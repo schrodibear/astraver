@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.86 2005-01-12 08:19:55 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.87 2005-02-01 13:40:38 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -665,15 +665,43 @@ and type_boolean env e =
     | Tint _ | Tenum _ | Tfloat _ | Tpointer _ | Tarray _ -> e'
     | _ -> error e.loc "invalid operand (expected arith or pointer)"
 
+let int_to_init loc env ty i=
+  (Iexpr 
+     (coerce ty 
+	(type_expr env 
+	   { node = (CEconstant 
+		       (IntConstant (sprintf "%d" i)));
+	     loc = loc})))
+
+
 (*s Typing of initializers *)
 
 let rec type_initializer loc env ty = function
-  | Iexpr e -> 
-      let e = type_expr env e in
-      Iexpr (coerce ty e)
+  | Iexpr e -> 	      
+      eprintf "type : %a@\n" print_type ty;
+      begin
+	match e.node with
+	  | CEstring_literal s ->
+	      let ty = 
+		match ty.ctype_node with
+		  | Tpointer ty | Tarray (ty,_) -> ty
+		  | _ ->  ty
+	      in
+	      eprintf "%a@\n" print_type ty;
+	      let l = ref [int_to_init e.loc env ty 0] in 
+	      let n = (String.length s) -1 in
+	      for i = 1 to n-1  do
+		l := int_to_init e.loc env ty 
+		  (Char.code (String.get s (n-i)))::!l
+	      done; 
+	      Ilist !l
+	  | _ -> 
+	      let e = type_expr env e in
+	      Iexpr (coerce ty e)
+      end
   | Ilist el -> 
       (match ty.ctype_node with
-	 | Tarray (ty,_) ->
+	 | Tarray (ty,_) ->   
 	     Ilist (List.map (type_initializer loc env ty) el)
 	 | Tstruct (n) ->
 	     (match tag_type_definition n with
@@ -994,8 +1022,9 @@ let type_decl d = match d.node with
 	    Loc.report Coptions.log d.loc;
 	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
 	    set_assigned info; (* ????? *)
+	    let i = type_initializer_option d.loc (Env.empty ()) ty i in
 	    let ty = array_size_from_initializer d.loc ty i in
-	    Tdecl (ty, info, type_initializer_option d.loc (Env.empty ()) ty i)
+	    Tdecl (ty, info,i)(* type_initializer_option d.loc (Env.empty ()) ty i*)
       end
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc (Env.empty ()) ty in
