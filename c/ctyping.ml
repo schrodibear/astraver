@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.54 2004-04-22 11:23:56 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.55 2004-04-22 12:03:34 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -736,6 +736,8 @@ let type_logic_parameters env pl =
 let type_spec_decl ofs = function
   | LDaxiom (id, p) -> 
       Taxiom (id, type_predicate ofs Env.empty p)
+  | LDinvariant (id, p) -> 
+      Tinvariant (id, type_predicate ofs Env.empty p)
   | LDlogic (id, ty, pl, ll) ->
       let ty = type_logic_type Env.empty ty in
       let pl,env' = type_logic_parameters Env.empty pl in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.34 2004-04-22 11:23:56 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.35 2004-04-22 12:03:34 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -440,6 +440,7 @@ let decl d =
 	  print_effects l;
 	id.logic_args <- l
     | Taxiom(id,p) -> () (* TODO *)
+    | Tinvariant(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 
     | Ttypedecl(ctype) -> ()
     | Tdecl(ctype,v,init) -> () (* TODO *)

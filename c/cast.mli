@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.41 2004-03-25 13:05:15 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.42 2004-04-22 12:03:34 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -133,6 +133,7 @@ type parsed_decl =
   | LDpredicate_def of 
       Info.logic_info * (parsed_logic_type * string) list * parsed_predicate
   | LDaxiom of string * parsed_predicate
+  | LDinvariant of string * parsed_predicate
 
 type parsed_code_annot = Assert of parsed_predicate | Label of string
 
@@ -254,6 +255,7 @@ and tblock = tdecl located list * tstatement list
 and tdecl = 
   | Tlogic of Info.logic_info * (tterm,tctype) logic_symbol
   | Taxiom of string * predicate
+  | Tinvariant of string * predicate
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * Info.var_info * texpr c_initializer

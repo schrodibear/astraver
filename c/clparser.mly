@@ -218,6 +218,7 @@ decl:
 | PREDICATE IDENTIFIER LPAR parameters RPAR LBRACE lexpr RBRACE 
     { LDpredicate_def (Info.default_logic_info $2, $4, $7) }
 | AXIOM IDENTIFIER COLON lexpr { LDaxiom ($2, $4) }
+| INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($2, $4) }
 ;
 
 parameters:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.74 2004-04-22 11:23:56 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.75 2004-04-22 12:03:34 filliatr Exp $ i*)
 
 
 open Format
@@ -729,18 +729,35 @@ let interp_assigns assigns = function
 	l LTrue
   | None ->
       LTrue
- 
 
+(* table for invariants *)
+let weak_invariants = Hashtbl.create 97
 
-let interp_spec effect_assigns s =
-  let tpre = interp_predicate_opt None "" s.requires
+let interp_weak_invariant id p =
+  let e = Ceffect.predicate p in
+  Hashtbl.add weak_invariants id (interp_predicate None "" p, e)
+
+let weak_invariants_for hvs =
+  Hashtbl.fold
+    (fun _ (p,e) acc -> 
+       if not (HeapVarSet.is_empty (HeapVarSet.inter e hvs)) then
+	 make_and p acc 
+       else acc)
+    weak_invariants LTrue
+
+let interp_spec effect_reads effect_assigns s =
+  let tpre = 
+    make_and
+      (interp_predicate_opt None "" s.requires)
+      (weak_invariants_for effect_reads)
   and tpost = 
     make_and
       (interp_predicate_opt None "" s.ensures)
-      (interp_assigns effect_assigns s.assigns)
-  in (tpre,tpost)
-
-
+      (make_and 
+	 (interp_assigns effect_assigns s.assigns)
+	 (weak_invariants_for effect_assigns))
+  in 
+  (tpre,tpost)
 
 
 let interp_decl d acc = 
@@ -772,6 +789,7 @@ let interp_decl d acc =
     | Ttypedecl _
     | Tfunspec _
     | Taxiom _
+    | Tinvariant _
     | Tlogic _
     | Tfundef _ ->
 	assert false
@@ -875,7 +893,7 @@ let rec interp_statement ab stat = match stat.st_node with
       Output.Label l
   | TSspec (spec,s) ->
       let eff = Ceffect.statement s in
-      let (pre,post) = interp_spec eff.Ceffect.assigns spec in
+      let pre,post = interp_spec eff.Ceffect.reads eff.Ceffect.assigns spec in
       Triple(pre,interp_statement ab s,post,None)
 
 and interp_block ab (decls,stats) =
@@ -977,7 +995,7 @@ let interp_fun_params pre params =
 
 
 let interp_function_spec id sp ty pl =
-  let pre,post = interp_spec id.function_writes sp in
+  let pre,post = interp_spec id.function_reads id.function_writes sp in
   let pre,tpl = interp_fun_params pre pl in
   let r = HeapVarSet.elements id.function_reads in
   let w = HeapVarSet.elements id.function_writes in
@@ -1015,6 +1033,10 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
       (why_code, Axiom(id,a)::why_spec, prover_decl)
+  | Tinvariant(id,p) -> 
+      lprintf "translating invariant declaration %s@." id;      
+      interp_weak_invariant id p;
+      why
   | Ttypedecl ({ ctype_node = CTenum _ } as ctype)
   | Ttypedef (ctype,_) -> 
       let dl = interp_type decl.loc ctype in 
@@ -1042,7 +1064,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       let f = id.var_name in
       lprintf "translating function %s@." f;
       begin try
-	let pre,post = interp_spec id.function_writes spec in
+	let pre,post = interp_spec id.function_reads id.function_writes spec in
 	let pre,tparams = interp_fun_params pre params in
 	abrupt_return := None;
 	let tblock = catch_return (interp_statement false block) in
