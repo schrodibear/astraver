@@ -103,6 +103,28 @@ let discriminate ctx concl =
   ProofTerm 
     (cc_applist (CC_var discriminate_lemma) [CC_var h; CC_type (TTpred concl)])
 
+let boolean_destruct_1 = Ident.create "why_boolean_destruct_1"
+let boolean_destruct_2 = Ident.create "why_boolean_destruct_2"
+let boolean_destruct ctx concl = 
+  let test_1 = function
+    | Spred (id, 
+	     Pand (_, 
+		   Pimplies 
+		     (_, Papp (eq1, [Tconst (ConstBool b1); t1], _), c1),
+	           Pimplies
+		     (_, Papp (eq2, [Tconst (ConstBool b2); t2], _), c2)))
+      when t1 = t2 && c1 = c2 && c1 = concl && is_eq eq1 
+        && is_eq eq2 && b1 = not b2 ->
+	id, t1, b1
+    | _ ->
+	raise Exit
+  in
+  let h,t,b = list_first test_1 ctx in
+  ProofTerm 
+    (cc_applist 
+       (CC_var (if b then boolean_destruct_1 else boolean_destruct_2)) 
+       [CC_term t; CC_type (TTpred concl); CC_var h])
+
 (* ..., h:A, ..., h':B, ... |- A and B *)
 let conjunction ctx = function
   | Pand (_, a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
@@ -460,6 +482,7 @@ let discharge_methods ctx concl =
   try loop_variant_1 ctx concl with Exit ->
   try rewrite_var ctx concl with Exit ->
   try discriminate ctx concl with Exit ->
+  try boolean_destruct ctx concl with Exit ->
   try linear ctx concl with Exit ->
   boolean_case ctx concl
   end

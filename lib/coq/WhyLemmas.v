@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.17 2004-07-07 15:27:32 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.18 2004-09-30 15:32:33 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -83,6 +83,18 @@ Implicit Arguments why_boolean_forall [].
 Lemma why_boolean_discriminate : false = true -> forall p:Prop, p.
 Proof.
 intros; discriminate.
+Qed.
+
+Lemma why_boolean_destruct_1 :
+  forall (b:bool) (p:Prop), ((true=b -> p) /\ (false=b -> p)) -> p.
+Proof.
+  destruct b; intuition.
+Qed.
+
+Lemma why_boolean_destruct_2 :
+  forall (b:bool) (p:Prop), ((false=b -> p) /\ (true=b -> p)) -> p.
+Proof.
+  destruct b; intuition.
 Qed.
 
 Require Import WhyInt.

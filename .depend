@@ -211,7 +211,7 @@ src/vcg.cmi: src/cc.cmi src/ident.cmi src/loc.cmi src/log.cmi src/logic.cmi \
     src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
 c/cast.cmi: c/clogic.cmi c/info.cmi src/loc.cmi 
-c/ceffect.cmi: c/cast.cmi c/clogic.cmi c/info.cmi c/output.cmi 
+c/ceffect.cmi: c/cast.cmi c/clogic.cmi c/info.cmi src/loc.cmi c/output.cmi 
 c/cenv.cmi: c/cast.cmi c/info.cmi src/loc.cmi 
 c/cerror.cmi: c/cast.cmi 
 c/cinterp.cmi: c/cast.cmi c/output.cmi 
