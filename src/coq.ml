@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.99 2003-09-23 08:07:40 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.100 2003-09-23 10:38:22 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -736,12 +736,12 @@ let print_validations fwe fmt =
 let output_validations fwe =
   let f = fwe ^ "_valid.v" in
   let m = Filename.basename fwe in
-  print_in_file (print_validations m) f;
+  print_in_file 78 (print_validations m) f;
   add_dep m
 
 let output_file fwe =
   let f = fwe ^ "_why.v" in
-  Gen.output_file f;
+  Gen.output_file 78 f;
   if valid then output_validations fwe
 
    

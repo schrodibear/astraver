@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.5 2003-09-23 08:07:40 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.6 2003-09-23 10:38:22 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -132,15 +132,15 @@ module Make(X : S) = struct
     X.first_time fmt;
     Queue.iter (fun (_,e) -> X.print_element fmt e) elem_q
 
-  let output_file f =
+  let output_file margin f =
     if Sys.file_exists f then begin
       let fbak = f ^ ".bak" in
       Sys.rename f fbak; 
       if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
-      print_in_file (regen fbak) f
+      print_in_file margin (regen fbak) f
     end else begin
       if_verbose_2 eprintf "*** generating file %s@." f;
-      print_in_file first_time f
+      print_in_file margin first_time f
     end
 
 end

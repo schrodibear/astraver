@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.26 2003-09-22 21:46:11 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.27 2003-09-23 10:38:22 filliatr Exp $ i*)
 
 open Format
 
@@ -28,7 +28,7 @@ let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref "Require Why."
-let mizar_preamble_ = ref None
+let mizar_environ_ = ref None
 let werror_ = ref false
 
 let ocaml_ = ref false
@@ -106,8 +106,8 @@ Coq-specific options:
               gives some Coq preamble to be substituted to \"Require Why\"
 
 Mizar-specific options:
-  --mizar-preamble <text>
-              gives some Mizar preamble to be inserted in the `environ' segment
+  --mizar-environ <text>
+              sets the Mizar `environ'
 
 Misc options:
   --ocaml        Ocaml code output
@@ -148,11 +148,11 @@ let files =
       :: s :: args -> coq_preamble_ := s; parse args
     | ("-coqpreamble"|"--coqpreamble"|"-coq-preamble"|"--coq-preamble")::[] ->
 	usage (); exit 1
-    | ("-mizarpreamble" | "--mizarpreamble" | 
-       "-mizar-preamble" | "--mizar-preamble") 
-      :: s :: args -> mizar_preamble_ := Some s; parse args
-    | ("-mizarpreamble" | "--mizarpreamble" | 
-       "-mizar-preamble"|"--mizar-preamble") :: [] ->
+    | ("-mizarenviron" | "--mizarenviron" | 
+       "-mizar-environ" | "--mizar-environ") 
+      :: s :: args -> mizar_environ_ := Some s; parse args
+    | ("-mizarenviron" | "--mizarenviron" | 
+       "-mizar-environ"|"--mizar-environ") :: [] ->
 	usage (); exit 1
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
@@ -182,7 +182,7 @@ let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = !coq_preamble_
-let mizar_preamble = !mizar_preamble_
+let mizar_environ = !mizar_environ_
 let wol = !wol_
 let werror = !werror_
 

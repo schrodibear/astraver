@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.7 2003-09-23 08:07:40 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.8 2003-09-23 10:38:22 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -209,7 +209,7 @@ let print_predicate fmt p =
     | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[for %s being %a holds@ %a@])" (Ident.string id')
+	fprintf fmt "(@[for %s@ being %a holds@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
@@ -306,7 +306,7 @@ environ
 %s
 
 begin :: proof obligations start here
-" (match mizar_preamble with None -> environ | Some s -> s)
+" (match mizar_environ with None -> environ | Some s -> s)
 
   let edit_below = Str.regexp "[ ]*:: EDIT BELOW THIS LINE[ ]*"
   let not_end_of_element _ s = not (Str.string_match edit_below s 0)
@@ -329,4 +329,4 @@ let _ =
 
 let output_file fwe =
   let f = fwe ^ "_why.miz" in
-  Gen.output_file f
+  Gen.output_file 75 f

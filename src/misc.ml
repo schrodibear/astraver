@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.77 2003-09-17 21:08:07 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.78 2003-09-23 10:38:22 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -592,10 +592,11 @@ let do_not_edit file before sep after =
   file_formatter after cout;
   close_out cout
 
-let print_in_file p f =
+let print_in_file margin p f =
   let cout = open_out f in
   let fmt = formatter_of_out_channel cout in
-  p fmt;
+  pp_set_margin fmt margin;
+  pp_open_box fmt 0; p fmt; pp_close_box fmt ();
   pp_print_flush fmt ();
   close_out cout
 
