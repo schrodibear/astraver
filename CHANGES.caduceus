@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+version 0.68, November 30th, 2004
+=================================
  o more support for & on non-structure variable, but not complete 
  o bug fix: removed name clashes in presence of multiple declaration of
    functions 
