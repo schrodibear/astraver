@@ -1,5 +1,5 @@
 
-(*i $Id: logic.mli,v 1.1 2001-08-15 21:08:52 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.2 2001-08-17 00:52:38 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -15,8 +15,7 @@ type term =
   | Tapp of Ident.t * term list
 
 type predicate =
-  | Pvar of Ident.t
-  | Papp of Ident.t * term list
+  | Pterm of term
   | Pimplies of predicate * predicate
   | Pand of predicate * predicate
   | Por of predicate * predicate

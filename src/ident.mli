@@ -36,6 +36,9 @@ val t_noteq : t
 val t_zwf_zero : t
 val result : t
 val default : t
+val access : t
+val store : t
+val annot_bool : t
 
 val p_or : t
 val p_and : t

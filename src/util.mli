@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.mli,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+(* $Id: util.mli,v 1.2 2001-08-17 00:52:40 filliatr Exp $ *)
 
 open Logic
 open Misc
@@ -38,24 +38,28 @@ val apply_assert : Rename.t -> local_env -> assertion -> assertion
 val type_v_subst : (Ident.t * Ident.t) list -> type_v -> type_v
 val type_c_subst : (Ident.t * Ident.t) list -> type_c -> type_c
 
-(*i
 val type_v_rsubst : (Ident.t * term) list -> type_v -> type_v
 val type_c_rsubst : (Ident.t * term) list -> type_c -> type_c
-val dest_sig : constr -> constr * constr 
-i*)
 
 val make_arrow : type_v binder list -> type_c -> type_v
 
 val is_mutable_in_env : local_env -> Ident.t -> bool
-val now_vars : local_env -> predicate -> Ident.set
+val predicate_now_vars : local_env -> predicate -> Ident.set
+val term_now_vars : local_env -> term -> Ident.set
 
 val deref_type : type_v -> type_v
 val dearray_type : type_v -> term * type_v
-(*i
-val v_of_constr : constr -> type_v
-val c_of_constr : constr -> type_c
-val is_pure_cci : constr -> bool
-i*)
+
+(* Functions to translate array operations *)
+
+val make_raw_access :
+  Rename.t -> local_env -> Ident.t * Ident.t -> term -> term
+
+val make_raw_store :
+  Rename.t -> local_env -> Ident.t * Ident.t -> term -> term -> term
+
+val make_pre_access :
+  Rename.t -> local_env -> Ident.t -> term -> predicate
 
 (* pretty printers *)
 

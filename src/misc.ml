@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.ml,v 1.1 2001-08-15 21:08:52 filliatr Exp $ *)
+(* $Id: misc.ml,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
 
 open Ident
 open Logic
@@ -9,6 +9,8 @@ open Logic
 (* debug *)
 
 let debug = ref false
+
+let option_app f = function None -> None | Some x -> Some (f x)
 
 let list_of_some = function None -> [] | Some x -> [x]
 
@@ -95,14 +97,19 @@ let warning s = Format.eprintf "warning: %s\n" s
 
 (*s Functions on terms and predicates. *)
 
+let applist f l = match (f,l) with
+  | f, [] -> f
+  | Tvar id, l -> Tapp (id, l)
+  | Tapp (id, l), l' -> Tapp (id, l @ l')
+  | Tconst _, _ -> assert false
+
 let rec collect_term s = function
   | Tvar id -> Idset.add id s
   | Tapp (_, l) -> List.fold_left collect_term s l
   | Tconst _ -> s
 
 and collect_pred s = function
-  | Pvar id -> Idset.add id s
-  | Papp (_, tl) -> List.fold_left collect_term s tl
+  | Pterm t -> collect_term s t
   | Pimplies (a, b) | Pand (a, b) | Por (a, b) -> 
       collect_pred (collect_pred s a) b
   | Pnot a -> collect_pred s a
@@ -110,21 +117,25 @@ and collect_pred s = function
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
 
-let rec subst_in_term alist = function
-  | Tvar x as t -> (try Tvar (List.assoc x alist) with Not_found -> t)
-  | Tapp (x,l) -> Tapp (x, List.map (subst_in_term alist) l)
+let rec tsubst_in_term alist = function
+  | Tvar x as t -> (try List.assoc x alist with Not_found -> t)
+  | Tapp (x,l) -> Tapp (x, List.map (tsubst_in_term alist) l)
   | Tconst _ as t -> t
 
-let rec subst_in_predicate alist = function
-  | Pvar x as p -> (try Pvar (List.assoc x alist) with Not_found -> p)
-  | Papp (x, tl) -> Papp (x, List.map (subst_in_term alist) tl)
-  | Pimplies (a, b) -> Pimplies (subst_in_predicate alist a,
-				 subst_in_predicate alist b)
-  | Pand (a,b) -> Pand (subst_in_predicate alist a,
-			subst_in_predicate alist b)
-  | Por (a,b) -> Por (subst_in_predicate alist a,
-		      subst_in_predicate alist b)
-  | Pnot a -> Pnot (subst_in_predicate alist a)
+let rec tsubst_in_predicate alist = function
+  | Pterm t -> Pterm (tsubst_in_term alist t)
+  | Pimplies (a, b) -> Pimplies (tsubst_in_predicate alist a,
+				 tsubst_in_predicate alist b)
+  | Pand (a,b) -> Pand (tsubst_in_predicate alist a,
+			tsubst_in_predicate alist b)
+  | Por (a,b) -> Por (tsubst_in_predicate alist a,
+		      tsubst_in_predicate alist b)
+  | Pnot a -> Pnot (tsubst_in_predicate alist a)
+
+let subst_in_term alist = 
+  tsubst_in_term (List.map (fun (id,id') -> (id, Tvar id')) alist)
+let subst_in_predicate alist = 
+  tsubst_in_predicate (List.map (fun (id,id') -> (id, Tvar id')) alist)
 
 (*s Pretty-print *)
 

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: monad.mli,v 1.1 2001-08-15 21:08:52 filliatr Exp $ *)
+(* $Id: monad.mli,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
 
 open Logic
 open Types
@@ -79,18 +79,4 @@ val make_letrec : Rename.t -> local_env
 	 -> (cc_term * type_c)
 	 -> type_c
          -> cc_term
-
-(* Functions to translate array operations *)
-
-val array_info :
-  Rename.t -> local_env -> Ident.t -> term * cc_type * cc_type
-
-val make_raw_access :
-  Rename.t -> local_env -> Ident.t * Ident.t -> term -> term
-
-val make_raw_store :
-  Rename.t -> local_env -> Ident.t * Ident.t -> term -> term -> term
-
-val make_pre_access :
-  Rename.t -> local_env -> Ident.t -> term -> term
 

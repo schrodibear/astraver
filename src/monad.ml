@@ -1,29 +1,16 @@
-(***********************************************************************)
-(*  v      *   The Coq Proof Assistant  /  The Coq Development Team    *)
-(* <O___,, *        INRIA-Rocquencourt  &  LRI-CNRS-Orsay              *)
-(*   \VV/  *************************************************************)
-(*    //   *      This file is distributed under the terms of the      *)
-(*         *       GNU Lesser General Public License Version 2.1       *)
-(***********************************************************************)
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: monad.ml,v 1.1 2001-08-15 21:08:52 filliatr Exp $ *)
-
-open Util
-open Names
-open Term
-open Termast
+(* $Id: monad.ml,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
 
 open Misc
 open Util
+open Logic
 open Types
 open Ast
 open Rename
 open Env
-open Pcic
 open Effect
-
 
 (* [product ren [y1,z1;...;yk,zk] q] constructs
  * the (possibly dependent) tuple type
@@ -42,6 +29,8 @@ let dep_product_name = function
   | 1 -> "sig"
   | n -> Printf.sprintf "sig_%d" n
 
+let product ren env before lo q = CC_type
+(*i
 let product ren env before lo = function
   | None -> (* non dependent case *)
       begin match lo with
@@ -54,6 +43,7 @@ let product ren env before lo = function
       let s = dep_product_name (List.length lo) in
       let a' = apply_post ren env before q in
       Term.applist (constant s, (List.map snd lo) @ [a'.a_value])
+i*)
 	
 (* [arrow ren v pl] abstracts the term v over the pre-condition if any
  * i.e. computes
@@ -63,22 +53,25 @@ let product ren env before lo = function
  * where the xi are given by the renaming [ren].
  *)
 
+let arrow ren env v pl = CC_type
+(*i
 let arrow ren env v pl =
   List.fold_left 
     (fun t p -> 
        if p.p_assert then t else Term.mkArrow (apply_pre ren env p).p_value t) 
     v pl
+i*)
 	
 (* [abstract_post ren env (e,q) (res,v)] abstract a post-condition q
  * over the write-variables of e *)
 
 let rec abstract_post ren env (e,q) =
-  let after_id id = id_of_string ((string_of_id id) ^ "'") in
+  let after_id id = Ident.create ((Ident.string id) ^ "'") in
   let (_,go) = Effect.get_repr e in
   let al = List.map (fun id -> (id,after_id id)) go in
-  let q = option_app (named_app (subst_in_constr al)) q in
+  let q = option_app (named_app (subst_in_predicate al)) q in
   let tgo = List.map (fun (id,aid) -> (aid, trad_type_in_env ren env id)) al in
-  option_app (named_app (abstract tgo)) q
+  q (*i option_app (named_app (abstract tgo)) q i*)
 
 (* Translation of effects types in cic types.
  *
@@ -106,7 +99,8 @@ and input_output ren env c =
 
 (* The function t -> \barre{t} on V and C. *)
 
-and trad_ml_type_c ren env c =
+and trad_ml_type_c ren env c = CC_type
+(*i
   let ((res,v),e,p,q) = c in
   let q = abstract_post ren env (e,q) in
   let lo = output ren env ((res,v),e) in
@@ -114,8 +108,10 @@ and trad_ml_type_c ren env c =
   let ty = arrow ren env ty p in
   let li = input ren env e in
   n_mkNamedProd ty li
+i*)
 
-and trad_ml_type_v ren env = function
+and trad_ml_type_v ren env v = CC_type
+(*i function
     
   | Ref _ | Array _ -> invalid_arg "Monad.trad_ml_type_v"
 	
@@ -142,23 +138,26 @@ and trad_ml_type_v ren env = function
 	
   | PureType c ->
       (apply_pre ren env (anonymous_pre false c)).p_value
+i*)
 
-and trad_imp_type ren env = function
+and trad_imp_type ren env v = CC_type
+(*i function
   | Ref v        -> trad_ml_type_v ren env v
   | Array (c,v)  -> Term.applist (constant "array", 
 				  [c; trad_ml_type_v ren env v])
   | _            -> invalid_arg "Monad.trad_imp_type"
+i*)
 
-and trad_type_in_env ren env id =
+and trad_type_in_env ren env id = CC_type
+(*i
   let v = type_in_env env id in trad_imp_type ren env v
-
-
+i*)
 
 (* bindings *)
 
 let binding_of_alist ren env al =
   List.map
-    (fun (id,id') -> (id', CC_typed_binder (trad_type_in_env ren env id)))
+    (fun (id,id') -> (id', CC_var_binder (type_in_env env id)))
     al
 
 
@@ -178,9 +177,9 @@ let make_abs bl t = match bl with
  * if there is no yi and no post-condition, it is simplified in res itself.
  *)
 
-let simple_constr_of_prog = function
-  | CC_expr c -> c
-  | CC_var id -> mkVar id
+let simple_term_of_prog = function
+  | CC_expr t -> t
+  | CC_var id -> Tvar id
   | _ -> assert false
 
 let make_tuple l q ren env before = match l with
@@ -189,9 +188,10 @@ let make_tuple l q ren env before = match l with
   | _ ->
       let tl = List.map snd l in
       let dep,h,th = match q with
-	| None -> false,[],[]
+	| None -> 
+	    false,[],[]
 	| Some c ->
-	    let args = List.map (fun (e,_) -> simple_constr_of_prog e) l in
+	    let args = List.map (fun (e,_) -> simple_term_of_prog e) l in
 	    let c = apply_post ren env before c in
 	    true,
 	    [ CC_hole (Term.applist (c.a_value, args)) ], (* hole *)
@@ -639,27 +639,3 @@ let make_letrec ren env (id_phi0,(cphi,r,a)) idf bl (te,ce) c =
   make_abs (List.rev bl) t
 
 
-(* [make_access env id c] Access in array id.
- *
- * Constructs [t:(array s T)](access_g s T t c ?::(lt c s)).
- *)
-
-let array_info ren env id =
-  let ty = type_in_env env id in
-  let size,v = dearray_type ty in
-  let ty_elem = trad_ml_type_v ren env v in
-  let ty_array = trad_imp_type ren env ty in
-  size,ty_elem,ty_array
-
-let make_raw_access ren env (id,id') c =
-  let size,ty_elem,_ = array_info ren env id in
-  Term.applist (constant "access", [size; ty_elem; mkVar id'; c])
-
-let make_pre_access ren env id c =
-  let size,_,_ = array_info ren env id in
-  conj (lt (constant "Zle") (constant "ZERO") c)
-       (lt (constant "Zlt") c size)
-      
-let make_raw_store ren env (id,id') c1 c2 =
-  let size,ty_elem,_ = array_info ren env id in
-  Term.applist (constant "store", [size; ty_elem; mkVar id'; c1; c2])

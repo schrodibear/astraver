@@ -836,7 +836,44 @@ else
 fi
 
 
+# camlp4 library
+# Extract the first word of "camlp4", so it can be a program name with args.
+set dummy camlp4; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:844: checking for $ac_word" >&5
+if eval "test \"\${ac_cv_prog_CAMLP4+set}\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test -n "$CAMLP4"; then
+  ac_cv_prog_CAMLP4="$CAMLP4" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_prog_CAMLP4="camlp4"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_prog_CAMLP4" && ac_cv_prog_CAMLP4="no"
+fi
+fi
+CAMLP4="$ac_cv_prog_CAMLP4"
+if test -n "$CAMLP4"; then
+  echo "$ac_t""$CAMLP4" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test "$CAMLP4" = no ; then
+	{ echo "configure: error: Cannot find camlp4." 1>&2; exit 1; }
+fi
+CAMLP4LIB=`camlp4 -where`
+
 # substitutions to perform
+
 
 
 
@@ -1000,9 +1037,11 @@ s%@OCAMLDEP@%$OCAMLDEP%g
 s%@OCAMLLEX@%$OCAMLLEX%g
 s%@OCAMLYACC@%$OCAMLYACC%g
 s%@OCAMLWEB@%$OCAMLWEB%g
+s%@CAMLP4@%$CAMLP4%g
 s%@OCAMLBEST@%$OCAMLBEST%g
 s%@OCAMLVERSION@%$OCAMLVERSION%g
 s%@OCAMLLIB@%$OCAMLLIB%g
+s%@CAMLP4LIB@%$CAMLP4LIB%g
 
 CEOF
 EOF

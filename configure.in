@@ -111,6 +111,13 @@ fi
 
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
+# camlp4 library
+AC_CHECK_PROG(CAMLP4,camlp4,camlp4,no)
+if test "$CAMLP4" = no ; then
+	AC_MSG_ERROR(Cannot find camlp4.)
+fi
+CAMLP4LIB=`camlp4 -where`
+
 # substitutions to perform
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
@@ -121,6 +128,7 @@ AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
+AC_SUBST(CAMLP4LIB)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

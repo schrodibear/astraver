@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: error.ml,v 1.1 2001-08-15 21:08:51 filliatr Exp $ *)
+(* $Id: error.ml,v 1.2 2001-08-17 00:52:37 filliatr Exp $ *)
 
 open Ident
 open Logic
@@ -35,13 +35,13 @@ type error =
   | ShouldBeReference
   | NoVariableAtDate of Ident.t * string
 
-exception Error of (Location.t option) * error
+exception Error of (Loc.t option) * error
 
 let report fmt = function
   | UnboundVariable id ->
       fprintf fmt "Unbound variable %s" (Ident.string id)
   | UnboundReference id ->
-      fprintf fmt "Unbound reference %s" (Ident.string id)
+      fprintf fmt "Unbound reference or array %s" (Ident.string id)
   | Clash id ->
       fprintf fmt "Clash with previous constant %s" (Ident.string id)
   | Undefined id ->
@@ -161,3 +161,8 @@ let should_be_a_variable loc = raise_with_loc (Some loc) ShouldBeVariable
 let should_be_a_reference loc = raise_with_loc (Some loc) ShouldBeReference
 
 let no_variable_at_date id d = raise_with_loc None (NoVariableAtDate (id,d))
+
+let check_for_non_constant loc = function
+  | Tconst _ -> raise_with_loc (Some loc) AppNonFunction
+  | _ -> ()
+

@@ -1,33 +1,18 @@
-(***********************************************************************)
-(*  v      *   The Coq Proof Assistant  /  The Coq Development Team    *)
-(* <O___,, *        INRIA-Rocquencourt  &  LRI-CNRS-Orsay              *)
-(*   \VV/  *************************************************************)
-(*    //   *      This file is distributed under the terms of the      *)
-(*         *       GNU Lesser General Public License Version 2.1       *)
-(***********************************************************************)
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: pdb.ml,v 1.1 2001-08-15 21:08:53 filliatr Exp $ *)
+(* $Id: db.ml,v 1.1 2001-08-17 00:52:37 filliatr Exp $ *)
 
-open Names
-open Term
-
+open Logic
 open Types
 open Ast
 open Env
-
-let cci_global id =
-  try
-    Declare.global_reference CCI id
-  with
-    _ -> raise Not_found
 
 let lookup_var ids locop id =
   if List.mem id ids then
     None
   else begin
-    try Some (cci_global id)
+    try Some (Tvar id)
     with Not_found -> Error.unbound_variable id locop
   end
 
@@ -42,17 +27,20 @@ let rec db_type_v ids = function
   | Array (c,v) -> Array (c,db_type_v ids v)
   | Arrow (bl,c) -> Arrow (List.map (db_binder ids) bl, db_type_c ids c)
   | PureType _ as v -> v
-and db_type_c ids ((id,v),e,p,q) =
-  (id,db_type_v ids v), e, p, q
+and db_type_c ids c =
+  { c_result_name = c.c_result_name;
+    c_result_type = db_type_v ids c.c_result_type;
+    c_effect = c.c_effect; c_pre = c.c_pre; c_post = c.c_post }
   (* TODO: db_condition ? *)
 and db_binder ids = function
-    (n, BindType v) -> (n, BindType (db_type_v ids v))
+  | (n, BindType v) -> (n, BindType (db_type_v ids v))
   | b -> b
 
 (* db binders *)
 
 let rec db_binders ((tids,pids,refs) as idl) = function
-    [] -> idl, []
+  | [] -> 
+      idl, []
   | (id, BindType (Ref _ | Array _ as v)) :: rem ->
       let idl',rem' = db_binders (tids,pids,id::refs) rem in
       idl', (id, BindType (db_type_v tids v)) :: rem'
@@ -67,7 +55,7 @@ let rec db_binders ((tids,pids,refs) as idl) = function
 
 
 (* db patterns *)
-
+(*i
 let rec db_pattern = function
   | (PatVar id) as t ->
       (try 
@@ -89,14 +77,14 @@ let rec db_pattern = function
   	ids,PatApp pl'
   | PatConstruct _ ->
       failwith "constructor in a pattern after parsing !"
-
+i*)
 
 (* db programs *)
   
 let db_prog e =
   (* tids = type Ident.ts, ids = variables, refs = references and arrays *)
   let rec db_desc ((tids,ids,refs) as idl) = function
-      (Var x) as t ->
+    | (Var x) as t ->
 	(match lookup_var ids (Some e.loc) x with
 	     None -> t
 	   | Some c -> Expression c)
@@ -146,7 +134,7 @@ let db_prog e =
     | PPoint (s,d) -> PPoint (s, db_desc idl d)
 	  
   and db_arg ((tids,_,refs) as idl) = function
-      Term ({ desc = Var id } as t) -> 
+    | Term ({ desc = Var id } as t) -> 
 	if List.mem id refs then Refarg id else Term (db idl t)
     | Term t -> Term (db idl t)
     | Type v -> Type (db_type_v tids v)
@@ -158,10 +146,7 @@ let db_prog e =
       loc = e.loc; info = e.info }
 
   in
-  let ids = Sign.ids_of_named_context (Global.named_context ()) in
-            (* TODO: separer X:Set et x:V:Set
-                     virer le reste (axiomes, etc.) *)
+  let ids = [] (* TODO: logical variables here *) in
   let vars,refs = all_vars (), all_refs () in
   db ([],vars@ids,refs) e
-;;
 

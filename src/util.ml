@@ -1,8 +1,9 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.ml,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+(* $Id: util.ml,v 1.2 2001-08-17 00:52:40 filliatr Exp $ *)
 
+open Logic
 open Ident
 open Misc
 open Types
@@ -11,8 +12,6 @@ open Env
 open Rename
 
 (*s Various utility functions. *)
-let option_app f = function None -> None | Some x -> Some (f x)
-
 let map_succeed f = 
   let rec map_f = function 
     | [] -> []
@@ -57,8 +56,11 @@ let assert_of_pre x =
 let is_mutable_in_env env id =
   (is_in_env env id) && (is_mutable (type_in_env env id))
 
-let now_vars env c =
+let predicate_now_vars env c =
   Idset.filter (is_mutable_in_env env) (predicate_vars c)
+
+let term_now_vars env c =
+  Idset.filter (is_mutable_in_env env) (term_vars c)
 
 let make_before_after c =
   let ids = Idset.elements (predicate_vars c) in
@@ -116,7 +118,7 @@ let apply_post ren env before c =
  *)
 
 let rec traverse_binders env = function
-    [] -> env
+  | [] -> env
   | (id,BindType v)::rem ->
       traverse_binders (add (id,v) env) rem
   | (id,BindSet)::rem ->
@@ -126,46 +128,48 @@ let rec traverse_binders env = function
 	  
 let initial_renaming env =
   let ids = Env.fold_all (fun (id,_) l -> id::l) env [] in
-    update empty_ren "0" ids
+  update empty_ren "0" ids
 
 
 (* Substitutions *)
 
-let rec type_c_subst s {c_result=(id,t); c_effect=e; c_pre=p; c_post=q} =
+let rec type_c_subst s c =
+  let {c_result_name=id; c_result_type=t; c_effect=e; c_pre=p; c_post=q} = c in
   let s' = s @ List.map (fun (x,x') -> (at_id x "", at_id x' "")) s in
-  { c_result = (id, type_v_subst s t);
+  { c_result_name = id;
+    c_result_type = type_v_subst s t;
     c_effect = Effect.subst s e;
     c_pre = List.map (pre_app (subst_in_predicate s)) p;
     c_post = option_app (post_app (subst_in_predicate s')) q }
 
 and type_v_subst s = function
-    Ref v -> Ref (type_v_subst s v)
+  | Ref v -> Ref (type_v_subst s v)
   | Array (n,v) -> Array (n,type_v_subst s v)
-  | Arrow (bl,c) -> Arrow(List.map (binder_subst s) bl, type_c_subst s c)
+  | Arrow (bl,c) -> Arrow (List.map (binder_subst s) bl, type_c_subst s c)
   | (PureType _) as v -> v
 
 and binder_subst s = function
-    (n, BindType v) -> (n, BindType (type_v_subst s v))
+  | (n, BindType v) -> (n, BindType (type_v_subst s v))
   | b -> b
 
-(* substitution of constr by others *)
+(* substitution of term for variables *)
 
-(*i
-let rec type_c_rsubst s ((id,t),e,p,q) =
-  (id, type_v_rsubst s t), e,
-    List.map (pre_app (real_subst_in_constr s)) p,
-    option_app (post_app (real_subst_in_constr s)) q
+let rec type_c_rsubst s c =
+  { c_result_name = c.c_result_name;
+    c_result_type = type_v_rsubst s c.c_result_type;
+    c_effect = c.c_effect;
+    c_pre = List.map (pre_app (tsubst_in_predicate s)) c.c_pre;
+    c_post = option_app (post_app (tsubst_in_predicate s)) c.c_post }
 
 and type_v_rsubst s = function
-    Ref v -> Ref (type_v_rsubst s v)
-  | Array (n,v) -> Array (real_subst_in_constr s n,type_v_rsubst s v)
+  | Ref v -> Ref (type_v_rsubst s v)
+  | Array (n,v) -> Array (tsubst_in_term s n, type_v_rsubst s v)
   | Arrow (bl,c) -> Arrow(List.map (binder_rsubst s) bl, type_c_rsubst s c)
-  | PureType c -> PureType (real_subst_in_constr s c)
+  | PureType _ as v -> v
 
 and binder_rsubst s = function
   | (n, BindType v) -> (n, BindType (type_v_rsubst s v))
   | b -> b
-i*)
 
 (* make_arrow bl c = (x1:V1)...(xn:Vn)c *)
 
@@ -223,6 +227,31 @@ and c_of_constr c =
     (result_id, v_of_constr c), Effect.bottom, [], None
 i*)
 
+(* [make_access env id c] Access in array id.
+ *
+ * Constructs [t:(array s T)](access_g s T t c ?::(lt c s)).
+ *)
+
+let array_info ren env id =
+  let ty = type_in_env env id in
+  let size,v = dearray_type ty in
+  (*i let ty_elem = trad_ml_type_v ren env v in
+  let ty_array = trad_imp_type ren env ty in i*)
+  size,v
+
+let make_raw_access ren env (id,id') c =
+  let size,_ = array_info ren env id in
+  Tapp (Ident.access, [Tvar id'; c])
+
+let make_pre_access ren env id c =
+  let size,_ = array_info ren env id in
+  Pand (Pterm (Tapp (Ident.t_le, [Tconst (ConstInt 0); c])),
+	Pterm (Tapp (Ident.t_lt, [c; size])))
+      
+let make_raw_store ren env (id,id') c1 c2 =
+  let size,_ = array_info ren env id in
+  Tapp (Ident.store, [Tvar id'; c1; c2])
+
 (* pretty printers (for debugging purposes) *)
 
 open Format
@@ -261,7 +290,8 @@ and print_type_v fmt = function
       print_pure_type fmt pt
 
 and print_type_c fmt c =
-  let (id,v) = c.c_result in
+  let id = c.c_result_name in
+  let v = c.c_result_type in
   fprintf fmt "@[returns %s: " (Ident.string id);
   print_type_v fmt v; fprintf fmt "@ ";
   Effect.print fmt c.c_effect; fprintf fmt "@ ";

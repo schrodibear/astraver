@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: ast.mli,v 1.1 2001-08-15 21:08:51 filliatr Exp $ *)
+(* $Id: ast.mli,v 1.2 2001-08-17 00:52:37 filliatr Exp $ *)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -42,7 +42,7 @@ type 'a t =
   { desc : 'a t_desc;
     pre  : precondition list;
     post : postcondition option;
-    loc  : Location.t;
+    loc  : Loc.t;
     info : 'a }
 
 and 'a t_desc =
@@ -71,25 +71,34 @@ and 'a arg =
 
 type parsed_program = unit t
 
+(*s Declarations. *)
+
+type decl = 
+  | Program of Ident.t * parsed_program
+  | External of Ident.t * type_v
+
 (*s Intermediate type for CC terms. *)
 
-type cc_type =
+type cc_type = CC_type (* NOT OF USE RIGHT NOW *)
+(*i
   | TTpure of pure_type
   | TTarrow of cc_type binder list 
   | TTarray of term * cc_type
+i*)
 
 type cc_bind_type = 
-  | CC_typed_binder of cc_type 
+  | CC_var_binder of type_v
+  | CC_pred_binder of predicate
   | CC_untyped_binder
 
 type cc_binder = variable * cc_bind_type
 
 type cc_term =
   | CC_var of variable
-  | CC_letin of bool * cc_type * cc_binder list * cc_term * cc_term
+  | CC_letin of bool * cc_binder list * cc_term * cc_term
   | CC_lam of cc_binder list * cc_term
   | CC_app of cc_term * cc_term list
-  | CC_tuple of bool * cc_type list * cc_term list
-  | CC_case of cc_type * cc_term * cc_term list
+  | CC_tuple of bool * cc_term list
+  | CC_case of cc_term * (cc_binder list * cc_term) list
   | CC_expr of term
   | CC_hole of predicate

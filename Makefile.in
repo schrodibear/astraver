@@ -23,21 +23,36 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
 INCLUDES = -I src
-BFLAGS   = $(INCLUDES) -I `camlp4 -where`
-OFLAGS   = $(INCLUDES) -I `camlp4 -where`
+BFLAGS   = -g $(INCLUDES) -I @CAMLP4LIB@
+OFLAGS   = $(INCLUDES) -I @CAMLP4LIB@
 
-CMO      = src/ident.cmo src/misc.cmo src/effect.cmo src/error.cmo  \
-           src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo
+CMO      = src/loc.cmo src/ident.cmo src/misc.cmo src/effect.cmo	\
+           src/error.cmo						\
+           src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
+           src/db.cmo src/typing.cmo src/wp.cmo src/monad.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
-PROG     = bin/why
 
-all: $(PROG).byte
+# main targets
+##############
+
+PROG = bin/why
+
+all: $(PROG).byte $(PROG)
 
 $(PROG): $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa $^
 
 $(PROG).byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma $^
+
+top: $(CMO)
+	ocamlmktop $(BFLAGS) -o $@ gramlib.cma $^
+
+# bench
+
+bench::
+	make $(PROG)
+	cd bench; ./bench
 
 # special rules
 ###############
@@ -89,6 +104,7 @@ tags:
 	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
 
 # myself
+########
 
 Makefile: Makefile.in config.status
 	./config.status
@@ -99,15 +115,16 @@ config.status: configure
 configure: configure.in
 	autoconf 
 
-# backup, clean and depend :
-############################
+# backup, clean and depend
+##########################
 
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
+	rm -f $(PROG) $(PROG).byte
 
 .depend depend::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
-	$(CAMLP4) pr_depend.cmo -impl src/parser.ml4 $(INCLUDES) >> .depend
+	$(CAMLP4) pr_depend.cmo -- $(INCLUDES) -impl src/parser.ml4 >> .depend
 
 include .depend

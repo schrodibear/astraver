@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: types.mli,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+(* $Id: types.mli,v 1.2 2001-08-17 00:52:39 filliatr Exp $ *)
 
 open Logic
 
@@ -58,7 +58,8 @@ type type_v =
  *)
 
 and type_c =
-  { c_result : Ident.t * type_v;
+  { c_result_name : Ident.t;
+    c_result_type : type_v;
     c_effect : Effect.t;
     c_pre    : precondition list;
     c_post   : postcondition option }

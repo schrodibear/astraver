@@ -8,7 +8,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: ptactic.ml,v 1.1 2001-08-15 21:08:53 filliatr Exp $ *)
+(* $Id: ptactic.ml,v 1.2 2001-08-17 00:52:39 filliatr Exp $ *)
 
 open Pp
 open Options
@@ -34,19 +34,19 @@ open Monad
 
 let coqast_of_prog p =
   (* 1. db : séparation dB/var/const *)
-  let p = Pdb.db_prog p in
+  let p = Db.db_prog p in
 
   (* 2. typage avec effets *)
-  deb_mess [< 'sTR"Ptyping.states: Typing with effects..."; 'fNL >];
+  deb_mess [< 'sTR"Typing.states: Typing with effects..."; 'fNL >];
   let env = Env.empty in
   let ren = initial_renaming env in
-  let p = Ptyping.states ren env p in
+  let p = Typing.states ren env p in
   let ((_,v),_,_,_) as c = p.info.kappa in
   Error.check_for_not_mutable p.loc v;
   deb_mess (pp_type_c c);
 
   (* 3. propagation annotations *)
-  let p = Pwp.propagate ren p in
+  let p = Wp.propagate ren p in
 
   (* 4a. traduction type *)
   let ty = Monad.trad_ml_type_c ren env c in
@@ -55,8 +55,8 @@ let coqast_of_prog p =
   (* 4b. traduction terme (terme intermédiaire de type cc_term) *)
   deb_mess 
     [< 'fNL; 'sTR"Mlize.trad: Translation program -> cc_term..."; 'fNL >];
-  let cc = Pmlize.trans ren p in
-  let cc = Pred.red cc in
+  let cc = Mlize.trans ren p in
+  let cc = Red.red cc in
   deb_mess (Util.pp_cc_term cc);
 
   (* 5. traduction en constr *)
@@ -210,7 +210,7 @@ let reduce_open_constr (em,c) =
     in
     collect []
   in
-  let c = Pred.red_cci c in
+  let c = Red.red_cci c in
   let em = existential_map_of_constr c in
   (em,c)
 
@@ -225,7 +225,7 @@ let correctness s p opttac =
   start_proof id Declare.NeverDischarge sign cty;
   Env.new_edited id (v,p);
   if !debug then show_open_subgoals();
-  deb_mess [< 'sTR"Pred.red_cci: Reduction..."; 'fNL >];
+  deb_mess [< 'sTR"Red.red_cci: Reduction..."; 'fNL >];
   let oc = reduce_open_constr oc in
   deb_mess [< 'sTR"AFTER REDUCTION:"; 'fNL >];
   deb_mess (Printer.prterm (snd oc));

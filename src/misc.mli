@@ -1,13 +1,15 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.mli,v 1.1 2001-08-15 21:08:52 filliatr Exp $ *)
+(* $Id: misc.mli,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
 
 (* Some misc. functions *)
 
 open Logic
 
-val reraise_with_loc : Location.t -> ('a -> 'b) -> 'a -> 'b
+val reraise_with_loc : Loc.t -> ('a -> 'b) -> 'a -> 'b
+
+val option_app : ('a -> 'b) -> 'a option -> 'b option
 
 val list_of_some : 'a option -> 'a list
 val difference : 'a list -> 'a list -> 'a list
@@ -36,10 +38,16 @@ val id_of_name : Ident.name -> Ident.t
 
 (*s Functions over terms and predicates. *)
 
+val applist : term -> term list -> term
+
 val term_vars : term -> Ident.set
 val predicate_vars : predicate -> Ident.set
 
+val subst_in_term : (Ident.t * Ident.t) list -> term -> term
+val tsubst_in_term : (Ident.t * term) list -> term -> term
+
 val subst_in_predicate : (Ident.t * Ident.t) list -> predicate -> predicate
+val tsubst_in_predicate : (Ident.t * term) list -> predicate -> predicate
 
 (* CIC terms *)
 

@@ -8,7 +8,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: env.ml,v 1.1 2001-08-15 21:08:51 filliatr Exp $ *)
+(* $Id: env.ml,v 1.2 2001-08-17 00:52:37 filliatr Exp $ *)
 
 open Misc
 open Ast
@@ -19,7 +19,7 @@ open Logic
 (* Environments for imperative programs.
  *
  * An environment of programs is an association tables
- * from Ident.t to types of values with effects
+ * from identifiers (Ident.t) to types of values with effects
  * (ProgAst.ml_type_v), together with a list of these associations, since
  * the order is relevant (we have dependent types e.g. [x:nat; t:(array x T)])
  *)
@@ -96,11 +96,8 @@ let add_global id v p =
     let _ = Penv.find id !env in
     Error.clash id None
   with Not_found -> begin
-    let id' =
-      if is_mutable v then id else Ident.create ("prog_" ^ (Ident.string id)) 
-    in
-    env := Penv.add id' (TypeV v) !env; 
-    pgm_table := Idmap.add id' p !pgm_table
+    env := Penv.add id (TypeV v) !env; 
+    pgm_table := Idmap.add id p !pgm_table
   end
 
 let add_global_set id =
@@ -113,14 +110,14 @@ let add_global_set id =
 let is_global id =
   try
     match Penv.find id !env with TypeV _ -> true | Set -> false
-  with
-    Not_found -> false
+  with Not_found -> 
+    false
 
 let is_global_set id =
   try
     match Penv.find id !env with TypeV _ -> false | Set -> true
-  with
-    Not_found -> false
+  with Not_found -> 
+    false
 
 
 let lookup_global id =

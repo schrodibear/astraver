@@ -1,26 +1,17 @@
-(***********************************************************************)
-(*  v      *   The Coq Proof Assistant  /  The Coq Development Team    *)
-(* <O___,, *        INRIA-Rocquencourt  &  LRI-CNRS-Orsay              *)
-(*   \VV/  *************************************************************)
-(*    //   *      This file is distributed under the terms of the      *)
-(*         *       GNU Lesser General Public License Version 2.1       *)
-(***********************************************************************)
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: pwp.ml,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+(* $Id: wp.ml,v 1.1 2001-08-17 00:52:40 filliatr Exp $ *)
 
-open Util
-open Names
-open Term
-
+open Ident
+open Logic
 open Misc
 open Types
 open Ast
 open Util
 open Env
 open Effect
-open Ptyping
+open Typing
 open Rename
 
 (* In this module:
@@ -41,59 +32,59 @@ open Rename
 let update_post env top ef c =
   let i,o = Effect.get_repr ef in
   let al = 
-    List.fold_left 
-      (fun l id -> 
+    Idset.fold
+      (fun id l -> 
 	 if is_mutable_in_env env id then
 	   if is_write ef id then l else (id,at_id id "")::l
 	 else if is_at id then
 	   let (uid,d) = un_at id in
-	   if is_mutable_in_env env uid & d="" then 
-	     (id,at_id uid top)::l 
+	   if is_mutable_in_env env uid && d="" then 
+	     (id,at_id uid top) :: l 
 	   else 
 	     l
 	 else
 	   l) 
-      [] (global_vars c)
+      (predicate_vars c) []
   in
-  subst_in_constr al c
+  subst_in_predicate al c
   
 let force_post up env top q e =
-  let (res,ef,p,_) = e.info.kappa in
+  let ef = e.info.kappa.c_effect in
   let q' = 
     if up then option_app (named_app (update_post env top ef)) q else q 
   in
-  let i = { env = e.info.env; kappa = (res,ef,p,q') } in
+  let c' = { e.info.kappa with c_post = q' } in
+  let i = { env = e.info.env; kappa = c' } in
   { desc = e.desc; pre = e.pre; post = q'; loc = e.loc; info = i }
 
 (* put a post-condition if none is present *)
 let post_if_none_up env top q = function
-    { post = None } as p -> force_post true env top q p 
+  | { post = None } as p -> force_post true env top q p 
   | p -> p
 
 let post_if_none env q = function
-    { post = None } as p -> force_post false env "" q p 
+  | { post = None } as p -> force_post false env "" q p 
   | p -> p
 
 (* [annotation_candidate p] determines if p is a candidate for a 
  * post-condition *)
 
 let annotation_candidate = function
-    { desc = If _ | LetIn _ | LetRef _ ; post = None } -> true
+  | { desc = If _ | LetIn _ | LetRef _ ; post = None } -> true
   | _ -> false
 
 (* [extract_pre p] erase the pre-condition of p and returns it *)
 let extract_pre pr =
-  let (v,e,p,q) = pr.info.kappa in
   { desc = pr.desc; pre = []; post = pr.post; loc = pr.loc;
-    info = { env = pr.info.env; kappa = (v,e,[],q) } },
-  p
+    info = { env = pr.info.env; kappa = { pr.info.kappa with c_pre = [] } } },
+  pr.info.kappa.c_pre
 
 (* adds some pre-conditions *)
 let add_pre p1 pr =
-  let (v,e,p,q) = pr.info.kappa in
-  let p' = p1 @ p in
+  let k = pr.info.kappa in
+  let p' = p1 @ k.c_pre in
   { desc = pr.desc; pre = p'; post = pr.post; loc = pr.loc;
-    info = { env = pr.info.env; kappa = (v,e,p',q) } }
+    info = { env = pr.info.env; kappa = { k with c_pre = p' } } }
   
 (* change the statement *)
 let change_desc p d =
@@ -108,33 +99,34 @@ let create_bool_post c =
  *)
 
 let is_bool = function
-  | PureType c ->
-      (match kind_of_term (strip_outer_cast c) with
-	 | IsMutInd (op,_) -> Global.string_of_global (IndRef op) = "bool"
-	 | _ -> false)
+  | PureType PTbool -> true
   | _ -> false
 
 let normalize_boolean ren env b =
-  let ((res,v),ef,p,q) = b.info.kappa in
-  Error.check_no_effect b.loc ef;
-  if is_bool v then
+  let k = b.info.kappa in
+  Error.check_no_effect b.loc k.c_effect;
+  if is_bool k.c_result_type then
+    let q = k.c_post in
     match q with
-	Some _ ->
+      | Some _ ->
 	  (* il y a une annotation : on se contente de lui forcer un nom *)
 	  let q = force_bool_name q in
 	  { desc = b.desc; pre = b.pre; post = q; loc = b.loc;
-	    info = { env = b.info.env; kappa = ((res,v),ef,p,q) } }
+	    info = { env = b.info.env; kappa = { k with c_post = q } } }
       | None -> begin
 	  (* il n'y a pas d'annotation : on cherche à en mettre une *)
 	  match b.desc with
-	      Expression c ->
-	    	let c' = Term.applist (constant "annot_bool",[c]) in
+	    | Expression c ->
+		b (* TODO *)
+(*i
+	    	let c' = Tapp (Ident.annot_bool, [c]) in
 		let ty = type_of_expression ren env c' in
 		let (_,q') = dest_sig ty in
 		let q' = Some { a_value = q'; a_name = Name (bool_name()) } in
 		{ desc = Expression c'; 
 		  pre = b.pre; post = q'; loc = b.loc;
 		  info = { env = b.info.env; kappa = ((res, v),ef,p,q') } }
+i*)
 	    | _ -> b
 	end
   else
@@ -143,22 +135,43 @@ let normalize_boolean ren env b =
 (* [decomp_boolean c] returns the specs R and S of a boolean expression *)
 
 let decomp_boolean = function
-    Some { a_value = q } ->
+  | Some { a_value = q } ->
+      tsubst_in_predicate [Ident.result, Tconst (ConstBool true)] q,
+      tsubst_in_predicate [Ident.result, Tconst (ConstBool false)] q
+(*i
       Reduction.whd_betaiota (Term.applist (q, [constant "true"])),
       Reduction.whd_betaiota (Term.applist (q, [constant "false"]))
-  | _ -> invalid_arg "Ptyping.decomp_boolean"
+i*)
+  | _ -> invalid_arg "Typing.decomp_boolean"
+
+let result_eq_true = 
+  Pterm (Tapp (t_eq, [Tvar result; Tconst (ConstBool true)]))
+
+let result_eq_false = 
+  Pterm (Tapp (t_eq, [Tvar result; Tconst (ConstBool false)]))
+
+let spec_and r1 s1 r2 s2 =
+  Pand (Pimplies (result_eq_true, Pand (r1, r2)),
+	Pimplies (result_eq_false, Por (s1, s2)))
+
+let spec_or r1 s1 r2 s2 =
+  Pand (Pimplies (result_eq_true, Por (r1, r2)),
+	Pimplies (result_eq_false, Pand (s1, s2)))
+
+let spec_not r s =
+  Pand (Pimplies (result_eq_true, s), Pimplies (result_eq_false, r))
 
 (* top point of a program *)
 
 let top_point = function
-    PPoint (s,_) as p -> s,p
-  | p -> let s = label_name() in s,PPoint(s,p)
+  | PPoint (s,_) as p -> s,p
+  | p -> let s = label_name() in s, PPoint(s,p)
 
 let top_point_block = function
-    (Label s :: _) as b -> s,b
-  | b -> let s = label_name() in s,(Label s)::b
+  | (Label s :: _) as b -> s,b
+  | b -> let s = label_name() in s, (Label s)::b
 
-let abstract_unit q = abstract [result_id,constant "unit"] q
+(*i let abstract_unit q = abstract [result_id,constant "unit"] q i*)
 
 (* [add_decreasing env ren ren' phi r bl] adds the decreasing condition
  *    phi(ren') r phi(ren)
@@ -166,13 +179,13 @@ let abstract_unit q = abstract [result_id,constant "unit"] q
  *)
 
 let add_decreasing env inv (var,r) lab bl =
-  let ids = now_vars env var in
-  let al = List.map (fun id -> (id,at_id id lab)) ids in
-  let var_lab = subst_in_constr al var in
-  let dec = Term.applist (r, [var;var_lab]) in
+  let ids = term_now_vars env var in
+  let al = Idset.fold (fun id l -> (id,at_id id lab) :: l) ids [] in
+  let var_lab = subst_in_term al var in
+  let dec = Pterm (applist r [var;var_lab]) in
   let post = match inv with
-      None -> anonymous dec
-    | Some i -> { a_value = conj dec i.a_value; a_name = i.a_name }
+    | None -> anonymous dec
+    | Some i -> { a_value = Pand (dec, i.a_value); a_name = i.a_name }
   in
   bl @ [ Assert post ]
 
@@ -189,12 +202,13 @@ let post_last_statement env top q bl =
  * info is the typing information coming from the outside annotations *)
 let rec propagate_desc ren info d = 
   let env = info.env in
-  let (_,_,p,q) = info.kappa in
+  let p = info.kappa.c_pre in
+  let q = info.kappa.c_post in
   match d with
-      If (e1,e2,e3) ->
+    | If (e1,e2,e3) ->
       (* propagation number 2 *)
 	let e1' = normalize_boolean ren env (propagate ren e1) in
-	if e2.post = None or e3.post = None then
+	if e2.post = None || e3.post = None then
 	  let top = label_name() in
 	  let ren' = push_date ren top in
 	  PPoint (top, If (e1', 
@@ -207,7 +221,7 @@ let rec propagate_desc ren info d =
     | TabAcc (ch,x,e) ->
       	TabAcc (ch, x, propagate ren e)
     | TabAff (ch,x,({desc=Expression c} as e1),e2) ->
-	let p = Monad.make_pre_access ren env x c in
+	let p = make_pre_access ren env x c in
 	let e1' = add_pre [(anonymous_pre true p)] e1 in
       	TabAff (false, x, propagate ren e1', propagate ren e2)
     | TabAff (ch,x,e1,e2) ->
@@ -252,10 +266,11 @@ let rec propagate_desc ren info d =
 and propagate ren p =
   let env = p.info.env in
   let p = match p.desc with
-      App (f,l) ->
-	let _,(_,so,ok),(_,_,_,qapp) = effect_app ren env f l in
+    | App (f,l) ->
+	let _,(_,so,ok),capp = effect_app ren env f l in
+	let qapp = capp.c_post in
 	if ok then
-	  let q = option_app (named_app (real_subst_in_constr so)) qapp in
+	  let q = option_app (named_app (tsubst_in_predicate so)) qapp in
 	  post_if_none env q p
 	else
 	  p
@@ -278,54 +293,43 @@ and propagate ren p =
 	let s = make_before_after s in
 	let q = match inv with
 	    None -> Some (anonymous s)
-	  | Some i -> Some { a_value = conj i.a_value s; a_name = i.a_name }
+	  | Some i -> Some { a_value = Pand (i.a_value, s); a_name = i.a_name }
 	in
-	let q = option_app (named_app abstract_unit) q in
+	(*i let q = option_app (named_app abstract_unit) q in i*)
 	post_if_none env q p
 
-    | SApp ([Var id], [e1;e2]) 
-      when id = connective_and or id = connective_or ->
-	let (_,_,_,q1) = e1.info.kappa
-	and (_,_,_,q2) = e2.info.kappa in
+    | SApp ([Var id], [e1;e2]) when id == p_and || id == p_or ->
+	let q1 = e1.info.kappa.c_post 
+	and q2 = e2.info.kappa.c_post in
 	let (r1,s1) = decomp_boolean q1
 	and (r2,s2) = decomp_boolean q2 in
 	let q =
-	  let conn = if id = connective_and then "spec_and" else "spec_or" in
-	  let c = Term.applist (constant conn, [r1; s1; r2; s2]) in
-	  let c = Reduction.whd_betadeltaiota (Global.env()) Evd.empty c in
+	  let c = (if id == p_and then spec_and else spec_or) r1 s1 r2 s2 in
 	  create_bool_post c
 	in
-	let d = 
-	  SApp ([Var id; Expression (out_post q1); Expression (out_post q2)], 
-		[e1; e2] ) 
-	in
-	post_if_none env q (change_desc p d)
+	post_if_none env q p
 
-    | SApp ([Var id], [e1]) when id = connective_not ->
-	let (_,_,_,q1) = e1.info.kappa in
+    | SApp ([Var id], [e1]) when id == p_not ->
+	let q1 = e1.info.kappa.c_post in
 	let (r1,s1) = decomp_boolean q1 in
-	let q = 
-	  let c = Term.applist (constant "spec_not", [r1; s1]) in
-	  let c = Reduction.whd_betadeltaiota (Global.env ()) Evd.empty c in
-	  create_bool_post c 
-	in
-	let d = SApp ([Var id; Expression (out_post q1)], [ e1 ]) in
-	post_if_none env q (change_desc p d)
+	let q = create_bool_post (spec_not r1 s1) in
+	post_if_none env q p
 
     | _ -> p
 
 and propagate_arg ren = function
-    Type _ | Refarg _ as a -> a
+  | Type _ | Refarg _ as a -> a
   | Term e -> Term (propagate ren e)
 
 
 and propagate_block ren env = function 
-    [] -> []
+  | [] -> 
+      []
   | (Statement p) :: (Assert q) :: rem when annotation_candidate p ->
       let q' =
-	let ((id,v),_,_,_) = p.info.kappa in
+	(*i let ((id,v),_,_,_) = p.info.kappa in
 	let tv = Monad.trad_ml_type_v ren env v in
-	named_app (abstract [id,tv]) q
+	named_app (abstract [id,tv]) i*) q
       in
       let p' = post_if_none env (Some q') p in
       (Statement (propagate ren p')) :: (Assert q) 
