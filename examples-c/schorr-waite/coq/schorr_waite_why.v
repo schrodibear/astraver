@@ -2286,8 +2286,113 @@ Lemma schorr_waite_impl_po_11 :
   (forall (x_0:pointer),
    (~(isreachable alloc l0 r0 root x_0) -> (acc m0 x_0) = (acc m x_0))).
 Proof.
+(* post-condition of the function *)
 intuition.
-(* FILL PROOF HERE *)
+inversion_clear H0; intuition.
+subst p1.
+subst x0.
+generalize (H8 x); intuition.
+inversion H1.
+elim H14.
+auto.
+inversion_clear H0; intuition.
+subst p1.
+inversion H4.
+subst x0.
+generalize (H8 x); intuition.
+inversion H1.
+elim H14.
+auto.
+inversion_clear H0; intuition.
+subst p1.
+inversion H4.
+subst x0.
+generalize (H12 x).
+intuition.
+assert (reachable alloc l r root x).
+apply reachable_unchanged with l0 r0 ;auto.
+generalize (H14 H1 H5);intros.
+inversion_clear H15.
+subst t1.
+inversion H16.
+subst;elim H6.
+intros.
+elim H0;auto.
+subst.
+inversion H3.
+elim H0;auto.
+inversion H3.
+elim H0;auto.
+inversion H16.
+inversion H15.
+inversion H17.
+inversion H1.
+elim H17;auto.
+inversion_clear H0; intuition.
+apply H7.
+intro.
+apply H4.
+apply reachable_unchanged with l r ;auto.
+intro.
+assert (in_list x1 x0 -> False).
+subst p1.
+inversion H5.
+subst x0.
+auto.
+inversion H12.
+elim H16;auto.
+generalize (H9 x1 H12).
+intuition.
+intuition.
+inversion_clear H0; intuition.
+subst p1.
+inversion H3.
+subst x0.
+generalize (H9 x); intuition.
+inversion H1.
+elim H15.
+auto.
+inversion_clear H0; intuition.
+subst p1.
+inversion H3.
+subst x0.
+generalize (H9 x); intuition.
+inversion H1.
+elim H15.
+auto.
+inversion_clear H0; intuition.
+subst p1.
+inversion H3.
+subst x0.
+generalize (H13 x).
+intuition.
+assert (reachable alloc l r root x).
+apply reachable_unchanged with l0 r0 ;auto.
+generalize (H15 H1 H6);intros.
+inversion_clear H16.
+inversion H17;auto.
+subst.
+auto.
+inversion H17.
+inversion H16.
+inversion H18.
+inversion H1.
+elim H18;auto.
+inversion_clear H0; intuition.
+apply H8.
+intro.
+apply H3.
+apply reachable_unchanged with l r ;auto.
+intro.
+assert (in_list x1 x0 -> False).
+subst p1.
+inversion H6.
+subst x0.
+auto.
+inversion H13.
+elim H17;auto.
+generalize (H10 x1 H13).
+intuition.
 Save.
 
 (* Why obligation from file "why/schorr_waite.why", characters 647-2610 *)
@@ -2328,7 +2433,14 @@ Lemma schorr_waite_impl_po_12 :
    (forall (x_3:pointer),
     (~(x_3 = null) /\ (isreachable alloc l r root x_3) -> (valid alloc x_3)))).
 Proof.
+(* loop invariant true at the beginning *)
 intuition.
-(* FILL PROOF HERE *)
+left; subst; auto.
+exists (@nil pointer).
+intuition.
+constructor.
+left; subst; auto.
+simpl in H; tauto.
+simpl in H; tauto.
 Save.
 
