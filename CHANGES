@@ -1,4 +1,6 @@
 
+  o fixed bug in ocaml code generation
+
 version 1.08, March 28th, 2003
 ==============================
   o C: local variables can be uninitialized
