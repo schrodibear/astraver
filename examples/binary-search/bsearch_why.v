@@ -162,8 +162,8 @@ Lemma binary_search_po_1 :
  Proof.
  intros.
 split.
- rewrite Post4; apply le_mean; Omega'.
-rewrite Post4; apply ge_mean; Omega'.
+ rewrite Post5; apply le_mean; Omega'.
+rewrite Post5; apply ge_mean; Omega'.
 Qed.
 
 (* Why obligation from file "bsearch.mlw", characters 615-624 *)
