@@ -1,5 +1,5 @@
 
-  o fixed bug in effect inference for predicates (alloc was missing)
+  o fixed bug in automatic annotation of x := e when e has a postcondition
 
 version 1.50, March 26th, 2004
 ==============================
