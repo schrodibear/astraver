@@ -1,9 +1,9 @@
 
 (* Fast exponentiation, using X^2n = (X^n)^2 and X^(2n+1) = X.(X^n)^2 *)
 
-external x : int
+parameter x : int
 
-external n,m,y : int ref
+parameter n,m,y : int ref
 
 external div2 : int -> int
 

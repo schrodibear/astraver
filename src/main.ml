@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.25 2002-03-21 13:20:47 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.26 2002-03-26 13:43:41 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -23,6 +23,10 @@ let push_obligations ol = match !prover with
 
 let push_validation id v = 
   if !valid && !prover = Coq then Coq.push_validation id v
+
+let push_parameter id v = match !prover with
+  | Pvs -> Pvs.push_parameter id v
+  | Coq -> Coq.push_parameter id v
 
 let output fwe = match !prover with
   | Pvs -> Pvs.output_file fwe
@@ -74,12 +78,22 @@ let interp_program id p =
 let add_external loc v id =
   if Env.is_global id then Error.clash id (Some loc);
   Env.add_global id v None
+
+let add_parameter tv id =
+  push_parameter (Ident.string id) tv
     
 let interp_decl = function
   | Program (id, p) ->
       if Env.is_global id then Error.clash id (Some p.info.loc);
       (try interp_program id p with Exit -> ())
+  | Parameter (loc, ids, v) ->
+      Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
+      List.iter (add_external loc v) ids;
+      if not (is_mutable v) then
+	let tv = Monad.trad_type_v (initial_renaming Env.empty) Env.empty v in
+	List.iter (add_parameter tv) ids
   | External (loc, ids, v) -> 
+      if is_mutable v then raise_with_loc (Some loc) MutableExternal;
       Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
       List.iter (add_external loc v) ids
   | QPvs s ->

@@ -4,7 +4,7 @@
 
 (**** 1. with global references *)
 
-external x,y : int ref
+parameter x,y : int ref
 
 let swap1 = 
   (let t = !x in begin x := !y; y := t end)
@@ -41,7 +41,7 @@ let call_swap3_y_x = (swap3 y x) { x = y@ and y = x@ }
 
 (**** 3. with a function using a global reference *)
 
-external tmp : int ref
+parameter tmp : int ref
 
 let swap4 = fun (a,b : int ref) ->
   begin tmp := !a; a := !b; b := !tmp end

@@ -5,7 +5,7 @@
    While not necessary to establish postcondition [x = 0] we add
    [x <= x@0] to the invariant to illustrate the use of labels. *)
 
-external x : int ref
+parameter x : int ref
 
 let p = 
   { x >= 0 }

@@ -2,14 +2,14 @@
 (* Unitary tests *)
 
 (* types syntax: values *)
-external v1 : bool ref
-external v2 : int
-external v3 : (int)
-external v4 : (int) ref
-external v5 : foo
-external v6 : array 10 of int
-external v7 : array 10 of (int)
-external v8 : array 3+4 of (int -> int)
+parameter v1 : bool ref
+external  v2 : int
+external  v3 : (int)
+parameter v4 : (int) ref
+external  v5 : foo
+parameter v6 : array 10 of int
+parameter v7 : array 10 of (int)
+parameter v8 : array 3+4 of (int -> int)
 
 (* types syntax: functions *)
 external f1 : int -> bool -> int

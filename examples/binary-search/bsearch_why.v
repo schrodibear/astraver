@@ -9,11 +9,11 @@ Tactic Definition Omega' := Abstract Omega.
 
 (* Parameters and axioms *)
 
-Parameter N : Z.
+(*Why*) Parameter N : Z.
 
 Axiom N_positive : `N >= 0`.
 
-Parameter v : Z.
+(*Why*) Parameter v : Z.
 
 (* Specification *)
 

@@ -1,12 +1,13 @@
 
-external N : int
-external v : int
+parameter N : int
+
+parameter v : int
+
+parameter t : array (N+1) of int
+
+parameter l,u,p,m : int ref
 
 external mean : int -> int -> int
-
-external t : array (N+1) of int
-
-external l,u,p,m : int ref
 
 let binary_search =
   { sorted_array(t,1,N) }

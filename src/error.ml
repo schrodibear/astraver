@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.11 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.12 2002-03-26 13:43:41 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -40,6 +40,7 @@ type error =
   | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
+  | MutableExternal
   | AnyMessage of string
 
 exception Error of (Loc.t option) * error
@@ -121,6 +122,9 @@ let report fmt = function
       fprintf fmt "@[This argument should have type@ "; f fmt; fprintf fmt "@]"
   | NoVariableAtDate (id, d) ->
       fprintf fmt "Variable %s is unknown at date %s" (Ident.string id) d
+  | MutableExternal ->
+      fprintf fmt "@[An external value cannot be mutable;@ ";
+      fprintf fmt "use parameter instead@]"
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

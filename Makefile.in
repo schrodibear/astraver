@@ -100,7 +100,7 @@ test:: $(BINARY) $(VO)
 	$(BINARY) -d -V -coq bench/test.ml
 
 examples:: $(BINARY) $(VO)
-	make -C examples/misc
+	make -C examples
 
 # installation
 ##############

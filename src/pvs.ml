@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.14 2002-03-20 16:01:44 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.15 2002-03-26 13:43:41 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -157,6 +157,8 @@ let reset () = Queue.clear queue
 let push_verbatim s = Queue.add (Verbatim s) queue
 
 let push_obligations ol = Queue.add (Obligations ol) queue
+
+let push_parameter id v = failwith "todo: Pvs.push_parameter"
 
 let output_elem fmt = function
   | Verbatim s -> fprintf fmt "  %s@\n@\n" s

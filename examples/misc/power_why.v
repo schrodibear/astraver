@@ -6,8 +6,6 @@ Require ZArithRing.
 Require Zcomplements.
 Require Zpower.
 
-Parameter x : Z.
-
 Definition square := [x]`x * x`.
 Definition double := [x]`2 * x`.
 
@@ -89,42 +87,42 @@ Save.
 
 (* Obligations *)
 
+(*Why*) Parameter x : Z.
+
 Lemma power1_po_1 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
   (well_founded ? (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
 
 Lemma power1_po_2 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (Variant1: Z) 
-  (y1: Z) 
-  (n0: Z) 
-  (m1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  Variant1 = n0 ->
-  (result1: bool) 
-  (if result1 then `n0 > 0` else `n0 <= 0`) ->
-  (if true then `n0 > 0` else `n0 <= 0`) ->
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  (result2: bool) 
-  (if result2 then (Zodd n0) else (Zeven n0)) ->
-  (if true then (Zodd n0) else (Zeven n0)) ->
-  (y2: Z) 
-  y2 = `y1 * m1` ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (Variant1: Z)
+  (y1: Z)
+  (n0: Z)
+  (m1: Z)
+  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre4: Variant1 = n0)
+  (result1: bool)
+  (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
+  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (result2: bool)
+  (Bool2: (if result2 then (Zodd n0) else (Zeven n0)))
+  (Test3: (if true then (Zodd n0) else (Zeven n0)))
+  (y2: Z)
+  (Post3: y2 = `y1 * m1`)
   ((m:Z)
    (m = `m1 * m1` ->
     ((n1:Z)
@@ -132,13 +130,13 @@ Lemma power1_po_2 :
       (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
-Clear result1 H4 result2 H7.
+Clear result1 Bool1 result2 Bool2.
 Repeat Split; Try Omega.
-Rewrite H11; Clear H11.
-Decompose [and] H6; Clear H6.
-Rewrite (Zodd_div2 n0 H7 H8) in H4. Rewrite H4.
-Rewrite H9; Clear H9.
-Rewrite H10; Clear H10.
+Rewrite H0; Clear H0.
+Decompose [and] Pre3; Clear Pre3.
+Rewrite (Zodd_div2 n0 H1 Test3) in H0. Rewrite H0.
+Rewrite H; Clear H.
+Rewrite Post3; Clear Post3.
 Rewrite Zpower_exp.
 Replace (Zpower m1 `1`) with m1.
 Rewrite Zpower_2n.
@@ -149,34 +147,32 @@ Generalize (Zdiv2_ge_0 n0); Omega.
 Unfold Zpower; Unfold Zpower_pos; Simpl; Ring.
 Generalize (Zdiv2_ge_0 n0); Omega.
 Omega.
-Rewrite H11; Apply Zdiv2_ge_0; Omega.
+Rewrite H0; Apply Zdiv2_ge_0; Omega.
 Apply Zge_le.
-Rewrite H11; Apply Zdiv2_ge_0; Omega.
-Rewrite H11; Apply Zdiv2_lt; Omega.
+Rewrite H0; Apply Zdiv2_ge_0; Omega.
+Rewrite H0; Apply Zdiv2_lt; Omega.
 Save.
 
 Lemma power1_po_3 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (Variant1: Z) 
-  (y1: Z) 
-  (n0: Z) 
-  (m1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  Variant1 = n0 ->
-  (result1: bool) 
-  (if result1 then `n0 > 0` else `n0 <= 0`) ->
-  (if true then `n0 > 0` else `n0 <= 0`) ->
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  (result2: bool) 
-  (if result2 then (Zodd n0) else (Zeven n0)) ->
-  (if false then (Zodd n0) else (Zeven n0)) ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (Variant1: Z)
+  (y1: Z)
+  (n0: Z)
+  (m1: Z)
+  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre4: Variant1 = n0)
+  (result1: bool)
+  (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
+  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (result2: bool)
+  (Bool2: (if result2 then (Zodd n0) else (Zeven n0)))
+  (Test2: (if false then (Zodd n0) else (Zeven n0)))
   ((m:Z)
    (m = `m1 * m1` ->
     ((n1:Z)
@@ -184,134 +180,126 @@ Lemma power1_po_3 :
       (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
-Clear result1 H4 result2 H7.
+Clear result1 Bool1 result2 Bool2.
 Repeat Split; Try Omega.
-Decompose [and] H6; Clear H6.
-Rewrite (Zeven_div2 n0 H8) in H4. Rewrite H4.
-Rewrite H9; Clear H9.
-Rewrite H10; Clear H10.
+Decompose [and] Pre3; Clear Pre3.
+Rewrite (Zeven_div2 n0 Test2) in H1. Rewrite H1.
+Rewrite H; Clear H.
+Rewrite H0; Clear H0.
 Rewrite Zpower_2n.
 Unfold square.
 Unfold div2.
 Ring.
 Generalize (Zdiv2_ge_0 n0); Omega.
-Rewrite H10; Apply Zdiv2_ge_0; Omega.
+Rewrite H0; Apply Zdiv2_ge_0; Omega.
 Apply Zge_le.
-Rewrite H10; Apply Zdiv2_ge_0; Omega.
-Rewrite H10; Apply Zdiv2_lt; Omega.
+Rewrite H0; Apply Zdiv2_ge_0; Omega.
+Rewrite H0; Apply Zdiv2_lt; Omega.
 Save.
 
 Lemma power1_po_4 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (Variant1: Z) 
-  (y1: Z) 
-  (n0: Z) 
-  (m1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  Variant1 = n0 ->
-  (result1: bool) 
-  (if result1 then `n0 > 0` else `n0 <= 0`) ->
-  (if true then `n0 > 0` else `n0 <= 0`) ->
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  (y2: Z) 
-  ((m:Z)
-   (m = `m1 * m1` ->
-    ((n1:Z)
-     (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\ `n1 >= 0` /\
-      (Zwf `0` n1 n0))))) ->
-  (m2: Z) 
-  m2 = `m1 * m1` ->
-  (n1: Z) 
-  n1 = (div2 n0) ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (Variant1: Z)
+  (y1: Z)
+  (n0: Z)
+  (m1: Z)
+  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre4: Variant1 = n0)
+  (result1: bool)
+  (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
+  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (y2: Z)
+  (Post12: ((m:Z)
+            (m = `m1 * m1` ->
+             ((n1:Z)
+              (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\
+               `n1 >= 0` /\ (Zwf `0` n1 n0))))))
+  (m2: Z)
+  (Post4: m2 = `m1 * m1`)
+  (n1: Z)
+  (Post5: n1 = (div2 n0))
   (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ (Zwf `0` n1 n0).
 Proof.
 Intuition.
 Save.
 
 Lemma power1_po_5 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (Variant1: Z) 
-  (y1: Z) 
-  (n0: Z) 
-  (m1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  Variant1 = n0 ->
-  (result1: bool) 
-  (if result1 then `n0 > 0` else `n0 <= 0`) ->
-  (if true then `n0 > 0` else `n0 <= 0`) ->
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  (m2: Z) 
-  (n1: Z) 
-  (y2: Z) 
-  (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
-  (Zwf `0` n1 n0) ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (Variant1: Z)
+  (y1: Z)
+  (n0: Z)
+  (m1: Z)
+  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre4: Variant1 = n0)
+  (result1: bool)
+  (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
+  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (m2: Z)
+  (n1: Z)
+  (y2: Z)
+  (Post11: (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
+           (Zwf `0` n1 n0))
   (Zwf `0` n1 Variant1).
 Proof.
-Intros; Rewrite H3; Tauto.
+Intros; Rewrite Pre4; Tauto.
 Save.
 
 Lemma power1_po_6 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (Variant1: Z) 
-  (y1: Z) 
-  (n0: Z) 
-  (m1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  Variant1 = n0 ->
-  (result1: bool) 
-  (if result1 then `n0 > 0` else `n0 <= 0`) ->
-  (if true then `n0 > 0` else `n0 <= 0`) ->
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  (m2: Z) 
-  (n1: Z) 
-  (y2: Z) 
-  (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
-  (Zwf `0` n1 n0) ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (Variant1: Z)
+  (y1: Z)
+  (n0: Z)
+  (m1: Z)
+  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre4: Variant1 = n0)
+  (result1: bool)
+  (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
+  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (m2: Z)
+  (n1: Z)
+  (y2: Z)
+  (Post11: (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
+           (Zwf `0` n1 n0))
   (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0`.
 Proof.
 Intuition.
 Save.
 
 Lemma power1_po_7 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (Variant1: Z) 
-  (y1: Z) 
-  (n0: Z) 
-  (m1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
-  Variant1 = n0 ->
-  (result1: bool) 
-  (if result1 then `n0 > 0` else `n0 <= 0`) ->
-  (if false then `n0 > 0` else `n0 <= 0`) ->
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\
-  `n0 >= 0` ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (Variant1: Z)
+  (y1: Z)
+  (n0: Z)
+  (m1: Z)
+  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre4: Variant1 = n0)
+  (result1: bool)
+  (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
+  (Test1: (if false then `n0 > 0` else `n0 <= 0`))
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\
   ((if false then `n0 > 0` else `n0 <= 0`)).
 Proof.
@@ -319,37 +307,37 @@ Intuition.
 Save.
 
 Lemma power1_po_8 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
   (Zpower x n) = `y0 * (Zpower m0 n)` /\ `n >= 0`.
 Proof.
 Intros.
 Split; [ Idtac | Omega].
-Rewrite H1; Ring.
-Rewrite H0; Trivial.
+Rewrite Post2; Ring.
+Rewrite Post1; Trivial.
 Save.
 
 Lemma power1_po_9 : 
-  (n: Z) 
-  `n >= 0` ->
-  (m0: Z) 
-  m0 = x ->
-  (y0: Z) 
-  y0 = `1` ->
-  (m1: Z) 
-  (n0: Z) 
-  (y1: Z) 
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\
-  ((if false then `n0 > 0` else `n0 <= 0`)) ->
+  (n: Z)
+  (Pre6: `n >= 0`)
+  (m0: Z)
+  (Post1: m0 = x)
+  (y0: Z)
+  (Post2: y0 = `1`)
+  (m1: Z)
+  (n0: Z)
+  (y1: Z)
+  (Post7: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\
+          ((if false then `n0 > 0` else `n0 <= 0`)))
   y1 = (Zpower x n).
 Proof.
 Intros.
 Intuition.
-Rewrite H3.
+Rewrite H.
 Replace n0 with `0`.
 Simpl; Ring.
 Omega.

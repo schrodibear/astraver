@@ -1,5 +1,5 @@
 
-external i : int ref
+parameter i : int ref
 
 let p = 
   { i <= 10 }

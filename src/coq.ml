@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.21 2002-03-21 15:47:06 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.22 2002-03-26 13:43:41 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -153,6 +153,10 @@ let rec print_cc_type fmt = function
       fprintf fmt "(array %a %a)" print_term s print_cc_type v
   | TTlambda (b, t) ->
       fprintf fmt "[%a]%a" print_binder b print_cc_type t
+(*i***
+  | TTarrow ((id, CC_var_binder t1), t2) when not (occur_cc_type id t2) -> 
+      fprintf fmt "%a -> %a" print_cc_type t1 print_cc_type t2
+***i*)
   | TTarrow (b, t) -> 
       fprintf fmt "(%a)%a" print_binder b print_cc_type t
   | TTtuple ([_,t], None) -> 
@@ -232,13 +236,17 @@ let reprint_obligation fmt (id,s) =
 
 let print_obligation fmt o = 
   reprint_obligation fmt o;
-  fprintf fmt "Proof. (* %s *)@\n(* FILL PROOF HERE *)@\nSave.@\n@\n" (fst o)
+  fprintf fmt "Proof. (* %s *)@\n(* FILL PROOF HERE *)@\nSave.@\n" (fst o)
 
-let print_validation fmt id v =
-  fprintf fmt "@[Definition %s_valid :=@\n  %a.@\n@]@\n" id print_cc_term v
+let reprint_validation fmt id v =
+  fprintf fmt "@[Definition %s_valid :=@\n  %a.@]@\n" id print_cc_term v
 
-let print_parameter fmt id c =
-  fprintf fmt "@[(*Why*) Parameter %s : %a.@\n@]@\n" id print_type_c c
+let print_validation = reprint_validation
+
+let reprint_parameter fmt id c =
+  fprintf fmt "@[(*Why*) Parameter %s : %a.@]@\n" id print_cc_type c
+
+let print_parameter = reprint_parameter
 
 (*s Elements to produce. *)
 
@@ -248,7 +256,7 @@ type element_kind =
   | Valid of string
 
 type element = 
-  | Parameter of string * type_c
+  | Parameter of string * cc_type
   | Obligation of obligation
   | Validation of string * validation
 
@@ -265,26 +273,32 @@ let push_obligations =
 let push_validation id v = 
   add_elem (Valid id) (Validation (id,v))
 
+let push_parameter id v =
+  add_elem (Param id) (Parameter (id,v))
+
 let print_element_kind fmt = function
   | Param s -> fprintf fmt "parameter %s" s
   | Oblig s -> fprintf fmt "obligation %s" s
   | Valid s -> fprintf fmt "validation %s" s
 
-let print_element fmt = function
-  | Parameter (id, c) -> print_parameter fmt id c
-  | Obligation o -> print_obligation fmt o
-  | Validation (id, v) -> print_validation fmt id v
+let print_element fmt e = 
+  begin match e with
+    | Parameter (id, c) -> print_parameter fmt id c
+    | Obligation o -> print_obligation fmt o
+    | Validation (id, v) -> print_validation fmt id v
+  end;
+  fprintf fmt "@\n"
 
 let reprint_element fmt = function
-  | Parameter (id, c) -> print_parameter fmt id c
+  | Parameter (id, c) -> reprint_parameter fmt id c
   | Obligation o -> reprint_obligation fmt o
-  | Validation (id, v) -> print_validation fmt id v
+  | Validation (id, v) -> reprint_validation fmt id v
 
 (*s Generating the output. *)
 
 let oblig_regexp = Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
 let valid_regexp = Str.regexp "Definition[ ]+\\(.*\\)_valid[ ]*:=[ ]*"
-let param_regexp = Str.regexp "(*Why*) Parameter[ ]+\\(.*\\)[ ]*:[ ]*"
+let param_regexp = Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
 
 let check_line s =
   let test r = 
@@ -294,6 +308,9 @@ let check_line s =
   try Some (Valid (test valid_regexp)) with Exit ->
   try Some (Param (test param_regexp)) with Exit ->
   None
+
+let end_is_not_dot s =
+  let n = String.length s in n = 0 || s.[n-1] <> '.'
 
 let regen oldf fmt =
   let cin = open_in oldf in
@@ -305,16 +322,15 @@ let regen oldf fmt =
 	  scan ()
       | Some e ->
 	  if Hashtbl.mem elem_t e then begin
-	    if !verbose then eprintf "overwriting %a@\n" print_element_kind e;
+	    if !verbose then eprintf "overwriting %a@." print_element_kind e;
 	    print_up_to e
 	  end else
-	    if !verbose then eprintf "erasing %a@\n" print_element_kind e;
-	  skip_to_dot ();
+	    if !verbose then eprintf "erasing %a@." print_element_kind e;
+	  if end_is_not_dot s then skip_to_dot ();
 	  scan ()
   and skip_to_dot () =
     let s = input_line cin in
-    let n = String.length s in
-    if n = 0 || s.[n-1] <> '.' then skip_to_dot ()
+    if end_is_not_dot s then skip_to_dot ()
   and tail () = 
     fprintf fmt "%c" (input_char cin); tail () 
   and print_up_to e =

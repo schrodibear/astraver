@@ -10,7 +10,7 @@
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
-\newcommand{\indexnt}[1]{\index{#1@\textsl{#1} (grammar entry)}}
+\newcommand{\indexnt}[1]{\index{#1@\textsl{#1}, grammar entry}}
 \newcommand{\indextt}[1]{\index{#1@\texttt{#1}}}
 \newcommand{\etoile}{$^{\star}$}
 \newcommand{\etoilesep}[1]{$^{\star}_#1$}
@@ -89,7 +89,7 @@ The input file contains the following kinds of declaration:
 \begin{itemize}
   \item\indextt{let}
     \texttt{let} $x$ \texttt{=} \textsl{annotated-program} \par
-    It declares a program expression, with name $x$.
+    Declares a program expression, with name $x$.
     The program is typed, added to the context and proof obligations
     are generated. 
     Examples:
@@ -99,22 +99,32 @@ The input file contains the following kinds of declaration:
 \end{verbatim}
     Such programs cannot be of mutable types (i.e. references or arrays).
 
-  \item\indextt{external}
-    \te{external} $x_1,\dots,x_n: \tau$ \par 
-    It declares some external values of type $\tau$.
-    This is to introduce values to be use in the program part; 
-    values to be used in the specification part
-    must be introduced using the \te{pvs} declaration (when the \pvs\
-    prover is used) or directly into the generated \coq\ module (when
-    the \coq\ prover is used).
+  \item\indextt{parameter}
+    \te{parameter} $x_1,\dots,x_n: \tau$ \par
+    Declares some parameters for the whole development. They will be
+    turned into axioms on the prover part.
     Examples:
 \begin{verbatim}
-     external x,y : int ref
+     parameter x,y : int ref
+     parameter N : int
+     parameter t : array N of int
+\end{verbatim}
+    (Types are detailed in Section~\ref{types} and their syntax is
+    given in Section~\ref{syntax:mltypes}.)
+
+  \item\indextt{external}
+    \te{external} $x_1,\dots,x_n: \tau$ \par 
+    Declares some external values of type $\tau$, 
+    used in the programs but defined on the prover part.
+    Examples:
+\begin{verbatim}
      external mean : int -> int -> int
      external diff : a:int -> b:int -> { b >= 0 } int { a = b + result }
 \end{verbatim}
-    Types are detailed in Section~\ref{types} and their syntax is
-    given in Section~\ref{syntax:mltypes}.
+    Note that material to be used only in specifications must be introduced
+    using the \te{pvs} declaration---when the \pvs\ 
+    prover is used---or directly into the generated \coq\ module---when
+    the \coq\ prover is used.
 
   \item\indextt{pvs}
     \te{pvs "}\textit{any \pvs\ material}\te{"} \par
@@ -256,8 +266,8 @@ program.
 
 Program expressions are given types including side-effects and
 specification. Such a type is either inferred by \why\ (for each
-\texttt{let} declaration), or given by the user (in an \texttt{external}
-declaration).
+\texttt{let} declaration), or given by the user (in an
+\texttt{external} or a \texttt{parameter} declaration).
 
 Types syntax follows ML types syntax, with additional information for
 side-effects and pre/postconditions. Here are examples of simple types,
@@ -335,13 +345,6 @@ as in ML, but must write instead
 \end{itemize}
 
 
-\section{Examples}
-\label{examples}
-
-Various examples can be found in the subdirectory \texttt{examples/}
-of the distribution.
-
-
 \section{Installation}
 \label{install}\index{Installation}
 
@@ -365,6 +368,15 @@ Then
   (Alternatively, you can move/copy the \why\ executable
   \texttt{bin/why} anywhere, or make a symbolic link to it from anywhere.)
 \end{enumerate}
+
+
+\chapter{Full examples}
+\label{examples}
+
+This chapter details the examples delivered with \why, in the
+subdirectory \texttt{examples/} of the distribution.
+
+TODO
 
 
 \chapter{Reference manual}
@@ -649,9 +661,10 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 
   \nt{declaration}
     & $::=$ & \te{let} \nt{identifier} \te{=} \nt{prog} \\
+      & $|$ & \te{parameter} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{value\_type} \\ \indextt{parameter}
       & $|$ & \te{external} \nt{identifier}\plussep{\te{,}}
-              \te{:} \nt{value\_type} \\ 
-              \indextt{external}
+              \te{:} \nt{value\_type} \\ \indextt{external}
       & $|$ & \te{pvs} \nt{string}
 \end{tabular}\\
 \hrulefill

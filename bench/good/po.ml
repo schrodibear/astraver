@@ -1,7 +1,7 @@
 
 (* Tests for proof obligations. *)
 
-external x : int ref
+parameter x : int ref
 
 let p1 = { q(x+1) } begin x := !x + 1 end { q(x) }
 

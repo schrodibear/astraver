@@ -1,5 +1,5 @@
 
-external x: int ref
+parameter x: int ref
 
 let oppose = fun (u:unit) -> (x := - !x) { x = -x@ }
 
