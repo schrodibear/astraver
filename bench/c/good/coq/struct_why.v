@@ -6,7 +6,7 @@ Require Export caduceus_spec_why.
 (* Why obligation from file "why/struct.why", characters 159-179 *)
 Lemma f_impl_po_1 : 
   forall (t: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (x: ((memory) Z)),
   forall (Pre13: (valid alloc t) /\ (acc x t) = 0),
   forall (caduceus1: pointer),
@@ -20,7 +20,7 @@ Save.
 (* Why obligation from file "why/struct.why", characters 143-233 *)
 Lemma f_impl_po_2 : 
   forall (t: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
   forall (Pre13: (valid alloc t) /\ (acc x t) = 0),
@@ -48,7 +48,7 @@ Save.
 
 (* Why obligation from file "why/struct.why", characters 739-752 *)
 Lemma g_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
@@ -66,7 +66,7 @@ Save.
 
 (* Why obligation from file "why/struct.why", characters 787-801 *)
 Lemma g_impl_po_2 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
@@ -87,7 +87,7 @@ Save.
 
 (* Why obligation from file "why/struct.why", characters 805-830 *)
 Lemma g_impl_po_3 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
@@ -111,7 +111,7 @@ Save.
 
 (* Why obligation from file "why/struct.why", characters 770-830 *)
 Lemma g_impl_po_4 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),

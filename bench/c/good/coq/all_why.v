@@ -232,7 +232,7 @@ Save.
 
 (* Why obligation from file "why/all.why", characters 1272-1318 *)
 Lemma t1_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (Pre3: (valid_index alloc t 0) /\ (acc intP (shift t 0)) = 1),
@@ -249,7 +249,7 @@ Save.
 
 (* Why obligation from file "why/all.why", characters 1759-1767 *)
 Lemma t2_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
@@ -272,7 +272,7 @@ Save.
 
 (* Why obligation from file "why/all.why", characters 2144-2146 *)
 Lemma t3_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
@@ -293,7 +293,7 @@ Save.
 
 (* Why obligation from file "why/all.why", characters 2385-2432 *)
 Lemma t4_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),

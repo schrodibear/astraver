@@ -8,7 +8,7 @@ Lemma copy_impl_po_1 :
   forall (t1: pointer),
   forall (t2: pointer),
   forall (n: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
                 ~((base_addr t1) = (base_addr t2))),
   forall (i: Z),
@@ -57,7 +57,7 @@ Lemma copy_impl_po_2 :
   forall (t1: pointer),
   forall (t2: pointer),
   forall (n: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
                 ~((base_addr t1) = (base_addr t2))),

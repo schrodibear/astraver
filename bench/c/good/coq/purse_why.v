@@ -104,7 +104,7 @@ Save.
 Lemma credit_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre6: (purse_inv alloc balance p) /\ s >= 0),
   (valid alloc p).
@@ -116,7 +116,7 @@ Save.
 Lemma credit_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre6: (purse_inv alloc balance p) /\ s >= 0),
   forall (Pre3: (valid alloc p)),
@@ -136,7 +136,7 @@ Save.
 Lemma test1_impl_po_1 : 
   forall (p1: pointer),
   forall (p2: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre10: ((purse_inv alloc balance p1) /\
                  (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
@@ -149,7 +149,7 @@ Save.
 Lemma test1_impl_po_2 : 
   forall (p1: pointer),
   forall (p2: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre10: ((purse_inv alloc balance p1) /\
                  (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
@@ -161,11 +161,11 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 616-676 *)
+(* Why obligation from file "why/purse.why", characters 653-672 *)
 Lemma test1_impl_po_3 : 
   forall (p1: pointer),
   forall (p2: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre10: ((purse_inv alloc balance p1) /\
                  (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
@@ -173,23 +173,47 @@ Lemma test1_impl_po_3 :
   forall (balance0: ((memory) Z)),
   forall (Post2: balance0 = (upd balance p1 0)),
   forall (Pre8: (purse_inv alloc balance0 p2) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance1: ((memory) Z)),
-  forall (Post5: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+  forall (Post5: ((purse_inv alloc0 balance1 p2) /\ (acc balance1 p2) =
                  ((acc balance0 p2) + 100)) /\
                  (assigns alloc balance0 balance1 (pointer_loc p2))),
-  forall (Pre7: (valid alloc p1)),
+  (valid alloc0 p1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/purse.why", characters 616-676 *)
+Lemma test1_impl_po_4 : 
+  forall (p1: pointer),
+  forall (p2: pointer),
+  forall (alloc: alloc_table),
+  forall (balance: ((memory) Z)),
+  forall (Pre10: ((purse_inv alloc balance p1) /\
+                 (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
+  forall (Pre9: (valid alloc p1)),
+  forall (balance0: ((memory) Z)),
+  forall (Post2: balance0 = (upd balance p1 0)),
+  forall (Pre8: (purse_inv alloc balance0 p2) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
+  forall (balance1: ((memory) Z)),
+  forall (Post5: ((purse_inv alloc0 balance1 p2) /\ (acc balance1 p2) =
+                 ((acc balance0 p2) + 100)) /\
+                 (assigns alloc balance0 balance1 (pointer_loc p2))),
+  forall (Pre7: (valid alloc0 p1)),
   forall (result1: Z),
   forall (Post7: result1 = (acc balance1 p1)),
   result1 = 0 /\
   (assigns alloc balance balance1
    (union_loc (pointer_loc p2) (pointer_loc p1))).
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/purse.why", characters 975-1002 *)
 Lemma test2_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
@@ -202,181 +226,199 @@ Save.
 
 (* Why obligation from file "why/purse.why", characters 1018-1045 *)
 Lemma test2_impl_po_2 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
   forall (p2: pointer),
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   forall (Pre18: (purse_inv alloc balance p1) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance0: ((memory) Z)),
-  forall (Post8: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
+  forall (Post8: ((purse_inv alloc0 balance0 p1) /\ (acc balance0 p1) =
                  ((acc balance p1) + 100)) /\
                  (assigns alloc balance balance0 (pointer_loc p1))),
-  (purse_inv alloc balance0 p2) /\ 200 >= 0.
+  (purse_inv alloc0 balance0 p2) /\ 200 >= 0.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/purse.why", characters 1063-1091 *)
 Lemma test2_impl_po_3 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
   forall (p2: pointer),
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   forall (Pre18: (purse_inv alloc balance p1) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance0: ((memory) Z)),
-  forall (Post8: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
+  forall (Post8: ((purse_inv alloc0 balance0 p1) /\ (acc balance0 p1) =
                  ((acc balance p1) + 100)) /\
                  (assigns alloc balance balance0 (pointer_loc p1))),
-  forall (Pre17: (purse_inv alloc balance0 p2) /\ 200 >= 0),
+  forall (Pre17: (purse_inv alloc0 balance0 p2) /\ 200 >= 0),
+  forall (alloc1: alloc_table),
   forall (balance1: ((memory) Z)),
-  forall (Post11: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+  forall (Post11: ((purse_inv alloc1 balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 (pointer_loc p2))),
-  (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <= (acc balance1 p1).
+                  (assigns alloc0 balance0 balance1 (pointer_loc p2))),
+  (purse_inv alloc1 balance1 p1) /\ 0 <= 50 /\ 50 <= (acc balance1 p1).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/purse.why", characters 1111-1140 *)
 Lemma test2_impl_po_4 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
   forall (p2: pointer),
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   forall (Pre18: (purse_inv alloc balance p1) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance0: ((memory) Z)),
-  forall (Post8: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
+  forall (Post8: ((purse_inv alloc0 balance0 p1) /\ (acc balance0 p1) =
                  ((acc balance p1) + 100)) /\
                  (assigns alloc balance balance0 (pointer_loc p1))),
-  forall (Pre17: (purse_inv alloc balance0 p2) /\ 200 >= 0),
+  forall (Pre17: (purse_inv alloc0 balance0 p2) /\ 200 >= 0),
+  forall (alloc1: alloc_table),
   forall (balance1: ((memory) Z)),
-  forall (Post11: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+  forall (Post11: ((purse_inv alloc1 balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 (pointer_loc p2))),
-  forall (Pre16: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
+                  (assigns alloc0 balance0 balance1 (pointer_loc p2))),
+  forall (Pre16: (purse_inv alloc1 balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
+  forall (alloc2: alloc_table),
   forall (balance2: ((memory) Z)),
-  forall (Post14: ((purse_inv alloc balance2 p1) /\ (acc balance2 p1) =
+  forall (Post14: ((purse_inv alloc2 balance2 p1) /\ (acc balance2 p1) =
                   ((acc balance1 p1) - 50)) /\
-                  (assigns alloc balance1 balance2 (pointer_loc p1))),
-  (purse_inv alloc balance2 p2) /\ 0 <= 100 /\ 100 <= (acc balance2 p2).
+                  (assigns alloc1 balance1 balance2 (pointer_loc p1))),
+  (purse_inv alloc2 balance2 p2) /\ 0 <= 100 /\ 100 <= (acc balance2 p2).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/purse.why", characters 1165-1184 *)
 Lemma test2_impl_po_5 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
   forall (p2: pointer),
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   forall (Pre18: (purse_inv alloc balance p1) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance0: ((memory) Z)),
-  forall (Post8: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
+  forall (Post8: ((purse_inv alloc0 balance0 p1) /\ (acc balance0 p1) =
                  ((acc balance p1) + 100)) /\
                  (assigns alloc balance balance0 (pointer_loc p1))),
-  forall (Pre17: (purse_inv alloc balance0 p2) /\ 200 >= 0),
+  forall (Pre17: (purse_inv alloc0 balance0 p2) /\ 200 >= 0),
+  forall (alloc1: alloc_table),
   forall (balance1: ((memory) Z)),
-  forall (Post11: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+  forall (Post11: ((purse_inv alloc1 balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 (pointer_loc p2))),
-  forall (Pre16: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
+                  (assigns alloc0 balance0 balance1 (pointer_loc p2))),
+  forall (Pre16: (purse_inv alloc1 balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
+  forall (alloc2: alloc_table),
   forall (balance2: ((memory) Z)),
-  forall (Post14: ((purse_inv alloc balance2 p1) /\ (acc balance2 p1) =
+  forall (Post14: ((purse_inv alloc2 balance2 p1) /\ (acc balance2 p1) =
                   ((acc balance1 p1) - 50)) /\
-                  (assigns alloc balance1 balance2 (pointer_loc p1))),
-  forall (Pre15: (purse_inv alloc balance2 p2) /\ 0 <= 100 /\ 100 <=
+                  (assigns alloc1 balance1 balance2 (pointer_loc p1))),
+  forall (Pre15: (purse_inv alloc2 balance2 p2) /\ 0 <= 100 /\ 100 <=
                  (acc balance2 p2)),
+  forall (alloc3: alloc_table),
   forall (balance3: ((memory) Z)),
-  forall (Post17: ((purse_inv alloc balance3 p2) /\ (acc balance3 p2) =
+  forall (Post17: ((purse_inv alloc3 balance3 p2) /\ (acc balance3 p2) =
                   ((acc balance2 p2) - 100)) /\
-                  (assigns alloc balance2 balance3 (pointer_loc p2))),
-  (valid alloc p1).
+                  (assigns alloc2 balance2 balance3 (pointer_loc p2))),
+  (valid alloc3 p1).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/purse.why", characters 1216-1235 *)
 Lemma test2_impl_po_6 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
   forall (p2: pointer),
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   forall (Pre18: (purse_inv alloc balance p1) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance0: ((memory) Z)),
-  forall (Post8: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
+  forall (Post8: ((purse_inv alloc0 balance0 p1) /\ (acc balance0 p1) =
                  ((acc balance p1) + 100)) /\
                  (assigns alloc balance balance0 (pointer_loc p1))),
-  forall (Pre17: (purse_inv alloc balance0 p2) /\ 200 >= 0),
+  forall (Pre17: (purse_inv alloc0 balance0 p2) /\ 200 >= 0),
+  forall (alloc1: alloc_table),
   forall (balance1: ((memory) Z)),
-  forall (Post11: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+  forall (Post11: ((purse_inv alloc1 balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 (pointer_loc p2))),
-  forall (Pre16: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
+                  (assigns alloc0 balance0 balance1 (pointer_loc p2))),
+  forall (Pre16: (purse_inv alloc1 balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
+  forall (alloc2: alloc_table),
   forall (balance2: ((memory) Z)),
-  forall (Post14: ((purse_inv alloc balance2 p1) /\ (acc balance2 p1) =
+  forall (Post14: ((purse_inv alloc2 balance2 p1) /\ (acc balance2 p1) =
                   ((acc balance1 p1) - 50)) /\
-                  (assigns alloc balance1 balance2 (pointer_loc p1))),
-  forall (Pre15: (purse_inv alloc balance2 p2) /\ 0 <= 100 /\ 100 <=
+                  (assigns alloc1 balance1 balance2 (pointer_loc p1))),
+  forall (Pre15: (purse_inv alloc2 balance2 p2) /\ 0 <= 100 /\ 100 <=
                  (acc balance2 p2)),
+  forall (alloc3: alloc_table),
   forall (balance3: ((memory) Z)),
-  forall (Post17: ((purse_inv alloc balance3 p2) /\ (acc balance3 p2) =
+  forall (Post17: ((purse_inv alloc3 balance3 p2) /\ (acc balance3 p2) =
                   ((acc balance2 p2) - 100)) /\
-                  (assigns alloc balance2 balance3 (pointer_loc p2))),
-  forall (Pre14: (valid alloc p1)),
+                  (assigns alloc2 balance2 balance3 (pointer_loc p2))),
+  forall (Pre14: (valid alloc3 p1)),
   forall (caduceus_1: Z),
   forall (Post20: caduceus_1 = (acc balance3 p1)),
-  (valid alloc p2).
+  (valid alloc3 p2).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/purse.why", characters 1194-1236 *)
 Lemma test2_impl_po_7 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
   forall (Post2: (fresh alloc p1) /\ (purse_inv alloc balance p1)),
   forall (p2: pointer),
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   forall (Pre18: (purse_inv alloc balance p1) /\ 100 >= 0),
+  forall (alloc0: alloc_table),
   forall (balance0: ((memory) Z)),
-  forall (Post8: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
+  forall (Post8: ((purse_inv alloc0 balance0 p1) /\ (acc balance0 p1) =
                  ((acc balance p1) + 100)) /\
                  (assigns alloc balance balance0 (pointer_loc p1))),
-  forall (Pre17: (purse_inv alloc balance0 p2) /\ 200 >= 0),
+  forall (Pre17: (purse_inv alloc0 balance0 p2) /\ 200 >= 0),
+  forall (alloc1: alloc_table),
   forall (balance1: ((memory) Z)),
-  forall (Post11: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+  forall (Post11: ((purse_inv alloc1 balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 (pointer_loc p2))),
-  forall (Pre16: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
+                  (assigns alloc0 balance0 balance1 (pointer_loc p2))),
+  forall (Pre16: (purse_inv alloc1 balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
+  forall (alloc2: alloc_table),
   forall (balance2: ((memory) Z)),
-  forall (Post14: ((purse_inv alloc balance2 p1) /\ (acc balance2 p1) =
+  forall (Post14: ((purse_inv alloc2 balance2 p1) /\ (acc balance2 p1) =
                   ((acc balance1 p1) - 50)) /\
-                  (assigns alloc balance1 balance2 (pointer_loc p1))),
-  forall (Pre15: (purse_inv alloc balance2 p2) /\ 0 <= 100 /\ 100 <=
+                  (assigns alloc1 balance1 balance2 (pointer_loc p1))),
+  forall (Pre15: (purse_inv alloc2 balance2 p2) /\ 0 <= 100 /\ 100 <=
                  (acc balance2 p2)),
+  forall (alloc3: alloc_table),
   forall (balance3: ((memory) Z)),
-  forall (Post17: ((purse_inv alloc balance3 p2) /\ (acc balance3 p2) =
+  forall (Post17: ((purse_inv alloc3 balance3 p2) /\ (acc balance3 p2) =
                   ((acc balance2 p2) - 100)) /\
-                  (assigns alloc balance2 balance3 (pointer_loc p2))),
-  forall (Pre14: (valid alloc p1)),
+                  (assigns alloc2 balance2 balance3 (pointer_loc p2))),
+  forall (Pre14: (valid alloc3 p1)),
   forall (caduceus_1: Z),
   forall (Post20: caduceus_1 = (acc balance3 p1)),
-  forall (Pre13: (valid alloc p2)),
+  forall (Pre13: (valid alloc3 p2)),
   forall (aux_1: Z),
   forall (Post23: aux_1 = (acc balance3 p2)),
   (caduceus_1 + aux_1) = 150.
@@ -388,7 +430,7 @@ Save.
 Lemma withdraw_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre6: (purse_inv alloc balance p) /\ 0 <= s /\ s <= (acc balance p)),
   (valid alloc p).
@@ -400,7 +442,7 @@ Save.
 Lemma withdraw_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
   forall (Pre6: (purse_inv alloc balance p) /\ 0 <= s /\ s <= (acc balance p)),
   forall (Pre3: (valid alloc p)),

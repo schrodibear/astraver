@@ -34,10 +34,8 @@ typedef struct struct_list {
   @*/
 
 /*@ axiom Path_cons :
-  @ \forall list p1; \forall list p2;
-      \valid(p1) =>
-        \forall plist l;
-          lpath(p1->tl,l,p2) => lpath(p1,cons(p1,l),p2)
+  @ \forall list p1; \forall plist l; \forall list p2;
+      \valid(p1) => lpath(p1->tl,l,p2) => lpath(p1,cons(p1,l),p2)
 */
 
 /** [(llist t p l)]: there is a (finite) linked list starting from pointer [p]

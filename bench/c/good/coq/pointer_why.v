@@ -5,7 +5,7 @@ Require Import caduceus_why.
 
 (* Why obligation from file "why/pointer.why", characters 144-190 *)
 Lemma array1_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (Pre4: (valid_index alloc t 2)),
@@ -37,7 +37,7 @@ Save.
 (* Why obligation from file "why/pointer.why", characters 595-618 *)
 Lemma f2_impl_po_1 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre10: (valid alloc x)),
   forall (Pre9: (valid alloc x)),
@@ -54,7 +54,7 @@ Save.
 (* Why obligation from file "why/pointer.why", characters 585-622 *)
 Lemma f2_impl_po_2 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre10: (valid alloc x)),
   forall (Pre9: (valid alloc x)),
@@ -77,7 +77,7 @@ Save.
 (* Why obligation from file "why/pointer.why", characters 907-930 *)
 Lemma f_impl_po_1 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre10: (valid alloc x)),
   forall (Pre9: (valid alloc x)),
@@ -94,7 +94,7 @@ Save.
 (* Why obligation from file "why/pointer.why", characters 996-1005 *)
 Lemma f_impl_po_2 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre10: (valid alloc x)),
   forall (Pre9: (valid alloc x)),
@@ -116,7 +116,7 @@ Save.
 
 (* Why obligation from file "why/pointer.why", characters 1430-1449 *)
 Lemma struct1_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (s: pointer),
   forall (Pre10: (valid alloc s)),
   forall (p: pointer),
@@ -129,7 +129,7 @@ Save.
 
 (* Why obligation from file "why/pointer.why", characters 1488-1513 *)
 Lemma struct1_impl_po_2 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (Pre10: (valid alloc s)),
@@ -148,7 +148,7 @@ Save.
 
 (* Why obligation from file "why/pointer.why", characters 1465-1513 *)
 Lemma struct1_impl_po_3 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (y: ((memory) Z)),

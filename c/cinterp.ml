@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.69 2004-03-30 15:39:28 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.70 2004-04-06 12:49:08 filliatr Exp $ i*)
 
 
 open Format
@@ -28,7 +28,7 @@ open Creport
 let rec global_var_for_type t =
   match t.ctype_node with
     | (CTenum _ | CTint _) -> "intP"
-    | CTpointer ty -> global_var_for_type ty ^ "P"
+    | CTarray (ty,_) | CTpointer ty -> global_var_for_type ty ^ "P"
     | CTstruct _ -> "pointer"
     | _ -> assert false (* TODO *)
 

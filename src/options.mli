@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.31 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.32 2004-04-06 12:49:09 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -64,8 +64,8 @@ val pvs_preamble : string
 val mizar_environ : string option
 
 val no_simplify_prelude : bool
-
 val no_harvey_prelude : bool
+val simplify_typing : bool
 
 val fpi : bool
 

@@ -19,7 +19,7 @@ Qed.
 (* Why obligation from file "why/passing.why", characters 125-153 *)
 Lemma f_impl_po_1 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (Pre4: (valid_index alloc x 0)),
   forall (caduceus_1: pointer),
   forall (Post2: caduceus_1 = (shift x 0)),
@@ -32,7 +32,7 @@ Save.
 (* Why obligation from file "why/passing.why", characters 90-153 *)
 Lemma f_impl_po_2 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre4: (valid_index alloc x 0)),
   forall (caduceus_1: pointer),
@@ -48,7 +48,7 @@ Save.
 
 (* Why obligation from file "why/passing.why", characters 278-324 *)
 Lemma g2_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (r: pointer),
   forall (Pre7: (valid alloc r)),
   forall (Pre6: (valid alloc r)),
@@ -71,7 +71,7 @@ Save.
 (* Why obligation from file "why/passing.why", characters 390-609 *)
 Lemma g_impl_po_1 : 
   forall (x: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre4: (valid alloc x)),
   forall (Pre3: (valid alloc x)),

@@ -71,7 +71,7 @@ Save.
 Lemma test1_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre6: (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -109,7 +109,7 @@ Save.
 Lemma test1_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre6: (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -128,7 +128,7 @@ Save.
 Lemma test2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre10: (valid_range alloc t 0 n)),
   forall (i: Z),
@@ -169,7 +169,7 @@ Save.
 Lemma test2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre10: (valid_range alloc t 0 n)),
   forall (i: Z),

@@ -9,7 +9,7 @@ Lemma sort4_2_impl_po_1 :
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (Pre81: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
@@ -28,7 +28,7 @@ Lemma sort4_2_impl_po_2 :
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre81: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
@@ -51,7 +51,7 @@ Lemma sort4_2_impl_po_3 :
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre81: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\

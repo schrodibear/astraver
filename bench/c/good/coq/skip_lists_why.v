@@ -65,7 +65,7 @@ Save.
 
 (* Why obligation from file "why/skip_lists.why", characters 138-168 *)
 Lemma init_impl_po_1 : 
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (forward: ((memory) pointer)),
   forall (NIL0: pointer),
   forall (Post3: (valid alloc NIL0) /\
@@ -81,7 +81,7 @@ Save.
 (* Why obligation from file "why/skip_lists.why", characters 735-754 *)
 Lemma insert_impl_po_1 : 
   forall (l: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (Pre65: (valid alloc l)),
@@ -112,7 +112,7 @@ Save.
 Lemma insert_impl_po_2 : 
   forall (l: pointer),
   forall (v: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (elt: ((memory) Z)),
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
@@ -276,7 +276,7 @@ Save.
 (* Why obligation from file "why/skip_lists.why", characters 578-1177 *)
 Lemma insert_impl_po_3 : 
   forall (l: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (Pre65: (valid alloc l)),
@@ -306,7 +306,7 @@ Save.
 (* Why obligation from file "why/skip_lists.why", characters 524-1430 *)
 Lemma insert_impl_po_4 : 
   forall (l: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (Pre65: (valid alloc l)),
@@ -334,7 +334,7 @@ Save.
 Lemma insert_impl_po_5 : 
   forall (l: pointer),
   forall (v: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (elt: ((memory) Z)),
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
@@ -374,7 +374,7 @@ Save.
 Lemma insert_impl_po_6 : 
   forall (l: pointer),
   forall (v: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (elt: ((memory) Z)),
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
@@ -444,7 +444,7 @@ Save.
 Lemma insert_impl_po_7 : 
   forall (l: pointer),
   forall (v: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (elt: ((memory) Z)),
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
@@ -542,7 +542,7 @@ Save.
 (* Why obligation from file "why/skip_lists.why", characters 4042-4061 *)
 Lemma search_impl_po_1 : 
   forall (l: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (Pre24: (valid alloc l)),
@@ -571,7 +571,7 @@ Save.
 Lemma search_impl_po_2 : 
   forall (l: pointer),
   forall (v: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (elt: ((memory) Z)),
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
@@ -633,7 +633,7 @@ Save.
 (* Why obligation from file "why/skip_lists.why", characters 3889-4474 *)
 Lemma search_impl_po_3 : 
   forall (l: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (Pre24: (valid alloc l)),
@@ -661,7 +661,7 @@ Save.
 (* Why obligation from file "why/skip_lists.why", characters 3835-4635 *)
 Lemma search_impl_po_4 : 
   forall (l: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (Pre24: (valid alloc l)),

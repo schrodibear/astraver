@@ -19,7 +19,7 @@ Lemma flag_impl_po_1 :
   forall (BLUE: Z),
   forall (RED: Z),
   forall (WHITE: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre15: (valid_range alloc t 0 n) /\
                  (forall (k:Z),
@@ -32,6 +32,7 @@ Lemma flag_impl_po_1 :
   forall (r: Z),
   forall (Post8: r = n),
   forall (Variant1: Z),
+  forall (alloc0: alloc_table),
   forall (b1: Z),
   forall (i1: Z),
   forall (intP0: ((memory) Z)),
@@ -41,9 +42,9 @@ Lemma flag_impl_po_1 :
                         (0 <= k /\ k < n ->
                          (isColor BLUE RED WHITE (acc intP0 (shift t k))))) /\
                  0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                 (isMonochrome alloc intP0 t 0 b1 BLUE)) /\
-                 (isMonochrome alloc intP0 t b1 i1 WHITE)) /\
-                 (isMonochrome alloc intP0 t r1 n RED)),
+                 (isMonochrome alloc0 intP0 t 0 b1 BLUE)) /\
+                 (isMonochrome alloc0 intP0 t b1 i1 WHITE)) /\
+                 (isMonochrome alloc0 intP0 t r1 n RED)),
   forall (Test2: true = true),
   forall (caduceus_6: Z),
   forall (Post1: caduceus_6 = i1),
@@ -63,25 +64,26 @@ Lemma flag_impl_po_1 :
                    (result0 = i1 ->
                     (forall (i:Z),
                      (i = (result0 + 1) ->
-                      (forall (intP:((memory) Z)),
-                       (((acc intP (shift t result)) =
-                        (acc intP0 (shift t result0)) /\
-                        (acc intP (shift t result0)) =
-                        (acc intP0 (shift t result))) /\
-                        (assigns alloc intP0 intP
-                         (union_loc (pointer_loc (shift t result0))
-                          (pointer_loc (shift t result)))) ->
-                        ((((((((forall (k:Z),
-                                (0 <= k /\ k < n ->
-                                 (isColor BLUE RED WHITE
-                                  (acc intP (shift t k))))) /\
-                        0 <= b) /\ b <= i) /\ i <= r1) /\ r1 <= n) /\
-                        (isMonochrome alloc intP t 0 b BLUE)) /\
-                        (isMonochrome alloc intP t b i WHITE)) /\
-                        (isMonochrome alloc intP t r1 n RED)) /\
-                        (Zwf 0 (r1 - i) (r1 - i1)))) /\
-                      (valid_index alloc t result) /\
-                      (valid_index alloc t result0))))))))))) /\
+                      (forall (alloc:alloc_table),
+                       (forall (intP:((memory) Z)),
+                        (((acc intP (shift t result)) =
+                         (acc intP0 (shift t result0)) /\
+                         (acc intP (shift t result0)) =
+                         (acc intP0 (shift t result))) /\
+                         (assigns alloc0 intP0 intP
+                          (union_loc (pointer_loc (shift t result0))
+                           (pointer_loc (shift t result)))) ->
+                         ((((((((forall (k:Z),
+                                 (0 <= k /\ k < n ->
+                                  (isColor BLUE RED WHITE
+                                   (acc intP (shift t k))))) /\
+                         0 <= b) /\ b <= i) /\ i <= r1) /\ r1 <= n) /\
+                         (isMonochrome alloc intP t 0 b BLUE)) /\
+                         (isMonochrome alloc intP t b i WHITE)) /\
+                         (isMonochrome alloc intP t r1 n RED)) /\
+                         (Zwf 0 (r1 - i) (r1 - i1))))) /\
+                      (valid_index alloc0 t result) /\
+                      (valid_index alloc0 t result0))))))))))) /\
             ((result0 <> BLUE ->
               (forall (result:pointer),
                (result = (shift t i1) ->
@@ -95,9 +97,9 @@ Lemma flag_impl_po_1 :
                                (isColor BLUE RED WHITE
                                 (acc intP0 (shift t k))))) /\
                       0 <= b1) /\ b1 <= i) /\ i <= r1) /\ r1 <= n) /\
-                      (isMonochrome alloc intP0 t 0 b1 BLUE)) /\
-                      (isMonochrome alloc intP0 t b1 i WHITE)) /\
-                      (isMonochrome alloc intP0 t r1 n RED)) /\
+                      (isMonochrome alloc0 intP0 t 0 b1 BLUE)) /\
+                      (isMonochrome alloc0 intP0 t b1 i WHITE)) /\
+                      (isMonochrome alloc0 intP0 t r1 n RED)) /\
                       (Zwf 0 (r1 - i) (r1 - i1)))))) /\
                   ((result0 <> WHITE ->
                     (forall (result:pointer),
@@ -107,42 +109,44 @@ Lemma flag_impl_po_1 :
                         ((result0 = RED ->
                           (forall (r:Z),
                            (r = (r1 - 1) ->
-                            (forall (intP:((memory) Z)),
-                             (((acc intP (shift t r)) =
-                              (acc intP0 (shift t i1)) /\
-                              (acc intP (shift t i1)) =
-                              (acc intP0 (shift t r))) /\
-                              (assigns alloc intP0 intP
-                               (union_loc (pointer_loc (shift t i1))
-                                (pointer_loc (shift t r)))) ->
-                              ((((((((forall (k:Z),
-                                      (0 <= k /\ k < n ->
-                                       (isColor BLUE RED WHITE
-                                        (acc intP (shift t k))))) /\
-                              0 <= b1) /\ b1 <= i1) /\ i1 <= r) /\ r <= n) /\
-                              (isMonochrome alloc intP t 0 b1 BLUE)) /\
-                              (isMonochrome alloc intP t b1 i1 WHITE)) /\
-                              (isMonochrome alloc intP t r n RED)) /\
-                              (Zwf 0 (r - i1) (r1 - i1)))) /\
-                            (valid_index alloc t r) /\
-                            (valid_index alloc t i1))))) /\
+                            (forall (alloc:alloc_table),
+                             (forall (intP:((memory) Z)),
+                              (((acc intP (shift t r)) =
+                               (acc intP0 (shift t i1)) /\
+                               (acc intP (shift t i1)) =
+                               (acc intP0 (shift t r))) /\
+                               (assigns alloc0 intP0 intP
+                                (union_loc (pointer_loc (shift t i1))
+                                 (pointer_loc (shift t r)))) ->
+                               ((((((((forall (k:Z),
+                                       (0 <= k /\ k < n ->
+                                        (isColor BLUE RED WHITE
+                                         (acc intP (shift t k))))) /\
+                               0 <= b1) /\ b1 <= i1) /\ i1 <= r) /\ r <=
+                               n) /\
+                               (isMonochrome alloc intP t 0 b1 BLUE)) /\
+                               (isMonochrome alloc intP t b1 i1 WHITE)) /\
+                               (isMonochrome alloc intP t r n RED)) /\
+                               (Zwf 0 (r - i1) (r1 - i1))))) /\
+                            (valid_index alloc0 t r) /\
+                            (valid_index alloc0 t i1))))) /\
                         ((result0 <> RED ->
                           ((((((((forall (k:Z),
                                   (0 <= k /\ k < n ->
                                    (isColor BLUE RED WHITE
                                     (acc intP0 (shift t k))))) /\
                           0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
-                          (isMonochrome alloc intP0 t 0 b1 BLUE)) /\
-                          (isMonochrome alloc intP0 t b1 i1 WHITE)) /\
-                          (isMonochrome alloc intP0 t r1 n RED)) /\
+                          (isMonochrome alloc0 intP0 t 0 b1 BLUE)) /\
+                          (isMonochrome alloc0 intP0 t b1 i1 WHITE)) /\
+                          (isMonochrome alloc0 intP0 t r1 n RED)) /\
                           (Zwf 0 (r1 - i1) (r1 - i1)))))) /\
-                      (valid alloc result))))))) /\
-                (valid alloc result))))))) /\
-          (valid alloc result)))
+                      (valid alloc0 result))))))) /\
+                (valid alloc0 result))))))) /\
+          (valid alloc0 result)))
    else (exists b:Z,
-         (exists r:Z, ((isMonochrome alloc intP0 t 0 b BLUE) /\
-          (isMonochrome alloc intP0 t b r WHITE)) /\
-          (isMonochrome alloc intP0 t r n RED))) /\
+         (exists r:Z, ((isMonochrome alloc0 intP0 t 0 b BLUE) /\
+          (isMonochrome alloc0 intP0 t b r WHITE)) /\
+          (isMonochrome alloc0 intP0 t r n RED))) /\
    (assigns alloc intP intP0 (range_loc t 0 n))).
 Proof.
 intuition.
@@ -156,7 +160,7 @@ Lemma flag_impl_po_2 :
   forall (BLUE: Z),
   forall (RED: Z),
   forall (WHITE: Z),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre15: (valid_range alloc t 0 n) /\
                  (forall (k:Z),

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.19 2004-04-05 12:51:13 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.20 2004-04-06 12:49:09 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -151,7 +151,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(OR@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" print_predicate a
-  | Forall (_, id, n, ty, p) when external_type ty -> 
+  | Forall (_, id, n, ty, p) when simplify_typing && external_type ty -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
@@ -185,7 +185,7 @@ let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
 	print_predicate fmt concl
-    | Svar (id, ty) :: hyps when cc_external_type ty -> 
+    | Svar (id, ty) :: hyps when simplify_typing && cc_external_type ty -> 
 	fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
 	  Ident.print id (cc_has_type ty) id print_seq hyps
     | Svar (id, v) :: hyps -> 
@@ -319,6 +319,6 @@ let output_file fwe =
        if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
     sep
     (fun fmt -> 
-       logic_typing fmt; 
+       if simplify_typing then logic_typing fmt; 
        Queue.iter (print_elem fmt) queue)
 

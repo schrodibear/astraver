@@ -6,7 +6,7 @@ Require Export caduceus_spec_why.
 (* Why obligation from file "why/schorr_waite.why", characters 337-337 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (t: pointer),
   forall (Post17: t = root),
   forall (p: pointer),
@@ -34,7 +34,7 @@ Lemma schorr_waite_impl_po_1 :
             (forall (t:pointer),
              (t = p1 ->
               (forall (p:pointer),
-               (p = (acc r0 p) ->
+               (p = (acc r0 p1) ->
                 (forall (result0:pointer),
                  (result0 = t ->
                   (forall (r:((memory) pointer)),
@@ -78,7 +78,7 @@ Lemma schorr_waite_impl_po_1 :
                 (forall (t:pointer),
                  (t = p1 ->
                   (forall (p:pointer),
-                   (p = (acc r0 p) ->
+                   (p = (acc r0 p1) ->
                     (forall (result0:pointer),
                      (result0 = t ->
                       (forall (r:((memory) pointer)),
@@ -116,7 +116,7 @@ Lemma schorr_waite_impl_po_1 :
             (forall (p:pointer),
              (p = t1 ->
               (forall (t:pointer),
-               (t = (acc l0 t) ->
+               (t = (acc l0 t1) ->
                 (forall (result0:pointer),
                  (result0 = p ->
                   (forall (l:((memory) pointer)),
@@ -142,7 +142,7 @@ Save.
 (* Why obligation from file "why/schorr_waite.why", characters 293-306 *)
 Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (t: pointer),
   forall (Post17: t = root),
   forall (p: pointer),
@@ -167,7 +167,7 @@ Save.
 (* Why obligation from file "why/schorr_waite.why", characters 275-335 *)
 Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (t: pointer),
   forall (Post17: t = root),
   forall (p: pointer),
@@ -204,7 +204,7 @@ Lemma schorr_waite_impl_po_3 :
                   (forall (t:pointer),
                    (t = p1 ->
                     (forall (p:pointer),
-                     (p = (acc r0 p) ->
+                     (p = (acc r0 p1) ->
                       (forall (result0:pointer),
                        (result0 = t ->
                         (forall (r:((memory) pointer)),
@@ -248,7 +248,7 @@ Lemma schorr_waite_impl_po_3 :
                       (forall (t:pointer),
                        (t = p1 ->
                         (forall (p:pointer),
-                         (p = (acc r0 p) ->
+                         (p = (acc r0 p1) ->
                           (forall (result0:pointer),
                            (result0 = t ->
                             (forall (r:((memory) pointer)),
@@ -286,7 +286,7 @@ Lemma schorr_waite_impl_po_3 :
                   (forall (p:pointer),
                    (p = t1 ->
                     (forall (t:pointer),
-                     (t = (acc l0 t) ->
+                     (t = (acc l0 t1) ->
                       (forall (result0:pointer),
                        (result0 = p ->
                         (forall (l:((memory) pointer)),
@@ -309,68 +309,8 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 781-799 *)
-Lemma schorr_waite_impl_po_4 : 
-  forall (root: pointer),
-  forall (alloc: alloc),
-  forall (t: pointer),
-  forall (Post17: t = root),
-  forall (p: pointer),
-  forall (Post16: p = null),
-  forall (Variant1: Z),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre41: Variant1 = 0),
-  forall (Test8: true = true),
-  forall (q: pointer),
-  forall (Post6: q = t1),
-  forall (t2: pointer),
-  forall (Post4: t2 = p1),
-  forall (Pre39: (valid alloc p1)),
-  forall (result4: pointer),
-  forall (Post72: result4 = (acc r0 p1)),
-  result4 = (acc r0 result4).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/schorr_waite.why", characters 1245-1263 *)
-Lemma schorr_waite_impl_po_5 : 
-  forall (root: pointer),
-  forall (alloc: alloc),
-  forall (t: pointer),
-  forall (Post17: t = root),
-  forall (p: pointer),
-  forall (Post16: p = null),
-  forall (Variant1: Z),
-  forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
-  forall (m0: ((memory) Z)),
-  forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
-  forall (t1: pointer),
-  forall (Pre41: Variant1 = 0),
-  forall (Test8: true = true),
-  forall (q: pointer),
-  forall (Post15: q = p1),
-  forall (p2: pointer),
-  forall (Post11: p2 = t1),
-  forall (Pre18: (valid alloc t1)),
-  forall (result3: pointer),
-  forall (Post48: result3 = (acc l0 t1)),
-  result3 = (acc l0 result3).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 (* Why obligation from file "why/schorr_waite.why", characters 124-1508 *)
-Lemma schorr_waite_impl_po_6 : 
+Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (t: pointer),
   forall (Post17: t = root),
@@ -381,6 +321,16 @@ Lemma schorr_waite_impl_po_6 :
   forall (Test8: true = true),
   forall (Post18: (Zwf 0 0 0)),
   (Zwf 0 0 Variant1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 Proof.
 intuition.
 (* FILL PROOF HERE *)
