@@ -9,7 +9,8 @@
 
 (if why-mode-map nil
   (setq why-mode-map (make-keymap))
-  (define-key why-mode-map "\C-c\C-q" 'why-switch-to-coq)
+  (define-key why-mode-map "\C-c\C-c" 'why-generate-obligations)
+  (define-key why-mode-map "\C-c\C-a" 'why-find-alternate-file)
   (define-key why-mode-map [(control return)] 'font-lock-fontify-buffer))
 
 (setq auto-mode-alist
@@ -66,47 +67,67 @@
   (interactive)
   (if (save-excursion (why-go-and-get-next-proof)) (yank)))
 
-;; menu
+;; custom variables
 
-(defun why-switch-to-coq ()
-  "switch to the Coq buffer"
+(require 'custom)
+
+(defcustom why-prover "coq"
+  "Why prover"
+  :group 'why :type '(choice (const :tag "Coq" "coq")
+			     (const :tag "PVS" "pvs")))
+
+(defcustom why-prog-name "why"
+  "Why executable name"
+  :group 'why :type 'string)
+
+(defcustom why-options "--valid"
+  "Why options"
+  :group 'why :type 'string)
+
+(defun why-command-line (file)
+  (concat why-prog-name " -" why-prover " " why-options " " file))
+
+(defun why-find-alternate-file ()
+  "switch to the proof obligations buffer"
   (interactive)
   (let* ((f (buffer-file-name))
 	 (fcoq (concat (file-name-sans-extension f) "_why.v")))
     (find-file fcoq)))
 
-(defun why-generate-coq ()
-  "generate the Coq module"
+(defun why-generate-obligations ()
+  "generate the proof obligations"
   (interactive)
   (let ((f (buffer-name)))
-    (compile (concat "why " f))))
+    (compile (why-command-line f))))
 
-(defun why-switch-to-pvs ()
-  "switch to the Coq buffer"
+(defun why-generate-ocaml ()
+  "generate the ocaml code"
   (interactive)
-  (let* ((f (buffer-name))
-	 (fpvs (concat (file-name-sans-extension f) "_why.pvs")))
-    (switch-to-buffer fpvs)))
+  (let ((f (buffer-name)))
+    (compile (concat why-prog-name " --ocaml " f))))
+
+;; menu
 
 (require 'easymenu)
 
 (defun why-menu ()
-  (easy-menu-change () "Why" 
-		    '(["Type-check buffer" why-type-check t]
-		      ["Show WP" why-show-wp t]
-		      ["Generate Ocaml code" why-generate-ocaml t]
-		      ["Recolor buffer" font-lock-fontify-buffer t]
-		      "---"
-		      "Coq"
-		      ["Generate file" why-generate-coq t]
-		      ["Switch to Coq buffer" why-switch-to-coq t]
-		      ["Grab next proof" why-grab-next-proof t]
-		      "---"
-		      "PVS"
-		      ["Generate PVS file" why-generate-pvs t]
-		      ["Switch to PVS buffer" why-switch-to-pvs t]
-		      "---"
-		      )))
+  (easy-menu-change 
+   () "Why" 
+   '(["Customize Why mode" (customize-group 'why) t]
+     "---"
+     ["Type-check buffer" why-type-check t]
+     ["Show WP" why-show-wp t]
+     ["Generate obligations" why-generate-obligations t]
+     ["Switch to obligations buffer" why-find-alternate-file t]
+     ["Generate Ocaml code" why-generate-ocaml t]
+     ["Recolor buffer" font-lock-fontify-buffer t]
+     "---"
+     "Coq"
+     ["Grab next proof" why-grab-next-proof t]
+     "---"
+     "PVS"
+     "---"
+     )))
 
 ;; setting the mode
 
