@@ -87,6 +87,8 @@ rule token = parse
   | "__FILE__"              { let f = Loc.get_file () in
 			      STRING_LITERAL ("\"" ^ f ^ "\"") }
   | "__extension__"         { token lexbuf }
+  | "__attribute__"         { ATTRIBUTE }
+  | "__restrict"            { RESTRICT }
   (* we skip # line directives *)
   | '#' [^'\n']* '\n'       { token lexbuf }
 
@@ -96,13 +98,13 @@ rule token = parse
   | '0'['x''X'] rH+ rIS?    { CONSTANT (lexeme lexbuf)}
   | '0' rD+ rIS?            { CONSTANT (lexeme lexbuf) }
   | rD+ rIS?                { CONSTANT (lexeme lexbuf) }
-  | 'L'? "'" (_|[^'\\''\''])+ "'"     { CONSTANT (lexeme lexbuf) }
+  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (lexeme lexbuf) }
 
   | rD+ rE rFS?             { CONSTANT (lexeme lexbuf) }
   | rD* "." rD+ (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
   | rD+ "." rD* (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
 
-  | 'L'? '"' (_|[^'\\''"'])* '"'     { STRING_LITERAL (lexeme lexbuf) }
+  | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 
   | "..."                   { ELLIPSIS }
   | ">>="                   { RIGHT_ASSIGN }

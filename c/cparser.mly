@@ -60,6 +60,7 @@
     | Sshort
     | Sconst
     | Svolatile
+    | Srestrict
     | Ssigned of bool (* true = signed / false = unsigned *)
     | Sstruct_decl of string option * parameters 
     | Sunion_decl of string option * parameters
@@ -181,13 +182,15 @@
     and params pl = 
       List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
     in
-    let ty = full_type (base_type None specs) decl in
+    let bt = base_type None specs in
+    let sg = apply_sign sg bt in
+    let ty = full_type bt decl in
     if !Ctypes.debug then eprintf "%a@." explain_type ty;
     { ctype_expr = ty;
       ctype_storage = st;
       ctype_const = List.exists ((=) Sconst) specs;
       ctype_volatile = List.exists ((=) Svolatile) specs;
-      ctype_signed = apply_sign sg ty }
+      ctype_signed = sg }
 
   let interp_param (s, d, id) = interp_type false s d, id
   let interp_params = List.map interp_param
@@ -281,6 +284,9 @@
 %token SEMICOLON LBRACE RBRACE COMMA COLON EQUAL LPAR RPAR LSQUARE RSQUARE
 %token DOT AMP EXL TILDE MINUS PLUS STAR SLASH PERCENT LT GT HAT PIPE
 %token QUESTION EOF
+
+/* non-ANSI tokens */
+%token ATTRIBUTE RESTRICT
 
 %nonassoc specs
 %nonassoc TYPE_NAME
@@ -475,7 +481,7 @@ constant_expression
 declaration
         : declaration_specifiers SEMICOLON 
             { type_declarations $1 }
-        | declaration_specifiers init_declarator_list SEMICOLON 
+        | declaration_specifiers init_declarator_list attributes_opt SEMICOLON 
 	    { List.map locate (declaration $1 $2) }
 	| WDECL  /* ADDED FOR WHY */
 	    { [locate (Cspecdecl $1)] }
@@ -620,6 +626,7 @@ enumerator
 type_qualifier
         : CONST { Sconst }
         | VOLATILE { Svolatile }
+	| RESTRICT { warning "ignored __restrict"; Srestrict }
         ;
 
 declarator
@@ -653,9 +660,11 @@ annot
 
 pointer
         : STAR { fun d -> Dpointer d }
-        | STAR type_qualifier_list { uns () }
+        | STAR type_qualifier_list 
+	    { warning "ignored qualifiers"; fun d -> Dpointer d }
         | STAR pointer { fun d -> Dpointer ($2 d) }
-        | STAR type_qualifier_list pointer { uns () }
+        | STAR type_qualifier_list pointer 
+	    { warning "ignored qualifiers"; fun d -> Dpointer ($3 d) }
         ;
 
 type_qualifier_list
@@ -666,7 +675,8 @@ type_qualifier_list
 
 parameter_type_list
         : parameter_list { $1 }
-        | parameter_list COMMA ELLIPSIS { uns () }
+        /* TODO */
+        | parameter_list COMMA ELLIPSIS { warning "ignored <...>"; $1 }
         ;
 
 parameter_list
@@ -701,7 +711,7 @@ abstract_declarator
 
 direct_abstract_declarator
         : LPAR abstract_declarator RPAR 
-            { uns () }
+            { $2 }
         | LSQUARE RSQUARE 
 	    { Darray (Dsimple, None) }
         | LSQUARE constant_expression RSQUARE 
@@ -843,6 +853,34 @@ function_prototype
         | declarator
 	    { Ctypes.push (); function_declaration [] $1 [] }
         ;
+
+/* non-ANSI */
+
+attributes_opt:
+  /* empty */ {}
+| attributes { warning "ignored attributes" }
+;
+
+attributes:
+  attribute {}
+| attributes attribute {} 
+;
+
+attribute:
+  ATTRIBUTE LPAR LPAR attribute_list RPAR RPAR {}
+;
+
+attribute_list:
+  attrib {}
+| attribute_list COMMA attrib {}
+;
+
+attrib:
+  /* empty */ {}
+| identifier {}
+| identifier LPAR RPAR {}
+| identifier LPAR argument_expression_list RPAR {}
+;
 
 %%
 

@@ -30,6 +30,11 @@ signed char q;
 unsigned int r;
 signed s; /* defaults to signed int */
 
+/* misc. (specifiers and pointers) */
+
+unsigned char * * t;
+const char** u;
+
 /* structures */
 
 struct T; /* forward declaration */
