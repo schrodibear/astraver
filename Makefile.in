@@ -263,6 +263,7 @@ FILES =src/*.ml* Makefile.in configure.in configure .depend \
 	lib/coq/*.v lib/pvs/why.*
 
 distrib export: source export-doc export-examples linux
+	make -C $(HOME)/www/why install
 
 source: doc/manual.ps export/$(NAME).tar.gz
 	cp CHANGES export/$(NAME).tar.gz $(FTP)
