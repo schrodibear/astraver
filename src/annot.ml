@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.4 2002-10-17 15:01:52 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.5 2002-11-04 16:48:59 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -145,15 +145,15 @@ let rec normalize p =
   match p.desc with
     | Aff (x, ({desc = Expression t} as e1)) 
       when post e1 = None && k.c_post = None ->
-	let t = put_label_term env p.info.label t in
+	let t = put_label_term env p.info.label (unref_term t) in
 	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
     | If (e1, e2, e3) ->
 	change_desc p (If (normalize_boolean env e1, e2, e3))
     | TabAff (_, x, ({desc=Expression t1} as e1), ({desc=Expression t2} as e2))
       when post e1 = None && post e2 = None && k.c_post = None ->
-	let t1 = put_label_term env p.info.label t1 in
-	let t2 = put_label_term env p.info.label t2 in
+	let t1 = put_label_term env p.info.label (unref_term t1) in
+	let t2 = put_label_term env p.info.label (unref_term t2) in
 	let t = make_raw_store env (x, at_id x p.info.label) t1 t2 in
 	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
@@ -168,10 +168,10 @@ let rec normalize p =
 	       let q = post_app (change_label "" p.info.label) q in
 	       force_post env (Some q) p)
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
-	let q = create_post (equality (Tvar Ident.result) t) in
+	let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
 	change_desc p (LetRef (x, post_if_none env q e1, e2))
     | LetIn (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
-	let q = create_post (equality (Tvar Ident.result) t) in
+	let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
 	change_desc p (LetIn (x, post_if_none env q e1, e2))
     | Var _ | Expression _ | Acc _ | Aff _ | TabAcc _ | TabAff _  
     | Seq _ | Lam _ | LetIn _ | LetRef _ | Rec _ | App _ 
@@ -192,7 +192,7 @@ and normalize_boolean env b =
 	match b.desc with
 	  | Expression c ->
 	      (* expression E -> result=E *)
-	      let c = equality (Tvar Ident.result) c in
+	      let c = equality (Tvar Ident.result) (unref_term c) in
 	      give_post b (create_post c)
 	  | If (e1, e2, e3) ->
 	      let ne1 = normalize_boolean env e1 in

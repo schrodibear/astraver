@@ -13,8 +13,17 @@ goods () {
 	    echo -n "why ok... "
 	    if $coqc "$base"_why.v > /dev/null 2>&1; then
 		echo "coq ok"
+#  		echo -n "coq ok..."
+#  		$pgm --ocaml --ocaml-ext $f > $base.ml 2>/dev/null
+#  		if ocamlc -c $base.ml > /dev/null 2>&1; then
+#  		    echo "ocaml ok"
+#  		else
+#  		    echo "ocaml FAILED"
+#  		fi
 	    else
 		echo "coq FAILED"
+		$coqc "$base"_why.v
+		exit 1
 	    fi
 	else 
 	    echo "why FAILED"

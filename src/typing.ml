@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.78 2002-10-28 13:22:00 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.79 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -272,10 +272,10 @@ and is_pure_type_c c =
 
 let partial_pre = function
   | Tapp (id, [a;b]) when id == t_div_int || id == t_mod_int ->
-      let p = neq b (Tconst (ConstInt 0)) in
+      let p = neq (unref_term b) (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
   | Tapp (id, [a]) when id == t_sqrt_float ->
-      let p = ge_float a (Tconst (ConstFloat "0.")) in
+      let p = ge_float (unref_term a) (Tconst (ConstFloat "0.")) in
       [anonymous_pre true p]
   | _ ->
       []
@@ -363,7 +363,7 @@ and typef_desc lab env loc = function
   | Srefget id ->
       let v = check_ref_type loc env id in
       let ef = Effect.add_read id Effect.bottom in
-      Expression (Tvar id), (v,ef), []
+      Expression (Tapp (deref, [Tvar id])), (v,ef), []
 
   | Srefset (x, e1) ->
       let et = check_ref_type loc env x in
@@ -479,7 +479,8 @@ and typef_desc lab env loc = function
 	  (match t_a.desc with
   	     (* argument is pure: it is substituted *)
 	     | Expression ca when post t_a = None ->
-		 let kapp = type_c_rsubst (subst_one x ca) kapp in
+		 let uca = unref_term ca in
+		 let kapp = type_c_rsubst (subst_one x uca) kapp in
 		 let (_,tapp),_,_,_ = decomp_kappa kapp in
 		 (match t_f.desc with
 		    (* function itself is pure: we collapse terms *)

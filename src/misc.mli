@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.46 2002-10-28 13:22:00 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.47 2002-11-04 16:48:59 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -128,6 +128,8 @@ val ptype_c_of_v : ptype_v -> ptype_c
 val type_c_of_v : type_v -> type_c
 val make_arrow : type_v binder list -> type_c -> type_v
 
+val unref_term : term -> term
+
 val equals_true : term -> term
 val equals_false : term -> term
 
@@ -178,6 +180,7 @@ val arg_loc : Ptree.arg -> Loc.t
 
 open Format
 
+val print_option : (formatter -> 'a -> unit) -> formatter -> 'a option -> unit
 val print_list : 
   (formatter -> unit -> unit) -> 
   (formatter -> 'a -> unit) -> formatter -> 'a list -> unit

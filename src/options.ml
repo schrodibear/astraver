@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.10 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.11 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 open Format
 
@@ -27,7 +27,10 @@ let type_only_ = ref false
 let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
+
 let ocaml_ = ref false
+let ocaml_annot_ = ref false
+let ocaml_externals_ = ref false
 
 type prover = Coq | Pvs
 let prover_ = ref Coq
@@ -86,7 +89,9 @@ Prover options:
               gives a default tactic for new proof obligations
 
 Misc options:
-  --ocaml     Ocaml code output
+  --ocaml        Ocaml code output
+  --ocaml-annot  Show all annotations in ocaml code
+  --ocaml-ext    Consider \"external\"s as parameters in ocaml code
 ";
   flush stderr
 
@@ -112,6 +117,10 @@ let files =
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
 	usage (); exit 1
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
+    | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
+	ocaml_annot_ := true; parse args
+    | ("--ocaml-ext" | "-ocaml-ext") :: args -> 
+	ocaml_externals_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -127,6 +136,8 @@ let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let ocaml = !ocaml_
+let ocaml_annot = !ocaml_annot_
+let ocaml_externals = !ocaml_externals_
 
 let if_verbose f x = if verbose then f x
 let if_verbose_2 f x y = if verbose then f x y

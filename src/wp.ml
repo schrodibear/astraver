@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.65 2002-10-18 11:18:38 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.66 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -115,6 +115,7 @@ and wp_desc info d q =
     (* $wp(E,q) = q[result \leftarrow E]$ *)
     | Expression t ->
 	let w = optpost_val q in
+	let t = unref_term t in
 	d, optnamed_app (tsubst_in_predicate (subst_one result t)) w
     (* $wp(!x,q) = q[result \leftarrow x]$ *)
     | Acc x ->

@@ -11,6 +11,10 @@ WHYOPTIONS=--valid
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $(WHYOPTIONS) $<
 
+%.ml: %.mlw
+	$(WHY) -ocaml $< > $@
+	ocamlc -c -i $@
+
 clean::
 	rm -f *~ *.vo
 

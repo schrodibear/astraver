@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.57 2002-10-31 16:16:33 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.58 2002-11-04 16:48:59 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -261,6 +261,11 @@ let subst_one x t = Idmap.add x t Idmap.empty
 
 let subst_onev = subst_one
 
+let rec unref_term = function
+  | Tapp (id, [t]) when id == deref -> unref_term t
+  | Tapp (id, tl) -> Tapp (id, List.map unref_term tl)
+  | Tvar _ | Tconst _ as t -> t
+
 let equals_true = function
   | Tapp (id, _) as t when is_relation id -> t
   | t -> Tapp (t_eq, [t; Tconst (ConstBool true)])
@@ -438,6 +443,10 @@ let arg_loc = function
 (*s Pretty-print *)
 
 open Format
+
+let print_option f fmt = function
+  | None -> ()
+  | Some x -> f fmt x
 
 let rec print_list sep print fmt = function
   | [] -> ()

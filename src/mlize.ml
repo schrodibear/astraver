@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.60 2002-10-18 11:18:38 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.61 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -40,7 +40,7 @@ let rec trad e =
 
 and trad_desc info d ren = match d with
   | Expression t ->
-      Monad.unit info (Value t) ren
+      Monad.unit info (Value (unref_term t)) ren
 
   | Var id ->
       assert (not (is_reference info.env id));

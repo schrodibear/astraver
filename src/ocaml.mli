@@ -14,11 +14,17 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.mli,v 1.1 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: ocaml.mli,v 1.2 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
 open Format
+open Types
+open Env
 
-val output : formatter -> Ptree.file -> unit
+val push_parameters : Ident.t list -> type_v -> unit
+
+val push_program : Ident.t -> typed_program -> unit
+
+val output : formatter -> unit
 

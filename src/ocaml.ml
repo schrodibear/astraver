@@ -14,34 +14,58 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.1 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.2 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
 open Format
+open Options
 open Ident
 open Logic
 open Misc
 open Util
 open Types
-open Ptree
+open Env
+open Ast
+
+(*s pre- and postconditions *)
+
+let pre = 
+  let print fmt p = fprintf fmt "(* @[%a@] *)" print_predicate p.p_value in
+  print_list newline print
+
+let post fmt q = 
+  let exn fmt (x,a) = fprintf fmt "%a => %a" Ident.print x print_assertion a in
+  match q with 
+    | (a, []) -> 
+	fprintf fmt "(* @[%a@] *)" print_assertion a 
+    | (a, al) -> 
+	fprintf fmt "(* @[%a@ | %a@] *)" 
+	  print_assertion a (print_list alt exn) al
 
 (*s types and constants *)
 
 let identifiers = print_list comma Ident.print
 
 let rec typev fmt = function
-  | PVref v -> 
+  | Ref v -> 
       fprintf fmt "(%a ref)" typev v
-  | PVarray (_, v) -> 
+  | Array (_, v) -> 
       fprintf fmt "(%a array)" typev v
-  | PVarrow (bl, c) -> 
-      fprintf fmt "%a -> %a" (print_list arrow binder_type) bl typec c
-  | PVpure pt -> 
+  | Arrow (bl, c) -> 
+      fprintf fmt "%a ->@ %a" (print_list arrow binder_type) bl typec c
+  | PureType pt -> 
       print_pure_type fmt pt
 
-and typec fmt c = 
-  fprintf fmt "%a" typev c.pc_result_type
+and typec fmt c = match c.c_pre, c.c_post with
+  | [], None ->
+      fprintf fmt "%a" typev c.c_result_type
+  | [], Some q ->
+      fprintf fmt "%a@ %a" typev c.c_result_type post q
+  | p, None ->
+      fprintf fmt "%a@ %a" pre p typev c.c_result_type
+  | p, Some q ->
+      fprintf fmt "%a@ %a@ %a" pre p typev c.c_result_type post q
 
 and binder_type fmt = function
   | id, BindType v when id == Ident.anonymous -> typev fmt v
@@ -63,130 +87,155 @@ let constant fmt = function
 
 (*s logical expressions *)
 
-let rec lexpr fmt a = 
-  fprintf fmt "<lexpr>"
+let caml_infix id = is_arith_binop id || is_relation id
+
+let infix id = 
+  if id == t_add_int then "+" 
+  else if id == t_sub_int then "-" 
+  else if id == t_mul_int then "*"
+  else if id == t_div_int then "/"
+  else if id == t_mod_int then "mod"
+  else if id == t_add_int then "+." 
+  else if id == t_sub_int then "-." 
+  else if id == t_mul_int then "*."
+  else if id == t_div_int then "/."
+  else if is_eq id then "="
+  else if is_neq id then "<>"
+  else if id == t_lt_int || id == t_lt_float then "<"
+  else if id == t_le_int || id == t_le_float then "<="
+  else if id == t_gt_int || id == t_gt_float then ">"
+  else if id == t_ge_int || id == t_ge_float then ">="
+  else assert false
+
+let prefix fmt id = fprintf fmt "( %s )" (infix id)
+
+let rec expression fmt = function
+  | Tvar id -> 
+      Ident.print fmt id
+  | Tconst c -> 
+      constant fmt c
+  | Tapp (d, [Tvar id]) when d == deref ->
+      fprintf fmt "!%a" Ident.print id
+  | Tapp (id, [a; b]) when id == access ->
+      fprintf fmt "%a.(%a)" expression a expression b
+  | Tapp (id, [a; b]) when caml_infix id ->
+      fprintf fmt "(%a %s %a)" expression a (infix id) expression b
+  | Tapp (id, tl) -> 
+      fprintf fmt "(%a %a)" Ident.print id (print_list space expression) tl
 
 (*s program expressions *)
 
-let infix id = 
-  if id == t_add then "+" 
-  else if id == t_sub then "-" 
-  else if id == t_mul then "*"
-  else if id == t_div then "/"
-  else "todo"
-
 let rec expr fmt e = 
-  fprintf fmt "%a" exprd e.pdesc
+  let k = e.info.kappa in
+  let p = k.c_pre in
+  let q = k.c_post in
+  if not ocaml_annot || (p = [] && q = None) then
+    fprintf fmt "@[%a@]" exprd e.desc
+  else match p, q with
+    | [], Some q -> 
+	fprintf fmt "@[<hv>%a@ %a@]" exprd e.desc post q
+    | p, None ->
+	fprintf fmt "@[<hv>%a@ %a@]" pre p exprd e.desc
+    | p, Some q ->
+	fprintf fmt "@[<hv>%a@ %a@ %a@]" pre p exprd e.desc post q
 
 and exprd fmt = function
-  | Svar id ->
+  | Var id when caml_infix id ->
+      fprintf fmt "%a" prefix id
+  | Var id ->
       Ident.print fmt id
-  | Srefget id ->
+  | Acc id ->
       fprintf fmt "!%a" Ident.print id
-  | Srefset (id, e) ->
-      fprintf fmt "%a := %a" Ident.print id expr e
-  | Sarrget (_, id, e) ->
+  | Aff (id, e) ->
+      fprintf fmt "@[<hov 2>(%a := %a)@]" Ident.print id expr e
+  | TabAcc (_, id, e) ->
       fprintf fmt "%a.(%a)" Ident.print id expr e
-  | Sarrset (_, id, e1, e2) ->
-      fprintf fmt "%a.(%a) <- %a" Ident.print id expr e1 expr e2
-  | Sseq bl ->
-      fprintf fmt "@[begin %a end@]" block bl
-  | Swhile (e1, inv, var, { pdesc = Sseq e2 }) ->
-      fprintf fmt "while %a do %a done" expr e1 block e2
-  | Swhile _ ->
+  | TabAff (_, id, e1, e2) ->
+      fprintf fmt "@[<hov 2>(%a.(%a) <-@ %a)@]" Ident.print id expr e1 expr e2
+  | Seq bl ->
+      fprintf fmt "@[<hv>begin@;<1 2>%a@ end@]" block bl
+  | While (e1, inv, var, { desc = Seq e2 }) ->
+      fprintf fmt "@[<hv>while %a do@;<1 2>%a@ done@]" expr e1 block e2
+  | While _ ->
       assert false
-  | Sif (e1, e2, e3) ->
-      fprintf fmt "@[if %a then %a else %a@]" expr e1 expr e2 expr e3
-  | Slam (bl, e) ->
-      fprintf fmt "(fun %a -> %a)" binder_ids bl expr e
-  | Sapp ({pdesc=Sapp ({pdesc=Svar id}, Sterm e1)}, Sterm e2) 
+  | If (e1, e2, e3) ->
+      fprintf fmt "(@[<hv>if %a then@;<1 2>%a@ else@;<1 2>%a@])" 
+	expr e1 expr e2 expr e3
+  | Lam (bl, e) ->
+      fprintf fmt "@[<hov 2>(fun %a ->@ %a)@]" binder_ids bl expr e
+  | App ({desc=App ({desc=Var id}, Term e1, _)}, Term e2, _) 
     when is_poly id || id == t_mod_int ->
-      fprintf fmt "(%a %s %a)" expr e1 (infix id) expr e2
-  | Sapp (e, a) ->
-      fprintf fmt "(%a %a)" expr e arg a
-  | Sletref (id, e1, e2) ->
-      fprintf fmt "@[@[<hov 2>let %a =@ ref %a in@]@\n%a@]" 
+      fprintf fmt "@[<hov 2>(%a %s@ %a)@]" expr e1 (infix id) expr e2
+  | App (e, a, _) ->
+      fprintf fmt "@[<hov 2>(%a@ %a)@]" expr e arg a
+  | LetRef (id, e1, e2) ->
+      fprintf fmt "@[(@[<hov 2>let %a =@ ref %a in@]@\n%a)@]" 
 	Ident.print id expr e1 expr e2
-  | Sletin (id, e1, e2) ->
-      fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]" 
+  | LetIn (id, e1, e2) ->
+      fprintf fmt "@[(@[<hov 2>let %a =@ %a in@]@\n%a)@]" 
 	Ident.print id expr e1 expr e2
-  | Srec (id, bl, v, var, e) ->
-      fprintf fmt "(let rec %a %a = %a in %a)" 
+  | Rec (id, bl, v, var, e) ->
+      fprintf fmt "@[<hov 2>(let rec %a %a =@ %a in@ %a)@]" 
 	Ident.print id binder_ids bl expr e Ident.print id
-  | Sraise (id, None, vo) ->
-      fprintf fmt "raise %a" Ident.print id
-  | Sraise (id, Some e, vo) ->
-      fprintf fmt "raise (%a %a)" Ident.print id expr e
-  | Stry (e, hl) ->
-      fprintf fmt "(try %a with %a)" expr e (print_list alt handler) hl
-  | Sconst c -> 
-      constant fmt c
+  | Raise (id, None) ->
+      fprintf fmt "@[<hov 2>(raise %a)@]" Ident.print id
+  | Raise (id, Some e) ->
+      fprintf fmt "@[<hov 2>(raise@ (%a %a))@]" Ident.print id expr e
+  | Try (e, hl) ->
+      fprintf fmt "(@[<hv>try@;<1 2>%a@ with@ @[<v>%a@]@])" 
+	expr e (print_list newline handler) hl
+  | Expression t -> 
+      expression fmt t
 
-and block fmt = fprintf fmt "@[%a@]" (print_list space block_st)
+and block fmt = fprintf fmt "@[<hv>%a@]" (print_list space block_st)
 
 and block_st fmt = function
-  | Slabel l -> fprintf fmt "(* label %s *)" l
-  | Sassert a -> fprintf fmt "(* assert %a *)" lexpr a
-  | Sstatement e -> fprintf fmt "%a;" expr e
+  | Label l -> fprintf fmt "(* label %s *)" l
+  | Assert a -> fprintf fmt "(* assert %a *)" print_assertion a
+  | Statement e -> fprintf fmt "%a;" expr e
 
 and arg fmt = function
-  | Sterm e -> expr fmt e
-  | Stype _ -> assert false
+  | Term e -> expr fmt e
+  | Refarg id -> Ident.print fmt id
+  | Type _ -> assert false
 
 and handler fmt = function
   | (id, None), e -> 
-      fprintf fmt "%a -> %a" Ident.print id expr e
+      fprintf fmt "| %a -> %a" Ident.print id expr e
   | (id, Some id'), e -> 
-      fprintf fmt "%a %a -> %a" Ident.print id Ident.print id' expr e
+      fprintf fmt "| %a %a -> %a" Ident.print id Ident.print id' expr e
 
-let decl fmt = function
-  | Program (id, e) -> 
-      fprintf fmt "@[<hov 2>let %a =@ %a@]" Ident.print id expr e
-  | Parameter _ ->
-      assert false
-  | External (_, ids, v) ->
-      fprintf fmt "@[<hov 2>(* external %a :@ %a *)@]" identifiers ids typev v
-  | Exception (_, id, None) ->
-      fprintf fmt "exception %a" Ident.print id
-  | Exception (_, id, Some pt) ->
-      fprintf fmt "exception %a of %a" Ident.print id print_pure_type pt
-  | Logic (_, id, lt) ->
-      fprintf fmt "(* logic %a : %a *)" Ident.print id print_logic_type lt
-  | QPvs s ->
-      fprintf fmt "(* pvs \"%s\" *)" (String.escaped s)
+let decl fmt (id, e) =
+  fprintf fmt "@[<hov 2>let %a =@ %a@]@\n@\n" Ident.print id expr e
 
-(*s [functorize] collects the parameters *)
+(*s Parameters (collected to make a functor) *)
 
-let functorize =
-  let rec collect (pl, dl) = function
-    | [] -> List.rev pl, List.rev dl
-    | Parameter (_, ids, v) :: r -> collect ((ids, v) :: pl, dl) r
-    | d :: r -> collect (pl, d :: dl) r
-  in
-  collect ([], [])
+let params = Queue.create ()
+
+let push_parameters ids v = List.iter (fun id -> Queue.add (id, v) params) ids
 
 (*s We make a functor if some parameters are present *)
 
-let parameter fmt (ids, v) =
-  let print fmt id = 
-    fprintf fmt "@[<hov 2>val %a : %a@]" Ident.print id typev v 
-  in
-  print_list newline print fmt ids
+let parameter fmt (id, v) =
+  fprintf fmt "@\n@[<hov 2>val %a : %a@]@\n" Ident.print id typev v 
 
-let output fmt p = 
+let progs = Queue.create ()
+
+let push_program id p = Queue.add (id, p) progs
+
+let output fmt = 
   fprintf fmt "(* code generated by why --ocaml *)@\n@\n";
-  let print_decl fmt d = fprintf fmt "@[%a@]@\n" decl d in
-  let print_decls = print_list newline print_decl in
-  let parameters = print_list newline parameter in
-  match functorize p with
-    | [], dl -> 
-	fprintf fmt "@[%a@]" print_decls dl
-    | pl, dl ->
-	fprintf fmt "@[module type Parameters = sig@\n";
-	fprintf fmt "  @[%a@]@\nend@\n@\n@]" parameters pl;
-	fprintf fmt "@[module Make(P : Parameters) = struct@\n";
-	fprintf fmt "  open P@\n@\n";
-	fprintf fmt "  @[%a@]@\nend@\n@]" print_decls dl
+  let print_decls fmt () = Queue.iter (decl fmt) progs in
+  if Queue.is_empty params then
+    fprintf fmt "@[%a@]" print_decls ()
+  else begin
+    fprintf fmt "@[module type Parameters = sig@\n  @[";
+    Queue.iter (parameter fmt) params;
+    fprintf fmt "@]@\nend@\n@\n@]";
+    fprintf fmt "@[module Make(P : Parameters) = struct@\n";
+    fprintf fmt "  open P@\n@\n";
+    fprintf fmt "  @[%a@]@\nend@\n@]" print_decls ()
+  end
 
 
 

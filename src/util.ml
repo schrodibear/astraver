@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.58 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.59 2002-11-04 16:49:00 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -279,6 +279,7 @@ let make_raw_access env (id,id') c =
 
 let make_pre_access env id c =
   let size,_ = array_info env id in
+  let c = unref_term c in
   Pand (le_int (Tconst (ConstInt 0)) c, lt_int c size)
       
 let make_raw_store env (id,id') c1 c2 =
@@ -298,10 +299,6 @@ let print_pre fmt l =
   end
 
 let print_assertion fmt a = print_predicate fmt a.a_value
-
-let print_option f fmt = function
-  | None -> ()
-  | Some x -> f fmt x
 
 let print_exn fmt (x,c) = 
   fprintf fmt "| %a => %a" Ident.print x print_assertion c

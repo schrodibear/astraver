@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.41 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.42 2002-11-04 16:48:59 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -45,9 +45,12 @@ let push_parameter id v = match prover with
   | Pvs -> Pvs.push_parameter id v
   | Coq -> Coq.push_parameter id v
 
-let output fwe = match prover with
-  | Pvs -> Pvs.output_file fwe
-  | Coq -> Coq.output_file fwe
+let output fwe = 
+  if ocaml then 
+    Ocaml.output std_formatter
+  else match prover with
+    | Pvs -> Pvs.output_file fwe
+    | Coq -> Coq.output_file fwe
 
 (*s Processing of a single declaration [let id = p]. *)
 
@@ -73,6 +76,8 @@ let interp_program id p =
   print_if_debug print_wp wp;
   print_if_debug print_prog p;
   if wp_only then raise Exit;
+
+  if ocaml then begin Ocaml.push_program id p; raise Exit end;
 
   if_debug eprintf "* functionalization@.";
   let ren = initial_renaming env in
@@ -109,12 +114,14 @@ let interp_decl d =
   | Parameter (loc, ids, v) ->
       let v = Ltyping.type_v loc lab env lenv v in
       List.iter (add_external loc v) ids;
+      if ocaml then Ocaml.push_parameters ids v;
       if not (is_mutable v) then
 	let tv = Monad.trad_type_v (initial_renaming env) env v in
 	List.iter (add_parameter tv) ids
   | External (loc, ids, v) -> 
       let v = Ltyping.type_v loc lab env lenv v in
       if is_mutable v then raise_located loc MutableExternal;
+      if ocaml_externals then Ocaml.push_parameters ids v;
       List.iter (add_external loc v) ids
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
@@ -138,7 +145,6 @@ let c_parser c =
 let deal_channel parsef cin =
   let p = parsef cin in
   if parse_only then exit 0;
-  if ocaml then begin Ocaml.output std_formatter p; exit 0 end;
   List.iter interp_decl p
 
 let deal_file f =
