@@ -38,6 +38,11 @@
 	    (EQ (sub_permut g d t 
 			    (store (store t i (select t j)) j (select t i))) 
 		|@true|)))
+  (FORALL 
+   (t1 t2 g d i j)
+   (IMPLIES (AND (EQ (exchange t1 t2 i j) |@true|)
+		 (<= g i) (<= i d) (<= g j) (<= j d))
+	    (EQ (sub_permut g d t1 t2) |@true|)))
   (FORALL (t1 t2 i j) 
 	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
 		   (EQ (permut t1 t2) |@true|)))
