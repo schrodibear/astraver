@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.121 2004-12-08 10:53:22 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.122 2004-12-08 14:17:29 hubert Exp $ i*)
 
 
 open Format
@@ -141,7 +141,10 @@ let rec interp_term label old_label t =
 	let te1 = f t1 in
 	let var = global_var_for_type t.nterm_type in
 	LApp("acc",[interp_var label var;te1])
-    | NTunop (Ustar, _) -> assert false
+    | NTunop (Utilde, t) -> 
+	LApp ("bw_compl", [f t])
+    | NTunop (Ustar, _) -> 
+	assert false
     | NTunop (Uamp, t1) -> 
 	interp_term_address label old_label t1
     | NTunop (Uminus, t1) -> 

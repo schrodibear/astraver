@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.67 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.68 2004-12-08 14:17:29 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -120,6 +120,9 @@ and type_term_node loc env = function
 	 Tapp (info, tl), ty
        with Not_found -> 
 	 error loc ("unbound function " ^ f.logic_name))
+  | PLunop (Utilde, t) -> 
+      let t = type_int_term env t in
+      Tunop (Utilde, t), t.term_type
   | PLunop (Uminus, t) -> 
       let t = type_num_term env t in
       Tunop (Uminus, t), t.term_type

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.65 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.66 2004-12-08 14:17:29 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -25,6 +25,7 @@ open Format
 open Pp
 open Output
 open Ctypes
+open Cenv
 
 let interp_type ctype =
   match ctype.ctype_node with
@@ -177,6 +178,7 @@ let rec term t =
     | NTunop (Ustar,_) -> assert false
     | NTunop (Uamp, t) -> term t
     | NTunop (Uminus, t) -> term t
+    | NTunop (Utilde, t) -> term t
     | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
     | NTbase_addr t -> term t
     | NTblock_length t -> add_alloc (term t)
@@ -472,6 +474,149 @@ let invariant_for_global =
     allocs := allocs';
     NPand (form, Cnorm.valid_for_type loc v t)
 
+let not_a_constant_value loc = error loc "is not a constant value"
+
+let binop loc = function
+  | Badd | Badd_int | Badd_float | Badd_pointer_int -> Clogic.Badd
+  | Bsub | Bsub_int | Bsub_float | Bsub_pointer -> Clogic.Bsub
+  | Bmul | Bmul_int | Bmul_float -> Clogic.Bmul
+  | Bdiv | Bdiv_int | Bdiv_float -> Clogic.Bdiv
+  | Bmod | Bmod_int -> Clogic.Bmod
+  | Blt | Blt_int | Blt_float | Blt_pointer
+  | Bgt | Bgt_int | Bgt_float | Bgt_pointer
+  | Ble | Ble_int | Ble_float | Ble_pointer
+  | Bge | Bge_int | Bge_float | Bge_pointer
+  | Beq | Beq_int | Beq_float | Beq_pointer
+  | Bneq | Bneq_int | Bneq_float | Bneq_pointer
+  | Bbw_and
+  | Bbw_xor
+  | Bbw_or
+  | Band
+  | Bor
+  | Bshift_left
+  | Bshift_right -> not_a_constant_value loc
+
+let unop = function
+  | Ustar -> Clogic.Ustar
+  | Uamp -> Clogic.Uamp
+  | Utilde -> Clogic.Utilde
+  | Ufloat_of_int -> Clogic.Ufloat_of_int
+  | Uint_of_float -> Clogic.Uint_of_float
+  | Uminus -> Clogic.Uminus
+  | Uplus | Unot -> assert false
+
+let rec term_of_expr e =
+  let make n = 
+    { nterm_node = n; nterm_type = e.nexpr_type; nterm_loc = e.nexpr_loc }
+  in
+  match e.nexpr_node with 
+  | NEconstant e -> make (NTconstant e)
+  | NEvar (Var_info info) -> make (NTvar info)
+  | NEarrow (nlvalue,var_info) -> 
+      make (NTarrow (term_of_expr nlvalue, var_info))
+  | NEstar (nlvalue) -> 
+      make (NTstar (term_of_expr nlvalue))
+  | NEunary (Uplus, nexpr) -> 
+      term_of_expr nexpr
+  | NEunary (Unot, nexpr) -> 
+      make (NTif ((term_of_expr nexpr), 
+		  make (NTconstant (IntConstant "0")), 
+		  make (NTconstant (IntConstant "1"))))
+  | NEunary (op, nexpr) ->  
+      make (NTunop (unop op, term_of_expr nexpr))  
+  | NEbinary (e1, op, e2) ->
+      make (NTbinop(term_of_expr e1, binop e.nexpr_loc op, term_of_expr e2))
+  | NEcond (e1, e2, e3) ->
+      make (NTif (term_of_expr e1, term_of_expr e2, term_of_expr e3))
+  | NEcast (ty, e) ->
+      make (NTcast (ty, term_of_expr e))
+  | NEvar (Fun_info _)
+  | NEcall _ 
+  | NEincr (_, _)
+  | NEassign_op (_, _, _)
+  | NEassign (_, _) 
+  | NEseq (_, _)
+  | NEstring_literal _
+  | NEnop -> 
+      not_a_constant_value e.nexpr_loc
+
+let noattr loc ty e =
+  { nterm_node = e;
+    nterm_type = ty;
+    nterm_loc  = loc
+  }
+
+let rec pop_initializer loc t i =
+  match i with 
+    | [] ->{ nterm_node = 
+	       (match t.Ctypes.ctype_node with
+		  | Tint _ -> NTconstant(IntConstant "0")
+		  | Tfloat _ -> NTconstant(FloatConstant "0.0")
+		  | Tpointer _ -> 
+		      NTcast (t,
+			      {nterm_node = NTconstant (IntConstant "0");
+			       nterm_type = c_int;
+			       nterm_loc  = loc})
+		  | _ -> assert false);
+	     nterm_type = t;
+	     nterm_loc  = loc
+	    },[]
+    | (Iexpr e)::l -> term_of_expr e,l
+    | (Ilist [])::l -> pop_initializer loc t l
+    | (Ilist l)::l' -> 
+	let e,r = pop_initializer loc t l in e,r@l'
+
+let rec invariant_for_constant loc t lvalue initializers =
+ match t.Ctypes.ctype_node with
+    | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
+	let x,l = pop_initializer loc t initializers in
+	NPrel ( lvalue,Eq,x), l
+    | Tstruct n ->
+	begin match tag_type_definition n with
+	  | TTStructUnion (Tstruct (_), fl) ->
+	      List.fold_left 
+		(fun (acc,init) (tyf, f) -> 
+		   let block, init' =
+		      invariant_for_constant loc tyf 
+		       (noattr loc tyf (NTarrow(lvalue, f))) init
+		   in (NPand (acc,block),init'))
+		(NPtrue,initializers)  fl
+	  | _ ->
+	      assert false
+	end
+    | Tunion n ->
+	begin match tag_type_definition n with
+	  | TTStructUnion (Tstruct (_), (tyf,f)::_) ->
+	      let block, init' =
+		 invariant_for_constant loc tyf 
+		  (noattr loc tyf (NTarrow(lvalue, f)))
+		  initializers
+	      in (block,init')
+	  | _ ->
+	      assert false
+	end
+    | Tarray (ty,Some t) ->
+	let rec init_cells i (block,init) =
+	  if i >= t then (block,init)
+	  else
+	    let ts = (noattr loc c_int 
+			(NTconstant (IntConstant (Int64.to_string i)))) in
+	    let (b,init') = 
+	       invariant_for_constant loc ty 
+		(noattr loc ty 
+		   (NTstar 
+		      (noattr loc c_int 
+			 (NTbinop (lvalue,Clogic.Badd, ts))))) init 
+	    in
+	    init_cells (Int64.add i Int64.one) (NPand (block,b),init')
+	in
+	init_cells Int64.zero (NPtrue,initializers)
+    | Tarray (ty,None) -> assert false
+    | Tfun (_, _) -> assert false
+    | Tvar _ -> assert false
+    | Tvoid -> assert false  
+  
+
 let decl d =
   match d.Cast.node with
     | Nlogic(id,ltype) -> 
@@ -482,15 +627,36 @@ let decl d =
 	id.logic_args <- l
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
-    | Ndecl({Ctypes.ctype_node = Tstruct _ | Tarray _} as ty, v, _) 
-      when ty.Ctypes.ctype_storage <> Extern ->
-	lprintf "adding implicit invariant for %s@." v.var_name;
-	let id = "valid_" ^ v.var_name in
-	let t = { nterm_node = NTvar v; 
-		  nterm_loc = Loc.dummy;
-		  nterm_type = ty } in
-	add_strong_invariant id (invariant_for_global d.loc v t) 
-    | Ndecl(ctype,v,init) -> () (* TODO *)
+    | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
+	begin
+	  match ty.Ctypes.ctype_node with
+	    | Tstruct _ | Tarray _ ->
+		lprintf "adding implicit invariant for validity of %s@." 
+		  v.var_name;
+		let id = "valid_" ^ v.var_name in
+		let t = { nterm_node = NTvar v; 
+			  nterm_loc = Loc.dummy;
+			  nterm_type = ty } in
+		add_strong_invariant id (invariant_for_global d.loc v t) 
+	    | _ -> ()
+	end;
+	let init = (match init with | None -> [] | Some l -> [l]) in
+	if ty.Ctypes.ctype_const then 	
+	  begin
+	    match ty.Ctypes.ctype_node with
+	      | Tint _ | Tfloat _ | Tenum _ | Tpointer _ 
+	      | Tarray _ | Tstruct _ ->
+		  lprintf "adding implicit invariant for constant %s@." 
+		    v.var_name;
+		  let id = "constant_" ^ v.var_name in
+		  let t = {nterm_node = NTvar v; 
+			   nterm_loc = Loc.dummy;
+			   nterm_type = ty } in
+		  let (pre,_) = invariant_for_constant d.loc ty t init in 
+		  add_strong_invariant id pre
+	      | _ -> ()
+	  end;
+    | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
     | Naxiom(id,p) -> () (* TODO *)
     | Ntypedef(ctype,id) -> () 
     | Ntypedecl(ctype) -> ()
