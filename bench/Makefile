@@ -13,6 +13,7 @@ c:
 
 pvs:
 	../bin/why.opt --pvs -d -V test.mlw
+	pvs -batch -v 3 -l batch.el
 
 test:
 	../bin/why.opt -d -V --valid --coq-tactic Magic test.mlw

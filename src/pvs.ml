@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.27 2002-11-07 12:20:17 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.28 2002-11-07 12:59:47 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -68,6 +68,8 @@ let print_term fmt t =
 	if d = "1" then fprintf fmt "%s" n else fprintf fmt "%s/%s" n d
     | Tderef _ ->
 	assert false
+    | Tvar id when id == t_zwf_zero ->
+	fprintf fmt "zwf_zero"
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
     | Tapp (id, [t]) when id == t_neg_int ->
@@ -120,6 +122,8 @@ let print_predicate fmt p =
 	Ident.print fmt id
     | Papp (id, [t]) when id == well_founded ->
 	fprintf fmt "well_founded?(%a)" print_term t
+    | Papp (id, [a;b]) when id == t_zwf_zero ->
+	fprintf fmt "zwf_zero(%a, %a)" print_term a print_term b
     | Papp (id, [a;b]) when is_int_comparison id ->
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
     | Papp (id, [a;b]) when is_eq id ->
