@@ -19,130 +19,186 @@ Definition A_eq_bool (x y:A) := bool_of_sumbool (A_eq_dec x y).
 (*Why*) Parameter M : Z.
 Axiom M_positive : (0 <= M)%Z.
 
-(* Why obligation from file , characters 1205-1217 *)
-Lemma initnext_po_1 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z),
-   (0 <= 1)%Z /\ (1 < array_length next)%Z.
+(* Why obligation from file "kmp.mlw", characters 1206-1218 *)
+Lemma initnext_po_1 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  0 <= 1 /\ 1 < (array_length next).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1225-1755 *)
-Lemma initnext_po_2 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z), well_founded lexZ.
+(* Why obligation from file "kmp.mlw", characters 1226-1758 *)
+Lemma initnext_po_2 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  (well_founded lexZ).
 Proof.
 intros; exact lexZ_well_founded.
 Qed.
 
-(* Why obligation from file , characters 1578-1583 *)
-Lemma initnext_po_3 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z),
-   (0 <= i1)%Z /\ (i1 < array_length p)%Z.
+(* Why obligation from file "kmp.mlw", characters 1581-1586 *)
+Lemma initnext_po_3 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  0 <= i1 /\ i1 < (array_length p).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1584-1589 *)
-Lemma initnext_po_4 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z),
-   (0 <= j1)%Z /\ (j1 < array_length p)%Z.
+(* Why obligation from file "kmp.mlw", characters 1587-1592 *)
+Lemma initnext_po_4 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  0 <= j1 /\ j1 < (array_length p).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1634-1648 *)
-Lemma initnext_po_5 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test6:access p i1 = access p j1) (i2:Z) (Post2:i2 = (i1 + 1)%Z)
-   (j2:Z) (Post3:j2 = (j1 + 1)%Z),
-   (0 <= i2)%Z /\ (i2 < array_length next1)%Z.
+(* Why obligation from file "kmp.mlw", characters 1637-1651 *)
+Lemma initnext_po_5 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test6: (access p i1) = (access p j1)),
+  forall (i2: Z),
+  forall (Post2: i2 = (i1 + 1)),
+  forall (j2: Z),
+  forall (Post3: j2 = (j1 + 1)),
+  0 <= i2 /\ i2 < (array_length next1).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1596-1660 *)
-Lemma initnext_po_6 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test6:access p i1 = access p j1) (i2:Z) (Post2:i2 = (i1 + 1)%Z)
-   (j2:Z) (Post3:j2 = (j1 + 1)%Z)
-   (Pre10:(0 <= i2)%Z /\ (i2 < array_length next1)%Z) (next2:array Z)
-   (Post4:next2 = store next1 i2 j2),
-   (((0 <= j2)%Z /\ (j2 <= M)%Z) /\
-    ((j2 < i2)%Z /\ (i2 <= M)%Z) /\
-    match_ p (i2 - j2) p 0 j2 /\
-    (forall z:Z,
-       (j2 + 1 < z)%Z /\ (z < i2 + 1)%Z ->
-       ~ match_ p (i2 + 1 - z) p 0 z) /\
-    (forall k:Z, (0 < k)%Z /\ (k <= i2)%Z -> Next p k (access next2 k)) /\
-    array_length next2 = M) /\
-   lexZ (pairZ (M - i2) j2) (pairZ (M - i1) j1).
+(* Why obligation from file "kmp.mlw", characters 1599-1663 *)
+Lemma initnext_po_6 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test6: (access p i1) = (access p j1)),
+  forall (i2: Z),
+  forall (Post2: i2 = (i1 + 1)),
+  forall (j2: Z),
+  forall (Post3: j2 = (j1 + 1)),
+  forall (Pre10: 0 <= i2 /\ i2 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (Post4: next2 = (store next1 i2 j2)),
+  ((0 <= j2 /\ j2 <= M) /\ (j2 < i2 /\ i2 <= M) /\
+  (match_ p (i2 - j2) p 0 j2) /\
+  (forall (z:Z),
+   ((j2 + 1) < z /\ z < (i2 + 1) -> ~(match_ p (i2 + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i2 -> (Next p k (access next2 k)))) /\
+  (array_length next2) = M) /\ (lexZ (pairZ (M - i2) j2) (pairZ (M - i1) j1)).
 Proof.
 intuition.
 subst i2 j2.
@@ -187,63 +243,86 @@ replace (i1 + 1 - (j1 + 1))%Z with (i1 - j1)%Z.
 unfold lexZ, lex, Zwf, pairZ; left; Omega'.
 Qed.
 
-(* Why obligation from file , characters 1708-1721 *)
-Lemma initnext_po_7 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test5:access p i1 <> access p j1) (Test4:j1 = 0%Z) (i2:Z)
-   (Post5:i2 = (i1 + 1)%Z), (0 <= i2)%Z /\ (i2 < array_length next1)%Z.
+(* Why obligation from file "kmp.mlw", characters 1711-1724 *)
+Lemma initnext_po_7 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test5: ~(access p i1) = (access p j1)),
+  forall (Test4: j1 = 0),
+  forall (i2: Z),
+  forall (Post5: i2 = (i1 + 1)),
+  0 <= i2 /\ i2 < (array_length next1).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1691-1725 *)
-Lemma initnext_po_8 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test5:access p i1 <> access p j1) (Test4:j1 = 0%Z) (i2:Z)
-   (Post5:i2 = (i1 + 1)%Z)
-   (Pre9:(0 <= i2)%Z /\ (i2 < array_length next1)%Z) (next2:array Z)
-   (Post6:next2 = store next1 i2 0%Z),
-   (((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-    ((j1 < i2)%Z /\ (i2 <= M)%Z) /\
-    match_ p (i2 - j1) p 0 j1 /\
-    (forall z:Z,
-       (j1 + 1 < z)%Z /\ (z < i2 + 1)%Z ->
-       ~ match_ p (i2 + 1 - z) p 0 z) /\
-    (forall k:Z, (0 < k)%Z /\ (k <= i2)%Z -> Next p k (access next2 k)) /\
-    array_length next2 = M) /\
-   lexZ (pairZ (M - i2) j1) (pairZ (M - i1) j1).
+(* Why obligation from file "kmp.mlw", characters 1694-1728 *)
+Lemma initnext_po_8 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test5: ~(access p i1) = (access p j1)),
+  forall (Test4: j1 = 0),
+  forall (i2: Z),
+  forall (Post5: i2 = (i1 + 1)),
+  forall (Pre9: 0 <= i2 /\ i2 < (array_length next1)),
+  forall (next2: (array Z)),
+  forall (Post6: next2 = (store next1 i2 0)),
+  ((0 <= j1 /\ j1 <= M) /\ (j1 < i2 /\ i2 <= M) /\
+  (match_ p (i2 - j1) p 0 j1) /\
+  (forall (z:Z),
+   ((j1 + 1) < z /\ z < (i2 + 1) -> ~(match_ p (i2 + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i2 -> (Next p k (access next2 k)))) /\
+  (array_length next2) = M) /\ (lexZ (pairZ (M - i2) j1) (pairZ (M - i1) j1)).
 Proof.
 intuition.
   rewrite Test4.
@@ -293,62 +372,82 @@ unfold lexZ, lex, Zwf, pairZ.
  left; Omega'.
 Qed.
 
-(* Why obligation from file , characters 1736-1744 *)
-Lemma initnext_po_9 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test5:access p i1 <> access p j1) (Test3:j1 <> 0%Z),
-   (0 <= j1)%Z /\ (j1 < array_length next1)%Z.
+(* Why obligation from file "kmp.mlw", characters 1739-1747 *)
+Lemma initnext_po_9 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test5: ~(access p i1) = (access p j1)),
+  forall (Test3: j1 <> 0),
+  0 <= j1 /\ j1 < (array_length next1).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1731-1744 *)
-Lemma initnext_po_10 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length p)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test5:access p i1 <> access p j1) (Test3:j1 <> 0%Z)
-   (Pre8:(0 <= j1)%Z /\ (j1 < array_length next1)%Z) (j2:Z)
-   (Post7:j2 = access next1 j1),
-   (((0 <= j2)%Z /\ (j2 <= M)%Z) /\
-    ((j2 < i1)%Z /\ (i1 <= M)%Z) /\
-    match_ p (i1 - j2) p 0 j2 /\
-    (forall z:Z,
-       (j2 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-       ~ match_ p (i1 + 1 - z) p 0 z) /\
-    (forall k:Z, (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-    array_length next1 = M) /\
-   lexZ (pairZ (M - i1) j2) (pairZ (M - i1) j1).
+(* Why obligation from file "kmp.mlw", characters 1734-1747 *)
+Lemma initnext_po_10 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length p)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test5: ~(access p i1) = (access p j1)),
+  forall (Test3: j1 <> 0),
+  forall (Pre8: 0 <= j1 /\ j1 < (array_length next1)),
+  forall (j2: Z),
+  forall (Post7: j2 = (access next1 j1)),
+  ((0 <= j2 /\ j2 <= M) /\ (j2 < i1 /\ i1 <= M) /\
+  (match_ p (i1 - j2) p 0 j2) /\
+  (forall (z:Z),
+   ((j2 + 1) < z /\ z < (i1 + 1) -> ~(match_ p (i1 + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+  (array_length next1) = M) /\ (lexZ (pairZ (M - i1) j2) (pairZ (M - i1) j1)).
 Proof.
 intuition cut (j1 <> 0%Z); [ clear Test3; intro Test3 | assumption ].
   subst j2.
@@ -397,54 +496,69 @@ right.
  Omega'.
 Qed.
 
-(* Why obligation from file , characters 1225-1755 *)
-Lemma initnext_po_11 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (Variant1:prodZZ) (i1 j1:Z)
-   (next1:array Z) (Pre13:Variant1 = pairZ (M - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-        match_ p (i1 - j1) p 0 j1 /\
-        (forall z:Z,
-           (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-           ~ match_ p (i1 + 1 - z) p 0 z) /\
-        (forall k:Z,
-           (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-        array_length next1 = M) (Test7:(i1 < M - 1)%Z) (i2 j2:Z)
-   (next2:array Z)
-   (Inv0:(((0 <= j2)%Z /\ (j2 <= M)%Z) /\
-          ((j2 < i2)%Z /\ (i2 <= M)%Z) /\
-          match_ p (i2 - j2) p 0 j2 /\
-          (forall z:Z,
-             (j2 + 1 < z)%Z /\ (z < i2 + 1)%Z ->
-             ~ match_ p (i2 + 1 - z) p 0 z) /\
-          (forall k:Z,
-             (0 < k)%Z /\ (k <= i2)%Z -> Next p k (access next2 k)) /\
-          array_length next2 = M) /\
-         lexZ (pairZ (M - i2) j2) (pairZ (M - i1) j1)),
-   lexZ (pairZ (M - i2) j2) Variant1.
+(* Why obligation from file "kmp.mlw", characters 1226-1758 *)
+Lemma initnext_po_11 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Pre13: Variant1 = (pairZ (M - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M),
+  forall (Test7: i1 < (M - 1)),
+  forall (i2: Z),
+  forall (j2: Z),
+  forall (next2: (array Z)),
+  forall (Inv0: ((0 <= j2 /\ j2 <= M) /\ (j2 < i2 /\ i2 <= M) /\
+                (match_ p (i2 - j2) p 0 j2) /\
+                (forall (z:Z),
+                 ((j2 + 1) < z /\ z < (i2 + 1) ->
+                  ~(match_ p (i2 + 1 - z) p 0 z))) /\
+                (forall (k:Z),
+                 (0 < k /\ k <= i2 -> (Next p k (access next2 k)))) /\
+                (array_length next2) = M) /\
+                (lexZ (pairZ (M - i2) j2) (pairZ (M - i1) j1))),
+  (lexZ (pairZ (M - i2) j2) Variant1).
 Proof.
 intuition.
 rewrite Pre13; assumption.
 Qed.
 
-(* Why obligation from file , characters 1263-1512 *)
-Lemma initnext_po_12 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z),
-   ((0 <= j)%Z /\ (j <= M)%Z) /\
-   ((j < i)%Z /\ (i <= M)%Z) /\
-   match_ p (i - j) p 0 j /\
-   (forall z:Z,
-      (j + 1 < z)%Z /\ (z < i + 1)%Z -> ~ match_ p (i + 1 - z) p 0 z) /\
-   (forall k:Z, (0 < k)%Z /\ (k <= i)%Z -> Next p k (access next0 k)) /\
-   array_length next0 = M.
+(* Why obligation from file "kmp.mlw", characters 1264-1515 *)
+Lemma initnext_po_12 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  (0 <= j /\ j <= M) /\ (j < i /\ i <= M) /\ (match_ p (i - j) p 0 j) /\
+  (forall (z:Z),
+   ((j + 1) < z /\ z < (i + 1) -> ~(match_ p (i + 1 - z) p 0 z))) /\
+  (forall (k:Z), (0 < k /\ k <= i -> (Next p k (access next0 k)))) /\
+  (array_length next0) = M.
 Proof.
 intuition.
 subst i j.
@@ -455,35 +569,48 @@ Omega'.
 ArraySubst next0.
 Qed.
 
-(* Why obligation from file , characters 1193-1763 *)
-Lemma initnext_po_13 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test8:(1 < M)%Z)
-   (Pre14:(0 <= 1)%Z /\ (1 < array_length next)%Z) (next0:array Z)
-   (Post1:next0 = store next 1 0%Z) (i1 j1:Z) (next1:array Z)
-   (Inv:(((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-         ((j1 < i1)%Z /\ (i1 <= M)%Z) /\
-         match_ p (i1 - j1) p 0 j1 /\
-         (forall z:Z,
-            (j1 + 1 < z)%Z /\ (z < i1 + 1)%Z ->
-            ~ match_ p (i1 + 1 - z) p 0 z) /\
-         (forall k:Z,
-            (0 < k)%Z /\ (k <= i1)%Z -> Next p k (access next1 k)) /\
-         array_length next1 = M) /\ (i1 >= M - 1)%Z),
-   array_length next1 = M /\
-   (forall j:Z, (0 < j)%Z /\ (j < M)%Z -> Next p j (access next1 j)).
+(* Why obligation from file "kmp.mlw", characters 1194-1766 *)
+Lemma initnext_po_13 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test8: 1 < M),
+  forall (Pre14: 0 <= 1 /\ 1 < (array_length next)),
+  forall (next0: (array Z)),
+  forall (Post1: next0 = (store next 1 0)),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (next1: (array Z)),
+  forall (Inv: ((0 <= j1 /\ j1 <= M) /\ (j1 < i1 /\ i1 <= M) /\
+               (match_ p (i1 - j1) p 0 j1) /\
+               (forall (z:Z),
+                ((j1 + 1) < z /\ z < (i1 + 1) ->
+                 ~(match_ p (i1 + 1 - z) p 0 z))) /\
+               (forall (k:Z),
+                (0 < k /\ k <= i1 -> (Next p k (access next1 k)))) /\
+               (array_length next1) = M) /\ i1 >= (M - 1)),
+  (array_length next1) = M /\
+  (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next1 j)))).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1763-1763 *)
-Lemma initnext_po_14 :
- forall (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\ array_length next = M) (i:Z)
-   (Post9:i = 1%Z) (j:Z) (Post8:j = 0%Z) (Test1:(1 >= M)%Z),
-   array_length next = M /\
-   (forall j:Z, (0 < j)%Z /\ (j < M)%Z -> Next p j (access next j)).
+(* Why obligation from file "kmp.mlw", characters 1766-1766 *)
+Lemma initnext_po_14 : 
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M),
+  forall (i: Z),
+  forall (Post9: i = 1),
+  forall (j: Z),
+  forall (Post8: j = 0),
+  forall (Test1: 1 >= M),
+  (array_length next) = M /\
+  (forall (j:Z), (0 < j /\ j < M -> (Next p j (access next j)))).
 Proof.
 intuition.
 absurd (0 < j)%Z; Omega'.
@@ -494,152 +621,204 @@ Qed.
 Axiom N_positive : (0 <= N)%Z.
 
 
-(* Why obligation from file , characters 2317-2332 *)
-Lemma kmp_po_1 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z),
-   array_length p = M /\ array_length next = M.
+(* Why obligation from file "kmp.mlw", characters 2320-2335 *)
+Lemma kmp_po_1 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  (array_length p) = M /\ (array_length next) = M.
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 2338-2714 *)
-Lemma kmp_po_2 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j))),
-   well_founded lexZ.
+(* Why obligation from file "kmp.mlw", characters 2341-2719 *)
+Lemma kmp_po_2 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  (well_founded lexZ).
 Proof.
 intros; exact lexZ_well_founded.
 Qed.
 
-(* Why obligation from file , characters 2354-2360 *)
-Lemma kmp_po_3 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test2:(j1 < M)%Z) (result1:bool)
-   (Bool4:if result1 then (i1 < N)%Z else (i1 >= N)%Z),
-   if result1
-   then (j1 < M)%Z /\ (i1 < N)%Z
-   else (j1 >= M)%Z \/ (j1 < M)%Z /\ (i1 >= N)%Z.
+(* Why obligation from file "kmp.mlw", characters 2357-2363 *)
+Lemma kmp_po_3 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test2: j1 < M),
+  forall (result1: bool),
+  forall (Bool4: (if result1 then i1 < N else i1 >= N)),
+  (if result1 then j1 < M /\ i1 < N else j1 >= M \/ j1 < M /\ i1 >= N).
 Proof.
 intuition oldinduction result1; tauto.
 Qed.
 
-(* Why obligation from file , characters 2360-2360 *)
-Lemma kmp_po_4 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test1:(j1 >= M)%Z) (result1:bool) (Post5:result1 = false),
-   if result1
-   then (j1 < M)%Z /\ (i1 < N)%Z
-   else (j1 >= M)%Z \/ (j1 < M)%Z /\ (i1 >= N)%Z.
+(* Why obligation from file "kmp.mlw", characters 2363-2363 *)
+Lemma kmp_po_4 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test1: j1 >= M),
+  forall (result1: bool),
+  forall (Post5: result1 = false),
+  (if result1 then j1 < M /\ i1 < N else j1 >= M \/ j1 < M /\ i1 >= N).
 Proof.
 oldinduction result1; intuition; discriminate Post5.
 Qed.
 
-(* Why obligation from file , characters 2586-2591 *)
-Lemma kmp_po_5 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z),
-   (0 <= i1)%Z /\ (i1 < array_length a)%Z.
+(* Why obligation from file "kmp.mlw", characters 2591-2596 *)
+Lemma kmp_po_5 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  0 <= i1 /\ i1 < (array_length a).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 2592-2597 *)
-Lemma kmp_po_6 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length a)%Z),
-   (0 <= j1)%Z /\ (j1 < array_length p)%Z.
+(* Why obligation from file "kmp.mlw", characters 2597-2602 *)
+Lemma kmp_po_6 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length a)),
+  0 <= j1 /\ j1 < (array_length p).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 2604-2648 *)
-Lemma kmp_po_7 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length a)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test7:access a i1 = access p j1) (i2:Z) (Post1:i2 = (i1 + 1)%Z)
-   (j2:Z) (Post2:j2 = (j1 + 1)%Z),
-   (((0 <= j2)%Z /\ (j2 <= M)%Z) /\
-    ((j2 <= i2)%Z /\ (i2 <= N)%Z) /\
-    match_ a (i2 - j2) p 0 j2 /\
-    (forall k:Z, (0 <= k)%Z /\ (k < i2 - j2)%Z -> ~ match_ a k p 0 M)) /\
-   lexZ (pairZ (N - i2) j2) (pairZ (N - i1) j1).
+(* Why obligation from file "kmp.mlw", characters 2609-2653 *)
+Lemma kmp_po_7 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length a)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test7: (access a i1) = (access p j1)),
+  forall (i2: Z),
+  forall (Post1: i2 = (i1 + 1)),
+  forall (j2: Z),
+  forall (Post2: j2 = (j1 + 1)),
+  ((0 <= j2 /\ j2 <= M) /\ (j2 <= i2 /\ i2 <= N) /\
+  (match_ a (i2 - j2) p 0 j2) /\
+  (forall (k:Z), (0 <= k /\ k < (i2 - j2) -> ~(match_ a k p 0 M)))) /\
+  (lexZ (pairZ (N - i2) j2) (pairZ (N - i1) j1)).
 Proof.
 intuition discriminate H18 || auto with *.
 subst j2 i2.
@@ -659,32 +838,41 @@ subst j2 i2.
  left; Omega'.
 Qed.
 
-(* Why obligation from file , characters 2677-2686 *)
-Lemma kmp_po_8 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length a)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test6:access a i1 <> access p j1) (Test5:j1 = 0%Z) (i2:Z)
-   (Post3:i2 = (i1 + 1)%Z),
-   (((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-    ((j1 <= i2)%Z /\ (i2 <= N)%Z) /\
-    match_ a (i2 - j1) p 0 j1 /\
-    (forall k:Z, (0 <= k)%Z /\ (k < i2 - j1)%Z -> ~ match_ a k p 0 M)) /\
-   lexZ (pairZ (N - i2) j1) (pairZ (N - i1) j1).
+(* Why obligation from file "kmp.mlw", characters 2682-2691 *)
+Lemma kmp_po_8 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length a)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test6: ~(access a i1) = (access p j1)),
+  forall (Test5: j1 = 0),
+  forall (i2: Z),
+  forall (Post3: i2 = (i1 + 1)),
+  ((0 <= j1 /\ j1 <= M) /\ (j1 <= i2 /\ i2 <= N) /\
+  (match_ a (i2 - j1) p 0 j1) /\
+  (forall (k:Z), (0 <= k /\ k < (i2 - j1) -> ~(match_ a k p 0 M)))) /\
+  (lexZ (pairZ (N - i2) j1) (pairZ (N - i1) j1)).
 Proof.
 intuition discriminate H18 || auto with *.
   subst j1.
@@ -707,58 +895,76 @@ unfold lexZ, lex, Zwf, pairZ.
  left; Omega'.
 Qed.
 
-(* Why obligation from file , characters 2697-2705 *)
-Lemma kmp_po_9 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length a)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test6:access a i1 <> access p j1) (Test4:j1 <> 0%Z),
-   (0 <= j1)%Z /\ (j1 < array_length next0)%Z.
+(* Why obligation from file "kmp.mlw", characters 2702-2710 *)
+Lemma kmp_po_9 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length a)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test6: ~(access a i1) = (access p j1)),
+  forall (Test4: j1 <> 0),
+  0 <= j1 /\ j1 < (array_length next0).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 2692-2705 *)
-Lemma kmp_po_10 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z)
-   (Pre11:(0 <= i1)%Z /\ (i1 < array_length a)%Z)
-   (Pre12:(0 <= j1)%Z /\ (j1 < array_length p)%Z)
-   (Test6:access a i1 <> access p j1) (Test4:j1 <> 0%Z)
-   (Pre10:(0 <= j1)%Z /\ (j1 < array_length next0)%Z) (j2:Z)
-   (Post4:j2 = access next0 j1),
-   (((0 <= j2)%Z /\ (j2 <= M)%Z) /\
-    ((j2 <= i1)%Z /\ (i1 <= N)%Z) /\
-    match_ a (i1 - j2) p 0 j2 /\
-    (forall k:Z, (0 <= k)%Z /\ (k < i1 - j2)%Z -> ~ match_ a k p 0 M)) /\
-   lexZ (pairZ (N - i1) j2) (pairZ (N - i1) j1).
+(* Why obligation from file "kmp.mlw", characters 2697-2710 *)
+Lemma kmp_po_10 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  forall (Pre11: 0 <= i1 /\ i1 < (array_length a)),
+  forall (Pre12: 0 <= j1 /\ j1 < (array_length p)),
+  forall (Test6: ~(access a i1) = (access p j1)),
+  forall (Test4: j1 <> 0),
+  forall (Pre10: 0 <= j1 /\ j1 < (array_length next0)),
+  forall (j2: Z),
+  forall (Post4: j2 = (access next0 j1)),
+  ((0 <= j2 /\ j2 <= M) /\ (j2 <= i1 /\ i1 <= N) /\
+  (match_ a (i1 - j2) p 0 j2) /\
+  (forall (k:Z), (0 <= k /\ k < (i1 - j2) -> ~(match_ a k p 0 M)))) /\
+  (lexZ (pairZ (N - i1) j2) (pairZ (N - i1) j1)).
 Proof.
 intuition assert (j1 <> 0%Z); auto with *.
   (* invariant *)
@@ -804,30 +1010,39 @@ intuition assert (j1 <> 0%Z); auto with *.
  Omega'.
 Qed.
 
-(* Why obligation from file , characters 2338-2714 *)
-Lemma kmp_po_11 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (Variant1:prodZZ) (i1 j1:Z) (Pre13:Variant1 = pairZ (N - i1) j1)
-   (Inv:((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-        ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-        match_ a (i1 - j1) p 0 j1 /\
-        (forall k:Z,
-           (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M))
-   (Test8:(j1 < M)%Z /\ (i1 < N)%Z) (i2 j2:Z)
-   (Inv0:(((0 <= j2)%Z /\ (j2 <= M)%Z) /\
-          ((j2 <= i2)%Z /\ (i2 <= N)%Z) /\
-          match_ a (i2 - j2) p 0 j2 /\
-          (forall k:Z,
-             (0 <= k)%Z /\ (k < i2 - j2)%Z -> ~ match_ a k p 0 M)) /\
-         lexZ (pairZ (N - i2) j2) (pairZ (N - i1) j1)),
-   lexZ (pairZ (N - i2) j2) Variant1.
+(* Why obligation from file "kmp.mlw", characters 2341-2719 *)
+Lemma kmp_po_11 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (Variant1: prodZZ),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Pre13: Variant1 = (pairZ (N - i1) j1)),
+  forall (Inv: (0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))),
+  forall (Test8: j1 < M /\ i1 < N),
+  forall (i2: Z),
+  forall (j2: Z),
+  forall (Inv0: ((0 <= j2 /\ j2 <= M) /\ (j2 <= i2 /\ i2 <= N) /\
+                (match_ a (i2 - j2) p 0 j2) /\
+                (forall (k:Z),
+                 (0 <= k /\ k < (i2 - j2) -> ~(match_ a k p 0 M)))) /\
+                (lexZ (pairZ (N - i2) j2) (pairZ (N - i1) j1))),
+  (lexZ (pairZ (N - i2) j2) Variant1).
 Proof.
 intuition; rewrite Pre13; assumption.
 Qed.
@@ -836,20 +1051,24 @@ Definition first_occur (p a:array A) (r:Z) :=
   ((0 <= r < array_length a)%Z -> match_ a r p 0 (array_length p)) /\
   (forall k:Z, (0 <= k < r)%Z -> ~ match_ a k p 0 (array_length p)).
 
-(* Why obligation from file , characters 2382-2524 *)
-Lemma kmp_po_12 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j))),
-   ((0 <= j)%Z /\ (j <= M)%Z) /\
-   ((j <= i)%Z /\ (i <= N)%Z) /\
-   match_ a (i - j) p 0 j /\
-   (forall k:Z, (0 <= k)%Z /\ (k < i - j)%Z -> ~ match_ a k p 0 M).
+(* Why obligation from file "kmp.mlw", characters 2385-2529 *)
+Lemma kmp_po_12 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  (0 <= j /\ j <= M) /\ (j <= i /\ i <= N) /\ (match_ a (i - j) p 0 j) /\
+  (forall (k:Z), (0 <= k /\ k < (i - j) -> ~(match_ a k p 0 M))).
 Proof.
 intuition.
 generalize M_positive; Omega'.
@@ -860,24 +1079,31 @@ generalize N_positive; Omega'.
  generalize M_positive; Omega'.
 Qed.
 
-(* Why obligation from file , characters 2736-2740 *)
-Lemma kmp_po_13 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (i1 j1:Z)
-   (Inv:(((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-         ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-         match_ a (i1 - j1) p 0 j1 /\
-         (forall k:Z,
-            (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M)) /\
-        ((j1 >= M)%Z \/ (j1 < M)%Z /\ (i1 >= N)%Z)) (Test10:j1 = M),
-   first_occur p a (i1 - M).
+(* Why obligation from file "kmp.mlw", characters 2741-2745 *)
+Lemma kmp_po_13 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Inv: ((0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))) /\
+               (j1 >= M \/ j1 < M /\ i1 >= N)),
+  forall (Test10: j1 = M),
+  (first_occur p a (i1 - M)).
 Proof.
 intros.
 decompose [and] Inv.
@@ -895,24 +1121,31 @@ replace (i1 - M)%Z with (i1 - j1)%Z.
 Omega'.
 Qed.
 
-(* Why obligation from file , characters 2746-2748 *)
-Lemma kmp_po_14 :
- forall (a:array A) (next:array Z) (p:array A)
-   (Pre15:array_length p = M /\
-          array_length next = M /\ array_length a = N) (i:Z)
-   (Post8:i = 0%Z) (j:Z) (Post7:j = 0%Z)
-   (Pre14:array_length p = M /\ array_length next = M) (next0:array Z)
-   (Post15:array_length next0 = M /\
-           (forall j:Z,
-              (0 < j)%Z /\ (j < M)%Z -> Next p j (access next0 j)))
-   (i1 j1:Z)
-   (Inv:(((0 <= j1)%Z /\ (j1 <= M)%Z) /\
-         ((j1 <= i1)%Z /\ (i1 <= N)%Z) /\
-         match_ a (i1 - j1) p 0 j1 /\
-         (forall k:Z,
-            (0 <= k)%Z /\ (k < i1 - j1)%Z -> ~ match_ a k p 0 M)) /\
-        ((j1 >= M)%Z \/ (j1 < M)%Z /\ (i1 >= N)%Z)) (Test9:j1 <> M),
-   first_occur p a i1.
+(* Why obligation from file "kmp.mlw", characters 2751-2753 *)
+Lemma kmp_po_14 : 
+  forall (a: (array A)),
+  forall (next: (array Z)),
+  forall (p: (array A)),
+  forall (Pre15: (array_length p) = M /\ (array_length next) = M /\
+                 (array_length a) = N),
+  forall (i: Z),
+  forall (Post8: i = 0),
+  forall (j: Z),
+  forall (Post7: j = 0),
+  forall (Pre14: (array_length p) = M /\ (array_length next) = M),
+  forall (next0: (array Z)),
+  forall (Post15: (array_length next0) = M /\
+                  (forall (j:Z),
+                   (0 < j /\ j < M -> (Next p j (access next0 j))))),
+  forall (i1: Z),
+  forall (j1: Z),
+  forall (Inv: ((0 <= j1 /\ j1 <= M) /\ (j1 <= i1 /\ i1 <= N) /\
+               (match_ a (i1 - j1) p 0 j1) /\
+               (forall (k:Z),
+                (0 <= k /\ k < (i1 - j1) -> ~(match_ a k p 0 M)))) /\
+               (j1 >= M \/ j1 < M /\ i1 >= N)),
+  forall (Test9: j1 <> M),
+  (first_occur p a i1).
 Proof.
 intros.
  unfold first_occur.
