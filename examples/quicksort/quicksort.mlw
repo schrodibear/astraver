@@ -22,9 +22,9 @@
    a recursive function to sort between [l] and [r] *)
 
 let quick_rec =
-  let rec quick_rec (t:array N of int)(l,r:int) : unit 
+  let rec quick_rec (t:int array)(l,r:int) : unit 
   { variant 1+r-l } =
-    { 0 <= l and r < N (*as Pre*) }
+    { 0 <= l and r < array_length(t) (*as Pre*) }
     (if l < r then
        let p = (partition t l r) in
        begin
@@ -36,6 +36,6 @@ let quick_rec =
 (* At last, the main program, which is just a call to [quick_rec] *)
 
 let quicksort =
-  fun (t:array N of int) ->
-    (quick_rec t 0 (N-1))
-    { sorted_array(t, 0, N-1) and permut(t, t@) }
+  fun (t:int array) ->
+    (quick_rec t 0 ((array_length t)-1))
+    { sorted_array(t, 0, array_length(t)-1) and permut(t, t@) }

@@ -27,18 +27,23 @@ Require Omega.
  *)
 
 Lemma quicksort_lemma :
-  (N:Z)(t0,t1,t2,t3:(array N Z))
-  (g,d,p:Z) `0 <= g` -> `g < d` -> `d < N` -> `g <= p <= d`
+  (t0,t1,t2,t3:(array Z))
+  (g,d,p:Z) `0 <= g` -> `g < d` -> `d < (array_length t0)` -> `g <= p <= d`
     -> (partition_p t1 g d p) -> (sub_permut g d t1 t0)
      -> (sorted_array t2 g (Zpred p)) -> (sub_permut g (Zpred p) t2 t1)
        -> (sorted_array t3 (Zs p) d) -> (sub_permut(Zs p) d t3 t2 )
          -> (sorted_array t3 g d) /\ (sub_permut g d t3 t0).
 Proof.
-Intros N t0 t1 t2 t3 g d p H1 H2 H3 H4
+Intros t0 t1 t2 t3 g d p H1 H2 H3 H4
   piv_t1 perm_t1 sort_t2 perm_t2 sort_t3 perm_t3.
+Generalize (sub_permut_length perm_t1); Intro HL1. 
+Generalize (sub_permut_length perm_t2); Intro HL2. 
+Generalize (sub_permut_length perm_t3); Intro HL3. 
+Rewrite <- HL1 in H3.
 Generalize
   (partition_p_permut_left H1 H2 H3 H4 piv_t1 (sub_permut_sym perm_t2)).
   Intro piv_t2.
+Rewrite <- HL2 in H3.
 Generalize 
   (partition_p_permut_right H1 H2 H3 H4 piv_t2 (sub_permut_sym perm_t3)).
   Intro piv_t3.
@@ -98,11 +103,11 @@ Save.
  *)
 
 Lemma quicksort_trivial :
-  (N:Z)(t:(array N Z))
-  (g,d:Z) `0 <= g` -> `g >= d` -> `d < N`
+  (t:(array Z))
+  (g,d:Z) `0 <= g` -> `g >= d` -> `d < (array_length t)`
     -> (sorted_array t g d) /\ (sub_permut g d t t).
 Proof.
-Intros N t g d H1 H2 H3.
+Intros t g d H1 H2 H3.
 Split.
 Unfold sorted_array.
 Intros.

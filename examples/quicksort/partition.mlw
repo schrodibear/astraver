@@ -14,13 +14,11 @@
 (*                                                                        *)
 (**************************************************************************)
 
-parameter N : int
-
 (* exchange of two elements *)
 
 let swap =
-  fun (t:array N of int)(i,j:int) ->
-    { 0 <= i < N and 0 <= j < N }
+  fun (t:int array)(i,j:int) ->
+    { 0 <= i < array_length(t) and 0 <= j < array_length(t) }
     (let v = t[i] in
      begin
        t[i] := t[j];
@@ -30,11 +28,11 @@ let swap =
 
 (* partition *)
 
-logic partition_p : array int, int, int, int -> prop
+logic partition_p : int array, int, int, int -> prop
 
 let partition =
-  fun (t:array N of int)(l,r:int) ->
-    { 0 <= l < r and r < N }
+  fun (t:int array)(l,r:int) ->
+    { 0 <= l < r and r < array_length(t) }
    (let pv = t[l] in
     let i = ref (l+1) in
     let j = ref r in
@@ -45,7 +43,7 @@ let partition =
 		 and array_ge(t, j+1, r, pv)
 		 and sub_permut(l, r, t, t@init)
                  and t[l]=t@init[l] as Inv
-          variant N+2+j-i }
+          variant array_length(t)+2+j-i }
         label L;
 	while t[!i] <= pv && !i < !j do
       	  { invariant i@L <= i <= r and array_le(t, l+1, i-1, pv) as Invi

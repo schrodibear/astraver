@@ -11,14 +11,16 @@ Require partition_why.
 Lemma quick_rec_po_1 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test2: `l0 < r0`)
-  (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`.
+  (`0 <= l0` /\ `l0 < r0`) /\ `r0 < (array_length t0)`.
 Proof.
 Intros; Omega.
 Save.
@@ -26,43 +28,45 @@ Save.
 Lemma quick_rec_po_2 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
-  (t0: (array N Z))
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test2: `l0 < r0`)
-  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`)
-  (t1: (array N Z))
+  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < (array_length t0)`)
+  (t1: (array Z))
   (p: Z)
   (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
-  `0 <= l0` /\ `p - 1 < N`.
+  `0 <= l0` /\ `p - 1 < (array_length t1)`.
 Proof.
-Intuition.
+Intuition (SameLength t1 t0; Omega).
 Save.
 
 Lemma quick_rec_po_3 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
-  (t0: (array N Z))
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test2: `l0 < r0`)
-  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`)
-  (t1: (array N Z))
+  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < (array_length t0)`)
+  (t1: (array Z))
   (p: Z)
   (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
-  (Pre11: `0 <= l0` /\ `p - 1 < N`)
-  (Pre5: `0 <= l0` /\ `p - 1 < N`)
-  (Pre6: `0 <= l0` /\ `p - 1 < N`)
+  (Pre11: `0 <= l0` /\ `p - 1 < (array_length t1)`)
+  (Pre5: `0 <= l0` /\ `p - 1 < (array_length t1)`)
+  (Pre6: `0 <= l0` /\ `p - 1 < (array_length t1)`)
   (Zwf `0` `1 + (p - 1) - l0` Variant1).
 Proof.
 Intuition.
@@ -72,49 +76,51 @@ Save.
 Lemma quick_rec_po_4 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
-  (t0: (array N Z))
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test2: `l0 < r0`)
-  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`)
-  (t1: (array N Z))
+  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < (array_length t0)`)
+  (t1: (array Z))
   (p: Z)
   (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
-  (Pre11: `0 <= l0` /\ `p - 1 < N`)
-  (t2: (array N Z))
+  (Pre11: `0 <= l0` /\ `p - 1 < (array_length t1)`)
+  (t2: (array Z))
   (Post8: (sorted_array t2 l0 `p - 1`) /\ (sub_permut l0 `p - 1` t2 t1))
-  `0 <= p + 1` /\ `r0 < N`.
+  `0 <= p + 1` /\ `r0 < (array_length t2)`.
 Proof.
-Intros; Omega.
+Intuition; SameLength t2 t1; SameLength t1 t0; Omega.
 Save.
 
 Lemma quick_rec_po_5 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
-  (t0: (array N Z))
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test2: `l0 < r0`)
-  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`)
-  (t1: (array N Z))
+  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < (array_length t0)`)
+  (t1: (array Z))
   (p: Z)
   (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
-  (Pre11: `0 <= l0` /\ `p - 1 < N`)
-  (t2: (array N Z))
+  (Pre11: `0 <= l0` /\ `p - 1 < (array_length t1)`)
+  (t2: (array Z))
   (Post8: (sorted_array t2 l0 `p - 1`) /\ (sub_permut l0 `p - 1` t2 t1))
-  (Pre10: `0 <= p + 1` /\ `r0 < N`)
-  (Pre8: `0 <= p + 1` /\ `r0 < N`)
-  (Pre9: `0 <= p + 1` /\ `r0 < N`)
+  (Pre10: `0 <= p + 1` /\ `r0 < (array_length t2)`)
+  (Pre8: `0 <= p + 1` /\ `r0 < (array_length t2)`)
+  (Pre9: `0 <= p + 1` /\ `r0 < (array_length t2)`)
   (Zwf `0` `1 + r0 - (p + 1)` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -123,24 +129,25 @@ Save.
 Lemma quick_rec_po_6 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
-  (t0: (array N Z))
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test2: `l0 < r0`)
-  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`)
-  (t1: (array N Z))
+  (Pre12: (`0 <= l0` /\ `l0 < r0`) /\ `r0 < (array_length t0)`)
+  (t1: (array Z))
   (p: Z)
   (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
-  (Pre11: `0 <= l0` /\ `p - 1 < N`)
-  (t2: (array N Z))
+  (Pre11: `0 <= l0` /\ `p - 1 < (array_length t1)`)
+  (t2: (array Z))
   (Post8: (sorted_array t2 l0 `p - 1`) /\ (sub_permut l0 `p - 1` t2 t1))
-  (Pre10: `0 <= p + 1` /\ `r0 < N`)
-  (t3: (array N Z))
+  (Pre10: `0 <= p + 1` /\ `r0 < (array_length t2)`)
+  (t3: (array Z))
   (Post10: (sorted_array t3 `p + 1` r0) /\ (sub_permut `p + 1` r0 t3 t2))
   (sorted_array t3 l0 r0) /\ (sub_permut l0 r0 t3 t0).
 Proof.
@@ -152,13 +159,14 @@ Save.
 Lemma quick_rec_po_7 : 
   (l: Z)
   (r: Z)
-  (Pre15: `0 <= l` /\ `r < N`)
+  (t: (array Z))
+  (Pre15: `0 <= l` /\ `r < (array_length t)`)
   (Variant1: Z)
   (l0: Z)
   (r0: Z)
-  (t0: (array N Z))
+  (t0: (array Z))
   (Pre14: Variant1 = `1 + r0 - l0`)
-  (Pre13: `0 <= l0` /\ `r0 < N`)
+  (Pre13: `0 <= l0` /\ `r0 < (array_length t0)`)
   (Test1: `l0 >= r0`)
   (sorted_array t0 l0 r0) /\ (sub_permut l0 r0 t0 t0).
 Proof.
@@ -166,19 +174,19 @@ Intros; Apply quicksort_trivial; Intuition.
 Save.
 
 Definition quick_rec := (* validation *)
-  [l: Z; r: Z; t: (array N Z); Pre15: `0 <= l` /\ `r < N`]
+  [l: Z; r: Z; t: (array Z); Pre15: `0 <= l` /\ `r < (array_length t)`]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
-      (l0: Z)(r0: Z)(t0: (array N Z))(_: Variant1 = `1 + r0 - l0`)
-      (_0: `0 <= l0` /\ `r0 < N`)
-      (sig_2 (array N Z) unit [t1: (array N Z)][result: unit]
+      (l0: Z)(r0: Z)(t0: (array Z))(_: Variant1 = `1 + r0 - l0`)
+      (_0: `0 <= l0` /\ `r0 < (array_length t0)`)
+      (sig_2 (array Z) unit [t1: (array Z)][result: unit]
        ((sorted_array t1 l0 r0) /\ (sub_permut l0 r0 t1 t0)))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
-       (l0: Z)(r0: Z)(t0: (array N Z))(_: Variant2 = `1 + r0 - l0`)
-       (_0: `0 <= l0` /\ `r0 < N`)
-       (sig_2 (array N Z) unit [t1: (array N Z)][result: unit]
+       (l0: Z)(r0: Z)(t0: (array Z))(_: Variant2 = `1 + r0 - l0`)
+       (_0: `0 <= l0` /\ `r0 < (array_length t0)`)
+       (sig_2 (array Z) unit [t1: (array Z)][result: unit]
         ((sorted_array t1 l0 r0) /\ (sub_permut l0 r0 t1 t0)));
-       l0: Z; r0: Z; t0: (array N Z); Pre14: Variant1 = `1 + r0 - l0`;
-       Pre13: `0 <= l0` /\ `r0 < N`]
+       l0: Z; r0: Z; t0: (array Z); Pre14: Variant1 = `1 + r0 - l0`;
+       Pre13: `0 <= l0` /\ `r0 < (array_length t0)`]
         let (result, Bool2) =
           let (result1, Post2) = (Z_lt_ge_bool l0 r0) in
           (exist_1 [result2: bool]
@@ -188,82 +196,89 @@ Definition quick_rec := (* validation *)
         | (left Test2) =>
             let (t1, result0, Post4) =
               let Pre12 =
-                (quick_rec_po_1 l r Pre15 Variant1 l0 r0 Pre14 Pre13 Test2) in
+                (quick_rec_po_1 l r t Pre15 Variant1 l0 r0 t0 Pre14 Pre13
+                Test2) in
               let (t1, p, Post5) =
                 let Pre2 = Pre12 in
                 let Pre3 = Pre2 in
                 let (t1, result2, Post6) = (partition l0 r0 t0 Pre2) in
-                (exist_2 [t2: (array N Z)][result3: Z](`l0 <= result3` /\
+                (exist_2 [t2: (array Z)][result3: Z](`l0 <= result3` /\
                 `result3 <= r0`) /\ (partition_p t2 l0 r0 result3) /\
                 (sub_permut l0 r0 t2 t0) t1 result2 Post6) in
               let (t2, result0, Post7) =
                 let Pre11 =
-                  (quick_rec_po_2 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13
+                  (quick_rec_po_2 l r t Pre15 Variant1 l0 r0 t0 Pre14 Pre13
                   Test2 Pre12 t1 p Post5) in
                 let (t2, result0, Post8) =
                   let Pre5 = Pre11 in
                   let Pre6 = Pre5 in
                   let (t2, result2, Post9) =
                     ((wf1 `1 + (p - 1) - l0`)
-                      (quick_rec_po_3 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13
-                      Test2 Pre12 t1 p Post5 Pre11 Pre5 Pre6) l0 `p - 1` 
-                      t1 (refl_equal ? `1 + (p - 1) - l0`) Pre6) in
-                  (exist_2 [t3: (array N Z)][result3: unit]
+                      (quick_rec_po_3 l r t Pre15 Variant1 l0 r0 t0 Pre14
+                      Pre13 Test2 Pre12 t1 p Post5 Pre11 Pre5 Pre6) l0
+                      `p - 1` t1 (refl_equal ? `1 + (p - 1) - l0`) Pre6) in
+                  (exist_2 [t3: (array Z)][result3: unit]
                   (sorted_array t3 l0 `p - 1`) /\
                   (sub_permut l0 `p - 1` t3 t1) t2 result2 Post9) in
                 let Pre10 =
-                  (quick_rec_po_4 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13
+                  (quick_rec_po_4 l r t Pre15 Variant1 l0 r0 t0 Pre14 Pre13
                   Test2 Pre12 t1 p Post5 Pre11 t2 Post8) in
                 let (t3, result1, Post10) =
                   let Pre8 = Pre10 in
                   let Pre9 = Pre8 in
                   let (t3, result3, Post11) =
                     ((wf1 `1 + r0 - (p + 1)`)
-                      (quick_rec_po_5 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13
-                      Test2 Pre12 t1 p Post5 Pre11 t2 Post8 Pre10 Pre8 Pre9)
-                      `p + 1` r0 t2 (refl_equal ? `1 + r0 - (p + 1)`) Pre9) in
-                  (exist_2 [t4: (array N Z)][result4: unit]
+                      (quick_rec_po_5 l r t Pre15 Variant1 l0 r0 t0 Pre14
+                      Pre13 Test2 Pre12 t1 p Post5 Pre11 t2 Post8 Pre10 Pre8
+                      Pre9) `p + 1` r0 t2 (refl_equal ? `1 + r0 - (p + 1)`)
+                      Pre9) in
+                  (exist_2 [t4: (array Z)][result4: unit]
                   (sorted_array t4 `p + 1` r0) /\
                   (sub_permut `p + 1` r0 t4 t2) t3 result3 Post11) in
-                (exist_2 [t4: (array N Z)][result2: unit]
+                (exist_2 [t4: (array Z)][result2: unit]
                 (sorted_array t4 l0 r0) /\ (sub_permut l0 r0 t4 t0) t3
                 result1
-                (quick_rec_po_6 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13 Test2
-                Pre12 t1 p Post5 Pre11 t2 Post8 Pre10 t3 Post10)) in
-              (exist_2 [t3: (array N Z)][result1: unit]
+                (quick_rec_po_6 l r t Pre15 Variant1 l0 r0 t0 Pre14 Pre13
+                Test2 Pre12 t1 p Post5 Pre11 t2 Post8 Pre10 t3 Post10)) in
+              (exist_2 [t3: (array Z)][result1: unit]
               (sorted_array t3 l0 r0) /\ (sub_permut l0 r0 t3 t0) t2 
               result0 Post7) in
-            (exist_2 [t2: (array N Z)][result1: unit]
-            (sorted_array t2 l0 r0) /\ (sub_permut l0 r0 t2 t0) t1 result0
-            Post4)
+            (exist_2 [t2: (array Z)][result1: unit](sorted_array t2 l0 r0) /\
+            (sub_permut l0 r0 t2 t0) t1 result0 Post4)
         | (right Test1) =>
             let (result0, Post3) = (exist_1 [result0: unit]
               (sorted_array t0 l0 r0) /\ (sub_permut l0 r0 t0 t0) tt
-              (quick_rec_po_7 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13 Test1)) in
-            (exist_2 [t1: (array N Z)][result1: unit]
-            (sorted_array t1 l0 r0) /\ (sub_permut l0 r0 t1 t0) t0 result0
-            Post3) end) `1 + r - l` l r t (refl_equal ? `1 + r - l`) Pre15).
+              (quick_rec_po_7 l r t Pre15 Variant1 l0 r0 t0 Pre14 Pre13
+              Test1)) in
+            (exist_2 [t1: (array Z)][result1: unit](sorted_array t1 l0 r0) /\
+            (sub_permut l0 r0 t1 t0) t0 result0 Post3) end) `1 + r - l` 
+      l r t (refl_equal ? `1 + r - l`) Pre15).
 
 Lemma quicksort_po_1 : 
-  `0 <= 0` /\ `N - 1 < N`.
+  (t: (array Z))
+  `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`.
 Proof.
-Omega.
+Intuition Omega.
 Save.
 
 Lemma quicksort_po_2 : 
-  (t: (array N Z))
-  (Pre1: `0 <= 0` /\ `N - 1 < N`)
-  (t0: (array N Z))
-  (Post1: (sorted_array t0 `0` `N - 1`) /\ (sub_permut `0` `N - 1` t0 t))
-  (sorted_array t0 `0` `N - 1`) /\ (permut t0 t).
+  (t: (array Z))
+  (Pre1: `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`)
+  (t0: (array Z))
+  (Post1: (sorted_array t0 `0` `(array_length t) - 1`) /\
+          (sub_permut `0` `(array_length t) - 1` t0 t))
+  (sorted_array t0 `0` `(array_length t0) - 1`) /\ (permut t0 t).
 Proof.
 Intuition EAuto.
+SameLength t0 t; Rewrite H3; Trivial.
 Save.
 
 Definition quicksort := (* validation *)
-  [t: (array N Z)]
-    let Pre1 = quicksort_po_1 in
-    let (t0, result1, Post1) = (quick_rec `0` `N - 1` t Pre1) in
-    (exist_2 [t1: (array N Z)][result2: unit](sorted_array t1 `0` `N - 1`) /\
-    (permut t1 t) t0 result1 (quicksort_po_2 t Pre1 t0 Post1)).
+  [t: (array Z)]
+    let Pre1 = (quicksort_po_1 t) in
+    let (t0, result1, Post1) =
+      (quick_rec `0` `(array_length t) - 1` t Pre1) in
+    (exist_2 [t1: (array Z)][result2: unit]
+    (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t) t0 
+    result1 (quicksort_po_2 t Pre1 t0 Post1)).
 
