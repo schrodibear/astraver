@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.43 2004-03-22 15:16:26 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.44 2004-03-22 15:51:45 marche Exp $ i*)
 
 
 open Format
@@ -352,9 +352,47 @@ and interp_lvalue e =
     | _ -> assert false (* wrong typing of lvalue ??? *)
 	  
 
+
+let collect_locations acc loc =
+  match loc with
+    | Lterm t -> 
+	begin
+	  match t.term_node with
+	    | Tarrow(e,f) ->
+		let loc = LApp("pointer_loc",[interp_term (Some "") "" e]) in
+		begin
+		  try
+		    let p = List.assoc f acc in
+		    (f,LApp("union_loc",[loc;p]))::acc
+		  with
+		      Not_found -> (f,loc)::acc
+		end
+	    | _ -> assert false (* TODO *)
+	end
+    | Lstar t -> assert false (* TODO *)
+    | Lrange(t1,t2,t3) -> assert false (* TODO *)
+
+
+
+
+let interp_assigns locl =
+  let l = List.fold_left collect_locations [] locl in
+  List.fold_left
+    (fun acc (v,p) ->
+       make_and acc
+	 (LPred("assigns",
+		[LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; p])))
+    LTrue l
+
+	 
+
+
 let interp_spec s =
   let tpre = interp_predicate_opt None "" s.requires
-  and tpost = interp_predicate_opt None "" s.ensures
+  and tpost = 
+    make_and
+      (interp_predicate_opt None "" s.ensures)
+      (interp_assigns s.assigns)
   in (tpre,tpost)
 
 

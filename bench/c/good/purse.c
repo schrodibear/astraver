@@ -1,5 +1,4 @@
 
-
 typedef struct {
   int balance;
 } purse;

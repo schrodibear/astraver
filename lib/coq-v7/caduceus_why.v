@@ -6,6 +6,7 @@ Require Why.
 Parameter pointer : Set.
 Parameter alloc : Set.
 Parameter memory : Set -> Set.
+Parameter assign_loc : Set.
 
 (*Why*) Parameter any_int : (_: unit)Z.
 
@@ -54,7 +55,7 @@ Admitted.
 (*Why*) Parameter shift_ :
   (p: pointer)(i: Z)(sig_1 pointer [result: pointer](result = (shift p i))).
 
-(*Why logic*) Definition acc : (A23:Set) ((memory) A23) -> pointer -> A23.
+(*Why logic*) Definition acc : (A27:Set) ((memory) A27) -> pointer -> A27.
 Admitted.
 Implicits acc [1].
 
@@ -63,7 +64,7 @@ Implicits acc [1].
   (sig_1 A5 [result: A5](result = (acc m p))).
 
 (*Why logic*) Definition upd :
-  (A24:Set) ((memory) A24) -> pointer -> A24 -> ((memory) A24).
+  (A28:Set) ((memory) A28) -> pointer -> A28 -> ((memory) A28).
 Admitted.
 Implicits upd [1].
 
@@ -74,21 +75,61 @@ Implicits upd [1].
    (m0 = (upd m p v))).
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (A25:Set)
-  ((m:((memory) A25)) ((p:pointer) ((a:A25) (acc (upd m p a) p) = a))).
+  (A29:Set)
+  ((m:((memory) A29)) ((p:pointer) ((a:A29) (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A26:Set)
-  ((m:((memory) A26))
+  (A30:Set)
+  ((m:((memory) A30))
    ((p1:pointer)
     ((p2:pointer)
-     ((a:A26) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     ((a:A30) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc -> pointer -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
+Admitted.
+
+(*Why logic*) Definition pointer_loc : pointer -> assign_loc.
+Admitted.
+
+(*Why logic*) Definition union_loc : assign_loc -> assign_loc -> assign_loc.
+Admitted.
+
+
+(*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
+Admitted.
+
+(*Why predicate*) Definition assigns [A31:Set] [a:alloc] [m1:((memory) A31)]
+  [m2:((memory) A31)] [l:assign_loc]
+  := ((p:pointer)
+      (~(fresh a p) /\ (unchanged p l) -> (acc m1 p) = (acc m2 p))).
+Implicits assigns [1].
+
+(*Why axiom*) Lemma unchanged_pointer1 :
+  ((p1:pointer)
+   ((p2:pointer) ((unchanged p1 (pointer_loc p2)) -> ~(p1 = p2)))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_pointer2 :
+  ((p1:pointer)
+   ((p2:pointer) (~(p1 = p2) -> (unchanged p1 (pointer_loc p2))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_union1 :
+  ((l1:assign_loc)
+   ((l2:assign_loc)
+    ((p:pointer)
+     ((unchanged p (union_loc l1 l2)) -> (unchanged p l1) /\ (unchanged p l2))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_union2 :
+  ((l1:assign_loc)
+   ((l2:assign_loc)
+    ((p:pointer)
+     ((unchanged p l1) /\ (unchanged p l2) -> (unchanged p (union_loc l1 l2)))))).
 Admitted.
 
