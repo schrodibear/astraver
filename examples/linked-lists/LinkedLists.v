@@ -178,16 +178,23 @@ Definition ll_order [c1,c2: pointer_store * pointer] : Prop :=
     (llist t1 p1 l1) /\ (llist t2 p2 l2) /\ 
     (lt (length l1) (length l2)))).
 
-Axiom ll_order_wf : (well_founded ll_order).
-(*
 Lemma ll_order_wf : (well_founded ll_order).
 Proof.
-Unfold well_founded.
-Destruct a; Destruct p; Intros.
-Apply Acc_intro.
-Destruct y; Destruct p2; Unfold 1 ll_order; Intuition.
+Apply well_founded_inv_lt_rel_compat
+  with F := [x:StorePointerPair][n]
+            (let (t,p) = x in 
+            (EX l:plist | (llist t p l) /\ (length l)=n)).
+Unfold ll_order inv_lt_rel.
+Destruct x; Destruct y; Intuition.
+Elim H; Clear H; Intros l1 H; Elim H; Clear H; Intros l2 H.
+Intuition.
+Exists (length l1).
+Exists l1; Intuition.
+Intuition.
+Elim H1; Intros l2'; Intuition.
+Generalize (llist_function ? ?? ? H H4); Intro; Subst l2.
+Omega.
 Save.
-*)
 Hints Resolve ll_order_wf.
 
 
