@@ -30,16 +30,7 @@ Lemma add1_po_2 :
   (Pre3: `y >= 0`)
   (result: Z)
   (Post3: result = y)
-  (Variant1: Z)
-  (x0: Z)
-  (z0: Z)
-  (Pre2: Variant1 = z0)
-  (I: `0 <= z0` /\ `x0 = x + (y - z0)`)
-  (Test2: `z0 > 0`)
-  (x1: Z)
-  (z1: Z)
-  (I0: (`0 <= z1` /\ `x1 = x + (y - z1)`) /\ (Zwf `0` z1 z0))
-  (Zwf `0` z1 Variant1).
+  `0 <= result` /\ `x = x + (y - result)`.
 Proof.
 Unfold Zwf; Intros; Omega.
 Save.
@@ -50,22 +41,13 @@ Lemma add1_po_3 :
   (Pre3: `y >= 0`)
   (result: Z)
   (Post3: result = y)
-  `0 <= result` /\ `x = x + (y - result)`.
-Proof.
-Intuition.
-Save.
-
-Lemma add1_po_4 : 
-  (y: Z)
-  (x: Z)
-  (Pre3: `y >= 0`)
-  (result: Z)
-  (Post3: result = y)
   (x0: Z)
   (z0: Z)
   (I: (`0 <= z0` /\ `x0 = x + (y - z0)`) /\ `z0 <= 0`)
   `x0 = x + y`.
-Proof. Intuition. Save.
+Proof.
+Intuition.
+Save.
 
 Definition add1 := (* validation *)
   [y: Z; x: Z; Pre3: `y >= 0`]
@@ -108,9 +90,8 @@ Definition add1 := (* validation *)
                   `x2 = x + (y - z2)`) /\ (Zwf `0` z2 z0) x1 z1 result2
                   (add1_po_1 y x Pre3 result Post3 Variant1 x0 z0 Pre2 I
                   Test2 x1 Post1 z1 Post2)) in
-                ((wf1 z1)
-                  (add1_po_2 y x Pre3 result Post3 Variant1 x0 z0 Pre2 I
-                  Test2 x1 z1 I0) x1 z1 (refl_equal ? z1) (proj1 ? ? I0)) in
+                ((wf1 z1) (loop_variant_1 Pre2 I0) x1 z1 (refl_equal ? z1)
+                  (proj1 ? ? I0)) in
               (exist_3 [x2: Z][z2: Z][result2: unit](`0 <= z2` /\
               `x2 = x + (y - z2)`) /\ `z2 <= 0` x1 z1 result1 I0)
           | (right Test1) =>
@@ -120,9 +101,9 @@ Definition add1 := (* validation *)
               (exist_3 [x2: Z][z2: Z][result2: unit](`0 <= z2` /\
               `x2 = x + (y - z2)`) /\ `z2 <= 0` x1 z1 result1 I0) end) 
         result x result (refl_equal ? result)
-        (add1_po_3 y x Pre3 result Post3)) in
+        (add1_po_2 y x Pre3 result Post3)) in
     (exist_2 [x1: Z][result1: unit]`x1 = x + y` x0 result0
-    (add1_po_4 y x Pre3 result Post3 x0 z0 I)).
+    (add1_po_3 y x Pre3 result Post3 x0 z0 I)).
 
 Lemma u1_po_1 : 
   (result: Z)
@@ -346,38 +327,13 @@ Lemma mult1_po_3 :
   (Post3: savex = x)
   (x0: Z)
   (Post1: x0 = `0`)
-  (Variant1: Z)
-  (x1: Z)
-  (z0: Z)
-  (Pre3: Variant1 = z0)
-  (I: `0 <= z0` /\ `x1 = x * (y - z0)`)
-  (Test2: `z0 > 0`)
-  (x2: Z)
-  (z1: Z)
-  (I0: (`0 <= z1` /\ `x2 = x * (y - z1)`) /\ (Zwf `0` z1 z0))
-  (Zwf `0` z1 Variant1).
-Proof. 
-Simpl; Intros.
-Rewrite Pre3; Tauto.
-Save.
-
-Lemma mult1_po_4 : 
-  (y: Z)
-  (x: Z)
-  (Pre4: `x >= 0` /\ `y >= 0`)
-  (result: Z)
-  (Post4: result = y)
-  (savex: Z)
-  (Post3: savex = x)
-  (x0: Z)
-  (Post1: x0 = `0`)
   `0 <= result` /\ `x0 = x * (y - result)`.
 Proof. 
 Intros.
 Subst result; Split; [ Omega | Ring ]; Assumption.
 Save.
 
-Lemma mult1_po_5 : 
+Lemma mult1_po_4 : 
   (y: Z)
   (x: Z)
   (Pre4: `x >= 0` /\ `y >= 0`)
@@ -391,7 +347,7 @@ Lemma mult1_po_5 :
   (z0: Z)
   (I: (`0 <= z0` /\ `x1 = x * (y - z0)`) /\ `z0 <= 0`)
   `x1 = x * y`.
-Proof.
+Proof. 
 Simpl; Intros.
 Cut `z0 = 0`.
 Intros eq; Rewrite eq in I. Intuition.
@@ -451,9 +407,7 @@ Definition mult1 := (* validation *)
                       `x3 = x * (y - z2)`) /\ (Zwf `0` z2 z0) x2 z1 result3
                       (mult1_po_2 y x Pre4 result Post4 savex Post3 x0 Post1
                       Variant1 x1 z0 Pre3 I Test2 x2 Post8 z1 Post2)) in
-                    ((wf1 z1)
-                      (mult1_po_3 y x Pre4 result Post4 savex Post3 x0 Post1
-                      Variant1 x1 z0 Pre3 I Test2 x2 z1 I0) x2 z1
+                    ((wf1 z1) (loop_variant_1 Pre3 I0) x2 z1
                       (refl_equal ? z1) (proj1 ? ? I0)) in
                   (exist_3 [x3: Z][z2: Z][result3: unit](`0 <= z2` /\
                   `x3 = x * (y - z2)`) /\ `z2 <= 0` x2 z1 result2 I0)
@@ -464,9 +418,9 @@ Definition mult1 := (* validation *)
                   (exist_3 [x3: Z][z2: Z][result3: unit](`0 <= z2` /\
                   `x3 = x * (y - z2)`) /\ `z2 <= 0` x2 z1 result2 I0) end)
             result x0 result (refl_equal ? result)
-            (mult1_po_4 y x Pre4 result Post4 savex Post3 x0 Post1)) in
+            (mult1_po_3 y x Pre4 result Post4 savex Post3 x0 Post1)) in
         (exist_3 [x2: Z][z1: Z][result2: unit]`x2 = x * y` x1 z0 result1
-        (mult1_po_5 y x Pre4 result Post4 savex Post3 x0 Post1 x1 z0 I)) in
+        (mult1_po_4 y x Pre4 result Post4 savex Post3 x0 Post1 x1 z0 I)) in
       (exist_3 [x1: Z][z1: Z][result1: unit]`x1 = x * y` x0 z0 result0 Post6) in
     (exist_2 [x1: Z][result1: unit]`x1 = x * y` x0 result0 Post5).
 

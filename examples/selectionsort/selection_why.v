@@ -218,44 +218,6 @@ Lemma selection_po_6 :
   (Post8: result1 = i0)
   (result2: Z)
   (Post7: result2 = `i0 + 1`)
-  (Variant3: Z)
-  (j0: Z)
-  (min0: Z)
-  (Pre6: Variant3 = `n - j0`)
-  (Pre5: (`i0 + 1 <= j0` /\ `j0 <= n`) /\ (`i0 <= min0` /\ `min0 < n`) /\
-         ((k:Z)
-          (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
-  (Test5: `j0 < n`)
-  (j1: Z)
-  (min1: Z)
-  (Post13: ((`i0 + 1 <= j1` /\ `j1 <= n`) /\ (`i0 <= min1` /\ `min1 < n`) /\
-           ((k:Z)
-            (`i0 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`))) /\
-           (Zwf `0` `n - j1` `n - j0`))
-  (Zwf `0` `n - j1` Variant3).
-Proof.
-Intros; Rewrite Pre6; Tauto.
-Save.
-
-Lemma selection_po_7 : 
-  (t: (array n Z))
-  (Pre13: `n >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array n Z))
-  (Pre12: Variant1 = `n - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= n - 1`) /\ (sorted_array t0 `0` `i0 - 1`) /\
-          (permut t0 t) /\
-          ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
-            ((l:Z) (`i0 <= l` /\ `l < n` -> `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < n - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
   (`i0 + 1 <= result2` /\ `result2 <= n`) /\ (`i0 <= result1` /\
   `result1 < n`) /\
   ((k:Z)
@@ -266,7 +228,7 @@ Assert h:`k=i0`. Omega.
 Subst result1 k; Omega.
 Save.
 
-Lemma selection_po_8 : 
+Lemma selection_po_7 : 
   (t: (array n Z))
   (Pre13: `n >= 1`)
   (result: Z)
@@ -296,7 +258,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma selection_po_9 : 
+Lemma selection_po_8 : 
   (t: (array n Z))
   (Pre13: `n >= 1`)
   (result: Z)
@@ -329,7 +291,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma selection_po_10 : 
+Lemma selection_po_9 : 
   (t: (array n Z))
   (Pre13: `n >= 1`)
   (result: Z)
@@ -420,7 +382,7 @@ Apply H4; Omega.
 Unfold Zwf; Omega.
 Save.
 
-Lemma selection_po_11 : 
+Lemma selection_po_10 : 
   (t: (array n Z))
   (Pre13: `n >= 1`)
   (result: Z)
@@ -456,36 +418,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma selection_po_12 : 
-  (t: (array n Z))
-  (Pre13: `n >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array n Z))
-  (Pre12: Variant1 = `n - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= n - 1`) /\ (sorted_array t0 `0` `i0 - 1`) /\
-          (permut t0 t) /\
-          ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
-            ((l:Z) (`i0 <= l` /\ `l < n` -> `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < n - 1`)
-  (i1: Z)
-  (t1: (array n Z))
-  (Post12: ((`0 <= i1` /\ `i1 <= n - 1`) /\ (sorted_array t1 `0` `i1 - 1`) /\
-           (permut t1 t) /\
-           ((k:Z)
-            (`0 <= k` /\ `k < i1` ->
-             ((l:Z)
-              (`i1 <= l` /\ `l < n` -> `(access t1 k) <= (access t1 l)`))))) /\
-           (Zwf `0` `n - i1` `n - i0`))
-  (Zwf `0` `n - i1` Variant1).
-Proof.
-Intros; Rewrite Pre12; Tauto.
-Save.
-
-Lemma selection_po_13 : 
+Lemma selection_po_11 : 
   (t: (array n Z))
   (Pre13: `n >= 1`)
   (result: Z)
@@ -500,7 +433,7 @@ Intuition.
 Unfold sorted_array; Intros; Omega.
 Save.
 
-Lemma selection_po_14 : 
+Lemma selection_po_12 : 
   (t: (array n Z))
   (Pre13: `n >= 1`)
   (result: Z)
@@ -763,12 +696,8 @@ Definition selection := (* validation *)
                                         j0 min0 Pre6 Pre5 Test5 min1 Post21
                                         j1 Post2)) in
                                       ((wf2 `n - j1`)
-                                        (selection_po_6 t Pre13 result Post11
-                                        Variant1 i0 t0 Pre12 Pre11 Test6
-                                        result1 Post8 result2 Post7 Variant3
-                                        j0 min0 Pre6 Pre5 Test5 j1 min1
-                                        Post13) j1 min1
-                                        (refl_equal ? `n - j1`)
+                                        (loop_variant_1 Pre6 Post13) 
+                                        j1 min1 (refl_equal ? `n - j1`)
                                         (proj1 ? ? Post13)) in
                                     (exist_3 [j2: Z][min2: Z][result5: unit]
                                     ((`i0 + 1 <= j2` /\ `j2 <= n`) /\
@@ -797,12 +726,12 @@ Definition selection := (* validation *)
                                     `j2 >= n` j1 min1 result4 Post3) end)
                               `n - result2` result2 result1
                               (refl_equal ? `n - result2`)
-                              (selection_po_7 t Pre13 result Post11 Variant1
+                              (selection_po_6 t Pre13 result Post11 Variant1
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
                               Post7)) in
                           let (t1, result4, Post24) =
                             let Pre7 =
-                              (selection_po_8 t Pre13 result Post11 Variant1
+                              (selection_po_7 t Pre13 result Post11 Variant1
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
                               Post7 j0 min0 Post3) in
                             let (w, Post6) = (exist_1 [result4: Z]
@@ -810,7 +739,7 @@ Definition selection := (* validation *)
                               (refl_equal ? (access t0 min0))) in
                             let (t1, result4, Post25) =
                               let Pre8 =
-                                (selection_po_9 t Pre13 result Post11
+                                (selection_po_8 t Pre13 result Post11
                                 Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                 Post8 result2 Post7 j0 min0 Post3 Pre7 w
                                 Post6) in
@@ -848,7 +777,7 @@ Definition selection := (* validation *)
                                     `(access t3 k) <= (access t3 l)`))))) /\
                                 (Zwf `0` `n - i` `n - i0`))) t2
                               result5
-                              (selection_po_10 t Pre13 result Post11 Variant1
+                              (selection_po_9 t Pre13 result Post11 Variant1
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
                               Post7 j0 min0 Post3 Pre7 w Post6 Pre8 t1 Post4
                               t2 Post5)) in
@@ -913,11 +842,9 @@ Definition selection := (* validation *)
                        (`i2 <= l` /\ `l < n` ->
                         `(access t2 k) <= (access t2 l)`))))) /\
                     (Zwf `0` `n - i2` `n - i0`) i1 t1 result2
-                    (selection_po_11 t Pre13 result Post11 Variant1 i0 t0
+                    (selection_po_10 t Pre13 result Post11 Variant1 i0 t0
                     Pre12 Pre11 Test6 t1 Post17 i1 Post9)) in
-                  ((wf1 `n - i1`)
-                    (selection_po_12 t Pre13 result Post11 Variant1 i0 t0
-                    Pre12 Pre11 Test6 i1 t1 Post12) i1 t1
+                  ((wf1 `n - i1`) (loop_variant_1 Pre12 Post12) i1 t1
                     (refl_equal ? `n - i1`) (proj1 ? ? Post12)) in
                 (exist_3 [i2: Z][t2: (array n Z)][result2: unit]
                 ((`0 <= i2` /\ `i2 <= n - 1`) /\
@@ -947,10 +874,10 @@ Definition selection := (* validation *)
                    (`i2 <= l` /\ `l < n` -> `(access t2 k) <= (access t2 l)`))))) /\
                 `i2 >= n - 1` i1 t1 result1 Post10) end) `n - result` 
           result t (refl_equal ? `n - result`)
-          (selection_po_13 t Pre13 result Post11)) in
+          (selection_po_11 t Pre13 result Post11)) in
       (exist_2 [t1: (array n Z)][result1: unit]
       (sorted_array t1 `0` `n - 1`) /\ (permut t1 t) t0 result0
-      (selection_po_14 t Pre13 result Post11 i0 t0 Post10)) in
+      (selection_po_12 t Pre13 result Post11 i0 t0 Post10)) in
     (exist_2 [t1: (array n Z)][result0: unit](sorted_array t1 `0` `n - 1`) /\
     (permut t1 t) t0 result Post15).
 

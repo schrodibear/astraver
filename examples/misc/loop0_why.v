@@ -38,13 +38,10 @@ Lemma p_po_3 :
   (x0: Z)
   (Pre5: Variant1 = x0)
   (Pre4: `0 <= x0` /\ `x0 <= x`)
-  (Test2: `x0 > 0`)
-  (Pre3: `x0 >= 0`)
-  (x1: Z)
-  (Post2: (`0 <= x1` /\ `x1 <= x`) /\ (Zwf `0` x1 x0))
-  (Zwf `0` x1 Variant1).
+  (Test1: `x0 <= 0`)
+  `x0 >= 0`.
 Proof.
-Intros; Rewrite Pre5; Intuition.
+Intuition.
 Save.
 
 Lemma p_po_4 : 
@@ -55,26 +52,13 @@ Lemma p_po_4 :
   (Pre5: Variant1 = x0)
   (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test1: `x0 <= 0`)
-  `x0 >= 0`.
+  (Pre2: `x0 >= 0`)
+  `x0 = 0`.
 Proof. 
 Intuition.
 Save.
 
 Lemma p_po_5 : 
-  (x: Z)
-  (Pre6: `x >= 0`)
-  (Variant1: Z)
-  (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `0 <= x0` /\ `x0 <= x`)
-  (Test1: `x0 <= 0`)
-  (Pre2: `x0 >= 0`)
-  `x0 = 0`.
-Proof.
-Intros; Omega.
-Save.
-
-Lemma p_po_6 : 
   (x: Z)
   (Pre6: `x >= 0`)
   `0 <= x` /\ `x <= x`.
@@ -109,15 +93,14 @@ Definition p := (* validation *)
                 (exist_2 [x2: Z][result1: unit](`0 <= x2` /\ `x2 <= x`) /\
                 (Zwf `0` x2 x0) x1 result0
                 (p_po_2 x Pre6 Variant1 x0 Pre5 Pre4 Test2 Pre3 x1 Post1)) in
-              ((wf1 x1)
-                (p_po_3 x Pre6 Variant1 x0 Pre5 Pre4 Test2 Pre3 x1 Post2) 
-                x1 (refl_equal ? x1) (proj1 ? ? Post2)) in
+              ((wf1 x1) (loop_variant_1 Pre5 Post2) x1 (refl_equal ? x1)
+                (proj1 ? ? Post2)) in
             (exist_2 [x2: Z][result1: unit]`x2 = 0` x1 result0 Post5)
         | (right Test1) =>
-            let Pre2 = (p_po_4 x Pre6 Variant1 x0 Pre5 Pre4 Test1) in
+            let Pre2 = (p_po_3 x Pre6 Variant1 x0 Pre5 Pre4 Test1) in
             let (x1, result0, Post4) = (exist_2 [x1: Z][result0: unit]
               `x1 = 0` x0 tt
-              (p_po_5 x Pre6 Variant1 x0 Pre5 Pre4 Test1 Pre2)) in
+              (p_po_4 x Pre6 Variant1 x0 Pre5 Pre4 Test1 Pre2)) in
             (exist_2 [x2: Z][result1: unit]`x2 = 0` x1 result0 Post4) end) 
-      x x (refl_equal ? x) (p_po_6 x Pre6)).
+      x x (refl_equal ? x) (p_po_5 x Pre6)).
 

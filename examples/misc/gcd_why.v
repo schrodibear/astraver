@@ -77,37 +77,13 @@ Lemma gcd1_po_3 :
   (Post5: result = a)
   (result0: Z)
   (Post4: result0 = b)
-  (Variant1: Z)
-  (x0: Z)
-  (y0: Z)
-  (Pre3: Variant1 = (max x0 y0))
-  (Pre2: `0 < x0` /\ `0 < y0` /\ `(gcd x0 y0) = (gcd a b)`)
-  (Test4: `x0 <> y0`)
-  (x1: Z)
-  (y1: Z)
-  (Post6: (`0 < x1` /\ `0 < y1` /\ `(gcd x1 y1) = (gcd a b)`) /\
-          (Zwf `0` (max x1 y1) (max x0 y0)))
-  (Zwf `0` (max x1 y1) Variant1).
-Proof.
-Intuition.
-Rewrite Pre3; Assumption.
-Save.
-
-Lemma gcd1_po_4 : 
-  (a: Z)
-  (b: Z)
-  (Pre4: `a > 0` /\ `b > 0`)
-  (result: Z)
-  (Post5: result = a)
-  (result0: Z)
-  (Post4: result0 = b)
   `0 < result` /\ `0 < result0` /\ `(gcd result result0) = (gcd a b)`.
 Proof.
 Intuition.
 Subst; Reflexivity.
 Save.
 
-Lemma gcd1_po_5 : 
+Lemma gcd1_po_4 : 
   (a: Z)
   (b: Z)
   (Pre4: `a > 0` /\ `b > 0`)
@@ -197,10 +173,8 @@ Definition gcd1 := (* validation *)
                       (exist_3 [x2: Z][y2: Z][result3: unit](`0 < x2` /\
                       `0 < y2` /\ `(gcd x2 y2) = (gcd a b)`) /\
                       (Zwf `0` (max x2 y2) (max x0 y0)) x1 y1 result2 Post6) in
-                    ((wf1 (max x1 y1))
-                      (gcd1_po_3 a b Pre4 result Post5 result0 Post4 Variant1
-                      x0 y0 Pre3 Pre2 Test4 x1 y1 Post6) x1 y1
-                      (refl_equal ? (max x1 y1)) (proj1 ? ? Post6)) in
+                    ((wf1 (max x1 y1)) (loop_variant_1 Pre3 Post6) x1 
+                      y1 (refl_equal ? (max x1 y1)) (proj1 ? ? Post6)) in
                   (exist_3 [x2: Z][y2: Z][result3: unit](`0 < x2` /\
                   `0 < y2` /\ `(gcd x2 y2) = (gcd a b)`) /\ `x2 = y2` 
                   x1 y1 result2 Post3)
@@ -213,9 +187,9 @@ Definition gcd1 := (* validation *)
                   `0 < y2` /\ `(gcd x2 y2) = (gcd a b)`) /\ `x2 = y2` 
                   x1 y1 result2 Post3) end) (max result result0) result
             result0 (refl_equal ? (max result result0))
-            (gcd1_po_4 a b Pre4 result Post5 result0 Post4)) in
+            (gcd1_po_3 a b Pre4 result Post5 result0 Post4)) in
         let (result2, Post12) = (exist_1 [result2: Z]`result2 = (gcd a b)` 
-          x0 (gcd1_po_5 a b Pre4 result Post5 result0 Post4 x0 y0 Post3)) in
+          x0 (gcd1_po_4 a b Pre4 result Post5 result0 Post4 x0 y0 Post3)) in
         (exist_3 [x1: Z][y1: Z][result3: Z]`result3 = (gcd a b)` x0 y0
         result2 Post12) in
       (exist_2 [x1: Z][result2: Z]`result2 = (gcd a b)` x0 result1 Post9) in
@@ -284,37 +258,13 @@ Lemma gcd2_po_3 :
   (Post6: result = a)
   (result0: Z)
   (Post5: result0 = b)
-  (Variant1: Z)
-  (x0: Z)
-  (y0: Z)
-  (Pre4: Variant1 = y0)
-  (Pre3: `0 <= x0` /\ `0 <= y0` /\ `(gcd x0 y0) = (gcd a b)`)
-  (Test2: `y0 <> 0`)
-  (x1: Z)
-  (y1: Z)
-  (Post7: (`0 <= x1` /\ `0 <= y1` /\ `(gcd x1 y1) = (gcd a b)`) /\
-          (Zwf `0` y1 y0))
-  (Zwf `0` y1 Variant1).
-Proof.
-Intuition.
-Rewrite Pre4; Assumption.
-Save.
-
-Lemma gcd2_po_4 : 
-  (a: Z)
-  (b: Z)
-  (Pre5: `a >= 0` /\ `b >= 0`)
-  (result: Z)
-  (Post6: result = a)
-  (result0: Z)
-  (Post5: result0 = b)
   `0 <= result` /\ `0 <= result0` /\ `(gcd result result0) = (gcd a b)`.
 Proof.
 Intuition.
 Subst; Reflexivity.
 Save.
 
-Lemma gcd2_po_5 : 
+Lemma gcd2_po_4 : 
   (a: Z)
   (b: Z)
   (Pre5: `a >= 0` /\ `b >= 0`)
@@ -393,9 +343,7 @@ Definition gcd2 := (* validation *)
                       (exist_3 [x2: Z][y2: Z][result3: unit](`0 <= x2` /\
                       `0 <= y2` /\ `(gcd x2 y2) = (gcd a b)`) /\
                       (Zwf `0` y2 y0) x1 y1 result2 Post7) in
-                    ((wf1 y1)
-                      (gcd2_po_3 a b Pre5 result Post6 result0 Post5 Variant1
-                      x0 y0 Pre4 Pre3 Test2 x1 y1 Post7) x1 y1
+                    ((wf1 y1) (loop_variant_1 Pre4 Post7) x1 y1
                       (refl_equal ? y1) (proj1 ? ? Post7)) in
                   (exist_3 [x2: Z][y2: Z][result3: unit](`0 <= x2` /\
                   `0 <= y2` /\ `(gcd x2 y2) = (gcd a b)`) /\ `y2 = 0` 
@@ -409,9 +357,9 @@ Definition gcd2 := (* validation *)
                   `0 <= y2` /\ `(gcd x2 y2) = (gcd a b)`) /\ `y2 = 0` 
                   x1 y1 result2 Post4) end) result0 result result0
             (refl_equal ? result0)
-            (gcd2_po_4 a b Pre5 result Post6 result0 Post5)) in
+            (gcd2_po_3 a b Pre5 result Post6 result0 Post5)) in
         let (result2, Post11) = (exist_1 [result2: Z]`result2 = (gcd a b)` 
-          x0 (gcd2_po_5 a b Pre5 result Post6 result0 Post5 x0 y0 Post4)) in
+          x0 (gcd2_po_4 a b Pre5 result Post6 result0 Post5 x0 y0 Post4)) in
         (exist_3 [x1: Z][y1: Z][result3: Z]`result3 = (gcd a b)` x0 y0
         result2 Post11) in
       (exist_2 [x1: Z][result2: Z]`result2 = (gcd a b)` x0 result1 Post9) in

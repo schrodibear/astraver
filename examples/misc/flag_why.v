@@ -364,35 +364,6 @@ Lemma dutch_flag_po_11 :
   (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red))
-  (Test6: `i0 < r0`)
-  (b1: Z)
-  (i1: Z)
-  (r1: Z)
-  (t1: (array N color))
-  (Post14: ((`0 <= b1` /\ `b1 <= i1`) /\ (`i1 <= r1` /\ `r1 <= N`) /\
-           (monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 i1 white) /\
-           (monochrome t1 r1 N red)) /\ (Zwf `0` `r1 - i1` `r0 - i0`))
-  (Zwf `0` `r1 - i1` Variant1).
-Proof.
-Intros; Rewrite Pre13; Tauto.
-Save.
-
-Lemma dutch_flag_po_12 : 
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array N color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red))
   (Test1: `i0 >= r0`)
   (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 r0 white) /\
   (monochrome t0 r0 N red).
@@ -400,7 +371,7 @@ Proof.
 Unfold monochrome; Intuition.
 Save.
 
-Lemma dutch_flag_po_13 : 
+Lemma dutch_flag_po_12 : 
   (t: (array N color))
   (result: Z)
   (Post13: result = `0`)
@@ -726,11 +697,8 @@ Definition dutch_flag := (* validation *)
                       (monochrome t2 r2 N red)) /\
                       (Zwf `0` `r2 - i2` `r0 - i0`) b1 i1 r1 t1 result3
                       Post14) in
-                    ((wf1 `r1 - i1`)
-                      (dutch_flag_po_11 result Post13 result0 Post12 result1
-                      Post11 Variant1 b0 i0 r0 t0 Pre13 Pre12 Test6 b1 i1 r1
-                      t1 Post14) b1 i1 r1 t1 (refl_equal ? `r1 - i1`)
-                      (proj1 ? ? Post14)) in
+                    ((wf1 `r1 - i1`) (loop_variant_1 Pre13 Post14) b1 
+                      i1 r1 t1 (refl_equal ? `r1 - i1`) (proj1 ? ? Post14)) in
                   (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array N color)]
                   [result4: unit](monochrome t2 `0` b2 blue) /\
                   (monochrome t2 b2 r2 white) /\ (monochrome t2 r2 N red) 
@@ -741,14 +709,14 @@ Definition dutch_flag := (* validation *)
                     (monochrome t1 `0` b1 blue) /\
                     (monochrome t1 b1 r1 white) /\
                     (monochrome t1 r1 N red) b0 i0 r0 t0 tt
-                    (dutch_flag_po_12 result Post13 result0 Post12 result1
+                    (dutch_flag_po_11 result Post13 result0 Post12 result1
                     Post11 Variant1 b0 i0 r0 t0 Pre13 Pre12 Test1)) in
                   (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array N color)]
                   [result4: unit](monochrome t2 `0` b2 blue) /\
                   (monochrome t2 b2 r2 white) /\ (monochrome t2 r2 N red) 
                   b1 i1 r1 t1 result3 Post19) end) `result1 - result0` 
             result result0 result1 t (refl_equal ? `result1 - result0`)
-            (dutch_flag_po_13 t result Post13 result0 Post12 result1 Post11)) in
+            (dutch_flag_po_12 t result Post13 result0 Post12 result1 Post11)) in
         (Build_tuple_4 b0 i0 t0 result2) in
       (Build_tuple_3 b0 t0 result1) in
     (Build_tuple_2 t0 result0).

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.32 2002-11-05 08:19:32 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.33 2002-11-14 08:54:03 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -132,6 +132,8 @@ val p_and : t
 val p_not : t
 
 (*s Category tests *)
+
+val is_variant : t -> bool
 
 val is_poly : t -> bool
 

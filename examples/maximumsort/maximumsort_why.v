@@ -539,31 +539,6 @@ Lemma maxisort_po_5 :
   (Pre6: `0 <= N`)
   (result: Z)
   (Post3: result = `N - 1`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array N Z))
-  (Pre5: Variant1 = `i0 + 1`)
-  (Pre4: (`0 <= i0 + 1` /\ `i0 + 1 <= N`) /\
-         (sorted_array t0 `i0 + 1` `N - 1`) /\ (permut t0 t) /\
-         ((`i0 + 1 < N` -> (Maximize t0 i0 (access t0 `i0 + 1`) `0`))))
-  (Test2: `i0 >= 0`)
-  (i1: Z)
-  (t1: (array N Z))
-  (Post4: ((`0 <= i1 + 1` /\ `i1 + 1 <= N`) /\
-          (sorted_array t1 `i1 + 1` `N - 1`) /\ (permut t1 t) /\
-          ((`i1 + 1 < N` -> (Maximize t1 i1 (access t1 `i1 + 1`) `0`)))) /\
-          (Zwf `0` `i1 + 1` `i0 + 1`))
-  (Zwf `0` `i1 + 1` Variant1).
-Proof.
-  Unfold Zwf; Intros; Omega'.
-Save.
-
-Lemma maxisort_po_6 : 
-  (N: Z)
-  (t: (array N Z))
-  (Pre6: `0 <= N`)
-  (result: Z)
-  (Post3: result = `N - 1`)
   (`0 <= result + 1` /\ `result + 1 <= N`) /\
   (sorted_array t `result + 1` `N - 1`) /\ (permut t t) /\
   ((`result + 1 < N` -> (Maximize t result (access t `result + 1`) `0`))).
@@ -574,7 +549,7 @@ Proof.
   Intros H; Absurd `N < N`; [Omega' | Auto].
 Save.
 
-Lemma maxisort_po_7 : 
+Lemma maxisort_po_6 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -668,10 +643,8 @@ Definition maxisort := (* validation *)
                   (Zwf `0` `i2 + 1` `i0 + 1`) i1 t1 result2
                   (maxisort_po_4 N t Pre6 result Post3 Variant1 i0 t0 Pre5
                   Pre4 Test2 t1 Post6 i1 Post1)) in
-                ((wf1 `i1 + 1`)
-                  (maxisort_po_5 N t Pre6 result Post3 Variant1 i0 t0 Pre5
-                  Pre4 Test2 i1 t1 Post4) i1 t1 (refl_equal ? `i1 + 1`)
-                  (proj1 ? ? Post4)) in
+                ((wf1 `i1 + 1`) (loop_variant_1 Pre5 Post4) i1 t1
+                  (refl_equal ? `i1 + 1`) (proj1 ? ? Post4)) in
               (exist_3 [i2: Z][t2: (array N Z)][result2: unit]
               ((`0 <= i2 + 1` /\ `i2 + 1 <= N`) /\
               (sorted_array t2 `i2 + 1` `N - 1`) /\ (permut t2 t) /\
@@ -689,8 +662,8 @@ Definition maxisort := (* validation *)
               (sorted_array t2 `i2 + 1` `N - 1`) /\ (permut t2 t) /\
               ((`i2 + 1 < N` -> (Maximize t2 i2 (access t2 `i2 + 1`) `0`)))) /\
               `i2 < 0` i1 t1 result1 Post2) end) `result + 1` result 
-        t (refl_equal ? `result + 1`) (maxisort_po_6 N t Pre6 result Post3)) in
+        t (refl_equal ? `result + 1`) (maxisort_po_5 N t Pre6 result Post3)) in
     (exist_2 [t1: (array N Z)][result1: unit](sorted_array t1 `0` `N - 1`) /\
     (permut t1 t) t0 result0
-    (maxisort_po_7 N t Pre6 result Post3 i0 t0 Post2)).
+    (maxisort_po_6 N t Pre6 result Post3 i0 t0 Post2)).
 

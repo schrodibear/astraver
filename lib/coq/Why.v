@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: Why.v,v 1.6 2002-10-15 12:18:50 filliatr Exp $ *)
+(* $Id: Why.v,v 1.7 2002-11-14 08:54:02 filliatr Exp $ *)
 
 Require Export WhyCoqCompat.
 
@@ -11,5 +11,6 @@ Require Export WhyArrays.
 Require Export WhyPermut.
 Require Export WhySorted.
 Require Export WhyExn.
+Require Export WhyLemmas.
 
 Implicits well_founded [1].

@@ -43,21 +43,25 @@ type proof =
   | Proj1 of Ident.t
   | Conjunction of Ident.t * Ident.t
   | WfZwf of term
+  | Loop_variant_1 of Ident.t * Ident.t
 
 type validation = proof cc_term
 
 (*s We automatically prove the trivial obligations *)
 
+(* ... |- true *)
 let ptrue = function
   | Ptrue -> True
   | _ -> raise Exit
 
 let is_eq id = id == Ident.t_eq || id == Ident.t_eq_int
 
+(* ... |- a=a *)
 let reflexivity = function
   | Papp (id, [a;b]) when is_eq id && a = b -> Reflexivity a
   | _ -> raise Exit
 
+(* ..., h:P, ...|- P *)
 let assumption concl = function
   | Spred (id, p) when p = concl -> Assumption id 
   | Spred (id, Pand (a, b)) when a = concl -> Proj1 id
@@ -67,22 +71,44 @@ let lookup_hyp a =
   let test = function Spred (id, b) when a = b -> id | _ -> raise Exit in
   list_first test
 
+(* ..., h:A, ..., h':B, ... |- A and B *)
 let conjunction ctx = function
   | Pand (a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
   | _ -> raise Exit
 
+(* ... |- (well_founded (Zwf 0)) *)
 let wf_zwf = function
   | Papp (id, [Tvar id']) when id == well_founded && id' == t_zwf_zero ->
       WfZwf (Tconst (ConstInt 0))
   | _ -> 
       raise Exit
 
+(* ..., h:v=phi0, ..., h':I and (Zwf c phi1 phi0), ... |- (Zwf c phi1 v) *)
+let loop_variant_1 hyps concl =
+  let lookup_h v = function
+    | Spred (h, Papp (id, [Tvar id';phi0])) when is_eq id && id' == v -> h,phi0
+    | _ -> raise Exit
+  in
+  let rec lookup_h' phi1 phi0 = function
+    | Spred (h', Pand (_, Papp (id, [t1; t0]))) 
+      when id == t_zwf_zero && t1 = phi1 && t0 = phi0 -> h'
+    | _ -> raise Exit
+  in
+  match concl with
+    | Papp (id, [phi1; Tvar v]) when id == t_zwf_zero ->
+	let h, phi0 = list_first (lookup_h v) hyps in 
+	let h' = list_first (lookup_h' phi1 phi0) hyps in
+	Loop_variant_1 (h, h')
+    | _ -> 
+	raise Exit
+
 let discharge ctx concl =
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
   try reflexivity concl with Exit -> 
   try list_first (assumption concl) ctx with Exit ->
-  conjunction ctx concl
+  try conjunction ctx concl with Exit ->
+  loop_variant_1 ctx concl
 
 let discharge_msg () =
   if_verbose eprintf "one obligation trivially discharged@."

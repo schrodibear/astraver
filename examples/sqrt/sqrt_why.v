@@ -248,7 +248,17 @@ Lemma sqrt_po_4 :
   (Pre1: ~(`2` = `0`))
   (result2: Z)
   (Post4: result2 = (Zdiv (`x + 1`) `2`))
-  (well_founded (Zwf ZERO)).
+  (Variant1: Z)
+  (y0: Z)
+  (z0: Z)
+  (Pre6: Variant1 = y0)
+  (Pre5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
+         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
+  (Test2: `z0 < y0`)
+  (y1: Z)
+  (Post1: y1 = z0)
+  (Pre3: ~(`2` = `0`))
+  ~(z0 = `0`).
 Proof. (* sqrt_po_4 *)
 Auto with *.
 Save.
@@ -274,9 +284,20 @@ Lemma sqrt_po_5 :
   (y1: Z)
   (Post1: y1 = z0)
   (Pre3: ~(`2` = `0`))
-  ~(z0 = `0`).
+  (Pre4: ~(z0 = `0`))
+  (z1: Z)
+  (Post2: z1 = (Zdiv (`(Zdiv x z0) + z0`) `2`))
+  (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
+  `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\ (Zwf `0` y1 y0).
 Proof. (* sqrt_po_5 *)
-Auto with *.
+Unfold Zwf.
+Intuition.
+Subst z1.
+Apply iter_sqrt_pos; Omega.
+Subst y1; Assumption.
+Subst y1; Assumption.
+Apply (iter_sqrt_invar3 x z0); Auto.
+Omega.
 Save.
 
 Lemma sqrt_po_6 : 
@@ -289,74 +310,10 @@ Lemma sqrt_po_6 :
   (Pre1: ~(`2` = `0`))
   (result2: Z)
   (Post4: result2 = (Zdiv (`x + 1`) `2`))
-  (Variant1: Z)
-  (y0: Z)
-  (z0: Z)
-  (Pre6: Variant1 = y0)
-  (Pre5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Test2: `z0 < y0`)
-  (y1: Z)
-  (Post1: y1 = z0)
-  (Pre3: ~(`2` = `0`))
-  (Pre4: ~(z0 = `0`))
-  (z1: Z)
-  (Post2: z1 = (Zdiv (`(Zdiv x z0) + z0`) `2`))
-  (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-  `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\ (Zwf `0` y1 y0).
-Proof. (* sqrt_po_6 *)
-Unfold Zwf.
-Intuition.
-Subst z1.
-Apply iter_sqrt_pos; Omega.
-Subst y1; Assumption.
-Subst y1; Assumption.
-Apply (iter_sqrt_invar3 x z0); Auto.
-Omega.
-Save.
-
-Lemma sqrt_po_7 : 
-  (x: Z)
-  (Pre7: `x >= 0`)
-  (Test5: `x <> 0`)
-  (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
-  (Pre1: ~(`2` = `0`))
-  (result2: Z)
-  (Post4: result2 = (Zdiv (`x + 1`) `2`))
-  (Variant1: Z)
-  (y0: Z)
-  (z0: Z)
-  (Pre6: Variant1 = y0)
-  (Pre5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Test2: `z0 < y0`)
-  (y1: Z)
-  (z1: Z)
-  (Post6: (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-          `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\
-          (Zwf `0` y1 y0))
-  (Zwf `0` y1 Variant1).
-Proof. (* sqrt_po_7 *)
-Unfold Zwf.
-Intuition; Trivial.
-Save.
-
-Lemma sqrt_po_8 : 
-  (x: Z)
-  (Pre7: `x >= 0`)
-  (Test5: `x <> 0`)
-  (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
-  (Pre1: ~(`2` = `0`))
-  (result2: Z)
-  (Post4: result2 = (Zdiv (`x + 1`) `2`))
   `result2 > 0` /\ `result1 > 0` /\
   `result2 = (Zdiv ((Zdiv x result1) + result1) 2)` /\
   `x < (result1 + 1) * (result1 + 1)` /\ `x < (result2 + 1) * (result2 + 1)`.
-Proof. (* sqrt_po_8 *)
+Proof. (* sqrt_po_6 *)
 Intuition.
 Subst result2.
 Assert `(x+1)/2 >= 1`.
@@ -387,7 +344,7 @@ Rewrite H; Omega.
 Rewrite H; Trivial.
 Save.
 
-Lemma sqrt_po_9 : 
+Lemma sqrt_po_7 : 
   (x: Z)
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
@@ -403,7 +360,7 @@ Lemma sqrt_po_9 :
           `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`) /\
           `z0 >= y0`)
   `y0 * y0 <= x` /\ `x < (y0 + 1) * (y0 + 1)`.
-Proof. (* sqrt_po_9 *)
+Proof. (* sqrt_po_7 *)
 Intuition.
 Apply (iter_sqrt_invar4 x y0 z0); Try Omega.
 Save.
@@ -453,8 +410,7 @@ Definition sqrt := (* validation *)
                     let (y0, z0, result3, Post15) =
                       let (y0, z0, result3, Post3) =
                         (well_founded_induction Z (Zwf ZERO)
-                          (sqrt_po_4 x Pre7 Test5 Test3 result1 Post5 Pre1
-                          result2 Post4) [Variant1: Z](y0: Z)(z0: Z)
+                          (Zwf_well_founded `0`) [Variant1: Z](y0: Z)(z0: Z)
                           (_: Variant1 = y0)(_0: `z0 > 0` /\ `y0 > 0` /\
                           `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
                           `x < (y0 + 1) * (y0 + 1)` /\
@@ -500,7 +456,7 @@ Definition sqrt := (* validation *)
                                       y2 = z0 result4 tt Post1) in
                                     let Pre3 = Pre1 in
                                     let Pre4 =
-                                      (sqrt_po_5 x Pre7 Test5 Test3 result1
+                                      (sqrt_po_4 x Pre7 Test5 Test3 result1
                                       Post5 Pre1 result2 Post4 Variant1 y0 z0
                                       Pre6 Pre5 Test2 y1 Post1 Pre3) in
                                     let (z1, result5, Post2) =
@@ -522,15 +478,13 @@ Definition sqrt := (* validation *)
                                     `x < (y2 + 1) * (y2 + 1)` /\
                                     `x < (z2 + 1) * (z2 + 1)`) /\
                                     (Zwf `0` y2 y0) y1 z1 result5
-                                    (sqrt_po_6 x Pre7 Test5 Test3 result1
+                                    (sqrt_po_5 x Pre7 Test5 Test3 result1
                                     Post5 Pre1 result2 Post4 Variant1 y0 z0
                                     Pre6 Pre5 Test2 y1 Post1 Pre3 Pre4 z1
                                     Post2)) in
-                                  ((wf1 y1)
-                                    (sqrt_po_7 x Pre7 Test5 Test3 result1
-                                    Post5 Pre1 result2 Post4 Variant1 y0 z0
-                                    Pre6 Pre5 Test2 y1 z1 Post6) y1 z1
-                                    (refl_equal ? y1) (proj1 ? ? Post6)) in
+                                  ((wf1 y1) (loop_variant_1 Pre6 Post6) 
+                                    y1 z1 (refl_equal ? y1)
+                                    (proj1 ? ? Post6)) in
                                 (exist_3 [y2: Z][z2: Z][result5: unit]
                                 (`z2 > 0` /\ `y2 > 0` /\
                                 `z2 = (Zdiv ((Zdiv x y2) + y2) 2)` /\
@@ -552,12 +506,12 @@ Definition sqrt := (* validation *)
                                 `x < (z2 + 1) * (z2 + 1)`) /\ `z2 >= y2` 
                                 y1 z1 result4 Post3) end) result1 result1
                           result2 (refl_equal ? result1)
-                          (sqrt_po_8 x Pre7 Test5 Test3 result1 Post5 Pre1
+                          (sqrt_po_6 x Pre7 Test5 Test3 result1 Post5 Pre1
                           result2 Post4)) in
                       let (result4, Post17) = (exist_1 [result4: Z]
                         `result4 * result4 <= x` /\
                         `x < (result4 + 1) * (result4 + 1)` y0
-                        (sqrt_po_9 x Pre7 Test5 Test3 result1 Post5 Pre1
+                        (sqrt_po_7 x Pre7 Test5 Test3 result1 Post5 Pre1
                         result2 Post4 y0 z0 Post3)) in
                       (exist_3 [y1: Z][z1: Z][result5: Z]
                       `result5 * result5 <= x` /\

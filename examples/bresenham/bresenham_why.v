@@ -190,31 +190,6 @@ Lemma bresenham_po_5 :
   (Post2: y0 = `0`)
   (e0: Z)
   (Post3: e0 = `2 * y2 - x2`)
-  (Variant1: Z)
-  (e1: Z)
-  (x1: Z)
-  (y1: Z)
-  (Pre4: Variant1 = `x2 + 1 - x1`)
-  (Pre3: (`0 <= x1` /\ `x1 <= x2 + 1`) /\ (invariant x1 y1 e1))
-  (Test4: `x1 <= x2`)
-  (e2: Z)
-  (x3: Z)
-  (y3: Z)
-  (Post9: ((`0 <= x3` /\ `x3 <= x2 + 1`) /\ (invariant x3 y3 e2)) /\
-          (Zwf `0` `x2 + 1 - x3` `x2 + 1 - x1`))
-  (Zwf `0` `x2 + 1 - x3` Variant1).
-Proof.
-Intros.
-Rewrite Pre4; Tauto.
-Save.
-
-Lemma bresenham_po_6 : 
-  (x0: Z)
-  (Post1: x0 = `0`)
-  (y0: Z)
-  (Post2: y0 = `0`)
-  (e0: Z)
-  (Post3: e0 = `2 * y2 - x2`)
   (`0 <= x0` /\ `x0 <= x2 + 1`) /\ (invariant x0 y0 e0).
 Proof.
 Intuition.
@@ -329,10 +304,8 @@ Definition bresenham := (* validation *)
                   (Zwf `0` `x2 + 1 - x4` `x2 + 1 - x1`) e2 x3 y3 result4
                   (bresenham_po_4 x0 Post1 y0 Post2 e0 Post3 Variant1 e1 x1
                   y1 Pre4 Pre3 Test4 Pre2 e2 y3 Post12 x3 Post7)) in
-                ((wf1 `x2 + 1 - x3`)
-                  (bresenham_po_5 x0 Post1 y0 Post2 e0 Post3 Variant1 e1 x1
-                  y1 Pre4 Pre3 Test4 e2 x3 y3 Post9) e2 x3 y3
-                  (refl_equal ? `x2 + 1 - x3`) (proj1 ? ? Post9)) in
+                ((wf1 `x2 + 1 - x3`) (loop_variant_1 Pre4 Post9) e2 x3 
+                  y3 (refl_equal ? `x2 + 1 - x3`) (proj1 ? ? Post9)) in
               (exist_4 [e3: Z][x4: Z][y4: Z][result4: unit]((`0 <= x4` /\
               `x4 <= x2 + 1`) /\ (invariant x4 y4 e3)) /\ `x4 > x2` e2 
               x3 y3 result3 Post8)
@@ -345,6 +318,6 @@ Definition bresenham := (* validation *)
               `x4 <= x2 + 1`) /\ (invariant x4 y4 e3)) /\ `x4 > x2` e2 
               x3 y3 result3 Post8) end) `x2 + 1 - x0` e0 x0 y0
         (refl_equal ? `x2 + 1 - x0`)
-        (bresenham_po_6 x0 Post1 y0 Post2 e0 Post3)) in
+        (bresenham_po_5 x0 Post1 y0 Post2 e0 Post3)) in
     (Build_tuple_4 e1 x1 y1 result2).
 

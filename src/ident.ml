@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.37 2002-11-05 08:19:32 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.38 2002-11-14 08:54:03 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -82,7 +82,7 @@ let is_at id = id.label <> None
 
 let un_at = function
   | { label = Some d } as id -> { id with label = None }, d
-  | _ -> invalid_arg"Ident.un_at"
+  | _ -> invalid_arg "Ident.un_at"
 
 (*s Bound variables. *)
 
@@ -168,6 +168,11 @@ let well_founded_induction = create "well_founded_induction"
 let p_and = create "and"
 let p_or = create "or"
 let p_not = create "not"
+
+(*s tests *)
+
+let is_variant id =
+  String.length id.name >= 7 && String.sub id.name 0 7 = "Variant"
 
 let is_comparison id = 
   id == t_lt || id == t_le || id == t_gt || id == t_ge || 

@@ -66,30 +66,12 @@ Lemma search1_po_4 :
   (t: (array N Z))
   (result: Z)
   (Post3: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `N - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < N`)
-  (i1: Z)
-  (Post4: (`0 <= i1` /\
-          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`))) /\
-          (Zwf `0` `N - i1` `N - i0`))
-  (Zwf `0` `N - i1` Variant1).
-Proof.
-Intros; Subst Variant1; Tauto.
-Save.
-
-Lemma search1_po_5 : 
-  (t: (array N Z))
-  (result: Z)
-  (Post3: result = `0`)
   `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
 Proof.
 Intuition. Omega.
 Save.
 
-Lemma search1_po_6 : 
+Lemma search1_po_5 : 
   (t: (array N Z))
   (result: Z)
   (Post3: result = `0`)
@@ -240,10 +222,8 @@ Definition search1 := (* validation *)
                       end in
                     Cases (decomp1 Post13) of
                     | (Qval (exist result2 Post4)) =>
-                      ((wf1 `N - i1`)
-                        (search1_po_4 t result Post3 Variant1 i0 Pre4 Pre3
-                        Test4 i1 Post4) i1 (refl_equal ? `N - i1`)
-                        (proj1 ? ? Post4))
+                      ((wf1 `N - i1`) (loop_variant_1 Pre4 Post4) i1
+                        (refl_equal ? `N - i1`) (proj1 ? ? Post4))
                     | (Qexn result2 Post23) => (exist_2 [i2: Z]
                       (qcomb [result3: Z]`(access t result3) = 0`
                        [result3: unit](`0 <= i2` /\
@@ -280,14 +260,14 @@ Definition search1 := (* validation *)
                      ((k:Z) (`0 <= k` /\ `k < i2` -> `(access t k) <> 0`))) /\
                      `i2 >= N`) i1 (Exn unit result2) Post11)
                   end end) `N - result` result (refl_equal ? `N - result`)
-            (search1_po_5 t result Post3)) in
+            (search1_po_4 t result Post3)) in
         Cases (decomp1 Post8) of
         | (Qval (exist result1 Post2)) =>
           let (result2, Post26) =
             (exist_1 (qcomb [result2: unit]
                       ((k:Z) (`0 <= k` /\ `k < N` -> `(access t k) <> 0`))
                       [result2: Z]`(access t result2) = 0`) (Exn Z tt)
-            (search1_po_6 t result Post3 i0 Post2)) in
+            (search1_po_5 t result Post3 i0 Post2)) in
           Cases (decomp1 Post26) of
           | (Qval (exist result3 Post27)) => (exist_2 [i1: Z]
             (qcomb [result4: Z]`(access t result4) = 0`
@@ -410,30 +390,12 @@ Lemma search2_po_4 :
   (t: (array N Z))
   (result: Z)
   (Post3: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `N - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < N`)
-  (i1: Z)
-  (Post4: (`0 <= i1` /\
-          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`))) /\
-          (Zwf `0` `N - i1` `N - i0`))
-  (Zwf `0` `N - i1` Variant1).
-Proof.
-Intros; Subst Variant1; Tauto.
-Save.
-
-Lemma search2_po_5 : 
-  (t: (array N Z))
-  (result: Z)
-  (Post3: result = `0`)
   `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
 Proof.
 Intuition. Omega.
 Save.
 
-Lemma search2_po_6 : 
+Lemma search2_po_5 : 
   (t: (array N Z))
   (result: Z)
   (Post3: result = `0`)
@@ -578,10 +540,8 @@ Definition search2 := (* validation *)
                       end in
                     Cases (decomp1 Post13) of
                     | (Qval (exist result2 Post4)) =>
-                      ((wf1 `N - i1`)
-                        (search2_po_4 t result Post3 Variant1 i0 Pre4 Pre3
-                        Test4 i1 Post4) i1 (refl_equal ? `N - i1`)
-                        (proj1 ? ? Post4))
+                      ((wf1 `N - i1`) (loop_variant_1 Pre4 Post4) i1
+                        (refl_equal ? `N - i1`) (proj1 ? ? Post4))
                     | (Qexn _ Post22) => (exist_2 [i2: Z]
                       (qcomb [result2: unit]`(access t i2) = 0`
                        [result2: unit](`0 <= i2` /\
@@ -618,14 +578,14 @@ Definition search2 := (* validation *)
                      ((k:Z) (`0 <= k` /\ `k < i2` -> `(access t k) <> 0`))) /\
                      `i2 >= N`) i1 (Exn unit tt) Post11)
                   end end) `N - result` result (refl_equal ? `N - result`)
-            (search2_po_5 t result Post3)) in
+            (search2_po_4 t result Post3)) in
         Cases (decomp1 Post8) of
         | (Qval (exist result1 Post2)) =>
           let (result2, Post25) =
             (exist_1 (qcomb [result2: unit]
                       ((k:Z) (`0 <= k` /\ `k < N` -> `(access t k) <> 0`))
                       [result2: Z]`(access t result2) = 0`) (Exn Z tt)
-            (search2_po_6 t result Post3 i0 Post2)) in
+            (search2_po_5 t result Post3 i0 Post2)) in
           Cases (decomp1 Post25) of
           | (Qval (exist result3 Post26)) => (exist_2 [i1: Z]
             (qcomb [result4: unit]`(access t i1) = 0`

@@ -54,7 +54,7 @@ COQINCLUDES = -R lib/coq Coq.why
 VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
      lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo \
-     lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo
+     lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo lib/coq/WhyLemmas.vo
 VFILES=$(VO:.vo=.v)
 WHYVO=lib/coq/Why.vo
 

@@ -208,30 +208,6 @@ Lemma power1_po_4 :
   (Post1: m0 = x)
   (y0: Z)
   (Post2: y0 = `1`)
-  (Variant1: Z)
-  (m1: Z)
-  (n0: Z)
-  (y1: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Test4: `n0 > 0`)
-  (m2: Z)
-  (n1: Z)
-  (y2: Z)
-  (Post7: (`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0`) /\
-          (Zwf `0` n1 n0))
-  (Zwf `0` n1 Variant1).
-Proof.
-Intros; Rewrite Pre3; Tauto.
-Save.
-
-Lemma power1_po_5 : 
-  (n: Z)
-  (Pre4: `n >= 0`)
-  (m0: Z)
-  (Post1: m0 = x)
-  (y0: Z)
-  (Post2: y0 = `1`)
   `(Zpower x n) = y0 * (Zpower m0 n)` /\ `n >= 0`.
 Proof.
 Intros.
@@ -240,7 +216,7 @@ Subst y0; Ring.
 Subst m0; Trivial.
 Save.
 
-Lemma power1_po_6 : 
+Lemma power1_po_5 : 
   (n: Z)
   (Pre4: `n >= 0`)
   (m0: Z)
@@ -356,10 +332,8 @@ Definition power1 := (* validation *)
                   (Zwf `0` n2 n0) m2 n1 y2 result4
                   (power1_po_3 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0 y1
                   Pre3 Pre2 Test4 y2 Post10 m2 Post4 n1 Post5)) in
-                ((wf1 n1)
-                  (power1_po_4 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0 y1
-                  Pre3 Pre2 Test4 m2 n1 y2 Post7) m2 n1 y2 (refl_equal ? n1)
-                  (proj1 ? ? Post7)) in
+                ((wf1 n1) (loop_variant_1 Pre3 Post7) m2 n1 y2
+                  (refl_equal ? n1) (proj1 ? ? Post7)) in
               (exist_4 [m3: Z][n2: Z][y3: Z][result3: unit]
               (`(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0`) /\
               `n2 <= 0` m2 n1 y2 result2 Post6)
@@ -371,7 +345,7 @@ Definition power1 := (* validation *)
               (exist_4 [m3: Z][n2: Z][y3: Z][result3: unit]
               (`(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0`) /\
               `n2 <= 0` m2 n1 y2 result2 Post6) end) n m0 n y0
-        (refl_equal ? n) (power1_po_5 n Pre4 m0 Post1 y0 Post2)) in
+        (refl_equal ? n) (power1_po_4 n Pre4 m0 Post1 y0 Post2)) in
     (exist_4 [m2: Z][n1: Z][y2: Z][result2: unit]`y2 = (Zpower x n)` 
-    m1 n0 y1 result1 (power1_po_6 n Pre4 m0 Post1 y0 Post2 m1 n0 y1 Post6)).
+    m1 n0 y1 result1 (power1_po_5 n Pre4 m0 Post1 y0 Post2 m1 n0 y1 Post6)).
 

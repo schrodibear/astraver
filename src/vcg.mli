@@ -36,6 +36,7 @@ type proof =
   | Proj1 of Ident.t
   | Conjunction of Ident.t * Ident.t
   | WfZwf of term
+  | Loop_variant_1 of Ident.t * Ident.t
 
 type validation = proof cc_term
 

@@ -53,28 +53,12 @@ Save.
 Lemma p_po_4 : 
   (i0: Z)
   (Post1: i0 = `0`)
-  (Variant1: Z)
-  (i1: Z)
-  (Pre4: Variant1 = `N - i1`)
-  (Pre3: `0 <= i1`)
-  (Test4: `i1 < N`)
-  (i2: Z)
-  (Post4: `0 <= i2` /\ (Zwf `0` `N - i2` `N - i1`))
-  (Zwf `0` `N - i2` Variant1).
-Proof.
-Intuition.
-Subst Variant1; Assumption.
-Save.
-
-Lemma p_po_5 : 
-  (i0: Z)
-  (Post1: i0 = `0`)
   `0 <= i0`.
 Proof.
 Intuition.
 Save.
 
-Lemma p_po_6 : 
+Lemma p_po_5 : 
   (t: (array N Z))
   (i0: Z)
   (Post1: i0 = `0`)
@@ -211,9 +195,8 @@ Definition p := (* validation *)
                     end in
                   Cases (decomp1 Post12) of
                   | (Qval (exist result2 Post4)) =>
-                    ((wf1 `N - i2`)
-                      (p_po_4 i0 Post1 Variant1 i1 Pre4 Pre3 Test4 i2 Post4)
-                      i2 (refl_equal ? `N - i2`) (proj1 ? ? Post4))
+                    ((wf1 `N - i2`) (loop_variant_1 Pre4 Post4) i2
+                      (refl_equal ? `N - i2`) (proj1 ? ? Post4))
                   | (Qexn result2 Post22) => (exist_2 [i3: Z]
                     (qcomb [result3: Z]
                      (`0 <= result3` /\ `result3 < N` ->
@@ -256,12 +239,12 @@ Definition p := (* validation *)
                    [result3: unit]`0 <= i3` /\ `i3 >= N`) i2
                   (Exn unit result2) Post10)
                 end end) `N - i0` i0 (refl_equal ? `N - i0`)
-          (p_po_5 i0 Post1)) in
+          (p_po_4 i0 Post1)) in
       Cases (decomp1 Post7) of
       | (Qval (exist result1 Post3)) =>
         let (result2, Post25) = (exist_1 [result2: Z]
           (`0 <= result2` /\ `result2 < N` -> `(access t result2) = 0`) 
-          N (p_po_6 t i0 Post1 i1 Post3)) in
+          N (p_po_5 t i0 Post1 i1 Post3)) in
         (exist_2 [i2: Z]
         (qcomb [result3: Z]
          (`0 <= result3` /\ `result3 < N` -> `(access t result3) = 0`)
