@@ -13,19 +13,19 @@ WHYOPTIONS=--coq-v8 --valid
 	coqc -R ../../lib/coq Coq.why $(OPT) $<
 
 %_why.pvs: %.mlw $(WHY)
-	$(WHY) --pvs $(WHYOPTIONS) $<
+	$(WHY) --pvs $<
 
 %_why.sx: %.mlw $(WHY)
-	$(WHY) --simplify $(WHYOPTIONS) $<
+	$(WHY) --simplify $<
 
 %_why.sx: %.c $(WHY)
 	$(WHY) --simplify $(WHYOPTIONS) $<
 
 %_why.miz: %.mlw $(WHY)
-	$(WHY) --mizar $(WHYOPTIONS) $<
+	$(WHY) --mizar $<
 
 %_why.miz: %.c $(WHY)
-	$(WHY) --mizar $(WHYOPTIONS) $<
+	$(WHY) --mizar $<
 
 %.ml: %.mlw
 	$(WHY) -ocaml $< > $@
