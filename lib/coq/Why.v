@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: Why.v,v 1.16 2003-09-24 09:59:26 filliatr Exp $ *)
+(* $Id: Why.v,v 1.17 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Require Export WhyCoqCompat.
 
@@ -30,7 +30,7 @@ Require Export WhyLemmas.
 
 Require Export WhyCM.
 
-Implicit Arguments well_founded [1].
+Implicit Arguments well_founded [A].
 Implicit Arguments well_founded_induction [ ].
 Hints Unfold Zwf .
 

@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyBool.v,v 1.10 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.11 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Require Import ZArith.
 Require Import Sumbool.

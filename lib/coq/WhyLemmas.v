@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.12 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.13 2003-09-25 13:55:01 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -37,7 +37,7 @@ Lemma why_rewrite_var :
 Proof.
 intros; case H; trivial.
 Qed.
-Implicit Arguments why_rewrite_var [1 2 3].
+Implicit Arguments why_rewrite_var [A x t].
 
 Lemma why_boolean_case :
  forall (A B C D:Prop) (b:bool),
@@ -53,7 +53,7 @@ Lemma why_boolean_wp :
 Proof.
 olddestruct b; assumption.
 Qed.
-Implicit Arguments why_boolean_wp [1 2].
+Implicit Arguments why_boolean_wp [A B].
 
 Lemma why_boolean_if_1 :
  forall (q1t q1f q3t q3f:Prop) (q2:bool -> Prop),

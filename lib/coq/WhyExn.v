@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -16,7 +16,7 @@
 
 (* This file is a contribution by Christine Paulin *)
 
-(* $Id: WhyExn.v,v 1.3 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyExn.v,v 1.4 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Set Implicit Arguments.
 Unset Strict Implicit.

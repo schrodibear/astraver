@@ -1,4 +1,4 @@
-(* Load Programs. *)
+
 Require Import WhyArrays.
 Require Import WhyPermut.
 

@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.8 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyPermut.v,v 1.9 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Require Import WhyArrays.
 Require Import Omega.

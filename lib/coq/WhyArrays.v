@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.9 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.10 2003-09-25 13:55:01 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -43,7 +43,7 @@ Unset Strict Implicit.
 
 Parameter raw_array : Set -> Set.
 
-Definition array (T:Set) := Z * raw_array T.
+Definition array (T:Set) := prod Z (raw_array T).
 
 
 (* Array length *)

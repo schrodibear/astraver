@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.6 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.7 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require Import WhyPermut.

@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyInt.v,v 1.5 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyInt.v,v 1.6 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Require Export ZArith.
 Require Export ZArith_dec.

@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.4 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyCM.v,v 1.5 2003-09-25 13:55:01 filliatr Exp $ *)
 
 Require Export WhyArrays.
 
