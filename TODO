@@ -1,11 +1,14 @@
 
+INPUT
+=====
+
+ - simpler syntax for simple functions (e.g, int -> int -> int)
+
 FEATURES
 ========
 
  - Java input
    see http://home.inreach.com/bronikov/grammars/java.html
-
- - Coq output
 
  - pure code output (with annotations as comments)
 
@@ -34,8 +37,6 @@ IMPLEMENTATION
 
  - add renaming in typing info
 
- - suppress duplication of pre/post conditions in AST
-
  - variant = identifier ?
 
- - wp: function application: wrong when function has effects
+ - wp: function application: incorrect when function has effects

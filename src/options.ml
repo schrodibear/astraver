@@ -1,12 +1,25 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: options.ml,v 1.2 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.3 2002-02-28 16:15:13 filliatr Exp $ i*)
+
+open Format
 
 let verbose = ref false
 
-let verbosely f x = if !verbose then f x
+let if_verbose f x = if !verbose then f x
+let if_verbose_2 f x y = if !verbose then f x y
+let if_verbose_3 f x y z = if !verbose then f x y z
 
 let debug = ref false
+
+let if_debug f x = if !debug then f x
+let if_debug_2 f x y = if !debug then f x y
+let if_debug_3 f x y z = if !debug then f x y z
+
+(*i
+let null_formatter = make_formatter (fun _ _ _ -> ()) (fun _ -> ())
+let dprintf f = if !debug then eprintf f else fprintf null_formatter f
+i*)
 
 let type_only = ref false
 

@@ -162,7 +162,7 @@ clean::
 	cd doc; make clean
 
 dist-clean:: clean
-	rm -f Makefile
+	rm -f Makefile config.status config.cache config.log
 
 .depend depend::
 	rm -f .depend

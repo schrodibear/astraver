@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.5 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.6 2002-02-28 16:15:12 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -27,12 +27,15 @@ type error =
   | VariantInformative
   | ShouldBeInformative
   | AppNonFunction
+  | TooManyArguments
   | PartialApp
-  | NotExpectedType of (formatter -> unit) * (formatter -> unit)
+  | TermExpectedType of (formatter -> unit) * (formatter -> unit)
+  | ExpectedType of (formatter -> unit)
   | ExpectsAType of Ident.t
   | ExpectsATerm of Ident.t
   | ShouldBeVariable of Ident.t
   | ShouldBeReference of Ident.t
+  | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
 
@@ -79,10 +82,15 @@ let report fmt = function
       fprintf fmt "@[This term cannot be applied@ ";
       fprintf fmt "(either it is not a function@ ";
       fprintf fmt "or it is applied to non pure arguments)@]"
+  | TooManyArguments ->
+      fprintf fmt "@[Too many arguments@]"
   | PartialApp ->
       fprintf fmt "@[This function does not have@ ";
       fprintf fmt "the right number of arguments@]"
-  | NotExpectedType (t,v) ->
+  | ExpectedType v ->
+      fprintf fmt "@[This term is expected to have type@ ";
+      v fmt; fprintf fmt "@]"
+  | TermExpectedType (t,v) ->
       fprintf fmt "@[Term "; t fmt; fprintf fmt "@ is expected to have type@ ";
       v fmt; fprintf fmt "@]"
   | ExpectsAType id ->
@@ -97,6 +105,8 @@ let report fmt = function
   | ShouldBeReference id ->
       fprintf fmt "@[The argument %s@ " (Ident.string id);
       fprintf fmt "in this application should be a reference@]"
+  | ShouldNotBeReference ->
+      fprintf fmt "@[This argument should not be a reference@]"
   | IllTypedArgument f ->
       fprintf fmt "@[This argument should have type@ "; f fmt; fprintf fmt "@]"
   | NoVariableAtDate (id, d) ->
@@ -156,10 +166,14 @@ let variant_informative loc = raise_with_loc (Some loc) VariantInformative
 let should_be_informative loc = raise_with_loc (Some loc) ShouldBeInformative
 
 let app_of_non_function loc = raise_with_loc (Some loc) AppNonFunction
+let too_many_arguments loc = raise_with_loc (Some loc) TooManyArguments
   
 let partial_app loc = raise_with_loc (Some loc) PartialApp
   
-let expected_type loc t v = raise_with_loc (Some loc) (NotExpectedType (t,v))
+let term_expected_type loc t v = 
+  raise_with_loc (Some loc) (TermExpectedType (t,v))
+
+let expected_type loc v = raise_with_loc (Some loc) (ExpectedType v)
 
 let expects_a_type id loc = raise_with_loc (Some loc) (ExpectsAType id)
 
@@ -170,6 +184,9 @@ let should_be_a_variable loc id =
    
 let should_be_a_reference loc id = 
   raise_with_loc (Some loc) (ShouldBeReference id)
+
+let should_not_be_a_reference loc = 
+  raise_with_loc (Some loc) ShouldNotBeReference
 
 let ill_typed_argument loc t = raise_with_loc (Some loc) (IllTypedArgument t)
 

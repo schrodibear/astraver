@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.9 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.10 2002-02-28 16:15:13 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -105,7 +105,4 @@ val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
 
-(*s For debugging purposes... *)
-
 val warning : string -> unit
-val debug : bool ref

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.7 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.8 2002-02-28 16:15:13 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -157,6 +157,11 @@ and type_v_rsubst s = function
 and binder_rsubst s = function
   | (n, BindType v) -> (n, BindType (type_v_rsubst s v))
   | b -> b
+
+let type_c_of_v v =
+  { c_result_name = Ident.result;
+    c_result_type = v;
+    c_effect = Effect.bottom; c_pre = []; c_post = None }
 
 (* make_arrow bl c = (x1:V1)...(xn:Vn)c *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.11 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.12 2002-02-28 16:15:13 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -25,30 +25,30 @@ let output fwe = match !prover with
   | Pvs -> Pvs.output_file fwe
   | Coq -> Coq.output_file fwe
 
-(*s Processing os a single declaration [p]. *)
+(*s Processing of a single declaration [p]. *)
 
 let interp_program id p =
   let ploc = p.info.loc in
-  if !debug then eprintf "=== interpreting program %a ===@\n" Ident.print id;
+  if_debug_3 eprintf "=== interpreting program %a ===@\n@?" Ident.print id;
   let p = Db.db_prog p in
-  if !debug then eprintf "=== typing with effects ===@\n";
+  if_debug eprintf "=== typing with effects ===@\n@?";
   let env = Env.empty in
-  let p = Typing.states Typing.initial_labels env p in
+  let p = Typing.typef Typing.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
   Error.check_for_not_mutable ploc v;
-  if !debug then begin print_type_c err_formatter c; eprintf "@\n" end;
+  if_debug_3 eprintf "%a@\n@?" print_type_c c;
   if !type_only then exit 0;
-  if !debug then eprintf "=== weakest preconditions ===@\n";
+  if_debug eprintf "=== weakest preconditions ===@\n@?";
   let ren = initial_renaming env in
   let p = Wp.propagate ren p in
-  if !debug then eprintf "=== functionalization ===@\n";
+  if_debug eprintf "=== functionalization ===@\n@?";
   let cc = Mlize.trans ren p in
   let cc = Red.red cc in
-  if !debug then begin print_cc_term err_formatter cc; eprintf "@\n" end;
-  if !debug then eprintf "=== generating obligations ===@\n";
+  if_debug_3 eprintf "%a@\n@?" print_cc_term cc;
+  if_debug eprintf "=== generating obligations ===@\n@?";
   let ol = Vcg.vcg (Ident.string id) cc in
-  if !verbose then eprintf "%d proof obligation(s)@\n" (List.length ol);
+  if_verbose_2 eprintf "%d proof obligation(s)@\n@?" (List.length ol);
   flush stderr;
   v, ol
 

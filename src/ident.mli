@@ -1,7 +1,7 @@
 
-(*i $Id: ident.mli,v 1.9 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.10 2002-02-28 16:15:13 filliatr Exp $ i*)
 
-(*s Indentifiers. *)
+(*s Identifiers. *)
 
 type t
 

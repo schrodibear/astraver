@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: types.mli,v 1.6 2002-02-05 15:01:55 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.7 2002-02-28 16:15:13 filliatr Exp $ i*)
 
 open Logic
 
@@ -36,16 +36,7 @@ type type_v =
   | Arrow     of type_v binder list * type_c
   | PureType  of pure_type
 
-(* ... and types of computations. 
- *
- * INVARIANT: l'effet E contient toutes les variables apparaissant dans
- *            le programme ET les annotations P et Q
- *            Si E = { x1,...,xn | y1,...,ym }, les variables x sont les
- *            variables en lecture seule et y1 les variables modifiées
- *            les xi sont libres dans P et Q, et les yi,result liées dans Q
- *            i.e.  P = p(x)
- *               et Q = [y1]...[yn][res]q(x,y,res)
- *)
+(* ... and types of computations. *)
 
 and type_c =
   { c_result_name : Ident.t;

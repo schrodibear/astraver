@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.5 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.6 2002-02-28 16:15:12 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -133,7 +133,7 @@ let db_prog e =
 	  
   and db_arg ((tids,_,refs) as idl) = function
     | Term ({ desc = Var id } as t) -> 
-	if List.mem id refs then Refarg id else Term (db idl t)
+	if List.mem id refs then Refarg (t.info.loc, id) else Term (db idl t)
     | Term t -> Term (db idl t)
     | Type v -> Type (db_type_v tids v)
     | Refarg _ -> assert false

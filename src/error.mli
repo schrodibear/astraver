@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.4 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.5 2002-02-28 16:15:13 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -28,12 +28,15 @@ type error =
   | VariantInformative
   | ShouldBeInformative
   | AppNonFunction
+  | TooManyArguments
   | PartialApp
-  | NotExpectedType of (formatter -> unit) * (formatter -> unit)
+  | TermExpectedType of (formatter -> unit) * (formatter -> unit)
+  | ExpectedType of (formatter -> unit)
   | ExpectsAType of Ident.t
   | ExpectsATerm of Ident.t
   | ShouldBeVariable of Ident.t
   | ShouldBeReference of Ident.t
+  | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
 
@@ -65,12 +68,16 @@ val variant_informative : Loc.t -> 'a
 val should_be_informative : Loc.t -> 'a
 
 val app_of_non_function : Loc.t -> 'a
+val too_many_arguments : Loc.t -> 'a
 val partial_app : Loc.t -> 'a
-val expected_type : Loc.t -> (formatter -> unit) -> (formatter -> unit) -> 'a
+val term_expected_type : 
+  Loc.t -> (formatter -> unit) -> (formatter -> unit) -> 'a
+val expected_type : Loc.t -> (formatter -> unit) -> 'a
 val expects_a_type : Ident.t -> Loc.t -> 'a
 val expects_a_term : Ident.t -> 'a
 val should_be_a_variable : Loc.t -> Ident.t -> 'a
 val should_be_a_reference : Loc.t -> Ident.t -> 'a
+val should_not_be_a_reference : Loc.t -> 'a
 val ill_typed_argument : Loc.t -> (formatter -> unit) -> 'a
 
 val no_variable_at_date : Ident.t -> string -> 'a

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.6 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.7 2002-02-28 16:15:13 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -29,6 +29,7 @@ val type_c_subst : (Ident.t * Ident.t) list -> type_c -> type_c
 val type_v_rsubst : (Ident.t * term) list -> type_v -> type_v
 val type_c_rsubst : (Ident.t * term) list -> type_c -> type_c
 
+val type_c_of_v : type_v -> type_c
 val make_arrow : type_v binder list -> type_c -> type_v
 
 val is_mutable_in_env : local_env -> Ident.t -> bool

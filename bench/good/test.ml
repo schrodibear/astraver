@@ -1,5 +1,11 @@
 
 external x: int ref
 
-let test = x := - !x
+external f: (x:int)(y:bool)int
+
+let test = 
+  begin
+    x := (f !x true)
+  end
+
 
