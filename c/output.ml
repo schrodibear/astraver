@@ -600,12 +600,15 @@ type 'a decl = { mutable state : state; decl : 'a };;
 
 module StringMap = Map.Make(String);;
 
+(*
 exception Recursion;;
+*)
 
 let rec do_topo decl_map iter_fun output_fun d =
   match d.state with
     | `DONE -> ()
-    | `RUNNING -> raise Recursion
+    | `RUNNING -> 
+	Creport.warning Loc.dummy "Recursive definition in generated file"
     | `TODO ->
 	d.state <- `RUNNING;
 	iter_fun

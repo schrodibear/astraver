@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.56 2004-10-18 08:58:04 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.57 2004-10-21 14:52:45 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -63,7 +63,15 @@ let pointer_heap_array_var ty =
     | CTarray (ty,_)
     | CTpointer ty ->
 	let v,ty = pointer_heap_var ty in
-	(v ^ "P", memory_type ty)
+	let v = v^"P" in
+	let info = 
+	  match Cenv.add_sym Loc.dummy v 
+	    Cltyping.c_void (Var_info (default_var_info v)) 
+	  with
+	    | Var_info v -> v
+	    | Fun_info f -> assert false
+	in
+	(info, memory_type ty)
     | _ -> assert false (* location wrongly typed *)
 
 let heap_vars = Hashtbl.create 97
@@ -79,16 +87,27 @@ let print_heap_vars fmt () =
     (fun s t -> fprintf fmt "(%s:%a)" s base_type t) heap_vars;
   fprintf fmt "@]"
 
-let heap_var_type = function
-  | "alloc" -> ([], "alloc_table")
-  | v -> Hashtbl.find heap_vars v
+let alloc = 
+  let x = "alloc" in
+  match Cenv.add_sym Loc.dummy x Cltyping.c_void (Var_info (default_var_info x)) 
+  with
+    | Var_info v -> v
+    | Fun_info _ -> assert false
 
-let is_memory_var = function
-  | "alloc" -> 
-      false
-  | v -> 
-      (try let (_,t) = Hashtbl.find heap_vars v in t = "memory"
-       with Not_found -> assert false)
+
+
+let heap_var_type v = 
+  if v == alloc
+  then ([], "alloc_table")
+  else Hashtbl.find heap_vars v.var_unique_name
+
+let is_memory_var v = 
+  if v == alloc then false
+  else
+    try 
+      let (_,t) = Hashtbl.find heap_vars v.var_unique_name in 
+      t = "memory"
+    with Not_found -> assert false
 
 let declare_heap_var v ty =
 (**
@@ -101,20 +120,20 @@ let empty = HeapVarSet.empty
 let union = HeapVarSet.union
 
 let add_var v ty s =
-  declare_heap_var v ([], interp_type ty);
+  declare_heap_var v.var_unique_name ([], interp_type ty);
   HeapVarSet.add v s
   
-let add_alloc s = HeapVarSet.add "alloc" s
+let add_alloc s = HeapVarSet.add alloc s
 
 let add_field_var v ty s =
-   let v = v.field_heap_var_name in
+   let n = v.var_unique_name in
    let _,ty = pointer_heap_var ty in
-   declare_heap_var v (memory_type ty);
+   declare_heap_var n (memory_type ty);
    HeapVarSet.add v s
 
 let add_pointer_var ty s =
   let v,ty = pointer_heap_array_var ty in
-  declare_heap_var v ty;
+  declare_heap_var v.var_unique_name ty;
   HeapVarSet.add v s
 
 type effect =
@@ -143,7 +162,7 @@ let rec term t =
   match t.term_node with 
     | Tvar v -> 
 	if v.var_is_static
-	then add_var v.var_name t.term_type empty
+	then add_var v t.term_type empty
 	else empty
     | Tdot ({term_node = Tunop (Ustar, t1)}, f) -> 
 	assert false
@@ -216,7 +235,7 @@ let assign_location loc =
 		 { reads = empty;
 		   assigns = 
 		     if v.var_is_static
-		     then add_var v.var_name t.term_type empty
+		     then add_var v t.term_type empty
 		     else empty }
 	     | _ -> assert false
 	 end
@@ -277,12 +296,14 @@ let weak_invariants = Hashtbl.create 97
 let add_weak_invariant id p =
   Hashtbl.add weak_invariants id (p, predicate p)
 
+let intersect_only_alloc e1 e2 =
+  HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
+
 let weak_invariants_for hvs =
   Hashtbl.fold
     (fun _ (_,e) acc -> 
-       if not (HeapVarSet.is_empty (HeapVarSet.inter e hvs)) then
-	 union e acc 
-       else acc)
+       if intersect_only_alloc e hvs then acc
+       else union e acc) 
     weak_invariants empty
 
 let spec sp = 
@@ -305,10 +326,12 @@ let rec expr e = match e.texpr_node with
   | TEstring_literal _ 
   | TEsizeof _ ->
       ef_empty
-  | TEvar v ->
+  | TEvar (Var_info v) ->
       if v.var_is_static
-      then reads_add_var v.var_name e.texpr_type ef_empty
+      then reads_add_var v e.texpr_type ef_empty
       else ef_empty
+  | TEvar (Fun_info v) ->
+      ef_empty
   | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
       assert false
   | TEdot (e1, f)
@@ -334,7 +357,8 @@ let rec expr e = match e.texpr_node with
       assign_expr e
   | TEcall (e, el) ->
       let ef = match e.texpr_node with
-	| TEvar v -> { reads = v.function_reads; assigns = v.function_writes } 
+	| TEvar (Fun_info f) -> 
+	    { reads = f.function_reads; assigns = f.function_writes } 
 	| _ -> expr e
       in
       List.fold_left (fun ef arg -> ef_union (expr arg) ef) ef el
@@ -345,10 +369,12 @@ let rec expr e = match e.texpr_node with
 
 (* effects for [e = ...] *)
 and assign_expr e = match e.texpr_node with
-  | TEvar v -> 
+  | TEvar (Var_info v) -> 
       if v.var_is_static
-      then assigns_add_var v.var_name e.texpr_type ef_empty
+      then assigns_add_var v e.texpr_type ef_empty
       else ef_empty
+  | TEvar (Fun_info _) ->
+      ef_empty
   | TEunary (Ustar, e) ->
       reads_add_alloc (assigns_add_pointer_var e.texpr_type (expr e))
   | TEarrget (e1, e2) ->
@@ -443,7 +469,7 @@ and initializer_ = function
 
 let print_effects fmt l =
   fprintf fmt "@[%a@]"
-    (print_list space pp_print_string) (HeapVarSet.elements l)
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_name)) (HeapVarSet.elements l)
 
 (* first pass: declare invariants and computes effects for logics *)
 
@@ -488,11 +514,13 @@ let warnings = Queue.create ()
 let functions dl = 
   let fixpoint = ref true in
   let declare id ef =
+    lprintf "effects for function %s before invariants: reads %a writes %a@." 
+      id.fun_name print_effects ef.reads print_effects ef.assigns;
     let ef  = {
       reads = union ef.reads (weak_invariants_for (union ef.reads ef.assigns));
       assigns = ef.assigns }
     in
-    lprintf "effects for function %s: reads %a writes %a@." id.var_name 
+    lprintf "effects for function %s: reads %a writes %a@." id.fun_name 
       print_effects ef.reads print_effects ef.assigns;
     if not (HeapVarSet.subset ef.reads id.function_reads) then begin
       fixpoint := false;
@@ -516,7 +544,7 @@ let functions dl =
 		if not (HeapVarSet.is_empty ef_body.assigns) then
 		  Queue.add 
 		    (d.loc,
-		     "function " ^ id.var_name ^ " has side-effects but no 'assigns' clause given")
+		     "function " ^ id.fun_name ^ " has side-effects but no 'assigns' clause given")
 		    warnings
 	    | Some _ -> 
 		(* some assigns given by user:
@@ -525,7 +553,7 @@ let functions dl =
 		  begin 
 		    Queue.add 
 		      (d.loc,
-		       "'assigns' clause for function " ^ id.var_name ^
+		       "'assigns' clause for function " ^ id.fun_name ^
 		       " do not match side-effects of its body ")
 		      warnings		    
 		  end

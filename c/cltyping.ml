@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.61 2004-10-19 08:42:51 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.62 2004-10-21 14:52:45 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -103,7 +103,11 @@ and type_term_node loc env = function
 	try find_sym x.var_name with Not_found -> 
         error loc ("unbound variable " ^ x.var_name)
       in 
-      Tvar info, ty
+      begin match info with
+	| Var_info v -> Tvar v, ty
+	| Fun_info f -> 
+            error loc ("variable " ^ f.fun_name ^ " is a function")
+      end
   | PLapp (f, tl) ->
       (try 
 	 let pl, ty, info = find_fun f.logic_name in
@@ -301,7 +305,7 @@ let add_quantifiers q env =
 	 let i = Info.default_var_info x 
 	 and ty = type_logic_type env ty
 	 in
-	 ((ty,i)::tq,Env.add x ty i env))
+	 ((ty,i)::tq,Env.add x ty (Var_info i) env))
       ([],env) q
   in
   (List.rev tq,env)
@@ -428,7 +432,7 @@ let type_spec result env s =
   let p = option_app (type_predicate env) s.requires in
   let env' = match result with
     | None -> env
-    | Some ty -> Env.add "\\result" ty (Info.default_var_info "\\result") env
+    | Some ty -> Env.add "\\result" ty (Var_info (Info.default_var_info "\\result")) env
   in
   let q = option_app (type_predicate env') s.ensures in
   let v = option_app (type_variant env) s.decreases in
@@ -513,7 +517,7 @@ and eval_const_expr e = match e.texpr_node with
       Int64.div (eval_const_expr t1)  (eval_const_expr t2)
   | TEcast (_, e) -> eval_const_expr e
   | TEsizeof t -> sizeof e.texpr_loc t
-  | TEvar v ->
+  | TEvar (Var_info v) ->
       if e.texpr_type.ctype_const 
       then v.enum_constant_value
       else error e.texpr_loc "not a const variable"
@@ -626,9 +630,9 @@ let rec print_term_node fmt = function
   | Tbinop (t1, Badd, t2) -> 
       fprintf fmt "(%a+%a)" print_term t1 print_term t2
   | Tarrow (t1, f) ->
-      fprintf fmt "(%a->%s)" print_term t1 f.field_name
+      fprintf fmt "(%a->%s)" print_term t1 f.var_name
   | Tdot (t1, f) ->
-      fprintf fmt "(%a.%s)" print_term t1 f.field_name
+      fprintf fmt "(%a.%s)" print_term t1 f.var_name
   | Tarrget (t1, t2) ->
       fprintf fmt "%a[%a]" print_term t1 print_term t2
   | Tresult ->

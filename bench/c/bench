@@ -111,7 +111,7 @@ echo "C interp (good)"
 cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 parsing="../../../bin/caduceus.opt"
-for f in consts param clash invariants switch; do
+for f in purse consts param clash clash_alloc invariants switch struct; do
     echo -n "  $f.c... "
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
 	echo -n "caduceus ok... "

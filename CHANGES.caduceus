@@ -1,5 +1,6 @@
 Note: These are the changes for Caduceus.
 
+ o bug fix on name clash for memory variables in generated Why files
  o fix of a bug introduced in last version, with redeclaration of
    functions 
  o bug fix: caduceus now allows redeclaration of a local variable

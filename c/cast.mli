@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.49 2004-10-18 08:58:04 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.50 2004-10-21 14:52:45 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -196,9 +196,9 @@ and texpr_node =
   | TEnop
   | TEconstant of constant
   | TEstring_literal of string
-  | TEvar of Info.var_info
-  | TEdot of lvalue * Info.field_info
-  | TEarrow of lvalue * Info.field_info
+  | TEvar of Info.env_info
+  | TEdot of lvalue * Info.var_info
+  | TEarrow of lvalue * Info.var_info
   | TEarrget of lvalue * texpr
   | TEseq of texpr * texpr
   | TEassign of lvalue * texpr
@@ -263,9 +263,9 @@ and tdecl =
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
-  | Tfunspec of spec * texpr ctype * Info.var_info * 
+  | Tfunspec of spec * texpr ctype * Info.fun_info * 
       (texpr ctype * Info.var_info) list
-  | Tfundef of spec * texpr ctype * Info.var_info * 
+  | Tfundef of spec * texpr ctype * Info.fun_info * 
       (texpr ctype * Info.var_info) list * tstatement
 
 type tfile = tdecl located list

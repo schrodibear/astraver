@@ -130,10 +130,10 @@ Save.
 Lemma f_impl_po_2 : 
   forall (x: Z),
   forall (Test1: x <> 0),
-  forall (y_1_1: Z),
-  forall (Post1: y_1_1 = 2),
+  forall (y_0_1: Z),
+  forall (Post1: y_0_1 = 2),
   forall (result1: Z),
-  forall (Post2: result1 = y_1_1),
+  forall (Post2: result1 = y_0_1),
   ((x = 0 -> result1 = 1)) /\ ((x <> 0 -> result1 = 2)).
 Proof.
 intuition.

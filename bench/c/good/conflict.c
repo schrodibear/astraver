@@ -1,3 +1,3 @@
-int f();
+int f(int x);
 
-int f(){return 1;}
+int f(int x){return 1;}

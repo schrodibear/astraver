@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.12 2004-09-30 13:46:37 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.13 2004-10-21 14:52:45 hubert Exp $ i*)
 
 val interp_type : Cast.tctype -> string
 
@@ -26,12 +26,14 @@ type effect =
       assigns : HeapVarSet.t;
     }
 
+val intersect_only_alloc : HeapVarSet.t -> HeapVarSet.t -> bool
+
 (* all heap vars and their associated types *)
 val heap_vars : (string, Output.base_type) Hashtbl.t
 val print_heap_vars : Format.formatter -> unit -> unit
 
-val heap_var_type : string -> Output.base_type
-val is_memory_var : string -> bool
+val heap_var_type : var_info -> Output.base_type
+val is_memory_var : var_info -> bool
 
 val location : Cast.tterm Clogic.location -> HeapVarSet.t
 

@@ -12,16 +12,20 @@ CADUCEUS
 
  - C features
    - &x for local variable x
-   - switch
+   - switch 
+	Done, except for 'nested' case like switch (e) { if () { case ...
    - union
    - memory allocation
-   - sizeof / sizeof_expr
+   - sizeof / sizeof_expr DONE
 
  - implementation:
+
    - evaluation order: add an interference test to exclude expressions where
      evaluation order changes the result
+
    - heap variables: rename to avoid clashes
      possible clash between a local variable and a heap var, e.g. in struct.c
+       DONE
 
  - logic: & in logic term syntax
 

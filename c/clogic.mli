@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.35 2004-10-13 10:01:17 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.36 2004-10-21 14:52:45 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -91,8 +91,8 @@ and 'ctype term_node =
   | Tapp of Info.logic_info * 'ctype term list
   | Tunop of term_unop * 'ctype term
   | Tbinop of 'ctype term * term_binop * 'ctype term
-  | Tdot of 'ctype term * Info.field_info
-  | Tarrow of 'ctype term * Info.field_info
+  | Tdot of 'ctype term * Info.var_info
+  | Tarrow of 'ctype term * Info.var_info
   | Tarrget of 'ctype term * 'ctype term
   | Tif of 'ctype term * 'ctype term * 'ctype term
   | Told of 'ctype term
@@ -157,6 +157,6 @@ type ('term,'pred) loop_annot = {
 }
 
 type ('term,'ctype) logic_symbol =
-  | Predicate_reads of (string * 'ctype) list * 'term location list
-  | Predicate_def of (string * 'ctype) list * 'ctype predicate 
-  | Function of (string * 'ctype) list * 'ctype * 'term location list
+  | Predicate_reads of (Info.var_info * 'ctype) list * 'term location list
+  | Predicate_def of (Info.var_info * 'ctype) list * 'ctype predicate 
+  | Function of (Info.var_info * 'ctype) list * 'ctype * 'term location list

@@ -3,8 +3,6 @@
 
 Require Export caduceus_why. Require Export caduceus_tactics.
 
-Parameter intmset:Set.
-
 (*Why logic*) Definition mset : ((memory) Z) -> pointer -> Z -> Z -> intmset.
 Admitted.
 
@@ -13,6 +11,4 @@ Admitted.
   := (forall (k:Z),
       (i <= k /\ k < j -> (acc intP (shift t k)) <=
        (acc intP (shift t (k + 1))))).
-
-
 

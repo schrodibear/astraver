@@ -5,29 +5,91 @@ Require Export caduceus_spec_why.
 (* Add LoadPath "../../../../lib/coq". *)
 Load caduceus_tactics.
 
+(* Why obligation from file "why/purse.why", characters 151-236 *)
+Lemma credit_impl_po_1 : 
+  forall (p: pointer),
+  forall (s: Z),
+  forall (alloc: alloc_table),
+  forall (balance: ((memory) Z)),
+  forall (Pre4: (purse_inv alloc balance p) /\ s >= 0),
+  (valid alloc p).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
+(* Why obligation from file "why/purse.why", characters 131-237 *)
+Lemma credit_impl_po_2 : 
+  forall (p: pointer),
+  forall (s: Z),
+  forall (alloc: alloc_table),
+  forall (balance: ((memory) Z)),
+  forall (Pre4: (purse_inv alloc balance p) /\ s >= 0),
+  forall (Pre3: (valid alloc p)),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = ((acc balance p) + s)),
+  forall (Pre1: (valid alloc p)),
+  forall (balance0: ((memory) Z)),
+  forall (Post5: balance0 = (upd balance p aux_1)),
+  ((purse_inv alloc balance0 p) /\ (acc balance0 p) =
+  ((acc balance p) + s)) /\ (assigns alloc balance balance0 (pointer_loc p)).
 Proof.
 unfold purse_inv; intuition.
 subst; caduceus.
 subst; caduceus.
-unfold assigns; intuition.
-assert (p0<>p).
-apply unchanged_pointer_elim; assumption.
-subst balance0; caduceus.
 Save.
 
+(* Why obligation from file "why/purse.why", characters 585-607 *)
+Lemma test1_impl_po_1 : 
+  forall (p1: pointer),
+  forall (p2: pointer),
+  forall (alloc: alloc_table),
+  forall (balance: ((memory) Z)),
+  forall (Pre8: ((purse_inv alloc balance p1) /\
+                (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
+  (valid alloc p1).
 Proof.
 unfold purse_inv; intuition.
 Save.
 
+(* Why obligation from file "why/purse.why", characters 621-647 *)
+Lemma test1_impl_po_2 : 
+  forall (p1: pointer),
+  forall (p2: pointer),
+  forall (alloc: alloc_table),
+  forall (balance: ((memory) Z)),
+  forall (Pre8: ((purse_inv alloc balance p1) /\
+                (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
+  forall (Pre7: (valid alloc p1)),
+  forall (balance0: ((memory) Z)),
+  forall (Post6: balance0 = (upd balance p1 0)),
+  (purse_inv alloc balance0 p2) /\ 100 >= 0.
 Proof.
 unfold purse_inv; intuition.
-subst; caduceus.
+subst;caduceus.
 Save.
 
+(* Why obligation from file "why/purse.why", characters 613-670 *)
+Lemma test1_impl_po_3 : 
+  forall (p1: pointer),
+  forall (p2: pointer),
+  forall (alloc: alloc_table),
+  forall (balance: ((memory) Z)),
+  forall (Pre8: ((purse_inv alloc balance p1) /\
+                (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
+  forall (Pre7: (valid alloc p1)),
+  forall (balance0: ((memory) Z)),
+  forall (Post6: balance0 = (upd balance p1 0)),
+  forall (Pre6: (purse_inv alloc balance0 p2) /\ 100 >= 0),
+  forall (balance1: ((memory) Z)),
+  forall (Post9: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
+                 ((acc balance0 p2) + 100)) /\
+                 (assigns alloc balance0 balance1 (pointer_loc p2))),
+  forall (Pre5: (valid alloc p1)),
+  forall (result1: Z),
+  forall (Post5: result1 = (acc balance1 p1)),
+  result1 = 0 /\
+  (assigns alloc balance balance1
+   (union_loc (pointer_loc p2) (pointer_loc p1))).
 Proof.
 unfold purse_inv; intuition.
 subst result1.
@@ -47,149 +109,6 @@ assumption.
 caduceus.
 Save.
 
-Proof.
-intuition.
-Save.
-
-Proof.
-unfold purse_inv; intuition.
-rewrite H9; intuition.
-apply unchanged_pointer_intro; auto.
-Admitted.
-
-Proof.
-unfold purse_inv; intuition.
-rewrite H16; intuition.
-Admitted.
-
-Proof.
-unfold purse_inv; intuition.
-Admitted.
-
-Proof.
-intuition.
-Admitted.
-
-Proof.
-intuition.
-Admitted.
-
-Proof.
-intuition.
-subst caduceus3 aux_1.
-rewrite H25.
-rewrite H23; intuition.
-rewrite H21.
-rewrite H17; intuition.
-rewrite H15.
-rewrite H11; intuition.
-rewrite H10.
-Admitted.
-
-Proof.
-unfold purse_inv; intuition.
-Save.
-
-Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
-unfold assigns; intuition.
-assert (p0<>p).
-apply unchanged_pointer_elim; auto.
-subst; caduceus.
-Save.
-
-(* Why obligation from file "why/purse.why", characters 148-232 *)
-Lemma credit_impl_po_1 : 
-  forall (p: pointer),
-  forall (s: Z),
-  forall (alloc: alloc_table),
-  forall (balance: ((memory) Z)),
-  forall (Pre4: (purse_inv alloc balance p) /\ s >= 0),
-  (valid alloc p).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/purse.why", characters 128-233 *)
-Lemma credit_impl_po_2 : 
-  forall (p: pointer),
-  forall (s: Z),
-  forall (alloc: alloc_table),
-  forall (balance: ((memory) Z)),
-  forall (Pre4: (purse_inv alloc balance p) /\ s >= 0),
-  forall (Pre3: (valid alloc p)),
-  forall (aux_1: Z),
-  forall (Post3: aux_1 = ((acc balance p) + s)),
-  forall (Pre1: (valid alloc p)),
-  forall (balance0: ((memory) Z)),
-  forall (Post5: balance0 = (upd balance p aux_1)),
-  ((purse_inv alloc balance0 p) /\ (acc balance0 p) =
-  ((acc balance p) + s)) /\ (assigns alloc balance balance0 nothing_loc).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/purse.why", characters 585-607 *)
-Lemma test1_impl_po_1 : 
-  forall (p1: pointer),
-  forall (p2: pointer),
-  forall (alloc: alloc_table),
-  forall (balance: ((memory) Z)),
-  forall (Pre8: ((purse_inv alloc balance p1) /\
-                (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
-  (valid alloc p1).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/purse.why", characters 621-647 *)
-Lemma test1_impl_po_2 : 
-  forall (p1: pointer),
-  forall (p2: pointer),
-  forall (alloc: alloc_table),
-  forall (balance: ((memory) Z)),
-  forall (Pre8: ((purse_inv alloc balance p1) /\
-                (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
-  forall (Pre7: (valid alloc p1)),
-  forall (balance0: ((memory) Z)),
-  forall (Post7: balance0 = (upd balance p1 0)),
-  (purse_inv alloc balance0 p2) /\ 100 >= 0.
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/purse.why", characters 613-670 *)
-Lemma test1_impl_po_3 : 
-  forall (p1: pointer),
-  forall (p2: pointer),
-  forall (alloc: alloc_table),
-  forall (balance: ((memory) Z)),
-  forall (Pre8: ((purse_inv alloc balance p1) /\
-                (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
-  forall (Pre7: (valid alloc p1)),
-  forall (balance0: ((memory) Z)),
-  forall (Post7: balance0 = (upd balance p1 0)),
-  forall (Pre6: (purse_inv alloc balance0 p2) /\ 100 >= 0),
-  forall (balance1: ((memory) Z)),
-  forall (Post10: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
-                  ((acc balance0 p2) + 100)) /\
-                  (assigns alloc balance0 balance1 nothing_loc)),
-  forall (Pre5: (valid alloc p1)),
-  forall (result1: Z),
-  forall (Post5: result1 = (acc balance1 p1)),
-  result1 = 0 /\
-  (assigns alloc balance balance1
-   (union_loc (pointer_loc p2) (pointer_loc p1))).
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
 
 (* Why obligation from file "why/purse.why", characters 972-998 *)
 Lemma test2_impl_po_1 : 
@@ -201,10 +120,10 @@ Lemma test2_impl_po_1 :
   forall (Post10: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   (purse_inv alloc balance p1) /\ 100 >= 0.
 Proof.
-(* FILL PROOF HERE *)
+intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1015-1041 *)
+(* Why obligation from file "why/purse.why", characters 1017-1043 *)
 Lemma test2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -216,13 +135,15 @@ Lemma test2_impl_po_2 :
   forall (balance0: ((memory) Z)),
   forall (Post15: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
                   ((acc balance p1) + 100)) /\
-                  (assigns alloc balance balance0 nothing_loc)),
+                  (assigns alloc balance balance0 (pointer_loc p1))),
   (purse_inv alloc balance0 p2) /\ 200 >= 0.
 Proof.
-(* FILL PROOF HERE *)
-Save.
+unfold purse_inv; intuition.
+rewrite H9;intuition.
+apply unchanged_pointer_intro; auto.
+Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1060-1087 *)
+(* Why obligation from file "why/purse.why", characters 1064-1091 *)
 Lemma test2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -234,18 +155,20 @@ Lemma test2_impl_po_3 :
   forall (balance0: ((memory) Z)),
   forall (Post15: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
                   ((acc balance p1) + 100)) /\
-                  (assigns alloc balance balance0 nothing_loc)),
+                  (assigns alloc balance balance0 (pointer_loc p1))),
   forall (Pre13: (purse_inv alloc balance0 p2) /\ 200 >= 0),
   forall (balance1: ((memory) Z)),
   forall (Post18: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 nothing_loc)),
+                  (assigns alloc balance0 balance1 (pointer_loc p2))),
   (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <= (acc balance1 p1).
 Proof.
-(* FILL PROOF HERE *)
-Save.
+unfold purse_inv; intuition.
+rewrite H16;intuition.
+apply unchanged_pointer_intro; auto.
+Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1108-1136 *)
+(* Why obligation from file "why/purse.why", characters 1114-1142 *)
 Lemma test2_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -257,12 +180,12 @@ Lemma test2_impl_po_4 :
   forall (balance0: ((memory) Z)),
   forall (Post15: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
                   ((acc balance p1) + 100)) /\
-                  (assigns alloc balance balance0 nothing_loc)),
+                  (assigns alloc balance balance0 (pointer_loc p1))),
   forall (Pre13: (purse_inv alloc balance0 p2) /\ 200 >= 0),
   forall (balance1: ((memory) Z)),
   forall (Post18: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 nothing_loc)),
+                  (assigns alloc balance0 balance1 (pointer_loc p2))),
   forall (Pre12: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
   forall (balance2: ((memory) Z)),
@@ -271,10 +194,12 @@ Lemma test2_impl_po_4 :
                   (assigns alloc balance1 balance2 (pointer_loc p1))),
   (purse_inv alloc balance2 p2) /\ 0 <= 100 /\ 100 <= (acc balance2 p2).
 Proof.
-(* FILL PROOF HERE *)
-Save.
+unfold purse_inv; intuition.
+rewrite H24;intuition.
+apply unchanged_pointer_intro; auto.
+Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1145-1232 *)
+(* Why obligation from file "why/purse.why", characters 1152-1240 *)
 Lemma test2_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -286,12 +211,12 @@ Lemma test2_impl_po_5 :
   forall (balance0: ((memory) Z)),
   forall (Post15: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
                   ((acc balance p1) + 100)) /\
-                  (assigns alloc balance balance0 nothing_loc)),
+                  (assigns alloc balance balance0 (pointer_loc p1))),
   forall (Pre13: (purse_inv alloc balance0 p2) /\ 200 >= 0),
   forall (balance1: ((memory) Z)),
   forall (Post18: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 nothing_loc)),
+                  (assigns alloc balance0 balance1 (pointer_loc p2))),
   forall (Pre12: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
   forall (balance2: ((memory) Z)),
@@ -306,10 +231,10 @@ Lemma test2_impl_po_5 :
                   (assigns alloc balance2 balance3 (pointer_loc p2))),
   (valid alloc p1).
 Proof.
-(* FILL PROOF HERE *)
-Save.
+intuition.
+Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1145-1232 *)
+(* Why obligation from file "why/purse.why", characters 1152-1240 *)
 Lemma test2_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -321,12 +246,12 @@ Lemma test2_impl_po_6 :
   forall (balance0: ((memory) Z)),
   forall (Post15: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
                   ((acc balance p1) + 100)) /\
-                  (assigns alloc balance balance0 nothing_loc)),
+                  (assigns alloc balance balance0 (pointer_loc p1))),
   forall (Pre13: (purse_inv alloc balance0 p2) /\ 200 >= 0),
   forall (balance1: ((memory) Z)),
   forall (Post18: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 nothing_loc)),
+                  (assigns alloc balance0 balance1 (pointer_loc p2))),
   forall (Pre12: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
   forall (balance2: ((memory) Z)),
@@ -342,10 +267,10 @@ Lemma test2_impl_po_6 :
   forall (Pre9: (valid alloc p1)),
   (valid alloc p2).
 Proof.
-(* FILL PROOF HERE *)
-Save.
+intuition.
+Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1095-1239 *)
+(* Why obligation from file "why/purse.why", characters 1100-1248 *)
 Lemma test2_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -357,12 +282,12 @@ Lemma test2_impl_po_7 :
   forall (balance0: ((memory) Z)),
   forall (Post15: ((purse_inv alloc balance0 p1) /\ (acc balance0 p1) =
                   ((acc balance p1) + 100)) /\
-                  (assigns alloc balance balance0 nothing_loc)),
+                  (assigns alloc balance balance0 (pointer_loc p1))),
   forall (Pre13: (purse_inv alloc balance0 p2) /\ 200 >= 0),
   forall (balance1: ((memory) Z)),
   forall (Post18: ((purse_inv alloc balance1 p2) /\ (acc balance1 p2) =
                   ((acc balance0 p2) + 200)) /\
-                  (assigns alloc balance0 balance1 nothing_loc)),
+                  (assigns alloc balance0 balance1 (pointer_loc p2))),
   forall (Pre12: (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <=
                  (acc balance1 p1)),
   forall (balance2: ((memory) Z)),
@@ -381,10 +306,19 @@ Lemma test2_impl_po_7 :
   forall (Post9: result3 = ((acc balance3 p1) + (acc balance3 p2))),
   result3 = 150.
 Proof.
-(* FILL PROOF HERE *)
-Save.
+intuition.
+subst result3.
+rewrite H23;intuition.
+rewrite H25.
+rewrite H21.
+rewrite H17; intuition.
+rewrite H15.
+rewrite H11; intuition.
+rewrite H10.
+rewrite H6.
+Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1481-1565 *)
+(* Why obligation from file "why/purse.why", characters 1496-1581 *)
 Lemma withdraw_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
@@ -393,10 +327,10 @@ Lemma withdraw_impl_po_1 :
   forall (Pre4: (purse_inv alloc balance p) /\ 0 <= s /\ s <= (acc balance p)),
   (valid alloc p).
 Proof.
-(* FILL PROOF HERE *)
+unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1461-1566 *)
+(* Why obligation from file "why/purse.why", characters 1476-1582 *)
 Lemma withdraw_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
@@ -412,6 +346,7 @@ Lemma withdraw_impl_po_2 :
   ((purse_inv alloc balance0 p) /\ (acc balance0 p) =
   ((acc balance p) - s)) /\ (assigns alloc balance balance0 (pointer_loc p)).
 Proof.
-(* FILL PROOF HERE *)
+unfold purse_inv; intuition.
+subst; caduceus.
+subst; caduceus.
 Save.
-

@@ -15,8 +15,8 @@ val pointer_or_array_type : 'a ctype -> bool
 val is_null : texpr -> bool
 
 (* Global environment *)
-val add_sym : Loc.t -> string -> tctype -> var_info -> var_info
-val find_sym : string -> tctype * var_info
+val add_sym : Loc.t -> string -> tctype -> env_info -> env_info
+val find_sym : string -> tctype * env_info
 
 val add_typedef : Loc.t -> string -> tctype -> unit
 val find_typedef : string -> tctype
@@ -41,16 +41,16 @@ module Env : sig
 
   val new_block : t -> t
 
-  val add : string -> tctype -> var_info -> t -> t
-  val find : string -> t -> tctype * var_info
+  val add : string -> tctype -> env_info -> t -> t
+  val find : string -> t -> tctype * env_info
   val mem : string -> t -> bool
 
   val find_tag_type : Loc.t -> t -> texpr ctype_node -> texpr ctype_node
 
 end
 
-val type_of_field : Loc.t -> string -> tctype -> field_info * tctype
-val find_field : tag:string -> field:string -> field_info
+val type_of_field : Loc.t -> string -> tctype -> var_info * tctype
+val find_field : tag:string -> field:string -> var_info
 val declare_fields : texpr ctype_node -> ('a * string * 'b) list -> unit
 
 (* make heap var names unique *)

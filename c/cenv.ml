@@ -6,7 +6,6 @@ open Creport
 open Info
 
 (* Type equality (i.e. structural equality, but ignoring attributes) *)
-(* TODO: pointers = arrays *)
 
 let rec eq_type ty1 ty2 = 
   eq_type_node ty1.ctype_node ty2.ctype_node
@@ -146,7 +145,7 @@ let is_used_name n = Hashtbl.mem used_names n
 
 let use_name ?local_names n = 
   if is_used_name n then raise Exit; 
-  begin match local_names with Some h -> if Hashtbl.mem h n then raise Exit | None -> () end;
+  begin match local_names with Some h -> if Lib.Sset.mem n h then raise Exit | None -> () end;
   n
 
 let rec next_name ?local_names n i = 
@@ -156,7 +155,7 @@ let rec next_name ?local_names n i =
 let unique_name ?local_names n = try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
 (* variables and functions *)
-let (sym_t : (string, (texpr ctype * var_info)) Hashtbl.t) = Hashtbl.create 97
+let (sym_t : (string, (texpr ctype * env_info)) Hashtbl.t) = Hashtbl.create 97
 
 let is_sym = Hashtbl.mem sym_t
 
@@ -165,13 +164,16 @@ let find_sym = Hashtbl.find sym_t
 let add_sym l x ty info = 
   let n = unique_name x in
   mark_as_used n; 
-  info.var_unique_name <- n;
+  set_unique_name info n;
   if is_sym x then begin
     let (t,i) = find_sym x in
     if not (eq_type t ty) then 
       (* TODO accepter fonctions avec arguments si aucun la première fois 
 	 Question de Claude: accepter aussi un raffinement des specs ? *)
-      error l ("conflicting types for " ^ x);
+      begin
+	eprintf "t : %a, ty : %a@." print_type  t print_type  ty;
+	error l ("conflicting types for " ^ x);
+      end;
     i
   end else begin
     Hashtbl.add sym_t x (ty,info);
@@ -200,8 +202,8 @@ module Env = struct
   (* [tags] is the stack of blocks; 
      each block maps a tag name to a tag type *)
   type t = { 
-    vars : (texpr ctype * var_info) M.t; 
-    used_names : (string, unit) Hashtbl.t;
+    vars : (texpr ctype * env_info) M.t; 
+    used_names : Lib.Sset.t;
     tags : (string, tag_type) Hashtbl.t list;
   }
 
@@ -210,7 +212,7 @@ module Env = struct
 
   let empty () = 
     { vars = M.empty; 
-      used_names = Hashtbl.create 97; 
+      used_names = Lib.Sset.empty; 
       tags = [shared_hash_table] }
 
   let new_block env = { env with tags = Hashtbl.create 17 :: env.tags }
@@ -218,9 +220,9 @@ module Env = struct
   (* symbols *)
   let add x t info env = 
     let n = unique_name ~local_names:env.used_names x in
-    info.var_unique_name <- n;
-    Hashtbl.add env.used_names n ();
-    { env with vars = M.add x (t,info) env.vars }
+    set_unique_name info n;
+    { env with used_names = Lib.Sset.add n env.used_names;
+	vars = M.add x (t,info) env.vars }
 
   let find x env = M.find x env.vars
 
@@ -282,7 +284,8 @@ let find_field ~tag:n ~field:x =
 	try use_name n_x with Exit -> 
 	  next_name n_x 0
     in
-    let f = { field_name = x; field_tag = n; field_heap_var_name = u } in
+    let f = default_var_info x in
+    set_unique_name (Var_info f) u;
     mark_as_used u; 
     Hashtbl.add fields_t (n,x) f; f
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.73 2004-10-20 12:56:43 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.74 2004-10-21 14:52:45 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -150,17 +150,19 @@ let warn_for_read_only loc e =
   in
   match e.texpr_node with
   | TEarrow (_, x) | TEdot (_, x) when e.texpr_type.ctype_const  ->
-      warning loc ("assigment of read-only member `" ^ x.field_name ^ "'")
+      warning loc ("assignment of read-only member `" ^ x.var_name ^ "'")
   | TEarrow (e1, x) when pointer_on_read_only e1.texpr_type ->
-      warning loc ("assigment of read-only member `" ^ x.field_name ^ "'")
+      warning loc ("assignment of read-only member `" ^ x.var_name ^ "'")
   | TEdot (e1, x) when e1.texpr_type.ctype_const ->
-      warning loc ("assigment of read-only member `" ^ x.field_name ^ "'")
-  | TEvar x when e.texpr_type.ctype_const ->
-      warning loc ("assigment of read-only variable `" ^ x.var_name ^ "'")
-  | TEvar x ->
+      warning loc ("assignment of read-only member `" ^ x.var_name ^ "'")
+  | TEvar (Var_info x) when e.texpr_type.ctype_const ->
+      warning loc ("assignment of read-only variable `" ^ x.var_name ^ "'")
+  | TEvar (Var_info x) ->
       Loc.report Coptions.log loc;
       fprintf Coptions.log "Variable %s is assigned@." x.var_name;
-      x.var_is_assigned <- true
+      set_assigned x
+  | TEvar (Fun_info f) ->
+      warning loc ("function assignment (ignored)")
   | _ when e.texpr_type.ctype_const ->
       warning loc "assigment of read-only location"
   | _ -> 
@@ -209,8 +211,8 @@ and type_type_node loc env = function
 	       | None -> n
 	       | Some e -> eval_const_expr e 
 	     in
-	     i.enum_constant_value <- n'; 
-	     ignore (add_sym loc f ty i); 
+	     set_const_value i n'; 
+	     ignore (add_sym loc f ty (Var_info i)); 
 	     Int64.add n' Int64.one) 
 	  Int64.zero fl
       in
@@ -697,8 +699,8 @@ and type_block env et (dl,sl) =
 	  error d.loc ("variable `" ^ x ^ "' declared void");
 	let i = type_initializer d.loc env ty i in
 	let info = default_var_info x in
-	if ty.ctype_storage = Static then info.var_is_static <- true;
-	let env' = Env.add x ty info env in
+	if ty.ctype_storage = Static then set_static info;
+	let env' = Env.add x ty (Var_info info) env in
 	let dl',env'' = type_decls (Sset.add x vs) env' dl in
 	{ d with node = Tdecl (ty, info, i) } :: dl', env''
     | { node = Ctypedecl ty } as d :: dl ->
@@ -728,7 +730,7 @@ let type_parameters loc env pl =
   let type_one (ty,x) (pl,env) =
     let info = default_var_info x in
     let ty = type_type loc env ty in 
-    (ty,info) :: pl, Env.add x ty info env
+    (ty,info) :: pl, Env.add x ty (Var_info info) env
   in
   let is_void (ty,_) = ty.ctype_node = CTvoid in
   let pl, env = List.fold_right type_one pl ([], env) in
@@ -745,7 +747,7 @@ let type_logic_parameters env pl =
     (fun (ty,x) (pl,env) ->
        let info = default_var_info x in
        let ty = type_logic_type env ty in 
-       (x,ty) :: pl, Env.add x ty info env)
+       (info,ty) :: pl, Env.add x ty (Var_info info) env)
     pl 
     ([], env)
 
@@ -823,16 +825,25 @@ let type_decl d = match d.node with
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
       let ty = type_type d.loc (Env.empty ()) ty in
-      let info = add_sym d.loc x ty (default_var_info x) in
       begin match ty.ctype_node with
-	| CTfun (pl, ty) ->
-	    let pl = List.map (fun (ty,x) -> (ty,default_var_info x)) pl in
-	    Tfunspec (function_spec d.loc x None, ty, info, pl)
+	| CTfun (pl, ty') ->
+	    let info = 
+	      match add_sym d.loc x ty (Fun_info (default_fun_info x)) with
+		| Var_info _ -> assert false
+		| Fun_info f -> f
+	    in
+	    let pl = List.map (fun (t,x) -> (t,default_var_info x)) pl in
+	    Tfunspec (function_spec d.loc x None, ty', info, pl)
 	| _ -> 
-	    info.var_is_static <- true;
+	    let info = 
+	      match add_sym d.loc x ty (Var_info (default_var_info x)) with
+		| Var_info v -> v
+		| Fun_info _ -> assert false
+	    in
+	    set_static info;
 	    Loc.report Coptions.log d.loc;
 	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
-	    info.var_is_assigned <- true;
+	    set_assigned info; (* ????? *)
 	    let ty = array_size_from_initializer d.loc ty i in
 	    Tdecl (ty, info, type_initializer d.loc (Env.empty ()) ty i)
       end
@@ -841,10 +852,14 @@ let type_decl d = match d.node with
       let pl,env = type_parameters d.loc (Env.empty ()) pl in
       let s = type_spec ~result:ty env s in
       let s = function_spec d.loc f (Some s) in
-      let info = default_var_info f in
+      let info = default_fun_info f in
       info.has_assigns <- (s.assigns <> None);
       let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
-      let info = add_sym d.loc f (noattr (CTfun (spl, ty))) info in
+      let info = 
+	match add_sym d.loc f (noattr (CTfun (spl, ty))) (Fun_info info) with 
+	  | Var_info _ -> assert false
+	  | Fun_info f -> f
+      in
       Tfunspec (s, ty, info, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc (Env.empty ()) ty in
@@ -852,10 +867,14 @@ let type_decl d = match d.node with
       let pl,env = type_parameters d.loc (Env.empty ()) pl in
       let s = option_app (type_spec ~result:ty env) s in
       let s = function_spec d.loc f s in
-      let info = default_var_info f in
+      let info = default_fun_info f in
       info.has_assigns <- (s.assigns <> None);
       let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
-      let info = add_sym d.loc f (noattr (CTfun (spl, ty))) info in
+      let info = 
+	match add_sym d.loc f (noattr (CTfun (spl, ty))) (Fun_info info) with
+	  | Var_info v -> assert false
+	  | Fun_info f -> f
+      in
       let bl,st = type_statement env et bl in
       if st.term && et <> None then
 	warning d.loc "control reaches end of non-void function";

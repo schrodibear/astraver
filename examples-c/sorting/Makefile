@@ -1,7 +1,15 @@
 
-FILES = selection
+CADUCEUS=../../bin/caduceus.opt
+CADUCEUSLIB=$(shell pwd)/../../lib
+EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
-coq:
+FILES = 
+
+TODO = selection
+
+coq: $(FILES)
+
+allcoq:
 	for f in $(FILES); do \
 	  caduceus $$f.c; \
 	  make -f $$f.makefile coq; \
@@ -21,9 +29,13 @@ cvcl:
 
 .PHONY: coq simplify cvcl
 
-%: %.c 
-	caduceus $*.c
-	make -f $*.makefile simplify
+why/%.why: %.c 
+	rm -f coq/caduceus_spec_why.v
+	$(EXECCADUCEUS) $<
+
+%: %.c
+	rm -f why/$*.why
+	make why/$*.why
 	make -f $*.makefile coq
 
 clean:

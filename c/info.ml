@@ -14,32 +14,41 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.11 2004-10-11 11:17:44 filliatr Exp $ i*)
-
-module HeapVarSet = Set.Make(String)
+(*i $Id: info.ml,v 1.12 2004-10-21 14:52:45 hubert Exp $ i*)
 
 type var_info =
     {
       var_name : string;
+      var_uniq_tag : int;
       mutable var_unique_name : string;
       mutable var_is_assigned : bool;
       mutable var_is_static : bool;
       mutable enum_constant_value : int64;
-      mutable function_reads : HeapVarSet.t;
-      mutable function_writes : HeapVarSet.t;
-      mutable has_assigns : bool;
     }
 
+let tag_counter = ref 0
+
 let default_var_info x =
+  incr tag_counter;
   { var_name = x; 
+    var_uniq_tag = !tag_counter;
     var_unique_name = x;
     var_is_assigned = false;
     var_is_static = false;
     enum_constant_value = Int64.zero;
-    function_reads = HeapVarSet.empty;
-    function_writes = HeapVarSet.empty; 
-    has_assigns = false
   }
+
+let set_assigned v = v.var_is_assigned <- true
+
+let set_static v = v.var_is_static <- true
+
+let set_const_value v n = v.enum_constant_value <- n
+
+module HeapVarSet = 
+  Set.Make(struct type t = var_info 
+		  let compare i1 i2 = 
+		      Pervasives.compare i1.var_uniq_tag i2.var_uniq_tag 
+	   end)
 
 type logic_info =
     {
@@ -51,8 +60,39 @@ let default_logic_info x =
   { logic_name = x;
     logic_args = HeapVarSet.empty }
 
+(*
 type field_info = { 
   field_name : string;
+(*
   field_tag : string;
+*)
   mutable field_heap_var_name : string;
 }
+*)
+
+type fun_info =
+    {
+      fun_name : string;
+      mutable fun_unique_name : string;
+      mutable function_reads : HeapVarSet.t;
+      mutable function_writes : HeapVarSet.t;
+      mutable has_assigns : bool;
+    }
+
+let default_fun_info x =
+  { fun_name = x; 
+    fun_unique_name = x;
+    function_reads = HeapVarSet.empty;
+    function_writes = HeapVarSet.empty; 
+    has_assigns = false
+  }
+
+
+type env_info =
+  | Var_info of var_info
+  | Fun_info of fun_info
+
+let set_unique_name e n =
+  match e with
+    | Var_info v -> v.var_unique_name <- n
+    | Fun_info f -> f.fun_unique_name <- n

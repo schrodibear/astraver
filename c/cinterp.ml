@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.105 2004-10-19 07:35:02 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.106 2004-10-21 14:52:45 hubert Exp $ i*)
 
 
 open Format
@@ -138,7 +138,7 @@ let rec interp_term label old_label t =
     | Tdot (t, field)
     | Tarrow (t, field) -> 
 	let te = f t in
-	let var = field.field_heap_var_name in
+	let var = field.var_unique_name in
 	LApp("acc",[interp_var label var;te])
     | Tunop (Ustar, t1) -> 
 	let te1 = f t1 in
@@ -152,7 +152,8 @@ let rec interp_term label old_label t =
 	LApp("real_of_int", [f t1])
     | Tapp (g, l) -> 
 	LApp(g.logic_name,
-	     (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
+	     (HeapVarSet.fold 
+		(fun x acc -> (interp_var label x.var_unique_name)::acc) 
 		g.logic_args []) 
 	     @ List.map f l)
     | Tnull -> 
@@ -194,7 +195,7 @@ and interp_term_address  label old_label e = match e.term_node with
 	| CTenum _ | CTint _ | CTfloat _ -> 
   	    interp_term  label old_label e1
 	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
-	    let var = f.field_heap_var_name in
+	    let var = f.var_unique_name in
 	    LApp("acc",[interp_var label var; interp_term label old_label e1])
 	| _ -> unsupported "& operator on a field"
       end
@@ -238,7 +239,8 @@ let rec interp_predicate label old_label p =
 	LPred(op,[ft t1;ft t2])
     | Papp (v, tl) ->
 	LPred(v.logic_name, 
-	      (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
+	      (HeapVarSet.fold 
+		 (fun x acc -> (interp_var label x.var_unique_name)::acc) 
 		 v.logic_args []) 
 	      @ List.map ft tl)
     | Pfalse -> 
@@ -372,9 +374,10 @@ let rec interp_expr e =
 	Cte (Prim_int (Int64.to_int (Cconst.int e.texpr_loc c)))
     | TEconstant (FloatConstant c) ->
 	Cte(Prim_float(float_of_string c))
-    | TEvar(v) -> 
+    | TEvar(Var_info v) -> 
 	let n = v.var_unique_name in
 	if v.var_is_assigned then Deref n else Var n
+    | TEvar(Fun_info v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | TEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
 		 |Blt_float | Bgt_float | Ble_float | Bge_float 
@@ -450,7 +453,7 @@ let rec interp_expr e =
     | TEdot (e,s)
     | TEarrow (e,s) ->
 	let te = interp_expr e in
-	let var = s.field_heap_var_name in
+	let var = s.var_unique_name in
 	Output.make_app "acc_" [Var(var);te]
     | TEunary(Ustar,e1) -> 
 	let te1 = interp_expr e1 in
@@ -475,12 +478,12 @@ let rec interp_expr e =
     | TEcall(e,args) -> 
 	begin
 	  match e.texpr_node with
-	    | TEvar v ->
+	    | TEvar (Fun_info v) ->
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
 		in
-		build_complex_app (Var (v.var_unique_name ^ "_parameter")) 
+		build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
 		  targs
 	    | _ -> 
 		unsupported "call of a non-variable function"
@@ -583,7 +586,8 @@ and interp_incr_expr op e =
 
 and interp_lvalue e =
   match e.texpr_node with
-    | TEvar v -> LocalRef(v)
+    | TEvar (Var_info v) -> LocalRef(v)
+    | TEvar (Fun_info v) -> assert false
     | TEunary(Ustar,e1) ->
 	let var = global_var_for_type e.texpr_type in
 	HeapRef(var,interp_expr e1)
@@ -596,16 +600,17 @@ and interp_lvalue e =
 	assert false
     | TEdot (e1,f)
     | TEarrow (e1,f) ->
-	HeapRef(f.field_heap_var_name, interp_expr e1)
+	HeapRef(f.var_unique_name, interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
 
 and interp_address e = match e.texpr_node with
-  | TEvar v -> 
+  | TEvar (Var_info v) -> 
       begin match e.texpr_type.ctype_node with
 	| CTstruct _ | CTunion _ -> Deref v.var_unique_name
 	| _ -> unsupported "& operator"
       end
+  | TEvar (Fun_info v) -> unsupported "& operator on functions"
   | TEunary (Ustar, e1) ->
       interp_expr e1
   | TEarrget (e1, e2) ->
@@ -619,7 +624,7 @@ and interp_address e = match e.texpr_node with
   	    interp_expr e1
 	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
             build_complex_app (Var "acc_") 
-	    [Var f.field_heap_var_name; interp_expr e1]
+	    [Var f.var_unique_name; interp_expr e1]
 	| _ -> unsupported "& operator on a field"
       end
   | TEcast (_, e1) ->
@@ -664,13 +669,13 @@ and interp_statement_expr e =
     | TEcall (e1,args) -> 
 	begin
 	  match e1.texpr_node with
-	    | TEvar v ->
+	    | TEvar (Fun_info v) ->
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
 		in
 		let app = 
-		  build_complex_app (Var (v.var_unique_name ^ "_parameter")) 
+		  build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
 		    targs
 		in
 		if e.texpr_type.ctype_node = CTvoid then
@@ -729,7 +734,7 @@ let collect_locations before acc loc =
 		  let loc = 
 		    LApp("pointer_loc",[interp_term (Some before) before e]) 
 		  in
-		  f.field_heap_var_name, Some loc
+		  f.var_unique_name, Some loc
 	      | Tarrget(e1,e2) -> 
 		  let var = global_var_for_array_type e1.term_type in
 		  let loc = 
@@ -790,7 +795,7 @@ let interp_assigns before assigns = function
 	     let t = 
 	       if Ceffect.is_memory_var v then Memory []  else Reference false
 	     in
-	     StringMap.add v t m)
+	     StringMap.add v.var_unique_name t m)
 	  assigns StringMap.empty
       in
       let l = 
@@ -825,9 +830,8 @@ let weak_invariant =
 let weak_invariants_for hvs =
   Hashtbl.fold
     (fun id (p,e) acc -> 
-       if not (HeapVarSet.is_empty (HeapVarSet.inter e hvs)) then
-	 make_and (weak_invariant id p) acc 
-       else acc)
+       if Ceffect.intersect_only_alloc e hvs then acc
+       else make_and (weak_invariant id p) acc) 
     Ceffect.weak_invariants LTrue
 
 let interp_spec effect_reads effect_assigns s =
@@ -1233,11 +1237,12 @@ and interp_case ab may_break i =
 let interp_predicate_args id args =
   let args =
     List.fold_right
-      (fun (id,t) args -> (id,([],Ceffect.interp_type t))::args)
+      (fun (id,t) args -> 
+	 (id.var_unique_name,([],Ceffect.interp_type t))::args)
       args []
   in
   HeapVarSet.fold
-    (fun arg t -> (arg,Ceffect.heap_var_type arg)::t)
+    (fun arg t -> (arg.var_unique_name,Ceffect.heap_var_type arg)::t)
     id.logic_args args
 
 let cinterp_logic_symbol id ls =
@@ -1245,7 +1250,9 @@ let cinterp_logic_symbol id ls =
     | Predicate_reads(args,locs) -> 
 	let args = interp_predicate_args id args in
 	let ty = 
-	  List.fold_right (fun (x,t) ty -> Prod_type (x, Base_type t, ty)) 
+	  List.fold_right 
+	    (fun (x,t) ty -> 
+	       Prod_type (x, Base_type t, ty)) 
 	    args (Base_type ([],"prop"))
 	in
 	Logic(false, id.logic_name, ty)
@@ -1257,7 +1264,7 @@ let cinterp_logic_symbol id ls =
 	let local_type =
 	  List.fold_right
 	    (fun (id,ty) t -> 
-	       Prod_type(id,base_type (Ceffect.interp_type ty),t))
+	       Prod_type(id.var_unique_name,base_type (Ceffect.interp_type ty),t))
 	    args (base_type (Ceffect.interp_type ret))
 	in
 	let final_type =
@@ -1273,7 +1280,7 @@ let interp_axiom p =
   let a = interp_predicate None "" p
   and e = Ceffect.predicate p in
   HeapVarSet.fold
-    (fun arg t -> LForall(arg,Ceffect.heap_var_type arg,t))
+    (fun arg t -> LForall(arg.var_unique_name,Ceffect.heap_var_type arg,t))
     e a
 
 let interp_effects e =
@@ -1297,12 +1304,15 @@ let interp_fun_params params =
        (id.var_unique_name,base_type tt)::tpl)
  params []
 
+let heap_var_unique_names v =
+  HeapVarSet.fold (fun v l -> v.var_unique_name::l) v []
+  
 
 let interp_function_spec id sp ty pl =
   let tpl = interp_fun_params pl in
   let pre,post = interp_spec id.function_reads id.function_writes sp in
-  let r = HeapVarSet.elements id.function_reads in
-  let w = HeapVarSet.elements id.function_writes in
+  let r = heap_var_unique_names id.function_reads in
+  let w = heap_var_unique_names id.function_writes in
   let annot_type = 
     Annot_type
       (pre, Base_type ([], Ceffect.interp_type ty), r, w, post, None)
@@ -1313,7 +1323,7 @@ let interp_function_spec id sp ty pl =
       tpl 
       annot_type
   in
-  tpl,pre,post, Param (false, id.var_unique_name ^ "_parameter", ty)
+  tpl,pre,post, Param (false, id.fun_unique_name ^ "_parameter", ty)
 
 let interp_type loc ctype = match ctype.ctype_node with
   | CTenum (e, _) ->
@@ -1365,7 +1375,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       reset_tmp_var ();
       let tparams,pre,post,tspec = 
 	interp_function_spec id spec ctype params in
-      let f = id.var_unique_name in
+      let f = id.fun_unique_name in
       lprintf "translating function %s@." f;
       begin try
 	abrupt_return := None;
@@ -1376,7 +1386,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	       if id.var_is_assigned
 	       then 
 		 let n = id.var_unique_name in
-		 id.var_unique_name <- "mutable_" ^ n; 
+		 set_unique_name (Var_info id) ("mutable_" ^ n); 
 		 [id.var_unique_name,n]
 	       else bl) params [] in
 	let tblock = catch_return (interp_statement false may_break block) in
