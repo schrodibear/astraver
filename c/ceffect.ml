@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.85 2005-02-23 13:07:18 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.86 2005-02-28 09:00:41 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -537,11 +537,11 @@ let binop loc = function
   | Bmul | Bmul_int | Bmul_float -> Clogic.Bmul
   | Bdiv | Bdiv_int | Bdiv_float -> Clogic.Bdiv
   | Bmod | Bmod_int -> Clogic.Bmod
+  | Beq | Beq_int | Beq_float | Beq_pointer 
   | Blt | Blt_int | Blt_float | Blt_pointer
   | Bgt | Bgt_int | Bgt_float | Bgt_pointer
   | Ble | Ble_int | Ble_float | Ble_pointer
   | Bge | Bge_int | Bge_float | Bge_pointer
-  | Beq | Beq_int | Beq_float | Beq_pointer
   | Bneq | Bneq_int | Bneq_float | Bneq_pointer
   | Bbw_and
   | Bbw_xor
