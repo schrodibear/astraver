@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.6 2004-07-19 12:23:16 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.7 2004-07-20 09:55:39 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -29,6 +29,8 @@ let spec =
     "-debug", Arg.Set debug, "set the debug flag" ]
 let usage = "usage: dp [options] files.{cvc,cvc.all,sx,sx.all}"
 let () = Arg.parse spec (fun s -> Queue.push s files) usage 
+
+let () = Cvcl_split.debug := !debug; Simplify_split.debug := !debug
 
 (* stats *)
 let nvalid = ref 0
@@ -45,12 +47,12 @@ let call cmd =
 
 let call_cvcl f =
   call
-    (sprintf "ulimit -t %d; cvcl < %s > out 2>&1 && grep -q Valid out" 
+    (sprintf "ulimit -t %d; cvcl < %s > out 2>&1 && grep -q -w Valid out" 
        !timeout f)
 
 let call_simplify f =
   call
-    (sprintf "ulimit -t %d; Simplify %s > out 2>&1 && grep -q Valid out" 
+    (sprintf "ulimit -t %d; Simplify %s > out 2>&1 && grep -q -w Valid out" 
        !timeout f)
 
 let split f =
@@ -84,6 +86,7 @@ valid           : %3d (%3.0f%%)
 invalid         : %3d (%3.0f%%)
 timeout/failure : %3d (%3.0f%%)\n" 
     (!nvalid + !ninvalid + !ntimeout)
-    !nvalid pvalid !ninvalid pinvalid !ntimeout ptimeout
+    !nvalid pvalid !ninvalid pinvalid !ntimeout ptimeout;
+  try Sys.remove "out" with _ -> ()
 
 let () = Printexc.catch main ()

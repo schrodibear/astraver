@@ -14,10 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify_split.mli,v 1.1 2004-07-15 13:45:37 filliatr Exp $ i*)
+(*i $Id: simplify_split.mli,v 1.2 2004-07-20 09:55:39 filliatr Exp $ i*)
 
 (* Split a CVC Simplify input file into several files, one for each query.
    The function passed is iterated over each sub-file. *)
 
 val iter : (string -> unit) -> string -> unit
 
+val debug : bool ref

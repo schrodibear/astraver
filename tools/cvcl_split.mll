@@ -14,13 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl_split.mll,v 1.2 2004-07-15 15:08:51 filliatr Exp $ i*)
+(*i $Id: cvcl_split.mll,v 1.3 2004-07-20 09:55:39 filliatr Exp $ i*)
 
 {
 
   open Printf
   open Lexing
 
+  let debug = ref false
   let callback = ref (fun f -> assert false)
 
   (* we put everything not a goal into [buf] *)
@@ -38,7 +39,7 @@
   let end_file file =
     close_out !outc;
     !callback file;
-    Sys.remove file
+    if not !debug then Sys.remove file
 
 }
 

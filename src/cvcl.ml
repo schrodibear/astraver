@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.21 2004-07-19 15:35:20 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.22 2004-07-20 09:55:39 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -734,7 +734,39 @@ let predefined_symbols fmt =
         "forall t1:int array. forall t2:int array.
          permut(t1,t2) -> array_length(t1) = array_length(t2)";
 
-      (* TODO: sub_permut *)
+      "sub_permut_refl",
+        "forall t:int array. forall g:int. forall d:int.
+             sub_permut(g,d,t,t)";
+
+      "sub_permut_sym",
+        "forall t1:int array. forall t2:int array. forall g:int. forall d:int.
+             sub_permut(g,d,t1,t2) -> sub_permut(g,d,t2,t1)";
+
+      "sub_permut_trans",
+        "forall t1:int array. forall t2:int array. forall t3:int array.
+         forall g:int. forall d:int.
+             sub_permut(g,d,t1,t2) -> sub_permut(g,d,t2,t3) ->
+             sub_permut(g,d,t1,t3)";
+
+      "sub_permut_exchange_1",
+        "forall t:int array.
+         forall g:int. forall d:int. forall i:int. forall j:int.
+             (g <= i and i <= d and g <= j and j <= d) ->
+             sub_permut(g,d,t,store(store(t,i,t[j]),j,t[i]))";
+
+      "sub_permut_exchange_2",
+        "forall t1:int array. forall t2:int array.
+         forall g:int. forall d:int. forall i:int. forall j:int.
+             (g <= i and i <= d and g <= j and j <= d and
+              exchange(t1,t2,i,j)) -> sub_permut(g,d,t1,t2)";
+
+      "sub_permut_permut",
+        "forall t1:int array. forall t2:int array. forall g:int. forall d:int. 
+         sub_permut(g,d,t1,t2) -> permut(t1,t2)";
+
+      "sub_permut_array_length",
+        "forall t1:int array. forall t2:int array. forall g:int. forall d:int. 
+         sub_permut(g,d,t1,t2) -> array_length(t1) = array_length(t2)";
 
       "sorted_array_def",
         "forall t:int array. forall i:int. forall j:int.
