@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.2 2004-02-04 13:45:19 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.3 2004-02-04 16:21:28 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -44,8 +44,45 @@ let error l s = raise (Error (Some l, AnyMessage s))
 
 (* Typing terms *)
 
+let noattr tyn = { ctype_node = tyn; 
+		   ctype_storage = No_storage;
+		   ctype_const = false;
+		   ctype_volatile = false }
+let c_void = noattr CTvoid
+let c_int = noattr (CTint (Signed, Int))
+let c_char = noattr (CTint (Unsigned, Char))
+let c_float = noattr (CTfloat Float)
+let c_string = noattr (CTpointer c_char)
+
 let rec type_term env et t =
-  assert false (*TODO*)
+  let t, ty = type_term_node t.info env t.node in
+  match et with
+    | Some ety -> 
+	(* TODO vérifier ety = ty *)
+	{ node = t; info = ty }
+    | None ->
+	{ node = t; info = ty }
+
+and type_term_node loc env = function
+  | Tconstant c -> 
+      (try 
+	 let _ = int_of_string c in Tconstant c, c_int
+       with _ -> 
+	 Tconstant c, c_float)
+  | Tvar (s, lab) ->
+      assert false
+  | Tapp (f, tl) ->
+      assert false
+  | Tunop (op, t) -> 
+      assert false
+  | Tbinop (t1, op, t2) ->
+      assert false
+  | Tdot (t, x) ->
+      assert false
+  | Tarrow (t, x) ->
+      assert false
+  | Tif (t1, t2, t3) ->
+      assert false
 
 and type_terms loc env at tl =
   let rec type_list = function
@@ -74,7 +111,10 @@ let rec type_predicate env = function
 	    | _ -> error loc ("predicate " ^ x ^ " expects arguments"))
        with Not_found -> error loc ("unbound predicate " ^ x))
   | Prel (t1, r, t2) -> 
-      (*TODO*) Prel (type_term env None t1, r, type_term env None t2)
+      let t1 = type_term env None t1 in
+      let t2 = type_term env None t2 in
+      (*TODO verif *) 
+      Prel (t1, r, t2)
   | Pand (p1, p2) -> 
       Pand (type_predicate env p1, type_predicate env p2)
   | Por (p1, p2) -> 
@@ -91,14 +131,17 @@ let rec type_predicate env = function
        with Not_found -> 
 	 error locp ("unbound predicate " ^ p))
   | Pif (t, p1, p2) -> 
-      Pif (type_term env None t, type_predicate env p1,
-	   type_predicate env p2)
+      (* TODO type t ? *)
+      let t = type_term env None t in
+      Pif (t, type_predicate env p1, type_predicate env p2)
   | Pforall (s, pt, p) -> 
       Pforall (s, pt, type_predicate env p)
   | Pexists (s, pt, p) -> 
       Pexists (s, pt, type_predicate env p)
 
-let type_variant env (t, r) = (type_term env None t, r) (* TODO et=int ? *)
+let type_variant env (t, r) = 
+  let t = type_term env None t in
+  (t, r) (* TODO et=int ? *)
 
 let type_loop_annot env (i,v) =
   option_app (type_predicate env) i, type_variant env v

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.18 2004-02-03 08:24:43 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.19 2004-02-04 16:21:28 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -171,11 +171,11 @@ and lvalue = texpr (* TODO: cf CIL *)
 
 type tctype = texpr ctype
 
-type predicate = (texpr, string) Clogic.predicate
+type predicate = (tctype term, string) Clogic.predicate
 
 type variant = tctype term * string option
 
-type loop_annot = (texpr, string) Clogic.loop_annot
+type loop_annot = (tctype term, string) Clogic.loop_annot
 
 type loop_info = { loop_break : bool; loop_continue : bool }
 

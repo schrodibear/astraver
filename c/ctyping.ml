@@ -14,14 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.17 2004-02-04 13:45:20 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.18 2004-02-04 16:21:28 filliatr Exp $ i*)
 
 open Format
 open Coptions
 open Cast
 open Cerror
-open Creport
 open Cltyping
+open Creport
 open Info
 
 (* Typing C programs *)
@@ -44,16 +44,6 @@ let loop_annot env a =
 
 
 (*s Some predefined types, subtype relation, etc. *)
-
-let noattr tyn = { ctype_node = tyn; 
-		   ctype_storage = No_storage;
-		   ctype_const = false;
-		   ctype_volatile = false }
-let c_void = noattr CTvoid
-let c_int = noattr (CTint (Signed, Int))
-let c_char = noattr (CTint (Unsigned, Char))
-let c_float = noattr (CTfloat Float)
-let c_string = noattr (CTpointer c_char)
 
 let int_op = function
   | Badd -> Badd_int
