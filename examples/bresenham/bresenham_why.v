@@ -87,16 +87,15 @@ Lemma bresenham_po_2 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test4: `x1 <= x2`)
-  (Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
   (best x1 y1).
 Proof.
 Intros.
-Decompose [and] Pre3.
+Decompose [and] Pre4.
 Exact (invariant_is_ok x1 y1 e1 H2).
 Save.
 
@@ -111,13 +110,12 @@ Lemma bresenham_po_3 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test4: `x1 <= x2`)
-  (Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre4: (best x1 y1))
+  (Pre2: (best x1 y1))
   (result3: bool)
   (Bool2: (if result3 then `e1 < 0` else `e1 >= 0`))
   (Test3: `e1 < 0`)
@@ -127,13 +125,11 @@ Lemma bresenham_po_3 :
           (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
 Proof.
 Intros.
-Simpl in Test4.
-Simpl in Test3.
 Rewrite H; Clear x H.
 Split. Omega'.
 Split. Omega'.
 Split.
-Unfold invariant. Unfold invariant in Pre3.
+Unfold invariant. Unfold invariant in Pre4.
 Split.
 Replace `2*(x1+1+1)*y2` with `2*(x1+1)*y2+2*y2`;
  [ Omega' | Ring ].
@@ -152,13 +148,12 @@ Lemma bresenham_po_4 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test4: `x1 <= x2`)
-  (Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre4: (best x1 y1))
+  (Pre2: (best x1 y1))
   (result3: bool)
   (Bool2: (if result3 then `e1 < 0` else `e1 >= 0`))
   (Test2: `e1 >= 0`)
@@ -170,10 +165,8 @@ Lemma bresenham_po_4 :
           (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
 Proof.
 Intros.
-Simpl in Test4.
-Simpl in Test2.
 Rewrite H; Clear x H.
-Unfold invariant. Unfold invariant in Pre3.
+Unfold invariant. Unfold invariant in Pre4.
 Split. Omega'.
 Split. Omega'.
 Rewrite Post4.
@@ -195,13 +188,12 @@ Lemma bresenham_po_5 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test4: `x1 <= x2`)
-  (Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre4: (best x1 y1))
+  (Pre2: (best x1 y1))
   (e2: Z)
   (y3: Z)
   (Post14: ((x:Z) (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\
@@ -226,12 +218,11 @@ Lemma bresenham_po_6 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test4: `x1 <= x2`)
-  (Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
   (e2: Z)
   (x3: Z)
   (y3: Z)
@@ -240,7 +231,7 @@ Lemma bresenham_po_6 :
   (Zwf `0` `x2 + 1 - x3` Variant1).
 Proof.
 Intros.
-Rewrite Pre5; Tauto.
+Rewrite Pre3; Tauto.
 Save.
 
 Lemma bresenham_po_7 : 
@@ -254,12 +245,11 @@ Lemma bresenham_po_7 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test4: `x1 <= x2`)
-  (Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
   (e2: Z)
   (x3: Z)
   (y3: Z)
@@ -281,12 +271,11 @@ Lemma bresenham_po_8 :
   (y1: Z)
   (x1: Z)
   (e1: Z)
-  (Pre6: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  (Pre5: Variant1 = `x2 + 1 - x1`)
+  (Pre4: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
+  (Pre3: Variant1 = `x2 + 1 - x1`)
   (result2: bool)
   (Bool1: (if result2 then `x1 <= x2` else `x1 > x2`))
   (Test1: `x1 > x2`)
-  (Pre2: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
   `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1) /\ `x1 > x2`.
 Proof.
 Intuition.

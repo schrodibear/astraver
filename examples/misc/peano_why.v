@@ -25,7 +25,6 @@ Lemma add1_po_2 :
   (result0: bool)
   (Bool1: (if result0 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
   (z1: Z)
@@ -49,7 +48,6 @@ Lemma add1_po_3 :
   (result0: bool)
   (Bool1: (if result0 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (x1: Z)
   (z1: Z)
   (I: `0 <= z1` /\ x1 = `x + (y - z1)` /\ (Zwf `0` z1 z0))
@@ -72,7 +70,6 @@ Lemma add1_po_4 :
   (result0: bool)
   (Bool1: (if result0 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (x1: Z)
   (z1: Z)
   (I: `0 <= z1` /\ x1 = `x + (y - z1)` /\ (Zwf `0` z1 z0))
@@ -93,7 +90,6 @@ Lemma add1_po_5 :
   (result0: bool)
   (Bool1: (if result0 then `z0 > 0` else `z0 <= 0`))
   (Test1: `z0 <= 0`)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   `0 <= z0` /\ x0 = `x + (y - z0)` /\ `z0 <= 0`.
 Proof. Intuition. Save.
 
@@ -164,7 +160,6 @@ Lemma mult1_po_2 :
   (result2: bool)
   (Bool1: (if result2 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   `result0 >= 0`.
 Proof.
 Intros; Omega.
@@ -188,7 +183,6 @@ Lemma mult1_po_3 :
   (result2: bool)
   (Bool1: (if result2 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (x2: Z)
   (Post8: x2 = `x1 + result0`)
   (z1: Z)
@@ -200,7 +194,7 @@ Repeat Split; Unfold Zwf; Try Omega.
 Rewrite Post4; Clear Post4.
 Rewrite Post8; Clear Post8.
 Rewrite Post2; Clear Post2.
-Decompose [and] I0.
+Decompose [and] I.
 Rewrite H0; Clear H0.
 Ring.
 Save.
@@ -223,7 +217,6 @@ Lemma mult1_po_4 :
   (result2: bool)
   (Bool1: (if result2 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (x2: Z)
   (z1: Z)
   (I: `0 <= z1` /\ x2 = `x * (y - z1)` /\ (Zwf `0` z1 z0))
@@ -251,7 +244,6 @@ Lemma mult1_po_5 :
   (result2: bool)
   (Bool1: (if result2 then `z0 > 0` else `z0 <= 0`))
   (Test2: `z0 > 0`)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (x2: Z)
   (z1: Z)
   (I: `0 <= z1` /\ x2 = `x * (y - z1)` /\ (Zwf `0` z1 z0))
@@ -278,7 +270,6 @@ Lemma mult1_po_6 :
   (result2: bool)
   (Bool1: (if result2 then `z0 > 0` else `z0 <= 0`))
   (Test1: `z0 <= 0`)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   `0 <= z0` /\ x1 = `x * (y - z0)` /\ `z0 <= 0`.
 Proof. Tauto. Save.
 

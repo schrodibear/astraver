@@ -134,7 +134,7 @@ Save.
 
 Lemma binary_search_po_1 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -146,7 +146,7 @@ Proof. Auto with *. Save.
 
 Lemma binary_search_po_2 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -157,16 +157,13 @@ Lemma binary_search_po_2 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
   `l1 <= m1` /\ `m1 <= u1`.
@@ -179,7 +176,7 @@ Save.
 
 Lemma binary_search_po_3 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -190,19 +187,16 @@ Lemma binary_search_po_3 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
   `0 <= m1` /\ `m1 < N + 1`.
 Proof.
 Intros.
@@ -212,7 +206,7 @@ Save.
 
 Lemma binary_search_po_4 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -223,19 +217,16 @@ Lemma binary_search_po_4 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
   (result4: bool)
   (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
   (Test5: `(access t m1) < v`)
@@ -256,7 +247,7 @@ Save.
 
 Lemma binary_search_po_5 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -267,19 +258,16 @@ Lemma binary_search_po_5 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
   (result4: bool)
   (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
   (Test4: `(access t m1) >= v`)
@@ -293,7 +281,7 @@ Save.
 
 Lemma binary_search_po_6 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -304,19 +292,16 @@ Lemma binary_search_po_6 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
   (result4: bool)
   (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
   (Test4: `(access t m1) >= v`)
@@ -341,7 +326,7 @@ Save.
 
 Lemma binary_search_po_7 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -352,19 +337,16 @@ Lemma binary_search_po_7 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
   (result4: bool)
   (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
   (Test4: `(access t m1) >= v`)
@@ -390,7 +372,7 @@ Save.
 
 Lemma binary_search_po_8 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -401,16 +383,13 @@ Lemma binary_search_po_8 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (l2: Z)
   (p2: Z)
   (u2: Z)
@@ -421,12 +400,12 @@ Lemma binary_search_po_8 :
   (Zwf `0` `2 + u2 - l2` Variant1).
 Proof.
 Intros.
-Rewrite Pre7; Tauto.
+Rewrite Pre5; Tauto.
 Save.
 
 Lemma binary_search_po_9 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -437,16 +416,13 @@ Lemma binary_search_po_9 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test6: `l1 <= u1`)
-  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   (l2: Z)
   (p2: Z)
   (u2: Z)
@@ -463,7 +439,7 @@ Save.
 
 Lemma binary_search_po_10 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -474,16 +450,13 @@ Lemma binary_search_po_10 :
   (u1: Z)
   (p1: Z)
   (l1: Z)
-  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Pre6: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> (access t p1) = v)))
-  (Pre7: Variant1 = `2 + u1 - l1`)
+  (Pre5: Variant1 = `2 + u1 - l1`)
   (result2: bool)
   (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
   (Test1: `l1 > u1`)
-  (Pre2: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> (access t p1) = v)))
   `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\ `l1 > u1`.
@@ -493,7 +466,7 @@ Save.
 
 Lemma binary_search_po_11 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -512,7 +485,7 @@ Save.
 
 Lemma binary_search_po_12 : 
   (t: (array `N + 1` Z))
-  (Pre9: (sorted_array t `1` N))
+  (Pre7: (sorted_array t `1` N))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)

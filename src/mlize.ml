@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.35 2002-04-15 13:29:19 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.36 2002-04-15 14:09:24 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -133,13 +133,13 @@ and trad_desc info d ren = match d with
 	 ren
 
   | While (b, inv, ((phi,_) as var), e) ->
-      let info = 
+      let info' = 
 	let p = 
 	  match inv with Some a -> [pre_of_assert false a] | None -> [] 
 	in
 	{ info with kappa = { info.kappa with c_pre = p }}
       in
-      Monad.wfrec var info
+      Monad.wfrec var info'
 	(fun w -> 
 	   let exit = Monad.unit info (Tconst ConstUnit) in
 	   let loop = Monad.compose e.info (trad e) (fun _ -> w) in

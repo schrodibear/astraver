@@ -18,12 +18,9 @@ Lemma p_po_2 :
   (result: bool)
   (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
-  (Pre3: `0 <= x0` /\ `x0 <= x`)
-  (x1: Z)
-  (Post1: x1 = `x0 - 1`)
-  `0 <= x1` /\ `x1 <= x` /\ (Zwf `0` x1 x0).
+  `x0 >= 0`.
 Proof.
-Simpl; Unfold Zwf; Intros; Omega.
+Simpl; Intros; Omega.
 Save.
 
 Lemma p_po_3 : 
@@ -36,12 +33,12 @@ Lemma p_po_3 :
   (result: bool)
   (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
-  (Pre3: `0 <= x0` /\ `x0 <= x`)
+  (Pre3: `x0 >= 0`)
   (x1: Z)
-  (Post5: `0 <= x1` /\ `x1 <= x` /\ (Zwf `0` x1 x0))
-  (Zwf `0` x1 Variant1).
+  (Post1: x1 = `x0 - 1`)
+  `0 <= x1` /\ `x1 <= x` /\ (Zwf `0` x1 x0).
 Proof.
-Intros. Rewrite Pre4; Intuition.
+Intros; Unfold Zwf; Intuition.
 Save.
 
 Lemma p_po_4 : 
@@ -54,11 +51,13 @@ Lemma p_po_4 :
   (result: bool)
   (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
-  (Pre3: `0 <= x0` /\ `x0 <= x`)
+  (Pre3: `x0 >= 0`)
   (x1: Z)
   (Post5: `0 <= x1` /\ `x1 <= x` /\ (Zwf `0` x1 x0))
-  `0 <= x1` /\ `x1 <= x`.
-Proof. Intuition. Save.
+  (Zwf `0` x1 Variant1).
+Proof. 
+Intros; Rewrite Pre4; Intuition.
+Save.
 
 Lemma p_po_5 : 
   (x: Z)
@@ -69,14 +68,47 @@ Lemma p_po_5 :
   (Pre4: Variant1 = x0)
   (result: bool)
   (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
-  (Test1: `x0 <= 0`)
-  (Pre2: `0 <= x0` /\ `x0 <= x`)
-  x0 = `0`.
+  (Test2: `x0 > 0`)
+  (Pre3: `x0 >= 0`)
+  (x1: Z)
+  (Post5: `0 <= x1` /\ `x1 <= x` /\ (Zwf `0` x1 x0))
+  `0 <= x1` /\ `x1 <= x`.
 Proof.
-Simpl; Intros; Omega.
+Intuition.
 Save.
 
 Lemma p_po_6 : 
+  (x: Z)
+  (Pre6: `x >= 0`)
+  (Variant1: Z)
+  (x0: Z)
+  (Pre5: `0 <= x0` /\ `x0 <= x`)
+  (Pre4: Variant1 = x0)
+  (result: bool)
+  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
+  (Test1: `x0 <= 0`)
+  `x0 >= 0`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma p_po_7 : 
+  (x: Z)
+  (Pre6: `x >= 0`)
+  (Variant1: Z)
+  (x0: Z)
+  (Pre5: `0 <= x0` /\ `x0 <= x`)
+  (Pre4: Variant1 = x0)
+  (result: bool)
+  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
+  (Test1: `x0 <= 0`)
+  (Pre2: `x0 >= 0`)
+  x0 = `0`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma p_po_8 : 
   (x: Z)
   (Pre6: `x >= 0`)
   `0 <= x` /\ `x <= x`.

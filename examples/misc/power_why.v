@@ -91,7 +91,7 @@ Save.
 
 Lemma power1_po_1 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -103,7 +103,7 @@ Save.
 
 Lemma power1_po_2 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -112,12 +112,11 @@ Lemma power1_po_2 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre4: Variant1 = n0)
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: Variant1 = n0)
   (result1: bool)
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test4: `n0 > 0`)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (result2: bool)
   (Bool2: (if result2 then (Zodd n0) else (Zeven n0)))
   (Test3: (Zodd n0))
@@ -153,7 +152,7 @@ Save.
 
 Lemma power1_po_3 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -162,12 +161,11 @@ Lemma power1_po_3 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre4: Variant1 = n0)
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: Variant1 = n0)
   (result1: bool)
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test4: `n0 > 0`)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (result2: bool)
   (Bool2: (if result2 then (Zodd n0) else (Zeven n0)))
   (Test2: (Zeven n0))
@@ -195,7 +193,7 @@ Save.
 
 Lemma power1_po_4 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -204,12 +202,11 @@ Lemma power1_po_4 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre4: Variant1 = n0)
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: Variant1 = n0)
   (result1: bool)
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test4: `n0 > 0`)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (y2: Z)
   (Post12: ((m:Z) (m = `m1 * m1` ->
                    ((n1:Z) (n1 = (div2 n0) ->
@@ -226,7 +223,7 @@ Save.
 
 Lemma power1_po_5 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -235,12 +232,11 @@ Lemma power1_po_5 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre4: Variant1 = n0)
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: Variant1 = n0)
   (result1: bool)
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test4: `n0 > 0`)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (m2: Z)
   (n1: Z)
   (y2: Z)
@@ -248,12 +244,12 @@ Lemma power1_po_5 :
            (Zwf `0` n1 n0))
   (Zwf `0` n1 Variant1).
 Proof.
-Intros; Rewrite Pre4; Tauto.
+Intros; Rewrite Pre2; Tauto.
 Save.
 
 Lemma power1_po_6 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -262,12 +258,11 @@ Lemma power1_po_6 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre4: Variant1 = n0)
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: Variant1 = n0)
   (result1: bool)
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test4: `n0 > 0`)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (m2: Z)
   (n1: Z)
   (y2: Z)
@@ -280,7 +275,7 @@ Save.
 
 Lemma power1_po_7 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -289,12 +284,11 @@ Lemma power1_po_7 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre4: Variant1 = n0)
+  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: Variant1 = n0)
   (result1: bool)
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test1: `n0 <= 0`)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`.
 Proof.
 Intuition.
@@ -302,7 +296,7 @@ Save.
 
 Lemma power1_po_8 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
@@ -317,7 +311,7 @@ Save.
 
 Lemma power1_po_9 : 
   (n: Z)
-  (Pre6: `n >= 0`)
+  (Pre4: `n >= 0`)
   (m0: Z)
   (Post1: m0 = x)
   (y0: Z)
