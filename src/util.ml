@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.ml,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
+(*i $Id: util.ml,v 1.5 2001-08-24 19:00:08 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -227,44 +226,6 @@ let decomp_boolean = function
   | _ -> 
       assert false
 
-(* v_of_constr : traduit un type CCI en un type ML *)
-(*i
-let dest_sig c = match matches (Coqlib.build_coq_sig_pattern ()) c with
-  | [_,a; _,p] -> (a,p)
-  | _     -> assert false
-
-(* TODO: faire un test plus serieux sur le type des objets Coq *)
-let rec is_pure_cci c = match kind_of_term c with
-  | IsCast (c,_) -> is_pure_cci c
-  | IsProd(_,_,c') -> is_pure_cci c'
-  | IsRel _ | IsMutInd _ | IsConst _ -> true (* heu... *)
-  | IsApp _ -> not (is_matching (Coqlib.build_coq_sig_pattern ()) c)
-  | _ -> Util.error "CCI term not acceptable in programs"
-
-let rec v_of_constr c = match kind_of_term c with
-  | IsCast (c,_) -> v_of_constr c
-  | IsProd _ ->
-      let revbl,t2 = Term.decompose_prod c in
-      let bl =
-	List.map
-	  (fun (name,t1) -> (id_from_name name, BindType (v_of_constr t1)))
-	  (List.rev revbl)
-      in
-      let vars = List.rev (List.map (fun (id,_) -> mkVar id) bl) in
-      Arrow (bl, c_of_constr (substl vars t2))
-  | IsMutInd _ | IsConst _ | IsApp _ ->
-      PureType c
-  | _ -> 
-      failwith "v_of_constr: TODO"
-
-and c_of_constr c =
-  if is_matching (Coqlib.build_coq_sig_pattern ()) c then
-    let (a,q) = dest_sig c in
-    (result_id, v_of_constr a), Effect.bottom, [], Some (anonymous q)
-  else
-    (result_id, v_of_constr c), Effect.bottom, [], None
-i*)
-
 (* [make_access env id c] Access in array id.
  *
  * Constructs [t:(array s T)](access_g s T t c ?::(lt c s)).
@@ -290,7 +251,7 @@ let make_raw_store ren env (id,id') c1 c2 =
   let size,_ = array_info ren env id in
   Tapp (Ident.store, [Tvar id'; c1; c2])
 
-(* pretty printers (for debugging purposes) *)
+(*s Pretty printers (for debugging purposes) *)
 
 open Format
 
@@ -348,7 +309,7 @@ and pp_binder fmt = function
   | id,Untyped -> 
       fprintf fmt "(%s)" (Ident.string id)
 
-(* pretty-print of cc-terms (intermediate terms) *)
+(*s Pretty-print of cc-terms (intermediate terms) *)
 
 let print_pred_binders = ref true
 

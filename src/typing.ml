@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.4 2001-08-23 20:24:35 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.5 2001-08-24 19:00:08 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -500,7 +500,7 @@ let rec states_desc ren env loc = function
       While (s_b,invopt,(var',r),s_bl), (v,ef)
       
   | Lam ([],_) ->
-      failwith "Typing.states: abs. should have almost one binder"
+      assert false
 
   | Lam (bl, e) ->
       let bl' = cic_binders env ren bl in

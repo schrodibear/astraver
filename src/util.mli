@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.mli,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
+(*i $Id: util.mli,v 1.5 2001-08-24 19:00:08 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -60,7 +59,7 @@ val decomp_kappa : type_c ->
 
 val decomp_boolean : postcondition option -> predicate * predicate
 
-(* Functions to translate array operations *)
+(*s Functions to translate array operations *)
 
 val array_info : Rename.t -> local_env -> Ident.t -> term * type_v
 
@@ -73,7 +72,7 @@ val make_raw_store :
 val make_pre_access :
   Rename.t -> local_env -> Ident.t -> term -> predicate
 
-(* pretty printers *)
+(*s Pretty printers. *)
 
 open Format
 

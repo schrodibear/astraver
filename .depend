@@ -78,9 +78,6 @@ src/mlize.cmi: src/ast.cmi src/env.cmi src/rename.cmi
 src/monad.cmi: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/rename.cmi src/types.cmi 
 src/parser.cmi: src/ast.cmi src/types.cmi 
-src/pcic.cmi: src/ast.cmi 
-src/pcicenv.cmi: src/env.cmi src/ident.cmi src/logic.cmi src/rename.cmi 
-src/ptactic.cmi: src/ast.cmi 
 src/pvs.cmi: src/vcg.cmi 
 src/red.cmi: src/ast.cmi 
 src/rename.cmi: src/ident.cmi 

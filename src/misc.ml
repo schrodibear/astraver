@@ -1,15 +1,16 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.ml,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
+(*i $Id: misc.ml,v 1.5 2001-08-24 19:00:07 filliatr Exp $ i*)
 
 open Ident
 open Logic
 open Types 
 
-(* debug *)
+(*s debug *)
 
 let debug = ref false
+
+(*s Utility functions. *)
 
 let map_succeed f = 
   let rec map_f = function 
@@ -27,32 +28,9 @@ let difference l1 l2 =
     | [] -> []
     | a::rem -> if List.mem a l2 then diff rem else a::(diff rem)
   in
-    diff l1
+  diff l1
 
-(* TODO: these functions should be moved in the code of Coq *)
-
-let reraise_with_loc loc f x =
-  try f x with e -> Stdpp.raise_with_loc loc e
-
-
-(* functions on names *)
-
-let at_id id d = Ident.create ((Ident.string id) ^ "@" ^ d)
-
-let is_at id =
-  try
-    let _ = String.index (Ident.string id) '@' in true
-  with Not_found ->
-    false
-
-let un_at id =
-  let s = Ident.string id in
-    try
-      let n = String.index s '@' in
-    	Ident.create (String.sub s 0 n),
-	String.sub s (succ n) (pred (String.length s - n))
-    with Not_found ->
-      invalid_arg "un_at"
+(*s Functions on names *)
 
 type avoid = Ident.set
 
@@ -67,9 +45,7 @@ let renaming_of_ids avoid ids =
   in
   rename avoid ids
 
-let adr_id id = Ident.create ("adr_" ^ (Ident.string id))
-
-(* hypotheses names *)
+(*s hypotheses names *)
 
 let next s r = function
   | Anonymous -> incr r; Ident.create (s ^ string_of_int !r)
@@ -197,7 +173,7 @@ let rec occur_predicate id = function
   | Pnot a -> occur_predicate id a
   | Forall (_,_,_,a) -> occur_predicate id a
   
-(* smart constructors *)
+(*s Smart constructors. *)
 
 let ttrue = Tconst (ConstBool true)
 let tfalse = Tconst (ConstBool false)
@@ -272,80 +248,3 @@ let rec print_predicate fmt = function
       fprintf fmt "(forall #%d: " (Ident.bound_id b);
       print_predicate fmt p; fprintf fmt ")"
 
-(*i
-(* functions on CIC terms *)
-
-let isevar = Evarutil.new_evar_in_sign (Global.env ())
-
-(* Substitutions of variables by others. *)
-let subst_in_constr alist =
-  let alist' = List.map (fun (id,id') -> (id, mkVar id')) alist in
-  replace_vars alist'
-
-let subst_in_ast alist ast =
-  let alist' = 
-    List.map (fun (id,id') -> (string_of_id id,string_of_id id')) alist in
-  let rec subst = function
-      Nvar(l,s) -> Nvar(l,try List.assoc s alist' with Not_found -> s)
-    | Node(l,s,args) -> Node(l,s,List.map subst args)
-    | Slam(l,so,a) -> Slam(l,so,subst a) (* TODO:enlever so de alist' ? *)
-    | x -> x
-  in
-    subst ast
-
-let subst_ast_in_ast alist ast =
-  let alist' = 
-    List.map (fun (id,a) -> (string_of_id id,a)) alist in
-  let rec subst = function
-      Nvar(l,s) as x -> (try List.assoc s alist' with Not_found -> x)
-    | Node(l,s,args) -> Node(l,s,List.map subst args)
-    | Slam(l,so,a) -> Slam(l,so,subst a) (* TODO:enlever so de alist' ? *)
-    | x -> x
-  in
-    subst ast
-
-(* subst. of variables by constr *)
-let real_subst_in_constr = replace_vars
-
-(* Coq constants *)
-
-let coq_constant d s = make_path ("Coq" :: d) (id_of_string s) CCI
-
-let bool_sp = coq_constant ["Init"; "Datatypes"] "bool"
-let coq_true = mkMutConstruct (((bool_sp,0),1), [||])
-let coq_false = mkMutConstruct (((bool_sp,0),2), [||])
-
-let constant s =
-  let id = id_of_string s in
-  Declare.global_reference CCI id
-
-let connective_and = id_of_string "prog_bool_and"
-let connective_or  = id_of_string "prog_bool_or"
-let connective_not = id_of_string "prog_bool_not"
-
-let is_connective id =
-  id = connective_and or id = connective_or or id = connective_not
-
-(* [conj i s] constructs the conjunction of two constr *)
-
-let conj i s = Term.applist (constant "and", [i; s])
-
-(* [n_mkNamedProd v [xn,tn;...;x1,t1]] constructs the type 
-   [(x1:t1)...(xn:tn)v] *)
-
-let rec n_mkNamedProd v = function
-  | [] -> v
-  | (id,ty) :: rem -> n_mkNamedProd (Term.mkNamedProd id ty v) rem
-
-(* [n_lambda v [xn,tn;...;x1,t1]] constructs the type [x1:t1]...[xn:tn]v *)
-
-let rec n_lambda v = function
-  | [] -> v
-  | (id,ty) :: rem -> n_lambda (Term.mkNamedLambda id ty v) rem
-
-(* [abstract env idl c] constructs [x1]...[xn]c where idl = [x1;...;xn] *)
-
-let abstract ids c = n_lambda c (List.rev ids)
-
-
-i*)

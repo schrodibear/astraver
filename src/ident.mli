@@ -18,6 +18,13 @@ val next_away : t -> set -> t
 
 val print : Format.formatter -> t -> unit
 
+(*s Qualified identifiers with labels. *)
+
+val at_id : t -> string -> t
+val un_at : t -> t * string
+val is_at : t -> bool
+val adr_id : t -> t
+
 (*s Bound variables. *)
 
 type bound
@@ -26,7 +33,7 @@ val bound : unit -> bound
 
 val bound_id : bound -> int
 
-(*s Some pre-defined Ident.ts. *)
+(*s Some pre-defined identifiers. *)
 
 val t_add : t
 val t_sub : t

@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.mli,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
+(*i $Id: misc.mli,v 1.5 2001-08-24 19:00:07 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -9,18 +8,10 @@ open Logic
 
 val map_succeed : ('a -> 'b) -> 'a list -> 'b list
 
-val reraise_with_loc : Loc.t -> ('a -> 'b) -> 'a -> 'b
-
 val option_app : ('a -> 'b) -> 'a option -> 'b option
 
 val list_of_some : 'a option -> 'a list
 val difference : 'a list -> 'a list -> 'a list
-
-val at_id : Ident.t -> string -> Ident.t
-val un_at : Ident.t -> Ident.t * string
-val is_at : Ident.t -> bool
-
-val adr_id : Ident.t -> Ident.t
 
 type avoid = Ident.set
 val renaming_of_ids : avoid -> Ident.t list -> (Ident.t * Ident.t) list * avoid
@@ -60,6 +51,8 @@ val mlize_type : Types.type_v -> pure_type
 val occur_term : Ident.t -> term -> bool
 val occur_predicate : Ident.t -> predicate -> bool
 
+(*s Smart constructors. *)
+
 val ttrue : term
 val tfalse : term
 val ptrue : predicate
@@ -68,34 +61,6 @@ val pif : predicate -> predicate -> predicate -> predicate
 val pand : predicate -> predicate -> predicate
 val por : predicate -> predicate -> predicate
 val pnot : predicate -> predicate
-
-
-(* CIC terms *)
-
-(*i
-val isevar : constr
-
-val subst_in_constr : (Ident.t * Ident.t) list -> constr -> constr
-val subst_in_ast : (Ident.t * Ident.t) list -> Coqast.t -> Coqast.t
-val subst_ast_in_ast : (Ident.t * Coqast.t) list -> Coqast.t -> Coqast.t
-val real_subst_in_constr : (Ident.t * constr) list -> constr -> constr
-
-val constant : string -> constr
-val coq_constant : string list -> string -> section_path
-val conj : constr -> constr -> constr
-
-val coq_true : constr
-val coq_false : constr
-
-val connective_and : Ident.t
-val connective_or  : Ident.t
-val connective_not : Ident.t
-val is_connective : Ident.t -> bool
-
-val n_mkNamedProd : constr -> (Ident.t * constr) list -> constr
-val n_lambda  : constr -> (Ident.t * constr) list -> constr
-val abstract : (Ident.t * constr) list -> constr -> constr
-i*)
 
 (*s Pretty-print *)
 

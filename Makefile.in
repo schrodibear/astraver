@@ -38,7 +38,7 @@ CMX      = $(CMO:.cmo=.cmx)
 
 PROG = bin/why
 
-all: $(PROG).byte $(PROG)
+all: $(PROG)
 
 $(PROG): $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa $^

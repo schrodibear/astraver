@@ -36,6 +36,23 @@ let rec next_away id s =
 
 let print fmt s = Format.fprintf fmt "%s" s
 
+(*s Qualified identifiers. *)
+
+let at_id id d = id ^ "@" ^ d
+
+let is_at id =
+  try let _ = String.index id '@' in true with Not_found -> false
+
+let un_at id =
+  try
+    let n = String.index id '@' in
+    String.sub id 0 n,
+    String.sub id (succ n) (pred (String.length id - n))
+  with Not_found ->
+    invalid_arg "Ident.un_at"
+
+let adr_id id = "adr_" ^ id
+
 (*s Bound variables. *)
 
 type bound = int
