@@ -217,21 +217,20 @@ Lemma rev_impl_po_6 :
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
   forall (Test1: r1 = null),
-  (exists l0:plist, (llist alloc tl0 p2 l0) /\ (llist alloc tl p0 (rev l0))).
+  (forall (l0:plist),
+   ((llist alloc tl p0 l0) -> (llist alloc tl0 p2 (rev l0)))).
 Proof.
 intuition.
 elim Pre7; clear Pre7; intuition.
-elim H; clear H; intuition.
-elim (is_list_llist alloc tl p0 Pre9); intros l0 Hl0.
+elim H0; clear H0; intuition.
+elim (is_list_llist alloc tl p0 Pre9); intros l1 Hl1.
 subst.
-exists (rev l0); intuition.
 assert (x0 = nil).
-inversion_clear H3; intuition.
-inversion_clear H. elim H3; auto.
+inversion_clear H4; intuition.
+inversion_clear H0. elim H4; auto.
 subst x0.
-generalize (H1 l0 Hl0); simpl; intro.
-rewrite <- H; auto.
-rewrite rev_involutive; auto.
+generalize (H2 l0 H); simpl; intro.
+rewrite <- H0; auto.
 Save.
 
 (* Why obligation from file "why/reverse.why", characters 216-486 *)
@@ -253,6 +252,6 @@ intros; subst.
 exists (nil (A:=pointer)).
 elim (is_list_llist alloc tl p0 Pre9); intros l Hl; exists l.
 intuition.
-rewrite (llist_function _ _ _ _ _ _ Hl H).
 rewrite <- app_nil_end; auto.
+rewrite (llist_function _ _ _ _ _ _ Hl H); auto.
 Save.

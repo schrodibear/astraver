@@ -4,7 +4,7 @@
 #include "list.h"
 
 /*@ requires is_list(p0)
-  @ ensures \exists plist l0; llist(\result, l0) && \old(llist(p0, rev(l0)))
+  @ ensures \forall plist l0; \old(llist(p0, l0)) => llist(\result, rev(l0))
   @*/
 list rev(list p0) {
   list r = p0;
