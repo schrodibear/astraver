@@ -188,11 +188,136 @@ may be consulted, to discover missing pre-conditions for instance.
 
 \section{Pointer access and modification}
 \index{valid@\texttt{\bs{}valid}}
-\index{valid\_index@\texttt{\bs{}valid\_index}}
-\index{valid\_range@\texttt{\bs{}valid\_range}}
 
+Let us consider now a small program involving a pointer, in a file
+\verb|abs.c|: 
+\begin{code}
+//@ ensures *p >= 0
+void abs1(int *p) {
+  if (*p < 0) *p = -*p;
+}
+\end{code}
+Running \caduceus{} and then Simplify results in:
+\begin{verbatim}
+> caduceus abs.c
+generating Why code for function abs1
+> make -f abs.makefile simplify
+make[1]: Entering directory `/home/demons6/marche/recherche/caduceus'
+abs.makefile:36: abs.depend: No such file or directory
+why -coq-v8 -dir coq -coq-preamble "Require Export caduceus_why. Require Export caduceus_tactics." /usr/local/lib/caduceus/why/caduceus.why why/caduceus_spec.why
+why -coq-v8 -dir coq -coq-preamble "Require Export caduceus_spec_why." -coq-tactic "intuition" /usr/local/lib/caduceus/why/caduceus.why why/caduceus_spec.why why/abs.why
+coqdep -I coq coq/*.v > abs.depend
+make[1]: Leaving directory `/home/demons6/marche/recherche/caduceus'
+make[1]: Entering directory `/home/demons6/marche/recherche/caduceus'
+time make -f abs.makefile clean do_simplify > simplify.log
+
+real    0m0.244s
+user    0m0.170s
+sys     0m0.060s
+valid obligations:       1
+invalid obligations:       1
+\end{verbatim}
+so it that case, there are two proof obligations and only one of them
+has been proved. To investigate the unporved one, we may look at file
+\verb|simplify.log|:
+\begin{verbatim}
+> cat simplify.log
+[...]
+Simplify simplify/abs_why.sx.all
+Counterexample:
+  context:
+    (AND
+      (EQ null p)
+      (EQ (ISpointer p) |@true|)
+      (EQ (ISalloc alloc) |@true|)
+    )
+
+1: Invalid.
+
+2: Valid.
+\end{verbatim}
+The counter example given contains \verb|(EQ null p)|, meaning that
+this program may not run as expected if pointer \verb|p| is
+null: indeed, a segmentation would occur in that case. If you try to
+use Coq instead of Simplify, you will face the same problem when
+trying to prove the first obligation: you will end up with
+\begin{verbatim}
+1 subgoal
+p : pointer
+alloc : alloc
+______________________________________(1/1)
+valid alloc p
+\end{verbatim}
+which is not provable.
+
+To fix this problem, one should specify a pre-condition to function
+\verb|abs|, which can be given using the \verb|\valid| predicate of
+\caduceus{} as follows:
+\begin{code}
+/*@ requires \valid(p)
+  @ ensures *p >= 0
+  @*/
+void abs2(int *p) {
+  if (*p < 0) *p = -*p;
+}
+\end{code}
+If you run \caduceus{} again on this version, you will first notice
+that the first obligation is now automatically discharge by Why, and
+Simplify will succeed to prove the second obligation. If you run Coq
+instead, then this obligation will not be proved automatically: you
+will have to make the proof by hand. Here is the goal to solve, after
+executing the \verb|intuition| tactic:
+\begin{verbatim}
+1 subgoal
+p : pointer
+alloc : alloc
+intP : memory Z
+Pre9 : valid alloc p
+Pre3 : valid alloc p
+caduceus_1 : Z
+Post3 : caduceus_1 = acc intP p
+result : bool
+Post5 : if result then caduceus_1 < 0 else caduceus_1 >= 0
+______________________________________(1/1)
+if result
+then
+ (forall result0 : Z,
+  result0 = acc intP p ->
+  (forall intP0 : memory Z,
+   intP0 = upd intP p (- result0) -> acc intP0 p >= 0) /\ valid alloc p) /\
+ valid alloc p
+else acc intP p >= 0
+\end{verbatim}
+It is indeed quite large, because it has two cases depending on the
+value of \verb|result|, which is (see \verb|Post5|) the condition of
+the \verb|if| in the C program. With Coq, the simplest thing to do
+with such a goal shape is to make two cases, with
+\begin{verbatim}
+destruct result; intuition.
+\end{verbatim}
+instead of \verb|intuition| alone. This will then result in one
+subgoal (the other case has been solved automatically):
+\begin{verbatim}
+1 subgoal
+p : pointer
+alloc : alloc
+intP : memory Z
+Pre9 : valid alloc p
+Pre3 : valid alloc p
+caduceus_1 : Z
+Post3 : caduceus_1 = acc intP p
+Post5 : caduceus_1 < 0
+result : Z
+H : result = acc intP p
+intP0 : memory Z
+H0 : intP0 = upd intP p (- result)
+______________________________________(1/1)
+acc intP0 p >= 0
+\end{verbatim}
 
 \section{Arrays}
+\index{valid\_index@\texttt{\bs{}valid\_index}}
+\index{valid\_range@\texttt{\bs{}valid\_range}}
 
 \section{Structures}
 
