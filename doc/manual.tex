@@ -754,7 +754,21 @@ $R_1$ and $R_2$. Example: \texttt{0 <= x < y}.
 \label{lexical:ml}\index{Lexical conventions!ML programs}
 
 Lexical conventions are the same as for logic (see
-Section~\ref{lexical:logic} on page~\pageref{lexical:logic}). 
+Section~\ref{lexical:logic} on page~\pageref{lexical:logic}).
+The set of keywords is now:
+\begin{center}
+{\tt\begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
+and & array & as & assert & begin \\
+bool & do & done & else & end \\
+exception & external & false & float & for \\
+forall & fun & if & in & int \\
+invariant & label & let & logic & not \\
+of & or & parameter & prop & pvs \\
+raise & raises & reads & rec & ref \\
+returns & then & true & try & unit \\
+variant & void & while & with & writes \\
+\end{tabular}}
+\end{center}
 
 \subsection{ML types}
 \label{syntax:mltypes}\index{ML type!syntax}
