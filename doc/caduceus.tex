@@ -1026,7 +1026,8 @@ annotations.
 
   \nt{loop\_annot}
     & $::=$ & \te{/*@} $[$ \te{invariant} \nt{predicate} $]$
-              $[$ \te{variant} \nt{variant} $]$ \te{*/}  \\
+              $[$ \te{loop\_assigns} \nt{assigned\_locs} $]$ \\
+           && $[$ \te{variant} \nt{variant} $]$ \te{*/}  \\
               \indextt{invariant}\indextt{variant}
   \nt{variant} 
     & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
