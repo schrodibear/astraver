@@ -27,8 +27,7 @@ Implicit Arguments On.
 Section next_prop.
 
 Variable A : Set.
-Variable M : Z.
-Variable p : (array M A).
+Variable p : (array A).
 
 (* Definition *)
  
@@ -42,13 +41,12 @@ Inductive Next [j,n:Z] : Prop :=
 
 (* Some properties of the predicate Next *)
 
-Variable N : Z.
-Variable a : (array N A).
+Variable a : (array A).
 
 Lemma next_iteration :
   (i,j,n:Z)
-         `0 < j < M`
-      -> `j <= i <= N`
+         `0 < j < (array_length p)`
+      -> `j <= i <= (array_length a)`
       -> (match a `i-j` p `0` j)
       -> (Next j n)
       -> (match a `i-n` p `0` n).
@@ -71,12 +69,12 @@ Save.
 
 Lemma next_is_maximal :
   (i,j,n,k:Z)
-        `0 < j < M`
-     -> `j <= i <= N`
+        `0 < j < (array_length p)`
+     -> `j <= i <= (array_length a)`
      -> `i-j < k < i-n`
      -> (match a `i-j` p `0` j)
      -> (Next j n)
-     -> ~(match a k p `0` M).
+     -> ~(match a k p `0` (array_length p)).
 Proof.
 Intros i j n k Hj Hi Hk Hmatch Hnext.
 Red. Intro Hmax.
@@ -88,12 +86,12 @@ Apply match_sym.
 Apply match_left_weakening with n := j.
 Ring `k-(j-(i-k))`. Ring `j-(i-k)-(j-(i-k))`. Assumption.
 Omega.
-Apply match_right_weakening with n := M.
+Apply match_right_weakening with n := (array_length p).
 Assumption.
 Omega.
 Save.
 
-Lemma next_1_0 : `1 <= M` -> (Next `1` `0`).
+Lemma next_1_0 : `1 <= (array_length p)` -> (Next `1` `0`).
 Proof.
 Intro HM.
 Apply Next_cons. 

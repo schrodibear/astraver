@@ -17,18 +17,19 @@
 external N : int
 external f : int
 
-logic found : array int -> prop
-logic m_invariant : int,array int -> prop
-logic n_invariant : int,array int -> prop
-logic i_invariant : int,int,int,int,array int -> prop
-logic j_invariant : int,int,int,int,array int -> prop
-logic termination : int,int,int,int,int,array int -> prop
+logic found : int array -> prop
+logic m_invariant : int,int array -> prop
+logic n_invariant : int,int array -> prop
+logic i_invariant : int,int,int,int,int array -> prop
+logic j_invariant : int,int,int,int,int array -> prop
+logic termination : int,int,int,int,int,int array -> prop
 
 (* Implementation part *)
 
-parameter A : array N+1 of int   (* the array *)
+parameter A : int array (* the array *)
 
 let find =
+  { array_length(A) = N+1 }
   let m = ref 1 in let n = ref N in
   while !m < !n do
     { invariant m_invariant(m,A) and n_invariant(n,A) and permut(A,A@init) 

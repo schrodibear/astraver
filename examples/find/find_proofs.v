@@ -26,7 +26,7 @@ Save.
 
 (* Lemmas to prove arrays bounds obligations. *)
 
-Lemma bound_3 : (m,n,i,r:Z)(A:(array (Zs N) Z))
+Lemma bound_3 : (m,n,i,r:Z)(A:(array Z))
   (i_invariant m n i r A) ->
   `i <= n` ->
   (Zlt #A[i] r) ->
@@ -45,7 +45,7 @@ Assumption.
 Save.
 
 
-Lemma bound_4 : (m,n,j,r:Z)(A:(array (Zs N) Z))
+Lemma bound_4 : (m,n,j,r:Z)(A:(array Z))
   (j_invariant m n j r A) ->
   `m <= j` ->
   (Zlt r #A[j]) ->
@@ -66,7 +66,7 @@ Save.
 
 (* Some subgoals of the main proof *)
 
-Lemma subgoal_1 : (m1,n1,i2,j2,i3:Z)(A,A0,A1:(array (Zs N) Z))
+Lemma subgoal_1 : (m1,n1,i2,j2,i3:Z)(A,A0,A1:(array Z))
   (m_invariant m1 A0)
           /\(n_invariant n1 A0)/\(permut A0 A)/\`1 <= m1`/\`n1 <= N` ->
   `m1 < n1` ->
@@ -110,7 +110,7 @@ Case (Z_le_lt_eq_dec i3 f H6).
 Save.
 
 
-Lemma subgoal_2 : (m1,n1,i2,j2,i3,j3:Z)(A,A0,A1:(array (Zs N) Z))
+Lemma subgoal_2 : (m1,n1,i2,j2,i3,j3:Z)(A,A0,A1:(array Z))
   (m_invariant m1 A0)
     /\(n_invariant n1 A0)
     /\(permut A0 A)
@@ -161,7 +161,8 @@ Elim HH_9; Auto. Abstract Omega.
 Save.
 
 
-Lemma subgoal_3 : (m0,n0,i0,j0,i1,j1:Z)(A,A0,A1,A2:(array (Zs N) Z))
+Lemma subgoal_3 : (m0,n0,i0,j0,i1,j1:Z)(A,A0,A1,A2:(array Z))
+  `(array_length A)=N+1` -> 
   (m_invariant m0 A0)
            /\(n_invariant n0 A0)/\(permut A0 A)/\`1 <= m0`/\`n0 <= N`
  -> `m0 < n0`
@@ -198,7 +199,7 @@ Lemma subgoal_3 : (m0,n0,i0,j0,i1,j1:Z)(A,A0,A1,A2:(array (Zs N) Z))
                /\(termination (Zs i1) (Zpred j1) m0 n0 (#A0[f]) A2)
                  /\(permut A2 A).
 Proof.
-Intros m0 n0 i0 j0 i1 j1 A A0 A1 A2 Inv_mn Test7 Pre12 Inv_ij Test4 Inv_i 
+Intros m0 n0 i0 j0 i1 j1 A A0 A1 A2 HN Inv_mn Test7 Pre12 Inv_ij Test4 Inv_i 
   Inv_j Pre10 Test3 Post7 Pre8 Pre7.
 Split.
 (* [Zwf] *)
@@ -208,6 +209,7 @@ Split.
 Split.
 (* [i_invariant] *)
   Apply Lemma_8_10 with j:=j1 A':=A1 ; Try Assumption.
+  SameLength A2 A1. Intuition; SameLength A1 A. Omega.
   Decompose [and] Inv_i. Elim H1. Abstract Omega.
   Abstract Omega. Abstract Omega.  
   Decompose [and] Inv_i. Assumption.
@@ -215,6 +217,7 @@ Split.
 Split.
 (* [j_invariant] *)
   Apply Lemma_9_11 with i:=i1 A':=A1 ; Try Assumption.
+  SameLength A2 A1. Intuition; SameLength A1 A. Omega.
   Decompose [and] Inv_j. Elim H1. Abstract Omega. 
   Decompose [and] Inv_i. Elim H1. Abstract Omega. 
   Decompose [and] Inv_mn. Assumption.
@@ -223,12 +226,14 @@ Split.
 Split.
 (* [m_invariant] *)
   Apply Lemma_12' with i:=i1 j:=j1 A:=A1.
+  Intuition; SameLength A1 A; Omega.
   Decompose [and] Inv_i. Elim H1. Abstract Omega.
   Auto with datatypes.
   Decompose [and] Inv_ij. Assumption.
 Split.
 (* [n_invariant] *)
   Apply Lemma_13' with i:=i1 j:=j1 A:=A1.
+  Intuition; SameLength A1 A. Omega.
   Decompose [and] Inv_i. Elim H1. Abstract Omega.
   Decompose [and] Inv_j. Elim H1. Abstract Omega.
   Auto with datatypes.
@@ -251,7 +256,7 @@ Split.
 Save.
 
 
-Lemma subgoal_5 : (m1,n1,i2,j2:Z)(A,A0,A1:(array (Zs N) Z))
+Lemma subgoal_5 : (m1,n1,i2,j2:Z)(A,A0,A1:(array Z))
   (m_invariant m1 A0)
     /\(n_invariant n1 A0)
     /\(permut A0 A)
@@ -283,7 +288,7 @@ Abstract Omega.
 Save.
 
 
-Lemma subgoal_6 : (m1,n1,i2,j2:Z)(A,A0,A1:(array (Zs N) Z))
+Lemma subgoal_6 : (m1,n1,i2,j2:Z)(A,A0,A1:(array Z))
   (m_invariant m1 A0)
     /\(n_invariant n1 A0)
     /\(permut A0 A)
@@ -315,7 +320,7 @@ Abstract Omega.
 Save.
 
 
-Lemma subgoal_7 : (m1,n1,i2,j2:Z)(A,A0,A1:(array (Zs N) Z))
+Lemma subgoal_7 : (m1,n1,i2,j2:Z)(A,A0,A1:(array Z))
   (m_invariant m1 A0)
     /\(n_invariant n1 A0)/\(permut A0 A)/\`1 <= m1`/\`n1 <= N` ->
   `m1 < n1` ->

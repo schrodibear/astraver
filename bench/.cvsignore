@@ -13,4 +13,4 @@ batch.el
 *.bin
 a.*
 ctest.c
-*.hv
+*.rv

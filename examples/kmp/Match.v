@@ -7,7 +7,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-Require Export Arrays.
+Require Export WhyArrays.
 
 Implicit Arguments On.
 
@@ -17,11 +17,11 @@ Implicit Arguments On.
  * are equal.
  *)
 
-Inductive match [ A:Set; N1:Z; t1:(array N1 A); i1:Z;
-                         N2:Z; t2:(array N2 A); i2:Z; n:Z ] : Prop :=
+Inductive match [ A:Set; t1:(array A); i1:Z;
+                         t2:(array A); i2:Z; n:Z ] : Prop :=
   match_cons :
-     `0 <= i1 <= N1-n`
-  -> `0 <= i2 <= N2-n`
+     `0 <= i1 <= (array_length t1)-n`
+  -> `0 <= i2 <= (array_length t2)-n`
   -> ((i:Z) `0 <= i < n` -> #t1[`i1+i`] = #t2[`i2+i`])
   -> (match t1 i1 t2 i2 n).
 
@@ -33,14 +33,12 @@ Require Omega.
 Section match_lemmas.
 
 Variable A : Set.
-Variable N1 : Z.
-Variable t1 : (array N1 A).
-Variable N2 : Z.
-Variable t2 : (array N2 A).
+Variable t1 : (array A).
+Variable t2 : (array A).
 
 Lemma match_empty :
-  (i1,i2:Z)`0 <= i1 <= N1`
-      	  -> `0 <= i2 <= N2`
+  (i1,i2:Z)`0 <= i1 <= (array_length t1)`
+      	  -> `0 <= i2 <= (array_length t2)`
 	  -> (match t1 i1 t2 i2 `0`).
 Proof.
 Intros i1 i2 Hi1 Hi2.
@@ -50,8 +48,8 @@ Save.
 
 Lemma match_right_extension :
   (i1,i2,n:Z)(match t1 i1 t2 i2 n)
-      	  -> `i1 <= N1-n-1`
-	  -> `i2 <= N2-n-1`
+      	  -> `i1 <= (array_length t1)-n-1`
+	  -> `i2 <= (array_length t2)-n-1`
           -> #t1[`i1+n`]=#t2[`i2+n`]
 	  -> (match t1 i1 t2 i2 `n+1`).
 Proof.
@@ -132,8 +130,7 @@ Intros i Hi. Symmetry.
 Apply H1; Omega.
 Save.
 
-Variable N3 : Z.
-Variable t3 : (array N3 A).
+Variable t3 : (array A).
 
 Lemma match_trans :
   (i1,i2,i3,n:Z)

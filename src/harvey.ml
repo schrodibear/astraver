@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.1 2002-12-05 16:25:11 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.2 2002-12-06 10:11:19 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -27,14 +27,32 @@ open Format
 
 let oblig = Queue.create ()
 
-let vars = Hashtbl.create 97
-
 let reset () = Queue.clear oblig
 
 let push_obligations = List.iter (fun o -> Queue.add o oblig)
 
 let uncapitalize fmt id = 
   fprintf fmt "%s" (String.uncapitalize (Ident.string id))
+
+let prefix id =
+  if id == t_lt then "arith_less"
+  else if id == t_le then "arith_leq"
+  else if id == t_gt then "arith_gr"
+  else if id == t_ge then "arith_greq"
+  (* int cmp *)
+  else if id == t_lt_int then "arith_less"
+  else if id == t_le_int then "arith_leq"
+  else if id == t_gt_int then "arith_gr"
+  else if id == t_ge_int then "arith_greq"
+  (* int ops *)
+  else if id == t_add_int then "arith_add"
+  else if id == t_sub_int then "arith_minus"
+  else if id == t_mul_int then "arith_times"
+  else if id == t_div_int then "arith_div"
+  else if id == t_mod_int then "arith_mod"
+  else if id == t_neg_int then "arith_opp"
+  (* float ops *)
+  else assert false
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -49,9 +67,14 @@ let rec print_term fmt = function
       Report.raise_unlocated (AnyMessage "haRVey does not support floats")
   | Tderef _ -> 
       assert false
+  | Tapp (id, tl) when is_relation id || is_arith id ->
+      fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, tl) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	uncapitalize id (print_list space print_term) tl
+
+and print_terms fmt tl = 
+  print_list space print_term fmt tl
 
 let rec print_predicate fmt = function
   | Pvar id -> 
@@ -60,9 +83,10 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->
       fprintf fmt "@[(not (= %a@ %a))@]" print_term a print_term b
+  | Papp (id, tl) when is_relation id || is_arith id ->
+      fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Papp (id, tl) -> 
-      fprintf fmt "@[(%a@ %a)@]" 
-	uncapitalize id (print_list space print_term) tl
+      fprintf fmt "@[(%a@ %a)@]" uncapitalize id print_terms tl
   | Ptrue ->
       fprintf fmt "true"
   | Pfalse ->
@@ -95,12 +119,11 @@ let rec is_first_order = function
 
 let rec filter_context = function
   | [] -> []
-  | Svar (id, _) :: ctx -> Hashtbl.add vars id id; filter_context ctx
+  | Svar (id, _) :: ctx -> filter_context ctx
   | Spred (_, p) :: ctx when is_first_order p -> p :: filter_context ctx
   | Spred _ :: ctx -> filter_context ctx
 
 let output_sequent fmt (ctx, c) = 
-  Hashtbl.clear vars;
   match filter_context ctx with
     | [] -> 
 	fprintf fmt "@[%a@]" print_predicate c
@@ -112,7 +135,7 @@ let output_sequent fmt (ctx, c) =
 	  (print_list space print_predicate) ctx print_predicate c
 
 let output_obligation f (o, s) = 
-  let fname = f ^ "_" ^ o ^ ".hv" in
+  let fname = f ^ "_" ^ o ^ ".rv" in
   let cout = open_out fname in
   let fmt = formatter_of_out_channel cout in
   output_sequent fmt s;

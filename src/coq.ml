@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.78 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.79 2002-12-06 10:11:19 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -46,7 +46,7 @@ let prefix_id id =
   (* bool cmp *)
   else if id == t_eq_bool then "B_eq_bool"
   else if id == t_neq_bool then "B_noteq_bool"
-  (* bool cmp *)
+  (* unit cmp *)
   else if id == t_eq_unit then "U_eq_bool"
   else if id == t_neq_unit then "U_noteq_bool"
   (* int ops *)
