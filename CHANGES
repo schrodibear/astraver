@@ -1,7 +1,8 @@
 
-version 0.7, 
+version 0.7, October 2nd, 2002
 ==============================
-
+  o Why library compatible with Coq 7.3 (released version) and with Coq
+    development version (determined at configuration)
   o code ported to ocaml 3.06  
   o examples: quicksort (2 versions) 
   o more obligations automatically discharged 
