@@ -10,6 +10,7 @@
 \newcommand{\coq}{\textsf{Coq}\index{Coq@\textsf{Coq}}}
 \newcommand{\harvey}{\textsf{haRVey}\index{haRVey@\textsf{haRVey}}}
 \newcommand{\simplify}{\textsf{Simplify}\index{Simplify@\textsf{Simplify}}}
+\newcommand{\mizar}{\textsf{Mizar}\index{Mizar@\textsf{Mizar}}}
 \newcommand{\hollight}{\textsf{HOL Light}\index{HOL Light@\textsf{HOL Light}}}
 \newcommand{\krakatoa}{\textsf{Krakatoa}\index{Krakatoa@\textsf{Krakatoa}}}
 \newcommand{\java}{\textsc{Java}\index{Java@\textsf{Java}}}
@@ -113,7 +114,7 @@ Similarly, invoking \why\ as
      why --harvey foo.mlw
 \end{verbatim}
 (re)generates a \pvs\ theory \texttt{foo\_why.pvs}, an input file
-\texttt{foo\_why.ml} for \hollight, an input file \texttt{foo\_why.ax}
+\texttt{foo\_why.ml} for \hollight, an input file \texttt{foo\_why.sx}
 for \simplify\ or a bunch of files
 \texttt{foo\_}\textit{xxx}\texttt{.hv} to be 
 produced by \harvey.
@@ -608,7 +609,9 @@ are added.
 \end{description}
 
 
-\section{Caml code generation}
+\section{Tools}
+
+\subsection{Caml code generation}
 \label{ocamlcode}\index{Caml code generation}
 In order to run your \why\ ML code, true \caml\ code can be
 produced with option \texttt{--ocaml}: 
@@ -649,6 +652,17 @@ of the functor too, with command line option \texttt{--ocaml-ext}.
 Note that \caml\ code can also be generated from C input files, giving
 an ML translation of the C code. (This is not of great use, though,
 since the C input code is already executable.)
+
+\subsection{Why to HTML converter}
+A tool to convert \why\ input files to HTML is provided. Its usage is
+immediate:
+\begin{verbatim}
+     why2html [-t title] files...
+\end{verbatim}
+Each \why\ input file given on the command line, say \textit{foo.mlw},
+is translated into a HTML file \textit{foo.mlw.html}. A title for the
+HTML page can be specified using command line option \texttt{-t};
+otherwise the original file name is used.
 
 
 \section{Installation}
