@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.42 2002-06-24 11:50:57 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.43 2002-06-26 15:24:26 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -348,7 +348,7 @@ let reprint_element fmt = function
 let oblig_regexp = 
   Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
 let valid_regexp = 
-  Str.regexp "Definition[ ]+\\(.*\\)[ ]*:=[ ]*(\\* validation \\*)"
+  Str.regexp "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*"
 let param_regexp = 
   Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
 
