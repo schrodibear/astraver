@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.19 2002-09-18 06:27:31 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.20 2002-10-11 11:09:20 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -17,6 +17,8 @@ val trad_type_v : Rename.t -> local_env -> type_v -> cc_type
 val trad_type_c : Rename.t -> local_env -> type_c -> cc_type
 val trad_imp_type  : Rename.t -> local_env -> type_v -> cc_type
 val trad_type_in_env : Rename.t -> local_env -> Ident.t -> cc_type
+
+val exn_arg_type : Ident.t -> cc_type
 
 (*s Basic monadic operators. They operate over values of type [interp] i.e.
     functions building a [cc_term] given a renaming structure. *)
@@ -45,6 +47,10 @@ val apply   :
 (*s Monadic operator to raise exceptions *)
 
 val exn : typing_info -> Ident.t -> term option -> interp
+
+val handle : 
+  typing_info -> interp -> typing_info -> 
+  (exn_pattern * (Ident.t -> interp)) list -> interp
 
 (*s Other monadic operators. *)
 

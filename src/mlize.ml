@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.57 2002-10-01 14:45:59 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.58 2002-10-11 11:09:20 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -170,8 +170,20 @@ and trad_desc info d ren = match d with
 	(fun v -> Monad.exn info id (Some (Tvar v))) 
 	ren
 
-  | Try _ ->
-      assert false
+  | Try (e, hl) ->
+      let handler ((x,a) as p, h) =
+	let hi = 
+	  Monad.compose h.info (trad h) info 
+	    (fun v -> Monad.unit info (Value (Tvar v)))
+	in
+	p, (fun res ren -> match a with
+	      | None -> 
+		  hi ren
+	      | Some a ->
+		  let ta = exn_arg_type x in
+		  CC_letin (false, [a, CC_var_binder ta], CC_var res, hi ren))
+      in
+      Monad.handle e.info (trad e) info (List.map handler hl) ren
 
 and trad_binders ren env = function
   | [] -> 

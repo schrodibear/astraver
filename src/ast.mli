@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.45 2002-10-01 14:45:59 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.46 2002-10-11 11:09:20 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -13,6 +13,8 @@ type variable = Ident.t
 type label = string
 
 type variant = term * pure_type * variable
+
+type exn_pattern = Ptree.exn_pattern
 
 (* ['a] is the type of information associated to the nodes. *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.54 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.55 2002-10-11 11:09:20 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -249,16 +249,11 @@ let exn_pattern dep x res xs =
   in
   make xs
 
-(***
-  match res with 
-  | None -> [PPvariable (Ident.anonymous, TTpure PTunit)]
-  | Some (v,t) -> [PPvariable (v, TTpure t)]
-***)
-
 (* pattern for a value: (Val (Val ... (Val v))) *)
 let val_pattern dep res xs =
   let t = if dep then [PPcons (exist, res)] else res in
-  List.hd (List.fold_right (fun x cc -> [PPcons (Ident.exn_qval, cc)]) xs t)
+  let id = if dep then exn_qval else exn_val in
+  List.hd (List.fold_right (fun x cc -> [PPcons (id, cc)]) xs t)
 
 (*s [compose k1 e1 e2 ren env] constructs the term
    
@@ -287,7 +282,11 @@ let decomp x b v =
   | [] -> var v
   | (id,_) :: _ -> CC_app (var (decomp (List.length x)), var id)
 
-let gen_compose isapp info1 e1 info2 e2 ren =
+(* [isapp] signals an application.
+   [handler x res : interp] is the handler for exception [x] with value [res].
+*)
+
+let gen_compose isapp handler info1 e1 info2 e2 ren =
   let env = info1.env in
   let k1 = info1.kappa in
   let (res1,v1),ef1,p1,q1 = decomp_kappa k1 in
@@ -334,10 +333,8 @@ let gen_compose isapp info1 e1 info2 e2 ren =
 	PPvariable (post_name a.a_name, CC_pred_binder a.a_value) 
       in
       let exn_branch x =
-	let xt = find_exception x in
-	let r = Exn (x, option_app (fun _ -> Tvar res1) xt) in
 	let px = 
-	  (match xt with 
+	  (match find_exception x with 
 	     | Some pt1 -> PPvariable (res1, CC_var_binder (TTpure pt1))
 	     | None -> PPvariable (anonymous, CC_var_binder (TTpure PTunit))) 
 	  ::
@@ -345,7 +342,7 @@ let gen_compose isapp info1 e1 info2 e2 ren =
 	     | Some q1 -> let a = post_exn x q1 in [pat_post a]
 	     | None -> [])
 	in
-	exn_pattern dep x px x1, unit info2 r ren'
+	exn_pattern dep x px x1, handler x res1 ren'
       in
       let pres1 = 
 	(PPvariable (res1, CC_var_binder tv1)) :: 
@@ -358,9 +355,30 @@ let gen_compose isapp info1 e1 info2 e2 ren =
   let cc = CC_letin (dep, bl, cc1, cc2) in
   let_many_pre pre1 cc
 
-let compose = gen_compose false
-let apply = gen_compose true
+(* [compose], [apply] and [handle] are instances of [gen_compose].
+   [compose] and [apply] use the default handler [reraise]. *)
 
+let reraise info x res =
+  let xt = find_exception x in
+  let r = Exn (x, option_app (fun _ -> Tvar res) xt) in
+  unit info r
+
+let compose info1 e1 info2 e2 = 
+  gen_compose false (reraise info2) info1 e1 info2 e2
+
+let apply info1 e1 info2 e2 = 
+  gen_compose true (reraise info2) info1 e1 info2 e2
+
+let handle info1 e1 info hl = 
+  let handler x res = 
+    let rec lookup = function
+      | [] -> reraise info x res
+      | ((y,_),h) :: _ when x = y -> h res
+      | _ :: hl -> lookup hl
+    in
+    lookup hl
+  in
+  gen_compose false handler info1 e1 info (fun v -> unit info (Value (Tvar v)))
 
 (*s [exn] is the operator corresponding to [raise]. *)
 
