@@ -47,8 +47,7 @@ VO7= lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo  lib/coq-v7/WhyInt.vo \
      lib/coq-v7/WhyTuples.vo  lib/coq-v7/WhyPermut.vo \
      lib/coq-v7/WhySorted.vo  lib/coq-v7/Why.vo     lib/coq-v7/WhyFloat.vo \
      lib/coq-v7/WhyExn.vo lib/coq-v7/WhyCoqCompat.vo \
-     lib/coq-v7/WhyLemmas.vo  lib/coq-v7/WhyTactics.vo lib/coq-v7/WhyCM.vo \
-     lib/coq-v7/caduceus_why.vo
+     lib/coq-v7/WhyLemmas.vo  lib/coq-v7/WhyTactics.vo lib/coq-v7/WhyCM.vo 
 V7FILES=$(VO7:.vo=.v)
 
 VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
@@ -56,7 +55,7 @@ VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo     lib/coq/WhyFloat.vo \
      lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo \
      lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo \
-     lib/coq/caduceus_why.vo
+     lib/coq/caduceus_why.vo     lib/coq/caduceus_tactics.vo
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs
@@ -220,14 +219,14 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 
-install-lib:
+install-lib: 
 	mkdir -p $(LIBDIR)/caduceus/why
 	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
 	mkdir -p $(LIBDIR)/caduceus/coq
 	if test "@COQVER@" == "v7"; then \
-	  cp -f lib/coq-v7/caduceus_why.v $(LIBDIR)/caduceus/coq; \
+	  cp -f lib/coq-v7/caduceus_why.v lib/coq-v7/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
 	else \
-	  cp -f lib/coq/caduceus_why.v $(LIBDIR)/caduceus/coq; \
+	  cp -f lib/coq/caduceus_why.v lib/coq/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
 	fi
 
 install-man:

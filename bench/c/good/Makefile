@@ -1,11 +1,11 @@
 
 CADUCEUS=../../../bin/caduceus.opt 
-CADUCEUSLIB=../../../lib/
+CADUCEUSLIB=$(shell pwd)/../../../lib
 
-all: coq/struct_why.vo coq/pointer_why.vo
+all:
+	echo $(CADUCEUSLIB)
 
 purse: why/purse.why coq/caduceus_spec_why.v coq/purse_why.vo
-
 
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 

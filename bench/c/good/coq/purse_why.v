@@ -5,8 +5,103 @@ Require Export caduceus_spec_why.
 (* Add LoadPath "../../../../lib/coq". *)
 Load caduceus_tactics.
 
-(* Why obligation from file "why/purse.why", characters 160-178 *)
-Lemma credit_po_1 : 
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+subst; caduceus.
+unfold assigns; intuition.
+assert (p0<>p).
+apply unchanged_pointer_elim; assumption.
+subst balance0; caduceus.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst result1.
+rewrite H8; intuition.
+subst balance0; caduceus.
+unfold assigns; intuition.
+assert (p<>p2).
+apply unchanged_pointer_elim.
+apply unchanged_union_elim1 with (pointer_loc p1).
+assumption.
+rewrite H8; intuition.
+subst balance0.
+assert (p<>p1).
+apply unchanged_pointer_elim.
+apply unchanged_union_elim2 with (pointer_loc p2).
+assumption.
+caduceus.
+Save.
+
+Proof.
+intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+rewrite H9; intuition.
+apply unchanged_pointer_intro; auto.
+Admitted.
+
+Proof.
+unfold purse_inv; intuition.
+rewrite H16; intuition.
+Admitted.
+
+Proof.
+unfold purse_inv; intuition.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
+
+Proof.
+intuition.
+Admitted.
+
+Proof.
+intuition.
+subst caduceus3 aux_1.
+rewrite H25.
+rewrite H23; intuition.
+rewrite H21.
+rewrite H17; intuition.
+rewrite H15.
+rewrite H11; intuition.
+rewrite H10.
+Admitted.
+
+Proof.
+unfold purse_inv; intuition.
+Save.
+
+Proof.
+unfold purse_inv; intuition.
+subst; caduceus.
+subst; caduceus.
+unfold assigns; intuition.
+assert (p0<>p).
+apply unchanged_pointer_elim; auto.
+subst; caduceus.
+Save.
+
+(* Why obligation from file "why/purse.why", characters 165-183 *)
+Lemma credit_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
   forall (alloc: alloc),
@@ -14,11 +109,11 @@ Lemma credit_po_1 :
   forall (Pre6: (purse_inv alloc balance p) /\ s >= 0),
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 204-228 *)
-Lemma credit_po_2 : 
+(* Why obligation from file "why/purse.why", characters 209-233 *)
+Lemma credit_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
   forall (alloc: alloc),
@@ -34,17 +129,11 @@ Lemma credit_po_2 :
     (assigns alloc balance balance0 (pointer_loc p)))) /\
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
-unfold assigns; intuition.
-assert (p0<>p).
-apply unchanged_pointer_elim; assumption.
-subst balance0; caduceus.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 578-601 *)
-Lemma test1_po_1 : 
+(* Why obligation from file "why/purse.why", characters 588-611 *)
+Lemma test1_impl_po_1 : 
   forall (p1: pointer),
   forall (p2: pointer),
   forall (alloc: alloc),
@@ -53,11 +142,11 @@ Lemma test1_po_1 :
                  (purse_inv alloc balance p2)) /\ ~(p1 = p2)),
   (valid alloc p1).
 Proof.
-unfold purse_inv; intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 614-641 *)
-Lemma test1_po_2 : 
+(* Why obligation from file "why/purse.why", characters 624-651 *)
+Lemma test1_impl_po_2 : 
   forall (p1: pointer),
   forall (p2: pointer),
   forall (alloc: alloc),
@@ -69,12 +158,11 @@ Lemma test1_po_2 :
   forall (Post2: balance0 = (upd balance p1 0)),
   (purse_inv alloc balance0 p2) /\ 100 >= 0.
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 606-666 *)
-Lemma test1_po_3 : 
+(* Why obligation from file "why/purse.why", characters 616-676 *)
+Lemma test1_impl_po_3 : 
   forall (p1: pointer),
   forall (p2: pointer),
   forall (alloc: alloc),
@@ -96,26 +184,11 @@ Lemma test1_po_3 :
   (assigns alloc balance balance1
    (union_loc (pointer_loc p2) (pointer_loc p1))).
 Proof.
-unfold purse_inv; intuition.
-subst result1.
-rewrite H8; intuition.
-subst balance0; caduceus.
-unfold assigns; intuition.
-assert (p<>p2).
-apply unchanged_pointer_elim.
-apply unchanged_union_elim1 with (pointer_loc p1).
-assumption.
-rewrite H8; intuition.
-subst balance0.
-assert (p<>p1).
-apply unchanged_pointer_elim.
-apply unchanged_union_elim2 with (pointer_loc p2).
-assumption.
-caduceus.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 960-987 *)
-Lemma test2_po_1 : 
+(* Why obligation from file "why/purse.why", characters 975-1002 *)
+Lemma test2_impl_po_1 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -124,11 +197,11 @@ Lemma test2_po_1 :
   forall (Post5: (fresh alloc p2) /\ (purse_inv alloc balance p2)),
   (purse_inv alloc balance p1) /\ 100 >= 0.
 Proof.
-intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1003-1030 *)
-Lemma test2_po_2 : 
+(* Why obligation from file "why/purse.why", characters 1018-1045 *)
+Lemma test2_impl_po_2 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -142,13 +215,11 @@ Lemma test2_po_2 :
                  (assigns alloc balance balance0 (pointer_loc p1))),
   (purse_inv alloc balance0 p2) /\ 200 >= 0.
 Proof.
-unfold purse_inv; intuition.
-rewrite H9; intuition.
-apply unchanged_pointer_intro; auto.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/purse.why", characters 1048-1076 *)
-Lemma test2_po_3 : 
+(* Why obligation from file "why/purse.why", characters 1063-1091 *)
+Lemma test2_impl_po_3 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -167,12 +238,11 @@ Lemma test2_po_3 :
                   (assigns alloc balance0 balance1 (pointer_loc p2))),
   (purse_inv alloc balance1 p1) /\ 0 <= 50 /\ 50 <= (acc balance1 p1).
 Proof.
-unfold purse_inv; intuition.
-rewrite H16; intuition.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/purse.why", characters 1096-1125 *)
-Lemma test2_po_4 : 
+(* Why obligation from file "why/purse.why", characters 1111-1140 *)
+Lemma test2_impl_po_4 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -197,11 +267,11 @@ Lemma test2_po_4 :
                   (assigns alloc balance1 balance2 (pointer_loc p1))),
   (purse_inv alloc balance2 p2) /\ 0 <= 100 /\ 100 <= (acc balance2 p2).
 Proof.
-unfold purse_inv; intuition.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/purse.why", characters 1150-1169 *)
-Lemma test2_po_5 : 
+(* Why obligation from file "why/purse.why", characters 1165-1184 *)
+Lemma test2_impl_po_5 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -232,11 +302,11 @@ Lemma test2_po_5 :
                   (assigns alloc balance2 balance3 (pointer_loc p2))),
   (valid alloc p1).
 Proof.
-intuition.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/purse.why", characters 1201-1220 *)
-Lemma test2_po_6 : 
+(* Why obligation from file "why/purse.why", characters 1216-1235 *)
+Lemma test2_impl_po_6 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -266,15 +336,15 @@ Lemma test2_po_6 :
                   ((acc balance2 p2) - 100)) /\
                   (assigns alloc balance2 balance3 (pointer_loc p2))),
   forall (Pre14: (valid alloc p1)),
-  forall (caduceus_3: Z),
-  forall (Post20: caduceus_3 = (acc balance3 p1)),
+  forall (caduceus_1: Z),
+  forall (Post20: caduceus_1 = (acc balance3 p1)),
   (valid alloc p2).
 Proof.
-intuition.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/purse.why", characters 1179-1221 *)
-Lemma test2_po_7 : 
+(* Why obligation from file "why/purse.why", characters 1194-1236 *)
+Lemma test2_impl_po_7 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (p1: pointer),
@@ -304,26 +374,18 @@ Lemma test2_po_7 :
                   ((acc balance2 p2) - 100)) /\
                   (assigns alloc balance2 balance3 (pointer_loc p2))),
   forall (Pre14: (valid alloc p1)),
-  forall (caduceus_3: Z),
-  forall (Post20: caduceus_3 = (acc balance3 p1)),
+  forall (caduceus_1: Z),
+  forall (Post20: caduceus_1 = (acc balance3 p1)),
   forall (Pre13: (valid alloc p2)),
   forall (aux_1: Z),
   forall (Post23: aux_1 = (acc balance3 p2)),
-  (caduceus_3 + aux_1) = 150.
+  (caduceus_1 + aux_1) = 150.
 Proof.
-intuition.
-subst caduceus3 aux_1.
-rewrite H25.
-rewrite H23; intuition.
-rewrite H21.
-rewrite H17; intuition.
-rewrite H15.
-rewrite H11; intuition.
-rewrite H10.
-Admitted.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/purse.why", characters 1481-1499 *)
-Lemma withdraw_po_1 : 
+(* Why obligation from file "why/purse.why", characters 1501-1519 *)
+Lemma withdraw_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
   forall (alloc: alloc),
@@ -331,32 +393,26 @@ Lemma withdraw_po_1 :
   forall (Pre6: (purse_inv alloc balance p) /\ 0 <= s /\ s <= (acc balance p)),
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1525-1549 *)
-Lemma withdraw_po_2 : 
+(* Why obligation from file "why/purse.why", characters 1545-1569 *)
+Lemma withdraw_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
   forall (Pre6: (purse_inv alloc balance p) /\ 0 <= s /\ s <= (acc balance p)),
   forall (Pre3: (valid alloc p)),
-  forall (caduceus_2: Z),
-  forall (Post2: caduceus_2 = (acc balance p)),
+  forall (caduceus_1: Z),
+  forall (Post2: caduceus_1 = (acc balance p)),
   (forall (balance0:((memory) Z)),
-   (balance0 = (upd balance p (caduceus_2 - s)) ->
+   (balance0 = (upd balance p (caduceus_1 - s)) ->
     ((purse_inv alloc balance0 p) /\ (acc balance0 p) =
     ((acc balance p) - s)) /\
     (assigns alloc balance balance0 (pointer_loc p)))) /\
   (valid alloc p).
 Proof.
-unfold purse_inv; intuition.
-subst; caduceus.
-subst; caduceus.
-unfold assigns; intuition.
-assert (p0<>p).
-apply unchanged_pointer_elim; auto.
-subst; caduceus.
+(* FILL PROOF HERE *)
 Save.
 
