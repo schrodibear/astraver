@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.49 2002-07-11 09:22:27 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.50 2002-07-18 14:45:06 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -173,17 +173,16 @@ let rec print_cc_type fmt = function
 ***i*)
   | TTarrow (b, t) -> 
       fprintf fmt "(%a)@,%a" print_binder b print_cc_type t
-  | TTtuple ([_,t], None) -> 
+  | TTtuple ([_,CC_var_binder t], None) -> 
       print_cc_type fmt t
   | TTtuple (bl, None) ->
       fprintf fmt "(@[tuple_%d@ %a@])" (List.length bl) 
-	(print_list space (fun fmt (_,t) -> print_cc_type fmt t)) bl
+	(print_list space print_binder_type) bl
   | TTtuple (bl, Some q) -> 
       fprintf fmt "(@[sig_%d@ %a@ %a(%a)@])" (List.length bl)
-	(print_list space (fun fmt (_,t) -> print_cc_type fmt t)) bl 
+	(print_list space print_binder_type) bl 
 	(print_list nothing 
-	     (fun fmt (id,t) -> 
-		fprintf fmt "[%a:%a]@," Ident.print id print_cc_type t)) bl
+	   (fun fmt b -> fprintf fmt "[%a]@," print_binder b)) bl
 	print_cc_type q
   | TTpred p ->
       print_predicate fmt p
@@ -196,6 +195,11 @@ and print_binder fmt (id,b) =
     | CC_pred_binder p -> fprintf fmt ": %a" print_predicate p
     | CC_var_binder t -> fprintf fmt ": %a" print_cc_type t
     | CC_untyped_binder -> ()
+
+and print_binder_type fmt = function
+  | _, CC_var_binder t -> print_cc_type fmt t
+  | _ -> assert false
+
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
@@ -288,7 +292,9 @@ let reprint_obligation fmt (id,s) =
 
 let print_obligation fmt o = 
   reprint_obligation fmt o;
-  fprintf fmt "Proof.@\n(* FILL PROOF HERE *)@\nSave.@\n"
+  fprintf fmt "Proof.@\n";
+  option_iter (fun t -> fprintf fmt "%s.@\n" t) coq_tactic;
+  fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
 
 let reprint_validation fmt id v =
   fprintf fmt "@[Definition %s := (* validation *)@\n  %a.@]@\n" 

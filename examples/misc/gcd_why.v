@@ -192,15 +192,15 @@ Definition gcd1 := (* validation *)
         let (x0, y0, result1, Post5) =
           (well_founded_induction Z (Zwf ZERO)
             (gcd1_po_1 a b Pre4 result Post1 result0 Post2) [Variant1: Z]
-            (x0: Z)(y0: Z)(_: Variant1 = (max x0 y0))(_: `0 < x0` /\
+            (x0: Z)(y0: Z)(_: Variant1 = (max x0 y0))(_0: `0 < x0` /\
             `0 < y0` /\ `(gcd x0 y0) = (gcd a b)`)
-            (sig_3 Z Z unit [x1:Z][y1:Z][result:unit](`0 < x1` /\ `0 < y1` /\
-             `(gcd x1 y1) = (gcd a b)` /\ `x1 = y1`))
+            (sig_3 Z Z unit [x1: Z][y1: Z][result1: unit](`0 < x1` /\
+             `0 < y1` /\ `(gcd x1 y1) = (gcd a b)` /\ `x1 = y1`))
             [Variant1: Z; wf1: (Variant2: Z)
              (Pre1: (Zwf `0` Variant2 Variant1))(x0: Z)(y0: Z)
-             (_: Variant2 = (max x0 y0))(_: `0 < x0` /\ `0 < y0` /\
+             (_: Variant2 = (max x0 y0))(_0: `0 < x0` /\ `0 < y0` /\
              `(gcd x0 y0) = (gcd a b)`)
-             (sig_3 Z Z unit [x1:Z][y1:Z][result:unit](`0 < x1` /\
+             (sig_3 Z Z unit [x1: Z][y1: Z][result1: unit](`0 < x1` /\
               `0 < y1` /\ `(gcd x1 y1) = (gcd a b)` /\ `x1 = y1`));
              x0: Z; y0: Z; Pre3: Variant1 = (max x0 y0); Pre2: `0 < x0` /\
              `0 < y0` /\ `(gcd x0 y0) = (gcd a b)`]
@@ -455,15 +455,15 @@ Definition gcd2 := (* validation *)
         let (x0, y0, result1, Post6) =
           (well_founded_induction Z (Zwf ZERO)
             (gcd2_po_1 a b Pre5 result Post1 result0 Post2) [Variant1: Z]
-            (x0: Z)(y0: Z)(_: Variant1 = y0)(_: `0 <= x0` /\ `0 <= y0` /\
+            (x0: Z)(y0: Z)(_: Variant1 = y0)(_0: `0 <= x0` /\ `0 <= y0` /\
             `(gcd x0 y0) = (gcd a b)`)
-            (sig_3 Z Z unit [x1:Z][y1:Z][result:unit](`0 <= x1` /\
+            (sig_3 Z Z unit [x1: Z][y1: Z][result1: unit](`0 <= x1` /\
              `0 <= y1` /\ `(gcd x1 y1) = (gcd a b)` /\ `y1 = 0`))
             [Variant1: Z; wf1: (Variant2: Z)
              (Pre1: (Zwf `0` Variant2 Variant1))(x0: Z)(y0: Z)
-             (_: Variant2 = y0)(_: `0 <= x0` /\ `0 <= y0` /\
+             (_: Variant2 = y0)(_0: `0 <= x0` /\ `0 <= y0` /\
              `(gcd x0 y0) = (gcd a b)`)
-             (sig_3 Z Z unit [x1:Z][y1:Z][result:unit](`0 <= x1` /\
+             (sig_3 Z Z unit [x1: Z][y1: Z][result1: unit](`0 <= x1` /\
               `0 <= y1` /\ `(gcd x1 y1) = (gcd a b)` /\ `y1 = 0`));
              x0: Z; y0: Z; Pre4: Variant1 = y0; Pre3: `0 <= x0` /\
              `0 <= y0` /\ `(gcd x0 y0) = (gcd a b)`]

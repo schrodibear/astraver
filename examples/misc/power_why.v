@@ -333,14 +333,14 @@ Definition power1 := (* validation *)
     let (m1, n0, y1, result1, Post6) =
       (well_founded_induction Z (Zwf ZERO)
         (power1_po_1 n Pre4 m0 Post1 y0 Post2) [Variant1: Z](m1: Z)(n0: Z)
-        (y1: Z)(_: Variant1 = n0)(_: `(Zpower x n) = y1 * (Zpower m1 n0)` /\
+        (y1: Z)(_: Variant1 = n0)(_0: `(Zpower x n) = y1 * (Zpower m1 n0)` /\
         `n0 >= 0`)
-        (sig_4 Z Z Z unit [m2:Z][n1:Z][y2:Z][result:unit]
+        (sig_4 Z Z Z unit [m2: Z][n1: Z][y2: Z][result1: unit]
          (`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ `n1 <= 0`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
          (m1: Z)(n0: Z)(y1: Z)(_: Variant2 = n0)
-         (_: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-         (sig_4 Z Z Z unit [m2:Z][n1:Z][y2:Z][result:unit]
+         (_0: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+         (sig_4 Z Z Z unit [m2: Z][n1: Z][y2: Z][result1: unit]
           (`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ `n1 <= 0`));
          m1: Z; n0: Z; y1: Z; Pre3: Variant1 = n0;
          Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`]

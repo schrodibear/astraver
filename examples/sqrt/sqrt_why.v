@@ -510,22 +510,22 @@ Definition sqrt := (* validation *)
                         (well_founded_induction Z (Zwf ZERO)
                           (sqrt_po_4 x Pre7 Test5 Test3 result1 Post1 Pre1
                           result2 Post2) [Variant1: Z](y0: Z)(z0: Z)
-                          (_: Variant1 = y0)(_: `z0 > 0` /\ `y0 > 0` /\
+                          (_: Variant1 = y0)(_0: `z0 > 0` /\ `y0 > 0` /\
                           `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
                           `x < (y0 + 1) * (y0 + 1)` /\
                           `x < (z0 + 1) * (z0 + 1)`)
-                          (sig_3 Z Z unit [y1:Z][z1:Z][result:unit]
+                          (sig_3 Z Z unit [y1: Z][z1: Z][result3: unit]
                            (`z1 > 0` /\ `y1 > 0` /\
                            `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
                            `x < (y1 + 1) * (y1 + 1)` /\
                            `x < (z1 + 1) * (z1 + 1)` /\ `z1 >= y1`))
                           [Variant1: Z; wf1: (Variant2: Z)
                            (Pre2: (Zwf `0` Variant2 Variant1))(y0: Z)(z0: Z)
-                           (_: Variant2 = y0)(_: `z0 > 0` /\ `y0 > 0` /\
+                           (_: Variant2 = y0)(_0: `z0 > 0` /\ `y0 > 0` /\
                            `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
                            `x < (y0 + 1) * (y0 + 1)` /\
                            `x < (z0 + 1) * (z0 + 1)`)
-                           (sig_3 Z Z unit [y1:Z][z1:Z][result:unit]
+                           (sig_3 Z Z unit [y1: Z][z1: Z][result3: unit]
                             (`z1 > 0` /\ `y1 > 0` /\
                             `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
                             `x < (y1 + 1) * (y1 + 1)` /\

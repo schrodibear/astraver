@@ -540,20 +540,20 @@ Definition heapsort := (* validation *)
       let (k0, t0, result0, Post3) =
         (well_founded_induction Z (Zwf ZERO)
           (heapsort_po_1 N Pre10 result Post1) [Variant1: Z](k0: Z)
-          (t0: (array N Z))(_: Variant1 = `k0 + 1`)(_: `(-1) <= k0` /\
+          (t0: (array N Z))(_: Variant1 = `k0 + 1`)(_0: `(-1) <= k0` /\
           `k0 <= N - 1` /\
           ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
           (permut t0 t))
-          (sig_3 Z (array N Z) unit [k1:Z][t1:(array N Z)][result:unit]
+          (sig_3 Z (array N Z) unit [k1: Z][t1: (array N Z)][result0: unit]
            (`(-1) <= k1` /\ `k1 <= N - 1` /\
            ((i:Z) (`k1 + 1 <= i` /\ `i <= N - 1` -> (heap t1 `N - 1` i))) /\
            (permut t1 t) /\ `k1 < 0`))
           [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
            (k0: Z)(t0: (array N Z))(_: Variant2 = `k0 + 1`)
-           (_: `(-1) <= k0` /\ `k0 <= N - 1` /\
+           (_0: `(-1) <= k0` /\ `k0 <= N - 1` /\
            ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
            (permut t0 t))
-           (sig_3 Z (array N Z) unit [k1:Z][t1:(array N Z)][result:unit]
+           (sig_3 Z (array N Z) unit [k1: Z][t1: (array N Z)][result0: unit]
             (`(-1) <= k1` /\ `k1 <= N - 1` /\
             ((i:Z) (`k1 + 1 <= i` /\ `i <= N - 1` -> (heap t1 `N - 1` i))) /\
             (permut t1 t) /\ `k1 < 0`));
@@ -636,26 +636,26 @@ Definition heapsort := (* validation *)
       let (k0, t1, result1, Post6) =
         (well_founded_induction Z (Zwf ZERO)
           (heapsort_po_9 N t Pre10 t0 Post9 result0 Post4) [Variant3: Z]
-          (k0: Z)(t1: (array N Z))(_: Variant3 = k0)(_: `0 <= k0` /\
+          (k0: Z)(t1: (array N Z))(_: Variant3 = k0)(_0: `0 <= k0` /\
           `k0 <= N - 1` /\
           ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
           ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
           ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
           (permut t1 t))
-          (sig_3 Z (array N Z) unit [k1:Z][t2:(array N Z)][result:unit]
+          (sig_3 Z (array N Z) unit [k1: Z][t2: (array N Z)][result1: unit]
            (`0 <= k1` /\ `k1 <= N - 1` /\
            ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t2 k1 i))) /\
            ((`k1 + 1 <= N - 1` -> `(access t2 0) <= (access t2 k1 + 1)`)) /\
            ((`k1 + 1 <= N - 1` -> (sorted_array t2 `k1 + 1` `N - 1`))) /\
            (permut t2 t) /\ `k1 < 1`))
           [Variant3: Z; wf2: (Variant4: Z)(Pre5: (Zwf `0` Variant4 Variant3))
-           (k0: Z)(t1: (array N Z))(_: Variant4 = k0)(_: `0 <= k0` /\
+           (k0: Z)(t1: (array N Z))(_: Variant4 = k0)(_0: `0 <= k0` /\
            `k0 <= N - 1` /\
            ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
            ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
            ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
            (permut t1 t))
-           (sig_3 Z (array N Z) unit [k1:Z][t2:(array N Z)][result:unit]
+           (sig_3 Z (array N Z) unit [k1: Z][t2: (array N Z)][result1: unit]
             (`0 <= k1` /\ `k1 <= N - 1` /\
             ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t2 k1 i))) /\
             ((`k1 + 1 <= N - 1` -> `(access t2 0) <= (access t2 k1 + 1)`)) /\

@@ -1139,18 +1139,18 @@ Definition distance := (* validation *)
     let (i1, t0, result0, Post4) =
       (well_founded_induction Z (Zwf ZERO) (distance_po_1 i0 Post1)
         [Variant1: Z](i1: Z)(t0: (array `n2 + 1` Z))
-        (_: Variant1 = `n2 + 1 - i1`)(_: `0 <= i1` /\ `i1 <= n2 + 1` /\
+        (_: Variant1 = `n2 + 1 - i1`)(_0: `0 <= i1` /\ `i1 <= n2 + 1` /\
         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
-        (sig_3 Z (array `n2 + 1` Z) unit [i2:Z][t1:(array `n2 + 1` Z)]
-         [result:unit](`0 <= i2` /\ `i2 <= n2 + 1` /\
+        (sig_3 Z (array `n2 + 1` Z) unit [i2: Z][t1: (array `n2 + 1` Z)]
+         [result0: unit](`0 <= i2` /\ `i2 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
          `i2 > n2`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
          (i1: Z)(t0: (array `n2 + 1` Z))(_: Variant2 = `n2 + 1 - i1`)
-         (_: `0 <= i1` /\ `i1 <= n2 + 1` /\
+         (_0: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
-         (sig_3 Z (array `n2 + 1` Z) unit [i2:Z][t1:(array `n2 + 1` Z)]
-          [result:unit](`0 <= i2` /\ `i2 <= n2 + 1` /\
+         (sig_3 Z (array `n2 + 1` Z) unit [i2: Z][t1: (array `n2 + 1` Z)]
+          [result0: unit](`0 <= i2` /\ `i2 <= n2 + 1` /\
           ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
           `i2 > n2`));
          i1: Z; t0: (array `n2 + 1` Z); Pre4: Variant1 = `n2 + 1 - i1`;
@@ -1216,12 +1216,12 @@ Definition distance := (* validation *)
       (well_founded_induction Z (Zwf ZERO)
         (distance_po_8 i0 Post1 i1 t0 Post4 i2 Post5) [Variant3: Z](i3: Z)
         (j0: Z)(old0: Z)(t1: (array `n2 + 1` Z))(_: Variant3 = `i3 + 1`)
-        (_: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+        (_0: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
         ((j:Z)
          (`0 <= j` /\ `j <= n2` ->
           (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-        (sig_5 Z Z Z (array `n2 + 1` Z) unit [i4:Z][j1:Z][old1:Z]
-         [t2:(array `n2 + 1` Z)][result:unit](`(-1) <= i4` /\
+        (sig_5 Z Z Z (array `n2 + 1` Z) unit [i4: Z][j1: Z][old1: Z]
+         [t2: (array `n2 + 1` Z)][result2: unit](`(-1) <= i4` /\
          `i4 <= n1 - 1` /\
          ((j:Z)
           (`0 <= j` /\ `j <= n2` ->
@@ -1229,12 +1229,12 @@ Definition distance := (* validation *)
          `i4 < 0`))
         [Variant3: Z; wf2: (Variant4: Z)(Pre5: (Zwf `0` Variant4 Variant3))
          (i3: Z)(j0: Z)(old0: Z)(t1: (array `n2 + 1` Z))
-         (_: Variant4 = `i3 + 1`)(_: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+         (_: Variant4 = `i3 + 1`)(_0: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
          ((j:Z)
           (`0 <= j` /\ `j <= n2` ->
            (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-         (sig_5 Z Z Z (array `n2 + 1` Z) unit [i4:Z][j1:Z][old1:Z]
-          [t2:(array `n2 + 1` Z)][result:unit](`(-1) <= i4` /\
+         (sig_5 Z Z Z (array `n2 + 1` Z) unit [i4: Z][j1: Z][old1: Z]
+          [t2: (array `n2 + 1` Z)][result2: unit](`(-1) <= i4` /\
           `i4 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
@@ -1286,7 +1286,7 @@ Definition distance := (* validation *)
                       Variant3 i3 t1 Pre20 Pre19 Test8 Pre6 old1 Post6 Pre7
                       t2 Post7 j1 Post8) [Variant5: Z](j2: Z)(old2: Z)
                       (t3: (array `n2 + 1` Z))(_: Variant5 = `j2 + 1`)
-                      (_: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+                      (_0: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
                       ((k:Z)
                        (`j2 < k` /\ `k <= n2` ->
                         (min_suffix w1 w2 i3 k (access t3 k)))) /\
@@ -1294,9 +1294,9 @@ Definition distance := (* validation *)
                        (`0 <= k` /\ `k <= j2` ->
                         (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
                       (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-                      (sig_4 Z Z (array `n2 + 1` Z) unit [j3:Z][old3:Z]
-                       [t4:(array `n2 + 1` Z)][result:unit](`(-1) <= j3` /\
-                       `j3 <= n2 - 1` /\
+                      (sig_4 Z Z (array `n2 + 1` Z) unit [j3: Z][old3: Z]
+                       [t4: (array `n2 + 1` Z)][result6: unit]
+                       (`(-1) <= j3` /\ `j3 <= n2 - 1` /\
                        ((k:Z)
                         (`j3 < k` /\ `k <= n2` ->
                          (min_suffix w1 w2 i3 k (access t4 k)))) /\
@@ -1308,7 +1308,7 @@ Definition distance := (* validation *)
                       [Variant5: Z; wf3: (Variant6: Z)
                        (Pre9: (Zwf `0` Variant6 Variant5))(j2: Z)(old2: Z)
                        (t3: (array `n2 + 1` Z))(_: Variant6 = `j2 + 1`)
-                       (_: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+                       (_0: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
                        ((k:Z)
                         (`j2 < k` /\ `k <= n2` ->
                          (min_suffix w1 w2 i3 k (access t3 k)))) /\
@@ -1316,9 +1316,9 @@ Definition distance := (* validation *)
                         (`0 <= k` /\ `k <= j2` ->
                          (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
                        (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-                       (sig_4 Z Z (array `n2 + 1` Z) unit [j3:Z][old3:Z]
-                        [t4:(array `n2 + 1` Z)][result:unit](`(-1) <= j3` /\
-                        `j3 <= n2 - 1` /\
+                       (sig_4 Z Z (array `n2 + 1` Z) unit [j3: Z][old3: Z]
+                        [t4: (array `n2 + 1` Z)][result6: unit]
+                        (`(-1) <= j3` /\ `j3 <= n2 - 1` /\
                         ((k:Z)
                          (`j3 < k` /\ `k <= n2` ->
                           (min_suffix w1 w2 i3 k (access t4 k)))) /\

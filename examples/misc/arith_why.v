@@ -315,13 +315,13 @@ Definition mult := (* validation *)
               (mult_po_1 x y Pre5 result Post1 result0 Post2 result1 Post3)
               [Variant1: Z](a0: Z)(b0: Z)(p0: Z)(_: Variant1 = a0)
               (Inv: `a0 >= 0` /\ `p0 + a0 * b0 = x * y`)
-              (sig_4 Z Z Z unit [a1:Z][b1:Z][p1:Z][result:unit](`a1 >= 0` /\
-               `p1 + a1 * b1 = x * y` /\ `a1 = 0`))
+              (sig_4 Z Z Z unit [a1: Z][b1: Z][p1: Z][result2: unit]
+               (`a1 >= 0` /\ `p1 + a1 * b1 = x * y` /\ `a1 = 0`))
               [Variant1: Z; wf1: (Variant2: Z)
                (Pre1: (Zwf `0` Variant2 Variant1))(a0: Z)(b0: Z)(p0: Z)
                (_: Variant2 = a0)(Inv: `a0 >= 0` /\ `p0 + a0 * b0 = x * y`)
-               (sig_4 Z Z Z unit [a1:Z][b1:Z][p1:Z][result:unit](`a1 >= 0` /\
-                `p1 + a1 * b1 = x * y` /\ `a1 = 0`));
+               (sig_4 Z Z Z unit [a1: Z][b1: Z][p1: Z][result2: unit]
+                (`a1 >= 0` /\ `p1 + a1 * b1 = x * y` /\ `a1 = 0`));
                a0: Z; b0: Z; p0: Z; Pre4: Variant1 = a0; Inv: `a0 >= 0` /\
                `p0 + a0 * b0 = x * y`]
                 let (result2, Bool1) =
@@ -333,7 +333,7 @@ Definition mult := (* validation *)
                                        else `a0 = 0`)
                         result2 Bool1) of
                 | (left Test4) =>
-                    let (a1, b1, p1, result3, Inv) =
+                    let (a1, b1, p1, result3, Inv0) =
                       let (a1, b1, p1, result3, Inv0) =
                         let (p1, result3, Post12) =
                           let (result3, Bool2) =
@@ -419,15 +419,15 @@ Definition mult := (* validation *)
                         result1 Post3 Variant1 a0 b0 p0 Pre4 Inv Test4 a1 b1
                         p1 Inv0)) in
                     (exist_4 [a2: Z][b2: Z][p2: Z][result4: unit]`a2 >= 0` /\
-                    `p2 + a2 * b2 = x * y` /\ `a2 = 0` a1 b1 p1 result3 Inv)
+                    `p2 + a2 * b2 = x * y` /\ `a2 = 0` a1 b1 p1 result3 Inv0)
                 | (right Test1) =>
-                    let (a1, b1, p1, result3, Inv) = (exist_4 [a1: Z][b1: Z]
+                    let (a1, b1, p1, result3, Inv0) = (exist_4 [a1: Z][b1: Z]
                       [p1: Z][result3: unit]`a1 >= 0` /\
                       `p1 + a1 * b1 = x * y` /\ `a1 = 0` a0 b0 p0 tt
                       (mult_po_9 x y Pre5 result Post1 result0 Post2 result1
                       Post3 Variant1 a0 b0 p0 Pre4 Inv Test1)) in
                     (exist_4 [a2: Z][b2: Z][p2: Z][result4: unit]`a2 >= 0` /\
-                    `p2 + a2 * b2 = x * y` /\ `a2 = 0` a1 b1 p1 result3 Inv) end)
+                    `p2 + a2 * b2 = x * y` /\ `a2 = 0` a1 b1 p1 result3 Inv0) end)
               result result result0 result1 (refl_equal ? result)
               (mult_po_10 x y Pre5 result Post1 result0 Post2 result1 Post3)) in
           let (result3, Post15) = (exist_1 [result3: Z]`result3 = x * y` 

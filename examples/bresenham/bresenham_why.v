@@ -297,14 +297,14 @@ Definition bresenham := (* validation *)
     let (e1, x1, y1, result2, Post8) =
       (well_founded_induction Z (Zwf ZERO)
         (bresenham_po_1 x0 Post1 y0 Post2 e0 Post3) [Variant1: Z](e1: Z)
-        (x1: Z)(y1: Z)(_: Variant1 = `x2 + 1 - x1`)(_: `0 <= x1` /\
+        (x1: Z)(y1: Z)(_: Variant1 = `x2 + 1 - x1`)(_0: `0 <= x1` /\
         `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-        (sig_4 Z Z Z unit [e2:Z][x3:Z][y3:Z][result:unit](`0 <= x3` /\
+        (sig_4 Z Z Z unit [e2: Z][x3: Z][y3: Z][result2: unit](`0 <= x3` /\
          `x3 <= x2 + 1` /\ (invariant x3 y3 e2) /\ `x3 > x2`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
-         (e1: Z)(x1: Z)(y1: Z)(_: Variant2 = `x2 + 1 - x1`)(_: `0 <= x1` /\
+         (e1: Z)(x1: Z)(y1: Z)(_: Variant2 = `x2 + 1 - x1`)(_0: `0 <= x1` /\
          `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-         (sig_4 Z Z Z unit [e2:Z][x3:Z][y3:Z][result:unit](`0 <= x3` /\
+         (sig_4 Z Z Z unit [e2: Z][x3: Z][y3: Z][result2: unit](`0 <= x3` /\
           `x3 <= x2 + 1` /\ (invariant x3 y3 e2) /\ `x3 > x2`));
          e1: Z; x1: Z; y1: Z; Pre4: Variant1 = `x2 + 1 - x1`;
          Pre3: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1)]

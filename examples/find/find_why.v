@@ -1580,14 +1580,14 @@ Definition find := (* validation *)
           (A0: (array `N + 1` Z))(m0: Z)(n0: Z)(_: Variant1 = `n0 - m0`)
           (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
           (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`)
-          (sig_4 (array `N + 1` Z) Z Z unit [A1:(array `N + 1` Z)][m1:Z]
-           [n1:Z][result:unit]((found A1) /\ (permut A1 A0)))
+          (sig_4 (array `N + 1` Z) Z Z unit [A1: (array `N + 1` Z)][m1: Z]
+           [n1: Z][result1: unit]((found A1) /\ (permut A1 A0)))
           [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
            (A0: (array `N + 1` Z))(m0: Z)(n0: Z)(_: Variant2 = `n0 - m0`)
            (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
            (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`)
-           (sig_4 (array `N + 1` Z) Z Z unit [A1:(array `N + 1` Z)][m1:Z]
-            [n1:Z][result:unit]((found A1) /\ (permut A1 A0)));
+           (sig_4 (array `N + 1` Z) Z Z unit [A1: (array `N + 1` Z)][m1: Z]
+            [n1: Z][result1: unit]((found A1) /\ (permut A1 A0)));
            A0: (array `N + 1` Z); m0: Z; n0: Z; Pre20: Variant1 = `n0 - m0`;
            Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
            (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`]
@@ -1629,8 +1629,9 @@ Definition find := (* validation *)
                                 (termination i0 j0 m0 n0 r A1) /\
                                 (permut A1 A))
                                 (sig_4 (array `N + 1` Z) Z Z unit
-                                 [A2:(array `N + 1` Z)][i1:Z][j1:Z]
-                                 [result:unit]((i_invariant m0 n0 i1 r A2) /\
+                                 [A2: (array `N + 1` Z)][i1: Z][j1: Z]
+                                 [result4: unit]
+                                 ((i_invariant m0 n0 i1 r A2) /\
                                  (j_invariant m0 n0 j1 r A2) /\
                                  (m_invariant m0 A2) /\
                                  (n_invariant n0 A2) /\ `0 <= j1` /\
@@ -1649,8 +1650,8 @@ Definition find := (* validation *)
                                  (termination i0 j0 m0 n0 r A1) /\
                                  (permut A1 A))
                                  (sig_4 (array `N + 1` Z) Z Z unit
-                                  [A2:(array `N + 1` Z)][i1:Z][j1:Z]
-                                  [result:unit]
+                                  [A2: (array `N + 1` Z)][i1: Z][j1: Z]
+                                  [result4: unit]
                                   ((i_invariant m0 n0 i1 r A2) /\
                                   (j_invariant m0 n0 j1 r A2) /\
                                   (m_invariant m0 A2) /\
@@ -1680,7 +1681,7 @@ Definition find := (* validation *)
                                                          else `i0 > j0`)
                                           result4 Bool2) of
                                   | (left Test9) =>
-                                      let (A2, i1, j1, result5, Inv_ij) =
+                                      let (A2, i1, j1, result5, Inv_ij0) =
                                         let (A2, i1, j1, result5, Inv_ij0) =
                                           let (i1, result5, Inv_i) =
                                             (well_founded_induction Z
@@ -1697,8 +1698,8 @@ Definition find := (* validation *)
                                                        A1) /\ `i0 <= i1` /\
                                               `i1 <= n0` /\
                                               (termination i1 j0 m0 n0 r A1))
-                                              (sig_2 Z unit [i2:Z]
-                                               [result:unit]
+                                              (sig_2 Z unit [i2: Z]
+                                               [result5: unit]
                                                ((i_invariant m0 n0 i2 r A1) /\
                                                `i0 <= i2` /\ `i2 <= n0` /\
                                                (termination i2 j0 m0 n0 r A1) /\
@@ -1712,8 +1713,8 @@ Definition find := (* validation *)
                                                         r A1) /\
                                                `i0 <= i1` /\ `i1 <= n0` /\
                                                (termination i1 j0 m0 n0 r A1))
-                                               (sig_2 Z unit [i2:Z]
-                                                [result:unit]
+                                               (sig_2 Z unit [i2: Z]
+                                                [result5: unit]
                                                 ((i_invariant m0 n0 i2 r A1) /\
                                                 `i0 <= i2` /\ `i2 <= n0` /\
                                                 (termination i2 j0 m0 n0 r A1) /\
@@ -1755,7 +1756,7 @@ Definition find := (* validation *)
                                                         result5 Bool3) of
                                                 | (left Test4) =>
                                                     let (i2, result6,
-                                                      Inv_i) =
+                                                      Inv_i0) =
                                                       let (i2, result6,
                                                         Inv_i0) =
                                                         let (i2, result6,
@@ -1827,10 +1828,10 @@ Definition find := (* validation *)
                                                     (termination i3 j0 m0 n0
                                                      r A1) /\
                                                     `(access A1 i3) >= r` 
-                                                    i2 result6 Inv_i)
+                                                    i2 result6 Inv_i0)
                                                 | (right Test3) =>
                                                     let (i2, result6,
-                                                      Inv_i) =
+                                                      Inv_i0) =
                                                       (exist_2 [i2: Z]
                                                       [result6: unit]
                                                       (i_invariant m0 n0 i2 r
@@ -1858,7 +1859,7 @@ Definition find := (* validation *)
                                                     (termination i3 j0 m0 n0
                                                      r A1) /\
                                                     `(access A1 i3) >= r` 
-                                                    i2 result6 Inv_i) end)
+                                                    i2 result6 Inv_i0) end)
                                               `N + 1 - i0` i0
                                               (refl_equal ? `N + 1 - i0`)
                                               (find_po_10 A result Post1
@@ -1882,8 +1883,8 @@ Definition find := (* validation *)
                                                        A1) /\ `j1 <= j0` /\
                                               `m0 <= j1` /\
                                               (termination i1 j1 m0 n0 r A1))
-                                              (sig_2 Z unit [j2:Z]
-                                               [result:unit]
+                                              (sig_2 Z unit [j2: Z]
+                                               [result6: unit]
                                                ((j_invariant m0 n0 j2 r A1) /\
                                                `j2 <= j0` /\ `m0 <= j2` /\
                                                (termination i1 j2 m0 n0 r A1) /\
@@ -1896,8 +1897,8 @@ Definition find := (* validation *)
                                                         r A1) /\
                                                `j1 <= j0` /\ `m0 <= j1` /\
                                                (termination i1 j1 m0 n0 r A1))
-                                               (sig_2 Z unit [j2:Z]
-                                                [result:unit]
+                                               (sig_2 Z unit [j2: Z]
+                                                [result6: unit]
                                                 ((j_invariant m0 n0 j2 r A1) /\
                                                 `j2 <= j0` /\ `m0 <= j2` /\
                                                 (termination i1 j2 m0 n0 r A1) /\
@@ -1936,7 +1937,7 @@ Definition find := (* validation *)
                                                         result6 Bool4) of
                                                 | (left Test6) =>
                                                     let (j2, result7,
-                                                      Inv_j) =
+                                                      Inv_j0) =
                                                       let (j2, result7,
                                                         Inv_j0) =
                                                         let (j2, result7,
@@ -2007,10 +2008,10 @@ Definition find := (* validation *)
                                                     (termination i1 j3 m0 n0
                                                      r A1) /\
                                                     `r >= (access A1 j3)` 
-                                                    j2 result7 Inv_j)
+                                                    j2 result7 Inv_j0)
                                                 | (right Test5) =>
                                                     let (j2, result7,
-                                                      Inv_j) =
+                                                      Inv_j0) =
                                                       (exist_2 [j2: Z]
                                                       [result7: unit]
                                                       (j_invariant m0 n0 j2 r
@@ -2038,7 +2039,7 @@ Definition find := (* validation *)
                                                     (termination i1 j3 m0 n0
                                                      r A1) /\
                                                     `r >= (access A1 j3)` 
-                                                    j2 result7 Inv_j) end) 
+                                                    j2 result7 Inv_j0) end)
                                               j0 j0 (refl_equal ? j0)
                                               (find_po_17 A result Post1
                                               result0 Post2 Variant1 A0 m0 n0
@@ -2362,9 +2363,9 @@ Definition find := (* validation *)
                                       `i2 <= N + 1` /\
                                       (termination i2 j2 m0 n0 r A3) /\
                                       (permut A3 A) /\ `i2 > j2` A2 i1 
-                                      j1 result5 Inv_ij)
+                                      j1 result5 Inv_ij0)
                                   | (right Test2) =>
-                                      let (A2, i1, j1, result5, Inv_ij) =
+                                      let (A2, i1, j1, result5, Inv_ij0) =
                                         (exist_4 [A2: (array `N + 1` Z)]
                                         [i1: Z][j1: Z][result5: unit]
                                         (i_invariant m0 n0 i1 r A2) /\
@@ -2389,7 +2390,7 @@ Definition find := (* validation *)
                                       `i2 <= N + 1` /\
                                       (termination i2 j2 m0 n0 r A3) /\
                                       (permut A3 A) /\ `i2 > j2` A2 i1 
-                                      j1 result5 Inv_ij) end)
+                                      j1 result5 Inv_ij0) end)
                                 `N + 2 + result3 - result2` A0 result2
                                 result3
                                 (refl_equal ? `N + 2 + result3 - result2`)

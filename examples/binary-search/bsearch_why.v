@@ -501,19 +501,19 @@ Definition binary_search := (* validation *)
       (well_founded_induction Z (Zwf ZERO)
         (binary_search_po_1 t Pre7 l0 Post1 u0 Post2 p0 Post3) [Variant1: Z]
         (l1: Z)(m0: Z)(p1: Z)(u1: Z)(_: Variant1 = `2 + u1 - l1`)
-        (_: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+        (_0: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
         ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
         ((`p1 > 0` -> `(access t p1) = v`)))
-        (sig_5 Z Z Z Z unit [l2:Z][m1:Z][p2:Z][u2:Z][result:unit]
+        (sig_5 Z Z Z Z unit [l2: Z][m1: Z][p2: Z][u2: Z][result2: unit]
          (`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
          ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
          ((`p2 > 0` -> `(access t p2) = v`)) /\ `l2 > u2`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
          (l1: Z)(m0: Z)(p1: Z)(u1: Z)(_: Variant2 = `2 + u1 - l1`)
-         (_: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         (_0: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> `(access t p1) = v`)))
-         (sig_5 Z Z Z Z unit [l2:Z][m1:Z][p2:Z][u2:Z][result:unit]
+         (sig_5 Z Z Z Z unit [l2: Z][m1: Z][p2: Z][u2: Z][result2: unit]
           (`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
           ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
           ((`p2 > 0` -> `(access t p2) = v`)) /\ `l2 > u2`));

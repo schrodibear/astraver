@@ -107,11 +107,11 @@ Save.
 Definition p := (* validation *)
   [x: Z; Pre6: `x >= 0`]
     (well_founded_induction Z (Zwf ZERO) (p_po_1 x Pre6) [Variant1: Z](x0: Z)
-      (_: Variant1 = x0)(_: `0 <= x0` /\ `x0 <= x`)
-      (sig_2 Z unit [x1:Z][result:unit](`x1 = 0`))
+      (_: Variant1 = x0)(_0: `0 <= x0` /\ `x0 <= x`)
+      (sig_2 Z unit [x1: Z][result: unit](`x1 = 0`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
-       (x0: Z)(_: Variant2 = x0)(_: `0 <= x0` /\ `x0 <= x`)
-       (sig_2 Z unit [x1:Z][result:unit](`x1 = 0`)); x0: Z;
+       (x0: Z)(_: Variant2 = x0)(_0: `0 <= x0` /\ `x0 <= x`)
+       (sig_2 Z unit [x1: Z][result: unit](`x1 = 0`)); x0: Z;
        Pre5: Variant1 = x0; Pre4: `0 <= x0` /\ `x0 <= x`]
         let (result, Bool1) =
           let (result1, Post4) = (Z_gt_le_bool x0 `0`) in

@@ -16,7 +16,7 @@ Parameter foo : Set.
 
 (*Why*) Parameter f3 :
   (x: Z)(y: Z)(_: `x >= 0`)
-  (sig_2 Z Z [y0:Z][result:Z](`y0 = y + x + result`)).
+  (sig_2 Z Z [y0: Z][result: Z](`y0 = y + x + result`)).
 
 (*Why*) Parameter f4 : (_: unit)unit.
 
@@ -27,7 +27,7 @@ Parameter foo : Set.
 (*Why*) Parameter f7 : (x: foo)foo.
 
 (*Why*) Parameter f8 :
-  (t: (array `10` Z))(sig_1 unit [result:unit](`(access t 1) = 2`)).
+  (t: (array `10` Z))(sig_1 unit [result: unit](`(access t 1) = 2`)).
 
 Lemma p1_po_1 : 
   True.

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: options.ml,v 1.7 2002-04-03 15:52:04 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.8 2002-07-18 14:45:06 filliatr Exp $ i*)
 
 open Format
 
@@ -12,6 +12,7 @@ let parse_only_ = ref false
 let type_only_ = ref false
 let wp_only_ = ref false
 let valid_ = ref false
+let coq_tactic_ = ref None
 
 type prover = Coq | Pvs
 let prover_ = ref Coq
@@ -66,6 +67,8 @@ Prover options:
   --pvs       selects PVS prover
   --valid, 
   --no-valid  set/unset the functional validation (Coq only; default is no)
+  --coq-tactic <tactic> 
+              gives a default tactic for new proof obligations
 ";
   flush stderr
 
@@ -86,6 +89,10 @@ let files =
     | ("-V" | "--verbose") :: args -> verbose_ := true; parse args
     | ("-valid" | "--valid") :: args -> valid_ := true; parse args
     | ("-novalid" | "--no-valid") :: args -> valid_ := false; parse args
+    | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") 
+      :: s :: args -> coq_tactic_ := Some s; parse args
+    | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
+	usage (); exit 1
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -99,6 +106,7 @@ let type_only = !type_only_
 let wp_only = !wp_only_
 let prover = !prover_
 let valid = !valid_
+let coq_tactic = !coq_tactic_
 
 let if_verbose f x = if verbose then f x
 let if_verbose_2 f x y = if verbose then f x y

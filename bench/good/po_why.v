@@ -226,7 +226,7 @@ Definition p9a := (* validation *)
       `x0 = 1` `aux_1 + 1` Post2) in
     (exist_2 [x1: Z][result0: Z]`result0 = 2` /\ `x1 = 1` x0 result Post4).
 
-(*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result:Z](`result = x + 1`)).
+(*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result: Z](`result = x + 1`)).
 
 Lemma p10_po_1 : 
   (result1: Z)
@@ -280,7 +280,7 @@ Definition p11a := (* validation *)
   (exist_1 [result0: Z]`result0 = 4` result Post3).
 
 (*Why*) Parameter incrx :
-  (_: unit)(x: Z)(sig_2 Z unit [x0:Z][result:unit](`x0 = x + 1`)).
+  (_: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = x + 1`)).
 
 Lemma p12_po_1 : 
   (x: Z)
@@ -343,7 +343,8 @@ Definition p13a := (* validation *)
     (p13a_po_1 x x0 Post1 x1 Post3)).
 
 (*Why*) Parameter incrx2 :
-  (_: unit)(x: Z)(sig_2 Z Z [x0:Z][result:Z](`x0 = x + 1` /\ `result = x0`)).
+  (_: unit)(x: Z)
+  (sig_2 Z Z [x0: Z][result: Z](`x0 = x + 1` /\ `result = x0`)).
 
 Lemma p14_po_1 : 
   (x: Z)

@@ -478,20 +478,21 @@ Definition dutch_flag := (* validation *)
           (well_founded_induction Z (Zwf ZERO)
             (dutch_flag_po_1 result Post1 result0 Post2 result1 Post3)
             [Variant1: Z](b0: Z)(i0: Z)(r0: Z)(t0: (array N color))
-            (_: Variant1 = `r0 - i0`)(_: `0 <= b0` /\ `b0 <= i0` /\
+            (_: Variant1 = `r0 - i0`)(_0: `0 <= b0` /\ `b0 <= i0` /\
             (`i0 <= r0` /\ `r0 <= N`) /\ (monochrome t0 `0` b0 blue) /\
             (monochrome t0 b0 i0 white) /\ (monochrome t0 r0 N red))
-            (sig_5 Z Z Z (array N color) unit [b1:Z][i1:Z][r1:Z]
-             [t1:(array N color)][result:unit]((monochrome t1 `0` b1 blue) /\
-             (monochrome t1 b1 r1 white) /\ (monochrome t1 r1 N red)))
+            (sig_5 Z Z Z (array N color) unit [b1: Z][i1: Z][r1: Z]
+             [t1: (array N color)][result2: unit]
+             ((monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 r1 white) /\
+             (monochrome t1 r1 N red)))
             [Variant1: Z; wf1: (Variant2: Z)
              (Pre1: (Zwf `0` Variant2 Variant1))(b0: Z)(i0: Z)(r0: Z)
-             (t0: (array N color))(_: Variant2 = `r0 - i0`)(_: `0 <= b0` /\
+             (t0: (array N color))(_: Variant2 = `r0 - i0`)(_0: `0 <= b0` /\
              `b0 <= i0` /\ (`i0 <= r0` /\ `r0 <= N`) /\
              (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
              (monochrome t0 r0 N red))
-             (sig_5 Z Z Z (array N color) unit [b1:Z][i1:Z][r1:Z]
-              [t1:(array N color)][result:unit]
+             (sig_5 Z Z Z (array N color) unit [b1: Z][i1: Z][r1: Z]
+              [t1: (array N color)][result2: unit]
               ((monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 r1 white) /\
               (monochrome t1 r1 N red)));
              b0: Z; i0: Z; r0: Z; t0: (array N color);

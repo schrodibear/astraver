@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.41 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.42 2002-07-18 14:45:06 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -18,14 +18,16 @@ open Env
  
        $z1 \times ... \times zk$ if no postcondition
     or $\exists. y1:z1. ... yk:zk. (Q x1 ... xn)$  otherwise *)
- 
-let product before ren env w q = match q,w with
-  | None, [_,v] -> 
+
+let make_bl = List.map (fun (id,t) -> (id, CC_var_binder t))
+
+let product before ren env w q = match q, w with
+  | None, [_, v] -> 
       v
   | None, _ -> 
-      TTtuple (w, None)
+      TTtuple (make_bl w, None)
   | Some q, _ -> 
-      TTtuple (w, Some (TTpred (apply_post before ren env q).a_value))
+      TTtuple (make_bl w, Some (TTpred (apply_post before ren env q).a_value))
 
 
 (*s [arrow_pred ren v pl] abstracts the term [v] over the pre-condition if any

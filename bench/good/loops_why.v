@@ -75,11 +75,11 @@ Save.
 Definition loop1 := (* validation *)
   [i: Z; Pre6: `i <= 10`]
     (well_founded_induction Z (Zwf ZERO) (loop1_po_1 i Pre6) [Variant1: Z]
-      (i0: Z)(_: Variant1 = `10 - i0`)(_: `i0 <= 10`)
-      (sig_2 Z unit [i1:Z][result:unit](`i1 = 10`))
+      (i0: Z)(_: Variant1 = `10 - i0`)(_0: `i0 <= 10`)
+      (sig_2 Z unit [i1: Z][result: unit](`i1 = 10`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
-       (i0: Z)(_: Variant2 = `10 - i0`)(_: `i0 <= 10`)
-       (sig_2 Z unit [i1:Z][result:unit](`i1 = 10`)); i0: Z;
+       (i0: Z)(_: Variant2 = `10 - i0`)(_0: `i0 <= 10`)
+       (sig_2 Z unit [i1: Z][result: unit](`i1 = 10`)); i0: Z;
        Pre5: Variant1 = `10 - i0`; Pre4: `i0 <= 10`]
         let (result, Bool1) =
           let (result1, Post4) = (Z_lt_ge_bool i0 `10`) in
@@ -214,11 +214,11 @@ Definition loop2 := (* validation *)
   [x: Z; Pre4: `x <= 10`]
     let (x0, result, Post5) =
       (well_founded_induction Z (Zwf ZERO) (loop2_po_1 x Pre4) [Variant1: Z]
-        (x0: Z)(_: Variant1 = `10 - x0`)(_: `x0 <= 10`)
-        (sig_2 Z unit [x1:Z][result:unit](`x1 = 10`))
+        (x0: Z)(_: Variant1 = `10 - x0`)(_0: `x0 <= 10`)
+        (sig_2 Z unit [x1: Z][result: unit](`x1 = 10`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
-         (x0: Z)(_: Variant2 = `10 - x0`)(_: `x0 <= 10`)
-         (sig_2 Z unit [x1:Z][result:unit](`x1 = 10`)); x0: Z;
+         (x0: Z)(_: Variant2 = `10 - x0`)(_0: `x0 <= 10`)
+         (sig_2 Z unit [x1: Z][result: unit](`x1 = 10`)); x0: Z;
          Pre3: Variant1 = `10 - x0`; Pre2: `x0 <= 10`]
           let (result, Bool1) =
             let (result1, Post6) = (Z_lt_ge_bool x0 `10`) in

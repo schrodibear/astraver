@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: options.mli,v 1.7 2002-04-03 15:52:04 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.8 2002-07-18 14:45:06 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -29,6 +29,8 @@ type prover = Coq | Pvs
 val prover : prover
 
 val valid : bool
+
+val coq_tactic : string option
 
 (*s Files given on the command line *)
 

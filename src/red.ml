@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.21 2002-07-11 09:22:27 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.22 2002-07-18 14:45:06 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -10,6 +10,78 @@ open Util
 
 (*s Reductions of interpretations. *)
 
+(*s We proceed in two phases (simpler without de Bruijn indices).
+    (1) first we rename bound variables, so that successive binders have 
+        different names;
+    (2) then we reduce, performing substitutions without possible captures *)
+
+(*s Phase 1: Renaming of bound variables. Argument [fv] is the set of 
+    already traversed binders (a set of identifiers) *)
+
+let rec uniq_tt fv s = function
+  | TTarray (t, tt) -> 
+      TTarray (tsubst_in_term s t, uniq_tt fv s tt)
+  | TTlambda (b, tt) ->
+      let b',fv',s' = uniq_binder fv s b in TTlambda (b', uniq_tt fv' s' tt)
+  | TTarrow (b, tt) -> 
+      let b',fv',s' = uniq_binder fv s b in TTarrow (b', uniq_tt fv' s' tt)
+  | TTtuple (bl, p) -> 
+      let bl',fv',s' = uniq_binders fv s bl in
+      TTtuple (bl', option_app (uniq_tt fv' s') p)
+  | TTpred p ->
+      TTpred (tsubst_in_predicate s p)
+  | TTpure _ as t -> 
+      t
+  | TTapp (id, t) ->
+      TTapp (id, uniq_tt fv s t)
+
+and uniq_binder fv s (id,b) =
+  let b' = match b with 
+    | CC_var_binder c -> CC_var_binder (uniq_tt fv s c)
+    | CC_pred_binder c -> CC_pred_binder (tsubst_in_predicate s c)
+    | CC_untyped_binder -> CC_untyped_binder
+  in
+  let id' = next_away id fv in
+  if id' <> id then 
+    (id',b'), Idset.add id' fv, Idmap.add id (Tvar id') s 
+  else 
+    (id,b'), Idset.add id fv, s
+
+and uniq_binders fv s = function
+  | [] -> 
+      [], fv, s
+  | b :: bl -> 
+      let b',fv',s' = uniq_binder fv s b in 
+      let bl',fv'',s'' = uniq_binders fv' s' bl in
+      b' :: bl', fv'', s''
+
+let rec uniq_cc fv s = function
+  | CC_var x | CC_term (Tvar x) ->
+      CC_term (try Idmap.find x s with Not_found -> Tvar x)
+  | CC_letin (dep, bl, e1, e2) ->
+      let bl',fv',s' = uniq_binders fv s bl in
+      CC_letin (dep, bl', uniq_cc fv s e1, uniq_cc fv' s' e2)
+  | CC_lam (b, e) ->
+      let b',fv',s' = uniq_binder fv s b in
+      CC_lam (b', uniq_cc fv' s' e)
+  | CC_app (f, a) ->
+      CC_app (uniq_cc fv s f, uniq_cc fv s a)
+  | CC_if (a,b,c) ->
+      CC_if (uniq_cc fv s a, uniq_cc fv s b, uniq_cc fv s c)
+  | CC_tuple (al, po) ->
+      CC_tuple (List.map (uniq_cc fv s) al, option_app (uniq_tt fv s) po)
+  | CC_term c ->
+      CC_term (tsubst_in_term s c)
+  | CC_hole ty ->
+      CC_hole (tsubst_in_predicate s ty)
+  | CC_type t ->
+      CC_type (uniq_tt fv s t)
+
+
+(*s Phase 2: we reduce. *)
+
+(*s Occurrence in the range of a substitution *)
+
 let in_rng id s =
   try
     Idmap.iter (fun _ t -> if occur_term id t then raise Exit) s; false
@@ -18,33 +90,25 @@ let in_rng id s =
 
 (*s Traversing binders and substitution within CC types *)
 
-let rec cc_subst_binder s (id,b) = 
-  let b' = match b with 
-    | CC_var_binder c -> CC_var_binder (cc_type_subst s c)
-    | CC_pred_binder c -> CC_pred_binder (tsubst_in_predicate s c)
-    | CC_untyped_binder -> CC_untyped_binder
-  in
-  (id,b'), Idmap.remove id s
+let rec cc_subst_binder_type s = function
+  | CC_var_binder c -> CC_var_binder (cc_type_subst s c)
+  | CC_pred_binder c -> CC_pred_binder (tsubst_in_predicate s c)
+  | CC_untyped_binder -> CC_untyped_binder
 
-and cc_subst_binders s = function
-  | [] -> 
-      [], s
-  | b :: bl -> 
-      let b',s' = cc_subst_binder s b in 
-      let bl',s'' = cc_subst_binders s' bl in
-      b'::bl', s''
+and cc_subst_binder s (id,b) = (id, cc_subst_binder_type s b)
+
+and cc_subst_binders s = List.map (cc_subst_binder s)
 
 and cc_type_subst s = function
   | TTarray (t, tt) -> 
       TTarray (tsubst_in_term s t, cc_type_subst s tt)
   | TTlambda (b, tt) ->
-      let b',s' = cc_subst_binder s b in TTlambda (b', cc_type_subst s' tt)
+      let b' = cc_subst_binder s b in TTlambda (b', cc_type_subst s tt)
   | TTarrow (b, tt) -> 
-      let b',s' = cc_subst_binder s b in TTarrow (b', cc_type_subst s' tt)
-  | TTtuple (ttl, p) -> 
-      let s' = List.fold_right Idmap.remove (List.map fst ttl) s in
-      TTtuple (List.map (fun (id,t) -> (id, cc_type_subst s t)) ttl,
-	       option_app (cc_type_subst s') p)
+      let b' = cc_subst_binder s b in TTarrow (b', cc_type_subst s tt)
+  | TTtuple (bl, p) -> 
+      let bl' = cc_subst_binders s bl in
+      TTtuple (bl', option_app (cc_type_subst s) p)
   | TTpred p ->
       TTpred (tsubst_in_predicate s p)
   | TTpure _ as t -> 
@@ -91,20 +155,16 @@ let rec red sp s cct =
 	 | CC_tuple (al,_) when is_iota_redex bl al ->
 	     red sp (iota_subst s (bl, al)) e2
 	 | re1 ->
-	     let bl',s' = cc_subst_binders s bl in
-	     (match red sp s' e2 with
+	     let bl' = cc_subst_binders s bl in
+	     (match red sp s e2 with
 		(* [let (x1,...,xn) = e1 in (x1,...,xn)] *)
 		| CC_tuple (al,_) when is_eta_redex bl al ->
 		    red sp s e1
 		| re2 ->
 		    CC_letin (dep, bl', re1, re2)))
-  | CC_lam ((id, CC_var_binder c), e) when in_rng id s ->
-      let id' = bound id in
-      let e' = red Idmap.empty (subst_one id (Tvar id')) e in
-      CC_lam ((id', CC_var_binder (cc_type_subst s c)), red sp s e')
   | CC_lam (b, e) ->
-      let b',s' = cc_subst_binder s b in
-      CC_lam (b', red sp s' e)
+      let b' = cc_subst_binder s b in
+      CC_lam (b', red sp s e)
   | CC_app (f, a) ->
       (match red sp s f, red sp s a with
 	 (* two terms *)
@@ -129,4 +189,7 @@ let rec red sp s cct =
       CC_type (cc_type_subst s t)
 
 
-let red = red Idmap.empty Idmap.empty
+let red c = 
+  let c' = uniq_cc Idset.empty Idmap.empty c in
+  red Idmap.empty Idmap.empty c'
+

@@ -604,9 +604,10 @@ Definition initnext := (* validation *)
                     ~(match p `i0 + 1 - z` p `0` z))) /\
                   ((k:Z)
                    (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))))
-                  (sig_4 Z Z (array M Z) unit [i1:Z][j1:Z][next2:(array M Z)]
-                   [result:unit](`0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\
-                   `i1 <= M`) /\ (match p `i1 - j1` p `0` j1) /\
+                  (sig_4 Z Z (array M Z) unit [i1: Z][j1: Z]
+                   [next2: (array M Z)][result3: unit](`0 <= j1` /\
+                   `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
+                   (match p `i1 - j1` p `0` j1) /\
                    ((z:Z)
                     (`j1 + 1 < z` /\ `z < i1 + 1` ->
                      ~(match p `i1 + 1 - z` p `0` z))) /\
@@ -623,8 +624,8 @@ Definition initnext := (* validation *)
                      ~(match p `i0 + 1 - z` p `0` z))) /\
                    ((k:Z)
                     (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))))
-                   (sig_4 Z Z (array M Z) unit [i1:Z][j1:Z]
-                    [next2:(array M Z)][result:unit](`0 <= j1` /\
+                   (sig_4 Z Z (array M Z) unit [i1: Z][j1: Z]
+                    [next2: (array M Z)][result3: unit](`0 <= j1` /\
                     `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
                     (match p `i1 - j1` p `0` j1) /\
                     ((z:Z)
@@ -652,7 +653,7 @@ Definition initnext := (* validation *)
                                            else `i0 >= M - 1`)
                             result3 Bool1) of
                     | (left Test7) =>
-                        let (i1, j1, next2, result4, Inv) =
+                        let (i1, j1, next2, result4, Inv0) =
                           let (i1, j1, next2, result4, Inv0) =
                             let (i1, j1, next2, result4, Inv0) =
                               let (result4, Bool3) =
@@ -892,9 +893,9 @@ Definition initnext := (* validation *)
                           ~(match p `i2 + 1 - z` p `0` z))) /\
                         ((k:Z)
                          (`0 < k` /\ `k <= i2` -> (Next p k (access next3 k)))) /\
-                        `i2 >= M - 1` i1 j1 next2 result4 Inv)
+                        `i2 >= M - 1` i1 j1 next2 result4 Inv0)
                     | (right Test2) =>
-                        let (i1, j1, next2, result4, Inv) = (exist_4 [i1: Z]
+                        let (i1, j1, next2, result4, Inv0) = (exist_4 [i1: Z]
                           [j1: Z][next2: (array M Z)][result4: unit]
                           `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\
                           `i1 <= M`) /\ (match p `i1 - j1` p `0` j1) /\
@@ -917,7 +918,7 @@ Definition initnext := (* validation *)
                           ~(match p `i2 + 1 - z` p `0` z))) /\
                         ((k:Z)
                          (`0 < k` /\ `k <= i2` -> (Next p k (access next3 k)))) /\
-                        `i2 >= M - 1` i1 j1 next2 result4 Inv) end)
+                        `i2 >= M - 1` i1 j1 next2 result4 Inv0) end)
                   (pairZ `M - result` result0) result result0 next0
                   (refl_equal ? (pairZ `M - result` result0))
                   (initnext_po_14 next p result Post1 result0 Post2 Test8
@@ -1405,7 +1406,7 @@ Definition kmp := (* validation *)
             `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
             (match a `i0 - j0` p `0` j0) /\
             ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-            (sig_3 Z Z unit [i1:Z][j1:Z][result:unit](`0 <= j1` /\
+            (sig_3 Z Z unit [i1: Z][j1: Z][result2: unit](`0 <= j1` /\
              `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
              (match a `i1 - j1` p `0` j1) /\
              ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
@@ -1416,7 +1417,7 @@ Definition kmp := (* validation *)
              `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
              (match a `i0 - j0` p `0` j0) /\
              ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-             (sig_3 Z Z unit [i1:Z][j1:Z][result:unit](`0 <= j1` /\
+             (sig_3 Z Z unit [i1: Z][j1: Z][result2: unit](`0 <= j1` /\
               `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
               (match a `i1 - j1` p `0` j1) /\
               ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
@@ -1462,7 +1463,7 @@ Definition kmp := (* validation *)
                                      `j0 >= M` /\ false = false)
                       result2 Post4) of
               | (left Test8) =>
-                  let (i1, j1, result3, Inv) =
+                  let (i1, j1, result3, Inv0) =
                     let (i1, j1, result3, Inv0) =
                       let (i1, j1, result3, Inv0) =
                         let (result3, Bool4) =
@@ -1603,9 +1604,9 @@ Definition kmp := (* validation *)
                   (match a `i2 - j2` p `0` j2) /\
                   ((k:Z) (`0 <= k` /\ `k < i2 - j2` -> ~(match a k p `0` M))) /\
                   (`j2 < M` /\ `i2 >= N` \/ `j2 >= M` /\ false = false) 
-                  i1 j1 result3 Inv)
+                  i1 j1 result3 Inv0)
               | (right Test3) =>
-                  let (i1, j1, result3, Inv) = (exist_3 [i1: Z][j1: Z]
+                  let (i1, j1, result3, Inv0) = (exist_3 [i1: Z][j1: Z]
                     [result3: unit]`0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\
                     `i1 <= N`) /\ (match a `i1 - j1` p `0` j1) /\
                     ((k:Z)
@@ -1619,7 +1620,7 @@ Definition kmp := (* validation *)
                   (match a `i2 - j2` p `0` j2) /\
                   ((k:Z) (`0 <= k` /\ `k < i2 - j2` -> ~(match a k p `0` M))) /\
                   (`j2 < M` /\ `i2 >= N` \/ `j2 >= M` /\ false = false) 
-                  i1 j1 result3 Inv) end) (pairZ `N - result` result0) 
+                  i1 j1 result3 Inv0) end) (pairZ `N - result` result0)
             result result0 (refl_equal ? (pairZ `N - result` result0))
             (kmp_po_13 a p result Post1 result0 Post2 next0 Post15)) in
         let (result3, Post21) =

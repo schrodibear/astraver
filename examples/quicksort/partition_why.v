@@ -1240,8 +1240,8 @@ Definition partition := (* validation *)
               `i0 <= r` /\ `j0 <= r` /\ (array_le t0 `l + 1` `i0 - 1` pv) /\
               (array_ge t0 `j0 + 1` r pv) /\ (sub_permut l r t0 t) /\
               `(access t0 l) = (access t l)`)
-              (sig_4 Z Z (array N Z) unit [i1:Z][j1:Z][t1:(array N Z)]
-               [result:unit](`l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
+              (sig_4 Z Z (array N Z) unit [i1: Z][j1: Z][t1: (array N Z)]
+               [result1: unit](`l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
                (array_le t1 `l + 1` `i1 - 1` pv) /\
                (array_ge t1 `j1 + 1` r pv) /\ (sub_permut l r t1 t) /\
                `(access t1 l) = (access t l)` /\ `i1 >= j1`))
@@ -1252,8 +1252,8 @@ Definition partition := (* validation *)
                (array_le t0 `l + 1` `i0 - 1` pv) /\
                (array_ge t0 `j0 + 1` r pv) /\ (sub_permut l r t0 t) /\
                `(access t0 l) = (access t l)`)
-               (sig_4 Z Z (array N Z) unit [i1:Z][j1:Z][t1:(array N Z)]
-                [result:unit](`l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
+               (sig_4 Z Z (array N Z) unit [i1: Z][j1: Z][t1: (array N Z)]
+                [result1: unit](`l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
                 (array_le t1 `l + 1` `i1 - 1` pv) /\
                 (array_ge t1 `j1 + 1` r pv) /\ (sub_permut l r t1 t) /\
                 `(access t1 l) = (access t l)` /\ `i1 >= j1`));
@@ -1271,7 +1271,7 @@ Definition partition := (* validation *)
                                        else `i0 >= j0`)
                         result1 Bool1) of
                 | (left Test12) =>
-                    let (i1, j1, t1, result2, Inv) =
+                    let (i1, j1, t1, result2, Inv0) =
                       let (i1, j1, t1, result2, Inv0) =
                         let (i1, result2, Invi) =
                           (well_founded_induction Z (Zwf ZERO)
@@ -1280,8 +1280,8 @@ Definition partition := (* validation *)
                             Test12) [Variant3: Z](i1: Z)
                             (_: Variant3 = `r - i1`)(Invi: `i0 <= i1` /\
                             `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` pv))
-                            (sig_2 Z unit [i2:Z][result:unit](`i0 <= i2` /\
-                             `i2 <= r` /\
+                            (sig_2 Z unit [i2: Z][result2: unit]
+                             (`i0 <= i2` /\ `i2 <= r` /\
                              (array_le t0 `l + 1` `i2 - 1` pv) /\
                              (`(access t0 i2) <= pv` /\ `i2 >= j0` \/
                              `(access t0 i2) > pv` /\ false = false)))
@@ -1289,8 +1289,8 @@ Definition partition := (* validation *)
                              (Pre3: (Zwf `0` Variant4 Variant3))(i1: Z)
                              (_: Variant4 = `r - i1`)(Invi: `i0 <= i1` /\
                              `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` pv))
-                             (sig_2 Z unit [i2:Z][result:unit](`i0 <= i2` /\
-                              `i2 <= r` /\
+                             (sig_2 Z unit [i2: Z][result2: unit]
+                              (`i0 <= i2` /\ `i2 <= r` /\
                               (array_le t0 `l + 1` `i2 - 1` pv) /\
                               (`(access t0 i2) <= pv` /\ `i2 >= j0` \/
                               `(access t0 i2) > pv` /\ false = false)));
@@ -1369,7 +1369,7 @@ Definition partition := (* validation *)
                                                      false = false)
                                       result2 Post5) of
                               | (left Test5) =>
-                                  let (i2, result3, Invi) =
+                                  let (i2, result3, Invi0) =
                                     let (i2, result3, Invi0) =
                                       let (i2, result3, Post6) =
                                         let (result3, Post6) =
@@ -1402,9 +1402,9 @@ Definition partition := (* validation *)
                                   (array_le t0 `l + 1` `i3 - 1` pv) /\
                                   (`(access t0 i3) <= pv` /\ `i3 >= j0` \/
                                   `(access t0 i3) > pv` /\ false = false) 
-                                  i2 result3 Invi)
+                                  i2 result3 Invi0)
                               | (right Test4) =>
-                                  let (i2, result3, Invi) = (exist_2 [i2: Z]
+                                  let (i2, result3, Invi0) = (exist_2 [i2: Z]
                                     [result3: unit]`i0 <= i2` /\ `i2 <= r` /\
                                     (array_le t0 `l + 1` `i2 - 1` pv) /\
                                     (`(access t0 i2) <= pv` /\ `i2 >= j0` \/
@@ -1419,7 +1419,7 @@ Definition partition := (* validation *)
                                   (array_le t0 `l + 1` `i3 - 1` pv) /\
                                   (`(access t0 i3) <= pv` /\ `i3 >= j0` \/
                                   `(access t0 i3) > pv` /\ false = false) 
-                                  i2 result3 Invi) end) `r - i0` i0
+                                  i2 result3 Invi0) end) `r - i0` i0
                             (refl_equal ? `r - i0`)
                             (partition_po_11 l r t Pre14 Pre1 pv Post1 result
                             Post2 result0 Post3 Variant1 i0 j0 t0 Pre10 Inv
@@ -1431,7 +1431,7 @@ Definition partition := (* validation *)
                             Test12 i1 Invi) [Variant5: Z](j1: Z)
                             (_: Variant5 = j1)(Invj: `l <= j1` /\
                             `j1 <= j0` /\ (array_ge t0 `j1 + 1` r pv))
-                            (sig_2 Z unit [j2:Z][result:unit](`l <= j2` /\
+                            (sig_2 Z unit [j2: Z][result3: unit](`l <= j2` /\
                              `j2 <= j0` /\ (array_ge t0 `j2 + 1` r pv) /\
                              (`(access t0 j2) >= pv` /\ `i1 >= j2` \/
                              `(access t0 j2) < pv` /\ false = false)))
@@ -1439,8 +1439,9 @@ Definition partition := (* validation *)
                              (Pre6: (Zwf `0` Variant6 Variant5))(j1: Z)
                              (_: Variant6 = j1)(Invj: `l <= j1` /\
                              `j1 <= j0` /\ (array_ge t0 `j1 + 1` r pv))
-                             (sig_2 Z unit [j2:Z][result:unit](`l <= j2` /\
-                              `j2 <= j0` /\ (array_ge t0 `j2 + 1` r pv) /\
+                             (sig_2 Z unit [j2: Z][result3: unit]
+                              (`l <= j2` /\ `j2 <= j0` /\
+                              (array_ge t0 `j2 + 1` r pv) /\
                               (`(access t0 j2) >= pv` /\ `i1 >= j2` \/
                               `(access t0 j2) < pv` /\ false = false)));
                              j1: Z; Pre8: Variant5 = j1; Invj: `l <= j1` /\
@@ -1519,7 +1520,7 @@ Definition partition := (* validation *)
                                                      false = false)
                                       result3 Post8) of
                               | (left Test9) =>
-                                  let (j2, result4, Invj) =
+                                  let (j2, result4, Invj0) =
                                     let (j2, result4, Invj0) =
                                       let (j2, result4, Post9) =
                                         let (result4, Post9) =
@@ -1553,9 +1554,9 @@ Definition partition := (* validation *)
                                   (array_ge t0 `j3 + 1` r pv) /\
                                   (`(access t0 j3) >= pv` /\ `i1 >= j3` \/
                                   `(access t0 j3) < pv` /\ false = false) 
-                                  j2 result4 Invj)
+                                  j2 result4 Invj0)
                               | (right Test8) =>
-                                  let (j2, result4, Invj) = (exist_2 [j2: Z]
+                                  let (j2, result4, Invj0) = (exist_2 [j2: Z]
                                     [result4: unit]`l <= j2` /\ `j2 <= j0` /\
                                     (array_ge t0 `j2 + 1` r pv) /\
                                     (`(access t0 j2) >= pv` /\ `i1 >= j2` \/
@@ -1570,7 +1571,7 @@ Definition partition := (* validation *)
                                   (array_ge t0 `j3 + 1` r pv) /\
                                   (`(access t0 j3) >= pv` /\ `i1 >= j3` \/
                                   `(access t0 j3) < pv` /\ false = false) 
-                                  j2 result4 Invj) end) j0 j0
+                                  j2 result4 Invj0) end) j0 j0
                             (refl_equal ? j0)
                             (partition_po_20 l r t Pre14 Pre1 pv Post1 result
                             Post2 result0 Post3 Variant1 i0 j0 t0 Pre10 Inv
@@ -1675,9 +1676,9 @@ Definition partition := (* validation *)
                     (array_le t2 `l + 1` `i2 - 1` pv) /\
                     (array_ge t2 `j2 + 1` r pv) /\ (sub_permut l r t2 t) /\
                     `(access t2 l) = (access t l)` /\ `i2 >= j2` i1 j1 
-                    t1 result2 Inv)
+                    t1 result2 Inv0)
                 | (right Test1) =>
-                    let (i1, j1, t1, result2, Inv) = (exist_4 [i1: Z][j1: Z]
+                    let (i1, j1, t1, result2, Inv0) = (exist_4 [i1: Z][j1: Z]
                       [t1: (array N Z)][result2: unit]`l + 1 <= i1` /\
                       `i1 <= r` /\ `j1 <= r` /\
                       (array_le t1 `l + 1` `i1 - 1` pv) /\
@@ -1691,8 +1692,8 @@ Definition partition := (* validation *)
                     (array_le t2 `l + 1` `i2 - 1` pv) /\
                     (array_ge t2 `j2 + 1` r pv) /\ (sub_permut l r t2 t) /\
                     `(access t2 l) = (access t l)` /\ `i2 >= j2` i1 j1 
-                    t1 result2 Inv) end) `N + 2 + result0 - result` result
-              result0 t (refl_equal ? `N + 2 + result0 - result`)
+                    t1 result2 Inv0) end) `N + 2 + result0 - result` 
+              result result0 t (refl_equal ? `N + 2 + result0 - result`)
               (partition_po_27 l r t Pre14 Pre1 pv Post1 result Post2 result0
               Post3)) in
           let (t1, result2, Post27) =
