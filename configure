@@ -1001,6 +1001,21 @@ if test "$COQDEP" = true ; then
 fi
 COQLIB=`coqc -where`
 
+echo $ac_n "checking Coq version""... $ac_c" 1>&6
+echo "configure:1006: checking Coq version" >&5
+COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([^ ]*\) .*$|\1|p' `
+
+case $COQVERSION in
+  7.3)
+    echo "$ac_t""$COQVERSION" 1>&6
+    cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
+  7.3*)
+    echo "$ac_t""$COQVERSION" 1>&6
+    cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+  *)
+    { echo "configure: error: You need Coq 7.3 or later" 1>&2; exit 1; };;
+esac
+
 # substitutions to perform
 
 

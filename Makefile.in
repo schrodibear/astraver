@@ -52,7 +52,9 @@ COQINCLUDES = -I lib/coq
 
 VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
      lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
-     lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo
+     lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo \
+     lib/coq/WhyCoqCompat.vo
+VFILES=$(VO:.vo=.v)
 
 GENERATED = src/version.ml src/parser.ml \
 	    src/clexer.ml src/cparser.ml src/cparser.mli
@@ -90,6 +92,8 @@ VERSION=0.6
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
 	echo "let date = \""`date`"\"" >> $@
+# 	echo "let sources = \""`pwd`"\"" >> $@
+# 	echo "let coqlib = \""$(COQLIB)"\"" >> $@
 
 doc::
 	cd doc; make
@@ -120,11 +124,13 @@ src/logic.ml: src/logic.mli
 # installation
 ##############
 
-install: $(BINARY)
+install: $(BINARY) $(VO)
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why
 	mkdir -p $(MANDIR)/man1
 	cp -f doc/why.1 $(MANDIR)/man1
+	mkdir -p $(COQLIB)/contrib/why
+	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
 
 local: $(STATICBINARY)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why

@@ -159,6 +159,20 @@ if test "$COQDEP" = true ; then
 fi
 COQLIB=`coqc -where`
 
+AC_MSG_CHECKING(Coq version)
+COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
+
+case $COQVERSION in
+  7.3)
+    AC_MSG_RESULT($COQVERSION)
+    cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
+  7.3*)
+    AC_MSG_RESULT($COQVERSION)
+    cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+  *)
+    AC_MSG_ERROR(You need Coq 7.3 or later);;
+esac
+
 # substitutions to perform
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)

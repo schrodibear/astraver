@@ -6,7 +6,7 @@ Require Why.
 Lemma f1_po_1 : 
   (x: Z)
   (Pre6: `x >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -87,7 +87,7 @@ Definition f1 := (* validation *)
 Lemma f2_po_1 : 
   (x: Z)
   (Pre6: `x >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -179,7 +179,7 @@ Definition f2 := (* validation *)
 Lemma f3_po_1 : 
   (a: Z)
   (Pre6: `a >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -295,7 +295,7 @@ Definition f3 := (* validation *)
 Lemma f4_po_1 : 
   (a: Z)
   (Pre6: `a >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

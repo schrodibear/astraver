@@ -5,7 +5,7 @@ Require Omega.
 Lemma loop1_po_1 : 
   (i: Z)
   (Pre6: `i <= 10`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with datatypes.
 Save.
@@ -106,7 +106,7 @@ Definition oppose := (* validation *)
 Lemma loop2_po_1 : 
   (x: Z)
   (Pre4: `x <= 10`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with datatypes.
 Save.
