@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.42 2003-05-12 15:13:23 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.43 2004-03-24 07:40:37 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -160,6 +160,7 @@ val is_int_arith_unop : t -> bool
 val is_int_arith : t -> bool
 
 val is_float_arith_binop : t -> bool
+val is_float_arith : t -> bool
 
 val is_arith_binop : t -> bool
 

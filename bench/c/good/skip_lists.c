@@ -55,14 +55,14 @@ list empty() {
   return l;
 }
 
-/*@ ensures 0 <= \result <= 1 */
+/*@ ensures 0.0 <= \result <= 1.0 */
 float rand01();
 
 /*@ ensures 1 <= \result <= MaxNbLevels */
 int random_level() {
-  static float p = 0.25;
+  static float prob = 0.25;
   int lvl = 1;
-  while (rand01() < p && lvl < MaxNbLevels) 
+  while (rand01() < prob && lvl < MaxNbLevels) 
     lvl++;
   return lvl;
 }

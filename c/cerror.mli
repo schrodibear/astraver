@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cerror.mli,v 1.3 2004-02-04 13:45:19 filliatr Exp $ i*)
+(*i $Id: cerror.mli,v 1.4 2004-03-24 07:40:37 filliatr Exp $ i*)
 
 type t = 
   | AnyMessage of string
   | ExpectedType of Cast.tctype * Cast.tctype
   | TooManyArguments
   | PartialApp
+  | Unsupported of string
 	  

@@ -9,6 +9,7 @@ type constant =
 
 let fprintf_constant form e =
   match e with
+    | Prim_int(n) when n<0 -> fprintf form "(%d)" n
     | Prim_int(n) -> fprintf form "%d" n
     | Prim_float(f) -> fprintf form "%f" f
     | Prim_bool(b) -> fprintf form "%b" b
@@ -44,7 +45,7 @@ let rec fprintf_term form t =
       fprintf form "@[%s(%a" id fprintf_term t;
       List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
       fprintf form ")@]"
-  | LApp(_,_) -> assert false      
+  | LApp(id,[])
   | LVar(id) -> fprintf form "%s" id
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
 ;;

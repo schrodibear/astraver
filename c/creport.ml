@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.7 2004-02-24 10:27:22 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.8 2004-03-24 07:40:37 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -81,10 +81,13 @@ let report fmt = function
       fprintf fmt "Error: too many arguments"
   | PartialApp ->
       fprintf fmt "Error: this application is partial"
+  | Unsupported s ->
+      fprintf fmt "Error: unsupported feature (%s)" s
 
 let raise_located loc e = raise (Error (Some loc, e))
 let raise_unlocated e = raise (Error (None, e))
 let raise_locop locop e = raise (Error (locop, e))
+let unsupported s = raise (Error (None, Unsupported s))
 
 let error l s = raise (Error (Some l, AnyMessage s))
 let warning l s = 

@@ -150,7 +150,7 @@ let rec term t =
     | Tunop (Ustar, t) ->
 	add_pointer_var t.term_type (term t)
     | Tunop (Uminus, t) -> term t
-    | Tblock_length t -> term t
+    | Tblock_length t -> add_alloc (term t)
     | Tat (t, _) -> 
 	term t
     | Told t -> 

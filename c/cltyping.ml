@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.26 2004-03-22 10:20:10 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.27 2004-03-24 07:40:37 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -105,7 +105,7 @@ and type_term_node loc env = function
 	| CTpointer ty | CTarray (ty, _) -> Tunop (Ustar, t), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
-   | PLbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
+  | PLbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
       let t1 = type_num_term env t1 in
       let t2 = type_num_term env t2 in
       Tbinop (t1, op, t2), max_type t1.term_type t2.term_type
@@ -134,7 +134,7 @@ and type_term_node loc env = function
 	     error loc "subscripted value is neither array nor pointer")
   | PLif (t1, t2, t3) ->
       (* TODO type de t1 ? *)
-      assert false (*TODO*)
+      unsupported "logic if-then-else"
   | PLold t ->
       let t = type_term env t in
       Told t, t.term_type
@@ -153,7 +153,7 @@ and type_term_node loc env = function
   | PLnull ->
       Tnull, c_void_star
   | PLcast (ty, t) ->
-      assert false (* TODO *)
+      unsupported "logic cast"
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ 
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->

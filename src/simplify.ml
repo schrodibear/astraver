@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.14 2004-03-23 14:25:12 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.15 2004-03-24 07:40:37 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -64,13 +64,7 @@ let prefix id =
   else if id == t_mod_int then "int_mod"
   else if id == t_neg_int then "-"
   (* float ops *)
-  else if id == t_add_float 
-       || id == t_sub_float 
-       || id == t_mul_float 
-       || id == t_div_float 
-       || id == t_neg_float 
-       || id == t_sqrt_float 
-       || id == t_float_of_int 
+  else if is_float_comparison id || is_float_arith id || id == t_float_of_int 
   then
     Report.raise_unlocated (AnyMessage "Simplify does not support floats")
   else assert false
