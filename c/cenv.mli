@@ -14,7 +14,7 @@ val pointer_or_array_type : 'a ctype -> bool
 val is_null : texpr -> bool
 
 (* Global environment *)
-val add_sym : Loc.t -> string -> tctype -> var_info -> unit
+val add_sym : Loc.t -> string -> tctype -> var_info -> var_info
 val find_sym : string -> tctype * var_info
 
 val add_typedef : Loc.t -> string -> tctype -> unit
@@ -42,6 +42,7 @@ module Env : sig
 
   val add : string -> tctype -> var_info -> t -> t
   val find : string -> t -> tctype * var_info
+  val mem : string -> t -> bool
 
   val find_tag_type : Loc.t -> t -> texpr ctype_node -> texpr ctype_node
 

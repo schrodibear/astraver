@@ -385,7 +385,7 @@ let functions dl =
     | Tfunspec (sp, _, id, _) ->
 	declare id (spec sp)
     | Tfundef (sp, _, id, _, s) ->
-	declare id (ef_union (ef_option spec sp) (statement s))
+	declare id (ef_union (spec sp) (statement s))
     | _ -> 
 	()
   in

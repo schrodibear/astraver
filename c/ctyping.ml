@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.48 2004-03-23 08:04:34 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.49 2004-03-23 12:54:53 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -195,7 +195,8 @@ and type_type_node loc env = function
       let fl = List.map type_enum_field fl in
       let tyn = Env.find_tag_type loc env (CTenum (x, Decl fl)) in
       let ty = noattr tyn in
-      List.iter (fun (f,_) -> add_sym loc f ty (default_var_info f)) fl;
+      List.iter 
+	(fun (f,_) -> ignore (add_sym loc f ty (default_var_info f))) fl;
       tyn
   | CTfun (pl, tyn) ->
       let pl = List.map (type_parameter loc env) pl in
@@ -667,6 +668,7 @@ and type_block env et (dl,sl) =
     | [] -> 
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
+	if Env.mem x env then error d.loc ("redeclaration of `" ^ x ^ "'");
 	let ty = type_type d.loc env ty in	
 	if eq_type_node ty.ctype_node CTvoid then 
 	  error d.loc ("variable `"^x^"' declared void");
@@ -738,6 +740,36 @@ let type_spec_decl ofs = function
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
 
+(* table storing function specifications *)
+let function_specs = Hashtbl.create 97
+
+let empty_spec () = 
+  { requires = None; assigns = []; ensures = None; decreases = None } 
+
+let is_empty_spec s = 
+  s.requires = None && s.assigns = [] && s.ensures = None && s.decreases = None
+
+let function_spec loc f = function
+  (* no spec given; we return the current spec if any, or [empty_spec] *)
+  | None ->
+      (try 
+	 Hashtbl.find function_specs f
+       with Not_found -> 
+	 let s = empty_spec () in Hashtbl.add function_specs f s; s)
+  (* a spec is given; we update the current spec only if [empty_spec] *)
+  | Some s ->
+      (try 
+	 let s' = Hashtbl.find function_specs f in
+	 if not (is_empty_spec s') then 
+	   error loc ("already a specification for " ^ f);
+	 s'.requires <- s.requires;
+	 s'.assigns <- s.assigns;
+	 s'.ensures <- s.ensures;
+	 s'.decreases <- s.decreases;
+	 s'
+       with Not_found -> 
+	 Hashtbl.add function_specs f s; s)
+
 let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
       type_spec_decl ofs s
@@ -750,27 +782,33 @@ let type_decl d = match d.node with
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
       let ty = type_type d.loc Env.empty ty in
-      let info = default_var_info x in
-      info.var_is_static <- true;
-      Loc.report Coptions.log d.loc;
-      fprintf Coptions.log "Variable %s is assigned@." info.var_name;
-      info.var_is_assigned <- true;
-      add_sym d.loc x ty info;
-      Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
+      let info = add_sym d.loc x ty (default_var_info x) in
+      begin match ty.ctype_node with
+	| CTfun (pl, ty) ->
+	    Tfunspec (function_spec d.loc x None, ty, info, pl)
+	| _ -> 
+	    info.var_is_static <- true;
+	    Loc.report Coptions.log d.loc;
+	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
+	    info.var_is_assigned <- true;
+	    Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
+      end
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc Env.empty ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       let s = type_spec ~result:ty env s in
+      let s = function_spec d.loc f (Some s) in
       let info = default_var_info f in
-      add_sym d.loc f (noattr (CTfun (pl, ty))) info;
+      let info = add_sym d.loc f (noattr (CTfun (pl, ty))) info in
       Tfunspec (s, ty, info, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
       let et = if eq_type ty c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       let s = option_app (type_spec ~result:ty env) s in
+      let s = function_spec d.loc f s in
       let info = default_var_info f in
-      add_sym d.loc f (noattr (CTfun (pl, ty))) info;
+      let info = add_sym d.loc f (noattr (CTfun (pl, ty))) info in
       let bl,st = type_statement env et bl in
       if st.term && et <> None then
 	warning d.loc "control reaches end of non-void function";

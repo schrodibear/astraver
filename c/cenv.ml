@@ -149,18 +149,23 @@ let add_sym l x ty info =
     if not (eq_type t ty) then 
       (* TODO accepter fonctions avec arguments si aucun la première fois 
 	 Question de Claude: accepter aussi un raffinement des specs ? *)
-      error l ("conflicting types for " ^ x)
-  end else
-    Hashtbl.add sym_t x (ty,info)
+      error l ("conflicting types for " ^ x);
+    i
+  end else begin
+    Hashtbl.add sym_t x (ty,info);
+    info
+  end
 
 (*s Environments for the logical side *)
 
 let functions = 
-  (Hashtbl.create 97 : (string, tctype list * tctype * Info.logic_info) Hashtbl.t)
+  (Hashtbl.create 97 : 
+     (string, tctype list * tctype * Info.logic_info) Hashtbl.t)
 let add_fun = Hashtbl.add functions
 let find_fun = Hashtbl.find functions
 
-let predicates = (Hashtbl.create 97 : (string, tctype list * Info.logic_info) Hashtbl.t) 
+let predicates = 
+  (Hashtbl.create 97 : (string, tctype list * Info.logic_info) Hashtbl.t) 
 let add_pred = Hashtbl.add predicates
 let find_pred = Hashtbl.find predicates
 
@@ -187,6 +192,8 @@ module Env = struct
     { env with vars = M.add x (t,info) env.vars }
 
   let find x env = M.find x env.vars
+
+  let mem x env = M.mem x env.vars
 
   (* tagged type *)
   let find_tag n env =

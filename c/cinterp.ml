@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.46 2004-03-23 09:44:08 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.47 2004-03-23 12:54:53 filliatr Exp $ i*)
 
 
 open Format
@@ -641,16 +641,6 @@ and interp_block ab (decls,stats) =
   in
   List.fold_right interp_decl decls (block stats)
 
-let no_spec = 
-  { requires = None; 
-    assigns = []; 
-    ensures = None; 
-    decreases = None }
-
-let interp_spec_option = function
-  | None -> interp_spec no_spec
-  | Some s -> interp_spec s
-
 let interp_predicate_args id args =
   let args =
     List.fold_right
@@ -723,7 +713,7 @@ let interp_fun_params pre params =
 
 
 let interp_function_spec id sp ty pl =
-  let pre,post = interp_spec_option sp in
+  let pre,post = interp_spec sp in
   let pre,tpl = interp_fun_params pre pl in
   let r = HeapVarSet.elements id.function_reads in
   let w = HeapVarSet.elements id.function_writes in
@@ -773,11 +763,11 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	      assert false (* TODO *)
       end
   | Tfunspec(spec,ctype,id,params) -> 
-      (why_code, interp_function_spec id (Some spec) ctype params :: why_spec,
+      (why_code, interp_function_spec id spec ctype params :: why_spec,
        prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
       lprintf "translating function %s@." id.var_name;
-      let pre,post = interp_spec_option spec in
+      let pre,post = interp_spec spec in
       let pre,tparams = interp_fun_params pre params in
       abrupt_return := None;
       let tblock = catch_return (interp_statement false block) in

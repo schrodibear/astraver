@@ -31,7 +31,7 @@ coq/%_valid.vo: coq/%_why.vo
 coq/%.vo: coq/%.v
 	coqc -R ../../../lib/coq Coq.why -I coq $<
 
-simplify:
+simplify_:
 	time make do_simplify > simplify.log
 	@echo -n "valid obligations: " 
 	@egrep '[0-9]+: Valid.$$' simplify.log | wc -l

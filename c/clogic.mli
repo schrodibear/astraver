@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.23 2004-03-18 15:21:38 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.24 2004-03-23 12:54:53 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -125,10 +125,10 @@ type 'term location =
 type 'term variant = 'term * string option
 
 type ('term,'pred) spec = { 
-  requires : 'pred option;
-  assigns : 'term location list;    
-  ensures : 'pred option;
-  decreases : 'term variant option
+  mutable requires : 'pred option;
+  mutable assigns : 'term location list;    
+  mutable ensures : 'pred option;
+  mutable decreases : 'term variant option
 }
 
 type ('term,'pred) loop_annot = {
