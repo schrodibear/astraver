@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.3 2004-12-08 15:48:44 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.4 2004-12-08 16:09:20 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -48,6 +48,13 @@ let term_unop = function
   | Clogic.Uamp -> "&"
   | Clogic.Ufloat_of_int -> "float_of_int"
   | Clogic.Uint_of_float -> "int_of_float"
+
+let term_binop = function
+  | Clogic.Badd -> "+"
+  | Clogic.Bsub -> "-"
+  | Clogic.Bmul -> "*"
+  | Clogic.Bdiv -> "/"
+  | Clogic.Bmod -> "%"
  
 let rec nterm fmt t = match t.nterm_node with
   | NTconstant (IntConstant s | FloatConstant s) ->
@@ -61,7 +68,7 @@ let rec nterm fmt t = match t.nterm_node with
   | NTstar t ->
       fprintf fmt "*%a" nterm_p t
   | NTbinop (t1, op, t2) ->
-      fprintf fmt ""
+      fprintf fmt "%a %s %a" nterm_p t1 (term_binop op) nterm_p t2
   | NTarrow (t, vi) ->
       fprintf fmt "%a->%s" nterm_p t vi.var_name
   | NTif (t1, t2, t3) ->
@@ -148,7 +155,12 @@ let logic_parameter fmt (x, ty) = fprintf fmt "%a %s" ctype ty x.var_name
 
 let logic_parameters = print_list comma logic_parameter
 
-let locations fmt l = fprintf fmt "<locations>"
+let location fmt = function
+  | Lterm t -> nterm fmt t
+  | Lstar t -> fprintf fmt "%a[*]" nterm t
+  | Lrange (t1, t2, t3) -> fprintf fmt "%a[%a..%a]" nterm t1 nterm t2 nterm t3
+
+let locations = print_list comma location
 
 let nlogic_symbol fmt li = function
   | NPredicate_reads (pl, locs) ->
