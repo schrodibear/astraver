@@ -1,214 +1,191 @@
+(* Load Programs. *)
+Require Import Sumbool.
+Require Import Why.
+Require Import Omega.
+Require Import ZArithRing.
 
-Require Sumbool.
-Require Why.
-Require Omega.
-Require ZArithRing.
+Require Import Zcomplements.
+Require Import Zpower.
 
-Require Zcomplements.
-Require Zpower.
-
-Definition square := [x]`x * x`.
-Definition double := [x]`2 * x`.
+Definition square x := (x * x)%Z.
+Definition double x := (2 * x)%Z.
 
 Definition div2 := Zdiv2.
 
-Definition is_odd := [x](bool_of_sumbool (sumbool_not ? ? (Zeven_odd_dec x))).
+Definition is_odd x :=
+  bool_of_sumbool (sumbool_not _ _ (Zeven_odd_dec x)).
 
 (* Some auxiliary lemmas about Zdiv2 are necessary *)
 
-Lemma Zdiv2_ge_0 : (x:Z) `x >= 0` -> `(Zdiv2 x) >= 0`.
+Lemma Zdiv2_ge_0 : forall x:Z, (x >= 0)%Z -> (Zdiv2 x >= 0)%Z.
 Proof.
-Destruct x; Auto with zarith.
-Destruct p; Auto with zarith.
-Simpl. Omega.
-Intros. (Absurd `(NEG p) >= 0`; Red; Auto with zarith).
-Save.
+olddestruct x; auto with zarith.
+olddestruct p; auto with zarith.
+simpl.
+ omega.
+intros.
+ absurd (NEG p >= 0)%Z; red; auto with zarith.
+Qed.
 
-Lemma Zdiv2_lt : (x:Z) `x > 0` -> `(Zdiv2 x) < x`.
+Lemma Zdiv2_lt : forall x:Z, (x > 0)%Z -> (Zdiv2 x < x)%Z.
 Proof.
-Destruct x.
-Intro. Absurd `0 > 0`; [ Omega | Assumption ].
-Destruct p; Auto with zarith.
+olddestruct x.
+intro.
+ absurd (0 > 0)%Z; [ omega | assumption ].
+olddestruct p; auto with zarith.
 
-Simpl.
-Intro p0.
-Replace (POS (xI p0)) with `2*(POS p0)+1`.
-Omega.
-Simpl. Auto with zarith.
+simpl.
+intro p0.
+replace (POS (xI p0)) with (2 * POS p0 + 1)%Z.
+omega.
+simpl.
+ auto with zarith.
 
-Intro p0.
-Simpl.
-Replace (POS (xO p0)) with `2*(POS p0)`.
-Omega.
-Simpl. Auto with zarith.
+intro p0.
+simpl.
+replace (POS (xO p0)) with (2 * POS p0)%Z.
+omega.
+simpl.
+ auto with zarith.
 
-Simpl. Omega.
+simpl.
+ omega.
 
-Intros. 
-Absurd `(NEG p) > 0`; Red; Auto with zarith.
-Elim p; Auto with zarith.
-Save.
+intros.
+ absurd (NEG p > 0)%Z; red; auto with zarith.
+elim p; auto with zarith.
+Qed.
 
 (* A property of Zpower:  x^(2*n) = (x^2)^n *)
 
-Lemma Zpower_2n : 
-  (x,n:Z)`n >= 0` -> (Zpower x (double n))=(Zpower (square x) n).
+Lemma Zpower_2n :
+ forall x n:Z, (n >= 0)%Z -> Zpower x (double n) = Zpower (square x) n.
 Proof.
-Unfold double.
-Intros x0 n Hn.
-Replace `2*n` with `n+n`.
-Rewrite Zpower_exp.
-Pattern n.
-Apply natlike_ind.
+unfold double.
+intros x0 n Hn.
+replace (2 * n)%Z with (n + n)%Z.
+rewrite Zpower_exp.
+pattern n.
+apply natlike_ind.
 
-Simpl. Auto with zarith.
+simpl.
+ auto with zarith.
 
-Intros.
-Unfold Zs.
-Rewrite Zpower_exp.
-Rewrite Zpower_exp.
-Replace (Zpower x0 `1`) with x0.
-Replace (Zpower (square x0) `1`) with (square x0).
-Rewrite <- H0.
-Unfold square.
-Ring.
+intros.
+unfold Zs.
+rewrite Zpower_exp.
+rewrite Zpower_exp.
+replace (Zpower x0 1) with x0.
+replace (Zpower (square x0) 1) with (square x0).
+rewrite <- H0.
+unfold square.
+ring.
 
-Unfold Zpower; Unfold Zpower_pos; Simpl. Omega.
+unfold Zpower; unfold Zpower_pos; simpl.
+ omega.
 
-Unfold Zpower; Unfold Zpower_pos; Simpl. Omega.
+unfold Zpower; unfold Zpower_pos; simpl.
+ omega.
 
-Omega.
-Omega.
-Omega.
-Omega.
-Omega.
-Assumption.
-Assumption.
-Omega.
-Save.
+omega.
+omega.
+omega.
+omega.
+omega.
+assumption.
+assumption.
+omega.
+Qed.
 
 (* Obligations *)
 
 (*Why*) Parameter x : Z.
 
-(* Why obligation from file "power.mlw", characters 506-518 *)
-Lemma power1_po_1 : 
-  (n: Z)
-  (Pre4: `n >= 0`)
-  (m0: Z)
-  (Post1: m0 = x)
-  (y0: Z)
-  (Post2: y0 = `1`)
-  (Variant1: Z)
-  (m1: Z)
-  (n0: Z)
-  (y1: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Test4: `n0 > 0`)
-  (Test3: (Zodd n0))
-  (y2: Z)
-  (Post3: y2 = `y1 * m1`)
-  ((m:Z)
-   (m = `m1 * m1` ->
-    ((n1:Z)
-     (n1 = (div2 n0) -> (`(Zpower x n) = y2 * (Zpower m n1)` /\ `n1 >= 0`) /\
-      (Zwf `0` n1 n0))))).
+(* Why obligation from file , characters 506-518 *)
+Lemma power1_po_1 :
+ forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
+   (Post2:y0 = 1%Z) (Variant1 m1 n0 y1:Z) (Pre3:Variant1 = n0)
+   (Pre2:Zpower x n = (y1 * Zpower m1 n0)%Z /\ (n0 >= 0)%Z)
+   (Test4:(n0 > 0)%Z) (Test3:Zodd n0) (y2:Z) (Post3:y2 = (y1 * m1)%Z)
+   (m:Z),
+   m = (m1 * m1)%Z ->
+   forall n1:Z,
+     n1 = div2 n0 ->
+     (Zpower x n = (y2 * Zpower m n1)%Z /\ (n1 >= 0)%Z) /\ Zwf 0 n1 n0.
 Proof.
-Simpl; Intros.
-Repeat Split; Try Omega.
-Subst n1.
-Decompose [and] Pre2; Clear Pre2.
-Rewrite (Zodd_div2 n0 H1 Test3) in H0. Rewrite H0.
-Subst m.
-Subst y2.
-Rewrite Zpower_exp.
-Replace (Zpower m1 `1`) with m1.
-Rewrite Zpower_2n.
-Unfold square.
-Unfold div2.
-Ring.
-Generalize (Zdiv2_ge_0 n0); Omega.
-Unfold Zpower; Unfold Zpower_pos; Simpl; Ring.
-Generalize (Zdiv2_ge_0 n0); Omega.
-Omega.
-Subst n1; Apply Zdiv2_ge_0; Omega.
-Subst n1; Apply Zdiv2_lt; Omega.
-Save.
+simpl; intros.
+repeat split; try omega.
+subst n1.
+decompose [and] Pre2; clear Pre2.
+rewrite (Zodd_div2 n0 H1 Test3) in H0.
+ rewrite H0.
+subst m.
+subst y2.
+rewrite Zpower_exp.
+replace (Zpower m1 1) with m1.
+rewrite Zpower_2n.
+unfold square.
+unfold div2.
+ring.
+generalize (Zdiv2_ge_0 n0); omega.
+unfold Zpower; unfold Zpower_pos; simpl; ring.
+generalize (Zdiv2_ge_0 n0); omega.
+omega.
+subst n1; apply Zdiv2_ge_0; omega.
+subst n1; apply Zdiv2_lt; omega.
+Qed.
 
-(* Why obligation from file "power.mlw", characters 518-518 *)
-Lemma power1_po_2 : 
-  (n: Z)
-  (Pre4: `n >= 0`)
-  (m0: Z)
-  (Post1: m0 = x)
-  (y0: Z)
-  (Post2: y0 = `1`)
-  (Variant1: Z)
-  (m1: Z)
-  (n0: Z)
-  (y1: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Test4: `n0 > 0`)
-  (Test2: (Zeven n0))
-  ((m:Z)
-   (m = `m1 * m1` ->
-    ((n1:Z)
-     (n1 = (div2 n0) -> (`(Zpower x n) = y1 * (Zpower m n1)` /\ `n1 >= 0`) /\
-      (Zwf `0` n1 n0))))).
+(* Why obligation from file , characters 518-518 *)
+Lemma power1_po_2 :
+ forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
+   (Post2:y0 = 1%Z) (Variant1 m1 n0 y1:Z) (Pre3:Variant1 = n0)
+   (Pre2:Zpower x n = (y1 * Zpower m1 n0)%Z /\ (n0 >= 0)%Z)
+   (Test4:(n0 > 0)%Z) (Test2:Zeven n0) (m:Z),
+   m = (m1 * m1)%Z ->
+   forall n1:Z,
+     n1 = div2 n0 ->
+     (Zpower x n = (y1 * Zpower m n1)%Z /\ (n1 >= 0)%Z) /\ Zwf 0 n1 n0.
 Proof.
-Simpl; Intros.
-Repeat Split; Try Omega.
-Decompose [and] Pre2; Clear Pre2.
-Rewrite (Zeven_div2 n0 Test2) in H1. Rewrite H1.
-Subst m.
-Subst n1.
-Rewrite Zpower_2n.
-Unfold square.
-Unfold div2.
-Ring.
-Generalize (Zdiv2_ge_0 n0); Omega.
-Subst n1; Apply Zdiv2_ge_0; Omega.
-Subst n1; Apply Zdiv2_lt; Omega.
-Save.
+simpl; intros.
+repeat split; try omega.
+decompose [and] Pre2; clear Pre2.
+rewrite (Zeven_div2 n0 Test2) in H1.
+ rewrite H1.
+subst m.
+subst n1.
+rewrite Zpower_2n.
+unfold square.
+unfold div2.
+ring.
+generalize (Zdiv2_ge_0 n0); omega.
+subst n1; apply Zdiv2_ge_0; omega.
+subst n1; apply Zdiv2_lt; omega.
+Qed.
 
-(* Why obligation from file "power.mlw", characters 414-459 *)
-Lemma power1_po_3 : 
-  (n: Z)
-  (Pre4: `n >= 0`)
-  (m0: Z)
-  (Post1: m0 = x)
-  (y0: Z)
-  (Post2: y0 = `1`)
-  `(Zpower x n) = y0 * (Zpower m0 n)` /\ `n >= 0`.
+(* Why obligation from file , characters 414-459 *)
+Lemma power1_po_3 :
+ forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
+   (Post2:y0 = 1%Z), Zpower x n = (y0 * Zpower m0 n)%Z /\ (n >= 0)%Z.
 Proof.
-Intros.
-Split; [ Idtac | Omega].
-Subst y0; Ring.
-Subst m0; Trivial.
-Save.
+intros.
+split; [ idtac | omega ].
+subst y0; ring.
+subst m0; trivial.
+Qed.
 
-(* Why obligation from file "power.mlw", characters 345-575 *)
-Lemma power1_po_4 : 
-  (n: Z)
-  (Pre4: `n >= 0`)
-  (m0: Z)
-  (Post1: m0 = x)
-  (y0: Z)
-  (Post2: y0 = `1`)
-  (m1: Z)
-  (n0: Z)
-  (y1: Z)
-  (Post6: (`(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`) /\ `n0 <= 0`)
-  `y1 = (Zpower x n)`.
+(* Why obligation from file , characters 345-575 *)
+Lemma power1_po_4 :
+ forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
+   (Post2:y0 = 1%Z) (m1 n0 y1:Z)
+   (Post6:(Zpower x n = (y1 * Zpower m1 n0)%Z /\ (n0 >= 0)%Z) /\
+          (n0 <= 0)%Z), y1 = Zpower x n.
 Proof.
-Intros.
-Intuition.
-Rewrite H1.
-Replace n0 with `0`.
-Simpl; Ring.
-Omega.
-Save.
+intros.
+intuition.
+rewrite H1.
+replace n0 with 0%Z.
+simpl; ring.
+omega.
+Qed.
 
 
