@@ -45,3 +45,14 @@ int array1() {
   return *p++ = 1;
 }
 
+/* pointers and structures */
+
+struct S { int x; int y; } s;
+
+//@ requires \valid(s)  ensures \result >= 1
+int struct1(int n) { 
+  int * p = &s.x;
+  *p = 1;
+  s.y = 2;
+  return *p; 
+}

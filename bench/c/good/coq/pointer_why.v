@@ -114,3 +114,59 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
+(* Why obligation from file "why/pointer.why", characters 1430-1449 *)
+Lemma struct1_impl_po_1 : 
+  forall (alloc: alloc),
+  forall (s: pointer),
+  forall (Pre10: (valid alloc s)),
+  forall (p: pointer),
+  forall (Post2: p = s),
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/pointer.why", characters 1488-1513 *)
+Lemma struct1_impl_po_2 : 
+  forall (alloc: alloc),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (Pre10: (valid alloc s)),
+  forall (p: pointer),
+  forall (Post2: p = s),
+  forall (Pre9: (valid alloc p)),
+  forall (intP0: ((memory) Z)),
+  forall (Post5: intP0 = (upd intP p 1)),
+  forall (caduceus_1: pointer),
+  forall (Post1: caduceus_1 = s),
+  (valid alloc caduceus_1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/pointer.why", characters 1465-1513 *)
+Lemma struct1_impl_po_3 : 
+  forall (alloc: alloc),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (y: ((memory) Z)),
+  forall (Pre10: (valid alloc s)),
+  forall (p: pointer),
+  forall (Post2: p = s),
+  forall (Pre9: (valid alloc p)),
+  forall (intP0: ((memory) Z)),
+  forall (Post5: intP0 = (upd intP p 1)),
+  forall (caduceus_1: pointer),
+  forall (Post1: caduceus_1 = s),
+  forall (Pre5: (valid alloc caduceus_1)),
+  forall (y0: ((memory) Z)),
+  forall (Post8: y0 = (upd y caduceus_1 2)),
+  (forall (result:Z), (result = (acc intP0 p) -> result >= 1)) /\
+  (valid alloc p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

@@ -46,25 +46,15 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 283-299 *)
+(* Why obligation from file "why/passing.why", characters 278-324 *)
 Lemma g2_impl_po_1 : 
   forall (alloc: alloc),
   forall (r: pointer),
+  forall (Pre7: (valid alloc r)),
+  forall (Pre6: (valid alloc r)),
   forall (intP0: ((memory) Z)),
   forall (Post2: (acc intP0 r) = 0),
-  (valid alloc r).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/passing.why", characters 257-303 *)
-Lemma g2_impl_po_2 : 
-  forall (alloc: alloc),
-  forall (r: pointer),
-  forall (intP0: ((memory) Z)),
-  forall (Post2: (acc intP0 r) = 0),
-  forall (Pre3: (valid alloc r)),
+  forall (Pre5: (valid alloc r)),
   forall (result0: Z),
   forall (Post4: result0 = (acc intP0 r)),
   result0 = 0.
@@ -73,25 +63,26 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 393-412 *)
-Lemma g_impl_po_1 : 
-  forall (x: pointer),
-  forall (alloc: alloc),
-  (valid alloc x).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 370-443 *)
-Lemma g_impl_po_2 : 
+(* Why obligation from file "why/passing.why", characters 390-609 *)
+Lemma g_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc),
   forall (intP: ((memory) Z)),
+  forall (Pre4: (valid alloc x)),
   forall (Pre3: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post1: intP0 = (upd intP x 0)),
   (acc intP0 x) = 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
 Proof.
 intuition.
 (* FILL PROOF HERE *)
