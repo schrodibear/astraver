@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.88 2004-06-28 13:22:11 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.89 2004-06-29 12:37:39 filliatr Exp $ i*)
 
 
 open Format
@@ -857,7 +857,7 @@ let interp_decl d acc =
 		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
 		  | CTfloat _ -> App(Var("any_real"),Var("void"))
 		  | CTfun _ -> assert false
-		  | CTarray _ | CTpointer _ -> 
+		  | CTarray _ | CTpointer _ | CTstruct _ -> 
                       let t = { term_node = Tresult; term_type = ctype } in
                       alloc_on_stack d.loc v t
 		  | _ -> assert false
