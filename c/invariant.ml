@@ -4,6 +4,7 @@ open Ctypes
 open Clogic
 open Cenv
 open Cnorm
+open Cprint
 
 let var_to_term loc v =
   {
@@ -124,16 +125,20 @@ let rec tab_struct loc mark v1 v2 s ty n n1 n2=
 	 else p)
       NPtrue l
   else
-  make_and (List.fold_left 
-	      (fun p t -> 
-		 if  compatible_type t.var_type v2.nterm_type 
-		 then make_and p (not_alias loc v2 (in_struct v1 t))
+    make_and (List.fold_left 
+		(fun p t -> 
+		   if  compatible_type t.var_type v2.nterm_type 
+		   then make_and p (not_alias loc v2 (in_struct v1 t))
 		 else p)
-	      NPtrue l)
-    (make_forall_range loc v2 s 
-       (fun t i -> 
-	  local_separation loc mark n1 v1 (n2^"[i]") (indirection loc ty t)))
-
+		NPtrue l)
+      (make_forall_range loc v2 s 
+       (fun t i ->
+	  let t = { nterm_node = t.nterm_node;
+		    nterm_loc = t.nterm_loc;
+		    nterm_type = ty;} in
+	  Format.eprintf "v2 = %a ty= %a @." nterm t ctype t.nterm_type; 
+	  local_separation loc mark n1 v1 (n2^"[i]") t(*indirection loc ty t*)))
+      
 and local_separation loc mark n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with

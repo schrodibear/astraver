@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.mli,v 1.2 2004-12-14 13:51:54 hubert Exp $ i*)
+(*i $Id: cprint.mli,v 1.3 2005-02-17 16:09:31 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -33,3 +33,5 @@ val ndecl : formatter -> ndecl located -> unit
 val nfile : formatter -> nfile -> unit
 
 val npredicate :  formatter -> npredicate -> unit
+
+val nterm : formatter -> nterm -> unit

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.81 2005-02-16 13:14:27 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.82 2005-02-17 16:09:31 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -865,7 +865,6 @@ let decl d =
 	       let t = { nterm_node = NTvar v; 
 			 nterm_loc = d.loc;
 			 nterm_type = ty } in
-	       (*if s <> Int64.one then*)
 	       let name1 = "valid_range_" ^ v.var_name in
 	       let (pre1,pre2) = validity t typ s in
 	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
