@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.19 2002-03-13 10:48:13 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.20 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -80,14 +80,28 @@ and trad_desc info d ren = match d with
   | Coerce e ->
       Monad.compose e.info (trad e) (fun res -> Monad.unit info (Tvar res)) ren
 
-  | App (e1, Term e2) ->
+  | App (_, _, None) ->
+      assert false
+
+  | App (e1, Term e2, Some kapp) ->
+      let infoapp = { env = info.env; label = label_name (); kappa = kapp } in
       Monad.compose e2.info (trad e2)
 	(fun v2 -> 
 	   Monad.compose e1.info (trad e1)
 	     (fun v1 -> 
-		Monad.compose info (fun _ -> CC_app (CC_var v1, [CC_var v2]))
+		Monad.compose infoapp 
+		  (fun _ -> CC_app (CC_var v1, [CC_var v2]))
 		  (fun v -> Monad.unit info (Tvar v))))
 	ren
+
+  | App (e1, Refarg (_,r), Some kapp) ->
+      trad e1 ren
+
+  | Lam (bl, e) ->
+      let bl',env' = trad_binders ren info.env bl in
+      let ren' = initial_renaming env' in
+      let te = trans e ren' in
+      CC_lam (bl', te)
 
   | _ -> failwith "Mlize.trad: TODO"
 
@@ -158,45 +172,6 @@ and trad_desc info d ren = match d with
       let var' = typed_var env var in
       make_while ren env var' (tb,b.info.kappa) tbl (inv,ct)
 
-  | Lam (bl, e) ->
-      let bl' = trad_binders ren env bl in
-      let env' = traverse_binders env bl in
-      let ren' = initial_renaming env' in
-      let te = trans ren' e in
-      CC_lam (bl', te)
-
-  | App (f, args) ->
-      let trad_arg (ren,args) = function
-	| Term a ->
-	    let ((_,tya),efa,_,_) as ca = decomp_kappa a.info.kappa in
-	    let ta = trad ren a in
-	    let w = get_writes efa in
-	    let ren' = next ren w in
-	    ren', ta::args
-	| Refarg _ ->
-	    ren, args
-	| Type v -> 
-	    assert false
-(*i	    let c = trad_ml_type_v ren env v in
-	    ren, (CC_expr c) :: args i*)
-      in
-      let ren',targs = List.fold_left trad_arg (ren,[]) [args] in
-      let tf = trad ren' f in
-      let cf = f.info.kappa in
-      let c,(s,_,_),capp = effect_app ren env f [args] in
-      let tc_args =
-	List.combine
-	  (List.rev targs)
-	  (Misc.map_succeed
-	     (function
-		| Term x -> x.info.kappa
-		| Refarg _ -> failwith "caught"
-		| Type _ -> assert false
-		    (*i (Ident.result,PureType mkSet),Effect.bottom,[],Nonei*))
-	     [args])
-      in
-      make_app env ren tc_args ren' (tf,cf) (c,s,capp) ct
-	
   | LetRef (x, e1, e2) ->
       let (_,v1),ef1,p1,q1 = decomp_kappa e1.info.kappa in
       let te1 = trad ren e1 in
@@ -217,26 +192,6 @@ and trad_desc info d ren = match d with
       in
       t
 
-  | LetIn (x, e1, e2) ->
-      let (_,v1),ef1,p1,q1 = decomp_kappa e1.info.kappa in
-      let te1 = trad ren e1 in
-      let tv1 = v1 (*i trad_ml_type_v ren env v1 i*) in
-      let env' = add (x,v1) env in
-      let ren' = next ren (get_writes ef1) in
-      let (_,v2),ef2,p2,q2 = decomp_kappa e2.info.kappa in
-      let tv2 = v2 (*i trad_ml_type_v ren' env' v2 i*) in
-      let te2 = trad ren' e2 in
-      let ren'' = next ren' (get_writes ef2) in
-      let t,ty = result_tuple ren'' (current_date ren) env
-		   (Ident.result,CC_var Ident.result, CC_type) (eft,qt) in
-      let t = make_let_in ren' ren'' env' te2 p2
-		(current_vars ren'' (get_writes ef2),q2)
-		(Ident.result,tv2) (t,ty) in
-      let t = make_let_in ren ren' env te1 p1
-     		(current_vars ren' (get_writes ef1),q1) (x,tv1) (t,ty) 
-      in
-      t
-
   | LetRec (f,bl,v,var,e) ->
       let c = match tt with Arrow(_,c) -> c | _ -> assert false in
       let (_,ef,_,_) = decomp_kappa c in
@@ -248,20 +203,20 @@ and trad_desc info d ren = match d with
       let t = make_letrec ren' env' (phi0,var') f bl' (te,e.info.kappa) c in
       CC_lam (bl', t)
 
+****i*)
+
 and trad_binders ren env = function
   | [] -> 
-      []
-  | (_,BindType (Ref _ | Array _)) :: bl ->
-      trad_binders ren env bl
-  | (id,BindType v) :: bl ->
-      let tt = v (*i trad_ml_type_v ren env v i*) in
-      (id, CC_var_binder tt) :: (trad_binders ren env bl)
-  | (id,BindSet) :: bl ->
+      [], env
+  | (id, BindType (Ref _ | Array _ as v)) :: bl ->
+      trad_binders ren (Env.add id v env) bl
+  | (id, BindType v) :: bl ->
+      let tt =  trad_ml_type_v ren env v in
+      let env' = Env.add id v env in
+      let bl',env'' = trad_binders ren env' bl in
+      (id, CC_var_binder tt) :: bl', env''
+  | (_, (BindSet | Untyped)) :: _ ->
       assert false
-      (*i (id, CC_typed_binder mkSet) :: (trad_binders ren env bl) i*)
-  | (_,Untyped) :: _ -> 
-      assert false
-****i*)
 
 and trad_block info =
   let rec block res = function

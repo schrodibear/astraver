@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.8 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.9 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -87,7 +87,7 @@ let report fmt = function
       fprintf fmt "@[Too many arguments@]"
   | TooComplexArgument ->
       fprintf fmt 
-	"@[This argument prevents the application to be given a type@]"
+	"@[This argument is too complex; application cannot be given a type@]"
   | PartialApp ->
       fprintf fmt "@[This function does not have@ ";
       fprintf fmt "the right number of arguments@]"

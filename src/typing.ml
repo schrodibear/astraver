@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.25 2002-03-13 10:48:13 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.26 2002-03-13 16:15:47 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -116,7 +116,7 @@ and check_binders loc lab env = function
       env
   | (id, BindType v) :: bl ->
       check_type_v loc lab env v;
-      check_binders loc lab (Env.add (id, v) env) bl
+      check_binders loc lab (Env.add id v env) bl
   | (id, BindSet) :: bl ->
       check_binders loc lab (Env.add_set id env) bl
   | (id, Untyped) :: bl ->
@@ -144,7 +144,7 @@ let rec subtype = function
   | (v1,v2) -> 
       v1 = v2
 
-let compose3effects x y z = Effect.compose x (Effect.compose y z)
+let union3effects x y z = Effect.union x (Effect.union y z)
 
 let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
   | Arrow ([x,BindType v], k) ->
@@ -392,23 +392,30 @@ and typef_desc lab env loc = function
   | Lam (bl, e) ->
       let env' = check_binders (Some loc) lab env bl in
       let t_e = typef initial_labels env' e in
-      let v = make_arrow bl t_e.info.kappa in
+      let k = 
+	let q = optpost_app (change_label t_e.info.label "0") (post t_e) in
+	{ t_e.info.kappa with c_post = q }
+      in
+      let v = make_arrow bl k in
       let ef = Effect.bottom in
       Lam(bl,t_e), (v,ef), []
 
-  | App ({desc=Var id} as e, Term a) when is_eq_neq id ->
+  | App (_, _, Some _) ->
+      assert false
+
+  | App ({desc=Var id} as e, Term a, None) when is_eq_neq id ->
       let t_a = typef lab env a in
       let eq = type_eq_neq id a.info.loc (result_type t_a) in
-      typef_desc lab env loc (App ({e with desc = Var eq}, Term a))
+      typef_desc lab env loc (App ({e with desc = Var eq}, Term a, None))
       (* TODO: avoid recursive call *)
 	 
-  | App (f, Term a) ->
+  | App (f, Term a, None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
       let t_a = typef lab env a in
       expected_type a.info.loc (result_type t_a) tx;
       let _,eapp,_,_ = decomp_kappa kapp in
-      let ef = compose3effects (effect t_a) (effect t_f) eapp in
+      let ef = union3effects (effect t_a) (effect t_f) eapp in
       (match t_a.desc with
 	 | Expression ca when t_a.info.kappa.c_post = None ->
 	     let kapp = type_c_rsubst [x,ca] kapp in
@@ -419,39 +426,39 @@ and typef_desc lab env loc = function
 		    let e = Expression (applist cf [ca]) in
 		    coerce e env kapp, (tapp, ef), pl
 		| _ ->	   
-		    coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
+		    App (t_f, Term t_a, Some kapp), (tapp, ef), [])
 	 | _ ->
 	     let (_,tapp),_,_,qapp = decomp_kappa kapp in
 	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
 	     if occur_post x qapp then
-	       App (t_f, Term t_a), (tapp, ef), []
+	       App (t_f, Term t_a, Some kapp), (tapp, ef), []
 	     else
 	       let kapp = { kapp with c_pre = [] } in
-	       coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
+	       App (t_f, Term t_a, Some kapp), (tapp, ef), [])
 
-  | App (f, (Refarg (locr,r) as a)) ->
+  | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
       let tr = type_in_env env r in
       expected_type locr tr tx;
       let kapp = type_c_subst [x,r] kapp in
       let (_,tapp),eapp,_,_ = decomp_kappa kapp in
-      let ef = Effect.compose (effect t_f) eapp in
-      coerce (App (t_f, a)) env kapp, (tapp, ef), []
+      let ef = Effect.union (effect t_f) eapp in
+      App (t_f, a, Some kapp), (tapp, ef), []
 
-  | App (f, Type _) ->
+  | App (f, Type _, None) ->
       failwith "todo: typing: application to a type"
       
   | LetRef (x, e1, e2) ->
       let t_e1 = typef lab env e1 in
       let ef1 = t_e1.info.kappa.c_effect in
       let v1 = t_e1.info.kappa.c_result_type in
-      let env' = add (x,Ref v1) env in
+      let env' = add x (Ref v1) env in
       let t_e2 = typef lab env' e2 in
       let ef2 = t_e2.info.kappa.c_effect in
       let v2 = t_e2.info.kappa.c_result_type in
       Error.check_for_let_ref loc v2;
-      let ef = Effect.compose ef1 (Effect.remove ef2 x) in
+      let ef = Effect.union ef1 (Effect.remove x ef2) in
       LetRef (x, t_e1, t_e2), (v2,ef), []
 	
   | LetIn (x, e1, e2) ->
@@ -459,11 +466,11 @@ and typef_desc lab env loc = function
       let ef1 = t_e1.info.kappa.c_effect in
       let v1 = t_e1.info.kappa.c_result_type in
       Error.check_for_not_mutable e1.info.loc v1;
-      let env' = add (x,v1) env in
+      let env' = add x v1 env in
       let t_e2 = typef lab env' e2 in
       let ef2 = t_e2.info.kappa.c_effect in
       let v2 = t_e2.info.kappa.c_result_type in
-      let ef = Effect.compose ef1 ef2 in
+      let ef = Effect.union ef1 ef2 in
       LetIn (x, t_e1, t_e2), (v2,ef), []
 	    
   | If (b, e1, e2) ->
@@ -472,13 +479,9 @@ and typef_desc lab env loc = function
       Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
       let t_e1 = typef lab env e1
       and t_e2 = typef lab env e2 in
-      let efb = t_b.info.kappa.c_effect in
-      let tb = t_b.info.kappa.c_result_type in
-      let ef1 = t_e1.info.kappa.c_effect in
       let t1 = t_e1.info.kappa.c_result_type in
-      let ef2 = t_e2.info.kappa.c_effect in
       let t2 = t_e2.info.kappa.c_result_type in
-      let ef = Effect.compose efb (disj ef1 ef2) in
+      let ef = union3effects (effect t_b) (effect t_e1) (effect t_e2) in
       let v = type_v_sup loc t1 t2 in
       If (t_b, t_e1, t_e2), (v,ef), []
 
@@ -490,8 +493,9 @@ and typef_desc lab env loc = function
       let tvar = typed_var env' var in
       (* effect for a let/rec construct is computed as a fixpoint *)
       let rec state_rec c =
+	(* TODO: change label to "0" in [c] *)
 	let tf = make_arrow bl c in
-	let env'' = add_recursion (f,(phi0,tvar)) (add (f,tf) env') in
+	let env'' = add_recursion (f,(phi0,tvar)) (add f tf env') in
 	let t_e = typef initial_labels env'' e in
 	if t_e.info.kappa = c then
 	  t_e
@@ -503,7 +507,7 @@ and typef_desc lab env loc = function
       let c0 = { c_result_name = result; c_result_type = v;
 		 c_effect = efvar; c_pre = []; c_post = None } in
       let t_e = state_rec c0 in
-      let tf = make_arrow bl t_e.info.kappa in
+      let tf = make_arrow bl t_e.info.kappa in (* IDEM *)
       Rec (f,bl,v,var,t_e), (tf,Effect.bottom), []
 
   | Coerce e ->
@@ -530,7 +534,7 @@ and typef_block lab env bl =
 	let efe = t_e.info.kappa.c_effect in
 	let t = t_e.info.kappa.c_result_type in
 	let bl,t,ef = ef_block lab (Some t) block in
-	(Statement t_e)::bl, t, Effect.compose efe ef
+	(Statement t_e)::bl, t, Effect.union efe ef
   in
   ef_block lab None bl
 

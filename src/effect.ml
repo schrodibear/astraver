@@ -1,20 +1,23 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.7 2002-03-13 14:26:41 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.8 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 (*s Effects. *)
 
 open Ident
 open Misc
 
-(*s An effect is composed of two lists (r,w) of variables.
-    The first one is the list of read-only variables
-    and the second one is the list of read-write variables.
+(*s An effect is composed of two lists [(r,w)] of variables.
+    The first one is the list of all variables (the input)
+    and the second one is the list of possibly modified variables (the output)
  
-    INVARIANT: 
-    1. each list is sorted in decreasing order for Pervasives.compare
-    2. there are no duplicate elements in each list
-    3. the two lists are disjoint *)
+    INVARIANTS: 
+    1. there are no duplicate elements in each list 
+    2. output is contained in input
+
+    REMARK: for most operations, sets will be more relevant than lists,
+    but order must not change when a substitution is applied and thus
+    lists are preferred *)
 
 type t = Ident.t list * Ident.t list
 
@@ -24,57 +27,45 @@ let bottom = ([], [])
 
 (*s basic operations *)
 
-let push x l =
-  let rec push_rec = function
-    | [] -> [x]
-    | (y :: rem) as l ->
-	if x = y then l else if x > y then x :: l else y :: push_rec rem
-  in
-  push_rec l
+let list_add x l = if List.mem x l then l else x :: l
 
-let basic_remove x l =
+let list_remove x l = 
   let rec rem_rec = function
     | [] -> []
     | y :: l -> if x = y then l else y :: rem_rec l
   in
-  rem_rec l
+  if List.mem x l then rem_rec l else l
 
-let mem x (r,w) = (List.mem x r) or (List.mem x w)
+let mem x (r,w) = (List.mem x r) || (List.mem x w)
 
-let rec basic_union = function
-  | [], s2 -> s2
-  | s1, [] -> s1
-  | ((v1 :: l1) as s1), ((v2 :: l2) as s2) ->
-      if v1 > v2 then
-	v1 :: basic_union (l1,s2)
-      else if v1 < v2 then
-	v2 :: basic_union (s1,l2)
-      else
-	v1 :: basic_union (l1,l2)
+(* [list_union] is a merge sort *)
+let list_union l1 l2 = 
+  let rec basic_union = function
+    | [], s2 -> s2
+    | s1, [] -> s1
+    | ((v1 :: l1) as s1), ((v2 :: l2) as s2) ->
+	if v1 < v2 then
+	  v1 :: basic_union (l1,s2)
+	else if v1 > v2 then
+	  v2 :: basic_union (s1,l2)
+	else
+	  v1 :: basic_union (l1,l2)
+  in
+  basic_union (List.sort compare l1, List.sort compare l2)
 
 (*s adds reads and writes variables *)
 
-let add_read id ((r,w) as e) =
-  (* if the variable is already a RW it is ok, otherwise adds it as a RO. *)
-  if List.mem id w then
-    e
-  else
-    push id r, w
+let add_read x ((r,w) as e) = (list_add x r, w)
 
 let add_reads ids = Ident.Idset.fold add_read ids
 
-let add_write id (r,w) =
-  (* if the variable is a RO then removes it from RO. Adds it to RW. *)
-  if List.mem id r then
-    basic_remove id r, push id w
-  else
-    r, push id w
+let add_write x (r,w) = (list_add x r, list_add x w)
 
 (*s access *)
 
-let get_reads = basic_union
+let get_reads = fst
 let get_writes = snd
-let get_repr e = (get_reads e, get_writes e)
+let get_repr e = e
 
 (*s tests *)
 
@@ -83,24 +74,7 @@ let is_write (_,w) id = List.mem id w
 
 (*s union and disjunction *)
 
-let union (r1,w1) (r2,w2) = basic_union (r1,r2), basic_union (w1,w2)
-
-let rec diff = function
-  | [], s2 -> []
-  | s1, [] -> s1
-  | ((v1 :: l1) as s1), ((v2 :: l2) as s2) ->
-      if v1 > v2 then
-	v1 :: diff (l1,s2)
-      else if v1 < v2 then
-	diff (s1,l2)
-      else
-	diff (l1,l2)
-
-let disj (r1,w1) (r2,w2) =
-  let w1_w2 = diff (w1,w2) and w2_w1 = diff (w2,w1) in
-  let r = basic_union (basic_union (r1,r2), basic_union (w1_w2,w2_w1))
-  and w = basic_union (w1,w2) in
-  r,w
+let union (r1,w1) (r2,w2) = (list_union r1 r2, list_union w1 w2)
 
 (*s comparison relation *)
 
@@ -108,16 +82,9 @@ let le e1 e2 = failwith "effects: le: not yet implemented"
 
 let inf e1 e2 = failwith "effects: inf: not yet implemented"
 
-(*s composition *)
-
-let compose (r1,w1) (r2,w2) =
-  let r = basic_union (r1, diff (r2,w1)) in
-  let w = basic_union (w1,w2) in
-  r,w
-
 (*s remove *)
 
-let remove (r,w) name = basic_remove name r, basic_remove name w
+let remove x (r,w) = (list_remove x r, list_remove x w)
 
 (*s occurrence *)
 
@@ -125,12 +92,16 @@ let occur x (r,w) = List.mem x r || List.mem x w
 
 (*s substitution *)
 
-let subst_list (x,x') l =
-  if List.mem x l then push x' (basic_remove x l) else l
+let list_subst (x,x') l =
+  let rec subst = function
+    | [] -> []
+    | y :: r -> if y = x then x' :: r else y :: subst r
+  in
+  if List.mem x l then subst l else l
 
-let subst_one (r,w) s = subst_list s r, subst_list s w
+let subst_one s (r,w) = (list_subst s r, list_subst s w)
 
-let subst s e = List.fold_left subst_one e s
+let subst = List.fold_right subst_one
 
 (*s pretty-print *)
 

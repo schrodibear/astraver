@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.14 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.15 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 (*s Names separation *)
 
@@ -102,8 +102,8 @@ let db_prog e =
 	  
     | Lam (bl,e) ->
 	let idl',bl' = db_binders idl bl in Lam(bl', db idl' e)
-    | App (e1,e2) ->
-	App (db idl e1, db_arg idl e2)
+    | App (e1,e2,a) ->
+	App (db idl e1, db_arg idl e2, a)
     | LetRef (x,e1,e2) ->
 	LetRef (x, db idl e1, db (tids,ids,Ids.add x refs) e2)
     | LetIn (x,e1,e2) ->

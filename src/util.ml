@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.15 2002-03-13 10:01:38 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.16 2002-03-13 16:15:47 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -111,18 +111,19 @@ let apply_assert ren env c =
   let al = make_assoc_list ren env ids in
   { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
  
-let apply_post  = apply_assert 
+let apply_post = apply_assert 
 
 (*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
     as we cross the binders [bl]. *)
 
 let rec traverse_binders env = function
-  | [] -> env
-  | (id,BindType v)::rem ->
-      traverse_binders (add (id,v) env) rem
-  | (id,BindSet)::rem ->
-      traverse_binders (add_set id env) rem
-  | (_,Untyped)::_ ->
+  | [] -> 
+      env
+  | (id, BindType v) :: rem ->
+      traverse_binders (Env.add id v env) rem
+  | (id, BindSet) :: rem ->
+      traverse_binders (Env.add_set id env) rem
+  | (_, Untyped) :: _ ->
       invalid_arg "traverse_binders"
 	  
 let initial_renaming env =
@@ -379,8 +380,10 @@ and print_desc fmt = function
 	print_prog p1 print_prog p2 print_prog p3
   | Lam (bl, p) -> 
       fprintf fmt "<fun>"
-  | App (p, a) -> 
+  | App (p, a, None) -> 
       fprintf fmt "(%a %a)" print_prog p print_arg a
+  | App (p, a, Some k) -> 
+      fprintf fmt "(%a %a :: %a)" print_prog p print_arg a print_type_c k
   | LetRef (id, p1, p2) ->
       fprintf fmt "let %a = %a in %a" 
 	Ident.print id print_prog p1 print_prog p2

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.mli,v 1.5 2002-03-13 14:26:41 filliatr Exp $ i*)
+(*i $Id: effect.mli,v 1.6 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 (*s The abstract type of effects. *)
 
@@ -19,11 +19,9 @@ val get_repr : t -> (Ident.t list) * (Ident.t list)
 val is_read  : t -> Ident.t -> bool    (* read-only *)
 val is_write : t -> Ident.t -> bool    (* read-write *)
 
-val compose : t -> t -> t
 val union : t -> t -> t
-val disj : t -> t -> t
 
-val remove : t -> Ident.t -> t
+val remove : Ident.t -> t -> t
 
 val occur : Ident.t -> t -> bool
 

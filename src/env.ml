@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.10 2002-03-13 10:48:13 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.11 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -37,7 +37,7 @@ type local_env = type_info Penv.t
 
 let empty = (Penv.empty : local_env)
 
-let add (id,v) = Penv.add id (TypeV v)
+let add id v = Penv.add id (TypeV v)
 
 let add_set id = Penv.add id Set
 

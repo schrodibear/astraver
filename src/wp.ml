@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.22 2002-03-13 10:35:30 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.23 2002-03-13 16:15:47 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -116,12 +116,14 @@ let rec normalize p =
 	change_desc p (LetIn (x, normalize e1, normalize e2))
     | Rec (x, bl, v, var, e1) ->
 	change_desc p (Rec (x, bl, v, var, normalize e1))
-    | App (e1, Term e2) ->
-	change_desc p (App (normalize e1, Term (normalize e2)))
-    | App (e1, (Refarg _ as r)) ->
-	change_desc p (App (normalize e1, r))
-    | App (e1, Type v) ->
-	change_desc p (App (normalize e1, Type v))
+    | App (_, _, None) ->
+	assert false
+    | App (e1, Term e2, k) ->
+	change_desc p (App (normalize e1, Term (normalize e2), k))
+    | App (e1, (Refarg _ as r), k) ->
+	change_desc p (App (normalize e1, r, k))
+    | App (e1, Type v, k) ->
+	change_desc p (App (normalize e1, Type v, k))
     | Coerce e ->
 	let e = normalize e in
 	if k.c_post = None then
@@ -259,13 +261,15 @@ and wp_desc info d q =
 	let bl',w = wp_block bl q in
 	Seq bl', w
     (* function call: $\forall r. Q_f \Rightarrow q$ *)
-    | App (p1, Term p2) ->
+    | App (_, _, None) ->
+	assert false
+    | App (p1, Term p2, k) ->
 	let p'1,_ = wp p1 None in
 	let p'2,_ = wp p2 None in
-	App (p'1, Term p'2), None
-    | App (p1, a) ->
+	App (p'1, Term p'2, k), None
+    | App (p1, a, k) ->
 	let p'1,_ = wp p1 None in
-	App (p'1, a), None
+	App (p'1, a, k), None
     | Lam (bl, p) ->
 	let p',w = wp p None in
 	Lam (bl, p'), None

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.10 2002-03-13 14:26:41 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.11 2002-03-13 16:15:47 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -68,12 +68,12 @@ and trad_ml_type_v ren env = function
 	List.fold_left
 	  (fun (bl,ren,env) b -> match b with
 	     | (id, BindType ((Ref _ | Array _) as v)) ->
-		 let env' = add (id,v) env in
+		 let env' = add id v env in
 		 let ren' = initial_renaming env' in
 		 (bl, ren', env')
 	     | (id, BindType v) -> 
 		 let tt = trad_ml_type_v ren env v in
-		 let env' = add (id,v) env in
+		 let env' = add id v env in
 		 let ren' = initial_renaming env' in
 		 (id,tt)::bl, ren', env'
 	     | _ -> failwith "Monad: trad_ml_type_v: not yet implemented"

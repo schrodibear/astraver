@@ -21,7 +21,6 @@ let swap2 =
   end
   { x = y@ and y = x@ } 
 
-
 (* 2. with a function *)
 
 let swap3 = fun (x,y : int ref) ->
@@ -44,4 +43,3 @@ external tmp : int ref
 let swap4 = fun (x,y : int ref) ->
   begin tmp := !x; x := !y; y := !tmp end
   { x = y@ and y = x@ }
-

@@ -1,16 +1,9 @@
 
 (* Test program *)
 
-external r : int ref
+external r,s : int ref
 
-let p = (let x = 1 in r := x) { r > 0 }
+let f = fun (x:int) -> (r := !r + x) { r = r@ + x }
 
-(** let p = begin r := 2; r := !r end { r = 2 } **)
+let p = (f begin s := 2; 1 end) (* BUG: x pas substitué dans post résultat *)
 
-(** let p = begin r := 1; r := !r end { r >= 0 } **)
-
-(** let f = fun (x:int) -> { x > 0 } x { x > 0 } **)
-
-(** let f = fun (x:int) -> { x > 0 } x { result = x } **)
-
-(** external f : x:int -> { x > 0 } int { result = x } **)

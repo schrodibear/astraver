@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.7 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.8 2002-03-13 16:15:46 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -20,7 +20,7 @@ open Ast
 type local_env
 
 val empty : local_env
-val add : (Ident.t * type_v) -> local_env -> local_env
+val add : Ident.t -> type_v -> local_env -> local_env
 val add_set : Ident.t -> local_env -> local_env
 val is_local : local_env -> Ident.t -> bool
 val is_local_set : local_env -> Ident.t -> bool
