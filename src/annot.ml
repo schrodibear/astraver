@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.19 2003-06-13 14:08:34 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.20 2003-12-16 10:04:09 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -180,6 +180,11 @@ let rec normalize p =
   let p = lift_oblig_assign p in
   let k = p.info.kappa in
   match p.desc with
+    (***
+    | Expression t ->
+	let t = put_label_term env p.info.label (unref_term t) in
+	change_desc p (Expression t)
+    ***)
     | Aff (x, ({desc = Expression t} as e1)) 
       when post e1 = None && k.c_post = None ->
 	let t = put_label_term env p.info.label (unref_term t) in
@@ -248,7 +253,7 @@ let rec normalize p =
     | LetIn (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
 	change_desc p (LetIn (x, post_if_none env q e1, e2))
-    | Var _ | Expression _ | Acc _ | Aff _ | TabAcc _ | TabAff _  
+    | Expression _ | Var _ | Acc _ | Aff _ | TabAcc _ | TabAff _  
     | Seq _ | Lam _ | LetIn _ | LetRef _ | Rec _ | App _ 
     | Raise _ | Try _ | Absurd ->
 	p

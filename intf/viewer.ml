@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: viewer.ml,v 1.7 2003-08-25 08:27:33 filliatr Exp $ i*)
+(*i $Id: viewer.ml,v 1.8 2003-12-16 10:04:09 filliatr Exp $ i*)
 
 open Format
 open Options
@@ -29,8 +29,8 @@ let deal_file f =
   Loc.set_file f;
   Main.reset ();
   let cin = open_in f in 
-  c_file := Filename.check_suffix f ".c";
-  let parsef = if !c_file then Main.c_parser else Main.ml_parser in
+  (*c_file := Filename.check_suffix f ".c";*)
+  let parsef = (*if !c_file then Main.c_parser else *) Main.ml_parser in
   let p = parsef cin in
   if parse_only then exit 0;
   List.iter Main.interp_decl p;

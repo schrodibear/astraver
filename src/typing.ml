@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.99 2003-08-25 08:27:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.100 2003-12-16 10:04:09 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -513,6 +513,7 @@ and typef_desc lab env loc = function
 	  (match t_a.desc with
   	     (* argument is pure: it is substituted *)
 	     | Expression ca when post t_a = None ->
+		 (* let tca = put_label_term env "" (unref_term ca) in *)
 		 let kapp = type_c_subst_oldify env x ca kapp in
 		 let (_,tapp),_,_,_ = decomp_kappa kapp in
 		 (match t_f.desc with
