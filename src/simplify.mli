@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.mli,v 1.3 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: simplify.mli,v 1.4 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Vcg
 
@@ -23,6 +23,8 @@ val reset : unit -> unit
 val push_obligations : obligation list -> unit
 
 val push_axiom : string -> Logic.predicate Env.scheme -> unit
+
+val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
 
 val output_file : string -> unit
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.66 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.67 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -214,5 +214,4 @@ val do_not_edit :
 
 val file_formatter : (Format.formatter -> unit) -> (out_channel -> unit)
 
-val print_in_file : margin:int -> (Format.formatter -> unit) -> string -> unit
 

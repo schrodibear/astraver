@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.67 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.68 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -93,6 +93,14 @@ let push_axiom id p = match prover with
   | Mizar -> Mizar.push_axiom id p
   | Harvey -> Harvey.push_axiom id p
   | Simplify -> Simplify.push_axiom id p
+
+let push_predicate id p = match prover with
+  | Pvs -> Pvs.push_predicate id p
+  | Coq _ -> Coq.push_predicate id p
+  | HolLight -> Holl.push_predicate id p
+  | Mizar -> Mizar.push_predicate id p
+  | Harvey -> Harvey.push_predicate id p
+  | Simplify -> Simplify.push_predicate id p
 
 let output fwe = 
   if wol then begin
@@ -201,7 +209,12 @@ let interp_decl d =
       let t = Predicate (List.map snd pl) in
       let t = generalize_logic_type t in
       add_global_logic id t;
-      assert false (* TODO *)
+      let lenv' = 
+	List.fold_right (fun (x,pt) -> add_logic x (PureType pt)) pl lenv 
+      in
+      let p = Ltyping.predicate lab env lenv' p in
+      let p = generalize_predicate_def (pl,p) in
+      push_predicate (Ident.string id) p
   | Axiom (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
       let p = generalize_predicate p in

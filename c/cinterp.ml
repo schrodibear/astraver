@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.38 2004-03-18 16:52:34 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.39 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 
 open Format
@@ -615,4 +615,39 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
 let interp l =
   List.fold_left interp_located_tdecl ([],[]) l
 
+(* generation of file [caduceus_spec.why] *)
 
+let output_specs fmt files =
+  fprintf fmt "(* this file was automatically generated; do not edit *)@\n@\n";
+  fprintf fmt "(* heap variables *)@\n";
+  Hashtbl.iter 
+    (fun v bt -> 
+       let d = Param (false, v, Ref_type (Base_type bt)) in
+       fprintf fmt "@[%a@]" fprintf_why_decls [d])
+    Ceffect.heap_vars;
+  fprintf fmt "(* functions specifications *)@\n";
+  let declare_function id sp ty pl =
+    let pre,post = interp_spec_option sp in
+    let r = HeapVarSet.elements id.function_reads in
+    let w = HeapVarSet.elements id.function_writes in
+    let ty = 
+      List.fold_right 
+	(fun (ct,x) ty -> 
+	   Prod_type (x, Base_type ([], Ceffect.interp_type ct), ty))
+	pl 
+	(Annot_type
+	   (pre, Base_type ([], Ceffect.interp_type ty), r, w, post, None))
+    in
+    let d = Param (false, id.var_name, ty) in
+    fprintf fmt "@[%a@]" fprintf_why_decls [d]
+  in
+  let decl d = match d.node with
+    | Tfundef (sp, ty, id, pl, _) ->
+	declare_function id sp ty pl
+    | Tfunspec (sp, ty, id, pl) ->
+	declare_function id (Some sp) ty pl
+    | _ -> 
+	()
+  in
+  List.iter (fun (_,dl) -> List.iter decl dl) files
+    

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.18 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.19 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -32,6 +32,7 @@ type elem =
   | Obligation of obligation
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
 let elem_q = Queue.create ()
 
@@ -42,6 +43,8 @@ let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
 let push_logic id t = Queue.add (Logic (id, t)) elem_q
 
 let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
+
+let push_predicate id p = Queue.add (Predicate (id, p)) elem_q
 
 let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
 
@@ -237,13 +240,14 @@ let print_elem fmt = function
   | Obligation (loc, s, sq) -> print_obligation fmt loc s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
+  | Predicate _ -> assert false (*TODO*)
 
 let print_obl_list fmt = 
   let comma = ref false in
   let print = function
     | Obligation (_,id,_) -> 
 	if !comma then fprintf fmt "; "; fprintf fmt "%s" id; comma := true
-    | Parameter _ | Axiom _ | Logic _ -> 
+    | Parameter _ | Axiom _ | Logic _ | Predicate _ -> 
 	()
   in
   fprintf fmt "let all = ["; 

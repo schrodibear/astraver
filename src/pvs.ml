@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.51 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.52 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -114,6 +114,9 @@ let rec print_pure_type fmt = function
   | PTvarid _ -> assert false 
   | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> failwith "no polymorphism with PVS"
+
+let print_logic_binder fmt (id,pt) =
+  fprintf fmt "%s:%a" (Ident.string id) print_pure_type pt
 
 let infix_relation id =
   if id == t_lt_int then "<" 
@@ -256,12 +259,19 @@ let print_axiom fmt id p =
   if l <> [] then failwith "no polymorphism with PVS";
   fprintf fmt "  %s: AXIOM @[%a@]@\n@\n" id print_predicate p
 
+let print_predicate fmt id p =
+  let (l,(bl,p)) = Env.specialize_predicate_def p in
+  if l <> [] then failwith "no polymorphism with PVS";
+  fprintf fmt "  %s(@[%a@]) : bool = @[%a@]@\n@\n"
+    id (print_list comma print_logic_binder) bl print_predicate p
+
 type elem = 
   | Verbatim of string
   | Obligations of obligation list
   | Parameter of string * cc_type
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
 let queue = Queue.create ()
 
@@ -275,12 +285,15 @@ let push_logic id t = Queue.add (Logic (id,t)) queue
 
 let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
+let push_predicate id p = Queue.add (Predicate (id, p)) queue
+
 let output_elem fmt = function
   | Verbatim s -> fprintf fmt "  %s@\n@\n" s
   | Obligations ol -> print_obligations fmt ol
   | Parameter (id, v) -> print_parameter fmt id v
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
+  | Predicate (id, p) -> print_predicate fmt id p
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in

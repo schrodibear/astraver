@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.119 2004-03-12 15:31:26 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.120 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -729,6 +729,21 @@ let print_axiom fmt id p =
   reprint_axiom fmt id p;
   fprintf fmt "Admitted.@\n"
 
+let reprint_predicate fmt id p =
+  let (l,(bl,p)) = Env.specialize_predicate_def p in
+  fprintf fmt
+     "@[<hov 2>(*Why predicate*) Definition %s %a %a:@ := @[%a@].@]@\n" 
+    id (print_list space (fun fmt x -> fprintf fmt "(A%d:Set)" x.tag)) l
+    (print_list space 
+       (fun fmt (x,pt) -> 
+	  fprintf fmt "(%a:%a)" Ident.print x print_pure_type pt))
+    bl
+    print_predicate p 
+
+let print_predicate fmt id p = reprint_predicate fmt id p
+
+
+
 open Regen
 
 module Gen = Regen.Make(
@@ -740,6 +755,7 @@ struct
       | Obligation o -> print_obligation fmt o
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
+      | Predicate (id, p) -> print_predicate fmt id p
     end;
     fprintf fmt "@\n"
       
@@ -748,6 +764,7 @@ struct
     | Obligation o -> reprint_obligation fmt o
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
+    | Predicate (id, p) -> reprint_predicate fmt id p
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -775,6 +792,9 @@ let push_logic id t =
 
 let push_axiom id p =
   Gen.add_elem (Ax, id) (Axiom (id, p))
+
+let push_predicate id p =
+  Gen.add_elem (Pr, id) (Predicate (id, p))
 
 let _ = 
   Gen.add_regexp 
@@ -815,12 +835,12 @@ let print_validations fwe fmt =
 let output_validations fwe =
   let f = fwe ^ "_valid.v" in
   let m = Filename.basename fwe in
-  print_in_file 78 (print_validations m) f;
+  print_in_file (print_validations m) f;
   add_dep m
 
 let output_file fwe =
   let f = fwe ^ "_why.v" in
-  Gen.output_file 78 f;
+  Gen.output_file f;
   if valid then output_validations fwe
 
    

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.92 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.93 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -79,6 +79,7 @@ let exn_condition = gec "exn_condition"
 let binder  = gec "binder"
 let binder_type = gec "binder_type"
 let binders  = gec "binders"
+let logic_binder = gec "logic_binder"
 
 (* programs *)
 let program = gec "program"
@@ -548,7 +549,13 @@ i*)
 	Logic (loc, e, ids, t)
     | "axiom"; id = ident; ":"; p = lexpr ->
 	Axiom (loc, id, p)
+    | "predicate"; id = ident; "("; bl = LIST0 logic_binder SEP ","; ")";
+      "="; p = lexpr ->
+	Predicate_def (loc, id, bl, p)
   ] ]
+  ;
+  logic_binder:
+  [ [ id = ident; ":"; t = primitive_type -> (id, t) ] ]
   ;
   external_:
   [ [ "external" -> true | -> false ] ]

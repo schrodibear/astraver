@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.34 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.35 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Format
 
@@ -34,6 +34,7 @@ let no_simplify_prelude_ = ref false
 let no_harvey_prelude_ = ref false
 let werror_ = ref false
 let fpi_ = ref false
+let dir_ = ref ""
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -155,6 +156,7 @@ Misc options:
   --ocaml-annot  Show all annotations in ocaml code
   --ocaml-ext    Consider \"external\"s as parameters in ocaml code
   --output f     Redirect output to file f
+  --dir d        Output files in directory d
 ";
   flush stderr
 
@@ -223,6 +225,10 @@ let files =
 	wol_ := true; parse args
     | ("-werror" | "--werror") :: args ->
 	werror_ := true; parse args
+    | ("-dir" | "--dir") :: d :: args ->
+	dir_ := d; parse args
+    | ("-dir" | "--dir") :: [] ->
+	usage (); exit 1
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -251,6 +257,9 @@ let no_harvey_prelude = !no_harvey_prelude_
 let wol = !wol_
 let werror = !werror_
 let fpi = !fpi_
+let dir = !dir_
+
+let file f = if dir = "" then f else Lib.file ~subdir:dir ~file:f
 
 let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_

@@ -14,3 +14,4 @@ val arrow : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 
+val print_in_file : ?margin:int -> (Format.formatter -> unit) -> string -> unit

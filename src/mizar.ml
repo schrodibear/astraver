@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.14 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.15 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -33,6 +33,7 @@ type elem =
   | Obligation of obligation
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
 let elem_q = Queue.create ()
 
@@ -45,6 +46,8 @@ let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
 let push_logic id t = Queue.add (Logic (id, t)) elem_q
 
 let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
+
+let push_predicate id p = Queue.add (Predicate (id, p)) elem_q
 
 (*s Pretty print *)
 
@@ -309,6 +312,7 @@ struct
       | Obligation o -> print_obligation fmt o
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
+      | Predicate _ -> assert false (*TODO*)
     end;
     fprintf fmt "@\n"
       
@@ -317,6 +321,7 @@ struct
     | Obligation o -> reprint_obligation fmt o
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
+    | Predicate _ -> assert false (*TODO*)
 
   let re_oblig_loc = Str.regexp " :: Why obligation from .*"
 
@@ -361,4 +366,4 @@ let _ =
 
 let output_file fwe =
   let f = fwe ^ "_why.miz" in
-  Gen.output_file 75 f
+  Gen.output_file ~margin:75 f

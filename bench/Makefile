@@ -36,7 +36,6 @@ harvey:
 simplify:
 	../bin/why.opt --simplify -d -V test.mlw
 	Simplify test_why.sx
-
 mizar:
 	../bin/why.opt --mizar -d -V test.mlw
 	mzf test_why.miz

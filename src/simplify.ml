@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.11 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.12 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -30,6 +30,7 @@ open Pp
 type elem = 
   | Oblig of obligation 
   | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
 let queue = Queue.create ()
 
@@ -38,6 +39,10 @@ let reset () = Queue.clear queue
 let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
 
 let push_axiom id p = Queue.add (Axiom (id, p)) queue
+
+let push_predicate id p = Queue.add (Predicate (id, p)) queue
+
+let defpred = Hashtbl.create 97
 
 (*s Pretty print *)
 
@@ -133,6 +138,8 @@ let rec print_predicate fmt = function
   | Papp (id, [a;b]) when id == t_zwf_zero ->
       fprintf fmt "@[(AND (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
+  | Papp (id, tl) when Hashtbl.mem defpred id -> 
+      fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
   | Papp (id, tl) -> 
       fprintf fmt "@[(EQ (%a@ %a) |@@true|)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
@@ -199,9 +206,17 @@ let print_axiom fmt id p =
   fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@]@\n" id;
   fprintf fmt " @[<hov 2>%a@])@]@\n@\n" print_predicate p.Env.scheme_type
 
+let print_predicate fmt id p =
+  let (bl,p) = p.Env.scheme_type in
+  fprintf fmt "@[(DEFPRED (%s %a) @[%a@])@]@\n@\n" id
+    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    print_predicate p;
+  Hashtbl.add defpred (Ident.create id) ()
+
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o
   | Axiom (id, p) -> print_axiom fmt id p
+  | Predicate (id, p) -> print_predicate fmt id p
 
 let prelude = ref 
 "(BG_PUSH 

@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.mli,v 1.5 2004-02-27 16:55:56 marche Exp $ i*)
+(*i $Id: cinterp.mli,v 1.6 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
 val interp : Cast.tfile -> Output.why_decl list * Output.prover_decl list;;
 
+val output_specs : Format.formatter -> (string * Cast.tfile) list -> unit

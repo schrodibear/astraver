@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.7 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: regen.mli,v 1.8 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -29,6 +29,7 @@ type element_kind =
   | Valid (* obsolete but helps porting from old versions *)
   | Lg
   | Ax
+  | Pr
 
 type element_id = element_kind * string
 
@@ -37,6 +38,7 @@ type element =
   | Obligation of obligation
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
 module type S = sig
  
@@ -67,7 +69,7 @@ module Make(X : S) : sig
 
   val first_time : formatter -> unit
 
-  val output_file : int -> string -> unit
+  val output_file : ?margin:int -> string -> unit
 
 end
 

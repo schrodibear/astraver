@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.mli,v 1.4 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: holl.mli,v 1.5 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -28,5 +28,6 @@ val push_parameter : string -> Cc.cc_type -> unit
 
 val push_logic : string -> Logic.logic_type Env.scheme -> unit
 val push_axiom : string -> Logic.predicate Env.scheme -> unit
+val push_predicate : string -> Logic.predicate_def Env.scheme -> unit
 
 val output_file : string -> unit

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.10 2004-03-17 09:50:11 marche Exp $ i*)
+(*i $Id: regen.ml,v 1.11 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -31,6 +31,7 @@ type element_kind =
   | Valid (* obsolete but helps porting from old versions *)
   | Lg
   | Ax
+  | Pr
 
 type element_id = element_kind * string
 
@@ -39,6 +40,7 @@ type element =
   | Obligation of obligation
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
 module type S = sig
  
@@ -65,6 +67,7 @@ module Make(X : S) = struct
     | Valid, s -> fprintf fmt "validation %s" s
     | Lg, s -> fprintf fmt "logic %s" s
     | Ax, s -> fprintf fmt "axiom %s" s
+    | Pr, s -> fprintf fmt "predicate %s" s
 
   let elem_t = Hashtbl.create 97 (* maps [element_id] to [element] *)
   let elem_q = Queue.create ()   (* queue of [element_id * element] *)
@@ -139,16 +142,16 @@ module Make(X : S) = struct
     X.first_time fmt;
     Queue.iter (fun (_,e) -> X.print_element fmt e) elem_q
 
-  let output_file margin f =
+  let output_file ?(margin=78) f =
     if Sys.file_exists f then begin
       let fbak = f ^ ".bak" in
       if Sys.file_exists fbak then Sys.remove fbak;
       Sys.rename f fbak; 
       if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
-      print_in_file margin (regen fbak) f
+      Pp.print_in_file ~margin (regen fbak) f
     end else begin
       if_verbose_2 eprintf "*** generating file %s@." f;
-      print_in_file margin first_time f
+      Pp.print_in_file ~margin first_time f
     end
 
 end

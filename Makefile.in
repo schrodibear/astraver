@@ -80,7 +80,7 @@ opt: bin/why.opt bin/caduceus.opt
 byte : bin/why.byte bin/caduceus.byte
 
 # why
-CMO = src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
+CMO = src/lib.cmo src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/ident.cmo \
 	   src/effect.cmo src/pp.cmo src/misc.cmo src/report.cmo	\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
@@ -93,11 +93,11 @@ CMO = src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
-	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
 #	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
-	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
@@ -107,7 +107,7 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 # caduceus
-CCMO = src/linenum.cmo src/loc.cmo src/pp.cmo \
+CCMO = src/lib.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo \
 	c/creport.cmo c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
@@ -119,11 +119,11 @@ CCMO = src/linenum.cmo src/loc.cmo src/pp.cmo \
 CCMX = $(CCMO:.cmo=.cmx)
 
 bin/caduceus.opt: $(CCMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
 	strip $@
 
 bin/caduceus.byte: $(CCMO)
-	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma $^
 
 # graphical interface
 GCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
@@ -386,7 +386,9 @@ export/$(NAME).tar.gz:
 	cp --parents $(FILES) $(EXPORT)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
 
-tarball: export/$(NAME).tar.gz
+tarball: 
+	cd export; rm -rf $(NAME) $(NAME).tar.gz
+	make export/$(NAME).tar.gz
 
 EXFILES = lib/coq*/*.v examples/*/*.v examples/*/*.mlw
 

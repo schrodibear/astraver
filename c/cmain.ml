@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.20 2004-03-17 17:07:15 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.21 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 open Format
 open Coptions
 open Cerror
 open Creport
+open Output
 
 let parse_file f =
   let ppf = Cpp.cpp f in
@@ -34,9 +35,8 @@ let type_file (f,p) =
 let interp_file (f,p) =
   let (why,prover) = Cinterp.interp p in
   let f = Filename.chop_extension f in
-  let ch = open_out (f ^ ".why") in
-  Output.fprintf_why_decls (formatter_of_out_channel ch) why;
-  close_out ch
+  let file = Lib.file "why" (f ^ ".why") in
+  Pp.print_in_file (fun fmt -> Output.fprintf_why_decls fmt why) file
 
 let file_copy src dest =
   let cin = open_in src
@@ -44,15 +44,15 @@ let file_copy src dest =
   and buff = String.make 1024 ' ' 
   and n = ref 0 
   in
-  while n:= input cin buff 0 1024; !n <> 0 do 
+  while n := input cin buff 0 1024; !n <> 0 do 
     output cout buff 0 !n
   done;
   close_in cin; close_out cout
 
 let main () = 
   if not (parse_only || type_only || cpp_dump) then begin
-    let theory = "caduceus.why" in
-    let theorysrc = Filename.concat Coptions.libdir theory in
+    let theory = Lib.file "why" "caduceus.why" in
+    let theorysrc = Filename.concat Coptions.libdir "caduceus.why" in
     if not (Sys.file_exists theory) ||
       Digest.file theory <> Digest.file theorysrc
     then file_copy theorysrc theory
@@ -68,6 +68,9 @@ let main () =
   while (not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles)) do 
     () 
   done;
+  (* Why specs *)
+  let file = Lib.file "why" "caduceus_spec.why" in
+  Pp.print_in_file (fun fmt -> Cinterp.output_specs fmt tfiles) file;
   (* Why interpretation *)
   List.iter interp_file tfiles
 

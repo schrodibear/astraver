@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.16 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.17 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -34,6 +34,8 @@ let reset () = Queue.clear oblig; Queue.clear axiom
 let push_obligations = List.iter (fun o -> Queue.add o oblig)
 
 let push_axiom id p = Queue.add (id, p) axiom
+
+let push_predicate id p = assert false (*TODO*)
 
 (*s Pretty print *)
 

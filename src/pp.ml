@@ -22,3 +22,10 @@ let string fmt s = fprintf fmt "%s" s
 
 let hov n fmt f x = pp_open_hovbox fmt n; f x; pp_close_box fmt ()
 
+let print_in_file ?(margin=78) p f =
+  let cout = open_out f in
+  let fmt = formatter_of_out_channel cout in
+  pp_set_margin fmt margin;
+  pp_open_box fmt 0; p fmt; pp_close_box fmt ();
+  pp_print_flush fmt ();
+  close_out cout

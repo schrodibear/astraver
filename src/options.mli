@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.30 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.31 2004-03-19 11:16:07 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -68,6 +68,8 @@ val no_simplify_prelude : bool
 val no_harvey_prelude : bool
 
 val fpi : bool
+
+val file : string -> string
 
 (*s Files given on the command line *)
 
