@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.7 2002-11-20 16:57:04 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.8 2002-11-21 10:38:31 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -57,6 +57,7 @@ type ctype =
 
 let void = CTpure PTunit
 let c_int = CTpure PTint
+let c_float = CTpure PTfloat
 let c_bool = CTpure PTbool
 
 let rec print_ctype fmt = function
@@ -91,46 +92,105 @@ let mk_seq loc e1 e2 = match e1, e2 with
   | { pdesc=Sseq l1 }, e2 -> mk_expr loc (Sseq (l1 @ [Sstatement e2]))
   | e1, e2 -> mk_expr loc (Sseq [Sstatement e1; Sstatement e2])
 
-let ml_const c = mk_expr Loc.dummy (Sconst c)
+let ml_const l c = mk_expr l (Sconst c)
 let ml_var l id = mk_expr l (Svar id)
 let ml_refget l id = mk_expr l (Srefget id)
 let ml_refset l id e = mk_expr l (Srefset (id, e))
 let ml_if l e1 e2 e3 = mk_expr l (Sif (e1, e2, e3))
-let ml_let_tmp l e1 e2 = 
-  let tmp = fresh_var () in mk_expr l (Sletin (tmp, e1, e2 tmp))
+let ml_let_tmp l e1 k2 = 
+  let tmp = fresh_var () in 
+  let e2,r = k2 tmp in
+  mk_expr l (Sletin (tmp, e1, e2)), r
 
-let c_true = ml_const (ConstInt 1)
-let c_false = ml_const (ConstInt 0)
+let c_true l = ml_const l (ConstInt 1)
+let c_false l = ml_const l (ConstInt 0)
 
-let int_of_bool l e = mk_expr l (Sif (e, c_true, c_false))
+let int_of_bool l e = mk_expr l (Sif (e, c_true l, c_false l))
 
-let ml_float_of_int l e = 
-  mk_expr l (Sapp (ml_var Loc.dummy t_float_of_int, Sterm e))
+let float_of_int l e = 
+  mk_expr l (Sapp (ml_var l t_float_of_int, Sterm e))
 
 (*s Binary operations *)
 
-let interp_binop = function
-  | Plus -> t_add
-  | Minus -> t_sub
-  | Mult -> t_mul
-  | Div -> t_div
+let interp_int_binop = function
+  | Plus -> t_add_int
+  | Minus -> t_sub_int
+  | Mult -> t_mul_int
+  | Div -> t_div_int
   | Mod -> t_mod_int
-  | Lt -> t_lt
-  | Gt -> t_gt
-  | Le -> t_le
-  | Ge -> t_ge
-  | Eq -> t_eq
-  | Neq -> t_neq
+  | Lt -> t_lt_int
+  | Gt -> t_gt_int
+  | Le -> t_le_int
+  | Ge -> t_ge_int
+  | Eq -> t_eq_int
+  | Neq -> t_neq_int
+  | _ -> assert false
+
+let interp_float_binop = function
+  | Plus -> t_add_float
+  | Minus -> t_sub_float
+  | Mult -> t_mul_float
+  | Div -> t_div_float
+  | Lt -> t_lt_float
+  | Gt -> t_gt_float
+  | Le -> t_le_float
+  | Ge -> t_ge_float
+  | Eq -> t_eq_float
+  | Neq -> t_neq_float
   | _ -> assert false
 
 let mk_binop l op e1 e2 =
   mk_expr l (Sapp (mk_expr l (Sapp (mk_expr l (Svar op), Sterm e1)), Sterm e2))
 
+let expected_num l =
+  raise_located l (ExpectedType (fun fmt -> fprintf fmt "int or float"))
+
+let invalid_binop l = 
+  raise_located l (AnyMessage "invalid operands to binary operator")
+
+let interp_binop l op (m1,t1) (m2,t2) = match op with
+  | Plus | Minus | Mult | Div | Le | Lt | Ge | Gt -> 
+    (match t1, t2 with
+    | CTpure PTint, CTpure PTint -> 
+	mk_binop l (interp_int_binop op) m1 m2, t1
+    | CTpure PTfloat, CTpure PTfloat ->
+	mk_binop l (interp_float_binop op) m1 m2, t1
+    | CTpure PTint, CTpure PTfloat ->
+	mk_binop l (interp_float_binop op) (float_of_int m1.loc m1) m2, t2
+    | CTpure PTfloat, CTpure PTint ->
+	mk_binop l (interp_float_binop op) m1 (float_of_int m2.loc m2), t1
+    | CTpure PTbool, _ | _, CTpure PTbool ->
+        assert false
+    | _ -> 
+	expected_num l)
+  | Eq | Neq ->
+    (match t1, t2 with
+    | CTpure PTint, CTpure PTint -> 
+	mk_binop l (interp_int_binop op) m1 m2, c_int
+    | CTpure PTfloat, CTpure PTfloat ->
+	mk_binop l (interp_float_binop op) m1 m2, c_int
+    | CTpure PTint, CTpure PTfloat ->
+	mk_binop l (interp_float_binop op) (float_of_int m1.loc m1) m2, c_int
+    | CTpure PTfloat, CTpure PTint ->
+	mk_binop l (interp_float_binop op) m1 (float_of_int m2.loc m2), c_int
+    | CTpure pt1, CTpure pt2 when pt1 = pt2 ->
+	mk_binop l t_eq m1 m2, c_int
+    | _ ->
+	invalid_binop l)
+  | Mod ->
+    (match t1, t2 with
+    | CTpure PTint, CTpure PTint -> 
+	mk_binop l (interp_int_binop op) m1 m2, c_int
+    | _ ->
+	invalid_binop l)
+  | Or|And|Bw_or|Bw_xor|Bw_and ->
+        assert false (* TODO *)
+		  
 (*s Coercion of [e] of type [t] to an expected type [et] *)
 
 let coerce l et e t = match et with
   | Some (CTpure PTfloat as et) when t = c_int -> 
-      ml_float_of_int l e, et
+      float_of_int l e, et
   | Some et when et <> t ->
       raise_located l (ExpectedType (fun f -> print_ctype f et))
   | _ ->
@@ -190,15 +250,13 @@ let rec interp_expr cenv et e =
 	    (interp_expr e) el
 ***)
       | CEbinary (l, e1, (Plus | Minus | Mult | Div | Mod as op), e2) ->
-	  let m1,t1 = interp_expr cenv None e1 in
-	  let m2,t2 = interp_expr cenv None e2 in
-	  assert (t1 = t2); (* TODO: int/float *)
-	  let op = interp_binop op in
+	  let m1,t1 as m1t1 = interp_expr cenv None e1 in
+	  let m2t2 = interp_expr cenv None e2 in
 	  if is_pure e1 then
-	    mk_binop l op m1 m2, t1
+	    interp_binop l op m1t1 m2t2
 	  else
 	    (* let tmp = e1 in tmp op e2 *)
-	    ml_let_tmp l m1 (fun x -> mk_binop l op (ml_var l x) m2), t1
+	    ml_let_tmp l m1 (fun x -> interp_binop l op (ml_var l x, t1) m2t2)
       | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq | And | Or), e2) as e ->
 	  int_of_bool l (interp_boolean cenv e), c_int
       | CEbinary (l, e1, (Bw_and | Bw_or | Bw_xor as op), e2) ->
@@ -207,11 +265,11 @@ let rec interp_expr cenv et e =
 	  (match get_type l cenv id with
 	     | ct, Ref _ -> 
 		 let getid = ml_refget l id in
-		 let incrid = (* id := !id + 1 *)
-		   ml_refset l id 
-		     (mk_binop l (interp_binop Plus) 
-			getid (ml_const (ConstInt 1)))
+		 let id_1,_ = 
+		   interp_binop l Plus (getid, ct) 
+		     (ml_const l (ConstInt 1), c_int)
 		 in
+		 let incrid = ml_refset l id id_1 in (* id := !id + 1 *)
 		 if et = Some void then 
 		   incrid, void
 		 else 
@@ -223,24 +281,30 @@ let rec interp_expr cenv et e =
       | CEarrget _ ->
 	  assert false
       | CEconst (l, s) ->
-	  ml_const (ConstInt (int_of_string s)), c_int
+	  (try
+	     ml_const l (ConstInt (int_of_string s)), c_int
+	   with Failure "int_of_string" ->
+	     ml_const l (ConstFloat s), c_float)
     in
     coerce ml.loc et ml ct
 
 and interp_boolean cenv = function
   | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq as op), e2) ->
-      let m1,t1 = interp_expr cenv None e1 in
-      let m2,t2 = interp_expr cenv None e2 in
-      assert (t1 = t2); (* TODO: int/float *)
-      mk_binop l (interp_binop op) m1 m2
+      let m1t1 = interp_expr cenv None e1 in
+      let m2t2 = interp_expr cenv None e2 in
+      let e,_ = interp_binop l op m1t1 m2t2 in
+      e
   | CEbinary (l, e1, And, e2) ->
-      ml_if l (interp_boolean cenv e1) (interp_boolean cenv e2) c_false
+      ml_if l (interp_boolean cenv e1) (interp_boolean cenv e2) (c_false l)
   | CEbinary (l, e1, Or, e2) ->
-      ml_if l (interp_boolean cenv e1) c_true (interp_boolean cenv e2)
+      ml_if l (interp_boolean cenv e1) (c_true l) (interp_boolean cenv e2)
   | e ->
-      let e,t = interp_expr cenv None e in 
-      assert (t = c_int); (* TODO: float *)
-      mk_binop e.loc t_neq e (ml_const (ConstInt 0))
+      let m,_ as mt = interp_expr cenv None e in 
+      let e,_ = 
+	(* OPTIM: directement 0.0 quand float *)
+	interp_binop m.loc Neq mt (ml_const m.loc (ConstInt 0), c_int) 
+      in
+      e
 
 let append_to_block l s1 s2 = match s1, s2 with
   | _, None -> s1
