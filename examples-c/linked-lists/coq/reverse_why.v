@@ -128,7 +128,6 @@ absurd (r1=null); auto.
 subst.
 elim Pre7; clear Pre7; intuition.
 elim H; clear H; intuition.
-Print is_list.
 elim (is_list_llist alloc tl p0 Pre9); intros l0 Hl0.
 subst.
 exists (rev l0); intuition.

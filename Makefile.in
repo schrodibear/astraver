@@ -416,7 +416,7 @@ export-examples:
 
 export-examples-c:
 	mkdir -p $(WWW)/caduceus/examples
-	cd examples-c; cp --parents */*.c $(WWW)/caduceus/examples
+	cd examples-c; cp --parents */*.c */*.h $(WWW)/caduceus/examples
 	mkdir -p $(WWW)/caduceus/examples/bench
 	cp bench/c/good/*.c $(WWW)/caduceus/examples/bench
 	rm -f $(WWW)/caduceus/examples/bench/test.c

@@ -17,3 +17,20 @@ typedef struct struct_list {
 
 /*@ logic StorePointerPair store_pointer_pair(list l) reads l->tl */
 
+
+#if 0
+/* axioms for Simplify */
+
+/* axiom ll_order_wf : well_founded(ll_order) */
+
+/*@ axiom is_list_llist_ax :
+    \forall list p;
+     is_list(p) => \exists plist l; llist(p,l) */
+
+/*@ axiom llist_function_ax :
+    \forall plist l1; \forall plist l2; \forall list p;
+    llist(p,l1) => llist(p,l2) => eq_list(l1,l2) */
+
+/*@ axiom eq_list_def : \forall plist x; \forall plist y;
+    x==y => eq_list(x,y) */
+#endif
