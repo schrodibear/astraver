@@ -92,11 +92,11 @@ Lemma g_impl_po_3 :
   forall (Post5: caduceus_1 = (acc t ps0)),
   (valid alloc caduceus_1).
 Proof.
-unfold valid_S;intuition.
+intuition.
 subst;
 auto.
-generalize (valid_S_pointer alloc t s).
-unfold valid_S; intuition.
+generalize (valid_S_t_pointer alloc t s).
+intuition.
 Save.
 
 (* Why obligation from file "why/struct.why", characters 734-793 *)

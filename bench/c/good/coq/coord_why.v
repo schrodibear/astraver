@@ -12,6 +12,5 @@ Lemma g_impl_po_1 :
   (valid alloc (shift tab index)).
 Proof.
 intros.
-unfold valid_anonymous_0 in *|-*.
 intuition.
 Save.

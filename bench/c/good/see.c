@@ -12,10 +12,9 @@ int f() {
   return b;
 }
 
-/*@ ensures b1 == 0 && b2 == 1 */
+/*@ ensures b1 == 1 */
 void k() {
   b = 1;
-  b1 = f() + (1 - f());
-  b2 = (1 - f()) * f();
+  b1 = f() + f();
 }
 

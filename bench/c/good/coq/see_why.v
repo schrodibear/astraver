@@ -3,32 +3,20 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/see.why", characters 301-332 *)
+(* Why obligation from file "why/see.why", characters 279-319 *)
 Lemma k_impl_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),
+  forall (b2: Z),
+  forall (caduceus_1: Z),
+  forall (Post10: caduceus_1 = b2 /\ b2 = (1 - b0)),
   forall (b3: Z),
-  forall (caduceus_2: Z),
-  forall (Post18: caduceus_2 = b3 /\ b3 = (1 - b0)),
-  forall (b4: Z),
   forall (aux_1: Z),
-  forall (Post20: aux_1 = b4 /\ b4 = (1 - b3)),
+  forall (Post13: aux_1 = b3 /\ b3 = (1 - b2)),
   forall (result0: Z),
-  forall (Post7: result0 = (1 - aux_1)),
-  (forall (result:Z),
-   (result = (caduceus_2 + result0) ->
-    (forall (result0:Z),
-     (forall (b:Z),
-      (result0 = b /\ b = (1 - b4) ->
-       (forall (result1:Z),
-        (result1 = (1 - result0) ->
-         (forall (result0:Z),
-          (forall (b0:Z),
-           (result0 = b0 /\ b0 = (1 - b) ->
-            (forall (result2:Z),
-             (result2 = (result1 * result0) -> result = 0 /\ result2 = 1)))))))))))).
+  forall (Post5: result0 = (caduceus_1 + aux_1)),
+  result0 = 1.
 Proof.
 intuition.
-subst; ring.
 Save.
 

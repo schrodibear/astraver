@@ -37,8 +37,8 @@ Lemma f2_impl_po_2 :
   (valid alloc caduceus_4).
 Proof.
 intuition; subst.
-generalize (valid_S_pointer alloc b c s0).
-unfold valid_S; intuition.
+generalize (valid_S_b_pointer alloc b s0).
+unfold valid_S_b; intuition.
 Save.
 
 (* Why obligation from file "why/separation3.why", characters 190-319 *)
@@ -98,7 +98,7 @@ Lemma f3_impl_po_2 :
   (valid alloc caduceus_5).
 Proof.
 intuition; subst.
-generalize (valid_S_pointer alloc b b s0); unfold valid_S; intuition.
+generalize (valid_S_b_pointer alloc b s0); unfold valid_S_b; intuition.
 Save.
 
 (* Why obligation from file "why/separation3.why", characters 606-735 *)
@@ -133,7 +133,7 @@ generalize (valid_S_pointer alloc b c s0); unfold internal_separation_S.
 intuition.
 generalize (neq_base_addr_neq_shift (s0#c) (s0#b) 2 2).
 intuition.
-generalize (valid_S_pointer alloc b c s0); unfold valid_S; intuition.
+generalize (valid_S_c_pointer alloc c s0); unfold valid_S_c; intuition.
 Save.
 
 (* Why obligation from file "why/separation3.why", characters 1193-1217 *)
@@ -186,9 +186,9 @@ red in H2.
 rewrite <- (shift_zero (l#q)).
 rewrite <- (shift_zero s0).
 apply neq_base_addr_neq_shift; intuition.
-generalize (valid_L_pointer alloc b c q r l).
+generalize (valid_L_q_pointer alloc q l).
 cut (valid alloc l).
-unfold valid_L; intuition.
+unfold valid_L_q; intuition.
 valid.
 Save.
 

@@ -22,7 +22,7 @@ Lemma f1_impl_po_1 :
   (valid alloc (acc p2 u1))) /\ (valid_range alloc (acc p1 u1) 0 5)) /\
   (valid_range alloc (acc p2 u1) 0 5).
 Proof.
-unfold valid_anonymous_1;intuition;generalize (H u1);intuition.
+intuition;generalize (H u1);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 475-492 *)
@@ -59,7 +59,7 @@ Lemma f1_impl_po_2 :
   (valid alloc (acc p2 u2))) /\ (valid_range alloc (acc p1 u2) 0 5)) /\
   (valid_range alloc (acc p2 u2) 0 5).
 Proof.
-unfold valid_anonymous_1;intuition;generalize (H u2);intuition.
+intuition;generalize (H u2);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 36-898 *)
@@ -266,7 +266,7 @@ Lemma f3_impl_po_1 :
   (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 u3) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H u3);intuition.
+intuition;generalize (H u3);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32345-32362 *)
@@ -402,7 +402,7 @@ Lemma f3_impl_po_2 :
   (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 u4) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H u4);intuition.
+intuition;generalize (H u4);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32368-32385 *)
@@ -553,7 +553,7 @@ Lemma f3_impl_po_3 :
   (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w1) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w1);intuition.
+intuition;generalize (H w1);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32391-32408 *)
@@ -719,7 +719,7 @@ Lemma f3_impl_po_4 :
   (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w2) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w2);intuition.
+intuition;generalize (H w2);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32414-32431 *)
@@ -900,7 +900,7 @@ Lemma f3_impl_po_5 :
   (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w3) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w3);intuition.
+intuition;generalize (H w3);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32437-32454 *)
@@ -1096,7 +1096,7 @@ Lemma f3_impl_po_6 :
   (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w4) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w4);intuition.
+intuition;generalize (H w4);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32460-32477 *)
@@ -1307,7 +1307,7 @@ Lemma f3_impl_po_7 :
   (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w5) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w5);intuition.
+intuition;generalize (H w5);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32483-32500 *)
@@ -1533,7 +1533,7 @@ Lemma f3_impl_po_8 :
   (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w6) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w6);intuition.
+intuition;generalize (H w6);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32506-32523 *)
@@ -1774,7 +1774,7 @@ Lemma f3_impl_po_9 :
   (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w7) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w7);intuition.
+intuition;generalize (H w7);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32529-32546 *)
@@ -2030,7 +2030,7 @@ Lemma f3_impl_po_10 :
   (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w8) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w8);intuition.
+intuition;generalize (H w8);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32552-32569 *)
@@ -2301,7 +2301,7 @@ Lemma f3_impl_po_11 :
   (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w9) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w9);intuition.
+intuition;generalize (H w9);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32575-32593 *)
@@ -2587,7 +2587,7 @@ Lemma f3_impl_po_12 :
   (valid_range alloc (acc anonymous_2_p1 w10) 0 5)) /\
   (valid_range alloc (acc anonymous_2_p2 w10) 0 5).
 Proof.
-unfold valid_anonymous_2;intuition;generalize (H w10);intuition.
+intuition;generalize (H w10);intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 937-35071 *)
@@ -2933,7 +2933,7 @@ Lemma f3_impl_po_13 :
             (union_loc (pointer_loc w1)
              (union_loc (pointer_loc u4) (pointer_loc u3))))))))))))).
 Proof.
-unfold valid_anonymous_2;intuition.
+intuition.
 Admitted.
 
 (* Why obligation from file "why/separation.why", characters 35438-35515 *)
@@ -2972,13 +2972,12 @@ Lemma f_impl_po_2 :
   forall (Post3: caduceus_8 = (shift (acc t ss) 0)),
   (valid alloc caduceus_8).
 Proof.
-unfold valid_s1.
- intuition.
+intuition.
 subst.
-generalize (valid_s1_pointer alloc t u ss ).
+generalize (valid_s1_t_pointer alloc t ss ).
 assert (valid alloc ss).
 valid.
-unfold valid_s1;intuition.
+unfold valid_s1_t;intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 35421-35550 *)
@@ -3043,20 +3042,20 @@ generalize (pointer_pair_2 v  (s # t) H4).
 intuition. 
 assert (valid alloc s).
 valid.
-generalize (valid_s1_pointer alloc t u s H4).
-rewrite shift_zero;unfold valid_s1;intuition.
+generalize (valid_s1_t_pointer alloc t s H4).
+rewrite shift_zero;unfold valid_s1_t;intuition.
 assert (valid alloc s).
 valid.
-generalize (valid_s1_pointer alloc t u s H4).
-rewrite shift_zero;unfold valid_s1;intuition.
+generalize (valid_s1_t_pointer alloc t s H4).
+rewrite shift_zero;unfold valid_s1_t;intuition.
 assert (valid alloc s).
 valid.
-generalize (valid_s1_pointer alloc t u s H4).
-rewrite shift_zero;unfold valid_s1;intuition.
+generalize (valid_s1_u_pointer alloc u s H4).
+rewrite shift_zero;unfold valid_s1_u;intuition.
 assert (valid alloc s).
 valid.
-generalize (valid_s1_pointer alloc t u s H4).
-rewrite shift_zero;unfold valid_s1;intuition.
+generalize (valid_s1_t_pointer alloc t s H4).
+rewrite shift_zero;unfold valid_s1_t;intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 36045-36073 *)
@@ -3076,7 +3075,7 @@ Lemma h_impl_po_1 :
   forall (Pre5: (valid_range alloc tab 0 5)),
   (valid alloc (shift tab 0)).
 Proof.
-unfold valid_anonymous_0;intuition.
+intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 36187-36288 *)
@@ -3090,8 +3089,8 @@ Lemma h_impl_po_2 :
 Proof.
 intuition.
 rewrite shift_zero;rewrite shift_zero.
-generalize (valid_anonymous_0_pointer alloc x tab).
-unfold valid_anonymous_0;intuition.
+generalize (valid_anonymous_0_x_pointer alloc x tab).
+unfold valid_anonymous_0_x;intuition.
 assert (valid alloc tab). 
 valid.
 intuition.

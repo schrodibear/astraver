@@ -60,45 +60,13 @@ let rec predicate_for name t =
 				NPimplies (ineq, pre))))))
      | _ -> NPtrue
 
-let axiom_for s ty t v fl =
-  let validity = 
-    List.fold_right 
-      (fun f acc -> 
-	 NPand (acc, (NPapp 
-			 (find_pred ("valid_" ^ s ^ "_" ^ f.var_name ), [t]))))
-      fl NPtrue in
+let axiom_for s ty t v validity=
   Cast.Naxiom 
     ("valid_" ^ s ^ "_pointer", 
-     NPforall ([ty,v], 
-	       NPimplies 
-		 (NPvalid t, 
-		  NPand (validity,
+     NPforall ([ty,v], NPimplies (NPvalid t, validity)))
+(***
 		  NPapp (find_pred ("internal_separation_" ^ s), [t])))))
-
-let axiom_for_array s ty t v=
-  let i = default_var_info "counter" in
-  let vari = noattr_term c_int (NTvar i) in
-  let sup_var = default_var_info "sup" in
-  let sup =  noattr_term c_int (NTvar sup_var) in
-  let ineq = NPand 
-	       (NPrel (nzero, Le, vari),
-		NPrel (vari, Lt, sup)) in
-  let array = default_var_info ("array_" ^ s) in
-  let tarray = noattr_term (noattr_type (Tpointer ty)) (NTvar array) in
-  Cast.Naxiom ( 
-    ("valid_" ^ s ^ "_range"),  
-    NPforall ((noattr_type (Tpointer (ty)),array)::
-		(noattr_type (Tint (Signed, Ctypes.Int)),sup_var)::
-	      [(noattr_type (Tint (Signed, Ctypes.Int)), i)], 
-	      NPimplies (ineq,
-			 (NPand
-			   ((NPvalid (noattr_term 
-				       (noattr_type (Tpointer (ty)))
-					    (NTbinop (tarray,Badd,vari)))),
-			   (NPapp (find_pred ("valid_" ^ s),
-				  [(noattr_term 
-				      (noattr_type (Tpointer (ty)))
-				      (NTbinop (tarray,Badd,vari)))])))))))
+***)
 
 let not_alias loc x y = 
   let ba t = { nterm_node = NTbase_addr t; 
@@ -335,6 +303,12 @@ let separation s1 ty1 s2 (ty2,fl) decls =
 		      NPforall ((ty1,t1_var)::[ty2,t2_var] , pred )))::decls
   end else
     decls
+
+let make_var x ty =
+  let info = default_var_info x in
+  Info.set_var_type (Var_info info) ty;
+  info, 
+  { nterm_node = NTvar info; nterm_loc = Loc.dummy; nterm_type = ty } 
     
 let add_predicates l =
   (* first we enter all names in environment *)
@@ -352,13 +326,7 @@ let add_predicates l =
   (* then we define predicates for all structures *)
   let f s (ty,fl) l2 = 
     let ty = noattr_type ty in
-    let st = default_var_info s in
-    Info.set_var_type (Var_info st) ty; 
-    let t = 
-      { nterm_node = NTvar st; 
-	nterm_loc = Loc.dummy;
-	nterm_type = ty } 
-    in
+    let st,t = make_var s ty in
     let l2 =
       List.fold_right 
 	 (fun f acc -> 
@@ -367,17 +335,32 @@ let add_predicates l =
 		nterm_loc = Loc.dummy;
 		nterm_type = f.var_type } 
 	    in
-	    let info = find_pred ("valid_" ^ s ^ "_" ^ f.var_name) in
-	    (noattr_located 
-	       (Cast.Nlogic 
-		  (info,NPredicate_def ([st,ty],(predicate_for s tf)))))::acc)
-	 fl l2 in
-    let info = find_pred ("internal_separation_" ^ s) in 
-    let l2 = noattr_located (axiom_for s ty t st fl)::l2 in
-    let l2 = noattr_located (
-      Cast.Nlogic (info,
-		   NPredicate_def ([st,ty],
-				   (separation_intern Loc.dummy s t))))::l2 in
+	    let infox,x = make_var f.var_name f.var_type in
+	    let s_f = s ^ "_" ^ f.var_name in
+	    let info = find_pred ("valid_" ^ s_f) in
+	    let axiom_s_f =
+	      noattr_located (axiom_for s_f ty t st (NPapp (info, [tf]))) 
+	    in
+	    let predicate_s_f =
+	      noattr_located 
+		(Cast.Nlogic 
+		   (info, NPredicate_def ([infox,f.var_type], 
+					  predicate_for s x))) 
+	    in
+	    predicate_s_f :: axiom_s_f :: acc)
+	 fl l2
+    in
+    let info = find_pred ("internal_separation_" ^ s) in 	    
+    let axiom_s_f =
+      noattr_located (axiom_for s ty t st (NPapp (info, [t]))) 
+    in
+    let l2 = 
+      axiom_s_f :: 
+      noattr_located (
+	Cast.Nlogic (info,
+		     NPredicate_def 
+		       ([st,ty],
+			(separation_intern Loc.dummy s t))))::l2 in
     Cenv.fold_all_struct (separation s ty) l2
   in
   Cenv.fold_all_struct f l

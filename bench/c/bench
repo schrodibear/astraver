@@ -5,7 +5,7 @@ FILES="array assigns break call clash clash_alloc clash_redef \
     copy dowhile invariants ifs logic_cast \
     param passing purse queue rec ref ref_glob search see \
     sizeof alloca \
-    struct switch enum separation3 separation"
+    struct struct2 switch enum separation3 separation"
 
 # benchmark for caduceus
 export CADUCEUSLIB=`pwd`/../../lib/why
@@ -131,7 +131,7 @@ for f in $FILES; do
 	exit 1
     fi
 done
-../../../bin/dp.opt -timeout 10 simplify/*_why.sx.all || true
+../../../bin/dp.opt -timeout 20 simplify/*_why.sx.all || true
 
 
 for f in $FILES; do

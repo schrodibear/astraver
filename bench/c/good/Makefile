@@ -35,11 +35,19 @@ cvcl: $(CFILES)
 	dp -timeout 10 cvcl/*_why.cvc.all
 
 # running Coq on all programs
-coq: $(WFILES)
-	for f in $(CFILES:.c=); do \
+
+COQFILES = array assigns break call clash clash_alloc clash_redef \
+    continue coord \
+    copy dowhile invariants ifs logic_cast \
+    param passing purse queue rec ref ref_glob search see \
+    sizeof alloca \
+    struct struct2 switch enum separation3 separation
+
+coq:
+	for f in $(COQFILES); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
-	  make -f $$f.makefile coq; \
+	  make -f $$f.makefile coq || exit 1; \
 	done
 
 # type-checking all C programs
@@ -63,6 +71,11 @@ why/init2.why: init2.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f why/$*.why
 	make why/$*.why
 	make -f $*.makefile simplify
+
+%.coq: %.c
+	rm -f why/$*.why
+	make why/$*.why
+	make -f $*.makefile coq
 
 .PHONY: simplify coq
 
