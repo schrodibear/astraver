@@ -14,8 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.78 2003-09-23 10:38:22 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.79 2003-10-06 14:06:33 filliatr Exp $ i*)
 
+open Options
 open Ident
 open Logic
 open Types 
@@ -509,7 +510,7 @@ let rec print_term fmt = function
   | Tconst (ConstFloat f) -> 
       fprintf fmt "%s" f
   | Tvar id -> 
-      Ident.dbprint fmt id
+      (if debug then Ident.dbprint else Ident.print) fmt id
   | Tderef id ->
       fprintf fmt "!%a" Ident.lprint id
   | Tapp (id, tl) -> 
@@ -526,7 +527,7 @@ let relation_string id =
 
 let rec print_predicate fmt = function
   | Pvar id -> 
-      Ident.dbprint fmt id
+      (if debug then Ident.dbprint else Ident.print) fmt id
   | Papp (id, [t1; t2]) when is_relation id ->
       fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
   | Papp (id, l) ->
@@ -548,10 +549,10 @@ let rec print_predicate fmt = function
       fprintf fmt "(not %a)" print_predicate a
   | Forall (_,_,b,_,p) ->
       fprintf fmt "@[<hov 2>(forall %a:@ %a)@]" 
-	Ident.dbprint b print_predicate p
+	(if debug then Ident.dbprint else Ident.print) b print_predicate p
   | Exists (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
-	Ident.dbprint b print_predicate p
+	(if debug then Ident.dbprint else Ident.print) b print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 

@@ -4,7 +4,7 @@
 Require Import Why.
 
 
-(* Why obligation from file "quicksort2.mlw", characters 230-234 *)
+(* Why obligation from file "quicksort2.mlw", characters 227-231 *)
 Lemma swap_po_1 : 
   forall (i: Z),
   forall (j: Z),
@@ -20,7 +20,7 @@ Proof.
 tauto.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 241-250 *)
+(* Why obligation from file "quicksort2.mlw", characters 237-246 *)
 Lemma swap_po_2 : 
   forall (i: Z),
   forall (j: Z),
@@ -40,7 +40,7 @@ intros; ArraySubst t0.
 Qed.
 
 
-(* Why obligation from file "quicksort2.mlw", characters 211-257 *)
+(* Why obligation from file "quicksort2.mlw", characters 209-252 *)
 Lemma swap_po_3 : 
   forall (i: Z),
   forall (j: Z),
@@ -63,7 +63,7 @@ intros; subst t1; subst t0; subst v.
 auto with datatypes.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 531-535 *)
+(* Why obligation from file "quicksort2.mlw", characters 523-527 *)
 Lemma quick_rec_po_1 : 
   forall (l: Z),
   forall (r: Z),
@@ -81,7 +81,7 @@ Proof.
 auto with *.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 903-908 *)
+(* Why obligation from file "quicksort2.mlw", characters 884-889 *)
 Lemma quick_rec_po_2 : 
   forall (l: Z),
   forall (r: Z),
@@ -117,7 +117,7 @@ intuition.
 ArrayLength.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 937-951 *)
+(* Why obligation from file "quicksort2.mlw", characters 918-932 *)
 Lemma quick_rec_po_3 : 
   forall (l: Z),
   forall (r: Z),
@@ -156,7 +156,7 @@ Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 918-955 *)
+(* Why obligation from file "quicksort2.mlw", characters 899-936 *)
 Lemma quick_rec_po_4 : 
   forall (l: Z),
   forall (r: Z),
@@ -225,7 +225,7 @@ decompose [exchange] Post30.
 rewrite H24; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 955-955 *)
+(* Why obligation from file "quicksort2.mlw", characters 936-936 *)
 Lemma quick_rec_po_5 : 
   forall (l: Z),
   forall (r: Z),
@@ -271,7 +271,7 @@ assert hj: (j < i1)%Z \/ j = i1.
 rewrite H15; assumption.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 654-859 *)
+(* Why obligation from file "quicksort2.mlw", characters 640-842 *)
 Lemma quick_rec_po_6 : 
   forall (l: Z),
   forall (r: Z),
@@ -299,7 +299,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 998-1011 *)
+(* Why obligation from file "quicksort2.mlw", characters 976-989 *)
 Lemma quick_rec_po_7 : 
   forall (l: Z),
   forall (r: Z),
@@ -331,7 +331,7 @@ Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 1020-1044 *)
+(* Why obligation from file "quicksort2.mlw", characters 997-1021 *)
 Lemma quick_rec_po_8 : 
   forall (l: Z),
   forall (r: Z),
@@ -367,7 +367,7 @@ Proof.
 intuition ArrayLength.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 465-1143 *)
+(* Why obligation from file "quicksort2.mlw", characters 459-1117 *)
 Lemma quick_rec_po_9 : 
   forall (l: Z),
   forall (r: Z),
@@ -406,7 +406,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 1053-1077 *)
+(* Why obligation from file "quicksort2.mlw", characters 1029-1053 *)
 Lemma quick_rec_po_10 : 
   forall (l: Z),
   forall (r: Z),
@@ -448,7 +448,7 @@ generalize (sub_permut_length H20); generalize (exchange_length Post32);
  generalize (sub_permut_length H10); intros; omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 465-1143 *)
+(* Why obligation from file "quicksort2.mlw", characters 459-1117 *)
 Lemma quick_rec_po_11 : 
   forall (l: Z),
   forall (r: Z),
@@ -491,7 +491,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 594-1086 *)
+(* Why obligation from file "quicksort2.mlw", characters 583-1061 *)
 Lemma quick_rec_po_12 : 
   forall (l: Z),
   forall (r: Z),
@@ -640,7 +640,7 @@ omega.
 assumption.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 1086-1086 *)
+(* Why obligation from file "quicksort2.mlw", characters 1061-1061 *)
 Lemma quick_rec_po_13 : 
   forall (l: Z),
   forall (r: Z),
@@ -660,7 +660,7 @@ unfold sorted_array; intros; omega.
 Qed.
 
 
-(* Why obligation from file "quicksort2.mlw", characters 1247-1351 *)
+(* Why obligation from file "quicksort2.mlw", characters 1221-1325 *)
 Lemma quicksort_po_1 : 
   forall (t: (array Z)),
   0 <= 0 /\ ((array_length t) - 1) < (array_length t).
@@ -668,7 +668,7 @@ Proof.
 intuition omega.
 Qed.
 
-(* Why obligation from file "quicksort2.mlw", characters 1247-1351 *)
+(* Why obligation from file "quicksort2.mlw", characters 1221-1325 *)
 Lemma quicksort_po_2 : 
   forall (t: (array Z)),
   forall (Pre1: 0 <= 0 /\ ((array_length t) - 1) < (array_length t)),

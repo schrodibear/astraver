@@ -9,7 +9,7 @@ WHYOPTIONS=--valid
 	$(WHY) --coq-v7 $(WHYOPTIONS) $<
 
 %.vo: %.v
-	coqc -R ../../lib/coq-v7 Coq.why $<
+	coqc -v7 -R ../../lib/coq-v7 Coq.why $<
 
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $(WHYOPTIONS) $<
