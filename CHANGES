@@ -1,4 +1,6 @@
 
+  o fixed bug in effect inference for predicates (alloc was missing)
+
 version 1.50, March 26th, 2004
 ==============================
   o first release of Caduceus

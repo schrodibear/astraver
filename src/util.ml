@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.90 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.91 2004-03-30 15:39:28 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -88,6 +88,13 @@ let put_label_term env l t =
     Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
   in
   subst_in_term s t
+
+let put_label_predicate env l p =
+  let ids = predicate_refs env p in
+  let s = 
+    Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
+  in
+  subst_in_predicate s p
 
 let oldify env ef t =
   let ids = term_refs env t in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.39 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.40 2004-03-30 15:39:28 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -25,6 +25,7 @@ open Env
 val erase_label : string -> predicate -> predicate
 val change_label : string -> string -> predicate -> predicate
 val put_label_term : local_env -> string -> term -> term
+val put_label_predicate : local_env -> string -> predicate -> predicate
 
 val traverse_binders : local_env -> (type_v binder) list -> local_env
 val initial_renaming : local_env -> Rename.t

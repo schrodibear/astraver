@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.68 2004-03-29 13:51:07 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.69 2004-03-30 15:39:28 filliatr Exp $ i*)
 
 
 open Format
@@ -760,13 +760,13 @@ let interp_decl d acc =
 let interp_invariant annot =
   match annot with
     | { invariant = None; variant = None } -> 
-	(LTrue, LConst (Prim_int 0))
-    | { invariant = Some inv; variant = Some (var,_) } -> 
-	(interp_predicate None "init" inv, interp_term None "" var)
-    | { invariant = None; variant = Some (var,_) } -> 
-	(LTrue, interp_term None "" var)
+	(LTrue, (LConst (Prim_int 0), None))
+    | { invariant = Some inv; variant = Some (var,r) } -> 
+	(interp_predicate None "init" inv, (interp_term None "" var, r))
+    | { invariant = None; variant = Some (var,r) } -> 
+	(LTrue, (interp_term None "" var, r))
     | { invariant = Some inv; variant = None } -> 
-	(interp_predicate None "init" inv, LConst (Prim_int 0))
+	(interp_predicate None "init" inv, (LConst (Prim_int 0), None))
 
 let try_with_void ex e = Try (e, ex, None, Void)  
 

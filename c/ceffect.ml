@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.29 2004-03-29 13:51:07 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.30 2004-03-30 15:39:28 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -137,6 +137,7 @@ let ef_union e1 e2 =
 let reads_add_var v ty e = { e with reads = add_var v ty e.reads }
 let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
 let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }
+let reads_add_alloc e = { e with reads = add_alloc e.reads }
 
 let assigns_add_var v ty e = { e with assigns = add_var v ty e.assigns }
 let assigns_add_field_var v ty e = 
@@ -153,13 +154,14 @@ let rec term t =
     | Tdot ({term_node = Tunop (Ustar, t1)}, f)
     | Tdot (t1,f)
     | Tarrow (t1,f) -> 
-	add_field_var f t.term_type (term t1)
+	add_alloc (add_field_var f t.term_type (term t1))
     | Tarrget(t1,t2) ->
-	union
-	  (add_pointer_var t1.term_type (term t1))
-	  (term t2) 
+	add_alloc
+	  (union
+	     (add_pointer_var t1.term_type (term t1))
+	     (term t2))
     | Tunop (Ustar, t) ->
-	add_pointer_var t.term_type (term t)
+	add_alloc (add_pointer_var t.term_type (term t))
     | Tunop (Uminus, t) -> term t
     | Tbase_addr t -> term t
     | Tblock_length t -> add_alloc (term t)
@@ -260,17 +262,18 @@ let rec expr e = match e.texpr_node with
   | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->	
-      reads_add_field_var f e.texpr_type (expr e1)
+      reads_add_alloc (reads_add_field_var f e.texpr_type (expr e1))
   | TEarrget (e1, e2) ->	
-      ef_union
-	(reads_add_pointer_var e1.texpr_type (expr e1))
-	(expr e2) 
+      reads_add_alloc 
+	(ef_union
+	   (reads_add_pointer_var e1.texpr_type (expr e1))
+	   (expr e2))
   | TEbinary (e1, _, e2) | TEseq (e1, e2) ->
       ef_union (expr e1) (expr e2)
   | TEassign (lv, e) | TEassign_op (lv, _, e) ->
       ef_union (assign_expr lv) (expr e)
   | TEunary (Ustar, e) ->
-      reads_add_pointer_var e.texpr_type (expr e)
+      reads_add_alloc (reads_add_pointer_var e.texpr_type (expr e))
   | TEunary (Uamp, e) ->
       address_expr e
   | TEunary 
@@ -296,13 +299,14 @@ and assign_expr e = match e.texpr_node with
       then assigns_add_var v.var_name e.texpr_type ef_empty
       else ef_empty
   | TEunary (Ustar, e) ->
-      assigns_add_pointer_var e.texpr_type (expr e)
+      reads_add_alloc (assigns_add_pointer_var e.texpr_type (expr e))
   | TEarrget (e1, e2) ->
-      ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2) 
+      reads_add_alloc 
+	(ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2))
   | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
-      assigns_add_field_var f e.texpr_type (expr e1)
+      reads_add_alloc (assigns_add_field_var f e.texpr_type (expr e1))
   | TEcast (_, e1) ->
       assign_expr e1
   | _ -> 

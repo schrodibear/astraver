@@ -54,6 +54,8 @@ val bool_type : why_type
 val unit_type : why_type
 val base_type : string -> why_type
 
+type variant = term * string option
+
 type expr =
   | Cte of constant
   | Var of string
@@ -66,7 +68,7 @@ type expr =
   | While of 
       expr (* loop condition *)
       * assertion (* invariant *) 
-      * term (* variant *) 
+      * variant (* variant *) 
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
@@ -113,7 +115,7 @@ val make_label : string -> expr -> expr;;
   applying simplifications if possible
 
 *)
-val make_while : expr -> assertion -> term -> expr -> expr;;
+val make_while : expr -> assertion -> variant -> expr -> expr;;
 
 
 

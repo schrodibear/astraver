@@ -298,6 +298,8 @@ let fprint_logic_type = fprint_logic_type ""
 
 (*s expressions *)
 
+type variant = term * string option
+
 type expr =
   | Cte of constant
   | Var of string
@@ -310,7 +312,7 @@ type expr =
   | While of 
       expr (* loop condition *)
       * assertion (* invariant *) 
-      * term (* variant *) 
+      * variant (* variant *) 
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
@@ -372,7 +374,7 @@ let rec iter_expr f e =
     | Deref(id) -> f id
     | If(e1,e2,e3) ->
 	iter_expr f e1; iter_expr f e2; iter_expr f e3
-    | While(e1,inv,var,e2) ->
+    | While(e1,inv,(var,_),e2) ->
 	iter_expr f e1; 
 	iter_assertion f inv; 
 	iter_term f var; 
@@ -397,6 +399,10 @@ let rec iter_expr f e =
 	option_iter (fun (_,a) -> iter_assertion f a) exceps
     | Assert(e) -> iter_assertion f e
     | Label s -> ()
+
+let fprintf_variant form = function
+  | t, None -> fprintf_term form t
+  | t, Some r -> fprintf form "%a for %s" fprintf_term t r
 	  
 let rec fprintf_expr form e =
   match e with
@@ -421,7 +427,7 @@ let rec fprintf_expr form e =
 	  "@[<hv 0>while %a do@ @[<hv 1>@[<hv 2>{ @[<hv 2>invariant@ %a@]@ @[<hv 2>variant@ %a@] }@]@ %a@]@ done@]" 
 	  fprintf_expr e1 
 	  fprintf_assertion inv
-	  fprintf_term var
+	  fprintf_variant var
 	  fprintf_expr_list e2
     | Block(el) ->
 	fprintf form "@[<hv 0>begin@ @[<hv 1>  %a@]@ end@]" fprintf_expr_list el

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.21 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.22 2004-03-30 15:39:28 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -190,10 +190,11 @@ let rec normalize p =
 	let t = put_label_term env p.info.label (unref_term t) in
 	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
-    | Aff (x, e1) when post e1 <> None ->
+    | Aff (x, e1) when is_pure e1 && post e1 <> None ->
 	(match post e1 with
 	   | Some q1 ->
 	       let q = post_app (change_label e1.info.label p.info.label) q1 in
+	       let q = post_app (put_label_predicate env p.info.label) q in
 	       let q = post_app (subst_in_predicate (subst_onev result x)) q in
 	       post_if_none env (Some q) p
 	   | _ -> assert false)
