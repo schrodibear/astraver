@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.82 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.83 2004-05-26 08:35:10 filliatr Exp $ i*)
 
 
 open Format
@@ -1119,7 +1119,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Tdecl(ctype,v,init) -> 
       lprintf "translating global declaration of %s@." v.var_name;
       begin match ctype.ctype_node with
-	| CTstruct _ -> 
+	| CTstruct _ | CTarray _ -> 
 	    let id = "valid_" ^ v.var_name in
 	    add_weak_invariant id (Cltyping.valid_for_type v ctype)
 	| _ -> 

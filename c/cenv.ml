@@ -243,7 +243,7 @@ end
 (* Field access *)
 
 let fields_t = Hashtbl.create 97
-let find_field n x = 
+let find_field ~tag:n ~field:x = 
   try 
     Hashtbl.find fields_t (n,x)
   with Not_found -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.41 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.42 2004-05-26 08:35:10 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -36,6 +36,7 @@ let c_char = noattr (CTint (Unsigned, Char))
 let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
 let c_array ty = noattr (CTarray (ty, None))
+let c_array_size ty s = noattr (CTarray (ty, Some s))
 let c_pointer ty = noattr (CTpointer ty)
 let c_void_star = c_pointer c_void
 let c_addr = noattr (CTvar "addr")
@@ -419,10 +420,61 @@ let type_spec result env s =
     ensures = q;
     decreases = v }
 
-let valid_for_type v ty =
-  (***
-  let rec valid_for ty = match ty.ctype_node with
-    | CTstruct (
-  ***)
-  Pvalid { term_node = Tvar v; term_type = c_pointer ty }
+(* Automatic invariants expressing validity of local/global variables *)
 
+let int_constant n = { term_node = Tconstant n; term_type = c_int }
+
+let rec term_of_expr e = match e.texpr_node with
+  | TEconstant c -> { term_node = Tconstant c; term_type = e.texpr_type }
+  | _ -> assert false
+
+let tpred t = match t.term_node with
+  | Tconstant c -> 
+      { t with term_node = Tconstant (string_of_int (int_of_string c - 1)) }
+  | _ ->
+      { t with term_node = Tbinop (t, Bsub, int_constant "1") }
+
+let make_and p1 p2 = match p1, p2 with
+  | Ptrue, _ -> p2
+  | _, Ptrue -> p1
+  | _ -> Pand (p1, p2)
+
+let fresh_index = 
+  let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
+
+let valid_for_type v ty =
+  let rec valid_for tn ty = match ty.ctype_node with
+    | CTstruct (n, _) ->
+	let t = { term_node = tn; term_type = c_pointer ty } in
+	begin match tag_type_definition n with
+	  | Defined (CTstruct (_, Decl fl)) ->
+	      List.fold_right 
+		(fun (tyf, f, _) acc -> match tyf.ctype_node with
+		   | CTstruct _ | CTarray _ ->
+		       let tnf = Tarrow (t, find_field n f) in
+		       make_and acc (valid_for tnf tyf)
+		   | _ ->
+		       acc)
+		fl (Pvalid t)
+	  | _ -> assert false
+	end
+    | CTarray (ty, None) ->
+	assert false (* TODO *)
+    | CTarray (ty, Some s) ->
+	let t = { term_node = tn; term_type = c_array_size ty s } in
+	let ts = term_of_expr s in
+	begin match ty.ctype_node with
+	  | CTstruct _ | CTarray _ ->
+	      let i = default_var_info (fresh_index ()) in
+	      let vari = { term_node = Tvar i; term_type = c_int } in
+	      let vti = valid_for (Tbinop (t, Badd, vari)) ty in
+	      let ineq = Pand (Prel (int_constant "0", Le, vari),
+			       Prel (vari, Lt, ts)) in
+	      Pforall ([c_int, i.var_name], Pimplies (ineq, vti))
+	  | _ ->
+	      Pvalid_range (t, int_constant "0", tpred ts)
+	end
+    | _ -> 
+	assert false
+  in
+  valid_for (Tvar v) ty

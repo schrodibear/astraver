@@ -1,7 +1,9 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
-
+  
+ o added automatic invariants for structures and arrays
+ o fixed bug with several structures fields with same name
  o fixed bug with void parameters
  o added support for cast from float to int (interpreted as Why's int_of_real)
 
