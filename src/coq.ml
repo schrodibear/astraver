@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.4 2002-01-31 12:44:35 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.5 2002-01-31 22:48:02 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -147,28 +147,22 @@ let print_lemma fmt (id,s) =
   print_sequent fmt s;
   fprintf fmt ".@]@\n"
 
-let print_obligations fmt ol = 
-  print_list fmt (fun fmt () -> fprintf fmt "@\n") print_lemma ol;
-  if ol <> [] then fprintf fmt "@\n"
+let print_obligation fmt o = 
+  print_lemma fmt o;
+  fprintf fmt "@\n"
 
 
 (*s Queueing elements. *)
 
-type elem = 
-  | Verbatim of string
-  | Obligations of obligation list
-
-let already = Hashtbl.create 97
+let oblig = Hashtbl.create 97
 
 let queue = Queue.create ()
 
-let reset () = Queue.clear queue; Hashtbl.clear already
-
-let push_verbatim s = Queue.add (Verbatim s) queue
+let reset () = Queue.clear queue; Hashtbl.clear oblig
 
 let push_obligations ol = 
-  Queue.add (Obligations ol) queue;
-  List.iter (fun (l,_) -> Hashtbl.add already l false) ol
+  List.iter (fun o -> Queue.add o queue) ol;
+  List.iter (fun (l,p) -> Hashtbl.add oblig l p) ol
 
 
 (*s Generating the output. *)
@@ -176,13 +170,6 @@ let push_obligations ol =
 let has_prefix p = 
   let lp = String.length p in
   fun s -> String.length s >= lp && String.sub s 0 lp = p
-
-let scan_lines f file =
-  if Sys.file_exists file then begin
-    let cin = open_in file in
-    try while true do f (input_line cin) done
-    with End_of_file -> close_in cin
-  end
 
 let is_lemma s =
   try
@@ -192,22 +179,50 @@ let is_lemma s =
   with Not_found ->
     None
 
-let scan f = 
-  let scan_f s = match is_lemma s with 
-    | None -> ()
-    | Some l -> Hashtbl.add already l true
+let regen oldf fmt =
+  let cin = open_in oldf in
+  let rec scan () =
+    let s = input_line cin in
+    match is_lemma s with
+      | Some l when Hashtbl.mem oblig l ->
+	  let p = Hashtbl.find oblig l in
+	  print_lemma fmt (l,p);
+	  Hashtbl.remove oblig l;
+	  skip_to_dot ();
+	  scan ()
+      | _ -> 
+	  fprintf fmt "%s@\n" s;
+	  scan ()
+  and skip_to_dot () =
+    let s = input_line cin in
+    let n = String.length s in
+    if n = 0 || s.[n-1] <> '.' then skip_to_dot ()
+  and tail () = 
+    fprintf fmt "%c" (input_char cin); tail () 
   in
-  scan_lines scan_f f
+  begin
+    try scan () with End_of_file -> 
+    try tail () with End_of_file -> close_in cin
+  end;
+  Queue.iter 
+    (function (l,_) as o -> if Hashtbl.mem oblig l then print_obligation fmt o)
+    queue
 
-let output_elem fmt = function
-  | Verbatim s -> fprintf fmt "%s@\n@\n" s
-  | Obligations ol -> print_obligations fmt ol
+let first_time fmt =
+  Queue.iter (print_obligation fmt) queue
+
+let print_in_file p f =
+  let cout = open_out f in
+  let fmt = formatter_of_out_channel cout in
+  p fmt;
+  pp_print_flush fmt ();
+  close_out cout
 
 let output_file fwe =
   let f = fwe ^ "_why.v" in
-  scan f;
-  let cout = open_out f in
-  let fmt = formatter_of_out_channel cout in
-  Queue.iter (output_elem fmt) queue;
-  pp_print_flush fmt ();
-  close_out cout
+  if Sys.file_exists f then begin
+    let fbak = f ^ ".bak" in
+    Sys.rename f fbak; 
+    print_in_file (regen fbak) f
+  end else 
+    print_in_file first_time f

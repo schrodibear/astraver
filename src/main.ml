@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.8 2002-01-31 12:44:35 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.9 2002-01-31 22:48:02 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -61,8 +61,6 @@ let interp_decl = function
       List.iter (fun id -> Env.add_global id v None) ids
   | QPvs s ->
       Pvs.push_verbatim s
-  | QCoq s ->
-      Coq.push_verbatim s
 
 (*s Processinf of a channel / a file. *)
 
