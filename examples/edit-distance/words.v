@@ -288,7 +288,7 @@ Save.
 Section suffixes.
 
 Variable n:Z.
-Variable t:(array n A).
+Variable t:(array A).
 
 Definition F : (i:Z)((j:Z)(Zwf_up n j i)->word)->word.
 Proof.
@@ -383,9 +383,6 @@ Omega.
 Save.
 
 End suffixes.
-
-Implicits suffix [1].
-Implicits word_of_array [1].
 
 
 (*s Bonus: we show the equivalence with another definition of the

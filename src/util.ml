@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.66 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.67 2002-12-05 13:22:27 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -88,6 +88,26 @@ let put_label_term env l t =
     Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
   in
   subst_in_term s t
+
+let oldify env ef t =
+  let ids = term_refs env t in
+  let s =
+    Idset.fold 
+      (fun id s -> 
+	 if Effect.is_write ef id then Idmap.add id (at_id id "") s else s)
+      ids Idmap.empty
+  in
+  subst_in_term s t
+
+let type_c_subst_oldify env x t k =
+  let s = subst_one x t in 
+  let s_old = subst_one x (oldify env k.c_effect t) in
+  { c_result_name = k.c_result_name;
+    c_result_type = type_v_rsubst s k.c_result_type;
+    c_effect = k.c_effect;
+    c_pre = List.map (asst_app (tsubst_in_predicate s)) k.c_pre;
+    c_post = option_app (post_app (tsubst_in_predicate s_old)) k.c_post }
+
 
 (*s shortcuts for typing information *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.6 2002-12-04 15:43:58 filliatr Exp $ *)
+(* $Id: WhyPermut.v,v 1.7 2002-12-05 13:22:27 filliatr Exp $ *)
 
 Require WhyArrays.
 Require Omega.
@@ -44,7 +44,7 @@ Lemma exchange_1 : (A:Set)(t:(array A))
   (access (store (store t i #t[j]) j #t[i]) i) = #t[j].
 Proof.
 Intros A t i j H_i H_j.
-WhyAccessStore j i H; WhyArrays; Auto with datatypes.
+AccessStore j i H; WhyArrays; Auto with datatypes.
 Save.
 
 Hints Resolve exchange_1 : v62 datatypes.
@@ -59,7 +59,7 @@ Intros A t i j H_i H_j.
 Apply exchange_c; WhyArrays; Auto with datatypes.
 Intros k H_k not_k_i not_k_j.
 Cut ~j=k; Auto with datatypes. Intro not_j_k.
-Rewrite store_def_2; WhyArrays; Auto with datatypes.
+AccessOther; Auto with datatypes.
 Save.
 
 Hints Resolve exchange_proof : v62 datatypes.

@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.3 2002-12-04 10:29:50 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.4 2002-12-05 13:22:27 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require WhyPermut.
@@ -138,12 +138,9 @@ Unfold sorted_array ; Intros.
 Cut `x = i`\/`x > i`.
 (Intro Hcut ; Elim Hcut ; Clear Hcut ; Intro).
 Rewrite H2.
-Rewrite store_def_1 ; Try Omega.
-Rewrite store_def_2 ; Try Omega.
+AccessSame. AccessOther.
 Apply Zle_trans with m:=(access A i) ; [Assumption | Apply H_sorted ; Omega].
-
-(Rewrite store_def_2; Try Omega).
-(Rewrite store_def_2; Try Omega).
+Do 2 AccessOther.
 Apply H_sorted ; Omega.
 Omega.
 Save.
@@ -162,15 +159,12 @@ Unfold sorted_array ; Intros.
 Cut `x = j-1`\/`x < j-1`.
 (Intro Hcut ; Elim Hcut ; Clear Hcut ; Intro).
 Rewrite H2.
-Replace `j-1+1` with j; [ Idtac | Omega ]. (*** Ring `j-1+1`. => BUG ***)
-Rewrite store_def_2 ; Try Omega.
-Rewrite store_def_1 ; Try Omega.
+Ring `j-1+1`.
+AccessOther. 
 Apply Zle_trans with m:=(access A j). 
 Apply sorted_elements with n:=i m:=j ; Try Omega ; Assumption.
 Assumption.
-
-(Rewrite store_def_2; Try Omega).
-(Rewrite store_def_2; Try Omega).
+Do 2 AccessOther.
 Apply H_sorted ; Omega.
 
 Omega.
@@ -186,8 +180,7 @@ Lemma no_effect :
 Proof.
 Intros.
 Unfold sorted_array ; Intros. 
-Rewrite store_def_2 ; Try Omega.
-Rewrite store_def_2 ; Try Omega.
+Do 2 AccessOther.
 Apply H1 ; Assumption.
 Save.
 

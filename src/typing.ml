@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.83 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.84 2002-12-05 13:22:27 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -324,12 +324,12 @@ let saturation loc e (a,al) =
     and [expr] the program. *)
 
 let rec typef lab env expr =
+  let toplabel = label_name () in
   let (d,(v,e),o1) = typef_desc lab env expr.loc expr.pdesc in
   let loc = expr.loc in
   let (ep,p) = state_pre lab env loc expr.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.post in
   let q = option_app (saturation loc e) q in
-  let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
   let ol,q' = match q, d with
     | None, App (_,_,k') -> o1 @ k'.c_pre, k'.c_post
@@ -344,7 +344,7 @@ let rec typef lab env expr =
 
 and typef_desc lab env loc = function
   | Sconst c ->
-      Expression (Tconst c), (typing_const c,Effect.bottom), []
+      Expression (Tconst c), (typing_const c, Effect.bottom), []
 
   | Svar id ->
       let v = 
@@ -437,7 +437,7 @@ and typef_desc lab env loc = function
       let v = type_v_unit in
       While (t_b,invopt,var,t_e), (v,ef), []
       
-  | Slam ([],_) ->
+  | Slam ([], _) ->
       assert false
 
   | Slam (bl, e) ->
@@ -485,8 +485,7 @@ and typef_desc lab env loc = function
 	  (match t_a.desc with
   	     (* argument is pure: it is substituted *)
 	     | Expression ca when post t_a = None ->
-		 let uca = unref_term ca in
-		 let kapp = type_c_rsubst (subst_one x uca) kapp in
+		 let kapp = type_c_subst_oldify env x ca kapp in
 		 let (_,tapp),_,_,_ = decomp_kappa kapp in
 		 (match t_f.desc with
 		    (* function itself is pure: we collapse terms *)

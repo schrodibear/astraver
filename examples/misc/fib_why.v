@@ -650,18 +650,14 @@ Subst t3; Auto.
 Subst t3.
 Assert hi : `i=k0` \/ `i<k0`. Omega.
 Intuition.
-Subst i. Rewrite store_def_1.
+Subst i.  AccessSame.
 Rewrite (H5 `k0-1`). 
 Rewrite (H5 `k0-2`). 
 Symmetry; Auto with *.
 Omega.
 Omega.
-Omega.
-Rewrite store_def_2.
+AccessOther.
 Auto.
-Omega.
-Omega.
-Omega.
 Unfold Zwf; Omega.
 Save.
 
@@ -683,11 +679,11 @@ Proof.
 Intuition.
 Subst t1 t0; Auto.
 Assert hi: `i=0` \/ `i=1`. Omega. Intuition.
-Subst i t1; Rewrite store_def_2; Try Omega.
-Subst t0; Rewrite store_def_1; Try Omega. Auto.
+Subst i t1; AccessOther.
+Subst t0; AccessSame. Auto.
 Subst t0; Simpl; Omega.
 Subst t0; Simpl; Omega.
-Subst i t1; Rewrite store_def_1; Try Omega. Auto.
+Subst i t1; AccessSame. Auto.
 Subst t0; Simpl; Omega.
 Save.
 

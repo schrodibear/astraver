@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.6 2002-12-04 15:43:58 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.7 2002-12-05 13:22:27 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -105,11 +105,20 @@ Tactic Definition WhyArrays :=
   Repeat Rewrite store_def_1;
   Repeat Rewrite array_length_store.
 
-Tactic Definition WhyAccessStore i j H :=
+Tactic Definition AccessStore i j H :=
   Elim (Z_eq_dec i j); [ 
     Intro H; Rewrite H; Rewrite store_def_1; WhyArrays
   | Intro H; Rewrite store_def_2; 
              [ Idtac | Idtac | Idtac | Exact H ] ].
+
+Tactic Definition AccessSame :=
+  Rewrite store_def_1; WhyArrays; Try Omega.
+
+Tactic Definition AccessOther :=
+  Rewrite store_def_2; WhyArrays; Try Omega.
+
+Tactic Definition ArraySubst t :=
+  Subst t; Simpl; WhyArrays; Try Omega.
 
 (* Syntax and pretty-print for arrays *)
 

@@ -201,35 +201,35 @@ Lemma dutch_flag_po_6 :
 Proof.
 Unfold monochrome Zwf; Intuition Try Omega.
 Assert h:`k < b0` \/ k=b0. Omega. Intuition.
-Subst t2; Rewrite store_def_2; Try Omega.
-Subst t1; Rewrite store_def_2; Try Omega.
+Subst t2; AccessOther.
+Subst t1; AccessOther.
 Auto.
 Subst t1; Simpl; Auto.
 Subst t1; Simpl; Auto.
 Omega.
 Assert h:`b0 = i0` \/ `b0 < i0`. Omega. Intuition.
 Subst k t2 b0.
-Rewrite store_def_1.
+AccessSame.
 Subst u; Assumption.
 Subst t1; Simpl; Omega.
-Subst t2; Rewrite store_def_2; Try Omega.
-Subst t1 k; Rewrite store_def_1; Try Omega.
+Subst t2; AccessOther.
+Subst t1 k; AccessSame.
 Assumption.
 Subst t1; Simpl; Auto.
 Subst t1; Simpl; Auto.
 Omega.
 Assert h:`k = i0` \/ `k < i0`. Omega. Intuition.
-Subst t2 k; Rewrite store_def_1; Try Omega.
+Subst t2 k; AccessSame.
 Subst u; Apply H5; Omega.
 Subst t1; Simpl; Auto.
-Subst t2; Rewrite store_def_2; Try Omega.
-Subst t1; Rewrite store_def_2; Try Omega.
+Subst t2; AccessOther.
+Subst t1; AccessOther.
 Apply H5; Omega.
 Subst t1; Simpl; Auto.
 Subst t1; Simpl; Auto.
 Omega.
-Subst t2; Rewrite store_def_2; Try Omega.
-Subst t1; Rewrite store_def_2; Try Omega.
+Subst t2; AccessOther.
+Subst t1; AccessOther.
 Apply H7; Omega.
 Subst t1; Simpl; Auto.
 Subst t1; Simpl; Auto.
@@ -504,22 +504,18 @@ Lemma dutch_flag_po_14 :
   (Zwf `0` `r1 - i0` `r0 - i0`).
 Proof.
 Unfold monochrome Zwf; Intuition Try Omega.
-Subst t2; Rewrite store_def_2; WhyBounds.
-Subst t1; Rewrite store_def_2; Try Omega.
+Subst t2 t1; Do 2 AccessOther.
 Apply H; Omega.
-Subst t2; Rewrite store_def_2; WhyBounds.
-Subst t1; Rewrite store_def_2; Try Omega.
+Subst t2 t1; Do 2 AccessOther. 
 Apply H3; Omega.
 Assert h:`k = r1` \/ `r1 < k`. Omega. Intuition.
 Assert h':`k = i0` \/ `i0 < k`. Omega. Intuition.
-Subst t2 k; Rewrite store_def_1; WhyBounds.
+Subst t2 t1 k; AccessSame.
 Subst u; Rewrite <- H11; Subst r1.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
-Subst t2; Rewrite store_def_2; WhyBounds.
-Subst t1 k; Rewrite store_def_1; Try Omega.
+Subst t2 t1 k; AccessOther.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
-Subst t2; Rewrite store_def_2; WhyBounds.
-Subst t1; Rewrite store_def_2; Try Omega.
+Subst t2 t1; Do 2 AccessOther.
 Apply H5; Omega.
 Subst t2 t1; Simpl; Trivial.
 Save.

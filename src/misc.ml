@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.61 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.62 2002-12-05 13:22:27 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -192,7 +192,7 @@ let rec collect_term s = function
   | Tapp (_, l) -> List.fold_left collect_term s l
   | Tconst _ -> s
 
-and collect_pred s = function
+let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
   | Papp (_, l) -> List.fold_left collect_term s l
   | Pimplies (a, b) | Pand (a, b) | Por (a, b) -> 
@@ -384,7 +384,7 @@ let ge_float = relation t_ge_float
 let eq = relation t_eq
 let neq = relation t_neq
 
-let array_length id = Tapp (array_length, [Tvar id])
+let array_length id = Tapp (array_length, [Tderef id])
 
 let lt_int = relation t_lt_int
 let le_int = relation t_le_int

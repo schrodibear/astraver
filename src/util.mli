@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.29 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.30 2002-12-05 13:22:27 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -33,6 +33,9 @@ val apply_term : Rename.t -> local_env -> term -> term
 val apply_assert : Rename.t -> local_env -> assertion -> assertion
 val apply_post : 
   label -> Rename.t -> local_env -> postcondition -> postcondition
+
+val oldify : local_env -> Effect.t -> term -> term
+val type_c_subst_oldify : local_env -> Ident.t -> term -> type_c -> type_c
 
 val is_reference : local_env -> Ident.t -> bool
 val predicate_now_refs : local_env -> predicate -> Ident.set
