@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.49 2004-03-23 12:54:53 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.50 2004-03-24 16:45:03 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -183,7 +183,7 @@ and type_type_node loc env = function
   | CTpointer tyn -> 
       CTpointer (type_type loc env tyn)
   | CTstruct (_, Tag) | CTunion (_, Tag) | CTenum (_, Tag) as tyn ->
-       Env.find_tag_type loc env tyn		       
+      Env.find_tag_type loc env tyn		       
   | CTstruct (x, Decl fl) ->
       let tyn = CTstruct (x, Decl (List.map (type_field loc env) fl)) in
       Env.find_tag_type loc env tyn

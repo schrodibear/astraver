@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.59 2004-03-24 16:29:09 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.60 2004-03-24 16:45:03 filliatr Exp $ i*)
 
 
 open Format
@@ -939,8 +939,17 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       why
   | Ttypedecl { ctype_node = CTstruct _ | CTunion _ } -> 
       why
-  | Ttypedecl { ctype_node = CTenum _ } ->
-      unsupported "enum"
+  | Ttypedecl { ctype_node = CTenum (e, _) } ->
+      begin match Cenv.tag_type_definition e with
+	| Cenv.Defined (CTenum (_, Decl el)) -> 
+	    if List.exists (fun (_,i) -> i <> None) el then
+	      warning decl.loc ("ignoring initializer(s) for enum " ^ e);
+	    let dl = 
+	      List.map (fun (x,_) -> Param (false,x,Base_type ([], "int"))) el
+	    in
+	    why_code, dl @ why_spec, prover_decl
+	| _ -> assert false
+      end
   | Ttypedecl _ ->
       assert false
   | Tdecl(ctype,v,init) -> 

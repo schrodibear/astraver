@@ -3,32 +3,17 @@
 
 Require Export caduceus_why. Require Export caduceus_tactics.
 
-(*Why logic*) Definition disjoint : plist -> plist -> Prop.
-Admitted.
+(*Why*) Parameter A : Z.
 
-(*Why logic*) Definition eq_list : plist -> plist -> Prop.
-Admitted.
+(*Why*) Parameter B : Z.
 
-(*Why logic*) Definition app : plist -> plist -> plist.
-Admitted.
+(*Why*) Parameter C : Z.
 
-(*Why logic*) Definition rev : plist -> plist.
-Admitted.
-
-(*Why logic*) Definition cyclic : ((memory) pointer) -> pointer -> Prop.
-Admitted.
-
-(*Why logic*) Definition llist :
-  ((memory) pointer) -> pointer -> plist -> Prop.
-Admitted.
-
-(*Why logic*) Definition is_list : ((memory) pointer) -> pointer -> Prop.
-Admitted.
-
-(*Why*) Parameter cyclic_parameter :
-  forall (l: pointer), forall (alloc: alloc),
-  forall (tl: ((memory) pointer)), forall (H: (valid alloc l)),
-  (sig_1 Z
-   (fun (result: Z)  => (((result <> 0 -> (cyclic tl l))) /\
-    ((result = 0 -> ~(cyclic tl l)))))).
+(*Why*) Parameter f_parameter :
+  forall (tt: unit), forall (alloc: alloc), forall (ps: pointer),
+  forall (s: pointer), forall (t: ((memory) pointer)),
+  forall (z: ((memory) Z)), forall (H: ((valid alloc s) /\
+  (valid alloc (acc t s))) /\ (valid alloc ps)),
+  (sig_3 pointer ((memory) Z) Z
+   (fun (ps0: pointer) (z0: ((memory) Z)) (result: Z)  => (result = A))).
 

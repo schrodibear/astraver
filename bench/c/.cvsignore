@@ -9,3 +9,5 @@ test_why.v
 caduceus_why.v
 coq
 why
+test.makefile
+test.depend
