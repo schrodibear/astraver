@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.80 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.81 2003-07-10 15:41:43 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -136,7 +136,8 @@ and wp_desc info d q =
     | Expression t ->
 	let w = optpost_val q in
 	let t = unref_term t in
-	d, optasst_app (tsubst_in_predicate (subst_one result t)) w
+	let s = subst_one result t in
+	d, optasst_app (fun p -> simplify (tsubst_in_predicate s p)) w
     (* $wp(!x,q) = q[result \leftarrow x]$ *)
     | Acc x ->
 	let w = optpost_val q in
