@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.10 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.11 2003-05-12 14:13:38 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -135,9 +135,9 @@ and print_terms fmt tl =
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "T"
-  | Pfalse ->
-      fprintf fmt "F"
   | Pvar id when id == default_post ->
+      fprintf fmt "T"
+  | Pfalse ->
       fprintf fmt "F"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id

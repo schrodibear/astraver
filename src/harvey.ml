@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.8 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.9 2003-05-12 14:13:38 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -82,6 +82,12 @@ and print_terms fmt tl =
   print_list space print_term fmt tl
 
 let rec print_predicate fmt = function
+  | Ptrue ->
+      fprintf fmt "true"
+  | Pvar id when id == default_post ->
+      fprintf fmt "true"
+  | Pfalse ->
+      fprintf fmt "false"
   | Pvar id -> 
       fprintf fmt "%a" uncapitalize id
   | Papp (id, [a; b]) when is_eq id ->
@@ -95,10 +101,6 @@ let rec print_predicate fmt = function
 	print_term b print_term a print_term b
   | Papp (id, tl) -> 
       fprintf fmt "@[(%a@ %a)@]" uncapitalize id print_terms tl
-  | Ptrue ->
-      fprintf fmt "true"
-  | Pfalse ->
-      fprintf fmt "false"
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(->@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
