@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.17 2002-03-05 14:51:26 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.18 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -380,9 +380,6 @@ i*)
       "{"; LIDENT "variant"; var = variant; "}"; "="; p = program;
       "in"; p2 = program ->
 	LetIn (f, without_annot loc (LetRec (f,bl,v,var,p)), p2)
-	    
-    | "@"; s = STRING; p = program ->
-	Debug (s,p)
 	  
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.18 2002-03-05 16:01:41 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.19 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -239,10 +239,16 @@ let rec typef lab env expr =
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = p1 @ expr.info.pre in
-  let c = { c_result_name = result; c_result_type = v;
-	    c_effect = e'; c_pre = p'; c_post = q } in
-  let tinfo = { env = env; kappa = c } in
-  { desc = d; info = tinfo }
+  match q, d with
+    | None, Coerce expr' ->
+	let c = { c_result_name = result; c_result_type = v;
+		  c_effect = Effect.union e' (effect expr');
+		  c_pre = p' @ (pre expr'); c_post = post expr' } in
+	{ desc = expr'.desc; info = { env = env; kappa = c } }
+    | _ ->
+	let c = { c_result_name = result; c_result_type = v;
+		  c_effect = e'; c_pre = p'; c_post = q } in
+	{ desc = d; info = { env = env; kappa = c } }
 
 
 and typef_desc lab env loc = function
@@ -438,14 +444,9 @@ and typef_desc lab env loc = function
       let lab' = LabelSet.add s lab in
       typef_desc lab' env loc d
 	
-  | Debug _ -> 
-      failwith "Typing.typef: Debug: TODO"
-
-
 and typef_arg lab env = function
   | Term a -> let t_a = typef lab env a in Term t_a
   | Refarg _ | Type _ as a -> a 
-
 
 and typef_block lab env bl =
   let rec ef_block lab tyres = function

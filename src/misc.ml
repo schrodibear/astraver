@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.14 2002-03-05 16:01:41 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.15 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -75,7 +75,7 @@ let reset_names,pre_name,post_name,inv_name,
     (next "Variant" var),
     (fun () -> next "rphi" phi Anonymous),
     (fun () -> next "for" forr Anonymous),
-    (fun () -> Ident.string (next "Label" label Anonymous))
+    (fun () -> Ident.string (next "_label_" label Anonymous))
 
 let id_of_name = function Name id -> id | Anonymous -> default
 
@@ -339,3 +339,6 @@ let rec print_predicate fmt = function
       fprintf fmt "(forall #%d: " (Ident.bound_id b);
       print_predicate fmt p; fprintf fmt ")"
 
+let print_wp fmt = function
+  | None -> fprintf fmt "<no weakest precondition>"
+  | Some {a_value=p} -> print_predicate fmt p

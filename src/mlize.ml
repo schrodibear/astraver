@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.12 2002-03-04 16:28:40 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.13 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -261,10 +261,6 @@ and trad_desc ren env ct d =
   | PPoint (s,d) ->       
       let ren' = push_date ren s in
       trad_desc ren' env ct d
-
-  | Debug _ -> 
-      failwith "Mlise.trad: Debug: not implemented"
-
 
 and trad_binders ren env = function
   | [] -> 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: rename.ml,v 1.3 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: rename.ml,v 1.4 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -52,14 +52,14 @@ let next r ids =
 
 let find r x =
   let rec find_in_one = function
-      []         -> raise Not_found
-    | (y,v)::rem -> if y = x then v else find_in_one rem
+    | []           -> raise Not_found
+    | (y,v) :: rem -> if y = x then v else find_in_one rem
   in
   let rec find_in_all = function
-      []         -> raise Not_found
-    | (_,l)::rem -> try find_in_one l with Not_found -> find_in_all rem
+    | []           -> raise Not_found
+    | (_,l) :: rem -> try find_in_one l with Not_found -> find_in_all rem
   in
-    find_in_all r.levels
+  find_in_all r.levels
 
 
 let current_var = find
@@ -75,25 +75,25 @@ let fresh r ids = fst (renaming_of_ids r.avoid ids)
 
 let current_date r =
   match r.levels with
-      [] -> invalid_arg "Renamings.current_date"
-    | (d,_)::_ -> d
+    | [] -> invalid_arg "Renamings.current_date"
+    | (d,_) :: _ -> d
 
 let all_dates r = List.map fst r.levels
 
 let rec valid_date da r = 
   let rec valid = function
-      [] -> false
-    | (d,_)::rem -> (d=da) or (valid rem)
+    | [] -> false
+    | (d,_) :: rem -> (d = da) || (valid rem)
   in
-    valid r.levels
+  valid r.levels
 
 (* [until d r] selects the part of the renaming [r] starting from date [d] *)
 let rec until da r =
   let rec cut = function
-      [] -> invalid_arg "Renamings.until"
-    | (d,_)::rem as r -> if d=da then r else cut rem
+    | [] -> invalid_arg "Renamings.until"
+    | (d,_) :: rem as r -> if d = da then r else cut rem
   in
-    { avoid = r.avoid; levels = cut r.levels; cpt = r.cpt }
+  { avoid = r.avoid; levels = cut r.levels; cpt = r.cpt }
 
 let var_at_date r d id =
   try

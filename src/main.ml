@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.14 2002-03-06 14:37:16 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.15 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -8,7 +8,7 @@ open Types
 open Env
 open Format
 open Error
-open Rename
+open Misc
 open Util
 
 (*s Prover selection. *)
@@ -42,7 +42,8 @@ let interp_program id p =
   if !type_only then exit 0;
 
   if_debug eprintf "=== weakest preconditions ===@\n@?";
-  let p = Wp.propagate p in
+  let p,wp = Wp.propagate p in
+  if_debug_3 eprintf "@[%a@]@\n@?" print_wp wp;
   if !wp_only then exit 0;
 
   if_debug eprintf "=== functionalization ===@\n@?";

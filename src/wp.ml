@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.15 2002-03-05 16:01:41 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.16 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -21,7 +21,7 @@ let force_post q e =
   let i = { env = e.info.env; kappa = c' } in
   { desc = e.desc; info = i }
 
-let post_if_none env q p = match post p with
+let post_if_none q p = match post p with
   | None -> force_post q p 
   | _ -> p
 
@@ -95,7 +95,7 @@ let rec normalize p =
     | Aff (x, { desc = Expression t }) when k.c_post = None ->
 	let t = make_after_before_term env t in
 	let q = create_bool_post (equality (Tvar x) t) in
-	post_if_none env q p
+	post_if_none q p
     | Aff (x, e) ->
 	change_desc p (Aff (x, normalize e))
     | If (e1, e2, e3) ->
@@ -118,7 +118,7 @@ let rec normalize p =
       when e1.info.kappa.c_post = None ->
 	let t = make_after_before_term env t in
 	let q = create_bool_post (equality (Tvar Ident.result) t) in
-	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
+	change_desc p (LetRef (x, post_if_none q e1, normalize e2))
     | LetRef (x, e1, e2) ->
 	change_desc p (LetRef (x, normalize e1, normalize e2))
     | LetIn (x, e1, e2) ->
@@ -139,8 +139,9 @@ let rec normalize p =
 	  { desc = e.desc; info = { env = env; kappa = k'} }
 	else
 	  change_desc p (Coerce e)
-    | Debug _ | PPoint _ ->
-	failwith "todo: normalize"
+    | PPoint (lab, d) ->
+	let p = normalize (change_desc p d) in
+	change_desc p (PPoint (lab, p.desc))
 
 and normalize_block = function
   | [] ->
@@ -192,20 +193,37 @@ and normalize_boolean env b =
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary. *)
 
-let rec wp p q =
+let output p = 
+  let w = Effect.get_writes (effect p) in
   let env = p.info.env in
-  let q = if q = None then post p else q in
-  let d,w = wp_desc p.info p.desc q in
-  let p = change_desc p d in
-  post_if_none env q p, w
+  List.map (fun id -> (id, type_in_env env id)) w
+
+let rec wp p q =
+  let postp = post p in
+  let q0 = if postp = None then q else postp in
+  let lab = label_name () in
+  let q1 = optpost_app (change_label "" lab) q0 in
+  let d,w = wp_desc p.info p.desc q1 in
+  let p = change_desc p (PPoint (lab, d)) in
+  let w = optpost_app (erase_label lab) w in
+  let p = if postp = None then force_post q0 p else p in
+  let w = match postp, q with
+    | Some {a_value=q'}, Some {a_value=q} ->
+	let vars = (result, result_type p) :: (output p) in
+	Some (anonymous (foralls vars (Pimplies (q', q))))
+    | _ -> 
+	w
+  in
+  p, w
 
 and wp_desc info d q = 
-  let env = info.env in
   let result = info.kappa.c_result_name in
   match d with
+    (* TODO: check if likely *)
+    | Var x ->
+	d, optpost_app (tsubst_in_predicate [result,Tvar x]) q
     (* $wp(E,q) = q[result \leftarrow E]$ *)
     | Expression t ->
-	let q = optpost_app make_before_after q in
 	d, optpost_app (tsubst_in_predicate [result,t]) q
     (* $wp(!x,q) = q[result \leftarrow x]$ *)
     | Acc x ->
@@ -216,11 +234,16 @@ and wp_desc info d q =
 	let q = optpost_app (subst_in_predicate [x, result]) q in
 	let p',w = wp p q in
 	Aff (x, p'), w
+    | TabAcc _ ->
+	failwith "todo: wp tab acc"
+    | TabAff _ ->
+	failwith "todo: wp tab aff"
     (* conditional: two cases depending on [p1.post] *)
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 q in
 	let p'3,w3 = wp p3 q in
 	(match w2, w3, post p1 with
+	   (***
 	   | Some {a_value=q2}, Some {a_value=q3}, Some {a_value=q1} -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  q1(true) => wp(p2, q) and q1(false) => wp(p3, q)$ *)
@@ -229,7 +252,8 @@ and wp_desc info d q =
 	       let q1f = tsubst_in_predicate [Ident.result,tfalse] q1 in
 	       let w = Pand (Pimplies (q1t, q2), Pimplies (q1f, q3)) in
 	       If (p1, p'2, p'3), create_bool_post w
-	   | Some {a_value=q2}, Some {a_value=q3}, None -> 
+           ***)
+	   | Some {a_value=q2}, Some {a_value=q3}, _ -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
@@ -237,55 +261,47 @@ and wp_desc info d q =
 	       let p'1,w1 = wp p1 (create_bool_post q1) in
 	       If (p'1, p'2, p'3), w1
 	   | _ ->
-	       If (p1, p'2, p'3), None)
+	       let p'1,_ = wp p1 None in
+	       If (p'1, p'2, p'3), None)
     (* sequence *)
     | Seq bl -> 
-	let lab,bl = top_point_block bl in
-	let q = optpost_app (change_label "" lab) q in
 	let bl',w = wp_block bl q in
 	Seq bl', w
     (* function call: $\forall r. Q_f \Rightarrow q$ *)
-    | App _ ->
-	let w = wp_app info q in
-	d, w
+    | App (p1, Term p2) ->
+	let p'1,_ = wp p1 None in
+	let p'2,_ = wp p2 None in
+	App (p'1, Term p'2), None
+    | App (p1, a) ->
+	let p'1,_ = wp p1 None in
+	App (p'1, a), None
     | Lam (bl, p) ->
-	let env' = traverse_binders env bl in
 	let p',w = wp p None in
 	Lam (bl, p'), None
+    | LetIn (x, p1, p2) ->
+	failwith "todo: wp let in"
     | LetRef (x, e1, e2) ->
 	let e'2, w = wp e2 q in
 	let q' = optpost_app (subst_in_predicate [x, result]) w in
 	let e'1,w' = wp e1 q' in
 	LetRef (x, e'1, e'2), w'
+    | LetRec _ ->
+	failwith "todo: wp let rec"
     | While (b, invopt, (var,r), bl) ->
-	d, invopt
-    | _ -> 
-	failwith "todo wp"
-
-(*i TODO: FAUX il faut quantifier également par rapport aux variables 
-    modifiées par l'appel i*)
-and wp_app info q =
-  optpost_app 
-    (fun q -> 
-       let n = Ident.bound () in
-       let q = make_before_after q in
-       let q = tsubst_in_predicate [Ident.result,Tbound n] q in
-       let ti = mlize_type info.kappa.c_result_type in
-       let rname = info.kappa.c_result_name in
-       match info.kappa.c_post with
-	 | Some qf -> 
-	     let qf = tsubst_in_predicate [rname,Tbound n] qf.a_value in
-	     Forall (rname, n, ti, Pimplies (qf, q))
-	 | None ->
-	     Forall (rname, n, ti, q))
-    q
+	d, invopt (* TODO: check *)
+    | PPoint (lab, p) ->
+	let p',w = wp_desc info p q in
+	let w = optpost_app (erase_label lab) w in
+	PPoint (lab, p'), w
+    | Coerce p ->
+	let p',w = wp p q in
+	Coerce p', w
 
 and wp_block bl q = match bl with
   | [] ->
-      [], optpost_app make_before_after q
+      [], q
   | Statement p :: bl ->
       let bl', w = wp_block bl q in
-      let w = if is_conditional p && post p <> None then post p else w in
       let p', w' = wp p w in
       Statement p' :: bl', w'
   | Label l :: bl ->
@@ -297,6 +313,4 @@ and wp_block bl q = match bl with
 
 let propagate p =
   let p = normalize p in
-  let p,_ = wp p None in
-  p
-
+  wp p None

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.10 2002-03-04 16:14:23 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.11 2002-03-06 16:04:52 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -131,8 +131,6 @@ let db_prog e =
 	x
     | Coerce e -> 
 	Coerce (db idl e)
-    | Debug (s,e1) ->
-	Debug (s, db idl e1)
     | PPoint (s,d) -> 
 	PPoint (s, db_desc idl d)
 	  

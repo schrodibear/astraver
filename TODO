@@ -2,8 +2,6 @@
 INPUT
 =====
 
- - simpler syntax for simple functions (e.g, int -> int -> int)
-
 FEATURES
 ========
 
@@ -16,9 +14,7 @@ FEATURES
 
  - arguments which are types
 
- - primitive functions, like =, applied to non-pure terms
-
- - option to suppress termination obligations
+ - option to suppress termination obligations (i.e. partial correctness)
 
 DOCUMENTATION
 =============
@@ -33,10 +29,8 @@ BUGS
 IMPLEMENTATION
 ==============
 
- - no substitution when result name is not "result" => force it
+ - force result name "result" internally
 
  - variant = identifier ?
-
- - wp: function application: incorrect when function has effects
 
  - well-formedness of types (in external, in particular)

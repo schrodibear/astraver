@@ -21,12 +21,12 @@ src/ident.cmx: src/ident.cmi
 src/loc.cmo: src/loc.cmi 
 src/loc.cmx: src/loc.cmi 
 src/main.cmo: src/ast.cmi src/coq.cmi src/db.cmi src/env.cmi src/error.cmi \
-    src/ident.cmi src/loc.cmi src/mlize.cmi src/options.cmi src/parser.cmi \
-    src/pvs.cmi src/red.cmi src/rename.cmi src/types.cmi src/typing.cmi \
+    src/ident.cmi src/loc.cmi src/misc.cmi src/mlize.cmi src/options.cmi \
+    src/parser.cmi src/pvs.cmi src/red.cmi src/types.cmi src/typing.cmi \
     src/util.cmi src/vcg.cmi src/version.cmo src/wp.cmi 
 src/main.cmx: src/ast.cmi src/coq.cmx src/db.cmx src/env.cmx src/error.cmx \
-    src/ident.cmx src/loc.cmx src/mlize.cmx src/options.cmx src/parser.cmx \
-    src/pvs.cmx src/red.cmx src/rename.cmx src/types.cmi src/typing.cmx \
+    src/ident.cmx src/loc.cmx src/misc.cmx src/mlize.cmx src/options.cmx \
+    src/parser.cmx src/pvs.cmx src/red.cmx src/types.cmi src/typing.cmx \
     src/util.cmx src/vcg.cmx src/version.cmx src/wp.cmx 
 src/misc.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi \
     src/misc.cmi 
@@ -103,4 +103,4 @@ src/typing.cmi: src/ast.cmi src/env.cmi src/ident.cmi src/logic.cmi \
 src/util.cmi: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
-src/wp.cmi: src/env.cmi 
+src/wp.cmi: src/env.cmi src/types.cmi 
