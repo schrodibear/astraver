@@ -223,7 +223,7 @@ let rec separation_intern ?(use_pred=false) loc n1 v1 =
 		  (make_forall_range loc v1 s 
 		     (fun t i -> 
 			separation_intern ~use_pred:true loc (n1^"[i]") 
-			  (indirection loc ty t)))
+			  (*indirection loc ty t*)(noattr_term ty t.nterm_node)))
 		  
 	    | _ -> NPtrue
 	end
