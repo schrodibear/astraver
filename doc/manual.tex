@@ -527,6 +527,48 @@ Options are the following:
 \end{description}
 
 
+\section{Library}
+\label{library}\index{Library}
+These are the predicates provided in \why's own library:
+\begin{description}
+\item[\texttt{sorted\_array : array int, int, int -> prop}] ~\par
+  \indextt{sorted\_array}
+  \texttt{sorted\_array($t$,$i$,$j$)} states that the sub-array
+  $t[i..j]$ is sorted (in increasing order).
+
+\item[\texttt{exchange : array int, array int, int, int -> prop}] ~\par
+  \indextt{exchange}
+  \texttt{exchange($t_1$,$t_2$,$i$,$j$)} states that arrays $t_1$ and
+  $t_2$ differ only by the swapping of the two elements at indexes $i$
+  and $j$.
+
+\item[\texttt{sub\_permut : int, int, array int, array int -> prop}] ~\par
+  \indextt{sub\_permut }
+  \texttt{sub\_permut($i$,$j$,$t_1$,$t_2$)} states that the sub-arrays
+  $t_1[i..j]$ and $t_2[i..j]$ are permutations of each other, the
+  other parts of these arrays being the same.
+
+\item[\texttt{permut : array int, array int -> prop}] ~\par
+  \indextt{permut}
+  \texttt{permut($t_1$,$t_2$)} states that the two arrays $t_1$ and
+  $t_2$ are permutations of each other.
+
+\item[\texttt{array\_le : array int, int, int, int -> prop}] ~\par
+  \indextt{array\_le}
+  \texttt{array\_le($t$,$i$,$j$,$v$)} states that $\forall k. ~ i \le
+  k \le j \Rightarrow t[i] \le v$.
+
+\item[\texttt{array\_ge : array int, int, int, int -> prop}] ~\par
+  \indextt{array\_ge}
+  \texttt{array\_ge($t$,$i$,$j$,$v$)} states that $\forall k. ~ i \le
+  k \le j \Rightarrow t[i] \ge v$.
+
+\end{description}
+
+
+TODO: specific Coq and PVS libraries
+
+
 \section{Logic syntax}
 \label{syntax:logic}\index{Logic!syntax}
 
