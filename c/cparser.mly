@@ -21,6 +21,7 @@
   open Format
   open Coptions
   open Ptree
+  open Ctypes
   open Cast
   open Parsing
   open Cerror

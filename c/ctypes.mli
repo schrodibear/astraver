@@ -14,11 +14,53 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.4 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: ctypes.mli,v 1.5 2004-12-02 15:00:25 hubert Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
    syntactic analysis. *)
+
+
+type storage_class = No_storage | Extern | Auto | Static | Register
+
+type sign = Signed | Unsigned
+
+type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
+
+type cfloat = Float | Double | LongDouble
+
+type ctype_node =
+  | Tvoid
+  | Tint of sign * cinteger
+  | Tfloat of cfloat
+  | Tvar of string
+  | Tarray of ctype * int64 option 
+  | Tpointer of ctype
+  | Tstruct of string 
+  | Tunion of string 
+  | Tenum of string 
+  | Tfun of parameter list * ctype
+
+and ctype = { 
+  ctype_node : ctype_node;
+  ctype_storage : storage_class;
+  ctype_const : bool;
+  ctype_volatile : bool;
+}
+
+and parameter = ctype * string
+
+
+
+val noattr : ctype_node -> ctype
+val c_void : ctype
+val c_int : ctype
+val c_float : ctype
+val c_string : ctype
+val c_array :  ctype ->  ctype
+val c_pointer :  ctype ->  ctype
+val c_void_star : ctype
+val c_addr : ctype
 
 val add : string -> unit
 

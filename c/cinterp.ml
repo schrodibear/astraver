@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.117 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.118 2004-12-02 15:00:25 hubert Exp $ i*)
 
 
 open Format
@@ -24,18 +24,19 @@ open Info
 open Cast
 open Clogic
 open Creport
+open Ctypes
 
 let rec global_var_for_type t =
   match t.ctype_node with
-    | (CTenum _ | CTint _) -> "intP"
-    | CTfloat _ -> "realP"
-    | CTarray (ty,_) | CTpointer ty -> global_var_for_type ty ^ "P"
-    | CTstruct _ -> "pointer"
+    | (Tenum _ | Tint _) -> "intP"
+    | Tfloat _ -> "realP"
+    | Tarray (ty,_) | Tpointer ty -> global_var_for_type ty ^ "P"
+    | Tstruct _ -> "pointer"
     | _ -> assert false (* TODO *)
 
 let global_var_for_array_type t =
   match t.ctype_node with
-    | CTpointer ty | CTarray(ty,_) -> global_var_for_type ty
+    | Tpointer ty | Tarray(ty,_) -> global_var_for_type ty
     | _ -> assert false
 
 let interp_int_rel = function
@@ -62,44 +63,46 @@ let interp_pointer_rel = function
   | Eq -> "eq"
   | Neq -> "neq"
 
+open Ctypes
+
 let float_of_int (t : nctype nterm) = 
-  { nterm_type = Cltyping.c_float; 
+  { nterm_type = c_float; 
     nterm_loc = Loc.dummy;
     nterm_node = NTunop (Ufloat_of_int, t) }
 
 let interp_rel (t1 : nctype nterm) t2 r = 
   match t1.nterm_type.ctype_node, t2.nterm_type.ctype_node with
-  | (CTenum _ | CTint _), (CTenum _ | CTint _) -> 
+  | (Tenum _ | Tint _), (Tenum _ | Tint _) -> 
       t1, interp_int_rel r, t2
-  | CTfloat _, CTfloat _ -> 
+  | Tfloat _, Tfloat _ -> 
       t1, interp_real_rel r, t2
-  | (CTenum _ | CTint _), CTfloat _ -> 
+  | (Tenum _ | Tint _), Tfloat _ -> 
       float_of_int t1, interp_real_rel r, t2
-  | CTfloat _, (CTenum _ | CTint _) -> 
+  | Tfloat _, (Tenum _ | Tint _) -> 
       t1, interp_real_rel r, float_of_int t2
-  | (CTarray _|CTpointer _), (CTarray _|CTpointer _) -> 
+  | (Tarray _|Tpointer _), (Tarray _|Tpointer _) -> 
       t1, interp_pointer_rel r, t2
   | _ ->
       (match r with Eq -> t1,"eq",t2 | Neq -> t1,"neq",t2 | _ -> assert false)
 
 let interp_term_bin_op ty op =
   match ty.ctype_node, op with
-  | (CTenum _ | CTint _), Badd -> "add_int"
-  | (CTenum _ | CTint _), Bsub -> "sub_int"
-  | (CTenum _ | CTint _), Bmul -> "mul_int"
-  | (CTenum _ | CTint _), Bdiv -> "div_int"
-  | (CTenum _ | CTint _), Bmod -> "dmod_int"
-  | CTfloat _, Badd -> "add_real"
-  | CTfloat _, Bsub -> "sub_real"
-  | CTfloat _, Bmul -> "mul_real"
-  | CTfloat _, Bdiv -> "div_real"
-  | (CTpointer _ | CTarray _), Badd -> "shift"
-  | (CTpointer _ | CTarray _), Bsub -> "sub_pointer"
+  | (Tenum _ | Tint _), Badd -> "add_int"
+  | (Tenum _ | Tint _), Bsub -> "sub_int"
+  | (Tenum _ | Tint _), Bmul -> "mul_int"
+  | (Tenum _ | Tint _), Bdiv -> "div_int"
+  | (Tenum _ | Tint _), Bmod -> "dmod_int"
+  | Tfloat _, Badd -> "add_real"
+  | Tfloat _, Bsub -> "sub_real"
+  | Tfloat _, Bmul -> "mul_real"
+  | Tfloat _, Bdiv -> "div_real"
+  | (Tpointer _ | Tarray _), Badd -> "shift"
+  | (Tpointer _ | Tarray _), Bsub -> "sub_pointer"
   | _ -> assert false
 
 let interp_term_un_op ty op = match ty.ctype_node, op with
-  | (CTenum _ | CTint _), Uminus -> "neg_int"
-  | CTfloat _, Uminus -> "neg_real"
+  | (Tenum _ | Tint _), Uminus -> "neg_int"
+  | Tfloat _, Uminus -> "neg_real"
   | _ -> assert false
 
 let interp_var label v =
@@ -111,14 +114,14 @@ let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.nterm_node with
     | NTconstant (IntConstant c) ->
-	LConst(Prim_int(Int64.to_int (Cconst.int t.nterm_loc c)))
+	LConst(Prim_int (Cconst.int t.nterm_loc c))
     | NTconstant (FloatConstant c) ->
-	LConst(Prim_float(float_of_string c))
+	LConst(Prim_float c)
     | NTvar id ->
 	let n = id.var_unique_name in
 	if id.var_is_referenced then
 	  begin match t.nterm_type.ctype_node with
-	    | CTstruct _ | CTunion _ -> 
+	    | Tstruct _ | Tunion _ -> 
 		if id.var_is_assigned && not id.var_is_a_formal_param then
 		  interp_var label n
 		else LVar n 		  
@@ -168,15 +171,15 @@ let rec interp_term label old_label t =
 	LVar "null"
     | NTresult -> 
 	LVar "result" 
-    | NTcast({ctype_node = CTpointer _}, 
+    | NTcast({ctype_node = Tpointer _}, 
 	    {nterm_node = NTconstant (IntConstant "0")}) ->
 	LVar "null"
     | NTcast (ty, t) -> 
 	begin match ty.ctype_node, t.nterm_type.ctype_node with
-	  | (CTenum _ | CTint _), (CTenum _ | CTint _)
-	  | CTfloat _, CTfloat _ -> 
+	  | (Tenum _ | Tint _), (Tenum _ | Tint _)
+	  | Tfloat _, Tfloat _ -> 
 	      f t
-	  | CTfloat _, (CTenum _ | CTint _) ->
+	  | Tfloat _, (Tenum _ | Tint _) ->
 	      LApp ("real_of_int", [f t])
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      f t
@@ -187,16 +190,16 @@ let rec interp_term label old_label t =
 and interp_term_address  label old_label e = match e.nterm_node with
   | NTvar v -> 
       begin match e.nterm_type.ctype_node with
-	| CTstruct _ | CTunion _ -> LVar v.var_unique_name
+	| Tstruct _ | Tunion _ -> LVar v.var_unique_name
 	| _ -> unsupported e.nterm_loc "& operator"
       end
   | NTunop (Ustar, e1) -> 
       interp_term  label old_label e1
   | NTarrow (e1, f) ->
       begin match e.nterm_type.ctype_node with
-	| CTenum _ | CTint _ | CTfloat _ -> 
+	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_term  label old_label e1
-	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
+	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
 	    let var = f.var_unique_name in
 	    LApp("acc",[interp_var label var; interp_term label old_label e1])
 	| _ -> unsupported e.nterm_loc "& operator on a field"
@@ -223,7 +226,7 @@ let rec interp_predicate label old_label p =
 	  l (interp_predicate label old_label p)
     | NPif (t, p1, p2) -> 
 	let t = ft t in
-	let zero = LConst (Prim_int 0) in
+	let zero = LConst (Prim_int Int64.zero) in
 	LAnd (make_impl (LPred ("neq_int", [t; zero])) (f p1),
 	      make_impl (LPred ("eq_int",  [t; zero])) (f p2))
     | NPnot p -> 
@@ -309,18 +312,18 @@ let interp_bin_op = function
   | Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor ->
       assert false
 
-let int_one = Cte(Prim_int 1)
-let int_minus_one = Cte(Prim_int (-1))
-let float_one = Cte(Prim_float 1.0)
+let int_one = Cte(Prim_int Int64.one)
+let int_minus_one = Cte(Prim_int Int64.minus_one)
+let float_one = Cte(Prim_float "1.0")
 
-let interp_incr_op ty op = match ty.ctype_node, op with
-  | (CTenum _ | CTint _), (Upostfix_inc | Uprefix_inc) -> "add_int", int_one
-  | (CTenum _ | CTint _), (Upostfix_dec | Uprefix_dec) -> "sub_int", int_one
-  | CTfloat _, (Upostfix_inc | Uprefix_inc) -> "add_real", float_one
-  | CTfloat _, (Upostfix_dec | Uprefix_dec) -> "sub_real", float_one
-  | (CTpointer _ | CTarray _), 
+let interp_incr_op ty op = match ty.Ctypes.ctype_node, op with
+  | (Tenum _ | Tint _), (Upostfix_inc | Uprefix_inc) -> "add_int", int_one
+  | (Tenum _ | Tint _), (Upostfix_dec | Uprefix_dec) -> "sub_int", int_one
+  | Tfloat _, (Upostfix_inc | Uprefix_inc) -> "add_real", float_one
+  | Tfloat _, (Upostfix_dec | Uprefix_dec) -> "sub_real", float_one
+  | (Tpointer _ | Tarray _), 
     (Upostfix_inc | Uprefix_inc) -> "shift_", int_one
-  | (CTpointer _ | CTarray _), 
+  | (Tpointer _ | Tarray _), 
     (Upostfix_dec | Uprefix_dec) -> "shift_", int_minus_one
   | _ -> assert false
 
@@ -372,9 +375,9 @@ let build_minimal_app e args =
 let rec interp_expr e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
-	Cte (Prim_int (Int64.to_int (Cconst.int e.nexpr_loc c)))
+	Cte (Prim_int (Cconst.int e.nexpr_loc c))
     | NEconstant (FloatConstant c) ->
-	Cte(Prim_float(float_of_string c))
+	Cte(Prim_float c)
     | NEvar(Var_info v) -> 
 	let n = v.var_unique_name in
 	(*if v.var_is_referenced then
@@ -395,7 +398,8 @@ let rec interp_expr e =
 		 |Beq_pointer | Bneq_pointer 
 		 |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
     | NEunary (Unot, _) ->
-	If(interp_boolean_expr e, Cte(Prim_int(1)), Cte(Prim_int(0)))
+	If(interp_boolean_expr e, 
+	   Cte(Prim_int Int64.one), Cte(Prim_int Int64.zero))
     | NEbinary(e1,op,e2) ->
 	build_minimal_app (Var (interp_bin_op op)) 
 	  [interp_expr e1;interp_expr e2]
@@ -464,9 +468,9 @@ let rec interp_expr e =
     | NEunary (Uplus, e) ->
 	interp_expr e
     | NEunary(Uminus, e) -> 
-	begin match e.nexpr_type.ctype_node with
-	  | CTenum _ | CTint _ -> make_app "neg_int" [interp_expr e]
-	  | CTfloat _ -> make_app "neg_real" [interp_expr e]
+	begin match e.nexpr_type.Ctypes.ctype_node with
+	  | Tenum _ | Tint _ -> make_app "neg_int" [interp_expr e]
+	  | Tfloat _ -> make_app "neg_real" [interp_expr e]
 	  | _ -> assert false
 	end
     | NEunary (Uint_of_float, e) ->
@@ -490,17 +494,17 @@ let rec interp_expr e =
 	    | _ -> 
 		unsupported e.nexpr_loc "call of a non-variable function"
 	end
-    | NEcast({ctype_node = CTpointer _}, 
+    | NEcast({Ctypes.ctype_node = Tpointer _}, 
 	     {nexpr_node = NEconstant (IntConstant "0")}) ->
 	Var "null"
     | NEcast(t,e1) -> 
-	begin match t.ctype_node, e1.nexpr_type.ctype_node with
-	  | (CTenum _ | CTint _), (CTenum _ | CTint _)
-	  | CTfloat _, CTfloat _ -> 
+	begin match t.Ctypes.ctype_node, e1.nexpr_type.Ctypes.ctype_node with
+	  | (Tenum _ | Tint _), (Tenum _ | Tint _)
+	  | Tfloat _, Tfloat _ -> 
 	      interp_expr e1
-	  | CTfloat _, (CTenum _ | CTint _) ->
+	  | Tfloat _, (Tenum _ | Tint _) ->
 	      make_app "real_of_int" [interp_expr e1]
-	  | (CTenum _ | CTint _), CTfloat _ ->
+	  | (Tenum _ | Tint _), Tfloat _ ->
 	      make_app "int_of_real" [interp_expr e1]
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      interp_expr e1
@@ -530,10 +534,10 @@ and interp_boolean_expr e =
 	Not(interp_boolean_expr e)
     (* otherwise e <> 0 *)
     | _ -> 
-	let cmp,zero = match e.nexpr_type.ctype_node with
-	  | CTenum _ | CTint _ -> "neq_int", Cte (Prim_int 0)
-	  | CTfloat _ -> "neq_real", Cte (Prim_float 0.0)
-	  | CTarray _ | CTpointer _ -> "neq_pointer", Var "null"
+	let cmp,zero = match e.nexpr_type.Ctypes.ctype_node with
+	  | Tenum _ | Tint _ -> "neq_int", Cte (Prim_int Int64.zero)
+	  | Tfloat _ -> "neq_real", Cte (Prim_float "0.0")
+	  | Tarray _ | Tpointer _ -> "neq_pointer", Var "null"
 	  | _ -> assert false
 	in
 	build_complex_app (Var cmp) [interp_expr e; zero]
@@ -616,8 +620,8 @@ and interp_lvalue e =
 and interp_address e = match e.nexpr_node with
   | NEvar (Var_info v) -> 
       assert (v.var_is_referenced); 
-       begin match e.nexpr_type.ctype_node with
-       | CTstruct _ | CTunion _ -> Deref v.var_unique_name
+       begin match e.nexpr_type.Ctypes.ctype_node with
+       | Tstruct _ | Tunion _ -> Deref v.var_unique_name
        | _ -> Var v.var_unique_name
        end
   | NEvar (Fun_info v) -> unsupported e.nexpr_loc "& operator on functions"
@@ -632,10 +636,10 @@ and interp_address e = match e.nexpr_node with
   | NEdot (e1, f)
 *)
   | NEarrow (e1, f) ->
-      begin match e.nexpr_type.ctype_node with
-	| CTenum _ | CTint _ | CTfloat _ -> 
+      begin match e.nexpr_type.Ctypes.ctype_node with
+	| Tenum _ | Tint _ | Tfloat _ -> 
   	    interp_expr e1
-	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
+	| Tstruct _ | Tunion _ | Tpointer _ | Tarray _ ->
             build_complex_app (Var "acc_") 
 	    [Var f.var_unique_name; interp_expr e1]
 	| _ -> unsupported e.nexpr_loc "& operator on a field"
@@ -693,7 +697,7 @@ and interp_statement_expr e =
 		  build_complex_app (Var (v.fun_unique_name ^ "_parameter")) 
 		    targs
 		in
-		if e.nexpr_type.ctype_node = CTvoid then
+		if e.nexpr_type.Ctypes.ctype_node = Tvoid then
 		  app
 		else
 		  Let (tmp_var (), app, Void)
@@ -879,22 +883,22 @@ let interp_decl d acc =
 	if v.var_is_referenced then
 	  let t = { nterm_node = NTresult; 
 		    nterm_loc = d.loc;
-		    nterm_type = Cltyping.c_pointer ctype } in
+		    nterm_type = Ctypes.c_pointer ctype } in
 	  Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
 	else
 	  let tinit = match init with 
 	    | Inothing ->
-		begin match ctype.ctype_node with
-		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
-		  | CTfloat _ -> App(Var("any_real"),Var("void"))
-		  | CTarray (_, None) | CTpointer _ -> 
+		begin match ctype.Ctypes.ctype_node with
+		  | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
+		  | Tfloat _ -> App(Var("any_real"),Var("void"))
+		  | Tarray (_, None) | Tpointer _ -> 
 		      App(Var "any_pointer", Var "void")
-		  | CTarray _ | CTstruct _ | CTunion _ -> 
+		  | Tarray _ | Tstruct _ | Tunion _ -> 
                       let t = { nterm_node = NTresult; 
 				nterm_loc = d.loc;
 				nterm_type = ctype } in
                       alloc_on_stack d.loc v t
-		  | CTvoid | CTvar _ | CTfun _ -> assert false
+		  | Tvoid | Tvar _ | Tfun _ -> assert false
 		end
 	    | Iexpr e -> interp_expr e		
 	    | Ilist _ -> unsupported d.loc "structured initializer for local var"
@@ -904,9 +908,9 @@ let interp_decl d acc =
 	  else
 	    Let(v.var_unique_name,tinit,acc)
     | Ntypedef _
-    | Ntypedecl { ctype_node = CTstruct _ | CTunion _ } -> 
+    | Ntypedecl { Ctypes.ctype_node = Tstruct _ | Tunion _ } -> 
 	acc
-    | Ntypedecl { ctype_node = CTenum _ } -> 
+    | Ntypedecl { Ctypes.ctype_node = Tenum _ } -> 
 	unsupported d.loc "local enum type"
     | Ntypedecl _
     | Nfunspec _
@@ -924,7 +928,7 @@ let interp_invariant label effects annot =
   in
   let inv = make_and (interp_assigns label effects annot.loop_assigns) inv in
   let var = match annot.variant with
-    | None -> LConst (Prim_int 0), None
+    | None -> LConst (Prim_int Int64.zero), None
     | Some (var,r) -> interp_term None "init" var, r
   in
   (inv, var)
@@ -937,9 +941,9 @@ let break b e = if b then try_with_void "Break" e else e
 
 let continue b e = if b then try_with_void "Continue" e else e    
 
-let return_exn ty = match ty.ctype_node with
-  | CTenum _ | CTint _ -> "Return_int"
-  | CTfloat _ -> "Return_real"
+let return_exn ty = match ty.Ctypes.ctype_node with
+  | Tenum _ | Tint _ -> "Return_int"
+  | Tfloat _ -> "Return_real"
   | _ -> "Return_pointer"
 
 (* [abrupt_return] contains the exception used for last abrupt return if any *)
@@ -1281,13 +1285,17 @@ let interp_function_spec id sp ty pl =
   in
   tpl,pre,post, Param (false, id.fun_unique_name ^ "_parameter", ty)
 
-let interp_type loc ctype = match ctype.ctype_node with
-  | CTenum (e, _) ->
+let interp_type loc ctype = match ctype.Ctypes.ctype_node with
+  | Tenum e ->
       begin match Cenv.tag_type_definition e with
-	| Cenv.Defined (CTenum (_, Decl el)) -> 
-	    if List.exists (fun (_,i) -> i <> None) el then
-	      warning loc ("ignoring initializer(s) for enum " ^ e);
-	    List.map (fun (x,_) -> Param (false,x,Base_type ([], "int"))) el
+	| Cenv.TTEnum ((Tenum n),el) -> 
+	    List.flatten
+	      (List.map 
+		 (fun (x,v) -> 
+		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
+		    [Param (false,x,Base_type ([], "int"));
+		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])
+		 el)
 	| _ -> assert false
       end
   | _ -> 
@@ -1306,11 +1314,11 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ninvariant(id,p) -> 
       lprintf "translating invariant declaration %s@." id;      
       why
-  | Ntypedecl ({ ctype_node = CTenum _ } as ctype)
+  | Ntypedecl ({ Ctypes.ctype_node = Tenum _ } as ctype)
   | Ntypedef (ctype,_) -> 
       let dl = interp_type decl.loc ctype in 
       why_code, dl @ why_spec, prover_decl
-  | Ntypedecl { ctype_node = CTstruct _ | CTunion _ } -> 
+  | Ntypedecl { Ctypes.ctype_node = Tstruct _ | Tunion _ } -> 
       why
   | Ntypedecl _ ->
       assert false

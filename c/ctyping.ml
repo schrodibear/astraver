@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.78 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.79 2004-12-02 15:00:25 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -26,6 +26,82 @@ open Creport
 open Info
 open Cenv
 open Lib
+open Ctypes
+open Int64
+
+(* evaluation static *)
+let rec sizeof loc = 
+  let incomplete_type () = 
+    error loc "invalid application of `sizeof' to an incomplete type"
+  in
+  let warned = ref false in
+  let architecture () =
+    if not !warned then begin 
+      warned := true;
+      warning loc "compiler/architecture-dependent sizeof"
+    end
+  in
+  let rec sizeof ?(field=false) (ty : tctype) = match ty.ctype_node with
+    | Tvoid -> of_int 1
+    | Tint (_, Char) -> of_int 1 
+    | Tint (_, Short) -> of_int 2
+    | Tint (_, Int) -> architecture (); of_int 4
+    | Tint (_, Long) -> of_int 4
+    | Tint (_, LongLong) -> of_int 8
+    | Tint (_, Bitfield n) -> 
+	architecture ();
+	let d = div n (of_int 8) in
+	if rem n (of_int 8) = zero then d else succ d
+    | Tfloat Float -> of_int 4
+    | Tfloat Double -> of_int 8
+    | Tfloat LongDouble -> of_int 12
+    | Tvar x -> assert false (* should be expansed *)
+    | Tarray (ty, Some e) -> 
+	mul e (sizeof ty)
+    | Tarray (ty, None) -> if field then of_int 0 else of_int 1
+    | Tpointer _ -> of_int 4
+    | Tstruct n ->
+	(match tag_type_definition n with
+	   | TTIncomplete -> 
+	       incomplete_type ()
+	   | TTStructUnion (Tstruct _, fl) -> 
+	       List.fold_left (fun s (ty,_) -> add s (sizeof ~field:true ty)) 
+		 (of_int 0) fl
+	   | _ -> 
+	       assert false)
+    | Tunion n ->
+	(match tag_type_definition n with
+	   | TTIncomplete -> 
+	       incomplete_type ()
+	   | TTStructUnion (Tunion _, fl) -> 
+	       List.fold_left (fun s (ty,_) -> max s (sizeof ~field:true ty)) 
+		 (of_int 0) fl
+	   | _ -> 
+	       assert false)
+    | Tenum _ -> of_int 4
+    | Tfun _ -> of_int 4 (* function pointer? *)
+  in
+  sizeof
+
+and eval_const_expr (e : texpr) = match e.texpr_node with
+  | TEconstant (IntConstant c) -> Cconst.int e.texpr_loc c
+  | TEunary (Uplus, t) -> eval_const_expr t
+  | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr t)
+  | TEbinary (t1, Cast.Badd_int, t2) -> 
+      Int64.add (eval_const_expr t1)  (eval_const_expr t2)
+  | TEbinary (t1, Cast.Bsub_int, t2) -> 
+      Int64.sub (eval_const_expr t1)  (eval_const_expr t2)
+  | TEbinary (t1, Cast.Bmul_int, t2) -> 
+      Int64.mul (eval_const_expr t1)  (eval_const_expr t2)
+  | TEbinary (t1, Cast.Bdiv_int, t2) -> 
+      Int64.div (eval_const_expr t1)  (eval_const_expr t2)
+  | TEcast (_, e) -> eval_const_expr e
+  | TEsizeof (t,n) -> n
+  | TEvar (Var_info v) ->
+      if e.texpr_type.Ctypes.ctype_const 
+      then v.enum_constant_value
+      else error e.texpr_loc "not a const variable"
+  | _ -> error e.texpr_loc "not a constant expression"
 
 (* Typing C programs *)
 
@@ -88,47 +164,53 @@ let pointer_op = function
   | _ -> assert false
 
 let type_op op ty = match ty.ctype_node with 
-  | CTint _ | CTenum _ -> int_op op 
-  | CTfloat _ -> float_op op 
-  | CTpointer _ | CTarray _ -> pointer_op op
+  | Tint _ | Tenum _ -> int_op op 
+  | Tfloat _ -> float_op op 
+  | Tpointer _ | Tarray _ -> pointer_op op
   | _ -> assert false 
 
 let is_bitfield ty = match ty.ctype_node with
-  | CTint (_, Bitfield _) -> true
+  | Tint (_, Bitfield _) -> true
   | _ -> false
 
-let va_list = Cltyping.noattr (CTvar "va_list")
+let va_list = Ctypes.noattr (Ctypes.Tvar "va_list")
 let _ = add_typedef Loc.dummy "__builtin_va_list" va_list
 
 (* Coercions (ints to floats, floats to int) *)
 
 let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
-  | (CTint _ | CTenum _), CTfloat _ -> 
+  | (Tint _ | Tenum _), Tfloat _ -> 
       { e with texpr_node = TEunary (Ufloat_of_int, e); texpr_type = ty }
-  | CTfloat _, (CTint _ | CTenum _) ->
+  | Tfloat _, (Tint _ | Tenum _) ->
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
-  | CTpointer { ctype_node = CTvoid }, CTpointer _ ->
+  | Tpointer { ctype_node = Tvoid }, Tpointer _ ->
       e
   | _ ->
       if verbose || debug then eprintf 
-	"expected %a, found %a@." print_type e.texpr_type print_type ty;
+	"expected %a, found %a@." print_type ty print_type e.texpr_type;
       error e.texpr_loc "incompatible type"
 
 let compat_pointers ty1 ty2 = 
-  (ty1.ctype_node = CTvoid) || (ty2.ctype_node = CTvoid) || eq_type ty1 ty2
+  (ty1.ctype_node = Tvoid) || (ty2.ctype_node = Tvoid) || eq_type ty1 ty2
 
 (* convert [e1] and [e2] to the same arithmetic type *)
 let conversion e1 e2 =
   let ty1 = e1.texpr_type in
   let ty2 = e2.texpr_type in
   match ty1.ctype_node, ty2.ctype_node with
-    | (CTint _ | CTenum _), (CTint _ | CTenum _) -> e1, e2, ty1
-    | CTfloat _, (CTint _ | CTenum _) -> e1, coerce ty1 e2, ty1
-    | (CTint _ | CTenum _), CTfloat _ -> coerce ty2 e1, e2, ty2
-    | CTfloat _, CTfloat _ -> e1, e2, ty1
+    | (Tint _ | Tenum _), (Tint _ | Tenum _) -> e1, e2, ty1
+    | Tfloat _, (Tint _ | Tenum _) -> e1, coerce ty1 e2, ty1
+    | (Tint _ | Tenum _), Tfloat _ -> coerce ty2 e1, e2, ty2
+    | Tfloat _, Tfloat _ -> e1, e2, ty1
     | _ -> assert false
+
+let is_null e = 
+  match e.texpr_node with
+    | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
+    | _ -> false
+
 
 (* type the assignment of [e2] into a left value of type [ty1] *)
 let type_assignment loc ty1 e2 =
@@ -145,7 +227,7 @@ let type_assignment loc ty1 e2 =
 
 let warn_for_read_only loc e = 
   let pointer_on_read_only ty = match ty.ctype_node with
-    | CTpointer ty -> ty.ctype_const 
+    | Tpointer ty -> ty.ctype_const 
     | _ -> false
   in
   match e.texpr_node with
@@ -175,56 +257,78 @@ let set_referenced e = match e.texpr_node with
 (*s Types *)
 
 let rec type_type loc env ty = 
-  { ty with ctype_node = type_type_node loc env ty.ctype_node }
+  { Ctypes.ctype_node = type_type_node loc env ty.Cast.ctype_node;
+    ctype_storage = ty.Cast.ctype_storage ;
+    ctype_const = ty.Cast.ctype_const ;
+    ctype_volatile = ty.Cast.ctype_volatile
+  }
 
 and type_type_node loc env = function
-  | CTvoid | CTfloat _ as ty -> 
-      ty
+  | CTvoid -> Tvoid
+  | CTfloat x -> Tfloat x
   | CTint (s,i) ->
-      CTint (s, type_integer loc env i)
+      Tint (s, type_integer loc env i)
   | CTvar x -> 
       (* TODO: les attributs sont perdus *)
       (try (find_typedef x).ctype_node with Not_found -> assert false)
-  | CTarray (tyn, eo) -> 
-      CTarray (type_type loc env tyn, type_int_expr_option env eo)
+  | CTarray (tyn, None) ->
+      Tarray (type_type loc env tyn, None)
+  | CTarray (tyn, Some e) -> 
+      Tarray (type_type loc env tyn , 
+	      Some (eval_const_expr  (type_int_expr env e)))
   | CTpointer tyn -> 
-      CTpointer (type_type loc env tyn)
-  | CTstruct (_, Tag) | CTunion (_, Tag) | CTenum (_, Tag) as tyn ->
-      Env.find_tag_type loc env tyn		       
+      Tpointer (type_type loc env tyn)
+  | CTstruct (x,Tag) -> Env.find_tag_type loc env (Tstruct x)  
+  | CTunion (x,Tag)  -> Env.find_tag_type loc env (Tunion x)
+  | CTenum (x,Tag)  -> Env.find_tag_type loc env (Tenum x)
   | CTstruct (x, Decl fl) ->
       let fl = List.map (type_field loc env) fl in
-      let tyn = Env.find_tag_type loc env (CTstruct (x, Decl fl)) in
+      let tyn = Env.set_struct_union_type loc env (Tstruct x) fl in
       declare_fields tyn fl;
       tyn
   | CTunion (x, Decl fl) ->
       let fl = List.map (type_field loc env) fl in
-      let tyn = Env.find_tag_type loc env (CTunion (x, Decl fl)) in
+      let tyn = Env.set_struct_union_type loc env (Tunion x) fl in
       declare_fields tyn fl;
       tyn
   | CTenum (x, Decl fl) ->
-      let tyn = Env.find_tag_type loc env (CTenum (x, Tag)) in
+      let tyn = Env.find_tag_type loc env (Tenum x) in
       let ty = noattr tyn in
       let ty = { ty with ctype_const = true } in
-      let fl = 
-	List.map 
-	  (fun (f,op) -> 
+      let rec enum_fields v = function
+	| [] -> 
+	    []
+	| (f, op) :: fl ->
 	     let i = default_var_info f in
 	     ignore (add_sym loc f ty (Var_info i)); 
-	     (f,type_int_expr_option env op)) 
-	  fl
+	     let v = match op with
+	       | None -> 
+		   v
+	       | Some e -> 
+		   let e = type_int_expr env e in
+		   eval_const_expr e
+	     in
+	     (f, v) :: enum_fields (Int64.succ v) fl
       in
-      Env.find_tag_type loc env (CTenum (x, Decl fl)) 
+      let fl = enum_fields Int64.zero fl in
+      Env.set_enum_type loc env (Tenum x) fl 
   | CTfun (pl, tyn) ->
       let pl = List.map (fun (ty,x) -> (type_type loc env ty, x)) pl in
       let pl = match pl with
-	| [{ctype_node = CTvoid},_] -> []
+	| [{ctype_node = Tvoid},_] -> []
 	| _ -> pl
       in
-      CTfun (pl, type_type loc env tyn)
+      Tfun (pl, type_type loc env tyn)
 
 and type_integer loc env = function
-  | Char | Short | Int | Long | LongLong as i -> i
-  | Bitfield e -> Bitfield (type_expr env e)
+  | Cast.Char -> Char
+  | Cast.Short -> Short
+  | Cast.Int -> Int 
+  | Cast.Long -> Long
+  | Cast.LongLong -> LongLong
+  | Cast.Bitfield e -> 
+      let e = type_int_expr env e in
+      Bitfield (eval_const_expr e)
 
 (*s Expressions *)
 
@@ -242,15 +346,15 @@ and type_expr_node loc env = function
   | CEstring_literal s ->
       TEstring_literal s, c_string
   | CEvar x ->
-      let (t,info) =
+      let var =
 	try Env.find x env with Not_found -> 
 	  try find_sym x with Not_found -> 
 	    error loc (x ^ " undeclared")
       in
-      (TEvar info,t)
+      (TEvar var,var_type var)
   | CEdot (e, x) ->
       let te = type_expr env e in
-      let x,ty = type_of_field loc x te.texpr_type in
+      let x = type_of_field loc x te.texpr_type in
       let te_dot_x = match te.texpr_node with
 	| TEunary (Ustar, e) -> TEarrow (e, x)
 	| TEarrget (e1, e2) -> 
@@ -262,20 +366,20 @@ and type_expr_node loc env = function
 	    TEarrow (a, x)
 	| _ -> TEdot (te, x)
       in
-      te_dot_x, ty
+      te_dot_x, x.var_type
   | CEarrow (e, x) ->
       let te = type_expr env e in
       begin match te.texpr_type.ctype_node with
-	| CTarray (ty, _) | CTpointer ty ->
-	    let x,ty = type_of_field loc x ty in
-	    TEarrow (te, x), ty
+	| Tarray (ty,_) | Tpointer ty ->
+	    let x = type_of_field loc x ty in
+	    TEarrow (te, x), x.var_type
 	| _ -> 
 	    error loc "invalid type argument of `->'"
       end
   | CEarrget (e1, e2) ->
       let te1 = type_expr env e1 in
       (match te1.texpr_type.ctype_node with
-	 | CTarray (ty, _) | CTpointer ty ->
+	 | Tarray (ty,_) | Tpointer ty ->
 	     let te2 = type_int_expr env e2 in
 	     TEarrget (te1, te2), ty
 	 | _ ->
@@ -325,7 +429,7 @@ and type_expr_node loc env = function
       let e = type_lvalue env e in
       warn_for_read_only e_loc e;
       begin match e.texpr_type.ctype_node with
-	| CTenum _ | CTint _ | CTfloat _ | CTpointer _ -> 
+	| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
             TEincr (op, e), e.texpr_type
 	| _ -> error loc "wrong type to {de,in}crement"
       end
@@ -335,7 +439,7 @@ and type_expr_node loc env = function
   | CEunary ((Uplus | Uminus as op), e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
-	| CTenum _ | CTint _ | CTfloat _ -> TEunary (op, e), e.texpr_type
+	| Tenum _ | Tint _ | Tfloat _ -> TEunary (op, e), e.texpr_type
 	| _ -> error loc "wrong type argument to unary plus/minus"
       end
   | CEunary (Uamp, e) ->
@@ -346,11 +450,11 @@ and type_expr_node loc env = function
       if ty.ctype_storage = Register then 
 	warning loc "address of register requested";
       set_referenced e;
-      TEunary (Uamp, e), noattr (CTpointer ty)
+      TEunary (Uamp, e), noattr (Tpointer ty)
   | CEunary (Ustar, e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
-	| CTpointer ty | CTarray (ty, _) -> TEunary (Ustar, e), ty
+	| Tpointer ty | Tarray (ty,_) -> TEunary (Ustar, e), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
   | CEunary (Utilde, e) ->
@@ -375,12 +479,12 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTenum _ | CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	| (Tenum _ | Tint _ | Tfloat _), (Tint _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Badd ty, e2), ty
-	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
+	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    TEbinary (e1, Badd_pointer_int, e2), ty1
-	| (CTenum _ | CTint _), (CTpointer _ | CTarray _) ->
+	| (Tenum _ | Tint _), (Tpointer _ | Tarray _) ->
 	    TEbinary (e2, Badd_pointer_int, e1), ty2
 	| _ -> error loc "invalid operands to binary +"
       end
@@ -390,14 +494,14 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTint _ | CTenum _ | CTfloat _), (CTint _ | CTenum _ | CTfloat _) ->
+	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Bsub ty, e2), ty
-	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
+	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    let me2 = { e2 with texpr_node = TEunary (Uminus, e2);
 			  texpr_type = ty2 } in
 	    TEbinary (e1, Badd_pointer_int, me2), ty1
-	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
+	| (Tpointer _ | Tarray _), (Tpointer _ | Tarray _) ->
 	    TEbinary (e1, Bsub_pointer, e2), c_int (* TODO check types *)
 	| _ -> error loc "invalid operands to binary -"
       end
@@ -407,16 +511,16 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTint _ | CTenum _ | CTfloat _), (CTint _ | CTenum _ | CTfloat _) ->
+	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op op ty, e2), c_int
-	| (CTpointer ty1  | CTarray (ty1,_)), 
-	  (CTpointer ty2 | CTarray (ty2,_)) ->
+	| (Tpointer ty1  | Tarray (ty1,_)), 
+	  (Tpointer ty2 | Tarray (ty2,_)) ->
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    TEbinary (e1, pointer_op op, e2), c_int
-	| (CTpointer _  | CTarray _), (CTint _ | CTenum _ | CTfloat _)
-	| (CTint _ | CTenum _ | CTfloat _), (CTpointer _  | CTarray _) ->
+	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _)
+	| (Tint _ | Tenum _ | Tfloat _), (Tpointer _  | Tarray _) ->
 	    warning loc "comparison between pointer and integer";
 	    TEbinary (e1, pointer_op op, e2), c_int
 	| _ ->
@@ -445,12 +549,12 @@ and type_expr_node loc env = function
       let e = type_expr env e in
       let el = List.map (type_expr env) el in
       begin match e.texpr_type.ctype_node with
-	| CTfun (tl, ty) ->
+	| Tfun (tl, ty) ->
 	    let rec check_args i el' = function
 	      | [], [] -> 
 		  TEcall (e, List.rev el'), ty
 	      | e :: el, (t, _) :: tl when compatible_type e.texpr_type t ->
-		  check_args (succ i) (coerce t e :: el') (el, tl)
+		  check_args (i+1) (coerce t e :: el') (el, tl)
 	      | e :: _, _ :: _ ->
 		  error loc ("incompatible type for argument " ^ 
 			     string_of_int i)
@@ -471,10 +575,12 @@ and type_expr_node loc env = function
       TEcast (ty, e), ty
   | CEsizeof_expr e ->
       let e = type_expr env e in
-      TEsizeof e.texpr_type, c_int
+      let n = sizeof e.texpr_loc e.texpr_type in
+      TEsizeof (e.texpr_type,n), c_int
   | CEsizeof ty ->
       let ty = type_type loc env ty in
-      TEsizeof ty, c_int
+      let n = sizeof loc ty in
+      TEsizeof(ty,n), c_int
 
 and type_lvalue env e = 
   let loc = e.loc in
@@ -501,19 +607,20 @@ and type_field loc env (ty, x, bf) =
   let ty = type_type loc env ty in
   let bf = type_expr_option env bf in
   match bf, ty.ctype_node with
-    | _, CTvoid ->
+    | _, Tvoid ->
 	error loc ("field `"^x^"' declared void")
     | None, _ ->
-	(ty, x, bf)
-    | Some e, (CTenum _ | CTint _ as tyn) -> 
+	(ty, x)
+    | Some e, (Tenum _ | Tint _ as tyn) -> 
 	let s = match tyn with
-	  | CTenum _ -> Unsigned (* TODO: verif assez de bits pour l'enum *)
-	  | CTint (s, Int) -> s
-	  | CTint (s, _) ->
+	  | Tenum _ -> Unsigned (* TODO: verif assez de bits pour l'enum *)
+	  | Tint (s, Int) -> s
+	  | Tint (s, _) ->
 	      warning loc ("bit-field `"^x^"' type invalid in ANSI C"); s
 	  | _ -> assert false
 	in
-	({ty with ctype_node = CTint (s, Bitfield e)}, x, bf)
+	let v = eval_const_expr e in
+	({ty with ctype_node = Tint (s, Bitfield v)}, x)
     | Some _, _ -> 
 	error loc ("bit-field `"^x^"' has invalid type")
 
@@ -523,13 +630,13 @@ and type_field loc env (ty, x, bf) =
 and type_int_expr_option env eo = option_app (type_int_expr env) eo
 
 and type_int_expr env e = match type_expr env e with
-  | { texpr_type = { ctype_node = CTint _ | CTenum _ } } as te -> te
+  | { texpr_type = { ctype_node = Tint _ | Tenum _ } } as te -> te
   | _ -> error e.loc "invalid operand (expected integer)"
 
 (*s Typing of arithmetic expressions: integers or floats *)
 
 and type_arith_expr env e = match type_expr env e with
-  | { texpr_type = { ctype_node = CTint _ | CTenum _ | CTfloat _ } } as te -> 
+  | { texpr_type = { ctype_node = Tint _ | Tenum _ | Tfloat _ } } as te -> 
       te
   | _ -> error e.loc "invalid operand (expected integer or float)"
 
@@ -539,7 +646,7 @@ and type_boolean env e =
   let e' = type_expr env e in
   let ty = e'.texpr_type in
   match ty.ctype_node with
-    | CTint _ | CTenum _ | CTfloat _ | CTpointer _ | CTarray _ -> e'
+    | Tint _ | Tenum _ | Tfloat _ | Tpointer _ | Tarray _ -> e'
     | _ -> error e.loc "invalid operand (expected arith or pointer)"
 
 (*s Typing of initializers *)
@@ -552,15 +659,15 @@ let rec type_initializer loc env ty = function
       Iexpr (coerce ty e)
   | Ilist el -> 
       (match ty.ctype_node with
-	 | CTarray (ty, _) ->
+	 | Tarray (ty,_) ->
 	     Ilist (List.map (type_initializer loc env ty) el)
-	 | CTstruct (n, _) ->
+	 | Tstruct (n) ->
 	     (match tag_type_definition n with
-		| Incomplete -> 
+		| TTIncomplete -> 
 		    error loc "initializer but incomplete type"
-		| Defined (CTstruct (_, Decl fl)) -> 
+		| TTStructUnion (Tstruct n, fl) -> 
 		    Ilist (type_struct_initializer loc env fl el)
-		| Defined _ -> 
+		| _ -> 
 		    assert false)
 	 | _ -> 
 	     (match el with
@@ -573,7 +680,7 @@ let rec type_initializer loc env ty = function
 and type_struct_initializer loc env fl el = match fl, el with
   | _, [] -> 
       []
-  | (ty,_,_) :: fl, e :: el ->
+  | (ty,_) :: fl, e :: el ->
       let e = type_initializer loc env ty e in
       e :: type_struct_initializer loc env fl el
   | [], _ ->
@@ -693,7 +800,7 @@ and type_block env et (dl,sl) =
     | { node = Cdecl (ty, x, i) } as d :: dl ->
 	if Sset.mem x vs then error d.loc ("redeclaration of `" ^ x ^ "'");
 	let ty = type_type d.loc env ty in	
-	if eq_type_node ty.ctype_node CTvoid then 
+	if eq_type_node ty.ctype_node Tvoid then 
 	  error d.loc ("variable `" ^ x ^ "' declared void");
 	let i = type_initializer d.loc env ty i in
 	let info = default_var_info x in
@@ -734,7 +841,7 @@ let type_parameters loc env pl =
       "Parameter %s added in env with unique name %s@." x info.var_unique_name;
     (ty,info) :: pl, env 
   in
-  let is_void (ty,_) = ty.ctype_node = CTvoid in
+  let is_void (ty,_) = ty.ctype_node = Tvoid in
   let pl, env = List.fold_right type_one pl ([], env) in
   match pl with
     | [p] when is_void p -> 
@@ -807,11 +914,9 @@ let function_spec loc f = function
 	 Hashtbl.add function_specs f s; s)
 
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
-  | CTarray (ety, None), Ilist l -> 
-      let s = string_of_int (List.length l) in
-      let s = { texpr_node = TEconstant (IntConstant s);
-		texpr_type = c_int; texpr_loc = loc } in
-      { ty with ctype_node = CTarray (ety, Some s) }
+  | Tarray (ety, None), Ilist l -> 
+      let s = of_int (List.length l) in
+      { ty with ctype_node = Tarray (ety, Some s) }
   | _ -> 
       ty
 
@@ -826,14 +931,14 @@ let type_decl d = match d.node with
       let ty = type_type d.loc (Env.empty ()) ty in
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
-      begin match ty.ctype_node with
+      begin match ty.Cast.ctype_node with
 	| CTfun(pl,ty_res) ->
 	    let pl,env = type_parameters d.loc (Env.empty ()) pl in
 	    let ty_res = type_type d.loc (Env.empty ()) ty_res in
 	    let info = default_fun_info x in
 	    let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
 	    let info = 
-	      match add_sym d.loc x (noattr (CTfun (spl, ty_res))) 
+	      match add_sym d.loc x (noattr (Tfun (spl, ty_res))) 
 		(Fun_info info) with
 		| Var_info _ -> assert false
 		| Fun_info f -> f
@@ -862,7 +967,7 @@ let type_decl d = match d.node with
       info.has_assigns <- (s.assigns <> None);
       let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
       let info = 
-	match add_sym d.loc f (noattr (CTfun (spl, ty))) (Fun_info info) with 
+	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with 
 	  | Var_info _ -> assert false
 	  | Fun_info f -> f
       in
@@ -877,7 +982,7 @@ let type_decl d = match d.node with
       info.has_assigns <- (s.assigns <> None);
       let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
       let info = 
-	match add_sym d.loc f (noattr (CTfun (spl, ty))) (Fun_info info) with
+	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with
 	  | Var_info v -> assert false
 	  | Fun_info f -> f
       in

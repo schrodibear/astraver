@@ -14,21 +14,21 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.21 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.22 2004-12-02 15:00:25 hubert Exp $ i*)
 
 open Format;;
 
 type constant =
-  | Prim_int of int
-  | Prim_float of float
+  | Prim_int of int64
+  | Prim_float of string
   | Prim_bool of bool
 ;;
 
 let fprintf_constant form e =
   match e with
-    | Prim_int(n) when n<0 -> fprintf form "(%d)" n
-    | Prim_int(n) -> fprintf form "%d" n
-    | Prim_float(f) -> fprintf form "%f" f
+    | Prim_int(n) when Int64.compare n Int64.zero < 0 -> fprintf form "(%Ld)" n
+    | Prim_int(n) -> fprintf form "%Ld" n
+    | Prim_float(f) -> fprintf form "%s" f
     | Prim_bool(b) -> fprintf form "%b" b
 ;;
 

@@ -14,11 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.12 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: creport.ml,v 1.13 2004-12-02 15:00:25 hubert Exp $ i*)
 
 open Format
 open Cerror
-open Cast
+open Ctypes
 
 exception Error of (Loc.t option) * Cerror.t
 
@@ -28,24 +28,16 @@ let rec print_type fmt t =
   print_type_node fmt t.ctype_node
 
 and print_type_node fmt = function
-  | CTvoid -> fprintf fmt "void"
-  | CTint (s, i) -> fprintf fmt "%a %a" print_sign s print_integer i
-  | CTfloat f -> print_float fmt f
-  | CTvar x -> fprintf fmt "%s" x
-  | CTarray (ty, None) -> fprintf fmt "%a[]" print_type ty
-  | CTarray (ty, Some e) -> fprintf fmt "%a[_]" print_type ty
-  | CTpointer ty -> fprintf fmt "%a*" print_type ty
-  | CTstruct (x, Tag) -> 
-      fprintf fmt "struct %s" x
-  | CTstruct (x, Decl fl) -> 
-      fprintf fmt "struct %s { %a}" x print_fields fl
-  | CTunion (x, Tag) -> 
-      fprintf fmt "union %s <incomplete>" x
-  | CTunion (x, Decl fl) -> 
-      fprintf fmt "union %s { %a}" x print_fields fl
-  | CTenum (x, Tag) -> fprintf fmt "enum %s" x
-  | CTenum (x, Decl el) -> fprintf fmt "enum %s { %a}" x print_enums el
-  | CTfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
+  | Tvoid -> fprintf fmt "void"
+  | Tint (s, i) -> fprintf fmt "%a %a" print_sign s print_integer i
+  | Tfloat f -> print_float fmt f
+  | Tvar x -> fprintf fmt "%s" x
+  | Tarray (ty,_) -> fprintf fmt "%a[]" print_type ty
+  | Tpointer ty -> fprintf fmt "%a*" print_type ty
+  | Tstruct (x) -> fprintf fmt "struct %s" x
+  | Tunion (x) -> fprintf fmt "union %s" x
+  | Tenum (x) -> fprintf fmt "enum %s" x
+  | Tfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
 
 and print_sign fmt = function
   | Signed -> fprintf fmt "signed"
@@ -57,7 +49,7 @@ and print_integer fmt = function
   | Int -> fprintf fmt "int"
   | Long -> fprintf fmt "long"
   | LongLong -> fprintf fmt "long long"
-  | Bitfield _ -> fprintf fmt "int (bitfield)"
+  | Bitfield _  -> fprintf fmt "int (bitfield)"
 
 and print_float fmt = function
   | Float -> fprintf fmt "float"

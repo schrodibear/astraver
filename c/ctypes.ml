@@ -14,11 +14,59 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.7 2004-10-20 12:56:43 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.8 2004-12-02 15:00:25 hubert Exp $ i*)
 
 open Format
 open Coptions
 open Lib
+
+
+type storage_class = No_storage | Extern | Auto | Static | Register
+
+type sign = Signed | Unsigned
+
+type cinteger = Char | Short | Int | Long | LongLong | Bitfield of int64
+
+type cfloat = Float | Double | LongDouble
+
+type ctype_node =
+  | Tvoid
+  | Tint of sign * cinteger
+  | Tfloat of cfloat
+  | Tvar of string
+  | Tarray of ctype * int64 option
+  | Tpointer of ctype
+  | Tstruct of string 
+  | Tunion of string 
+  | Tenum of string 
+  | Tfun of parameter list * ctype
+
+and ctype = { 
+  ctype_node : ctype_node;
+  ctype_storage : storage_class;
+  ctype_const : bool;
+  ctype_volatile : bool;
+}
+
+and parameter = ctype * string
+
+
+
+
+let noattr tyn = { ctype_node = tyn; 
+		   ctype_storage = No_storage;
+		   ctype_const = false;
+		   ctype_volatile = false }
+let c_void = noattr Tvoid
+let c_int = noattr (Tint (Signed, Int))
+let c_char = noattr (Tint (Unsigned, Char))
+let c_float = noattr (Tfloat Float)
+let c_string = noattr (Tpointer c_char)
+let c_array ty = noattr (Tarray (ty,None))
+let c_pointer ty = noattr (Tpointer ty)
+let c_void_star = c_pointer c_void
+let c_addr = noattr (Tvar "addr")
+
 
 let stack = ref [ref Sset.empty]
 

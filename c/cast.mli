@@ -14,23 +14,18 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.51 2004-11-30 14:31:22 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.52 2004-12-02 15:00:24 hubert Exp $ i*)
 
 (*s C types *)
 
 open Clogic
+open Ctypes
 
 type 'a located = { node : 'a; loc : Loc.t }
 
 type offset = int
 
-type storage_class = No_storage | Extern | Auto | Static | Register
-
-type sign = Signed | Unsigned
-
 type 'expr cinteger = Char | Short | Int | Long | LongLong | Bitfield of 'expr
-
-type cfloat = Float | Double | LongDouble
 
 type 'a tagged = Tag | Decl of 'a
 
@@ -185,7 +180,7 @@ open Clogic
 
 type texpr = {
   texpr_node : texpr_node;
-  texpr_type : texpr ctype;
+  texpr_type : tctype;
   texpr_loc  : Loc.t
 }
 
@@ -206,11 +201,11 @@ and texpr_node =
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr
   | TEcast of tctype * texpr
-  | TEsizeof of tctype
+  | TEsizeof of tctype * int64
 
 and lvalue = texpr (* TODO: cf CIL *)
 
-and tctype = texpr ctype
+and tctype = Ctypes.ctype
 
 type tterm = tctype term
 
@@ -299,7 +294,7 @@ and nexpr_node =
 
 and nlvalue = nexpr (* TODO: cf CIL *)
 
-and nctype = int64 ctype
+and nctype = (*int64*) Ctypes.ctype
 
 type nterm = nctype Clogic.nterm
 

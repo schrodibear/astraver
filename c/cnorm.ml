@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.2 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.3 2004-12-02 15:00:25 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -24,10 +24,12 @@ open Cltyping
 
 (* Sizeof *)
 
-open Int64
+open Ctypes
 open Cast
 open Clogic
+open Int64
 
+(*
 let rec sizeof loc = 
   let incomplete_type () = 
     error loc "invalid application of `sizeof' to an incomplete type"
@@ -39,47 +41,54 @@ let rec sizeof loc =
       warning loc "compiler/architecture-dependent sizeof"
     end
   in
-  let rec sizeof (ty : 'a ctype) = match ty.ctype_node with
-    | CTvoid -> of_int 1
-    | CTint (_, Char) -> of_int 1 
-    | CTint (_, Short) -> of_int 2
-    | CTint (_, Int) -> architecture (); of_int 4
-    | CTint (_, Long) -> of_int 4
-    | CTint (_, LongLong) -> of_int 8
+  let rec sizeof (ty : Ctypes.ctype) = match ty.Ctypes.ctype_node with
+    | Tvoid -> of_int 1
+    | Tint (_, Ctypes.Char) -> of_int 1 
+    | Tint (_, Ctypes.Short) -> of_int 2
+    | Tint (_, Ctypes.Int) -> architecture (); of_int 4
+    | Tint (_, Ctypes.Long) -> of_int 4
+    | Tint (_, Ctypes.LongLong) -> of_int 8
+(*
     | CTint (_, Bitfield e) -> 
 	architecture ();
 	let n = eval_const_expr e in
 	let d = div n (of_int 8) in
 	if rem n (of_int 8) = zero then d else succ d
-    | CTfloat Float -> of_int 4
-    | CTfloat Double -> of_int 8
-    | CTfloat LongDouble -> of_int 12
-    | CTvar x -> assert false (* should be expansed *)
+*)
+    | Tint (_, Ctypes.Bitfield) -> 
+	unsupported loc "sizeof bitfield"
+    | Tfloat Float -> of_int 4
+    | Tfloat Double -> of_int 8
+    | Tfloat LongDouble -> of_int 12
+    | Ctypes.Tvar x -> assert false (* should be expansed *)
+(*
     | CTarray (ty, Some e) -> 
 	let n = eval_const_expr e in
 	mul n (sizeof ty)
-    | CTarray (ty, None) -> incomplete_type ()
-    | CTpointer _ -> of_int 4
-    | CTstruct (n, _) ->
+    | Tarray (ty, None) -> incomplete_type ()
+*)
+    | Tarray (ty) -> incomplete_type ()
+    | Tpointer _ -> of_int 4
+    | Tstruct (n) ->
 	(match tag_type_definition n with
 	   | Incomplete -> 
 	       incomplete_type ()
-	   | Defined (CTstruct (_, Decl fl)) -> 
-	       List.fold_left (fun s (ty,_,_) -> add s (sizeof ty)) 
+	   | Defined (Tstruct (_), fl) -> 
+	       List.fold_left (fun s (ty,_) -> add s (sizeof ty)) 
 		 (of_int 0) fl
 	   | Defined _ -> 
 	       assert false)
-    | CTunion (n, _) ->
+    | Tunion (n) ->
 	(match tag_type_definition n with
 	   | Incomplete -> 
 	       incomplete_type ()
-	   | Defined (CTunion (_, Decl fl)) -> 
-	       List.fold_left (fun s (ty,_,_) -> max s (sizeof ty)) 
+	   | Defined (Tunion (_), fl) -> 
+	       List.fold_left (fun s (ty,_) -> max s (sizeof ty)) 
 		 (of_int 0) fl
 	   | Defined _ -> 
 	       assert false)
-    | CTenum _ -> of_int 4
-    | CTfun _ -> of_int 4 (* function pointer? *)
+    | Tenum _ -> of_int 4
+    | Tfun _ -> of_int 4 (* function pointer? *)
   in
   sizeof
 
@@ -98,10 +107,10 @@ and eval_const_expr (e : texpr) = match e.texpr_node with
   | TEcast (_, e) -> eval_const_expr e
   | TEsizeof t -> sizeof e.texpr_loc t
   | TEvar (Var_info v) ->
-      if e.texpr_type.ctype_const 
+      if e.texpr_type.Ctypes.ctype_const 
       then v.enum_constant_value
       else error e.texpr_loc "not a const variable"
-  | _ -> error e.texpr_loc "not a constant expression"
+  | _ -> error e.texpr_loc "not a constant expression" *)
 
 
 
@@ -111,52 +120,52 @@ let noption f o =
     | None -> None
     | Some x -> Some (f x)
 
-let cinteger i =
+(*let cinteger i =
   match i with 
     | Char -> Char
     | Short -> Short
     | Int -> Int
     | Long -> Int
     | LongLong -> LongLong
-    | Bitfield (e) -> Bitfield (eval_const_expr e)
+    | Bitfield (e) -> Bitfield (eval_const_expr e)*)
 
 let rec ctype (t : tctype) : nctype =
   let nctype =
-    match t.ctype_node with
-      | CTvoid -> CTvoid
-      | CTint (sign ,i) -> CTint (sign ,cinteger i) 
-      | CTfloat cfloat -> CTfloat cfloat
-      | CTvar string -> CTvar string
-      | CTarray (t ,option) -> CTarray(ctype t,noption eval_const_expr option) 
-      | CTpointer t -> CTpointer (ctype t)
-      | CTstruct ( string ,l) ->
-	  (match l with 
-	     | Tag -> CTstruct (string,Tag)
+    match t.Ctypes.ctype_node with
+      | Tvoid -> Tvoid
+      | Tint (sign ,i) -> Tint (sign , (*cinteger *)i) 
+      | Tfloat cfloat -> Tfloat cfloat
+      | Ctypes.Tvar string -> Ctypes.Tvar string
+      | Tarray (t,op) -> Tarray(ctype t,op) 
+      | Tpointer t -> Tpointer (ctype t)
+      | Tstruct ( string ) ->Tstruct (string)
+	  (*match l with 
+	     | Tag -> Tstruct (string,Tag)
 	     | Decl l ->
-		 CTstruct ( 
+		 Tstruct ( 
 		   string,
 		   Decl (
 		     (List.map (fun (t,s,op) -> (ctype t,s,noption eval_const_expr op))) 
-		     l))) 
-      | CTunion (string, l)-> 
-	  (match l with 
-	    | Tag -> CTunion (string,Tag)
+		     l))*) 
+      | Tunion (string)-> Tunion (string)
+	  (*match l with 
+	    | Tag -> Tunion (string,Tag)
 	    | Decl l ->
-		CTunion ( 
+		Tunion ( 
 		  string,
 		  Decl (
 		    (List.map (fun (t,s,op) -> (ctype t,s,noption eval_const_expr op))) 
-			  l)))
-      | CTfun (l ,c)-> CTfun (List.map (fun (t,s) -> (ctype t,s)) l, ctype c)
-      | CTenum (string , l) ->
-	  match l with 
-	    | Tag -> CTenum (string,Tag)
+			  l))*)
+      | Tfun (l ,c)-> Tfun (List.map (fun (t,s) -> (ctype t,s)) l, ctype c)
+      | Tenum (string) ->Tenum string
+	  (*match l with 
+	    | Tag -> Tenum (string,Tag)
 	    | Decl l -> 
-		CTenum 
+		Tenum 
 		  (string,
 		   Decl (List.map 
 			   (fun(s,op) -> 
-			      (s,noption eval_const_expr op)) l))
+			      (s,noption eval_const_expr op)) l))*)
 (*
       let _ = 
 	List.fold_left 
@@ -175,10 +184,10 @@ let rec ctype (t : tctype) : nctype =
 
   in
   { 
-    ctype_node = nctype;
-    ctype_storage = t.ctype_storage;
-    ctype_const = t.ctype_const;
-    ctype_volatile = t.ctype_volatile;
+    Ctypes.ctype_node = nctype;
+    ctype_storage = t.Ctypes.ctype_storage;
+    ctype_const = t.Ctypes.ctype_const;
+    ctype_volatile = t.Ctypes.ctype_volatile;
   }
 
 open Cast
@@ -199,8 +208,8 @@ and expr_node loc ty t =
 	  (match env_info with
 	    | Var_info v -> 
 		if v.var_is_referenced && 
-		  (match ty.ctype_node with
-		    | CTstruct _ | CTunion _ -> false
+		  (match ty.Ctypes.ctype_node with
+		    | Tstruct _ | Tunion _ -> false
 		    | _ -> true)
 		then
 		  begin
@@ -209,7 +218,7 @@ and expr_node loc ty t =
 *)
 		    NEstar
 		      {nexpr_node= NEvar env_info;
-		       nexpr_type = Cltyping.noattr (CTpointer ty);
+		       nexpr_type = noattr (Tpointer ty);
 		       nexpr_loc = loc}
 		  end
 		else NEvar env_info
@@ -221,7 +230,7 @@ and expr_node loc ty t =
 	  NEstar(
 	    {
 	      nexpr_node =NEbinary(expr lvalue, Badd_pointer_int, expr texpr);
-	      nexpr_type = Cltyping.noattr (CTpointer ty);
+	      nexpr_type = noattr (Tpointer ty);
 	      nexpr_loc = loc;
 	    })
       | TEseq (texpr1,texpr2) -> NEseq ((expr texpr1) , (expr texpr2))
@@ -251,9 +260,8 @@ and expr_node loc ty t =
       | TEcond (texpr1, texpr2, texpr3) -> NEcond ((expr texpr1),
 						   (expr texpr2),
 						   (expr texpr3))
-      | TEsizeof tctype ->
-	  NEconstant 
-	    (IntConstant (Int64.to_string (sizeof loc tctype)))
+      | TEsizeof (tctype,n) ->
+	  NEconstant (IntConstant (Int64.to_string n))
       | TEcast (tctype ,texpr) -> NEcast (ctype tctype, expr texpr)
   
 let rec term_node loc t =
@@ -373,7 +381,7 @@ let rec st_cases used_cases (i : tstatement)
   : 'a IntMap.t * 'a IntMap.t * nstatement =
   match i.st_node with 
     | TScase ( e ,i') ->
-	let n =  eval_const_expr e in
+	let n =  Ctyping.eval_const_expr e in
 	let e = expr e in
 	if IntMap.mem n used_cases 
 	then
@@ -412,7 +420,7 @@ and st_case_list (used_cases : 'a IntMap.t) (l : tstatement list) :
 		      (used_cases'',(IntMap.empty,(statement s)::instr)::l'')
 	      end
 	  | TScase(e,i) -> 
-	      let n = eval_const_expr e in 
+	      let n = Ctyping.eval_const_expr e in 
 	      let e = expr e in
 	      if IntMap.mem n used_cases 
 	      then
@@ -549,9 +557,9 @@ let fresh_index =
 let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
   let rec valid_fields valid_for_current n (t : Cast.nterm) = 
     begin match tag_type_definition n with
-      | Defined (CTstruct (_, Decl fl)) ->
+      | TTStructUnion (Tstruct (_), fl) ->
 	  List.fold_right 
-	    (fun (tyf, f, _) acc -> 
+	    (fun (tyf, f) acc -> 
 	       let tf = 
 		 { nterm_node = NTarrow (t, find_field n f); 
 		   nterm_loc = loc;
@@ -562,25 +570,25 @@ let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
 	    (if valid_for_current then 
 	       if fresh then NPand(NPvalid t, NPfresh t) else NPvalid t 
 	     else NPtrue)
-      | Defined _ ->
-	  assert false
-      | Incomplete ->
+      | TTIncomplete ->
 	  error loc ("`" ^ v.var_name ^ "' has incomplete type")
+      | _ ->
+	  assert false
     end
-  and valid_for (t : Cast.nterm) = match t.nterm_type.ctype_node with
-    | CTstruct (n, _) ->
+  and valid_for (t : Cast.nterm) = match t.nterm_type.Ctypes.ctype_node with
+    | Tstruct (n) ->
  	valid_fields true n t
-    | CTarray (ty, None) ->
+    | Tarray (ty, None) ->
 	error loc ("array size missing in `" ^ v.var_name ^ "'")
-    | CTarray (ty, Some s) ->
+    | Tarray (ty, Some s) ->
 	let ts = int_nconstant (Int64.to_string s) in
 	let valid_form =
 	  make_and
 	    (NPvalid_range (t, nzero, tpred ts))
 	    (if fresh then NPfresh t else NPtrue)
 	in		   
-	begin match ty.ctype_node with
-	  | CTstruct (n,_) ->
+	begin match ty.Ctypes.ctype_node with
+	  | Tstruct n ->
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { nterm_node = NTvar i; 
 			   nterm_loc = loc;
@@ -682,10 +690,10 @@ that a pointer is different from all allocated pointers in [t]
     (* Format.eprintf "local_alloc_fields@.  allocs = %a@.  t = %a@." 
         print_allocs allocs print_term t; *)
     match tag_type_definition n with
-    | Defined (CTstruct (_, Decl fl)) ->
+    | TTStructUnion ((Tstruct _),fl) ->
 	let allocs',form' as res = 
 	  List.fold_right 
-	  (fun (tyf, f, _) (allocs,form) -> 
+	  (fun (tyf, f) (allocs,form) -> 
 	     let tf = 
 	       { nterm_node = NTarrow (t, find_field n f); 
 		 nterm_loc = t.nterm_loc;
@@ -700,22 +708,22 @@ that a pointer is different from all allocated pointers in [t]
 	Format.eprintf "  local_alloc_fields ---> %a@." print_predicate form'; 
 	*)
 	res 
-    | Defined _ ->
-	assert false
-    | Incomplete ->
+    | TTIncomplete ->
 	error loc ("`" ^ v.var_name ^ "' has incomplete type")
+    |  _ ->
+	assert false
   and local_alloc_for allocs (t : Cast.nterm) = 
     (* Format.eprintf "local_alloc_for@.  allocs = %a@.  t = %a@." 
         print_allocs allocs print_term t; *)
-    match t.nterm_type.ctype_node with
-    | CTstruct (n, _) ->
+    match t.nterm_type.Ctypes.ctype_node with
+    | Tstruct n ->
 	let allocs_t = allocs t in
 	let allocs x = make_and (allocs x) (not_alias x t) in
 	let allocs',form = local_alloc_fields allocs n t in
 	allocs', make_and allocs_t form
-    | CTarray (ty, None) ->
+    | Tarray (ty, None) ->
 	error loc ("array size missing in `" ^ v.var_name ^ "'")
-    | CTarray (ty, Some s) ->
+    | Tarray (ty, Some s) ->
 	let ts = int_nconstant (Int64.to_string s) in
 	let forall_index i vari pi =
 	  make_forall [c_int, i] 
@@ -724,8 +732,8 @@ that a pointer is different from all allocated pointers in [t]
 	       pi)
 	in
 	let allocs_t = allocs t in
-	begin match ty.ctype_node with
-	  | CTstruct (n, _) ->
+	begin match ty.Ctypes.ctype_node with
+	  | Tstruct n ->
 	      (* Format.eprintf "  cas d'un tableau de struct@."; *)
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { nterm_node = NTvar i; 
@@ -762,7 +770,7 @@ that a pointer is different from all allocated pointers in [t]
 		   (forall_index i vari (allocs_i x))),
 	      (* forall j 0<=j<ts -> form_j *)
 	      make_and allocs_t (forall_index j varj form_j)
-	  | CTarray _ ->
+	  | Tarray _ ->
 	      (* Format.eprintf "  cas d'un tableau d'autre nature@."; *)
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { nterm_node = NTvar i; 

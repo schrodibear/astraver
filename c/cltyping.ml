@@ -14,18 +14,20 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.66 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.67 2004-12-02 15:00:25 hubert Exp $ i*)
 
 open Cast
 open Clogic
 open Creport
 open Cerror
 open Cenv
+open Ctypes
 
 let option_app f = function Some x -> Some (f x) | None -> None
 
 (* Typing terms *)
 
+(*
 let noattr tyn = { ctype_node = tyn; 
 		   ctype_storage = No_storage;
 		   ctype_const = false;
@@ -40,6 +42,7 @@ let c_array_size ty s = noattr (CTarray (ty, Some s))
 let c_pointer ty = noattr (CTpointer ty)
 let c_void_star = c_pointer c_void
 let c_addr = noattr (CTvar "addr")
+*)
 
 let is_null t = match t.term_node with
   | Tnull -> true
@@ -65,23 +68,25 @@ let expected_term_type loc t1 t2 =
   then raise_located loc (ExpectedType (t1.term_type, t2))
 
 let expected_num loc t = match t.term_type.ctype_node with
-  | CTenum _ | CTint _ | CTfloat _ -> ()
+  | Tenum _ | Tint _ | Tfloat _ -> ()
   | _ -> error loc "invalid operand (expected integer or float)"
 
 let expected_num_pointer loc t = match t.term_type.ctype_node with
-  | CTenum _ | CTint _ | CTfloat _ 
-  | CTarray _ | CTpointer _ -> ()
-  | _ -> error loc "invalid operand (expected integer, float or pointer)"
+  | Tenum _ | Tint _ | Tfloat _ 
+  | Tarray _ | Tpointer _ -> ()
+  | _ -> 
+      Format.eprintf "type = %a@." print_type t.term_type;
+      error loc "invalid operand (expected integer, float or pointer)"
 
 let expected_int loc t = match t.term_type.ctype_node with
-  | CTint _ -> ()
+  | Tint _ -> ()
   | _ -> error loc "invalid operand (expected integer)"
 
 let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
-  | CTint _, CTint _ -> c_int
-  | CTint _, CTfloat _
-  | CTfloat _, CTint _
-  | CTfloat _, CTfloat _ -> c_float
+  | Tint _, Tint _ -> c_int
+  | Tint _, Tfloat _
+  | Tfloat _, Tint _
+  | Tfloat _, Tfloat _ -> c_float
   | _ -> assert false
 
 (* Typing terms *)
@@ -98,13 +103,13 @@ and type_term_node loc env = function
   | PLconstant (FloatConstant _ as c) ->
       Tconstant c, c_float
   | PLvar x ->
-      let (ty,info) = 
+      let info = 
 	try Env.find x.var_name env with Not_found -> 
 	try find_sym x.var_name with Not_found -> 
         error loc ("unbound variable " ^ x.var_name)
       in 
       begin match info with
-	| Var_info v -> Tvar v, ty
+	| Var_info v -> Clogic.Tvar v, v.var_type
 	| Fun_info f -> 
             error loc ("variable " ^ f.fun_name ^ " is a function")
       end
@@ -121,12 +126,12 @@ and type_term_node loc env = function
   | PLunop (Ustar, t) -> 
       let t = type_term env t in
       begin match t.term_type.ctype_node with
-	| CTpointer ty | CTarray (ty, _) -> Tunop (Ustar, t), ty
+	| Tpointer ty | Tarray (ty,_) -> Tunop (Ustar, t), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
-      Tunop (Uamp, t), noattr (CTpointer t.term_type)
+      Tunop (Uamp, t), noattr (Tpointer t.term_type)
   | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
@@ -135,11 +140,11 @@ and type_term_node loc env = function
       let t2 = type_term env t2 in
       let ty2 = t2.term_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTenum _ | CTint _ | CTfloat _), (CTenum _ | CTint _ | CTfloat _) ->
+	| (Tenum _ | Tint _ | Tfloat _), (Tenum _ | Tint _ | Tfloat _) ->
 	    Tbinop (t1, Badd, t2), max_type ty1 ty2
-	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
+	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    Tbinop (t1, Badd, t2), ty1
-	| (CTenum _ | CTint _), (CTpointer _ | CTarray _) ->
+	| (Tenum _ | Tint _), (Tpointer _ | Tarray _) ->
 	    Tbinop (t2, Badd, t1), ty2
 	| _ -> 
 	    error loc "invalid operands to binary +"
@@ -150,14 +155,14 @@ and type_term_node loc env = function
       let t2 = type_term env t2 in
       let ty2 = t2.term_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTenum _ | CTint _ | CTfloat _), (CTenum _ | CTint _ | CTfloat _) ->
+	| (Tenum _ | Tint _ | Tfloat _), (Tenum _ | Tint _ | Tfloat _) ->
 	    Tbinop (t1, Bsub, t2), max_type ty1 ty2
-	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
+	| (Tpointer _ | Tarray _), (Tint _ | Tenum _) -> 
 	    let mt2 = { term_node = Tunop (Uminus, t2); 
 			term_loc = t2.term_loc;
 			term_type = ty2 } in
 	    Tbinop (t1, Badd, mt2), ty1
-	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
+	| (Tpointer _ | Tarray _), (Tpointer _ | Tarray _) ->
 	    Tbinop (t1, Bsub, t2), ty1 (* TODO check types *)
 	| _ -> error loc "invalid operands to binary -"
       end
@@ -171,7 +176,7 @@ and type_term_node loc env = function
       Tbinop (t1, Bmod, t2), c_int
   | PLdot (t, x) ->
       let t = type_term env t in
-      let x,ty = type_of_field loc x t.term_type in
+      let x = type_of_field loc x t.term_type in
       let t_dot_x = match t.term_node with
 	| Tunop (Ustar, e) -> 
 	    Tarrow (e, x)
@@ -185,20 +190,20 @@ and type_term_node loc env = function
 	| _ -> 
 	    Tdot (t, x)
       in
-      t_dot_x, ty
+      t_dot_x, x.var_type
   | PLarrow (t, x) ->
       let t = type_term env t in
       begin match t.term_type.ctype_node with
-	| CTpointer ty -> 
-	    let x,ty = type_of_field loc x ty in
-	    Tarrow (t, x), ty
+	| Tpointer ty -> 
+	    let x = type_of_field loc x ty in
+	    Tarrow (t, x), x.var_type
 	| _ -> 
 	    error loc "invalid type argument of `->'"
       end
   | PLarrget (t1, t2) ->
       let t1 = type_term env t1 in
       (match t1.term_type.ctype_node with
-	 | CTarray (ty, _) | CTpointer ty ->
+	 | Tarray (ty,_) | Tpointer ty ->
 	     let t2 = type_int_term env t2 in
 	     Tarrget (t1, t2), ty
 	 | _ ->
@@ -216,15 +221,15 @@ and type_term_node loc env = function
   | PLbase_addr t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Tbase_addr t, c_addr
+	 | Tarray _ | Tpointer _ -> Tbase_addr t, c_addr
 	 | _ -> error loc "subscripted value is neither array nor pointer")
   | PLblock_length t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Tblock_length t, c_int
+	 | Tarray _ | Tpointer _ -> Tblock_length t, c_int
 	 | _ -> error loc "subscripted value is neither array nor pointer")
   | PLresult ->
-      (try let ty,_ = Env.find "\\result" env in Tresult, ty
+      (try let t = Env.find "\\result" env in Tresult, (var_type t)
        with Not_found -> error loc "\\result meaningless")
   | PLnull ->
       Tnull, c_void_star
@@ -232,11 +237,11 @@ and type_term_node loc env = function
       let t = type_term env t in
       let tt = t.term_type in
       begin match ty, tt.ctype_node with
-	| LTvoid, CTvoid
-	| LTint, CTint _ 
-	| LTfloat, CTfloat _ -> t.term_node, tt
-	| LTfloat, CTint _ -> Tunop (Ufloat_of_int, t), c_float
-	| LTint, CTfloat _ -> Tunop (Uint_of_float, t), c_int
+	| LTvoid, Tvoid
+	| LTint, Tint _ 
+	| LTfloat, Tfloat _ -> t.term_node, tt
+	| LTfloat, Tint _ -> Tunop (Ufloat_of_int, t), c_float
+	| LTint, Tfloat _ -> Tunop (Uint_of_float, t), c_int
 	| _ -> warning loc "ignored cast in annotation"; t.term_node, tt
       end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
@@ -280,8 +285,8 @@ let rec type_type env t =
   { t with ctype_node = type_type_node env t.ctype_node }
 
 and type_type_node env = function
-  | CTint _ | CTfloat _ as t -> t
-  | CTarray (ty, None) -> CTarray (type_type env ty, None)
+  | Tint _ | Tfloat _ as t -> t
+  | Tarray (ty,t) -> Tarray (type_type env ty,t)
   | _ -> assert false
 
 let rec type_logic_type env = function
@@ -291,7 +296,7 @@ let rec type_logic_type env = function
   | LTarray ty -> c_array (type_logic_type env ty)
   | LTpointer ty -> c_pointer (type_logic_type env ty)
   | LTvar id ->  
-      noattr (try (find_typedef id).ctype_node with Not_found -> CTvar id)
+      noattr (try (find_typedef id).ctype_node with Not_found -> Tvar id)
 
 (** abandon provisoire 
 let rec type_logic_type env = function
@@ -384,21 +389,21 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let tloc = t.lexpr_loc in
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Pfresh(t)
+	 | Tarray _ | Tpointer _ -> Pfresh(t)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLvalid (t) ->
       let tloc = t.lexpr_loc in
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | CTstruct _ | CTunion _
-	 | CTarray _ | CTpointer _ -> Pvalid(t)
+	 | Tstruct _ | Tunion _
+	 | Tarray _ | Tpointer _ -> Pvalid(t)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLvalid_index (t,a) ->
       let tloc = t.lexpr_loc in
       let t = type_term env t in
       let a = type_int_term env a in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Pvalid_index(t,a)
+	 | Tarray _ | Tpointer _ -> Pvalid_index(t,a)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLvalid_range (t,a,b) ->
       let tloc = t.lexpr_loc in
@@ -406,7 +411,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let a = type_int_term env a in
       let b = type_int_term env b in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Pvalid_range(t,a,b)
+	 | Tarray _ | Tpointer _ -> Pvalid_range(t,a,b)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLold p ->
       Pold (type_predicate env p)

@@ -35,7 +35,7 @@ intuition.
 subst; auto.
 Admitted.
 
-(* Why obligation from file "why/ref.why", characters 332-945 *)
+(* Why obligation from file "why/ref.why", characters 335-482 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),

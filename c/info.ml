@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.16 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.17 2004-12-02 15:00:25 hubert Exp $ i*)
+
+open Ctypes
 
 type var_info =
     {
@@ -26,6 +28,7 @@ type var_info =
       mutable var_is_static : bool;
       mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
+      mutable var_type : Ctypes.ctype;
     }
 
 let tag_counter = ref 0
@@ -40,6 +43,7 @@ let default_var_info x =
     var_is_static = false;
     var_is_a_formal_param = false;
     enum_constant_value = Int64.zero;
+    var_type = c_void;
   }
 
 let set_assigned v = v.var_is_assigned <- true
@@ -79,6 +83,7 @@ type fun_info =
       mutable function_reads : HeapVarSet.t;
       mutable function_writes : HeapVarSet.t;
       mutable has_assigns : bool;
+      mutable fun_type : Ctypes.ctype;
     }
 
 let default_fun_info x =
@@ -86,7 +91,8 @@ let default_fun_info x =
     fun_unique_name = x;
     function_reads = HeapVarSet.empty;
     function_writes = HeapVarSet.empty; 
-    has_assigns = false
+    has_assigns = false;
+    fun_type = c_void;
   }
 
 
@@ -102,3 +108,13 @@ let set_unique_name e n =
 *)
 	v.var_unique_name <- n
     | Fun_info f -> f.fun_unique_name <- n
+
+let var_type d = 
+  match d with
+    | Var_info v -> v.var_type
+    | Fun_info f -> f.fun_type
+
+let set_var_type d ty = 
+  match d with
+    | Var_info v -> v.var_type <- ty
+    | Fun_info f -> f.fun_type <- ty

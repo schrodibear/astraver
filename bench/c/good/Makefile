@@ -1,7 +1,7 @@
 
 CADUCEUS=../../../bin/caduceus.opt
 CADUCEUSLIB=$(shell pwd)/../../../lib
-EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
+EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v
 
 CFILES=$(shell ls *.c)
 WFILES=$(addprefix why/, $(CFILES:.c=.why))

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.62 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.63 2004-12-02 15:00:24 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -24,49 +24,50 @@ open Info
 open Format
 open Pp
 open Output
+open Ctypes
 
 let interp_type ctype =
   match ctype.ctype_node with
-  | CTvoid -> "unit"
-  | CTenum _ | CTint _ -> "int"
-  | CTfloat(cfloat) -> "real"
-  | CTarray(t,None) -> "pointer"      
-  | CTarray(t,Some e) -> "pointer"
-  | CTpointer(t) -> "pointer"      
-  | CTunion _
-  | CTstruct _ -> "pointer"
-  | CTvar x -> x (* must be a logic type *)
-  | CTfun _ -> unsupported Loc.dummy "first-class functions"
+  | Tvoid -> "unit"
+  | Tenum _ | Tint _ -> "int"
+  | Tfloat(cfloat) -> "real"
+  | Tarray(t,None) -> "pointer"      
+  | Tarray(t,Some e) -> "pointer"
+  | Tpointer(t) -> "pointer"      
+  | Tunion _
+  | Tstruct _ -> "pointer"
+  | Tvar x -> x (* must be a logic type *)
+  | Tfun _ -> unsupported Loc.dummy "first-class functions"
 
 let rec pointer_heap_var ty =
   match ty.ctype_node with
-    | CTvar v -> assert false (* should have been expanded *)
-    | CTvoid -> failwith "void * not supported"
-    | CTint _ -> "int", "int"
-    | CTenum _ -> "int", "int"
-    | CTfloat _ -> "real", "real"
-    | CTarray ({ctype_node = CTstruct _ | CTunion _}, _) 
-    | CTpointer {ctype_node = CTstruct _ | CTunion _} ->
+    | Tvar v -> assert false (* should have been expanded *)
+    | Tvoid -> failwith "void * not supported"
+    | Tint _ -> "int", "int"
+    | Tenum _ -> "int", "int"
+    | Tfloat _ -> "real", "real"
+    | Tarray ({ctype_node = Tstruct _ | Tunion _}, _) 
+    | Tpointer {ctype_node = Tstruct _ | Tunion _} ->
 	"pointer", "pointer"
-    | CTarray (ty,_)
-    | CTpointer ty ->
+    | Tarray (ty,_)
+    | Tpointer ty ->
 	let v,_ = pointer_heap_var ty in
 	(v ^ "P", "pointer")
-    | CTstruct _ 
-    | CTunion _ -> "pointer", "pointer" (* OK? *)
-    | CTfun _ -> assert false (* bad typing ! *)
+    | Tstruct _ 
+    | Tunion _ -> "pointer", "pointer" (* OK? *)
+    | Tfun _ -> assert false (* bad typing ! *)
 
 let memory_type t = ([t],"memory")
 
 let pointer_heap_array_var ty =
   match ty.ctype_node with
-    | CTarray (ty,_)
-    | CTpointer ty ->
+    | Tarray (ty,_)
+    | Tpointer ty ->
 	let v,ty = pointer_heap_var ty in
 	let v = v^"P" in
 	let info = 
 	  match Cenv.add_sym Loc.dummy v 
-	    Cltyping.c_void (Var_info (default_var_info v)) 
+	    Ctypes.c_void (Var_info (default_var_info v)) 
 	  with
 	    | Var_info v -> v
 	    | Fun_info f -> assert false
@@ -89,7 +90,7 @@ let print_heap_vars fmt () =
 
 let alloc = 
   let x = "alloc" in
-  match Cenv.add_sym Loc.dummy x Cltyping.c_void (Var_info (default_var_info x)) 
+  match Cenv.add_sym Loc.dummy x Ctypes.c_void (Var_info (default_var_info x)) 
   with
     | Var_info v -> v
     | Fun_info _ -> assert false
@@ -121,7 +122,7 @@ let union = HeapVarSet.union
 
 let add_var v ty s =
   let tyi =
-    if v.var_is_referenced then Cltyping.c_pointer ty
+    if v.var_is_referenced then Ctypes.c_pointer ty
     else ty
   in
   declare_heap_var v.var_unique_name ([], interp_type tyi);
@@ -310,7 +311,6 @@ let spec sp =
        (List.fold_left
 	  (fun acc l -> ef_union acc (assign_location l)) ef_empty)
        sp.Clogic.assigns)
-
 open Cast
 
 let rec expr e = match e.nexpr_node with
@@ -372,15 +372,15 @@ and assign_expr e = match e.nexpr_node with
 (* effects for [&e] *)
 and address_expr e = match e.nexpr_node with
   | NEvar v -> 
-      begin match e.nexpr_type.ctype_node with
-	| CTstruct _ | CTunion _ -> ef_empty
+      begin match e.nexpr_type.Ctypes.ctype_node with
+	| Tstruct _ | Tunion _ -> ef_empty
 	| _ -> ef_empty (* unsupported "& operator" *)
       end
   | NEstar  e1 ->
       expr e1
   | NEarrow (e1, f) ->
-      begin match e1.nexpr_type.ctype_node with
-	| CTenum _ | CTint _ | CTfloat _ -> expr e1
+      begin match e1.nexpr_type.Ctypes.ctype_node with
+	| Tenum _ | Tint _ | Tfloat _ -> expr e1
 	| _ -> reads_add_field_var f e.nexpr_type (expr e1)
       end
  (* | NEcast (_, e1) ->
@@ -467,8 +467,8 @@ let decl d =
 	id.logic_args <- l
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
-    | Ndecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) 
-      when ty.ctype_storage <> Extern ->
+    | Ndecl({Ctypes.ctype_node = Tstruct _ | Tarray _} as ty, v, _) 
+      when ty.Ctypes.ctype_storage <> Extern ->
 	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
 	let t = { nterm_node = NTvar v; 

@@ -210,36 +210,35 @@ src/util.cmi: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi src/ident.cmi \
 src/vcg.cmi: src/cc.cmi src/ident.cmi src/loc.cmi src/log.cmi src/logic.cmi \
     src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
-c/cast.cmi: c/cconst.cmi c/clogic.cmi c/info.cmi src/loc.cmi 
+c/cast.cmi: c/cconst.cmi c/clogic.cmi c/ctypes.cmi c/info.cmi src/loc.cmi 
 c/cconst.cmi: src/loc.cmi 
 c/ceffect.cmi: c/cast.cmi c/clogic.cmi c/info.cmi src/loc.cmi c/output.cmi 
-c/cenv.cmi: c/cast.cmi c/info.cmi src/loc.cmi 
-c/cerror.cmi: c/cast.cmi 
+c/cenv.cmi: c/ctypes.cmi c/info.cmi src/loc.cmi 
+c/cerror.cmi: c/ctypes.cmi 
 c/cinterp.cmi: c/cast.cmi c/output.cmi 
 c/clogic.cmi: c/info.cmi src/loc.cmi 
 c/clparser.cmi: c/cast.cmi c/clogic.cmi 
 c/cltyping.cmi: c/cast.cmi c/cenv.cmi c/clogic.cmi src/env.cmi 
 c/cnorm.cmi: c/cast.cmi c/info.cmi src/loc.cmi 
 c/cparser.cmi: c/cast.cmi c/clogic.cmi 
-c/creport.cmi: c/cast.cmi c/cerror.cmi src/loc.cmi 
+c/creport.cmi: c/cerror.cmi c/ctypes.cmi src/loc.cmi 
 c/ctyping.cmi: c/cast.cmi 
+c/info.cmi: c/ctypes.cmi 
 c/cconst.cmo: c/creport.cmi c/cconst.cmi 
 c/cconst.cmx: c/creport.cmx c/cconst.cmi 
-c/ceffect.cmo: c/cast.cmi c/cenv.cmi c/clogic.cmi c/cltyping.cmi c/cnorm.cmi \
-    c/coptions.cmi c/creport.cmi c/info.cmi src/loc.cmi c/output.cmi \
-    src/pp.cmi c/ceffect.cmi 
-c/ceffect.cmx: c/cast.cmi c/cenv.cmx c/clogic.cmi c/cltyping.cmx c/cnorm.cmx \
-    c/coptions.cmx c/creport.cmx c/info.cmx src/loc.cmx c/output.cmx \
-    src/pp.cmx c/ceffect.cmi 
-c/cenv.cmo: c/cast.cmi c/clogic.cmi c/creport.cmi c/info.cmi src/lib.cmi \
-    c/cenv.cmi 
-c/cenv.cmx: c/cast.cmi c/clogic.cmi c/creport.cmx c/info.cmx src/lib.cmx \
-    c/cenv.cmi 
+c/ceffect.cmo: c/cast.cmi c/cenv.cmi c/clogic.cmi c/cnorm.cmi c/coptions.cmi \
+    c/creport.cmi c/ctypes.cmi c/info.cmi src/loc.cmi c/output.cmi src/pp.cmi \
+    c/ceffect.cmi 
+c/ceffect.cmx: c/cast.cmi c/cenv.cmx c/clogic.cmi c/cnorm.cmx c/coptions.cmx \
+    c/creport.cmx c/ctypes.cmx c/info.cmx src/loc.cmx c/output.cmx src/pp.cmx \
+    c/ceffect.cmi 
+c/cenv.cmo: c/creport.cmi c/ctypes.cmi c/info.cmi src/lib.cmi c/cenv.cmi 
+c/cenv.cmx: c/creport.cmx c/ctypes.cmx c/info.cmx src/lib.cmx c/cenv.cmi 
 c/cinterp.cmo: c/cast.cmi c/cconst.cmi c/ceffect.cmi c/cenv.cmi c/cerror.cmi \
-    c/clogic.cmi c/cltyping.cmi c/cnorm.cmi c/coptions.cmi c/creport.cmi \
+    c/clogic.cmi c/cnorm.cmi c/coptions.cmi c/creport.cmi c/ctypes.cmi \
     c/info.cmi src/loc.cmi c/output.cmi c/cinterp.cmi 
 c/cinterp.cmx: c/cast.cmi c/cconst.cmx c/ceffect.cmx c/cenv.cmx c/cerror.cmi \
-    c/clogic.cmi c/cltyping.cmx c/cnorm.cmx c/coptions.cmx c/creport.cmx \
+    c/clogic.cmi c/cnorm.cmx c/coptions.cmx c/creport.cmx c/ctypes.cmx \
     c/info.cmx src/loc.cmx c/output.cmx c/cinterp.cmi 
 c/clexer.cmo: c/cast.cmi c/cerror.cmi c/cllexer.cmo c/clogic.cmi \
     c/cparser.cmi c/creport.cmi c/ctypes.cmi src/loc.cmi 
@@ -252,9 +251,9 @@ c/cllexer.cmx: c/cerror.cmi c/clogic.cmi c/clparser.cmx src/compat.cmx \
 c/clparser.cmo: c/cast.cmi c/clogic.cmi c/info.cmi c/clparser.cmi 
 c/clparser.cmx: c/cast.cmi c/clogic.cmi c/info.cmx c/clparser.cmi 
 c/cltyping.cmo: c/cast.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi c/creport.cmi \
-    src/env.cmi c/info.cmi src/loc.cmi c/cltyping.cmi 
+    c/ctypes.cmi src/env.cmi c/info.cmi src/loc.cmi c/cltyping.cmi 
 c/cltyping.cmx: c/cast.cmi c/cenv.cmx c/cerror.cmi c/clogic.cmi c/creport.cmx \
-    src/env.cmx c/info.cmx src/loc.cmx c/cltyping.cmi 
+    c/ctypes.cmx src/env.cmx c/info.cmx src/loc.cmx c/cltyping.cmi 
 c/cmain.cmo: c/ceffect.cmi c/cerror.cmi c/cinterp.cmi c/clexer.cmo \
     c/cmake.cmi c/cnorm.cmi src/compat.cmo c/coptions.cmi c/cpp.cmi \
     c/creport.cmi c/ctyping.cmi src/lib.cmi src/loc.cmi c/output.cmi \
@@ -266,9 +265,11 @@ c/cmain.cmx: c/ceffect.cmx c/cerror.cmi c/cinterp.cmx c/clexer.cmx \
 c/cmake.cmo: c/coptions.cmi src/pp.cmi c/cmake.cmi 
 c/cmake.cmx: c/coptions.cmx src/pp.cmx c/cmake.cmi 
 c/cnorm.cmo: c/cast.cmi c/cconst.cmi c/cenv.cmi c/clogic.cmi c/cltyping.cmi \
-    c/creport.cmi c/info.cmi src/loc.cmi c/cnorm.cmi 
+    c/creport.cmi c/ctypes.cmi c/ctyping.cmi c/info.cmi src/loc.cmi \
+    c/cnorm.cmi 
 c/cnorm.cmx: c/cast.cmi c/cconst.cmx c/cenv.cmx c/clogic.cmi c/cltyping.cmx \
-    c/creport.cmx c/info.cmx src/loc.cmx c/cnorm.cmi 
+    c/creport.cmx c/ctypes.cmx c/ctyping.cmx c/info.cmx src/loc.cmx \
+    c/cnorm.cmi 
 c/coptions.cmo: c/cversion.cmo c/coptions.cmi 
 c/coptions.cmx: c/cversion.cmx c/coptions.cmi 
 c/cparser.cmo: c/cast.cmi c/cerror.cmi c/clogic.cmi c/coptions.cmi \
@@ -277,20 +278,20 @@ c/cparser.cmx: c/cast.cmi c/cerror.cmi c/clogic.cmi c/coptions.cmx \
     c/creport.cmx c/ctypes.cmx src/loc.cmx src/ptree.cmi c/cparser.cmi 
 c/cpp.cmo: c/coptions.cmi src/loc.cmi c/cpp.cmi 
 c/cpp.cmx: c/coptions.cmx src/loc.cmx c/cpp.cmi 
-c/creport.cmo: c/cast.cmi c/cerror.cmi c/coptions.cmi src/loc.cmi \
+c/creport.cmo: c/cerror.cmi c/coptions.cmi c/ctypes.cmi src/loc.cmi \
     c/creport.cmi 
-c/creport.cmx: c/cast.cmi c/cerror.cmi c/coptions.cmx src/loc.cmx \
+c/creport.cmx: c/cerror.cmi c/coptions.cmx c/ctypes.cmx src/loc.cmx \
     c/creport.cmi 
 c/ctypes.cmo: c/coptions.cmi src/lib.cmi c/ctypes.cmi 
 c/ctypes.cmx: c/coptions.cmx src/lib.cmx c/ctypes.cmi 
-c/ctyping.cmo: c/cast.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi c/cltyping.cmi \
-    src/compat.cmo c/coptions.cmi c/creport.cmi src/env.cmi c/info.cmi \
-    src/lib.cmi src/loc.cmi c/ctyping.cmi 
-c/ctyping.cmx: c/cast.cmi c/cenv.cmx c/cerror.cmi c/clogic.cmi c/cltyping.cmx \
-    src/compat.cmx c/coptions.cmx c/creport.cmx src/env.cmx c/info.cmx \
-    src/lib.cmx src/loc.cmx c/ctyping.cmi 
-c/info.cmo: c/info.cmi 
-c/info.cmx: c/info.cmi 
+c/ctyping.cmo: c/cast.cmi c/cconst.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi \
+    c/cltyping.cmi src/compat.cmo c/coptions.cmi c/creport.cmi c/ctypes.cmi \
+    src/env.cmi c/info.cmi src/lib.cmi src/loc.cmi c/ctyping.cmi 
+c/ctyping.cmx: c/cast.cmi c/cconst.cmx c/cenv.cmx c/cerror.cmi c/clogic.cmi \
+    c/cltyping.cmx src/compat.cmx c/coptions.cmx c/creport.cmx c/ctypes.cmx \
+    src/env.cmx c/info.cmx src/lib.cmx src/loc.cmx c/ctyping.cmi 
+c/info.cmo: c/ctypes.cmi c/info.cmi 
+c/info.cmx: c/ctypes.cmx c/info.cmi 
 c/output.cmo: c/creport.cmi src/loc.cmi c/output.cmi 
 c/output.cmx: c/creport.cmx src/loc.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 

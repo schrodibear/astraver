@@ -1,7 +1,10 @@
 
 open Format
+(*
 open Clogic
 open Cast
+*)
+open Ctypes
 open Creport
 open Info
 
@@ -11,32 +14,32 @@ let rec eq_type ty1 ty2 =
   eq_type_node ty1.ctype_node ty2.ctype_node
 
 and eq_type_node tn1 tn2 = match tn1, tn2 with
-  | CTvoid, CTvoid
-  | CTint _, CTint _ 
-  | CTfloat _, CTfloat _ 
-  | CTint _, CTenum _ 
-  | CTenum _, CTint _ ->
+  | Tvoid, Tvoid
+  | Tint _, Tint _ 
+  | Tfloat _, Tfloat _ 
+  | Tint _, Tenum _ 
+  | Tenum _, Tint _ ->
       true
-  | CTvar x1, CTvar x2 ->
+  | Tvar x1, Tvar x2 ->
       x1 = x2
-  | CTarray (ty1, _), CTarray (ty2, _) ->
-      eq_type ty1 ty2 (* TODO: taille? *)
-  | CTpointer ty1, CTpointer ty2 ->
+  | Tarray (ty1,_), Tarray (ty2,_) ->
+      eq_type ty1 ty2 
+  | Tpointer ty1, Tpointer ty2 ->
       eq_type ty1 ty2
-  | CTarray (ty1, _), CTpointer ty2 | CTpointer ty1, CTarray (ty2, _) ->
+  | Tarray (ty1,_), Tpointer ty2 | Tpointer ty1, Tarray (ty2,_) ->
       eq_type ty1 ty2
-  | CTstruct (s1, _), CTstruct (s2, _) ->
+  | Tstruct s1, Tstruct s2 ->
       s1 = s2
-  | CTunion (u1, _), CTunion (u2, _) ->
+  | Tunion u1, Tunion u2 ->
       u1 = u2
-  | CTenum (e1, _), CTenum (e2, _) ->
+  | Tenum e1, Tenum e2 ->
       e1 = e2
-  | CTpointer {ctype_node = CTfun _ as tn1}, (CTfun _ as tn2)
-  | (CTfun _ as tn1), CTpointer {ctype_node = CTfun _ as tn2} ->
+  | Tpointer {ctype_node = Tfun _ as tn1}, (Tfun _ as tn2)
+  | (Tfun _ as tn1), Tpointer {ctype_node = Tfun _ as tn2} ->
       eq_type_node tn1 tn2
-  | CTfun ([], ty1), CTfun (_, ty2) | CTfun (_, ty1), CTfun ([], ty2) ->
+  | Tfun ([], ty1), Tfun (_, ty2) | Tfun (_, ty1), Tfun ([], ty2) ->
       eq_type ty1 ty2
-  | CTfun (pl1, ty1), CTfun (pl2, ty2) ->
+  | Tfun (pl1, ty1), Tfun (pl2, ty2) ->
       eq_type ty1 ty2 &&
       (try List.for_all2 (fun (ty1,_) (ty2,_) -> eq_type ty1 ty2) pl1 pl2
        with Invalid_argument _ -> false)
@@ -46,30 +49,26 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
 (* [sub_type ty1 ty2] is true if type [ty1] can be coerced to type [ty2] *)
 
 let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
-  | CTint _, CTfloat _ -> true
-  | CTpointer { ctype_node = CTvoid }, CTpointer _ -> true
+  | Tint _, Tfloat _ -> true
+  | Tpointer { ctype_node = Tvoid }, Tpointer _ -> true
   | _ -> eq_type ty1 ty2
 
 let compatible_type ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
 
 let arith_type ty = match ty.ctype_node with
-  | CTint _ | CTfloat _ -> true
+  | Tint _ | Tfloat _ -> true
   | _ -> false
 
 let array_type ty = match ty.ctype_node with
-  | CTarray _ -> true
+  | Tarray _ -> true
   | _ -> false
 
 let pointer_type ty = match ty.ctype_node with
-  | CTpointer _ -> true
+  | Tpointer _ -> true
   | _ -> false
 
 let pointer_or_array_type ty = match ty.ctype_node with
-  | CTpointer _ | CTarray _ -> true
-  | _ -> false
-
-let is_null e = match e.texpr_node with
-  | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
+  | Tpointer _ | Tarray _ -> true
   | _ -> false
 
 (*s Global environment *)
@@ -79,12 +78,15 @@ let is_null e = match e.texpr_node with
 type tag_kind = Struct | Union | Enum
 
 let tag_kind = function
-  | CTstruct _ -> Struct
-  | CTunion _ -> Union
-  | CTenum _ -> Enum
+  | Tstruct _ -> Struct
+  | Tunion _ -> Union
+  | Tenum _ -> Enum
   | _ -> assert false
 
-type tag_type_definition = Incomplete | Defined of texpr ctype_node
+type tag_type_definition = 
+  | TTIncomplete
+  | TTStructUnion of ctype_node * (ctype * string) list
+  | TTEnum of ctype_node * (string * int64) list
 
 type tag_type = { 
   tag_kind : tag_kind;
@@ -115,17 +117,17 @@ let create_tag_type k n ty =
 let clash_tag l s1 s2 = 
   let redef t n = error l (sprintf "redeclaration of `%s %s'" t n) in
   match s1, s2 with
-  | CTstruct (n,_), CTstruct _ -> redef "struct" n
-  | CTunion (n,_), CTunion _ -> redef "union" n
-  | CTenum (n,_), CTenum _ -> redef "enum" n
-  | (CTstruct (n,_) | CTunion (n,_) | CTenum (n,_)), 
-    (CTstruct _ | CTunion _ | CTenum _) -> 
+  | Tstruct (n), Tstruct _ -> redef "struct" n
+  | Tunion (n), Tunion _ -> redef "union" n
+  | Tenum (n), Tenum _ -> redef "enum" n
+  | (Tstruct (n) | Tunion (n) | Tenum (n)), 
+    (Tstruct _ | Tunion _ | Tenum _) -> 
       error l (sprintf "`%s' defined as wrong kind of tag" n)
   | _ -> assert false
 
 (* typedefs *)
 
-let typedef_t = (Hashtbl.create 97 : (string, tctype) Hashtbl.t)
+let typedef_t = (Hashtbl.create 97 : (string, 'a) Hashtbl.t)
 
 let is_typedef = Hashtbl.mem typedef_t
 
@@ -155,7 +157,8 @@ let rec next_name ?local_names n i =
 let unique_name ?local_names n = try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
 (* variables and functions *)
-let (sym_t : (string, (texpr ctype * env_info)) Hashtbl.t) = Hashtbl.create 97
+
+let (sym_t : (string, env_info) Hashtbl.t) = Hashtbl.create 97
 
 let is_sym = Hashtbl.mem sym_t
 
@@ -166,17 +169,18 @@ let add_sym l x ty info =
   mark_as_used n; 
   set_unique_name info n;
   if is_sym x then begin
-    let (t,i) = find_sym x in
-    if not (eq_type t ty) then 
+    let d = find_sym x in
+    if not (eq_type (var_type d) ty) then 
       (* TODO accepter fonctions avec arguments si aucun la première fois 
 	 Question de Claude: accepter aussi un raffinement des specs ? *)
       begin
-	eprintf "t : %a, ty : %a@." print_type  t print_type  ty;
+	eprintf "t : %a, ty : %a@." print_type  (var_type d) print_type  ty;
 	error l ("conflicting types for " ^ x);
       end;
-    i
+    d
   end else begin
-    Hashtbl.add sym_t x (ty,info);
+    set_var_type info ty;
+    Hashtbl.add sym_t x info;
     info
   end
 
@@ -184,12 +188,12 @@ let add_sym l x ty info =
 
 let functions = 
   (Hashtbl.create 97 : 
-     (string, tctype list * tctype * Info.logic_info) Hashtbl.t)
+     (string, ctype list * ctype * Info.logic_info) Hashtbl.t)
 let add_fun = Hashtbl.add functions
 let find_fun = Hashtbl.find functions
 
 let predicates = 
-  (Hashtbl.create 97 : (string, tctype list * Info.logic_info) Hashtbl.t) 
+  (Hashtbl.create 97 : (string, ctype list * Info.logic_info) Hashtbl.t) 
 let add_pred = Hashtbl.add predicates
 let find_pred = Hashtbl.find predicates
 
@@ -202,7 +206,7 @@ module Env = struct
   (* [tags] is the stack of blocks; 
      each block maps a tag name to a tag type *)
   type t = { 
-    vars : (texpr ctype * env_info) M.t; 
+    vars : env_info M.t; 
     used_names : Lib.Sset.t;
     tags : (string, tag_type) Hashtbl.t list;
   }
@@ -221,8 +225,9 @@ module Env = struct
   let add x t info env = 
     let n = unique_name ~local_names:env.used_names x in
     set_unique_name info n;
+    set_var_type info t;
     { env with used_names = Lib.Sset.add n env.used_names;
-	vars = M.add x (t,info) env.vars }
+	vars = M.add x info env.vars }
 
   let find x env = M.find x env.vars
 
@@ -238,36 +243,75 @@ module Env = struct
 
   let find_tag_type loc env tyn = 
     let tt = match tyn with
-      | CTstruct (n, Tag) | CTunion (n, Tag) | CTenum (n, Tag) ->
+      | Tstruct (n) | Tunion (n) | Tenum (n) ->
           (try
 	     find_tag n env
 	   with Not_found -> 
-	     let tt = create_tag_type (tag_kind tyn) n Incomplete in
+	     let tt = create_tag_type (tag_kind tyn) n TTIncomplete in
 	     Hashtbl.add (List.hd env.tags) n tt;
 	     tt)
-      | CTstruct (n, _) | CTunion (n, _) | CTenum (n, _) ->
+      | _ ->
+	  assert false
+    in
+    match tt.tag_kind with
+      | Struct -> Tstruct (tt.tag_uname)
+      | Union -> Tunion (tt.tag_uname)
+      | Enum -> Tenum (tt.tag_uname)
+
+  let set_struct_union_type loc env tyn fields = 
+    let tt = match tyn with
+      | Tstruct (n) | Tunion (n) ->
 	   (try
               let tt = Hashtbl.find (List.hd env.tags) n in
 	      begin match tt.tag_type with
-		| Incomplete ->
+		| TTIncomplete ->
                     (* tag already seen in this block but not yet defined *)
-                    tt.tag_type <- Defined tyn
-		| Defined tyn' ->  
+                    tt.tag_type <- TTStructUnion (tyn,fields)
+		| TTStructUnion (tyn',_) | TTEnum (tyn',_) ->  
 		    (* tag [n] already defined in current block *)
 		    clash_tag loc tyn tyn'
 	      end;
 	      tt
 	    with Not_found ->
-	      let tt = create_tag_type (tag_kind tyn) n (Defined tyn) in
+	      let tt = 
+		create_tag_type (tag_kind tyn) n (TTStructUnion (tyn,fields)) 
+	      in
 	      Hashtbl.add (List.hd env.tags) n tt;
 	      tt)
       | _ ->
 	  assert false
     in
     match tt.tag_kind with
-      | Struct -> CTstruct (tt.tag_uname, Tag)
-      | Union -> CTunion (tt.tag_uname, Tag)
-      | Enum -> CTenum (tt.tag_uname, Tag)
+      | Struct -> Tstruct (tt.tag_uname)
+      | Union -> Tunion (tt.tag_uname)
+      | Enum -> assert false
+
+  let set_enum_type loc env tyn fields = 
+    let tt = match tyn with
+      | Tenum (n) ->
+	   (try
+              let tt = Hashtbl.find (List.hd env.tags) n in
+	      begin match tt.tag_type with
+		| TTIncomplete ->
+                    (* tag already seen in this block but not yet defined *)
+                    tt.tag_type <- TTEnum (tyn,fields)
+		| TTStructUnion (tyn',_) | TTEnum (tyn', _) ->  
+		    (* tag [n] already defined in current block *)
+		    clash_tag loc tyn tyn'
+	      end;
+	      tt
+	    with Not_found ->
+	      let tt = 
+		create_tag_type (tag_kind tyn) n (TTEnum (tyn,fields)) 
+	      in
+	      Hashtbl.add (List.hd env.tags) n tt;
+	      tt)
+      | _ ->
+	  assert false
+    in
+    match tt.tag_kind with
+      | Enum -> Tenum (tt.tag_uname)
+      | Struct | Union -> assert false
 
 end
 
@@ -290,30 +334,31 @@ let find_field ~tag:n ~field:x =
     Hashtbl.add fields_t (n,x) f; f
 
 let declare_fields tyn fl = match tyn with
-  | CTstruct (n, _) | CTunion (n, _) ->
-      List.iter (fun (_,x,_) -> ignore (find_field n x)) fl
+  | Tstruct n | Tunion n ->
+      List.iter 
+	(fun (t,x) -> let v = find_field n x in set_var_type (Var_info v) t)
+	fl
   | _ -> 
       assert false
   
 let type_of_field loc x ty = 
   let rec lookup su n = function
     | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")
-    | (ty, y, _) :: _ when x = y -> find_field n x, ty
+    | (ty, y) :: _ when x = y -> find_field n x
     | _ :: fl -> lookup su n fl
   in
   match ty.ctype_node with
-    | CTstruct (n, Tag) | CTunion (n, Tag) -> 
+    | Tstruct (n) | Tunion (n) -> 
         assert (Hashtbl.mem tags_t n);
 	let tt = Hashtbl.find tags_t n in
 	begin match tt.tag_type with
-	  | Incomplete -> error loc ("use of incomplete type")
-	  | Defined (CTstruct (_, Decl fl)) -> lookup "structure" n fl
-	  | Defined (CTunion (_, Decl fl)) -> lookup "union" n fl
-	  | Defined _ ->
+	  | TTIncomplete -> error loc ("use of incomplete type")
+	  | TTStructUnion (Tstruct _, fl) -> lookup "structure" n fl
+	  | TTStructUnion (Tunion _, fl) -> lookup "union" n fl
+	  | TTStructUnion _ | TTEnum _ ->
 	      error loc ("request for member `" ^ x ^ 
 			 "' in something not a structure or union")
 	end
-    | CTstruct _ | CTunion _ -> assert false
     | _ -> error loc ("request for member `" ^ x ^ 
 		      "' in something not a structure or union")
 

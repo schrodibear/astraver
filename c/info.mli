@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.15 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.16 2004-12-02 15:00:25 hubert Exp $ i*)
 
 type var_info = private 
     {
@@ -26,6 +26,7 @@ type var_info = private
       mutable var_is_static : bool;
       mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
+      mutable var_type : Ctypes.ctype;
     }
 
 val default_var_info : string -> var_info
@@ -61,6 +62,7 @@ type fun_info =
       mutable function_reads : HeapVarSet.t;
       mutable function_writes : HeapVarSet.t;
       mutable has_assigns : bool;
+      mutable fun_type : Ctypes.ctype;
     }
 
 val default_fun_info : string -> fun_info
@@ -71,4 +73,6 @@ type env_info =
 
 val set_unique_name : env_info -> string -> unit
 
+val var_type : env_info -> Ctypes.ctype
 
+val set_var_type : env_info -> Ctypes.ctype -> unit

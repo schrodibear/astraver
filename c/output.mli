@@ -14,11 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.11 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.12 2004-12-02 15:00:25 hubert Exp $ i*)
 
 type constant =
-  | Prim_int of int
-  | Prim_float of float
+  | Prim_int of int64
+  | Prim_float of string
   | Prim_bool of bool
 ;;
 
