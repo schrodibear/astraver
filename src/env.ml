@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.12 2002-03-15 13:00:31 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.13 2002-03-27 14:15:11 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -208,6 +208,7 @@ let _ = add_global t_add bin_arith_type None
 let _ = add_global t_sub bin_arith_type None
 let _ = add_global t_mul bin_arith_type None
 let _ = add_global t_div bin_arith_type None
+let _ = add_global t_mod bin_arith_type None
 
 let un_arith_type = 
   Arrow ([x, BindType int], 

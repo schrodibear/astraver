@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.15 2002-03-13 10:48:13 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.16 2002-03-27 14:15:11 filliatr Exp $ i*)
 
 type t = string
 
@@ -81,6 +81,7 @@ let t_add = "%add"
 let t_sub = "%sub"
 let t_mul = "%mul"
 let t_div = "%div"
+let t_mod = "%mod"
 let t_neg = "%neg"
 let t_sqrt = "%sqrt"
 

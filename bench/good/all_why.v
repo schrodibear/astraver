@@ -56,6 +56,18 @@ Proof.
 Auto.
 Save.
 
+Lemma ar6_po_1 : 
+  ~(`1` = `0`).
+Proof.
+Omega.
+Save.
+
+Lemma ar7_po_1 : 
+  ~(`1` = `0`).
+Proof.
+Omega.
+Save.
+
 Lemma arr1_po_1 : 
   `0 <= 0` /\ `0 < 10`.
 Proof. (* arr1_po_1 *)

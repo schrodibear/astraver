@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.23 2002-03-26 14:03:27 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.24 2002-03-27 14:15:11 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -28,27 +28,32 @@ let openz fmt = if !inz == 0 then fprintf fmt "`@["; incr inz
 let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
 
 let print_term fmt t = 
-  let rec print0 = function
+  let rec print0 fmt = function
     | Tapp (id, [a;b]) when is_relation id ->
-	fprintf fmt "(@[<hov 2>Z%s_bool@ " (Ident.string id);
-	print1 a; fprintf fmt "@ "; print1 b; fprintf fmt "@])"
+	fprintf fmt "(@[<hov 2>Z%s_bool@ %a@ %a@])" (Ident.string id)
+	print1 a print1 b
     | t -> 
-	print1 t
-  and print1 = function
+	print1 fmt t
+  and print1 fmt = function
     | Tapp (id, [a;b]) when id == t_add || id == t_sub ->
-	openz fmt; print1 a;
-	fprintf fmt " %s@ " (if id == t_add then "+" else "-");
-	print2 b; closez fmt
+	openz fmt; 
+	fprintf fmt "%a %s@ %a" print1 a (if id == t_add then "+" else "-") 
+	  print2 b; 
+	closez fmt
     | t ->
-	print2 t
-  and print2 = function
-    | Tapp (id, [a;b]) when id == t_mul || id == t_div ->
-	openz fmt; print2 a;
-	fprintf fmt " %s@ " (if id == t_mul then "*" else "/");
-	print3 b; closez fmt
+	print2 fmt t
+  and print2 fmt = function
+    | Tapp (id, [a;b]) when id == t_mul ->
+	openz fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closez fmt
+    | Tapp (id, [a;b]) when id == t_div ->
+	openz fmt; 
+	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b; closez fmt
+    | Tapp (id, [a;b]) when id == t_mod ->
+	openz fmt; 
+	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b; closez fmt
     | t ->
-	print3 t
-  and print3 = function
+	print3 fmt t
+  and print3 fmt = function
     | Tconst (ConstInt n) -> 
 	openz fmt; fprintf fmt "%d" n; closez fmt
     | Tconst (ConstBool b) -> 
@@ -64,22 +69,19 @@ let print_term fmt t =
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 
-	fprintf fmt "%s" (Ident.string id)
+	Ident.print fmt id
     | Tapp (id, [t]) when id == t_neg ->
-	openz fmt; fprintf fmt "-"; print3 t; closez fmt
+	openz fmt; fprintf fmt "-%a" print3 t; closez fmt
     | Tapp (id, l) as t when is_relation id || is_arith id ->
-	fprintf fmt "@[("; print0 t; fprintf fmt ")@]"
+	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) when id == t_zwf_zero -> 
-	openz fmt;
-	fprintf fmt "(@[Zwf 0 "; print_terms tl; fprintf fmt "@])";
-	closez fmt
+	openz fmt; fprintf fmt "(@[Zwf 0 %a@])" print_terms tl; closez fmt
     | Tapp (id, tl) -> 
-	fprintf fmt "(@[%s " (Ident.string id); print_terms tl;
-	fprintf fmt "@])"
-  and print_terms tl =
-    print_list (fun fmt () -> fprintf fmt "@ ") (fun _ t -> print0 t) fmt tl
+	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
+  and print_terms fmt tl =
+    print_list space print0 fmt tl
   in
-  print0 t
+  print0 fmt t
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "Z"
@@ -87,26 +89,24 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "R"
   | PTarray (s, v) -> 
-      fprintf fmt "(array "; print_term fmt s; fprintf fmt " "; 
-      print_pure_type fmt v; fprintf fmt ")"
-  | PTexternal id -> fprintf fmt "%s" (Ident.string id)
+      fprintf fmt "(array %a %a)" print_term s print_pure_type v
+  | PTexternal id -> Ident.print fmt id
 
 let print_predicate fmt p =
-  let rec print0 = function
+  let rec print0 fmt = function
     | Pif (a, b, c) -> 
-	fprintf fmt "(@[if "; print_term fmt a; fprintf fmt "@ then ";
-	print0 b; fprintf fmt "@ else "; print0 c; fprintf fmt "@])"
+	fprintf fmt "(@[if %a@ then %a@ else %a@])"
+	  print_term a print0 b print0 c
     | Pimplies (a, b) -> 
-	fprintf fmt "(@["; print1 a; fprintf fmt " ->@ "; print0 b;
-	fprintf fmt "@])"
-    | p -> print1 p
-  and print1 = function
-    | Por (a, b) -> print1 a; fprintf fmt " \/@ "; print2 b
-    | p -> print2 p
-  and print2 = function
-    | Pand (a, b) -> print2 a; fprintf fmt " /\@ "; print3 b
-    | p -> print3 p
-  and print3 = function
+	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
+    | p -> print1 fmt p
+  and print1 fmt = function
+    | Por (a, b) -> fprintf fmt "%a \/@ %a" print1 a print2 b
+    | p -> print2 fmt p
+  and print2 fmt = function
+    | Pand (a, b) -> fprintf fmt "%a /\@ %a" print2 a print3 b
+    | p -> print3 fmt p
+  and print3 fmt = function
     | Ptrue -> 
 	fprintf fmt "True"
     | Pfalse -> 
@@ -116,35 +116,29 @@ let print_predicate fmt p =
     | Papp (id, [a;b]) when id == t_eq ->
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [t]) when id == well_founded ->
-	fprintf fmt "@[(well_founded ?@ "; print_term fmt t; fprintf fmt ")@]"
+	fprintf fmt "@[(well_founded ?@ %a)@]" print_term t
     | Papp (id, [a;b]) when id == t_neq ->
-	fprintf fmt "~("; 
-	print_term fmt a; fprintf fmt " =@ "; print_term fmt b;
-	fprintf fmt ")"
+	fprintf fmt "~(%a =@ %a)" print_term a print_term b
     | Papp (id, [a;b]) when id == t_zwf_zero ->
-	fprintf fmt "(Zwf `0` "; 
-	print_term fmt a; fprintf fmt " ";
-	print_term fmt b; fprintf fmt ")"
+	fprintf fmt "(Zwf `0` %a %a)" print_term a print_term b
     | Papp (id, [a;b]) when is_comparison id ->
-	openz fmt; print_term fmt a; 
-	fprintf fmt " %s@ " (relation id);
-	print_term fmt b; closez fmt
+	openz fmt; 
+	fprintf fmt "%a %s@ %a" print_term a (relation id) print_term b; 
+	closez fmt
     | Papp (id, l) ->
-	fprintf fmt "(@[%s " (Ident.string id); 
-	print_list (fun fmt () -> fprintf fmt "@ ") print_term fmt l;
-	fprintf fmt "@])"
+	fprintf fmt "(@[%s %a@])" (Ident.string id)
+	  (print_list space print_term) l
     | Pnot p -> 
-	fprintf fmt "~"; print3 p
+	fprintf fmt "~%a" print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = bsubst_in_predicate [n, Tvar id'] p in
-	fprintf fmt "(@[(%s:" (Ident.string id');
-	print_pure_type fmt t; fprintf fmt ")@ ";
-	print0 p'; fprintf fmt "@])"
+	fprintf fmt "(@[(%s:%a) %a@])" (Ident.string id')
+	  print_pure_type t print0 p'
     | p -> 
-	fprintf fmt "("; print0 p; fprintf fmt ")"
+	fprintf fmt "(%a)" print0 p
   in
-  print0 p
+  print0 fmt p
 
 let rec print_cc_type fmt = function
   | TTpure pt -> 
@@ -193,6 +187,8 @@ let print_sequent fmt (hyps,concl) =
   print_seq hyps
 
 let print_proof fmt = function
+  | Lemma (s, []) ->
+      fprintf fmt "%s" s
   | Lemma (s, vl) ->
       fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
   | Reflexivity t ->

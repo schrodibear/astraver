@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.14 2002-03-13 10:48:13 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.15 2002-03-27 14:15:11 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -49,6 +49,7 @@ val t_add : t
 val t_sub : t
 val t_mul : t
 val t_div : t
+val t_mod : t
 val t_neg : t
 val t_sqrt : t
 

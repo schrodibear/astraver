@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.39 2002-03-25 16:06:27 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.40 2002-03-27 14:15:11 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -298,7 +298,7 @@ and is_pure_type_c c =
 (*s Preconditions for partial functions. *)
 
 let partial_pre = function
-  | Tapp (id, [a;b]) when id == t_div ->
+  | Tapp (id, [a;b]) when id == t_div || id == t_mod ->
       let p = neq b (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
   | Tapp (id, [a]) when id == t_sqrt ->
@@ -438,9 +438,9 @@ and typef_desc lab env loc = function
 	     (match t_f.desc with
 	       (* function itself is pure: we collapse terms *)
 		| Expression cf when post t_f = None ->
-		    let pl = (pre t_a) @ (pre t_f) in
-		    let e = Expression (applist cf [ca]) in
-		    coerce e env kapp, (tapp, ef), pl
+		    let e = applist cf [ca] in
+		    let pl = partial_pre e @ pre t_a @ pre t_f in
+		    coerce (Expression e) env kapp, (tapp, ef), pl
 		| _ ->	   
 		    App (t_f, Term t_a, Some kapp), (tapp, ef), [])
          (* argument is complex: we transform into [let v = arg in (f v)] *)
@@ -454,14 +454,15 @@ and typef_desc lab env loc = function
 	     let app_f_v,pl = match t_f.desc with
 	       (* function itself is pure: we collapse terms *)
 	       | Expression cf when post t_f = None ->
-		   Expression (applist cf [Tvar v]), pre t_f
+		   let e = applist cf [Tvar v] in
+		   Expression e, partial_pre e @ pre t_f
                (* function is [let y = ty in E]: we lift this let *)
 	       | LetIn (y, ty, ({ desc = Expression cf } as tf')) 
                  when post tf' = None && post t_f = None ->
-		   let e = Expression (applist cf [Tvar v]) in
+		   let e = applist cf [Tvar v] in
 		   let env'' = Env.add v tx tf'.info.env in
-		   LetIn (y, ty, make_lnode e env'' kapp),
-		   pre tf' @ pre t_f
+		   LetIn (y, ty, make_lnode (Expression e) env'' kapp),
+		   partial_pre e @ pre tf' @ pre t_f
 	       | _ ->
 		   let var_v = make_lnode (Var v) env' (type_c_of_v tx) in
 		   App (t_f, Term var_v, Some kapp), []

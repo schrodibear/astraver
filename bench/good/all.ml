@@ -54,6 +54,7 @@ let ar3 = 1+1
 let ar4 = 1-1
 let ar5 = 1*1
 let ar6 = 1/1
+let ar7 = 1%1
 
 (* assignements *)
 let a1 = v4 := 1

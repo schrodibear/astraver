@@ -3,10 +3,7 @@
 
 parameter x : int ref
 
-parameter foo : int -> int
+let p = (3 / 7) { result = 3 }
 
-parameter N : int
-
-let p = { q(1) } (3 + begin x := 1; !x end) { q(N) }
 
 
