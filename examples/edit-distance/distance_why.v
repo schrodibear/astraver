@@ -39,7 +39,7 @@ Lemma distance_po_2 :
   (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test2: `i1 <= n2`)
   (result1: Z)
   (Post2: (store t0 i1 result1) = (store t0 i1 `n2 - i1`))
@@ -56,14 +56,14 @@ Lemma distance_po_3 :
   (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test2: `i1 <= n2`)
   (t1: (array `n2 + 1` Z))
   (Post2: t1 = (store t0 i1 `n2 - i1`))
   (i2: Z)
   (Post3: i2 = `i1 + 1`)
   `0 <= i2` /\ `i2 <= n2 + 1` /\
-  ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+  ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
   (Zwf `0` `n2 + 1 - i2` `n2 + 1 - i1`).
 Proof.
 Intuition.
@@ -81,12 +81,12 @@ Lemma distance_po_4 :
   (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test2: `i1 <= n2`)
   (i2: Z)
   (t1: (array `n2 + 1` Z))
   (Post20: `0 <= i2` /\ `i2 <= n2 + 1` /\
-           ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+           ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
            (Zwf `0` `n2 + 1 - i2` `n2 + 1 - i1`))
   (Zwf `0` `n2 + 1 - i2` Variant1).
 Proof.
@@ -102,15 +102,15 @@ Lemma distance_po_5 :
   (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test2: `i1 <= n2`)
   (i2: Z)
   (t1: (array `n2 + 1` Z))
   (Post20: `0 <= i2` /\ `i2 <= n2 + 1` /\
-           ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+           ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
            (Zwf `0` `n2 + 1 - i2` `n2 + 1 - i1`))
   `0 <= i2` /\ `i2 <= n2 + 1` /\
-  ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)).
+  ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)).
 Proof.
 Intuition.
 Save.
@@ -123,10 +123,10 @@ Lemma distance_po_6 :
   (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test1: `i1 > n2`)
   `0 <= i1` /\ `i1 <= n2 + 1` /\
-  ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\ `i1 > n2`.
+  ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\ `i1 > n2`.
 Proof.
 Intuition.
 Save.
@@ -136,7 +136,7 @@ Lemma distance_po_7 :
   (i0: Z)
   (Post1: i0 = `0`)
   `0 <= i0` /\ `i0 <= n2 + 1` /\
-  ((j:Z) (`0 <= j` /\ `j < i0` -> (access t j) = `n2 - j`)).
+  ((j:Z) (`0 <= j` /\ `j < i0` -> `(access t j) = n2 - j`)).
 Proof.
 Intuition.
 Omega'.
@@ -148,7 +148,7 @@ Lemma distance_po_8 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -165,7 +165,7 @@ Lemma distance_po_9 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -192,7 +192,7 @@ Lemma distance_po_10 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -226,7 +226,7 @@ Lemma distance_po_11 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -275,7 +275,7 @@ Lemma distance_po_12 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -327,7 +327,7 @@ Lemma distance_po_13 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -380,7 +380,7 @@ Lemma distance_po_14 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -466,7 +466,7 @@ Lemma distance_po_15 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -519,7 +519,7 @@ Lemma distance_po_16 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -609,7 +609,7 @@ Lemma distance_po_17 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -673,7 +673,7 @@ Lemma distance_po_18 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -732,7 +732,7 @@ Lemma distance_po_19 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -794,7 +794,7 @@ Lemma distance_po_20 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -845,7 +845,7 @@ Lemma distance_po_21 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -904,7 +904,7 @@ Lemma distance_po_22 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -956,7 +956,7 @@ Lemma distance_po_23 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -990,7 +990,7 @@ Lemma distance_po_24 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -1025,7 +1025,7 @@ Lemma distance_po_25 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -1054,7 +1054,7 @@ Lemma distance_po_26 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -1082,7 +1082,7 @@ Lemma distance_po_27 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -1107,7 +1107,7 @@ Lemma distance_po_28 :
   (i1: Z)
   (t0: (array `n2 + 1` Z))
   (Post4: `0 <= i1` /\ `i1 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)) /\
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
@@ -1140,22 +1140,22 @@ Definition distance := (* validation *)
       (well_founded_induction Z (Zwf ZERO) (distance_po_1 i0 Post1)
         [Variant1: Z](i1: Z)(t0: (array `n2 + 1` Z))
         (_: Variant1 = `n2 + 1 - i1`)(_: `0 <= i1` /\ `i1 <= n2 + 1` /\
-        ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+        ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
         (sig_3 Z (array `n2 + 1` Z) unit [i2:Z][t1:(array `n2 + 1` Z)]
          [result:unit](`0 <= i2` /\ `i2 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+         ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
          `i2 > n2`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
          (i1: Z)(t0: (array `n2 + 1` Z))(_: Variant2 = `n2 + 1 - i1`)
          (_: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
          (sig_3 Z (array `n2 + 1` Z) unit [i2:Z][t1:(array `n2 + 1` Z)]
           [result:unit](`0 <= i2` /\ `i2 <= n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+          ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
           `i2 > n2`));
          i1: Z; t0: (array `n2 + 1` Z); Pre4: Variant1 = `n2 + 1 - i1`;
          Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
-         ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`))]
+         ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`))]
           let (result0, Bool1) =
             let (result2, Post21) = (Z_le_gt_bool i1 n2) in
             (exist_1 [result3: bool]
@@ -1183,7 +1183,7 @@ Definition distance := (* validation *)
                     tt Post3) in
                   (exist_3 [i3: Z][t2: (array `n2 + 1` Z)][result3: unit]
                   `0 <= i3` /\ `i3 <= n2 + 1` /\
-                  ((j:Z) (`0 <= j` /\ `j < i3` -> (access t2 j) = `n2 - j`)) /\
+                  ((j:Z) (`0 <= j` /\ `j < i3` -> `(access t2 j) = n2 - j`)) /\
                   (Zwf `0` `n2 + 1 - i3` `n2 + 1 - i1`) i2 t1 result2
                   (distance_po_3 i0 Post1 Variant1 i1 t0 Pre4 Pre3 Test2 t1
                   Post2 i2 Post3)) in
@@ -1194,18 +1194,18 @@ Definition distance := (* validation *)
                   t1 Post20)) in
               (exist_3 [i3: Z][t2: (array `n2 + 1` Z)][result2: unit]
               `0 <= i3` /\ `i3 <= n2 + 1` /\
-              ((j:Z) (`0 <= j` /\ `j < i3` -> (access t2 j) = `n2 - j`)) /\
+              ((j:Z) (`0 <= j` /\ `j < i3` -> `(access t2 j) = n2 - j`)) /\
               `i3 > n2` i2 t1 result1 Post4)
           | (right Test1) =>
               let (i2, t1, result1, Post4) = (exist_3 [i2: Z]
                 [t1: (array `n2 + 1` Z)][result1: unit]`0 <= i2` /\
                 `i2 <= n2 + 1` /\
-                ((j:Z) (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+                ((j:Z) (`0 <= j` /\ `j < i2` -> `(access t1 j) = n2 - j`)) /\
                 `i2 > n2` i1 t0 tt
                 (distance_po_6 i0 Post1 Variant1 i1 t0 Pre4 Pre3 Test1)) in
               (exist_3 [i3: Z][t2: (array `n2 + 1` Z)][result2: unit]
               `0 <= i3` /\ `i3 <= n2 + 1` /\
-              ((j:Z) (`0 <= j` /\ `j < i3` -> (access t2 j) = `n2 - j`)) /\
+              ((j:Z) (`0 <= j` /\ `j < i3` -> `(access t2 j) = n2 - j`)) /\
               `i3 > n2` i2 t1 result1 Post4) end) `n2 + 1 - i0` i0 t
         (refl_equal ? `n2 + 1 - i0`) (distance_po_7 t i0 Post1)) in
     let (i2, result1, Post5) =

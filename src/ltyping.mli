@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.mli,v 1.2 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.3 2002-07-08 11:02:32 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -32,5 +32,4 @@ val binders :
 
 (* errors *)
 
-val expected_cmp : Loc.t -> 'a
 val expected_num : Loc.t -> 'a

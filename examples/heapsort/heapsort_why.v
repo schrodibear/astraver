@@ -113,7 +113,7 @@ Lemma heapsort_po_3 :
            ((i:Z) (`k0 <= i` /\ `i <= N - 1` -> (heap t1 `N - 1` i))) /\
            ((i:Z)
             (`0 <= i` /\ `i < k0` \/ `k0 < i` /\ `i < 2 * k0 + 1` \/
-             `N - 1 < i` /\ `i < N` -> (access t1 i) = (access t0 i))) /\
+             `N - 1 < i` /\ `i < N` -> `(access t1 i) = (access t0 i)`)) /\
            ((v:Z) ((inftree t0 `N - 1` v k0) -> (inftree t1 `N - 1` v k0))))
   (k1: Z)
   (Post2: k1 = `k0 - 1`)
@@ -325,7 +325,7 @@ Lemma heapsort_po_12 :
            ((i:Z) (`0 <= i` /\ `i <= k0 - 1` -> (heap t3 `k0 - 1` i))) /\
            ((i:Z)
             (`0 <= i` /\ `i < 0` \/ `0 < i` /\ `i < 2 * 0 + 1` \/
-             `k0 - 1 < i` /\ `i < N` -> (access t3 i) = (access t2 i))) /\
+             `k0 - 1 < i` /\ `i < N` -> `(access t3 i) = (access t2 i)`)) /\
            ((v:Z)
             ((inftree t2 `k0 - 1` v `0`) -> (inftree t3 `k0 - 1` v `0`))))
   (k1: Z)
@@ -584,7 +584,7 @@ Definition heapsort := (* validation *)
                       ((i:Z)
                        (`0 <= i` /\ `i < k0` \/ `k0 < i` /\
                         `i < 2 * k0 + 1` \/ `N - 1 < i` /\ `i < N` ->
-                        (access t2 i) = (access t0 i))) /\
+                        `(access t2 i) = (access t0 i)`)) /\
                       ((v:Z)
                        ((inftree t0 `N - 1` v k0) ->
                         (inftree t2 `N - 1` v k0))) t1
@@ -697,7 +697,7 @@ Definition heapsort := (* validation *)
                       ((i:Z)
                        (`0 <= i` /\ `i < 0` \/ `0 < i` /\ `i < 2 * 0 + 1` \/
                         `k0 - 1 < i` /\ `i < N` ->
-                        (access t4 i) = (access t2 i))) /\
+                        `(access t4 i) = (access t2 i)`)) /\
                       ((v:Z)
                        ((inftree t2 `k0 - 1` v `0`) ->
                         (inftree t4 `k0 - 1` v `0`))) t3

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.19 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.20 2002-07-08 11:02:32 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -243,6 +243,16 @@ let logic_table = ref Idmap.empty
 
 let add_global_logic x t = logic_table := Idmap.add x t !logic_table
 
+let int_array = PTarray (Tvar Ident.implicit, PTint)
+let agl s = add_global_logic (Ident.create s)
+
+let _ = agl "sorted_array" (Predicate [int_array; PTint; PTint])
+let _ = agl "exchange"     (Predicate [int_array; int_array; PTint; PTint])
+let _ = agl "sub_permut"   (Predicate [PTint; PTint; int_array; int_array])
+let _ = agl "permut"       (Predicate [int_array; int_array])
+let _ = agl "array_le"     (Predicate [int_array; PTint; PTint; PTint])
+let _ = agl "array_ge"     (Predicate [int_array; PTint; PTint; PTint])
+
 let is_logic = Idmap.mem
 let find_logic = Idmap.find
 
@@ -260,7 +270,7 @@ let logical_env (m,_,_) =
 		  | TypeV v -> add_logic id v e
 		  | _ -> e) m lenv
   in
-  transl m (let (gm,_,_) = !env in transl gm Idmap.empty)
+  transl m (let (gm,_,_) = !env in transl gm !logic_table)
   
 
 (*s Labels *)

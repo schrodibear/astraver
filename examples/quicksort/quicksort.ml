@@ -16,7 +16,7 @@
 
 let quick_rec =
   let rec quick_rec (t:array N of int)(l,r:int) : unit 
-  { variant r-l for Zwf(-1) } =
+  { variant 1+r-l } =
     { 0 <= l and r < N (*as Pre*) }
     (if l < r then
        let p = (partition t l r) in

@@ -26,6 +26,10 @@ external test_char : a:A -> b:A -> {} bool { if result then a=b else not a=b }
 
 external Zmin : int -> int -> int
 
+logic min_suffix : array A, array A, int, int, int -> prop
+logic word_of_array : array A -> word
+logic min_dist : word, word, int -> prop
+
 (*s The program. *)
 
 let distance =

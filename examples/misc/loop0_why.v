@@ -91,7 +91,7 @@ Lemma p_po_7 :
   (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test1: `x0 <= 0`)
   (Pre2: `x0 >= 0`)
-  x0 = `0`.
+  `x0 = 0`.
 Proof.
 Intros; Omega.
 Save.
@@ -108,10 +108,10 @@ Definition p := (* validation *)
   [x: Z; Pre6: `x >= 0`]
     (well_founded_induction Z (Zwf ZERO) (p_po_1 x Pre6) [Variant1: Z](x0: Z)
       (_: Variant1 = x0)(_: `0 <= x0` /\ `x0 <= x`)
-      (sig_2 Z unit [x1:Z][result:unit](x1 = `0`))
+      (sig_2 Z unit [x1:Z][result:unit](`x1 = 0`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (x0: Z)(_: Variant2 = x0)(_: `0 <= x0` /\ `x0 <= x`)
-       (sig_2 Z unit [x1:Z][result:unit](x1 = `0`)); x0: Z;
+       (sig_2 Z unit [x1:Z][result:unit](`x1 = 0`)); x0: Z;
        Pre5: Variant1 = x0; Pre4: `0 <= x0` /\ `x0 <= x`]
         let (result, Bool1) =
           let (result1, Post4) = (Z_gt_le_bool x0 `0`) in
@@ -135,12 +135,12 @@ Definition p := (* validation *)
                 (p_po_4 x Pre6 Variant1 x0 Pre5 Pre4 Test2 Pre3 x1 Post3) 
                 x1 (refl_equal ? x1)
                 (p_po_5 x Pre6 Variant1 x0 Pre5 Pre4 Test2 Pre3 x1 Post3)) in
-            (exist_2 [x2: Z][result1: unit]x2 = `0` x1 result0 Post6)
+            (exist_2 [x2: Z][result1: unit]`x2 = 0` x1 result0 Post6)
         | (right Test1) =>
             let Pre2 = (p_po_6 x Pre6 Variant1 x0 Pre5 Pre4 Test1) in
             let (x1, result0, Post5) = (exist_2 [x1: Z][result0: unit]
-              x1 = `0` x0 tt
+              `x1 = 0` x0 tt
               (p_po_7 x Pre6 Variant1 x0 Pre5 Pre4 Test1 Pre2)) in
-            (exist_2 [x2: Z][result1: unit]x2 = `0` x1 result0 Post5) end) 
+            (exist_2 [x2: Z][result1: unit]`x2 = 0` x1 result0 Post5) end) 
       x x (refl_equal ? x) (p_po_8 x Pre6)).
 

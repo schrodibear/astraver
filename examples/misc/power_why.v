@@ -116,7 +116,7 @@ Lemma power1_po_2 :
   (n0: Z)
   (y1: Z)
   (Pre3: Variant1 = n0)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (Test3: (Zodd n0))
   (y2: Z)
@@ -124,7 +124,7 @@ Lemma power1_po_2 :
   ((m:Z)
    (m = `m1 * m1` ->
     ((n1:Z)
-     (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\ `n1 >= 0` /\
+     (n1 = (div2 n0) -> `(Zpower x n) = y2 * (Zpower m n1)` /\ `n1 >= 0` /\
       (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
@@ -162,13 +162,13 @@ Lemma power1_po_3 :
   (n0: Z)
   (y1: Z)
   (Pre3: Variant1 = n0)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (Test2: (Zeven n0))
   ((m:Z)
    (m = `m1 * m1` ->
     ((n1:Z)
-     (n1 = (div2 n0) -> (Zpower x n) = `y1 * (Zpower m n1)` /\ `n1 >= 0` /\
+     (n1 = (div2 n0) -> `(Zpower x n) = y1 * (Zpower m n1)` /\ `n1 >= 0` /\
       (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
@@ -200,19 +200,19 @@ Lemma power1_po_4 :
   (n0: Z)
   (y1: Z)
   (Pre3: Variant1 = n0)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (y2: Z)
   (Post10: ((m:Z)
             (m = `m1 * m1` ->
              ((n1:Z)
-              (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\
+              (n1 = (div2 n0) -> `(Zpower x n) = y2 * (Zpower m n1)` /\
                `n1 >= 0` /\ (Zwf `0` n1 n0))))))
   (m2: Z)
   (Post4: m2 = `m1 * m1`)
   (n1: Z)
   (Post5: n1 = (div2 n0))
-  (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ (Zwf `0` n1 n0).
+  `(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ (Zwf `0` n1 n0).
 Proof.
 Intuition.
 Save.
@@ -229,12 +229,12 @@ Lemma power1_po_5 :
   (n0: Z)
   (y1: Z)
   (Pre3: Variant1 = n0)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (m2: Z)
   (n1: Z)
   (y2: Z)
-  (Post7: (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
+  (Post7: `(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
           (Zwf `0` n1 n0))
   (Zwf `0` n1 Variant1).
 Proof.
@@ -253,14 +253,14 @@ Lemma power1_po_6 :
   (n0: Z)
   (y1: Z)
   (Pre3: Variant1 = n0)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (m2: Z)
   (n1: Z)
   (y2: Z)
-  (Post7: (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
+  (Post7: `(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\
           (Zwf `0` n1 n0))
-  (Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0`.
+  `(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0`.
 Proof.
 Intuition.
 Save.
@@ -277,9 +277,9 @@ Lemma power1_po_7 :
   (n0: Z)
   (y1: Z)
   (Pre3: Variant1 = n0)
-  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test1: `n0 <= 0`)
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`.
+  `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`.
 Proof.
 Intuition.
 Save.
@@ -291,7 +291,7 @@ Lemma power1_po_8 :
   (Post1: m0 = x)
   (y0: Z)
   (Post2: y0 = `1`)
-  (Zpower x n) = `y0 * (Zpower m0 n)` /\ `n >= 0`.
+  `(Zpower x n) = y0 * (Zpower m0 n)` /\ `n >= 0`.
 Proof.
 Intros.
 Split; [ Idtac | Omega].
@@ -309,8 +309,8 @@ Lemma power1_po_9 :
   (m1: Z)
   (n0: Z)
   (y1: Z)
-  (Post6: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`)
-  y1 = (Zpower x n).
+  (Post6: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`)
+  `y1 = (Zpower x n)`.
 Proof.
 Intros.
 Intuition.
@@ -333,17 +333,17 @@ Definition power1 := (* validation *)
     let (m1, n0, y1, result1, Post6) =
       (well_founded_induction Z (Zwf ZERO)
         (power1_po_1 n Pre4 m0 Post1 y0 Post2) [Variant1: Z](m1: Z)(n0: Z)
-        (y1: Z)(_: Variant1 = n0)(_: (Zpower x n) = `y1 * (Zpower m1 n0)` /\
+        (y1: Z)(_: Variant1 = n0)(_: `(Zpower x n) = y1 * (Zpower m1 n0)` /\
         `n0 >= 0`)
         (sig_4 Z Z Z unit [m2:Z][n1:Z][y2:Z][result:unit]
-         ((Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ `n1 <= 0`))
+         (`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ `n1 <= 0`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
          (m1: Z)(n0: Z)(y1: Z)(_: Variant2 = n0)
-         (_: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
+         (_: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
          (sig_4 Z Z Z unit [m2:Z][n1:Z][y2:Z][result:unit]
-          ((Zpower x n) = `y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ `n1 <= 0`));
+          (`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0` /\ `n1 <= 0`));
          m1: Z; n0: Z; y1: Z; Pre3: Variant1 = n0;
-         Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`]
+         Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`]
           let (result1, Bool1) =
             let (result3, Post9) = (Z_gt_le_bool n0 `0`) in
             (exist_1 [result4: bool]
@@ -376,7 +376,7 @@ Definition power1 := (* validation *)
                          (m = `m1 * m1` ->
                           ((n1:Z)
                            (n1 = (div2 n0) ->
-                            (Zpower x n) = `y3 * (Zpower m n1)` /\
+                            `(Zpower x n) = y3 * (Zpower m n1)` /\
                             `n1 >= 0` /\ (Zwf `0` n1 n0))))) y2
                         result3
                         (power1_po_2 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0
@@ -387,7 +387,7 @@ Definition power1 := (* validation *)
                            (m = `m1 * m1` ->
                             ((n1:Z)
                              (n1 = (div2 n0) ->
-                              (Zpower x n) = `y1 * (Zpower m n1)` /\
+                              `(Zpower x n) = y1 * (Zpower m n1)` /\
                               `n1 >= 0` /\ (Zwf `0` n1 n0))))) tt
                           (power1_po_3 n Pre4 m0 Post1 y0 Post2 Variant1 m1
                           n0 y1 Pre3 Pre2 Test4 Test2)) in
@@ -396,7 +396,7 @@ Definition power1 := (* validation *)
                          (m = `m1 * m1` ->
                           ((n1:Z)
                            (n1 = (div2 n0) ->
-                            (Zpower x n) = `y2 * (Zpower m n1)` /\
+                            `(Zpower x n) = y2 * (Zpower m n1)` /\
                             `n1 >= 0` /\ (Zwf `0` n1 n0))))) y1
                         result3 Post12) end) in
                   let (m2, result3, Post4) =
@@ -412,7 +412,7 @@ Definition power1 := (* validation *)
                     (exist_2 [n2: Z][result5: unit]n2 = (div2 n0) result4 
                     tt Post5) in
                   (exist_4 [m3: Z][n2: Z][y3: Z][result5: unit]
-                  (Zpower x n) = `y3 * (Zpower m3 n2)` /\ `n2 >= 0` /\
+                  `(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0` /\
                   (Zwf `0` n2 n0) m2 n1 y2 result4
                   (power1_po_4 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0 y1
                   Pre3 Pre2 Test4 y2 Post10 m2 Post4 n1 Post5)) in
@@ -422,18 +422,18 @@ Definition power1 := (* validation *)
                   (power1_po_6 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0 y1
                   Pre3 Pre2 Test4 m2 n1 y2 Post7)) in
               (exist_4 [m3: Z][n2: Z][y3: Z][result3: unit]
-              (Zpower x n) = `y3 * (Zpower m3 n2)` /\ `n2 >= 0` /\
+              `(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0` /\
               `n2 <= 0` m2 n1 y2 result2 Post6)
           | (right Test1) =>
               let (m2, n1, y2, result2, Post6) = (exist_4 [m2: Z][n1: Z]
-                [y2: Z][result2: unit](Zpower x n) = `y2 * (Zpower m2 n1)` /\
+                [y2: Z][result2: unit]`(Zpower x n) = y2 * (Zpower m2 n1)` /\
                 `n1 >= 0` /\ `n1 <= 0` m1 n0 y1 tt
                 (power1_po_7 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0 y1 Pre3
                 Pre2 Test1)) in
               (exist_4 [m3: Z][n2: Z][y3: Z][result3: unit]
-              (Zpower x n) = `y3 * (Zpower m3 n2)` /\ `n2 >= 0` /\
+              `(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0` /\
               `n2 <= 0` m2 n1 y2 result2 Post6) end) n m0 n y0
         (refl_equal ? n) (power1_po_8 n Pre4 m0 Post1 y0 Post2)) in
-    (exist_4 [m2: Z][n1: Z][y2: Z][result2: unit]y2 = (Zpower x n) m1 
-    n0 y1 result1 (power1_po_9 n Pre4 m0 Post1 y0 Post2 m1 n0 y1 Post6)).
+    (exist_4 [m2: Z][n1: Z][y2: Z][result2: unit]`y2 = (Zpower x n)` 
+    m1 n0 y1 result1 (power1_po_9 n Pre4 m0 Post1 y0 Post2 m1 n0 y1 Post6)).
 

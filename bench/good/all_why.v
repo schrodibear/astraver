@@ -16,7 +16,7 @@ Parameter foo : Set.
 
 (*Why*) Parameter f3 :
   (x: Z)(y: Z)(_: `x >= 0`)
-  (sig_2 Z Z [y0:Z][result:Z](y0 = `y + x + result`)).
+  (sig_2 Z Z [y0:Z][result:Z](`y0 = y + x + result`)).
 
 (*Why*) Parameter f4 : (_: unit)unit.
 
@@ -27,7 +27,7 @@ Parameter foo : Set.
 (*Why*) Parameter f7 : (x: foo)foo.
 
 (*Why*) Parameter f8 :
-  (t: (array `10` Z))(sig_1 unit [result:unit]((access t `1`) = `2`)).
+  (t: (array `10` Z))(sig_1 unit [result:unit](`(access t 1) = 2`)).
 
 Lemma p1_po_1 : 
   True.
@@ -84,31 +84,31 @@ Definition p6 := (* validation *)
   (exist_1 [result: Z](True -> ~False) `0` p6_po_1).
 
 Lemma p7_po_1 : 
-  ((x:Z) x = x).
+  ((x:Z) `x = x`).
 Proof.
 Auto.
 Save.
 
 Definition p7 := (* validation *)
-  (exist_1 [result: Z]((x:Z) x = x) `0` p7_po_1).
+  (exist_1 [result: Z]((x:Z) `x = x`) `0` p7_po_1).
 
 Lemma p8_po_1 : 
-  True /\ ((x:Z) x = x).
+  True /\ ((x:Z) `x = x`).
 Proof.
 Auto.
 Save.
 
 Definition p8 := (* validation *)
-  (exist_1 [result: Z]True /\ ((x:Z) x = x) `0` p8_po_1).
+  (exist_1 [result: Z]True /\ ((x:Z) `x = x`) `0` p8_po_1).
 
 Lemma p9_po_1 : 
-  ((x:Z) ((y:Z) (x = y -> x = y))).
+  ((x:Z) ((y:Z) (`x = y` -> `x = y`))).
 Proof.
 Auto.
 Save.
 
 Definition p9 := (* validation *)
-  (exist_1 [result: Z]((x:Z) ((y:Z) (x = y -> x = y))) `0` p9_po_1).
+  (exist_1 [result: Z]((x:Z) ((y:Z) (`x = y` -> `x = y`))) `0` p9_po_1).
 
 Definition acc1 := (* validation *)
   v2.
@@ -431,20 +431,20 @@ Definition arr2 := (* validation *)
 
 Lemma arr3_po_1 : 
   (v4: Z)
-  (Pre2: v4 = `0`)
+  (Pre2: `v4 = 0`)
   `0 <= v4` /\ `v4 < 10`.
 Proof. (* arr3_po_1 *)
 Intros; Omega.
 Save.
 
 Definition arr3 := (* validation *)
-  [v4: Z; v6: (array `10` Z); Pre2: v4 = `0`]
+  [v4: Z; v6: (array `10` Z); Pre2: `v4 = 0`]
     let Pre1 = (arr3_po_1 v4 Pre2) in
     (access v6 v4).
 
 Lemma arr4_po_1 : 
   (v6: (array `10` Z))
-  (Pre3: (access v6 `0`) = `9`)
+  (Pre3: `(access v6 0) = 9`)
   `0 <= 0` /\ `0 < 10`.
 Proof. (* arr4_po_1 *)
 Intros; Omega.
@@ -452,7 +452,7 @@ Save.
 
 Lemma arr4_po_2 : 
   (v6: (array `10` Z))
-  (Pre3: (access v6 `0`) = `9`)
+  (Pre3: `(access v6 0) = 9`)
   (Pre2: `0 <= 0` /\ `0 < 10`)
   `0 <= (access v6 0)` /\ `(access v6 0) < 10`.
 Proof. (* arr4_po_2 *)
@@ -460,7 +460,7 @@ Intros; Omega.
 Save.
 
 Definition arr4 := (* validation *)
-  [v6: (array `10` Z); Pre3: (access v6 `0`) = `9`]
+  [v6: (array `10` Z); Pre3: `(access v6 0) = 9`]
     let Pre2 = (arr4_po_1 v6 Pre3) in
     let Pre1 = (arr4_po_2 v6 Pre3 Pre2) in
     (access v6 (access v6 `0`)).
@@ -503,7 +503,7 @@ Definition arr6 := (* validation *)
 
 Lemma arr7_po_1 : 
   (v6: (array `10` Z))
-  (Pre3: (access v6 `0`) = `9`)
+  (Pre3: `(access v6 0) = 9`)
   `0 <= 0` /\ `0 < 10`.
 Proof. (* arr7_po_1 *)
 Intros; Omega.
@@ -511,7 +511,7 @@ Save.
 
 Lemma arr7_po_2 : 
   (v6: (array `10` Z))
-  (Pre3: (access v6 `0`) = `9`)
+  (Pre3: `(access v6 0) = 9`)
   (Pre2: `0 <= 0` /\ `0 < 10`)
   (result: Z)
   (Post1: (store v6 (access v6 `0`) result) = (store v6 (access v6 `0`) `1`))
@@ -521,7 +521,7 @@ Intros; Omega.
 Save.
 
 Definition arr7 := (* validation *)
-  [v6: (array `10` Z); Pre3: (access v6 `0`) = `9`]
+  [v6: (array `10` Z); Pre3: `(access v6 0) = 9`]
     let Pre2 = (arr7_po_1 v6 Pre3) in
     let (result, Post1) = (exist_1 [result: Z]
       (store v6 (access v6 `0`) result) = (store v6 (access v6 `0`) `1`) 
@@ -554,13 +554,13 @@ Definition fc3 := (* validation *)
     let (b0, result1, Post3) =
       let Pre1 = (fc3_po_1 result Post1 result0 Post2) in
       let (b0, r, Post4) = (f3 result result0 Pre1) in
-      (exist_2 [b1: Z][result2: Z]b1 = `result0 + result + result2` b0 
+      (exist_2 [b1: Z][result2: Z]`b1 = result0 + result + result2` b0 
       r Post4) in
     result1 in
   result0.
 
 Definition an1 := (* validation *)
-  (exist_1 [result: Z]result = `0` `0` (refl_equal ? `0`)).
+  (exist_1 [result: Z]`result = 0` `0` (refl_equal ? `0`)).
 
 Lemma an2_po_1 : 
   (v4: Z)

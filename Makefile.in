@@ -270,6 +270,6 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
 	$(COQDEP) -I lib/coq */*/*.v >> .depend
-	make -C examples depend
+#	make -C examples depend
 
 include .depend

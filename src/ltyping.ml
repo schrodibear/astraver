@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.2 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.3 2002-07-08 11:02:32 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -12,9 +12,6 @@ open Ptree
 open Misc
 open Util
 open Env
-
-let expected_cmp loc =
-  Error.expected_type loc (fun fmt -> fprintf fmt "unit, bool, int or float")
 
 let expected_num loc =
   Error.expected_type loc (fun fmt -> fprintf fmt "int or float")
@@ -44,6 +41,8 @@ let other_cmp = function
   | PTbool, PPneq -> t_neq_bool
   | PTunit, PPeq -> t_eq_unit
   | PTunit, PPneq -> t_neq_unit
+  | _, PPeq -> t_eq
+  | _, PPneq -> t_neq
   | _ -> assert false
 
 let make_comparison loc = function
@@ -51,11 +50,10 @@ let make_comparison loc = function
       Papp (int_cmp r, [a; b])
   | (a,PTfloat), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTfloat) ->
       Papp (float_cmp r, [a; b])
-  | (a,(PTbool|PTunit as ta)), (PPeq | PPneq as r), (b,(PTbool|PTunit as tb))
-    when ta = tb ->
+  | (a,ta), (PPeq | PPneq as r), (b,tb) when ta = tb ->
       Papp (other_cmp (ta,r), [a; b])
-  | _ ->
-      expected_cmp loc
+  | _, _, (_,tb) ->
+      Error.expected_type loc (fun f -> Util.print_pure_type f tb)
 
 let int_arith = function
   | PPadd -> t_add_int
@@ -190,11 +188,15 @@ and type_tapp loc lenv x tl =
     | _ -> Error.app_of_non_function loc
 
 and check_type_args loc at tl =
+  let illtyped a b = match a, b with
+    | PTarray (_, a), PTarray (_, b) -> a <> b
+    | _ -> a <> b
+  in
   let rec check_arg = function
     | [], [] -> 
 	()
     | a :: al, (tb,b) :: bl ->
-	if a <> b then
+	if illtyped a b then
 	  Error.term_expected_type loc 
 	    (fun f -> print_term f tb) (fun f -> print_pure_type f a); 
 	check_arg (al, bl)

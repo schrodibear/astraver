@@ -10,7 +10,7 @@ Lemma swap1_po_1 :
   (Post2: x0 = y)
   (y0: Z)
   (Post3: y0 = t)
-  x0 = y /\ y0 = x.
+  `x0 = y` /\ `y0 = x`.
 Proof.
 Intuition.
 Save.
@@ -27,10 +27,10 @@ Definition swap1 := (* validation *)
         let (result0, Post3) = (exist_1 [result0: Z]result0 = t t
           (refl_equal ? t)) in
         (exist_2 [y1: Z][result1: unit]y1 = t result0 tt Post3) in
-      (exist_3 [x1: Z][y1: Z][result1: unit]x1 = y /\ y1 = x x0 y0 result0
-      (swap1_po_1 x y t Post1 x0 Post2 y0 Post3)) in
-    (exist_3 [x1: Z][y1: Z][result0: unit]x1 = y /\ y1 = x x0 y0 result
-    Post4).
+      (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 y0
+      result0 (swap1_po_1 x y t Post1 x0 Post2 y0 Post3)) in
+    (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
+    result Post4).
 
 Lemma swap2_po_1 : 
   (x: Z)
@@ -41,7 +41,7 @@ Lemma swap2_po_1 :
   (Post2: x0 = y)
   (y0: Z)
   (Post3: y0 = t)
-  x0 = y /\ y0 = x.
+  `x0 = y` /\ `y0 = x`.
 Proof.
 Intuition.
 Save.
@@ -59,12 +59,12 @@ Definition swap2 := (* validation *)
           let (result0, Post3) = (exist_1 [result0: Z]result0 = t t
             (refl_equal ? t)) in
           (exist_2 [y1: Z][result1: unit]y1 = t result0 tt Post3) in
-        (exist_3 [x1: Z][y1: Z][result1: unit]x1 = y /\ y1 = x x0 y0 
-        result0 (swap2_po_1 x y t Post1 x0 Post2 y0 Post3)) in
-      (exist_3 [x1: Z][y1: Z][result0: unit]x1 = y /\ y1 = x x0 y0 result
-      Post5) in
-    (exist_3 [x1: Z][y1: Z][result0: unit]x1 = y /\ y1 = x x0 y0 result
-    Post4).
+        (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 
+        y0 result0 (swap2_po_1 x y t Post1 x0 Post2 y0 Post3)) in
+      (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
+      result Post5) in
+    (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
+    result Post4).
 
 Lemma swap3_po_1 : 
   (a: Z)
@@ -75,7 +75,7 @@ Lemma swap3_po_1 :
   (Post2: a0 = b)
   (b0: Z)
   (Post3: b0 = t)
-  a0 = b /\ b0 = a.
+  `a0 = b` /\ `b0 = a`.
 Proof.
 Intuition.
 Save.
@@ -92,10 +92,10 @@ Definition swap3 := (* validation *)
         let (result0, Post3) = (exist_1 [result0: Z]result0 = t t
           (refl_equal ? t)) in
         (exist_2 [b1: Z][result1: unit]b1 = t result0 tt Post3) in
-      (exist_3 [a1: Z][b1: Z][result1: unit]a1 = b /\ b1 = a a0 b0 result0
-      (swap3_po_1 a b t Post1 a0 Post2 b0 Post3)) in
-    (exist_3 [a1: Z][b1: Z][result0: unit]a1 = b /\ b1 = a a0 b0 result
-    Post4).
+      (exist_3 [a1: Z][b1: Z][result1: unit]`a1 = b` /\ `b1 = a` a0 b0
+      result0 (swap3_po_1 a b t Post1 a0 Post2 b0 Post3)) in
+    (exist_3 [a1: Z][b1: Z][result0: unit]`a1 = b` /\ `b1 = a` a0 b0 
+    result Post4).
 
 Lemma test_swap3_po_1 : 
   (result: Z)
@@ -104,8 +104,8 @@ Lemma test_swap3_po_1 :
   (Post2: result0 = `2`)
   (c0: Z)
   (d0: Z)
-  (Post4: c0 = result0 /\ d0 = result)
-  d0 = `1`.
+  (Post4: `c0 = result0` /\ `d0 = result`)
+  `d0 = 1`.
 Proof. (* test_swap3_po_1 *)
 Intuition.
 Save.
@@ -118,7 +118,7 @@ Definition test_swap3 := (* validation *)
       (refl_equal ? `2`)) in
     let (c0, d0, result1, Post3) =
       let (c0, d0, result2, Post4) = (swap3 result result0) in
-      (exist_3 [c1: Z][d1: Z][result3: unit]d1 = `1` c0 d0 result2
+      (exist_3 [c1: Z][d1: Z][result3: unit]`d1 = 1` c0 d0 result2
       (test_swap3_po_1 result Post1 result0 Post2 c0 d0 Post4)) in
     (Build_tuple_2 c0 result1) in
   result0.
@@ -126,16 +126,16 @@ Definition test_swap3 := (* validation *)
 Definition call_swap3_x_y := (* validation *)
   [x: Z; y: Z]
     let (x0, y0, result0, Post1) = (swap3 x y) in
-    (exist_3 [x1: Z][y1: Z][result1: unit]x1 = y /\ y1 = x x0 y0 result0
-    Post1).
+    (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 y0 
+    result0 Post1).
 
 Lemma call_swap3_y_x_po_1 : 
   (x: Z)
   (y: Z)
   (y0: Z)
   (x0: Z)
-  (Post1: y0 = x /\ x0 = y)
-  x0 = y /\ y0 = x.
+  (Post1: `y0 = x` /\ `x0 = y`)
+  `x0 = y` /\ `y0 = x`.
 Proof. (* call_swap3_y_x_po_1 *)
 Intuition.
 Save.
@@ -143,8 +143,8 @@ Save.
 Definition call_swap3_y_x := (* validation *)
   [x: Z; y: Z]
     let (y0, x0, result0, Post1) = (swap3 y x) in
-    (exist_3 [x1: Z][y1: Z][result1: unit]x1 = y /\ y1 = x x0 y0 result0
-    (call_swap3_y_x_po_1 x y y0 x0 Post1)).
+    (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 y0 
+    result0 (call_swap3_y_x_po_1 x y y0 x0 Post1)).
 
 Lemma swap4_po_1 : 
   (a: Z)
@@ -155,7 +155,7 @@ Lemma swap4_po_1 :
   (Post2: a0 = b)
   (b0: Z)
   (Post3: b0 = tmp0)
-  a0 = b /\ b0 = a.
+  `a0 = b` /\ `b0 = a`.
 Proof.
 Intuition.
 Save.
@@ -174,8 +174,8 @@ Definition swap4 := (* validation *)
       let (result1, Post3) = (exist_1 [result1: Z]result1 = tmp0 tmp0
         (refl_equal ? tmp0)) in
       (exist_2 [b1: Z][result2: unit]b1 = tmp0 result1 tt Post3) in
-    (exist_4 [a1: Z][b1: Z][tmp1: Z][result2: unit]a1 = b /\ b1 = a a0 
-    b0 tmp0 result1 (swap4_po_1 a b tmp0 Post1 a0 Post2 b0 Post3)).
+    (exist_4 [a1: Z][b1: Z][tmp1: Z][result2: unit]`a1 = b` /\ `b1 = a` 
+    a0 b0 tmp0 result1 (swap4_po_1 a b tmp0 Post1 a0 Post2 b0 Post3)).
 
 Lemma test_swap4_po_1 : 
   (result: Z)
@@ -184,8 +184,8 @@ Lemma test_swap4_po_1 :
   (Post2: result0 = `2`)
   (c0: Z)
   (d0: Z)
-  (Post4: c0 = result0 /\ d0 = result)
-  d0 = `1`.
+  (Post4: `c0 = result0` /\ `d0 = result`)
+  `d0 = 1`.
 Proof. (* test_swap4_po_1 *)
 Intuition.
 Save.
@@ -199,7 +199,7 @@ Definition test_swap4 := (* validation *)
         (refl_equal ? `2`)) in
       let (c0, d0, tmp0, result1, Post3) =
         let (c0, d0, tmp0, result2, Post4) = (swap4 result result0 tmp) in
-        (exist_4 [c1: Z][d1: Z][tmp1: Z][result3: unit]d1 = `1` c0 d0 
+        (exist_4 [c1: Z][d1: Z][tmp1: Z][result3: unit]`d1 = 1` c0 d0 
         tmp0 result2
         (test_swap4_po_1 result Post1 result0 Post2 c0 d0 Post4)) in
       (Build_tuple_3 c0 tmp0 result1) in
@@ -208,36 +208,36 @@ Definition test_swap4 := (* validation *)
 Lemma call_swap4_x_y_po_1 : 
   (x: Z)
   (y: Z)
-  (Pre1: x = `3`)
+  (Pre1: `x = 3`)
   (x0: Z)
   (y0: Z)
-  (Post1: x0 = y /\ y0 = x)
-  y0 = `3`.
+  (Post1: `x0 = y` /\ `y0 = x`)
+  `y0 = 3`.
 Proof.
 Intuition.
 Save.
 
 Definition call_swap4_x_y := (* validation *)
-  [tmp: Z; x: Z; y: Z; Pre1: x = `3`]
+  [tmp: Z; x: Z; y: Z; Pre1: `x = 3`]
     let (x0, y0, tmp0, result0, Post1) = (swap4 x y tmp) in
-    (exist_4 [tmp1: Z][x1: Z][y1: Z][result1: unit]y1 = `3` tmp0 x0 y0
+    (exist_4 [tmp1: Z][x1: Z][y1: Z][result1: unit]`y1 = 3` tmp0 x0 y0
     result0 (call_swap4_x_y_po_1 x y Pre1 x0 y0 Post1)).
 
 Lemma call_swap4_y_x_po_1 : 
   (x: Z)
   (y: Z)
-  (Pre1: x = `3`)
+  (Pre1: `x = 3`)
   (y0: Z)
   (x0: Z)
-  (Post1: y0 = x /\ x0 = y)
-  y0 = `3`.
+  (Post1: `y0 = x` /\ `x0 = y`)
+  `y0 = 3`.
 Proof.
 Intuition.
 Save.
 
 Definition call_swap4_y_x := (* validation *)
-  [tmp: Z; x: Z; y: Z; Pre1: x = `3`]
+  [tmp: Z; x: Z; y: Z; Pre1: `x = 3`]
     let (y0, x0, tmp0, result0, Post1) = (swap4 y x tmp) in
-    (exist_4 [tmp1: Z][x1: Z][y1: Z][result1: unit]y1 = `3` tmp0 x0 y0
+    (exist_4 [tmp1: Z][x1: Z][y1: Z][result1: unit]`y1 = 3` tmp0 x0 y0
     result0 (call_swap4_y_x_po_1 x y Pre1 y0 x0 Post1)).
 

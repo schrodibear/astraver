@@ -27,6 +27,9 @@ parameter x,y,e : int ref
     The invariant relates [x], [y] and [e] and
     gives lower and upper bound for [e] (see the Coq file). *)
 
+logic best : int, int -> prop
+logic invariant : int, int, int -> prop
+
 let bresenham =
   begin
     x := 0;

@@ -3,6 +3,8 @@
 
 parameter x : int ref
 
+logic q : int -> prop
+
 (* basic stuff: assignment, sequence and local variables *)
 
 let p1 = { q(x+1) } begin x := !x + 1 end { q(x) }

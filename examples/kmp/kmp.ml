@@ -20,6 +20,10 @@ parameter p : array M of A
 
 parameter next : array M of int
 
+logic match : array A, int, array A, int, int -> prop
+logic Next : array A, int, int -> prop
+logic pairZ : int,int -> prodZZ
+
 let initnext =
   fun (u:unit) ->
    (let i = ref 1 in
@@ -31,7 +35,7 @@ let initnext =
             and match(p, i-j, p, 0, j)
   	    and (forall z:int. j+1 < z < i+1 -> not match(p, i+1-z, p, 0, z))
             and (forall k:int. 0 < k <= i -> Next(p, k, next[k]))     as Inv
-          variant pairZ(M-i, j) : prodZZ for lexZ }
+          variant pairZ(M-i, j) for lexZ }
         if (A_eq_bool p[!i] p[!j]) then begin
           i := !i+1; j := !j+1; next[!i] := !j
         end else
@@ -50,6 +54,8 @@ parameter N : int
 
 parameter a : array N of A
 
+logic first_occur : array A, array A, int -> prop
+
 let kmp =
  (let i = ref 0 in
   let j = ref 0 in
@@ -59,7 +65,7 @@ let kmp =
       { invariant 0 <= j <= M and j <= i <= N
            and match(a, i-j, p, 0, j)
            and forall k:int. 0 <= k < i-j -> not match(a, k, p, 0, M) as Inv
-        variant pairZ(N-i, j) : prodZZ for lexZ }
+        variant pairZ(N-i, j) for lexZ }
       if (A_eq_bool a[!i] p[!j]) then begin
         i := !i+1; j := !j+1
       end else

@@ -23,6 +23,8 @@ let swap =
 
 (* partition *)
 
+logic partition_p : array int, int, int, int -> prop
+
 let partition =
   fun (t:array N of int)(l,r:int) ->
     { 0 <= l < r and r < N }
@@ -36,7 +38,7 @@ let partition =
 		 and array_ge(t, j+1, r, pv)
 		 and sub_permut(l, r, t, t@init)
                  and t[l]=t@init[l] as Inv
-          variant j-i for Zwf(-N-2) }
+          variant N+2+j-i }
         label L;
 	while t[!i] <= pv && !i < !j do
       	  { invariant i@L <= i <= r and array_le(t, l+1, i-1, pv) as Invi

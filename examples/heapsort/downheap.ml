@@ -1,9 +1,13 @@
 
 (* The recursive function downheap *)
 
+logic select_son : array int, int, int, int -> prop
+logic inftree : array int, int, int, int -> prop
+logic heap : array int, int, int -> prop 
+
 let downheap = 
   let rec downheap (N:int)(t:array N of int)(k,n:int) : unit { variant n-k } =
-  {    0 <= k <= n and n < N
+  {     0 <= k <= n and n < N
     and forall i:int. k+1 <= i <= n -> heap(t, n, i) }
   (let j = 2*k+1 in
    if j <= n then

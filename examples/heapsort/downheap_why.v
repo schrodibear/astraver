@@ -385,20 +385,46 @@ Lemma downheap_po_12 :
   (Test7: `(access t0 k) < (access t0 j')`)
   (t1: (array N Z))
   (Post21: (exchange t1 t0 k j'))
+  (Pre8: `0 <= j'` /\ `j' <= n` /\ `n < N` /\
+         ((i:Z) (`j' + 1 <= i` /\ `i <= n` -> (heap t1 n i))))
+  `0 <= j'` /\ `j' <= n` /\ `n < N` /\
+  ((i:Z) (`j' + 1 <= i` /\ `i <= n` -> (heap t1 n i))).
+Proof.
+Intuition.
+Save.
+
+Lemma downheap_po_13 : 
+  (Variant1: Z)
+  (N: Z)
+  (k: Z)
+  (n: Z)
+  (t0: (array N Z))
+  (Pre10: Variant1 = `n - k`)
+  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+         ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
+  (j: Z)
+  (Post1: j = `2 * k + 1`)
+  (Test8: `j <= n`)
+  (j': Z)
+  (Post10: (select_son t0 k n j'))
+  (Test7: `(access t0 k) < (access t0 j')`)
+  (t1: (array N Z))
+  (Post21: (exchange t1 t0 k j'))
   (t2: (array N Z))
   (Post23: (permut t2 t1) /\
            ((i:Z) (`j' <= i` /\ `i <= n` -> (heap t2 n i))) /\
            ((i:Z)
             (`0 <= i` /\ `i < j'` \/ `j' < i` /\ `i < 2 * j' + 1` \/
-             `n < i` /\ `i < N` -> (access t2 i) = (access t1 i))) /\
+             `n < i` /\ `i < N` -> `(access t2 i) = (access t1 i)`)) /\
            ((v:Z) ((inftree t1 n v j') -> (inftree t2 n v j'))))
   (permut t2 t0) /\ ((i:Z) (`k <= i` /\ `i <= n` -> (heap t2 n i))) /\
   ((i:Z)
    (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/ `n < i` /\
-    `i < N` -> (access t2 i) = (access t0 i))) /\
+    `i < N` -> `(access t2 i) = (access t0 i)`)) /\
   ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))).
 Proof.
 Intuition.
+
 (* permut *)
 Apply permut_trans with t' := t1.
 Intuition. Apply exchange_is_permut with i:=k j:=j'; Assumption.
@@ -461,7 +487,7 @@ Elim Post10; Intros; Omega'.
     Assumption. Omega'. Omega'.
 Save.
 
-Lemma downheap_po_13 : 
+Lemma downheap_po_14 : 
   (Variant1: Z)
   (N: Z)
   (k: Z)
@@ -479,7 +505,7 @@ Lemma downheap_po_13 :
   (permut t0 t0) /\ ((i:Z) (`k <= i` /\ `i <= n` -> (heap t0 n i))) /\
   ((i:Z)
    (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/ `n < i` /\
-    `i < N` -> (access t0 i) = (access t0 i))) /\
+    `i < N` -> `(access t0 i) = (access t0 i)`)) /\
   ((v:Z) ((inftree t0 n v k) -> (inftree t0 n v k))).
 Proof.
 Intuition.
@@ -497,7 +523,7 @@ Omega'. Rewrite <- H6. Assumption.
 Intro. Apply H3; Omega'.
 Save.
 
-Lemma downheap_po_14 : 
+Lemma downheap_po_15 : 
   (Variant1: Z)
   (N: Z)
   (k: Z)
@@ -512,7 +538,7 @@ Lemma downheap_po_14 :
   (permut t0 t0) /\ ((i:Z) (`k <= i` /\ `i <= n` -> (heap t0 n i))) /\
   ((i:Z)
    (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/ `n < i` /\
-    `i < N` -> (access t0 i) = (access t0 i))) /\
+    `i < N` -> `(access t0 i) = (access t0 i)`)) /\
   ((v:Z) ((inftree t0 n v k) -> (inftree t0 n v k))).
 Proof.
 Intuition.
@@ -539,7 +565,7 @@ Definition downheap := (* validation *)
        ((i:Z) (`k <= i` /\ `i <= n` -> (heap t1 n i))) /\
        ((i:Z)
         (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/ `n < i` /\
-         `i < N` -> (access t1 i) = (access t0 i))) /\
+         `i < N` -> `(access t1 i) = (access t0 i)`)) /\
        ((v:Z) ((inftree t0 n v k) -> (inftree t1 n v k)))))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (N: Z)(k: Z)(n: Z)(t0: (array N Z))(_: Variant2 = `n - k`)
@@ -549,7 +575,7 @@ Definition downheap := (* validation *)
         ((permut t1 t0) /\ ((i:Z) (`k <= i` /\ `i <= n` -> (heap t1 n i))) /\
         ((i:Z)
          (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/ `n < i` /\
-          `i < N` -> (access t1 i) = (access t0 i))) /\
+          `i < N` -> `(access t1 i) = (access t0 i)`)) /\
         ((v:Z) ((inftree t0 n v k) -> (inftree t1 n v k)))));
        N: Z; k: Z; n: Z; t0: (array N Z); Pre10: Variant1 = `n - k`;
        Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
@@ -662,14 +688,16 @@ Definition downheap := (* validation *)
                             ((wf1 `n - j'`)
                               (downheap_po_11 Variant1 N k n t0 Pre10 Pre9 j
                               Post1 Test8 j' Post10 Test7 t1 Post21 Pre8) 
-                              N j' n t1 (refl_equal ? `n - j'`) Pre8) in
+                              N j' n t1 (refl_equal ? `n - j'`)
+                              (downheap_po_12 Variant1 N k n t0 Pre10 Pre9 j
+                              Post1 Test8 j' Post10 Test7 t1 Post21 Pre8)) in
                           (exist_2 [t3: (array N Z)][result5: unit]
                           (permut t3 t1) /\
                           ((i:Z) (`j' <= i` /\ `i <= n` -> (heap t3 n i))) /\
                           ((i:Z)
                            (`0 <= i` /\ `i < j'` \/ `j' < i` /\
                             `i < 2 * j' + 1` \/ `n < i` /\ `i < N` ->
-                            (access t3 i) = (access t1 i))) /\
+                            `(access t3 i) = (access t1 i)`)) /\
                           ((v:Z) ((inftree t1 n v j') -> (inftree t3 n v j'))) 
                           t2 result4 Post24) in
                         (exist_2 [t3: (array N Z)][result3: unit]
@@ -678,17 +706,17 @@ Definition downheap := (* validation *)
                         ((i:Z)
                          (`0 <= i` /\ `i < k` \/ `k < i` /\
                           `i < 2 * k + 1` \/ `n < i` /\ `i < N` ->
-                          (access t3 i) = (access t0 i))) /\
+                          `(access t3 i) = (access t0 i)`)) /\
                         ((v:Z) ((inftree t0 n v k) -> (inftree t3 n v k))) 
                         t2 result2
-                        (downheap_po_12 Variant1 N k n t0 Pre10 Pre9 j Post1
+                        (downheap_po_13 Variant1 N k n t0 Pre10 Pre9 j Post1
                         Test8 j' Post10 Test7 t1 Post21 t2 Post23)) in
                       (exist_2 [t2: (array N Z)][result2: unit]
                       (permut t2 t0) /\
                       ((i:Z) (`k <= i` /\ `i <= n` -> (heap t2 n i))) /\
                       ((i:Z)
                        (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/
-                        `n < i` /\ `i < N` -> (access t2 i) = (access t0 i))) /\
+                        `n < i` /\ `i < N` -> `(access t2 i) = (access t0 i)`)) /\
                       ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))) 
                       t1 result1 Post20)
                   | (right Test6) =>
@@ -698,31 +726,31 @@ Definition downheap := (* validation *)
                         ((i:Z)
                          (`0 <= i` /\ `i < k` \/ `k < i` /\
                           `i < 2 * k + 1` \/ `n < i` /\ `i < N` ->
-                          (access t0 i) = (access t0 i))) /\
+                          `(access t0 i) = (access t0 i)`)) /\
                         ((v:Z) ((inftree t0 n v k) -> (inftree t0 n v k))) 
                         tt
-                        (downheap_po_13 Variant1 N k n t0 Pre10 Pre9 j Post1
+                        (downheap_po_14 Variant1 N k n t0 Pre10 Pre9 j Post1
                         Test8 j' Post10 Test6)) in
                       (exist_2 [t1: (array N Z)][result2: unit]
                       (permut t1 t0) /\
                       ((i:Z) (`k <= i` /\ `i <= n` -> (heap t1 n i))) /\
                       ((i:Z)
                        (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/
-                        `n < i` /\ `i < N` -> (access t1 i) = (access t0 i))) /\
+                        `n < i` /\ `i < N` -> `(access t1 i) = (access t0 i)`)) /\
                       ((v:Z) ((inftree t0 n v k) -> (inftree t1 n v k))) 
                       t0 result1 Post19) end) in
                 (exist_2 [t2: (array N Z)][result1: unit](permut t2 t0) /\
                 ((i:Z) (`k <= i` /\ `i <= n` -> (heap t2 n i))) /\
                 ((i:Z)
                  (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/
-                  `n < i` /\ `i < N` -> (access t2 i) = (access t0 i))) /\
+                  `n < i` /\ `i < N` -> `(access t2 i) = (access t0 i)`)) /\
                 ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))) t1 
                 result0 Post17) in
               (exist_2 [t2: (array N Z)][result1: unit](permut t2 t0) /\
               ((i:Z) (`k <= i` /\ `i <= n` -> (heap t2 n i))) /\
               ((i:Z)
                (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/
-                `n < i` /\ `i < N` -> (access t2 i) = (access t0 i))) /\
+                `n < i` /\ `i < N` -> `(access t2 i) = (access t0 i)`)) /\
               ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))) t1 result0
               Post9)
           | (right Test1) =>
@@ -731,21 +759,23 @@ Definition downheap := (* validation *)
                 ((i:Z) (`k <= i` /\ `i <= n` -> (heap t0 n i))) /\
                 ((i:Z)
                  (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/
-                  `n < i` /\ `i < N` -> (access t0 i) = (access t0 i))) /\
+                  `n < i` /\ `i < N` -> `(access t0 i) = (access t0 i)`)) /\
                 ((v:Z) ((inftree t0 n v k) -> (inftree t0 n v k))) tt
-                (downheap_po_14 Variant1 N k n t0 Pre10 Pre9 j Post1 Test1)) in
+                (downheap_po_15 Variant1 N k n t0 Pre10 Pre9 j Post1 Test1)) in
               (exist_2 [t1: (array N Z)][result1: unit](permut t1 t0) /\
               ((i:Z) (`k <= i` /\ `i <= n` -> (heap t1 n i))) /\
               ((i:Z)
                (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/
-                `n < i` /\ `i < N` -> (access t1 i) = (access t0 i))) /\
+                `n < i` /\ `i < N` -> `(access t1 i) = (access t0 i)`)) /\
               ((v:Z) ((inftree t0 n v k) -> (inftree t1 n v k))) t0 result0
               Post8) end) in
         (exist_2 [t2: (array N Z)][result0: unit](permut t2 t0) /\
         ((i:Z) (`k <= i` /\ `i <= n` -> (heap t2 n i))) /\
         ((i:Z)
          (`0 <= i` /\ `i < k` \/ `k < i` /\ `i < 2 * k + 1` \/ `n < i` /\
-          `i < N` -> (access t2 i) = (access t0 i))) /\
+          `i < N` -> `(access t2 i) = (access t0 i)`)) /\
         ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))) t1 result Post6)
       `n - k` N k n t (refl_equal ? `n - k`) Pre11).
+
+
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.44 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.45 2002-07-08 11:02:32 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -177,14 +177,14 @@ EXTEND
 	a ] ]
   ;
   predicate4:
-  [ [ a = predicate5; "+"; b = predicate4 -> infix_pp loc a PPadd b
-    | a = predicate5; "-"; b = predicate4 -> infix_pp loc a PPsub b
+  [ [ a = predicate4; "+"; b = predicate5 -> infix_pp loc a PPadd b
+    | a = predicate4; "-"; b = predicate5 -> infix_pp loc a PPsub b
     | a = predicate5 -> a ] ]
   ;
   predicate5:
-  [ [ a = predicate6; "*"; b = predicate5 -> infix_pp loc a PPmul b
-    | a = predicate6; "/"; b = predicate5 -> infix_pp loc a PPdiv b
-    | a = predicate6; "%"; b = predicate5 -> infix_pp loc a PPmod b
+  [ [ a = predicate5; "*"; b = predicate6 -> infix_pp loc a PPmul b
+    | a = predicate5; "/"; b = predicate6 -> infix_pp loc a PPdiv b
+    | a = predicate5; "%"; b = predicate6 -> infix_pp loc a PPmod b
     | a = predicate6 -> a ] ]
   ;
   predicate6:

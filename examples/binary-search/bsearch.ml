@@ -9,6 +9,8 @@ parameter l,u,p,m : int ref
 
 external mean : int -> int -> int
 
+logic In : array int,int,int -> prop
+
 let binary_search =
   { sorted_array(t,1,N) }
   begin

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.56 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.57 2002-07-08 11:02:32 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -69,6 +69,9 @@ and check_app loc bl c tl = match bl, tl with
       assert false
 
 (*s Utility functions for typing *)
+
+let expected_cmp loc =
+  Error.expected_type loc (fun fmt -> fprintf fmt "unit, bool, int or float")
 
 let just_reads e = difference (get_reads e) (get_writes e)
 
@@ -569,13 +572,19 @@ and typef_desc lab env loc = function
       let var,efvar = state_var lab env' var in
       let phi0 = phi_name () in
       check_type_var loc env' var;
-      (* effect for a let/rec construct is computed as a fixpoint *)
+      (* effects for a let/rec construct are computed as a fixpoint *)
+      let fixpoint_reached c1 c2 =
+	c1.c_effect = c2.c_effect && 
+        List.length c1.c_pre = List.length c2.c_pre &&
+        (match c1.c_post, c2.c_post with 
+         | None, None | Some _, Some _ -> true | _ -> false)
+      in
       let rec state_rec c =
 	(* TODO: change label to "init" in [c] *)
 	let tf = make_arrow bl' c in
 	let env'' = add_rec f (add f tf env') in
 	let t_e = typef initial_labels env'' e in
-	if t_e.info.kappa = c then
+	if fixpoint_reached t_e.info.kappa c then
 	  t_e
       	else begin
 	  if_debug_3 eprintf "  (rec => %a)@\n@?" print_type_c t_e.info.kappa;
