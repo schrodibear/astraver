@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.56 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.57 2002-09-12 15:12:44 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -216,8 +216,9 @@ let rec print_cc_type fmt = function
 	print_cc_type q
   | TTpred p ->
       print_predicate fmt p
-  | TTapp (id, t) ->
-      fprintf fmt "(@[%a@ %a@])" Ident.print id print_cc_type t
+  | TTapp (id, l) ->
+      fprintf fmt "(@[%a@ %a@])" Ident.print id 
+	(print_list space print_cc_type) l
 
 and print_binder fmt (id,b) = 
   Ident.print fmt id;
@@ -342,7 +343,7 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
-let reprint_exception fmt id v =
+let reprint_exception_type fmt id v =
   fprintf fmt "(*Why*) Inductive ET_%s [T:Set] : Set :=@\n" id;
   fprintf fmt "  | Val_%s : T -> (ET_%s T)@\n" id id;
   fprintf fmt "  | Exn_%s : " id;
@@ -352,7 +353,26 @@ let reprint_exception fmt id v =
   end;
   fprintf fmt "(ET_%s T).@\n" id
 
-let print_exception = reprint_exception
+let print_exception_type = reprint_exception_type
+
+let reprint_exception_post fmt id v =
+  fprintf fmt "(*Why*) Definition post_%s :=@\n" id;
+  begin match v with
+    | None -> 
+	fprintf fmt "  [T:Set][P:Prop][Q:T->Prop][x:(ET_%s T)]@\n" id;
+	fprintf fmt "  Cases x of @\n";
+	fprintf fmt "  | (Val_%s v) => (Q v)@\n" id;
+	fprintf fmt "  | Exn_%s => P@\n" id
+    | Some t -> 
+	fprintf fmt "  [T:Set][P:%a -> Prop][Q:T->Prop][x:(ET_%s T)]@\n" 
+	  print_cc_type t id;
+	fprintf fmt "  Cases x of @\n";
+	fprintf fmt "  | (Val_%s v) => (Q v)@\n" id;
+	fprintf fmt "  | (Exn_%s v) => (P v)@\n" id
+  end;
+  fprintf fmt "  end.@\n"
+
+let print_exception_post = reprint_exception_post
 
 (*s Elements to produce. *)
 
@@ -360,13 +380,15 @@ type element_kind =
   | Param of string
   | Oblig of string
   | Valid of string
-  | Excep of string
+  | Exc_t of string
+  | Exc_p of string
 
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
   | Validation of string * validation
-  | Exception of string * cc_type option
+  | Exception_type of string * cc_type option
+  | Exception_post of string * cc_type option
 
 let elem_t = Hashtbl.create 97 (* maps [element_kind] to [element] *)
 let elem_q = Queue.create ()   (* queue of [element_kind * element] *)
@@ -385,20 +407,23 @@ let push_parameter id v =
   add_elem (Param id) (Parameter (id,v))
 
 let push_exception id v =
-  add_elem (Excep id) (Exception (id,v))
+  add_elem (Exc_t id) (Exception_type (id,v));
+  add_elem (Exc_p id) (Exception_post (id,v))
 
 let print_element_kind fmt = function
   | Param s -> fprintf fmt "parameter %s" s
   | Oblig s -> fprintf fmt "obligation %s" s
   | Valid s -> fprintf fmt "validation %s" s
-  | Excep s -> fprintf fmt "exception %s" s
+  | Exc_t s -> fprintf fmt "exception %s" s
+  | Exc_p _ -> ()
 
 let print_element fmt e = 
   begin match e with
     | Parameter (id, c) -> print_parameter fmt id c
     | Obligation o -> print_obligation fmt o
     | Validation (id, v) -> print_validation fmt id v
-    | Exception (id, v) -> print_exception fmt id v
+    | Exception_type (id, v) -> print_exception_type fmt id v
+    | Exception_post (id, v) -> print_exception_post fmt id v
   end;
   fprintf fmt "@\n"
 
@@ -406,7 +431,8 @@ let reprint_element fmt = function
   | Parameter (id, c) -> reprint_parameter fmt id c
   | Obligation o -> reprint_obligation fmt o
   | Validation (id, v) -> reprint_validation fmt id v
-  | Exception (id, v) -> reprint_exception fmt id v
+  | Exception_type (id, v) -> reprint_exception_type fmt id v
+  | Exception_post (id, v) -> reprint_exception_post fmt id v
 
 (*s Generating the output. *)
 
@@ -416,8 +442,10 @@ let valid_regexp =
   Str.regexp "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*"
 let param_regexp = 
   Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
-let excep_regexp = 
+let exc_t_regexp = 
   Str.regexp "(\\*Why\\*) Inductive[ ]+ET_\\([^ ]*\\).*"
+let exc_p_regexp = 
+  Str.regexp "(\\*Why\\*) Definition[ ]+post_\\([^ ]*\\).*"
 
 let check_line s =
   let test r = 
@@ -426,7 +454,8 @@ let check_line s =
   try Some (Oblig (test oblig_regexp)) with Exit ->
   try Some (Valid (test valid_regexp)) with Exit ->
   try Some (Param (test param_regexp)) with Exit ->
-  try Some (Excep (test excep_regexp)) with Exit ->
+  try Some (Exc_t (test exc_t_regexp)) with Exit ->
+  try Some (Exc_p (test exc_p_regexp)) with Exit ->
   None
 
 let end_is_not_dot s =

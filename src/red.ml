@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.23 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.24 2002-09-12 15:12:45 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -33,8 +33,8 @@ let rec uniq_tt fv s = function
       TTpred (tsubst_in_predicate s p)
   | TTpure _ as t -> 
       t
-  | TTapp (id, t) ->
-      TTapp (id, uniq_tt fv s t)
+  | TTapp (id, l) ->
+      TTapp (id, List.map (uniq_tt fv s) l)
 
 and uniq_binder fv s (id,b) =
   let b' = match b with 
@@ -114,8 +114,8 @@ and cc_type_subst s = function
       TTpred (tsubst_in_predicate s p)
   | TTpure _ as t -> 
       t
-  | TTapp (id, t) ->
-      TTapp (id, cc_type_subst s t)
+  | TTapp (id, l) ->
+      TTapp (id, List.map (cc_type_subst s) l)
 
 (*s Eta and iota redexes. *)
 

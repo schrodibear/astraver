@@ -604,13 +604,34 @@ Definition an3 := (* validation *)
   | Val_E1 : T -> (ET_E1 T)
   | Exn_E1 : (ET_E1 T).
 
+(*Why*) Definition post_E1 :=
+  [T:Set][P:Prop][Q:T->Prop][x:(ET_E1 T)]
+  Cases x of 
+  | (Val_E1 v) => (Q v)
+  | Exn_E1 => P
+  end.
+
 (*Why*) Inductive ET_E2 [T:Set] : Set :=
   | Val_E2 : T -> (ET_E2 T)
   | Exn_E2 : Z -> (ET_E2 T).
 
+(*Why*) Definition post_E2 :=
+  [T:Set][P:Z -> Prop][Q:T->Prop][x:(ET_E2 T)]
+  Cases x of 
+  | (Val_E2 v) => (Q v)
+  | (Exn_E2 v) => (P v)
+  end.
+
 (*Why*) Inductive ET_E3 [T:Set] : Set :=
   | Val_E3 : T -> (ET_E3 T)
   | Exn_E3 : foo -> (ET_E3 T).
+
+(*Why*) Definition post_E3 :=
+  [T:Set][P:foo -> Prop][Q:T->Prop][x:(ET_E3 T)]
+  Cases x of 
+  | (Val_E3 v) => (Q v)
+  | (Exn_E3 v) => (P v)
+  end.
 
 (*Why*) Parameter f1_ex : (n: Z)(ET_E1 unit).
 

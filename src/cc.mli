@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: cc.mli,v 1.1 2002-09-06 13:38:54 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.2 2002-09-12 15:12:44 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -15,7 +15,7 @@ type cc_type =
   | TTarrow of cc_binder * cc_type
   | TTtuple of cc_binder list * cc_type option
   | TTpred of predicate
-  | TTapp of Ident.t * cc_type
+  | TTapp of Ident.t * cc_type list
 
 and cc_bind_type = 
   | CC_var_binder of cc_type

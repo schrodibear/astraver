@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.46 2002-09-12 13:20:55 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.47 2002-09-12 15:12:45 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -53,7 +53,7 @@ let arrow_vars =
   List.fold_right (fun (id,v) t -> TTarrow ((id, CC_var_binder v), t))
 
 let trad_exn_type =
-  List.fold_right (fun id t -> TTapp (Ident.exn_type id, t))
+  List.fold_right (fun id t -> TTapp (Ident.exn_type id, [t]))
 
 (*s Translation of effects types in CC types.
   
@@ -116,6 +116,21 @@ and trad_type_in_env ren env id =
   trad_imp_type ren env v
 
 
+(* builds (Val_e1 (Val_e2 ... (Exn_ei))) *) 
+
+let rec make_exn ty x v = function
+  | [] -> 
+      assert false
+  | y :: yl when x = y -> 
+      let x = Ident.exn_exn x in
+      (match v with 
+	 | None -> CC_app (CC_term (Tvar x), CC_type ty)
+	 | Some v -> CC_app (CC_app (CC_term (Tvar x), CC_type ty), CC_term v))
+  | y :: yl -> 
+      CC_app (CC_app (CC_term (Tvar (Ident.exn_val y)), 
+		      CC_term (Tvar Ident.implicit)),
+	      make_exn ty x v yl)
+
 (*s The Monadic operators. They are operating on values of the following
     type [interp] (functions producing a [cc_term] when given a renaming
     data structure). *)
@@ -142,48 +157,72 @@ let apply_result ren env = function
 let lambda_vars =
   List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
 
-let result_term info = function
-  | Value t -> t
-  | Exn _ -> assert false
+let result_term ef v = function
+  | Value t -> CC_term t
+  | Exn (x, t) -> make_exn v x t (Effect.get_exns ef)
 
 let unit info r ren = 
   let env = info.env in
-  let r = apply_result ren env r in
-  let t = result_term info r in
   let k = info.kappa in
+  let r = apply_result ren env r in
+  let v = trad_type_v ren env k.c_result_type in
   let ef = k.c_effect in
+  let t = result_term ef v r in
   let q = k.c_post in
   let ids = get_writes ef in
   if ids = [] && q = None then
-    CC_term t
+    t
   else 
     let hole, holet = match q with
       | None -> 
 	  [], None
       | Some q -> 
+	  (* proof obligation *)
 	  let h = 
-	    let (c,_) = apply_post info.label ren env q in
-	    tsubst_in_predicate (subst_one result t) c.a_value
+	    let (q,ql) = apply_post info.label ren env q in
+	    let a = match r with Value _ -> q | Exn (x,_) -> List.assoc x ql in
+	    match r with
+	      | Value t | Exn (_, Some t) ->
+		  tsubst_in_predicate (subst_one result t) a.a_value
+	      | Exn _ ->
+		  a.a_value
 	  in
+	  (* type of the obligation: [y1]...[yn][res]Q *)
 	  let ht = 
-	    let _,o,x = get_repr ef in
-	    assert (x = []); (* TODO *)
+	    let _,o,xs = get_repr ef in
 	    let ren' = Rename.next ren (result :: o) in
 	    let result' = current_var ren' result in
+	    let (q,ql) = apply_post info.label ren' env q in
+	    let abs_pred v c =
+	      let c = c.a_value in
+	      let c = subst_in_predicate (subst_onev result result') c in
+	      match v with
+		| Some v -> 
+		    lambda_vars [result', trad_type_v ren' env v] (TTpred c)
+		| None -> 
+		    TTpred c
+	    in
+	    let c = abs_pred (Some k.c_result_type) q in
+	    let c = 
+	      List.fold_right 
+		(fun x c -> 
+		   let tx = find_exception x in
+		   let tx = option_app (fun x -> PureType x) tx in
+		   let qx = List.assoc x ql in
+		   TTapp (exn_post x, [abs_pred tx qx; c]))
+		xs c 
+	    in
 	    let bl = 
 	      List.map (fun id -> (current_var ren' id, 
-				   trad_type_in_env ren env id)) o @
-	      [result', trad_type_v ren env k.c_result_type]
+				   trad_type_in_env ren env id)) o
 	    in
-	    let (c,_) = apply_post info.label ren' env q in
-	    let c = subst_in_predicate (subst_onev result result') c.a_value in
-	    lambda_vars bl (TTpred c)
+	    lambda_vars bl c
 	  in
 	  [ CC_hole h ], Some ht
     in
     CC_tuple (
       (List.map (fun id -> let id' = current_var ren id in CC_var id') ids) @
-      (CC_term t) :: hole,
+      t :: hole,
       holet)
 
 (*s [compose k1 e1 e2 ren env] constructs the term
@@ -244,29 +283,9 @@ let compose = gen_compose false
 let apply = gen_compose true
 
 
-(*s [exn] is the operator corresponding to [raise].
-    It returns [unit info (Val_e1 (Val_e2 ... (Exn_ei)))]. *)
+(*s [exn] is the operator corresponding to [raise]. *)
 
-let rec make_exn ty x v = function
-  | [] -> 
-      assert false
-  | y :: yl when x = y -> 
-      let x = Ident.exn_exn x in
-      (match v with 
-	 | None -> CC_app (CC_term (Tvar x), CC_type ty)
-	 | Some v -> CC_app (CC_app (CC_term (Tvar x), CC_type ty), CC_term v))
-  | y :: yl -> 
-      CC_app (CC_app (CC_term (Tvar (Ident.exn_val y)), 
-		      CC_term (Tvar Ident.implicit)),
-	      make_exn ty x v yl)
-
-let exn info id t ren =
-  let x = Effect.get_exns info.kappa.c_effect in
-  let v = info.kappa.c_result_type in
-  let env = info.env in
-  (* unit info (make_exn (trad_type_v ren env v) id t x) ren *)
-  assert false
-  
+let exn info id t = unit info (Exn (id, t))
 
 (*s [cross_label] is an operator to be used when a label is encountered *)
 
