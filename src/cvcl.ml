@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.17 2004-07-16 09:38:01 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.18 2004-07-19 08:40:49 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -249,6 +249,10 @@ module IterIT = struct
     | Forall (_, _, _, v, p) -> g v; predicate f g p
     | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
     | Papp (id, tl, i) -> f id i; List.iter (term f) tl
+
+  let predicate_def f g (bl,p) =
+    List.iter (fun (_,pt) -> g pt) bl;
+    predicate f g p
 	
   let logic_type g = function
     | Function (l, pt) -> List.iter g l; g pt
@@ -368,6 +372,9 @@ module GenSubst(S : Substitution) = struct
     | Forallb (w, a, b) -> Forallb (w, predicate s a, predicate s b)
     | Pfpi (t, a, b) -> Pfpi (term s t, a, b)
     | Ptrue | Pfalse | Pvar _ as p -> p
+
+  let predicate_def s (bl,p) = 
+    List.map (fun (x,pt) -> (x, pure_type s pt)) bl, predicate s p
 
 end
 
@@ -492,33 +499,6 @@ let rec print_logic_type fmt = function
       fprintf fmt "[[%a] -> %a]" 
 	(print_list comma print_pure_type) pl print_pure_type pt
 
-let print_predicate_def fmt id p0 =
-  fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
-  let print i bl p =
-    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
-      id instance i
-      print_logic_type (Predicate (List.map snd bl))
-      (print_list comma 
-	 (fun fmt (x,pt) -> 
-	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
-      print_predicate p
-  in
-  let (bl,p) = p0.scheme_type in
-  assert (bl <> []);
-  if p0.scheme_vars = [] then
-    print [] bl p
-  else begin
-    Instances.iter
-      (fun i ->
-	 assert (List.length p0.scheme_vars = List.length i);
-	 let s = List.combine p0.scheme_vars i in
-	 let bl = SubstV.binders s bl in
-	 let p = SubstV.predicate s p in
-	 print i bl p)
-      (instances (Ident.create id));
-    fprintf fmt "@\n"
-  end
-
 let print_parameter fmt id c =
   IterIT.cc_type (fun _ _ -> ()) (declare_type fmt) c;
   fprintf fmt 
@@ -533,7 +513,11 @@ let print_logic_instance fmt id i t =
   fprintf fmt "%%%% Why logic %s@\n" id;
   fprintf fmt "@[%s%a: %a;@]@\n@\n" id instance i print_logic_type t
 
-let logic_types = Hashtbl.create 97
+type logic_symbol = 
+  | Uninterp of logic_type scheme
+  | Defined of predicate_def scheme
+
+let logic_symbols = Hashtbl.create 97
 
 let print_logic fmt id t = 
   if t.scheme_vars = [] then
@@ -541,19 +525,49 @@ let print_logic fmt id t =
   else
     (* nothing to do until we encounter closed instances of [id] *)
     (* we only remember the type of [id] *)
-    Hashtbl.add logic_types (Ident.create id) t
+    Hashtbl.add logic_symbols (Ident.create id) (Uninterp t)
 
 let declared_logic = Hashtbl.create 97
 
-let declare_logic fmt id i =
+let rec declare_logic fmt id i =
   if i <> [] && not (Hashtbl.mem declared_logic (id,i)) then begin
     Hashtbl.add declared_logic (id,i) ();
-    let t = Hashtbl.find logic_types id in
-    assert (List.length t.scheme_vars = List.length i);
-    let s = List.combine t.scheme_vars i in
-    let t = SubstV.logic_type s t.scheme_type in
-    print_logic_instance fmt (Ident.string id) i t
+    assert (Hashtbl.mem logic_symbols id);
+    match Hashtbl.find logic_symbols id with
+      | Uninterp t ->
+	  assert (List.length t.scheme_vars = List.length i);
+	  let s = List.combine t.scheme_vars i in
+	  let t = SubstV.logic_type s t.scheme_type in
+	  print_logic_instance fmt (Ident.string id) i t
+      | Defined p ->
+	  assert (List.length p.scheme_vars = List.length i);
+	  let s = List.combine p.scheme_vars i in
+	  let p = SubstV.predicate_def s p.scheme_type in
+ 	  print_predicate_def_instance fmt (Ident.string id) i p
   end
+
+(* predicates definitions *)
+
+and print_predicate_def_instance fmt id i ((bl,p) as d) =
+  IterIT.predicate_def (declare_logic fmt) (declare_type fmt) d;
+  fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
+  fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+    id instance i
+    print_logic_type (Predicate (List.map snd bl))
+    (print_list comma 
+       (fun fmt (x,pt) -> 
+	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
+    print_predicate p
+
+let print_predicate_def fmt id p0 =
+  let (bl,_) = p0.scheme_type in
+  assert (bl <> []);
+  if p0.scheme_vars = [] then
+    print_predicate_def_instance fmt id [] p0.scheme_type
+  else 
+    Hashtbl.add logic_symbols (Ident.create id) (Defined p0)
+
+(* Obligations *)
 
 let print_obligation fmt (loc, o, s) = 
   IterIT.sequent (declare_logic fmt) (declare_type fmt) s;
