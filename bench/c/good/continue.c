@@ -24,4 +24,23 @@ int f2()
   return i;
 }
 
+/*@ ensures \result == 7 */
+int f3()
+{
+  int i;
+  /*@ invariant i <= 7 && i != 6 variant 7 - i */ 
+  for (i = 0; i < 6; i++) {
+    if (i == 5) 
+      { i = 6; continue; }
+  }
+  return i;
+}
+
+/*
+int main(void) {
+  printf("%d\n",f3());
+  return 0;
+}
+*/
+
   

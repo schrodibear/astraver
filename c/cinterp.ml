@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.112 2004-11-23 15:58:02 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.113 2004-11-25 14:31:24 hubert Exp $ i*)
 
 
 open Format
@@ -1091,10 +1091,10 @@ let rec interp_statement ab may_break stat = match stat.st_node with
 	   (interp_statement_expr e1)
 	   (break body.st_break 
 	      (make_while (interp_boolean_expr e2) inv dec 
-		 (continue body.st_continue
-		    (append 
-		       (interp_statement true (ref false) body) 
-		       (interp_statement_expr e3))))))
+		 (append 
+		    (continue body.st_continue
+		       (interp_statement true (ref false) body))
+		    (interp_statement_expr e3)))))
   | TSwhile(annot,e,s) -> 
       let label = new_label () in
       let ef = 

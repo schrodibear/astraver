@@ -3,22 +3,6 @@
 
 Require Import caduceus_spec_why.
 
-Proof.
-destruct result0; intuition.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-destruct result1; intuition.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
 (* Why obligation from file "why/continue.why", characters 246-252 *)
 Lemma f1_impl_po_1 : 
   forall (n: Z),
@@ -34,7 +18,6 @@ Lemma f1_impl_po_1 :
   (forall (result:unit), (result = tt -> 0 <= n2 /\ (Zwf 0 n2 n1))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/continue.why", characters 276-296 *)
@@ -52,7 +35,6 @@ Lemma f1_impl_po_2 :
   0 <= n2 /\ (Zwf 0 n2 n1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/continue.why", characters 119-346 *)
@@ -67,7 +49,6 @@ Lemma f1_impl_po_3 :
   (forall (result:Z), (result = n1 -> result = 0)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/continue.why", characters 160-171 *)
@@ -77,10 +58,9 @@ Lemma f1_impl_po_4 :
   0 <= n.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 692-698 *)
+(* Why obligation from file "why/continue.why", characters 677-683 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -95,13 +75,13 @@ Lemma f2_impl_po_1 :
   forall (i3: Z),
   forall (Post5: i3 = 6),
   (forall (result:unit),
-   (result = tt -> i3 <= 10 /\ (Zwf 0 (10 - i3) (10 - i2)))).
+   (result = tt ->
+    (forall (i:Z), (i = (i3 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 716-716 *)
+(* Why obligation from file "why/continue.why", characters 701-701 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -118,10 +98,9 @@ Lemma f2_impl_po_2 :
   (forall (i:Z), (i = (i2 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 538-815 *)
+(* Why obligation from file "why/continue.why", characters 538-787 *)
 Lemma f2_impl_po_3 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -135,7 +114,6 @@ Lemma f2_impl_po_3 :
   (forall (result:Z), (result = i2 -> result = 10)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/continue.why", characters 581-593 *)
@@ -147,6 +125,66 @@ Lemma f2_impl_po_4 :
   i1 <= 10.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/continue.why", characters 1156-1162 *)
+Lemma f3_impl_po_1 : 
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  forall (Variant1: Z),
+  forall (i2: Z),
+  forall (Pre3: Variant1 = (7 - i2)),
+  forall (Pre2: i2 <= 7 /\ i2 <> 6),
+  forall (Test4: i2 < 6),
+  forall (Test3: i2 = 5),
+  forall (i3: Z),
+  forall (Post5: i3 = 6),
+  (forall (result:unit),
+   (result = tt ->
+    (forall (i:Z),
+     (i = (i3 + 1) -> (i <= 7 /\ i <> 6) /\ (Zwf 0 (7 - i) (7 - i2)))))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/continue.why", characters 1180-1180 *)
+Lemma f3_impl_po_2 : 
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  forall (Variant1: Z),
+  forall (i2: Z),
+  forall (Pre3: Variant1 = (7 - i2)),
+  forall (Pre2: i2 <= 7 /\ i2 <> 6),
+  forall (Test4: i2 < 6),
+  forall (Test2: i2 <> 5),
+  forall (result2: unit),
+  forall (Post4: result2 = tt),
+  (forall (i:Z),
+   (i = (i2 + 1) -> (i <= 7 /\ i <> 6) /\ (Zwf 0 (7 - i) (7 - i2)))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/continue.why", characters 1000-1266 *)
+Lemma f3_impl_po_3 : 
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  forall (Variant1: Z),
+  forall (i2: Z),
+  forall (Pre3: Variant1 = (7 - i2)),
+  forall (Pre2: i2 <= 7 /\ i2 <> 6),
+  forall (Test1: i2 >= 6),
+  (forall (result:Z), (result = i2 -> result = 7)).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/continue.why", characters 1042-1073 *)
+Lemma f3_impl_po_4 : 
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  i1 <= 7 /\ i1 <> 6.
+Proof.
+intuition.
 Save.
 

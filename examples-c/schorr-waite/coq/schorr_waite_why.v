@@ -4166,8 +4166,7 @@ Lemma schorr_waite_impl_po_12 :
                    ((isreachable alloc l r root x) ->
                     (isreachable alloc l0 r0 t1 x) \/
                     (isreachable alloc l0 r0 p1 x))) /\
-  
-               (forall (x:pointer),
+                 (forall (x:pointer),
                   (~(x = null) ->
                    ((isreachable alloc l0 r0 t1 x) \/
                     (isreachable alloc l0 r0 p1 x) ->
