@@ -76,7 +76,6 @@ Lemma gcd1_po_3 :
   (Zwf `0` (max x0 y1) (max x0 y0)).
 Proof.
 Intuition.
-Assert h:~x0=y0. Assumption. Omega.
 Rewrite Post3; Rewrite <- H4; Auto.
 Unfold Zwf max.
 Assert h:~x0=y0. Assumption. 

@@ -207,7 +207,6 @@ Lemma fib2_aux_po_3 :
   `fx0 = (F x0 + 1 - 1)`.
 Proof.
 Intuition.
-Assert ~`x0=n0`; [ Assumption | Omega ].
 Rewrite H0; Rewrite H7; Symmetry.
 Generalize H5. Replace x0 with `(x0+1)-1`. Generalize `x0+1`.
 Intros; Ring `z-1+1`; Replace `z-1-1` with `z-2`. 

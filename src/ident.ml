@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.ml,v 1.30 2002-09-12 15:12:44 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.31 2002-10-09 16:43:06 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -78,10 +78,12 @@ let bound =
 
 (*s Exceptions names and constructors *)
 
-let exn_type id = create ("ET_" ^ id.name)
-let exn_val id = create ("Val_" ^ id.name)
-let exn_exn id = create ("Exn_" ^ id.name)
-let exn_post id = create ("post_" ^ id.name)
+let exn_type = create "EM"
+let exn_val = create "Val"
+let exn_exn = create "Exn"
+let exn_post = create "qcomb"
+let exn_qval = create "Qval"
+let exn_qexn = create "Qexn"
 
 (*s Pre-defined. *)
 

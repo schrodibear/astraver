@@ -440,7 +440,6 @@ Subst l; Rewrite store_def_1; Try Omega.
 Subst w; Apply H11; Omega.
 Rewrite store_def_2; Try Omega.
 Subst w; Apply H11; Omega.
-Assumption.
 Subst t2. Rewrite store_def_2; Try Omega.
 Rewrite store_def_2; Try Omega.
 Subst t1. 
@@ -451,7 +450,6 @@ Apply H4; Omega.
 Rewrite store_def_2; Try Omega.
 Rewrite store_def_2; Try Omega.
 Apply H4; Omega.
-Assumption.
 Unfold Zwf; Omega.
 Save.
 

@@ -694,7 +694,7 @@ Definition an3 := (* validation *)
 
 (*Why*) Implicits post_E3.
 
-(*Why*) Parameter f1_ex : (n: Z)(ET_E1 unit).
+(*Why*) Parameter f1_ex : (n: Z)(EM unit unit).
 
-(*Why*) Parameter f2_ex : (x: Z)(tuple_2 Z (ET_E1 (ET_E2 bool))).
+(*Why*) Parameter f2_ex : (x: Z)(tuple_2 Z (EM unit (EM Z bool))).
 

@@ -80,7 +80,6 @@ Omega.
 Unfold Zwf. 
 Repeat Split; Try Omega.
 Rewrite H3; Apply Z_div_lt; Try Omega.
-Cut ~`a0 = 0`; [ Intro; Omega | Assumption ].
 Save.
 
 Lemma mult_po_4 : 
@@ -116,12 +115,10 @@ Ring.
 Cut `2 > 0`; [ Intro h | Omega ].
 Generalize (Z_mod_lt a0 `2` h).
 Cut ~`a0%2 = 1`; Intros; Try Omega.
-Assumption.
 Omega.
 Unfold Zwf.
 Repeat Split; Try Omega.
 Rewrite H3; Apply Z_div_lt; Try Omega.
-Cut ~`a0 = 0`; [ Intro; Omega | Assumption ].
 Save.
 
 Lemma mult_po_5 : 

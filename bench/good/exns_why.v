@@ -3,42 +3,13 @@
 
 Require Why.
 
-(*Why*) Inductive ET_E [T:Set] : Set :=
-  | Val_E : T -> (ET_E T)
-  | Exn_E : (ET_E T).
-
-(*Why*) Definition post_E :=
-  [T:Set][P:Prop][Q:T->Prop][x:(ET_E T)]
-  Cases x of 
-  | (Val_E v) => (Q v)
-  | Exn_E => P
-  end.
-
-(*Why*) Implicits post_E.
-
-
 Definition p1 := (* validation *)
-  (exist_1 (post_E True [result: unit]False) (Exn_E unit) I).
-
-(*Why*) Inductive ET_F [T:Set] : Set :=
-  | Val_F : T -> (ET_F T)
-  | Exn_F : Z -> (ET_F T).
-
-(*Why*) Definition post_F :=
-  [T:Set][P:Z -> Prop][Q:T->Prop][x:(ET_F T)]
-  Cases x of 
-  | (Val_F v) => (Q v)
-  | (Exn_F v) => (P v)
-  end.
-
-(*Why*) Implicits post_F.
-
+  (exist_1 (qcomb [result: unit]True [result: unit]False) (Exn unit tt) I).
 
 Definition p2 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]`result = 1` `1`
     (refl_equal ? `1`)) in
-  (exist_1 (post_F [result0: Z]`result0 = 1` [result0: unit]False) (Exn_F
-                                                                    unit
+  (exist_1 (qcomb [result0: Z]`result0 = 1` [result0: unit]False) (Exn unit
                                                                     result)
   Post1).
 

@@ -137,12 +137,13 @@ lib/coq/WhySorted.vo: lib/coq/WhySorted.v lib/coq/WhyArrays.vo lib/coq/WhyPermut
 lib/coq/WhyPermut.vo: lib/coq/WhyPermut.v lib/coq/WhyArrays.vo
 lib/coq/WhyInt.vo: lib/coq/WhyInt.v
 lib/coq/WhyFloat.vo: lib/coq/WhyFloat.v lib/coq/Why.vo
+lib/coq/WhyExn.vo: lib/coq/WhyExn.v
 lib/coq/WhyCoqDev.vo: lib/coq/WhyCoqDev.v
 lib/coq/WhyCoqCompat.vo: lib/coq/WhyCoqCompat.v
 lib/coq/WhyCoq73.vo: lib/coq/WhyCoq73.v
 lib/coq/WhyBool.vo: lib/coq/WhyBool.v
 lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
-lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo lib/coq/WhyCoqCompat.vo
+lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo
 examples/sqrt/sqrt_why.vo: examples/sqrt/sqrt_why.v lib/coq/Why.vo
 examples/selectionsort/selection_why.vo: examples/selectionsort/selection_why.v lib/coq/Why.vo
 examples/quicksort2/quicksort2_why.vo: examples/quicksort2/quicksort2_why.v lib/coq/Why.vo
