@@ -333,7 +333,13 @@ Lemma binary_search_po_6 :
   ((`p1 > 0` -> (access t p1) = v)) /\ (Zwf `0` `2 + u2 - l1` `2 + u1 - l1`).
 Proof.
 Intros.
-Omega'.
+Clear H3 result2 H5; Simpl in H6.
+Clear result4 H10; Simpl in H11.
+Clear result5 H12; Simpl in H13.
+Repeat Split; Try Omega'.
+Rewrite H14; Clear H14; Rewrite H8.
+Intros; Apply In_left_side; Assumption Orelse Intuition.
+Rewrite <- H8; Assumption.
 Save.
 
 Lemma binary_search_po_7 : 
