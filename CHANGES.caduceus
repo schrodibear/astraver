@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+ o fixed bug with global structures arrays
+
 version 0.71, February 3rd, 2005
 ================================
  o axioms valid_S_pointer split into valid_S_x_pointer for each field x
