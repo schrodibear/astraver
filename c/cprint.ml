@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.1 2004-12-08 10:42:28 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.2 2004-12-08 10:59:24 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -100,8 +100,73 @@ let loop_annot fmt = function
 	(print_option loop_assigns) a.loop_assigns
 	(print_option variant) a.variant
 
-let nexpr fmt e =
-  fprintf fmt "<expr>"
+let binop fmt = function
+  | Badd | Badd_int | Badd_float | Badd_pointer_int -> fprintf fmt "+" 
+  | Bsub | Bsub_int | Bsub_float | Bsub_pointer -> fprintf fmt "-"
+  | Bmul | Bmul_int | Bmul_float -> fprintf fmt "*"
+  | Bdiv | Bdiv_int | Bdiv_float -> fprintf fmt "/"
+  | Bmod | Bmod_int -> fprintf fmt "%%" 
+  | Blt | Blt_int | Blt_float | Blt_pointer -> fprintf fmt "<"
+  | Bgt | Bgt_int | Bgt_float | Bgt_pointer -> fprintf fmt ">"
+  | Ble | Ble_int | Ble_float | Ble_pointer -> fprintf fmt "<="
+  | Bge | Bge_int | Bge_float | Bge_pointer -> fprintf fmt ">="
+  | Beq | Beq_int | Beq_float | Beq_pointer -> fprintf fmt "=="
+  | Bneq | Bneq_int | Bneq_float | Bneq_pointer -> fprintf fmt "!=" 
+  | Bbw_and -> fprintf fmt "&"
+  | Bbw_xor -> fprintf fmt "<bw_xor>"
+  | Bbw_or -> fprintf fmt "|"
+  | Band -> fprintf fmt "&&"
+  | Bor -> fprintf fmt "||"
+  | Bshift_left -> fprintf fmt "<<"
+  | Bshift_right -> fprintf fmt ">>"
+
+
+let unop fmt = function
+  | Uplus -> fprintf fmt "+"
+  | Uminus -> fprintf fmt "-"
+  | Unot -> fprintf fmt "!"
+  | Ustar -> fprintf fmt "*"
+  | Uamp -> fprintf fmt "&"
+  | Utilde -> fprintf fmt "~"
+  (* these are introduced during typing *)
+  | Ufloat_of_int -> fprintf fmt "float_of_int"
+  | Uint_of_float -> fprintf fmt "int_of_float"
+
+let rec nexpr fmt e = match e.nexpr_node with
+  | NEnop ->
+      ()
+  | NEconstant (IntConstant s | FloatConstant s) ->
+      fprintf fmt "%s" s
+  | NEstring_literal s ->
+      fprintf fmt "\"%S\"" s
+  | NEvar (Var_info x) ->
+      fprintf fmt "%s" x.var_name
+  | NEvar (Fun_info x) ->
+      fprintf fmt "%s" x.fun_name
+  | NEarrow (e, x) ->
+      fprintf fmt "(%a->%s)" nexpr e x.var_name
+  | NEstar e ->
+      fprintf fmt "( *%a)" nexpr e
+  | NEseq (e1, e2) ->
+      fprintf fmt "(%a, %a)" nexpr e1 nexpr e2
+  | NEassign (e1, e2) ->
+      fprintf fmt "(%a = %a)" nexpr e1 nexpr e2
+  | NEassign_op (e1, op, e2) ->
+      fprintf fmt "(%a %a= %a)" nexpr e1 binop op nexpr e2
+  | NEunary (op, e) ->
+      fprintf fmt "(%a %a)" unop op nexpr e
+  | NEincr (Uprefix_inc, e) -> fprintf fmt "(++%a)" nexpr e
+  | NEincr (Uprefix_dec, e) -> fprintf fmt "(--%a)" nexpr e
+  | NEincr (Upostfix_inc, e) -> fprintf fmt "(%a++)" nexpr e
+  | NEincr (Upostfix_dec, e) -> fprintf fmt "(%a--)" nexpr e
+  | NEbinary (e1, op, e2) ->
+      fprintf fmt "(%a %a %a)" nexpr e1 binop op nexpr e2
+  | NEcall (e, l) ->
+      fprintf fmt "%a(%a)" nexpr e (print_list comma nexpr) l
+  | NEcond (e1, e2, e3) ->
+      fprintf fmt "(%a ? %a : %a)" nexpr e1 nexpr e2 nexpr e3
+  | NEcast (ty, e) ->
+      fprintf fmt "((%a) %a)" ctype ty nexpr e
 
 let rec c_initializer fmt = function
   | Iexpr e -> nexpr fmt e
