@@ -102,7 +102,7 @@ bench-tc:: $(BINARY) $(VO)
 test:: $(BINARY) $(VO)
 	$(BINARY) -d -V -coq bench/test.ml
 
-examples:: $(BINARY) $(VO)
+examples:: $(STATICBINARY) $(VO)
 	make -C examples
 
 # installation

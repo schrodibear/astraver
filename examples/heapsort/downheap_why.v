@@ -421,6 +421,36 @@ Lemma downheap_po_11 :
   (Test7: `(access t0 k) < (access t0 result1)`)
   (t1: (array N Z))
   (Post21: (exchange t1 t0 k result1))
+  (Pre7: `0 <= result1` /\ `result1 <= n` /\ `n < N` /\
+         ((i:Z) (`result1 + 1 <= i` /\ `i <= n` -> (heap t1 n i))))
+  (Zwf `0` `n - result1` Variant1).
+Proof.
+Intros; Unfold Zwf; Decompose [select_son] Post10; Omega'.
+Save.
+
+Lemma downheap_po_12 : 
+  (N: Z)
+  (k: Z)
+  (n: Z)
+  (t: (array N Z))
+  (Pre10: `0 <= k` /\ `k <= n` /\ `n < N` /\
+          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
+  (Variant1: Z)
+  (N: Z)
+  (k: Z)
+  (n: Z)
+  (t0: (array N Z))
+  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+         ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
+  (Pre8: Variant1 = `n - k`)
+  (result: Z)
+  (Post1: result = `2 * k + 1`)
+  (Test8: `result <= n`)
+  (result1: Z)
+  (Post10: (select_son t0 k n result1))
+  (Test7: `(access t0 k) < (access t0 result1)`)
+  (t1: (array N Z))
+  (Post21: (exchange t1 t0 k result1))
   (t2: (array N Z))
   (Post23: (permut t2 t1) /\
            ((i:Z) (`result1 <= i` /\ `i <= n` -> (heap t2 n i))) /\
@@ -435,6 +465,7 @@ Lemma downheap_po_11 :
     `i < N` -> (access t2 i) = (access t0 i))) /\
   ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))).
 Proof.
+
 Intuition.
 (* permut *)
 Apply permut_trans with t' := t1.
@@ -498,7 +529,7 @@ Elim Post10; Intros; Omega'.
     Assumption. Omega'. Omega'.
 Save.
 
-Lemma downheap_po_12 : 
+Lemma downheap_po_13 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -540,7 +571,7 @@ Omega'. Rewrite <- H10. Assumption.
 Intro. Apply H7; Omega'.
 Save.
 
-Lemma downheap_po_13 : 
+Lemma downheap_po_14 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -574,4 +605,3 @@ Intro; Absurd `2*k0+1 > n0`; Omega'.
 Intro; Absurd `2*k0+2 > n0`; Omega'.
 Intro; Absurd `2*k0+2 > n0`; Omega'.
 Save.
-

@@ -1,5 +1,5 @@
 
-WHY=../../bin/why.opt
+WHY=../../bin/why.static
 
 %_why.v: %.ml $(WHY)
 	$(WHY) $<

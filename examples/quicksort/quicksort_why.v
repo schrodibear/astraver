@@ -71,6 +71,7 @@ Lemma quick_rec_po_4 :
   (Zwf `(-1)` `result0 - 1 - l` Variant1).
 Proof.
 Intuition.
+Unfold Zwf; Omega.
 Save.
 
 Lemma quick_rec_po_5 : 
@@ -93,9 +94,7 @@ Lemma quick_rec_po_5 :
           (sub_permut l `result0 - 1` t2 t1))
   `0 <= result0 + 1` /\ `r < N`.
 Proof.
-Intros.
-Apply quicksort_lemma with t1:=t1 t2:=t2 p:=result0;
-Intuition. 
+Intros; Omega.
 Save.
 
 Lemma quick_rec_po_6 : 
@@ -119,7 +118,7 @@ Lemma quick_rec_po_6 :
   (Pre: `0 <= result0 + 1` /\ `r < N`)
   (Zwf `(-1)` `r - (result0 + 1)` Variant1).
 Proof.
-Intros; Apply quicksort_trivial; Intuition.
+Intros; Unfold Zwf; Omega.
 Save.
 
 Lemma quick_rec_po_7 : 
@@ -145,7 +144,9 @@ Lemma quick_rec_po_7 :
            (sub_permut `result0 + 1` r t3 t2))
   (sorted_array t3 l r) /\ (sub_permut l r t3 t0).
 Proof.
-(* FILL PROOF HERE *)
+Intros.
+Apply quicksort_lemma with t1:=t1 t2:=t2 p:=result0;
+Intuition. 
 Save.
 
 Lemma quick_rec_po_8 : 
@@ -161,7 +162,7 @@ Lemma quick_rec_po_8 :
   (Test1: `l >= r`)
   (sorted_array t0 l r) /\ (sub_permut l r t0 t0).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Apply quicksort_trivial; Intuition.
 Save.
 
 Lemma quicksort_po_1 : 

@@ -5,6 +5,7 @@
 let rec f (x:int) (y:int) : bool { variant phi(x) } = (f x y)
 
 (***
+let rec has (this:value) (c:value) : bool { variant phi(this) } =
 	let res = ref false in
 	let test = ref (compareTo (access_contenu this) c) in
 	begin
