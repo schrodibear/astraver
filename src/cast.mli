@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.9 2002-11-21 14:04:08 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.10 2002-11-26 16:54:21 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -26,11 +26,6 @@ type constant_expression = unit
 type annot = int * string
 
 type parameters = (pure_type * Ident.t) list
-
-type declarator =
-  | CDvar of Ident.t
-  | CDarr of Ident.t * constant_expression
-  | CDfun of Ident.t * parameters * annot option
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
@@ -44,6 +39,7 @@ type binary_operator =
   | Bw_and | Bw_xor | Bw_or | And | Or
 
 type cexpr =
+  | CEnop of Loc.t
   | CEconst of Loc.t * string
   | CEvar of Loc.t * Ident.t
   | CEarrget of Loc.t * cexpr * cexpr
@@ -54,14 +50,20 @@ type cexpr =
   | CEcall of Loc.t * cexpr * cexpr list
   | CEcond of Loc.t * cexpr * cexpr * cexpr
 
+type c_initializer = cexpr option
+
+type declarator =
+  | CDvar of Ident.t * c_initializer
+  | CDarr of Ident.t * constant_expression
+  | CDfun of Ident.t * parameters * annot option
+
 type cstatement = 
   | CSnop of Loc.t
   | CSexpr of Loc.t * cexpr
   | CScond of Loc.t * cexpr * cstatement * cstatement
   | CSwhile of Loc.t * cexpr * annot * cstatement
   | CSdowhile of Loc.t * cstatement * annot * cexpr
-  | CSfor of 
-      Loc.t * cstatement * cstatement * cexpr option * annot * cstatement
+  | CSfor of Loc.t * cexpr * cexpr * cexpr option * annot * cstatement
   | CSblock of Loc.t * block
   | CSreturn of Loc.t * cexpr option
 

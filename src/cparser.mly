@@ -36,6 +36,11 @@
     | Some (b,_) -> Loc.join (b,0) lb 
     | _ -> lb
 
+  let expr_of_statement = function
+    | CSnop l -> CEnop l
+    | CSexpr (_, e) -> e
+    | _ -> assert false
+
 %}
 
 %token <int * string> ANNOT
@@ -261,8 +266,13 @@ init_declarator_list
         ;
 
 init_declarator
-        : declarator { $1 }
-        | declarator EQUAL c_initializer { uns() }
+        : declarator 
+            { $1 }
+        | declarator EQUAL c_initializer 
+	    { match $1 with 
+		| CDvar (id, _) -> CDvar (id, Some $3) 
+		| d -> d 
+	    }
         ;
 
 storage_class_specifier
@@ -354,7 +364,7 @@ declarator
 
 direct_declarator
         : IDENTIFIER 
-            { CDvar (Ident.create $1) }
+            { CDvar (Ident.create $1, None) }
         | LPAR declarator RPAR 
 	    { uns() }
         | direct_declarator LSQUARE constant_expression RSQUARE 
@@ -362,11 +372,11 @@ direct_declarator
         | direct_declarator LSQUARE RSQUARE 
 	    { uns() }
         | direct_declarator LPAR parameter_type_list RPAR annot 
-	    { match $1 with CDvar id -> CDfun (id, $3, $5) | _ -> uns () }
+	    { match $1 with CDvar (id,_) -> CDfun (id, $3, $5) | _ -> uns () }
         | direct_declarator LPAR identifier_list RPAR 
 	    { uns() }
         | direct_declarator LPAR RPAR annot 
-            { match $1 with CDvar id -> CDfun (id, [], $4) | _ -> uns () }
+            { match $1 with CDvar (id,_) -> CDfun (id, [], $4) | _ -> uns () }
         ;
 
 /* ADDED FOR WHY */
@@ -400,7 +410,7 @@ parameter_list
 
 parameter_declaration
         : declaration_specifiers declarator 
-            { ($1, match $2 with CDvar id -> id | _ -> uns()) }
+            { ($1, match $2 with CDvar (id,_) -> id | _ -> uns()) }
         | declaration_specifiers abstract_declarator { uns() }
         | declaration_specifiers { ($1, Ident.anonymous) }
         ;
@@ -434,9 +444,9 @@ direct_abstract_declarator
         ;
 
 c_initializer
-        : assignment_expression { }
-        | LBRACE c_initializer_list RBRACE { }
-        | LBRACE c_initializer_list COMMA RBRACE { }
+        : assignment_expression { $1 }
+        | LBRACE c_initializer_list RBRACE { uns() }
+        | LBRACE c_initializer_list COMMA RBRACE { uns() }
         ;
 
 c_initializer_list
@@ -501,9 +511,11 @@ iteration_statement
         | DO statement ANNOT WHILE LPAR expression RPAR SEMICOLON 
 	    { CSdowhile (loc (), $2, $3, $6) }
         | FOR LPAR expression_statement expression_statement RPAR ANNOT statement 
-	    { CSfor (loc (), $3, $4, None, $6, $7) }
+	    { CSfor (loc (), expr_of_statement $3, expr_of_statement $4, 
+		     None, $6, $7) }
         | FOR LPAR expression_statement expression_statement expression RPAR ANNOT statement 
-	    { CSfor (loc (), $3, $4, Some $5, $7, $8) }
+	    { CSfor (loc (), expr_of_statement $3, expr_of_statement $4, 
+		     Some $5, $7, $8) }
         ;
 
 jump_statement

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.11 2002-11-25 14:33:57 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.12 2002-11-26 16:54:21 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -74,6 +74,7 @@ let rec print_ctype fmt = function
       fprintf fmt "%a (%a)" print_ctype ct (print_list comma print_ctype) ctl
 
 let loc_of_expr = function
+  | CEnop l -> l
   | CEconst (l, _) -> l
   | CEvar (l, _) -> l
   | CEarrget (l, _, _) -> l
@@ -117,6 +118,7 @@ let ml_let_tmp l e1 k2 =
   mk_expr l (Sletin (tmp, e1, e2)), r
 let ml_arrget l id e = mk_expr l (Sarrget (true, id, e))
 let ml_unop l op e = mk_expr l (Sapp (mk_expr l (Svar op), Sterm e))
+let ml_letref l x e1 e2 = mk_expr l (Sletref (x, e1, e2))
 
 let c_true l = ml_const l (ConstInt 1)
 let c_false l = ml_const l (ConstInt 0)
@@ -209,6 +211,17 @@ let interp_binop l op (m1,t1) (m2,t2) = match op with
   | Bw_or | Bw_xor | Bw_and ->
       assert false (* TODO *)
 
+(*s Assignment operators *)
+
+let interp_assign_op = function
+  | Amul -> Mult 
+  | Adiv -> Div
+  | Amod -> Mod
+  | Aadd -> Plus
+  | Asub -> Minus
+  | Aleft | Aright | Aand | Axor | Aor -> assert false (* TODO *)
+  | Aequal -> assert false
+
 (*s Coercion of [e] of type [t] to an expected type [et] *)
 
 let coerce l et e t = match et with
@@ -228,6 +241,19 @@ let rec is_pure = function
   | CEcond (_, e1, e2, e3) -> is_pure e1 && is_pure e2 && is_pure e3
   | _ -> false
 
+(*s Left values *)
+
+type lvalue = 
+  | LVid of Loc.t * Ident.t
+
+let interp_lvalue cenv = function
+  | CEvar (l, id) ->
+      (match get_type l cenv id with
+	 | ct, Ref _ -> LVid (l, id), ct
+	 | _ -> raise_located l (NotAReference id))
+  | e ->
+      raise_located (loc_of_expr e) (AnyMessage "not a left-value")
+
 (*s C expressions. 
     [cenv : cenv] is the environment. 
     [et : ctype option] is the (possibly) expected type; 
@@ -243,18 +269,19 @@ let rec interp_expr cenv et e =
 	  (match get_type l cenv id with
 	     | ct, Ref _ -> ml_refget l id, ct
 	     | ct, _ -> ml_var l id , ct)
-      | CEassign (l, CEvar (_,id), Aequal, e) -> 
-	  (match get_type l cenv id with
-	     | ct, Ref _ -> 
-		 let m,t = interp_expr cenv (Some ct) e in
+      | CEassign (l, lv, op, e) -> 
+	  (match interp_lvalue cenv lv with
+	     | LVid (_, id), ct -> 
+		 let mt = interp_expr cenv (Some ct) e in
+		 let getid = ml_refget l id in
+		 let m',t = match op with
+		   | Aequal -> mt
+		   | _ -> interp_binop l (interp_assign_op op) (getid,ct) mt
+		 in
 		 if et = Some void then
-		   ml_refset l id m, void
+		   ml_refset l id m', void
 		 else
-		   mk_seq l (ml_refset l id m) (ml_refget l id), t
-	     | _ -> 
-		 raise_located l (NotAReference id))
-      | CEassign _ ->
-	  assert false
+		   mk_seq l (ml_refset l id m') getid, t)
       | CEseq (l, e1, e2) -> 
 	  let m1,t1 = interp_expr cenv (Some void) e1 in
 	  let m2,t2 = interp_expr cenv et e2 in
@@ -284,9 +311,9 @@ let rec interp_expr cenv et e =
 	  int_of_bool l (interp_boolean cenv e), c_int
       | CEbinary (l, e1, (Bw_and | Bw_or | Bw_xor as op), e2) ->
 	  assert false
-      | CEunary (l, Prefix_inc, CEvar (_, id)) ->
-	  (match get_type l cenv id with
-	     | ct, Ref _ -> 
+      | CEunary (l, Prefix_inc, lv) ->
+	  (match interp_lvalue cenv lv with
+	     | LVid (_, id), ct -> 
 		 let getid = ml_refget l id in
 		 let id_1,_ = 
 		   interp_binop l Plus (getid, ct) 
@@ -296,9 +323,7 @@ let rec interp_expr cenv et e =
 		 if et = Some void then 
 		   incrid, void
 		 else 
-		   mk_seq l incrid getid, ct
-	     | _ -> 
-		 raise_located l (NotAReference id))
+		   mk_seq l incrid getid, ct)
       | CEunary (l, Not, e) ->
 	  ml_if l (interp_boolean cenv e) (c_false l) (c_true l), c_int
       | CEunary (l, Uplus, e) ->
@@ -318,6 +343,8 @@ let rec interp_expr cenv et e =
 	     | _ -> raise_located l' (NotAnArray id))
       | CEarrget (l, _, _) ->
 	  unsupported l
+      | CEnop l ->
+	  ml_const l ConstUnit, void
       | CEconst (l, s) ->
 	  (try
 	     ml_const l (ConstInt (int_of_string s)), c_int
@@ -353,19 +380,19 @@ let append_to_block l s1 s2 = match s1, s2 with
   | CSblock (_, (d, bl)), Some s2 -> CSblock (l, (d, bl @ [s2]))
   | _, Some s2 -> CSblock (l, ([], [s1; s2]))
 
-(* TODO: vérifier [et] *)
+(* TODO: vérifier [et], sert au return seulement *)
 let rec interp_statement cenv et = function
   | CSexpr (_, e) -> 
-      let m,_ = interp_expr cenv et e in m
+      let m,_ = interp_expr cenv (Some void) e in m
   | CSblock (l, bl) ->
-      interp_block l cenv bl
+      interp_block l cenv et bl
   | CSfor (l, s1, s2, e3, an, s) ->
       let (i,v) = interp_loop_annot an in
       let s3 = option_app (fun e -> CSexpr (l, e)) e3 in
+      let m1,_ = interp_expr cenv (Some void) s1 in
       let bl = append_to_block l s s3 in
-      mk_seq l 
-	(interp_statement cenv (Some void) s1) 
-	(mk_expr l (Swhile (interp_statement cenv (Some c_bool) s2, Some i, v, 
+      mk_seq l m1
+	(mk_expr l (Swhile (interp_boolean cenv s2, Some i, v, 
 			    interp_statement cenv (Some void) bl)))
   | CSdowhile (l, s, an, e) ->
       (* do s while (e) = s ; while (e) s *)
@@ -385,18 +412,31 @@ let rec interp_statement cenv et = function
       assert false
 
 (* TODO: passer un [et] *)
-and interp_block l cenv (d,b) =
-  assert (d = []);
+and interp_block l cenv et (d,b) =
+  let rec interp_locals cenv = function
+    | [] ->
+	cenv, []
+    | Ctypedecl (l, CDvar (id, Some e), v) :: dl ->
+	let m,_ = interp_expr cenv (Some (CTpure v)) e in
+	let cenv' = Idmap.add id (CTpure v, Ref (PureType v)) cenv in
+	let cenv'',lv = interp_locals cenv' dl in
+	cenv'', (id, m) :: lv
+    | Ctypedecl (l, CDvar (_, None), _) :: _ -> 
+	raise_located l (AnyMessage "Local variables must be initialized")
+    | _ ->
+	unsupported l
+  in
+  let cenv',lv = interp_locals cenv d in
   let rec interp_bl = function
     | [] -> 
 	mt_seq l
     | s :: bl ->
-	mk_seq l (interp_statement cenv (Some void) s) (interp_bl bl)
+	mk_seq l (interp_statement cenv' et s) (interp_bl bl)
   in
-  interp_bl b
+  List.fold_right (fun (id,e) m -> ml_letref l id e m) lv (interp_bl b)
 
-let interp_annotated_block cenv (l, p, bl, q) =
-  { pdesc = (interp_block l cenv bl).pdesc;
+let interp_annotated_block cenv et (l, p, bl, q) =
+  { pdesc = (interp_block l cenv et bl).pdesc;
     pre = interp_c_pre p; post = interp_c_post q; loc = l }
 
 let interp_binder (pt, id) = (id, BindType (PVpure pt))
@@ -404,10 +444,11 @@ let interp_binder (pt, id) = (id, BindType (PVpure pt))
 let interp_binders = List.map interp_binder
 
 let interp_fun cenv l bl v bs =
-  mk_ptree l (Slam (interp_binders bl, interp_annotated_block cenv bs)) [] None
+  mk_ptree l (Slam (interp_binders bl, 
+		    interp_annotated_block cenv (Some (CTpure v)) bs)) [] None
 
 let interp_decl cenv = function
-  | Ctypedecl (l, CDvar id, v) -> 
+  | Ctypedecl (l, CDvar (id, _), v) -> 
       Parameter (l, [id], PVref (PVpure v)),
       Idmap.add id (CTpure v, Ref (PureType v)) cenv
   | Ctypedecl (l, CDfun (id, bl, an), v) -> 
