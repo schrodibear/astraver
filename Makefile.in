@@ -225,7 +225,7 @@ export-doc: doc/manual.ps doc/manual.html
 
 BINARYNAME = $(NAME)-$(OSTYPE)
 
-linux: clean binary
+linux: binary
 
 BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO) \
 	doc/why.1 doc/manual.ps \
