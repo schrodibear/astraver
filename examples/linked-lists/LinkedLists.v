@@ -1,18 +1,8 @@
 
 Require Why.
-
-(* finite lists characterization *)
-
-Inductive is_list [h: int_store; t: pointer_store] : pointer -> Prop :=
-  | List_null : (is_list h t null)
-  | List_cons : (p:pointer) (is_valid_int h p) -> (is_valid_pointer t p)
-                -> (is_list h t (access_pointer t p)) -> (is_list h t p).
-
-Hint is_list : core := Constructors is_list.
+Require Export PolyList.
 
 (* the Coq pointer list associated to a (finite) linked list *)
-
-Require PolyList.
 
 Definition plist := (list pointer).
 
@@ -24,6 +14,61 @@ Inductive list_of [t:pointer_store] : pointer -> plist -> Prop :=
 
 Hint list_of : core := Constructors list_of.
 
+(* no common element between two lists *)
+
+Definition disjoint [l1,l2: plist] : Prop :=
+  ((x:pointer)(In x l1) -> ~(In x l2)) /\
+  ((x:pointer)(In x l2) -> ~(In x l1)).
+
+(* invariance of a list when updating a cell outside of this list *)
+
+Lemma list_of_update_same : 
+  (t:pointer_store)(p:pointer)(l:plist)(list_of t p l) -> 
+  (p1,p2:pointer) (is_valid_pointer t p1) -> ~(In p1 l) -> 
+  (list_of (update_pointer t p1 p2) p l).
+Proof.
+Induction 1; Intuition.
+Apply List_of_cons; Auto.
+Rewrite update_access_other_pointer; Auto.
+Auto with *.
+Red; Intro; Apply H4; Subst p1; Auto with *.
+Save.
+
+Lemma no_cycle_1 : (t:pointer_store)(p:pointer)(is_valid_pointer t p) ->
+  (l:plist)(list_of t p l) -> ~p=(access_pointer t p).
+Proof.
+Inversion 2.
+Rewrite <- H1 in H; Simpl in H; Tauto.
+Subst.
+Inversion H0.
+Inversion H3.
+
+Save.
+
+
+Lemma list_of_not_in : 
+  (t:pointer_store)(l:plist)(p,p':pointer)
+  (list_of t p (cons p' l)) -> ~(In p l).
+Proof.
+Intros; Inversion H.
+Subst.
+Inversion H4.
+Auto.
+Subst.
+
+Save.
+
+Hints Resolve list_of_update_same list_of_not_in.
+
+(* finite lists characterization *)
+
+Inductive is_list [h: int_store; t: pointer_store] : pointer -> Prop :=
+  | List_null : (is_list h t null)
+  | List_cons : (p:pointer) (is_valid_int h p) -> (is_valid_pointer t p)
+                -> (is_list h t (access_pointer t p)) -> (is_list h t p).
+
+Hint is_list : core := Constructors is_list.
+
 Lemma is_list_list_of : 
   (h:int_store; t:pointer_store)
   (p:pointer)(is_list h t p) -> (EX l:plist | (list_of t p l)).
@@ -33,10 +78,6 @@ Exists (nil pointer); Intuition.
 Elim HrecH; Intros.
 Exists (cons p x); Intuition.
 Save.
-
-Definition disjoint [l1,l2: plist] : Prop :=
-  ((x:pointer)(In x l1) -> ~(In x l2)) /\
-  ((x:pointer)(In x l2) -> ~(In x l1)).
 
 (* WF relation over lists *)
 

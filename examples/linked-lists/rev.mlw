@@ -50,7 +50,9 @@ let rev (p0:pointer) =
       Ltl := (update_pointer !Ltl !q !p);
       p := !q
       end
-    done
+    done;
+    !p
   end
-  {}
+  { exists l:plist. list_of(Ltl, result, l) and
+    forall l0:plist. list_of(Ltl, p0, l0) -> l = rev(l0) }
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.1 2003-04-10 14:37:43 filliatr Exp $ *)
+(* $Id: WhyCM.v,v 1.2 2003-04-10 15:59:51 filliatr Exp $ *)
 
 Require Export WhyArrays.
 
@@ -142,6 +142,12 @@ Definition is_valid_update_pointer :
   (s:pointer_store)(p1,p2:pointer)(v:pointer)
   (is_valid_pointer s p1) -> (is_valid_pointer (update_pointer s p2 v) p1)
 := (!is_valid_update pointer).
+Definition update_access_other_pointer : 
+  (s:pointer_store)(p1,p2:pointer)(v:pointer)
+  (is_valid_pointer s p1) -> (is_valid_pointer s p2) -> ~p1=p2 -> 
+  (access_pointer (update_pointer s p1 v) p2) = (access_pointer s p2)
+:= (!pupdate_paccess_other pointer).
+
 Hints Resolve is_valid_update_pointer.
 
 (* The set of allocated addresses *)

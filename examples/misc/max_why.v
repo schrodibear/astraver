@@ -13,7 +13,7 @@ Axiom l_pos : `0 < l`.
     (`0 <= k` /\ `k < l` ->
      (`k <> i` -> (`k <> j` -> `(access a0 k) = (access a k)`)))))).
 
-(* Why obligation from file "test.mlw", characters 524-529 *)
+(* Why obligation from file "max.mlw", characters 555-560 *)
 Lemma pgm_max_end_po_1 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)
@@ -33,7 +33,7 @@ Proof.
 Auto with *.
 Save.
 
-(* Why obligation from file "test.mlw", characters 532-537 *)
+(* Why obligation from file "max.mlw", characters 563-568 *)
 Lemma pgm_max_end_po_2 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)
@@ -54,7 +54,7 @@ Proof.
 Auto with *.
 Save.
 
-(* Why obligation from file "test.mlw", characters 543-550 *)
+(* Why obligation from file "max.mlw", characters 574-581 *)
 Lemma pgm_max_end_po_3 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)
@@ -86,7 +86,7 @@ Subst; Intuition.
 Unfold Zwf; Intuition.
 Save.
 
-(* Why obligation from file "test.mlw", characters 521-550 *)
+(* Why obligation from file "max.mlw", characters 552-581 *)
 Lemma pgm_max_end_po_4 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)
@@ -115,7 +115,7 @@ Subst; Intuition.
 Unfold Zwf; Intuition.
 Save.
 
-(* Why obligation from file "test.mlw", characters 408-492 *)
+(* Why obligation from file "max.mlw", characters 439-523 *)
 Lemma pgm_max_end_po_5 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)
@@ -131,7 +131,7 @@ Assert `k=0` \/ `0<k`. Omega. Intuition.
 Subst; Intuition.
 Save.
 
-(* Why obligation from file "test.mlw", characters 314-766 *)
+(* Why obligation from file "max.mlw", characters 345-797 *)
 Lemma pgm_max_end_po_6 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)
