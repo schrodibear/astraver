@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.2 2002-12-06 10:11:19 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.3 2002-12-06 10:32:55 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -30,6 +30,8 @@ let oblig = Queue.create ()
 let reset () = Queue.clear oblig
 
 let push_obligations = List.iter (fun o -> Queue.add o oblig)
+
+(*s Pretty print *)
 
 let uncapitalize fmt id = 
   fprintf fmt "%s" (String.uncapitalize (Ident.string id))
@@ -85,6 +87,9 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(not (= %a@ %a))@]" print_term a print_term b
   | Papp (id, tl) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
+  | Papp (id, [a;b]) when id == t_zwf_zero ->
+      fprintf fmt "@[(and (arith_leq 0 %a)@ (arith_less %a %a))@]" 
+	print_term b print_term a print_term b
   | Papp (id, tl) -> 
       fprintf fmt "@[(%a@ %a)@]" uncapitalize id print_terms tl
   | Ptrue ->
@@ -105,6 +110,18 @@ let rec print_predicate fmt = function
   | Forall _
   | Exists _ -> assert false
 
+let output_sequent fmt (ctx, c) = match ctx with
+  | [] -> 
+      fprintf fmt "@[%a@]" print_predicate c
+  | [p] -> 
+      fprintf fmt "@[<hov 2>(->@ @[%a@]@ %a)@]" 
+	print_predicate p print_predicate c
+  | ctx -> 
+      fprintf fmt "@[<hov 2>(->@ @[<hov 2>(and@ %a)@]@ %a)@]"
+	(print_list space print_predicate) ctx print_predicate c
+
+(*s First-order checks *)
+
 let rec is_first_order = function
   | Pvar _
   | Papp _
@@ -123,24 +140,26 @@ let rec filter_context = function
   | Spred (_, p) :: ctx when is_first_order p -> p :: filter_context ctx
   | Spred _ :: ctx -> filter_context ctx
 
-let output_sequent fmt (ctx, c) = 
-  match filter_context ctx with
-    | [] -> 
-	fprintf fmt "@[%a@]" print_predicate c
-    | [p] -> 
-	fprintf fmt "@[<hov 2>(->@ @[%a@]@ %a)@]" 
-	  print_predicate p print_predicate c
-    | ctx -> 
-	fprintf fmt "@[<hov 2>(->@ @[<hov 2>(and@ %a)@]@ %a)@]"
-	  (print_list space print_predicate) ctx print_predicate c
+exception NotFirstOrder
+
+let rec prepare_conclusion = function
+  | Forall (_, _, _, p) -> prepare_conclusion p
+  | p -> if is_first_order p then p else raise NotFirstOrder
+
+let prepare_sequent (ctx, c) = 
+  filter_context ctx, prepare_conclusion c
 
 let output_obligation f (o, s) = 
-  let fname = f ^ "_" ^ o ^ ".rv" in
-  let cout = open_out fname in
-  let fmt = formatter_of_out_channel cout in
-  output_sequent fmt s;
-  pp_print_flush fmt ();
-  close_out cout
+  try
+    let s = prepare_sequent s in
+    let fname = f ^ "_" ^ o ^ ".rv" in
+    let cout = open_out fname in
+    let fmt = formatter_of_out_channel cout in
+    output_sequent fmt s;
+    pp_print_flush fmt ();
+    close_out cout
+  with NotFirstOrder ->
+    unlocated_wprintf "obligation %s is not first-order@\n" o
 
 let output_file f = Queue.iter (output_obligation f) oblig
 

@@ -1,8 +1,13 @@
 
+version 0.8, December 6th, 2002
+===============================
+  o haRVey output (see http://www.loria.fr/~ranise/haRVey/)
+  o C input (incomplete: no arrays, no pointers, no recursive functions)
   o Coq: helper tactics (AccessSame, AccessOther, ...)
   o fixed bug in application typing
-  o arrays do not have a dependent type anymore; array_length introduced
-  o Emacs mode for editing Why ML source
+  o major change:
+    arrays do not have a dependent type anymore; array_length introduced
+  o Emacs mode for editing Why ML source (in lib/emacs)
   o automatic discharge of ...|-(well_founded (Zwf 0))
     and of ...,v=t,...,I and (Zwf 0 t' t),...|-(Zwf 0 t' v)
   o fixed bug in local recursive functions
