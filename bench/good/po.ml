@@ -17,4 +17,11 @@ let p6 = (let a = 3 in a + 4) { result = 7 }
 
 let p7 = (3 + (let a = 4 in a + a)) { result = 11 }
 
-let p8 = { q(x+4) } (3 + begin x := !x + 1; !x end) { q(x) }
+(* Side effects in function arguments *)
+
+let p8 = 
+  { q(x+1) } (3 + begin x := !x + 1; !x end) { q(x) and result = x@ + 4 }
+
+(* evaluation order *)
+
+let p9 = (begin x := 1; 1 end + begin x := 2; 1 end) { result = 2 and x = 1 }

@@ -27,6 +27,17 @@ external f7 : x:foo -> {} foo {}
 
 external f8 : t:array 10 of int -> {} unit { access(t,1) = 2 }
 
+(* predicates *)
+let p1 = 0 { true }
+let p2 = 0 { not false }
+let p3 = 0 { true and true }
+let p4 = 0 { true or false }
+let p5 = 0 { false or not false }
+let p6 = 0 { true -> not false }
+let p7 = 0 { forall x:int. x=x }
+let p8 = 0 { true and forall x:int. x=x }
+let p9 = 0 { forall x:int. forall y:int. x=y -> x=y }
+
 (* variables *)
 let acc1 = v2
 let acc2 = acc1

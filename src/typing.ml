@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.38 2002-03-25 13:05:14 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.39 2002-03-25 16:06:27 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -431,30 +431,42 @@ and typef_desc lab env loc = function
       let _,eapp,_,_ = decomp_kappa kapp in
       let ef = union3effects (effect t_a) (effect t_f) eapp in
       (match t_a.desc with
+	 (* argument is pure: it is substituted *)
 	 | Expression ca when post t_a = None ->
 	     let kapp = type_c_rsubst [x,ca] kapp in
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     (match t_f.desc with
+	       (* function itself is pure: we collapse terms *)
 		| Expression cf when post t_f = None ->
 		    let pl = (pre t_a) @ (pre t_f) in
 		    let e = Expression (applist cf [ca]) in
 		    coerce e env kapp, (tapp, ef), pl
 		| _ ->	   
 		    App (t_f, Term t_a, Some kapp), (tapp, ef), [])
+         (* argument is complex: we transform into [let v = arg in (f v)] *)
 	 | _ ->
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
-	     (* TODO: rename [x] to avoid capture *)
+	     let v = fresh_var () in
+	     let kapp = type_c_subst [x,v] kapp in
 	     let info = { loc = loc; pre = []; post = None } in
-	     let env' = Env.add x tx env in
-	     let app_f_x,pl = match t_f.desc with
+	     let env' = Env.add v tx env in
+	     let app_f_v,pl = match t_f.desc with
+	       (* function itself is pure: we collapse terms *)
 	       | Expression cf when post t_f = None ->
-		   Expression (applist cf [Tvar x]), pre t_f
+		   Expression (applist cf [Tvar v]), pre t_f
+               (* function is [let y = ty in E]: we lift this let *)
+	       | LetIn (y, ty, ({ desc = Expression cf } as tf')) 
+                 when post tf' = None && post t_f = None ->
+		   let e = Expression (applist cf [Tvar v]) in
+		   let env'' = Env.add v tx tf'.info.env in
+		   LetIn (y, ty, make_lnode e env'' kapp),
+		   pre tf' @ pre t_f
 	       | _ ->
-		   let var_x = make_lnode (Var x) env' (type_c_of_v tx) in
-		   App (t_f, Term var_x, Some kapp), []
+		   let var_v = make_lnode (Var v) env' (type_c_of_v tx) in
+		   App (t_f, Term var_v, Some kapp), []
 	     in
-	     LetIn (x, t_a, make_lnode app_f_x env' kapp), (tapp, ef), pl)
+	     LetIn (v, t_a, make_lnode app_f_v env' kapp), (tapp, ef), pl)
 
   | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in

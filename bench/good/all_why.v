@@ -2,6 +2,60 @@
 Require Why.
 Require Omega.
 
+Lemma p1_po_1 : 
+  True.
+Proof.
+Tauto.
+Save.
+
+Lemma p2_po_1 : 
+  ~False.
+Proof.
+Tauto.
+Save.
+
+Lemma p3_po_1 : 
+  True /\ True.
+Proof.
+Tauto.
+Save.
+
+Lemma p4_po_1 : 
+  True \/ False.
+Proof.
+Tauto.
+Save.
+
+Lemma p5_po_1 : 
+  False \/ ~False.
+Proof. 
+Auto.
+Save.
+
+Lemma p6_po_1 : 
+  (True -> ~False).
+Proof.
+Auto.
+Save.
+
+Lemma p7_po_1 : 
+  ((x:Z) x = x).
+Proof.
+Auto.
+Save.
+
+Lemma p8_po_1 : 
+  True /\ ((x:Z) x = x).
+Proof.
+Auto.
+Save.
+
+Lemma p9_po_1 : 
+  ((x:Z) ((y:Z) (x = y -> x = y))).
+Proof.
+Auto.
+Save.
+
 Lemma arr1_po_1 : 
   `0 <= 0` /\ `0 < 10`.
 Proof. (* arr1_po_1 *)

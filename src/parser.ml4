@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.29 2002-03-25 13:05:14 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.30 2002-03-25 16:06:27 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -18,7 +18,6 @@ let term = gec "term"
 let term0 = gec "term0"
 let term1 = gec "term1"
 let predicate = gec "predicate"
-let predicate00 = gec "predicate00"
 let predicate0 = gec "predicate0"
 let predicate1 = gec "predicate1"
 let predicate2 = gec "predicate2"
@@ -165,12 +164,7 @@ EXTEND
     | f = FLOAT -> ConstFloat (float_of_string f) ] ]
   ;
   predicate:
-  [ [ LIDENT "forall"; id = ident; ":"; t = primitive_type; 
-      "." ; a = predicate -> forall id (PureType t) a 
-    | a = predicate00 -> a ] ]
-  ; 
-  predicate00:
-  [ [ a = predicate0; "->"; b = predicate00 -> Pimplies (a,b)
+  [ [ a = predicate0; "->"; b = predicate -> Pimplies (a,b)
     | a = predicate0 -> a ] ]
   ; 
   predicate0:
@@ -188,6 +182,8 @@ EXTEND
 	Pand (Papp (r1, [t1;t2]), Papp (r2, [t2;t3]))
     | "if"; t = term; "then"; p1 = predicate; "else"; p2 = predicate ->
 	Pif (t, p1, p2)
+    | LIDENT "forall"; id = ident; ":"; t = primitive_type; 
+      "." ; a = predicate -> forall id (PureType t) a 
     | "not"; a = predicate -> Pnot a
     | "true" -> Ptrue
     | "false" -> Pfalse

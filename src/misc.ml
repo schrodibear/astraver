@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.26 2002-03-21 15:47:06 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.27 2002-03-25 16:06:27 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -80,7 +80,7 @@ let variant_name = gen_sym "Variant"
 let phi_name = gen_sym "rphi"
 let for_name = gen_sym "for"
 let label_name = let f = gen_sym "_label_" in fun () -> Ident.string (f ())
-let fresh_var = gen_sym "_var_"
+let fresh_var = gen_sym "aux_"
 let wf_name = gen_sym "wf"
 
 let id_of_name = function Name id -> id | Anonymous -> default

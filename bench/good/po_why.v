@@ -70,11 +70,29 @@ Save.
 
 Lemma p8_po_1 : 
   (x: Z)
-  (Pre1: (q `x + 4`))
+  (Pre1: (q `x + 1`))
   (x0: Z)
   (Post1: x0 = `x + 1`)
-  (q x0).
-Proof. (* p8_po_1 *)
-(* FILL PROOF HERE *)
+  (q x0) /\ `3 + x0` = `x + 4`.
+Proof.
+Intuition; Rewrite Post1; Assumption.
+Save.
+
+Lemma p9_po_1 : 
+  (x0: Z)
+  (Post2: x0 = `2`)
+  ((x:Z) (x = `1` -> `1 + 1` = `2` /\ x = `1`)).
+Proof.
+Intuition.
+Save.
+
+Lemma p9_po_2 : 
+  (result: Z)
+  (Post3: ((x:Z) (x = `1` -> `1 + result` = `2` /\ x = `1`)))
+  (x1: Z)
+  (Post1: x1 = `1`)
+  `1 + result` = `2` /\ x1 = `1`.
+Proof.
+Intuition.
 Save.
 
