@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.98 2003-09-22 21:46:11 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.99 2003-09-23 08:07:40 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -688,7 +688,7 @@ struct
    It can be modified; only the generated parts will be overwritten. *)@\n
 %s@\n@\n" coq_preamble
 
-  let end_of_element _ s =
+  let not_end_of_element _ s =
     let n = String.length s in n = 0 || s.[n-1] <> '.'
 
 end)

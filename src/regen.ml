@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.4 2003-09-22 13:11:59 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.5 2003-09-23 08:07:40 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -48,7 +48,7 @@ module type S = sig
   val first_time : formatter -> unit
 
   (* how to recognize the end of an element to erase / overwrite *)
-  val end_of_element : element_id -> string -> bool
+  val not_end_of_element : element_id -> string -> bool
 
 end
 
@@ -106,11 +106,11 @@ module Make(X : S) = struct
 	      print_up_to e
 	    end else
 	      if verbose then eprintf "erasing %a@." print_element_kind e;
-	    if X.end_of_element e s then skip_element e;
+	    if X.not_end_of_element e s then skip_element e;
 	    scan ()
     and skip_element e =
       let s = input_line cin in
-      if X.end_of_element e s then skip_element e
+      if X.not_end_of_element e s then skip_element e
     and tail () = 
       fprintf fmt "%c" (input_char cin); tail () 
     and print_up_to e =
