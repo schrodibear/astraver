@@ -1,4 +1,5 @@
 
+  o fixed bug with WP of constants false/true (simplification added)
   o better automatic annotation of tests (in particular || and && are given
     postconditions whenever possible)
 
