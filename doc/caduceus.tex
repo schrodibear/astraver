@@ -676,7 +676,7 @@ result1 = 0
 Now the important hypothesis we have is \verb|H8|: it specifies that
 between memory states \verb|balance0| and \verb|balance1|, the only
 memory location that has been assigned is the one pointed by
-\verb|p2|. So, since we now that \verb|p1| and \verb|p2| are different
+\verb|p2|. So, since we know that \verb|p1| and \verb|p2| are different
 (\verb|H0|), we should have \verb|p1 # balance1 = p1 # balance0|. We proceed
 by tactics
 \begin{verbatim}
@@ -1155,6 +1155,9 @@ so in future versions of the tool:
 \item arithmetic overflow (currently all integers types are mapped to
   arbitrary precision integers on the prover side)
 \item \texttt{sizeof}
+\item standard library functions: \texttt{malloc}, \texttt{memcpy},
+  \texttt{strcmp}, etc.
+\item more support for \verb|&| operator.
 \end{itemize}
 
 \subsection{Other unsupported features}
