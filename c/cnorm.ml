@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.15 2005-01-12 13:26:22 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.16 2005-01-12 14:36:32 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -1000,14 +1000,23 @@ let compatible_type ty1 ty2 =
     | _, Tfun _ | _, Tenum _| _, Tpointer _  
     | _, Ctypes.Tvar _ | _, Tvoid | _, Tint _ | _, Tfloat _ -> false
     | _, _ -> true 
+
 (* assumes v2 is an array of objects of type ty *)
-let rec tab_struct loc v1 v2 s ty n n1 n2=
+let rec tab_struct loc mark v1 v2 s ty n n1 n2=
   let l = begin
     match  tag_type_definition n with
       | TTStructUnion ((Tstruct _),fl) ->
 	  fl
       | _ -> assert false
   end in
+  if mark then
+    List.fold_left 
+      (fun p t -> 
+	 if  compatible_type t.var_type v2.nterm_type 
+	 then make_and p (not_alias loc v2 (in_struct v1 t))
+	 else p)
+      NPtrue l
+  else
   make_and (List.fold_left 
 	      (fun p t -> 
 		 if  compatible_type t.var_type v2.nterm_type 
@@ -1016,8 +1025,9 @@ let rec tab_struct loc v1 v2 s ty n n1 n2=
 	      NPtrue l)
     (make_forall_range loc v2 s 
        (fun t i -> 
-	  local_separation loc n1 v1 (n2^"[i]") (indirection loc ty t)))
-and local_separation loc n1 v1 n2 v2 =
+	  local_separation loc mark n1 v1 (n2^"[i]") (indirection loc ty t)))
+
+and local_separation loc mark n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
     | Tarray (ty, None), _ ->
@@ -1063,12 +1073,12 @@ and local_separation loc n1 v1 n2 v2 =
 		List.fold_left 
 		  (fun p t2 -> 
 		     make_and p 
-		       (local_separation loc n1 (in_struct v1 t1) 
+		       (local_separation loc mark n1 (in_struct v1 t1) 
 			  n2 (in_struct v2 t2)))
 		  p l2)
 	     NPtrue l1)
-    | Tstruct n , Tarray (ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
-    | Tarray (ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
+    | Tstruct n , Tarray (ty,Some s) -> tab_struct loc mark v1 v2 s ty n n1 n2
+    | Tarray (ty,Some s) , Tstruct n -> tab_struct loc mark v2 v1 s ty n n1 n2
     | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
 	make_and
 	  (if compatible_type v1.nterm_type v2.nterm_type
@@ -1078,10 +1088,10 @@ and local_separation loc n1 v1 n2 v2 =
 	     NPtrue)
 	  (make_and 
 	     (make_forall_range loc v1 s1 
-		(fun t i -> local_separation loc (n1^"[i]") 
+		(fun t i -> local_separation loc mark (n1^"[i]") 
 		     (indirection loc ty1 t) n2 v2))
 	     (make_forall_range loc v2 s2  
-		(fun t i -> local_separation loc n1 v1 (n2^"[j]") 
+		(fun t i -> local_separation loc true n1 v1 (n2^"[j]") 
 		     (indirection loc ty2 t))))
     | _, _ -> NPtrue
 
@@ -1131,7 +1141,7 @@ let rec separation_intern loc v1 =
 		       (var_to_term loc v))
 		    (List.fold_left 
 		       (fun acc x -> 
-			  make_and acc (local_separation loc 
+			  make_and acc (local_separation loc false
 					  v.var_name (in_struct v1 v) 
 					  x.var_name (in_struct v1 x))) 
 		       NPtrue l))
@@ -1145,7 +1155,7 @@ let rec separation_intern loc v1 =
 	  
 	
 let separation loc v1 v2 =
-  local_separation loc v1.var_name (var_to_term loc v1) 
+  local_separation loc false v1.var_name (var_to_term loc v1) 
     v2.var_name (var_to_term loc v2)
 
 (*
