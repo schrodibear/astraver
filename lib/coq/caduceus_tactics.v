@@ -49,9 +49,6 @@ Ltac AssignsRec :=
           X4 id); ModRec
 *)
 (*
-  |  |- (assigns ?X1 ?X2 (upd ?X2 ?X3 ?X4) ?X6) =>
-      apply (assigns_upd (h:=X1) X2 (unch:=X6) (v:=X3) X4); subst;
-       krakatoa; progress auto
 *)
 (*
   |  |- (modifiable ?X1 ?X7 (update ?X2 ?X3 ?X4) ?X6) =>
@@ -67,6 +64,13 @@ Ltac AssignsRec :=
        [ subst; krakatoa; unfold inter_loc; intuition; fail 
        | Store | ModRec ]
 *)
+  |  |- (assigns ?X1 ?X2 ?X3 (pointer_loc ?X4)) =>
+       unfold assigns; intro tmpp; intro assigncond; 
+        elim assigncond; clear assigncond; 
+        intros validcond unchangedcond;
+        generalize (unchanged_pointer_elim tmpp X4 unchangedcond);
+        intro neq_pointer_cond;
+        caduceus; progress auto
   end.
 
 

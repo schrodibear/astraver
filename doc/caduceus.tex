@@ -638,11 +638,10 @@ the ones of ESC/Java~\cite{?} and JML~\cite{JML}: it specifies that no
 other memory locations than \verb|p->balance| may be modified by the
 function.  Of course, that modification requires to make again the
 verification of function \verb|credit|: the second obligation is a bit
-more complicated, it is nevertheless solves by Simplify automatically.
-With Coq, the proof must be completed also follows
-\begin{verbatim}
-TODO
-\end{verbatim}
+more complicated, it is nevertheless solved by Simplify automatically,
+and with Coq the additional assertion is solved by intuition so indeed
+the same proof remains correct.
+
 Let's now go back to function \verb|test1|: the three obligations are
 now solved by Simplify, and for the Coq proof of the third obligation,
 after \verb|unfold purse_inv; intuition|, we have to solve
