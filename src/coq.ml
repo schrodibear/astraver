@@ -1,16 +1,16 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.20 2002-03-21 13:20:47 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.21 2002-03-21 15:47:06 filliatr Exp $ i*)
 
 open Options
 open Logic
 open Types
 open Ast
-open Misc
-open Util
 open Ident
+open Util
 open Format
 open Vcg
+open Misc
 
 let out_file f = f ^ "_why.v"
 
@@ -107,9 +107,12 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " /\@ "; print3 b
     | p -> print3 p
   and print3 = function
-    | Ptrue -> fprintf fmt "True"
-    | Pfalse -> fprintf fmt "False"
-    | Pvar id -> Ident.print fmt id
+    | Ptrue -> 
+	fprintf fmt "True"
+    | Pfalse -> 
+	fprintf fmt "False"
+    | Pvar id -> 
+	Ident.print fmt id
     | Papp (id, [a;b]) when id == t_eq ->
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [t]) when id == well_founded ->
@@ -130,14 +133,16 @@ let print_predicate fmt p =
 	fprintf fmt "(@[%s " (Ident.string id); 
 	print_list (fun fmt () -> fprintf fmt "@ ") print_term fmt l;
 	fprintf fmt "@])"
-    | Pnot p -> fprintf fmt "~"; print3 p
+    | Pnot p -> 
+	fprintf fmt "~"; print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = bsubst_in_predicate [n, Tvar id'] p in
 	fprintf fmt "(@[(%s:" (Ident.string id');
 	print_pure_type fmt t; fprintf fmt ")@ ";
 	print0 p'; fprintf fmt "@])"
-    | p -> fprintf fmt "("; print0 p; fprintf fmt ")"
+    | p -> 
+	fprintf fmt "("; print0 p; fprintf fmt ")"
   in
   print0 p
 
@@ -146,10 +151,29 @@ let rec print_cc_type fmt = function
       print_pure_type fmt pt
   | TTarray (s, v) -> 
       fprintf fmt "(array %a %a)" print_term s print_cc_type v
-  | TTlambda _
-  | TTarrow _ 
-  | TTtuple _ -> 
-      assert false
+  | TTlambda (b, t) ->
+      fprintf fmt "[%a]%a" print_binder b print_cc_type t
+  | TTarrow (b, t) -> 
+      fprintf fmt "(%a)%a" print_binder b print_cc_type t
+  | TTtuple ([_,t], None) -> 
+      print_cc_type fmt t
+  | TTtuple (bl, None) ->
+      fprintf fmt "(tuple_%d %a)" (List.length bl) 
+	(print_list space (fun fmt (_,t) -> print_cc_type fmt t)) bl
+  | TTtuple (bl, Some q) -> 
+      fprintf fmt "(sig_%d %a %a(%a))" (List.length bl)
+	(print_list space (fun fmt (_,t) -> print_cc_type fmt t)) bl 
+	(print_list nothing 
+	     (fun fmt (id,t) -> 
+		fprintf fmt "[%a:%a]" Ident.print id print_cc_type t)) bl
+	print_predicate q
+
+and print_binder fmt (id,b) = 
+  Ident.print fmt id;
+  match b with
+    | CC_pred_binder p -> fprintf fmt ": %a" print_predicate p
+    | CC_var_binder t -> fprintf fmt ": %a" print_cc_type t
+    | CC_untyped_binder -> ()
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
@@ -164,6 +188,45 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq hyps
 
+let print_proof fmt = function
+  | Lemma (s, vl) ->
+      fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
+  | Reflexivity t ->
+      fprintf fmt "@[(refl_equal ? %a)@]" print_term t
+  | Assumption id -> 
+      Ident.print fmt id
+
+let print_binder_id fmt (id,_) = Ident.print fmt id
+
+let rec print_cc_term fmt = function
+  | CC_var id -> 
+      Ident.print fmt id
+  | CC_letin (_,bl,c,c1) ->
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
+      (print_list comma print_binder_id) bl
+      print_cc_term c print_cc_term c1
+  | CC_lam (b,c) ->
+      fprintf fmt "@[<hov 2>[%a]@,%a@]" print_binder b print_cc_term c
+  | CC_app (f,args) ->
+      fprintf fmt "@[<hov 2>(%a@ %a)@]" 
+      print_cc_term f (print_list pp_print_space print_cc_term) args
+  | CC_tuple cl ->
+      fprintf fmt "<Tuple %a>" (print_list space print_cc_term) cl
+  | CC_case _ ->
+      fprintf fmt "<Case (TODO)>"
+  | CC_if (b,e1,e2) ->
+      fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
+      hov 0 fmt (print_cc_term fmt) e1;
+      fprintf fmt "@\nelse@\n  ";
+      hov 0 fmt (print_cc_term fmt) e2;
+      fprintf fmt "@]"
+  | CC_expr c ->
+      fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
+  | CC_hole pr ->
+      print_proof fmt pr
+  | CC_type t ->
+      print_cc_type fmt t
+      
 let reprint_obligation fmt (id,s) =
   fprintf fmt "@[<hov 2>Lemma %s : @\n%a.@]@\n" id print_sequent s
 
@@ -172,7 +235,7 @@ let print_obligation fmt o =
   fprintf fmt "Proof. (* %s *)@\n(* FILL PROOF HERE *)@\nSave.@\n@\n" (fst o)
 
 let print_validation fmt id v =
-  fprintf fmt "@[Definition %s_valid := O(*TODO*).@\n@]@\n" id
+  fprintf fmt "@[Definition %s_valid :=@\n  %a.@\n@]@\n" id print_cc_term v
 
 let print_parameter fmt id c =
   fprintf fmt "@[(*Why*) Parameter %s : %a.@\n@]@\n" id print_type_c c

@@ -54,3 +54,8 @@ IMPLEMENTATION
 
  - proof obligations related to if-then-else:
    replace "b:bool,h:Q(b),h':Q(true)" with "Q(true)" directly
+
+ - type predicates
+   => declare predicates in input files with a syntax like
+	predicate P(type,...,type)
+   only pure types?

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.25 2002-03-20 15:01:56 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.26 2002-03-21 15:47:06 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -464,9 +464,7 @@ let rec print_cc_term fmt = function
       (print_list comma print_binder) bl
       print_cc_term c print_cc_term c1
   | CC_lam (b,c) ->
-      fprintf fmt "@[<hov 2>";
-      print_binder fmt b;
-      fprintf fmt "@,"; print_cc_term fmt c; fprintf fmt "@]"
+      fprintf fmt "@[<hov 2>[%a]@,%a@]" print_binder b print_cc_term c
   | CC_app (f,args) ->
       fprintf fmt "@[<hov 2>(%a@ %a)@]" 
       print_cc_term f (print_list pp_print_space print_cc_term) args
