@@ -48,18 +48,24 @@ CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
 
 CMX      = $(CMO:.cmo=.cmx)
 
-COQC   = @COQC@
+COQC7  = @COQC7@
+COQC8  = @COQC8@
 COQDEP = @COQDEP@
 COQLIB = @COQLIB@
-COQINCLUDES = -R @WHYLIBCOQ@ Coq.why
 
-VO = @WHYLIBCOQ@/WhyArrays.vo  @WHYLIBCOQ@/WhyBool.vo  @WHYLIBCOQ@/WhyInt.vo \
-     @WHYLIBCOQ@/WhyTuples.vo  @WHYLIBCOQ@/WhyPermut.vo \
-     @WHYLIBCOQ@/WhySorted.vo  @WHYLIBCOQ@/Why.vo     @WHYLIBCOQ@/WhyFloat.vo \
-     @WHYLIBCOQ@/WhyExn.vo @WHYLIBCOQ@/WhyCoqCompat.vo \
-     @WHYLIBCOQ@/WhyLemmas.vo  @WHYLIBCOQ@/WhyTactics.vo @WHYLIBCOQ@/WhyCM.vo
-VFILES=$(VO:.vo=.v)
-WHYVO=@WHYLIBCOQ@/Why.vo
+VO7= lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo  lib/coq-v7/WhyInt.vo \
+     lib/coq-v7/WhyTuples.vo  lib/coq-v7/WhyPermut.vo \
+     lib/coq-v7/WhySorted.vo  lib/coq-v7/Why.vo     lib/coq-v7/WhyFloat.vo \
+     lib/coq-v7/WhyExn.vo lib/coq-v7/WhyCoqCompat.vo \
+     lib/coq-v7/WhyLemmas.vo  lib/coq-v7/WhyTactics.vo lib/coq-v7/WhyCM.vo
+V7FILES=$(VO7:.vo=.v)
+
+VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
+     lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
+     lib/coq/WhySorted.vo  lib/coq/Why.vo     lib/coq/WhyFloat.vo \
+     lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo \
+     lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo
+V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
@@ -114,7 +120,9 @@ bin/why2html.opt: tools/why2html.ml
 static:: $(STATICBINARY)
 
 coq-no:
-coq-yes: $(VO)
+coq-yes: coq-@COQVER@
+coq-v7: $(VO7)
+coq-v8: $(VO7) $(VO)
 
 VERSION=1.32
 
@@ -130,6 +138,8 @@ doc:: doc/version.tex
 # bench
 
 .PHONY: bench test
+
+WHYVO=lib/coq/Why.vo
 
 bench:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) --valid"
@@ -171,9 +181,13 @@ install-man:
 	cp -f doc/*.1 $(MANDIR)/man1
 
 install-coq-no:
-install-coq-yes:
+install-coq-yes: install-coq-@COQVER@
+install-coq-v7:
 	mkdir -p $(COQLIB)/contrib/why
-	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
+	cp -f $(VO7) $(V7FILES) $(COQLIB)/contrib/why
+install-coq-v8: install-coq-v7
+	mkdir -p $(COQLIB)/newcontrib/why
+	cp -f $(VO8) $(V8FILES) $(COQLIB)/newcontrib/why
 
 install-pvs-no:
 install-pvs-yes:
@@ -254,8 +268,11 @@ src/parser.ml: src/parser.ml4
 .mly.mli:
 	$(OCAMLYACC) -v $<
 
-.v.vo:
-	$(COQC) $(COQINCLUDES) $<
+lib/coq/%.vo: lib/coq/%.v
+	$(COQC8) -R lib/coq Coq.why $<
+
+lib/coq-v7/%.vo: lib/coq-v7/%.v
+	$(COQC7) -R lib/coq-v7 Coq.why $<
 
 %_why.v: %.mlw $(BINARY)
 	$(BINARY) -coq $*.mlw

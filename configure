@@ -1010,18 +1010,23 @@ echo "configure:1008: checking Coq version" >&5
     case $COQVERSION in
     7.3.1)
 	echo "$ac_t""$COQVERSION" 1>&6
-	COQVER=--coq-v7
+	COQC7=$COQC
+	COQVER=v7
 	WHYLIBCOQ=lib/coq-v7
 	cp -f lib/coq/WhyCoq73.v lib/coq-v7/WhyCoqCompat.v;;
     7.3.1*|7.4*)
 	echo "$ac_t""$COQVERSION" 1>&6
-	COQVER=--coq-v7
+	COQC7=$COQC
+	COQVER=v7
 	WHYLIBCOQ=lib/coq-v7
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
     8.*)
 	echo "$ac_t""$COQVERSION" 1>&6
-	COQVER=--coq-v8
-	WHYLIBCOQ=lib/coq;;
+	COQC7="$COQC -v7"
+	COQC8=$COQC
+	COQVER=v8
+	WHYLIBCOQ=lib/coq
+	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
     *)
 	COQ=no
 	echo "configure: warning: You need Coq 7.3.1 or later; Coq discarded" 1>&2;;
@@ -1032,7 +1037,7 @@ fi
 # Extract the first word of "pvs", so it can be a program name with args.
 set dummy pvs; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1036: checking for $ac_word" >&5
+echo "configure:1041: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_PVSC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1072,7 +1077,7 @@ fi
 # Extract the first word of "mizf", so it can be a program name with args.
 set dummy mizf; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:1076: checking for $ac_word" >&5
+echo "configure:1081: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_MIZF'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -1105,7 +1110,7 @@ if test "$MIZF" = no; then
 else
     MIZAR=yes
     echo $ac_n "checking Mizar library""... $ac_c" 1>&6
-echo "configure:1109: checking Mizar library" >&5
+echo "configure:1114: checking Mizar library" >&5
     if test -d "$MIZFILES"; then
 	MIZARLIB=$MIZFILES
 	echo "$ac_t""$MIZARLIB" 1>&6
@@ -1119,6 +1124,7 @@ echo "configure:1109: checking Mizar library" >&5
 fi
 
 # substitutions to perform
+
 
 
 
@@ -1310,6 +1316,8 @@ s%@OCAMLVERSION@%$OCAMLVERSION%g
 s%@OCAMLLIB@%$OCAMLLIB%g
 s%@CAMLP4LIB@%$CAMLP4LIB%g
 s%@COQ@%$COQ%g
+s%@COQC7@%$COQC7%g
+s%@COQC8@%$COQC8%g
 s%@COQLIB@%$COQLIB%g
 s%@COQVER@%$COQVER%g
 s%@WHYLIBCOQ@%$WHYLIBCOQ%g

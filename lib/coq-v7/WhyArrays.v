@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.1 2003-09-22 12:22:36 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.2 2003-09-26 10:53:31 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -42,7 +42,7 @@ Implicit Arguments On.
 
 Parameter raw_array : Set -> Set.
 
-Definition array [T:Set] := Z * (raw_array T).
+Definition array [T:Set] := (prod Z (raw_array T)).
 
 
 (* Array length *)

@@ -54,9 +54,9 @@ good_ml () {
 	echo -n "  "$f"... "
 	base=$1/`basename $f .mlw`
 	# running Why
-	if ! $pgm @COQVER@ $f > /dev/null 2>&1; then
+	if ! $pgm --coq-@COQVER@ $f > /dev/null 2>&1; then
 	    echo "why FAILED"
-	    $pgm @COQVER@ $f
+	    $pgm --coq-@COQVER@ $f
 	    exit 1
 	fi
 	echo -n "why ok... "
@@ -81,9 +81,9 @@ good_c () {
 	    exit 1
 	fi
 	echo -n "GCC ok... "
-	if ! $pgm @COQVER@ $f > /dev/null 2>&1; then
+	if ! $pgm --coq-@COQVER@ $f > /dev/null 2>&1; then
 	    echo "why FAILED"
-	    $pgm @COQVER@ $f
+	    $pgm --coq-@COQVER@ $f
 	    exit 1
 	fi
 	echo -n "why ok... "
