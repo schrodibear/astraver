@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.12 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.13 2002-03-05 14:51:26 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -289,9 +289,20 @@ let rec print_term fmt = function
   | Tapp (id, tl) -> 
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 
+let relation_string id =
+  if id == t_lt then "<" 
+  else if id == t_le then "<="
+  else if id == t_gt then ">"
+  else if id == t_ge then ">="
+  else if id == t_eq then "="
+  else if id == t_neq then "<>"
+  else assert false
+
 let rec print_predicate fmt = function
   | Pvar id -> 
       Ident.print fmt id
+  | Papp (id, [t1; t2]) when is_relation id ->
+      fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
   | Papp (id, l) ->
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) l
   | Ptrue ->

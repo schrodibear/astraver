@@ -103,4 +103,4 @@ src/typing.cmi: src/ast.cmi src/env.cmi src/ident.cmi src/logic.cmi \
 src/util.cmi: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
-src/wp.cmi: src/effect.cmi src/env.cmi src/logic.cmi src/rename.cmi 
+src/wp.cmi: src/env.cmi 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.16 2002-03-05 11:24:59 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.17 2002-03-05 14:51:26 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -413,7 +413,7 @@ i*)
       | ">"  -> Ident.t_gt
       | ">=" -> Ident.t_ge
       | "="  -> Ident.t_eq
-      | "/=" -> Ident.t_neq ] ] 
+      | "<>" -> Ident.t_neq ] ] 
   ;
 
   (* Other entries (invariants, etc.) *)
