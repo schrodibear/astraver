@@ -1,0 +1,62 @@
+typedef struct { int p1[5]; int p2[5]; int v1; int v2; int *pp1; } las;
+typedef struct { int *pp2; } las2;
+las u, v, w, m;
+las2 u2, v2;
+
+/*@
+  invariant inv1:
+  \forall las x,las y;
+  &x != &y =>
+  \base_addr(x.p1) != \base_addr(y.pp1)
+  &&  \base_addr(x.p2) != \base_addr(y.pp1)
+  &&  \base_addr(x.pp1) != \base_addr(y.pp1)
+*/
+/*@
+  invariant inv2:
+  \forall las x,las2 y;
+  \base_addr(x.p1) != \base_addr(y.pp2)
+  &&  \base_addr(x.p2) != \base_addr(y.pp2)
+  &&  \base_addr(x.pp1) != \base_addr(y.pp2)
+*/
+/*@
+  invariant inv3:
+  \forall las2 x,las2 y;
+  &x != &y => \base_addr(x.pp2) != \base_addr(y.pp2)
+*/
+
+/*@
+  requires \valid(p) && \valid(p->p1) && \valid(p->p2) && \valid(p->pp1)
+  && \valid_range(p->p1,0,5) && \valid_range(p->p2,0,5)
+  assigns p->p1[0 .. 5],p->p2[0 .. 5], p->v1, p->v2, *p->pp1
+  ensures p->p1[1] <= p->v1
+*/
+void g(las * p);
+
+/*@
+  requires \valid(p) && \valid(p->pp2)
+  assigns *p->pp2
+  ensures *p->pp2>=5
+*/
+void g2(las2 * p);
+
+/*@
+  requires
+  (\forall las x; (&x==&u || &x==&v || &x==&w || &x==&m) =>
+  \valid(x) && \valid(x.p1) && \valid(x.p2) && \valid_range(x.p1,0,5) && \valid_range(x.p2,0,5)
+  && \valid(x.pp1)) && \valid(u2.pp2) && \valid(v2.pp2)
+  assigns u.v1,u.v2,u.p1[0 .. 5],u.p2[0 .. 5],*u.pp1
+  ,v.v1,v.v2,v.p1[0 .. 5],v.p2[0 .. 5],*v.pp1
+  ,w.v1,w.v2,w.p1[0 .. 5],w.p2[0 .. 5],*w.pp1
+  ,m.v1,m.v2,m.p1[0 .. 5],m.p2[0 .. 5],*m.pp1
+  ,*u2.pp2,*v2.pp2
+  ensures
+  \forall las x; \exists int i; (&x==&u || &x==&v || &x==&w || &x==&m) => x.p1[i] <= x.v1
+*/
+void f()
+{ g(&u);
+ g(&v);
+ g(&w);
+ g(&m);
+ //g2(&u2); en commentaire pour simplifier !
+ //g2(&v2); en commentaire pour simplifier !
+}
