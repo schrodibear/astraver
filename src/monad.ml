@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.42 2002-07-18 14:45:06 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.43 2002-09-06 11:45:21 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -229,21 +229,28 @@ let compose = gen_compose false
 let apply = gen_compose true
 
 
-(*s [exn] is the operator corresponding to [raise] *)
+(*s [exn] is the operator corresponding to [raise].
+    It returns [unit info (Val_e1 (Val_e2 ... (Exn_ei)))]. *)
 
-let rec make_exn x v = function
+let rec make_exn ty x v = function
   | [] -> 
       assert false
   | y :: yl when x = y -> 
       let x = Ident.exn_exn x in
-      (match v with None -> Tvar x | Some v -> Tapp (x, [v]))
+      (match v with 
+	 | None -> CC_app (CC_term (Tvar x), CC_type ty)
+	 | Some v -> CC_app (CC_app (CC_term (Tvar x), CC_type ty), CC_term v))
   | y :: yl -> 
-      Tapp (Ident.exn_val y, [Tvar Ident.implicit; make_exn x v yl])
+      CC_app (CC_app (CC_term (Tvar (Ident.exn_val y)), 
+		      CC_term (Tvar Ident.implicit)),
+	      make_exn ty x v yl)
 
-let exn info id t =
+let exn info id t ren =
   let x = Effect.get_exns info.kappa.c_effect in
-  let info' = erase_exns info in
-  assert false (* TODO (make_exn id t x) *)
+  let v = info.kappa.c_result_type in
+  let env = info.env in
+  (* unit info (make_exn (trad_type_v ren env v) id t x) ren *)
+  assert false
   
 
 (*s [cross_label] is an operator to be used when a label is encountered *)

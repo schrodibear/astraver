@@ -1,4 +1,8 @@
 
+exception E
+
+let p = raise E
+
 let f (a_:int) (b_:int) = 
  (let a = ref a_ in
   let b = ref b_ in

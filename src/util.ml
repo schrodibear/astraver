@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.42 2002-07-18 14:45:06 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.43 2002-09-06 11:45:21 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -360,10 +360,10 @@ and print_desc fmt = function
   | Rec (id, bl, v, var, p) ->
       fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 
 	Ident.print id print_type_v v print_prog p
-  | Raise (id, None, t) ->
-      fprintf fmt "raise %a" Ident.print id; print_cast fmt t
-  | Raise (id, Some p, t) ->
-      fprintf fmt "raise (%a %a)" Ident.print id print_prog p; print_cast fmt t
+  | Raise (id, None) ->
+      fprintf fmt "raise %a" Ident.print id
+  | Raise (id, Some p) ->
+      fprintf fmt "raise (%a %a)" Ident.print id print_prog p
   | Expression t -> 
       print_term fmt t
   | Coerce p ->
