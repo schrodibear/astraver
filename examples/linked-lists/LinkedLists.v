@@ -23,6 +23,8 @@ Hint lpath : core := Constructors lpath.
 
 Definition llist [t:pointer_store; p:pointer; l:plist] := (lpath t p l null).
 
+Hints Unfold llist.
+
 (* no common element between two lists *)
 
 Definition disjoint [l1,l2: plist] : Prop :=
@@ -102,7 +104,7 @@ Exists (cons a x0); Exists x1; Simpl; Subst; Auto.
 Save.
 
 Lemma list_length_absurd : (A:Set)(l1,l2:(list A))
-  ~(length l1)=(length l2) -> ~l1=l2..
+  ~(length l1)=(length l2) -> ~l1=l2.
 Proof.
 Induction l1; Induction l2; Simpl; Intuition.
 Discriminate H1.
@@ -132,45 +134,18 @@ Intro; Apply (list_length_absurd ? x0 (app x (cons p x0))); Auto.
 Rewrite length_app; Simpl; Omega.
 Save.
 
-(***
-Lemma no_cycle_1 : (t:pointer_store)(p:pointer)(is_valid_pointer t p) ->
-  (l:plist)(list_of t p l) -> ~p=(pget t p).
-Proof.
-Inversion 2.
-Rewrite <- H1 in H; Simpl in H; Tauto.
-Subst.
-Inversion H0.
-Inversion H3.
-
-Save.
-
-Lemma list_of_not_in : 
-  (t:pointer_store)(l:plist)(p,p':pointer)
-  (list_of t p (cons p' l)) -> ~(In p l).
-Proof.
-Intros; Inversion H.
-Subst.
-Inversion H4.
-Auto.
-Subst.
-
-Save.
-
-Hints Resolve list_of_not_in.
-***)
-
 (* finite lists characterization *)
 
-Inductive is_list [h: int_store; t: pointer_store] : pointer -> Prop :=
-  | List_null : (is_list h t null)
-  | List_cons : (p:pointer) (is_valid_int h p) -> (is_valid_pointer t p)
-                -> (is_list h t (pget t p)) -> (is_list h t p).
+Inductive is_list [t: pointer_store] : pointer -> Prop :=
+  | List_null : (is_list t null)
+  | List_cons : (p:pointer) (is_valid_pointer t p) -> 
+                (is_list t (pget t p)) -> (is_list t p).
 
 Hint is_list : core := Constructors is_list.
 
-Lemma is_list_list_of : 
-  (h:int_store; t:pointer_store)
-  (p:pointer)(is_list h t p) -> (EX l:plist | (list_of t p l)).
+Lemma is_list_llist : 
+  (t:pointer_store)
+  (p:pointer)(is_list t p) -> (EX l:plist | (llist t p l)).
 Proof.
 Intros; Induction H.
 Exists (nil pointer); Intuition.
@@ -178,26 +153,34 @@ Elim HrecH; Intros.
 Exists (cons p x); Intuition.
 Save.
 
+Lemma llist_is_list :
+  (t:pointer_store)
+  (l:plist)(p:pointer)(llist t p l) -> (is_list t p).
+Proof.
+Induction l; Intuition.
+Inversion H; Auto.
+Inversion H0; Intuition.
+Save.
+
 (* WF relation over lists *)
 
-Definition Triple := int_store * (pointer_store * pointer).
-Definition triple := [h:int_store; t:pointer_store; p:pointer](h, (t, p)).
+Definition StorePointerPair := pointer_store * pointer.
+Definition store_pointer_pair := [t:pointer_store; p:pointer](t, p).
 
-Definition tl_order [c1,c2:(int_store * (pointer_store * pointer))] : Prop :=
-  let (h1,tp1) = c1 in
-  let (t1,p1) = tp1 in
-  let (h2,tp2) = c2 in
-  let (t2,p2) = tp2 in
-  t1=t2 /\ (is_list h2 t2 p2) /\ (pget t2 p2)=p1.
+Definition ll_order [c1,c2: pointer_store * pointer] : Prop :=
+  let (t1,p1) = c1 in
+  let (t2,p2) = c2 in
+  t1=t2 /\ (is_list t2 p2) /\ (pget t2 p2)=p1.
 
-Axiom tl_order_wf : (well_founded tl_order).
+Axiom ll_order_wf : (well_founded ll_order).
 (**
-Lemma tl_order_wf : (well_founded tl_order).
+Lemma ll_order_wf : (well_founded ll_order).
 Proof.
 Unfold well_founded.
 Destruct a; Destruct p; Intros.
 Apply Acc_intro.
-Destruct y; Destruct p2; Unfold 1 tl_order; Intuition.
+Destruct y; Destruct p2; Unfold 1 ll_order; Intuition.
 Save.
 **)
+Hints Resolve ll_order_wf.
 
