@@ -70,7 +70,7 @@ Proof.
 intuition.
 subst y2; rewrite <- H4; auto.
 unfold Zwf, max.
-assert h: x1 <> y1.
+assert (h: x1 <> y1).
  assumption.
  case (Z_le_gt_dec x1 y2); case (Z_le_gt_dec x1 y1); intros; omega.
 Qed.
@@ -155,18 +155,18 @@ Lemma gcd2_po_2 :
   (0 <= x2 /\ 0 <= y2 /\ (gcd x2 y2) = (gcd a b)) /\ (Zwf 0 y2 y1).
 Proof.
 intuition.
-assert h_y0: y1 <> 0%Z.
+assert (h_y0: y1 <> 0).
  assumption.
-assert h1_y0: (y1 > 0)%Z.
+assert (h1_y0: (y1 > 0)).
  omega.
 generalize (Z_mod_lt x1 y1 h1_y0); intro.
 subst y2 r; tauto.
 subst y2 x2 r.
 rewrite <- H4; auto.
 unfold Zwf.
-assert h_y0: y1 <> 0%Z.
+assert (h_y0: y1 <> 0).
  assumption.
-assert h1_y0: (y1 > 0)%Z.
+assert (h1_y0: (y1 > 0)).
  omega.
 generalize (Z_mod_lt x1 y1 h1_y0); omega.
 Qed.

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.49 2003-05-12 15:13:23 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.50 2003-10-17 13:00:23 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -46,7 +46,7 @@ let rec next id n s =
     id'
 
 let next_away id s = 
-  if Idset.mem id s then 
+  if id.name <> "_" && Idset.mem id s then 
     let id0 = id.name in
     let id0 = if is_index id0 then id0 ^ "_" else id0 in
     next id0 0 s 
@@ -156,7 +156,7 @@ let t_ge_float = create "ge_float"
 
 let t_zwf_zero = create "%zwf_zero"
 let result = create "result"
-let default = create "_"
+let default = create "H"
 let array_length = create "array_length"
 let access = create "access"
 let store = create "store"

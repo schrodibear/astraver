@@ -23,7 +23,7 @@ Lemma length_po_2 :
    then p2 = null /\ true = false \/ p2 <> null /\ true = true
    else p2 = null /\ false = false \/ p2 <> null /\ false = true.
 Proof.
-olddestruct result0; intuition.
+simple_destruct result0; intuition.
 Qed.
 
 (* Why obligation from file , characters 1061-1061 *)
@@ -37,7 +37,7 @@ Lemma length_po_3 :
    then p2 = null /\ true = false \/ p2 <> null /\ true = true
    else p2 = null /\ false = false \/ p2 <> null /\ false = true.
 Proof.
-olddestruct result0; intuition.
+simple_destruct result0; intuition.
 Qed.
 
 (* Why obligation from file , characters 1157-1193 *)

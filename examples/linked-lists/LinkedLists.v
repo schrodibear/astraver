@@ -59,7 +59,7 @@ Lemma llist_pset_same :
    forall p1 p2:pointer,
      is_valid_pointer t p1 -> ~ In p1 l -> llist (pset t p1 p2) p l.
 Proof.
-unfold llist; oldinduction 1; intuition.
+unfold llist; simple_induction 1; intuition.
 apply Path_cons; auto.
  rewrite PointerStore.get_set_other; auto.
 auto with *.
@@ -73,7 +73,7 @@ Lemma llist_function :
  forall (t:pointer_store) (l1 l2:plist) (p:pointer),
    llist t p l1 -> llist t p l2 -> l1 = l2.
 Proof.
-oldinduction l1; intuition.
+simple_induction l1; intuition.
 inversion H; subst.
 inversion H0; intuition.
 inversion H1.
@@ -89,7 +89,7 @@ Lemma llist_append :
    llist t p (app l1 l2) ->
     EX p' : pointer | lpath t p l1 p' /\ llist t p' l2.
 Proof.
-oldinduction l1; simpl; intuition.
+simple_induction l1; simpl; intuition.
 exists p; auto.
 inversion H0; subst.
 elim (H l2 (pget t a) H6); intuition.
@@ -102,7 +102,7 @@ Lemma In_app_cons :
    In x l ->
     EX l1 : list A | ( EX l2 : list A | l = app l1 (cons x l2)).
 Proof.
-oldinduction l; simpl; intuition.
+simple_induction l; simpl; intuition.
 exists (nil (A:=A)); exists l0; simpl; subst; auto.
 elim (H x H1); clear H; intros.
 elim H; clear H; intuition.
@@ -112,7 +112,7 @@ Qed.
 Lemma list_length_absurd :
  forall (A:Set) (l1 l2:list A), length l1 <> length l2 -> l1 <> l2.
 Proof.
-oldinduction l1; oldinduction l2; simpl; intuition.
+simple_induction l1; simple_induction l2; simpl; intuition.
 discriminate H1.
 discriminate H1.
 injection H2; intros.
@@ -123,7 +123,7 @@ Lemma length_app :
  forall (A:Set) (l1 l2:list A),
    length (app l1 l2) = (length l1 + length l2)%N.
 Proof.
-oldinduction l1; simpl; intuition.
+simple_induction l1; simpl; intuition.
 Qed.
 
 (** a list starting with [p] does not contain [p] in its remaining elements *)
@@ -158,7 +158,7 @@ Lemma is_list_llist :
  forall (t:pointer_store) (p:pointer),
    is_list t p ->  EX l : plist | llist t p l.
 Proof.
-intros; oldinduction H.
+intros; simple_induction H.
 exists (nil (A:=pointer)); intuition.
 elim HrecH; intros.
 exists (cons p x); intuition.
@@ -168,7 +168,7 @@ Lemma llist_is_list :
  forall (t:pointer_store) (l:plist) (p:pointer),
    llist t p l -> is_list t p.
 Proof.
-oldinduction l; intuition.
+simple_induction l; intuition.
 inversion H; auto.
 inversion H0; intuition.
 Qed.
@@ -192,7 +192,7 @@ apply well_founded_inv_lt_rel_compat with
  (F := fun (x:StorePointerPair) n =>
          let (t, p) := x in  EX l : plist | llist t p l /\ length l = n).
 unfold ll_order, inv_lt_rel.
-olddestruct x; olddestruct y; intuition.
+simple_destruct x; simple_destruct y; intuition.
 elim H; clear H; intros l1 H; elim H; clear H; intros l2 H.
 intuition.
 exists (length l1).

@@ -140,7 +140,7 @@ Lemma iter_sqrt_invar2 :
    z = ((x / y + y) / 2)%Z -> (2 * y * (z + 1) > x + y * y)%Z.
 Proof.
 intros x y z xPos yPos zVal.
-assert TwoPos: (2 > 0)%Z; try omega.
+assert (TwoPos: (2 > 0)); try omega.
 generalize (Z_div_mod_eq x y yPos).
 generalize (Z_mod_lt x y yPos).
 generalize (Z_div_mod_eq (x / y + y) 2 TwoPos).
@@ -348,7 +348,7 @@ apply Z_div_ge; try omega.
 omega.
 subst y.
 assert ((x / x + x)%Z = (x + 1)%Z).
-assert xPos: (x > 0)%Z; try omega.
+assert (xPos: (x > 0)); try omega.
 generalize (Z_div_same x xPos).
  intro.
 rewrite H; omega.
@@ -363,7 +363,7 @@ omega.
 subst z.
 apply (iter_sqrt_invar3 x x); try omega.
 assert ((x / x + x)%Z = (x + 1)%Z).
-assert xPos: (x > 0)%Z; try omega.
+assert (xPos: (x > 0)); try omega.
 generalize (Z_div_same x xPos).
  intro.
 rewrite H; omega.

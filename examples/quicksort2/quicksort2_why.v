@@ -202,14 +202,14 @@ Lemma quick_rec_po_4 :
     i <= (r0 + 1)) /\ (Zwf 0 (1 + r0 - i) (1 + r0 - i1)))).
 Proof.
 intuition.
-assert hj: (j < m2)%Z \/ j = m2.
+assert (hj: (j < m2)%Z \/ j = m2).
  omega.
  decompose [exchange] Post30.
  intuition.
 rewrite H26; try omega.
 apply H5; omega.
 subst j; rewrite H25; assumption.
-assert hj: (j < i1)%Z \/ j = i1.
+assert (hj: (j < i1)%Z \/ j = i1).
  omega.
  decompose [exchange] Post30.
  intuition.
@@ -265,7 +265,7 @@ Lemma quick_rec_po_5 :
     i <= (r0 + 1)) /\ (Zwf 0 (1 + r0 - i) (1 + r0 - i1)))).
 Proof.
 intuition.
-assert hj: (j < i1)%Z \/ j = i1.
+assert (hj: (j < i1)%Z \/ j = i1).
  omega.
  intuition.
 rewrite H15; assumption.
@@ -534,7 +534,7 @@ Lemma quick_rec_po_12 :
 Proof.
 intuition.
 unfold sorted_array; intros.
-assert hx: (x < m1 - 1)%Z \/ x = (m1 - 1)%Z \/ x = m1 \/ (m1 < x)%Z.
+assert (hx: (x < m1 - 1)%Z \/ x = (m1 - 1)%Z \/ x = m1 \/ (m1 < x)).
  omega.
  intuition.
 (* x < m0-1 *)
@@ -559,7 +559,7 @@ rewrite (H30 m1).
 rewrite H35.
  rewrite H13.
  clear H34 H35 H36.
-assert hm0: (m1 - 1 < array_length t2)%Z.
+assert (hm0: (m1 - 1 < array_length t2)).
  omega.
 rewrite <- (sub_permut_length H20) in hm0.
 generalize (sub_permut_function H20 H1 hm0); intros.
@@ -593,9 +593,9 @@ elim (sub_permut_id H24); intros.
 unfold array_id in H28.
 rewrite (H28 m1).
  clear H28 H29.
-assert hm0: (0 <= m1 + 1)%Z.
+assert (hm0: (0 <= m1 + 1)).
  omega.
-assert hl: array_length t4 = array_length t0.
+assert (hl: array_length t4 = array_length t0).
   ArrayLength; clear H24.
   ArrayLength; clear H20.
   ArrayLength; clear Post32.

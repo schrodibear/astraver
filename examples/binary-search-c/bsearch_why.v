@@ -130,9 +130,7 @@ Lemma binary_search_po_3 :
 Proof.
 unfold Zwf; intuition try omega.
 subst; apply In_right_side; intuition.
-rewrite H; assumption.
 subst; apply In_left_side; intuition.
-rewrite H; assumption.
 Qed.
 
 (* Why obligation from file "bsearch.c", characters 504-596 *)
@@ -149,7 +147,7 @@ Lemma binary_search_po_4 :
   (((In t 0 ((array_length t) - 1) v) -> (In t l1 u1 v))).
 Proof.
 intuition.
-subst; rewrite <- H; assumption.
+subst; assumption.
 Qed.
 
 (* Why obligation from file "bsearch.c", characters 794-796 *)

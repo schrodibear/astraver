@@ -1,7 +1,7 @@
 (* Load Programs. *)
 (*s Axiomatization of words over a alphabet [A]. *)
 
-Require Import PolyList.
+Require Import List.
 Require Import ZArith.
 Require Import ZArithRing.
 Require Import WhyArrays.
@@ -20,7 +20,7 @@ Definition word := list A.
 Definition eps := nil (A:=A).
 
 Definition concat := app.
-Implicit Arguments concat [1].
+Implicit Arguments concat [A].
 
 
 (*s Distance. It is axiomatized as a predicate [dist w1 w2 n] expressing that
@@ -74,7 +74,7 @@ Lemma first_last_explicit :
  forall (u:word) (a:A),
    concat (but_last a u) (cons (last_char a u) eps) = cons a u.
 Proof.
-oldinduction u; simpl.
+simple_induction u; simpl.
 reflexivity.
 intros.
 rewrite (H a).
@@ -83,8 +83,8 @@ Qed.
 
 Lemma first_last :
  forall (a:A) (u:word),
-    EX v : _
-   | ( EX b : _
+    exists v : _
+   | ( exists b : _
       | concat v (cons b eps) = cons a u /\ Zlength v = Zlength u).
 Proof.
 intros a u.
@@ -92,7 +92,7 @@ exists (but_last a u).
 exists (last_char a u).
 split.
  exact (first_last_explicit u a).
-generalize a; oldinduction u; simpl; intros.
+generalize a; simple_induction u; simpl; intros.
 omega.
 generalize (Hrecu a0); intros; omega.
 Qed.
@@ -106,9 +106,9 @@ Lemma key_lemma_right :
    dist w1 w'2 m ->
    forall w2:word,
      w'2 = cons a w2 ->
-      EX u1 : _
-     | ( EX v1 : _
-        | ( EX k : _
+      exists u1 : _
+     | ( exists v1 : _
+        | ( exists k : _
            | w1 = concat u1 v1 /\
              dist v1 w2 k /\ (k + Zlength u1 <= m + 1)%Z)).
 Proof.
@@ -153,7 +153,7 @@ Qed.
 Lemma dist_symetry :
  forall (w1 w2:word) (n:Z), dist w1 w2 n -> dist w2 w1 n.
 Proof.
-oldinduction 1; intros.
+simple_induction 1; intros.
 exact dist_eps.
 apply dist_add_right; assumption.
 apply dist_add_left; assumption.
@@ -163,9 +163,9 @@ Qed.
 Lemma key_lemma_left :
  forall (w1 w2:word) (m:Z) (a:A),
    dist (cons a w1) w2 m ->
-    EX u2 : _
-   | ( EX v2 : _
-      | ( EX k : _
+    exists u2 : _
+   | ( exists v2 : _
+      | ( exists k : _
          | w2 = concat u2 v2 /\
            dist w1 v2 k /\ (k + Zlength u2 <= m + 1)%Z)).
 Proof.
@@ -193,7 +193,7 @@ Lemma dist_concat_left :
  forall (u v w:word) (n:Z),
    dist v w n -> dist (concat u v) w (Zlength u + n).
 Proof.
-oldinduction u; simpl; intros.
+simple_induction u; simpl; intros.
 auto.
 replace (Zlength l + 1 + n)%Z with (Zlength l + n + 1)%Z;
  [ idtac | omega ].
@@ -204,7 +204,7 @@ Lemma dist_concat_right :
  forall (u v w:word) (n:Z),
    dist v w n -> dist v (concat u w) (Zlength u + n).
 Proof.
-oldinduction u; simpl; intros.
+simple_induction u; simpl; intros.
 auto.
 replace (Zlength l + 1 + n)%Z with (Zlength l + n + 1)%Z;
  [ idtac | omega ].
@@ -287,12 +287,12 @@ Qed.
 Lemma min_dist_eps_length : forall w:word, min_dist eps w (Zlength w).
 Proof.
 intros w; unfold min_dist; intuition.
-oldinduction w; simpl; intros.
+simple_induction w; simpl; intros.
 exact dist_eps.
 apply dist_add_right; assumption.
 generalize m H.
  clear m H.
-oldinduction w; intros m H; inversion H; simpl.
+simple_induction w; intros m H; inversion H; simpl.
 omega.
 generalize (Hrecw n H4); intro; omega.
 Qed.
@@ -432,7 +432,7 @@ Qed.
 Lemma dist_is_dist' :
  forall (w1 w2:word) (n:Z), dist w1 w2 n -> dist' w1 w2 n.
 Proof.
-oldinduction 1.
+simple_induction 1.
 exact dist'_eps.
 intros; apply dist'_add_left; assumption.
 intros; apply dist'_add_right; assumption.
@@ -446,7 +446,7 @@ Lemma dist_concat_both_left :
  forall (n:Z) (u w1 w2:word),
    dist w1 w2 n -> dist (concat u w1) (concat u w2) n.
 Proof.
-oldinduction u; simpl; intros.
+simple_induction u; simpl; intros.
 auto.
 apply dist_context; auto.
 Qed.
@@ -455,8 +455,8 @@ Lemma dist_concat_both_right :
  forall (n:Z) (w1 w2:word),
    dist w1 w2 n -> forall u:word, dist (concat w1 u) (concat w2 u) n.
 Proof.
-oldinduction 1; simpl; intros.
-oldinduction u; simpl.
+simple_induction 1; simpl; intros.
+simple_induction u; simpl.
 exact dist_eps.
 apply dist_context; assumption.
 apply dist_add_left.
@@ -470,7 +470,7 @@ Qed.
 Lemma dist'_is_dist :
  forall (w1 w2:word) (n:Z), dist' w1 w2 n -> dist w1 w2 n.
 Proof.
-oldinduction 1.
+simple_induction 1.
 exact dist_eps.
 intros; apply dist_add_left; assumption.
 intros; apply dist_add_right; assumption.

@@ -9,12 +9,12 @@ Require Import ZArithRing.
 
 Lemma double_div2 : forall x:Z, Zdiv2 (2 * x) = x.
 Proof.
-olddestruct x; auto.
+simple_destruct x; auto.
 Qed.
 
 Lemma double_div2_bis : forall x:Z, (0 <= x)%Z -> Zdiv2 (2 * x + 1) = x.
 Proof.
-olddestruct x; auto.
+simple_destruct x; auto.
 intros.
 simpl in H.
 absurd (0 <= NEG p)%Z.

@@ -6,7 +6,7 @@ Axiom l_pos : (0 < l)%Z.
 
 (*Why*) Parameter swap :
   forall (i: Z), forall (j: Z), forall (a: (array Z)),
-  forall (_: (array_length a) = l),
+  forall (H: (array_length a) = l),
   (sig_2 (array Z) unit
    (fun (a0: (array Z)) (result: unit)  => ((array_length a0) = l /\
     (access a0 i) = (access a j) /\ (access a0 j) = (access a i) /\

@@ -6,13 +6,13 @@ Ltac CallSubst x := subst x.
 
 Ltac ArrayLength :=
   match context with
-  | [h:(exchange _ _ _ _) |- _ ] =>
+  | h:(exchange _ _ _ _) |- _ =>
       (rewrite (exchange_length h); try omega) ||
         (rewrite <- (exchange_length h); try omega)
-  | [h:(sub_permut _ _ _ _) |- _ ] =>
+  | h:(sub_permut _ _ _ _) |- _ =>
       (rewrite (sub_permut_length h); try omega) ||
         (rewrite <- (sub_permut_length h); try omega)
-  | [h:(permut _ _ _ _) |- _ ] =>
+  | h:(permut _ _ _ _) |- _ =>
       (rewrite (permut_length h); try omega) ||
         (rewrite <- (permut_length h); try omega)
   | _ => idtac
@@ -23,12 +23,12 @@ Ltac ArrayLength :=
 
 Ltac ProveSameLength t1 t2 :=
   match context with
-  | [ |- (?X1 = ?X1) ] => reflexivity
-  | [h:(exchange t1 t2 _ _) |- _ ] =>
+  | |- (?X1 = ?X1) => reflexivity
+  | h:(exchange t1 t2 _ _) |- _ =>
       exact (exchange_length h)
-  | [h:(sub_permut _ _ t1 t2) |- _ ] =>
+  | h:(sub_permut _ _ t1 t2) |- _ =>
       exact (sub_permut_length h)
-  | [h:(permut t1 t2) |- _ ] => exact (permut_length h)
+  | h:(permut t1 t2) |- _ => exact (permut_length h)
   end.
 
 Ltac ProveSameLengthSym t1 t2 :=

@@ -145,7 +145,7 @@ Lemma partition_po_3 :
    pv \/ (access t0 i2) <= pv /\ i2 >= j1).
 Proof.
 intuition.
-oldinduction result1; auto.
+simple_induction result1; auto.
 Qed.
 
 (* Why obligation from file "partition.mlw", characters 1972-1972 *)
@@ -183,7 +183,7 @@ Lemma partition_po_4 :
    pv \/ (access t0 i2) <= pv /\ i2 >= j1).
 Proof.
 intuition.
-oldinduction result1; auto.
+simple_induction result1; auto.
  discriminate Post2.
 Qed.
 
@@ -335,8 +335,8 @@ Lemma partition_po_8 :
    pv \/ (access t0 j2) >= pv /\ i2 >= j2).
  Proof.
  intuition.
-oldinduction result2; auto.
-oldinduction result2; auto.
+simple_induction result2; auto.
+simple_induction result2; auto.
 Qed.
 
 (* Why obligation from file "partition.mlw", characters 2126-2126 *)
@@ -378,8 +378,8 @@ Lemma partition_po_9 :
    pv \/ (access t0 j2) >= pv /\ i2 >= j2).
 Proof.
 intuition.
-oldinduction result2; auto || discriminate Post5.
-oldinduction result2; auto || discriminate Post5.
+simple_induction result2; auto || discriminate Post5.
+simple_induction result2; auto || discriminate Post5.
 Qed.
 
 (* Why obligation from file "partition.mlw", characters 2222-2233 *)

@@ -47,7 +47,7 @@ Lemma index_po_2 :
           (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> v))) /\
           (Zwf 0 (n - i) (n - i1))))).
 Proof.
-olddestruct result0; intuition.
+simple_destruct result0; intuition.
 assert (k = i1 \/ (k < i1)%Z).
  omega.
  intuition.
@@ -130,7 +130,7 @@ Lemma index2_po_2 :
           (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> v))) /\
           (Zwf 0 (n - i) (n - i1))))).
 Proof.
-olddestruct result0; intuition.
+simple_destruct result0; intuition.
 assert (k = i1 \/ (k < i1)%Z).
  omega.
  intuition.

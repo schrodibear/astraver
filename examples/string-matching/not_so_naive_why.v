@@ -68,7 +68,7 @@ Lemma NSN_po_3 :
           (forall (ell:Z),
            (ell = 2 -> (forall (j:Z), (j = 0 -> 0 <= j)) /\ k > 0 /\ ell > 0))))).
 Proof.
-olddestruct result; intuition.
+simple_destruct result; intuition.
 Qed.
 
 (* Why obligation from file "not_so_naive.c", characters 760-764 *)
@@ -174,13 +174,13 @@ Lemma NSN_po_6 :
               (forall (j:Z),
                (j = (j2 + ell1) -> 0 <= j /\ (Zwf 0 (n - m - j) (n - m - j2))))))))))).
 Proof.
-olddestruct result3; unfold Zwf; intuition.
+simple_destruct result3; unfold Zwf; intuition.
 subst.
 apply match_left_extension; try omega.
 apply match_left_extension; try omega.
 assumption.
 replace (j2 + 1 + 1)%Z with (j2 + 2)%Z; try omega.
-replace (array_length x - 1 - 1)%Z with (m - 2)%Z; try omega.
+replace (array_length x - 1 - 1)%Z with (array_length x - 2)%Z; try omega.
 assumption.
 Qed.
 

@@ -152,14 +152,14 @@ Lemma dutch_flag_po_4 :
       (Zwf 0 (r1 - i) (r1 - i1)))))).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
-assert h: (k < b1)%Z \/ k = b1.
+assert (h: (k < b1)%Z \/ k = b1).
  omega.
  intuition.
 subst t2; AccessOther.
 subst t1; AccessOther.
 auto.
 subst t1; simpl; auto.
-assert h: b1 = i1 \/ (b1 < i1)%Z.
+assert (h: b1 = i1 \/ (b1 < i1)).
  omega.
  intuition.
 subst k t2 b1.
@@ -169,7 +169,7 @@ subst t2; AccessOther.
 subst k; AccessSame.
 assumption.
 subst t1; simpl; auto.
-assert h: k = i1 \/ (k < i1)%Z.
+assert (h: k = i1 \/ (k < i1)).
  omega.
  intuition.
 subst t2 k; AccessSame.
@@ -217,7 +217,7 @@ Lemma dutch_flag_po_5 :
   (Zwf 0 (r1 - i2) (r1 - i1)).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
-assert h: (k < i1)%Z \/ k = i1.
+assert (h: (k < i1)%Z \/ k = i1).
  omega.
  intuition.
 subst k; assumption.
@@ -341,10 +341,10 @@ subst t2 t1; do 2 AccessOther.
 apply H; omega.
 subst t2 t1; do 2 AccessOther.
  apply H7; omega.
-assert h: k = r2 \/ (r2 < k)%Z.
+assert (h: k = r2 \/ (r2 < k)).
  omega.
  intuition.
-assert h': k = i1 \/ (i1 < k)%Z.
+assert (h': k = i1 \/ (i1 < k)).
  omega.
  intuition.
 generalize H19; clear H19; subst t2 t1 k; AccessSame; intro H19.

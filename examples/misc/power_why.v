@@ -19,8 +19,8 @@ Definition is_odd x :=
 
 Lemma Zdiv2_ge_0 : forall x:Z, (x >= 0)%Z -> (Zdiv2 x >= 0)%Z.
 Proof.
-olddestruct x; auto with zarith.
-olddestruct p; auto with zarith.
+simple_destruct x; auto with zarith.
+simple_destruct p; auto with zarith.
 simpl.
  omega.
 intros.
@@ -29,10 +29,10 @@ Qed.
 
 Lemma Zdiv2_lt : forall x:Z, (x > 0)%Z -> (Zdiv2 x < x)%Z.
 Proof.
-olddestruct x.
+simple_destruct x.
 intro.
  absurd (0 > 0)%Z; [ omega | assumption ].
-olddestruct p; auto with zarith.
+simple_destruct p; auto with zarith.
 
 simpl.
 intro p0.

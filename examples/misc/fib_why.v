@@ -205,7 +205,7 @@ Lemma fib2_po_1 :
   1 = (F n).
 Proof.
 intuition.
-assert h: n = 0%Z \/ n = 1%Z.
+assert (h : n = 0 \/ n = 1).
  omega.
 intuition; rewrite H; auto with *.
 Qed.
@@ -336,7 +336,7 @@ Lemma fib4_po_1 :
   1 = (F n).
 Proof.
 intros.
-assert h: n = 0%Z \/ n = 1%Z.
+assert (h: n = 0 \/ n = 1).
  omega.
 intuition; rewrite H1; auto.
 Qed.
@@ -487,7 +487,7 @@ Proof.
 intuition.
 subst t3; auto.
 subst t3.
-assert hi: i = k1 \/ (i < k1)%Z.
+assert (hi: i = k1 \/ (i < k1)).
  omega.
 intuition.
 subst i.
@@ -521,7 +521,7 @@ Lemma fib4_po_8 :
 Proof.
 intuition.
 subst t1 t0; auto.
-assert hi: i = 0%Z \/ i = 1%Z.
+assert (hi: i = 0 \/ i = 1).
  omega.
  intuition.
 subst i t1; AccessOther.

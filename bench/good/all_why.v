@@ -15,7 +15,7 @@ Parameter foo : Set.
 (*Why*) Parameter f2 : forall (_: Z), bool.
 
 (*Why*) Parameter f3 :
-  forall (x: Z), forall (y: Z), forall (_: x >= 0),
+  forall (x: Z), forall (y: Z), forall (H: x >= 0),
   (sig_2 Z Z (fun (y0: Z) (result: Z)  => (y0 = (y + x + result)))).
 
 (*Why*) Parameter f4 : forall (_: unit), unit.

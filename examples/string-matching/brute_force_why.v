@@ -109,7 +109,7 @@ Lemma BF_po_3 :
      (forall (j:Z),
       (j = (j2 + 1) -> 0 <= j /\ (Zwf 0 (n - m + 1 - j) (n - m + 1 - j2))))))).
 Proof.
-olddestruct result4; intuition.
+simple_destruct result4; intuition.
 subst i.
 apply match_right_extension; auto with *.
 subst c_aux_1 c_aux_2; ring (0 + i3)%Z; ring (j2 + i3)%Z; assumption.

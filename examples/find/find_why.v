@@ -581,15 +581,15 @@ Lemma find_po_12 :
 Proof.
 intros.
 subst r.
-assert H: exchange A3 A1 i2 j2.
+assert (H: exchange A3 A1 i2 j2).
 subst A3.
  subst A2.
  subst w.
 auto with datatypes.
 
-assert H0: (access A3 i2 <= access A0 f)%Z.
+assert (H0: (access A3 i2 <= access A0 f)).
 elim H; intros; rewrite H3; omega.
-assert H1: (access A0 f <= access A3 j2)%Z.
+assert (H1: (access A0 f <= access A3 j2)).
 elim H; intros; rewrite H5; omega.
 generalize
  (subgoal_3 m1 n1 i1 j1 i2 j2 A A0 A1 A3 Pre27 Inv_mn Test14 zero_f_SN

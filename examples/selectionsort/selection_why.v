@@ -121,7 +121,7 @@ Lemma selection_po_3 :
     (Zwf 0 ((array_length t0) - j) ((array_length t0) - j1)))).
 Proof.
 intuition.
-assert h: (k < j1)%Z \/ k = j1.
+assert (h: (k < j1) \/ k = j1).
  omega.
  intuition.
 apply Zle_trans with (access t0 min1).
@@ -171,7 +171,7 @@ Lemma selection_po_4 :
     (Zwf 0 ((array_length t0) - j) ((array_length t0) - j1)))).
 Proof.
 intuition.
-assert h: (k < j1)%Z \/ k = j1.
+assert (h: (k < j1) \/ k = j1).
  omega.
  intuition.
 subst k; omega.
@@ -204,7 +204,7 @@ Lemma selection_po_5 :
   (forall (k:Z), (i1 <= k /\ k < j -> (access t0 min) <= (access t0 k))).
 Proof.
 intuition.
-assert h: k = i1.
+assert (h: k = i1).
  omega.
 subst min k; omega.
 Qed.
@@ -374,7 +374,7 @@ Proof.
 intuition.
 ArraySubst t2.
 ArraySubst t1.
-assert h: i1 = 0%Z \/ (0 < i1)%Z.
+assert (h: i1 = 0%Z \/ (0 < i1)).
  omega.
  intuition.
 replace (i0 - 1)%Z with 0%Z.
@@ -399,7 +399,7 @@ apply permut_trans with t0.
 subst t2; subst t1; subst w.
 apply exchange_is_permut with min1 i1; auto with *.
 assumption.
-assert h: k = i1 \/ (k < i1)%Z.
+assert (h: k = i1 \/ (k < i1)).
  omega.
  intuition.
 subst k.
@@ -407,7 +407,7 @@ subst t2; simpl in H23.
 AccessSame.
 AccessOther.
 subst t1; simpl in H23.
-assert h: l = min1 \/ min1 <> l.
+assert (h: l = min1 \/ min1 <> l).
  omega.
  intuition.
 subst l; AccessSame.
@@ -418,7 +418,7 @@ subst t2; simpl in H23.
  AccessOther.
 AccessOther.
 subst t1; simpl in H23.
-assert h: l = min1 \/ min1 <> l.
+assert (h: l = min1 \/ min1 <> l).
  omega.
  intuition.
 subst l; AccessSame.
@@ -466,7 +466,7 @@ Lemma selection_po_11 :
   (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
 Proof.
 intuition.
-assert h: i1 = 0%Z \/ (0 < i1)%Z.
+assert (h: i1 = 0%Z \/ (0 < i1)).
  omega.
  intuition.
 unfold sorted_array; intros; omega.
