@@ -12,3 +12,4 @@ pvstc.el
 *.sx
 *.sx.all
 .depend
+a.out
