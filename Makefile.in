@@ -203,6 +203,8 @@ install-mizar-yes:
 local: $(STATICBINARY) $(WHY2HTML) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
+	mkdir -p $(COQLIB)/contrib/why
+	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib/why
 	mkdir -p $(COQLIB)/newcontrib/why
 	cp -f $(VO8) $(VFILES) $(COQLIB)/newcontrib/why
 	mkdir -p $(PVSLIB)/why
