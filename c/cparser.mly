@@ -41,6 +41,7 @@
 			      Stream.Error ("Unsupported C syntax: " ^ s)))
   let warning s =
     Format.eprintf "%a warning: %s\n" Loc.report_line (symbol_start ()) s
+  let vwarning s = if verbose then warning s
 
   let add_pre_loc lb = function
     | Some (b,_) -> Loc.join (b,0) lb 
@@ -56,13 +57,13 @@
   type specifier = 
     | Stypedef 
     | Sstorage of storage_class
-    | Stype of ctype_expr
+    | Stype of cexpr ctype_node
     | Slong
     | Sshort
     | Sconst
     | Svolatile
     | Srestrict
-    | Ssigned of bool (* true = signed / false = unsigned *)
+    | Ssign of sign
     | Sstruct_decl of string option * parameters 
     | Sunion_decl of string option * parameters
 	
@@ -99,7 +100,7 @@
     let rec loop so = function
       | [] -> 
 	  so
-      | Ssigned b' :: sp -> 
+      | Ssign b' :: sp -> 
 	  (match so with 
 	     | None -> loop (Some b') sp
 	     | Some b when b = b' -> warning "duplicate (un)signed"; loop so sp
@@ -110,9 +111,8 @@
     loop None
 
   let apply_sign sg ty = match sg, ty with
-    | None, CTchar -> false
-    | None, _ -> true
-    | Some b, (CTchar | CTshort | CTint | CTlong | CTlonglong) -> b
+    | None, t -> t
+    | Some b, (CTint (_, i)) -> CTint (b, i)
     | Some _, _ -> error "signed or unsigned invalid"
 
   type length = Short | Long | LongLong
@@ -163,7 +163,7 @@
 	     | Some ty -> ty 
 	     | None when gl && st = No_storage && sg = None && lg = None -> 
 		 error "data definition has no type or storage class"
-	     | None -> CTint)
+	     | None -> CTint (Signed, Int))
       | Stype t :: sp when tyo = None ->
 	  base_type (Some t) sp
       | Sstruct_decl (so, pl) :: sp when tyo = None ->
@@ -184,14 +184,13 @@
       List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
     in
     let bt = base_type None specs in
-    let sg = apply_sign sg bt in
+    let bt = apply_sign sg bt in
     let ty = full_type bt decl in
     if debug then eprintf "%a@." explain_type ty;
-    { ctype_expr = ty;
+    { ctype_node = ty;
       ctype_storage = st;
       ctype_const = List.exists ((=) Sconst) specs;
-      ctype_volatile = List.exists ((=) Svolatile) specs;
-      ctype_signed = sg }
+      ctype_volatile = List.exists ((=) Svolatile) specs }
 
   let interp_param (s, d, id) = interp_type false s d, id
   let interp_params = List.map interp_param
@@ -217,7 +216,7 @@
   let type_declarations specs =
     if is_typedef specs then warning "useless keyword in empty declaration";
     let ty = interp_type true specs Dsimple in
-    match ty.ctype_expr with
+    match ty.ctype_node with
       | CTstruct_decl _ | CTunion_decl _ | CTenum_decl _ 
       | CTstruct_named _ | CTunion_named _ | CTenum_named _ ->
           [ locate (Ctypedecl ty) ]
@@ -262,7 +261,7 @@
 	List.iter (fun (_,x) -> Ctypes.remove x) pl;
 	ty, id, pl, p
     | _ -> 
-	uns ()
+	raise Parsing.Parse_error
 
 %}
 
@@ -533,14 +532,14 @@ type_specifier
         ;
 type_specifier_no_name
         : VOID { Stype CTvoid }
-        | CHAR { Stype CTchar }
+        | CHAR { Stype (CTint (Unsigned, Char)) }
         | SHORT { Sshort }
-        | INT { Stype CTint }
+        | INT { Stype (CTint (Signed, Int)) }
         | LONG { Slong }
-        | FLOAT { Stype CTfloat }
-        | DOUBLE { Stype CTdouble }
-        | SIGNED { Ssigned true }
-        | UNSIGNED { Ssigned false }
+        | FLOAT { Stype (CTfloat Float) }
+        | DOUBLE { Stype (CTfloat Double) }
+        | SIGNED { Ssign Signed }
+        | UNSIGNED { Ssign Unsigned }
         | struct_or_union_specifier { $1 }
         | enum_specifier { $1 }
         ;
@@ -627,7 +626,7 @@ enumerator
 type_qualifier
         : CONST { Sconst }
         | VOLATILE { Svolatile }
-	| RESTRICT { warning "ignored __restrict"; Srestrict }
+	| RESTRICT { vwarning "ignored __restrict"; Srestrict }
         ;
 
 declarator
@@ -662,10 +661,10 @@ annot
 pointer
         : STAR { fun d -> Dpointer d }
         | STAR type_qualifier_list 
-	    { warning "ignored qualifiers"; fun d -> Dpointer d }
+	    { vwarning "ignored qualifiers"; fun d -> Dpointer d }
         | STAR pointer { fun d -> Dpointer ($2 d) }
         | STAR type_qualifier_list pointer 
-	    { warning "ignored qualifiers"; fun d -> Dpointer ($3 d) }
+	    { vwarning "ignored qualifiers"; fun d -> Dpointer ($3 d) }
         ;
 
 type_qualifier_list
@@ -677,7 +676,7 @@ type_qualifier_list
 parameter_type_list
         : parameter_list { $1 }
         /* TODO */
-        | parameter_list COMMA ELLIPSIS { warning "ignored <...>"; $1 }
+        | parameter_list COMMA ELLIPSIS { vwarning "ignored <...>"; $1 }
         ;
 
 parameter_list
@@ -859,7 +858,7 @@ function_prototype
 
 attributes_opt:
   /* empty */ {}
-| attributes { warning "ignored attributes" }
+| attributes { vwarning "ignored attributes" }
 ;
 
 attributes:

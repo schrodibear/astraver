@@ -14,11 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.2 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.3 2003-12-23 13:23:41 filliatr Exp $ i*)
 
 let parse_only = ref false
 let type_only = ref false
-let cpp_command = ref "gcc -E"
+let cpp_command = ref "gcc -E -C"
 let with_cpp = ref true
 let debug = ref false
 let verbose = ref false

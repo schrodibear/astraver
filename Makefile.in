@@ -164,8 +164,8 @@ WHYVO=lib/coq/Why.vo
 bench:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid"
 
-bench-c:: $(BINARY) $(WHYVO)
-	cd bench; sh ./bench "../$(BINARY) --valid" c
+bench-c:: $(CADUCEUS) $(WHYVO)
+	cd bench/c; sh ./bench
 
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs
@@ -416,6 +416,8 @@ coq-clean::
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli > .depend
+
+depend-coq coq-depend:
 	if test @COQ@ == yes; then \
 	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v >> .depend; \
 	  $(COQDEP) -R lib/coq-v7 Coq.why lib/coq-v7/*.v >> .depend; \

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.5 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.6 2003-12-23 13:23:41 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -161,8 +161,8 @@ rule token = parse
 
 and comment = parse
   | "*/" { () }
-  | _    { comment lexbuf }
   | eof  { lex_error lexbuf "Unterminated_comment" }
+  | _    { comment lexbuf }
 
 and annot = parse
   | "*/" { ANNOT (!annot_start_pos, Buffer.contents buf) }

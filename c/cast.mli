@@ -14,15 +14,48 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.5 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.6 2003-12-23 13:23:41 filliatr Exp $ i*)
 
-(* C abstract syntax trees *)
+(*s C types *)
+
+type storage_class = No_storage | Extern | Auto | Static | Register
+
+type sign = Signed | Unsigned
+
+type cinteger = Char | Short | Int | Long | LongLong
+
+type cfloat = Float | Double | LongDouble
+
+type 'expr ctype_node =
+  | CTvoid
+  | CTint of sign * cinteger
+  | CTfloat of cfloat
+  | CTvar of string
+  | CTarray of 'expr ctype_node * 'expr option
+  | CTpointer of 'expr ctype_node
+  | CTbitfield of 'expr ctype_node * 'expr
+  | CTstruct_named of string
+  | CTstruct_decl of string option * 'expr parameters 
+  | CTunion_named of string
+  | CTunion_decl of string option * 'expr parameters
+  | CTenum_named of string
+  | CTenum_decl of string option * (string * 'expr option) list
+  | CTfun of 'expr parameters * 'expr ctype_node
+
+and 'expr ctype = { 
+  ctype_node : 'expr ctype_node;
+  ctype_storage : storage_class;
+  ctype_const : bool;
+  ctype_volatile : bool;
+}
+
+and 'expr parameters = ('expr ctype * string) list
+
+(*s C parsed abstract syntax trees *)
 
 type 'a located = { node : 'a; loc : Loc.t }
 
 type annot = int * string
-
-type storage_class = No_storage | Extern | Auto | Static | Register
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
@@ -38,40 +71,7 @@ type binary_operator =
 
 type shift = Left | Right
 
-type ctype_expr =
-  | CTvoid
-  | CTchar
-  | CTshort
-  | CTint
-  | CTlong
-  | CTlonglong
-  | CTfloat
-  | CTdouble
-  | CTlongdouble
-  | CTvar of string
-  | CTarray of ctype_expr * cexpr option
-  | CTpointer of ctype_expr
-  | CTbitfield of ctype_expr * cexpr
-  | CTstruct_named of string
-  | CTstruct_decl of string option * parameters 
-  | CTunion_named of string
-  | CTunion_decl of string option * parameters
-  | CTenum_named of string
-  | CTenum_decl of string option * (string * cexpr option) list
-  (* only for the sym table *)
-  | CTfun of parameters * ctype_expr
-
-and ctype = { 
-  ctype_expr : ctype_expr;
-  ctype_storage : storage_class;
-  ctype_const : bool;
-  ctype_volatile : bool;
-  ctype_signed : bool 
-}
-
-and parameters = (ctype * string) list
-
-and cexpr = cexpr_node located
+type cexpr = cexpr_node located
 
 and cexpr_node =
   | CEnop
@@ -88,9 +88,9 @@ and cexpr_node =
   | CEcall of cexpr * cexpr list
   | CEcond of cexpr * cexpr * cexpr
   | CEshift of cexpr * shift * cexpr
-  | CEcast of ctype * cexpr
+  | CEcast of cexpr ctype * cexpr
   | CEsizeof_expr of cexpr
-  | CEsizeof of ctype
+  | CEsizeof of cexpr ctype
 
 type c_initializer = 
   | Inothing
@@ -123,10 +123,11 @@ and annotated_block = annot option * block * annot option
 
 and decl = 
   | Cspecdecl of annot
-  | Ctypedef of ctype * string
-  | Ctypedecl of ctype
-  | Cdecl of ctype * string * c_initializer
-  | Cfundef of ctype * string * parameters * annotated_block located
+  | Ctypedef of cexpr ctype * string
+  | Ctypedecl of cexpr ctype
+  | Cdecl of cexpr ctype * string * c_initializer
+  | Cfundef of 
+      cexpr ctype * string * cexpr parameters * annotated_block located
 
 type file = decl located list
 
