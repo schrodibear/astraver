@@ -5,8 +5,9 @@
 \usepackage[latin1]{inputenc}
 \usepackage{pstricks}
 \usepackage{pst-node}
-\usepackage{color}
+%\usepackage{color}
 \usepackage{url}
+\usepackage{verbatim}
 
 \input{./macros}
 
@@ -24,8 +25,8 @@
 
 \title{Certification de l'algorithme de
   Schorr-Waite avec Caduceus}
-\author{Thierry Hubert}
-\institution{Projet PROVAL de l'INRIA-equipe DEMONS
+\author{Thierry Hubert, Claude Marché}
+\institution{Projet PROVAL de l'INRIA --- Équipe DEMONS
   du LRI - Orsay}
 
 \slideCaption{Séminaire LogiCal-ProVal --- 11 mars 2005}
@@ -43,8 +44,10 @@
 \item L'algorithme de Schorr-Waite
 \item Sa spécification formelle en Caduceus
 \item Annotation du code 
-\item la preuve Simplify et en Coq
-\item Terminaison
+\item Preuve avec le démonstrateur automatique Simplify
+\item Preuve avec Coq
+\item Terminaison avec Coq
+\item Conclusions
 \end{enumerate}
 
 \end{slide}
@@ -57,8 +60,9 @@ The Schorr-Waite algorithm is the first moutain that any formalism for
 pointer aliasing should climb.
 \end{slshape}
 
---- Richard Bornat (Proving pointer programs in {H}oare logic, In {\em
+\hspace*{5cm} --- Richard Bornat \begin{small}(Proving pointer programs in {H}oare logic, In {\em
   Mathematics of Program Construction}, 2000, page 121)
+\end{small}
 
 \begin{itemize}
 \item 2000, Bornat, système Jape
@@ -66,6 +70,7 @@ pointer aliasing should climb.
 \item 2004, Abrial, système Atelier B
 \end{itemize}
 
+$\leadsto$ au tour de Caduceus
 \end{slide}
 
 \begin{slide}{Originalité de la preuve avec Caduceus}
@@ -73,7 +78,7 @@ pointer aliasing should climb.
 \begin{itemize}
 \item Directement sur du code source en C
 \item Preuve de l'absence de ``segmentation fault'' 
-\item Partie inaccessible montrée inchangée
+\item Partie inaccessible de la mémoire montrée inchangée
 \item Preuve formelle de terminaison
 \end{itemize}
 
@@ -88,7 +93,7 @@ Parcours d'un graphe orienté (binaire)
 \item sans utiliser d'allocation memoire
 \end{itemize}
 
-Noeuds du graphe codés par structure C :
+N{\oe}uds du graphe codés par structure C :
 \fontsize{10}{10pt}
 \begin{alltt}
 typedef struct struct_node \{
@@ -96,9 +101,14 @@ typedef struct struct_node \{
   unsigned int c :1;         /* usage interne */
   struct struct_node *l, *r; /* fils gauche et droit */
 \} * node;
-
+\end{alltt}
+La fonction
+\fontsize{10}{10pt}
+\begin{alltt}
 void schorr_waite(node root);
 \end{alltt}
+doit parcourir le graphe, à partir du n{\oe}ud donné \verb|root|, en
+suivant les fils gauche et droits.
 \end{slide}
 
 
@@ -134,14 +144,18 @@ void schorr_waite(node root) \{
   \psset{unit=\unitlength,arrows=->}
 %\fbox{
 \begin{picture}(100,100)
+\put(-50,50){\rnode{fig1}}
+\put(-20,50){\rnode{fig2}}
+\put(110,50){\rnode{fig3}}
+\put(140,50){\rnode{fig4}}
 \put(50,100){\rnode{null}{\makebox(0,0)[l]{\tiny NULL}}}
 \untilSlide*{1}{\put(50,80){\unode{n0}}}
 \fromSlide*{2}{\put(50,80){\mnode{n0}}}
 \untilSlide*{2}{\put(20,50){\unode{n1}}}
 \fromSlide*{3}{\put(20,50){\mnode{n1}}}
 \put(80,50){\unode{n2}}
-\untilSlide*{1}{\put(30,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
-\untilSlide*{1}{\put(30,80){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\untilSlide*{2}{\put(25,90){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\untilSlide*{2}{\put(20,70){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
 \put(0,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(40,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(60,20){\rnode{n11}}
@@ -152,38 +166,49 @@ void schorr_waite(node root) \{
 \untilSlide*{5}{\ncline{n0}{n2}}
 \untilSlide*{2}{\ncline[nodesepB=1mm]{n1}{null2}}
 \untilSlide*{3}{\ncline[nodesepB=1mm]{n1}{null3}}
-\onlySlide*{1}{\ncline[nodesep=1mm]{p}{null}}
-\onlySlide*{1}{\ncline[nodesepA=1mm]{t}{n0}}
-\onlySlide*{2}{\put(80,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
-\onlySlide*{2}{\put(0,50){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
-\onlySlide*{2}{\ncline[nodesepA=3mm]{p}{n0}}
-\onlySlide*{2}{\ncline[nodesepA=1mm]{t}{n1}}
+\onlySlide*{1}{\ncline[nodesepA=2mm]{p}{null}}
+\onlySlide*{1}{\ncline[nodesepA=2mm]{t}{n0}}
+\untilSlide*{2}{\ncline[linewidth=2mm,linecolor=gray]{fig3}{fig4}\Aput{push}}
+%\onlySlide*{2}{\put(80,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+%\onlySlide*{2}{\put(0,50){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{2}{\ncline[nodesepA=2mm]{p}{n0}}
+\onlySlide*{2}{\ncline[nodesepA=2mm]{t}{n1}}
 \onlySlide*{2}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
-\onlySlide*{3}{\put(0,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
-\onlySlide*{3}{\put(-10,30){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
-\onlySlide*{3}{\ncline[nodesepA=3mm]{p}{n1}}
-\onlySlide*{3}{\ncline[nodesepB=1mm]{t}{null2}}
+\onlySlide*{2}{\ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{push}}
+\onlySlide*{3}{\put(0,70){\rnode{p}{\makebox(0,0)[br]{$p$}}}}
+%\onlySlide*{3}{\put(-10,30){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{3}{\put(20,-10){\rnode{t}{\makebox(0,0)[tl]{$t$}}}}
+\onlySlide*{3}{\ncline[nodesepA=2mm]{p}{n1}}
+\onlySlide*{3}{\ncline[nodesepB=2mm]{t}{null2}}
 \onlySlide*{3}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
 \onlySlide*{3}{\ncarc[arcangleA=150,arcangleB=-20,linewidth=1]{n1}{n0}}
-\onlySlide*{4}{\put(0,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
-\onlySlide*{4}{\put(20,-10){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
-\onlySlide*{4}{\ncline[nodesepA=3mm]{p}{n1}}
-\onlySlide*{4}{\ncline[nodesepB=1mm]{t}{null3}}
+\onlySlide*{3}{\ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{push}}
+\onlySlide*{3}{\ncline[linewidth=2mm,linecolor=gray]{fig3}{fig4}\Aput{swing}}
+\onlySlide*{4}{\put(0,70){\rnode{p}{\makebox(0,0)[br]{$p$}}}}
+\onlySlide*{4}{\put(20,-10){\rnode{t}{\makebox(0,0)[tr]{$t$}}}}
+\onlySlide*{4}{\ncline[nodesepA=2mm]{p}{n1}}
+\onlySlide*{4}{\ncline[nodesepB=2mm]{t}{null3}}
 \onlySlide*{4}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
 \onlySlide*{4}{\ncarc[arcangleA=-120,arcangleB=-40,linewidth=1]{n1}{n0}}
 \fromSlide*{4}{\ncline[nodesepB=1mm]{n1}{null2}}
-\onlySlide*{5}{\put(60,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
-\onlySlide*{5}{\put(-50,70){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
-\onlySlide*{5}{\ncline[nodesepA=3mm]{p}{n0}}
-\onlySlide*{5}{\ncline[nodesepB=1mm]{t}{n1}}
+\onlySlide*{4}{\ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{swing}}
+\onlySlide*{4}{\ncline[linewidth=2mm,linecolor=gray]{fig3}{fig4}\Aput{pop}}
+\fromSlide*{5}{\put(-25,90){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{5}{\put(-60,60){\rnode{t}{\makebox(0,0)[b]{$t$}}}}
+\onlySlide*{5}{\ncline[nodesepA=2mm]{p}{n0}}
+\onlySlide*{5}{\ncline[nodesepA=2mm]{t}{n1}}
 \onlySlide*{5}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
 \fromSlide*{5}{\ncline[nodesepB=1mm]{n1}{null3}}
-\onlySlide*{6}{\put(-50,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
-\onlySlide*{6}{\put(70,70){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
-\onlySlide*{6}{\ncline[nodesepA=1mm]{p}{n0}}
+\onlySlide*{5}{\ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{pop}}
+\onlySlide*{5}{\ncline[linewidth=2mm,linecolor=gray]{fig3}{fig4}\Aput{swing}}
+%\onlySlide*{6}{\put(-50,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{6}{\put(30,60){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{6}{\ncline[nodesepA=2mm]{p}{n0}}
 \onlySlide*{6}{\ncline[nodesepA=2mm]{t}{n2}}
 \onlySlide*{6}{\ncarc[nodesepB=1mm,arcangleA=-120,arcangleB=-20,linewidth=1]{n0}{null}}
 \fromSlide*{6}{\ncline[nodesepB=1mm]{n0}{n1}}
+\onlySlide*{6}{\ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{swing}}
+\onlySlide*{6}{\ncline[linewidth=2mm,linecolor=gray]{fig3}{fig4}\Aput{push}}
 \end{picture}
 %}
 
@@ -199,8 +224,8 @@ void schorr_waite(node root);
 \end{alltt}
 
 \begin{itemize}
-\item Les noeuds accessibles à partir de root sont non-marqués
-initialement (n->m == 0) et marqués à la fin (n->m == 1)
+\item Les noeuds accessibles à partir de \verb|root| sont initialement
+  non-marqués (\verb|n->m == 0|) et marqués à la fin (\verb|n->m == 1|)
 
 \item La structure du graphe est restaurée (pointeurs des fils gauche et
 droit restaurés à leurs valeurs initiales)
@@ -218,8 +243,10 @@ Il faut exprimer l'accessibilité. On introduit
 \begin{itemize}
 \item déclaré en Caduceus
 \item supposé défini (ou du moins axiomatisé) dans le prouveur.
-\item declaration \verb|reads|: permet de faire dependre ce predicat
-  de p1 (->l \cup ->r)
+\item déclaration
+  \begin{slshape}\begin{blue}reads\end{blue}\end{slshape} : permet de
+  faire dépendre ce prédicat
+  de $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$
 \end{itemize}
 
 \end{slide}
@@ -230,30 +257,24 @@ Il faut exprimer l'accessibilité. On introduit
 \begin{alltt}\begin{slshape}\begin{blue}
 /*@ \textbf{requires}
   @  \bs{}forall node x; 
-  @     x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
+  @     x != \bs{}null && reachable(root,x) => 
+  @                           \valid(x) && ! x->m  
   @ \textbf{ensures}
-  @  (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @  (\bs{}forall node x; \old(x->l) == x->l && 
+  @                       \old(x->r) == x->r) 
   @ &&
-  @  (\bs{}forall node x; x != \bs{}null && reachable(root,x) => x->m) 
+  @  (\bs{}forall node x; x != \bs{}null && 
+  @                       reachable(root,x) => x->m) 
   @ &&
-  @  (\bs{}forall node x; ! reachable(root,x) => x->m == \old(x->m))
+  @  (\bs{}forall node x; ! reachable(root,x) => 
+  @                      x->m == \old(x->m))
   @*/\end{blue}\end{slshape}
 void schorr_waite(node root);
 \end{alltt}
 \end{slide}
 
-
-\begin{slide}{Annotation du code}
-
-cad trouver le bon invariant de boucle.
-
-idee essentielle: codage d'une pile de backtracking dans le graphe
-
-\end{slide}
-
-\begin{slide}{La pile de backtrack}
-\begin{center}
-  \unitlength=0.5mm
+\newsavebox{\pile}
+\savebox{\pile}{\unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
 \begin{picture}(100,100)
 \put(50,100){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
@@ -285,83 +306,154 @@ idee essentielle: codage d'une pile de backtracking dans le graphe
 \ncline{n121}{n1212}
 \ncline[nodesepA=1mm]{p}{n12}
 \ncline[nodesepA=1mm]{t}{n121}
-\end{picture}\label{figure}
-\end{center}
+\end{picture}}
+
+\begin{slide}{Annotation du code}
+
+$\leadsto$ trouver le bon invariant de boucle.
+
+\begin{minipage}[b]{0.4\textwidth}
+Idée essentielle : codage d'une pile de backtracking dans le graphe
+\end{minipage}\hfill
+\usebox{\pile}
 
 \end{slide}
+
+
+
+
+
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
 \begin{alltt}
 /*@ invariant
-    @  (I1 :: \bs{}forall node x; \old(reachable(root,x)) => 
-    @    reachable(t,x) || reachable(p,x))
-    @ &&
-
+  @  (I1 :: \bs{}forall node x; \old(reachable(root,x)) => 
+  @    reachable(t,x) || reachable(p,x))
+  @ &&
 \end{alltt}
+N{\oe}ud initialement accessible $\Ra$ accessible par $p$ ou $t$
+
+\begin{comment}
 Ce premier invariant indique que tous les noeuds dans le graphe au
 debut de la fonction sont atteignable par t ou p.
+\end{comment}
+
+\bigskip
+
 \fontsize{10pt}{9pt}
 \begin{alltt}
-(I2 :: \bs{}forall node x; x != \bs{}null => 
-    @         (reachable(t,x) || reachable(p,x)) => 
-    @         \old(reachable(root,x)))
-    @ &&
+@ (I2 :: \bs{}forall node x; x != \bs{}null => 
+@         (reachable(t,x) || reachable(p,x)) => 
+@         \old(reachable(root,x)))
+@ &&
 \end{alltt}
+N{\oe}ud non null accessible par $p$ ou $t$ $\Ra$ initialement accessible
+
+\begin{comment}
 Ce deuxième invariant indique que tous les noeuds non null atteignable
 par t ou p etaient dans le graphe avant la fonction.
+\end{comment}
+
 \end{slide}
+
+
+\begin{slide}{Invariant de la boucle}
+
+\fontsize{10pt}{9pt}
+\begin{alltt}
+@ (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
+@         x->m == \old(x->m)) 
+@ &&
+\end{alltt}
+N{\oe}ud inaccessible $\Ra$ marquage inchangé
+
+\begin{comment}
+Cet invariant indique que tous les noeuds qui n'etait pas dans le
+graphe avant la fonction, ont leur marquage inchanger.
+\end{comment}
+\end{slide}
+
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
 \begin{alltt}
-(I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
-    @         x->m == \old(x->m)) 
-    @ &&
+@ \bs{}exists plist stack;
+@  (I4a :: clr_list (p,stack))
+@    &&
 \end{alltt}
-Cet invariant indique que tous les noeuds qui n'etait pas dans le
-graphe avant la fonction, ont leur marquage inchanger.
-\fontsize{10pt}{9pt}
-\begin{alltt}
- \bs{}exists plist stack;
-    @  (I4a :: clr_list (p,stack))
-    &&
-\end{alltt}
+
+Définition de la pile de backtrack \verb|stack|
+
+\begin{comment}
 Cet invariant permet de definir la pile de backtrack.
-La declaration de clr_list dans caduceus est :
+La declaration de 
+\end{comment}
+\begin{minipage}[b]{0.4\textwidth}
+\verb|clr_list| déclaré dans Caduceus par :
 \fontsize{10pt}{9pt}
 \begin{alltt}
-/*@ predicate clr_list(node p, plist stack)
+/*@ predicate 
+  @   clr_list(node p, 
+  @            plist stack)
   @   reads p->c,p->l,p->r
   @*/
 \end{alltt}
+\end{minipage}\hfill
+\usebox{\pile}
 \end{slide}
+
+
 \begin{slide}{Invariant de la boucle}
-\fontsize{10pt}{9pt}
-\begin{alltt}
-(I4b :: \bs{}forall node p; in_list (p,stack) => p->m)  &&
-\end{alltt}
-Cet invariant precise que tous les noeuds dans la pile sont marqués.
-La declaration de in_list dans caduceus est :
-\fontsize{10pt}{9pt}
-\begin{alltt}
-/*@ predicate in_list(node p,plist stack) */
-\end{alltt}
 
 \fontsize{10pt}{9pt}
 \begin{alltt}
-(I4c :: \bs{}forall node x; 
-    @          \valid(x) && \old(reachable(root,x)) && 
-    @          !x->m =>
-    @          unmarked_reachable(t,x) || 
-    @          (\bs{}exists node y; 
-    @            in_list(y,stack) && 
-    @          unmarked_reachable(y->r,x))) 
-    @  &&
+@ (I4b :: \bs{}forall node p; in_list (p,stack) => p->m)  
+@ &&
 \end{alltt}
+\begin{comment}
+Cet invariant precise que tous les noeuds dans la pile sont marqués.
+La declaration de \verb|in_list| dans caduceus est :
+\end{comment}
+
+\begin{minipage}[b]{0.4\textwidth}
+Tout n{\oe}ud de la pile est marqué
+
+\bigskip
+
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ predicate 
+  @   in_list(node p,
+  @           plist stack) */
+\end{alltt}
+\end{minipage}\hfill
+\usebox{\pile}
+\end{slide}
+
+\begin{slide}{Invariant de la boucle}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+@ (I4c :: \bs{}forall node x; 
+@   \valid(x) && \old(reachable(root,x)) && !x->m =>
+@     unmarked_reachable(t,x) || 
+@     (\bs{}exists node y; 
+@       in_list(y,stack) && unmarked_reachable(y->r,x))) 
+@  &&
+\end{alltt}
+\begin{comment}
 Cet invariant precise que tous les noeuds non marqués qui etaient
 valid et dans le graphe au debut de la fonction, sont atteignable par
 un chemin non marqués par t ou atteignable par un chemin non marqués
 par un des fils droit des noeuds de la pile de backtrack.
-La declaration de unmarked_reachable dans caduceus est :
+La declaration de \verb|unmarked_reachable| dans caduceus est :
+\end{comment}
+
+\bigskip
+
+Tout n{\oe}ud accessible non marqué est accessible depuis $t$ ou bien
+par un fils droit d'un élément de la pile
+
+\bigskip
+
 \fontsize{10pt}{9pt}
 \begin{alltt}
 /*@ predicate unmarked_reachable(node p1, node p2)
@@ -373,33 +465,46 @@ La declaration de unmarked_reachable dans caduceus est :
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
 \begin{alltt}
-(I4d ::\bs{}forall node x; !in_list(x,stack) =>  
-    @        (x->r == \old(x->r) && x->l == \old(x->l))) 
-    @  &&
+@ (I4d ::\bs{}forall node x; !in_list(x,stack) =>  
+@        (x->r == \old(x->r) && x->l == \old(x->l))) 
+@  &&
 \end{alltt}
-Cet invariant precise que tous les noeuds hors de la pile de backtrack
-ont leurs fils inchangés.
+
+\begin{minipage}[b]{0.4\textwidth}
+N{\oe}ud hors de la pile $\Ra$ les fils sont inchangés par rapport à
+leur valeurs initiales
+\end{minipage}\hfill
+\usebox{\pile}
+
+\end{slide}
+
+\begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
 \begin{alltt}
-    @ (I4e :: \bs{}forall node p1; \bs{}forall node p2;
-    @          pair_in_list(p1,p2,cons(t,stack)) => 
-    @          (p2->c => \old(p2->l) == p2->l 
-    @                    && \old(p2->r) == p1)
-    @          &&(!p2->c => \old(p2->l) == p1 
-    @                    && \old(p2->r) == p2->r)) */
+@ (I4e :: \bs{}forall node p1; \bs{}forall node p2;
+@    pair_in_list(p1,p2,cons(t,stack)) => 
+@        (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
+@     && (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)) */
 \end{alltt}
+\begin{comment}
 Enfin cet invariant precise que pour tous les elements de la pile de
 backtrack, suivant la valeur de c soit son fils gauche soit son fils
 droit est inchangé et leur fils changer est maintenant la pointeur
 qui les precède dans la pile ou bien t si ce pointer est en tête de la pile.
-La declaration de pair_in_list dans caduceus est :
+La declaration de \verb|pair_in_list| dans caduceus est :
 \fontsize{10pt}{9pt}
 \begin{alltt}
 /*@ predicate pair_in_list(node p1, node p2, plist stack) */
 \end{alltt}
+\end{comment}
+\begin{minipage}[b]{0.4\textwidth}
+Précise les fils gauche et droit des éléments de la pile
+\end{minipage}\hfill
+\usebox{\pile}
+
 
 \end{slide}
-\begin{slide}{La preuves Simplify}
+\begin{slide}{La preuve avec Simplify}
 \begin{comment}
 . invariant vrai init
 . poste condition
@@ -435,11 +540,26 @@ ajout axiome reachable(p,p) :
 
 \end{comment}
 
-. invariant vrai init
-. post cond
-. 3 fois invariant preserve resp. pop swing push
-. validit	 des acc
+12 obligations de preuve
+\begin{itemize}
+\item invariant initialement
+\item post-condition de la fonction
+\item 3 fois : invariant préservé,  resp. par \textbf{pop},
+  \textbf{swing} et \textbf{push}
+\item 7 fois : validité d'accès $n\rightarrow f$
+\end{itemize}
+
+Simplify prouve 4 accès valides.
+
+Ajout de 
+\fontsize{10pt}{9pt}
+\begin{alltt}\begin{slshape}
+//@ axiom reachable_refl : \bs{}forall node p ; reachable(p,p) 
+\end{slshape}\end{alltt}
+
+$\leadsto$ tous les accès sont valides
 \end{slide}
+
 \begin{slide}{La preuve Coq}
 Nous devons d''abord definir les predicates utilisés par caduceus.
 \fontsize{10pt}{9pt}
@@ -539,7 +659,12 @@ la mesure lexicographique des 3 mesures suivant :
 \item la taille de la pile
 \end{enumerate}
 \end{slide}
-\begin{slide}{La preuve de terminaison}
+\begin{slide}{La preuve de terminaison: généralités}
+
+On définit:
+\begin{itemize}
+\item La notion d'ordre lexicographique \emph{non-dépendant}
+\begin{comment}
 \fontsize{10pt}{9pt}
 \begin{alltt}
 Section lexico.
@@ -558,6 +683,9 @@ End lexico.
 \end{alltt} 
 Cette section est utilise afin d'avoir une version non dependante de
 l'ordre lexicographique.
+\end{comment}
+\item Une généralisation de \verb|Wf_nat.inv_lt_rel| de Coq pour
+\begin{comment}
 \fontsize{10pt}{9pt}
 \begin{alltt}
 Section LT_WF_REL.
@@ -580,46 +708,53 @@ End LT_WF_REL.
 
 \end{alltt}
 Cette section est une copie de la section de meme nom tiree de
-WF_nat, mais qui generalise a n'importe quelle relation bien fondee a
-la place de < sur les nat
+WF_nat, mais qui generalise a 
+\end{comment}
+n'importe quelle relation bien fondée à la place de \verb|<| sur les
+nat. 
 
-Cela permet de prouve la terminaison avec des mesures qui 
+$\mapsto$ Permet de prouver la terminaison avec des mesures qui 
 \begin{enumerate}
-\item ne sont pas totales (cad pas defini partout)
-\item a valeur dans autre chose que nat (ici nat * nat * nat)
+\item ne sont pas totales (c.-à.-d. pas définies partout)
+\item à valeur dans autre chose que \verb|nat| (ici \verb|nat * nat * nat|)
 \end{enumerate}
+\end{itemize}
+
+$\mapsto$ ajouts dans la librairie standard de Coq ?
 \end{slide}
 
 \begin{slide}{La preuve de terminaison}
-Pour la preuve de terminaison on doit rajouter les elements suivant a
-l'annotation du code.
+
+% Pour la preuve de terminaison on doit rajouter les elements suivant
+% a l'annotation du code.
+
+On doit compléter la spécification
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\begin{slshape}\begin{blue}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
 /*@ predicate reachable_elements(node root, plist s) 
             reads root->l,root->r */ 
 /*@ requires 
        \bs{}exists plist s; reachable_elements(root,s) && 
-     ... */\end{slshape}
+     ... */\end{blue}\end{slshape}
 void schorr_waite(node root) \{
-  node t = root; node p = NULL;\begin{slshape}
+  node t = root; node p = NULL;\begin{slshape}\begin{blue}
   /*@ invariant ...
     @ variant weight(p,t) for order_mark_m_and_c_and_stack 
-    @*/\end{slshape}
+    @*/\end{blue}\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
    ...
 \end{alltt}
-ou en Coq on definit :
+ou en Coq on définit :
 \[
 \begin{array}{l}
 \verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
 \forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
 \end{array}
 \]
-Les fontions \verb|weight| et \verb|order_mark_m_and_c_and_stack| sont
-la definition de la mesure precedente.
-
+Les fonctions \verb|weight| et \verb|order_mark_m_and_c_and_stack|
+définissent la mesure précédente.
 \end{slide}
 \begin{slide}{Quelques chiffres}
 Avec Simplify nous avons prouve 8 obligations de preuves sur 13.
