@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.31 2004-03-17 09:54:37 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.32 2004-03-17 13:27:19 marche Exp $ i*)
 
 
 open Format
@@ -230,12 +230,12 @@ let rec interp_expr e =
 	assert false (* TODO *)
     | TEcond(e1,e2,e3) ->
 	If(interp_boolean_expr e1,interp_expr e2,interp_expr e3)
-    | TEstring_literal s
-	-> assert false (* TODO *)
-    | TEdot(e,s)
-      -> assert false (* TODO *)
-    | TEarrow(e,s)
-      -> assert false (* TODO *)
+    | TEstring_literal s -> assert false (* TODO *)
+    | TEdot(e,s) -> assert false (* TODO *)
+    | TEarrow(e,s) ->
+	let te = interp_expr e in
+	let var = s in
+	Output.make_app "acc_" [Var(var);te]
     | TEunary(Ustar,e1) -> 
 	let te1 = interp_expr e1 in
 	let var = global_var_for_type e.texpr_type in
@@ -534,7 +534,8 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
       "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
       (Axiom(id,a)::why_decls,prover_decl)
-  | Ttypedef(ctype,id) -> assert false (* TODO *)
+  | Ttypedef(ctype,id) -> 
+      (why_decls,prover_decl) 
   | Ttypedecl(ctype) -> assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 
       fprintf Coptions.log 

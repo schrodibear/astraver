@@ -2,7 +2,7 @@
 CADUCEUS=../../../bin/caduceus.opt 
 CADUCEUSLIB=../../../lib/why
 
-all: pointer_why.vo
+all: struct_why.vo pointer_why.vo
 
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 

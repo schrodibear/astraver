@@ -127,7 +127,7 @@ let decl d =
 	  (List.map fst (HeapVarSet.elements l));
 	id.logic_args <- l
     | Taxiom(id,p) -> () (* TODO *)
-    | Ttypedef(ctype,id) -> assert false (* TODO *)
+    | Ttypedef(ctype,id) -> () 
     | Ttypedecl(ctype) -> assert false (* TODO *)
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
