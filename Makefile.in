@@ -223,7 +223,7 @@ source:  doc/manual.ps
 export-doc: doc/manual.ps doc/manual.html
 	cp $^ $(WWW)
 
-BINARY = $(NAME)-$(OSTYPE)
+BINARYNAME = $(NAME)-$(OSTYPE)
 
 linux: clean binary
 
@@ -232,10 +232,10 @@ BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO) \
 	lib/coq/*.v lib/pvs/why.*
 
 binary: $(BINARYFILES)
-	mkdir -p export/$(BINARY)
-	cp --parents $(BINARYFILES) export/$(BINARY)
-	(cd export; tar czf $(BINARY).tar.gz $(BINARY))
-	cp export/$(BINARY).tar.gz $(FTP)
+	mkdir -p export/$(BINARYNAME)
+	cp --parents $(BINARYFILES) export/$(BINARYNAME)
+	(cd export; tar czf $(BINARYNAME).tar.gz $(BINARYNAME))
+	cp export/$(BINARYNAME).tar.gz $(FTP)
 
 # myself
 ########
