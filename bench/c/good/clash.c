@@ -71,5 +71,3 @@ void f2(S3 ma_structure)
  }
 
 
-
-

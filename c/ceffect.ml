@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.58 2004-11-22 16:14:27 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.59 2004-11-26 16:40:03 marche Exp $ i*)
 
 open Cast
 open Coptions
@@ -120,8 +120,13 @@ let empty = HeapVarSet.empty
 let union = HeapVarSet.union
 
 let add_var v ty s =
-  declare_heap_var v.var_unique_name ([], interp_type ty);
+  let tyi =
+    if v.var_is_referenced then Cltyping.c_pointer ty
+    else ty
+  in
+  declare_heap_var v.var_unique_name ([], interp_type tyi);
   HeapVarSet.add v s
+
   
 let add_alloc s = HeapVarSet.add alloc s
 

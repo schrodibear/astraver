@@ -29,12 +29,13 @@ Lemma f_impl_po_2 :
   forall (Pre3: (valid alloc0 i)),
   forall (result0: Z),
   forall (Post2: result0 = (acc intP0 i)),
-  result0 = 1.
+  result0 = 1 /\ (assigns alloc intP intP0 nothing_loc).
 Proof.
 intuition.
-Save.
+subst; auto.
+Admitted.
 
-(* Why obligation from file "why/ref.why", characters 284-897 *)
+(* Why obligation from file "why/ref.why", characters 332-945 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),

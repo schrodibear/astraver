@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.113 2004-11-25 14:31:24 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.114 2004-11-26 16:40:03 marche Exp $ i*)
 
 
 open Format
@@ -115,9 +115,21 @@ let rec interp_term label old_label t =
     | Tconstant (FloatConstant c) ->
 	LConst(Prim_float(float_of_string c))
     | Tvar id ->
-	if id.var_is_assigned && not id.var_is_a_formal_param then
-	  interp_var label id.var_unique_name
-	else LVar id.var_unique_name
+	let n = id.var_unique_name in
+	if id.var_is_referenced then
+	  begin match t.term_type.ctype_node with
+	    | CTstruct _ | CTunion _ -> 
+		if id.var_is_assigned && not id.var_is_a_formal_param then
+		  interp_var label n
+		else LVar n 		  
+	    | _ -> 
+		let var = global_var_for_type t.term_type in
+		LApp("acc",[LVar var; LVar n])
+	  end
+	else 
+	  if id.var_is_assigned && not id.var_is_a_formal_param then
+	    interp_var label n
+	  else LVar n
     | Told t ->	interp_term (Some old_label) old_label t
     | Tbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op t.term_type op,[f t1;f t2])

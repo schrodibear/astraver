@@ -9,7 +9,9 @@ void g(int *p) {
   *p = 1;
 }
 
-//@ ensures \result == 1
+/*@ assigns \nothing
+  @ ensures \result == 1
+  @*/
 int f() {
   int i;
   g(&i);
