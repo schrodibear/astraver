@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.5 2003-01-10 15:27:58 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.6 2003-01-13 09:53:06 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -103,6 +103,7 @@ let rec print_term fmt = function
       else fprintf fmt "(real_of_num %s / real_of_num %s)" n d
   | Tderef _ -> 
       assert false
+  (* arithmetic *)
   | Tapp (id, [a; b]) when id == t_add_int || id == t_add_float ->
       fprintf fmt "(@[%a +@ %a@])" print_term a print_term b
   | Tapp (id, [a; b]) when id == t_sub_int || id == t_sub_float ->
@@ -115,6 +116,12 @@ let rec print_term fmt = function
       fprintf fmt "(@[--%a@])" print_term a
   | Tapp (id, tl) when is_relation id || is_arith id -> 
       fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
+  (* arrays *)
+  | Tapp (id, [a; b]) when id == access ->
+      fprintf fmt "(@[EL (num_of_int %a) %a@])" print_term b print_term a
+  | Tapp (id, [a]) when id == Ident.array_length ->
+      fprintf fmt "&(@[LENGTH %a@])" print_term a
+  (* any other application *)
   | Tapp (id, tl) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	Ident.print id (print_list space print_term) tl
@@ -175,8 +182,10 @@ let rec print_predicate fmt = function
 let rec print_cc_type fmt = function
   | TTpure pt -> 
       print_pure_type fmt pt
+  | TTarray v -> 
+      fprintf fmt "(@[%a list@])" print_cc_type v
   | _ ->
-      fprintf fmt "<type>"
+      assert false
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
