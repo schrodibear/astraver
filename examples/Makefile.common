@@ -15,6 +15,9 @@ WHYOPTIONS=--valid
 	$(WHY) -ocaml $< > $@
 	ocamlc -c -i $@
 
+%.wol: %.mlw
+	$(WHY) --wol $<
+
 clean::
 	rm -f *~ *.vo
 
