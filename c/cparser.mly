@@ -689,10 +689,6 @@ loop_annot
         : LOOP_ANNOT                   { Some $1 }
         | /* epsilon */ %prec no_annot { None }
         ;
-spec_annot
-        : SPEC                         { Some $1 }
-        | /* epsilon */ %prec no_annot { None }
-        ;
 
 pointer
         : STAR { fun d -> Dpointer d }
@@ -819,7 +815,7 @@ statement_list
 
 expression_statement
         : SEMICOLON { locate CSnop }
-	| CODE_ANNOT SEMICOLON { locate (CSannot $1) } /* ADDED FOR WHY */
+	| CODE_ANNOT { locate (CSannot $1) } /* ADDED FOR WHY */
         | expression SEMICOLON { locate (CSexpr $1) }
         ;
 

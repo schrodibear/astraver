@@ -75,10 +75,10 @@ predicate:
 ;
 
 logic_type:
-  IDENTIFIER { Cltyping.noattr (CTvar $1) }
-| INT        { Cltyping.c_int }
-| FLOAT      { Cltyping.c_float }
-| logic_type LSQUARE RSQUARE { Cltyping.c_array $1 }
+  IDENTIFIER { LTvar $1 }
+| INT        { LTint }
+| FLOAT      { LTfloat }
+| logic_type LSQUARE RSQUARE { LTarray $1 }
 ;
 
 relation:

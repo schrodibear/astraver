@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.6 2004-02-10 08:18:02 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.7 2004-02-10 08:36:51 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -36,6 +36,7 @@ let c_char = noattr (CTint (Unsigned, Char))
 let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
 let c_array ty = noattr (CTarray (ty, None))
+let c_pointer ty = noattr (CTpointer ty)
 
 let expected_type loc t1 t2 =
   if not (eq_type t1 t2) then raise_located loc (ExpectedType (t1, t2))
@@ -108,7 +109,13 @@ and type_type_node env = function
   | CTarray (ty, None) -> CTarray (type_type env ty, None)
   | _ -> assert false
 
-let type_logic_type = type_type
+let rec type_logic_type env = function
+  | LTint -> c_int
+  | LTfloat -> c_float
+  | LTarray ty -> c_array (type_logic_type env ty)
+  | LTpointer ty -> c_pointer (type_logic_type env ty)
+  | LTvar id -> noattr (CTvar id)
+
 (** abandon provisoire 
 let rec type_logic_type env = function
   | PTctype ct ->

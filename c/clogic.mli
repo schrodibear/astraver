@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.8 2004-02-10 08:18:02 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.9 2004-02-10 08:36:51 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -27,11 +27,16 @@ type 'ctype logic_type =
 and 'ctype type_var =
   { tag : int; mutable type_val : 'ctype logic_type option }
 **)
-type 'ctype logic_type = 'ctype
+type logic_type = 
+  | LTint
+  | LTfloat
+  | LTarray of logic_type
+  | LTpointer of logic_type
+  | LTvar of string
 
-type 'ctype logic_symbol =
-  | Predicate of 'ctype logic_type list
-  | Function of 'ctype logic_type list * 'ctype logic_type
+type 'ltype logic_symbol =
+  | Predicate of 'ltype list
+  | Function of 'ltype list * 'ltype
 
 type ('a, 'b) info = { node : 'a; info : 'b }
 
@@ -68,8 +73,8 @@ type ('term, 'ctype) predicate =
   | Pimplies of ('term, 'ctype) predicate * ('term, 'ctype) predicate
   | Pnot of ('term, 'ctype) predicate
   | Pif of 'term * ('term, 'ctype) predicate * ('term, 'ctype) predicate
-  | Pforall of string * 'ctype logic_type * ('term, 'ctype) predicate
-  | Pexists of string * 'ctype logic_type * ('term, 'ctype) predicate
+  | Pforall of string * 'ctype * ('term, 'ctype) predicate
+  | Pexists of string * 'ctype * ('term, 'ctype) predicate
 
 type location = 
   | Lid of string

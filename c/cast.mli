@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.22 2004-02-10 08:18:02 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.23 2004-02-10 08:36:50 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -113,10 +113,10 @@ type pctype = cexpr ctype
 
 (* parsed logic AST *)
 
-type parsed_predicate = (Loc.t term, pctype) predicate
+type parsed_predicate = (Loc.t term, logic_type) predicate
 type parsed_spec = parsed_predicate spec
-type parsed_loop_annot = (Loc.t term, pctype) loop_annot
-type parsed_logic_type = pctype logic_type
+type parsed_loop_annot = (Loc.t term, logic_type) loop_annot
+type parsed_logic_type = Clogic.logic_type
 
 type parsed_decl = 
   | LDlogic of string * parsed_logic_type * (parsed_logic_type * string) list
@@ -210,8 +210,6 @@ type loop_annot = (tctype term, tctype) Clogic.loop_annot
 type loop_info = { loop_break : bool; loop_continue : bool }
 
 type fun_info = { fun_abrupt_return : bool }
-
-type logic_type = tctype Clogic.logic_type
 
 type tstatement = {
   st_node : tstatement_node;

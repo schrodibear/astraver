@@ -295,16 +295,16 @@ annotations.
   \\[0.1em]
 
   \nt{c\_declaration}
-    & $::=$ & $[$ \nt{c\_spec} $]$ \nt{c\_type} \nt{identifier} \te{(} 
+    & $::=$ & \nt{c\_spec} \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               \te{;} \\
-      & $|$ & $[$ \nt{c\_spec} $]$ \nt{c\_type} \nt{identifier} \te{(} 
+      & $|$ & \nt{c\_spec} \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               \nt{block} \te{;} \\
-      & $|$ & \te{/*@} \te{logic} \nt{type} \nt{identifier} \te{(} 
-              \nt{parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
+      & $|$ & \te{/*@} \te{logic} \nt{logic\_type} \nt{identifier} \te{(} 
+              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
       & $|$ & \te{/*@} \te{predicate} \nt{identifier} \te{(} 
-              \nt{parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
+              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
       & $|$ & \te{/*@} \te{axiom} \nt{identifier} \te{:} 
               \nt{predicate} \te{*/} \\
   \\[0.1em]
@@ -334,6 +334,14 @@ annotations.
     & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
 
   \\[0.1em]
+  
+  \nt{logic\_type}
+    & $::=$ & \te{int} $|$ \te{float} $|$ \nt{logic\_type} \te{[]} 
+            $|$ \nt{identifier} \\
+  \nt{logic\_parameter}
+    & $::=$ & \nt{logic\_type} \nt{identifier} \\
+
+  \\[0.1em]
 \end{tabular}\\
 \hrulefill
 \caption{Annotations within C constructs}
@@ -353,7 +361,6 @@ annotations.
       & $|$ & \te{*} \nt{term} \\
       & $|$ & \nt{term} \te{->} \nt{identifier} \\
       & $|$ & \nt{term} \te{.} \nt{identifier} \\
-      & $|$ & \nt{labeled\_identifier} \\
       & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{term} \te{[} \nt{term} \te{]} \\
       & $|$ & \nt{term} \te{?} \nt{term} \te{:} \nt{term} \\
@@ -385,9 +392,9 @@ annotations.
       & $|$ & \te{!} \nt{predicate} \\
       & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
               \te{else} \nt{predicate} \\
-      & $|$ & \te{forall} \nt{identifier} \te{:} \nt{primitive\_type}
+      & $|$ & \te{forall} \nt{identifier} \te{:} \nt{logic\_type}
               \te{.} \nt{predicate} \\
-      & $|$ & \te{exists} \nt{identifier} \te{:} \nt{primitive\_type}
+      & $|$ & \te{exists} \nt{identifier} \te{:} \nt{logic\_type}
               \te{.} \nt{predicate} \\
       & $|$ & \te{(} \nt{predicate} \te{)} \\
   \\[0.1em]
