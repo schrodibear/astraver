@@ -15,7 +15,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 451-457 *)
+(* Why obligation from file "good/set.mlw", characters 446-457 *)
 Lemma p2_po_1 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -26,7 +26,9 @@ Lemma p2_po_1 :
   forall (x1: Z),
   forall (Test2: x1 = y0 /\ x1 <> 0),
   forall (Pre3: y0 >= 0),
-  (y0 - 1) >= 0 /\ (Zwf 0 (y0 - 1) y0).
+  forall (y1: Z),
+  forall (Post2: y1 = (y0 - 1)),
+  y1 >= 0 /\ (Zwf 0 y1 y0).
 Proof.
 unfold Zwf; intuition.
 Qed.

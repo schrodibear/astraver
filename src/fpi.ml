@@ -34,14 +34,14 @@ let rec print_term fmt = function
   | Tconst (ConstFloat f) -> print_real fmt f
   | Tconst _ -> assert false
   | Tvar id -> Ident.print fmt id
-  | Tapp (id, tl) -> 
+  | Tapp (id, tl, _) -> 
       fprintf fmt "(%s %a)" (Ident.string id) (print_list space print_term) tl
   | Tderef _ -> assert false
 
 let rec print_pred fmt = function
   | Pfpi (t,f1,f2) -> 
       fprintf fmt "(fpi %a %a %a)" print_term t print_real f1 print_real f2
-  | Papp (id, tl) -> 
+  | Papp (id, tl, _) -> 
       fprintf fmt "(%s %a)" (Ident.string id) (print_list space print_term) tl
   | _ -> assert false
 

@@ -3,14 +3,159 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/schorr_waite.why", characters 478-478 *)
+(* Why obligation from file "why/schorr_waite.why", characters 159-478 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Post18: t = root),
+  forall (Post35: t = root),
   forall (p: pointer),
-  forall (Post17: p = null),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (p1: pointer),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 523-641 *)
+Lemma schorr_waite_impl_po_2 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  (~(t1 = null) -> (valid alloc t1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 660-718 *)
+Lemma schorr_waite_impl_po_3 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  (valid alloc p1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 843-868 *)
+Lemma schorr_waite_impl_po_4 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (c0: ((memory) Z)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test4: (acc c0 p1) <> 0),
+  forall (q: pointer),
+  forall (Post31: q = t1),
+  forall (t2: pointer),
+  forall (Post26: t2 = p1),
+  forall (p2: pointer),
+  forall (Post27: p2 = (acc r0 p1)),
+  forall (caduceus_7: pointer),
+  forall (Post30: caduceus_7 = t2),
+  (valid alloc caduceus_7).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 820-868 *)
+Lemma schorr_waite_impl_po_5 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (c0: ((memory) Z)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test4: (acc c0 p1) <> 0),
+  forall (q: pointer),
+  forall (Post31: q = t1),
+  forall (t2: pointer),
+  forall (Post26: t2 = p1),
+  forall (p2: pointer),
+  forall (Post27: p2 = (acc r0 p1)),
+  forall (caduceus_7: pointer),
+  forall (Post30: caduceus_7 = t2),
+  forall (Pre31: (valid alloc caduceus_7)),
+  forall (r1: ((memory) pointer)),
+  forall (Post64: r1 = (upd r0 caduceus_7 q)),
+  (Zwf 0 0 0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 1005-1042 *)
+Lemma schorr_waite_impl_po_6 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
   forall (l0: ((memory) pointer)),
@@ -18,305 +163,196 @@ Lemma schorr_waite_impl_po_1 :
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
   forall (t1: pointer),
-  forall (Pre41: Variant1 = 0),
-  forall (Test8: true = true),
-  forall (Test5: ~(p1 = null)),
-  ((t1 = null ->
-    (forall (result:Z),
-     (result = (acc c0 p1) ->
-      ((result <> 0 ->
-        (forall (result:pointer),
-         (result = t1 ->
-          (forall (t:pointer),
-           (t = p1 ->
-            (forall (p:pointer),
-             (p = (acc r0 p1) ->
-              (forall (result0:pointer),
-               (result0 = t ->
-                (forall (r:((memory) pointer)),
-                 (r = (upd r0 result0 result) -> (Zwf 0 0 0))) /\
-                (valid alloc result0))))) /\
-            (valid alloc p1))))))) /\
-      ((result = 0 ->
-        (forall (result:pointer),
-         (result = t1 ->
-          (forall (t:pointer),
-           (t = (acc r0 p1) ->
-            (forall (result0:pointer),
-             (result0 = p1 ->
-              (forall (result1:pointer),
-               (result1 = (acc l0 p1) ->
-                (forall (r:((memory) pointer)),
-                 (r = (upd r0 result0 result1) ->
-                  (forall (result0:pointer),
-                   (result0 = p1 ->
-                    (forall (l:((memory) pointer)),
-                     (l = (upd l0 result0 result) ->
-                      (forall (result:pointer),
-                       (result = p1 ->
-                        (forall (c:((memory) Z)),
-                         (c = (upd c0 result 1) -> (Zwf 0 0 0))) /\
-                        (valid alloc result))))) /\
-                    (valid alloc result0))))) /\
-                (valid alloc result0))) /\
-              (valid alloc p1))))) /\
-          (valid alloc p1))))))) /\
-    (valid alloc p1))) /\
-  ((~(t1 = null) ->
-    (forall (result:Z),
-     (result = (acc m0 t1) ->
-      ((result <> 0 ->
-        (forall (result:Z),
-         (result = (acc c0 p1) ->
-          ((result <> 0 ->
-            (forall (result:pointer),
-             (result = t1 ->
-              (forall (t:pointer),
-               (t = p1 ->
-                (forall (p:pointer),
-                 (p = (acc r0 p1) ->
-                  (forall (result0:pointer),
-                   (result0 = t ->
-                    (forall (r:((memory) pointer)),
-                     (r = (upd r0 result0 result) -> (Zwf 0 0 0))) /\
-                    (valid alloc result0))))) /\
-                (valid alloc p1))))))) /\
-          ((result = 0 ->
-            (forall (result:pointer),
-             (result = t1 ->
-              (forall (t:pointer),
-               (t = (acc r0 p1) ->
-                (forall (result0:pointer),
-                 (result0 = p1 ->
-                  (forall (result1:pointer),
-                   (result1 = (acc l0 p1) ->
-                    (forall (r:((memory) pointer)),
-                     (r = (upd r0 result0 result1) ->
-                      (forall (result0:pointer),
-                       (result0 = p1 ->
-                        (forall (l:((memory) pointer)),
-                         (l = (upd l0 result0 result) ->
-                          (forall (result:pointer),
-                           (result = p1 ->
-                            (forall (c:((memory) Z)),
-                             (c = (upd c0 result 1) -> (Zwf 0 0 0))) /\
-                            (valid alloc result))))) /\
-                        (valid alloc result0))))) /\
-                    (valid alloc result0))) /\
-                  (valid alloc p1))))) /\
-              (valid alloc p1))))))) /\
-        (valid alloc p1))) /\
-      ((result = 0 ->
-        (forall (result:pointer),
-         (result = p1 ->
-          (forall (p:pointer),
-           (p = t1 ->
-            (forall (t:pointer),
-             (t = (acc l0 t1) ->
-              (forall (result0:pointer),
-               (result0 = p ->
-                (forall (l:((memory) pointer)),
-                 (l = (upd l0 result0 result) ->
-                  (forall (result:pointer),
-                   (result = p ->
-                    (forall (m:((memory) Z)),
-                     (m = (upd m0 result 1) ->
-                      (forall (result:pointer),
-                       (result = p ->
-                        (forall (c:((memory) Z)),
-                         (c = (upd c0 result 0) -> (Zwf 0 0 0))) /\
-                        (valid alloc result))))) /\
-                    (valid alloc result))))) /\
-                (valid alloc result0))))) /\
-            (valid alloc t1))))))))) /\
-    (valid alloc t1))).
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test3: (acc c0 p1) = 0),
+  forall (q: pointer),
+  forall (Post25: q = t1),
+  forall (t2: pointer),
+  forall (Post14: t2 = (acc r0 p1)),
+  forall (caduceus_6: pointer),
+  forall (Post18: caduceus_6 = p1),
+  forall (Pre19: (valid alloc p1)),
+  forall (aux_1: pointer),
+  forall (Post17: aux_1 = (acc l0 p1)),
+  (valid alloc caduceus_6).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 369-382 *)
-Lemma schorr_waite_impl_po_2 : 
+(* Why obligation from file "why/schorr_waite.why", characters 1005-1042 *)
+Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Post18: t = root),
+  forall (Post35: t = root),
   forall (p: pointer),
-  forall (Post17: p = null),
+  forall (Post34: p = null),
   forall (Variant1: Z),
+  forall (c0: ((memory) Z)),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (r0: ((memory) pointer)),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test5: t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0),
+  forall (Pre32: (valid alloc p1)),
+  forall (Test3: (acc c0 p1) = 0),
+  forall (q: pointer),
+  forall (Post25: q = t1),
+  forall (t2: pointer),
+  forall (Post14: t2 = (acc r0 p1)),
+  forall (caduceus_6: pointer),
+  forall (Post18: caduceus_6 = p1),
+  forall (Pre19: (valid alloc p1)),
+  forall (aux_1: pointer),
+  forall (Post17: aux_1 = (acc l0 p1)),
+  forall (Pre17: (valid alloc caduceus_6)),
+  forall (r1: ((memory) pointer)),
+  forall (Post56: r1 = (upd r0 caduceus_6 aux_1)),
+  (forall (result:pointer),
+   (result = p1 ->
+    (forall (l:((memory) pointer)),
+     (l = (upd l0 result q) ->
+      (forall (result:pointer),
+       (result = p1 ->
+        (forall (c:((memory) Z)), (c = (upd c0 result 1) -> (Zwf 0 0 0))) /\
+        (valid alloc result))))) /\
+    (valid alloc result))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 1289-1302 *)
+Lemma schorr_waite_impl_po_8 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (t1: pointer),
-  forall (Pre41: Variant1 = 0),
-  forall (Test8: true = true),
-  forall (Test4: p1 = null),
-  forall (Test3: ~(t1 = null)),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (q: pointer),
+  forall (Post13: q = p1),
+  forall (p2: pointer),
+  forall (Post2: p2 = t1),
   (valid alloc t1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 285-476 *)
-Lemma schorr_waite_impl_po_3 : 
+(* Why obligation from file "why/schorr_waite.why", characters 1349-1374 *)
+Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Post18: t = root),
+  forall (Post35: t = root),
   forall (p: pointer),
-  forall (Post17: p = null),
+  forall (Post34: p = null),
+  forall (Variant1: Z),
+  forall (l0: ((memory) pointer)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (q: pointer),
+  forall (Post13: q = p1),
+  forall (p2: pointer),
+  forall (Post2: p2 = t1),
+  forall (t2: pointer),
+  forall (Post3: t2 = (acc l0 t1)),
+  forall (caduceus_3: pointer),
+  forall (Post6: caduceus_3 = p2),
+  (valid alloc caduceus_3).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 1326-1374 *)
+Lemma schorr_waite_impl_po_10 : 
+  forall (root: pointer),
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Post35: t = root),
+  forall (p: pointer),
+  forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
   forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
-  forall (r0: ((memory) pointer)),
   forall (t1: pointer),
-  forall (Pre41: Variant1 = 0),
-  forall (Test8: true = true),
-  forall (Test4: p1 = null),
-  forall (Test3: ~(t1 = null)),
-  forall (Pre4: (valid alloc t1)),
-  forall (caduceus_10: Z),
-  forall (Post40: caduceus_10 = (acc m0 t1)),
-  forall (result2: bool),
-  forall (Post42: (if result2 then caduceus_10 <> 0 else caduceus_10 = 0)),
-  (if result2 then True
-   else ((t1 = null ->
-          (forall (result:Z),
-           (result = (acc c0 p1) ->
-            ((result <> 0 ->
-              (forall (result:pointer),
-               (result = t1 ->
-                (forall (t:pointer),
-                 (t = p1 ->
-                  (forall (p:pointer),
-                   (p = (acc r0 p1) ->
-                    (forall (result0:pointer),
-                     (result0 = t ->
-                      (forall (r:((memory) pointer)),
-                       (r = (upd r0 result0 result) -> (Zwf 0 0 0))) /\
-                      (valid alloc result0))))) /\
-                  (valid alloc p1))))))) /\
-            ((result = 0 ->
-              (forall (result:pointer),
-               (result = t1 ->
-                (forall (t:pointer),
-                 (t = (acc r0 p1) ->
-                  (forall (result0:pointer),
-                   (result0 = p1 ->
-                    (forall (result1:pointer),
-                     (result1 = (acc l0 p1) ->
-                      (forall (r:((memory) pointer)),
-                       (r = (upd r0 result0 result1) ->
-                        (forall (result0:pointer),
-                         (result0 = p1 ->
-                          (forall (l:((memory) pointer)),
-                           (l = (upd l0 result0 result) ->
-                            (forall (result:pointer),
-                             (result = p1 ->
-                              (forall (c:((memory) Z)),
-                               (c = (upd c0 result 1) -> (Zwf 0 0 0))) /\
-                              (valid alloc result))))) /\
-                          (valid alloc result0))))) /\
-                      (valid alloc result0))) /\
-                    (valid alloc p1))))) /\
-                (valid alloc p1))))))) /\
-          (valid alloc p1))) /\
-   ((~(t1 = null) ->
-     (forall (result:Z),
-      (result = (acc m0 t1) ->
-       ((result <> 0 ->
-         (forall (result:Z),
-          (result = (acc c0 p1) ->
-           ((result <> 0 ->
-             (forall (result:pointer),
-              (result = t1 ->
-               (forall (t:pointer),
-                (t = p1 ->
-                 (forall (p:pointer),
-                  (p = (acc r0 p1) ->
-                   (forall (result0:pointer),
-                    (result0 = t ->
-                     (forall (r:((memory) pointer)),
-                      (r = (upd r0 result0 result) -> (Zwf 0 0 0))) /\
-                     (valid alloc result0))))) /\
-                 (valid alloc p1))))))) /\
-           ((result = 0 ->
-             (forall (result:pointer),
-              (result = t1 ->
-               (forall (t:pointer),
-                (t = (acc r0 p1) ->
-                 (forall (result0:pointer),
-                  (result0 = p1 ->
-                   (forall (result1:pointer),
-                    (result1 = (acc l0 p1) ->
-                     (forall (r:((memory) pointer)),
-                      (r = (upd r0 result0 result1) ->
-                       (forall (result0:pointer),
-                        (result0 = p1 ->
-                         (forall (l:((memory) pointer)),
-                          (l = (upd l0 result0 result) ->
-                           (forall (result:pointer),
-                            (result = p1 ->
-                             (forall (c:((memory) Z)),
-                              (c = (upd c0 result 1) -> (Zwf 0 0 0))) /\
-                             (valid alloc result))))) /\
-                         (valid alloc result0))))) /\
-                     (valid alloc result0))) /\
-                   (valid alloc p1))))) /\
-               (valid alloc p1))))))) /\
-         (valid alloc p1))) /\
-       ((result = 0 ->
-         (forall (result:pointer),
-          (result = p1 ->
-           (forall (p:pointer),
-            (p = t1 ->
-             (forall (t:pointer),
-              (t = (acc l0 t1) ->
-               (forall (result0:pointer),
-                (result0 = p ->
-                 (forall (l:((memory) pointer)),
-                  (l = (upd l0 result0 result) ->
-                   (forall (result:pointer),
-                    (result = p ->
-                     (forall (m:((memory) Z)),
-                      (m = (upd m0 result 1) ->
-                       (forall (result:pointer),
-                        (result = p ->
-                         (forall (c:((memory) Z)),
-                          (c = (upd c0 result 0) -> (Zwf 0 0 0))) /\
-                         (valid alloc result))))) /\
-                     (valid alloc result))))) /\
-                 (valid alloc result0))))) /\
-             (valid alloc t1))))))))) /\
-     (valid alloc t1)))).
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Pre33: (~(t1 = null) -> (valid alloc t1))),
+  forall (Test2: ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (q: pointer),
+  forall (Post13: q = p1),
+  forall (p2: pointer),
+  forall (Post2: p2 = t1),
+  forall (t2: pointer),
+  forall (Post3: t2 = (acc l0 t1)),
+  forall (caduceus_3: pointer),
+  forall (Post6: caduceus_3 = p2),
+  forall (Pre7: (valid alloc caduceus_3)),
+  forall (l1: ((memory) pointer)),
+  forall (Post48: l1 = (upd l0 caduceus_3 q)),
+  (forall (result:pointer),
+   (result = p2 ->
+    (forall (m:((memory) Z)),
+     (m = (upd m0 result 1) ->
+      (forall (result:pointer),
+       (result = p2 ->
+        (forall (c:((memory) Z)), (c = (upd c0 result 0) -> (Zwf 0 0 0))) /\
+        (valid alloc result))))) /\
+    (valid alloc result))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/schorr_waite.why", characters 152-1557 *)
-Lemma schorr_waite_impl_po_4 : 
+Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
+  forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Post18: t = root),
+  forall (Post35: t = root),
   forall (p: pointer),
-  forall (Post17: p = null),
+  forall (Post34: p = null),
   forall (Variant1: Z),
-  forall (Pre41: Variant1 = 0),
-  forall (Test8: true = true),
-  forall (Post19: (Zwf 0 0 0)),
+  forall (m0: ((memory) Z)),
+  forall (p1: pointer),
+  forall (t1: pointer),
+  forall (Pre36: Variant1 = 0),
+  forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
+  forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
+  forall (Post36: (Zwf 0 0 0)),
   (Zwf 0 0 Variant1).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
 Proof.
 intuition.
 (* FILL PROOF HERE *)

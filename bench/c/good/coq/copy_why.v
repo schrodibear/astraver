@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/copy.why", characters 355-363 *)
+(* Why obligation from file "why/copy.why", characters 318-367 *)
 Lemma copy_impl_po_1 : 
   forall (t1: pointer),
   forall (t2: pointer),
@@ -12,7 +12,7 @@ Lemma copy_impl_po_1 :
   forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
                 ~((base_addr t1) = (base_addr t2))),
   forall (i: Z),
-  forall (Post3: i = n),
+  forall (Post9: i = n),
   forall (Variant1: Z),
   forall (i1: Z),
   forall (intP0: ((memory) Z)),
@@ -23,25 +23,25 @@ Lemma copy_impl_po_1 :
                   (acc intP0 (shift t1 k))))),
   forall (Test2: true = true),
   forall (caduceus: Z),
-  forall (Post2: caduceus = i1),
+  forall (Post4: caduceus = i1),
   forall (i2: Z),
-  forall (Post1: i2 = (caduceus - 1)),
-  ((caduceus > 0 ->
+  forall (Post2: i2 = (caduceus - 1)),
+  forall (result1: Z),
+  forall (Post3: result1 = caduceus),
+  ((result1 > 0 ->
     (forall (result:pointer),
      (result = (shift t2 i2) ->
-      (forall (result0:pointer),
-       (result0 = (shift t1 i2) ->
-        (forall (result1:Z),
-         (result1 = (acc intP0 result0) ->
-          (forall (intP:((memory) Z)),
-           (intP = (upd intP0 result result1) -> (i2 <= n /\
-            (forall (k:Z),
-             (i2 <= k /\ k < n -> (acc intP (shift t2 k)) =
-              (acc intP (shift t1 k))))) /\
-            (Zwf 0 i2 i1))) /\
-          (valid alloc result))) /\
-        (valid alloc result0))))))) /\
-  ((caduceus <= 0 ->
+      ((forall (result0:Z),
+        (result0 = (acc intP0 (shift t1 i2)) ->
+         (forall (intP:((memory) Z)),
+          (intP = (upd intP0 result result0) -> (i2 <= n /\
+           (forall (k:Z),
+            (i2 <= k /\ k < n -> (acc intP (shift t2 k)) =
+             (acc intP (shift t1 k))))) /\
+           (Zwf 0 i2 i1))) /\
+         (valid alloc result))) /\
+      (valid alloc (shift t1 i2))) /\ (valid alloc (shift t1 i2)))))) /\
+  ((result1 <= 0 ->
     (forall (k:Z),
      (0 <= k /\ k < n -> (acc intP0 (shift t2 k)) = (acc intP0 (shift t1 k)))))).
 Proof.
@@ -62,7 +62,7 @@ Lemma copy_impl_po_2 :
   forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
                 ~((base_addr t1) = (base_addr t2))),
   forall (i: Z),
-  forall (Post3: i = n),
+  forall (Post9: i = n),
   i <= n /\
   (forall (k:Z),
    (i <= k /\ k < n -> (acc intP (shift t2 k)) = (acc intP (shift t1 k)))).

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.26 2004-06-30 08:57:53 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.27 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -98,23 +98,23 @@ let rec print_term fmt = function
 	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
-  | Tapp (id, [a; b; c]) when id == if_then_else ->
+  | Tapp (id, [a; b; c], _) when id == if_then_else ->
       assert false; (* SUPPORTED IN SIMPLIFY? *)
       (*
       fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
 	print_term c *)
-  | Tapp (id, [a; b]) when id == access ->
+  | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "@[(select@ %a@ %a)@]" print_term a print_term b
-  | Tapp (id, [a; b; c]) when id == store ->
+  | Tapp (id, [a; b; c], _) when id == store ->
       fprintf fmt "@[(store@ %a@ %a@ %a)@]" 
 	print_term a print_term b print_term c
-  | Tapp (id, [t]) when id == t_neg_int ->
+  | Tapp (id, [t], _) when id == t_neg_int ->
       fprintf fmt "@[(- 0 %a)@]" print_term t
-  | Tapp (id, tl) when is_relation id || is_arith id ->
+  | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
-  | Tapp (id, []) ->
+  | Tapp (id, [], _) ->
       Ident.print fmt id 
-  | Tapp (id, tl) ->
+  | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	Ident.print id (print_list space print_term) tl
 
@@ -143,20 +143,20 @@ let rec print_predicate fmt = function
       fprintf fmt "FALSE"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
-  | Papp (id, [t]) when id == well_founded ->
+  | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE ; was well_founded@\n"
-  | Papp (id, [a; b]) when is_eq id ->
+  | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(EQ %a@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when is_neq id ->
+  | Papp (id, [a; b], _) when is_neq id ->
       fprintf fmt "@[(NEQ %a@ %a)@]" print_term a print_term b
-  | Papp (id, tl) when is_int_comparison id ->
+  | Papp (id, tl, _) when is_int_comparison id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
-  | Papp (id, [a;b]) when id == t_zwf_zero ->
+  | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[(AND (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl) when Hashtbl.mem defpred id -> 
+  | Papp (id, tl, _) when Hashtbl.mem defpred id -> 
       fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
-  | Papp (id, tl) -> 
+  | Papp (id, tl, _) -> 
       fprintf fmt "@[(EQ (%a@ %a) |@@true|)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(IMPLIES@ %a@ %a)@]" print_predicate a print_predicate b

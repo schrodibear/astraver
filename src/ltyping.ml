@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.28 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.29 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -90,11 +90,11 @@ let rec unify t1 t2 =
 
 let make_comparison loc = function
   | (a,PTint), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTint) ->
-      Papp (int_cmp r, [a; b])
+      Papp (int_cmp r, [a; b], [])
   | (a,PTreal), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTreal) ->
-      Papp (real_cmp r, [a; b])
+      Papp (real_cmp r, [a; b], [])
   | (a,ta), (PPeq | PPneq as r), (b,tb) when unify ta tb ->
-      Papp (other_cmp (ta,r), [a; b])
+      Papp (other_cmp (ta,r), [a; b], [])
   | _, _, (_,tb) ->
       raise_located loc (ExpectedType (fun f -> Util.print_pure_type f tb))
 
@@ -115,9 +115,9 @@ let real_arith = function
 
 let make_arith loc = function
   | (a,PTint), (PPadd|PPsub|PPmul|PPdiv|PPmod as r), (b,PTint) ->
-      Tapp (int_arith r, [a; b]), PTint
+      Tapp (int_arith r, [a; b], []), PTint
   | (a,PTreal), (PPadd|PPsub|PPmul|PPdiv as r), (b,PTreal) ->
-      Tapp (real_arith r, [a; b]), PTreal
+      Tapp (real_arith r, [a; b], []), PTreal
   | _ ->
       expected_num loc
 
@@ -126,6 +126,29 @@ let predicate_expected loc =
 
 let term_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "term expected"))
+
+(* Table of closed instances *)
+
+module Instances = 
+  Set.Make(struct type t = pure_type list let compare = compare end)
+
+let instances_t = Hashtbl.create 97
+
+let instances = Hashtbl.find instances_t
+
+let add_instance x i =
+  let s = try Hashtbl.find instances_t x with Not_found -> Instances.empty in
+  Hashtbl.replace instances_t x (Instances.add i s)
+
+let instance x vars = 
+  let i = List.map (fun v -> v.type_val) vars in
+  begin try 
+    let ci = List.map (function None -> raise Exit | Some pt -> pt) i in
+    add_instance x ci
+  with Exit -> () end;
+  i
+
+(* typing predicates *)
 
 let rec predicate lab env lenv p =
   desc_predicate p.pp_loc lab env lenv p.pp_desc
@@ -179,7 +202,7 @@ and type_pvar loc lenv x =
   if is_at x then 
     raise_located loc (AnyMessage "predicates cannot be labelled");
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
-  match find_logic x lenv with
+  match snd (find_logic x lenv) with
     | Predicate [] -> Pvar x
     | Function _ -> predicate_expected loc
     | _ -> raise_located loc PartialApp
@@ -187,8 +210,11 @@ and type_pvar loc lenv x =
 and type_papp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
-    | Predicate at -> check_type_args loc at tl; Papp (x, List.map fst tl)
-    | _ -> predicate_expected loc
+    | vars, Predicate at -> 
+	check_type_args loc at tl; 
+	Papp (x, List.map fst tl, instance x vars)
+    | _ -> 
+	predicate_expected loc
 
 and term lab env lenv t =
   desc_term t.pp_loc lab env lenv t.pp_desc
@@ -199,7 +225,7 @@ and desc_term loc lab env lenv = function
   | PPapp (x, [a;b]) when x == Ident.access ->
       (match term lab env lenv a, term lab env lenv b with
 	 | (a, PTarray v), (b, PTint) ->
-	     Tapp (x, [a;b]), v
+	     Tapp (x, [a;b], [Some v]), v
 	 | (_, PTarray _), _ ->
 	     expected_type b.pp_loc (PureType PTint)
 	 | (Tvar t,_), _ ->
@@ -208,7 +234,7 @@ and desc_term loc lab env lenv = function
 	     assert false)
   | PPapp (x, [a]) when x == Ident.array_length ->
       (match term lab env lenv a with
-	 | a, PTarray _ -> Tapp (x, [a]), PTint
+	 | a, PTarray v -> Tapp (x, [a], [Some v]), PTint
 	 | Tvar t, _ -> raise_located a.pp_loc (UnboundArray t)
 	 | _ -> raise_located a.pp_loc (AnyMessage "array expected"))
   | PPapp (id, [a; b; c]) when id == if_then_else ->
@@ -217,7 +243,8 @@ and desc_term loc lab env lenv = function
       type_if lab env lenv a b c
   | PPapp (x, tl) ->
       let tl = List.map (term lab env lenv) tl in
-      Tapp (x, List.map fst tl), type_tapp loc lenv x tl
+      let ty, i = type_tapp loc lenv x tl in
+      Tapp (x, List.map fst tl, i), ty
   | PPtrue ->
       ttrue, PTbool
   | PPfalse ->
@@ -231,8 +258,8 @@ and desc_term loc lab env lenv = function
       term_expected loc
   | PPprefix (PPneg, a) ->
       (match term lab env lenv a with
-	 | ta, PTint -> Tapp (t_neg_int, [ta]), PTint
-	 | ta, PTreal -> Tapp (t_neg_real, [ta]), PTreal
+	 | ta, PTint -> Tapp (t_neg_int, [ta], []), PTint
+	 | ta, PTreal -> Tapp (t_neg_real, [ta], []), PTreal
 	 | _ -> expected_num loc)
   | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ ->
       term_expected loc
@@ -243,7 +270,7 @@ and type_if lab env lenv a b c =
 	if tyb <> tyc then 
 	  raise_located c.pp_loc 
 	    (ExpectedType (fun f -> print_pure_type f tyb));
-	Tapp (if_then_else, [ta; tb; tc]), tyb
+	Tapp (if_then_else, [ta; tb; tc], []), tyb
     | _ -> raise_located a.pp_loc ShouldBeBoolean
 
 and type_tvar loc lab env lenv x = 
@@ -257,15 +284,17 @@ and type_tvar loc lab env lenv x =
       x
   in
   if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
-  match find_logic xu lenv with
+  match snd (find_logic xu lenv) with
     | Function ([], t) -> Tvar x, t
     | _ -> raise_located loc (MustBePure)
 
 and type_tapp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
-    | Function (at, t) -> check_type_args loc at tl; t
-    | _ -> raise_located loc (AppNonFunction)
+    | vars, Function (at, t) -> 
+	check_type_args loc at tl; t, instance x vars
+    | _ -> 
+	raise_located loc (AppNonFunction)
 
 and check_type_args loc at tl =
   let rec check_arg = function

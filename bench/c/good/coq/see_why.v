@@ -3,12 +3,6 @@
 
 Require Import Why.
 
-(* Why obligation from file "why/see.why", characters 89-91 *)
-Lemma f_impl_po_1 : 
-  forall (b: Z),
-  forall (b0: Z),
-  forall (Post1: b0 = (1 - b)),
-  b0 = b0 /\ b0 = (1 - b).
 Proof.
 intuition.
 Save.
@@ -19,17 +13,24 @@ Lemma k_impl_po_1 :
   forall (Post1: b0 = 1),
   forall (b3: Z),
   forall (caduceus_2: Z),
-  forall (Post4: caduceus_2 = b3 /\ b3 = (1 - b0)),
+  forall (Post20: caduceus_2 = b3 /\ b3 = (1 - b0)),
   forall (b4: Z),
   forall (aux_1: Z),
-  forall (Post6: aux_1 = b4 /\ b4 = (1 - b3)),
+  forall (Post22: aux_1 = b4 /\ b4 = (1 - b3)),
+  forall (result0: Z),
+  forall (Post7: result0 = (1 - aux_1)),
   (forall (result:Z),
-   (forall (b:Z),
-    (result = b /\ b = (1 - b4) ->
-     (forall (result0:Z),
-      (forall (b0:Z),
-       (result0 = b0 /\ b0 = (1 - b) -> (caduceus_2 + (1 - aux_1)) = 0 /\
-        ((1 - result) * result0) = 1)))))).
+   (result = (caduceus_2 + result0) ->
+    (forall (result0:Z),
+     (forall (b:Z),
+      (result0 = b /\ b = (1 - b4) ->
+       (forall (result1:Z),
+        (result1 = (1 - result0) ->
+         (forall (result0:Z),
+          (forall (b0:Z),
+           (result0 = b0 /\ b0 = (1 - b) ->
+            (forall (result2:Z),
+             (result2 = (result1 * result0) -> result = 0 /\ result2 = 1)))))))))))).
 Proof.
 intuition.
 subst; ring.

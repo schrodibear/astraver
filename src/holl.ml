@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.22 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.23 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -122,28 +122,28 @@ let rec print_term fmt = function
   | Tderef _ -> 
       assert false
   (* arithmetic *)
-  | Tapp (id, [a; b]) when id == t_add_int || id == t_add_real ->
+  | Tapp (id, [a; b], _) when id == t_add_int || id == t_add_real ->
       fprintf fmt "(@[%a +@ %a@])" print_term a print_term b
-  | Tapp (id, [a; b]) when id == t_sub_int || id == t_sub_real ->
+  | Tapp (id, [a; b], _) when id == t_sub_int || id == t_sub_real ->
       fprintf fmt "(@[%a -@ %a@])" print_term a print_term b
-  | Tapp (id, [a; b]) when id == t_mul_int || id == t_mul_real ->
+  | Tapp (id, [a; b], _) when id == t_mul_int || id == t_mul_real ->
       fprintf fmt "(@[%a *@ %a@])" print_term a print_term b
-  | Tapp (id, [a; b]) when id == t_div_real ->
+  | Tapp (id, [a; b], _) when id == t_div_real ->
       fprintf fmt "(@[%a /@ %a@])" print_term a print_term b
-  | Tapp (id, [a]) when id == t_neg_int || id == t_neg_real ->
+  | Tapp (id, [a], _) when id == t_neg_int || id == t_neg_real ->
       fprintf fmt "(@[--%a@])" print_term a
-  | Tapp (id, [a; b; c]) when id == if_then_else -> 
+  | Tapp (id, [a; b; c], _) when id == if_then_else -> 
       fprintf fmt "(@[if %a@ then %a@ else %a@])" 
 	print_term a print_term b print_term c
-  | Tapp (id, tl) when is_relation id || is_arith id -> 
+  | Tapp (id, tl, _) when is_relation id || is_arith id -> 
       fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
   (* arrays *)
-  | Tapp (id, [a; b]) when id == access ->
+  | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "(@[EL (num_of_int %a) %a@])" print_term b print_term a
-  | Tapp (id, [a]) when id == Ident.array_length ->
+  | Tapp (id, [a], _) when id == Ident.array_length ->
       fprintf fmt "&(@[LENGTH %a@])" print_term a
   (* any other application *)
-  | Tapp (id, tl) ->
+  | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	Ident.print id (print_list space print_term) tl
 
@@ -159,24 +159,24 @@ let rec print_predicate fmt = function
       fprintf fmt "F"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
-  | Papp (id, [a; b]) when is_eq id ->
+  | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when is_neq id ->
+  | Papp (id, [a; b], _) when is_neq id ->
       fprintf fmt "@[~(%a =@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when id == t_lt_int || id == t_lt_real ->
+  | Papp (id, [a; b], _) when id == t_lt_int || id == t_lt_real ->
       fprintf fmt "@[(%a <@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when id == t_le_int || id == t_le_real ->
+  | Papp (id, [a; b], _) when id == t_le_int || id == t_le_real ->
       fprintf fmt "@[(%a <=@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when id == t_gt_int || id == t_gt_real ->
+  | Papp (id, [a; b], _) when id == t_gt_int || id == t_gt_real ->
       fprintf fmt "@[(%a >@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when id == t_ge_int || id == t_ge_real ->
+  | Papp (id, [a; b], _) when id == t_ge_int || id == t_ge_real ->
       fprintf fmt "@[(%a >=@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when id == t_zwf_zero ->
+  | Papp (id, [a; b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((&0 <= %a) /\\@ (%a < %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl) when is_relation id || is_arith id ->
+  | Papp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix_id id) print_terms tl
-  | Papp (id, tl) -> 
+  | Papp (id, tl, _) -> 
       fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "(@[%a ==>@ %a@])" print_predicate a print_predicate b

@@ -1,7 +1,7 @@
 
 UNIT: TYPE;
 tt: UNIT;
-array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+array_length_INT: [ARRAY INT OF INT -> INT]; %% should be polymorphic
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];

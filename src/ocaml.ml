@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.13 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.14 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -118,21 +118,21 @@ let rec expression fmt = function
       constant fmt c
   | Tderef id ->
       fprintf fmt "!%a" Ident.print id
-  | Tapp (id, [Tderef t]) when id == Ident.array_length ->
+  | Tapp (id, [Tderef t], _) when id == Ident.array_length ->
       fprintf fmt "(Array.length %a)" Ident.print t
-  | Tapp (id, [t]) when id == t_neg_int ->
+  | Tapp (id, [t], _) when id == t_neg_int ->
       fprintf fmt "(-%a)" expression t
-  | Tapp (id, [t]) when id == t_neg_real ->
+  | Tapp (id, [t], _) when id == t_neg_real ->
       fprintf fmt "(-. %a)" expression t
-  | Tapp (id, [t]) when id == t_sqrt_real ->
+  | Tapp (id, [t], _) when id == t_sqrt_real ->
       fprintf fmt "(sqrt %a)" expression t
-  | Tapp (id, [t]) when id == t_real_of_int ->
+  | Tapp (id, [t], _) when id == t_real_of_int ->
       fprintf fmt "(real %a)" expression t
-  | Tapp (id, [a; b]) when id == access ->
+  | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "%a.(%a)" expression a expression b
-  | Tapp (id, [a; b]) when caml_infix id ->
+  | Tapp (id, [a; b], _) when caml_infix id ->
       fprintf fmt "(%a %s %a)" expression a (infix id) expression b
-  | Tapp (id, tl) -> 
+  | Tapp (id, tl, _) -> 
       fprintf fmt "(%a %a)" Ident.print id (print_list space expression) tl
 
 (*s program expressions *)

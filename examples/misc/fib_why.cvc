@@ -1,7 +1,7 @@
 
 UNIT: TYPE;
 tt: UNIT;
-array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+array_length_INT: [ARRAY INT OF INT -> INT]; %% should be polymorphic
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];
@@ -210,30 +210,30 @@ QUERY (FORALL (n:INT):
 %% fib4_po_1, Why obligation from file "fib.mlw", characters 1393-1394
 QUERY (FORALL (n:INT):
       (FORALL (t:(ARRAY INT OF INT)):
-      (((0 <= n) AND (n < array_length(t))) =>
+      (((0 <= n) AND (n < array_length_INT(t))) =>
       ((n <= 1) =>
       (FORALL (result0:INT): ((result0 = 1) => (result0 = F(n))))))));
 
 %% fib4_po_2, Why obligation from file "fib.mlw", characters 1414-1423
 QUERY (FORALL (n:INT):
       (FORALL (t:(ARRAY INT OF INT)):
-      (((0 <= n) AND (n < array_length(t))) =>
+      (((0 <= n) AND (n < array_length_INT(t))) =>
       ((n > 1) =>
       (FORALL (aux_2:INT):
       ((aux_2 = 1) =>
       (FORALL (aux_1:INT):
-      ((aux_1 = 0) => ((0 <= aux_1) AND (aux_1 < array_length(t)))))))))));
+      ((aux_1 = 0) => ((0 <= aux_1) AND (aux_1 < array_length_INT(t)))))))))));
 
 %% fib4_po_3, Why obligation from file "fib.mlw", characters 1414-1423
 QUERY (FORALL (n:INT):
       (FORALL (t:(ARRAY INT OF INT)):
-      (((0 <= n) AND (n < array_length(t))) =>
+      (((0 <= n) AND (n < array_length_INT(t))) =>
       ((n > 1) =>
       (FORALL (aux_2:INT):
       ((aux_2 = 1) =>
       (FORALL (aux_1:INT):
       ((aux_1 = 0) =>
-      (((0 <= aux_1) AND (aux_1 < array_length(t))) =>
+      (((0 <= aux_1) AND (aux_1 < array_length_INT(t))) =>
       (FORALL (t0:(ARRAY INT OF INT)):
       ((t0 = (t WITH [aux_1] := aux_2)) =>
       (FORALL (result:INT):
@@ -245,12 +245,12 @@ QUERY (FORALL (n:INT):
        (FORALL (result:INT):
        ((result = 2) =>
        ((((2 <= result) AND (result <= (n + 1))) AND
-        ((array_length(t1) = array_length(t)) AND
+        ((array_length_INT(t1) = array_length_INT(t)) AND
         (FORALL (i:INT): (((0 <= i) AND (i < result)) => (t1[i] = F(i)))))) AND
        (FORALL (k:INT):
        (FORALL (t0:ARRAY INT OF INT):
        ((((2 <= k) AND (k <= (n + 1))) AND
-        ((array_length(t0) = array_length(t)) AND
+        ((array_length_INT(t0) = array_length_INT(t)) AND
         (FORALL (i:INT): (((0 <= i) AND (i < k)) => (t0[i] = F(i)))))) =>
        (((k <= n) =>
         (((FORALL (result:INT):
@@ -262,14 +262,14 @@ QUERY (FORALL (n:INT):
            (FORALL (k0:INT):
            ((k0 = (k + 1)) =>
            ((((2 <= k0) AND (k0 <= (n + 1))) AND
-            ((array_length(t1) = array_length(t)) AND
+            ((array_length_INT(t1) = array_length_INT(t)) AND
             (FORALL (i:INT): (((0 <= i) AND (i < k0)) => (t1[i] = F(i)))))) AND
            ((0 <= ((n + 1) - k)) AND (((n + 1) - k0) < ((n + 1) - k)))))))) AND
-          ((0 <= result0) AND (result0 < array_length(t0)))))))) AND
-         ((0 <= (k - 2)) AND ((k - 2) < array_length(t0)))) AND
-        ((0 <= (k - 1)) AND ((k - 1) < array_length(t0))))) AND
+          ((0 <= result0) AND (result0 < array_length_INT(t0)))))))) AND
+         ((0 <= (k - 2)) AND ((k - 2) < array_length_INT(t0)))) AND
+        ((0 <= (k - 1)) AND ((k - 1) < array_length_INT(t0))))) AND
        ((k > n) =>
        ((FORALL (result:INT): ((result = t0[n]) => (result = F(n)))) AND
-       ((0 <= n) AND (n < array_length(t0)))))))))))))) AND
-      ((0 <= result0) AND (result0 < array_length(t0)))))))))))))))))));
+       ((0 <= n) AND (n < array_length_INT(t0)))))))))))))) AND
+      ((0 <= result0) AND (result0 < array_length_INT(t0)))))))))))))))))));
 

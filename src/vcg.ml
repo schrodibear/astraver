@@ -76,7 +76,7 @@ let ptrue = function
 
 (* ... |- a=a *)
 let reflexivity = function
-  | Papp (id, [a;b]) when is_eq id && a = b -> Reflexivity a
+  | Papp (id, [a;b], _) when is_eq id && a = b -> Reflexivity a
   | _ -> raise Exit
 
 (* ..., h:P, ...|- P  and ..., h:P and Q, ...|- P *)
@@ -110,7 +110,7 @@ let conjunction ctx = function
 
 (* ... |- (well_founded (Zwf 0)) *)
 let wf_zwf = function
-  | Papp (id, [Tvar id']) when id == well_founded && id' == t_zwf_zero ->
+  | Papp (id, [Tvar id'], _) when id == well_founded && id' == t_zwf_zero ->
       WfZwf (Tconst (ConstInt 0))
   | _ -> 
       raise Exit
@@ -118,16 +118,18 @@ let wf_zwf = function
 (* ..., h:v=phi0, ..., h':I and (Zwf c phi1 phi0), ... |- (Zwf c phi1 v) *)
 let loop_variant_1 hyps concl =
   let lookup_h v = function
-    | Spred (h, Papp (id, [Tvar id';phi0])) when is_eq id && id' == v -> h,phi0
-    | _ -> raise Exit
+    | Spred (h, Papp (id, [Tvar id';phi0], _)) when is_eq id && id' == v -> 
+	h,phi0
+    | _ -> 
+	raise Exit
   in
   let rec lookup_h' phi1 phi0 = function
-    | Spred (h', Pand (_, _, Papp (id, [t1; t0]))) 
+    | Spred (h', Pand (_, _, Papp (id, [t1; t0], _))) 
       when id == t_zwf_zero && t1 = phi1 && t0 = phi0 -> h'
     | _ -> raise Exit
   in
   match concl with
-    | Papp (id, [phi1; Tvar v]) when id == t_zwf_zero ->
+    | Papp (id, [phi1; Tvar v], _) when id == t_zwf_zero ->
 	let h, phi0 = list_first (lookup_h v) hyps in 
 	let h' = list_first (lookup_h' phi1 phi0) hyps in
 	Loop_variant_1 (h, h')
@@ -144,7 +146,8 @@ let rec unif_term u = function
 	      | None -> Idmap.add id (Some t') u
 	      | Some t'' -> if t' = t'' then u else raise Exit)
        with Not_found -> raise Exit)
-  | Tapp (id, tl), Tapp (id', tl') when id == id' -> unif_terms u (tl, tl')
+  | Tapp (id, tl, _), Tapp (id', tl', _) when id == id' -> 
+      unif_terms u (tl, tl')
   | _ -> raise Exit
 and unif_terms u = function
   | [], [] -> u
@@ -154,7 +157,8 @@ and unif_terms u = function
 (* unification of predicates *)
 let rec unif_pred u = function
   | Pvar id, Pvar id' when id == id' -> u
-  | Papp (id, tl), Papp (id', tl') when id == id' -> unif_terms u (tl, tl')
+  | Papp (id, tl, _), Papp (id', tl', _) when id == id' -> 
+      unif_terms u (tl, tl')
   | Ptrue, Ptrue | Pfalse, Pfalse -> u
   | Forallb (_, _, _, _, a, b), Forallb (_, _, _, _, a', b')
   | Pimplies (_, a, b), Pimplies (_, a', b') 
@@ -393,7 +397,7 @@ let rewrite_var ctx concl = match ctx, concl with
   (* ..., v=t, p(v) |- p(t) *)
   | Spred (h1, p1) ::
     Svar (id'1, TTpure PTbool) ::
-    Spred (h2, Papp (ide, [Tvar v; t])) ::
+    Spred (h2, Papp (ide, [Tvar v; t], _)) ::
     Svar (v', ty) :: _,
     p
     when is_eq ide && v == v' -> 
@@ -406,7 +410,7 @@ let rewrite_var ctx concl = match ctx, concl with
   (* ..., v=t, p(t) |- p(v) *)
   | _ :: 
     Spred (h1, p1) ::
-    Spred (h2, Papp (ide, [Tvar v; t])) ::
+    Spred (h2, Papp (ide, [Tvar v; t], _)) ::
     Svar (v', ty) :: _,
     p
     when is_eq ide && v == v' -> 

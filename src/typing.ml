@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.111 2004-07-06 15:00:26 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.112 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -282,10 +282,10 @@ and is_pure_type_c c =
 (*s Preconditions for partial functions. *)
 
 let partial_pre loc = function
-  | Tapp (id, [a;b]) when id == t_div_int || id == t_mod_int ->
+  | Tapp (id, [a;b], _) when id == t_div_int || id == t_mod_int ->
       let p = neq (unref_term b) (Tconst (ConstInt 0)) in
       [anonymous loc p]
-  | Tapp (id, [a]) when id == t_sqrt_real ->
+  | Tapp (id, [a], _) when id == t_sqrt_real ->
       let p = ge_real (unref_term a) (Tconst (ConstFloat ("0","",""))) in
       [anonymous loc p]
   | _ ->
@@ -302,7 +302,7 @@ let check_ref_type loc env id =
       
 let check_array_type loc env id =
   try
-    dearray_type (type_in_env env id)
+    PureType (dearray_type (type_in_env env id))
   with 
     | Not_found -> raise_located loc (UnboundArray id)
     | Invalid_argument _ -> raise_located loc (NotAnArray id)
@@ -502,9 +502,9 @@ and typef_desc lab env loc = function
   | Sapp ({pdesc=Svar id}, Sterm a) when id == Ident.array_length ->
        let t_a = typef lab env a in
        (match result_type t_a, t_a.desc with
-	  | Array _, Var t -> 
+	  | Array (PureType pt), Var t -> 
 	      let ef = Effect.add_read t Effect.bottom in
-	      Expression (array_length t), (type_v_int, ef), []
+	      Expression (array_length t pt), (type_v_int, ef), []
 	  | _ -> 
 	      raise_located a.ploc (AnyMessage "array expected"))
 

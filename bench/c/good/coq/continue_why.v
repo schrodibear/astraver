@@ -22,7 +22,7 @@ Qed.
 (* Why obligation from file "why/continue.why", characters 236-250 *)
 Lemma f1_impl_po_1 : 
   forall (n: Z),
-  forall (Post3: n = 10),
+  forall (Post7: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
@@ -30,8 +30,8 @@ Lemma f1_impl_po_1 :
   forall (Test4: n1 > 0),
   forall (Test3: n1 = 5),
   forall (n2: Z),
-  forall (Post1: n2 = 0),
-  0 <= n2 /\ (Zwf 0 n2 n1).
+  forall (Post4: n2 = 0),
+  (forall (result:unit), (result = tt -> 0 <= n2 /\ (Zwf 0 n2 n1))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -40,7 +40,7 @@ Save.
 (* Why obligation from file "why/continue.why", characters 265-286 *)
 Lemma f1_impl_po_2 : 
   forall (n: Z),
-  forall (Post3: n = 10),
+  forall (Post7: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
@@ -48,7 +48,7 @@ Lemma f1_impl_po_2 :
   forall (Test4: n1 > 0),
   forall (Test2: n1 <> 5),
   forall (n2: Z),
-  forall (Post2: n2 = (n1 - 1)),
+  forall (Post3: n2 = (n1 - 1)),
   0 <= n2 /\ (Zwf 0 n2 n1).
 Proof.
 intuition.
@@ -58,13 +58,13 @@ Save.
 (* Why obligation from file "why/continue.why", characters 113-335 *)
 Lemma f1_impl_po_3 : 
   forall (n: Z),
-  forall (Post3: n = 10),
+  forall (Post7: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
   forall (Pre2: 0 <= n1),
   forall (Test1: n1 <= 0),
-  n1 = 0.
+  (forall (result:Z), (result = n1 -> result = 0)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -73,7 +73,7 @@ Save.
 (* Why obligation from file "why/continue.why", characters 153-165 *)
 Lemma f1_impl_po_4 : 
   forall (n: Z),
-  forall (Post3: n = 10),
+  forall (Post7: n = 10),
   0 <= n.
 Proof.
 intuition.
@@ -83,7 +83,7 @@ Save.
 (* Why obligation from file "why/continue.why", characters 663-677 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
-  forall (Post4: i = 17),
+  forall (Post9: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -93,8 +93,9 @@ Lemma f2_impl_po_1 :
   forall (Test4: i2 < 10),
   forall (Test3: i2 = 5),
   forall (i3: Z),
-  forall (Post2: i3 = 6),
-  i3 <= 10 /\ (Zwf 0 (10 - i3) (10 - i2)).
+  forall (Post5: i3 = 6),
+  (forall (result:unit),
+   (result = tt -> i3 <= 10 /\ (Zwf 0 (10 - i3) (10 - i2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -103,7 +104,7 @@ Save.
 (* Why obligation from file "why/continue.why", characters 687-691 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
-  forall (Post4: i = 17),
+  forall (Post9: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -112,6 +113,8 @@ Lemma f2_impl_po_2 :
   forall (Pre2: i2 <= 10),
   forall (Test4: i2 < 10),
   forall (Test2: i2 <> 5),
+  forall (result2: unit),
+  forall (Post4: result2 = tt),
   (forall (i:Z), (i = (i2 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))).
 Proof.
 intuition.
@@ -121,7 +124,7 @@ Save.
 (* Why obligation from file "why/continue.why", characters 513-784 *)
 Lemma f2_impl_po_3 : 
   forall (i: Z),
-  forall (Post4: i = 17),
+  forall (Post9: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -129,7 +132,7 @@ Lemma f2_impl_po_3 :
   forall (Pre3: Variant1 = (10 - i2)),
   forall (Pre2: i2 <= 10),
   forall (Test1: i2 >= 10),
-  i2 = 10.
+  (forall (result:Z), (result = i2 -> result = 10)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -138,7 +141,7 @@ Save.
 (* Why obligation from file "why/continue.why", characters 555-568 *)
 Lemma f2_impl_po_4 : 
   forall (i: Z),
-  forall (Post4: i = 17),
+  forall (Post9: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   i1 <= 10.

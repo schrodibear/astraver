@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.18 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.19 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -109,24 +109,24 @@ let prefix_id id =
 
 let rec print_term fmt t = 
   let rec print0 fmt = function
-    | Tapp (id, [a; b]) when is_relation id -> 
+    | Tapp (id, [a; b], _) when is_relation id -> 
 	fprintf fmt "@[%s(@[%a,@ %a@])@]" 
 	  (prefix_id id) print0 a print0 b
     | t ->
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a; b]) when id == t_add_int || id == t_add_real ->
+    | Tapp (id, [a; b], _) when id == t_add_int || id == t_add_real ->
 	fprintf fmt "%a +@ %a" print1 a print2 b
-    | Tapp (id, [a; b]) when id == t_sub_int || id == t_sub_real ->
+    | Tapp (id, [a; b], _) when id == t_sub_int || id == t_sub_real ->
 	fprintf fmt "%a -@ %a" print1 a print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a; b]) when id == t_mul_int || id == t_mul_real ->
+    | Tapp (id, [a; b], _) when id == t_mul_int || id == t_mul_real ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a; b]) when id == t_div_int || id == t_div_real ->
+    | Tapp (id, [a; b], _) when id == t_div_int || id == t_div_real ->
 	fprintf fmt "%a /@ %a" print2 a print3 b
-    | Tapp (id, [a; b]) when id == t_mod_int ->
+    | Tapp (id, [a; b], _) when id == t_mod_int ->
 	fprintf fmt "%a mod %a" print2 a print3 b
     | t -> 
 	print3 fmt t
@@ -148,25 +148,25 @@ let rec print_term fmt t =
     | Tderef _ -> 
 	assert false
     (* arithmetic *)
-    | Tapp (id, [a]) when id == t_neg_int || id == t_neg_real ->
+    | Tapp (id, [a], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "(@[-%a@])" print3 a
-    | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
+    | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "(@[%a@])" print0 t
-    | Tapp (id, [a; b; c]) when id == if_then_else -> 
+    | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "@[if-then-else(@[%a,@ %a,@ %a@])@]" 
 	print0 a print0 b print0 c
     (* arrays *)
-    | Tapp (id, [a; b]) when id == access ->
+    | Tapp (id, [a; b], _) when id == access ->
 	fprintf fmt "(@[%a.%a@])" print0 a print0 b
-    | Tapp (id, [a; b; c]) when id == store ->
+    | Tapp (id, [a; b; c], _) when id == store ->
 	fprintf fmt "(@[%a+*(%a,@ %a)@])" 
 	print3 b print0 a print0 c
-    | Tapp (id, [a]) when id == Ident.array_length ->
+    | Tapp (id, [a], _) when id == Ident.array_length ->
 	fprintf fmt "(@[len %a@])" print0 a
     (* any other application *)
-    | Tapp (id, tl) when is_relation id || is_arith id -> 
+    | Tapp (id, tl, _) when is_relation id || is_arith id -> 
 	fprintf fmt "%s(@[%a@])" (prefix_id id) print_terms tl
-    | Tapp (id, tl) ->
+    | Tapp (id, tl, _) ->
 	fprintf fmt "%a(@[%a@])" Ident.print id print_terms tl
   in
   print0 fmt t
@@ -213,15 +213,15 @@ let print_predicate fmt p =
 	fprintf fmt "contradiction"
     | Pvar id -> 
 	fprintf fmt "%a" Ident.print id
-    | Papp (id, [a; b]) when is_relation id ->
+    | Papp (id, [a; b], _) when is_relation id ->
 	fprintf fmt "@[%a %s@ %a@]" 
 	print_term a (infix_relation id) print_term b
-    | Papp (id, [a; b]) when id == t_zwf_zero ->
+    | Papp (id, [a; b], _) when id == t_zwf_zero ->
 	fprintf fmt "@[(0 <= %a &@ %a < %a)@]" 
 	print_term b print_term a print_term b
-    | Papp (id, tl) when is_relation id || is_arith id ->
+    | Papp (id, tl, _) when is_relation id || is_arith id ->
 	fprintf fmt "@[%s(%a)@]" (prefix_id id) print_terms tl
-    | Papp (id, tl) -> 
+    | Papp (id, tl, _) -> 
 	fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
     | Pnot a ->
 	fprintf fmt "@[not %a@]" print3 a

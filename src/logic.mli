@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.22 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.23 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -26,15 +26,6 @@ type constant =
   | ConstUnit
   | ConstFloat of real_constant
 
-type term =
-  | Tvar of Ident.t
-  | Tconst of constant
-  | Tderef of Ident.t
-  | Tapp of Ident.t * term list
-
-type substitution = term Ident.map
-type var_substitution = Ident.t Ident.map
-
 (*s Pure types. *)
 
 type pure_type =
@@ -45,15 +36,27 @@ type pure_type =
   | PTarray of pure_type
   | PTvarid of Ident.t
   | PTvar of type_var
-  | PTexternal of (pure_type list) * Ident.t
+  | PTexternal of pure_type list * Ident.t
+
 and type_var =
-    { tag : int; mutable type_val : pure_type option }
+  { tag : int; mutable type_val : pure_type option }
+
+type instance = pure_type option list
+
+type term =
+  | Tvar of Ident.t
+  | Tconst of constant
+  | Tderef of Ident.t
+  | Tapp of Ident.t * term list * instance
+
+type substitution = term Ident.map
+type var_substitution = Ident.t Ident.map
 
 type is_wp = bool
 
 type predicate =
   | Pvar of Ident.t
-  | Papp of Ident.t * term list
+  | Papp of Ident.t * term list * instance
   | Ptrue
   | Pfalse
   | Pimplies of is_wp * predicate * predicate

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.43 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.44 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -486,7 +486,7 @@ let _ = agl "array_ge"     (Predicate [int_array; PTint; PTint; PTint])
 
 let is_logic = Idmap.mem
 
-let find_logic x env = snd (specialize_logic_type (Idmap.find x env))
+let find_logic x env = specialize_logic_type (Idmap.find x env)
 
 let add_logic_aux id vars v env = match v with
   | (Ref (PureType pt)) | (PureType pt) -> 

@@ -1,11 +1,21 @@
 
 UNIT: TYPE;
 tt: UNIT;
-array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+array_length_INT: [ARRAY INT OF INT -> INT]; %% should be polymorphic
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];
 
+gcd: [[INT, INT] -> INT];
+
+ASSERT FORALL (a,b:INT): gcd(a,b) = gcd(a-b, b);
+ASSERT FORALL (a,b:INT): gcd(a,b) = gcd(a, b-a);
+ASSERT FORALL (a:INT): gcd(a,a) = a;
+ASSERT FORALL (a:INT): gcd(a,0) = a;
+ASSERT FORALL (a,b:INT): gcd(a,b) = gcd(b, mod_int(a, b));
+
+max: [[INT, INT] -> INT];
+ASSERT FORALL (x,y:INT): (x >= y AND max(x,y)=x) OR (x < y AND max(x,y)=y);
 
 %%%% DO NOT EDIT BELOW THIS LINE
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.67 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: monad.ml,v 1.68 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -516,18 +516,18 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
     args @ input @ holes
   in
   let tw = 
-    let r_phi0_phi = Papp (r, [Tvar vphi0; Tvar vphi]) in
+    let r_phi0_phi = Papp (r, [Tvar vphi0; Tvar vphi], []) in
     TTarrow ((vphi0, CC_var_binder a),
 	     TTarrow ((pre_name Anonymous, CC_pred_binder r_phi0_phi), tphi0))
   in
   let fw ren = 
     let tphi = apply_term ren env phi in
-    let decphi = info.loc, Papp (r, [tphi; Tvar vphi]) in
+    let decphi = info.loc, Papp (r, [tphi; Tvar vphi], []) in
     cc_applist (CC_var w) ([CC_term tphi; CC_hole decphi] @ input ren) 
   in
   cc_applist (CC_var well_founded_induction)
     ([CC_type a; CC_term (Tvar r);
-      CC_hole (info.loc, Papp (well_founded, [Tvar r]));
+      CC_hole (info.loc, Papp (well_founded, [Tvar r], []));
       CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
       cc_lam 
 	([vphi, CC_var_binder a; w, CC_var_binder tw] @ bl)

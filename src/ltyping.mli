@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.12 2003-12-18 12:24:06 marche Exp $ i*)
+(*i $Id: ltyping.mli,v 1.13 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -53,3 +53,12 @@ val binders :
 (* errors *)
 
 val expected_num : Loc.t -> 'a
+
+(* instances: the following table contains all closed instances of logical
+   symbols that have been used so far. 
+   It is later used to generate all monomorphic
+   instances of symbols/predicates/axioms in the CVC Lite output. *)
+
+module Instances : Set.S with type elt = pure_type list
+
+val instances : Ident.t -> Instances.t

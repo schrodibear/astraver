@@ -68,324 +68,180 @@ Lemma init_impl_po_1 :
   forall (alloc: alloc_table),
   forall (forward: ((memory) pointer)),
   forall (NIL0: pointer),
-  forall (Post3: (valid alloc NIL0) /\
+  forall (Post1: (valid alloc NIL0) /\
                  (block_length alloc (acc forward NIL0)) = 16),
   forall (caduceus_1: pointer),
-  forall (Post1: caduceus_1 = NIL0),
+  forall (Post4: caduceus_1 = NIL0),
   (valid alloc caduceus_1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 768-787 *)
+(* Why obligation from file "why/skip_lists.why", characters 591-608 *)
 Lemma insert_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
-  forall (header: ((memory) pointer)),
-  forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
   forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
-  forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
-  forall (k: Z),
-  forall (Post30: k = (acc level l)),
-  forall (Variant1: Z),
-  forall (Pre21: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (Variant3: Z),
-  forall (p2: pointer),
-  forall (Pre16: Variant3 = 0),
-  forall (Test3: true = true),
-  (valid alloc p2).
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  (valid alloc0 l).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 696-869 *)
+(* Why obligation from file "why/skip_lists.why", characters 733-749 *)
 Lemma insert_impl_po_2 : 
   forall (l: pointer),
-  forall (v: Z),
   forall (alloc: alloc_table),
-  forall (elt: ((memory) Z)),
-  forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
-  forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
   forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
   forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
-  forall (k: Z),
-  forall (Post30: k = (acc level l)),
-  forall (Variant1: Z),
-  forall (k1: Z),
-  forall (pointerP0: ((memory) pointer)),
-  forall (Pre21: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (Variant3: Z),
-  forall (p2: pointer),
-  forall (Pre16: Variant3 = 0),
-  forall (Test3: true = true),
-  forall (Pre9: (valid alloc p2)),
-  forall (caduceus_14: pointer),
-  forall (Post42: caduceus_14 = (acc forward p2)),
-  forall (result1: pointer),
-  forall (Post44: result1 = (shift caduceus_14 k1)),
-  (forall (result:pointer),
-   (result = (acc pointerP0 result1) ->
-    (forall (result0:Z),
-     (result0 = (acc elt result) ->
-      ((result0 < v ->
-        ((1 <> 0 -> (forall (p:pointer), (p = result -> (Zwf 0 0 0))))) /\
-        ((1 = 0 ->
-          (forall (result:pointer),
-           (result = (shift update k1) ->
-            (forall (pointerP:((memory) pointer)),
-             (pointerP = (upd pointerP0 result p2) ->
-              (forall (k:Z),
-               (k = (k1 - 1) -> ((k >= 0 -> (Zwf 0 0 0))) /\
-                ((k < 0 ->
-                  (forall (result:Z),
-                   (result = (acc elt p2) -> ((result = v -> True)) /\
-                    ((result <> v ->
-                      (forall (k:Z),
-                       (1 <= k /\ k <= 16 ->
-                        (forall (result:Z),
-                         (result = k ->
-                          (forall (result0:Z),
-                           (result0 = (acc level l) ->
-                            ((result > result0 ->
-                              (forall (result:pointer),
-                               (result = l ->
-                                (forall (result0:Z),
-                                 (result0 = (acc level result) ->
-                                  (forall (level0:((memory) Z)),
-                                   (level0 = (upd level result (result0 + 1)) ->
-                                    (forall (result:pointer),
-                                     (result = (shift update (result0 + 1)) ->
-                                      (forall (result1:pointer),
-                                       (result1 = (acc header l) ->
-                                        (forall (pointerP0:((memory) pointer)),
-                                         (pointerP0 = (upd pointerP result
-                                                       result1) ->
-                                          (forall (q:pointer),
-                                           ((valid alloc q) /\
-                                            (block_length alloc
-                                             (acc forward q)) =
-                                            (result0 + 1) ->
-                                            (forall (result:pointer),
-                                             (result = q ->
-                                              (forall (elt0:((memory) Z)),
-                                               (elt0 = (upd elt result v) ->
-                                                True)) /\
-                                              (valid alloc result))))))) /\
-                                        (valid alloc result))) /\
-                                      (valid alloc l))))) /\
-                                  (valid alloc result))) /\
-                                (valid alloc result))))) /\
-                            ((result <= result0 ->
-                              (forall (q:pointer),
-                               ((valid alloc q) /\
-                                (block_length alloc (acc forward q)) = k ->
-                                (forall (result:pointer),
-                                 (result = q ->
-                                  (forall (elt0:((memory) Z)),
-                                   (elt0 = (upd elt result v) -> True)) /\
-                                  (valid alloc result))))))))) /\
-                          (valid alloc l))))))))) /\
-                  (valid alloc p2))))))) /\
-            (valid alloc result))))))) /\
-      ((result0 >= v ->
-        ((0 <> 0 -> (forall (p:pointer), (p = result -> (Zwf 0 0 0))))) /\
-        ((0 = 0 ->
-          (forall (result:pointer),
-           (result = (shift update k1) ->
-            (forall (pointerP:((memory) pointer)),
-             (pointerP = (upd pointerP0 result p2) ->
-              (forall (k:Z),
-               (k = (k1 - 1) -> ((k >= 0 -> (Zwf 0 0 0))) /\
-                ((k < 0 ->
-                  (forall (result:Z),
-                   (result = (acc elt p2) -> ((result = v -> True)) /\
-                    ((result <> v ->
-                      (forall (k:Z),
-                       (1 <= k /\ k <= 16 ->
-                        (forall (result:Z),
-                         (result = k ->
-                          (forall (result0:Z),
-                           (result0 = (acc level l) ->
-                            ((result > result0 ->
-                              (forall (result:pointer),
-                               (result = l ->
-                                (forall (result0:Z),
-                                 (result0 = (acc level result) ->
-                                  (forall (level0:((memory) Z)),
-                                   (level0 = (upd level result (result0 + 1)) ->
-                                    (forall (result:pointer),
-                                     (result = (shift update (result0 + 1)) ->
-                                      (forall (result1:pointer),
-                                       (result1 = (acc header l) ->
-                                        (forall (pointerP0:((memory) pointer)),
-                                         (pointerP0 = (upd pointerP result
-                                                       result1) ->
-                                          (forall (q:pointer),
-                                           ((valid alloc q) /\
-                                            (block_length alloc
-                                             (acc forward q)) =
-                                            (result0 + 1) ->
-                                            (forall (result:pointer),
-                                             (result = q ->
-                                              (forall (elt0:((memory) Z)),
-                                               (elt0 = (upd elt result v) ->
-                                                True)) /\
-                                              (valid alloc result))))))) /\
-                                        (valid alloc result))) /\
-                                      (valid alloc l))))) /\
-                                  (valid alloc result))) /\
-                                (valid alloc result))))) /\
-                            ((result <= result0 ->
-                              (forall (q:pointer),
-                               ((valid alloc q) /\
-                                (block_length alloc (acc forward q)) = k ->
-                                (forall (result:pointer),
-                                 (result = q ->
-                                  (forall (elt0:((memory) Z)),
-                                   (elt0 = (upd elt result v) -> True)) /\
-                                  (valid alloc result))))))))) /\
-                          (valid alloc l))))))))) /\
-                  (valid alloc p2))))))) /\
-            (valid alloc result))))))))) /\
-    (valid alloc result))) /\
-  (valid alloc result1).
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  (valid alloc1 l).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 613-1201 *)
+(* Why obligation from file "why/skip_lists.why", characters 1018-1037 *)
 Lemma insert_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
   forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
   forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
   forall (k: Z),
-  forall (Post30: k = (acc level l)),
+  forall (Post55: k = (acc level l)),
   forall (Variant1: Z),
-  forall (Pre21: Variant1 = 0),
+  forall (Pre17: Variant1 = 0),
   forall (Test4: true = true),
   forall (Variant3: Z),
-  forall (Pre16: Variant3 = 0),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
   forall (Test3: true = true),
-  forall (Post21: (Zwf 0 0 0)),
-  (Zwf 0 0 Variant3).
+  (valid alloc1 p2).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 541-1447 *)
+(* Why obligation from file "why/skip_lists.why", characters 946-1119 *)
 Lemma insert_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
-  forall (header: ((memory) pointer)),
-  forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
-  forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
-  forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
-  forall (k: Z),
-  forall (Post30: k = (acc level l)),
-  forall (Variant1: Z),
-  forall (Pre21: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (Post18: (Zwf 0 0 0)),
-  (Zwf 0 0 Variant1).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/skip_lists.why", characters 2313-2351 *)
-Lemma insert_impl_po_5 : 
-  forall (l: pointer),
-  forall (v: Z),
-  forall (alloc: alloc_table),
-  forall (elt: ((memory) Z)),
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
   forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
   forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
   forall (k: Z),
-  forall (Post30: k = (acc level l)),
-  forall (p1: pointer),
+  forall (Post55: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (k1: Z),
   forall (pointerP0: ((memory) pointer)),
-  forall (k2: Z),
-  forall (Post69: 1 <= k2 /\ k2 <= 16),
-  forall (k3: Z),
-  forall (q2: pointer),
-  forall (Post88: (valid alloc q2) /\ (block_length alloc (acc forward q2)) =
-                  k3),
-  forall (Variant5: Z),
-  forall (k4: Z),
-  forall (Pre62: Variant5 = 0),
-  forall (Test6: true = true),
-  forall (aux_5: pointer),
-  forall (Post100: aux_5 = (shift update k4)),
-  (valid alloc aux_5).
+  forall (Pre17: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  forall (Pre5: (valid alloc1 p2)),
+  forall (caduceus_14: pointer),
+  forall (Post88: caduceus_14 = (acc forward p2)),
+  forall (result1: pointer),
+  forall (Post90: result1 = (shift caduceus_14 k1)),
+  (forall (result:pointer),
+   (result = (acc pointerP0 result1) ->
+    result = (acc pointerP0 (shift (acc forward p2) k1)))) /\
+  (valid alloc1 result1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 2313-2351 *)
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 1152-1323 *)
+Lemma insert_impl_po_5 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (k1: Z),
+  forall (pointerP0: ((memory) pointer)),
+  forall (Pre17: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  forall (q3: pointer),
+  forall (Post4: q3 = (acc pointerP0 (shift (acc forward p2) k1))),
+  (valid alloc1 q3).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 887-1356 *)
 Lemma insert_impl_po_6 : 
   forall (l: pointer),
   forall (v: Z),
@@ -394,69 +250,493 @@ Lemma insert_impl_po_6 :
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
   forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
   forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
   forall (k: Z),
-  forall (Post30: k = (acc level l)),
-  forall (p1: pointer),
+  forall (Post55: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (k1: Z),
   forall (pointerP0: ((memory) pointer)),
-  forall (k2: Z),
-  forall (Post69: 1 <= k2 /\ k2 <= 16),
-  forall (k3: Z),
-  forall (q2: pointer),
-  forall (Post88: (valid alloc q2) /\ (block_length alloc (acc forward q2)) =
-                  k3),
-  forall (Variant5: Z),
-  forall (k4: Z),
-  forall (pointerP2: ((memory) pointer)),
-  forall (Pre62: Variant5 = 0),
-  forall (Test6: true = true),
-  forall (aux_5: pointer),
-  forall (Post100: aux_5 = (shift update k4)),
-  forall (Pre43: (valid alloc aux_5)),
-  forall (result6: pointer),
-  forall (Post102: result6 = (acc pointerP2 aux_5)),
-  (forall (result:pointer),
-   (result = (acc forward q2) ->
-    (forall (result0:pointer),
-     (result0 = (shift result k4) ->
-      (forall (result:pointer),
-       (result = (acc forward result6) ->
-        (forall (result1:pointer),
-         (result1 = (shift result k4) ->
-          (forall (result:pointer),
-           (result = (acc pointerP2 result1) ->
-            (forall (pointerP:((memory) pointer)),
-             (pointerP = (upd pointerP2 result0 result) ->
-              (forall (result:pointer),
-               (result = (acc forward result6) ->
-                (forall (result0:pointer),
-                 (result0 = (shift result k4) ->
-                  (forall (pointerP0:((memory) pointer)),
-                   (pointerP0 = (upd pointerP result0 q2) ->
+  forall (Pre17: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  forall (q3: pointer),
+  forall (Post4: q3 = (acc pointerP0 (shift (acc forward p2) k1))),
+  forall (Pre8: (valid alloc1 q3)),
+  forall (result2: Z),
+  forall (Post5: (acc elt q3) < v /\ result2 = 1 \/ (acc elt q3) >= v /\
+                 result2 = 0),
+  ((result2 <> 0 -> (forall (p:pointer), (p = q3 -> (Zwf 0 0 0))))) /\
+  ((result2 = 0 ->
+    (forall (result:pointer),
+     (result = (shift update k1) ->
+      (forall (pointerP:((memory) pointer)),
+       (pointerP = (upd pointerP0 result p2) ->
+        (forall (k:Z),
+         (k = (k1 - 1) ->
+          (forall (result:Z),
+           (result = k ->
+            ((result >= 0 ->
+              ((true = false ->
+                (forall (result:unit),
+                 (result = tt ->
+                  ((((acc elt p2) = v ->
+                     (forall (result:unit), (result = tt -> True)))) /\
+                  (((acc elt p2) <> v ->
                     (forall (k:Z),
-                     (k = (k4 - 1) -> ((k >= 0 -> (Zwf 0 0 0))) /\
-                      ((k < 0 -> True)))))) /\
-                  (valid alloc result0))))) /\
-              (valid alloc result6))) /\
-            (valid alloc result0))) /\
-          (valid alloc result1))))) /\
-      (valid alloc result6))))) /\
-  (valid alloc q2).
+                     (1 <= k /\ k <= 16 ->
+                      (((k > (acc level l) ->
+                         (forall (result:pointer),
+                          (result = l ->
+                           (forall (result0:Z),
+                            (result0 = ((acc level result) + 1) ->
+                             (forall (level0:((memory) Z)),
+                              (level0 = (upd level result result0) ->
+                               (forall (result:Z),
+                                (result = result0 ->
+                                 (forall (result0:pointer),
+                                  (result0 = (shift update result) ->
+                                   (forall (result1:pointer),
+                                    (result1 = (acc header l) ->
+                                     (forall (pointerP0:((memory) pointer)),
+                                      (pointerP0 = (upd pointerP result0
+                                                    result1) ->
+                                       (forall (q:pointer),
+                                        ((valid alloc1 q) /\
+                                         (block_length alloc1 (acc forward q)) =
+                                         result ->
+                                         (forall (result:pointer),
+                                          (result = q ->
+                                           (forall (elt0:((memory) Z)),
+                                            (elt0 = (upd elt result v) ->
+                                             (forall (k:Z),
+                                              (forall (pointerP:((memory) pointer)),
+                                               (True ->
+                                                ((true = true ->
+                                                  (forall (p:pointer),
+                                                   (p = (acc pointerP
+                                                         (shift update k)) ->
+                                                    (forall (result:pointer),
+                                                     (result = (shift (
+                                                                acc forward q)
+                                                                k) ->
+                                                      (((forall (result0:pointer),
+                                                         (result0 = (
+                                                          acc pointerP
+                                                          (shift (acc forward
+                                                                  p)
+                                                           k)) ->
+                                                          (forall (pointerP0:((memory) pointer)),
+                                                           (pointerP0 = (
+                                                            upd pointerP
+                                                            result result0) ->
+                                                            (forall (result:pointer),
+                                                             (result = (
+                                                              shift (
+                                                              acc forward p)
+                                                              k) ->
+                                                              (forall (pointerP:((memory) pointer)),
+                                                               (pointerP = (
+                                                                upd pointerP0
+                                                                result q) ->
+                                                                (forall (k0:Z),
+                                                                 (k0 =
+                                                                  (k - 1) ->
+                                                                  (forall (result:Z),
+                                                                   (result = k0 ->
+                                                                    ((
+                                                                    result >=
+                                                                    0 ->
+                                                                    ((
+                                                                    true = false ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    True)))) /\
+                                                                    ((
+                                                                    false = false ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    (Zwf 0 0 0))))))) /\
+                                                                    ((
+                                                                    result <
+                                                                    0 ->
+                                                                    ((
+                                                                    true = true ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    True)))) /\
+                                                                    ((
+                                                                    false = true ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    (Zwf 0 0 0))))))))))))) /\
+                                                              (valid alloc1
+                                                               result))) /\
+                                                            (valid alloc1 p))) /\
+                                                          (valid alloc1
+                                                           result))) /\
+                                                      (valid alloc1 p)) /\
+                                                      (valid alloc1
+                                                       (shift (acc forward p)
+                                                        k))) /\
+                                                      (valid alloc1
+                                                       (shift (acc forward p)
+                                                        k)))) /\
+                                                    (valid alloc1 q))))) /\
+                                                ((false = true -> True))))))) /\
+                                           (valid alloc1 result))))))) /\
+                                     (valid alloc1 result0))) /\
+                                   (valid alloc1 l))))))) /\
+                             (valid alloc1 result))) /\
+                           (valid alloc1 result))))) /\
+                      ((k <= (acc level l) ->
+                        (forall (result:unit),
+                         (result = tt ->
+                          (forall (q:pointer),
+                           ((valid alloc1 q) /\
+                            (block_length alloc1 (acc forward q)) = k ->
+                            (forall (result:pointer),
+                             (result = q ->
+                              (forall (elt0:((memory) Z)),
+                               (elt0 = (upd elt result v) ->
+                                (forall (k:Z),
+                                 (forall (pointerP:((memory) pointer)),
+                                  (True ->
+                                   ((true = true ->
+                                     (forall (p:pointer),
+                                      (p = (acc pointerP (shift update k)) ->
+                                       (forall (result:pointer),
+                                        (result = (shift (acc forward q) k) ->
+                                         (((forall (result0:pointer),
+                                            (result0 = (acc pointerP
+                                                        (shift (acc forward p)
+                                                         k)) ->
+                                             (forall (pointerP0:((memory) pointer)),
+                                              (pointerP0 = (upd pointerP
+                                                            result result0) ->
+                                               (forall (result:pointer),
+                                                (result = (shift (acc forward
+                                                                  p)
+                                                           k) ->
+                                                 (forall (pointerP:((memory) pointer)),
+                                                  (pointerP = (upd pointerP0
+                                                               result q) ->
+                                                   (forall (k0:Z),
+                                                    (k0 = (k - 1) ->
+                                                     (forall (result:Z),
+                                                      (result = k0 ->
+                                                       ((result >= 0 ->
+                                                         ((true = false ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             True)))) /\
+                                                         ((false = false ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             (Zwf 0 0 0))))))) /\
+                                                       ((result < 0 ->
+                                                         ((true = true ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             True)))) /\
+                                                         ((false = true ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             (Zwf 0 0 0))))))))))))) /\
+                                                 (valid alloc1 result))) /\
+                                               (valid alloc1 p))) /\
+                                             (valid alloc1 result))) /\
+                                         (valid alloc1 p)) /\
+                                         (valid alloc1
+                                          (shift (acc forward p) k))) /\
+                                         (valid alloc1
+                                          (shift (acc forward p) k)))) /\
+                                       (valid alloc1 q))))) /\
+                                   ((false = true -> True))))))) /\
+                              (valid alloc1 result)))))))))) /\
+                      (valid alloc1 l)))))) /\
+                  (valid alloc1 p2))))) /\
+              ((false = false ->
+                (forall (result:unit), (result = tt -> (Zwf 0 0 0))))))) /\
+            ((result < 0 ->
+              ((true = true ->
+                (forall (result:unit),
+                 (result = tt ->
+                  ((((acc elt p2) = v ->
+                     (forall (result:unit), (result = tt -> True)))) /\
+                  (((acc elt p2) <> v ->
+                    (forall (k:Z),
+                     (1 <= k /\ k <= 16 ->
+                      (((k > (acc level l) ->
+                         (forall (result:pointer),
+                          (result = l ->
+                           (forall (result0:Z),
+                            (result0 = ((acc level result) + 1) ->
+                             (forall (level0:((memory) Z)),
+                              (level0 = (upd level result result0) ->
+                               (forall (result:Z),
+                                (result = result0 ->
+                                 (forall (result0:pointer),
+                                  (result0 = (shift update result) ->
+                                   (forall (result1:pointer),
+                                    (result1 = (acc header l) ->
+                                     (forall (pointerP0:((memory) pointer)),
+                                      (pointerP0 = (upd pointerP result0
+                                                    result1) ->
+                                       (forall (q:pointer),
+                                        ((valid alloc1 q) /\
+                                         (block_length alloc1 (acc forward q)) =
+                                         result ->
+                                         (forall (result:pointer),
+                                          (result = q ->
+                                           (forall (elt0:((memory) Z)),
+                                            (elt0 = (upd elt result v) ->
+                                             (forall (k:Z),
+                                              (forall (pointerP:((memory) pointer)),
+                                               (True ->
+                                                ((true = true ->
+                                                  (forall (p:pointer),
+                                                   (p = (acc pointerP
+                                                         (shift update k)) ->
+                                                    (forall (result:pointer),
+                                                     (result = (shift (
+                                                                acc forward q)
+                                                                k) ->
+                                                      (((forall (result0:pointer),
+                                                         (result0 = (
+                                                          acc pointerP
+                                                          (shift (acc forward
+                                                                  p)
+                                                           k)) ->
+                                                          (forall (pointerP0:((memory) pointer)),
+                                                           (pointerP0 = (
+                                                            upd pointerP
+                                                            result result0) ->
+                                                            (forall (result:pointer),
+                                                             (result = (
+                                                              shift (
+                                                              acc forward p)
+                                                              k) ->
+                                                              (forall (pointerP:((memory) pointer)),
+                                                               (pointerP = (
+                                                                upd pointerP0
+                                                                result q) ->
+                                                                (forall (k0:Z),
+                                                                 (k0 =
+                                                                  (k - 1) ->
+                                                                  (forall (result:Z),
+                                                                   (result = k0 ->
+                                                                    ((
+                                                                    result >=
+                                                                    0 ->
+                                                                    ((
+                                                                    true = false ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    True)))) /\
+                                                                    ((
+                                                                    false = false ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    (Zwf 0 0 0))))))) /\
+                                                                    ((
+                                                                    result <
+                                                                    0 ->
+                                                                    ((
+                                                                    true = true ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    True)))) /\
+                                                                    ((
+                                                                    false = true ->
+                                                                    (
+                                                                    forall (result:unit),
+                                                                    (
+                                                                    result = tt ->
+                                                                    (Zwf 0 0 0))))))))))))) /\
+                                                              (valid alloc1
+                                                               result))) /\
+                                                            (valid alloc1 p))) /\
+                                                          (valid alloc1
+                                                           result))) /\
+                                                      (valid alloc1 p)) /\
+                                                      (valid alloc1
+                                                       (shift (acc forward p)
+                                                        k))) /\
+                                                      (valid alloc1
+                                                       (shift (acc forward p)
+                                                        k)))) /\
+                                                    (valid alloc1 q))))) /\
+                                                ((false = true -> True))))))) /\
+                                           (valid alloc1 result))))))) /\
+                                     (valid alloc1 result0))) /\
+                                   (valid alloc1 l))))))) /\
+                             (valid alloc1 result))) /\
+                           (valid alloc1 result))))) /\
+                      ((k <= (acc level l) ->
+                        (forall (result:unit),
+                         (result = tt ->
+                          (forall (q:pointer),
+                           ((valid alloc1 q) /\
+                            (block_length alloc1 (acc forward q)) = k ->
+                            (forall (result:pointer),
+                             (result = q ->
+                              (forall (elt0:((memory) Z)),
+                               (elt0 = (upd elt result v) ->
+                                (forall (k:Z),
+                                 (forall (pointerP:((memory) pointer)),
+                                  (True ->
+                                   ((true = true ->
+                                     (forall (p:pointer),
+                                      (p = (acc pointerP (shift update k)) ->
+                                       (forall (result:pointer),
+                                        (result = (shift (acc forward q) k) ->
+                                         (((forall (result0:pointer),
+                                            (result0 = (acc pointerP
+                                                        (shift (acc forward p)
+                                                         k)) ->
+                                             (forall (pointerP0:((memory) pointer)),
+                                              (pointerP0 = (upd pointerP
+                                                            result result0) ->
+                                               (forall (result:pointer),
+                                                (result = (shift (acc forward
+                                                                  p)
+                                                           k) ->
+                                                 (forall (pointerP:((memory) pointer)),
+                                                  (pointerP = (upd pointerP0
+                                                               result q) ->
+                                                   (forall (k0:Z),
+                                                    (k0 = (k - 1) ->
+                                                     (forall (result:Z),
+                                                      (result = k0 ->
+                                                       ((result >= 0 ->
+                                                         ((true = false ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             True)))) /\
+                                                         ((false = false ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             (Zwf 0 0 0))))))) /\
+                                                       ((result < 0 ->
+                                                         ((true = true ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             True)))) /\
+                                                         ((false = true ->
+                                                           (forall (result:unit),
+                                                            (result = tt ->
+                                                             (Zwf 0 0 0))))))))))))) /\
+                                                 (valid alloc1 result))) /\
+                                               (valid alloc1 p))) /\
+                                             (valid alloc1 result))) /\
+                                         (valid alloc1 p)) /\
+                                         (valid alloc1
+                                          (shift (acc forward p) k))) /\
+                                         (valid alloc1
+                                          (shift (acc forward p) k)))) /\
+                                       (valid alloc1 q))))) /\
+                                   ((false = true -> True))))))) /\
+                              (valid alloc1 result)))))))))) /\
+                      (valid alloc1 l)))))) /\
+                  (valid alloc1 p2))))) /\
+              ((false = true ->
+                (forall (result:unit), (result = tt -> (Zwf 0 0 0))))))))))))) /\
+      (valid alloc1 result))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 2244-3119 *)
+(* Why obligation from file "why/skip_lists.why", characters 863-1451 *)
 Lemma insert_impl_po_7 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (Pre17: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  forall (Post66: (Zwf 0 0 0)),
+  (Zwf 0 0 Variant3).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 791-1697 *)
+Lemma insert_impl_po_8 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (Pre17: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Post63: (Zwf 0 0 0)),
+  (Zwf 0 0 Variant1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 791-1697 *)
+Lemma insert_impl_po_9 : 
   forall (l: pointer),
   forall (v: Z),
   forall (alloc: alloc_table),
@@ -464,124 +744,559 @@ Lemma insert_impl_po_7 :
   forall (forward: ((memory) pointer)),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
-  forall (Pre65: (valid alloc l)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
   forall (update: pointer),
-  forall (Post12: update = (any_pointer tt)),
-  forall (Pre64: (valid alloc l)),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
   forall (p: pointer),
-  forall (Post26: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post11: q = (any_pointer tt)),
-  forall (Pre63: (valid alloc l)),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
   forall (k: Z),
-  forall (Post30: k = (acc level l)),
+  forall (Post55: k = (acc level l)),
+  forall (Variant1: Z),
   forall (p1: pointer),
   forall (pointerP0: ((memory) pointer)),
+  forall (Pre17: Variant1 = 0),
+  forall (Test1: false = true),
+  ((((acc elt p1) = v -> (forall (result:unit), (result = tt -> True)))) /\
+  (((acc elt p1) <> v ->
+    (forall (k:Z),
+     (1 <= k /\ k <= 16 ->
+      (((k > (acc level l) ->
+         (forall (result:pointer),
+          (result = l ->
+           (forall (result0:Z),
+            (result0 = ((acc level result) + 1) ->
+             (forall (level0:((memory) Z)),
+              (level0 = (upd level result result0) ->
+               (forall (result:Z),
+                (result = result0 ->
+                 (forall (result0:pointer),
+                  (result0 = (shift update result) ->
+                   (forall (result1:pointer),
+                    (result1 = (acc header l) ->
+                     (forall (pointerP:((memory) pointer)),
+                      (pointerP = (upd pointerP0 result0 result1) ->
+                       (forall (q:pointer),
+                        ((valid alloc1 q) /\
+                         (block_length alloc1 (acc forward q)) = result ->
+                         (forall (result:pointer),
+                          (result = q ->
+                           (forall (elt0:((memory) Z)),
+                            (elt0 = (upd elt result v) ->
+                             (forall (k:Z),
+                              (forall (pointerP:((memory) pointer)),
+                               (True ->
+                                ((true = true ->
+                                  (forall (p:pointer),
+                                   (p = (acc pointerP (shift update k)) ->
+                                    (forall (result:pointer),
+                                     (result = (shift (acc forward q) k) ->
+                                      (((forall (result0:pointer),
+                                         (result0 = (acc pointerP
+                                                     (shift (acc forward p) k)) ->
+                                          (forall (pointerP0:((memory) pointer)),
+                                           (pointerP0 = (upd pointerP result
+                                                         result0) ->
+                                            (forall (result:pointer),
+                                             (result = (shift (acc forward p)
+                                                        k) ->
+                                              (forall (pointerP:((memory) pointer)),
+                                               (pointerP = (upd pointerP0
+                                                            result q) ->
+                                                (forall (k0:Z),
+                                                 (k0 = (k - 1) ->
+                                                  (forall (result:Z),
+                                                   (result = k0 ->
+                                                    ((result >= 0 ->
+                                                      ((true = false ->
+                                                        (forall (result:unit),
+                                                         (result = tt -> True)))) /\
+                                                      ((false = false ->
+                                                        (forall (result:unit),
+                                                         (result = tt ->
+                                                          (Zwf 0 0 0))))))) /\
+                                                    ((result < 0 ->
+                                                      ((true = true ->
+                                                        (forall (result:unit),
+                                                         (result = tt -> True)))) /\
+                                                      ((false = true ->
+                                                        (forall (result:unit),
+                                                         (result = tt ->
+                                                          (Zwf 0 0 0))))))))))))) /\
+                                              (valid alloc1 result))) /\
+                                            (valid alloc1 p))) /\
+                                          (valid alloc1 result))) /\
+                                      (valid alloc1 p)) /\
+                                      (valid alloc1 (shift (acc forward p) k))) /\
+                                      (valid alloc1 (shift (acc forward p) k)))) /\
+                                    (valid alloc1 q))))) /\
+                                ((false = true -> True))))))) /\
+                           (valid alloc1 result))))))) /\
+                     (valid alloc1 result0))) /\
+                   (valid alloc1 l))))))) /\
+             (valid alloc1 result))) /\
+           (valid alloc1 result))))) /\
+      ((k <= (acc level l) ->
+        (forall (result:unit),
+         (result = tt ->
+          (forall (q:pointer),
+           ((valid alloc1 q) /\ (block_length alloc1 (acc forward q)) = k ->
+            (forall (result:pointer),
+             (result = q ->
+              (forall (elt0:((memory) Z)),
+               (elt0 = (upd elt result v) ->
+                (forall (k:Z),
+                 (forall (pointerP:((memory) pointer)),
+                  (True ->
+                   ((true = true ->
+                     (forall (p:pointer),
+                      (p = (acc pointerP (shift update k)) ->
+                       (forall (result:pointer),
+                        (result = (shift (acc forward q) k) ->
+                         (((forall (result0:pointer),
+                            (result0 = (acc pointerP
+                                        (shift (acc forward p) k)) ->
+                             (forall (pointerP0:((memory) pointer)),
+                              (pointerP0 = (upd pointerP result result0) ->
+                               (forall (result:pointer),
+                                (result = (shift (acc forward p) k) ->
+                                 (forall (pointerP:((memory) pointer)),
+                                  (pointerP = (upd pointerP0 result q) ->
+                                   (forall (k0:Z),
+                                    (k0 = (k - 1) ->
+                                     (forall (result:Z),
+                                      (result = k0 ->
+                                       ((result >= 0 ->
+                                         ((true = false ->
+                                           (forall (result:unit),
+                                            (result = tt -> True)))) /\
+                                         ((false = false ->
+                                           (forall (result:unit),
+                                            (result = tt -> (Zwf 0 0 0))))))) /\
+                                       ((result < 0 ->
+                                         ((true = true ->
+                                           (forall (result:unit),
+                                            (result = tt -> True)))) /\
+                                         ((false = true ->
+                                           (forall (result:unit),
+                                            (result = tt -> (Zwf 0 0 0))))))))))))) /\
+                                 (valid alloc1 result))) /\
+                               (valid alloc1 p))) /\
+                             (valid alloc1 result))) /\
+                         (valid alloc1 p)) /\
+                         (valid alloc1 (shift (acc forward p) k))) /\
+                         (valid alloc1 (shift (acc forward p) k)))) /\
+                       (valid alloc1 q))))) /\
+                   ((false = true -> True))))))) /\
+              (valid alloc1 result)))))))))) /\
+      (valid alloc1 l)))))) /\
+  (valid alloc1 p1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 2380-2430 *)
+Lemma insert_impl_po_10 : 
+  forall (l: pointer),
+  forall (v: Z),
+  forall (alloc: alloc_table),
+  forall (elt: ((memory) Z)),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (p1: pointer),
+  forall (pointerP0: ((memory) pointer)),
+  forall (Pre44: (valid alloc1 p1)),
+  forall (Test9: (acc elt p1) <> v),
   forall (k2: Z),
-  forall (Post69: 1 <= k2 /\ k2 <= 16),
+  forall (Post16: 1 <= k2 /\ k2 <= 16),
   forall (k3: Z),
   forall (q2: pointer),
-  forall (Post88: (valid alloc q2) /\ (block_length alloc (acc forward q2)) =
-                  k3),
+  forall (Post33: (valid alloc1 q2) /\
+                  (block_length alloc1 (acc forward q2)) = k3),
+  forall (caduceus_7: pointer),
+  forall (Post36: caduceus_7 = q2),
+  forall (Pre28: (valid alloc1 caduceus_7)),
+  forall (elt0: ((memory) Z)),
+  forall (Post112: elt0 = (upd elt caduceus_7 v)),
+  (forall (k:Z),
+   (forall (pointerP:((memory) pointer)),
+    (True ->
+     ((true = true ->
+       (forall (p:pointer),
+        (p = (acc pointerP (shift update k)) ->
+         (forall (result:pointer),
+          (result = (shift (acc forward q2) k) ->
+           (((forall (result0:pointer),
+              (result0 = (acc pointerP (shift (acc forward p) k)) ->
+               (forall (pointerP0:((memory) pointer)),
+                (pointerP0 = (upd pointerP result result0) ->
+                 (forall (result:pointer),
+                  (result = (shift (acc forward p) k) ->
+                   (forall (pointerP:((memory) pointer)),
+                    (pointerP = (upd pointerP0 result q2) ->
+                     (forall (k0:Z),
+                      (k0 = (k - 1) ->
+                       (forall (result:Z),
+                        (result = k0 ->
+                         ((result >= 0 ->
+                           ((true = false ->
+                             (forall (result:unit), (result = tt -> True)))) /\
+                           ((false = false ->
+                             (forall (result:unit),
+                              (result = tt -> (Zwf 0 0 0))))))) /\
+                         ((result < 0 ->
+                           ((true = true ->
+                             (forall (result:unit), (result = tt -> True)))) /\
+                           ((false = true ->
+                             (forall (result:unit),
+                              (result = tt -> (Zwf 0 0 0))))))))))))) /\
+                   (valid alloc1 result))) /\
+                 (valid alloc1 p))) /\
+               (valid alloc1 result))) /\
+           (valid alloc1 p)) /\ (valid alloc1 (shift (acc forward p) k))) /\
+           (valid alloc1 (shift (acc forward p) k)))) /\
+         (valid alloc1 q2))))) /\
+     ((false = true -> True))))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 2563-2601 *)
+Lemma insert_impl_po_11 : 
+  forall (l: pointer),
+  forall (v: Z),
+  forall (alloc: alloc_table),
+  forall (elt: ((memory) Z)),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (p1: pointer),
+  forall (pointerP0: ((memory) pointer)),
+  forall (Pre44: (valid alloc1 p1)),
+  forall (Test9: (acc elt p1) <> v),
+  forall (k2: Z),
+  forall (Post16: 1 <= k2 /\ k2 <= 16),
+  forall (k3: Z),
+  forall (q2: pointer),
+  forall (Post33: (valid alloc1 q2) /\
+                  (block_length alloc1 (acc forward q2)) = k3),
   forall (Variant5: Z),
-  forall (Pre62: Variant5 = 0),
-  forall (Test6: true = true),
-  forall (Post13: (Zwf 0 0 0)),
+  forall (k4: Z),
+  forall (Pre43: Variant5 = 0),
+  forall (Test8: true = true),
+  forall (aux_5: pointer),
+  forall (Post121: aux_5 = (shift update k4)),
+  (valid alloc1 aux_5).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 2563-2601 *)
+Lemma insert_impl_po_12 : 
+  forall (l: pointer),
+  forall (v: Z),
+  forall (alloc: alloc_table),
+  forall (elt: ((memory) Z)),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (p1: pointer),
+  forall (pointerP0: ((memory) pointer)),
+  forall (Pre44: (valid alloc1 p1)),
+  forall (Test9: (acc elt p1) <> v),
+  forall (k2: Z),
+  forall (Post16: 1 <= k2 /\ k2 <= 16),
+  forall (k3: Z),
+  forall (q2: pointer),
+  forall (Post33: (valid alloc1 q2) /\
+                  (block_length alloc1 (acc forward q2)) = k3),
+  forall (Variant5: Z),
+  forall (k4: Z),
+  forall (pointerP2: ((memory) pointer)),
+  forall (Pre43: Variant5 = 0),
+  forall (Test8: true = true),
+  forall (aux_5: pointer),
+  forall (Post121: aux_5 = (shift update k4)),
+  forall (Pre30: (valid alloc1 aux_5)),
+  forall (result6: pointer),
+  forall (Post123: result6 = (acc pointerP2 aux_5)),
+  result6 = (acc pointerP2 (shift update k4)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 2494-3369 *)
+Lemma insert_impl_po_13 : 
+  forall (l: pointer),
+  forall (v: Z),
+  forall (alloc: alloc_table),
+  forall (elt: ((memory) Z)),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre47: (valid alloc l)),
+  forall (alloc0: alloc_table),
+  forall (update: pointer),
+  forall (Post71: ((valid_range alloc0 update 0 15) /\
+                  (fresh alloc update)) /\ (alloc_extends alloc alloc0)),
+  forall (Pre46: (valid alloc0 l)),
+  forall (p: pointer),
+  forall (Post56: p = (acc header l)),
+  forall (alloc1: alloc_table),
+  forall (Post75: (alloc_extends alloc0 alloc1)),
+  forall (Pre45: (valid alloc1 l)),
+  forall (k: Z),
+  forall (Post55: k = (acc level l)),
+  forall (p1: pointer),
+  forall (pointerP0: ((memory) pointer)),
+  forall (Pre44: (valid alloc1 p1)),
+  forall (Test9: (acc elt p1) <> v),
+  forall (k2: Z),
+  forall (Post16: 1 <= k2 /\ k2 <= 16),
+  forall (k3: Z),
+  forall (q2: pointer),
+  forall (Post33: (valid alloc1 q2) /\
+                  (block_length alloc1 (acc forward q2)) = k3),
+  forall (Variant5: Z),
+  forall (Pre43: Variant5 = 0),
+  forall (Test8: true = true),
+  forall (Post57: (Zwf 0 0 0)),
   (Zwf 0 0 Variant5).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3485-3503 *)
+(* Why obligation from file "why/skip_lists.why", characters 3790-3815 *)
 Lemma random_level_impl_po_1 : 
   forall (prob0: R),
-  forall (Post3: prob0 = (0250000 / 1000000)%R),
+  forall (Post5: (eq R prob0 (0250000 / 1000000)%R)),
   forall (lvl: Z),
-  forall (Post2: lvl = 1),
+  forall (Post4: lvl = 1),
   forall (Variant1: Z),
   forall (lvl1: Z),
-  forall (Pre3: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (caduceus_1: R),
-  forall (Post15: (Rle (0000000 / 1000000)%R caduceus_1) /\
-                  (Rle caduceus_1 (1000000 / 1000000)%R)),
-  forall (Test3: (Rlt caduceus_1 prob0)),
-  forall (result1: bool),
-  forall (Post18: (if result1 then lvl1 < 16 else lvl1 >= 16)),
-  (if result1 then (forall (lvl:Z), (lvl = (lvl1 + 1) -> (Zwf 0 0 0)))
-   else 1 <= lvl1 /\ lvl1 <= 16).
+  forall (Pre4: Variant1 = 0),
+  forall (Test2: (exists caduceus_1:R,
+                  ((Rle (0000000 / 1000000)%R caduceus_1) /\
+                  (Rle caduceus_1 (1000000 / 1000000)%R)) /\
+                  (Rlt caduceus_1 prob0) /\ lvl1 < 16)),
+  forall (lvl2: Z),
+  forall (Post2: lvl2 = (lvl1 + 1)),
+  (Zwf 0 0 0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3503-3503 *)
+(* Why obligation from file "why/skip_lists.why", characters 3643-3823 *)
 Lemma random_level_impl_po_2 : 
   forall (prob0: R),
-  forall (Post3: prob0 = (0250000 / 1000000)%R),
+  forall (Post5: (eq R prob0 (0250000 / 1000000)%R)),
   forall (lvl: Z),
-  forall (Post2: lvl = 1),
+  forall (Post4: lvl = 1),
   forall (Variant1: Z),
   forall (lvl1: Z),
-  forall (Pre3: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (caduceus_1: R),
-  forall (Post15: (Rle (0000000 / 1000000)%R caduceus_1) /\
-                  (Rle caduceus_1 (1000000 / 1000000)%R)),
-  forall (Test2: (Rge caduceus_1 prob0)),
-  1 <= lvl1 /\ lvl1 <= 16.
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/skip_lists.why", characters 3393-3573 *)
-Lemma random_level_impl_po_3 : 
-  forall (prob0: R),
-  forall (Post3: prob0 = (0250000 / 1000000)%R),
-  forall (lvl: Z),
-  forall (Post2: lvl = 1),
-  forall (Variant1: Z),
-  forall (Pre3: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (Post4: (Zwf 0 0 0)),
+  forall (Pre4: Variant1 = 0),
+  forall (Test2: (exists caduceus_1:R,
+                  ((Rle (0000000 / 1000000)%R caduceus_1) /\
+                  (Rle caduceus_1 (1000000 / 1000000)%R)) /\
+                  (Rlt caduceus_1 prob0) /\ lvl1 < 16)),
+  forall (Post6: (Zwf 0 0 0)),
   (Zwf 0 0 Variant1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4102-4121 *)
-Lemma search_impl_po_1 : 
-  forall (l: pointer),
-  forall (alloc: alloc_table),
-  forall (header: ((memory) pointer)),
-  forall (level: ((memory) Z)),
-  forall (Pre24: (valid alloc l)),
-  forall (Pre23: (valid alloc l)),
-  forall (p: pointer),
-  forall (Post14: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post5: q = (any_pointer tt)),
-  forall (Pre22: (valid alloc l)),
-  forall (k: Z),
-  forall (Post18: k = (acc level l)),
+(* Why obligation from file "why/skip_lists.why", characters 3643-3823 *)
+Lemma random_level_impl_po_3 : 
+  forall (prob0: R),
+  forall (Post5: (eq R prob0 (0250000 / 1000000)%R)),
+  forall (lvl: Z),
+  forall (Post4: lvl = 1),
   forall (Variant1: Z),
-  forall (Pre18: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (Variant3: Z),
-  forall (p2: pointer),
-  forall (Pre16: Variant3 = 0),
-  forall (Test3: true = true),
-  (valid alloc p2).
+  forall (lvl1: Z),
+  forall (Pre4: Variant1 = 0),
+  forall (Test1: (exists caduceus_1:R,
+                  ((Rle (0000000 / 1000000)%R caduceus_1) /\
+                  (Rle caduceus_1 (1000000 / 1000000)%R)) /\
+                  ((Rge caduceus_1 prob0) \/ (Rlt caduceus_1 prob0) /\
+                  lvl1 >= 16))),
+  (forall (result:Z), (result = lvl1 -> 1 <= result /\ result <= 16)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4032-4201 *)
+(* Why obligation from file "why/skip_lists.why", characters 4142-4158 *)
+Lemma search_impl_po_1 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (header: ((memory) pointer)),
+  forall (Pre19: (valid alloc l)),
+  forall (p: pointer),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  (valid alloc0 l).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 4423-4442 *)
 Lemma search_impl_po_2 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre19: (valid alloc l)),
+  forall (p: pointer),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
+  forall (k: Z),
+  forall (Post14: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (Pre14: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  (valid alloc0 p2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 4353-4522 *)
+Lemma search_impl_po_3 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (pointerP: ((memory) pointer)),
+  forall (Pre19: (valid alloc l)),
+  forall (p: pointer),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
+  forall (k: Z),
+  forall (Post14: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (k1: Z),
+  forall (Pre14: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  forall (Pre5: (valid alloc0 p2)),
+  forall (caduceus_4: pointer),
+  forall (Post38: caduceus_4 = (acc forward p2)),
+  forall (result1: pointer),
+  forall (Post40: result1 = (shift caduceus_4 k1)),
+  (forall (result:pointer),
+   (result = (acc pointerP result1) ->
+    result = (acc pointerP (shift (acc forward p2) k1)))) /\
+  (valid alloc0 result1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 4554-4720 *)
+Lemma search_impl_po_4 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (forward: ((memory) pointer)),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (pointerP: ((memory) pointer)),
+  forall (Pre19: (valid alloc l)),
+  forall (p: pointer),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
+  forall (k: Z),
+  forall (Post14: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (k1: Z),
+  forall (Pre14: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Variant3: Z),
+  forall (p2: pointer),
+  forall (Pre12: Variant3 = 0),
+  forall (Test3: true = true),
+  forall (q3: pointer),
+  forall (Post4: q3 = (acc pointerP (shift (acc forward p2) k1))),
+  (valid alloc0 q3).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/skip_lists.why", characters 4295-4752 *)
+Lemma search_impl_po_5 : 
   forall (l: pointer),
   forall (v: Z),
   forall (alloc: alloc_table),
@@ -590,112 +1305,133 @@ Lemma search_impl_po_2 :
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
   forall (pointerP: ((memory) pointer)),
-  forall (Pre24: (valid alloc l)),
-  forall (Pre23: (valid alloc l)),
+  forall (Pre19: (valid alloc l)),
   forall (p: pointer),
-  forall (Post14: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post5: q = (any_pointer tt)),
-  forall (Pre22: (valid alloc l)),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
   forall (k: Z),
-  forall (Post18: k = (acc level l)),
+  forall (Post14: k = (acc level l)),
   forall (Variant1: Z),
   forall (k1: Z),
-  forall (Pre18: Variant1 = 0),
+  forall (Pre14: Variant1 = 0),
   forall (Test4: true = true),
   forall (Variant3: Z),
   forall (p2: pointer),
-  forall (Pre16: Variant3 = 0),
+  forall (Pre12: Variant3 = 0),
   forall (Test3: true = true),
-  forall (Pre9: (valid alloc p2)),
-  forall (caduceus_4: pointer),
-  forall (Post30: caduceus_4 = (acc forward p2)),
-  forall (result1: pointer),
-  forall (Post32: result1 = (shift caduceus_4 k1)),
-  (forall (result:pointer),
-   (result = (acc pointerP result1) ->
-    (forall (result0:Z),
-     (result0 = (acc elt result) ->
-      ((result0 < v ->
-        ((1 <> 0 -> (forall (p:pointer), (p = result -> (Zwf 0 0 0))))) /\
-        ((1 = 0 ->
-          (forall (k:Z),
-           (k = (k1 - 1) -> ((k >= 0 -> (Zwf 0 0 0))) /\
-            ((k < 0 ->
+  forall (q3: pointer),
+  forall (Post4: q3 = (acc pointerP (shift (acc forward p2) k1))),
+  forall (Pre8: (valid alloc0 q3)),
+  forall (result2: Z),
+  forall (Post5: (acc elt q3) < v /\ result2 = 1 \/ (acc elt q3) >= v /\
+                 result2 = 0),
+  ((result2 <> 0 -> (forall (p:pointer), (p = q3 -> (Zwf 0 0 0))))) /\
+  ((result2 = 0 ->
+    (forall (k:Z),
+     (k = (k1 - 1) ->
+      (forall (result:Z),
+       (result = k ->
+        ((result >= 0 ->
+          ((true = false ->
+            (forall (result:unit),
+             (result = tt ->
               (forall (result:Z),
-               (result = (acc elt p2) -> ((result < v -> True)) /\
-                ((result >= v -> True)))) /\
-              (valid alloc p2))))))))) /\
-      ((result0 >= v ->
-        ((0 <> 0 -> (forall (p:pointer), (p = result -> (Zwf 0 0 0))))) /\
-        ((0 = 0 ->
-          (forall (k:Z),
-           (k = (k1 - 1) -> ((k >= 0 -> (Zwf 0 0 0))) /\
-            ((k < 0 ->
+               ((acc elt p2) <> v /\ result = 0 \/ (acc elt p2) = v /\
+                result = 1 -> True)) /\
+              (valid alloc0 p2))))) /\
+          ((false = false ->
+            (forall (result:unit), (result = tt -> (Zwf 0 0 0))))))) /\
+        ((result < 0 ->
+          ((true = true ->
+            (forall (result:unit),
+             (result = tt ->
               (forall (result:Z),
-               (result = (acc elt p2) -> ((result < v -> True)) /\
-                ((result >= v -> True)))) /\
-              (valid alloc p2))))))))))) /\
-    (valid alloc result))) /\
-  (valid alloc result1).
+               ((acc elt p2) <> v /\ result = 0 \/ (acc elt p2) = v /\
+                result = 1 -> True)) /\
+              (valid alloc0 p2))))) /\
+          ((false = true ->
+            (forall (result:unit), (result = tt -> (Zwf 0 0 0))))))))))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3951-4525 *)
-Lemma search_impl_po_3 : 
+(* Why obligation from file "why/skip_lists.why", characters 4272-4846 *)
+Lemma search_impl_po_6 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
-  forall (Pre24: (valid alloc l)),
-  forall (Pre23: (valid alloc l)),
+  forall (Pre19: (valid alloc l)),
   forall (p: pointer),
-  forall (Post14: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post5: q = (any_pointer tt)),
-  forall (Pre22: (valid alloc l)),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
   forall (k: Z),
-  forall (Post18: k = (acc level l)),
+  forall (Post14: k = (acc level l)),
   forall (Variant1: Z),
-  forall (Pre18: Variant1 = 0),
+  forall (Pre14: Variant1 = 0),
   forall (Test4: true = true),
   forall (Variant3: Z),
-  forall (Pre16: Variant3 = 0),
+  forall (Pre12: Variant3 = 0),
   forall (Test3: true = true),
-  forall (Post10: (Zwf 0 0 0)),
+  forall (Post19: (Zwf 0 0 0)),
   (Zwf 0 0 Variant3).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
+(* Why obligation from file "why/skip_lists.why", characters 4200-5002 *)
+Lemma search_impl_po_7 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (header: ((memory) pointer)),
+  forall (level: ((memory) Z)),
+  forall (Pre19: (valid alloc l)),
+  forall (p: pointer),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
+  forall (k: Z),
+  forall (Post14: k = (acc level l)),
+  forall (Variant1: Z),
+  forall (Pre14: Variant1 = 0),
+  forall (Test4: true = true),
+  forall (Post16: (Zwf 0 0 0)),
+  (Zwf 0 0 Variant1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3879-4681 *)
-Lemma search_impl_po_4 : 
+(* Why obligation from file "why/skip_lists.why", characters 4200-5002 *)
+Lemma search_impl_po_8 : 
   forall (l: pointer),
+  forall (v: Z),
   forall (alloc: alloc_table),
+  forall (elt: ((memory) Z)),
   forall (header: ((memory) pointer)),
   forall (level: ((memory) Z)),
-  forall (Pre24: (valid alloc l)),
-  forall (Pre23: (valid alloc l)),
+  forall (Pre19: (valid alloc l)),
   forall (p: pointer),
-  forall (Post14: p = (acc header l)),
-  forall (q: pointer),
-  forall (Post5: q = (any_pointer tt)),
-  forall (Pre22: (valid alloc l)),
+  forall (Post15: p = (acc header l)),
+  forall (alloc0: alloc_table),
+  forall (Post25: (alloc_extends alloc alloc0)),
+  forall (Pre18: (valid alloc0 l)),
   forall (k: Z),
-  forall (Post18: k = (acc level l)),
+  forall (Post14: k = (acc level l)),
   forall (Variant1: Z),
-  forall (Pre18: Variant1 = 0),
-  forall (Test4: true = true),
-  forall (Post7: (Zwf 0 0 0)),
-  (Zwf 0 0 Variant1).
+  forall (p1: pointer),
+  forall (Pre14: Variant1 = 0),
+  forall (Test1: false = true),
+  (forall (result:Z),
+   ((acc elt p1) <> v /\ result = 0 \/ (acc elt p1) = v /\ result = 1 -> True)) /\
+  (valid alloc0 p1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

@@ -23,7 +23,7 @@ Lemma main_impl_po_1 :
   forall (x: Z),
   forall (Pre4: x = 0),
   forall (i: Z),
-  forall (Post4: i = 0),
+  forall (Post5: i = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -33,9 +33,9 @@ Lemma main_impl_po_1 :
   forall (Pre2: x0 = i2 /\ i2 <= 10),
   forall (Test2: i2 < 10),
   forall (x1: Z),
-  forall (Post2: x1 = (x0 + 1)),
+  forall (Post3: x1 = (x0 + 1)),
   forall (i3: Z),
-  forall (Post3: i3 = (i2 + 1)),
+  forall (Post4: i3 = (i2 + 1)),
   (x1 = i3 /\ i3 <= 10) /\ (Zwf 0 (10 - i3) (10 - i2)).
 Proof.
 intuition.
@@ -47,7 +47,7 @@ Lemma main_impl_po_2 :
   forall (x: Z),
   forall (Pre4: x = 0),
   forall (i: Z),
-  forall (Post4: i = 0),
+  forall (Post5: i = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -67,7 +67,7 @@ Lemma main_impl_po_3 :
   forall (x: Z),
   forall (Pre4: x = 0),
   forall (i: Z),
-  forall (Post4: i = 0),
+  forall (Post5: i = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   x = i1 /\ i1 <= 10.

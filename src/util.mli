@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.43 2004-07-08 07:12:29 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.44 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -46,7 +46,7 @@ val term_refs : local_env -> term -> Ident.set
 val post_refs : local_env -> postcondition -> Ident.set
 
 val deref_type : type_v -> type_v
-val dearray_type : type_v -> type_v
+val dearray_type : type_v -> pure_type
 
 val decomp_kappa : type_c -> 
   (Ident.t * type_v) * Effect.t * precondition list * postcondition option
@@ -86,7 +86,7 @@ val occur_type_c : Ident.t -> type_c -> bool
 (*s Functions to translate array operations *)
 
 val array_info : 
-  local_env -> Ident.t -> type_v
+  local_env -> Ident.t -> pure_type
 
 val make_raw_access :
   local_env -> Ident.t * Ident.t -> term -> term

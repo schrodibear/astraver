@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.96 2004-07-08 07:12:29 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.97 2004-07-08 13:43:32 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -190,12 +190,12 @@ let initial_renaming env =
 
 let rec occur_term id = function
   | Tvar id' | Tderef id' -> id = id'
-  | Tapp (_, l) -> List.exists (occur_term id) l
+  | Tapp (_, l, _) -> List.exists (occur_term id) l
   | Tconst _ -> false
 
 let rec occur_predicate id = function
   | Pvar _ | Ptrue | Pfalse -> false
-  | Papp (_, l) -> List.exists (occur_term id) l
+  | Papp (_, l, _) -> List.exists (occur_term id) l
   | Pif (a, b, c) -> 
       occur_term id a || occur_predicate id b || occur_predicate id c
   | Forallb (_, _, _, _, a, b) 
@@ -277,7 +277,8 @@ let deref_type = function
   | _ -> invalid_arg "deref_type"
 
 let dearray_type = function
-  | Array v -> v
+  | Array (PureType pt) -> pt
+  | Array _ -> assert false
   | _ -> invalid_arg "dearray_type"
 
 let decomp_kappa c = 
@@ -287,14 +288,14 @@ let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 
 (* [decomp_boolean c] returns the specs R and S of a boolean expression *)
 
-let equality t1 t2 = Papp (t_eq, [t1; t2])
+let equality t1 t2 = Papp (t_eq, [t1; t2], [])
 
 let tequality v t1 t2 = match v with
-  | PureType PTint -> Papp (t_eq_int, [t1; t2])
-  | PureType PTbool -> Papp (t_eq_bool, [t1; t2])
-  | PureType PTreal -> Papp (t_eq_real, [t1; t2])
-  | PureType PTunit -> Papp (t_eq_unit, [t1; t2])
-  | _ -> Papp (t_eq, [t1; t2])
+  | PureType PTint -> Papp (t_eq_int, [t1; t2], [])
+  | PureType PTbool -> Papp (t_eq_bool, [t1; t2], [])
+  | PureType PTreal -> Papp (t_eq_real, [t1; t2], [])
+  | PureType PTunit -> Papp (t_eq_unit, [t1; t2], [])
+  | _ -> Papp (t_eq, [t1; t2], [])
 
 let decomp_boolean ({ a_value = c }, _) =
   (* q -> if result then q(true) else q(false) *)
@@ -313,17 +314,17 @@ let array_info env id =
   v
 
 let make_raw_access env (id,id') c =
-  let _ = array_info env id in
-  Tapp (Ident.access, [Tvar id'; c])
+  let pt = array_info env id in
+  Tapp (Ident.access, [Tvar id'; c], [Some pt])
 
 let make_pre_access env id c =
-  let _ = array_info env id in
+  let pt = array_info env id in
   let c = unref_term c in
-  Pand (false, le_int (Tconst (ConstInt 0)) c, lt_int c (array_length id))
+  Pand (false, le_int (Tconst (ConstInt 0)) c, lt_int c (array_length id pt))
       
 let make_raw_store env (id,id') c1 c2 =
-  let _ = array_info env id in
-  Tapp (Ident.store, [Tvar id'; c1; c2])
+  let pt = array_info env id in
+  Tapp (Ident.store, [Tvar id'; c1; c2], [Some pt])
 
 (*s to build AST *)
 

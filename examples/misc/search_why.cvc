@@ -1,7 +1,7 @@
 
 UNIT: TYPE;
 tt: UNIT;
-array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+array_length_INT: [ARRAY INT OF INT -> INT]; %% should be polymorphic
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];
@@ -15,10 +15,11 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 < array_length(t)) => ((0 <= i1) AND (i1 < array_length(t)))))))))));
+      ((i1 < array_length_INT(t)) =>
+      ((0 <= i1) AND (i1 < array_length_INT(t)))))))))));
 
 %% search1_po_2, Why obligation from file "search.mlw", characters 398-414
 QUERY (FORALL (t:(ARRAY INT OF INT)):
@@ -26,11 +27,11 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 < array_length(t)) =>
-      (((0 <= i1) AND (i1 < array_length(t))) =>
+      ((i1 < array_length_INT(t)) =>
+      (((0 <= i1) AND (i1 < array_length_INT(t))) =>
       ((t[i1] = 0) =>
       (FORALL (result1:INT):
       ((result1 = i1) =>
@@ -42,11 +43,11 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 < array_length(t)) =>
-      (((0 <= i1) AND (i1 < array_length(t))) =>
+      ((i1 < array_length_INT(t)) =>
+      (((0 <= i1) AND (i1 < array_length_INT(t))) =>
       ((t[i1] /= 0) =>
       (FORALL (result1:UNIT):
       ((result1 = tt) =>
@@ -54,8 +55,8 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = (i1 + 1)) =>
       (((0 <= i) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i)) => (t[k] /= 0)))) AND
-      ((0 <= (array_length(t) - i1)) AND
-      ((array_length(t) - i) < (array_length(t) - i1))))))))))))))))));
+      ((0 <= (array_length_INT(t) - i1)) AND
+      ((array_length_INT(t) - i) < (array_length_INT(t) - i1))))))))))))))))));
 
 %% search1_po_4, Why obligation from file "search.mlw", characters 237-442
 QUERY (FORALL (t:(ARRAY INT OF INT)):
@@ -63,11 +64,12 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 >= array_length(t)) =>
-      (FORALL (k:INT): (((0 <= k) AND (k < array_length(t))) => (t[k] /= 0)))))))))));
+      ((i1 >= array_length_INT(t)) =>
+      (FORALL (k:INT):
+      (((0 <= k) AND (k < array_length_INT(t))) => (t[k] /= 0)))))))))));
 
 %% search1_po_5, Why obligation from file "search.mlw", characters 286-334
 QUERY (FORALL (t:(ARRAY INT OF INT)):
@@ -82,10 +84,11 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 < array_length(t)) => ((0 <= i1) AND (i1 < array_length(t)))))))))));
+      ((i1 < array_length_INT(t)) =>
+      ((0 <= i1) AND (i1 < array_length_INT(t)))))))))));
 
 %% search2_po_2, Why obligation from file "search.mlw", characters 900-911
 QUERY (FORALL (t:(ARRAY INT OF INT)):
@@ -93,11 +96,11 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 < array_length(t)) =>
-      (((0 <= i1) AND (i1 < array_length(t))) =>
+      ((i1 < array_length_INT(t)) =>
+      (((0 <= i1) AND (i1 < array_length_INT(t))) =>
       ((t[i1] = 0) =>
       (FORALL (result:INT): ((result = i1) => (t[result] = 0)))))))))))));
 
@@ -107,11 +110,11 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 < array_length(t)) =>
-      (((0 <= i1) AND (i1 < array_length(t))) =>
+      ((i1 < array_length_INT(t)) =>
+      (((0 <= i1) AND (i1 < array_length_INT(t))) =>
       ((t[i1] /= 0) =>
       (FORALL (result1:UNIT):
       ((result1 = tt) =>
@@ -119,8 +122,8 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = (i1 + 1)) =>
       (((0 <= i) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i)) => (t[k] /= 0)))) AND
-      ((0 <= (array_length(t) - i1)) AND
-      ((array_length(t) - i) < (array_length(t) - i1))))))))))))))))));
+      ((0 <= (array_length_INT(t) - i1)) AND
+      ((array_length_INT(t) - i) < (array_length_INT(t) - i1))))))))))))))))));
 
 %% search2_po_4, Why obligation from file "search.mlw", characters 740-939
 QUERY (FORALL (t:(ARRAY INT OF INT)):
@@ -128,11 +131,12 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
       ((i = 0) =>
       (FORALL (Variant1:INT):
       (FORALL (i1:INT):
-      ((Variant1 = (array_length(t) - i1)) =>
+      ((Variant1 = (array_length_INT(t) - i1)) =>
       (((0 <= i1) AND
        (FORALL (k:INT): (((0 <= k) AND (k < i1)) => (t[k] /= 0)))) =>
-      ((i1 >= array_length(t)) =>
-      (FORALL (k:INT): (((0 <= k) AND (k < array_length(t))) => (t[k] /= 0)))))))))));
+      ((i1 >= array_length_INT(t)) =>
+      (FORALL (k:INT):
+      (((0 <= k) AND (k < array_length_INT(t))) => (t[k] /= 0)))))))))));
 
 %% search2_po_5, Why obligation from file "search.mlw", characters 789-837
 QUERY (FORALL (t:(ARRAY INT OF INT)):
@@ -143,112 +147,116 @@ QUERY (FORALL (t:(ARRAY INT OF INT)):
 
 %% search3_po_1, Why obligation from file "search.mlw", characters 1503-1517
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) => ((0 <= 0) AND (0 <= array_length(t)))));
+      ((0 <= array_length_INT(t)) =>
+      ((0 <= 0) AND (0 <= array_length_INT(t)))));
 
 %% search3_po_2, Why obligation from file "search.mlw", characters 1314-1335
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (result:INT):
       ((result = 0) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (Variant1:INT):
       (FORALL (i0:INT):
-      ((Variant1 = (array_length(t) - i0)) =>
-      (((0 <= i0) AND (i0 <= array_length(t))) =>
-      ((i0 = array_length(t)) =>
+      ((Variant1 = (array_length_INT(t) - i0)) =>
+      (((0 <= i0) AND (i0 <= array_length_INT(t))) =>
+      ((i0 = array_length_INT(t)) =>
       (FORALL (k:INT):
-      (((i0 <= k) AND (k < array_length(t))) => (t[k] /= 0))))))))))))));
+      (((i0 <= k) AND (k < array_length_INT(t))) => (t[k] /= 0))))))))))))));
 
 %% search3_po_3, Why obligation from file "search.mlw", characters 1350-1358
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (result:INT):
       ((result = 0) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (Variant1:INT):
       (FORALL (i0:INT):
-      ((Variant1 = (array_length(t) - i0)) =>
-      (((0 <= i0) AND (i0 <= array_length(t))) =>
-      ((i0 /= array_length(t)) => ((0 <= i0) AND (i0 < array_length(t))))))))))))));
+      ((Variant1 = (array_length_INT(t) - i0)) =>
+      (((0 <= i0) AND (i0 <= array_length_INT(t))) =>
+      ((i0 /= array_length_INT(t)) =>
+      ((0 <= i0) AND (i0 < array_length_INT(t))))))))))))));
 
 %% search3_po_4, Why obligation from file "search.mlw", characters 1364-1365
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (result:INT):
       ((result = 0) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (Variant1:INT):
       (FORALL (i0:INT):
-      ((Variant1 = (array_length(t) - i0)) =>
-      (((0 <= i0) AND (i0 <= array_length(t))) =>
-      ((i0 /= array_length(t)) =>
-      (((0 <= i0) AND (i0 < array_length(t))) =>
+      ((Variant1 = (array_length_INT(t) - i0)) =>
+      (((0 <= i0) AND (i0 <= array_length_INT(t))) =>
+      ((i0 /= array_length_INT(t)) =>
+      (((0 <= i0) AND (i0 < array_length_INT(t))) =>
       ((t[i0] = 0) =>
       (FORALL (result1:INT): ((result1 = i0) => (t[result1] = 0))))))))))))))));
 
 %% search3_po_5, Why obligation from file "search.mlw", characters 1377-1397
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (result:INT):
       ((result = 0) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (Variant1:INT):
       (FORALL (i0:INT):
-      ((Variant1 = (array_length(t) - i0)) =>
-      (((0 <= i0) AND (i0 <= array_length(t))) =>
-      ((i0 /= array_length(t)) =>
-      (((0 <= i0) AND (i0 < array_length(t))) =>
-      ((t[i0] /= 0) => ((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length(t))))))))))))))));
+      ((Variant1 = (array_length_INT(t) - i0)) =>
+      (((0 <= i0) AND (i0 <= array_length_INT(t))) =>
+      ((i0 /= array_length_INT(t)) =>
+      (((0 <= i0) AND (i0 < array_length_INT(t))) =>
+      ((t[i0] /= 0) =>
+      ((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length_INT(t))))))))))))))));
 
 %% search3_po_6, Why obligation from file "search.mlw", characters 1249-1494
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (result:INT):
       ((result = 0) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (Variant1:INT):
       (FORALL (i0:INT):
-      ((Variant1 = (array_length(t) - i0)) =>
-      (((0 <= i0) AND (i0 <= array_length(t))) =>
-      ((i0 /= array_length(t)) =>
-      (((0 <= i0) AND (i0 < array_length(t))) =>
+      ((Variant1 = (array_length_INT(t) - i0)) =>
+      (((0 <= i0) AND (i0 <= array_length_INT(t))) =>
+      ((i0 /= array_length_INT(t)) =>
+      (((0 <= i0) AND (i0 < array_length_INT(t))) =>
       ((t[i0] /= 0) =>
-      (((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length(t))) =>
+      (((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length_INT(t))) =>
       (FORALL (result1:INT):
       ((result1 = (i0 + 1)) =>
-      (((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length(t))) =>
-      ((0 <= Variant1) AND ((array_length(t) - result1) < Variant1)))))))))))))))))));
+      (((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length_INT(t))) =>
+      ((0 <= Variant1) AND ((array_length_INT(t) - result1) < Variant1)))))))))))))))))));
 
 %% search3_po_7, Why obligation from file "search.mlw", characters 1377-1397
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (result:INT):
       ((result = 0) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       (FORALL (Variant1:INT):
       (FORALL (i0:INT):
-      ((Variant1 = (array_length(t) - i0)) =>
-      (((0 <= i0) AND (i0 <= array_length(t))) =>
-      ((i0 /= array_length(t)) =>
-      (((0 <= i0) AND (i0 < array_length(t))) =>
+      ((Variant1 = (array_length_INT(t) - i0)) =>
+      (((0 <= i0) AND (i0 <= array_length_INT(t))) =>
+      ((i0 /= array_length_INT(t)) =>
+      (((0 <= i0) AND (i0 < array_length_INT(t))) =>
       ((t[i0] /= 0) =>
-      (((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length(t))) =>
+      (((0 <= (i0 + 1)) AND ((i0 + 1) <= array_length_INT(t))) =>
       ((FORALL (k:INT):
-       ((((i0 + 1) <= k) AND (k < array_length(t))) => (t[k] /= 0))) =>
+       ((((i0 + 1) <= k) AND (k < array_length_INT(t))) => (t[k] /= 0))) =>
       (FORALL (k:INT):
-      (((i0 <= k) AND (k < array_length(t))) => (t[k] /= 0))))))))))))))))));
+      (((i0 <= k) AND (k < array_length_INT(t))) => (t[k] /= 0))))))))))))))))));
 
 %% search3_po_8, Why obligation from file "search.mlw", characters 1149-1608
 QUERY (FORALL (t:(ARRAY INT OF INT)):
-      ((0 <= array_length(t)) =>
-      (((0 <= 0) AND (0 <= array_length(t))) =>
+      ((0 <= array_length_INT(t)) =>
+      (((0 <= 0) AND (0 <= array_length_INT(t))) =>
       ((FORALL (k:INT):
-       (((0 <= k) AND (k < array_length(t))) => (t[k] /= 0))) =>
-      (FORALL (k:INT): (((0 <= k) AND (k < array_length(t))) => (t[k] /= 0)))))));
+       (((0 <= k) AND (k < array_length_INT(t))) => (t[k] /= 0))) =>
+      (FORALL (k:INT):
+      (((0 <= k) AND (k < array_length_INT(t))) => (t[k] /= 0)))))));
 

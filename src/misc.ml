@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.89 2004-07-07 15:27:32 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.90 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -205,29 +205,29 @@ let optasst_app f = option_app (asst_app f)
 
 let applist f l = match (f,l) with
   | f, [] -> f
-  | Tvar id, l -> Tapp (id, l)
-  | Tapp (id, l), l' -> Tapp (id, l @ l')
+  | Tvar id, l -> Tapp (id, l, [])
+  | Tapp (id, l, il), l' -> assert (il = []); Tapp (id, l @ l', [])
   | (Tconst _ | Tderef _), _ -> assert false
 
 let papplist f l = match (f,l) with
   | f, [] -> f
-  | Pvar id, l -> Papp (id, l)
-  | Papp (id, l), l' -> Papp (id, l @ l')
+  | Pvar id, l -> Papp (id, l, [])
+  | Papp (id, l, il), l' -> assert (il = []); Papp (id, l @ l', [])
   | _ -> assert false
 
 let rec predicate_of_term = function
   | Tvar x -> Pvar x
-  | Tapp (id, l) -> Papp (id, l)
+  | Tapp (id, l, i) -> Papp (id, l, i)
   | _ -> assert false
 
 let rec collect_term s = function
   | Tvar id | Tderef id -> Idset.add id s
-  | Tapp (_, l) -> List.fold_left collect_term s l
+  | Tapp (_, l, _) -> List.fold_left collect_term s l
   | Tconst _ -> s
 
 let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
-  | Papp (_, l) -> List.fold_left collect_term s l
+  | Papp (_, l, _) -> List.fold_left collect_term s l
   | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) | Piff (a, b)
   | Forallb (_, _, _, _, a, b) -> 
       collect_pred (collect_pred s a) b
@@ -251,8 +251,8 @@ let rec tsubst_in_term s = function
       (try Idmap.find x s with Not_found -> t)
   | Tderef x as t ->
       (try Idmap.find x s with Not_found -> t)
-  | Tapp (x,l) -> 
-      Tapp (x, List.map (tsubst_in_term s) l)
+  | Tapp (x,l,i) -> 
+      Tapp (x, List.map (tsubst_in_term s) l, i)
 (*i***EXP
       let l' = List.map (tsubst_in_term s) l in
       (try applist (Idmap.find x s) l' with Not_found -> Tapp (x,l'))
@@ -273,7 +273,7 @@ let rec map_predicate f = function
   | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
 
 let rec tsubst_in_predicate s = function
-  | Papp (id, l) -> Papp (id, List.map (tsubst_in_term s) l)
+  | Papp (id, l, i) -> Papp (id, List.map (tsubst_in_term s) l, i)
   | Pif (a, b ,c) -> Pif (tsubst_in_term s a, 
 			  tsubst_in_predicate s b, 
 			  tsubst_in_predicate s c)
@@ -297,12 +297,12 @@ let rec subst_manyv vl1 vl2 = match vl1, vl2 with
   
 let rec unref_term = function
   | Tderef id -> Tvar id
-  | Tapp (id, tl) -> Tapp (id, List.map unref_term tl)
+  | Tapp (id, tl, i) -> Tapp (id, List.map unref_term tl, i)
   | Tvar _ | Tconst _ as t -> t
 
 let equals_true = function
-  | Tapp (id, _) as t when is_relation id -> t
-  | t -> Tapp (t_eq, [t; Tconst (ConstBool true)])
+  | Tapp (id, _, _) as t when is_relation id -> t
+  | t -> Tapp (t_eq, [t; Tconst (ConstBool true)], [])
 
 let negate id =
   if id == t_lt then t_ge
@@ -337,8 +337,8 @@ let make_int_relation id =
   else id
 
 let equals_false = function
-  | Tapp (id, l) when is_relation id -> Tapp (negate id, l)
-  | t -> Tapp (t_eq, [t; Tconst (ConstBool false)])
+  | Tapp (id, l, i) when is_relation id -> Tapp (negate id, l, i)
+  | t -> Tapp (t_eq, [t; Tconst (ConstBool false)], [])
 
 let rec mlize_type = function
   | PureType pt -> pt
@@ -417,7 +417,7 @@ let tfalse = Tconst (ConstBool false)
 let tresult = Tvar Ident.result
 let tvoid = Tconst ConstUnit
 
-let relation op t1 t2 = Papp (op, [t1; t2])
+let relation op t1 t2 = Papp (op, [t1; t2], [])
 let not_relation op = relation (negate op)
 let lt = relation t_lt
 let le = relation t_le
@@ -427,7 +427,7 @@ let ge_real = relation t_ge_real
 let eq = relation t_eq
 let neq = relation t_neq
 
-let array_length id = Tapp (array_length, [Tderef id])
+let array_length id i = Tapp (array_length, [Tderef id], [Some i])
 
 let lt_int = relation t_lt_int
 let le_int = relation t_le_int
@@ -467,11 +467,11 @@ module Size = struct
 
   let rec term = function
     | Tconst _ | Tvar _ | Tderef _ -> 1 
-    | Tapp (_, tl) -> List.fold_left (fun s t -> s + term t) 1 tl
+    | Tapp (_, tl, _) -> List.fold_left (fun s t -> s + term t) 1 tl
 
   let rec predicate = function
     | Pvar _ | Ptrue | Pfalse -> 1
-    | Papp (_, tl) -> List.fold_left (fun s t -> s + term t) 1 tl
+    | Papp (_, tl, _) -> List.fold_left (fun s t -> s + term t) 1 tl
     | Pand (_, p1, p2) 
     | Por (p1, p2) 
     | Piff (p1, p2) 
@@ -530,7 +530,7 @@ let rec print_term fmt = function
       (if debug then Ident.dbprint else Ident.print) fmt id
   | Tderef id ->
       fprintf fmt "!%a" Ident.lprint id
-  | Tapp (id, tl) -> 
+  | Tapp (id, tl, _) -> 
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 
 let relation_string id =
@@ -549,7 +549,7 @@ let rec print_predicate fmt = function
   | Papp (id, [t1; t2]) when is_relation id ->
       fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
 *)
-  | Papp (id, l) ->
+  | Papp (id, l, _) ->
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) l
   | Ptrue ->
       fprintf fmt "true"

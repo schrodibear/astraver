@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.19 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.20 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -81,12 +81,12 @@ let rec print_term fmt = function
       Report.raise_unlocated (AnyMessage "haRVey does not support reals")
   | Tderef _ -> 
       assert false
-  | Tapp (id, [a; b; c]) when id == if_then_else -> 
+  | Tapp (id, [a; b; c], _) when id == if_then_else -> 
       fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
 	print_term c
-  | Tapp (id, tl) when is_relation id || is_arith id ->
+  | Tapp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
-  | Tapp (id, tl) ->
+  | Tapp (id, tl, _) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	Ident.print id (print_list space print_term) tl
 
@@ -102,16 +102,16 @@ let rec print_predicate fmt = function
       fprintf fmt "false"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
-  | Papp (id, [a; b]) when is_eq id ->
+  | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when is_neq id ->
+  | Papp (id, [a; b], _) when is_neq id ->
       fprintf fmt "@[(not (= %a@ %a))@]" print_term a print_term b
-  | Papp (id, tl) when is_relation id || is_arith id ->
+  | Papp (id, tl, _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
-  | Papp (id, [a;b]) when id == t_zwf_zero ->
+  | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl) -> 
+  | Papp (id, tl, _) -> 
       fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(->@ %a@ %a)@]" print_predicate a print_predicate b

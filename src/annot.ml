@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.29 2004-07-08 11:48:25 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.30 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -91,7 +91,7 @@ let while_post loc info b inv =
 
 let while_post_block env inv (phi,_,r) e = 
   let lab = e.info.label in
-  let decphi = Papp (r, [phi; put_label_term env lab phi]) in
+  let decphi = Papp (r, [phi; put_label_term env lab phi], []) in
   let ql = default_exns_post (effect e) in
   match inv with
     | None -> 
@@ -127,7 +127,7 @@ let is_equality = function
 *)
 
 let get_equality_rhs = function
-  | Some ({ a_value = Papp (id, [Tvar t1; t2]) }, []) 
+  | Some ({ a_value = Papp (id, [Tvar t1; t2], _) }, []) 
     when id == t_eq && t1 == result -> t2
   | _ -> assert false
 
@@ -392,7 +392,7 @@ let q_true_false q =
   simplify ctrue, simplify cfalse
 
 let is_result_eq = function
-  | Papp (id, [Tvar id'; t]) when is_eq id && id' == result -> Some t
+  | Papp (id, [Tvar id'; t], _) when is_eq id && id' == result -> Some t
   | _ -> None
 
 let a_values = List.map (fun a -> a.a_value)

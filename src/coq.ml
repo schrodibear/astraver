@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.125 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.126 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -122,24 +122,24 @@ let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
 
 let print_term_v7 fmt t = 
   let rec print0 fmt = function
-    | Tapp (id, [a;b]) when is_relation id ->
+    | Tapp (id, [a;b], _) when is_relation id ->
 	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (prefix_id id)
 	print1 a print1 b
     | t -> 
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b]) when id == t_add_int ->
+    | Tapp (id, [a;b], _) when id == t_add_int ->
 	openz fmt; fprintf fmt "%a +@ %a" print1 a print2 b; closez fmt
-    | Tapp (id, [a;b]) when id == t_sub_int ->
+    | Tapp (id, [a;b], _) when id == t_sub_int ->
 	openz fmt; fprintf fmt "%a -@ %a" print1 a print2 b; closez fmt
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul_int ->
+    | Tapp (id, [a;b], _) when id == t_mul_int ->
 	openz fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closez fmt
-    | Tapp (id, [a;b]) when id == t_div_int ->
+    | Tapp (id, [a;b], _) when id == t_div_int ->
 	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
-    | Tapp (id, [a;b]) when id == t_mod_int ->
+    | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
     | t ->
 	print3 fmt t
@@ -157,21 +157,21 @@ let print_term_v7 fmt t =
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
-    | Tvar id | Tapp (id, []) -> 
+    | Tvar id | Tapp (id, [], _) -> 
 	Ident.print fmt id
     | Tderef _ ->
 	assert false
-    | Tapp (id, [t]) when id == t_neg_int ->
+    | Tapp (id, [t], _) when id == t_neg_int ->
 	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt
-    | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
+    | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
-    | Tapp (id, [a; b; c]) when id == if_then_else -> 
+    | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print0 a print0 b print0 c
-    | Tapp (id, tl) when id == t_zwf_zero -> 
+    | Tapp (id, tl, _) when id == t_zwf_zero -> 
 	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
-    | Tapp (id, tl) when is_relation id || is_arith id -> 
+    | Tapp (id, tl, _) when is_relation id || is_arith id -> 
 	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
-    | Tapp (id, tl) -> 
+    | Tapp (id, tl, _) -> 
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
   and print_terms fmt tl =
     print_list space print0 fmt tl
@@ -204,27 +204,27 @@ let print_predicate_v7 fmt p =
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
-    | Papp (id, [t]) when id == well_founded ->
+    | Papp (id, [t], _) when id == well_founded ->
 	fprintf fmt "@[(well_founded %a)@]" print_term_v7 t
-    | Papp (id, [a;b]) when id == t_zwf_zero ->
+    | Papp (id, [a;b], _) when id == t_zwf_zero ->
 	fprintf fmt "(Zwf `0` %a %a)" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when is_int_comparison id ->
+    | Papp (id, [a;b], _) when is_int_comparison id ->
 	openz fmt; 
 	fprintf fmt "%a %s@ %a" 
 	  print_term_v7 a (infix_relation id) print_term_v7 b; 
 	closez fmt
-    | Papp (id, [a;b]) when id == t_eq_real ->
+    | Papp (id, [a;b], _) when id == t_eq_real ->
 	fprintf fmt "(@[eqT R %a %a@])" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when id == t_neq_real ->
+    | Papp (id, [a;b], _) when id == t_neq_real ->
 	fprintf fmt "~(@[eqT R %a %a@])" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when is_eq id ->
+    | Papp (id, [a;b], _) when is_eq id ->
 	fprintf fmt "@[%a = %a@]" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when is_neq id -> 
+    | Papp (id, [a;b], _) when is_neq id -> 
 	fprintf fmt "@[~(%a = %a)@]" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when is_real_comparison id ->
+    | Papp (id, [a;b], _) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v7 a print_term_v7 b
-    | Papp (id, l) ->
+    | Papp (id, l, _) ->
 	fprintf fmt "(@[%a %a@])" Ident.print id
 	  (print_list space print_term_v7) l
     | Pnot p -> 
@@ -394,24 +394,24 @@ and print_proof_v7 fmt = function
 
 let print_term_v8 fmt t = 
   let rec print0 fmt = function
-    | Tapp (id, [a;b]) when is_relation id ->
+    | Tapp (id, [a;b], _) when is_relation id ->
 	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (prefix_id id)
 	print3 a print3 b
     | t -> 
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b]) when id == t_add_int ->
+    | Tapp (id, [a;b], _) when id == t_add_int ->
 	fprintf fmt "%a +@ %a" print1 a print2 b
-    | Tapp (id, [a;b]) when id == t_sub_int ->
+    | Tapp (id, [a;b], _) when id == t_sub_int ->
 	fprintf fmt "%a -@ %a" print1 a print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul_int ->
+    | Tapp (id, [a;b], _) when id == t_mul_int ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a;b]) when id == t_div_int ->
+    | Tapp (id, [a;b], _) when id == t_div_int ->
 	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
-    | Tapp (id, [a;b]) when id == t_mod_int ->
+    | Tapp (id, [a;b], _) when id == t_mod_int ->
 	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
     | t ->
 	print3 fmt t
@@ -435,21 +435,21 @@ let print_term_v8 fmt t =
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf Z0)"
-    | Tvar id | Tapp (id, []) -> 
+    | Tvar id | Tapp (id, [], _) -> 
 	Ident.print fmt id
     | Tderef _ ->
 	assert false
-    | Tapp (id, [t]) when id == t_neg_int ->
+    | Tapp (id, [t], _) when id == t_neg_int ->
 	fprintf fmt "(Zopp %a)" print3 t
-    | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
+    | Tapp (id, [_;_], _) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
-    | Tapp (id, [a; b; c]) when id == if_then_else -> 
+    | Tapp (id, [a; b; c], _) when id == if_then_else -> 
 	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print0 a print0 b print0 c
-    | Tapp (id, tl) when id == t_zwf_zero -> 
+    | Tapp (id, tl, _) when id == t_zwf_zero -> 
 	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
-    | Tapp (id, tl) when is_relation id || is_arith id -> 
+    | Tapp (id, tl, _) when is_relation id || is_arith id -> 
 	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
-    | Tapp (id, tl) -> 
+    | Tapp (id, tl, _) -> 
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
   and print_terms fmt tl =
     print_list space print3 fmt tl
@@ -482,25 +482,25 @@ let print_predicate_v8 fmt p =
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
-    | Papp (id, [t]) when id == well_founded ->
+    | Papp (id, [t], _) when id == well_founded ->
 	fprintf fmt "@[(well_founded %a)@]" print_term_v8 t
-    | Papp (id, [a;b]) when id == t_zwf_zero ->
+    | Papp (id, [a;b], _) when id == t_zwf_zero ->
 	fprintf fmt "(Zwf 0 %a %a)" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when is_int_comparison id ->
+    | Papp (id, [a;b], _) when is_int_comparison id ->
 	fprintf fmt "%a %s@ %a" 
 	  print_term_v8 a (infix_relation id) print_term_v8 b
-    | Papp (id, [a;b]) when id == t_eq_real ->
+    | Papp (id, [a;b], _) when id == t_eq_real ->
 	fprintf fmt "(@[eq R %a %a@])" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when id == t_neq_real ->
+    | Papp (id, [a;b], _) when id == t_neq_real ->
 	fprintf fmt "~(@[eq R %a %a@])" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when is_eq id ->
+    | Papp (id, [a;b], _) when is_eq id ->
 	fprintf fmt "@[%a = %a@]" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when is_neq id -> 
+    | Papp (id, [a;b], _) when is_neq id -> 
 	fprintf fmt "@[~(%a = %a)@]" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when is_real_comparison id ->
+    | Papp (id, [a;b], _) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v8 a print_term_v8 b
-    | Papp (id, l) ->
+    | Papp (id, l, _) ->
 	fprintf fmt "(@[%a %a@])" Ident.print id
 	  (print_list space print_term_v8) l
     | Pnot p -> 

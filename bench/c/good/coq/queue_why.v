@@ -12,7 +12,7 @@ Lemma pop_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre32: (acc empty q) = 0 /\ (valid alloc q) /\
+  forall (Pre23: (acc empty q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -30,21 +30,21 @@ Lemma pop_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre32: (acc empty q) = 0 /\ (valid alloc q) /\
+  forall (Pre23: (acc empty q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
-  forall (Pre9: (valid alloc q)),
+  forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
-  forall (Post8: caduceus_6 = (acc contents q)),
+  forall (Post21: caduceus_6 = (acc contents q)),
   forall (caduceus1: pointer),
-  forall (Post1: caduceus1 = q),
+  forall (Post20: caduceus1 = q),
   (valid alloc caduceus1).
 Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 875-884 *)
+(* Why obligation from file "why/queue.why", characters 678-932 *)
 Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -55,123 +55,89 @@ Lemma pop_impl_po_3 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre32: (acc empty q) = 0 /\ (valid alloc q) /\
+  forall (Pre23: (acc empty q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
-  forall (Pre9: (valid alloc q)),
+  forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
-  forall (Post8: caduceus_6 = (acc contents q)),
+  forall (Post21: caduceus_6 = (acc contents q)),
   forall (caduceus1: pointer),
-  forall (Post1: caduceus1 = q),
-  forall (Pre8: (valid alloc caduceus1)),
+  forall (Post20: caduceus1 = q),
+  forall (Pre4: (valid alloc caduceus1)),
   forall (caduceus2: Z),
-  forall (Post10: caduceus2 = (acc first caduceus1)),
-  forall (Pre7: (valid alloc caduceus1)),
+  forall (Post19: caduceus2 = (acc first caduceus1)),
+  forall (Pre3: (valid alloc caduceus1)),
   forall (first0: ((memory) Z)),
-  forall (Post12: first0 = (upd first caduceus1 (1 + caduceus2))),
+  forall (Post24: first0 = (upd first caduceus1 (1 + caduceus2))),
+  forall (result0: Z),
+  forall (Post18: result0 = caduceus2),
   (forall (result:pointer),
-   (result = (shift caduceus_6 caduceus2) ->
-    (forall (result0:Z),
-     (result0 = (acc intP result) ->
-      (forall (result:Z),
-       (result = (acc first0 q) ->
-        (forall (result1:Z),
-         (result1 = (acc length q) ->
-          ((result = result1 ->
-            (forall (result:pointer),
-             (result = q ->
-              (forall (first1:((memory) Z)),
-               (first1 = (upd first0 result 0) ->
-                (forall (result:pointer),
-                 (result = q ->
-                  (forall (full0:((memory) Z)),
-                   (full0 = (upd full result 0) ->
-                    (forall (result:pointer),
-                     (result = q ->
-                      (forall (result1:Z),
-                       (result1 = (acc first1 q) ->
-                        (forall (result2:Z),
-                         (result2 = (acc last q) ->
-                          ((result1 = result2 ->
-                            (forall (empty0:((memory) Z)),
-                             (empty0 = (upd empty result 1) ->
-                              ((acc full0 q) = 0 /\ result0 =
-                              (acc intP
-                               (shift (acc contents q) (acc first q)))) /\
-                              (((assigns alloc full full0 (pointer_loc q)) /\
-                              (assigns alloc first first1 (pointer_loc q))) /\
-                              (assigns alloc empty empty0 (pointer_loc q))) /\
-                              ((valid_range alloc (acc contents q) 0
-                                ((acc length q) - 1)) /\
-                              0 <= (acc first1 q) /\ (acc first1 q) <
-                              (acc length q)) /\ 0 <= (acc last q) /\
-                              (acc last q) < (acc length q))) /\
-                            (valid alloc result))) /\
-                          ((result1 <> result2 ->
-                            (forall (empty0:((memory) Z)),
-                             (empty0 = (upd empty result 0) ->
-                              ((acc full0 q) = 0 /\ result0 =
-                              (acc intP
-                               (shift (acc contents q) (acc first q)))) /\
-                              (((assigns alloc full full0 (pointer_loc q)) /\
-                              (assigns alloc first first1 (pointer_loc q))) /\
-                              (assigns alloc empty empty0 (pointer_loc q))) /\
-                              ((valid_range alloc (acc contents q) 0
-                                ((acc length q) - 1)) /\
-                              0 <= (acc first1 q) /\ (acc first1 q) <
-                              (acc length q)) /\ 0 <= (acc last q) /\
-                              (acc last q) < (acc length q))) /\
-                            (valid alloc result))))) /\
-                        (valid alloc q))) /\
-                      (valid alloc q))))) /\
-                  (valid alloc result))))) /\
-              (valid alloc result))))) /\
-          ((result <> result1 ->
-            (forall (result:pointer),
-             (result = q ->
-              (forall (full0:((memory) Z)),
-               (full0 = (upd full result 0) ->
-                (forall (result:pointer),
-                 (result = q ->
-                  (forall (result1:Z),
-                   (result1 = (acc first0 q) ->
-                    (forall (result2:Z),
-                     (result2 = (acc last q) ->
-                      ((result1 = result2 ->
+   (result = (shift caduceus_6 result0) ->
+    ((forall (result0:Z),
+      (result0 = (acc intP result) ->
+       (((((acc first0 q) = (acc length q) ->
+           (forall (result:pointer),
+            (result = q ->
+             (forall (first1:((memory) Z)),
+              (first1 = (upd first0 result 0) ->
+               (forall (result:pointer),
+                (result = q ->
+                 (forall (full0:((memory) Z)),
+                  (full0 = (upd full result 0) ->
+                   (forall (result:pointer),
+                    (result = q ->
+                     ((forall (result1:Z),
+                       ((acc first1 q) = (acc last q) /\ result1 = 1 \/
+                        (acc first1 q) <> (acc last q) /\ result1 = 0 ->
                         (forall (empty0:((memory) Z)),
-                         (empty0 = (upd empty result 1) -> ((acc full0 q) =
-                          0 /\ result0 =
-                          (acc intP (shift (acc contents q) (acc first q)))) /\
-                          (((assigns alloc full full0 (pointer_loc q)) /\
-                          (assigns alloc first first0 (pointer_loc q))) /\
-                          (assigns alloc empty empty0 (pointer_loc q))) /\
-                          ((valid_range alloc (acc contents q) 0
-                            ((acc length q) - 1)) /\
-                          0 <= (acc first0 q) /\ (acc first0 q) <
-                          (acc length q)) /\ 0 <= (acc last q) /\
-                          (acc last q) < (acc length q))) /\
+                         (empty0 = (upd empty result result1) ->
+                          (forall (result:Z),
+                           (result = result0 -> ((acc full0 q) = 0 /\
+                            result =
+                            (acc intP (shift (acc contents q) (acc first q)))) /\
+                            (((assigns alloc full full0 (pointer_loc q)) /\
+                            (assigns alloc first first1 (pointer_loc q))) /\
+                            (assigns alloc empty empty0 (pointer_loc q))) /\
+                            ((valid_range alloc (acc contents q) 0
+                              ((acc length q) - 1)) /\
+                            0 <= (acc first1 q) /\ (acc first1 q) <
+                            (acc length q)) /\ 0 <= (acc last q) /\
+                            (acc last q) < (acc length q))))) /\
                         (valid alloc result))) /\
-                      ((result1 <> result2 ->
-                        (forall (empty0:((memory) Z)),
-                         (empty0 = (upd empty result 0) -> ((acc full0 q) =
-                          0 /\ result0 =
-                          (acc intP (shift (acc contents q) (acc first q)))) /\
-                          (((assigns alloc full full0 (pointer_loc q)) /\
-                          (assigns alloc first first0 (pointer_loc q))) /\
-                          (assigns alloc empty empty0 (pointer_loc q))) /\
-                          ((valid_range alloc (acc contents q) 0
-                            ((acc length q) - 1)) /\
-                          0 <= (acc first0 q) /\ (acc first0 q) <
-                          (acc length q)) /\ 0 <= (acc last q) /\
-                          (acc last q) < (acc length q))) /\
-                        (valid alloc result))))) /\
-                    (valid alloc q))) /\
-                  (valid alloc q))))) /\
-              (valid alloc result))))))) /\
-        (valid alloc q))) /\
-      (valid alloc q))) /\
-    (valid alloc result))).
+                     (valid alloc q)) /\ (valid alloc q))))) /\
+                 (valid alloc result))))) /\
+             (valid alloc result))))) /\
+       (((acc first0 q) <> (acc length q) ->
+         (forall (result:unit),
+          (result = tt ->
+           (forall (result:pointer),
+            (result = q ->
+             (forall (full0:((memory) Z)),
+              (full0 = (upd full result 0) ->
+               (forall (result:pointer),
+                (result = q ->
+                 ((forall (result1:Z),
+                   ((acc first0 q) = (acc last q) /\ result1 = 1 \/
+                    (acc first0 q) <> (acc last q) /\ result1 = 0 ->
+                    (forall (empty0:((memory) Z)),
+                     (empty0 = (upd empty result result1) ->
+                      (forall (result:Z),
+                       (result = result0 -> ((acc full0 q) = 0 /\ result =
+                        (acc intP (shift (acc contents q) (acc first q)))) /\
+                        (((assigns alloc full full0 (pointer_loc q)) /\
+                        (assigns alloc first first0 (pointer_loc q))) /\
+                        (assigns alloc empty empty0 (pointer_loc q))) /\
+                        ((valid_range alloc (acc contents q) 0
+                          ((acc length q) - 1)) /\
+                        0 <= (acc first0 q) /\ (acc first0 q) <
+                        (acc length q)) /\ 0 <= (acc last q) /\
+                        (acc last q) < (acc length q))))) /\
+                    (valid alloc result))) /\
+                 (valid alloc q)) /\ (valid alloc q))))) /\
+             (valid alloc result)))))))) /\
+       (valid alloc q)) /\ (valid alloc q))) /\
+    (valid alloc result)) /\ (valid alloc result))).
 Proof.
 intros; subst.
 intuition idtac; subst; try rewrite acc_upd; auto with *.
@@ -188,7 +154,7 @@ Lemma push_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre33: (acc full q) = 0 /\ (valid alloc q) /\
+  forall (Pre23: (acc full q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -206,21 +172,21 @@ Lemma push_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre33: (acc full q) = 0 /\ (valid alloc q) /\
+  forall (Pre23: (acc full q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
-  forall (Pre9: (valid alloc q)),
+  forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
-  forall (Post8: caduceus_6 = (acc contents q)),
+  forall (Post9: caduceus_6 = (acc contents q)),
   forall (caduceus1: pointer),
-  forall (Post1: caduceus1 = q),
+  forall (Post8: caduceus1 = q),
   (valid alloc caduceus1).
 Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 2986-2995 *)
+(* Why obligation from file "why/queue.why", characters 2796-3041 *)
 Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
@@ -232,136 +198,88 @@ Lemma push_impl_po_3 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre33: (acc full q) = 0 /\ (valid alloc q) /\
+  forall (Pre23: (acc full q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
-  forall (Pre9: (valid alloc q)),
+  forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
-  forall (Post8: caduceus_6 = (acc contents q)),
+  forall (Post9: caduceus_6 = (acc contents q)),
   forall (caduceus1: pointer),
-  forall (Post1: caduceus1 = q),
-  forall (Pre8: (valid alloc caduceus1)),
+  forall (Post8: caduceus1 = q),
+  forall (Pre4: (valid alloc caduceus1)),
   forall (caduceus2: Z),
-  forall (Post10: caduceus2 = (acc last caduceus1)),
-  forall (Pre7: (valid alloc caduceus1)),
+  forall (Post7: caduceus2 = (acc last caduceus1)),
+  forall (Pre3: (valid alloc caduceus1)),
   forall (last0: ((memory) Z)),
-  forall (Post12: last0 = (upd last caduceus1 (1 + caduceus2))),
+  forall (Post24: last0 = (upd last caduceus1 (1 + caduceus2))),
+  forall (result0: Z),
+  forall (Post6: result0 = caduceus2),
   (forall (result:pointer),
-   (result = (shift caduceus_6 caduceus2) ->
+   (result = (shift caduceus_6 result0) ->
     (forall (intP0:((memory) Z)),
      (intP0 = (upd intP result c) ->
-      (forall (result:Z),
-       (result = (acc last0 q) ->
-        (forall (result0:Z),
-         (result0 = (acc length q) ->
-          ((result = result0 ->
-            (forall (result:pointer),
-             (result = q ->
-              (forall (last1:((memory) Z)),
-               (last1 = (upd last0 result 0) ->
-                (forall (result:pointer),
-                 (result = q ->
-                  (forall (empty0:((memory) Z)),
-                   (empty0 = (upd empty result 0) ->
-                    (forall (result:pointer),
-                     (result = q ->
-                      (forall (result0:Z),
-                       (result0 = (acc first q) ->
-                        (forall (result1:Z),
-                         (result1 = (acc last1 q) ->
-                          ((result0 = result1 ->
-                            (forall (full0:((memory) Z)),
-                             (full0 = (upd full result 1) ->
-                              ((acc empty0 q) = 0 /\
-                              (acc intP0
-                               (shift (acc contents q) (acc last q))) =
-                              c) /\
-                              ((((assigns alloc last last1 (pointer_loc q)) /\
-                              (assigns alloc intP intP0
-                               (pointer_loc (shift (acc contents q)
-                                             (acc last q))))) /\
-                              (assigns alloc full full0 (pointer_loc q))) /\
-                              (assigns alloc empty empty0 (pointer_loc q))) /\
-                              ((valid_range alloc (acc contents q) 0
-                                ((acc length q) - 1)) /\
-                              0 <= (acc first q) /\ (acc first q) <
-                              (acc length q)) /\ 0 <= (acc last1 q) /\
-                              (acc last1 q) < (acc length q))) /\
-                            (valid alloc result))) /\
-                          ((result0 <> result1 ->
-                            (forall (full0:((memory) Z)),
-                             (full0 = (upd full result 0) ->
-                              ((acc empty0 q) = 0 /\
-                              (acc intP0
-                               (shift (acc contents q) (acc last q))) =
-                              c) /\
-                              ((((assigns alloc last last1 (pointer_loc q)) /\
-                              (assigns alloc intP intP0
-                               (pointer_loc (shift (acc contents q)
-                                             (acc last q))))) /\
-                              (assigns alloc full full0 (pointer_loc q))) /\
-                              (assigns alloc empty empty0 (pointer_loc q))) /\
-                              ((valid_range alloc (acc contents q) 0
-                                ((acc length q) - 1)) /\
-                              0 <= (acc first q) /\ (acc first q) <
-                              (acc length q)) /\ 0 <= (acc last1 q) /\
-                              (acc last1 q) < (acc length q))) /\
-                            (valid alloc result))))) /\
-                        (valid alloc q))) /\
-                      (valid alloc q))))) /\
-                  (valid alloc result))))) /\
-              (valid alloc result))))) /\
-          ((result <> result0 ->
-            (forall (result:pointer),
-             (result = q ->
-              (forall (empty0:((memory) Z)),
-               (empty0 = (upd empty result 0) ->
-                (forall (result:pointer),
-                 (result = q ->
-                  (forall (result0:Z),
-                   (result0 = (acc first q) ->
-                    (forall (result1:Z),
-                     (result1 = (acc last0 q) ->
-                      ((result0 = result1 ->
-                        (forall (full0:((memory) Z)),
-                         (full0 = (upd full result 1) -> ((acc empty0 q) =
-                          0 /\
-                          (acc intP0 (shift (acc contents q) (acc last q))) =
-                          c) /\
-                          ((((assigns alloc last last0 (pointer_loc q)) /\
-                          (assigns alloc intP intP0
-                           (pointer_loc (shift (acc contents q) (acc last q))))) /\
-                          (assigns alloc full full0 (pointer_loc q))) /\
-                          (assigns alloc empty empty0 (pointer_loc q))) /\
-                          ((valid_range alloc (acc contents q) 0
-                            ((acc length q) - 1)) /\
-                          0 <= (acc first q) /\ (acc first q) <
-                          (acc length q)) /\ 0 <= (acc last0 q) /\
-                          (acc last0 q) < (acc length q))) /\
-                        (valid alloc result))) /\
-                      ((result0 <> result1 ->
-                        (forall (full0:((memory) Z)),
-                         (full0 = (upd full result 0) -> ((acc empty0 q) =
-                          0 /\
-                          (acc intP0 (shift (acc contents q) (acc last q))) =
-                          c) /\
-                          ((((assigns alloc last last0 (pointer_loc q)) /\
-                          (assigns alloc intP intP0
-                           (pointer_loc (shift (acc contents q) (acc last q))))) /\
-                          (assigns alloc full full0 (pointer_loc q))) /\
-                          (assigns alloc empty empty0 (pointer_loc q))) /\
-                          ((valid_range alloc (acc contents q) 0
-                            ((acc length q) - 1)) /\
-                          0 <= (acc first q) /\ (acc first q) <
-                          (acc length q)) /\ 0 <= (acc last0 q) /\
-                          (acc last0 q) < (acc length q))) /\
-                        (valid alloc result))))) /\
-                    (valid alloc q))) /\
-                  (valid alloc q))))) /\
-              (valid alloc result))))))) /\
-        (valid alloc q))) /\
-      (valid alloc q))) /\
+      (((((acc last0 q) = (acc length q) ->
+          (forall (result:pointer),
+           (result = q ->
+            (forall (last1:((memory) Z)),
+             (last1 = (upd last0 result 0) ->
+              (forall (result:pointer),
+               (result = q ->
+                (forall (empty0:((memory) Z)),
+                 (empty0 = (upd empty result 0) ->
+                  (forall (result:pointer),
+                   (result = q ->
+                    ((forall (result0:Z),
+                      ((acc first q) = (acc last1 q) /\ result0 = 1 \/
+                       (acc first q) <> (acc last1 q) /\ result0 = 0 ->
+                       (forall (full0:((memory) Z)),
+                        (full0 = (upd full result result0) ->
+                         ((acc empty0 q) = 0 /\
+                         (acc intP0 (shift (acc contents q) (acc last q))) =
+                         c) /\
+                         ((((assigns alloc last last1 (pointer_loc q)) /\
+                         (assigns alloc intP intP0
+                          (pointer_loc (shift (acc contents q) (acc last q))))) /\
+                         (assigns alloc full full0 (pointer_loc q))) /\
+                         (assigns alloc empty empty0 (pointer_loc q))) /\
+                         ((valid_range alloc (acc contents q) 0
+                           ((acc length q) - 1)) /\
+                         0 <= (acc first q) /\ (acc first q) <
+                         (acc length q)) /\ 0 <= (acc last1 q) /\
+                         (acc last1 q) < (acc length q))) /\
+                       (valid alloc result))) /\
+                    (valid alloc q)) /\ (valid alloc q))))) /\
+                (valid alloc result))))) /\
+            (valid alloc result))))) /\
+      (((acc last0 q) <> (acc length q) ->
+        (forall (result:unit),
+         (result = tt ->
+          (forall (result:pointer),
+           (result = q ->
+            (forall (empty0:((memory) Z)),
+             (empty0 = (upd empty result 0) ->
+              (forall (result:pointer),
+               (result = q ->
+                ((forall (result0:Z),
+                  ((acc first q) = (acc last0 q) /\ result0 = 1 \/
+                   (acc first q) <> (acc last0 q) /\ result0 = 0 ->
+                   (forall (full0:((memory) Z)),
+                    (full0 = (upd full result result0) -> ((acc empty0 q) =
+                     0 /\ (acc intP0 (shift (acc contents q) (acc last q))) =
+                     c) /\ ((((assigns alloc last last0 (pointer_loc q)) /\
+                     (assigns alloc intP intP0
+                      (pointer_loc (shift (acc contents q) (acc last q))))) /\
+                     (assigns alloc full full0 (pointer_loc q))) /\
+                     (assigns alloc empty empty0 (pointer_loc q))) /\
+                     ((valid_range alloc (acc contents q) 0
+                       ((acc length q) - 1)) /\
+                     0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
+                     0 <= (acc last0 q) /\ (acc last0 q) < (acc length q))) /\
+                   (valid alloc result))) /\
+                (valid alloc q)) /\ (valid alloc q))))) /\
+            (valid alloc result)))))))) /\
+      (valid alloc q)) /\ (valid alloc q))) /\
     (valid alloc result))).
 Proof.
 intros; subst.
@@ -381,7 +299,7 @@ Lemma test_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre7: (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
+  forall (Pre5: (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
                 (valid alloc q) /\
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
@@ -395,7 +313,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/queue.why", characters 4858-4862 *)
+(* Why obligation from file "why/queue.why", characters 4817-4862 *)
 Lemma test_impl_po_2 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -407,7 +325,7 @@ Lemma test_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre7: (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
+  forall (Pre5: (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
                 (valid alloc q) /\
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
@@ -420,7 +338,7 @@ Lemma test_impl_po_2 :
   forall (first0: ((memory) Z)),
   forall (full0: ((memory) Z)),
   forall (caduceus_1: Z),
-  forall (Post2: ((acc full0 q) = 0 /\ caduceus_1 =
+  forall (Post5: ((acc full0 q) = 0 /\ caduceus_1 =
                  (acc intP (shift (acc contents q) (acc first q)))) /\
                  (((assigns alloc full full0 (pointer_loc q)) /\
                  (assigns alloc first first0 (pointer_loc q))) /\
@@ -428,6 +346,8 @@ Lemma test_impl_po_2 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first0 q) /\ (acc first0 q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
+  forall (result: unit),
+  forall (Post1: result = tt),
   (forall (result:Z),
    (result = (acc empty0 q1) -> result = (acc empty q1) /\
     ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=

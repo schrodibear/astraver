@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.6 2004-07-08 11:48:25 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.7 2004-07-08 13:43:31 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -79,6 +79,32 @@ let infix id =
   else if id == t_ge_real then ">="
   else assert false
 
+let external_type = function
+  | PTexternal _ | PTarray (PTexternal _) -> true
+  | _ -> false
+
+let rec print_pure_type fmt = function
+  | PTint -> fprintf fmt "INT"
+  | PTbool -> fprintf fmt "BOOLEAN"
+  | PTreal -> fprintf fmt "REAL"
+  | PTunit -> fprintf fmt "UNIT"
+  | PTarray pt -> fprintf fmt "ARRAY INT OF %a" print_pure_type pt
+  | PTvarid _ -> assert false
+  | PTvar {type_val=Some pt} -> print_pure_type fmt pt
+  | PTvar _ -> assert false
+  | PTexternal (_,id) -> fprintf fmt "%a" Ident.print id
+
+let instance fmt = function
+  | [] -> 
+      ()
+  | ptl -> 
+      let one fmt = function 
+	| None -> assert false 
+	| Some pt -> print_pure_type fmt pt 
+      in 
+      fprintf fmt "_%a" 
+	(print_list (fun fmt () -> fprintf fmt "_") one) ptl
+
 let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%a" Ident.print id
@@ -99,46 +125,31 @@ let rec print_term fmt = function
 	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
-  | Tapp (id, ([_;_] as tl)) when id == t_mod_int ->
+  | Tapp (id, ([_;_] as tl), _) when id == t_mod_int ->
       fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
-  | Tapp (id, [a]) when id == t_sqrt_real || id == t_int_of_real ->
+  | Tapp (id, [a], _) when id == t_sqrt_real || id == t_int_of_real ->
       fprintf fmt "@[%a(%a)@]" Ident.print id print_term a
-  | Tapp (id, [a]) when id == t_real_of_int ->
+  | Tapp (id, [a], _) when id == t_real_of_int ->
       fprintf fmt "@[%a@]" print_term a
-  | Tapp (id, [a; b; c]) when id == if_then_else ->
+  | Tapp (id, [a; b; c], _) when id == if_then_else ->
       fprintf fmt "@[(IF %a THEN@ %a ELSE@ %a)@]" 
 	print_term a print_term b print_term c
-  | Tapp (id, [a; b]) when id == access ->
+  | Tapp (id, [a; b], _) when id == access ->
       fprintf fmt "@[%a[%a]@]" print_term a print_term b
-  | Tapp (id, [a; b; c]) when id == store ->
+  | Tapp (id, [a; b; c], _) when id == store ->
       fprintf fmt "@[(%a WITH@ [%a] := %a)@]" 
 	print_term a print_term b print_term c
-  | Tapp (id, [t]) when id == t_neg_int || id == t_neg_real ->
+  | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
       fprintf fmt "@[(-%a)@]" print_term t
-  | Tapp (id, [a;b]) when is_relation id || is_arith id ->
+  | Tapp (id, [a;b], _) when is_relation id || is_arith id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
-  | Tapp (id, []) ->
-      Ident.print fmt id 
-  | Tapp (id, tl) ->
-      fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
+  | Tapp (id, [], i) ->
+      fprintf fmt "%a%a" Ident.print id instance i
+  | Tapp (id, tl, i) ->
+      fprintf fmt "@[%a%a(%a)@]" Ident.print id instance i print_terms tl
 
 and print_terms fmt tl = 
   print_list comma print_term fmt tl
-
-let external_type = function
-  | PTexternal _ | PTarray (PTexternal _) -> true
-  | _ -> false
-
-let rec print_pure_type fmt = function
-  | PTint -> fprintf fmt "INT"
-  | PTbool -> fprintf fmt "BOOLEAN"
-  | PTreal -> fprintf fmt "REAL"
-  | PTunit -> fprintf fmt "UNIT"
-  | PTarray pt -> fprintf fmt "ARRAY INT OF %a" print_pure_type pt
-  | PTvarid _ -> assert false
-  | PTvar {type_val=Some pt} -> print_pure_type fmt pt
-  | PTvar {tag=t} -> Format.eprintf "PTvar = %d@\n" t; assert false
-  | PTexternal (_,id) -> fprintf fmt "%a" Ident.print id
 
 let rec print_predicate fmt = function
   | Ptrue ->
@@ -149,18 +160,18 @@ let rec print_predicate fmt = function
       fprintf fmt "FALSE"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
-  | Papp (id, [t]) when id == well_founded ->
+  | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE %% was well_founded@\n"
-  | Papp (id, [a; b]) when is_eq id ->
+  | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
-  | Papp (id, [a; b]) when is_neq id ->
+  | Papp (id, [a; b], _) when is_neq id ->
       fprintf fmt "@[(%a /=@ %a)@]" print_term a print_term b
-  | Papp (id, [a;b]) when is_int_comparison id || is_real_comparison id ->
+  | Papp (id, [a;b], _) when is_int_comparison id || is_real_comparison id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
-  | Papp (id, [a;b]) when id == t_zwf_zero ->
+  | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl) -> 
+  | Papp (id, tl, _) -> 
       fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(%a =>@ %a)@]" print_predicate a print_predicate b
