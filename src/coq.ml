@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.54 2002-07-22 14:37:06 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.55 2002-07-29 13:38:38 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -141,10 +141,10 @@ let print_predicate fmt p =
 	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
-    | Por (a, b) -> fprintf fmt "%a \/@ %a" print2 a print1 b
+    | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (a, b) -> fprintf fmt "%a /\@ %a" print3 a print2 b
+    | Pand (a, b) -> fprintf fmt "%a /\\@ %a" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function
     | Ptrue -> 

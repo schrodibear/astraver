@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.34 2002-07-24 15:01:29 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.35 2002-07-29 13:38:38 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -122,7 +122,8 @@ let ml_parser c =
    Grammar.Entry.parse Parser.decls st
  
 let c_parser c = 
-  Clexer.parse c; []
+  let d = Clexer.parse c in
+  Cinterp.interp d
 
 let deal_channel parsef cin =
   let d = parsef cin in

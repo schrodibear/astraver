@@ -1,14 +1,25 @@
 /* from http://www.lysator.liu.se/c/ANSI-C-grammar-y.html */
 
 %{
+
+  open Logic
+  open Ptree
+  open Cast
+  open Parsing
+
+  let loc () = (symbol_start (), symbol_end ())
+
+  let uns () =
+    raise (Stdpp.Exc_located (loc (), Stream.Error "Unsupported C syntax"))
+
 %}
 
-%token <string> IDENTIFIER CONSTANT STRING_LITERAL 
+%token <string> IDENTIFIER CONSTANT STRING_LITERAL ANNOT TYPE_NAME
 %token SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
 %token SUB_ASSIGN LEFT_ASSIGN RIGHT_ASSIGN AND_ASSIGN
-%token XOR_ASSIGN OR_ASSIGN TYPE_NAME
+%token XOR_ASSIGN OR_ASSIGN
 
 %token TYPEDEF EXTERN STATIC AUTO REGISTER
 %token CHAR SHORT INT LONG SIGNED UNSIGNED FLOAT DOUBLE CONST VOLATILE VOID
@@ -20,13 +31,13 @@
 %token DOT AMP EXL TILDE MINUS PLUS STAR SLASH PERCENT LT GT HAT PIPE
 %token QUESTION EOF
 
-%type <unit> file
+%type <Cast.file> file
 %start file
 %%
 
 file
-        : translation_unit EOF { }
-        | EOF { }
+        : translation_unit EOF { $1 }
+        | EOF { [] }
         ;
 
 primary_expression
@@ -167,27 +178,28 @@ constant_expression
         ;
 
 declaration
-        : declaration_specifiers SEMICOLON { }
-        | declaration_specifiers init_declarator_list SEMICOLON { }
+        : declaration_specifiers SEMICOLON { uns() }
+        | declaration_specifiers init_declarator_list SEMICOLON 
+	    { List.map (fun d -> Ctypedecl (loc(), d, $1)) $2 }
         ;
 
 declaration_specifiers
-        : storage_class_specifier { }
-        | storage_class_specifier declaration_specifiers { }
-        | type_specifier { }
-        | type_specifier declaration_specifiers { }
-        | type_qualifier { }
-        | type_qualifier declaration_specifiers { }
+        : storage_class_specifier { uns() }
+        | storage_class_specifier declaration_specifiers { uns() }
+        | type_specifier { $1 }
+        | type_specifier declaration_specifiers { uns() }
+        | type_qualifier { uns() }
+        | type_qualifier declaration_specifiers { uns() }
         ;
 
 init_declarator_list
-        : init_declarator { }
-        | init_declarator_list COMMA init_declarator { }
+        : init_declarator { [$1] }
+        | init_declarator_list COMMA init_declarator { $1 @ [$3] }
         ;
 
 init_declarator
-        : declarator { }
-        | declarator EQUAL c_initializer { }
+        : declarator { $1 }
+        | declarator EQUAL c_initializer { uns() }
         ;
 
 storage_class_specifier
@@ -199,18 +211,18 @@ storage_class_specifier
         ;
 
 type_specifier
-        : VOID { }
-        | CHAR { }
-        | SHORT { }
-        | INT { }
-        | LONG { }
-        | FLOAT { }
-        | DOUBLE { }
-        | SIGNED { }
-        | UNSIGNED { }
-        | struct_or_union_specifier { }
-        | enum_specifier { }
-        | TYPE_NAME { }
+        : VOID { PTunit }
+        | CHAR { PTint }
+        | SHORT { PTint }
+        | INT { PTint }
+        | LONG { PTint }
+        | FLOAT { PTfloat }
+        | DOUBLE { PTfloat }
+        | SIGNED { uns() }
+        | UNSIGNED { uns() }
+        | struct_or_union_specifier { uns() }
+        | enum_specifier { uns() }
+        | TYPE_NAME { PTexternal (Ident.create $1) }
         ;
 
 struct_or_union_specifier
@@ -273,18 +285,30 @@ type_qualifier
         ;
 
 declarator
-        : pointer direct_declarator { }
-        | direct_declarator { }
+        : pointer direct_declarator { uns() }
+        | direct_declarator { $1 }
         ;
 
 direct_declarator
-        : IDENTIFIER { }
-        | LPAR declarator RPAR { }
-        | direct_declarator LSQUARE constant_expression RSQUARE { }
-        | direct_declarator LSQUARE RSQUARE { }
-        | direct_declarator LPAR parameter_type_list RPAR { }
-        | direct_declarator LPAR identifier_list RPAR { }
-        | direct_declarator LPAR RPAR { }
+        : IDENTIFIER 
+            { CDvar (Ident.create $1) }
+        | LPAR declarator RPAR 
+	    { uns() }
+        | direct_declarator LSQUARE constant_expression RSQUARE 
+	    { uns() }
+        | direct_declarator LSQUARE RSQUARE 
+	    { uns() }
+        | direct_declarator LPAR parameter_type_list RPAR annot 
+	    { match $1 with CDvar id -> CDfun (id, $3, $5) | _ -> uns () }
+        | direct_declarator LPAR identifier_list RPAR 
+	    { uns() }
+        | direct_declarator LPAR RPAR annot 
+            { match $1 with CDvar id -> CDfun (id, [], $4) | _ -> uns () }
+        ;
+
+annot
+        : ANNOT         { Some $1 }
+        | /* epsilon */ { None }
         ;
 
 pointer
@@ -301,19 +325,20 @@ type_qualifier_list
 
 
 parameter_type_list
-        : parameter_list { }
-        | parameter_list COMMA ELLIPSIS { }
+        : parameter_list { $1 }
+        | parameter_list COMMA ELLIPSIS { uns() }
         ;
 
 parameter_list
-        : parameter_declaration { }
-        | parameter_list COMMA parameter_declaration { }
+        : parameter_declaration { [$1] }
+        | parameter_list COMMA parameter_declaration { $1 @ [$3] }
         ;
 
 parameter_declaration
-        : declaration_specifiers declarator { }
-        | declaration_specifiers abstract_declarator { }
-        | declaration_specifiers { }
+        : declaration_specifiers declarator 
+            { ($1, match $2 with CDvar id -> id | _ -> uns()) }
+        | declaration_specifiers abstract_declarator { uns() }
+        | declaration_specifiers { ($1, Ident.anonymous) }
         ;
 
 identifier_list
@@ -414,13 +439,13 @@ jump_statement
         ;
 
 translation_unit
-        : external_declaration { }
-        | translation_unit external_declaration { }
+        : external_declaration { $1 }
+        | translation_unit external_declaration { $1 @ $2 }
         ;
 
 external_declaration
-        : function_definition { }
-        | declaration { }
+        : function_definition { uns() }
+        | declaration { $1 }
         ;
 
 function_definition

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.52 2002-07-22 14:37:06 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.53 2002-07-29 13:38:38 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -82,6 +82,9 @@ let decls = gec "decls"
 let logic_type = gec "logic_type"
 let logic_arg = gec "logic_arg"
 
+let c_pre_condition = gec "c_pre_condition"
+let c_post_condition = gec "c_post_condition"
+let c_spec = gec "c_spec"
 
 (*s Utility functions. *)
 
@@ -164,7 +167,7 @@ EXTEND
     | a = lexpr2 -> a ] ]
   ;
   lexpr2:
-  [ [ "not"; a = lexpr3 -> prefix_pp loc PPnot a
+  [ [ LIDENT "not"; a = lexpr3 -> prefix_pp loc PPnot a
     | a = lexpr3 -> a ] ]
   ;
   lexpr3:
@@ -510,6 +513,17 @@ i*)
   logic_arg:
   [ [ t = primitive_type -> t
     | "array"; t = primitive_type -> PTarray (Tvar Ident.implicit, t)
+  ] ]
+  ;
+
+  (* C annotations *)
+  c_pre_condition:
+  [ [ LIDENT "pre"; p = pre_condition -> p ] ];
+  c_post_condition:
+  [ [ LIDENT "post"; q = post_condition -> q ] ];
+  c_spec:
+  [ [ p = OPT c_pre_condition; e = effects; q = OPT c_post_condition; EOI -> 
+      (list_of_some p, e, q)
   ] ]
   ;
 END

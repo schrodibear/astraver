@@ -1,9 +1,10 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.48 2002-07-19 09:12:24 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.49 2002-07-29 13:38:38 filliatr Exp $ i*)
 
 open Format
 open Ident
+open Error
 open Logic
 open Misc
 open Types
@@ -304,6 +305,10 @@ and wp_desc info d q =
     | Lam (bl, p) ->
 	let p',_ = wp p None in
 	Lam (bl, p'), None
+    | LetIn (x, _, _) | LetRef (x, _, _) when occur_post x q ->
+        Report.raise_unlocated 
+	  (AnyMessage ("cannot compute wp due to capture variable;\n" ^
+                       "please rename variable " ^ Ident.string x))
     | LetIn (x, e1, e2) ->
 	let e'2, w = wp e2 q in
 	let q' = optpost_app (subst_in_predicate (subst_onev x result)) w in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: report.ml,v 1.1 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.2 2002-07-29 13:38:38 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -13,7 +13,7 @@ exception Error of (Loc.t option) * Error.t
 
 let report fmt = function
   | AnyMessage s ->
-      fprintf fmt "%s" s
+      fprintf fmt "Error: %s" s
   | UnboundVariable id ->
       fprintf fmt "Unbound variable %s" (Ident.string id)
   | UnboundReference id ->

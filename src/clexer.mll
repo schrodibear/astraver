@@ -11,6 +11,8 @@
   let lex_error lexbuf s =
     raise (Stdpp.Exc_located (loc lexbuf, Stream.Error s))
 
+  let buf = Buffer.create 1024
+
 }
 
 let rD =	['0'-'9']
@@ -23,6 +25,7 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | [' ' '\t' '\n']+        { token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
+  | "/*@"                   { Buffer.clear buf; annot lexbuf }
 
   | "auto"                  { AUTO }
   | "break"                 { BREAK }
@@ -125,6 +128,11 @@ and comment = parse
   | "*/" { () }
   | _    { comment lexbuf }
   | eof  { lex_error lexbuf "Unterminated_comment" }
+
+and annot = parse
+  | "*/" { ANNOT (Buffer.contents buf) }
+  | eof  { lex_error lexbuf "Unterminated annotation" }
+  | _    { Buffer.add_char buf (lexeme_char lexbuf 0); annot lexbuf }
 
 {
 
