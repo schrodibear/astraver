@@ -102,7 +102,7 @@ The input file contains the following kinds of declaration:
   \item\indextt{parameter}
     \te{parameter} $x_1,\dots,x_n: \tau$ \par
     Declares some parameters for the whole development. They will be
-    turned into axioms on the prover part.
+    turned into axioms on the prover part (when not mutable).
     Examples:
 \begin{verbatim}
      parameter x,y : int ref
@@ -121,6 +121,8 @@ The input file contains the following kinds of declaration:
      external mean : int -> int -> int
      external diff : a:int -> b:int -> { b >= 0 } int { a = b + result }
 \end{verbatim}
+    External values cannot be mutable.
+
     Note that material to be used only in specifications must be introduced
     using the \te{pvs} declaration---when the \pvs\ 
     prover is used---or directly into the generated \coq\ module---when
@@ -373,7 +375,7 @@ Then
 \chapter{Full examples}
 \label{examples}
 
-This chapter details the examples delivered with \why, in the
+This chapter details the examples delivered with \why\ in the
 subdirectory \texttt{examples/} of the distribution.
 
 TODO
@@ -423,7 +425,7 @@ Options are the following:
 
   \item[Prover options:] ~\par
   \item[\texttt{--pvs}, \texttt{--coq}]: ~\par 
-    Select the prover; It defaults to \coq.
+    Select the prover; it defaults to \coq.
   \item[\texttt{--valid}, \texttt{--no-valid}]: ~\par
     Set/Unset the functional validation. Only meaningful with the
     \coq\ prover. When set, \why\ outputs a functional interpretation
