@@ -1,6 +1,6 @@
 
   o better names given to local references in proof obligations
-  o improved automatic proof
+  o improved automatic proof (both completeness and performance)
 
 version 1.10, April 4th, 2003
 ==============================
