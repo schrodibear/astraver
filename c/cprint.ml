@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.2 2004-12-08 10:59:24 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.3 2004-12-08 15:48:44 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -41,11 +41,104 @@ and ctype_node fmt = function
   | Tenum s -> fprintf fmt "enum %s" s
   | Tfun _ -> fprintf fmt "<fun>"
 
-let nterm fmt t = 
-  fprintf fmt "<term>"
+let term_unop = function
+  | Clogic.Uminus -> "-"
+  | Clogic.Utilde -> "~"
+  | Clogic.Ustar -> "*"
+  | Clogic.Uamp -> "&"
+  | Clogic.Ufloat_of_int -> "float_of_int"
+  | Clogic.Uint_of_float -> "int_of_float"
+ 
+let rec nterm fmt t = match t.nterm_node with
+  | NTconstant (IntConstant s | FloatConstant s) ->
+      fprintf fmt "%s" s
+  | NTvar x ->
+      fprintf fmt "%s" x.var_name
+  | NTapp (li, tl) ->
+      fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
+  | NTunop (op, t) ->
+      fprintf fmt "%s%a" (term_unop op) nterm_p t
+  | NTstar t ->
+      fprintf fmt "*%a" nterm_p t
+  | NTbinop (t1, op, t2) ->
+      fprintf fmt ""
+  | NTarrow (t, vi) ->
+      fprintf fmt "%a->%s" nterm_p t vi.var_name
+  | NTif (t1, t2, t3) ->
+      fprintf fmt "%a ? %a : %a" nterm_p t1 nterm_p t2 nterm_p t3
+  | NTold t ->
+      fprintf fmt "\\old(%a)" nterm t
+  | NTat (t, l) ->
+      fprintf fmt "\\at(%a, %s)" nterm t l
+  | NTbase_addr t ->
+      fprintf fmt "\\base_addr(%a)" nterm t
+  | NTblock_length t ->
+      fprintf fmt "\\block_length(%a)" nterm t
+  | NTresult ->
+      fprintf fmt "\\result"
+  | NTnull ->
+      fprintf fmt "null"
+  | NTcast (ty, t) ->
+      fprintf fmt "(%a)%a" ctype ty nterm t
 
-let npredicate fmt p = 
-  fprintf fmt "<predicate>"
+and nterm_p fmt t = match t.nterm_node with
+  | NTconstant _ | NTvar _ | NTapp _ | NTresult | NTnull | NTold _ | NTat _ ->
+      nterm fmt t
+  | _ ->
+      fprintf fmt "(%a)" nterm t
+
+
+let quantifier fmt (ty, x) = fprintf fmt "%a %s" ctype ty x.var_name
+
+let quantifiers = print_list comma quantifier
+
+let relation = function
+  | Lt -> "<"
+  | Gt -> ">"
+  | Le -> "<="
+  | Ge -> ">="
+  | Eq -> "=="
+  | Neq -> "!="
+ 
+let rec npredicate fmt = function
+  | NPfalse ->
+      fprintf fmt "false"
+  | NPtrue ->
+      fprintf fmt "true"
+  | NPapp (li, tl) ->
+      fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
+  | NPrel (t1, rel, t2) ->
+      fprintf fmt "%a %s %a" nterm t1 (relation rel) nterm t2
+  | NPand (p1, p2) ->
+      fprintf fmt "%a &&@ %a" npredicate p1 npredicate p2
+  | NPor (p1, p2) ->
+      fprintf fmt "%a ||@ %a" npredicate p1 npredicate p2
+  | NPimplies (p1, p2) ->
+      fprintf fmt "%a ->@ %a" npredicate p1 npredicate p2
+  | NPiff (p1, p2) ->
+      fprintf fmt "%a <->@ %a" npredicate p1 npredicate p2
+  | NPnot p ->
+      fprintf fmt "! %a" npredicate p
+  | NPif (t, p1, p2) ->
+      fprintf fmt "%a ? %a : %a" nterm t npredicate p1 npredicate p2
+  | NPforall (q, p) ->
+      fprintf fmt "\\forall %a;@ %a" quantifiers q npredicate p
+  | NPexists (q, p) ->
+      fprintf fmt "\\exists %a;@ %a" quantifiers q npredicate p
+  | NPold p ->
+      fprintf fmt "\\old(%a)" npredicate p
+  | NPat (p, l) ->
+      fprintf fmt "\\at(%a, %s)" npredicate p l
+  | NPvalid t ->
+      fprintf fmt "\\valid(%a)" nterm t
+  | NPvalid_index (t1, t2) ->
+      fprintf fmt "\\valid_index(%a, %a)" nterm t1 nterm t2
+  | NPvalid_range (t1, t2, t3) ->
+      fprintf fmt "\\valid_range(%a, %a, %a)" nterm t1 nterm t2 nterm t3
+  | NPfresh t ->
+      fprintf fmt "\\fresh(%a)" nterm t
+  | NPnamed (id, p) ->
+      fprintf fmt "%s:: %a" id npredicate p
 
 let parameter fmt (ty, x) = fprintf fmt "%a %s" ctype ty x.var_name
 
@@ -72,12 +165,12 @@ let spec fmt = function
   | { requires = None; assigns = None; ensures = None; decreases = None } ->
       ()
   | s ->
-      let requires fmt p = fprintf fmt "requires %a@\n" npredicate p in
-      let assigns fmt a = fprintf fmt "assigns %a@\n" locations a in
-      let ensures fmt p = fprintf fmt "ensures %a@\n" npredicate p in
+      let requires fmt p = fprintf fmt "@[requires %a@]@\n" npredicate p in
+      let assigns fmt a = fprintf fmt "@[assigns %a@]@\n" locations a in
+      let ensures fmt p = fprintf fmt "@[ensures %a@]@\n" npredicate p in
       let decreases fmt = function
-	| (t, None) -> fprintf fmt "decreases %a@\n" nterm t
-	| (t, Some r) -> fprintf fmt "decreases %a for %s@\n" nterm t r
+	| (t, None) -> fprintf fmt "@[decreases %a@]@\n" nterm t
+	| (t, Some r) -> fprintf fmt "@[decreases %a for %s@]@\n" nterm t r
       in
       fprintf fmt "/*@@ @[%a%a%a%a@] */@\n"
 	(print_option requires) s.requires
@@ -89,11 +182,11 @@ let loop_annot fmt = function
   | { invariant = None; loop_assigns = None; variant = None } ->
       ()
   | a ->
-      let invariant fmt p = fprintf fmt "invariant %a@\n" npredicate p in
-      let loop_assigns fmt a = fprintf fmt "assigns %a@\n" locations a in
+      let invariant fmt p = fprintf fmt "@[invariant %a@]@\n" npredicate p in
+      let loop_assigns fmt a = fprintf fmt "@[assigns %a@]@\n" locations a in
       let variant fmt = function
-	| (t, None) -> fprintf fmt "variant %a@\n" nterm t
-	| (t, Some r) -> fprintf fmt "variant %a for %s@\n" nterm t r
+	| (t, None) -> fprintf fmt "@[variant %a@]@\n" nterm t
+	| (t, Some r) -> fprintf fmt "@[variant %a for %s@]@\n" nterm t r
       in
       fprintf fmt "/*@@ @[%a%a%a@] */@\n"
 	(print_option invariant) a.invariant
@@ -113,7 +206,7 @@ let binop fmt = function
   | Beq | Beq_int | Beq_float | Beq_pointer -> fprintf fmt "=="
   | Bneq | Bneq_int | Bneq_float | Bneq_pointer -> fprintf fmt "!=" 
   | Bbw_and -> fprintf fmt "&"
-  | Bbw_xor -> fprintf fmt "<bw_xor>"
+  | Bbw_xor -> fprintf fmt "^"
   | Bbw_or -> fprintf fmt "|"
   | Band -> fprintf fmt "&&"
   | Bor -> fprintf fmt "||"
@@ -144,29 +237,33 @@ let rec nexpr fmt e = match e.nexpr_node with
   | NEvar (Fun_info x) ->
       fprintf fmt "%s" x.fun_name
   | NEarrow (e, x) ->
-      fprintf fmt "(%a->%s)" nexpr e x.var_name
+      fprintf fmt "%a->%s" nexpr_p e x.var_name
   | NEstar e ->
-      fprintf fmt "( *%a)" nexpr e
+      fprintf fmt "*%a" nexpr_p e
   | NEseq (e1, e2) ->
-      fprintf fmt "(%a, %a)" nexpr e1 nexpr e2
+      fprintf fmt "%a, %a" nexpr e1 nexpr e2
   | NEassign (e1, e2) ->
-      fprintf fmt "(%a = %a)" nexpr e1 nexpr e2
+      fprintf fmt "%a = %a" nexpr e1 nexpr e2
   | NEassign_op (e1, op, e2) ->
-      fprintf fmt "(%a %a= %a)" nexpr e1 binop op nexpr e2
+      fprintf fmt "%a %a= %a" nexpr e1 binop op nexpr e2
   | NEunary (op, e) ->
-      fprintf fmt "(%a %a)" unop op nexpr e
-  | NEincr (Uprefix_inc, e) -> fprintf fmt "(++%a)" nexpr e
-  | NEincr (Uprefix_dec, e) -> fprintf fmt "(--%a)" nexpr e
-  | NEincr (Upostfix_inc, e) -> fprintf fmt "(%a++)" nexpr e
-  | NEincr (Upostfix_dec, e) -> fprintf fmt "(%a--)" nexpr e
+      fprintf fmt "%a%a" unop op nexpr_p e
+  | NEincr (Uprefix_inc, e) -> fprintf fmt "++%a" nexpr_p e
+  | NEincr (Uprefix_dec, e) -> fprintf fmt "--%a" nexpr_p e
+  | NEincr (Upostfix_inc, e) -> fprintf fmt "%a++" nexpr_p e
+  | NEincr (Upostfix_dec, e) -> fprintf fmt "%a--" nexpr_p e
   | NEbinary (e1, op, e2) ->
-      fprintf fmt "(%a %a %a)" nexpr e1 binop op nexpr e2
+      fprintf fmt "%a %a %a" nexpr_p e1 binop op nexpr_p e2
   | NEcall (e, l) ->
       fprintf fmt "%a(%a)" nexpr e (print_list comma nexpr) l
   | NEcond (e1, e2, e3) ->
-      fprintf fmt "(%a ? %a : %a)" nexpr e1 nexpr e2 nexpr e3
+      fprintf fmt "%a ? %a : %a" nexpr e1 nexpr e2 nexpr e3
   | NEcast (ty, e) ->
-      fprintf fmt "((%a) %a)" ctype ty nexpr e
+      fprintf fmt "(%a)%a" ctype ty nexpr_p e
+
+and nexpr_p fmt e = match e.nexpr_node with
+  | NEnop | NEconstant _ | NEstring_literal _ | NEvar _ -> nexpr fmt e
+  | _ -> fprintf fmt "(@[%a@])" nexpr e
 
 let rec c_initializer fmt = function
   | Iexpr e -> nexpr fmt e
@@ -226,7 +323,7 @@ and ndecl fmt d = match d.node with
   | Naxiom (x, p) -> 
       fprintf fmt "/*@@ @[axiom %s:@ %a@] */@\n" x npredicate p
   | Ninvariant (x, p) -> 
-      fprintf fmt "/*@@ @[invariant %s:@ %a@] */@\n" x npredicate p 
+      fprintf fmt "/*@@ @[<hov 2>invariant %s:@ %a@] */@\n" x npredicate p 
   | Ntypedef (ty, x) ->
       fprintf fmt "typedef %a %s;@\n" ctype ty x
   | Ntypedecl ty ->
@@ -239,7 +336,7 @@ and ndecl fmt d = match d.node with
       fprintf fmt "%a%a %s(@[%a@]);@\n" spec s ctype ty fi.fun_name
 	parameters pl
   | Nfundef (s, ty, fi, pl, st) ->
-      fprintf fmt "%a@\n%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
+      fprintf fmt "%a%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
 	(print_list comma parameter) pl nstatement st
 
 let nfile fmt p = 
