@@ -1,7 +1,9 @@
 
 /* C recursive function */
 
-int f(int x) /*@ x >= 0 variant x */ {
+/*@ requires x >= 0 (* variant x *) ensures \result == 0 */ 
+int f(int x){
   if (x == 0) return 0;
   return f(x - 1);
-} /*@ result = 0 */
+}
+

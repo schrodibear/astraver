@@ -7,21 +7,27 @@ C test file
 
 int t[];
 
-void g(int* x) { *x = 0; } /*@ x = 0 */
+/*@ ensures *x == 0 */
+void g(int* x) { *x = 0; }
 
 int * r;
 
-int g2() { g(r); return *r; } /*@ result = 0 */
+/*@ ensures \result == 0 */
+int g2() { g(r); return *r; }
 
-int g3() { int i = 1; g(&i); return i; } /*@ result = 0 */
+/*@ ensures \result == 0 */
+int g3() { int i = 1; g(&i); return i; }
 
-void f(int x[]) /*@ array_length(x) = 1 */ { 
+/*@ requires \length(x) == 1 ensures x[0] == 1 */ 
+void f(int x[]) { 
   x[0] = 1;
-} /*@ x[0] = 1 */
+}
 
-void main() /*@ array_length(t) = 1 */ {
+/*@ requires \length(t) == 1 ensures t[0] == 1 */ 
+void main() {
   f(t);
-} /*@ t[0] = 1 */
+} 
+
 
 
   

@@ -1,6 +1,7 @@
 
 /* continue tests */
 
+/*@ ensures \result == 0 */
 int f1()
 {
   int n = 10;
@@ -11,9 +12,8 @@ int f1()
   }
   return n;
 }
-/*@ result = 0 */
 
-
+/*@ ensures \result == 10 */
 int f2()
 {
   int i = 17;
@@ -23,6 +23,5 @@ int f2()
   }
   return i;
 }
-/*@ result = 10 */
 
   

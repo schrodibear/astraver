@@ -5,15 +5,16 @@ int b;
 int b1; 
 int b2;
 
+/*@ ensures \result == b && b == 1 - \old(b) */
 int f() {
   b = 1 - b;
   return b;
-} /*@ result = b and b = 1 - b@ */
+}
 
-
+/*@ ensures b1 == 0 && b2 == 1 */
 void k() {
   b = 1;
   b1 = f() + (1 - f());
   b2 = (1 - f()) * f();
-} /*@ b1 = 0 and b2 = 1 */
+}
 

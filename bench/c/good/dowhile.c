@@ -8,8 +8,8 @@ C test file
 int x;
 int i;
 
+/*@ requires x >= 0  ensures x == 10 */ 
 void main() 
-/*@ x >= 0 */ 
 {
   x = 0;
   i = 10;
@@ -17,8 +17,8 @@ void main()
     x = x + 1;
     i = i - 1;
   }
-  /*@ invariant x = 10 - i and i >= 0 variant i */
+  /*@ invariant x == 10 - i && i >= 0 variant i */
   while (i > 0);
 } 
-/*@ x = 10 */
+
 

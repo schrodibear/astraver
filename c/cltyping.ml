@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.10 2004-02-10 10:47:14 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.11 2004-02-10 13:39:12 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -37,6 +37,15 @@ let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
 let c_array ty = noattr (CTarray (ty, None))
 let c_pointer ty = noattr (CTpointer ty)
+let c_void_star = c_pointer c_void
+
+let is_null t = t.node = Tnull
+
+let compatible t1 t2 = 
+  sub_type t1.info t2.info || 
+  sub_type t2.info t1.info ||
+  (pointer_or_array_type t1.info && is_null t2) ||
+  (pointer_or_array_type t2.info && is_null t1)
 
 let expected_type loc t1 t2 =
   if not (eq_type t1 t2) then raise_located loc (ExpectedType (t1, t2))
@@ -153,6 +162,8 @@ and type_term_node loc env = function
   | Tresult ->
       (try let ty,_ = Env.find "\\result" env in Tresult, ty
        with Not_found -> error loc "\\result meaningless")
+  | Tnull ->
+      Tnull, c_void_star
 
 and type_int_term env t =
   let tt = type_term env t in
@@ -206,6 +217,14 @@ let rec type_logic_type env = function
       PTexternal (List.map (type_logic_type env) tl, s)
 **)
 
+let type_quantifier env (ty, x) = (type_logic_type env ty, x)
+let type_quantifiers env = List.map (type_quantifier env)
+
+let add_quantifiers q env =
+  List.fold_left
+    (fun env (ty, x) -> Env.add x ty (Info.default_var_info x) env)
+    env q
+
 (* Typing predicates *)
 
 let rec type_predicate env = function
@@ -226,7 +245,7 @@ let rec type_predicate env = function
       let loc = Loc.join t1.info t2.info in
       let t1 = type_term env t1 in
       let t2 = type_term env t2 in
-      if not (compatible t1.info t2.info) then 
+      if not (compatible t1 t2) then 
 	error loc "comparison of incompatible types";
       Prel (t1, r, t2)
   | Pand (p1, p2) -> 
@@ -248,14 +267,14 @@ let rec type_predicate env = function
       (* TODO type t ? *)
       let t = type_term env t in
       Pif (t, type_predicate env p1, type_predicate env p2)
-  | Pforall (x, pt, p) -> 
-      let pt = type_logic_type env pt in
-      let env' = Env.add x pt (Info.default_var_info x) env in
-      Pforall (x, pt, type_predicate env' p)
-  | Pexists (x, pt, p) -> 
-      let pt = type_logic_type env pt in
-      let env' = Env.add x pt (Info.default_var_info x) env in
-      Pexists (x, pt, type_predicate env' p)
+  | Pforall (q, p) -> 
+      let q = type_quantifiers env q in
+      let env' = add_quantifiers q env in
+      Pforall (q, type_predicate env' p)
+  | Pexists (q, p) -> 
+      let q = type_quantifiers env q in
+      let env' = add_quantifiers q env in
+      Pexists (q, type_predicate env' p)
 
 let type_variant env = function 
   | (t, None) -> (type_int_term env t, None)

@@ -6,10 +6,11 @@ open Info
 
 val eq_type : tctype -> tctype -> bool
 val eq_type_node : 'a ctype_node -> 'b ctype_node -> bool
-val compatible : tctype -> tctype -> bool
 val sub_type : 'a ctype -> 'b ctype -> bool
 val arith_type : 'a ctype -> bool
+val array_type : 'a ctype -> bool
 val pointer_type : 'a ctype -> bool
+val pointer_or_array_type : 'a ctype -> bool
 val is_null : texpr -> bool
 
 (* Global environment *)

@@ -2,14 +2,15 @@
 /* break tests */
 
 
+/*@ ensures \result == 12 */
 int f1()
 {
   while (1) /*@ invariant true variant 1 */ break;
   return 12;
 }
-/*@ result = 12 */
 
 
+/*@ ensures \result == 1 */
 int f2() 
 {
   int n = 10;
@@ -20,9 +21,9 @@ int f2()
   }
   return n;
 }
-/*@ result = 1 */
     
 
+/*@ ensures \result == 2 */
 int f3() 
 {
   int n = 10;
@@ -33,11 +34,9 @@ int f3()
   }
   return n;
 }
-/*@ result = 2 */
     
-
+/*@ ensures \result == 3 */
 int f4(int x) 
-/*@ */
 { 
   int i = 0;
   for (i = 0; i < 10; i++)
@@ -47,5 +46,4 @@ int f4(int x)
     }
   return i;
 }
-/*@ result = 3 */
 

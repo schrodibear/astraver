@@ -32,7 +32,7 @@
 %token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IMPLIES AND OR NOT TRUE FALSE OLD AT RESULT LENGTH THEN AT
 %token QUESTION MINUS PLUS STAR SLASH PERCENT LSQUARE RSQUARE EOF
-%token INVARIANT VARIANT FOR LABEL ASSERT 
+%token INVARIANT VARIANT FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES MODIFIABLE LOGIC PREDICATE AXIOM
 
 %nonassoc prec_forall prec_exists
@@ -68,10 +68,10 @@ predicate:
       { Pand (Prel ($1, $2, $3), Prel ($3, $4, $5)) }
 | IF term THEN predicate ELSE predicate %prec prec_if
       { Pif ($2, $4, $6) }
-| FORALL IDENTIFIER COLON logic_type DOT predicate %prec prec_forall
-      { Pforall ($2, $4, $6) }
-| EXISTS IDENTIFIER COLON logic_type DOT predicate %prec prec_exists
-      { Pexists ($2, $4, $6) }
+| FORALL ne_parameters SEMICOLON predicate %prec prec_forall
+      { Pforall ($2, $4) }
+| EXISTS ne_parameters SEMICOLON predicate %prec prec_exists
+      { Pexists ($2, $4) }
 | LPAR predicate RPAR { $2 }
 ;
 
@@ -92,6 +92,7 @@ relation:
 ;
 
 term:
+  NULL { info Tnull } 
 | CONSTANT { info (Tconstant $1) }
 | IDENTIFIER { info (Tvar $1) }
 | IDENTIFIER LPAR term_list RPAR { info (Tapp ($1, $3)) }

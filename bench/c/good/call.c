@@ -8,18 +8,17 @@ C test file
 int x;
 /* int t[]; */
 
+/*@ requires y == ddd ensures \result == z */ 
 int f(int y, int ddd, int z) 
-/*@ y=ddd */ 
 {
   int u = z;
   return u++;
 } 
-/*@ result = z */
 
+/*@ ensures x == 2 */
 void main() 
 {
   x = 0;
   x = f(1,++x,2);
 } 
-/*@ x = 2 */
 

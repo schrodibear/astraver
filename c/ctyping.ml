@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.25 2004-02-10 10:47:14 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.26 2004-02-10 13:39:12 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -402,7 +402,8 @@ and type_lvalue env e =
 	fprintf Coptions.log "Variable %s is assigned@." v.var_name;
 	v.var_is_assigned <- true; 
 	e 
-    | TEunary (Ustar, _) -> e
+    | TEunary (Ustar, _) 
+    | TEarrget _ -> e
     | _ -> error loc "invalid lvalue"
 
 and type_expr_option env eo = option_app (type_expr env) eo
@@ -629,15 +630,15 @@ let type_decl d = match d.node with
       Tdecl (ty, info, type_initializer Env.empty ty i)
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc Env.empty ty in
-      let s = type_spec ty Env.empty s in
       let pl,env = type_parameters d.loc Env.empty pl in
+      let s = type_spec ty env s in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
       Tfunspec (s, ty, f, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
-      let s = option_app (type_spec ty Env.empty) s in
       let et = if ty = c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
+      let s = option_app (type_spec ty env) s in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
       let bl,st = type_block env et bl in
       if st.break then 

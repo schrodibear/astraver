@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.9 2004-02-10 08:36:51 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.10 2004-02-10 13:39:12 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -59,8 +59,11 @@ and 'a term_node =
   | Tat of 'a term * string
   | Tlength of 'a term
   | Tresult
+  | Tnull
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
+
+type 'ctype quantifiers = ('ctype * string) list
 
 type ('term, 'ctype) predicate =
   | Pfalse
@@ -73,8 +76,8 @@ type ('term, 'ctype) predicate =
   | Pimplies of ('term, 'ctype) predicate * ('term, 'ctype) predicate
   | Pnot of ('term, 'ctype) predicate
   | Pif of 'term * ('term, 'ctype) predicate * ('term, 'ctype) predicate
-  | Pforall of string * 'ctype * ('term, 'ctype) predicate
-  | Pexists of string * 'ctype * ('term, 'ctype) predicate
+  | Pforall of 'ctype quantifiers * ('term, 'ctype) predicate
+  | Pexists of 'ctype quantifiers * ('term, 'ctype) predicate
 
 type location = 
   | Lid of string

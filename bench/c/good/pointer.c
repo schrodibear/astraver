@@ -1,13 +1,16 @@
 
 /* C tests with pointers */
 
-int f(int *x) /*@ */ {
+/*@ ensures *x == 1 && \result == 0 */
+int f(int *x) {
   *x = 0;
   return (*x)++;
-} /*@ x = 1 and result = 0 */
+}
 
 int* r;
 
-int g() { return f(r); } /*@ r = 1 */
+/*@ ensures *r == 1 */
+int g() { return f(r); }
 
-int h() { int z = 0; return f(&z) + z; } /*@ result = 1 */
+/*@ ensures \result == 1 */
+int h() { int z = 0; return f(&z) + z; }
