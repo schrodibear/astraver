@@ -92,6 +92,16 @@ Intuition.
 Save.
 
 
+(* Why obligation from file "good-c/all.c", characters 544-548 *)
+Lemma t1_po_2 : 
+  (t: (array Z))
+  (Pre2: `(array_length t) = 10` /\ `(access t 0) = 1`)
+  (Pre1: `0 <= 0` /\ `0 < (array_length t)`)
+  `(access t 0) = 1`.
+Proof.
+Tauto.
+Save.
+
 (* Why obligation from file "good-c/all.c", characters 635-638 *)
 Lemma t2_po_1 : 
   (t: (array Z))

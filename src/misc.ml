@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.73 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.74 2003-03-11 13:38:36 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -154,6 +154,8 @@ let optpost_fold f = option_fold (post_fold f)
 
 let anonymous loc x = { a_name = Anonymous; a_value = x; a_loc = loc }
 let wp_named loc x = { a_name = Name (wp_name ()); a_value = x; a_loc = loc }
+
+let force_wp_name = option_app (fun a -> { a with a_name = Name (wp_name ()) })
 
 let force_name f a = { a with a_name = Name (f a.a_name) }
 

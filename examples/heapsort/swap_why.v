@@ -4,8 +4,24 @@
 Require Why.
 Require Omega.
 
-(* Why obligation from file "swap.mlw", characters 166-175 *)
+(* Why obligation from file "swap.mlw", characters 153-157 *)
 Lemma swap_po_1 : 
+  (i: Z)
+  (j: Z)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
+  (v: Z)
+  (Post3: v = (access t i))
+  (Pre2: `0 <= i` /\ `i < (array_length t)`)
+  `0 <= j` /\ `j < (array_length t)`.
+Proof.
+Tauto.
+Save.
+
+(* Why obligation from file "swap.mlw", characters 166-175 *)
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -23,8 +39,9 @@ Proof.
 Intros; ArraySubst t0.
 Save.
 
+
 (* Why obligation from file "swap.mlw", characters 132-184 *)
-Lemma swap_po_2 : 
+Lemma swap_po_3 : 
   (i: Z)
   (j: Z)
   (t: (array Z))

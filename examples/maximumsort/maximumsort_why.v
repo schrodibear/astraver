@@ -58,8 +58,24 @@ Implicit Arguments Off.
 
 
 (* Début: preuve de "swap" *)
-(* Why obligation from file "maximumsort.mlw", characters 217-226 *)
+(* Why obligation from file "maximumsort.mlw", characters 206-210 *)
 Lemma swap_po_1 : 
+  (i: Z)
+  (j: Z)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
+  (v: Z)
+  (Post3: v = (access t i))
+  (Pre2: `0 <= i` /\ `i < (array_length t)`)
+  `0 <= j` /\ `j < (array_length t)`.
+Proof.
+Intuition ArraySubst t0.
+Save.
+
+(* Why obligation from file "maximumsort.mlw", characters 217-226 *)
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -74,11 +90,11 @@ Lemma swap_po_1 :
   (Post1: t0 = (store t i (access t j)))
   `0 <= j` /\ `j < (array_length t0)`.
 Proof.
-Intuition ArraySubst t0.
+Intros; ArraySubst t0; Intuition.
 Save.
 
 (* Why obligation from file "maximumsort.mlw", characters 187-233 *)
-Lemma swap_po_2 : 
+Lemma swap_po_3 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -100,11 +116,11 @@ Proof.
  Auto with datatypes.
 Save.
 
-
 (* Fin: preuve de "swap" *)
 
 
 (* Début: preuve de "maximum" *)
+
 (* Why obligation from file "maximumsort.mlw", characters 602-603 *)
 Lemma maximum_po_1 : 
   (n: Z)

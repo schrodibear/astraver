@@ -7,8 +7,24 @@ Require Omega.
 Require ZArithRing.
 
 
-(* Why obligation from file "partition.mlw", characters 1353-1362 *)
+(* Why obligation from file "partition.mlw", characters 1340-1344 *)
 Lemma swap_po_1 : 
+  (i: Z)
+  (j: Z)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
+  (v: Z)
+  (Post3: v = (access t i))
+  (Pre2: `0 <= i` /\ `i < (array_length t)`)
+  `0 <= j` /\ `j < (array_length t)`.
+Proof. 
+Tauto.
+Save.
+
+(* Why obligation from file "partition.mlw", characters 1353-1362 *)
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -22,12 +38,14 @@ Lemma swap_po_1 :
   (t0: (array Z))
   (Post1: t0 = (store t i (access t j)))
   `0 <= j` /\ `j < (array_length t0)`.
-Proof. 
+Proof.
+Intuition.
 Intros; ArraySubst t0.
 Save.
 
+
 (* Why obligation from file "partition.mlw", characters 1319-1371 *)
-Lemma swap_po_2 : 
+Lemma swap_po_3 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -48,7 +66,6 @@ Proof.
 Intros; Subst t1 t0 v.
 Auto with datatypes.
 Save.
-
 
 (* Why obligation from file "partition.mlw", characters 1579-1583 *)
 Lemma partition_po_1 : 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.58 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.59 2003-03-11 13:38:36 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -53,6 +53,7 @@ val wp_named : Loc.t -> 'a -> 'a asst
 
 val force_post_name : postcondition option -> postcondition option
 val force_bool_name : postcondition option -> postcondition option
+val force_wp_name : assertion option -> assertion option
 
 val force_loc : Loc.t -> assertion -> assertion
 val force_post_loc : Loc.t -> postcondition -> postcondition

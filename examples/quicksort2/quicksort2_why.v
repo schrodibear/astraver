@@ -4,8 +4,24 @@
 Require Why.
 
 
-(* Why obligation from file "quicksort2.mlw", characters 241-250 *)
+(* Why obligation from file "quicksort2.mlw", characters 230-234 *)
 Lemma swap_po_1 : 
+  (i: Z)
+  (j: Z)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
+  (v: Z)
+  (Post3: v = (access t i))
+  (Pre2: `0 <= i` /\ `i < (array_length t)`)
+  `0 <= j` /\ `j < (array_length t)`.
+Proof.
+Tauto.
+Save.
+
+(* Why obligation from file "quicksort2.mlw", characters 241-250 *)
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -23,8 +39,9 @@ Proof.
 Intros; ArraySubst t0.
 Save.
 
+
 (* Why obligation from file "quicksort2.mlw", characters 211-257 *)
-Lemma swap_po_2 : 
+Lemma swap_po_3 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -45,7 +62,6 @@ Proof.
 Intros; Subst t1; Subst t0; Subst v.
 Auto with datatypes.
 Save.
-
 
 (* Why obligation from file "quicksort2.mlw", characters 531-535 *)
 Lemma quick_rec_po_1 : 

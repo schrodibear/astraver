@@ -372,7 +372,7 @@ let linear ctx concl =
   in
   (* we cut the context at the last WP (and reverse it) *)
   let rec cut_context acc = function
-    | [] -> acc
+    | [] -> raise Exit
     | Spred (id, _) as h :: _ when is_wp id -> h :: acc
     | h :: ctx -> cut_context (h :: acc) ctx
   in

@@ -1,4 +1,5 @@
 
+  o linear proof search restricted to WP obligations
   o PVS: change in array type (warray) to get better TCCs
   o fixed ocaml output (array_length)
 

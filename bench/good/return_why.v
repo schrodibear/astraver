@@ -19,8 +19,25 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", characters 282-317 *)
+(* Why obligation from file "good/return.mlw", characters 314-316 *)
 Lemma p_po_2 : 
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
+  (i0: Z)
+  (Post1: i0 = `0`)
+  (Variant1: Z)
+  (i1: Z)
+  (Pre4: Variant1 = `N - i1`)
+  (Pre3: `0 <= i1`)
+  (Test4: `i1 < N`)
+  (Test3: `(access t i1) = 0`)
+  (`0 <= i1` /\ `i1 < N` -> `(access t i1) = 0`).
+Proof.
+Intuition.
+Save.
+
+(* Why obligation from file "good/return.mlw", characters 282-317 *)
+Lemma p_po_3 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
   (i0: Z)
@@ -38,7 +55,7 @@ Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good/return.mlw", characters 189-195 *)
-Lemma p_po_3 : 
+Lemma p_po_4 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
   (i0: Z)
@@ -49,7 +66,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "good/return.mlw", characters 351-352 *)
-Lemma p_po_4 : 
+Lemma p_po_5 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
   (i0: Z)
@@ -58,8 +75,6 @@ Lemma p_po_4 :
   (Post3: `0 <= i1` /\ `i1 >= N`)
   (`0 <= N` /\ `N < N` -> `(access t N) = 0`).
 Proof.
-Intuition.
+Auto with *.
 Save.
-
-
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.73 2003-02-27 16:55:34 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.74 2003-03-11 13:38:36 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -113,7 +113,7 @@ let rec wp p q =
 	let w = abstract_wp q' q res (output p) in
 	Some (wp_named p.info.loc (erase_label lab (erase_label "" w)))
     | _ -> 
-	w
+	force_wp_name w
   in
   let w = optasst_app (add_pre (pre p @ obligations p)) w in
   p, w
