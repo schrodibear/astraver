@@ -89,3 +89,6 @@ Admitted.
 (*Why logic*) Definition fresh : alloc -> pointer -> Prop.
 Admitted.
 
+(*Why axiom*) Lemma false_not_true : ~(false = true).
+Admitted.
+

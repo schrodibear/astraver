@@ -82,3 +82,6 @@ exception Return_pointer of pointer
  
 (* integer pointer/arrays *)
 parameter intP : int memory ref
+
+axiom false_not_true : false <> true (* for Simplify *)
+

@@ -221,8 +221,14 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 
 install-lib:
-	mkdir -p $(LIBDIR)/why
-	cp -f lib/why/*.why $(LIBDIR)/why
+	mkdir -p $(LIBDIR)/caduceus/why
+	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
+	mkdir -p $(LIBDIR)/caduceus/coq
+	if test "@COQVER@" == "v7"; then \
+	  cp -f lib/coq-v7/caduceus_why.v $(LIBDIR)/caduceus/coq; \
+	else \
+	  cp -f lib/coq/caduceus_why.v $(LIBDIR)/caduceus/coq; \
+	fi
 
 install-man:
 	mkdir -p $(MANDIR)/man1

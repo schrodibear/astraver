@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.41 2004-03-22 13:46:05 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.42 2004-03-22 15:06:21 filliatr Exp $ i*)
 
 
 open Format
@@ -476,23 +476,31 @@ let rec interp_statement stat = match stat.st_node with
 	  | None -> Void
 	  | Some e -> interp_expr e
       end
+  | TSif(e,s1,s2) -> 
+      If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
   | TSfor(annot,e1,e2,e3,body) ->
       let (inv,dec) = interp_invariant annot in
       append
 	(interp_statement_expr e1)
-	(break stat.st_break 
-	   (make_while (interp_expr e2) inv dec 
-	      (continue stat.st_continue
+	(break body.st_break 
+	   (make_while (interp_boolean_expr e2) inv dec 
+	      (continue body.st_continue
 		 (append 
 		    (interp_statement body) 
 		    (interp_statement_expr e3)))))
-  | TSif(e,s1,s2) -> 
-      If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
   | TSwhile(annot,e,s) -> 
       let (inv,dec) = interp_invariant annot in
-      make_while (interp_expr e) inv dec (interp_statement s)
+      break s.st_break
+	(make_while (interp_boolean_expr e) inv dec 
+	   (continue s.st_continue (interp_statement s)))
   | TSdowhile(annot,s,e) -> 
-      assert false (* TODO *)
+      let (inv,dec) = interp_invariant annot in
+      break true
+	(make_while (Cte (Prim_bool true)) inv dec
+	   (continue s.st_continue
+	      (append (interp_statement s)
+		 (If (Not (interp_boolean_expr e), 
+		      Raise ("Break", None), Void)))))
   | TSblock(b) -> 
       interp_block b 
   | TSbreak -> 
@@ -618,9 +626,12 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       begin
 	match init with 
 	  | Inothing ->
+	      why
+	      (*** already done when translating heap variables
 	      (why_code,
 	       (Param(false,v.var_name,Ref_type(t)))::why_spec,
 	       prover_decl)
+              ***)
 	  | _ -> 
 	      assert false (* TODO *)
       end
