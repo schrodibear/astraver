@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.15 2002-07-04 09:31:12 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.16 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -45,6 +45,7 @@ type error =
   | NoVariableAtDate of Ident.t * string
   | MutableExternal
   | AnyMessage of string
+  | ExceptionArgument of Ident.t * bool
 
 exception Error of (Loc.t option) * error
 
@@ -122,17 +123,21 @@ let report fmt = function
   | ShouldBeVariable ->
       fprintf fmt "@[This argument should be a variable@]"
   | ShouldBeReference id ->
-      fprintf fmt "@[The argument %s@ " (Ident.string id);
+      fprintf fmt "@[The argument %a@ " Ident.print id;
       fprintf fmt "in this application should be a reference@]"
   | ShouldNotBeReference ->
       fprintf fmt "@[This argument should not be a reference@]"
   | IllTypedArgument f ->
       fprintf fmt "@[This argument should have type@ "; f fmt; fprintf fmt "@]"
   | NoVariableAtDate (id, d) ->
-      fprintf fmt "Variable %s is unknown at date %s" (Ident.string id) d
+      fprintf fmt "Variable %a is unknown at date %s" Ident.print id d
   | MutableExternal ->
       fprintf fmt "@[An external value cannot be mutable;@ ";
       fprintf fmt "use parameter instead@]"
+  | ExceptionArgument (id, true) ->
+      fprintf fmt "Exception %a needs an argument" Ident.print id
+  | ExceptionArgument (id, false) ->
+      fprintf fmt "Exception %a has no argument" Ident.print id
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
@@ -221,3 +226,5 @@ let check_for_non_constant loc = function
   | Tconst _ -> raise_with_loc (Some loc) AppNonFunction
   | _ -> ()
 
+let exception_argument loc id b = 
+  raise_with_loc (Some loc) (ExceptionArgument (id, b))

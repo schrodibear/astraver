@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.47 2002-06-25 12:52:44 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.48 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -10,7 +10,6 @@ open Ast
 open Util
 open Rename
 open Env
-open Effect
 open Monad
 
 let make_info env k = { env = env; label = label_name (); kappa = k }
@@ -165,6 +164,14 @@ and trad_desc info d ren = match d with
 	   (Monad.wfrec_with_binders bl' var e.info
 	      (fun w -> with_rec f (recf w) (trad e)))
 	   ren')
+
+  | Raise (id, None, _) ->
+      Monad.exn info id None ren
+
+  | Raise (id, Some e, _) ->
+      Monad.compose e.info (trad e) 
+	(fun v -> Monad.exn info id (Some (Tvar v))) 
+	ren
 
 and trad_binders ren env = function
   | [] -> 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.52 2002-07-04 09:31:13 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.53 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -608,6 +608,29 @@ and typef_desc lab env loc = function
       let tf = make_arrow bl t_e.info.kappa in (* IDEM *)
       Rec (f,bl,v,var,t_e), (tf,Effect.bottom), []
 
+  | Raise (id, e, ct) ->
+      let xt =
+	try find_exception id 
+	with Not_found -> Error.unbound_exception id (Some loc)
+      in
+      let t_e = match xt, e with
+	| None, Some _ -> 
+	    Error.exception_argument loc id false
+	| Some _, None ->
+	    Error.exception_argument loc id true
+	| Some xt, Some e ->
+	    let t_e = typef lab env e in
+	    expected_type e.info.loc (result_type t_e) (PureType xt);
+	    Some t_e
+	| None, None -> 
+	    None
+      in
+      let v = match ct with 
+	| None -> type_v_unit 
+	| Some v -> check_type_v (Some loc) lab env v; v 
+      in
+      Raise (id, t_e, ct), (v, Effect.add_exn id Effect.bottom), []
+	    
   | Coerce e ->
       let te = typef lab env e in
       Coerce te, (result_type te, effect te), []

@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.20 2002-06-20 12:55:22 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.21 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -37,9 +37,16 @@ val is_at : t -> bool
 
 val bound : t -> t
 
+(*s Exceptions names and constructors *)
+
+val exn_type : t -> t
+val exn_val : t -> t
+val exn_exn : t -> t
+
 (*s Some pre-defined identifiers. *)
 
 val anonymous : t
+val implicit : t
 
 val t_add : t
 val t_sub : t

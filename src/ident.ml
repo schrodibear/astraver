@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.22 2002-06-24 08:48:04 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.23 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -70,9 +70,16 @@ let bound =
   let n = ref 0 in
   fun s -> incr n; { s with stamp = !n }
 
+(*s Exceptions names and constructors *)
+
+let exn_type id = create ("ET_" ^ id.name)
+let exn_val id = create ("Val_" ^ id.name)
+let exn_exn id = create ("Exn_" ^ id.name)
+
 (*s Pre-defined. *)
 
 let anonymous = create "_"
+let implicit = create "?"
 
 let t_add = create "%add"
 let t_sub = create "%sub"

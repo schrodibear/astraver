@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.19 2002-06-18 09:28:12 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.20 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -42,6 +42,8 @@ val pre : typed_program -> precondition list
 val post : typed_program -> postcondition option
 val result_type : typed_program -> type_v
 val result_name : typing_info -> Ident.t
+
+val erase_exns : typing_info -> typing_info
 
 val forall : Ident.t -> type_v -> predicate -> predicate
 val foralls : (Ident.t  * type_v) list -> predicate -> predicate

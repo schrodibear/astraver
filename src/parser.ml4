@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.40 2002-07-04 11:05:32 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.41 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -33,6 +33,7 @@ let effects  = gec "effects"
 let reads    = gec "reads"
 let writes   = gec "writes"
 let raises   = gec "raises"
+let cast     = gec "cast"
 let pre_condition = gec "pre_condition"
 let post_condition = gec "post_condition"
 
@@ -395,6 +396,10 @@ i*)
         p
     | "let"; "rec"; p = recfun; "in"; p2 = program ->
 	LetIn (rec_name p, without_annot loc p, p2)
+    | "raise"; id = ident; t = OPT cast ->
+	Raise (id, None, t)
+    | "raise"; "("; id = ident; p = program; ")"; t = OPT cast ->
+	Raise (id, Some p, t)
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 
 	  | [] -> 
@@ -413,6 +418,9 @@ i*)
   arg:
   [ [ "'"; t = type_v -> Type t
     | p = program -> Term p ] ]
+  ;
+  cast:
+  [ [ ":"; t = type_v -> t ] ]
   ;
   block:
   [ [ s = block_statement; ";"; b = block -> s :: b

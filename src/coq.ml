@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.46 2002-07-04 11:10:22 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.47 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -70,6 +70,8 @@ let print_term fmt t =
 	(* TODO *)
 	assert (floor f = f);
 	openz fmt; fprintf fmt "%d" (truncate f); closez fmt
+    | Tvar id when id == implicit ->
+	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 

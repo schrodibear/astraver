@@ -1,16 +1,16 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.39 2002-07-04 09:31:13 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.40 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Format
 open Ident
 open Misc
+open Effect
 open Util
 open Logic
 open Types
 open Ast
 open Rename
-open Effect
 open Env
 
 (*s [product ren [y1,z1;...;yk,zk] q] constructs the (possibly dependent) 
@@ -49,8 +49,7 @@ let arrow_vars =
   List.fold_right (fun (id,v) t -> TTarrow ((id, CC_var_binder v), t))
 
 let trad_exn_type =
-  let exn_id id = Ident.create ("ET_" ^ Ident.string id) in
-  List.fold_right (fun id t -> TTapp (exn_id id, t))
+  List.fold_right (fun id t -> TTapp (Ident.exn_type id, t))
 
 (*s Translation of effects types in CC types.
   
@@ -226,6 +225,24 @@ let gen_compose isapp info1 e1 e2 ren =
 
 let compose = gen_compose false
 let apply = gen_compose true
+
+
+(*s [exn] is the operator corresponding to [raise] *)
+
+let rec make_exn x v = function
+  | [] -> 
+      assert false
+  | y :: yl when x = y -> 
+      let x = Ident.exn_exn x in
+      (match v with None -> Tvar x | Some v -> Tapp (x, [v]))
+  | y :: yl -> 
+      Tapp (Ident.exn_val y, [Tvar Ident.implicit; make_exn x v yl])
+
+let exn info id t =
+  let x = Effect.get_exns info.kappa.c_effect in
+  let info' = erase_exns info in
+  assert false (* TODO (make_exn id t x) *)
+  
 
 (*s [cross_label] is an operator to be used when a label is encountered *)
 

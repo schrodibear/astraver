@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.12 2002-07-04 09:31:13 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.13 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -46,6 +46,7 @@ type error =
   | NoVariableAtDate of Ident.t * string
   | MutableExternal
   | AnyMessage of string
+  | ExceptionArgument of Ident.t * bool
 
 exception Error of (Loc.t option) * error
 
@@ -96,3 +97,6 @@ val ill_typed_argument : Loc.t -> (formatter -> unit) -> 'a
 val no_variable_at_date : Ident.t -> string -> 'a
 
 val check_for_non_constant : Loc.t -> Logic.term -> unit
+
+val exception_argument : Loc.t -> Ident.t -> bool -> 'a
+

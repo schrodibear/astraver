@@ -686,6 +686,9 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
               \te{in} \nt{prog} \\
       & $|$ & \te{fun} \nt{binders} \te{->} \nt{prog} \\
       & $|$ & \te{let} \te{rec} \nt{recfun} $[$ \te{in} \nt{prog} $]$ \\
+      & $|$ & \te{raise} \nt{identifier} $[$ \te{:} \nt{value\_type} $]$ \\
+      & $|$ & \te{raise} \te{(} \nt{identifier} \nt{prog} \te{)}
+              $[$ \te{:} \nt{value\_type} $]$ \\
       & $|$ & \te{(} \nt{prog}\plus\  \te{)} \\
   \\[0.1em]
 

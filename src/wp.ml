@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.43 2002-06-24 13:58:14 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.44 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -155,6 +155,8 @@ let rec normalize p =
 	change_desc p (App (normalize e1, r, k))
     | App (e1, Type v, k) ->
 	change_desc p (App (normalize e1, Type v, k))
+    | Raise (id, po, ct) ->
+	change_desc p (Raise (id, option_app normalize po, ct))
     | Coerce e ->
 	let e = normalize e in
 	if k.c_post = None then
@@ -321,6 +323,12 @@ and wp_desc info d q =
 	let q = while_post_block info.env inv var e in
 	let e',_ = wp e (Some q) in
 	While (b', inv, var, e'), None
+    (* TODO: wp for raise *)
+    | Raise (id, None, ct) ->
+	Raise (id, None, ct), None
+    | Raise (id, Some e, ct) ->
+	let e',_ = wp e None in
+	Raise (id, Some e', ct), None
     | Coerce p ->
 	let p',w = wp p q in
 	Coerce p', w

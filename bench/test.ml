@@ -7,6 +7,7 @@ parameter f : n:int -> {} unit raises E {}
 
 parameter g : x:int ref -> {} bool writes x raises E,F {}
 
+let p = raise (E 1) : int
 
 (****
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.15 2002-07-04 09:31:12 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.16 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 (*s Effects. *)
 
@@ -108,6 +108,8 @@ let remove x e =
       output = list_remove x e.output }
 
 let remove_exn x e = { e with exns = Idset.remove x e.exns }
+
+let erase_exns e = { e with exns = Idset.empty }
 
 (*s occurrence *)
 

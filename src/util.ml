@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.38 2002-07-04 11:10:23 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.39 2002-07-04 13:18:12 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -79,6 +79,9 @@ let post p = p.info.kappa.c_post
 let result_type p = p.info.kappa.c_result_type
 let result_name p = p.kappa.c_result_name
 
+let erase_exns ti = 
+  let k = ti.kappa in
+  { ti with kappa = { k with c_effect = Effect.erase_exns k.c_effect } }
 
 (*s [apply_pre] and [apply_post] instantiate pre- and post- conditions
     according to a given renaming of variables (and a date that means
@@ -359,10 +362,18 @@ and print_desc fmt = function
   | Rec (id, bl, v, var, p) ->
       fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 
 	Ident.print id print_type_v v print_prog p
+  | Raise (id, None, t) ->
+      fprintf fmt "raise %a" Ident.print id; print_cast fmt t
+  | Raise (id, Some p, t) ->
+      fprintf fmt "raise (%a %a)" Ident.print id print_prog p; print_cast fmt t
   | Expression t -> 
       print_term fmt t
   | Coerce p ->
       print_prog fmt p
+
+and print_cast fmt = function
+  | None -> ()
+  | Some v -> fprintf fmt ": %a" print_type_v v
 
 and print_block fmt = 
   print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
