@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.88 2003-01-24 10:30:37 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.89 2003-02-03 16:09:09 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -343,12 +343,13 @@ let rec typef lab env expr =
   let (d,(v,e),o1) = typef_desc lab env expr.ploc expr.pdesc in
   let loc = expr.ploc in
   let (ep,p) = state_pre lab env loc expr.pre in
+  let (eo,o) = state_pre lab env loc expr.oblig in
   let (eq,q) = state_post lab env (result,v,e) loc expr.post in
   let q = option_app (saturation loc e) q in
-  let e' = Effect.union e (Effect.union ep eq) in
+  let e' = Effect.union e (Effect.union (Effect.union ep eo) eq) in
   let ol,q' = match q, d with
-    | None, App (_,_,k') -> o1 @ k'.c_pre, k'.c_post
-    | _ -> o1, q
+    | None, App (_,_,k') -> o @ o1 @ k'.c_pre, k'.c_post
+    | _ -> o @ o1, q
   in
   let pr = 
     let c = { c_result_name = result; c_result_type = v; c_effect = e'; 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.12 2003-01-24 13:53:48 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.13 2003-02-03 16:09:08 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -74,6 +74,7 @@ type exn_pattern = variable * variable option
 type t = 
   { pdesc : t_desc;
     pre : lexpr asst list;
+    oblig : lexpr asst list;
     post : lexpr post option;
     ploc : Loc.t }
 

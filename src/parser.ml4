@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.73 2003-01-31 09:52:34 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.74 2003-02-03 16:09:08 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -127,7 +127,7 @@ let conj = function
   | _ -> assert false (* TODO *)
 
 let without_annot loc d = 
-  { pdesc = d; pre = []; post = None; ploc = loc }
+  { pdesc = d; pre = []; oblig = []; post = None; ploc = loc }
 
 let rec app f = function
   | [] -> 
@@ -148,7 +148,8 @@ let un_op op loc e =
 
 let mk_prog loc p pre post =
   { pdesc = p.pdesc; 
-    pre = p.pre @ pre; 
+    pre = pre; 
+    oblig = p.pre @ p.oblig;
     post = conj (p.post, post); 
     ploc = loc }
 

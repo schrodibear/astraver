@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.26 2003-01-31 13:35:48 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.27 2003-02-03 16:09:08 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -107,7 +107,7 @@ let get_type l cenv id =
 
 (*s ML constructors *)
 
-let mk_ptree l d p q = { pdesc = d ; pre = p; post = q; ploc = l }
+let mk_ptree l d p q = { pdesc = d ; pre = p; oblig = []; post = q; ploc = l }
 let mk_expr l d = mk_ptree l d [] None
 
 let mk_seq loc e1 e2 = match e1, e2 with
@@ -705,7 +705,7 @@ let interp_annotated_block cenv et (l, p, bl, q) =
     else 
       bl
   in
-  { pdesc = bl.pdesc; pre = p; post = q; ploc=l }, st.abrupt_return
+  { pdesc = bl.pdesc; pre = p; oblig = []; post = q; ploc=l }, st.abrupt_return
 
 let interp_binder (v, id) = 
   let t = match v with
