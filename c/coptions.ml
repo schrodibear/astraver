@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.12 2004-05-18 09:34:21 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.13 2004-10-06 15:10:02 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -55,6 +55,7 @@ let debug = ref false
 let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
+let coq_tactic = ref "intuition"
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -83,6 +84,8 @@ let _ =
           "  debugging mode";
         "-why-opt", Arg.String ((:=) why_opt),
 	  " <why options>  passes options to Why";
+	"-coq-tactic", Arg.String ((:=) coq_tactic),
+	  " <coq tactic>  Coq tactic for new goals";
 	"-v", Arg.Set verbose,
           "  verbose mode";
 	"-q", Arg.Clear verbose,
@@ -103,4 +106,5 @@ let with_cpp = !with_cpp
 let cpp_command = !cpp_command
 let cpp_dump = !cpp_dump
 let why_opt = !why_opt
+let coq_tactic = !coq_tactic
 

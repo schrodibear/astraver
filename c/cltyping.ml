@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.57 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.58 2004-10-06 15:10:02 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -438,6 +438,12 @@ let rec eval_const_expr e = match e.texpr_node with
   | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr t)
   | TEbinary (t1, Cast.Badd_int, t2) -> 
       Int64.add (eval_const_expr t1)  (eval_const_expr t2)
+  | TEbinary (t1, Cast.Bsub_int, t2) -> 
+      Int64.sub (eval_const_expr t1)  (eval_const_expr t2)
+  | TEbinary (t1, Cast.Bmul_int, t2) -> 
+      Int64.mul (eval_const_expr t1)  (eval_const_expr t2)
+  | TEbinary (t1, Cast.Bdiv_int, t2) -> 
+      Int64.div (eval_const_expr t1)  (eval_const_expr t2)
   | TEcast (_, e) -> eval_const_expr e
   | TEvar v ->
       if e.texpr_type.ctype_const 

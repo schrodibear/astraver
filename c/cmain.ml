@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.42 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.43 2004-10-06 15:10:02 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -116,12 +116,13 @@ let main () =
 	      "# this makefile was automatically generated; do not edit @\n@\n";
 	    fprintf fmt "WHY=why %s@\n@\n" Coptions.why_opt;	    
 	    fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
+	    fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
 	    fprintf fmt ".PHONY: all coq pvs simplify cvcl@\n@\n";
 	    fprintf fmt "all: coq/caduceus_spec_why.v simplify/%s_why.sx@\n@\n" f;
 
 	    fprintf fmt "coq: coq/%s_why.vo@\n@\n" f;
 	    fprintf fmt "coq/%s_why.v: why/caduceus_spec.why coq/caduceus_spec_why.v why/%s.why@\n" f f;
-	    fprintf fmt "\t@@echo 'why -coq-v8 [...] why/%s.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export caduceus_spec_why.\" -coq-tactic \"intuition\" $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
+	    fprintf fmt "\t@@echo 'why -coq-v8 [...] why/%s.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export caduceus_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
 	    fprintf fmt "coq/caduceus_spec_why.v: why/caduceus_spec.why@\n";
 	    fprintf fmt "\t@@echo 'why -coq-v8 [...] why/caduceus_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export caduceus_why. Require Export caduceus_tactics.\" $(CADULIB)/why/caduceus.why why/caduceus_spec.why@\n@\n";
 	    fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
