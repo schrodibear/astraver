@@ -200,10 +200,40 @@ Lemma selection_impl_po_3 :
     (valid_index alloc t result) /\ (valid_index alloc t i2))).
 Proof.
 intuition.
-assert (k=i2).
+unfold sorted in *|-*; intuition.
+assert (k < i2-1 \/ k = i2-1).
 omega.
-subst; omega.
-Qed.
+intuition idtac.
+rewrite H14; auto with *.
+rewrite H14; auto with *.
+subst.
+rewrite H14; auto with *.
+ring (i2 -1 +1).
+rewrite H15; caduceus; auto with *.
+
+Focus 2.
+assert (k < i2 \/ k=i2).
+omega.
+intuition idtac.
+
+rewrite H14; auto with *.
+
+assert (l=min3\/l<>min3).
+omega.
+intuition idtac.
+subst; rewrite H12; auto with *.
+rewrite H14; auto with *.
+
+
+subst; rewrite H15; auto with *.
+
+assert (l=min3\/l<>min3).
+omega.
+intuition idtac.
+subst; rewrite H12; auto with *.
+rewrite H14; auto with *.
+
+Admitted.
 
 
 (* Why obligation from file "why/selection.why", characters 1056-1317 *)
@@ -244,41 +274,10 @@ Lemma selection_impl_po_4 :
     (acc intP0 (shift t k)))).
 Proof.
 intuition.
-unfold sorted in *|-*; intuition.
-assert (k < i2-1 \/ k = i2-1).
+assert (k=i2).
 omega.
-intuition idtac.
-rewrite H15; auto with *.
-rewrite H15; auto with *.
-subst.
-rewrite H15; auto with *.
-ring (i2 -1 +1).
-rewrite H16; caduceus; auto with *.
-
-Focus 2.
-assert (k < i2 \/ k=i2).
-omega.
-intuition idtac.
-
-rewrite H15; auto with *.
-
-assert (l=min3\/l<>min3).
-omega.
-intuition idtac.
-subst; rewrite H13; auto with *.
-rewrite H15; auto with *.
-
-
-subst; rewrite H16; auto with *.
-
-assert (l=min3\/l<>min3).
-omega.
-intuition idtac.
-subst; rewrite H13; auto with *.
-rewrite H15; auto with *.
-
-Admitted.
-(* Save. *)
+subst; omega.
+Qed.
 
 (* Why obligation from file "why/selection.why", characters 320-1697 *)
 Lemma selection_impl_po_5 : 
@@ -312,7 +311,10 @@ Lemma selection_impl_po_5 :
   (mset intP0 t 0 (n - 1)) = (mset intP t 0 (n - 1)).
 Proof.
 intuition.
-red; intuition.
+unfold sorted in *|-*; intuition.
+assert (k < n-2 \/ k=n-2).
+omega.
+intuition.
 Save.
 
 
@@ -339,10 +341,7 @@ Lemma selection_impl_po_6 :
      (i1 <= l /\ l < n -> (acc intP (shift t k)) <= (acc intP (shift t l)))))).
 Proof.
 intuition.
-unfold sorted in *|-*; intuition.
-assert (k < n-2 \/ k=n-2).
-omega.
-intuition.
+red; intuition.
 Save.
 
 
