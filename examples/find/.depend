@@ -1,0 +1,4 @@
+find_why.vo: find_why.v ../../lib/coq/Why.vo
+find_spec.vo: find_spec.v ../../lib/coq/WhyArrays.vo
+find_proofs.vo: find_proofs.v find_spec.vo find_lemmas.vo
+find_lemmas.vo: find_lemmas.v find_spec.vo
