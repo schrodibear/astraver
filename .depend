@@ -10,6 +10,14 @@ src/coq.cmo: src/cc.cmi src/env.cmi src/error.cmi src/ident.cmi src/loc.cmi \
 src/coq.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx src/loc.cmx \
     src/logic.cmi src/misc.cmx src/options.cmx src/pp.cmx src/regen.cmx \
     src/report.cmx src/types.cmi src/util.cmx src/vcg.cmx src/coq.cmi 
+src/cvcl.cmo: src/cc.cmi src/env.cmi src/error.cmi src/ident.cmi src/loc.cmi \
+    src/logic.cmi src/ltyping.cmi src/misc.cmi src/monomorph.cmi \
+    src/options.cmi src/parser.cmi src/pp.cmi src/report.cmi src/vcg.cmi \
+    src/cvcl.cmi 
+src/cvcl.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx src/loc.cmx \
+    src/logic.cmi src/ltyping.cmx src/misc.cmx src/monomorph.cmx \
+    src/options.cmx src/parser.cmx src/pp.cmx src/report.cmx src/vcg.cmx \
+    src/cvcl.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/ast.cmi src/effect.cmi src/error.cmi src/ident.cmi \
@@ -105,11 +113,11 @@ src/parser.cmx: src/compat.cmx src/effect.cmx src/error.cmi \
 src/pp.cmo: src/pp.cmi 
 src/pp.cmx: src/pp.cmi 
 src/pvs.cmo: src/cc.cmi src/env.cmi src/ident.cmi src/loc.cmi src/logic.cmi \
-    src/misc.cmi src/options.cmi src/pp.cmi src/types.cmi src/util.cmi \
-    src/vcg.cmi src/pvs.cmi 
+    src/misc.cmi src/monomorph.cmi src/options.cmi src/pp.cmi src/types.cmi \
+    src/util.cmi src/vcg.cmi src/pvs.cmi 
 src/pvs.cmx: src/cc.cmi src/env.cmx src/ident.cmx src/loc.cmx src/logic.cmi \
-    src/misc.cmx src/options.cmx src/pp.cmx src/types.cmi src/util.cmx \
-    src/vcg.cmx src/pvs.cmi 
+    src/misc.cmx src/monomorph.cmx src/options.cmx src/pp.cmx src/types.cmi \
+    src/util.cmx src/vcg.cmx src/pvs.cmi 
 src/red.cmo: src/ast.cmi src/cc.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/util.cmi src/red.cmi 
 src/red.cmx: src/ast.cmi src/cc.cmi src/ident.cmx src/logic.cmi src/misc.cmx \

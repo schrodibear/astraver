@@ -189,35 +189,35 @@ Admitted.
 
 
 
-(*Why logic*) Definition acc : (A41:Set) ((memory) A41) -> pointer -> A41.
+(*Why logic*) Definition acc : (A20:Set) ((memory) A20) -> pointer -> A20.
 Admitted.
 Implicits acc [1].
 
 
 (*Why logic*) Definition upd :
-  (A42:Set) ((memory) A42) -> pointer -> A42 -> ((memory) A42).
+  (A21:Set) ((memory) A21) -> pointer -> A21 -> ((memory) A21).
 Admitted.
 Implicits upd [1].
 
 
 (*Why axiom*) Lemma acc_upd :
-  (A43:Set)
-  ((m:((memory) A43)) ((p:pointer) ((a:A43) (acc (upd m p a) p) = a))).
+  (A22:Set)
+  ((m:((memory) A22)) ((p:pointer) ((a:A22) (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (A44:Set)
-  ((m:((memory) A44))
+  (A23:Set)
+  ((m:((memory) A23))
    ((p1:pointer)
-    ((p2:pointer) ((a:A44) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+    ((p2:pointer) ((a:A23) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A45:Set)
-  ((m:((memory) A45))
+  (A24:Set)
+  ((m:((memory) A24))
    ((p1:pointer)
     ((p2:pointer)
-     ((a:A45) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     ((a:A24) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
@@ -269,8 +269,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns [A46:Set] [a:alloc_table]
-  [m1:((memory) A46)] [m2:((memory) A46)] [l:assign_loc]
+(*Why predicate*) Definition assigns [A25:Set] [a:alloc_table]
+  [m1:((memory) A25)] [m2:((memory) A25)] [l:assign_loc]
   := ((p:pointer)
       ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicits assigns [1].
@@ -343,12 +343,12 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma assigns_trans :
-  (A47:Set)
+  (A26:Set)
   ((a:alloc_table)
    ((l:assign_loc)
-    ((m1:((memory) A47))
-     ((m2:((memory) A47))
-      ((m3:((memory) A47))
+    ((m1:((memory) A26))
+     ((m2:((memory) A26))
+      ((m3:((memory) A26))
        ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
 Admitted.
 

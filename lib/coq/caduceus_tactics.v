@@ -18,6 +18,14 @@ Ltac neq_pointer :=
   repeat rewrite shift_shift; 
   progress auto with * ||
   match goal with
+  | h: base_addr ?P1 = base_addr ?P2 -> False |- ?P1 <> ?P2 =>
+       red; intro; subst P1; auto
+  | h: base_addr ?P2 = base_addr ?P1 -> False |- ?P1 <> ?P2 =>
+       red; intro; subst P1; auto
+  | h: base_addr ?P1 <> base_addr ?P2 |- ?P1 <> ?P2 =>
+       red; intro; subst P1; auto
+  | h: base_addr ?P2 <> base_addr ?P1 |- ?P1 <> ?P2 =>
+       red; intro; subst P1; auto
   | |- (shift ?P1 ?O1) <> (shift ?P2 ?O2) =>
        solve [ apply neq_offset_neq_shift; auto with * ]
   end.
