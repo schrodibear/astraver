@@ -81,7 +81,9 @@ children when $c$ is 0, or the right children when $c$ is 1.
 
 \subsection{Writing the loop invariant}
 
-\begin{figure}[t]
+\begin{figure}[b]
+\vspace*{-5mm}
+\hrulefill
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}
@@ -478,7 +480,9 @@ The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
 relation are also defined in Coq according the informal definition of
 the measure above. 
 
-\begin{figure}[t]
+\begin{figure}[b]
+\vspace*{-5mm}
+\hrulefill 
 \begin{alltt}\begin{slshape}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
@@ -498,7 +502,6 @@ void schorr_waite(node root) \{
 \}
 \end{alltt}
 \vspace*{-5mm}
-\hrulefill 
 \caption{Additional annotations for termination}
 \label{fig:term}
 \end{figure}

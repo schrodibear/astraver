@@ -30,6 +30,7 @@ boolean field $c$ is used internally by the algorithm, to denote which
 of the children is currently explored.
  
 \begin{figure}[b]
+\vspace*{-5mm}
 \hrulefill
 \begin{alltt}
 void schorr_waite(node root) \{
@@ -220,22 +221,26 @@ graph. Indeed reasoning about reachability is the main part of all the
 verification, as already noticed by previous studies of the
 Schorr-Waite algorithm.
 
-{\Huge EXPLIQUER, comparer avec JML et les methodes pures}
-
-In the \caduceus{} methodology, such an ``external'' notion must be
-declared, by a \verb|predicate| annotation. For the reachability
+At this point, the \caduceus{} methodology is quite different from
+JML one: in JML, one would need to provide a so-called \emph{pure}
+(i.e. side-effect free) method defining reachability and using it in
+annotations. This is a good approach for runtime assertion checking,
+but for formal verification this is unsuitable, because we need to reason
+about reachability, not only compute it. In the \caduceus{}
+methodology, such a logical notion must be 
+declared, by a \verb|predicate| annotation, and supposed to be defined
+or axiomatized in the back-end prover. This is very similar to a forward
+declaration of a C function, whose implementation will be given
+latter: such predicates have to be `implemented' latter, either
+by giving additional \caduceus{} annotations (such as \verb|axioms|)
+or in the back-end prover. For the reachability
 predicate, this is written as
 \begin{alltt}\begin{slshape}
 /*@ predicate reachable (node p1, node p2) 
   @   reads p1->l,p1->r */
 \end{slshape}\end{alltt}
 This declares a binary predicate on nodes, but nothing yet is
-said about its semantics. This is very similar to a forward
-declaration of a C function, whose implementation will be given
-latter. Such predicates have to be `implemented' latter, either
-by giving additional \caduceus{} annotations (such as \verb|axioms|)
-or in the back-end prover. 
-The \texttt{reads} clause that follows the predicate
+said about its semantics. The \texttt{reads} clause that follows the predicate
 declaration above gives information on which data the predicate
 depends on: in this case, it does depend on \verb|p1| and
 \verb|p2| but also on the graph structure itself. The syntax
@@ -244,6 +249,7 @@ in fact as $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$ that is all the
 node expressions from \verb|p1| using the left and right children.
 
 \begin{figure}[b]
+\vspace*{-5mm}
 \hrulefill
 \begin{alltt}\begin{slshape}
 /*@ \textbf{requires}
@@ -283,6 +289,11 @@ inherits from C the fact that booleans are not clearly distinguished
 from the integers: when an integer expression $e$ is used as a logical
 atom, then it should be understood as the boolean $e\neq 0$, so that
 one can indifferently write \verb|! x->m| or \verb|x->m == 0|. 
+Notice that we use a standard first order logic: every function is
+total (like in JML, i.e. no 3-valued logic) so that an expression
+\verb|p->f| is valid even if \verb|p| is \verb|null|, but no
+property of it is known (very similarly to division by zero for
+example). 
 
 In the pre-condition, the built-in predicate $\valid(p)$ means that
 the pointer $p$ points to a correctly allocated memory block, i.e. that
@@ -304,12 +315,6 @@ root is now marked. So this specifies that the whole
 graph has been traversed. The third assertion says that for the nodes
 which were not reachable, their mark is not changed by the algorithm,
 that is the unreachable nodes are not traversed by the algorithm.
-
-Notice that we use a standard first order logic: every function is
-total (like in JML, i.e. no 3-valued logic) so that an expression
-\verb|p->f| is valid even if \verb|p| is \verb|null|, but no
-property of it is known (very similarly to division by zero for
-example). 
 
 With respect to the most recent formal specification given in
 Isabelle/HOL~\cite{mehta03cade}, we added two things: first the
