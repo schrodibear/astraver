@@ -12,8 +12,8 @@ let selection =
       (* t[0..i-1] is already sorted *)
       { invariant 0 <= i <= array_length(t)-1 and
 	          sorted_array(t, 0, i-1) and permut(t, t@init) and
-	          forall k:int. 0 <= k < i ->
-		    forall l:int. i <= l < array_length(t) -> t[k] <= t[l]
+	          forall k:int. forall l:int. 0 <= k < i ->
+		    i <= l < array_length(t) -> t[k] <= t[l]
 	variant array_length(t) - i }
       (* we look for the minimum of t[i..n-1] *)
       let min = ref !i in 
