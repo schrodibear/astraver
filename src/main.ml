@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.38 2002-10-15 09:05:53 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.39 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -139,7 +139,7 @@ let deal_file f =
 let main () =
   if files = [] then begin
     deal_channel ml_parser stdin;
-    output "WhyOutput" 
+    output "Output" 
   end else
     List.iter deal_file files
 

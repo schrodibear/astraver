@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: annot.ml,v 1.2 2002-10-16 13:46:19 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.3 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -11,6 +11,23 @@ open Env
 open Types
 
 (* Automatic annotations *)
+
+let default_post = anonymous Pfalse
+
+(* maximum *)
+
+let sup q q' = match q, q' with
+  | None, _ ->
+      q'
+  | _, None ->
+      q
+  | Some (q, ql), Some (_, ql') ->
+      assert (List.length ql = List.length ql');
+      let supx (x,a) (x',a') =
+	assert (x = x');
+	x, if a == default_post then a' else a
+      in
+      Some (q, List.map2 supx ql ql') 
 
 (* force a post-condition *)
 
@@ -30,23 +47,29 @@ let post_if_none env q p = match post p with
 
 (* post-condition of [while b do inv I done] i.e. [I and not B] *)
 
+let default_exns_post e =
+  let xs = Effect.get_exns e in
+  List.map (fun x -> x, default_post) xs
+ 
 let while_post info b inv = 
   let _,s = decomp_boolean (post b) in
   let s = change_label b.info.label info.label s in
+  let ql = default_exns_post info.kappa.c_effect in
   match inv with
-    | None -> Some (anonymous s, [])
+    | None -> Some (anonymous s, ql)
     | Some i -> Some ({ a_value = pand i.a_value s; 
-			a_name = Name (post_name_from i.a_name) }, [])
+			a_name = Name (post_name_from i.a_name) }, ql)
 
 let while_post_block env inv (phi,_,r) e = 
   let lab = e.info.label in
   let decphi = Papp (r, [phi; put_label_term env lab phi]) in
+  let ql = default_exns_post (effect e) in
   match inv with
     | None -> 
-	anonymous decphi
+	anonymous decphi, ql
     | Some i -> 
 	{ a_value = pand i.a_value decphi; 
-	  a_name = Name (post_name_from i.a_name) }
+	  a_name = Name (post_name_from i.a_name) }, ql
 
 (* misc. *)
 

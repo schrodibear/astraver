@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.62 2002-10-16 13:46:19 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.63 2002-10-17 12:52:21 filliatr Exp $ i*)
 
 open Ident
 open Error
@@ -33,13 +33,13 @@ let filter_post k =
 
 let saturate_post k a q = 
   let ql = match q with Some (_,l) -> l | None -> [] in
-  let set_post x = x, try List.assoc x ql with Not_found -> anonymous Ptrue in
+  let set_post x = x, try List.assoc x ql with Not_found -> default_post in
   let xs = get_exns k.kappa.c_effect in
   let saturate a = (a, List.map set_post xs) in
   option_app saturate a
 
 let need_a_post p = 
-  post p = None && match p.desc with Lam _ | Rec _ -> false | _ -> true
+  match p.desc with Lam _ | Rec _ -> false | _ -> true
 
 (*s Weakest precondition of an annotated program:
     $wp(e{Q'}, Q) = forall y,v. Q' => Q$ 
@@ -70,9 +70,9 @@ let rec wp p q =
   let env = p.info.env in
   let lab = p.info.label in
   let postp = post p in
-  let q0 = if postp = None then q else postp in
-  let q0 = optpost_app (change_label "" lab) q0 in
-  let d,w = wp_desc p.info p.desc q0 in
+  let q0 = Annot.sup postp q (* if postp = None then q else postp *) in
+  let q0_ = optpost_app (change_label "" lab) q0 in
+  let d,w = wp_desc p.info p.desc q0_ in
   let p = change_desc p d in
   let w = option_app (named_app (erase_label lab)) w in
   let p = if need_a_post p then force_post env q0 p else p in
@@ -176,8 +176,8 @@ and wp_desc info d q =
 	Rec (f, bl, v, var, e'), None
     | While (b, inv, var, e) ->
 	let b',_ = wp b None in
-	let a = while_post_block info.env inv var e in
-	let q = saturate_post e.info (Some a) q in
+	let qbl = while_post_block info.env inv var e in
+	let q = Annot.sup (Some qbl) q in (* exc. posts taken from [q] *)
 	let e',_ = wp e q in
 	While (b', inv, var, e'), None
     (* $wp(raise E, _, R) = R$ *)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.52 2002-10-16 13:46:19 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.53 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -106,7 +106,8 @@ let post_name_from =
       avoid := Idset.add id' !avoid;
       id'
 
-let warning s = Format.eprintf "warning: %s\n" s
+let warning s = Format.eprintf "warning: %s@\n" s
+let wprintf f = Format.eprintf "warning: "; Format.eprintf f
 
 (*s Various utility functions. *)
 
@@ -406,6 +407,8 @@ let rec cc_applist f l = match (f, l) with
   | f, x :: l -> cc_applist (CC_app (f, x)) l
 
 let cc_lam bl = List.fold_right (fun b c -> CC_lam (b, c)) bl
+
+let tt_var x = TTterm (Tvar x)
 
 let tt_arrow = List.fold_right (fun b t -> TTarrow (b, t))
 

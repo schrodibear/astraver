@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.66 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.67 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -216,9 +216,11 @@ let rec print_cc_type fmt = function
 	print_cc_type q
   | TTpred p ->
       print_predicate fmt p
-  | TTapp (id, l) ->
-      fprintf fmt "(@[%a@ %a@])" Ident.print id 
+  | TTapp (tt, l) ->
+      fprintf fmt "(@[%a@ %a@])" print_cc_type tt
 	(print_list space print_cc_type) l
+  | TTterm t ->
+      print_term fmt t
 
 and print_binder fmt (id,b) = 
   Ident.print fmt id;

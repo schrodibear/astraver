@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.75 2002-10-15 11:49:11 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.76 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -19,6 +19,7 @@ open Report
 open Ast
 open Env 
 open Effect
+open Annot
 
 (*s Typing of terms (used to type pure expressions). *)
 
@@ -295,7 +296,7 @@ let saturation loc e (a,al) =
     if not (List.mem x xs) then raise_located loc (CannotBeRaised x);
   in
   List.iter check al;
-  let set_post x = x, try List.assoc x al with Not_found -> anonymous Ptrue in
+  let set_post x = x, try List.assoc x al with Not_found -> default_post in
   (a, List.map set_post xs)
 
 (*s Typing programs. We infer here the type with effects. 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.58 2002-09-19 15:22:09 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.59 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -294,7 +294,10 @@ EXTEND
   post_condition:
   [ [ c = assertion -> (c,[]) 
     | c = assertion; "|"; l = LIST1 exn_condition SEP "|" -> (c,l) 
-    | "|"; l = LIST1 exn_condition SEP "|" -> (anonymous (mk_pp loc PPtrue), l)
+    | "|"; l = LIST1 exn_condition SEP "|" -> 
+	Format.eprintf "%awarning: no postcondition; false inserted@\n" 
+	  Loc.report loc;
+	(anonymous (mk_pp loc PPfalse), l)
   ] ]
   ;
   exn_condition:

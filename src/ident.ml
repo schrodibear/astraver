@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.ml,v 1.32 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.33 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -50,7 +50,7 @@ let lprint fmt s = match s.label with
   | None -> Format.fprintf fmt "%s" s.name
   | Some l -> Format.fprintf fmt "%s@@%s" s.name l
 
-let dbprint fmt s = Format.fprintf fmt "%s#%d" s.name s.stamp
+let dbprint fmt s = Format.fprintf fmt "%a#%d" lprint s s.stamp
 
 (*s Possibly anonymous names *)
 

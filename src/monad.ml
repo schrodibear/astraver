@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.55 2002-10-11 11:09:20 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.56 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -22,15 +22,11 @@ open Env
 
 let make_bl = List.map (fun (id,t) -> (id, CC_var_binder t))
 
-let product before ren env w q = match q, w with
+let product w q = match q, w with
   | None, [_, v] -> 
       v
-  | None, _ -> 
-      TTtuple (make_bl w, None)
-  | Some q, _ -> 
-      let (a,al) = apply_post before ren env q in
-      assert (al = []);
-      TTtuple (make_bl w, Some (TTpred a.a_value))
+  | _ -> 
+      TTtuple (make_bl w, q)
 
 (*s [arrow_pred ren v pl] abstracts the term [v] over the pre-condition if any
     i.e. computes
@@ -52,13 +48,17 @@ let arrow_pred ren env v pl =
 let arrow_vars = 
   List.fold_right (fun (id,v) t -> TTarrow ((id, CC_var_binder v), t))
 
+let lambda_vars =
+  List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
+
 (* type of the argument of an exception; unit if none *)
 let exn_arg_type x =
   TTpure (match find_exception x with None -> PTunit | Some pt -> pt)
 
 (* monadic type for exceptions: (EM E1 (EM E1 ... (EM Ek T))) *)
 let trad_exn_type =
-  List.fold_right (fun id t -> TTapp (Ident.exn_type, [exn_arg_type id; t]))
+  List.fold_right 
+    (fun id t -> TTapp (tt_var Ident.exn_type, [exn_arg_type id; t]))
 
 (*s Translation of effects types in CC types.
   
@@ -71,7 +71,8 @@ let rec trad_type_c ren env k =
   let before = label_name () in
   let ren' = next (push_date ren before) o in
   let lo = output ren' env (v,o,x) in
-  let ty = product before ren' env lo q in
+  let q = option_app (apply_post before ren' env) q in
+  let ty = product lo (make_applied_post ren' env k q) in
   let ty = arrow_pred ren env ty p in
   let li = input ren env i in
   arrow_vars li ty
@@ -120,33 +121,9 @@ and trad_type_in_env ren env id =
   let v = type_in_env env id in 
   trad_imp_type ren env v
 
-
-(* builds (Val_e1 (Val_e2 ... (Exn_ei))) *) 
-
-let make_val x =
-  CC_app (CC_term (Tvar Ident.exn_val), CC_type (exn_arg_type x))
-
-let rec make_exn ty x v = function
-  | [] -> 
-      assert false
-  | y :: yl when x = y -> 
-      let v = match v with Some v -> v | None -> Tconst ConstUnit in
-      CC_app (CC_app (CC_term (Tvar Ident.exn_exn), 
-		      CC_type (trad_exn_type yl ty)), CC_term v)
-  | y :: yl -> 
-      CC_app (make_val y, make_exn ty x v yl)
-
-(* builds (Val_e1 (Val_e2 ... (Val_en t))) *)
-
-let make_val t xs = 
-  List.fold_right (fun x cc -> CC_app (make_val x, cc)) xs t
-
-let lambda_vars =
-  List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
-
 (* builds (qcomb [r][Q1] (qcomb [r][Q2] (... (qcomb [r][Qn] [r]Q)))) *)
 
-let make_post ren env res k q =
+and make_post ren env res k q =
   let q = post_app (subst_in_predicate (subst_onev result res)) q in
   let abs_pred v c =
     lambda_vars [res, trad_type_v ren env v] (TTpred c.a_value)
@@ -156,9 +133,40 @@ let make_post ren env res k q =
        let tx = match find_exception x with None -> PTunit | Some pt -> pt in
        let tx = PureType tx in
        let qx = post_exn x q in
-       TTapp (exn_post, [abs_pred tx qx; c]))
+       TTapp (tt_var exn_post, [abs_pred tx qx; c]))
     (get_exns k.c_effect) 
     (abs_pred k.c_result_type (post_val q))
+
+(* same, applied on [result] *)
+
+and make_applied_post ren env k = function
+  | None -> 
+      None
+  | Some (a, []) ->
+      Some (TTpred a.a_value)
+  | Some q ->
+      let tt = make_post ren env result k q in
+      Some (TTapp (tt, [tt_var result]))
+
+(* builds (Val Ex) *) 
+
+let make_valx x =
+  CC_app (CC_term (Tvar Ident.exn_val), CC_type (exn_arg_type x))
+
+(* builds (Val_e1 (Val_e2 ... (Val_en t))) *)
+
+let make_val t xs = 
+  List.fold_right (fun x cc -> CC_app (make_valx x, cc)) xs t
+
+let rec make_exn ty x v = function
+  | [] -> 
+      assert false
+  | y :: yl when x = y -> 
+      let v = match v with Some v -> v | None -> Tconst ConstUnit in
+      CC_app (CC_app (CC_term (Tvar Ident.exn_exn), 
+		      CC_type (trad_exn_type yl ty)), CC_term v)
+  | y :: yl -> 
+      CC_app (make_valx y, make_exn ty x v yl)
 
 (*s The Monadic operators. They are operating on values of the following
     type [interp] (functions producing a [cc_term] when given a renaming
@@ -306,9 +314,8 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
 	  let hyp = subst_in_predicate (subst_onev result res1) q.a_value in
 	  [post_name q.a_name, CC_pred_binder hyp], true 
 	else
-	  (* TODO: type of binder is
-	     TTapp (make_post ren' env res1 k1 q1, res1) *)
-	  [post_name Anonymous , CC_untyped_binder], true 
+	  let tt = TTapp (make_post ren' env res1 k1 q1, [tt_var res1]) in
+	  [post_name Anonymous , CC_var_binder tt], true 
   in
   let vo = current_vars ren' w1 in
   let bl = (binding_of_alist ren env vo) @ b @ b' in

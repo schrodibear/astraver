@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.22 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.23 2002-10-17 12:52:20 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -129,7 +129,8 @@ let rec print_cc_type fmt = function
   | TTarrow _
   | TTtuple _ 
   | TTpred _ 
-  | TTapp _ -> assert false
+  | TTapp _ 
+  | TTterm _ -> assert false
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
