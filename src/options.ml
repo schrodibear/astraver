@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.30 2003-11-04 14:07:57 marche Exp $ i*)
+(*i $Id: options.ml,v 1.31 2004-02-12 09:37:35 marche Exp $ i*)
 
 open Format
 
@@ -27,7 +27,7 @@ let type_only_ = ref false
 let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
-let coq_preamble_ = ref "Require Why."
+let coq_preamble_ = ref None
 let mizar_environ_ = ref None
 let no_simplify_prelude_ = ref false
 let no_harvey_prelude_ = ref false
@@ -179,7 +179,7 @@ let files =
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
 	usage (); exit 1
     | ("-coqpreamble" | "--coqpreamble" | "-coq-preamble" | "--coq-preamble") 
-      :: s :: args -> coq_preamble_ := s; parse args
+      :: s :: args -> coq_preamble_ := Some s; parse args
     | ("-coqpreamble"|"--coqpreamble"|"-coq-preamble"|"--coq-preamble")::[] ->
 	usage (); exit 1
     | ("-mizarenviron" | "--mizarenviron" | 
@@ -225,7 +225,11 @@ let wp_only = !wp_only_
 let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
-let coq_preamble = !coq_preamble_
+let coq_preamble = match !coq_preamble_ with
+  | None when prover = Coq V7 -> "Require Why."
+  | None -> "Require Import Why."
+  | Some s -> s
+
 let mizar_environ = !mizar_environ_
 let no_simplify_prelude = !no_simplify_prelude_
 let no_harvey_prelude = !no_harvey_prelude_

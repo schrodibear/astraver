@@ -9,3 +9,6 @@ old
 *.ml
 pvstc.el
 *_valid.v
+*.sx
+*.sx.all
+.depend

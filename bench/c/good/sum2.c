@@ -4,7 +4,7 @@
 
 /* on veut sum(t,i,j) = t[i]+...+t[j-1] */
 
-/* @ logic int sum(int[] t,int i,int j) 
+/*@ logic int sum(int[] t,int i,int j) 
   (* reads i,j,t,t[*] *)
 */
 

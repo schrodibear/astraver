@@ -1,0 +1,23 @@
+
+(* default variable initialisation *)
+parameter any_int: unit -> int
+parameter any_pointer: unit -> pointer
+
+(* pointer access *)
+parameter acc: 'a memory -> pointer -> 'a
+logic acc: 'a memory, pointer -> 'a
+
+(* pointer arithmetic *)
+parameter shift: pointer -> int -> pointer
+logic shift: pointer,int -> pointer
+
+(* pointer update *)
+parameter upd: 'a memory -> pointer -> 'a -> 'a memory
+logic upd: 'a memory, pointer, 'a -> 'a memory
+
+axiom acc_upd1 : 
+  forall m : 'a memory. forall p : pointer. forall a: 'a.
+    acc(upd(m,p,a),p) = a
+ 
+(* integer pointer/arrays *)
+parameter intP : int memory ref
