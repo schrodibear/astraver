@@ -25,18 +25,18 @@ Modeling Language (JML)~\cite{leavens00jml}. It has however
 significant differences, mainly due to the fact that unlike JML we do
 not seek runtime assertion checking. Description of this annotation
 language is not the purpose of this article ; we refer
-to~\cite{Caduceus,filliatre04icfem} for more information. We will
-simply introduce here what we need for the case study.
-One feature of this annotation language, shared with JML, is that
-annotations must follow a similar syntax as C syntax, so that a C
-programmer may learn it quite easily.
+to~\cite{Caduceus,filliatre04icfem} for more information. We simply
+introduce here what we need for the case study.  One feature of this
+annotation language, shared with JML, is that annotations follow
+a syntax similar to C, so that a C programmer may learn it
+quite easily.
  
 Once a C program is annotated, verification is done by running
 \caduceus{} on its source code in a way similar to a classical
 compiler, but resulting in the generation of so-called
 \emph{verification conditions}: first-order predicate logic formulas
 whose validity implies the soundness of the program with respect to
-the absence of threat and to the functional properties given as
+the absence of threat and to the behavioral  properties given as
 annotations. At this point, a general purpose theorem prover must be
 used to establish those verification conditions.  An original
 \caduceus{} feature is its independence with respect to the prover. It
@@ -46,17 +46,17 @@ haRVey~\cite{ranise03harvey} and CVC-lite~\cite{barrett04cav}
 automatic provers. New provers may easily be added via a suitable
 pretty-printer.
 
-For performing proof of the verification conditions with an
+To perform proof of the verification conditions with an
 interactive prover, the user needs to understand the
 modeling of the memory heap provided by \caduceus{}. The
 `component-as-array' trick of Burstall and Bornat is re-used, extended
 to arrays and pointer arithmetic in
 general~\cite{filliatre04icfem}. For this case study, no pointer
-arithmetic occur in the considered source code, and fortunately the
+arithmetic occurs in the considered source code, and fortunately the
 generated verification conditions are exactly what they could be
 expected with the original `component-as-array' modeling. That is, the
 extension of this trick to pointer arithmetic does not add any
-overhead when the source code does not use pointer arithmetic.
+overhead when the source code makes no use of pointer arithmetic.
 
 %%% Local Variables: 
 %%% mode: latex

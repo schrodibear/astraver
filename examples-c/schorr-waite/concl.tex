@@ -1,11 +1,11 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-We obtained a machine-checked full verification of the Schorr-Waite
+We presented a machine-checked full verification of the Schorr-Waite
 algorithm, directly on a real C source version of it. We have not only
-proved the functional properties of it, like previous
+proved the behavioral properties of it, like previous
 works~\cite{bornat00mpc,mehta03cade}, but we have also proved that no
-invalid pointer dereferencing may occur, and we also proved the
+invalid pointer dereferencing may occur, and the
 termination. Moreover we used a tool for arbitrary C programs, without
 anything specialized for this case study, which additionally gives the
 choice of the back-end prover.
@@ -26,7 +26,10 @@ currently investigating solutions, in particular by integration of
 advanced static analysis techniques.
 
 An interesting question is what would be the next ``mountain to
-climb'' for pointer program verification?
+climb'' for pointer program verification? multi-procedure programs,
+separation {\Huge TODO}
+
+{\Huge comparer ACSL avec JML}
 
 %%% Local Variables: 
 %%% mode: latex

@@ -2,11 +2,11 @@
 \section{Verification}
 \label{sec:proof}
 
-The function is formally specified, now the hard work begins, we need
+The function is now formally specified. The hard work begins: we need
 to prove that the implementation of Figure~\ref{fig:code} indeed
 satisfies this specification. If one runs the \caduceus{} tool on that
-annotated code now, it will generate verification conditions that
-are indeed not provable: as usual with a Hoare-like system, when there
+annotated code, it generates verification conditions that
+are actually not provable: as usual with a Hoare-like system, when there
 are loops like the \verb|while| of Schorr-Waite, it is mandatory
 (except in simple cases) to manually add a loop invariant. The design
 of a suitable loop invariant is the most difficult part of
@@ -14,9 +14,9 @@ the verification process, more difficult than performing the proof
 themselves. Fortunately for us, suitable loop invariants were proposed
 by previous works on Schorr-Waite algorithm. However, some
 difficulties remain. The main one is that we need to express this loop
-invariant in the \caduceus{} syntax, which is quite poor, for example
-in~\cite{mehta03cade} they use a higher-order syntax that is simply
-not allowed by \caduceus. 
+invariant in the \caduceus{} syntax, which is limited to
+first-order. Hence, the higher-order specifications of~\cite{mehta03cade}
+are not allowed by \caduceus. 
 % Also, since we proved a little bit more than
 % previous works, namely the absence of invalid pointer dereferencing,
 % we needed to add new assertions in the loop invariant.
@@ -71,10 +71,10 @@ the root will be always reachable either from $p$ or from $t$. We also
 need to describe as a loop invariant how the backtracking stack is
 implemented using the pointers of the graph. On
 Figure~\ref{fig:stack}, we display some state of the graph as it may
-occur at an arbitrary iteration of the loop. The dashed arrows
-corresponds to the children pointers as they were at the beginning,
-whereas the thick arrows shows their current values. the normal arrows
-corresponds to unmodified links. The backtracking stack is indeed the
+occur at an arbitrary iteration of the loop. The dotted arrows
+correspond to the children pointers as they were at the beginning,
+whereas the thick arrows show their current values. The normal arrows
+correspond to unmodified links. The backtracking stack is indeed the
 list of pointers, starting from $p$, following either the left
 children when $c$ is 0, or the right children when $c$ is 1.
 
@@ -127,19 +127,19 @@ void schorr_waite(node root) \{
 The loop invariant as it is written in the \caduceus{} annotation
 language is displayed on Figure~\ref{fig:loopinv}.  For specifying this
 loop invariant, in particular the stack, we need to talk about lists
-of pointers, in annotations. With \caduceus{}, such a datatype from
+of pointers in annotations. With \caduceus{}, such a datatype from
 the logical side can be imported, implicitly. Then new predicates and
 logical function symbols can be declared, as the \verb|reachable|
-predicate already introduced, which can take as argument either C
+predicate already introduced, which can take as arguments either C
 types or logical types. Here we declare
 \begin{alltt}\begin{slshape}
 /*@ logic plist cons(node p, plist l) */
 /*@ predicate in_list(node p,plist l) */
 /*@ predicate pair_in_list(node p1,node p2, plist l) */\end{slshape}
 \end{alltt}
-which first introduce the logical type \verb|plist| for finite lists
+which first introduces the logical type \verb|plist| for finite lists
 of pointers, then a logical function symbol \verb|cons| which adds an
-element to a list, a predicate \verb|in_list| which tests if a pointer
+element to a list, a predicate \verb|in_list| which tests whether a pointer
 belongs to a list, and finally a predicate
 $\verb|pair_in_list|(p_1,p_2,l)$, saying that $p_1$ and $p_2$ are two
 consecutive elements in a list $l$.
@@ -150,7 +150,7 @@ The loop invariant finally requires the declaration of two predicates:
   @   reads p1->r,p1->l,p1->m 
   @*/\end{slshape}
 \end{alltt}
-specifies that $p_2$ is reachable from $p_1$, by traversing only
+specifies that $p_2$ is reachable from $p_1$ by traversing only
 unmarked nodes; and
 \begin{alltt}\begin{slshape}
 /*@ predicate clr_list (node p, plist stack) 
@@ -160,34 +160,34 @@ unmarked nodes; and
 specifies that \verb|stack| is the list of pointers obtained from $p$ as
 described on Figure~\ref{fig:stack}.
 
-On Figure~\ref{fig:loopinv}, we used the \caduceus{} notation to name
-formulas, of the form \textsl{name}\verb|::|\textsl{formula}. The loop
-invariant has eight assertions:
+On Figure~\ref{fig:loopinv}, we use the \caduceus{} notation to name
+formulas with double-colons. The loop
+invariant is made of eight assertions:
 \begin {enumerate}
 \item[I1] means that all nodes which were initially reachable from
   root, are reachable from $t$ or $p$
-\item[I2] means that conversely, all (non-null) nodes reachable by $t$
+\item[I2] means that conversely, all (non-null) nodes reachable from $t$
   or $p$ were initially reachable from \verb|root|. This is true only
   for non-null node, because \verb|null| may not be reachable from
-  \verb|root| is the graph is cyclic.
+  \verb|root| if the graph is cyclic.
 \item[I3] means that for initially unreachable nodes, the marks
   remain unchanged.
 \item[I4a] defines the backtracking stack as on Figure~\ref{fig:stack}.
 \item[I4b] means that all nodes in the \texttt{stack} are marked.
-\item[I4c] is the trickiest annotation, means that
+\item[I4c] is the trickiest annotation: it means that
   any valid node, initially reachable from root, 
   and not yet marked, is reachable by traversing only
   unmarked nodes, either from $t$ or from the right children of a node
   in the stack.
 \item[I4d] means that all nodes out of \texttt{stack} have
-  the same children as before the function. 
-\item[I4e] is a tricky one also, that is essential for being able to
+  the same children as initially. 
+\item[I4e] is essential for being able to
   `recover' the correct children of nodes of the stack, as it can be
   seen again on Figure~\ref{fig:stack}: if $p_1$ is in
   the stack, followed by $p_2$ (or if $p_1$ is $t$ and $p2$ is the head of the
   stack), then: if $p_2\verb|->c|$ is
   1 then its left child is the same as its was initially
-     and its right child is $p_1$ ; and if $p_2\verb|->c|$ is 0 then
+     and its right child is $p_1$; and if $p_2\verb|->c|$ is 0 then
      its left child is $p_1$ and its right child is the same as it was
      initially. 
 \end{enumerate}
@@ -246,7 +246,7 @@ require validity check, because they are trivial enough to be
 automatically discharged, for example \verb|p->r| in the `pop` branch
 because it was preceeded by \verb|p->c| and \verb|p| did not change.
 
-A first attempt can be made to solve these obligations by an
+A first attempt can be made to solve these obligations with an
 automatic prover. Here we present the result with Simplify, which appears
 to be the best in that case. Four of the twelve obligations are
 solved automatically, which are the validity of the dereferencings
@@ -255,12 +255,12 @@ look at those obligations shows that they can be solved by equality
 reasoning: for example the \verb|t->r| access in the `pop' branch is
 valid because \verb|t| is equal to the old value of \verb|p| in the
 condition of the if, which is already assumed valid. It is not
-surprising at all that Simplify do not solve the other obligations,
-because until now we did not give any definition or axiomatization of
-the introduce predicates, in particular reachability. Indeed, to
+surprising at all that Simplify does not solve the other obligations,
+because until now we did not give any definition or axiomatization for
+the introduced predicates, in particular reachability. Indeed, to
 establish for example validity of \verb|t->m| in the condition of the
 \verb|while|, one needs to use the function's pre-condition saying
-that any non-null, initially reachable node is valid. To establish
+that any non-null initially reachable node is valid. To establish
 that \verb|t| is initially reachable, one can use the \verb|I1|
 assertion of the loop invariant, as soon as one knows the simple fact
 that \verb|t| is reachable from itself! So one thing that can be done
@@ -280,19 +280,18 @@ assistant.
 \subsection{Verification with the Coq interactive prover}
 
 Unlike with Simplify, we have now all the power of the Coq
-specification language, in particular we do not need to axiomatize
+specification language; in particular we do not need to axiomatize
 predicates in the C source file, but we can \emph{define} them, and in
 particular for reachability, it is natural to use an inductive
-definition.
+definition in the spirit of~\cite{mehta03cade}.
 
-Due to lack of space, we do not present any Coq code here, the whole
+Due to lack of space, we do not present any Coq code here, but only
+approximations to ease reading. The whole
 development can be found from the \caduceus{} web
 page~\cite{Caduceus}. The first step is to deal with the type
 \verb|plist| used to modelize the stack: we simply use the finite list
 datatype of the Coq standard library. The \verb|clr_list| predicate
-can be defined inductively with the Prolog-like clauses (this is only
-an approximation of the real Coq code, to ease reading, the real code
-can be found in the \caduceus{} distribution):
+can be defined inductively with the Prolog-like clauses:
 \[
 \begin{array}{l}
 \verb|clr_list|(a,c,l,r, p, nil).  \\
@@ -315,7 +314,7 @@ modeling~\cite{Caduceus,filliatre04icfem}.
 The next step is to define the reachability predicate in Coq. We
 proceeded in a slightly different way than Mehta and
 Nipkow~\cite{mehta03cade}: we introduce a more general predicate
-\verb|path| which also make precise the path between nodes. It is
+\verb|path| which also makes precise the path between nodes. It is
 defined by three clauses:
 \[
 \begin{array}{l}
@@ -339,9 +338,9 @@ p_2, s) \land \forall p, in(p,s) \rightarrow select(m,p) = 0 \\
 Notice that it is now easy to establish the validity of the axiom
 \verb|reachable_refl|.
 
-A few lemmas have been proved before proving the obligations, the most
-important one was to show that when $p_2$ is reachable from $p_1$,
-there is a path which have no cycle:
+A few lemmas are proved before proving the obligations, the most
+important one is to show that when $p_2$ is reachable from $p_1$,
+there is a path which has no cycle:
 \[
 \begin{array}{l}
 \forall a, p_1, p_2, l, r, s,~path(a,l,r,p_1,p_2,s) \rightarrow
@@ -353,9 +352,10 @@ there is a path which have no cycle:
 where \verb|no_rep| is a simple predicate on a list which says that no
 element occurs twice. 
 
-With those definitions and lemmas, we have been able to manually
-complete all the proof obligations in Coq. We will give a few figures
-after talking about the last point: termination.
+With those definitions and lemmas, we are able to manually
+complete all the proof obligations in Coq. We give a few figures
+at the end of the next section.
+% after talking about the last point: termination.
 
 
 \begin{comment}
@@ -455,22 +455,22 @@ llist a next .
 \subsection{Termination}
 \label{sec:termination}
 
-Proving termination of the algorithm of course amounts to prove
+Proving termination of the algorithm is proving
 termination of the while loop. In \caduceus{}, one can annotate a
 loop by a \emph{variant}: an expression which decreases with respect
-to some well-founded ordering. It is quite easy to find such a
-measure: there is a triple of natural numbers which decrease
-lexicographically at each iteration:
+to some well-founded ordering. It is not hard to find such a
+measure for the Schorr-Waite algorithm. There is a triple of natural
+numbers which decrease lexicographically at each iteration:
 \begin{enumerate}
-\item the number of unmarked reachable nodes
-\item the number of reachable nodes which have $c=0$
-\item the length of the stack
+\item The number of unmarked reachable nodes;
+\item The number of reachable nodes which have $c=0$;
+\item The length of the stack
 \end{enumerate}
-There is a minor problem: in our modeling, there is no assumption on
+There is a minor issue: in our modeling, there is no assumption on
 the finiteness of the memory, so indeed nothing tells that the set of
-reachable nodes is finite. So indeed, this is an extra assumption we have
-to insert in the pre-condition. Finally, the annotated source code is
-completed as given Figure~\ref{fig:term}, where in Coq we define
+reachable nodes is finite. So this is an extra assumption we have
+to insert in the pre-condition. The additional annotations for
+termination are given Figure~\ref{fig:term}, where in Coq we define
 \[
 \begin{array}{l}
 \verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
@@ -478,8 +478,8 @@ completed as given Figure~\ref{fig:term}, where in Coq we define
 \end{array}
 \]
 The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
-are also defined in Coq according the informal definition of the
-measure above. 
+relation are also defined in Coq according the informal definition of
+the measure above. 
 
 \begin{figure}[t]
 \begin{alltt}\begin{slshape}
@@ -507,8 +507,7 @@ void schorr_waite(node root) \{
 \label{fig:term}
 \end{figure}
 
-
-With the completed annotated code, \caduceus{} generated two
+With the completed annotated code, \caduceus{} generates two
 additional verification conditions. The first is to show that the ordering is
 well-founded, whereas the second is indeed an artifact of the
 \caduceus{} verification condition generator, trivially solved by
@@ -520,15 +519,15 @@ The well-foundedness obligation is indeed not passed to
 automatic provers like Simplify because it is a second-order
 formula. So finally Simplify solves 8 of the 13 obligations, which is
 a quite good score but of course the 5 remaining obligations are by
-far more difficult than the others.
+far the most difficult.
 
 With Coq, we completed all the obligations including the
 well-foundedness. Here are a few figures about the whole Coq proof: 
 definition of predicates on lists, reachability and such, and
 corresponding lemmas amount to 317 lines of definitions and 589 lines
 of proof tactics. The generated verification conditions amount to 985
-lines, and 2411 lines of tactics were inserted manually for proving
-them. Approximately 40\% of the work was for the termination proof,
+lines, and 2411 lines of tactics were inserted manually to prove
+them. Approximately 40\% of the work was devoted to the termination proof,
 both in term of lines of Coq text and of time spent: proving the
 obligations without termination required around 3 weeks, and the
 termination proof required 2 more weeks.
