@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cpp.mll,v 1.2 2004-03-04 09:08:27 filliatr Exp $ i*)
+(*i $Id: cpp.mll,v 1.3 2004-03-04 09:16:27 filliatr Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -36,13 +36,13 @@ let start_of_comment_string = "start_of_comment_string"
 let end_of_comment_string = "end_of_comment_string"
 
 rule before = parse
-  | "/*" { print start_of_comment_string; before lexbuf }
-  | "*/" { print end_of_comment_string; before lexbuf }
+  | "/*@" { print start_of_comment_string; before lexbuf }
+(*  | "*/" { print end_of_comment_string; before lexbuf } *)
   | _    { print (lexeme lexbuf); before lexbuf }
   | eof  { () }
 
 and after = parse
-  | start_of_comment_string { print "/*"; after lexbuf }
+  | start_of_comment_string { print "/*@"; after lexbuf }
   | end_of_comment_string   { print "*/"; after lexbuf }
   | _    { print (lexeme lexbuf); after lexbuf }
   | eof  { () }
