@@ -26,6 +26,10 @@
   let loc () = (symbol_start (), symbol_end ())
   let loc_i i = (rhs_start i, rhs_end i)
 
+  let locate x = { node = x; loc = loc() }
+  let locate_i i x = { node = x; loc = loc_i i }
+  let with_loc l x = { node = x; loc = l }
+
   let error s = raise (Stdpp.Exc_located (loc (), Stream.Error s))
 
   let uns () =
@@ -40,9 +44,9 @@
     | Some (b,_) -> Loc.join (b,0) lb 
     | _ -> lb
 
-  let expr_of_statement = function
-    | CSnop l -> CEnop l
-    | CSexpr (_, e) -> e
+  let expr_of_statement s = match s.node with
+    | CSnop -> { node = CEnop; loc = s.loc }
+    | CSexpr e -> e
     | _ -> assert false
 
   (* used only for parsing types *)
@@ -74,7 +78,7 @@
 
   (* interps a list of specifiers / declarators as a [ctype] *)
 
-  let interp_type specs d = 
+  let interp_type specs decl = 
     failwith "todo"
 
   let interp_param (s, d, id) = interp_type s d, id
@@ -86,13 +90,13 @@
     let l = loc() in
     if is_typedef specs then
       let interp = function
-	| (n,d), Inothing -> Ctypes.add n; Ctypedef (l, interp_type specs d, n)
+	| (n,d), Inothing -> Ctypes.add n; Ctypedef (interp_type specs d, n)
 	| (n,_), _ -> error ("typedef " ^ n ^ " is initialized")
       in
       List.map interp decls
     else
       let interp ((n,d),i) =
-	Ctypes.remove n; Cdecl (l, interp_type specs d, n, i)
+	Ctypes.remove n; Cdecl (interp_type specs d, n, i)
       in
       List.map interp decls
 
@@ -128,9 +132,9 @@ file
         ;
 
 primary_expression
-        : IDENTIFIER { CEvar (loc (), $1) }
-        | CONSTANT { CEconstant (loc (), $1) }
-        | STRING_LITERAL { CEstring_literal (loc (), $1) }
+        : IDENTIFIER { locate (CEvar $1) }
+        | CONSTANT { locate (CEconstant $1) }
+        | STRING_LITERAL { locate (CEstring_literal $1) }
         | LPAR expression RPAR { $2 }
         ;
 
@@ -138,19 +142,19 @@ postfix_expression
         : primary_expression 
             { $1 }
         | postfix_expression LSQUARE expression RSQUARE 
-	    { CEarrget (loc (), $1, $3) }
+	    { locate (CEarrget ($1, $3)) }
         | postfix_expression LPAR RPAR 
-	    { CEcall (loc (), $1, []) }
+	    { locate (CEcall ($1, [])) }
         | postfix_expression LPAR argument_expression_list RPAR 
-	    { CEcall (loc (), $1, $3) }
+	    { locate (CEcall ($1, $3)) }
         | postfix_expression DOT IDENTIFIER 
-	    { CEdot (loc (), $1, $3) }
+	    { locate (CEdot ($1, $3)) }
         | postfix_expression PTR_OP IDENTIFIER 
-	    { CEarrow (loc (), $1, $3) }
+	    { locate (CEarrow ($1, $3)) }
         | postfix_expression INC_OP 
-	    { CEunary (loc (), Postfix_inc, $1) }
+	    { locate (CEunary (Postfix_inc, $1)) }
         | postfix_expression DEC_OP
-	    { CEunary (loc (), Postfix_dec, $1)}
+	    { locate (CEunary (Postfix_dec, $1)) }
         ;
 
 argument_expression_list
@@ -160,12 +164,12 @@ argument_expression_list
 
 unary_expression
         : postfix_expression { $1 }
-        | INC_OP unary_expression { CEunary (loc (), Prefix_inc, $2) }
-        | DEC_OP unary_expression { CEunary (loc (), Prefix_dec, $2) }
-        | unary_operator cast_expression { CEunary (loc (), $1, $2) }
-        | SIZEOF unary_expression { CEsizeof_expr (loc (), $2) }
+        | INC_OP unary_expression { locate (CEunary (Prefix_inc, $2)) }
+        | DEC_OP unary_expression { locate (CEunary (Prefix_dec, $2)) }
+        | unary_operator cast_expression { locate (CEunary ($1, $2)) }
+        | SIZEOF unary_expression { locate (CEsizeof_expr $2) }
         | SIZEOF LPAR type_name RPAR 
-	    { let s,d = $3 in CEsizeof (loc (), interp_type s d) }
+	    { let s,d = $3 in locate (CEsizeof (interp_type s d)) }
         ;
 
 unary_operator
@@ -180,106 +184,106 @@ unary_operator
 cast_expression
         : unary_expression { $1 }
         | LPAR type_name RPAR cast_expression 
-	    { let s,d = $2 in CEcast (loc (), interp_type s d, $4) }
+	    { let s,d = $2 in locate (CEcast (interp_type s d, $4)) }
         ;
 
 multiplicative_expression
         : cast_expression 
             { $1 }
         | multiplicative_expression STAR cast_expression 
-	    { CEbinary (loc (), $1, Mult, $3) }
+	    { locate (CEbinary ($1, Mult, $3)) }
         | multiplicative_expression SLASH cast_expression 
-	    { CEbinary (loc (), $1, Div, $3) }
+	    { locate (CEbinary ($1, Div, $3)) }
         | multiplicative_expression PERCENT cast_expression 
-	    { CEbinary (loc (), $1, Mod, $3) }
+	    { locate (CEbinary ($1, Mod, $3)) }
         ;
 
 additive_expression
         : multiplicative_expression 
            { $1 }
         | additive_expression PLUS multiplicative_expression 
-	    { CEbinary (loc (), $1, Plus, $3) }
+	    { locate (CEbinary ($1, Plus, $3)) }
         | additive_expression MINUS multiplicative_expression 
-	    { CEbinary (loc (), $1, Minus, $3) }
+	    { locate (CEbinary ($1, Minus, $3)) }
         ;
 
 shift_expression
         : additive_expression { $1 }
         | shift_expression LEFT_OP additive_expression 
-	    { CEshift (loc (), $1, Left, $3) }
+	    { locate (CEshift ($1, Left, $3)) }
         | shift_expression RIGHT_OP additive_expression 
-	    { CEshift (loc (), $1, Right, $3) }
+	    { locate (CEshift ($1, Right, $3)) }
         ;
 
 relational_expression
         : shift_expression 
             { $1 }
         | relational_expression LT shift_expression 
-	    { CEbinary (loc (), $1, Lt, $3) }
+	    { locate (CEbinary ($1, Lt, $3)) }
         | relational_expression GT shift_expression
-	    { CEbinary (loc (), $1, Gt, $3) }
+	    { locate (CEbinary ($1, Gt, $3)) }
         | relational_expression LE_OP shift_expression
-	    { CEbinary (loc (), $1, Le, $3) }
+	    { locate (CEbinary ($1, Le, $3)) }
         | relational_expression GE_OP shift_expression
-	    { CEbinary (loc (), $1, Ge, $3) }
+	    { locate (CEbinary ($1, Ge, $3)) }
         ;
 
 equality_expression
         : relational_expression 
             { $1 }
         | equality_expression EQ_OP relational_expression 
-	    { CEbinary (loc (), $1, Eq, $3) }
+	    { locate (CEbinary ($1, Eq, $3)) }
         | equality_expression NE_OP relational_expression 
-	    { CEbinary (loc (), $1, Neq, $3) }
+	    { locate (CEbinary ($1, Neq, $3)) }
         ;
 
 and_expression
         : equality_expression 
             { $1 }
         | and_expression AMP equality_expression 
-	    { CEbinary (loc (), $1, Bw_and, $3) }
+	    { locate (CEbinary ($1, Bw_and, $3)) }
         ;
 
 exclusive_or_expression
         : and_expression 
             { $1 }
         | exclusive_or_expression HAT and_expression 
-	    { CEbinary (loc (), $1, Bw_xor, $3) }
+	    { locate (CEbinary ($1, Bw_xor, $3)) }
         ;
 
 inclusive_or_expression
         : exclusive_or_expression 
             { $1 }
         | inclusive_or_expression PIPE exclusive_or_expression 
-	    { CEbinary (loc (), $1, Bw_or, $3) }
+	    { locate (CEbinary ($1, Bw_or, $3)) }
         ;
 
 logical_and_expression
         : inclusive_or_expression 
             { $1 }
         | logical_and_expression AND_OP inclusive_or_expression 
-	    { CEbinary (loc (), $1, And, $3) }
+	    { locate (CEbinary ($1, And, $3)) }
         ;
 
 logical_or_expression
         : logical_and_expression 
             { $1 }
         | logical_or_expression OR_OP logical_and_expression 
-	    { CEbinary (loc (), $1, Or, $3) }
+	    { locate (CEbinary ($1, Or, $3)) }
         ;
 
 conditional_expression
         : logical_or_expression 
             { $1 }
         | logical_or_expression QUESTION expression COLON conditional_expression 
-	    { CEcond (loc (), $1, $3, $5) }
+	    { locate (CEcond ($1, $3, $5)) }
         ;
 
 assignment_expression
         : conditional_expression 
             { $1 }
         | unary_expression assignment_operator assignment_expression 
-	    { CEassign (loc (), $1, $2, $3) }
+	    { locate (CEassign ($1, $2, $3)) }
         ;
 
 assignment_operator
@@ -298,7 +302,7 @@ assignment_operator
 
 expression
         : assignment_expression { $1 }
-        | expression COMMA assignment_expression { CEseq (loc(), $1, $3) }
+        | expression COMMA assignment_expression { locate (CEseq ($1, $3)) }
         ;
 
 constant_expression
@@ -309,9 +313,9 @@ declaration
         : declaration_specifiers SEMICOLON 
             { warning "empty declaration"; [] }
         | declaration_specifiers init_declarator_list SEMICOLON 
-	    { declaration $1 $2 }
+	    { List.map locate (declaration $1 $2) }
 	| WDECL  /* ADDED FOR WHY */
-	    { [Cspecdecl $1] }
+	    { [locate (Cspecdecl $1)] }
         ;
 
 declaration_specifiers
@@ -540,7 +544,7 @@ c_initializer_list
 
 statement
         : labeled_statement { $1 }
-        | compound_statement { CSblock (loc (), $1) }
+        | compound_statement { locate (CSblock $1) }
         | expression_statement { $1 }
         | selection_statement { $1 }
         | iteration_statement { $1 }
@@ -548,9 +552,9 @@ statement
         ;
 
 labeled_statement
-        : IDENTIFIER COLON statement { CSlabel (loc (), $1, $3) }
-        | CASE constant_expression COLON statement { CScase (loc (), $2, $4) }
-        | DEFAULT COLON statement { CSdefault (loc (), $3) }
+        : IDENTIFIER COLON statement { locate (CSlabel ($1, $3)) }
+        | CASE constant_expression COLON statement { locate (CScase ($2, $4)) }
+        | DEFAULT COLON statement { locate (CSdefault $3) }
         ;
 
 compound_statement
@@ -570,7 +574,7 @@ compound_statement_LBRACE:
 
 /* ADDED FOR WHY */
 compound_statement_with_post
-        : compound_statement annot { (loc (), $1, $2) }
+        : compound_statement annot { ($1, $2) }
         ;
 
 declaration_list
@@ -584,39 +588,41 @@ statement_list
         ;
 
 expression_statement
-        : SEMICOLON { CSnop (loc ()) }
-	| ANNOT SEMICOLON { CSannot (loc (), $1) } /* ADDED FOR WHY */
-        | expression SEMICOLON { CSexpr (loc (), $1) }
+        : SEMICOLON { locate CSnop }
+	| ANNOT SEMICOLON { locate (CSannot $1) } /* ADDED FOR WHY */
+        | expression SEMICOLON { locate (CSexpr $1) }
         ;
 
 selection_statement
         : IF LPAR expression RPAR statement 
-            { CScond (loc (), $3, $5, CSnop (loc ())) }
+            { locate (CScond ($3, $5, locate CSnop)) }
         | IF LPAR expression RPAR statement ELSE statement 
-	    { CScond (loc (), $3, $5, $7) }
+	    { locate (CScond ($3, $5, $7)) }
         | SWITCH LPAR expression RPAR statement 
-	    { CSswitch (loc (), $3, $5) }
+	    { locate (CSswitch ($3, $5)) }
         ;
 
 iteration_statement
         : WHILE LPAR expression RPAR ANNOT statement 
-            { CSwhile (loc (), $3, $5, $6) }
+            { locate (CSwhile ($3, $5, $6)) }
         | DO statement ANNOT WHILE LPAR expression RPAR SEMICOLON 
-	    { CSdowhile (loc (), $2, $3, $6) }
-        | FOR LPAR expression_statement expression_statement RPAR ANNOT statement 
-	    { CSfor (loc (), expr_of_statement $3, expr_of_statement $4, 
-		     None, $6, $7) }
-        | FOR LPAR expression_statement expression_statement expression RPAR ANNOT statement 
-	    { CSfor (loc (), expr_of_statement $3, expr_of_statement $4, 
-		     Some $5, $7, $8) }
+	    { locate (CSdowhile ($2, $3, $6)) }
+        | FOR LPAR expression_statement expression_statement RPAR 
+          ANNOT statement 
+	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
+			     None, $6, $7)) }
+        | FOR LPAR expression_statement expression_statement expression RPAR 
+          ANNOT statement 
+	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
+			     Some $5, $7, $8)) }
         ;
 
 jump_statement
-        : GOTO IDENTIFIER SEMICOLON { CSgoto (loc (), $2) }
-        | CONTINUE SEMICOLON { CScontinue (loc ()) }
-        | BREAK SEMICOLON { CSbreak (loc ()) }
-        | RETURN SEMICOLON { CSreturn (loc (), None) }
-        | RETURN expression SEMICOLON { CSreturn (loc (), Some $2) }
+        : GOTO IDENTIFIER SEMICOLON { locate (CSgoto $2) }
+        | CONTINUE SEMICOLON { locate CScontinue }
+        | BREAK SEMICOLON { locate CSbreak }
+        | RETURN SEMICOLON { locate (CSreturn None) }
+        | RETURN expression SEMICOLON { locate (CSreturn (Some $2)) }
         ;
 
 translation_unit
@@ -631,20 +637,22 @@ external_declaration
 
 function_definition
         : declaration_specifiers declarator declaration_list compound_statement
-            { let lb,b,q = loc_i 4, $4, None in
+            { let b,q = $4, None in
 	      match $2 with
 		| id, Dfunction (d, pl, p) ->
-		    let lb = add_pre_loc lb p in
+		    let lb = add_pre_loc (loc_i 4) p in
 		    let ty = interp_type $1 d in
-		    Cfundef (loc (), ty, id, interp_params pl, (lb,p,b,q))
+		    locate 
+		      (Cfundef (ty, id, interp_params pl, with_loc lb (p,b,q)))
 		| _ -> uns () }
         | declaration_specifiers declarator compound_statement_with_post
-	    { let (lb,b,q) = $3 in
+	    { let (b,q) = $3 in
               match $2 with
 		| id, Dfunction (d, pl, p) -> 
-		    let lb = add_pre_loc lb p in
+		    let lb = add_pre_loc (loc_i 3) p in
 		    let ty = interp_type $1 d in
-		    Cfundef (loc (), ty, id, interp_params pl, (lb,p,b,q))
+		    locate
+		      (Cfundef (ty, id, interp_params pl, with_loc lb (p,b,q)))
 		| _ -> uns () }
         | declarator declaration_list compound_statement 
 	    { uns () }

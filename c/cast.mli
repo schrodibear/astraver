@@ -14,12 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.1 2003-12-08 13:02:50 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.2 2003-12-10 09:53:24 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
-open Logic
-open Ptree
+type 'a located = { node : 'a; loc : Loc.t }
 
 type annot = int * string
 
@@ -61,60 +60,64 @@ type binary_operator =
 
 type shift = Left | Right
 
-type cexpr =
-  | CEnop of Loc.t
-  | CEconstant of Loc.t * string
-  | CEstring_literal of Loc.t * string
-  | CEvar of Loc.t * string
-  | CEdot of Loc.t * cexpr * string
-  | CEarrow of Loc.t * cexpr * string
-  | CEarrget of Loc.t * cexpr * cexpr
-  | CEseq of Loc.t * cexpr * cexpr
-  | CEassign of Loc.t * cexpr * assign_operator * cexpr
-  | CEunary of Loc.t * unary_operator * cexpr
-  | CEbinary of Loc.t * cexpr * binary_operator * cexpr
-  | CEcall of Loc.t * cexpr * cexpr list
-  | CEcond of Loc.t * cexpr * cexpr * cexpr
-  | CEshift of Loc.t * cexpr * shift * cexpr
-  | CEcast of Loc.t * ctype * cexpr
-  | CEsizeof_expr of Loc.t * cexpr
-  | CEsizeof of Loc.t * ctype
+type cexpr = cexpr_node located
+
+and cexpr_node =
+  | CEnop
+  | CEconstant of string
+  | CEstring_literal of string
+  | CEvar of string
+  | CEdot of cexpr * string
+  | CEarrow of cexpr * string
+  | CEarrget of cexpr * cexpr
+  | CEseq of cexpr * cexpr
+  | CEassign of cexpr * assign_operator * cexpr
+  | CEunary of unary_operator * cexpr
+  | CEbinary of cexpr * binary_operator * cexpr
+  | CEcall of cexpr * cexpr list
+  | CEcond of cexpr * cexpr * cexpr
+  | CEshift of cexpr * shift * cexpr
+  | CEcast of ctype * cexpr
+  | CEsizeof_expr of cexpr
+  | CEsizeof of ctype
 
 type c_initializer = 
   | Inothing
   | Iexpr of cexpr
   | Ilist of c_initializer list
 
-type cstatement = 
-  | CSnop of Loc.t
-  | CSexpr of Loc.t * cexpr
-  | CScond of Loc.t * cexpr * cstatement * cstatement
-  | CSwhile of Loc.t * cexpr * annot * cstatement
-  | CSdowhile of Loc.t * cstatement * annot * cexpr
-  | CSfor of Loc.t * cexpr * cexpr * cexpr option * annot * cstatement
-  | CSblock of Loc.t * block
-  | CSreturn of Loc.t * cexpr option
-  | CSbreak of Loc.t
-  | CScontinue of Loc.t
-  | CSlabel of Loc.t * string * cstatement
-  | CSswitch of Loc.t * cexpr * cstatement
-  | CScase of Loc.t * cexpr * cstatement
-  | CSdefault of Loc.t * cstatement
-  | CSgoto of Loc.t * string
-  | CSannot of Loc.t * annot
+type cstatement = cstatement_node located
 
-and block = decl list * cstatement list
+and cstatement_node =
+  | CSnop
+  | CSexpr of cexpr
+  | CScond of cexpr * cstatement * cstatement
+  | CSwhile of cexpr * annot * cstatement
+  | CSdowhile of cstatement * annot * cexpr
+  | CSfor of cexpr * cexpr * cexpr option * annot * cstatement
+  | CSblock of block
+  | CSreturn of cexpr option
+  | CSbreak
+  | CScontinue
+  | CSlabel of string * cstatement
+  | CSswitch of cexpr * cstatement
+  | CScase of cexpr * cstatement
+  | CSdefault of cstatement
+  | CSgoto of string
+  | CSannot of annot
 
-and annotated_block = Loc.t * annot option * block * annot option
+and block = decl located list * cstatement list
+
+and annotated_block = annot option * block * annot option
 
 and decl = 
   | Cspecdecl of annot
-  | Ctypedef of Loc.t * ctype * string
-  | Cdecl of Loc.t * ctype * string * c_initializer
-  | Cfundef of Loc.t * ctype * string * parameters * annotated_block
+  | Ctypedef of ctype * string
+  | Cdecl of ctype * string * c_initializer
+  | Cfundef of ctype * string * parameters * annotated_block located
 
 and parameters = (ctype * string) list
 
-type file = decl list
+type file = decl located list
 
 

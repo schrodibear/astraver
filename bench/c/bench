@@ -5,7 +5,7 @@
 # C files to parse with success
 echo "C parsing"
 cd good/syntax
-parsing="../../../bin/caduceus.opt -parse-only"
+parsing="../../../../bin/caduceus.opt -parse-only"
 for f in *.c; do
     echo -n "  "$f"... "
     if ! gcc -c $f > /dev/null 2>&1; then
