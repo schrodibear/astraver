@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.55 2002-09-11 14:52:28 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.56 2002-09-12 11:31:25 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -96,10 +96,11 @@ let conj_assert {a_name=n; a_value=a} {a_value=b} =
   { a_value = infix_pp (Loc.join a.pp_loc b.pp_loc) a PPand b; a_name = n }
 
 let conj = function
-  | None,None     -> None
-  | None,b        -> b
-  | a,None        -> a
-  | Some a,Some b -> Some (conj_assert a b)
+  | None, None     -> None
+  | None, b        -> b
+  | a, None        -> a
+  | Some (a,[]), Some (b,[]) -> Some (conj_assert a b, [])
+  | _ -> assert false (* TODO *)
 
 let without_annot loc d = 
   { pdesc = d; pre = []; post = None; loc = loc }
@@ -289,7 +290,7 @@ EXTEND
   [ [ c = assertion -> pre_of_assert false c ] ]
   ;
   post_condition:
-  [ [ c = assertion -> c ] ]
+  [ [ c = assertion -> (c,[]) ] ]
   ;
 
   (* Binders (for both types and programs) *)
@@ -315,10 +316,10 @@ EXTEND
   ;
 
   precondition:
-  [ [ "{"; c = assertion; "}" -> pre_of_assert false c ] ]
+  [ [ "{"; p = pre_condition; "}" -> p ] ]
   ;
   postcondition:
-  [ [ "{"; c = assertion; "}" -> c ] ]
+  [ [ "{"; q = post_condition; "}" -> q ] ]
   ;
   program:
   [ [ p = prog1 -> p ] ]
@@ -509,7 +510,7 @@ i*)
   [ [ b = LIST0 logic_arg SEP ","; "->"; LIDENT "prop" -> Predicate b
     | b = LIST0 logic_arg SEP ","; "->"; t = primitive_type -> Function (b, t)
   ] ]
-  ;	
+  ;
   logic_arg:
   [ [ t = primitive_type -> t
     | "array"; t = primitive_type -> PTarray (Tvar Ident.implicit, t)

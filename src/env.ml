@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.23 2002-07-22 08:46:51 uid1331 Exp $ i*)
+(*i $Id: env.ml,v 1.24 2002-09-12 11:31:24 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -184,7 +184,8 @@ let compare_type op t =
 	       relation op (Tvar x) (Tvar y),
 	       not_relation op (Tvar x) (Tvar y))
   in
-  make_arrow [x, BindType t; y, BindType t] (make_c bool (Some (anonymous q)))
+  let q = make_c bool (Some (anonymous q, [])) in
+  make_arrow [x, BindType t; y, BindType t] q
 
 let _ = add_global t_lt_int (compare_type t_lt_int int) None
 let _ = add_global t_le_int (compare_type t_le_int int) None

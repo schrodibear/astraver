@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.36 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.37 2002-09-12 11:31:24 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -21,7 +21,6 @@ val optpost_app :
 
 val anonymous : predicate -> assertion
 val anonymous_pre : bool -> predicate -> precondition
-val out_post : postcondition option -> predicate
 val pre_of_assert : bool -> 'a asst -> 'a pre
 val assert_of_pre : precondition -> assertion
 
@@ -75,6 +74,7 @@ val predicate_of_term : term -> predicate
 
 val term_vars : term -> Ident.set
 val predicate_vars : predicate -> Ident.set
+val post_vars : postcondition -> Ident.set
 
 val subst_in_term : var_substitution -> term -> term
 val tsubst_in_term : substitution -> term -> term
@@ -156,6 +156,6 @@ val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
 val print_assertion : formatter -> assertion -> unit
-val print_wp : formatter -> assertion option -> unit
+val print_wp : formatter -> postcondition option -> unit
 
 val warning : string -> unit

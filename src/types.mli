@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: types.mli,v 1.11 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.12 2002-09-12 11:31:25 filliatr Exp $ i*)
 
 open Logic
 
@@ -13,13 +13,13 @@ type 'a pre =
 
 type 'a asst = { a_name : Ident.name; a_value : 'a }
 
-type 'a post = 'a asst
+type 'a post = 'a asst * (Ident.t * 'a asst) list
 
 type precondition = predicate pre
 
 type assertion = predicate asst
 
-type postcondition = assertion
+type postcondition = assertion * (Ident.t * assertion) list
 
 (*s Binders. *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.46 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.47 2002-09-12 11:31:24 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -122,7 +122,8 @@ let named_app f x = { a_name = x.a_name; a_value = (f x.a_value) }
 let pre_app f x = 
   { p_assert = x.p_assert; p_name = x.p_name; p_value = f x.p_value }
 
-let post_app = named_app
+let post_app f (q,l) = 
+  (named_app f q, List.map (fun (x,a) -> (x, named_app f a)) l)
 
 let optpost_app f = option_app (post_app f)
 
@@ -130,17 +131,13 @@ let anonymous x = { a_name = Anonymous; a_value = x }
 
 let anonymous_pre b x = { p_assert = b; p_name = Anonymous; p_value = x }
 
-let force_name f x =
-  option_app (fun q -> { a_name = Name (f q.a_name); a_value = q.a_value }) x
+let force_name f a = { a_name = Name (f a.a_name); a_value = a.a_value }
 
-let force_post_name x = force_name post_name x
+let force_post_name = option_app (fun (q,l) -> (force_name post_name q, l))
 
-let force_bool_name x = 
-  force_name (function Name id -> id | Anonymous -> bool_name()) x
-
-let out_post = function
-    Some { a_value = x } -> x
-  | None -> invalid_arg "out_post"
+let force_bool_name = 
+  let f = function Name id -> id | Anonymous -> bool_name() in
+  option_app (fun (q,l) -> (force_name f q, l))
 
 let pre_of_assert b x =
   { p_assert = b; p_name = x.a_name; p_value = x.a_value }
@@ -183,6 +180,12 @@ and collect_pred s = function
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
+
+let post_vars (q,al) = 
+  List.fold_left 
+    (fun s (_,a) -> Idset.union s (predicate_vars a.a_value))
+    (predicate_vars q.a_value)
+    al
 
 let rec tsubst_in_term s = function
   | Tvar x as t -> 
@@ -463,4 +466,4 @@ let print_assertion fmt a = print_predicate fmt a.a_value
 
 let print_wp fmt = function
   | None -> fprintf fmt "<no weakest precondition>"
-  | Some {a_value=p} -> print_predicate fmt p
+  | Some ({a_value=p},_) -> print_predicate fmt p

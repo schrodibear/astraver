@@ -1,7 +1,10 @@
 
-logic c : -> prop
+logic f : int -> int
+logic p : int -> prop
+logic c : -> int
+logic A : -> prop
 
-let p = 1 { c }
+let test = void { f(1)=c and A and p(f(2)) }
 
 (***
 exception E

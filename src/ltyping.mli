@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.mli,v 1.4 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.5 2002-09-12 11:31:24 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -23,6 +23,7 @@ val term :
   LabelSet.t -> logical_env -> lexpr -> term * pure_type
 
 val type_pre : LabelSet.t -> logical_env -> lexpr pre -> precondition
+val type_assert : LabelSet.t -> logical_env -> lexpr asst -> assertion
 val type_post : LabelSet.t -> logical_env -> lexpr post -> postcondition
 
 val binders : 

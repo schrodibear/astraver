@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.51 2002-09-06 13:38:54 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.52 2002-09-12 11:31:25 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -19,12 +19,14 @@ open Rename
 let force_post env q e = match q with
   | None -> 
       e
-  | Some { a_value = c } ->
+  | Some ({ a_value = c }, []) ->
       let ids = predicate_refs env c in
       let ef = Effect.add_reads ids e.info.kappa.c_effect in
       let k = { e.info.kappa with c_post = q; c_effect = ef } in
       let i = { e.info with kappa = k } in
       { desc = e.desc; info = i }
+  | Some _ ->
+      assert false
 
 let post_if_none env q p = match post p with
   | None -> force_post env q p 
@@ -36,22 +38,24 @@ let while_post info b inv =
   let _,s = decomp_boolean (post b) in
   let s = change_label b.info.label info.label s in
   match inv with
-    | None -> Some (anonymous s)
-    | Some i -> Some { a_value = pand i.a_value s; 
-		       a_name = Name (post_name_from i.a_name) }
+    | None -> Some (anonymous s, [])
+    | Some i -> Some ({ a_value = pand i.a_value s; 
+			a_name = Name (post_name_from i.a_name) }, [])
 
 let while_post_block env inv (phi,_,r) e = 
   let lab = e.info.label in
   let decphi = Papp (r, [phi; put_label_term env lab phi]) in
   match inv with
-    | None -> anonymous decphi
-    | Some i -> { a_value = pand i.a_value decphi; 
-		  a_name = Name (post_name_from i.a_name) }
+    | None -> 
+	(anonymous decphi, [])
+    | Some i -> 
+	({ a_value = pand i.a_value decphi; 
+	   a_name = Name (post_name_from i.a_name) }, [])
 
 (* misc. *)
 
 let create_post c =
-  Some { a_value = c; a_name = Name (post_name Anonymous) }
+  Some ({ a_value = c; a_name = Name (post_name Anonymous) }, [])
 
 let is_conditional p = match p.desc with If _ -> true | _ -> false
 
@@ -226,10 +230,12 @@ let rec wp p q =
   let w = optpost_app (erase_label lab) w in
   let p = if postp = None then force_post env q0 p else p in
   let w = match postp, q with
-    | Some {a_value=q'}, Some {a_value=q} ->
+    | Some ({a_value=q'}, []), Some ({a_value=q}, []) ->
 	let vars = (result, result_type p) :: (output p) in
 	let w = foralls vars (Pimplies (q', q)) in
-	Some (anonymous (erase_label lab w))
+	Some (anonymous (erase_label lab w), [])
+    | Some _, Some _ ->
+	assert false
     | _ -> 
 	w
   in
@@ -274,13 +280,15 @@ and wp_desc info d q =
 	let p'2,w2 = wp p2 q in
 	let p'3,w3 = wp p3 q in
 	(match w2, w3, post p1 with
-	   | Some {a_value=q2}, Some {a_value=q3}, _ -> 
+	   | Some ({a_value=q2},[]), Some ({a_value=q3},[]), _ -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
 	       let q1 = Pif (Tvar result1, q2, q3) in
 	       let p'1,w1 = wp p1 (create_post q1) in
 	       If (p'1, p'2, p'3), w1
+	   | Some _, Some _, _ ->
+	       assert false
 	   | _ ->
 	       let p'1,_ = wp p1 None in
 	       If (p'1, p'2, p'3), None)

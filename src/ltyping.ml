@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.6 2002-07-22 08:46:51 uid1331 Exp $ i*)
+(*i $Id: ltyping.ml,v 1.7 2002-09-12 11:31:24 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -220,9 +220,12 @@ and type_const = function
 
 let type_pre lab lenv p = { p with p_value = predicate lab lenv p.p_value }
 
-let type_post lab lenv a = 
+let type_assert lab lenv a = { a with a_value = predicate lab lenv a.a_value }
+
+let type_post lab lenv (a,al) = 
   let lab' = LabelSet.add "" lab in 
-  { a with a_value = predicate lab' lenv a.a_value }
+  let f = type_assert lab' lenv in
+  (f a, List.map (fun (x,a) -> (x, f a)) al)
 
 let check_effect loc env e =
   let check_ref id =

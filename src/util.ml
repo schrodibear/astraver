@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.45 2002-09-06 13:38:54 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.46 2002-09-12 11:31:25 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -124,10 +124,10 @@ let apply_assert ren env c =
   let s = make_subst None ren env ids in
   { a_name = c.a_name; a_value = subst_in_predicate s c.a_value }
  
-let apply_post before ren env c =
-  let ids = predicate_vars c.a_value in
+let apply_post before ren env q =
+  let ids = post_vars q in
   let s = make_subst (Some before) ren env ids in
-  { a_name = c.a_name; a_value = subst_in_predicate s c.a_value }
+  post_app (subst_in_predicate s) q
   
 (*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
     as we cross the binders [bl]. *)
@@ -169,7 +169,12 @@ let occur_assertion id a = occur_predicate id a.a_value
 
 let occur_precondition id p = occur_predicate id p.p_value
   
-let occur_post id = function None -> false | Some q -> occur_assertion id q
+let occur_post id = function 
+  | None -> 
+      false 
+  | Some (q,l) -> 
+      occur_assertion id q || 
+      List.exists (fun (_,a) -> occur_assertion id a) l
 
 let rec occur_type_v id = function
   | Ref v -> occur_type_v id v
@@ -220,7 +225,7 @@ let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 let equality t1 t2 = Papp (t_eq, [t1; t2])
 
 let decomp_boolean = function
-  | Some { a_value = c } -> 
+  | Some ({ a_value = c }, _) -> 
       (* q -> if result then q(true) else q(false) *)
       let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) c in
       let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) c in
@@ -263,9 +268,16 @@ let print_pre fmt l =
     fprintf fmt " @]"
   end
 
+let print_assertion fmt a = print_predicate fmt a.a_value
+
+let print_option f fmt = function
+  | None -> ()
+  | Some x -> f fmt x
+
 let print_post fmt = function
   | None -> ()
-  | Some c -> fprintf fmt "@[ %a @]" print_predicate c.a_value
+  | Some (c,[]) -> fprintf fmt "@[ %a @]" print_assertion c
+  | Some _ -> assert false
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"
@@ -344,7 +356,7 @@ and print_desc fmt = function
   | While (p, i, var, e) ->
       fprintf fmt 
 	"while %a do@\n  { invariant %a variant _ }@\n  @[%a@]@\ndone" 
-	print_prog p print_post i print_prog e
+	print_prog p (print_option print_assertion) i print_prog e
   | If (p1, p2, p3) ->
       fprintf fmt "if %a then@ %a else@ %a" 
 	print_prog p1 print_prog p2 print_prog p3

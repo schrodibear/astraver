@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.53 2002-09-06 13:38:54 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.54 2002-09-12 11:31:24 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -212,7 +212,7 @@ and trad_conditional info info1 te1 info2 te2 info3 te3 =
 	   Monad.compose infob eb (fun r -> Monad.unit info (Tvar r)) ren'
 	 in
 	 match q1 with
-	   | Some q -> 
+	   | Some (q,_) -> 
 	       let n = test_name Anonymous in
 	       let q = tsubst_in_predicate (subst_one result tb) q.a_value in
 	       CC_lam ((n, CC_pred_binder (simplify q)), t)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.64 2002-09-06 13:38:54 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.65 2002-09-12 11:31:25 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -186,14 +186,14 @@ let state_pre lab env loc pl =
   predicates_effect lab env loc (List.map (fun x -> x.p_value) pl), pl
 
 let state_assert lab env loc a =
-  let a = type_post lab (logical_env env) a in
+  let a = type_assert lab (logical_env env) a in
   predicates_effect lab env loc [a.a_value], a
 
 let state_inv lab env loc = function
   | None -> 
       Effect.bottom, None
   | Some i -> 
-      let i = type_post lab (logical_env env) i in
+      let i = type_assert lab (logical_env env) i in
       predicates_effect lab env loc [i.a_value], Some i
 	
 
@@ -206,10 +206,10 @@ let state_inv lab env loc = function
 let state_post lab env (id,v,ef) loc = function
   | None -> 
       Effect.bottom, None
-  | Some q ->
+  | Some ((_,[]) as q) ->
       let lenv = Env.add_logic id v (logical_env env) in
-      let q = type_post lab lenv q in
-      let ids = predicate_vars q.a_value in
+      let (a,_) as q = type_post lab lenv q in
+      let ids = post_vars q in
       let ef,c = 
 	Idset.fold
 	  (fun id (e,c) ->
@@ -229,10 +229,11 @@ let state_post lab env (id,v,ef) loc = function
 		 raise_located loc (UnboundReference uid)
 	     end else
 	       e,c)
-	  ids (Effect.bottom, q.a_value)
+	  ids (Effect.bottom, a.a_value)
       in
-      ef, Some { a_name = q.a_name; a_value = c }
-
+      ef, Some ({ a with a_value = c }, [])
+  | Some _ ->
+      assert false
 
 (*s Detection of pure functions. *)
 

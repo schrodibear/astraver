@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.44 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.45 2002-09-12 11:31:25 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -28,8 +28,9 @@ let product before ren env w q = match q, w with
   | None, _ -> 
       TTtuple (make_bl w, None)
   | Some q, _ -> 
-      TTtuple (make_bl w, Some (TTpred (apply_post before ren env q).a_value))
-
+      let (a,al) = apply_post before ren env q in
+      assert (al = []);
+      TTtuple (make_bl w, Some (TTpred a.a_value))
 
 (*s [arrow_pred ren v pl] abstracts the term [v] over the pre-condition if any
     i.e. computes
@@ -146,9 +147,9 @@ let unit info t ren =
     let hole, holet = match q with
       | None -> 
 	  [], None
-      | Some c -> 
+      | Some q -> 
 	  let h = 
-	    let c = apply_post info.label ren env c in
+	    let (c,_) = apply_post info.label ren env q in
 	    tsubst_in_predicate (subst_one result t) c.a_value
 	  in
 	  let ht = 
@@ -161,7 +162,7 @@ let unit info t ren =
 				   trad_type_in_env ren env id)) o @
 	      [result', trad_type_v ren env k.c_result_type]
 	    in
-	    let c = apply_post info.label ren' env c in
+	    let (c,_) = apply_post info.label ren' env q in
 	    let c = subst_in_predicate (subst_onev result result') c.a_value in
 	    lambda_vars bl (TTpred c)
 	  in
@@ -208,7 +209,7 @@ let gen_compose isapp info1 e1 e2 ren =
     | None -> 
 	[], false
     | Some q1 -> 
-	let q1 = apply_post info1.label ren' env q1 in
+	let (q1,_) = apply_post info1.label ren' env q1 in
 	let hyp = subst_in_predicate (subst_onev result res1) q1.a_value in
 	[post_name q1.a_name, CC_pred_binder hyp], true 
   in
