@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/see.why", characters 409-440 *)
+(* Why obligation from file "why/see.why", characters 433-464 *)
 Lemma k_impl_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),

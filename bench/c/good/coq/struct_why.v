@@ -126,3 +126,47 @@ intuition; subst; auto.
 caduceus.
 Save.
 
+(* Why obligation from file "why/struct.why", characters 1038-1062 *)
+Lemma invariants_initially_established_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (t: ((memory) pointer)),
+  forall (Pre12: (separation_intern_s s) /\ (valid_s alloc t s)),
+  forall (caduceus_3: pointer),
+  forall (Post3: caduceus_3 = s),
+  (valid alloc caduceus_3).
+Proof.
+intuition.
+subst;inversion_clear  H0;auto.
+Save.
+
+(* Why obligation from file "why/struct.why", characters 1015-1062 *)
+Lemma invariants_initially_established_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (t: ((memory) pointer)),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (z: ((memory) Z)),
+  forall (Pre12: (separation_intern_s s) /\ (valid_s alloc t s)),
+  forall (caduceus_3: pointer),
+  forall (Post3: caduceus_3 = s),
+  forall (Pre3: (valid alloc caduceus_3)),
+  forall (z0: ((memory) Z)),
+  forall (Post11: z0 = (upd z caduceus_3 0)),
+  (forall (result:pointer),
+   (result = (acc t s) ->
+    (forall (x0:((memory) Z)),
+     (x0 = (upd x result 0) ->
+      (forall (result:pointer),
+       (result = (acc t s) ->
+        (forall (y0:((memory) Z)),
+         (y0 = (upd y result 0) -> (forall (ps:pointer), (ps = null -> True)))) /\
+        (valid alloc result))) /\
+      (valid alloc s))) /\
+    (valid alloc result))) /\
+  (valid alloc s).
+Proof.
+unfold valid_s;intuition;subst;auto.
+Save.
+

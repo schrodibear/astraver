@@ -170,3 +170,178 @@ omega.
 generalize (H8 0 h);rewrite shift_zero;auto.
 Save.
 
+(* Why obligation from file "why/separation.why", characters 2451-2530 *)
+Lemma invariants_initially_established_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (t: ((memory) pointer)),
+  forall (tab: pointer),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (x: ((memory) pointer)),
+  forall (Pre58: (separation_intern_tab tab) /\
+                 (separation_tab_v alloc v x tab) /\
+                 (separation_tab_s alloc t u s x tab) /\
+                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
+                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
+                 (separation_v_s alloc t u s v)),
+  (valid alloc s).
+Proof.
+intuition.
+inversion_clear H4.
+auto.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 2538-2566 *)
+Lemma invariants_initially_established_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (s: pointer),
+  forall (t: ((memory) pointer)),
+  forall (tab: pointer),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (x: ((memory) pointer)),
+  forall (Pre58: (separation_intern_tab tab) /\
+                 (separation_tab_v alloc v x tab) /\
+                 (separation_tab_s alloc t u s x tab) /\
+                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
+                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
+                 (separation_v_s alloc t u s v)),
+  forall (Pre4: (valid alloc s)),
+  forall (caduceus_24: pointer),
+  forall (Post3: caduceus_24 = (shift (acc t s) 0)),
+  (valid alloc caduceus_24).
+Proof.
+unfold valid_s;intuition.
+subst.
+apply valid_range_valid with 0 1.
+rewrite shift_zero;auto.
+omega.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 2433-2566 *)
+Lemma invariants_initially_established_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (t: ((memory) pointer)),
+  forall (tab: pointer),
+  forall (u: ((memory) pointer)),
+  forall (v: pointer),
+  forall (x: ((memory) pointer)),
+  forall (Pre58: (separation_intern_tab tab) /\
+                 (separation_tab_v alloc v x tab) /\
+                 (separation_tab_s alloc t u s x tab) /\
+                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
+                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
+                 (separation_v_s alloc t u s v)),
+  forall (Pre4: (valid alloc s)),
+  forall (caduceus_24: pointer),
+  forall (Post3: caduceus_24 = (shift (acc t s) 0)),
+  forall (Pre3: (valid alloc caduceus_24)),
+  forall (intP0: ((memory) Z)),
+  forall (Post43: intP0 = (upd intP caduceus_24 0)),
+  (forall (result:pointer),
+   (result = (shift (acc t s) 1) ->
+    (forall (intP:((memory) Z)),
+     (intP = (upd intP0 result 0) ->
+      (forall (result:pointer),
+       (result = (shift (acc u s) 0) ->
+        (forall (intP0:((memory) Z)),
+         (intP0 = (upd intP result 0) ->
+          (forall (result:pointer),
+           (result = (shift (acc u s) 1) ->
+            (forall (intP:((memory) Z)),
+             (intP = (upd intP0 result 0) ->
+              (forall (result:pointer),
+               (result = (shift (acc u s) 2) ->
+                (forall (intP0:((memory) Z)),
+                 (intP0 = (upd intP result 0) ->
+                  (forall (result:pointer),
+                   (result = (shift v 0) ->
+                    (forall (intP:((memory) Z)),
+                     (intP = (upd intP0 result 0) ->
+                      (forall (result:pointer),
+                       (result = (shift v 1) ->
+                        (forall (intP0:((memory) Z)),
+                         (intP0 = (upd intP result 0) ->
+                          (forall (result:pointer),
+                           (result = (shift v 2) ->
+                            (forall (intP:((memory) Z)),
+                             (intP = (upd intP0 result 0) ->
+                              (forall (result:pointer),
+                               (result = (shift v 3) ->
+                                (forall (intP0:((memory) Z)),
+                                 (intP0 = (upd intP result 0) ->
+                                  ((forall (result:pointer),
+                                    (result = (shift (acc x (shift tab 0)) 0) ->
+                                     (forall (intP:((memory) Z)),
+                                      (intP = (upd intP0 result 0) ->
+                                       ((forall (result:pointer),
+                                         (result = (shift (acc x
+                                                           (shift tab 1))
+                                                    0) ->
+                                          (forall (intP0:((memory) Z)),
+                                           (intP0 = (upd intP result 0) ->
+                                            ((forall (result:pointer),
+                                              (result = (shift (acc x
+                                                                (shift tab 2))
+                                                         0) ->
+                                               (forall (intP:((memory) Z)),
+                                                (intP = (upd intP0 result 0) ->
+                                                 ((forall (result:pointer),
+                                                   (result = (shift (
+                                                              acc x
+                                                              (shift tab 3))
+                                                              0) ->
+                                                    (forall (intP0:((memory) Z)),
+                                                     (intP0 = (upd intP
+                                                               result 0) ->
+                                                      ((forall (result:pointer),
+                                                        (result = (shift (
+                                                                   acc x
+                                                                   (shift tab
+                                                                    4))
+                                                                   0) ->
+                                                         (forall (intP:((memory) Z)),
+                                                          (intP = (upd intP0
+                                                                   result 0) ->
+                                                           True)) /\
+                                                         (valid alloc result))) /\
+                                                      (valid alloc
+                                                       (shift tab 4))) /\
+                                                      (valid alloc
+                                                       (shift tab 4)))) /\
+                                                    (valid alloc result))) /\
+                                                 (valid alloc (shift tab 3))) /\
+                                                 (valid alloc (shift tab 3)))) /\
+                                               (valid alloc result))) /\
+                                            (valid alloc (shift tab 2))) /\
+                                            (valid alloc (shift tab 2)))) /\
+                                          (valid alloc result))) /\
+                                       (valid alloc (shift tab 1))) /\
+                                       (valid alloc (shift tab 1)))) /\
+                                     (valid alloc result))) /\
+                                  (valid alloc (shift tab 0))) /\
+                                  (valid alloc (shift tab 0)))) /\
+                                (valid alloc result))))) /\
+                            (valid alloc result))))) /\
+                        (valid alloc result))))) /\
+                    (valid alloc result))))) /\
+                (valid alloc result))) /\
+              (valid alloc s))) /\
+            (valid alloc result))) /\
+          (valid alloc s))) /\
+        (valid alloc result))) /\
+      (valid alloc s))) /\
+    (valid alloc result))) /\
+  (valid alloc s).
+Proof.
+unfold valid_tab, valid_v,valid_s;intuition;subst;
+try rewrite shift_zero;
+assert (0<=4<5); try omega;
+generalize (H10 4 H4);auto.
+assert (0<=0<5); try omega;
+generalize (H10 0 H11);auto.
+Save.
+

@@ -67,7 +67,46 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 786-801 *)
+(* Why obligation from file "why/passing.why", characters 763-790 *)
+Lemma invariants_initially_established_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (t: pointer),
+  forall (Pre7: (valid_t alloc t)),
+  forall (r0: pointer),
+  forall (Post1: r0 = null),
+  forall (caduceus_2: pointer),
+  forall (Post4: caduceus_2 = (shift t 0)),
+  (valid alloc caduceus_2).
+Proof.
+intuition.
+subst;red in Pre7.
+apply valid_range_valid_shift with 0 1;auto;omega.
+Save.
+
+(* Why obligation from file "why/passing.why", characters 727-790 *)
+Lemma invariants_initially_established_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (t: pointer),
+  forall (Pre7: (valid_t alloc t)),
+  forall (r0: pointer),
+  forall (Post1: r0 = null),
+  forall (caduceus_2: pointer),
+  forall (Post4: caduceus_2 = (shift t 0)),
+  forall (Pre3: (valid alloc caduceus_2)),
+  forall (intP0: ((memory) Z)),
+  forall (Post8: intP0 = (upd intP caduceus_2 0)),
+  (forall (result:pointer),
+   (result = (shift t 1) ->
+    (forall (intP:((memory) Z)), (intP = (upd intP0 result 0) -> True)) /\
+    (valid alloc result))).
+Proof.
+intuition.
+subst;red in Pre7.
+apply valid_range_valid_shift with 0 1;auto;omega.
+Save.
+
+(* Why obligation from file "why/passing.why", characters 959-974 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),

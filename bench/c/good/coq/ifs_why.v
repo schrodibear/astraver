@@ -206,3 +206,74 @@ Lemma V4A_impl_po_5 :
 Proof.
 Admitted.
 
+(* Why obligation from file "why/ifs.why", characters 3716-3743 *)
+Lemma invariants_initially_established_impl_po_1 : 
+  forall (Ch_Pn: pointer),
+  forall (SPMEP: pointer),
+  forall (alloc: alloc_table),
+  forall (Pre25: (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
+                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+  forall (caduceus_8: pointer),
+  forall (Post3: caduceus_8 = (shift Ch_Pn 0)),
+  (valid alloc caduceus_8).
+Proof.
+intuition.
+subst.
+red in H1.
+apply valid_range_valid_shift with 0 3;auto;omega.
+Save.
+
+(* Why obligation from file "why/ifs.why", characters 3676-3743 *)
+Lemma invariants_initially_established_impl_po_2 : 
+  forall (Ch_Pn: pointer),
+  forall (SPMEP: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre25: (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
+                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+  forall (caduceus_8: pointer),
+  forall (Post3: caduceus_8 = (shift Ch_Pn 0)),
+  forall (Pre3: (valid alloc caduceus_8)),
+  forall (intP0: ((memory) Z)),
+  forall (Post25: intP0 = (upd intP caduceus_8 0)),
+  (forall (result:pointer),
+   (result = (shift Ch_Pn 1) ->
+    (forall (intP:((memory) Z)),
+     (intP = (upd intP0 result 0) ->
+      (forall (result:pointer),
+       (result = (shift Ch_Pn 2) ->
+        (forall (intP0:((memory) Z)),
+         (intP0 = (upd intP result 0) ->
+          (forall (result:pointer),
+           (result = (shift Ch_Pn 3) ->
+            (forall (intP:((memory) Z)),
+             (intP = (upd intP0 result 0) ->
+              (forall (result:pointer),
+               (result = (shift SPMEP 0) ->
+                (forall (intP0:((memory) Z)),
+                 (intP0 = (upd intP result 0) ->
+                  (forall (result:pointer),
+                   (result = (shift SPMEP 1) ->
+                    (forall (intP:((memory) Z)),
+                     (intP = (upd intP0 result 0) ->
+                      (forall (result:pointer),
+                       (result = (shift SPMEP 2) ->
+                        (forall (intP0:((memory) Z)),
+                         (intP0 = (upd intP result 0) ->
+                          (forall (result:pointer),
+                           (result = (shift SPMEP 3) ->
+                            (forall (intP:((memory) Z)),
+                             (intP = (upd intP0 result 0) -> True)) /\
+                            (valid alloc result))))) /\
+                        (valid alloc result))))) /\
+                    (valid alloc result))))) /\
+                (valid alloc result))))) /\
+            (valid alloc result))))) /\
+        (valid alloc result))))) /\
+    (valid alloc result))).
+Proof.
+intuition;
+subst;
+red in H2;red in H1;apply valid_range_valid_shift with 0 3;auto;omega.
+Save.
+
