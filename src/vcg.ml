@@ -1,6 +1,8 @@
 
 (*s Verification Conditions Generator. *)
 
+open Format
+open Options
 open Logic
 open Types
 open Ast
@@ -31,7 +33,9 @@ let discharge ctx concl =
   tauto_if concl
 
 let discharge_msg () =
-  Printf.eprintf "One obligation trivially discharged...\n"; flush stderr
+  if !verbose then begin
+    eprintf "One obligation trivially discharged...\n"; flush stderr
+  end
 
 (*s The VCG; it's trivial, we just traverse the CC term and push a 
     new obligation on each hole. *)

@@ -8,7 +8,7 @@ goods () {
     echo "  checking good files"
     for f in $1/*.ml; do
 	echo -n "    "$f"... "
-	if $pgm $f > /dev/null 2>&1; 
+	if $pgm -pvs $f > /dev/null 2>&1; 
         then echo "ok"; else echo "FAILED!"; exit 1; fi
     done
 }

@@ -1,5 +1,6 @@
+(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: pvs.ml,v 1.5 2002-01-24 15:59:30 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.1 2002-01-24 15:59:30 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -8,7 +9,7 @@ open Ident
 open Format
 open Vcg
 
-let out_file f = f ^ ".why.pvs"
+let out_file f = f ^ ".why.v"
 
 let relation id =
   if id == t_lt then "<" 
@@ -22,9 +23,9 @@ let relation id =
 let print_term fmt t = 
   let rec print0 = function
     | Tapp (id, [a;b]) when is_relation id ->
-	fprintf fmt "@[<hov 2>"; print1 a; 
+	fprintf fmt "@[<hov 2>`"; print1 a; 
 	fprintf fmt " %s@ " (relation id);
-	print1 b; fprintf fmt "@]"
+	print1 b; fprintf fmt "`@]"
     | t -> 
 	print1 t
   and print1 = function
@@ -47,7 +48,7 @@ let print_term fmt t =
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
-	fprintf fmt "unit" 
+	fprintf fmt "tt" 
     | Tconst (ConstFloat f) -> 
 	(* TODO *)
 	assert (floor f = f);
@@ -69,47 +70,54 @@ let print_term fmt t =
   print0 t
 
 let rec print_pure_type fmt = function
-  | PTint -> fprintf fmt "int"
+  | PTint -> fprintf fmt "Z"
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
-  | PTfloat -> fprintf fmt "real"
-  | PTarray (_, v) -> 
-      fprintf fmt "[int -> "; print_pure_type fmt v; fprintf fmt "]"
+  | PTfloat -> fprintf fmt "R"
+  | PTarray (s, v) -> 
+      fprintf fmt "(array "; print_term fmt s; fprintf fmt " "; 
+      print_pure_type fmt v; fprintf fmt ")"
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
 let print_predicate fmt p =
   let rec print0 = function
     | Pif (a, b, c) -> 
-	fprintf fmt "@[IF "; print0 a; fprintf fmt "@ THEN ";
-	print0 b; fprintf fmt "@ ELSE "; print0 c; fprintf fmt " ENDIF@]"
+	fprintf fmt "((@["; print1 a; fprintf fmt " -> "; print0 b; 
+	fprintf fmt "@ ) /\ (~"; print3 a; fprintf fmt " -> "; print0 c; 
+	fprintf fmt "@]))"
     | Pimplies (a, b) -> 
-	fprintf fmt "(@["; print1 a; fprintf fmt " IMPLIES@ "; print0 b;
+	fprintf fmt "(@["; print1 a; fprintf fmt " ->@ "; print0 b;
 	fprintf fmt "@])"
     | p -> print1 p
   and print1 = function
-    | Por (a, b) -> print1 a; fprintf fmt " OR@ "; print2 b
+    | Por (a, b) -> print1 a; fprintf fmt " \/@ "; print2 b
     | p -> print2 p
   and print2 = function
-    | Pand (a, b) -> print2 a; fprintf fmt " AND@ "; print3 b
+    | Pand (a, b) -> print2 a; fprintf fmt " /\@ "; print3 b
     | p -> print3 p
   and print3 = function
     | Pterm t -> print_term fmt t
-    | Pnot p -> fprintf fmt "NOT "; print3 p
+    | Pnot p -> fprintf fmt "~"; print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = bsubst_in_predicate [n, Tvar id'] p in
-	fprintf fmt "(@[FORALL (%s: " (Ident.string id');
-	print_pure_type fmt t; fprintf fmt "):@ ";
+	fprintf fmt "(@[(%s:" (Ident.string id');
+	print_pure_type fmt t; fprintf fmt ")@ ";
 	print0 p'; fprintf fmt "@])"
     | p -> fprintf fmt "("; print0 p; fprintf fmt ")"
   in
   print0 p
 
 let rec print_type_v fmt = function
-  | PureType pt -> print_pure_type fmt pt
-  | Ref v -> print_type_v fmt v
-  | Array (_, v) -> fprintf fmt "[int -> "; print_type_v fmt v; fprintf fmt "]"
-  | Arrow _ -> assert false
+  | PureType pt -> 
+      print_pure_type fmt pt
+  | Ref v -> 
+      print_type_v fmt v
+  | Array (s, v) -> 
+      fprintf fmt "(array "; print_term fmt s; fprintf fmt " "; 
+      print_type_v fmt v; fprintf fmt ")"
+  | Arrow _ -> 
+      assert false
 
 let occur_sequent id = function
   | Spred p -> occur_predicate id p
@@ -122,29 +130,22 @@ let print_sequent fmt (hyps,concl) =
     | Svar (id, v) :: hyps -> 
 	if List.exists (occur_sequent id) hyps || occur_predicate id concl then
 	begin
-	  fprintf fmt "FORALL (%s: " (Ident.string id); 
-	  print_type_v fmt v; fprintf fmt ") :@\n"
+	  fprintf fmt "(%s: " (Ident.string id); 
+	  print_type_v fmt v; fprintf fmt ") @\n"
 	end;
 	print_seq hyps
     | Spred p :: hyps -> 
-	print_predicate fmt p; fprintf fmt " IMPLIES@\n";
+	print_predicate fmt p; fprintf fmt " ->@\n";
 	print_seq hyps
   in
   print_seq hyps
 
 let print_lemma fmt (id,s) =
-  fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
+  fprintf fmt "@[<hov 2>Lemma %s : @\n" id;
   print_sequent fmt s;
-  fprintf fmt "@]@\n"
+  fprintf fmt ".@]@\n"
 
 let print_obligations fmt ol = 
   print_list fmt (fun fmt () -> fprintf fmt "@\n") print_lemma ol;
   if ol <> [] then fprintf fmt "@\n"
-
-let begin_theory fmt th =
-  fprintf fmt "%s: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  unit: TYPE = int@\n@\n  unit: unit = 0@\n@\n"
-    
-let end_theory fmt th =
-  fprintf fmt "END %s@\n" th
 

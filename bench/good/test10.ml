@@ -4,7 +4,7 @@ external visible :
 
 external a : int
 
-let p = if a > 0 && (visible a) then skip
+let p = if a > 0 && (visible a) then void
 
 
 

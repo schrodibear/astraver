@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.5 2002-01-24 13:41:05 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.6 2002-01-24 15:59:30 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -339,6 +339,8 @@ let rec normalize ren p =
 	let t = make_after_before_term env t in
 	let q = create_bool_post (Pterm (Tapp (t_eq, [Tvar x;t]))) in
 	post_if_none env q p
+    | Aff (_, { desc = Expression _ }) ->
+	p
     | If (e1, e2, e3) ->
 	change_desc p (If (normalize_boolean ren env e1, 
 			   normalize ren e2, normalize ren e3))

@@ -1,6 +1,8 @@
+(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.6 2002-01-24 13:41:05 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.7 2002-01-24 15:59:30 filliatr Exp $ i*)
 
+open Options
 open Ast
 open Types
 open Env
@@ -9,10 +11,21 @@ open Error
 open Rename
 open Util
 
-let debug = ref false
+let header fmt f = match !prover with
+  | Pvs -> Pvs.begin_theory fmt f
+  | Coq -> ()
 
-type prover = Coq | Pvs
-let prover = ref Coq
+let trailer fmt f = match !prover with
+  | Pvs -> Pvs.end_theory fmt f
+  | Coq -> ()
+
+let print_obligations = function
+  | Pvs -> Pvs.print_obligations 
+  | Coq -> Coq.print_obligations
+
+let out_file f = match !prover with
+  | Pvs -> Pvs.out_file f
+  | Coq -> Coq.out_file f
 
 let interp_program id p =
   if !debug then eprintf "=== interpreting program %s@\n" (Ident.string id);
@@ -36,13 +49,14 @@ let interp_program id p =
   if !debug then begin print_cc_term err_formatter cc; eprintf "@\n" end;
   (* 5. VCG *)
   let ol = Vcg.vcg (Ident.string id) cc in
-  if !debug then eprintf "%d proof obligation(s)@\n" (List.length ol);
+  if !verbose then eprintf "%d proof obligation(s)@\n" (List.length ol);
+  flush stderr;
   v, ol
     
 let interp_decl fmt = function
   | Program (id, p) ->
       let v,ol = interp_program id p in
-      Pvs.print_obligations fmt ol;
+      print_obligations !prover fmt ol;
       Env.add_global id v None
   | External (ids, v) -> 
       List.iter (fun id -> Env.add_global id v None) ids
@@ -54,16 +68,16 @@ let interp_decl fmt = function
 let deal_channel theo cin fmt =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
-  Pvs.begin_theory fmt theo;
+  header fmt theo;
   List.iter (interp_decl fmt) d;
-  Pvs.end_theory fmt theo
+  trailer fmt theo
 
 let deal_file f =
   Loc.set_file f;
   let cin = open_in f in 
   let fwe = Filename.chop_extension f in
   let base = Filename.basename fwe in
-  let cout = open_out (fwe ^ ".pvs") in
+  let cout = open_out (out_file fwe) in
   let fmt = formatter_of_out_channel cout in
   deal_channel base cin fmt;
   close_in cin;
@@ -71,7 +85,20 @@ let deal_file f =
   close_out cout
 
 let usage () =
-  eprintf "usage: why [-d|--debug] [--pvs] [--coq] [files...]\n";
+  eprintf "
+usage: why [options] [files...]
+
+If no file is given, the source is read on standard input and
+output is written in file `WhyOutput'
+
+Options are:
+  --help     prints this message
+  --pvs      selects PVS prover
+  --coq      selects COQ prover (default)
+  --verbose  verbose mode
+  --quiet    quiet mode (default)
+  --debug    debugging mode
+";
   flush stderr
 
 let parse_args () =
@@ -82,6 +109,8 @@ let parse_args () =
     | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover := Coq; parse args
     | ("-d" | "--debug") :: args -> debug := true; parse args
+    | ("-q" | "--quiet") :: args -> verbose := false; parse args
+    | ("-V" | "--verbose") :: args -> verbose := true; parse args
     | f :: args -> files := f :: !files; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
