@@ -2,6 +2,7 @@
 
 \usepackage{fullpage}
 \usepackage{url}
+\usepackage{makeidx}
 
 \newcommand{\caml}{\textsf{Caml}}
 \newcommand{\pvs}{\textsf{PVS}}
@@ -9,13 +10,17 @@
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
+\newcommand{\indexnt}[1]{\index{#1@\textsl{#1} (non terminal)}}
 \newcommand{\etoile}{$^{\star}$}
 \newcommand{\etoilesep}[1]{$^{\star}_#1$}
 \newcommand{\plus}{$^+$}
 \newcommand{\plussep}[1]{$^+_#1$}
 
+\makeindex
+
 \begin{document}
 
+%%% coverpage
 \thispagestyle{empty}
 \begin{center}
 ~\\[3cm]
@@ -28,16 +33,23 @@ Jean-Christophe Filli\^atre
 \today\\
 \end{center}
 
+
 \tableofcontents
 
-\chapter{The \why\ tool}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Foreword}
 
 \why\ is a tool to generate proof obligations from annotated programs.
 Currently, the input syntax is a fragment of \caml\ (with annotations),
 and the output is a \pvs\ theory or a \coq\ file.
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Tuorial}
+
+
 \section{Principles}
+
 
 \subsection{Input files}
 
@@ -58,7 +70,9 @@ The input file may contain the following kinds of declaration:
     the given program, and declares it with name $x$.
 \end{itemize}
 
+
 \subsection{Annotations}
+\index{Annotations}
 
 Annotations are predicates over the values of the program variables
 visible at the corresponding program point.
@@ -84,6 +98,7 @@ program, so that the initial value of $x$ can be referred to as $x@0$.
 
 
 \section{Installation}
+\index{Installation}
 
 To compile \why, you need both \textsf{Objective Caml} and
 \textsf{Camlp4} to be installed, in version at least 3.01. (Both can
@@ -110,8 +125,9 @@ Then
 \chapter{Reference manual}
 \label{refman}
 
+
 \section{Usage}
-\label{usage}
+\label{usage}\index{Usage}
 
 \why\ is invoked as a batch compiler, given a list of input files:
 \begin{center}
@@ -155,9 +171,11 @@ Options are the following:
 
 
 \section{Logic syntax}
-\label{syntax:logic}
+\label{syntax:logic}\index{Logic!syntax}
+
 
 \subsection{Terms}
+\label{syntax:terms}\index{Term!syntax}
 
 Syntax of terms is given in Figure~\ref{fig:terms}.
 Usual precedences apply to arithmetical operations.
@@ -166,7 +184,7 @@ Usual precedences apply to arithmetical operations.
 \begin{center}
 \hrulefill\\
 \begin{tabular}{lrl}
-  \nt{term}
+  \nt{term}\indexnt{term}
     & $::=$ & \nt{constant} \\
       & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
       & $|$ & \te{-} \nt{term} \\
@@ -193,7 +211,9 @@ Usual precedences apply to arithmetical operations.
 \end{center}            
 \end{figure}
 
+
 \subsection{Predicates}
+\label{syntax:predicates}\index{Predicate!syntax}
 
 Syntax of predicates is given in Figure~\ref{fig:predicates}.
 It is a first-order quantifier-free syntax, independent from the \pvs\ one.
@@ -231,8 +251,10 @@ $t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$.
 
 
 \section{Syntax of ML programs}
+\label{syntax:ml}\index{ML programs!syntax}
 
 \subsection{ML types}
+\label{syntax:mltypes}\index{ML types!syntax}
 
 Syntax of types is given in Figure~\ref{fig:types}.
 
@@ -273,7 +295,9 @@ Syntax of types is given in Figure~\ref{fig:types}.
 \end{center}            
 \end{figure}
 
+
 \subsection{ML expressions}
+\label{syntax:mlexpr}\index{ML expressions!syntax}
 
 Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 \begin{figure}[htbp]
@@ -352,7 +376,9 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 \end{center}
 \end{figure}
 
+
 \subsection{ML files}
+\label{syntax:mlfiles}\index{ML files!syntax}
 
 Syntax of input files is given in Figure~\ref{fig:input}.
 
@@ -375,5 +401,8 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \label{fig:input}
 \end{center}           
 \end{figure}
+
+
+\printindex
 
 \end{document}

@@ -5,3 +5,6 @@ dep.ps
 doc.ps
 auto
 .advi
+manual.idx
+manual.ilg
+manual.ind
