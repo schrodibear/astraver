@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.103 2004-10-18 08:04:48 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.104 2004-10-18 11:17:28 filliatr Exp $ i*)
 
 
 open Format
@@ -865,13 +865,12 @@ let interp_decl d acc =
 		begin match ctype.ctype_node with
 		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
 		  | CTfloat _ -> App(Var("any_real"),Var("void"))
-		  | CTfun _ -> assert false
-		  | CTarray _ | CTpointer _ | CTstruct _ -> 
+		  | CTarray _ | CTpointer _ | CTstruct _ | CTunion _ -> 
                       let t = { term_node = Tresult; 
 				term_loc = d.loc;
 				term_type = ctype } in
                       alloc_on_stack d.loc v t
-		  | _ -> assert false
+		  | CTvoid | CTvar _ | CTfun _ -> assert false
 		end
 	    | Iexpr e -> interp_expr e		
 	    | Ilist _ -> unsupported "structured initializer for local var"
