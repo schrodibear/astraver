@@ -16,9 +16,9 @@ let interp_type ctype =
   | CTarray(t,Some e) -> "pointer"
   | CTpointer(t) -> "pointer"      
   | CTvar x -> x (* must be a logic type *)
-  | tyn -> eprintf "%a@." Creport.print_type_node tyn; exit 1
   | _ -> assert false (* TODO *)
 (*
+  | tyn -> eprintf "%a@." Creport.print_type_node tyn; exit 1
   | CTvar of string
   | CTstruct_named of string
   | CTstruct of string * 'expr field list
