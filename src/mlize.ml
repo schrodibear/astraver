@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.13 2002-03-06 16:04:52 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.14 2002-03-11 11:46:22 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -52,7 +52,7 @@ and trad_desc ren env ct d =
 	t
 
   | Var id ->
-      if is_mutable_in_env env id then
+      if is_reference env id then
 	invalid_arg "Mlise.trad_desc"
       else if is_local env id then
 	CC_var id

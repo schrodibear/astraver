@@ -16,6 +16,9 @@ FEATURES
 
  - option to suppress termination obligations (i.e. partial correctness)
 
+ - mutually recursive functions 
+   (many variants over the same type, one relation)
+
 DOCUMENTATION
 =============
 
@@ -29,7 +32,7 @@ BUGS
 IMPLEMENTATION
 ==============
 
- - force result name "result" internally
+ - force result name "result" internally (but keep given name for PP)
 
  - variant = identifier ?
 

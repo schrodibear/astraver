@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.12 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.13 2002-03-11 11:46:22 filliatr Exp $ i*)
 
 type t = string
 
@@ -38,7 +38,7 @@ let rec next_away id s =
 
 let print fmt s = Format.fprintf fmt "%s" s
 
-(*s Qualified identifiers. *)
+(*s Labelled identifiers. *)
 
 let at_id id d = id ^ "@" ^ d
 
@@ -51,7 +51,7 @@ let un_at id =
     String.sub id 0 n,
     String.sub id (succ n) (pred (String.length id - n))
   with Not_found ->
-    invalid_arg "Ident.un_at"
+    id, ""
 
 let adr_id id = "adr_" ^ id
 
@@ -71,29 +71,29 @@ let print_bound fmt b = Format.fprintf fmt "#%d" b
 
 let anonymous = "_"
 
-let t_add = "@add"
-let t_sub = "@sub"
-let t_mul = "@mul"
-let t_div = "@div"
-let t_neg = "@neg"
-let t_sqrt = "@sqrt"
+let t_add = "%add"
+let t_sub = "%sub"
+let t_mul = "%mul"
+let t_div = "%div"
+let t_neg = "%neg"
+let t_sqrt = "%sqrt"
 
-let t_lt = "@lt"
-let t_le = "@le"
-let t_gt = "@gt"
-let t_ge = "@ge"
-let t_eq = "@eq"
-let t_neq = "@neq"
+let t_lt = "%lt"
+let t_le = "%le"
+let t_gt = "%gt"
+let t_ge = "%ge"
+let t_eq = "%eq"
+let t_neq = "%neq"
 
-let t_eq_int = "@eq_int"
-let t_eq_bool = "@eq_bool"
-let t_eq_float = "@eq_float"
-let t_eq_unit = "@eq_unit"
+let t_eq_int = "%eq_int"
+let t_eq_bool = "%eq_bool"
+let t_eq_float = "%eq_float"
+let t_eq_unit = "%eq_unit"
 
-let t_neq_int = "@neq_int"
-let t_neq_bool = "@neq_bool"
-let t_neq_float = "@neq_float"
-let t_neq_unit = "@neq_unit"
+let t_neq_int = "%neq_int"
+let t_neq_bool = "%neq_bool"
+let t_neq_float = "%neq_float"
+let t_neq_unit = "%neq_unit"
 
 let t_zwf_zero = "zwf_zero"
 let result = "result"

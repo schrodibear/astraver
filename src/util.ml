@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.11 2002-03-05 16:01:41 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.12 2002-03-11 11:46:23 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -10,16 +10,24 @@ open Ast
 open Env
 open Rename
 
-(* Some generic functions on programs *)
+(*s References mentioned by a predicate *)
 
-let is_mutable_in_env env id =
+let is_reference env id =
   (is_in_env env id) && (is_mutable (type_in_env env id))
 
-let predicate_now_vars env c =
-  Idset.filter (is_mutable_in_env env) (predicate_vars c)
+let predicate_now_refs env c =
+  Idset.filter (is_reference env) (predicate_vars c)
+
+let is_labelled_reference env id =
+  let id,_ = Ident.un_at id in is_reference env id
+
+let predicate_refs env c =
+  Idset.filter (is_labelled_reference env) (predicate_vars c)
 
 let term_now_vars env c =
-  Idset.filter (is_mutable_in_env env) (term_vars c)
+  Idset.filter (is_reference env) (term_vars c)
+
+(*s Labels management *)
 
 let gen_change_label f c =
   let ids = Idset.elements (predicate_vars c) in
@@ -46,7 +54,7 @@ let change_label l1 l2 c =
 let make_after_before_al env ids =
   Idset.fold 
     (fun id al -> 
-       if is_mutable_in_env env id then (id, at_id id "") :: al else al)
+       if is_reference env id then (id, at_id id "") :: al else al)
     ids []
 
 let make_after_before env p = 
@@ -63,19 +71,18 @@ let post p = p.info.kappa.c_post
 let result_type p = p.info.kappa.c_result_type
 
 
-(* [apply_pre] and [apply_post] instantiate pre- and post- conditions
- * according to a given renaming of variables (and a date that means
- * `before' in the case of the post-condition).
- *)
+(*s [apply_pre] and [apply_post] instantiate pre- and post- conditions
+    according to a given renaming of variables (and a date that means
+    `before' in the case of the post-condition). *)
 
 let make_assoc_list ren env on_prime ids =
   Idset.fold
     (fun id al ->
-       if is_mutable_in_env env id then
+       if is_reference env id then
 	 (id,current_var ren id) :: al
        else if is_at id then
 	 let uid,d = un_at id in
-	   if is_mutable_in_env env uid then
+	   if is_reference env uid then
 	     (match d with
 		| "" -> (id,on_prime ren uid)
 		| _  -> (id,var_at_date ren d uid)) :: al
@@ -107,9 +114,8 @@ let apply_post ren env before c =
     make_assoc_list ren env (fun r uid -> var_at_date r before uid) ids in
   { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
 
-(* [traverse_binder ren env bl] updates renaming [ren] and environment [env]
- * as we cross the binders [bl]
- *)
+(*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
+    as we cross the binders [bl]. *)
 
 let rec traverse_binders env = function
   | [] -> env
@@ -125,7 +131,7 @@ let initial_renaming env =
   update empty_ren "0" ids
 
 
-(* Substitutions *)
+(*s Substitutions *)
 
 let rec type_c_subst s c =
   let {c_result_name=id; c_result_type=t; c_effect=e; c_pre=p; c_post=q} = c in
@@ -146,7 +152,7 @@ and binder_subst s = function
   | (n, BindType v) -> (n, BindType (type_v_subst s v))
   | b -> b
 
-(* substitution of term for variables *)
+(*s substitution of term for variables *)
 
 let rec type_c_rsubst s c =
   { c_result_name = c.c_result_name;
@@ -205,10 +211,8 @@ let decomp_boolean = function
       equality (Tvar Ident.result) ttrue,
       equality (Tvar Ident.result) tfalse
 
-(* [make_access env id c] Access in array id.
- *
- * Constructs [t:(array s T)](access_g s T t c ?::(lt c s)).
- *)
+(*s [make_access env id c] Access in array id.
+    Constructs [t:(array s T)](access_g s T t c ?::(lt c s)). *)
 
 let array_info env id =
   let ty = type_in_env env id in
@@ -294,6 +298,69 @@ and print_type_c fmt c =
       print_type_v v 
       Effect.print e
       print_post q
+
+(*s Pretty-print of typed programs *)
+
+let rec print_prog fmt p = 
+  let k = p.info.kappa in
+  if k.c_pre = [] && k.c_post = None then
+    fprintf fmt "@[%a@]" print_desc p.desc
+  else
+    fprintf fmt "@[{%a}@ %a@ {%a}@]" 
+      print_pre k.c_pre print_desc p.desc print_post k.c_post
+
+and print_desc fmt = function
+  | Var id -> 
+      Ident.print fmt id
+  | Acc id -> 
+      fprintf fmt "!%a" Ident.print id
+  | Aff (id, p) -> 
+      fprintf fmt "%a := %a" Ident.print id print_prog p
+  | TabAcc (_, id, p) -> 
+      fprintf fmt "%a[%a]" Ident.print id print_prog p
+  | TabAff (_, id, p1, p2) -> 
+      fprintf fmt "%a[%a] := %a" Ident.print id print_prog p1 print_prog p2
+  | Seq bl -> 
+      print_block fmt bl
+  | While (p, i, var, bl) ->
+      fprintf fmt 
+	"while %a do@\n  { invariant %a variant _ }@\n  @[%a@]@\ndone" 
+	print_prog p print_post i print_block bl
+  | If (p1, p2, p3) ->
+      fprintf fmt "if %a then %a else %a" 
+	print_prog p1 print_prog p2 print_prog p3
+  | Lam (bl, p) -> 
+      fprintf fmt "<fun>"
+  | App (p, a) -> 
+      fprintf fmt "(%a %a)" print_prog p print_arg a
+  | LetRef (id, p1, p2) ->
+      fprintf fmt "let %a = %a in %a" 
+	Ident.print id print_prog p1 print_prog p2
+  | LetIn (id, p1, p2) ->
+      fprintf fmt "let %a = ref %a in %a" 
+	Ident.print id print_prog p1 print_prog p2
+  | LetRec (id, bl, v, var, p) ->
+      fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 
+	Ident.print id print_type_v v print_prog p
+  | Expression t -> 
+      print_term fmt t
+  | Coerce p ->
+      print_prog fmt p
+  | PPoint (l, d) ->
+      fprintf fmt "<%s>%a" l print_desc d
+
+and print_block fmt = 
+  print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
+
+and print_block_st fmt = function
+  | Statement p -> print_prog fmt p
+  | Label l -> fprintf fmt "label %s" l
+  | Assert a -> fprintf fmt "assert {%a}" print_assertion a
+
+and print_arg fmt = function
+  | Refarg (_,r) -> Ident.print fmt r
+  | Term p -> print_prog fmt p
+  | Type v -> print_type_v fmt v
 
 (*s Pretty-print of cc-terms (intermediate terms) *)
 

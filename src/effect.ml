@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.4 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.5 2002-03-11 11:46:22 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -27,25 +27,25 @@ let bottom = ([], [])
 
 let push x l =
   let rec push_rec = function
-      [] -> [x]
-    | (y::rem) as l ->
-	if x = y then l else if x > y then x::l else y :: push_rec rem
+    | [] -> [x]
+    | (y :: rem) as l ->
+	if x = y then l else if x > y then x :: l else y :: push_rec rem
   in
-    push_rec l
+  push_rec l
 
 let basic_remove x l =
   let rec rem_rec = function
-      [] -> []
-    | y::l -> if x = y then l else y :: rem_rec l
+    | [] -> []
+    | y :: l -> if x = y then l else y :: rem_rec l
   in
-    rem_rec l
+  rem_rec l
 
 let mem x (r,w) = (List.mem x r) or (List.mem x w)
 
 let rec basic_union = function
-    [], s2 -> s2
+  | [], s2 -> s2
   | s1, [] -> s1
-  | ((v1::l1) as s1), ((v2::l2) as s2) ->
+  | ((v1 :: l1) as s1), ((v2 :: l2) as s2) ->
       if v1 > v2 then
 	v1 :: basic_union (l1,s2)
       else if v1 < v2 then
@@ -61,6 +61,8 @@ let add_read id ((r,w) as e) =
     e
   else
     push id r, w
+
+let add_reads ids = Ident.Idset.fold add_read ids
 
 let add_write id (r,w) =
   (* if the variable is a RO then removes it from RO. Adds it to RW. *)
@@ -85,9 +87,9 @@ let is_write (_,w) id = List.mem id w
 let union (r1,w1) (r2,w2) = basic_union (r1,r2), basic_union (w1,w2)
 
 let rec diff = function
-    [], s2 -> []
+  | [], s2 -> []
   | s1, [] -> s1
-  | ((v1::l1) as s1), ((v2::l2) as s2) ->
+  | ((v1 :: l1) as s1), ((v2 :: l2) as s2) ->
       if v1 > v2 then
 	v1 :: diff (l1,s2)
       else if v1 < v2 then
@@ -112,7 +114,7 @@ let inf e1 e2 = failwith "effects: inf: not yet implemented"
 let compose (r1,w1) (r2,w2) =
   let r = basic_union (r1, diff (r2,w1)) in
   let w = basic_union (w1,w2) in
-    r,w
+  r,w
 
 (* remove *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.16 2002-03-06 16:04:52 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.17 2002-03-11 11:46:23 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -16,13 +16,18 @@ open Rename
 
 (* force a post-condition *)
 
-let force_post q e =
-  let c' = { e.info.kappa with c_post = q } in
-  let i = { env = e.info.env; kappa = c' } in
-  { desc = e.desc; info = i }
+let force_post env q e = match q with
+  | None -> 
+      e
+  | Some { a_value = c } ->
+      let ids = predicate_refs env c in
+      let ef = Effect.add_reads ids e.info.kappa.c_effect in
+      let k = { e.info.kappa with c_post = q; c_effect = ef } in
+      let i = { env = e.info.env; kappa = k } in
+      { desc = e.desc; info = i }
 
-let post_if_none q p = match post p with
-  | None -> force_post q p 
+let post_if_none env q p = match post p with
+  | None -> force_post env q p 
   | _ -> p
 
 let optpost_app f = option_app (post_app f)
@@ -95,7 +100,7 @@ let rec normalize p =
     | Aff (x, { desc = Expression t }) when k.c_post = None ->
 	let t = make_after_before_term env t in
 	let q = create_bool_post (equality (Tvar x) t) in
-	post_if_none q p
+	post_if_none env q p
     | Aff (x, e) ->
 	change_desc p (Aff (x, normalize e))
     | If (e1, e2, e3) ->
@@ -118,7 +123,7 @@ let rec normalize p =
       when e1.info.kappa.c_post = None ->
 	let t = make_after_before_term env t in
 	let q = create_bool_post (equality (Tvar Ident.result) t) in
-	change_desc p (LetRef (x, post_if_none q e1, normalize e2))
+	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
     | LetRef (x, e1, e2) ->
 	change_desc p (LetRef (x, normalize e1, normalize e2))
     | LetIn (x, e1, e2) ->
@@ -199,6 +204,7 @@ let output p =
   List.map (fun id -> (id, type_in_env env id)) w
 
 let rec wp p q =
+  let env = p.info.env in
   let postp = post p in
   let q0 = if postp = None then q else postp in
   let lab = label_name () in
@@ -206,7 +212,7 @@ let rec wp p q =
   let d,w = wp_desc p.info p.desc q1 in
   let p = change_desc p (PPoint (lab, d)) in
   let w = optpost_app (erase_label lab) w in
-  let p = if postp = None then force_post q0 p else p in
+  let p = if postp = None then force_post env q0 p else p in
   let w = match postp, q with
     | Some {a_value=q'}, Some {a_value=q} ->
 	let vars = (result, result_type p) :: (output p) in

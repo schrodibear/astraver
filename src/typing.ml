@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.19 2002-03-06 16:04:52 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.20 2002-03-11 11:46:22 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -130,7 +130,7 @@ let state_var ren env (phi,r) =
   let ids = term_vars phi in
   Idset.fold
     (fun id e ->
-       if is_mutable_in_env env id then Effect.add_read id e else e)
+       if is_reference env id then Effect.add_read id e else e)
     ids Effect.bottom 
 
 	
@@ -143,12 +143,12 @@ let state_pre lab env loc pl =
     let ids = predicate_vars p.p_value in
     Idset.fold
       (fun id e ->
-	 if is_mutable_in_env env id then
+	 if is_reference env id then
 	   Effect.add_read id e
 	 else if is_at id then begin
 	   let uid,l = un_at id in
 	   if not (LabelSet.mem l lab) then Error.unbound_label l loc;
-	   if is_mutable_in_env env uid then
+	   if is_reference env uid then
 	     Effect.add_read uid e
 	   else
 	     e
@@ -181,7 +181,7 @@ let state_post lab env (id,v,ef) loc = function
       let ef,c = 
 	Idset.fold
 	  (fun id (e,c) ->
-	     if is_mutable_in_env env id then
+	     if is_reference env id then
 	       if is_write ef id then
 		 Effect.add_write id e, c
 	       else
@@ -191,7 +191,7 @@ let state_post lab env (id,v,ef) loc = function
 	       let uid,l = un_at id in
 	       if l <> "" && not (LabelSet.mem l lab) then 
 		 Error.unbound_label l loc;
-	       if is_mutable_in_env env uid then
+	       if is_reference env uid then
 		 Effect.add_read uid e, c
 	       else
 		 e,c
