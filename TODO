@@ -2,6 +2,11 @@
 CADUCEUS
 ========
 
+  - variable locale de type union :
+
+      typedef union {long x; float y;} state;
+      void f(){  state s; }
+
  - structures passed to functions (by value): validity should be added
    automatically
 
