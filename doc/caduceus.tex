@@ -34,6 +34,7 @@
 \def\result{\char'134 result}
 \def\at{\char'134 at}
 \def\forall{\char'134 forall}
+\def\exists{\char'134 exists}
 \def\valid{\char'134 valid}
 \def\block{\char'134 block}
 \def\base{\char'134 base}
@@ -468,7 +469,7 @@ decreasingness of the variant have been discharged automatically by
 Why.
 
 \section{Structures}
-
+\label{sec:purse}
 Let us now consider a program using structures. We consider a simple
 ``electronic purse'' modelized by
 \begin{code}
@@ -774,9 +775,93 @@ or to reduce the size of proof obligations (there would be more
 numerous but smaller proof obligations).
 
 \subsection{Logical declarations}
-\indextt{predicate}\indextt{logic}\indextt{axiom}
+\indextt{logic}\indextt{axiom}
 
-TODO
+Analogously to the \texttt{predicate} declaration seen in
+Section~\ref{sec:purse}, it possible to introduce logical functions,
+and axioms on them:
+\begin{code}
+/*@ predicate is_min(int t[],int n,int min) \{
+  @     (\forall int i; 0 <= i < n => min <= t[i]) &&
+  @     (\exists int i; 0 <= i < n && min == t[i]) 
+  @ \}
+  @*/
+
+/*@ requires n > 0 && \valid_range(t,0,n)
+  @ ensures is_min(t,n,\result) 
+  @*/
+int min(int t[],int n) \{
+  int i;
+  int tmp = t[0];  
+  /*@ invariant 1 <= i <= n
+    @ variant n-i
+    @*/
+  for (i=1 ; i < n; i++) \{
+     if (t[i] < tmp) tmp = t[i];
+  \}
+  return tmp;
+\}
+
+/*@ logic int min(int t[],int n) reads t[*] */
+/*@ logic int max(int t[],int n) reads t[*] */
+
+/*@ axiom min_is_min:
+  @    \forall int t[]; \forall int n; is_min(t,n,min(t,n))
+  @*/
+
+/*@ axiom is_min_is_min:
+  @    \forall int t[]; \forall int n; \forall int m;
+  @         is_min(t,n,m) => m == min(t,n)
+  @*/
+
+/*@ requires \valid_range(t,0,n) && n > 0
+  @ ensures 
+  @     min(t,n) <= \result && \result <= max(t,n)
+  @*/
+int average(int t[],int n) \{
+  int i;
+  int sum = 0;  
+  /*@ invariant 0 <= i <= n
+    @ variant n-i
+    @*/
+  for (i=0 ; i < n; i++) \{
+     sum += t[i];
+  \}
+  return sum / n;
+\}
+\end{code}
+
+Missing: \texttt{predicate} not defined by using \texttt{reads}.
+
+\subsection{Invariant declarations}
+\indextt{invariant}
+
+Global invariants may be stated: they are assertions that must hold at
+entrance and at exit of functions. Example:
+
+\begin{code}
+struct \{
+  int x;
+  int y;
+\} s;
+/*@ invariant s_intervals: 0 <= s.x && s.x <= s.y && s.y <= 100 */
+
+int c = 12;
+/*@ invariant const_c : c==12 */
+\end{code}
+
+For example, with the following function, invariant
+\texttt{s\_intervals} is both assumed as pre-condition and required as
+post-condition, and \texttt{const\_c} is assumed (but not required
+since \texttt{c} is not modified).
+\begin{code}
+/*@ requires n>=0 @*/
+void f(int n) \{
+  int t = s.x+n;
+  if (t <= s.y - 20) s.x = t + c ;
+\}
+\end{code}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
