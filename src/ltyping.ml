@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.16 2003-02-05 08:07:48 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.17 2003-02-05 08:14:11 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -100,8 +100,8 @@ let make_arith loc = function
 let check_label loc lab env =
   if_labelled 
     (fun (id,l) -> 
-       if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l);
-       if not (is_reference env id) then raise_located loc (NotAReference id))
+       if not (is_reference env id) then raise_located loc (NotAReference id);
+       if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l))
 
 let predicate_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "predicate expected"))
@@ -151,6 +151,8 @@ and desc_predicate loc lab env lenv = function
       exists id v (predicate lab env (Env.add_logic id v lenv) a)
 
 and type_pvar loc lenv x =
+  if is_at x then 
+    raise_located loc (AnyMessage "predicates cannot be labelled");
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
     | Predicate [] -> Pvar x
