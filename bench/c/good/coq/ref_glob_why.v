@@ -46,11 +46,34 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/ref_glob.why", characters 567-594 *)
+(* Why obligation from file "why/ref_glob.why", characters 2091-2118 *)
 Lemma f4_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (c1: ((memory) pointer)),
   forall (c2: ((memory) pointer)),
   forall (plas: pointer),
+  forall (Pre11: (valid alloc plas) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_c2 alloc (acc c2 anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_c1 alloc (acc c1 anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    ((~((base_addr (acc c1 anonymous_0)) = (base_addr (
+                                                            acc c1
+                                                            anonymous_01))) /\
+                    ~((base_addr (acc c1 anonymous_0)) = (base_addr (
+                                                          acc c2 anonymous_01)))) /\
+                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
+                                                          acc c1 anonymous_01)))) /\
+                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
+                                                          acc c2 anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc c1 c2 anonymous_0)))),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc c2 plas)),
@@ -58,18 +81,40 @@ Lemma f4_impl_po_1 :
 Proof.
 intuition.
 subst;auto.
-generalize (valid_anonymous_0_c1_pointer alloc c2 plas Pre4).
-unfold valid_anonymous_0_c1.
+generalize (H1 plas Pre4).
+unfold valid_anonymous_0_c2.
 tauto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 529-594 *)
+(* Why obligation from file "why/ref_glob.why", characters 2053-2118 *)
 Lemma f4_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (c1: ((memory) pointer)),
   forall (c2: ((memory) pointer)),
   forall (intP: ((memory) Z)),
   forall (plas: pointer),
+  forall (Pre11: (valid alloc plas) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_c2 alloc (acc c2 anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_c1 alloc (acc c1 anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    ((~((base_addr (acc c1 anonymous_0)) = (base_addr (
+                                                            acc c1
+                                                            anonymous_01))) /\
+                    ~((base_addr (acc c1 anonymous_0)) = (base_addr (
+                                                          acc c2 anonymous_01)))) /\
+                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
+                                                          acc c1 anonymous_01)))) /\
+                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
+                                                          acc c2 anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc c1 c2 anonymous_0)))),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc c2 plas)),
@@ -95,43 +140,36 @@ Lemma f4_impl_po_2 :
     (valid alloc result))) /\
   (valid alloc plas).
 Proof.
-intros.
 intuition.
 subst.
-rewrite H5;auto.
-generalize (valid_anonymous_0_c1_pointer alloc c1 plas Pre4).
+rewrite H10;auto.
+generalize (H0 plas Pre4).
 unfold valid_anonymous_0_c1.
 tauto.
 apply pset_singleton_intro.
-generalize (valid_anonymous_0_pointer alloc c1 c2 plas Pre4).
+generalize (H4 plas Pre4).
 unfold internal_separation_anonymous_0.
 intro.
-generalize (neq_base_addr_neq_shift _ _ 0 0 H).
+generalize (neq_base_addr_neq_shift _ _ 0 0 H3).
 repeat rewrite shift_zero;auto.
 subst;auto.
 subst.
 red.
 intros.
-red in H2.
-red in H5.
-assert (not_in_pset p (pset_singleton (plas # c2))).
-generalize (pset_union_elim1 _  _ _  H0);auto.
-generalize (H5 p H H3);intro.
-rewrite H6.
-assert (not_in_pset p (pset_singleton (plas # c1))).
-generalize (pset_union_elim2 _ _ _ H0);auto.
-generalize (H2 p H H7);intro.
-rewrite H8.
+rewrite H10;auto.
+rewrite H7;auto.
 rewrite acc_upd_neq;auto.
-generalize (pset_singleton_elim _ _ H3).
-intuition.
+intro;subst.
+generalize (pset_union_elim1 _  _ _  H5);auto.
+apply not_not_in_pset_singleton.
+generalize (pset_union_elim2 _  _ _  H5);auto.
+generalize (pset_union_elim1 _ _ _ H5);auto.
 subst;auto.
 subst.
-generalize (valid_anonymous_0_c1_pointer alloc c1 plas Pre4).
-unfold valid_anonymous_0_c1;tauto.
+generalize (H0 plas Pre4) ; unfold valid_anonymous_0_c1;tauto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 938-1092 *)
+(* Why obligation from file "why/ref_glob.why", characters 2462-2616 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -145,7 +183,7 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 1250-1277 *)
+(* Why obligation from file "why/ref_glob.why", characters 2774-2801 *)
 Lemma h_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -160,7 +198,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 1213-1277 *)
+(* Why obligation from file "why/ref_glob.why", characters 2737-2801 *)
 Lemma h_impl_po_2 : 
   forall (p: pointer),
   forall (alloc: alloc_table),

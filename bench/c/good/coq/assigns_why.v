@@ -3,6 +3,7 @@
 
 Require Export caduceus_spec_why.
 
+
 (* Why obligation from file "why/assigns.why", characters 309-418 *)
 Lemma erase_impl_po_1 : 
   forall (p: pointer),

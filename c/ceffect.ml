@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.89 2005-03-25 15:37:44 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.90 2005-04-01 13:46:57 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -320,6 +320,11 @@ let loop_annot a =
 (* table for weak invariants *)
 let weak_invariants = Hashtbl.create 97
 
+let print_effects fmt l =
+  fprintf fmt "@[%a@]"
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
+    (HeapVarSet.elements l)
+
 let add_weak_invariant id p =
   Hashtbl.add weak_invariants id (p, predicate p)
 
@@ -348,8 +353,8 @@ let intersect_only_alloc e1 e2 =
 
 let weak_invariants_for hvs =
   Hashtbl.fold
-    (fun _ (_,e) acc -> 
-       if intersect_only_alloc e hvs then acc
+    (fun name (_,e) acc ->
+        if intersect_only_alloc e hvs then acc
        else union e acc) 
     weak_invariants empty
 

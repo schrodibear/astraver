@@ -61,8 +61,8 @@ let rec predicate_for name t =
 				NPimplies (ineq, pre))))))
      | _ -> NPtrue
 
-let axiom_for s ty t v validity=
-  Cast.Naxiom 
+let predicat_for s ty t v validity=
+  Cast.Ninvariant 
     ("valid_" ^ s ^ "_pointer", 
      NPforall ([ty,v], NPimplies (NPvalid t, validity)))
 
@@ -305,7 +305,7 @@ let separation s1 ty1 s2 (ty2,fl) decls =
 	       nterm_type = ty2 } in
     let pred = local_separation Loc.dummy false s1 t1 s2 t2 in
     let pred = NPimplies ((diff Loc.dummy t1 t2),pred) in
-    noattr_located (Cast.Naxiom ( 
+    noattr_located (Cast.Ninvariant ( 
 		      ("separation_" ^ s1 ^ "_" ^ s2),
 		      NPforall ((ty1,t1_var)::[ty2,t2_var] , pred )))::decls
   end else
@@ -343,7 +343,7 @@ let add_predicates l =
 	    let s_f = s ^ "_" ^ f.var_name in
 	    let info = find_pred ("valid_" ^ s_f) in
 	    let axiom_s_f =
-	      noattr_located (axiom_for s_f ty t st (NPapp (info, [tf]))) 
+	      noattr_located (predicat_for s_f ty t st (NPapp (info, [tf]))) 
 	    in
 	    let predicate_s_f =
 	      noattr_located 
@@ -356,15 +356,18 @@ let add_predicates l =
     in
     let info = find_pred ("internal_separation_" ^ s) in 	    
     let axiom_s_f =
-      noattr_located (axiom_for s ty t st (NPapp (info, [t]))) 
+      noattr_located (
+	Cast.Ninvariant
+	  ("internal_separation_" ^ s ^"_invariant", 
+	   NPforall ([ty,st], NPimplies (NPvalid t, (NPapp (info, [t]))))))
     in
-    let l2 = 
-      axiom_s_f :: 
+    let l2 =  
       noattr_located (
 	Cast.Nlogic (info,
 		     NPredicate_def 
 		       ([st,ty],
-			(separation_intern Loc.dummy sterm st t))))::l2 in
+			(separation_intern Loc.dummy sterm st t)))):: 
+	axiom_s_f ::l2 in
     Cenv.fold_all_struct (separation s ty) l2
   in
   Cenv.fold_all_struct f l

@@ -3,15 +3,52 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/ifs.why", characters 371-391 *)
+(* Why obligation from file "why/ifs.why", characters 2516-2536 *)
 Lemma V4A_impl_po_1 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
+  forall (CPRE_VC: ((memory) pointer)),
   forall (Ch_Pn: pointer),
+  forall (Cpt: ((memory) pointer)),
+  forall (Param4_Pn: ((memory) Z)),
   forall (SPMEP: pointer),
+  forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
-  forall (Pre34: ((valid alloc Parametre) /\
+  forall (Pre34: (((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_CPRE_VC alloc (acc CPRE_VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_VC alloc (acc VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Cpt alloc (acc Cpt anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    (((~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                                  acc CPRE_VC
+                                                                  anonymous_01))) /\
+                    ~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                               acc VC
+                                                               anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc CPRE_VC
+                                                          anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc VC anonymous_01)))) /\
+                    ~((base_addr (acc Cpt anonymous_0)) = (base_addr (
+                                                           acc Cpt
+                                                           anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Param4_Pn (acc Param4_Pn anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc CPRE_VC VC
+                    anonymous_0)))) /\
                  (valid_range alloc Ch_Pn 0 4) /\
                  (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_range alloc SPMEP 0 4)),
@@ -20,16 +57,52 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 426-917 *)
+(* Why obligation from file "why/ifs.why", characters 2571-3062 *)
 Lemma V4A_impl_po_2 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
+  forall (CPRE_VC: ((memory) pointer)),
   forall (Ch_Pn: pointer),
+  forall (Cpt: ((memory) pointer)),
+  forall (Param4_Pn: ((memory) Z)),
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
-  forall (Pre34: ((valid alloc Parametre) /\
+  forall (Pre34: (((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_CPRE_VC alloc (acc CPRE_VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_VC alloc (acc VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Cpt alloc (acc Cpt anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    (((~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                                  acc CPRE_VC
+                                                                  anonymous_01))) /\
+                    ~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                               acc VC
+                                                               anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc CPRE_VC
+                                                          anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc VC anonymous_01)))) /\
+                    ~((base_addr (acc Cpt anonymous_0)) = (base_addr (
+                                                           acc Cpt
+                                                           anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Param4_Pn (acc Param4_Pn anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc CPRE_VC VC
+                    anonymous_0)))) /\
                  (valid_range alloc Ch_Pn 0 4) /\
                  (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_range alloc SPMEP 0 4)),
@@ -41,17 +114,53 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 426-917 *)
+(* Why obligation from file "why/ifs.why", characters 2571-3062 *)
 Lemma V4A_impl_po_3 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
+  forall (CPRE_VC: ((memory) pointer)),
   forall (Ch_Pn: pointer),
+  forall (Cpt: ((memory) pointer)),
+  forall (Param4_Pn: ((memory) Z)),
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
+  forall (Pre34: (((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_CPRE_VC alloc (acc CPRE_VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_VC alloc (acc VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Cpt alloc (acc Cpt anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    (((~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                                  acc CPRE_VC
+                                                                  anonymous_01))) /\
+                    ~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                               acc VC
+                                                               anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc CPRE_VC
+                                                          anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc VC anonymous_01)))) /\
+                    ~((base_addr (acc Cpt anonymous_0)) = (base_addr (
+                                                           acc Cpt
+                                                           anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Param4_Pn (acc Param4_Pn anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc CPRE_VC VC
+                    anonymous_0)))) /\
                  (valid_range alloc Ch_Pn 0 4) /\
                  (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_range alloc SPMEP 0 4)),
@@ -66,17 +175,53 @@ apply valid_range_valid_shift with 0 4;auto;
 omega.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 426-917 *)
+(* Why obligation from file "why/ifs.why", characters 2571-3062 *)
 Lemma V4A_impl_po_4 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
+  forall (CPRE_VC: ((memory) pointer)),
   forall (Ch_Pn: pointer),
+  forall (Cpt: ((memory) pointer)),
+  forall (Param4_Pn: ((memory) Z)),
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
+  forall (Pre34: (((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_CPRE_VC alloc (acc CPRE_VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_VC alloc (acc VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Cpt alloc (acc Cpt anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    (((~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                                  acc CPRE_VC
+                                                                  anonymous_01))) /\
+                    ~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                               acc VC
+                                                               anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc CPRE_VC
+                                                          anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc VC anonymous_01)))) /\
+                    ~((base_addr (acc Cpt anonymous_0)) = (base_addr (
+                                                           acc Cpt
+                                                           anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Param4_Pn (acc Param4_Pn anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc CPRE_VC VC
+                    anonymous_0)))) /\
                  (valid_range alloc Ch_Pn 0 4) /\
                  (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_range alloc SPMEP 0 4)),
@@ -92,17 +237,53 @@ generalize (valid_anonymous_0_CPRE_VC_pointer alloc VC Parametre H);
 unfold valid_anonymous_0_CPRE_VC;tauto.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 399-918 *)
+(* Why obligation from file "why/ifs.why", characters 2544-3063 *)
 Lemma V4A_impl_po_5 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
+  forall (CPRE_VC: ((memory) pointer)),
   forall (Ch_Pn: pointer),
+  forall (Cpt: ((memory) pointer)),
+  forall (Param4_Pn: ((memory) Z)),
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
+  forall (Pre34: (((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_CPRE_VC alloc (acc CPRE_VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_VC alloc (acc VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Cpt alloc (acc Cpt anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    (((~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                                  acc CPRE_VC
+                                                                  anonymous_01))) /\
+                    ~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                               acc VC
+                                                               anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc CPRE_VC
+                                                          anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc VC anonymous_01)))) /\
+                    ~((base_addr (acc Cpt anonymous_0)) = (base_addr (
+                                                           acc Cpt
+                                                           anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Param4_Pn (acc Param4_Pn anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc CPRE_VC VC
+                    anonymous_0)))) /\
                  (valid_range alloc Ch_Pn 0 4) /\
                  (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_range alloc SPMEP 0 4)),
@@ -121,24 +302,59 @@ Lemma V4A_impl_po_5 :
                  (acc intP SPMEP) <> 0) /\ aux_1 = 0),
   (valid alloc caduceus_18).
 Proof.
-intuition;subst;
-generalize (valid_anonymous_0_VC_pointer alloc VC Parametre Pre8);
-unfold valid_anonymous_0_VC;tauto.
+intuition;subst;unfold valid_anonymous_0_VC in H3;
+generalize (H3 Parametre H0);
+tauto.
 Save.
 
 
-(* Why obligation from file "why/ifs.why", characters 399-918 *)
+(* Why obligation from file "why/ifs.why", characters 2544-3063 *)
 Lemma V4A_impl_po_6 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
+  forall (CPRE_VC: ((memory) pointer)),
   forall (Ch_Pn: pointer),
+  forall (Cpt: ((memory) pointer)),
   forall (Param4_Pn: ((memory) Z)),
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre34: ((valid alloc Parametre) /\
+  forall (Pre34: (((valid alloc Parametre) /\
                  (valid_range alloc Pn_Bac 0 4)) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_CPRE_VC alloc (acc CPRE_VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_VC alloc (acc VC anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Cpt alloc (acc Cpt anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  (forall (anonymous_01:pointer),
+                   (~(anonymous_0 = anonymous_01) ->
+                    (((~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                                  acc CPRE_VC
+                                                                  anonymous_01))) /\
+                    ~((base_addr (acc CPRE_VC anonymous_0)) = (base_addr (
+                                                               acc VC
+                                                               anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc CPRE_VC
+                                                          anonymous_01)))) /\
+                    ~((base_addr (acc VC anonymous_0)) = (base_addr (
+                                                          acc VC anonymous_01)))) /\
+                    ~((base_addr (acc Cpt anonymous_0)) = (base_addr (
+                                                           acc Cpt
+                                                           anonymous_01)))))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (valid_anonymous_0_Param4_Pn (acc Param4_Pn anonymous_0)))) /\
+                 (forall (anonymous_0:pointer),
+                  ((valid alloc anonymous_0) ->
+                   (internal_separation_anonymous_0 alloc CPRE_VC VC
+                    anonymous_0)))) /\
                  (valid_range alloc Ch_Pn 0 4) /\
                  (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_range alloc SPMEP 0 4)),
@@ -217,8 +433,8 @@ Lemma V4A_impl_po_6 :
       (valid alloc (shift SPMEP 1)) /\ (valid alloc (shift SPMEP 1)))))) /\
   (valid alloc Parametre).
 Proof.
-intuition;subst;
-generalize (valid_anonymous_0_VC_pointer alloc VC Parametre Pre8);
-unfold valid_anonymous_0_VC;intuition.
+intuition;subst;unfold valid_anonymous_0_VC in H3;
+generalize (H3 Parametre H0);
+intros (G,Q);
+generalize (valid_range_valid_shift alloc (Parametre#VC) 0 4 3 Q) ;intuition.
 Save.
-
