@@ -73,8 +73,8 @@ type expr =
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
   | App of expr * expr
-  | Raise of string * expr
-  | Try of expr * string * string * expr
+  | Raise of string * expr option
+  | Try of expr * string * string option * expr
   | Fun of (string * why_type) list * 
       assertion * expr * assertion * ((string * assertion) option)
   | Triple of assertion * expr * assertion * ((string * assertion) option)

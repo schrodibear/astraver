@@ -17,7 +17,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 BINDIR=@bindir@
-LIBDIR=@libdir@/why
+LIBDIR=@libdir@
 
 EXE=@EXE@
 
@@ -47,14 +47,16 @@ VO7= lib/coq-v7/WhyArrays.vo  lib/coq-v7/WhyBool.vo  lib/coq-v7/WhyInt.vo \
      lib/coq-v7/WhyTuples.vo  lib/coq-v7/WhyPermut.vo \
      lib/coq-v7/WhySorted.vo  lib/coq-v7/Why.vo     lib/coq-v7/WhyFloat.vo \
      lib/coq-v7/WhyExn.vo lib/coq-v7/WhyCoqCompat.vo \
-     lib/coq-v7/WhyLemmas.vo  lib/coq-v7/WhyTactics.vo lib/coq-v7/WhyCM.vo
+     lib/coq-v7/WhyLemmas.vo  lib/coq-v7/WhyTactics.vo lib/coq-v7/WhyCM.vo \
+     lib/coq-v7/caduceus_why.vo
 V7FILES=$(VO7:.vo=.v)
 
 VO8= lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo \
      lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo     lib/coq/WhyFloat.vo \
      lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo \
-     lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo
+     lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo lib/coq/WhyCM.vo \
+     lib/coq/caduceus_why.vo
 V8FILES=$(VO8:.vo=.v)
 
 PVSFILES = lib/pvs/why.pvs
@@ -165,11 +167,16 @@ src/version.ml: Makefile
 c/cversion.ml: Makefile
 	echo "let version = \""$(CVERSION)"\"" > $@
 	echo "let date = \""`date`"\"" >> $@
-	echo "let libdir = \""$(LIBDIR)"\"" >> $@
-
+	echo "let libdir = \""$(LIBDIR)/caduceus"\"" >> $@
 
 doc:: doc/version.tex
 	cd doc; make
+
+lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
+	$(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
+
+lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
+	$(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
 
 # bench
 
@@ -214,8 +221,8 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 
 install-lib:
-	mkdir -p $(LIBDIR)
-	cp -f lib/why/*.why $(LIBDIR)
+	mkdir -p $(LIBDIR)/why
+	cp -f lib/why/*.why $(LIBDIR)/why
 
 install-man:
 	mkdir -p $(MANDIR)/man1

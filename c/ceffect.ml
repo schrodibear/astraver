@@ -66,7 +66,9 @@ let print_heap_vars fmt () =
     (fun s t -> fprintf fmt "(%s:%a)" s base_type t) heap_vars;
   fprintf fmt "@]"
 
-let heap_var_type = Hashtbl.find heap_vars
+let heap_var_type = function
+  | "alloc" -> ([], "alloc")
+  | v -> Hashtbl.find heap_vars v
 
 let declare_heap_var v ty =
   if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty
@@ -94,6 +96,8 @@ let add_var v ty s =
   declare_heap_var v ([], interp_type ty);
   HeapVarSet.add v s
   
+let add_alloc s = HeapVarSet.add "alloc" s
+
 let add_field_var v ty s =
    let v = name_heap_var v in
    let _,ty = pointer_heap_var ty in
@@ -196,10 +200,11 @@ let rec predicate p =
     | Pif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))
     | Pforall (_, p) -> predicate p	
     | Pexists (_, p) -> predicate p
-    | Pfresh t -> term t
-    | Pvalid t -> term t
-    | Pvalid_index (t1,t2) -> union (term t1) (term t2)
-    | Pvalid_range (t1,t2, t3) -> union (term t1) (union (term t2) (term t3))
+    | Pfresh t -> add_alloc (term t)
+    | Pvalid t -> add_alloc (term t)
+    | Pvalid_index (t1,t2) -> add_alloc (union (term t1) (term t2))
+    | Pvalid_range (t1,t2, t3) -> 
+	add_alloc (union (term t1) (union (term t2) (term t3)))
     | Pold p -> predicate p
     | Pat (p,_) -> predicate p
 

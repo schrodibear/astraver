@@ -316,8 +316,8 @@ type expr =
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
   | App of expr * expr
-  | Raise of string * expr
-  | Try of expr * string * string * expr
+  | Raise of string * expr option
+  | Try of expr * string * string option * expr
   | Fun of (string * why_type) list * 
       assertion * expr * assertion * ((string * assertion) option)
   | Triple of assertion * expr * assertion * ((string * assertion) option)
@@ -381,7 +381,8 @@ let rec iter_expr f e =
     | Let(id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | Let_ref(id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | App(e1,e2) -> iter_expr f e1; iter_expr f e2
-    | Raise(id,e) -> iter_expr f e
+    | Raise (_, None) -> ()
+    | Raise(id,Some e) -> iter_expr f e
     | Try(e1,exc,id,e2) -> iter_expr f e1; iter_expr f e2
     | Fun(params,pre,body,post,signals) ->
 	iter_assertion f pre;
@@ -434,9 +435,14 @@ let rec fprintf_expr form e =
 	  fprintf_expr e1 fprintf_expr e2
     | App(e1,e2) ->
 	fprintf form "@[<hv 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
-    | Raise(id,e) ->
+    | Raise(id,None) ->
+	fprintf form "@[<hv 1>raise@ %s@]" id
+    | Raise(id,Some e) ->
 	fprintf form "@[<hv 1>raise@ (%s@ %a)@]" id fprintf_expr e
-    | Try(e1,exc,id,e2) ->
+    | Try(e1,exc,None,e2) ->
+	fprintf form "@[<hv 1>try@ %a@ with@ %s ->@ %a end@]" 
+	  fprintf_expr e1 exc fprintf_expr e2
+    | Try(e1,exc,Some id,e2) ->
 	fprintf form "@[<hv 1>try@ %a@ with@ %s %s ->@ %a end@]" 
 	  fprintf_expr e1 exc id fprintf_expr e2
     | Fun(params,pre,body,post,signals) ->

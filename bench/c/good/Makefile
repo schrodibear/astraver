@@ -1,12 +1,12 @@
 
 CADUCEUS=../../../bin/caduceus.opt 
-CADUCEUSLIB=../../../lib/why
+CADUCEUSLIB=../../../lib/
 
 all: coq/struct_why.vo coq/pointer_why.vo
 
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
-why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/caduceus.why
+why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	$(EXECCADUCEUS) $<
 
 WHY=../../../bin/why.opt
@@ -48,4 +48,4 @@ type-all:
 include .depend
 
 depend .depend:
-	coqdep -I coq coq/*.v > .depend
+	coqdep -R ../../../lib/coq Coq.why -I coq coq/*.v > .depend

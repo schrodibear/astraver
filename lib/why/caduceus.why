@@ -5,20 +5,35 @@ parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
 logic null : -> pointer
-logic block_length: pointer -> int
+logic block_length: alloc,pointer -> int
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
-logic valid : pointer -> prop
-logic valid_index : pointer, int -> prop
-logic valid_range : pointer, int, int -> prop
+
+parameter alloc : alloc ref
+
+predicate valid(a:alloc, p:pointer) = 
+	p <> null 
+	and 0 <= offset(p)
+	and offset(p) < block_length(a,p)
+
+predicate valid_index(a:alloc, p:pointer, i:int) =
+	p <> null 
+	and 0 <= offset(p)+i 
+	and offset(p)+i < block_length(a,p)
+
+predicate valid_range(a:alloc, p:pointer, i:int, j:int) =
+	p <> null 
+	and 0 <= offset(p)+i 
+	and i <= j
+	and offset(p)+j < block_length(a,p)
 
 axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
 
 axiom block_length_shift :
-  forall p:pointer. forall i:int.
-  block_length(shift(p,i)) = block_length(p)
+  forall a:alloc. forall p:pointer. forall i:int.
+  block_length(a,shift(p,i)) = block_length(a,p)
 
 axiom shift_null :
   forall p:pointer. forall i:int.
@@ -28,83 +43,21 @@ axiom shift_not_null :
   forall p:pointer. forall i:int.
     p<>null -> shift(p,i)<>null
 
-(* axioms for valid *)
-axiom valid_def :
-  forall p:pointer. 
-	(p <> null 
-	and 0 <= offset(p)
-	and offset(p) < block_length(p))
-	-> valid(p)	
-
-axiom valid_not_null :
-  forall p:pointer. valid(p) -> p <> null 
-
-axiom valid1 :
-  forall p:pointer. valid(p) -> 0 <= offset(p) 
-
-axiom valid2 :
-  forall p:pointer. valid(p) -> offset(p) < block_length(p)
-
-(* axioms for valid_index *)
-axiom valid_index_def :
-  forall p:pointer. forall i:int. 
-	(p <> null 
-	and 0 <= offset(p)+i 
-	and offset(p)+i < block_length(p))
-	-> valid_index(p,i)	
-
-axiom valid_index_not_null :
-  forall p:pointer. forall i:int. 
-	valid_index(p,i) -> p <> null 
-
-axiom valid_index1 :
-  forall p:pointer. forall i:int. 
-	valid_index(p,i) -> 0 <= offset(p)+i 
-
-axiom valid_index2 :
-  forall p:pointer. forall i:int. 
-	valid_index(p,i) -> offset(p)+i < block_length(p)
-
-(* axioms for valid_range *)
-axiom valid_range_def :
-  forall p:pointer. forall i:int. forall j:int.
-	(p <> null 
-	and 0 <= offset(p)+i 
-	and i <= j
-	and offset(p)+j < block_length(p))
-	-> valid_range(p,i,j)	
-
-axiom valid_range_not_null :
-  forall p:pointer. forall i:int. forall j:int.
-	valid_range(p,i,j) -> p <> null 
-
-axiom valid_range1 :
-  forall p:pointer. forall i:int. forall j:int.
-	valid_range(p,i,j) -> 0 <= offset(p)+i 
-
-axiom valid_range2 :
-  forall p:pointer. forall i:int. forall j:int.
-	valid_range(p,i,j) -> i <= j
-
-axiom valid_range3 :
-  forall p:pointer. forall i:int. forall j:int.
-	valid_range(p,i,j) -> offset(p)+j < block_length(p)
-
 parameter shift_ : p:pointer -> i:int -> 
   { } pointer { result = shift(p,i) }
 
 (* pointer access *)
 logic acc: 'a memory, pointer -> 'a
 parameter acc_ : m:'a memory ref -> p:pointer -> 
-  { p <> null and 0 <= offset(p) < block_length(p) }
-  'a reads m
+  { valid(alloc,p) }
+  'a reads alloc,m
   { result = acc(m,p) }
 
 (* pointer update *)
 logic upd: 'a memory, pointer, 'a -> 'a memory
 parameter upd_ : m:'a memory ref -> p:pointer -> v:'a -> 
-  { p <> null and 0 <= offset(p) < block_length(p) }
-  unit reads m writes m
+  { valid(alloc,p) }
+  unit reads alloc,m writes m
   { m = upd(m@,p,v) }
 
 axiom acc_upd_eq : 
@@ -117,7 +70,7 @@ axiom acc_upd_neq :
     p1 <> p2 -> acc(upd(m,p1,a),p2) = acc(m,p2)
 
 (* memory allocation *)
-logic fresh : pointer -> prop
+logic fresh : alloc,pointer -> prop
 
 (* exceptions *)
 exception Break

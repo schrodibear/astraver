@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.40 2004-03-22 10:20:10 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.41 2004-03-22 13:46:05 filliatr Exp $ i*)
 
 
 open Format
@@ -77,19 +77,19 @@ let rec interp_term label old_label t =
     | Tarrget (t1, t2) -> 
 	let te1 = f t1 and te2 = f t2 in
 	let var = global_var_for_type t.term_type in
-	LApp("acc",[LVar var;LApp("shift",[te1;te2])])
+	LApp("acc",[interp_var label var;LApp("shift",[te1;te2])])
     | Tarrow (t, field) -> 
 	let te = f t in
 	let var = field in
-	LApp("acc",[LVar var;te])
-
-    | Tdot (_, _) -> assert false (* TODO *)
+	LApp("acc",[interp_var label var;te])
+    | Tdot (_, _) -> 
+	assert false (* TODO *)
     | Tunop (Ustar, t1) -> 
 	let te1 = f t1 in
 	let var = global_var_for_type t.term_type in
-	LApp("acc",[LVar var;te1])
-
-    | Tunop (_, _) -> assert false (* TODO *)
+	LApp("acc",[interp_var label var;te1])
+    | Tunop (_, _) -> 
+	assert false (* TODO *)
     | Tapp (g, l) -> 
 	LApp(g.logic_name,
 	     (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
@@ -126,13 +126,13 @@ let rec interp_predicate label old_label p =
     | Pold p -> interp_predicate (Some old_label) old_label p
     | Pat (p, l) -> interp_predicate (Some l) old_label p
     | Pfresh (t) ->
-	LPred("fresh",[ft t])
+	LPred("fresh",[interp_var label "alloc"; ft t])
     | Pvalid (t) ->
-	LPred("valid",[ft t])
+	LPred("valid",[interp_var label "alloc"; ft t])
     | Pvalid_index (t,a) ->
-	LPred("valid_index",[ft t;ft a])
+	LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
     | Pvalid_range (t,a,b) ->
-	LPred("valid_range",[ft t;ft a;ft b])
+	LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
 
 let interp_predicate_opt label old_label pred =
   match pred with
@@ -458,51 +458,59 @@ let interp_invariant annot =
     | _ -> 
 	assert false (* TODO *)
 
-let rec interp_statement stat =
-  match stat.st_node with
-    | TSexpr e ->
-	interp_statement_expr e
-    | TSreturn eopt ->
-	(* TODO: abrupt return *)
-	begin
-	  match eopt with
-	    | None -> Void
-	    | Some e -> interp_expr e
-	end
-    | TSfor(annot,e1,e2,e3,body) ->
-	let (inv,dec) = interp_invariant annot in
-	append
-	  (interp_statement_expr e1)
-	  (make_while (interp_expr e2) inv dec 
-	     (append 
-		(interp_statement body) 
-		(interp_statement_expr e3)))
-  | TSnop -> Void
+let try_with_void ex e = Try (e, ex, None, Void)  
+
+let break b e = if b then try_with_void "Break" e else e
+
+let continue b e = if b then try_with_void "Continue" e else e    
+
+let rec interp_statement stat = match stat.st_node with
+  | TSnop -> 
+      Void
+  | TSexpr e ->
+      interp_statement_expr e
+  | TSreturn eopt ->
+      (* TODO: abrupt return *)
+      begin
+	match eopt with
+	  | None -> Void
+	  | Some e -> interp_expr e
+      end
+  | TSfor(annot,e1,e2,e3,body) ->
+      let (inv,dec) = interp_invariant annot in
+      append
+	(interp_statement_expr e1)
+	(break stat.st_break 
+	   (make_while (interp_expr e2) inv dec 
+	      (continue stat.st_continue
+		 (append 
+		    (interp_statement body) 
+		    (interp_statement_expr e3)))))
   | TSif(e,s1,s2) -> 
       If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
   | TSwhile(annot,e,s) -> 
       let (inv,dec) = interp_invariant annot in
       make_while (interp_expr e) inv dec (interp_statement s)
-  | TSdowhile(annot,s,e)
-      -> assert false (* TODO *)
+  | TSdowhile(annot,s,e) -> 
+      assert false (* TODO *)
   | TSblock(b) -> 
       interp_block b 
-  | TSbreak
-      -> assert false (* TODO *)
-  | TScontinue
-      -> assert false (* TODO *)
-  | TSlabel(lab,s)
-      -> append (Output.Label lab) (interp_statement s)
-  | TSswitch(e,s)
-      -> assert false (* TODO *)
-  | TScase(e,s)
-      -> assert false (* TODO *)
-  | TSgoto(lab)
-      -> assert false (* TODO *)
+  | TSbreak -> 
+      Raise ("Break", None)
+  | TScontinue -> 
+      Raise ("Continue", None)
+  | TSlabel(lab,s) -> 
+      append (Output.Label lab) (interp_statement s)
+  | TSswitch(e,s) -> 
+      assert false (* TODO *)
+  | TScase(e,s) -> 
+      assert false (* TODO *)
+  | TSgoto(lab) -> 
+      assert false (* TODO *)
   | TSassert(pred) -> 
       Output.Assert(interp_predicate None "init" pred)
-  | TSlogic_label(l)
-      -> assert false (* TODO *)
+  | TSlogic_label(l) -> 
+      assert false (* TODO *)
   | TSspec (spec,s) ->
       let (pre,post) = interp_spec spec in
       Triple(pre,interp_statement s,post,None)

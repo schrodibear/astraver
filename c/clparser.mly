@@ -94,9 +94,6 @@ lexpr:
 | AT LPAR lexpr COMMA IDENTIFIER RPAR { info (PLat ($3, $5)) }
 | BLOCK_LENGTH LPAR lexpr RPAR { info (PLblock_length $3) }
 | RESULT { info PLresult }
-/***
-| LPAR logic_type RPAR lexpr { info (PLcast ($2, $4)) }
-***/
 /* both terms and predicates */
 | LPAR lexpr RPAR { $2 }
 | IDENTIFIER { info (PLvar (Info.default_var_info $1)) }
@@ -109,6 +106,9 @@ logic_type:
 | INT        { LTint }
 | FLOAT      { LTfloat }
 | logic_type STAR { LTpointer $1 }
+/***
+| LPAR logic_type RPAR lexpr { info (PLcast ($2, $4)) }
+***/
 ;
 
 relation:

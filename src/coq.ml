@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.120 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.121 2004-03-22 13:46:06 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -691,11 +691,16 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
+let print_scheme fmt l =
+  List.iter
+    (fun x -> 
+       if v8 then fprintf fmt "forall (A%d:Set),@ " x.tag
+       else fprintf fmt "(A%d:Set)@ " x.tag)
+    l
+
 let print_logic_type fmt s = 
   let (l,t) = Env.specialize_logic_type s in
-  List.iter
-    (fun x -> fprintf fmt "forall (A%d:Set),@ " x.tag)
-    l;
+  print_scheme fmt l;
   match t with
   | Function ([], t) ->
       print_pure_type fmt t
@@ -716,9 +721,7 @@ let print_logic fmt id t =
 
 let print_predicate_scheme fmt p =
   let (l,p) = Env.specialize_predicate p in
-  List.iter
-    (fun x -> fprintf fmt "forall (A%d:Set),@ " x.tag)
-    l;
+  print_scheme fmt l;
   print_predicate fmt p
 
 let reprint_axiom fmt id p =
@@ -731,13 +734,20 @@ let print_axiom fmt id p =
 
 let reprint_predicate fmt id p =
   let (l,(bl,p)) = Env.specialize_predicate_def p in
+  let print_poly fmt x = 
+    if v8 then fprintf fmt "(A%d:Set)" x.tag else fprintf fmt "[A%d:Set]" x.tag
+  in
+  let print_binder fmt (x,pt) = 
+    if v8 then 
+      fprintf fmt "(%a:%a)" Ident.print x print_pure_type pt
+    else
+      fprintf fmt "[%a:%a]" Ident.print x print_pure_type pt
+  in
   fprintf fmt
-     "@[<hov 2>(*Why predicate*) Definition %s %a %a:@ := @[%a@].@]@\n" 
-    id (print_list space (fun fmt x -> fprintf fmt "(A%d:Set)" x.tag)) l
-    (print_list space 
-       (fun fmt (x,pt) -> 
-	  fprintf fmt "(%a:%a)" Ident.print x print_pure_type pt))
-    bl
+     "@[<hov 2>(*Why predicate*) Definition %s %a %a@ := @[%a@].@]@\n" 
+    id 
+    (print_list space print_poly) l
+    (print_list space print_binder) bl
     print_predicate p 
 
 let print_predicate fmt id p = reprint_predicate fmt id p
@@ -808,7 +818,9 @@ let _ =
   Gen.add_regexp 
     "(\\*Why axiom\\*) Lemma[ ]+\\([^ ]*\\)[ ]*:[ ]*" Ax;
   Gen.add_regexp 
-    "(\\*Why logic\\*) Definition[ ]+\\([^ ]*\\)[ ]*:[ ]*" Lg
+    "(\\*Why logic\\*) Definition[ ]+\\([^ ]*\\)[ ]*:[ ]*" Lg;
+  Gen.add_regexp 
+    "(\\*Why predicate\\*) Definition[ ]+\\([^ ]*\\) " Pr
 
 (* validations *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.23 2004-03-22 10:20:10 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.24 2004-03-22 13:46:06 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -50,13 +50,18 @@ let file_copy src dest =
   done;
   close_in cin; close_out cout
 
+let file_copy_if_different src dst =
+  if not (Sys.file_exists dst) || Digest.file dst <> Digest.file src then
+    file_copy src dst
+
 let main () = 
   if not (parse_only || type_only || cpp_dump) then begin
+    let theorysrc = Filename.concat Coptions.libdir "why/caduceus.why" in
     let theory = Lib.file "why" "caduceus.why" in
-    let theorysrc = Filename.concat Coptions.libdir "caduceus.why" in
-    if not (Sys.file_exists theory) ||
-      Digest.file theory <> Digest.file theorysrc
-    then file_copy theorysrc theory
+    file_copy_if_different theorysrc theory;
+    let coqsrc = Filename.concat Coptions.libdir "coq/caduceus_why.v" in
+    let coq = Lib.file "coq" "caduceus_why.v" in
+    file_copy_if_different coqsrc coq
   end;
   (* parsing *)
   let pfiles = List.map parse_file (files ()) in

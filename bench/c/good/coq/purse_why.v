@@ -62,7 +62,7 @@ Lemma test1_po_2 :
   (purse_inv alloc balance0 p2) /\ 100 >= 0.
 Proof.
 unfold purse_inv; intuition; subst.
-
+rewrite acc_upd_neq; auto.
 Save.
 
 (* Why obligation from file "why/purse.why", characters 534-584 *)
@@ -85,7 +85,10 @@ Lemma test1_po_3 :
   forall (Post7: result1 = (acc balance1 p1)),
   result1 = 0.
 Proof.
-(* FILL PROOF HERE *)
+unfold purse_inv; intuition.
+subst.
+rewrite acc_upd_neq in H8; auto.
+omega.
 Save.
 
 (* Why obligation from file "why/purse.why", characters 789-807 *)
