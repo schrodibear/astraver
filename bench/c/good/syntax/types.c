@@ -37,18 +37,39 @@ const char** u;
 
 /* structures */
 
-struct T; /* forward declaration */
-struct S { int fa; }; 
-struct T { char fb; float fc; };
-struct { int fd :3; } sa; /* bit field */
-struct { struct S fe; int ff; } sb;
-struct U { struct T * fg; };
-struct V { int fh; struct V * next; };
-struct V * sc;
+struct S1; /* forward declaration */
+struct S2 { int fa; }; 
+struct S1 { char fb; float fc; };
+struct { struct S1 fe; int ff; } sb;
+struct S3 { struct S1 * fg; };
+struct S4 { int fh; struct S4 * next; };
+struct S4 * sc;
+
+/* bit fields */
+
+struct { int fd :3; } sa;
+
+struct flags { 
+  unsigned int is_keyword : 1;
+  unsigned int is_extern  : 1;
+  unsigned int is_static  : 1;
+};
 
 /* unions */
 
+union U1 { int fi; float fj; };
+union U2 { union U1 fk; int fl; };
+
+/* mixed structures / unions / arrays */
+
+struct S5 { char fm; union { int fn; float fo; } fp; } arr1[10];
+
 /* enums */
+
+enum boolean { FALSE, TRUE };
+enum { E11, E12, E13 };
+enum { E21 = 1, E22, E23 };
+enum letters { E31 = 'a', E32 = 'b', E33 = 'c', E34 = 'd' };
 
 /* nightmare examples from K&R, section 5.12 */
 
