@@ -1,6 +1,6 @@
 
 all:
-	./bench "../bin/why.opt --valid"
+	./bench "../bin/why.opt --coq-v8 --valid"
 
 tc:
 	./bench "../bin/why.opt -tc"
@@ -10,7 +10,7 @@ ml:
 	ocamlc -c -i test.ml
 
 c:
-	../bin/why.opt -d -V --valid --coq-tactic Magic ctest.c
+	../bin/why.opt --coq-v8 -d -V --valid --coq-tactic magic ctest.c
 	coqc -R ../lib/coq Coq.why ctest_why.v
 	coqc -R ../lib/coq Coq.why ctest_valid.v
 	#coqide ctest_why.v
@@ -41,6 +41,6 @@ hol:
 	../bin/why.opt --hol-light -d -V test.mlw
 
 test:
-	../bin/why.opt -d -V --valid --coq-tactic Magic test.mlw
+	../bin/why.opt --coq-v8 -d -V --valid --coq-tactic magic test.mlw
 	coqc -R ../lib/coq Coq.why test_why.v
 	coqc -R ../lib/coq Coq.why test_valid.v

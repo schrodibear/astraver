@@ -82,3 +82,5 @@ IMPLEMENTATION
 
  - floats: post-condition annotating an assignement (x := E { x = E })
    uses generic equality (t_eq); should be t_eq_float on floats
+
+ - auto discharge of  v = phi, P(phi) |- P(v)  (converse of rewrite_var)

@@ -14,12 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyFloat.v,v 1.7 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: WhyFloat.v,v 1.8 2003-09-25 09:02:43 filliatr Exp $ *)
 
 Require Why.
 Require Export Rbase.
 
-Open Scope R_scope.
+Open Local Scope R_scope.
 
 Parameter R_lt_ge_bool : 
  forall x y:R, { b:bool | if b then x < y else x >= y }.
@@ -37,3 +37,4 @@ Parameter R_noteq_bool :
 (* no validation for programs using floats
 Parameter why_any_float : (_: unit)(sig_1 R [result: R](True)).
 *)
+

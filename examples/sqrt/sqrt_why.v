@@ -225,65 +225,96 @@ Qed.
 
 (* beginning of proof obligations *)
 
-(* Why obligation from file , characters 391-392 *)
-Lemma sqrt_po_1 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test6:x = 0%Z),
-   (0 * 0 <= x)%Z /\ (x < (0 + 1) * (0 + 1))%Z.
+(* Why obligation from file "sqrt.mlw", characters 391-392 *)
+Lemma sqrt_po_1 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test6: x = 0),
+  (0 * 0) <= x /\ x < ((0 + 1) * (0 + 1)).
  (* sqrt_po_1 *)
 Proof.
 auto with *.
 Qed.
 
-(* Why obligation from file , characters 417-418 *)
-Lemma sqrt_po_2 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test5:x <> 0%Z) (Test4:(x <= 3)%Z),
-   (1 * 1 <= x)%Z /\ (x < (1 + 1) * (1 + 1))%Z.
+(* Why obligation from file "sqrt.mlw", characters 417-418 *)
+Lemma sqrt_po_2 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test5: x <> 0),
+  forall (Test4: x <= 3),
+  (1 * 1) <= x /\ x < ((1 + 1) * (1 + 1)).
  (* sqrt_po_2 *)
 Proof.
 auto with *.
 Qed.
 
-(* Why obligation from file , characters 460-467 *)
-Lemma sqrt_po_3 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test5:x <> 0%Z) (Test3:(x > 3)%Z)
-   (y:Z) (Post5:y = x), 2%Z <> 0%Z.
+(* Why obligation from file "sqrt.mlw", characters 460-467 *)
+Lemma sqrt_po_3 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test5: x <> 0),
+  forall (Test3: x > 3),
+  forall (y: Z),
+  forall (Post5: y = x),
+  ~(2 = 0).
  (* sqrt_po_3 *)
 Proof.
 auto with *.
 Qed.
 
-(* Why obligation from file , characters 654-660 *)
-Lemma sqrt_po_4 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test5:x <> 0%Z) (Test3:(x > 3)%Z)
-   (y:Z) (Post5:y = x) (Pre6:2%Z <> 0%Z) (z:Z)
-   (Post4:z = ((x + 1) / 2)%Z) (Variant1 y1 z1:Z) (Pre5:Variant1 = y1)
-   (Pre4:(z1 > 0)%Z /\
-         (y1 > 0)%Z /\
-         z1 = ((x / y1 + y1) / 2)%Z /\
-         (x < (y1 + 1) * (y1 + 1))%Z /\ (x < (z1 + 1) * (z1 + 1))%Z)
-   (Test2:(z1 < y1)%Z) (y2:Z) (Post1:y2 = z1) (Pre2:2%Z <> 0%Z),
-   z1 <> 0%Z.
+(* Why obligation from file "sqrt.mlw", characters 654-660 *)
+Lemma sqrt_po_4 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test5: x <> 0),
+  forall (Test3: x > 3),
+  forall (y: Z),
+  forall (Post5: y = x),
+  forall (Pre6: ~(2 = 0)),
+  forall (z: Z),
+  forall (Post4: z = ((Zdiv (x + 1) 2))),
+  forall (Variant1: Z),
+  forall (y1: Z),
+  forall (z1: Z),
+  forall (Pre5: Variant1 = y1),
+  forall (Pre4: z1 > 0 /\ y1 > 0 /\ z1 = ((Zdiv ((Zdiv x y1) + y1) 2)) /\ x <
+                ((y1 + 1) * (y1 + 1)) /\ x < ((z1 + 1) * (z1 + 1))),
+  forall (Test2: z1 < y1),
+  forall (y2: Z),
+  forall (Post1: y2 = z1),
+  forall (Pre2: ~(2 = 0)),
+  ~(z1 = 0).
  Proof.
  intuition.
 Qed.
 
 
-(* Why obligation from file , characters 636-670 *)
-Lemma sqrt_po_5 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test5:x <> 0%Z) (Test3:(x > 3)%Z)
-   (y:Z) (Post5:y = x) (Pre6:2%Z <> 0%Z) (z:Z)
-   (Post4:z = ((x + 1) / 2)%Z) (Variant1 y1 z1:Z) (Pre5:Variant1 = y1)
-   (Pre4:(z1 > 0)%Z /\
-         (y1 > 0)%Z /\
-         z1 = ((x / y1 + y1) / 2)%Z /\
-         (x < (y1 + 1) * (y1 + 1))%Z /\ (x < (z1 + 1) * (z1 + 1))%Z)
-   (Test2:(z1 < y1)%Z) (y2:Z) (Post1:y2 = z1) (Pre2:2%Z <> 0%Z)
-   (Pre3:z1 <> 0%Z) (z2:Z) (Post2:z2 = ((x / z1 + z1) / 2)%Z),
-   ((z2 > 0)%Z /\
-    (y2 > 0)%Z /\
-    z2 = ((x / y2 + y2) / 2)%Z /\
-    (x < (y2 + 1) * (y2 + 1))%Z /\ (x < (z2 + 1) * (z2 + 1))%Z) /\
-   Zwf 0 y2 y1.
+(* Why obligation from file "sqrt.mlw", characters 636-670 *)
+Lemma sqrt_po_5 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test5: x <> 0),
+  forall (Test3: x > 3),
+  forall (y: Z),
+  forall (Post5: y = x),
+  forall (Pre6: ~(2 = 0)),
+  forall (z: Z),
+  forall (Post4: z = ((Zdiv (x + 1) 2))),
+  forall (Variant1: Z),
+  forall (y1: Z),
+  forall (z1: Z),
+  forall (Pre5: Variant1 = y1),
+  forall (Pre4: z1 > 0 /\ y1 > 0 /\ z1 = ((Zdiv ((Zdiv x y1) + y1) 2)) /\ x <
+                ((y1 + 1) * (y1 + 1)) /\ x < ((z1 + 1) * (z1 + 1))),
+  forall (Test2: z1 < y1),
+  forall (y2: Z),
+  forall (Post1: y2 = z1),
+  forall (Pre2: ~(2 = 0)),
+  forall (Pre3: ~(z1 = 0)),
+  forall (z2: Z),
+  forall (Post2: z2 = ((Zdiv ((Zdiv x z1) + z1) 2))),
+  (z2 > 0 /\ y2 > 0 /\ z2 = ((Zdiv ((Zdiv x y2) + y2) 2)) /\ x <
+  ((y2 + 1) * (y2 + 1)) /\ x < ((z2 + 1) * (z2 + 1))) /\ (Zwf 0 y2 y1).
  Proof.
  unfold Zwf; intuition.
 subst z2.
@@ -294,15 +325,19 @@ apply (iter_sqrt_invar3 x z1); auto.
 omega.
 Qed.
 
-(* Why obligation from file , characters 525-613 *)
-Lemma sqrt_po_6 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test5:x <> 0%Z) (Test3:(x > 3)%Z)
-   (y:Z) (Post5:y = x) (Pre6:2%Z <> 0%Z) (z:Z)
-   (Post4:z = ((x + 1) / 2)%Z),
-   (z > 0)%Z /\
-   (y > 0)%Z /\
-   z = ((x / y + y) / 2)%Z /\
-   (x < (y + 1) * (y + 1))%Z /\ (x < (z + 1) * (z + 1))%Z.
+(* Why obligation from file "sqrt.mlw", characters 525-613 *)
+Lemma sqrt_po_6 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test5: x <> 0),
+  forall (Test3: x > 3),
+  forall (y: Z),
+  forall (Post5: y = x),
+  forall (Pre6: ~(2 = 0)),
+  forall (z: Z),
+  forall (Post4: z = ((Zdiv (x + 1) 2))),
+  z > 0 /\ y > 0 /\ z = ((Zdiv ((Zdiv x y) + y) 2)) /\ x <
+  ((y + 1) * (y + 1)) /\ x < ((z + 1) * (z + 1)).
  (* sqrt_po_6 *)
 Proof.
 intuition.
@@ -335,17 +370,23 @@ rewrite H; omega.
 rewrite H; trivial.
 Qed.
 
-(* Why obligation from file , characters 679-681 *)
-Lemma sqrt_po_7 :
- forall (x:Z) (Pre7:(x >= 0)%Z) (Test5:x <> 0%Z) (Test3:(x > 3)%Z)
-   (y:Z) (Post5:y = x) (Pre6:2%Z <> 0%Z) (z:Z)
-   (Post4:z = ((x + 1) / 2)%Z) (y1 z1:Z)
-   (Post3:((z1 > 0)%Z /\
-           (y1 > 0)%Z /\
-           z1 = ((x / y1 + y1) / 2)%Z /\
-           (x < (y1 + 1) * (y1 + 1))%Z /\ (x < (z1 + 1) * (z1 + 1))%Z) /\
-          (z1 >= y1)%Z),
-   (y1 * y1 <= x)%Z /\ (x < (y1 + 1) * (y1 + 1))%Z.
+(* Why obligation from file "sqrt.mlw", characters 679-681 *)
+Lemma sqrt_po_7 : 
+  forall (x: Z),
+  forall (Pre7: x >= 0),
+  forall (Test5: x <> 0),
+  forall (Test3: x > 3),
+  forall (y: Z),
+  forall (Post5: y = x),
+  forall (Pre6: ~(2 = 0)),
+  forall (z: Z),
+  forall (Post4: z = ((Zdiv (x + 1) 2))),
+  forall (y1: Z),
+  forall (z1: Z),
+  forall (Post3: (z1 > 0 /\ y1 > 0 /\ z1 = ((Zdiv ((Zdiv x y1) + y1) 2)) /\
+                 x < ((y1 + 1) * (y1 + 1)) /\ x < ((z1 + 1) * (z1 + 1))) /\
+                 z1 >= y1),
+  (y1 * y1) <= x /\ x < ((y1 + 1) * (y1 + 1)).
 Proof.
 intuition.
 apply (iter_sqrt_invar4 x y1 z1); try omega.

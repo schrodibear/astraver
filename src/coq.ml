@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.101 2003-09-24 09:59:26 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.102 2003-09-25 09:02:43 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -379,7 +379,7 @@ let print_term_v8 fmt t =
   let rec print0 fmt = function
     | Tapp (id, [a;b]) when is_relation id ->
 	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (prefix_id id)
-	print1 a print1 b
+	print3 a print3 b
     | t -> 
 	print1 fmt t
   and print1 fmt = function

@@ -358,6 +358,7 @@ clean::
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
 	make -C doc clean
+	make -C examples-v7 clean
 	make -C examples clean
 
 dist-clean:: clean
@@ -375,6 +376,7 @@ coq-clean::
 	fi
 
 alldepend:
+	make -C examples-v7 depend
 	make -C examples depend
 
 include .depend
