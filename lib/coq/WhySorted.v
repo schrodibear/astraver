@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.4 2002-12-05 13:22:27 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.5 2003-01-07 16:54:07 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require WhyPermut.
@@ -138,9 +138,9 @@ Unfold sorted_array ; Intros.
 Cut `x = i`\/`x > i`.
 (Intro Hcut ; Elim Hcut ; Clear Hcut ; Intro).
 Rewrite H2.
-AccessSame. AccessOther.
+AccessSame; Try Omega. AccessOther; Try Omega.
 Apply Zle_trans with m:=(access A i) ; [Assumption | Apply H_sorted ; Omega].
-Do 2 AccessOther.
+Do 2 (AccessOther; Try Omega).
 Apply H_sorted ; Omega.
 Omega.
 Save.
@@ -160,11 +160,11 @@ Cut `x = j-1`\/`x < j-1`.
 (Intro Hcut ; Elim Hcut ; Clear Hcut ; Intro).
 Rewrite H2.
 Ring `j-1+1`.
-AccessOther. 
+AccessOther; Try Omega. 
 Apply Zle_trans with m:=(access A j). 
 Apply sorted_elements with n:=i m:=j ; Try Omega ; Assumption.
 Assumption.
-Do 2 AccessOther.
+Do 2 (AccessOther; Try Omega).
 Apply H_sorted ; Omega.
 
 Omega.
@@ -180,7 +180,7 @@ Lemma no_effect :
 Proof.
 Intros.
 Unfold sorted_array ; Intros. 
-Do 2 AccessOther.
+Do 2 (AccessOther; Try Omega).
 Apply H1 ; Assumption.
 Save.
 

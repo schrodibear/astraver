@@ -18,7 +18,7 @@
 
 (*** Zwf *******************************************************************)
 
-Require ZArith_base.
+Require ZArith.
 Require Export Wf_nat.
 Require Omega.
 

@@ -1,6 +1,7 @@
 
-version 0.9, January 6th, 2003
+version 0.91, January 7th, 2003
 ===============================
+  o fixed compatibility with Coq 7.3
   o C: recursive functions, arrays, pointers
 
 version 0.8, December 6th, 2002

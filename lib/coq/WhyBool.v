@@ -14,10 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyBool.v,v 1.7 2002-11-14 09:38:05 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.8 2003-01-07 16:54:07 filliatr Exp $ *)
 
 Require ZArith.
 Require Sumbool.
+Require WhyCoqCompat.
 
 Definition annot_bool :
   (b:bool) { b':bool | if b' then b=true else b=false }.

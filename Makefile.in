@@ -90,7 +90,7 @@ static:: $(STATICBINARY)
 
 coq:: $(VO)
 
-VERSION=0.9
+VERSION=0.91
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -152,7 +152,7 @@ demons: $(STATICBINARY) doc/manual.ps
 doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
-doc/version.tex:
+doc/version.tex: Makefile.in
 	echo "\newcommand{\whyversion}{$(VERSION)}" > $@
 
 doc/manual.html: doc/manual.tex
