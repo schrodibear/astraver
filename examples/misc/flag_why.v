@@ -7,6 +7,8 @@ Require Sumbool.
 
 (*Why*) Parameter N : Z.
 
+Axiom N_non_negative : `0 <= N`.
+
 Inductive color : Set := blue : color | white : color | red : color.
 
 Lemma eq_color_dec : (c1,c2:color) { c1=c2 } + { ~c1=c2 }.
@@ -342,7 +344,21 @@ Unfold monochrome Zwf; Intuition Try Omega.
 Rewrite Post7; Rewrite store_def_2; Try Omega.
 Rewrite Post6; Rewrite store_def_2; Try Omega.
 Apply H0; Omega.
-
+Rewrite Post7; Rewrite store_def_2; Try Omega.
+Rewrite Post6; Rewrite store_def_2; Try Omega.
+Apply H3; Omega.
+Assert h:`k = r1` \/ `r1 < k`. Omega. Intuition.
+Assert h':`k = i0` \/ `i0 < k`. Omega. Intuition.
+Rewrite Post7; Rewrite H13; Rewrite store_def_1.
+Rewrite Post5; Rewrite <- H10; Rewrite H13.
+Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
+Omega.
+Rewrite Post7; Rewrite store_def_2; Try Omega.
+Rewrite Post6; Rewrite H10; Rewrite store_def_1; Try Omega.
+Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
+Rewrite Post7; Rewrite store_def_2; Try Omega.
+Rewrite Post6; Rewrite store_def_2; Try Omega.
+Apply H6; Omega.
 Save.
 
 Lemma dutch_flag_po_12 : 
@@ -371,7 +387,7 @@ Lemma dutch_flag_po_12 :
            (monochrome t1 r1 N red) /\ (Zwf `0` `r1 - i1` `r0 - i0`))
   (Zwf `0` `r1 - i1` Variant1).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Rewrite Pre13; Tauto.
 Save.
 
 Lemma dutch_flag_po_13 : 
@@ -402,7 +418,7 @@ Lemma dutch_flag_po_13 :
   (monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 i1 white) /\
   (monochrome t1 r1 N red).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma dutch_flag_po_14 : 
@@ -425,7 +441,7 @@ Lemma dutch_flag_po_14 :
   (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 r0 white) /\
   (monochrome t0 r0 N red).
 Proof.
-(* FILL PROOF HERE *)
+Unfold monochrome; Intuition.
 Save.
 
 Lemma dutch_flag_po_15 : 
@@ -440,7 +456,13 @@ Lemma dutch_flag_po_15 :
   `result1 <= N`) /\ (monochrome t `0` result blue) /\
   (monochrome t result result0 white) /\ (monochrome t result1 N red).
 Proof.
-(* FILL PROOF HERE *)
+Intuition 
+  (Try Rewrite Post1; Try Rewrite Post2; Try Rewrite Post3;
+  Try Omega).
+Exact N_non_negative.
+Unfold monochrome; Intros; Absurd `0<0`; Omega.
+Unfold monochrome; Intros; Absurd `0<0`; Omega.
+Unfold monochrome; Intros; Absurd `N<N`; Omega.
 Save.
 
 Definition dutch_flag := (* validation *)
