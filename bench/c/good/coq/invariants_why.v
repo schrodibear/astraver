@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/invariants.why", characters 293-306 *)
+(* Why obligation from file "why/invariants.why", characters 347-360 *)
 Lemma f_impl_po_1 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -13,15 +13,15 @@ Lemma f_impl_po_1 :
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
   forall (Pre11: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                 (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                 100),
+                 (valid_range alloc c 0 1) /\ (0 <= (acc x s) /\ (acc x s) <=
+                 (acc y s)) /\ (acc y s) <= 100),
   (valid alloc s).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 310-334 *)
+(* Why obligation from file "why/invariants.why", characters 364-388 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -31,8 +31,8 @@ Lemma f_impl_po_2 :
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
   forall (Pre11: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                 (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                 100),
+                 (valid_range alloc c 0 1) /\ (0 <= (acc x s) /\ (acc x s) <=
+                 (acc y s)) /\ (acc y s) <= 100),
   forall (Pre3: (valid alloc s)),
   forall (caduceus_4: Z),
   forall (Post5: caduceus_4 = (acc x s)),

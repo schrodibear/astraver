@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.59 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.60 2004-05-26 13:23:32 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -795,6 +795,14 @@ let function_spec loc f = function
        with Not_found -> 
 	 Hashtbl.add function_specs f s; s)
 
+let array_size_from_initializer loc ty i = match ty.ctype_node, i with
+  | CTarray (ety, None), Ilist l -> 
+      let s = { texpr_node = TEconstant (string_of_int (List.length l));
+		texpr_type = c_int; texpr_loc = loc } in
+      { ty with ctype_node = CTarray (ety, Some s) }
+  | _ -> 
+      ty
+
 let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
       type_spec_decl ofs s
@@ -816,6 +824,7 @@ let type_decl d = match d.node with
 	    Loc.report Coptions.log d.loc;
 	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
 	    info.var_is_assigned <- true;
+	    let ty = array_size_from_initializer d.loc ty i in
 	    Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
       end
   | Cfunspec (s, ty, f, pl) ->

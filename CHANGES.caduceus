@@ -1,7 +1,8 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
-  
+ 
+ o array size deduced from initializer when any 
  o added automatic invariants for structures and arrays
  o fixed bug with several structures fields with same name
  o fixed bug with void parameters

@@ -8,12 +8,12 @@ CADUCEUS
    - union
    - memory allocation
    - sizeof / sizeof_expr
-   - arithmetic int -> float conversion in annotations (e.g. f >= 0)
 
  - implementation:
    - evaluation order: add an interference test to exclude expressions where
      evaluation order changes the result
    - heap variables: rename to avoid clashes
+     possible clash between a local variable and a heap var, e.g. in struct.c
 
  - logic: & in logic term syntax
 

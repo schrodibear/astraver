@@ -23,9 +23,9 @@ void f(int x[]) {
   x[0] = 1;
 }
 
-int t[];
+int t[2];
 
-/*@ requires \valid_index(t,0) ensures t[0] == 1 */ 
+/*@ ensures t[0] == 1 */ 
 void main() {
   f(t);
 } 
