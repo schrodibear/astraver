@@ -4,82 +4,141 @@
 Require Export caduceus_spec_why.
 
 
-(* Why obligation from file "why/test.why", characters 183-196 *)
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/test.why", characters 207-220 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: ((valid alloc s) /\ (valid alloc (acc t s))) /\
+  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
                  (valid alloc ps)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
+  forall (ps0: pointer),
+  forall (Post1: ps0 = s),
   (valid alloc s).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/test.why", characters 235-260 *)
+(* Why obligation from file "why/test.why", characters 255-269 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: ((valid alloc s) /\ (valid alloc (acc t s))) /\
+  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
                  (valid alloc ps)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
-  forall (Pre10: (valid alloc s)),
+  forall (ps0: pointer),
+  forall (Post1: ps0 = s),
+  forall (Pre13: (valid alloc s)),
   forall (p1: pointer),
-  forall (Post5: p1 = (acc t s)),
+  forall (Post6: p1 = (acc t s)),
+  (valid alloc ps0).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/test.why", characters 273-298 *)
+Lemma f_impl_po_3 : 
+  forall (alloc: alloc),
+  forall (ps: pointer),
+  forall (s: pointer),
+  forall (t: ((memory) pointer)),
+  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
+                 (valid alloc ps)),
+  forall (p: pointer),
+  forall (Post2: p = (any_pointer tt)),
+  forall (ps0: pointer),
+  forall (Post1: ps0 = s),
+  forall (Pre13: (valid alloc s)),
+  forall (p1: pointer),
+  forall (Post6: p1 = (acc t s)),
+  forall (Pre7: (valid alloc ps0)),
   forall (caduceus_1: pointer),
-  forall (Post1: caduceus_1 = p1),
+  forall (Post10: caduceus_1 = (acc t ps0)),
   (valid alloc caduceus_1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/test.why", characters 212-260 *)
-Lemma f_impl_po_3 : 
+(* Why obligation from file "why/test.why", characters 238-298 *)
+Lemma f_impl_po_4 : 
   forall (alloc: alloc),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (z: ((memory) Z)),
-  forall (Pre11: ((valid alloc s) /\ (valid alloc (acc t s))) /\
+  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
                  (valid alloc ps)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
-  forall (Pre10: (valid alloc s)),
+  forall (ps0: pointer),
+  forall (Post1: ps0 = s),
+  forall (Pre13: (valid alloc s)),
   forall (p1: pointer),
-  forall (Post5: p1 = (acc t s)),
+  forall (Post6: p1 = (acc t s)),
+  forall (Pre7: (valid alloc ps0)),
   forall (caduceus_1: pointer),
-  forall (Post1: caduceus_1 = p1),
-  forall (Pre4: (valid alloc caduceus_1)),
+  forall (Post10: caduceus_1 = (acc t ps0)),
+  forall (Pre6: (valid alloc caduceus_1)),
   forall (z0: ((memory) Z)),
-  forall (Post9: z0 = (upd z caduceus_1 1)),
+  forall (Post12: z0 = (upd z caduceus_1 1)),
   (forall (result:pointer),
    (result = (acc t s) ->
     (forall (result0:Z), (result0 = (acc z0 result) -> result0 = 1)) /\

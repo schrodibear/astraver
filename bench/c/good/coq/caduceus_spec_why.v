@@ -3,29 +3,7 @@
 
 Require Export caduceus_why. Require Export caduceus_tactics.
 
-(*Why*) Parameter f_parameter :
-  forall (x: pointer), forall (alloc: alloc), forall (intP: ((memory) Z)),
-  forall (H: (valid_index alloc x 0)),
-  (sig_2 ((memory) Z) unit
-   (fun (intP0: ((memory) Z)) (result: unit)  => ((acc intP0 (shift x 0)) =
-    1))).
-
-(*Why*) Parameter g2_parameter :
-  forall (tt: unit), forall (alloc: alloc), forall (intP: ((memory) Z)),
-  forall (r: pointer), forall (H: (valid alloc r)),
-  (sig_2 ((memory) Z) Z
-   (fun (intP0: ((memory) Z)) (result: Z)  => (result = 0))).
-
-(*Why*) Parameter g_parameter :
-  forall (x: pointer), forall (alloc: alloc), forall (intP: ((memory) Z)),
-  forall (H: (valid alloc x)),
-  (sig_2 ((memory) Z) unit
-   (fun (intP0: ((memory) Z)) (result: unit)  => ((acc intP0 x) = 0))).
-
 (*Why*) Parameter main_parameter :
-  forall (tt: unit), forall (alloc: alloc), forall (intP: ((memory) Z)),
-  forall (t: pointer), forall (H: (valid_index alloc t 0)),
-  (sig_2 ((memory) Z) unit
-   (fun (intP0: ((memory) Z)) (result: unit)  => ((acc intP0 (shift t 0)) =
-    1))).
+  forall (tt: unit), forall (x: Z), forall (H: x = 0),
+  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = 10))).
 

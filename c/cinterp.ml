@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.57 2004-03-24 15:07:46 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.58 2004-03-24 15:59:18 filliatr Exp $ i*)
 
 
 open Format
@@ -482,17 +482,23 @@ and interp_lvalue e =
 and interp_address e = match e.texpr_node with
   | TEvar v -> 
       begin match e.texpr_type.ctype_node with
-	| CTstruct _ | CTunion _ -> Var v.var_name
+	| CTstruct _ | CTunion _ -> Deref v.var_name
 	| _ -> unsupported "& operator"
       end
   | TEunary (Ustar, e1) ->
       interp_expr e1
   | TEarrget (e1, e2) ->
       build_complex_app (Var "shift_") [interp_expr e1; interp_expr e2]
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, _)
-  | TEdot (e1, _)
-  | TEarrow (e1, _) ->
-      interp_expr e1
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+  | TEdot (e1, f)
+  | TEarrow (e1, f) ->
+      begin match e1.texpr_type.ctype_node with
+	| CTenum _ | CTint _ | CTfloat _ -> 
+  	    interp_expr e1
+	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
+            build_complex_app (Var "acc_") [Var f; interp_expr e1]
+	| _ -> unsupported "& operator on a field"
+      end
   | TEcast (_, e1) ->
       interp_address e1
   | _ -> 
@@ -532,15 +538,21 @@ and interp_statement_expr e =
 			  [Var var; Var "caduceus1"; 
 			   make_app top [Var "caduceus2"; one]]))
 	end
-    | TEcall (e,args) -> 
+    | TEcall (e1,args) -> 
 	begin
-	  match e.texpr_node with
+	  match e1.texpr_node with
 	    | TEvar v ->
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
 		in
-		build_complex_app (Var (v.var_name ^ "_parameter")) targs
+		let app = 
+		  build_complex_app (Var (v.var_name ^ "_parameter")) targs
+		in
+		if e.texpr_type.ctype_node = CTvoid then
+		  app
+		else
+		  Let (tmp_var (), app, Void)
 	    | _ -> 
 		unsupported "call of a non-variable function"
 	end

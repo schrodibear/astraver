@@ -6,8 +6,11 @@ CADUCEUS
    - &x for local variable x
    - switch
    - union
+   - enum
    - memory allocation
    - sizeof / sizeof_expr
+   - if(p) / if(!p) with p a pointer
+   - arithmetic int -> float conversion in annotations : f >= 0
 
  - implementation:
    - evaluation order: add an interference test to exclude expressions where

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.26 2004-03-24 15:07:46 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.27 2004-03-24 15:59:18 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -53,7 +53,7 @@ let rec pointer_heap_var ty =
 	let v,_ = pointer_heap_var ty in
 	(v ^ "P", "pointer")
     | CTstruct _ 
-    | CTunion _ -> assert false
+    | CTunion _ -> "pointer", "pointer" (* OK? *)
     | CTfun _ -> assert false (* bad typing ! *)
 
 let memory_type t = ([t],"memory")
@@ -321,7 +321,10 @@ and address_expr e = match e.texpr_node with
   | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
-      expr e1
+      begin match e1.texpr_type.ctype_node with
+	| CTenum _ | CTint _ | CTfloat _ -> expr e1
+	| _ -> reads_add_field_var f e.texpr_type (expr e1)
+      end
   | TEcast (_, e1) ->
       address_expr e1
   | _ -> 
