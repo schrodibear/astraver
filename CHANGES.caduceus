@@ -1,5 +1,8 @@
 Note: These are the changes for Caduceus.
 
+version 0.71, February 3rd, 2005
+================================
+ o axioms valid_S_pointer split into valid_S_x_pointer for each field x
  o removed axioms about null 
  o valid, valid_index, valid_range do not require p<>null anymore 
  o allocation on stack for structures and arrays

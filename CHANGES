@@ -1,4 +1,10 @@
 
+version 1.71, February 3rd, 2005
+================================
+  o Simplify output: axioms are also printed with universal
+    quantifiers moved inside as much as possible (forall x y, P x =>
+    Q x y becomes forall x, P x => forall y, Q x y)
+
 version 1.69, January 4th, 2005
 ===============================
   o labeled predicates with syntax ":id: predicate" and lowest precedence
