@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.5 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.6 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -119,6 +119,10 @@ let compose (r1,w1) (r2,w2) =
 (* remove *)
 
 let remove (r,w) name = basic_remove name r, basic_remove name w
+
+(* occurrence *)
+
+let occur x (r,w) = List.mem x r || List.mem x w
 
 (* substitution *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.7 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.8 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -61,6 +61,7 @@ let is_local_set env id =
 
 type typing_info = {
   env : local_env;
+  label : string;
   kappa : type_c
 }
   

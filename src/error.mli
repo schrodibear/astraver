@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.5 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.6 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -29,6 +29,7 @@ type error =
   | ShouldBeInformative
   | AppNonFunction
   | TooManyArguments
+  | TooComplexArgument
   | PartialApp
   | TermExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectedType of (formatter -> unit)
@@ -69,6 +70,7 @@ val should_be_informative : Loc.t -> 'a
 
 val app_of_non_function : Loc.t -> 'a
 val too_many_arguments : Loc.t -> 'a
+val too_complex_argument : Loc.t -> 'a
 val partial_app : Loc.t -> 'a
 val term_expected_type : 
   Loc.t -> (formatter -> unit) -> (formatter -> unit) -> 'a

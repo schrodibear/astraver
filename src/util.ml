@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.12 2002-03-11 11:46:23 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.13 2002-03-11 15:17:58 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -24,8 +24,11 @@ let is_labelled_reference env id =
 let predicate_refs env c =
   Idset.filter (is_labelled_reference env) (predicate_vars c)
 
-let term_now_vars env c =
+let term_now_refs env c =
   Idset.filter (is_reference env) (term_vars c)
+
+let term_refs env c =
+  Idset.filter (is_labelled_reference env) (term_vars c)
 
 (*s Labels management *)
 
@@ -131,6 +134,55 @@ let initial_renaming env =
   update empty_ren "0" ids
 
 
+(*s Occurrences *)
+
+let rec occur_term id = function
+  | Tvar id' -> id = id'
+  | Tapp (_, l) -> List.exists (occur_term id) l
+  | Tconst _ | Tbound _ -> false
+
+let rec occur_predicate id = function
+  | Pvar _ | Ptrue | Pfalse -> false
+  | Papp (_, l) -> List.exists (occur_term id) l
+  | Pif (a, b, c) -> 
+      occur_term id a || occur_predicate id b || occur_predicate id c
+  | Pimplies (a, b) -> occur_predicate id a || occur_predicate id b
+  | Pand (a, b) -> occur_predicate id a || occur_predicate id b
+  | Por (a, b) -> occur_predicate id a || occur_predicate id b
+  | Pnot a -> occur_predicate id a
+  | Forall (_,_,_,a) -> occur_predicate id a
+
+let occur_assertion id a = occur_predicate id a.a_value
+
+let occur_precondition id p = occur_predicate id p.p_value
+  
+let occur_post id = function None -> false | Some q -> occur_assertion id q
+
+let rec occur_type_v id = function
+  | Ref v -> occur_type_v id v
+  | Array (t, v) -> occur_term id t || occur_type_v id v
+  | Arrow (bl, c) -> List.exists (occur_binder id) bl || occur_type_c id c
+  | PureType _ -> false
+
+and occur_type_c id c =
+  occur_type_v id c.c_result_type ||
+  List.exists (occur_precondition id) c.c_pre ||
+  Effect.occur id c.c_effect ||
+  occur_post id c.c_post 
+
+and occur_binder id = function
+  | id', BindType v -> id <> id' && occur_type_v id v
+  | _, (BindSet | Untyped) -> false
+
+let forall x v p =
+  let n = Ident.bound () in
+  let p = tsubst_in_predicate [x, Tbound n] p in
+  Forall (x, n, mlize_type v, p)
+
+let foralls =
+  List.fold_right
+    (fun (x,v) p -> if occur_predicate x p then forall x v p else p)
+    
 (*s Substitutions *)
 
 let rec type_c_subst s c =

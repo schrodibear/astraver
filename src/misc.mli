@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.15 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.16 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -68,12 +68,6 @@ val equals_true : term -> term
 val equals_false : term -> term
 
 val mlize_type : type_v -> pure_type
-
-val occur_term : Ident.t -> term -> bool
-val occur_predicate : Ident.t -> predicate -> bool
-
-val forall : Ident.t -> type_v -> predicate -> predicate
-val foralls : (Ident.t  * type_v) list -> predicate -> predicate
 
 (*s Smart constructors for terms and predicates. *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.17 2002-03-11 11:46:23 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.18 2002-03-11 15:17:58 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -23,7 +23,7 @@ let force_post env q e = match q with
       let ids = predicate_refs env c in
       let ef = Effect.add_reads ids e.info.kappa.c_effect in
       let k = { e.info.kappa with c_post = q; c_effect = ef } in
-      let i = { env = e.info.env; kappa = k } in
+      let i = { e.info with kappa = k } in
       { desc = e.desc; info = i }
 
 let post_if_none env q p = match post p with
@@ -43,7 +43,7 @@ let is_conditional p = match p.desc with If _ -> true | _ -> false
 
 let extract_pre pr =
   { desc = pr.desc; 
-    info = { env = pr.info.env; kappa = { pr.info.kappa with c_pre = [] } } },
+    info = { pr.info with kappa = { pr.info.kappa with c_pre = [] } } },
   pr.info.kappa.c_pre
 
 (* adds some pre-conditions *)
@@ -52,7 +52,7 @@ let add_pre p1 pr =
   let k = pr.info.kappa in
   let p' = p1 @ k.c_pre in
   { desc = pr.desc; 
-    info = { env = pr.info.env; kappa = { k with c_pre = p' } } }
+    info = {  pr.info with kappa = { k with c_pre = p' } } }
   
 (* change the statement *)
 
@@ -141,7 +141,7 @@ let rec normalize p =
 	if k.c_post = None then
 	  let ke = e.info.kappa in
 	  let k' = { ke with c_pre = k.c_pre @ ke.c_pre } in
-	  { desc = e.desc; info = { env = env; kappa = k'} }
+	  { desc = e.desc; info = { e.info with kappa = k'} }
 	else
 	  change_desc p (Coerce e)
     | PPoint (lab, d) ->
@@ -207,10 +207,9 @@ let rec wp p q =
   let env = p.info.env in
   let postp = post p in
   let q0 = if postp = None then q else postp in
-  let lab = label_name () in
+  let lab = p.info.label in
   let q1 = optpost_app (change_label "" lab) q0 in
   let d,w = wp_desc p.info p.desc q1 in
-  let p = change_desc p (PPoint (lab, d)) in
   let w = optpost_app (erase_label lab) w in
   let p = if postp = None then force_post env q0 p else p in
   let w = match postp, q with

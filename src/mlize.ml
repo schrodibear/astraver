@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.14 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.15 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -32,6 +32,7 @@ i*)
 
 let rec trad ren t =
   let env = t.info.env in
+  let ren = push_date ren t.info.label in
   trad_desc ren env t.info.kappa t.desc
 
 and trad_desc ren env ct d =

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.20 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.21 2002-03-11 15:17:58 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -113,6 +113,13 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
 let expected_type loc t et =
   if t <> et then Error.expected_type loc (fun fmt -> print_type_v fmt et)
 
+(*i
+let check_complex_arg loc x k =
+  let (_,t),e,_,q = decomp_kappa k in
+  if Effect.occur x e || occur_type_v x t || occur_post x q then
+    Error.too_complex_argument loc
+i*)
+
 let type_eq loc = function
   | PureType PTint -> Ident.t_eq_int
   | PureType PTbool -> Ident.t_eq_bool
@@ -121,18 +128,18 @@ let type_eq loc = function
   | _ -> Error.expected_type loc 
 	 (fun fmt -> fprintf fmt "unit, bool, int or float")
 
-let coerce p env k = Coerce { desc = p; info = { env = env; kappa = k } }
+let make_node p env l k = 
+  { desc = p; info = { env = env; label = l; kappa = k } }
+
+let coerce p env k = 
+  let l = label_name () in Coerce (make_node p env l k)
 
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
 let state_var ren env (phi,r) = 
-  let ids = term_vars phi in
-  Idset.fold
-    (fun id e ->
-       if is_reference env id then Effect.add_read id e else e)
-    ids Effect.bottom 
-
+  let ids = term_refs env phi in
+  Effect.add_reads ids Effect.bottom
 	
 (*s Typing preconditions.
     Return the effect i.e. variables appearing in the precondition. 
@@ -228,6 +235,8 @@ let partial_pre = function
   | _ ->
       []
 
+let assert_pre p = { p with p_assert = true }
+
 (*s Typing programs. We infer here the type with effects. 
     [lab] is the set of labels, [env] the environment 
     and [expr] the program. *)
@@ -238,18 +247,18 @@ let rec typef lab env expr =
   let ep = state_pre lab env loc expr.info.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let e' = Effect.union e (Effect.union ep eq) in
-  let p' = p1 @ expr.info.pre in
+  let p' = List.map assert_pre p1 @ expr.info.pre in
+  let lab = label_name () in
   match q, d with
     | None, Coerce expr' ->
 	let c = { c_result_name = result; c_result_type = v;
 		  c_effect = Effect.union e' (effect expr');
 		  c_pre = p' @ (pre expr'); c_post = post expr' } in
-	{ desc = expr'.desc; info = { env = env; kappa = c } }
+	make_node expr'.desc env lab c
     | _ ->
 	let c = { c_result_name = result; c_result_type = v;
 		  c_effect = e'; c_pre = p'; c_post = q } in
-	{ desc = d; info = { env = env; kappa = c } }
-
+	make_node d env lab c
 
 and typef_desc lab env loc = function
   | Expression c ->
@@ -358,8 +367,13 @@ and typef_desc lab env loc = function
 		| _ ->	   
 		    coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
 	 | _ ->
-	     let (_,tapp),_,_,_ = decomp_kappa kapp in
-	     coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
+	     let (_,tapp),_,_,qapp = decomp_kappa kapp in
+	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
+	     if occur_post x qapp then
+	       App (t_f, Term t_a), (tapp, ef), []
+	     else
+	       let kapp = { kapp with c_pre = [] } in
+	       coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
 
   | App (f, (Refarg (locr,r) as a)) ->
       let t_f = typef lab env f in

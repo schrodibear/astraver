@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.10 2002-03-11 11:46:23 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.11 2002-03-11 15:17:58 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -35,7 +35,8 @@ val make_arrow : type_v binder list -> type_c -> type_v
 val is_reference : local_env -> Ident.t -> bool
 val predicate_now_refs : local_env -> predicate -> Ident.set
 val predicate_refs : local_env -> predicate -> Ident.set
-val term_now_vars : local_env -> term -> Ident.set
+val term_now_refs : local_env -> term -> Ident.set
+val term_refs : local_env -> term -> Ident.set
 
 val deref_type : type_v -> type_v
 val dearray_type : type_v -> term * type_v
@@ -51,6 +52,18 @@ val effect : typed_program -> Effect.t
 val pre : typed_program -> precondition list
 val post : typed_program -> postcondition option
 val result_type : typed_program -> type_v
+
+val forall : Ident.t -> type_v -> predicate -> predicate
+val foralls : (Ident.t  * type_v) list -> predicate -> predicate
+
+(*s Occurrences *)
+
+val occur_term : Ident.t -> term -> bool
+val occur_predicate : Ident.t -> predicate -> bool
+val occur_assertion : Ident.t -> assertion -> bool
+val occur_post : Ident.t -> postcondition option -> bool
+val occur_type_v : Ident.t -> type_v -> bool
+val occur_type_c : Ident.t -> type_c -> bool
 
 (*s Functions to translate array operations *)
 

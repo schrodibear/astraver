@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.7 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.8 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -28,6 +28,7 @@ type error =
   | ShouldBeInformative
   | AppNonFunction
   | TooManyArguments
+  | TooComplexArgument
   | PartialApp
   | TermExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectedType of (formatter -> unit)
@@ -84,6 +85,9 @@ let report fmt = function
       fprintf fmt "or it is applied to non pure arguments)@]"
   | TooManyArguments ->
       fprintf fmt "@[Too many arguments@]"
+  | TooComplexArgument ->
+      fprintf fmt 
+	"@[This argument prevents the application to be given a type@]"
   | PartialApp ->
       fprintf fmt "@[This function does not have@ ";
       fprintf fmt "the right number of arguments@]"
@@ -167,6 +171,7 @@ let should_be_informative loc = raise_with_loc (Some loc) ShouldBeInformative
 
 let app_of_non_function loc = raise_with_loc (Some loc) AppNonFunction
 let too_many_arguments loc = raise_with_loc (Some loc) TooManyArguments
+let too_complex_argument loc = raise_with_loc (Some loc) TooComplexArgument
   
 let partial_app loc = raise_with_loc (Some loc) PartialApp
   

@@ -1,9 +1,10 @@
 
-(*i $Id: pvs.ml,v 1.9 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.10 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Logic
 open Types
 open Misc
+open Util
 open Ident
 open Format
 open Vcg

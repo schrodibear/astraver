@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.16 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.17 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -169,6 +169,7 @@ let rec tsubst_in_predicate alist = function
 
 let subst_in_term alist = 
   tsubst_in_term (List.map (fun (id,id') -> (id, Tvar id')) alist)
+
 let subst_in_predicate alist = 
   tsubst_in_predicate (List.map (fun (id,id') -> (id, Tvar id')) alist)
 
@@ -203,32 +204,6 @@ let rec mlize_type = function
   | Ref v -> mlize_type v
   | Array (s, v) -> PTarray (s, mlize_type v)
   | Arrow _ -> assert false
-
-let rec occur_term id = function
-  | Tvar id' -> id = id'
-  | Tapp (_, l) -> List.exists (occur_term id) l
-  | Tconst _ | Tbound _ -> false
-
-let rec occur_predicate id = function
-  | Pvar _ | Ptrue | Pfalse -> false
-  | Papp (_, l) -> List.exists (occur_term id) l
-  | Pif (a, b, c) -> 
-      occur_term id a || occur_predicate id b || occur_predicate id c
-  | Pimplies (a, b) -> occur_predicate id a || occur_predicate id b
-  | Pand (a, b) -> occur_predicate id a || occur_predicate id b
-  | Por (a, b) -> occur_predicate id a || occur_predicate id b
-  | Pnot a -> occur_predicate id a
-  | Forall (_,_,_,a) -> occur_predicate id a
-  
-let forall x v p =
-  let n = Ident.bound () in
-  let p = tsubst_in_predicate [x, Tbound n] p in
-  Forall (x, n, mlize_type v, p)
-
-let foralls =
-  List.fold_right
-    (fun (x,v) p -> if occur_predicate x p then forall x v p else p)
-    
 
 (*s Smart constructors. *)
 

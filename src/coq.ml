@@ -1,11 +1,12 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.10 2002-03-04 15:26:34 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.11 2002-03-11 15:17:57 filliatr Exp $ i*)
 
 open Options
 open Logic
 open Types
 open Misc
+open Util
 open Ident
 open Format
 open Vcg
