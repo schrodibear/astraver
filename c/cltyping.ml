@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.9 2004-02-10 10:38:09 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.10 2004-02-10 10:47:14 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -86,8 +86,12 @@ and type_term_node loc env = function
       let t = type_num_term env t in
       Tunop (Uminus, t), t.info
   | Tunop (Ustar, t) -> 
-      assert false (*TODO*)
-  | Tbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
+      let t = type_term env t in
+      begin match t.info.ctype_node with
+	| CTpointer ty | CTarray (ty, _) -> Tunop (Ustar, t), ty
+	| _ -> error loc "invalid type argument of `unary *'"
+      end
+   | Tbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
       let t1 = type_num_term env t1 in
       let t2 = type_num_term env t2 in
       Tbinop (t1, op, t2), max_type t1.info t2.info
@@ -96,7 +100,18 @@ and type_term_node loc env = function
       let t2 = type_int_term env t2 in
       Tbinop (t1, Bmod, t2), c_int
   | Tdot (t, x) ->
-      assert false (*TODO*)
+      let t = type_term env t in
+      begin match t.info.ctype_node with
+	| CTstruct (_,fl) ->
+	    Tdot (t, x), type_of_struct_field loc x fl
+	| CTunion (_,fl) -> 
+	    Tdot (t, x), type_of_union_field loc x fl
+	| CTstruct_named _ | CTunion_named _ ->
+            error loc "use of incomplete type"
+	| _ -> 
+	    error loc ("request for member `" ^ x ^ 
+		       "' in something not a structure or union")
+      end
   | Tarrow (t, x) ->
       let t = type_term env t in
       begin match t.info.ctype_node with
@@ -127,6 +142,7 @@ and type_term_node loc env = function
       let t = type_term env t in
       Told t, t.info
   | Tat (t, l) ->
+      (* TODO check label l *)
       let t = type_term env t in
       Tat (t, l), t.info
   | Tlength t ->
@@ -135,7 +151,8 @@ and type_term_node loc env = function
 	 | CTarray _ | CTpointer _ -> Tlength t, c_int
 	 | _ -> error loc "subscripted value is neither array nor pointer")
   | Tresult ->
-      assert false (*TODO*)
+      (try let ty,_ = Env.find "\\result" env in Tresult, ty
+       with Not_found -> error loc "\\result meaningless")
 
 and type_int_term env t =
   let tt = type_term env t in
@@ -247,6 +264,9 @@ let type_variant env = function
 let type_loop_annot env (i,v) =
   option_app (type_predicate env) i, type_variant env v
 
-let type_spec env (p,e,q) = 
-  option_app (type_predicate env) p, e, option_app (type_predicate env) q
+let type_spec ~result:ty env (p,e,q) = 
+  let p = option_app (type_predicate env) p in
+  let env' = Env.add "\\result" ty (Info.default_var_info "\\result") env in
+  let q = option_app (type_predicate env') q in
+  p, e, q
 

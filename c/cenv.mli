@@ -2,6 +2,8 @@
 open Cast
 open Info
 
+(* Typing environments. They are common to both code and annotations. *)
+
 val eq_type : tctype -> tctype -> bool
 val eq_type_node : 'a ctype_node -> 'b ctype_node -> bool
 val compatible : tctype -> tctype -> bool
@@ -27,6 +29,7 @@ val find_fun : string -> tctype list * tctype
 val add_pred : string -> tctype list -> unit
 val find_pred : string -> tctype list
 
+(* Local environment *)
 module Env : sig
 
   type t

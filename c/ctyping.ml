@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.24 2004-02-10 10:38:09 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.25 2004-02-10 10:47:14 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -44,7 +44,7 @@ let with_offset ofs f x =
 	raise (Error (Some (offset ofs loc), e))
 
 let type_predicate ofs env p = with_offset ofs (type_predicate env) p
-let type_spec env (ofs,s) = with_offset ofs (type_spec env) s
+let type_spec ty env (ofs,s) = with_offset ofs (type_spec ~result:ty env) s
 let type_loop_annot env (ofs,a) = with_offset ofs (type_loop_annot env) a
 
 (*s Some predefined types, subtype relation, etc. *)
@@ -628,14 +628,14 @@ let type_decl d = match d.node with
       let info = default_var_info x in
       Tdecl (ty, info, type_initializer Env.empty ty i)
   | Cfunspec (s, ty, f, pl) ->
-      let s = type_spec Env.empty s in
       let ty = type_type d.loc Env.empty ty in
+      let s = type_spec ty Env.empty s in
       let pl,env = type_parameters d.loc Env.empty pl in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
       Tfunspec (s, ty, f, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
-      let s = option_app (type_spec Env.empty) s in
       let ty = type_type d.loc Env.empty ty in
+      let s = option_app (type_spec ty Env.empty) s in
       let et = if ty = c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
