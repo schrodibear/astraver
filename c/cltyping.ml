@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.46 2004-06-28 13:22:11 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.47 2004-06-28 15:00:04 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -527,7 +527,7 @@ type memory_loc =
 let all_locations_for_type loc v tn ty =
 
   let rec all_locations mloc ty =
-    match ty.ctype_node with
+0    match ty.ctype_node with
       | CTstruct (n, _) ->
 	  begin match tag_type_definition n with
 	    | Defined (CTstruct (_, Decl fl)) ->
@@ -592,55 +592,74 @@ and print_term fmt t = print_term_node fmt t.term_node
 
 let local_alloc_post loc v t =
 (*
-
-[local_alloc_for allocs tn ty] returns a pair (allocs',f), f is a formula expressing that 
-[tn] is different from all pointers in [allocs]
-
-[allocs'] is the list of newly allocated pointers.
-
+[local_alloc_for t] returns a pair (allocs,f), f is a formula expressing that 
+all allocations in [t] are not aliased and [allocs] is a function expressing
+that a pointer is different from all allocated pointers in [t]
 *)
-
-  let rec local_alloc_for allocs tn ty = 
-    Format.eprintf "tn = %a ty = %a@." 
-      print_term_node tn Creport.print_type ty;
-    match ty.ctype_node with
+  let rec local_alloc_fields n t = match tag_type_definition n with
+    | Defined (CTstruct (_, Decl fl)) ->
+	List.fold_right 
+	  (fun (tyf, f, _) (allocs,form) -> 
+	     let tf = 
+	       { term_node = Tdot (t, find_field n f); term_type = tyf }
+	     in
+	     let allocs',form' = local_alloc_for tf in
+	     (fun x -> make_and (allocs x) (allocs' x)), 
+	     make_and form (make_and form' (allocs tf)))
+	  fl 
+	  ((fun x -> Ptrue), Ptrue)
+    | Defined _ ->
+	assert false
+    | Incomplete ->
+	error loc ("`" ^ v.var_name ^ "' has incomplete type")
+  and local_alloc_for t = match t.term_type.ctype_node with
     | CTstruct (n, _) ->
-	let t = { term_node = tn; term_type = c_pointer ty } in
-	let form = 
-	  List.fold_left
-	    (fun acc f -> make_and acc (f t)) 
-	    Ptrue
-	    allocs
-	in
-	let new_allocs = (fun x -> Prel(x,Neq,t)) in
-	begin match tag_type_definition n with
-	  | Defined (CTstruct (_, Decl fl)) ->
-	      List.fold_right 
-		(fun (tyf, f, _) (new_allocs,form) -> match tyf.ctype_node with
-		   | CTstruct _ | CTarray _ ->
-		       let tnf = Tarrow (t, find_field n f) in
-		       let tf = { term_node = tnf ; term_type = c_pointer tyf } in
-		       let new_allocs',form' = local_alloc_for (new_allocs@allocs) tnf tyf in
-		       (new_allocs'@new_allocs),make_and form form'
-		   | _ ->
-		       (new_allocs,form))
-		fl ([new_allocs],form)
-	  | Defined _ ->
-	      assert false
-	  | Incomplete ->
-	      error loc ("`" ^ v.var_name ^ "' has incomplete type")
-	end
+	local_alloc_fields n t
     | CTarray (ty, None) ->
 	error loc ("array size missing in `" ^ v.var_name ^ "'")
     | CTarray (ty, Some s) ->
-	let t = { term_node = tn; term_type = c_array_size ty s } in
 	let ts = eval_array_size s in
-	let form = 
-	  List.fold_left
-	    (fun acc f -> make_and acc (f t)) 
-	    Ptrue
-	    allocs
+	let ineq vari = 
+	  Pand (Prel (int_constant "0", Le, vari), Prel (vari, Lt, ts)) 
 	in
+	begin match ty.ctype_node with
+	  | CTstruct (n, _) ->
+	      let i = default_var_info (fresh_index ()) in
+	      let vari = { term_node = Tvar i; term_type = c_int } in
+	      let ti = 
+		{ term_node = Tbinop (t, Badd, vari); term_type = t.term_type }
+	      in
+	      let allocs,form = local_alloc_fields n ti in
+	      (fun x -> 
+		 make_and (Prel (x, Neq, t))
+		   (make_forall [c_int, i.var_name]
+		      (make_implies (ineq vari) (allocs x)))),
+	      make_forall [c_int, i.var_name]
+		(make_implies (ineq vari)
+		   (make_and form
+		      (let j = default_var_info (fresh_index ()) in
+		       let varj ={ term_node = Tvar j; term_type = c_int } in
+		       let tj = 
+			 { term_node = Tbinop (t, Badd, varj); 
+			   term_type = t.term_type }
+		       in
+		       make_forall [c_int, j.var_name]
+			 (make_implies (Prel (varj, Neq, vari))
+			    (Prel (ti, Neq, tj))))))
+	  | _ ->
+	      let i = default_var_info (fresh_index ()) in
+	      let vari = { term_node = Tvar i; term_type = c_int } in
+	      let ti = 
+		{ term_node = Tarrget (t, vari); term_type = t.term_type }
+	      in
+	      assert false (*TODO*)
+	end
+    | _ ->
+	(fun x -> Prel (x, Neq, t)), Ptrue
+  in
+  assert false (*TODO*)
+
+(****
 	let allocs_before i op =
 	  (* forall j, 0 <= j < i -> x <> tj *)
 	  let j = default_var_info (fresh_index ()) in
@@ -684,3 +703,4 @@ let local_alloc_post loc v t =
   in
   Ptrue (* let _,f = local_alloc_for [] Tresult ty in f *)
 
+****)
