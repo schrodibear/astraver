@@ -189,7 +189,7 @@ The input file contains the following kinds of declaration:
     Examples:
 \begin{verbatim}
      logic max : int,int -> int
-     logic is_int : float -> prop
+     logic is_int : real -> prop
 \end{verbatim}
 
     Similarly to \te{parameter}, the prefix
@@ -695,14 +695,14 @@ These are the functions predefined in \why:
   \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} and \texttt{\%}.
 \item[\texttt{neg\_int : int -> int}] ~\par
   Corresponds to the prefix symbol \texttt{-}.
-\item[\texttt{add\_float, sub\_float, mul\_float, div\_float :
-    float,float -> float}] ~\par
+\item[\texttt{add\_real, sub\_real, mul\_real, div\_real :
+    real,real -> real}] ~\par
   Correspond to the infix symbols
   \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
-\item[\texttt{neg\_float, sqrt\_float : float -> float}] ~\par
-  \texttt{neg\_float} corresponds to the prefix symbol \texttt{-}.
-\item[\texttt{float\_of\_int : int -> float}] ~\par
-  Conversion of an integer into a floating point number.
+\item[\texttt{neg\_real, sqrt\_real : real -> real}] ~\par
+  \texttt{neg\_real} corresponds to the prefix symbol \texttt{-}.
+\item[\texttt{real\_of\_int : int -> real}] ~\par
+  Conversion of an integer into a real number.
 \item[\texttt{array\_length : $\alpha$ array -> int}] ~\par
   The size of an array.
 \end{description}
@@ -717,9 +717,9 @@ These are the predicates predefined in \why:
   Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
   \texttt{>=}, \texttt{=} and \texttt{<>}.
 
-\item[\texttt{lt\_float, le\_float, gt\_float, ge\_float, eq\_float,
-    neq\_float :}] ~\par
-  \texttt{float, float -> prop} ~\par
+\item[\texttt{lt\_real, le\_real, gt\_real, ge\_real, eq\_real,
+    neq\_real :}] ~\par
+  \texttt{real, real -> prop} ~\par
   Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
   \texttt{>=}, \texttt{=} and \texttt{<>}.
 
@@ -777,7 +777,7 @@ Types are mapped as follows:
     \hline
     \texttt{int} & \texttt{Z} \\
     \hline
-    \texttt{float} & \texttt{R} \\
+    \texttt{real} & \texttt{R} \\
     \hline
     $\tau$ \texttt{array} & \texttt{(array $\tau$)},
                             from module \texttt{WhyArrays} \\
@@ -854,7 +854,7 @@ Types are mapped as follows:
     \hline
     \texttt{int} & \texttt{int} \\
     \hline
-    \texttt{float} & \texttt{real} \\
+    \texttt{real} & \texttt{real} \\
     \hline
     $\tau$ \texttt{array} & \texttt{warray[$\tau$]},
                             from theory \texttt{why} \\
@@ -913,7 +913,7 @@ Keywords of the logic are:
 \begin{center}
 {\tt\begin{tabular}{l@{\qquad}l@{\qquad}l}
 and & bool & else \\
-exists & false & float \\
+exists & false & real \\
 forall & if & int  \\
 not & or & then  \\
 true & unit & void
@@ -949,7 +949,7 @@ have the same type.
 
   \nt{constant}\indexnt{constant}
     & $::=$ & \nt{integer-constant} \\
-      & $|$ & \nt{floating-point-constant} \\
+      & $|$ & \nt{real-constant} \\
       & $|$ & \te{true} \\
       & $|$ & \te{false} \\
       & $|$ & \te{void} \\
@@ -1035,7 +1035,7 @@ The set of keywords is now:
 absurd & and & array & as & assert  \\
 begin & bool & do & done & else  \\
 end & exception & exists & external & false  \\
-float & for & forall & fun & if  \\
+real & for & forall & fun & if  \\
 in & int & invariant & label & let  \\
 logic & not & of & or & parameter \\
 prop & raise & raises & reads \\
@@ -1083,7 +1083,7 @@ Syntax of types is given in Figure~\ref{fig:types}.
   \\[0.1em]
 
   \nt{primitive\_type}\indexnt{primitive\_type}
-    & $::=$ & \te{int} $|$ \te{bool} $|$ \te{float} $|$ 
+    & $::=$ & \te{int} $|$ \te{bool} $|$ \te{real} $|$ 
               \te{unit} $|$ \nt{identifier} $|$ \te{'} \nt{identifier} \\
     & $|$ & \nt{primitive\_type} \nt{identifier} $|$ \te{(}
     \nt{primitive\_type}\etoilesep{\te{,}} \te{)} \nt{identifier} \\
@@ -1265,15 +1265,15 @@ These are the functions predefined in \why:
 \item[\texttt{neg\_int : int -> int}] ~\par
   Correponds to the prefix symbol \texttt{-}.
 
-\item[\texttt{add\_float, sub\_float, mul\_float, div\_float,
-    : float -> float -> float}] ~\par
+\item[\texttt{add\_real, sub\_real, mul\_real, div\_real,
+    : real -> real -> real}] ~\par
   Correspond to the infix symbols
   \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
 
-\item[\texttt{neg\_float, sqrt\_float : float -> float}] ~\par
-  \texttt{neg\_float} correponds to the prefix symbol \texttt{-}.
+\item[\texttt{neg\_real, sqrt\_real : real -> real}] ~\par
+  \texttt{neg\_real} correponds to the prefix symbol \texttt{-}.
 
-\item[\texttt{float\_of\_int : int -> float}]
+\item[\texttt{real\_of\_int : int -> real}]
 
 \item[\texttt{lt\_int : x:int -> y:int -> \{\} bool \{if result then x
     < y else x >= y\}}] ~\par
@@ -1290,8 +1290,8 @@ These are the functions predefined in \why:
   Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
   \texttt{>=}, \texttt{=} and \texttt{<>}.
 
-\item[\texttt{lt\_float, le\_float, gt\_float, ge\_float, eq\_float,
-    neq\_float}] ~\par
+\item[\texttt{lt\_real, le\_real, gt\_real, ge\_real, eq\_real,
+    neq\_real}] ~\par
   As for integers.
 
 \item[\texttt{eq\_bool, neq\_bool, eq\_unit, neq\_unit}] ~\par

@@ -21,7 +21,7 @@ external parameter lsr : int -> int -> int
 (* default variable initialisation *)
 
 parameter any_int: unit -> int
-parameter any_float: unit -> float
+parameter any_float: unit -> real
 parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
@@ -190,7 +190,7 @@ exception Break
 exception Continue
 exception Return
 exception Return_int of int
-exception Return_float of float
+exception Return_float of real
 exception Return_pointer of pointer
 
 (* for Simplify *)

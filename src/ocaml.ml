@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.12 2004-04-30 14:19:05 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.13 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -103,10 +103,10 @@ let infix id =
   else if id == t_div_int then "/."
   else if is_eq id then "="
   else if is_neq id then "<>"
-  else if id == t_lt_int || id == t_lt_float then "<"
-  else if id == t_le_int || id == t_le_float then "<="
-  else if id == t_gt_int || id == t_gt_float then ">"
-  else if id == t_ge_int || id == t_ge_float then ">="
+  else if id == t_lt_int || id == t_lt_real then "<"
+  else if id == t_le_int || id == t_le_real then "<="
+  else if id == t_gt_int || id == t_gt_real then ">"
+  else if id == t_ge_int || id == t_ge_real then ">="
   else assert false
 
 let prefix fmt id = fprintf fmt "( %s )" (infix id)
@@ -122,12 +122,12 @@ let rec expression fmt = function
       fprintf fmt "(Array.length %a)" Ident.print t
   | Tapp (id, [t]) when id == t_neg_int ->
       fprintf fmt "(-%a)" expression t
-  | Tapp (id, [t]) when id == t_neg_float ->
+  | Tapp (id, [t]) when id == t_neg_real ->
       fprintf fmt "(-. %a)" expression t
-  | Tapp (id, [t]) when id == t_sqrt_float ->
+  | Tapp (id, [t]) when id == t_sqrt_real ->
       fprintf fmt "(sqrt %a)" expression t
-  | Tapp (id, [t]) when id == t_float_of_int ->
-      fprintf fmt "(float %a)" expression t
+  | Tapp (id, [t]) when id == t_real_of_int ->
+      fprintf fmt "(real %a)" expression t
   | Tapp (id, [a; b]) when id == access ->
       fprintf fmt "%a.(%a)" expression a expression b
   | Tapp (id, [a; b]) when caml_infix id ->

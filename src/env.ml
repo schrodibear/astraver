@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.40 2004-03-23 14:21:40 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.41 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -38,7 +38,7 @@ let rec find_pure_type_vars env t =
     | PTexternal(l,id) ->
 	List.fold_left find_pure_type_vars env l
     | PTarray ta -> find_pure_type_vars env ta
-    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> env
+    | PTint | PTreal | PTbool | PTunit | PTvar _ -> env
 
 let find_logic_type_vars t =
   match t with
@@ -112,7 +112,7 @@ let rec subst_pure_type s t =
     | PTexternal(l,id) ->
 	PTexternal(List.map (subst_pure_type s) l,id)
     | PTarray ta -> PTarray (subst_pure_type s ta)
-    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> t
+    | PTint | PTreal | PTbool | PTunit | PTvar _ -> t
 
 let subst_logic_type s t =
   match t with
@@ -352,7 +352,7 @@ let y = Ident.create "y"
 let int = PureType PTint
 let bool = PureType PTbool
 let unit = PureType PTunit
-let float = PureType PTfloat
+let real = PureType PTreal
 
 let make_c t q = 
   { c_result_name = result; c_result_type = t;
@@ -371,20 +371,20 @@ let _ = add_global t_le_int (compare_type t_le_int int) None
 let _ = add_global t_gt_int (compare_type t_gt_int int) None
 let _ = add_global t_ge_int (compare_type t_ge_int int) None
 
-let _ = add_global t_lt_float (compare_type t_lt_float float) None
-let _ = add_global t_le_float (compare_type t_le_float float) None
-let _ = add_global t_gt_float (compare_type t_gt_float float) None
-let _ = add_global t_ge_float (compare_type t_ge_float float) None
+let _ = add_global t_lt_real (compare_type t_lt_real real) None
+let _ = add_global t_le_real (compare_type t_le_real real) None
+let _ = add_global t_gt_real (compare_type t_gt_real real) None
+let _ = add_global t_ge_real (compare_type t_ge_real real) None
 
 let _ = add_global t_eq_int (compare_type t_eq_int int) None
 let _ = add_global t_eq_unit (compare_type t_eq_unit unit) None
 let _ = add_global t_eq_bool (compare_type t_eq_bool bool) None
-let _ = add_global t_eq_float (compare_type t_eq_float float) None
+let _ = add_global t_eq_real (compare_type t_eq_real real) None
 
 let _ = add_global t_neq_int (compare_type t_neq_int int) None
 let _ = add_global t_neq_unit (compare_type t_neq_unit unit) None
 let _ = add_global t_neq_bool (compare_type t_neq_bool bool) None
-let _ = add_global t_neq_float (compare_type t_neq_float float) None
+let _ = add_global t_neq_real (compare_type t_neq_real real) None
 
 let bin_arith_type t = 
   make_arrow [x, BindType t; y, BindType t] (make_c t None)
@@ -395,27 +395,27 @@ let _ = add_global t_mul_int (bin_arith_type int) None
 let _ = add_global t_div_int (bin_arith_type int) None
 let _ = add_global t_mod_int (bin_arith_type int) None
 
-let _ = add_global t_add_float (bin_arith_type float) None
-let _ = add_global t_sub_float (bin_arith_type float) None
-let _ = add_global t_mul_float (bin_arith_type float) None
-let _ = add_global t_div_float (bin_arith_type float) None
+let _ = add_global t_add_real (bin_arith_type real) None
+let _ = add_global t_sub_real (bin_arith_type real) None
+let _ = add_global t_mul_real (bin_arith_type real) None
+let _ = add_global t_div_real (bin_arith_type real) None
 
 let un_arith_type t = 
   make_arrow [x, BindType t] (make_c t None)
 
 let _ = add_global t_neg_int (un_arith_type int) None
-let _ = add_global t_neg_float (un_arith_type float) None
-let _ = add_global t_sqrt_float (un_arith_type float) None
+let _ = add_global t_neg_real (un_arith_type real) None
+let _ = add_global t_sqrt_real (un_arith_type real) None
 
-let _ = add_global t_float_of_int 
-	  (make_arrow [x, BindType int] (make_c float None)) None
+let _ = add_global t_real_of_int 
+	  (make_arrow [x, BindType int] (make_c real None)) None
 
 let any t = 
   make_arrow [x, BindType unit] 
     (make_c t (Some (anonymous Loc.dummy Ptrue, [])))
 let _ = add_global any_int (any int) None
 let _ = add_global any_unit (any unit) None
-let _ = add_global any_float (any float) None
+let _ = add_global any_real (any real) None
 
 (* Logical environment *)
 
@@ -442,13 +442,13 @@ let _ = agl "ge_int" int_cmp
 let _ = agl "eq_int" int_cmp
 let _ = agl "neq_int" int_cmp
 
-let float_cmp = Predicate [PTfloat; PTfloat]
-let _ = agl "lt_float" float_cmp
-let _ = agl "le_float" float_cmp
-let _ = agl "gt_float" float_cmp
-let _ = agl "ge_float" float_cmp
-let _ = agl "eq_float" float_cmp
-let _ = agl "neq_float" float_cmp
+let real_cmp = Predicate [PTreal; PTreal]
+let _ = agl "lt_real" real_cmp
+let _ = agl "le_real" real_cmp
+let _ = agl "gt_real" real_cmp
+let _ = agl "ge_real" real_cmp
+let _ = agl "eq_real" real_cmp
+let _ = agl "neq_real" real_cmp
 
 let _ = agl "eq_bool" (Predicate [PTbool; PTbool])
 let _ = agl "neq_bool" (Predicate [PTbool; PTbool])
@@ -463,14 +463,14 @@ let _ = agl "div_int" int_binop_arith
 let _ = agl "mod_int" int_binop_arith
 let _ = agl "neg_int" (Function ([PTint], PTint))
 
-let float_binop_arith = Function ([PTfloat; PTfloat], PTfloat)
-let _ = agl "add_float" float_binop_arith
-let _ = agl "sub_float" float_binop_arith
-let _ = agl "mul_float" float_binop_arith
-let _ = agl "div_float" float_binop_arith
-let _ = agl "neg_float" (Function ([PTfloat], PTfloat))
-let _ = agl "sqrt_float" (Function ([PTfloat], PTfloat))
-let _ = agl "float_of_int" (Function ([PTint], PTfloat))
+let real_binop_arith = Function ([PTreal; PTreal], PTreal)
+let _ = agl "add_real" real_binop_arith
+let _ = agl "sub_real" real_binop_arith
+let _ = agl "mul_real" real_binop_arith
+let _ = agl "div_real" real_binop_arith
+let _ = agl "neg_real" (Function ([PTreal], PTreal))
+let _ = agl "sqrt_real" (Function ([PTreal], PTreal))
+let _ = agl "real_of_int" (Function ([PTint], PTreal))
 
 let _ = agl "sorted_array" (Predicate [int_array; PTint; PTint])
 let _ = agl "exchange"     (Predicate [int_array; int_array; PTint; PTint])

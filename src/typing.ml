@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.104 2004-04-30 14:19:05 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.105 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -40,19 +40,19 @@ open Annot
 let type_v_int = PureType PTint
 let type_v_bool = PureType PTbool
 let type_v_unit = PureType PTunit
-let type_v_float = PureType PTfloat
+let type_v_real = PureType PTreal
 
 let typing_const = function
   | ConstInt _ -> type_v_int
   | ConstBool _ -> type_v_bool
   | ConstUnit -> type_v_unit
-  | ConstFloat _ -> type_v_float
+  | ConstFloat _ -> type_v_real
 
 (*s Utility functions for typing *)
 
 let expected_cmp loc =
   raise_located loc 
-    (ExpectedType (fun fmt -> fprintf fmt "unit, bool, int or float"))
+    (ExpectedType (fun fmt -> fprintf fmt "unit, bool, int or real"))
 
 let just_reads e = difference (get_reads e) (get_writes e)
 
@@ -122,30 +122,30 @@ let check_unbound_exn loc =
 
 (*s Instantiation of polymorphic functions *)
 
-let type_prim idint idfloat idbool idunit loc = function
+let type_prim idint idreal idbool idunit loc = function
   | PureType PTint -> idint
   | PureType PTbool -> idbool
-  | PureType PTfloat -> idfloat
+  | PureType PTreal -> idreal
   | PureType PTunit -> idunit
   | _ -> expected_cmp loc
 
-let type_eq = type_prim t_eq_int t_eq_float t_eq_bool t_eq_unit
-let type_neq = type_prim t_neq_int t_neq_float t_neq_bool t_neq_unit
+let type_eq = type_prim t_eq_int t_eq_real t_eq_bool t_eq_unit
+let type_neq = type_prim t_neq_int t_neq_real t_neq_bool t_neq_unit
 
-let type_num idint idfloat loc = function
+let type_num idint idreal loc = function
   | PureType PTint -> idint
-  | PureType PTfloat -> idfloat
+  | PureType PTreal -> idreal
   | _ -> expected_num loc
 
-let type_lt = type_num t_lt_int t_lt_float
-let type_le = type_num t_le_int t_le_float
-let type_gt = type_num t_gt_int t_gt_float
-let type_ge = type_num t_ge_int t_ge_float
-let type_add = type_num t_add_int t_add_float
-let type_sub = type_num t_sub_int t_sub_float
-let type_mul = type_num t_mul_int t_mul_float
-let type_div = type_num t_div_int t_div_float
-let type_neg = type_num t_neg_int t_neg_float
+let type_lt = type_num t_lt_int t_lt_real
+let type_le = type_num t_le_int t_le_real
+let type_gt = type_num t_gt_int t_gt_real
+let type_ge = type_num t_ge_int t_ge_real
+let type_add = type_num t_add_int t_add_real
+let type_sub = type_num t_sub_int t_sub_real
+let type_mul = type_num t_mul_int t_mul_real
+let type_div = type_num t_div_int t_div_real
+let type_neg = type_num t_neg_int t_neg_real
 
 let type_poly id =
   if id == t_eq then type_eq 
@@ -285,8 +285,8 @@ let partial_pre loc = function
   | Tapp (id, [a;b]) when id == t_div_int || id == t_mod_int ->
       let p = neq (unref_term b) (Tconst (ConstInt 0)) in
       [anonymous loc p]
-  | Tapp (id, [a]) when id == t_sqrt_float ->
-      let p = ge_float (unref_term a) (Tconst (ConstFloat ("0","",""))) in
+  | Tapp (id, [a]) when id == t_sqrt_real ->
+      let p = ge_real (unref_term a) (Tconst (ConstFloat ("0","",""))) in
       [anonymous loc p]
   | _ ->
       []

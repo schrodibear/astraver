@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.50 2003-10-17 13:00:23 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.51 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -116,16 +116,16 @@ let t_mul_int = create "mul_int"
 let t_div_int = create "div_int"
 let t_neg_int = create "neg_int"
 
-let t_add_float = create "add_float"
-let t_sub_float = create "sub_float"
-let t_mul_float = create "mul_float"
-let t_div_float = create "div_float"
-let t_neg_float = create "neg_float"
+let t_add_real = create "add_real"
+let t_sub_real = create "sub_real"
+let t_mul_real = create "mul_real"
+let t_div_real = create "div_real"
+let t_neg_real = create "neg_real"
 
 let t_mod_int = create "mod_int"
-let t_sqrt_float = create "sqrt_float"
+let t_sqrt_real = create "sqrt_real"
 
-let t_float_of_int = create "float_of_int"
+let t_real_of_int = create "real_of_int"
 
 let t_lt = create "%lt"
 let t_le = create "%le"
@@ -136,12 +136,12 @@ let t_neq = create "%neq"
 
 let t_eq_int = create "eq_int"
 let t_eq_bool = create "eq_bool"
-let t_eq_float = create "eq_float"
+let t_eq_real = create "eq_real"
 let t_eq_unit = create "eq_unit"
 
 let t_neq_int = create "neq_int"
 let t_neq_bool = create "neq_bool"
-let t_neq_float = create "neq_float"
+let t_neq_real = create "neq_real"
 let t_neq_unit = create "neq_unit"
 
 let t_lt_int = create "lt_int"
@@ -149,10 +149,10 @@ let t_le_int = create "le_int"
 let t_gt_int = create "gt_int"
 let t_ge_int = create "ge_int"
 
-let t_lt_float = create "lt_float"
-let t_le_float = create "le_float"
-let t_gt_float = create "gt_float"
-let t_ge_float = create "ge_float"
+let t_lt_real = create "lt_real"
+let t_le_real = create "le_real"
+let t_gt_real = create "gt_real"
+let t_ge_real = create "ge_real"
 
 let t_zwf_zero = create "%zwf_zero"
 let result = create "result"
@@ -168,7 +168,7 @@ let false_rec = create "False_rec"
 
 let any_int = create "why_any_int"
 let any_unit = create "why_any_unit"
-let any_float = create "why_any_float"
+let any_real = create "why_any_real"
 
 (*s tests *)
 
@@ -190,47 +190,47 @@ let is_int_comparison id =
   id == t_eq_int || id == t_neq_int ||
   id == t_lt_int || id == t_le_int || id == t_gt_int || id == t_ge_int 
 
-let is_float_comparison id = 
-  id == t_eq_float || id == t_neq_float ||
-  id == t_lt_float || id == t_le_float || id == t_gt_float || id == t_ge_float 
+let is_real_comparison id = 
+  id == t_eq_real || id == t_neq_real ||
+  id == t_lt_real || id == t_le_real || id == t_gt_real || id == t_ge_real 
 
 let is_bool_comparison id = id == t_eq_bool || id == t_neq_bool
 let is_unit_comparison id = id == t_eq_unit || id == t_neq_unit
 
 let is_eq id = 
-  id == t_eq || id == t_eq_int || id == t_eq_float || 
+  id == t_eq || id == t_eq_int || id == t_eq_real || 
   id == t_eq_bool || id == t_eq_unit
 
 let is_neq id = 
-  id == t_neq || id == t_neq_int || id == t_neq_float || 
+  id == t_neq || id == t_neq_int || id == t_neq_real || 
   id == t_neq_bool || id == t_neq_unit
 
 let is_relation id = 
-  is_comparison id || is_int_comparison id || is_float_comparison id ||
+  is_comparison id || is_int_comparison id || is_real_comparison id ||
   is_bool_comparison id || is_unit_comparison id
 
 let is_int_arith_binop id =
   id == t_add_int || id == t_sub_int || id == t_mul_int || id == t_div_int ||
   id == t_mod_int
 
-let is_float_arith_binop id =
-  id == t_add_float || id == t_sub_float || id == t_mul_float || 
-  id == t_div_float
+let is_real_arith_binop id =
+  id == t_add_real || id == t_sub_real || id == t_mul_real || 
+  id == t_div_real
 
 let is_arith_binop id =
-  is_int_arith_binop id || is_float_arith_binop id
+  is_int_arith_binop id || is_real_arith_binop id
 
 let is_int_arith_unop id = 
   id == t_neg_int
 
-let is_float_arith_unop id =
-  id == t_neg_float || id == t_sqrt_float
+let is_real_arith_unop id =
+  id == t_neg_real || id == t_sqrt_real
 
 let is_int_arith id = 
   is_int_arith_binop id || is_int_arith_unop id
 
-let is_float_arith id =
-  is_float_arith_binop id || is_float_arith_unop id
+let is_real_arith id =
+  is_real_arith_binop id || is_real_arith_unop id
 
 let is_arith id =
-  is_int_arith id || is_float_arith id || id == t_float_of_int
+  is_int_arith id || is_real_arith id || id == t_real_of_int

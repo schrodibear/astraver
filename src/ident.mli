@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.43 2004-03-24 07:40:37 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.44 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -85,16 +85,16 @@ val t_mul_int : t
 val t_div_int : t
 val t_neg_int : t
 
-val t_add_float : t
-val t_sub_float : t
-val t_mul_float : t
-val t_div_float : t
-val t_neg_float : t
+val t_add_real : t
+val t_sub_real : t
+val t_mul_real : t
+val t_div_real : t
+val t_neg_real : t
 
 val t_mod_int : t
-val t_sqrt_float : t
+val t_sqrt_real : t
 
-val t_float_of_int : t
+val t_real_of_int : t
 
 val t_lt : t
 val t_le : t
@@ -105,12 +105,12 @@ val t_neq : t
 
 val t_eq_int : t
 val t_eq_bool : t
-val t_eq_float : t
+val t_eq_real : t
 val t_eq_unit : t
 
 val t_neq_int : t
 val t_neq_bool : t
-val t_neq_float : t
+val t_neq_real : t
 val t_neq_unit : t
 
 val t_lt_int : t
@@ -118,10 +118,10 @@ val t_le_int : t
 val t_gt_int : t
 val t_ge_int : t
 
-val t_lt_float : t
-val t_le_float : t
-val t_gt_float : t
-val t_ge_float : t
+val t_lt_real : t
+val t_le_real : t
+val t_gt_real : t
+val t_ge_real : t
 
 val t_zwf_zero : t
 val result : t
@@ -137,7 +137,7 @@ val false_rec : t
 
 val any_int : t
 val any_unit : t
-val any_float : t
+val any_real : t
 
 (*s Category tests *)
 
@@ -148,7 +148,7 @@ val is_poly : t -> bool
 
 val is_comparison : t -> bool
 val is_int_comparison : t -> bool
-val is_float_comparison : t -> bool
+val is_real_comparison : t -> bool
 
 val is_relation : t -> bool
 
@@ -159,8 +159,8 @@ val is_int_arith_binop : t -> bool
 val is_int_arith_unop : t -> bool
 val is_int_arith : t -> bool
 
-val is_float_arith_binop : t -> bool
-val is_float_arith : t -> bool
+val is_real_arith_binop : t -> bool
+val is_real_arith : t -> bool
 
 val is_arith_binop : t -> bool
 

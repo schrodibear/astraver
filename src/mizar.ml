@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.16 2004-04-30 14:19:05 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.17 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -55,12 +55,12 @@ let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "Integer"
   | PTbool -> fprintf fmt "Element of BOOLEAN"
   | PTunit -> fprintf fmt "Element of {0}"
-  | PTfloat -> fprintf fmt "Real"
+  | PTreal -> fprintf fmt "Real"
   | PTexternal([],id) -> Ident.print fmt id
   | PTarray PTunit -> fprintf fmt "XFinSequence of {0}"
   | PTarray PTbool -> fprintf fmt "XFinSequence of BOOLEAN"
   | PTarray PTint -> fprintf fmt "XFinSequence of INT"
-  | PTarray PTfloat -> fprintf fmt "XFinSequence of REAL"
+  | PTarray PTreal -> fprintf fmt "XFinSequence of REAL"
   | PTarray (PTexternal([],id)) -> fprintf fmt "XFinSequence of %a" Ident.print id
   | PTarray (PTarray _) -> assert false
   | PTarray (PTexternal _)
@@ -77,13 +77,13 @@ let prefix_id id =
   else if id == t_ge_int then "int_ge"
   else if id == t_eq_int then assert false (* TODO *)
   else if id == t_neq_int then assert false (* TODO *)
-  (* float cmp *)
-  else if id == t_lt_float then "real_lt" 
-  else if id == t_le_float then "real_le"
-  else if id == t_gt_float then "real_gt"
-  else if id == t_ge_float then "real_ge"
-  else if id == t_eq_float then assert false (* TODO *)
-  else if id == t_neq_float then assert false (* TODO *)
+  (* real cmp *)
+  else if id == t_lt_real then "real_lt" 
+  else if id == t_le_real then "real_le"
+  else if id == t_gt_real then "real_gt"
+  else if id == t_ge_real then "real_ge"
+  else if id == t_eq_real then assert false (* TODO *)
+  else if id == t_neq_real then assert false (* TODO *)
   (* bool cmp *)
   else if id == t_eq_bool then assert false (* TODO *)
   else if id == t_neq_bool then assert false (* TODO *)
@@ -97,14 +97,14 @@ let prefix_id id =
   else if id == t_div_int then assert false (* TODO *)
   else if id == t_mod_int then assert false (* TODO *)
   else if id == t_neg_int then "int_neg"
-  (* float ops *)
-  else if id == t_add_float then "real_add"
-  else if id == t_sub_float then "real_sub"
-  else if id == t_mul_float then "real_mul"
-  else if id == t_div_float then "real_div"
-  else if id == t_neg_float then "real_neg"
-  else if id == t_sqrt_float then assert false (* TODO *)
-  else if id == t_float_of_int then assert false (* TODO *)
+  (* real ops *)
+  else if id == t_add_real then "real_add"
+  else if id == t_sub_real then "real_sub"
+  else if id == t_mul_real then "real_mul"
+  else if id == t_div_real then "real_div"
+  else if id == t_neg_real then "real_neg"
+  else if id == t_sqrt_real then assert false (* TODO *)
+  else if id == t_real_of_int then assert false (* TODO *)
   else assert false
 
 let rec print_term fmt t = 
@@ -115,16 +115,16 @@ let rec print_term fmt t =
     | t ->
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a; b]) when id == t_add_int || id == t_add_float ->
+    | Tapp (id, [a; b]) when id == t_add_int || id == t_add_real ->
 	fprintf fmt "%a +@ %a" print1 a print2 b
-    | Tapp (id, [a; b]) when id == t_sub_int || id == t_sub_float ->
+    | Tapp (id, [a; b]) when id == t_sub_int || id == t_sub_real ->
 	fprintf fmt "%a -@ %a" print1 a print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a; b]) when id == t_mul_int || id == t_mul_float ->
+    | Tapp (id, [a; b]) when id == t_mul_int || id == t_mul_real ->
 	fprintf fmt "%a *@ %a" print2 a print3 b
-    | Tapp (id, [a; b]) when id == t_div_int || id == t_div_float ->
+    | Tapp (id, [a; b]) when id == t_div_int || id == t_div_real ->
 	fprintf fmt "%a /@ %a" print2 a print3 b
     | Tapp (id, [a; b]) when id == t_mod_int ->
 	fprintf fmt "%a mod %a" print2 a print3 b
@@ -148,7 +148,7 @@ let rec print_term fmt t =
     | Tderef _ -> 
 	assert false
     (* arithmetic *)
-    | Tapp (id, [a]) when id == t_neg_int || id == t_neg_float ->
+    | Tapp (id, [a]) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "(@[-%a@])" print3 a
     | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "(@[%a@])" print0 t
@@ -175,10 +175,10 @@ and print_terms fmt tl =
   print_list comma print_term fmt tl
 
 let infix_relation id =
-       if id == t_lt_int || id == t_lt_float then "<" 
-  else if id == t_le_int || id == t_le_float then "<="
-  else if id == t_gt_int || id == t_gt_float then ">"
-  else if id == t_ge_int || id == t_ge_float then ">="
+       if id == t_lt_int || id == t_lt_real then "<" 
+  else if id == t_le_int || id == t_le_real then "<="
+  else if id == t_gt_int || id == t_gt_real then ">"
+  else if id == t_ge_int || id == t_ge_real then ">="
   else if is_eq id then "="
   else if is_neq id then "<>"
   else assert false

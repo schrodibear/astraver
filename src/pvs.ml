@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.53 2004-04-30 14:19:05 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.54 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -35,7 +35,7 @@ let relation id =
   else if id == t_neq then "/="
   else assert false
 
-let print_float fmt = function
+let print_real fmt = function
   | "","0",_ | "0","",_ | "0","0",_ -> 
       fprintf fmt "0"
   | i,f,e ->
@@ -57,15 +57,15 @@ let print_term fmt t =
     | Tapp (id, [a;b]) when id == t_add_int || id == t_sub_int ->
 	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
 	  print1 a (if id == t_add_int then "+" else "-") print2 b
-    | Tapp (id, [a;b]) when id == t_add_float || id == t_sub_float ->
+    | Tapp (id, [a;b]) when id == t_add_real || id == t_sub_real ->
 	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
-	  print1 a (if id == t_add_float then "+" else "-") print2 b
+	  print1 a (if id == t_add_real then "+" else "-") print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul_int || id == t_mul_float ->
+    | Tapp (id, [a;b]) when id == t_mul_int || id == t_mul_real ->
 	fprintf fmt "@[<hov 2>%a *@ %a@]" print2 a print3 b
-    | Tapp (id, [a;b]) when id == t_div_float ->
+    | Tapp (id, [a;b]) when id == t_div_real ->
 	fprintf fmt "@[<hov 2>%a /@ %a@]" print2 a print3 b
     | Tapp (id, [a;b]) when id == t_div_int ->
 	fprintf fmt "(@[div(%a,%a)@])" print0 a print0 b
@@ -81,8 +81,8 @@ let print_term fmt t =
     | Tconst ConstUnit -> 
 	fprintf fmt "unit" 
     | Tconst (ConstFloat f) -> 
-	print_float fmt f
-    | Tapp (id, [Tconst (ConstInt n)]) when id == t_float_of_int ->
+	print_real fmt f
+    | Tapp (id, [Tconst (ConstInt n)]) when id == t_real_of_int ->
 	fprintf fmt "(%d :: real)" n
     | Tderef _ ->
 	assert false
@@ -92,7 +92,7 @@ let print_term fmt t =
 	fprintf fmt "zwf_zero"
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
-    | Tapp (id, [t]) when id == t_neg_int || id == t_neg_float ->
+    | Tapp (id, [t]) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
     | Tapp (id, [a; b; c]) when id == if_then_else -> 
 	fprintf fmt "(@[if %a@ then %a@ else %a@])" print0 a print0 b print0 c
@@ -108,7 +108,7 @@ let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
-  | PTfloat -> fprintf fmt "real"
+  | PTreal -> fprintf fmt "real"
   | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
   | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
   | PTexternal(l,id) -> 
@@ -127,12 +127,12 @@ let infix_relation id =
   else if id == t_ge_int then ">="
   else if id == t_eq_int then "="
   else if id == t_neq_int then "/="
-  else if id == t_lt_float then "<" 
-  else if id == t_le_float then "<="
-  else if id == t_gt_float then ">"
-  else if id == t_ge_float then ">="
-  else if id == t_eq_float then "="
-  else if id == t_neq_float then "/="
+  else if id == t_lt_real then "<" 
+  else if id == t_le_real then "<="
+  else if id == t_gt_real then ">"
+  else if id == t_ge_real then ">="
+  else if id == t_eq_real then "="
+  else if id == t_neq_real then "/="
   else assert false
 
 let print_predicate fmt p =
@@ -165,7 +165,7 @@ let print_predicate fmt p =
 	fprintf fmt "well_founded?(%a)" print_term t
     | Papp (id, [a;b]) when id == t_zwf_zero ->
 	fprintf fmt "zwf_zero(%a, %a)" print_term a print_term b
-    | Papp (id, [a;b]) when is_int_comparison id || is_float_comparison id ->
+    | Papp (id, [a;b]) when is_int_comparison id || is_real_comparison id ->
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
     | Papp (id, [a;b]) when is_eq id ->
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
@@ -191,7 +191,7 @@ let print_predicate fmt p =
 	print0 fmt p'; fprintf fmt "@])"
     | Pfpi (t,f1,f2) ->
 	fprintf fmt 
-	"@[fpi(%a,%a,%a)@]" print_term t print_float f1 print_float f2
+	"@[fpi(%a,%a,%a)@]" print_term t print_real f1 print_real f2
     | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

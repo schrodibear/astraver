@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.94 2004-04-30 14:19:05 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.95 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -277,7 +277,7 @@ EXTEND
   primitive_type:
   [ [ "int" -> PTint
     | "bool" -> PTbool
-    | "float" -> PTfloat
+    | "real" -> PTreal
     | "unit" -> PTunit 
     | v = type_var -> PTvarid v
     | id = ident -> PTexternal ([],id) 
@@ -415,7 +415,7 @@ EXTEND
   ;
   prog6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
-    | LIDENT "sqrt_float"; x = prog6 -> un_op Ident.t_sqrt_float loc x
+    | LIDENT "sqrt_real"; x = prog6 -> un_op Ident.t_sqrt_real loc x
     | x = prog7 -> x ] ]
   ;
   prog7:

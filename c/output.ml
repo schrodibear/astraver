@@ -190,7 +190,7 @@ type why_type =
 let base_type s = Base_type([],s);;
 let int_type = base_type "int";;
 let bool_type = base_type "bool";;
-let float_type = base_type "float";;
+let float_type = base_type "real";;
 let unit_type = base_type "unit";;
 
 let option_iter f x =

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.21 2004-04-07 07:45:49 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.22 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -62,10 +62,10 @@ let prefix id =
   else if id == t_mul_int then "*"
   else if id == t_div_int then "int_div"
   else if id == t_mod_int then "int_mod"
-  (* float ops *)
-  else if is_float_comparison id || is_float_arith id || id == t_float_of_int 
+  (* real ops *)
+  else if is_real_comparison id || is_real_arith id || id == t_real_of_int 
   then
-    Report.raise_unlocated (AnyMessage "Simplify does not support floats")
+    Report.raise_unlocated (AnyMessage "Simplify does not support reals")
   else assert false
 
 let rec print_term fmt = function
@@ -78,7 +78,7 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
   | Tconst (ConstFloat _) ->
-      Report.raise_unlocated (AnyMessage "Simplify does not support floats")
+      Report.raise_unlocated (AnyMessage "Simplify does not support reals")
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c]) when id == if_then_else ->

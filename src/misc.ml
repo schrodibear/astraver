@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.84 2004-04-30 14:19:04 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.85 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -316,12 +316,12 @@ let negate id =
   else if id == t_ge_int then t_lt_int
   else if id == t_eq_int then t_neq_int
   else if id == t_neq_int then t_eq_int
-  else if id == t_lt_float then t_ge_float
-  else if id == t_le_float then t_gt_float
-  else if id == t_gt_float then t_le_float
-  else if id == t_ge_float then t_lt_float
-  else if id == t_eq_float then t_neq_float
-  else if id == t_neq_float then t_eq_float
+  else if id == t_lt_real then t_ge_real
+  else if id == t_le_real then t_gt_real
+  else if id == t_gt_real then t_le_real
+  else if id == t_ge_real then t_lt_real
+  else if id == t_eq_real then t_neq_real
+  else if id == t_neq_real then t_eq_real
   else if id == t_eq_bool then t_neq_bool
   else if id == t_neq_bool then t_eq_bool 
   else if id == t_eq_unit then t_neq_unit
@@ -422,7 +422,7 @@ let lt = relation t_lt
 let le = relation t_le
 let gt = relation t_gt
 let ge = relation t_ge
-let ge_float = relation t_ge_float
+let ge_real = relation t_ge_real
 let eq = relation t_eq
 let neq = relation t_neq
 
@@ -499,10 +499,10 @@ let rec print_term fmt = function
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 
 let relation_string id =
-  if id == t_lt || id == t_lt_int || id == t_lt_float then "<" 
-  else if id == t_le || id == t_le_int || id == t_le_float then "<="
-  else if id == t_gt || id == t_gt_int || id == t_gt_float then ">"
-  else if id == t_ge || id == t_ge_int || id == t_ge_float then ">="
+  if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
+  else if id == t_le || id == t_le_int || id == t_le_real then "<="
+  else if id == t_gt || id == t_gt_int || id == t_gt_real then ">"
+  else if id == t_ge || id == t_ge_int || id == t_ge_real then ">="
   else if is_eq id then "="
   else if is_neq id then "<>"
   else assert false

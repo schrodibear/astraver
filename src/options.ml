@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.37 2004-04-06 12:49:09 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.38 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 open Format
 
@@ -128,7 +128,7 @@ Prover selection:
   --mizar     selects Mizar prover
   --harvey    selects haRVey prover
   --simplify  selects Simplify prover
-  --fpi       outputs floating-point obligations into a separate .fpi file
+  --fpi       outputs realing-point obligations into a separate .fpi file
 
 Coq-specific options:
   --valid, 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.122 2004-04-30 14:19:04 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.123 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -33,7 +33,7 @@ let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "Z"
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
-  | PTfloat -> fprintf fmt "R"
+  | PTreal -> fprintf fmt "R"
   | PTarray v -> fprintf fmt "(array %a)" print_pure_type v
   | PTexternal([],id) -> Ident.print fmt id
   | PTexternal(l,id) -> 
@@ -54,13 +54,13 @@ let prefix_id id =
   else if id == t_ge_int then "Z_ge_lt_bool"
   else if id == t_eq_int then "Z_eq_bool"
   else if id == t_neq_int then "Z_noteq_bool"
-  (* float cmp *)
-  else if id == t_lt_float then "R_lt_ge_bool" 
-  else if id == t_le_float then "R_le_gt_bool"
-  else if id == t_gt_float then "R_gt_le_bool"
-  else if id == t_ge_float then "R_ge_lt_bool"
-  else if id == t_eq_float then "R_eq_bool"
-  else if id == t_neq_float then "R_noteq_bool"
+  (* real cmp *)
+  else if id == t_lt_real then "R_lt_ge_bool" 
+  else if id == t_le_real then "R_le_gt_bool"
+  else if id == t_gt_real then "R_gt_le_bool"
+  else if id == t_ge_real then "R_ge_lt_bool"
+  else if id == t_eq_real then "R_eq_bool"
+  else if id == t_neq_real then "R_noteq_bool"
   (* bool cmp *)
   else if id == t_eq_bool then "B_eq_bool"
   else if id == t_neq_bool then "B_noteq_bool"
@@ -74,14 +74,14 @@ let prefix_id id =
   else if id == t_div_int then "Zdiv"
   else if id == t_mod_int then "Zmod"
   else if id == t_neg_int then "Zopp"
-  (* float ops *)
-  else if id == t_add_float then "Rplus"
-  else if id == t_sub_float then "Rminus"
-  else if id == t_mul_float then "Rmult"
-  else if id == t_div_float then "Rdiv"
-  else if id == t_neg_float then "Ropp"
-  else if id == t_sqrt_float then "sqrt"
-  else if id == t_float_of_int then "IZR"
+  (* real ops *)
+  else if id == t_add_real then "Rplus"
+  else if id == t_sub_real then "Rminus"
+  else if id == t_mul_real then "Rmult"
+  else if id == t_div_real then "Rdiv"
+  else if id == t_neg_real then "Ropp"
+  else if id == t_sqrt_real then "sqrt"
+  else if id == t_real_of_int then "IZR"
   else assert false
 
 let infix_relation id =
@@ -94,10 +94,10 @@ let infix_relation id =
   else assert false
 
 let pprefix_id id =
-  if id == t_lt_float then "Rlt"
-  else if id == t_le_float then "Rle"
-  else if id == t_gt_float then "Rgt" 
-  else if id == t_ge_float then "Rge"
+  if id == t_lt_real then "Rlt"
+  else if id == t_le_real then "Rle"
+  else if id == t_gt_real then "Rgt" 
+  else if id == t_ge_real then "Rge"
   else assert false
 
 let rec collect_app l = function
@@ -150,8 +150,8 @@ let print_term_v7 fmt t =
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
     | Tconst (ConstFloat (i,f,e)) -> 
-	assert (!inz == 0); (* TODO: floats inside integer expressions *)
-	failwith "float constants not supported with Coq V7"
+	assert (!inz == 0); (* TODO: reals inside integer expressions *)
+	failwith "real constants not supported with Coq V7"
     | Tvar id when id == implicit ->
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
@@ -210,15 +210,15 @@ let print_predicate_v7 fmt p =
 	fprintf fmt "%a %s@ %a" 
 	  print_term_v7 a (infix_relation id) print_term_v7 b; 
 	closez fmt
-    | Papp (id, [a;b]) when id == t_eq_float ->
+    | Papp (id, [a;b]) when id == t_eq_real ->
 	fprintf fmt "(@[eqT R %a %a@])" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when id == t_neq_float ->
+    | Papp (id, [a;b]) when id == t_neq_real ->
 	fprintf fmt "~(@[eqT R %a %a@])" print_term_v7 a print_term_v7 b
     | Papp (id, [a;b]) when is_eq id ->
 	fprintf fmt "@[%a = %a@]" print_term_v7 a print_term_v7 b
     | Papp (id, [a;b]) when is_neq id -> 
 	fprintf fmt "@[~(%a = %a)@]" print_term_v7 a print_term_v7 b
-    | Papp (id, [a;b]) when is_float_comparison id ->
+    | Papp (id, [a;b]) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v7 a print_term_v7 b
     | Papp (id, l) ->
@@ -484,15 +484,15 @@ let print_predicate_v8 fmt p =
     | Papp (id, [a;b]) when is_int_comparison id ->
 	fprintf fmt "%a %s@ %a" 
 	  print_term_v8 a (infix_relation id) print_term_v8 b
-    | Papp (id, [a;b]) when id == t_eq_float ->
+    | Papp (id, [a;b]) when id == t_eq_real ->
 	fprintf fmt "(@[eq R %a %a@])" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when id == t_neq_float ->
+    | Papp (id, [a;b]) when id == t_neq_real ->
 	fprintf fmt "~(@[eq R %a %a@])" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b]) when is_eq id ->
 	fprintf fmt "@[%a = %a@]" print_term_v8 a print_term_v8 b
     | Papp (id, [a;b]) when is_neq id -> 
 	fprintf fmt "@[~(%a = %a)@]" print_term_v8 a print_term_v8 b
-    | Papp (id, [a;b]) when is_float_comparison id ->
+    | Papp (id, [a;b]) when is_real_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" 
 	(pprefix_id id) print_term_v8 a print_term_v8 b
     | Papp (id, l) ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.17 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.18 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -56,16 +56,16 @@ let prefix id =
   else if id == t_div_int then "int_div"
   else if id == t_mod_int then "int_mod"
   else if id == t_neg_int then "-"
-  (* float ops *)
-  else if id == t_add_float 
-       || id == t_sub_float 
-       || id == t_mul_float 
-       || id == t_div_float 
-       || id == t_neg_float 
-       || id == t_sqrt_float 
-       || id == t_float_of_int 
+  (* real ops *)
+  else if id == t_add_real 
+       || id == t_sub_real 
+       || id == t_mul_real 
+       || id == t_div_real 
+       || id == t_neg_real 
+       || id == t_sqrt_real 
+       || id == t_real_of_int 
   then
-    Report.raise_unlocated (AnyMessage "haRVey does not support floats")
+    Report.raise_unlocated (AnyMessage "haRVey does not support reals")
   else assert false
 
 let rec print_term fmt = function
@@ -78,7 +78,7 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "tt" 
   | Tconst (ConstFloat _) ->
-      Report.raise_unlocated (AnyMessage "haRVey does not support floats")
+      Report.raise_unlocated (AnyMessage "haRVey does not support reals")
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c]) when id == if_then_else -> 

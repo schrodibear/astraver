@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.25 2004-03-12 14:29:02 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.26 2004-04-30 14:30:20 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -31,7 +31,7 @@ open Error
 open Report
 
 let expected_num loc =
-  raise_located loc (ExpectedType (fun fmt -> fprintf fmt "int or float"))
+  raise_located loc (ExpectedType (fun fmt -> fprintf fmt "int or real"))
 
 let expected_type loc et =
   raise_located loc (ExpectedType (fun fmt -> print_type_v fmt et))
@@ -47,13 +47,13 @@ let int_cmp = function
   | PPneq -> t_neq_int
   | _ -> assert false
 
-let float_cmp = function
-  | PPlt -> t_lt_float
-  | PPle -> t_le_float
-  | PPgt -> t_gt_float
-  | PPge -> t_ge_float
-  | PPeq -> t_eq_float
-  | PPneq -> t_neq_float
+let real_cmp = function
+  | PPlt -> t_lt_real
+  | PPle -> t_le_real
+  | PPgt -> t_gt_real
+  | PPge -> t_ge_real
+  | PPeq -> t_eq_real
+  | PPneq -> t_neq_real
   | _ -> assert false
 
 let other_cmp = function
@@ -91,8 +91,8 @@ let rec unify t1 t2 =
 let make_comparison loc = function
   | (a,PTint), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTint) ->
       Papp (int_cmp r, [a; b])
-  | (a,PTfloat), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTfloat) ->
-      Papp (float_cmp r, [a; b])
+  | (a,PTreal), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTreal) ->
+      Papp (real_cmp r, [a; b])
   | (a,ta), (PPeq | PPneq as r), (b,tb) when unify ta tb ->
       Papp (other_cmp (ta,r), [a; b])
   | _, _, (_,tb) ->
@@ -106,18 +106,18 @@ let int_arith = function
   | PPmod -> t_mod_int
   | _ -> assert false
 
-let float_arith = function
-  | PPadd -> t_add_float
-  | PPsub -> t_sub_float
-  | PPmul -> t_mul_float
-  | PPdiv -> t_div_float
+let real_arith = function
+  | PPadd -> t_add_real
+  | PPsub -> t_sub_real
+  | PPmul -> t_mul_real
+  | PPdiv -> t_div_real
   | _ -> assert false
 
 let make_arith loc = function
   | (a,PTint), (PPadd|PPsub|PPmul|PPdiv|PPmod as r), (b,PTint) ->
       Tapp (int_arith r, [a; b]), PTint
-  | (a,PTfloat), (PPadd|PPsub|PPmul|PPdiv as r), (b,PTfloat) ->
-      Tapp (float_arith r, [a; b]), PTfloat
+  | (a,PTreal), (PPadd|PPsub|PPmul|PPdiv as r), (b,PTreal) ->
+      Tapp (real_arith r, [a; b]), PTreal
   | _ ->
       expected_num loc
 
@@ -169,9 +169,9 @@ and desc_predicate loc lab env lenv = function
       exists id v (predicate lab env (Env.add_logic id v lenv) a)
   | PPfpi (e, f1, f2) ->
       (match term lab env lenv e with
-	 | te, PTfloat -> Pfpi (te, f1, f2)
+	 | te, PTreal -> Pfpi (te, f1, f2)
 	 | _ -> raise_located e.pp_loc 
-	         (AnyMessage "this expression should have type float"))
+	         (AnyMessage "this expression should have type real"))
 
 and type_pvar loc lenv x =
   if is_at x then 
@@ -229,7 +229,7 @@ and desc_term loc lab env lenv = function
   | PPprefix (PPneg, a) ->
       (match term lab env lenv a with
 	 | ta, PTint -> Tapp (t_neg_int, [ta]), PTint
-	 | ta, PTfloat -> Tapp (t_neg_float, [ta]), PTfloat
+	 | ta, PTreal -> Tapp (t_neg_real, [ta]), PTreal
 	 | _ -> expected_num loc)
   | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ ->
       term_expected loc
@@ -285,7 +285,7 @@ and type_const = function
   | ConstInt _ -> PTint
   | ConstBool _ -> PTbool
   | ConstUnit -> PTunit
-  | ConstFloat _ -> PTfloat
+  | ConstFloat _ -> PTreal
 
 
 (*s Checking types *)
