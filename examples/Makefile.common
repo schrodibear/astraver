@@ -35,6 +35,7 @@ WHYOPTIONS=--valid
 
 clean::
 	rm -f *~ *.vo *.wol
+	rm -f *_valid.v
 
 depend::
 	coqdep -R ../../lib/coq Coq.why *.v > .depend

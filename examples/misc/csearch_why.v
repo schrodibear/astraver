@@ -42,9 +42,6 @@ Lemma index_po_2 :
    else ((i:Z) (i = `i1 + 1` -> `0 <= i` /\ (Zwf `0` `n - i` `n - i1`)))).
 Proof.
 Destruct result0; Intuition.
-Assert `k=i1` \/ `k<i1`. Omega. Intuition.
-Subst k c_aux_1; Auto.
-Apply (H0 k); Auto with *.
 Save.
 
 (* Why obligation from file "csearch.c", characters 150-156 *)
