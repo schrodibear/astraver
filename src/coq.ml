@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.24 2002-03-27 14:15:11 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.25 2002-03-27 16:00:10 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -71,7 +71,7 @@ let print_term fmt t =
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
     | Tapp (id, [t]) when id == t_neg ->
-	openz fmt; fprintf fmt "-%a" print3 t; closez fmt
+	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt
     | Tapp (id, l) as t when is_relation id || is_arith id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) when id == t_zwf_zero -> 

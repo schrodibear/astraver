@@ -88,6 +88,17 @@ let vcg base t =
     | CC_hole p -> 
 	CC_hole (try let pr = discharge ctx p in discharge_msg (); pr
 		 with Exit -> push ctx p)
+    (* special treatment for the if-then-else *)
+    | CC_letin (x, ([idb, CC_var_binder (TTpure PTbool); 
+		     _, CC_pred_binder _] as bl1), e1, 
+		CC_if (CC_var idb', 
+		       (CC_lam ((_, CC_pred_binder _), _) as br1),
+		       (CC_lam ((_, CC_pred_binder _), _) as br2)))
+      when idb = idb' ->
+	let e'1 = traverse ctx e1 in
+	let br'1 = traverse ctx br1 in
+	let br'2 = traverse ctx br2 in
+	CC_letin (x, bl1, e'1, CC_if (CC_var idb', br'1, br'2))
     | CC_letin (x, bl, e1, e2) -> 
 	let e'1 = traverse ctx e1 in
 	let e'2 = traverse (traverse_binders ctx bl) e2 in

@@ -3,7 +3,8 @@
 
 parameter x : int ref
 
-let p = (3 / 7) { result = 3 }
+let p = (if !x = 0 then x := 1 else x := 2) { x <> 0 }
+
 
 
 
