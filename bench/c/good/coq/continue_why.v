@@ -3,7 +3,7 @@
 
 Require Import caduceus_spec_why.
 
-(* Why obligation from file "why/continue.why", characters 246-252 *)
+(* Why obligation from file "why/continue.why", characters 269-275 *)
 Lemma f1_impl_po_1 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -20,7 +20,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 276-296 *)
+(* Why obligation from file "why/continue.why", characters 301-321 *)
 Lemma f1_impl_po_2 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -37,7 +37,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 119-346 *)
+(* Why obligation from file "why/continue.why", characters 134-379 *)
 Lemma f1_impl_po_3 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -51,7 +51,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 160-171 *)
+(* Why obligation from file "why/continue.why", characters 177-188 *)
 Lemma f1_impl_po_4 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -60,7 +60,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 664-670 *)
+(* Why obligation from file "why/continue.why", characters 731-737 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -81,7 +81,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 688-688 *)
+(* Why obligation from file "why/continue.why", characters 755-755 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -100,7 +100,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 528-769 *)
+(* Why obligation from file "why/continue.why", characters 589-846 *)
 Lemma f2_impl_po_3 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -116,7 +116,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 570-582 *)
+(* Why obligation from file "why/continue.why", characters 633-645 *)
 Lemma f2_impl_po_4 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -127,7 +127,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1117-1123 *)
+(* Why obligation from file "why/continue.why", characters 1228-1234 *)
 Lemma f3_impl_po_1 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
@@ -147,7 +147,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1141-1141 *)
+(* Why obligation from file "why/continue.why", characters 1252-1252 *)
 Lemma f3_impl_po_2 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
@@ -165,7 +165,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 964-1222 *)
+(* Why obligation from file "why/continue.why", characters 1069-1343 *)
 Lemma f3_impl_po_3 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
@@ -179,7 +179,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1005-1036 *)
+(* Why obligation from file "why/continue.why", characters 1112-1143 *)
 Lemma f3_impl_po_4 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),

@@ -15,7 +15,7 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/break.why", characters 501-507 *)
+(* Why obligation from file "why/break.why", characters 524-530 *)
 Lemma f2_impl_po_1 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -33,7 +33,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 528-548 *)
+(* Why obligation from file "why/break.why", characters 553-573 *)
 Lemma f2_impl_po_2 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -50,7 +50,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 367-555 *)
+(* Why obligation from file "why/break.why", characters 384-582 *)
 Lemma f2_impl_po_3 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -64,7 +64,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 409-420 *)
+(* Why obligation from file "why/break.why", characters 428-439 *)
 Lemma f2_impl_po_4 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -73,7 +73,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 906-912 *)
+(* Why obligation from file "why/break.why", characters 973-979 *)
 Lemma f3_impl_po_1 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -91,7 +91,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 933-953 *)
+(* Why obligation from file "why/break.why", characters 1002-1022 *)
 Lemma f3_impl_po_2 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -108,7 +108,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 772-960 *)
+(* Why obligation from file "why/break.why", characters 833-1031 *)
 Lemma f3_impl_po_3 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -122,7 +122,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 814-825 *)
+(* Why obligation from file "why/break.why", characters 877-888 *)
 Lemma f3_impl_po_4 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -131,7 +131,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 1297-1303 *)
+(* Why obligation from file "why/break.why", characters 1408-1414 *)
 Lemma f4_impl_po_1 : 
   forall (i: Z),
   forall (Post8: i = 0),
@@ -149,7 +149,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 1314-1314 *)
+(* Why obligation from file "why/break.why", characters 1425-1425 *)
 Lemma f4_impl_po_2 : 
   forall (i: Z),
   forall (Post8: i = 0),
@@ -168,7 +168,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 1186-1353 *)
+(* Why obligation from file "why/break.why", characters 1293-1468 *)
 Lemma f4_impl_po_3 : 
   forall (i: Z),
   forall (Post8: i = 0),
@@ -184,7 +184,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/break.why", characters 1229-1240 *)
+(* Why obligation from file "why/break.why", characters 1338-1349 *)
 Lemma f4_impl_po_4 : 
   forall (i: Z),
   forall (Post8: i = 0),

@@ -46,7 +46,7 @@ Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 698-710 *)
+(* Why obligation from file "why/struct.why", characters 713-725 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -59,7 +59,7 @@ Proof.
  intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 734-747 *)
+(* Why obligation from file "why/struct.why", characters 751-764 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -76,7 +76,7 @@ Proof.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 752-776 *)
+(* Why obligation from file "why/struct.why", characters 769-793 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -99,7 +99,7 @@ generalize (valid_S_pointer alloc t s).
 unfold valid_S; intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 717-776 *)
+(* Why obligation from file "why/struct.why", characters 734-793 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -116,7 +116,7 @@ Lemma g_impl_po_4 :
   forall (Post5: caduceus_1 = (acc t ps0)),
   forall (Pre6: (valid alloc caduceus_1)),
   forall (x0: ((memory) Z)),
-  forall (Post12: x0 = (upd x caduceus_1 1)),
+  forall (Post13: x0 = (upd x caduceus_1 1)),
   (((forall (result:Z), (result = (acc x0 (acc t s)) -> result = 1)) /\
   (valid alloc s)) /\ (valid alloc (acc t s))) /\ (valid alloc (acc t s)).
 Proof.

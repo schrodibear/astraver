@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.131 2005-01-31 10:18:06 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.132 2005-01-31 16:21:19 hubert Exp $ i*)
 
 
 open Format
@@ -425,9 +425,6 @@ let rec interp_expr e =
 			  [Deref n; interp_expr e2]))
 	        (Deref n)
 	  | HeapRef(var,e1) -> 
-	      (* let tmp1 = e1 in
-		 let tmp2 = op (acc var e1) e2 in
-		 upd var tmp1 tmp2; tmp2 *)
 	      let tmp1 = tmp_var () in
 	      let tmp2 = tmp_var () in
 	      Let(tmp1, e1,
@@ -914,8 +911,6 @@ let alloc_on_stack loc v t =
 			(LPred ("alloc_stack", 
 				[LVar "result"; LVar "alloc@"; LVar "alloc"])),
 		      None))
-      
-
 
 let interp_decl d acc = 
   match d.node with 
@@ -1007,6 +1002,91 @@ let make_switch_condition_default tmp l used_cases=
   in
   cond,fl
 
+let in_struct v1 v = 
+ 	{ nexpr_node = NEarrow (v1, v); 
+	  nexpr_loc = v1.nexpr_loc;
+	  nexpr_type = v.var_type }
+
+let noattr loc ty e =
+  { nexpr_node = e;
+    nexpr_type = ty;
+    nexpr_loc  = loc
+  }
+
+let rec pop_initializer loc t i =
+  match i with 
+    | [] -> (noattr loc t NEnop),[]
+    | (Iexpr e)::l -> e,l
+    | (Ilist [])::l -> pop_initializer loc t l
+    | (Ilist l)::l' -> 
+	let e,r = pop_initializer loc t l in e,r@l'
+
+let rec init_expr loc t lvalue initializers =
+  match t.Ctypes.ctype_node with
+    | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
+	let x,l = pop_initializer loc t initializers in
+	[{nst_node =NSexpr (noattr loc t (NEassign(lvalue,x)));
+	  nst_break = false;    
+	  nst_continue = false; 
+	  nst_return = false;   
+	  nst_term = true;
+	  nst_loc = loc     
+	 }], l
+    | Tstruct n ->
+	begin match Cenv.tag_type_definition n with
+	  | Cenv.TTStructUnion (Tstruct (_), fl) ->
+	      List.fold_left 
+		(fun (acc,init)  f -> 
+		   let block, init' =
+		     init_expr loc f.var_type 
+		       (in_struct lvalue f) init
+		   in (acc@block,init'))
+		([],initializers)  fl
+	  | _ ->
+	      assert false
+	end
+    | Tunion n ->
+	begin match Cenv.tag_type_definition n with
+	  | Cenv.TTStructUnion (Tstruct (_), f::_) ->
+	      let block, init' =
+		init_expr loc f.var_type 
+		  (noattr loc f.var_type (NEarrow(lvalue, f)))
+		  initializers
+	      in (block,init')
+	  | _ ->
+	      assert false
+	end
+    | Tarray (ty,Some t) ->
+	let rec init_cells i (block,init) =
+	  if i >= t then (block,init)
+	  else
+	    let ts = {
+	      nexpr_node = NEconstant (IntConstant (Int64.to_string i));
+	      nexpr_type = {Ctypes.ctype_node = Tint (Signed,Ctypes.Int);
+			      ctype_storage = No_storage;
+			      ctype_const = false;
+			      ctype_volatile = false;};
+	      nexpr_loc  =  loc }
+	    in
+	    let (b,init') = 
+	      init_expr loc ty 
+		(noattr loc ty 
+		   (NEstar(noattr loc
+			     {Ctypes.ctype_node = Tpointer ty;
+			      ctype_storage = No_storage;
+			      ctype_const = false;
+			      ctype_volatile = false;}
+			     (NEbinary (lvalue,Badd,ts))))) 
+		init 
+	    in
+	    init_cells (Int64.add i Int64.one) (block@b,init')
+	in
+	init_cells Int64.zero ([],initializers)
+    | Tarray (ty,None) -> assert false
+    | Tfun (_, _) -> assert false
+    | Tvar _ -> assert false
+    | Tvoid -> assert false
+
 (* [ab] indicates if returns are abrupt *)
 
 let rec interp_statement ab may_break stat = match stat.nst_node with
@@ -1029,7 +1109,8 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       end
   | NSif(e,s1,s2) -> 
       If(interp_boolean_expr e,
-	 interp_statement ab may_break s1, interp_statement ab may_break s2)
+	 (interp_statement ab may_break s1), 
+	 (interp_statement ab may_break s2))
   | NSfor(annot,e1,e2,e3,body) ->
       let label = new_label () in
       let ef = 
@@ -1058,9 +1139,10 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       in
       let (inv,dec) = interp_invariant label ef annot in
       append (Output.Label label)
-	(break s.nst_break
-	   (make_while (interp_boolean_expr e) inv dec 
-	      (continue s.nst_continue (interp_statement true (ref false) s))))
+	 (break s.nst_break
+	    (make_while (interp_boolean_expr e) inv dec 
+	       (continue s.nst_continue 
+		  (interp_statement true (ref false) s))))
   | NSdowhile(annot,s,e) -> 
       let label = new_label () in
       let ef = 
@@ -1077,7 +1159,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 		 (If (Not (interp_boolean_expr e), 
 		      Raise ("Break", None), Void)))))
   | NSblock(b) -> 
-      interp_block ab may_break b 
+      interp_block ab may_break b
   | NSbreak -> 
       may_break := true;
       Raise ("Break", None)
@@ -1117,28 +1199,55 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
   | NSdecl(ctype,v,init,rem) -> 
       lprintf 
 	"translating local declaration of %s@." v.var_unique_name;
-      let tinit = match init with 
-	| None ->
+      let tinit,(decl,_) = match init with 
+	| None | Some (Ilist [])->
 	    begin match ctype.Ctypes.ctype_node with
 	      | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
 	      | Tfloat _ -> App(Var("any_real"),Var("void"))
 	      | Tarray (_, None) | Tpointer _ -> 
 		  App(Var "any_pointer", Var "void")
-	      | Tarray _ | Tstruct _ | Tunion _ -> 
-                  let t = { nterm_node = NTresult; 
-			    nterm_loc = stat.nst_loc;
-			    nterm_type = ctype } in
-                  alloc_on_stack stat.nst_loc v t
+	      | Tarray (_, Some n) ->
+		  App (Var "alloca_parameter", Cte (Prim_int n))
+	      | Tstruct _ | Tunion _ ->
+		  App (Var "alloca_parameter", Cte (Prim_int Int64.one))
+		    (*let t = { nterm_node = NTresult;
+		      nterm_loc = stat.nst_loc;
+		      nterm_type = ctype } in
+		      alloc_on_stack stat.nst_loc v t*)
 	      | Tvoid | Tvar _ | Tfun _ -> assert false
-	    end
-	| Some (Iexpr e) -> interp_expr e		
-	| Some (Ilist _) -> 
-	    unsupported stat.nst_loc "structured initializer for local var"
+	    end,([],[])
+	| Some i  ->   
+	    begin match ctype.Ctypes.ctype_node with
+	      | Tenum _ | Tint _ | Tfloat _ | Tarray (_, None) | Tpointer _ -> 
+		  interp_expr (fst (pop_initializer stat.nst_loc ctype [i])),
+		  ([],[])
+	      | Tarray (_, Some n) ->
+		  App (Var "alloca_parameter", Cte (Prim_int n)),
+		  init_expr stat.nst_loc ctype
+		    { nexpr_node = NEvar (Var_info v);
+		      nexpr_type = ctype;
+		      nexpr_loc  = stat.nst_loc;
+		    } [i]
+			 
+	      | Tstruct _ | Tunion _ ->
+		  App (Var "alloca_parameter", Cte (Prim_int Int64.one)),
+		  init_expr stat.nst_loc ctype
+		    { nexpr_node = NEvar (Var_info v);
+		      nexpr_type = ctype;
+		      nexpr_loc  = stat.nst_loc;
+		    } [i]
+	      | Tvoid | Tvar _ | Tfun _ -> assert false
+	     end
       in
+      let decl = List.fold_left (fun acc x ->
+				   acc@[interp_statement ab may_break x]) 
+		   [] decl in
       if v.var_is_assigned then
-	Let_ref(v.var_unique_name,tinit,interp_statement ab may_break rem)
+	Let_ref(v.var_unique_name,tinit,
+		Block (decl@[interp_statement ab may_break rem]))
       else
-	Let(v.var_unique_name,tinit,interp_statement ab may_break rem)
+	Let(v.var_unique_name,tinit,
+	    Block (decl@[interp_statement ab may_break rem]))
 
 and interp_block ab may_break (*decls,*)stats =
   let rec block = function
@@ -1394,7 +1503,8 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	       else bl) 
 	    params [] 
 	in
-	let tblock = catch_return (interp_statement false may_break block) in
+	let tblock = catch_return 
+		       (interp_statement false may_break block) in
 	assert (not !may_break);
 	let tblock = make_label "init" tblock in
 	let tblock =
@@ -1415,15 +1525,6 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	lprintf "assuming function %s@." f;
 	(why_code, tspec :: why_spec, prover_decl)
       end
-
-(***
-let add_strong_invariant id (p,_) spec =
-  let a = interp_axiom p in
-  Axiom (id, a) :: spec
-
-let add_strong_invariants =
-  Hashtbl.fold add_strong_invariant Ceffect.strong_invariants
-***)
 
 let interp l =
   let s = interp_strong_invariants () in

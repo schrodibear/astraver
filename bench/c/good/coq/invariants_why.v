@@ -21,7 +21,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 599-641 *)
+(* Why obligation from file "why/invariants.why", characters 636-678 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -46,7 +46,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 576-642 *)
+(* Why obligation from file "why/invariants.why", characters 613-679 *)
 Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -75,7 +75,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 576-642 *)
+(* Why obligation from file "why/invariants.why", characters 613-679 *)
 Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -100,7 +100,7 @@ Lemma f_impl_po_4 :
   forall (Post4: aux_4 = (t + (acc intP (shift c 0)))),
   forall (Pre1: (valid alloc caduceus_2)),
   forall (x0: ((memory) Z)),
-  forall (Post13: x0 = (upd x caduceus_2 aux_4)),
+  forall (Post14: x0 = (upd x caduceus_2 aux_4)),
   (0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition.
@@ -108,7 +108,7 @@ subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 652-652 *)
+(* Why obligation from file "why/invariants.why", characters 691-691 *)
 Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -133,7 +133,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 1013-1037 *)
+(* Why obligation from file "why/invariants.why", characters 1059-1083 *)
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c: pointer),
@@ -151,7 +151,7 @@ inversion_clear H0.
 auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 990-1037 *)
+(* Why obligation from file "why/invariants.why", characters 1036-1083 *)
 Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (c: pointer),

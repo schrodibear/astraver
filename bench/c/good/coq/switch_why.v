@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/switch.why", characters 203-226 *)
+(* Why obligation from file "why/switch.why", characters 220-243 *)
 Lemma f1_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -19,7 +19,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 313-328 *)
+(* Why obligation from file "why/switch.why", characters 336-351 *)
 Lemma f1_impl_po_2 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -34,7 +34,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 389-404 *)
+(* Why obligation from file "why/switch.why", characters 418-433 *)
 Lemma f1_impl_po_3 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -50,7 +50,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 736-759 *)
+(* Why obligation from file "why/switch.why", characters 779-802 *)
 Lemma f1_impl_po_4 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -72,7 +72,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 778-778 *)
+(* Why obligation from file "why/switch.why", characters 823-823 *)
 Lemma f1_impl_po_5 : 
   forall (x: Z),
   forall (y: Z),
@@ -93,7 +93,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1090-1113 *)
+(* Why obligation from file "why/switch.why", characters 1168-1191 *)
 Lemma f1a_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -110,7 +110,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1219-1239 *)
+(* Why obligation from file "why/switch.why", characters 1303-1323 *)
 Lemma f1a_impl_po_2 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -127,7 +127,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1321-1341 *)
+(* Why obligation from file "why/switch.why", characters 1411-1431 *)
 Lemma f1a_impl_po_3 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -145,7 +145,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1682-1697 *)
+(* Why obligation from file "why/switch.why", characters 1786-1801 *)
 Lemma f1a_impl_po_4 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -166,7 +166,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1717-1717 *)
+(* Why obligation from file "why/switch.why", characters 1823-1823 *)
 Lemma f1a_impl_po_5 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -188,7 +188,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2105-2120 *)
+(* Why obligation from file "why/switch.why", characters 2248-2263 *)
 Lemma f2_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -274,7 +274,7 @@ Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2136-2136 *)
+(* Why obligation from file "why/switch.why", characters 2281-2281 *)
 Lemma f2_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -361,7 +361,7 @@ Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3251-3266 *)
+(* Why obligation from file "why/switch.why", characters 3319-3334 *)
 Lemma f3_impl_po_1 : 
   forall (x: Z),
   forall (caduceus_1: Z),
@@ -439,7 +439,7 @@ Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3282-3282 *)
+(* Why obligation from file "why/switch.why", characters 3352-3352 *)
 Lemma f3_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -518,7 +518,7 @@ Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3866-3872 *)
+(* Why obligation from file "why/switch.why", characters 3999-4005 *)
 Lemma f4_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -533,7 +533,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3883-3883 *)
+(* Why obligation from file "why/switch.why", characters 4016-4016 *)
 Lemma f4_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -552,7 +552,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3913-3913 *)
+(* Why obligation from file "why/switch.why", characters 4048-4048 *)
 Lemma f4_impl_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -568,7 +568,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4353-4359 *)
+(* Why obligation from file "why/switch.why", characters 4540-4546 *)
 Lemma f5_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -590,7 +590,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4288-4377 *)
+(* Why obligation from file "why/switch.why", characters 4473-4566 *)
 Lemma f5_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -608,7 +608,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4288-4377 *)
+(* Why obligation from file "why/switch.why", characters 4473-4566 *)
 Lemma f5_impl_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -628,7 +628,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4496-4496 *)
+(* Why obligation from file "why/switch.why", characters 4699-4699 *)
 Lemma f5_impl_po_4 : 
   forall (x: Z),
   forall (y: Z),
@@ -644,7 +644,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4776-4791 *)
+(* Why obligation from file "why/switch.why", characters 5013-5028 *)
 Lemma f6_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -661,7 +661,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4807-4807 *)
+(* Why obligation from file "why/switch.why", characters 5046-5046 *)
 Lemma f6_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -677,7 +677,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5066-5081 *)
+(* Why obligation from file "why/switch.why", characters 5337-5352 *)
 Lemma f7_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -694,7 +694,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5090-5090 *)
+(* Why obligation from file "why/switch.why", characters 5361-5361 *)
 Lemma f7_impl_po_2 : 
   forall (x: Z),
   forall (y: Z),

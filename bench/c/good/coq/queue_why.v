@@ -252,7 +252,7 @@ intros [h|h];auto.
 elim H8;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3611-3630 *)
+(* Why obligation from file "why/queue.why", characters 3653-3672 *)
 Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -272,7 +272,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3755-3777 *)
+(* Why obligation from file "why/queue.why", characters 3797-3819 *)
 Lemma push_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -297,7 +297,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3823-4016 *)
+(* Why obligation from file "why/queue.why", characters 3865-4058 *)
 Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
@@ -403,7 +403,7 @@ intros [h|h];auto.
 elim H8;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 5704-5723 *)
+(* Why obligation from file "why/queue.why", characters 5746-5765 *)
 Lemma test_impl_po_1 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -427,7 +427,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/queue.why", characters 5687-5728 *)
+(* Why obligation from file "why/queue.why", characters 5729-5770 *)
 Lemma test_impl_po_2 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),

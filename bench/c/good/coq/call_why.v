@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/call.why", characters 142-188 *)
+(* Why obligation from file "why/call.why", characters 153-199 *)
 Lemma f_impl_po_1 : 
   forall (y: Z),
   forall (ddd: Z),
@@ -22,7 +22,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/call.why", characters 326-360 *)
+(* Why obligation from file "why/call.why", characters 344-378 *)
 Lemma main_impl_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),

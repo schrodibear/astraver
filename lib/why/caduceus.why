@@ -345,7 +345,8 @@ parameter alloca_parameter : n:int ->
 	pointer writes alloc
 	{ valid(alloc,result) and offset(result) = 0 and 	
 	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)
-	  and fresh(alloc@,result) and on_stack(alloc,result) }
+	  and fresh(alloc@,result) and on_stack(alloc,result) 
+	  and alloc_stack (result,alloc@,alloc) }
 
 
 
