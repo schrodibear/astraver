@@ -678,6 +678,8 @@ let fprintf_why_decls form decls =
 
      - Claude, 03 apr 2004
   *)
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) decls;
+(***
   let (logic,other) = 
     List.partition
       (function Logic _ | Predicate _ -> true | _ -> false) 
@@ -685,7 +687,7 @@ let fprintf_why_decls form decls =
   in
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) logic;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) other
-
+***)
 ;;
 
 (*

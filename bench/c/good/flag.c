@@ -1,15 +1,7 @@
 
 /* Dijkstra's dutch flag */
 
-/* en attente de interp
 typedef enum { BLUE, WHITE, RED } color;
-*/
-
-typedef enum { aBLUE, aWHITE, aRED } color;
-
-color BLUE;
-color WHITE;
-color RED;
 
 /*@ predicate isColor(int i) { i == BLUE || i == WHITE || i == RED }
   @*/

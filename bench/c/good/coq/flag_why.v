@@ -12,19 +12,15 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 301-348 *)
+(* Why obligation from file "why/flag.why", characters 273-320 *)
 Lemma flag_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
-  forall (BLUE: Z),
-  forall (RED: Z),
-  forall (WHITE: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre15: (valid_range alloc t 0 n) /\
                  (forall (k:Z),
-                  (0 <= k /\ k < n ->
-                   (isColor BLUE RED WHITE (acc intP (shift t k)))))),
+                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
   forall (Post10: b = 0),
   forall (i: Z),
@@ -39,8 +35,7 @@ Lemma flag_impl_po_1 :
   forall (r1: Z),
   forall (Pre14: Variant1 = (r1 - i1)),
   forall (Pre13: (((((((forall (k:Z),
-                        (0 <= k /\ k < n ->
-                         (isColor BLUE RED WHITE (acc intP0 (shift t k))))) /\
+                        (0 <= k /\ k < n -> (isColor (acc intP0 (shift t k))))) /\
                  0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
                  (isMonochrome alloc0 intP0 t 0 b1 BLUE)) /\
                  (isMonochrome alloc0 intP0 t b1 i1 WHITE)) /\
@@ -75,8 +70,7 @@ Lemma flag_impl_po_1 :
                            (pointer_loc (shift t result)))) ->
                          ((((((((forall (k:Z),
                                  (0 <= k /\ k < n ->
-                                  (isColor BLUE RED WHITE
-                                   (acc intP (shift t k))))) /\
+                                  (isColor (acc intP (shift t k))))) /\
                          0 <= b) /\ b <= i) /\ i <= r1) /\ r1 <= n) /\
                          (isMonochrome alloc intP t 0 b BLUE)) /\
                          (isMonochrome alloc intP t b i WHITE)) /\
@@ -94,8 +88,7 @@ Lemma flag_impl_po_1 :
                      (i = (i1 + 1) ->
                       ((((((((forall (k:Z),
                               (0 <= k /\ k < n ->
-                               (isColor BLUE RED WHITE
-                                (acc intP0 (shift t k))))) /\
+                               (isColor (acc intP0 (shift t k))))) /\
                       0 <= b1) /\ b1 <= i) /\ i <= r1) /\ r1 <= n) /\
                       (isMonochrome alloc0 intP0 t 0 b1 BLUE)) /\
                       (isMonochrome alloc0 intP0 t b1 i WHITE)) /\
@@ -120,8 +113,7 @@ Lemma flag_impl_po_1 :
                                  (pointer_loc (shift t r)))) ->
                                ((((((((forall (k:Z),
                                        (0 <= k /\ k < n ->
-                                        (isColor BLUE RED WHITE
-                                         (acc intP (shift t k))))) /\
+                                        (isColor (acc intP (shift t k))))) /\
                                0 <= b1) /\ b1 <= i1) /\ i1 <= r) /\ r <=
                                n) /\
                                (isMonochrome alloc intP t 0 b1 BLUE)) /\
@@ -133,8 +125,7 @@ Lemma flag_impl_po_1 :
                         ((result0 <> RED ->
                           ((((((((forall (k:Z),
                                   (0 <= k /\ k < n ->
-                                   (isColor BLUE RED WHITE
-                                    (acc intP0 (shift t k))))) /\
+                                   (isColor (acc intP0 (shift t k))))) /\
                           0 <= b1) /\ b1 <= i1) /\ i1 <= r1) /\ r1 <= n) /\
                           (isMonochrome alloc0 intP0 t 0 b1 BLUE)) /\
                           (isMonochrome alloc0 intP0 t b1 i1 WHITE)) /\
@@ -153,27 +144,22 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 372-783 *)
+(* Why obligation from file "why/flag.why", characters 344-737 *)
 Lemma flag_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
-  forall (BLUE: Z),
-  forall (RED: Z),
-  forall (WHITE: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre15: (valid_range alloc t 0 n) /\
                  (forall (k:Z),
-                  (0 <= k /\ k < n ->
-                   (isColor BLUE RED WHITE (acc intP (shift t k)))))),
+                  (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
   forall (Post10: b = 0),
   forall (i: Z),
   forall (Post9: i = 0),
   forall (r: Z),
   forall (Post8: r = n),
-  (((((((forall (k:Z),
-         (0 <= k /\ k < n -> (isColor BLUE RED WHITE (acc intP (shift t k))))) /\
+  (((((((forall (k:Z), (0 <= k /\ k < n -> (isColor (acc intP (shift t k))))) /\
   0 <= b) /\ b <= i) /\ i <= r) /\ r <= n) /\
   (isMonochrome alloc intP t 0 b BLUE)) /\
   (isMonochrome alloc intP t b i WHITE)) /\

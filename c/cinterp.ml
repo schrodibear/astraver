@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.70 2004-04-06 12:49:08 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.71 2004-04-07 08:13:09 filliatr Exp $ i*)
 
 
 open Format
@@ -972,6 +972,17 @@ let interp_function_spec id sp ty pl =
   in
   Param (false, id.var_name ^ "_parameter", ty)
 
+let interp_type loc ctype = match ctype.ctype_node with
+  | CTenum (e, _) ->
+      begin match Cenv.tag_type_definition e with
+	| Cenv.Defined (CTenum (_, Decl el)) -> 
+	    if List.exists (fun (_,i) -> i <> None) el then
+	      warning loc ("ignoring initializer(s) for enum " ^ e);
+	    List.map (fun (x,_) -> Param (false,x,Base_type ([], "int"))) el
+	| _ -> assert false
+      end
+  | _ -> 
+      []
 
 let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   match decl.node with
@@ -983,21 +994,12 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
       (why_code, Axiom(id,a)::why_spec, prover_decl)
-  | Ttypedef(ctype,id) -> 
-      why
+  | Ttypedecl ({ ctype_node = CTenum _ } as ctype)
+  | Ttypedef (ctype,_) -> 
+      let dl = interp_type decl.loc ctype in 
+      why_code, dl @ why_spec, prover_decl
   | Ttypedecl { ctype_node = CTstruct _ | CTunion _ } -> 
       why
-  | Ttypedecl { ctype_node = CTenum (e, _) } ->
-      begin match Cenv.tag_type_definition e with
-	| Cenv.Defined (CTenum (_, Decl el)) -> 
-	    if List.exists (fun (_,i) -> i <> None) el then
-	      warning decl.loc ("ignoring initializer(s) for enum " ^ e);
-	    let dl = 
-	      List.map (fun (x,_) -> Param (false,x,Base_type ([], "int"))) el
-	    in
-	    why_code, dl @ why_spec, prover_decl
-	| _ -> assert false
-      end
   | Ttypedecl _ ->
       assert false
   | Tdecl(ctype,v,init) -> 
