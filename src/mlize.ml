@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.26 2002-03-15 12:38:06 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.27 2002-03-15 13:00:32 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -76,7 +76,7 @@ and trad_desc info d ren = match d with
   | LetIn (x, e1, e2) ->
       Monad.compose e1.info (trad e1)
 	(fun v1 ren' ->
-	   let t1 = trad_ml_type_v ren info.env (result_type e1) in
+	   let t1 = trad_type_v ren info.env (result_type e1) in
 	   CC_letin (false, [x, CC_var_binder t1], CC_expr (Tvar v1), 
 		     Monad.compose e2.info (trad e2) 
 		       (fun v2 -> Monad.unit info (Tvar v2)) ren'))
@@ -85,7 +85,7 @@ and trad_desc info d ren = match d with
   | LetRef (x, e1, e2) ->
       Monad.compose e1.info (trad e1)
 	(fun v1 ren' ->
-	   let t1 = trad_ml_type_v ren info.env (result_type e1) in
+	   let t1 = trad_type_v ren info.env (result_type e1) in
 	   let ren'' = next ren' [x] in
 	   let x' = current_var ren'' x in
 	   CC_letin (false, [x', CC_var_binder t1], CC_expr (Tvar v1), 
@@ -157,7 +157,7 @@ and trad_desc info d ren = match d with
 
 (*i***
   | While (b, inv, var, bl) ->
-      (*i EXP: we do not generate the obligation at the end of test i*)
+      (* EXP: we do not generate the obligation at the end of test *)
       let b' =
 	{ b with info={ b.info with kappa={ b.info.kappa with c_post=None }}}
       in
@@ -185,7 +185,7 @@ and trad_binders ren env = function
   | (id, BindType (Ref _ | Array _ as v)) :: bl ->
       trad_binders ren (Env.add id v env) bl
   | (id, BindType v) :: bl ->
-      let tt =  trad_ml_type_v ren env v in
+      let tt =  trad_type_v ren env v in
       let env' = Env.add id v env in
       let bl',env'' = trad_binders ren env' bl in
       (id, CC_var_binder tt) :: bl', env''

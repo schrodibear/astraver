@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: types.mli,v 1.8 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.9 2002-03-15 13:00:32 filliatr Exp $ i*)
 
 open Logic
 
@@ -23,10 +23,6 @@ type 'a binder_type =
   | Untyped
 
 type 'a binder = Ident.t * 'a binder_type
-
-(*s Variant. *)
-
-type variant = term * predicate * pure_type (* phi, R, A *)
 
 (*s Types of values... *)
 

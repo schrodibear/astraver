@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.16 2002-03-15 12:38:06 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.17 2002-03-15 13:00:32 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -48,10 +48,10 @@ let arrow_vars =
 
 (*s Translation of effects types in CC types.
   
-    [trad_ml_type_v] and [trad_ml_type_c] translate types with effects
+    [trad_type_v] and [trad_type_c] translate types with effects
     into CC types. *)
 
-let rec trad_ml_type_c ren env k = 
+let rec trad_type_c ren env k = 
   let ((res,v),e,p,q) = decomp_kappa k in
   let i,o = get_repr e in
   let before = label_name () in
@@ -62,7 +62,7 @@ let rec trad_ml_type_c ren env k =
   let li = input ren env i in
   arrow_vars ty li
 
-and trad_ml_type_v ren env = function
+and trad_type_v ren env = function
   | Ref _ 
   | Array _ -> 
       assert false
@@ -75,15 +75,15 @@ and trad_ml_type_v ren env = function
 		 let ren' = initial_renaming env' in
 		 (bl, ren', env')
 	     | (id, BindType v) -> 
-		 let tt = trad_ml_type_v ren env v in
+		 let tt = trad_type_v ren env v in
 		 let env' = add id v env in
 		 let ren' = initial_renaming env' in
 		 (id,tt)::bl, ren', env'
 	     | _ -> 
-		 failwith "Monad: trad_ml_type_v: not yet implemented")
+		 failwith "Monad: trad_type_v: not yet implemented")
  	  ([],ren,env) bl 
       in
-      arrow_vars (trad_ml_type_c ren' env' c) bl'
+      arrow_vars (trad_type_c ren' env' c) bl'
   | PureType c ->
       TTpure c
 
@@ -91,7 +91,7 @@ and input ren env i =
   prod ren env i
 
 and output ren env ((id,v),o) =
-  let tv = trad_ml_type_v ren env v in
+  let tv = trad_type_v ren env v in
   (prod ren env o) @ [id,tv]
 
 and input_output ren env c =
@@ -103,8 +103,8 @@ and prod ren env g =
   List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
 
 and trad_imp_type ren env = function
-  | Ref v -> trad_ml_type_v ren env v
-  | Array (t, v) -> TTarray (t, trad_ml_type_v ren env v)
+  | Ref v -> trad_type_v ren env v
+  | Array (t, v) -> TTarray (t, trad_type_v ren env v)
   | _ -> assert false
 
 and trad_type_in_env ren env id =
@@ -179,7 +179,7 @@ let gen_compose isapp info1 e1 e2 ren =
   let r1,w1 = get_repr ef1 in
   let ren' = next ren w1 in
   let res1,ren' = fresh ren' res1 in
-  let tt1 = trad_ml_type_v ren env v1 in
+  let tt1 = trad_type_v ren env v1 in
   let b = [res1, CC_var_binder tt1] in
   let b',dep = match q1 with
     | None -> 
@@ -255,310 +255,9 @@ let fresh id e ren =
   let id',ren' = Rename.fresh ren id in
   e id' ren'
 
+(*s Well-founded recursion. *)
 
-(*i****
-
-(* [make_app env ren args ren' (tf,cf) (cb,s,capp) c]
- * constructs the application of [tf] to [args].
- * capp is the effect of application, after substitution (s) and cb before
- *)
-
-let eq ty e1 e2 =
-  Papp (Ident.t_eq, [e1; e2])
-
-let lt r e1 e2 = match r with
-  | Tvar id -> Papp (id, [e1; e2])
-  | _ -> assert false
-
-let is_recursive env = function
-  | CC_var x -> 
-      (try let _ = find_recursion x env in true with Not_found -> false)
-  | _ -> false
-
-let if_recursion env f = function
-  | CC_var x ->
-      (try let v = find_recursion x env in (f v x) with Not_found -> [])
-  | _ -> []
-
-let dec_phi ren env s svi =
-  if_recursion env
-    (fun (phi0,(cphi,r,_)) f -> 
-       let phi = subst_in_term svi (subst_in_term s cphi) in
-       let phi = apply_term ren env phi in
-       [CC_expr phi; CC_hole (lt r phi (Tvar phi0))])
-
-let eq_phi ren env s svi =
-  if_recursion env
-    (fun (phi0,(cphi,_,a)) f ->
-       let phi = subst_in_term svi (subst_in_term s cphi) in
-       let phi = apply_term ren env phi in
-       [CC_hole (eq a phi phi)])
-
-let is_ref_binder = function 
-  | (_,BindType (Ref _ | Array _)) -> true
-  | _ -> false
-
-let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
-  let ((_,tvf),ef,pf,qf) = decomp_kappa cf in
-  let (_,eapp,papp,qapp) = decomp_kappa capp in
-  let ((_,v),e,p,q) = decomp_kappa c in
-  let bl = List.filter (fun b -> not (is_ref_binder b)) bl in
-  let recur = is_recursive env tf in
-  let before = current_date ren in
-  let ren'' = next ren' (get_writes ef) in
-  let ren''' = next ren'' (get_writes eapp) in
-  let res = Ident.result in
-  let vi,svi =
-    let ids = List.map fst bl in
-    let av = List.fold_right Idset.add ids Idset.empty in
-    let s = fresh (avoid ren av) ids in
-    List.map snd s, s
-  in
-  let tyres = v in
-              (*i subst_in_constr svi (trad_ml_type_v ren env v) in i*)
-  let t,ty = result_tuple ren''' before env (res, CC_var res, CC_type) (e,q) in
-  let res_f = Ident.create "vf" in
-  let inf,outf =
-    let i,o = let _,e,_,_ = decomp_kappa cb in get_reads e, get_writes e in
-    let apply_s = List.map (fun id -> try List.assoc id s with _ -> id) in
-    apply_s i, apply_s o
-  in
-  let fe =
-    let xi = List.rev (List.map snd (current_vars ren'' inf)) in
-    let holes = List.map (fun x -> (apply_pre ren'' env x).p_value)
-		  (List.map (pre_app (subst_in_predicate svi)) papp) in
-    CC_app ((if recur then tf else CC_var res_f),
-	    (dec_phi ren'' env s svi tf) 
-	    @(List.map (fun id -> CC_var id) (vi @ xi))
-	    @(eq_phi ren'' env s svi tf)
-	    @(List.map (fun c -> CC_hole c) holes))
-  in
-  let qapp' = option_app (named_app (subst_in_predicate svi)) qapp in
-  let t = 
-    make_let_in ren'' ren''' env fe [] (current_vars ren''' outf,qapp')
-      (res,tyres) (t,ty)
-  in
-  let t =
-    if recur then 
-      t
-    else
-      make_let_in ren' ren'' env tf pf
-	(current_vars ren'' (get_writes ef),qf)
-	(res_f,tvf (*i trad_ml_type_v ren env tvf i*)) (t,ty)
-  in
-  let rec eval_args ren = function
-    | [] -> t
-    | (vx,(ta,ca)) :: args ->
-	let ((_,tva),ea,pa,qa) = decomp_kappa ca in
-	let w = get_writes ea in
-	let ren' = next ren w in
-	let t' = eval_args ren' args in
-	make_let_in ren ren' env ta pa (current_vars ren' (get_writes ea),qa)
-	  (vx,tva (*i trad_ml_type_v ren env tva i*)) (t',ty)
-  in
-  eval_args ren (List.combine vi args)
+let wf (phi,r) vphi info f ren =
+  failwith "todo"
 
 
-(*s [make_while ren env (cphi,r,a) (tb,cb) (te,ce) c]
-   constructs the term corresponding to the while, i.e.
-   \begin{verbatim}
-      [h:(I x)](well_founded_induction
-                A R ?::(well_founded A R)
-                [Phi:A] (x) Phi=phi(x)->(I x)-> \exists x'.res.(I x')/\(S x')
-                [Phi_0:A][w:(Phi:A)(Phi<Phi_0)-> ...]
-                  [x][eq:Phi_0=phi(x)][h:(I x)]
-                     Cases (b x) of
-                       (left  HH) => (x,?::(IS x))
-                     | (right HH) => let x1,_,_ = (e x ?) in
-                                     (w phi(x1) ? x1 ? ?)
-                phi(x) x ? ?)
-   \end{verbatim}
- *)
-
-let id_phi = Ident.create "phi"
-let id_phi0 = Ident.create "phi0"
-
-let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
-  let ((_,tvb),eb,pb,qb) = decomp_kappa cb in
-  let ((res,_),ef,_,is) = decomp_kappa c in
-
-  let ren' = next ren (get_writes ef) in
-  let before = current_date ren in
-  
-  let ty = 
-    let is = abstract_post ren' env (ef,is) in
-    let _,lo = input_output ren env c in
-    product ren env before lo is 
-  in
-  let resb = Ident.create "resultb" in
-  let tyb = tvb (*i trad_ml_type_v ren' env tvb i*) in
-  let wb = get_writes eb in
-
-  (* première branche: le test est vrai => e;w *)
-  let t1 = 
-    make_block ren' env 
-      (fun ren'' result -> match result with
-	 | Some (id,_) ->
-	     let v = List.rev (current_vars ren'' (get_writes ef)) in
-	       CC_app (CC_var id_w,
-		       [CC_expr (phi_of ren'');
-			CC_hole (lt r (phi_of ren'') (Tvar id_phi0))]
-		       @(List.map (fun (_,id) -> CC_var id) v)
-		       @(CC_hole (eq a (phi_of ren'') (phi_of ren'')))
-		       ::(match i with
-			    | None -> [] 
-			    | Some c -> 
-				[CC_hole (apply_assert ren'' env c).a_value])),
-	       ty
-      	 | None -> failwith "a block should contain at least one statement")
-      tbl
-  in
-        
-  (* deuxième branche: le test est faux => on sort de la boucle *)
-  let t2,_ = 
-    result_tuple ren' before env
-      (res, CC_expr (Tconst ConstUnit), CC_type) (ef,is)
-  in
-
-  let b_al = current_vars ren' (get_reads eb) in
-  let qb = force_bool_name qb in
-  let t = make_if_case ren' env ty (tb,qb) (t1,t2) in
-  let t = 
-    make_let_in 
-      ren' ren' env tb pb (current_vars ren' wb,qb) (resb,tyb) (t,ty) 
-  in
-  let t = 
-    let pl = List.map (pre_of_assert false) (list_of_some i) in
-    abs_pre ren' env (t,ty) pl 
-  in
-  let t = 
-    CC_lam ([var_name Anonymous,
-	     CC_pred_binder (eq a (Tvar id_phi0) (phi_of ren'))],t) 
-  in
-  let bl = binding_of_alist ren env (current_vars ren' (get_writes ef)) in
-  make_abs (List.rev bl) t
-
-
-let make_while ren env (cphi,r,a) (tb,cb) tbl (i,c) =
-  let (_,ef,_,is) = decomp_kappa c in
-  let phi_of ren = apply_term ren env cphi in
-  let wf_a_r = Papp (Ident.well_founded, [(*i a; i*) r]) in
-
-  let before = current_date ren in
-  let ren' = next ren (get_writes ef) in
-  let al = current_vars ren' (get_writes ef) in
-  let v = CC_type in
-(*i
-  let v =   
-    let _,lo = input_output ren env c in
-    let is = abstract_post ren' env (ef,is) in
-    match i with
-      | None -> product ren' env before lo is
-      | Some ci -> 
-	  Term.mkArrow (apply_assert ren' env ci).a_value 
-	    (product ren' env before lo is) 
-  in
-  let v = Term.mkArrow (eq a (mkVar id_phi) (phi_of ren')) v in
-  let v = 
-    n_mkNamedProd v 
-      (List.map (fun (id,id') -> (id',trad_type_in_env ren env id)) al) 
-  in
-  let tw = 
-    Term.mkNamedProd id_phi a
-      (Term.mkArrow (lt r (mkVar id_phi) (mkVar id_phi0)) v) 
-  in
-i*)
-  let id_w = Ident.create "loop" in
-  let vars = List.rev (current_vars ren (get_writes ef)) in
-  let body =
-    make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) 
-  in
-  CC_app (CC_expr (Tapp (well_founded_induction, [])),
-	  [(*i CC_expr a; i*) CC_expr r;
-	   CC_hole wf_a_r;
-	   (*i CC_expr (Term.mkNamedLambda id_phi a v); i*)
-	   CC_lam ([id_phi0, CC_var_binder (PureType a);
-		    (*i id_w, CC_typed_binder tw i*) ],
-		   body);
-	   CC_expr (phi_of ren)]
-	  @(List.map (fun (_,id) -> CC_var id) vars)
-          @(CC_hole (eq a (phi_of ren) (phi_of ren)))
-	  ::(match i with
-	       | None -> [] 
-	       | Some c -> [CC_hole (apply_assert ren env c).a_value])) 
-
-
-(* [make_letrec ren env (phi0,(cphi,r,a)) bl (te,ce) c]
- * constructs the term corresponding to the let rec i.e.
-   \begin{verbatim}
-   [x][h:P(x)](well_founded_induction 
-                A R ?::(well_founded A R)
-                [Phi:A] (bl) (x) Phi=phi(x)->(P x)-> \exists x'.res.(Q x x')
-                [Phi_0:A][w:(Phi:A)(Phi<Phi_0)-> ...]
-                  [bl][x][eq:Phi_0=phi(x)][h:(P x)]te
-                phi(x) bl x ? ?)
-  \end{verbatim}
- *)
-
-let make_letrec ren env (id_phi0,(cphi,r,a)) idf bl (te,ce) c =
-  let (_,ef,p,q) = decomp_kappa c in
-  let phi_of ren = apply_term ren env cphi in
-  let wf_a_r = Papp (well_founded, [(*i a; i*) r]) in
-
-  let before = current_date ren in
-  let al = current_vars ren (get_reads ef) in
-  let v = CC_type in
-(*i
-  let v = 
-    let _,lo = input_output ren env c in
-    let q = abstract_post ren env (ef,q) in
-    arrow ren env (product ren env (current_date ren) lo q) p 
-  in
-  let v = Term.mkArrow (eq a (mkVar id_phi) (phi_of ren)) v in
-  let v = 
-    n_mkNamedProd v 
-      (List.map (fun (id,id') -> (id',trad_type_in_env ren env id)) al) 
-  in
-  let v = 
-    n_mkNamedProd v
-      (List.map (function (id,CC_typed_binder c) -> (id,c) 
-		   | _ -> assert false) (List.rev bl)) 
-  in
-  let tw = 
-    Term.mkNamedProd id_phi a
-      (Term.mkArrow (lt r (mkVar id_phi) (mkVar id_phi0)) v) 
-  in
-i*)
-  let vars = List.rev (current_vars ren (get_reads ef)) in
-  let body =
-    let al = current_vars ren (get_reads ef) in
-    let bod = abs_pre ren env (te,v) p in
-    let bod = 
-      CC_lam ([var_name Anonymous,
-	       CC_pred_binder (eq a (Tvar id_phi0) (phi_of ren))],
-	       bod) 
-    in
-    let bl' = binding_of_alist ren env al in
-    make_abs (bl@(List.rev bl')) bod
-  in
-  let t =
-    CC_app (CC_expr (Tapp (well_founded_induction, [])),
-	    [(*i CC_expr a; i*) CC_expr r;
-	     CC_hole wf_a_r;
-	     (*i CC_expr (Term.mkNamedLambda id_phi a v); i*)
-	     CC_lam ([id_phi0, CC_var_binder (PureType a);
-		      (*i idf, CC_typed_binder tw i*) ],
-		     body);
-	     CC_expr (phi_of ren)]
-	    @(List.map (fun (id,_) -> CC_var id) bl)
-	    @(List.map (fun (_,id) -> CC_var id) vars)
-            @[CC_hole (eq a (phi_of ren) (phi_of ren))]
-	   )
-  in
-  (* on abstrait juste par rapport aux variables de ef *)
-  let al = current_vars ren (get_reads ef) in
-  let bl = binding_of_alist ren env al in
-  make_abs (List.rev bl) t
-
-
-****i*)

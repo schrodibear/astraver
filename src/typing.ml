@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.29 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.30 2002-03-15 13:00:32 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -131,7 +131,7 @@ let type_v_sup loc t1 t2 =
   t1
 
 (* todo: type variants *)
-let typed_var env (phi,r) = (phi, r, PTint)
+let typed_var env (phi,r) = (phi, r)
 
 (* TODO: subtype is currently structural equality *)
 let rec subtype = function

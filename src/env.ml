@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.11 2002-03-13 16:15:46 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.12 2002-03-15 13:00:31 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -217,28 +217,4 @@ let un_arith_type =
 	   c_pre = []; c_post = None })
 
 let _ = add_global t_neg un_arith_type None
-
-(* We also maintain a table of the currently edited proofs of programs
- * in order to add them in the environnement when the user does Save *)
-
-(*i
-open Format
-
-let (edited : (type_v * typed_program) Idmap.t ref) = ref Idmap.empty
-
-let new_edited id v =
-  edited := Idmap.add id v !edited
-
-let is_edited id =
-  try let _ = Idmap.find id !edited in true with Not_found -> false
-
-let register id id' =
-  try
-    let (v,p) = Idmap.find id !edited in
-    let _ = add_global id' v (Some p) in
-    Options.if_verbose 
-      mSGNL (hOV 0 [< 'sTR"Program "; pr_id id'; 'sPC; 'sTR"is defined" >]);
-    edited := Idmap.remove id !edited
-  with Not_found -> ()
-i*)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.8 2002-03-13 16:15:46 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.9 2002-03-15 13:00:32 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -68,13 +68,4 @@ val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
 
 val add_recursion : Ident.t * (Ident.t * variant) -> local_env -> local_env
 val find_recursion : Ident.t -> local_env -> Ident.t * variant
-
-(* We also maintain a table of the currently edited proofs of programs
- * in order to add them in the environnement when the user does Save *)
-
-(*i
-val new_edited : Ident.t -> type_v * typed_program -> unit
-val is_edited : Ident.t -> bool
-val register : Ident.t -> Ident.t -> unit
-i*)
 
