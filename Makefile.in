@@ -155,19 +155,13 @@ coq-yes: coq-@COQVER@
 coq-v7: $(VO7)
 coq-v8: $(VO7) $(VO8)
 
-# Why version
-VERSION=1.50
-# Caduceus version
-CVERSION=0.50
+include Version
 
-src/version.ml: Makefile
+src/version.ml: Version 
 	echo "let version = \""$(VERSION)"\"" > $@
 	echo "let date = \""`date`"\"" >> $@
-#	echo "let cversion = \""$(CVERSION)"\"" >> $@
-# 	echo "let sources = \""`pwd`"\"" >> $@
-# 	echo "let coqlib = \""$(COQLIB)"\"" >> $@
 
-c/cversion.ml: Makefile
+c/cversion.ml: Version Makefile
 	echo "let version = \""$(CVERSION)"\"" > $@
 	echo "let date = \""`date`"\"" >> $@
 	echo "let libdir = \""$(LIBDIR)/caduceus"\"" >> $@
@@ -285,7 +279,7 @@ zip:
 doc/manual.ps: doc/manual.tex doc/version.tex
 	make -C doc manual.ps
 
-doc/version.tex: Makefile.in
+doc/version.tex: Version
 	echo "\newcommand{\whyversion}{$(VERSION)}" > $@
 	echo "\newcommand{\caduceusversion}{$(CVERSION)}" >> $@
 

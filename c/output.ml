@@ -666,6 +666,18 @@ let output_decls get_id iter_decl output_decl decls =
 ;;
 
 let fprintf_why_decls form decls =
+  (* Why do we need a partition ?
+     because one may have a logic and a parameter with the same name, 
+     and the computation of dependencies is confused in that case
+
+     Logic may not depend on anything
+     Predicate may depend on other Predicate and Logic
+     Axiom may depend on Predicate and Logic
+     Parameter may depend on Predicate and Logic
+     Def may depend on Predicate, Logic, Parameter and Def
+
+     - Claude, 03 apr 2004
+  *)
   let (logic,other) = 
     List.partition
       (function Logic _ | Predicate _ -> true | _ -> false) 
@@ -673,6 +685,7 @@ let fprintf_why_decls form decls =
   in
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) logic;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) other
+
 ;;
 
 (*
