@@ -6,7 +6,7 @@ Require Import Why.
 
 
 
-(* Why obligation from file "arith.why", characters 315-319 *)
+(* Why obligation from file "arith.why", characters 177-303 *)
 Lemma test_po_1 : 
   forall (k: Z),
   forall (j: Z),

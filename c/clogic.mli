@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.15 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.16 2004-03-02 13:42:28 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -34,28 +34,30 @@ type logic_type =
   | LTpointer of logic_type
   | LTvar of string
 
-type ('a, 'b) info = { node : 'a; info : 'b }
-
 type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
 type term_unop = Uminus | Ustar
 
-type 'a term = ('a term_node, 'a) info
+type ('ctype, 'info) term = {
+  node : ('ctype, 'info) term_node;
+  info : 'info
+}
 
-and 'a term_node =
+and ('ctype, 'info) term_node =
   | Tconstant of string
   | Tvar of Info.var_info
-  | Tapp of Info.logic_info * 'a term list
-  | Tunop of term_unop * 'a term
-  | Tbinop of 'a term * term_binop * 'a term
-  | Tdot of 'a term * string
-  | Tarrow of 'a term * string
-  | Tarrget of 'a term * 'a term
-  | Tif of 'a term * 'a term * 'a term
-  | Told of 'a term
-  | Tat of 'a term * string
-  | Tlength of 'a term
+  | Tapp of Info.logic_info * ('ctype, 'info) term list
+  | Tunop of term_unop * ('ctype, 'info) term
+  | Tbinop of ('ctype, 'info) term * term_binop * ('ctype, 'info) term
+  | Tdot of ('ctype, 'info) term * string
+  | Tarrow of ('ctype, 'info) term * string
+  | Tarrget of ('ctype, 'info) term * ('ctype, 'info) term
+  | Tif of ('ctype, 'info) term * ('ctype, 'info) term * ('ctype, 'info) term
+  | Told of ('ctype, 'info) term
+  | Tat of ('ctype, 'info) term * string
+  | Tlength of ('ctype, 'info) term
   | Tresult
   | Tnull
+  | Tcast of 'ctype * ('ctype, 'info) term
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.16 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.17 2004-03-02 13:42:28 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -39,7 +39,10 @@ let c_array ty = noattr (CTarray (ty, None))
 let c_pointer ty = noattr (CTpointer ty)
 let c_void_star = c_pointer c_void
 
-let is_null t = t.node = Tnull
+let is_null t = match t.node with
+  | Tnull -> true
+  | Tconstant s -> (try int_of_string s = 0 with _ -> false)
+  | _ -> false
 
 let compatible t1 t2 = 
   sub_type t1.info t2.info || 
@@ -149,6 +152,8 @@ and type_term_node loc env = function
        with Not_found -> error loc "\\result meaningless")
   | Tnull ->
       Tnull, c_void_star
+  | Tcast (ty, t) ->
+      assert false (* TODO *)
 
 and type_int_term env t =
   let tt = type_term env t in

@@ -83,6 +83,7 @@ logic_type:
 | INT        { LTint }
 | FLOAT      { LTfloat }
 | logic_type LSQUARE RSQUARE { LTarray $1 }
+| logic_type STAR { LTpointer $1 }
 ;
 
 relation:
@@ -98,7 +99,8 @@ term:
   NULL { info Tnull } 
 | CONSTANT { info (Tconstant $1) }
 | IDENTIFIER { info (Tvar (Info.default_var_info $1)) }
-| IDENTIFIER LPAR term_list RPAR { info (Tapp (Info.default_logic_info $1, $3)) }
+| IDENTIFIER LPAR term_list RPAR 
+    { info (Tapp (Info.default_logic_info $1, $3)) }
 | term PLUS term { info (Tbinop ($1, Badd, $3)) }
 | term MINUS term { info (Tbinop ($1, Bsub, $3)) }
 | term STAR term { info (Tbinop ($1, Bmul, $3)) }
@@ -115,6 +117,8 @@ term:
 | AT LPAR term COMMA IDENTIFIER RPAR { info (Tat ($3, $5)) }
 | LENGTH LPAR term RPAR { info (Tlength $3) }
 | RESULT { info Tresult }
+/* | LPAR term RPAR { $2 } */
+/* | LPAR logic_type RPAR term { info (Tcast ($2, $4)) } */
 ;
 
 term_list:

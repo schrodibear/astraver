@@ -14,29 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.14 2004-02-27 16:55:56 marche Exp $ i*)
-
-(*i $Id: cmain.ml,v 1.14 2004-02-27 16:55:56 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.15 2004-03-02 13:42:28 filliatr Exp $ i*)
 
 open Format
 open Coptions
 open Cerror
 open Creport
 
-(* C pre-processor *)
-let cpp f = 
-  if with_cpp then begin
-    let ppf = Filename.temp_file (Filename.basename f) ".i" in
-    ignore (Sys.command (sprintf "%s %s > %s" cpp_command f ppf));
-    Loc.set_file ppf;
-    ppf, (fun () -> Sys.remove ppf)
-  end else begin
-    Loc.set_file f;
-    f, (fun () -> ())
-  end
-
 let interp_file f =
-  let ppf,rm_ppf = cpp f in
+  let ppf,rm_ppf = Cpp.cpp f in
   let c = open_in ppf in
   let p = Clexer.parse c in
   close_in c;
@@ -63,7 +49,7 @@ let file_copy src dest =
   close_in cin; close_out cout
 
 let main () = 
-  if not (parse_only || type_only) then begin
+  if not (parse_only || type_only || cpp_dump) then begin
     let theory = "caduceus.why" in
     let theorysrc = Filename.concat Coptions.libdir theory in
     if not (Sys.file_exists theory) ||

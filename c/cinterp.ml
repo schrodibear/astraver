@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.17 2004-02-27 16:55:56 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.18 2004-03-02 13:42:28 filliatr Exp $ i*)
 
 
 open Format
@@ -82,7 +82,7 @@ let rec interp_term label old_label t =
 	     (List.map (fun (x,_) -> LVar x) g.logic_args) @ List.map f l)
     | Clogic.Tnull -> LVar "null"
     | Clogic.Tresult -> LVar "result"
-
+    | Clogic.Tcast (ty, t) -> assert false (* TODO *)
 
 
 let rec interp_predicate label old_label p =

@@ -60,7 +60,7 @@ PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/parser.ml src/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
-	    c/cllexer.ml c/clparser.ml c/clparser.mli \
+	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml \
 	    intf/hilight.ml tools/why2html.ml
 
 # main targets
@@ -113,7 +113,7 @@ CCMO = src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo \
 	c/ceffect.cmo \
-	c/cinterp.cmo c/cmain.cmo
+	c/cinterp.cmo c/cpp.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 
 bin/caduceus.opt: $(CCMX)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.7 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.8 2004-03-02 13:42:28 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -47,6 +47,7 @@ let libdir =
 let parse_only = ref false
 let type_only = ref false
 let cpp_command = ref "gcc -E -C"
+let cpp_dump = ref false
 let with_cpp = ref true
 let debug = ref false
 let verbose = ref false
@@ -65,6 +66,8 @@ let _ =
 	  "  no C preprocessor";
         "-ccp", Arg.String ((:=) cpp_command), 
 	  " <cmd>  sets the C preprocessor";
+	"-E", Arg.Set cpp_dump,
+	  "  stops after pre-processing and dump pre-processed file";
 	"-d", Arg.Set debug,
           "  debugging mode";
 	"-v", Arg.Set verbose,
@@ -81,4 +84,5 @@ let verbose = !verbose
 let werror = !werror
 let with_cpp = !with_cpp
 let cpp_command = !cpp_command
+let cpp_dump = !cpp_dump
 

@@ -14,27 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.6 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: cpp.mli,v 1.1 2004-03-02 13:42:28 filliatr Exp $ i*)
 
-(*s environment variables *)
+(* [cpp f] preprocesses file [f]; returns the preprocessed file and a 
+   finalizer to be called when the preprocessed file has been used. *)
 
-val libdir : string
-
-(*s command-line options *)
-
-val parse_only : bool
-val type_only : bool
-val debug : bool
-val verbose : bool
-val werror : bool
-val with_cpp : bool
-val cpp_command : string
-val cpp_dump : bool
-
-val files : string Queue.t
-
-(*s The log file *)
-
-val log : Format.formatter;;
-val close_log : unit -> unit;;
-
+val cpp : string -> string * (unit -> unit)
