@@ -303,9 +303,11 @@ programs annotations, and arguments may be given names when needed:
      x:int -> y:int -> { } int { result = x + y }
 \end{verbatim}
 Side effects must be explicited beside the result type:
+\indextt{reads}\indextt{writes}\indextt{raises}%
 \begin{verbatim}
      unit -> { x >= 0 } unit writes x { x < x@ }
      a:int ref -> b:int ref -> { } unit reads b writes a { a = a@ + b }
+     n:int -> { } int raises Negative { result = sqrt(n) }
 \end{verbatim}
 Finally, the result may be given a name other than \texttt{result},
 with the following syntax:
@@ -634,7 +636,8 @@ Syntax of types is given in Figure~\ref{fig:types}.
     & $::=$ & \te{\{} $[$ \nt{predicate} $]$ \te{\}} \\
       &     & $[$ \te{returns} \nt{identifier} \te{:} $]$ \nt{value\_type} \\
       &     & $[$ \te{reads} \nt{identifier}\etoilesep{\te{,}} $]$
-              $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
+              $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ 
+              $[$ \te{raises}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
       &     & \te{\{} $[$ \nt{predicate} $]$ \te{\}} \\
       & $|$ & \nt{value\_type} \\
   \\[0.1em]

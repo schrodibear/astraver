@@ -3,6 +3,11 @@ exception E of int
 
 exception F
 
+parameter f : n:int -> {} unit raises E {}
+
+parameter g : x:int ref -> {} bool writes x raises E,F {}
+
+
 (****
 
 (* Test program *)

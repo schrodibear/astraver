@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.39 2002-07-04 08:58:13 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.40 2002-07-04 11:05:32 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -32,6 +32,7 @@ let result   = gec "result"
 let effects  = gec "effects"
 let reads    = gec "reads"
 let writes   = gec "writes"
+let raises   = gec "raises"
 let pre_condition = gec "pre_condition"
 let post_condition = gec "post_condition"
 
@@ -234,11 +235,13 @@ EXTEND
     | v = type_v -> (Ident.result, v) ] ]
   ;
   effects:
-  [ [ r = OPT reads; w = OPT writes ->
+  [ [ r = OPT reads; w = OPT writes; x = OPT raises ->
       let r' = match r with Some l -> l | _ -> [] in
       let w' = match w with Some l -> l | _ -> [] in
+      let x' = match x with Some l -> l | _ -> [] in
       List.fold_right Effect.add_write w'
-	(List.fold_right Effect.add_read r' Effect.bottom)
+	(List.fold_right Effect.add_read r' 
+	   (List.fold_right Effect.add_exn x' Effect.bottom))
     ] ]
   ;
   reads:
@@ -246,6 +249,9 @@ EXTEND
   ;
   writes:
   [ [ LIDENT "writes"; l = LIST0 ident SEP "," -> l ] ]
+  ;
+  raises:
+  [ [ LIDENT "raises"; l = LIST0 ident SEP "," -> l ] ]
   ;
   pre_condition:
   [ [ c = assertion -> pre_of_assert false c ] ]

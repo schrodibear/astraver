@@ -124,3 +124,6 @@ exception E1
 exception E2 of int
 exception E3 of foo
 
+(* effects with exceptions *)
+parameter f1_ex : n:int -> {} unit raises E1 {}
+parameter f2_ex : x:int ref -> {} bool writes x raises E1,E2 {}

@@ -612,3 +612,7 @@ Definition an3 := (* validation *)
   | Val_E3 : T -> (ET_E3 T)
   | Exn_E3 : foo -> (ET_E3 T).
 
+(*Why*) Parameter f1_ex : (n: Z)(ET_E1 unit).
+
+(*Why*) Parameter f2_ex : (x: Z)(tuple_2 Z (ET_E1 (ET_E2 bool))).
+
