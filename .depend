@@ -12,10 +12,10 @@ src/coq.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx src/loc.cmx \
     src/report.cmx src/types.cmi src/util.cmx src/vcg.cmx src/coq.cmi 
 src/cvcl.cmo: src/cc.cmi src/env.cmi src/error.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/ltyping.cmi src/misc.cmi src/options.cmi src/pp.cmi \
-    src/util.cmi src/vcg.cmi src/cvcl.cmi 
+    src/vcg.cmi src/cvcl.cmi 
 src/cvcl.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx src/loc.cmx \
     src/logic.cmi src/ltyping.cmx src/misc.cmx src/options.cmx src/pp.cmx \
-    src/util.cmx src/vcg.cmx src/cvcl.cmi 
+    src/vcg.cmx src/cvcl.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/ast.cmi src/effect.cmi src/error.cmi src/ident.cmi \
@@ -67,11 +67,9 @@ src/main.cmx: src/annot.cmx src/ast.cmi src/cc.cmi src/coq.cmx src/cvcl.cmx \
     src/simplify.cmx src/types.cmi src/typing.cmx src/util.cmx src/vcg.cmx \
     src/wp.cmx 
 src/misc.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/ident.cmi src/loc.cmi \
-    src/logic.cmi src/options.cmi src/pp.cmi src/ptree.cmi src/types.cmi \
-    src/misc.cmi 
+    src/logic.cmi src/options.cmi src/ptree.cmi src/types.cmi src/misc.cmi 
 src/misc.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/ident.cmx src/loc.cmx \
-    src/logic.cmi src/options.cmx src/pp.cmx src/ptree.cmi src/types.cmi \
-    src/misc.cmi 
+    src/logic.cmi src/options.cmx src/ptree.cmi src/types.cmi src/misc.cmi 
 src/mizar.cmo: src/cc.cmi src/env.cmi src/error.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/misc.cmi src/options.cmi src/pp.cmi src/regen.cmi \
     src/vcg.cmi src/mizar.cmi 
@@ -143,11 +141,11 @@ src/typing.cmx: src/annot.cmx src/ast.cmi src/effect.cmx src/env.cmx \
     src/options.cmx src/ptree.cmi src/rename.cmx src/report.cmx src/types.cmi \
     src/util.cmx src/typing.cmi 
 src/util.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi src/ident.cmi \
-    src/logic.cmi src/misc.cmi src/pp.cmi src/ptree.cmi src/rename.cmi \
-    src/types.cmi src/util.cmi 
+    src/logic.cmi src/misc.cmi src/options.cmi src/pp.cmi src/ptree.cmi \
+    src/rename.cmi src/types.cmi src/util.cmi 
 src/util.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/env.cmx src/ident.cmx \
-    src/logic.cmi src/misc.cmx src/pp.cmx src/ptree.cmi src/rename.cmx \
-    src/types.cmi src/util.cmi 
+    src/logic.cmi src/misc.cmx src/options.cmx src/pp.cmx src/ptree.cmi \
+    src/rename.cmx src/types.cmi src/util.cmi 
 src/vcg.cmo: src/cc.cmi src/ident.cmi src/loc.cmi src/log.cmi src/logic.cmi \
     src/misc.cmi src/options.cmi src/pp.cmi src/types.cmi src/util.cmi \
     src/vcg.cmi 
@@ -271,3 +269,9 @@ intf/viewer.cmo: src/ast.cmi src/env.cmi intf/hilight.cmo src/loc.cmi \
     src/log.cmi src/main.cmo intf/navig.cmi src/options.cmi src/util.cmi 
 intf/viewer.cmx: src/ast.cmi src/env.cmx intf/hilight.cmx src/loc.cmx \
     src/log.cmi src/main.cmx intf/navig.cmx src/options.cmx src/util.cmx 
+tools/cvcl_split.cmo: tools/cvcl_split.cmi 
+tools/cvcl_split.cmx: tools/cvcl_split.cmi 
+tools/dp.cmo: tools/cvcl_split.cmi tools/simplify_split.cmi 
+tools/dp.cmx: tools/cvcl_split.cmx tools/simplify_split.cmx 
+tools/simplify_split.cmo: tools/simplify_split.cmi 
+tools/simplify_split.cmx: tools/simplify_split.cmi 

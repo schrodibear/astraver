@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify_split.mll,v 1.1 2004-07-15 13:45:37 filliatr Exp $ i*)
+(*i $Id: simplify_split.mll,v 1.2 2004-07-15 14:27:03 filliatr Exp $ i*)
 
 {
 
@@ -37,7 +37,8 @@
 
   let end_file file =
     close_out !outc;
-    !callback file
+    !callback file;
+    Sys.remove file
 
 }
 
@@ -45,7 +46,9 @@ let space = [' ' '\t' '\n' '\r']
 let ident = ['a'-'z' 'A'-'Z']+
 
 rule split = parse
-  | "(" space* "BG_PUSH"
+  | ";" [^'\n']* '\n' 
+        { Buffer.add_string buf (lexeme lexbuf); split lexbuf }
+  | "(" space* ("BG_PUSH" | "DEFPRED")
       { Buffer.add_string buf (lexeme lexbuf); 
 	lisp_copy lexbuf; split lexbuf }
   | ident 

@@ -183,37 +183,37 @@ Admitted.
 
 
 (*Why logic*) Definition acc :
-  forall (A41:Set), ((memory) A41) -> pointer -> A41.
+  forall (A22:Set), ((memory) A22) -> pointer -> A22.
 Admitted.
 Implicit Arguments acc.
 
 
 (*Why logic*) Definition upd :
-  forall (A42:Set), ((memory) A42) -> pointer -> A42 -> ((memory) A42).
+  forall (A23:Set), ((memory) A23) -> pointer -> A23 -> ((memory) A23).
 Admitted.
 Implicit Arguments upd.
 
 
 (*Why axiom*) Lemma acc_upd :
-  forall (A43:Set),
-  (forall (m:((memory) A43)),
-   (forall (p:pointer), (forall (a:A43), (acc (upd m p a) p) = a))).
+  forall (A24:Set),
+  (forall (m:((memory) A24)),
+   (forall (p:pointer), (forall (a:A24), (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A44:Set),
-  (forall (m:((memory) A44)),
+  forall (A25:Set),
+  (forall (m:((memory) A25)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A44), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+     (forall (a:A25), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  forall (A45:Set),
-  (forall (m:((memory) A45)),
+  forall (A26:Set),
+  (forall (m:((memory) A26)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A45), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A26), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
@@ -266,8 +266,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns (A46:Set) (a:alloc_table)
-  (m1:((memory) A46)) (m2:((memory) A46)) (l:assign_loc)
+(*Why predicate*) Definition assigns (A27:Set) (a:alloc_table)
+  (m1:((memory) A27)) (m2:((memory) A27)) (l:assign_loc)
   := (forall (p:pointer),
       ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments assigns.
@@ -328,12 +328,12 @@ Admitted.
 
 
 (*Why axiom*) Lemma assigns_trans :
-  forall (A47:Set),
+  forall (A28:Set),
   (forall (a:alloc_table),
    (forall (l:assign_loc),
-    (forall (m1:((memory) A47)),
-     (forall (m2:((memory) A47)),
-      (forall (m3:((memory) A47)),
+    (forall (m1:((memory) A28)),
+     (forall (m2:((memory) A28)),
+      (forall (m3:((memory) A28)),
        ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
 Proof.
 unfold assigns; intuition; rewrite H0; auto.

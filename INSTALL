@@ -10,3 +10,6 @@ INSTALLATION
 
   2. Install with "make install".  You may need superuser permissions.
 
+
+If you are willing to use Coq (more precisely if Coq is detected when
+running ./configure), you need Coq >= 7.4.

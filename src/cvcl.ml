@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.14 2004-07-13 14:55:41 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.15 2004-07-15 14:27:03 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -217,30 +217,6 @@ let rec print_cc_type fmt = function
       fprintf fmt "[%a ->@%a]" print_cc_type t1 print_cc_type t2
   | _ -> 
       assert false
-(***
-  | TTlambda (b, t) ->
-      fprintf fmt "[%a]@,%a" print_binder b print_cc_type t
-  | TTtuple ([_,CC_var_binder t], None) -> 
-      print_cc_type fmt t
-  | TTtuple (bl, None) ->
-      fprintf fmt "(@[tuple_%d@ %a@])" (List.length bl) 
-	(print_list space print_binder_type) bl
-  | TTtuple (bl, Some q) -> 
-      fprintf fmt "(@[sig_%d@ %a@ %a(%a)@])" (List.length bl)
-	(print_list space print_binder_type) bl 
-	(print_list nothing 
-	   (fun fmt b -> fprintf fmt "[%a]@," print_binder b)) bl
-	print_cc_type q
-  | TTpred p ->
-      print_predicate fmt p
-  | TTapp (tt, l) ->
-      fprintf fmt "(@[%a@ %a@])" print_cc_type tt
-	(print_list space print_cc_type) l
-  | TTterm t ->
-      print_term fmt t
-  | TTSet ->
-      fprintf fmt "Set"
-***)
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
@@ -321,24 +297,6 @@ module SV = struct
 end
 module SubstV = GenSubst(SV)
 
-(* substitution of unification type variables within instances *)
-(***
-module SI = struct
-
-  type substitution = (int * pure_type) list
-
-  let rec pure_type s = function
-    | PTvar v as t ->
-	(try List.assoc v.tag s with Not_found -> t)
-    | PTexternal (l, id) ->
-	PTexternal (List.map (pure_type s) l, id)
-    | PTarray ta -> PTarray (pure_type s ta)
-    | PTint | PTreal | PTbool | PTunit | PTvarid _ as t -> t
-
-end
-module SubstI = GenSubst(SI)
-***)
-
 (* the following module collects instances (within [Tapp] and [Papp]) *)
 module OpenInstances = struct
 
@@ -386,16 +344,6 @@ let rec unify s t1 t2 = match (t1,t2) with
       unify s v1 t2
   | (PTvar {tag=t;type_val=None}, _) ->
       assert false
-(***
-      begin
-	try
-	  let t1 = List.assoc t s in
-	  if t1 <> t2 then raise Exit;
-	  s
-	with Not_found ->
-	  (t, t2) :: s
-      end
-***)
   | (PTvarid v1, _) ->
       let v1 = Ident.string v1 in
       begin
