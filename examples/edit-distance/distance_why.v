@@ -23,6 +23,7 @@ Definition min_suffix :=
 
 Definition test_char := [a,b:A](bool_of_sumbool (A_eq_dec a b)).
 
+(* Why obligation from file "distance.mlw", characters 1733-1749 *)
 Lemma distance_po_1 : 
   (t: (array Z))
   (w1: (array A))
@@ -43,6 +44,7 @@ Proof.
 Simpl; Intuition.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 1560-1781 *)
 Lemma distance_po_2 : 
   (t: (array Z))
   (w1: (array A))
@@ -74,6 +76,7 @@ Apply H8; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 1598-1697 *)
 Lemma distance_po_3 : 
   (t: (array Z))
   (w1: (array A))
@@ -89,6 +92,7 @@ Intuition.
 Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2027-2032 *)
 Lemma distance_po_4 : 
   (t: (array Z))
   (w1: (array A))
@@ -119,6 +123,7 @@ Intuition.
 Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2480-2485 *)
 Lemma distance_po_5 : 
   (t: (array Z))
   (w1: (array A))
@@ -171,6 +176,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2513-2519 *)
 Lemma distance_po_6 : 
   (t: (array Z))
   (w1: (array A))
@@ -226,6 +232,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2506-2512 *)
 Lemma distance_po_7 : 
   (t: (array Z))
   (w1: (array A))
@@ -282,6 +289,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2533-2546 *)
 Lemma distance_po_8 : 
   (t: (array Z))
   (w1: (array A))
@@ -371,6 +379,7 @@ Unfold min_suffix; Unfold min_suffix in H19; Apply H19; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2564-2597 *)
 Lemma distance_po_9 : 
   (t: (array Z))
   (w1: (array A))
@@ -462,6 +471,7 @@ Subst old3; Apply H19; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2116-2648 *)
 Lemma distance_po_10 : 
   (t: (array Z))
   (w1: (array A))
@@ -530,6 +540,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2155-2403 *)
 Lemma distance_po_11 : 
   (t: (array Z))
   (w1: (array A))
@@ -588,6 +599,7 @@ Replace `n2` with `(j1+1)`; [ Idtac | Omega' ].
 Apply H13; Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 1831-2673 *)
 Lemma distance_po_12 : 
   (t: (array Z))
   (w1: (array A))
@@ -644,6 +656,7 @@ Apply H18; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 1868-1987 *)
 Lemma distance_po_13 : 
   (t: (array Z))
   (w1: (array A))
@@ -675,6 +688,7 @@ Apply suffix_length; Omega'.
 Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2681-2685 *)
 Lemma distance_po_14 : 
   (t: (array Z))
   (w1: (array A))
@@ -704,6 +718,7 @@ Intuition.
 Omega'.
 Save.
 
+(* Why obligation from file "distance.mlw", characters 2681-2685 *)
 Lemma distance_po_15 : 
   (t: (array Z))
   (w1: (array A))

@@ -3,6 +3,7 @@ Require Why.
 
 (*Why*) Parameter N : Z.
 
+(* Why obligation from file "good/return.mlw", characters 285-290 *)
 Lemma p_po_1 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
@@ -18,6 +19,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good/return.mlw", characters 314-316 *)
 Lemma p_po_2 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
@@ -34,6 +36,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good/return.mlw", characters 282-317 *)
 Lemma p_po_3 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
@@ -51,6 +54,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "good/return.mlw", characters 155-345 *)
 Lemma p_po_4 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
@@ -69,6 +73,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good/return.mlw", characters 189-195 *)
 Lemma p_po_5 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)
@@ -80,6 +85,7 @@ Intuition.
 Save.
 
 
+(* Why obligation from file "good/return.mlw", characters 351-352 *)
 Lemma p_po_6 : 
   (t: (array Z))
   (Pre5: `(array_length t) = N`)

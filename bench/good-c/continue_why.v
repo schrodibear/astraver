@@ -3,6 +3,7 @@
 
 Require Why.
 
+(* Why obligation from file "good-c/continue.c", characters 130-139 *)
 Lemma f1_po_1 : 
   (result: Z)
   (Post4: result = `10`)
@@ -19,6 +20,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 109-141 *)
 Lemma f1_po_2 : 
   (result: Z)
   (Post4: result = `10`)
@@ -33,6 +35,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 103-154 *)
 Lemma f1_po_3 : 
   (result: Z)
   (Post4: result = `10`)
@@ -50,6 +53,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 84-90 *)
 Lemma f1_po_4 : 
   (result: Z)
   (Post4: result = `10`)
@@ -58,6 +62,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 164-165 *)
 Lemma f1_po_5 : 
   (result: Z)
   (Post4: result = `10`)
@@ -202,6 +207,7 @@ Definition f1 := (* validation *)
       (exist_2 [n1: Z][result2: Z]`result2 = 0` n0 result1 Post18) in
     (exist_1 [result1: Z]`result1 = 0` result0 Post7).
 
+(* Why obligation from file "good-c/continue.c", characters 312-321 *)
 Lemma f2_po_1 : 
   (result: Z)
   (Post5: result = `17`)
@@ -221,6 +227,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 291-323 *)
 Lemma f2_po_2 : 
   (result: Z)
   (Post5: result = `17`)
@@ -238,6 +245,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 216-327 *)
 Lemma f2_po_3 : 
   (result: Z)
   (Post5: result = `17`)
@@ -257,6 +265,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 260-267 *)
 Lemma f2_po_4 : 
   (result: Z)
   (Post5: result = `17`)
@@ -267,6 +276,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/continue.c", characters 337-338 *)
 Lemma f2_po_5 : 
   (result: Z)
   (Post5: result = `17`)

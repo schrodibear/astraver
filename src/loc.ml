@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.5 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.6 2003-01-10 12:47:41 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
@@ -55,4 +55,9 @@ let report fmt (b,e) = match !file with
        with _ ->
 	 fprintf fmt "File \"%s\", characters %d-%d:@\n" f b e)
 
+let report_obligation fmt (b,e) = match !file with
+  | None -> 
+      fprintf fmt "Why obligation from standard input, characters %d-%d" b e
+  | Some f ->
+      fprintf fmt "Why obligation from file \"%s\", characters %d-%d" f b e
 

@@ -5,6 +5,7 @@ Require Why.
 Require Omega.
 
 
+(* Why obligation from file "selection.mlw", characters 796-803 *)
 Lemma selection_po_1 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -40,6 +41,7 @@ Proof.
 Auto with *.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 788-793 *)
 Lemma selection_po_2 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -76,6 +78,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 809-818 *)
 Lemma selection_po_3 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -124,6 +127,7 @@ Subst min1 k; Omega.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 785-818 *)
 Lemma selection_po_4 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -167,6 +171,7 @@ Subst k; Omega.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 557-840 *)
 Lemma selection_po_5 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -214,6 +219,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 603-739 *)
 Lemma selection_po_6 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -245,6 +251,7 @@ Assert h:`k=i0`. Omega.
 Subst result1 k; Omega.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 882-889 *)
 Lemma selection_po_7 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -278,6 +285,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 910-915 *)
 Lemma selection_po_8 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -315,6 +323,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 917-927 *)
 Lemma selection_po_9 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -356,6 +365,7 @@ Intuition.
 ArraySubst t1.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 893-931 *)
 Lemma selection_po_10 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -454,6 +464,7 @@ Apply H4; Omega.
 Subst t2 t1; Simpl; Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 125-969 *)
 Lemma selection_po_11 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -495,6 +506,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 216-408 *)
 Lemma selection_po_12 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
@@ -512,6 +524,7 @@ Intuition.
 Unfold sorted_array; Intros; Omega.
 Save.
 
+(* Why obligation from file "selection.mlw", characters 104-969 *)
 Lemma selection_po_13 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)

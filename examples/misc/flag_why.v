@@ -21,6 +21,7 @@ Definition eq_white := [c](bool_of_sumbool (eq_color_dec c white)).
 Definition monochrome [t:(array color); i,j:Z; c:color] : Prop :=
   (k:Z)`i <= k < j` -> #t[k]=c.
 
+(* Why obligation from file "flag.mlw", characters 715-720 *)
 Lemma dutch_flag_po_1 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -45,6 +46,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 748-753 *)
 Lemma dutch_flag_po_2 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -70,6 +72,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 772-777 *)
 Lemma dutch_flag_po_3 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -99,6 +102,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 779-789 *)
 Lemma dutch_flag_po_4 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -132,6 +136,7 @@ Intuition.
 ArraySubst t1.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 757-793 *)
 Lemma dutch_flag_po_5 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -198,6 +203,7 @@ Subst t1; Simpl; Auto.
 Subst t2; Simpl; Auto.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 727-842 *)
 Lemma dutch_flag_po_6 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -238,6 +244,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 861-866 *)
 Lemma dutch_flag_po_7 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -263,6 +270,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 880-891 *)
 Lemma dutch_flag_po_8 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -296,6 +304,7 @@ Assert h:`k<i0` \/ k=i0. Omega. Intuition.
 Subst k; Assumption.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 943-948 *)
 Lemma dutch_flag_po_9 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -324,6 +333,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 967-972 *)
 Lemma dutch_flag_po_10 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -356,6 +366,7 @@ Proof.
 Unfold monochrome; Intuition.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 974-984 *)
 Lemma dutch_flag_po_11 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -394,6 +405,7 @@ Intuition
 ArraySubst t1.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 952-988 *)
 Lemma dutch_flag_po_12 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -450,6 +462,7 @@ Apply H5; Omega.
 Subst t2 t1; Simpl; Trivial.
 Save.
 
+(* Why obligation from file "flag.mlw", characters 473-1097 *)
 Lemma dutch_flag_po_13 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
@@ -476,6 +489,7 @@ Intuition.
 Replace r0 with i0. Trivial. Omega. 
 Save.
 
+(* Why obligation from file "flag.mlw", characters 507-674 *)
 Lemma dutch_flag_po_14 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)

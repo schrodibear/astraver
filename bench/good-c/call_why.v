@@ -4,6 +4,7 @@
 Require Why.
 
 
+(* Why obligation from file "good-c/call.c", characters 113-116 *)
 Lemma f_po_1 : 
   (y: Z)
   (ddd: Z)
@@ -39,6 +40,7 @@ Definition f := (* validation *)
       (exist_2 [u1: Z][result1: Z]`result1 = z` u0 result0 Post5) in
     (exist_1 [result1: Z]`result1 = z` result0 Post4).
 
+(* Why obligation from file "good-c/call.c", characters 174-177 *)
 Lemma main_po_1 : 
   (x0: Z)
   (Post1: x0 = `0`)
@@ -49,6 +51,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/call.c", characters 170-180 *)
 Lemma main_po_2 : 
   (x0: Z)
   (Post1: x0 = `0`)

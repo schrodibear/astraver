@@ -4,6 +4,7 @@
 Require Why.
 
 
+(* Why obligation from file "search.mlw", characters 384-389 *)
 Lemma search1_po_1 : 
   (t: (array Z))
   (result: Z)
@@ -18,6 +19,7 @@ Proof.
 Auto with *.
 Save.
 
+(* Why obligation from file "search.mlw", characters 381-415 *)
 Lemma search1_po_2 : 
   (t: (array Z))
   (result: Z)
@@ -40,6 +42,7 @@ Apply (H0 k). Omega. Assumption.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 231-443 *)
 Lemma search1_po_3 : 
   (t: (array Z))
   (result: Z)
@@ -61,6 +64,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "search.mlw", characters 280-328 *)
 Lemma search1_po_4 : 
   (t: (array Z))
   (result: Z)
@@ -70,6 +74,7 @@ Proof.
 Intuition. Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 449-470 *)
 Lemma search1_po_5 : 
   (t: (array Z))
   (result: Z)
@@ -362,6 +367,7 @@ Definition search1 := (* validation *)
                 [result0: Z]`(access t result0) = 0`) (Exn Z tt) Post35)
     end.
 
+(* Why obligation from file "search.mlw", characters 885-890 *)
 Lemma search2_po_1 : 
   (t: (array Z))
   (result: Z)
@@ -376,6 +382,7 @@ Proof.
 Auto with *.
 Save.
 
+(* Why obligation from file "search.mlw", characters 882-911 *)
 Lemma search2_po_2 : 
   (t: (array Z))
   (result: Z)
@@ -398,6 +405,7 @@ Apply (H0 k). Omega. Assumption.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 732-939 *)
 Lemma search2_po_3 : 
   (t: (array Z))
   (result: Z)
@@ -419,6 +427,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "search.mlw", characters 781-829 *)
 Lemma search2_po_4 : 
   (t: (array Z))
   (result: Z)
@@ -428,6 +437,7 @@ Proof.
 Intuition. Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 945-966 *)
 Lemma search2_po_5 : 
   (t: (array Z))
   (result: Z)
@@ -695,6 +705,7 @@ Definition search2 := (* validation *)
                 [result1: Z]`(access t result1) = 0`) (Exn Z tt) Post33)
     end.
 
+(* Why obligation from file "search.mlw", characters 1495-1509 *)
 Lemma search3_po_1 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)
@@ -703,6 +714,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 1312-1333 *)
 Lemma search3_po_2 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)
@@ -719,6 +731,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 1348-1352 *)
 Lemma search3_po_3 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)
@@ -735,6 +748,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "search.mlw", characters 1375-1395 *)
 Lemma search3_po_4 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)
@@ -752,6 +766,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "search.mlw", characters 1247-1486 *)
 Lemma search3_po_5 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)
@@ -772,6 +787,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "search.mlw", characters 1375-1395 *)
 Lemma search3_po_6 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)
@@ -795,6 +811,7 @@ Subst k; Auto.
 Apply Post11 with k; Omega.
 Save.
 
+(* Why obligation from file "search.mlw", characters 1147-1597 *)
 Lemma search3_po_7 : 
   (t: (array Z))
   (Pre13: `0 <= (array_length t)`)

@@ -127,6 +127,7 @@ Save.
 
 (* Obligations *)
 
+(* Why obligation from file "bsearch.mlw", characters 563-580 *)
 Lemma binary_search_po_1 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -157,6 +158,7 @@ Split. Rewrite Post4; Apply le_mean; Omega'.
 Rewrite Post4; Apply ge_mean; Omega'.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 593-598 *)
 Lemma binary_search_po_2 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -187,6 +189,7 @@ Clear Pre8.
 Omega'.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 616-627 *)
 Lemma binary_search_po_3 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -225,6 +228,7 @@ Subst l2 m1.
 Intros; Apply In_right_side; Assumption Orelse Intuition.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 642-647 *)
 Lemma binary_search_po_4 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -257,6 +261,7 @@ Simpl in Test4.
 Repeat Split; Try Omega'.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 665-676 *)
 Lemma binary_search_po_5 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -299,6 +304,7 @@ Subst u2 m1.
 Intros; Apply In_left_side; Assumption Orelse Intuition.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 688-747 *)
 Lemma binary_search_po_6 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -343,6 +349,7 @@ Intros; Absurd `p2 = 0`; Omega'.
 Intro; Subst p2; Omega'.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 327-498 *)
 Lemma binary_search_po_7 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\
@@ -362,6 +369,7 @@ Intuition.
 Subst l0 u0; Assumption.
 Save.
 
+(* Why obligation from file "bsearch.mlw", characters 169-861 *)
 Lemma binary_search_po_8 : 
   (t: (array Z))
   (Pre7: `(array_length t) >= 1` /\

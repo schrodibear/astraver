@@ -9,6 +9,7 @@ Definition f1 := (* validation *)
       (refl_equal ? `0`)) in
     (exist_2 [x1: Z][result0: unit]`x1 = 0` result tt Post1).
 
+(* Why obligation from file "good-c/all.c", characters 117-120 *)
 Lemma f2_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -23,6 +24,7 @@ Definition f2 := (* validation *)
       (f2_po_1 x Pre1)) in
     (exist_2 [x1: Z][result0: unit]`x1 = 1` result tt Post1).
 
+(* Why obligation from file "good-c/all.c", characters 163-166 *)
 Lemma f3_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -37,6 +39,7 @@ Definition f3 := (* validation *)
       (f3_po_1 x Pre1)) in
     (exist_2 [x1: Z][result0: unit]`x1 = 1` result tt Post1).
 
+(* Why obligation from file "good-c/all.c", characters 213-216 *)
 Lemma f4_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -67,6 +70,7 @@ Definition f4 := (* validation *)
     (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = 1` /\ `y1 = 0` x0 result 
     tt Post3).
 
+(* Why obligation from file "good-c/all.c", characters 273-276 *)
 Lemma f5_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -90,6 +94,7 @@ Definition f5 := (* validation *)
     (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = 1` /\ `y1 = 1` x0 result 
     tt Post2).
 
+(* Why obligation from file "good-c/all.c", characters 329-335 *)
 Lemma f6_po_1 : 
   (x: Z)
   (Pre1: `x = 1`)
@@ -104,6 +109,7 @@ Definition f6 := (* validation *)
       (f6_po_1 x Pre1)) in
     (exist_2 [x1: Z][result0: unit]`x1 = 3` result tt Post1).
 
+(* Why obligation from file "good-c/all.c", characters 396-397 *)
 Lemma f7a_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -132,6 +138,7 @@ Definition f7a := (* validation *)
           (exist_1 [result1: Z]`result1 = 1` result0 Post4) end) in
     (exist_2 [y1: Z][result0: unit]`y1 = 1` result tt Post2).
 
+(* Why obligation from file "good-c/all.c", characters 454-455 *)
 Lemma f7b_po_1 : 
   (x: Z)
   (Pre1: `x <> 0`)
@@ -160,6 +167,7 @@ Definition f7b := (* validation *)
           (exist_1 [result1: Z]`result1 = 2` result0 Post4) end) in
     (exist_2 [y1: Z][result0: unit]`y1 = 2` result tt Post2).
 
+(* Why obligation from file "good-c/all.c", characters 544-548 *)
 Lemma t1_po_1 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10` /\ `(access t 0) = 1`)
@@ -168,6 +176,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 544-548 *)
 Lemma t1_po_2 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10` /\ `(access t 0) = 1`)
@@ -185,6 +194,7 @@ Definition t1 := (* validation *)
       (t1_po_2 t Pre2 Pre1)) in
     (exist_2 [y1: Z][result0: unit]`y1 = 1` result tt Post1).
 
+(* Why obligation from file "good-c/all.c", characters 635-638 *)
 Lemma t2_po_1 : 
   (t: (array Z))
   (x: Z)
@@ -199,6 +209,7 @@ Intuition.
 Subst c_aux_2 x; Auto.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 633-639 *)
 Lemma t2_po_2 : 
   (t: (array Z))
   (x: Z)
@@ -239,6 +250,7 @@ Definition t2 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 1` x0 result Post7) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 1` x0 result tt Post3).
 
+(* Why obligation from file "good-c/all.c", characters 726-729 *)
 Lemma t3_po_1 : 
   (t: (array Z))
   (x: Z)
@@ -251,6 +263,7 @@ Intuition.
 Replace x0 with `1`; Omega.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 724-730 *)
 Lemma t3_po_2 : 
   (t: (array Z))
   (x: Z)
@@ -285,6 +298,7 @@ Definition t3 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 1` x0 result Post5) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 1` x0 result tt Post2).
 
+(* Why obligation from file "good-c/all.c", characters 821-824 *)
 Lemma t4_po_1 : 
   (t: (array Z))
   (x: Z)
@@ -304,6 +318,7 @@ Subst x c_aux_3 c_aux_4.
 AccessSame.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 813-824 *)
 Lemma t4_po_2 : 
   (t: (array Z))
   (x: Z)
@@ -369,6 +384,7 @@ Definition t4 := (* validation *)
     (exist_3 [t5: (array Z)][x1: Z][result0: unit]`x1 = 3` /\
     `(access t5 2) = 5` t0 x0 result Post4).
 
+(* Why obligation from file "good-c/all.c", characters 913-916 *)
 Lemma e1_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -410,6 +426,7 @@ Definition e1 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 4` x0 result Post5) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 4` x0 result tt Post4).
 
+(* Why obligation from file "good-c/all.c", characters 967-970 *)
 Lemma e2_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -444,6 +461,7 @@ Definition e2 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 5` x0 result Post4) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 5` x0 result tt Post3).
 
+(* Why obligation from file "good-c/all.c", characters 1017-1020 *)
 Lemma e3_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -456,6 +474,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 1017-1024 *)
 Lemma e3_po_2 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -498,6 +517,7 @@ Definition e3 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 5` x0 result Post8) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 5` x0 result tt Post4).
 
+(* Why obligation from file "good-c/all.c", characters 1071-1074 *)
 Lemma e4_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -508,6 +528,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 1071-1078 *)
 Lemma e4_po_2 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -545,6 +566,7 @@ Definition e4 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 6` x0 result Post6) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 6` x0 result tt Post3).
 
+(* Why obligation from file "good-c/all.c", characters 1125-1128 *)
 Lemma e5_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
@@ -555,6 +577,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/all.c", characters 1131-1134 *)
 Lemma e5_po_2 : 
   (x: Z)
   (Pre1: `x = 2`)

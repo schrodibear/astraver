@@ -16,6 +16,7 @@ Hints Resolve gcd_asubb_b gcd_a_bsuba gcd_a_a gcd_a_0 gcd_a_amodb.
 Definition max : Z->Z->Z := 
   [x,y] Cases (Z_le_gt_dec x y) of (left _) => y | (right _) => x end.
 
+(* Why obligation from file "gcd.mlw", characters 373-385 *)
 Lemma gcd1_po_1 : 
   (a: Z)
   (b: Z)
@@ -42,6 +43,7 @@ Unfold Zwf max.
 Case (Z_le_gt_dec x1 y0); Case (Z_le_gt_dec x0 y0); Intros; Omega.
 Save.
 
+(* Why obligation from file "gcd.mlw", characters 401-413 *)
 Lemma gcd1_po_2 : 
   (a: Z)
   (b: Z)
@@ -69,6 +71,7 @@ Assert h:~x0=y0. Assumption.
 Case (Z_le_gt_dec x0 y1); Case (Z_le_gt_dec x0 y0); Intros; Omega.
 Save.
 
+(* Why obligation from file "gcd.mlw", characters 281-320 *)
 Lemma gcd1_po_3 : 
   (a: Z)
   (b: Z)
@@ -83,6 +86,7 @@ Intuition.
 Subst; Reflexivity.
 Save.
 
+(* Why obligation from file "gcd.mlw", characters 430-432 *)
 Lemma gcd1_po_4 : 
   (a: Z)
   (b: Z)
@@ -195,6 +199,7 @@ Definition gcd1 := (* validation *)
       (exist_2 [x1: Z][result2: Z]`result2 = (gcd a b)` x0 result1 Post9) in
     (exist_1 [result1: Z]`result1 = (gcd a b)` result0 Post8).
 
+(* Why obligation from file "gcd.mlw", characters 705-712 *)
 Lemma gcd2_po_1 : 
   (a: Z)
   (b: Z)
@@ -214,6 +219,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "gcd.mlw", characters 723-759 *)
 Lemma gcd2_po_2 : 
   (a: Z)
   (b: Z)
@@ -250,6 +256,7 @@ Assert h1_y0 : `y0 > 0`. Omega.
 Generalize (Z_mod_lt x0 y0 h1_y0); Omega.
 Save.
 
+(* Why obligation from file "gcd.mlw", characters 635-676 *)
 Lemma gcd2_po_3 : 
   (a: Z)
   (b: Z)
@@ -264,6 +271,7 @@ Intuition.
 Subst; Reflexivity.
 Save.
 
+(* Why obligation from file "gcd.mlw", characters 776-778 *)
 Lemma gcd2_po_4 : 
   (a: Z)
   (b: Z)

@@ -3,6 +3,7 @@
 
 Require Why.
 
+(* Why obligation from file "good-c/sum1.c", characters 74-165 *)
 Lemma main_po_1 : 
   (x: Z)
   (Pre4: `x = 0`)
@@ -26,6 +27,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "good-c/sum1.c", characters 118-135 *)
 Lemma main_po_2 : 
   (x: Z)
   (Pre4: `x = 0`)
@@ -38,6 +40,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/sum1.c", characters 74-165 *)
 Lemma main_po_3 : 
   (x: Z)
   (Pre4: `x = 0`)

@@ -26,7 +26,7 @@ type context_element =
 
 type sequent = context_element list * predicate
 
-type obligation = string * sequent
+type obligation = Loc.t * string * sequent
 
 type proof = 
   | Lemma of string * Ident.t list

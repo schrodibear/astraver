@@ -58,6 +58,7 @@ Implicit Arguments Off.
 
 
 (* Début: preuve de "swap" *)
+(* Why obligation from file "maximumsort.mlw", characters 206-210 *)
 Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
@@ -73,6 +74,7 @@ Proof.
   Intros; Omega.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 217-226 *)
 Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
@@ -92,6 +94,7 @@ Intuition ArraySubst t0.
 Save.
 
 
+(* Why obligation from file "maximumsort.mlw", characters 187-233 *)
 Lemma swap_po_3 : 
   (i: Z)
   (j: Z)
@@ -139,6 +142,7 @@ Definition swap := (* validation *)
 
 
 (* Début: preuve de "maximum" *)
+(* Why obligation from file "maximumsort.mlw", characters 602-603 *)
 Lemma maximum_po_1 : 
   (n: Z)
   (k: Z)
@@ -161,6 +165,7 @@ Proof.
   Rewrite Test4 in Pre12; Tauto.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 643-647 *)
 Lemma maximum_po_2 : 
   (n: Z)
   (k: Z)
@@ -183,6 +188,7 @@ Proof.
    Intros; Omega'.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 637-642 *)
 Lemma maximum_po_3 : 
   (n: Z)
   (k: Z)
@@ -206,6 +212,7 @@ Proof.
   Intros; Omega'.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 656-675 *)
 Lemma maximum_po_4 : 
   (n: Z)
   (k: Z)
@@ -233,6 +240,7 @@ Ring `k0-1+1`; Intros;
  Apply Maximize_Zle with m1:=(access t i0); Omega' Orelse Tauto.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 503-756 *)
 Lemma maximum_po_5 : 
   (n: Z)
   (k: Z)
@@ -263,6 +271,7 @@ Proof.
   Unfold Zwf; Omega'.  
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 684-702 *)
 Lemma maximum_po_6 : 
   (n: Z)
   (k: Z)
@@ -288,6 +297,7 @@ Proof.
   Repeat (Split; [Omega' | Auto]); Ring `k0-1+1`; Tauto.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 503-756 *)
 Lemma maximum_po_7 : 
   (n: Z)
   (k: Z)
@@ -418,6 +428,7 @@ Definition maximum := (* validation *)
 
 (* fin preuve de maximum *)
 
+(* Why obligation from file "maximumsort.mlw", characters 1124-1144 *)
 Lemma maxisort_po_1 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -441,6 +452,7 @@ Proof.
   Intros H; Absurd `i0 < i0`; Omega'.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 1156-1169 *)
 Lemma maxisort_po_2 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -466,6 +478,7 @@ Proof.
   Intros;  Omega'.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 1115-1170 *)
 Lemma maxisort_po_3 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -527,6 +540,7 @@ Proof.
    Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 876-1194 *)
 Lemma maxisort_po_4 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -561,6 +575,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 911-1086 *)
 Lemma maxisort_po_5 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -578,6 +593,7 @@ Proof.
   Intros H; Absurd `(array_length t) < (array_length t)`; [Omega' | Auto].
 Save.
 
+(* Why obligation from file "maximumsort.mlw", characters 808-1254 *)
 Lemma maxisort_po_6 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)

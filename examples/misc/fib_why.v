@@ -9,6 +9,7 @@ Axiom F_1 : (F `1`) = `1`.
 Axiom F_n : (n:Z) `n >= 2` -> `(F n) = (F (n-1)) + (F (n-2))`.
 Hints Resolve F_0 F_1 F_n.
 
+(* Why obligation from file "fib.mlw", characters 429-430 *)
 Lemma fib1_po_1 : 
   (n: Z)
   (Pre12: `n >= 0`)
@@ -25,6 +26,7 @@ Intuition Try (Rewrite H0; Auto with *).
 Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 462-476 *)
 Lemma fib1_po_2 : 
   (n: Z)
   (Pre12: `n >= 0`)
@@ -38,6 +40,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 395-497 *)
 Lemma fib1_po_3 : 
   (n: Z)
   (Pre12: `n >= 0`)
@@ -54,6 +57,7 @@ Proof.
 Intros; Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 445-459 *)
 Lemma fib1_po_4 : 
   (n: Z)
   (Pre12: `n >= 0`)
@@ -70,6 +74,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 395-497 *)
 Lemma fib1_po_5 : 
   (n: Z)
   (Pre12: `n >= 0`)
@@ -89,6 +94,7 @@ Proof.
 Intros; Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 445-476 *)
 Lemma fib1_po_6 : 
   (n: Z)
   (Pre12: `n >= 0`)
@@ -163,6 +169,7 @@ Definition fib1 := (* validation *)
             (exist_1 [result1: Z]`result1 = (F n0)` result0 Post3) end) 
       n n (refl_equal ? n) Pre12).
 
+(* Why obligation from file "fib.mlw", characters 695-697 *)
 Lemma fib2_aux_po_1 : 
   (n: Z)
   (x: Z)
@@ -183,6 +190,7 @@ Intuition.
 Rewrite <- Test2; Assumption.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 713-744 *)
 Lemma fib2_aux_po_2 : 
   (n: Z)
   (x: Z)
@@ -210,6 +218,7 @@ Omega.
 Ring `x0+1-1`; Trivial.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 625-765 *)
 Lemma fib2_aux_po_3 : 
   (n: Z)
   (x: Z)
@@ -278,6 +287,7 @@ Definition fib2_aux := (* validation *)
             (exist_1 [result1: Z]`result1 = (F n0)` result0 Post3) end)
       `n - x` n x fx fx_1 (refl_equal ? `n - x`) Pre8).
 
+(* Why obligation from file "fib.mlw", characters 824-825 *)
 Lemma fib2_po_1 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -289,6 +299,7 @@ Assert h: `n=0` \/ `n=1`. Omega.
 Intuition; Rewrite H; Auto with *.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 831-849 *)
 Lemma fib2_po_2 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -319,6 +330,7 @@ Definition fib2 := (* validation *)
           (exist_1 [result3: Z]`result3 = (F n)` result2 Post4) in
         (exist_1 [result1: Z]`result1 = (F n)` result0 Post3) end).
 
+(* Why obligation from file "fib.mlw", characters 1126-1192 *)
 Lemma fib3_po_1 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -361,6 +373,7 @@ Subst y1; Assumption.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1043-1082 *)
 Lemma fib3_po_2 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -381,6 +394,7 @@ Subst result result1.
 Auto with *.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1009-1201 *)
 Lemma fib3_po_3 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -402,6 +416,7 @@ Intuition.
 Replace n with k0. Auto. Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 991-1201 *)
 Lemma fib3_po_4 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -553,6 +568,7 @@ Definition fib3 := (* validation *)
     (exist_1 [result1: Z]`result1 = (F n)` result0 Post11).
 
 
+(* Why obligation from file "fib.mlw", characters 1367-1368 *)
 Lemma fib4_po_1 : 
   (n: Z)
   (t: (array Z))
@@ -565,6 +581,7 @@ Assert h: `n=0` \/ `n=1`. Omega.
 Intuition; Rewrite H1; Auto.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1388-1397 *)
 Lemma fib4_po_2 : 
   (n: Z)
   (t: (array Z))
@@ -575,6 +592,7 @@ Proof.
 Intros; Simpl; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1404-1413 *)
 Lemma fib4_po_3 : 
   (n: Z)
   (t: (array Z))
@@ -588,6 +606,7 @@ Proof.
 Intros; Subst t0; Simpl; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1627-1657 *)
 Lemma fib4_po_4 : 
   (n: Z)
   (t: (array Z))
@@ -614,6 +633,7 @@ Proof.
 Simpl; Intuition.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1442-1687 *)
 Lemma fib4_po_5 : 
   (n: Z)
   (t: (array Z))
@@ -660,6 +680,7 @@ Auto.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1478-1590 *)
 Lemma fib4_po_6 : 
   (n: Z)
   (t: (array Z))
@@ -685,6 +706,7 @@ Subst t0; AccessSame. Auto.
 Subst i t1; AccessSame. Auto.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1420-1687 *)
 Lemma fib4_po_7 : 
   (n: Z)
   (t: (array Z))
@@ -709,6 +731,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "fib.mlw", characters 1694-1698 *)
 Lemma fib4_po_8 : 
   (n: Z)
   (t: (array Z))

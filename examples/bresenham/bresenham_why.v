@@ -64,6 +64,7 @@ Save.
 
 (*s Program correctness. *)
 
+(* Why obligation from file "bresenham.mlw", characters 1620-1630 *)
 Lemma bresenham_po_1 : 
   (x0: Z)
   (Post1: x0 = `0`)
@@ -85,6 +86,7 @@ Decompose [and] Pre3.
 Exact (invariant_is_ok x1 y1 e1 H0).
 Save.
 
+(* Why obligation from file "bresenham.mlw", characters 1656-1672 *)
 Lemma bresenham_po_2 : 
   (x0: Z)
   (Post1: x0 = `0`)
@@ -118,6 +120,7 @@ Omega'.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "bresenham.mlw", characters 1684-1738 *)
 Lemma bresenham_po_3 : 
   (x0: Z)
   (Post1: x0 = `0`)
@@ -155,6 +158,7 @@ Omega'.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "bresenham.mlw", characters 1457-1766 *)
 Lemma bresenham_po_4 : 
   (x0: Z)
   (Post1: x0 = `0`)
@@ -183,6 +187,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "bresenham.mlw", characters 1493-1532 *)
 Lemma bresenham_po_5 : 
   (x0: Z)
   (Post1: x0 = `0`)

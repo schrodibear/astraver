@@ -3,6 +3,7 @@
 
 Require Why.
 
+(* Why obligation from file "good-c/pointer.c", characters 72-78 *)
 Lemma f_po_1 : 
   (x0: Z)
   (Post1: x0 = `0`)
@@ -42,6 +43,7 @@ Definition g := (* validation *)
     let (r0, result0, Post1) = (f r) in
     (exist_2 [r1: Z][result1: Z]`r1 = 1` r0 result0 (proj1 ? ? Post1)).
 
+(* Why obligation from file "good-c/pointer.c", characters 187-196 *)
 Lemma h_po_1 : 
   (result: Z)
   (Post2: result = `0`)

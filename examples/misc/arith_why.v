@@ -6,6 +6,7 @@ Require Omega.
 Require Zdiv.
 Require ZArithRing.
 
+(* Why obligation from file "arith.mlw", characters 358-364 *)
 Lemma mult_po_1 : 
   (x: Z)
   (y: Z)
@@ -28,6 +29,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "arith.mlw", characters 374-386 *)
 Lemma mult_po_2 : 
   (x: Z)
   (y: Z)
@@ -68,6 +70,7 @@ Repeat Split; Try Omega.
 Subst a; Apply Z_div_lt; Try Omega.
 Save.
 
+(* Why obligation from file "arith.mlw", characters 355-386 *)
 Lemma mult_po_3 : 
   (x: Z)
   (y: Z)
@@ -108,6 +111,7 @@ Repeat Split; Try Omega.
 Subst a; Apply Z_div_lt; Try Omega.
 Save.
 
+(* Why obligation from file "arith.mlw", characters 400-406 *)
 Lemma mult_po_4 : 
   (x: Z)
   (y: Z)
@@ -137,6 +141,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "arith.mlw", characters 268-436 *)
 Lemma mult_po_5 : 
   (x: Z)
   (y: Z)
@@ -171,6 +176,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "arith.mlw", characters 304-333 *)
 Lemma mult_po_6 : 
   (x: Z)
   (y: Z)
@@ -187,6 +193,7 @@ Intuition.
 Subst result result0 result1; Ring.
 Save.
 
+(* Why obligation from file "arith.mlw", characters 443-445 *)
 Lemma mult_po_7 : 
   (x: Z)
   (y: Z)

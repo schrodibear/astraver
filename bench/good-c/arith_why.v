@@ -3,6 +3,7 @@
 
 Require Why.
 
+(* Why obligation from file "good-c/arith.c", characters 59-166 *)
 Lemma test_po_1 : 
   (k: Z)
   (j: Z)

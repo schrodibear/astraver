@@ -4,6 +4,7 @@
 Require Why.
 Require Omega.
 
+(* Why obligation from file "swap.mlw", characters 153-157 *)
 Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
@@ -19,6 +20,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "swap.mlw", characters 166-175 *)
 Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
@@ -37,6 +39,7 @@ Proof.
 Intros; ArraySubst t0.
 Save.
 
+(* Why obligation from file "swap.mlw", characters 132-184 *)
 Lemma swap_po_3 : 
   (i: Z)
   (j: Z)

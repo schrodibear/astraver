@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.81 2003-01-09 13:13:47 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.82 2003-01-10 12:47:41 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -365,7 +365,8 @@ and print_case fmt (p,e) =
   fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term e
 
       
-let reprint_obligation fmt (id,s) =
+let reprint_obligation fmt (loc,id,s) =
+  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
   fprintf fmt "@[<hov 2>Lemma %s : @\n%a.@]@\n" id print_sequent s
 
 let print_obligation fmt o = 
@@ -408,7 +409,7 @@ let add_elem ek e = Queue.add (ek,e) elem_q; Hashtbl.add elem_t ek e
 let reset () = Queue.clear elem_q; Hashtbl.clear elem_t
 
 let push_obligations = 
-  List.iter (fun ((l,_) as o) -> add_elem (Oblig, l) (Obligation o))
+  List.iter (fun ((_,l,_) as o) -> add_elem (Oblig, l) (Obligation o))
 
 let push_validation id v = 
   add_elem (Valid, id) (Validation (id,v))
@@ -448,17 +449,27 @@ let _ =
   add_regexp 
     "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param
 
+let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
+
+type line_kind =
+  | Obligation_location
+  | Element of (element_kind * string)
+  | Other
+
 let check_line s =
   let rec test = function
     | [] -> 
-	None
+	Other
     | (r, k) :: l ->
 	if Str.string_match r s 0 then 
-	  Some (k, Str.matched_group 1 s) 
+	  Element (k, Str.matched_group 1 s) 
 	else 
 	  test l
   in
-  test !regexps
+  if Str.string_match re_oblig_loc s 0 then 
+    Obligation_location
+  else
+    test !regexps
 
 let end_is_not_dot s =
   let n = String.length s in n = 0 || s.[n-1] <> '.'
@@ -468,10 +479,12 @@ let regen oldf fmt =
   let rec scan () =
     let s = input_line cin in
     match check_line s with
-      | None -> 
+      | Other -> 
 	  fprintf fmt "%s@\n" s;
 	  scan ()
-      | Some e ->
+      | Obligation_location ->
+	  scan ()
+      | Element e ->
 	  if Hashtbl.mem elem_t e then begin
 	    if verbose then eprintf "overwriting %a@." print_element_kind e;
 	    print_up_to e

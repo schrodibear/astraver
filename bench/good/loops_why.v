@@ -2,6 +2,7 @@
 Require Why.
 Require Omega.
 
+(* Why obligation from file "good/loops.mlw", characters 96-174 *)
 Lemma loop1_po_1 : 
   (i: Z)
   (Pre6: `i <= 10`)
@@ -18,6 +19,7 @@ Proof.
 Unfold Zwf; Intros; Omega.
 Save.
 
+(* Why obligation from file "good/loops.mlw", characters 82-187 *)
 Lemma loop1_po_2 : 
   (i: Z)
   (Pre6: `i <= 10`)
@@ -80,6 +82,7 @@ Definition oppose := (* validation *)
       (refl_equal ? `(-x)`)) in
     (exist_2 [x1: Z][result0: unit]`x1 = (-x)` result tt Post1).
 
+(* Why obligation from file "good/loops.mlw", characters 353-421 *)
 Lemma loop2_po_1 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -95,6 +98,7 @@ Proof.
 Unfold Zwf; Intros; Omega.
 Save.
 
+(* Why obligation from file "good/loops.mlw", characters 353-436 *)
 Lemma loop2_po_2 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -108,6 +112,7 @@ Proof.
 Intros; Intuition.
 Save.
 
+(* Why obligation from file "good/loops.mlw", characters 458-471 *)
 Lemma loop2_po_3 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -121,6 +126,7 @@ Proof.
 Simpl; Intros; Omega.
 Save.
 
+(* Why obligation from file "good/loops.mlw", characters 443-471 *)
 Lemma loop2_po_4 : 
   (x: Z)
   (Pre4: `x <= 10`)

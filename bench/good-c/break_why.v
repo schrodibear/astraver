@@ -67,6 +67,7 @@ Definition f1 := (* validation *)
       (refl_equal ? `12`)) in
     (exist_1 [result1: Z]`result1 = 12` result0 Post15).
 
+(* Why obligation from file "good-c/break.c", characters 227-233 *)
 Lemma f2_po_1 : 
   (result: Z)
   (Post4: result = `10`)
@@ -83,6 +84,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 208-235 *)
 Lemma f2_po_2 : 
   (result: Z)
   (Post4: result = `10`)
@@ -97,6 +99,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 201-248 *)
 Lemma f2_po_3 : 
   (result: Z)
   (Post4: result = `10`)
@@ -114,6 +117,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 182-188 *)
 Lemma f2_po_4 : 
   (result: Z)
   (Post4: result = `10`)
@@ -122,6 +126,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 147-248 *)
 Lemma f2_po_5 : 
   (result: Z)
   (Post4: result = `10`)
@@ -287,6 +292,7 @@ Definition f2 := (* validation *)
       (exist_2 [n1: Z][result2: Z]`result2 = 1` n0 result1 Post30) in
     (exist_1 [result1: Z]`result1 = 1` result0 Post7).
 
+(* Why obligation from file "good-c/break.c", characters 395-401 *)
 Lemma f3_po_1 : 
   (result: Z)
   (Post4: result = `10`)
@@ -304,6 +310,7 @@ Intuition.
 (* FILL PROOF HERE *)
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 376-403 *)
 Lemma f3_po_2 : 
   (result: Z)
   (Post4: result = `10`)
@@ -319,6 +326,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 369-416 *)
 Lemma f3_po_3 : 
   (result: Z)
   (Post4: result = `10`)
@@ -336,6 +344,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 350-356 *)
 Lemma f3_po_4 : 
   (result: Z)
   (Post4: result = `10`)
@@ -344,6 +353,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 315-416 *)
 Lemma f3_po_5 : 
   (result: Z)
   (Post4: result = `10`)
@@ -509,6 +519,7 @@ Definition f3 := (* validation *)
       (exist_2 [n1: Z][result2: Z]`result2 = 2` n0 result1 Post30) in
     (exist_1 [result1: Z]`result1 = 2` result0 Post7).
 
+(* Why obligation from file "good-c/break.c", characters 576-594 *)
 Lemma f4_po_1 : 
   (result: Z)
   (Post4: result = `0`)
@@ -526,6 +537,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 495-600 *)
 Lemma f4_po_2 : 
   (result: Z)
   (Post4: result = `0`)
@@ -544,6 +556,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 539-545 *)
 Lemma f4_po_3 : 
   (result: Z)
   (Post4: result = `0`)
@@ -554,6 +567,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "good-c/break.c", characters 495-600 *)
 Lemma f4_po_4 : 
   (result: Z)
   (Post4: result = `0`)

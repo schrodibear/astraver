@@ -7,6 +7,7 @@ Require Omega.
 Require ZArithRing.
 
 
+(* Why obligation from file "partition.mlw", characters 1340-1344 *)
 Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
@@ -22,6 +23,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1353-1362 *)
 Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
@@ -40,6 +42,7 @@ Proof.
 Intros; ArraySubst t0.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1319-1371 *)
 Lemma swap_po_3 : 
   (i: Z)
   (j: Z)
@@ -83,6 +86,7 @@ Definition swap := (* validation *)
     (exist_2 [t1: (array Z)][result0: unit](exchange t1 t i j) t0 result
     Post4).
 
+(* Why obligation from file "partition.mlw", characters 1579-1583 *)
 Lemma partition_po_1 : 
   (l: Z)
   (r: Z)
@@ -93,6 +97,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1932-1937 *)
 Lemma partition_po_2 : 
   (l: Z)
   (r: Z)
@@ -123,6 +128,7 @@ Proof.
 Intuition (ArrayLength; Omega).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1947-1954 *)
 Lemma partition_po_3 : 
   (l: Z)
   (r: Z)
@@ -159,6 +165,7 @@ Intuition.
 Induction result3; Auto.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1932-1954 *)
 Lemma partition_po_4 : 
   (l: Z)
   (r: Z)
@@ -195,6 +202,7 @@ Intuition.
 Induction result3; Auto.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1926-2077 *)
 Lemma partition_po_5 : 
   (l: Z)
   (r: Z)
@@ -238,6 +246,7 @@ Omega.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1979-2030 *)
 Lemma partition_po_6 : 
   (l: Z)
   (r: Z)
@@ -264,6 +273,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2086-2091 *)
 Lemma partition_po_7 : 
   (l: Z)
   (r: Z)
@@ -298,6 +308,7 @@ Proof.
 Intuition (ArrayLength; Omega).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2101-2108 *)
 Lemma partition_po_8 : 
   (l: Z)
   (r: Z)
@@ -339,6 +350,7 @@ Induction result4; Auto.
 Induction result4; Auto.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2086-2108 *)
 Lemma partition_po_9 : 
   (l: Z)
   (r: Z)
@@ -380,6 +392,7 @@ Induction result4; Auto.
 Induction result4; Auto.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2080-2221 *)
 Lemma partition_po_10 : 
   (l: Z)
   (r: Z)
@@ -433,6 +446,7 @@ Discriminate H21.
 Discriminate H21.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2127-2176 *)
 Lemma partition_po_11 : 
   (l: Z)
   (r: Z)
@@ -463,6 +477,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2255-2269 *)
 Lemma partition_po_12 : 
   (l: Z)
   (r: Z)
@@ -499,6 +514,7 @@ Proof.
 Intuition (ArrayLength; Omega).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2240-2306 *)
 Lemma partition_po_13 : 
   (l: Z)
   (r: Z)
@@ -575,6 +591,7 @@ Apply H16; Omega.
 Unfold Zwf; ArrayLength; Omega.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2224-2306 *)
 Lemma partition_po_14 : 
   (l: Z)
   (r: Z)
@@ -613,6 +630,7 @@ Proof.
 Intuition (Unfold Zwf; SameLength t t0; Omega).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 1685-1865 *)
 Lemma partition_po_15 : 
   (l: Z)
   (r: Z)
@@ -634,6 +652,7 @@ Apply array_le_empty; Omega.
 Apply array_ge_empty; Omega.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2329-2334 *)
 Lemma partition_po_16 : 
   (l: Z)
   (r: Z)
@@ -658,6 +677,7 @@ Proof.
 Intuition (SameLength t t0; Omega).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2359-2372 *)
 Lemma partition_po_17 : 
   (l: Z)
   (r: Z)
@@ -684,6 +704,7 @@ Proof.
 Intuition (SameLength t t0; Auto with *).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2383-2385 *)
 Lemma partition_po_18 : 
   (l: Z)
   (r: Z)
@@ -751,6 +772,7 @@ Assumption.
 Assumption.
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2416-2435 *)
 Lemma partition_po_19 : 
   (l: Z)
   (r: Z)
@@ -777,6 +799,7 @@ Proof.
 Intuition (SameLength t0 t; Omega).
 Save.
 
+(* Why obligation from file "partition.mlw", characters 2445-2451 *)
 Lemma partition_po_20 : 
   (l: Z)
   (r: Z)

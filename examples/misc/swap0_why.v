@@ -1,6 +1,7 @@
 Require Why.
 Require Omega.
 
+(* Why obligation from file "swap0.mlw", characters 143-168 *)
 Lemma swap1_po_1 : 
   (x: Z)
   (y: Z)
@@ -32,6 +33,7 @@ Definition swap1 := (* validation *)
     (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
     result Post4).
 
+(* Why obligation from file "swap0.mlw", characters 304-346 *)
 Lemma swap2_po_1 : 
   (x: Z)
   (y: Z)
@@ -66,6 +68,7 @@ Definition swap2 := (* validation *)
     (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
     result Post4).
 
+(* Why obligation from file "swap0.mlw", characters 491-516 *)
 Lemma swap3_po_1 : 
   (a: Z)
   (b: Z)
@@ -97,6 +100,7 @@ Definition swap3 := (* validation *)
     (exist_3 [a1: Z][b1: Z][result0: unit]`a1 = b` /\ `b1 = a` a0 b0 
     result Post4).
 
+(* Why obligation from file "swap0.mlw", characters 636-657 *)
 Lemma test_swap3_po_1 : 
   (result: Z)
   (Post2: result = `1`)
@@ -129,6 +133,7 @@ Definition call_swap3_x_y := (* validation *)
     (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 y0 
     result0 Post1).
 
+(* Why obligation from file "swap0.mlw", characters 766-799 *)
 Lemma call_swap3_y_x_po_1 : 
   (x: Z)
   (y: Z)
@@ -146,6 +151,7 @@ Definition call_swap3_y_x := (* validation *)
     (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 y0 
     result0 (call_swap3_y_x_po_1 x y y0 x0 Post1)).
 
+(* Why obligation from file "swap0.mlw", characters 918-981 *)
 Lemma swap4_po_1 : 
   (a: Z)
   (b: Z)
@@ -177,6 +183,7 @@ Definition swap4 := (* validation *)
     (exist_4 [a1: Z][b1: Z][tmp1: Z][result2: unit]`a1 = b` /\ `b1 = a` 
     a0 b0 tmp0 result1 (swap4_po_1 a b tmp0 Post1 a0 Post2 b0 Post3)).
 
+(* Why obligation from file "swap0.mlw", characters 1076-1097 *)
 Lemma test_swap4_po_1 : 
   (result: Z)
   (Post2: result = `1`)
@@ -205,6 +212,7 @@ Definition test_swap4 := (* validation *)
       (Build_tuple_3 c0 tmp0 result1) in
     (Build_tuple_2 tmp0 result0).
 
+(* Why obligation from file "swap0.mlw", characters 1151-1182 *)
 Lemma call_swap4_x_y_po_1 : 
   (x: Z)
   (y: Z)
@@ -223,6 +231,7 @@ Definition call_swap4_x_y := (* validation *)
     (exist_4 [tmp1: Z][x1: Z][y1: Z][result1: unit]`y1 = 3` tmp0 x0 y0
     result0 (call_swap4_x_y_po_1 x y Pre1 x0 y0 Post1)).
 
+(* Why obligation from file "swap0.mlw", characters 1204-1235 *)
 Lemma call_swap4_y_x_po_1 : 
   (x: Z)
   (y: Z)

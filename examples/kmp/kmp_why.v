@@ -19,6 +19,7 @@ Definition A_eq_bool := [x,y:A](bool_of_sumbool (A_eq_dec x y)).
 (*Why*) Parameter M : Z.
 Axiom M_positive : `0 <= M`.
 
+(* Why obligation from file "kmp.mlw", characters 1205-1217 *)
 Lemma initnext_po_1 : 
   (next: (array Z))
   (p: (array A))
@@ -33,6 +34,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1225-1755 *)
 Lemma initnext_po_2 : 
   (next: (array Z))
   (p: (array A))
@@ -50,6 +52,7 @@ Proof.
 Intros; Exact lexZ_well_founded.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1584-1589 *)
 Lemma initnext_po_3 : 
   (next: (array Z))
   (p: (array A))
@@ -79,6 +82,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1578-1583 *)
 Lemma initnext_po_4 : 
   (next: (array Z))
   (p: (array A))
@@ -109,6 +113,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1634-1648 *)
 Lemma initnext_po_5 : 
   (next: (array Z))
   (p: (array A))
@@ -143,6 +148,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1596-1660 *)
 Lemma initnext_po_6 : 
   (next: (array Z))
   (p: (array A))
@@ -209,6 +215,7 @@ Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
 Unfold lexZ lex Zwf pairZ; Left; Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1708-1721 *)
 Lemma initnext_po_7 : 
   (next: (array Z))
   (p: (array A))
@@ -242,6 +249,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1691-1725 *)
 Lemma initnext_po_8 : 
   (next: (array Z))
   (p: (array A))
@@ -317,6 +325,7 @@ Intuition.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1736-1744 *)
 Lemma initnext_po_9 : 
   (next: (array Z))
   (p: (array A))
@@ -348,6 +357,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1731-1744 *)
 Lemma initnext_po_10 : 
   (next: (array Z))
   (p: (array A))
@@ -427,6 +437,7 @@ Elim (H11 j0) ; [ Intros | Omega' ].
 Right. Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1225-1755 *)
 Lemma initnext_po_11 : 
   (next: (array Z))
   (p: (array A))
@@ -467,6 +478,7 @@ Intuition.
 Rewrite Pre7; Assumption.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1263-1512 *)
 Lemma initnext_po_12 : 
   (next: (array Z))
   (p: (array A))
@@ -497,6 +509,7 @@ Omega'.
 ArraySubst next0.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1193-1763 *)
 Lemma initnext_po_13 : 
   (next: (array Z))
   (p: (array A))
@@ -524,6 +537,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 1179-1763 *)
 Lemma initnext_po_14 : 
   (next: (array Z))
   (p: (array A))
@@ -922,6 +936,7 @@ Definition initnext := (* validation *)
 Axiom N_positive : `0 <= N`.
 
 
+(* Why obligation from file "kmp.mlw", characters 2317-2332 *)
 Lemma kmp_po_1 : 
   (a: (array A))
   (next: (array Z))
@@ -937,6 +952,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2338-2714 *)
 Lemma kmp_po_2 : 
   (a: (array A))
   (next: (array Z))
@@ -956,6 +972,7 @@ Proof.
 Intros; Exact lexZ_well_founded.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2354-2360 *)
 Lemma kmp_po_3 : 
   (a: (array A))
   (next: (array Z))
@@ -986,6 +1003,7 @@ Proof.
 Intuition Induction result3; Tauto.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2344-2360 *)
 Lemma kmp_po_4 : 
   (a: (array A))
   (next: (array Z))
@@ -1016,6 +1034,7 @@ Proof.
 Intuition Induction result3; Tauto.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2592-2597 *)
 Lemma kmp_po_5 : 
   (a: (array A))
   (next: (array Z))
@@ -1044,6 +1063,7 @@ Intuition.
 Discriminate H14.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2586-2591 *)
 Lemma kmp_po_6 : 
   (a: (array A))
   (next: (array Z))
@@ -1072,6 +1092,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2604-2648 *)
 Lemma kmp_po_7 : 
   (a: (array A))
   (next: (array Z))
@@ -1116,6 +1137,7 @@ Subst j1 i1.
   Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2677-2686 *)
 Lemma kmp_po_8 : 
   (a: (array A))
   (next: (array Z))
@@ -1158,6 +1180,7 @@ Intuition Discriminate H14 Orelse Auto with *.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2697-2705 *)
 Lemma kmp_po_9 : 
   (a: (array A))
   (next: (array Z))
@@ -1188,6 +1211,7 @@ Intuition.
 Discriminate H14.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2692-2705 *)
 Lemma kmp_po_10 : 
   (a: (array A))
   (next: (array Z))
@@ -1253,6 +1277,7 @@ Discriminate H16.
 Discriminate H16.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2338-2714 *)
 Lemma kmp_po_11 : 
   (a: (array A))
   (next: (array Z))
@@ -1294,6 +1319,7 @@ Definition first_occur :=
         (match a r p `0` (array_length p)))
   /\ ((k:Z) `0 <= k < r` -> ~(match a k p `0` (array_length p))).
 
+(* Why obligation from file "kmp.mlw", characters 2382-2524 *)
 Lemma kmp_po_12 : 
   (a: (array A))
   (next: (array Z))
@@ -1321,6 +1347,7 @@ Generalize N_positive; Omega'. Generalize M_positive; Omega'.
 Absurd `0 <= k`; Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2736-2740 *)
 Lemma kmp_po_13 : 
   (a: (array A))
   (next: (array Z))
@@ -1355,6 +1382,7 @@ Replace (array_length p) with M. Assumption. Omega'.
 Omega'.
 Save.
 
+(* Why obligation from file "kmp.mlw", characters 2746-2748 *)
 Lemma kmp_po_14 : 
   (a: (array A))
   (next: (array Z))

@@ -33,7 +33,7 @@ type context_element =
 
 type sequent = context_element list * predicate
 
-type obligation = string * sequent
+type obligation = Loc.t * string * sequent
 
 type proof = 
   | Lemma of string * Ident.t list
@@ -192,7 +192,7 @@ let vcg base t =
     let id = base ^ "_po_" ^ string_of_int !cpt in
     let ctx' = clean_sequent (List.rev ctx) concl in
     let sq = (ctx', concl) in
-    po := (id, sq) :: !po;
+    po := (loc, id, sq) :: !po;
     log (snd loc) sq (Some id);
     Lemma (id, hyps_names ctx')
   in

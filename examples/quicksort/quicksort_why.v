@@ -8,6 +8,7 @@ Require Quicksort.
 
 Require partition_why.
 
+(* Why obligation from file "quicksort.mlw", characters 1603-1620 *)
 Lemma quick_rec_po_1 : 
   (l: Z)
   (r: Z)
@@ -25,6 +26,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1646-1667 *)
 Lemma quick_rec_po_2 : 
   (l: Z)
   (r: Z)
@@ -47,6 +49,7 @@ Proof.
 Intuition (SameLength t1 t0; Omega).
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1523-1762 *)
 Lemma quick_rec_po_3 : 
   (l: Z)
   (r: Z)
@@ -73,6 +76,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1671-1692 *)
 Lemma quick_rec_po_4 : 
   (l: Z)
   (r: Z)
@@ -98,6 +102,7 @@ Proof.
 Intuition; SameLength t2 t1; SameLength t1 t0; Omega.
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1523-1762 *)
 Lemma quick_rec_po_5 : 
   (l: Z)
   (r: Z)
@@ -126,6 +131,7 @@ Proof.
 Intros; Unfold Zwf; Omega.
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1631-1703 *)
 Lemma quick_rec_po_6 : 
   (l: Z)
   (r: Z)
@@ -156,6 +162,7 @@ Apply quicksort_lemma with t1:=t1 t2:=t2 p:=p;
 Intuition. 
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1574-1703 *)
 Lemma quick_rec_po_7 : 
   (l: Z)
   (r: Z)
@@ -254,6 +261,7 @@ Definition quick_rec := (* validation *)
             (sub_permut l0 r0 t1 t0) t0 result0 Post3) end) `1 + r - l` 
       l r t (refl_equal ? `1 + r - l`) Pre15).
 
+(* Why obligation from file "quicksort.mlw", characters 1877-1977 *)
 Lemma quicksort_po_1 : 
   (t: (array Z))
   `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`.
@@ -261,6 +269,7 @@ Proof.
 Intuition Omega.
 Save.
 
+(* Why obligation from file "quicksort.mlw", characters 1877-1977 *)
 Lemma quicksort_po_2 : 
   (t: (array Z))
   (Pre1: `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.5 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.6 2003-01-10 12:47:41 filliatr Exp $ i*)
 
 (*s Error location. *)
 
@@ -31,3 +31,4 @@ val set_file : string -> unit
 open Format
 
 val report : formatter -> t -> unit
+val report_obligation : formatter -> t -> unit

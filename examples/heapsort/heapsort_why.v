@@ -64,6 +64,7 @@ Save.
 
 (* Obligations. *)
 
+(* Why obligation from file "heapsort.mlw", characters 791-827 *)
 Lemma heapsort_po_1 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -88,6 +89,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 568-850 *)
 Lemma heapsort_po_2 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -134,6 +136,7 @@ Apply permut_trans with t':=t0; Assumption.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 605-759 *)
 Lemma heapsort_po_3 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -153,6 +156,7 @@ Apply (lem_div2_2 (array_length t) i); Trivial Orelse Omega'.
 Auto with datatypes.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 517-913 *)
 Lemma heapsort_po_4 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -171,6 +175,7 @@ Intuition.
 SameLength t0 t; Auto with *.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 1429-1442 *)
 Lemma heapsort_po_5 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -196,6 +201,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 1452-1473 *)
 Lemma heapsort_po_6 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -232,6 +238,7 @@ Unfold array_id.
 Intros i0 Hi0. Symmetry. Apply H18; Omega'.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 1112-1496 *)
 Lemma heapsort_po_7 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -329,6 +336,7 @@ Assumption.
 Unfold Zwf; Omega'.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 1149-1397 *)
 Lemma heapsort_po_8 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -351,6 +359,7 @@ Tauto.
 Intro; Absurd `(array_length t0)-1+1 <= (array_length t0)-1`; Omega'.
 Save.
 
+(* Why obligation from file "heapsort.mlw", characters 1070-1496 *)
 Lemma heapsort_po_9 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)

@@ -207,6 +207,7 @@ Save.
 
 (* beginning of proof obligations *)
 
+(* Why obligation from file "sqrt.mlw", characters 391-392 *)
 Lemma sqrt_po_1 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -216,6 +217,7 @@ Proof. (* sqrt_po_1 *)
 Auto with *.
 Save.
 
+(* Why obligation from file "sqrt.mlw", characters 417-418 *)
 Lemma sqrt_po_2 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -226,6 +228,7 @@ Proof. (* sqrt_po_2 *)
 Auto with *.
 Save.
 
+(* Why obligation from file "sqrt.mlw", characters 460-467 *)
 Lemma sqrt_po_3 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -238,6 +241,7 @@ Proof. (* sqrt_po_3 *)
 Auto with *.
 Save.
 
+(* Why obligation from file "sqrt.mlw", characters 484-676 *)
 Lemma sqrt_po_4 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -275,6 +279,7 @@ Omega.
 Save.
 
 
+(* Why obligation from file "sqrt.mlw", characters 525-613 *)
 Lemma sqrt_po_5 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -320,6 +325,7 @@ Rewrite H; Omega.
 Rewrite H; Trivial.
 Save.
 
+(* Why obligation from file "sqrt.mlw", characters 679-681 *)
 Lemma sqrt_po_6 : 
   (x: Z)
   (Pre6: `x >= 0`)

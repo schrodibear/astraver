@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.3 2003-01-09 16:50:21 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.4 2003-01-10 12:47:41 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -140,12 +140,13 @@ let print_sequent fmt (hyps,concl) =
 let print_parameter fmt id v =
   fprintf fmt "<parameter ???>"
 
-let print_obligation fmt id sq =
+let print_obligation fmt loc id sq =
+  fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
   fprintf fmt "let %s = `%a`;;@\n@\n" id print_sequent sq
 
 let print_elem fmt = function
   | Parameter (id, v) -> print_parameter fmt id v
-  | Obligation (s, sq) -> print_obligation fmt s sq
+  | Obligation (loc, s, sq) -> print_obligation fmt loc s sq
 
 let output_file fwe =
   let sep = "(* DO NOT EDIT BELOW THIS LINE *)" in

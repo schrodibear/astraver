@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.30 2002-12-10 15:03:14 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.31 2003-01-10 12:47:41 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -178,7 +178,7 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq hyps
 
-let print_lemma fmt (id,s) =
+let print_lemma fmt (_,id,s) =
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
   fprintf fmt "@]@\n"

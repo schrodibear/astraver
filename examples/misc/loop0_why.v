@@ -2,6 +2,7 @@
 Require Why.
 Require Omega.
 
+(* Why obligation from file "loop0.mlw", characters 229-235 *)
 Lemma p_po_1 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -13,6 +14,7 @@ Lemma p_po_1 :
   `x0 >= 0`.
 Proof. Auto with *. Save.
 
+(* Why obligation from file "loop0.mlw", characters 240-327 *)
 Lemma p_po_2 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -29,6 +31,7 @@ Proof.
 Intros; Unfold Zwf; Intuition.
 Save.
 
+(* Why obligation from file "loop0.mlw", characters 229-235 *)
 Lemma p_po_3 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -42,6 +45,7 @@ Proof.
 Intuition.
 Save.
 
+(* Why obligation from file "loop0.mlw", characters 227-340 *)
 Lemma p_po_4 : 
   (x: Z)
   (Pre6: `x >= 0`)
@@ -56,6 +60,7 @@ Proof.
 Intros; Omega.
 Save.
 
+(* Why obligation from file "loop0.mlw", characters 273-289 *)
 Lemma p_po_5 : 
   (x: Z)
   (Pre6: `x >= 0`)

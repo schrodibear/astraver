@@ -6,6 +6,7 @@ Require Why.
 Definition max : Z->Z->Z := 
   [x,y] Cases (Z_le_gt_dec x y) of (left _) => y | (right _) => x end.
 
+(* Why obligation from file "mac_carthy.mlw", characters 122-253 *)
 Lemma f91_po_1 : 
   (Variant1: Z)
   (n0: Z)
@@ -18,6 +19,7 @@ Case (Z_le_gt_dec `0` `101-n`); Intros Pre2 Test2;
 Case (Z_le_gt_dec `0` `101-(n+11)`); Intuition; Omega.
 Save.
 
+(* Why obligation from file "mac_carthy.mlw", characters 122-253 *)
 Lemma f91_po_2 : 
   (Variant1: Z)
   (n0: Z)
@@ -33,6 +35,7 @@ Case (Z_le_gt_dec `0` `101-n`); Intros H Pre2 Test2 aux_1 Post5;
 Case (Z_le_gt_dec `0` `101-aux_1`); Intuition Omega.
 Save.
 
+(* Why obligation from file "mac_carthy.mlw", characters 145-165 *)
 Lemma f91_po_3 : 
   (Variant1: Z)
   (n0: Z)
@@ -49,6 +52,7 @@ Proof.
 Intuition Omega.
 Save.
 
+(* Why obligation from file "mac_carthy.mlw", characters 179-185 *)
 Lemma f91_po_4 : 
   (Variant1: Z)
   (n0: Z)

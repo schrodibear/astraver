@@ -19,6 +19,9 @@ pvs:
 harvey:
 	../bin/why.opt --harvey -d -V test.mlw
 
+hol:
+	../bin/why.opt --hol-light -d -V test.mlw
+
 test:
 	../bin/why.opt -d -V --valid --coq-tactic Magic test.mlw
 	coqc -R ../lib/coq Coq.why test_why.v
