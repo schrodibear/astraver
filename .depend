@@ -53,11 +53,11 @@ src/red.cmx: src/ast.cmi src/misc.cmx src/util.cmx src/red.cmi
 src/rename.cmo: src/error.cmi src/ident.cmi src/misc.cmi src/rename.cmi 
 src/rename.cmx: src/error.cmx src/ident.cmx src/misc.cmx src/rename.cmi 
 src/typing.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/error.cmi \
-    src/ident.cmi src/loc.cmi src/logic.cmi src/misc.cmi src/rename.cmi \
-    src/types.cmi src/util.cmi src/typing.cmi 
+    src/ident.cmi src/loc.cmi src/logic.cmi src/misc.cmi src/options.cmi \
+    src/rename.cmi src/types.cmi src/util.cmi src/typing.cmi 
 src/typing.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/error.cmx \
-    src/ident.cmx src/loc.cmx src/logic.cmi src/misc.cmx src/rename.cmx \
-    src/types.cmi src/util.cmx src/typing.cmi 
+    src/ident.cmx src/loc.cmx src/logic.cmi src/misc.cmx src/options.cmx \
+    src/rename.cmx src/types.cmi src/util.cmx src/typing.cmi 
 src/util.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi src/util.cmi 
 src/util.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \

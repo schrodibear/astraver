@@ -1,17 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.10 2002-02-28 16:15:12 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.11 2002-03-01 10:15:42 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
 open Logic
 open Types
-
-type termination = 
-  | RecArg of int 
-  | Wf of term * term
-
-type variable = Ident.t
 
 (*s Blocks. *)
 
@@ -23,6 +17,8 @@ type 'a block_st =
 type 'a block = 'a block_st list
 
 (*s AST. ['a] is the type of information associated to the nodes. *)
+
+type variable = Ident.t
 
 type 'a t = 
   { desc : 'a t_desc;

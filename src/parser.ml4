@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.11 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.12 2002-03-01 10:15:42 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -65,7 +65,6 @@ let block_statement = gec "block_statement"
 let relation = gec "relation"
 let ident = gec "ident"
 let qualid_ident = gec "qualid_ident"
-let wf_arg = gec "wf_arg"
 let invariant = gec "invariant"
 let variant = gec "variant"
 let assertion = gec "assertion"
@@ -97,10 +96,6 @@ let conj = function
 
 let without_effect loc d = 
   { desc = d; info = { pre = []; post = None; loc = loc } }
-
-let type_without_effect v =
-  { c_result_name = Ident.result; c_result_type = v;
-    c_effect = Effect.bottom; c_pre = []; c_post = None }
 
 let bin_op op loc e1 e2 =
   without_effect loc
@@ -217,7 +212,7 @@ EXTEND
         { c_result_name = id; c_result_type = v;
 	  c_effect = e; c_pre = list_of_some p; c_post = q } 
     | v = type_v -> 
-	type_without_effect v ] ] 
+	type_c_of_v v ] ] 
   ;
   effects:
   [ [ r = OPT reads; w = OPT writes ->
@@ -418,10 +413,6 @@ i*)
   ;
 
   (* Other entries (invariants, etc.) *)
-  wf_arg:
-  [ [ "{"; LIDENT "wf"; c = term; "for"; w = term; "}" -> Wf (c,w)
-    | "{"; LIDENT "wf"; n = INT; "}" ->	RecArg (int_of_string n) ] ]
-  ;
   invariant:
   [ [ LIDENT "invariant"; c = assertion -> c ] ]
   ;
