@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/search.why", characters 427-508 *)
+(* Why obligation from file "why/search.why", characters 458-541 *)
 Lemma index_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -25,7 +25,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 521-527 *)
+(* Why obligation from file "why/search.why", characters 556-562 *)
 Lemma index_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -57,7 +57,7 @@ subst.
 auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 544-564 *)
+(* Why obligation from file "why/search.why", characters 581-601 *)
 Lemma index_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -91,7 +91,7 @@ apply Test2.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 191-571 *)
+(* Why obligation from file "why/search.why", characters 208-610 *)
 Lemma index_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -120,7 +120,7 @@ omega.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 242-385 *)
+(* Why obligation from file "why/search.why", characters 263-412 *)
 Lemma index_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),

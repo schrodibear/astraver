@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.75 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.76 2005-04-04 14:05:15 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -390,6 +390,8 @@ let rec type_predicate env p0 = match p0.lexpr_node with
 	    error loc "comparison between pointer and integer" (* C warning *)
 	    (* Prel (t1, r, t2) *)
 	| (Tvar "addr", Tvar "addr") -> Prel (t1, r, t2)
+	| Tvar _ , Tvar _ ->  
+	    Prel (t1, r, t2)
 	| _ ->
 	    error loc "invalid operands to comparison"
       end

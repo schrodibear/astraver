@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/swap.why", characters 265-292 *)
+(* Why obligation from file "why/swap.why", characters 157-184 *)
 Lemma swap_impl_po_1 : 
   forall (t: pointer),
   forall (i: Z),
@@ -15,7 +15,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 377-404 *)
+(* Why obligation from file "why/swap.why", characters 284-311 *)
 Lemma swap_impl_po_2 : 
   forall (t: pointer),
   forall (i: Z),
@@ -33,7 +33,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 351-405 *)
+(* Why obligation from file "why/swap.why", characters 258-312 *)
 Lemma swap_impl_po_3 : 
   forall (t: pointer),
   forall (i: Z),
@@ -54,7 +54,7 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 351-405 *)
+(* Why obligation from file "why/swap.why", characters 258-312 *)
 Lemma swap_impl_po_4 : 
   forall (t: pointer),
   forall (i: Z),
@@ -72,7 +72,7 @@ Lemma swap_impl_po_4 :
   forall (Post3: aux_3 = (acc intP (shift t j))),
   forall (Pre1: (valid alloc caduceus_2)),
   forall (intP0: ((memory) Z)),
-  forall (Post11: intP0 = (upd intP caduceus_2 aux_3)),
+  forall (Post12: intP0 = (upd intP caduceus_2 aux_3)),
   (forall (result:pointer),
    (result = (shift t j) ->
     (forall (intP1:((memory) Z)),
