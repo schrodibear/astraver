@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.mli,v 1.8 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: cmake.mli,v 1.1 2004-11-08 16:10:01 filliatr Exp $ i*)
 
-(* Interpretation of C programs *)
+(* Makefile generation *)
 
-open Output
+(* declares a function [f] in file [file] *)
+val add : file:string -> f:string -> unit
 
-val interp : Cast.tfile -> 
-  (string * why_decl) list * why_decl list * prover_decl list
+(* generates the makefile for a given C file *)
+val makefile : string -> unit
 

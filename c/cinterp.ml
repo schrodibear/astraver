@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.108 2004-11-05 16:24:18 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.109 2004-11-08 16:10:01 filliatr Exp $ i*)
 
 
 open Format
@@ -1376,8 +1376,8 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       let tparams,pre,post,tspec = 
 	interp_function_spec id spec ctype params in
       let f = id.fun_unique_name in
-      lprintf "translating function %s@." f;
-      begin try
+      if Coptions.verify id.fun_name then begin try
+	lprintf "translating function %s@." f;
 	abrupt_return := None;
 	let may_break = ref false in
 	let list_of_refs =
@@ -1400,7 +1400,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	    (fun (mut_id,id) bl ->
 	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
 	printf "generating Why code for function %s@." f;
-	((Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
+	((f, Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
 	 tspec :: why_spec,
 	 prover_decl)
       with Error (_, Cerror.Unsupported s) ->
@@ -1409,6 +1409,9 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	(why_code,
 	 tspec :: why_spec,
 	 prover_decl)
+      end else begin
+	lprintf "assuming function %s@." f;
+	(why_code, tspec :: why_spec, prover_decl)
       end
 
 let interp l =

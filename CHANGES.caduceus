@@ -1,6 +1,10 @@
 Note: These are the changes for Caduceus.
 
  
+ o new options:
+   -s to generate one file for each C function
+   -verify f,g,... to specify the set of functions to verify; implies -s
+   -assume f,g,... to specify functions not to verify (assumed to be correct)
  o fixed bug with assigned parameters and assigns clauses
  o fixed bug with multiple assigned parameters
 

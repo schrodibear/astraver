@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/queue.why", characters 456-475 *)
+(* Why obligation from file "why/queue.why", characters 459-478 *)
 Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -21,7 +21,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 606-629 *)
+(* Why obligation from file "why/queue.why", characters 611-634 *)
 Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -44,7 +44,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 678-929 *)
+(* Why obligation from file "why/queue.why", characters 684-939 *)
 Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -145,7 +145,7 @@ rewrite acc_upd in H15; omega.
 rewrite acc_upd in H9; omega.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 2581-2600 *)
+(* Why obligation from file "why/queue.why", characters 2601-2620 *)
 Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -163,7 +163,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 2727-2749 *)
+(* Why obligation from file "why/queue.why", characters 2745-2767 *)
 Lemma push_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -186,7 +186,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 2796-3038 *)
+(* Why obligation from file "why/queue.why", characters 2813-3006 *)
 Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
@@ -212,7 +212,7 @@ Lemma push_impl_po_3 :
   forall (Post7: caduceus2 = (acc last caduceus1)),
   forall (Pre3: (valid alloc caduceus1)),
   forall (last0: ((memory) Z)),
-  forall (Post24: last0 = (upd last caduceus1 (1 + caduceus2))),
+  forall (Post23: last0 = (upd last caduceus1 (1 + caduceus2))),
   forall (result0: Z),
   forall (Post6: result0 = caduceus2),
   (forall (result:pointer),
@@ -289,7 +289,7 @@ rewrite acc_upd in H9; omega.
 Save.
 
 
-(* Why obligation from file "why/queue.why", characters 4834-4853 *)
+(* Why obligation from file "why/queue.why", characters 4788-4807 *)
 Lemma test_impl_po_1 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -313,7 +313,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/queue.why", characters 4817-4858 *)
+(* Why obligation from file "why/queue.why", characters 4771-4812 *)
 Lemma test_impl_po_2 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -338,7 +338,7 @@ Lemma test_impl_po_2 :
   forall (first0: ((memory) Z)),
   forall (full0: ((memory) Z)),
   forall (caduceus_1: Z),
-  forall (Post5: ((acc full0 q) = 0 /\ caduceus_1 =
+  forall (Post4: ((acc full0 q) = 0 /\ caduceus_1 =
                  (acc intP (shift (acc contents q) (acc first q)))) /\
                  (((assigns alloc full full0 (pointer_loc q)) /\
                  (assigns alloc first first0 (pointer_loc q))) /\

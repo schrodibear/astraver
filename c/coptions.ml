@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.13 2004-10-06 15:10:02 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.14 2004-11-08 16:10:01 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -56,6 +56,7 @@ let verbose = ref false
 let werror = ref false
 let why_opt = ref ""
 let coq_tactic = ref "intuition"
+let separate = ref false
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -67,6 +68,29 @@ Copyright (c) 2003- Jean-Christophe Filliâtre and Claude Marché
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Cversion.version Cversion.date;
   exit 0
+
+type verification = All | Verify | Assume
+let verification = ref All
+
+let comma = Str.regexp "[ \t]*,[ \t]*"
+let split = Str.split comma
+
+let functions = Hashtbl.create 97
+
+let verify s =
+  separate := true;
+  if !verification = Assume then begin
+    Printf.eprintf "you cannot use both -verify and -assume\n"; exit 1
+  end;
+  verification := Verify;
+  List.iter (fun f -> Hashtbl.add functions f ()) (split s)
+
+let assume s =
+  if !verification = Verify then begin
+    Printf.eprintf "you cannot use both -verify and -assume\n"; exit 1
+  end;
+  verification := Assume;
+  List.iter (fun f -> Hashtbl.add functions f ()) (split s)
 
 let _ = 
   Arg.parse 
@@ -94,6 +118,12 @@ let _ =
           "  treats warnings as errors";
 	"--version", Arg.Unit version,
           "  prints version and exit";
+	"-s", Arg.Set separate,
+	  "  a separate file for each function";
+	"-verify", Arg.String verify,
+	  " <f,g,h...>  specifies the functions to verify; implies -s";
+	"-assume", Arg.String assume,
+	  " <f,g,h...>  specifies functions not to be verified (i.e. assumed)";
       ]
       add_file "caduceus [options] file..."
 
@@ -107,4 +137,10 @@ let cpp_command = !cpp_command
 let cpp_dump = !cpp_dump
 let why_opt = !why_opt
 let coq_tactic = !coq_tactic
+let separate = !separate
+
+let verify f = match !verification with
+  | All -> true
+  | Verify -> Hashtbl.mem functions f
+  | Assume -> not (Hashtbl.mem functions f)
 

@@ -256,11 +256,13 @@ c/cltyping.cmo: c/cast.cmi c/cconst.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi \
 c/cltyping.cmx: c/cast.cmi c/cconst.cmx c/cenv.cmx c/cerror.cmi c/clogic.cmi \
     c/creport.cmx src/env.cmx c/info.cmx src/loc.cmx c/cltyping.cmi 
 c/cmain.cmo: c/ceffect.cmi c/cerror.cmi c/cinterp.cmi c/clexer.cmo \
-    src/compat.cmo c/coptions.cmi c/cpp.cmi c/creport.cmi c/ctyping.cmi \
-    src/lib.cmi src/loc.cmi c/output.cmi src/pp.cmi 
+    c/cmake.cmi src/compat.cmo c/coptions.cmi c/cpp.cmi c/creport.cmi \
+    c/ctyping.cmi src/lib.cmi src/loc.cmi c/output.cmi src/pp.cmi 
 c/cmain.cmx: c/ceffect.cmx c/cerror.cmi c/cinterp.cmx c/clexer.cmx \
-    src/compat.cmx c/coptions.cmx c/cpp.cmx c/creport.cmx c/ctyping.cmx \
-    src/lib.cmx src/loc.cmx c/output.cmx src/pp.cmx 
+    c/cmake.cmx src/compat.cmx c/coptions.cmx c/cpp.cmx c/creport.cmx \
+    c/ctyping.cmx src/lib.cmx src/loc.cmx c/output.cmx src/pp.cmx 
+c/cmake.cmo: c/coptions.cmi src/pp.cmi c/cmake.cmi 
+c/cmake.cmx: c/coptions.cmx src/pp.cmx c/cmake.cmi 
 c/coptions.cmo: c/cversion.cmo c/coptions.cmi 
 c/coptions.cmx: c/cversion.cmx c/coptions.cmi 
 c/cparser.cmo: c/cast.cmi c/cerror.cmi c/clogic.cmi c/coptions.cmi \

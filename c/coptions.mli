@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.9 2004-10-06 15:10:02 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.10 2004-11-08 16:10:01 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -32,8 +32,11 @@ val cpp_command : string
 val cpp_dump : bool
 val why_opt : string
 val coq_tactic : string
+val separate : bool
 
 val files : unit -> string list 
+
+val verify : string -> bool
 
 (*s The log file *)
 

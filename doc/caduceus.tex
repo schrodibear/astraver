@@ -937,6 +937,28 @@ void f(int n) \{
     Stop after pre-processing and dump the pre-processed file on
     standard output (mainly useful for debugging).
 
+  \item[Proof obligations generation:] ~\par
+  \item[\texttt{-why-opt} \textit{string}]: ~\par
+    Pass options to \why\ (to be used in the generated \texttt{Makefile}).
+  \item[\texttt{-s}]: ~\par
+    Use a separate file for each C function.
+    
+    The default behaviour is to generate a single \why\ file 
+    for each C file and therefore to get all proof obligations for
+    each C file into the same prover file (e.g. all \coq\ obligations
+    in \texttt{coq/foo\_why.v} for a C file \texttt{foo.c}).
+    With this option \texttt{-s}, a separate \why\ file is generated
+    for each C function and therefore a separate prover file
+    (e.g. the verification of a function \texttt{f} from
+    \texttt{foo.c} will generate proof obligations into the \coq\ file
+    \texttt{coq/foo\_\_f\_why.v}).
+  \item[\texttt{-verify} \textit{f,g,h,\dots}]: ~\par
+    Specify the sets of functions to verify. Implies \texttt{-s}.
+
+  \item[Prover specific options:] ~\par
+  \item[\texttt{-coq-tactic} \textit{tactic}]: ~\par
+    Pass a default Coq tactic to \why\ (in the generated \texttt{Makefile}).
+
 \end{description}
 
 \section{Input Files Syntax}
