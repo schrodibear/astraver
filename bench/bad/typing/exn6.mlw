@@ -1,0 +1,7 @@
+
+(* E undeclared in f effects *)
+
+exception E
+
+external f : unit -> { } unit { true | E => false }
+

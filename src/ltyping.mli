@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.8 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.9 2003-01-10 15:27:59 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -37,8 +37,10 @@ val term :
   LabelSet.t -> logical_env -> lexpr -> term * pure_type
 
 val type_assert : LabelSet.t -> logical_env -> lexpr asst -> assertion
+
 val type_post : 
-  LabelSet.t -> logical_env -> Ident.t -> type_v -> lexpr post -> postcondition
+  LabelSet.t -> logical_env -> Ident.t -> type_v -> Effect.t -> lexpr post -> 
+  postcondition
 
 val binders : 
   Loc.t -> LabelSet.t -> local_env -> logical_env -> 

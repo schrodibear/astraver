@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.12 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.13 2003-01-10 15:27:58 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -242,10 +242,14 @@ and type_const = function
 
 let type_assert lab lenv a = { a with a_value = predicate lab lenv a.a_value }
 
-let type_post lab lenv id v (a,al) = 
+let type_post lab lenv id v ef (a,al) = 
   let lab' = LabelSet.add "" lab in 
   let a' = let lenv' = Env.add_logic id v lenv in type_assert lab' lenv' a in
+  let xs = Effect.get_exns ef in
   let type_exn_post (x,a) =
+    let loc = a.a_value.pp_loc in
+    if not (is_exception x) then raise_located loc (UnboundException x);
+    if not (List.mem x xs) then raise_located loc (CannotBeRaised x);
     let lenv' = match find_exception x with
       | None -> lenv
       | Some pt -> Env.add_logic result (PureType pt) lenv
@@ -282,7 +286,7 @@ and type_c loc lab env lenv c =
   let v = type_v loc lab env lenv c.pc_result_type in
   let id = c.pc_result_name in
   let p = List.map (type_assert lab lenv) c.pc_pre in
-  let q = option_app (type_post lab lenv id v) c.pc_post in
+  let q = option_app (type_post lab lenv id v c.pc_effect) c.pc_post in
   let s = subst_onev id Ident.result in
   let q = optpost_app (subst_in_predicate s) q in
   { c_result_name = c.pc_result_name; c_effect = c.pc_effect;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.86 2002-12-11 10:33:13 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.87 2003-01-10 15:27:59 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -232,7 +232,7 @@ let state_post lab env (id,v,ef) loc = function
       Effect.bottom, None
   | Some q ->
       check_unbound_exn loc (snd q);
-      let q = type_post lab (logical_env env) id v q in
+      let q = type_post lab (logical_env env) id v ef q in
       let ids = post_vars q in
       let ef,q = 
 	Idset.fold
