@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.20 2004-04-06 12:49:09 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.21 2004-04-07 07:45:49 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -235,12 +235,11 @@ let logic_typing fmt =
 		  | _ -> acc) pl []
 	   in
 	   fprintf fmt
-             "@[(BG_PUSH (FORALL (%a) (PATS (MPAT %a))@ (IMPLIES (AND %a)
+             "@[(BG_PUSH (FORALL (%a)@\n;; @[(PATS (IS%a (%a %a)))@]@\n(IMPLIES (AND %a)
                (EQ (IS%a (%a %a)) |@@true|))))@]@\n@\n"
 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
-	     (print_list space (fun fmt (x,t) -> 
-				  fprintf fmt "(IS%s %s)" t x))
-	     epl
+	     Ident.print ty Ident.print f 
+	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
 	     (print_list space (fun fmt (x,t) -> 
 				  fprintf fmt "(EQ (IS%s %s) |@@true|)" t x))
 	     epl

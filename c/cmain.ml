@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.27 2004-03-26 16:28:29 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.28 2004-04-07 07:45:48 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -130,7 +130,7 @@ let main () =
 	    fprintf fmt "\tcat simplify/caduceus_why.sx simplify/caduceus_spec_why.sx $< > $<.all@\n";
 	    fprintf fmt "\tSimplify $<.all@\n@\n";
 	    fprintf fmt "simplify/%s_why.sx: why/caduceus_spec.why why/%s.why@\n" f f;
-	    fprintf fmt "\twhy -simplify -dir simplify $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f;
+	    fprintf fmt "\twhy -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f;
 
 	    fprintf fmt "include %s.depend@\n@\n" f;
 	    fprintf fmt "depend %s.depend: coq/caduceus_spec_why.v coq/caduceus_tactics.v coq/%s_why.v@\n" f f;
