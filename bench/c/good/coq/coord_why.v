@@ -9,7 +9,7 @@ Lemma g_impl_po_1 :
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (Pre5: (0 <= index /\ index < 3) /\ (separation_intern_tab tab) /\
-                (valid_tab alloc tab)),
+                (valid_tab tab alloc)),
   (valid alloc (shift tab index)).
 Proof.
 unfold valid_tab .
@@ -20,7 +20,7 @@ Save.
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
-  forall (Pre19: (separation_intern_tab tab) /\ (valid_tab alloc tab)),
+  forall (Pre19: (separation_intern_tab tab) /\ (valid_tab tab alloc)),
   forall (caduceus_6: pointer),
   forall (Post3: caduceus_6 = (shift tab 0)),
   (valid alloc caduceus_6).
@@ -37,7 +37,7 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (tab: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre19: (separation_intern_tab tab) /\ (valid_tab alloc tab)),
+  forall (Pre19: (separation_intern_tab tab) /\ (valid_tab tab alloc)),
   forall (caduceus_6: pointer),
   forall (Post3: caduceus_6 = (shift tab 0)),
   forall (Pre3: (valid alloc caduceus_6)),

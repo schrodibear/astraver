@@ -13,11 +13,11 @@ Lemma f_impl_po_1 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre15: (separation_intern_tab tab) /\
-                 (separation_tab_v alloc v x tab) /\
-                 (separation_tab_s alloc t u s x tab) /\
-                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                 (separation_v_s alloc t u s v)),
+                 (separation_tab_v tab x v alloc) /\
+                 (separation_tab_s tab x s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                 (separation_v_s v s u t alloc)),
   (valid alloc s).
 Proof.
 unfold  valid_s; intuition.
@@ -33,11 +33,11 @@ Lemma f_impl_po_2 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre15: (separation_intern_tab tab) /\
-                 (separation_tab_v alloc v x tab) /\
-                 (separation_tab_s alloc t u s x tab) /\
-                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                 (separation_v_s alloc t u s v)),
+                 (separation_tab_v tab x v alloc) /\
+                 (separation_tab_s tab x s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                 (separation_v_s v s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_6: pointer),
   forall (Post3: caduceus_6 = (shift (acc t s) 0)),
@@ -58,11 +58,11 @@ Lemma f_impl_po_3 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre15: (separation_intern_tab tab) /\
-                 (separation_tab_v alloc v x tab) /\
-                 (separation_tab_s alloc t u s x tab) /\
-                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                 (separation_v_s alloc t u s v)),
+                 (separation_tab_v tab x v alloc) /\
+                 (separation_tab_s tab x s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                 (separation_v_s v s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_6: pointer),
   forall (Post3: caduceus_6 = (shift (acc t s) 0)),
@@ -113,11 +113,11 @@ Lemma g_impl_po_1 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre3: (separation_intern_tab tab) /\
-                (separation_tab_v alloc v x tab) /\
-                (separation_tab_s alloc t u s x tab) /\
-                (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                (separation_v_s alloc t u s v)),
+                (separation_tab_v tab x v alloc) /\
+                (separation_tab_s tab x s u t alloc) /\
+                (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                (separation_v_s v s u t alloc)),
   (valid alloc (shift v 0)).
 Proof.
 intuition.
@@ -134,11 +134,11 @@ Lemma h_impl_po_1 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre5: (separation_intern_tab tab) /\
-                (separation_tab_v alloc v x tab) /\
-                (separation_tab_s alloc t u s x tab) /\
-                (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                (separation_v_s alloc t u s v)),
+                (separation_tab_v tab x v alloc) /\
+                (separation_tab_s tab x s u t alloc) /\
+                (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                (separation_v_s v s u t alloc)),
   (valid alloc (shift tab 0)).
 Proof.
 intuition.
@@ -155,11 +155,11 @@ Lemma h_impl_po_2 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre5: (separation_intern_tab tab) /\
-                (separation_tab_v alloc v x tab) /\
-                (separation_tab_s alloc t u s x tab) /\
-                (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                (separation_v_s alloc t u s v)),
+                (separation_tab_v tab x v alloc) /\
+                (separation_tab_s tab x s u t alloc) /\
+                (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                (separation_v_s v s u t alloc)),
   forall (Pre2: (valid alloc (shift tab 0))),
   (valid alloc (shift (acc x (shift tab 0)) 0)).
 Proof.
@@ -180,11 +180,11 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre58: (separation_intern_tab tab) /\
-                 (separation_tab_v alloc v x tab) /\
-                 (separation_tab_s alloc t u s x tab) /\
-                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                 (separation_v_s alloc t u s v)),
+                 (separation_tab_v tab x v alloc) /\
+                 (separation_tab_s tab x s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                 (separation_v_s v s u t alloc)),
   (valid alloc s).
 Proof.
 intuition.
@@ -202,11 +202,11 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre58: (separation_intern_tab tab) /\
-                 (separation_tab_v alloc v x tab) /\
-                 (separation_tab_s alloc t u s x tab) /\
-                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                 (separation_v_s alloc t u s v)),
+                 (separation_tab_v tab x v alloc) /\
+                 (separation_tab_s tab x s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                 (separation_v_s v s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_24: pointer),
   forall (Post3: caduceus_24 = (shift (acc t s) 0)),
@@ -230,11 +230,11 @@ Lemma invariants_initially_established_impl_po_3 :
   forall (v: pointer),
   forall (x: ((memory) pointer)),
   forall (Pre58: (separation_intern_tab tab) /\
-                 (separation_tab_v alloc v x tab) /\
-                 (separation_tab_s alloc t u s x tab) /\
-                 (separation_intern_s alloc t u s) /\ (valid_v alloc v) /\
-                 (valid_s alloc t u s) /\ (valid_tab alloc x tab) /\
-                 (separation_v_s alloc t u s v)),
+                 (separation_tab_v tab x v alloc) /\
+                 (separation_tab_s tab x s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
+                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+                 (separation_v_s v s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_24: pointer),
   forall (Post3: caduceus_24 = (shift (acc t s) 0)),

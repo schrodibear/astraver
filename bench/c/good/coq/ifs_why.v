@@ -11,8 +11,8 @@ Lemma V4A_impl_po_1 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -32,8 +32,8 @@ Lemma V4A_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -54,8 +54,8 @@ Lemma V4A_impl_po_3 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -80,8 +80,8 @@ Lemma V4A_impl_po_4 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -119,8 +119,8 @@ Lemma V4A_impl_po_5 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -211,8 +211,8 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (Ch_Pn: pointer),
   forall (SPMEP: pointer),
   forall (alloc: alloc_table),
-  forall (Pre25: (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+  forall (Pre25: (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (caduceus_8: pointer),
   forall (Post3: caduceus_8 = (shift Ch_Pn 0)),
   (valid alloc caduceus_8).
@@ -229,8 +229,8 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (SPMEP: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre25: (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
-                 (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
+  forall (Pre25: (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
+                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
   forall (caduceus_8: pointer),
   forall (Post3: caduceus_8 = (shift Ch_Pn 0)),
   forall (Pre3: (valid alloc caduceus_8)),

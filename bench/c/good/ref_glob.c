@@ -23,6 +23,20 @@ void f2() {
   g(&x);
 }
 
+typedef struct{ int c1; int c2; } las;
+las * plas; 
+
+/*@ 
+  @ requires \valid(plas) 
+  @ assigns plas->c1,plas->c2 
+  @*/ 
+void f4() 
+{ 
+  g(&plas->c1); 
+  plas->c2=2; 
+}
+
+
 
 int t[3] = {1,2,3};
 
@@ -39,3 +53,4 @@ void h(int **p) {
 void f3() {
   h(&t);
 }
+

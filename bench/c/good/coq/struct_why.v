@@ -53,7 +53,7 @@ Lemma g_impl_po_1 :
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
-                 (valid_s alloc t s)),
+                 (valid_s s t alloc)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   (valid alloc s).
@@ -68,7 +68,7 @@ Lemma g_impl_po_2 :
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
-                 (valid_s alloc t s)),
+                 (valid_s s t alloc)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -86,7 +86,7 @@ Lemma g_impl_po_3 :
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
-                 (valid_s alloc t s)),
+                 (valid_s s t alloc)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -108,7 +108,7 @@ Lemma g_impl_po_4 :
   forall (t: ((memory) pointer)),
   forall (x: ((memory) Z)),
   forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
-                 (valid_s alloc t s)),
+                 (valid_s s t alloc)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -131,7 +131,7 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre12: (separation_intern_s s) /\ (valid_s alloc t s)),
+  forall (Pre12: (separation_intern_s s) /\ (valid_s s t alloc)),
   forall (caduceus_3: pointer),
   forall (Post3: caduceus_3 = s),
   (valid alloc caduceus_3).
@@ -148,7 +148,7 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
   forall (z: ((memory) Z)),
-  forall (Pre12: (separation_intern_s s) /\ (valid_s alloc t s)),
+  forall (Pre12: (separation_intern_s s) /\ (valid_s s t alloc)),
   forall (caduceus_3: pointer),
   forall (Post3: caduceus_3 = s),
   forall (Pre3: (valid alloc caduceus_3)),

@@ -1,10 +1,12 @@
 Note: These are the changes for Caduceus.
 
-version 0.69, December 16th, 2004
+version 0.69, still to be released
 =================================
-
  o automatic invariants for expressing the so-called 'separation' of
    global variables
+ o proof obligations added to show that global variables
+   initializations satisfy all user invariants. Obligation names
+   are of the form "invariants_initially_established_po_..."
  o automatic addition of invariants for constant values. new option
    -closed to assume a closed program, i.e where all files 
    are given, allowing more invariants 
