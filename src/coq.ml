@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.28 2002-04-17 08:48:58 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.29 2002-04-17 14:52:16 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -133,7 +133,7 @@ let print_predicate fmt p =
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = bsubst_in_predicate [n, Tvar id'] p in
-	fprintf fmt "(@[(%s:%a) %a@])" (Ident.string id')
+	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
     | p -> 
 	fprintf fmt "(%a)" print0 p

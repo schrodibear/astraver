@@ -4,3 +4,4 @@ all:
 	make -C binary-search
 	make -C bresenham
 	make -C quicksort
+	make -C edit-distance
