@@ -4,7 +4,6 @@
 #include "list.h"
 
 /*@ requires is_list(p0)
-  @ (* assigns ??? *)
   @ ensures \exists plist l0; llist(\result, l0) && \old(llist(p0, rev(l0)))
   @*/
 list rev(list p0) {
@@ -15,7 +14,7 @@ list rev(list p0) {
         \exists plist lp; \exists plist lr;
           llist(p, lp) && llist(r, lr) && disjoint(lp, lr) &&
           \forall plist l; 
-            \old(llist(p0, l)) => eq_list(app(rev(lr), lp), rev(l))
+            \old(llist(p0, l)) => app(rev(lr), lp) == rev(l)
     @ variant store_pointer_pair(r) for ll_order */
   while (r != nil) {
     list q = r;

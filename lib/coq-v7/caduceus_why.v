@@ -18,7 +18,7 @@ Parameter assign_loc : Set.
 
 (*Why*) Parameter null : pointer.
 
-(*Why logic*) Definition block_length : alloc -> pointer -> Z.
+(*Why logic*) Definition block_length : alloc_table -> pointer -> Z.
 Admitted.
 
 (*Why logic*) Definition base_addr : pointer -> addr.
@@ -55,14 +55,15 @@ Admitted.
   (p: pointer)(q: pointer)
   (sig_1 bool [result: bool]((if result then ~(p = q) else p = q))).
 
-(*Why predicate*) Definition valid  [a:alloc] [p:pointer]
+(*Why predicate*) Definition valid  [a:alloc_table] [p:pointer]
   := ~(p = null) /\ `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
 
-(*Why predicate*) Definition valid_index  [a:alloc] [p:pointer] [i:Z]
+(*Why predicate*) Definition valid_index  [a:alloc_table] [p:pointer] [i:Z]
   := ~(p = null) /\ `0 <= (offset p) + i` /\
      `(offset p) + i < (block_length a p)`.
 
-(*Why predicate*) Definition valid_range  [a:alloc] [p:pointer] [i:Z] [j:Z]
+(*Why predicate*) Definition valid_range  [a:alloc_table] [p:pointer] [i:Z]
+  [j:Z]
   := ~(p = null) /\ `0 <= (offset p) + i` /\ `i <= j` /\
      `(offset p) + j < (block_length a p)`.
 
@@ -75,7 +76,7 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma block_length_shift :
-  ((a:alloc)
+  ((a:alloc_table)
    ((p:pointer) ((i:Z) `(block_length a (shift p i)) = (block_length a p)`))).
 Admitted.
 
@@ -88,7 +89,7 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma base_addr_block_length :
-  ((a:alloc)
+  ((a:alloc_table)
    ((p1:pointer)
     ((p2:pointer)
      ((base_addr p1) = (base_addr p2) ->
@@ -126,12 +127,12 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma valid_index_valid_shift :
-  ((a:alloc)
+  ((a:alloc_table)
    ((p:pointer) ((i:Z) ((valid_index a p i) -> (valid a (shift p i)))))).
 Admitted.
 
 (*Why axiom*) Lemma valid_range_valid_shift :
-  ((a:alloc)
+  ((a:alloc_table)
    ((p:pointer)
     ((i:Z)
      ((j:Z)
@@ -185,8 +186,8 @@ Admitted.
 Implicits acc [1].
 
 (*Why*) Parameter acc_ :
-  (A5: Set)(p: pointer)(alloc: alloc)(m: ((memory) A5))(H: (valid alloc p))
-  (sig_1 A5 [result: A5](result = (acc m p))).
+  (A5: Set)(p: pointer)(alloc: alloc_table)(m: ((memory) A5))
+  (H: (valid alloc p))(sig_1 A5 [result: A5](result = (acc m p))).
 
 (*Why logic*) Definition upd :
   (A33:Set) ((memory) A33) -> pointer -> A33 -> ((memory) A33).
@@ -194,7 +195,7 @@ Admitted.
 Implicits upd [1].
 
 (*Why*) Parameter upd_ :
-  (A11: Set)(p: pointer)(v: A11)(alloc: alloc)(m: ((memory) A11))
+  (A11: Set)(p: pointer)(v: A11)(alloc: alloc_table)(m: ((memory) A11))
   (H: (valid alloc p))
   (sig_2 ((memory) A11) unit [m0: ((memory) A11)][result: unit]
    (m0 = (upd m p v))).
@@ -219,7 +220,7 @@ Admitted.
      ((a:A36) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
-(*Why logic*) Definition fresh : alloc -> pointer -> Prop.
+(*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -241,8 +242,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns [A37:Set] [a:alloc] [m1:((memory) A37)]
-  [m2:((memory) A37)] [l:assign_loc]
+(*Why predicate*) Definition assigns [A37:Set] [a:alloc_table]
+  [m1:((memory) A37)] [m2:((memory) A37)] [l:assign_loc]
   := ((p:pointer) ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicits assigns [1].
 

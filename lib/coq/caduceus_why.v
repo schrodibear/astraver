@@ -6,7 +6,7 @@ Require Export WhyFloat.
 
 Parameter addr : Set.
 Parameter pointer : Set. (* = addr * Z *)
-Parameter alloc : Set.
+Parameter alloc_table : Set.
 Parameter memory : Set -> Set.
 Parameter assign_loc : Set.
 
@@ -18,7 +18,7 @@ Parameter assign_loc : Set.
 
 (*Why*) Parameter null : pointer.
 
-(*Why logic*) Definition block_length : alloc -> pointer -> Z.
+(*Why logic*) Definition block_length : alloc_table -> pointer -> Z.
 Admitted.
 
 (*Why logic*) Definition base_addr : pointer -> addr.
@@ -53,14 +53,15 @@ Admitted.
   forall (p: pointer), forall (q: pointer),
   (sig_1 bool (fun (result: bool)  => ((if result then ~(p = q) else p = q)))).
 
-(*Why predicate*) Definition valid  (a:alloc) (p:pointer)
+(*Why predicate*) Definition valid  (a:alloc_table) (p:pointer)
   := ~(p = null) /\ 0 <= (offset p) /\ (offset p) < (block_length a p).
 
-(*Why predicate*) Definition valid_index  (a:alloc) (p:pointer) (i:Z)
+(*Why predicate*) Definition valid_index  (a:alloc_table) (p:pointer) (i:Z)
   := ~(p = null) /\ 0 <= ((offset p) + i) /\ ((offset p) + i) <
      (block_length a p).
 
-(*Why predicate*) Definition valid_range  (a:alloc) (p:pointer) (i:Z) (j:Z)
+(*Why predicate*) Definition valid_range  (a:alloc_table) (p:pointer) (i:Z)
+  (j:Z)
   := ~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
      (block_length a p).
 
@@ -75,7 +76,7 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma block_length_shift :
-  (forall (a:alloc),
+  (forall (a:alloc_table),
    (forall (p:pointer),
     (forall (i:Z), (block_length a (shift p i)) = (block_length a p)))).
 Admitted.
@@ -89,7 +90,7 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma base_addr_block_length :
-  (forall (a:alloc),
+  (forall (a:alloc_table),
    (forall (p1:pointer),
     (forall (p2:pointer),
      ((base_addr p1) = (base_addr p2) -> (block_length a p1) =
@@ -126,13 +127,13 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma valid_index_valid_shift :
-  (forall (a:alloc),
+  (forall (a:alloc_table),
    (forall (p:pointer),
     (forall (i:Z), ((valid_index a p i) -> (valid a (shift p i)))))).
 Admitted.
 
 (*Why axiom*) Lemma valid_range_valid_shift :
-  (forall (a:alloc),
+  (forall (a:alloc_table),
    (forall (p:pointer),
     (forall (i:Z),
      (forall (j:Z),
@@ -194,7 +195,7 @@ Admitted.
 Implicit Arguments acc.
 
 (*Why*) Parameter acc_ :
-  forall (A5: Set), forall (p: pointer), forall (alloc: alloc),
+  forall (A5: Set), forall (p: pointer), forall (alloc: alloc_table),
   forall (m: ((memory) A5)), forall (H: (valid alloc p)),
   (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
@@ -205,7 +206,7 @@ Implicit Arguments upd.
 
 (*Why*) Parameter upd_ :
   forall (A11: Set), forall (p: pointer), forall (v: A11),
-  forall (alloc: alloc), forall (m: ((memory) A11)),
+  forall (alloc: alloc_table), forall (m: ((memory) A11)),
   forall (H: (valid alloc p)),
   (sig_2 ((memory) A11) unit
    (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
@@ -232,7 +233,7 @@ Admitted.
      (forall (a:A36), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
-(*Why logic*) Definition fresh : alloc -> pointer -> Prop.
+(*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -253,8 +254,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns (A37:Set) (a:alloc) (m1:((memory) A37))
-  (m2:((memory) A37)) (l:assign_loc)
+(*Why predicate*) Definition assigns (A37:Set) (a:alloc_table)
+  (m1:((memory) A37)) (m2:((memory) A37)) (l:assign_loc)
   := (forall (p:pointer),
       ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicit Arguments assigns.

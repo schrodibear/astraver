@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.17 2004-04-01 13:57:47 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.18 2004-04-05 08:29:23 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -318,6 +318,6 @@ let output_file fwe =
        if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
     sep
     (fun fmt -> 
-       logic_typing fmt;
+       (* logic_typing fmt; *)
        Queue.iter (print_elem fmt) queue)
 

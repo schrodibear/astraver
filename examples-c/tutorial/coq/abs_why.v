@@ -6,7 +6,7 @@ Require Export caduceus_spec_why.
 (* Why obligation from file "why/abs.why", characters 89-104 *)
 Lemma abs1_impl_po_1 : 
   forall (p: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   (valid alloc p).
 Proof.
 intuition.
@@ -15,7 +15,7 @@ Admitted.
 (* Why obligation from file "why/abs.why", characters 72-131 *)
 Lemma abs1_impl_po_2 : 
   forall (p: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre3: (valid alloc p)),
   forall (caduceus_1: Z),
@@ -37,7 +37,7 @@ Save.
 (* Why obligation from file "why/abs.why", characters 316-375 *)
 Lemma abs2_impl_po_1 : 
   forall (p: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre9: (valid alloc p)),
   forall (Pre3: (valid alloc p)),

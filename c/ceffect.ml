@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.30 2004-03-30 15:39:28 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.31 2004-04-05 08:29:23 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -80,7 +80,7 @@ let print_heap_vars fmt () =
   fprintf fmt "@]"
 
 let heap_var_type = function
-  | "alloc" -> ([], "alloc")
+  | "alloc" -> ([], "alloc_table")
   | v -> Hashtbl.find heap_vars v
 
 let declare_heap_var v ty =

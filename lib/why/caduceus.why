@@ -6,7 +6,7 @@ parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
 parameter null : pointer
-logic block_length: alloc,pointer -> int
+logic block_length: alloc_table,pointer -> int
 logic base_addr: pointer -> addr
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
@@ -26,19 +26,19 @@ parameter eq_pointer :
 parameter neq_pointer : 
   p:pointer -> q:pointer -> {} bool { if result then p<>q else p=q }
 
-parameter alloc : alloc ref
+parameter alloc : alloc_table ref
 
-predicate valid(a:alloc, p:pointer) = 
+predicate valid(a:alloc_table, p:pointer) = 
 	p <> null 
 	and 0 <= offset(p)
 	and offset(p) < block_length(a,p)
 
-predicate valid_index(a:alloc, p:pointer, i:int) =
+predicate valid_index(a:alloc_table, p:pointer, i:int) =
 	p <> null 
 	and 0 <= offset(p)+i 
 	and offset(p)+i < block_length(a,p)
 
-predicate valid_range(a:alloc, p:pointer, i:int, j:int) =
+predicate valid_range(a:alloc_table, p:pointer, i:int, j:int) =
 	p <> null 
 	and 0 <= offset(p)+i 
 	and i <= j
@@ -53,7 +53,7 @@ axiom base_addr_shift :
   base_addr(shift(p,i)) = base_addr(p)
 
 axiom block_length_shift :
-  forall a:alloc. forall p:pointer. forall i:int.
+  forall a:alloc_table. forall p:pointer. forall i:int.
   block_length(a,shift(p,i)) = block_length(a,p)
 
 axiom shift_null :
@@ -65,7 +65,7 @@ axiom shift_not_null :
     p<>null -> shift(p,i)<>null
 
 axiom base_addr_block_length :
-  forall a:alloc. forall p1:pointer. forall p2:pointer.
+  forall a:alloc_table. forall p1:pointer. forall p2:pointer.
   base_addr(p1) = base_addr(p2) -> block_length(a,p1) = block_length(a,p2)
 
 axiom pointer_pair_1 :
@@ -88,11 +88,11 @@ axiom neq_offset_neq_shift :
   offset(p1)+i <> offset(p2)+j -> shift(p1,i) <> shift(p2,j)
 
 axiom valid_index_valid_shift :
-  forall a:alloc. forall p:pointer. forall i:int. 
+  forall a:alloc_table. forall p:pointer. forall i:int. 
   valid_index(a,p,i) -> valid(a,shift(p,i))
 
 axiom valid_range_valid_shift :
-  forall a:alloc. forall p:pointer. forall i:int. forall j:int. forall k:int.
+  forall a:alloc_table. forall p:pointer. forall i:int. forall j:int. forall k:int.
   valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
 
 axiom sub_pointer_def :
@@ -150,7 +150,7 @@ axiom acc_upd_neq :
     p1 <> p2 -> acc(upd(m,p1,a),p2) = acc(m,p2)
 
 (* memory allocation *)
-logic fresh : alloc,pointer -> prop
+logic fresh : alloc_table,pointer -> prop
 
 (* exceptions *)
 exception Break
@@ -171,7 +171,7 @@ logic range_loc : pointer,int,int -> assign_loc
 logic union_loc : assign_loc, assign_loc -> assign_loc
 logic unchanged : pointer,assign_loc -> prop
 
-predicate assigns (a:alloc,m1:'a memory,m2:'a memory,l:assign_loc) =
+predicate assigns (a:alloc_table,m1:'a memory,m2:'a memory,l:assign_loc) =
  forall p:pointer.
     (valid(a,p) and unchanged(p,l)) -> acc(m2,p)=acc(m1,p)
 
@@ -233,7 +233,7 @@ external parameter lsr : int -> int -> int
 
 (* marche pas: order sup
 axiom assigns_upd :
- forall a:alloc. forall m:'a memory. forall unch:assign_loc.
+ forall a:alloc_table. forall m:'a memory. forall unch:assign_loc.
    forall p:pointer. forall x:'a.
     not(unch(p)) -> assigns(a,m,upd(m,p,x),unch)
 *)
