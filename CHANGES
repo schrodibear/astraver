@@ -1,8 +1,8 @@
 
-  o syntax: logic may introduce several identifiers in a single declaration
-
-version 1.05, March 11th, 2003
+version 1.06, March 18th, 2003
 ==============================
+  o label "init" suppressed; new syntax label:expression to insert labels
+  o syntax: logic may introduce several identifiers in a single declaration
   o linear proof search restricted to WP obligations
   o PVS: change in array type (warray) to get better TCCs
   o fixed ocaml output (array_length)
