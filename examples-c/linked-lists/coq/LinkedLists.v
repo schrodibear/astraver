@@ -208,6 +208,29 @@ omega.
 Qed.
 Hint Resolve length_order_wf .
 
+Lemma length_acc :
+  forall a tl p,
+  is_list a tl p -> p <> null ->
+  length_order (length a tl (acc tl p)) (length a tl p).
+Proof.
+unfold length,length_order; intros.
+exists a.
+inversion H; intuition.
+absurd (p = null); auto.
+subst p0.
+generalize (is_list_llist _ _ _ H2).
+intros [l1 Hl1]; exists l1.
+generalize (is_list_llist _ _ _ H).
+intros [l2 Hl2]; exists l2.
+intuition.
+inversion Hl2.
+absurd (p = null); auto.
+assert (l1 = l).
+apply llist_function with a a tl (acc tl p); auto.
+subst; auto.
+Qed.
+Hint Resolve length_acc.
+
 
 (** * Disjointness *)
 
