@@ -713,7 +713,7 @@ Language (\jml)~\cite{JML}. Such programs are translated into
 \why\ ML input code, expressing the semantics of the original \java\ 
 code. A \coq\ model is produced beside.
 
-See the \krakatoa\ web site, at \url{http://www.lri.fr/~marche/krakatoa/}.
+See the \krakatoa\ web site, at \url{http://krakatoa.lri.fr}.
 
 
 \chapter{Reference manual}
@@ -1211,7 +1211,9 @@ Syntax of types is given in Figure~\ref{fig:types}.
 
   \nt{primitive\_type}\indexnt{primitive\_type}
     & $::=$ & \te{int} $|$ \te{bool} $|$ \te{float} $|$ 
-              \te{unit} $|$ \nt{identifier} \\
+              \te{unit} $|$ \nt{identifier} $|$ \te{'} \nt{identifier} \\
+    & $|$ & \nt{primitive\_type} \nt{identifier} $|$ \te{(}
+    \nt{primitive\_type}\etoilesep{\te{,}} \te{)} \nt{identifier} \\
   \\[0.1em]
 
   \nt{precondition}\indexnt{precondition}
