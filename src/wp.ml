@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.86 2004-07-02 14:45:47 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.87 2004-07-05 13:18:45 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -158,6 +158,21 @@ and wp_desc info d q =
 	let q = optpost_app (tsubst_in_predicate (subst_one result t)) q in
 	let e'1,w = wp e1 q in
 	TabAcc (ck, x, e'1), w
+    | TabAff (ck, x, 
+	      ({desc=Any {c_post = Some (q1,[])}} as e1), 
+	      ({desc=Any {c_post = Some (q2,[])}} as e2)) ->
+	begin match is_result_eq q1.a_value, is_result_eq q2.a_value with
+	  | Some ce1, Some ce2 ->
+	      let w = optpost_val q in
+	      let w = 
+		optasst_app (tsubst_in_predicate (subst_one result tvoid)) w in
+	      let st = make_raw_store info.env (x,x) ce1 ce2 in
+	      let w = optasst_app (tsubst_in_predicate (subst_one x st)) w in
+	      (* TODO: obligations de e1 et e2 *)
+	      TabAff (ck, x, e1, e2), w
+	  | _ ->
+	      assert false
+	end
     | TabAff (ck, x, 
 	      ({desc=Expression ce1} as e1), ({desc=Expression ce2} as e2)) ->
 	let w = optpost_val q in

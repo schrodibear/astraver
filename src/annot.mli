@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.mli,v 1.5 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: annot.mli,v 1.6 2004-07-05 13:18:44 filliatr Exp $ i*)
 
 open Env
 open Types
@@ -54,4 +54,6 @@ val change_desc : 'a Ast.t -> 'a Ast.t_desc -> 'a Ast.t
 
 
 val purify : typed_program -> typed_program
+
+val is_result_eq : predicate -> term option
 

@@ -88,7 +88,7 @@ CMO = src/lib.cmo src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
            src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
-	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
+	   src/holl.cmo src/harvey.cmo src/simplify.cmo src/cvcl.cmo \
            src/regen.cmo src/mizar.cmo src/coq.cmo \
            src/ocaml.cmo src/fpi.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
@@ -480,7 +480,7 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli > .depend
 
-.depend.coq: lib/coq*/*.v
+.depend.coq: # lib/coq*/*.v
 	if test @COQ@ = yes; then \
 	  rm -f .depend.coq; \
 	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v > .depend.coq; \

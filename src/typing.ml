@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.109 2004-07-05 11:58:47 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.110 2004-07-05 13:18:44 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -437,10 +437,12 @@ and typef_desc lab env loc = function
       let ef = Effect.add_write x (Effect.union ef1 ef2) in
       let v = type_v_unit in
       let d,p = match t_e1.desc, post t_e1, t_e2.desc, post t_e2 with
+(***
 	| Expression ce1, None, Expression _, None ->
 	    (* simple enough to be left as is *)
 	    let pre = anonymous loc (make_pre_access env x ce1) in
 	    TabAff (check, x, t_e1, t_e2), [pre]
+***)
 	| _ ->
 	    (* turned into [let v2 = e2 in let v1 = e1 in x[v1] := v2] *)
 	    let v1 = fresh_var () in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.72 2004-07-05 11:58:47 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.73 2004-07-05 13:18:44 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -34,13 +34,14 @@ open Logic
 
 let typed_progs = ref [] (* for the GUI *)
 
-let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp x = match prover with
+let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp f_cvc x = match prover with
   | Pvs -> f_pvs x
   | Coq _ -> f_coq x
   | HolLight -> f_hol x
   | Mizar -> f_miz x 
   | Harvey -> f_hrv x
   | Simplify -> f_smp x
+  | CVCLite -> f_cvc x
 
 let reset () =
   typed_progs := [];
@@ -53,6 +54,7 @@ let reset () =
   | Mizar -> Mizar.reset ()
   | Harvey -> Harvey.reset ()
   | Simplify -> Simplify.reset ()
+  | CVCLite -> Cvcl.reset ()
 
 let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
@@ -61,6 +63,7 @@ let push_obligations ol = match prover with
   | Mizar -> Mizar.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
   | Simplify -> Simplify.push_obligations ol
+  | CVCLite -> Cvcl.push_obligations ol
 
 let prover_is_coq = match prover with Coq _ -> true | _ -> false
 
@@ -78,6 +81,7 @@ let push_parameter id v tv = match prover with
   | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)
+  | CVCLite -> Cvcl.push_parameter id tv
 
 let push_logic id t = match prover with
   | Pvs -> Pvs.push_logic id t
@@ -85,6 +89,7 @@ let push_logic id t = match prover with
   | HolLight -> Holl.push_logic id t
   | Mizar -> Mizar.push_logic id t
   | Harvey | Simplify -> () (* nothing to do? *)
+  | CVCLite -> Cvcl.push_logic id t
 
 let push_axiom id p = match prover with
   | Pvs -> Pvs.push_axiom id p
@@ -93,6 +98,7 @@ let push_axiom id p = match prover with
   | Mizar -> Mizar.push_axiom id p
   | Harvey -> Harvey.push_axiom id p
   | Simplify -> Simplify.push_axiom id p
+  | CVCLite -> Cvcl.push_axiom id p
 
 let push_predicate id p = match prover with
   | Pvs -> Pvs.push_predicate id p
@@ -101,6 +107,7 @@ let push_predicate id p = match prover with
   | Mizar -> Mizar.push_predicate id p
   | Harvey -> Harvey.push_predicate id p
   | Simplify -> Simplify.push_predicate id p
+  | CVCLite -> Cvcl.push_predicate id p
 
 let output fwe = 
   if wol then begin
@@ -115,6 +122,7 @@ let output fwe =
     | Mizar -> Mizar.output_file fwe
     | Harvey -> Harvey.output_file fwe
     | Simplify -> Simplify.output_file fwe
+    | CVCLite -> Cvcl.output_file fwe
   end;
   if fpi then Fpi.output fwe
 
