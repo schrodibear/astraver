@@ -24,8 +24,6 @@ are not allowed by \caduceus.
 \subsection{Designing the loop invariant}
 
 \begin{figure}[b]
-\vspace*{-5mm}
-\hrulefill
 \vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
@@ -85,42 +83,55 @@ children when $c$ is 0, or the right children when $c$ is 1.
 \subsection{Writing the loop invariant}
 
 \begin{figure}[b]
-\vspace*{-5mm}
-\hrulefill
-\vspace*{-2mm}
 %\fontsize{10pt}{9pt}
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}
   /*@ invariant
-    @  (I1 :: \bs{}forall node x; \old(reachable(root,x)) => 
-    @    reachable(t,x) || reachable(p,x))
+    @  (I1 :: \bs{}forall node x; 
+    @    \old(reachable(root,x)) => 
+    @      reachable(t,x) || reachable(p,x))
     @ &&
     @  (I2 :: \bs{}forall node x; x != \bs{}null => 
-    @         (reachable(t,x) || reachable(p,x)) => 
-    @         \old(reachable(root,x)))
+    @         (reachable(t,x) || 
+    @          reachable(p,x)) => 
+    @            \old(reachable(root,x)))
     @ &&
-    @  (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
-    @         x->m == \old(x->m)) 
+    @  (I3 :: \bs{}forall node x; 
+    @       ! \old(reachable(root,x)) => 
+    @             x->m == \old(x->m)) 
     @ &&
     @  \bs{}exists plist stack;
     @  (I4a :: clr_list (p,stack)) 
     @  &&
-    @  (I4b :: \bs{}forall node p; in_list (p,stack) => p->m) 
+    @  (I4b :: \bs{}forall node p; 
+    @             in_list (p,stack) => p->m) 
     @  &&
     @  (I4c :: \bs{}forall node x; 
-    @          \valid(x) && \old(reachable(root,x)) && !x->m =>
-    @          unmarked_reachable(t,x) || (\bs{}exists node y; 
-    @            in_list(y,stack) && unmarked_reachable(y->r,x))) 
+    @          \valid(x) && 
+    @          \old(reachable(root,x)) && 
+    @          !x->m =>
+    @          unmarked_reachable(t,x) || 
+    @          (\bs{}exists node y; 
+    @             in_list(y,stack) && 
+    @             unmarked_reachable(y->r,x))) 
     @  &&
-    @  (I4d :: \bs{}forall node x; !in_list(x,stack) =>  
-    @          (x->r == \old(x->r) && x->l == \old(x->l))) 
+    @  (I4d :: \bs{}forall node x; 
+    @             !in_list(x,stack) =>  
+    @             (x->r == \old(x->r) && 
+    @              x->l == \old(x->l))) 
     @  &&
-    @  (I4e :: \bs{}forall node p1; \bs{}forall node p2;
-    @          pair_in_list(p1,p2,cons(t,stack)) => 
-    @          (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
+    @  (I4e :: 
+    @    \bs{}forall node p1; 
+    @      \bs{}forall node p2;
+    @        pair_in_list(p1,p2,cons(t,stack)) 
+    @        =>(p2->c => 
+    @             \old(p2->l) == p2->l && 
+    @          \old(p2->r) == p1)
     @          &&
-    @          (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)) 
+    @          (!p2->c => 
+    @             \old(p2->l) == p1 && 
+    @          \old(p2->r) == p2->r)) 
     @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
     ...
@@ -141,7 +152,8 @@ types or logical types. Here we declare
 \begin{alltt}\begin{slshape}
 /*@ logic plist cons(node p, plist l) */
 /*@ predicate in_list(node p,plist l) */
-/*@ predicate pair_in_list(node p1,node p2, plist l) */\end{slshape}
+/*@ predicate pair_in_list(node p1,
+                    node p2,plist l) */\end{slshape}
 \end{alltt}
 which first introduces the logical type \verb|plist| for finite lists
 of pointers, then a logical function symbol \verb|cons| which adds an
@@ -152,13 +164,14 @@ consecutive elements in a list $l$.
 
 The loop invariant finally requires the declaration of two predicates:
 \begin{alltt}\begin{slshape}
-/*@ predicate unmarked_reachable (node p1, node p2) 
+/*@ predicate unmarked_reachable (node p1,
+                                  node p2) 
   @   reads p1->r,p1->l,p1->m */\end{slshape}
 \end{alltt}
 specifies that $p_2$ is reachable from $p_1$ by traversing only
 unmarked nodes; and
 \begin{alltt}\begin{slshape}
-/*@ predicate clr_list (node p, plist stack) 
+/*@ predicate clr_list(node p,plist stack) 
   @   reads p->c,p->l,p->r */\end{slshape}
 \end{alltt}
 specifies that \verb|stack| is the list of pointers obtained from $p$ as
@@ -299,7 +312,8 @@ can be defined inductively with the Prolog-like clauses:
 \[
 \begin{array}{l}
 \verb|clr_list|(a,c,l,r, p, nil).  \\
-\verb|clr_list|(a,c,l,r,p,cons(p,s)) \verb|:-| \verb|valid|(a,p), \verb|clr_list|(a,next(c,l,r,p),s).
+\verb|clr_list|(a,c,l,r,p,cons(p,s)) \verb|:-| \verb|valid|(a,p),\\
+  \verb|    clr_list|(a,next(c,l,r,p),s).
 \end{array}
 \]
 where $next(c,l,r,p) = \verb|if|~select(c,p) =
@@ -324,9 +338,9 @@ defined by three clauses:
 \begin{array}{l}
 \verb|path|(a,l,r, p, p, nil)  \\
 \verb|path|(a,l,r,p_1,p_2,cons(p_1,s)) \verb|:-| 
-  \verb|valid|(a,p_1), \verb|path|(a,select(l,p_1),p_2,s) \\
+  \verb|valid|(a,p_1), \\  \verb|   path|(a,select(l,p_1),p_2,s) \\
 \verb|path|(a,l,r,p_1,p_2,cons(p_1,s)) \verb|:-| 
-  \verb|valid|(a,p_1), \verb|path|(a,select(r,p_1),p_2,s)
+  \verb|valid|(a,p_1), \\ \verb|   path|(a,select(r,p_1),p_2,s)
 \end{array}
 \]
 and then
@@ -336,7 +350,7 @@ and then
 p_2, s) \\
 \verb|unmarked_reachable|(a,m,l,r, p_1, p_2) = \\
 \qquad\qquad\qquad \exists s,~\verb|path|(a,l,r, p_1,
-p_2, s) \land \forall p, p \in s \rightarrow select(m,p) = 0 \\
+p_2, s) \land \forall p, p \in s \rightarrow \\ select(m,p) = 0 \\
 \end{array} 
 \]
 Notice that it is now easy to establish the validity of the axiom
@@ -349,8 +363,8 @@ there is a path which has no cycle:
 \begin{array}{l}
 \forall a, p_1, p_2, l, r, s,~\verb|path|(a,l,r,p_1,p_2,s) \rightarrow
  \\\qquad\qquad\qquad
-  \exists s', s' \subseteq s \land \verb|no_rep|(s') \land
-  \verb|path|(a,l,r,p_1, p_2, s')
+  \exists s', s' \subseteq s \land \verb|no_rep|(s') \land \\
+  \verb|                   path|(a,l,r,p_1, p_2, s')
 \end{array}
 \] 
 where \verb|no_rep| is a simple predicate on a list which says that no
@@ -461,21 +475,21 @@ llist a next .
 
 
 \begin{figure}[b]
-\vspace*{-5mm}
-\hrulefill 
-\vspace*{-2mm}
 \begin{alltt}\begin{slshape}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
-/*@ predicate reachable_elements(node root, plist s) 
+/*@ predicate reachable_elements(node root,
+                                 plist s) 
             reads root->l,root->r */ 
 /*@ requires 
-       \bs{}exists plist s; reachable_elements(root,s) && 
+       \bs{}exists plist s; 
+         reachable_elements(root,s) && 
      ... */\end{slshape}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}
   /*@ invariant ...
-    @ variant weight(p,t) for order_mark_m_and_c_and_stack 
+    @ variant weight(p,t) 
+    @   for order_mark_m_and_c_and_stack 
     @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
    ...
@@ -506,8 +520,8 @@ to insert in the pre-condition. The additional annotations for
 termination are given Figure~\ref{fig:term}, where in Coq we define
 \[
 \begin{array}{l}
-\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
-\forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
+\verb|reachable_elements|(a,l,r, root, s) = \\ %\\\qquad\qquad\qquad 
+\verb|   | \forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
 \end{array}
 \]
 The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|

@@ -36,17 +36,21 @@ of the children is currently explored.
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;
-  while (p != NULL || (t != NULL && ! t->m)) \{
+  while (p != NULL || 
+        (t != NULL && ! t->m)) \{
     if (t == NULL || t->m) \{
       if (p->c) \{ \begin{slshape}/* \textbf{pop} */\end{slshape}
-        node q = t; t = p; p = p->r; t->r = q;
+        node q = t; t = p; 
+        p = p->r; t->r = q;
       \} 
       else \{ \begin{slshape}/* \textbf{swing} */\end{slshape}
-        node q = t; t = p->r; p->r = p->l; p->l = q; p->c = 1;
+        node q = t; t = p->r; 
+        p->r = p->l; p->l = q; p->c = 1;
       \}
     \} 
     else \{ \begin{slshape}/* \textbf{push} */ \end{slshape}
-      node q = p; p = t; t = t->l; p->l = q; p->m = 1; p->c = 0;
+      node q = p; p = t; t = t->l; 
+      p->l = q; p->m = 1; p->c = 0;
     \}
   \}
 \}
@@ -260,19 +264,22 @@ in fact as $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$ that is all the
 node expressions from \verb|p1| using the left and right children.
 
 \begin{figure}[b]
-\vspace*{-5mm}
-\hrulefill
-\vspace*{-2mm}
+
 \begin{alltt}\begin{slshape}
 /*@ \textbf{requires}
   @  \bs{}forall node x; 
-  @     x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
+  @     x != \bs{}null && 
+  @     reachable(root,x) => \valid(x) 
+  @     && ! x->m  
   @ \textbf{ensures}
-  @  (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @  (\bs{}forall node x; \old(x->l) == x->l 
+  @     && \old(x->r) == x->r) 
   @ &&
-  @  (\bs{}forall node x; x != \bs{}null && reachable(root,x) => x->m) 
+  @  (\bs{}forall node x; x != \bs{}null 
+  @     && reachable(root,x) => x->m) 
   @ &&
-  @  (\bs{}forall node x; ! reachable(root,x) => x->m == \old(x->m))
+  @  (\bs{}forall node x; !reachable(root,x) 
+  @     => x->m == \old(x->m))
   @*/\end{slshape}
 void schorr_waite(node root) \{
 \end{alltt}
