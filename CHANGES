@@ -1,4 +1,5 @@
 
+  o arrays do not have a dependent type anymore; array_length introduced
   o Emacs mode for editing Why ML source
   o automatic discharge of ...|-(well_founded (Zwf 0))
     and of ...,v=t,...,I and (Zwf 0 t' t),...|-(Zwf 0 t' v)

@@ -58,12 +58,10 @@ let fib3 (n:int) =
 
 (** Imperative, in an array *)
 
-parameter N : int
-
-parameter t : array N of int
+parameter t : int array
 
 let fib4 (n:int) =
-  { 0 <= n < N }
+  { 0 <= n < array_length(t) }
   (if n <= 1 then
      1
    else begin
@@ -71,7 +69,8 @@ let fib4 (n:int) =
      t[1] := 1;
      let k = ref 2 in
      while !k <= n do
-       { invariant 2 <= k <= n+1 and forall i:int. 0 <= i < k -> t[i] = F(i)  
+       { invariant 2 <= k <= n+1 and array_length(t) = array_length(t@init) and
+	           forall i:int. 0 <= i < k -> t[i] = F(i)  
          variant n+1 - k }
        t[!k] := t[!k - 1] + t[!k - 2];
        k := !k + 1

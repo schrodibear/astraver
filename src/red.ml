@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.32 2002-12-02 13:42:55 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.33 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -42,8 +42,8 @@ let rec uniq_list f fv s = function
       x' :: l', fv'', s''
 
 let rec uniq_tt fv s = function
-  | TTarray (t, tt) -> 
-      TTarray (tsubst_in_term s t, uniq_tt fv s tt)
+  | TTarray tt -> 
+      TTarray (uniq_tt fv s tt)
   | TTlambda (b, tt) ->
       let b',fv',s' = uniq_binder fv s b in TTlambda (b', uniq_tt fv' s' tt)
   | TTarrow (b, tt) -> 
@@ -139,8 +139,8 @@ and cc_subst_binder s (id,b) =
 and cc_subst_binders s = cc_subst_list cc_subst_binder s
 
 and cc_type_subst s = function
-  | TTarray (t, tt) -> 
-      TTarray (tsubst_in_term s t, cc_type_subst s tt)
+  | TTarray tt -> 
+      TTarray (cc_type_subst s tt)
   | TTlambda (b, tt) ->
       let b',s' = cc_subst_binder s b in TTlambda (b', cc_type_subst s' tt)
   | TTarrow (b, tt) -> 

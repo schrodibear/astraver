@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.34 2002-11-21 14:04:08 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.35 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -121,6 +121,7 @@ val t_ge_float : t
 val t_zwf_zero : t
 val result : t
 val default : t
+val array_length : t
 val access : t
 val store : t
 val annot_bool : t

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.26 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.27 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -254,7 +254,7 @@ let logic_table = ref Idmap.empty
 
 let add_global_logic x t = logic_table := Idmap.add x t !logic_table
 
-let int_array = PTarray (Tvar Ident.implicit, PTint)
+let int_array = PTarray PTint
 let agl s = add_global_logic (Ident.create s)
 
 let int_cmp = Predicate [PTint; PTint]
@@ -308,8 +308,8 @@ let find_logic = Idmap.find
 let add_logic id v env = match v with
   | (Ref (PureType pt)) | (PureType pt) -> 
       Idmap.add id (Function ([], pt)) env
-  | (Array (n, PureType t)) -> 
-      Idmap.add id (Function ([], PTarray (n,t))) env
+  | (Array (PureType t)) -> 
+      Idmap.add id (Function ([], PTarray t)) env
   | _ -> 
       env
 

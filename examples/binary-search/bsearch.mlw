@@ -1,23 +1,21 @@
 
-parameter N : int
-
 parameter v : int
 
-parameter t : array (N+1) of int
+parameter t : int array
 
 parameter l,u,p,m : int ref
 
 external mean : int -> int -> int
 
-logic In : array int,int,int -> prop
+logic In : int array,int,int -> prop
 
 let binary_search =
-  { sorted_array(t,1,N) }
+  { array_length(t) >= 1 and sorted_array(t,1,array_length(t)-1) }
   begin
-    l := 1; u := N; p := 0;
+    l := 1; u := (array_length t)-1; p := 0;
     while !l <= !u do
-      { invariant 1 <= l and u <= N and 0 <= p <= N
-               and (p = 0 -> In(t,1,N) -> In(t,l,u))
+      { invariant 1 <= l and u <= array_length(t)-1 and 0 <= p <= array_length(t)-1
+               and (p = 0 -> In(t,1,array_length(t)-1) -> In(t,l,u))
                and (p > 0 -> t[p]=v)
         variant 2+u-l }
       m := (mean !l !u);
@@ -31,5 +29,5 @@ let binary_search =
       end       
     done
   end
-  { (1 <= p <= N and t[p]=v) or (p = 0 and not In(t,1,N)) }
+  { (1 <= p <= array_length(t)-1 and t[p]=v) or (p = 0 and not In(t,1,array_length(t)-1)) }
 

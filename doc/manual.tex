@@ -136,7 +136,7 @@ The input file contains the following kinds of declaration:
 \begin{verbatim}
      parameter x,y : int ref
      parameter N : int
-     parameter t : array N of int
+     parameter t : int array
 \end{verbatim}
     (Types are detailed in Section~\ref{types} and their syntax is
     given in Section~\ref{syntax:mltypes}.)
@@ -431,7 +431,6 @@ as in ML, but one must write instead
 \item Array access is written \texttt{t[e]} instead of \texttt{t.(e)},
   and array update is written \texttt{t[e1] := e2} instead of
   \texttt{t.(e1) <- e2}.
-\item Array types mention the array size (e.g. \texttt{array 10 of int}).
 \end{itemize}
 Getting true \caml\ code from a \why\ source is the subject of the
 next section.
@@ -598,7 +597,10 @@ These are the functions predefined in \why:
   \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
 \item[\texttt{neg\_float, sqrt\_float : float -> float}] ~\par
   \texttt{neg\_float} corresponds to the prefix symbol \texttt{-}.
-\item[\texttt{float\_of\_int : int -> float}]
+\item[\texttt{float\_of\_int : int -> float}] ~\par
+  Conversion of an integer into a floating point number.
+\item[\texttt{array\_length : $\alpha$ array -> int}] ~\par
+  The size of an array.
 \end{description}
 
 \subsubsection{Predefined predicates}
@@ -623,34 +625,34 @@ These are the predicates predefined in \why:
 \item[\texttt{eq\_unit, neq\_unit : unit, unit -> prop}] ~\par
   Correspond to the infix symbols \texttt{=} and \texttt{<>}.
 
-\item[\texttt{sorted\_array : array int, int, int -> prop}] ~\par
+\item[\texttt{sorted\_array : int array, int, int -> prop}] ~\par
   \indextt{sorted\_array}
   \texttt{sorted\_array($t$,$i$,$j$)} states that the sub-array
   $t[i..j]$ is sorted (in increasing order).
 
-\item[\texttt{exchange : array int, array int, int, int -> prop}] ~\par
+\item[\texttt{exchange : int array, int array, int, int -> prop}] ~\par
   \indextt{exchange}
   \texttt{exchange($t_1$,$t_2$,$i$,$j$)} states that arrays $t_1$ and
   $t_2$ differ only by the swapping of the two elements at indexes $i$
   and $j$.
 
-\item[\texttt{sub\_permut : int, int, array int, array int -> prop}] ~\par
+\item[\texttt{sub\_permut : int, int, int array, int array -> prop}] ~\par
   \indextt{sub\_permut }
   \texttt{sub\_permut($i$,$j$,$t_1$,$t_2$)} states that the sub-arrays
   $t_1[i..j]$ and $t_2[i..j]$ are permutations of each other, the
   other parts of these arrays being the same.
 
-\item[\texttt{permut : array int, array int -> prop}] ~\par
+\item[\texttt{permut : int array, int array -> prop}] ~\par
   \indextt{permut}
   \texttt{permut($t_1$,$t_2$)} states that the two arrays $t_1$ and
   $t_2$ are permutations of each other.
 
-\item[\texttt{array\_le : array int, int, int, int -> prop}] ~\par
+\item[\texttt{array\_le : int array, int, int, int -> prop}] ~\par
   \indextt{array\_le}
   \texttt{array\_le($t$,$i$,$j$,$v$)} states that $\forall k. ~ i \le
   k \le j \Rightarrow t[i] \le v$.
 
-\item[\texttt{array\_ge : array int, int, int, int -> prop}] ~\par
+\item[\texttt{array\_ge : int array, int, int, int -> prop}] ~\par
   \indextt{array\_ge}
   \texttt{array\_ge($t$,$i$,$j$,$v$)} states that $\forall k. ~ i \le
   k \le j \Rightarrow t[i] \ge v$.
@@ -839,7 +841,7 @@ Syntax of types is given in Figure~\ref{fig:types}.
   \nt{simple\_value\_type}\indexnt{simple\_value\_type}
     & $::=$ & \nt{primitive\_type} \\
       & $|$ & \nt{simple\_value\_type} \te{ref} \\
-      & $|$ & \te{array} \nt{term} \te{of} \nt{simple\_value\_type} \\
+      & $|$ & \nt{simple\_value\_type} \te{array} \\
       & $|$ & \te{(} \nt{value\_type} \te{)} \\
   \\[0.1em]
 
@@ -1019,7 +1021,7 @@ Syntax of input files is given in Figure~\ref{fig:input}.
    \\[0.1em]
 
   \nt{logic\_arg\_type}
-    & $::=$ & \nt{primitive\_type} $|$ \te{array} \nt{primitive\_type}
+    & $::=$ & \nt{primitive\_type} $|$ \nt{primitive\_type} \te{array} 
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of ML files}

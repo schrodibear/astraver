@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.2 2002-11-14 09:38:06 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.3 2002-12-04 10:29:50 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require WhyPermut.
@@ -29,7 +29,7 @@ Set Implicit Arguments.
 (* Definition *)
 
 Definition sorted_array :=
-  [N:Z][A:(array N Z)][deb:Z][fin:Z]
+  [A:(array Z)][deb:Z][fin:Z]
      `deb<=fin` -> (x:Z) `x>=deb` -> `x<fin` -> (Zle #A[x] #A[`x+1`]).
 
 (* Elements of a sorted sub-array are in increasing order *)
@@ -37,13 +37,13 @@ Definition sorted_array :=
 (* one element and the next one *)
 
 Lemma sorted_elements_1 :
-  (N:Z)(A:(array N Z))(n:Z)(m:Z)
+  (A:(array Z))(n:Z)(m:Z)
   (sorted_array A n m)
   -> (k:Z)`k>=n`
   -> (i:Z) `0<=i` -> `k+i<=m`
   -> (Zle (access A k) (access A `k+i`)).
 Proof.
-Intros N A n m H_sorted k H_k i H_i.
+Intros A n m H_sorted k H_k i H_i.
 Pattern i. Apply natlike_ind.
 Intro.
 Replace `k+0` with k; Omega. (*** Ring `k+0` => BUG ***)
@@ -65,9 +65,9 @@ Save.
 (* one element and any of the following *)
 
 Lemma sorted_elements :
-  (N:Z)(A:(array N Z))(n:Z)(m:Z)(k:Z)(l:Z)
+  (A:(array Z))(n:Z)(m:Z)(k:Z)(l:Z)
   (sorted_array A n m)
-  -> `k>=n` -> `l<N` -> `k<=l` -> `l<=m`
+  -> `k>=n` -> `l<(array_length A)` -> `k<=l` -> `l<=m`
   -> (Zle (access A k) (access A l)).
 Proof.
 Intros.
@@ -80,7 +80,7 @@ Hints Resolve sorted_elements : datatypes v62.
 
 (* A sub-array of a sorted array is sorted *)
 
-Lemma sub_sorted_array : (N:Z)(A:(array N Z))(deb:Z)(fin:Z)(i:Z)(j:Z)
+Lemma sub_sorted_array : (A:(array Z))(deb:Z)(fin:Z)(i:Z)(j:Z)
       (sorted_array A deb fin) -> 
         (`i>=deb` -> `j<=fin` -> `i<=j` -> (sorted_array A i j)).
 Proof.
@@ -93,8 +93,8 @@ Hints Resolve sub_sorted_array : datatypes v62.
 
 (* Extension on the left of the property of being sorted *)
 
-Lemma left_extension : (N:Z)(A:(array N Z))(i:Z)(j:Z)
-   `i>0` -> `j<N` -> (sorted_array A i j) 
+Lemma left_extension : (A:(array Z))(i:Z)(j:Z)
+   `i>0` -> `j<(array_length A)` -> (sorted_array A i j) 
    -> (Zle #A[`i-1`]  #A[i]) -> (sorted_array A `i-1` j).
 Proof.
 (Intros; Unfold sorted_array ; Intros).
@@ -111,8 +111,8 @@ Save.
 
 (* Extension on the right *)
 
-Lemma right_extension : (N:Z)(A:(array N Z))(i:Z)(j:Z)
-   `i>=0` -> `j<N-1` -> (sorted_array A i j) 
+Lemma right_extension : (A:(array Z))(i:Z)(j:Z)
+   `i>=0` -> `j<(array_length A)-1` -> (sorted_array A i j) 
    -> (Zle #A[j]  #A[`j+1`]) -> (sorted_array A i `j+1`).
 Proof.
 (Intros; Unfold sorted_array ; Intros).
@@ -127,12 +127,12 @@ Save.
 (* Substitution of the leftmost value by a smaller value *) 
 
 Lemma left_substitution : 
-   (N:Z)(A:(array N Z))(i:Z)(j:Z)(v:Z)
-   `i>=0`  -> `j<N`  -> (sorted_array A i j)
+   (A:(array Z))(i:Z)(j:Z)(v:Z)
+   `i>=0`  -> `j<(array_length A)`  -> (sorted_array A i j)
    -> (Zle v #A[i])
    -> (sorted_array (store A i v) i j).
 Proof.
-Intros N A i j v H_i H_j H_sorted H_v.
+Intros A i j v H_i H_j H_sorted H_v.
 Unfold sorted_array ; Intros.
 
 Cut `x = i`\/`x > i`.
@@ -151,12 +151,12 @@ Save.
 (* Substitution of the rightmost value by a larger value *)
 
 Lemma right_substitution : 
-   (N:Z)(A:(array N Z))(i:Z)(j:Z)(v:Z)
-   `i>=0`  -> `j<N`  -> (sorted_array A i j)
+   (A:(array Z))(i:Z)(j:Z)(v:Z)
+   `i>=0`  -> `j<(array_length A)`  -> (sorted_array A i j)
    -> (Zle #A[j] v)
    -> (sorted_array (store A j v) i j).
 Proof.
-Intros N A i j v H_i H_j H_sorted H_v.
+Intros A i j v H_i H_j H_sorted H_v.
 Unfold sorted_array ; Intros.
 
 Cut `x = j-1`\/`x < j-1`.
@@ -179,9 +179,9 @@ Save.
 (* Affectation outside of the sorted region *)
 
 Lemma no_effect : 
-   (N:Z)(A:(array N Z))(i:Z)(j:Z)(k:Z)(v:Z)
-   `i>=0`  -> `j<N`  -> (sorted_array A i j)
-   -> `0<=k<i`\/`j<k<N`
+   (A:(array Z))(i:Z)(j:Z)(k:Z)(v:Z)
+   `i>=0`  -> `j<(array_length A)`  -> (sorted_array A i j)
+   -> `0<=k<i`\/`j<k<(array_length A)`
    -> (sorted_array (store A k v) i j).
 Proof.
 Intros.
@@ -191,10 +191,10 @@ Rewrite store_def_2 ; Try Omega.
 Apply H1 ; Assumption.
 Save.
 
-Lemma sorted_array_id : (N:Z)(t1,t2:(array N Z))(g,d:Z)
+Lemma sorted_array_id : (t1,t2:(array Z))(g,d:Z)
   (sorted_array t1 g d) -> (array_id t1 t2 g d) -> (sorted_array t2 g d).
 Proof.
-Intros N t1 t2 g d Hsorted Hid.
+Intros t1 t2 g d Hsorted Hid.
 Unfold array_id in Hid.
 Unfold sorted_array in Hsorted. Unfold sorted_array.
 Intros Hgd x H1x H2x.

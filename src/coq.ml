@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.77 2002-12-02 16:05:47 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.78 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -134,8 +134,7 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "R"
-  | PTarray (s, v) -> 
-      fprintf fmt "(array %a %a)" print_term s print_pure_type v
+  | PTarray v -> fprintf fmt "(array %a)" print_pure_type v
   | PTexternal id -> Ident.print fmt id
 
 let infix_relation id =
@@ -216,8 +215,8 @@ let print_predicate fmt p =
 let rec print_cc_type fmt = function
   | TTpure pt -> 
       print_pure_type fmt pt
-  | TTarray (s, v) -> 
-      fprintf fmt "(@[array@ %a@ %a@])" print_term s print_cc_type v
+  | TTarray v -> 
+      fprintf fmt "(@[array@ %a@])" print_cc_type v
   | TTlambda (b, t) ->
       fprintf fmt "[%a]@,%a" print_binder b print_cc_type t
 (*i***

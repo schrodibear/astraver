@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.69 2002-12-02 13:42:55 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.70 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -280,7 +280,7 @@ EXTEND
 	t ] ]
   ;
   simple_type_v:
-  [ [ "array"; size = lexpr; "of"; v = simple_type_v -> PVarray (size,v)
+  [ [ v = simple_type_v; "array" -> PVarray v
     | v = simple_type_v; "ref" -> PVref v
     | t = primitive_type -> PVpure t
     | "("; v = type_v; ")" -> v ] ] 
@@ -562,7 +562,7 @@ i*)
   ;
   logic_arg:
   [ [ t = primitive_type -> t
-    | "array"; t = primitive_type -> PTarray (Tvar Ident.implicit, t)
+    | t = primitive_type; "array" -> PTarray t
   ] ]
   ;
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.4 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.5 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -50,7 +50,7 @@ let identifiers = print_list comma Ident.print
 let rec typev fmt = function
   | Ref v -> 
       fprintf fmt "(%a ref)" typev v
-  | Array (_, v) -> 
+  | Array v -> 
       fprintf fmt "(%a array)" typev v
   | Arrow (bl, c) -> 
       fprintf fmt "%a ->@ %a" (print_list arrow binder_type) bl typec c

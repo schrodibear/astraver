@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: types.mli,v 1.15 2002-11-28 16:18:35 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.16 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 (*s Types for programs *)
 
@@ -45,7 +45,7 @@ type 'a binder = Ident.t * 'a binder_type
 
 type type_v = 
   | Ref of type_v
-  | Array of term * type_v
+  | Array of type_v
   | Arrow of type_v binder list * type_c
   | PureType of pure_type
 

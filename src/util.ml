@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.65 2002-12-02 15:17:20 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.66 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -189,7 +189,7 @@ let occur_post id = function
 
 let rec occur_type_v id = function
   | Ref v -> occur_type_v id v
-  | Array (t, v) -> occur_term id t || occur_type_v id v
+  | Array v -> occur_type_v id v
   | Arrow (bl, c) -> occur_arrow id bl c
   | PureType _ -> false
 
@@ -234,7 +234,7 @@ let deref_type = function
   | _ -> invalid_arg "deref_type"
 
 let dearray_type = function
-  | Array (size,v) -> size,v
+  | Array v -> v
   | _ -> invalid_arg "dearray_type"
 
 let decomp_kappa c = 
@@ -261,22 +261,22 @@ let decomp_boolean = function
 
 let array_info env id =
   let ty = type_in_env env id in
-  let size,v = dearray_type ty in
+  let v = dearray_type ty in
   (*i let ty_elem = trad_ml_type_v ren env v in
   let ty_array = trad_imp_type ren env ty in i*)
-  size,v
+  v
 
 let make_raw_access env (id,id') c =
-  let size,_ = array_info env id in
+  let _ = array_info env id in
   Tapp (Ident.access, [Tvar id'; c])
 
 let make_pre_access env id c =
-  let size,_ = array_info env id in
+  let _ = array_info env id in
   let c = unref_term c in
-  Pand (le_int (Tconst (ConstInt 0)) c, lt_int c size)
+  Pand (le_int (Tconst (ConstInt 0)) c, lt_int c (array_length id))
       
 let make_raw_store env (id,id') c1 c2 =
-  let size,_ = array_info env id in
+  let _ = array_info env id in
   Tapp (Ident.store, [Tvar id'; c1; c2])
 
 (*s Pretty printers (for debugging purposes) *)
@@ -310,7 +310,7 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "float"
-  | PTarray (s,t) -> fprintf fmt "array(%a,%a)" print_term s print_pure_type t
+  | PTarray t -> fprintf fmt "(%a array)" print_pure_type t
   | PTexternal id -> fprintf fmt "%a" Ident.print id
 
 and print_type_v fmt = function
@@ -333,8 +333,8 @@ and pp_binder fmt = function
 and print_type_v2 fmt = function
   | Ref v -> 
       fprintf fmt "@[%a@ ref@]" print_type_v v
-  | Array (cc,v) -> 
-      fprintf fmt "@[array@ %a@ of %a@]" print_term cc print_type_v v
+  | Array v -> 
+      fprintf fmt "@[array@ %a@]" print_type_v v
   | PureType pt -> 
       print_pure_type fmt pt
   | Arrow _ as v ->
@@ -446,8 +446,8 @@ let print_var_binders = ref false
 let rec print_cc_type fmt = function
   | TTpure pt -> 
       print_pure_type fmt pt
-  | TTarray (s, t) -> 
-      fprintf fmt "(array %a %a)" print_term s print_cc_type t
+  | TTarray t -> 
+      fprintf fmt "(array %a)" print_cc_type t
   | TTlambda (b, t) ->
       fprintf fmt "[%a]%a" print_binder b print_cc_type t
   | TTarrow (b, t) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.60 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.61 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -300,7 +300,7 @@ let equals_false = function
 let rec mlize_type = function
   | PureType pt -> pt
   | Ref v -> mlize_type v
-  | Array (s, v) -> PTarray (s, mlize_type v)
+  | Array v -> PTarray (mlize_type v)
   | Arrow _ -> assert false
 
 (*s Substitutions *)
@@ -316,7 +316,7 @@ let rec type_c_subst s c =
 
 and type_v_subst s = function
   | Ref v -> Ref (type_v_subst s v)
-  | Array (n,v) -> Array (n,type_v_subst s v)
+  | Array v -> Array (type_v_subst s v)
   | Arrow (bl,c) -> Arrow (List.map (binder_subst s) bl, type_c_subst s c)
   | (PureType _) as v -> v
 
@@ -335,7 +335,7 @@ let rec type_c_rsubst s c =
 
 and type_v_rsubst s = function
   | Ref v -> Ref (type_v_rsubst s v)
-  | Array (n,v) -> Array (tsubst_in_term s n, type_v_rsubst s v)
+  | Array v -> Array (type_v_rsubst s v)
   | Arrow (bl,c) -> Arrow(List.map (binder_rsubst s) bl, type_c_rsubst s c)
   | PureType _ as v -> v
 
@@ -383,6 +383,8 @@ let ge = relation t_ge
 let ge_float = relation t_ge_float
 let eq = relation t_eq
 let neq = relation t_neq
+
+let array_length id = Tapp (array_length, [Tvar id])
 
 let lt_int = relation t_lt_int
 let le_int = relation t_le_int

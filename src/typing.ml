@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.82 2002-11-29 08:47:42 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.83 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -66,8 +66,8 @@ let rec subtype = function
       c1 = c2
   | (Ref v1, Ref v2) -> 
       subtype (v1,v2)
-  | (Array (s1,v1), Array (s2,v2)) -> 
-      s1 = s2 && subtype (v1,v2)
+  | (Array v1, Array v2) -> 
+      subtype (v1,v2)
   | (v1,v2) -> 
       v1 = v2
 
@@ -376,7 +376,7 @@ and typef_desc lab env loc = function
       expected_type e.loc (result_type t_e) type_v_int;
       let efe = t_e.info.kappa.c_effect in
       let ef = Effect.add_read x efe in
-      let _,ty = check_array_type loc env x in
+      let ty = check_array_type loc env x in
       let s,p = match t_e.desc with
 	| Expression c when post t_e = None ->
 	    let t = make_raw_access env (x,x) c in
@@ -391,7 +391,7 @@ and typef_desc lab env loc = function
       let t_e1 = typef lab env e1 in
       expected_type e1.loc (result_type t_e1) type_v_int;
       let t_e2 = typef lab env e2 in 
-      let _,et = check_array_type loc env x in
+      let et = check_array_type loc env x in
       expected_type e2.loc (result_type t_e2) et;
       let ef1 = t_e1.info.kappa.c_effect in
       let ef2 = t_e2.info.kappa.c_effect in
@@ -452,6 +452,15 @@ and typef_desc lab env loc = function
       let eq = type_poly id a.loc (result_type t_a) in
       typef_desc lab env loc (Sapp ({e with pdesc = Svar eq}, Sterm a))
       (* TODO: avoid recursive call? *)
+
+  | Sapp ({pdesc=Svar id}, Sterm a) when id == Ident.array_length ->
+       let t_a = typef lab env a in
+       (match result_type t_a, t_a.desc with
+	  | Array _, Var t -> 
+	      let ef = Effect.add_read t Effect.bottom in
+	      Expression (array_length t), (type_v_int, ef), []
+	  | _ -> 
+	      raise_located a.loc (AnyMessage "array expected"))
 
   | Sapp (f, Sterm a) ->
       let t_f = typef lab env f in

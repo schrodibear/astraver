@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.9 2002-11-28 16:18:35 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.10 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -50,7 +50,7 @@ and pp_desc =
 
 type ptype_v =
   | PVref   of ptype_v
-  | PVarray of lexpr * ptype_v   (* size x type *)
+  | PVarray of ptype_v
   | PVarrow of ptype_v binder list * ptype_c
   | PVpure  of pure_type
 

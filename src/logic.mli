@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.12 2002-11-05 08:19:32 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.13 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -40,7 +40,7 @@ type pure_type =
   | PTbool
   | PTfloat
   | PTunit
-  | PTarray of term * pure_type
+  | PTarray of pure_type
   | PTexternal of Ident.t
 
 type predicate =

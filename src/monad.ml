@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.61 2002-12-02 13:42:55 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.62 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -125,7 +125,7 @@ and prod ren env g =
 
 and trad_imp_type ren env = function
   | Ref v -> trad_type_v ren env v
-  | Array (t, v) -> TTarray (t, trad_type_v ren env v)
+  | Array v -> TTarray (trad_type_v ren env v)
   | _ -> assert false
 
 and trad_type_in_env ren env id =

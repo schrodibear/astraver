@@ -4,7 +4,23 @@ Require Why.
 (*Why*) Parameter N : Z.
 
 Lemma p_po_1 : 
-  (t: (array N Z))
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
+  (i0: Z)
+  (Post1: i0 = `0`)
+  (Variant1: Z)
+  (i1: Z)
+  (Pre4: Variant1 = `N - i1`)
+  (Pre3: `0 <= i1`)
+  (Test4: `i1 < N`)
+  `0 <= i1` /\ `i1 < (array_length t)`.
+Proof.
+Intuition.
+Save.
+
+Lemma p_po_2 : 
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
@@ -18,8 +34,9 @@ Proof.
 Intuition.
 Save.
 
-Lemma p_po_2 : 
-  (t: (array N Z))
+Lemma p_po_3 : 
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
@@ -34,7 +51,9 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-Lemma p_po_3 : 
+Lemma p_po_4 : 
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
@@ -50,7 +69,9 @@ Proof.
 Intuition.
 Save.
 
-Lemma p_po_4 : 
+Lemma p_po_5 : 
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
   (i0: Z)
   (Post1: i0 = `0`)
   `0 <= i0`.
@@ -58,8 +79,10 @@ Proof.
 Intuition.
 Save.
 
-Lemma p_po_5 : 
-  (t: (array N Z))
+
+Lemma p_po_6 : 
+  (t: (array Z))
+  (Pre5: `(array_length t) = N`)
   (i0: Z)
   (Post1: i0 = `0`)
   (i1: Z)
@@ -69,9 +92,8 @@ Proof.
 Intuition.
 Save.
 
-
 Definition p := (* validation *)
-  [i: Z; t: (array N Z)]
+  [i: Z; t: (array Z); Pre5: `(array_length t) = N`]
     let (i0, result, Post6) =
       let (i0, result, Post1) =
         let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
@@ -106,7 +128,9 @@ Definition p := (* validation *)
                     let (result1, Post13) =
                       let (result1, Bool1) =
                         let result2 =
-                          let Pre2 = (conj ? ? Pre3 Test4) in
+                          let Pre2 =
+                            (p_po_1 t Pre5 i0 Post1 Variant1 i1 Pre4 Pre3
+                            Test4) in
                           (Z_eq_bool (access t i1)) in
                         let (result3, Post14) = (result2 `0`) in
                         (exist_1 [result4: bool]
@@ -123,8 +147,8 @@ Definition p := (* validation *)
                             let (result2, Post17) = (exist_1 [result2: Z]
                               (`0 <= result2` /\ `result2 < N` ->
                                `(access t result2) = 0`) i1
-                              (p_po_1 t i0 Post1 Variant1 i1 Pre4 Pre3 Test4
-                              Test3)) in
+                              (p_po_2 t Pre5 i0 Post1 Variant1 i1 Pre4 Pre3
+                              Test4 Test3)) in
                             (exist_1 (qcomb [result3: Z]
                                       (`0 <= result3` /\ `result3 < N` ->
                                        `(access t result3) = 0`)
@@ -158,8 +182,8 @@ Definition p := (* validation *)
                             ((i:Z)
                              (i = `i1 + 1` -> `0 <= i` /\
                               (Zwf `0` `N - i` `N - i1`))) tt
-                            (p_po_2 t i0 Post1 Variant1 i1 Pre4 Pre3 Test4
-                            Test2)) in
+                            (p_po_3 t Pre5 i0 Post1 Variant1 i1 Pre4 Pre3
+                            Test4 Test2)) in
                           (exist_1 (qcomb [result3: Z]
                                     (`0 <= result3` /\ `result3 < N` ->
                                      `(access t result3) = 0`)
@@ -184,8 +208,8 @@ Definition p := (* validation *)
                        [result4: unit]`0 <= i3` /\
                        (Zwf `0` `N - i3` `N - i1`)) i2
                       (Val Z result3)
-                      (p_po_3 i0 Post1 Variant1 i1 Pre4 Pre3 Test4 Post20 i2
-                      Post2))
+                      (p_po_4 t Pre5 i0 Post1 Variant1 i1 Pre4 Pre3 Test4
+                      Post20 i2 Post2))
                     | (Qexn result2 Post21) => (exist_2 [i2: Z]
                       (qcomb [result3: Z]
                        (`0 <= result3` /\ `result3 < N` ->
@@ -240,12 +264,12 @@ Definition p := (* validation *)
                    [result3: unit]`0 <= i3` /\ `i3 >= N`) i2
                   (Exn unit result2) Post10)
                 end end) `N - i0` i0 (refl_equal ? `N - i0`)
-          (p_po_4 i0 Post1)) in
+          (p_po_5 t Pre5 i0 Post1)) in
       Cases (decomp1 Post7) of
       | (Qval (exist result1 Post3)) =>
         let (result2, Post25) = (exist_1 [result2: Z]
           (`0 <= result2` /\ `result2 < N` -> `(access t result2) = 0`) 
-          N (p_po_5 t i0 Post1 i1 Post3)) in
+          N (p_po_6 t Pre5 i0 Post1 i1 Post3)) in
         (exist_2 [i2: Z]
         (qcomb [result3: Z]
          (`0 <= result3` /\ `result3 < N` -> `(access t result3) = 0`)

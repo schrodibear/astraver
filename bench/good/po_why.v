@@ -397,41 +397,46 @@ Definition p14 := (* validation *)
     (p14_po_1 x Pre1 x0 result1 Post1)).
 
 Lemma p15_po_1 : 
-  `0 <= 0` /\ `0 < 10`.
+  (t: (array Z))
+  (Pre2: `(array_length t) = 10`)
+  `0 <= 0` /\ `0 < (array_length t)`.
 Proof. (* p15_po_1 *)
-Omega.
-Save.
-
-
-
-Definition p15 := (* validation *)
-  [t: (array `10` Z)]let Pre1 = p15_po_1 in
-                     (access t `0`).
-
-Lemma p16_po_1 : 
-  (t: (array `10` Z))
-  (result: Z)
-  (Post1: (store t `9` result) = (store t `9` `1`))
-  `0 <= 9` /\ `9 < 10`.
-Proof. (* p16_po_1 *)
 Intros; Omega.
 Save.
 
 
 
+Definition p15 := (* validation *)
+  [t: (array Z); Pre2: `(array_length t) = 10`]
+    let Pre1 = (p15_po_1 t Pre2) in
+    (access t `0`).
+
+Lemma p16_po_1 : 
+  (t: (array Z))
+  (Pre2: `(array_length t) = 10`)
+  (result: Z)
+  (Post1: (store t `9` result) = (store t `9` `1`))
+  `0 <= 9` /\ `9 < (array_length (store t 9 result))`.
+Proof. (* p16_po_1 *)
+Intros; Simpl; Omega.
+Save.
+
+
+
 Definition p16 := (* validation *)
-  [t: (array `10` Z)]
+  [t: (array Z); Pre2: `(array_length t) = 10`]
     let (result, Post1) = (exist_1 [result: Z]
       (store t `9` result) = (store t `9` `1`) `1`
       (refl_equal ? (store t `9` `1`))) in
-    let Pre1 = (p16_po_1 t result Post1) in
-    (exist_2 [t1: (array `10` Z)][result1: unit]
+    let Pre1 = (p16_po_1 t Pre2 result Post1) in
+    (exist_2 [t1: (array Z)][result1: unit]
     t1 = (store t `9` `1`) (store t `9` result) tt Post1).
 
 Lemma p17_po_1 : 
-  (t: (array `10` Z))
-  (Pre3: `0 <= (access t 0)` /\ `(access t 0) < 10`)
-  `0 <= 0` /\ `0 < 10`.
+  (t: (array Z))
+  (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
+         `(access t 0) < 10`)
+  `0 <= 0` /\ `0 < (array_length t)`.
 Proof. (* p17_po_1 *)
 Intros; Omega.
 Save.
@@ -445,14 +450,28 @@ Save.
 *)
 
 
+Lemma p17_po_2 : 
+  (t: (array Z))
+  (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
+         `(access t 0) < 10`)
+  (Pre2: `0 <= 0` /\ `0 < (array_length t)`)
+  (result: Z)
+  (Post1: (store t (access t `0`) result) = (store t (access t `0`) `1`))
+  `0 <= (access t 0)` /\
+  `(access t 0) < (array_length (store t (access t 0) result))`.
+Proof.
+Intros; Simpl; Omega.
+Save.
+
 Definition p17 := (* validation *)
-  [t: (array `10` Z); Pre3: `0 <= (access t 0)` /\ `(access t 0) < 10`]
+  [t: (array Z); Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
+   `(access t 0) < 10`]
     let Pre2 = (p17_po_1 t Pre3) in
     let (result, Post1) = (exist_1 [result: Z]
       (store t (access t `0`) result) = (store t (access t `0`) `1`) 
       `1` (refl_equal ? (store t (access t `0`) `1`))) in
-    let Pre1 = Pre3 in
-    (exist_2 [t1: (array `10` Z)][result1: unit]
+    let Pre1 = (p17_po_2 t Pre3 Pre2 result Post1) in
+    (exist_2 [t1: (array Z)][result1: unit]
     t1 = (store t (access t `0`) `1`) (store t (access t `0`) result) 
     tt Post1).
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.18 2002-12-02 15:17:20 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.19 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -72,8 +72,7 @@ let rec print_ctype fmt = function
   | CTpure PTbool -> assert false
   | CTpure PTunit -> fprintf fmt "void"
   | CTpure (PTexternal id ) -> Ident.print fmt id
-  | CTpure (PTarray (s, pt)) -> 
-      fprintf fmt "%a[%a]" print_pure_type pt print_term s
+  | CTpure (PTarray pt) -> fprintf fmt "%a[]" print_pure_type pt
   | CTpointer ct -> fprintf fmt "%a*" print_ctype ct
   | CTarray ct -> fprintf fmt "%a[]" print_ctype ct
   | CTfun (ctl, ct) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.28 2002-11-07 12:59:47 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.29 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -89,7 +89,7 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "real"
-  | PTarray (_, v) -> 
+  | PTarray v -> 
       fprintf fmt "[int -> "; print_pure_type fmt v; fprintf fmt "]"
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
@@ -155,7 +155,7 @@ let print_predicate fmt p =
 
 let rec print_cc_type fmt = function
   | TTpure pt -> print_pure_type fmt pt
-  | TTarray (_, v) -> fprintf fmt "[int -> %a]" print_cc_type v
+  | TTarray v -> fprintf fmt "[int -> %a]" print_cc_type v
   | TTlambda _
   | TTarrow _
   | TTtuple _ 

@@ -4,9 +4,10 @@ exception Return of int
 parameter N : int
 
 parameter i : int ref
-parameter t : array N of int
+parameter t : int array
 
 let p = 
+  { array_length(t) = N }
   try begin
     i := 0;
     while !i < N do

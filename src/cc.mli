@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.9 2002-11-12 14:35:02 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.10 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -24,7 +24,7 @@ type variable = Ident.t
 
 type cc_type =
   | TTpure of pure_type
-  | TTarray of term * cc_type
+  | TTarray of cc_type
   | TTlambda of cc_binder * cc_type
   | TTarrow of cc_binder * cc_type
   | TTtuple of cc_binder list * cc_type option

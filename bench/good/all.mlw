@@ -3,13 +3,13 @@
 
 (* types syntax: values *)
 parameter v1 : bool ref
-parameter  v2 : int
-parameter  v3 : (int)
+parameter v2 : int
+parameter v3 : (int)
 parameter v4 : (int) ref
-parameter  v5 : foo
-parameter v6 : array 10 of int
-parameter v7 : array 10 of (int)
-parameter v8 : array 3+4 of (int -> int)
+parameter v5 : foo
+parameter v6 : int array
+parameter v7 : (int) array
+parameter v8 : (int -> int) array
 
 (* types syntax: functions *)
 parameter f1 : int -> bool -> int
@@ -25,7 +25,7 @@ parameter f5 : foo -> foo
 parameter f6 : x:foo -> foo
 parameter f7 : x:foo -> {} foo {}
 
-parameter f8 : t:array 10 of int -> {} unit reads t { t[1] = 2 }
+parameter f8 : t:int array -> {} unit reads t { t[1] = 2 }
 
 (* predicates *)
 let p1 = 0 { true }
@@ -96,14 +96,14 @@ let r7 = 1 = 2 || 2 = 3
 let r8 = 1 = 2 && 2 = 3
 
 (* arrays *)
-let arr1 = v6[0]
-let arr2 = v6[1+2]
-let arr3 = { v4 = 0 } v6[!v4]
-let arr4 = { v6[0] = 9 } v6[v6[0]]
+let arr1 = { array_length(v6) >= 1 } v6[0]
+let arr2 = { array_length(v6) >= 4 } v6[1+2]
+let arr3 = { array_length(v6) >= 1 and v4 = 0 } v6[!v4]
+let arr4 = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]]
 
-let arr5 = v6[0] := 1
-let arr6 = v6[1+2] := 3+4
-let arr7 = { v6[0] = 9 } v6[v6[0]] := 1
+let arr5 = { array_length(v6) >= 1 } v6[0] := 1
+let arr6 = { array_length(v6) >= 4 } v6[1+2] := 3+4
+let arr7 = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]] := 1
 
 (* function calls *)
 let fc1 = (f5 v5)

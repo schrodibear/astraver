@@ -9,11 +9,12 @@ external eq_blue  : c:color -> {} bool { if result then c=blue else c<>blue }
 external eq_white : c:color -> {} bool { if result then c=white else c<>white }
 
 parameter N : int
-parameter t : array N of color
+parameter t : color array
 
-logic monochrome : array color, int, int, color -> prop
+logic monochrome : color array, int, int, color -> prop
 
 let dutch_flag = 
+  { array_length(t) = N }
   let b = ref 0 in
   let i = ref 0 in
   let r = ref N in
@@ -21,7 +22,8 @@ let dutch_flag =
      { invariant 0 <= b <= i and i <= r <= N and
 	         monochrome(t,0,b,blue) and 
 	         monochrome(t,b,i,white) and 
-	         monochrome(t,r,N,red)
+	         monochrome(t,r,N,red) and
+		 array_length(t) = N
        variant r - i }
      if (eq_blue t[!i]) then begin
        let u = t[!b] in begin t[!b] := t[!i]; t[!i] := u end;

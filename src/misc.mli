@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.48 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.49 2002-12-04 10:29:51 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -151,6 +151,8 @@ val ge : term -> term -> predicate
 val ge_float : term -> term -> predicate
 val eq : term -> term -> predicate
 val neq : term -> term -> predicate
+
+val array_length : Ident.t -> term
 
 val pif : term -> predicate -> predicate -> predicate
 val pand : predicate -> predicate -> predicate

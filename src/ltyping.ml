@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.11 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.12 2002-12-04 10:29:50 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -166,12 +166,17 @@ and desc_term loc lab lenv = function
       Tvar x, type_tvar loc lenv x
   | PPapp (x, [a;b]) when x == Ident.access ->
       (match term lab lenv a, term lab lenv b with
-	 | (a, PTarray (_,v)), (b, PTint) ->
+	 | (a, PTarray v), (b, PTint) ->
 	     Tapp (x, [a;b]), v
 	 | (Tvar t,_), _ ->
 	     raise_located a.pp_loc (UnboundArray t)
 	 | _ ->
 	     assert false)
+  | PPapp (x, [a]) when x == Ident.array_length ->
+      (match term lab lenv a with
+	 | a, PTarray _ -> Tapp (x, [a]), PTint
+	 | Tvar t, _ -> raise_located a.pp_loc (UnboundArray t)
+	 | _ -> raise_located a.pp_loc (AnyMessage "array expected"))
   | PPapp (x, tl) ->
       let tl = List.map (term lab lenv) tl in
       Tapp (x, List.map fst tl), type_tapp loc lenv x tl
@@ -208,7 +213,7 @@ and type_tapp loc lenv x tl =
 
 and check_type_args loc at tl =
   let illtyped a b = match a, b with
-    | PTarray (_, a), PTarray (_, b) -> a <> b
+    | PTarray a, PTarray b -> a <> b
     | _ -> a <> b
   in
   let rec check_arg = function
@@ -264,9 +269,8 @@ let check_effect loc env e =
 let rec type_v loc lab env lenv = function
   | PVref v -> 
       Ref (type_v loc lab env lenv v)
-  | PVarray (t, v) -> 
-      let t,_ = term lab lenv t in
-      Array (t, type_v loc lab env lenv v)
+  | PVarray v -> 
+      Array (type_v loc lab env lenv v)
   | PVarrow (bl, c) -> 
       let bl',env',lenv' = binders loc lab env lenv bl in 
       make_arrow bl' (type_c loc lab env' lenv' c)
