@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: effect.mli,v 1.1 2001-08-15 21:08:51 filliatr Exp $ *)
+(*i $Id: effect.mli,v 1.2 2001-08-24 19:07:16 filliatr Exp $ i*)
 
 (*s The abstract type of effects. *)
 

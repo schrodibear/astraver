@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: env.mli,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
+(*i $Id: env.mli,v 1.3 2001-08-24 19:07:16 filliatr Exp $ i*)
 
 open Logic
 open Types

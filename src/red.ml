@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: red.ml,v 1.3 2001-08-21 20:57:02 filliatr Exp $ *)
+(*i $Id: red.ml,v 1.4 2001-08-24 19:07:17 filliatr Exp $ i*)
 
 open Ast
 open Misc

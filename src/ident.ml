@@ -1,4 +1,6 @@
 
+(*i $Id: ident.ml,v 1.6 2001-08-24 19:07:17 filliatr Exp $ i*)
+
 type t = string
 
 let create s = s

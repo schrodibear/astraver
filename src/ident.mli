@@ -1,4 +1,6 @@
 
+(*i $Id: ident.mli,v 1.6 2001-08-24 19:07:17 filliatr Exp $ i*)
+
 (*s Indentifiers. *)
 
 type t

@@ -1,4 +1,6 @@
 
+(*i $Id: loc.ml,v 1.3 2001-08-24 19:07:17 filliatr Exp $ i*)
+
 (*s Error locations. *)
 
 type t = int * int

@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: parser.ml4,v 1.5 2001-08-23 20:24:35 filliatr Exp $ *)
+(*i $Id: parser.ml4,v 1.6 2001-08-24 19:07:17 filliatr Exp $ i*)
 
 open Logic
 open Rename

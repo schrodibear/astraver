@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: rename.mli,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+(*i $Id: rename.mli,v 1.2 2001-08-24 19:07:17 filliatr Exp $ i*)
 
 (* Abstract type for renamings 
  * 

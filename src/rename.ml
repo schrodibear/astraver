@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: rename.ml,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+(*i $Id: rename.ml,v 1.2 2001-08-24 19:07:17 filliatr Exp $ i*)
 
 open Ident
 open Misc

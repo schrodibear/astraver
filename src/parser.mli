@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: parser.mli,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
+(*i $Id: parser.mli,v 1.3 2001-08-24 19:07:17 filliatr Exp $ i*)
 
 (* Grammar for the programs *)
 
