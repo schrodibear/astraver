@@ -119,7 +119,7 @@ CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo c/cnorm.cmo c/cprint.cmo \
-	c/ceffect.cmo \
+	c/invariant.cmo c/ceffect.cmo \
 	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 
