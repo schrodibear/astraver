@@ -30,12 +30,12 @@ let sqrt = fun (x : int) ->
 	!y
       end
   end		
-  { result * result <= x and x < (result+1)*(result+1)  }
+  { result * result <= x and x < (result+1)*(result+1) }
      
 (*
 Local Variables: 
 mode: tuareg
-compile-command: "why sqrt.why"
+compile-command: "why sqrt.ml"
 End: 
 *)
      
