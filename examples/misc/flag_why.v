@@ -2,7 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Why.
-Require EqDecide.
 Require Sumbool.
 
 (*Why*) Parameter N : Z.
