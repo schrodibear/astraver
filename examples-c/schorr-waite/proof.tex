@@ -326,6 +326,28 @@ verification of a C program with \caduceus{} and an interactive prover
 as back-end, one needs to learn more on this
 modeling~\cite{Caduceus,filliatre04icfem}.
 
+\begin{figure*}[tp]
+\begin{alltt}\begin{slshape}
+/*@ logic Length weight(node p, node t) 
+            reads p->m,p->c,p->l,p->r  */
+/*@ predicate reachable_elements(node root, plist s) 
+            reads root->l,root->r */ 
+/*@ requires 
+       \bs{}exists plist s; reachable_elements(root,s) && 
+     ... */\end{slshape}
+void schorr_waite(node root) \{
+  node t = root; node p = NULL;\begin{slshape}
+  /*@ invariant ...
+    @ variant weight(p,t) 
+    @   for order_mark_m_and_c_and_stack 
+    @*/\end{slshape}
+  while (p != NULL || (t != NULL && ! t->m)) \{
+   ...
+\end{alltt}
+\caption{Additional annotations for termination}
+\label{fig:term}
+\end{figure*}
+
 The next step is to define the reachability predicate in Coq. We
 proceeded in a slightly different way than Mehta and
 Nipkow~\cite{mehta03cade}: we introduce a more general predicate
@@ -374,121 +396,8 @@ at the end of the next section.
 % after talking about the last point: termination.
 
 
-\begin{comment}
-\subsubsection{Intermediate lemmas}
-
-For define in coq the reachability two definitions:
-Firstly a inductive definition  \texttt{path} which define a path between two pointers.
-\begin{alltt}
-\begin{slshape}
-Inductive path (a: alloc_table) (l: memory pointer)(r: memory pointer) : 
-pointer ->  pointer -> list pointer -> Prop :=
-  | Path_null : forall p:pointer, path a l r p  p nil
-  | Path_left :
-      forall p1 p2:pointer,
-      forall lp : list pointer,
-        valid a p1 ->
-          path a l r (acc l p1) p2 lp-> path a l r p1  p2 (p1::lp)
-  | Path_right :
-      	forall p1 p2:pointer,
-      forall lp : list pointer ,
-        	valid a p1 ->
-        	  path a l r (acc r p1)  p2 lp -> path a l r p1 p2 (p1::lp). 
-\end{slshape}
-\end{alltt}
-Secondly a definition  \texttt{reachable} which define if two pointers are
-reachable i.e. there exist a path between this two pointers.
-\begin{alltt}
-\begin{slshape}
-Definition reachable (a: alloc_table) 
-  (l: memory pointer)(r: memory pointer) 
-  (p1 :pointer) (p2:pointer) : Prop :=
-  exists lp : list pointer, path a l r p1 p2 lp
-\end{slshape}
-\end{alltt}
-
-We supplement this definition with the lemma
-\texttt{path\_no\_cycle} which affirm if
-there exist a path between this two pointers then there exist a path
-between this two pointers without cycle.
-\begin{alltt}
-\begin{slshape}
-Lemma path_no_cycle : forall (a : alloc_table) 
-  (p1 p2 : pointer) (l r : memory pointer) 
-  (pa : list pointer), path a l r p1 p2 pa -> 
-  exists pa' :list pointer, 
-  incl pa' pa /\ no_rep pa' /\ path a l r p1 p2 pa'. 
-\end{slshape}
-\end{alltt}
-
-And we supplement this definition with four lemmas
-\texttt{path\_upd\_left}, \texttt{path\_upd\_right},
-\texttt{path\_inv\_upd\_left} and \texttt{path\_inv\_upd\_right} which
-affirm if we have un path between the two pointers p1 p2 and if we
-modify the graphe without touch the pointers in this path then this
-path exists always. 
-\begin{alltt}
-\begin{slshape}
-Lemma path_upd_left : forall (alloc : alloc_table) 
-  (l r : memory pointer) (p:pointer)
-  (lp : list pointer) (p1 p0 p2 : pointer), 
-  ~ In p lp -> path alloc l r p1 p0 lp -> 
-  path alloc (upd l p p2) r p1 p0 lp.
-\end{slshape}
-\end{alltt}
 
 
-
-An other definition on reachability is neccessary, the definition
- \texttt{unmarked\_reachable} which define if there exist a path
- between this two pointers with all the pointers in this path are not marked.
-\begin{alltt}
-\begin{slshape}
-Definition unmarked_reachable (a: alloc_table) 
-  (m:memory Z) (l r: memory pointer) (p1 p2:pointer) 
-  : Prop :=
-  exists lp : list pointer, 
-    (forall x : pointer, In x lp -> (acc m x) = 0 ) 
-    /\ path a l r p1 p2 lp.
-\end{slshape}
-\end{alltt}
-
-
-An other important definition for this proof is \texttt{clr\_list}
-which define the pile. For this it use a inductive definition llist
-which define a list form a initial pointer and un function
-\texttt{next} which give us a follower of a pointer.  
-\begin{alltt}
-\begin{slshape}
-Definition clr_list (a: alloc_table)  (c:memory Z) (l: memory pointer)
-(r: memory pointer) : pointer ->list pointer-> Prop :=
-let next t := if Z_eq_dec (acc c t) 0 then (acc l t) else (acc r t) in
-llist a next .
-\end{slshape}
-\end{alltt}
-\end{comment}
-
-\begin{figure*}[tp]
-\begin{alltt}\begin{slshape}
-/*@ logic Length weight(node p, node t) 
-            reads p->m,p->c,p->l,p->r  */
-/*@ predicate reachable_elements(node root, plist s) 
-            reads root->l,root->r */ 
-/*@ requires 
-       \bs{}exists plist s; reachable_elements(root,s) && 
-     ... */\end{slshape}
-void schorr_waite(node root) \{
-  node t = root; node p = NULL;\begin{slshape}
-  /*@ invariant ...
-    @ variant weight(p,t) 
-    @   for order_mark_m_and_c_and_stack 
-    @*/\end{slshape}
-  while (p != NULL || (t != NULL && ! t->m)) \{
-   ...
-\end{alltt}
-\caption{Additional annotations for termination}
-\label{fig:term}
-\end{figure*}
 
 \subsection{Termination}
 \label{sec:termination}
