@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.67 2004-12-10 15:10:41 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.68 2004-12-14 13:51:54 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -468,11 +468,11 @@ let print_effects fmt l =
 (* first pass: declare invariants and computes effects for logics *)
 
 let invariant_for_global =
-  let allocs = ref (fun x -> NPtrue) in
+  let allocs = ref (fun n x -> (*NPtrue*) []) in
   fun loc v t ->
     let allocs',form = Cnorm.separation ~allocs:!allocs loc v t in
     allocs := allocs';
-    NPand (form, Cnorm.valid_for_type loc v t)
+    form
 
 let not_a_constant_value loc = error loc "is not a constant value"
 
@@ -660,11 +660,16 @@ let decl d =
 	    | Tstruct _ | Tarray _ ->
 		lprintf "adding implicit invariant for validity of %s@." 
 		  v.var_name;
-		let id = "valid_" ^ v.var_name in
+		let id = "separation_" ^ v.var_name in
 		let t = { nterm_node = NTvar v; 
 			  nterm_loc = Loc.dummy;
 			  nterm_type = ty } in
-		add_strong_invariant id (invariant_for_global d.loc v t) 
+		  List.iter (fun (x,y) -> 
+(*			       (eprintf "%s : %a @." x Cprint.npredicate y);*)
+			       add_strong_invariant x y) 
+		    (invariant_for_global d.loc v t);
+		add_strong_invariant ("valid_" ^ v.var_name) 
+		  (Cnorm.valid_for_type d.loc v t)
 	    | _ -> ()
 	end;
 	let init = (match init with | None -> [] | Some l -> [l]) in

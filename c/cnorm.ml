@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.7 2004-12-10 15:10:41 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.8 2004-12-14 13:51:54 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -641,6 +641,7 @@ let print_allocs =
 	       term_type = c_pointer c_void } in
   fun fmt p -> fprintf fmt "fun x -> %a" print_predicate (p varx)
 
+(*
 let separation loc v ?(allocs=(fun x -> NPtrue)) (t : Cast.nterm) =
   let not_alias x y = 
     let ba t = { nterm_node = NTbase_addr t; 
@@ -789,3 +790,178 @@ that a pointer is different from all allocated pointers in [t]
 	allocs, NPtrue
   in
   local_alloc_for allocs t
+*)
+
+let separation loc v ?(allocs=(fun n x -> [])) (t : Cast.nterm) =
+  let not_alias x y = 
+    let ba t = { nterm_node = NTbase_addr t; 
+		 nterm_loc = loc;
+		 nterm_type = c_addr } in 
+    NPrel (ba x, Neq, ba y)
+  in
+(*
+[local_alloc_for t] returns a pair (allocs,f), f is a formula expressing that 
+all allocations in [t] are not aliased and [allocs] is a function expressing
+that a pointer is different from all allocated pointers in [t]
+*)
+  let rec local_alloc_fields allocs n t =	
+    (* Format.eprintf "local_alloc_fields@.  allocs = %a@.  t = %a@." 
+        print_allocs allocs print_term t; *)
+    match tag_type_definition n with
+    | TTStructUnion ((Tstruct _),fl) ->
+	let allocs',form' as res = 
+	  List.fold_right 
+	  (fun (tyf, f) (allocs,form) -> 
+	     let tf = 
+	       { nterm_node = NTarrow (t, f); 
+		 nterm_loc = t.nterm_loc;
+		 nterm_type = ctype tyf }
+	     in
+	     let allocs',form' = local_alloc_for allocs tf f.var_name in
+	     allocs',form@form')
+	  fl 
+	  (allocs, [])
+	in
+	(*
+	Format.eprintf "  local_alloc_fields ---> %a@." print_predicate form'; 
+	*)
+	res 
+    | TTIncomplete ->
+	error loc ("`" ^ v.var_name ^ "' has incomplete type")
+    |  _ ->
+	assert false
+  and local_alloc_for allocs (t : Cast.nterm) name = 
+    (* Format.eprintf "local_alloc_for@.  allocs = %a@.  t = %a@." 
+        print_allocs allocs print_term t; *)
+    match t.nterm_type.Ctypes.ctype_node with
+    | Tstruct n ->
+	let allocs_t = allocs name t in
+	let allocs n x = 
+	  if compatible_type x.nterm_type t.nterm_type 
+	  then (allocs n x)@[("separation_"^name^"_"^n, not_alias x t)] 
+	  else allocs n x in
+	let allocs',form = local_alloc_fields allocs n t in
+	allocs', form@allocs_t 
+    | Tarray (ty, None) ->
+	error loc ("array size missing in `" ^ v.var_name ^ "'")
+    | Tarray (ty, Some s) ->
+	let ts = int_nconstant (Int64.to_string s) in
+	let forall_index i vari pi =
+	  make_forall [c_int, i] 
+	    (make_implies 
+	       (NPand (NPrel (nzero, Le, vari), NPrel (vari, Lt, ts)))
+	       pi)
+	in
+	let allocs_t = allocs name t in
+	begin match ty.Ctypes.ctype_node with
+	  | Tstruct n ->
+	      (* Format.eprintf "  cas d'un tableau de struct@."; *)
+	      let i = default_var_info (fresh_index ()) in
+	      let vari = { nterm_node = NTvar i; 
+			   nterm_loc = t.nterm_loc;
+			   nterm_type = c_int } in
+	      let ti = 
+		{ nterm_node = NTbinop (t, Badd, vari); 
+		  nterm_loc = t.nterm_loc;
+		  nterm_type = t.nterm_type }
+	      in
+	      let allocs_i,_ = local_alloc_fields (fun n x -> []) n ti in
+	      let j = default_var_info (fresh_index ()) in
+	      let varj ={ nterm_node = NTvar j; 
+			  nterm_loc = t.nterm_loc;
+			  nterm_type = c_int } in
+	      let allocs' n x =
+		(* allocs x and x<>t and 
+		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
+		(allocs n x)@(if compatible_type x.nterm_type t.nterm_type 
+			    then [("separation_"^name^"_"^n, not_alias x t)]
+			    else [])@
+		[("separation_in_tableau_"^name^"_"^n,(forall_index i vari
+		   (make_implies (NPrel (vari, Neq, varj)) 
+		      (List.fold_left (fun x (_,y) -> make_and x y) 
+			 NPtrue (allocs_i n x)))))]
+	      in
+	      let tj = 
+		{ nterm_node = NTbinop (t, Badd, varj); 
+		  nterm_loc = t.nterm_loc;
+		  nterm_type = t.nterm_type }
+	      in
+	      let _,form_j = local_alloc_fields allocs' n tj in
+	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
+	      (fun n x -> 
+		 (allocs n x)@(if compatible_type x.nterm_type t.nterm_type 
+			     then [("separation_"^name^"_"^n,not_alias x t)]
+			    else [])@
+	      [("separation_in_structure_in_tableau_"^name^"_"^n,
+		(forall_index i vari 
+		   (List.fold_left (fun x (_,y) -> make_and x y) 
+		      NPtrue (allocs_i n x))))]),
+	      (* forall j 0<=j<ts -> form_j *)
+	      ("separation_in_tableau_"^name^"_"^n,
+	       (forall_index j varj (List.fold_left 
+				       (fun x (_,y) -> make_and x y) 
+				       NPtrue form_j)))::allocs_t 
+	  | Tarray _ ->
+	      (* Format.eprintf "  cas d'un tableau d'autre nature@."; *)
+	      let i = default_var_info (fresh_index ()) in
+	      let vari = { nterm_node = NTvar i; 
+			   nterm_loc = t.nterm_loc;
+			   nterm_type = c_int } in
+	      let ti = { nterm_node = 
+			   NTstar {
+			     nterm_node = NTbinop (t, Badd, vari); 
+			     nterm_type = t.nterm_type;
+			     nterm_loc = t.nterm_loc ;
+			   } ;
+			 nterm_loc = t.nterm_loc;
+			 nterm_type = ty } in
+	      let allocs_i,_ = local_alloc_for (fun n x -> []) ti (name^"+i") 
+	      in
+	      let j = default_var_info (fresh_index ()) in
+	      let varj ={ nterm_node = NTvar j; 
+			  nterm_loc = t.nterm_loc;
+			  nterm_type = c_int } in
+	      let allocs' n x =
+		(* allocs x and x<> t and
+		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
+		(allocs n x)@(if compatible_type x.nterm_type t.nterm_type 
+			    then [("separation_"^name^"_"^n,not_alias x t)]
+			    else [])@
+		  [("separation_in_tableau_"^name^"_"^n,(forall_index i vari
+		     (make_implies (NPrel (vari, Neq, varj)) 
+			(List.fold_left (fun x (_,y) -> make_and x y) 
+			   NPtrue  (allocs_i n x)))))]
+	      in
+	      let tj = { nterm_node = 
+			   NTstar {
+			     nterm_node = NTbinop (t, Badd, varj); 
+			     nterm_type = t.nterm_type;
+			     nterm_loc = t.nterm_loc ;
+			   } ;
+			 nterm_loc = t.nterm_loc;
+			 nterm_type = ty } in
+	      let _,form_j = local_alloc_for allocs' tj (name^"+j") in
+	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
+	      (fun n x -> 
+		 (allocs n x)@(if compatible_type x.nterm_type t.nterm_type 
+			    then [("separation_"^name^"_"^n, not_alias x t)]
+			     else [])@
+		   [("separation_in_tableau_"^name^"_"^n,(forall_index i vari 
+		      (List.fold_left (fun x (_,y) -> make_and x y) 
+			 NPtrue (allocs_i n x))))]),
+	      (* forall j 0<=j<ts -> form_j *)
+	     ("separation_in_tableau"^name,(forall_index j varj 
+		(List.fold_left (fun x (_,y) -> make_and x y) 
+		   NPtrue form_j)))::allocs_t 
+	  | _ ->
+	      let allocs n x = (allocs n x)@
+			     (if compatible_type x.nterm_type t.nterm_type 
+			      then [("separation_"^name^"_"^n,not_alias x t)]
+			      else []) in
+	      allocs, allocs_t
+	end
+    | _ ->
+	(* Format.eprintf "autre (%a)@." print_term t; *)
+	allocs, []
+  in
+  local_alloc_for allocs t v.var_name

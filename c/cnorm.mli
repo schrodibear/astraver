@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.1 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.2 2004-12-14 13:51:54 hubert Exp $ i*)
 
 open Cast
 
@@ -30,7 +30,9 @@ val valid_for_type :
 
 val separation : 
   Loc.t -> Info.var_info -> 
-  ?allocs:(nterm -> npredicate) -> nterm -> (nterm -> npredicate) * npredicate
+  ?allocs:(string -> nterm -> (string * npredicate) list) -> nterm -> 
+    (string -> nterm -> (string * npredicate) list) * 
+    (string * npredicate) list
 
 val make_and : npredicate -> npredicate -> npredicate
 

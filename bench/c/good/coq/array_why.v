@@ -3,55 +3,29 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/array.why", characters 985-1088 *)
+(* Why obligation from file "why/array.why", characters 244-347 *)
 Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (forall (index_1:Z),
-                 (0 <= index_1 /\ index_1 < 3 ->
-                  ~((base_addr (acc intPP (shift t index_1))) = (base_addr t)) /\
-                  (forall (index_0:Z),
-                   (0 <= index_0 /\ index_0 < 3 ->
-                    (index_0 <> index_1 ->
-                     ~((base_addr (acc intPP (shift t index_1))) = (base_addr (
-                                                                    acc intPP
-                                                                    (
-                                                                    shift t
-                                                                    index_0))))))))) /\
-                (valid_range alloc t 0 2) /\
-                (forall (index_2:Z),
-                 (0 <= index_2 /\ index_2 < 3 ->
-                  (valid_range alloc (acc intPP (shift t index_2)) 0 2)))),
+                (separation_in_tableaut alloc t intPP) /\
+                (valid_t alloc t intPP)),
   (valid alloc (shift t 1)).
 Proof.
 intuition; subst; auto with *.
 Save.
 
-(* Why obligation from file "why/array.why", characters 985-1088 *)
+(* Why obligation from file "why/array.why", characters 244-347 *)
 Lemma getcell_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (forall (index_1:Z),
-                 (0 <= index_1 /\ index_1 < 3 ->
-                  ~((base_addr (acc intPP (shift t index_1))) = (base_addr t)) /\
-                  (forall (index_0:Z),
-                   (0 <= index_0 /\ index_0 < 3 ->
-                    (index_0 <> index_1 ->
-                     ~((base_addr (acc intPP (shift t index_1))) = (base_addr (
-                                                                    acc intPP
-                                                                    (
-                                                                    shift t
-                                                                    index_0))))))))) /\
-                (valid_range alloc t 0 2) /\
-                (forall (index_2:Z),
-                 (0 <= index_2 /\ index_2 < 3 ->
-                  (valid_range alloc (acc intPP (shift t index_2)) 0 2)))),
+                (separation_in_tableaut alloc t intPP) /\
+                (valid_t alloc t intPP)),
   forall (Pre2: (valid alloc (shift t 1))),
   (valid alloc (shift (acc intPP (shift t 1)) 2)).
 Proof.

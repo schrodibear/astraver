@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.123 2004-12-10 15:10:41 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.124 2004-12-14 13:51:54 hubert Exp $ i*)
 
 
 open Format
@@ -833,15 +833,38 @@ let weak_invariants_for hvs =
     Ceffect.weak_invariants LTrue
 
 (* we memoize the translation of strong invariants *)
+(*
 let strong_invariant = 
   let h = Hashtbl.create 97 in
-  fun id p -> 
+  fun id p e -> 
     try 
       Hashtbl.find h id
     with Not_found -> 
       let p = interp_predicate None "" p in
       Hashtbl.add h id p;
       p
+*)
+
+let interp_strong_invariants () =
+  Hashtbl.fold
+    (fun id (p,e) acc -> 
+       let args = 
+	 HeapVarSet.fold 
+	   (fun x acc -> (x.var_unique_name, Ceffect.heap_var_type x)::acc) 
+	   e []
+       in
+       if args = [] then acc else
+       (Predicate(false,id,args,interp_predicate None "" p))::acc)
+    Ceffect.strong_invariants []
+    
+
+let strong_invariant_name id p e =
+  LPred(id, 
+	(HeapVarSet.fold 
+	   (fun x acc -> LVar(x.var_unique_name)::acc) 
+	   e []))
+
+
 
 let strong_invariants_for hvs =
   (** eprintf "strong_invariants: %a @." print_hvs hvs; **)
@@ -849,7 +872,7 @@ let strong_invariants_for hvs =
     (fun id (p,e) acc -> 
        (** eprintf "  e = { %a }@." print_hvs e; **)
        if Ceffect.intersect_only_alloc e hvs then acc
-       else make_and (strong_invariant id p) acc) 
+       else make_and (strong_invariant_name id p e) acc) 
     Ceffect.strong_invariants LTrue
 
 let interp_spec add_inv effect_reads effect_assigns s =
@@ -872,7 +895,8 @@ let interp_spec add_inv effect_reads effect_assigns s =
 let alloc_on_stack loc v t =
   let form = 
     Cnorm.make_and 
-      (snd (Cnorm.separation loc v t))
+      (List.fold_left (fun x (_,y) -> Cnorm.make_and x y) 
+	 NPtrue (snd(Cnorm.separation loc v t)))
       (Cnorm.valid_for_type ~fresh:true loc v t)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
@@ -1389,6 +1413,7 @@ let add_strong_invariants =
 ***)
 
 let interp l =
-  List.fold_left interp_located_tdecl ([],[],[]) l
+  let s = interp_strong_invariants () in
+  List.fold_left interp_located_tdecl ([],s,[]) l
 
 

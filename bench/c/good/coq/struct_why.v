@@ -46,16 +46,14 @@ Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 825-837 *)
+(* Why obligation from file "why/struct.why", characters 747-759 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (Pre11: (((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)) /\
-                 ~((base_addr (acc t s)) = (base_addr s)) /\
-                 (valid alloc s) /\ (valid alloc (acc t s))),
+                 (valid alloc ps)) /\ (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   (valid alloc s).
@@ -63,16 +61,14 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 861-874 *)
+(* Why obligation from file "why/struct.why", characters 783-796 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (Pre11: (((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)) /\
-                 ~((base_addr (acc t s)) = (base_addr s)) /\
-                 (valid alloc s) /\ (valid alloc (acc t s))),
+                 (valid alloc ps)) /\ (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -83,16 +79,14 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 879-903 *)
+(* Why obligation from file "why/struct.why", characters 801-825 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (Pre11: (((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)) /\
-                 ~((base_addr (acc t s)) = (base_addr s)) /\
-                 (valid alloc s) /\ (valid alloc (acc t s))),
+                 (valid alloc ps)) /\ (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -106,7 +100,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 844-903 *)
+(* Why obligation from file "why/struct.why", characters 766-825 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -114,9 +108,7 @@ Lemma g_impl_po_4 :
   forall (t: ((memory) pointer)),
   forall (x: ((memory) Z)),
   forall (Pre11: (((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)) /\
-                 ~((base_addr (acc t s)) = (base_addr s)) /\
-                 (valid alloc s) /\ (valid alloc (acc t s))),
+                 (valid alloc ps)) /\ (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),

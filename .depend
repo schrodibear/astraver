@@ -215,7 +215,7 @@ c/cconst.cmi: src/loc.cmi
 c/ceffect.cmi: c/cast.cmi c/clogic.cmi c/info.cmi src/loc.cmi c/output.cmi 
 c/cenv.cmi: c/ctypes.cmi c/info.cmi src/loc.cmi 
 c/cerror.cmi: c/ctypes.cmi 
-c/cinit.cmi: c/cast.cmi c/info.cmi 
+c/cinit.cmi: c/cast.cmi c/info.cmi src/loc.cmi 
 c/cinterp.cmi: c/cast.cmi c/output.cmi 
 c/clogic.cmi: c/info.cmi src/loc.cmi 
 c/clparser.cmi: c/cast.cmi c/clogic.cmi 
@@ -229,10 +229,10 @@ c/info.cmi: c/ctypes.cmi
 c/cconst.cmo: c/creport.cmi c/cconst.cmi 
 c/cconst.cmx: c/creport.cmx c/cconst.cmi 
 c/ceffect.cmo: c/cast.cmi c/cenv.cmi c/clogic.cmi c/cnorm.cmi c/coptions.cmi \
-    c/creport.cmi c/ctypes.cmi c/ctyping.cmi c/info.cmi src/loc.cmi \
+    c/cprint.cmi c/creport.cmi c/ctypes.cmi c/info.cmi src/loc.cmi \
     c/output.cmi src/pp.cmi c/ceffect.cmi 
 c/ceffect.cmx: c/cast.cmi c/cenv.cmx c/clogic.cmi c/cnorm.cmx c/coptions.cmx \
-    c/creport.cmx c/ctypes.cmx c/ctyping.cmx c/info.cmx src/loc.cmx \
+    c/cprint.cmx c/creport.cmx c/ctypes.cmx c/info.cmx src/loc.cmx \
     c/output.cmx src/pp.cmx c/ceffect.cmi 
 c/cenv.cmo: c/coptions.cmi c/creport.cmi c/ctypes.cmi c/info.cmi src/lib.cmi \
     c/cenv.cmi 
@@ -273,11 +273,11 @@ c/cmain.cmx: c/ceffect.cmx c/cerror.cmi c/cinit.cmx c/cinterp.cmx \
 c/cmake.cmo: c/coptions.cmi src/pp.cmi c/cmake.cmi 
 c/cmake.cmx: c/coptions.cmx src/pp.cmx c/cmake.cmi 
 c/cnorm.cmo: c/cast.cmi c/cconst.cmi c/cenv.cmi c/clogic.cmi c/cltyping.cmi \
-    c/creport.cmi c/ctypes.cmi c/ctyping.cmi c/info.cmi src/loc.cmi \
-    c/cnorm.cmi 
+    c/coptions.cmi c/creport.cmi c/ctypes.cmi c/ctyping.cmi c/info.cmi \
+    src/loc.cmi c/cnorm.cmi 
 c/cnorm.cmx: c/cast.cmi c/cconst.cmx c/cenv.cmx c/clogic.cmi c/cltyping.cmx \
-    c/creport.cmx c/ctypes.cmx c/ctyping.cmx c/info.cmx src/loc.cmx \
-    c/cnorm.cmi 
+    c/coptions.cmx c/creport.cmx c/ctypes.cmx c/ctyping.cmx c/info.cmx \
+    src/loc.cmx c/cnorm.cmi 
 c/coptions.cmo: c/cversion.cmo c/coptions.cmi 
 c/coptions.cmx: c/cversion.cmx c/coptions.cmi 
 c/cparser.cmo: c/cast.cmi c/cerror.cmi c/clogic.cmi c/coptions.cmi \
