@@ -413,7 +413,7 @@ second assignment without changing the second obligation.
 
 
 \section{Restrictions with respect to ML}
-The input language is close to (some fragment of) \caml. However,
+The ML input language is close to (some fragment of) \caml. However,
 there are some---more or less significant---differences:
 \begin{itemize}
 \item There is \textit{no type inference}; binders are explicitly
@@ -433,6 +433,13 @@ as in ML, but one must write instead
   \texttt{t.(e1) <- e2}.
 \item Array types mention the array size (e.g. \texttt{array 10 of int}).
 \end{itemize}
+Getting true \caml\ code from a \why\ source is the subject of the
+next section.
+
+
+\section{Caml code generation}
+\label{ocamlcode}\index{Caml code generation}
+TODO
 
 
 \section{Installation}
@@ -519,6 +526,19 @@ Options are the following:
     Set/Unset the functional validation. Only meaningful with the
     \coq\ prover. When set, \why\ outputs a functional interpretation
     of each program. Default is no validation. 
+
+  \item[Caml code generation options:] ~\par
+  \item[\texttt{--ocaml}]: ~\par 
+    Select the \caml\ code generation. The code is produced on
+    standard output, unless specified otherwise with option \texttt{--output}.
+  \item[\texttt{--output}] \textit{file}: ~\par 
+    Redirect the output to file \textit{file}.
+  \item[\texttt{--ocaml-annot}]: ~\par 
+    Decorate the \caml\ code with all annotations as comments. Default
+    is no annotation.
+  \item[\texttt{--ocaml-ext}]: ~\par 
+    Make parameters from \texttt{external} declarations.
+    
 \end{description}
 
 

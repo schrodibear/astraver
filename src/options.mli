@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.11 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.12 2002-11-05 08:44:50 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -33,6 +33,7 @@ val if_debug_3 : ('a -> 'b -> 'c -> unit) -> 'a -> 'b -> 'c -> unit
 val ocaml : bool
 val ocaml_annot : bool
 val ocaml_externals : bool
+val output : (Format.formatter -> unit) -> unit
 
 (*s Typing options *)
 

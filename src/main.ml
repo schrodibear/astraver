@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.42 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.43 2002-11-05 08:44:50 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -47,7 +47,7 @@ let push_parameter id v = match prover with
 
 let output fwe = 
   if ocaml then 
-    Ocaml.output std_formatter
+    Options.output Ocaml.output 
   else match prover with
     | Pvs -> Pvs.output_file fwe
     | Coq -> Coq.output_file fwe

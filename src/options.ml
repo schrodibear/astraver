@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.11 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.12 2002-11-05 08:44:50 filliatr Exp $ i*)
 
 open Format
 
@@ -31,6 +31,7 @@ let coq_tactic_ = ref None
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
 let ocaml_externals_ = ref false
+let output_ = ref None
 
 type prover = Coq | Pvs
 let prover_ = ref Coq
@@ -92,6 +93,7 @@ Misc options:
   --ocaml        Ocaml code output
   --ocaml-annot  Show all annotations in ocaml code
   --ocaml-ext    Consider \"external\"s as parameters in ocaml code
+  --output f     Redirect output to file f
 ";
   flush stderr
 
@@ -121,6 +123,10 @@ let files =
 	ocaml_annot_ := true; parse args
     | ("--ocaml-ext" | "-ocaml-ext") :: args -> 
 	ocaml_externals_ := true; parse args
+    | ("-o" | "-output" | "--output") :: f :: args -> 
+	output_ := Some f; parse args
+    | ("-o" | "-output" | "--output") :: [] -> 
+	usage (); exit 1
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -135,9 +141,20 @@ let wp_only = !wp_only_
 let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
+
 let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_
 let ocaml_externals = !ocaml_externals_
+
+let output o = match !output_ with
+  | None -> 
+      o Format.std_formatter
+  | Some f -> 
+      let cout = open_out f in
+      let fmt = Format.formatter_of_out_channel cout in
+      o fmt;
+      Format.pp_print_flush fmt ();
+      close_out cout
 
 let if_verbose f x = if verbose then f x
 let if_verbose_2 f x y = if verbose then f x y
