@@ -16,9 +16,10 @@ by previous works on Schorr-Waite algorithm. However, some
 difficulties remain. The main one is that we need to express this loop
 invariant in the \caduceus{} syntax, which is quite poor, for example
 in~\cite{mehta03cade} they use a higher-order syntax that is simply
-not allowed by \caduceus. Also, since we proved a little bit more than
-previous works, namely the absence of invalid pointer dereferencing,
-we needed to add new assertions in the loop invariant.
+not allowed by \caduceus. 
+% Also, since we proved a little bit more than
+% previous works, namely the absence of invalid pointer dereferencing,
+% we needed to add new assertions in the loop invariant.
 
 \subsection{Designing the loop invariant}
 
@@ -66,7 +67,7 @@ we needed to add new assertions in the loop invariant.
 The key idea for the loop invariant is that even if the graph
 structure is temporarily modified, the reachability of nodes is
 preserved. More precisely, each node that is initially reachable from
-the root will be always reachable either from p or from t. We also
+the root will be always reachable either from $p$ or from $t$. We also
 need to describe as a loop invariant how the backtracking stack is
 implemented using the pointers of the graph. On
 Figure~\ref{fig:stack}, we display some state of the graph as it may
@@ -123,7 +124,7 @@ void schorr_waite(node root) \{
 \label{fig:loopinv}
 \end{figure}
 
-The loop invariant as it is writing in the \caduceus{} annotation
+The loop invariant as it is written in the \caduceus{} annotation
 language is displayed on Figure~\ref{fig:loopinv}.  For specifying this
 loop invariant, in particular the stack, we need to talk about lists
 of pointers, in annotations. With \caduceus{}, such a datatype from
@@ -138,9 +139,10 @@ types or logical types. Here we declare
 \end{alltt}
 which first introduce the logical type \verb|plist| for finite lists
 of pointers, then a logical function symbol \verb|cons| which adds an
-element to a list, a predicate \verb|in_list| which tests of a
-pointer belongs to a list, and finally a predicate \verb|pair_in_list|,
-saying that p1 and p2 are two consecutive nodes of a list.
+element to a list, a predicate \verb|in_list| which tests if a pointer
+belongs to a list, and finally a predicate
+$\verb|pair_in_list|(p_1,p_2,l)$, saying that $p_1$ and $p_2$ are two
+consecutive elements in a list $l$.
 
 The loop invariant finally requires the declaration of two predicates:
 \begin{alltt}\begin{slshape}
@@ -148,44 +150,46 @@ The loop invariant finally requires the declaration of two predicates:
   @   reads p1->r,p1->l,p1->m 
   @*/\end{slshape}
 \end{alltt}
-specifies that p2 is reachable from p1, by traversing only unmarked
-nodes; and
+specifies that $p_2$ is reachable from $p_1$, by traversing only
+unmarked nodes; and
 \begin{alltt}\begin{slshape}
 /*@ predicate clr_list (node p, plist stack) 
   @   reads p->c,p->l,p->r 
   @*/\end{slshape}
 \end{alltt}
-specifies that \verb|stack| is the list of pointers obtained from p as
+specifies that \verb|stack| is the list of pointers obtained from $p$ as
 described on Figure~\ref{fig:stack}.
 
 On Figure~\ref{fig:loopinv}, we used the \caduceus{} notation to name
 formulas, of the form \textsl{name}\verb|::|\textsl{formula}. The loop
-invariant has 9 assertions:
+invariant has eight assertions:
 \begin {enumerate}
-\item {I1} : means that all nodes which were initially reachable from
-  root, are reachable from t or p
-\item {I2} : means that conversely, all (non-null) nodes reachable by t or
-  p were initially reachable from root. This is true only for non-null
-  node, because null may not be reachable from root is the graph is cyclic.
-\item {I3} : means that for nodes initially unreachable, the mark
-  remains unchanged.
-\item {I4a} : defines the backtracking stack as on Figure~\ref{fig:stack}.
-\item {I4b} : means that all nodes in the \texttt{stack} are marked.
-\item {I4c} : the trickest annotation, means that
+\item[I1] means that all nodes which were initially reachable from
+  root, are reachable from $t$ or $p$
+\item[I2] means that conversely, all (non-null) nodes reachable by $t$
+  or $p$ were initially reachable from \verb|root|. This is true only
+  for non-null node, because \verb|null| may not be reachable from
+  \verb|root| is the graph is cyclic.
+\item[I3] means that for initially unreachable nodes, the marks
+  remain unchanged.
+\item[I4a] defines the backtracking stack as on Figure~\ref{fig:stack}.
+\item[I4b] means that all nodes in the \texttt{stack} are marked.
+\item[I4c] is the trickiest annotation, means that
   any valid node, initially reachable from root, 
   and not yet marked, is reachable by traversing only
-  unmarked nodes, either from t or from the right children of a node
+  unmarked nodes, either from $t$ or from the right children of a node
   in the stack.
-\item {I4d} : means all nodes out of \texttt{stack} have
+\item[I4d] means that all nodes out of \texttt{stack} have
   the same children as before the function. 
-\item {I4e} : a trick one also, that is essential for being able to
+\item[I4e] is a tricky one also, that is essential for being able to
   `recover' the correct children of nodes of the stack, as it can be
-  seen again on Figure~\ref{fig:stack}: if p1 is in
-  the stack, followed by p2 (or if p1 is t and p2 is the head of the
-  stack), then : if p2->c is
+  seen again on Figure~\ref{fig:stack}: if $p_1$ is in
+  the stack, followed by $p_2$ (or if $p_1$ is $t$ and $p2$ is the head of the
+  stack), then: if $p_2\verb|->c|$ is
   1 then its left child is the same as its was initially
-     and its right child is p1 ; and if p2->c is 0 then its left child
-   is p1 and its right child is the same as it was initially.
+     and its right child is $p_1$ ; and if $p_2\verb|->c|$ is 0 then
+     its left child is $p_1$ and its right child is the same as it was
+     initially. 
 \end{enumerate}
 
 
@@ -298,7 +302,7 @@ can be found in the \caduceus{} distribution):
 where $next(c,l,r,p) = \verb|if|~select(c,p) =
 0~\verb|then|~select(l,p)~\verb|else|~select(r,p)$. Here we see that
 the component-as-array modeling is exposed to the user: the
-\verb|clr_list| predicate has two argument in C, but in the modeling
+\verb|clr_list| predicate has two arguments in C, but in the modeling
 it is given extras arguments $a$, $c$, $l$, $r$ which are arrays
 indexed by pointers (with $select$ as their access function). $a$
 corresponds to an allocation table which tells for each pointer
@@ -337,7 +341,7 @@ Notice that it is now easy to establish the validity of the axiom
 
 A few lemmas have been proved before proving the obligations, the most
 important one was to show that when $p_2$ is reachable from $p_1$,
-there is a path which has no cycle:
+there is a path which have no cycle:
 \[
 \begin{array}{l}
 \forall a, p_1, p_2, l, r, s,~path(a,l,r,p_1,p_2,s) \rightarrow
@@ -451,8 +455,33 @@ llist a next .
 \subsection{Termination}
 \label{sec:termination}
 
-\begin{figure}[b]
-\hrulefill
+Proving termination of the algorithm of course amounts to prove
+termination of the while loop. In \caduceus{}, one can annotate a
+loop by a \emph{variant}: an expression which decreases with respect
+to some well-founded ordering. It is quite easy to find such a
+measure: there is a triple of natural numbers which decrease
+lexicographically at each iteration:
+\begin{enumerate}
+\item the number of unmarked reachable nodes
+\item the number of reachable nodes which have $c=0$
+\item the length of the stack
+\end{enumerate}
+There is a minor problem: in our modeling, there is no assumption on
+the finiteness of the memory, so indeed nothing tells that the set of
+reachable nodes is finite. So indeed, this is an extra assumption we have
+to insert in the pre-condition. Finally, the annotated source code is
+completed as given Figure~\ref{fig:term}, where in Coq we define
+\[
+\begin{array}{l}
+\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
+\forall p, in(p,s) \leftrightarrow reachable(a,l,r,root,p) 
+\end{array}
+\]
+The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
+are also defined in Coq according the informal definition of the
+measure above. 
+
+\begin{figure}[t]
 \begin{alltt}\begin{slshape}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
@@ -473,35 +502,11 @@ void schorr_waite(node root) \{
 \}
 \end{alltt}
 \vspace*{-5mm}
+\hrulefill 
 \caption{Additional annotations for termination}
 \label{fig:term}
 \end{figure}
 
-Proving termination of the algorithm of course amounts to prove
-termination of the while loop. In \caduceus{}, one can annotate a
-loop by a \emph{variant}: an expression which decreases with respect
-to some well-founded ordering. It is quite easy to find such a
-measure: there is a triple of natural numbers which decrease
-lexicographically at each iteration:
-\begin{enumerate}
-\item the number of unmarked reachable nodes
-\item the number of reachable nodes which has c=0
-\item the length of the stack
-\end{enumerate}
-There is a minor problem: in our modeling, there is no assumption on
-the finiteness of the memory, so indeed nothing tells that the set of
-reachable nodes is finite. So indeed, this an extra assumption we have
-to insert in the pre-condition. Finally, the annotated source code is
-completed as given Figure~\ref{fig:term}, where in Coq we define
-\[
-\begin{array}{l}
-\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
-\forall p, in(p,s) \leftrightarrow reachable(a,l,r,root,p) 
-\end{array}
-\]
-The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
-are also defined in Coq according the informal definition of the
-measure above. 
 
 With the completed annotated code, \caduceus{} generated two
 additional verification conditions. The first is to show that the ordering is
@@ -517,12 +522,12 @@ formula. So finally Simplify solves 8 of the 13 obligations, which is
 a quite good score but of course the 5 remaining obligations are by
 far more difficult than the others.
 
-With, we completed all the obligations including the
+With Coq, we completed all the obligations including the
 well-foundedness. Here are a few figures about the whole Coq proof: 
 definition of predicates on lists, reachability and such, and
 corresponding lemmas amount to 317 lines of definitions and 589 lines
 of proof tactics. The generated verification conditions amount to 985
-lines, and 2411 lines of tactics were inserted manually for provng
+lines, and 2411 lines of tactics were inserted manually for proving
 them. Approximately 40\% of the work was for the termination proof,
 both in term of lines of Coq text and of time spent: proving the
 obligations without termination required around 3 weeks, and the
