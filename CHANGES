@@ -1,6 +1,7 @@
 
 version 0.71, October 15th, 2002
 ================================
+  o better wp for the if-then-else (when the test is annotated)
   o reference masking now forbidden
   o new feature: exceptions (beta test)
   o fixed bug in automatic annotations => some postconditions names may change
