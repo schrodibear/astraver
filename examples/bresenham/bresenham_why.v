@@ -121,8 +121,9 @@ Lemma bresenham_po_3 :
   (Test3: `e1 < 0`)
   (e2: Z)
   (Post6: e2 = `e1 + 2 * y2`)
-  ((x:Z) (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\ (invariant x y1 e2) /\
-          (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
+  ((x:Z)
+   (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\ (invariant x y1 e2) /\
+    (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
 Proof.
 Intros.
 Rewrite H; Clear x H.
@@ -161,8 +162,9 @@ Lemma bresenham_po_4 :
   (Post4: y3 = `y1 + 1`)
   (e2: Z)
   (Post5: e2 = `e1 + 2 * (y2 - x2)`)
-  ((x:Z) (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\ (invariant x y3 e2) /\
-          (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
+  ((x:Z)
+   (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\ (invariant x y3 e2) /\
+    (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
 Proof.
 Intros.
 Rewrite H; Clear x H.
@@ -196,9 +198,9 @@ Lemma bresenham_po_5 :
   (Pre2: (best x1 y1))
   (e2: Z)
   (y3: Z)
-  (Post14: ((x:Z) (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\
-                   (invariant x y3 e2) /\
-                   (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))))
+  (Post14: ((x:Z)
+            (x = `x1 + 1` -> `0 <= x` /\ `x <= x2 + 1` /\
+             (invariant x y3 e2) /\ (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))))
   (x3: Z)
   (Post7: x3 = `x1 + 1`)
   `0 <= x3` /\ `x3 <= x2 + 1` /\ (invariant x3 y3 e2) /\

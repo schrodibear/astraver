@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.37 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.38 2002-04-17 16:01:17 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -125,7 +125,8 @@ and trad_desc info d ren = match d with
 	(fun v1 ren' -> 
 	   let x' = current_var ren' x in
 	   let t = make_raw_access info.env (x,x') (Tvar v1) in
-	   Monad.unit info t ren')
+	   let p = anonymous_pre true (make_pre_access info.env x (Tvar v1)) in
+	   insert_pre info.env p (Monad.unit info t) ren')
 	ren
 
   | TabAff (_, x, e1, e2) ->
@@ -138,8 +139,10 @@ and trad_desc info d ren = match d with
 		 let ren'' = next ren' [x] in
   		 let x'' = current_var ren'' x in
 		 let st = make_raw_store info.env (x,x') (Tvar v1) (Tvar v2) in
+		 let p = make_pre_access info.env x (Tvar v1) in
 		 CC_letin (false, [x'', CC_var_binder tx], CC_term st,
-			   Monad.unit info (Tconst ConstUnit) ren'')))
+			   insert_pre info.env (anonymous_pre true p)
+			     (Monad.unit info (Tconst ConstUnit)) ren'')))
 	 ren
 
   | While (b, inv, ((phi,_) as var), e) ->

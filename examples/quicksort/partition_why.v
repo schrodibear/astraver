@@ -14,7 +14,7 @@ Require ZArithRing.
 Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
-  (Pre3: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
+  (Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
   `0 <= i` /\ `i < N`.
 Proof. 
 Intros; Omega.
@@ -24,7 +24,7 @@ Lemma swap_po_2 :
   (i: Z)
   (j: Z)
   (t: (array N Z))
-  (Pre3: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
+  (Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
   (Pre1: `0 <= i` /\ `i < N`)
   (result: Z)
   (Post1: result = (access t i))
@@ -37,7 +37,7 @@ Lemma swap_po_3 :
   (i: Z)
   (j: Z)
   (t: (array N Z))
-  (Pre3: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
+  (Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
   (Pre1: `0 <= i` /\ `i < N`)
   (result: Z)
   (Post1: result = (access t i))

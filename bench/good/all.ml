@@ -101,6 +101,10 @@ let arr2 = v6[1+2]
 let arr3 = { v4 = 0 } v6[!v4]
 let arr4 = { v6[0] = 9 } v6[v6[0]]
 
+let arr5 = v6[0] := 1
+let arr6 = v6[1+2] := 3+4
+let arr7 = { v6[0] = 9 } v6[v6[0]] := 1
+
 (* function calls *)
 let fc1 = (f5 v5)
 let fc2 = (f4 void)

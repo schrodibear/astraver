@@ -122,9 +122,11 @@ Lemma power1_po_2 :
   (Test3: (Zodd n0))
   (y2: Z)
   (Post3: y2 = `y1 * m1`)
-  ((m:Z) (m = `m1 * m1` ->
-          ((n1:Z) (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\
-                   `n1 >= 0` /\ (Zwf `0` n1 n0))))).
+  ((m:Z)
+   (m = `m1 * m1` ->
+    ((n1:Z)
+     (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\ `n1 >= 0` /\
+      (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
 Clear result1 Bool1 result2 Bool2.
@@ -169,9 +171,11 @@ Lemma power1_po_3 :
   (result2: bool)
   (Bool2: (if result2 then (Zodd n0) else (Zeven n0)))
   (Test2: (Zeven n0))
-  ((m:Z) (m = `m1 * m1` ->
-          ((n1:Z) (n1 = (div2 n0) -> (Zpower x n) = `y1 * (Zpower m n1)` /\
-                   `n1 >= 0` /\ (Zwf `0` n1 n0))))).
+  ((m:Z)
+   (m = `m1 * m1` ->
+    ((n1:Z)
+     (n1 = (div2 n0) -> (Zpower x n) = `y1 * (Zpower m n1)` /\ `n1 >= 0` /\
+      (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
 Clear result1 Bool1 result2 Bool2.
@@ -208,10 +212,11 @@ Lemma power1_po_4 :
   (Bool1: (if result1 then `n0 > 0` else `n0 <= 0`))
   (Test4: `n0 > 0`)
   (y2: Z)
-  (Post12: ((m:Z) (m = `m1 * m1` ->
-                   ((n1:Z) (n1 = (div2 n0) ->
-                            (Zpower x n) = `y2 * (Zpower m n1)` /\
-                            `n1 >= 0` /\ (Zwf `0` n1 n0))))))
+  (Post12: ((m:Z)
+            (m = `m1 * m1` ->
+             ((n1:Z)
+              (n1 = (div2 n0) -> (Zpower x n) = `y2 * (Zpower m n1)` /\
+               `n1 >= 0` /\ (Zwf `0` n1 n0))))))
   (m2: Z)
   (Post4: m2 = `m1 * m1`)
   (n1: Z)
