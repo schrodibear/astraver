@@ -290,10 +290,10 @@
 
 %}
 
-%token <Cast.parsed_spec> SPEC
-%token <Cast.parsed_decl> DECL
-%token <Cast.parsed_code_annot> CODE_ANNOT
-%token <Cast.parsed_loop_annot> LOOP_ANNOT
+%token <int * Cast.parsed_spec> SPEC
+%token <int * Cast.parsed_decl> DECL
+%token <int * Cast.parsed_code_annot> CODE_ANNOT
+%token <int * Cast.parsed_loop_annot> LOOP_ANNOT
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL TYPE_NAME
 %token SIZEOF
@@ -516,7 +516,7 @@ declaration
 	  declaration_specifiers init_declarator_list attributes_opt SEMICOLON 
 	    { [locate (spec_declaration $1 $2 $3)] }
 	| DECL  /* ADDED FOR WHY */
-	    { [locate (Cspecdecl $1)] }
+	    { let ofs,d = $1 in [locate (Cspecdecl (ofs,d))] }
         ;
 
 /* the precedence specs indicates to keep going with declaration_specifiers */

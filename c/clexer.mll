@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.12 2004-02-10 08:18:02 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.13 2004-02-10 10:05:48 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -163,11 +163,12 @@ and comment = parse
   | _    { comment lexbuf }
 
 and annot = parse
-  | "*/" { match Cllexer.annot (!annot_start_pos, Buffer.contents buf) with
-	     | Cast.Adecl d -> DECL d
-	     | Cast.Aspec s -> SPEC s
-	     | Cast.Acode_annot a -> CODE_ANNOT a
-	     | Cast.Aloop_annot a -> LOOP_ANNOT a
+  | "*/" { let loc = !annot_start_pos in
+	   match Cllexer.annot (loc, Buffer.contents buf) with
+	     | Cast.Adecl d -> DECL (loc, d)
+	     | Cast.Aspec s -> SPEC (loc, s)
+	     | Cast.Acode_annot a -> CODE_ANNOT (loc, a)
+	     | Cast.Aloop_annot a -> LOOP_ANNOT (loc, a)
 	 }
   | eof  { lex_error lexbuf "Unterminated annotation" }
   | _    { Buffer.add_char buf (lexeme_char lexbuf 0); annot lexbuf }

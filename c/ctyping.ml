@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.22 2004-02-10 09:00:03 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.23 2004-02-10 10:05:48 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -31,6 +31,21 @@ open Cenv
 let located_app f x = { node = f x.node; loc = x.loc }
 
 let option_app f = function Some x -> Some (f x) | None -> None
+
+let offset ofs (ls, le) = (ofs + ls, ofs + le)
+
+let with_offset ofs f x =
+  try
+    f x
+  with 
+    | Stdpp.Exc_located (loc, e) -> 
+	raise (Stdpp.Exc_located (offset ofs loc, e))
+    | Error (Some loc, e) ->
+	raise (Error (Some (offset ofs loc), e))
+
+let type_predicate ofs env p = with_offset ofs (type_predicate env) p
+let type_spec env (ofs,s) = with_offset ofs (type_spec env) s
+let type_loop_annot env (ofs,a) = with_offset ofs (type_loop_annot env) a
 
 (*s Some predefined types, subtype relation, etc. *)
 
@@ -530,10 +545,10 @@ and type_statement_node loc env et = function
       assert false (*TODO*)
   | CScase (e, s) ->
       assert false (*TODO*)
-  | CSannot (Assert p) ->
-      let p = type_predicate env p in
+  | CSannot (ofs, Assert p) ->
+      let p = type_predicate ofs env p in
       TSassert p, mt_status
-  | CSannot (Label l) ->
+  | CSannot (_, Label l) ->
       TSlogic_label l, mt_status
 
 and type_block env et (dl,sl) = 
@@ -594,9 +609,9 @@ let declare_type l ty =
 let type_logic_parameters env = 
   List.map (fun (ty, _) -> type_logic_type env ty)
 
-let type_spec_decl loc = function
+let type_spec_decl ofs = function
   | LDaxiom (id, p) -> 
-      Taxiom (id, type_predicate Env.empty p)
+      Taxiom (id, type_predicate ofs Env.empty p)
   | LDlogic (s, ty, pl) ->
       let ty = type_logic_type Env.empty ty in
       let pl = type_logic_parameters Env.empty pl in
@@ -608,8 +623,8 @@ let type_spec_decl loc = function
       Tlogic (s, Predicate pl)
 
 let type_decl d = match d.node with
-  | Cspecdecl s -> 
-      type_spec_decl d.loc s
+  | Cspecdecl (ofs, s) -> 
+      type_spec_decl ofs s
   | Ctypedef (ty, x) -> 
       let ty = declare_type d.loc ty in
       add_typedef d.loc x ty;

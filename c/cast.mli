@@ -14,13 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.24 2004-02-10 09:00:03 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.25 2004-02-10 10:05:48 filliatr Exp $ i*)
 
 (*s C types *)
 
 open Clogic
 
 type 'a located = { node : 'a; loc : Loc.t }
+
+type offset = int
 
 type storage_class = No_storage | Extern | Auto | Static | Register
 
@@ -137,10 +139,10 @@ and cstatement_node =
   | CSnop
   | CSexpr of cexpr
   | CSif of cexpr * cstatement * cstatement
-  | CSwhile of cexpr * parsed_loop_annot option * cstatement
-  | CSdowhile of cstatement * parsed_loop_annot option * cexpr
+  | CSwhile of cexpr * (offset * parsed_loop_annot) option * cstatement
+  | CSdowhile of cstatement * (offset * parsed_loop_annot) option * cexpr
   | CSfor of 
-      cexpr * cexpr * cexpr * parsed_loop_annot option * cstatement
+      cexpr * cexpr * cexpr * (offset * parsed_loop_annot) option * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -149,19 +151,19 @@ and cstatement_node =
   | CSswitch of cexpr * cstatement
   | CScase of cexpr * cstatement
   | CSgoto of string
-  | CSannot of parsed_code_annot
+  | CSannot of (offset * parsed_code_annot)
 
 and block = decl located list * cstatement list
 
 and decl = 
-  | Cspecdecl of parsed_decl
+  | Cspecdecl of offset * parsed_decl
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
   | Cdecl of cexpr ctype * string * cexpr c_initializer
   | Cfunspec of 
-      parsed_spec * cexpr ctype * string * cexpr parameter list
+      (offset * parsed_spec) * cexpr ctype * string * cexpr parameter list
   | Cfundef of 
-      parsed_spec option * 
+      (offset * parsed_spec) option * 
       cexpr ctype * string * cexpr parameter list * block
 
 type file = decl located list
