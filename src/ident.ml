@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.43 2003-02-12 15:57:21 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.44 2003-02-27 16:55:34 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -168,6 +168,9 @@ let well_founded_induction = create "well_founded_induction"
 let if_then_else = create "if_then_else"
 
 (*s tests *)
+
+let is_wp id =
+  String.length id.name >= 2 && id.name.[0] == 'W' && id.name.[1] == 'P'
 
 let is_variant id =
   String.length id.name >= 7 && String.sub id.name 0 7 = "Variant"

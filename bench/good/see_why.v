@@ -20,10 +20,10 @@ Lemma k_po_1 :
   (Post1: b0 = `1`)
   (b3: Z)
   (aux_4: Z)
-  (Post4: `aux_4 = b3` /\ `b3 = 1 - b0`)
+  (Post2: `aux_4 = b3` /\ `b3 = 1 - b0`)
   (b4: Z)
   (aux_2: Z)
-  (Post8: `aux_2 = b4` /\ `b4 = 1 - b3`)
+  (Post4: `aux_2 = b4` /\ `b4 = 1 - b3`)
   ((result:Z)
    ((b:Z)
     (`result = b` /\ `b = 1 - b4` ->

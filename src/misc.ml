@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.70 2003-02-12 15:57:21 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.71 2003-02-27 16:55:34 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -93,6 +93,7 @@ let pre_name = gen_sym_name "Pre"
 let post_name = gen_sym_name "Post"
 let inv_name = gen_sym_name "Inv"
 let test_name = gen_sym_name "Test"
+let wp_name = gen_sym "WP"
 let bool_name = gen_sym "Bool"
 let variant_name = gen_sym "Variant"
 let phi_name = gen_sym "rphi"
@@ -147,6 +148,7 @@ let post_app f (q,l) =
 let optpost_app f = option_app (post_app f)
 
 let anonymous loc x = { a_name = Anonymous; a_value = x; a_loc = loc }
+let wp_named loc x = { a_name = Name (wp_name ()); a_value = x; a_loc = loc }
 
 let force_name f a = { a with a_name = Name (f a.a_name) }
 

@@ -176,7 +176,7 @@ Lemma quick_rec_po_4 :
   (Pre6: (`0 <= i0` /\ `i0 < (array_length t1)`) /\ `0 <= m1` /\
          `m1 < (array_length t1)`)
   (t2: (array Z))
-  (Post33: (exchange t2 t1 i0 m1))
+  (Post30: (exchange t2 t1 i0 m1))
   ((i:Z)
    (i = `i0 + 1` ->
     (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t2 j) < v`)) /\
@@ -186,19 +186,19 @@ Lemma quick_rec_po_4 :
 Proof.
 Intuition.
 Assert hj : `j < m1` \/ j = m1. Omega. 
-Decompose [exchange] Post33. Intuition.
+Decompose [exchange] Post30. Intuition.
 Rewrite H24; Try Omega.
 Apply H5; Omega.
 Subst j; Rewrite H23; Assumption.
 Assert hj : `j < i0` \/ j = i0. Omega. 
-Decompose [exchange] Post33. Intuition.
+Decompose [exchange] Post30. Intuition.
 Rewrite H24; Try Omega.
 Apply H7; Omega.
 Subst j; Rewrite H22. Apply H7; Omega.
 Apply sub_permut_trans with t1.
 Apply exchange_is_sub_permut with i0 m1; Assumption Orelse Omega.
 Assumption.
-Decompose [exchange] Post33. Intuition.
+Decompose [exchange] Post30. Intuition.
 Rewrite H22; Omega.
 Unfold Zwf; Omega.
 Save.
@@ -338,7 +338,7 @@ Lemma quick_rec_po_8 :
   (Pre19: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
           `m0 < (array_length t1)`)
   (t2: (array Z))
-  (Post35: (exchange t2 t1 l0 m0))
+  (Post32: (exchange t2 t1 l0 m0))
   `0 <= l0` /\ `m0 - 1 < (array_length t2)`.
 Proof.
 Intuition ArrayLength.
@@ -374,7 +374,7 @@ Lemma quick_rec_po_9 :
   (Pre19: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
           `m0 < (array_length t1)`)
   (t2: (array Z))
-  (Post35: (exchange t2 t1 l0 m0))
+  (Post32: (exchange t2 t1 l0 m0))
   (Pre18: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
   (Pre12: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
   (Pre13: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
@@ -414,15 +414,15 @@ Lemma quick_rec_po_10 :
   (Pre19: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
           `m0 < (array_length t1)`)
   (t2: (array Z))
-  (Post35: (exchange t2 t1 l0 m0))
+  (Post32: (exchange t2 t1 l0 m0))
   (Pre18: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
   (t3: (array Z))
-  (Post37: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
+  (Post34: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
   `0 <= m0 + 1` /\ `r0 < (array_length t3)`.
 Proof.
 Intuition.
 Generalize (sub_permut_length H20);
-Generalize (exchange_length Post35); 
+Generalize (exchange_length Post32); 
 Generalize (sub_permut_length H10);
 Intros; Omega.
 Save.
@@ -457,10 +457,10 @@ Lemma quick_rec_po_11 :
   (Pre19: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
           `m0 < (array_length t1)`)
   (t2: (array Z))
-  (Post35: (exchange t2 t1 l0 m0))
+  (Post32: (exchange t2 t1 l0 m0))
   (Pre18: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
   (t3: (array Z))
-  (Post37: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
+  (Post34: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
   (Pre17: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
   (Pre15: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
   (Pre16: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
@@ -500,13 +500,13 @@ Lemma quick_rec_po_12 :
   (Pre19: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
           `m0 < (array_length t1)`)
   (t2: (array Z))
-  (Post35: (exchange t2 t1 l0 m0))
+  (Post32: (exchange t2 t1 l0 m0))
   (Pre18: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
   (t3: (array Z))
-  (Post37: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
+  (Post34: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
   (Pre17: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
   (t4: (array Z))
-  (Post39: (sorted_array t4 `m0 + 1` r0) /\ (sub_permut `m0 + 1` r0 t4 t3))
+  (Post36: (sorted_array t4 `m0 + 1` r0) /\ (sub_permut `m0 + 1` r0 t4 t3))
   (sorted_array t4 l0 r0) /\ (sub_permut l0 r0 t4 t0).
 Proof.
 Intuition.
@@ -524,7 +524,7 @@ Unfold array_id in H28.
 Rewrite (H28 x). Rewrite (H28 `x+1`). 
 Clear H28 H30. Elim (sub_permut_id H20); Intros.
 Unfold array_id in H30. Replace `x+1` with m0.
-Rewrite (H30 m0). Elim Post35; Intros.
+Rewrite (H30 m0). Elim Post32; Intros.
 Rewrite H35. Rewrite H13. Clear H34 H35 H36.
 Assert hm0 : `m0-1 < (array_length t2)`. Omega.
 Rewrite <- (sub_permut_length H20) in hm0.
@@ -533,11 +533,11 @@ Elim (H34 x). Clear H34. Intuition.
 Elim H34; Intros j [ H1j H2j].
 Rewrite H2j.
 Assert j = l0 \/ `l0 < j`. Omega. Intuition.
-Elim Post35; Intros.
+Elim Post32; Intros.
 Subst j. Rewrite H44.
 Assert `(access t1 m0) < v`.
 Apply H9; Omega. Omega.
-Elim Post35; Intros.
+Elim Post32; Intros.
 Rewrite H46; Try Omega.
 Assert `(access t1 j) < v`.
 Apply H9; Omega. Omega.
@@ -551,7 +551,7 @@ Assert hm0 : `0 <= m0+1`. Omega.
 Assert hl:(array_length t4)=(array_length t0).
   ArrayLength; Clear H24.
   ArrayLength; Clear H20.
-  ArrayLength; Clear Post35.
+  ArrayLength; Clear Post32.
   ArrayLength.
 Rewrite <- hl in H2.
 Generalize (sub_permut_function H24 hm0 H2); Intros.
@@ -561,12 +561,12 @@ Clear H28 H29 H2j.
 Elim (sub_permut_id H20); Intros.
 Unfold array_id in H29.
 Rewrite (H29 m0); Try Omega. Rewrite (H29 j); Try Omega.
-Elim Post35; Intros.
+Elim Post32; Intros.
 Rewrite H34.
 Rewrite (H35 j); Try Omega.
 Rewrite H13.
 Apply Zge_le.
-Apply H8; Omega. ArrayLength; Clear Post35; ArrayLength. 
+Apply H8; Omega. ArrayLength; Clear Post32; ArrayLength. 
 Omega. Omega.
 (* sub_permut *)
 Apply sub_permut_trans with t3.

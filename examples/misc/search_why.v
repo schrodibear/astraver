@@ -246,7 +246,7 @@ Lemma search3_po_7 :
   (Post23: ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)))
   ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
 Proof.
-Intuition.
+Trivial.
 Save.
 
 

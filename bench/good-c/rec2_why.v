@@ -25,7 +25,7 @@ Lemma f_po_2 :
   (x0: Z)
   (Pre7: Variant1 = x0)
   (Pre6: `x0 >= 0`)
-  (Post10: ((result:Z) (`result = 0` -> `result = 0`)) /\ `x0 - 1 >= 0`)
+  (WP1: ((result:Z) (`result = 0` -> `result = 0`)) /\ `x0 - 1 >= 0`)
   (Pre5: `x0 - 1 >= 0`)
   (Pre3: `x0 - 1 >= 0`)
   (Pre4: `x0 - 1 >= 0`)

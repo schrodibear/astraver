@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.56 2003-02-12 15:57:21 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.57 2003-02-27 16:55:34 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -46,6 +46,7 @@ val optexn_app :
   (predicate -> predicate) -> postcondition option -> postcondition option
 
 val anonymous : Loc.t -> 'a -> 'a asst
+val wp_named : Loc.t -> 'a -> 'a asst
 
 val force_post_name : postcondition option -> postcondition option
 val force_bool_name : postcondition option -> postcondition option
@@ -81,6 +82,7 @@ val pre_name    : Ident.name -> Ident.t
 val post_name   : Ident.name -> Ident.t
 val inv_name    : Ident.name -> Ident.t
 val test_name   : Ident.name -> Ident.t
+val wp_name     : unit -> Ident.t
 
 val bool_name   : unit -> Ident.t
 val variant_name : unit -> Ident.t

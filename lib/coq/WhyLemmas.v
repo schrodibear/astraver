@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.6 2003-02-19 10:28:35 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.7 2003-02-27 16:55:34 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -42,3 +42,13 @@ Lemma why_boolean_case :
 Proof.
 Destruct b; Intuition.
 Save.
+
+Lemma why_boolean_wp :
+  (A,B:Prop)(q:bool->Prop)
+  (A -> (q true)) -> (B -> (q false)) -> 
+  (b:bool)(if b then A else B) -> (q b).
+Proof.
+Destruct b; Assumption.
+Save.
+Implicits why_boolean_wp [1 2].
+

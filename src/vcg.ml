@@ -127,74 +127,101 @@ let loop_variant_1 hyps concl =
 
 (* tautologies in linear first-order logic *)
 
-(* lookup for an instance of p(v1...vn) where the vi are the variables
-   to instantiate *)
-let lookup_instance p bvars ctx =
-  let u0 = List.fold_right (fun v -> Idmap.add v None) bvars Idmap.empty in
-  let rec unif_term u = function
-    | Tvar id, Tvar id' when id == id' -> u
-    | Tvar id, Tvar id' -> 
-	(try (match Idmap.find id u with
-		| None -> Idmap.add id (Some id') u
-		| Some id'' -> if id' == id'' then u else raise Exit)
-	 with Not_found -> raise Exit)
-    | Tconst c, Tconst c' -> if c = c' then u else raise Exit
-    | Tderef _, _ | _, Tderef _ -> assert false
-    | Tapp (id, tl), Tapp (id', tl') when id == id' -> unif_terms u (tl, tl')
-    | _ -> raise Exit
-  and unif_terms u = function
-    | [], [] -> u
-    | t :: tl, t' :: tl' -> unif_terms (unif_term u (t, t')) (tl, tl')
-    | _ -> raise Exit
-  in
-  let rec unif_pred u = function
-    | Pvar id, Pvar id' when id == id' -> u
-    | Papp (id, tl), Papp (id', tl') when id == id' -> unif_terms u (tl, tl')
-    | Ptrue, Ptrue | Pfalse, Pfalse -> u
-    | Pimplies (a, b), Pimplies (a', b') 
-    | Pand (a, b), Pand (a', b')
-    | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
-    | Pif (a, b, c), Pif (a', b', c') ->
-	unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
-    | Pnot a, Pnot a' -> unif_pred u (a, a')
-    | Forall (_, n, _, p), Forall (_, n', _, p') 
-    | Exists (_, n, _, p), Exists (_, n', _, p') ->
-	let p'n = subst_in_predicate (subst_onev n' n) p' in 
-	unif_pred u (p, p'n)
-    | _ -> raise Exit
+(* unification of terms *)
+let rec unif_term u = function
+  | Tconst c, Tconst c' when c = c' -> u
+  | Tvar id, Tvar id' when id == id' -> u
+  | Tvar id, Tvar id' -> 
+      (try (match Idmap.find id u with
+	      | None -> Idmap.add id (Some id') u
+	      | Some id'' -> if id' == id'' then u else raise Exit)
+       with Not_found -> raise Exit)
+  | Tderef _, _ | _, Tderef _ -> assert false
+  | Tapp (id, tl), Tapp (id', tl') when id == id' -> unif_terms u (tl, tl')
+  | _ -> raise Exit
+and unif_terms u = function
+  | [], [] -> u
+  | t :: tl, t' :: tl' -> unif_terms (unif_term u (t, t')) (tl, tl')
+  | _ -> raise Exit
+
+(* unification of predicates *)
+let rec unif_pred u = function
+  | Pvar id, Pvar id' when id == id' -> u
+  | Papp (id, tl), Papp (id', tl') when id == id' -> unif_terms u (tl, tl')
+  | Ptrue, Ptrue | Pfalse, Pfalse -> u
+  | Pimplies (a, b), Pimplies (a', b') 
+  | Pand (a, b), Pand (a', b')
+  | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
+  | Pif (a, b, c), Pif (a', b', c') ->
+      unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
+  | Pnot a, Pnot a' -> unif_pred u (a, a')
+  | Forall (_, n, _, p), Forall (_, n', _, p') 
+  | Exists (_, n, _, p), Exists (_, n', _, p') ->
+      let p'n = subst_in_predicate (subst_onev n' n) p' in 
+      unif_pred u (p, p'n)
+  | _ -> raise Exit
+
+(* [lookup_instance]. 
+   [id] is a proof of [forall v1...vn . p => q] where [bvars = v1...vn].
+   we look for an hypothesis matching [p], as an instance [p(a1...ak)],
+   and we return [forall vi. q(a1...ak)] (together with a proof of it)
+   where the [vi]s not in the [aj]s. *)
+
+let lookup_instance id bvars p q ctx =
+  let u0 = 
+    List.fold_right (fun (_,n,_) -> Idmap.add n None) bvars Idmap.empty 
   in
   let rec lookup = function
-    | Svar _ -> 
-	raise Exit
-    | Spred (id, p') -> 
-	let u = unif_pred u0 (p, p') in
-	List.map (fun x -> match Idmap.find x u with
-		    | None -> raise Exit (* TODO: on pourrait quand meme *)
-		    | Some x' -> x') bvars, 
-	id
+    | Svar _ -> raise Exit
+    | Spred (id, p') -> id, unif_pred u0 (p, p')
   in
-  list_first lookup ctx
+  let hpx, u = list_first lookup ctx in
+  let bvars',vars,s =
+    List.fold_right 
+      (fun ((x,n,_) as b) (bv,vl,s) -> match Idmap.find n u with
+	 | None -> b :: bv, x :: vl, s
+	 | Some x' -> bv, x' :: vl, Idmap.add n x' s) 
+      bvars ([], [], Idmap.empty)
+  in
+  List.fold_right
+    (fun (x, n, ty) p -> Forall (x, n, ty, p))
+    bvars' (subst_in_predicate s q),
+  cc_lam 
+    (List.map (fun (x, _, ty) -> x, CC_var_binder (TTpure ty)) bvars')
+    (cc_applist (CC_var id) (List.map cc_var (vars @ [hpx])))
 
-(***
-let rec intros ctx = function
-  | Forall (id, n, t, p) ->
-      let id' = next_away id (predicate_vars p) in
-      let p' = subst_in_predicate (subst_onev n id') p in
-      intros (Svar (id', TTpure t) :: ctx) p'
-  | Pimplies (a, b) -> 
-      let h = fresh_hyp () in intros (Spred (h, a) :: ctx) b
-  | c -> 
-      ctx, c
-***)
+(* alpha-equivalence over predicates *)
+let alpha = unif_pred Idmap.empty
+
+let lookup_boolean_instance a b =
+  let rec lookup = function
+    | Svar (x, TTpure PTbool) ::
+      Spred (h, Pif (Tvar x1, c, d)) :: _ when x == x1 && a = c && b = d -> 
+	x, h
+    | _ :: ctx ->
+	lookup ctx
+    | [] ->
+	raise Exit
+  in
+  lookup
+
+let boolean_wp_lemma = Ident.create "why_boolean_wp"
 
 (* [qe_forall (forall x1...forall xn. p => q) = [x1;...;xn],p,q] *)
 let rec qe_forall = function
-  | Pimplies (p, q) -> [], p, q
-  | Forall (_, n, _, p) -> let vl, p, q = qe_forall p in n::vl, p, q
-  | _ -> raise Exit
-  
+  | Pimplies (p, q) -> 
+      [], p, q
+  | Forall (id, n, ty, p) -> 
+      let vl, p, q = qe_forall p in (id, n, ty) :: vl, p, q
+  | _ -> 
+      raise Exit
+ 
 (* ctx = xk:tk, ..., x1:t1 *)
 let linear ctx concl = 
+  let concl = match concl with (* TODO: comprendre l'origine *)
+    | Pif (Tconst (ConstBool true), c, _) -> c
+    | _ -> concl
+  in
   let rec search = function
     | [] -> 
 	raise Exit
@@ -208,42 +235,64 @@ let linear ctx concl =
 	with Exit ->
 	  let h1 = fresh_hyp () in
 	  let h2 = fresh_hyp () in
-	  let ctx' = (Spred (h1, a)) :: (Spred (h2, b)) :: ctx in
+	  let pr = 
+	    try (* particular case for an if-then-else WP *)
+	      (match a, b with
+		 | Pimplies (a, qt), Pimplies (b, qf) ->
+		     let b,hb = lookup_boolean_instance a b ctx in
+		     let ct = tsubst_in_predicate (subst_one b ttrue) concl in
+		     if ct <> qt then raise Exit;
+		     let cf = tsubst_in_predicate (subst_one b tfalse) concl in
+		     if cf <> qf then raise Exit;
+		     ProofTerm 
+		       (cc_applist (CC_var boolean_wp_lemma)
+			  [CC_type 
+			     (TTlambda ((b, CC_var_binder (TTpure PTbool)), 
+					TTpred concl));
+			   CC_var h1; CC_var h2; CC_var b; CC_var hb])
+		 | _ -> 
+		     raise Exit)
+	    with Exit ->
+	      let ctx' = (Spred (h1, a)) :: (Spred (h2, b)) :: ctx in
+	      search ctx'
+	  in
 	  ProofTerm (CC_letin (false,
 			       [h1, CC_pred_binder a; h2, CC_pred_binder b],
-			       CC_var id,
-			       CC_hole (search ctx')))
+			       CC_var id, CC_hole pr))
 	end
     | Spred (id, (Forall _ as a)) :: ctx -> 
 	begin try
+	  search ctx
+	with Exit ->
 	  let bvars,p,q = qe_forall a in
-	  let vars,hpx = lookup_instance p bvars ctx in
-	  let qx = subst_in_predicate (subst_manyv bvars vars) q in
+	  let qx,pr_qx = lookup_instance id bvars p q ctx in
 	  let h1 = fresh_hyp () in
 	  let ctx' = Spred (h1, qx) :: ctx in
 	  ProofTerm 
-	    (CC_letin (false, [h1, CC_pred_binder qx],
-		       CC_app (cc_applist (CC_var id) (List.map cc_var vars), 
-			       CC_var hpx),
+	    (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
 		       CC_hole (search ctx')))
-	with Exit ->
-	  search ctx
 	end
     | Spred (id, Pimplies (p, q)) :: ctx ->
 	begin try
+	  search ctx
+	with Exit ->
 	  let hp = lookup_hyp p ctx in
 	  let hq = fresh_hyp () in
 	  let ctx' = Spred (hq, q) :: ctx in
 	  ProofTerm
 	    (CC_letin (false, [hq, CC_pred_binder q],
 		       CC_app (CC_var id, CC_var hp), CC_hole (search ctx')))
-	with Exit ->
-	  search ctx
 	end
     | _ :: ctx ->
 	search ctx
   in
-  search (List.rev ctx)
+  (* we cut the context at the last WP *)
+  let rec cut_context acc = function
+    | [] -> acc
+    | Spred (id, _) as h :: _ when is_wp id -> h :: acc
+    | h :: ctx -> cut_context (h :: acc) ctx
+  in
+  search (cut_context [] ctx)
 
 (* ..., v=t, p(v) |- p(t) *)
 let rewrite_var_lemma = Ident.create "why_rewrite_var"
@@ -294,11 +343,14 @@ let discharge_methods ctx concl =
   try rewrite_var ctx concl with Exit ->
   try linear ctx concl with Exit ->
   boolean_case ctx concl
+  
+let count = ref 0
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in
   log (snd loc) (ctx, concl) None;
-  if_verbose eprintf "one obligation trivially discharged@.";
+  incr count;
+  if_verbose_2 eprintf "one obligation trivially discharged [%d]@." !count;
   pr
 
 (*s Cleaning the sequents *)
@@ -332,6 +384,10 @@ let clean_sequent hyps concl =
 	  clean hl
     | Spred (_, Ptrue) :: hl ->
 	clean hl
+(***
+    | Spred (id, _) :: hl when is_wp id ->
+	clean hl
+***)
     | h :: hl ->
 	h :: clean hl
   in
