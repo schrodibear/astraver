@@ -1,4 +1,5 @@
 
+  o support for polymorphic types in the logic
   o syntax of haRVey output now uses integer constants, predefined
     arithmetic operators, and does not change capitalization of
     variables, to be conform with the syntax of the next version of

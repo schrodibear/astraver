@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.32 2003-03-26 10:45:14 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.33 2003-12-15 14:58:07 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -262,7 +262,52 @@ type logical_env = logic_type Idmap.t
 
 let logic_table = ref Idmap.empty
 
-let add_global_logic x t = logic_table := Idmap.add x t !logic_table
+let rec subst_type x v t =
+  match t with
+    | PTvarid id ->
+	if x = Ident.string id then PTvar v else t
+    | PTexternal(l,id) ->
+	PTexternal(List.map (subst_type x v) l,id)
+    | PTarray ta -> PTarray (subst_type x v ta)
+    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> t
+
+let subst x v t =
+  match t with
+    | Function(tl,tr) -> 
+	Function(List.map (subst_type x v) tl,subst_type x v tr)
+    | Predicate(tl) -> 
+	Predicate(List.map (subst_type x v) tl)
+    | Generalized _ -> assert false
+
+let rec find_type_vars env t =
+  match t with
+    | PTvarid id ->
+	let s = Ident.string id in
+	if List.mem s env then env else s::env
+    | PTexternal(l,id) ->
+	List.fold_left find_type_vars env l
+    | PTarray ta -> find_type_vars env ta
+    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> env
+
+let find_type_vars t =
+  match t with
+    | Function(tl,tr) ->
+	let env = find_type_vars [] tr in
+	List.fold_left find_type_vars env tl
+    | Predicate(tl) ->
+	List.fold_left find_type_vars [] tl
+    | Generalized _ -> assert false
+
+let generalize t =
+  let l = find_type_vars t in
+  List.fold_left
+    (fun t x -> Generalized (fun v -> subst x v t))
+    t
+    l
+
+let add_global_logic x t = 
+  let t = generalize t in
+  logic_table := Idmap.add x t !logic_table
 
 let int_array = PTarray PTint
 let agl s = add_global_logic (Ident.create s)
@@ -313,7 +358,18 @@ let _ = agl "array_le"     (Predicate [int_array; PTint; PTint; PTint])
 let _ = agl "array_ge"     (Predicate [int_array; PTint; PTint; PTint])
 
 let is_logic = Idmap.mem
-let find_logic = Idmap.find
+
+let new_type_var =
+  let c = ref 0 in
+  fun () -> incr c;{ tag = !c; type_val = None }
+
+let rec specialize t =
+  match t with
+    | Generalized f ->
+	let v = new_type_var() in specialize (f v)
+    | _ -> t
+
+let find_logic x env = specialize (Idmap.find x env)
 
 let add_logic id v env = match v with
   | (Ref (PureType pt)) | (PureType pt) -> 

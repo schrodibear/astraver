@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.12 2003-05-13 12:30:13 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.13 2003-12-15 14:58:07 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -46,7 +46,10 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "one"
   | PTfloat -> fprintf fmt "real"
   | PTarray v -> fprintf fmt "list(%a)" print_pure_type v (* TODO *)
-  | PTexternal id -> Ident.print fmt id
+  | PTexternal([],id) -> Ident.print fmt id
+  | PTexternal(_,_) 
+  | PTvar _ -> failwith "no polymorphism with HOL-light yet"
+  | PTvarid _ -> assert false
 
 let prefix_id id =
   (* int cmp *)

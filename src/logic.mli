@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.15 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.16 2003-12-15 14:58:08 marche Exp $ i*)
 
 (*s Logic. *)
 
@@ -41,7 +41,11 @@ type pure_type =
   | PTfloat
   | PTunit
   | PTarray of pure_type
-  | PTexternal of Ident.t
+  | PTvarid of Ident.t
+  | PTvar of type_var
+  | PTexternal of (pure_type list) * Ident.t
+and type_var =
+    { tag : int; mutable type_val : pure_type option }
 
 type is_wp = bool
 
@@ -60,5 +64,6 @@ type predicate =
   | Exists of Ident.t * Ident.t * pure_type * predicate
 
 type logic_type =
+  | Generalized of (type_var -> logic_type)
   | Predicate of pure_type list
   | Function of pure_type list * pure_type

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.39 2003-05-12 14:13:38 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.40 2003-12-15 14:58:08 marche Exp $ i*)
 
 open Logic
 open Types
@@ -91,7 +91,10 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "real"
   | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
-  | PTexternal id -> fprintf fmt "%s" (Ident.string id)
+  | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
+  | PTvarid _ -> assert false 
+  | PTexternal(_,_) 
+  | PTvar _ -> failwith "no polymorphism with PVS yet"
 
 let infix_relation id =
   if id == t_lt_int then "<" 

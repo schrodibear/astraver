@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.82 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.83 2003-12-15 14:58:08 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -352,7 +352,7 @@ let print_post fmt = function
   | Some (c,[]) -> 
       fprintf fmt "@[ %a @]" print_assertion c
   | Some (c, l) -> 
-      fprintf fmt "@[ %a@ %a@ ]" print_assertion c 
+      fprintf fmt "@[ %a@ %a @]" print_assertion c 
 	(print_list space print_exn) l
 
 let rec print_pure_type fmt = function
@@ -361,7 +361,13 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "float"
   | PTarray t -> fprintf fmt "(%a array)" print_pure_type t
-  | PTexternal id -> fprintf fmt "%a" Ident.print id
+  | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
+  | PTvarid(id) -> fprintf fmt "'%a" Ident.print id
+  | PTvar(v) -> fprintf fmt "'a%d" v.tag
+  | PTexternal([t],id) -> fprintf fmt "(%a %a)" print_pure_type t Ident.print id
+  | PTexternal(l,id) -> fprintf fmt "((%a) %a)" 
+      (print_list space print_pure_type) l
+      Ident.print id
 
 and print_type_v fmt = function
   | Arrow (b,c) ->
@@ -406,11 +412,15 @@ and print_type_c fmt c =
       Effect.print e
       print_post q
 
-let print_logic_type fmt lt =
+let rec print_logic_type fmt lt =
   let print_args = print_list comma print_pure_type in
   match lt with
-  | Predicate l -> fprintf fmt "%a -> prop" print_args l
-  | Function (l, pt) -> fprintf fmt "%a -> %a" print_args l print_pure_type pt
+    | Generalized f -> 
+	let v = Env.new_type_var() in
+	let t = f v in
+	fprintf fmt "'a%d. %a" v.tag print_logic_type t
+    | Predicate l -> fprintf fmt "%a -> prop" print_args l
+    | Function (l, pt) -> fprintf fmt "%a -> %a" print_args l print_pure_type pt
 
 (*s Pretty-print of typed programs *)
 

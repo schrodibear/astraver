@@ -73,7 +73,7 @@ Lemma p3_po_1 :
   (if b then (forall (y:Z), (y = (y0 - 1) -> y >= 0 /\ (Zwf 0 y y0)))
    else y0 = 0).
 Proof.
-unfold Zwf; simple_destruct b; intuition.
+unfold Zwf; simple destruct b; intuition.
 Qed.
 
 (* Why obligation from file "good/set.mlw", characters 683-729 *)
@@ -92,6 +92,6 @@ Lemma p4_po_1 :
   forall (Post10: x1 = y1 /\ ((if result1 then x1 <> 0 else x1 = 0))),
   (if result1 then y1 >= 1 /\ (Zwf 0 y1 y0) else y1 = 0).
 Proof.
-unfold Zwf; simple_destruct result1; intuition.
+unfold Zwf; simple destruct result1; intuition.
 Qed.
 

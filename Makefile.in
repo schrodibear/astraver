@@ -156,16 +156,16 @@ doc:: doc/version.tex
 WHYVO=lib/coq/Why.vo
 
 bench:: $(BINARY) $(WHYVO)
-	cd bench; ./bench "../$(BINARY) --valid"
+	cd bench; sh ./bench "../$(BINARY) --valid"
 
 bench-c:: $(BINARY) $(WHYVO)
-	cd bench; ./bench "../$(BINARY) --valid" c
+	cd bench; sh ./bench "../$(BINARY) --valid" c
 
 bench-pvs:: $(BINARY) $(WHYVO)
-	cd bench; ./bench "../$(BINARY) --valid" pvs
+	cd bench; sh ./bench "../$(BINARY) --valid" pvs
 
 bench-tc:: $(BINARY) $(WHYVO)
-	cd bench; ./bench "../$(BINARY) -tc"
+	cd bench; sh ./bench "../$(BINARY) -tc"
 
 test:: $(BINARY) $(WHYVO)
 	$(BINARY) -d -V -coq bench/test.ml

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.6 2003-10-27 16:21:19 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.7 2003-12-15 14:58:08 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -100,9 +100,9 @@ let external_type = function
   | _ -> false
 
 let has_type ty fmt id = match ty with
-  | PTexternal ty ->
+  | PTexternal(_, ty) ->
       fprintf fmt "(EQ (IS%a %a) |@@true|)" Ident.print ty Ident.print id
-  | PTarray (PTexternal ty) ->
+  | PTarray (PTexternal(_,ty)) ->
       fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
 	Ident.print ty Ident.print id
   | _ -> 
@@ -162,7 +162,7 @@ let cc_external_type = function
 let cc_has_type ty fmt id = match ty with
   | Cc.TTpure ty when external_type ty ->
       has_type ty fmt id
-  | Cc.TTarray (Cc.TTpure (PTexternal ty)) ->
+  | Cc.TTarray (Cc.TTpure (PTexternal(_,ty))) ->
       fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
 	Ident.print ty Ident.print id
   | _ -> 

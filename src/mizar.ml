@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.8 2003-09-23 10:38:22 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.9 2003-12-15 14:58:08 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -46,13 +46,18 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "Element of BOOLEAN"
   | PTunit -> fprintf fmt "Element of {0}"
   | PTfloat -> fprintf fmt "Real"
-  | PTexternal id -> Ident.print fmt id
+  | PTexternal([],id) -> Ident.print fmt id
   | PTarray PTunit -> fprintf fmt "XFinSequence of {0}"
   | PTarray PTbool -> fprintf fmt "XFinSequence of BOOLEAN"
   | PTarray PTint -> fprintf fmt "XFinSequence of INT"
   | PTarray PTfloat -> fprintf fmt "XFinSequence of REAL"
-  | PTarray (PTexternal id) -> fprintf fmt "XFinSequence of %a" Ident.print id
+  | PTarray (PTexternal([],id)) -> fprintf fmt "XFinSequence of %a" Ident.print id
   | PTarray (PTarray _) -> assert false
+  | PTarray (PTexternal _)
+  | PTarray (PTvar _)
+  | PTexternal _ | PTvar _ ->  failwith "no polymorphism with Mizar yet"
+  | PTvarid _  
+  | PTarray (PTvarid _) -> assert false
 
 let prefix_id id =
   (* int cmp *)

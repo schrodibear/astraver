@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.106 2003-12-11 10:12:45 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.107 2003-12-15 14:58:07 marche Exp $ i*)
 
 open Options
 open Logic
@@ -34,7 +34,14 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "R"
   | PTarray v -> fprintf fmt "(array %a)" print_pure_type v
-  | PTexternal id -> Ident.print fmt id
+  | PTexternal([],id) -> Ident.print fmt id
+  | PTexternal(l,id) -> 
+      fprintf fmt "((%a) %a)"
+      Ident.print id
+      (print_list space print_pure_type) l
+  | PTvarid _ -> assert false
+  | PTvar(v) -> 
+      fprintf fmt "A%d" v.tag
 
 let prefix_id id =
   (* int cmp *)

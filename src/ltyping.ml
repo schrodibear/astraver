@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.22 2003-09-24 15:23:09 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.23 2003-12-15 14:58:08 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -65,12 +65,35 @@ let other_cmp = function
   | _, PPneq -> t_neq
   | _ -> assert false
 
+
+let rec unify t1 t2 = 
+  match (t1,t2) with
+  | (PTarray ta,PTarray tb) -> unify ta tb
+  | (PTvarid _,_) -> assert false
+  | (_,PTvarid _) -> assert false
+  | (PTexternal(l1,i1),PTexternal(l2,i2)) ->
+      i1 = i2 && List.length l1 = List.length l2 &&
+      List.for_all2 unify l1 l2
+  | (PTvar v1,_) ->
+      begin
+	match v1.type_val with
+	  | None -> v1.type_val <- Some t2; true
+	  | Some ta -> unify ta t2
+      end
+  | (_,PTvar v2) ->
+      begin
+	match v2.type_val with 
+	  | None -> v2.type_val <- Some t1; true
+	  | Some tb -> unify t1 tb
+      end
+  | _ -> t1 = t2
+
 let make_comparison loc = function
   | (a,PTint), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTint) ->
       Papp (int_cmp r, [a; b])
   | (a,PTfloat), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTfloat) ->
       Papp (float_cmp r, [a; b])
-  | (a,ta), (PPeq | PPneq as r), (b,tb) when ta = tb ->
+  | (a,ta), (PPeq | PPneq as r), (b,tb) when unify ta tb ->
       Papp (other_cmp (ta,r), [a; b])
   | _, _, (_,tb) ->
       raise_located loc (ExpectedType (fun f -> Util.print_pure_type f tb))
@@ -150,6 +173,7 @@ and type_pvar loc lenv x =
     raise_located loc (AnyMessage "predicates cannot be labelled");
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
+    | Generalized _ -> assert false
     | Predicate [] -> Pvar x
     | Function _ -> predicate_expected loc
     | _ -> raise_located loc PartialApp
@@ -157,6 +181,7 @@ and type_pvar loc lenv x =
 and type_papp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
+    | Generalized _ -> assert false
     | Predicate at -> check_type_args loc at tl; Papp (x, List.map fst tl)
     | _ -> predicate_expected loc
 
@@ -227,28 +252,33 @@ and type_tvar loc lab env lenv x =
   in
   if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
   match find_logic xu lenv with
+    | Generalized _ -> assert false
     | Function ([], t) -> Tvar x, t
     | _ -> raise_located loc (MustBePure)
 
 and type_tapp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
+    | Generalized _ -> assert false
     | Function (at, t) -> check_type_args loc at tl; t
     | _ -> raise_located loc (AppNonFunction)
 
 and check_type_args loc at tl =
+(*
   let illtyped a b = match a, b with
     | PTarray a, PTarray b -> a <> b
     | _ -> a <> b
   in
+*)
   let rec check_arg = function
     | [], [] -> 
 	()
     | a :: al, (tb,b) :: bl ->
-	if illtyped a b then
+	if unify a b then
+	  check_arg (al, bl)
+	else
 	  raise_located loc (TermExpectedType ((fun f -> print_term f tb),
-					       fun f -> print_pure_type f a)); 
-	check_arg (al, bl)
+					       fun f -> print_pure_type f a))
     | [], _ ->
 	raise_located loc TooManyArguments
     | _, [] ->

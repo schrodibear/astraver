@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.85 2003-12-08 13:03:34 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.86 2003-12-15 14:58:08 marche Exp $ i*)
 
 open Options
 open Logic
@@ -60,6 +60,7 @@ let pp_relation = gec "pp_relation"
 let constant = gec "constant"
 
 (* types *)
+let type_var = gec "type_var"
 let primitive_type = gec "primitive_type"
 let type_v   = gec "type_v"
 let simple_type_v   = gec "simple_type_v"
@@ -264,12 +265,17 @@ EXTEND
   ;
 
   (* Types *)
+  type_var:
+  [ [ "'" ; v = ident -> v ] ]
+  ;
   primitive_type:
   [ [ "int" -> PTint
     | "bool" -> PTbool
     | "float" -> PTfloat
     | "unit" -> PTunit 
-    | id = ident -> PTexternal id ] ]
+    | v = type_var -> PTvarid v
+    | id = ident -> PTexternal ([],id) 
+    | "["; l = LIST1 primitive_type SEP ","; id = ident; "]" -> PTexternal (l,id) ] ]
   ;
   (* [ident] is expansed to allow factorization *)
   type_v:
