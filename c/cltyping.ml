@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.25 2004-03-18 14:11:46 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.26 2004-03-22 10:20:10 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -251,9 +251,9 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       Pnot (type_predicate env p)
   | PLapp (p, tl) ->
       (try
-	 let pl,_ = find_pred p.logic_name in
+	 let pl,info = find_pred p.logic_name in
 	 let tl = type_terms p0.lexpr_loc env pl tl in
-	 Papp (p, tl)
+	 Papp (info, tl)
        with Not_found -> 
 	 error p0.lexpr_loc ("unbound predicate " ^ p.logic_name))
   | PLif (t, p1, p2) -> 

@@ -33,7 +33,6 @@ int test1(purse *p1, purse *p2) {
     return p1->balance;
 }
 
-
 //@ ensures \fresh(\result) && purse_inv(\result) 
 purse *new_purse();
 

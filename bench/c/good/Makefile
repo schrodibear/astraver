@@ -12,10 +12,10 @@ why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/caduceus.why
 WHY=../../../bin/why.opt
 
 coq/%_why.v coq/%_valid.v: why/%.why $(WHY)
-	$(WHY) -dir coq --valid -V --coq-v8 --coq-preamble "Require Export Why" why/caduceus.why $<
+	$(WHY) -dir coq --valid -V --coq-v8 --coq-preamble "Require Export Why" why/caduceus.why why/caduceus_spec.why $<
 
 simplify/%_why.sx: why/%.why $(WHY)
-	$(WHY) -dir simplify -V --simplify --no-simplify-prelude why/caduceus.why $<
+	$(WHY) -dir simplify -V --simplify --no-simplify-prelude why/caduceus.why why/caduceus_spec.why $<
 
 coq/caduceus_why.v: why/caduceus.why $(WHY)
 	$(WHY) -dir coq --coq-v8 why/caduceus.why
@@ -36,7 +36,7 @@ do_simplify: simplify/arith_why.sxcheck simplify/sum2_why.sxcheck \
 	     simplify/pointer_why.sxcheck
 
 simplify/%.sxcheck: simplify/%.sx
-	cat simplify/caduceus_why.sx $< > $<.all
+	cat simplify/caduceus_why.sx simplify/caduceus_spec_why.sx $< > $<.all
 	Simplify $<.all
 
 type-all:

@@ -1,8 +1,7 @@
 
 val mkdir_p : string -> unit
 
-(* [file subdir file]: if file is "dirname/basename", inserts subdir dirname
-   and basename, resulting in filename "dirname/subdir/basename";
-   creates directory "dirname/subdir" if it does not exist *)
-val file : subdir:string -> file:string -> string
+(* [file dir file] returns "dir/basename" if [file] is "dirname/basename", 
+   creating [dir] if necessary. *)
+val file : dir:string -> file:string -> string
 

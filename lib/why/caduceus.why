@@ -116,6 +116,9 @@ axiom acc_upd_neq :
   forall a: 'a.
     p1 <> p2 -> acc(upd(m,p1,a),p2) = acc(m,p2)
 
+(* memory allocation *)
+logic fresh : pointer -> prop
+
 (* exceptions *)
 exception Break
 exception Continue

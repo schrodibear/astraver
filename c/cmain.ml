@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.22 2004-03-19 11:18:49 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.23 2004-03-22 10:20:10 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -33,10 +33,11 @@ let type_file (f,p) =
   (f, Ctyping.type_file p)
 
 let interp_file (f,p) =
-  let (why,prover) = Cinterp.interp p in
+  let (why_code,why_spec,prover) = Cinterp.interp p in
   let f = Filename.chop_extension f in
   let file = Lib.file "why" (f ^ ".why") in
-  Pp.print_in_file (fun fmt -> Output.fprintf_why_decls fmt why) file
+  Pp.print_in_file (fun fmt -> Output.fprintf_why_decls fmt why_code) file;
+  why_spec
 
 let file_copy src dest =
   let cin = open_in src
@@ -69,12 +70,27 @@ let main () =
     () 
   done;
   lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
+  (* Why interpretation *)
+  let why_specs =
+    List.fold_left (fun specs f -> let s = interp_file f in s @ specs) 
+      [] tfiles
+  in
   (* Why specs *)
   let file = Lib.file "why" "caduceus_spec.why" in
-  Pp.print_in_file (fun fmt -> Cinterp.output_specs fmt tfiles) file;
-  (* Why interpretation *)
-  List.iter interp_file tfiles
-
+  Pp.print_in_file 
+    (fun fmt -> 
+       fprintf fmt 
+	 "(* this file was automatically generated; do not edit *)@\n@\n";
+       fprintf fmt "(* heap variables *)@\n";
+       Hashtbl.iter 
+	 (fun v bt -> 
+	    let d = Param (false, v, Ref_type (Base_type bt)) in
+	    fprintf fmt "@[%a@]" fprintf_why_decls [d])
+	 Ceffect.heap_vars;
+       fprintf fmt "(* functions specifications *)@\n";
+       Output.fprintf_why_decls fmt why_specs) 
+    file
+ 
 let rec explain_exception fmt = function
   | Parsing.Parse_error -> 
       fprintf fmt "Syntax error"

@@ -121,6 +121,8 @@ let rec iter_assertion f a =
 let fprintf_base_type form (l,t) =
   match l with
     | [] -> fprintf form "%s" t
+    | [x] ->
+	fprintf form "%s %s" x t
     | x::l ->
 	fprintf form "(%s" x;
 	List.iter (fun t -> fprintf form ",%s" t) l;
@@ -607,7 +609,7 @@ let fprintf_why_decl form d =
 	  (if b then "external" else "") id 
 	  fprint_logic_arg a;
 	List.iter (fun a -> fprintf form ",%a" fprint_logic_arg a) args;
-	fprintf form ") :@ %a@]@.@." fprintf_assertion p
+	fprintf form ") =@ %a@]@.@." fprintf_assertion p
 
 
 let iter_prover_decl f d =
@@ -653,7 +655,7 @@ let output_decls get_id iter_decl output_decl decls =
 let fprintf_why_decls form decls =
   let (logic,other) = 
     List.partition
-      (function Logic _ -> true | _ -> false) 
+      (function Logic _ | Predicate _ -> true | _ -> false) 
       decls
   in
   List.iter (fprintf_why_decl form) logic;

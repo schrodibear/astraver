@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.35 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.36 2004-03-22 10:20:10 filliatr Exp $ i*)
 
 open Format
 
@@ -259,7 +259,7 @@ let werror = !werror_
 let fpi = !fpi_
 let dir = !dir_
 
-let file f = if dir = "" then f else Lib.file ~subdir:dir ~file:f
+let file f = if dir = "" then f else Lib.file ~dir ~file:f
 
 let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.68 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.69 2004-03-22 10:20:10 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -238,7 +238,7 @@ let deal_file f =
   deal_channel ml_parser cin;
   close_in cin;
   let fwe = Filename.chop_extension f in
-  output fwe
+  output (Options.file fwe)
 
 let main () =
   if files = [] then begin

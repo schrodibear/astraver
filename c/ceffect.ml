@@ -37,7 +37,7 @@ let rec pointer_heap_var ty =
     | CTarray (ty,_)
     | CTpointer ty ->
 	let v,_ = pointer_heap_var ty in
-	( v ^ "P", "pointer")
+	(v ^ "P", "pointer")
     | CTstruct _ -> "pointer", "pointer" (* probably wrong *)
     | CTunion _ -> "pointer", "pointer" (* probably wrong *)
     | CTenum _ -> "int", "int"
@@ -63,7 +63,7 @@ let print_heap_vars fmt () =
   in
   fprintf fmt "@[";
   Hashtbl.iter 
-    (fun s t -> fprintf fmt "(%s:%a)" s base_type t) Ceffect.heap_vars;
+    (fun s t -> fprintf fmt "(%s:%a)" s base_type t) heap_vars;
   fprintf fmt "@]"
 
 let heap_var_type = Hashtbl.find heap_vars
@@ -94,6 +94,12 @@ let add_var v ty s =
   declare_heap_var v ([], interp_type ty);
   HeapVarSet.add v s
   
+let add_field_var v ty s =
+   let v = name_heap_var v in
+   let _,ty = pointer_heap_var ty in
+   declare_heap_var v (memory_type ty);
+   HeapVarSet.add v s
+
 let add_pointer_var ty s =
   let v,ty = pointer_heap_array_var ty in
   let v = name_heap_var v in
@@ -112,9 +118,12 @@ let ef_union e1 e2 =
     assigns = union e1.assigns e2.assigns }
 
 let reads_add_var v ty e = { e with reads = add_var v ty e.reads }
+let reads_add_field_var v ty e = { e with reads = add_field_var v ty e.reads }
 let reads_add_pointer_var ty e = { e with reads = add_pointer_var ty e.reads }
 
 let assigns_add_var v ty e = { e with assigns = add_var v ty e.assigns }
+let assigns_add_field_var v ty e = 
+  { e with assigns = add_field_var v ty e.assigns }
 let assigns_add_pointer_var ty e = 
   { e with assigns = add_pointer_var ty e.assigns }
 
@@ -124,8 +133,8 @@ let rec term t =
 	if v.var_is_static
 	then add_var v.var_name t.term_type empty
 	else empty
-    | Tarrow(t,f) -> 
-	add_var f t.term_type (term t)
+    | Tarrow(t1,f) -> 
+	add_field_var f t.term_type (term t1)
     | Tdot(t,f) -> 
 	assert false
     | Tarrget(t1,t2) ->
@@ -231,8 +240,8 @@ let rec expr e = match e.texpr_node with
       else ef_empty
   | TEdot (e, f) ->
       assert false
-  | TEarrow (e, f) ->	
-      reads_add_var f e.texpr_type (expr e)
+  | TEarrow (e1, f) ->	
+      reads_add_field_var f e.texpr_type (expr e1)
   | TEarrget (e1, e2) ->	
       ef_union
 	(reads_add_pointer_var e1.texpr_type (expr e1))
@@ -270,8 +279,8 @@ and assign_expr e = match e.texpr_node with
       assigns_add_pointer_var e.texpr_type (expr e)
   | TEarrget (e1, e2) ->
       ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2) 
-  | TEarrow (e, f) ->
-      assigns_add_var f e.texpr_type (expr e)
+  | TEarrow (e1, f) ->
+      assigns_add_field_var f e.texpr_type (expr e1)
   | TEdot (e, f) ->
       assert false
   | TEcast (_, e) ->

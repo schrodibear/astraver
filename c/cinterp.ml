@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.39 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.40 2004-03-22 10:20:10 filliatr Exp $ i*)
 
 
 open Format
@@ -117,7 +117,11 @@ let rec interp_predicate label old_label p =
     | Pand (p1, p2) -> make_and (f p1) (f p2)
     | Prel (t1, op, t2) ->
 	LPred(interp_rel op,[ft t1;ft t2])
-    | Papp (_, _)
+    | Papp (v, tl) ->
+	LPred(v.logic_name, 
+	      (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
+		 v.logic_args []) 
+	      @ List.map ft tl)
     | Pfalse -> LFalse
     | Pold p -> interp_predicate (Some old_label) old_label p
     | Pat (p, l) -> interp_predicate (Some l) old_label p
@@ -251,7 +255,11 @@ let rec interp_expr e =
 	begin
 	  match e.texpr_node with
 	    | TEvar v ->
-		make_app v.var_name (List.map interp_expr args)
+		let targs = match args with
+		  | [] -> [Output.Var "void"]
+		  | _ -> List.map interp_expr args
+		in
+		make_app (v.var_name ^ "_parameter") targs
 	    | _ -> assert false
 	end
     | TEcast(t,e)
@@ -557,22 +565,44 @@ let interp_axiom p =
 let interp_effects e =
   HeapVarSet.fold (fun var acc -> var::acc) e []
 
+let interp_fun_params params =
+  if params=[]
+  then ["tt",unit_type]
+  else List.map interp_param params 
 
-let interp_located_tdecl (why_decls,prover_decl) decl =
+let interp_function_spec id sp ty pl =
+  let tpl = interp_fun_params pl in
+  let pre,post = interp_spec_option sp in
+  let r = HeapVarSet.elements id.function_reads in
+  let w = HeapVarSet.elements id.function_writes in
+  let annot_type = 
+    Annot_type
+      (pre, Base_type ([], Ceffect.interp_type ty), r, w, post, None)
+  in
+  let ty = 
+    List.fold_right 
+      (fun (x,ct) ty -> Prod_type (x, ct, ty))
+      tpl 
+      annot_type
+  in
+  Param (false, id.var_name ^ "_parameter", ty)
+
+let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   match decl.node with
   | Tlogic(id,ltype) -> 
       lprintf 
       "translating logic declaration of %s@." id.logic_name;
-      (cinterp_logic_symbol id ltype::why_decls,
+      (why_code, cinterp_logic_symbol id ltype::why_spec,
        prover_decl)
   | Taxiom(id,p) -> 
       lprintf 
       "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
-      (Axiom(id,a)::why_decls,prover_decl)
+      (why_code, Axiom(id,a)::why_spec, prover_decl)
   | Ttypedef(ctype,id) -> 
-      (why_decls,prover_decl) 
-  | Ttypedecl(ctype) -> assert false (* TODO *)
+      why
+  | Ttypedecl(ctype) -> 
+      assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 
       lprintf 
         "translating global declaration of %s@." v.var_name;
@@ -580,74 +610,25 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
       begin
 	match init with 
 	  | Inothing ->
-	      ((Param(false,v.var_name,Ref_type(t)))::why_decls,prover_decl)
-	  | _ -> assert false (* TODO *)
+	      (why_code,
+	       (Param(false,v.var_name,Ref_type(t)))::why_spec,
+	       prover_decl)
+	  | _ -> 
+	      assert false (* TODO *)
       end
   | Tfunspec(spec,ctype,id,params) -> 
-      lprintf "translating function %s@." id.var_name;
-      let tparams = List.map interp_param params in
-      let pre,post = interp_spec spec in
-      let reads = interp_effects id.function_reads in
-      let writes = interp_effects id.function_writes in
-      let annot_type =
-	Annot_type(pre,base_type (Ceffect.interp_type ctype),reads,writes,post,None)
-      in
-      let local_type =
-	List.fold_right
-	  (fun (ty,arg) t -> 
-	     Prod_type(arg,base_type (Ceffect.interp_type ty),t))
-	  params annot_type
-      in
-      ((Param(false,id.var_name,local_type))::why_decls, prover_decl)
+      (why_code, interp_function_spec id (Some spec) ctype params :: why_spec,
+       prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
       lprintf "translating function %s@." id.var_name;
-      let tparams = 
-	if params=[]
-	then ["tt",unit_type]
-	else List.map interp_param params 
-      in
+      let tparams = interp_fun_params params in
       let pre,post = interp_spec_option spec in
       let tblock = interp_statement block in
-      ((Def(id.var_name,Fun(tparams,pre,tblock,post,None)))::why_decls,
+      ((Def(id.var_name,Fun(tparams,pre,tblock,post,None)))::why_code,
+       interp_function_spec id spec ctype params :: why_spec,
        prover_decl)
 
 
 let interp l =
-  List.fold_left interp_located_tdecl ([],[]) l
+  List.fold_left interp_located_tdecl ([],[],[]) l
 
-(* generation of file [caduceus_spec.why] *)
-
-let output_specs fmt files =
-  fprintf fmt "(* this file was automatically generated; do not edit *)@\n@\n";
-  fprintf fmt "(* heap variables *)@\n";
-  Hashtbl.iter 
-    (fun v bt -> 
-       let d = Param (false, v, Ref_type (Base_type bt)) in
-       fprintf fmt "@[%a@]" fprintf_why_decls [d])
-    Ceffect.heap_vars;
-  fprintf fmt "(* functions specifications *)@\n";
-  let declare_function id sp ty pl =
-    let pre,post = interp_spec_option sp in
-    let r = HeapVarSet.elements id.function_reads in
-    let w = HeapVarSet.elements id.function_writes in
-    let ty = 
-      List.fold_right 
-	(fun (ct,x) ty -> 
-	   Prod_type (x, Base_type ([], Ceffect.interp_type ct), ty))
-	pl 
-	(Annot_type
-	   (pre, Base_type ([], Ceffect.interp_type ty), r, w, post, None))
-    in
-    let d = Param (false, id.var_name, ty) in
-    fprintf fmt "@[%a@]" fprintf_why_decls [d]
-  in
-  let decl d = match d.node with
-    | Tfundef (sp, ty, id, pl, _) ->
-	declare_function id sp ty pl
-    | Tfunspec (sp, ty, id, pl) ->
-	declare_function id (Some sp) ty pl
-    | _ -> 
-	()
-  in
-  List.iter (fun (_,dl) -> List.iter decl dl) files
-    

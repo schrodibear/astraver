@@ -8,8 +8,7 @@ let mkdir_p dir =
   end else
     Unix.mkdir dir 0o777
 
-let file ~subdir ~file = 
-  let dir = Filename.concat (Filename.dirname file) subdir in
+let file ~dir ~file = 
   mkdir_p dir;
   Filename.concat dir (Filename.basename file)
 
