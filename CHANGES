@@ -1,4 +1,6 @@
 
+  o new declaration "predicate" to define a predicate
+  o new option --dir to output files in a subdirectory
   o new option --pvs-preamble
   o change in syntax: "external" is now a modifier for "parameter" and
     "logic" (see the manual for explanaitions); to be conservative, 
