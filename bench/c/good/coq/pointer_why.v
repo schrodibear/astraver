@@ -3,31 +3,38 @@
 
 Require Import caduceus_why.
 
+(* Why obligation from file "why/pointer.why", characters 144-190 *)
+Lemma array1_impl_po_1 : 
+  forall (alloc: alloc),
+  forall (intP: ((memory) Z)),
+  forall (t: pointer),
+  forall (Pre4: (valid_index alloc t 2)),
+  forall (p: pointer),
+  forall (Post4: p = (any_pointer tt)),
+  forall (caduceus_3: pointer),
+  forall (Post1: caduceus_3 = t),
+  forall (result: pointer),
+  forall (Post7: result = (shift caduceus_3 2)),
+  (forall (result0:pointer),
+   (result0 = result ->
+    (forall (p:pointer),
+     (p = (shift result0 1) ->
+      (forall (result:Z),
+       (result = 1 ->
+        (forall (intP0:((memory) Z)),
+         (intP0 = (upd intP result0 result) -> result = 1)) /\
+        (valid alloc result0))))))).
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/pointer.why", characters 166-189 *)
+(* Why obligation from file "why/pointer.why", characters 595-618 *)
 Lemma f2_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc),
@@ -44,7 +51,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 156-193 *)
+(* Why obligation from file "why/pointer.why", characters 585-622 *)
 Lemma f2_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc),
@@ -67,7 +74,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 478-501 *)
+(* Why obligation from file "why/pointer.why", characters 907-930 *)
 Lemma f_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc),
@@ -84,7 +91,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 567-576 *)
+(* Why obligation from file "why/pointer.why", characters 996-1005 *)
 Lemma f_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc),

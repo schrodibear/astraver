@@ -35,3 +35,13 @@ int g2() {
 /*@ ensures \result == 1 */
 int h() { int z = 0; return f(&z) + z; }
 
+
+int t[5];
+
+//@ requires \valid_index(t,2) ensures \result == 1 
+int array1() {
+  int * p;
+  p = &t[2];
+  return *p++ = 1;
+}
+

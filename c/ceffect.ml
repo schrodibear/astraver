@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.25 2004-03-24 14:25:13 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.26 2004-03-24 15:07:46 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -150,8 +150,9 @@ let rec term t =
 	if v.var_is_static
 	then add_var v.var_name t.term_type empty
 	else empty
-    | Tdot(t1,f)
-    | Tarrow(t1,f) -> 
+    | Tdot ({term_node = Tunop (Ustar, t1)}, f)
+    | Tdot (t1,f)
+    | Tarrow (t1,f) -> 
 	add_field_var f t.term_type (term t1)
     | Tarrget(t1,t2) ->
 	union
@@ -255,6 +256,7 @@ let rec expr e = match e.texpr_node with
       if v.var_is_static
       then reads_add_var v.var_name e.texpr_type ef_empty
       else ef_empty
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->	
       reads_add_field_var f e.texpr_type (expr e1)
@@ -296,6 +298,7 @@ and assign_expr e = match e.texpr_node with
       assigns_add_pointer_var e.texpr_type (expr e)
   | TEarrget (e1, e2) ->
       ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2) 
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
       assigns_add_field_var f e.texpr_type (expr e1)
@@ -315,6 +318,7 @@ and address_expr e = match e.texpr_node with
       expr e1
   | TEarrget (e1, e2) ->
       ef_union (expr e1) (expr e2) 
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
       expr e1

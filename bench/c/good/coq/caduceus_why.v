@@ -45,28 +45,6 @@ Admitted.
   := ~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
      (block_length a p).
 
-(*Why predicate*) Definition valid  (a:alloc) (p:pointer):
-  := ~(p = null) /\ 0 <= (offset p) /\ (offset p) < (block_length a p).
-
-(*Why predicate*) Definition valid_index  (a:alloc) (p:pointer) (i:Z):
-  := ~(p = null) /\ 0 <= ((offset p) + i) /\ ((offset p) + i) <
-     (block_length a p).
-
-(*Why predicate*) Definition valid_range  (a:alloc) (p:pointer) (i:Z) (j:Z):
-  := ~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
-     (block_length a p).
-
-(*Why predicate*) Definition valid  (a:alloc) (p:pointer):
-  := ~(p = null) /\ 0 <= (offset p) /\ (offset p) < (block_length a p).
-
-(*Why predicate*) Definition valid_index  (a:alloc) (p:pointer) (i:Z):
-  := ~(p = null) /\ 0 <= ((offset p) + i) /\ ((offset p) + i) <
-     (block_length a p).
-
-(*Why predicate*) Definition valid_range  (a:alloc) (p:pointer) (i:Z) (j:Z):
-  := ~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
-     (block_length a p).
-
 (*Why axiom*) Lemma offset_shift :
   (forall (p:pointer),
    (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
@@ -160,16 +138,6 @@ Admitted.
   := (forall (p:pointer),
       ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicit Arguments assigns.
-
-(*Why predicate*) Definition assigns (A37:Set) (a:alloc) (m1:((memory) A37))
-  (m2:((memory) A37)) (l:assign_loc):
-  := (forall (p:pointer),
-      ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
-
-(*Why predicate*) Definition assigns (A37:Set) (a:alloc) (m1:((memory) A37))
-  (m2:((memory) A37)) (l:assign_loc):
-  := (forall (p:pointer),
-      ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 
 (*Why axiom*) Lemma unchanged_pointer_intro :
   (forall (p1:pointer),

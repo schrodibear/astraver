@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.56 2004-03-24 14:25:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.57 2004-03-24 15:07:46 filliatr Exp $ i*)
 
 
 open Format
@@ -104,6 +104,7 @@ let rec interp_term label old_label t =
 	let te1 = f t1 and te2 = f t2 in
 	let var = global_var_for_type t.term_type in
 	LApp("acc",[interp_var label var;LApp("shift",[te1;te2])])
+    | Tdot ({term_node = Tunop (Ustar, t)}, field)
     | Tdot (t, field)
     | Tarrow (t, field) -> 
 	let te = f t in
@@ -204,12 +205,20 @@ let interp_bin_op = function
   | Bneq_pointer -> "neq_pointer" 
   | _ -> unsupported "binary operator"
 
-let interp_incr_op = function
-  | Upostfix_inc | Uprefix_inc -> "add_int"
-  | Upostfix_dec | Uprefix_dec -> "sub_int"
+let int_one = Cte(Prim_int 1)
+let int_minus_one = Cte(Prim_int (-1))
+let float_one = Cte(Prim_float 1.0)
 
-
-let one = Cte(Prim_int 1)
+let interp_incr_op ty op = match ty.ctype_node, op with
+  | CTint _, (Upostfix_inc | Uprefix_inc) -> "add_int", int_one
+  | CTint _, (Upostfix_dec | Uprefix_dec) -> "sub_int", int_one
+  | CTfloat _, (Upostfix_inc | Uprefix_inc) -> "add_float", float_one
+  | CTfloat _, (Upostfix_dec | Uprefix_dec) -> "sub_float", float_one
+  | (CTpointer _ | CTarray _), 
+    (Upostfix_inc | Uprefix_inc) -> "shift_", int_one
+  | (CTpointer _ | CTarray _), 
+    (Upostfix_dec | Uprefix_dec) -> "shift_", int_minus_one
+  | _ -> assert false
 
 type interp_lvalue =
   | LocalRef of Info.var_info
@@ -336,8 +345,9 @@ let rec interp_expr e =
 	If(interp_boolean_expr e1, interp_expr e2, interp_expr e3)
     | TEstring_literal s -> 
 	unsupported "string literal"
-    | TEdot(e,s)
-    | TEarrow(e,s) ->
+    | TEdot ({texpr_node = TEunary (Ustar, e)}, s)
+    | TEdot (e,s)
+    | TEarrow (e,s) ->
 	let te = interp_expr e in
 	let var = s in
 	Output.make_app "acc_" [Var(var);te]
@@ -403,6 +413,7 @@ and interp_boolean_expr e =
     | _ -> build_complex_app (Var "neq_int") [interp_expr e; Cte(Prim_int(0))]
 
 and interp_incr_expr op e =
+  let top,one = interp_incr_op e.texpr_type op in
   match interp_lvalue e with
     | LocalRef v ->
 	begin
@@ -412,15 +423,13 @@ and interp_incr_expr op e =
 		Let("caduceus",Deref(v.var_name),
 		    append 
 		      (Assign(v.var_name,
-			      make_app (interp_incr_op op)
-				[Var "caduceus";one]))
+			      make_app top [Var "caduceus";one]))
 		      (Var "caduceus"))
 	    | Uprefix_dec | Uprefix_inc ->
 		(* v := op !v 1; !v *)
 		append 
 		  (Assign(v.var_name,
-			App(App(Var(interp_incr_op op),Deref(v.var_name)),
-			    one)))
+			  App(App(Var top, Deref(v.var_name)), one)))
 		  (Deref v.var_name)
 	end
     | HeapRef(var,e') ->
@@ -436,8 +445,7 @@ and interp_incr_expr op e =
 			append
 			  (make_app "upd_" 
 			     [Var var;Var "caduceus1";
-			      make_app (interp_incr_op op) 
-				[one;Var "caduceus2"]])
+			      make_app top [one;Var "caduceus2"]])
 			  (Var "caduceus2")))
 	    | Uprefix_dec | Uprefix_inc ->
 		(* let tmp1 = e' in
@@ -445,7 +453,7 @@ and interp_incr_expr op e =
 		   upd var tmp1 tmp2; tmp2 *)
 		Let("caduceus1",e',
 		    Let("caduceus2",
-			make_app (interp_incr_op op)
+			make_app top
 			  [make_app "acc_" [Var var;Var "caduceus1"];one],
 			append
 			  (make_app "upd_" 
@@ -464,8 +472,9 @@ and interp_lvalue e =
 	let var = global_var_for_type e.texpr_type in
 	HeapRef(var,build_complex_app (Var "shift_")
 		  [interp_expr e1; interp_expr e2])
-    | TEdot(e1,f)
-    | TEarrow(e1,f) ->
+    | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+    | TEdot (e1,f)
+    | TEarrow (e1,f) ->
 	HeapRef(f,interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
@@ -480,6 +489,7 @@ and interp_address e = match e.texpr_node with
       interp_expr e1
   | TEarrget (e1, e2) ->
       build_complex_app (Var "shift_") [interp_expr e1; interp_expr e2]
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, _)
   | TEdot (e1, _)
   | TEarrow (e1, _) ->
       interp_expr e1
@@ -505,11 +515,12 @@ and interp_statement_expr e =
 		   [Var var;e1; interp_expr e])
 	end 
     | TEincr(op,e) ->
+	let top,one = interp_incr_op e.texpr_type op in
 	begin
 	  match interp_lvalue e with
 	    | LocalRef v ->
 		Assign(v.var_name,
-		       make_app (interp_incr_op op) [Deref(v.var_name); one])
+		       make_app top [Deref(v.var_name); one])
 	    | HeapRef(var,e1) -> 
 		(* let tmp1 = e1 in
 		   let tmp2 = acc var tmp1 in 
@@ -519,8 +530,7 @@ and interp_statement_expr e =
 			make_app "acc_" [Var var; Var "caduceus1"],
 			make_app "upd_"
 			  [Var var; Var "caduceus1"; 
-			   make_app (interp_incr_op op) 
-			     [Var "caduceus2"; one]]))
+			   make_app top [Var "caduceus2"; one]]))
 	end
     | TEcall (e,args) -> 
 	begin
@@ -574,6 +584,7 @@ let collect_locations acc loc =
       | Lterm t -> 
 	  begin
 	    match t.term_node with
+	      | Tdot({term_node = Tunop (Clogic.Ustar, e)}, f)
 	      | Tdot(e,f)
 	      | Tarrow(e,f) ->
 		  f,LApp("pointer_loc",[interp_term (Some "") "" e])

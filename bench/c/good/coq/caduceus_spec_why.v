@@ -3,73 +3,44 @@
 
 Require Export caduceus_why. Require Export caduceus_tactics.
 
-(*Why logic*) Definition elements :
-  ((memory) pointer) -> ((memory) pointer) -> ((memory) pointer) -> pointer
-  -> int_list -> Prop.
-Admitted.
+(*Why*) Parameter array1_parameter :
+  forall (tt: unit), forall (intP: ((memory) Z)), forall (alloc: alloc),
+  forall (t: pointer), forall (H: (valid_index alloc t 2)),
+  (sig_2 ((memory) Z) Z
+   (fun (intP0: ((memory) Z)) (result: Z)  => (result = 1))).
 
-(*Why logic*) Definition mem : Z -> int_list -> Prop.
-Admitted.
+(*Why*) Parameter f2_parameter :
+  forall (x: pointer), forall (alloc: alloc), forall (intP: ((memory) Z)),
+  forall (H: (valid alloc x)),
+  (sig_2 ((memory) Z) Z
+   (fun (intP0: ((memory) Z)) (result: Z)  => ((acc intP0 x) = 1 /\ result =
+    1))).
 
-(*Why logic*) Definition cons : Z -> int_list -> int_list.
-Admitted.
+(*Why*) Parameter f_parameter :
+  forall (x: pointer), forall (alloc: alloc), forall (intP: ((memory) Z)),
+  forall (H: (valid alloc x)),
+  (sig_2 ((memory) Z) Z
+   (fun (intP0: ((memory) Z)) (result: Z)  => ((acc intP0 x) = 1 /\ result =
+    0))).
 
-(*Why logic*) Definition nil : int_list.
-Admitted.
+(*Why*) Parameter g2_parameter :
+  forall (tt: unit), forall (alloc: alloc), forall (intP: ((memory) Z)),
+  forall (r: pointer),
+  (sig_3 ((memory) Z) pointer Z
+   (fun (intP0: ((memory) Z)) (r0: pointer) (result: Z)  => ((acc intP0 r0) =
+    1))).
 
-(*Why*) Parameter drand48_parameter :
-  forall (tt: unit), (sig_1 R (fun (result: R)  => (True))).
+(*Why*) Parameter g_parameter :
+  forall (tt: unit), forall (alloc: alloc), forall (intP: ((memory) Z)),
+  forall (r: pointer), forall (H: (valid alloc r)),
+  (sig_2 ((memory) Z) Z
+   (fun (intP0: ((memory) Z)) (result: Z)  => ((acc intP0 r) = 1))).
 
-(*Why*) Parameter empty_parameter :
-  forall (tt: unit), forall (level: ((memory) Z)), forall (NIL: pointer),
-  forall (alloc: alloc), forall (forward: ((memory) pointer)),
-  forall (header: ((memory) pointer)), forall (pointerP: ((memory) pointer)),
-  (sig_4 ((memory) pointer) ((memory) Z) ((memory) pointer) pointer
-   (fun (header0: ((memory) pointer)) (level0: ((memory) Z))
-    (pointerP0: ((memory) pointer)) (result: pointer)  =>
-    ((valid alloc result) /\ (elements forward header0 pointerP0 result nil)))).
-
-(*Why*) Parameter init_parameter :
-  forall (tt: unit), forall (elt: ((memory) Z)), forall (NIL: pointer),
-  forall (alloc: alloc), forall (forward: ((memory) pointer)),
-  (sig_3 pointer ((memory) Z) unit
-   (fun (NIL0: pointer) (elt0: ((memory) Z)) (result: unit)  =>
-    ((valid alloc NIL0) /\ (block_length alloc (acc forward NIL0)) = 16))).
-
-(*Why*) Parameter insert_parameter :
-  forall (l: pointer), forall (v: Z), forall (alloc: alloc),
-  forall (elt: ((memory) Z)), forall (forward: ((memory) pointer)),
-  forall (header: ((memory) pointer)), forall (level: ((memory) Z)),
-  forall (pointerP: ((memory) pointer)), forall (prob: R),
-  forall (H: (valid alloc l)),
-  (sig_4 ((memory) Z) ((memory) Z) ((memory) pointer) unit
-   (fun (elt0: ((memory) Z)) (level0: ((memory) Z))
-    (pointerP0: ((memory) pointer)) (result: unit)  => (True))).
-
-(*Why*) Parameter make_node_parameter :
-  forall (lvl: Z), forall (alloc: alloc),
-  forall (forward: ((memory) pointer)),
-  (sig_1 pointer
-   (fun (result: pointer)  => ((valid alloc result) /\
-    (block_length alloc (acc forward result)) = lvl))).
+(*Why*) Parameter h_parameter :
+  forall (tt: unit), forall (alloc: alloc), forall (intP: ((memory) Z)),
+  (sig_2 ((memory) Z) Z
+   (fun (intP0: ((memory) Z)) (result: Z)  => (result = 1))).
 
 (*Why*) Parameter malloc_parameter :
   forall (_: Z), (sig_1 pointer (fun (result: pointer)  => (True))).
-
-(*Why*) Parameter rand01_parameter :
-  forall (tt: unit),
-  (sig_1 R
-   (fun (result: R)  => ((Rle (Rdiv (IZR 0000000) (IZR 1000000)) result) /\
-    (Rle result (Rdiv (IZR 1000000) (IZR 1000000)))))).
-
-(*Why*) Parameter random_level_parameter :
-  forall (tt: unit), forall (prob: R),
-  (sig_1 Z (fun (result: Z)  => (1 <= result /\ result <= 16))).
-
-(*Why*) Parameter search_parameter :
-  forall (l: pointer), forall (v: Z), forall (alloc: alloc),
-  forall (elt: ((memory) Z)), forall (forward: ((memory) pointer)),
-  forall (header: ((memory) pointer)), forall (level: ((memory) Z)),
-  forall (pointerP: ((memory) pointer)), forall (H: (valid alloc l)),
-  (sig_1 Z (fun (result: Z)  => (True))).
 
