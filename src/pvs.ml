@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.46 2004-03-01 14:48:50 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.47 2004-03-02 10:41:34 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -58,7 +58,7 @@ let print_term fmt t =
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	fprintf fmt "%d" n
+	fprintf fmt "(%d::int)" n
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
