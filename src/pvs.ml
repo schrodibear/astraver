@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.19 2002-07-04 09:31:13 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.20 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -28,16 +28,16 @@ let print_term fmt t =
     | t -> 
 	print1 t
   and print1 = function
-    | Tapp (id, [a;b]) when id == t_add || id == t_sub ->
+    | Tapp (id, [a;b]) when id == t_add_int || id == t_sub_int ->
 	fprintf fmt "@[<hov 2>"; print1 a;
-	fprintf fmt " %s@ " (if id == t_add then "+" else "-");
+	fprintf fmt " %s@ " (if id == t_add_int then "+" else "-");
 	print2 b; fprintf fmt "@]"
     | t ->
 	print2 t
   and print2 = function
-    | Tapp (id, [a;b]) when id == t_mul || id == t_div ->
+    | Tapp (id, [a;b]) when id == t_mul_int || id == t_div_int ->
 	fprintf fmt "@[<hov 2>"; print2 a;
-	fprintf fmt " %s@ " (if id == t_mul then "*" else "/");
+	fprintf fmt " %s@ " (if id == t_mul_int then "*" else "/");
 	print3 b; fprintf fmt "@]"
     | t ->
 	print3 t
@@ -54,9 +54,9 @@ let print_term fmt t =
 	fprintf fmt "%d" (truncate f)
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
-    | Tapp (id, [t]) when id == t_neg ->
+    | Tapp (id, [t]) when id == t_neg_int ->
 	fprintf fmt "-"; print3 t
-    | Tapp (id, l) as t when is_relation id || is_arith id ->
+    | Tapp (id, l) as t when is_relation id || is_int_arith id ->
 	fprintf fmt "@[("; print0 t; fprintf fmt ")@]"
     | Tapp (id, tl) -> 
 	fprintf fmt "%s(@[" (Ident.string id);

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.39 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.40 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -244,7 +244,7 @@ let make_raw_access env (id,id') c =
 
 let make_pre_access env id c =
   let size,_ = array_info env id in
-  Pand (le (Tconst (ConstInt 0)) c, lt c size)
+  Pand (le_int (Tconst (ConstInt 0)) c, lt_int c size)
       
 let make_raw_store env (id,id') c1 c2 =
   let size,_ = array_info env id in

@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.21 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.22 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -48,12 +48,19 @@ val exn_exn : t -> t
 val anonymous : t
 val implicit : t
 
-val t_add : t
-val t_sub : t
-val t_mul : t
-val t_div : t
+val t_add_int : t
+val t_sub_int : t
+val t_mul_int : t
+val t_div_int : t
+val t_neg_int : t
+
+val t_add_float : t
+val t_sub_float : t
+val t_mul_float : t
+val t_div_float : t
+val t_neg_float : t
+
 val t_mod : t
-val t_neg : t
 val t_sqrt : t
 
 val t_lt : t
@@ -73,6 +80,16 @@ val t_neq_bool : t
 val t_neq_float : t
 val t_neq_unit : t
 
+val t_lt_int : t
+val t_le_int : t
+val t_gt_int : t
+val t_ge_int : t
+
+val t_lt_float : t
+val t_le_float : t
+val t_gt_float : t
+val t_ge_float : t
+
 val t_zwf_zero : t
 val result : t
 val default : t
@@ -86,10 +103,11 @@ val p_or : t
 val p_and : t
 val p_not : t
 
-val is_eq_neq : t -> bool
 val is_comparison : t -> bool
+val is_int_comparison : t -> bool
+
 val is_relation : t -> bool
 
-val is_arith_binop : t -> bool
-val is_arith_unop : t -> bool
-val is_arith : t -> bool
+val is_int_arith_binop : t -> bool
+val is_int_arith_unop : t -> bool
+val is_int_arith : t -> bool

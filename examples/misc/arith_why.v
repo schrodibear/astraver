@@ -37,7 +37,7 @@ Lemma mult_po_2 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
+  (Test4: `a0 <> 0`)
   ~(`2` = `0`).
 Proof.
 Intros; Omega.
@@ -59,8 +59,8 @@ Lemma mult_po_3 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
-  (Test3: `(Zmod a0 2)` = `1`)
+  (Test4: `a0 <> 0`)
+  (Test3: `(Zmod a0 2) = 1`)
   (p1: Z)
   (Post4: p1 = `p0 + b0`)
   ((a:Z)
@@ -100,8 +100,8 @@ Lemma mult_po_4 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
-  (Test2: ~(`(Zmod a0 2)` = `1`))
+  (Test4: `a0 <> 0`)
+  (Test2: `(Zmod a0 2) <> 1`)
   ((a:Z)
    (a = `(Zdiv a0 2)` ->
     ((b:Z)
@@ -142,7 +142,7 @@ Lemma mult_po_5 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
+  (Test4: `a0 <> 0`)
   (p1: Z)
   (Post12: ((a:Z)
             (a = `(Zdiv a0 2)` ->
@@ -170,7 +170,7 @@ Lemma mult_po_6 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
+  (Test4: `a0 <> 0`)
   (p1: Z)
   (Post12: ((a:Z)
             (a = `(Zdiv a0 2)` ->
@@ -203,7 +203,7 @@ Lemma mult_po_7 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
+  (Test4: `a0 <> 0`)
   (a1: Z)
   (b1: Z)
   (p1: Z)
@@ -229,7 +229,7 @@ Lemma mult_po_8 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test4: ~(a0 = `0`))
+  (Test4: `a0 <> 0`)
   (a1: Z)
   (b1: Z)
   (p1: Z)
@@ -255,8 +255,8 @@ Lemma mult_po_9 :
   (p0: Z)
   (Pre4: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
-  (Test1: a0 = `0`)
-  `a0 >= 0` /\ `p0 + a0 * b0` = `x * y` /\ a0 = `0`.
+  (Test1: `a0 = 0`)
+  `a0 >= 0` /\ `p0 + a0 * b0` = `x * y` /\ `a0 = 0`.
 Proof.
 Intuition.
 Save.
@@ -290,7 +290,7 @@ Lemma mult_po_11 :
   (a0: Z)
   (b0: Z)
   (p0: Z)
-  (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y` /\ a0 = `0`)
+  (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y` /\ `a0 = 0`)
   p0 = `x * y`.
 Proof.
 Intuition.
@@ -316,21 +316,21 @@ Definition mult := (* validation *)
               [Variant1: Z](a0: Z)(b0: Z)(p0: Z)(_: Variant1 = a0)
               (Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
               (sig_4 Z Z Z unit [a1:Z][b1:Z][p1:Z][result:unit](`a1 >= 0` /\
-               `p1 + a1 * b1` = `x * y` /\ a1 = `0`))
+               `p1 + a1 * b1` = `x * y` /\ `a1 = 0`))
               [Variant1: Z; wf1: (Variant2: Z)
                (Pre1: (Zwf `0` Variant2 Variant1))(a0: Z)(b0: Z)(p0: Z)
                (_: Variant2 = a0)(Inv: `a0 >= 0` /\ `p0 + a0 * b0` = `x * y`)
                (sig_4 Z Z Z unit [a1:Z][b1:Z][p1:Z][result:unit](`a1 >= 0` /\
-                `p1 + a1 * b1` = `x * y` /\ a1 = `0`));
+                `p1 + a1 * b1` = `x * y` /\ `a1 = 0`));
                a0: Z; b0: Z; p0: Z; Pre4: Variant1 = a0; Inv: `a0 >= 0` /\
                `p0 + a0 * b0` = `x * y`]
                 let (result2, Bool1) =
                   let (result4, Post11) = (Z_noteq_bool a0 `0`) in
                   (exist_1 [result5: bool]
-                  (if result5 then ~(a0 = `0`) else a0 = `0`) result4 Post11) in
+                  (if result5 then `a0 <> 0` else `a0 = 0`) result4 Post11) in
                 (Cases (btest
-                        [result2:bool](if result2 then ~(a0 = `0`)
-                                       else a0 = `0`)
+                        [result2:bool](if result2 then `a0 <> 0`
+                                       else `a0 = 0`)
                         result2 Bool1) of
                 | (left Test4) =>
                     let (a1, b1, p1, result3, Inv) =
@@ -345,14 +345,13 @@ Definition mult := (* validation *)
                               (Z_eq_bool `(Zmod a0 2)`) in
                             let (result5, Post13) = (result4 `1`) in
                             (exist_1 [result6: bool]
-                            (if result6 then `(Zmod a0 2)` = `1`
-                             else ~(`(Zmod a0 2)` = `1`)) result5
+                            (if result6 then `(Zmod a0 2) = 1`
+                             else `(Zmod a0 2) <> 1`) result5
                             Post13) in
                           (Cases (btest
                                   [result3:bool](if result3
-                                                 then `(Zmod a0 2)` = `1`
-                                                 else ~(`(Zmod a0 2)` = `
-                                                 1`))
+                                                 then `(Zmod a0 2) = 1`
+                                                 else `(Zmod a0 2) <> 1`)
                                   result3 Bool2) of
                           | (left Test3) =>
                               let (p1, result4, Post4) =
@@ -420,16 +419,16 @@ Definition mult := (* validation *)
                         result1 Post3 Variant1 a0 b0 p0 Pre4 Inv Test4 a1 b1
                         p1 Inv0)) in
                     (exist_4 [a2: Z][b2: Z][p2: Z][result4: unit]`a2 >= 0` /\
-                    `p2 + a2 * b2` = `x * y` /\ a2 = `0` a1 b1 p1 result3
+                    `p2 + a2 * b2` = `x * y` /\ `a2 = 0` a1 b1 p1 result3
                     Inv)
                 | (right Test1) =>
                     let (a1, b1, p1, result3, Inv) = (exist_4 [a1: Z][b1: Z]
                       [p1: Z][result3: unit]`a1 >= 0` /\
-                      `p1 + a1 * b1` = `x * y` /\ a1 = `0` a0 b0 p0 tt
+                      `p1 + a1 * b1` = `x * y` /\ `a1 = 0` a0 b0 p0 tt
                       (mult_po_9 x y Pre5 result Post1 result0 Post2 result1
                       Post3 Variant1 a0 b0 p0 Pre4 Inv Test1)) in
                     (exist_4 [a2: Z][b2: Z][p2: Z][result4: unit]`a2 >= 0` /\
-                    `p2 + a2 * b2` = `x * y` /\ a2 = `0` a1 b1 p1 result3
+                    `p2 + a2 * b2` = `x * y` /\ `a2 = 0` a1 b1 p1 result3
                     Inv) end) result result result0 result1
               (refl_equal ? result)
               (mult_po_10 x y Pre5 result Post1 result0 Post2 result1 Post3)) in

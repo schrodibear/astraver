@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.53 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.54 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -169,6 +169,9 @@ let check_for_alias loc id v =
 let expected_cmp loc =
   Error.expected_type loc (fun fmt -> fprintf fmt "unit, bool, int or float")
 
+let expected_num loc =
+  Error.expected_type loc (fun fmt -> fprintf fmt "int or float")
+
 let type_eq loc = function
   | PureType PTint -> Ident.t_eq_int
   | PureType PTbool -> Ident.t_eq_bool
@@ -183,9 +186,24 @@ let type_neq loc = function
   | PureType PTunit -> Ident.t_neq_unit
   | _ -> expected_cmp loc
 
-let type_eq_neq id =
-  assert (is_eq_neq id);
-  if id == t_eq then type_eq else type_neq
+let type_cmp idint idfloat loc = function
+  | PureType PTint -> idint
+  | PureType PTfloat -> idfloat
+  | _ -> expected_num loc
+
+let type_lt = type_cmp Ident.t_lt_int Ident.t_lt_float
+let type_le = type_cmp Ident.t_le_int Ident.t_le_float
+let type_gt = type_cmp Ident.t_gt_int Ident.t_gt_float
+let type_ge = type_cmp Ident.t_ge_int Ident.t_ge_float
+
+let type_comparison id =
+  if id == t_eq then type_eq 
+  else if id == t_neq then type_neq
+  else if id == t_lt then type_lt
+  else if id == t_le then type_le 
+  else if id == t_gt then type_gt
+  else if id == t_ge then  type_ge
+  else assert false
 
 let make_node p env l k = 
   { desc = p; info = { env = env; label = l; kappa = k } }
@@ -300,7 +318,7 @@ and is_pure_type_c c =
 (*s Preconditions for partial functions. *)
 
 let partial_pre = function
-  | Tapp (id, [a;b]) when id == t_div || id == t_mod ->
+  | Tapp (id, [a;b]) when id == t_div_int || id == t_mod ->
       let p = neq b (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
   | Tapp (id, [a]) when id == t_sqrt ->
@@ -463,12 +481,12 @@ and typef_desc lab env loc = function
   | App (_, _, Some _) ->
       assert false
 
-  | App ({desc=Var id} as e, Term a, None) when is_eq_neq id ->
+  | App ({desc=Var id} as e, Term a, None) when is_comparison id ->
       let t_a = typef lab env a in
-      let eq = type_eq_neq id a.info.loc (result_type t_a) in
+      let eq = type_comparison id a.info.loc (result_type t_a) in
       typef_desc lab env loc (App ({e with desc = Var eq}, Term a, None))
       (* TODO: avoid recursive call *)
-	 
+
   | App (f, Term a, None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in

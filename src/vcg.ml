@@ -28,8 +28,10 @@ type validation = proof cc_term
 
 (*s We automatically prove the trivial obligations *)
 
+let is_eq id = id == Ident.t_eq || id == Ident.t_eq_int
+
 let reflexivity = function
-  | Papp (id, [a;b]) when id == Ident.t_eq && a = b -> Reflexivity a
+  | Papp (id, [a;b]) when is_eq id && a = b -> Reflexivity a
   | _ -> raise Exit
 
 let assumption concl = function

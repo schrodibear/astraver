@@ -252,8 +252,8 @@ Definition c3 := (* validation *)
     let (result, Bool1) =
       let (result1, Post4) = (Z_eq_bool v4 `1`) in
       (exist_1 [result2: bool]
-      (if result2 then v4 = `1` else ~(v4 = `1`)) result1 Post4) in
-    (Cases (btest [result:bool](if result then v4 = `1` else ~(v4 = `1`))
+      (if result2 then `v4 = 1` else `v4 <> 1`) result1 Post4) in
+    (Cases (btest [result:bool](if result then `v4 = 1` else `v4 <> 1`)
             result Bool1) of
     | (left Test2) =>
         let (v9, result0, Post2) =
@@ -351,8 +351,8 @@ Definition lr3 := (* validation *)
 
 Definition r1 := (* validation *)
   let (result1, Post1) = (Z_eq_bool `1` `1`) in
-  (exist_1 [result2: bool]
-  (if result2 then `1` = `1` else ~(`1` = `1`)) result1 Post1).
+  (exist_1 [result2: bool](if result2 then `1 = 1` else `1 <> 1`) result1
+  Post1).
 
 Definition r2 := (* validation *)
   let (result1, Post1) = (Z_gt_le_bool `2` `1`) in
@@ -376,36 +376,36 @@ Definition r5 := (* validation *)
 
 Definition r6 := (* validation *)
   let (result1, Post1) = (Z_noteq_bool `1` `2`) in
-  (exist_1 [result2: bool]
-  (if result2 then ~(`1` = `2`) else `1` = `2`) result1 Post1).
+  (exist_1 [result2: bool](if result2 then `1 <> 2` else `1 = 2`) result1
+  Post1).
 
 Definition r7 := (* validation *)
   let (result, Bool1) =
     let (result1, Post1) = (Z_eq_bool `1` `2`) in
-    (exist_1 [result2: bool]
-    (if result2 then `1` = `2` else ~(`1` = `2`)) result1 Post1) in
-  (Cases (btest [result:bool](if result then `1` = `2` else ~(`1` = `2`))
-          result Bool1) of
+    (exist_1 [result2: bool](if result2 then `1 = 2` else `1 <> 2`) result1
+    Post1) in
+  (Cases (btest [result:bool](if result then `1 = 2` else `1 <> 2`) result
+          Bool1) of
   | (left Test2) => true
   | (right Test1) =>
       let (result0, Post2) =
         let (result2, Post3) = (Z_eq_bool `2` `3`) in
         (exist_1 [result3: bool]
-        (if result3 then `2` = `3` else ~(`2` = `3`)) result2 Post3) in
+        (if result3 then `2 = 3` else `2 <> 3`) result2 Post3) in
       result0 end).
 
 Definition r8 := (* validation *)
   let (result, Bool1) =
     let (result1, Post1) = (Z_eq_bool `1` `2`) in
-    (exist_1 [result2: bool]
-    (if result2 then `1` = `2` else ~(`1` = `2`)) result1 Post1) in
-  (Cases (btest [result:bool](if result then `1` = `2` else ~(`1` = `2`))
-          result Bool1) of
+    (exist_1 [result2: bool](if result2 then `1 = 2` else `1 <> 2`) result1
+    Post1) in
+  (Cases (btest [result:bool](if result then `1 = 2` else `1 <> 2`) result
+          Bool1) of
   | (left Test2) =>
       let (result0, Post2) =
         let (result2, Post3) = (Z_eq_bool `2` `3`) in
         (exist_1 [result3: bool]
-        (if result3 then `2` = `3` else ~(`2` = `3`)) result2 Post3) in
+        (if result3 then `2 = 3` else `2 <> 3`) result2 Post3) in
       result0
   | (right Test1) => false end).
 

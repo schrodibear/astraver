@@ -534,6 +534,7 @@ Usual precedences apply to arithmetical operations.
     & $::=$ & \nt{constant} \\
       & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
       & $|$ & \te{-} \nt{term} \\
+      & $|$ & \te{-.} \nt{term} \\
       & $|$ & \nt{identifier} \\
       & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{identifier} \te{[} \nt{term} \te{]} \\
@@ -550,6 +551,7 @@ Usual precedences apply to arithmetical operations.
 
   \nt{arith\_op}\indexnt{arith\_op}
     & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%}
+              \te{+.} $|$ \te{-.} $|$ \te{*.} $|$ \te{/.} $|
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of terms}

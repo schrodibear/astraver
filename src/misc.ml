@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.39 2002-06-24 13:58:14 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.40 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -225,7 +225,30 @@ let negate id =
   else if id == t_ge then t_lt
   else if id == t_eq then t_neq
   else if id == t_neq then t_eq
+  else if id == t_lt_int then t_ge_int
+  else if id == t_le_int then t_gt_int
+  else if id == t_gt_int then t_le_int
+  else if id == t_ge_int then t_lt_int
+  else if id == t_eq_int then t_neq_int
+  else if id == t_neq_int then t_eq_int
+  else if id == t_lt_float then t_ge_float
+  else if id == t_le_float then t_gt_float
+  else if id == t_gt_float then t_le_float
+  else if id == t_ge_float then t_lt_float
+  else if id == t_eq_float then t_neq_float
+  else if id == t_neq_float then t_eq_float
+  else if id == t_eq_bool then t_neq_bool
+  else if id == t_neq_bool then t_eq_bool 
+  else if id == t_eq_unit then t_neq_unit
+  else if id == t_neq_unit then t_eq_unit 
   else assert false
+
+let make_int_relation id =
+  if id == t_lt then t_lt_int
+  else if id == t_le then t_le_int
+  else if id == t_gt then t_gt_int
+  else if id == t_ge then t_ge_int
+  else id
 
 let equals_false = function
   | Tapp (id, l) when is_relation id -> Tapp (negate id, l)
@@ -311,6 +334,9 @@ let gt = relation t_gt
 let ge = relation t_ge
 let eq = relation t_eq
 let neq = relation t_neq
+
+let lt_int = relation t_lt_int
+let le_int = relation t_le_int
 
 let pif a b c =
   if a = ttrue then b else if a = tfalse then c else Pif (a, b ,c)

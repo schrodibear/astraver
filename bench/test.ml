@@ -1,4 +1,7 @@
 
+let x = 1.1 = 2.2
+
+(***
 exception E of int
 
 exception F
@@ -8,6 +11,7 @@ parameter f : n:int -> {} unit raises E {}
 parameter g : x:int ref -> {} bool writes x raises E,F {}
 
 let p = raise (E 1) : int
+***)
 
 (****
 

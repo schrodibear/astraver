@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.30 2002-06-24 13:58:14 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.31 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -104,9 +104,12 @@ val tvoid : term
 
 val relation : Ident.t -> term -> term -> predicate
 val not_relation : Ident.t -> term -> term -> predicate
+val make_int_relation : Ident.t -> Ident.t
 
 val lt : term -> term -> predicate
 val le : term -> term -> predicate
+val lt_int : term -> term -> predicate
+val le_int : term -> term -> predicate
 val gt : term -> term -> predicate
 val ge : term -> term -> predicate
 val eq : term -> term -> predicate

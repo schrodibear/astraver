@@ -211,7 +211,7 @@ Save.
 Lemma sqrt_po_1 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test6: x = `0`)
+  (Test6: `x = 0`)
   `0 * 0 <= x` /\ `x < (0 + 1) * (0 + 1)`.
 Proof. (* sqrt_po_1 *)
 Auto with *.
@@ -220,7 +220,7 @@ Save.
 Lemma sqrt_po_2 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test4: `x <= 3`)
   `1 * 1 <= x` /\ `x < (1 + 1) * (1 + 1)`.
 Proof. (* sqrt_po_2 *)
@@ -230,7 +230,7 @@ Save.
 Lemma sqrt_po_3 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -242,7 +242,7 @@ Save.
 Lemma sqrt_po_4 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -258,7 +258,7 @@ Save.
 Lemma sqrt_po_5 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -283,7 +283,7 @@ Save.
 Lemma sqrt_po_6 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -319,7 +319,7 @@ Save.
 Lemma sqrt_po_7 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -347,7 +347,7 @@ Save.
 Lemma sqrt_po_8 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -377,7 +377,7 @@ Save.
 Lemma sqrt_po_9 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -400,7 +400,7 @@ Save.
 Lemma sqrt_po_10 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -445,7 +445,7 @@ Save.
 Lemma sqrt_po_11 : 
   (x: Z)
   (Pre7: `x >= 0`)
-  (Test5: ~(x = `0`))
+  (Test5: `x <> 0`)
   (Test3: `x > 3`)
   (result1: Z)
   (Post1: result1 = x)
@@ -469,8 +469,8 @@ Definition sqrt := (* validation *)
       let (result, Bool3) =
         let (result1, Post10) = (Z_eq_bool x `0`) in
         (exist_1 [result2: bool]
-        (if result2 then x = `0` else ~(x = `0`)) result1 Post10) in
-      (Cases (btest [result:bool](if result then x = `0` else ~(x = `0`))
+        (if result2 then `x = 0` else `x <> 0`) result1 Post10) in
+      (Cases (btest [result:bool](if result then `x = 0` else `x <> 0`)
               result Bool3) of
       | (left Test6) =>
           let (result0, Post19) = (exist_1 [result0: Z]

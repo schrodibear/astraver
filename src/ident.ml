@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.23 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.24 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -81,12 +81,19 @@ let exn_exn id = create ("Exn_" ^ id.name)
 let anonymous = create "_"
 let implicit = create "?"
 
-let t_add = create "%add"
-let t_sub = create "%sub"
-let t_mul = create "%mul"
-let t_div = create "%div"
+let t_add_int = create "%add_int"
+let t_sub_int = create "%sub_int"
+let t_mul_int = create "%mul_int"
+let t_div_int = create "%div_int"
+let t_neg_int = create "%neg_int"
+
+let t_add_float = create "%add_float"
+let t_sub_float = create "%sub_float"
+let t_mul_float = create "%mul_float"
+let t_div_float = create "%div_float"
+let t_neg_float = create "%neg_float"
+
 let t_mod = create "%mod"
-let t_neg = create "%neg"
 let t_sqrt = create "%sqrt"
 
 let t_lt = create "%lt"
@@ -106,6 +113,16 @@ let t_neq_bool = create "%neq_bool"
 let t_neq_float = create "%neq_float"
 let t_neq_unit = create "%neq_unit"
 
+let t_lt_int = create "%lt_int"
+let t_le_int = create "%le_int"
+let t_gt_int = create "%gt_int"
+let t_ge_int = create "%ge_int"
+
+let t_lt_float = create "%lt_float"
+let t_le_float = create "%le_float"
+let t_gt_float = create "%gt_float"
+let t_ge_float = create "%ge_float"
+
 let t_zwf_zero = create "zwf_zero"
 let result = create "result"
 let default = create "_"
@@ -119,21 +136,27 @@ let p_and = create "and"
 let p_or = create "or"
 let p_not = create "not"
 
-let is_eq_neq id =
+let is_comparison id =
+  id == t_lt || id == t_le || id == t_gt || id == t_ge || 
   id == t_eq || id == t_neq
 
-let is_comparison id =
-  id == t_lt || id == t_le || id == t_gt || id == t_ge
+let is_int_comparison id =
+  id == t_eq_int || id == t_neq_int ||
+  id == t_lt_int || id == t_le_int || id == t_gt_int || id == t_ge_int 
+
+let is_float_comparison id = 
+  id == t_eq_float || id == t_neq_float ||
+  id == t_lt_float || id == t_le_float || id == t_gt_float || id == t_ge_float 
 
 let is_relation id = 
-  id == t_lt || id == t_le || id == t_gt || id == t_ge ||
-  id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int
+  is_comparison id || is_int_comparison id || is_float_comparison id
 
-let is_arith_binop id =
-  id == t_add || id == t_sub || id == t_mul || id == t_div || id == t_mod
+let is_int_arith_binop id =
+  id == t_add_int || id == t_sub_int || id == t_mul_int || id == t_div_int ||
+  id == t_mod
 
-let is_arith_unop id = 
-  id == t_neg
+let is_int_arith_unop id = 
+  id == t_neg_int
 
-let is_arith id = 
-  is_arith_binop id || is_arith_unop id
+let is_int_arith id = 
+  is_int_arith_binop id || is_int_arith_unop id

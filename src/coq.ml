@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.47 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.48 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -15,18 +15,18 @@ open Misc
 let out_file f = f ^ "_why.v"
 
 let prefix_id id =
-  if id == t_lt then "Z_lt_ge_bool" 
-  else if id == t_le then "Z_le_gt_bool"
-  else if id == t_gt then "Z_gt_le_bool"
-  else if id == t_ge then "Z_ge_lt_bool"
+  if id == t_lt_int then "Z_lt_ge_bool" 
+  else if id == t_le_int then "Z_le_gt_bool"
+  else if id == t_gt_int then "Z_gt_le_bool"
+  else if id == t_ge_int then "Z_ge_lt_bool"
   else if id == t_eq_int then "Z_eq_bool"
   else if id == t_neq_int then "Z_noteq_bool"
-  else if id == t_add then "Zplus"
-  else if id == t_sub then "Zminus"
-  else if id == t_mul then "Zmult"
-  else if id == t_div then "Zdiv"
+  else if id == t_add_int then "Zplus"
+  else if id == t_sub_int then "Zminus"
+  else if id == t_mul_int then "Zmult"
+  else if id == t_div_int then "Zdiv"
   else if id == t_mod then "Zmod"
-  else if id == t_neg then "Zopp"
+  else if id == t_neg_int then "Zopp"
   else assert false
 
 let inz = ref 0
@@ -41,17 +41,17 @@ let print_term fmt t =
     | t -> 
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b]) when id == t_add || id == t_sub ->
+    | Tapp (id, [a;b]) when id == t_add_int || id == t_sub_int ->
 	openz fmt; 
-	fprintf fmt "%a %s@ %a" print1 a (if id == t_add then "+" else "-") 
-	  print2 b; 
+	fprintf fmt "%a %s@ %a" 
+	  print1 a (if id == t_add_int then "+" else "-") print2 b; 
 	closez fmt
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul ->
+    | Tapp (id, [a;b]) when id == t_mul_int ->
 	openz fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closez fmt
-    | Tapp (id, [a;b]) when id == t_div ->
+    | Tapp (id, [a;b]) when id == t_div_int ->
 	openz fmt; 
 	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b; closez fmt
     | Tapp (id, [a;b]) when id == t_mod ->
@@ -76,13 +76,13 @@ let print_term fmt t =
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
-    | Tapp (id, [t]) when id == t_neg ->
+    | Tapp (id, [t]) when id == t_neg_int ->
 	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt
-    | Tapp (id, [_;_]) as t when is_relation id || is_arith_binop id ->
+    | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) when id == t_zwf_zero -> 
 	openz fmt; fprintf fmt "(@[Zwf 0 %a@])" print_terms tl; closez fmt
-    | Tapp (id, tl) when is_relation id || is_arith id -> 
+    | Tapp (id, tl) when is_relation id || is_int_arith id -> 
 	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl) -> 
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
@@ -101,12 +101,12 @@ let rec print_pure_type fmt = function
   | PTexternal id -> Ident.print fmt id
 
 let infix_relation id =
-  if id == t_lt then "<" 
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
-  else if id == t_eq then "="
-  else if id == t_neq then "<>"
+  if id == t_lt_int || id == t_lt then "<" 
+  else if id == t_le_int || id == t_le then "<="
+  else if id == t_gt_int || id == t_gt then ">"
+  else if id == t_ge_int || id == t_ge then ">="
+  else if id == t_eq_int then "="
+  else if id == t_neq_int then "<>"
   else assert false
 
 let print_predicate fmt p =
@@ -132,13 +132,13 @@ let print_predicate fmt p =
 	Ident.print fmt id
     | Papp (id, [a;b]) when id == t_eq ->
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
-    | Papp (id, [t]) when id == well_founded ->
-	fprintf fmt "@[(well_founded ?@ %a)@]" print_term t
     | Papp (id, [a;b]) when id == t_neq ->
 	fprintf fmt "~(%a =@ %a)" print_term a print_term b
+    | Papp (id, [t]) when id == well_founded ->
+	fprintf fmt "@[(well_founded ?@ %a)@]" print_term t
     | Papp (id, [a;b]) when id == t_zwf_zero ->
 	fprintf fmt "(Zwf `0` %a %a)" print_term a print_term b
-    | Papp (id, [a;b]) when is_comparison id ->
+    | Papp (id, [a;b]) when is_int_comparison id || is_comparison id ->
 	openz fmt; 
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
 	closez fmt

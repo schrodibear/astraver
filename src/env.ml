@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.16 2002-07-04 08:58:13 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.17 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -185,42 +185,53 @@ let compare_type op t =
       c_effect = Effect.bottom;
       c_pre = []; c_post = Some (anonymous q) }
 
-let _ = add_global t_lt (compare_type t_lt int) None
-let _ = add_global t_le (compare_type t_le int) None
-let _ = add_global t_gt (compare_type t_gt int) None
-let _ = add_global t_ge (compare_type t_ge int) None
+let _ = add_global t_lt_int (compare_type t_lt_int int) None
+let _ = add_global t_le_int (compare_type t_le_int int) None
+let _ = add_global t_gt_int (compare_type t_gt_int int) None
+let _ = add_global t_ge_int (compare_type t_ge_int int) None
 
-let _ = add_global t_eq_int (compare_type t_eq int) None
-let _ = add_global t_eq_unit (compare_type t_eq unit) None
-let _ = add_global t_eq_bool (compare_type t_eq bool) None
-let _ = add_global t_eq_float (compare_type t_eq float) None
+let _ = add_global t_lt_float (compare_type t_lt_float float) None
+let _ = add_global t_le_float (compare_type t_le_float float) None
+let _ = add_global t_gt_float (compare_type t_gt_float float) None
+let _ = add_global t_ge_float (compare_type t_ge_float float) None
 
-let _ = add_global t_neq_int (compare_type t_neq int) None
-let _ = add_global t_neq_unit (compare_type t_neq unit) None
-let _ = add_global t_neq_bool (compare_type t_neq bool) None
-let _ = add_global t_neq_float (compare_type t_neq float) None
+let _ = add_global t_eq_int (compare_type t_eq_int int) None
+let _ = add_global t_eq_unit (compare_type t_eq_unit unit) None
+let _ = add_global t_eq_bool (compare_type t_eq_bool bool) None
+let _ = add_global t_eq_float (compare_type t_eq_float float) None
 
-let bin_arith_type = 
+let _ = add_global t_neq_int (compare_type t_neq_int int) None
+let _ = add_global t_neq_unit (compare_type t_neq_unit unit) None
+let _ = add_global t_neq_bool (compare_type t_neq_bool bool) None
+let _ = add_global t_neq_float (compare_type t_neq_float float) None
+
+let bin_arith_type t = 
   make_arrow 
-    [x, BindType int; y, BindType int]
+    [x, BindType t; y, BindType t]
     { c_result_name = result;
-      c_result_type = int;
+      c_result_type = t;
       c_effect = Effect.bottom;
       c_pre = []; c_post = None }
 
-let _ = add_global t_add bin_arith_type None
-let _ = add_global t_sub bin_arith_type None
-let _ = add_global t_mul bin_arith_type None
-let _ = add_global t_div bin_arith_type None
-let _ = add_global t_mod bin_arith_type None
+let _ = add_global t_add_int (bin_arith_type int) None
+let _ = add_global t_sub_int (bin_arith_type int) None
+let _ = add_global t_mul_int (bin_arith_type int) None
+let _ = add_global t_div_int (bin_arith_type int) None
+let _ = add_global t_mod     (bin_arith_type int) None
 
-let un_arith_type = 
+let _ = add_global t_add_float (bin_arith_type float) None
+let _ = add_global t_sub_float (bin_arith_type float) None
+let _ = add_global t_mul_float (bin_arith_type float) None
+let _ = add_global t_div_float (bin_arith_type float) None
+
+let un_arith_type t = 
   make_arrow 
-    [x, BindType int]
+    [x, BindType t]
     { c_result_name = result;
-      c_result_type = int;
+      c_result_type = t;
       c_effect = Effect.bottom;
       c_pre = []; c_post = None }
 
-let _ = add_global t_neg un_arith_type None
+let _ = add_global t_neg_int (un_arith_type int) None
+let _ = add_global t_neg_float (un_arith_type float) None
 

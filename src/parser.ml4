@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.41 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.42 2002-07-04 15:47:17 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -143,18 +143,23 @@ EXTEND
 
   (* Logic *)
   term:
-  [ [ a = term; "+"; b = term0 -> Tapp (Ident.t_add, [a;b])
-    | a = term; "-"; b = term0 -> Tapp (Ident.t_sub, [a;b])
+  [ [ a = term; "+"; b = term0 -> Tapp (Ident.t_add_int, [a;b])
+    | a = term; "-"; b = term0 -> Tapp (Ident.t_sub_int, [a;b])
+    | a = term; "+."; b = term0 -> Tapp (Ident.t_add_float, [a;b])
+    | a = term; "-."; b = term0 -> Tapp (Ident.t_sub_float, [a;b])
     | a = term0 -> a ] ]
   ;
   term0:
-  [ [ a = term0; "*"; b = term1 -> Tapp (Ident.t_mul, [a;b])
-    | a = term0; "/"; b = term1 -> Tapp (Ident.t_div, [a;b])
+  [ [ a = term0; "*"; b = term1 -> Tapp (Ident.t_mul_int, [a;b])
+    | a = term0; "/"; b = term1 -> Tapp (Ident.t_div_int, [a;b])
+    | a = term0; "*."; b = term1 -> Tapp (Ident.t_mul_float, [a;b])
+    | a = term0; "/."; b = term1 -> Tapp (Ident.t_div_float, [a;b])
     | a = term0; "%"; b = term1 -> Tapp (Ident.t_mod, [a;b])
     | a = term1 -> a ] ]
   ;
   term1:
-  [ [ "-"; a = term1 -> Tapp (Ident.t_neg, [a])
+  [ [ "-"; a = term1 -> Tapp (Ident.t_neg_int, [a])
+    | "-."; a = term1 -> Tapp (Ident.t_neg_float, [a])
     | c = constant -> Tconst c
     | x = qualid_ident -> Tvar x
     | x = qualid_ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
@@ -182,18 +187,26 @@ EXTEND
     | a = predicate2 -> a ] ]
   ;
   predicate2:
-  [ [ t = term -> predicate_of_term loc t
-    | t1 = term; r = relation; t2 = term -> Papp (r, [t1;t2])
+  [ [ t = term -> 
+	predicate_of_term loc t
+    | t1 = term; r = relation; t2 = term -> 
+	Papp (make_int_relation r, [t1;t2])
     | t1 = term; r1 = relation; t2 = term; r2 = relation; t3 = term ->
-	Pand (Papp (r1, [t1;t2]), Papp (r2, [t2;t3]))
+	Pand (Papp (make_int_relation r1, [t1;t2]), 
+	      Papp (make_int_relation r2, [t2;t3]))
     | "if"; t = term; "then"; p1 = predicate; "else"; p2 = predicate ->
 	Pif (t, p1, p2)
     | LIDENT "forall"; id = ident; ":"; t = primitive_type; 
-      "." ; a = predicate -> forall id (PureType t) a 
-    | "not"; a = predicate -> Pnot a
-    | "true" -> Ptrue
-    | "false" -> Pfalse
-    | "("; a = predicate; ")" -> a ] ] 
+      "." ; a = predicate -> 
+	forall id (PureType t) a 
+    | "not"; a = predicate -> 
+	Pnot a
+    | "true" -> 
+	Ptrue
+    | "false" -> 
+	Pfalse
+    | "("; a = predicate; ")" -> 
+	a ] ] 
   ;
 
   (* Types *)
@@ -335,18 +348,23 @@ EXTEND
     | x = prog4 -> x ] ]
   ;
   ast4:
-  [ [ x = prog5; "+"; y = prog4 -> bin_op Ident.t_add loc x y
-    | x = prog5; "-"; y = prog4 -> bin_op Ident.t_sub loc x y
+  [ [ x = prog5; "+"; y = prog4 -> bin_op Ident.t_add_int loc x y
+    | x = prog5; "-"; y = prog4 -> bin_op Ident.t_sub_int loc x y
+    | x = prog5; "+."; y = prog4 -> bin_op Ident.t_add_float loc x y
+    | x = prog5; "-."; y = prog4 -> bin_op Ident.t_sub_float loc x y
     | x = prog5 -> x ] ]
   ;
   ast5:
-  [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul loc x y 
-    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div loc x y 
+  [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul_int loc x y 
+    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div_int loc x y 
+    | x = prog6; "*."; y = prog5 -> bin_op Ident.t_mul_float loc x y 
+    | x = prog6; "/."; y = prog5 -> bin_op Ident.t_div_float loc x y 
     | x = prog6; "%"; y = prog5 -> bin_op Ident.t_mod loc x y 
     | x = prog6 -> x ] ]
   ;
   ast6:
-  [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
+  [ [ "-"; x = prog6 -> un_op Ident.t_neg_int loc x
+    | "-."; x = prog6 -> un_op Ident.t_neg_float loc x
     | LIDENT "sqrt"; x = prog6 -> un_op Ident.t_sqrt loc x
     | x = ast7 -> without_annot loc x ] ]
   ;
