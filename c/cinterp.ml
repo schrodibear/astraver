@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.7 2004-02-09 15:55:09 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.8 2004-02-10 09:00:03 filliatr Exp $ i*)
 
 (*****
 
@@ -1093,6 +1093,8 @@ let rec interp_statement stat acc =
   | TSgoto(lab)
       -> assert false (* TODO *)
   | TSassert(pred)
+      -> assert false (* TODO *)
+  | TSlogic_label(l)
       -> assert false (* TODO *)
 
 and interp_block (decls,stats) =

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.21 2004-02-10 08:18:02 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.22 2004-02-10 09:00:03 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -530,8 +530,11 @@ and type_statement_node loc env et = function
       assert false (*TODO*)
   | CScase (e, s) ->
       assert false (*TODO*)
-  | CSannot an ->
-      assert false (*TODO*)
+  | CSannot (Assert p) ->
+      let p = type_predicate env p in
+      TSassert p, mt_status
+  | CSannot (Label l) ->
+      TSlogic_label l, mt_status
 
 and type_block env et (dl,sl) = 
   let rec type_decls env = function

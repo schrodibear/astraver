@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.7 2004-02-10 08:36:51 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.8 2004-02-10 09:00:03 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -41,6 +41,21 @@ let c_pointer ty = noattr (CTpointer ty)
 let expected_type loc t1 t2 =
   if not (eq_type t1 t2) then raise_located loc (ExpectedType (t1, t2))
 
+let expected_num loc t = match t.info.ctype_node with
+  | CTint _ | CTfloat _ -> ()
+  | _ -> error loc "invalid operand (expected integer or float)"
+
+let expected_int loc t = match t.info.ctype_node with
+  | CTint _ -> ()
+  | _ -> error loc "invalid operand (expected integer)"
+
+let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
+  | CTint _, CTint _ -> c_int
+  | CTint _, CTfloat _
+  | CTfloat _, CTint _
+  | CTfloat _, CTfloat _ -> c_float
+  | _ -> assert false
+
 let rec type_term env t =
   let t, ty = type_term_node t.info env t.node in
   { node = t; info = ty }
@@ -52,10 +67,12 @@ and type_term_node loc env = function
        with _ -> 
 	 Tconstant c, c_float)
   | Tvar x ->
-      (try
-	 let (ty,_) = Env.find x env in Tvar x, ty
-       with Not_found ->
-	 error loc ("unbound variable " ^ x))
+      let (ty,_) = 
+	try Env.find x env with Not_found -> 
+	try find_sym x with Not_found -> 
+        error loc ("unbound variable " ^ x)
+      in 
+      Tvar x, ty
   | Tapp (f, tl) ->
       (try 
 	 let pl, ty = find_fun f in
@@ -63,16 +80,31 @@ and type_term_node loc env = function
 	 Tapp (f, tl), ty
        with Not_found -> 
 	 error loc ("unbound function " ^ f))
-  | Tunop (op, t) -> 
+  | Tunop (Uminus, t) -> 
+      let t = type_num_term env t in
+      Tunop (Uminus, t), t.info
+  | Tunop (Ustar, t) -> 
       assert false
-  | Tbinop (t1, op, t2) ->
-      assert false
+  | Tbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
+      let t1 = type_num_term env t1 in
+      let t2 = type_num_term env t2 in
+      Tbinop (t1, op, t2), max_type t1.info t2.info
+  | Tbinop (t1, Bmod, t2) ->
+      let t1 = type_int_term env t1 in
+      let t2 = type_int_term env t2 in
+      Tbinop (t1, Bmod, t2), c_int
   | Tdot (t, x) ->
       assert false
   | Tarrow (t, x) ->
       assert false
   | Tarrget (t1, t2) ->
-      assert false
+      let t1 = type_term env t1 in
+      (match t1.info.ctype_node with
+	 | CTarray (ty, _) | CTpointer ty ->
+	     let t2 = type_int_term env t2 in
+	     Tarrget (t1, t2), ty
+	 | _ ->
+	     error loc "subscripted value is neither array nor pointer")
   | Tif (t1, t2, t3) ->
       assert false
   | Told t ->
@@ -84,13 +116,23 @@ and type_term_node loc env = function
   | Tresult ->
       assert false
 
+and type_int_term env t =
+  let tt = type_term env t in
+  expected_int t.info tt;
+  tt
+
+and type_num_term env t =
+  let tt = type_term env t in
+  expected_num t.info tt;
+  tt
+
 and type_terms loc env at tl =
   let rec type_list = function
     | [], [] -> 
 	[]
     | et :: etl, ({info=tloc} as t) :: tl ->
 	let t = type_term env t in
-	expected_type tloc et t.info;
+	expected_type tloc t.info et;
 	t :: type_list (etl, tl)
     | [], _ ->
 	raise_located loc TooManyArguments

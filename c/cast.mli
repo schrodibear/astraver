@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.23 2004-02-10 08:36:50 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.24 2004-02-10 09:00:03 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -234,6 +234,7 @@ and tstatement_node =
   | TScase of texpr * tstatement
   | TSgoto of string
   | TSassert of predicate
+  | TSlogic_label of string
 
 and tblock = tdecl located list * tstatement list
 
