@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.11 2004-01-09 13:41:27 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.12 2004-01-09 14:52:29 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -142,9 +142,22 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
 
 let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
   | CTint _, CTfloat _ -> true
+  | CTpointer { ctype_node = CTvoid }, CTpointer _ -> true
   | _ -> eq_type ty1 ty2
 
 let compatible ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
+
+let arith_type ty = match ty.ctype_node with
+  | CTint _ | CTfloat _ -> true
+  | _ -> false
+
+let pointer_type ty = match ty.ctype_node with
+  | CTpointer _ -> true
+  | _ -> false
+
+let is_null e = match e.texpr_node with
+  | TEconstant s -> (try int_of_string s = 0 with _ -> false)
+  | _ -> false
 
 (* Coercions (ints to floats, floats to int) *)
 
@@ -154,6 +167,8 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
   | CTfloat _, CTint _ ->
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
+      e
+  | CTpointer { ctype_node = CTvoid }, CTpointer _ ->
       e
   | _ ->
       if verbose || debug then eprintf 
@@ -218,6 +233,21 @@ let add_tag_type l x s =
   if is_tag_type x then clash_tag l s (find_tag_type x);
   Hashtbl.add tags_t x s
 
+(* typedefs *)
+
+let typedef_t = Hashtbl.create 97
+
+let is_typedef = Hashtbl.mem typedef_t
+
+let find_typedef = Hashtbl.find typedef_t
+
+let add_typedef l x ty = 
+  if is_typedef x then begin
+    if ty = find_typedef x then error l ("redefinition of `" ^ x ^ "'")
+    else error l ("conflicting types for `" ^ x ^ "'")
+  end else
+    Hashtbl.add typedef_t x ty
+
 (* variables and functions *)
 let (sym_t : (string, texpr ctype) Hashtbl.t) = Hashtbl.create 97
 
@@ -267,33 +297,40 @@ let type_loop_annot env a =
 
 (*s Types *)
 
-let rec type_type env ty = 
-  { ty with ctype_node = type_type_node env ty.ctype_node }
+let rec type_type loc env ty = 
+  { ty with ctype_node = type_type_node loc env ty.ctype_node }
 
-and type_type_node env = function
+and type_type_node loc env = function
   | CTvoid | CTint _ | CTfloat _ as ty -> 
       ty
-  | CTvar _ as ty -> 
-      ty (* TODO: expanser ici ? *)
+  | CTvar x -> 
+      (* TODO: les attributs sont perdus *)
+      (try (find_typedef x).ctype_node with Not_found -> assert false)
   | CTarray (tyn, eo) -> 
-      CTarray (type_type env tyn, type_int_expr_option env eo)
+      CTarray (type_type loc env tyn, type_int_expr_option env eo)
   | CTpointer tyn -> 
-      CTpointer (type_type env tyn)
-  | CTstruct_named x | CTunion_named x | CTenum_named x ->
-      (Env.find_tag_type x env).ctype_node
+      CTpointer (type_type loc env tyn)
+  | CTstruct_named x | CTunion_named x | CTenum_named x as ty ->
+      begin 
+	try 
+	  (Env.find_tag_type x env).ctype_node
+	with Not_found -> 
+	  (* TODO: gcc sometimes says "storage size of `x' isn't known" *)
+	  ty
+      end
   | CTstruct (x, fl) ->
-      CTstruct (x, List.map (type_field env) fl)
+      CTstruct (x, List.map (type_field loc env) fl)
   | CTunion (x, fl) ->
-      CTunion (x, List.map (type_field env) fl)
+      CTunion (x, List.map (type_field loc env) fl)
   | CTenum (x, fl) ->
       let type_enum_field (f, eo) = (f, type_int_expr_option env eo) in
       CTenum (x, List.map type_enum_field fl)
   | CTfun (pl, tyn) ->
-      CTfun (List.map (type_parameter env) pl, type_type env tyn)
+      CTfun (List.map (type_parameter loc env) pl, type_type loc env tyn)
 
 (* type a type and adds it to the local env if it is a declaration *)
 and declare_local_type l ty env = 
-  let ty' = type_type env ty in
+  let ty' = type_type l env ty in
   match ty.ctype_node with
     | CTstruct (n,_) | CTunion (n,_) | CTenum (n,_) -> 
 	ty', Env.add_tag_type l n ty' env
@@ -327,6 +364,8 @@ and type_expr_node loc env = function
 	    TEdot (te, x), type_of_struct_field loc x fl
 	| CTunion (_,fl) -> 
 	    TEdot (te, x), type_of_union_field loc x fl
+	| CTstruct_named _ | CTunion_named _ ->
+            error loc "use of incomplete type"
 	| _ -> 
 	    error loc ("request for member `" ^ x ^ 
 		       "' in something not a structure or union")
@@ -338,6 +377,8 @@ and type_expr_node loc env = function
 	    TEarrow (te, x), type_of_struct_field loc x fl
 	| CTpointer { ctype_node = CTunion (_,fl) } -> 
 	    TEarrow (te, x), type_of_union_field loc x fl
+	| CTpointer { ctype_node = CTstruct_named _ | CTunion_named _ } ->
+	    error loc "dereferencing pointer to incomplete type"
 	| CTpointer _ ->
 	    error loc ("request for member `" ^ x ^ 
 		       "' in something not a structure or union")
@@ -377,9 +418,13 @@ and type_expr_node loc env = function
       let ty2 = e2.texpr_type in
       begin match op with
 	| Aequal ->
-	    if not (sub_type ty2 ty1) then 
-	      error loc "incompatible types in assignment";
-	    TEassign (e1, op, coerce ty1 e2), ty1
+	    if (arith_type ty1 && arith_type ty2) || 
+	       (sub_type ty2 ty1) || 
+	       (pointer_type ty1 && is_null e2) 
+	    then
+	      TEassign (e1, op, coerce ty1 e2), ty1
+	    else
+	      error loc "incompatible types in assignment"
 	| Amul | Adiv | Aadd | Asub -> 
             assert false (*TODO*)
 	| Amod | Aleft | Aright 
@@ -505,24 +550,24 @@ and type_expr_node loc env = function
   | CEcall (e, el) ->
       assert false (*TODO*)
   | CEcast (ty, e) ->
-      let ty = type_type env ty in
+      let ty = type_type loc env ty in
       let e = type_expr env e in
       TEcast (ty, e), ty
   | CEsizeof_expr e ->
       let e = type_expr env e in
       TEsizeof_expr e, c_int
   | CEsizeof ty ->
-      let ty = type_type env ty in
+      let ty = type_type loc env ty in
       TEsizeof ty, c_int
 
 and type_lvalue env e = type_expr env e (* TODO: vérifier *)
 
 and type_expr_option env eo = option_app (type_expr env) eo
 
-and type_parameter env (ty, x) = (type_type env ty, x)
+and type_parameter loc env (ty, x) = (type_type loc env ty, x)
 
-and type_field env (ty, x, bf) = 
-  (type_type env ty, x, type_expr_option env bf)
+and type_field loc env (ty, x, bf) = 
+  (type_type loc env ty, x, type_expr_option env bf)
 
 (*s Typing of integers expressions: to be used when coercion is not allowed
     (array subscript, array size, enum value, etc.) *)
@@ -696,15 +741,15 @@ and type_annotated_block env et (p,bl,q) =
   let q = option_app (type_predicate env) q in
   (p, bl, q), st
 
-let type_parameters env pl =
+let type_parameters loc env pl =
   List.fold_right
     (fun (ty,x) (pl,env) ->
-       let ty = type_type env ty in (ty,x)::pl, Env.add x ty env)
+       let ty = type_type loc env ty in (ty,x)::pl, Env.add x ty env)
     pl 
     ([], env)
   
 let declare_type l ty = 
-  let ty' = type_type Env.empty ty in
+  let ty' = type_type l Env.empty ty in
   match ty.ctype_node with
   | CTstruct (n,_) | CTunion (n,_) | CTenum (n,_) -> add_tag_type l n ty'; ty'
   | _ -> ty'
@@ -714,6 +759,7 @@ let type_decl d = match d.node with
       assert false (*TODO*)
   | Ctypedef (ty, x) -> 
       let ty = declare_type d.loc ty in
+      add_typedef d.loc x ty;
       Ttypedef (ty, x)
   | Ctypedecl ty -> 
       let ty = declare_type d.loc ty in
@@ -723,9 +769,9 @@ let type_decl d = match d.node with
       add_sym d.loc x ty;
       Tdecl (ty, x, type_initializer Env.empty ty i)
   | Cfundef (ty, f, pl, bl) -> 
-      let ty = type_type Env.empty ty in
+      let ty = type_type d.loc Env.empty ty in
       let et = if ty = c_void then None else Some ty in
-      let pl,env = type_parameters Env.empty pl in
+      let pl,env = type_parameters d.loc Env.empty pl in
       (* TODO: ajouter f plutot comme global + vérif si déjà déclarée *)
       let env = Env.add f (noattr (CTfun (pl, ty))) env in
       let bl,st = type_annotated_block env et bl in
