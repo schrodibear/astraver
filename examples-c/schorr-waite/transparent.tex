@@ -215,11 +215,11 @@ Il faut exprimer l'accessibilité. On introduit
 /*@ predicate reachable (node p1, node p2) 
   @   reads p1->l,p1->r */
 \end{blue}\end{slshape}\end{alltt}
-
 \begin{itemize}
 \item déclaré en Caduceus
 \item supposé défini (ou du moins axiomatisé) dans le prouveur.
-\item 
+\item declaration \verb|reads|: permet de faire dependre ce predicat
+  de p1 (->l \cup ->r)
 \end{itemize}
 
 \end{slide}
@@ -325,7 +325,14 @@ graphe avant la fonction, ont leur marquage inchanger.
     @  (I4a :: clr_list (p,stack))
     &&
 \end{alltt}
-Cet invariant permet de definir la pile de backtrack
+Cet invariant permet de definir la pile de backtrack.
+La declaration de clr_list dans caduceus est :
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ predicate clr_list(node p, plist stack)
+  @   reads p->c,p->l,p->r
+  @*/
+\end{alltt}
 \end{slide}
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
@@ -333,6 +340,12 @@ Cet invariant permet de definir la pile de backtrack
 (I4b :: \bs{}forall node p; in_list (p,stack) => p->m)  &&
 \end{alltt}
 Cet invariant precise que tous les noeuds dans la pile sont marqués.
+La declaration de in_list dans caduceus est :
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ predicate in_list(node p,plist stack) */
+\end{alltt}
+
 \fontsize{10pt}{9pt}
 \begin{alltt}
 (I4c :: \bs{}forall node x; 
@@ -348,6 +361,14 @@ Cet invariant precise que tous les noeuds non marqués qui etaient
 valid et dans le graphe au debut de la fonction, sont atteignable par
 un chemin non marqués par t ou atteignable par un chemin non marqués
 par un des fils droit des noeuds de la pile de backtrack.
+La declaration de unmarked_reachable dans caduceus est :
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ predicate unmarked_reachable(node p1, node p2)
+  @   reads p1->r,p1->l,p1->m
+  @*/
+\end{alltt}
+
 \end{slide}
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
@@ -371,6 +392,12 @@ Enfin cet invariant precise que pour tous les elements de la pile de
 backtrack, suivant la valeur de c soit son fils gauche soit son fils
 droit est inchangé et leur fils changer est maintenant la pointeur
 qui les precède dans la pile ou bien t si ce pointer est en tête de la pile.
+La declaration de pair_in_list dans caduceus est :
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ predicate pair_in_list(node p1, node p2, plist stack) */
+\end{alltt}
+
 \end{slide}
 \begin{slide}{La preuves Simplify}
 \begin{comment}
@@ -417,6 +444,10 @@ ajout axiome reachable(p,p) :
 Nous devons d''abord definir les predicates utilisés par caduceus.
 \fontsize{10pt}{9pt}
 \begin{alltt}
+  Definition llist (a: alloc_table) (next : pointer -> pointer)
+  (p:pointer) (l:plist) :=
+  lpath a next p l null.
+
   Definition clr_list (a: alloc_table)  (c:memory Z) 
   (l: memory pointer)(r: memory pointer) : 
   pointer ->list pointer-> Prop :=
@@ -539,9 +570,15 @@ la definition de la mesure precedente.
 
 \end{slide}
 \begin{slide}{Conclusion}
-On a prouve les differents aspects de l'algorithme Schorr Waite.
+On a prouver different aspect de l'algorithme de schorrWaite : 
+\begin{enumerate}
+\item cette algorithme est bien un aprcours de graphe
+\item il ne peu y avoir de ``segmentation fault''
+\item que les parties hors du graphes ne sont pas changees
+\item la terminaison
+\end{enumerate}
 
-
+De plus contrairement aux autres travaus, cette preuve a ete fait sur un vrai programme C.
 
 
 \end{slide}
