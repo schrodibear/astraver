@@ -14,7 +14,7 @@ Lemma length_po_1 :
   (Post7: n = `0`)
   (well_founded ll_order).
 Proof.
-Intros; Exact ll_order_wf.
+Auto.
 Save.
 
 (* Why obligation from file "length.mlw", characters 1045-1061 *)

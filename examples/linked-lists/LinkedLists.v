@@ -2,13 +2,16 @@
 Require Why.
 Require Export PolyList.
 
-(* the Coq pointer list associated to a (finite) linked list *)
+(** the Coq pointer list associated to a (finite) linked list *)
 
 Definition plist := (list pointer).
 
-(* [(lpath t p1 l p2)] :
-   there is a path from pointer [p1] to pointer [p2] using links in store [t],
-   and the list of pointers along this path is [l]. *)
+
+(** * Paths *)
+
+(** [(lpath t p1 l p2)] :
+    there is a path from pointer [p1] to pointer [p2] using links in store [t],
+    and the list of pointers along this path is [l]. *)
 
 Inductive lpath [t:pointer_store] : pointer -> plist -> pointer -> Prop :=
   | Path_null : (p:pointer)(lpath t p (nil pointer) p)
@@ -18,15 +21,18 @@ Inductive lpath [t:pointer_store] : pointer -> plist -> pointer -> Prop :=
 
 Hint lpath : core := Constructors lpath.
 
-(* [(llist t p l)]: there is a (finite) linked list starting from pointer [p]
-   using links in store [t], and this list of pointers is [l] *)
+
+(** * Lists *)
+
+(** [(llist t p l)]: there is a (finite) linked list starting from pointer [p]
+    using links in store [t], and this list of pointers is [l] *)
 
 Definition llist [t:pointer_store; p:pointer; l:plist] := (lpath t p l null).
 
 Hints Unfold llist.
 
-(* inductive characterization of [llist] (which could have been an
-   inductive definition of [llist])  *)
+(** inductive characterization of [llist] (which could have been an
+    inductive definition of [llist])  *)
 
 Lemma llist_null : 
   (t:pointer_store)(p:pointer)(llist t p (nil pointer)) -> p=null.
@@ -41,7 +47,7 @@ Proof.
 Unfold llist; Inversion 1; Intuition.
 Save.
 
-(* invariance of a list when updating a cell outside of this list *)
+(** invariance of a list when updating a cell outside of this list *)
 
 Lemma llist_pset_same : 
   (t:pointer_store)(p:pointer)(l:plist)(llist t p l) -> 
@@ -56,7 +62,7 @@ Red; Intro; Apply H4; Subst p0; Auto with *.
 Save.
 Hints Resolve llist_pset_same.
 
-(* [llist] is a function *)
+(** [llist] is a function *)
 
 Lemma llist_function : 
   (t:pointer_store)(l1,l2:plist)(p:pointer)
@@ -85,7 +91,7 @@ Elim (H l2 (pget t a) H6); Intuition.
 Exists x; Auto.
 Save.
 
-(* should go in PolyList *)
+(** this should go in PolyList *)
 Lemma In_app_cons : 
   (A:Set)(l:(list A))(x:A) (In x l) -> 
   (EX l1 : (list A) | (EX l2 : (list A) | l = (app l1 (cons x l2)))).
@@ -113,6 +119,8 @@ Proof.
 Induction l1; Simpl; Intuition.
 Save.
 
+(** a list starting with [p] does not contain [p] in its remaining elements *)
+
 Lemma llist_not_starting : 
   (t:pointer_store)(p:pointer)(l:plist)
   (llist t (pget t p) l) -> ~(In p l).
@@ -128,7 +136,8 @@ Intro; Apply (list_length_absurd ? x0 (app x (cons p x0))); Auto.
 Rewrite length_app; Simpl; Omega.
 Save.
 
-(* finite lists characterization *)
+
+(** * Finite lists characterization *)
 
 Inductive is_list [t: pointer_store] : pointer -> Prop :=
   | List_null : (is_list t null)
@@ -157,7 +166,7 @@ Inversion H0; Intuition.
 Save.
 
 
-(* WF relation over linked lists *)
+(** * WF relation over linked lists *)
 
 Definition StorePointerPair := pointer_store * pointer.
 Definition store_pointer_pair := [t:pointer_store; p:pointer](t, p).
@@ -170,7 +179,7 @@ Definition ll_order [c1,c2: pointer_store * pointer] : Prop :=
     (lt (length l1) (length l2)))).
 
 Axiom ll_order_wf : (well_founded ll_order).
-(**
+(*
 Lemma ll_order_wf : (well_founded ll_order).
 Proof.
 Unfold well_founded.
@@ -178,7 +187,7 @@ Destruct a; Destruct p; Intros.
 Apply Acc_intro.
 Destruct y; Destruct p2; Unfold 1 ll_order; Intuition.
 Save.
-**)
+*)
 Hints Resolve ll_order_wf.
 
 
