@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.45 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.46 2004-11-30 14:31:23 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -84,9 +84,11 @@ let main () =
   (* typing *)
   let tfiles = List.map type_file pfiles in
   if type_only then exit 0;
+  (* normalisation *)
+  let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
   (* effects *)
-  List.iter (fun (_,p) -> Ceffect.file p) tfiles;
-  while not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles) do 
+  List.iter (fun (_,p) -> Ceffect.file p) nfiles;
+  while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 
     Queue.clear Ceffect.warnings; 
   done;
   Queue.iter 
@@ -98,7 +100,7 @@ let main () =
   (* Why interpretation *)
   let why_specs =
     List.fold_left (fun specs f -> let s = interp_file f in s @ specs) 
-      [] tfiles
+      [] nfiles
   in
   (* Why specs *)
   let file = Lib.file "why" "caduceus_spec.why" in

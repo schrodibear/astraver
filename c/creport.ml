@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.11 2004-10-18 08:58:04 hubert Exp $ i*)
+(*i $Id: creport.ml,v 1.12 2004-11-30 14:31:23 hubert Exp $ i*)
 
 open Format
 open Cerror
@@ -87,7 +87,7 @@ let report fmt = function
 let raise_located loc e = raise (Error (Some loc, e))
 let raise_unlocated e = raise (Error (None, e))
 let raise_locop locop e = raise (Error (locop, e))
-let unsupported s = raise (Error (None, Unsupported s))
+let unsupported loc s = raise (Error (Some loc, Unsupported s))
 
 let error l s = raise (Error (Some l, AnyMessage s))
 let warning l s = 

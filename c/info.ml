@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.15 2004-11-29 15:38:42 marche Exp $ i*)
+(*i $Id: info.ml,v 1.16 2004-11-30 14:31:23 hubert Exp $ i*)
 
 type var_info =
     {
@@ -43,6 +43,8 @@ let default_var_info x =
   }
 
 let set_assigned v = v.var_is_assigned <- true
+
+let unset_assigned v = v.var_is_assigned <- false
 
 let set_is_referenced v = v.var_is_referenced <- true
 

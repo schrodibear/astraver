@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/array.why", characters 985-1166 *)
+(* Why obligation from file "why/array.why", characters 985-1088 *)
 Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
@@ -30,7 +30,7 @@ Proof.
 intuition; subst; auto with *.
 Save.
 
-(* Why obligation from file "why/array.why", characters 985-1166 *)
+(* Why obligation from file "why/array.why", characters 985-1088 *)
 Lemma getcell_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),

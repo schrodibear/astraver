@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.mli,v 1.6 2004-03-24 07:40:37 filliatr Exp $ i*)
+(*i $Id: creport.mli,v 1.7 2004-11-30 14:31:23 hubert Exp $ i*)
 
 open Format
 
@@ -25,7 +25,7 @@ val report : formatter -> Cerror.t -> unit
 val raise_located : Loc.t -> Cerror.t -> 'a 
 val raise_unlocated : Cerror.t -> 'a
 val raise_locop : Loc.t option -> Cerror.t -> 'a
-val unsupported : string -> 'a
+val unsupported : Loc.t -> string -> 'a
 
 val print_type : formatter -> 'a Cast.ctype -> unit
 val print_type_node : formatter -> 'a Cast.ctype_node -> unit

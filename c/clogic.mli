@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.39 2004-11-29 16:01:15 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.40 2004-11-30 14:31:23 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -160,3 +160,59 @@ type ('term,'ctype) logic_symbol =
   | Predicate_reads of (Info.var_info * 'ctype) list * 'term location list
   | Predicate_def of (Info.var_info * 'ctype) list * 'ctype predicate 
   | Function of (Info.var_info * 'ctype) list * 'ctype * 'term location list
+
+(*
+
+normalized AST
+
+*)
+
+type 'ctype nterm = {
+  nterm_node : 'ctype nterm_node;
+  nterm_loc : Loc.t;
+  nterm_type : 'ctype
+}
+
+and 'ctype nterm_node =
+  | NTconstant of constant
+  | NTvar of Info.var_info
+  | NTapp of Info.logic_info * 'ctype nterm list
+  | NTunop of term_unop * 'ctype nterm
+  | NTstar of 'ctype nterm
+  | NTbinop of 'ctype nterm * term_binop * 'ctype nterm
+  | NTarrow of 'ctype nterm * Info.var_info
+  | NTif of 'ctype nterm * 'ctype nterm * 'ctype nterm
+  | NTold of 'ctype nterm
+  | NTat of 'ctype nterm * string
+  | NTbase_addr of 'ctype nterm
+  | NTblock_length of 'ctype nterm
+  | NTresult
+  | NTnull
+  | NTcast of 'ctype * 'ctype nterm
+
+type 'ctype npredicate =
+  | NPfalse
+  | NPtrue
+  | NPapp of Info.logic_info * 'ctype nterm list
+  | NPrel of 'ctype nterm * relation * 'ctype nterm
+  | NPand of 'ctype npredicate * 'ctype npredicate
+  | NPor of 'ctype npredicate * 'ctype npredicate
+  | NPimplies of 'ctype npredicate * 'ctype npredicate
+  | NPiff of 'ctype npredicate * 'ctype npredicate
+  | NPnot of 'ctype npredicate
+  | NPif of 'ctype nterm * 'ctype npredicate * 'ctype npredicate
+  | NPforall of 'ctype typed_quantifiers * 'ctype npredicate
+  | NPexists of 'ctype typed_quantifiers * 'ctype npredicate
+  | NPold of 'ctype npredicate
+  | NPat of 'ctype npredicate * string
+  | NPvalid of 'ctype nterm 
+  | NPvalid_index of 'ctype nterm * 'ctype nterm
+  | NPvalid_range of 'ctype nterm * 'ctype nterm * 'ctype nterm
+  | NPfresh of 'ctype nterm 
+
+type ('term,'ctype) nlogic_symbol =
+  | NPredicate_reads of (Info.var_info * 'ctype) list * 'term location list
+  | NPredicate_def of (Info.var_info * 'ctype) list * 'ctype npredicate 
+  | NFunction of (Info.var_info * 'ctype) list * 'ctype * 'term location list
+
+

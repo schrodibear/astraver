@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.60 2004-11-29 16:01:14 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.61 2004-11-30 14:31:22 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -36,7 +36,7 @@ let interp_type ctype =
   | CTunion _
   | CTstruct _ -> "pointer"
   | CTvar x -> x (* must be a logic type *)
-  | CTfun _ -> unsupported "first-class functions"
+  | CTfun _ -> unsupported Loc.dummy "first-class functions"
 
 let rec pointer_heap_var ty =
   match ty.ctype_node with
@@ -164,53 +164,46 @@ let assigns_add_pointer_var ty e =
   { e with assigns = add_pointer_var ty e.assigns }
 
 let rec term t =
-  match t.term_node with 
-    | Tvar v -> 
+  match t.nterm_node with 
+    | NTvar v -> 
 	if v.var_is_static
-	then add_var v t.term_type empty
+	then add_var v t.nterm_type empty
 	else empty
-    | Tdot ({term_node = Tunop (Ustar, t1)}, f) -> 
-	assert false
-    | Tdot (t1,f)
-    | Tarrow (t1,f) -> 
-	add_alloc (add_field_var f t.term_type (term t1))
-    | Tarrget(t1,t2) ->
-	add_alloc
-	  (union
-	     (add_pointer_var t1.term_type (term t1))
-	     (term t2))
-    | Tunop (Ustar, t) ->
-	add_alloc (add_pointer_var t.term_type (term t))
-    | Tunop (Uamp, t) -> term t
-    | Tunop (Uminus, t) -> term t
-    | Tunop ((Ufloat_of_int | Uint_of_float), t) -> term t
-    | Tbase_addr t -> term t
-    | Tblock_length t -> add_alloc (term t)
-    | Tat (t, _) -> 
+    | NTarrow (t1,f) -> 
+	add_alloc (add_field_var f t.nterm_type (term t1))
+    | NTstar t ->
+	add_alloc (add_pointer_var t.nterm_type (term t))
+    | NTunop (Ustar,_) -> assert false
+    | NTunop (Uamp, t) -> term t
+    | NTunop (Uminus, t) -> term t
+    | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
+    | NTbase_addr t -> term t
+    | NTblock_length t -> add_alloc (term t)
+    | NTat (t, _) -> 
 	term t
-    | Told t -> 
+    | NTold t -> 
 	term t
-    | Tif (t1, t2, t3) -> 
+    | NTif (t1, t2, t3) -> 
 	union (term t1) (union (term t2) (term t3))
-    | Tbinop (t1, _, t2) -> 
+    | NTbinop (t1, _, t2) -> 
 	union (term t1) (term t2) 
-    | Tapp (id, l) -> 
+    | NTapp (id, l) -> 
 	List.fold_left 
 	  (fun acc t -> union acc (term t)) 
 	  id.logic_args
 	  l
-    | Tconstant _ -> empty
-    | Tnull -> empty
-    | Tresult -> empty
-    | Tcast (_, t) -> term t
+    | NTconstant _ -> empty
+    | NTnull -> empty
+    | NTresult -> empty
+    | NTcast (_, t) -> term t
 
 let location loc =
   match loc with
     | Lterm t -> term t 
     | Lstar t ->
-	add_pointer_var t.term_type (term t)
+	add_pointer_var t.nterm_type (term t)
     | Lrange(t1,t2,t3) -> 
-	add_pointer_var t1.term_type
+	add_pointer_var t1.nterm_type
 	  (union 
 	     (term t1)
 	     (union (term t2) (term t3)))
@@ -223,66 +216,61 @@ let assign_location loc =
   match loc with
     | Lterm t ->
 	 begin 
-	   match t.term_node with
-	     | Tarrget(t1,t2) ->
-		 { reads = add_alloc (union (term t1) (term t2));
-		   assigns = add_pointer_var t1.term_type empty }
-	     | Tdot ({term_node = Tunop (Ustar, t1)}, f) ->
-		 assert false
-	     | Tdot (t1,f)
-	     | Tarrow (t1,f) -> 
+	   match t.nterm_node with
+	     | NTarrow (t1,f) -> 
 		 { reads = add_alloc (term t1);
-		   assigns = add_field_var f t.term_type empty }
-	     | Tunop (Ustar, t1) ->
+		   assigns = add_field_var f t.nterm_type empty }
+	     | NTstar t1 ->
 		 { reads = add_alloc (term t1);
-		   assigns = add_pointer_var t1.term_type empty }
-	     | Tvar v ->
+		   assigns = add_pointer_var t1.nterm_type empty }
+	     | NTunop (Ustar,_) -> assert false
+	     | NTvar v ->
 		 { reads = empty;
 		   assigns = 
 		     if v.var_is_static
-		     then add_var v t.term_type empty
+		     then add_var v t.nterm_type empty
 		     else empty }
 	     | _ -> assert false
 	 end
     | Lstar t ->
 	{ reads = add_alloc (term t);
-	  assigns = add_pointer_var t.term_type empty }
+	  assigns = add_pointer_var t.nterm_type empty }
     | Lrange(t1,t2,t3) -> 
 	{ reads = add_alloc (union (term t1) (union (term t2) (term t3)));
-	  assigns = add_pointer_var t1.term_type empty }
+	  assigns = add_pointer_var t1.nterm_type empty }
 	  
 
 let rec predicate p = 
   match p with
-    | Ptrue -> empty
-    | Pfalse -> empty
-    | Papp (id, tl) -> 	
+    | NPtrue -> empty
+    | NPfalse -> empty
+    | NPapp (id, tl) -> 	
 	List.fold_left 
 	  (fun acc t -> union acc (term t)) 
 	  id.logic_args
 	  tl
-    | Prel (t1, _, t2) -> union (term t1) (term t2)
-    | Pand (p1, p2)
-    | Por (p1, p2) 
-    | Piff (p1, p2) 
-    | Pimplies (p1, p2) -> union (predicate p1) (predicate p2)
-    | Pnot p -> predicate p
-    | Pif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))
-    | Pforall (_, p) -> predicate p	
-    | Pexists (_, p) -> predicate p
-    | Pfresh t -> add_alloc (term t)
-    | Pvalid t -> add_alloc (term t)
-    | Pvalid_index (t1,t2) -> add_alloc (union (term t1) (term t2))
-    | Pvalid_range (t1,t2, t3) -> 
+    | NPrel (t1, _, t2) -> union (term t1) (term t2)
+    | NPand (p1, p2)
+    | NPor (p1, p2) 
+    | NPiff (p1, p2) 
+    | NPimplies (p1, p2) -> union (predicate p1) (predicate p2)
+    | NPnot p -> predicate p
+    | NPif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))
+    | NPforall (_, p) -> predicate p	
+    | NPexists (_, p) -> predicate p
+    | NPfresh t -> add_alloc (term t)
+    | NPvalid t -> add_alloc (term t)
+    | NPvalid_index (t1,t2) -> add_alloc (union (term t1) (term t2))
+    | NPvalid_range (t1,t2, t3) -> 
 	add_alloc (union (term t1) (union (term t2) (term t3)))
-    | Pold p -> predicate p
-    | Pat (p,_) -> predicate p
+    | NPold p -> predicate p
+    | NPat (p,_) -> predicate p
 
 let logic_type ls =
   match ls with
-    | Clogic.Predicate_reads(args,locs) -> locations locs
-    | Clogic.Predicate_def(args,pred) -> predicate pred
-    | Clogic.Function(args,ret,locs) -> locations locs
+    | Clogic.NPredicate_reads(args,locs) -> locations locs
+    | Clogic.NPredicate_def(args,pred) -> predicate pred
+    | Clogic.NFunction(args,ret,locs) -> locations locs
 
 
 let option f = function None -> empty | Some x -> f x
@@ -324,138 +312,121 @@ let spec sp =
 
 open Cast
 
-let rec expr e = match e.texpr_node with
-  | TEnop
-  | TEconstant _
-  | TEstring_literal _ 
-  | TEsizeof _ ->
-      ef_empty
-  | TEvar (Var_info v) ->
-      if v.var_is_static
-      then reads_add_var v e.texpr_type ef_empty
+let rec expr e = match e.nexpr_node with
+  | NEnop
+  | NEconstant _
+  | NEstring_literal _ -> ef_empty
+  | NEvar (Var_info v) ->
+      if v.var_is_static 
+      then reads_add_var v e.nexpr_type ef_empty
       else ef_empty
-  | TEvar (Fun_info v) ->
+  | NEvar (Fun_info v) ->
       ef_empty
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
-      assert false
-  | TEdot (e1, f)
-  | TEarrow (e1, f) ->	
-      reads_add_alloc (reads_add_field_var f e.texpr_type (expr e1))
-  | TEarrget (e1, e2) ->	
-      reads_add_alloc 
-	(ef_union
-	   (reads_add_pointer_var e1.texpr_type (expr e1))
-	   (expr e2))
-  | TEbinary (e1, _, e2) | TEseq (e1, e2) ->
+  | NEarrow (e1, f) ->	
+      reads_add_alloc (reads_add_field_var f e.nexpr_type (expr e1))
+  | NEbinary (e1, _, e2) | NEseq (e1, e2) ->
       ef_union (expr e1) (expr e2)
-  | TEassign (lv, e) | TEassign_op (lv, _, e) ->
+  | NEassign (lv, e) | NEassign_op (lv, _, e) ->
       ef_union (assign_expr lv) (expr e)
-  | TEunary (Ustar, e) ->
-      reads_add_alloc (reads_add_pointer_var e.texpr_type (expr e))
-  | TEunary (Uamp, e) ->
+  | NEstar e ->
+      reads_add_alloc (reads_add_pointer_var e.nexpr_type (expr e))
+  | NEunary (Ustar , _ ) -> assert false
+  | NEunary (Uamp, e) ->
       address_expr e
-  | TEunary 
+  | NEunary 
       ((Uplus | Uminus | Unot | Utilde | Ufloat_of_int | Uint_of_float), e) ->
       expr e
-  | TEincr (_, e) ->
+  | NEincr (_, e) ->
       assign_expr e
-  | TEcall (e, el) ->
-      let ef = match e.texpr_node with
-	| TEvar (Fun_info f) -> 
+  | NEcall (e, el) ->
+      let ef = match e.nexpr_node with
+	| NEvar (Fun_info f) -> 
 	    { reads = f.function_reads; assigns = f.function_writes } 
 	| _ -> expr e
       in
       List.fold_left (fun ef arg -> ef_union (expr arg) ef) ef el
-  | TEcond (e1, e2, e3) ->
+  | NEcond (e1, e2, e3) ->
       ef_union (ef_union (expr e1) (expr e2)) (expr e3)
-  | TEcast (_, e) ->
+  | NEcast (_, e) ->
       expr e
 
 (* effects for [e = ...] *)
-and assign_expr e = match e.texpr_node with
-  | TEvar (Var_info v) -> 
+and assign_expr e = match e.nexpr_node with
+  | NEvar (Var_info v) -> 
       if v.var_is_static
-      then assigns_add_var v e.texpr_type ef_empty
+      then assigns_add_var v e.nexpr_type ef_empty
       else ef_empty
-  | TEvar (Fun_info _) ->
+  | NEvar (Fun_info _) ->
       ef_empty
-  | TEunary (Ustar, e) ->
-      reads_add_alloc (assigns_add_pointer_var e.texpr_type (expr e))
-  | TEarrget (e1, e2) ->
-      reads_add_alloc 
-	(ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2))
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
-      assert false
-  | TEdot (e1, f)
-  | TEarrow (e1, f) ->
-      reads_add_alloc (assigns_add_field_var f e.texpr_type (expr e1))
-  | TEcast (_, e1) ->
+  | NEstar e ->
+      reads_add_alloc (assigns_add_pointer_var e.nexpr_type (expr e))
+  | NEunary (Ustar,_) -> assert false
+  | NEarrow (e1, f) ->
+      reads_add_alloc (assigns_add_field_var f e.nexpr_type (expr e1))
+  | NEcast (_, e1) ->
       assign_expr e1
   | _ -> 
       assert false (* not a left value *)
 
 (* effects for [&e] *)
-and address_expr e = match e.texpr_node with
-  | TEvar v -> 
-      begin match e.texpr_type.ctype_node with
+and address_expr e = match e.nexpr_node with
+  | NEvar v -> 
+      begin match e.nexpr_type.ctype_node with
 	| CTstruct _ | CTunion _ -> ef_empty
 	| _ -> ef_empty (* unsupported "& operator" *)
       end
-  | TEunary (Ustar, e1) ->
+  | NEstar  e1 ->
       expr e1
-  | TEarrget (e1, e2) ->
-      ef_union (expr e1) (expr e2) 
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
-      assert false
-  | TEdot (e1, f)
-  | TEarrow (e1, f) ->
-      begin match e1.texpr_type.ctype_node with
+  | NEarrow (e1, f) ->
+      begin match e1.nexpr_type.ctype_node with
 	| CTenum _ | CTint _ | CTfloat _ -> expr e1
-	| _ -> reads_add_field_var f e.texpr_type (expr e1)
+	| _ -> reads_add_field_var f e.nexpr_type (expr e1)
       end
-  | TEcast (_, e1) ->
-      address_expr e1
+ (* | NEcast (_, e1) ->
+      address_expr e1*)
   | _ -> 
       assert false (* not a left value *)
 
-let rec statement s = match s.st_node with
-  | TSnop
-  | TSbreak
-  | TScontinue
-  | TSgoto _ 
-  | TSlogic_label _
-  | TSreturn None ->
+let rec statement s = match s.nst_node with
+  | NSnop
+  | NSbreak
+  | NScontinue
+  | NSlogic_label _
+  | NSreturn None ->
       ef_empty
-  | TSexpr e -> 
+  | NSexpr e -> 
       expr e
-  | TSif (e, s1, s2) -> 
+  | NSif (e, s1, s2) -> 
       ef_union (expr e) (ef_union (statement s1) (statement s2))
-  | TSwhile (annot, e, s)
-  | TSdowhile (annot, s, e) ->
+  | NSwhile (annot, e, s)
+  | NSdowhile (annot, s, e) ->
       ef_union (loop_annot annot) (ef_union (statement s) (expr e))
-  | TSfor (annot, e1, e2, e3, s) ->
+  | NSfor (annot, e1, e2, e3, s) ->
       ef_union (loop_annot annot) (ef_union (ef_union (expr e1) (expr e2))
 				     (ef_union (expr e3) (statement s)))
-  | TSblock bl ->
+  | NSblock bl ->
       block bl
-  | TSreturn (Some e) ->
+  | NSreturn (Some e) ->
       expr e
-  | TSlabel (_, s) ->
+  | NSlabel (_, s) ->
       statement s
-  | TSswitch (e, s)
-  | TScase (e, s) ->
-      ef_union (expr e) (statement s)
-  | TSdefault ( s) ->
-      statement s
-  | TSassert p ->
+  | NSswitch (e, used_cases, case_list) -> 
+      List.fold_left
+	(fun ef (cases,bl) ->
+	   List.fold_left 
+	     (fun ef i -> ef_union ef (statement i))
+	     ef bl)
+	(expr e)
+	case_list
+  | NSassert p ->
       { reads = predicate p; assigns = empty }
-  | TSspec (sp, s) ->
+  | NSspec (sp, s) ->
       ef_union (spec sp) (statement s)
 
 and block (dl, sl) =
   let local_decl d = match d.node with
-    | Tdecl (_, _, i) -> initializer_ i
-    | Ttypedecl _ -> ef_empty
+    | Ndecl (_, _, i) -> initializer_ i
+    | Ntypedecl _ -> ef_empty
     | _ -> ef_empty (* unsupported local declaration *)
   in
   List.fold_left
@@ -473,41 +444,42 @@ and initializer_ = function
 
 let print_effects fmt l =
   fprintf fmt "@[%a@]"
-    (print_list space (fun fmt v -> pp_print_string fmt v.var_name)) (HeapVarSet.elements l)
+    (print_list space 
+       (fun fmt v -> pp_print_string fmt v.var_name)) (HeapVarSet.elements l)
 
 (* first pass: declare invariants and computes effects for logics *)
 
 let invariant_for_global =
-  let allocs = ref (fun x -> Ptrue) in
+  let allocs = ref (fun x -> NPtrue) in
   fun loc v t ->
-    let allocs',form = Cltyping.separation ~allocs:!allocs loc v t in
+    let allocs',form = Cnorm.separation ~allocs:!allocs loc v t in
     allocs := allocs';
-    Pand (form, Cltyping.valid_for_type loc v t)
+    NPand (form, Cnorm.valid_for_type loc v t)
 
 let decl d =
   match d.Cast.node with
-    | Tlogic(id,ltype) -> 
+    | Nlogic(id,ltype) -> 
 	let l = logic_type ltype in
 	lprintf 
 	  "effects of logic declaration of %s: @[%a@]@." id.logic_name
 	  print_effects l;
 	id.logic_args <- l
-    | Tinvariant(id,p) -> 
+    | Ninvariant(id,p) -> 
 	add_weak_invariant id p
-    | Tdecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) 
+    | Ndecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) 
       when ty.ctype_storage <> Extern ->
 	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
-	let t = { term_node = Tvar v; 
-		  term_loc = Loc.dummy;
-		  term_type = ty } in
-	add_weak_invariant id (invariant_for_global d.loc v t)
-    | Tdecl(ctype,v,init) -> () (* TODO *)
-    | Taxiom(id,p) -> () (* TODO *)
-    | Ttypedef(ctype,id) -> () 
-    | Ttypedecl(ctype) -> ()
-    | Tfunspec(spec,ctype,id,params) -> () (* TODO *)
-    | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)
+	let t = { nterm_node = NTvar v; 
+		  nterm_loc = Loc.dummy;
+		  nterm_type = ty } in
+	add_weak_invariant id (invariant_for_global d.loc v t) 
+    | Ndecl(ctype,v,init) -> () (* TODO *)
+    | Naxiom(id,p) -> () (* TODO *)
+    | Ntypedef(ctype,id) -> () 
+    | Ntypedecl(ctype) -> ()
+    | Nfunspec(spec,ctype,id,params) -> () (* TODO *)
+    | Nfundef(spec,ctype,id,params,block) -> () (* TODO *)
 
 let file l = List.iter decl l
 
@@ -536,9 +508,9 @@ let functions dl =
     end
   in
   let decl d = match d.node with
-    | Tfunspec (sp, _, id, _) ->
+    | Nfunspec (sp, _, id, _) ->
 	declare id (spec sp)
-    | Tfundef (sp, _, id, _, s) ->
+    | Nfundef (sp, _, id, _, s) ->
 	let ef_spec = spec sp and ef_body = statement s in
 	begin
 	  match sp.Clogic.assigns with

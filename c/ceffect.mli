@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.13 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.14 2004-11-30 14:31:22 hubert Exp $ i*)
 
-val interp_type : Cast.tctype -> string
+val interp_type : Cast.nctype -> string
 
 open Info
 
@@ -35,25 +35,25 @@ val print_heap_vars : Format.formatter -> unit -> unit
 val heap_var_type : var_info -> Output.base_type
 val is_memory_var : var_info -> bool
 
-val location : Cast.tterm Clogic.location -> HeapVarSet.t
+val location : Cast.nterm Clogic.location -> HeapVarSet.t
 
-val locations : Cast.tterm Clogic.location list -> HeapVarSet.t
+val locations : Cast.nterm Clogic.location list -> HeapVarSet.t
 
-val predicate : Cast.predicate -> HeapVarSet.t
+val predicate : Cast.npredicate -> HeapVarSet.t
 
-val expr : Cast.texpr -> effect
+val expr : Cast.nexpr -> effect
 
-val statement : Cast.tstatement -> effect
+val statement : Cast.nstatement -> effect
 
 (* computes effects for logical symbols only *)
-val file : Cast.tfile -> unit
+val file : Cast.nfile -> unit
 
 (* computes functions effects; 
    return [true] when fixpoint is reached (no more modification) *)
-val functions : Cast.tfile -> bool
+val functions : Cast.nfile -> bool
 
 (* table for weak invariants *)
-val weak_invariants : (string, Cast.predicate * HeapVarSet.t) Hashtbl.t
+val weak_invariants : (string, Cast.npredicate * HeapVarSet.t) Hashtbl.t
 
 (* table of warnings from computation of effects *)
 val warnings : (Loc.t * string) Queue.t

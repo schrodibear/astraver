@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.77 2004-11-29 15:38:42 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.78 2004-11-30 14:31:23 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -202,25 +202,18 @@ and type_type_node loc env = function
       declare_fields tyn fl;
       tyn
   | CTenum (x, Decl fl) ->
-      let type_enum_field (f, eo) = (f, type_int_expr_option env eo) in
-      let fl = List.map type_enum_field fl in
-      let tyn = Env.find_tag_type loc env (CTenum (x, Decl fl)) in
+      let tyn = Env.find_tag_type loc env (CTenum (x, Tag)) in
       let ty = noattr tyn in
       let ty = { ty with ctype_const = true } in
-      let _ = 
-	List.fold_left 
-	  (fun n (f,op) -> 
+      let fl = 
+	List.map 
+	  (fun (f,op) -> 
 	     let i = default_var_info f in
-	     let n' = match op with
-	       | None -> n
-	       | Some e -> eval_const_expr e 
-	     in
-	     set_const_value i n'; 
 	     ignore (add_sym loc f ty (Var_info i)); 
-	     Int64.add n' Int64.one) 
-	  Int64.zero fl
+	     (f,type_int_expr_option env op)) 
+	  fl
       in
-      tyn
+      Env.find_tag_type loc env (CTenum (x, Decl fl)) 
   | CTfun (pl, tyn) ->
       let pl = List.map (fun (ty,x) -> (type_type loc env ty, x)) pl in
       let pl = match pl with

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.14 2004-11-22 16:14:27 filliatr Exp $ i*)
+(*i $Id: info.mli,v 1.15 2004-11-30 14:31:23 hubert Exp $ i*)
 
 type var_info = private 
     {
@@ -31,6 +31,8 @@ type var_info = private
 val default_var_info : string -> var_info
 
 val set_assigned : var_info -> unit
+
+val unset_assigned : var_info -> unit
 
 val set_is_referenced : var_info -> unit
 

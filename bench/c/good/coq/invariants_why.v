@@ -21,7 +21,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 590-716 *)
+(* Why obligation from file "why/invariants.why", characters 590-632 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -39,14 +39,14 @@ Lemma f_impl_po_2 :
   forall (Post7: t = ((acc x s) + n)),
   forall (Pre5: (valid alloc s)),
   forall (Test2: t <= ((acc y s) - 20)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = s),
+  forall (caduceus_1: pointer),
+  forall (Post5: caduceus_1 = s),
   (valid alloc (shift c 0)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 567-717 *)
+(* Why obligation from file "why/invariants.why", characters 567-633 *)
 Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -64,18 +64,18 @@ Lemma f_impl_po_3 :
   forall (Post7: t = ((acc x s) + n)),
   forall (Pre5: (valid alloc s)),
   forall (Test2: t <= ((acc y s) - 20)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = s),
+  forall (caduceus_1: pointer),
+  forall (Post5: caduceus_1 = s),
   forall (Pre4: (valid alloc (shift c 0))),
   forall (aux_4: Z),
   forall (Post4: aux_4 = (t + (acc intP (shift c 0)))),
-  (valid alloc caduceus_2).
+  (valid alloc caduceus_1).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 567-717 *)
+(* Why obligation from file "why/invariants.why", characters 567-633 *)
 Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -93,14 +93,14 @@ Lemma f_impl_po_4 :
   forall (Post7: t = ((acc x s) + n)),
   forall (Pre5: (valid alloc s)),
   forall (Test2: t <= ((acc y s) - 20)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = s),
+  forall (caduceus_1: pointer),
+  forall (Post5: caduceus_1 = s),
   forall (Pre4: (valid alloc (shift c 0))),
   forall (aux_4: Z),
   forall (Post4: aux_4 = (t + (acc intP (shift c 0)))),
-  forall (Pre1: (valid alloc caduceus_2)),
+  forall (Pre1: (valid alloc caduceus_1)),
   forall (x0: ((memory) Z)),
-  forall (Post13: x0 = (upd x caduceus_2 aux_4)),
+  forall (Post13: x0 = (upd x caduceus_1 aux_4)),
   (0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition.
@@ -108,7 +108,7 @@ subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 727-727 *)
+(* Why obligation from file "why/invariants.why", characters 643-643 *)
 Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),

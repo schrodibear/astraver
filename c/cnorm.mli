@@ -14,15 +14,24 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cconst.mli,v 1.2 2004-11-30 14:31:22 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.1 2004-11-30 14:31:23 hubert Exp $ i*)
 
-(* Evaluation of constant literals *)
+open Cast
 
-exception Constant_too_large
+(*
+val sizeof : Loc.t -> tctype -> int64
 
-exception Invalid of string
+val eval_const_expr : Cast.texpr -> int64
 
-val int : Loc.t -> string -> Int64.t
+*)
+val valid_for_type : 
+  ?fresh:bool -> Loc.t -> Info.var_info -> 
+    nterm -> npredicate
 
-module IntMap : Map.S with type key = int64
+val separation : 
+  Loc.t -> Info.var_info -> 
+  ?allocs:(nterm -> npredicate) -> nterm -> (nterm -> npredicate) * npredicate
 
+val make_and : npredicate -> npredicate -> npredicate
+
+val file : tdecl located list -> ndecl located list

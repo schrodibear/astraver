@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cconst.mll,v 1.2 2004-10-18 09:15:42 hubert Exp $ i*)
+(*i $Id: cconst.mll,v 1.3 2004-11-30 14:31:22 hubert Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -23,6 +23,8 @@
   open Lexing
   open Int64
   open Creport
+
+  module IntMap = Map.Make(struct type t = int64 let compare = compare end)
 
   exception Constant_too_large
 
@@ -99,7 +101,7 @@ rule eval_int loc = parse
   | "'" { eval_char lexbuf }
   | '0' { eval_octa loc Int64.zero lexbuf}
   | ['1'-'9'] as d { eval_deci loc (val_char d) lexbuf}
-  | 'L' { unsupported "extended character" } 
+  | 'L' { unsupported loc "extended character" } 
   | eof { raise (Invalid "empty literal") }
   | _   { raise (Invalid ("Illegal character " ^ lexeme lexbuf)) }
 

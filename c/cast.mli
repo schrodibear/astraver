@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.50 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.51 2004-11-30 14:31:22 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -45,9 +45,6 @@ type 'expr ctype_node =
   | CTunion of string * 'expr field list tagged
   | CTenum of string * (string * 'expr option) list tagged
   | CTfun of 'expr parameter list * 'expr ctype
-(*
-  | CTtyped_fun of ('expr ctype * Info.var_info) list * 'expr ctype
-*)
 
 and 'expr ctype = { 
   ctype_node : 'expr ctype_node;
@@ -208,12 +205,12 @@ and texpr_node =
   | TEbinary of texpr * binary_operator * texpr
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr
-  | TEcast of texpr ctype * texpr
-  | TEsizeof of texpr ctype
+  | TEcast of tctype * texpr
+  | TEsizeof of tctype
 
 and lvalue = texpr (* TODO: cf CIL *)
 
-type tctype = texpr ctype
+and tctype = texpr ctype
 
 type tterm = tctype term
 
@@ -260,12 +257,99 @@ and tdecl =
   | Tlogic of Info.logic_info * (tterm,tctype) logic_symbol
   | Taxiom of string * predicate
   | Tinvariant of string * predicate
-  | Ttypedef of texpr ctype * string
-  | Ttypedecl of texpr ctype
-  | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
-  | Tfunspec of spec * texpr ctype * Info.fun_info * 
-      (texpr ctype * Info.var_info) list
-  | Tfundef of spec * texpr ctype * Info.fun_info * 
-      (texpr ctype * Info.var_info) list * tstatement
+  | Ttypedef of tctype * string
+  | Ttypedecl of tctype
+  | Tdecl of tctype * Info.var_info * texpr c_initializer
+  | Tfunspec of spec * tctype * Info.fun_info * 
+      (tctype * Info.var_info) list
+  | Tfundef of spec * tctype * Info.fun_info * 
+      (tctype * Info.var_info) list * tstatement
 
 type tfile = tdecl located list
+
+
+(*
+
+normalized AST
+
+*)
+
+type nexpr = {
+  nexpr_node : nexpr_node;
+  nexpr_type : nctype;
+  nexpr_loc  : Loc.t
+}
+
+and nexpr_node =
+  | NEnop
+  | NEconstant of constant
+  | NEstring_literal of string
+  | NEvar of Info.env_info
+  | NEarrow of nlvalue * Info.var_info
+  | NEstar of nlvalue 
+  | NEseq of nexpr * nexpr
+  | NEassign of nlvalue * nexpr
+  | NEassign_op of nlvalue * binary_operator * nexpr
+  | NEunary of unary_operator * nexpr
+  | NEincr of incr_operator * nexpr
+  | NEbinary of nexpr * binary_operator * nexpr
+  | NEcall of nexpr * nexpr list
+  | NEcond of nexpr * nexpr * nexpr
+  | NEcast of nctype * nexpr
+
+and nlvalue = nexpr (* TODO: cf CIL *)
+
+and nctype = int64 ctype
+
+type nterm = nctype Clogic.nterm
+
+type npredicate = nctype Clogic.npredicate
+
+type nspec = (nterm, npredicate) Clogic.spec
+
+type nvariant = nterm * string option
+
+type nloop_annot = (nterm, npredicate) Clogic.loop_annot
+
+type nstatement = {
+  nst_node : nstatement_node;
+  nst_break : bool;    (* may breaks *)
+  nst_continue : bool; (* may continue *)
+  nst_return : bool;   (* may return *)
+  nst_term : bool;     (* may terminate normally *)
+  nst_loc : Loc.t
+}
+
+and nstatement_node =
+  | NSnop
+  | NSexpr of nexpr
+  | NSif of nexpr * nstatement * nstatement
+  | NSwhile of nloop_annot * nexpr * nstatement
+  | NSdowhile of nloop_annot * nstatement * nexpr
+  | NSfor of nloop_annot * nexpr * nexpr * nexpr * nstatement
+  | NSblock of nblock
+  | NSreturn of nexpr option
+  | NSbreak
+  | NScontinue
+  | NSlabel of string * nstatement
+  | NSswitch of nexpr * (nexpr Cconst.IntMap.t) * 
+      ((nexpr Cconst.IntMap.t * nstatement list) list)
+  | NSassert of npredicate
+  | NSlogic_label of string
+  | NSspec of nspec * nstatement
+
+and nblock = ndecl located list * nstatement list
+
+and ndecl = 
+  | Nlogic of Info.logic_info * (nterm,nctype) nlogic_symbol
+  | Naxiom of string * npredicate
+  | Ninvariant of string * npredicate
+  | Ntypedef of nctype * string
+  | Ntypedecl of nctype
+  | Ndecl of nctype * Info.var_info * nexpr c_initializer
+  | Nfunspec of nspec * nctype * Info.fun_info * 
+      (nctype * Info.var_info) list
+  | Nfundef of nspec * nctype * Info.fun_info * 
+      (nctype * Info.var_info) list * nstatement
+
+type nfile = ndecl located list
