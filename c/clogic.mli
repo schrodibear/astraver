@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.5 2004-02-09 15:55:09 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.6 2004-02-09 15:57:21 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -53,6 +53,8 @@ and 'a term_node =
   | Tarrow of 'a term * string
   | Tarrget of 'a term * 'a term
   | Tif of 'a term * 'a term * 'a term
+  | Told of 'a term
+  | Tat of 'a term * string
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
 
