@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.75 2004-11-05 16:24:18 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.76 2004-11-22 16:14:27 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -167,6 +167,10 @@ let warn_for_read_only loc e =
       warning loc "assigment of read-only location"
   | _ -> 
       ()
+
+let set_referenced e = match e.texpr_node with
+  | TEvar (Var_info x) -> set_is_referenced x
+  | _ -> ()
 
 (*s Types *)
 
@@ -348,6 +352,7 @@ and type_expr_node loc env = function
       if is_bitfield ty then error loc "cannot take address of bitfield";
       if ty.ctype_storage = Register then 
 	warning loc "address of register requested";
+      set_referenced e;
       TEunary (Uamp, e), noattr (CTpointer ty)
   | CEunary (Ustar, e) ->
       let e = type_expr env e in

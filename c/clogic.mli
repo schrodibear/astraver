@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.36 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.37 2004-11-22 16:14:27 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -124,7 +124,6 @@ type 'ctype predicate =
   | Pvalid_index of 'ctype term * 'ctype term
   | Pvalid_range of 'ctype term * 'ctype term * 'ctype term
   | Pfresh of 'ctype term 
-  | Palloc_extends
 
 type 'term location = 
   | Lterm of 'term

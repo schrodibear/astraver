@@ -219,35 +219,6 @@ Admitted.
      (forall (a:A24), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
-(*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
-Admitted.
-
-(*Why axiom*) Lemma fresh_not_valid :
-  (forall (a:alloc_table),
-   (forall (p:pointer),
-    ((fresh a p) -> (forall (i:Z), ~(valid a (shift p i)))))).
-Admitted.
-
-(*Why predicate*) Definition alloc_extends  (a1:alloc_table) (a2:alloc_table)
-  := (forall (p:pointer),
-      ((block_length a1 p) > 0 -> (block_length a1 p) = (block_length a2 p))).
-
-(*Why axiom*) Lemma alloc_extends_valid :
-  (forall (a1:alloc_table),
-   (forall (a2:alloc_table),
-    ((alloc_extends a1 a2) ->
-     (forall (p:pointer), ((valid a1 p) -> (valid a2 p)))))).
-Admitted.
-
-(*Why axiom*) Lemma alloc_extends_valid_range :
-  (forall (a1:alloc_table),
-   (forall (a2:alloc_table),
-    ((alloc_extends a1 a2) ->
-     (forall (p:pointer),
-      (forall (i:Z),
-       (forall (j:Z), ((valid_range a1 p i j) -> (valid_range a2 p i j)))))))).
-Admitted.
-
 (*Why axiom*) Lemma false_not_true : ~(false = true).
 Admitted.
 
@@ -328,8 +299,6 @@ Admitted.
        (forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 
-
-
 (*Why axiom*) Lemma assigns_trans :
   forall (A26:Set),
   (forall (a:alloc_table),
@@ -338,8 +307,52 @@ Admitted.
      (forall (m2:((memory) A26)),
       (forall (m3:((memory) A26)),
        ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
-Proof.
-unfold assigns; intuition; rewrite H0; auto.
-Save.
+Admitted.
 
+(*Why logic*) Definition on_heap : alloc_table -> pointer -> Prop.
+Admitted.
+
+(*Why logic*) Definition on_stack : alloc_table -> pointer -> Prop.
+Admitted.
+
+(*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma fresh_not_valid :
+  (forall (a:alloc_table),
+   (forall (p:pointer),
+    ((fresh a p) -> (forall (i:Z), ~(valid a (shift p i)))))).
+Admitted.
+
+(*Why logic*) Definition alloc_stack :
+  pointer -> alloc_table -> alloc_table -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma alloc_stack_1 :
+  (forall (p:pointer),
+   (forall (a1:alloc_table),
+    (forall (a2:alloc_table), ((alloc_stack p a1 a2) -> (valid a2 p))))).
+Admitted.
+
+(*Why logic*) Definition free_heap :
+  pointer -> alloc_table -> alloc_table -> Prop.
+Admitted.
+
+(*Why logic*) Definition free_stack :
+  alloc_table -> alloc_table -> alloc_table -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma free_stack_heap :
+  (forall (a1:alloc_table),
+   (forall (a2:alloc_table),
+    (forall (a3:alloc_table),
+     (forall (p:pointer), ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p))))))).
+Admitted.
+
+(*Why axiom*) Lemma free_stack_stack :
+  (forall (a1:alloc_table),
+   (forall (a2:alloc_table),
+    (forall (a3:alloc_table),
+     (forall (p:pointer), ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p))))))).
+Admitted.
 

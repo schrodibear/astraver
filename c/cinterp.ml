@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.110 2004-11-13 02:27:23 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.111 2004-11-22 16:14:27 filliatr Exp $ i*)
 
 
 open Format
@@ -257,9 +257,6 @@ let rec interp_predicate label old_label p =
 	LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
     | Pvalid_range (t,a,b) ->
 	LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
-    | Palloc_extends ->
-	LPred("alloc_extends", [interp_var (Some old_label) "alloc";
-				interp_var label "alloc"])
 
 let interp_predicate_opt label old_label pred =
   match pred with
@@ -376,7 +373,10 @@ let rec interp_expr e =
 	Cte(Prim_float(float_of_string c))
     | TEvar(Var_info v) -> 
 	let n = v.var_unique_name in
-	if v.var_is_assigned then Deref n else Var n
+	if v.var_is_referenced then
+	  let var = global_var_for_type e.texpr_type in
+	  make_app "acc_" [Var var; Var n]
+	else if v.var_is_assigned then Deref n else Var n
     | TEvar(Fun_info v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | TEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
@@ -606,10 +606,8 @@ and interp_lvalue e =
 
 and interp_address e = match e.texpr_node with
   | TEvar (Var_info v) -> 
-      begin match e.texpr_type.ctype_node with
-	| CTstruct _ | CTunion _ -> Deref v.var_unique_name
-	| _ -> unsupported "& operator"
-      end
+      assert (v.var_is_referenced); 
+      Var v.var_unique_name
   | TEvar (Fun_info v) -> unsupported "& operator on functions"
   | TEunary (Ustar, e1) ->
       interp_expr e1
@@ -852,19 +850,27 @@ let alloc_on_stack loc v t =
   let form = 
     Cltyping.make_and 
       (snd (Cltyping.separation loc v t))
-      (Cltyping.make_and 
-	 (Cltyping.valid_for_type ~fresh:true loc v t) Palloc_extends)
+      (Cltyping.valid_for_type ~fresh:true loc v t)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
-		      interp_predicate None "" form,None))
+		      make_and 
+			(interp_predicate None "" form)
+			(LPred ("alloc_stack", 
+				[LVar "result"; LVar "alloc@"; LVar "alloc"])), 
+		      None))
       
 let interp_decl d acc = 
   match d.node with 
     | Tdecl(ctype,v,init) -> 
 	lprintf 
 	  "translating local declaration of %s@." v.var_unique_name;
-	let tinit =
-	  match init with 
+	if v.var_is_referenced then
+	  let t = { term_node = Tresult; 
+		    term_loc = d.loc;
+		    term_type = Cltyping.c_pointer ctype } in
+	  Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
+	else
+	  let tinit = match init with 
 	    | Inothing ->
 		begin match ctype.ctype_node with
 		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
@@ -880,11 +886,11 @@ let interp_decl d acc =
 		end
 	    | Iexpr e -> interp_expr e		
 	    | Ilist _ -> unsupported "structured initializer for local var"
-	in
-	if v.var_is_assigned then
-	  Let_ref(v.var_unique_name,tinit,acc)
-	else
-	  Let(v.var_unique_name,tinit,acc)
+	  in
+	  if v.var_is_assigned then
+	    Let_ref(v.var_unique_name,tinit,acc)
+	  else
+	    Let(v.var_unique_name,tinit,acc)
     | Ttypedef _
     | Ttypedecl { ctype_node = CTstruct _ | CTunion _ } -> 
 	acc

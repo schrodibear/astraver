@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.13 2004-11-05 16:24:18 marche Exp $ i*)
+(*i $Id: info.mli,v 1.14 2004-11-22 16:14:27 filliatr Exp $ i*)
 
 type var_info = private 
     {
@@ -22,6 +22,7 @@ type var_info = private
       var_uniq_tag : int;
       mutable var_unique_name : string;
       mutable var_is_assigned : bool;
+      mutable var_is_referenced : bool;
       mutable var_is_static : bool;
       mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
@@ -30,6 +31,8 @@ type var_info = private
 val default_var_info : string -> var_info
 
 val set_assigned : var_info -> unit
+
+val set_is_referenced : var_info -> unit
 
 val set_static : var_info -> unit
 

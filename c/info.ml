@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.13 2004-11-05 16:24:18 marche Exp $ i*)
+(*i $Id: info.ml,v 1.14 2004-11-22 16:14:27 filliatr Exp $ i*)
 
 type var_info =
     {
@@ -22,6 +22,7 @@ type var_info =
       var_uniq_tag : int;
       mutable var_unique_name : string;
       mutable var_is_assigned : bool;
+      mutable var_is_referenced : bool;
       mutable var_is_static : bool;
       mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
@@ -35,12 +36,15 @@ let default_var_info x =
     var_uniq_tag = !tag_counter;
     var_unique_name = x;
     var_is_assigned = false;
+    var_is_referenced = false;
     var_is_static = false;
     var_is_a_formal_param = false;
     enum_constant_value = Int64.zero;
   }
 
 let set_assigned v = v.var_is_assigned <- true
+
+let set_is_referenced v = v.var_is_referenced <- true
 
 let set_static v = v.var_is_static <- true
 

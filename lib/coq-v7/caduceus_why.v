@@ -79,6 +79,9 @@ Admitted.
 
 Admitted.
 
+(*Why axiom*) Lemma shift_zero : ((p:pointer) (shift p `0`) = p).
+Admitted.
+
 (*Why axiom*) Lemma shift_shift :
   ((p:pointer) ((i:Z) ((j:Z) (shift (shift p i) j) = (shift p `i + j`)))).
 Admitted.
