@@ -1,6 +1,9 @@
 Note: These are the changes for Caduceus.
 
 
+ o preliminary support for & on non-structure variable. Caution is
+   required, because dangling pointers are not detected.
+
 version 0.67, November 22nd, 2004
 =================================
  o fixed bug with local variables of pointer type
