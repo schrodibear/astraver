@@ -6,9 +6,9 @@ pgm=$1
 coqc="coqc -I ../lib/coq"
 
 goods () {
-    for f in $1/*.ml; do
+    for f in $1/*.mlw; do
 	echo -n "  "$f"... "
-	base=$1/`basename $f .ml`
+	base=$1/`basename $f .mlw`
 	if $pgm --coq $f > /dev/null 2>&1; then
 	    echo -n "why ok... "
 	    if $coqc "$base"_why.v > /dev/null 2>&1; then
@@ -25,7 +25,7 @@ goods () {
 }
 
 bads () {
-    for f in $1/*.ml; do
+    for f in $1/*.mlw; do
 	echo -n "  "$f"... "
 	if $pgm $2 $f > /dev/null 2>&1; then 
 	    echo "$pgm $2 $f"
@@ -59,8 +59,8 @@ goods good
 exit 0
 
 # 4. Showing the results
-for f in good/*.ml; do
-    coq=good/`basename $f .ml`_why.v
+for f in good/*.mlw; do
+    coq=good/`basename $f .mlw`_why.v
     echo "==== "$coq" ===="
     cat $coq
     echo "==== "$f" ===="

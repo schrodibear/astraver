@@ -2,13 +2,13 @@
 WHY=../../bin/why.static
 WHYOPTIONS=--valid
 
-%_why.v: %.ml $(WHY)
+%_why.v: %.mlw $(WHY)
 	$(WHY) $(WHYOPTIONS) $<
 
 %.vo: %.v
 	coqc -I ../../lib/coq $<
 
-%_why.pvs: %.ml $(WHY)
+%_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $(WHYOPTIONS) $<
 
 clean::

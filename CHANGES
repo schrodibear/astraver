@@ -1,4 +1,6 @@
 
+  o manual: added lexical conventions
+  o examples: added maximum sort (by Sylvain Boulmé)
   o new feature: exceptions (beta test)
 
 version 0.71, October 15th, 2002 (bug fix release)
