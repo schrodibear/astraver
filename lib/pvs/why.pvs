@@ -1,0 +1,15 @@
+why: THEORY
+BEGIN
+
+  unit: TYPE = int
+  unit: unit = 0
+
+  c,x,y : VAR int
+  zwf(c) : [int, int -> bool] = (lambda x,y: c <= x and x < y)
+  zwf_zero : [int, int -> bool] = zwf(0)
+
+  zwf_wf : AXIOM forall c: well_founded?(zwf(c))
+
+END why
+
+
