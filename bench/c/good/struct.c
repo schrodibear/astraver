@@ -16,7 +16,7 @@ int f(T* t) {
 struct S { int z; T t; } s;
 struct S *ps;
 
-/*@ requires \valid(s) && \valid(s.t) && \valid(ps)
+/*@ requires \valid(ps)
   @ ensures \result == 1
   @*/
 int g() {
