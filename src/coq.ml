@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.95 2003-09-17 21:08:07 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.96 2003-09-18 11:52:58 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -462,10 +462,19 @@ let output_validations fwe =
 let output_file fwe =
   let f = fwe ^ "_why.v" in
   if Sys.file_exists f then begin
-    let fbak = f ^ ".bak" in
-    Sys.rename f fbak; 
-    if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
-    print_in_file (Gen.regen fbak) f
+    let ftmp = f ^ ".tmp" in
+    print_in_file (Gen.regen f) ftmp;
+    let old_md5 = Digest.file f in
+    let new_md5 = Digest.file ftmp in
+    if old_md5 = new_md5 then begin
+      if_verbose_2 eprintf "*** file %s is unchanged (not overridden)@." f;
+      Sys.remove ftmp
+    end else begin
+      let fbak = f ^ ".bak" in
+      if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
+      Sys.rename f fbak; 
+      Sys.rename ftmp f
+    end
   end else begin
     if_verbose_2 eprintf "*** generating file %s@." f;
     print_in_file Gen.first_time f
