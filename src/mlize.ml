@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.23 2002-03-14 14:38:09 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.24 2002-03-14 16:13:41 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -39,10 +39,10 @@ and trad_desc info d ren = match d with
       Monad.compose 
 	e1.info (trad e1)
 	(fun res1 ren' -> 
-	   let t1 = trad_ml_type_v ren info.env (result_type e1) in
+	   let tx = trad_type_in_env ren info.env x in
 	   let ren'' = next ren' [x] in
 	   let x' = current_var ren'' x in
-	   CC_letin (false, [x', CC_var_binder t1], CC_expr (Tvar res1), 
+	   CC_letin (false, [x', CC_var_binder tx], CC_expr (Tvar res1), 
 		     Monad.unit info (Tconst ConstUnit) ren''))
 	ren
 
@@ -119,30 +119,31 @@ and trad_desc info d ren = match d with
       let te = trans e ren' in
       CC_lam (bl', te)
 
+  | TabAcc (_, x, e1) ->
+      Monad.compose e1.info (trad e1)
+	(fun v1 ren' -> 
+	   let x' = current_var ren' x in
+	   let t = make_raw_access info.env (x,x') (Tvar v1) in
+	   Monad.unit info t ren')
+	ren
+
+  | TabAff (_, x, e1, e2) ->
+       Monad.compose e2.info (trad e2)
+	 (fun v2 -> 
+	    Monad.compose e1.info (trad e1)
+	      (fun v1 ren' -> 
+		 let tx = trad_type_in_env ren info.env x in
+		 let x' = current_var ren' x in
+		 let ren'' = next ren' [x] in
+  		 let x'' = current_var ren'' x in
+		 let st = make_raw_store info.env (x,x') (Tvar v1) (Tvar v2) in
+		 CC_letin (false, [x'', CC_var_binder tx], CC_expr st,
+			   Monad.unit info (Tconst ConstUnit) ren'')))
+	 ren
+
   | _ -> failwith "Mlize.trad: TODO"
 
 (*i***
-  | TabAcc (check, x, e1) ->
-      let _,ty_elem = array_info env x in
-      let te1 = trad ren e1 in
-      let (_,ef1,p1,q1) = decomp_kappa e1.info.kappa in
-      let w = get_writes ef1 in
-      let ren' = next ren w in
-      let id = Ident.create "index" in
-      let access = 
-	make_raw_access env (x,current_var ren' x) (Tvar id) 
-      in
-      let t,ty = result_tuple ren' (current_date ren) env
-		   (rest, CC_expr access, CC_type) (eft,qt) in
-      let t =
-	if check then 
-	  let h = make_pre_access env x (Tvar id) in 
-	  let_in_pre ty (anonymous_pre true h) t
-	else
-	  t 
-      in
-      make_let_in ren ren' env te1 p1
-	(current_vars ren' w,q1) (id, PureType PTint) (t,ty)
 
   | TabAff (check, x, e1, e2) ->
       let _,ty_elem = array_info env x in

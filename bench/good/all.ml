@@ -84,7 +84,10 @@ let r7 = 1 = 2 || 2 = 3
 let r8 = 1 = 2 && 2 = 3
 
 (* arrays *)
-
+let arr1 = v6[0]
+let arr2 = v6[1+2]
+let arr3 = { v4 = 0 } v6[!v4]
+let arr4 = v6[v6[0]]
 
 (* function calls *)
 let fc1 = (f5 v5)

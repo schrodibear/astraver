@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.13 2002-03-14 14:38:09 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.14 2002-03-14 16:13:41 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -232,14 +232,14 @@ let make_abs bl t = match bl with
 let bind_pre ren env p =
   pre_name p.p_name, CC_pred_binder (apply_pre ren env p).p_value
 
-let abs_pre env pl =
-  List.fold_right
-    (fun p t ->
+let abs_pre env pl t =
+  List.fold_left
+    (fun t p ->
        if p.p_assert then
 	 insert_pre env p t
        else
 	 (fun ren -> CC_lam ([bind_pre ren env p], t ren)))
-    pl
+    t pl
 
 let abstraction env k e ren =
   let _,ef,p,_ = decomp_kappa k in

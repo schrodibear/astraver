@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.21 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.22 2002-03-14 16:13:41 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -58,7 +58,7 @@ let next s r = function
   | Name id -> id
 
 let reset_names,pre_name,post_name,inv_name,
-    test_name,bool_name,var_name,phi_name,for_name,label_name =
+    test_name,bool_name,variant_name,phi_name,for_name,label_name,fresh_var =
   let pre = ref 0 in
   let post = ref 0 in
   let inv = ref 0 in
@@ -68,6 +68,7 @@ let reset_names,pre_name,post_name,inv_name,
   let phi = ref 0 in
   let forr = ref 0 in
   let label = ref 0 in
+  let fvar = ref 0 in
     (fun () -> 
        pre := 0; post := 0; inv := 0; test := 0; 
        bool := 0; var := 0; phi := 0; label := 0),
@@ -79,7 +80,8 @@ let reset_names,pre_name,post_name,inv_name,
     (next "Variant" var),
     (fun () -> next "rphi" phi Anonymous),
     (fun () -> next "for" forr Anonymous),
-    (fun () -> Ident.string (next "_label_" label Anonymous))
+    (fun () -> Ident.string (next "_label_" label Anonymous)),
+    (fun () -> next "_var_" fvar Anonymous)
 
 let id_of_name = function Name id -> id | Anonymous -> default
 
@@ -278,7 +280,7 @@ let rec print_term fmt = function
   | Tconst (ConstBool b) -> 
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 
-      fprintf fmt "unit" 
+      fprintf fmt "void" 
   | Tconst (ConstFloat f) -> 
       fprintf fmt "%f" f
   | Tbound b ->

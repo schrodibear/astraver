@@ -1,7 +1,11 @@
 
 (* Test program *)
 
-let p = let x = ref 1 in begin x := !x + 1 end { x > 1 }
+external t : array 10 of int
+
+let p1 = { access(t,0)=0 } begin t[t[0]] := 1 end { access(t,0) = 1 }
+
+let p2 = t[begin t[0] := 1; 0 end] { result = 1 }
 
 (***
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.24 2002-03-14 14:38:09 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.25 2002-03-14 16:13:41 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -228,10 +228,20 @@ and wp_desc info d q =
 	let q = optpost_app (subst_in_predicate [x, result]) q in
 	let p',w = wp p q in
 	Aff (x, p'), w
-    | TabAcc _ ->
-	failwith "todo: wp tab acc"
-    | TabAff _ ->
-	failwith "todo: wp tab aff"
+    | TabAcc (ck, x, e1) ->
+	let t = make_raw_access info.env (x,x) (Tvar result) in
+	let q = optpost_app (tsubst_in_predicate [result, t]) q in
+	let e'1,w = wp e1 q in
+	TabAcc (ck, x, e'1), w
+    | TabAff (ck, x, e1, e2) ->
+	let q = optpost_app (tsubst_in_predicate [result, tvoid]) q in
+	let v = fresh_var () in
+	let st = make_raw_store info.env (x,x) (Tvar v) (Tvar result) in
+	let q = optpost_app (tsubst_in_predicate [x, st]) q in
+	let e'2,w2 = wp e2 q in
+	let w2 = optpost_app (subst_in_predicate [v, result]) w2 in
+	let e'1,w1 = wp e1 w2 in
+	TabAff (ck, x, e1, e2), w1
     (* conditional: two cases depending on [p1.post] *)
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 q in
