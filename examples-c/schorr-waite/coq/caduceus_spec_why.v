@@ -24,6 +24,11 @@ Defined.
 exact isreachable.
 Defined.
 
+(*Why logic*) Definition mesure :
+  alloc_table -> ((memory) Z) -> ((memory) Z) -> ((memory) pointer)
+  -> ((memory) pointer) -> pointer -> pointer -> Length.
+Admitted.
+
 (*Why logic*) Definition pair_in_list : pointer -> pointer -> plist -> Prop.
 exact pair_in_list.
 Defined.

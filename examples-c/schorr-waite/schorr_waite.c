@@ -9,6 +9,8 @@ typedef struct struct_node {
 
 /*@ logic plist cons(node p, plist l) */
 
+/*@ logic Length mesure (node p , node t) reads p->m,p->c,p->l,p->r*/
+
 /*@ predicate in_list(node p,plist stack) */
 
 /*@ predicate pair_in_list(node p1,node p2, plist stack) */
@@ -33,8 +35,12 @@ void schorr_waite(node root) {
   node t = root;
   node p = NULL;
   /*@invariant
-    @ (\forall node x; \old(isreachable(root,x)) =>
-    @       (isreachable(t,x) || isreachable(p,x)))&&
+    @ (\forall node x; 
+    @   (\old(isreachable(root,x)) => (isreachable(t,x) || isreachable(p,x))))
+    @ &&
+    @ (\forall node x; x!=\null => 
+    @   ((isreachable(t,x) || isreachable(p,x)) => \old(isreachable(root,x)))) 
+    @ &&
     @ \exists plist stack;
     @   clr_list (p,stack) &&
     @   (\forall node p; in_list (p,stack) => p->m) &&
@@ -51,7 +57,9 @@ void schorr_waite(node root) {
     @  (\forall node x; ! \old(isreachable(root,x)) => x->m == \old(x->m)) &&
     @  (\forall node x; x != \null && \old(isreachable(root,x)) => \valid(x)) 
   */
-  /*      (\forall node p1; (\forall node p2;
+  /*
+      variant mesure (p,t) for mesure_order
+      (\forall node p1; (\forall node p2;
               pair_in_list(p1,p2,stack) => 
 	          (\old(p2->l) == (p2->c ? p2->l : p1)) &&
 	          (\old(p2->r) == (p2->c ? p1 : p2->r))))
