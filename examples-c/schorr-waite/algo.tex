@@ -70,14 +70,14 @@ when the right child is explored, and goes back up.
   \unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
 \begin{picture}(100,150)
-\put(-80,180){\rnode{null}{\makebox(0,0)[c]{NULL}}}
+\put(-80,180){\rnode{null}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(-80,160){\unode{n0}}
 \put(-70,140){\unode{n1}}
 \put(-90,140){\unode{n2}}
 \put(-90,190){\rnode{p}{\makebox(0,0)[rb]{p}}}
 \put(-100,160){\rnode{t}{\makebox(0,0)[r]{t}}}
-\put(-110,120){\rnode{null2}{\makebox(0,0)[c]{NULL}}}
-\put(-80,120){\rnode{null3}{\makebox(0,0)[c]{NULL}}}
+\put(-110,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-80,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(-70,160){\rnode{fig1}}
 \ncline{n0}{n1}
 \ncline{n0}{n2}
@@ -86,14 +86,14 @@ when the right child is explored, and goes back up.
 \ncline{p}{null}
 \ncline{t}{n0}
 \put(-40,160){\rnode{fig2}}
-\put(0,180){\rnode{null}{\makebox(0,0)[b]{NULL}}}
+\put(0,180){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(0,160){\mnode{n0}}
 \put(10,140){\unode{n1}}
 \put(-10,140){\unode{n2}}
 \put(20,170){\rnode{p}{\makebox(0,0)[lb]{p}}}
 \put(-20,140){\rnode{t}{\makebox(0,0)[r]{t}}}
-\put(-20,120){\rnode{null2}{\makebox(0,0)[c]{NULL}}}
-\put(0,120){\rnode{null3}{\makebox(0,0)[c]{NULL}}}
+\put(-20,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(0,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
 \ncline{n0}{n1}
 \ncline{n2}{null2}
@@ -103,14 +103,14 @@ when the right child is explored, and goes back up.
 \ncline{fig1}{fig2}\Aput{PUSH}
 \put(10,160){\rnode{fig2}}
 \put(40,160){\rnode{fig3}}
-\put(80,180){\rnode{null}{\makebox(0,0)[b]{NULL}}}
+\put(80,180){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(80,160){\mnode{n0}}
 \put(90,140){\unode{n1}}
 \put(70,140){\mnode{n2}}
 \put(60,140){\rnode{p}{\makebox(0,0)[r]{p}}}
 \put(50,130){\rnode{t}{\makebox(0,0)[b]{t}}}
-\put(50,120){\rnode{null2}{\makebox(0,0)[c]{NULL}}}
-\put(80,120){\rnode{null3}{\makebox(0,0)[c]{NULL}}}
+\put(50,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(80,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
 \ncarc[arcangleA=120,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
@@ -120,14 +120,14 @@ when the right child is explored, and goes back up.
 \ncline{fig2}{fig3}\Aput{PUSH}
 \put(90,160){\rnode{fig3}}
 \put(120,160){\rnode{fig4}}
-\put(160,180){\rnode{null}{\makebox(0,0)[b]{NULL}}}
+\put(160,180){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(160,160){\mnode{n0}}
 \put(170,140){\unode{n1}}
 \put(150,140){\mnode{n2}}
 \put(140,140){\rnode{p}{\makebox(0,0)[r]{p}}}
 \put(150,130){\rnode{t}{\makebox(0,0)[rb]{t}}}
-\put(130,120){\rnode{null2}{\makebox(0,0)[c]{NULL}}}
-\put(160,120){\rnode{null3}{\makebox(0,0)[c]{NULL}}}
+\put(130,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(160,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
 \ncarc[arcangleA=120,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
@@ -137,14 +137,14 @@ when the right child is explored, and goes back up.
 \ncline{fig3}{fig4}\Aput{SWING}
 \put(-70,60){\rnode{fig4}}
 \put(-30,60){\rnode{fig5}}
-\put(0,80){\rnode{null}{\makebox(0,0)[b]{NULL}}}
+\put(0,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(0,60){\mnode{n0}}
 \put(10,40){\unode{n1}}
 \put(-10,40){\mnode{n2}}
 \put(10,70){\rnode{p}{\makebox(0,0)[lb]{p}}}
 \put(-20,60){\rnode{t}{\makebox(0,0)[rb]{t}}}
-\put(-30,20){\rnode{null2}{\makebox(0,0)[c]{NULL}}}
-\put(0,20){\rnode{null3}{\makebox(0,0)[c]{NULL}}}
+\put(-30,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(0,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(10,60){\rnode{fig1}}
 \ncline{n0}{n1}
 \ncline{n2}{null2}
@@ -155,14 +155,14 @@ when the right child is explored, and goes back up.
 \ncline{fig4}{fig5}\Aput{POP}
 \put(10,60){\rnode{fig5}}
 \put(50,60){\rnode{fig6}}
-\put(80,80){\rnode{null}{\makebox(0,0)[b]{NULL}}}
+\put(80,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(80,60){\mnode{n0}}
 \put(90,40){\unode{n1}}
 \put(70,40){\mnode{n2}}
 \put(60,60){\rnode{p}{\makebox(0,0)[r]{p}}}
 \put(100,60){\rnode{t}{\makebox(0,0)[lb]{t}}}
-\put(50,20){\rnode{null2}{\makebox(0,0)[c]{NULL}}}
-\put(80,20){\rnode{null3}{\makebox(0,0)[c]{NULL}}}
+\put(50,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(80,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(90,60){\rnode{fig1}}
 \ncline{n0}{n2}
 \ncline{n2}{null2}
