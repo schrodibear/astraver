@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.12 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.13 2004-03-23 14:21:40 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -218,6 +218,32 @@ let print_elem fmt = function
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
 
+(* for each function symbol [f : t1,...,tn -> t] where [t] is an abstract type
+   we generate an axiom 
+   [FORALL (x1 ... xn) (IMPLIES (AND (ISti xi)) (ISt (f x1 ... xn)))] *)
+let logic_typing fmt =
+  Env.iter_global_logic
+    (fun f s -> match s.Env.scheme_type with
+       | Function (pl, PTexternal (_,ty)) ->
+	   let n = ref 0 in
+	   let pl = List.map (fun pt -> incr n; "x"^string_of_int !n, pt) pl in
+	   let epl = 
+	     List.fold_right 
+	       (fun p acc -> match p with
+		  | (x, PTexternal(_,t)) -> (x, Ident.string t) :: acc
+		  | _ -> acc) pl []
+	   in
+	   fprintf fmt
+	     "(BG_PUSH (FORALL (%a) (IMPLIES (AND %a)
+              (EQ (IS%a (%a %a)) |@@true|))))@\n@\n"
+	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
+	     (print_list space (fun fmt (x,t) -> 
+				  fprintf fmt "(EQ (IS%s %s) |@@true|)" t x))
+	     epl
+             Ident.print ty Ident.print f 
+	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
+       | Function _ | Logic.Predicate _ -> ())
+
 let prelude = ref 
 "(BG_PUSH 
   ; array_length
@@ -288,5 +314,7 @@ let output_file fwe =
     (fun fmt -> 
        if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
     sep
-    (fun fmt -> Queue.iter (print_elem fmt) queue)
+    (fun fmt -> 
+       logic_typing fmt;
+       Queue.iter (print_elem fmt) queue)
 

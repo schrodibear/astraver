@@ -28,7 +28,8 @@
 %}
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL
-%token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
+%token LPAR RPAR IF ELSE COLON DOT DOTDOT 
+%token INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IMPLIES AND OR NOT 
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH VALID VALID_INDEX VALID_RANGE 
 %token FRESH THEN AT
@@ -190,15 +191,15 @@ locations:
 location:
   location_term { Lterm $1 }
 | location_term LSQUARE STAR RSQUARE { Lstar $1 }
-| location_term LSQUARE location_term DOT DOT location_term RSQUARE    
-   { Lrange ($1, $3, $6) }
+| location_term LSQUARE lexpr DOTDOT lexpr RSQUARE    
+   { Lrange ($1, $3, $5) }
 ;
 
 location_term:
 | IDENTIFIER { info (PLvar (Info.default_var_info $1)) }
 | location_term ARROW IDENTIFIER { info (PLarrow ($1, $3)) }
 | location_term DOT IDENTIFIER { info (PLdot ($1, $3)) }
-| location_term LSQUARE location_term RSQUARE { info (PLarrget ($1, $3)) }
+| location_term LSQUARE lexpr RSQUARE { info (PLarrget ($1, $3)) }
 | STAR location_term { info (PLunop (Ustar, $2)) }
 ;
 

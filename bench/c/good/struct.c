@@ -1,10 +1,8 @@
 
-
 typedef struct {
   int x;
   int y;
 } T;
-
 
 /*@ requires \valid(t) && t->x == 0
   @ assigns t->x

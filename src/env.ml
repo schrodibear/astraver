@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.39 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.40 2004-03-23 14:21:40 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -425,6 +425,8 @@ let logic_table = ref Idmap.empty
 
 let add_global_logic x t = 
   logic_table := Idmap.add x t !logic_table
+
+let iter_global_logic f = Idmap.iter f !logic_table
 
 let add_global_logic_gen x t =
  add_global_logic x (generalize_logic_type t)

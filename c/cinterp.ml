@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.48 2004-03-23 13:20:55 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.49 2004-03-23 14:21:40 filliatr Exp $ i*)
 
 
 open Format
@@ -246,7 +246,8 @@ let rec interp_expr e =
 	App(App(Var("acc_"),Var(var)),App(App(Var("shift_"),te1),te2))
     | TEassign (e1,e2) ->
 	assert false (* TODO *)
-    | TEincr(op,e) -> interp_incr_expr op e
+    | TEincr(op,e) -> 
+	interp_incr_expr op e
     | TEassign_op(e1,op,e2) ->
 	assert false (* TODO *)
     | TEseq(e1,e2) ->
@@ -265,7 +266,10 @@ let rec interp_expr e =
 	let te1 = interp_expr e1 in
 	let var = global_var_for_type e.texpr_type in
 	make_app "acc_" [Var var;te1]
-    | TEunary(_,_) -> assert false (* TODO *)	
+    | TEunary (Uplus, e) ->
+	interp_expr e
+    | TEunary(_,_) -> 
+	assert false (* TODO *)	
     | TEcall(e,args) -> 
 	begin
 	  match e.texpr_node with
