@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.90 2004-06-30 09:42:37 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.91 2004-06-30 14:34:04 filliatr Exp $ i*)
 
 
 open Format
@@ -807,20 +807,24 @@ let interp_assigns before assigns = function
   | None ->
       LTrue
 
-(* table for weak invariants *)
-let weak_invariants = Hashtbl.create 97
-
-let add_weak_invariant id p =
-  let e = Ceffect.predicate p in
-  Hashtbl.add weak_invariants id (interp_predicate None "" p, e)
+(* we memoize the translation of weak invariants *)
+let weak_invariant = 
+  let h = Hashtbl.create 97 in
+  fun id p -> 
+    try 
+      Hashtbl.find h id
+    with Not_found -> 
+      let p = interp_predicate None "" p in
+      Hashtbl.add h id p;
+      p
 
 let weak_invariants_for hvs =
   Hashtbl.fold
-    (fun _ (p,e) acc -> 
+    (fun id (p,e) acc -> 
        if not (HeapVarSet.is_empty (HeapVarSet.inter e hvs)) then
-	 make_and p acc 
+	 make_and (weak_invariant id p) acc 
        else acc)
-    weak_invariants LTrue
+    Ceffect.weak_invariants LTrue
 
 let interp_spec effect_reads effect_assigns s =
   let tpre = 
@@ -835,13 +839,6 @@ let interp_spec effect_reads effect_assigns s =
 	 (weak_invariants_for effect_assigns))
   in 
   (tpre,tpost)
-
-let alloc_global =
-  let allocs = ref (fun x -> Ptrue) in
-  fun loc v t ->
-    let allocs',form = Cltyping.separation ~allocs:!allocs loc v t in
-    allocs := allocs';
-    Pand (form, Cltyping.valid_for_type loc v t)
 
 let alloc_on_stack loc v t =
   let form = 
@@ -1154,7 +1151,6 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       (why_code, Axiom(id,a)::why_spec, prover_decl)
   | Tinvariant(id,p) -> 
       lprintf "translating invariant declaration %s@." id;      
-      add_weak_invariant id p;
       why
   | Ttypedecl ({ ctype_node = CTenum _ } as ctype)
   | Ttypedef (ctype,_) -> 
@@ -1166,14 +1162,6 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       assert false
   | Tdecl(ctype,v,init) -> 
       lprintf "translating global declaration of %s@." v.var_name;
-      begin match ctype.ctype_node with
-	| CTstruct _ | CTarray _ -> 
-	    let id = "valid_" ^ v.var_name in
-	    let t = { term_node = Tvar v; term_type = ctype } in
-	    add_weak_invariant id (alloc_global decl.loc v t)
-	| _ -> 
-	    ()
-      end;
       begin match init with 
 	| Inothing ->
 	    ()

@@ -1,6 +1,10 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
+ o added automatic annotations expressing the separation of the
+   various globals (resp. the various locals of a given function)
+ o fixed automatic invariants expressing the validity of local and global vars
+
 version 0.62, June 24th, 2004
 =============================
  o fixed bug with unused structures fields (not renamed)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.10 2004-05-13 14:06:27 filliatr Exp $ i*)
+(*i $Id: ceffect.mli,v 1.11 2004-06-30 14:34:04 filliatr Exp $ i*)
 
 val interp_type : Cast.tctype -> string
 
@@ -49,3 +49,6 @@ val file : Cast.tfile -> unit
 (* computes functions effects; 
    return [true] when fixpoint is reached (no more modification) *)
 val functions : Cast.tfile -> bool
+
+(* table for weak invariants *)
+val weak_invariants : (string, Cast.predicate * HeapVarSet.t) Hashtbl.t

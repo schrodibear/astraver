@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.47 2004-06-28 13:22:11 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.48 2004-06-30 14:34:04 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -274,11 +274,11 @@ let loop_annot a =
 let weak_invariants = Hashtbl.create 97
 
 let add_weak_invariant id p =
-  Hashtbl.add weak_invariants id (predicate p)
+  Hashtbl.add weak_invariants id (p, predicate p)
 
 let weak_invariants_for hvs =
   Hashtbl.fold
-    (fun _ e acc -> 
+    (fun _ (_,e) acc -> 
        if not (HeapVarSet.is_empty (HeapVarSet.inter e hvs)) then
 	 union e acc 
        else acc)
@@ -442,6 +442,15 @@ let print_effects fmt l =
   fprintf fmt "@[%a@]"
     (print_list space pp_print_string) (HeapVarSet.elements l)
 
+(* first pass: declare invariants and computes effects for logics *)
+
+let invariant_for_global =
+  let allocs = ref (fun x -> Ptrue) in
+  fun loc v t ->
+    let allocs',form = Cltyping.separation ~allocs:!allocs loc v t in
+    allocs := allocs';
+    Pand (form, Cltyping.valid_for_type loc v t)
+
 let decl d =
   match d.Cast.node with
     | Tlogic(id,ltype) -> 
@@ -456,7 +465,7 @@ let decl d =
 	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
 	let t = { term_node = Tvar v; term_type = ty } in
-	add_weak_invariant id (Cltyping.valid_for_type d.loc v t)
+	add_weak_invariant id (invariant_for_global d.loc v t)
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Taxiom(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 
@@ -465,6 +474,8 @@ let decl d =
     | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)
 
 let file l = List.iter decl l
+
+(* second pass: compute functions effects as a fixpoint *)
 
 let functions dl = 
   let fixpoint = ref true in

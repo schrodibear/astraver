@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.50 2004-06-30 09:42:37 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.51 2004-06-30 14:34:04 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -517,61 +517,6 @@ let valid_for_type ?(fresh=false) loc v t =
   in
   valid_for t
 
-
-(*
-type memory_loc =
-  | Loc_term of term
-  | Loc_arrow of memory_loc * Info.field_info
-  | Loc_range of memory_loc list * term * term
-
-let all_locations_for_type loc v tn ty =
-
-  let rec all_locations mloc ty =
-0    match ty.ctype_node with
-      | CTstruct (n, _) ->
-	  begin match tag_type_definition n with
-	    | Defined (CTstruct (_, Decl fl)) ->
-		List.fold_right 
-		(fun (tyf, f, _) locs -> match tyf.ctype_node with
-		   | CTstruct _ | CTarray _ ->
-		       let tnf = Loc_arrow (mloc, find_field n f) in
-		       (all_locations tnf tyf)@locs
-		   | _ -> locs)
-		fl [mloc]
-	  | Defined _ ->
-	      assert false
-	  | Incomplete ->
-	      error loc ("`" ^ v.var_name ^ "' has incomplete type")
-	end
-    | CTarray (ty, None) ->
-	error loc ("array size missing in `" ^ v.var_name ^ "'")
-    | CTarray (ty, Some s) ->
-	let ts = eval_array_size s in
-	let range_loc = Loc_range(mloc,int_constant "0",tpred ts) in
-	begin match ty.ctype_node with
-	  | CTstruct _ | CTarray _ ->
-	      range_loc :: (all_locations range_loc ty)
-	  | _ -> [range_loc]
-	end
-    | _ -> 
-	assert false
-  in
-  let t = { term_node = tn; term_type = c_pointer ty } in
-  all_locations (Loc_term t) ty
-
-
-let rec disjoint_locs locs =
-  match locs with
-    | [] -> Ltrue
-    | l::r ->
-	match l with
-	  | Loc_term t -> noalias t r
-          | Loc_arrow(l,f) -> noalias t r
-	  | Loc_range (Loc_arrow
-
-*)
-
-
 open Format
 
 let rec print_term_node fmt = function
@@ -628,8 +573,8 @@ all allocations in [t] are not aliased and [allocs] is a function expressing
 that a pointer is different from all allocated pointers in [t]
 *)
   let rec local_alloc_fields allocs n t =	
-    Format.eprintf "local_alloc_fields@.  allocs = %a@.  t = %a@." 
-      print_allocs allocs print_term t;
+    (* Format.eprintf "local_alloc_fields@.  allocs = %a@.  t = %a@." 
+        print_allocs allocs print_term t; *)
     match tag_type_definition n with
     | Defined (CTstruct (_, Decl fl)) ->
 	let allocs',form' as res = 
@@ -643,15 +588,17 @@ that a pointer is different from all allocated pointers in [t]
 	  fl 
 	  (allocs, Ptrue)
 	in
+	(*
 	Format.eprintf "  local_alloc_fields ---> %a@." print_predicate form'; 
+	*)
 	res 
     | Defined _ ->
 	assert false
     | Incomplete ->
 	error loc ("`" ^ v.var_name ^ "' has incomplete type")
   and local_alloc_for allocs t = 
-    Format.eprintf "local_alloc_for@.  allocs = %a@.  t = %a@." 
-      print_allocs allocs print_term t;
+    (* Format.eprintf "local_alloc_for@.  allocs = %a@.  t = %a@." 
+        print_allocs allocs print_term t; *)
     match t.term_type.ctype_node with
     | CTstruct (n, _) ->
 	let allocs_t = allocs t in
@@ -671,7 +618,7 @@ that a pointer is different from all allocated pointers in [t]
 	let allocs_t = allocs t in
 	begin match ty.ctype_node with
 	  | CTstruct (n, _) ->
-	      Format.eprintf "  cas d'un tableau de struct@.";
+	      (* Format.eprintf "  cas d'un tableau de struct@."; *)
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
 	      let ti = 
@@ -698,10 +645,9 @@ that a pointer is different from all allocated pointers in [t]
 		   (make_and (allocs x) (not_alias x t))
 		   (forall_index i vari (allocs_i x))),
 	      (* forall j 0<=j<ts -> form_j *)
-	      begin let p = make_and allocs_t (forall_index j varj form_j) in
-	      Format.eprintf "  local_alloc_for (struct arr) ---> %a@." print_predicate p; p end
+	      make_and allocs_t (forall_index j varj form_j)
 	  | CTarray _ ->
-	      Format.eprintf "  cas d'un tableau d'autre nature@.";
+	      (* Format.eprintf "  cas d'un tableau d'autre nature@."; *)
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
 	      let ti = { term_node = Tarrget (t, vari); term_type = ty } in
@@ -724,60 +670,14 @@ that a pointer is different from all allocated pointers in [t]
 		   (make_and (allocs x) (not_alias x t))
 		   (forall_index i vari (allocs_i x))),
 	      (* forall j 0<=j<ts -> form_j *)
-	      begin let p = make_and allocs_t (forall_index j varj form_j) in
-	      Format.eprintf "  local_alloc_for (other arr) ---> %a@." print_predicate p; p end
+	      make_and allocs_t (forall_index j varj form_j)
 	  | _ ->
 	      let allocs x = make_and (allocs x) (not_alias x t) in
 	      allocs, allocs_t
 	end
     | _ ->
-	Format.eprintf "autre (%a)@." print_term t;
+	(* Format.eprintf "autre (%a)@." print_term t; *)
 	allocs, Ptrue
   in
   local_alloc_for allocs t
 
-(****
-	let allocs_before i op =
-	  (* forall j, 0 <= j < i -> x <> tj *)
-	  let j = default_var_info (fresh_index ()) in
-	  let varj = { term_node = Tvar j; term_type = c_int } in
-	  let ineq = Pand (Prel (int_constant "0", Le, varj),
-			   Prel (varj, Lt, i)) 
-	  in
-	  (fun x -> Pforall([c_int, j.var_name], 
-			    Pimplies(ineq,Prel(x,Neq,op varj))))
-	in
-	let new_allocs = (fun x -> Prel(x,Neq,t)) in
-	begin match ty.ctype_node with
-	  | CTstruct _ ->
-	      let i = default_var_info (fresh_index ()) in
-	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let op j = 
-		{ term_node = Tbinop (t, Badd, j); term_type = c_pointer ty }
-	      in
-	      let new_allocs', vti = 
-		local_alloc_for (allocs_before vari op :: new_allocs :: allocs) (op vari).term_node (c_pointer ty) in
-	      let ineq = Pand (Prel (int_constant "0", Le, vari),
-			       Prel (vari, Lt, ts)) in
-	      (allocs_before ts op :: new_allocs :: new_allocs'),
-	      Pand(form,Pforall ([c_int, i.var_name], Pimplies (ineq, vti)))
-	  | CTarray _ ->
-	      let i = default_var_info (fresh_index ()) in
-	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let op j = { term_node = Tarrget(t, j); term_type = ty } in
-	      let new_allocs', vti = 
-		local_alloc_for (allocs_before vari op :: new_allocs :: allocs) (op vari).term_node ty in
-	      let ineq = Pand (Prel (int_constant "0", Le, vari),
-			       Prel (vari, Lt, ts)) in
-	      (allocs_before ts op :: new_allocs :: new_allocs'),
-	      Pand(form,Pforall ([c_int, i.var_name], Pimplies (ineq, vti)))
-	  | _ ->
-	      let op j = { term_node = Tarrget(t, j); term_type = ty } in
-	      [allocs_before ts op ; new_allocs],form
-	end
-    | _ -> 
-	assert false
-  in
-  Ptrue (* let _,f = local_alloc_for [] Tresult ty in f *)
-
-****)

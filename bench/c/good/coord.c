@@ -4,7 +4,6 @@ typedef struct {
 } coord;
 
 coord  tab [3];
-/*@ invariant tab_range : \valid_range(tab,0,2) */
 
 /*@ assigns \nothing */
 void f (int x);
