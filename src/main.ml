@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.73 2004-07-05 13:18:44 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.74 2004-07-05 14:43:57 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -81,7 +81,7 @@ let push_parameter id v tv = match prover with
   | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)
-  | CVCLite -> Cvcl.push_parameter id tv
+  | CVCLite -> if is_pure_type_scheme v then Cvcl.push_parameter id tv
 
 let push_logic id t = match prover with
   | Pvs -> Pvs.push_logic id t

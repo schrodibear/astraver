@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.2 2004-07-05 14:05:21 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.3 2004-07-05 14:43:57 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -107,7 +107,7 @@ let rec print_term fmt = function
   | Tapp (id, [a; b; c]) when id == store ->
       fprintf fmt "@[(%a WITH@ [%a] := %a)@]" 
 	print_term a print_term b print_term c
-  | Tapp (id, [t]) when id == t_neg_int ->
+  | Tapp (id, [t]) when id == t_neg_int || id == t_neg_real ->
       fprintf fmt "@[(-%a)@]" print_term t
   | Tapp (id, [a;b]) when is_relation id || is_arith id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
@@ -148,7 +148,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->
       fprintf fmt "@[(%a /=@ %a)@]" print_term a print_term b
-  | Papp (id, [a;b]) when is_int_comparison id ->
+  | Papp (id, [a;b]) when is_int_comparison id || is_real_comparison id ->
       fprintf fmt "@[(%a %s %a)@]" print_term a (infix id) print_term b
   | Papp (id, [a;b]) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
@@ -243,15 +243,21 @@ let print_axiom fmt id p =
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p.Env.scheme_type
 
 let print_predicate fmt id p =
+  fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
   let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[(DEFPRED (%s %a) @[%a@])@]@\n@\n" id
-    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
-    print_predicate p;
-  Hashtbl.add defpred (Ident.create id) ()
+  fprintf fmt "@[<hov 2>%s: [%a -> BOOLEAN] =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+    id
+    (print_list space (fun fmt (_,pt) -> print_pure_type fmt pt)) bl 
+    (print_list comma 
+       (fun fmt (x,pt) -> 
+	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
+    print_predicate p
 
 let print_parameter fmt id c =
   fprintf fmt 
-    "@[<hov 2>%%%% Why Parameter %s (TODO)@]@\n@\n" id (* print_cc_type c *)
+    "@[%%%% Why parameter %s@]@\n" id;
+  fprintf fmt 
+    "@[<hov 2>%s: %a;@]@\n@\n" id print_cc_type c
 
 let rec print_logic_type fmt = function
   | Logic.Predicate pl ->
