@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.47 2004-03-02 10:41:34 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.48 2004-03-08 19:26:48 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -45,11 +45,16 @@ let print_term fmt t =
     | Tapp (id, [a;b]) when id == t_add_int || id == t_sub_int ->
 	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
 	  print1 a (if id == t_add_int then "+" else "-") print2 b
+    | Tapp (id, [a;b]) when id == t_add_float || id == t_sub_float ->
+	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
+	  print1 a (if id == t_add_float then "+" else "-") print2 b
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul_int ->
+    | Tapp (id, [a;b]) when id == t_mul_int || id == t_mul_float ->
 	fprintf fmt "@[<hov 2>%a *@ %a@]" print2 a print3 b
+    | Tapp (id, [a;b]) when id == t_div_float ->
+	fprintf fmt "@[<hov 2>%a /@ %a@]" print2 a print3 b
     | Tapp (id, [a;b]) when id == t_div_int ->
 	fprintf fmt "(@[div(%a,%a)@])" print0 a print0 b
     | Tapp (id, [a;b]) when id == t_mod_int ->
@@ -58,14 +63,19 @@ let print_term fmt t =
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	fprintf fmt "(%d::int)" n
+	fprintf fmt "(%d :: int)" n
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "unit" 
     | Tconst (ConstFloat f) -> 
 	let n,d = rationalize f in
-	if d = "1" then fprintf fmt "%s" n else fprintf fmt "%s/%s" n d
+	if d = "1" then 
+	  fprintf fmt "(%s :: real)" n 
+	else 
+	  fprintf fmt "(%s/%s)" n d
+    | Tapp (id, [Tconst (ConstInt n)]) when id == t_float_of_int ->
+	fprintf fmt "(%d :: real)" n
     | Tderef _ ->
 	assert false
     | Tvar id when id == implicit ->
@@ -165,7 +175,7 @@ let print_predicate fmt p =
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[EXIST (%s: " (Ident.string id');
+	fprintf fmt "(@[EXISTS (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 fmt p'; fprintf fmt "@])"
     | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 

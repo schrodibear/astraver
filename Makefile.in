@@ -92,7 +92,7 @@ CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
-	strip $@
+#	strip $@
 
 bin/why.byte: $(CMO) src/why.cmo
 	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
@@ -234,8 +234,8 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local: $(STATICBINARY) $(WHY2HTML) $(VO)
-	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
+local: bin/why.opt $(WHY2HTML) $(VO)
+	cp -f bin/why.opt $$HOME/bin/$$OSTYPE/why
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
 	mkdir -p $(COQLIB)/contrib7/why
 	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib7/why

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.43 2004-03-04 12:49:44 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.44 2004-03-08 19:26:48 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -73,6 +73,9 @@ let type_op op ty = match ty.ctype_node with
 let is_bitfield ty = match ty.ctype_node with
   | CTint (_, Bitfield _) -> true
   | _ -> false
+
+let va_list = Cltyping.noattr (CTvar "va_list")
+let _ = add_typedef Loc.dummy "__builtin_va_list" va_list
 
 (* Coercions (ints to floats, floats to int) *)
 
@@ -173,7 +176,12 @@ and type_type_node loc env = function
       List.iter (fun (f,_) -> add_sym loc f ty (default_var_info f)) fl;
       tyn
   | CTfun (pl, tyn) ->
-      CTfun (List.map (type_parameter loc env) pl, type_type loc env tyn)
+      let pl = List.map (type_parameter loc env) pl in
+      let pl = match pl with
+	| [{ctype_node = CTvoid},_] -> []
+	| _ -> pl
+      in
+      CTfun (pl, type_type loc env tyn)
 
 and type_integer loc env = function
   | Char | Short | Int | Long | LongLong as i -> i
