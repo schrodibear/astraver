@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.128 2005-01-19 16:19:19 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.129 2005-01-20 10:34:31 hubert Exp $ i*)
 
 
 open Format
@@ -244,7 +244,7 @@ let rec interp_predicate label old_label p =
     | NPapp (v, tl) ->
 	LPred(v.logic_name, 
 	      (HeapVarSet.fold 
-		 (fun x acc -> acc@[(interp_var label x.var_unique_name)]) 
+		 (fun x acc -> (interp_var label x.var_unique_name) :: acc) 
 		 v.logic_args []) 
 	      @ List.map ft tl)
     | NPfalse -> 
@@ -856,7 +856,7 @@ let interp_strong_invariants () =
     (fun id (p,e,args) acc -> 
        let args = 
 	 HeapVarSet.fold 
-	   (fun x acc -> acc@[(x.var_unique_name, Ceffect.heap_var_type x)]) 
+	   (fun x acc -> (x.var_unique_name, Ceffect.heap_var_type x) :: acc) 
 	   e args
        in
        if args = [] then acc else
@@ -867,7 +867,7 @@ let interp_strong_invariants () =
 let strong_invariant_name id e =
   LPred(id, 
 	(HeapVarSet.fold 
-	   (fun x acc -> acc@[LVar(x.var_unique_name) ]) 
+	   (fun x acc -> (LVar x.var_unique_name) :: acc) 
 	   e []))
 
 let strong_invariants_for hvs =
@@ -1241,7 +1241,7 @@ let interp_predicate_args id args =
       args []
   in
   (HeapVarSet.fold
-    (fun arg t -> t@[(arg.var_unique_name,Ceffect.heap_var_type arg)])
+    (fun arg t -> (arg.var_unique_name,Ceffect.heap_var_type arg) :: t)
     id.logic_args [])@args
 
 let cinterp_logic_symbol id ls =
