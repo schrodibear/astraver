@@ -3,20 +3,21 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/copy.why", characters 283-291 *)
+(* Why obligation from file "why/copy.why", characters 326-334 *)
 Lemma copy_impl_po_1 : 
   forall (t1: pointer),
   forall (t2: pointer),
   forall (n: Z),
   forall (alloc: alloc),
-  forall (Pre8: (valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)),
+  forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
+                ~((base_addr t1) = (base_addr t2))),
   forall (i: Z),
   forall (Post3: i = n),
   forall (Variant1: Z),
   forall (i1: Z),
   forall (intP0: ((memory) Z)),
   forall (Pre7: Variant1 = i1),
-  forall (Pre6: (0 <= i1 /\ i1 <= n) /\
+  forall (Pre6: i1 <= n /\
                 (forall (k:Z),
                  (i1 <= k /\ k < n -> (acc intP0 (shift t2 k)) =
                   (acc intP0 (shift t1 k))))),
@@ -33,7 +34,7 @@ Lemma copy_impl_po_1 :
         (forall (result1:Z),
          (result1 = (acc intP0 result0) ->
           (forall (intP:((memory) Z)),
-           (intP = (upd intP0 result result1) -> ((0 <= i2 /\ i2 <= n) /\
+           (intP = (upd intP0 result result1) -> (i2 <= n /\
             (forall (k:Z),
              (i2 <= k /\ k < n -> (acc intP (shift t2 k)) =
               (acc intP (shift t1 k))))) /\
@@ -45,24 +46,27 @@ Lemma copy_impl_po_1 :
      (0 <= k /\ k < n -> (acc intP0 (shift t2 k)) = (acc intP0 (shift t1 k)))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+assert (k=i1-1 \/ i1<=k). omega. intuition; subst; caduceus.
+subst; valid.
+subst; valid.
 Save.
 
-(* Why obligation from file "why/copy.why", characters 354-530 *)
+(* Why obligation from file "why/copy.why", characters 397-554 *)
 Lemma copy_impl_po_2 : 
   forall (t1: pointer),
   forall (t2: pointer),
   forall (n: Z),
   forall (alloc: alloc),
   forall (intP: ((memory) Z)),
-  forall (Pre8: (valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)),
+  forall (Pre8: ((valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)) /\
+                ~((base_addr t1) = (base_addr t2))),
   forall (i: Z),
   forall (Post3: i = n),
-  (0 <= i /\ i <= n) /\
+  i <= n /\
   (forall (k:Z),
    (i <= k /\ k < n -> (acc intP (shift t2 k)) = (acc intP (shift t1 k)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

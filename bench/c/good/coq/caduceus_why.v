@@ -4,7 +4,8 @@
 Require Export Why.
 Require Export WhyFloat.
 
-Parameter pointer : Set.
+Parameter addr : Set.
+Parameter pointer : Set. (* = addr * Z *)
 Parameter alloc : Set.
 Parameter memory : Set -> Set.
 Parameter assign_loc : Set.
@@ -18,6 +19,9 @@ Parameter assign_loc : Set.
 (*Why*) Parameter null : pointer.
 
 (*Why logic*) Definition block_length : alloc -> pointer -> Z.
+Admitted.
+
+(*Why logic*) Definition base_addr : pointer -> addr.
 Admitted.
 
 (*Why logic*) Definition offset : pointer -> Z.
@@ -50,6 +54,11 @@ Admitted.
    (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
 Admitted.
 
+(*Why axiom*) Lemma base_addr_shift :
+  (forall (p:pointer),
+   (forall (i:Z), (base_addr (shift p i)) = (base_addr p))).
+Admitted.
+
 (*Why axiom*) Lemma block_length_shift :
   (forall (a:alloc),
    (forall (p:pointer),
@@ -62,6 +71,52 @@ Admitted.
 
 (*Why axiom*) Lemma shift_not_null :
   (forall (p:pointer), (forall (i:Z), (~(p = null) -> ~((shift p i) = null)))).
+Admitted.
+
+(*Why axiom*) Lemma base_addr_block_length :
+  (forall (a:alloc),
+   (forall (p1:pointer),
+    (forall (p2:pointer),
+     ((base_addr p1) = (base_addr p2) -> (block_length a p1) =
+      (block_length a p2))))).
+Admitted.
+
+(*Why axiom*) Lemma pointer_pair_1 :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    ((base_addr p1) = (base_addr p2) /\ (offset p1) = (offset p2) -> p1 = p2))).
+Admitted.
+
+(*Why axiom*) Lemma pointer_pair_2 :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (p1 = p2 -> (base_addr p1) = (base_addr p2) /\ (offset p1) = (offset p2)))).
+Admitted.
+
+(*Why axiom*) Lemma neq_base_addr_neq_shift :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      (~((base_addr p1) = (base_addr p2)) -> ~((shift p1 i) = (shift p2 j))))))).
+Admitted.
+
+(*Why axiom*) Lemma neq_offset_neq_shift :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      (((offset p1) + i) <> ((offset p2) + j) ->
+       ~((shift p1 i) = (shift p2 j))))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_range_valid_shift :
+  (forall (a:alloc),
+   (forall (p:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      (forall (k:Z),
+       ((valid_range a p i j) -> (i <= k /\ k <= j -> (valid a (shift p k))))))))).
 Admitted.
 
 (*Why*) Parameter shift_ :
