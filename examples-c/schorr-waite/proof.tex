@@ -2,7 +2,34 @@
 \section{Verification}
 \label{sec:proof}
 
-\subsection{Modeling lists of pointers}
+\subsection{Loop invariant}
+
+\newcommand{\unode}[1]{\makebox(0,0){\circlenode{#1}{\hspace*{0.01\unitlength}}}}
+\newcommand{\mnode}[1]{\makebox(0,0){\circlenode[fillstyle=solid,fillcolor=black]{#1}{\hspace*{0.01\unitlength}}}}
+
+
+\begin{center}
+  \unitlength=0.5mm
+  \psset{unit=\unitlength,arrows=->}
+\begin{picture}(100,100)
+\put(50,100){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(50,80){\mnode{n0}}\put(58,83){\makebox(0,0)[b] {c=false}}
+\put(30,60){\mnode{n1}}\put(23,63){\makebox(0,0)[b] {c=true}}
+\put(60,60){\unode{n2}}
+
+\put(20,40){\unode{n11}}
+\put(40,40){\unode{n12}}
+\put(50,20){\unode{n122}}
+
+\ncline[linestyle=dashed]{n0}{n1}
+\ncarc[arcangleA=120,linewidth=1]{n0}{null}
+\ncline{n0}{n2}
+\ncline{n1}{n11}
+\ncline{n12}{n122}
+\ncline[linestyle=dashed]{n1}{n12}
+\ncarc[arcangleA=-100,arcangleB=-30,linewidth=1]{n1}{n0}
+\end{picture}\label{figure}
+\end{center}
 
 \begin{alltt}
 \begin{slshape}
@@ -14,8 +41,6 @@
 \end{slshape}
 \end{alltt}
 
-
-\subsection{Loop invariant}
 
 \begin{alltt}
 \begin{slshape}
@@ -38,29 +63,29 @@ void schorr_waite(node root) \{
     @ &&
     @   (I2 :: \bs{}forall node x; x != \null => 
     @     ((reachable(t,x) || reachable(p,x)) => 
-    @        \old(reachable(root,x)))) 
+    @        \old(reachable(root,x))))
+    @ &&
+    @  (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => x->m == \old(x->m)) &&
+    @  (I4 :: \bs{}forall node x; x != \bs{}null && \old(reachable(root,x)) => \valid(x)) 
     @ &&
     @ \bs{}exists plist stack;
-    @   (I3 :: clr_list (p,stack)) 
+    @   (I5a :: clr_list (p,stack)) 
     @   &&
-    @   (I4 :: \bs{}forall node p; in_list (p,stack) => p->m) 
+    @   (I5b :: \bs{}forall node p; in_list (p,stack) => p->m) 
     @   &&
-    @   (I5 :: \bs{}forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
+    @   (I5c :: \bs{}forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
     @      unmarked_reachable(t,x) || 
     @      (\bs{}exists node y; in_list(y,stack) && unmarked_reachable(y->r,x))) 
     @   &&
-    @   (I6 :: \bs{}forall node x; !in_list(x,stack) =>  
+    @   (I5d :: \bs{}forall node x; !in_list(x,stack) =>  
     @      (x->r == \old(x->r) && x->l == \old(x->l))) 
     @   &&
-    @   (I7 :: \bs{}forall node p1; \bs{}forall node p2;
+    @   (I5e :: \bs{}forall node p1; \bs{}forall node p2;
               pair_in_list(p1,p2,cons(t,stack)) => 
 	          (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
                   &&
     @	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) ==
-    @              p2->r))
-    @ &&
-    @  (I8 :: \bs{}forall node x; ! \old(reachable(root,x)) => x->m == \old(x->m)) &&
-    @  (I9 :: \bs{}forall node x; x != \bs{}null && \old(reachable(root,x)) => \valid(x)) 
+    @              p2->r)) 
     @*/
   while (p != NULL || (t != NULL && ! t->m)) \{
     if (t == NULL || t->m) \{
@@ -84,24 +109,29 @@ It's have 9 assertion :
   before this function, there are reachable by t or p in the while.
 \item {I2} : This assertion means that for all nodes reachable by t or
   p in the while there are reachable by root before this function.
-\item {I3} : This assertion clr\_list define the stack \texttt{stack}.
-\item {I4} : This assertion means all nodes in the
-  \texttt{stack} are mark.
-\item {I5} : This assertion means that for all nodes valid, reachable by root
-  before the function and not mark there are reachable with a way
+\item {I3} : This assertion means all nodes not reachable by root before the
+  function her mark are the same.
+\item {I4} :  This assertion means all nodes different of null and
+  reachable by root before the function are valid
+\item {I5a} : This assertion clr\_list define the stack
+  \texttt{stack}. As one can see on the figure \ref{figure} the
+  \texttt{stack} begin with p and according to the mark \texttt{c} it
+  continues with the left children if \texttt{c} are true, with the
+  right children otherwise. 
+\item {I5b} : This assertion means all nodes in the
+  \texttt{stack} are mark by \texttt{m}.
+\item {I5c} : This assertion means that for all nodes valid, reachable by root
+  before the function and not mark by \texttt{m} there are reachable with a way
   totaly not mark by t or a right way of a nodes in the \texttt{stack} .
-\item {I6} : This assertion means all nodes out of \texttt{stack} are
+\item {I5d} : This assertion means all nodes out of \texttt{stack} are
   same children then before the function. 
-\item {I7} : This assertion means that for all two nodes t1 t2 successive in
+\item {I5e} : This assertion means that for all two nodes t1 t2 successive in
   the \texttt{stack} with t on the head if the second mark c of t2 is
   true then the left children of t2 is the same then before the
   function and the right children of t2 is t1 else the left children
   of t2 is t1 and the right children  is the same then before the
   function.
-\item {I8} : This assertion means all nodes not reachable by root before the
-  function her mark are the same.
-\item {I9} :  This assertion means all nodes different of null and
-  reachable by root before the function are valid
+
 \end{enumerate}
 \subsection{Intermediate lemmas}
 
