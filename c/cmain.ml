@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.26 2004-03-24 15:07:46 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.27 2004-03-26 16:28:29 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -126,7 +126,7 @@ let main () =
 	    fprintf fmt "\t@@echo -n \"invalid obligations: \"  @\n";
 	    fprintf fmt "\t@@egrep '[0-9]+: Invalid.$$' simplify.log | wc -l @\n\n";
 	    fprintf fmt "do_simplify: simplify/%s_why.sxcheck@\n@\n" f;
-	    fprintf fmt "simplify/%%.sxcheck: simplify/%%.sx@\n";
+	    fprintf fmt "simplify/%s_why.sxcheck: simplify/%s_why.sx@\n" f f;
 	    fprintf fmt "\tcat simplify/caduceus_why.sx simplify/caduceus_spec_why.sx $< > $<.all@\n";
 	    fprintf fmt "\tSimplify $<.all@\n@\n";
 	    fprintf fmt "simplify/%s_why.sx: why/caduceus_spec.why why/%s.why@\n" f f;
