@@ -1,4 +1,7 @@
 
+version 1.50, March 26th, 2004
+==============================
+  o first release of Caduceus
   o added ``typing'' contraints in Simplify output (using predicates ISxxx)
   o new declaration "predicate" to define a predicate
   o new option --dir to output files into a given directory

@@ -152,9 +152,9 @@ coq-v7: $(VO7)
 coq-v8: $(VO7) $(VO8)
 
 # Why version
-VERSION=1.42
+VERSION=1.50
 # Caduceus version
-CVERSION=0.1
+CVERSION=0.50
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -386,12 +386,13 @@ FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why
 
-distrib export: source export-doc export-examples linux
+distrib export: source export-doc export-examples export-examples-c linux
 	make -C $(HOME)/www/why install
 
 source: doc/manual.ps export/$(NAME).tar.gz
-	cp CHANGES export/$(NAME).tar.gz $(FTP)
+	cp CHANGES CHANGES.caduceus export/$(NAME).tar.gz $(FTP)
 	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
+	echo "<#def cversion>$(CVERSION)</#def>" >> $(HOME)/www/why/version.prehtml
 
 export/$(NAME).tar.gz:
 	mkdir -p $(EXPORT)/bin
@@ -408,6 +409,13 @@ export-examples:
 	cp --parents $(EXFILES) $(WWW)
 	make -C $(WWW)/examples clean depend
 	echo "*** faire make all dans $(WWW)/examples ***"
+
+export-examples-c:
+	mkdir -p $(WWW)/caduceus/examples
+	cd examples-c; cp --parents */*.c $(WWW)/caduceus/examples
+	mkdir -p $(WWW)/caduceus/examples/bench
+	cp bench/c/good/*.c $(WWW)/caduceus/examples/bench
+	rm -f $(WWW)/caduceus/examples/bench/test.c
 
 export-doc: doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html
 	cp doc/manual.ps doc/manual.html $(WWW)/manual
