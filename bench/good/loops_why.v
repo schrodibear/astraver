@@ -2,7 +2,7 @@
 Require Why.
 Require Omega.
 
-(* Why obligation from file "good/loops.mlw", characters 96-174 *)
+(* Why obligation from file "good/loops.mlw", characters 156-167 *)
 Lemma loop1_po_1 : 
   (i: Z)
   (Pre6: `i <= 10`)
@@ -40,7 +40,7 @@ Save.
 
 
 
-(* Why obligation from file "good/loops.mlw", characters 362-430 *)
+(* Why obligation from file "good/loops.mlw", characters 414-425 *)
 Lemma loop2_po_1 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -84,7 +84,7 @@ Proof.
 Simpl; Intros; Omega.
 Save.
 
-(* Why obligation from file "good/loops.mlw", characters 459-487 *)
+(* Why obligation from file "good/loops.mlw", characters 487-487 *)
 Lemma loop2_po_4 : 
   (x: Z)
   (Pre4: `x <= 10`)

@@ -88,7 +88,7 @@ Proof.
 Intros; Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 279-326 *)
+(* Why obligation from file "good/recfun.mlw", characters 326-326 *)
 Lemma f2_po_3 : 
   (x: Z)
   (Pre8: `x >= 0`)
@@ -163,7 +163,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 439-486 *)
+(* Why obligation from file "good/recfun.mlw", characters 486-486 *)
 Lemma f3_po_4 : 
   (a: Z)
   (Pre8: `a >= 0`)
@@ -245,7 +245,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 619-676 *)
+(* Why obligation from file "good/recfun.mlw", characters 676-676 *)
 Lemma f4_po_4 : 
   (a: Z)
   (Pre8: `a >= 0`)

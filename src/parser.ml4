@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.82 2003-05-13 12:30:13 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.83 2003-06-18 14:07:50 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -130,6 +130,8 @@ let conj = function
 
 let without_annot loc d = 
   { pdesc = d; pre = []; oblig = []; post = None; ploc = loc }
+
+let no_loc (_,e) = (e,e)
 
 let rec app f = function
   | [] -> 
@@ -360,17 +362,17 @@ EXTEND
   ;
   prog1:
   [ [ x = prog2; "||"; y = prog1  -> 
-       let ptrue = without_annot loc (Sconst (ConstBool true)) in
+       let ptrue = without_annot (no_loc loc) (Sconst (ConstBool true)) in
        without_annot loc (Sif (x, ptrue, y))
     | x = prog2; "&&"; y = prog1 -> 
-       let pf = without_annot loc (Sconst (ConstBool false)) in
+       let pf = without_annot (no_loc loc) (Sconst (ConstBool false)) in
        without_annot loc (Sif (x, y, pf))
     | x = prog2 -> x ] ]
   ;
   prog2:
   [ [ LIDENT "not"; x = prog3 -> 
-       let pf = without_annot loc (Sconst (ConstBool false)) in
-       let pt = without_annot loc (Sconst (ConstBool true)) in
+       let pf = without_annot (no_loc loc) (Sconst (ConstBool false)) in
+       let pt = without_annot (no_loc loc) (Sconst (ConstBool true)) in
        without_annot loc (Sif (x, pf, pt))
     | x = prog3 -> x ] ]
   ;
@@ -418,11 +420,12 @@ EXTEND
     | "if"; e1 = program; "then"; e2 = program; "else"; e3 = program ->
 	without_annot loc (Sif (e1,e2,e3))
     | "if"; e1 = program; "then"; e2 = program ->
-	without_annot loc (Sif (e1,e2,without_annot loc (Sconst ConstUnit)))
+	without_annot loc (Sif (e1, e2,
+				without_annot (no_loc loc) (Sconst ConstUnit)))
     | "while"; b = program; "do"; 
 	"{"; inv = OPT invariant; LIDENT "variant"; wf = variant; "}";
-	bl = block; "done" ->
-	without_annot loc (Swhile (b, inv, wf, without_annot loc (Sseq bl)))
+	(bl_loc,bl) = block; "done" ->
+	without_annot loc (Swhile (b, inv, wf, without_annot bl_loc (Sseq bl)))
 (*i
     | "for"; i = ident; "="; v1 = program; "to"; v2 = program;
 	"do"; "{"; inv = invariant; "}"; bl = block; "done" -> 
@@ -432,7 +435,7 @@ i*)
 	without_annot loc (Sletref (v, p1, p2))
     | "let"; v = ident; "="; p1 = program; "in"; p2 = program ->
 	without_annot loc (Sletin (v, p1, p2))
-    | "begin"; b = block; "end" ->
+    | "begin"; (_,b) = block; "end" ->
 	without_annot loc (Sseq b)
     | "fun"; bl = binders; "->"; p = program ->
 	without_annot loc (Slam (bl,p))
@@ -470,7 +473,7 @@ i*)
   [ [ ":"; t = type_v -> t ] ]
   ;
   block:
-  [ [ b = any_block -> check_block loc b; b ] ]
+  [ [ b = any_block -> check_block loc b; loc, b ] ]
   ;
   any_block:
   [ [ s = block_statement; ";"; b = any_block -> s :: b

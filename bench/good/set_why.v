@@ -23,7 +23,7 @@ Save.
   (sig_2 Z bool [x0: Z][result: bool](`x0 = v` /\
    ((if result then `x0 <> 0` else `x0 = 0`)))).
 
-(* Why obligation from file "good/set.mlw", characters 372-465 *)
+(* Why obligation from file "good/set.mlw", characters 446-457 *)
 Lemma p2_po_1 : 
   (y: Z)
   (Pre6: `y >= 0`)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.19 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.20 2003-06-18 14:07:50 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -62,3 +62,7 @@ val coq_preamble : string
 (*s Files given on the command line *)
 
 val files : string list
+
+(*s GUI? *)
+
+val gui : bool ref

@@ -37,7 +37,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/return.mlw", characters 282-317 *)
+(* Why obligation from file "good/return.mlw", characters 317-317 *)
 Lemma p_po_3 : 
   (t: (array Z))
   (Pre9: `(array_length t) = N`)

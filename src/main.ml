@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.57 2003-03-26 07:10:17 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.58 2003-06-18 14:07:50 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -31,7 +31,10 @@ open Util
 
 (*s Prover dependent functions. *)
 
+let typed_progs = ref [] (* for the GUI *)
+
 let reset () =
+  typed_progs := [];
   Vcg.logs := []; 
   match prover with
   | Pvs -> Pvs.reset ()
@@ -91,6 +94,7 @@ let interp_program id p =
 
   if_debug eprintf "* weakest preconditions@.";
   let p,wp = Wp.wp p in
+  if !Options.gui then typed_progs := p :: !typed_progs;
   print_if_debug print_wp wp;
   print_if_debug print_prog p;
   if wp_only then raise Exit;
@@ -201,12 +205,5 @@ let rec explain_exception fmt = function
   | e ->
       fprintf fmt "Anomaly: %s" (Printexc.to_string e); raise e
 
-let _ =
-  try
-    main ()
-  with e ->
-    explain_exception err_formatter e;
-    pp_print_newline err_formatter ();
-    exit 1
 
 

@@ -46,7 +46,7 @@ Lemma quick_rec_po_2 :
           (sub_permut l0 r0 t1 t0))
   `0 <= l0` /\ `p - 1 < (array_length t1)`.
 Proof.
-Intuition (SameLength t1 t0; Omega).
+  Intuition (SameLength t1 t0; Omega).
 Save.
 
 (* Why obligation from file "quicksort.mlw", characters 1523-1762 *)

@@ -51,7 +51,7 @@ Save.
 
 
 
-(* Why obligation from file "good/exns.mlw", characters 1534-1557 *)
+(* Why obligation from file "good/exns.mlw", characters 1557-1557 *)
 Lemma p14_po_1 : 
   (x: Z)
   (Test1: `x <> 1`)

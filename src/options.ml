@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.20 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.21 2003-06-18 14:07:50 filliatr Exp $ i*)
 
 open Format
 
@@ -185,3 +185,6 @@ let if_debug f x = if debug then f x
 let if_debug_2 f x y = if debug then f x y
 let if_debug_3 f x y z = if debug then f x y z
 
+(* GUI *)
+
+let gui = ref false

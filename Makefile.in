@@ -31,9 +31,9 @@ OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
-INCLUDES = -I src
-BFLAGS   = -g $(INCLUDES) -I +camlp4
-OFLAGS   = $(INCLUDES) -I +camlp4
+INCLUDES = -I src -I intf
+BFLAGS   = -g $(INCLUDES) -I +camlp4 -I +lablgtk2
+OFLAGS   = $(INCLUDES) -I +camlp4 -I +lablgtk2
 
 CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
 	   src/effect.cmo src/misc.cmo src/report.cmo		\
@@ -64,7 +64,8 @@ PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/parser.ml \
-	    src/clexer.ml src/cparser.ml src/cparser.mli
+	    src/clexer.ml src/cparser.ml src/cparser.mli \
+	    intf/hilight.ml
 
 # main targets
 ##############
@@ -78,16 +79,26 @@ opt: bin/why.opt
 
 byte : bin/why.byte
 
-bin/why.opt: $(CMX)
+bin/why.opt: $(CMX) src/why.cmx 
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
 	strip $@
 
-bin/why.byte: $(CMO)
+bin/why.byte: $(CMO) src/why.cmo
 	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
-bin/why.static: $(CMX)
+bin/why.static: $(CMX) src/why.cmx 
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
 	strip $@
+
+GCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
+GCMX = $(GCMO:.cmo=.cmx)
+
+bin/gwhy.opt: $(GCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa lablgtk.cmxa $^
+	strip $@
+
+bin/gwhy.byte: $(GCMO)
+	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
@@ -332,7 +343,7 @@ coq-clean::
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
+	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli intf/*.ml intf/*.mli > .depend
 	if test @COQ@ == yes; then \
 	  $(COQDEP) $(COQINCLUDES) lib/coq/*.v >> .depend; fi
 
