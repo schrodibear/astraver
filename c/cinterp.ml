@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.126 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.127 2005-01-10 13:46:54 hubert Exp $ i*)
 
 
 open Format
@@ -854,7 +854,7 @@ let strong_invariant =
 
 let interp_strong_invariants () =
   Hashtbl.fold
-    (fun id (p,e,_) acc -> 
+    (fun id (p,e) acc -> 
        let args = 
 	 HeapVarSet.fold 
 	   (fun x acc -> (x.var_unique_name, Ceffect.heap_var_type x)::acc) 
@@ -862,10 +862,10 @@ let interp_strong_invariants () =
        in
        if args = [] then acc else
        (Predicate(false,id,args,interp_predicate None "" p))::acc)
-    Ceffect.strong_invariants []
+    Ceffect.strong_invariants_2 []
     
 
-let strong_invariant_name id p e =
+let strong_invariant_name id e =
   LPred(id, 
 	(HeapVarSet.fold 
 	   (fun x acc -> LVar(x.var_unique_name)::acc) 
@@ -876,10 +876,10 @@ let strong_invariant_name id p e =
 let strong_invariants_for hvs =
   (** eprintf "strong_invariants: %a @." print_hvs hvs; **)
   Hashtbl.fold
-    (fun id (p,e1,e2) acc -> 
+    (fun id (e1,e2) acc -> 
        (** eprintf "  e = { %a }@." print_hvs e; **)
        if HeapVarSet.subset e2 hvs then 
-	 make_and (strong_invariant_name id p e1) acc
+	 make_and (strong_invariant_name id e1) acc
        else acc) 
     Ceffect.strong_invariants LTrue
 

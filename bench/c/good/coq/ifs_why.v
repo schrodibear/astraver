@@ -3,26 +3,26 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/ifs.why", characters 430-1137 *)
+(* Why obligation from file "why/ifs.why", characters 458-1165 *)
 Lemma V4A_impl_po_1 : 
   forall (Parametre: pointer),
   forall (Ch_Pn: pointer),
   forall (SPMEP: pointer),
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
-  forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
-                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
+  forall (Pre35: (valid alloc Parametre) /\ (valid_int_array Ch_Pn alloc) /\
+                 (valid_int_array SPMEP alloc) /\
+                 (separation_int_array_int_array SPMEP Ch_Pn)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
   (valid alloc (shift Ch_Pn 0)).
 Proof.
-unfold valid_Ch_Pn .
+unfold valid_int_array .
 intuition.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 430-1137 *)
+(* Why obligation from file "why/ifs.why", characters 458-1165 *)
 Lemma V4A_impl_po_2 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -31,9 +31,9 @@ Lemma V4A_impl_po_2 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
-                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
+  forall (Pre35: (valid alloc Parametre) /\ (valid_int_array Ch_Pn alloc) /\
+                 (valid_int_array SPMEP alloc) /\
+                 (separation_int_array_int_array SPMEP Ch_Pn)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -44,7 +44,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/ifs.why", characters 430-1137 *)
+(* Why obligation from file "why/ifs.why", characters 458-1165 *)
 Lemma V4A_impl_po_3 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -53,9 +53,9 @@ Lemma V4A_impl_po_3 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
-                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
+  forall (Pre35: (valid alloc Parametre) /\ (valid_int_array Ch_Pn alloc) /\
+                 (valid_int_array SPMEP alloc) /\
+                 (separation_int_array_int_array SPMEP Ch_Pn)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -66,11 +66,11 @@ Lemma V4A_impl_po_3 :
   ((acc intP (shift Ch_Pn 0)) = 0 /\ (acc intP (shift Pn_Bac 0)) = 0 ->
    (valid alloc (shift SPMEP 0)) /\ (valid alloc (shift SPMEP 0))).
 Proof.
-unfold valid_SPMEP.
+unfold valid_int_array.
 intuition.
 Save.
 
-(* Why obligation from file "why/ifs.why", characters 403-1138 *)
+(* Why obligation from file "why/ifs.why", characters 431-1166 *)
 Lemma V4A_impl_po_4 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -79,9 +79,9 @@ Lemma V4A_impl_po_4 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
-                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
+  forall (Pre35: (valid alloc Parametre) /\ (valid_int_array Ch_Pn alloc) /\
+                 (valid_int_array SPMEP alloc) /\
+                 (separation_int_array_int_array SPMEP Ch_Pn)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),
@@ -108,7 +108,7 @@ Proof.
 intuition; subst; auto.
 Admitted.
 
-(* Why obligation from file "why/ifs.why", characters 403-1138 *)
+(* Why obligation from file "why/ifs.why", characters 431-1166 *)
 Lemma V4A_impl_po_5 : 
   forall (Parametre: pointer),
   forall (Pn_Bac: pointer),
@@ -118,9 +118,9 @@ Lemma V4A_impl_po_5 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre35: (valid alloc Parametre) /\
-                 (separation_SPMEP_Ch_Pn SPMEP Ch_Pn) /\
-                 (valid_Ch_Pn Ch_Pn alloc) /\ (valid_SPMEP SPMEP alloc)),
+  forall (Pre35: (valid alloc Parametre) /\ (valid_int_array Ch_Pn alloc) /\
+                 (valid_int_array SPMEP alloc) /\
+                 (separation_int_array_int_array SPMEP Ch_Pn)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
   forall (Post4: caduceus_19 = (shift (acc VC Parametre) 0)),

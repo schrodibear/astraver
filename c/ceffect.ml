@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.73 2005-01-06 14:27:55 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.74 2005-01-10 13:46:54 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -303,7 +303,17 @@ let strong_invariants = Hashtbl.create 97
 let add_strong_invariant id p vars =
   if p <> NPtrue then
   let ef = predicate p in
-  Hashtbl.add strong_invariants id (p, ef, vars)
+  Hashtbl.add strong_invariants id (ef,vars)
+
+let strong_invariants_2 = Hashtbl.create 97
+
+let add_strong_invariant_2 id p =
+  if p <> NPtrue then
+  let ef = predicate p in
+  Hashtbl.add strong_invariants_2 id (p, ef)
+
+let mem_strong_invariant_2 id =
+  Hashtbl.mem strong_invariants_2 id
 
 let intersect_only_alloc e1 e2 =
   HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
@@ -317,7 +327,7 @@ let weak_invariants_for hvs =
 
 let strong_invariants_for hvs =
   Hashtbl.fold
-    (fun _ (_,_,e) acc -> 
+    (fun _ (_,e) acc -> 
        if HeapVarSet.subset e hvs then union e acc
        else acc) 
     strong_invariants empty
@@ -476,18 +486,47 @@ let print_effects fmt l =
 
 (* first pass: declare invariants and computes effects for logics *)
 let global_var = ref []
+
+let rec ctype ty =
+  ctype_node ty.Ctypes.ctype_node
+
+and ctype_node = function
+  | Tvoid -> sprintf "void"
+  | Tint _ -> sprintf "int"
+  | Tfloat _ -> sprintf "float"
+  | Ctypes.Tvar s -> sprintf "%s" s
+  | Tarray (ty, _) -> sprintf "%s_array" (ctype ty)
+  | Tpointer ty -> sprintf "%s*" (ctype ty)
+  | Tstruct s -> sprintf "struct_%s" s;
+  | Tunion s -> sprintf "union_%s" s
+  | Tenum s -> sprintf "enum_%s" s
+  | Tfun _ -> assert false
 		   
 let invariant_for_global =
   fun loc v ->
     let form =
-      List.fold_left (fun p x -> 
-			("separation_"^v.var_name^"_"^x.var_name,
-			 (Cnorm.separation loc v x),
-			 HeapVarSet.add v (HeapVarSet.singleton x))::p) 
+      List.fold_left (fun p x ->
+			let name ="separation_"^(ctype v.var_type)
+				  ^"_"^(ctype x.var_type) in
+			let pre = (Cnorm.separation loc v x) in
+			  (if not (mem_strong_invariant_2 name) 
+			   then
+			     add_strong_invariant_2 name pre);
+			  (name, 
+			   (pre,HeapVarSet.add v (HeapVarSet.singleton x)))::p)
+	(*		  ("separation_"^v.var_name^"_"^x.var_name,
+			  (Cnorm.separation loc v x),
+			  HeapVarSet.add v (HeapVarSet.singleton x))::p)*) 
 	[] !global_var in 
     global_var := v::!global_var;
-    ("separation_intern_"^v.var_name, (Cnorm.separation_intern loc v),
-     HeapVarSet.singleton v)::form
+    let name = "separation_intern_"^(ctype v.var_type) in 
+    let p = (Cnorm.separation_intern loc v) in
+      (if not (mem_strong_invariant_2 name) 
+       then
+	 add_strong_invariant_2 name p);
+    (name, (p ,HeapVarSet.singleton v))::form
+(*    ("separation_intern_"^v.var_name, (Cnorm.separation_intern loc v),
+     HeapVarSet.singleton v)::form*)
     
 (*  let allocs = ref (fun n x -> (*NPtrue*) []) in
   fun loc v t ->
@@ -687,12 +726,15 @@ let decl d =
 		let t = { nterm_node = NTvar v; 
 			  nterm_loc = Loc.dummy;
 			  nterm_type = ty } in
-		List.iter (fun (x,y,z) -> 
-			     (*(eprintf "%s : %a @." x Cprint.npredicate y);*)
-			     add_strong_invariant x y z) 
+		List.iter (fun (x,(p,y)) -> add_strong_invariant x p y) 
 		  (invariant_for_global d.loc v);
-		add_strong_invariant ("valid_" ^ v.var_name) 
-		  (Cnorm.valid_for_type d.loc v t) 
+		let name ="valid_" ^ (ctype v.var_type) in
+		let pre =(Cnorm.valid_for_type d.loc v t) in 
+		  (if not (mem_strong_invariant_2 name) 
+		   then
+		     add_strong_invariant_2 name pre);
+		add_strong_invariant name 
+		  pre
 		  (HeapVarSet.singleton v)
 	    | _ -> ()
 	end;
@@ -703,7 +745,8 @@ let decl d =
 	  let t = {nterm_node = NTvar v; 
 		   nterm_loc = Loc.dummy;
 		   nterm_type = ty } in
-	  let (pre,_) = invariant_for_constant d.loc ty t init in 
+	  let (pre,_) = invariant_for_constant d.loc ty t init in
+	  add_strong_invariant_2 id pre ;
 	  add_strong_invariant id pre (HeapVarSet.singleton v)
 	end;
     | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
