@@ -69,7 +69,7 @@ Lemma partition_po_2 :
   (Post2: result0 = `l + 1`)
   (result1: Z)
   (Post3: result1 = r)
-  (well_founded ? (Zwf `(-(N - 2))`)).
+  (well_founded ? (Zwf `(-N) - 2`)).
 Proof.
 Auto with *.
 Save.
@@ -641,7 +641,20 @@ Lemma partition_po_16 :
   (Zwf `0` j2 j1).
 Proof.
 Intuition.
-ICI.
+Apply array_ge_cons. Intros j Hj. Omega.
+Unfold Zwf; Omega.
+Discriminate H21.
+Discriminate H21.
+Discriminate H21.
+Apply array_ge_cons. Intros j Hj. 
+Elim (Z_le_gt_dec `j1+1` j); Intro.
+Elim H19; Intros. Apply H17; Omega.
+Cut `j = j1`; [ Intro | Omega ].
+Rewrite H17; Omega.
+Unfold Zwf; Omega.
+Discriminate H21.
+Discriminate H21.
+Discriminate H21.
 Save.
 
 Lemma partition_po_17 : 
@@ -687,8 +700,9 @@ Lemma partition_po_17 :
   (Invj: `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result) /\
          (Zwf `0` j2 j1))
   (Zwf `0` j2 Variant5).
-Proof. (* partition_po_17 *)
-(* FILL PROOF HERE *)
+Proof.
+Intros.
+Rewrite Pre8; Tauto.
 Save.
 
 Lemma partition_po_18 : 
@@ -734,8 +748,8 @@ Lemma partition_po_18 :
   (Invj: `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result) /\
          (Zwf `0` j2 j1))
   `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result).
-Proof. (* partition_po_18 *)
-(* FILL PROOF HERE *)
+Proof.
+Tauto. 
 Save.
 
 Lemma partition_po_19 : 
@@ -780,8 +794,8 @@ Lemma partition_po_19 :
   `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
   (`(access t0 j1) >= result` /\ `i1 >= j1` \/ `(access t0 j1) < result` /\
   false = false).
-Proof. (* partition_po_19 *)
-(* FILL PROOF HERE *)
+Proof.
+Tauto.
 Save.
 
 Lemma partition_po_20 : 
@@ -813,8 +827,8 @@ Lemma partition_po_20 :
          (`(access t0 i1) <= result` /\ `i1 >= j0` \/
          `(access t0 i1) > result` /\ false = false))
   `l <= j0` /\ `j0 <= j0` /\ (array_ge t0 `j0 + 1` r result).
-Proof. (* partition_po_20 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition.
 Save.
 
 Lemma partition_po_21 : 
@@ -853,8 +867,8 @@ Lemma partition_po_21 :
   (Bool6: (if result5 then `i1 < j1` else `i1 >= j1`))
   (Test11: `i1 < j1`)
   `0 <= i1` /\ `i1 < N` /\ (`0 <= j1` /\ `j1 < N`).
-Proof. (* partition_po_21 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition.
 Save.
 
 Lemma partition_po_22 : 
@@ -901,9 +915,38 @@ Lemma partition_po_22 :
   `l + 1 <= i2` /\ `i2 <= r` /\ `j2 <= r` /\
   (array_le t1 `l + 1` `i2 - 1` result) /\ (array_ge t1 `j2 + 1` r result) /\
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l) /\
-  (Zwf `(-(N - 2))` `j2 - i2` `j0 - i0`).
-Proof. (* partition_po_22 *)
-(* FILL PROOF HERE *)
+  (Zwf `(-N) - 2` `j2 - i2` `j0 - i0`).
+Proof.
+Intros.
+Decompose [and or] Invj; Clear Invj. 
+Absurd `i1 < j1`; Omega.
+Repeat (Apply conj); Try Omega.
+Replace `i2-1` with `(i1-1)+1`.
+Apply array_le_right_extension.
+Decompose [and] Invi. Apply array_le_exchange with t:=t0 x:=i1 y:=j1.
+Omega. Omega. 
+Assumption. Omega. Apply exchange_sym; Assumption.
+Ring `(i1-1+1)`. Elim Post25; Intros. Rewrite H6.
+Omega.
+Omega.
+(* (array_ge t1 `(Zpred j1)+1` r (#t[l])) *)
+Replace `j2+1` with `(j1+1)-1`.
+Apply array_ge_left_extension.
+Apply array_ge_exchange with t:=t0 x:=i1 y:=j1.
+Omega. Omega. 
+Assumption. Omega. Apply exchange_sym; Assumption.
+Ring `(j1+1-1)`. Elim Post25; Intros. Rewrite H7.
+Omega.
+Omega.
+(* (sub_permut l r t1 t) *)
+Apply sub_permut_trans with t':=t0.
+Apply exchange_is_sub_permut with i:=i1 j:=j1; [Omega | Omega | Assumption].
+Decompose [and] Inv; Assumption.
+(* (access t1 l) = (access t l) *)
+Decompose [and] Inv. Rewrite <- H11.
+Elim Post25; Intros.
+Apply H15; Omega.
+Unfold Zwf; Omega.
 Save.
 
 Lemma partition_po_23 : 
@@ -944,10 +987,12 @@ Lemma partition_po_23 :
   `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
   (array_le t0 `l + 1` `i1 - 1` result) /\ (array_ge t0 `j1 + 1` r result) /\
   (sub_permut l r t0 t) /\ (access t0 l) = (access t l) /\
-  (Zwf `(-(N - 2))` `j1 - i1` `j0 - i0`).
-Proof. (* partition_po_23 *)
-(* FILL PROOF HERE *)
+  (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`).
+Proof.
+Intros.
+Repeat (Apply conj); Tauto Orelse Unfold Zwf; Omega.
 Save.
+
 
 Lemma partition_po_24 : 
   (l: Z)
@@ -979,11 +1024,10 @@ Lemma partition_po_24 :
   (Inv: `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
         (array_le t1 `l + 1` `i1 - 1` result) /\
         (array_ge t1 `j1 + 1` r result) /\ (sub_permut l r t1 t) /\
-        (access t1 l) = (access t l) /\
-        (Zwf `(-(N - 2))` `j1 - i1` `j0 - i0`))
-  (Zwf `(-(N - 2))` `j1 - i1` Variant1).
-Proof. (* partition_po_24 *)
-(* FILL PROOF HERE *)
+        (access t1 l) = (access t l) /\ (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`))
+  (Zwf `(-N) - 2` `j1 - i1` Variant1).
+Proof. 
+Intros; Rewrite Pre10; Tauto.
 Save.
 
 Lemma partition_po_25 : 
@@ -1016,13 +1060,12 @@ Lemma partition_po_25 :
   (Inv: `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
         (array_le t1 `l + 1` `i1 - 1` result) /\
         (array_ge t1 `j1 + 1` r result) /\ (sub_permut l r t1 t) /\
-        (access t1 l) = (access t l) /\
-        (Zwf `(-(N - 2))` `j1 - i1` `j0 - i0`))
+        (access t1 l) = (access t l) /\ (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`))
   `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
   (array_le t1 `l + 1` `i1 - 1` result) /\ (array_ge t1 `j1 + 1` r result) /\
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l).
-Proof. (* partition_po_25 *)
-(* FILL PROOF HERE *)
+Proof.
+Tauto.
 Save.
 
 Lemma partition_po_26 : 
@@ -1052,8 +1095,8 @@ Lemma partition_po_26 :
   `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
   (array_le t0 `l + 1` `i0 - 1` result) /\ (array_ge t0 `j0 + 1` r result) /\
   (sub_permut l r t0 t) /\ (access t0 l) = (access t l) /\ `i0 >= j0`.
-Proof. (* partition_po_26 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition.
 Save.
 
 Lemma partition_po_27 : 
@@ -1072,8 +1115,10 @@ Lemma partition_po_27 :
   (array_le t `l + 1` `result0 - 1` result) /\
   (array_ge t `result1 + 1` r result) /\ (sub_permut l r t t) /\
   (access t l) = (access t l).
-Proof. (* partition_po_27 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition.
+Apply array_le_empty; Omega.
+Apply array_ge_empty; Omega.
 Save.
 
 Lemma partition_po_28 : 
@@ -1096,8 +1141,8 @@ Lemma partition_po_28 :
         (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
         (access t0 l) = (access t l) /\ `i0 >= j0`)
   `0 <= i0` /\ `i0 < N`.
-Proof. (* partition_po_28 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition.
 Save.
 
 Lemma partition_po_29 : 
@@ -1124,8 +1169,8 @@ Lemma partition_po_29 :
            else `(access t0 i0) >= result`))
   (Test14: `(access t0 i0) < result`)
   `0 <= l` /\ `l < N` /\ (`0 <= i0` /\ `i0 < N`).
-Proof. (* partition_po_29 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition.
 Save.
 
 Lemma partition_po_30 : 
@@ -1154,8 +1199,45 @@ Lemma partition_po_30 :
   (t1: (array N Z))
   (Post34: (exchange t1 t0 l i0))
   `l <= i0` /\ `i0 <= r` /\ (partition_p t1 l r i0) /\ (sub_permut l r t1 t).
-Proof. (* partition_po_30 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition; Clear result3 Bool7.
+Apply piv.
+Omega.
+Omega.
+Apply array_le_cons.
+Intros i Hi. Elim (Z_le_lt_eq_dec l i); Intros.
+(* case l < i *)
+Elim Post34; Intros.
+Elim H7; Intros.
+Rewrite H15. 
+Rewrite (H16 i). Rewrite H10. Rewrite <- Post1.
+Apply H17; Omega.
+Omega.
+Omega.
+Omega.
+(* case l = i *)
+Elim Post34; Intros.
+Rewrite <- b. Rewrite H14. Rewrite H15.
+Rewrite H10.
+Omega.
+Omega.
+(* array_ge *)
+Apply array_ge_cons.
+Intros j Hj.
+Elim Post34; Intros. Rewrite H15.
+Rewrite H10.
+Rewrite (H16 j).
+Elim H8; Intros. Rewrite <- Post1. Apply H17; Omega.
+Omega.
+Omega.
+Omega.
+(* (sub_permut l r t1 t) *)
+Apply sub_permut_trans with t':=t0.
+Apply exchange_is_sub_permut with i:=l j:=i0.
+Omega.
+Omega.
+Assumption.
+Assumption.
 Save.
 
 Lemma partition_po_31 : 
@@ -1182,8 +1264,8 @@ Lemma partition_po_31 :
            else `(access t0 i0) >= result`))
   (Test13: `(access t0 i0) >= result`)
   `0 <= l` /\ `l < N` /\ (`0 <= i0 - 1` /\ `i0 - 1 < N`).
-Proof. (* partition_po_31 *)
-(* FILL PROOF HERE *)
+Proof. 
+Intuition.
 Save.
 
 Lemma partition_po_32 : 
@@ -1213,7 +1295,53 @@ Lemma partition_po_32 :
   (Post30: (exchange t1 t0 l `i0 - 1`))
   `l <= i0 - 1` /\ `i0 - 1 <= r` /\ (partition_p t1 l r `i0 - 1`) /\
   (sub_permut l r t1 t).
-Proof. (* partition_po_32 *)
-(* FILL PROOF HERE *)
+Proof.
+Intuition; Clear result3 Bool7.
+Apply piv.
+Omega.
+Omega.
+(* array_le *)
+Apply array_le_cons.
+Intros i Hi. 
+Elim (Z_le_lt_eq_dec l i); Intros.
+(* case l < i *)
+Elim Post30; Intros. Rewrite H15.
+Rewrite H10.
+Rewrite (H16 i). Elim H7; Intros. 
+Rewrite <- Post1. Apply H17; Omega.
+Omega.
+Omega.
+Omega.
+(* case l = i *)
+Rewrite <- b. 
+Elim Post30; Intros.
+Rewrite H15. Rewrite H10.
+Rewrite H14.
+Elim H7; Intros. 
+Rewrite <- Post1. Apply H17; Omega.
+Omega.
+(* array_ge *)
+Apply array_ge_cons.
+Intro j. Ring `i0-1+1`. Intro Hj. 
+Elim Post30; Intros.
+Rewrite H15. Rewrite (H16 j).
+Rewrite H10.
+Elim H8; Intros. 
+Elim (Z_le_lt_eq_dec i0 j); Intros.
+(* case i0 < j *)
+Rewrite <- Post1. Apply H17; Omega.
+(* case i0 = j *)
+Rewrite <- b. Omega.
+Omega.
+Omega.
+Omega.
+Omega.
+(* (sub_permut t1 t l r) *)
+Apply sub_permut_trans with t':=t0.
+Apply exchange_is_sub_permut with i:=l j:=(Zpred i0).
+Omega.
+Unfold Zpred; Omega.
+Assumption.
+Assumption.
 Save.
 

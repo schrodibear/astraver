@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.33 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.34 2002-04-17 08:48:59 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -56,6 +56,7 @@ let ast4 = gec "ast4"
 let ast5 = gec "ast5"
 let ast6 = gec "ast6"
 let ast7 = gec "ast7"
+let recfun = gec "recfun"
 let arg = gec "arg"
 let block = gec "block"
 let block_statement = gec "block_statement"
@@ -121,6 +122,8 @@ let mk_prog loc p pre post =
 	     post = conj (p.info.post, post); 
 	     loc = loc } }
 
+let rec_name = function Rec (x,_,_,_,_) -> x | _ -> assert false
+
 EXTEND 
 
   ident:
@@ -149,7 +152,7 @@ EXTEND
     | a = term1 -> a ] ]
   ;
   term1:
-  [ [ "-"; a = term -> Tapp (Ident.t_neg, [a])
+  [ [ "-"; a = term1 -> Tapp (Ident.t_neg, [a])
     | c = constant -> Tconst c
     | x = qualid_ident -> Tvar x
     | x = qualid_ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
@@ -382,14 +385,10 @@ i*)
 	Seq b
     | "fun"; bl = binders; "->"; p = program ->
 	Lam (bl,p)
-    | "let"; "rec"; f = ident; bl = binders; ":"; v = type_v;
-      "{"; LIDENT "variant"; var = variant; "}"; "="; p = program ->
-	Rec (f,bl,v,var,p)
-    | "let"; "rec"; f = ident; bl = binders; ":"; v = type_v;
-      "{"; LIDENT "variant"; var = variant; "}"; "="; p = program;
-      "in"; p2 = program ->
-	LetIn (f, without_annot loc (Rec (f,bl,v,var,p)), p2)
-	  
+    | "let"; "rec"; p = recfun -> 
+        p
+    | "let"; "rec"; p = recfun; "in"; p2 = program ->
+	LetIn (rec_name p, without_annot loc p, p2)
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 
 	  | [] -> 
@@ -399,6 +398,11 @@ i*)
           | _  -> 
 	      app p args
     ] ]
+  ;
+  recfun:
+  [ [ f = ident; bl = binders; ":"; v = type_v;
+      "{"; LIDENT "variant"; var = variant; "}"; "="; p = program ->
+	Rec (f,bl,v,var,p) ] ]
   ;
   arg:
   [ [ "'"; t = type_v -> Type t
@@ -435,6 +439,8 @@ i*)
   decl:
   [ [ "let"; id = ident; "="; p = program -> 
 	Program (id, p)
+    | "let"; "rec"; p = recfun -> 
+	Program (rec_name p, without_annot loc p)
     | "external"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
 	External (loc, ids, v)
     | "parameter"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.36 2002-04-15 14:09:24 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.37 2002-04-17 08:48:59 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -14,6 +14,14 @@ open Effect
 open Monad
 
 let make_info env k = { env = env; label = label_name (); kappa = k }
+
+(*s Interpretations of recursive functions are stored in the following
+    table. *)
+
+let rec_table = Hashtbl.create 97
+let add_rec = Hashtbl.add rec_table
+let find_rec = Hashtbl.find rec_table
+let is_rec = Hashtbl.mem rec_table
 
 (*s Translation of imperative programs into functional ones.
     [ren] is the current renamings of variables,
@@ -29,7 +37,9 @@ and trad_desc info d ren = match d with
 
   | Var id ->
       assert (not (is_reference info.env id));
-      if is_local info.env id then
+      if is_rec id then
+	find_rec id ren
+      else if is_local info.env id then
 	CC_var id
       else
 	CC_term (Tvar id)
@@ -89,7 +99,7 @@ and trad_desc info d ren = match d with
 	   Monad.compose e1.info (trad e1)
 	     (fun v1 -> 
 		Monad.apply infoapp 
-		  (fun _ -> CC_app (CC_var v1, [CC_var v2]))
+		  (fun _ -> CC_app (CC_var v1, CC_var v2))
 		  (fun v -> Monad.unit info (Tvar v))))
 	ren
 
@@ -147,19 +157,19 @@ and trad_desc info d ren = match d with
 	ren
 
   | Rec (f, bl, v, var, e) -> 
-      failwith "Mlize.trad: Rec"
-(*i***
-  | LetRec (f,bl,v,var,e) ->
-      let c = match tt with Arrow(_,c) -> c | _ -> assert false in
-      let (_,ef,_,_) = decomp_kappa c in
-      let bl' = trad_binders ren env bl in
-      let env' = traverse_binders env bl in
+      let bl',env' = trad_binders ren info.env bl in
       let ren' = initial_renaming env' in
-      let (phi0,var') = find_recursion f e.info.env in
-      let te = trad ren' e in
-      let t = make_letrec ren' env' (phi0,var') f bl' (te,e.info.kappa) c in
-      CC_lam (bl', t)
-****i*)
+      let pinfo = 
+	let pkappa = { e.info.kappa with c_effect = Effect.bottom } in
+	{ e.info with kappa = pkappa } 
+      in
+      cc_lam bl' 
+	(abstraction pinfo 
+	   (Monad.wfrec_with_binders bl' var e.info
+	      (fun w -> 
+		 add_rec f (fun ren -> cc_lam bl' (w ren));
+		 trad e))
+	   ren')
 
 and trad_binders ren env = function
   | [] -> 

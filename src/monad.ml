@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.26 2002-04-15 13:29:19 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.27 2002-04-17 08:48:59 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -260,18 +260,18 @@ let fresh id e ren =
     \begin{verbatim}
     (well_founded_induction
        A R ?::(well_founded A R)
-       [Phi:A] (x) Phi=phi(x) -> <info>
-       [Phi:A][w:(Phi0:A) Phi0<Phi -> (x) Phi=phi(x) -> <info>]
-         [x][eq:Phi=phi(x)][h:<pre info>]
+       [Phi:A] (bl) (x) Phi=phi(x) -> <info>
+       [Phi:A][w:(Phi0:A) Phi0<Phi -> (bl) (x) Phi=phi(x) -> <info>]
+         [bl][x][eq:Phi=phi(x)][h:<pre info>]
 
             <body where w <- (w phi(x1) ?::phi(x1)<Phi 
-                              x1 ?::phi(x1)=phi(x1) ?::<pre info>)>
+                              argl x1 ?::phi(x1)=phi(x1) ?::<pre info>)>
 
-       phi(x) x ?::phi(x)=phi(x) ?::<pre info>)
+       phi(x) bl x ?::phi(x)=phi(x) ?::<pre info>)
     \end{verbatim}
 *)
 
-let wfrec (phi,r) info f ren =
+let wfrec_with_binders bl (phi,r) info f ren =
   let env = info.env in
   let vphi = variant_name () in
   let wr = get_writes info.kappa.c_effect in
@@ -284,9 +284,12 @@ let wfrec (phi,r) info f ren =
   let a = TTpure PTint in (* TODO: type variant *)
   let w = wf_name () in
   let k = info'.kappa in
-  let tphi = trad_type_c ren env k in
+  let tphi = tt_arrow bl (trad_type_c ren env k) in
   let vphi0 = variant_name () in
-  let tphi0 = trad_type_c ren env (type_c_subst (subst_onev vphi vphi0) k) in
+  let tphi0 = 
+    let k0 = type_c_subst (subst_onev vphi vphi0) k in 
+    tt_arrow bl (trad_type_c ren env k0) 
+  in
   let input ren =
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
     let pl = (anonymous_pre false (equality phi phi)) :: info.kappa.c_pre in
@@ -301,15 +304,17 @@ let wfrec (phi,r) info f ren =
   let fw ren = 
     let tphi = apply_term ren env phi in
     let decphi = predicate_of_term (applist r [tphi; Tvar vphi]) in
-    CC_app (CC_var w, [CC_term tphi; CC_hole decphi] @ input ren) 
+    cc_applist (CC_var w) ([CC_term tphi; CC_hole decphi] @ input ren) 
   in
-  CC_app (CC_var well_founded_induction,
-	  [CC_term r;
-	   CC_hole (papplist (Pvar well_founded) [r]);
-	   CC_type (TTarrow ((vphi, CC_var_binder a), tphi));
-	   cc_lam 
-	     [vphi, CC_var_binder a; w, CC_var_binder tw]
-	     (let ren' = next ren (get_writes k.c_effect) in 
-	      abstraction info' (f fw) ren');
-	   CC_term (apply_term ren env phi)] @
-	  input ren)
+  cc_applist (CC_var well_founded_induction)
+    ([CC_term r;
+      CC_hole (papplist (Pvar well_founded) [r]);
+      CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
+      cc_lam 
+	([vphi, CC_var_binder a; w, CC_var_binder tw] @ bl)
+	(let ren' = next ren (get_writes k.c_effect) in 
+	 abstraction info' (f fw) ren');
+      CC_term (apply_term ren env phi)] @
+     input ren)
+
+let wfrec = wfrec_with_binders []

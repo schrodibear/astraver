@@ -14,7 +14,6 @@
 (* The recursive part of the quicksort algorithm:
    a recursive function to sort between [g] and [d] *)
 
-(***
 let quick_rec =
   let rec quick_rec (t:array N of int)(l,r:int) : unit 
   { variant r-l for Zwf(-1) } =
@@ -26,11 +25,6 @@ let quick_rec =
 	 (quick_rec t (p+1) r)
        end)
     { sorted_array(t, l, r) and sub_permut(l, r, t, t@) }
-***)
-
-external quick_rec : t:(array N of int) -> l:int -> r:int ->
-                     { 0 <= l and r < N as Pre } unit writes t
-                     { sorted_array(t, l, r) and sub_permut(l, r, t, t@) }
 
 (* At last, the main program, which is just a call to [quick_rec] *)
 

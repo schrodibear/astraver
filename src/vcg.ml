@@ -106,10 +106,10 @@ let vcg base t =
     | CC_lam (b, e) ->
 	let e' = traverse (traverse_binders ctx [b]) e in
 	CC_lam (b, e')
-    | CC_app (e, el) ->
-	let e' = traverse ctx e in
-	let el' = List.map (traverse ctx) el in
-	CC_app (e', el')
+    | CC_app (f, a) ->
+	let f' = traverse ctx f in
+	let a' = traverse ctx a in
+	CC_app (f', a')
     | CC_tuple el ->
 	let el' = List.map (traverse ctx) el in
 	CC_tuple el'

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.13 2002-03-27 14:15:11 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.14 2002-04-17 08:48:58 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -17,16 +17,14 @@ open Logic
  *)
 
 module Penv = struct
-  type 'a t = ('a Idmap.t)
-	    * ((Ident.t * 'a) list)
-	    * ((Ident.t * (Ident.t * variant)) list)
-  let empty = Idmap.empty, [], []
+  type 'a t = 'a Idmap.t * (Ident.t * 'a) list * Idset.t
+  let empty = Idmap.empty, [], Idset.empty
   let add id v (m,l,r) = (Idmap.add id v m, (id,v)::l, r)
   let find id (m,_,_) = Idmap.find id m
   let fold f (_,l,_) x0 = List.fold_right f l x0
   let iter f (_,l,_) = List.iter f l
-  let add_rec (id,var) (m,l,r) = (m,l,(id,var)::r)
-  let find_rec id (_,_,r) = List.assoc id r
+  let add_rec x (m,l,r) = (m, l, Idset.add x r)
+  let is_rec x (_,_,r) = Idset.mem x r
 end
 
 (* Local environments *)
@@ -153,13 +151,8 @@ let fold_all f lenv x0 =
   let x1 = Penv.fold f !env x0 in
   Penv.fold f lenv x1
 
-
-(* recursions *)
-
-let add_recursion = Penv.add_rec
-
-let find_recursion = Penv.find_rec
-
+let add_rec = Penv.add_rec
+let is_rec = Penv.is_rec
 
 
 (* Initial symbol table *)

@@ -4,8 +4,133 @@
 Require Why.
 Require Omega.
 Require ArrayPermut.
+Require Partition.
 Require Sorted.
-(* Require partition_why. *) Parameter N:Z.
+Require Quicksort.
+(* Require partition_why. *) 
+
+Parameter N:Z.
+
+Lemma quick_rec_po_1 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (well_founded ? (Zwf `(-1)`)).
+Proof.
+Auto with *.
+Save.
+
+Lemma quick_rec_po_2 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
+  (result: bool)
+  (Bool1: (if result then `l < r` else `l >= r`))
+  (Test2: `l < r`)
+  `0 <= l` /\ `l < r` /\ `r < N`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma quick_rec_po_3 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (t0: (array N Z))
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
+  (result: bool)
+  (Bool1: (if result then `l < r` else `l >= r`))
+  (Test2: `l < r`)
+  (t1: (array N Z))
+  (result0: Z)
+  (Post5: `l <= result0` /\ `result0 <= r` /\ (partition_p t1 l r result0) /\
+          (sub_permut l r t1 t0))
+  `0 <= l` /\ `result0 - 1 < N`.
+Proof.
+Intuition.
+Save.
+
+Lemma quick_rec_po_4 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (t0: (array N Z))
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
+  (result: bool)
+  (Bool1: (if result then `l < r` else `l >= r`))
+  (Test2: `l < r`)
+  (t1: (array N Z))
+  (result0: Z)
+  (Post5: `l <= result0` /\ `result0 <= r` /\ (partition_p t1 l r result0) /\
+          (sub_permut l r t1 t0))
+  (t2: (array N Z))
+  (Post8: (sorted_array t2 l `result0 - 1`) /\
+          (sub_permut l `result0 - 1` t2 t1))
+  `0 <= result0 + 1` /\ `r < N`.
+Proof.
+Intuition.
+Save.
+
+Lemma quick_rec_po_5 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (t0: (array N Z))
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
+  (result: bool)
+  (Bool1: (if result then `l < r` else `l >= r`))
+  (Test2: `l < r`)
+  (t1: (array N Z))
+  (result0: Z)
+  (Post5: `l <= result0` /\ `result0 <= r` /\ (partition_p t1 l r result0) /\
+          (sub_permut l r t1 t0))
+  (t2: (array N Z))
+  (Post8: (sorted_array t2 l `result0 - 1`) /\
+          (sub_permut l `result0 - 1` t2 t1))
+  (t3: (array N Z))
+  (Post10: (sorted_array t3 `result0 + 1` r) /\
+           (sub_permut `result0 + 1` r t3 t2))
+  (sorted_array t3 l r) /\ (sub_permut l r t3 t0).
+Proof.
+Intros.
+Apply quicksort_lemma with t1:=t1 t2:=t2 p:=result0;
+Intuition. 
+Save.
+
+Lemma quick_rec_po_6 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (t0: (array N Z))
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
+  (result: bool)
+  (Bool1: (if result then `l < r` else `l >= r`))
+  (Test1: `l >= r`)
+  (sorted_array t0 l r) /\ (sub_permut l r t0 t0).
+Proof.
+Intros; Apply quicksort_trivial; Intuition.
+Save.
 
 Lemma quicksort_po_1 : 
   `0 <= 0` /\ `N - 1 < N`.

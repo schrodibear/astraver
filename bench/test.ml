@@ -1,10 +1,8 @@
 
 (* Test program *)
 
-parameter x : int ref
+(* parameter x : int ref *)
 
-let p = (if !x = 0 then x := 1 else x := 2) { x <> 0 }
-
-
-
+let rec f (x:int) : unit { variant x } = 
+  { x >= 0 } if x > 0 then (f (x-1)) else void
 

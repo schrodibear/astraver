@@ -111,7 +111,6 @@ let fc3 = let a = ref 0 in let b = ref 0 in (f3 a b)
 
 (* recursive functions *)
 
-
 (* annotations *)
 let an1 = 0 { result = 0 }
 let an2 = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@ }

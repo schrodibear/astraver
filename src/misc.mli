@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.26 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.27 2002-04-17 08:48:59 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -113,6 +113,8 @@ val simplify : predicate -> predicate
 
 val cc_applist : 'a cc_term -> 'a cc_term list -> 'a cc_term
 val cc_lam : cc_binder list -> 'a cc_term -> 'a cc_term
+
+val tt_arrow : cc_binder list -> cc_type -> cc_type
 
 (*s functions over AST *)
 

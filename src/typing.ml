@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.41 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.42 2002-04-17 08:48:59 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -344,8 +344,10 @@ and typef_desc lab env loc = function
   | Var id as s ->
       let v = type_in_env env id in
       let ef = Effect.bottom in
-      let s = if is_pure_type_v v then Expression (Tvar id) else s in
-      s, (v,ef), []
+      if is_pure_type_v v && not (is_rec id env) then 
+	Expression (Tvar id), (v,ef), []
+      else 
+	s, (v,ef), [] 
 
   | Acc id ->
       let v = deref_type (type_in_env env id) in
@@ -529,12 +531,12 @@ and typef_desc lab env loc = function
       let rec state_rec c =
 	(* TODO: change label to "init" in [c] *)
 	let tf = make_arrow bl c in
-	let env'' = add_recursion (f,(phi0,tvar)) (add f tf env') in
+	let env'' = add_rec f (add f tf env') in
 	let t_e = typef initial_labels env'' e in
 	if t_e.info.kappa = c then
 	  t_e
       	else begin
-	  if_debug_3 eprintf "%a@\n@?" print_type_c t_e.info.kappa;
+	  if_debug_3 eprintf "  (rec => %a)@\n@?" print_type_c t_e.info.kappa;
 	  state_rec t_e.info.kappa
       	end
       in 
