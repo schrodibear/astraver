@@ -9,7 +9,7 @@
 \IfFileExists{pst-grad}{\RequirePackage{pst-grad}}{\RequirePackage{gradient}}
 
 \newgray{mygrey}{.5}
-\newrgbcolor{mellow}{.847 .72 .525}
+\newrgbcolor{beau}{.7 .9 .7}
 \newrgbcolor{orange}{1.00 0.65 0.00}
 
 \FontTitle{%
@@ -34,16 +34,16 @@
 \newcommand{\TPFrame}[1]{%
   \ifinColor
   \fi
-  \psframe[linestyle=dotted,dotsep=5pt,linewidth=2pt,linecolor=mellow]%
-  (-1,-.5)(11.6,8.3)
-  \pspolygon[linestyle=none,fillstyle=solid,%
-  fillcolor=mygrey](8.4,8.4)(9.6,8.4)(9,7.4)
-  \pspolygon[linestyle=none,fillstyle=solid,%
-  fillcolor=red](8.2,8.5)(9.4,8.5)(8.8,7.5)
-  \pspolygon[linestyle=none,fillstyle=solid,%
-  fillcolor=mygrey](1.4,-1.1)(2.6,-1.1)(2,-.1)
-  \pspolygon[linestyle=none,fillstyle=solid,%
-  fillcolor=red](1.1,-.9)(2.3,-.9)(1.7,.1)
+  \psframe[linestyle=dotted,dotsep=8pt,linewidth=6pt,linecolor=beau]%
+  (-1,-0.9)(11.5,8.5)
+%  \pspolygon[linestyle=none,fillstyle=solid,%
+%  fillcolor=mygrey](8.4,8.4)(9.6,8.4)(9,7.4)
+%  \pspolygon[linestyle=none,fillstyle=solid,%
+%  fillcolor=red](8.2,8.5)(9.4,8.5)(8.8,7.5)
+%  \pspolygon[linestyle=none,fillstyle=solid,%
+%  fillcolor=mygrey](1.4,-1.1)(2.6,-1.1)(2,-.1)
+%  \pspolygon[linestyle=none,fillstyle=solid,%
+%  fillcolor=red](1.1,-.9)(2.3,-.9)(1.7,.1)
   \PutLogo % Mandatory
  {#1}}
 

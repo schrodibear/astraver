@@ -1,0 +1,447 @@
+\documentclass[pdf,proval,slideColor,colorBG,total]{prosper}
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage{pstricks}
+\usepackage{pst-node}
+\usepackage{color}
+\usepackage{url}
+
+\input{./macros}
+
+\pagestyle{empty}
+
+\newrgbcolor{lightred}{1 0.8 0.8}
+\newrgbcolor{lightblue}{0.8 0.8 1}
+\newrgbcolor{whycolor}{0 0.5 1}
+\newrgbcolor{coqcolor}{1 0.5 0}
+
+
+\begin{document}
+%\sffamily
+%\parindent=0mm
+
+\title{Certification de l'algorithme de
+  Schorr-Waite avec Caduceus}
+\author{Thierry Hubert}
+\institution{Projet PROVAL de l'INRIA-equipe DEMONS
+  du LRI - Orsay}
+
+\slideCaption{Séminaire LogiCal-ProVal --- 11 mars 2005}
+
+\maketitle
+
+
+
+
+
+\begin{slide}{Plan de cet exposé}
+
+\begin{enumerate}
+\item Motivations
+\item L'algorithme de Schorr-Waite
+\item Sa spécification formelle en Caduceus
+\item Annotation du code 
+\item la preuve Simplify et en Coq
+\item Terminaison
+\end{enumerate}
+
+\end{slide}
+
+
+\begin{slide}{Motivations}
+
+\begin{slshape}
+The Schorr-Waite algorithm is the first moutain that any formalism for
+pointer aliasing should climb.
+\end{slshape}
+
+--- Richard Bornat (Proving pointer programs in {H}oare logic, In {\em
+  Mathematics of Program Construction}, 2000, page 121)
+
+\begin{itemize}
+\item 2000, Bornat, système Jape
+\item 2003, Mehta \& Nipkow, système Isabelle/HOL
+\item 2004, Abrial, système Atelier B
+\end{itemize}
+
+\end{slide}
+
+\begin{slide}{Originalité de la preuve avec Caduceus}
+
+\begin{itemize}
+\item Directement sur du code source en C
+\item Preuve de l'absence de ``segmentation fault'' 
+\item Partie inaccessible montrée inchangée
+\item Preuve formelle de terminaison
+\end{itemize}
+
+\end{slide}
+
+
+\begin{slide}{L'algorithme de Schorr-Waite}
+
+Parcours d'un graphe orienté (binaire) 
+\begin{itemize}
+\item en profondeur
+\item sans utiliser d'allocation memoire
+\end{itemize}
+
+Noeuds du graphe codés par structure C :
+\fontsize{10}{10pt}
+\begin{alltt}
+typedef struct struct_node \{
+  unsigned int m :1;         /* marquage */
+  unsigned int c :1;         /* usage interne */
+  struct struct_node *l, *r; /* fils gauche et droit */
+\} * node;
+
+void schorr_waite(node root);
+\end{alltt}
+\end{slide}
+
+
+
+
+\begin{slide}{L'algorithme de Schorr-Waite en C}
+\fontsize{10}{10pt}
+\begin{alltt}
+void schorr_waite(node root) \{
+  node t = root; node p = NULL;
+  while (p != NULL || (t != NULL && ! t->m)) \{
+    if (t == NULL || t->m) \{
+      if (p->c) \{ \begin{slshape}/* \textbf{pop} */\end{slshape}
+        node q = t; t = p; p = p->r; t->r = q;
+      \} 
+      else \{ \begin{slshape}/* \textbf{swing} */\end{slshape}
+        node q = t; t = p->r; p->r = p->l; 
+        p->l = q; p->c = 1;
+      \}
+    \} 
+    else \{ \begin{slshape}/* \textbf{push} */ \end{slshape}
+      node q = p; p = t; t = t->l; p->l = q; 
+      p->m = 1; p->c = 0;
+\}\}\}
+\end{alltt}
+\end{slide}
+
+\overlays{6}{
+\begin{slide}{Exemple d'exécution}
+
+\begin{center}
+  \unitlength=0.5mm
+  \psset{unit=\unitlength,arrows=->}
+%\fbox{
+\begin{picture}(100,100)
+\put(50,100){\rnode{null}{\makebox(0,0)[l]{\tiny NULL}}}
+\untilSlide*{1}{\put(50,80){\unode{n0}}}
+\fromSlide*{2}{\put(50,80){\mnode{n0}}}
+\untilSlide*{2}{\put(20,50){\unode{n1}}}
+\fromSlide*{3}{\put(20,50){\mnode{n1}}}
+\put(80,50){\unode{n2}}
+\untilSlide*{1}{\put(30,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\untilSlide*{1}{\put(30,80){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\put(0,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(40,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(60,20){\rnode{n11}}
+\put(100,20){\rnode{n12}}
+\ncline[linestyle=dotted]{-}{n2}{n11}
+\ncline[linestyle=dotted]{-}{n2}{n12}
+\untilSlide*{1}{\ncline{n0}{n1}}
+\untilSlide*{5}{\ncline{n0}{n2}}
+\untilSlide*{2}{\ncline[nodesepB=1mm]{n1}{null2}}
+\untilSlide*{3}{\ncline[nodesepB=1mm]{n1}{null3}}
+\onlySlide*{1}{\ncline[nodesep=1mm]{p}{null}}
+\onlySlide*{1}{\ncline[nodesepA=1mm]{t}{n0}}
+\onlySlide*{2}{\put(80,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{2}{\put(0,50){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{2}{\ncline[nodesepA=3mm]{p}{n0}}
+\onlySlide*{2}{\ncline[nodesepA=1mm]{t}{n1}}
+\onlySlide*{2}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
+\onlySlide*{3}{\put(0,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{3}{\put(-10,30){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{3}{\ncline[nodesepA=3mm]{p}{n1}}
+\onlySlide*{3}{\ncline[nodesepB=1mm]{t}{null2}}
+\onlySlide*{3}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
+\onlySlide*{3}{\ncarc[arcangleA=150,arcangleB=-20,linewidth=1]{n1}{n0}}
+\onlySlide*{4}{\put(0,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{4}{\put(20,-10){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{4}{\ncline[nodesepA=3mm]{p}{n1}}
+\onlySlide*{4}{\ncline[nodesepB=1mm]{t}{null3}}
+\onlySlide*{4}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
+\onlySlide*{4}{\ncarc[arcangleA=-120,arcangleB=-40,linewidth=1]{n1}{n0}}
+\fromSlide*{4}{\ncline[nodesepB=1mm]{n1}{null2}}
+\onlySlide*{5}{\put(60,100){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{5}{\put(-50,70){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{5}{\ncline[nodesepA=3mm]{p}{n0}}
+\onlySlide*{5}{\ncline[nodesepB=1mm]{t}{n1}}
+\onlySlide*{5}{\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}}
+\fromSlide*{5}{\ncline[nodesepB=1mm]{n1}{null3}}
+\onlySlide*{6}{\put(-50,70){\rnode{p}{\makebox(0,0)[r]{$p$}}}}
+\onlySlide*{6}{\put(70,70){\rnode{t}{\makebox(0,0)[r]{$t$}}}}
+\onlySlide*{6}{\ncline[nodesepA=1mm]{p}{n0}}
+\onlySlide*{6}{\ncline[nodesepA=2mm]{t}{n2}}
+\onlySlide*{6}{\ncarc[nodesepB=1mm,arcangleA=-120,arcangleB=-20,linewidth=1]{n0}{null}}
+\fromSlide*{6}{\ncline[nodesepB=1mm]{n0}{n1}}
+\end{picture}
+%}
+
+\end{center}
+
+\end{slide}}
+
+
+\begin{slide}{Spécification informelle}
+
+\begin{alltt}
+void schorr_waite(node root);
+\end{alltt}
+
+\begin{itemize}
+\item Les noeuds accessibles à partir de root sont non-marqués
+initialement (n->m == 0) et marqués à la fin (n->m == 1)
+
+\item La structure du graphe est restaurée (pointeurs des fils gauche et
+droit restaurés à leurs valeurs initiales)
+\end{itemize}
+\end{slide}
+
+\begin{slide}{Spécification formelle en Caduceus}
+
+Il faut exprimer l'accessibilité. On introduit
+\fontsize{10}{10pt}
+\begin{alltt}\begin{slshape}\begin{blue}
+/*@ predicate reachable (node p1, node p2) 
+  @   reads p1->l,p1->r */
+\end{blue}\end{slshape}\end{alltt}
+
+\begin{itemize}
+\item déclaré en Caduceus
+\item supposé défini (ou du moins axiomatisé) dans le prouveur.
+\item 
+\end{itemize}
+
+\end{slide}
+
+\begin{slide}{Annotation de la fonction}
+
+\fontsize{10}{10pt}
+\begin{alltt}\begin{slshape}\begin{blue}
+/*@ \textbf{requires}
+  @  \bs{}forall node x; 
+  @     x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
+  @ \textbf{ensures}
+  @  (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @ &&
+  @  (\bs{}forall node x; x != \bs{}null && reachable(root,x) => x->m) 
+  @ &&
+  @  (\bs{}forall node x; ! reachable(root,x) => x->m == \old(x->m))
+  @*/\end{blue}\end{slshape}
+void schorr_waite(node root);
+\end{alltt}
+\end{slide}
+
+
+\begin{slide}{Annotation du code}
+
+cad trouver le bon invariant de boucle.
+
+idee essentielle: codage d'une pile de backtracking dans le graphe
+
+\end{slide}
+
+\begin{slide}{La pile de backtrack}
+\begin{center}
+  \unitlength=0.5mm
+  \psset{unit=\unitlength,arrows=->}
+\begin{picture}(100,100)
+\put(50,100){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
+\put(80,83){\rnode{root}{\makebox(0,0)[lb]{root}}}
+\put(50,80){\mnode{n0}}\put(58,83){\makebox(0,0)[b] {$c=0$}}
+\put(30,60){\mnode{n1}}\put(23,63){\makebox(0,0)[b] {$c=1$}}
+\put(60,60){\unode{n2}}
+
+\put(20,40){\mnode{n11}}
+\put(40,40){\mnode{n12}}\put(50,43){\makebox(0,0)[b] {$c=0$}}
+\put(50,20){\unode{n122}}
+\put(30,20){\unode{n121}}
+\put(40,0){\unode{n1211}}
+\put(20,0){\unode{n1212}}
+\put(70,43){\rnode{p}{\makebox(0,0)[lb]{$p$}}}
+\put(0,30){\rnode{t}{\makebox(0,0)[rb]{$t$}}}
+
+\ncline[linestyle=dotted]{n0}{n1}
+\ncarc[arcangleA=120,linewidth=1]{n0}{null}
+\ncline{n0}{n2}
+\ncline{n1}{n11}
+\ncline{n12}{n122}
+\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{n12}{n121}
+\ncarc[arcangleA=120,arcangleB=30,linewidth=1]{n12}{n1}
+\ncarc[arcangleA=-100,arcangleB=-30,linewidth=1]{n1}{n0}
+\ncline[nodesepA=1mm]{root}{n0}
+\ncline{n121}{n1211}
+\ncline{n121}{n1212}
+\ncline[nodesepA=1mm]{p}{n12}
+\ncline[nodesepA=1mm]{t}{n121}
+\end{picture}\label{figure}
+\end{center}
+
+\end{slide}
+\begin{slide}{Invariant de la boucle}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ invariant
+    @  (I1 :: \bs{}forall node x; \old(reachable(root,x)) => 
+    @    reachable(t,x) || reachable(p,x))
+    @ &&
+
+\end{alltt}
+Ce premier invariant indique que tous les noeuds dans le graphe au
+debut de la fonction sont atteignable par t ou p.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+(I2 :: \bs{}forall node x; x != \bs{}null => 
+    @         (reachable(t,x) || reachable(p,x)) => 
+    @         \old(reachable(root,x)))
+    @ &&
+\end{alltt}
+Ce deuxième invariant indique que tous les noeuds non null atteignable
+par t ou p etaient dans le graphe avant la fonction.
+\end{slide}
+\begin{slide}{Invariant de la boucle}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+(I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
+    @         x->m == \old(x->m)) 
+    @ &&
+\end{alltt}
+Cet invariant indique que tous les noeuds qui n'etait pas dans le
+graphe avant la fonction, ont leur marquage inchanger.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+ \bs{}exists plist stack;
+    @  (I4a :: clr_list (p,stack))
+    &&
+\end{alltt}
+Cet invariant permet de definir la pile de backtrack
+\end{slide}
+\begin{slide}{Invariant de la boucle}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+(I4b :: \bs{}forall node p; in_list (p,stack) => p->m)  &&
+\end{alltt}
+Cet invariant precise que tous les noeuds dans la pile sont marqués.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+(I4c :: \bs{}forall node x; 
+    @          \valid(x) && \old(reachable(root,x)) && 
+    @          !x->m =>
+    @          unmarked_reachable(t,x) || 
+    @          (\bs{}exists node y; 
+    @            in_list(y,stack) && 
+    @          unmarked_reachable(y->r,x))) 
+    @  &&
+\end{alltt}
+Cet invariant precise que tous les noeuds non marqués qui etaient
+valid et dans le graphe au debut de la fonction, sont atteignable par
+un chemin non marqués par t ou atteignable par un chemin non marqués
+par un des fils droit des noeuds de la pile de backtrack.
+\end{slide}
+\begin{slide}{Invariant de la boucle}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+(I4d ::\bs{}forall node x; !in_list(x,stack) =>  
+    @        (x->r == \old(x->r) && x->l == \old(x->l))) 
+    @  &&
+\end{alltt}
+Cet invariant precise que tous les noeuds hors de la pile de backtrack
+ont leurs fils inchangés.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+    @ (I4e :: \bs{}forall node p1; \bs{}forall node p2;
+    @          pair_in_list(p1,p2,cons(t,stack)) => 
+    @          (p2->c => \old(p2->l) == p2->l 
+    @                    && \old(p2->r) == p1)
+    @          &&(!p2->c => \old(p2->l) == p1 
+    @                    && \old(p2->r) == p2->r)) */
+\end{alltt}
+Enfin cet invariant precise que pour tous les elements de la pile de
+backtrack, suivant la valeur de c soit son fils gauche soit son fils
+droit est inchangé et leur fils changer est maintenant la pointeur
+qui les precède dans la pile ou bien t si ce pointer est en tête de la pile.
+\end{slide}
+\begin{slide}{La preuves Simplify}
+
+\end{slide}
+\begin{slide}{La preuve Coq}
+Nous devons d''abord definir les predicates utilisés par caduceus.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+  Definition clr_list (a: alloc_table)  (c:memory Z) 
+  (l: memory pointer)(r: memory pointer) : 
+  pointer ->list pointer-> Prop :=
+  let next t := if Z_eq_dec (acc c t) 0 then (acc l t) 
+  else (acc r t) in
+  llist a next .
+\end{alltt}
+Voici donc la d	finition Coq de la pile de backtrack.
+\end{slide}
+\begin{slide}{La preuve Coq}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+  Inductive path (a: alloc_table) (l: memory pointer)
+  (r: memory pointer) : 
+  pointer ->  pointer -> list pointer -> Prop :=
+    | Path_null : forall p:pointer, path a l r p  p nil
+    | Path_left :
+      forall p1 p2:pointer,
+        forall lp : list pointer,
+          valid a p1 ->
+            path a l r (acc l p1) p2 lp-> 
+               path a l r p1  p2 (p1::lp)
+    | Path_right :
+      	forall p1 p2:pointer,
+          forall lp : list pointer ,
+        	valid a p1 ->
+        	  path a l r (acc r p1)  p2 lp -> 
+                     path a l r p1 p2 (p1::lp). 
+\end{alltt}
+Ce predicat represente le chemin entre 2 noeuds du graphe.
+\end{slide}
+\begin{slide}{La preuve Coq}
+\fontsize{10pt}{9pt}
+\begin{alltt}     
+  Definition reachable (a: alloc_table) 
+    (l: memory pointer)(r: memory pointer) 
+    (p1 :pointer) (p2:pointer) : Prop :=
+    exists lp : list pointer, path a l r p1 p2 lp.
+\end{alltt}
+Ce predicat represente l'accesibilite d'un noeuds a un autre dans le graphe.
+\end{slide}
+\begin{slide}{La preuve Coq}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+Definition unmarked_reachable (a: alloc_table) 
+  (m:memory Z) (l r: memory pointer) (p1 p2:pointer) 
+  : Prop :=
+  exists lp : list pointer, 
+    (forall x : pointer, In x lp -> (acc m x) = 0 ) 
+    /\ path a l r p1 p2 lp.
+\end{alltt}
+Ce predicat represente l'accesibilite par des noeuds non marquer d'un noeuds a un autre dans le graphe.
+\end{slide}
+\begin{slide}{La preuve Coq}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+
+\end{alltt}
+\end{slide}
+\end{document}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
