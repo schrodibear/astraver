@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.ml,v 1.28 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.29 2002-07-22 08:46:51 uid1331 Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -194,5 +194,4 @@ let is_float_arith id =
   is_float_arith_binop id || is_float_arith_unop id
 
 let is_arith id =
-  is_int_arith id || is_float_arith id
-
+  is_int_arith id || is_float_arith id || id == t_float_of_int

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.5 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.6 2002-07-22 08:46:51 uid1331 Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -76,7 +76,7 @@ let make_arith loc = function
   | (a,PTint), (PPadd|PPsub|PPmul|PPdiv|PPmod as r), (b,PTint) ->
       Tapp (int_arith r, [a; b]), PTint
   | (a,PTfloat), (PPadd|PPsub|PPmul|PPdiv as r), (b,PTfloat) ->
-      Tapp (float_cmp r, [a; b]), PTfloat
+      Tapp (float_arith r, [a; b]), PTfloat
   | _ ->
       expected_num loc
 

@@ -1,5 +1,16 @@
 
-(* The recursive function downheap *)
+(** Heapsort. 
+
+    This formal proof is detailed in this paper:
+
+    J.-C. Filliâtre and N. Magaud. Certification of sorting algorithms
+    in  the system  Coq. In  Theorem Proving  in Higher  Order Logics:
+    Emerging Trends, 1999.
+    (http://www.lri.fr/~filliatr/ftp/publis/Filliatre-Magaud.ps.gz)    **)
+
+(* The recursive function downheap.
+   [downheap N t k n] moves the element t[k] down in the heap encoded
+   in t[j..n] *)
 
 logic select_son : array int, int, int, int -> prop
 logic inftree : array int, int, int, int -> prop

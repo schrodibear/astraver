@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.22 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.23 2002-07-22 08:46:51 uid1331 Exp $ i*)
 
 open Ident
 open Misc
@@ -228,7 +228,7 @@ let _ = add_global t_neg_float (un_arith_type float) None
 let _ = add_global t_sqrt_float (un_arith_type float) None
 
 let _ = add_global t_float_of_int 
-	  (make_arrow [x, BindType int] (make_c float None))
+	  (make_arrow [x, BindType int] (make_c float None)) None
 
 (* Logical environment *)
 

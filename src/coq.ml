@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.52 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.53 2002-07-22 08:46:51 uid1331 Exp $ i*)
 
 open Options
 open Logic
@@ -43,6 +43,7 @@ let prefix_id id =
   else if id == t_div_float then "Rdiv"
   else if id == t_neg_float then "Ropp"
   else if id == t_sqrt_float then "sqrt"
+  else if id == t_float_of_int then "IZR"
   else assert false
 
 let inz = ref 0

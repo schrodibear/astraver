@@ -57,6 +57,3 @@ IMPLEMENTATION
      A and B |- A
      A, B |- A and B
      
- - float_of_int
-
- - accessibility of primitives (%add_int, %neg_int, ...)
