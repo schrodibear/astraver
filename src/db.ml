@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.13 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.14 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 (*s Names separation *)
 
@@ -109,9 +109,9 @@ let db_prog e =
     | LetIn (x,e1,e2) ->
 	LetIn (x, db idl e1, db (tids,Ids.add x ids,refs) e2)
 	  
-    | LetRec (f,bl,v,var,e) ->
+    | Rec (f,bl,v,var,e) ->
 	let (tids',ids',refs'),bl' = db_binders idl bl in
-	LetRec (f, bl, v, var, db (tids',Ids.add f ids',refs') e)
+	Rec (f, bl, v, var, db (tids',Ids.add f ids',refs') e)
     | Expression _ as x -> 
 	x
     | Coerce e -> 

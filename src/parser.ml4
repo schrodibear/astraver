@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.19 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.20 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -344,14 +344,11 @@ EXTEND
 	Expression (Tconst (ConstBool false))
     | "!"; v = ident ->
 	Acc v
-(*i | "?" -> isevar i*)
     | v = ident; ":="; p = program ->
 	Aff (v,p)
-    | v = ident; "["; e = program; "]" -> TabAcc (true,v,e)
-    | v = ident; "#"; "["; e = program; "]" -> TabAcc (true,v,e)
+    | v = ident; "["; e = program; "]" -> 
+	TabAcc (true,v,e)
     | v = ident; "["; e = program; "]"; ":="; p = program -> 
-	TabAff (true,v,e,p)
-    | v = ident; "#"; "["; e = program; "]"; ":="; p = program -> 
 	TabAff (true,v,e,p)
     | "if"; e1 = program; "then"; e2 = program; "else"; e3 = program ->
 	If (e1,e2,e3)
@@ -376,11 +373,11 @@ i*)
 	Lam (bl,p)
     | "let"; "rec"; f = ident; bl = binders; ":"; v = type_v;
       "{"; LIDENT "variant"; var = variant; "}"; "="; p = program ->
-	LetRec (f,bl,v,var,p)
+	Rec (f,bl,v,var,p)
     | "let"; "rec"; f = ident; bl = binders; ":"; v = type_v;
       "{"; LIDENT "variant"; var = variant; "}"; "="; p = program;
       "in"; p2 = program ->
-	LetIn (f, without_annot loc (LetRec (f,bl,v,var,p)), p2)
+	LetIn (f, without_annot loc (Rec (f,bl,v,var,p)), p2)
 	  
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 

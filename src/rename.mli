@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: rename.mli,v 1.2 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: rename.mli,v 1.3 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 (* Abstract type for renamings 
  * 
@@ -31,7 +31,8 @@ val current_vars : t -> Ident.t list -> (Ident.t * Ident.t) list
     (* gives the current names of some variables *)
 
 val avoid : t -> Ident.set -> t
-val fresh : t -> Ident.t list -> (Ident.t * Ident.t) list
+val fresh : t -> Ident.t -> Ident.t * t
+val fresh_many : t -> Ident.t list -> (Ident.t * Ident.t) list * t
     (* introduces new names to avoid and renames some given variables *)
 
 val var_at_date  : t -> date -> Ident.t -> Ident.t

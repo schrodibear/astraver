@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: rename.ml,v 1.4 2002-03-06 16:04:52 filliatr Exp $ i*)
+(*i $Id: rename.ml,v 1.5 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -70,7 +70,14 @@ let current_vars r ids = List.map (fun id -> id,current_var r id) ids
 let avoid r ids = 
   { levels = r.levels; avoid = Idset.union r.avoid ids; cpt = r.cpt }
 
-let fresh r ids = fst (renaming_of_ids r.avoid ids)
+let fresh r id =
+  match renaming_of_ids r.avoid [id] with
+    | [_,id'], av -> id', { r with avoid = av }
+    | _ -> assert false
+
+let fresh_many r ids = 
+  let ids',av = renaming_of_ids r.avoid ids in
+  ids', { r with avoid = av }
 
 
 let current_date r =

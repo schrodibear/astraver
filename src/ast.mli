@@ -1,26 +1,17 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.16 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.17 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
 open Logic
 open Types
 
-(*s Blocks. *)
-
-type label = string
-
-type 'a block_st =
-  | Label of label
-  | Assert of assertion
-  | Statement of 'a
-
-type 'a block = 'a block_st list
-
 (*s AST. ['a] is the type of information associated to the nodes. *)
 
 type variable = Ident.t
+
+type label = string
 
 type 'a t = 
   { desc : 'a t_desc;
@@ -32,14 +23,14 @@ and 'a t_desc =
   | Aff of variable * 'a t
   | TabAcc of bool * variable * 'a t
   | TabAff of bool * variable * 'a t * 'a t
-  | Seq of 'a t block
-  | While of 'a t * assertion option * (term * term) * 'a t block
+  | Seq of 'a block
+  | While of 'a t * assertion option * (term * term) * 'a block
   | If of 'a t * 'a t * 'a t
   | Lam of type_v binder list * 'a t
   | App of 'a t * 'a arg
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
-  | LetRec of variable * type_v binder list * type_v * (term * term) * 'a t
+  | Rec of variable * type_v binder list * type_v * (term * term) * 'a t
   | Expression of term
   | Coerce of 'a t
 
@@ -47,6 +38,16 @@ and 'a arg =
   | Term of 'a t
   | Refarg of Loc.t * variable
   | Type of type_v
+
+and 'a block_st =
+  | Label of label
+  | Assert of assertion
+  | Statement of 'a t
+
+and 'a block = 'a block_st list
+
+(*s The parsing information consists of pre/post-conditions and location
+    in the source file. *)
 
 type parsed_info = {
   pre  : precondition list;
@@ -62,7 +63,7 @@ type decl =
   | External of Loc.t * Ident.t list * type_v
   | QPvs of string
 
-(*s Intermediate type for CC terms. *)
+(*s Intermediate CC terms. *)
 
 type cc_type =
   | TTpure of pure_type

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.23 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.24 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -470,7 +470,7 @@ and typef_desc lab env loc = function
       let v = type_v_sup loc t1 t2 in
       If (t_b, t_e1, t_e2), (v,ef), []
 
-  | LetRec (f,bl,v,var,e) ->
+  | Rec (f,bl,v,var,e) ->
       let env' = check_binders (Some loc) lab env bl in
       check_type_v (Some loc) lab env' v;
       let efvar = state_var lab env' var in
@@ -492,7 +492,7 @@ and typef_desc lab env loc = function
 		 c_effect = efvar; c_pre = []; c_post = None } in
       let t_e = state_rec c0 in
       let tf = make_arrow bl t_e.info.kappa in
-      LetRec (f,bl,v,var,t_e), (tf,Effect.bottom), []
+      Rec (f,bl,v,var,t_e), (tf,Effect.bottom), []
 
   | Coerce e ->
       let te = typef lab env e in
@@ -521,30 +521,4 @@ and typef_block lab env bl =
 	(Statement t_e)::bl, t, Effect.compose efe ef
   in
   ef_block lab None bl
-
-let effect_app ren env f args =
-  let n = List.length args in
-  let tf = f.info.kappa.c_result_type in (* TODO: external function type *)
-  let bl,c = match tf with
-    | Arrow (bl, c) -> bl,c
-    | _ -> assert false
-  in
-  let s,so,ok = 
-    List.fold_left
-    (fun (s,so,ok) (b,a) ->
-       match b,a with
-	 | (id,BindType (Ref _ | Array _ as v)), Refarg (_, id') ->
-	     (id,id')::s, so, ok
-	 | (id,BindType v), Term t ->
-	     (match t.desc with
-		| Expression c -> s, (id,c)::so, ok
-		| _ -> s,so,false)
-	 | _ -> 
-	     assert false)
-    ([],[],true)
-    (List.combine bl args)
-  in
-  let c' = type_c_subst s c in
-  (bl,c), (s,so,ok),
-  { c' with c_result_type = type_v_rsubst so c'.c_result_type }
 

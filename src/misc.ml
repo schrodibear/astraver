@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.19 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.20 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -44,7 +44,7 @@ let renaming_of_ids avoid ids =
   let rec rename avoid = function
     | [] -> 
 	[], avoid
-    | x::rem ->
+    | x :: rem ->
 	let al,avoid = rename avoid rem in
 	let x' = Ident.next_away x avoid in
 	(x,x')::al, Idset.add x' avoid

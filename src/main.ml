@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.18 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.19 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -50,6 +50,7 @@ let interp_program id p =
   if_debug eprintf "=== functionalization ===@\n@?";
   let ren = initial_renaming env in
   let cc = Mlize.trans p ren in
+  if_debug_3 eprintf "%a@\n-----@\n@?" print_cc_term cc;
   let cc = Red.red cc in
   if_debug_3 eprintf "%a@\n@?" print_cc_term cc;
 

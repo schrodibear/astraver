@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.20 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.21 2002-03-13 10:01:38 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -11,7 +11,6 @@ open Ast
 open Util
 open Env
 open Effect
-open Typing
 open Rename
 
 (* force a post-condition *)
@@ -115,8 +114,8 @@ let rec normalize p =
 	change_desc p (LetRef (x, normalize e1, normalize e2))
     | LetIn (x, e1, e2) ->
 	change_desc p (LetIn (x, normalize e1, normalize e2))
-    | LetRec (x, bl, v, var, e1) ->
-	change_desc p (LetRec (x, bl, v, var, normalize e1))
+    | Rec (x, bl, v, var, e1) ->
+	change_desc p (Rec (x, bl, v, var, normalize e1))
     | App (e1, Term e2) ->
 	change_desc p (App (normalize e1, Term (normalize e2)))
     | App (e1, (Refarg _ as r)) ->
@@ -277,7 +276,7 @@ and wp_desc info d q =
 	let q' = optpost_app (subst_in_predicate [x, result]) w in
 	let e'1,w' = wp e1 q' in
 	LetRef (x, e'1, e'2), w'
-    | LetRec _ ->
+    | Rec _ ->
 	failwith "todo: wp let rec"
     | While (b, invopt, (var,r), bl) ->
 	d, invopt (* TODO: check *)

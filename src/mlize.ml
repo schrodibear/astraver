@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.16 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.17 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -11,7 +11,6 @@ open Util
 open Rename
 open Env
 open Effect
-open Typing
 open Monad
 
 (*s Translation of imperative programs into functional ones.
@@ -48,22 +47,7 @@ and trad_desc info d ren = match d with
 	ren
 
   | Seq bl ->
-      let rec block res = function
-	| [] -> 
-	    (match res with
-	       | Some id -> Monad.unit info (Tvar id)
-	       | None -> assert false)
-	| (Assert c) :: bl ->
-	    let p = 
-	      { p_assert = true; p_name = c.a_name; p_value = c.a_value } 
-	    in
-	    insert_pre info.env p (block res bl)
-	| (Label s) :: bl ->
-	    cross_label s (block res bl)
-	| (Statement e) :: bl ->
-	    Monad.compose e.info (trad e) (fun x -> block (Some x) bl)
-      in
-      block None bl ren
+      trad_block info bl ren
 
   | If (b, e1, e2) ->
       Monad.compose b.info (trad b)
@@ -82,6 +66,18 @@ and trad_desc info d ren = match d with
 	       | None -> t
 	   in
 	   CC_if (CC_var resb, branch e1 ttrue, branch e2 tfalse))
+	ren
+
+  | Coerce e ->
+      Monad.compose e.info (trad e) (fun res -> Monad.unit info (Tvar res)) ren
+
+  | App (e1, Term e2) ->
+      Monad.compose e2.info (trad e2)
+	(fun v2 -> 
+	   Monad.compose e1.info (trad e1)
+	     (fun v1 -> 
+		Monad.compose info (fun _ -> CC_app (CC_var v1, [CC_var v2]))
+		  (fun v -> Monad.unit info (Tvar v))))
 	ren
 
   | _ -> failwith "Mlize.trad: TODO"
@@ -243,13 +239,6 @@ and trad_desc info d ren = match d with
       let t = make_letrec ren' env' (phi0,var') f bl' (te,e.info.kappa) c in
       CC_lam (bl', t)
 
-  | Coerce e ->
-      failwith "Mlize.trad: Coerce: todo"
-
-  | PPoint (s,d) ->       
-      let ren' = push_date ren s in
-      trad_desc ren' env ct d
-
 and trad_binders ren env = function
   | [] -> 
       []
@@ -264,7 +253,25 @@ and trad_binders ren env = function
   | (_,Untyped) :: _ -> 
       assert false
 ****i*)
-	
+
+and trad_block info =
+  let rec block res = function
+    | [] -> 
+	(match res with
+	   | Some id -> Monad.unit info (Tvar id)
+	   | None -> assert false)
+    | (Assert c) :: bl ->
+	let p = 
+	  { p_assert = true; p_name = c.a_name; p_value = c.a_value } 
+	in
+	insert_pre info.env p (block res bl)
+    | (Label s) :: bl ->
+	cross_label s (block res bl)
+    | (Statement e) :: bl ->
+	Monad.compose e.info (trad e) (fun x -> block (Some x) bl)
+  in
+  block None
+
 and trans e =
   cross_label e.info.label (abstraction e.info.env e.info.kappa (trad e))
 

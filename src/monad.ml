@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.8 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.9 2002-03-13 10:01:37 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -176,6 +176,7 @@ let compose info1 e1 e2 ren =
     (fun ren ->
        let w1 = get_writes ef1 in
        let ren' = next ren w1 in
+       let res1,ren' = fresh ren' res1 in
        let tt1 = trad_ml_type_v ren env v1 in
        let b = [res1, CC_var_binder tt1] in
        let b',dep = match q1 with

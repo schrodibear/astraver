@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.14 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.15 2002-03-13 10:01:38 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -387,7 +387,7 @@ and print_desc fmt = function
   | LetIn (id, p1, p2) ->
       fprintf fmt "let %a = ref %a in %a" 
 	Ident.print id print_prog p1 print_prog p2
-  | LetRec (id, bl, v, var, p) ->
+  | Rec (id, bl, v, var, p) ->
       fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 
 	Ident.print id print_type_v v print_prog p
   | Expression t -> 
