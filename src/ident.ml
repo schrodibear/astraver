@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.8 2002-02-04 16:42:20 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.9 2002-02-05 09:50:29 filliatr Exp $ i*)
 
 type t = string
 
@@ -81,7 +81,7 @@ let t_le = "le"
 let t_gt = "gt"
 let t_ge = "ge"
 let t_eq = "eq"
-let t_noteq = "neq"
+let t_neq = "neq"
 
 let t_zwf_zero = "zwf_zero"
 let result = "result"
@@ -101,7 +101,7 @@ let is_comparison id =
 
 let is_relation id = 
   id == t_lt || id == t_le || id == t_gt || id == t_ge ||
-  id == t_eq || id == t_noteq
+  id == t_eq || id == t_neq
 
 let is_arith id =
   id == t_add || id == t_sub || id == t_mul || id == t_div || id == t_neg

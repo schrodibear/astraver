@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.7 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.8 2002-02-05 09:50:29 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -14,7 +14,7 @@ let relation id =
   else if id == t_gt then ">"
   else if id == t_ge then ">="
   else if id == t_eq then "="
-  else if id == t_noteq then "/="
+  else if id == t_neq then "/="
   else assert false
 
 let print_term fmt t = 

@@ -3,3 +3,4 @@
 .pvscontext
 *.bin
 *_why.v
+*.vo

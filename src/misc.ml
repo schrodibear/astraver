@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.6 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.7 2002-02-05 09:50:29 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -154,8 +154,8 @@ let negate id =
   else if id == t_le then t_gt 
   else if id == t_gt then t_le
   else if id == t_ge then t_lt
-  else if id == t_eq then t_noteq
-  else if id == t_noteq then t_eq
+  else if id == t_eq then t_neq
+  else if id == t_neq then t_eq
   else assert false
 
 let equals_false = function
@@ -191,10 +191,13 @@ let tfalse = Tconst (ConstBool false)
 let tresult = Tvar Ident.result
 
 let relation op t1 t2 = Papp (op, [t1; t2])
+let not_relation op = relation (negate op)
 let lt = relation t_lt
 let le = relation t_le
 let gt = relation t_gt
 let ge = relation t_ge
+let eq = relation t_eq
+let neq = relation t_neq
 
 let pif a b c =
   if a = ttrue then b else if a = tfalse then c else Pif (a, b ,c)

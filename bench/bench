@@ -3,13 +3,24 @@
 # auto bench for why
 
 pgm=$1
+coqc=coqc
 
 goods () {
     echo "  checking good files"
     for f in $1/*.ml; do
 	echo -n "    "$f"... "
-	if $pgm -pvs $f > /dev/null 2>&1; 
-        then echo "ok"; else echo "FAILED!"; exit 1; fi
+	base=$1/`basename $f .ml`
+	if $pgm -coq $f > /dev/null 2>&1; then
+	    echo -n "why ok... "
+	    if $coqc "$base"_why.v > /dev/null 2>&1; then
+		echo "coq ok"
+	    else
+		echo "coq FAILED"
+	    fi
+	else 
+	    echo "why FAILED"
+	    exit 1
+	fi
     done
 }
 
@@ -38,9 +49,9 @@ goods good
 
 # 4. Showing the results
 for f in good/*.ml; do
-    pvs=good/`basename $f .ml`_why.pvs
-    echo "==== "$pvs" ===="
-    cat $pvs
+    coq=good/`basename $f .ml`_why.v
+    echo "==== "$coq" ===="
+    cat $coq
     echo "==== "$f" ===="
     cat $f
     read foo

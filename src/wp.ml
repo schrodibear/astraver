@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.9 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.10 2002-02-05 09:50:29 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -233,10 +233,10 @@ and normalize_boolean ren env b =
 	  (* a postcondition; nothing to do *)
 	  normalize ren (give_post b (force_bool_name q))
       | None -> begin
-	  (* nothing *)
 	  match b.desc with
-	    | Expression (Tapp (id, [t1;t2])) when id == t_gt ->
-		let c = Pif (Tvar Ident.result, gt t1 t2, le t1 t2) in
+	    | Expression (Tapp (id, [t1;t2])) when is_relation id ->
+		let c = Pif (Tvar Ident.result, 
+			     relation id t1 t2, not_relation id t1 t2) in
 		give_post b (create_bool_post c)
 	    | Expression c ->
 		(* expression E -> if result then E else not E *)
@@ -303,21 +303,28 @@ i*)
 	let q' = optpost_app (subst_in_predicate [x, result]) q in
 	let p',w = wp ren p q' in
 	Aff (x, p'), w
-    (* $wp(if p1 then p2 else p3, q) = 
-        wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
+    (* conditional: two cases depending on [p1.post] *)
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp ren p2 q in
 	let p'3,w3 = wp ren p3 q in
-	let q' = match w2, w3 with
-	  | Some q2, Some q3 -> 
-	      let result1 = p1.info.kappa.c_result_name in
-	      let q = Pif (Tvar result1, q2.a_value, q3.a_value) in
-	      create_bool_post q
-	  | _ ->
-	      None
-	in
-	let p'1,w1 = wp ren p1 q' in
-	If (p'1, p'2, p'3), w1
+	(match w2, w3, p1.post with
+	   | Some {a_value=q2}, Some {a_value=q3}, Some {a_value=q1} -> 
+	       (* $wp(if p1 then p2 else p3, q) = 
+		  q1(true) => wp(p2, q) and q1(false) => wp(p3, q)$ *)
+	       let q1 = make_before_after q1 in
+	       let q1t = tsubst_in_predicate [Ident.result,ttrue] q1 in
+	       let q1f = tsubst_in_predicate [Ident.result,tfalse] q1 in
+	       let w = Pand (Pimplies (q1t, q2), Pimplies (q1f, q3)) in
+	       If (p1, p'2, p'3), create_bool_post w
+	   | Some {a_value=q2}, Some {a_value=q3}, None -> 
+	       (* $wp(if p1 then p2 else p3, q) = 
+		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
+	       let result1 = p1.info.kappa.c_result_name in
+	       let q1 = Pif (Tvar result1, q2, q3) in
+	       let p'1,w1 = wp ren p1 (create_bool_post q1) in
+	       If (p'1, p'2, p'3), w1
+	   | _ ->
+	       If (p1, p'2, p'3), None)
     (* sequence *)
     | Seq bl -> 
 	let lab,bl = top_point_block bl in

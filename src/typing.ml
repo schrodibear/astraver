@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.7 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.8 2002-02-05 09:50:29 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -37,16 +37,14 @@ let rec typing_term loc env = function
   | Tconst (ConstBool _) -> type_v_bool
   | Tconst ConstUnit -> type_v_unit
   | Tconst (ConstFloat _) -> type_v_float
-  | Tapp (id, [a;b]) when id == t_eq || id == t_noteq ->
+  | Tapp (id, [a;b]) when id == t_eq || id == t_neq ->
       check_same_type loc env a b; type_v_bool
-  | Tapp (id, [a;b]) 
-    when id == t_add || id == t_sub || id == t_mul || id == t_div -> 
+  | Tapp (id, [a;b]) when is_arith id ->
       check_two_nums loc env a b
   | Tapp (id, [a]) when id == t_neg ->
       let ta = typing_term loc env a in
       check_num loc a ta; ta
-  | Tapp (id, [a;b]) 
-    when id == t_lt || id == t_le || id == t_gt || id == t_ge ->
+  | Tapp (id, [a;b]) when is_comparison id ->
       let _ = check_two_nums loc env a b in
       type_v_bool
   | Tapp (id, [Tvar a; b]) when id == access ->
@@ -365,10 +363,10 @@ and cic_binders env ren = function
 
 let partial_pre = function
   | Tapp (id, [a;b]) when id == t_div ->
-      let p = Papp (t_noteq, [b; Tconst (ConstInt 0)]) in
+      let p = neq b (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
   | Tapp (id, [a]) when id == t_sqrt ->
-      let p = ge a  (Tconst (ConstInt 0)) in
+      let p = ge a (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
   | _ ->
       []

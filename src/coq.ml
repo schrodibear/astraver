@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.7 2002-02-04 16:42:20 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.8 2002-02-05 09:50:29 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -18,7 +18,7 @@ let relation id =
   else if id == t_gt then ">"
   else if id == t_ge then ">="
   else if id == t_eq then "="
-  else if id == t_noteq then "<>"
+  else if id == t_neq then "<>"
   else assert false
 
 let inz = ref 0
@@ -118,7 +118,7 @@ i*)
 	print_term fmt a; fprintf fmt " =@ "; print_term fmt b
     | Papp (id, [t]) when id == well_founded ->
 	fprintf fmt "@[(well_founded ?@ "; print_term fmt t; fprintf fmt ")@]"
-    | Papp (id, [a;b]) when id == t_noteq ->
+    | Papp (id, [a;b]) when id == t_neq ->
 	fprintf fmt "~("; 
 	print_term fmt a; fprintf fmt " =@ "; print_term fmt b;
 	fprintf fmt ")"
