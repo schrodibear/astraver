@@ -1,4 +1,10 @@
 
+version 0.6, July 19th, 2002
+============================
+  o examples: find
+  o doc: predefined functions and predicates
+  o floats: predefined functions and predicates, Coq pretty-print
+  o fixed bug: x@ reference in a loop post-condition incorrectly translated
   o the variant relation is now necessarily an identifier
   o terms and predicates are now typed; new declaration "logic"
     (terms and predicates syntax are mixed; fixes a parsing bug)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.21 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.22 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -175,17 +175,16 @@ let bool = PureType PTbool
 let unit = PureType PTunit
 let float = PureType PTfloat
 
+let make_c t q = 
+  { c_result_name = result; c_result_type = t;
+    c_effect = Effect.bottom; c_pre = []; c_post = q }
+
 let compare_type op t =
   let q = Pif (Tvar result,
 	       relation op (Tvar x) (Tvar y),
 	       not_relation op (Tvar x) (Tvar y))
   in
-  make_arrow 
-    [x, BindType t; y, BindType t]
-    { c_result_name = result;
-      c_result_type = bool;
-      c_effect = Effect.bottom;
-      c_pre = []; c_post = Some (anonymous q) }
+  make_arrow [x, BindType t; y, BindType t] (make_c bool (Some (anonymous q)))
 
 let _ = add_global t_lt_int (compare_type t_lt_int int) None
 let _ = add_global t_le_int (compare_type t_le_int int) None
@@ -208,18 +207,13 @@ let _ = add_global t_neq_bool (compare_type t_neq_bool bool) None
 let _ = add_global t_neq_float (compare_type t_neq_float float) None
 
 let bin_arith_type t = 
-  make_arrow 
-    [x, BindType t; y, BindType t]
-    { c_result_name = result;
-      c_result_type = t;
-      c_effect = Effect.bottom;
-      c_pre = []; c_post = None }
+  make_arrow [x, BindType t; y, BindType t] (make_c t None)
 
 let _ = add_global t_add_int (bin_arith_type int) None
 let _ = add_global t_sub_int (bin_arith_type int) None
 let _ = add_global t_mul_int (bin_arith_type int) None
 let _ = add_global t_div_int (bin_arith_type int) None
-let _ = add_global t_mod     (bin_arith_type int) None
+let _ = add_global t_mod_int (bin_arith_type int) None
 
 let _ = add_global t_add_float (bin_arith_type float) None
 let _ = add_global t_sub_float (bin_arith_type float) None
@@ -227,15 +221,14 @@ let _ = add_global t_mul_float (bin_arith_type float) None
 let _ = add_global t_div_float (bin_arith_type float) None
 
 let un_arith_type t = 
-  make_arrow 
-    [x, BindType t]
-    { c_result_name = result;
-      c_result_type = t;
-      c_effect = Effect.bottom;
-      c_pre = []; c_post = None }
+  make_arrow [x, BindType t] (make_c t None)
 
 let _ = add_global t_neg_int (un_arith_type int) None
 let _ = add_global t_neg_float (un_arith_type float) None
+let _ = add_global t_sqrt_float (un_arith_type float) None
+
+let _ = add_global t_float_of_int 
+	  (make_arrow [x, BindType int] (make_c float None))
 
 (* Logical environment *)
 
@@ -247,6 +240,44 @@ let add_global_logic x t = logic_table := Idmap.add x t !logic_table
 
 let int_array = PTarray (Tvar Ident.implicit, PTint)
 let agl s = add_global_logic (Ident.create s)
+
+let int_cmp = Predicate [PTint; PTint]
+let _ = agl "lt_int" int_cmp
+let _ = agl "le_int" int_cmp
+let _ = agl "gt_int" int_cmp
+let _ = agl "ge_int" int_cmp
+let _ = agl "eq_int" int_cmp
+let _ = agl "neq_int" int_cmp
+
+let float_cmp = Predicate [PTfloat; PTfloat]
+let _ = agl "lt_float" float_cmp
+let _ = agl "le_float" float_cmp
+let _ = agl "gt_float" float_cmp
+let _ = agl "ge_float" float_cmp
+let _ = agl "eq_float" float_cmp
+let _ = agl "neq_float" float_cmp
+
+let _ = agl "eq_bool" (Predicate [PTbool; PTbool])
+let _ = agl "neq_bool" (Predicate [PTbool; PTbool])
+let _ = agl "eq_unit" (Predicate [PTunit; PTunit])
+let _ = agl "neq_unit" (Predicate [PTunit; PTunit])
+
+let int_binop_arith = Function ([PTint; PTint], PTint)
+let _ = agl "add_int" int_binop_arith
+let _ = agl "sub_int" int_binop_arith
+let _ = agl "mul_int" int_binop_arith
+let _ = agl "div_int" int_binop_arith
+let _ = agl "mod_int" int_binop_arith
+let _ = agl "neg_int" (Function ([PTint], PTint))
+
+let float_binop_arith = Function ([PTfloat; PTfloat], PTfloat)
+let _ = agl "add_float" float_binop_arith
+let _ = agl "sub_float" float_binop_arith
+let _ = agl "mul_float" float_binop_arith
+let _ = agl "div_float" float_binop_arith
+let _ = agl "neg_float" (Function ([PTfloat], PTfloat))
+let _ = agl "sqrt_float" (Function ([PTfloat], PTfloat))
+let _ = agl "float_of_int" (Function ([PTint], PTfloat))
 
 let _ = agl "sorted_array" (Predicate [int_array; PTint; PTint])
 let _ = agl "exchange"     (Predicate [int_array; int_array; PTint; PTint])

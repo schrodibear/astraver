@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.51 2002-07-19 11:23:52 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.52 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -34,7 +34,7 @@ let prefix_id id =
   else if id == t_sub_int then "Zminus"
   else if id == t_mul_int then "Zmult"
   else if id == t_div_int then "Zdiv"
-  else if id == t_mod then "Zmod"
+  else if id == t_mod_int then "Zmod"
   else if id == t_neg_int then "Zopp"
   (* float ops *)
   else if id == t_add_float then "Rplus"
@@ -42,15 +42,12 @@ let prefix_id id =
   else if id == t_mul_float then "Rmult"
   else if id == t_div_float then "Rdiv"
   else if id == t_neg_float then "Ropp"
+  else if id == t_sqrt_float then "sqrt"
   else assert false
 
 let inz = ref 0
 let openz fmt = if !inz == 0 then fprintf fmt "`@["; incr inz 
 let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
-
-let inr = ref 0
-let openr fmt = if !inr == 0 then fprintf fmt "``@["; incr inr
-let closer fmt = decr inr; if !inr == 0 then fprintf fmt "@]``"
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -60,34 +57,24 @@ let print_term fmt t =
     | t -> 
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b]) when id == t_add_int && !inr == 0 ->
+    | Tapp (id, [a;b]) when id == t_add_int ->
 	openz fmt; fprintf fmt "%a +@ %a" print1 a print2 b; closez fmt
-    | Tapp (id, [a;b]) when id == t_sub_int && !inr == 0 ->
+    | Tapp (id, [a;b]) when id == t_sub_int ->
 	openz fmt; fprintf fmt "%a -@ %a" print1 a print2 b; closez fmt
-    | Tapp (id, [a;b]) when id == t_add_float && !inz == 0 ->
-	openr fmt; fprintf fmt "%a +@ %a" print1 a print2 b; closer fmt
-    | Tapp (id, [a;b]) when id == t_sub_float && !inz == 0 ->
-	openr fmt; fprintf fmt "%a -@ %a" print1 a print2 b; closer fmt
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul_int && !inr == 0 ->
+    | Tapp (id, [a;b]) when id == t_mul_int ->
 	openz fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closez fmt
-    | Tapp (id, [a;b]) when id == t_mul_float && !inz == 0 ->
-	openr fmt; fprintf fmt "%a *@ %a" print2 a print3 b; closer fmt
     | Tapp (id, [a;b]) when id == t_div_int ->
 	fprintf fmt "(@[Zdiv %a@ %a@])" print2 a print3 b
-    | Tapp (id, [a;b]) when id == t_div_float && !inz == 0 ->
-	openr fmt; fprintf fmt "%a /@ %a" print2 a print3 b; closer fmt
-    | Tapp (id, [a;b]) when id == t_mod ->
+    | Tapp (id, [a;b]) when id == t_mod_int ->
 	fprintf fmt "(@[Zmod %a@ %a@])" print2 a print3 b
     | t ->
 	print3 fmt t
   and print3 fmt = function
     | Tconst (ConstInt n) -> 
-	if !inr == 0 then openz fmt; 
-	fprintf fmt "%d" n; 
-	if !inr == 0 then closez fmt
+	openz fmt; fprintf fmt "%d" n; closez fmt
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
@@ -95,24 +82,22 @@ let print_term fmt t =
     | Tconst (ConstFloat f) -> 
 	assert (!inz == 0); (* TODO: floats inside integer expressions *)
 	let n,d = rationalize f in
-	openr fmt;
-	if d = "1" then fprintf fmt "%s" n else fprintf fmt "%s/%s" n d;
-	closer fmt
+	let pint fmt s = openz fmt; fprintf fmt "%s" s; closez fmt in
+	if d = "1" then fprintf fmt "(IZR %a)" pint n
+	else fprintf fmt "(Rdiv (IZR %a) (IZR %a))" pint n pint d
     | Tvar id when id == implicit ->
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
-    | Tapp (id, [t]) when id == t_neg_int && !inr == 0 ->
+    | Tapp (id, [t]) when id == t_neg_int ->
 	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt
-    | Tapp (id, [t]) when id == t_neg_float && !inz == 0 ->
-	openr fmt; fprintf fmt "(-%a)" print3 t; closer fmt
-    | Tapp (id, [_;_]) as t when is_relation id || is_arith_binop id ->
+    | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) when id == t_zwf_zero -> 
 	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
-    | Tapp (id, tl) when is_relation id || is_int_arith id -> 
+    | Tapp (id, tl) when is_relation id || is_arith id -> 
 	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl) -> 
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
@@ -131,13 +116,19 @@ let rec print_pure_type fmt = function
   | PTexternal id -> Ident.print fmt id
 
 let infix_relation id =
-       if id == t_lt_int || id == t_lt_float then "<" 
-  else if id == t_le_int || id == t_le_float then "<="
-  else if id == t_gt_int || id == t_gt_float then ">"
-  else if id == t_ge_int || id == t_ge_float then ">="
+       if id == t_lt_int then "<" 
+  else if id == t_le_int then "<="
+  else if id == t_gt_int then ">"
+  else if id == t_ge_int then ">="
   else if id == t_eq_int then "="
-  else if id == t_eq_float then "=="
-  else if id == t_neq_int || id == t_neq_float then "<>"
+  else if id == t_neq_int then "<>"
+  else assert false
+
+let pprefix_id id =
+  if id == t_lt_float then "Rlt"
+  else if id == t_le_float then "Rle"
+  else if id == t_gt_float then "Rgt" 
+  else if id == t_ge_float then "Rge"
   else assert false
 
 let print_predicate fmt p =
@@ -169,20 +160,22 @@ let print_predicate fmt p =
 	fprintf fmt "@[(well_founded ?@ %a)@]" print_term t
     | Papp (id, [a;b]) when id == t_zwf_zero ->
 	fprintf fmt "(Zwf `0` %a %a)" print_term a print_term b
-    | Papp (id, [a;b]) when is_int_comparison id && !inr == 0 ->
+    | Papp (id, [a;b]) when is_int_comparison id ->
 	openz fmt; 
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
 	closez fmt
-    | Papp (id, [a;b]) when is_float_comparison id && !inz == 0 ->
-	openr fmt; 
-	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
-	closer fmt
     | Papp (id, [a;b]) when id == t_eq ->
 	fprintf fmt "%a = %a" print_term a print_term b
     | Papp (id, [a;b]) when id == t_neq ->
 	fprintf fmt "~(%a = %a)" print_term a print_term b
+    | Papp (id, [a;b]) when id == t_eq_float ->
+	fprintf fmt "(@[eqT R %a %a@])" print_term a print_term b
+    | Papp (id, [a;b]) when id == t_neq_float ->
+	fprintf fmt "~(@[eqT R %a %a@])" print_term a print_term b
+    | Papp (id, [a;b]) when is_float_comparison id ->
+	fprintf fmt "(@[%s %a %a@])" (pprefix_id id) print_term a print_term b
     | Papp (id, l) ->
-	fprintf fmt "(@[%s %a@])" (Ident.string id)
+	fprintf fmt "(@[%a %a@])" Ident.print id
 	  (print_list space print_term) l
     | Pnot p -> 
 	fprintf fmt "~%a" print3 p

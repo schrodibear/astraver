@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.4 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.5 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -62,7 +62,7 @@ let int_arith = function
   | PPsub -> t_sub_int
   | PPmul -> t_mul_int
   | PPdiv -> t_div_int
-  | PPmod -> t_mod
+  | PPmod -> t_mod_int
   | _ -> assert false
 
 let float_arith = function

@@ -403,76 +403,14 @@ Then
 \end{enumerate}
 
 
-\chapter{Full examples}
+\section{Examples}
 \label{examples}\index{Example}
 
-This chapter details the examples delivered with \why\ in the
+Many examples are delivered with \why\ in the
 subdirectory \texttt{examples/} of the distribution.
+They are also available on the \why\ web site, at
+\url{http://why.lri.fr/examples/}.
 
-\newcommand{\exsummary}[2]{%
-  \begin{description}
-  \item[Directory:] \url{#1}
-  \item[Description:] #2
-  \end{description}
-}
-
-\section{Binary Search}
-\label{binarysearch}\index{Binary search}
-
-\exsummary{binary-search}{Binary Search (divide-and-conquer search in
-  a sorted array)}
-
-TODO
-
-\section{Bresenham's line drawing algorithm}
-\label{bresenham}\index{Bresenham}
-
-\exsummary{bresenham}{Bresenham's line drawing algorithm (proof of optimality)}
-
-TODO
-
-\section{Quicksort}
-\label{quicksort}\index{Quicksort}
-
-\exsummary{quicksort}{Quicksort (the famous divide-and-conquer sorting
-  algorithm)}
-
-TODO
-
-\section{Heapsort}
-\label{heapsort}\index{Heapsort}
-
-\exsummary{heapsort}{Heapsort (in-place implementation)}
-
-TODO
-
-\section{Edit distance}
-\label{editdistance}\index{Edit distance}
-
-\exsummary{edit-distance}{Algorithm to compute the edit distance in
-  linear space}
-
-This program computes a variant of the Levenshtein distance. Given two
-strings $w_1$ and $w_2$ of respective lengths $n_1$ and $n_2$, it
-computes the minimal numbers of insertions and deletions to perform in
-one of the strings to get the other one.  (The traditional edit
-distance also includes substitutions.)
-
-The nice point about this algorithm, due to Claude March\'e, is to work
-in linear space, in an array of $\min(n_1,n_2)$ integers. Time
-complexity is $O(n_1\times n_2)$, as usual.
-
-Files are organized as follows:
-\begin{description}
-\item[\texttt{words.v}]: 
-  Introduces an abstract type \texttt{A} for
-  characters, defines distance between two lists of characters,
-  defines suffixes of an array of characters and establishes several
-  lemmas.  As a bonus, an alternative definition of distance is
-  defined and proved equivalent with the first one.
-\item[\texttt{distance.ml}]:
-  The program and its specification.  
-\end{description}
 
 
 \chapter{Reference manual}
@@ -529,8 +467,51 @@ Options are the following:
 
 \section{Library}
 \label{library}\index{Library}
-These are the predicates provided in \why's own library:
+
+\subsection{Logic}
+
+\subsubsection{Predefined functions}
+\index{Function!predefined}
+
+These are the functions predefined in \why:
 \begin{description}
+\item[\texttt{add\_int, sub\_int, mul\_int, div\_int, mod\_int :
+    int,int -> int}] ~\par
+  Correspond to the infix symbols
+  \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} and \texttt{\%}.
+\item[\texttt{neg\_int : int -> int}] ~\par
+  Corresponds to the prefix symbol \texttt{-}.
+\item[\texttt{add\_float, sub\_float, mul\_float, div\_float :
+    float,float -> float}] ~\par
+  Correspond to the infix symbols
+  \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
+\item[\texttt{neg\_float, sqrt\_float : float -> float}] ~\par
+  \texttt{neg\_float} corresponds to the prefix symbol \texttt{-}.
+\item[\texttt{float\_of\_int : int -> float}]
+\end{description}
+
+\subsubsection{Predefined predicates}
+\index{Predicate!predefined}
+
+These are the predicates predefined in \why:
+\begin{description}
+\item[\texttt{lt\_int, le\_int, gt\_int, ge\_int, eq\_int, neq\_int :
+    int, int -> prop}] ~\par
+  Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
+  \texttt{>=}, \texttt{=} and \texttt{<>}.
+
+\item[\texttt{lt\_float, le\_float, gt\_float, ge\_float, eq\_float,
+    neq\_float :}] ~\par
+  \texttt{float, float -> prop} ~\par
+  Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
+  \texttt{>=}, \texttt{=} and \texttt{<>}.
+
+\item[\texttt{eq\_bool, neq\_bool : bool, bool -> prop}] ~\par
+  Correspond to the infix symbols \texttt{=} and \texttt{<>}.
+
+\item[\texttt{eq\_unit, neq\_unit : unit, unit -> prop}] ~\par
+  Correspond to the infix symbols \texttt{=} and \texttt{<>}.
+
 \item[\texttt{sorted\_array : array int, int, int -> prop}] ~\par
   \indextt{sorted\_array}
   \texttt{sorted\_array($t$,$i$,$j$)} states that the sub-array
@@ -565,8 +546,13 @@ These are the predicates provided in \why's own library:
 
 \end{description}
 
+\subsection{Coq}
+\index{Coq library}
+TODO
 
-TODO: specific Coq and PVS libraries
+\subsection{PVS}
+\index{PVS library}
+TODO
 
 
 \section{Logic syntax}
@@ -659,7 +645,7 @@ $R_1$ and $R_2$. Example: \texttt{0 <= x < y}.
 \end{figure}
 
 
-\section{Syntax of ML programs}
+\section{ML programs}
 \label{syntax:ml}\index{ML program!syntax}
 
 \subsection{ML types}
@@ -835,6 +821,51 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \end{center}           
 \end{figure}
 
+\subsection{Predefined functions}
+
+These are the functions predefined in \why:
+\begin{description}
+\item[\texttt{add\_int, sub\_int, mul\_int, div\_int, mod\_int : int
+    -> int -> int}] ~\par
+  Correspond to the infix symbols
+  \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/} and \texttt{\%}.
+
+\item[\texttt{neg\_int : int -> int}] ~\par
+  Correponds to the prefix symbol \texttt{-}.
+
+\item[\texttt{add\_float, sub\_float, mul\_float, div\_float,
+    : float -> float -> float}] ~\par
+  Correspond to the infix symbols
+  \texttt{+}, \texttt{-}, \texttt{*} and \texttt{/}.
+
+\item[\texttt{neg\_float, sqrt\_float : float -> float}] ~\par
+  \texttt{neg\_float} correponds to the prefix symbol \texttt{-}.
+
+\item[\texttt{float\_of\_int : int -> float}]
+
+\item[\texttt{lt\_int : x:int -> y:int -> \{\} bool \{if result then x
+    < y else x >= y\}}] ~\par
+\item[\texttt{le\_int : x:int -> y:int -> \{\} bool \{if result then x
+    <= y else x > y\}}] ~\par
+\item[\texttt{gt\_int : x:int -> y:int -> \{\} bool \{if result then x
+    > y else x <= y\}}] ~\par
+\item[\texttt{ge\_int : x:int -> y:int -> \{\} bool \{if result then x
+    >= y else x < y\}}] ~\par
+\item[\texttt{eq\_int : x:int -> y:int -> \{\} bool \{if result then x
+    = y else x <> y\}}] ~\par
+\item[\texttt{neq\_int : x:int -> y:int -> \{\} bool \{if result then x
+    <> y else x = y\}}] ~\par
+  Correspond to the infix symbols \texttt{<}, \texttt{<=}, \texttt{>},
+  \texttt{>=}, \texttt{=} and \texttt{<>}.
+
+\item[\texttt{lt\_float, le\_float, gt\_float, ge\_float, eq\_float,
+    neq\_float}] ~\par
+  As for integers.
+
+\item[\texttt{eq\_bool, neq\_bool, eq\_unit, neq\_unit}] ~\par
+  As for integers.
+
+\end{description}
 
 \printindex
 

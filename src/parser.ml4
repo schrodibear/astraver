@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.50 2002-07-19 11:23:53 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.51 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -370,12 +370,12 @@ EXTEND
   ast5:
   [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul loc x y 
     | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div loc x y 
-    | x = prog6; "%"; y = prog5 -> bin_op Ident.t_mod loc x y 
+    | x = prog6; "%"; y = prog5 -> bin_op Ident.t_mod_int loc x y 
     | x = prog6 -> x ] ]
   ;
   ast6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
-    | LIDENT "sqrt"; x = prog6 -> un_op Ident.t_sqrt loc x
+    | LIDENT "sqrt_float"; x = prog6 -> un_op Ident.t_sqrt_float loc x
     | x = ast7 -> without_annot loc x ] ]
   ;
   ast7:

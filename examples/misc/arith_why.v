@@ -64,7 +64,7 @@ Lemma mult_po_3 :
   (p1: Z)
   (Post4: p1 = `p0 + b0`)
   ((a:Z)
-   (a = `(Zdiv a0 2)` ->
+   (a = (Zdiv a0 `2`) ->
     ((b:Z)
      (b = `2 * b0` -> `a >= 0` /\ `p1 + a * b = x * y` /\ (Zwf `0` a a0))))).
 Proof.
@@ -103,7 +103,7 @@ Lemma mult_po_4 :
   (Test4: `a0 <> 0`)
   (Test2: `(Zmod a0 2) <> 1`)
   ((a:Z)
-   (a = `(Zdiv a0 2)` ->
+   (a = (Zdiv a0 `2`) ->
     ((b:Z)
      (b = `2 * b0` -> `a >= 0` /\ `p0 + a * b = x * y` /\ (Zwf `0` a a0))))).
 Proof.
@@ -145,7 +145,7 @@ Lemma mult_po_5 :
   (Test4: `a0 <> 0`)
   (p1: Z)
   (Post12: ((a:Z)
-            (a = `(Zdiv a0 2)` ->
+            (a = (Zdiv a0 `2`) ->
              ((b:Z)
               (b = `2 * b0` -> `a >= 0` /\ `p1 + a * b = x * y` /\
                (Zwf `0` a a0))))))
@@ -173,13 +173,13 @@ Lemma mult_po_6 :
   (Test4: `a0 <> 0`)
   (p1: Z)
   (Post12: ((a:Z)
-            (a = `(Zdiv a0 2)` ->
+            (a = (Zdiv a0 `2`) ->
              ((b:Z)
               (b = `2 * b0` -> `a >= 0` /\ `p1 + a * b = x * y` /\
                (Zwf `0` a a0))))))
   (Pre3: ~(`2` = `0`))
   (a1: Z)
-  (Post5: a1 = `(Zdiv a0 2)`)
+  (Post5: a1 = (Zdiv a0 `2`))
   (b1: Z)
   (Post6: b1 = `2 * b0`)
   `a1 >= 0` /\ `p1 + a1 * b1 = x * y` /\ (Zwf `0` a1 a0).
@@ -342,7 +342,7 @@ Definition mult := (* validation *)
                                 (mult_po_2 x y Pre5 result Post1 result0
                                 Post2 result1 Post3 Variant1 a0 b0 p0 Pre4
                                 Inv Test4) in
-                              (Z_eq_bool `(Zmod a0 2)`) in
+                              (Z_eq_bool (Zmod a0 `2`)) in
                             let (result5, Post13) = (result4 `1`) in
                             (exist_1 [result6: bool]
                             (if result6 then `(Zmod a0 2) = 1`
@@ -362,7 +362,7 @@ Definition mult := (* validation *)
                                 p2 = `p0 + b0` result4 tt Post4) in
                               (exist_2 [p2: Z][result5: unit]
                               ((a:Z)
-                               (a = `(Zdiv a0 2)` ->
+                               (a = (Zdiv a0 `2`) ->
                                 ((b:Z)
                                  (b = `2 * b0` -> `a >= 0` /\
                                   `p2 + a * b = x * y` /\ (Zwf `0` a a0))))) 
@@ -374,7 +374,7 @@ Definition mult := (* validation *)
                               let (result4, Post14) =
                                 (exist_1 [result4: unit]
                                 ((a:Z)
-                                 (a = `(Zdiv a0 2)` ->
+                                 (a = (Zdiv a0 `2`) ->
                                   ((b:Z)
                                    (b = `2 * b0` -> `a >= 0` /\
                                     `p0 + a * b = x * y` /\ (Zwf `0` a a0))))) 
@@ -384,7 +384,7 @@ Definition mult := (* validation *)
                                 Inv Test4 Test2)) in
                               (exist_2 [p1: Z][result5: unit]
                               ((a:Z)
-                               (a = `(Zdiv a0 2)` ->
+                               (a = (Zdiv a0 `2`) ->
                                 ((b:Z)
                                  (b = `2 * b0` -> `a >= 0` /\
                                   `p1 + a * b = x * y` /\ (Zwf `0` a a0))))) 
@@ -395,10 +395,10 @@ Definition mult := (* validation *)
                           Post12) in
                         let (a1, result4, Post5) =
                           let (result4, Post5) = (exist_1 [result4: Z]
-                            result4 = `(Zdiv a0 2)` `(Zdiv a0 2)`
-                            (refl_equal ? `(Zdiv a0 2)`)) in
+                            result4 = (Zdiv a0 `2`) (Zdiv a0 `2`)
+                            (refl_equal ? (Zdiv a0 `2`))) in
                           (exist_2 [a2: Z][result5: unit]
-                          a2 = `(Zdiv a0 2)` result4 tt Post5) in
+                          a2 = (Zdiv a0 `2`) result4 tt Post5) in
                         let (b1, result5, Post6) =
                           let (result5, Post6) = (exist_1 [result5: Z]
                             result5 = `2 * b0` `2 * b0`

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.60 2002-07-09 11:45:02 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.61 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -254,11 +254,11 @@ and is_pure_type_c c =
 (*s Preconditions for partial functions. *)
 
 let partial_pre = function
-  | Tapp (id, [a;b]) when id == t_div_int || id == t_mod ->
+  | Tapp (id, [a;b]) when id == t_div_int || id == t_mod_int ->
       let p = neq b (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
-  | Tapp (id, [a]) when id == t_sqrt ->
-      let p = ge a (Tconst (ConstInt 0)) in
+  | Tapp (id, [a]) when id == t_sqrt_float ->
+      let p = ge_float a (Tconst (ConstFloat "0.")) in
       [anonymous_pre true p]
   | _ ->
       []

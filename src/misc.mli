@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.34 2002-07-19 11:23:53 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.35 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -116,6 +116,7 @@ val lt_int : term -> term -> predicate
 val le_int : term -> term -> predicate
 val gt : term -> term -> predicate
 val ge : term -> term -> predicate
+val ge_float : term -> term -> predicate
 val eq : term -> term -> predicate
 val neq : term -> term -> predicate
 

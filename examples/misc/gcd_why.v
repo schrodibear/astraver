@@ -327,7 +327,7 @@ Lemma gcd2_po_3 :
   (Test2: `y0 <> 0`)
   (Pre2: ~(y0 = `0`))
   (r: Z)
-  (Post3: r = `(Zmod x0 y0)`)
+  (Post3: r = (Zmod x0 y0))
   (x1: Z)
   (Post4: x1 = y0)
   (y1: Z)
@@ -482,8 +482,8 @@ Definition gcd2 := (* validation *)
                           (gcd2_po_2 a b Pre5 result Post1 result0 Post2
                           Variant1 x0 y0 Pre4 Pre3 Test2) in
                         let (r, Post3) = (exist_1 [result2: Z]
-                          result2 = `(Zmod x0 y0)` `(Zmod x0 y0)`
-                          (refl_equal ? `(Zmod x0 y0)`)) in
+                          result2 = (Zmod x0 y0) (Zmod x0 y0)
+                          (refl_equal ? (Zmod x0 y0))) in
                         let (x1, y1, result2, Post7) =
                           let (x1, result2, Post4) =
                             let (result2, Post4) = (exist_1 [result2: Z]

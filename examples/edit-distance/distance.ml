@@ -1,6 +1,17 @@
 
-(*s Correctness of a program computing the minimal distance between two
-    words (code by Claude Marché). *)
+(*s Correctness of a program computing the minimal distance between
+    two words (code by Claude Marché).
+
+    This program computes a variant of the Levenshtein distance. Given
+    two strings [w1] and [w2] of respective lengths [n1] and [n2], it
+    computes the minimal numbers of insertions and deletions to
+    perform in one of the strings to get the other one.  (The
+    traditional edit distance also includes substitutions.)
+
+    The nice point about this algorithm, due to Claude March\'e, is to
+    work in linear space, in an array of min(n1,n2) integers. Time
+    complexity is O(n1 * n2), as usual.
+*)
 
 (*s Parameters. Input of the program is composed of two arrays
     of characters, [w1] of size [n1] and [w2] of size [n2]. *)

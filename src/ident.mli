@@ -1,5 +1,6 @@
+(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.mli,v 1.24 2002-07-19 11:23:53 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.25 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -66,8 +67,10 @@ val t_mul_float : t
 val t_div_float : t
 val t_neg_float : t
 
-val t_mod : t
-val t_sqrt : t
+val t_mod_int : t
+val t_sqrt_float : t
+
+val t_float_of_int : t
 
 val t_lt : t
 val t_le : t
@@ -124,3 +127,5 @@ val is_int_arith : t -> bool
 val is_float_arith_binop : t -> bool
 
 val is_arith_binop : t -> bool
+
+val is_arith : t -> bool

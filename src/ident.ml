@@ -1,9 +1,15 @@
+(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.ml,v 1.27 2002-07-19 11:23:52 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.28 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
-let create s = { stamp = 0; name = s; label = None }
+let create = 
+  let h = Hashtbl.create 97 in
+  let hashcons id = 
+    try Hashtbl.find h id with Not_found -> Hashtbl.add h id id; id 
+  in
+  fun s -> hashcons { stamp = 0; name = s; label = None }
 
 let string s = s.name
 
@@ -87,20 +93,22 @@ let t_mul = create "%mul"
 let t_div = create "%div"
 let t_neg = create "%neg"
 
-let t_add_int = create "%add_int"
-let t_sub_int = create "%sub_int"
-let t_mul_int = create "%mul_int"
-let t_div_int = create "%div_int"
-let t_neg_int = create "%neg_int"
+let t_add_int = create "add_int"
+let t_sub_int = create "sub_int"
+let t_mul_int = create "mul_int"
+let t_div_int = create "div_int"
+let t_neg_int = create "neg_int"
 
-let t_add_float = create "%add_float"
-let t_sub_float = create "%sub_float"
-let t_mul_float = create "%mul_float"
-let t_div_float = create "%div_float"
-let t_neg_float = create "%neg_float"
+let t_add_float = create "add_float"
+let t_sub_float = create "sub_float"
+let t_mul_float = create "mul_float"
+let t_div_float = create "div_float"
+let t_neg_float = create "neg_float"
 
-let t_mod = create "%mod"
-let t_sqrt = create "%sqrt"
+let t_mod_int = create "mod_int"
+let t_sqrt_float = create "sqrt_float"
+
+let t_float_of_int = create "float_of_int"
 
 let t_lt = create "%lt"
 let t_le = create "%le"
@@ -109,27 +117,27 @@ let t_ge = create "%ge"
 let t_eq = create "%eq"
 let t_neq = create "%neq"
 
-let t_eq_int = create "%eq_int"
-let t_eq_bool = create "%eq_bool"
-let t_eq_float = create "%eq_float"
-let t_eq_unit = create "%eq_unit"
+let t_eq_int = create "eq_int"
+let t_eq_bool = create "eq_bool"
+let t_eq_float = create "eq_float"
+let t_eq_unit = create "eq_unit"
 
-let t_neq_int = create "%neq_int"
-let t_neq_bool = create "%neq_bool"
-let t_neq_float = create "%neq_float"
-let t_neq_unit = create "%neq_unit"
+let t_neq_int = create "neq_int"
+let t_neq_bool = create "neq_bool"
+let t_neq_float = create "neq_float"
+let t_neq_unit = create "neq_unit"
 
-let t_lt_int = create "%lt_int"
-let t_le_int = create "%le_int"
-let t_gt_int = create "%gt_int"
-let t_ge_int = create "%ge_int"
+let t_lt_int = create "lt_int"
+let t_le_int = create "le_int"
+let t_gt_int = create "gt_int"
+let t_ge_int = create "ge_int"
 
-let t_lt_float = create "%lt_float"
-let t_le_float = create "%le_float"
-let t_gt_float = create "%gt_float"
-let t_ge_float = create "%ge_float"
+let t_lt_float = create "lt_float"
+let t_le_float = create "le_float"
+let t_gt_float = create "gt_float"
+let t_ge_float = create "ge_float"
 
-let t_zwf_zero = create "zwf_zero"
+let t_zwf_zero = create "%zwf_zero"
 let result = create "result"
 let default = create "_"
 let access = create "access"
@@ -163,11 +171,12 @@ let is_relation id =
 
 let is_int_arith_binop id =
   id == t_add_int || id == t_sub_int || id == t_mul_int || id == t_div_int ||
-  id == t_mod
+  id == t_mod_int
 
 let is_float_arith_binop id =
   id == t_add_float || id == t_sub_float || id == t_mul_float || 
   id == t_div_float
+
 
 let is_arith_binop id =
   is_int_arith_binop id || is_float_arith_binop id
@@ -175,5 +184,15 @@ let is_arith_binop id =
 let is_int_arith_unop id = 
   id == t_neg_int
 
+let is_float_arith_unop id =
+  id == t_neg_float || id == t_sqrt_float
+
 let is_int_arith id = 
   is_int_arith_binop id || is_int_arith_unop id
+
+let is_float_arith id =
+  is_float_arith_binop id || is_float_arith_unop id
+
+let is_arith id =
+  is_int_arith id || is_float_arith id
+

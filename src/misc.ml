@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.44 2002-07-19 11:23:53 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.45 2002-07-19 13:01:36 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -344,6 +344,7 @@ let lt = relation t_lt
 let le = relation t_le
 let gt = relation t_gt
 let ge = relation t_ge
+let ge_float = relation t_ge_float
 let eq = relation t_eq
 let neq = relation t_neq
 

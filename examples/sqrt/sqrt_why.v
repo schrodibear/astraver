@@ -248,7 +248,7 @@ Lemma sqrt_po_4 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (well_founded ? (Zwf ZERO)).
 Proof. (* sqrt_po_4 *)
 Auto with *.
@@ -264,7 +264,7 @@ Lemma sqrt_po_5 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
   (y0: Z)
   (z0: Z)
@@ -289,7 +289,7 @@ Lemma sqrt_po_6 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
   (y0: Z)
   (z0: Z)
@@ -302,7 +302,7 @@ Lemma sqrt_po_6 :
   (Pre3: ~(`2` = `0`))
   (Pre4: ~(z0 = `0`))
   (z1: Z)
-  (Post4: z1 = `(Zdiv ((Zdiv x z0) + z0) 2)`)
+  (Post4: z1 = (Zdiv (`(Zdiv x z0) + z0`) `2`))
   `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
   `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)` /\ (Zwf `0` y1 y0).
 Proof. (* sqrt_po_6 *)
@@ -325,7 +325,7 @@ Lemma sqrt_po_7 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
   (y0: Z)
   (z0: Z)
@@ -353,7 +353,7 @@ Lemma sqrt_po_8 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
   (y0: Z)
   (z0: Z)
@@ -383,7 +383,7 @@ Lemma sqrt_po_9 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
   (y0: Z)
   (z0: Z)
@@ -406,7 +406,7 @@ Lemma sqrt_po_10 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   `result2 > 0` /\ `result1 > 0` /\
   `result2 = (Zdiv ((Zdiv x result1) + result1) 2)` /\
   `x < (result1 + 1) * (result1 + 1)` /\ `x < (result2 + 1) * (result2 + 1)`.
@@ -451,7 +451,7 @@ Lemma sqrt_po_11 :
   (Post1: result1 = x)
   (Pre1: ~(`2` = `0`))
   (result2: Z)
-  (Post2: result2 = `(Zdiv (x + 1) 2)`)
+  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (y0: Z)
   (z0: Z)
   (Post5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
@@ -503,8 +503,8 @@ Definition sqrt := (* validation *)
                     let Pre1 =
                       (sqrt_po_3 x Pre7 Test5 Test3 result1 Post1) in
                     let (result2, Post2) = (exist_1 [result2: Z]
-                      result2 = `(Zdiv (x + 1) 2)` `(Zdiv (x + 1) 2)`
-                      (refl_equal ? `(Zdiv (x + 1) 2)`)) in
+                      result2 = (Zdiv (`x + 1`) `2`) (Zdiv (`x + 1`) `2`)
+                      (refl_equal ? (Zdiv (`x + 1`) `2`))) in
                     let (y0, z0, result3, Post15) =
                       let (y0, z0, result3, Post5) =
                         (well_founded_induction Z (Zwf ZERO)
@@ -562,13 +562,13 @@ Definition sqrt := (* validation *)
                                       let (result5, Post4) =
                                         (exist_1 [result5: Z]
                                         result5 =
-                                        `(Zdiv ((Zdiv x z0) + z0) 2)` 
-                                        `(Zdiv ((Zdiv x z0) + z0) 2)`
-                                        (refl_equal ? `(Zdiv ((Zdiv x z0) +
-                                                             z0)
-                                                        2)`)) in
+                                        (Zdiv (`(Zdiv x z0) + z0`) `2`) 
+                                        (Zdiv (`(Zdiv x z0) + z0`) `2`)
+                                        (refl_equal ? (Zdiv (`(Zdiv x z0) +
+                                                              z0`)
+                                                       `2`))) in
                                       (exist_2 [z2: Z][result6: unit]
-                                      z2 = `(Zdiv ((Zdiv x z0) + z0) 2)` 
+                                      z2 = (Zdiv (`(Zdiv x z0) + z0`) `2`) 
                                       result5 tt Post4) in
                                     (exist_3 [y2: Z][z2: Z][result6: unit]
                                     `z2 > 0` /\ `y2 > 0` /\
