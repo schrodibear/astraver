@@ -616,11 +616,53 @@ TODO
 \label{syntax:logic}\index{Logic!syntax}
 
 
+\subsection{Lexical conventions}
+\label{lexical:logic}\index{Lexical conventions!logic}
+
+Lexical conventions are the same as \caml's. 
+
+\paragraph{Comments.} Comments are opened with \texttt{(*}, closed
+with \texttt{*)} and can be nested.
+
+\paragraph{Identifiers.} Identifiers are made of letters, digits,
+the underscore character \texttt{\_} and the single quote \texttt{'},
+starting with a letter. Additionally, they can be qualified by a
+label (another identifier), using the \texttt{@} notation.
+
+\begin{center}
+\begin{tabular}{lrl}
+  \nt{identifier}\indexnt{identifier}
+    & $::=$ & \nt{letter} (\nt{letter} $|$ \te{0}..\te{9} $|$
+              \te{\_} $|$ \te{'})\etoile
+  \\[0.1em]
+  \nt{letter}
+    & $::=$ & \te{A}..\te{Z} $|$ \te{a}..\te{z}
+  \\[0.1em]
+  \nt{lab\_identifier}\indexnt{lab\_identifier}
+    & $::=$ & \nt{identifier} [ \te{@} \nt{identifier} ]
+\end{tabular}
+\end{center}
+
+
+\paragraph{Keywords.}
+
+Keywords of the logic are:
+\begin{center}
+{\tt\begin{tabular}{l@{\qquad}l@{\qquad}l}
+and & bool & else \\
+false & float & forall \\
+if & int & not \\
+or & then & true \\
+unit & void
+\end{tabular}}
+\end{center}
+
+
 \subsection{Terms}
 \label{syntax:terms}\index{Term!syntax}
 
 Syntax of terms is given in Figure~\ref{fig:terms}.
-Usual precedences apply to arithmetical operations.
+Arithmetical operations have usual precedences and are left associative.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -630,9 +672,9 @@ Usual precedences apply to arithmetical operations.
     & $::=$ & \nt{constant} \\
       & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
       & $|$ & \te{-} \nt{term} \\
-      & $|$ & \nt{identifier} \\
-      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
-      & $|$ & \nt{identifier} \te{[} \nt{term} \te{]} \\
+      & $|$ & \nt{lab\_identifier} \\
+      & $|$ & \nt{lab\_identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
   \\[0.1em]
 
@@ -663,7 +705,10 @@ and the \pvs\ ones.
 
 Precedences are the following (from strongest to weakest): \te{not}, 
 \te{and}, \te{or}, implication, and \te{forall}. 
-Implication is right associative.
+Implication, conjunction and disjunction are right associative.
+
+Primitive types (non terminal \nt{primitive\_type}) are defined in
+Figure~\ref{fig:types}. 
 
 Syntactic sugar: $t_1 ~ R_1 ~ t_2 ~ R_2 ~ t_3$ is equivalent to
 $t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$ for any relations
@@ -704,6 +749,12 @@ $R_1$ and $R_2$. Example: \texttt{0 <= x < y}.
 
 \section{ML programs}
 \label{syntax:ml}\index{ML program!syntax}
+
+\subsection{Lexical conventions}
+\label{lexical:ml}\index{Lexical conventions!ML programs}
+
+Lexical conventions are the same as for logic (see
+Section~\ref{lexical:logic} on page~\pageref{lexical:logic}). 
 
 \subsection{ML types}
 \label{syntax:mltypes}\index{ML type!syntax}
@@ -901,7 +952,8 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \subsection{ML semantics}
 \label{semantics:ml}\index{ML program!semantics}
 
-Evaluation of ML programs obey to the following rules:
+Semantics of ML programs conforms to \caml's one.
+More precisely, it obeys the following rules:
 \begin{itemize}
 \item 
   Logical connective \texttt{\&\&} and \texttt{||} are lazy and
@@ -921,10 +973,10 @@ Evaluation of ML programs obey to the following rules:
 \item
   In a function call, the argument is evaluated first, then the
   function; consequently multiple arguments are evaluated from right
-  to left. In particular, this applies to all infix operators (except
-  \texttt{\&\&} and \texttt{||}).
+  to left. This applies to all infix operators, except
+  \texttt{\&\&} and \texttt{||}.
 \item
-  In the array assignment $t$\texttt{[}$e_2$\texttt{] :=} $e_1$,
+  In array assignment $t$\texttt{[}$e_2$\texttt{] :=} $e_1$,
   expression $e_1$ is evaluated first, then expression $e_2$.
 \end{itemize}
 
