@@ -101,7 +101,7 @@ bin/why.byte: $(CMO) src/why.cmo
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma $^
 
 bin/why.static: $(CMX) src/why.cmx 
-	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
 	strip $@
 
 bin/top: $(CMO)
