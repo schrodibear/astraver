@@ -1,4 +1,6 @@
 
+  o labeled predicates with syntax ":id: predicate" and lowest precedence
+
 version 1.64, October 13th, 2004
 ================================
   o Coq output now in V8 syntax when Coq V8 is detected at configuration

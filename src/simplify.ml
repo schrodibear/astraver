@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.30 2004-12-02 17:24:26 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.31 2004-12-06 13:58:12 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -134,7 +134,9 @@ let has_type ty fmt id = match ty with
   | _ -> 
       assert false
 
-let rec print_predicate fmt = function
+let rec print_predicate pos fmt p = 
+  let pp = print_predicate pos in 
+  match p with
   | Ptrue ->
       fprintf fmt "TRUE"
   | Pvar id when id == default_post ->
@@ -159,36 +161,38 @@ let rec print_predicate fmt = function
   | Papp (id, tl, _) -> 
       fprintf fmt "@[(EQ (%a@ %a) |@@true|)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
-      fprintf fmt "@[(IMPLIES@ %a@ %a)@]" print_predicate a print_predicate b
+      fprintf fmt "@[(IMPLIES@ %a@ %a)@]" (print_predicate (not pos)) a pp b
   | Piff (a, b) ->
-      fprintf fmt "@[(IFF@ %a@ %a)@]" print_predicate a print_predicate b
+      fprintf fmt "@[(IFF@ %a@ %a)@]" pp a pp b
   | Pif (a, b, c) ->
       fprintf fmt 
      "@[(AND@ (IMPLIES (EQ %a |@@true|) %a)@ (IMPLIES (NEQ %a |@@true|) %a))@]"
-      print_term a print_predicate b print_term a print_predicate c
+      print_term a pp b print_term a pp c
   | Pand (_, a, b) | Forallb (_, a, b) ->
-      fprintf fmt "@[(AND@ %a@ %a)@]" print_predicate a print_predicate b
+      fprintf fmt "@[(AND@ %a@ %a)@]" pp a pp b
   | Por (a, b) ->
-      fprintf fmt "@[(OR@ %a@ %a)@]" print_predicate a print_predicate b
+      fprintf fmt "@[(OR@ %a@ %a)@]" pp a pp b
   | Pnot a ->
-      fprintf fmt "@[(NOT@ %a)@]" print_predicate a
+      fprintf fmt "@[(NOT@ %a)@]" pp a
   | Forall (_, id, n, ty, p) when simplify_typing && external_type ty -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
-	Ident.print id' (has_type ty) id' print_predicate p'
+	Ident.print id' (has_type ty) id' pp p'
   | Forall (_,id,n,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id' print_predicate p'
+      fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id' pp p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(EXISTS (%a)@ %a)@]" Ident.print id' print_predicate p'
+      fprintf fmt "@[(EXISTS (%a)@ %a)@]" Ident.print id' pp p'
   | Pfpi _ ->
       failwith "fpi not supported with Simplify"
+  | Pnamed (n, p) when pos ->
+      fprintf fmt "@[(LBLPOS@ %s@ %a)@]" n pp p
   | Pnamed (n, p) ->
-      fprintf fmt "@[(LBLPOS@ %s@ %a)@]" n print_predicate p
+      fprintf fmt "@[(LBLNEG@ %s@ %a)@]" n pp p
 
 let cc_external_type = function
   | Cc.TTpure ty -> external_type ty
@@ -207,14 +211,15 @@ let cc_has_type ty fmt id = match ty with
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
-	print_predicate fmt concl
+	print_predicate false fmt concl
     | Svar (id, ty) :: hyps when simplify_typing && cc_external_type ty -> 
 	fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
 	  Ident.print id (cc_has_type ty) id print_seq hyps
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id print_seq hyps
     | Spred (_,p) :: hyps -> 
-	fprintf fmt "@[(IMPLIES %a@ %a)@]" print_predicate p print_seq hyps
+	fprintf fmt "@[(IMPLIES %a@ %a)@]" 
+	  (print_predicate true) p print_seq hyps
   in
   print_seq fmt hyps
 
@@ -224,13 +229,14 @@ let print_obligation fmt (loc, o, s) =
 
 let print_axiom fmt id p =
   fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@]@\n" id;
-  fprintf fmt " @[<hov 2>%a@])@]@\n@\n" print_predicate p.Env.scheme_type
+  fprintf fmt " @[<hov 2>%a@])@]@\n@\n" 
+    (print_predicate true) p.Env.scheme_type
 
 let print_predicate fmt id p =
   let (bl,p) = p.Env.scheme_type in
   fprintf fmt "@[(DEFPRED (%s %a) @[%a@])@]@\n@\n" id
     (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
-    print_predicate p;
+    (print_predicate false) p;
   Hashtbl.add defpred (Ident.create id) ()
 
 let print_elem fmt = function

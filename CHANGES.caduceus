@@ -1,5 +1,8 @@
 Note: These are the changes for Caduceus.
 
+ o labeled predicates with syntax "id: predicate" and lowest precedence
+   (labels are not interpreted; they are passed to Why and then to provers)
+
 version 0.68, November 30th, 2004
 =================================
  o more support for & on non-structure variable, but not complete 
