@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.7 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.8 2003-01-23 13:08:17 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -71,14 +71,22 @@ let default_exns_post e =
   List.map (fun x -> x, default_post) xs
  
 let while_post loc info b inv = 
-  let _,s = decomp_boolean (post b) in
-  let s = change_label b.info.label info.label s in
   let ql = default_exns_post info.kappa.c_effect in
-  match inv with
-    | None -> Some (anonymous loc s, ql)
-    | Some i -> Some ({ a_value = pand i.a_value s; 
-			a_name = Name (post_name_from i.a_name);
-			a_loc = loc }, ql)
+  match post b, inv with
+    | None, None -> 
+	None
+    | None, Some i ->
+	Some ({ a_value = i.a_value; 
+		a_name = Name (post_name_from i.a_name);
+		a_loc = loc }, ql)
+    | Some qb, inv ->
+	let _,s = decomp_boolean qb in
+	let s = change_label b.info.label info.label s in
+	match inv with
+	  | None -> Some (anonymous loc s, ql)
+	  | Some i -> Some ({ a_value = pand i.a_value s; 
+			      a_name = Name (post_name_from i.a_name);
+			      a_loc = loc }, ql)
 
 let while_post_block env inv (phi,_,r) e = 
   let lab = e.info.label in
@@ -91,6 +99,11 @@ let while_post_block env inv (phi,_,r) e =
 	{ a_value = pand i.a_value decphi; 
 	  a_name = Name (post_name_from i.a_name);
 	  a_loc = e.info.loc }, ql
+
+let check_while_test b =
+  if post b = None then
+    wprintf b.info.loc 
+      "couldn't give this test a postcondition (possible incompleteness)\n"
 
 (* misc. *)
 
@@ -118,10 +131,6 @@ let add_oblig p1 pr =
 (* change the statement *)
 
 let change_desc p d = { p with desc = d }
-
-(* [normalize_boolean b] checks if the boolean expression [b] (of type
-   [bool]) is annotated; if not, tries to add the annotation 
-   [if result then c=true else c=false]) if [b] is an expression [c]. *)
 
 let is_bool = function
   | PureType PTbool -> true
@@ -164,6 +173,7 @@ let rec normalize p =
 	post_if_none env q p
     | While (b, invopt, var, e) ->
 	let b' = normalize_boolean env b in
+	check_while_test b';
 	let p = change_desc p (While (b', invopt, var, e)) in
 	(match post p with
 	   | None -> 
@@ -182,6 +192,9 @@ let rec normalize p =
     | Seq _ | Lam _ | LetIn _ | LetRef _ | Rec _ | App _ 
     | Raise _ | Try _ ->
 	p
+
+(* [normalize_boolean b] checks if the boolean expression [b] (of type
+   [bool]) is annotated; if not, tries to give it an annotation. *)
 
 and normalize_boolean env b =
   let k = b.info.kappa in
@@ -204,14 +217,25 @@ and normalize_boolean env b =
 	      let ne1 = normalize_boolean env e1 in
 	      let ne2 = normalize_boolean env e2 in
 	      let ne3 = normalize_boolean env e3 in
-	      let q1t,q1f = decomp_boolean (post ne1) in
-	      let q2t,q2f = decomp_boolean (post ne2) in
-	      let q3t,q3f = decomp_boolean (post ne3) in
-	      let c = Pif (Tvar Ident.result,
-			   por (pand q1t q2t) (pand q1f q3t),
-			   por (pand q1t q2f) (pand q1f q3f)) in
-	      let b' = change_desc b (If (ne1,ne2,ne3)) in
-	      give_post b' (create_post c)
+	      begin  match post ne1, post ne2, post ne3 with
+		| Some q1, Some q2, Some q3 ->
+		    let q1t,q1f = decomp_boolean q1 in
+		    let q2t,q2f = decomp_boolean q2 in
+		    let q3t,q3f = decomp_boolean q3 in
+		    let c = Pif (Tvar Ident.result,
+				 por (pand q1t q2t) (pand q1f q3t),
+				 por (pand q1t q2f) (pand q1f q3f)) in
+		    let b' = change_desc b (If (ne1,ne2,ne3)) in
+		    give_post b' (create_post c)
+		| _ ->
+		    b
+	      end
+(***
+	  | LetIn (x, ({ desc = Expression t } as e1), e2) 
+	      when post e1 = None ->
+	      let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
+	change_desc p (LetIn (x, post_if_none env q e1, e2))
+***)
 	  | _ -> 
 	      b
       end

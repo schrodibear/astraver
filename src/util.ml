@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.70 2002-12-11 10:33:13 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.71 2003-01-23 13:08:17 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -108,6 +108,20 @@ let type_c_subst_oldify env x t k =
     c_pre = List.map (asst_app (tsubst_in_predicate s)) k.c_pre;
     c_post = option_app (post_app (tsubst_in_predicate s_old)) k.c_post }
 
+(*s Normalization of types: get rid of label "init" everywhere *)
+
+let rec normalize_type_v = function
+  | Ref v -> Ref (normalize_type_v v)
+  | Array v -> Array (normalize_type_v v)
+  | Arrow (bl, c) -> Arrow (bl, normalize_type_c c)
+  | PureType _ as v -> v
+
+and normalize_type_c k = 
+  { c_result_name = k.c_result_name;
+    c_result_type = normalize_type_v k.c_result_type;
+    c_effect = k.c_effect;
+    c_pre = List.map (asst_app (erase_label "init")) k.c_pre;
+    c_post = optpost_app (change_label "init" "") k.c_post }
 
 (*s shortcuts for typing information *)
 
@@ -266,15 +280,11 @@ let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 
 let equality t1 t2 = Papp (t_eq, [t1; t2])
 
-let decomp_boolean = function
-  | Some ({ a_value = c }, _) -> 
-      (* q -> if result then q(true) else q(false) *)
-      let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) c in
-      let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) c in
-      simplify ctrue, simplify cfalse
-  | None -> 
-      equality (Tvar Ident.result) ttrue,
-      equality (Tvar Ident.result) tfalse
+let decomp_boolean ({ a_value = c }, _) =
+  (* q -> if result then q(true) else q(false) *)
+  let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) c in
+  let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) c in
+  simplify ctrue, simplify cfalse
 
 (*s [make_access env id c] Access in array id.
     Constructs [t:(array s T)](access_g s T t c ?::(lt c s)). *)

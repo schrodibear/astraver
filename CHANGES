@@ -1,4 +1,6 @@
- 
+
+  o fixed bug in loop tests automatic annotation
+  o fixed bug in interpretation of @init 
   o doc: C programs, Coq and PVS libraries documented
   o logic: if-then-else construct on terms
   o PVS: arrays defined in Why prelude and fixed pretty-print; installation

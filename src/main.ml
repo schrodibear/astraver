@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.50 2003-01-16 15:42:48 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.51 2003-01-23 13:08:17 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -82,6 +82,7 @@ let interp_program id p =
   let p = Typing.typef Env.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
+  let v = normalize_type_v v in
   check_for_not_mutable ploc v;
   Env.add_global id v None;
   print_if_debug print_type_c c;
@@ -129,6 +130,7 @@ let interp_decl d =
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ids, v) ->
       let v = Ltyping.type_v loc lab env lenv v in
+      let v = normalize_type_v v in
       List.iter (add_external loc v) ids;
       if ocaml then Ocaml.push_parameters ids v;
       if not (is_mutable v) then
@@ -136,6 +138,7 @@ let interp_decl d =
 	List.iter (add_parameter v tv) ids
   | External (loc, ids, v) -> 
       let v = Ltyping.type_v loc lab env lenv v in
+      let v = normalize_type_v v in
       if is_mutable v then raise_located loc MutableExternal;
       if ocaml_externals then Ocaml.push_parameters ids v;
       List.iter (add_external loc v) ids

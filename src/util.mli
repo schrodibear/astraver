@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.31 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.32 2003-01-23 13:08:17 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -37,6 +37,8 @@ val apply_post :
 val oldify : local_env -> Effect.t -> term -> term
 val type_c_subst_oldify : local_env -> Ident.t -> term -> type_c -> type_c
 
+val normalize_type_v : type_v -> type_v
+
 val is_reference : local_env -> Ident.t -> bool
 val predicate_now_refs : local_env -> predicate -> Ident.set
 val predicate_refs : local_env -> predicate -> Ident.set
@@ -52,7 +54,7 @@ val decomp_kappa : type_c ->
 
 val equality : term -> term -> predicate
 
-val decomp_boolean : postcondition option -> predicate * predicate
+val decomp_boolean : postcondition -> predicate * predicate
 
 val effect : typed_program -> Effect.t
 val obligations : typed_program -> assertion list
