@@ -32,6 +32,7 @@
 \begin{tabular}{|p{0.97\textwidth}|}\hline%
 }{\\\hline\end{tabular}\end{alltt}\end{small}}
 \def\result{\char'134 result}
+\def\at{\char'134 at}
 \def\forall{\char'134 forall}
 \def\old{\char'134 old}
 \def\bs{\char'134}
@@ -191,10 +192,57 @@ Here is an example with a trivial loop:
 Beside loop annotations, there are three other kinds of inner annotations.
 
 \paragraph{Intermediate assertions.}\indextt{assert}
+An assertion can be placed at any statement point. A proof obligation
+is generated to show its validity. Example:
+\begin{code}
+
+  \dots
+  if (a > b) \{ int tmp = a; a = b; b = tmp; \}
+  /*@ assert a <= b */
+  \dots
+\end{code}
+Such an assertion can be seen as a cut in the proof. It is a property
+available below this program point and, conversely, it is collected by
+the upward weakest preconditions computation.
 
 \paragraph{Labels.}\indextt{label}
+Usual C labels can be used in annotations to refer to terms or
+predicates at a particular program point. Example:
+\begin{code}
+  
+  L:
+  /*@ invariant i >= \at(i,L) */
+  while (i++ < N) \dots
+\end{code}
+When there is no available label in the code, it is possible to
+insert a ``logical'' label using the following annotation:
+\begin{code}
+  
+  /*@ label L */
+  /*@ invariant i >= \at(i,L) */
+  while (i++ < N) \dots
+\end{code}
+
 
 \paragraph{Specifying pieces of code.}
+It is possible to give a specification to an inner statement (which
+may be a block or not). The syntax is the same as a function specification:
+\begin{code}
+
+  \dots
+  /*@ ensures a <= b */
+  if (a > b) \{ int tmp = a; a = b; b = tmp; \}
+  \dots
+\end{code}
+Contrary to the \texttt{assert} annotation, the specified
+statement is seen as a black box, as if it would be a
+function call.
+In particular, the weakest precondition computation
+will not enter this statement.
+
+Inner specifications may be used to help automatic decision procedures
+or to reduce the size of proof obligations (there would be more
+numerous but smaller proof obligations).
 
 \section{Pointers and arrays}
 \index{valid@\texttt{\bs{}valid}}
