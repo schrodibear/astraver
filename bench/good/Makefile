@@ -11,7 +11,7 @@ tc:
 WHY=../../bin/why.opt
 
 %_why.v: %.ml $(WHY)
-	time $(WHY) -V $<
+	$(WHY) -V $<
 
 %.vo: %.v
-	time coqc $<
+	coqc -I ../../lib/coq $<

@@ -1,6 +1,6 @@
 
+Require Why.
 Require Omega.
-Require ProgWf.
 
 Lemma p_po_1 : 
   (i: Z)

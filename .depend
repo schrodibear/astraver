@@ -70,10 +70,10 @@ src/util.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi src/util.cmi 
 src/util.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
     src/logic.cmi src/misc.cmx src/rename.cmx src/types.cmi src/util.cmi 
-src/vcg.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/options.cmi \
-    src/types.cmi src/vcg.cmi 
-src/vcg.cmx: src/ast.cmi src/ident.cmx src/logic.cmi src/options.cmx \
-    src/types.cmi src/vcg.cmi 
+src/vcg.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
+    src/options.cmi src/types.cmi src/util.cmi src/vcg.cmi 
+src/vcg.cmx: src/ast.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
+    src/options.cmx src/types.cmi src/util.cmx src/vcg.cmi 
 src/wp.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi src/util.cmi \
     src/wp.cmi 
@@ -90,12 +90,12 @@ src/error.cmi: src/ast.cmi src/effect.cmi src/ident.cmi src/loc.cmi \
 src/logic.cmi: src/ident.cmi 
 src/misc.cmi: src/ast.cmi src/ident.cmi src/loc.cmi src/logic.cmi \
     src/types.cmi 
-src/mlize.cmi: src/ast.cmi src/env.cmi src/rename.cmi 
+src/mlize.cmi: src/ast.cmi src/env.cmi src/logic.cmi src/rename.cmi 
 src/monad.cmi: src/ast.cmi src/env.cmi src/ident.cmi src/logic.cmi \
     src/rename.cmi src/types.cmi 
 src/parser.cmi: src/ast.cmi src/types.cmi 
 src/pvs.cmi: src/vcg.cmi 
-src/red.cmi: src/ast.cmi 
+src/red.cmi: src/ast.cmi src/logic.cmi 
 src/rename.cmi: src/ident.cmi 
 src/types.cmi: src/effect.cmi src/ident.cmi src/logic.cmi 
 src/typing.cmi: src/ast.cmi src/env.cmi src/loc.cmi src/logic.cmi \
@@ -104,3 +104,9 @@ src/util.cmi: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
+lib/coq/WhyWf.vo: lib/coq/WhyWf.v
+lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyWf.vo lib/coq/WhyArrays.vo
+lib/coq/WhyTuples.vo: lib/coq/WhyTuples.v
+lib/coq/WhyInt.vo: lib/coq/WhyInt.v
+lib/coq/WhyBool.vo: lib/coq/WhyBool.v
+lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo

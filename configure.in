@@ -136,6 +136,15 @@ else
     AC_MSG_RESULT(ok)
 fi
 
+# coq
+AC_CHECK_PROG(COQC,coqc,coqc,no)
+if test "$COQC" = no ; then
+	AC_MSG_ERROR(Cannot find coqc.)
+fi
+AC_CHECK_PROG(COQDEP,coqdep,coqdep,true)
+if test "$COQDEP" = true ; then
+	AC_MSG_WARN(Cannot find coqdep.)
+fi
 
 # substitutions to perform
 AC_SUBST(OCAMLC)
@@ -148,6 +157,8 @@ AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(CAMLP4LIB)
+AC_SUBST(COQC)
+AC_SUBST(COQDEP)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

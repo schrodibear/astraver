@@ -5,4 +5,4 @@ WHY=../../bin/why.opt
 	$(WHY) $<
 
 %.vo: %.v
-	coqc $<
+	coqc -I ../../lib/coq $<

@@ -1,6 +1,6 @@
 
+Require Why.
 Require Omega.
-Require Correctness.
 
 Lemma fc3_po_1 : 
   (result: Z)

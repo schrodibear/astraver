@@ -920,8 +920,77 @@ else
     echo "$ac_t""ok" 1>&6
 fi
 
+# coq
+# Extract the first word of "coqc", so it can be a program name with args.
+set dummy coqc; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:928: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_prog_COQC'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test -n "$COQC"; then
+  ac_cv_prog_COQC="$COQC" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_prog_COQC="coqc"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_prog_COQC" && ac_cv_prog_COQC="no"
+fi
+fi
+COQC="$ac_cv_prog_COQC"
+if test -n "$COQC"; then
+  echo "$ac_t""$COQC" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test "$COQC" = no ; then
+	{ echo "configure: error: Cannot find coqc." 1>&2; exit 1; }
+fi
+# Extract the first word of "coqdep", so it can be a program name with args.
+set dummy coqdep; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:961: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_prog_COQDEP'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test -n "$COQDEP"; then
+  ac_cv_prog_COQDEP="$COQDEP" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_prog_COQDEP="coqdep"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_prog_COQDEP" && ac_cv_prog_COQDEP="true"
+fi
+fi
+COQDEP="$ac_cv_prog_COQDEP"
+if test -n "$COQDEP"; then
+  echo "$ac_t""$COQDEP" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test "$COQDEP" = true ; then
+	echo "configure: warning: Cannot find coqdep." 1>&2
+fi
 
 # substitutions to perform
+
+
 
 
 
@@ -1088,6 +1157,8 @@ s%@OCAMLLEXDOTOPT@%$OCAMLLEXDOTOPT%g
 s%@OCAMLYACC@%$OCAMLYACC%g
 s%@OCAMLWEB@%$OCAMLWEB%g
 s%@CAMLP4@%$CAMLP4%g
+s%@COQC@%$COQC%g
+s%@COQDEP@%$COQDEP%g
 s%@OCAMLBEST@%$OCAMLBEST%g
 s%@OCAMLVERSION@%$OCAMLVERSION%g
 s%@OCAMLLIB@%$OCAMLLIB%g

@@ -3,13 +3,13 @@
 # auto bench for why
 
 pgm=$1
-coqc=coqc
+coqc="coqc -I ../lib/coq"
 
 goods () {
     for f in $1/*.ml; do
 	echo -n "  "$f"... "
 	base=$1/`basename $f .ml`
-	if $pgm -coq $f > /dev/null 2>&1; then
+	if $pgm --coq $f > /dev/null 2>&1; then
 	    echo -n "why ok... "
 	    if $coqc "$base"_why.v > /dev/null 2>&1; then
 		echo "coq ok"
@@ -18,7 +18,7 @@ goods () {
 	    fi
 	else 
 	    echo "why FAILED"
-	    $pgm -coq $f
+	    $pgm --coq $f
 	    exit 1
 	fi
     done

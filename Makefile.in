@@ -43,6 +43,13 @@ CMO      = src/options.cmo src/loc.cmo src/ident.cmo src/misc.cmo 	\
 	   src/coq.cmo src/version.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 
+COQC = @COQC@
+COQDEP = @COQDEP@
+COQINCLUDES = -I lib/coq
+
+VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
+     lib/coq/WhyTuples.vo  lib/coq/WhyWf.vo    lib/coq/Why.vo   
+
 GENERATED = src/version.ml src/parser.ml
 
 # main targets
@@ -50,7 +57,7 @@ GENERATED = src/version.ml src/parser.ml
 
 BINARY=bin/why.$(OCAMLBEST)
 
-all: $(BINARY)
+all: $(BINARY) $(VO)
 
 opt: bin/why.opt
 
@@ -119,7 +126,7 @@ src/parser.ml: src/parser.ml4
 # generic rules
 ###############
 
-.SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly
+.SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly .v .vo
 
 .mli.cmi:
 	$(OCAMLC) -c $(BFLAGS) $<
@@ -141,6 +148,9 @@ src/parser.ml: src/parser.ml4
 
 .mly.mli:
 	$(OCAMLYACC) -v $<
+
+.v.vo:
+	$(COQC) $(COQINCLUDES) $<
 
 %_why.v: %.ml $(BINARY)
 	$(BINARY) -coq $*.ml
@@ -185,6 +195,6 @@ dist-clean:: clean
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
-#	$(CAMLP4) pr_depend.cmo -- $(INCLUDES) -impl src/parser.ml4 >> .depend
+	$(COQDEP) -I lib/coq lib/coq/*.v >> .depend
 
 include .depend

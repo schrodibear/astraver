@@ -1,6 +1,6 @@
 
+Require Why.
 Require Omega.
-Require ProgWf.
 
 Lemma test_po_1 : 
   (x: Z)
