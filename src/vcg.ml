@@ -485,6 +485,16 @@ let rec cut_last_binders = function
   | [] | [_] | [_; _] -> []
   | b :: bl -> b :: cut_last_binders bl
 
+let rec annotated_if id = function
+  | [id', CC_var_binder (TTpure PTbool); _, CC_pred_binder _] -> id == id'
+  | [] -> false
+  | _ :: bl -> annotated_if id bl
+
+let rec annotation_if = function
+  | [qb, CC_pred_binder q] -> qb, q
+  | _ :: bl -> annotation_if bl
+  | [] -> assert false
+
 (*s The VCG; it's trivial, we just traverse the CC term and push a 
     new obligation on each hole. *)
 
@@ -508,17 +518,16 @@ let vcg base t =
     | CC_hole (loc, p) -> 
 	CC_hole (try discharge loc ctx p with Exit -> push loc ctx p)
     (* special treatment for the if-then-else *)
-    | CC_letin (dep, ([idb, CC_var_binder (TTpure PTbool); 
-		       _, CC_pred_binder _] as bl1), e1, 
-		CC_if (CC_term (Tvar idb'),
+    | CC_letin (dep, bl1, e1, 
+		CC_if (CC_term (Tvar idb),
 		       (CC_lam ((_, CC_pred_binder _), _) as br1),
 		       (CC_lam ((_, CC_pred_binder _), _) as br2)))
-      when idb = idb' ->
+      when annotated_if idb bl1 ->
 	let e'1 = traverse ctx e1 in
-	(* let ctx = traverse_binders ctx bl1 in (* EXP *) *)
+	let ctx = traverse_binders ctx (cut_last_binders bl1) in
 	let br'1 = traverse ctx br1 in
 	let br'2 = traverse ctx br2 in
-	CC_letin (dep, bl1, e'1, CC_if (CC_var idb', br'1, br'2))
+	CC_letin (dep, bl1, e'1, CC_if (CC_var idb, br'1, br'2))
     (* special treatment for the composition of exceptions *)
     | CC_letin (dep, bl, e1, CC_case (CC_term (Tvar _) as e2, br)) ->
 	let e'1 = traverse ctx e1 in

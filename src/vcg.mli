@@ -46,3 +46,9 @@ val vcg : string -> (Loc.t * predicate) cc_term -> obligation list * validation
 
 val logs : Log.t ref
 val log_print_function : (Format.formatter -> sequent -> unit) ref
+
+(* functions to be re-used in [Coq] *)
+
+val annotated_if : Ident.t -> cc_binder list -> bool
+val annotation_if : cc_binder list -> Ident.t * predicate
+

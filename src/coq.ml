@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.89 2003-03-03 14:32:03 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.90 2003-03-20 10:44:28 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -304,12 +304,12 @@ let rec print_cc_term fmt = function
       fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
 	print_cc_type q (print_list space print_cc_term) cl
   (* special treatment for the if-then-else *)
-  | CC_letin (_, ([idb, CC_var_binder (TTpure PTbool); 
-		   qb, CC_pred_binder q] as bl), e1, 
-	      CC_if (CC_var idb',
+  | CC_letin (_, bl, e1, 
+	      CC_if (CC_var idb,
 		     CC_lam ((idt, CC_pred_binder _), brt),
 		     CC_lam ((idf, CC_pred_binder _), brf)))
-    when idb = idb' ->
+    when annotated_if idb bl ->
+      let qb, q = annotation_if bl in
       fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n@[<hov 2>Cases@ (@[btest@ @[[%a:bool]@,%a@] %a@ %a@]) of@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
       (print_list comma print_binder_id) bl print_cc_term e1 
 	Ident.print idb print_predicate q Ident.print idb Ident.print qb

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.95 2003-03-20 09:57:36 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.96 2003-03-20 10:44:28 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -454,7 +454,6 @@ and typef_desc lab env loc = function
       let var,efphi = state_var lab env var in
       let t_b = typef lab env b in
       let efb = t_b.info.kappa.c_effect in
-      check_no_effect b.ploc t_b.info.kappa.c_effect;
       let t_e = typef lab env e in
       let efe = t_e.info.kappa.c_effect in
       let efinv,invopt = state_inv lab env loc invopt in
@@ -596,7 +595,6 @@ and typef_desc lab env loc = function
   | Sif (b, e1, e2) ->
       let t_b = typef lab env b in
       expected_type b.ploc (result_type t_b) type_v_bool;
-      check_no_effect b.ploc t_b.info.kappa.c_effect;
       let t_e1 = typef lab env e1
       and t_e2 = typef lab env e2 in
       let t1 = t_e1.info.kappa.c_result_type in

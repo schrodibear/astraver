@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.12 2003-03-20 09:57:36 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.13 2003-03-20 10:44:28 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -232,42 +232,26 @@ let rec normalize p =
 
            (* test is not annotated -> translation using an exception *)
 	   | None ->
-	       let pbool c = make_expression b.info.loc 
-			     (Tconst (ConstBool c)) (PureType PTbool) env
-	       in
-	       let pvoid = make_expression p.info.loc
-			     (Tconst ConstUnit) (PureType PTunit) env 
-	       in
 	       let effect_and_exit k = 
 		 let ef = Effect.add_exn exit_exn k.c_effect in
 		 let k' = type_c_of_v k.c_result_type in
 		 { k' with c_effect = ef }
 	       in
 	       let bloc = b.info.loc in
-	       let praise_exit =
-		 let k = type_c_of_v (PureType PTunit) in
-		 let ef = Effect.add_exn exit_exn Effect.bottom in
-		 make_lnode bloc (Raise (exit_exn, None))
-		   env [] { k with c_effect = ef }
+	       let praise_exit = 
+		 make_raise bloc exit_exn (PureType PTunit) env
 	       in
-	       let if_notb_raise_exit = 
-		 make_lnode bloc
-		   (If (make_lnode bloc (If (b, pbool false, pbool true)) 
-			  env [] b.info.kappa,
-			praise_exit,
-			pvoid))
+	       let body = 
+		 (* if b then e else raise Exit *)
+		 make_lnode e.info.loc (If (b, e, praise_exit))
 		   env [] (effect_and_exit b.info.kappa)
 	       in
 	       let d = 
 		 Try 
 		   (make_lnode p.info.loc
-		      (While (pbool true, invopt, var, 
-			      make_lnode p.info.loc
-				(Seq [Statement if_notb_raise_exit;
-				      Statement e])
-				env [] (effect_and_exit k)))
+		      (While (make_bool bloc true env, invopt, var, body))
 		      env [] (effect_and_exit k),
-		    [ (exit_exn, None), pvoid])
+		    [ (exit_exn, None), make_void p.info.loc env])
 	       in
 	       change_desc p d
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.76 2003-03-20 09:57:36 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.77 2003-03-20 10:44:28 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -306,6 +306,17 @@ let make_var loc x t env =
 
 let make_expression loc e t env =
   make_lnode loc (Expression e) env [] (type_c_of_v t)
+    
+let make_bool loc b env = 
+  make_expression loc (Tconst (ConstBool b)) (PureType PTbool) env
+
+let make_void loc env = 
+  make_expression loc (Tconst ConstUnit) (PureType PTunit) env 
+
+let make_raise loc x v env =
+  let k = type_c_of_v v in
+  let ef = Effect.add_exn exit_exn Effect.bottom in
+  make_lnode loc (Raise (x, None)) env [] { k with c_effect = ef }
 
 (*s Pretty printers (for debugging purposes) *)
 
