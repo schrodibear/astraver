@@ -12,3 +12,17 @@ int f1()
   return n;
 }
 /*@ result = 0 */
+
+
+int f2()
+{
+  int i = 17;
+  for (i = 0; i < 10; i++)
+    /*@ invariant i <= 10 variant 10 - i */ {
+    if (i == 5) { i = 6; continue; }
+  }
+  return i;
+}
+/*@ result = 10 */
+
+  

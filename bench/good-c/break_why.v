@@ -287,3 +287,423 @@ Definition f2 := (* validation *)
       (exist_2 [n1: Z][result2: Z]`result2 = 1` n0 result1 Post30) in
     (exist_1 [result1: Z]`result1 = 1` result0 Post7).
 
+Lemma f3_po_1 : 
+  (result: Z)
+  (Post4: result = `10`)
+  (Variant1: Z)
+  (n0: Z)
+  (Pre3: Variant1 = n0)
+  (Pre2: `1 <= n0`)
+  (Test4: `n0 >= 0`)
+  (Test3: `n0 = 1`)
+  (n1: Z)
+  (Post1: n1 = `n0 + 1`)
+  `n1 = 2`.
+Proof.
+Intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Lemma f3_po_2 : 
+  (result: Z)
+  (Post4: result = `10`)
+  (Variant1: Z)
+  (n0: Z)
+  (Pre3: Variant1 = n0)
+  (Pre2: `1 <= n0`)
+  (Test4: `n0 >= 0`)
+  (Test2: `n0 <> 1`)
+  ((n:Z) (n = `n0 - 1` -> `1 <= n` /\ (Zwf `0` n n0))).
+Proof.
+Intuition.
+Unfold Zwf; Omega.
+Save.
+
+Lemma f3_po_3 : 
+  (result: Z)
+  (Post4: result = `10`)
+  (Variant1: Z)
+  (n0: Z)
+  (Pre3: Variant1 = n0)
+  (Pre2: `1 <= n0`)
+  (Test4: `n0 >= 0`)
+  (n1: Z)
+  (Post24: ((n:Z) (n = `n1 - 1` -> `1 <= n` /\ (Zwf `0` n n0))))
+  (n2: Z)
+  (Post2: n2 = `n1 - 1`)
+  `1 <= n2` /\ (Zwf `0` n2 n0).
+Proof.
+Intuition.
+Save.
+
+Lemma f3_po_4 : 
+  (result: Z)
+  (Post4: result = `10`)
+  `1 <= result`.
+Proof.
+Intuition.
+Save.
+
+Lemma f3_po_5 : 
+  (result: Z)
+  (Post4: result = `10`)
+  (n0: Z)
+  (Post3: `1 <= n0` /\ `n0 < 0`)
+  `n0 = 2`.
+Proof.
+Intuition.
+Save.
+
+Definition f3 := (* validation *)
+  [_: unit]
+    let (result, Post4) = (exist_1 [result: Z]result = `10` `10`
+      (refl_equal ? `10`)) in
+    let (n0, result0, Post7) =
+      let (n0, result0, Post8) =
+        let (n0, result0, Post9) =
+          (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+            [Variant1: Z](n0: Z)(_0: Variant1 = n0)(_1: `1 <= n0`)
+            (sig_2 Z (EM unit unit) [n1: Z][result0: (EM unit unit)]
+             (((qcomb [result1: unit]`n1 = 2` [result1: unit]`1 <= n1` /\
+                `n1 < 0`)
+               result0)))
+            [Variant1: Z; wf1: (Variant2: Z)
+             (Pre1: (Zwf `0` Variant2 Variant1))(n0: Z)(_0: Variant2 = n0)
+             (_1: `1 <= n0`)
+             (sig_2 Z (EM unit unit) [n1: Z][result0: (EM unit unit)]
+              (((qcomb [result1: unit]`n1 = 2` [result1: unit]`1 <= n1` /\
+                 `n1 < 0`)
+                result0)));
+             n0: Z; Pre3: Variant1 = n0; Pre2: `1 <= n0`]
+              let (result0, Bool2) =
+                let (result2, Post10) = (Z_ge_lt_bool n0 `0`) in
+                (exist_1 [result3: bool]
+                (if result3 then `n0 >= 0` else `n0 < 0`) result2 Post10) in
+              (Cases (btest
+                      [result0:bool](if result0 then `n0 >= 0` else `n0 < 0`)
+                      result0 Bool2) of
+              | (left Test4) =>
+                  let (n1, result1, Post13) =
+                    let (n1, result1, Post14) =
+                      let (n1, result1, Post15) =
+                        let (result1, Bool1) =
+                          let (result3, Post16) = (Z_eq_bool n0 `1`) in
+                          (exist_1 [result4: bool]
+                          (if result4 then `n0 = 1` else `n0 <> 1`) result3
+                          Post16) in
+                        (Cases (btest
+                                [result1:bool](if result1 then `n0 = 1`
+                                               else `n0 <> 1`)
+                                result1 Bool1) of
+                        | (left Test3) =>
+                            let (n1, result2, Post18) =
+                              let (n1, result2, Post1) =
+                                let (result2, Post1) = (exist_1 [result2: Z]
+                                  result2 = `n0 + 1` `n0 + 1`
+                                  (refl_equal ? `n0 + 1`)) in
+                                (exist_2 [n2: Z][result3: unit]
+                                n2 = `n0 + 1` result2 tt Post1) in
+                              let (result3, Post19) =
+                                (exist_1 (qcomb [result3: unit]`n1 = 2`
+                                          [result3: unit]False) (Exn unit tt)
+                                (f3_po_1 result Post4 Variant1 n0 Pre3 Pre2
+                                Test4 Test3 n1 Post1)) in
+                              Cases (decomp1 Post19) of
+                              | (Qval (exist result4 Post20)) =>
+                                (exist_2 [n2: Z]
+                                (qcomb [result5: unit]`n2 = 2`
+                                 [result5: unit]
+                                 ((n:Z)
+                                  (n = `n2 - 1` -> `1 <= n` /\ (Zwf `0` n n0)))) 
+                                n1 (Val unit result4) (False_ind ? Post20))
+                              | (Qexn _0 Post21) => (exist_2 [n2: Z]
+                                (qcomb [result4: unit]`n2 = 2`
+                                 [result4: unit]
+                                 ((n:Z)
+                                  (n = `n2 - 1` -> `1 <= n` /\ (Zwf `0` n n0)))) 
+                                n1 (Exn unit tt) Post21)
+                              end in
+                            Cases (decomp1 Post18) of
+                            | (Qval (exist result3 Post22)) =>
+                              (exist_2 [n2: Z]
+                              (qcomb [result4: unit]`n2 = 2` [result4: unit]
+                               ((n:Z)
+                                (n = `n2 - 1` -> `1 <= n` /\ (Zwf `0` n n0)))) 
+                              n1 (Val unit result3) Post22)
+                            | (Qexn _0 Post23) => (exist_2 [n2: Z]
+                              (qcomb [result3: unit]`n2 = 2` [result3: unit]
+                               ((n:Z)
+                                (n = `n2 - 1` -> `1 <= n` /\ (Zwf `0` n n0)))) 
+                              n1 (Exn unit tt) Post23)
+                            end
+                        | (right Test2) =>
+                            let (result2, Post17) = (exist_1 [result2: unit]
+                              ((n:Z)
+                               (n = `n0 - 1` -> `1 <= n` /\ (Zwf `0` n n0))) 
+                              tt
+                              (f3_po_2 result Post4 Variant1 n0 Pre3 Pre2
+                              Test4 Test2)) in
+                            (exist_2 [n1: Z]
+                            (qcomb [result3: unit]`n1 = 2` [result3: unit]
+                             ((n:Z)
+                              (n = `n1 - 1` -> `1 <= n` /\ (Zwf `0` n n0)))) 
+                            n0 (Val unit result2) Post17) end) in
+                      Cases (decomp1 Post15) of
+                      | (Qval (exist result2 Post24)) =>
+                        let (n2, result3, Post2) =
+                          let (result3, Post2) = (exist_1 [result3: Z]
+                            result3 = `n1 - 1` `n1 - 1`
+                            (refl_equal ? `n1 - 1`)) in
+                          (exist_2 [n3: Z][result4: unit]
+                          n3 = `n1 - 1` result3 tt Post2) in
+                        (exist_2 [n3: Z]
+                        (qcomb [result4: unit]`n3 = 2` [result4: unit]
+                         `1 <= n3` /\ (Zwf `0` n3 n0)) n2
+                        (Val unit result3)
+                        (f3_po_3 result Post4 Variant1 n0 Pre3 Pre2 Test4 n1
+                        Post24 n2 Post2))
+                      | (Qexn _0 Post25) => (exist_2 [n2: Z]
+                        (qcomb [result2: unit]`n2 = 2` [result2: unit]
+                         `1 <= n2` /\ (Zwf `0` n2 n0)) n1 (Exn unit tt)
+                        Post25)
+                      end in
+                    Cases (decomp1 Post14) of
+                    | (Qval (exist result2 Post5)) =>
+                      ((wf1 n1) (loop_variant_1 Pre3 Post5) n1
+                        (refl_equal ? n1) (proj1 ? ? Post5))
+                    | (Qexn _0 Post26) => (exist_2 [n2: Z]
+                      (qcomb [result2: unit]`n2 = 2` [result2: unit]
+                       `1 <= n2` /\ `n2 < 0`) n1 (Exn unit tt) Post26)
+                    end in
+                  Cases (decomp1 Post13) of
+                  | (Qval (exist result2 Post3)) => (exist_2 [n2: Z]
+                    (qcomb [result3: unit]`n2 = 2` [result3: unit]
+                     `1 <= n2` /\ `n2 < 0`) n1 (Val unit result2) Post3)
+                  | (Qexn _0 Post27) => (exist_2 [n2: Z]
+                    (qcomb [result2: unit]`n2 = 2` [result2: unit]
+                     `1 <= n2` /\ `n2 < 0`) n1 (Exn unit tt) Post27)
+                  end
+              | (right Test1) =>
+                  let (n1, result1, Post11) = (exist_2 [n1: Z]
+                    (qcomb [result1: unit]`n1 = 2` [result1: unit]
+                     `1 <= n1` /\ `n1 < 0`) n0 (Val unit tt)
+                    (conj ? ? Pre2 Test1)) in
+                  Cases (decomp1 Post11) of
+                  | (Qval (exist result2 Post3)) => (exist_2 [n2: Z]
+                    (qcomb [result3: unit]`n2 = 2` [result3: unit]
+                     `1 <= n2` /\ `n2 < 0`) n1 (Val unit result2) Post3)
+                  | (Qexn _0 Post12) => (exist_2 [n2: Z]
+                    (qcomb [result2: unit]`n2 = 2` [result2: unit]
+                     `1 <= n2` /\ `n2 < 0`) n1 (Exn unit tt) Post12)
+                  end end) result result (refl_equal ? result)
+            (f3_po_4 result Post4)) in
+        Cases (decomp1 Post9) of
+        | (Qval (exist result1 Post3)) => (exist_2 [n1: Z][result2: unit]
+          `n1 = 2` n0 result1 (f3_po_5 result Post4 n0 Post3))
+        | (Qexn _0 Post28) =>
+          let (result1, Post29) = (exist_1 [result1: unit]`n0 = 2` tt
+            Post28) in
+          (exist_2 [n1: Z][result2: unit]`n1 = 2` n0 result1 Post29)
+        end in
+      let (result1, Post30) = (exist_1 [result1: Z]`result1 = 2` n0 Post8) in
+      (exist_2 [n1: Z][result2: Z]`result2 = 2` n0 result1 Post30) in
+    (exist_1 [result1: Z]`result1 = 2` result0 Post7).
+
+Lemma f4_po_1 : 
+  (result: Z)
+  (Post4: result = `0`)
+  (i0: Z)
+  (Post1: i0 = `0`)
+  (Variant1: Z)
+  (i1: Z)
+  (Pre3: Variant1 = `10 - i1`)
+  (Pre2: `i1 <= 3`)
+  (Test4: `i1 < 10`)
+  (Test2: `i1 <> 3`)
+  ((i:Z) (i = `i1 + 1` -> `i <= 3` /\ (Zwf `0` `10 - i` `10 - i1`))).
+Proof.
+Intuition.
+Unfold Zwf; Omega.
+Save.
+
+Lemma f4_po_2 : 
+  (result: Z)
+  (Post4: result = `0`)
+  (i0: Z)
+  (Post1: i0 = `0`)
+  (Variant1: Z)
+  (i1: Z)
+  (Pre3: Variant1 = `10 - i1`)
+  (Pre2: `i1 <= 3`)
+  (Test4: `i1 < 10`)
+  (Post21: ((i:Z) (i = `i1 + 1` -> `i <= 3` /\ (Zwf `0` `10 - i` `10 - i1`))))
+  (i2: Z)
+  (Post2: i2 = `i1 + 1`)
+  `i2 <= 3` /\ (Zwf `0` `10 - i2` `10 - i1`).
+Proof.
+Intuition.
+Save.
+
+Lemma f4_po_3 : 
+  (result: Z)
+  (Post4: result = `0`)
+  (i0: Z)
+  (Post1: i0 = `0`)
+  `i0 <= 3`.
+Proof.
+Intuition.
+Save.
+
+Lemma f4_po_4 : 
+  (result: Z)
+  (Post4: result = `0`)
+  (i0: Z)
+  (Post1: i0 = `0`)
+  (i1: Z)
+  (Post3: `i1 <= 3` /\ `i1 >= 10`)
+  `i1 = 3`.
+Proof.
+Intuition.
+Save.
+
+Definition f4 := (* validation *)
+  [x: Z]
+    let (result, Post4) = (exist_1 [result: Z]result = `0` `0`
+      (refl_equal ? `0`)) in
+    let (i0, result0, Post7) =
+      let (i0, result0, Post1) =
+        let (result0, Post1) = (exist_1 [result0: Z]result0 = `0` `0`
+          (refl_equal ? `0`)) in
+        (exist_2 [i1: Z][result1: unit]i1 = `0` result0 tt Post1) in
+      let (i1, result1, Post8) =
+        let (i1, result1, Post9) =
+          (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+            [Variant1: Z](i1: Z)(_: Variant1 = `10 - i1`)(_0: `i1 <= 3`)
+            (sig_2 Z (EM unit unit) [i2: Z][result1: (EM unit unit)]
+             (((qcomb [result2: unit]`i2 = 3` [result2: unit]`i2 <= 3` /\
+                `i2 >= 10`)
+               result1)))
+            [Variant1: Z; wf1: (Variant2: Z)
+             (Pre1: (Zwf `0` Variant2 Variant1))(i1: Z)
+             (_: Variant2 = `10 - i1`)(_0: `i1 <= 3`)
+             (sig_2 Z (EM unit unit) [i2: Z][result1: (EM unit unit)]
+              (((qcomb [result2: unit]`i2 = 3` [result2: unit]`i2 <= 3` /\
+                 `i2 >= 10`)
+                result1)));
+             i1: Z; Pre3: Variant1 = `10 - i1`; Pre2: `i1 <= 3`]
+              let (result1, Bool2) =
+                let (result3, Post10) = (Z_lt_ge_bool i1 `10`) in
+                (exist_1 [result4: bool]
+                (if result4 then `i1 < 10` else `i1 >= 10`) result3 Post10) in
+              (Cases (btest
+                      [result1:bool](if result1 then `i1 < 10`
+                                     else `i1 >= 10`)
+                      result1 Bool2) of
+              | (left Test4) =>
+                  let (i2, result2, Post13) =
+                    let (i2, result2, Post14) =
+                      let (result2, Post15) =
+                        let (result2, Bool1) =
+                          let (result4, Post16) = (Z_eq_bool i1 `3`) in
+                          (exist_1 [result5: bool]
+                          (if result5 then `i1 = 3` else `i1 <> 3`) result4
+                          Post16) in
+                        (Cases (btest
+                                [result2:bool](if result2 then `i1 = 3`
+                                               else `i1 <> 3`)
+                                result2 Bool1) of
+                        | (left Test3) =>
+                            let (result3, Post18) =
+                              (exist_1 (qcomb [result3: unit]`i1 = 3`
+                                        [result3: unit]False) (Exn unit tt)
+                              Test3) in
+                            Cases (decomp1 Post18) of
+                            | (Qval (exist result4 Post19)) =>
+                              (exist_1 (qcomb [result5: unit]`i1 = 3`
+                                        [result5: unit]
+                                        ((i:Z)
+                                         (i = `i1 + 1` -> `i <= 3` /\
+                                          (Zwf `0` `10 - i` `10 - i1`)))) 
+                              (Val unit result4) (False_ind ? Post19))
+                            | (Qexn _ Post20) =>
+                              (exist_1 (qcomb [result4: unit]`i1 = 3`
+                                        [result4: unit]
+                                        ((i:Z)
+                                         (i = `i1 + 1` -> `i <= 3` /\
+                                          (Zwf `0` `10 - i` `10 - i1`)))) 
+                              (Exn unit tt) Post20)
+                            end
+                        | (right Test2) =>
+                            let (result3, Post17) = (exist_1 [result3: unit]
+                              ((i:Z)
+                               (i = `i1 + 1` -> `i <= 3` /\
+                                (Zwf `0` `10 - i` `10 - i1`))) tt
+                              (f4_po_1 result Post4 i0 Post1 Variant1 i1 Pre3
+                              Pre2 Test4 Test2)) in
+                            (exist_1 (qcomb [result4: unit]`i1 = 3`
+                                      [result4: unit]
+                                      ((i:Z)
+                                       (i = `i1 + 1` -> `i <= 3` /\
+                                        (Zwf `0` `10 - i` `10 - i1`)))) 
+                            (Val unit result3) Post17) end) in
+                      Cases (decomp1 Post15) of
+                      | (Qval (exist result3 Post21)) =>
+                        let (i2, result4, Post2) =
+                          let (result4, Post2) = (exist_1 [result4: Z]
+                            result4 = `i1 + 1` `i1 + 1`
+                            (refl_equal ? `i1 + 1`)) in
+                          (exist_2 [i3: Z][result5: unit]
+                          i3 = `i1 + 1` result4 tt Post2) in
+                        (exist_2 [i3: Z]
+                        (qcomb [result5: unit]`i3 = 3` [result5: unit]
+                         `i3 <= 3` /\ (Zwf `0` `10 - i3` `10 - i1`)) 
+                        i2 (Val unit result4)
+                        (f4_po_2 result Post4 i0 Post1 Variant1 i1 Pre3 Pre2
+                        Test4 Post21 i2 Post2))
+                      | (Qexn _ Post22) => (exist_2 [i2: Z]
+                        (qcomb [result3: unit]`i2 = 3` [result3: unit]
+                         `i2 <= 3` /\ (Zwf `0` `10 - i2` `10 - i1`)) 
+                        i1 (Exn unit tt) Post22)
+                      end in
+                    Cases (decomp1 Post14) of
+                    | (Qval (exist result3 Post5)) =>
+                      ((wf1 `10 - i2`) (loop_variant_1 Pre3 Post5) i2
+                        (refl_equal ? `10 - i2`) (proj1 ? ? Post5))
+                    | (Qexn _ Post23) => (exist_2 [i3: Z]
+                      (qcomb [result3: unit]`i3 = 3` [result3: unit]
+                       `i3 <= 3` /\ `i3 >= 10`) i2 (Exn unit tt) Post23)
+                    end in
+                  Cases (decomp1 Post13) of
+                  | (Qval (exist result3 Post3)) => (exist_2 [i3: Z]
+                    (qcomb [result4: unit]`i3 = 3` [result4: unit]
+                     `i3 <= 3` /\ `i3 >= 10`) i2 (Val unit result3) Post3)
+                  | (Qexn _ Post24) => (exist_2 [i3: Z]
+                    (qcomb [result3: unit]`i3 = 3` [result3: unit]
+                     `i3 <= 3` /\ `i3 >= 10`) i2 (Exn unit tt) Post24)
+                  end
+              | (right Test1) =>
+                  let (i2, result2, Post11) = (exist_2 [i2: Z]
+                    (qcomb [result2: unit]`i2 = 3` [result2: unit]
+                     `i2 <= 3` /\ `i2 >= 10`) i1 (Val unit tt)
+                    (conj ? ? Pre2 Test1)) in
+                  Cases (decomp1 Post11) of
+                  | (Qval (exist result3 Post3)) => (exist_2 [i3: Z]
+                    (qcomb [result4: unit]`i3 = 3` [result4: unit]
+                     `i3 <= 3` /\ `i3 >= 10`) i2 (Val unit result3) Post3)
+                  | (Qexn _ Post12) => (exist_2 [i3: Z]
+                    (qcomb [result3: unit]`i3 = 3` [result3: unit]
+                     `i3 <= 3` /\ `i3 >= 10`) i2 (Exn unit tt) Post12)
+                  end end) `10 - i0` i0 (refl_equal ? `10 - i0`)
+            (f4_po_3 result Post4 i0 Post1)) in
+        Cases (decomp1 Post9) of
+        | (Qval (exist result2 Post3)) => (exist_2 [i2: Z][result3: unit]
+          `i2 = 3` i1 result2 (f4_po_4 result Post4 i0 Post1 i1 Post3))
+        | (Qexn _ Post25) =>
+          let (result2, Post26) = (exist_1 [result2: unit]`i1 = 3` tt
+            Post25) in
+          (exist_2 [i2: Z][result3: unit]`i2 = 3` i1 result2 Post26)
+        end in
+      let (result2, Post27) = (exist_1 [result2: Z]`result2 = 3` i1 Post8) in
+      (exist_2 [i2: Z][result3: Z]`result3 = 3` i1 result2 Post27) in
+    (exist_1 [result1: Z]`result1 = 3` result0 Post7).
+
