@@ -4,7 +4,8 @@
 Require Import Why.
 Require Import Omega.
 
-Parameter q : Z -> Prop.
+(*Why logic*) Definition q : Z -> Prop.
+Admitted.
 
 (* Why obligation from file "good/po.mlw", characters 153-194 *)
 Lemma p1_po_1 : 

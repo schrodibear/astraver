@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.5 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: regen.mli,v 1.6 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -27,6 +27,7 @@ type element_kind =
   | Param
   | Oblig
   | Valid (* obsolete but helps porting from old versions *)
+  | Lg
   | Ax
 
 type element_id = element_kind * string
@@ -34,6 +35,7 @@ type element_id = element_kind * string
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
+  | Logic of string * logic_type
   | Axiom of string * predicate
 
 module type S = sig

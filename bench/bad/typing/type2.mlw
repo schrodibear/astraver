@@ -1,2 +1,2 @@
 
-external f : unit -> {} unit writes r {}
+external parameter f : unit -> {} unit writes r {}

@@ -1,2 +1,2 @@
 
-external f : unit -> { } unit { true | F => false }
+external parameter f : unit -> { } unit { true | F => false }

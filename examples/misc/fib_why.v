@@ -9,7 +9,7 @@ Axiom F_1 : F 1 = 1%Z.
 Axiom F_n : forall n:Z, (n >= 2)%Z -> F n = (F (n - 1) + F (n - 2))%Z.
 Hint Resolve F_0 F_1 F_n .
 
-(* Why obligation from file "fib.mlw", characters 429-430 *)
+(* Why obligation from file "fib.mlw", characters 447-448 *)
 Lemma fib1_po_1 : 
   forall (n: Z),
   forall (Pre12: n >= 0),
@@ -25,7 +25,7 @@ assert (n0 = 0%Z \/ n0 = 1%Z); intuition try (rewrite H0; auto with *).
 omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 462-476 *)
+(* Why obligation from file "fib.mlw", characters 480-494 *)
 Lemma fib1_po_2 : 
   forall (n: Z),
   forall (Pre12: n >= 0),
@@ -39,7 +39,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 395-497 *)
+(* Why obligation from file "fib.mlw", characters 413-515 *)
 Lemma fib1_po_3 : 
   forall (n: Z),
   forall (Pre12: n >= 0),
@@ -56,7 +56,7 @@ Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 445-459 *)
+(* Why obligation from file "fib.mlw", characters 463-477 *)
 Lemma fib1_po_4 : 
   forall (n: Z),
   forall (Pre12: n >= 0),
@@ -73,7 +73,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 395-497 *)
+(* Why obligation from file "fib.mlw", characters 413-515 *)
 Lemma fib1_po_5 : 
   forall (n: Z),
   forall (Pre12: n >= 0),
@@ -93,7 +93,7 @@ Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 445-476 *)
+(* Why obligation from file "fib.mlw", characters 463-494 *)
 Lemma fib1_po_6 : 
   forall (n: Z),
   forall (Pre12: n >= 0),
@@ -116,7 +116,7 @@ symmetry; auto with *.
 Qed.
 
 
-(* Why obligation from file "fib.mlw", characters 695-697 *)
+(* Why obligation from file "fib.mlw", characters 713-715 *)
 Lemma fib2_aux_po_1 : 
   forall (n: Z),
   forall (x: Z),
@@ -138,7 +138,7 @@ intuition.
 rewrite <- Test2; assumption.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 713-744 *)
+(* Why obligation from file "fib.mlw", characters 731-762 *)
 Lemma fib2_aux_po_2 : 
   forall (n: Z),
   forall (x: Z),
@@ -169,7 +169,7 @@ omega.
 ring (x0 + 1 - 1)%Z; trivial.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 625-765 *)
+(* Why obligation from file "fib.mlw", characters 643-783 *)
 Lemma fib2_aux_po_3 : 
   forall (n: Z),
   forall (x: Z),
@@ -197,7 +197,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "fib.mlw", characters 824-825 *)
+(* Why obligation from file "fib.mlw", characters 842-843 *)
 Lemma fib2_po_1 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
@@ -210,7 +210,7 @@ assert (h : n = 0 \/ n = 1).
 intuition; rewrite H; auto with *.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 831-849 *)
+(* Why obligation from file "fib.mlw", characters 849-867 *)
 Lemma fib2_po_2 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
@@ -221,7 +221,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "fib.mlw", characters 1126-1192 *)
+(* Why obligation from file "fib.mlw", characters 1144-1210 *)
 Lemma fib3_po_1 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
@@ -265,7 +265,7 @@ subst k2; ring (k1 + 1 - 1)%Z; trivial.
 subst y2; assumption.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1043-1082 *)
+(* Why obligation from file "fib.mlw", characters 1061-1100 *)
 Lemma fib3_po_2 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
@@ -281,7 +281,7 @@ Proof.
 intuition; subst; auto with *.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1009-1201 *)
+(* Why obligation from file "fib.mlw", characters 1027-1219 *)
 Lemma fib3_po_3 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
@@ -305,7 +305,7 @@ replace n with k1.
  omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1201-1201 *)
+(* Why obligation from file "fib.mlw", characters 1219-1219 *)
 Lemma fib3_po_4 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
@@ -327,7 +327,7 @@ Qed.
 
 
 
-(* Why obligation from file "fib.mlw", characters 1375-1376 *)
+(* Why obligation from file "fib.mlw", characters 1393-1394 *)
 Lemma fib4_po_1 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -341,7 +341,7 @@ assert (h: n = 0 \/ n = 1).
 intuition; rewrite H1; auto.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1396-1405 *)
+(* Why obligation from file "fib.mlw", characters 1414-1423 *)
 Lemma fib4_po_2 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -352,7 +352,7 @@ Proof.
 intros; simpl; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1412-1421 *)
+(* Why obligation from file "fib.mlw", characters 1430-1439 *)
 Lemma fib4_po_3 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -366,7 +366,7 @@ Proof.
 intros; subst t0; simpl; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1635-1665 *)
+(* Why obligation from file "fib.mlw", characters 1653-1683 *)
 Lemma fib4_po_4 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -393,7 +393,7 @@ Proof.
 simpl; intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1656-1665 *)
+(* Why obligation from file "fib.mlw", characters 1674-1683 *)
 Lemma fib4_po_5 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -421,7 +421,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1644-1653 *)
+(* Why obligation from file "fib.mlw", characters 1662-1671 *)
 Lemma fib4_po_6 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -450,7 +450,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1635-1685 *)
+(* Why obligation from file "fib.mlw", characters 1653-1703 *)
 Lemma fib4_po_7 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -502,7 +502,7 @@ auto.
 Qed.
 
 
-(* Why obligation from file "fib.mlw", characters 1486-1598 *)
+(* Why obligation from file "fib.mlw", characters 1504-1616 *)
 Lemma fib4_po_8 : 
   forall (n: Z),
   forall (t: (array Z)),
@@ -531,7 +531,7 @@ subst i t1; AccessSame.
  auto.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1428-1695 *)
+(* Why obligation from file "fib.mlw", characters 1446-1713 *)
 Lemma fib4_po_9 : 
   forall (n: Z),
   forall (t: (array Z)),

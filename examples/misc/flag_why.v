@@ -24,7 +24,7 @@ Definition eq_white c := bool_of_sumbool (eq_color_dec c white).
 Definition monochrome (t:array color) (i j:Z) (c:color) : Prop :=
   forall k:Z, (i <= k < j)%Z -> access t k = c.
 
-(* Why obligation from file "flag.mlw", characters 721-726 *)
+(* Why obligation from file "flag.mlw", characters 780-785 *)
 Lemma dutch_flag_po_1 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -49,7 +49,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 754-759 *)
+(* Why obligation from file "flag.mlw", characters 813-818 *)
 Lemma dutch_flag_po_2 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -76,7 +76,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 785-795 *)
+(* Why obligation from file "flag.mlw", characters 844-854 *)
 Lemma dutch_flag_po_3 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -111,7 +111,7 @@ intuition.
 ArraySubst t1.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 763-799 *)
+(* Why obligation from file "flag.mlw", characters 822-858 *)
 Lemma dutch_flag_po_4 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -185,7 +185,7 @@ subst t1; simpl; auto.
 subst t2; simpl; auto.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 886-897 *)
+(* Why obligation from file "flag.mlw", characters 945-956 *)
 Lemma dutch_flag_po_5 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -223,7 +223,7 @@ assert (h: (k < i1)%Z \/ k = i1).
 subst k; assumption.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 949-954 *)
+(* Why obligation from file "flag.mlw", characters 1008-1013 *)
 Lemma dutch_flag_po_6 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -254,7 +254,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 980-990 *)
+(* Why obligation from file "flag.mlw", characters 1039-1049 *)
 Lemma dutch_flag_po_7 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -295,7 +295,7 @@ unfold monochrome;
 ArraySubst t1.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 958-994 *)
+(* Why obligation from file "flag.mlw", characters 1017-1053 *)
 Lemma dutch_flag_po_8 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -357,7 +357,7 @@ apply H9; omega.
 subst t2 t1; simpl; trivial.
 Qed.
 
-(* Why obligation from file "flag.mlw", characters 473-1103 *)
+(* Why obligation from file "flag.mlw", characters 532-1162 *)
 Lemma dutch_flag_po_9 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
@@ -386,7 +386,7 @@ replace r1 with i1.
  omega.
  Qed.
 
-(* Why obligation from file "flag.mlw", characters 513-680 *)
+(* Why obligation from file "flag.mlw", characters 572-739 *)
 Lemma dutch_flag_po_10 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),

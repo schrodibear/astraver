@@ -3,5 +3,5 @@
 
 exception E
 
-external f : unit -> { } unit { true | E => false }
+external parameter f : unit -> { } unit { true | E => false }
 

@@ -1,8 +1,8 @@
 
 (** Various implementations of the gcd. *)
 
-logic gcd : int,int -> int
-logic max : int,int -> int
+external logic gcd : int,int -> int
+external logic max : int,int -> int
 
 (** Simple algorithm with difference *)
 

@@ -1,7 +1,7 @@
 
 (**** McCarthy's ``91'' function. *)
 
-logic max : int,int -> int
+external logic max : int,int -> int
 
 let rec f91 (n:int) : int { variant max(0,101-n) } =
   {} 

@@ -8,7 +8,7 @@
     Emerging Trends, 1999.
     (http://www.lri.fr/~filliatr/ftp/publis/Filliatre-Magaud.ps.gz)    *)
 
-external Zdiv2 : int -> int
+external parameter Zdiv2 : int -> int
 
 let heapsort =
   fun (t:int array) ->

@@ -33,13 +33,13 @@ parameter i,j,old : int ref
 
 (*s Auxiliary definitions for the program and its specification. *)
 
-external test_char : a:A -> b:A -> {} bool { if result then a=b else not a=b }
+external parameter test_char : a:A -> b:A -> {} bool { if result then a=b else not a=b }
 
-external Zmin : int -> int -> int
+external parameter Zmin : int -> int -> int
 
-logic min_suffix : A array, A array, int, int, int -> prop
-logic word_of_array : int, A array -> word
-logic min_dist : word, word, int -> prop
+external logic min_suffix : A array, A array, int, int, int -> prop
+external logic word_of_array : int, A array -> word
+external logic min_dist : word, word, int -> prop
 
 (*s The program. *)
 

@@ -82,7 +82,7 @@ Qed.
 
 (* Obligations. *)
 
-(* Why obligation from file "heapsort.mlw", characters 849-885 *)
+(* Why obligation from file "heapsort.mlw", characters 859-895 *)
 Lemma heapsort_po_1 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -107,7 +107,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 849-897 *)
+(* Why obligation from file "heapsort.mlw", characters 859-907 *)
 Lemma heapsort_po_2 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -154,7 +154,7 @@ apply permut_trans with (t' := t0); assumption.
 unfold Zwf; Omega'.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 633-817 *)
+(* Why obligation from file "heapsort.mlw", characters 643-827 *)
 Lemma heapsort_po_3 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -174,7 +174,7 @@ apply (lem_div2_2 (array_length t) i); trivial || Omega'.
 auto with datatypes.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 537-970 *)
+(* Why obligation from file "heapsort.mlw", characters 547-980 *)
 Lemma heapsort_po_4 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -193,7 +193,7 @@ intuition.
 SameLength t0 t; auto with *.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 1502-1515 *)
+(* Why obligation from file "heapsort.mlw", characters 1512-1525 *)
 Lemma heapsort_po_5 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -218,7 +218,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 1525-1546 *)
+(* Why obligation from file "heapsort.mlw", characters 1535-1556 *)
 Lemma heapsort_po_6 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -259,7 +259,7 @@ intros i0 Hi0.
  apply H18; Omega'.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 1502-1558 *)
+(* Why obligation from file "heapsort.mlw", characters 1512-1568 *)
 Lemma heapsort_po_7 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -370,7 +370,7 @@ apply exchange_is_permut with (i := 0%Z) (j := k1).
  assumption.
  Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 1206-1470 *)
+(* Why obligation from file "heapsort.mlw", characters 1216-1480 *)
 Lemma heapsort_po_8 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),
@@ -394,7 +394,7 @@ intro; absurd (array_length t0 - 1 + 1 <= array_length t0 - 1)%Z;
  Omega'.
 Qed.
 
-(* Why obligation from file "heapsort.mlw", characters 1127-1569 *)
+(* Why obligation from file "heapsort.mlw", characters 1137-1579 *)
 Lemma heapsort_po_9 : 
   forall (t: (array Z)),
   forall (Pre16: 1 <= (array_length t)),

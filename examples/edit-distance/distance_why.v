@@ -21,7 +21,7 @@ Definition min_suffix (w1 w2:array A) (i j n:Z) :=
 
 Definition test_char (a b:A) := bool_of_sumbool (A_eq_dec a b).
 
-(* Why obligation from file "distance.mlw", characters 1733-1749 *)
+(* Why obligation from file "distance.mlw", characters 1780-1796 *)
 Lemma distance_po_1 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -43,7 +43,7 @@ Proof.
 simpl; intuition.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 1733-1770 *)
+(* Why obligation from file "distance.mlw", characters 1780-1817 *)
 Lemma distance_po_2 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -76,7 +76,7 @@ subst t1.
 apply H8; Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 1598-1697 *)
+(* Why obligation from file "distance.mlw", characters 1645-1744 *)
 Lemma distance_po_3 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -92,7 +92,7 @@ intuition.
 Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2027-2032 *)
+(* Why obligation from file "distance.mlw", characters 2074-2079 *)
 Lemma distance_po_4 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -126,7 +126,7 @@ intuition.
 Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2480-2485 *)
+(* Why obligation from file "distance.mlw", characters 2527-2532 *)
 Lemma distance_po_5 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -184,7 +184,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2506-2512 *)
+(* Why obligation from file "distance.mlw", characters 2553-2559 *)
 Lemma distance_po_6 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -245,7 +245,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2513-2519 *)
+(* Why obligation from file "distance.mlw", characters 2560-2566 *)
 Lemma distance_po_7 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -307,7 +307,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2533-2546 *)
+(* Why obligation from file "distance.mlw", characters 2580-2593 *)
 Lemma distance_po_8 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -405,7 +405,7 @@ subst old3.
 unfold min_suffix; unfold min_suffix in H21; apply H21; Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2585-2592 *)
+(* Why obligation from file "distance.mlw", characters 2632-2639 *)
 Lemma distance_po_9 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -470,7 +470,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2564-2597 *)
+(* Why obligation from file "distance.mlw", characters 2611-2644 *)
 Lemma distance_po_10 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -572,7 +572,7 @@ replace (j + 1)%Z with j2; [ idtac | Omega' ].
 subst old3; apply H21; Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2155-2403 *)
+(* Why obligation from file "distance.mlw", characters 2202-2450 *)
 Lemma distance_po_11 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -635,7 +635,7 @@ replace n2 with (j1 + 1)%Z; [ idtac | Omega' ].
 apply H13; Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2020-2662 *)
+(* Why obligation from file "distance.mlw", characters 2067-2709 *)
 Lemma distance_po_12 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -696,7 +696,7 @@ replace (i4 + 1)%Z with i3; [ idtac | Omega' ].
 apply H20; Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 1868-1987 *)
+(* Why obligation from file "distance.mlw", characters 1915-2034 *)
 Lemma distance_po_13 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -730,7 +730,7 @@ apply suffix_length; Omega'.
 Omega'.
 Qed.
 
-(* Why obligation from file "distance.mlw", characters 2681-2685 *)
+(* Why obligation from file "distance.mlw", characters 2728-2732 *)
 Lemma distance_po_14 : 
   forall (t: (array Z)),
   forall (w1: (array A)),
@@ -763,7 +763,7 @@ Omega'.
 Qed.
 
 
-(* Why obligation from file "distance.mlw", characters 2681-2685 *)
+(* Why obligation from file "distance.mlw", characters 2728-2732 *)
 Lemma distance_po_15 : 
   forall (t: (array Z)),
   forall (w1: (array A)),

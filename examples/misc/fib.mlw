@@ -4,10 +4,10 @@
 
        n:int -> { n >= 0 } int { result = F(n) }
 
-    where F is the Fibonacci function defined on the logical side
+    where F is the Fibonacci function defined on the external logical side
     (with F(0) = F(1) = 1 and F(n+2) = F(n+1) + F(n)) *)
 
-logic F : int -> int
+external logic F : int -> int
 
 (** Naive and purely functional *)
 

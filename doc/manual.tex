@@ -164,14 +164,13 @@ The input file contains the following kinds of declaration:
     (Types are detailed in Section~\ref{types} and their syntax is
     given in Section~\ref{syntax:types}.)
 
-  \item\indextt{external}
-    \te{external} $x_1,\dots,x_n: \tau$ \par 
-    Declares some external values of type $\tau$, 
-    used in the programs but defined on the prover part.
-    Examples:
+    The prefix \te{external}\indextt{external} indicates that
+    $x_1,\dots,x_n$ are already defined on the prover side (and thus
+    nothing is produced). Examples:
 \begin{verbatim}
-     external mean : int -> int -> int
-     external diff : a:int -> b:int -> { b >= 0 } int { a = b + result }
+     external parameter mean : int -> int -> int
+     external parameter diff : a:int -> b:int -> 
+                               { b >= 0 } int { a = b + result }
 \end{verbatim}
     External values cannot be mutable.
 
@@ -183,7 +182,7 @@ The input file contains the following kinds of declaration:
   \item\indextt{logic}\indextt{prop}
     \te{logic} $x_1,\dots,x_n$ \te{:} $\tau_1,\dots,\tau_m$ \te{->} $\tau$
 
-    Declares symbols $x_1,\dots,x_n$ belonging to the logic. 
+    Introduces symbols $x_1,\dots,x_n$ belonging to the logic. 
     The $x_i$ are either
     predicates (when $\tau$ is \te{prop}), constants (when $m=0$) or
     function symbols. 
@@ -192,6 +191,11 @@ The input file contains the following kinds of declaration:
      logic max : int,int -> int
      logic is_int : float -> prop
 \end{verbatim}
+
+    Similarly to \te{parameter}, the prefix
+    \te{external}\indextt{external} indicates that 
+    $x_1,\dots,x_n$ are already defined on the prover side (and thus
+    nothing is produced).
 
   \item\indextt{axiom} 
     \te{axiom} $x$ \te{:} \textsl{predicate}
@@ -391,8 +395,8 @@ context is indeed absurd, which corresponds to the obligation \texttt{false}.
 
 Program expressions are given types including side-effects and
 specification. Such a type is either inferred by \why\ (for each
-\texttt{let} declaration), or given by the user (in an
-\texttt{external} or a \texttt{parameter} declaration).
+\texttt{let} declaration), or given by the user (in a
+\texttt{parameter} declaration).
 
 Types syntax follows ML types syntax, with additional information for
 side-effects and pre/postconditions. Here are examples of simple types,
@@ -510,7 +514,7 @@ is translated into the following piece of \caml\ code:
        let f = fun y (*:int*) -> x := !x + y
      end
 \end{verbatim}
-\texttt{external} declarations are supposed to be realized by some
+\texttt{external parameter} declarations are supposed to be realized by some
 external \caml\ code. However, it is possible to make them arguments
 of the functor too, with command line option \texttt{--ocaml-ext}.
 
@@ -650,7 +654,7 @@ Command line options are the following:
     Decorate the \caml\ code with all annotations as comments. Default
     is no annotation.
   \item[\texttt{--ocaml-ext}]: ~\par 
-    Make parameters from \texttt{external} declarations.
+    Make parameters from \texttt{external parameter} declarations.
     
 \end{description}
 
@@ -1197,14 +1201,13 @@ Syntax of input files is given in Figure~\ref{fig:input}.
   \nt{declaration}
     & $::=$ & \te{let} \nt{identifier} $[$ \nt{binders} $]$ \te{=} \nt{prog} \\
       & $|$ & \te{let} \te{rec} \nt{recfun} \\
-      & $|$ & \te{parameter} \nt{identifier}\plussep{\te{,}}
-              \te{:} \nt{value\_type} \\ \indextt{parameter}
-      & $|$ & \te{external} \nt{identifier}\plussep{\te{,}}
-              \te{:} \nt{value\_type} \\ \indextt{external}
+      & $|$ & $[$ \te{external} $]$ 
+              \te{parameter} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{value\_type} \\ \indextt{parameter}\indextt{external}
       & $|$ & \te{exception} \nt{identifier} 
               $[$ \te{of} \nt{primitive\_type} $]$ \\ \indextt{exception}
-      & $|$ & \te{logic} \nt{identifier}\plussep{\te{,}}
-              \te{:} \nt{logic\_type} \\
+      & $|$ & $[$ \te{external} $]$ \te{logic} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{logic\_type} \\\indextt{logic} \indextt{external}
       & $|$ & \te{axiom} \nt{identifier} \te{:} \nt{predicate} \\
    \\[0.1em]
 

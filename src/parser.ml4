@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.89 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.90 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -109,6 +109,7 @@ let name = gec "name"
 
 let decl = gec "decl"
 let decls = gec "decls"
+let external_ = gec "external_"
 let logic_type = gec "logic_type"
 let logic_arg = gec "logic_arg"
 
@@ -534,17 +535,19 @@ i*)
 	Program (id, without_annot loc (Slam (bl, p)))
     | "let"; "rec"; p = recfun -> 
 	Program (rec_name p, without_annot loc p)
-    | "external"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
-	External (loc, ids, v)
-    | "parameter"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
-	Parameter (loc, ids, v)
+    | e = external_; 
+      "parameter"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
+	Parameter (loc, e, ids, v)
     | "exception"; id = ident; v = OPT exception_type ->
 	Exception (loc, id, v)
-    | "logic"; ids = LIST1 ident SEP ","; ":"; t = logic_type ->
-	Logic (loc, ids, t)
+    | e = external_; "logic"; ids = LIST1 ident SEP ","; ":"; t = logic_type ->
+	Logic (loc, e, ids, t)
     | "axiom"; id = ident; ":"; p = lexpr ->
 	Axiom (loc, id, p)
   ] ]
+  ;
+  external_:
+  [ [ "external" -> true | -> false ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]

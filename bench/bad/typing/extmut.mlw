@@ -1,2 +1,2 @@
 
-external x : int ref
+external parameter x : int ref

@@ -130,7 +130,7 @@ Qed.
 
 (* DÃ©but: preuve de  *)
 
-(* Why obligation from file "maximumsort.mlw", characters 602-603 *)
+(* Why obligation from file "maximumsort.mlw", characters 611-612 *)
 Lemma maximum_po_1 : 
   forall (n: Z),
   forall (k: Z),
@@ -153,7 +153,7 @@ Lemma maximum_po_1 :
   rewrite Test4 in Pre18; tauto.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 637-642 *)
+(* Why obligation from file "maximumsort.mlw", characters 646-651 *)
 Lemma maximum_po_2 : 
   forall (n: Z),
   forall (k: Z),
@@ -176,7 +176,7 @@ Lemma maximum_po_2 :
    intros; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 643-647 *)
+(* Why obligation from file "maximumsort.mlw", characters 652-656 *)
 Lemma maximum_po_3 : 
   forall (n: Z),
   forall (k: Z),
@@ -200,7 +200,7 @@ Lemma maximum_po_3 :
   intros; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 656-675 *)
+(* Why obligation from file "maximumsort.mlw", characters 665-684 *)
 Lemma maximum_po_4 : 
   forall (n: Z),
   forall (k: Z),
@@ -230,7 +230,7 @@ ring (k0 - 1 + 1)%Z; intros;
  apply Maximize_Zle with (m1 := access t i0); Omega' || tauto.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 503-756 *)
+(* Why obligation from file "maximumsort.mlw", characters 512-765 *)
 Lemma maximum_po_5 : 
   forall (n: Z),
   forall (k: Z),
@@ -262,7 +262,7 @@ Lemma maximum_po_5 :
   intros; subst nk; unfold Zwf; Omega'.
   Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 684-702 *)
+(* Why obligation from file "maximumsort.mlw", characters 693-711 *)
 Lemma maximum_po_6 : 
   forall (n: Z),
   forall (k: Z),
@@ -290,7 +290,7 @@ Lemma maximum_po_6 :
   repeat (split; [ Omega' | auto ]); ring (k0 - 1 + 1)%Z; tauto.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 503-756 *)
+(* Why obligation from file "maximumsort.mlw", characters 512-765 *)
 Lemma maximum_po_7 : 
   forall (n: Z),
   forall (k: Z),
@@ -326,7 +326,7 @@ Lemma maximum_po_7 :
 
 (* fin preuve de maximum *)
 
-(* Why obligation from file "maximumsort.mlw", characters 1131-1151 *)
+(* Why obligation from file "maximumsort.mlw", characters 1140-1160 *)
 Lemma maxisort_po_1 : 
   forall (t: (array Z)),
   forall (Pre10: 0 <= (array_length t)),
@@ -356,7 +356,7 @@ Lemma maxisort_po_1 :
   intros H; absurd (i1 < i1)%Z; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 1163-1176 *)
+(* Why obligation from file "maximumsort.mlw", characters 1172-1185 *)
 Lemma maxisort_po_2 : 
   forall (t: (array Z)),
   forall (Pre10: 0 <= (array_length t)),
@@ -381,7 +381,7 @@ Lemma maxisort_po_2 :
   intros; Omega'.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 1123-1176 *)
+(* Why obligation from file "maximumsort.mlw", characters 1132-1185 *)
 Lemma maxisort_po_3 : 
   forall (t: (array Z)),
   forall (Pre10: 0 <= (array_length t)),
@@ -448,7 +448,7 @@ Lemma maxisort_po_3 :
    unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 918-1093 *)
+(* Why obligation from file "maximumsort.mlw", characters 927-1102 *)
 Lemma maxisort_po_4 : 
   forall (t: (array Z)),
   forall (Pre10: 0 <= (array_length t)),
@@ -469,7 +469,7 @@ Lemma maxisort_po_4 :
    [ Omega' | auto ].
 Qed.
 
-(* Why obligation from file "maximumsort.mlw", characters 844-1201 *)
+(* Why obligation from file "maximumsort.mlw", characters 853-1210 *)
 Lemma maxisort_po_5 : 
   forall (t: (array Z)),
   forall (Pre10: 0 <= (array_length t)),

@@ -19,7 +19,7 @@ Definition A_eq_bool (x y:A) := bool_of_sumbool (A_eq_dec x y).
 (*Why*) Parameter M : Z.
 Axiom M_positive : (0 <= M)%Z.
 
-(* Why obligation from file "kmp.mlw", characters 1206-1218 *)
+(* Why obligation from file "kmp.mlw", characters 1243-1255 *)
 Lemma initnext_po_1 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -34,7 +34,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1226-1758 *)
+(* Why obligation from file "kmp.mlw", characters 1263-1795 *)
 Lemma initnext_po_2 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -52,7 +52,7 @@ Proof.
 intros; exact lexZ_well_founded.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1581-1586 *)
+(* Why obligation from file "kmp.mlw", characters 1618-1623 *)
 Lemma initnext_po_3 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -84,7 +84,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1587-1592 *)
+(* Why obligation from file "kmp.mlw", characters 1624-1629 *)
 Lemma initnext_po_4 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -117,7 +117,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1637-1651 *)
+(* Why obligation from file "kmp.mlw", characters 1674-1688 *)
 Lemma initnext_po_5 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -156,7 +156,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1599-1663 *)
+(* Why obligation from file "kmp.mlw", characters 1636-1700 *)
 Lemma initnext_po_6 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -243,7 +243,7 @@ replace (i1 + 1 - (j1 + 1))%Z with (i1 - j1)%Z.
 unfold lexZ, lex, Zwf, pairZ; left; Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1711-1724 *)
+(* Why obligation from file "kmp.mlw", characters 1748-1761 *)
 Lemma initnext_po_7 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -281,7 +281,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1694-1728 *)
+(* Why obligation from file "kmp.mlw", characters 1731-1765 *)
 Lemma initnext_po_8 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -372,7 +372,7 @@ unfold lexZ, lex, Zwf, pairZ.
  left; Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1739-1747 *)
+(* Why obligation from file "kmp.mlw", characters 1776-1784 *)
 Lemma initnext_po_9 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -408,7 +408,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1734-1747 *)
+(* Why obligation from file "kmp.mlw", characters 1771-1784 *)
 Lemma initnext_po_10 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -496,7 +496,7 @@ right.
  Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1226-1758 *)
+(* Why obligation from file "kmp.mlw", characters 1263-1795 *)
 Lemma initnext_po_11 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -541,7 +541,7 @@ intuition.
 rewrite Pre13; assumption.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1264-1515 *)
+(* Why obligation from file "kmp.mlw", characters 1301-1552 *)
 Lemma initnext_po_12 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -569,7 +569,7 @@ Omega'.
 ArraySubst next0.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1194-1766 *)
+(* Why obligation from file "kmp.mlw", characters 1231-1803 *)
 Lemma initnext_po_13 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -599,7 +599,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 1766-1766 *)
+(* Why obligation from file "kmp.mlw", characters 1803-1803 *)
 Lemma initnext_po_14 : 
   forall (next: (array Z)),
   forall (p: (array A)),
@@ -621,7 +621,7 @@ Qed.
 Axiom N_positive : (0 <= N)%Z.
 
 
-(* Why obligation from file "kmp.mlw", characters 2320-2335 *)
+(* Why obligation from file "kmp.mlw", characters 2366-2381 *)
 Lemma kmp_po_1 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -637,7 +637,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2341-2719 *)
+(* Why obligation from file "kmp.mlw", characters 2387-2765 *)
 Lemma kmp_po_2 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -658,7 +658,7 @@ Proof.
 intros; exact lexZ_well_founded.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2357-2363 *)
+(* Why obligation from file "kmp.mlw", characters 2403-2409 *)
 Lemma kmp_po_3 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -690,7 +690,7 @@ Proof.
 intuition simple induction result1; tauto.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2363-2363 *)
+(* Why obligation from file "kmp.mlw", characters 2409-2409 *)
 Lemma kmp_po_4 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -722,7 +722,7 @@ Proof.
 simple induction result1; intuition; discriminate Post5.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2591-2596 *)
+(* Why obligation from file "kmp.mlw", characters 2637-2642 *)
 Lemma kmp_po_5 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -752,7 +752,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2597-2602 *)
+(* Why obligation from file "kmp.mlw", characters 2643-2648 *)
 Lemma kmp_po_6 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -783,7 +783,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2609-2653 *)
+(* Why obligation from file "kmp.mlw", characters 2655-2699 *)
 Lemma kmp_po_7 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -838,7 +838,7 @@ subst j2 i2.
  left; Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2682-2691 *)
+(* Why obligation from file "kmp.mlw", characters 2728-2737 *)
 Lemma kmp_po_8 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -895,7 +895,7 @@ unfold lexZ, lex, Zwf, pairZ.
  left; Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2702-2710 *)
+(* Why obligation from file "kmp.mlw", characters 2748-2756 *)
 Lemma kmp_po_9 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -929,7 +929,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2697-2710 *)
+(* Why obligation from file "kmp.mlw", characters 2743-2756 *)
 Lemma kmp_po_10 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1010,7 +1010,7 @@ intuition assert (j1 <> 0%Z); auto with *.
  Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2341-2719 *)
+(* Why obligation from file "kmp.mlw", characters 2387-2765 *)
 Lemma kmp_po_11 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1051,7 +1051,7 @@ Definition first_occur (p a:array A) (r:Z) :=
   ((0 <= r < array_length a)%Z -> match_ a r p 0 (array_length p)) /\
   (forall k:Z, (0 <= k < r)%Z -> ~ match_ a k p 0 (array_length p)).
 
-(* Why obligation from file "kmp.mlw", characters 2385-2529 *)
+(* Why obligation from file "kmp.mlw", characters 2431-2575 *)
 Lemma kmp_po_12 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1079,7 +1079,7 @@ generalize N_positive; Omega'.
  generalize M_positive; Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2741-2745 *)
+(* Why obligation from file "kmp.mlw", characters 2787-2791 *)
 Lemma kmp_po_13 : 
   forall (a: (array A)),
   forall (next: (array Z)),
@@ -1121,7 +1121,7 @@ replace (i1 - M)%Z with (i1 - j1)%Z.
 Omega'.
 Qed.
 
-(* Why obligation from file "kmp.mlw", characters 2751-2753 *)
+(* Why obligation from file "kmp.mlw", characters 2797-2799 *)
 Lemma kmp_po_14 : 
   forall (a: (array A)),
   forall (next: (array Z)),

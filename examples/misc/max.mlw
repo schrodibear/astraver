@@ -1,7 +1,7 @@
 
 (* exemple pour le Coq'Art *)
 
-external l : int
+external parameter l : int
 
 parameter a : int array
 parameter x,y : int ref

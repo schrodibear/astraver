@@ -135,7 +135,7 @@ Qed.
 
 (* Obligations *)
 
-(* Why obligation from file "bsearch.mlw", characters 557-574 *)
+(* Why obligation from file "bsearch.mlw", characters 576-593 *)
 Lemma binary_search_po_1 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
@@ -167,7 +167,7 @@ split.
 rewrite Post4; apply ge_mean; Omega'.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 587-592 *)
+(* Why obligation from file "bsearch.mlw", characters 606-611 *)
 Lemma binary_search_po_2 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
@@ -198,7 +198,7 @@ intros.
 Omega'.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 610-621 *)
+(* Why obligation from file "bsearch.mlw", characters 629-640 *)
 Lemma binary_search_po_3 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
@@ -238,7 +238,7 @@ subst l2 m1.
 intros; apply In_right_side; assumption || intuition.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 659-670 *)
+(* Why obligation from file "bsearch.mlw", characters 678-689 *)
 Lemma binary_search_po_4 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
@@ -279,7 +279,7 @@ subst u2 m1.
 intros; apply In_left_side; assumption || intuition.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 682-741 *)
+(* Why obligation from file "bsearch.mlw", characters 701-760 *)
 Lemma binary_search_po_5 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
@@ -322,7 +322,7 @@ absurd (p2 = 0%Z); Omega'.
 subst p2; omega.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 331-492 *)
+(* Why obligation from file "bsearch.mlw", characters 350-511 *)
 Lemma binary_search_po_6 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
@@ -342,7 +342,7 @@ intuition.
 subst l0 u0; assumption.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 169-860 *)
+(* Why obligation from file "bsearch.mlw", characters 188-879 *)
 Lemma binary_search_po_7 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\

@@ -28,7 +28,7 @@ let swap =
 
 (* partition *)
 
-logic partition_p : int array, int, int, int -> prop
+external logic partition_p : int array, int, int, int -> prop
 
 let partition =
   fun (t:int array)(l,r:int) ->

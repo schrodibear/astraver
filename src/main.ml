@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.64 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: main.ml,v 1.65 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -28,6 +28,7 @@ open Error
 open Report
 open Misc
 open Util
+open Logic
 
 (*s Prover dependent functions. *)
 
@@ -70,6 +71,13 @@ let push_parameter id v tv = match prover with
   | Coq _ -> Coq.push_parameter id tv
   | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
   | Mizar -> if is_pure_type_v v then Mizar.push_parameter id tv
+  | Harvey | Simplify -> () (* nothing to do? *)
+
+let push_logic id t = match prover with
+  | Pvs -> Pvs.push_logic id t
+  | Coq _ -> Coq.push_logic id t
+  | HolLight -> Holl.push_logic id t
+  | Mizar -> Mizar.push_logic id t
   | Harvey | Simplify -> () (* nothing to do? *)
 
 let push_axiom id p = match prover with
@@ -159,31 +167,32 @@ let interp_decl d =
   | Program (id, p) ->
       if Env.is_global id then raise_located p.ploc (Clash id);
       (try interp_program id p with Exit -> ())
-  | Parameter (loc, ids, v) ->
+  | Parameter (loc, ext, ids, v) ->
       let v = Ltyping.type_v loc lab env lenv v in
+      if ext && is_mutable v then raise_located loc MutableExternal;
       let v = Env.generalize_type_v v in
       List.iter (add_external loc v) ids;
       let v = specialize_type_scheme v in
+      if ext && ocaml_externals then Ocaml.push_parameters ids v;
       if ocaml then Ocaml.push_parameters ids v;
-      if not (is_mutable v) then
+      if not ext && not (is_mutable v) then
 	let tv = Monad.trad_type_v (initial_renaming env) env v in
 	List.iter (add_parameter v tv) ids
-  | External (loc, ids, v) -> 
-      let v = Ltyping.type_v loc lab env lenv v in
-      if is_mutable v then raise_located loc MutableExternal;
-      let v = generalize_type_v v in
-      List.iter (add_external loc v) ids;
-      let v = specialize_type_scheme v in      
-      if ocaml_externals then Ocaml.push_parameters ids v;
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
       add_exception id v
-  | Logic (loc, ids, t) ->
+  | Logic (loc, ext, ids, t) ->
       let add id =
 	if is_logic id lenv then raise_located loc (Clash id);
-	add_global_logic id t
+	add_global_logic id t;
+	if not ext then push_logic (Ident.string id) t
       in
       List.iter add ids
+  | Predicate_def (loc, id, pl, p) ->
+      if is_logic id lenv then raise_located loc (Clash id);
+      let t = Predicate (List.map snd pl) in
+      add_global_logic id t;
+      assert false (* TODO *)
   | Axiom (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
 (*

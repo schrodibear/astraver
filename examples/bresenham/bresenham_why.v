@@ -67,7 +67,7 @@ Qed.
 
 (*s Program correctness. *)
 
-(* Why obligation from file "bresenham.mlw", characters 1620-1630 *)
+(* Why obligation from file "bresenham.mlw", characters 1638-1648 *)
 Lemma bresenham_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),
@@ -89,7 +89,7 @@ decompose [and] Pre3.
 exact (invariant_is_ok x1 y1 e1 H0).
 Qed.
 
-(* Why obligation from file "bresenham.mlw", characters 1656-1672 *)
+(* Why obligation from file "bresenham.mlw", characters 1674-1690 *)
 Lemma bresenham_po_2 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),
@@ -126,7 +126,7 @@ Omega'.
 unfold Zwf; Omega'.
 Qed.
 
-(* Why obligation from file "bresenham.mlw", characters 1684-1738 *)
+(* Why obligation from file "bresenham.mlw", characters 1702-1756 *)
 Lemma bresenham_po_3 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),
@@ -167,7 +167,7 @@ Omega'.
 unfold Zwf; Omega'.
 Qed.
 
-(* Why obligation from file "bresenham.mlw", characters 1493-1532 *)
+(* Why obligation from file "bresenham.mlw", characters 1511-1550 *)
 Lemma bresenham_po_4 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),

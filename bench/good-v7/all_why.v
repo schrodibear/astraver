@@ -1,5 +1,5 @@
 
-Require Why.
+Require Import Why.
 Require Omega.
 
 Parameter foo : Set.
@@ -15,7 +15,7 @@ Parameter foo : Set.
 (*Why*) Parameter f2 : (_: Z)bool.
 
 (*Why*) Parameter f3 :
-  (x: Z)(y: Z)(_: `x >= 0`)
+  (x: Z)(y: Z)(H: `x >= 0`)
   (sig_2 Z Z [y0: Z][result: Z](`y0 = y + x + result`)).
 
 (*Why*) Parameter f4 : (_: unit)unit.
@@ -33,7 +33,7 @@ Parameter foo : Set.
 
 
 
-(* Why obligation from file "all.mlw", characters 709-727 *)
+(* Why obligation from file "all.mlw", characters 675-693 *)
 Lemma p2_po_1 : 
   ~False.
 Proof.
@@ -44,7 +44,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 737-759 *)
+(* Why obligation from file "all.mlw", characters 703-725 *)
 Lemma p3_po_1 : 
   True /\ True.
 Proof.
@@ -55,7 +55,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 769-791 *)
+(* Why obligation from file "all.mlw", characters 735-757 *)
 Lemma p4_po_1 : 
   True \/ False.
 Proof.
@@ -66,7 +66,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 801-828 *)
+(* Why obligation from file "all.mlw", characters 767-794 *)
 Lemma p5_po_1 : 
   False \/ ~False.
 Proof. 
@@ -77,7 +77,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 838-864 *)
+(* Why obligation from file "all.mlw", characters 804-830 *)
 Lemma p6_po_1 : 
   (True -> ~False).
 Proof.
@@ -88,7 +88,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 874-900 *)
+(* Why obligation from file "all.mlw", characters 840-866 *)
 Lemma p7_po_1 : 
   ((x:Z) `x = x`).
 Proof.
@@ -99,7 +99,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 910-945 *)
+(* Why obligation from file "all.mlw", characters 876-911 *)
 Lemma p8_po_1 : 
   True /\ ((x:Z) `x = x`).
 Proof.
@@ -107,14 +107,14 @@ Auto.
 Save.
 
 
-(* Why obligation from file "all.mlw", characters 955-1002 *)
+(* Why obligation from file "all.mlw", characters 921-968 *)
 Lemma p9_po_1 : 
   ((x:Z) ((y:Z) (`x = y` -> `x = y`))).
 Proof.
 Trivial.
 Save.
 
-(* Why obligation from file "all.mlw", characters 1198-1201 *)
+(* Why obligation from file "all.mlw", characters 1164-1167 *)
 Lemma ar6_po_1 : 
   ~(`1` = `0`).
 Proof.
@@ -125,7 +125,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 1212-1215 *)
+(* Why obligation from file "all.mlw", characters 1178-1181 *)
 Lemma ar7_po_1 : 
   ~(`1` = `0`).
 Proof.
@@ -244,7 +244,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2156-2190 *)
+(* Why obligation from file "all.mlw", characters 2122-2156 *)
 Lemma arr1_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 1`)
@@ -257,7 +257,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2203-2239 *)
+(* Why obligation from file "all.mlw", characters 2169-2205 *)
 Lemma arr2_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 4`)
@@ -270,7 +270,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2251-2298 *)
+(* Why obligation from file "all.mlw", characters 2217-2264 *)
 Lemma arr3_po_1 : 
   (v4: Z)
   (v6: (array Z))
@@ -284,7 +284,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2354-2359 *)
+(* Why obligation from file "all.mlw", characters 2320-2325 *)
 Lemma arr4_po_1 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -293,7 +293,7 @@ Proof. (* arr4_po_1 *)
 Intros; Omega.
 Save.
 
-(* Why obligation from file "all.mlw", characters 2310-2363 *)
+(* Why obligation from file "all.mlw", characters 2276-2329 *)
 Lemma arr4_po_2 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -307,7 +307,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2376-2415 *)
+(* Why obligation from file "all.mlw", characters 2342-2381 *)
 Lemma arr5_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 1`)
@@ -317,7 +317,7 @@ Intros; Simpl; Omega.
 Save.
 
 
-(* Why obligation from file "all.mlw", characters 2427-2470 *)
+(* Why obligation from file "all.mlw", characters 2393-2436 *)
 Lemma arr6_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 4`)
@@ -328,7 +328,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2482-2540 *)
+(* Why obligation from file "all.mlw", characters 2448-2506 *)
 Lemma arr7_po_1 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -337,7 +337,7 @@ Proof. (* arr7_po_1 *)
 Intros; Omega.
 Save.
 
-(* Why obligation from file "all.mlw", characters 2526-2531 *)
+(* Why obligation from file "all.mlw", characters 2492-2497 *)
 Lemma arr7_po_2 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -351,7 +351,7 @@ Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2645-2653 *)
+(* Why obligation from file "all.mlw", characters 2611-2619 *)
 Lemma fc3_po_1 : 
   (a: Z)
   (Post2: a = `0`)
@@ -368,7 +368,7 @@ Proof. Intros; Omega. Save.
 
 
 
-(* Why obligation from file "all.mlw", characters 2796-2844 *)
+(* Why obligation from file "all.mlw", characters 2762-2810 *)
 Lemma an2_po_1 : 
   (v4: Z)
   (Pre1: `v4 >= 0`)

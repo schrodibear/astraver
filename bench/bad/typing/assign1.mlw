@@ -1,4 +1,4 @@
 
-external r : int ref
+external parameter r : int ref
 
 let p = r := true

@@ -19,7 +19,7 @@ Definition max (x y:Z) : Z :=
   | right _ => x
   end.
 
-(* Why obligation from file "gcd.mlw", characters 373-385 *)
+(* Why obligation from file "gcd.mlw", characters 391-403 *)
 Lemma gcd1_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -46,7 +46,7 @@ unfold Zwf, max.
 case (Z_le_gt_dec x2 y1); case (Z_le_gt_dec x1 y1); intros; omega.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 401-413 *)
+(* Why obligation from file "gcd.mlw", characters 419-431 *)
 Lemma gcd1_po_2 : 
   forall (a: Z),
   forall (b: Z),
@@ -75,7 +75,7 @@ assert (h: x1 <> y1).
  case (Z_le_gt_dec x1 y2); case (Z_le_gt_dec x1 y1); intros; omega.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 281-320 *)
+(* Why obligation from file "gcd.mlw", characters 299-338 *)
 Lemma gcd1_po_3 : 
   forall (a: Z),
   forall (b: Z),
@@ -90,7 +90,7 @@ intuition.
 subst; reflexivity.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 430-432 *)
+(* Why obligation from file "gcd.mlw", characters 448-450 *)
 Lemma gcd1_po_4 : 
   forall (a: Z),
   forall (b: Z),
@@ -110,7 +110,7 @@ auto.
 Qed.
 
 
-(* Why obligation from file "gcd.mlw", characters 705-712 *)
+(* Why obligation from file "gcd.mlw", characters 723-730 *)
 Lemma gcd2_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -130,7 +130,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 723-759 *)
+(* Why obligation from file "gcd.mlw", characters 741-777 *)
 Lemma gcd2_po_2 : 
   forall (a: Z),
   forall (b: Z),
@@ -171,7 +171,7 @@ assert (h1_y0: (y1 > 0)).
 generalize (Z_mod_lt x1 y1 h1_y0); omega.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 635-676 *)
+(* Why obligation from file "gcd.mlw", characters 653-694 *)
 Lemma gcd2_po_3 : 
   forall (a: Z),
   forall (b: Z),
@@ -186,7 +186,7 @@ intuition.
 subst; reflexivity.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 776-778 *)
+(* Why obligation from file "gcd.mlw", characters 794-796 *)
 Lemma gcd2_po_4 : 
   forall (a: Z),
   forall (b: Z),

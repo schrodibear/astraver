@@ -14,15 +14,15 @@
 
 (* specification *)
 
-external N : int
-external f : int
+external parameter N : int
+external parameter f : int
 
-logic found : int array -> prop
-logic m_invariant : int,int array -> prop
-logic n_invariant : int,int array -> prop
-logic i_invariant : int,int,int,int,int array -> prop
-logic j_invariant : int,int,int,int,int array -> prop
-logic termination : int,int,int,int,int,int array -> prop
+external logic found : int array -> prop
+external logic m_invariant : int,int array -> prop
+external logic n_invariant : int,int array -> prop
+external logic i_invariant : int,int,int,int,int array -> prop
+external logic j_invariant : int,int,int,int,int array -> prop
+external logic termination : int,int,int,int,int,int array -> prop
 
 (* Implementation part *)
 

@@ -9,7 +9,6 @@ parameter v4 : (int) ref
 parameter v5 : foo
 parameter v6 : int array
 parameter v7 : (int) array
-parameter v8 : (int -> int) array
 
 (* types syntax: functions *)
 parameter f1 : int -> bool -> int

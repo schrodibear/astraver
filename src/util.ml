@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.85 2004-01-29 09:15:01 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.86 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -655,14 +655,19 @@ and print_block_st fmt = function
 and print_block fmt =
   print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
 
+let print_external fmt b = if b then fprintf fmt "external "
+
 let print_decl fmt = function
   | Program (id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
-  | Parameter (_, ids, v) -> fprintf fmt "parameter <...>"
-  | External (_, ids, v) -> fprintf fmt "external <...>"
+  | Parameter (_, e, ids, v) -> 
+      fprintf fmt "%aparameter <...>" print_external e
   | Exception (_, id, pto) -> fprintf fmt "exception %a <...>" Ident.print id
-  | Logic (_, ids, lt) -> 
-      fprintf fmt "logic %a : <...>" (print_list comma Ident.print) ids
+  | Logic (_, e, ids, lt) -> 
+      fprintf fmt "%alogic %a : <...>" print_external e 
+	(print_list comma Ident.print) ids
   | Axiom (_, id, p) ->
       fprintf fmt "axiom %a : <...>" Ident.print id
+  | Predicate_def (_, id, _, _) ->
+      fprintf fmt "predicate %a <...>" Ident.print id
 
 let print_pfile = print_list newline print_decl

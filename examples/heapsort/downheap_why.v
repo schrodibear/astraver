@@ -214,7 +214,7 @@ Qed.
 
 (* Obligations *)
 
-(* Why obligation from file "downheap.mlw", characters 838-842 *)
+(* Why obligation from file "downheap.mlw", characters 865-869 *)
 Lemma downheap_po_1 : 
   forall (k: Z),
   forall (n: Z),
@@ -237,7 +237,7 @@ Proof.
 intros; Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 845-851 *)
+(* Why obligation from file "downheap.mlw", characters 872-878 *)
 Lemma downheap_po_2 : 
   forall (k: Z),
   forall (n: Z),
@@ -261,7 +261,7 @@ Proof.
 intros; Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 857-860 *)
+(* Why obligation from file "downheap.mlw", characters 884-887 *)
 Lemma downheap_po_3 : 
   forall (k: Z),
   forall (n: Z),
@@ -290,7 +290,7 @@ apply select_right_son;
  [ reflexivity | Omega' | rewrite (R11 k0) in Test4; Omega' ].
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 866-867 *)
+(* Why obligation from file "downheap.mlw", characters 893-894 *)
 Lemma downheap_po_4 : 
   forall (k: Z),
   forall (n: Z),
@@ -319,7 +319,7 @@ apply select_left_son;
  [ reflexivity | rewrite (R11 k0) in Test3; intro; assumption ].
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 873-874 *)
+(* Why obligation from file "downheap.mlw", characters 900-901 *)
 Lemma downheap_po_5 : 
   forall (k: Z),
   forall (n: Z),
@@ -345,7 +345,7 @@ apply select_left_son;
  [ reflexivity | intro; absurd (2 * k + 2 <= n)%Z; Omega' ].
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 939-943 *)
+(* Why obligation from file "downheap.mlw", characters 966-970 *)
 Lemma downheap_po_6 : 
   forall (k: Z),
   forall (n: Z),
@@ -369,7 +369,7 @@ Proof.
 intros; elim Post12; intros; Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 946-951 *)
+(* Why obligation from file "downheap.mlw", characters 973-978 *)
 Lemma downheap_po_7 : 
   forall (k: Z),
   forall (n: Z),
@@ -394,7 +394,7 @@ Proof.
 intros; elim Post12; intros; Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 978-995 *)
+(* Why obligation from file "downheap.mlw", characters 1005-1022 *)
 Lemma downheap_po_8 : 
   forall (k: Z),
   forall (n: Z),
@@ -432,7 +432,7 @@ elim Post23; intros.
 symmetry; apply (H22 i'); elim Post12; Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 665-1228 *)
+(* Why obligation from file "downheap.mlw", characters 692-1255 *)
 Lemma downheap_po_9 : 
   forall (k: Z),
   forall (n: Z),
@@ -469,7 +469,7 @@ Proof.
 intros; unfold Zwf; decompose [select_son] Post12; Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 671-759 *)
+(* Why obligation from file "downheap.mlw", characters 698-786 *)
 Lemma downheap_po_10 : 
   forall (k: Z),
   forall (n: Z),
@@ -507,7 +507,7 @@ Proof.
 trivial.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 957-999 *)
+(* Why obligation from file "downheap.mlw", characters 984-1026 *)
 Lemma downheap_po_11 : 
   forall (k: Z),
   forall (n: Z),
@@ -651,7 +651,7 @@ elim Post12; intros; Omega'.
  Omega'.
 Qed.
 
-(* Why obligation from file "downheap.mlw", characters 999-999 *)
+(* Why obligation from file "downheap.mlw", characters 1026-1026 *)
 Lemma downheap_po_12 : 
   forall (k: Z),
   forall (n: Z),
@@ -704,7 +704,7 @@ intro.
 Qed.
 
 
-(* Why obligation from file "downheap.mlw", characters 999-999 *)
+(* Why obligation from file "downheap.mlw", characters 1026-1026 *)
 Lemma downheap_po_13 : 
   forall (k: Z),
   forall (n: Z),

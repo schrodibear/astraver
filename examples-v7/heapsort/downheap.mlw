@@ -12,9 +12,9 @@
    [downheap N t k n] moves the element t[k] down in the heap encoded
    in t[j..n] *)
 
-logic select_son : int array, int, int, int -> prop
-logic inftree : int array, int, int, int -> prop
-logic heap : int array, int, int -> prop 
+external logic select_son : int array, int, int, int -> prop
+external logic inftree : int array, int, int, int -> prop
+external logic heap : int array, int, int -> prop 
 
 let downheap = 
   let rec downheap (t:int array)(k,n:int) : unit { variant n-k } =

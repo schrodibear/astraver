@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.10 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.11 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -30,6 +30,7 @@ open Cc
 type elem = 
   | Parameter of string * cc_type
   | Obligation of obligation
+  | Logic of string * logic_type
   | Axiom of string * predicate
 
 let elem_q = Queue.create ()
@@ -39,6 +40,8 @@ let reset () = Queue.clear elem_q
 let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
 
 let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
+
+let push_logic id t = Queue.add (Logic (id, t)) elem_q
 
 let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
 
@@ -278,6 +281,11 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
+let print_logic fmt id t = 
+  assert false (*TODO*)
+
+let reprint_logic fmt id t = print_logic fmt id t
+
 let reprint_axiom fmt id p =
   fprintf fmt "@[ :: Why Axiom @]@\n";
   fprintf fmt "@[ theorem %s:@\n @[%a@];@]@\n" id print_predicate p
@@ -293,6 +301,7 @@ struct
     begin match e with
       | Parameter (id, c) -> print_parameter fmt id c
       | Obligation o -> print_obligation fmt o
+      | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
     end;
     fprintf fmt "@\n"
@@ -300,6 +309,7 @@ struct
   let reprint_element fmt = function
     | Parameter (id, c) -> reprint_parameter fmt id c
     | Obligation o -> reprint_obligation fmt o
+    | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
 
   let re_oblig_loc = Str.regexp " :: Why obligation from .*"

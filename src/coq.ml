@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.112 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.113 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -676,13 +676,29 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
+let print_logic_type fmt = function
+  | Function (pl, t) ->
+      fprintf fmt "%a -> %a" 
+	(print_list arrow print_pure_type) pl print_pure_type t
+  | Predicate pl ->
+      fprintf fmt "%a -> Prop" (print_list arrow print_pure_type) pl
+
+let reprint_logic fmt id t = 
+  fprintf fmt 
+    "@[<hov 2>(*Why logic*) Definition %s :@ @[%a@].@]@\n" 
+    id print_logic_type t
+
+let print_logic fmt id t =
+  reprint_logic fmt id t;
+  fprintf fmt "Admitted.@\n"
+
 let reprint_axiom fmt id p =
   fprintf fmt
      "@[<hov 2>(*Why axiom*) Lemma %s :@ @[%a@].@]@\n" id print_predicate p
 
 let print_axiom fmt id p = 
   reprint_axiom fmt id p;
-  fprintf fmt "Admitted.@\n";
+  fprintf fmt "Admitted.@\n"
 
 open Regen
 
@@ -693,6 +709,7 @@ struct
     begin match e with
       | Parameter (id, c) -> print_parameter fmt id c
       | Obligation o -> print_obligation fmt o
+      | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
     end;
     fprintf fmt "@\n"
@@ -700,6 +717,7 @@ struct
   let reprint_element fmt = function
     | Parameter (id, c) -> reprint_parameter fmt id c
     | Obligation o -> reprint_obligation fmt o
+    | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
@@ -723,6 +741,9 @@ let push_obligations =
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))
 
+let push_logic id t = 
+  Gen.add_elem (Lg, id) (Logic (id, t))
+
 let push_axiom id p =
   Gen.add_elem (Ax, id) (Axiom (id, p))
 
@@ -736,7 +757,9 @@ let _ =
   Gen.add_regexp 
     "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param;
   Gen.add_regexp 
-    "(\\*Why axiom\\*) Lemma[ ]+\\([^ ]*\\)[ ]*:[ ]*" Ax
+    "(\\*Why axiom\\*) Lemma[ ]+\\([^ ]*\\)[ ]*:[ ]*" Ax;
+  Gen.add_regexp 
+    "(\\*Why logic\\*) Definition[ ]+\\([^ ]*\\)[ ]*:[ ]*" Lg
 
 (* validations *)
 

@@ -67,7 +67,7 @@ intros; subst t1 t0 v.
 auto with datatypes.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1579-1583 *)
+(* Why obligation from file "partition.mlw", characters 1588-1592 *)
 Lemma partition_po_1 : 
   forall (l: Z),
   forall (r: Z),
@@ -78,7 +78,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1950-1955 *)
+(* Why obligation from file "partition.mlw", characters 1959-1964 *)
 Lemma partition_po_2 : 
   forall (l: Z),
   forall (r: Z),
@@ -110,7 +110,7 @@ Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1965-1972 *)
+(* Why obligation from file "partition.mlw", characters 1974-1981 *)
 Lemma partition_po_3 : 
   forall (l: Z),
   forall (r: Z),
@@ -148,7 +148,7 @@ intuition.
 induction result1; auto.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1972-1972 *)
+(* Why obligation from file "partition.mlw", characters 1981-1981 *)
 Lemma partition_po_4 : 
   forall (l: Z),
   forall (r: Z),
@@ -187,7 +187,7 @@ induction result1; auto.
  discriminate Post2.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2078-2089 *)
+(* Why obligation from file "partition.mlw", characters 2087-2098 *)
 Lemma partition_po_5 : 
   forall (l: Z),
   forall (r: Z),
@@ -232,7 +232,7 @@ omega.
 unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1997-2048 *)
+(* Why obligation from file "partition.mlw", characters 2006-2057 *)
 Lemma partition_po_6 : 
   forall (l: Z),
   forall (r: Z),
@@ -260,7 +260,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2104-2109 *)
+(* Why obligation from file "partition.mlw", characters 2113-2118 *)
 Lemma partition_po_7 : 
   forall (l: Z),
   forall (r: Z),
@@ -296,7 +296,7 @@ Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2119-2126 *)
+(* Why obligation from file "partition.mlw", characters 2128-2135 *)
 Lemma partition_po_8 : 
   forall (l: Z),
   forall (r: Z),
@@ -339,7 +339,7 @@ induction result2; auto.
 induction result2; auto.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2126-2126 *)
+(* Why obligation from file "partition.mlw", characters 2135-2135 *)
 Lemma partition_po_9 : 
   forall (l: Z),
   forall (r: Z),
@@ -382,7 +382,7 @@ induction result2; auto || discriminate Post5.
 induction result2; auto || discriminate Post5.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2222-2233 *)
+(* Why obligation from file "partition.mlw", characters 2231-2242 *)
 Lemma partition_po_10 : 
   forall (l: Z),
   forall (r: Z),
@@ -431,7 +431,7 @@ apply array_ge_cons.
  omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2145-2194 *)
+(* Why obligation from file "partition.mlw", characters 2154-2203 *)
 Lemma partition_po_11 : 
   forall (l: Z),
   forall (r: Z),
@@ -463,7 +463,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2273-2287 *)
+(* Why obligation from file "partition.mlw", characters 2282-2296 *)
 Lemma partition_po_12 : 
   forall (l: Z),
   forall (r: Z),
@@ -499,7 +499,7 @@ Proof.
 intuition ArrayLength; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2258-2324 *)
+(* Why obligation from file "partition.mlw", characters 2267-2333 *)
 Lemma partition_po_13 : 
   forall (l: Z),
   forall (r: Z),
@@ -600,7 +600,7 @@ assumption.
 absurd (i2 < j2)%Z; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2324-2324 *)
+(* Why obligation from file "partition.mlw", characters 2333-2333 *)
 Lemma partition_po_14 : 
   forall (l: Z),
   forall (r: Z),
@@ -639,7 +639,7 @@ Proof.
 intuition unfold Zwf; SameLength t t0; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 1703-1883 *)
+(* Why obligation from file "partition.mlw", characters 1712-1892 *)
 Lemma partition_po_15 : 
   forall (l: Z),
   forall (r: Z),
@@ -661,7 +661,7 @@ apply array_le_empty; omega.
 apply array_ge_empty; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2347-2352 *)
+(* Why obligation from file "partition.mlw", characters 2356-2361 *)
 Lemma partition_po_16 : 
   forall (l: Z),
   forall (r: Z),
@@ -686,7 +686,7 @@ Proof.
 intuition SameLength t t0; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2377-2390 *)
+(* Why obligation from file "partition.mlw", characters 2386-2399 *)
 Lemma partition_po_17 : 
   forall (l: Z),
   forall (r: Z),
@@ -713,7 +713,7 @@ Proof.
 intuition SameLength t t0; auto with *.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2401-2403 *)
+(* Why obligation from file "partition.mlw", characters 2410-2412 *)
 Lemma partition_po_18 : 
   forall (l: Z),
   forall (r: Z),
@@ -789,7 +789,7 @@ assumption.
 assumption.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2434-2453 *)
+(* Why obligation from file "partition.mlw", characters 2443-2462 *)
 Lemma partition_po_19 : 
   forall (l: Z),
   forall (r: Z),
@@ -817,7 +817,7 @@ Proof.
 intuition SameLength t0 t; omega.
 Qed.
 
-(* Why obligation from file "partition.mlw", characters 2463-2469 *)
+(* Why obligation from file "partition.mlw", characters 2472-2478 *)
 Lemma partition_po_20 : 
   forall (l: Z),
   forall (r: Z),

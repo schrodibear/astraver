@@ -9,7 +9,7 @@ Require Import Why.
 Require Import Omega.
 
 
-(* Why obligation from file "find.mlw", characters 1612-1616 *)
+(* Why obligation from file "find.mlw", characters 1686-1690 *)
 Lemma find_po_1 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -31,7 +31,7 @@ intros; generalize le_f_N; generalize le_1_f.
 intuition; SameLength A0 A; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 1985-1990 *)
+(* Why obligation from file "find.mlw", characters 2059-2064 *)
 Lemma find_po_2 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -76,7 +76,7 @@ unfold i_invariant in H13; omega.
 omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2175-2186 *)
+(* Why obligation from file "find.mlw", characters 2249-2260 *)
 Lemma find_po_3 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -130,7 +130,7 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2020-2137 *)
+(* Why obligation from file "find.mlw", characters 2094-2211 *)
 Lemma find_po_4 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -170,7 +170,7 @@ intuition.
 unfold j_invariant in H8; unfold termination in H12; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2227-2232 *)
+(* Why obligation from file "find.mlw", characters 2301-2306 *)
 Lemma find_po_5 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -218,7 +218,7 @@ unfold j_invariant in H8; unfold termination in H12; omega.
 unfold j_invariant in H8; unfold termination in H12; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2410-2421 *)
+(* Why obligation from file "find.mlw", characters 2484-2495 *)
 Lemma find_po_6 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -275,7 +275,7 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2258-2375 *)
+(* Why obligation from file "find.mlw", characters 2332-2449 *)
 Lemma find_po_7 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -320,7 +320,7 @@ unfold termination in H12.
 omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2454-2477 *)
+(* Why obligation from file "find.mlw", characters 2528-2551 *)
 Lemma find_po_8 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -364,7 +364,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2531-2536 *)
+(* Why obligation from file "find.mlw", characters 2605-2610 *)
 Lemma find_po_9 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -412,7 +412,7 @@ unfold i_invariant in H16; omega.
 unfold i_invariant in H16; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2555-2560 *)
+(* Why obligation from file "find.mlw", characters 2629-2634 *)
 Lemma find_po_10 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -464,7 +464,7 @@ unfold termination in H28; unfold j_invariant in H25; omega.
 unfold termination in H28; unfold j_invariant in H25; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2562-2572 *)
+(* Why obligation from file "find.mlw", characters 2636-2646 *)
 Lemma find_po_11 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -518,7 +518,7 @@ intuition WhyArrays.
 ArraySubst A2; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2540-2576 *)
+(* Why obligation from file "find.mlw", characters 2614-2650 *)
 Lemma find_po_12 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -597,7 +597,7 @@ generalize
 intuition subst; intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2705-2705 *)
+(* Why obligation from file "find.mlw", characters 2779-2779 *)
 Lemma find_po_13 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -646,7 +646,7 @@ Proof.
 intuition.
  Qed.
 
-(* Why obligation from file "find.mlw", characters 1711-1924 *)
+(* Why obligation from file "find.mlw", characters 1785-1998 *)
 Lemma find_po_14 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -683,7 +683,7 @@ omega.
 auto.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2734-2749 *)
+(* Why obligation from file "find.mlw", characters 2808-2823 *)
 Lemma find_po_15 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -718,7 +718,7 @@ Proof.
 intuition elim H13; omega.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2784-2791 *)
+(* Why obligation from file "find.mlw", characters 2858-2865 *)
 Lemma find_po_16 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -764,7 +764,7 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2827-2834 *)
+(* Why obligation from file "find.mlw", characters 2901-2908 *)
 Lemma find_po_17 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -812,7 +812,7 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 2854-2878 *)
+(* Why obligation from file "find.mlw", characters 2928-2952 *)
 Lemma find_po_18 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -862,7 +862,7 @@ generalize
 intuition.
 Qed.
 
-(* Why obligation from file "find.mlw", characters 1475-1579 *)
+(* Why obligation from file "find.mlw", characters 1549-1653 *)
 Lemma find_po_19 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),
@@ -877,7 +877,7 @@ subst m; exact (Lemma_1 A).
 subst n; exact (Lemma_2 A).
 Qed.
 
-(* Why obligation from file "find.mlw", characters 1423-2893 *)
+(* Why obligation from file "find.mlw", characters 1497-2967 *)
 Lemma find_po_20 : 
   forall (A: (array Z)),
   forall (Pre27: (array_length A) = (N + 1)),

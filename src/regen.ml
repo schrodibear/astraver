@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.7 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.8 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -29,6 +29,7 @@ type element_kind =
   | Param
   | Oblig
   | Valid (* obsolete but helps porting from old versions *)
+  | Lg
   | Ax
 
 type element_id = element_kind * string
@@ -36,6 +37,7 @@ type element_id = element_kind * string
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
+  | Logic of string * logic_type
   | Axiom of string * predicate
 
 module type S = sig
@@ -61,6 +63,7 @@ module Make(X : S) = struct
     | Param, s -> fprintf fmt "parameter %s" s
     | Oblig, s -> fprintf fmt "obligation %s" s
     | Valid, s -> fprintf fmt "validation %s" s
+    | Lg, s -> fprintf fmt "logic %s" s
     | Ax, s -> fprintf fmt "axiom %s" s
 
   let elem_t = Hashtbl.create 97 (* maps [element_id] to [element] *)

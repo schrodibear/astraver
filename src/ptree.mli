@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.16 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.17 2004-02-23 17:14:58 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -112,12 +112,14 @@ type parsed_program = t
 
 (*s Declarations. *)
 
+type external_ = bool
+
 type decl = 
   | Program of Ident.t * parsed_program
-  | Parameter of Loc.t * Ident.t list * ptype_v
-  | External of Loc.t * Ident.t list * ptype_v
+  | Parameter of Loc.t * external_ * Ident.t list * ptype_v
   | Exception of Loc.t * Ident.t * pure_type option
-  | Logic of Loc.t * Ident.t list * logic_type
+  | Logic of Loc.t * external_ * Ident.t list * logic_type
+  | Predicate_def of Loc.t * Ident.t * (Ident.t * pure_type) list * lexpr
   | Axiom of Loc.t * Ident.t * lexpr
 
 type file = decl list
