@@ -9,7 +9,7 @@ Require Import Why.
    (fun (x0: Z) (result: bool)  => (x0 = v /\
     ((if result then x0 = 0 else x0 <> 0))))).
 
-(* Why obligation from file "set.mlw", characters 208-209 *)
+(* Why obligation from file "good/set.mlw", characters 208-209 *)
 Lemma p_po_1 : 
   forall (x0: Z),
   forall (Test1: x0 = 0 /\ x0 <> 0),
@@ -24,7 +24,7 @@ Qed.
    (fun (x0: Z) (result: bool)  => (x0 = v /\
     ((if result then x0 <> 0 else x0 = 0))))).
 
-(* Why obligation from file "set.mlw", characters 446-457 *)
+(* Why obligation from file "good/set.mlw", characters 446-457 *)
 Lemma p2_po_1 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -42,7 +42,7 @@ Proof.
 unfold Zwf; intuition.
 Qed.
 
-(* Why obligation from file "set.mlw", characters 358-478 *)
+(* Why obligation from file "good/set.mlw", characters 358-478 *)
 Lemma p2_po_2 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -58,7 +58,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "set.mlw", characters 559-560 *)
+(* Why obligation from file "good/set.mlw", characters 559-560 *)
 Lemma p3_po_1 : 
   forall (y: Z),
   forall (Pre4: y >= 0),
@@ -76,7 +76,7 @@ Proof.
 unfold Zwf; olddestruct b; intuition.
 Qed.
 
-(* Why obligation from file "set.mlw", characters 683-729 *)
+(* Why obligation from file "good/set.mlw", characters 683-729 *)
 Lemma p4_po_1 : 
   forall (y: Z),
   forall (Pre4: y >= 1),

@@ -2,7 +2,7 @@
 Require Import Why.
 Require Import Omega.
 
-(* Why obligation from file "loops.mlw", characters 156-167 *)
+(* Why obligation from file "good/loops.mlw", characters 156-167 *)
 Lemma loop1_po_1 : 
   forall (i: Z),
   forall (Pre6: i <= 10),
@@ -19,7 +19,7 @@ Proof.
 unfold Zwf; intros; omega.
 Qed.
 
-(* Why obligation from file "loops.mlw", characters 82-187 *)
+(* Why obligation from file "good/loops.mlw", characters 82-187 *)
 Lemma loop1_po_2 : 
   forall (i: Z),
   forall (Pre6: i <= 10),
@@ -40,7 +40,7 @@ Qed.
 
 
 
-(* Why obligation from file "loops.mlw", characters 414-425 *)
+(* Why obligation from file "good/loops.mlw", characters 414-425 *)
 Lemma loop2_po_1 : 
   forall (x: Z),
   forall (Pre4: x <= 10),
@@ -56,7 +56,7 @@ Proof.
 unfold Zwf; intros; omega.
 Qed.
 
-(* Why obligation from file "loops.mlw", characters 354-445 *)
+(* Why obligation from file "good/loops.mlw", characters 354-445 *)
 Lemma loop2_po_2 : 
   forall (x: Z),
   forall (Pre4: x <= 10),
@@ -70,7 +70,7 @@ Proof.
 intros; intuition.
 Qed.
 
-(* Why obligation from file "loops.mlw", characters 474-487 *)
+(* Why obligation from file "good/loops.mlw", characters 474-487 *)
 Lemma loop2_po_3 : 
   forall (x: Z),
   forall (Pre4: x <= 10),
@@ -84,7 +84,7 @@ Proof.
 simpl; intros; omega.
 Qed.
 
-(* Why obligation from file "loops.mlw", characters 487-487 *)
+(* Why obligation from file "good/loops.mlw", characters 487-487 *)
 Lemma loop2_po_4 : 
   forall (x: Z),
   forall (Pre4: x <= 10),

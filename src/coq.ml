@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.100 2003-09-23 10:38:22 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.101 2003-09-24 09:59:26 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -418,7 +418,7 @@ let print_term_v8 fmt t =
     | Tderef _ ->
 	assert false
     | Tapp (id, [t]) when id == t_neg_int ->
-	fprintf fmt "(-%a)" print3 t
+	fprintf fmt "(Zopp %a)" print3 t
     | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, [a; b; c]) when id == if_then_else -> 
@@ -567,13 +567,13 @@ let rec print_cc_term_v8 fmt = function
 	print_lambdas_v8 bl print_cc_term_v8 c
   | CC_app (f,a) ->
       let tl = collect_app [a] f in
-      fprintf fmt "@[<hov 2>(%a)@]" (print_list space print_cc_term_v8) tl
+      fprintf fmt "@[<hov 2>(%a)@]" (print_list_par space print_cc_term_v8) tl
   | CC_tuple (cl, None) ->
       fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
-	(print_list space print_cc_term_v8) cl
+	(print_list_par space print_cc_term_v8) cl
   | CC_tuple (cl, Some q) ->
       fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
-	print_cc_type_v8 q (print_list space print_cc_term_v8) cl
+	print_cc_type_v8 q (print_list_par space print_cc_term_v8) cl
   (* special treatment for the if-then-else *)
   | CC_letin (_, bl, e1, 
 	      CC_if (CC_var idb,
@@ -625,18 +625,20 @@ and print_proof_v8 fmt = function
   | Assumption id -> 
       Ident.print fmt id
   | Proj1 id ->
-      fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
+      fprintf fmt "@[(proj1 %a)@]" Ident.print id
   | Conjunction (id1, id2) ->
-      fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
+      fprintf fmt "@[(conj %a %a)@]" Ident.print id1 Ident.print id2
   | WfZwf t ->
       fprintf fmt "(Zwf_well_founded %a)" print_term_v8 t
   | Loop_variant_1 (h, h') ->
       fprintf fmt "(loop_variant_1 %a %a)" Ident.print h Ident.print h'
   | Absurd h ->
-      fprintf fmt "(False_ind ? %a)" Ident.print h
+      fprintf fmt "(False_ind _ %a)" Ident.print h
   | ProofTerm t ->
       fprintf fmt "@[%a@]" print_cc_term_v8 t
 
+and print_list_par sep pr fmt l =
+   print_list sep (fun fmt x -> fprintf fmt "(%a)" pr x) fmt l
 
 (* printers selection *)
 

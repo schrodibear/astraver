@@ -3,23 +3,34 @@
 
 Require Import Why.
 
-(* Why obligation from file , characters 138-140 *)
-Lemma f_po_1 :
- forall (b b0:Z) (Post1:b0 = (1 - b)%Z), b0 = b0 /\ b0 = (1 - b)%Z.
+(* Why obligation from file "good/see.mlw", characters 138-140 *)
+Lemma f_po_1 : 
+  forall (b: Z),
+  forall (b0: Z),
+  forall (Post1: b0 = (1 - b)),
+  b0 = b0 /\ b0 = (1 - b).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 230-242 *)
-Lemma k_po_1 :
- forall (b0:Z) (Post1:b0 = 1%Z) (b3 aux_4:Z)
-   (Post2:aux_4 = b3 /\ b3 = (1 - b0)%Z) (b4 aux_2:Z)
-   (Post4:aux_2 = b4 /\ b4 = (1 - b3)%Z) (result b:Z),
-   result = b /\ b = (1 - b4)%Z ->
-   forall result0 b0:Z,
-     result0 = b0 /\ b0 = (1 - b)%Z ->
-     (1 - aux_2 + aux_4)%Z = 0%Z /\ (result0 * (1 - result))%Z = 1%Z.
+(* Why obligation from file "good/see.mlw", characters 230-242 *)
+Lemma k_po_1 : 
+  forall (b0: Z),
+  forall (Post1: b0 = 1),
+  forall (b3: Z),
+  forall (aux_4: Z),
+  forall (Post2: aux_4 = b3 /\ b3 = (1 - b0)),
+  forall (b4: Z),
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = b4 /\ b4 = (1 - b3)),
+  (forall (result:Z),
+   (forall (b:Z),
+    (result = b /\ b = (1 - b4) ->
+     (forall (result0:Z),
+      (forall (b0:Z),
+       (result0 = b0 /\ b0 = (1 - b) -> (1 - aux_2 + aux_4) = 0 /\
+        (result0 * (1 - result)) = 1)))))).
 Proof.
 intuition.
 subst; ring.

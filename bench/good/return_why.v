@@ -3,7 +3,7 @@ Require Import Why.
 
 (*Why*) Parameter N : Z.
 
-(* Why obligation from file "return.mlw", characters 285-290 *)
+(* Why obligation from file "good/return.mlw", characters 285-290 *)
 Lemma p_po_1 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
@@ -19,7 +19,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "return.mlw", characters 314-316 *)
+(* Why obligation from file "good/return.mlw", characters 314-316 *)
 Lemma p_po_2 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
@@ -37,7 +37,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "return.mlw", characters 317-317 *)
+(* Why obligation from file "good/return.mlw", characters 317-317 *)
 Lemma p_po_3 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
@@ -55,7 +55,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "return.mlw", characters 189-195 *)
+(* Why obligation from file "good/return.mlw", characters 189-195 *)
 Lemma p_po_4 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
@@ -66,7 +66,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "return.mlw", characters 351-352 *)
+(* Why obligation from file "good/return.mlw", characters 351-352 *)
 Lemma p_po_5 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
