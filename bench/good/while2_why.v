@@ -17,8 +17,6 @@ Lemma test_po_2 :
   (x0: Z)
   (Pre3: `x0 <= 10`)
   (Pre2: Variant1 = `10 - x0`)
-  (result: bool)
-  (Bool1: (if result then `x0 < 10` else `x0 >= 10`))
   (Test2: `x0 < 10`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -34,8 +32,6 @@ Lemma test_po_3 :
   (x0: Z)
   (Pre3: `x0 <= 10`)
   (Pre2: Variant1 = `10 - x0`)
-  (result: bool)
-  (Bool1: (if result then `x0 < 10` else `x0 >= 10`))
   (Test2: `x0 < 10`)
   (x1: Z)
   (Post7: `x1 <= 10` /\ (Zwf `0` `10 - x1` `10 - x0`))
@@ -51,8 +47,6 @@ Lemma test_po_4 :
   (x0: Z)
   (Pre3: `x0 <= 10`)
   (Pre2: Variant1 = `10 - x0`)
-  (result: bool)
-  (Bool1: (if result then `x0 < 10` else `x0 >= 10`))
   (Test2: `x0 < 10`)
   (x1: Z)
   (Post7: `x1 <= 10` /\ (Zwf `0` `10 - x1` `10 - x0`))
@@ -68,8 +62,6 @@ Lemma test_po_5 :
   (x0: Z)
   (Pre3: `x0 <= 10`)
   (Pre2: Variant1 = `10 - x0`)
-  (result: bool)
-  (Bool1: (if result then `x0 < 10` else `x0 >= 10`))
   (Test1: `x0 >= 10`)
   x0 = `10`.
 Proof.
@@ -81,8 +73,6 @@ Lemma test_po_6 :
   (Pre4: `x <= 10`)
   (x0: Z)
   (Post3: x0 = `10`)
-  (result0: bool)
-  (Bool2: (if result0 then `x0 > 0` else `x0 <= 0`))
   (Test4: `x0 > 0`)
   (x1: Z)
   (Post11: x1 = `(-x0)`)
@@ -96,8 +86,6 @@ Lemma test_po_7 :
   (Pre4: `x <= 10`)
   (x0: Z)
   (Post3: x0 = `10`)
-  (result0: bool)
-  (Bool2: (if result0 then `x0 > 0` else `x0 <= 0`))
   (Test3: `x0 <= 0`)
   x0 = `(-10)`.
 Proof.

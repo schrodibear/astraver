@@ -62,20 +62,9 @@ let distance =
 	      t[!j] := temp
 	    else
 	      t[!j] := (Zmin t[!j] t[!j+1]) + 1
-          end)
-(***
-          {    ((k:Z)j-1 < k <= n2 -> (min_suffix w1 w2 i k t[k]))
-           and ((k:Z)0 <= k <= j-1 -> (min_suffix w1 w2 (i+1) k t[k]))
-           and (min_suffix w1 w2 (i+1) (j-1+1) old) }
-***)
-;
+          end);
           j := !j - 1
-        done
-(***
-        { -1 <= i-1 <= n1-1
-         and (j:Z)0 <= j <= n2 -> (min_suffix w1 w2 i j t[j]) }
-***)
-;
+        done;
 	i := !i - 1
       done;
       t[0]

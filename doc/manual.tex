@@ -404,9 +404,37 @@ TODO
 \label{quicksort}\index{Quicksort}
 
 \exsummary{quicksort}{Quicksort (the famous divide-and-conquer sorting
-  algorithm}
+  algorithm)}
 
 TODO
+
+\section{Edit distance}
+\label{editdistance}\index{Edit distance}
+
+\exsummary{edit-distance}{Algorithm to compute the edit distance in
+  linear space}
+
+This program computes a variant of the Levenshtein distance. Given two
+strings $w_1$ and $w_2$ of respective lengths $n_1$ and $n_2$, it
+computes the minimal numbers of insertions and deletions to perform in
+one of the strings to get the other one.  (The traditional edit
+distance also includes substitutions.)
+
+The nice point about this algorithm, due to Claude March\'e, is to work
+in linear space, in an array of $\min(n_1,n_2)$ integers. Time
+complexity is $O(n_1\times n_2)$, as usual.
+
+Files are organized as follows:
+\begin{description}
+\item[\texttt{words.v}]: 
+  Introduces an abstract type \texttt{A} for
+  characters, defines distance between two lists of characters,
+  defines suffixes of an array of characters and establishes several
+  lemmas.  As a bonus, an alternative definition of distance is
+  defined and proved equivalent with the first one.
+\item[\texttt{distance.ml}]:
+  The program and its specification.  
+\end{description}
 
 
 \chapter{Reference manual}

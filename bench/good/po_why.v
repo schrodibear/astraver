@@ -222,3 +222,11 @@ Lemma p18_po_2 :
 Proof. (* p18_po_2 *)
 
 Save.
+
+(* 
+ Local Variables:
+ mode: coq 
+  coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
+ End:
+*)
+
