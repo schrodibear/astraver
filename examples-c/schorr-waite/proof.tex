@@ -17,16 +17,18 @@
 \put(30,60){\mnode{n1}}\put(23,63){\makebox(0,0)[b] {c=true}}
 \put(60,60){\unode{n2}}
 
-\put(20,40){\unode{n11}}
-\put(40,40){\unode{n12}}
+\put(20,40){\mnode{n11}}
+\put(40,40){\mnode{n12}}\put(50,43){\makebox(0,0)[b] {c=false}}
 \put(50,20){\unode{n122}}
-
+\put(30,20){\unode{n121}}
 \ncline[linestyle=dashed]{n0}{n1}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
 \ncline{n0}{n2}
 \ncline{n1}{n11}
 \ncline{n12}{n122}
 \ncline[linestyle=dashed]{n1}{n12}
+\ncline[linestyle=dashed]{n12}{n121}
+\ncarc[arcangleA=120,linewidth=1]{n12}{n1}
 \ncarc[arcangleA=-100,arcangleB=-30,linewidth=1]{n1}{n0}
 \end{picture}\label{figure}
 \end{center}
