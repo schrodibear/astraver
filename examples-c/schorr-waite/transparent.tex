@@ -43,10 +43,13 @@
 \item Motivations
 \item L'algorithme de Schorr-Waite
 \item Sa spécification formelle en Caduceus
+\item Sa preuve
+\begin{itemize}
 \item Annotation du code 
 \item Preuve avec le démonstrateur automatique Simplify
 \item Preuve avec Coq
 \item Terminaison avec Coq
+\end{itemize}
 \item Conclusions
 \end{enumerate}
 
@@ -95,20 +98,20 @@ Parcours d'un graphe orienté (binaire)
 
 N{\oe}uds du graphe codés par structure C :
 \fontsize{10}{10pt}
-\begin{alltt}
+\begin{alltt}\blue
 typedef struct struct_node \{
-  unsigned int m :1;         /* marquage */
-  unsigned int c :1;         /* usage interne */
-  struct struct_node *l, *r; /* fils gauche et droit */
+  unsigned int m :1;         \textsl{/* marquage */}
+  unsigned int c :1;         \textsl{/* usage interne */}
+  struct struct_node *l, *r; \textsl{/* fils gauche et droit */}
 \} * node;
 \end{alltt}
 La fonction
 \fontsize{10}{10pt}
-\begin{alltt}
+\begin{alltt}\blue
 void schorr_waite(node root);
 \end{alltt}
-doit parcourir le graphe, à partir du n{\oe}ud donné \verb|root|, en
-suivant les fils gauche et droits.
+doit parcourir le graphe, à partir du n{\oe}ud donné \texttt{\blue root}, en
+suivant les fils gauches et droits.
 \end{slide}
 
 
@@ -219,16 +222,18 @@ void schorr_waite(node root) \{
 
 \begin{slide}{Spécification informelle}
 
-\begin{alltt}
+\begin{alltt}\blue
 void schorr_waite(node root);
 \end{alltt}
 
 \begin{itemize}
-\item Les n\oe{}uds accessibles à partir de \verb|root| sont initialement
-  non-marqués (\verb|n->m == 0|) et marqués à la fin (\verb|n->m == 1|)
+\item Les n{\oe}uds accessibles à partir de \verb|root| sont supposés initialement
+  non-marqués : \texttt{\blue n->m == 0}
 
-\item La structure du graphe est restaurée (pointeurs des fils gauche et
-droit restaurés à leurs valeurs initiales)
+\item ils doivent être marqués à la fin : \texttt{\blue n->m == 1}
+
+\item La structure du graphe doit être préservée : pointeurs des fils
+  gauches et droits doivent reprendre leurs valeurs initiales
 \end{itemize}
 \end{slide}
 
@@ -242,16 +247,17 @@ Il faut exprimer l'accessibilité. On introduit
 \end{blue}\end{slshape}\end{alltt}
 \begin{itemize}
 \item déclaré en Caduceus
-\item supposé défini (ou du moins axiomatisé) dans le prouveur.
+\item supposé défini (ou du moins axiomatisé) dans le prouveur utilisé.
 \item déclaration
-  \begin{slshape}\begin{blue}reads\end{blue}\end{slshape} : permet de
+  \texttt{\textsl{\blue reads}} : permet de
   faire dépendre ce prédicat
-  de $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$
+  de \begin{slshape}\texttt{\blue p1} (\texttt{\blue ->l} $\cup$
+    \texttt{\blue ->r})$^*$\end{slshape}
 \end{itemize}
 
 \end{slide}
 
-\begin{slide}{Annotation de la fonction}
+\begin{slide}{Spécification formelle en Caduceus}
 
 \fontsize{10}{10pt}
 \begin{alltt}\begin{slshape}\begin{blue}
@@ -325,13 +331,17 @@ Idée essentielle : codage d'une pile de \emph{backtracking} dans le graphe
 
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 /*@ invariant
   @  (I1 :: \bs{}forall node x; \old(reachable(root,x)) => 
   @    reachable(t,x) || reachable(p,x))
   @ &&
 \end{alltt}
-N{\oe}ud initialement accessible $\Ra$ accessible par $p$ ou $t$
+
+\bigskip
+
+N{\oe}ud initialement accessible $\Ra$ accessible par \texttt{\blue p}
+ou \texttt{\blue t}
 
 \begin{comment}
 Ce premier invariant indique que tous les n\oe{}uds dans le graphe au
@@ -341,13 +351,17 @@ début de la fonction sont atteignable par t ou p.
 \bigskip
 
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ (I2 :: \bs{}forall node x; x != \bs{}null => 
 @         (reachable(t,x) || reachable(p,x)) => 
 @         \old(reachable(root,x)))
 @ &&
 \end{alltt}
-N{\oe}ud non null accessible par $p$ ou $t$ $\Ra$ initialement accessible
+
+\bigskip
+
+N{\oe}ud non null accessible par \texttt{\blue p} ou \texttt{\blue t}
+$\Ra$ initialement accessible 
 
 \begin{comment}
 Ce deuxième invariant indique que tous les n\oe{}uds non null atteignable
@@ -359,12 +373,17 @@ par t ou p étaient dans le graphe avant la fonction.
 
 \begin{slide}{Invariant de la boucle}
 
+\bigskip
+
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
 @         x->m == \old(x->m)) 
 @ &&
 \end{alltt}
+
+\bigskip
+
 N{\oe}ud inaccessible $\Ra$ marquage inchangé
 
 \begin{comment}
@@ -375,22 +394,26 @@ graphe avant la fonction, ont leur marquage inchangé.
 
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ \bs{}exists plist stack;
 @  (I4a :: clr_list (p,stack))
 @    &&
 \end{alltt}
 
-Définition de la pile de \emph{backtrack} \verb|stack|
+\bigskip
 
 \begin{comment}
 Cet invariant permet de définir la pile de \emph{backtrack}.
 La déclaration de 
 \end{comment}
 \begin{minipage}[b]{0.4\textwidth}
-\verb|clr_list| déclaré dans Caduceus par :
+Définition de la pile de backtrack \texttt{\blue stack}
+
+\bigskip
+
+\texttt{\blue clr\_list} déclaré dans Caduceus par :
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 /*@ predicate 
   @   clr_list(node p, 
   @            plist stack)
@@ -405,7 +428,7 @@ La déclaration de
 \begin{slide}{Invariant de la boucle}
 
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ (I4b :: \bs{}forall node p; in_list (p,stack) => p->m)  
 @ &&
 \end{alltt}
@@ -420,10 +443,12 @@ Tout n{\oe}ud de la pile est marqué
 \bigskip
 
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 /*@ predicate 
   @   in_list(node p,
   @           plist stack) */
+
+
 \end{alltt}
 \end{minipage}\hfill
 \usebox{\pile}
@@ -431,12 +456,12 @@ Tout n{\oe}ud de la pile est marqué
 
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ (I4c :: \bs{}forall node x; 
-@   \valid(x) && \old(reachable(root,x)) && !x->m =>
-@     unmarked_reachable(t,x) || 
-@     (\bs{}exists node y; 
-@       in_list(y,stack) && unmarked_reachable(y->r,x))) 
+@  \valid(x) && \old(reachable(root,x)) && !x->m =>
+@    unmarked_reachable(t,x) || 
+@    (\bs{}exists node y; 
+@     in_list(y,stack) && unmarked_reachable(y->r,x))) 
 @  &&
 \end{alltt}
 \begin{comment}
@@ -455,16 +480,17 @@ par un fils droit d'un élément de la pile
 \bigskip
 
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 /*@ predicate unmarked_reachable(node p1, node p2)
   @   reads p1->r,p1->l,p1->m
   @*/
 \end{alltt}
+(accessibilité par un chemin formé de n{\oe}uds non marqués)
 
 \end{slide}
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ (I4d ::\bs{}forall node x; !in_list(x,stack) =>  
 @        (x->r == \old(x->r) && x->l == \old(x->l))) 
 @  &&
@@ -473,6 +499,8 @@ par un fils droit d'un élément de la pile
 \begin{minipage}[b]{0.4\textwidth}
 N{\oe}ud hors de la pile $\Ra$ les fils sont inchangés par rapport à
 leur valeurs initiales
+
+\bigskip
 \end{minipage}\hfill
 \usebox{\pile}
 
@@ -480,13 +508,14 @@ leur valeurs initiales
 
 \begin{slide}{Invariant de la boucle}
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 @ (I4e :: \bs{}forall node p1; \bs{}forall node p2;
-@    pair_in_list(p1,p2,cons(t,stack)) => 
-@        (p2->c => \old(p2->l) == p2->l && 
-@         \old(p2->r) == p1)
-@     && (!p2->c => \old(p2->l) == p1 && 
-@         \old(p2->r) == p2->r)) */
+@   pair_in_list(p1,p2,cons(t,stack)) => 
+@     (p2->c => 
+@         \old(p2->l) == p2->l && \old(p2->r) == p1)
+@  && (!p2->c => 
+@         \old(p2->l) == p1 && \old(p2->r) == p2->r)) 
+@*/
 \end{alltt}
 \begin{comment}
 Enfin cet invariant précise que pour tous les éléments de la pile de
@@ -500,7 +529,10 @@ La declaration de \verb|pair_in_list| dans caduceus est :
 \end{alltt}
 \end{comment}
 \begin{minipage}[b]{0.4\textwidth}
-Précise les fils gauches et droits des éléments de la pile
+Précise les fils gauche et droit des éléments de la pile
+\bigskip
+\bigskip
+\bigskip
 \end{minipage}\hfill
 \usebox{\pile}
 
@@ -544,126 +576,256 @@ ajout axiome reachable(p,p) :
 
 12 obligations de preuve
 \begin{itemize}
-\item invariant initialement
+\item invariant initialement vrai
 \item post-condition de la fonction
-\item 3 fois : invariant préservé,  resp. par \textbf{pop},
-  \textbf{swing} et \textbf{push}
-\item 7 fois : validité d'accès $n\rightarrow f$
+\item invariant préservé,  resp. par \textbf{pop},
+  \textbf{swing} et \textbf{push} (3 obligations)
+\item validité d'accès $n\rightarrow f$ (7 obligations)
 \end{itemize}
 
 Simplify prouve 4 accès valides.
 
-Ajout de 
+\bigskip
+Si ajout de 
 \fontsize{10pt}{9pt}
-\begin{alltt}\begin{slshape}
-//@ axiom reachable_refl : \bs{}forall node p ; reachable(p,p) 
+\begin{alltt}\begin{slshape}\blue
+/*@ axiom reachable_refl : 
+  @    \bs{}forall node p ; reachable(p,p) 
 \end{slshape}\end{alltt}
 
-$\leadsto$ tous les accès sont valides
+$\leadsto$ tous les accès sont prouvés valides
 \end{slide}
 
-\begin{slide}{La preuve Coq}
-Nous devons d''abord définir les prédicats utilisés par Caduceus.
-\fontsize{10pt}{9pt}
-\begin{alltt}
-  Definition llist (a: alloc_table) 
-(next : pointer -> pointer)(p:pointer) (l:plist) :=
-  lpath a next p l null.
+\begin{slide}{La preuve en Coq}
 
-  Definition clr_list (a: alloc_table)  (c:memory Z) 
+Nous devons d'abord \emph{définir} les prédicats déclarés en Caduceus.
+
+\bigskip
+
+On commence par les listes de n{\oe}uds:
+
+\bigskip
+
+\fontsize{10pt}{9pt}
+\begin{alltt}\blue
+Require Export List.
+
+Definition plist := list pointer.
+
+Definition in_list := (@In pointer).
+\end{alltt}
+\end{slide}
+
+\begin{slide}{Listes obtenues en suivant des pointeurs}
+
+\texttt{\blue (lpath a next p1 l p2)} :
+  il y a un chemin de \texttt{\blue p1} à \texttt{\blue p2} suivant les
+  liens \texttt{\blue next}, et \texttt{\blue l} est la liste des
+  pointeurs rencontrés sur ce chemin
+
+\fontsize{10pt}{9pt}
+\begin{alltt}\blue
+Inductive lpath 
+   (a: alloc_table) (next: pointer -> pointer) : 
+    pointer -> plist -> pointer -> Prop :=
+  | Path_null : forall p:pointer, lpath a next p nil p
+  | Path_cons : forall p1 p2:pointer, valid a p1 ->
+        forall l:list pointer,
+          lpath a next (next p1) l p2 -> 
+            lpath a next  p1 (cons p1 l) p2.
+\end{alltt}  
+\bigskip
+Listes terminées par \texttt{\blue null} :
+\fontsize{10pt}{9pt}
+\begin{alltt}\blue
+Definition llist 
+  (a: alloc_table) (next : pointer -> pointer)
+  (p:pointer) (l:plist) := lpath a next p l null.
+\end{alltt}
+\end{slide}
+
+\begin{slide}{La pile de backtracking}
+
+\fontsize{10pt}{9pt}
+\begin{alltt}\blue
+Definition clr_list (a: alloc_table)  (c:memory Z) 
   (l: memory pointer)(r: memory pointer) : 
   pointer ->list pointer-> Prop :=
-  let next t := if Z_eq_dec (acc c t) 0 then (acc l t) 
-  else (acc r t) in
-  llist a next .
+
+    let next t := if Z_eq_dec (acc c t) 0 then (acc l t) 
+                  else (acc r t) 
+    in
+    llist a next .
 \end{alltt}
-Voici donc la définition Coq de la pile de \emph{backtrack}.
-\end{slide}
-\begin{slide}{La preuve Coq}
+
+\bigskip
+
+\texttt{\blue (acc f t)} est l'écriture Coq de \texttt{\blue t->f} :
+modèle mémoire de Burstall-Bornat, un tableau par champ de structure.
 \fontsize{10pt}{9pt}
-\begin{alltt}
-  Inductive path (a: alloc_table) (l: memory pointer)
+\begin{alltt}\blue
+acc : forall A:Set, (memory A) -> pointer -> A
+\end{alltt}
+\end{slide}
+
+
+\begin{slide}{Chemins dans les graphes}
+
+\fontsize{10pt}{9pt}
+\begin{alltt}\blue
+Inductive path (a: alloc_table) (l: memory pointer)
   (r: memory pointer) : 
   pointer ->  pointer -> list pointer -> Prop :=
-    | Path_null : forall p:pointer, path a l r p  p nil
-    | Path_left :
-      forall p1 p2:pointer,
-        forall lp : list pointer,
-          valid a p1 ->
+    | Path_null : forall p:pointer, 
+            path a l r p  p nil
+    | Path_left : forall p1 p2:pointer,
+        forall lp : list pointer, valid a p1 ->
             path a l r (acc l p1) p2 lp-> 
                path a l r p1  p2 (p1::lp)
-    | Path_right :
-      	forall p1 p2:pointer,
-          forall lp : list pointer ,
-        	valid a p1 ->
-        	  path a l r (acc r p1)  p2 lp -> 
-                     path a l r p1 p2 (p1::lp). 
+    | Path_right : forall p1 p2:pointer,
+        forall lp : list pointer, valid a p1 ->
+            path a l r (acc r p1)  p2 lp -> 
+               path a l r p1 p2 (p1::lp). 
 \end{alltt}
-Ce prédicat représente le chemin entre 2 n\oe{}uds du graphe.
+ 
 \end{slide}
-\begin{slide}{La preuve Coq}
+
+
+
+\begin{slide}{Définition de l'accessibilité}
+
+Accessible = existence d'un chemin
+
+\bigskip
+
 \fontsize{10pt}{9pt}
-\begin{alltt}     
-  Definition reachable (a: alloc_table) 
+\begin{alltt}\blue
+Definition reachable (a: alloc_table) 
     (l: memory pointer)(r: memory pointer) 
     (p1 :pointer) (p2:pointer) : Prop :=
-    exists lp : list pointer, path a l r p1 p2 lp.
+
+    exists lp : list pointer, 
+       path a l r p1 p2 lp.
 \end{alltt}
-Ce prédicat représente l'accessibilité d'un n\oe{}uds a un autre dans le graphe.
+\begin{comment}
+Ce predicat represente l'accesibilite d'un noeuds a un autre dans le graphe.
+\end{comment}
 \end{slide}
-\begin{slide}{La preuve Coq}
+
+
+\begin{slide}{Accessibilité}
+
+Accessibilité suivant des n{\oe}uds non marqués 
+
+\bigskip
+
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 Definition unmarked_reachable (a: alloc_table) 
   (m:memory Z) (l r: memory pointer) (p1 p2:pointer) 
   : Prop :=
   exists lp : list pointer, 
     (forall x : pointer, In x lp -> (acc m x) = 0 ) 
-    /\ path a l r p1 p2 lp.
+    /\bs{} path a l r p1 p2 lp.
 \end{alltt}
-Ce prédicat représente l'accessibilité par des n\oe{}uds non marqués d'un n\oe{}ud à un autre dans le graphe.
+\begin{comment}
+Ce predicat represente l'accesibilite par des noeuds non marquer d'un noeuds a un autre dans le graphe.
+\end{comment}
 \end{slide}
-\begin{slide}{La preuve Coq}
+
+
+
+\begin{slide}{Quelques lemmes essentiels}
+
+Chemins sans cycle :
+
+\bigskip
+
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
+Fixpoint no_rep (l:list pointer) : Prop :=
+match l with
+| nil => True
+| (a::l) => 
+    (if In_dec eq_pointer_dec a l then False else True)  
+    /\bs{} no_rep l
+end.
+
+
 Lemma path_no_cycle : forall (a : alloc_table) 
   (p1 p2 : pointer) (l r : memory pointer) 
   (pa : list pointer), path a l r p1 p2 pa -> 
   exists pa' :list pointer, 
-  incl pa' pa /\ no_rep pa' /\ path a l r p1 p2 pa'.   
+  incl pa' pa /\bs{} no_rep pa' /\bs{} path a l r p1 p2 pa'.   
+
 \end{alltt}
+\begin{comment}
 Ce lemme affirme que s'y il existe un chemin de p1 a p2, alors il
-existe un chemin de p1 a p2 sans répétition.
+existe un chemin de p1 a p2 sans repetition.
+\end{comment}
 \end{slide}
-\begin{slide}{La preuve Coq}
+
+
+
+\begin{slide}{Accessibilité et mise à jour}
+
+Besoin de montrer que l'accessibilité est préservée en modifiant un
+pointeur non concerné :
+
+\bigskip
+
 \fontsize{10pt}{9pt}
-\begin{alltt}
+\begin{alltt}\blue
 Lemma path_upd_left : forall (alloc : alloc_table) 
   (l r : memory pointer) (p:pointer)
   (lp : list pointer) (p1 p0 p2 : pointer), 
   ~ In p lp -> path alloc l r p1 p0 lp -> 
   path alloc (upd l p p2) r p1 p0 lp.
 \end{alltt}
-Les quatre lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
+
+\bigskip
+
+Lemmes analogues \texttt{\blue path\_upd\_right},
+\texttt{\blue path\_inv\_upd\_left} et \texttt{\blue path\_inv\_upd\_right}
+\begin{comment}
+Les quatres lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
 \texttt{path\_inv\_upd\_left} et \texttt{path\_inv\_upd\_right}
 affirme que si il y a un chemin entre p1 et p2 et que l'ont modifie le
 graphe en dehors de ce chemin alors ce chemin existe toujours. 
+\end{comment}
 \end{slide}
+
+
+
+
 \begin{slide}{La preuve de terminaison}
+
+\begin{comment}
 Pour prouver la terminaison il faut monter la terminaison de la boucle
-while. Pour cela en Caduceus on annote la boucle avec \emph{variant}:
-une expression qui décroît a chaque tour de la boucle.
-La mesure qui décroît strictement pour cette boucle est 
-la mesure lexicographique des 3 mesures suivant :
+while. Pour cela en caduceus on annote la boucle avec \emph{variant}:
+une expression qui decroit a chaque tour de la boucle.
+\end{comment}
+
+\begin{itemize}
+\item Terminaison du while : clause \texttt{\blue variant} de Caduceus
+
+\item Mesure qui décroit strictement : ordre lexicographique 
 \begin{enumerate}
-\item le nombre de n\oe{}ud non marquer.
-\item le nombre de n\oe{}uds qui ont $c=0$
-\item la taille de la pile
+\item nombre de n{\oe}uds non marqués.
+\item nombre de n{\oe}uds qui ont $c=0$
+\item taille de la pile
 \end{enumerate}
+
+\item Léger détail: besoin d'une hypothèse de finitude du graphe !
+  (c.-à-d. ensemble fini de n{\oe}uds accessibles)
+\end{itemize}
+
 \end{slide}
+
+
 \begin{slide}{La preuve de terminaison: généralités}
 
-On définit:
+En Coq on définit:
 \begin{itemize}
 \item La notion d'ordre lexicographique \emph{non-dépendant}
 \begin{comment}
@@ -715,17 +877,17 @@ WF_nat, mais qui généralise a
 n'importe quelle relation bien fondée à la place de \verb|<| sur les
 nat. 
 
-$\mapsto$ Permet de prouver la terminaison avec des mesures qui 
+$\leadsto$ Permet de prouver la terminaison avec des mesures qui 
 \begin{enumerate}
 \item ne sont pas totales (c.-à.-d. pas définies partout)
 \item à valeur dans autre chose que \verb|nat| (ici \verb|nat * nat * nat|)
 \end{enumerate}
 \end{itemize}
 
-$\mapsto$ ajouts dans la librairie standard de Coq ?
+$\leadsto$ ajouts dans la librairie standard de Coq ?
 \end{slide}
 
-\begin{slide}{La preuve de terminaison}
+\begin{slide}{Terminaison : annotations supplémentaires}
 
 % Pour la preuve de terminaison on doit rajouter les elements suivant
 % a l'annotation du code.
@@ -733,7 +895,7 @@ $\mapsto$ ajouts dans la librairie standard de Coq ?
 On doit compléter la spécification
 \fontsize{10pt}{9pt}
 \begin{alltt}\begin{slshape}\begin{blue}
-/*@ logic Length weight(node p, node t) 
+/*@ logic weight_type weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
 /*@ predicate reachable_elements(node root, plist s) 
             reads root->l,root->r */ 
@@ -744,53 +906,66 @@ void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}\begin{blue}
   /*@ invariant ...
     @ variant weight(p,t) 
-    @         for order_mark_m_and_c_and_stack 
+    @     for order_mark_m_and_c_and_stack 
     @*/\end{blue}\end{slshape}
-  while (p != NULL || (t != NULL && ! t->m)) \{
-   ...
+  while (...) \{
 \end{alltt}
-ou en Coq on définit :
-\fontsize{10pt}{9pt}
-\begin{alltt}
-Definition reachable_elements (a:alloc_table) 
-  (l r:memory pointer) (p t: pointer)
-  (lp : list pointer) : Prop :=
-  no_rep lp /\
-  forall p2 : pointer, p2 <> null -> 
-    (reachable a l r p p2 \/ reachable a l r t p2) 
-    <-> In p2 lp.
-\end{alltt}
-
-Les fonctions \verb|weight| et \verb|order_mark_m_and_c_and_stack|
-définissent la mesure précédente.
 \end{slide}
-\begin{slide}{Quelques chiffres}
-Avec Simplify nous avons prouve 8 obligations de preuves sur 13.
+\begin{slide}{Terminaison en Coq}
 
-Avec Coq nous avons prouve toutes les obligations de preuves avec :
+en Coq on définit :
+
+\bigskip
+
+\fontsize{10pt}{9pt}
+\begin{alltt}\begin{slshape}\begin{blue}
+Definition reachable_elements a l r root s := 
+   forall p, In p s <-> reachable a l r root p 
+\end{blue}\end{slshape}\end{alltt}
+
+\bigskip
+
+\texttt{\blue weight} : un simple Record
+
+\bigskip
+
+\texttt{\blue order\_mark\_m\_and\_c\_and\_stack} : définition de la mesure
+lexicographique précédente.
+
+\end{slide}
+
+
+\begin{slide}{Quelques chiffres}
+
+% Simplify nous avons prouve 8 obligations de preuves sur 13.
+
+Avec Coq nous avons prouvé toutes les obligations de preuves avec :
 \begin{enumerate}
-\item 317 lignes de définitions et 589 lignes de tactiques sur les listes
-et accessibilité.
-\item 985 lignes de obligation de preuve générées automatiquement et
-  2411 lignes de tactiques ont été insérées automatiquement pour les
+\item 317 lignes de définitions et 589 lignes de tactiques sur les
+  listes, les graphes, les lemmes d'accessibilité.
+\item 985 lignes d'obligation de preuve sont générees automatiquement
+  par Caduceus+Why
+\item 2411 lignes de tactiques ont été insérées manuellement pour les
   prouver.
-\item environ 40% du travail a ete fait pour la terminaison
-\item 3 semaines ont été nécessaires pour faire la preuve et 2
-  semaines de plus pour la terminaison.  
+\item environ 5 semaines de travail ont été nécessaires.
+\item environ 40\% du temps et des lignes de Coq ont été consacrés à
+  la terminaison. 
 \end{enumerate}
 
 \end{slide}
 \begin{slide}{Conclusion}
-On a prouver différents aspect de l'algorithme de Schorr-Waite : 
+
+La montagne Schorr-Waite a pu être conquise par Caduceus 
 \begin{enumerate}
-\item cette algorithme est bien un parcours de graphe
-\item il ne peu y avoir de ``segmentation fault''
-\item que les parties hors du graphes ne sont pas changées
-\item la terminaison
+\item le langage de spécification est suffisamment puissant
+\item on peut traiter du vrai code C, et montrer l'absence de
+  ``segmentation fault'' 
+\item la terminaison peut être traitée aussi
 \end{enumerate}
 
-De plus contrairement aux autres travaux, cette preuve a été fait sur un vrai programme C.
+\bigskip
 
+Quelle serait la montagne suivante ?
 
 \end{slide}
 \end{document}
