@@ -611,6 +611,8 @@ Definition an3 := (* validation *)
   | Exn_E1 => P
   end.
 
+(*Why*) Implicits post_E1.
+
 (*Why*) Inductive ET_E2 [T:Set] : Set :=
   | Val_E2 : T -> (ET_E2 T)
   | Exn_E2 : Z -> (ET_E2 T).
@@ -622,6 +624,8 @@ Definition an3 := (* validation *)
   | (Exn_E2 v) => (P v)
   end.
 
+(*Why*) Implicits post_E2.
+
 (*Why*) Inductive ET_E3 [T:Set] : Set :=
   | Val_E3 : T -> (ET_E3 T)
   | Exn_E3 : foo -> (ET_E3 T).
@@ -632,6 +636,8 @@ Definition an3 := (* validation *)
   | (Val_E3 v) => (Q v)
   | (Exn_E3 v) => (P v)
   end.
+
+(*Why*) Implicits post_E3.
 
 (*Why*) Parameter f1_ex : (n: Z)(ET_E1 unit).
 

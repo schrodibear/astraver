@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.57 2002-09-12 15:12:44 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.58 2002-09-13 09:01:44 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -374,14 +374,22 @@ let reprint_exception_post fmt id v =
 
 let print_exception_post = reprint_exception_post
 
+let reprint_exception_impl fmt id =
+  fprintf fmt "(*Why*) Implicits post_%s.@\n" id
+
+let print_exception_impl = reprint_exception_impl
+
 (*s Elements to produce. *)
 
 type element_kind = 
-  | Param of string
-  | Oblig of string
-  | Valid of string
-  | Exc_t of string
-  | Exc_p of string
+  | Param
+  | Oblig
+  | Valid
+  | Exc_t
+  | Exc_p
+  | Exc_i
+
+type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
@@ -389,33 +397,35 @@ type element =
   | Validation of string * validation
   | Exception_type of string * cc_type option
   | Exception_post of string * cc_type option
+  | Exception_impl of string
 
-let elem_t = Hashtbl.create 97 (* maps [element_kind] to [element] *)
-let elem_q = Queue.create ()   (* queue of [element_kind * element] *)
+let elem_t = Hashtbl.create 97 (* maps [element_id] to [element] *)
+let elem_q = Queue.create ()   (* queue of [element_id * element] *)
 
 let add_elem ek e = Queue.add (ek,e) elem_q; Hashtbl.add elem_t ek e
 
 let reset () = Queue.clear elem_q; Hashtbl.clear elem_t
 
 let push_obligations = 
-  List.iter (fun ((l,_) as o) -> add_elem (Oblig l) (Obligation o))
+  List.iter (fun ((l,_) as o) -> add_elem (Oblig, l) (Obligation o))
 
 let push_validation id v = 
-  add_elem (Valid id) (Validation (id,v))
+  add_elem (Valid, id) (Validation (id,v))
 
 let push_parameter id v =
-  add_elem (Param id) (Parameter (id,v))
+  add_elem (Param, id) (Parameter (id,v))
 
 let push_exception id v =
-  add_elem (Exc_t id) (Exception_type (id,v));
-  add_elem (Exc_p id) (Exception_post (id,v))
+  add_elem (Exc_t, id) (Exception_type (id,v));
+  add_elem (Exc_p, id) (Exception_post (id,v));
+  add_elem (Exc_i, id) (Exception_impl id)
 
 let print_element_kind fmt = function
-  | Param s -> fprintf fmt "parameter %s" s
-  | Oblig s -> fprintf fmt "obligation %s" s
-  | Valid s -> fprintf fmt "validation %s" s
-  | Exc_t s -> fprintf fmt "exception %s" s
-  | Exc_p _ -> ()
+  | Param, s -> fprintf fmt "parameter %s" s
+  | Oblig, s -> fprintf fmt "obligation %s" s
+  | Valid, s -> fprintf fmt "validation %s" s
+  | Exc_t, s -> fprintf fmt "exception %s" s
+  | (Exc_p | Exc_i), _ -> ()
 
 let print_element fmt e = 
   begin match e with
@@ -424,6 +434,7 @@ let print_element fmt e =
     | Validation (id, v) -> print_validation fmt id v
     | Exception_type (id, v) -> print_exception_type fmt id v
     | Exception_post (id, v) -> print_exception_post fmt id v
+    | Exception_impl id -> print_exception_impl fmt id
   end;
   fprintf fmt "@\n"
 
@@ -433,30 +444,39 @@ let reprint_element fmt = function
   | Validation (id, v) -> reprint_validation fmt id v
   | Exception_type (id, v) -> reprint_exception_type fmt id v
   | Exception_post (id, v) -> reprint_exception_post fmt id v
+  | Exception_impl id -> reprint_exception_impl fmt id
 
 (*s Generating the output. *)
 
-let oblig_regexp = 
-  Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
-let valid_regexp = 
-  Str.regexp "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*"
-let param_regexp = 
-  Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
-let exc_t_regexp = 
-  Str.regexp "(\\*Why\\*) Inductive[ ]+ET_\\([^ ]*\\).*"
-let exc_p_regexp = 
-  Str.regexp "(\\*Why\\*) Definition[ ]+post_\\([^ ]*\\).*"
+let regexps = ref []
+
+let add_regexp r k = regexps := (Str.regexp r, k) :: !regexps
+
+let _ = 
+  add_regexp 
+    "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
+  add_regexp 
+    "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*" Valid;
+  add_regexp 
+    "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param;
+  add_regexp
+    "(\\*Why\\*) Inductive[ ]+ET_\\([^ ]*\\).*" Exc_t;
+  add_regexp
+    "(\\*Why\\*) Definition[ ]+post_\\([^ ]*\\).*" Exc_p;
+  add_regexp
+    "(\\*Why\\*) Implicits[ ]+post_\\([^ ]*\\).*" Exc_i
 
 let check_line s =
-  let test r = 
-    if Str.string_match r s 0 then Str.matched_group 1 s else raise Exit
+  let rec test = function
+    | [] -> 
+	None
+    | (r, k) :: l ->
+	if Str.string_match r s 0 then 
+	  Some (k, Str.matched_group 1 s) 
+	else 
+	  test l
   in
-  try Some (Oblig (test oblig_regexp)) with Exit ->
-  try Some (Valid (test valid_regexp)) with Exit ->
-  try Some (Param (test param_regexp)) with Exit ->
-  try Some (Exc_t (test exc_t_regexp)) with Exit ->
-  try Some (Exc_p (test exc_p_regexp)) with Exit ->
-  None
+  test !regexps
 
 let end_is_not_dot s =
   let n = String.length s in n = 0 || s.[n-1] <> '.'
