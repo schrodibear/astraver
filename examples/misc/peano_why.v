@@ -290,3 +290,207 @@ Lemma u2_po_2 :
  Qed.
 
 
+(* Why obligation from file "peano.mlw", characters 1344-1345 *)
+Lemma mult2_po_1 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test4: x0 = 0),
+  0 = (x0 * y0).
+Proof.
+intros; subst; intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1359-1374 *)
+Lemma mult2_po_2 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  (x0 - 1) >= 0 /\ y0 >= 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1185-1391 *)
+Lemma mult2_po_3 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (Pre11: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (Pre12: (x0 - 1) >= 0 /\ y0 >= 0),
+  (Zwf 0 (x0 - 1) Variant1).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1351-1375 *)
+Lemma mult2_po_4 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (aux_3: Z),
+  forall (Post10: aux_3 = ((x0 - 1) * y0)),
+  y0 >= 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1282-1283 *)
+Lemma mult2_po_5 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (aux_3: Z),
+  forall (Post10: aux_3 = ((x0 - 1) * y0)),
+  forall (Pre13: y0 >= 0),
+  forall (Pre14: y0 >= 0),
+  forall (Variant3: Z),
+  forall (a0: Z),
+  forall (b0: Z),
+  forall (Pre8: Variant3 = a0),
+  forall (Pre7: a0 >= 0),
+  forall (Test2: a0 = 0),
+  b0 = (a0 + b0).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1289-1307 *)
+Lemma mult2_po_6 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (aux_3: Z),
+  forall (Post10: aux_3 = ((x0 - 1) * y0)),
+  forall (Pre13: y0 >= 0),
+  forall (Pre14: y0 >= 0),
+  forall (Variant3: Z),
+  forall (a0: Z),
+  forall (Pre8: Variant3 = a0),
+  forall (Pre7: a0 >= 0),
+  forall (Test1: a0 <> 0),
+  (a0 - 1) >= 0.
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1261-1322 *)
+Lemma mult2_po_7 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (aux_3: Z),
+  forall (Post10: aux_3 = ((x0 - 1) * y0)),
+  forall (Pre13: y0 >= 0),
+  forall (Pre14: y0 >= 0),
+  forall (Variant3: Z),
+  forall (a0: Z),
+  forall (Pre8: Variant3 = a0),
+  forall (Pre7: a0 >= 0),
+  forall (Test1: a0 <> 0),
+  forall (Pre6: (a0 - 1) >= 0),
+  forall (Pre4: (a0 - 1) >= 0),
+  forall (Pre5: (a0 - 1) >= 0),
+  (Zwf 0 (a0 - 1) Variant3).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1289-1307 *)
+Lemma mult2_po_8 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (aux_3: Z),
+  forall (Post10: aux_3 = ((x0 - 1) * y0)),
+  forall (Pre13: y0 >= 0),
+  forall (Pre14: y0 >= 0),
+  forall (Variant3: Z),
+  forall (a0: Z),
+  forall (b0: Z),
+  forall (Pre8: Variant3 = a0),
+  forall (Pre7: a0 >= 0),
+  forall (Test1: a0 <> 0),
+  forall (Pre6: (a0 - 1) >= 0),
+  forall (result0_0: Z),
+  forall (Post4: result0_0 = (a0 - 1 + (b0 + 1))),
+  result0_0 = (a0 + b0).
+Proof.
+intuition; subst; ring.
+Save.
+
+(* Why obligation from file "peano.mlw", characters 1351-1375 *)
+Lemma mult2_po_9 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre18: x >= 0 /\ y >= 0),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (y0: Z),
+  forall (Pre17: Variant1 = x0),
+  forall (Pre16: x0 >= 0 /\ y0 >= 0),
+  forall (Test3: x0 <> 0),
+  forall (Pre15: (x0 - 1) >= 0 /\ y0 >= 0),
+  forall (aux_3: Z),
+  forall (Post10: aux_3 = ((x0 - 1) * y0)),
+  forall (Pre13: y0 >= 0),
+  forall (result0: Z),
+  forall (Post12: result0 = (y0 + aux_3)),
+  result0 = (x0 * y0).
+Proof.
+intuition; subst; ring.
+Save.
+

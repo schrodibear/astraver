@@ -51,3 +51,13 @@ let mult1 = fun (x:int ref) (y:int) ->
 (* test *)
 
 let u2 = let r = ref 4 in {} (mult1 r 6) { r = 24 }
+
+(* recursive multiplication with a local recursive addition *)
+
+let rec mult2 (x:int) (y:int) : int {variant x} =
+  { x>=0 and y >=0 } 
+  let rec add2 (a:int) (b:int) : int {variant a} = 
+    {a>=0} if a = 0 then b else (add2 (a-1) (b+1)) { result=a+b }
+  in
+  if x = 0 then 0 else (add2 y (mult2 (x-1) y)) 
+  {result=x*y}
