@@ -23,6 +23,43 @@ Inductive lpath (a: alloc_table) (t: memory pointer) : pointer -> plist -> point
 
 Hint Constructors lpath.
 
+Lemma lpath_append :
+ forall (a: alloc_table) (t: memory pointer) (l1 l2:plist) 
+ (p1 p2 p':pointer),
+   lpath a t p1 l1 p' -> lpath a t p' l2 p2 ->
+   lpath a t p1 (app l1 l2) p2.
+Proof.
+simple induction l1; simpl; intuition.
+inversion H; subst; auto.
+inversion H0; subst.
+constructor; auto.
+elim (H l2 (acc t a0) p2 p' H7); intuition.
+Qed.
+
+Lemma lpath_append_inv :
+ forall (a: alloc_table) (t: memory pointer) (l1 l2:plist) 
+ (p1 p2:pointer),
+   lpath a t p1 (app l1 l2) p2 ->
+    exists p' : pointer, lpath a t p1 l1 p' /\ lpath a t p' l2 p2.
+Proof.
+simple induction l1; simpl; intuition.
+exists p1; auto.
+inversion H0; subst.
+elim (H l2 (acc t a0) p2 H6); intuition.
+exists x; auto.
+Qed.
+
+Lemma lpath_add1 :
+  forall a tl p2 l p1, 
+    lpath a tl p1 l p2 -> valid a p2 ->
+    lpath a tl p1 (l ++ p2 :: nil) (acc tl p2).
+Proof.
+simple induction l; simpl; intuition.
+inversion H.
+subst; constructor; auto.
+inversion H0.
+subst; constructor; auto.
+Qed.
 
 (** * Lists *)
 
@@ -281,38 +318,86 @@ Variable tl : memory pointer.
 
 Definition finite (p : pointer) :=
   exists r : plist, 
-  forall p', 
-  (exists lpp', lpath a tl p lpp' p') -> p'<>null -> valid a p' /\ In p' r.
+  forall p' lpp', 
+  lpath a tl p lpp' p' -> p'<>null -> valid a p' /\ In p' r.
 
 Lemma finite_is_valid : forall p, p<>null -> finite p -> valid a p.
 Proof.
 unfold finite; intuition.
 elim H0; clear H0; intuition.
-assert (h : exists lpp' : plist, lpath a tl p lpp' p).
-exists (@nil pointer); auto.
-generalize (H0 p h); clear H0; intuition.
+assert (h:lpath a tl p nil p); auto.
+generalize (H0 p nil h); intuition.
 Save.
 
-Definition cyclic (p : pointer) :=
-  exists l1:plist, exists l2:plist, exists p',
-  p'<>null /\ lpath a tl p l1 p' /\ lpath a tl p' l2 p'.
+Inductive cyclic (p : pointer) : Prop :=
+Cyclic :
+  forall l1 l2 p',
+  p'<>null -> lpath a tl p l1 p' -> 
+  lpath a tl p' l2 p' -> l2<>nil ->
+  cyclic p.
 
-(** [cyclic] and [is_list] are exclusive *)
-Lemma cyclic_is_list_exclusive : forall p,
-  cyclic p -> is_list a tl p -> False.
+
+Lemma cyclic_acc : 
+  forall p, valid a p -> cyclic p -> cyclic (acc tl p).
 Proof.
-intros.
-elim H; clear H; intros l1 H; elim H; clear H; intros l2 H;
-elim H; clear H; intros p'; intuition.
-elim (is_list_llist a tl p H0); clear H0; intros l0 Hl0.
-unfold llist in Hl0.
+destruct 2.
+inversion H1.
+subst l1 p'.
+inversion H2.
+subst l2; intuition.
+apply Cyclic with (@nil pointer) (l ++ p :: nil) (acc tl p); auto.
+inversion H6.
+do 2 rewrite H12; inversion H5; intuition.
+inversion H10; intuition.
+subst l2.
+apply lpath_add1; auto.
+destruct l; simpl; discriminate.
+apply Cyclic with l l2 p'; auto.
+Qed.
 
-Admitted.
+Lemma not_cyclic_and_is_list :
+  forall p, is_list a tl p -> cyclic p -> False.
+Proof.
+induction 1.
+inversion 1.
+inversion H1.
+subst; intuition.
+inversion H4; intuition.
+intro; apply IHis_list.
+apply cyclic_acc; auto.
+Qed.
+
+Lemma enter_the_loop :
+  forall l12 p1 p2 l11,
+  lpath a tl p1 l11 p1 -> l11<>nil ->
+  lpath a tl p1 l12 p2 ->
+  exists l21, lpath a tl p2 l21 p1.
+Proof.
+induction l12; simpl; intuition.
+inversion H1.
+exists (@nil pointer); auto.
+inversion H.
+subst l11; intuition.
+elim (IHl12 (acc tl p1) p2 (l ++ p1 :: nil)).
+intro x; generalize p2.
+induction x; simpl; auto.
+intros p4 h; inversion h.
+exists l; intuition.
+intros.
+inversion H7; subst.
+elim (IHx (acc tl a1) H13).
+intros x0 Hx0; exists (a1 :: x0).
+constructor; auto.
+apply lpath_add1; auto.
+destruct l; simpl; discriminate.
+inversion H1; auto.
+Qed.
 
 (** when a list is finite, it is either [cyclic] or [is_list] *)
 Lemma finite_cyclic_or_is_list : forall p, 
   finite p -> cyclic p \/ is_list a tl p.
 Proof.
+destruct 1.
 Admitted.
 
 End Cyclicity.

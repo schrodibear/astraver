@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.109 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.110 2004-11-13 02:27:23 filliatr Exp $ i*)
 
 
 open Format
@@ -869,7 +869,9 @@ let interp_decl d acc =
 		begin match ctype.ctype_node with
 		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
 		  | CTfloat _ -> App(Var("any_real"),Var("void"))
-		  | CTarray _ | CTpointer _ | CTstruct _ | CTunion _ -> 
+		  | CTarray (_, None) | CTpointer _ -> 
+		      App(Var "any_pointer", Var "void")
+		  | CTarray _ | CTstruct _ | CTunion _ -> 
                       let t = { term_node = Tresult; 
 				term_loc = d.loc;
 				term_type = ctype } in

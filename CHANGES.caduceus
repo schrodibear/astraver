@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
 
  
+ o fixed bug with local variables of pointer type
  o new options:
    -s to generate one file for each C function
    -verify f,g,... to specify the set of functions to verify (implies -s)
