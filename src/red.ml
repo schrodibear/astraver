@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.27 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.28 2002-10-15 11:49:11 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -98,20 +98,27 @@ let rec cc_subst_binder_type s = function
   | CC_pred_binder c -> CC_pred_binder (tsubst_in_predicate s c)
   | CC_untyped_binder -> CC_untyped_binder
 
-and cc_subst_binder s (id,b) = (id, cc_subst_binder_type s b)
+and cc_subst_binder s (id,b) = 
+  (id, cc_subst_binder_type s b), Idmap.remove id s
 
-and cc_subst_binders s = List.map (cc_subst_binder s)
+and cc_subst_binders s = function
+  | [] -> 
+      [], s
+  | b :: bl -> 
+      let b',s' = cc_subst_binder s b in 
+      let bl',s'' = cc_subst_binders s' bl in
+      b' :: bl', s''
 
 and cc_type_subst s = function
   | TTarray (t, tt) -> 
       TTarray (tsubst_in_term s t, cc_type_subst s tt)
   | TTlambda (b, tt) ->
-      let b' = cc_subst_binder s b in TTlambda (b', cc_type_subst s tt)
+      let b',s' = cc_subst_binder s b in TTlambda (b', cc_type_subst s' tt)
   | TTarrow (b, tt) -> 
-      let b' = cc_subst_binder s b in TTarrow (b', cc_type_subst s tt)
+      let b',s' = cc_subst_binder s b in TTarrow (b', cc_type_subst s' tt)
   | TTtuple (bl, p) -> 
-      let bl' = cc_subst_binders s bl in
-      TTtuple (bl', option_app (cc_type_subst s) p)
+      let bl',s' = cc_subst_binders s bl in
+      TTtuple (bl', option_app (cc_type_subst s') p)
   | TTpred p ->
       TTpred (tsubst_in_predicate s p)
   | TTpure _ as t -> 
@@ -158,16 +165,16 @@ let rec red sp s cct =
 	 | CC_tuple (al,_) when is_iota_redex bl al ->
 	     red sp (iota_subst s (bl, al)) e2
 	 | re1 ->
-	     let bl' = cc_subst_binders s bl in
-	     (match red sp s e2 with
+	     let bl',s' = cc_subst_binders s bl in
+	     (match red sp s' e2 with
 		(* [let (x1,...,xn) = e1 in (x1,...,xn)] *)
 		| CC_tuple (al,_) when is_eta_redex bl al ->
 		    red sp s e1
 		| re2 ->
 		    CC_letin (dep, bl', re1, re2)))
   | CC_lam (b, e) ->
-      let b' = cc_subst_binder s b in
-      CC_lam (b', red sp s e)
+      let b',s' = cc_subst_binder s b in
+      CC_lam (b', red sp s' e)
   | CC_app (f, a) ->
       (match red sp s f, red sp s a with
 	 (* two terms *)

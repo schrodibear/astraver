@@ -1,4 +1,8 @@
 
+  o reference masking now forbidden
+  o new feature: exceptions
+  o fixed bug in automatic annotations => some postconditions names may change
+
 version 0.7, October 2nd, 2002
 ==============================
   o Why library compatible with Coq 7.3 (released version) and with Coq

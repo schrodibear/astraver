@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.16 2002-09-13 12:15:40 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.17 2002-10-15 11:49:11 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -14,6 +14,7 @@ type t =
   | UnboundException of Ident.t
   | Clash of Ident.t
   | ClashExn of Ident.t
+  | ClashRef of Ident.t
   | Undefined of Ident.t
   | NotAReference of Ident.t
   | NotAnArray of Ident.t

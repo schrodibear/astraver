@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: report.ml,v 1.3 2002-09-13 12:15:40 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.4 2002-10-15 11:49:11 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -28,6 +28,8 @@ let report fmt = function
       fprintf fmt "Clash with previous constant %s" (Ident.string id)
   | ClashExn id ->
       fprintf fmt "Clash with previous exception %s" (Ident.string id)
+  | ClashRef id ->
+      fprintf fmt "Clash with previous reference or array %s" (Ident.string id)
   | Undefined id ->
       fprintf fmt "The object %s is undefined" (Ident.string id)
   | NotAReference id ->

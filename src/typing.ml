@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.74 2002-10-15 09:05:53 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.75 2002-10-15 11:49:11 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -509,6 +509,7 @@ and typef_desc lab env loc = function
       failwith "todo: typing: application to a type"
       
   | Sletref (x, e1, e2) ->
+      if is_ref env x then raise_located loc (ClashRef x);
       let t_e1 = typef lab env e1 in
       let ef1 = t_e1.info.kappa.c_effect in
       let v1 = t_e1.info.kappa.c_result_type in
