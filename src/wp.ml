@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.75 2003-03-13 16:48:16 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.76 2003-03-14 15:20:20 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -169,6 +169,7 @@ and wp_desc info d q =
 	       let q1 = force_wp_name q1 in
 	       let q1 = saturate_post p1.info q1 q in
 	       let p'1,w1 = wp p1 q1 in
+	       let w1 = optasst_app (add_pre (pre p1 @ obligations p1)) w1 in
 	       If (p'1, p'2, p'3), w1
 	   | _ ->
 	       let p'1,_ = wp p1 None in
