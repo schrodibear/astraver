@@ -1,7 +1,7 @@
 .TH why 1 "March, 2002"
 
 .SH NAME
-why \- A certification tool
+why \- A multi-language multi-prover verification tool
 
 
 .SH SYNOPSIS
@@ -15,14 +15,16 @@ why \- A certification tool
 .SH DESCRIPTION
 
 .B why
-is a certification tool for the PVS and Coq proof assistants.
-It takes annotated programs as input, in ML syntax.
+is a verification tool. 
+It takes annotated programs as input (in ML or C syntax)
+and outputs verification conditions for several proof assistants (Coq,
+PVS, HOL Light, Mizar) and decision procedures (haRVey, Simplify).
 
 .SH OPTIONS
 
 .TP
 .B \-h
-Help. Will give you the complete list of options accepted by why.
+Help. Will give you the full list of command line options.
 
 
 .SH AUTHORS

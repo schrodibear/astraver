@@ -115,7 +115,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: $(VO)
 
-VERSION=1.22
+VERSION=1.3
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -158,13 +158,16 @@ src/logic.ml: src/logic.mli
 # installation
 ##############
 
-install: install-binary install-coq-@COQ@ install-pvs-@PVS@
+install: install-binary install-man install-coq-@COQ@ install-pvs-@PVS@
 
-install-binary: $(BINARY) 
+install-binary: $(BINARY) $(WHY2HTML)
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why
+	cp -f $(WHY2HTML) $(BINDIR)/why2html
+
+install-man:
 	mkdir -p $(MANDIR)/man1
-	cp -f doc/why.1 $(MANDIR)/man1
+	cp -f doc/*.1 $(MANDIR)/man1
 
 install-coq-no:
 install-coq-yes:
@@ -176,12 +179,14 @@ install-pvs-yes:
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSLIB)/why
 
-local: $(STATICBINARY) $(VO)
+local: $(STATICBINARY) $(WHY2HTML) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
+	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
 	mkdir -p $(COQLIB)/contrib/why
 	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSLIB)/why
+	cp -f doc/*.1 $$HOME/man/man1
 
 demons: $(STATICBINARY) doc/manual.ps
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why

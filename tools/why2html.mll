@@ -14,25 +14,37 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: why2html.mll,v 1.1 2003-09-15 08:40:40 filliatr Exp $ i*)
+(*i $Id: why2html.mll,v 1.2 2003-09-17 07:40:31 filliatr Exp $ i*)
 
 {
+  open Arg
   open Lexing
 
   let cout = ref stdout
   let print s = output_string !cout s
 }
 
+let decl = "external" | "parameter" | "logic"
+let keyw = "let" | "in" | "begin" | "end" | "if" | "then" | "else" | 
+           (* "ref" | "array" | *)
+	   "while" | "do" | "done" | "assert" | "label" | "fun" | "rec"
+let ident = ['a'-'z']+
+
 rule scan = parse
-  | "(*"  { print "<font color=\"red\">"; 
+  | "(*"  { print "<font color=\"990000\">(*"; 
 	    comment lexbuf; 
 	    print "</font>";
 	    scan lexbuf }
-  | "{"   { print "<font color=\"green\">"; 
+  | "{"   { print "<font color=\"green\">{"; 
 	    annotation lexbuf; 
 	    print "</font>";
 	    scan lexbuf }
+  | keyw  { print "<font color=\"0033cc\">"; print (lexeme lexbuf); 
+	    print "</font>"; scan lexbuf }
+  | decl  { print "<font color=\"990099\">"; print (lexeme lexbuf); 
+	    print "</font>"; scan lexbuf }
   | eof   { () }
+  | ident { print (lexeme lexbuf); scan lexbuf }
   | _     { print (lexeme lexbuf); scan lexbuf }
 
 and comment = parse
@@ -44,7 +56,7 @@ and comment = parse
 and annotation = parse
   | "}"  { print "}" }
   | eof  { () }
-  | _    { print (lexeme lexbuf); comment lexbuf }
+  | _    { print (lexeme lexbuf); annotation lexbuf }
 
 {
 
@@ -55,20 +67,28 @@ and annotation = parse
     scan lb;
     print "</pre>\n</body></html>\n"
 
+  let title = ref None
+
+  let make_title f = match !title with None -> f | Some t -> t
+
   let translate_file f =
     let fout = f ^ ".html" in
     let c = open_out fout in
     cout := c;
     let cin = open_in f in
-    translate_channel f cin;
+    translate_channel (make_title f) cin;
     close_in cin;
     close_out c
 
   let _ =
-    let argn = Array.length Sys.argv in
-    if argn = 1 then 
-      translate_channel "" stdin 
-    else 
-      for i = 1 to argn - 1 do translate_file Sys.argv.(i) done
+    let files = ref [] in
+    Arg.parse 
+	[ "-title", String (fun s -> title := Some s), 
+	  "<title>  specifies a title" ]
+	(fun s -> files := s :: !files)
+	"usage: why2html [options] files";
+    match !files with
+      | [] -> translate_channel "" stdin 
+      | fl -> List.iter translate_file fl
 
 }

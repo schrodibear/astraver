@@ -20,3 +20,5 @@ test_valid.v
 ctest_valid.v
 ctest.ml
 *.ax
+*.sx
+*.baf
