@@ -1,4 +1,6 @@
 
+version 1.62, June 24th, 2004
+=============================
   o new option --all-vc to get all verification conditions (no more
     automatic discharging of the most trivial conditions)
 

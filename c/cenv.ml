@@ -257,6 +257,12 @@ let find_field ~tag:n ~field:x =
     let f = { field_name = x; field_tag = n; field_heap_var_name = x } in
     Hashtbl.add fields_t (n,x) f; f
 
+let declare_fields tyn fl = match tyn with
+  | CTstruct (n, _) | CTunion (n, _) ->
+      List.iter (fun (_,x,_) -> ignore (find_field n x)) fl
+  | _ -> 
+      assert false
+  
 let type_of_field loc x ty = 
   let rec lookup su n = function
     | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")

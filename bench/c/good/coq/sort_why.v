@@ -109,8 +109,6 @@ Lemma sort4_2_impl_po_1 :
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
-  forall (tmp: Z),
-  forall (Post1: tmp = (any_int tt)),
   (valid alloc a).
 Proof.
 intuition.
@@ -129,11 +127,9 @@ Lemma sort4_2_impl_po_2 :
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
-  forall (tmp: Z),
-  forall (Post1: tmp = (any_int tt)),
   forall (Pre6: (valid alloc a)),
   forall (caduceus_5: Z),
-  forall (Post9: caduceus_5 = (acc intP a)),
+  forall (Post10: caduceus_5 = (acc intP a)),
   (valid alloc b).
 Proof.
 intuition.
@@ -152,16 +148,14 @@ Lemma sort4_2_impl_po_3 :
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
-  forall (tmp: Z),
-  forall (Post1: tmp = (any_int tt)),
   forall (Pre6: (valid alloc a)),
   forall (caduceus_5: Z),
-  forall (Post9: caduceus_5 = (acc intP a)),
+  forall (Post10: caduceus_5 = (acc intP a)),
   forall (Pre5: (valid alloc b)),
   forall (aux_1: Z),
-  forall (Post11: aux_1 = (acc intP b)),
+  forall (Post12: aux_1 = (acc intP b)),
   forall (result: bool),
-  forall (Post13: (if result then caduceus_5 > aux_1 else caduceus_5 <= aux_1)),
+  forall (Post14: (if result then caduceus_5 > aux_1 else caduceus_5 <= aux_1)),
   (if result
    then (forall (tmp:Z),
          (tmp = (acc intP a) ->

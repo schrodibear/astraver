@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.45 2004-06-22 14:52:15 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.46 2004-06-25 07:00:53 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -91,24 +91,11 @@ let is_memory_var = function
        with Not_found -> assert false)
 
 let declare_heap_var v ty =
+(**
+  eprintf "declare_heap_var %s (%a)%s\n" v (print_list comma pp_print_string) (fst ty) (snd ty); flush stderr;
+**)
   if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty
   else assert (Hashtbl.find heap_vars v = ty)
-
-(**
-let heap_var_names = Hashtbl.create 97 
-
-let name_heap_var v =
-  let rec fresh i = 
-    let un = v ^ "_" ^ string_of_int i in
-    if Hashtbl.mem heap_vars un then fresh (succ i) else un
-  in
-  try
-    Hashtbl.find heap_var_names v
-  with Not_found ->
-    let uv = if Hashtbl.mem heap_vars v then fresh 0 else v in
-    Hashtbl.add heap_var_names v uv;
-    uv
-**)
 
 let empty = HeapVarSet.empty
 let union = HeapVarSet.union

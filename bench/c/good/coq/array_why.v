@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/array.why", characters 340-432 *)
+(* Why obligation from file "why/array.why", characters 402-494 *)
 Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -11,9 +11,10 @@ Lemma getcell_impl_po_1 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
+                (valid_range alloc t 0 2) /\
                 (forall (index_1:Z),
                  (0 <= index_1 /\ index_1 < 3 ->
-                  (valid_range alloc (shift t index_1) 0 2)))),
+                  (valid_range alloc (acc intPP (shift t index_1)) 0 2)))),
   forall (caduceus_1: pointer),
   forall (Post1: caduceus_1 = t),
   forall (result: pointer),

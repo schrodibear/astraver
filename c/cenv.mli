@@ -51,6 +51,7 @@ end
 
 val type_of_field : Loc.t -> string -> tctype -> field_info * tctype
 val find_field : tag:string -> field:string -> field_info
+val declare_fields : texpr ctype_node -> ('a * string * 'b) list -> unit
 
 (* make heap var names unique *)
 val uniquize_names : unit -> unit

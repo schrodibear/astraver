@@ -1,6 +1,9 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
+version 0.62, June 24th, 2004
+=============================
+ o fixed bug with unused structures fields (not renamed)
  o fixed bug with any_real not defined in Why
  o fixed bug with pointers to float
 
