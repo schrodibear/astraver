@@ -1,4 +1,5 @@
 
+  o added ``typing'' contraints in Simplify output (using predicates ISxxx)
   o new declaration "predicate" to define a predicate
   o new option --dir to output files into a given directory
   o new option --pvs-preamble
