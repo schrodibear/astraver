@@ -40,7 +40,7 @@ typedef struct struct_node {
   @   reads p->c,p->l,p->r
   @*/
 
-/*@ predicate reachable_elements(node p, node t, plist l) 
+/*@ predicate reachable_elements(node p, node t, plist s) 
   @   reads p->l,p->r
   @*/ 
 

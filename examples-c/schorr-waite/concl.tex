@@ -1,20 +1,32 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-Dire que c'est un succes, que caduceus est puissant.
+We obtained a machine-checked full verification of the Schorr-Waite
+algorithm, directly on a real C source version of it. We have not only
+proved the functional properties of it, like previous
+works~\cite{bornat00mpc,mehta03cade}, but we have also proved that no
+invalid pointer dereferencing may occur, and we also proved the
+termination. Moreover we used a tool for arbitrary C programs, without
+anything specialized for this case study, which additionally gives the
+choice of the back-end prover.
 
-Improvements in \caduceus{} 
+We claim this is a very successful case study, which provides a clear
+evidence that the \caduceus{} approach is powerful. Anyway, there are
+still many potential improvements. There is a clear need for
+cooperation between automatic provers and interactive
+ones. Interactive provers are nice because they are very expressive
+and allow to prove manually difficult goals, but their automatic
+tactics are less powerful than automatic provers. This is especially
+true for Coq, because any decision procedure in it needs to provide a
+checkable proof trace, making its integration very difficult.
 
-Preuve automatique avec Simplify ?
+Several improvements to the \caduceus{} tool are in progress. There are
+scaling up issues for dealing with code of large size. We are
+currently investigating solutions, in particular by integration of
+advanced static analysis techniques.
 
-What would be the next mountain to climb ?
-
-issues:
-
- automation  ICS-PVS, Isabelle/HOL, Coq, automation not as powerful as
- Simplify. 
-
- issues for other C programs, C support (cast), scling up
+An interesting question is what would be the next ``mountain to
+climb'' for pointer program verification?
 
 %%% Local Variables: 
 %%% mode: latex
