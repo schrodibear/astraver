@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.15 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.16 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -14,55 +14,79 @@ open Effect
 open Typing
 open Monad
 
-(*i
-let has_proof_part ren env c =
-  let sign = Pcicenv.trad_sign_of ren env in
-  let ty = Typing.type_of (Global.env_of_context sign) Evd.empty c in
-  is_matching (Coqlib.build_coq_sig_pattern ()) ty
-i*)
+(*s Translation of imperative programs into functional ones.
+    [ren] is the current renamings of variables,
+    [e] is the imperative program to translate, annotated with type+effects.
+    We return the translated program in type [cc_term] *)
 
-(* main part: translation of imperative programs into functional ones.
- * 
- * [env] is the environment
- * [ren] is the current renamings of variables
- * [t] is the imperative program to translate, annotated with type+effects
- *
- * we return the translated program in type [cc_term]
- *)
+let rec trad e =
+  cross_label e.info.label (trad_desc e.info e.desc)
 
-let rec trad ren t =
-  let env = t.info.env in
-  let ren = push_date ren t.info.label in
-  trad_desc ren env t.info.kappa t.desc
-
-and trad_desc ren env ct d =
-  let (rest,tt),eft,pt,qt = decomp_kappa ct in
-  match d with
-
-  | Expression c ->
-      let ids = get_reads eft in
-      let al = current_vars ren ids in
-      let c' = subst_in_term al c in
-  (*i if has_proof_part ren env c' then
-	CC_expr c'
-      else i*)
-      	let ty = trad_ml_type_v ren env tt in
-	let t,_ =
-	  result_tuple ren (current_date ren) env (rest,CC_expr c',ty) (eft,qt)
-	in
-	t
+and trad_desc info d ren = match d with
+  | Expression t ->
+      Monad.unit info t ren
 
   | Var id ->
-      if is_reference env id then
-	invalid_arg "Mlise.trad_desc"
-      else if is_local env id then
+      assert (not (is_reference info.env id));
+      if is_local info.env id then
 	CC_var id
       else
 	CC_expr (Tvar id)
 
   | Acc _ ->
-      failwith "Mlise.trad: pure terms are supposed to be expressions"
+      assert false
 
+  | Aff (x, e1) ->
+      Monad.compose 
+	e1.info (trad e1)
+	(fun res1 ren' -> 
+	   let t1 = trad_ml_type_v ren info.env (result_type e1) in
+	   let ren'' = next ren' [x] in
+	   let x' = current_var ren'' x in
+	   CC_letin (false, [x', CC_var_binder t1], CC_expr (Tvar res1), 
+		     Monad.unit info (Tconst ConstUnit) ren''))
+	ren
+
+  | Seq bl ->
+      let rec block res = function
+	| [] -> 
+	    (match res with
+	       | Some id -> Monad.unit info (Tvar id)
+	       | None -> assert false)
+	| (Assert c) :: bl ->
+	    let p = 
+	      { p_assert = true; p_name = c.a_name; p_value = c.a_value } 
+	    in
+	    insert_pre info.env p (block res bl)
+	| (Label s) :: bl ->
+	    cross_label s (block res bl)
+	| (Statement e) :: bl ->
+	    Monad.compose e.info (trad e) (fun x -> block (Some x) bl)
+      in
+      block None bl ren
+
+  | If (b, e1, e2) ->
+      Monad.compose b.info (trad b)
+	(fun resb ren' -> 
+	   let branch e tb = 
+	     let t = 
+	       Monad.compose e.info (trad e) 
+		 (fun r -> Monad.unit info (Tvar r)) ren'
+	     in
+	     match post b with
+	       | Some qb -> 
+		   let n = test_name Anonymous in
+		   let q = apply_post ren' info.env qb in
+		   let q = tsubst_in_predicate [result, tb] q.a_value in
+		   CC_lam ([n, CC_pred_binder q], t)
+	       | None -> t
+	   in
+	   CC_if (CC_var resb, branch e1 ttrue, branch e2 tfalse))
+	ren
+
+  | _ -> failwith "Mlize.trad: TODO"
+
+(*i***
   | TabAcc (check, x, e1) ->
       let _,ty_elem = array_info env x in
       let te1 = trad ren e1 in
@@ -84,19 +108,6 @@ and trad_desc ren env ct d =
       in
       make_let_in ren ren' env te1 p1
 	(current_vars ren' w,q1) (id, PureType PTint) (t,ty)
-
-  | Aff (x, e1) ->
-      let tx = type_in_env env x (*i trad_type_in_env ren env x i*) in
-      let te1 = trad ren e1 in
-      let (_,ef1,p1,q1) = decomp_kappa e1.info.kappa in
-      let w1 = get_writes ef1 in
-      let ren' = next ren (x::w1) in
-      let t_ty = 
-	result_tuple ren' (current_date ren) env
-	  (rest, CC_expr (Tconst ConstUnit), CC_type) (eft,qt) 
-      in
-      make_let_in ren ren' env te1 p1
-	(current_vars ren' w1,q1) (current_var ren' x,tx) t_ty
 
   | TabAff (check, x, e1, e2) ->
       let _,ty_elem = array_info env x in
@@ -128,30 +139,6 @@ and trad_desc ren env ct d =
       in
       make_let_in ren ren' env te1 p1
 	(current_vars ren' w1,q1) (id1,PureType PTint) (t,ty)
-
-  | Seq bl ->
-      let before = current_date ren in
-      let finish ren = function
-	| Some (id,ty) -> 
-	    result_tuple ren before env (id,CC_var id, CC_type) (eft,qt)
-	| None ->
-	    failwith "a block should contain at least one statement"
-      in
-      let bl = trad_block ren env bl in
-      make_block ren env finish bl
-
-  | If (b, e1, e2) ->
-      (*i EXP: we do not generate the obligation at the end of test i*)
-      let b' =
-	{ b with info={ b.info with kappa={ b.info.kappa with c_post=None }}}
-      in
-      let tb = trad ren b' in
-      let _,efb,_,_ = decomp_kappa b.info.kappa in
-      let ren' = next ren (get_writes efb) in
-      let te1 = trad ren' e1 in
-      let te2 = trad ren' e2 in
-      make_if ren env (tb,b.info.kappa) ren' (te1,e1.info.kappa) 
-	(te2,e2.info.kappa) ct
 
   (* Translation of the while. *)
 
@@ -276,31 +263,8 @@ and trad_binders ren env = function
       (*i (id, CC_typed_binder mkSet) :: (trad_binders ren env bl) i*)
   | (_,Untyped) :: _ -> 
       assert false
+****i*)
 	
-and trad_block ren env = function
-  | [] -> 
-      []
-  | (Assert c) :: block ->
-      (Assert c) :: (trad_block ren env block)
-  | (Label s) :: block ->
-      let ren' = push_date ren s in
-      (Label s) :: (trad_block ren' env block)
-  | (Statement e) :: block ->
-      let te = trad ren e in
-      let _,efe,_,_ = decomp_kappa e.info.kappa in
-      let w = get_writes efe in
-      let ren' = next ren w in
-      (Statement (te,e.info.kappa)) :: (trad_block ren' env block)
-
-
-and trans ren e =
-  let env = e.info.env in
-  let _,ef,p,_ = decomp_kappa e.info.kappa in
-  let ty = trad_ml_type_c ren env e.info.kappa in
-  let ids = get_reads ef in
-  let al = current_vars ren ids in
-  let c = trad ren e in
-  let c = abs_pre ren env (c,ty) p in
-  let bl = binding_of_alist ren env al in
-  make_abs (List.rev bl) c
+and trans e =
+  cross_label e.info.label (abstraction e.info.env e.info.kappa (trad e))
 

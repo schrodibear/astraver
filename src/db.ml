@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.12 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.13 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 (*s Names separation *)
 
@@ -116,8 +116,6 @@ let db_prog e =
 	x
     | Coerce e -> 
 	Coerce (db idl e)
-    | PPoint (s,d) -> 
-	PPoint (s, db_desc idl d)
 	  
   and db_arg ((tids,_,refs) as idl) = function
     | Term ({ desc = Var id } as t) -> 

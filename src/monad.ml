@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.7 2002-03-04 16:28:40 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.8 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -13,77 +13,76 @@ open Rename
 open Env
 open Effect
 
-(* [product ren [y1,z1;...;yk,zk] q] constructs
- * the (possibly dependent) tuple type
- *
- *      $z1 \times ... \times zk$ if no post-condition
- * or   $\exists. y1:z1. ... yk:zk. (Q x1 ... xn)$  otherwise
- *
- * where the xi are given by the renaming [ren].
- *)
+(*s [product ren [y1,z1;...;yk,zk] q] constructs the (possibly dependent) 
+    tuple type
+ 
+       $z1 \times ... \times zk$ if no postcondition
+    or $\exists. y1:z1. ... yk:zk. (Q x1 ... xn)$  otherwise *)
+ 
+let product ren env w q = match q,w with
+  | None, [_,v] -> v
+  | None, _ -> TTtuple (w, None)
+  | Some q, _ -> TTtuple (w, Some (apply_post ren env q).a_value)
 
-let product_name = function
-  | 2 -> "prod"
-  | n -> Printf.sprintf "tuple_%d" n
 
-let dep_product_name = function
-  | 1 -> "sig"
-  | n -> Printf.sprintf "sig_%d" n
+(*s [arrow_pred ren v pl] abstracts the term [v] over the pre-condition if any
+    i.e. computes
+ 
+      (P1 x1 ... xn) -> ... -> (Pk x1 ... xn) -> v
+  
+    where the [xi] are given by the renaming [ren]. *)
 
-let product ren env before lo q = CC_type
-(*i
-let product ren env before lo = function
-  | None -> (* non dependent case *)
-      begin match lo with
-	| [_,v] -> v
-	| _ ->
-	    let s = product_name (List.length lo) in
-      	    Term.applist (constant s, List.map snd lo)
-      end
-  | Some q -> (* dependent case *)
-      let s = dep_product_name (List.length lo) in
-      let a' = apply_post ren env before q in
-      Term.applist (constant s, (List.map snd lo) @ [a'.a_value])
-i*)
-	
-(* [arrow ren v pl] abstracts the term v over the pre-condition if any
- * i.e. computes
- *
- *     (P1 x1 ... xn) -> ... -> (Pk x1 ... xn) -> v
- * 
- * where the xi are given by the renaming [ren].
- *)
-
-let arrow ren env v pl = CC_type
-(*i
-let arrow ren env v pl =
+let arrow_pred ren env v pl = 
   List.fold_left 
     (fun t p -> 
-       if p.p_assert then t else Term.mkArrow (apply_pre ren env p).p_value t) 
+       if p.p_assert then 
+	 t
+       else 
+	 let p = apply_pre ren env p in
+	 TTarrow ((id_of_name p.p_name, CC_pred_binder p.p_value), t))
     v pl
-i*)
 	
-(* [abstract_post ren env (e,q) (res,v)] abstract a post-condition q
- * over the write-variables of e *)
+let arrow_vars = 
+  List.fold_left (fun t (id,v) -> TTarrow ((id, CC_var_binder v), t))
 
-let rec abstract_post ren env (e,q) =
-  let after_id id = Ident.create ((Ident.string id) ^ "'") in
-  let (_,go) = Effect.get_repr e in
-  let al = List.map (fun id -> (id,after_id id)) go in
-  let q = option_app (named_app (subst_in_predicate al)) q in
-  let tgo = List.map (fun (id,aid) -> (aid, trad_type_in_env ren env id)) al in
-  q (*i option_app (named_app (abstract tgo)) q i*)
 
-(* Translation of effects types in cic types.
- *
- * [trad_ml_type_v] and [trad_ml_type_c] translate types with effects
- * into cic types.
- *)
+(*s Translation of effects types in CC types.
+  
+    [trad_ml_type_v] and [trad_ml_type_c] translate types with effects
+    into CC types. *)
 
-and prod ren env g = 
-  List.map
-    (fun id -> (current_var ren id, trad_type_in_env ren env id)) 
-    g
+let rec trad_ml_type_c ren env k = 
+  let ((res,v),e,p,q) = decomp_kappa k in
+  let lo = output ren env ((res,v),e) in
+  let ty = product ren env lo q in
+  let ty = arrow_pred ren env ty p in
+  let li = input ren env e in
+  arrow_vars ty li
+
+and trad_ml_type_v ren env = function
+  | Ref _ 
+  | Array _ -> 
+      assert false
+  | Arrow (bl, c) ->
+      let bl',ren',env' =
+	List.fold_left
+	  (fun (bl,ren,env) b -> match b with
+	     | (id, BindType ((Ref _ | Array _) as v)) ->
+		 let env' = add (id,v) env in
+		 let ren' = initial_renaming env' in
+		 (bl, ren', env')
+	     | (id, BindType v) -> 
+		 let tt = trad_ml_type_v ren env v in
+		 let env' = add (id,v) env in
+		 let ren' = initial_renaming env' in
+		 (id,tt)::bl, ren', env'
+	     | _ -> failwith "Monad: trad_ml_type_v: not yet implemented"
+ 	  )
+ 	  ([],ren,env) bl 
+      in
+      arrow_vars (trad_ml_type_c ren' env' c) bl'
+  | PureType c ->
+      TTpure c
 
 and input ren env e  =
   let i,_ = Effect.get_repr e in
@@ -98,217 +97,138 @@ and input_output ren env c =
   let ((res,v),e,_,_) = decomp_kappa c in
   input ren env e, output ren env ((res,v),e)
 
-(* The function $t \rightarrow \barre{t}$ on V and C. *)
+and prod ren env g = 
+  List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
 
-and trad_ml_type_c ren env c = CC_type
-(*i
-  let ((res,v),e,p,q) = c in
-  let q = abstract_post ren env (e,q) in
-  let lo = output ren env ((res,v),e) in
-  let ty = product ren env (current_date ren) lo q in
-  let ty = arrow ren env ty p in
-  let li = input ren env e in
-  n_mkNamedProd ty li
-i*)
-
-and trad_ml_type_v ren env v = CC_type
-(*i function
-    
-  | Ref _ | Array _ -> invalid_arg "Monad.trad_ml_type_v"
-	
-  | Arrow (bl, c) ->
-      let bl',ren',env' =
-	List.fold_left
-	  (fun (bl,ren,env) b -> match b with
-	     | (id,BindType ((Ref _ | Array _) as v)) ->
-		 let env' = add (id,v) env in
-		 let ren' = initial_renaming env' in
-		 (bl,ren',env')
-	     | (id,BindType v) -> 
-		 let tt = trad_ml_type_v ren env v in
-		 let env' = add (id,v) env in
-		 let ren' = initial_renaming env' in
-		 (id,tt)::bl,ren',env'
-	     | (id, BindSet) ->
-		 (id,mkSet) :: bl,ren,env
-	     | _ -> failwith "Monad: trad_ml_type_v: not yet implemented"
- 	  )
- 	  ([],ren,env) bl 
-      in
-      n_mkNamedProd (trad_ml_type_c ren' env' c) bl'
-	
-  | PureType c ->
-      (apply_pre ren env (anonymous_pre false c)).p_value
-i*)
-
-and trad_imp_type ren env v = CC_type
-(*i function
-  | Ref v        -> trad_ml_type_v ren env v
-  | Array (c,v)  -> Term.applist (constant "array", 
-				  [c; trad_ml_type_v ren env v])
-  | _            -> invalid_arg "Monad.trad_imp_type"
-i*)
-
-and trad_type_in_env ren env id = CC_type
-(*i
-  let v = type_in_env env id in trad_imp_type ren env v
-i*)
-
-(* bindings *)
-
-let binding_of_alist ren env al =
-  List.map
-    (fun (id,id') -> (id', CC_var_binder (type_in_env env id)))
-    al
-
-
-(* [make_abs bl t p] abstracts t w.r.t binding list bl., that is
- * [x1:t1]...[xn:tn]t. Returns t if the binding is empty. *)
-
-let make_abs bl t = match bl with
-  | [] -> t
-  | _  -> CC_lam (bl, t)
-
-
-(* [result_tuple ren before env (res,v) (ef,q)] constructs the tuple 
- *
- *    (y1,...,yn,res,?::(q/ren y1 ... yn res))
- *
- * where the yi are the values of the output of ef.
- * if there is no yi and no post-condition, it is simplified in res itself.
- *)
-
-let simple_term_of_prog = function
-  | CC_expr t -> t
-  | CC_var id -> Tvar id
+and trad_imp_type ren env = function
+  | Ref v -> trad_ml_type_v ren env v
+  | Array (t, v) -> TTarray (t, trad_ml_type_v ren env v)
   | _ -> assert false
 
-(*i
-let make_tuple l q ren env before = match l with
-  | [e,_] when q = None -> 
-      e
-  | _ ->
-      let tl = List.map snd l in
-      let dep,h,th = match q with
-	| None -> 
-	    false,[],[]
-	| Some c ->
-	    let args = List.map (fun (e,_) -> simple_term_of_prog e) l in
-	    let c = apply_post ren env before c in
-	    true,
-	    [ CC_hole (Term.applist (c.a_value, args)) ], (* hole *)
-	    [ c.a_value ]                     (* type of the hole *)
-      in 
-      CC_tuple (dep, (List.map fst l) @ h)
-i*)
+and trad_type_in_env ren env id =
+  let v = type_in_env env id in 
+  trad_imp_type ren env v
 
-let result_tuple ren before env (resid,res,v) (ef,q) =
+
+(*s The Monadic operators. They are operating on values of the following
+    type [interp] (functions producing a [cc_term] when given a renaming
+    data structure). *)
+
+type interp = Rename.t -> cc_term
+
+
+(*s [unit k t ren env] constructs the tuple 
+  
+      (y1, ..., yn, t, ?::(q/ren y1 ... yn t))
+  
+    where the [yi] are the values of the output of [k].
+   If there is no [yi] and no postcondition, it is simplified into 
+   [t] itself. *)
+
+let unit info t ren = 
+  let env = info.env in
+  let t = apply_term ren env t in
+  let k = info.kappa in
+  let ef = k.c_effect in
+  let q = k.c_post in
   let ids = get_writes ef in
   if ids = [] && q = None then
-    res, v
+    CC_expr t
   else 
     let hole = match q with
       | None -> 
 	  []
       | Some c -> 
-	  let c = apply_post ren env before c in
-	  let c = 
-	    tsubst_in_predicate [resid, simple_term_of_prog res] c.a_value
-	  in
+	  let c = apply_post ren env c in
+	  let c = tsubst_in_predicate [result, t] c.a_value in
 	  [ CC_hole c ]
     in
     CC_tuple (
       (List.map (fun id -> let id' = current_var ren id in CC_var id') ids) @
-      [res] @ hole),
-    CC_type
+      (CC_expr t) :: hole)
+    
 
-(* [make_let_in ren env fe p (vo,q) (res,v) t] constructs the term
+(*s [compose k1 e1 e2 ren env] constructs the term
    
         [ let h1 = ?:P1 in ... let hn = ?:Pm in ]
-          let y1,y2,...,yn, res [,q] = fe in
-          t
+          let y1,y2,...,yn, res1 [,q] = <e1 ren> in
+          <e2 res1 ren'>
 
-   vo=[_,y1;...;_,ym] are list of renamings.
-   v is the type of res
-   *)
+    where [ren' = next w1 ren] and [y1,...,yn = w1/ren] *)
 
-let let_in_pre ty p t =
+let binding_of_alist ren env =
+  List.map
+    (fun (id,id') -> (id', CC_var_binder (trad_type_in_env ren env id)))
+
+let insert_pre env p t ren =
+  let p = apply_pre ren env p in
   let h = p.p_value in
-  CC_letin (false, [pre_name p.p_name,CC_pred_binder h], CC_hole h, t)
+  CC_letin (false, [pre_name p.p_name, CC_pred_binder h], CC_hole h, t ren)
 
-let multiple_let_in_pre ty hl t =
-  List.fold_left (fun t h -> let_in_pre ty h t) t hl
+let insert_many_pre env pl t =
+  List.fold_left (fun t h -> insert_pre env h t) t pl
 
-let make_let_in ren ren' env fe p (vo,q) (res,tyres) (t,ty) =
-  let b = [res, CC_var_binder tyres] in
-  let b',dep = match q with
-    | None -> [],false
-    | Some q -> 
-	let q = apply_post ren' env (current_date ren) q in
-	let hyp = subst_in_predicate [Ident.result,res] q.a_value in
-	[post_name q.a_name, CC_pred_binder hyp],true 
-  in
-  let bl = (binding_of_alist ren env vo) @ b @ b' in
-(*i  let tyapp =
-    let n = succ (List.length vo) in
-    let name = match q with None -> product_name n | _ -> dep_product_name n in
-    constant name 
-  in i*)
-  let t = CC_letin (dep, bl, fe, t) in
-  multiple_let_in_pre ty (List.map (apply_pre ren env) p) t
+let compose info1 e1 e2 ren =
+  let env = info1.env in
+  let k1 = info1.kappa in
+  let (res1,v1),ef1,p1,q1 = decomp_kappa k1 in
+  insert_many_pre env p1
+    (fun ren ->
+       let w1 = get_writes ef1 in
+       let ren' = next ren w1 in
+       let tt1 = trad_ml_type_v ren env v1 in
+       let b = [res1, CC_var_binder tt1] in
+       let b',dep = match q1 with
+	 | None -> 
+	     [], false
+	 | Some q1 -> 
+	     let q1 = apply_post ren' env q1 in
+	     let hyp = subst_in_predicate [Ident.result, res1] q1.a_value in
+	     [post_name q1.a_name, CC_pred_binder hyp], true 
+       in
+       let vo = current_vars ren' w1 in
+       let bl = (binding_of_alist ren env vo) @ b @ b' in
+       CC_letin (dep, bl, e1 ren, e2 res1 ren'))
+    (push_date ren info1.label)
+
+(*s [cross_label] is an operator to be used when a label is encountered *)
+
+let cross_label l e ren = e (push_date ren l)
 
 
-(* [abs_pre ren env (t,ty) pl] abstracts a term t with respect to the 
- * list of pre-conditions [pl]. Some of them are real pre-conditions
- * and others are assertions, according to the boolean field [p_assert],
- * so we construct the term
- *   [h1:P1]...[hn:Pn]let h'1 = ?:P'1 in ... let H'm = ?:P'm in t
- *)
+(*s [abstraction env k e] abstracts a term [e] with respect to the 
+    list of read variables, to the preconditions/assertions, i.e.
+    builds
+
+      [x1]...[xk][h1:P1]...[hn:Pn]let h'1 = ?:P'1 in ... let H'm = ?:P'm in t
+    *)
+
+let make_abs bl t = match bl with
+  | [] -> t
+  | _  -> CC_lam (bl, t)
 
 let bind_pre ren env p =
   pre_name p.p_name, CC_pred_binder (apply_pre ren env p).p_value
 
-let abs_pre ren env (t,ty) pl =
-  List.fold_left
-    (fun t p ->
+let abs_pre env pl =
+  List.fold_right
+    (fun p t ->
        if p.p_assert then
-	 let_in_pre ty (apply_pre ren env p) t
+	 insert_pre env p t
        else
-	 CC_lam ([bind_pre ren env p], t))
-    t pl
-    
-(* [make_block ren env finish bl] builds the translation of a block.
- * finish is the function that is applied to the result at the end of the
- * block. *)
+	 (fun ren -> CC_lam ([bind_pre ren env p], t ren)))
+    pl
 
-let make_block ren env finish bl =
-  let rec rec_block ren result = function
-    | [] ->
-	finish ren result
-    | (Assert c) :: block ->
-	let t,ty = rec_block ren result block in
-	let c = apply_assert ren env c in
-	let p = { p_assert = true; p_name = c.a_name; p_value = c.a_value } in
-	let_in_pre ty p t, ty
-    | (Label s) :: block ->
-	let ren' = push_date ren s in
-	rec_block ren' result block
-    | (Statement (te,info)) :: block ->
-	let tye = info.c_result_type in
-	let efe = info.c_effect in
-	let pe = info.c_pre in
-	let qe = info.c_post in
-	let w = get_writes efe in
-	let ren' = next ren w in
-	let id = Ident.result in
-	(*i let tye = trad_ml_type_v ren env tye in i*)
-	let t = rec_block ren' (Some (id,tye)) block in
-	make_let_in ren ren' env te pe (current_vars ren' w,qe) (id,tye) t,
-	snd t
-  in
-  let t,_ = rec_block ren None bl in
-  t
+let abstraction env k e ren =
+  let _,ef,p,_ = decomp_kappa k in
+  let ids = get_reads ef in
+  let al = current_vars ren ids in
+  let c = abs_pre env p e ren in
+  let bl = binding_of_alist ren env al in
+  make_abs (List.rev bl) c
 
+
+(*i****
 
 (* [make_app env ren args ren' (tf,cf) (cb,s,capp) c]
  * constructs the application of [tf] to [args].
@@ -674,3 +594,4 @@ i*)
   make_abs (List.rev bl) t
 
 
+****i*)

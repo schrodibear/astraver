@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.17 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.18 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -35,6 +35,8 @@ val list_of_some : 'a option -> 'a list
 val difference : 'a list -> 'a list -> 'a list
 
 val list_combine3 : 'a list -> 'b list -> 'c list -> ('a * 'b * 'c) list
+
+val if_labelled : (Ident.t * string -> unit) -> Ident.t -> unit
 
 type avoid = Ident.set
 val renaming_of_ids : avoid -> Ident.t list -> (Ident.t * Ident.t) list * avoid

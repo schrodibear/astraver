@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.19 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.20 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -64,16 +64,6 @@ let is_bool = function
   | PureType PTbool -> true
   | _ -> false
 
-(* top point of a program *)
-
-let top_point = function
-  | PPoint (s,_) as p -> s,p
-  | p -> let s = label_name () in s, PPoint(s,p)
-
-let top_point_block = function
-  | (Label s :: _) as b -> s,b
-  | b -> let s = label_name () in s, (Label s)::b
-
 (*s Normalization. In this first pass, we
     (2) annotate [x := E] with [{ x = E }]
     (3) give tests the right postconditions
@@ -95,8 +85,9 @@ let rec normalize p =
   let p = lift_pre p in
   let k = p.info.kappa in
   match p.desc with
-    | Aff (x, { desc = Expression t }) when k.c_post = None ->
-	let t = make_after_before_term env t in
+    | Aff (x, ({desc = Expression t} as e1)) 
+      when post e1 = None && k.c_post = None ->
+	let t = put_label_term env p.info.label t in
 	let q = create_bool_post (equality (Tvar x) t) in
 	post_if_none env q p
     | Aff (x, e) ->
@@ -117,9 +108,7 @@ let rec normalize p =
     | While (b, invopt, var, bl) ->
 	change_desc p (While (normalize_boolean env b,
 			      invopt, var, normalize_block bl))
-    | LetRef (x, ({ desc = Expression t } as e1), e2) 
-      when e1.info.kappa.c_post = None ->
-	let t = make_after_before_term env t in
+    | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_bool_post (equality (Tvar Ident.result) t) in
 	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
     | LetRef (x, e1, e2) ->
@@ -142,9 +131,6 @@ let rec normalize p =
 	  { desc = e.desc; info = { e.info with kappa = k'} }
 	else
 	  change_desc p (Coerce e)
-    | PPoint (lab, d) ->
-	let p = normalize (change_desc p d) in
-	change_desc p (PPoint (lab, p.desc))
 
 and normalize_block = function
   | [] ->
@@ -173,9 +159,11 @@ and normalize_boolean env b =
     | None -> begin
 	match b.desc with
 	  | Expression c ->
-	      (* expression E -> if result then E=true else E=false *)
+	      (* expression E -> if result then E=true else E=false 
 	      let c = Pif (Tvar Ident.result, 
-			   equality c ttrue, equality c tfalse) in
+			   equality c ttrue, equality c tfalse) in *)
+	      (* expression E -> result=E *)
+	      let c = equality (Tvar Ident.result) c in
 	      give_post b (create_bool_post c)
 	  | If (e1, e2, e3) ->
 	      let ne1 = normalize_boolean env e1 in
@@ -206,14 +194,15 @@ let rec wp p q =
   let postp = post p in
   let q0 = if postp = None then q else postp in
   let lab = p.info.label in
-  let q1 = optpost_app (change_label "" lab) q0 in
-  let d,w = wp_desc p.info p.desc q1 in
+  let d,w = wp_desc p.info p.desc q0 in
+  let p = change_desc p d in
   let w = optpost_app (erase_label lab) w in
   let p = if postp = None then force_post env q0 p else p in
   let w = match postp, q with
     | Some {a_value=q'}, Some {a_value=q} ->
 	let vars = (result, result_type p) :: (output p) in
-	Some (anonymous (foralls vars (Pimplies (q', q))))
+	let w = foralls vars (Pimplies (q', q)) in
+	Some (anonymous (erase_label lab w))
     | _ -> 
 	w
   in
@@ -292,10 +281,6 @@ and wp_desc info d q =
 	failwith "todo: wp let rec"
     | While (b, invopt, (var,r), bl) ->
 	d, invopt (* TODO: check *)
-    | PPoint (lab, p) ->
-	let p',w = wp_desc info p q in
-	let w = optpost_app (erase_label lab) w in
-	PPoint (lab, p'), w
     | Coerce p ->
 	let p',w = wp p q in
 	Coerce p', w

@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.12 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.13 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -9,8 +9,6 @@ val create : string -> t
 
 val string : t -> string
 
-type name = Anonymous | Name of t
-
 module Idset : Set.S with type elt = t
 type set = Idset.t
 
@@ -19,6 +17,12 @@ module Idmap : Map.S with type key = t
 val next_away : t -> set -> t
 
 val print : Format.formatter -> t -> unit
+
+(*s Possibly anonymous names *)
+
+type name = Anonymous | Name of t
+
+val print_name : Format.formatter -> name -> unit
 
 (*s Qualified identifiers with labels. *)
 

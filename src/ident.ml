@@ -1,13 +1,11 @@
 
-(*i $Id: ident.ml,v 1.13 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.14 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 type t = string
 
 let create s = s
 
 let string s = s
-
-type name = Anonymous | Name of t
 
 module Idset = Set.Make(struct type t = string let compare = compare end)
 type set = Idset.t
@@ -38,6 +36,14 @@ let rec next_away id s =
 
 let print fmt s = Format.fprintf fmt "%s" s
 
+(*s Possibly anonymous names *)
+
+type name = Anonymous | Name of t
+
+let print_name fmt = function
+  | Name id -> print fmt id
+  | Anonymous -> Format.fprintf fmt "_"
+
 (*s Labelled identifiers. *)
 
 let at_id id d = id ^ "@" ^ d
@@ -51,7 +57,7 @@ let un_at id =
     String.sub id 0 n,
     String.sub id (succ n) (pred (String.length id - n))
   with Not_found ->
-    id, ""
+    invalid_arg "Ident.un_at"
 
 let adr_id id = "adr_" ^ id
 

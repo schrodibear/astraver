@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.5 2002-01-31 12:44:35 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.6 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Ast
 open Misc
@@ -34,13 +34,26 @@ let rec cc_subst subst = function
 and cc_subst_binders subst = List.map (cc_subst_binder subst)
 
 and cc_subst_binder subst = function
-  | id,CC_var_binder c -> id, CC_var_binder (type_v_rsubst subst c)
-  | id,CC_pred_binder c -> id, CC_pred_binder (tsubst_in_predicate subst c)
+  | id, CC_var_binder c -> id, CC_var_binder (cc_type_subst subst c)
+  | id, CC_pred_binder c -> id, CC_pred_binder (tsubst_in_predicate subst c)
   | b -> b
 
 and cc_cross_binders subst = function
   | [] -> subst
   | (id,_) :: bl -> cc_cross_binders (List.remove_assoc id subst) bl
+
+and cc_type_subst subst = function
+  | TTarray (t, tt) -> 
+      TTarray (tsubst_in_term subst t, cc_type_subst subst tt)
+  | TTarrow (b, tt) -> 
+      TTarrow (cc_subst_binder subst b, 
+	       cc_type_subst (cc_cross_binders subst [b]) tt)
+  | TTtuple (ttl, p) -> 
+      let subst' = List.fold_right List.remove_assoc (List.map fst ttl) subst in
+      TTtuple (List.map (fun (id,t) -> (id, cc_type_subst subst t)) ttl,
+	       option_app (tsubst_in_predicate subst') p)
+  | TTpure _ as t -> 
+      t
 
 (* here we only perform eta-reductions on programs to eliminate
  * redexes of the kind

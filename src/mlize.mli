@@ -1,11 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.mli,v 1.2 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: mlize.mli,v 1.3 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Ast
 open Env
 
 (* translation of imperative programs into intermediate functional programs *)
 
-val trans : Rename.t -> typed_program -> cc_term
+val trans : typed_program -> Rename.t -> cc_term
 

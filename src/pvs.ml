@@ -1,8 +1,9 @@
 
-(*i $Id: pvs.ml,v 1.10 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.11 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Logic
 open Types
+open Ast
 open Misc
 open Util
 open Ident
@@ -108,11 +109,11 @@ let print_predicate fmt p =
   in
   print0 p
 
-let rec print_type_v fmt = function
-  | PureType pt -> print_pure_type fmt pt
-  | Ref v -> print_type_v fmt v
-  | Array (_, v) -> fprintf fmt "[int -> "; print_type_v fmt v; fprintf fmt "]"
-  | Arrow _ -> assert false
+let rec print_cc_type fmt = function
+  | TTpure pt -> print_pure_type fmt pt
+  | TTarray (_, v) -> fprintf fmt "[int -> %a]" print_cc_type v
+  | TTarrow _
+  | TTtuple _ -> assert false
 
 let occur_sequent id = function
   | Spred p -> occur_predicate id p
@@ -124,10 +125,7 @@ let print_sequent fmt (hyps,concl) =
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
 	if List.exists (occur_sequent id) hyps || occur_predicate id concl then
-	begin
-	  fprintf fmt "FORALL (%s: " (Ident.string id); 
-	  print_type_v fmt v; fprintf fmt ") :@\n"
-	end;
+	  fprintf fmt "FORALL (%a: %a) :@\n" Ident.print id print_cc_type v;
 	print_seq hyps
     | Spred p :: hyps -> 
 	print_predicate fmt p; fprintf fmt " IMPLIES@\n";

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.13 2002-03-11 15:17:58 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.14 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -18,17 +18,29 @@ let is_reference env id =
 let predicate_now_refs env c =
   Idset.filter (is_reference env) (predicate_vars c)
 
-let is_labelled_reference env id =
-  let id,_ = Ident.un_at id in is_reference env id
-
-let predicate_refs env c =
-  Idset.filter (is_labelled_reference env) (predicate_vars c)
-
 let term_now_refs env c =
   Idset.filter (is_reference env) (term_vars c)
 
+
+let labelled_reference env id =
+  if is_reference env id then
+    id
+  else if is_at id then
+    let uid,_ = Ident.un_at id in 
+    if is_reference env uid then uid else failwith "caught"
+  else
+    failwith "caught"
+
+let set_map_succeed f s = 
+  Idset.fold 
+    (fun x e -> try Idset.add (f x) e with Failure _ -> e) 
+    s Idset.empty
+
+let predicate_refs env c =
+  set_map_succeed (labelled_reference env) (predicate_vars c)
+
 let term_refs env c =
-  Idset.filter (is_labelled_reference env) (term_vars c)
+  set_map_succeed (labelled_reference env) (term_vars c)
 
 (*s Labels management *)
 
@@ -42,10 +54,6 @@ let gen_change_label f c =
   in
   subst_in_predicate al c
 
-let make_before_after c =
-  gen_change_label 
-    (function (uid,"") -> uid | _ -> failwith "caught") c
-
 let erase_label l c =
   gen_change_label 
     (function (uid,l') when l = l' -> uid | _ -> failwith "caught") c
@@ -54,17 +62,10 @@ let change_label l1 l2 c =
   gen_change_label 
     (function (uid,l) when l = l1 -> at_id uid l2 | _ -> failwith "caught") c
 
-let make_after_before_al env ids =
-  Idset.fold 
-    (fun id al -> 
-       if is_reference env id then (id, at_id id "") :: al else al)
-    ids []
-
-let make_after_before env p = 
-  subst_in_predicate (make_after_before_al env (predicate_vars p)) p
-
-let make_after_before_term env t =
-  subst_in_term (make_after_before_al env (term_vars t)) t
+let put_label_term env l t =
+  let ids = term_refs env t in
+  let al = List.map (fun id -> (id, at_id id l)) (Idset.elements ids) in
+  subst_in_term al t
 
 (*s shortcuts for typing information *)
 
@@ -78,44 +79,39 @@ let result_type p = p.info.kappa.c_result_type
     according to a given renaming of variables (and a date that means
     `before' in the case of the post-condition). *)
 
-let make_assoc_list ren env on_prime ids =
+let make_assoc_list ren env ids =
   Idset.fold
     (fun id al ->
        if is_reference env id then
-	 (id,current_var ren id) :: al
+	 (id, current_var ren id) :: al
        else if is_at id then
 	 let uid,d = un_at id in
-	   if is_reference env uid then
-	     (match d with
-		| "" -> (id,on_prime ren uid)
-		| _  -> (id,var_at_date ren d uid)) :: al
-	   else
-	     al
+	 if is_reference env uid then begin
+	   assert (d <> "");
+	   (id, var_at_date ren d uid) :: al
+	 end else
+	   al
        else
 	 al) 
     ids []
 
 let apply_term ren env t =
   let ids = term_vars t in
-  let al = make_assoc_list ren env current_var ids in
+  let al = make_assoc_list ren env ids in
   subst_in_term al t
 
 let apply_pre ren env c =
   let ids = predicate_vars c.p_value in
-  let al = make_assoc_list ren env current_var ids in
+  let al = make_assoc_list ren env ids in
   { p_assert = c.p_assert; p_name = c.p_name; 
     p_value = subst_in_predicate al c.p_value }
 
 let apply_assert ren env c =
   let ids = predicate_vars c.a_value in
-  let al = make_assoc_list ren env current_var ids in
+  let al = make_assoc_list ren env ids in
   { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
  
-let apply_post ren env before c =
-  let ids = predicate_vars c.a_value in
-  let al = 
-    make_assoc_list ren env (fun r uid -> var_at_date r before uid) ids in
-  { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
+let apply_post  = apply_assert 
 
 (*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
     as we cross the binders [bl]. *)
@@ -356,10 +352,10 @@ and print_type_c fmt c =
 let rec print_prog fmt p = 
   let k = p.info.kappa in
   if k.c_pre = [] && k.c_post = None then
-    fprintf fmt "@[%a@]" print_desc p.desc
+    fprintf fmt "@[%s:%a@]" p.info.label print_desc p.desc
   else
-    fprintf fmt "@[{%a}@ %a@ {%a}@]" 
-      print_pre k.c_pre print_desc p.desc print_post k.c_post
+    fprintf fmt "@[%s:{%a}@ %a@ {%a}@]" 
+      p.info.label print_pre k.c_pre print_desc p.desc print_post k.c_post
 
 and print_desc fmt = function
   | Var id -> 
@@ -373,13 +369,13 @@ and print_desc fmt = function
   | TabAff (_, id, p1, p2) -> 
       fprintf fmt "%a[%a] := %a" Ident.print id print_prog p1 print_prog p2
   | Seq bl -> 
-      print_block fmt bl
+      fprintf fmt "begin@\n  @[%a@]@\nend" print_block bl
   | While (p, i, var, bl) ->
       fprintf fmt 
 	"while %a do@\n  { invariant %a variant _ }@\n  @[%a@]@\ndone" 
 	print_prog p print_post i print_block bl
   | If (p1, p2, p3) ->
-      fprintf fmt "if %a then %a else %a" 
+      fprintf fmt "if %a then@ %a else@ %a" 
 	print_prog p1 print_prog p2 print_prog p3
   | Lam (bl, p) -> 
       fprintf fmt "<fun>"
@@ -398,8 +394,6 @@ and print_desc fmt = function
       print_term fmt t
   | Coerce p ->
       print_prog fmt p
-  | PPoint (l, d) ->
-      fprintf fmt "<%s>%a" l print_desc d
 
 and print_block fmt = 
   print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
@@ -467,7 +461,5 @@ let rec print_cc_term fmt = function
 
 and print_binders fmt bl =
   print_list nothing 
-    (fun fmt (id,b) -> 
-       fprintf fmt "[%s" (Ident.string id);
-       print_binder fmt b; fprintf fmt "]") 
+    (fun fmt (id,b) -> fprintf fmt "[%a%a]" Ident.print id print_binder b)
     fmt bl

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.17 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.18 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -49,7 +49,7 @@ let interp_program id p =
 
   if_debug eprintf "=== functionalization ===@\n@?";
   let ren = initial_renaming env in
-  let cc = Mlize.trans ren p in
+  let cc = Mlize.trans p ren in
   let cc = Red.red cc in
   if_debug_3 eprintf "%a@\n@?" print_cc_term cc;
 
@@ -67,6 +67,7 @@ let add_external loc v id =
     
 let interp_decl = function
   | Program (id, p) ->
+      if Env.is_global id then Error.clash id (Some p.info.loc);
       let v,ol = interp_program id p in
       push_obligations ol;
       Env.add_global id v None
@@ -81,6 +82,7 @@ let interp_decl = function
 let deal_channel cin =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
+  if !parse_only then exit 0;
   List.iter interp_decl d
 
 let deal_file f =
@@ -133,6 +135,7 @@ Generic Options:
   --warranty     prints license and exits
 
 Typing/Annotations options:
+  -p, --parse-only  exits after parsing
   -tc, --type-only  exits after type-checking
   -wp, --wp-only    exits after annotation
 
@@ -150,6 +153,7 @@ let parse_args () =
     | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover := Coq; parse args
     | ("-d" | "--debug") :: args -> debug := true; parse args
+    | ("-p" | "--parse-only") :: args -> parse_only := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only := true; parse args
     | ("-wp" | "--wp-only") :: args -> wp_only := true; parse args
     | ("-q" | "--quiet") :: args -> verbose := false; parse args

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: options.mli,v 1.4 2002-03-05 14:41:51 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.5 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -20,6 +20,7 @@ val if_debug_3 : ('a -> 'b -> 'c -> unit) -> 'a -> 'b -> 'c -> unit
 
 (*s Typing options *)
 
+val parse_only : bool ref
 val type_only : bool ref
 val wp_only : bool ref
 

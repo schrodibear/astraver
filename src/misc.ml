@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.18 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.19 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -21,6 +21,8 @@ let option_app f = function None -> None | Some x -> Some (f x)
 let option_iter f = function None -> () | Some x -> f x
 
 let list_of_some = function None -> [] | Some x -> [x]
+
+let if_labelled f id = if is_at id then f (un_at id)
 
 let difference l1 l2 =
   let rec diff = function

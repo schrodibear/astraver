@@ -1,10 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.11 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.12 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 open Options
 open Logic
 open Types
+open Ast
 open Misc
 open Util
 open Ident
@@ -145,15 +146,13 @@ i*)
   in
   print0 p
 
-let rec print_type_v fmt = function
-  | PureType pt -> 
+let rec print_cc_type fmt = function
+  | TTpure pt -> 
       print_pure_type fmt pt
-  | Ref v -> 
-      print_type_v fmt v
-  | Array (s, v) -> 
-      fprintf fmt "(array "; print_term fmt s; fprintf fmt " "; 
-      print_type_v fmt v; fprintf fmt ")"
-  | Arrow _ -> 
+  | TTarray (s, v) -> 
+      fprintf fmt "(array %a %a)" print_term s print_cc_type v
+  | TTarrow _ 
+  | TTtuple _ -> 
       assert false
 
 let occur_sequent id = function
@@ -168,7 +167,7 @@ let print_sequent fmt (hyps,concl) =
 	if List.exists (occur_sequent id) hyps || occur_predicate id concl then
 	begin
 	  fprintf fmt "(%s: " (Ident.string id); 
-	  print_type_v fmt v; fprintf fmt ") @\n"
+	  print_cc_type fmt v; fprintf fmt ") @\n"
 	end;
 	print_seq hyps
     | Spred p :: hyps -> 

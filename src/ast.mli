@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.15 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.16 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -9,8 +9,10 @@ open Types
 
 (*s Blocks. *)
 
+type label = string
+
 type 'a block_st =
-  | Label of string
+  | Label of label
   | Assert of assertion
   | Statement of 'a
 
@@ -41,8 +43,6 @@ and 'a t_desc =
   | Expression of term
   | Coerce of 'a t
 
-  | PPoint of string * 'a t_desc
-
 and 'a arg =
   | Term of 'a t
   | Refarg of Loc.t * variable
@@ -64,19 +64,18 @@ type decl =
 
 (*s Intermediate type for CC terms. *)
 
-type cc_type = CC_type (* NOT OF USE RIGHT NOW *)
-(*i
+type cc_type =
   | TTpure of pure_type
-  | TTarrow of cc_type binder list 
   | TTarray of term * cc_type
-i*)
+  | TTarrow of cc_binder * cc_type
+  | TTtuple of (variable * cc_type) list * predicate option
 
-type cc_bind_type = 
-  | CC_var_binder of type_v
+and cc_bind_type = 
+  | CC_var_binder of cc_type
   | CC_pred_binder of predicate
   | CC_untyped_binder
 
-type cc_binder = variable * cc_bind_type
+and cc_binder = variable * cc_bind_type
 
 type cc_term =
   | CC_var of variable

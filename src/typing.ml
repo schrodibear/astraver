@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.22 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.23 2002-03-12 16:05:25 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -77,13 +77,15 @@ and check_app loc bl c tl = match bl, tl with
 let check_predicate loc lab env p =
   let vars = predicate_vars p in
   Idset.iter
-    (fun id -> 
-       let _,l = un_at id in
-       if not (LabelSet.mem l lab) then Error.unbound_label l loc) vars
+    (if_labelled 
+       (fun (_,l) -> 
+	  if not (LabelSet.mem l lab) then Error.unbound_label l loc))
+    vars
 
 let check_pre loc lab env p = check_predicate loc lab env p.p_value
 
-let check_assertion loc lab env a = check_predicate loc lab env a.a_value
+let check_post loc lab env a = 
+  let lab' = LabelSet.add "" lab in check_predicate loc lab' env a.a_value
 
 let check_effect loc env e =
   let check_ref id =
@@ -107,7 +109,7 @@ and check_type_c loc lab env c =
   check_effect loc env c.c_effect;
   check_type_v loc lab env c.c_result_type;
   List.iter (check_pre loc lab env) c.c_pre;
-  option_iter (check_assertion loc lab env) c.c_post
+  option_iter (check_post loc lab env) c.c_post
 
 and check_binders loc lab env = function
   | [] ->
@@ -232,7 +234,7 @@ let state_post lab env (id,v,ef) loc = function
 		 Effect.add_write id e, c
 	       else
 		 Effect.add_read id e,
-		 subst_in_predicate [id,at_id id ""] c
+		 subst_in_predicate [id, at_id id ""] c
 	     else if is_at id then begin
 	       let uid,l = un_at id in
 	       if l <> "" && not (LabelSet.mem l lab) then 
@@ -240,7 +242,7 @@ let state_post lab env (id,v,ef) loc = function
 	       if is_reference env uid then
 		 Effect.add_read uid e, c
 	       else
-		 e,c
+		 Error.unbound_reference uid loc
 	     end else
 	       e,c)
 	  ids (Effect.bottom, q.a_value)
@@ -285,9 +287,10 @@ let rec typef lab env expr =
   let loc = Some expr.info.loc in
   let ep = state_pre lab env loc expr.info.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
+  let toplabel = label_name () in
+  let q = optpost_app (change_label "" toplabel) q in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = List.map assert_pre p1 @ expr.info.pre in
-  let toplabel = label_name () in
   match q, d with
     | None, Coerce expr' ->
 	let c = { c_result_name = result; c_result_type = v;
@@ -453,6 +456,7 @@ and typef_desc lab env loc = function
 	    
   | If (b, e1, e2) ->
       let t_b = typef lab env b in
+      expected_type b.info.loc (result_type t_b) type_v_bool;
       Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
       let t_e1 = typef lab env e1
       and t_e2 = typef lab env e2 in
@@ -494,10 +498,6 @@ and typef_desc lab env loc = function
       let te = typef lab env e in
       Coerce te, (result_type te, effect te), []
 
-  | PPoint (s,d) -> 
-      let lab' = LabelSet.add s lab in
-      typef_desc lab' env loc d
-	
 and typef_block lab env bl =
   let rec ef_block lab tyres = function
     | [] ->

@@ -6,7 +6,7 @@ open Logic
 open Ast
 
 type context_element =
-  | Svar of Ident.t * type_v
+  | Svar of Ident.t * cc_type
   | Spred of predicate
 
 type sequent = context_element list * predicate

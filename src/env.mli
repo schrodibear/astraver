@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.6 2002-03-11 16:22:38 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.7 2002-03-12 16:05:24 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -29,7 +29,7 @@ val is_local_set : local_env -> Ident.t -> bool
 
 type typing_info = 
   { env : local_env;
-    label : string;
+    label : label;
     kappa : type_c }
   
 type typed_program = typing_info Ast.t
