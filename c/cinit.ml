@@ -26,7 +26,7 @@ let noattr loc ty e =
 
 let rec pop_initializer i =
   match i with 
-    | [] -> 
+    | [] -> raise Not_found
     | (Iexpr e)::l -> e,l
     | (Ilist [])::l -> pop_initializer l
     | (Ilist l)::l' -> 

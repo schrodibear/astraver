@@ -222,6 +222,7 @@ c/clparser.cmi: c/cast.cmi c/clogic.cmi
 c/cltyping.cmi: c/cast.cmi c/cenv.cmi c/clogic.cmi src/env.cmi 
 c/cnorm.cmi: c/cast.cmi c/info.cmi src/loc.cmi 
 c/cparser.cmi: c/cast.cmi c/clogic.cmi 
+c/cprint.cmi: c/cast.cmi c/clogic.cmi c/ctypes.cmi 
 c/creport.cmi: c/cerror.cmi c/ctypes.cmi src/loc.cmi 
 c/ctyping.cmi: c/cast.cmi 
 c/info.cmi: c/ctypes.cmi 
@@ -261,12 +262,12 @@ c/cltyping.cmx: c/cast.cmi c/cenv.cmx c/cerror.cmi c/clogic.cmi c/creport.cmx \
     c/ctypes.cmx src/env.cmx c/info.cmx src/loc.cmx c/cltyping.cmi 
 c/cmain.cmo: c/ceffect.cmi c/cerror.cmi c/cinit.cmi c/cinterp.cmi \
     c/clexer.cmo c/cmake.cmi c/cnorm.cmi src/compat.cmo c/coptions.cmi \
-    c/cpp.cmi c/creport.cmi c/ctyping.cmi src/lib.cmi src/loc.cmi \
-    c/output.cmi src/pp.cmi 
+    c/cpp.cmi c/cprint.cmi c/creport.cmi c/ctyping.cmi src/lib.cmi \
+    src/loc.cmi c/output.cmi src/pp.cmi 
 c/cmain.cmx: c/ceffect.cmx c/cerror.cmi c/cinit.cmx c/cinterp.cmx \
     c/clexer.cmx c/cmake.cmx c/cnorm.cmx src/compat.cmx c/coptions.cmx \
-    c/cpp.cmx c/creport.cmx c/ctyping.cmx src/lib.cmx src/loc.cmx \
-    c/output.cmx src/pp.cmx 
+    c/cpp.cmx c/cprint.cmx c/creport.cmx c/ctyping.cmx src/lib.cmx \
+    src/loc.cmx c/output.cmx src/pp.cmx 
 c/cmake.cmo: c/coptions.cmi src/pp.cmi c/cmake.cmi 
 c/cmake.cmx: c/coptions.cmx src/pp.cmx c/cmake.cmi 
 c/cnorm.cmo: c/cast.cmi c/cconst.cmi c/cenv.cmi c/clogic.cmi c/cltyping.cmi \
@@ -283,6 +284,10 @@ c/cparser.cmx: c/cast.cmi c/cerror.cmi c/clogic.cmi c/coptions.cmx \
     c/creport.cmx c/ctypes.cmx src/loc.cmx src/ptree.cmi c/cparser.cmi 
 c/cpp.cmo: c/coptions.cmi src/loc.cmi c/cpp.cmi 
 c/cpp.cmx: c/coptions.cmx src/loc.cmx c/cpp.cmi 
+c/cprint.cmo: c/cast.cmi c/clogic.cmi c/ctypes.cmi c/info.cmi src/pp.cmi \
+    c/cprint.cmi 
+c/cprint.cmx: c/cast.cmi c/clogic.cmi c/ctypes.cmx c/info.cmx src/pp.cmx \
+    c/cprint.cmi 
 c/creport.cmo: c/cerror.cmi c/coptions.cmi c/ctypes.cmi src/loc.cmi \
     c/creport.cmi 
 c/creport.cmx: c/cerror.cmi c/coptions.cmx c/ctypes.cmx src/loc.cmx \

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.47 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.48 2004-12-08 10:42:28 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -65,7 +65,7 @@ let file_copy_if_different src dst =
     file_copy src dst
 
 let main () = 
-  if not (parse_only || type_only || cpp_dump) then begin
+  if not (parse_only || type_only || print_norm || cpp_dump) then begin
     let theorysrc = Filename.concat Coptions.libdir "why/caduceus.why" in
 (*
     let theory = Lib.file "why" "caduceus.why" in
@@ -88,6 +88,11 @@ let main () =
   let tfiles = List.map (fun (f,p) -> (f,Cinit.add_init p)) tfiles in
   (* normalisation *)
   let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
+  if print_norm then begin
+    List.iter 
+      (fun (f,p) -> printf "%s:@\n%a@\n@." f Cprint.nfile p) nfiles;
+    exit 0
+  end;
   (* effects *)
   List.iter (fun (_,p) -> Ceffect.file p) nfiles;
   while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 

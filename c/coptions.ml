@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.14 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.15 2004-12-08 10:42:28 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -48,6 +48,7 @@ let libdir =
 
 let parse_only = ref false
 let type_only = ref false
+let print_norm = ref false
 let cpp_command = ref "gcc -E -C"
 let cpp_dump = ref false
 let with_cpp = ref true
@@ -98,6 +99,8 @@ let _ =
 	  "  stops after parsing";
         "-type-only", Arg.Set type_only, 
 	  "  stops after typing";
+        "-print-norm", Arg.Set print_norm, 
+	  "  stops after normalization and print C tree";
         "-no-cpp", Arg.Clear with_cpp, 
 	  "  no C preprocessor";
         "-ccp", Arg.String ((:=) cpp_command), 
@@ -129,6 +132,7 @@ let _ =
 
 let parse_only = !parse_only
 let type_only = !type_only
+let print_norm = !print_norm
 let debug = !debug
 let verbose = !verbose
 let werror = !werror

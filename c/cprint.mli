@@ -14,34 +14,20 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.11 2004-12-08 10:42:28 filliatr Exp $ i*)
+(*i $Id: cprint.mli,v 1.1 2004-12-08 10:42:28 filliatr Exp $ i*)
 
-(*s environment variables *)
+(* Pretty-printer for normalized AST *)
 
-val libdir : string
+open Format
+open Clogic
+open Cast
 
-(*s command-line options *)
+val ctype : formatter -> Ctypes.ctype -> unit
 
-val parse_only : bool
-val type_only : bool
-val print_norm : bool
-val debug : bool
-val verbose : bool
-val werror : bool
-val with_cpp : bool
-val cpp_command : string
-val cpp_dump : bool
-val why_opt : string
-val coq_tactic : string
-val separate : bool
+val nexpr : formatter -> nexpr -> unit
 
-val files : unit -> string list 
+val nstatement : formatter -> nstatement -> unit
 
-val verify : string -> bool
+val ndecl : formatter -> ndecl located -> unit
 
-(*s The log file *)
-
-val log : Format.formatter;;
-val lprintf : ('a, Format.formatter, unit) format -> 'a
-val close_log : unit -> unit;;
-
+val nfile : formatter -> nfile -> unit
