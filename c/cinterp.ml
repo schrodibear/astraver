@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.58 2004-03-24 15:59:18 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.59 2004-03-24 16:29:09 filliatr Exp $ i*)
 
 
 open Format
@@ -410,7 +410,14 @@ and interp_boolean_expr e =
     | TEunary (Unot, e) ->
 	Not(interp_boolean_expr e)
     (* otherwise e <> 0 *)
-    | _ -> build_complex_app (Var "neq_int") [interp_expr e; Cte(Prim_int(0))]
+    | _ -> 
+	let cmp,zero = match e.texpr_type.ctype_node with
+	  | CTenum _ | CTint _ -> "neq_int", Cte (Prim_int 0)
+	  | CTfloat _ -> "neq_float", Cte (Prim_float 0.0)
+	  | CTarray _ | CTpointer _ -> "neq_pointer", Var "null"
+	  | _ -> assert false
+	in
+	build_complex_app (Var cmp) [interp_expr e; zero]
 
 and interp_incr_expr op e =
   let top,one = interp_incr_op e.texpr_type op in
@@ -609,7 +616,14 @@ let collect_locations acc loc =
 				interp_term (Some "") "" e2])]) 
 		  in
 		  var,loc
-	    | _ -> assert false (* TODO *)
+	      | Tunop (Clogic.Ustar, e1) -> 
+		  let var = global_var_for_array_type e1.term_type in
+		  let loc = 
+		    LApp("pointer_loc", [interp_term (Some "") "" e1])
+		  in
+		  var,loc
+	      | _ ->
+		  assert false
 	  end
     | Lstar t -> 
 	let var = global_var_for_array_type t.term_type in
@@ -952,8 +966,10 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	let pre,tparams = interp_fun_params pre params in
 	abrupt_return := None;
 	let tblock = catch_return (interp_statement false block) in
+	let tspec = interp_function_spec id spec ctype params in
+	printf "generating Why code for function %s@." f;
 	((Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
-	 interp_function_spec id spec ctype params :: why_spec,
+	 tspec :: why_spec,
 	 prover_decl)
       with Error (_, Cerror.Unsupported s) ->
 	lprintf "unsupported feature (%s); skipping function %s@." s f;

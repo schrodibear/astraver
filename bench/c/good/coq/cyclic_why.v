@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/cyclic.why", characters 155-210 *)
+(* Why obligation from file "why/cyclic.why", characters 160-215 *)
 Lemma cyclic_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc),
@@ -16,15 +16,16 @@ Lemma cyclic_impl_po_1 :
   forall (caduceus_5: pointer),
   forall (Post1: caduceus_5 = l1),
   forall (result: bool),
-  forall (Post17: (if result then ~(caduceus_5 = null) else caduceus_5 = null)),
-  (if result then ((0 <> 0 -> (cyclic tl l))) /\ ((0 = 0 -> ~(cyclic tl l)))
-   else (forall (l2:pointer), (l2 = (acc tl l1) -> True)) /\ (valid alloc l1)).
+  forall (Post21: (if result then ~(caduceus_5 = null) else caduceus_5 = null)),
+  (if result then (forall (l2:pointer), (l2 = (acc tl l1) -> True)) /\
+   (valid alloc l1) else ((0 <> 0 -> (cyclic tl l))) /\
+   ((0 = 0 -> ~(cyclic tl l)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/cyclic.why", characters 292-346 *)
+(* Why obligation from file "why/cyclic.why", characters 298-352 *)
 Lemma cyclic_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc),
@@ -36,33 +37,27 @@ Lemma cyclic_impl_po_2 :
   forall (Post5: l2 = (any_pointer tt)),
   forall (Pre15: (valid alloc l1)),
   forall (l2_1: pointer),
-  forall (Post20: l2_1 = (acc tl l1)),
+  forall (Post24: l2_1 = (acc tl l1)),
   forall (Variant1: Z),
   forall (l1_1: pointer),
   forall (l2_2: pointer),
   forall (Pre14: Variant1 = 0),
-  forall (Test4: true = true),
+  forall (Test2: true = true),
   forall (caduceus_4: pointer),
   forall (Post2: caduceus_4 = l1_1),
   forall (result2: bool),
-  forall (Post30: (if result2 then ~(caduceus_4 = l2_2)
+  forall (Post34: (if result2 then ~(caduceus_4 = l2_2)
                    else caduceus_4 = l2_2)),
   (if result2
    then (forall (result:pointer),
          (result = l1_1 ->
-          ((~(result = null) -> ((0 <> 0 -> (cyclic tl l))) /\
-            ((0 = 0 -> ~(cyclic tl l))))) /\
-          ((result = null ->
+          ((~(result = null) ->
             (forall (result:pointer),
              (result = l2_2 ->
-              ((~(result = null) -> ((0 <> 0 -> (cyclic tl l))) /\
-                ((0 = 0 -> ~(cyclic tl l))))) /\
-              ((result = null ->
+              ((~(result = null) ->
                 (forall (result:pointer),
                  (result = (acc tl l2_2) ->
-                  ((~(result = null) -> ((0 <> 0 -> (cyclic tl l))) /\
-                    ((0 = 0 -> ~(cyclic tl l))))) /\
-                  ((result = null ->
+                  ((~(result = null) ->
                     (forall (l1:pointer),
                      (l1 = (acc tl l1) ->
                       (forall (result:pointer),
@@ -71,15 +66,21 @@ Lemma cyclic_impl_po_2 :
                          (result0 = (acc tl result) -> (Zwf 0 0 0))) /\
                         (valid alloc result))) /\
                       (valid alloc l2_2))) /\
-                    (valid alloc l1_1))))) /\
-                (valid alloc l2_2)))))))))
+                    (valid alloc l1_1))) /\
+                  ((result = null -> ((0 <> 0 -> (cyclic tl l))) /\
+                    ((0 = 0 -> ~(cyclic tl l))))))) /\
+                (valid alloc l2_2))) /\
+              ((result = null -> ((0 <> 0 -> (cyclic tl l))) /\
+                ((0 = 0 -> ~(cyclic tl l))))))))) /\
+          ((result = null -> ((0 <> 0 -> (cyclic tl l))) /\
+            ((0 = 0 -> ~(cyclic tl l)))))))
    else ((1 <> 0 -> (cyclic tl l))) /\ ((1 = 0 -> ~(cyclic tl l)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/cyclic.why", characters 724-745 *)
+(* Why obligation from file "why/cyclic.why", characters 716-737 *)
 Lemma cyclic_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc),
@@ -91,22 +92,22 @@ Lemma cyclic_impl_po_3 :
   forall (Post5: l2 = (any_pointer tt)),
   forall (Pre15: (valid alloc l1)),
   forall (l2_1: pointer),
-  forall (Post20: l2_1 = (acc tl l1)),
+  forall (Post24: l2_1 = (acc tl l1)),
   forall (Variant1: Z),
   forall (l1_1: pointer),
   forall (l2_2: pointer),
   forall (Pre14: Variant1 = 0),
-  forall (Test4: true = true),
+  forall (Test2: true = true),
   forall (Pre12: (valid alloc l1_1)),
   forall (result4: pointer),
-  forall (Post43: result4 = (acc tl l1_1)),
+  forall (Post48: result4 = (acc tl l1_1)),
   result4 = (acc tl result4).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/cyclic.why", characters 286-796 *)
+(* Why obligation from file "why/cyclic.why", characters 292-788 *)
 Lemma cyclic_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc),
@@ -118,10 +119,10 @@ Lemma cyclic_impl_po_4 :
   forall (Post5: l2 = (any_pointer tt)),
   forall (Pre15: (valid alloc l1)),
   forall (l2_1: pointer),
-  forall (Post20: l2_1 = (acc tl l1)),
+  forall (Post24: l2_1 = (acc tl l1)),
   forall (Variant1: Z),
   forall (Pre14: Variant1 = 0),
-  forall (Test4: true = true),
+  forall (Test2: true = true),
   forall (Post7: (Zwf 0 0 0)),
   (Zwf 0 0 Variant1).
 Proof.

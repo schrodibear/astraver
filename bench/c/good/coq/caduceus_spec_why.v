@@ -3,7 +3,32 @@
 
 Require Export caduceus_why. Require Export caduceus_tactics.
 
-(*Why*) Parameter main_parameter :
-  forall (tt: unit), forall (x: Z), forall (H: x = 0),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = 10))).
+(*Why logic*) Definition disjoint : plist -> plist -> Prop.
+Admitted.
+
+(*Why logic*) Definition eq_list : plist -> plist -> Prop.
+Admitted.
+
+(*Why logic*) Definition app : plist -> plist -> plist.
+Admitted.
+
+(*Why logic*) Definition rev : plist -> plist.
+Admitted.
+
+(*Why logic*) Definition cyclic : ((memory) pointer) -> pointer -> Prop.
+Admitted.
+
+(*Why logic*) Definition llist :
+  ((memory) pointer) -> pointer -> plist -> Prop.
+Admitted.
+
+(*Why logic*) Definition is_list : ((memory) pointer) -> pointer -> Prop.
+Admitted.
+
+(*Why*) Parameter cyclic_parameter :
+  forall (l: pointer), forall (alloc: alloc),
+  forall (tl: ((memory) pointer)), forall (H: (valid alloc l)),
+  (sig_1 Z
+   (fun (result: Z)  => (((result <> 0 -> (cyclic tl l))) /\
+    ((result = 0 -> ~(cyclic tl l)))))).
 
