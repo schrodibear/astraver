@@ -1,0 +1,2 @@
+
+external x : int ref

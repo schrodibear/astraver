@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.22 2002-03-26 13:43:41 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.23 2002-03-26 14:03:27 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -244,7 +244,8 @@ let reprint_validation fmt id v =
 let print_validation = reprint_validation
 
 let reprint_parameter fmt id c =
-  fprintf fmt "@[(*Why*) Parameter %s : %a.@]@\n" id print_cc_type c
+  fprintf fmt 
+    "@[<hov 2>(*Why*) Parameter %s :@ @[%a@].@]@\n" id print_cc_type c
 
 let print_parameter = reprint_parameter
 

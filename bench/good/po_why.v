@@ -96,3 +96,80 @@ Proof.
 Intuition.
 Save.
 
+(*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result:Z](result = `x + 1`)).
+
+Lemma p10_po_1 : 
+  (result1: Z)
+  (Post1: result1 = `0 + 1`)
+  result1 = `1`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma p11_po_1 : 
+  (result: Z)
+  (Post1: result = `3 + 1`)
+  (result0: Z)
+  (Post4: result0 = `0 + 1`)
+  `result0 + result` = `5`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma p11a_po_1 : 
+  (result: Z)
+  (Post1: result = `1 + 1`)
+  `result + result` = `4`.
+Proof.
+Intros; Omega.
+Save.
+
+(*Why*) Parameter incrx :
+  (_: unit)(x: Z)(sig_2 Z unit [x0:Z][result:unit](x0 = `x + 1`)).
+
+Lemma p12_po_1 : 
+  (x: Z)
+  (Pre1: x = `0`)
+  (x0: Z)
+  (Post1: x0 = `x + 1`)
+  x0 = `1`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma p13_po_1 : 
+  (x: Z)
+  (x0: Z)
+  (Post1: x0 = `x + 1`)
+  (x1: Z)
+  (Post3: x1 = `x0 + 1`)
+  x1 = `x + 2`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma p13a_po_1 : 
+  (x: Z)
+  (x0: Z)
+  (Post1: x0 = `x + 1`)
+  (x1: Z)
+  (Post3: x1 = `x0 + 1`)
+  x1 = `x + 2`.
+Proof.
+Intros; Omega.
+Save.
+
+(*Why*) Parameter incrx2 :
+  (_: unit)(x: Z)(sig_2 Z Z [x0:Z][result:Z](x0 = `x + 1` /\ result = x0)).
+
+Lemma p14_po_1 : 
+  (x: Z)
+  (Pre1: x = `0`)
+  (x0: Z)
+  (result1: Z)
+  (Post1: x0 = `x + 1` /\ result1 = x0)
+  result1 = `1`.
+Proof.
+Intros; Omega.
+Save.
+
