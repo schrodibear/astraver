@@ -1,0 +1,93 @@
+
+\section{Automatic invariants}
+
+\caduceus{} automatically adds invariants into the program, to express
+information that can be statically inferred from the program. 
+
+For each structure declared, axioms and predicates are generated. For
+each global variables declared, strong invariants are generated.
+
+\subsection{validity of pointers}
+
+for a struct s with fields (ty1 f1 ; ... ; tyn fn), a predicate
+valid_s is generated :
+
+valid_s(struct s x) := 
+  conjonction sur i de :
+   selon le cas sur tyi :
+     struct t :  valid_t(x.fi)
+     array(t,size) : valid_range(x.fi,0,size-1) &&
+                     forall i, 0 <= i < size => valid_t(x.fi[i])
+               (assuming valid_t is true for t a base type)
+     default : true
+
+and one axiom is generated :
+
+valid_s_pointer(struct s *x) :=
+   valid(x) => valid_s(*x)
+
+% not needed
+%valid_s_range(struct s *x,a,b) :=
+%   valid(x) => valid_s(*x)
+
+for each global variable x of type ty, a strong invariant is generated
+:
+
+selon le cas sur ty :
+
+ type de base : rien
+ struct s : valid(x)
+
+ array(t,size) :
+
+ array(array(...,array(t),size1,..,sizen) : 
+    valid_range(x,0,sizen-1) &&
+      (forall in, 0 <= in < sizen,
+           valid_range(x[in],0,size{n-1}-1) &&
+            (forall i_{n-1} , ....
+                  ...
+                  valid_range(x[in]...[i2],0,size1-1)))
+
+  ie, recursively, valid_array(x,t,size) where
+
+  valid_array(x,t,size) =
+    switch t :
+      array(t',size') : 
+        valid_range(x,0,size-1) &&
+        forall i, 0 <= i < size => valid_array(x[i],t',size')
+      default : valid_range(x,0,size-1)
+
+
+\subsection{separation}
+
+for a struct s with fields (ty1 f1 ; ... ; tyn fn), a predicate
+internal_separation_s is generated :
+
+internal_separation_s(struct s x) := 
+  each pair (p1,p2) of different pointers statically
+  inside x are non-aliased (if they same type, if not this information
+  is not added since it is supposed to be useless).
+
+for each pair of struct s1 and s2 (even if s1=s2), a predicate
+separation_s1_s2 is generated :
+
+separation_s1_s2(struct s1 x,struct s2 y) := 
+  each pointer p1 statically inside x and each
+  pointer p2 statically inside y are non-aliased (if they same type),
+  under the assumption x <> y if s1=s2
+
+  
+
+internal_separation_s(struct s x) := 
+  each pair (p1,p2) of different pointers statically
+  inside x are non-aliased (if they same type, if not this information
+  is not added since it is supposed to be useless).
+
+
+
+
+
+
+
+For each pair of structures named $s_1$ and $s_2$, an axiom 
+$verb|separation_|s_1\verb|_|s_2$ is generated
