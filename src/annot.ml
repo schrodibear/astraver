@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.8 2003-01-23 13:08:17 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.9 2003-01-23 13:44:38 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -115,6 +115,16 @@ let create_postval c = Some (post_named c)
 let create_post c = Some (post_named c, [])
 
 let is_conditional p = match p.desc with If _ -> true | _ -> false
+
+let is_equality = function
+  | Some ({ a_value = Papp (id, [Tvar t1; t2]) }, []) -> 
+      id == t_eq && t1 == result
+  | _ -> false
+
+let get_equality_rhs = function
+  | Some ({ a_value = Papp (id, [Tvar t1; t2]) }, []) 
+    when id == t_eq && t1 == result -> t2
+  | _ -> assert false
 
 (* [extract_pre p] erase the pre-condition of [p] and returns it *)
 
@@ -230,12 +240,23 @@ and normalize_boolean env b =
 		| _ ->
 		    b
 	      end
-(***
 	  | LetIn (x, ({ desc = Expression t } as e1), e2) 
-	      when post e1 = None ->
-	      let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
-	change_desc p (LetIn (x, post_if_none env q e1, e2))
-***)
+            when post e1 = None && post e2 <> None ->
+	      let s = tsubst_in_predicate (subst_one x (unref_term t)) in
+	      let q = optpost_app s (post e2) in
+	      let blab = b.info.label in
+	      let q = optpost_app (change_label e2.info.label blab) q in
+	      give_post b q
+	  | LetIn (x, e1, e2)
+	    when is_equality (post e1) && post e2 <> None &&
+	         Effect.get_writes (effect e1) = [] ->
+	      let t = get_equality_rhs (post e1) in
+	      let s = tsubst_in_predicate (subst_one x (unref_term t)) in
+	      let q = optpost_app s (post e2) in
+	      let blab = b.info.label in
+	      let q = optpost_app (change_label e1.info.label blab) q in
+	      let q = optpost_app (change_label e2.info.label blab) q in
+	      give_post b q
 	  | _ -> 
 	      b
       end

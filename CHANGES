@@ -1,5 +1,6 @@
 
-  o fixed bug in loop tests automatic annotation
+  o fixed bug in loop tests automatic annotation; 
+    now a warning when a loop test cannot be given a postcondition
   o fixed bug in interpretation of @init 
   o doc: C programs, Coq and PVS libraries documented
   o logic: if-then-else construct on terms
