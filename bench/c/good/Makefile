@@ -11,8 +11,11 @@ default:
 	for f in $(CFILES:.c=); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
-	  make -f $$f.makefile; \
+	  make -f $$f.makefile simplify/$${f}_why.sx.all; \
+	  make -f $$f.makefile cvcl/$${f}_why.cvc.all; \
 	done
+	dp -timeout 10 simplify/*_why.sx.all
+	dp -timeout 10 cvcl/*_why.cvc.all
 
 # running Simplify on all programs
 # with log in simplify.log and statictics
@@ -29,6 +32,13 @@ do_simplify: $(WFILES)
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
 	  make -f $$f.makefile do_simplify; \
+	done
+
+do_cvcl: $(CFILES)
+	for f in $(CFILES:.c=); do \
+	  rm -f why/$$f.why; \
+	  make why/$$f.why; \
+	  make -f $$f.makefile do_cvcl; \
 	done
 
 # running Coq on all programs

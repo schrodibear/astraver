@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.5 2004-07-16 09:38:01 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.6 2004-07-19 12:23:16 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -45,14 +45,16 @@ let call cmd =
 
 let call_cvcl f =
   call
-    (sprintf "ulimit -t %d; cvcl < %s > out && grep -q Valid out" !timeout f)
+    (sprintf "ulimit -t %d; cvcl < %s > out 2>&1 && grep -q Valid out" 
+       !timeout f)
 
 let call_simplify f =
   call
-    (sprintf "ulimit -t %d; Simplify %s > out && grep -q Valid out" !timeout f)
+    (sprintf "ulimit -t %d; Simplify %s > out 2>&1 && grep -q Valid out" 
+       !timeout f)
 
 let split f =
-  printf "%s: " f;
+  printf "%s: " f; flush stdout;
   let oldv = !nvalid in
   let oldi = !ninvalid in
   let oldt = !ntimeout in
@@ -63,11 +65,13 @@ let split f =
     Simplify_split.iter call_simplify f 
   else 
     begin Arg.usage spec usage; exit 1 end;
-  printf " (%d/%d/%d)\n" (!nvalid - oldv) (!ninvalid - oldi) (!ntimeout - oldt)
+  printf 
+    " (%d/%d/%d)\n" (!nvalid - oldv) (!ninvalid - oldi) (!ntimeout - oldt);
+  flush stdout
 
 let main () = 
   if Queue.is_empty files then begin Arg.usage spec usage; exit 1 end;
-  printf "(. = valid * = invalid # = timeout/failure)\n";
+  printf "(. = valid * = invalid # = timeout/failure)\n"; flush stdout;
   Queue.iter split files;
   let n = !nvalid + !ninvalid + !ntimeout in
   if n = 0 then exit 0;

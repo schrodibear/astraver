@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.74 2004-07-05 14:43:57 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.75 2004-07-19 12:23:16 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -228,7 +228,8 @@ let interp_decl d =
       let t = generalize_logic_type t in
       add_global_logic id t;
       let lenv' = 
-	List.fold_right (fun (x,pt) -> add_logic x (PureType pt)) pl lenv 
+	List.fold_right 
+	  (fun (x,pt) -> add_logic ~generalize:false x (PureType pt)) pl lenv 
       in
       let p = Ltyping.predicate lab env lenv' p in
       let p = generalize_predicate_def (pl,p) in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.19 2004-07-19 09:24:05 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.20 2004-07-19 12:23:16 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -50,8 +50,6 @@ let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
 let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
 let push_predicate id p = Queue.add (PredicateDef (id, p)) queue
-
-let defpred = Hashtbl.create 97
 
 (*s Pretty print *)
 
@@ -301,7 +299,7 @@ module IterIT = struct
 
 end
 
-module Types = struct
+module PureType = struct
 
   type t = pure_type
 
@@ -317,23 +315,22 @@ module Types = struct
 
 end	  
 
-module Htypes = Hashtbl.Make(Types)
+module Htypes = Hashtbl.Make(PureType)
 
 (* declaration of abstract types *)
 let declared_types = Htypes.create 97
 let declare_type fmt = function
-  | PTexternal (i,x) as pt when is_closed_pure_type pt -> 
-      if not (Htypes.mem declared_types pt) then begin
-	Htypes.add declared_types pt ();
-	fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt
-      end
+  | PTexternal (i,x) as pt 
+    when is_closed_pure_type pt && not (Htypes.mem declared_types pt) ->
+      Htypes.add declared_types pt ();
+      fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt
   | _ -> 
       ()
 
 (* generic substitution parameterized by a substitution over [pure_type] *)
 module type Substitution = sig
-  type substitution
-  val pure_type : substitution -> pure_type -> pure_type
+  type t
+  val pure_type : t -> pure_type -> pure_type
 end
 
 module GenSubst(S : Substitution) = struct
@@ -381,7 +378,13 @@ end
 (* substitution of type variables ([PTvarid]) by pure types *)
 module SV = struct
 
-  type substitution = (string * pure_type) list
+  type t = (string * pure_type) list
+
+  let equal =
+    List.for_all2 (fun (x1,pt1) (x2,pt2) -> x1 = x2 && PureType.equal pt1 pt2)
+      
+  let hash s = 
+    Hashtbl.hash (List.map (fun (x,pt) -> (x, PureType.normalize pt)) s)
 
   let rec pure_type s = function
     | PTvarid id as t ->
@@ -397,11 +400,20 @@ end
 module SubstV = GenSubst(SV)
 
 (* sets of symbols instances *)
-module SymbolsI = 
-  Set.Make(struct 
-	     type t = Ident.t * pure_type list 
-	     let compare = compare
-	   end)
+module Instance = struct 
+  type t = Ident.t * pure_type list 
+  let normalize (id, i) = (id, List.map PureType.normalize i)
+  let equal (id1, i1) (id2, i2) = id1=id2 && List.for_all2 PureType.equal i1 i2
+  let hash i = Hashtbl.hash (normalize i)
+  let compare (id1, i1) (id2, i2) = 
+    let c = compare id1 id2 in
+    if c <> 0 then 
+      c 
+    else 
+      compare (List.map PureType.normalize i1) (List.map PureType.normalize i2)
+end
+
+module SymbolsI = Set.Make(Instance)
 
 (* the following module collects instances (within [Tapp] and [Papp]) *)
 module OpenInstances = struct
@@ -508,11 +520,12 @@ let print_logic fmt id t =
     (* we only remember the type of [id] *)
     Hashtbl.add logic_symbols (Ident.create id) (Uninterp t)
 
-let declared_logic = Hashtbl.create 97
+module Hinstance = Hashtbl.Make(Instance)
+let declared_logic = Hinstance.create 97
 
 let rec declare_logic fmt id i =
-  if i <> [] && not (Hashtbl.mem declared_logic (id,i)) then begin
-    Hashtbl.add declared_logic (id,i) ();
+  if i <> [] && not (Hinstance.mem declared_logic (id,i)) then begin
+    Hinstance.add declared_logic (id,i) ();
     assert (Hashtbl.mem logic_symbols id);
     match Hashtbl.find logic_symbols id with
       | Uninterp t ->
@@ -555,11 +568,14 @@ let print_axiom_instance fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
+module Hsubst = Hashtbl.Make(SV)
+
 type axiom = {
   ax_pred : predicate scheme;
-  ax_open_instances : SymbolsI.elt list;
-  ax_open_symbols : Ident.set;
-  mutable ax_instances : SymbolsI.t; (* already considered instances *)
+  ax_symbols : Ident.set;
+  ax_symbols_i : SymbolsI.elt list;
+  mutable ax_symbols_instances : SymbolsI.t; (* already considered instances *)
+  ax_instances : unit Hsubst.t;
 }
 
 let axioms = Hashtbl.create 97
@@ -571,8 +587,9 @@ let print_axiom fmt id p =
     let oi = OpenInstances.predicate SymbolsI.empty p.scheme_type in
     let os = SymbolsI.fold (fun (id,_) -> Idset.add id) oi Idset.empty in
     let a = 
-      { ax_pred = p; ax_open_instances = SymbolsI.elements oi; 
-	ax_open_symbols = os; ax_instances = SymbolsI.empty } 
+      { ax_pred = p; ax_symbols_i = SymbolsI.elements oi; 
+	ax_symbols = os; ax_symbols_instances = SymbolsI.empty;
+	ax_instances = Hsubst.create 97 } 
     in
     Hashtbl.add axioms id a
 
@@ -586,14 +603,14 @@ let instantiate_axiom fmt id a =
   (* first pass: we look at all (closed) instances encountered so far
      appearing in axiom [a] *)
   let all_ci = 
-    Hashtbl.fold
+    Hinstance.fold
       (fun ((id,_) as i) () s -> 
-	 if Idset.mem id a.ax_open_symbols then SymbolsI.add i s else s)
+	 if Idset.mem id a.ax_symbols then SymbolsI.add i s else s)
       declared_logic SymbolsI.empty
   in
   (* second pass: if this set has not been already considered we instantiate *)
-  if not (SymbolsI.subset all_ci a.ax_instances) then begin
-    a.ax_instances <- all_ci;
+  if not (SymbolsI.subset all_ci a.ax_symbols_instances) then begin
+    a.ax_symbols_instances <- all_ci;
     fixpoint := false;
     let p = a.ax_pred in
     let rec iter s = function
@@ -602,8 +619,11 @@ let instantiate_axiom fmt id a =
 	    (fun x -> List.mem_assoc x s 
 	       && is_closed_pure_type (List.assoc x s)) p.scheme_vars 
 	  then
-	    let ps = SubstV.predicate s p.scheme_type in
-	    print_axiom_instance fmt id ps
+	    if not (Hsubst.mem a.ax_instances s) then begin
+	      Hsubst.add a.ax_instances s ();
+	      let ps = SubstV.predicate s p.scheme_type in
+	      print_axiom_instance fmt id ps
+	    end
       | (x,oi) :: oil ->
 	  SymbolsI.iter 
 	    (fun (y,ci) -> 
@@ -613,15 +633,8 @@ let instantiate_axiom fmt id a =
 	    all_ci;
 	  iter s oil
     in
-    iter [] a.ax_open_instances
+    iter [] a.ax_symbols_i
   end
-
-(***
-let print_axiom fmt id p =
-  let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
-  let all_i = OpenInstances.S.elements all_i in
-  fprintf fmt "@\n"
-***)
 
 let instantiate_axioms fmt = 
   fixpoint := false;
@@ -645,14 +658,18 @@ let print_elem fmt = function
   | Logic (id, t) -> print_logic fmt id t
   | Parameter (id, t) -> print_parameter fmt id t
 
+let prelude_done = ref false
 let prelude fmt = 
-fprintf fmt "
+  if not !prelude_done then begin
+    prelude_done := true;
+    fprintf fmt "
 UNIT: TYPE;
 tt: UNIT;
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];
 "
+  end
 
 (* first pass: we traverse all elements to collect types and closed instances
    of function symbols *)

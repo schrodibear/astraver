@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.33 2004-07-13 13:17:12 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.34 2004-07-19 12:23:16 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -426,7 +426,8 @@ and binders loc lab env lenv = function
   | (id, BindType v) :: bl ->
       let v = type_v loc lab env lenv v in
       let bl',env',lenv' = 
-	binders loc lab (Env.add id v env) (Env.add_logic ~generalize:false id v lenv) bl 
+	binders loc lab (Env.add id v env) 
+	  (Env.add_logic ~generalize:false id v lenv) bl 
       in
       (id, BindType v) :: bl', env', lenv'
   | (id, BindSet) :: bl ->
