@@ -1,0 +1,5 @@
+simplify
+*.depend
+*.makefile
+*.log
+why
