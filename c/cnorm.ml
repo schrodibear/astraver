@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.11 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.12 2005-01-05 10:26:18 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -426,7 +426,7 @@ let rec init_expr loc t lvalue initializers =
 		([],initializers)  fl
 	      in
 	      (
-		{nst_node = NSexpr (noattr2 loc t (NEassign
+		(*{nst_node = NSexpr (noattr2 loc t (NEassign
 						     ((expr lvalue),
 						      (alloca loc "1"))));
 		 nst_break = false;    
@@ -434,7 +434,7 @@ let rec init_expr loc t lvalue initializers =
 		 nst_return = false;   
 		 nst_term = true;
 		 nst_loc = loc     
-		}::l1,l2)
+		}::*)l1,l2)
 	  | _ ->
 	      assert false
 	end
@@ -446,14 +446,14 @@ let rec init_expr loc t lvalue initializers =
 		  (noattr loc f.var_type (TEarrow(lvalue, f)))
 		  initializers
 	      in 
-	      {nst_node = NSexpr (noattr2 loc t 
+	     (* {nst_node = NSexpr (noattr2 loc t 
 				    (NEassign((expr lvalue),(alloca loc "1"))));
 	       nst_break = false;    
 	       nst_continue = false; 
 	       nst_return = false;   
 	       nst_term = true;
 	       nst_loc = loc     
-	      }::block,init'
+	      }::*)block,init'
 	  | _ ->
 	      assert false
 	end
@@ -480,7 +480,7 @@ let rec init_expr loc t lvalue initializers =
 	    init_cells (Int64.add i Int64.one) (block@b,init')
 	in
 	let l1 , l2 = init_cells Int64.zero ([],initializers) in
-	{nst_node = NSexpr (noattr2 loc ty 
+(*	{nst_node = NSexpr (noattr2 loc ty 
 			      (NEassign((expr lvalue),
 					(alloca loc (Int64.to_string t)))));
 	 nst_break = false;    
@@ -488,7 +488,7 @@ let rec init_expr loc t lvalue initializers =
 	 nst_return = false;   
 	 nst_term = true;
 	 nst_loc = loc     
-	}::l1,l2
+	}::*)l1,l2
     | Tarray (ty,None) -> assert false
     | Tfun (_, _) -> assert false
     | Ctypes.Tvar _ -> assert false
@@ -511,15 +511,29 @@ and nlocated s l l2 =
 		    let declar = nlocated s decl l2 in
 		    begin match c with
 		      | Iexpr e ->
-			  NSdecl(v.var_type,v,Some (Iexpr (expr e)),copyattr s declar)
+			  NSdecl(v.var_type,v,Some (Iexpr (expr e)),
+				 copyattr s declar)
 		      | _ -> assert false
 		    end
-		| Tarray _ | Tstruct _ | Tunion _ -> 
+		| Tarray (_,Some length) -> 
+		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
 		    let declar,_ = 
 		      init_expr l v.var_type 
-			(noattr l v.var_type (TEvar (Var_info v))) [c] 
+			lvalue [c] 
 		    in
-		    NSdecl(v.var_type,v,None,
+		     NSdecl(v.var_type,v,
+			    Some (Iexpr (alloca l (Int64.to_string length))),
+			   copyattr s (nlocated s decl (declar@l2)))
+(*		    NSdecl(v.var_type,v,None,
+			   copyattr s (nlocated s decl (declar@l2)))*)
+		| Tarray _ | Tstruct _ | Tunion _ -> 
+		    let lvalue = (noattr l v.var_type (TEvar (Var_info v))) in
+		    let declar,_ = 
+		      init_expr l v.var_type 
+			lvalue [c] 
+		    in
+		     NSdecl(v.var_type,v,
+			    Some (Iexpr (alloca l "1")),
 			   copyattr s (nlocated s decl (declar@l2)))
 		| Tvoid | Ctypes.Tvar _ | Tfun _ -> assert false		      
 	end

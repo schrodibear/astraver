@@ -316,17 +316,31 @@ parameter free_block : p:pointer ->
 	unit writes alloc
 	{ free_heap(p, alloc@, alloc) }
 
+(*
+
+  [free_stack(a1,a2,a3)] specifies the relations between states of allocation table before and after a function body is executed :
+
+  a1 : alloc_table at beginning
+  a2 : alloc_table before return: some allocations occured in [a1] both 
+       on heap and on stack 
+  a3 : alloc_table after return: allocations on stack between [a1] and 
+       [a2] are not valid anymore
+
+*)
+
 logic free_stack : alloc_table, alloc_table, alloc_table -> prop
 
 axiom free_stack_heap : 
   forall a1 : alloc_table. forall a2 : alloc_table. forall a3 : alloc_table. 
-    forall p : pointer. valid(a2, p) -> on_heap(a2,p) -> valid(a3, p)
+    free_stack(a1,a2,a3) -> 
+      (forall p : pointer. valid(a2, p) -> on_heap(a2,p) -> valid(a3, p))
 
 axiom free_stack_stack : 
   forall a1 : alloc_table. forall a2 : alloc_table. forall a3 : alloc_table. 
-    forall p : pointer. valid(a1, p) -> on_stack(a1,p) -> valid(a3, p)
+     free_stack(a1,a2,a3) -> 
+      (forall p : pointer. valid(a1, p) -> on_stack(a1,p) -> valid(a3, p))
 
-parameter alloca : n:int -> 
+parameter alloca_parameter : n:int -> 
 	{ n >= 1 }
 	pointer writes alloc
 	{ valid(alloc,result) and offset(result) = 0 and 	
