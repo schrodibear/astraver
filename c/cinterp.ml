@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.6 2004-02-09 13:31:12 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.7 2004-02-09 15:55:09 filliatr Exp $ i*)
 
 (*****
 
@@ -1099,16 +1099,19 @@ and interp_block (decls,stats) =
   let b = List.fold_right interp_statement stats Void in
   List.fold_right interp_decl decls b 
 
-let interp_annotated_block (pre,block,post) =
+let interp_spec (pre,mods,post) =
   let tpre = interp_predicate pre
   and tpost = interp_predicate post
-  and tblock = interp_block block 
-  in (tpre,tblock,tpost)
-      
+  in (tpre,tpost)
+
+let interp_spec_option = function
+  | None -> interp_spec (None, [], None)
+  | Some s -> interp_spec s
 
 let interp_located_tdecl why_decls decl =
   match decl.node with
   | Tlogic(idlist,ltype) -> assert false (* TODO *)
+  | Taxiom(id,p) -> assert false (* TODO *)
   | Ttypedef(ctype,id) -> assert false (* TODO *)
   | Ttypedecl(ctype) -> assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 
@@ -1121,10 +1124,12 @@ let interp_located_tdecl why_decls decl =
 	      (Param(v.var_name,Ref_type(t)))::why_decls
 	  | _ -> assert false (* TODO *)
       end
-  | Tfundef(ctype,id,params,block,info) ->      
+  | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
+  | Tfundef(spec,ctype,id,params,block,info) ->      
       fprintf Coptions.log "translating function %s@." id;
       let tparams = List.map interp_param params in
-      let (pre,tblock,post) = interp_annotated_block block in
+      let pre,post = interp_spec_option spec in
+      let tblock = interp_block block in
       (Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls
 
 

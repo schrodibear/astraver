@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.19 2004-02-09 13:31:12 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.20 2004-02-09 15:55:09 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -648,8 +648,8 @@ and type_statement_node loc env et = function
   | CSgoto lab ->
       (* TODO: vérifier existence label *)
       TSgoto lab, mt_status
-  | CSfor (e1, e2, e3, an, s) ->
-      let an = option_app (loop_annot (Env.logic env)) an in
+  | CSfor (e1, e2, e3, an, s) -> 
+      let an = option_app (type_loop_annot (Env.logic env)) an in
       let e1 = type_expr env e1 in
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
@@ -658,14 +658,14 @@ and type_statement_node loc env et = function
       TSfor (e1, e2, e3, s, li, an),
       { mt_status with abrupt_return = st.abrupt_return }
   | CSdowhile (s, an, e) ->
-      let an = option_app (loop_annot (Env.logic env)) an in
+      let an = option_app (type_loop_annot (Env.logic env)) an in
       let s, st = type_statement env et s in
       let e = type_boolean env e in
       let li = { loop_break = st.break; loop_continue = st.continue } in
       TSdowhile (s, e, li, an), 
       { mt_status with abrupt_return = st.abrupt_return }
   | CSwhile (e, an, s) ->
-      let an = option_app (loop_annot (Env.logic env)) an in
+      let an = option_app (type_loop_annot (Env.logic env)) an in
       let e = type_boolean env e in
       let s, st = type_statement env et s in
       let li = { loop_break = st.break; loop_continue = st.continue } in
@@ -769,18 +769,25 @@ let type_decl d = match d.node with
       add_sym d.loc x ty;
       let info = default_var_info x in
       Tdecl (ty, info, type_initializer Env.empty ty i)
-  | Cfundef (ty, f, pl, bl) -> 
+  | Cfunspec (s, ty, f, pl) ->
+      let s = type_spec Cltyping.empty s in
+      let ty = type_type d.loc Env.empty ty in
+      let pl,env = type_parameters d.loc Env.empty pl in
+      add_sym d.loc f (noattr (CTfun (pl, ty)));
+      Tfunspec (s, ty, f, pl)
+  | Cfundef (s, ty, f, pl, bl) -> 
+      let s = option_app (type_spec Cltyping.empty) s in
       let ty = type_type d.loc Env.empty ty in
       let et = if ty = c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
-      let bl,st = type_annotated_block env et bl in
+      let bl,st = type_block env et bl in
       if st.break then 
 	error d.loc "break statement not within a loop or switch";
       if st.continue then 
 	error d.loc "continue statement not within a loop";
       let fi = { fun_abrupt_return = st.abrupt_return } in
-      Tfundef (ty, f, pl, bl, fi)
+      Tfundef (s, ty, f, pl, bl, fi)
 
 let type_file = List.map (fun d -> { d with node = type_decl d })
 

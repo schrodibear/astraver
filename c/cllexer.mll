@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.3 2004-02-04 13:45:19 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.4 2004-02-09 15:55:09 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -41,6 +41,7 @@ let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
   | [' ' '\t' '\012' '\r' '\n']+ { token lexbuf }
+  | "(*"                    { comment lexbuf; token lexbuf }
 
   | "forall"  { FORALL }
   | "exists"  { EXISTS }
@@ -61,10 +62,12 @@ rule token = parse
   | "for"       { FOR }
   | "assert"    { ASSERT }
   | "label"     { LABEL }
-  | "pre"       { PRE }
-  | "post"      { POST }
-  | "reads"     { READS }
-  | "writes"    { WRITES }
+  | "requires"       { REQUIRES }
+  | "ensures"      { ENSURES }
+  | "modifiable"     { MODIFIABLE }
+  | "logic"    { LOGIC }
+  | "predicate"    { PREDICATE }
+  | "axiom"    { AXIOM }
 
   | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
 
@@ -103,6 +106,12 @@ rule token = parse
   | eof { EOF }
   | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
  
+and comment = parse
+  | "*)" { () }
+  | "(*" { comment lexbuf; comment lexbuf }
+  | eof  { lex_error lexbuf "Unterminated_comment" }
+  | _    { comment lexbuf }
+
 
 {
 
@@ -120,5 +129,7 @@ rule token = parse
   let predicate = parse_with_offset Clparser.predicate
   let spec = parse_with_offset Clparser.spec
   let loop_annot = parse_with_offset Clparser.loop_annot
+  let decl = parse_with_offset Clparser.decl
+  let annot = parse_with_offset Clparser.annot
 
 }

@@ -106,8 +106,8 @@ bin/top: $(CMO)
 # caduceus
 CCMO = src/linenum.cmo src/loc.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo \
-	c/cparser.cmo c/clexer.cmo \
 	c/clparser.cmo c/cllexer.cmo \
+	c/cparser.cmo c/clexer.cmo \
 	c/creport.cmo c/cltyping.cmo c/ctyping.cmo \
 	c/output.cmo \
 	c/cinterp.cmo c/cmain.cmo

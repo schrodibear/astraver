@@ -295,19 +295,24 @@ annotations.
   \\[0.1em]
 
   \nt{c\_declaration}
-    & $::=$ & \nt{c\_type} \nt{identifier} \te{(} 
+    & $::=$ & $[$ \nt{c\_spec} $]$ \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
-              $[$ \nt{c\_spec} $]$ \te{;} \\
-      & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
+              \te{;} \\
+      & $|$ & $[$ \nt{c\_spec} $]$ \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
-              \nt{annotated\_block} \te{;} \\
-      & $|$ & \te{/*W} \te{logic} \nt{identifier} \te{:} 
-              \nt{logic\_type} \te{*/} \\
+              \nt{block} \te{;} \\
+      & $|$ & \te{/*@} \te{logic} \nt{type} \nt{identifier} \te{(} 
+              \nt{parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
+      & $|$ & \te{/*@} \te{predicate} \nt{identifier} \te{(} 
+              \nt{parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
+      & $|$ & \te{/*@} \te{axiom} \nt{identifier} \te{:} 
+              \nt{predicate} \te{*/} \\
   \\[0.1em]
 
   \nt{c\_spec}
-    & $::=$ & \te{/*@} $[$ \te{pre} \nt{precondition} $]$ \nt{effects}
-              $[$ \te{post} \nt{postcondition} $]$ \te{*/}  \\
+    & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
+              $[$ \te{modifiable} \nt{locations} $]$\\
+           && $[$ \te{ensures} \nt{predicate} $]$ \te{*/}  \\
   \\[0.1em]
 
   \nt{statement}
@@ -322,15 +327,6 @@ annotations.
     &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
   \\[0.1em]
 
-  \nt{annotated\_block}
-    & $::=$ & $[$ \nt{c\_pre} $]$ \nt{block} $[$ \nt{c\_post} $]$ \\
-  \\[0.1em]
-
-  \nt{c\_pre}
-    & $::=$ & \te{/*@} $[$ \nt{predicate} $]$ $[$ \te{variant} \nt{wf\_arg}
-              $]$ \te{*/}  \\
-  \nt{c\_post}
-    & $::=$ & \te{/*@} $[$ \nt{predicate} $]$ \te{*/}  \\
   \nt{c\_loop\_annot}
     & $::=$ & \te{/*@} \te{invariant} \nt{predicate} 
               \te{variant} \nt{wf\_arg} \te{*/}  \\

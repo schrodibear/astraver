@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.4 2004-01-14 16:33:28 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.5 2004-02-09 15:55:09 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -51,6 +51,7 @@ and 'a term_node =
   | Tbinop of 'a term * term_binop * 'a term
   | Tdot of 'a term * string
   | Tarrow of 'a term * string
+  | Tarrget of 'a term * 'a term
   | Tif of 'a term * 'a term * 'a term
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
@@ -69,11 +70,12 @@ type ('term, 'ident) predicate =
   | Pforall of string * pure_type * ('term, 'ident) predicate
   | Pexists of string * pure_type * ('term, 'ident) predicate
 
-type effects = string list * string list
+type location = 
+  | Lid of string
 
-type 'pred spec = 'pred option * effects * 'pred option
+type modifiable = location list
 
-type 'pred annot_statement = Assert of 'pred | Label of string
+type 'pred spec = 'pred option * modifiable * 'pred option
 
 type 'term variant = 'term * string option
 
@@ -85,4 +87,17 @@ type ('term,'ident) loop_annot =
 type parsed_predicate = (Loc.t term, (string, Loc.t) info) predicate
 type parsed_spec = parsed_predicate spec
 type parsed_loop_annot = (Loc.t term, (string, Loc.t) info) loop_annot
+
+type parsed_decl = 
+  | LDlogic of string * pure_type * (pure_type * string) list
+  | LDpredicate of string * (pure_type * string) list
+  | LDaxiom of string * parsed_predicate
+
+type parsed_code_annot = Assert of parsed_predicate | Label of string
+
+type parsed_annot = 
+  | Adecl of parsed_decl
+  | Aspec of parsed_spec
+  | Acode_annot of parsed_code_annot
+  | Aloop_annot of parsed_loop_annot
 

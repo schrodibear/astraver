@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.20 2004-02-09 13:31:12 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.21 2004-02-09 15:55:09 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -55,8 +55,6 @@ and 'expr parameter = 'expr ctype * string
 and 'expr field = 'expr ctype * string * 'expr option
 
 (*s C parsed abstract syntax trees *)
-
-type annot = int * string
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
@@ -115,9 +113,10 @@ and cstatement_node =
   | CSnop
   | CSexpr of cexpr
   | CSif of cexpr * cstatement * cstatement
-  | CSwhile of cexpr * annot option * cstatement
-  | CSdowhile of cstatement * annot option * cexpr
-  | CSfor of cexpr * cexpr * cexpr * annot option * cstatement
+  | CSwhile of cexpr * Clogic.parsed_loop_annot option * cstatement
+  | CSdowhile of cstatement * Clogic.parsed_loop_annot option * cexpr
+  | CSfor of 
+      cexpr * cexpr * cexpr * Clogic.parsed_loop_annot option * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -126,18 +125,20 @@ and cstatement_node =
   | CSswitch of cexpr * cstatement
   | CScase of cexpr * cstatement
   | CSgoto of string
-  | CSannot of annot
+  | CSannot of Clogic.parsed_code_annot
 
 and block = decl located list * cstatement list
 
-and annotated_block = annot option * block * annot option
-
 and decl = 
-  | Cspecdecl of annot
+  | Cspecdecl of Clogic.parsed_decl
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
   | Cdecl of cexpr ctype * string * cexpr c_initializer
-  | Cfundef of cexpr ctype * string * cexpr parameter list * annotated_block
+  | Cfunspec of 
+      Clogic.parsed_spec * cexpr ctype * string * cexpr parameter list
+  | Cfundef of 
+      Clogic.parsed_spec option * 
+      cexpr ctype * string * cexpr parameter list * block
 
 type file = decl located list
 
@@ -177,6 +178,8 @@ type tctype = texpr ctype
 
 type predicate = (tctype term, string) Clogic.predicate
 
+type spec = predicate Clogic.spec
+
 type variant = tctype term * string option
 
 type loop_annot = (tctype term, string) Clogic.loop_annot
@@ -211,15 +214,14 @@ and tstatement_node =
 
 and tblock = tdecl located list * tstatement list
 
-and annotated_tblock = 
-    predicate option * tblock * predicate option
-
 and tdecl = 
   | Tlogic of string list * logic_type
+  | Taxiom of string * predicate
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
-  | Tfundef of 
-      texpr ctype * string * texpr parameter list * annotated_tblock * fun_info
+  | Tfunspec of spec * texpr ctype * string * texpr parameter list
+  | Tfundef of spec option *
+      texpr ctype * string * texpr parameter list * tblock * fun_info
 
 type tfile = tdecl located list

@@ -31,7 +31,8 @@
 %token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IMPLIES AND OR NOT TRUE FALSE OLD RESULT LENGTH THEN AT
 %token QUESTION MINUS PLUS STAR SLASH PERCENT LSQUARE RSQUARE EOF
-%token INVARIANT VARIANT FOR LABEL ASSERT PRE POST READS WRITES
+%token INVARIANT VARIANT FOR LABEL ASSERT 
+%token REQUIRES ENSURES MODIFIABLE LOGIC PREDICATE AXIOM
 
 %right IMPLIES
 %left OR
@@ -44,7 +45,7 @@
 %left PLUS MINUS
 %left STAR SLASH PERCENT
 %right prec_uminus 
-%left DOT ARROW
+%left DOT ARROW LSQUARE
 
 %type <Clogic.parsed_predicate> predicate
 %start predicate
@@ -54,6 +55,12 @@
 
 %type <Clogic.parsed_loop_annot> loop_annot
 %start loop_annot
+
+%type <Clogic.parsed_decl> decl
+%start decl
+
+%type <Clogic.parsed_annot> annot
+%start annot
 
 %%
 
@@ -82,6 +89,7 @@ pure_type:
   IDENTIFIER { PTexternal ([], $1) }
 | INT        { PTint }
 | FLOAT      { PTfloat }
+| pure_type LSQUARE RSQUARE { PTarray $1 }
 ;
 
 relation:
@@ -106,6 +114,7 @@ term:
 | term PERCENT term { info (Tbinop ($1, Bmod, $3)) }
 | term ARROW IDENTIFIER { info (Tarrow ($1, $3)) }
 | term DOT IDENTIFIER { info (Tdot ($1, $3)) }
+| term LSQUARE term RSQUARE { info (Tarrget ($1, $3)) }
 | MINUS term %prec prec_uminus { info (Tunop (Uminus, $2)) }
 | PLUS term %prec prec_uminus { $2 }
 | STAR term { info (Tunop (Ustar, $2)) }
@@ -124,12 +133,12 @@ ne_term_list:
 
 pre_condition:
   /* epsilon */ { None }
-| PRE predicate { Some $2 }
+| REQUIRES predicate { Some $2 }
 ;
 
 post_condition:
   /* epsilon */  { None }
-| POST predicate { Some $2 }
+| ENSURES predicate { Some $2 }
 ;
 
 spec:
@@ -145,10 +154,6 @@ invariant:
 | INVARIANT predicate { Some $2 }
 ;
 
-pre:
-  pre_condition opt_variant { ($1, $2) }
-;
-
 variant:
   term FOR IDENTIFIER { ($1, Some $3) }
 | term                { ($1, None) }
@@ -160,32 +165,41 @@ opt_variant:
 ;
 
 annot:
-  ASSERT predicate { Assert $2 }
-| LABEL IDENTIFIER { Label $2 }
+  decl             { Adecl $1 }
+| spec             { Aspec $1 }
+| loop_annot       { Aloop_annot $1 }
+| ASSERT predicate { Acode_annot (Assert $2) }
+| LABEL IDENTIFIER { Acode_annot (Label $2) }
 ;
 
 effects:
-  reads writes { ($1, $2) }
+  /* epsilon */ { [] }
+| MODIFIABLE locations { $2 }
 ;
 
-reads:
-  /* epsilon */    { [] }
-| READS ident_list { $2 }
+locations:
+| location { [$1] }
+| location COMMA locations { $1 :: $3 }
 ;
 
-writes:
-  /* epsilon */    { [] }
-| WRITES ident_list { $2 }
+location:
+  IDENTIFIER { Lid $1 }
 ;
 
-ident_list:
-  /* epsilon */    { [] }
-| ne_ident_list    { $1 }
+decl:
+  LOGIC pure_type IDENTIFIER LPAR parameters RPAR { LDlogic ($3, $2, $5) }
+| PREDICATE IDENTIFIER LPAR parameters RPAR { LDpredicate ($2, $4) }
+| AXIOM IDENTIFIER COLON predicate { LDaxiom ($2, $4) }
 ;
 
-ne_ident_list:
-  IDENTIFIER                     { [$1] }
-| IDENTIFIER COMMA ne_ident_list { $1 :: $3 }
+parameters:
+  /* epsilon */  { [] }
+| ne_parameters { $1 }
+;
+
+ne_parameters:
+  pure_type IDENTIFIER { [($1, $2)] }
+| pure_type IDENTIFIER COMMA ne_parameters { ($1,$2) :: $4 }
 ;
 
 %%

@@ -73,7 +73,7 @@
     | Dsimple
     | Dpointer of declarator
     | Darray of declarator * cexpr option
-    | Dfunction of declarator * parameters * annot option
+    | Dfunction of declarator * parameters
 
   and parameters = (specifiers * declarator * string) list
 
@@ -195,7 +195,7 @@
       | Dsimple -> ty
       | Dpointer d -> full_type (noattr (CTpointer ty)) d
       | Darray (d, so) -> full_type (noattr (CTarray (ty, so))) d
-      | Dfunction (d, pl, _) -> full_type (noattr (CTfun (params pl, ty))) d
+      | Dfunction (d, pl) -> full_type (noattr (CTfun (params pl, ty))) d
     and params pl = 
       List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
     and fields fl =
@@ -230,6 +230,13 @@
 	Ctypes.remove n; Cdecl (interp_type true specs d, n, i)
       in
       List.map interp decls
+
+  let spec_declaration s specs decls =
+    match declaration specs decls with
+      | [Cdecl ({ ctype_node = CTfun (pl, ty) }, f, _)] ->
+	  Cfunspec (s, ty, f, pl)
+      | _ ->
+	  raise Parsing.Parse_error
 
   let type_declarations specs =
     if is_typedef specs then warning "useless keyword in empty declaration";
@@ -271,20 +278,22 @@
       pl
 
   let function_declaration specs d decls = match d with
-    | id, Dfunction (d, pl, p) ->
+    | id, Dfunction (d, pl) ->
 	let ty = interp_type false specs d in
 	let pl = 
 	  if decls = [] then interp_params pl else old_style_params pl decls 
 	in
 	List.iter (fun (_,x) -> Ctypes.remove x) pl;
-	ty, id, pl, p
+	ty, id, pl
     | _ -> 
 	raise Parsing.Parse_error
 
 %}
 
-%token <int * string> ANNOT
-%token <int * string> WDECL
+%token <Clogic.parsed_spec> SPEC
+%token <Clogic.parsed_decl> DECL
+%token <Clogic.parsed_code_annot> CODE_ANNOT
+%token <Clogic.parsed_loop_annot> LOOP_ANNOT
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL TYPE_NAME
 %token SIZEOF
@@ -309,7 +318,7 @@
 %nonassoc specs
 %nonassoc TYPE_NAME
 %nonassoc no_annot
-%nonassoc ANNOT
+/* %nonassoc ANNOT */
 
 %type <Cast.file> file
 %start file
@@ -503,7 +512,10 @@ declaration
             { type_declarations $1 }
         | declaration_specifiers init_declarator_list attributes_opt SEMICOLON 
 	    { List.map locate (declaration $1 $2) }
-	| WDECL  /* ADDED FOR WHY */
+        | SPEC 
+	  declaration_specifiers init_declarator_list attributes_opt SEMICOLON 
+	    { [locate (spec_declaration $1 $2 $3)] }
+	| DECL  /* ADDED FOR WHY */
 	    { [locate (Cspecdecl $1)] }
         ;
 
@@ -663,18 +675,22 @@ direct_declarator
 	    { let id,d = $1 in id, Darray (d, Some $3) }
         | direct_declarator LSQUARE RSQUARE 
 	    { let id,d = $1 in id, Darray (d, None) }
-        | direct_declarator LPAR parameter_type_list RPAR annot 
-	    { let id,d = $1 in id, Dfunction (d, $3, $5) }
-        | direct_declarator LPAR identifier_list RPAR annot
+        | direct_declarator LPAR parameter_type_list RPAR
+	    { let id,d = $1 in id, Dfunction (d, $3) }
+        | direct_declarator LPAR identifier_list RPAR
 	    { let pl = List.map (fun x -> ([], Dsimple, x)) $3 in
-	      let id,d = $1 in id, Dfunction (d, pl, $5) }
-        | direct_declarator LPAR RPAR annot 
-            { let id,d = $1 in id, Dfunction (d, [], $4) }
+	      let id,d = $1 in id, Dfunction (d, pl) }
+        | direct_declarator LPAR RPAR
+            { let id,d = $1 in id, Dfunction (d, []) }
         ;
 
 /* ADDED FOR WHY */
-annot
-        : ANNOT         { Some $1 }
+loop_annot
+        : LOOP_ANNOT                   { Some $1 }
+        | /* epsilon */ %prec no_annot { None }
+        ;
+spec_annot
+        : SPEC                         { Some $1 }
         | /* epsilon */ %prec no_annot { None }
         ;
 
@@ -741,13 +757,13 @@ direct_abstract_declarator
         | direct_abstract_declarator LSQUARE constant_expression RSQUARE 
 	    { Darray ($1, Some $3) }
         | LPAR RPAR 
-	    { Dfunction (Dsimple, [], None) }
+	    { Dfunction (Dsimple, []) }
         | LPAR parameter_type_list RPAR 
-	    { Dfunction (Dsimple, $2, None) }
+	    { Dfunction (Dsimple, $2) }
         | direct_abstract_declarator LPAR RPAR 
-	    { Dfunction ($1, [], None) }
+	    { Dfunction ($1, []) }
         | direct_abstract_declarator LPAR parameter_type_list RPAR 
-	    { Dfunction ($1, $3, None) }
+	    { Dfunction ($1, $3) }
         ;
 
 c_initializer
@@ -791,11 +807,6 @@ compound_statement_LBRACE:
   LBRACE { Ctypes.push () }
 ;
 
-/* ADDED FOR WHY */
-compound_statement_with_post
-        : compound_statement annot { ($1, $2) }
-        ;
-
 declaration_list
         : declaration { $1 }
         | declaration_list declaration { $1 @ $2 }
@@ -808,7 +819,7 @@ statement_list
 
 expression_statement
         : SEMICOLON { locate CSnop }
-	| ANNOT SEMICOLON { locate (CSannot $1) } /* ADDED FOR WHY */
+	| CODE_ANNOT SEMICOLON { locate (CSannot $1) } /* ADDED FOR WHY */
         | expression SEMICOLON { locate (CSexpr $1) }
         ;
 
@@ -822,16 +833,16 @@ selection_statement
         ;
 
 iteration_statement
-        : WHILE LPAR expression RPAR annot statement 
+        : WHILE LPAR expression RPAR loop_annot statement 
             { locate (CSwhile ($3, $5, $6)) }
-        | DO statement annot WHILE LPAR expression RPAR SEMICOLON 
+        | DO statement loop_annot WHILE LPAR expression RPAR SEMICOLON 
 	    { locate (CSdowhile ($2, $3, $6)) }
         | FOR LPAR expression_statement expression_statement RPAR 
-          annot statement
+          loop_annot statement
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
 			     locate CEnop, $6, $7)) }
         | FOR LPAR expression_statement expression_statement expression RPAR 
-          annot statement 
+          loop_annot statement 
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
 			     $5, $7, $8)) }
         ;
@@ -855,11 +866,14 @@ external_declaration
         ;
 
 function_definition
-        : function_prototype compound_statement_with_post
+        : function_prototype compound_statement
             { Ctypes.pop (); (* pushed by function_prototype *)
-	      let ty,id,pl,p = $1 in
-	      let b,q = $2 in
-	      locate (Cfundef (ty, id, pl, (p,b,q))) }
+	      let ty,id,pl = $1 in
+	      locate (Cfundef (None, ty, id, pl, $2)) }
+        | SPEC function_prototype compound_statement
+            { Ctypes.pop (); (* pushed by function_prototype *)
+	      let ty,id,pl = $2 in
+	      locate (Cfundef (Some $1, ty, id, pl, $3)) }
         ;
 	      
 function_prototype

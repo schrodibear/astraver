@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.10 2004-01-14 10:57:24 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.11 2004-02-09 15:55:09 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -48,8 +48,6 @@ rule token = parse
   | "/*"                    { comment lexbuf; token lexbuf }
   | "/*@"                   { annot_start_pos := lexeme_start lexbuf + 4;
 			      Buffer.clear buf; annot lexbuf }
-  | "/*W"                   { annot_start_pos := lexeme_start lexbuf + 4;
-			      Buffer.clear buf; wdecl lexbuf }
   | "auto"                  { AUTO }
   | "break"                 { BREAK }
   | "case"                  { CASE }
@@ -165,14 +163,14 @@ and comment = parse
   | _    { comment lexbuf }
 
 and annot = parse
-  | "*/" { ANNOT (!annot_start_pos, Buffer.contents buf) }
+  | "*/" { match Cllexer.annot (!annot_start_pos, Buffer.contents buf) with
+	     | Clogic.Adecl d -> DECL d
+	     | Clogic.Aspec s -> SPEC s
+	     | Clogic.Acode_annot a -> CODE_ANNOT a
+	     | Clogic.Aloop_annot a -> LOOP_ANNOT a
+	 }
   | eof  { lex_error lexbuf "Unterminated annotation" }
   | _    { Buffer.add_char buf (lexeme_char lexbuf 0); annot lexbuf }
-
-and wdecl = parse
-  | "*/" { WDECL (!annot_start_pos, Buffer.contents buf) }
-  | eof  { lex_error lexbuf "Unterminated annotation" }
-  | _    { Buffer.add_char buf (lexeme_char lexbuf 0); wdecl lexbuf }
 
 {
 
