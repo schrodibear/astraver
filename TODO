@@ -17,6 +17,8 @@ FEATURES
 
  - exceptions: false instead of true as implicit postcondition (+ warning)
 
+ - keyword absurd (similar to "assert false" in ocaml)
+
 COQ
 ===
 
