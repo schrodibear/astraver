@@ -186,9 +186,29 @@ sys     0m0.060s
 valid obligations:       2
 invalid obligations:       0
 \end{verbatim}
-When an obligation fails with Simplify, then no manual proof may be
+When an obligation fails with \simplify, then no manual proof may be
 attempted, but counter-examples given in file \texttt{simplify.log}
 may be consulted, to discover missing pre-conditions for instance.
+
+\subsection*{Other provers}
+\subsubsection*{\textsf{CVC Lite}}
+The use of \textsf{CVC Lite} is very similar to the use of
+\simplify. Simply run
+\begin{verbatim}
+> make -f max.makefile cvcl
+\end{verbatim}
+and \textsf{CVC Lite} will be run on the proof obligations and results
+displayed. (\textsf{CVC Lite} input files are generated withtin the
+\texttt{cvcl/} subdirectory.)
+
+\subsubsection*{\pvs} 
+To use the \pvs\ proof assistant, first run
+\begin{verbatim}
+> make -f max.makefile pvs
+\end{verbatim}
+It generates a bunch of files within the \texttt{pvs/}
+subdirectory. Proof obligations are contained in the
+\url{pvs/max_why.pvs} file. 
 
 \section{Pointer access and modification}
 
@@ -200,7 +220,7 @@ void abs1(int *p) \{
   if (*p < 0) *p = -*p;
 \}
 \end{code}
-Running \caduceus{} and then Simplify results in:
+Running \caduceus{} and then \simplify\ results in:
 \begin{verbatim}
 > caduceus abs.c
 generating Why code for function abs1
@@ -239,7 +259,7 @@ Counterexample:
 The counter example given contains \verb|(EQ null p)|, meaning that
 this program may not run as expected if pointer \verb|p| is
 null: indeed, a segmentation fault would occur in that case. If you try to
-use Coq instead of Simplify, you will face the same problem when
+use \coq\ instead of \simplify, you will face the same problem when
 trying to prove the first obligation: you will end up with
 \begin{verbatim}
 1 subgoal
