@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.13 2004-02-13 08:42:07 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.14 2004-02-23 14:02:37 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -110,29 +110,12 @@ and type_term_node loc env = function
       Tbinop (t1, Bmod, t2), c_int
   | Tdot (t, x) ->
       let t = type_term env t in
-      begin match t.info.ctype_node with
-	| CTstruct (_,fl) ->
-	    Tdot (t, x), type_of_struct_field loc x fl
-	| CTunion (_,fl) -> 
-	    Tdot (t, x), type_of_union_field loc x fl
-	| CTstruct_named _ | CTunion_named _ ->
-            error loc "use of incomplete type"
-	| _ -> 
-	    error loc ("request for member `" ^ x ^ 
-		       "' in something not a structure or union")
-      end
+      Tdot (t, x), type_of_field loc env x t.info
   | Tarrow (t, x) ->
       let t = type_term env t in
       begin match t.info.ctype_node with
-	| CTpointer { ctype_node = CTstruct (_,fl) } -> 
-	    Tarrow (t, x), type_of_struct_field loc x fl
-	| CTpointer { ctype_node = CTunion (_,fl) } -> 
-	    Tarrow (t, x), type_of_union_field loc x fl
-	| CTpointer { ctype_node = CTstruct_named _ | CTunion_named _ } ->
-	    error loc "dereferencing pointer to incomplete type"
-	| CTpointer _ ->
-	    error loc ("request for member `" ^ x ^ 
-		       "' in something not a structure or union")
+	| CTpointer ty -> 
+	    Tarrow (t, x), type_of_field loc env x ty
 	| _ -> 
 	    error loc "invalid type argument of `->'"
       end

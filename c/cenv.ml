@@ -23,17 +23,10 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       eq_type ty1 ty2
   | CTstruct (s1, _), CTstruct (s2, _) ->
       s1 = s2
-  | CTstruct_named x, _ | _, CTstruct_named x ->
-      eprintf "%a / %a\n" print_type_node tn1 print_type_node tn2;
-      assert false
   | CTunion (u1, _), CTunion (u2, _) ->
       u1 = u2
-  | CTunion_named _, _ | _, CTunion_named _ ->
-      assert false
   | CTenum (e1, _), CTenum (e2, _) ->
       e1 = e2
-  | CTenum_named _, _ | _, CTenum_named _ ->
-      assert false
   | CTfun (pl1, ty1), CTfun (pl2, ty2) ->
       eq_type ty1 ty2 &&
       (try List.for_all2 (fun (ty1,_) (ty2,_) -> eq_type ty1 ty2) pl1 pl2
@@ -72,11 +65,43 @@ let is_null e = match e.texpr_node with
 (*s Global environment *)
 
 (* tagged types *)
-let (tags_t : (string, texpr ctype) Hashtbl.t) = Hashtbl.create 97
+
+type tag_kind = Struct | Union | Enum
+
+let tag_kind = function
+  | CTstruct _ -> Struct
+  | CTunion _ -> Union
+  | CTenum _ -> Enum
+  | _ -> assert false
+
+type tag_type_definition = Incomplete | Defined of texpr ctype_node
+
+type tag_type = { 
+  tag_kind : tag_kind;
+  tag_name : string; (* original source name *)
+  tag_uname: string; (* unique name used for further reference *)
+  mutable tag_type : tag_type_definition;
+}
+
+(* map from unique names to tagged types *)
+let (tags_t : (string, tag_type) Hashtbl.t) = Hashtbl.create 97
+
+let create_tag_type k n ty =
+  let rec fresh i = 
+    let un = n ^ "_" ^ string_of_int i in
+    if Hashtbl.mem tags_t un then fresh (succ i) else un
+  in
+  let un = if Hashtbl.mem tags_t n then fresh 0 else n in
+  let tt = 
+    { tag_kind = k; tag_name = n; 
+      tag_uname = un; tag_type = ty } 
+  in
+  Hashtbl.add tags_t un tt;
+  tt
 
 let clash_tag l s1 s2 = 
   let redef t n = error l (sprintf "redeclaration of `%s %s'" t n) in
-  match s1.ctype_node, s2.ctype_node with
+  match s1, s2 with
   | CTstruct (n,_), CTstruct _ -> redef "struct" n
   | CTunion (n,_), CTunion _ -> redef "union" n
   | CTenum (n,_), CTenum _ -> redef "enum" n
@@ -84,14 +109,6 @@ let clash_tag l s1 s2 =
     (CTstruct _ | CTunion _ | CTenum _) -> 
       error l (sprintf "`%s' defined as wrong kind of tag" n)
   | _ -> assert false
-
-let is_tag_type = Hashtbl.mem tags_t
-
-let find_tag_type = Hashtbl.find tags_t
-
-let add_tag_type l x s = 
-  if is_tag_type x then clash_tag l s (find_tag_type x);
-  Hashtbl.add tags_t x s
 
 (* typedefs *)
 
@@ -142,36 +159,88 @@ module Env = struct
 
   module M = Map.Make(String)
 
+  (* [tags] is the stack of blocks; 
+     each block maps a tag name to a tag type *)
   type t = { 
     vars : (texpr ctype * var_info) M.t; 
-    tags : texpr ctype M.t;
+    tags : (string, tag_type) Hashtbl.t list;
   }
 
-  let empty = { vars = M.empty; tags = M.empty }
+  (* note: the first hash table in [tags] is shared *)
+  let empty = { vars = M.empty; tags = [Hashtbl.create 17] }
 
+  let new_block env = { env with tags = Hashtbl.create 17 :: env.tags }
+
+  (* symbols *)
   let add x t info env = 
     { env with vars = M.add x (t,info) env.vars }
 
   let find x env = M.find x env.vars
 
-  (* add a local tagged type *)
-  let add_tag_type l x s env = 
-    if M.mem x env.tags then clash_tag l s (M.find x env.tags);
-    { env with tags = M.add x s env.tags }
+  (* tagged type *)
+  let find_tag n env =
+    let rec find = function
+      | [] -> raise Not_found
+      | h :: hl -> try Hashtbl.find h n with Not_found -> find hl
+    in
+    find env.tags
 
-  (* look for a tagged type first in locals then in globals *)
-  let find_tag_type x env = 
-    try M.find x env.tags with Not_found -> find_tag_type x
+  let find_tag_type loc env tyn = 
+    let tt = match tyn with
+      | CTstruct (n, Tag) | CTunion (n, Tag) | CTenum (n, Tag) ->
+          (try
+	     find_tag n env
+	   with Not_found -> 
+	     let tt = create_tag_type (tag_kind tyn) n Incomplete in
+	     Hashtbl.add (List.hd env.tags) n tt;
+	     tt)
+      | CTstruct (n, _) | CTunion (n, _) | CTenum (n, _) ->
+	   (try
+              let tt = Hashtbl.find (List.hd env.tags) n in
+	      begin match tt.tag_type with
+		| Incomplete ->
+                    (* tag already seen in this block but not yet defined *)
+                    tt.tag_type <- Defined tyn
+		| Defined tyn' ->  
+		    (* tag [n] already defined in current block *)
+		    clash_tag loc tyn tyn'
+	      end;
+	      tt
+	    with Not_found ->
+	      let tt = create_tag_type (tag_kind tyn) n (Defined tyn) in
+	      Hashtbl.add (List.hd env.tags) n tt;
+	      tt)
+      | _ ->
+	  assert false
+    in
+    match tt.tag_kind with
+      | Struct -> CTstruct (tt.tag_uname, Tag)
+      | Union -> CTunion (tt.tag_uname, Tag)
+      | Enum -> CTenum (tt.tag_uname, Tag)
 
 end
 
 (* Field access *)
 
-let rec type_of_field su l x = function
-  | [] -> error l (su ^ " has no member named `" ^ x ^ "'")
-  | (ty, y, _) :: _ when x = y -> ty
-  | _ :: fl -> type_of_field su l x fl
-
-let type_of_struct_field = type_of_field "structure"
-let type_of_union_field = type_of_field "union"
+let type_of_field loc env x ty = 
+  let rec lookup su = function
+    | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")
+    | (ty, y, _) :: _ when x = y -> ty
+    | _ :: fl -> lookup su fl
+  in
+  match ty.ctype_node with
+    | CTstruct (n, Tag) | CTunion (n, Tag) -> 
+        assert (Hashtbl.mem tags_t n);
+	let tt = Hashtbl.find tags_t n in
+	begin match tt.tag_type with
+	  | Incomplete -> error loc ("use of incomplete type")
+	  | Defined (CTstruct (_, Decl fl)) -> lookup "structure" fl
+	  | Defined (CTunion (_, Decl fl)) -> lookup "union" fl
+	  | Defined _ ->
+	      error loc ("request for member `" ^ x ^ 
+			 "' in something not a structure or union")
+	end
+    | CTstruct _ | CTunion _ -> assert false
+    | _ -> error loc ("request for member `" ^ x ^ 
+		      "' in something not a structure or union")
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.28 2004-02-13 08:42:07 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.29 2004-02-23 14:02:37 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -32,6 +32,8 @@ type cinteger = Char | Short | Int | Long | LongLong
 
 type cfloat = Float | Double | LongDouble
 
+type 'a tagged = Tag | Decl of 'a
+
 type 'expr ctype_node =
   | CTvoid
   | CTint of sign * cinteger
@@ -39,12 +41,9 @@ type 'expr ctype_node =
   | CTvar of string
   | CTarray of 'expr ctype * 'expr option
   | CTpointer of 'expr ctype
-  | CTstruct_named of string
-  | CTstruct of string * 'expr field list
-  | CTunion_named of string
-  | CTunion of string * 'expr field list
-  | CTenum_named of string
-  | CTenum of string * (string * 'expr option) list
+  | CTstruct of string * 'expr field list tagged
+  | CTunion of string * 'expr field list tagged
+  | CTenum of string * (string * 'expr option) list tagged
   | CTfun of 'expr parameter list * 'expr ctype
 
 and 'expr ctype = { 

@@ -186,9 +186,9 @@
       | Stype t :: sp when tyo = None ->
 	  base_type (Some t) sp
       | Sstruct_decl (so, pl) :: sp when tyo = None ->
-	  base_type (Some (CTstruct (fresh_name so, fields pl))) sp
+	  base_type (Some (CTstruct (fresh_name so, Decl (fields pl)))) sp
       | Sunion_decl (so, pl) :: sp when tyo = None ->
-	  base_type (Some (CTunion (fresh_name so, fields pl))) sp
+	  base_type (Some (CTunion (fresh_name so, Decl (fields pl)))) sp
       | (Stype _ | Sstruct_decl _ | Sunion_decl _) :: _ ->
 	  error "two or more data types in declaration"
       | _ :: sp ->
@@ -244,8 +244,7 @@
     if is_typedef specs then warning "useless keyword in empty declaration";
     let ty = interp_type true specs Dsimple in
     match ty.ctype_node with
-      | CTstruct _ | CTunion _ | CTenum _ 
-      | CTstruct_named _ | CTunion_named _ | CTenum_named _ ->
+      | CTstruct _ | CTunion _ | CTenum _ ->
           [ locate (Ctypedecl ty) ]
       | _ ->
 	  warning "empty declaration";
@@ -595,7 +594,7 @@ struct_or_union_specifier
         | struct_or_union LBRACE struct_declaration_list RBRACE 
 	    { if $1 then Sstruct_decl (None, $3) else Sunion_decl (None, $3) }
         | struct_or_union identifier/*ICI*/ 
-	    { Stype (if $1 then CTstruct_named $2 else CTunion_named $2) }
+	    { Stype (if $1 then CTstruct ($2, Tag) else CTunion ($2, Tag)) }
         ;
 
 struct_or_union
@@ -643,11 +642,11 @@ struct_declarator
 
 enum_specifier
         : ENUM LBRACE enumerator_list RBRACE 
-            { Stype (CTenum (fresh_name None, $3)) }
+            { Stype (CTenum (fresh_name None, Decl $3)) }
         | ENUM identifier/*ICI*/ LBRACE enumerator_list RBRACE 
-	    { Stype (CTenum ($2, $4)) }
+	    { Stype (CTenum ($2, Decl $4)) }
         | ENUM identifier/*ICI*/ 
-	    { Stype (CTenum_named $2) }
+	    { Stype (CTenum ($2, Tag)) }
         ;
 
 enumerator_list

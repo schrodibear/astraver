@@ -20,9 +20,6 @@ val find_sym : string -> tctype * var_info
 val add_typedef : Loc.t -> string -> tctype -> unit
 val find_typedef : string -> tctype
 
-val add_tag_type : Loc.t -> string -> tctype -> unit
-val find_tag_type : string -> tctype
-
 (* Logic environment *)
 val add_fun : string -> tctype list * tctype -> unit
 val find_fun : string -> tctype list * tctype
@@ -36,14 +33,15 @@ module Env : sig
   type t
 
   val empty : t
+
+  val new_block : t -> t
+
   val add : string -> tctype -> var_info -> t -> t
   val find : string -> t -> tctype * var_info
 
-  val add_tag_type : Loc.t -> string -> tctype -> t -> t
-  val find_tag_type : string -> t -> tctype
+  val find_tag_type : Loc.t -> t -> texpr ctype_node -> texpr ctype_node
 
 end
 
-val type_of_struct_field : Loc.t -> string -> texpr field list -> tctype
-val type_of_union_field : Loc.t -> string -> texpr field list -> tctype
+val type_of_field : Loc.t -> Env.t -> string -> tctype -> tctype
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.30 2004-02-20 16:27:09 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.31 2004-02-23 14:02:38 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -121,32 +121,20 @@ and type_type_node loc env = function
       CTarray (type_type loc env tyn, type_int_expr_option env eo)
   | CTpointer tyn -> 
       CTpointer (type_type loc env tyn)
-  | CTstruct_named x | CTunion_named x | CTenum_named x as ty ->
-      begin 
-	try 
-	  (Env.find_tag_type x env).ctype_node
-	with Not_found -> 
-	  (* TODO: may fail on "storage size of `x' isn't known" *)
-	  ty
-      end
-  | CTstruct (x, fl) ->
-      CTstruct (x, List.map (type_field loc env) fl)
-  | CTunion (x, fl) ->
-      CTunion (x, List.map (type_field loc env) fl)
-  | CTenum (x, fl) ->
+  | CTstruct (_, Tag) | CTunion (_, Tag) | CTenum (_, Tag) as tyn ->
+       Env.find_tag_type loc env tyn		       
+  | CTstruct (x, Decl fl) ->
+      let tyn = CTstruct (x, Decl (List.map (type_field loc env) fl)) in
+      Env.find_tag_type loc env tyn
+  | CTunion (x, Decl fl) ->
+      let tyn = CTunion (x, Decl (List.map (type_field loc env) fl)) in
+      Env.find_tag_type loc env tyn
+  | CTenum (x, Decl fl) ->
       let type_enum_field (f, eo) = (f, type_int_expr_option env eo) in
-      CTenum (x, List.map type_enum_field fl)
+      let tyn = CTenum (x, Decl (List.map type_enum_field fl)) in
+      Env.find_tag_type loc env tyn
   | CTfun (pl, tyn) ->
       CTfun (List.map (type_parameter loc env) pl, type_type loc env tyn)
-
-(* type a type and adds it to the local env if it is a declaration *)
-and declare_local_type l ty env = 
-  let ty' = type_type l env ty in
-  match ty.ctype_node with
-    | CTstruct (n,_) | CTunion (n,_) | CTenum (n,_) -> 
-	ty', Env.add_tag_type l n ty' env
-    | _ -> 
-	ty', env
 
 (*s Expressions *)
 
@@ -173,29 +161,12 @@ and type_expr_node loc env = function
       (TEvar var_info),t
   | CEdot (e, x) ->
       let te = type_lvalue env e in
-      begin match te.texpr_type.ctype_node with
-	| CTstruct (_,fl) ->
-	    TEdot (te, x), type_of_struct_field loc x fl
-	| CTunion (_,fl) -> 
-	    TEdot (te, x), type_of_union_field loc x fl
-	| CTstruct_named _ | CTunion_named _ ->
-            error loc "use of incomplete type"
-	| _ -> 
-	    error loc ("request for member `" ^ x ^ 
-		       "' in something not a structure or union")
-      end
+      TEdot (te, x), type_of_field loc env x te.texpr_type
   | CEarrow (e, x) ->
       let te = type_lvalue env e in
       begin match te.texpr_type.ctype_node with
-	| CTpointer { ctype_node = CTstruct (_,fl) } -> 
-	    TEarrow (te, x), type_of_struct_field loc x fl
-	| CTpointer { ctype_node = CTunion (_,fl) } -> 
-	    TEarrow (te, x), type_of_union_field loc x fl
-	| CTpointer { ctype_node = CTstruct_named _ | CTunion_named _ } ->
-	    error loc "dereferencing pointer to incomplete type"
-	| CTpointer _ ->
-	    error loc ("request for member `" ^ x ^ 
-		       "' in something not a structure or union")
+	| CTpointer ty ->
+	    TEarrow (te, x), type_of_field loc env x ty
 	| _ -> 
 	    error loc "invalid type argument of `->'"
       end
@@ -573,20 +544,20 @@ and type_block env et (dl,sl) =
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
 	(* TODO: ty = void interdit *)
-	let ty',env' = declare_local_type d.loc ty env in
+	let ty' = type_type d.loc env ty in
 	let i = type_initializer env ty' i in
 	let info = default_var_info x in
-	let env' = Env.add x ty' info env' in
+	let env' = Env.add x ty' info env in
 	let dl',env'' = type_decls env' dl in
 	{ d with node = Tdecl (ty', info, i) } :: dl', env''
     | { node = Ctypedecl ty } as d :: dl ->
-	let ty',env' = declare_local_type d.loc ty env in
-	let dl',env'' = type_decls env' dl in
-	{ d with node = Ttypedecl ty' } :: dl', env''
+	let ty' = type_type d.loc env ty in
+	let dl',env' = type_decls env dl in
+	{ d with node = Ttypedecl ty' } :: dl', env'
     | { loc = l } :: _ ->
 	error l "unsupported local declaration"
   in
-  let dl',env' = type_decls env dl in
+  let dl',env' = type_decls (Env.new_block env) dl in
   let rec type_bl = function
     | [] -> 
 	[], mt_status
@@ -611,12 +582,6 @@ let type_parameters loc env pl =
     pl 
     ([], env)
   
-let declare_type l ty = 
-  let ty' = type_type l Env.empty ty in
-  match ty.ctype_node with
-  | CTstruct (n,_) | CTunion (n,_) | CTenum (n,_) -> add_tag_type l n ty'; ty'
-  | _ -> ty'
-
 let type_logic_parameters env = 
   List.map (fun (ty, _) -> type_logic_type env ty)
 
@@ -637,14 +602,14 @@ let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
       type_spec_decl ofs s
   | Ctypedef (ty, x) -> 
-      let ty = declare_type d.loc ty in
+      let ty = type_type d.loc Env.empty ty in
       add_typedef d.loc x ty;
       Ttypedef (ty, x)
   | Ctypedecl ty -> 
-      let ty = declare_type d.loc ty in
+      let ty = type_type d.loc Env.empty ty in
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
-      let ty = declare_type d.loc ty in
+      let ty = type_type d.loc Env.empty ty in
       add_sym d.loc x ty;
       let info = default_var_info x in
       Tdecl (ty, info, type_initializer Env.empty ty i)

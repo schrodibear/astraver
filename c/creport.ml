@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.5 2004-02-20 16:27:09 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.6 2004-02-23 14:02:38 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -35,12 +35,16 @@ and print_type_node fmt = function
   | CTarray (ty, None) -> fprintf fmt "%a[]" print_type ty
   | CTarray (ty, Some e) -> fprintf fmt "%a[_]" print_type ty
   | CTpointer ty -> fprintf fmt "%a*" print_type ty
-  | CTstruct_named x -> fprintf fmt "struct %s" x
-  | CTstruct (_, fl) -> fprintf fmt "struct _ { %a}" print_fields fl
-  | CTunion_named x -> fprintf fmt "union %s" x
-  | CTunion (_, fl) -> fprintf fmt "union _ { %a}" print_fields fl
-  | CTenum_named x -> fprintf fmt "enum %s" x
-  | CTenum (_, el) -> fprintf fmt "enum _ { %a}" print_enums el
+  | CTstruct (x, Tag) -> 
+      fprintf fmt "struct %s" x
+  | CTstruct (x, Decl fl) -> 
+      fprintf fmt "struct %s { %a}" x print_fields fl
+  | CTunion (x, Tag) -> 
+      fprintf fmt "union %s <incomplete>" x
+  | CTunion (x, Decl fl) -> 
+      fprintf fmt "union %s { %a}" x print_fields fl
+  | CTenum (x, Tag) -> fprintf fmt "enum %s" x
+  | CTenum (x, Decl el) -> fprintf fmt "enum %s { %a}" x print_enums el
   | CTfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
 
 and print_sign fmt = function

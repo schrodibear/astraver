@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.7 2004-02-10 10:47:14 filliatr Exp $ i*)
+(*i $Id: cltyping.mli,v 1.8 2004-02-23 14:02:38 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -30,8 +30,8 @@ val type_loop_annot : Env.t -> parsed_loop_annot -> Cast.loop_annot
 val type_logic_type : Env.t -> parsed_logic_type -> tctype
 
 val noattr : 'a ctype_node -> 'a ctype
-val c_void : 'a ctype
-val c_int : 'a ctype
-val c_float : 'a ctype
-val c_string : 'a ctype
+val c_void : tctype
+val c_int : tctype
+val c_float : tctype
+val c_string : tctype
 val c_array : 'a ctype -> 'a ctype
