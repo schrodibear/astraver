@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.99 2004-10-11 11:17:44 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.100 2004-10-11 12:47:19 hubert Exp $ i*)
 
 
 open Format
@@ -178,7 +178,7 @@ let rec interp_term label old_label t =
 and interp_term_address  label old_label e = match e.term_node with
   | Tvar v -> 
       begin match e.term_type.ctype_node with
-	| CTstruct _ | CTunion _ -> LVar v.var_name
+	| CTstruct _ | CTunion _ -> LVar v.var_unique_name
 	| _ -> unsupported "& operator"
       end
   | Tunop (Ustar, e1) -> 
@@ -371,7 +371,8 @@ let rec interp_expr e =
     | TEconstant (FloatConstant c) ->
 	Cte(Prim_float(float_of_string c))
     | TEvar(v) -> 
-	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
+	let n = v.var_unique_name in
+	if v.var_is_assigned then Deref n else Var n
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | TEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
 		 |Blt_float | Bgt_float | Ble_float | Bge_float 
@@ -394,7 +395,8 @@ let rec interp_expr e =
 	  match interp_lvalue e1 with
 	    | LocalRef(v) ->
 		(* v := e2; !v *)
-		append (Assign(v.var_name,interp_expr e2)) (Deref v.var_name)
+		let n = v.var_unique_name in
+		append (Assign(n,interp_expr e2)) (Deref n)
 	    | HeapRef(var,e1) ->
 		(* let tmp1 = e1 in 
 		   let tmp2 = e2 in upd var tmp1 tmp2; tmp2 *)
@@ -412,11 +414,12 @@ let rec interp_expr e =
 	begin match interp_lvalue e1 with
 	  (* v := op !v e2; !v *)
 	  | LocalRef(v) ->
+	      let n = v.var_unique_name in
 	      append
-	        (Assign(v.var_name,
+	        (Assign(n,
 			make_app (interp_bin_op op) 
-			  [Deref(v.var_name); interp_expr e2]))
-	        (Deref v.var_name)
+			  [Deref n; interp_expr e2]))
+	        (Deref n)
 	  | HeapRef(var,e1) -> 
 	      (* let tmp1 = e1 in
 		 let tmp2 = op (acc var e1) e2 in
@@ -475,7 +478,8 @@ let rec interp_expr e =
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
 		in
-		build_complex_app (Var (v.var_name ^ "_parameter")) targs
+		build_complex_app (Var (v.var_unique_name ^ "_parameter")) 
+		  targs
 	    | _ -> 
 		unsupported "call of a non-variable function"
 	end
@@ -533,17 +537,18 @@ and interp_incr_expr op e =
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
 		(* let tmp = !v in v:= op tmp 1; tmp *)
-		Let("caduceus",Deref(v.var_name),
+		Let("caduceus",Deref(v.var_unique_name),
 		    append 
-		      (Assign(v.var_name,
+		      (Assign(v.var_unique_name,
 			      make_app top [Var "caduceus";one]))
 		      (Var "caduceus"))
 	    | Uprefix_dec | Uprefix_inc ->
 		(* v := op !v 1; !v *)
+		let n = v.var_unique_name in
 		append 
-		  (Assign(v.var_name,
-			  App(App(Var top, Deref(v.var_name)), one)))
-		  (Deref v.var_name)
+		  (Assign(n,
+			  App(App(Var top, Deref n), one)))
+		  (Deref n)
 	end
     | HeapRef(var,e') ->
 	begin
@@ -596,7 +601,7 @@ and interp_lvalue e =
 and interp_address e = match e.texpr_node with
   | TEvar v -> 
       begin match e.texpr_type.ctype_node with
-	| CTstruct _ | CTunion _ -> Deref v.var_name
+	| CTstruct _ | CTunion _ -> Deref v.var_unique_name
 	| _ -> unsupported "& operator"
       end
   | TEunary (Ustar, e1) ->
@@ -630,7 +635,7 @@ and interp_statement_expr e =
 	begin
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
-		Assign(v.var_name,interp_expr e)
+		Assign(v.var_unique_name,interp_expr e)
 	    | HeapRef(var,e1) ->
 		(* upd var e1 e *)
 		(build_complex_app (Var "upd_")
@@ -641,8 +646,8 @@ and interp_statement_expr e =
 	begin
 	  match interp_lvalue e with
 	    | LocalRef v ->
-		Assign(v.var_name,
-		       make_app top [Deref(v.var_name); one])
+		Assign(v.var_unique_name,
+		       make_app top [Deref(v.var_unique_name); one])
 	    | HeapRef(var,e1) -> 
 		(* let tmp1 = e1 in
 		   let tmp2 = acc var tmp1 in 
@@ -663,7 +668,8 @@ and interp_statement_expr e =
 		  | _ -> List.map interp_expr args
 		in
 		let app = 
-		  build_complex_app (Var (v.var_name ^ "_parameter")) targs
+		  build_complex_app (Var (v.var_unique_name ^ "_parameter")) 
+		    targs
 		in
 		if e.texpr_type.ctype_node = CTvoid then
 		  app
@@ -676,9 +682,10 @@ and interp_statement_expr e =
 	begin
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
-		Assign(v.var_name,
+		let n = v.var_unique_name in
+		Assign(n,
 		       make_app (interp_bin_op op) 
-			 [Deref(v.var_name); interp_expr e])
+			 [Deref n; interp_expr e])
 	    | HeapRef(var,e1) -> 
 		(* let tmp1 = e1 in
 		   let tmp2 = acc var e1
@@ -737,7 +744,7 @@ let collect_locations before acc loc =
 		  in
 		  var, Some loc
 	      | Tvar v ->
-		  v.var_name, None
+		  v.var_unique_name, None
 	      | _ ->
 		  assert false
 	  end
@@ -849,7 +856,7 @@ let interp_decl d acc =
   match d.node with 
     | Tdecl(ctype,v,init) -> 
 	lprintf 
-	  "translating local declaration of %s@." v.var_name;
+	  "translating local declaration of %s@." v.var_unique_name;
 	let tinit =
 	  match init with 
 	    | Inothing ->
@@ -868,9 +875,9 @@ let interp_decl d acc =
 	    | Ilist _ -> unsupported "structured initializer for local var"
 	in
 	if v.var_is_assigned then
-	  Let_ref(v.var_name,tinit,acc)
+	  Let_ref(v.var_unique_name,tinit,acc)
 	else
-	  Let(v.var_name,tinit,acc)
+	  Let(v.var_unique_name,tinit,acc)
     | Ttypedef _
     | Ttypedecl { ctype_node = CTstruct _ | CTunion _ } -> 
 	acc
@@ -1308,7 +1315,7 @@ let interp_function_spec id sp ty pl =
       tpl 
       annot_type
   in
-  Param (false, id.var_name ^ "_parameter", ty)
+  Param (false, id.var_unique_name ^ "_parameter", ty)
 
 let interp_type loc ctype = match ctype.ctype_node with
   | CTenum (e, _) ->
@@ -1344,12 +1351,12 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ttypedecl _ ->
       assert false
   | Tdecl(ctype,v,init) -> 
-      lprintf "translating global declaration of %s@." v.var_name;
+      lprintf "translating global declaration of %s@." v.var_unique_name;
       begin match init with 
 	| Inothing ->
 	    ()
 	| _ -> 
-	    warning decl.loc ("ignoring initializer for " ^ v.var_name);
+	    warning decl.loc ("ignoring initializer for " ^ v.var_unique_name);
       end;
       why
   | Tfunspec(spec,ctype,id,params) -> 
@@ -1357,7 +1364,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
        prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
       reset_tmp_var ();
-      let f = id.var_name in
+      let f = id.var_unique_name in
       lprintf "translating function %s@." f;
       begin try
 	let pre,post = interp_spec id.function_reads id.function_writes spec in
