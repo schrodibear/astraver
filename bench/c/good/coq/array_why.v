@@ -3,13 +3,18 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/array.why", characters 349-452 *)
+(* Why obligation from file "why/array.why", characters 654-757 *)
 Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
+                (forall (counter2:Z),
+                 (forall (counter:Z),
+                  (((0 <= counter /\ counter < 3) /\ 0 <= counter2 /\
+                   counter2 < 3) /\ counter <> counter2 ->
+                   ~((shift t counter) = (shift t counter2))))) /\
                 (valid_range alloc t 0 3) /\
                 (forall (counter:Z),
                  (0 <= counter /\ counter < 3 ->
@@ -19,13 +24,18 @@ Proof.
 intuition; subst; auto with *.
 Save.
 
-(* Why obligation from file "why/array.why", characters 349-452 *)
+(* Why obligation from file "why/array.why", characters 654-757 *)
 Lemma getcell_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
+                (forall (counter2:Z),
+                 (forall (counter:Z),
+                  (((0 <= counter /\ counter < 3) /\ 0 <= counter2 /\
+                   counter2 < 3) /\ counter <> counter2 ->
+                   ~((shift t counter) = (shift t counter2))))) /\
                 (valid_range alloc t 0 3) /\
                 (forall (counter:Z),
                  (0 <= counter /\ counter < 3 ->

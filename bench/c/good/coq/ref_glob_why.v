@@ -45,13 +45,18 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 731-746 *)
+(* Why obligation from file "why/ref_glob.why", characters 1036-1051 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre4: (acc intP (shift (acc intPP t) 1)) = 2 /\
+                (forall (counter2:Z),
+                 (forall (counter:Z),
+                  (((0 <= counter /\ counter < 1) /\ 0 <= counter2 /\
+                   counter2 < 1) /\ counter <> counter2 ->
+                   ~((shift t counter) = (shift t counter2))))) /\
                 (valid_range alloc t 0 1) /\
                 (forall (counter:Z),
                  (0 <= counter /\ counter < 1 ->
@@ -61,24 +66,29 @@ Proof.
  intuition.
 assert (0<=0<1).
 omega.
-generalize (H2 0 H0).
+generalize (H3 0 H2).
 intro.
-rewrite shift_zero in H3.
+rewrite shift_zero in H4.
 assert (0<=0<=3).
 omega.
-generalize (valid_range_valid_shift alloc t 0 3 0 H3 H4).
+generalize (valid_range_valid_shift alloc t 0 3 0 H4 H5).
 intro.
-rewrite shift_zero in H5.
+rewrite shift_zero in H6.
 Admitted.
 
 
-(* Why obligation from file "why/ref_glob.why", characters 465-858 *)
+(* Why obligation from file "why/ref_glob.why", characters 465-1163 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre4: (acc intP (shift (acc intPP t) 1)) = 2 /\
+                (forall (counter2:Z),
+                 (forall (counter:Z),
+                  (((0 <= counter /\ counter < 1) /\ 0 <= counter2 /\
+                   counter2 < 1) /\ counter <> counter2 ->
+                   ~((shift t counter) = (shift t counter2))))) /\
                 (valid_range alloc t 0 1) /\
                 (forall (counter:Z),
                  (0 <= counter /\ counter < 1 ->
@@ -92,7 +102,7 @@ Lemma f3_impl_po_2 :
 Proof.
 intuition.
 rewrite shift_zero; auto.
-rewrite H5;auto.
+rewrite H6;auto.
 Admitted.
 (*
 apply unchanged_pointer_intro.
@@ -103,7 +113,7 @@ rewrite shift_zero in H5; auto.
 Qed.
 *)
 
-(* Why obligation from file "why/ref_glob.why", characters 985-1012 *)
+(* Why obligation from file "why/ref_glob.why", characters 1290-1317 *)
 Lemma f4_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c2: ((memory) pointer)),
@@ -117,7 +127,7 @@ intuition.
 subst;auto.
 Admitted.
 
-(* Why obligation from file "why/ref_glob.why", characters 947-1012 *)
+(* Why obligation from file "why/ref_glob.why", characters 1252-1317 *)
 Lemma f4_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (c1: ((memory) pointer)),
@@ -165,7 +175,7 @@ auto.
 caduceus.
 Admitted.
 
-(* Why obligation from file "why/ref_glob.why", characters 1337-1484 *)
+(* Why obligation from file "why/ref_glob.why", characters 1642-1789 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -179,7 +189,7 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 1642-1669 *)
+(* Why obligation from file "why/ref_glob.why", characters 1947-1974 *)
 Lemma h_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -194,7 +204,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 1605-1669 *)
+(* Why obligation from file "why/ref_glob.why", characters 1910-1974 *)
 Lemma h_impl_po_2 : 
   forall (p: pointer),
   forall (alloc: alloc_table),

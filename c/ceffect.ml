@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.75 2005-01-19 16:19:19 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.76 2005-01-20 10:01:23 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -795,6 +795,10 @@ let rec validity x ty size =
 	let i = default_var_info "counter" in
 	let vari = { nterm_node = NTvar i; 
 		     nterm_loc = x.nterm_loc;
+		     nterm_type = c_int } in
+	let j = default_var_info "counter2" in
+	let varj = { nterm_node = NTvar j; 
+		     nterm_loc = x.nterm_loc;
 		     nterm_type = c_int } in	  
 	let term_sup = { nterm_node = NTconstant (IntConstant 
 						    (Int64.to_string size)); 
@@ -803,21 +807,45 @@ let rec validity x ty size =
 	let ineq = NPand 
 		     (NPrel (Cnorm.nzero, Le, vari),
 		      NPrel (vari, Lt, 
-			       term_sup)) in
-	NPand (
+			       term_sup)) in	
+	let jneq = NPand 
+		     (NPrel (Cnorm.nzero, Le, varj),
+		      NPrel (varj, Lt, 
+			     term_sup)) in
+	let (pre1,pre2) = validity 
+			(noattr x.nterm_loc ty 
+			   (NTbinop (x,Clogic.Badd,vari)))
+					     ty' size' in
+	(NPand (
 	  NPvalid_range (x, Cnorm.nzero,term_sup),
 	  NPforall (
 	    [c_int,i],
-	    NPimplies(ineq,validity 
-			(noattr x.nterm_loc ty 
-			   (NTbinop (x,Clogic.Badd,vari)))
-					     ty' size')))
+	    NPimplies(ineq,pre1))),
+	  NPforall (
+	    (c_int,j)::[(c_int,i)],
+	    NPimplies(NPand (NPand (ineq,jneq),
+			     Invariant.diff x.nterm_loc vari varj),
+		      NPand (Invariant.diff x.nterm_loc 
+			       (noattr x.nterm_loc ty 
+				  (NTbinop (x,Clogic.Badd,vari)))
+			       (noattr x.nterm_loc ty 
+				  (NTbinop (x,Clogic.Badd,varj))),
+			       pre2))))
+    | Tstruct (n) ->
+	let term_sup = { nterm_node = NTconstant (IntConstant 
+						    (Int64.to_string size)); 
+			 nterm_loc = x.nterm_loc;
+			 nterm_type = c_int } in
+	let name = "internal_separation_" ^ n in
+	NPvalid_range (x, Cnorm.nzero,term_sup), 
+	NPapp (snd (find_pred name), [x])
+				
     | _ ->  
 	let term_sup = { nterm_node = NTconstant (IntConstant 
 						    (Int64.to_string size)); 
 			 nterm_loc = x.nterm_loc;
 			 nterm_type = c_int } in
-      NPvalid_range (x, Cnorm.nzero,term_sup)
+      NPvalid_range (x, Cnorm.nzero,term_sup), NPtrue
 
 let decl d =
   match d.Cast.node with
@@ -840,10 +868,12 @@ let decl d =
 			 nterm_loc = d.loc;
 			 nterm_type = ty } in
 	       (*if s <> Int64.one then*)
-		  (let name = "valid_range_" ^ v.var_name in
-		   let pre = validity t typ s in
-		   add_strong_invariant name pre (HeapVarSet.singleton v))
-		(*else
+	       let name1 = "valid_range_" ^ v.var_name in
+	       let name2 = "internal_separation_array_" ^ v.var_name in
+	       let (pre1,pre2) = validity t typ s in
+	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
+	       add_strong_invariant name2 pre2 (HeapVarSet.singleton v);
+              (*else
 		  let name = "valid_var_" ^ v.var_name in
 		  let pre = NPvalid t in
 		  add_strong_invariant name pre (HeapVarSet.singleton v) 

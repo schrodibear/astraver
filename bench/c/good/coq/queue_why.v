@@ -3,12 +3,13 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/queue.why", characters 264-292 *)
+(* Why obligation from file "why/queue.why", characters 311-339 *)
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (q: pointer),
   forall (t: pointer),
-  forall (Pre34: (valid_range alloc t 0 5) /\ (valid_range alloc q 0 1) /\
+  forall (Pre34: (internal_separation_queue q) /\
+                 (valid_range alloc t 0 5) /\ (valid_range alloc q 0 1) /\
                  (valid_queue q) /\ (internal_separation_queue q)),
   forall (caduceus_11: pointer),
   forall (Post3: caduceus_11 = (shift t 0)),
@@ -19,7 +20,7 @@ subst.
 auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 227-292 *)
+(* Why obligation from file "why/queue.why", characters 274-339 *)
 Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -31,7 +32,8 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (length: ((memory) Z)),
   forall (q: pointer),
   forall (t: pointer),
-  forall (Pre34: (valid_range alloc t 0 5) /\ (valid_range alloc q 0 1) /\
+  forall (Pre34: (internal_separation_queue q) /\
+                 (valid_range alloc t 0 5) /\ (valid_range alloc q 0 1) /\
                  (valid_queue q) /\ (internal_separation_queue q)),
   forall (caduceus_11: pointer),
   forall (Post3: caduceus_11 = (shift t 0)),
@@ -102,7 +104,7 @@ caduceus;unfold valid_range in *|- *;intuition.
 Save.
 
 
-(* Why obligation from file "why/queue.why", characters 1672-1691 *)
+(* Why obligation from file "why/queue.why", characters 1766-1785 *)
 Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -115,6 +117,7 @@ Lemma pop_impl_po_1 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 (internal_separation_queue q) /\
                  (valid_range alloc q 0 1) /\ (valid_queue q) /\
                  (internal_separation_queue q)),
   (valid alloc q).
@@ -122,7 +125,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 1824-1847 *)
+(* Why obligation from file "why/queue.why", characters 1918-1941 *)
 Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -135,6 +138,7 @@ Lemma pop_impl_po_2 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 (internal_separation_queue q) /\
                  (valid_range alloc q 0 1) /\ (valid_queue q) /\
                  (internal_separation_queue q)),
   forall (Pre5: (valid alloc q)),
@@ -149,7 +153,7 @@ subst;auto.
 Save.
 
 
-(* Why obligation from file "why/queue.why", characters 1897-2152 *)
+(* Why obligation from file "why/queue.why", characters 1991-2246 *)
 Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -164,6 +168,7 @@ Lemma pop_impl_po_3 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 (internal_separation_queue q) /\
                  (valid_range alloc q 0 1) /\ (valid_queue q) /\
                  (internal_separation_queue q)),
   forall (Pre5: (valid alloc q)),
@@ -247,15 +252,15 @@ Lemma pop_impl_po_3 :
     (valid alloc result)) /\ (valid alloc result))).
 Proof.
 intuition;subst;auto;caduceus.
-rewrite acc_upd_eq in H10;auto.
+rewrite acc_upd_eq in H11;auto.
 assert (1+q# first <= q # length).
 omega.
 generalize (Zle_lt_or_eq (1 + q # first) (q # length) H6).
 intros [h|h];auto.
-elim H10;auto.
+elim H11;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3776-3795 *)
+(* Why obligation from file "why/queue.why", characters 3917-3936 *)
 Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -268,6 +273,7 @@ Lemma push_impl_po_1 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 (internal_separation_queue q) /\
                  (valid_range alloc q 0 1) /\ (valid_queue q) /\
                  (internal_separation_queue q)),
   (valid alloc q).
@@ -276,7 +282,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3920-3942 *)
+(* Why obligation from file "why/queue.why", characters 4061-4083 *)
 Lemma push_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -289,6 +295,7 @@ Lemma push_impl_po_2 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 (internal_separation_queue q) /\
                  (valid_range alloc q 0 1) /\ (valid_queue q) /\
                  (internal_separation_queue q)),
   forall (Pre5: (valid alloc q)),
@@ -302,7 +309,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3988-4181 *)
+(* Why obligation from file "why/queue.why", characters 4129-4322 *)
 Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
@@ -318,6 +325,7 @@ Lemma push_impl_po_3 :
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
+                 (internal_separation_queue q) /\
                  (valid_range alloc q 0 1) /\ (valid_queue q) /\
                  (internal_separation_queue q)),
   forall (Pre5: (valid alloc q)),
@@ -401,15 +409,15 @@ Lemma push_impl_po_3 :
     (valid alloc result))).
 Proof.
 intuition;subst;auto;caduceus.
-rewrite acc_upd_eq in H10;auto.
+rewrite acc_upd_eq in H11;auto.
 assert (1+q# last <= q # length).
 omega.
 generalize (Zle_lt_or_eq (1 + q # last) (q # length) H6).
 intros [h|h];auto.
-elim H10;auto.
+elim H11;auto.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 5933-5952 *)
+(* Why obligation from file "why/queue.why", characters 6121-6140 *)
 Lemma test_impl_po_1 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -423,19 +431,20 @@ Lemma test_impl_po_1 :
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
-                (valid_range alloc q 0 1) /\ (valid_queue q) /\
-                (internal_separation_queue q)),
+                (internal_separation_queue q) /\ (valid_range alloc q 0 1) /\
+                (valid_queue q) /\ (internal_separation_queue q)),
   ((acc empty q) = 0 /\
   ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
   (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <= (acc last q) /\
-  (acc last q) < (acc length q)) /\ (valid_range alloc q 0 1) /\
-  (valid_queue q) /\ (internal_separation_queue q).
+  (acc last q) < (acc length q)) /\ (internal_separation_queue q) /\
+  (valid_range alloc q 0 1) /\ (valid_queue q) /\
+  (internal_separation_queue q).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/queue.why", characters 5916-5957 *)
+(* Why obligation from file "why/queue.why", characters 6104-6145 *)
 Lemma test_impl_po_2 : 
   forall (q1: pointer),
   forall (alloc: alloc_table),
@@ -451,14 +460,14 @@ Lemma test_impl_po_2 :
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
-                (valid_range alloc q 0 1) /\ (valid_queue q) /\
-                (internal_separation_queue q)),
+                (internal_separation_queue q) /\ (valid_range alloc q 0 1) /\
+                (valid_queue q) /\ (internal_separation_queue q)),
   forall (Pre3: ((acc empty q) = 0 /\
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
-                (valid_range alloc q 0 1) /\ (valid_queue q) /\
-                (internal_separation_queue q)),
+                (internal_separation_queue q) /\ (valid_range alloc q 0 1) /\
+                (valid_queue q) /\ (internal_separation_queue q)),
   forall (empty0: ((memory) Z)),
   forall (first0: ((memory) Z)),
   forall (full0: ((memory) Z)),
