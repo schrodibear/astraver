@@ -14,3 +14,4 @@ batch.el
 a.*
 ctest.c
 *.rv
+*.wol
