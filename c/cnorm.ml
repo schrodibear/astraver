@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.18 2005-01-20 16:34:56 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.19 2005-01-24 15:20:17 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -145,7 +145,7 @@ and expr_node loc ty t =
 	  if var_requires_indirection var_info then
 	    ne_star loc ty t'
 	  else t'
-      | TEarrow (lvalue ,var_info) -> 
+      | TEarrow (lvalue,var_info) -> 
 	  let t' = NEarrow ((expr lvalue), var_info) in
 	  if var_requires_indirection var_info then
 	    ne_star loc ty t'

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.72 2005-01-12 08:26:06 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.73 2005-01-24 15:20:17 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -82,6 +82,12 @@ let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
 
 open Info
 
+let set_referenced t = match t.term_node with
+  | Clogic.Tvar x -> set_is_referenced x
+  | Tdot (_,f) | Tarrow(_,f) -> set_is_referenced f
+  | _ -> ()
+
+
 let rec type_term env t =
   let t', ty = type_term_node t.lexpr_loc env t.lexpr_node in
   { term_node = t'; term_loc = t.lexpr_loc; term_type = ty }
@@ -124,6 +130,7 @@ and type_term_node loc env = function
       end
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
+      set_referenced t;
       Tunop (Uamp, t), noattr (Tpointer t.term_type)
   | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
       assert false
