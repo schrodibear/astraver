@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.70 2004-10-18 08:51:22 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.71 2004-10-18 08:58:04 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -215,13 +215,12 @@ and type_type_node loc env = function
       in
       tyn
   | CTfun (pl, tyn) ->
-      let pl = List.map (type_parameter loc env) pl in
+      let pl = List.map (fun (ty,x) -> (type_type loc env ty, x)) pl in
       let pl = match pl with
 	| [{ctype_node = CTvoid},_] -> []
 	| _ -> pl
       in
-      CTtyped_fun (pl, type_type loc env tyn)
-  | CTtyped_fun _ -> assert false
+      CTfun (pl, type_type loc env tyn)
 
 and type_integer loc env = function
   | Char | Short | Int | Long | LongLong as i -> i
@@ -445,7 +444,7 @@ and type_expr_node loc env = function
       let e = type_expr env e in
       let el = List.map (type_expr env) el in
       begin match e.texpr_type.ctype_node with
-	| CTtyped_fun (tl, ty) ->
+	| CTfun (tl, ty) ->
 	    let rec check_args i el' = function
 	      | [], [] -> 
 		  TEcall (e, List.rev el'), ty
@@ -496,8 +495,6 @@ and check_lvalue loc e = match e.texpr_node with
       error loc "invalid lvalue"
 
 and type_expr_option env eo = option_app (type_expr env) eo
-
-and type_parameter loc env (ty, x) = (type_type loc env ty, default_var_info x)
 
 and type_field loc env (ty, x, bf) = 
   let ty = type_type loc env ty in
@@ -827,7 +824,8 @@ let type_decl d = match d.node with
       let ty = type_type d.loc Env.empty ty in
       let info = add_sym d.loc x ty (default_var_info x) in
       begin match ty.ctype_node with
-	| CTtyped_fun (pl, ty) ->
+	| CTfun (pl, ty) ->
+	    let pl = List.map (fun (ty,x) -> (ty,default_var_info x)) pl in
 	    Tfunspec (function_spec d.loc x None, ty, info, pl)
 	| _ -> 
 	    info.var_is_static <- true;
@@ -844,7 +842,8 @@ let type_decl d = match d.node with
       let s = function_spec d.loc f (Some s) in
       let info = default_var_info f in
       info.has_assigns <- (s.assigns <> None);
-      let info = add_sym d.loc f (noattr (CTtyped_fun (pl, ty))) info in
+      let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
+      let info = add_sym d.loc f (noattr (CTfun (spl, ty))) info in
       Tfunspec (s, ty, info, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
@@ -854,7 +853,8 @@ let type_decl d = match d.node with
       let s = function_spec d.loc f s in
       let info = default_var_info f in
       info.has_assigns <- (s.assigns <> None);
-      let info = add_sym d.loc f (noattr (CTtyped_fun (pl, ty))) info in
+      let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
+      let info = add_sym d.loc f (noattr (CTfun (spl, ty))) info in
       let bl,st = type_statement env et bl in
       if st.term && et <> None then
 	warning d.loc "control reaches end of non-void function";
@@ -919,8 +919,8 @@ let sizeof loc =
 	   | Defined _ -> 
 	       assert false)
     | CTenum _ -> of_int 4
-    | CTtyped_fun _
     | CTfun _ -> of_int 4 (* function pointer? *)
   in
   sizeof
+
 

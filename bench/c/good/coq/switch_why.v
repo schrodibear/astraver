@@ -93,85 +93,84 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1093-1120 *)
+(* Why obligation from file "why/switch.why", characters 1087-1110 *)
 Lemma f1a_impl_po_1 : 
-  forall (x_0: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x_0),
+  forall (Post15: caduceus_1 = x),
   forall (Test8: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
-  forall (y_0_1: Z),
-  forall (Post12: y_0_1 = 1),
-  forall (y_0_2: Z),
-  forall (Post13: y_0_2 = 4),
-  (forall (y_0:Z),
-   (y_0 = 5 -> (forall (result:Z), (result = y_0 -> (x_0 = 4 -> result = 2))))).
+  forall (y1: Z),
+  forall (Post12: y1 = 1),
+  forall (y2: Z),
+  forall (Post13: y2 = 4),
+  (forall (y:Z),
+   (y = 5 -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1228-1250 *)
+(* Why obligation from file "why/switch.why", characters 1216-1236 *)
 Lemma f1a_impl_po_2 : 
-  forall (x_0: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x_0),
+  forall (Post15: caduceus_1 = x),
   forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
   forall (Test6: caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4),
-  forall (y_0_1: Z),
-  forall (Post9: y_0_1 = 2),
+  forall (y1: Z),
+  forall (Post9: y1 = 2),
   forall (result2: Z),
-  forall (Post10: result2 = y_0_1),
-  (forall (result:Z), (result = result2 -> (x_0 = 4 -> result = 2))).
+  forall (Post10: result2 = y1),
+  (forall (result:Z), (result = result2 -> (x = 4 -> result = 2))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1334-1356 *)
+(* Why obligation from file "why/switch.why", characters 1318-1338 *)
 Lemma f1a_impl_po_3 : 
-  forall (x_0: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x_0),
+  forall (Post15: caduceus_1 = x),
   forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
   forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
   forall (Test4: caduceus_1 = 3),
-  forall (y_0_1: Z),
-  forall (Post6: y_0_1 = 3),
+  forall (y1: Z),
+  forall (Post6: y1 = 3),
   forall (result3: Z),
-  forall (Post7: result3 = y_0_1),
-  (forall (result:Z), (result = result3 -> (x_0 = 4 -> result = 2))).
+  forall (Post7: result3 = y1),
+  (forall (result:Z), (result = result3 -> (x = 4 -> result = 2))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1697-1714 *)
+(* Why obligation from file "why/switch.why", characters 1679-1694 *)
 Lemma f1a_impl_po_4 : 
-  forall (x_0: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x_0),
+  forall (Post15: caduceus_1 = x),
   forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
   forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
   forall (Test3: caduceus_1 <> 3),
   forall (Test2: caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
                  caduceus_1 <> 3 /\ caduceus_1 <> 4),
-  forall (y_0_1: Z),
-  forall (Post3: y_0_1 = 4),
+  forall (y1: Z),
+  forall (Post3: y1 = 4),
   (forall (result:unit),
    (result = tt ->
-    (forall (y_0:Z),
-     (y_0 = 5 ->
-      (forall (result:Z), (result = y_0 -> (x_0 = 4 -> result = 2))))))).
+    (forall (y:Z),
+     (y = 5 -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 1734-1734 *)
+(* Why obligation from file "why/switch.why", characters 1714-1714 *)
 Lemma f1a_impl_po_5 : 
-  forall (x_0: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = x_0),
+  forall (Post15: caduceus_1 = x),
   forall (Test7: caduceus_1 <> 0 /\ caduceus_1 <> 1),
   forall (Test5: caduceus_1 <> 2 /\ caduceus_1 <> 4),
   forall (Test3: caduceus_1 <> 3),
@@ -182,59 +181,58 @@ Lemma f1a_impl_po_5 :
   forall (Post2: result3 = tt),
   (forall (result:unit),
    (result = tt ->
-    (forall (y_0:Z),
-     (y_0 = 5 ->
-      (forall (result:Z), (result = y_0 -> (x_0 = 4 -> result = 2))))))).
+    (forall (y:Z),
+     (y = 5 -> (forall (result:Z), (result = y -> (x = 4 -> result = 2))))))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2138-2155 *)
+(* Why obligation from file "why/switch.why", characters 2106-2121 *)
 Lemma f2_impl_po_1 : 
-  forall (x_1: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x_1),
+  forall (Post14: caduceus_1 = x),
   forall (Test2: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
-  forall (y_1_1: Z),
-  forall (Post2: y_1_1 = 1),
+  forall (y1: Z),
+  forall (Post2: y1 = 1),
   ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
     1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4)) ->
-    (forall (y_1:Z),
-     (y_1 = 2 ->
+    (forall (y:Z),
+     (y = 2 ->
       ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
         1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
         caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y_1:Z),
-         (y_1 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
   ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\ caduceus_1 <>
     4 ->
     (forall (result:unit),
@@ -242,86 +240,86 @@ Lemma f2_impl_po_1 :
       ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
         1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
         caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y_1:Z),
-         (y_1 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1_1 -> result = 4)))))))))))))))).
+                (forall (result:Z), (result = y1 -> result = 4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 2171-2171 *)
+(* Why obligation from file "why/switch.why", characters 2137-2137 *)
 Lemma f2_impl_po_2 : 
-  forall (x_1: Z),
-  forall (y_1: Z),
+  forall (x: Z),
+  forall (y: Z),
   forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x_1),
+  forall (Post14: caduceus_1 = x),
   forall (Test1: caduceus_1 <> 0 /\ caduceus_1 <> 1),
   forall (result0: unit),
   forall (Post1: result0 = tt),
   ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
     1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 4)) ->
-    (forall (y_1:Z),
-     (y_1 = 2 ->
+    (forall (y:Z),
+     (y = 2 ->
       ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
         1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
         caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y_1:Z),
-         (y_1 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
   ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\ caduceus_1 <>
     4 ->
     (forall (result:unit),
@@ -329,280 +327,280 @@ Lemma f2_impl_po_2 :
       ((caduceus_1 = 0 \/ caduceus_1 <> 0 /\ (caduceus_1 = 1 \/ caduceus_1 <>
         1 /\ (caduceus_1 = 2 \/ caduceus_1 <> 2 /\ (caduceus_1 = 3 \/
         caduceus_1 <> 3 /\ caduceus_1 = 4))) ->
-        (forall (y_1:Z),
-         (y_1 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 <> 0 /\ caduceus_1 <> 1 /\ caduceus_1 <> 2 /\
         caduceus_1 <> 3 /\ caduceus_1 <> 4 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_1:Z),
-             (y_1 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_1 -> result = 4)))))))))))))))).
+                (forall (result:Z), (result = y -> result = 4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3297-3314 *)
+(* Why obligation from file "why/switch.why", characters 3249-3264 *)
 Lemma f3_impl_po_1 : 
-  forall (x_2: Z),
+  forall (x: Z),
   forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x_2),
+  forall (Post14: caduceus_1 = x),
   forall (Test2: caduceus_1 = 0 \/ caduceus_1 <> 0 /\ caduceus_1 = 1),
-  forall (y_2_1: Z),
-  forall (Post2: y_2_1 = 1),
+  forall (y1: Z),
+  forall (Post2: y1 = 1),
   ((caduceus_1 <> 2 /\ caduceus_1 <> 3 ->
-    (forall (y_2:Z),
-     (y_2 = 2 ->
+    (forall (y:Z),
+     (y = 2 ->
       ((caduceus_1 <> 2 ->
-        (forall (y_2:Z),
-         (y_2 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
   ((caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 3 ->
     (forall (result:unit),
      (result = tt ->
       ((caduceus_1 <> 2 ->
-        (forall (y_2:Z),
-         (y_2 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2_1 -> result = 4)))))))))))))))).
+                (forall (result:Z), (result = y1 -> result = 4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3330-3330 *)
+(* Why obligation from file "why/switch.why", characters 3280-3280 *)
 Lemma f3_impl_po_2 : 
-  forall (x_2: Z),
-  forall (y_2: Z),
+  forall (x: Z),
+  forall (y: Z),
   forall (caduceus_1: Z),
-  forall (Post14: caduceus_1 = x_2),
+  forall (Post14: caduceus_1 = x),
   forall (Test1: caduceus_1 <> 0 /\ caduceus_1 <> 1),
   forall (result0: unit),
   forall (Post1: result0 = tt),
   ((caduceus_1 <> 2 /\ caduceus_1 <> 3 ->
-    (forall (y_2:Z),
-     (y_2 = 2 ->
+    (forall (y:Z),
+     (y = 2 ->
       ((caduceus_1 <> 2 ->
-        (forall (y_2:Z),
-         (y_2 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))))))) /\
   ((caduceus_1 = 2 \/ caduceus_1 <> 2 /\ caduceus_1 = 3 ->
     (forall (result:unit),
      (result = tt ->
       ((caduceus_1 <> 2 ->
-        (forall (y_2:Z),
-         (y_2 = 3 ->
+        (forall (y:Z),
+         (y = 3 ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))))))) /\
       ((caduceus_1 = 2 ->
         (forall (result:unit),
          (result = tt ->
           ((true = true ->
-            (forall (y_2:Z),
-             (y_2 = 4 ->
+            (forall (y:Z),
+             (y = 4 ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))) /\
+                (forall (result:Z), (result = y -> result = 4)))))))) /\
           ((false = true ->
             (forall (result:unit),
              (result = tt ->
               (forall (result:unit),
                (result = tt ->
-                (forall (result:Z), (result = y_2 -> result = 4)))))))))))))))).
+                (forall (result:Z), (result = y -> result = 4)))))))))))))))).
 Proof.
 intuition; discriminate.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3936-3942 *)
+(* Why obligation from file "why/switch.why", characters 3861-3867 *)
 Lemma f4_impl_po_1 : 
-  forall (x_3: Z),
-  forall (y_3: Z),
-  forall (Post10: y_3 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post10: y = 0),
   forall (caduceus_1: Z),
-  forall (Post8: caduceus_1 = x_3),
+  forall (Post8: caduceus_1 = x),
   forall (Test4: caduceus_1 = 0),
-  forall (Test3: x_3 = 0),
+  forall (Test3: x = 0),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y_3 -> result = 0)))).
+   (result = tt -> (forall (result:Z), (result = y -> result = 0)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3953-3953 *)
+(* Why obligation from file "why/switch.why", characters 3878-3878 *)
 Lemma f4_impl_po_2 : 
-  forall (x_3: Z),
-  forall (y_3: Z),
-  forall (Post10: y_3 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post10: y = 0),
   forall (caduceus_1: Z),
-  forall (Post8: caduceus_1 = x_3),
+  forall (Post8: caduceus_1 = x),
   forall (Test4: caduceus_1 = 0),
-  forall (Test2: x_3 <> 0),
+  forall (Test2: x <> 0),
   forall (result1: unit),
   forall (Post3: result1 = tt),
-  (forall (y_3:Z),
-   (y_3 = 1 ->
+  (forall (y:Z),
+   (y = 1 ->
     (forall (result:unit),
-     (result = tt -> (forall (result:Z), (result = y_3 -> result = 0)))))).
+     (result = tt -> (forall (result:Z), (result = y -> result = 0)))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 3985-3985 *)
+(* Why obligation from file "why/switch.why", characters 3908-3908 *)
 Lemma f4_impl_po_3 : 
-  forall (x_3: Z),
-  forall (y_3: Z),
-  forall (Post10: y_3 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post10: y = 0),
   forall (caduceus_1: Z),
-  forall (Post8: caduceus_1 = x_3),
+  forall (Post8: caduceus_1 = x),
   forall (Test1: caduceus_1 <> 0),
   forall (result0: unit),
   forall (Post2: result0 = tt),
   (forall (result:unit),
-   (result = tt -> (forall (result:Z), (result = y_3 -> result = 0)))).
+   (result = tt -> (forall (result:Z), (result = y -> result = 0)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4432-4438 *)
+(* Why obligation from file "why/switch.why", characters 4345-4351 *)
 Lemma f5_impl_po_1 : 
-  forall (x_4: Z),
-  forall (y_4: Z),
-  forall (Post9: y_4 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post9: y = 0),
   forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x_4),
+  forall (Post7: caduceus_1 = x),
   forall (Test4: caduceus_1 = 1),
   forall (Variant1: Z),
   forall (Pre3: Variant1 = 0),
-  forall (Test3: x_4 > 0),
+  forall (Test3: x > 0),
   (forall (result:unit),
    (result = tt ->
-    (forall (y_4:Z),
-     (y_4 = 1 ->
+    (forall (y:Z),
+     (y = 1 ->
       (forall (result:unit),
        (result = tt ->
-        (forall (result:Z), (result = y_4 -> (x_4 = 1 -> result = 1))))))))).
+        (forall (result:Z), (result = y -> (x = 1 -> result = 1))))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4365-4456 *)
+(* Why obligation from file "why/switch.why", characters 4280-4369 *)
 Lemma f5_impl_po_2 : 
-  forall (x_4: Z),
-  forall (y_4: Z),
-  forall (Post9: y_4 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post9: y = 0),
   forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x_4),
+  forall (Post7: caduceus_1 = x),
   forall (Test4: caduceus_1 = 1),
   forall (Variant1: Z),
   forall (Pre3: Variant1 = 0),
-  forall (Test3: x_4 > 0),
+  forall (Test3: x > 0),
   forall (Post10: (Zwf 0 0 0)),
   (Zwf 0 0 Variant1).
 Proof.
@@ -610,107 +608,104 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4365-4456 *)
+(* Why obligation from file "why/switch.why", characters 4280-4369 *)
 Lemma f5_impl_po_3 : 
-  forall (x_4: Z),
-  forall (y_4: Z),
-  forall (Post9: y_4 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post9: y = 0),
   forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x_4),
+  forall (Post7: caduceus_1 = x),
   forall (Test4: caduceus_1 = 1),
   forall (Variant1: Z),
   forall (Pre3: Variant1 = 0),
-  forall (Test2: x_4 <= 0),
-  (forall (y_4:Z),
-   (y_4 = 1 ->
+  forall (Test2: x <= 0),
+  (forall (y:Z),
+   (y = 1 ->
     (forall (result:unit),
      (result = tt ->
-      (forall (result:Z), (result = y_4 -> (x_4 = 1 -> result = 1))))))).
+      (forall (result:Z), (result = y -> (x = 1 -> result = 1))))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4577-4577 *)
+(* Why obligation from file "why/switch.why", characters 4488-4488 *)
 Lemma f5_impl_po_4 : 
-  forall (x_4: Z),
-  forall (y_4: Z),
-  forall (Post9: y_4 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post9: y = 0),
   forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = x_4),
+  forall (Post7: caduceus_1 = x),
   forall (Test1: caduceus_1 <> 1),
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z), (result = y_4 -> (x_4 = 1 -> result = 1))))).
+   (result = tt -> (forall (result:Z), (result = y -> (x = 1 -> result = 1))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4864-4881 *)
+(* Why obligation from file "why/switch.why", characters 4765-4780 *)
 Lemma f6_impl_po_1 : 
-  forall (x_5: Z),
-  forall (y_5: Z),
-  forall (Post7: y_5 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post7: y = 0),
   forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x_5),
+  forall (Post5: caduceus_1 = x),
   forall (Test2: caduceus_1 = (1 + 1)),
-  forall (y_5_1: Z),
-  forall (Post2: y_5_1 = 1),
+  forall (y1: Z),
+  forall (Post2: y1 = 1),
   (forall (result:unit),
    (result = tt ->
-    (forall (result:Z), (result = y_5_1 -> (x_5 = 2 -> result = 1))))).
+    (forall (result:Z), (result = y1 -> (x = 2 -> result = 1))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 4897-4897 *)
+(* Why obligation from file "why/switch.why", characters 4796-4796 *)
 Lemma f6_impl_po_2 : 
-  forall (x_5: Z),
-  forall (y_5: Z),
-  forall (Post7: y_5 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post7: y = 0),
   forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x_5),
+  forall (Post5: caduceus_1 = x),
   forall (Test1: caduceus_1 <> (1 + 1)),
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z), (result = y_5 -> (x_5 = 2 -> result = 1))))).
+   (result = tt -> (forall (result:Z), (result = y -> (x = 2 -> result = 1))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5163-5180 *)
+(* Why obligation from file "why/switch.why", characters 5052-5067 *)
 Lemma f7_impl_po_1 : 
-  forall (x_6: Z),
-  forall (y_6: Z),
-  forall (Post7: y_6 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post7: y = 0),
   forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x_6),
+  forall (Post5: caduceus_1 = x),
   forall (Test2: caduceus_1 = A),
-  forall (y_6_1: Z),
-  forall (Post2: y_6_1 = 1),
+  forall (y1: Z),
+  forall (Post2: y1 = 1),
   (forall (result:unit),
    (result = tt ->
-    (forall (result:Z), (result = y_6_1 -> (x_6 = A -> result = 1))))).
+    (forall (result:Z), (result = y1 -> (x = A -> result = 1))))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/switch.why", characters 5189-5189 *)
+(* Why obligation from file "why/switch.why", characters 5076-5076 *)
 Lemma f7_impl_po_2 : 
-  forall (x_6: Z),
-  forall (y_6: Z),
-  forall (Post7: y_6 = 0),
+  forall (x: Z),
+  forall (y: Z),
+  forall (Post7: y = 0),
   forall (caduceus_1: Z),
-  forall (Post5: caduceus_1 = x_6),
+  forall (Post5: caduceus_1 = x),
   forall (Test1: caduceus_1 <> A),
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (forall (result:unit),
-   (result = tt ->
-    (forall (result:Z), (result = y_6 -> (x_6 = A -> result = 1))))).
+   (result = tt -> (forall (result:Z), (result = y -> (x = A -> result = 1))))).
 Proof.
 intuition.
 Save.

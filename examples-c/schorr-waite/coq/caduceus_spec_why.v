@@ -7,7 +7,8 @@ Require Export BinTree.
 (*Why logic*) Definition clr_list :
   alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
   -> pointer -> plist -> Prop.
-Admitted.
+exact clr_list.
+Defined.
 
 (*Why logic*) Definition cons : pointer -> plist -> plist.
 exact (@cons pointer).

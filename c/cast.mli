@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.48 2004-10-11 15:22:48 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.49 2004-10-18 08:58:04 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -45,7 +45,9 @@ type 'expr ctype_node =
   | CTunion of string * 'expr field list tagged
   | CTenum of string * (string * 'expr option) list tagged
   | CTfun of 'expr parameter list * 'expr ctype
+(*
   | CTtyped_fun of ('expr ctype * Info.var_info) list * 'expr ctype
+*)
 
 and 'expr ctype = { 
   ctype_node : 'expr ctype_node;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.55 2004-10-11 15:22:48 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.56 2004-10-18 08:58:04 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -36,8 +36,7 @@ let interp_type ctype =
   | CTunion _
   | CTstruct _ -> "pointer"
   | CTvar x -> x (* must be a logic type *)
-  | CTfun _ -> assert false
-  | CTtyped_fun _ -> unsupported "first-class functions"
+  | CTfun _ -> unsupported "first-class functions"
 
 let rec pointer_heap_var ty =
   match ty.ctype_node with
@@ -56,7 +55,6 @@ let rec pointer_heap_var ty =
     | CTstruct _ 
     | CTunion _ -> "pointer", "pointer" (* OK? *)
     | CTfun _ -> assert false (* bad typing ! *)
-    | CTtyped_fun _ -> assert false (* bad typing ! *)
 
 let memory_type t = ([t],"memory")
 

@@ -59,6 +59,8 @@ Lemma schorr_waite_impl_po_1 :
 Proof.
 (* validity of access t->m in the condition of while *)
 intuition.
+inversion_clear H2;intuition.
+apply H4;intuition.
 Admitted.
 
 (* Why obligation from file "why/schorr_waite.why", characters 2483-2600 *)
@@ -341,8 +343,6 @@ Lemma schorr_waite_impl_po_5 :
   (Zwf 0 0 0).
 Proof.
 (* preservation of loop invariant for the first branch of if "pop" *)
-Admitted.
-(*
 intuition.
 subst.
 generalize (H x H3).
@@ -366,6 +366,12 @@ left.
 apply Path_null.
 left.
 apply Path_left;auto.
+replace (upd (upd r0 p1 null) p1 null) with (upd r0 p1 null).
+auto.
+
+
+
+apply Path_right;auto.
 
 
 

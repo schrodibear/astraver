@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.10 2004-10-11 15:22:48 hubert Exp $ i*)
+(*i $Id: creport.ml,v 1.11 2004-10-18 08:58:04 hubert Exp $ i*)
 
 open Format
 open Cerror
@@ -46,7 +46,6 @@ and print_type_node fmt = function
   | CTenum (x, Tag) -> fprintf fmt "enum %s" x
   | CTenum (x, Decl el) -> fprintf fmt "enum %s { %a}" x print_enums el
   | CTfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
-  | CTtyped_fun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
 
 and print_sign fmt = function
   | Signed -> fprintf fmt "signed"

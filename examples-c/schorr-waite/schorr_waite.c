@@ -40,8 +40,8 @@ void schorr_waite(node root) {
     @   clr_list (p,stack) &&
     @   (\forall node p; in_list (p,stack) => p->m) &&
     @   (\forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
-    @       unmarked_reachable(t,x) || 
-    @       (\exists node y ; in_list(y,stack) && unmarked_reachable(y->r,x))) &&
+    @      unmarked_reachable(t,x) || 
+    @      (\exists node y; in_list(y,stack) && unmarked_reachable(y->r,x))) &&
     @  (\forall node x; !in_list(x,stack) =>  
             (x->r == \old(x->r) && x->l == \old(x->l))) &&
     @  (\forall node p1; (\forall node p2;
