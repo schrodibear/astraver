@@ -320,3 +320,31 @@ Definition p9 := (* validation *)
     (qcomb [result0: Z]`x1 = 1` /\ `result0 = 1` [result0: unit]False) 
     x0 (Exn unit result) Post2).
 
+Definition p10 := (* validation *)
+  let (result, Post1) =
+    (exist_1 (qcomb [result: unit]`0 = 0` [result: Z]`result = 0`) (Exn Z tt)
+    (refl_equal ? `0`)) in
+  Cases (decomp1 Post1) of
+  | (Qval (exist result Post2)) => (exist_1 [result0: Z]`result0 = 0` 
+    result Post2)
+  | (Qexn _ Post3) =>
+    let (result0, Post4) = (exist_1 [result0: Z]`result0 = 0` `0`
+      (refl_equal ? `0`)) in
+    (exist_1 [result1: Z]`result1 = 0` result0 Post4)
+  end.
+
+Definition p11 := (* validation *)
+  let (result, Post1) =
+    let (result, Post2) = (exist_1 [result: Z]`result = 1` `1`
+      (refl_equal ? `1`)) in
+    (exist_1 (qcomb [result0: Z]`result0 = 1` [result0: Z]`result0 = 1`) 
+    (Exn Z result) Post2) in
+  Cases (decomp1 Post1) of
+  | (Qval (exist result Post3)) => (exist_1 [result0: Z]`result0 = 1` 
+    result Post3)
+  | (Qexn result Post4) =>
+    let (result0, Post5) = (exist_1 [result0: Z]`result0 = 1` result
+      Post4) in
+    (exist_1 [result1: Z]`result1 = 1` result0 Post5)
+  end.
+

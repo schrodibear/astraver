@@ -46,3 +46,8 @@ let p8 =
 
 let p9 = (raise (F begin x := 1; !x end)) { false | F => x = 1 and result = 1 }
 
+(* try / with *)
+
+let p10 = (try raise E : int with E -> 0 end) { result = 0 }
+
+let p11 = (try raise (F 1) : int with F x -> x end) { result = 1 }

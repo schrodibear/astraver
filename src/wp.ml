@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.57 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.58 2002-10-11 15:05:03 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -368,10 +368,29 @@ and wp_desc info d q =
 	let qe = filter_post e.info (option_app make_post q) in
 	let e',w = wp e qe in
 	Raise (id, Some e'), w
-    (* TODO: wp try/with *)
+    (* $wp(try e1 with E -> e2, Q, R) = wp(e1, Q, wp(e2, Q, R))$ *)
     | Try (e, hl) ->
-	let e',w = wp e None in
-	Try (e', hl), None
+	let subst w = function
+	  | None -> w
+	  | Some x -> optnamed_app (subst_in_predicate (subst_onev x result)) w
+	in
+	let hl' = 
+	  List.map (fun ((x,v) as p, h) -> 
+		      let h',w = wp h (filter_post h.info q) in
+		      (p,h'), (x, subst w v)) hl 
+	in
+	let hl',hwl = List.split hl' in
+	let make_post (q,ql) = 
+	  let hpost (x,r) =
+	    x, try (match List.assoc x hwl with None -> r | Some w -> w)
+	       with Not_found -> r
+	  in
+	  (q, List.map hpost ql)
+	in
+	let q = saturate_post e.info (option_app fst q) q in
+	let qe = filter_post e.info (option_app make_post q) in
+	let e',w = wp e qe in
+	Try (e', hl'), w
 
 and wp_block bl q = match bl with
   | [] ->
