@@ -1,5 +1,5 @@
 
-FILES = max abs swap search purse 
+FILES = max abs swap search purse average
 
 coq:
 	for f in $(FILES); do \
