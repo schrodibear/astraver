@@ -3,11 +3,14 @@
 ;; Copyright (C) 2002 Jean-Christophe FILLIATRE
 
 (defvar why-mode-hook nil)
+
 (defvar why-mode-map nil
   "Keymap for Why major mode")
 
 (if why-mode-map nil
-  (setq why-mode-map (make-keymap)))
+  (setq why-mode-map (make-keymap))
+  (define-key why-mode-map "\C-c\C-q" 'why-switch-to-coq)
+  (define-key why-mode-map [(control return)] 'font-lock-fontify-buffer))
 
 (setq auto-mode-alist
       (append
@@ -42,6 +45,7 @@
       ()
     (setq why-mode-syntax-table (make-syntax-table))
     (set-syntax-table why-mode-syntax-table)
+    (modify-syntax-entry ?' "w" why-mode-syntax-table)
     (modify-syntax-entry ?_ "w" why-mode-syntax-table)))
 
 ;; utility functions 
@@ -62,10 +66,54 @@
   (interactive)
   (if (save-excursion (why-go-and-get-next-proof)) (yank)))
 
+;; menu
+
+(defun why-switch-to-coq ()
+  "switch to the Coq buffer"
+  (interactive)
+  (let* ((f (buffer-file-name))
+	 (fcoq (concat (file-name-sans-extension f) "_why.v")))
+    (find-file fcoq)))
+
+(defun why-generate-coq ()
+  "generate the Coq module"
+  (interactive)
+  (let ((f (buffer-name)))
+    (compile (concat "why " f))))
+
+(defun why-switch-to-pvs ()
+  "switch to the Coq buffer"
+  (interactive)
+  (let* ((f (buffer-name))
+	 (fpvs (concat (file-name-sans-extension f) "_why.pvs")))
+    (switch-to-buffer fpvs)))
+
+(require 'easymenu)
+
+(defun why-menu ()
+  (easy-menu-change () "Why" 
+		    '(["Type-check buffer" why-type-check t]
+		      ["Show WP" why-show-wp t]
+		      ["Generate Ocaml code" why-generate-ocaml t]
+		      ["Recolor buffer" font-lock-fontify-buffer t]
+		      "---"
+		      "Coq"
+		      ["Generate file" why-generate-coq t]
+		      ["Switch to Coq buffer" why-switch-to-coq t]
+		      ["Grab next proof" why-grab-next-proof t]
+		      "---"
+		      "PVS"
+		      ["Generate PVS file" why-generate-pvs t]
+		      ["Switch to PVS buffer" why-switch-to-pvs t]
+		      "---"
+		      )))
+
 ;; setting the mode
 
 (defun why-mode ()
-  "Major mode for editing Why programs"
+  "Major mode for editing Why programs.
+
+\\{why-mode-map}"
   (interactive)
   (kill-all-local-variables)
   (why-create-syntax-table)
@@ -75,9 +123,12 @@
   ; indentation
   ; (make-local-variable 'indent-line-function)
   ; (setq indent-line-function 'why-indent-line)
+  ; menu
+  (why-menu)
   ; providing the mode
   (setq major-mode 'why-mode)
   (setq mode-name "WHY")
+  (use-local-map why-mode-map)
   (run-hooks 'why-mode-hook))
 
 (provide 'why-mode)
