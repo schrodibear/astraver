@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.16 2002-03-04 16:14:23 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.17 2002-03-04 16:15:58 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -72,8 +72,6 @@ and check_app loc bl c tl = match bl, tl with
       check_app loc bl c tl
   | _ ->
       assert false
-
-let type_of_expression ren env t = typing_term Loc.dummy env t
 
 
 (*s Utility functions for typing *)

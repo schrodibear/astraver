@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.mli,v 1.4 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.5 2002-03-04 16:15:58 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -26,4 +26,3 @@ val typed_var : local_env -> term * term -> variant
 
 val typef : LabelSet.t -> local_env -> parsed_program -> typed_program
 
-val type_of_expression : LabelSet.t -> local_env -> term -> type_v
