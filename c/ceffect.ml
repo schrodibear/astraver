@@ -79,7 +79,7 @@ let rec term t =
     | Tunop (Ustar, t) ->
 	HeapVarSet.add (pointer_heap_array_var t.term_type) (term t)
     | Tunop (_,_) -> assert false (* TODO *)
-    | Tlength _ -> assert false (* TODO *)
+    | Tblock_length _ -> assert false (* TODO *)
     | Tat (_, _) -> assert false (* TODO *)
     | Told _ -> assert false (* TODO *)
     | Tif (_, _, _) -> assert false (* TODO *)

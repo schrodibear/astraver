@@ -5,19 +5,20 @@ parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
 logic null : -> pointer
-logic length: pointer -> int
+logic block_length: pointer -> int
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
 logic valid : pointer -> prop
+logic valid_index : pointer, int -> prop
 logic valid_range : pointer, int, int -> prop
 
 axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
 
-axiom length_shift :
+axiom block_length_shift :
   forall p:pointer. forall i:int.
-  length(shift(p,i)) = length(p)
+  block_length(shift(p,i)) = block_length(p)
 
 axiom shift_null :
   forall p:pointer. forall i:int.
@@ -32,7 +33,7 @@ axiom valid_def :
   forall p:pointer. 
 	(p <> null 
 	and 0 <= offset(p)
-	and offset(p) < length(p))
+	and offset(p) < block_length(p))
 	-> valid(p)	
 
 axiom valid_not_null :
@@ -42,7 +43,27 @@ axiom valid1 :
   forall p:pointer. valid(p) -> 0 <= offset(p) 
 
 axiom valid2 :
-  forall p:pointer. valid(p) -> offset(p) < length(p)
+  forall p:pointer. valid(p) -> offset(p) < block_length(p)
+
+(* axioms for valid_index *)
+axiom valid_index_def :
+  forall p:pointer. forall i:int. 
+	(p <> null 
+	and 0 <= offset(p)+i 
+	and offset(p)+i < block_length(p))
+	-> valid_index(p,i)	
+
+axiom valid_index_not_null :
+  forall p:pointer. forall i:int. 
+	valid_index(p,i) -> p <> null 
+
+axiom valid_index1 :
+  forall p:pointer. forall i:int. 
+	valid_index(p,i) -> 0 <= offset(p)+i 
+
+axiom valid_index2 :
+  forall p:pointer. forall i:int. 
+	valid_index(p,i) -> offset(p)+i < block_length(p)
 
 (* axioms for valid_range *)
 axiom valid_range_def :
@@ -50,7 +71,7 @@ axiom valid_range_def :
 	(p <> null 
 	and 0 <= offset(p)+i 
 	and i <= j
-	and offset(p)+j < length(p))
+	and offset(p)+j < block_length(p))
 	-> valid_range(p,i,j)	
 
 axiom valid_range_not_null :
@@ -67,7 +88,7 @@ axiom valid_range2 :
 
 axiom valid_range3 :
   forall p:pointer. forall i:int. forall j:int.
-	valid_range(p,i,j) -> offset(p)+j < length(p)
+	valid_range(p,i,j) -> offset(p)+j < block_length(p)
 
 parameter shift_ : p:pointer -> i:int -> 
   { } pointer { result = shift(p,i) }
@@ -75,14 +96,14 @@ parameter shift_ : p:pointer -> i:int ->
 (* pointer access *)
 logic acc: 'a memory, pointer -> 'a
 parameter acc_ : m:'a memory ref -> p:pointer -> 
-  { p <> null and 0 <= offset(p) < length(p) }
+  { p <> null and 0 <= offset(p) < block_length(p) }
   'a reads m
   { result = acc(m,p) }
 
 (* pointer update *)
 logic upd: 'a memory, pointer, 'a -> 'a memory
 parameter upd_ : m:'a memory ref -> p:pointer -> v:'a -> 
-  { p <> null and 0 <= offset(p) < length(p) }
+  { p <> null and 0 <= offset(p) < block_length(p) }
   unit reads m writes m
   { m = upd(m@,p,v) }
 

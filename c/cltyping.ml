@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.23 2004-03-04 15:14:11 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.24 2004-03-04 16:14:20 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -142,10 +142,10 @@ and type_term_node loc env = function
       (* TODO check label l *)
       let t = type_term env t in
       Tat (t, l), t.term_type
-  | PLlength t ->
+  | PLblock_length t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Tlength t, c_int
+	 | CTarray _ | CTpointer _ -> Tblock_length t, c_int
 	 | _ -> error loc "subscripted value is neither array nor pointer")
   | PLresult ->
       (try let ty,_ = Env.find "\\result" env in Tresult, ty
@@ -294,7 +294,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
   | PLat (p, l) ->
       (* TODO check label l *)
       Pat (type_predicate env p, l)
-  | PLcast _ | PLlength _ | PLarrget _ | PLarrow _ 
+  | PLcast _ | PLblock_length _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
   | PLresult ->
       raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))

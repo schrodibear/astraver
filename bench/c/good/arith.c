@@ -16,10 +16,10 @@ void test(int k)
   i = j + k;
   l *= j ;
   j += l + 10 * k + i + m;
-
-  /* hack contournement de bug de ctyping */
-  j = j; l = l; 
 }
 
 /* axiom to help simplify make the proof */
 /*@ axiom dist1: \forall int x, int y, int z; x*(y+z) == x*y + x*z */
+/*@ axiom dist2: \forall int x, int y, int z; (x+y)*z == x*z + y*z */
+/*@ axiom id1: \forall int x; x*1 == x */
+/*@ axiom id2: \forall int x; 1*x == x */

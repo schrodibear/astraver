@@ -19,8 +19,6 @@
   @*/
 int test1(int t[],int n) {
   int i,s = 0;
-  /* hack contournement de bug de ctyping */
-  s = s; 
 
   /*@ invariant 0 <= i <= n && s == sum(t,0,i)
     @ variant n-i

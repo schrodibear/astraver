@@ -11,7 +11,9 @@ Set Implicit Arguments.
 (*Why logic*) Definition null : pointer.
 Admitted.
 
-(*Why logic*) Definition length : pointer -> Z.
+Admitted.
+
+(*Why logic*) Definition block_length : pointer -> Z.
 Admitted.
 
 (*Why logic*) Definition offset : pointer -> Z.
@@ -23,6 +25,9 @@ Admitted.
 (*Why logic*) Definition valid : pointer -> Prop.
 Admitted.
 
+(*Why logic*) Definition valid_index : pointer -> Z -> Prop.
+Admitted.
+
 (*Why logic*) Definition valid_range : pointer -> Z -> Z -> Prop.
 Admitted.
 
@@ -31,8 +36,11 @@ Admitted.
    (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
 Admitted.
 
-(*Why axiom*) Lemma length_shift :
-  (forall (p:pointer), (forall (i:Z), (length (shift p i)) = (length p))).
+Admitted.
+
+(*Why axiom*) Lemma block_length_shift :
+  (forall (p:pointer),
+   (forall (i:Z), (block_length (shift p i)) = (block_length p))).
 Admitted.
 
 (*Why axiom*) Lemma shift_null :
@@ -45,7 +53,8 @@ Admitted.
 
 (*Why axiom*) Lemma valid_def :
   (forall (p:pointer),
-   (~(p = null) /\ 0 <= (offset p) /\ (offset p) < (length p) -> (valid p))).
+   (~(p = null) /\ 0 <= (offset p) /\ (offset p) < (block_length p) ->
+    (valid p))).
 Admitted.
 
 (*Why axiom*) Lemma valid_not_null :
@@ -57,7 +66,28 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma valid2 :
-  (forall (p:pointer), ((valid p) -> (offset p) < (length p))).
+  (forall (p:pointer), ((valid p) -> (offset p) < (block_length p))).
+Admitted.
+
+(*Why axiom*) Lemma valid_index_def :
+  (forall (p:pointer),
+   (forall (i:Z),
+    (~(p = null) /\ 0 <= ((offset p) + i) /\ ((offset p) + i) <
+     (block_length p) -> (valid_index p i)))).
+Admitted.
+
+(*Why axiom*) Lemma valid_index_not_null :
+  (forall (p:pointer), (forall (i:Z), ((valid_index p i) -> ~(p = null)))).
+Admitted.
+
+(*Why axiom*) Lemma valid_index1 :
+  (forall (p:pointer),
+   (forall (i:Z), ((valid_index p i) -> 0 <= ((offset p) + i)))).
+Admitted.
+
+(*Why axiom*) Lemma valid_index2 :
+  (forall (p:pointer),
+   (forall (i:Z), ((valid_index p i) -> ((offset p) + i) < (block_length p)))).
 Admitted.
 
 (*Why axiom*) Lemma valid_range_def :
@@ -65,7 +95,7 @@ Admitted.
    (forall (i:Z),
     (forall (j:Z),
      (~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
-      (length p) -> (valid_range p i j))))).
+      (block_length p) -> (valid_range p i j))))).
 Admitted.
 
 (*Why axiom*) Lemma valid_range_not_null :
@@ -87,7 +117,8 @@ Admitted.
 (*Why axiom*) Lemma valid_range3 :
   (forall (p:pointer),
    (forall (i:Z),
-    (forall (j:Z), ((valid_range p i j) -> ((offset p) + j) < (length p))))).
+    (forall (j:Z),
+     ((valid_range p i j) -> ((offset p) + j) < (block_length p))))).
 Admitted.
 
 (*Why*) Parameter shift_ :
@@ -104,8 +135,8 @@ Admitted.
 
 (*Why*) Parameter acc_ :
   forall (A5: Set), forall (p: pointer), forall (m: ((memory) A5)),
-  forall (H: ~(p = null) /\ 0 <= (offset p) /\ (offset p) < (length p)),
-  (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
+  forall (H: ~(p = null) /\ 0 <= (offset p) /\ (offset p) <
+  (block_length p)), (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
 (*Why logic*) Definition upd :
   forall (A24:Set), ((memory) A24) -> pointer -> A24 -> ((memory) A24).
@@ -114,7 +145,7 @@ Admitted.
 (*Why*) Parameter upd_ :
   forall (A11: Set), forall (p: pointer), forall (v: A11),
   forall (m: ((memory) A11)), forall (H: ~(p = null) /\ 0 <= (offset p) /\
-  (offset p) < (length p)),
+  (offset p) < (block_length p)),
   (sig_2 ((memory) A11) unit
    (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.28 2004-03-04 15:14:11 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.29 2004-03-04 16:14:20 marche Exp $ i*)
 
 
 open Format
@@ -68,8 +68,8 @@ let rec interp_term label old_label t =
     | Told t ->	interp_term (Some old_label) old_label t
     | Tbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op op,[f t1;f t2])
-    | Tlength t -> 
-	LApp("length",[f t])
+    | Tblock_length t -> 
+	LApp("block_length",[f t])
     | Tat (t, l) -> 
 	interp_term (Some l) old_label t
     | Tif (_, _, _) -> assert false (* TODO *)
