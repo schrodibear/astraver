@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.40 2004-03-03 08:35:17 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.41 2004-03-03 13:12:15 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -193,12 +193,12 @@ and type_expr_node loc env = function
   | CEstring_literal s ->
       TEstring_literal s, c_string
   | CEvar x ->
-      let (t,var_info) =
+      let (t,info) =
 	try Env.find x env with Not_found -> 
 	  try find_sym x with Not_found -> 
 	    error loc (x ^ " undeclared")
       in
-      (TEvar var_info),t
+      (TEvar info,t)
   | CEdot (e, x) ->
       let te = type_expr env e in
       TEdot (te, x), type_of_field loc env x te.texpr_type
@@ -669,7 +669,8 @@ let type_logic_parameters env pl =
   List.fold_right
     (fun (ty,x) (pl,env) ->
        let info = default_var_info x in
-       let ty = type_logic_type env ty in ty :: pl, Env.add x ty info env)
+       let ty = type_logic_type env ty in 
+	       ty :: pl, Env.add x ty info env)
     pl 
     ([], env)
 
@@ -718,7 +719,7 @@ let type_decl d = match d.node with
       let s = type_spec ty env s in
       let info = default_var_info f in
       add_sym d.loc f (noattr (CTfun (pl, ty))) info;
-      Tfunspec (s, ty, f, pl)
+      Tfunspec (s, ty, info, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
       let et = if eq_type ty c_void then None else Some ty in

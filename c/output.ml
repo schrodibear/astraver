@@ -496,10 +496,9 @@ and fprintf_expr_end_list form l =
 ;;
 
 type why_decl =
-  | Param of string * why_type         (*r parameter in why *)
+  | Param of bool * string * why_type         (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | External of string * why_type      (*r external decl in why *)
-  | Logic of string * why_type         (*r logic decl in why *)
+  | Logic of bool * string * why_type         (*r logic decl in why *)
   | Axiom of string * assertion         (*r Axiom *)
 
 type prover_decl =
@@ -511,17 +510,15 @@ type prover_decl =
 
 let get_why_id d =
   match d with
-    | Param(id,_) -> id
-    | External(id,_) -> id
-    | Logic(id,_) -> id
+    | Param(_,id,_) -> id
+    | Logic(_,id,_) -> id
     | Def(id,_) -> id
     | Axiom(id,_) -> id
       
 let iter_why_decl f d =
   match d with
-    | Param(_,t) -> iter_why_type f t
-    | External(id,t) -> iter_why_type f t
-    | Logic(id,t) -> iter_why_type f t
+    | Param(_,_,t) -> iter_why_type f t
+    | Logic(_,id,t) -> iter_why_type f t
     | Def(id,t) -> iter_expr f t
     | Axiom(id,t) -> iter_assertion f t
       
@@ -574,14 +571,13 @@ let build_map get_id decl_list =
 
 let fprintf_why_decl form d =
   match d with
-    | Param(id,t) ->
-	fprintf form "@[<hv 1>parameter %s :@ %a@]@.@." id 
+    | Param(b,id,t) ->
+	fprintf form "@[<hv 1>%sparameter %s :@ %a@]@.@." 
+	(if b then "external" else "") id 
 	  (fprintf_type false) t
-    | External(id,t) ->
-	fprintf form "@[<hv 1>external %s :@ %a@]@.@." id 
-	  (fprintf_type false) t
-    | Logic(id,t) ->
-	fprintf form "@[<hv 1>logic %s :@ %a@]@.@." id 
+    | Logic(b,id,t) ->
+	fprintf form "@[<hv 1>%slogic %s :@ %a@]@.@." 
+	(if b then "external" else "") id 
 	  fprint_logic_type t
     | Axiom(id,p) ->
 	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 

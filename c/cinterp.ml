@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.22 2004-03-02 16:51:45 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.23 2004-03-03 13:12:15 marche Exp $ i*)
 
 
 open Format
@@ -490,13 +490,16 @@ let interp_axiom p =
     (fun (arg,ty) t -> LForall(arg,ty,t))
     e a
 
+let interp_effects e =
+  HeapVarSet.fold (fun (var,ty) acc -> var::acc) e []
+
 
 let interp_located_tdecl (why_decls,prover_decl) decl =
   match decl.node with
   | Tlogic(id,ltype) -> 
       fprintf Coptions.log 
       "translating logic declaration of %s@." id.logic_name;
-      ((Logic(id.logic_name,cinterp_logic_symbol id ltype))::why_decls,
+      ((Logic(false,id.logic_name,cinterp_logic_symbol id ltype))::why_decls,
        prover_decl)
   | Taxiom(id,p) -> 
       fprintf Coptions.log 
@@ -512,10 +515,25 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
       begin
 	match init with 
 	  | Inothing ->
-	      ((Param(v.var_name,Ref_type(t)))::why_decls,prover_decl)
+	      ((Param(false,v.var_name,Ref_type(t)))::why_decls,prover_decl)
 	  | _ -> assert false (* TODO *)
       end
-  | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
+  | Tfunspec(spec,ctype,id,params) -> 
+      fprintf Coptions.log "translating function %s@." id.var_name;
+      let tparams = List.map interp_param params in
+      let pre,post = interp_spec spec in
+      let reads = interp_effects id.function_reads in
+      let writes = interp_effects id.function_writes in
+      let annot_type =
+	Annot_type(pre,base_type (Ceffect.interp_type ctype),reads,writes,post,None)
+      in
+      let local_type =
+	List.fold_right
+	  (fun (ty,arg) t -> 
+	     Prod_type(arg,base_type (Ceffect.interp_type ty),t))
+	  params annot_type
+      in
+      ((Param(false,id.var_name,local_type))::why_decls, prover_decl)
   | Tfundef(spec,ctype,id,params,block,info) ->      
       fprintf Coptions.log "translating function %s@." id;
       let tparams = 

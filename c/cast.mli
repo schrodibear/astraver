@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.34 2004-03-02 15:13:53 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.35 2004-03-03 13:12:15 marche Exp $ i*)
 
 (*s C types *)
 
@@ -254,7 +254,7 @@ and tdecl =
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
-  | Tfunspec of spec * texpr ctype * string * texpr parameter list
+  | Tfunspec of spec * texpr ctype * Info.var_info * texpr parameter list
   | Tfundef of spec option *
       texpr ctype * string * texpr parameter list * tblock * fun_info
 

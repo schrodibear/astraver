@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.15 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.16 2004-03-03 13:12:15 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -40,10 +40,10 @@ let interp_file f =
 let file_copy src dest =
   let cin = open_in src
   and cout = open_out dest
-  and buff = String.make 1023 ' ' 
+  and buff = String.make 1024 ' ' 
   and n = ref 0 
   in
-  while n:= input cin buff 0 1023; !n <> 0 do 
+  while n:= input cin buff 0 1024; !n <> 0 do 
     output cout buff 0 !n
   done;
   close_in cin; close_out cout

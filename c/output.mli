@@ -122,10 +122,9 @@ val make_pre : assertion -> expr -> expr;;
 val append : expr -> expr -> expr
 
 type why_decl =
-  | Param of string * why_type         (*r parameter in why *)
+  | Param of bool * string * why_type  (*r parameter in why *)
   | Def of string * expr               (*r global let in why *)
-  | External of string * why_type      (*r external decl in why *)
-  | Logic of string * why_type         (*r logic decl in why *)
+  | Logic of bool * string * why_type  (*r logic decl in why *)
   | Axiom of string * assertion            (*r Axiom *)
 
 type prover_decl =
