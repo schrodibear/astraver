@@ -1,7 +1,7 @@
 #!/bin/sh
 
 FILES="array assigns break call clash clash_alloc clash_redef \
-    continue coord \
+    continue coord dassault_1 dassault_2 \
     copy dowhile invariants ifs logic_cast \
     param passing purse queue rec ref ref_glob search see \
     sizeof alloca \
