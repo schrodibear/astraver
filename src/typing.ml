@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.13 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.14 2002-03-01 16:31:25 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -510,7 +510,6 @@ and typef_desc lab env loc = function
       If (t_b, t_e1, t_e2), (v,ef), []
 
   | LetRec (f,bl,v,var,e) ->
-      (* let bl' = cic_binders env ren bl in *)
       let env' = traverse_binders env bl in
       let efvar = state_var lab env' var in
       let phi0 = phi_name () in
