@@ -150,6 +150,7 @@
   (setq major-mode 'why-mode)
   (setq mode-name "WHY")
   (use-local-map why-mode-map)
+  (font-lock-mode 1)
   (run-hooks 'why-mode-hook))
 
 (provide 'why-mode)
