@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.120 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.121 2004-12-08 10:53:22 hubert Exp $ i*)
 
 
 open Format
@@ -1293,7 +1293,8 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
 	| Cenv.TTEnum ((Tenum n),el) -> 
 	    List.flatten
 	      (List.map 
-		 (fun (x,v) -> 
+		 (fun (info,v) -> 
+		    let x = info.var_unique_name in
 		    let a = LPred ("eq_int", [LVar x; LConst(Prim_int v)]) in
 		    [Param (false,x,Base_type ([], "int"));
 		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])

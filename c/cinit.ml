@@ -24,18 +24,26 @@ let noattr loc ty e =
     texpr_loc  = loc
   }
 
-let rec pop_initializer i =
+let rec pop_initializer loc t i =
   match i with 
-    | [] -> raise Not_found
+    | [] ->{ texpr_node = 
+	       (match t.ctype_node with
+		  |  Tint _ -> TEconstant(IntConstant "0")
+		  | Tfloat _ -> TEconstant(FloatConstant "0.0")
+		  | Tpointer _ -> TEcast (t,Ctyping.tezero)
+		  | _ -> assert false);
+	     texpr_type = t;
+	     texpr_loc  = loc
+	    },[]
     | (Iexpr e)::l -> e,l
-    | (Ilist [])::l -> pop_initializer l
+    | (Ilist [])::l -> pop_initializer loc t l
     | (Ilist l)::l' -> 
-	let e,r = pop_initializer l in e,r@l'
+	let e,r = pop_initializer loc t l in e,r@l'
 
 let rec init_expr loc t lvalue initializers =
   match t.ctype_node with
-    | Tint _ | Tfloat _ | Tpointer _ -> 
-	let x,l = pop_initializer initializers in
+    | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
+	let x,l = pop_initializer loc t initializers in
 	[{st_node =TSexpr (noattr loc t (TEassign(lvalue,x)));
 	  st_break = false;    
 	  st_continue = false; 
@@ -50,7 +58,7 @@ let rec init_expr loc t lvalue initializers =
 		(fun (acc,init) (tyf, f) -> 
 		   let block, init' =
 		     init_expr loc tyf 
-		       (noattr loc tyf (TEarrow(lvalue, find_field n f))) init
+		       (noattr loc tyf (TEarrow(lvalue, f))) init
 		   in (acc@block,init'))
 		([],initializers)  fl
 	  | _ ->
@@ -61,7 +69,7 @@ let rec init_expr loc t lvalue initializers =
 	  | TTStructUnion (Tstruct (_), (tyf,f)::_) ->
 	      let block, init' =
 		init_expr loc tyf 
-		  (noattr loc tyf (TEarrow(lvalue, find_field n f)))
+		  (noattr loc tyf (TEarrow(lvalue, f)))
 		  initializers
 	      in (block,init')
 	  | _ ->
@@ -92,7 +100,6 @@ let rec init_expr loc t lvalue initializers =
 	init_cells Int64.zero ([],initializers)
     | Tarray (ty,None) -> assert false
     | Tfun (_, _) -> assert false
-    | Tenum _ -> assert false
     | Tvar _ -> assert false
     | Tvoid -> assert false
 

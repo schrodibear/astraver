@@ -85,8 +85,8 @@ let tag_kind = function
 
 type tag_type_definition = 
   | TTIncomplete
-  | TTStructUnion of ctype_node * (ctype * string) list
-  | TTEnum of ctype_node * (string * int64) list
+  | TTStructUnion of ctype_node * (ctype * var_info) list
+  | TTEnum of ctype_node * (var_info * int64) list
 
 type tag_type = { 
   tag_kind : tag_kind;
@@ -168,6 +168,7 @@ let add_sym l x ty info =
   let n = unique_name x in
   mark_as_used n; 
   set_unique_name info n;
+  if n <> x then Coptions.lprintf "renaming %s into %s@." x n;
   if is_sym x then begin
     let d = find_sym x in
     if not (eq_type (var_type d) ty) then 
@@ -336,7 +337,7 @@ let find_field ~tag:n ~field:x =
 let declare_fields tyn fl = match tyn with
   | Tstruct n | Tunion n ->
       List.iter 
-	(fun (t,x) -> let v = find_field n x in set_var_type (Var_info v) t)
+	(fun (t,v) -> set_var_type (Var_info v) t)
 	fl
   | _ -> 
       assert false
@@ -344,7 +345,7 @@ let declare_fields tyn fl = match tyn with
 let type_of_field loc x ty = 
   let rec lookup su n = function
     | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")
-    | (ty, y) :: _ when x = y -> find_field n x
+    | (ty, y) :: _ when x = y.var_name -> find_field n x
     | _ :: fl -> lookup su n fl
   in
   match ty.ctype_node with

@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.mli,v 1.6 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: ctyping.mli,v 1.7 2004-12-08 10:53:22 hubert Exp $ i*)
 
 (* Typing C programs *)
+val tezero : Cast.texpr
 
 val type_file : Cast.file -> Cast.tfile
 

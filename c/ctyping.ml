@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.82 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.83 2004-12-08 10:53:22 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -291,12 +291,12 @@ and type_type_node loc env = function
   | CTunion (x,Tag)  -> Env.find_tag_type loc env (Tunion x)
   | CTenum (x,Tag)  -> Env.find_tag_type loc env (Tenum x)
   | CTstruct (x, Decl fl) ->
-      let fl = List.map (type_field loc env) fl in
+      let fl = List.map (type_field x loc env) fl in
       let tyn = Env.set_struct_union_type loc env (Tstruct x) fl in
       declare_fields tyn fl;
       tyn
   | CTunion (x, Decl fl) ->
-      let fl = List.map (type_field loc env) fl in
+      let fl = List.map (type_field x loc env) fl in
       let tyn = Env.set_struct_union_type loc env (Tunion x) fl in
       declare_fields tyn fl;
       tyn
@@ -318,7 +318,7 @@ and type_type_node loc env = function
 		   eval_const_expr e
 	     in
 	     set_const_value i v;
-	     (f, v) :: enum_fields (Int64.succ v) fl
+	     (i, v) :: enum_fields (Int64.succ v) fl
       in
       let fl = enum_fields Int64.zero fl in
       Env.set_enum_type loc env (Tenum x) fl 
@@ -613,14 +613,15 @@ and check_lvalue loc e = match e.texpr_node with
 
 and type_expr_option env eo = option_app (type_expr env) eo
 
-and type_field loc env (ty, x, bf) = 
+and type_field n loc env (ty, x, bf) = 
   let ty = type_type loc env ty in
   let bf = type_expr_option env bf in
+  let info = find_field n x in
   match bf, ty.ctype_node with
     | _, Tvoid ->
 	error loc ("field `"^x^"' declared void")
     | None, _ ->
-	(ty, x)
+	(ty, info)
     | Some e, (Tenum _ | Tint _ as tyn) -> 
 	let s = match tyn with
 	  | Tenum _ -> Unsigned (* TODO: verif assez de bits pour l'enum *)
@@ -630,7 +631,7 @@ and type_field loc env (ty, x, bf) =
 	  | _ -> assert false
 	in
 	let v = eval_const_expr e in
-	({ty with ctype_node = Tint (s, Bitfield v)}, x)
+	({ty with ctype_node = Tint (s, Bitfield v)}, info)
     | Some _, _ -> 
 	error loc ("bit-field `"^x^"' has invalid type")
 

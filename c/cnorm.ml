@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.5 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.6 2004-12-08 10:53:22 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -520,7 +520,7 @@ let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
 	  List.fold_right 
 	    (fun (tyf, f) acc -> 
 	       let tf = 
-		 { nterm_node = NTarrow (t, find_field n f); 
+		 { nterm_node = NTarrow (t, f); 
 		   nterm_loc = loc;
 		   nterm_type = ctype tyf } 
 	       in
@@ -655,7 +655,7 @@ that a pointer is different from all allocated pointers in [t]
 	  List.fold_right 
 	  (fun (tyf, f) (allocs,form) -> 
 	     let tf = 
-	       { nterm_node = NTarrow (t, find_field n f); 
+	       { nterm_node = NTarrow (t, f); 
 		 nterm_loc = t.nterm_loc;
 		 nterm_type = ctype tyf }
 	     in
