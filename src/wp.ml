@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.60 2002-10-15 09:05:53 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.61 2002-10-15 13:56:35 filliatr Exp $ i*)
 
 open Ident
 open Error
@@ -12,6 +12,8 @@ open Util
 open Env
 open Effect
 open Annot
+
+(*s to quantify over all the variables modified by [p] *)
 
 let output p = 
   let w = Effect.get_writes (effect p) in
@@ -109,8 +111,15 @@ and wp_desc info d q =
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 (filter_post p2.info q) in
 	let p'3,w3 = wp p3 (filter_post p3.info q) in
-	(match w2, w3, post p1 with
-	   | Some {a_value=q2}, Some {a_value=q3}, _ -> 
+	(match post p1, w2, w3 with
+	   | Some _ as q1, Some {a_value=q2}, Some {a_value=q3} -> 
+	       (* $wp(if p1 then p2 else p3, q) = 
+		  (q1(true) => wp(p2, q)) and (q1(false) => wp(p3, q))$ *)
+	       let q1t,q1f = decomp_boolean q1 in
+	       let w = Pand (Pimplies (q1t, q2), Pimplies (q1f, q3)) in
+	       let p'1,_ = wp p1 None in
+	       If (p'1, p'2, p'3), (create_postval w)
+	   | None, Some {a_value=q2}, Some {a_value=q3} -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
