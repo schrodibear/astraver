@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.60 2004-03-24 16:45:03 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.61 2004-03-25 10:37:22 filliatr Exp $ i*)
 
 
 open Format
@@ -94,6 +94,8 @@ let rec interp_term label old_label t =
     | Told t ->	interp_term (Some old_label) old_label t
     | Tbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op t.term_type op,[f t1;f t2])
+    | Tbase_addr t -> 
+	LApp("base_addr",[f t])
     | Tblock_length t -> 
 	LApp("block_length",[interp_var label "alloc"; f t])
     | Tat (t, l) -> 
@@ -364,7 +366,7 @@ let rec interp_expr e =
 	  | _ -> assert false
 	end
     | TEunary (Uint_of_float, e) ->
-	unsupported "float_of_int"
+	unsupported "int_of_float"
     | TEunary (Ufloat_of_int, e) ->
 	make_app "float_of_int" [interp_expr e]
     | TEunary (Utilde, e) ->
@@ -387,7 +389,17 @@ let rec interp_expr e =
 	     {texpr_node = TEconstant "0"}) ->
 	Var "null"
     | TEcast(t,e) -> 
-	unsupported "cast"
+	begin match t.ctype_node, e.texpr_type.ctype_node with
+	  | (CTenum _ | CTint _), (CTenum _ | CTint _)
+	  | CTfloat _, CTfloat _ -> 
+	      interp_expr e
+	  | CTfloat _, (CTenum _ | CTint _) ->
+	      make_app "float_of_int" [interp_expr e]
+	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
+	      interp_expr e
+	  | _ -> 
+	      unsupported "cast"
+	end
     | TEsizeof_expr(e) -> 
 	unsupported "sizeof_expr"
     | TEsizeof(t) -> 

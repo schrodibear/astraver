@@ -4,6 +4,7 @@
 Require Why.
 Require WhyFloat.
 
+Parameter addr : Set.
 Parameter pointer : Set.
 Parameter alloc : Set.
 Parameter memory : Set -> Set.
@@ -18,6 +19,9 @@ Parameter assign_loc : Set.
 (*Why*) Parameter null : pointer.
 
 (*Why logic*) Definition block_length : alloc -> pointer -> Z.
+Admitted.
+
+(*Why logic*) Definition base_addr : pointer -> addr.
 Admitted.
 
 (*Why logic*) Definition offset : pointer -> Z.
@@ -49,6 +53,10 @@ Admitted.
   ((p:pointer) ((i:Z) `(offset (shift p i)) = (offset p) + i`)).
 Admitted.
 
+(*Why axiom*) Lemma base_addr_shift :
+  ((p:pointer) ((i:Z) (base_addr (shift p i)) = (base_addr p))).
+Admitted.
+
 (*Why axiom*) Lemma block_length_shift :
   ((a:alloc)
    ((p:pointer) ((i:Z) `(block_length a (shift p i)) = (block_length a p)`))).
@@ -60,6 +68,36 @@ Admitted.
 
 (*Why axiom*) Lemma shift_not_null :
   ((p:pointer) ((i:Z) (~(p = null) -> ~((shift p i) = null)))).
+Admitted.
+
+(*Why axiom*) Lemma base_addr_block_length :
+  ((a:alloc)
+   ((p1:pointer)
+    ((p2:pointer)
+     ((base_addr p1) = (base_addr p2) ->
+      `(block_length a p1) = (block_length a p2)`)))).
+Admitted.
+
+(*Why axiom*) Lemma pointer_pair_1 :
+  ((p1:pointer)
+   ((p2:pointer)
+    ((base_addr p1) = (base_addr p2) /\ `(offset p1) = (offset p2)` ->
+     p1 = p2))).
+Admitted.
+
+(*Why axiom*) Lemma pointer_pair_2 :
+  ((p1:pointer)
+   ((p2:pointer)
+    (p1 = p2 -> (base_addr p1) = (base_addr p2) /\
+     `(offset p1) = (offset p2)`))).
+Admitted.
+
+(*Why axiom*) Lemma neq_base_addr_neq_shift :
+  ((p1:pointer)
+   ((p2:pointer)
+    ((i:Z)
+     ((j:Z)
+      (~((base_addr p1) = (base_addr p2)) -> ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
 (*Why*) Parameter shift_ :

@@ -7,6 +7,7 @@ parameter any_pointer: unit -> pointer
 (* pointer arithmetic *)
 parameter null : pointer
 logic block_length: alloc,pointer -> int
+logic base_addr: pointer -> addr
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
 
@@ -37,6 +38,10 @@ axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
 
+axiom base_addr_shift :
+  forall p:pointer. forall i:int.
+  base_addr(shift(p,i)) = base_addr(p)
+
 axiom block_length_shift :
   forall a:alloc. forall p:pointer. forall i:int.
   block_length(a,shift(p,i)) = block_length(a,p)
@@ -48,6 +53,33 @@ axiom shift_null :
 axiom shift_not_null :
   forall p:pointer. forall i:int.
     p<>null -> shift(p,i)<>null
+
+axiom base_addr_block_length :
+  forall a:alloc. forall p1:pointer. forall p2:pointer.
+  base_addr(p1) = base_addr(p2) -> block_length(a,p1) = block_length(a,p2)
+
+axiom pointer_pair_1 :
+  forall p1:pointer. forall p2:pointer.
+  (base_addr(p1) = base_addr(p2) and offset(p1) = offset(p2)) -> p1 = p2
+
+axiom pointer_pair_2 :
+  forall p1:pointer. forall p2:pointer.
+  p1 = p2 -> (base_addr(p1) = base_addr(p2) and offset(p1) = offset(p2))
+
+(* the following properties can be proved; here to help Simplify *)
+axiom neq_base_addr_neq_shift :
+  forall p1:pointer. forall p2:pointer.
+  forall i:int. forall j:int.
+  base_addr(p1) <> base_addr(p2) -> shift(p1,i) <> shift(p2,j)
+
+axiom neq_offset_neq_shift :
+  forall p1:pointer. forall p2:pointer.
+  forall i:int. forall j:int.
+  offset(p1)+i <> offset(p2)+j -> shift(p1,i) <> shift(p2,j)
+
+axiom valid_range_valid_shift :
+  forall a:alloc. forall p:pointer. forall i:int. forall j:int. forall k:int.
+  valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
 
 parameter shift_ : p:pointer -> i:int -> 
   { } pointer { result = shift(p,i) }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.28 2004-03-24 09:58:09 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.29 2004-03-25 10:37:22 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -38,6 +38,7 @@ let c_string = noattr (CTpointer c_char)
 let c_array ty = noattr (CTarray (ty, None))
 let c_pointer ty = noattr (CTpointer ty)
 let c_void_star = c_pointer c_void
+let c_addr = noattr (CTvar "addr")
 
 let is_null t = match t.term_node with
   | Tnull -> true
@@ -142,6 +143,11 @@ and type_term_node loc env = function
       (* TODO check label l *)
       let t = type_term env t in
       Tat (t, l), t.term_type
+  | PLbase_addr t ->
+      let t = type_term env t in
+      (match t.term_type.ctype_node with
+	 | CTarray _ | CTpointer _ -> Tbase_addr t, c_addr
+	 | _ -> error loc "subscripted value is neither array nor pointer")
   | PLblock_length t ->
       let t = type_term env t in
       (match t.term_type.ctype_node with
@@ -301,7 +307,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
   | PLat (p, l) ->
       (* TODO check label l *)
       Pat (type_predicate env p, l)
-  | PLcast _ | PLblock_length _ | PLarrget _ | PLarrow _ 
+  | PLcast _ | PLblock_length _ | PLbase_addr _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
   | PLresult ->
       raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))

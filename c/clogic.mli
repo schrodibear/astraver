@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.24 2004-03-23 12:54:53 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.25 2004-03-25 10:37:22 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -52,6 +52,7 @@ and lexpr_node =
   | PLarrget of lexpr * lexpr
   | PLold of lexpr
   | PLat of lexpr * string
+  | PLbase_addr of lexpr
   | PLblock_length of lexpr
   | PLresult
   | PLnull
@@ -91,6 +92,7 @@ and 'ctype term_node =
   | Tif of 'ctype term * 'ctype term * 'ctype term
   | Told of 'ctype term
   | Tat of 'ctype term * string
+  | Tbase_addr of 'ctype term
   | Tblock_length of 'ctype term
   | Tresult
   | Tnull
