@@ -1,5 +1,11 @@
 Note: These are the changes for Caduceus.
 
+ o removed axioms about null 
+ o valid, valid_index, valid_range do not require p<>null anymore 
+ o allocation on stack for structures and arrays
+ o support for string literals in initializers (but not yet in
+   function argument) 
+ 
 version 0.70, January 25th, 2005
 ================================
  o fixed bug with & operator used only in assertions
