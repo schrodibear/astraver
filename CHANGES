@@ -1,4 +1,6 @@
 
+  o new command "axiom id : predicate" to declare an axiom
+
 version 1.40, December 19th, 2003
 ================================
   o disabled C support: C is now supported by an external tool, Caduceus
