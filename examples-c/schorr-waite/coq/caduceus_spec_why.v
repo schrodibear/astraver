@@ -24,14 +24,19 @@ Defined.
 exact isreachable.
 Defined.
 
-(*Why logic*) Definition mesure :
+(*Why logic*) Definition mkvar_type :
   alloc_table -> ((memory) Z) -> ((memory) Z) -> ((memory) pointer)
-  -> ((memory) pointer) -> pointer -> pointer -> Length.
+  -> ((memory) pointer) -> pointer -> pointer -> var_type.
 Admitted.
 
 (*Why logic*) Definition pair_in_list : pointer -> pointer -> plist -> Prop.
 exact pair_in_list.
 Defined.
+
+(*Why logic*) Definition reachable_elements :
+  alloc_table -> ((memory) pointer) -> ((memory) pointer) -> pointer
+  -> pointer -> plist -> Prop.
+Admitted.
 
 (*Why logic*) Definition unmarked_reachable :
   alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)

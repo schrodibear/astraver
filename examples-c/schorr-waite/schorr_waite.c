@@ -9,7 +9,7 @@ typedef struct struct_node {
 
 /*@ logic plist cons(node p, plist l) */
 
-/*@ logic Length mesure (node p , node t) reads p->m,p->c,p->l,p->r*/
+/*@ logic var_type mkvar_type (node p , node t) reads p->m,p->c,p->l,p->r*/
 
 /*@ predicate in_list(node p,plist stack) */
 
@@ -21,10 +21,14 @@ typedef struct struct_node {
 
 /*@ predicate clr_list (node p, plist stack) reads p->c,p->l,p->r*/
 
+/*@ predicate reachable_elements (node p, node t, plist l) reads p->l,p->r*/ 
+
+
 #define NULL ((void*)0)
 
 /*@ requires 
-  @   \forall node x; x!=\null && isreachable(root,x) => \valid(x) && ! x ->m  
+  @   (\forall node x; x!=\null && isreachable(root,x) => \valid(x) && ! x ->m)
+  @   && \exists plist l; reachable_elements(root,root,l)
   @ ensures 
   @   (\forall node x; \old (x->l) == x->l && \old (x->r) == x->r) &&
   @   (\forall node x; \valid(x) && isreachable (root,x) => x->m) &&
@@ -55,8 +59,14 @@ void schorr_waite(node root) {
 	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)))&&
     @  (\forall node x; ! \old(isreachable(root,x)) => x->m == \old(x->m)) &&
     @  (\forall node x; x != \null && \old(isreachable(root,x)) => \valid(x)) 
+    @  variant mkvar_type(p,t) for order_mark_m_and_c_and_stack
   */
-  // variant mesure (p,t) for mesure_order
+  /*
+      (\forall node p1; (\forall node p2;
+              pair_in_list(p1,p2,stack) => 
+	          (\old(p2->l) == (p2->c ? p2->l : p1)) &&
+	          (\old(p2->r) == (p2->c ? p1 : p2->r))))
+  */
   while (p != NULL || (t != NULL && ! t->m)) {
     if (t == NULL || t->m) {
       if (p->c) {
