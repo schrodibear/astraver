@@ -123,8 +123,8 @@ install: $(BINARY)
 	mkdir -p $(MANDIR)/man1
 	cp -f doc/why.1 $(MANDIR)/man1
 
-local: $(BINARY)
-	cp -f $(BINARY) $$HOME/bin/$$OSTYPE/why
+local: $(STATICBINARY)
+	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
 
 demons: $(STATICBINARY)
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why

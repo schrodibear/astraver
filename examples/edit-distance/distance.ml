@@ -26,7 +26,7 @@ external test_char : a:A -> b:A -> {} bool { if result then a=b else not a=b }
 
 external Zmin : int -> int -> int
 
-(*s The program and its proof of correctness. *)
+(*s The program. *)
 
 let distance =
   begin

@@ -1,5 +1,5 @@
 
-(**** McCarthy's ``91'' funtion. *)
+(**** McCarthy's ``91'' function. *)
 
 let rec f91 (n:int) : int { variant max(0,101-n) } =
   (if n <= 100 then

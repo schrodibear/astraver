@@ -125,9 +125,8 @@ examples/kmp/kmp_why.vo: examples/kmp/kmp_why.v lib/coq/Why.vo examples/kmp/Matc
 examples/kmp/Next.vo: examples/kmp/Next.v examples/kmp/Match.vo
 examples/kmp/Match.vo: examples/kmp/Match.v
 examples/kmp/Lex.vo: examples/kmp/Lex.v
-examples/kmp/KMP.vo: examples/kmp/KMP.v examples/kmp/Match.vo examples/kmp/Next.vo examples/kmp/Lex.vo
 examples/heapsort/swap_why.vo: examples/heapsort/swap_why.v lib/coq/Why.vo
-examples/heapsort/heapsort_why.vo: examples/heapsort/heapsort_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo
+examples/heapsort/heapsort_why.vo: examples/heapsort/heapsort_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo examples/heapsort/downheap_why.vo
 examples/heapsort/downheap_why.vo: examples/heapsort/downheap_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo
 examples/heapsort/Inftree.vo: examples/heapsort/Inftree.v lib/coq/Why.vo examples/heapsort/Heap.vo
 examples/heapsort/Heap.vo: examples/heapsort/Heap.v lib/coq/Why.vo
