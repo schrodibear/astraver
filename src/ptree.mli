@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ptree.mli,v 1.4 2002-07-24 15:01:29 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.5 2002-09-19 15:22:09 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -54,6 +54,8 @@ type label = string
 
 type variant = lexpr * variable
 
+type exn_pattern = variable * variable option
+
 type t = 
   { pdesc : t_desc;
     pre : lexpr pre list;
@@ -75,6 +77,7 @@ and t_desc =
   | Sletin of variable * t * t
   | Srec of variable * ptype_v binder list * ptype_v * variant * t
   | Sraise of variable * t option * ptype_v option
+  | Stry of t * (exn_pattern * t) list
   | Sconst of constant
 
 and arg =

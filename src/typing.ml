@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.69 2002-09-18 14:35:28 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.70 2002-09-19 15:22:09 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -594,6 +594,9 @@ and typef_desc lab env loc = function
 	| Some v -> type_v loc lab env (logical_env env) v
       in
       Raise (id, t_e), (v, Effect.add_exn id Effect.bottom), []
+
+  | Stry _ ->
+      assert false
 	    
 and typef_block lab env bl =
   let rec ef_block lab tyres = function

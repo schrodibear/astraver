@@ -744,6 +744,8 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
       & $|$ & \te{raise} \nt{identifier} $[$ \te{:} \nt{value\_type} $]$ \\
       & $|$ & \te{raise} \te{(} \nt{identifier} \nt{prog} \te{)}
               $[$ \te{:} \nt{value\_type} $]$ \\
+      & $|$ & \te{try} \nt{prog} \te{with} 
+              \nt{handler}\plussep{\te{|}} \te{end} \\
       & $|$ & \te{(} \nt{prog}\plus\  \te{)} \\
   \\[0.1em]
 
@@ -784,6 +786,12 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
   \nt{wf\_arg} 
     & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
 
+  \\[0.1em]
+
+  \nt{handler} 
+    & $::=$ & \nt{identifier} \te{->} \nt{prog} \\
+      & $|$ & \nt{identifier} \nt{identifier} \te{->} \nt{prog} \\
+  
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of annotated programs}

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.57 2002-09-12 13:20:55 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.58 2002-09-19 15:22:09 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -66,6 +66,7 @@ let recfun = gec "recfun"
 let arg = gec "arg"
 let block = gec "block"
 let block_statement = gec "block_statement"
+let handler = gec "handler"
 let relation = gec "relation"
 let ident = gec "ident"
 let qualid_ident = gec "qualid_ident"
@@ -439,6 +440,8 @@ i*)
 	Sraise (id, None, t)
     | "raise"; "("; id = ident; p = program; ")"; t = OPT cast ->
 	Sraise (id, Some p, t)
+    | "try"; p = program; "with"; hl = LIST1 handler SEP "|"; "end" ->
+	Stry (p, hl)
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 
 	  | [] -> 
@@ -466,9 +469,14 @@ i*)
     | s = block_statement                 -> [s] ] ]
   ;
   block_statement:
-    [ [ LIDENT "label"; s = ident -> Slabel (Ident.string s)
-      | LIDENT "assert"; "{"; c = assertion; "}" -> Sassert c 
-      | p = program -> Sstatement p ] ]
+  [ [ LIDENT "label"; s = ident -> Slabel (Ident.string s)
+    | LIDENT "assert"; "{"; c = assertion; "}" -> Sassert c 
+    | p = program -> Sstatement p ] ]
+  ;
+  handler:
+  [ [ x = ident; "->"; p = program -> ((x, None), p)
+    | x = ident; v = ident; "->"; p = program -> ((x, Some v), p)
+  ] ]
   ;
   relation:
     [ [ "<"  -> Ident.t_lt
