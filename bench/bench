@@ -43,6 +43,6 @@ for f in good/*.ml; do
     cat $pvs
     echo "==== "$f" ===="
     cat $f
-    read
+    read foo
 done
 

@@ -32,25 +32,27 @@ let interp_program id p =
   (* 5. VCG *)
   let ol = Vcg.vcg (Ident.string id) cc in
   if !debug then eprintf "%d proof obligation(s)@\n" (List.length ol);
-  ol
+  v, ol
     
 let interp_decl fmt = function
   | Program (id, p) ->
-      let ol = interp_program id p in
-      Pvs.print_obligations fmt ol
+      let v,ol = interp_program id p in
+      Pvs.print_obligations fmt ol;
+      Env.add_global id v None
   | External (ids, v) -> 
       List.iter (fun id -> Env.add_global id v None) ids
   | Pvs s ->
       fprintf fmt "  %s@\n@\n" s
 
-let deal_channel base cin fmt =
+let deal_channel theo cin fmt =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
-  Pvs.begin_theory fmt base;
+  Pvs.begin_theory fmt theo;
   List.iter (interp_decl fmt) d;
-  Pvs.end_theory fmt base
+  Pvs.end_theory fmt theo
 
 let deal_file f =
+  Loc.set_file f;
   let cin = open_in f in 
   let fwe = Filename.chop_extension f in
   let base = Filename.basename fwe in
@@ -73,26 +75,23 @@ let parse_args () =
 let main () =
   let files = parse_args () in
   if files = [] then
-    deal_channel "Input" stdin std_formatter
+    deal_channel "WhyOutput" stdin std_formatter
   else
     List.iter deal_file files
 
 let rec explain_exception fmt = function
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
-  | Stdpp.Exc_located ((fc, lc), e) ->
-      fprintf fmt "Characters %d-%d\n" fc lc;
+  | Stdpp.Exc_located (loc, e) ->
+      Loc.report fmt loc;
       explain_exception fmt e
-  | Error (Some (fc, lc), e) ->
-      fprintf fmt "Characters %d-%d\n" fc lc;
+  | Error (Some loc, e) ->
+      Loc.report fmt loc;
       report fmt e
   | Error (_, e) ->
       report fmt e
   | e ->
-      raise e
-(*i
-      fprintf fmt "Error: %s" (Printexc.to_string e)
-i*)
+      fprintf fmt "Anomaly: %s" (Printexc.to_string e); raise e
 
 let _ =
   try

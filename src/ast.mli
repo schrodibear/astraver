@@ -1,7 +1,6 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: ast.mli,v 1.4 2001-08-21 20:57:01 filliatr Exp $ *)
+(*i $Id: ast.mli,v 1.5 2001-08-23 20:24:34 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -13,21 +12,6 @@ type termination =
   | Wf of term * term
 
 type variable = Ident.t
-
-type lazy_connective = Land | Lor
-
-(*i
-type pattern =
-  | PatVar of Ident.t
-  | PatConstruct of Ident.t * ((section_path * int) * int)
-  | PatAlias of pattern * Ident.t
-  | PatPair of pattern * pattern
-  | PatApp of pattern list
-
-type epattern =
-  | ExnConstant of Ident.t
-  | ExnBind of Ident.t * Ident.t
-i*)
 
 (*s Blocks. *)
 
@@ -58,7 +42,6 @@ and 'a t_desc =
   | If of 'a t * 'a t * 'a t
   | Lam of type_v binder list * 'a t
   | App of 'a t * 'a arg list
-  | Lapp of lazy_connective * 'a t * 'a t 
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
   | LetRec of variable * type_v binder list * type_v * (term * term) * 'a t

@@ -3,12 +3,11 @@
 
  - arguments which are types
 
- - "if x = 0 then ..." => Failure "todo typing term"
-    actually pbm in globalization (should be "if !x = 0 then ...")
-
  - no substitution when result name is not "result" => force it?
 
  - add renaming in typing info
+
+ - suppress duplication of pre/post conditions in AST
 
  - Java input
    see http://home.inreach.com/bronikov/grammars/java.html

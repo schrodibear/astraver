@@ -170,16 +170,6 @@ and trad_desc ren env ct d =
       let te = trans ren' e in
       CC_lam (bl', te)
 
-  | Lapp (c, e1, e2) ->
-      let c = Tvar (if c = Land then p_and else p_or) in
-      let te1 = trad ren e1
-      and te2 = trad ren e2 in
-(*i
-      let q1' = apply_post ren env (current_date ren) (anonymous q1)
-      and q2' = apply_post ren env (current_date ren) (anonymous q2) in
-i*)
-      CC_app (CC_expr c, [te1; te2])
-
   | App (f, args) ->
       let trad_arg (ren,args) = function
 	| Term a ->

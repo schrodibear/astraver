@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: error.ml,v 1.2 2001-08-17 00:52:37 filliatr Exp $ *)
+(* $Id: error.ml,v 1.3 2001-08-23 20:24:34 filliatr Exp $ *)
 
 open Ident
 open Logic
@@ -28,11 +28,12 @@ type error =
   | ShouldBeInformative
   | AppNonFunction
   | PartialApp
-  | NotExpectedType of (formatter -> unit)
+  | NotExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectsAType of Ident.t
   | ExpectsATerm of Ident.t
-  | ShouldBeVariable
-  | ShouldBeReference
+  | ShouldBeVariable of Ident.t
+  | ShouldBeReference of Ident.t
+  | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
 
 exception Error of (Loc.t option) * error
@@ -79,8 +80,8 @@ let report fmt = function
   | PartialApp ->
       fprintf fmt "@[This function does not have@ ";
       fprintf fmt "the right number of arguments@]"
-  | NotExpectedType v ->
-      fprintf fmt "@[Argument is expected to have type@ ";
+  | NotExpectedType (t,v) ->
+      fprintf fmt "@[Term "; t fmt; fprintf fmt "@ is expected to have type@ ";
       v fmt; fprintf fmt "@]"
   | ExpectsAType id ->
       fprintf fmt "@[The argument %s@ " (Ident.string id);
@@ -88,10 +89,14 @@ let report fmt = function
   | ExpectsATerm id ->
       fprintf fmt "@[The argument %s@ " (Ident.string id);
       fprintf fmt "in this application is supposed to be a term@]"
-  | ShouldBeVariable ->
-      fprintf fmt "Argument of function should be a variable"
-  | ShouldBeReference ->
-      fprintf fmt "Argument of function should be a reference"
+  | ShouldBeVariable id ->
+      fprintf fmt "@[The argument %s@ " (Ident.string id);
+      fprintf fmt "in this application should be a variable@]"
+  | ShouldBeReference id ->
+      fprintf fmt "@[The argument %s@ " (Ident.string id);
+      fprintf fmt "in this application should be a reference@]"
+  | IllTypedArgument f ->
+      fprintf fmt "@[This argument should have type@ "; f fmt; fprintf fmt "@]"
   | NoVariableAtDate (id, d) ->
       fprintf fmt "Variable %s is unknown at date %s" (Ident.string id) d
 
@@ -150,15 +155,19 @@ let app_of_non_function loc = raise_with_loc (Some loc) AppNonFunction
   
 let partial_app loc = raise_with_loc (Some loc) PartialApp
   
-let expected_type loc v = raise_with_loc (Some loc) (NotExpectedType v)
+let expected_type loc t v = raise_with_loc (Some loc) (NotExpectedType (t,v))
 
 let expects_a_type id loc = raise_with_loc (Some loc) (ExpectsAType id)
 
 let expects_a_term id = raise_with_loc None (ExpectsATerm id)
 
-let should_be_a_variable loc = raise_with_loc (Some loc) ShouldBeVariable
+let should_be_a_variable loc id = 
+  raise_with_loc (Some loc) (ShouldBeVariable id)
    
-let should_be_a_reference loc = raise_with_loc (Some loc) ShouldBeReference
+let should_be_a_reference loc id = 
+  raise_with_loc (Some loc) (ShouldBeReference id)
+
+let ill_typed_argument loc t = raise_with_loc (Some loc) (IllTypedArgument t)
 
 let no_variable_at_date id d = raise_with_loc None (NoVariableAtDate (id,d))
 

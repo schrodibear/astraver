@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: db.ml,v 1.2 2001-08-21 20:57:01 filliatr Exp $ *)
+(* $Id: db.ml,v 1.3 2001-08-23 20:24:34 filliatr Exp $ *)
 
 open Logic
 open Types
@@ -116,8 +116,6 @@ let db_prog e =
 	let idl',bl' = db_binders idl bl in Lam(bl', db idl' e)
     | App (e1,l) ->
 	App (db idl e1, List.map (db_arg idl) l)
-    | Lapp (c,a,b) ->
-	Lapp (c, db idl a, db idl b)
     | LetRef (x,e1,e2) ->
 	LetRef (x, db idl e1, db (tids,ids,x::refs) e2)
     | LetIn (x,e1,e2) ->

@@ -1,7 +1,8 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: error.mli,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
+(*i $Id: error.mli,v 1.3 2001-08-23 20:24:34 filliatr Exp $ i*)
+
+(*s Errors. *)
 
 open Ident
 open Types
@@ -27,11 +28,12 @@ type error =
   | ShouldBeInformative
   | AppNonFunction
   | PartialApp
-  | NotExpectedType of (formatter -> unit)
+  | NotExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectsAType of Ident.t
   | ExpectsATerm of Ident.t
-  | ShouldBeVariable
-  | ShouldBeReference
+  | ShouldBeVariable of Ident.t
+  | ShouldBeReference of Ident.t
+  | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
 
 exception Error of (Loc.t option) * error
@@ -62,11 +64,12 @@ val should_be_informative : Loc.t -> 'a
 
 val app_of_non_function : Loc.t -> 'a
 val partial_app : Loc.t -> 'a
-val expected_type : Loc.t -> (formatter -> unit) -> 'a
+val expected_type : Loc.t -> (formatter -> unit) -> (formatter -> unit) -> 'a
 val expects_a_type : Ident.t -> Loc.t -> 'a
 val expects_a_term : Ident.t -> 'a
-val should_be_a_variable : Loc.t -> 'a
-val should_be_a_reference : Loc.t -> 'a
+val should_be_a_variable : Loc.t -> Ident.t -> 'a
+val should_be_a_reference : Loc.t -> Ident.t -> 'a
+val ill_typed_argument : Loc.t -> (formatter -> unit) -> 'a
 
 val no_variable_at_date : Ident.t -> string -> 'a
 

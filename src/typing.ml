@@ -1,7 +1,8 @@
-
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: typing.ml,v 1.3 2001-08-21 20:57:02 filliatr Exp $ *)
+(*i $Id: typing.ml,v 1.4 2001-08-23 20:24:35 filliatr Exp $ i*)
+
+(*s Typing. *)
 
 open Format
 open Ident
@@ -21,9 +22,10 @@ let type_v_bool = PureType PTbool
 let type_v_unit = PureType PTunit
 let type_v_float = PureType PTfloat
 
-let check_num loc t =
+let check_num loc a t =
   if not (t = type_v_int || t = type_v_float) then
-    Error.expected_type loc (fun fmt -> fprintf fmt "int or float")
+    Error.expected_type loc 
+      (fun fmt -> print_term fmt a) (fun fmt -> fprintf fmt "int or float")
 
 let rec typing_term loc env = function
   | Tvar id -> 
@@ -42,7 +44,7 @@ let rec typing_term loc env = function
       check_two_nums loc env a b
   | Tapp (id, [a]) when id == t_neg ->
       let ta = typing_term loc env a in
-      check_num loc ta; ta
+      check_num loc a ta; ta
   | Tapp (id, [a;b]) 
     when id == t_lt || id == t_le || id == t_gt || id == t_ge ->
       let _ = check_two_nums loc env a b in
@@ -50,37 +52,43 @@ let rec typing_term loc env = function
   | Tapp (id, [Tvar a; b]) when id == access ->
       let tb = typing_term loc env b in
       if tb <> type_v_int then 
-	Error.expected_type loc (fun fmt -> fprintf fmt "int");
+	Error.expected_type loc 
+	  (fun fmt -> print_term fmt b) (fun fmt -> fprintf fmt "int");
       (match type_in_env env a with 
 	 | Array (_,v) -> v 
 	 | _ -> raise (Error.Error (Some loc, Error.NotAnArray a)))
   | Tapp (id, [a]) when id == t_sqrt ->
       let ta = typing_term loc env a in
       if ta <> type_v_float then
-	Error.expected_type loc (fun fmt -> fprintf fmt "float");
+	Error.expected_type loc 
+	  (fun fmt -> print_term fmt a) (fun fmt -> fprintf fmt "float");
       type_v_float
   | Tapp (id, tl) as t ->
+      if not (is_in_env env id) then Error.app_of_non_function loc;
       (match type_in_env env id with
 	 | Arrow (bl, { c_result_type = v}) ->
-	     let ttl = List.map (typing_term loc env) tl in
+	     let ttl = List.map (fun t -> (t,typing_term loc env t)) tl in
 	     check_app loc bl ttl;
 	     v
 	 | _ -> 
-	     print_term err_formatter t; pp_print_newline err_formatter ();
-	     assert false)
+	     Error.app_of_non_function loc)
   | Tbound _ ->
       assert false
 
 and check_same_type loc env a b =
   let ta = typing_term loc env a in
   let tb = typing_term loc env b in
-  if ta <> tb then Error.expected_type loc (fun fmt -> print_type_v fmt ta)
+  if ta <> tb then 
+    Error.expected_type loc 
+      (fun fmt -> print_term fmt b) (fun fmt -> print_type_v fmt ta)
 
 and check_two_nums loc env a b =
   let ta = typing_term loc env a in
-  check_num loc ta;
+  check_num loc a ta;
   let tb = typing_term loc env b in
-  if ta <> tb then Error.expected_type loc (fun fmt -> print_type_v fmt ta);
+  if ta <> tb then 
+    Error.expected_type loc 
+      (fun fmt -> print_term fmt b) (fun fmt -> print_type_v fmt ta);
   ta
 
 and check_app loc bl tl = match bl, tl with
@@ -90,9 +98,10 @@ and check_app loc bl tl = match bl, tl with
       Error.app_of_non_function loc
   | _, [] ->
       Error.partial_app loc
-  | (_,BindType et) :: bl , at :: tl ->
+  | (_,BindType et) :: bl , (a,at) :: tl ->
       if et <> at then 
-	Error.expected_type loc (fun fmt -> print_type_v fmt et);
+	Error.expected_type loc 
+	  (fun fmt -> print_term fmt a) (fun fmt -> print_type_v fmt et);
       check_app loc bl tl
   | _ ->
       assert false
@@ -143,7 +152,7 @@ let effect_app ren env f args =
   let check_type loc v t so =
     let v' = type_v_rsubst so v in
     if not (convert (v',t)) then 
-      Error.expected_type loc (fun fmt -> print_type_v fmt v')
+      Error.ill_typed_argument loc (fun fmt -> print_type_v fmt v')
   in
   let s,so,ok = 
     (* s est la substitution des références, so celle des autres arg. 
@@ -155,11 +164,11 @@ let effect_app ren env f args =
 	     let ta = type_in_env env id' in
 	     check_type f.loc v ta so;
 	     (id,id')::s, so, ok
-	 | _, Refarg _ -> 
-	     Error.should_be_a_variable f.loc
+	 | (id,_), Refarg _ -> 
+	     Error.should_be_a_reference f.loc id
 	 | (id,BindType v), Term t ->
 	     let ta = t.info.kappa.c_result_type in
-	     check_type t.loc v ta so;
+	     check_type f.loc v ta so;
 	     (match t.desc with
 		| Expression c -> s, (id,c)::so, ok
 		| _ -> s,so,false)
@@ -202,7 +211,6 @@ let rec is_pure_desc ren env = function
   | TabAcc (_,_,p) -> is_pure ren env p
   | App (p,args) -> 
       is_pure ren env p && List.for_all (is_pure_arg ren env) args
-  | Lapp (_,a,b) -> is_pure ren env a && is_pure ren env b
   | Aff _ | TabAff _ | Seq _ | While _ | If _ 
   | Lam _ | LetRef _ | LetIn _ | LetRec _ -> false
   | Debug (_,p) -> is_pure ren env p
@@ -370,7 +378,6 @@ let states_expression ren env expr =
     | Var id -> 
 	Tvar id, pl, Effect.bottom
     | Expression c -> 
-	(* TODO: division by zero => obligation *)
 	c, pl, Effect.bottom
     | Acc id -> 
 	Tvar id, pl, Effect.add_read id Effect.bottom
@@ -435,7 +442,7 @@ let rec states_desc ren env loc = function
       Expression c, (v,Effect.bottom)
 
   | Acc _ ->
-      failwith "Typing.states: term is supposed not to be pure"
+      assert false
 
   | Var id ->
       let v = type_in_env env id in
@@ -443,8 +450,12 @@ let rec states_desc ren env loc = function
       Var id, (v,ef)
 
   | Aff (x, e1) ->
-      Error.check_for_reference loc x (type_in_env env x);
+      let et = type_in_env env x in
+      Error.check_for_reference loc x et;
       let s_e1 = states ren env e1 in
+      if s_e1.info.kappa.c_result_type <> deref_type et then 
+	Error.expected_type s_e1.loc 
+	  (fun fmt -> ()) (fun fmt -> print_type_v fmt (deref_type et));
       let e = s_e1.info.kappa.c_effect in
       let ef = add_write x e in
       let v = type_v_unit in
@@ -500,23 +511,6 @@ let rec states_desc ren env loc = function
       let ef = Effect.bottom in
       Lam(bl',s_e), (v,ef)
 	 
-  (* Connectives AND and OR *)
-  | Lapp (c,e1,e2) ->
-      let s_e1 = states ren env e1
-      and s_e2 = states ren env e2 in
-      let ef1 = s_e1.info.kappa.c_effect
-      and ef2 = s_e2.info.kappa.c_effect in
-      let ef = Effect.union ef1 ef2 in
-      Lapp (c,s_e1,s_e2), (type_v_bool, ef)
-
-  (* Connective NOT *)
-(*i
-  | SApp ([Var id], [e]) ->
-      let s_e = states ren env e in
-      let ef = s_e.info.kappa.c_effect in
-      SApp ([Var id], [s_e]), (type_v_bool, ef)
-i*)      
-
   (* ATTENTION:
      Si un argument réel de type ref. correspond à une ref. globale
      modifiée par la fonction alors la traduction ne sera pas correcte.

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: parser.ml4,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
+(* $Id: parser.ml4,v 1.5 2001-08-23 20:24:35 filliatr Exp $ *)
 
 open Logic
 open Rename
@@ -103,14 +103,6 @@ let bin_op op loc e1 e2 =
 let un_op op loc e =
   without_effect loc
     (App (without_effect loc (Expression (Tapp (op,[]))), [Term e]))
-
-let bool_bin op loc a1 a2 =
-  let w = without_effect loc in
-  let d = Lapp (op, a1, a2) in
-  w d
-
-let bool_or  loc = bool_bin Lor loc
-let bool_and loc = bool_bin Land loc
 
 let bool_not loc a = un_op Ident.p_not loc a
 
@@ -302,11 +294,9 @@ EXTEND
   [ [ x = prog2; "||"; y = prog1  -> 
        let ptrue = without_effect loc (Expression (Tconst (ConstBool true))) in
        without_effect loc (If (x, ptrue, y))
-       (*i bool_or loc x y i*)
     | x = prog2; "&&"; y = prog1 -> 
        let pf = without_effect loc (Expression (Tconst (ConstBool false))) in
        without_effect loc (If (x, y, pf))
-       (*i bool_and loc x y i*)
     | x = prog2 -> x ] ]
   ;
   ast2:
