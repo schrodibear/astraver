@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.60 2002-09-18 06:12:19 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.61 2002-09-18 14:35:28 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -309,7 +309,7 @@ let rec print_cc_term fmt = function
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
   | CC_case (e, pl) ->
-      fprintf fmt "@[<case (todo)>@]"
+      fprintf fmt "case (todo)"
   | CC_letin (_,[id,_],c,c1) ->
       fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
       Ident.print id print_cc_term c print_cc_term c1

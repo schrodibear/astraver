@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.48 2002-09-18 06:27:31 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.49 2002-09-18 14:35:28 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -131,6 +131,11 @@ let rec make_exn ty x v = function
 		      CC_term (Tvar Ident.implicit)),
 	      make_exn ty x v yl)
 
+(* builds (Val_e1 (Val_e2 ... (Val_en t))) *)
+
+let make_val t xs = 
+  List.fold_right (fun x cc -> CC_app (CC_var (Ident.exn_val x), cc)) xs t
+
 (*s The Monadic operators. They are operating on values of the following
     type [interp] (functions producing a [cc_term] when given a renaming
     data structure). *)
@@ -158,7 +163,7 @@ let lambda_vars =
   List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
 
 let result_term ef v = function
-  | Value t -> CC_term t
+  | Value t -> make_val (CC_term t) (Effect.get_exns ef)
   | Exn (x, t) -> make_exn v x t (Effect.get_exns ef)
 
 let unit info r ren = 
@@ -225,6 +230,28 @@ let unit info r ren =
       t :: hole,
       holet)
 
+(*s Case patterns *)
+
+(* (Val_e1 (Val_e2 ... (Exn_ei v))) *)
+let exn_pattern x res xs =
+  let rec make = function
+    | [] -> 
+	assert false
+    | y :: yl when x = y -> 
+	PPcons (Ident.exn_exn x,
+		match res with 
+		  | None -> [] 
+		  | Some (v,t) -> [PPvariable (v, TTpure t)])
+    | y :: yl -> 
+	PPcons (Ident.exn_val y, [make yl])
+  in
+  make xs
+
+(* (Val_e1 (Val_e2 ... (Val_en v))) *)
+let val_pattern (res,t) xs =
+  let t = [PPvariable (res, t)] in
+  List.hd (List.fold_right (fun x cc -> [PPcons (Ident.exn_val x, cc)]) xs t)
+
 (*s [compose k1 e1 e2 ren env] constructs the term
    
         [ let h1 = ?:P1 in ... let hn = ?:Pm in ]
@@ -254,12 +281,14 @@ let gen_compose isapp info1 e1 info2 e2 ren =
   let r1,w1,x1 = get_repr ef1 in
   let ren' = next ren w1 in
   let res1,ren' = fresh ren' res1 in
-  let tt1 = trad_type_v ren env v1 in
-  let b = [res1, CC_var_binder tt1] in
+  let tv1 = trad_type_v ren env v1 in
+  let tres1 = trad_exn_type x1 tv1 in
+  let b = [res1, CC_var_binder tres1] in
   let b',dep = match q1 with
     | None -> 
 	[], false
     | Some q1 -> 
+	(* TODO *)
 	let (q1,_) = apply_post info1.label ren' env q1 in
 	let hyp = subst_in_predicate (subst_onev result res1) q1.a_value in
 	[post_name q1.a_name, CC_pred_binder hyp], true 
@@ -272,8 +301,8 @@ let gen_compose isapp info1 e1 info2 e2 ren =
       let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r1) in
       let inputpre = List.map (fun (id,_) -> CC_var id) pre1 in
       cc_applist (e1 ren) (input @ inputpre)
-    else 
-      e1 ren 
+    else
+      e1 ren
   in
   let cc2 =
     if x1 = [] then
@@ -281,7 +310,15 @@ let gen_compose isapp info1 e1 info2 e2 ren =
       e2 res1 ren'
     else
       (* e1 may raise an exception *)
-      assert false
+      let exn_branch x =
+	let xt = find_exception x in
+	let r = Exn (x, option_app (fun _ -> Tvar res1) xt) in
+	let res1 = option_app (fun pt1 -> res1, pt1) xt in
+	exn_pattern x res1 x1, (* TODO [q1] *) unit info2 r ren'
+      in
+      CC_case (CC_var res1, 
+	       (val_pattern (res1, tv1) x1, (* TODO [q1] *) e2 res1 ren') ::
+	       (List.map exn_branch x1))
   in
   let cc = CC_letin (dep, bl, cc1, cc2) in
   let_many_pre pre1 cc

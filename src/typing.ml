@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.68 2002-09-13 12:32:55 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.69 2002-09-18 14:35:28 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -82,6 +82,12 @@ let check_for_let_ref loc v =
 
 let check_for_not_mutable loc v = 
   if is_mutable v then raise_located loc CannotBeMutable
+
+let check_unbound_exn loc =
+  let check (x,_) =
+    if not (Env.is_exception x) then raise_located loc (UnboundException x)
+  in
+  List.iter check
 
 (*s Instantiation of polymorphic functions *)
 
@@ -207,6 +213,7 @@ let state_post lab env (id,v,ef) loc = function
   | None -> 
       Effect.bottom, None
   | Some q ->
+      check_unbound_exn loc (snd q);
       let q = type_post lab (logical_env env) id v q in
       let ids = post_vars q in
       let ef,q = 
@@ -285,7 +292,6 @@ let check_no_effect loc ef =
 let saturation loc e (a,al) =
   let xs = Effect.get_exns e in
   let check (x,_) =
-    if not (Env.is_exception x) then raise_located loc (UnboundException x);
     if not (List.mem x xs) then raise_located loc (CannotBeRaised x);
   in
   List.iter check al;

@@ -140,7 +140,7 @@ let vcg base t =
 	CC_app (f', a')
     | CC_case (e, pl) ->
 	let e' = traverse ctx e in
-	let pl' = List.map (fun (p, e) -> (p, traverse ctx e)) pl in
+	let pl' = List.map (traverse_case ctx) pl in
 	CC_case (e', pl')
     | CC_tuple (el,p) ->
 	let el' = List.map (traverse ctx) el in
@@ -150,6 +150,11 @@ let vcg base t =
 	let b' = traverse ctx b in
 	let c' = traverse ctx c in
 	CC_if (a', b', c')
+  and traverse_case ctx (p,e) =
+    p, traverse (traverse_pattern ctx p) e
+  and traverse_pattern ctx = function
+    | PPvariable (id, v) -> (Svar (id,v)) :: ctx
+    | PPcons (_, pl) -> List.fold_left traverse_pattern ctx pl
   and traverse_binder ctx = function
     | id, CC_var_binder v -> (Svar (id,v)) :: ctx
     | id, CC_pred_binder p -> (Spred (id,p)) :: ctx
