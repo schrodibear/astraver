@@ -44,6 +44,7 @@
 \makeindex
 
 \begin{document}
+\sloppy
 
 %%% coverpage
 \thispagestyle{empty}
@@ -343,8 +344,8 @@ an array of integers:
 \begin{code}
 void swap(int t[],int i,int j) \{
   int tmp = t[i];
-  t[j] = t[i]; 
-  t[i] = tmp;
+  t[i] = t[j]; 
+  t[j] = tmp;
 \}
 \end{code}
 Running \caduceus{} on this program, without any annotation, leads to
@@ -359,36 +360,64 @@ i.e. inserting the pre-condition
 \end{code}
 As this, the obligations are now solved automatically both with
 Simplify and Coq. However, one may want to specify the function in
-more details: for example
+more details: for example\index{old@\texttt{\bs{}old}}
 \begin{code}
 /*@ requires \valid_index(t,i) && \valid_index(t,j) 
   @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
 \end{code}
+where in the post-condition, $\old(e)$ means the value of expression
+$e$ before execution of the function.
+
+With Simplify, this new specification is still proved
+automatically. With Coq, after \verb|intuition; subst; auto.| we have
+2 subgoals corresponding to the two terms of the conjunction:
+\indextt{shift}
+\begin{verbatim} 
+t : pointer
+i : Z
+j : Z
+alloc : alloc
+intP : memory Z
+H : valid_index alloc t i
+H0 : valid_index alloc t j
+Pre1 : valid alloc (shift t i)
+______________________________________(1/2)
+shift t i
+# (upd (upd intP (shift t i) (shift t j # intP)) (shift t j)
+     (shift t i # intP)) = shift t j # intP
+
+
+______________________________________(2/2)
+shift t j
+# (upd (upd intP (shift t i) (shift t j # intP)) (shift t j)
+     (shift t i # intP)) = shift t i # intP
+\end{verbatim}
+We meet here for the first time the function \verb|shift|:
+$(\verb|shift|~p~i)$ denotes in the logic the C expression $p+i$
+(pointer arithmetic), hence $(\verb|shift|~t~i)~\#~s$ then denotes
+$t[i]$ is the memory state $s$. Dealing with pointer arithmetic in
+general will be explained in Section~\ref{pointer-arith}. For the
+moment, we only have to deal again with the shape
+$p~\verb|#|~(\verb|upd|~s~q~v)$, by using the \verb|caduceus|
+tactics. However, this des not work immediately, because indeed we do
+not known whether $i$ and $j$ are different. So the Coq may be made by
+a case reasoning such as:
+\begin{verbatim}
+assert (i=j \/ i<>j); [omega | intuition].
+subst i; caduceus.
+caduceus.
+caduceus.
+\end{verbatim}
+
 
 \subsection{Arrays and loops}
 
 Let us now consider a more complex example: searching an element in an
 array, returning its index if it exists, and the first non-existent
 index otherwise: 
-\begin{code}
-/*@ requires \valid_range(t,0,n)
-  @ ensures 
-  @   (0 <= \result < n => t[\result] == v) &&
-  @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
-  @*/
-int index(int t[], int n, int v) \{
-  int i = 0;
-  /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
-    variant n - i */ 
-  while (i < n) \{
-    if (t[i] == v) break;
-    i++;
-  \}
-  return i;
-\}
-\end{code}
 \index{valid\_range@\texttt{\bs{}valid\_range}}
-
+\index{forall@\texttt{\bs{}forall}}
+\indextt{invariant}\indextt{variant}
 \begin{code}
 /*@ requires \valid_range(t,0,n)
   @ ensures 
@@ -406,9 +435,13 @@ int index(int t[], int n, int v) \{
   return i;
 \}
 \end{code}
+In the pre-condition, the new predicate $\verb|valid_range|(t,0,n)$ is used
+to specify that all memory locations $t[i]$ for $0\leq i < n$ are
+valid. Notice also the use of universal quantification in the
+post-condition. 
 
-\indextt{invariant}\indextt{variant}
-A loop can be annotated with an invariant (a property which holds at
+A very important novelty is for the \verb|while| loop: it is annotated
+with an invariant (a property which holds at 
 the loop entrance and is preserved by the loop body) and a variant (a
 quantity which decreases at each loop step for a well-founded
 ordering, thus ensuring termination). The three kinds of C loops can
@@ -419,17 +452,43 @@ A loop annotation is placed right before the loop; the keyword
 (resp. the variant). The invariant is optional and must appear before
 the variant when present.
 
+With Simplify, the two proof obligations generated are solved
+automatically. With Coq, the second one (which appears to be the
+validity of the invariant when entering the loop) is solved by
+\verb|intuition|, whereas the first one (the preservation of the
+invariant) needs a little more reasoning:
+\begin{verbatim}
+destruct result0; intuition.
+subst ; auto.
+assert (k<i1 \/ k=i1) ; [omega | intuition ].
+apply (H0 k); auto with *.
+subst; auto.
+subst; auto.
+apply (H0 i0); auto with *.
+\end{verbatim} 
+
+Notice that both the validity of the post-condition and the
+decreasingness of the variant have been discharged automatically by
+Why.
+
 \section{Structures}
 
+Let us now consider a program using structures. We consider a simple
+``electronic purse'' modelized by
 \begin{code}
 typedef struct \{
   int balance;
 \} purse;
 
 //@ predicate purse_inv(purse *p) \{ \valid(p) && p->balance >= 0 \}
-
+\end{code}
+The new thing here is this last \verb|predicate|\indextt{predicate}
+declaration: it is simply a definition in the logic of a new predicate
+\verb|purse_inv|, which applies to a (pointer to a) purse , stating
+that it is valid and its balance is non-negative. One may now specify
+two functions for crediting and withdrawing money has follows:
+\begin{code}
 /*@ requires purse_inv(p) && s >= 0
-  @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
   @*/
 void credit(purse *p,int s) \{
@@ -437,15 +496,61 @@ void credit(purse *p,int s) \{
 \}
 
 /*@ requires purse_inv(p) && 0 <= s <= p->balance
-  @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) - s
   @*/
 void withdraw(purse *p,int s) \{
   p->balance = p->balance - s;
 \}
 \end{code}
+The four obligations are solved automatically by Simplify. With Coq,
+the first to do manually is to unfold the definition of
+\verb|purse_inv|, and indeed the first obligation for \verb|credit|,
+to show that access to \verb|p->balance| is valid, is solved by
+\begin{verbatim}
+unfold purse_inv; intuition.
+\end{verbatim}
+After the same tactic, the second obligation for \verb|credit| results
+into two subgoals:
+\begin{verbatim}
+2 subgoals
+p : pointer
+s : Z
+alloc : alloc
+balance : memory Z
+Pre3 : valid alloc p
+H0 : s >= 0
+H1 : valid alloc p
+H2 : p # balance >= 0
+caduceus_1 : Z
+Post2 : caduceus_1 = p # balance
+balance0 : memory Z
+H : balance0 = upd balance p (caduceus_1 + s)
+______________________________________(1/2)
+p # balance0 >= 0
 
-\section{Memory model and pointer arithmetic}
+
+______________________________________(2/2)
+p # balance0 = p # balance + s
+\end{verbatim}
+We meet again the notation $p~\#~s$ where $s$ is now \verb|balance| or
+\verb|balance0|: these are also memory states with integer memory
+cells, the represents the values if the \verb|balance| field for each
+pointer to a purse. In general, there will be memory states whose
+names corresponds to names of each fields of structures, this is a
+representation of memory states already present in an early work on
+general pointer programs by Burstall~\cite{burstall72}, and was emphasized
+by Bornat~\cite{bornat00mpc}.
+
+Indeed, the situation is very similar to arrays, we again meet the
+shape $p~\verb|#|~(\verb|upd|~s~q~v)$, and the proofs are done by
+\begin{verbatim}
+subst; caduceus.
+\end{verbatim}
+for each subgoals. The situation is alomost the same for
+\verb|withdraw|.
+
+\section{Memory model and pointer arithmetic
+\label{pointer-arith}}
 \index{Pointer arithmetic}
 
 The C language makes almost no distinction between arrays and
@@ -536,13 +641,12 @@ The following table summarizes the various pointer notions:
 
 
 \section{Calling functions}
+\label{assigns}
 
-\subsection{The \texttt{assigns} clause}
-\label{assigns}\indextt{assigns}
-
+The next step in this tutorial is to deal with function call. Let us
+use again our \verb|purse| structure, and consider a simple test:
 \begin{code}
-/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
-  @ assigns p1->balance, p2->balance
+/*@ requires purse_inv(p1) && purse_inv(p2)
   @ ensures \result == 0
   @*/
 int test1(purse *p1, purse *p2) \{
@@ -550,25 +654,147 @@ int test1(purse *p1, purse *p2) \{
     credit(p2,100);
     return p1->balance;
 \}
-
-//@ ensures \fresh(\result) && purse_inv(\result) 
-purse *new_purse();
-
-
-//@ ensures \result == 150
-int test2() \{
-    purse *p1 = new_purse();
-    purse *p2 = new_purse();
-    credit(p1,100);
-    credit(p2,200);
-    withdraw(p1,50);
-    withdraw(p2,100);
-    return p1->balance + p2->balance;
-\}
 \end{code}
+This function requires three proof obligations, two of them being
+solved by Simplify. Unfortunately, this time the counter-example
+proposed by Simplify is not easy to interpret. Let's go to Coq proofs:
+the first obligation is to show the validity os use of pointer
+\verb|p1| in \verb|p1->balance = 0|, it is solves by 
+\begin{verbatim}
+unfold purse_inv; intuition.
+\end{verbatim}
+The second obligation is to show that the pre-condition to call to
+\verb|credit(p2,100)| is valid, that is (see specification of
+\verb|credit|) \verb|purse_inv(p2) && 100 >= 0|. After
+\begin{verbatim}
+unfold purse_inv; intuition.
+subst.
+\end{verbatim}
+we have to prove
+\begin{verbatim}
+p1 : pointer
+p2 : pointer
+alloc : alloc
+balance : memory Z
+Pre9 : valid alloc p1
+H1 : valid alloc p1
+H2 : p1 # balance >= 0
+H : valid alloc p2
+H3 : p2 # balance >= 0
+______________________________________(1/1)
+p2 # (upd balance p1 0) >= 0
+\end{verbatim}
+but the \verb|caduceus| tactic does not solve the goal this time,
+because indeed the tactic needs to find whether \verb|p1| is equal to
+\verb|p2| or not. Although it would be provable by cases, at this
+point one should understand that the case where \verb|p1=p2| is not
+supposed to happen, and indeed the result of \verb|test1| would not be
+0 in that case but 100. In other words, the third obligation, which is
+the proof of the post-condition, will not be provable. This is an
+instance of the so-called \emph{pointer aliasing} problem, and in fact
+one should avoid this aliasing in the pre-condition of \verb|test1| by
+requiring also \verb|p1 != p2|.\index{pointer
+  aliaising}\index{aliasing} 
 
-\section{Logical declarations}
-\indextt{predicate}\indextt{logic}\indextt{axiom}
+With that addition, the second obligation is provable in Coq with
+\begin{verbatim}
+unfold purse_inv; intuition.
+subst; caduceus.
+\end{verbatim}
+
+But the third obligation is not provable, both with Simplify and
+Coq. The problem now is that when proving post-condition of
+\verb|test1|, we do not see anymore the implementation of
+\verb|credit| but only its specification, and in this specification,
+nothing is said about modification of memory locations other than
+\verb|p->balance|. So, the right thing to do is to add a so-called
+\emph{\texttt{assigns} clause}\indextt{assigns} into the specification
+of \verb|credit|. The program now looks like
+\begin{code}
+/*@ requires purse_inv(p) && s >= 0
+  @ assigns p->balance
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
+  @*/
+void credit(purse *p,int s) {
+  p->balance = p->balance + s;
+}
+
+/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
+  @ ensures \result == 0
+  @*/
+int test1(purse *p1, purse *p2) {
+    p1->balance = 0;
+    credit(p2,100);
+    return p1->balance;
+}
+\end{code}
+Of course, that modification requires to make again the verification
+of function \verb|credit|: the second obligation is a bit more
+complicated, it is nevertheless solves by Simplify automatically. With
+Coq, the proof must be completed also follows
+
+TODO
+
+Let's now go back to function \verb|test1|: the three obligations are
+now solved by Simplify, and for the Coq proof of the third obligation,
+after \verb|unfold purse_inv; intuition|, we have to solve
+\begin{verbatim}
+p1 : pointer
+p2 : pointer
+alloc : alloc
+balance : memory Z
+Pre9 : valid alloc p1
+H0 : p1 = p2 -> False
+H : valid alloc p1
+H3 : p1 # balance >= 0
+H1 : valid alloc p2
+H4 : p2 # balance >= 0
+balance0 : memory Z
+Post2 : balance0 = upd balance p1 0
+H5 : 100 >= 0
+H6 : valid alloc p2
+H7 : p2 # balance0 >= 0
+balance1 : memory Z
+Pre7 : valid alloc p1
+H8 : assigns alloc balance0 balance1 (pointer_loc p2)
+H10 : p2 # balance1 = p2 # balance0 + 100
+H2 : valid alloc p2
+H11 : p2 # balance1 >= 0
+result1 : Z
+Post7 : result1 = p1 # balance1
+______________________________________(1/1)
+result1 = 0
+\end{verbatim}
+Now the important hypothesis with have is \verb|H8|: it specifies that
+between memory states \verb|balance0| and \verb|balance1|, the only
+memory location that has been modified is the one pointed by
+\verb|p2|. So, since we now that \verb|p1| and \verb|p2| are different
+(\verb|H0|), we should have \verb|p1 # balance1 = p1 # balance0|. We proceed
+by tactics
+\begin{verbatim}
+subst result1.
+rewrite H8; intuition.
+\end{verbatim}
+resulting in subgoal
+\begin{verbatim}
+...
+______________________________________(1/1)
+p1 # balance0 = 0
+\end{verbatim}
+which is proved by \verb|subst; caduceus|.
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 \section{A complete example}
@@ -640,6 +866,10 @@ Inner specifications may be used to help automatic decision procedures
 or to reduce the size of proof obligations (there would be more
 numerous but smaller proof obligations).
 
+\subsection{Logical declarations}
+\indextt{predicate}\indextt{logic}\indextt{axiom}
+
+TODO
 
 \section{Unsupported features}
 
