@@ -14,22 +14,38 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.19 2003-10-29 16:51:19 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.20 2003-12-05 15:49:30 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
 open Logic
 open Ptree
 
-type constant_expression = unit
-
 type annot = int * string
 
-type ctype =
-  | CTpure of pure_type
-  | CTarray of ctype
-  | CTpointer of ctype
-  | CTfun of ctype list * ctype
+type storage_class = No_storage | Extern | Auto | Static | Register
+
+type ctype_expr =
+  | CTvoid
+  | CTchar
+  | CTshort
+  | CTint
+  | CTlong
+  | CTfloat
+  | CTdouble
+  | CTvar of string
+  | CTarray of ctype_expr
+  | CTpointer of ctype_expr
+  (* only for the sym table *)
+  | CTfun of ctype list * ctype_expr
+
+and ctype = { 
+  ctype_expr : ctype_expr;
+  ctype_storage : storage_class;
+  ctype_const : bool;
+  ctype_volatile : bool;
+  ctype_signed : bool 
+}
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
@@ -37,16 +53,21 @@ type assign_operator =
 
 type unary_operator = 
   | Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec 
-  | Uplus | Uminus | Not | Ustar | Uamp
+  | Uplus | Uminus | Not | Ustar | Uamp | Utilde
 
 type binary_operator =
   | Plus | Minus | Mult | Div | Mod | Lt | Gt | Le | Ge | Eq | Neq 
   | Bw_and | Bw_xor | Bw_or | And | Or
 
+type shift = Left | Right
+
 type cexpr =
   | CEnop of Loc.t
-  | CEconst of Loc.t * string
-  | CEvar of Loc.t * Ident.t
+  | CEconstant of Loc.t * string
+  | CEstring_literal of Loc.t * string
+  | CEvar of Loc.t * string
+  | CEdot of Loc.t * cexpr * string
+  | CEarrow of Loc.t * cexpr * string
   | CEarrget of Loc.t * cexpr * cexpr
   | CEseq of Loc.t * cexpr * cexpr
   | CEassign of Loc.t * cexpr * assign_operator * cexpr
@@ -54,27 +75,15 @@ type cexpr =
   | CEbinary of Loc.t * cexpr * binary_operator * cexpr
   | CEcall of Loc.t * cexpr * cexpr list
   | CEcond of Loc.t * cexpr * cexpr * cexpr
+  | CEshift of Loc.t * cexpr * shift * cexpr
+  | CEcast of Loc.t * ctype * cexpr
+  | CEsizeof_expr of Loc.t * cexpr
+  | CEsizeof of Loc.t * ctype
 
-type c_initializer = cexpr option
-
-type storage_class = Extern
-
-type specifier = Typedef | Storage of storage_class
-
-type specifiers = specifier list
-
-type declarator =
-  | CDsimple
-  | CDpointer of declarator
-  | CDarray of declarator * constant_expression option
-  | CDfunction of declarator * parameters * annot option
-(*
-  | CDvar of Ident.t * c_initializer
-  | CDarr of Ident.t * constant_expression option
-  | CDfun of Ident.t * parameters * annot option
-*)
-
-and parameters = (ctype * declarator * Ident.t) list
+type c_initializer = 
+  | Inothing
+  | Iexpr of cexpr
+  | Ilist of c_initializer list
 
 type cstatement = 
   | CSnop of Loc.t
@@ -88,6 +97,10 @@ type cstatement =
   | CSbreak of Loc.t
   | CScontinue of Loc.t
   | CSlabel of Loc.t * string * cstatement
+  | CSswitch of Loc.t * cexpr * cstatement
+  | CScase of Loc.t * cexpr * cstatement
+  | CSdefault of Loc.t * cstatement
+  | CSgoto of Loc.t * string
   | CSannot of Loc.t * annot
 
 and block = decl list * cstatement list
@@ -96,8 +109,12 @@ and annotated_block = Loc.t * annot option * block * annot option
 
 and decl = 
   | Cspecdecl of annot
-  | Cdecl of Loc.t * ctype * declarator * Ident.t * c_initializer
-  | Cfundef of Loc.t * 
-      ctype * declarator * Ident.t * parameters * annotated_block
+  | Ctypedef of Loc.t * ctype * string
+  | Cdecl of Loc.t * ctype * string * c_initializer
+  | Cfundef of Loc.t * ctype * string * parameters * annotated_block
+
+and parameters = (ctype * string) list
 
 type file = decl list
+
+

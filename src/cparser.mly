@@ -26,11 +26,15 @@
   let loc () = (symbol_start (), symbol_end ())
   let loc_i i = (rhs_start i, rhs_end i)
 
+  let error s = raise (Stdpp.Exc_located (loc (), Stream.Error s))
+
   let uns () =
     raise (Stdpp.Exc_located (loc (), Stream.Error "Unsupported C syntax"))
   let unss s =
     raise (Stdpp.Exc_located (loc (), 
 			      Stream.Error ("Unsupported C syntax: " ^ s)))
+  let warning s =
+    Format.eprintf "%a warning: %s" Loc.report_line (symbol_start ()) s
 
   let add_pre_loc lb = function
     | Some (b,_) -> Loc.join (b,0) lb 
@@ -40,6 +44,57 @@
     | CSnop l -> CEnop l
     | CSexpr (_, e) -> e
     | _ -> assert false
+
+  (* used only for parsing types *)
+
+  type specifier = 
+    | Stypedef 
+    | Sstorage of storage_class
+    | Stype of ctype_expr
+    | Sconst
+    | Svolatile
+    | Ssigned of bool (* true = signed / false = unsigned *)
+    | Sstruct_named of string
+    | Sstruct_decl of string option * parameters 
+    | Sunion_named of string
+    | Sunion_decl of string option * parameters
+    | Senum_named of string
+    | Senum_decl of string option * (string * cexpr option) list
+	
+  and specifiers = specifier list
+
+  and declarator =
+    | Dsimple
+    | Dpointer of declarator
+    | Darray of declarator * cexpr option
+    | Dfunction of declarator * parameters * annot option
+    | Dbitfield of declarator * cexpr
+
+  and parameters = (specifiers * declarator * string) list
+
+  (* interps a list of specifiers / declarators as a [ctype] *)
+
+  let interp_type specs d = 
+    failwith "todo"
+
+  let interp_param (s, d, id) = interp_type s d, id
+  let interp_params = List.map interp_param
+
+  let is_typedef = List.exists ((=) Stypedef)
+
+  let declaration specs decls =
+    let l = loc() in
+    if is_typedef specs then
+      let interp = function
+	| (n,d), Inothing -> Ctypes.add n; Ctypedef (l, interp_type specs d, n)
+	| (n,_), _ -> error ("typedef " ^ n ^ " is initialized")
+      in
+      List.map interp decls
+    else
+      let interp ((n,d),i) =
+	Ctypes.remove n; Cdecl (l, interp_type specs d, n, i)
+      in
+      List.map interp decls
 
 %}
 
@@ -73,9 +128,9 @@ file
         ;
 
 primary_expression
-        : IDENTIFIER { CEvar (loc (), Ident.create $1) }
-        | CONSTANT { CEconst (loc (), $1) }
-        | STRING_LITERAL { uns() }
+        : IDENTIFIER { CEvar (loc (), $1) }
+        | CONSTANT { CEconstant (loc (), $1) }
+        | STRING_LITERAL { CEstring_literal (loc (), $1) }
         | LPAR expression RPAR { $2 }
         ;
 
@@ -89,9 +144,9 @@ postfix_expression
         | postfix_expression LPAR argument_expression_list RPAR 
 	    { CEcall (loc (), $1, $3) }
         | postfix_expression DOT IDENTIFIER 
-	    { uns () }
+	    { CEdot (loc (), $1, $3) }
         | postfix_expression PTR_OP IDENTIFIER 
-	    { uns() }
+	    { CEarrow (loc (), $1, $3) }
         | postfix_expression INC_OP 
 	    { CEunary (loc (), Postfix_inc, $1) }
         | postfix_expression DEC_OP
@@ -108,8 +163,9 @@ unary_expression
         | INC_OP unary_expression { CEunary (loc (), Prefix_inc, $2) }
         | DEC_OP unary_expression { CEunary (loc (), Prefix_dec, $2) }
         | unary_operator cast_expression { CEunary (loc (), $1, $2) }
-        | SIZEOF unary_expression { uns () }
-        | SIZEOF LPAR type_name RPAR { uns () }
+        | SIZEOF unary_expression { CEsizeof_expr (loc (), $2) }
+        | SIZEOF LPAR type_name RPAR 
+	    { let s,d = $3 in CEsizeof (loc (), interp_type s d) }
         ;
 
 unary_operator
@@ -117,13 +173,14 @@ unary_operator
         | STAR { Ustar }
         | PLUS { Uplus }
         | MINUS { Uminus }
-        | TILDE { uns () }
+        | TILDE { Utilde }
         | EXL { Not }
         ;
 
 cast_expression
         : unary_expression { $1 }
-        | LPAR type_name RPAR cast_expression { uns () }
+        | LPAR type_name RPAR cast_expression 
+	    { let s,d = $2 in CEcast (loc (), interp_type s d, $4) }
         ;
 
 multiplicative_expression
@@ -148,8 +205,10 @@ additive_expression
 
 shift_expression
         : additive_expression { $1 }
-        | shift_expression LEFT_OP additive_expression { uns () }
-        | shift_expression RIGHT_OP additive_expression { uns () }
+        | shift_expression LEFT_OP additive_expression 
+	    { CEshift (loc (), $1, Left, $3) }
+        | shift_expression RIGHT_OP additive_expression 
+	    { CEshift (loc (), $1, Right, $3) }
         ;
 
 relational_expression
@@ -247,19 +306,21 @@ constant_expression
         ;
 
 declaration
-        : declaration_specifiers SEMICOLON { uns() }
+        : declaration_specifiers SEMICOLON 
+            { warning "empty declaration"; [] }
         | declaration_specifiers init_declarator_list SEMICOLON 
-	    { List.map (fun ((n,d),i) -> Cdecl (loc(), $1, d, n, i)) $2 }
-	| WDECL { [Cspecdecl $1] } /* ADDED FOR WHY */
+	    { declaration $1 $2 }
+	| WDECL  /* ADDED FOR WHY */
+	    { [Cspecdecl $1] }
         ;
 
 declaration_specifiers
-        : storage_class_specifier { uns() }
-        | storage_class_specifier declaration_specifiers { uns() }
-        | type_specifier { $1 }
-        | type_specifier declaration_specifiers { uns() }
-        | type_qualifier { uns() }
-        | type_qualifier declaration_specifiers { uns() }
+        : storage_class_specifier { [$1] }
+        | storage_class_specifier declaration_specifiers { $1 :: $2 }
+        | type_specifier { [$1] }
+        | type_specifier declaration_specifiers { $1 :: $2 }
+        | type_qualifier { [$1] }
+        | type_qualifier declaration_specifiers { $1 :: $2 }
         ;
 
 init_declarator_list
@@ -269,113 +330,126 @@ init_declarator_list
 
 init_declarator
         : declarator 
-            { $1, None }
+            { $1, Inothing }
         | declarator EQUAL c_initializer 
-	    { $1, Some $3 }
+	    { $1, $3 }
         ;
 
 storage_class_specifier
-        : TYPEDEF { Typedef }
-        | EXTERN { Storage Extern }
-        | STATIC { uns () }
-        | AUTO { uns () }
-        | REGISTER { uns () }
+        : TYPEDEF { Stypedef }
+        | EXTERN { Sstorage Extern }
+        | STATIC { Sstorage Static }
+        | AUTO { Sstorage Auto }
+        | REGISTER { Sstorage Register }
         ;
 
 type_specifier
-        : VOID { CTpure PTunit }
-        | CHAR { CTpure PTint }
-        | SHORT { CTpure PTint }
-        | INT { CTpure PTint }
-        | LONG { CTpure PTint }
-        | FLOAT { CTpure PTfloat }
-        | DOUBLE { CTpure PTfloat }
-        | SIGNED { uns() }
-        | UNSIGNED { uns() }
-        | struct_or_union_specifier { uns() }
-        | enum_specifier { uns() }
-        | TYPE_NAME { CTpure (PTexternal (Ident.create $1)) }
+        : VOID { Stype CTvoid }
+        | CHAR { Stype CTchar }
+        | SHORT { Stype CTshort }
+        | INT { Stype CTint }
+        | LONG { Stype CTlong }
+        | FLOAT { Stype CTfloat }
+        | DOUBLE { Stype CTdouble }
+        | SIGNED { Ssigned true }
+        | UNSIGNED { Ssigned false }
+        | struct_or_union_specifier { $1 }
+        | enum_specifier { $1 }
+        | TYPE_NAME { Stype (CTvar $1) }
         ;
 
 struct_or_union_specifier
-        : struct_or_union IDENTIFIER LBRACE struct_declaration_list RBRACE { }
-        | struct_or_union LBRACE struct_declaration_list RBRACE { }
-        | struct_or_union IDENTIFIER { }
+        : struct_or_union IDENTIFIER LBRACE struct_declaration_list RBRACE 
+            { if $1 then 
+		Sstruct_decl (Some $2, $4) 
+	      else 
+		Sunion_decl (Some $2, $4) }
+        | struct_or_union LBRACE struct_declaration_list RBRACE 
+	    { if $1 then Sstruct_decl (None, $3) else Sunion_decl (None, $3) }
+        | struct_or_union IDENTIFIER 
+	    { if $1 then Sstruct_named $2 else Sunion_named $2 }
         ;
 
 struct_or_union
-        : STRUCT { }
-        | UNION { }
+        : STRUCT { true }
+        | UNION { false }
         ;
 
 struct_declaration_list
-        : struct_declaration { }
-        | struct_declaration_list struct_declaration { }
+        : struct_declaration { $1 }
+        | struct_declaration_list struct_declaration { $1 @ $2 }
         ;
 
 struct_declaration
-        : specifier_qualifier_list struct_declarator_list SEMICOLON { }
+        : specifier_qualifier_list struct_declarator_list SEMICOLON 
+            { let s = $1 in List.map (fun (id,d) -> s,d,id) $2 }
         ;
 
 specifier_qualifier_list
-        : type_specifier specifier_qualifier_list { }
-        | type_specifier { }
-        | type_qualifier specifier_qualifier_list { }
-        | type_qualifier { }
+        : type_specifier specifier_qualifier_list { $1 :: $2 }
+        | type_specifier { [$1] }
+        | type_qualifier specifier_qualifier_list { $1 :: $2 }
+        | type_qualifier { [$1] }
         ;
 
 struct_declarator_list
-        : struct_declarator { }
-        | struct_declarator_list COMMA struct_declarator { }
+        : struct_declarator { [$1] }
+        | struct_declarator_list COMMA struct_declarator { $1 @ [$3] }
         ;
 
 struct_declarator
-        : declarator { }
-        | COLON constant_expression { }
-        | declarator COLON constant_expression { }
+        : declarator 
+            { $1 }
+        | COLON constant_expression 
+	    { "_", Dbitfield (Dsimple, $2) }
+        | declarator COLON constant_expression 
+	    { let x,d = $1 in x, Dbitfield (d, $3) }
         ;
 
 enum_specifier
-        : ENUM LBRACE enumerator_list RBRACE { }
-        | ENUM IDENTIFIER LBRACE enumerator_list RBRACE { }
-        | ENUM IDENTIFIER { }
+        : ENUM LBRACE enumerator_list RBRACE 
+            { Senum_decl (None, $3) }
+        | ENUM IDENTIFIER LBRACE enumerator_list RBRACE 
+	    { Senum_decl (Some $2, $4) }
+        | ENUM IDENTIFIER 
+	    { Senum_named $2 }
         ;
 
 enumerator_list
-        : enumerator { }
-        | enumerator_list COMMA enumerator { }
+        : enumerator { [$1] }
+        | enumerator_list COMMA enumerator { $1 @ [$3] }
         ;
 
 enumerator
-        : IDENTIFIER { }
-        | IDENTIFIER EQUAL constant_expression { }
+        : IDENTIFIER { $1, None }
+        | IDENTIFIER EQUAL constant_expression { $1, Some $3 }
         ;
 
 type_qualifier
-        : CONST { }
-        | VOLATILE { }
+        : CONST { Sconst }
+        | VOLATILE { Svolatile }
         ;
 
 declarator
-        : pointer direct_declarator { let id,d = $2 in id, CDpointer d }
+        : pointer direct_declarator { let id,d = $2 in id, $1 d }
         | direct_declarator { $1 }
         ;
 
 direct_declarator
         : IDENTIFIER 
-            { Ident.create $1, CDsimple }
+            { $1, Dsimple }
         | LPAR declarator RPAR 
 	    { uns() }
         | direct_declarator LSQUARE constant_expression RSQUARE 
-	    { uns() }
+	    { let id,d = $1 in id, Darray (d, Some $3) }
         | direct_declarator LSQUARE RSQUARE 
-	    { let id,d = $1 in id, CDarray (d, None) }
+	    { let id,d = $1 in id, Darray (d, None) }
         | direct_declarator LPAR parameter_type_list RPAR annot 
-	    { let id,d = $1 in id, CDfunction (d, $3, $5) }
+	    { let id,d = $1 in id, Dfunction (d, $3, $5) }
         | direct_declarator LPAR identifier_list RPAR 
 	    { uns() }
         | direct_declarator LPAR RPAR annot 
-            { let id,d = $1 in id, CDfunction (d, [], $4) }
+            { let id,d = $1 in id, Dfunction (d, [], $4) }
         ;
 
 /* ADDED FOR WHY */
@@ -385,15 +459,15 @@ annot
         ;
 
 pointer
-        : STAR { () }
+        : STAR { fun d -> Dpointer d }
         | STAR type_qualifier_list { uns () }
-        | STAR pointer { uns () }
+        | STAR pointer { fun d -> Dpointer ($2 d) }
         | STAR type_qualifier_list pointer { uns () }
         ;
 
 type_qualifier_list
-        : type_qualifier { }
-        | type_qualifier_list type_qualifier { }
+        : type_qualifier { [$1] }
+        | type_qualifier_list type_qualifier { $1 @ [$2] }
         ;
 
 
@@ -408,9 +482,12 @@ parameter_list
         ;
 
 parameter_declaration
-        : declaration_specifiers declarator { let id,d = $2 in $1, d, id }
-        | declaration_specifiers abstract_declarator { uns() }
-        | declaration_specifiers { ($1, CDsimple, Ident.anonymous) }
+        : declaration_specifiers declarator 
+            { let id,d = $2 in $1, d, id }
+        | declaration_specifiers abstract_declarator 
+	    { $1, $2, "_" }
+        | declaration_specifiers 
+	    { ($1, Dsimple, "_") }
         ;
 
 identifier_list
@@ -419,37 +496,46 @@ identifier_list
         ;
 
 type_name
-        : specifier_qualifier_list { }
-        | specifier_qualifier_list abstract_declarator { }
+        : specifier_qualifier_list { $1, Dsimple }
+        | specifier_qualifier_list abstract_declarator { $1, $2 }
         ;
 
 abstract_declarator
-        : pointer { }
-        | direct_abstract_declarator { }
-        | pointer direct_abstract_declarator { }
+        : pointer { $1 Dsimple }
+        | direct_abstract_declarator { $1 }
+        | pointer direct_abstract_declarator { $1 $2 }
         ;
 
 direct_abstract_declarator
-        : LPAR abstract_declarator RPAR { }
-        | LSQUARE RSQUARE { }
-        | LSQUARE constant_expression RSQUARE { }
-        | direct_abstract_declarator LSQUARE RSQUARE { }
-        | direct_abstract_declarator LSQUARE constant_expression RSQUARE { }
-        | LPAR RPAR { }
-        | LPAR parameter_type_list RPAR { }
-        | direct_abstract_declarator LPAR RPAR { }
-        | direct_abstract_declarator LPAR parameter_type_list RPAR { }
+        : LPAR abstract_declarator RPAR 
+            { uns () }
+        | LSQUARE RSQUARE 
+	    { Darray (Dsimple, None) }
+        | LSQUARE constant_expression RSQUARE 
+	    { Darray (Dsimple, Some $2) }
+        | direct_abstract_declarator LSQUARE RSQUARE 
+	    { Darray ($1, None) }
+        | direct_abstract_declarator LSQUARE constant_expression RSQUARE 
+	    { Darray ($1, Some $3) }
+        | LPAR RPAR 
+	    { Dfunction (Dsimple, [], None) }
+        | LPAR parameter_type_list RPAR 
+	    { Dfunction (Dsimple, $2, None) }
+        | direct_abstract_declarator LPAR RPAR 
+	    { Dfunction ($1, [], None) }
+        | direct_abstract_declarator LPAR parameter_type_list RPAR 
+	    { Dfunction ($1, $3, None) }
         ;
 
 c_initializer
-        : assignment_expression { $1 }
-        | LBRACE c_initializer_list RBRACE { uns() }
-        | LBRACE c_initializer_list COMMA RBRACE { uns() }
+        : assignment_expression { Iexpr $1 }
+        | LBRACE c_initializer_list RBRACE { Ilist $2 }
+        | LBRACE c_initializer_list COMMA RBRACE { Ilist $2 }
         ;
 
 c_initializer_list
-        : c_initializer { }
-        | c_initializer_list COMMA c_initializer { }
+        : c_initializer { [$1] }
+        | c_initializer_list COMMA c_initializer { $1 @ [$3] }
         ;
 
 statement
@@ -463,8 +549,8 @@ statement
 
 labeled_statement
         : IDENTIFIER COLON statement { CSlabel (loc (), $1, $3) }
-        | CASE constant_expression COLON statement { uns () }
-        | DEFAULT COLON statement { uns () }
+        | CASE constant_expression COLON statement { CScase (loc (), $2, $4) }
+        | DEFAULT COLON statement { CSdefault (loc (), $3) }
         ;
 
 compound_statement
@@ -501,7 +587,7 @@ selection_statement
         | IF LPAR expression RPAR statement ELSE statement 
 	    { CScond (loc (), $3, $5, $7) }
         | SWITCH LPAR expression RPAR statement 
-	    { uns () }
+	    { CSswitch (loc (), $3, $5) }
         ;
 
 iteration_statement
@@ -518,7 +604,7 @@ iteration_statement
         ;
 
 jump_statement
-        : GOTO IDENTIFIER SEMICOLON { uns () }
+        : GOTO IDENTIFIER SEMICOLON { CSgoto (loc (), $2) }
         | CONTINUE SEMICOLON { CScontinue (loc ()) }
         | BREAK SEMICOLON { CSbreak (loc ()) }
         | RETURN SEMICOLON { CSreturn (loc (), None) }
@@ -537,13 +623,20 @@ external_declaration
 
 function_definition
         : declaration_specifiers declarator declaration_list compound_statement
-            { uns () }
+            { let lb,b,q = loc_i 4, $4, None in
+	      match $2 with
+		| id, Dfunction (d, pl, p) ->
+		    let lb = add_pre_loc lb p in
+		    let ty = interp_type $1 d in
+		    Cfundef (loc (), ty, id, interp_params pl, (lb,p,b,q))
+		| _ -> uns () }
         | declaration_specifiers declarator compound_statement_with_post
 	    { let (lb,b,q) = $3 in
               match $2 with
-		| id, CDfunction (d, pl, p) -> 
+		| id, Dfunction (d, pl, p) -> 
 		    let lb = add_pre_loc lb p in
-		    Cfundef (loc (), $1, d, id, pl, (lb,p,b,q))
+		    let ty = interp_type $1 d in
+		    Cfundef (loc (), ty, id, interp_params pl, (lb,p,b,q))
 		| _ -> uns () }
         | declarator declaration_list compound_statement 
 	    { uns () }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.39 2003-10-29 16:51:19 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.40 2003-12-05 15:49:30 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -52,6 +52,12 @@ let interp_c_annot = Parser.parse_c_annot
 
 (*s Typing C programs *)
 
+let simple_type t = 
+  { ctype_expr = t; ctype_storage = No_storage;
+    ctype_const = false; ctype_volatile = false; ctype_signed = true }
+
+(*****
+
 let void = CTpure PTunit
 let c_int = CTpure PTint
 let c_float = CTpure PTfloat
@@ -83,7 +89,8 @@ let rec print_ctype fmt = function
 
 let loc_of_expr = function
   | CEnop l -> l
-  | CEconst (l, _) -> l
+  | CEconstant (l, _) -> l
+  | CEstring_literal (l, _) -> l
   | CEvar (l, _) -> l
   | CEarrget (l, _, _) -> l
   | CEseq (l, _, _) -> l
@@ -298,7 +305,7 @@ let coerce l et e t = match et with
     [is_pure] really means that [e] is a substitutable expression *)
 
 let rec no_effect = function
-  | CEvar _ | CEconst _  -> true
+  | CEvar _ | CEconstant _ | CEstring_literal _  -> true
   | CEbinary (_, e1, _, e2) -> no_effect e1 && no_effect e2
   | CEunary (_, (Uplus | Uminus | Not), e) -> no_effect e
   | CEunary (_, (Uamp | Ustar), _) -> true
@@ -311,7 +318,7 @@ let rec is_pure cenv = function
 	 | (CTarray _ | CTpointer _), _
 	 | CTpure _, false -> true
 	 | _ -> false)
-  | CEconst _  -> true
+  | CEconstant _ | CEstring_literal _ -> true
   | CEbinary (_, e1, _, e2) -> 
       is_pure cenv e1 && is_pure cenv e2
   | CEunary (_, (Uplus | Uminus | Not), e) -> 
@@ -437,11 +444,13 @@ let rec interp_expr cenv et e =
 	  unsupported l
       | CEnop l ->
 	  ml_const l ConstUnit, void
-      | CEconst (l, s) ->
+      | CEconstant (l, s) ->
 	  (try
 	     ml_const l (ConstInt (int_of_string s)), c_int
 	   with Failure "int_of_string" ->
 	     ml_const l (ConstFloat s), c_float)
+      | CEstring_literal (l, _) ->
+	  unsupported l
     in
     coerce ml.ploc et ml ct
 
@@ -883,3 +892,7 @@ let interp l =
   (Exception (Loc.dummy, continue_exception, None)) ::
   interp_list Idmap.empty l
 
+***)
+
+let interp l = 
+  failwith "Plus de programmes C pour l'instant (grand chantier en cours)"
