@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.72 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.73 2002-10-14 09:44:16 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -286,7 +286,7 @@ let check_array_type loc env id =
 let check_no_effect loc ef =
   if not (Effect.get_writes ef = []) then raise_located loc HasSideEffects
 
-(*s Saturation of post-conditions: a postcondition must be set for
+(*s Saturation of postconditions: a postcondition must be set for
     any possibly raised exception *)
 
 let saturation loc e (a,al) =

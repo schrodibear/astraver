@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.58 2002-10-11 15:05:03 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.59 2002-10-14 09:44:16 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -238,6 +238,8 @@ let saturate_post k a q =
   let saturate a = (a, List.map set_post xs) in
   option_app saturate a
 
+let need_a_post p = 
+  post p = None && match p.desc with Lam _ | Rec _ -> false | _ -> true
 
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
@@ -253,7 +255,7 @@ let rec wp p q =
   let d,w = wp_desc p.info p.desc q0 in
   let p = change_desc p d in
   let w = option_app (named_app (erase_label lab)) w in
-  let p = if postp = None then force_post env q0 p else p in
+  let p = if need_a_post p then force_post env q0 p else p in
   let w = match postp, q with
     | Some ({a_value=q'}, []), Some ({a_value=q}, []) ->
 	let vars = (result, result_type p) :: (output p) in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.53 2002-10-10 17:04:43 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.54 2002-10-14 09:44:16 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -371,7 +371,7 @@ and print_desc fmt = function
       fprintf fmt "if %a then@ %a else@ %a" 
 	print_prog p1 print_prog p2 print_prog p3
   | Lam (bl, p) -> 
-      fprintf fmt "<fun>"
+      fprintf fmt "@[fun <bl> ->@\n  %a@]" print_prog p
   | App (p, a, k) -> 
       fprintf fmt "(@[%a %a ::@ %a@])" print_prog p print_arg a print_type_c k
   | LetRef (id, p1, p2) ->
