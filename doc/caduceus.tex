@@ -196,9 +196,9 @@ Let us consider now a small program involving a pointer, in a file
 \verb|abs.c|: 
 \begin{code}
 //@ ensures *p >= 0
-void abs1(int *p) {
+void abs1(int *p) \{
   if (*p < 0) *p = -*p;
-}
+\}
 \end{code}
 Running \caduceus{} and then Simplify results in:
 \begin{verbatim}
@@ -260,9 +260,9 @@ To fix this problem, one should specify a pre-condition to function
 /*@ requires \valid(p)
   @ ensures *p >= 0
   @*/
-void abs2(int *p) {
+void abs2(int *p) \{
   if (*p < 0) *p = -*p;
-}
+\}
 \end{code}
 If you run \caduceus{} again on this version, you will first notice
 that the first obligation is now automatically discharge by Why, and
@@ -376,16 +376,16 @@ index otherwise:
   @   (0 <= \result < n => t[\result] == v) &&
   @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
   @*/
-int index(int t[], int n, int v) {
+int index(int t[], int n, int v) \{
   int i = 0;
   /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
     variant n - i */ 
-  while (i < n) {
+  while (i < n) \{
     if (t[i] == v) break;
     i++;
-  }
+  \}
   return i;
-}
+\}
 \end{code}
 \index{valid\_range@\texttt{\bs{}valid\_range}}
 
@@ -395,16 +395,16 @@ int index(int t[], int n, int v) {
   @   (0 <= \result < n => t[\result] == v) &&
   @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
   @*/
-int index(int t[], int n, int v) {
+int index(int t[], int n, int v) \{
   int i = 0;
   /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
     variant n - i */ 
-  while (i < n) {
+  while (i < n) \{
     if (t[i] == v) break;
     i++;
-  }
+  \}
   return i;
-}
+\}
 \end{code}
 
 \indextt{invariant}\indextt{variant}
@@ -422,30 +422,31 @@ the variant when present.
 \section{Structures}
 
 \begin{code}
-typedef struct {
+typedef struct \{
   int balance;
-} purse;
+\} purse;
 
-//@ predicate purse_inv(purse *p) { \valid(p) && p->balance >= 0 }
+//@ predicate purse_inv(purse *p) \{ \valid(p) && p->balance >= 0 \}
 
 /*@ requires purse_inv(p) && s >= 0
   @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
   @*/
-void credit(purse *p,int s) {
+void credit(purse *p,int s) \{
   p->balance = p->balance + s;
-}
+\}
 
 /*@ requires purse_inv(p) && 0 <= s <= p->balance
   @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) - s
   @*/
-void withdraw(purse *p,int s) {
+void withdraw(purse *p,int s) \{
   p->balance = p->balance - s;
-}
+\}
 \end{code}
 
 \section{Memory model and pointer arithmetic}
+\index{Pointer arithmetic}
 
 The C language makes almost no distinction between arrays and
 pointers, and \caduceus\ identifies both notions on the model side.
@@ -499,10 +500,21 @@ Additional predicates are introduced to express that access to
     \mathtt{offset}(p)+j < \mathtt{block\_length}(a,p)
   \end{array}
 \end{displaymath}
+Note that two different blocks are truly \emph{separated} i.e. there
+is no way to access and/or modify any element of a block using a
+pointer related to another block. There is no way to
+express that two blocks allocated with two different calls to
+\texttt{malloc} are contiguous in memory. In particular, a C program
+realizing a buffer overflow cannot be proved correct.
+
+\medskip
+
 As specified in the ANSI C standard, pointer subtraction and pointer
 comparison is restricted to pointers with a same base address.
 When it is so, pointer subtraction (resp. comparison) corresponds to
 the subtraction (resp. comparison) of offsets.
+
+\medskip
 
 The following table summarizes the various pointer notions:
 \begin{center}
@@ -533,18 +545,18 @@ The following table summarizes the various pointer notions:
   @ assigns p1->balance, p2->balance
   @ ensures \result == 0
   @*/
-int test1(purse *p1, purse *p2) {
+int test1(purse *p1, purse *p2) \{
     p1->balance = 0;
     credit(p2,100);
     return p1->balance;
-}
+\}
 
 //@ ensures \fresh(\result) && purse_inv(\result) 
 purse *new_purse();
 
 
 //@ ensures \result == 150
-int test2() {
+int test2() \{
     purse *p1 = new_purse();
     purse *p2 = new_purse();
     credit(p1,100);
@@ -552,7 +564,7 @@ int test2() {
     withdraw(p1,50);
     withdraw(p2,100);
     return p1->balance + p2->balance;
-}
+\}
 \end{code}
 
 \section{Logical declarations}
@@ -627,6 +639,40 @@ will not enter this statement.
 Inner specifications may be used to help automatic decision procedures
 or to reduce the size of proof obligations (there would be more
 numerous but smaller proof obligations).
+
+
+\section{Unsupported features}
+
+If a feature is not supported by \caduceus, it is reported on the
+error output and the corresponding function is skipped:
+\begin{verbatim}
+unsupported feature (goto); skipping function f
+\end{verbatim}
+It means that no \why\ code is produced for function \texttt{f}, and
+thus no proof obligations, but \texttt{f} may still be called in other
+parts of the code and its specification is visible.
+
+\subsection{Features not supported in current version}
+The following features are not yet supported by \caduceus\ but will be
+so in future versions of the tool:
+\begin{itemize}
+\item \texttt{switch} constructs
+\item string literals (e.g. \texttt{"hello world"})
+\item arithmetic overflow (currently all integers types are mapped to
+  arbitrary precision integers on the prover side)
+\item \texttt{sizeof}
+\end{itemize}
+
+\subsection{Other unsupported features}
+The following features are not planed be supported by \caduceus:
+\begin{itemize}
+\item arbitrary \texttt{goto} (some simple \texttt{goto}'s will be supported)
+\item function pointer (apart from trivial situations where we know at
+  compile-time which function is pointed at)
+\item pointer cast (e.g. casting an \texttt{int*} to a \texttt{void*},
+  passing it to a function which casts it back to \texttt{int*})
+\item any non-ANSI feature
+\end{itemize}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
