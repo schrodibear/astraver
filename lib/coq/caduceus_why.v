@@ -319,8 +319,8 @@ Admitted.
 (*Why axiom*) Lemma pset_all_intro :
   (forall (p:pointer),
    (forall (l:pset),
-    ((forall (p':pointer),
-      (~(not_in_pset p' l) -> ~((base_addr p) = (base_addr p')))) ->
+    ((forall (p1:pointer),
+      (~(not_in_pset p1 l) -> ~((base_addr p) = (base_addr p1)))) ->
      (not_in_pset p (pset_all l))))).
 Admitted.
 
@@ -328,8 +328,8 @@ Admitted.
   (forall (p:pointer),
    (forall (l:pset),
     ((not_in_pset p (pset_all l)) ->
-     (forall (p':pointer),
-      (~(not_in_pset p' l) -> ~((base_addr p) = (base_addr p'))))))).
+     (forall (p1:pointer),
+      (~(not_in_pset p1 l) -> ~((base_addr p) = (base_addr p1))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_intro :
@@ -337,8 +337,8 @@ Admitted.
    (forall (l:pset),
     (forall (a:Z),
      (forall (b:Z),
-      ((forall (p':pointer), (not_in_pset p' l) \/
-        (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p' i))))) ->
+      ((forall (p1:pointer), (not_in_pset p1 l) \/
+        (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p1 i))))) ->
        (not_in_pset p (pset_range l a b))))))).
 Admitted.
 
@@ -348,17 +348,17 @@ Admitted.
     (forall (a:Z),
      (forall (b:Z),
       ((not_in_pset p (pset_range l a b)) ->
-       (forall (p':pointer),
-        (~(not_in_pset p' l) ->
-         (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p' i))))))))))).
+       (forall (p1:pointer),
+        (~(not_in_pset p1 l) ->
+         (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p1 i))))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_left_intro :
   (forall (p:pointer),
    (forall (l:pset),
     (forall (a:Z),
-     ((forall (p':pointer), (not_in_pset p' l) \/
-       (forall (i:Z), (i <= a -> ~(p = (shift p' i))))) ->
+     ((forall (p1:pointer), (not_in_pset p1 l) \/
+       (forall (i:Z), (i <= a -> ~(p = (shift p1 i))))) ->
       (not_in_pset p (pset_range_left l a)))))).
 Admitted.
 
@@ -367,17 +367,17 @@ Admitted.
    (forall (l:pset),
     (forall (a:Z),
      ((not_in_pset p (pset_range_left l a)) ->
-      (forall (p':pointer),
-       (~(not_in_pset p' l) ->
-        (forall (i:Z), (i <= a -> ~(p = (shift p' i)))))))))).
+      (forall (p1:pointer),
+       (~(not_in_pset p1 l) ->
+        (forall (i:Z), (i <= a -> ~(p = (shift p1 i)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_right_intro :
   (forall (p:pointer),
    (forall (l:pset),
     (forall (a:Z),
-     ((forall (p':pointer), (not_in_pset p' l) \/
-       (forall (i:Z), (a <= i -> ~(p = (shift p' i))))) ->
+     ((forall (p1:pointer), (not_in_pset p1 l) \/
+       (forall (i:Z), (a <= i -> ~(p = (shift p1 i))))) ->
       (not_in_pset p (pset_range_right l a)))))).
 Admitted.
 
@@ -386,17 +386,17 @@ Admitted.
    (forall (l:pset),
     (forall (a:Z),
      ((not_in_pset p (pset_range_right l a)) ->
-      (forall (p':pointer),
-       (~(not_in_pset p' l) ->
-        (forall (i:Z), (a <= i -> ~(p = (shift p' i)))))))))).
+      (forall (p1:pointer),
+       (~(not_in_pset p1 l) ->
+        (forall (i:Z), (a <= i -> ~(p = (shift p1 i)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_all_intro :
   (forall (p:pointer),
    (forall (l:pset),
     (forall (m:((memory) pointer)),
-     ((forall (p':pointer),
-       (~(not_in_pset p' l) -> (forall (i:Z), ~(p = (acc m (shift p' i)))))) ->
+     ((forall (p1:pointer),
+       (~(not_in_pset p1 l) -> (forall (i:Z), ~(p = (acc m (shift p1 i)))))) ->
       (not_in_pset p (pset_acc_all l m)))))).
 Admitted.
 
@@ -405,8 +405,8 @@ Admitted.
    (forall (l:pset),
     (forall (m:((memory) pointer)),
      ((not_in_pset p (pset_acc_all l m)) ->
-      (forall (p':pointer),
-       (~(not_in_pset p' l) -> (forall (i:Z), ~(p = (acc m (shift p' i)))))))))).
+      (forall (p1:pointer),
+       (~(not_in_pset p1 l) -> (forall (i:Z), ~(p = (acc m (shift p1 i)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_intro :
@@ -415,9 +415,9 @@ Admitted.
     (forall (m:((memory) pointer)),
      (forall (a:Z),
       (forall (b:Z),
-       ((forall (p':pointer),
-         (~(not_in_pset p' l) ->
-          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p' i))))))) ->
+       ((forall (p1:pointer),
+         (~(not_in_pset p1 l) ->
+          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p1 i))))))) ->
         (not_in_pset p (pset_acc_range l m a b)))))))).
 Admitted.
 
@@ -428,9 +428,9 @@ Admitted.
      (forall (a:Z),
       (forall (b:Z),
        ((not_in_pset p (pset_acc_range l m a b)) ->
-        (forall (p':pointer),
-         (~(not_in_pset p' l) ->
-          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p' i))))))))))))).
+        (forall (p1:pointer),
+         (~(not_in_pset p1 l) ->
+          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p1 i))))))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_left_intro :
@@ -438,9 +438,9 @@ Admitted.
    (forall (l:pset),
     (forall (m:((memory) pointer)),
      (forall (a:Z),
-      ((forall (p':pointer),
-        (~(not_in_pset p' l) ->
-         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p' i))))))) ->
+      ((forall (p1:pointer),
+        (~(not_in_pset p1 l) ->
+         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p1 i))))))) ->
        (not_in_pset p (pset_acc_range_left l m a))))))).
 Admitted.
 
@@ -450,9 +450,9 @@ Admitted.
     (forall (m:((memory) pointer)),
      (forall (a:Z),
       ((not_in_pset p (pset_acc_range_left l m a)) ->
-       (forall (p':pointer),
-        (~(not_in_pset p' l) ->
-         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p' i)))))))))))).
+       (forall (p1:pointer),
+        (~(not_in_pset p1 l) ->
+         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p1 i)))))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_right_intro :
@@ -460,9 +460,9 @@ Admitted.
    (forall (l:pset),
     (forall (m:((memory) pointer)),
      (forall (a:Z),
-      ((forall (p':pointer),
-        (~(not_in_pset p' l) ->
-         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p' i))))))) ->
+      ((forall (p1:pointer),
+        (~(not_in_pset p1 l) ->
+         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p1 i))))))) ->
        (not_in_pset p (pset_acc_range_right l m a))))))).
 Admitted.
 
@@ -472,9 +472,9 @@ Admitted.
     (forall (m:((memory) pointer)),
      (forall (a:Z),
       ((not_in_pset p (pset_acc_range_right l m a)) ->
-       (forall (p':pointer),
-        (~(not_in_pset p' l) ->
-         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p' i)))))))))))).
+       (forall (p1:pointer),
+        (~(not_in_pset p1 l) ->
+         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p1 i)))))))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_trans :

@@ -303,11 +303,11 @@ c/creport.cmx: src/loc.cmx c/ctypes.cmx c/coptions.cmx c/cerror.cmi \
 c/ctypes.cmo: src/lib.cmi c/coptions.cmi c/ctypes.cmi 
 c/ctypes.cmx: src/lib.cmx c/coptions.cmx c/ctypes.cmi 
 c/ctyping.cmo: src/loc.cmi src/lib.cmi c/info.cmi src/env.cmi c/ctypes.cmi \
-    c/creport.cmi c/coptions.cmi src/compat.cmo c/cltyping.cmi c/clogic.cmi \
-    c/cerror.cmi c/cenv.cmi c/cconst.cmi c/cast.cmi c/ctyping.cmi 
+    c/creport.cmi c/coptions.cmi c/cltyping.cmi c/clogic.cmi c/cerror.cmi \
+    c/cenv.cmi c/cconst.cmi c/cast.cmi c/ctyping.cmi 
 c/ctyping.cmx: src/loc.cmx src/lib.cmx c/info.cmx src/env.cmx c/ctypes.cmx \
-    c/creport.cmx c/coptions.cmx src/compat.cmx c/cltyping.cmx c/clogic.cmi \
-    c/cerror.cmi c/cenv.cmx c/cconst.cmx c/cast.cmi c/ctyping.cmi 
+    c/creport.cmx c/coptions.cmx c/cltyping.cmx c/clogic.cmi c/cerror.cmi \
+    c/cenv.cmx c/cconst.cmx c/cast.cmi c/ctyping.cmi 
 c/info.cmo: c/ctypes.cmi src/compat.cmo c/info.cmi 
 c/info.cmx: c/ctypes.cmx src/compat.cmx c/info.cmi 
 c/invariant.cmo: src/loc.cmi c/info.cmi c/ctypes.cmi c/creport.cmi \

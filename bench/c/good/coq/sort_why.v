@@ -395,17 +395,17 @@ Lemma sort4_3_impl_po_3 :
   (valid alloc b).
 Proof.
 intuition.
-subst; caduceus.
-apply assigns_trans with intP0.
+subst;red;caduceus.
+apply not_assigns_trans with intP0.
 red; subst; intuition.
-generalize (unchanged_union_elim2 _ _ _ H10).
+generalize (pset_union_elim2 _ _ _ H10).
 intro.
-generalize (unchanged_pointer_elim _ _ H11).
+generalize (pset_singleton_elim _ _ H11).
 intro; caduceus.
 red; subst; intuition.
-generalize (unchanged_union_elim1 _ _ _ H10).
+generalize (pset_union_elim1 _ _ _ H10).
 intro.
-generalize (unchanged_pointer_elim _ _ H11).
+generalize (pset_singleton_elim _ _ H11).
 intro; caduceus.
 Save.
 
@@ -431,7 +431,7 @@ Lemma sort4_3_impl_po_4 :
    (pset_union (pset_singleton b) (pset_singleton a))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red;intuition.
 Save.
 
 (* Why obligation from file "why/sort.why", characters 1999-2081 *)
@@ -516,17 +516,17 @@ Lemma sort4_3_impl_po_7 :
   (valid alloc d).
 Proof.
 intuition.
-subst; caduceus.
-apply assigns_trans with intP1.
+subst; red;caduceus.
+apply not_assigns_trans with intP1.
 red; subst; intuition.
-generalize (unchanged_union_elim2 _ _ _ H12).
+generalize (pset_union_elim2 _ _ _ H12).
 intro.
-generalize (unchanged_pointer_elim _ _ H13).
+generalize (pset_singleton_elim _ _ H13).
 intro; caduceus.
 red; subst; intuition.
-generalize (unchanged_union_elim1 _ _ _ H12).
+generalize (pset_union_elim1 _ _ _ H12).
 intro.
-generalize (unchanged_pointer_elim _ _ H13).
+generalize (pset_singleton_elim _ _ H13).
 intro; caduceus.
 Save.
 
@@ -556,7 +556,7 @@ Lemma sort4_3_impl_po_8 :
   (not_assigns alloc intP0 intP0
    (pset_union (pset_singleton d) (pset_singleton c))).
 Proof.
-intuition.
+intuition;red;intuition.
 Save.
 
 (* Why obligation from file "why/sort.why", characters 2461-2543 *)
@@ -655,17 +655,17 @@ Lemma sort4_3_impl_po_11 :
   (valid alloc c).
 Proof.
 intuition.
-subst; caduceus.
-apply assigns_trans with intP2.
+subst; red;caduceus.
+apply not_assigns_trans with intP2.
 red; subst; intuition.
-generalize (unchanged_union_elim2 _ _ _ H14).
+generalize (pset_union_elim2 _ _ _ H14).
 intro.
-generalize (unchanged_pointer_elim _ _ H15).
+generalize (pset_singleton_elim _ _ H15).
 intro; caduceus.
 red; subst; intuition.
-generalize (unchanged_union_elim1 _ _ _ H14).
+generalize (pset_union_elim1 _ _ _ H14).
 intro.
-generalize (unchanged_pointer_elim _ _ H15).
+generalize (pset_singleton_elim _ _ H15).
 intro; caduceus.
 Save.
 
@@ -700,7 +700,7 @@ Lemma sort4_3_impl_po_12 :
   (not_assigns alloc intP1 intP1
    (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
-intuition.
+intuition;red;intuition.
 Save.
 
 (* Why obligation from file "why/sort.why", characters 2923-3005 *)
@@ -814,17 +814,17 @@ Lemma sort4_3_impl_po_15 :
   (valid alloc d).
 Proof.
 intuition.
-subst; caduceus.
-apply assigns_trans with intP3.
+subst;red; caduceus.
+apply not_assigns_trans with intP3.
 red; subst; intuition.
-generalize (unchanged_union_elim2 _ _ _ H16).
+generalize (pset_union_elim2 _ _ _ H16).
 intro.
-generalize (unchanged_pointer_elim _ _ H17).
+generalize (pset_singleton_elim _ _ H17).
 intro; caduceus.
 red; subst; intuition.
-generalize (unchanged_union_elim1 _ _ _ H16).
+generalize (pset_union_elim1 _ _ _ H16).
 intro.
-generalize (unchanged_pointer_elim _ _ H17).
+generalize (pset_singleton_elim _ _ H17).
 intro; caduceus.
 Save.
 
@@ -864,7 +864,7 @@ Lemma sort4_3_impl_po_16 :
   (not_assigns alloc intP2 intP2
    (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
-intuition.
+intuition;red;intuition.
 Save.
 
 (* Why obligation from file "why/sort.why", characters 3385-3467 *)
@@ -993,17 +993,17 @@ Lemma sort4_3_impl_po_19 :
   (valid alloc c).
 Proof.
 intuition.
-subst; caduceus.
-apply assigns_trans with intP4.
+subst; red;caduceus.
+apply not_assigns_trans with intP4.
 red; subst; intuition.
-generalize (unchanged_union_elim2 _ _ _ H18).
+generalize (pset_union_elim2 _ _ _ H18).
 intro.
-generalize (unchanged_pointer_elim _ _ H19).
+generalize (pset_singleton_elim _ _ H19).
 intro; caduceus.
 red; subst; intuition.
-generalize (unchanged_union_elim1 _ _ _ H18).
+generalize (pset_union_elim1 _ _ _ H18).
 intro.
-generalize (unchanged_pointer_elim _ _ H19).
+generalize (pset_singleton_elim _ _ H19).
 intro; caduceus.
 Save.
 
@@ -1048,7 +1048,7 @@ Lemma sort4_3_impl_po_20 :
   (not_assigns alloc intP3 intP3
    (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
-intuition.
+intuition;red;intuition.
 Save.
 
 (* Why obligation from file "why/sort.why", characters 1493-3826 *)
@@ -1091,9 +1091,39 @@ Lemma sort4_3_impl_po_21 :
   ((acc intP4 a) <= (acc intP4 b) /\ (acc intP4 b) <= (acc intP4 c)) /\
   (acc intP4 c) <= (acc intP4 d).
 Proof.
-intuition.
+unfold swap_ord;intuition.
+rewrite H22;auto.
+rewrite H19;auto.
+assert (b # intP3 > c # intP3 \/ b # intP3 <= c # intP3 ).
+omega.
+inversion_clear H1.
+generalize (H24 H25);clear H24 H25.
+intros (H24,H25).
+rewrite H24.
+rewrite H19;auto.
+assert (a # intP1 > c # intP1 \/ a # intP1 <= c # intP1 ).
+omega.
+inversion_clear H1.
+generalize (H18 H26);clear H18 H26.
+intros (H18,H26).
+rewrite H26.
+rewrite H18.
+assert (c# intP0 > d # intP0 \/ c # intP0 <= d # intP0 ).
+omega.
+inversion_clear H1.
+generalize (H15 H27);clear H15 H27.
+intros (H15,H27).
+rewrite H15.
+rewrite H13;auto.
+rewrite H10;auto.
+assert (a# intP > b # intP \/ a # intP <= b # intP ).
+omega.
+inversion_clear H1.
+generalize (H12 H28);clear H12 H28.
+intros (H12,H28).
+rewrite H12.
+Admitted.
 
-Save.
 
 (* Why obligation from file "why/sort.why", characters 4140-4237 *)
 Lemma sort4_4_impl_po_1 : 
@@ -1103,7 +1133,6 @@ Lemma sort4_4_impl_po_1 :
   (valid alloc t).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/sort.why", characters 4140-4237 *)
@@ -1115,7 +1144,6 @@ Lemma sort4_4_impl_po_2 :
   (valid alloc (shift t 1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/sort.why", characters 4308-4353 *)
@@ -1724,8 +1752,7 @@ Lemma sort4_4_impl_po_3 :
     (valid alloc result))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+Admitted.
 
 (* Why obligation from file "why/sort.why", characters 4458-4458 *)
 Lemma sort4_4_impl_po_4 : 
@@ -2282,21 +2309,4 @@ Lemma sort4_4_impl_po_4 :
   (valid alloc (shift t 3))) /\ (valid alloc (shift t 3)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
+Admitted.

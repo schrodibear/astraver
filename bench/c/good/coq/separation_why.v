@@ -115,43 +115,43 @@ Lemma f1_impl_po_3 :
       (pset_range (pset_singleton (acc p1 u1)) 0 5))))).
 Proof.
 intuition.
-apply assigns_trans with v2_0.
-unfold assigns;intros.
+apply not_assigns_trans with v2_0.
+unfold not_assigns;intros.
 apply H12;auto.
-apply unchanged_union_elim2 with (pointer_loc u2);auto.
-unfold assigns;intros.
+apply pset_union_elim2 with (pset_singleton u2);auto.
+unfold not_assigns;intros.
 apply H18;auto.
-apply unchanged_union_elim1 with (pointer_loc u1);auto.
-apply assigns_trans with v1_0.
-unfold assigns;intros.
+apply pset_union_elim1 with (pset_singleton u1);auto.
+apply not_assigns_trans with v1_0.
+unfold not_assigns;intros.
 apply H13;auto.
-apply unchanged_union_elim2 with (pointer_loc u2);auto.
-unfold assigns;intros.
+apply pset_union_elim2 with (pset_singleton u2);auto.
+unfold not_assigns;intros.
 apply H19;auto.
-apply unchanged_union_elim1 with (pointer_loc u1);auto.
-apply assigns_trans with intP0.
-unfold assigns;intros.
+apply pset_union_elim1 with (pset_singleton u1);auto.
+apply not_assigns_trans with intP0.
+unfold not_assigns;intros.
 apply H9;auto.
-generalize (unchanged_union_elim2 (range_loc (u2 # p2) 0 5) 
-(union_loc (range_loc (u2 # p1) 0 5)
-(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5)))
+generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 5) 
+(pset_union (pset_range (pset_singleton (u2 # p1)) 0 5)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5)))
 p H20);intro.
-apply unchanged_union_elim2 with (range_loc (u2 # p1) 0 5);auto.
-unfold assigns;intros.
+apply pset_union_elim2 with (pset_range (pset_singleton (u2 # p1)) 0 5);auto.
+unfold not_assigns;intros.
 apply H17;auto.
-generalize (unchanged_union_elim1 (range_loc (u2 # p2) 0 5) 
-(union_loc (range_loc (u2 # p1) 0 5)
-(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5)))
+generalize (pset_union_elim1 (pset_range (pset_singleton (u2 # p2)) 0 5) 
+(pset_union (pset_range (pset_singleton (u2 # p1)) 0 5)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5)))
 p H20);intro.
-generalize (unchanged_union_elim2 (range_loc (u2 # p2) 0 5) 
-(union_loc (range_loc (u2 # p1) 0 5)
-(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5)))
+generalize (pset_union_elim2 (pset_range (pset_singleton (u2 # p2)) 0 5) 
+(pset_union (pset_range (pset_singleton (u2 # p1)) 0 5)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5)))
 p H20);intro.
-generalize (unchanged_union_elim1 
-(range_loc (u2 # p1) 0 5)
-(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5))
+generalize (pset_union_elim1 
+(pset_range (pset_singleton (u2 # p1)) 0 5)
+(pset_union (pset_range (pset_singleton (u1 # p2)) 0 5) (pset_range (pset_singleton (u1 # p1)) 0 5))
 p H22);intro.
-apply unchanged_union_intro;intuition.
+apply pset_union_intro;intuition.
 Save.
 
 (* Why obligation from file "why/separation.why", characters 32425-32442 *)

@@ -102,7 +102,7 @@ rewrite H5;auto.
 generalize (valid_anonymous_0_c1_pointer alloc c1 plas Pre4).
 unfold valid_anonymous_0_c1.
 tauto.
-apply unchanged_pointer_intro.
+apply pset_singleton_intro.
 generalize (valid_anonymous_0_pointer alloc c1 c2 plas Pre4).
 unfold internal_separation_anonymous_0.
 intro.
@@ -114,16 +114,16 @@ red.
 intros.
 red in H2.
 red in H5.
-assert (unchanged p (pointer_loc (plas # c2))).
-generalize (unchanged_union_elim1 _ _ _ H0);auto.
+assert (not_in_pset p (pset_singleton (plas # c2))).
+generalize (pset_union_elim1 _  _ _  H0);auto.
 generalize (H5 p H H3);intro.
 rewrite H6.
-assert (unchanged p (pointer_loc (plas # c1))).
-generalize (unchanged_union_elim2 _ _ _ H0);auto.
+assert (not_in_pset p (pset_singleton (plas # c1))).
+generalize (pset_union_elim2 _ _ _ H0);auto.
 generalize (H2 p H H7);intro.
 rewrite H8.
 rewrite acc_upd_neq;auto.
-generalize (unchanged_pointer_elim _ _ H3).
+generalize (pset_singleton_elim _ _ H3).
 intuition.
 subst;auto.
 subst.
