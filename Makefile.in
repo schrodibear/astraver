@@ -56,7 +56,7 @@ COQINCLUDES = -R @WHYLIBCOQ@ Coq.why
 VO = @WHYLIBCOQ@/WhyArrays.vo  @WHYLIBCOQ@/WhyBool.vo  @WHYLIBCOQ@/WhyInt.vo \
      @WHYLIBCOQ@/WhyTuples.vo  @WHYLIBCOQ@/WhyPermut.vo \
      @WHYLIBCOQ@/WhySorted.vo  @WHYLIBCOQ@/Why.vo     @WHYLIBCOQ@/WhyFloat.vo \
-     @WHYLIBCOQ@/WhyExn.vo \
+     @WHYLIBCOQ@/WhyExn.vo @WHYLIBCOQ@/WhyCoqCompat.vo \
      @WHYLIBCOQ@/WhyLemmas.vo  @WHYLIBCOQ@/WhyTactics.vo @WHYLIBCOQ@/WhyCM.vo
 VFILES=$(VO:.vo=.v)
 WHYVO=@WHYLIBCOQ@/Why.vo

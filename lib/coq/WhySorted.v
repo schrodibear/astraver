@@ -1,4 +1,4 @@
-(*
+(* Load Programs. *)(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -16,182 +16,206 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.5 2003-01-07 16:54:07 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.6 2003-09-22 13:11:59 filliatr Exp $ *)
 
 Require Export WhyArrays.
-Require WhyPermut.
+Require Import WhyPermut.
 
-Require ZArithRing.
-Require Omega.
+Require Import ZArithRing.
+Require Import Omega.
 
 Set Implicit Arguments.
+Unset Strict Implicit.
 
 (* Definition *)
 
-Definition sorted_array :=
-  [A:(array Z)][deb:Z][fin:Z]
-     `deb<=fin` -> (x:Z) `x>=deb` -> `x<fin` -> (Zle #A[x] #A[`x+1`]).
+Definition sorted_array (A:array Z) (deb fin:Z) :=
+  (deb <= fin)%Z ->
+  forall x:Z,
+    (x >= deb)%Z -> (x < fin)%Z -> (access A x <= access A (x + 1))%Z.
 
 (* Elements of a sorted sub-array are in increasing order *)
 
 (* one element and the next one *)
 
 Lemma sorted_elements_1 :
-  (A:(array Z))(n:Z)(m:Z)
-  (sorted_array A n m)
-  -> (k:Z)`k>=n`
-  -> (i:Z) `0<=i` -> `k+i<=m`
-  -> (Zle (access A k) (access A `k+i`)).
+ forall (A:array Z) (n m:Z),
+   sorted_array A n m ->
+   forall k:Z,
+     (k >= n)%Z ->
+     forall i:Z,
+       (0 <= i)%Z ->
+       (k + i <= m)%Z -> (access A k <= access A (k + i))%Z.
 Proof.
-Intros A n m H_sorted k H_k i H_i.
-Pattern i. Apply natlike_ind.
-Intro.
-Replace `k+0` with k; Omega. (*** Ring `k+0` => BUG ***)
+intros A n m H_sorted k H_k i H_i.
+pattern i.
+ apply natlike_ind.
+intro.
+replace (k + 0)%Z with k; omega.
+ (*** Ring `k+0` => BUG ***)
 
-Intros.
-Apply Zle_trans with m:=(access A `k+x`).
-Apply H0 ; Omega.
+intros.
+apply Zle_trans with (m := access A (k + x)).
+apply H0; omega.
 
-Unfold Zs.
-Replace `k+(x+1)` with `(k+x)+1`.
-Unfold sorted_array in H_sorted.
-Apply H_sorted ; Omega.
+unfold Zs.
+replace (k + (x + 1))%Z with (k + x + 1)%Z.
+unfold sorted_array in H_sorted.
+apply H_sorted; omega.
 
-Omega.
+omega.
 
-Assumption.
-Save.
+assumption.
+Qed.
 
 (* one element and any of the following *)
 
 Lemma sorted_elements :
-  (A:(array Z))(n:Z)(m:Z)(k:Z)(l:Z)
-  (sorted_array A n m)
-  -> `k>=n` -> `l<(array_length A)` -> `k<=l` -> `l<=m`
-  -> (Zle (access A k) (access A l)).
+ forall (A:array Z) (n m k l:Z),
+   sorted_array A n m ->
+   (k >= n)%Z ->
+   (l < array_length A)%Z ->
+   (k <= l)%Z -> (l <= m)%Z -> (access A k <= access A l)%Z.
 Proof.
-Intros.
-Replace l with `k+(l-k)`.
-Apply sorted_elements_1 with n:=n m:=m; [Assumption | Omega | Omega | Omega].
-Omega.
-Save.
+intros.
+replace l with (k + (l - k))%Z.
+apply sorted_elements_1 with (n := n) (m := m);
+ [ assumption | omega | omega | omega ].
+omega.
+Qed.
 
 Hints Resolve sorted_elements : datatypes v62.
 
 (* A sub-array of a sorted array is sorted *)
 
-Lemma sub_sorted_array : (A:(array Z))(deb:Z)(fin:Z)(i:Z)(j:Z)
-      (sorted_array A deb fin) -> 
-        (`i>=deb` -> `j<=fin` -> `i<=j` -> (sorted_array A i j)).
+Lemma sub_sorted_array :
+ forall (A:array Z) (deb fin i j:Z),
+   sorted_array A deb fin ->
+   (i >= deb)%Z -> (j <= fin)%Z -> (i <= j)%Z -> sorted_array A i j.
 Proof.
-Unfold sorted_array.
-Intros.
-Apply H ; Omega.
-Save.
+unfold sorted_array.
+intros.
+apply H; omega.
+Qed.
 
 Hints Resolve sub_sorted_array : datatypes v62.
 
 (* Extension on the left of the property of being sorted *)
 
-Lemma left_extension : (A:(array Z))(i:Z)(j:Z)
-   `i>0` -> `j<(array_length A)` -> (sorted_array A i j) 
-   -> (Zle #A[`i-1`]  #A[i]) -> (sorted_array A `i-1` j).
+Lemma left_extension :
+ forall (A:array Z) (i j:Z),
+   (i > 0)%Z ->
+   (j < array_length A)%Z ->
+   sorted_array A i j ->
+   (access A (i - 1) <= access A i)%Z -> sorted_array A (i - 1) j.
 Proof.
-(Intros; Unfold sorted_array ; Intros).
-Elim (Z_ge_lt_dec x i).   (* (`x >= i`) + (`x < i`) *)
-Intro Hcut.
-Apply H1 ; Omega.
+intros; unfold sorted_array; intros.
+elim (Z_ge_lt_dec x i).
+   (* (`x >= i`) + (`x < i`) *)
+intro Hcut.
+apply H1; omega.
 
-Intro Hcut.
-Replace x with `i-1`.
-Replace `i-1+1` with i ; [Assumption | Omega].
+intro Hcut.
+replace x with (i - 1)%Z.
+replace (i - 1 + 1)%Z with i; [ assumption | omega ].
 
-Omega.
-Save.
+omega.
+Qed.
 
 (* Extension on the right *)
 
-Lemma right_extension : (A:(array Z))(i:Z)(j:Z)
-   `i>=0` -> `j<(array_length A)-1` -> (sorted_array A i j) 
-   -> (Zle #A[j]  #A[`j+1`]) -> (sorted_array A i `j+1`).
+Lemma right_extension :
+ forall (A:array Z) (i j:Z),
+   (i >= 0)%Z ->
+   (j < array_length A - 1)%Z ->
+   sorted_array A i j ->
+   (access A j <= access A (j + 1))%Z -> sorted_array A i (j + 1).
 Proof.
-(Intros; Unfold sorted_array ; Intros).
-Elim (Z_lt_ge_dec x j).
-Intro Hcut. 
-Apply H1 ; Omega.
+intros; unfold sorted_array; intros.
+elim (Z_lt_ge_dec x j).
+intro Hcut.
+ apply H1; omega.
 
-Intro HCut.
-Replace x with j ; [Assumption | Omega].
-Save.
+intro HCut.
+replace x with j; [ assumption | omega ].
+Qed.
 
 (* Substitution of the leftmost value by a smaller value *) 
 
-Lemma left_substitution : 
-   (A:(array Z))(i:Z)(j:Z)(v:Z)
-   `i>=0`  -> `j<(array_length A)`  -> (sorted_array A i j)
-   -> (Zle v #A[i])
-   -> (sorted_array (store A i v) i j).
+Lemma left_substitution :
+ forall (A:array Z) (i j v:Z),
+   (i >= 0)%Z ->
+   (j < array_length A)%Z ->
+   sorted_array A i j ->
+   (v <= access A i)%Z -> sorted_array (store A i v) i j.
 Proof.
-Intros A i j v H_i H_j H_sorted H_v.
-Unfold sorted_array ; Intros.
+intros A i j v H_i H_j H_sorted H_v.
+unfold sorted_array; intros.
 
-Cut `x = i`\/`x > i`.
-(Intro Hcut ; Elim Hcut ; Clear Hcut ; Intro).
-Rewrite H2.
-AccessSame; Try Omega. AccessOther; Try Omega.
-Apply Zle_trans with m:=(access A i) ; [Assumption | Apply H_sorted ; Omega].
-Do 2 (AccessOther; Try Omega).
-Apply H_sorted ; Omega.
-Omega.
-Save.
+cut (x = i \/ (x > i)%Z).
+intro Hcut; elim Hcut; clear Hcut; intro.
+rewrite H2.
+AccessSame; try omega.
+ AccessOther; try omega.
+apply Zle_trans with (m := access A i);
+ [ assumption | apply H_sorted; omega ].
+do 2 (AccessOther; try omega).
+apply H_sorted; omega.
+omega.
+Qed.
 
 (* Substitution of the rightmost value by a larger value *)
 
-Lemma right_substitution : 
-   (A:(array Z))(i:Z)(j:Z)(v:Z)
-   `i>=0`  -> `j<(array_length A)`  -> (sorted_array A i j)
-   -> (Zle #A[j] v)
-   -> (sorted_array (store A j v) i j).
+Lemma right_substitution :
+ forall (A:array Z) (i j v:Z),
+   (i >= 0)%Z ->
+   (j < array_length A)%Z ->
+   sorted_array A i j ->
+   (access A j <= v)%Z -> sorted_array (store A j v) i j.
 Proof.
-Intros A i j v H_i H_j H_sorted H_v.
-Unfold sorted_array ; Intros.
+intros A i j v H_i H_j H_sorted H_v.
+unfold sorted_array; intros.
 
-Cut `x = j-1`\/`x < j-1`.
-(Intro Hcut ; Elim Hcut ; Clear Hcut ; Intro).
-Rewrite H2.
-Ring `j-1+1`.
-AccessOther; Try Omega. 
-Apply Zle_trans with m:=(access A j). 
-Apply sorted_elements with n:=i m:=j ; Try Omega ; Assumption.
-Assumption.
-Do 2 (AccessOther; Try Omega).
-Apply H_sorted ; Omega.
+cut (x = (j - 1)%Z \/ (x < j - 1)%Z).
+intro Hcut; elim Hcut; clear Hcut; intro.
+rewrite H2.
+ring (j - 1 + 1)%Z.
+AccessOther; try omega.
+ apply Zle_trans with (m := access A j).
+ apply sorted_elements with (n := i) (m := j); try omega; assumption.
+assumption.
+do 2 (AccessOther; try omega).
+apply H_sorted; omega.
 
-Omega.
-Save.
+omega.
+Qed.
 
 (* Affectation outside of the sorted region *)
 
-Lemma no_effect : 
-   (A:(array Z))(i:Z)(j:Z)(k:Z)(v:Z)
-   `i>=0`  -> `j<(array_length A)`  -> (sorted_array A i j)
-   -> `0<=k<i`\/`j<k<(array_length A)`
-   -> (sorted_array (store A k v) i j).
+Lemma no_effect :
+ forall (A:array Z) (i j k v:Z),
+   (i >= 0)%Z ->
+   (j < array_length A)%Z ->
+   sorted_array A i j ->
+   (0 <= k < i)%Z \/ (j < k < array_length A)%Z ->
+   sorted_array (store A k v) i j.
 Proof.
-Intros.
-Unfold sorted_array ; Intros. 
-Do 2 (AccessOther; Try Omega).
-Apply H1 ; Assumption.
-Save.
+intros.
+unfold sorted_array; intros.
+ do 2 (AccessOther; try omega).
+apply H1; assumption.
+Qed.
 
-Lemma sorted_array_id : (t1,t2:(array Z))(g,d:Z)
-  (sorted_array t1 g d) -> (array_id t1 t2 g d) -> (sorted_array t2 g d).
+Lemma sorted_array_id :
+ forall (t1 t2:array Z) (g d:Z),
+   sorted_array t1 g d -> array_id t1 t2 g d -> sorted_array t2 g d.
 Proof.
-Intros t1 t2 g d Hsorted Hid.
-Unfold array_id in Hid.
-Unfold sorted_array in Hsorted. Unfold sorted_array.
-Intros Hgd x H1x H2x.
-Rewrite <- (Hid x); [ Idtac | Omega ].
-Rewrite <- (Hid `x+1`); [ Idtac | Omega ].
-Apply Hsorted; Assumption.
-Save.
+intros t1 t2 g d Hsorted Hid.
+unfold array_id in Hid.
+unfold sorted_array in Hsorted.
+ unfold sorted_array.
+intros Hgd x H1x H2x.
+rewrite <- (Hid x); [ idtac | omega ].
+rewrite <- (Hid (x + 1)%Z); [ idtac | omega ].
+apply Hsorted; assumption.
+Qed.

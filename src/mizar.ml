@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.4 2003-09-18 20:32:55 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.5 2003-09-22 13:11:59 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -140,7 +140,7 @@ let rec print_term fmt t =
 	print0 a print0 b print0 c
     (* arrays *)
     | Tapp (id, [a; b]) when id == access ->
-	fprintf fmt "(@[%a.%a@])" print0 b print0 a
+	fprintf fmt "(@[%a.%a@])" print0 a print0 b
     | Tapp (id, [a; b; c]) when id == store ->
 	fprintf fmt "(@[%a+*(%a,@ %a)@])" 
 	print3 b print0 a print0 c

@@ -1,4 +1,4 @@
-(*
+(* Load Programs. *)(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,67 +14,73 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.11 2003-04-25 12:10:04 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.12 2003-09-22 13:11:59 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
 (* lemmas used to build automatic proofs *)
 
-Implicit Arguments On.
+Set Implicit Arguments.
+Unset Strict Implicit.
 
-Lemma loop_variant_1 : 
-  (A:Set)(v,phi0:A)(I:Prop)(P:A->Prop)
-  v=phi0 -> (I /\ (P phi0)) -> (P v).
+Lemma loop_variant_1 :
+ forall (A:Set) (v phi0:A) (I:Prop) (P:A -> Prop),
+   v = phi0 -> I /\ P phi0 -> P v.
 Proof.
-Intros. Rewrite H. Tauto.
-Save.
+intros.
+ rewrite H.
+ tauto.
+Qed.
 
 Lemma why_rewrite_var :
-  (A:Set)(x,t:A)x=t->(P:A->Prop)(P x)->(P t).
+ forall (A:Set) (x t:A), x = t -> forall P:A -> Prop, P x -> P t.
 Proof.
-Intros; Case H; Trivial.
-Save.
-Implicits why_rewrite_var [1 2 3].
+intros; case H; trivial.
+Qed.
+Implicit Arguments why_rewrite_var [1 2 3].
 
 Lemma why_boolean_case :
-  (A,B,C,D:Prop)
-  (b:bool)(if b then A else B)->(A->C)->(B->D)->(if b then C else D).
+ forall (A B C D:Prop) (b:bool),
+   (if b then A else B) -> (A -> C) -> (B -> D) -> if b then C else D.
 Proof.
-Destruct b; Intuition.
-Save.
+olddestruct b; intuition.
+Qed.
 
 Lemma why_boolean_wp :
-  (A,B:Prop)(q:bool->Prop)
-  (A -> (q true)) -> (B -> (q false)) -> 
-  (b:bool)(if b then A else B) -> (q b).
+ forall (A B:Prop) (q:bool -> Prop),
+   (A -> q true) ->
+   (B -> q false) -> forall b:bool, (if b then A else B) -> q b.
 Proof.
-Destruct b; Assumption.
-Save.
-Implicits why_boolean_wp [1 2].
+olddestruct b; assumption.
+Qed.
+Implicit Arguments why_boolean_wp [1 2].
 
 Lemma why_boolean_if_1 :
-  (q1t,q1f,q3t,q3f:Prop)(q2:bool->Prop)
-  q1t->(b:bool)(q2b:(q2 b))
-  (if b then (q1t /\ (q2 true))  \/ (q1f /\ q3t)
-        else (q1t /\ (q2 false)) \/ (q1f /\ q3f)).
+ forall (q1t q1f q3t q3f:Prop) (q2:bool -> Prop),
+   q1t ->
+   forall (b:bool) (q2b:q2 b),
+     if b
+     then q1t /\ q2 true \/ q1f /\ q3t
+     else q1t /\ q2 false \/ q1f /\ q3f.
 Proof.
-Destruct b; Auto.
-Save.
+olddestruct b; auto.
+Qed.
 
 Lemma why_boolean_forall :
-  (q:bool -> Prop)(q true) /\ (q false) -> (b:bool)(q b).
+ forall q:bool -> Prop, q true /\ q false -> forall b:bool, q b.
 Proof.
-Induction b; Intuition.
-Save.
-Implicits why_boolean_forall [].
+oldinduction b; intuition.
+Qed.
+Implicit Arguments why_boolean_forall [].
 
-Lemma why_boolean_discriminate : false=true->(p:Prop)p.
+Lemma why_boolean_discriminate : false = true -> forall p:Prop, p.
 Proof.
-Intros; Discriminate.
-Save.
+intros; discriminate.
+Qed.
 
-Require WhyInt.
-Require WhyTuples.
+Require Import WhyInt.
+Require Import WhyTuples.
 
-Parameter why_any_int : (_: unit)(sig_1 Z [result: Z](True)).
-Parameter why_any_unit : (_: unit)(sig_1 unit [result: unit](True)).
+Parameter why_any_int : forall x_:unit, sig_1 Z (fun result:Z => True).
+Parameter
+  why_any_unit : forall x_:unit, sig_1 unit (fun result:unit => True).

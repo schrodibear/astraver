@@ -1,4 +1,4 @@
-(*
+(* Load Programs. *)(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.8 2003-03-03 14:32:03 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.9 2003-09-22 13:11:59 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -35,99 +35,94 @@
 
 Require Export WhyInt.
 
-Implicit Arguments On.
+Set Implicit Arguments.
+Unset Strict Implicit.
 
 
 (* The type of arrays *)
 
 Parameter raw_array : Set -> Set.
 
-Definition array [T:Set] := Z * (raw_array T).
+Definition array (T:Set) := Z * raw_array T.
 
 
 (* Array length *)
 
-Definition array_length : (T:Set)(array T) -> Z :=
-  [T:Set; t:(array T)]let (n, _) = t in n.
+Definition array_length (T:Set) (t:array T) : Z := let (n, _) := t in n.
 
 
 (* Functions to create, access and modify arrays *)
 
-Parameter raw_new : (T:Set) T -> (raw_array T).
+Parameter raw_new : forall T:Set, T -> raw_array T.
 
-Definition new : (T:Set) Z -> T -> (array T) := 
-  [T:Set; n:Z; a:T](n, (raw_new a)).
+Definition new (T:Set) (n:Z) (a:T) : array T := (n, raw_new a).
 
-Parameter raw_access : (T:Set) (raw_array T) -> Z -> T.
+Parameter raw_access : forall T:Set, raw_array T -> Z -> T.
 
-Definition access : (T:Set) (array T) -> Z -> T := 
-  [T:Set; t:(array T); i:Z]let (_, r) = t in (raw_access r i).
+Definition access (T:Set) (t:array T) (i:Z) : T :=
+  let (_, r) := t in raw_access r i.
 
-Parameter raw_store : (T:Set) (raw_array T) -> Z -> T -> (raw_array T).
+Parameter
+  raw_store : forall T:Set, raw_array T -> Z -> T -> raw_array T.
 
-Definition store : (T:Set) (array T) -> Z -> T -> (array T) :=
-  [T:Set; t:(array T); i:Z; v:T]
-  ((array_length t), let (_, r) = t in (raw_store r i v)).
+Definition store (T:Set) (t:array T) (i:Z) (v:T) : array T :=
+  (array_length t, let (_, r) := t in raw_store r i v).
 
 
 (* Update does not change length *)
 
-Lemma array_length_store : 
-  (T:Set)(t:(array T))(i:Z)(v:T)
-  (array_length (store t i v)) = (array_length t).
+Lemma array_length_store :
+ forall (T:Set) (t:array T) (i:Z) (v:T),
+   array_length (store t i v) = array_length t.
 Proof.
-Trivial.
-Save.
+trivial.
+Qed.
 
 
 (* Axioms *)
 
-Axiom new_def : (T:Set)(n:Z)(v0:T)
-                (i:Z) `0 <= i < n` -> (access (new n v0) i) = v0.
+Axiom
+  new_def :
+    forall (T:Set) (n:Z) (v0:T) (i:Z),
+      (0 <= i < n)%Z -> access (new n v0) i = v0.
 
-Axiom store_def_1 : (T:Set)(t:(array T))(v:T)
-                    (i:Z) `0 <= i < (array_length t)` ->
-                    (access (store t i v) i) = v.
+Axiom
+  store_def_1 :
+    forall (T:Set) (t:array T) (v:T) (i:Z),
+      (0 <= i < array_length t)%Z -> access (store t i v) i = v.
 
-Axiom store_def_2 : (T:Set)(t:(array T))(v:T)
-                    (i:Z)(j:Z) 
-		    `0 <= i < (array_length t)` -> 
-		    `0 <= j < (array_length t)` ->
-		    `i <> j` ->
-                    (access (store t i v) j) = (access t j).
+Axiom
+  store_def_2 :
+    forall (T:Set) (t:array T) (v:T) (i j:Z),
+      (0 <= i < array_length t)%Z ->
+      (0 <= j < array_length t)%Z ->
+      i <> j -> access (store t i v) j = access t j.
 
 Hints Resolve new_def store_def_1 store_def_2 : datatypes v62.
 
 
 (* A tactic to simplify access in arrays *)
 
-Tactic Definition WhyArrays :=
-  Repeat Rewrite store_def_1;
-  Repeat Rewrite array_length_store.
+Ltac WhyArrays :=
+  repeat rewrite store_def_1; repeat rewrite array_length_store.
 
-Tactic Definition AccessStore i j H :=
-  Elim (Z_eq_dec i j); [ 
-    Intro H; Rewrite H; Rewrite store_def_1; WhyArrays
-  | Intro H; Rewrite store_def_2; 
-             [ Idtac | Idtac | Idtac | Exact H ] ].
+Ltac AccessStore i j H :=
+  elim (Z_eq_dec i j);
+   [ intro H; rewrite H; rewrite store_def_1; WhyArrays
+   | intro H; rewrite store_def_2; [ idtac | idtac | idtac | exact H ] ].
 
-Tactic Definition AccessSame :=
-  Rewrite store_def_1; WhyArrays; Try Omega.
+Ltac AccessSame := rewrite store_def_1; WhyArrays; try omega.
 
-Tactic Definition AccessOther :=
-  Rewrite store_def_2; WhyArrays; Try Omega.
+Ltac AccessOther := rewrite store_def_2; WhyArrays; try omega.
 
-Tactic Definition ArraySubst t :=
-  Subst t; Simpl; WhyArrays; Try Omega.
+Ltac ArraySubst t := subst t; simpl; WhyArrays; try omega.
 
 (* Syntax and pretty-print for arrays *)
 
-Grammar constr constr0 :=
-  array_access
-    [ "#" ident($t) "[" constr($c) "]" ] -> [ (access $t $c) ].
+(* <Warning> : Grammar is replaced by Notation *)
 
 (***
 Syntax constr level 0 :
   array_access
-    [ << (access ($VAR $t) $c) >> ] -> [ "#" $t "[" $c:L "]" ].
+    [ << (access ($VAR $t) $c) >> ] -> [  $t  $c:L  ].
 ***)

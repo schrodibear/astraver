@@ -14,10 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: Why.v,v 1.12 2003-09-22 13:11:59 filliatr Exp $ *)
+(* $Id: Why.v,v 1.13 2003-09-22 13:16:39 filliatr Exp $ *)
 
-Require Export Bool_nat.
-Require Export Zwf.
+Require Export WhyCoqCompat.
 
 Require Export WhyTuples.
 Require Export WhyInt.

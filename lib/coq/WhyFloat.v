@@ -14,23 +14,25 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyFloat.v,v 1.6 2003-03-26 10:45:14 filliatr Exp $ *)
+(* $Id: WhyFloat.v,v 1.7 2003-09-22 13:11:59 filliatr Exp $ *)
 
 Require Why.
 Require Export Rbase.
 
+Open Scope R_scope.
+
 Parameter R_lt_ge_bool : 
- (x,y:R) { b:bool | if b then ``x < y`` else ``x >= y`` }.
+ forall x y:R, { b:bool | if b then x < y else x >= y }.
 Parameter R_le_gt_bool : 
- (x,y:R) { b:bool | if b then ``x <= y`` else ``x > y`` }.
+ forall x y:R, { b:bool | if b then x <= y else x > y }.
 Parameter R_gt_le_bool : 
- (x,y:R) { b:bool | if b then ``x > y`` else ``x <= y`` }.
+ forall x y:R, { b:bool | if b then x > y else x <= y }.
 Parameter R_ge_lt_bool : 
- (x,y:R) { b:bool | if b then ``x >= y`` else ``x < y`` }.
+ forall x y:R, { b:bool | if b then x >= y else x < y }.
 Parameter R_eq_bool : 
- (x,y:R) { b:bool | if b then ``x == y`` else ``x <> y`` }.
+ forall x y:R, { b:bool | if b then x = y else x <> y }.
 Parameter R_noteq_bool : 
- (x,y:R) { b:bool | if b then ``x <> y`` else ``x == y`` }.
+ forall x y:R, { b:bool | if b then x <> y else x = y }.
 
 (* no validation for programs using floats
 Parameter why_any_float : (_: unit)(sig_1 R [result: R](True)).

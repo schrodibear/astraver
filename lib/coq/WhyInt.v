@@ -1,4 +1,4 @@
-(*
+(* Load Programs. *)(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,14 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyInt.v,v 1.4 2003-03-26 10:45:14 filliatr Exp $ *)
+(* $Id: WhyInt.v,v 1.5 2003-09-22 13:11:59 filliatr Exp $ *)
 
 Require Export ZArith.
 Require Export ZArith_dec.
 Require Export Zdiv.
 
-Theorem Znotzero : (x:Z){`x<>0`}+{`x=0`}.
+Theorem Znotzero : forall x:Z, {x <> 0%Z} + {x = 0%Z}.
 Proof.
-Intro x. Elim (Z_eq_dec x `0`) ; Auto.
-Save.
+intro x.
+ elim (Z_eq_dec x 0); auto.
+Qed.
 
