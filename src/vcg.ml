@@ -127,7 +127,8 @@ let loop_variant_1 hyps concl =
 
 (* tautologies in linear first-order logic *)
 
-(* lookup for an instance of p(v1...vn) where the vi are bound variables *)
+(* lookup for an instance of p(v1...vn) where the vi are the variables
+   to instantiate *)
 let lookup_instance p bvars ctx =
   let u0 = List.fold_right (fun v -> Idmap.add v None) bvars Idmap.empty in
   let rec unif_term u = function
@@ -192,7 +193,6 @@ let rec qe_forall = function
   
 (* ctx = xk:tk, ..., x1:t1 *)
 let linear ctx concl = 
-  (* let ctx,concl = intros ctx concl in FAUX *)
   let rec search = function
     | [] -> 
 	raise Exit
@@ -240,6 +240,24 @@ let linear ctx concl =
   in
   search (List.rev ctx)
 
+(* particular case of a let-in in a test *)
+let annot_if ctx concl = match ctx, concl with
+  | Spred (h1, (Pif (Tvar id1, a1, b1) as p1)) ::
+    Svar (id'1, TTpure PTbool) ::
+    Spred (h2, Papp (ide, [Tvar v; t])) ::
+    Svar (v', ty) :: _,
+    Pif (Tvar id, a, b) 
+    when is_eq ide && id == id1 && id1 == id'1 && v == v' -> 
+      let s = tsubst_in_predicate (subst_one v t) in
+      if s a1 <> a || s b1 <> b then raise Exit;
+      ProofTerm 
+	(cc_applist (CC_var (Ident.create "test_annot")) 
+	   [CC_var h2;
+	    CC_type (TTlambda ((v, CC_var_binder ty), TTpred p1));
+	    CC_var h1])
+  | _ -> 
+      raise Exit
+
 let discharge_methods ctx concl =
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
@@ -248,6 +266,7 @@ let discharge_methods ctx concl =
   try list_first (assumption concl) ctx with Exit ->
   try conjunction ctx concl with Exit ->
   try loop_variant_1 ctx concl with Exit ->
+  try annot_if ctx concl with Exit ->
   linear ctx concl
 
 let discharge loc ctx concl =

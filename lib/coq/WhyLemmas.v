@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.3 2002-11-14 09:38:05 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.4 2003-02-18 13:32:19 filliatr Exp $ *)
 
 Implicit Arguments On.
 
@@ -25,3 +25,10 @@ Proof.
 Intros. Rewrite H. Tauto.
 Save.
 
+Lemma test_annot :
+  (A:Set)(x,t:A)x=t->(P:A->Prop)(P x)->(P t).
+Proof.
+Intros; Case H; Trivial.
+Save.
+
+Implicits test_annot [1 2 3].
