@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.42 2004-05-26 08:35:10 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.43 2004-05-26 09:12:37 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -424,9 +424,15 @@ let type_spec result env s =
 
 let int_constant n = { term_node = Tconstant n; term_type = c_int }
 
-let rec term_of_expr e = match e.texpr_node with
-  | TEconstant c -> { term_node = Tconstant c; term_type = e.texpr_type }
-  | _ -> assert false
+let eval_array_size e = 
+  let rec eval e = match e.texpr_node with
+    | TEconstant c -> int_of_string c
+    | TEunary (Uplus, t) -> eval t
+    | TEunary (Cast.Uminus, t) -> -(eval t)
+    | TEbinary (t1, Cast.Badd_int, t2) -> eval t1 + eval t2
+    | _ -> assert false
+  in
+  { term_node = Tconstant (string_of_int (eval e)); term_type = c_int }
 
 let tpred t = match t.term_node with
   | Tconstant c -> 
@@ -442,7 +448,7 @@ let make_and p1 p2 = match p1, p2 with
 let fresh_index = 
   let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
 
-let valid_for_type v ty =
+let valid_for_type loc v ty =
   let rec valid_for tn ty = match ty.ctype_node with
     | CTstruct (n, _) ->
 	let t = { term_node = tn; term_type = c_pointer ty } in
@@ -456,13 +462,16 @@ let valid_for_type v ty =
 		   | _ ->
 		       acc)
 		fl (Pvalid t)
-	  | _ -> assert false
+	  | Defined _ ->
+	      assert false
+	  | Incomplete ->
+	      error loc ("`" ^ v.var_name ^ "' has incomplete type")
 	end
     | CTarray (ty, None) ->
-	assert false (* TODO *)
+	error loc ("array size missing in `" ^ v.var_name ^ "'")
     | CTarray (ty, Some s) ->
 	let t = { term_node = tn; term_type = c_array_size ty s } in
-	let ts = term_of_expr s in
+	let ts = eval_array_size s in
 	begin match ty.ctype_node with
 	  | CTstruct _ | CTarray _ ->
 	      let i = default_var_info (fresh_index ()) in

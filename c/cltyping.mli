@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.13 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: cltyping.mli,v 1.14 2004-05-26 09:12:37 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -38,6 +38,6 @@ val c_string : tctype
 val c_array : 'a ctype -> 'a ctype
 val c_pointer : 'a ctype -> 'a ctype
 
-val valid_for_type : Info.var_info -> tctype -> predicate
+val valid_for_type : Loc.t -> Info.var_info -> tctype -> predicate
 
 

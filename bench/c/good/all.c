@@ -36,21 +36,21 @@ void f7a() { y = x == 0 ? 1 : 2; }
     ensures y == 2 */ 
 void f7b() { y = x == 0 ? 1 : 2; }
 
-int t[];
+int t[3];
 
-/*@ requires \valid_index(t,0) && t[0] == 1 
+/*@ requires t[0] == 1 
     ensures y == 1 */ 
 void t1() { y = t[0]; }
 
-/*@ requires \valid_index(t,0) && x == 0 && t[0] == 1 
+/*@ requires x == 0 && t[0] == 1 
     ensures y == 1 */ 
 void t2() { y = t[x++]; }
 
-/*@ requires \valid_index(t,1) && x == 0 && t[1] == 1 
+/*@ requires x == 0 && t[1] == 1 
     ensures y == 1 */ 
 void t3() { y = t[++x]; }
 
-/*@ requires \valid_index(t,2) && x == 2 && t[2] == 3 
+/*@ requires x == 2 && t[2] == 3 
     ensures x == 3 && t[2] == 5 */ 
 void t4() { t[x] += x++; } 
 

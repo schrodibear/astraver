@@ -7,7 +7,7 @@ CFILES=$(shell ls *.c)
 WFILES=$(addprefix why/, $(CFILES:.c=.why))
 
 # generating and type-checking Why files for all C files
-all:
+default:
 	for f in $(CFILES:.c=); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \

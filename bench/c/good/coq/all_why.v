@@ -224,12 +224,12 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 1210-1256 *)
+(* Why obligation from file "why/all.why", characters 1213-1259 *)
 Lemma t1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
-  forall (Pre3: (valid_index alloc t 0) /\ (acc intP (shift t 0)) = 1),
+  forall (Pre3: (acc intP (shift t 0)) = 1 /\ (valid_range alloc t 0 2)),
   forall (caduceus_1: pointer),
   forall (Post1: caduceus_1 = t),
   forall (result: pointer),
@@ -241,14 +241,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 1697-1705 *)
+(* Why obligation from file "why/all.why", characters 1703-1711 *)
 Lemma t2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre3: ((valid_index alloc t 0) /\ x = 0) /\
-                (acc intP (shift t 0)) = 1),
+  forall (Pre3: (x = 0 /\ (acc intP (shift t 0)) = 1) /\
+                (valid_range alloc t 0 2)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = t),
   forall (caduceus: Z),
@@ -264,14 +264,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 2082-2084 *)
+(* Why obligation from file "why/all.why", characters 2091-2093 *)
 Lemma t3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre3: ((valid_index alloc t 1) /\ x = 0) /\
-                (acc intP (shift t 1)) = 1),
+  forall (Pre3: (x = 0 /\ (acc intP (shift t 1)) = 1) /\
+                (valid_range alloc t 0 2)),
   forall (caduceus_1: pointer),
   forall (Post2: caduceus_1 = t),
   forall (x0: Z),
@@ -285,14 +285,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 2323-2370 *)
+(* Why obligation from file "why/all.why", characters 2335-2382 *)
 Lemma t4_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre6: ((valid_index alloc t 2) /\ x = 2) /\
-                (acc intP (shift t 2)) = 3),
+  forall (Pre6: (x = 2 /\ (acc intP (shift t 2)) = 3) /\
+                (valid_range alloc t 0 2)),
   forall (caduceus_1: pointer),
   forall (Post1: caduceus_1 = t),
   forall (result: pointer),

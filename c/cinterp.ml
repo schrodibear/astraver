@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.83 2004-05-26 08:35:10 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.84 2004-05-26 09:12:37 filliatr Exp $ i*)
 
 
 open Format
@@ -1121,7 +1121,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       begin match ctype.ctype_node with
 	| CTstruct _ | CTarray _ -> 
 	    let id = "valid_" ^ v.var_name in
-	    add_weak_invariant id (Cltyping.valid_for_type v ctype)
+	    add_weak_invariant id (Cltyping.valid_for_type decl.loc v ctype)
 	| _ -> 
 	    ()
       end;

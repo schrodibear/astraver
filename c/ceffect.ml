@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.42 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.43 2004-05-26 09:12:37 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -467,7 +467,7 @@ let decl d =
     | Tdecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) ->
 	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
-	add_weak_invariant id (Cltyping.valid_for_type v ty)
+	add_weak_invariant id (Cltyping.valid_for_type d.loc v ty)
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Taxiom(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 
