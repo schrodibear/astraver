@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.35 2003-05-12 14:10:58 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.36 2003-05-13 12:30:13 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -620,7 +620,7 @@ let rec interp_statement cenv et abrupt = function
       let bl = append_to_block l s s3 in
       let mbl, st = interp_statement cenv et true bl in
       let mbl = continue st.continue l mbl in
-      let w = mk_expr l (Swhile (interp_boolean cenv s2, Some i, v, mbl)) in
+      let w = mk_expr l (Swhile (interp_boolean cenv s2, i, v, mbl)) in
       let w = break st.break l w in
       mk_seq l m1 w,
       { mt_status with abrupt_return = st.abrupt_return }
@@ -642,7 +642,7 @@ let rec interp_statement cenv et abrupt = function
       let (i,v) = interp_loop_annot an in
       let m, st = interp_statement cenv et true s in
       let m = continue st.continue l m in
-      let w = mk_expr l (Swhile (interp_boolean cenv e, Some i, v, m)) in
+      let w = mk_expr l (Swhile (interp_boolean cenv e, i, v, m)) in
       let w = break st.break l w in
       w, { mt_status with abrupt_return = st.abrupt_return }
   | CScond (l, e1, s2, s3) ->

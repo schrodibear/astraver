@@ -40,7 +40,6 @@ Intuition.
 Assert k=i1 \/ `k<i1`. Omega. Intuition.
 Subst k. Auto.
 Apply (H0 k). Omega. Assumption.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "search.mlw", characters 286-334 *)
@@ -105,7 +104,6 @@ Intuition.
 Assert k=i1 \/ `k<i1`. Omega. Intuition.
 Subst k. Auto.
 Apply (H0 k). Omega. Assumption.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "search.mlw", characters 796-844 *)

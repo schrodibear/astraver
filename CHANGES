@@ -1,4 +1,5 @@
 
+  o Coq: added Hints Unfold Zwf
   o (almost) conservative change in renaming strategy; a reference x1 is now
     renamed into x1 x1_0 x1_1 etc. instead of x1 x2 x3 etc.
 

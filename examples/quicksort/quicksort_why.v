@@ -73,7 +73,6 @@ Lemma quick_rec_po_3 :
   (Zwf `0` `1 + (p - 1) - l0` Variant1).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort.mlw", characters 1671-1692 *)

@@ -266,7 +266,6 @@ Proof.
 Intuition.
 Subst u2 m1.
 Intros; Apply In_left_side; Assumption Orelse Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "bsearch.mlw", characters 688-747 *)
@@ -310,7 +309,6 @@ Proof.
 Intuition.
 Absurd `p2 = 0`; Omega'.
 Subst p2; Omega.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "bsearch.mlw", characters 327-498 *)

@@ -29,7 +29,6 @@ Lemma main_po_1 :
   (`x3 = 10 - i3` /\ `i3 >= 0`) /\ (Zwf `0` i3 i2).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good-c/dowhile.c", characters 144-165 *)

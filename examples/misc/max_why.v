@@ -83,7 +83,6 @@ Intuition.
 Assert `k<y1` \/ k=y1. Omega. Intuition.
 Subst; Generalize (H7 k); Intuition.
 Subst; Intuition.
-Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "max.mlw", characters 552-581 *)
@@ -112,7 +111,6 @@ Proof.
 Intuition.
 Assert `k<y1` \/ k=y1. Omega. Intuition.
 Subst; Intuition.
-Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "max.mlw", characters 439-523 *)

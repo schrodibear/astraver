@@ -14,7 +14,7 @@ Lemma p_po_1 :
   (x1: Z)
   (Post1: x1 = `x0 - 1`)
   (`0 <= x1` /\ `x1 <= x`) /\ (Zwf `0` x1 x0).
-Proof. Intuition. Unfold Zwf; Omega. Save.
+Proof. Intuition. Save.
 
 (* Why obligation from file "loop0.mlw", characters 281-297 *)
 Lemma p_po_2 : 

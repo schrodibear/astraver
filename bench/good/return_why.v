@@ -53,7 +53,6 @@ Lemma p_po_3 :
   ((i:Z) (i = `i1 + 1` -> `0 <= i` /\ (Zwf `0` `N - i` `N - i1`))).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good/return.mlw", characters 189-195 *)

@@ -218,7 +218,6 @@ Apply exchange_is_sub_permut with i1 m2; Assumption Orelse Omega.
 Assumption.
 Decompose [exchange] Post30. Intuition.
 Rewrite H24; Omega.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 900-955 *)
@@ -263,7 +262,6 @@ Proof.
 Intuition.
 Assert hj : `j < i1` \/ `j = i1`. Omega. Intuition.
 Rewrite H15; Assumption.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 654-859 *)
@@ -400,7 +398,6 @@ Lemma quick_rec_po_9 :
   (Zwf `0` `1 + (m1 - 1) - l0` Variant1).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 1053-1077 *)
@@ -486,7 +483,6 @@ Lemma quick_rec_po_11 :
   (Zwf `0` `1 + r0 - (m1 + 1)` Variant1).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 594-1086 *)

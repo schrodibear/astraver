@@ -46,7 +46,6 @@ Subst result k t0.
 AccessSame.
 Subst result t0; AccessOther.
 Apply H4; Omega.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "copy.c", characters 185-281 *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.11 2003-05-12 14:13:38 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.12 2003-05-13 12:30:13 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -144,7 +144,7 @@ let rec print_predicate fmt = function
   | Papp (id, [a; b]) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->
-      fprintf fmt "@[~(%a =@ %a))@]" print_term a print_term b
+      fprintf fmt "@[~(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when id == t_lt_int || id == t_lt_float ->
       fprintf fmt "@[(%a <@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when id == t_le_int || id == t_le_float ->

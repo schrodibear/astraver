@@ -24,7 +24,6 @@ Lemma main_po_1 :
   (`x1 = i3` /\ `i3 <= 10`) /\ (Zwf `0` `10 - i3` `10 - i2`).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good-c/sum1.c", characters 118-135 *)

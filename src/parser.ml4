@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.81 2003-04-04 07:29:52 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.82 2003-05-13 12:30:13 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -562,7 +562,7 @@ EXTEND
       (list_of_some p, e, q)
   ] ];
   c_loop_annot:
-  [ [ LIDENT "invariant"; i = assertion; LIDENT "variant"; v = variant -> i,v
+  [ [ i = OPT invariant; LIDENT "variant"; v = variant -> i,v
   ] ];
   c_pre:
   [ [ p = OPT pre_condition; v = OPT c_variant -> p,v ] ];

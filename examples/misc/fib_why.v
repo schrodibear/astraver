@@ -190,7 +190,6 @@ Lemma fib2_aux_po_3 :
   (Zwf `0` `n0 - (x0 + 1)` Variant1).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 
@@ -257,7 +256,6 @@ Omega.
 Omega.
 Subst k2; Ring `k1+1-1`; Trivial.
 Subst y2; Assumption.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "fib.mlw", characters 1043-1082 *)
@@ -486,7 +484,6 @@ Omega.
 Omega.
 AccessOther.
 Auto.
-Unfold Zwf; Omega.
 Save.
 
 

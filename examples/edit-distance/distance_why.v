@@ -73,7 +73,6 @@ Intuition.
 ArraySubst t1.
 Subst t1. AccessStore i1 j Hij; Try Omega'.
 Apply H8; Omega'.
-Unfold Zwf; Omega'.
 Save.
 
 (* Why obligation from file "distance.mlw", characters 1598-1697 *)
@@ -382,7 +381,6 @@ Unfold min_suffix in H21; Apply H21; Omega'.
 Replace `j+1` with j2; [ Idtac | Omega' ].
 Subst old3.
 Unfold min_suffix; Unfold min_suffix in H21; Apply H21; Omega'.
-Unfold Zwf; Omega'.
 Save.
 
 (* Why obligation from file "distance.mlw", characters 2585-2592 *)
@@ -540,7 +538,6 @@ AccessOther.
 Apply H21; Omega'.
 Replace `j+1` with j2; [ Idtac | Omega' ].
 Subst old3; Apply H21; Omega'.
-Unfold Zwf; Omega'.
 Save.
 
 (* Why obligation from file "distance.mlw", characters 2155-2403 *)
@@ -658,7 +655,6 @@ Proof.
 Intuition.
 Replace `i4+1` with i3; [ Idtac | Omega' ].
 Apply H20; Omega'.
-Unfold Zwf; Omega'.
 Save.
 
 (* Why obligation from file "distance.mlw", characters 1868-1987 *)

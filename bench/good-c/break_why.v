@@ -98,7 +98,6 @@ Lemma f3_po_2 :
   ((n:Z) (n = `n1 - 1` -> `1 <= n` /\ (Zwf `0` n n1))).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good-c/break.c", characters 350-356 *)
@@ -137,7 +136,6 @@ Lemma f4_po_1 :
   ((i:Z) (i = `i2 + 1` -> `i <= 3` /\ (Zwf `0` `10 - i` `10 - i2`))).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good-c/break.c", characters 539-545 *)

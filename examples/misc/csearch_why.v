@@ -49,7 +49,6 @@ Destruct result0; Intuition.
 Assert `k=i1` \/ `k<i1`. Omega. Intuition.
 Subst k c_aux_1; Auto.
 Apply (H0 k); Auto with *.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "csearch.c", characters 150-198 *)
@@ -129,7 +128,6 @@ Destruct result0; Intuition.
 Assert `k=i1` \/ `k<i1`. Omega. Intuition.
 Subst k c_aux_2; Auto.
 Apply (H0 k); Auto with *.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "csearch.c", characters 483-531 *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.mli,v 1.14 2003-04-04 07:29:52 filliatr Exp $ i*)
+(*i $Id: parser.mli,v 1.15 2003-05-13 12:30:13 filliatr Exp $ i*)
 
 (* Grammar for the programs *)
 
@@ -34,6 +34,6 @@ type 'a c_parser = int -> string -> 'a
 val parse_c_spec : (lexpr asst list * Effect.t * lexpr post option) c_parser
 val parse_c_pre : (lexpr asst option * variant option) c_parser
 val parse_c_post : (lexpr post option) c_parser
-val parse_c_loop_annot : (lexpr asst * variant) c_parser
+val parse_c_loop_annot : (lexpr asst option * variant) c_parser
 val parse_c_decl : decl c_parser
 val parse_c_annot : block_st c_parser

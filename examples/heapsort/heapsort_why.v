@@ -332,8 +332,6 @@ Apply permut_trans with t':=t2; Try Assumption.
 Apply permut_trans with t':=t1.
 Apply exchange_is_permut with i:=`0` j:=k1. Assumption. 
 Assumption. 
-(* Zwf *)
-Unfold Zwf; Omega'.
 Save.
 
 (* Why obligation from file "heapsort.mlw", characters 1206-1470 *)

@@ -125,7 +125,6 @@ Subst i3.
 Generalize (subgoal_1 m1 n1 i1 j1 i2 A A0 A1 
               Inv_mn Test14 zero_f_SN Inv_ij Test9 Inv_i Test4).
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "find.mlw", characters 2020-2137 *)
@@ -268,7 +267,6 @@ Generalize (subgoal_2 m1 n1 i1 j1 i2 j2 A A0 A1
                   Inv_mn Test14 zero_f_SN Inv_ij Test9 Inv_i 
                   Inv_j Test6).
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "find.mlw", characters 2258-2375 *)
@@ -631,7 +629,6 @@ Lemma find_po_13 :
   (Zwf `0` `N + 2 + j2 - i2` `N + 2 + j1 - i1`).
 Proof.
 Intuition. 
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "find.mlw", characters 1711-1924 *)

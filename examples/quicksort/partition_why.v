@@ -416,8 +416,6 @@ Lemma partition_po_10 :
 Proof.
 Intuition.
 Apply array_ge_cons. Intros j0 Hj0. Omega.
-Unfold Zwf; Omega.
-Discriminate H21.
 Discriminate H21.
 Discriminate H21.
 Apply array_ge_cons. Intros j0 Hj0. 
@@ -425,8 +423,6 @@ Elim (Z_le_gt_dec `j2+1` j0); Intro.
 Elim H17; Intros. Apply H13; Omega.
 Cut `j0 = j2`; [ Intro | Omega ].
 Rewrite H13; Omega.
-Unfold Zwf; Omega.
-Discriminate H21.
 Discriminate H21.
 Discriminate H21.
 Save.

@@ -126,7 +126,6 @@ Apply Zle_trans with (access t0 min1).
 Subst min2; Omega.
 Apply H12; Omega.
 Subst min2 k; Omega.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 801-834 *)
@@ -172,7 +171,6 @@ Proof.
 Intuition.
 Assert h: `k<j1` \/ `k=j1`. Omega. Intuition.
 Subst k; Omega.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 619-755 *)

@@ -32,7 +32,6 @@ Lemma f_po_2 :
   (Zwf `0` `x0 - 1` Variant1).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 

@@ -17,7 +17,7 @@ Lemma f1_po_1 :
   (Post1: n2 = `0`)
   `0 <= n2` /\ (Zwf `0` n2 n1).
 Proof.
-Unfold Zwf; Intuition.
+Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 109-141 *)
@@ -32,7 +32,7 @@ Lemma f1_po_2 :
   (Test2: `n1 <> 5`)
   ((n:Z) (n = `n1 - 1` -> `0 <= n` /\ (Zwf `0` n n1))).
 Proof.
-Unfold Zwf; Intuition.
+Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 84-90 *)
@@ -41,7 +41,7 @@ Lemma f1_po_3 :
   (Post4: n = `10`)
   `0 <= n`.
 Proof.
-Unfold Zwf; Intuition.
+Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 164-165 *)
@@ -73,7 +73,6 @@ Lemma f2_po_1 :
   `i3 <= 10` /\ (Zwf `0` `10 - i3` `10 - i2`).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 291-323 *)
@@ -91,7 +90,6 @@ Lemma f2_po_2 :
   ((i:Z) (i = `i2 + 1` -> `i <= 10` /\ (Zwf `0` `10 - i` `10 - i2`))).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 260-267 *)

@@ -115,11 +115,8 @@ Destruct result4; Intuition.
 Subst i.
 Apply match_right_extension; Auto with *.
 Subst c_aux_1 c_aux_2; Ring `0+i3`; Ring `j2+i3`; Assumption.
-Unfold Zwf; Omega.
-Unfold Zwf; Omega.
 Subst result.
 Assert i3=(array_length x). Omega. Subst i3; Assumption.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "brute_force.c", characters 359-384 *)
@@ -157,9 +154,7 @@ Lemma BF_po_4 :
      (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))))).
 Proof.
 Intuition.
-Unfold Zwf; Omega.
 Assert i3=(array_length x). Omega. Subst i3; Assumption.
-Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "brute_force.c", characters 411-443 *)
