@@ -295,7 +295,8 @@
 %token <int * Cast.parsed_code_annot> CODE_ANNOT
 %token <int * Cast.parsed_loop_annot> LOOP_ANNOT
 
-%token <string> IDENTIFIER CONSTANT STRING_LITERAL TYPE_NAME
+%token <Cast.constant> CONSTANT
+%token <string> IDENTIFIER STRING_LITERAL TYPE_NAME
 %token SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN

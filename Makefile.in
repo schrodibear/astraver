@@ -171,7 +171,8 @@ coq-v8: $(VO7) $(VO8)
 include Version
 
 src/version.ml: Version 
-	echo "let version = \""$(VERSION)"\"" > $@
+	echo "let coqversion = \""@COQVER@"\"" > $@
+	echo "let version = \""$(VERSION)"\"" >> $@
 	echo "let date = \""`date`"\"" >> $@
 
 c/cversion.ml: Version Makefile

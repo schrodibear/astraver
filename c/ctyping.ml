@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.63 2004-07-21 08:07:08 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.64 2004-09-23 08:40:27 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -223,11 +223,10 @@ and type_expr env e =
 and type_expr_node loc env = function
   | CEnop ->
       TEnop, c_void
-  | CEconstant s ->
-      (try 
-	 let _ = int_of_string s in TEconstant s, c_int
-       with _ -> 
-	 TEconstant s, c_float)
+  | CEconstant (IntConstant _ as c) ->
+      TEconstant c, c_int
+  | CEconstant (FloatConstant _ as c) ->
+      TEconstant c, c_float
   | CEstring_literal s ->
       TEstring_literal s, c_string
   | CEvar x ->
@@ -801,7 +800,8 @@ let function_spec loc f = function
 
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
   | CTarray (ety, None), Ilist l -> 
-      let s = { texpr_node = TEconstant (string_of_int (List.length l));
+      let s = string_of_int (List.length l) in
+      let s = { texpr_node = TEconstant (IntConstant s);
 		texpr_type = c_int; texpr_loc = loc } in
       { ty with ctype_node = CTarray (ety, Some s) }
   | _ -> 

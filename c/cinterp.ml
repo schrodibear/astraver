@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.93 2004-07-06 11:49:01 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.94 2004-09-23 08:40:27 filliatr Exp $ i*)
 
 
 open Format
@@ -370,13 +370,10 @@ let check_for_assigns loc v =
 
 let rec interp_expr e =
   match e.texpr_node with
-    | TEconstant(c) -> 
-	begin
-	  try
-	    Cte(Prim_int(int_of_string c))
-	  with Failure "int_of_string" -> 
-	    Cte(Prim_float(float_of_string c))
-	end
+    | TEconstant (IntConstant c) -> 
+	Cte(Prim_int(int_of_string c))
+    | TEconstant (FloatConstant c) ->
+	Cte(Prim_float(float_of_string c))
     | TEvar(v) -> 
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
     (* a ``boolean'' expression is [if e then 1 else 0] *)
@@ -487,7 +484,8 @@ let rec interp_expr e =
 	    | _ -> 
 		unsupported "call of a non-variable function"
 	end
-    | TEcast({ctype_node = CTpointer _}, {texpr_node = TEconstant "0"}) ->
+    | TEcast({ctype_node = CTpointer _}, 
+	     {texpr_node = TEconstant (IntConstant "0")}) ->
 	Var "null"
     | TEcast(t,e) -> 
 	begin match t.ctype_node, e.texpr_type.ctype_node with

@@ -69,7 +69,7 @@ let pointer_or_array_type ty = match ty.ctype_node with
   | _ -> false
 
 let is_null e = match e.texpr_node with
-  | TEconstant s -> (try int_of_string s = 0 with _ -> false)
+  | TEconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
   | _ -> false
 
 (*s Global environment *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.44 2004-07-05 14:05:21 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.45 2004-09-23 08:40:27 filliatr Exp $ i*)
 
 open Format
 
@@ -54,7 +54,7 @@ let c_file = ref false
 type coq_version = V7 | V8
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-let prover_ = ref (Coq V7)
+let prover_ = ref (match Version.coqversion with "v8" -> Coq V8 | _ -> Coq V7)
 
 (*s extracting the Mizar environ from a file *)
 

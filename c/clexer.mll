@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.16 2004-07-21 08:07:08 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.17 2004-09-23 08:40:27 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
 {
 
+  open Cast
   open Cparser
   open Lexing
   open Cerror
@@ -97,7 +98,8 @@ rule token = parse
 
   (* preprocessor, compiler-dependent extensions, etc. *)
   | "__LINE__"              { let n = lexeme_start lexbuf in
-			      CONSTANT (string_of_int (Loc.line n)) }
+			      let s = string_of_int (Loc.line n) in
+			      CONSTANT (IntConstant s) }
   | "__FILE__"              { let f = Loc.get_file () in
 			      STRING_LITERAL ("\"" ^ f ^ "\"") }
   | "__extension__"         { token lexbuf }
@@ -109,14 +111,14 @@ rule token = parse
   | rL (rL | rD)*       { let s = lexeme lexbuf in
 			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
 
-  | '0'['x''X'] rH+ rIS?    { CONSTANT (lexeme lexbuf)}
-  | '0' rD+ rIS?            { CONSTANT (lexeme lexbuf) }
-  | rD+ rIS?                { CONSTANT (lexeme lexbuf) }
-  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (lexeme lexbuf) }
+  | '0'['x''X'] rH+ rIS?    { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | '0' rD+ rIS?            { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (lexeme lexbuf) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
+  | rD+ rE rFS?             { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | rD* "." rD+ (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
+  | rD+ "." rD* (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
 
   | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
 

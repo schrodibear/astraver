@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.43 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.44 2004-09-23 08:40:27 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -86,11 +86,13 @@ type binary_operator =
   | Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
   | Beq_pointer | Bneq_pointer
 
+type constant = IntConstant of string | FloatConstant of string
+
 type cexpr = cexpr_node located
 
 and cexpr_node =
   | CEnop
-  | CEconstant of string
+  | CEconstant of constant
   | CEstring_literal of string
   | CEvar of string
   | CEdot of cexpr * string
@@ -190,7 +192,7 @@ type texpr = {
 
 and texpr_node =
   | TEnop
-  | TEconstant of string
+  | TEconstant of constant
   | TEstring_literal of string
   | TEvar of Info.var_info
   | TEdot of lvalue * Info.field_info

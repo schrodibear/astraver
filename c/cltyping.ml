@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.53 2004-07-21 08:07:08 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.54 2004-09-23 08:40:27 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -428,7 +428,7 @@ let int_constant n = { term_node = Tconstant n; term_type = c_int }
 
 let eval_array_size e = 
   let rec eval e = match e.texpr_node with
-    | TEconstant c -> int_of_string c
+    | TEconstant (IntConstant c) -> int_of_string c
     | TEunary (Uplus, t) -> eval t
     | TEunary (Cast.Uminus, t) -> -(eval t)
     | TEbinary (t1, Cast.Badd_int, t2) -> eval t1 + eval t2
