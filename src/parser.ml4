@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.83 2003-06-18 14:07:50 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.84 2003-06-18 15:11:02 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -87,6 +87,8 @@ let prog1 = gec "prog1"
 let prog2 = gec "prog2"
 let prog3 = gec "prog3"
 let prog4 = gec "prog4"
+let plus_minus = gec "plus_minus"
+let times_div_mod = gec "times_div_mod"
 let prog5 = gec "prog5"
 let prog6 = gec "prog6"
 let prog7 = gec "prog7"
@@ -142,9 +144,10 @@ let rec app f = function
       let loc = Loc.join f.ploc (arg_loc a) in 
       app (without_annot loc (Sapp (f, a))) l
 
-let bin_op op loc e1 e2 =
-  without_annot loc
-    (app (without_annot loc (Svar op)) [Sterm e1; Sterm e2])
+let bin_op (loc_op,op) loc e1 e2 =
+  let f = without_annot loc_op (Svar op) in
+  let f_e1 = without_annot (Loc.join e1.ploc loc_op) (Sapp (f, Sterm e1)) in
+  without_annot loc (Sapp (f_e1, Sterm e2))
 
 let un_op op loc e =
   without_annot loc
@@ -381,15 +384,21 @@ EXTEND
     | x = prog4 -> x ] ]
   ;
   prog4:
-  [ [ x = prog5; "+"; y = prog4 -> bin_op Ident.t_add loc x y
-    | x = prog5; "-"; y = prog4 -> bin_op Ident.t_sub loc x y
+  [ [ x = prog5; op = plus_minus; y = prog4 -> bin_op op loc x y
     | x = prog5 -> x ] ]
   ;
+  plus_minus:
+  [ [ "+" -> loc, Ident.t_add
+    | "-" -> loc, Ident.t_sub ] ]
+  ;
   prog5:
-  [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul loc x y 
-    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div loc x y 
-    | x = prog6; "%"; y = prog5 -> bin_op Ident.t_mod_int loc x y 
+  [ [ x = prog6; op = times_div_mod; y = prog5 -> bin_op op loc x y 
     | x = prog6 -> x ] ]
+  ;
+  times_div_mod:
+  [ [ "*" -> loc, Ident.t_mul
+    | "/" -> loc, Ident.t_div
+    | "%" -> loc, Ident.t_mod_int ] ]
   ;
   prog6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
@@ -490,12 +499,12 @@ i*)
   ] ]
   ;
   relation:
-    [ [ "<"  -> Ident.t_lt
-      | "<=" -> Ident.t_le
-      | ">"  -> Ident.t_gt
-      | ">=" -> Ident.t_ge
-      | "="  -> Ident.t_eq
-      | "<>" -> Ident.t_neq ] ] 
+    [ [ "<"  -> loc, Ident.t_lt
+      | "<=" -> loc, Ident.t_le
+      | ">"  -> loc, Ident.t_gt
+      | ">=" -> loc, Ident.t_ge
+      | "="  -> loc, Ident.t_eq
+      | "<>" -> loc, Ident.t_neq ] ] 
   ;
 
   (* Other entries (invariants, etc.) *)

@@ -3,6 +3,7 @@ module type Tree = sig
 
   type t (* type of trees *)
 
+  exception NoMove
   val down : t -> t
   val up : t -> t
   val left : t -> t
@@ -16,19 +17,35 @@ end
 
 module Make (T : Tree) = struct
 
+  open T
+
   let tree = ref None
 
   let option_iter f = function
     | None -> ()
     | Some t -> f t
 
-  let update () = option_iter (fun t -> T.show_info (T.info t)) !tree
+  let update () = option_iter (fun t -> show_info (info t)) !tree
 
   let set t = tree := Some t; update ()
 
-  let down () = option_iter (fun t -> set (T.down t)) !tree
-  let up () = option_iter (fun t -> set (T.up t)) !tree
-  let left () = option_iter (fun t -> set (T.left t)) !tree
-  let right () = option_iter (fun t -> set (T.right t)) !tree
+  let move f () = 
+    option_iter (fun t -> try set (f t) with NoMove -> ()) !tree
+
+  let down = move T.down
+  let up = move T.up
+  let left = move T.left
+  let right = move T.right
+
+  let next () = 
+    let rec really_right t =
+      try set (T.right t) with NoMove -> really_right (T.up t)
+    in
+    option_iter 
+      (fun t -> 
+	 try set (T.down t) with NoMove -> 
+         try set (T.right t) with NoMove ->
+	 try really_right (T.up t) with NoMove -> ()) 
+      !tree
 
 end

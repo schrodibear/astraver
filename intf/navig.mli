@@ -3,6 +3,9 @@ module type Tree = sig
 
   type t (* type of trees *)
 
+  (* functions to navigate in the tree; must raise [NoMove] when the move
+     is not possible *)
+  exception NoMove
   val down : t -> t
   val up : t -> t
   val left : t -> t
@@ -23,8 +26,7 @@ module Make (T : Tree) : sig
   val left : unit -> unit
   val right : unit -> unit
 
-  (* val current_info : unit -> T.info (* raises [Not_found] is not set *) *)
-
-  (* val top : unit -> unit *)
+  (* depth-first traversal *)
+  val next : unit -> unit
 
 end

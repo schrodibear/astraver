@@ -35,10 +35,10 @@ module Tree = struct
   and move_left = Left of (unit -> t)
   and move_right = Right of (unit -> t)
 
+  exception NoMove
+  let no_move () = raise NoMove
 
-  let create x = 
-    let rec t = x, Up (fun () -> t), Left (fun () -> t), Right (fun () -> t)
-    in t
+  let create x = x, Up no_move, Left no_move, Right no_move
 
   type info = Loc.t * string
 
@@ -60,10 +60,10 @@ module Tree = struct
 
   let rec block t = function
     | [] ->
-	t
+	raise NoMove
     | Statement x :: bl -> 
-	let rec self = 
-	  x, Up (fun () -> t), Left (fun () -> self), 
+	let rec self =
+	  x, Up (fun () -> t), Left no_move, 
 	  Right (fun () -> block_from t self bl)
 	in
 	self
@@ -72,7 +72,7 @@ module Tree = struct
 
   and block_from t l = function
     | [] ->
-	l
+	raise NoMove
     | Statement x :: bl -> 
 	let rec self =
 	  x, Up (fun () -> t), Left (fun () -> l), 
@@ -82,14 +82,14 @@ module Tree = struct
     | _ :: bl ->
 	block_from t l bl
 
-  let down ((x, _, _, _) as t) = match x.desc with
+  let down ((x, up, _, _) as t) = match x.desc with
     | Seq bl -> block t bl
     | If (e1, e2, e3) -> block t [Statement e1; Statement e2; Statement e3]
     | Aff (_, e) -> block t [Statement e]
-    | App (e1, Term e2, _) -> block t [Statement e1; Statement e2]
+    | App (e1, Term e2, _) -> block t [Statement e2; Statement e1]
     | App (e1, _, _) -> block t [Statement e1]
     | While (e1, _, _, e2) -> block t [Statement e1; Statement e2]
-    | _ -> t
+    | _ -> raise NoMove
 
 
 end
@@ -289,6 +289,8 @@ let main () =
 	     buf1#apply_tag bgtag 
 	     ~start:(buf1#get_iter (`OFFSET b)) 
 	     ~stop:(buf1#get_iter (`OFFSET e));
+	     buf1#place_cursor (buf1#get_iter (`OFFSET b));
+	     tv1#scroll_to_mark ~use_align:true ~yalign:0.25 `INSERT;
 	     tb2#set_text s
 	  );
 
@@ -300,6 +302,8 @@ let main () =
 		   ~callback:Nav.left in
 	let _ = file_factory#add_item "Right" ~key:GdkKeysyms._Right
 		   ~callback:Nav.right in
+	let _ = file_factory#add_item "Next" ~key:GdkKeysyms._space
+		   ~callback:Nav.next in
 
 
 	  buf1#place_cursor ~where:buf1#start_iter;
