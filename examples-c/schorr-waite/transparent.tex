@@ -522,7 +522,7 @@ Enfin cet invariant précise que pour tous les éléments de la pile de
 backtrack, suivant la valeur de c soit son fils gauche soit son fils
 droit est inchangé et leur fils changer est maintenant la pointeur
 qui les precède dans la pile ou bien t si ce pointer est en tête de la pile.
-La declaration de \verb|pair_in_list| dans caduceus est :
+La déclaration de \verb|pair_in_list| dans Caduceus est :
 \fontsize{10pt}{9pt}
 \begin{alltt}
 /*@ predicate pair_in_list(node p1, node p2, plist stack) */
@@ -542,23 +542,23 @@ Précise les fils gauche et droit des éléments de la pile
 \begin{comment}
 . invariant vrai init
 . poste condition
-. 3 fois invariant preserve resp. pop swing push
-. validite des acces
+. 3 fois invariant préserve resp. pop swing push
+. validité des accès
 . po1 = WF order
-. po2 = validite de l'acces a t->m dans la boucle while 
-. po3 = validite de l'acces a t->m dans la premiere condition du if 
-. po4 = validite de l'acces a  p->c dans la seconde condition du if 
-. po5 = validite de t dans 't->r = q' dans la premiere branche du if 
-. po6 = preservation de l'invariant de boucle pour le ``pop'' 
-. po7 = validite de p dans ``p->r = p->l'' dans la seconde branche du
+. po2 = validité de l'accès a t->m dans la boucle while 
+. po3 = validité de l'accès a t->m dans la première condition du if 
+. po4 = validité de l'accès a  p->c dans la seconde condition du if 
+. po5 = validité de t dans 't->r = q' dans la première branche du if 
+. po6 = préservation de l'invariant de boucle pour le ``pop'' 
+. po7 = validité de p dans ``p->r = p->l'' dans la seconde branche du
   if (swing) 
-. po8 = preservation de l'invariant de boucle pour le ``swing'' 
-. po9 = validite de l'acces a  t dans la branche ``push'' 
-. po10 = validite de l'acces a p dans la branche ``push'' 
-. po11 = preservation de l'invariant de boucle pour le ``push'' 
+. po8 = préservation de l'invariant de boucle pour le ``swing'' 
+. po9 = validité de l'accès a  t dans la branche ``push'' 
+. po10 = validité de l'accès a p dans la branche ``push'' 
+. po11 = préservation de l'invariant de boucle pour le ``push'' 
 . po12 = po du a la terminaison
 . po13 = post-condition de la fonction
-. po14 = l'invariant vrai au debut de la boucle 
+. po14 = l'invariant vrai au début de la boucle 
 
 avec Simplify: 
 
@@ -708,7 +708,7 @@ Definition reachable (a: alloc_table)
        path a l r p1 p2 lp.
 \end{alltt}
 \begin{comment}
-Ce predicat represente l'accesibilite d'un noeuds a un autre dans le graphe.
+Ce prédicat représente l'accessibilité d'un n\oe{}uds a un autre dans le graphe.
 \end{comment}
 \end{slide}
 
@@ -729,7 +729,7 @@ Definition unmarked_reachable (a: alloc_table)
     /\bs{} path a l r p1 p2 lp.
 \end{alltt}
 \begin{comment}
-Ce predicat represente l'accesibilite par des noeuds non marquer d'un noeuds a un autre dans le graphe.
+Ce prédicat représente l'accessibilité par des n\oe{}uds non marqués d'un noeuds à un autre dans le graphe.
 \end{comment}
 \end{slide}
 
@@ -761,7 +761,7 @@ Lemma path_no_cycle : forall (a : alloc_table)
 \end{alltt}
 \begin{comment}
 Ce lemme affirme que s'y il existe un chemin de p1 a p2, alors il
-existe un chemin de p1 a p2 sans repetition.
+existe un chemin de p1 a p2 sans répétition.
 \end{comment}
 \end{slide}
 
@@ -788,7 +788,7 @@ Lemma path_upd_left : forall (alloc : alloc_table)
 Lemmes analogues \texttt{\blue path\_upd\_right},
 \texttt{\blue path\_inv\_upd\_left} et \texttt{\blue path\_inv\_upd\_right}
 \begin{comment}
-Les quatres lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
+Les quatre lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
 \texttt{path\_inv\_upd\_left} et \texttt{path\_inv\_upd\_right}
 affirme que si il y a un chemin entre p1 et p2 et que l'ont modifie le
 graphe en dehors de ce chemin alors ce chemin existe toujours. 
@@ -802,14 +802,14 @@ graphe en dehors de ce chemin alors ce chemin existe toujours.
 
 \begin{comment}
 Pour prouver la terminaison il faut monter la terminaison de la boucle
-while. Pour cela en caduceus on annote la boucle avec \emph{variant}:
-une expression qui decroit a chaque tour de la boucle.
+while. Pour cela en Caduceus on annote la boucle avec \emph{variant}:
+une expression qui décroît a chaque tour de la boucle.
 \end{comment}
 
 \begin{itemize}
 \item Terminaison du while : clause \texttt{\blue variant} de Caduceus
 
-\item Mesure qui décroit strictement : ordre lexicographique 
+\item Mesure qui décroît strictement : ordre lexicographique 
 \begin{enumerate}
 \item nombre de n{\oe}uds non marqués.
 \item nombre de n{\oe}uds qui ont $c=0$
@@ -943,7 +943,7 @@ Avec Coq nous avons prouvé toutes les obligations de preuves avec :
 \begin{enumerate}
 \item 317 lignes de définitions et 589 lignes de tactiques sur les
   listes, les graphes, les lemmes d'accessibilité.
-\item 985 lignes d'obligation de preuve sont générees automatiquement
+\item 985 lignes d'obligation de preuve sont générées automatiquement
   par Caduceus+Why
 \item 2411 lignes de tactiques ont été insérées manuellement pour les
   prouver.
