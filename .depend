@@ -302,8 +302,8 @@ c/ctyping.cmo: c/cast.cmi c/cconst.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi \
 c/ctyping.cmx: c/cast.cmi c/cconst.cmx c/cenv.cmx c/cerror.cmi c/clogic.cmi \
     c/cltyping.cmx src/compat.cmx c/coptions.cmx c/creport.cmx c/ctypes.cmx \
     src/env.cmx c/info.cmx src/lib.cmx src/loc.cmx c/ctyping.cmi 
-c/info.cmo: c/ctypes.cmi c/info.cmi 
-c/info.cmx: c/ctypes.cmx c/info.cmi 
+c/info.cmo: src/compat.cmo c/ctypes.cmi c/info.cmi 
+c/info.cmx: src/compat.cmx c/ctypes.cmx c/info.cmi 
 c/output.cmo: c/creport.cmi src/loc.cmi c/output.cmi 
 c/output.cmx: c/creport.cmx src/loc.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 

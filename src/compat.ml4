@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: compat.ml4,v 1.1 2004-07-21 08:07:09 filliatr Exp $ i*)
+(*i $Id: compat.ml4,v 1.2 2005-01-11 13:20:04 hubert Exp $ i*)
 
 (* compatibility file between ocaml 3.07 and 3.08 
    preprocessed with camlp4 with -DOCAML307 or -DOCAML308 *)
@@ -32,4 +32,11 @@ let offset ofs (b,e) =
   ELSE
    ({b with Lexing.pos_cnum = b.Lexing.pos_cnum + ofs},
     {e with Lexing.pos_cnum = e.Lexing.pos_cnum + ofs})
+  END
+
+let compare_for_set_fold x y =
+  IFDEF OCAML3082 THEN 
+    Pervasives.compare x y
+  ELSE
+    Pervasives.compare y x
   END

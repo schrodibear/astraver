@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.19 2005-01-03 09:26:54 marche Exp $ i*)
+(*i $Id: info.ml,v 1.20 2005-01-11 13:20:03 hubert Exp $ i*)
 
 open Ctypes
 
@@ -65,8 +65,10 @@ module HeapVarSet =
 		  let compare i1 i2 = 
 		    (* compare elements in reverse order, because then
 		       HeapVarSet.fold will be more like fold_right 
-		       instead of fold_left *)  
-		      Pervasives.compare i2.var_uniq_tag i1.var_uniq_tag 
+		       instead of fold_left (Call Compat because
+		       Set.fold order changed in OCaml 3.08.2) *)  
+		      Compat.compare_for_set_fold
+			i2.var_uniq_tag i1.var_uniq_tag 
 	   end)
 
 let print_hvs fmt s =

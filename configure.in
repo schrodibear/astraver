@@ -62,6 +62,8 @@ case $OCAMLVERSION in
         AC_MSG_ERROR(You need Objective 3.08 or later);;
   3.07*)
 	OCAMLV=307;;
+  3.08.2)
+	OCAMLV=3082;;
   3.08*)
 	OCAMLV=308;;
 esac
