@@ -23,7 +23,7 @@ int test1(int t[],int n) {
     @*/
   for(i=0; i < n; i++) 
   {
-    s += t[i];
+    s = s + t[i];
   }
   return s;
 }
@@ -39,6 +39,6 @@ void test2(int t[],int n) {
     @*/
   for(i=0; i < n; i++) 
   {
-    t[i]++;
+    t[i] = t[i] + 1;
   }
 }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.14 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.15 2004-02-25 16:18:48 marche Exp $ i*)
 
 (*****
 
@@ -951,7 +951,18 @@ let rec interp_term label old_label t =
     | Clogic.Told t ->	interp_term (Some old_label) old_label t
     | Clogic.Tbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op op,[f t1;f t2])
-    | _ -> assert false (* TODO *)
+    | Clogic.Tlength t -> 
+	LApp("length",[f t])
+    | Clogic.Tat (_, _) -> assert false (* TODO *)
+    | Clogic.Tif (_, _, _) -> assert false (* TODO *)
+    | Clogic.Tarrget (_, _) -> assert false (* TODO *)
+    | Clogic.Tarrow (_, _) -> assert false (* TODO *)
+    | Clogic.Tdot (_, _) -> assert false (* TODO *)
+    | Clogic.Tunop (_, _) -> assert false (* TODO *)
+    | Clogic.Tapp (g, l) -> LApp(g,List.map f l)
+    | Clogic.Tnull -> LVar "null"
+    | Clogic.Tresult -> LVar "result"
+
 
 
 let rec interp_predicate label old_label p =
@@ -1017,7 +1028,7 @@ let rec interp_expr e =
     | TEarrget(e1,e2) ->
 	let te1 = interp_expr e1 and te2 = interp_expr e2 in
 	let var = global_var_for_type e.texpr_type in
-	App(App(Var("acc"),Deref(var)),App(App(Var("shift"),te1),te2))
+	App(App(Var("acc_"),Var(var)),App(App(Var("shift_"),te1),te2))
     | TEassign (e1,e2) ->
 	assert false (* TODO *)
 	(*begin
@@ -1142,7 +1153,20 @@ let rec interp_statement_expr e accu =
 			   Cte(Prim_int 1)))
 	    | _ -> assert false (* TODO *)
 	end
-    | _ -> assert false (* TODO *)
+    | TEsizeof _ -> assert false (* TODO *)
+    | TEsizeof_expr _ -> assert false (* TODO *)
+    | TEcast (_, _) -> assert false (* TODO *)
+    | TEcond (_, _, _) -> assert false (* TODO *)
+    | TEcall (_, _) -> assert false (* TODO *)
+    | TEbinary (_, _, _) -> assert false (* TODO *)
+    | TEunary (_, _) -> assert false (* TODO *)
+    | TEassign_op (l, op, e) -> assert false (* TODO *)
+    | TEarrget (_, _) -> assert false (* TODO *)
+    | TEarrow (_, _) -> assert false (* TODO *)
+    | TEdot (_, _) -> assert false (* TODO *)
+    | TEvar _ -> assert false (* TODO *)
+    | TEstring_literal _ -> assert false (* TODO *)
+    | TEconstant _ -> assert false (* TODO *)
 
 let rec interp_statement stat acc =
   match stat.st_node with
@@ -1160,6 +1184,8 @@ let rec interp_statement stat acc =
 	  match annot with
 	    | { Clogic.invariant = None; Clogic.variant = None } -> 
 		(LTrue,LConst (Prim_int 0))
+	    | { Clogic.invariant = Some inv; Clogic.variant = Some (var,_) } -> 
+		(interp_predicate None "" inv,interp_term None "" var)
 	    | _ -> 
 		assert false (* TODO *)
 	in
@@ -1214,8 +1240,8 @@ let interp_spec_option = function
 
 let interp_located_tdecl why_decls decl =
   match decl.node with
-  | Tlogic(idlist,ltype) -> assert false (* TODO *)
-  | Taxiom(id,p) -> assert false (* TODO *)
+  | Tlogic(idlist,ltype) -> why_decls (* assert false *) (* TODO *)
+  | Taxiom(id,p) -> why_decls (* assert false *) (* TODO *)
   | Ttypedef(ctype,id) -> assert false (* TODO *)
   | Ttypedecl(ctype) -> assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 

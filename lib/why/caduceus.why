@@ -4,6 +4,7 @@ parameter any_int: unit -> int
 parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
+logic null : -> pointer
 logic length: pointer -> int
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
@@ -22,14 +23,14 @@ parameter shift_ : p:pointer -> i:int ->
 (* pointer access *)
 logic acc: 'a memory, pointer -> 'a
 parameter acc_ : m:'a memory ref -> p:pointer -> 
-  { 0 <= offset(p) < length(p) }
+  { p <> null and 0 <= offset(p) < length(p) }
   'a reads m
   { result = acc(m,p) }
 
 (* pointer update *)
 logic upd: 'a memory, pointer, 'a -> 'a memory
 parameter upd_ : m:'a memory ref -> p:pointer -> v:'a -> 
-  { 0 <= offset(p) < length(p) }
+  { p <> null and 0 <= offset(p) < length(p) }
   unit reads m writes m
   { m = upd(m@,p,v) }
 
