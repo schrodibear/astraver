@@ -7,13 +7,11 @@ EXECCADUCEUS=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-n
 CFILES=$(shell ls *.c)
 WFILES=$(addprefix why/, $(CFILES:.c=.why))
 
-BENCHFILES = array assigns break call clash clash_alloc clash_redef \
-    continue coord \
-    copy dowhile invariants ifs logic_cast \
-    param passing purse queue rec ref ref_glob search see \
-    sizeof alloca \
-    struct struct2 switch enum separation3 separation
-
+BENCHFILES=$(shell cat ../bench-files)
+CBENCHFILES=$(addsuffix .c, $(BENCHFILES))
+WBENCHFILES=$(addprefix why/, $(CBENCHFILES:.c=.why))
+SBENCHFILES=$(addprefix simplify/, $(CBENCHFILES:.c=_why.sx.all))
+HBENCHFILES=$(addprefix harvey/, $(CBENCHFILES:.c=_why.all.rv))
 
 # generating and type-checking Why files for all C files
 default:
@@ -27,32 +25,22 @@ default:
 	dp -timeout 10 cvcl/*_why.cvc.all
 
 # running Simplify on all programs
-simplify: $(WFILES)
-	for f in $(CFILES:.c=); do \
-	  rm -f why/$$f.why; \
-	  make why/$$f.why; \
-	  make -f $$f.makefile simplify/$${f}_why.sx.all; \
-	done
-	dp -timeout 10 simplify/*_why.sx.all
+simplify: $(SBENCHFILES)
+	dp -timeout 10 $(SBENCHFILES)
 
-cvcl: $(CFILES)
-	for f in $(CFILES:.c=); do \
+# running haRVey on all programs
+harvey: $(HBENCHFILES)
+	dp -timeout 10 $(HBENCHFILES)
+
+cvcl: $(CVCBENCHFILES)
+	for f in $(BENCHFILES); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
 	  make -f $$f.makefile cvcl/$${f}_why.cvc.all; \
 	done
 	dp -timeout 10 cvcl/*_why.cvc.all
 
-harvey: $(WFILES)
-	for f in $(BENCHFILES); do \
-	  rm -f why/$$f.why; \
-	  make why/$$f.why; \
-	  make -f $$f.makefile harvey/$${f}_why.all.rv; \
-	done
-	dp -timeout 10 harvey/*_why.all.rv
-
 # running Coq on all programs
-
 coq:
 	for f in $(BENCHFILES); do \
 	  rm -f why/$$f.why; \
@@ -76,6 +64,16 @@ why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 why/init2.why: init2.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
 	$(EXECCADUCEUS) -closed $<
+
+simplify/%_why.sx.all: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+	rm -f coq/caduceus_spec_why.v
+	$(EXECCADUCEUS) $<
+	make -f $*.makefile $@
+
+harvey/%_why.all.rv: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+	rm -f coq/caduceus_spec_why.v
+	$(EXECCADUCEUS) $<
+	make -f $*.makefile $@
 
 %: %.c
 	rm -f why/$*.why
