@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.58 2004-10-06 15:10:02 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.59 2004-10-13 10:01:17 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -289,13 +289,23 @@ let rec type_logic_type env = function
       PTexternal (List.map (type_logic_type env) tl, s)
 **)
 
+(*
 let type_quantifier env (ty, x) = (type_logic_type env ty, x)
 let type_quantifiers env = List.map (type_quantifier env)
+*)
 
 let add_quantifiers q env =
-  List.fold_left
-    (fun env (ty, x) -> Env.add x ty (Info.default_var_info x) env)
-    env q
+  let (tq,env) =
+    List.fold_left
+      (fun (tq,env) (ty, x) -> 
+	 let i = Info.default_var_info x 
+	 and ty = type_logic_type env ty
+	 in
+	 ((ty,i)::tq,Env.add x ty i env))
+      ([],env) q
+  in
+  (List.rev tq,env)
+
 
 let int_constant n = 
   { term_node = Tconstant (IntConstant n); 
@@ -351,12 +361,10 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let t = type_int_term env t in
       Pif (t, type_predicate env p1, type_predicate env p2)
   | PLforall (q, p) -> 
-      let q = type_quantifiers env q in
-      let env' = add_quantifiers q env in
+      let q, env' = add_quantifiers q env in
       Pforall (q, type_predicate env' p)
   | PLexists (q, p) -> 
-      let q = type_quantifiers env q in
-      let env' = add_quantifiers q env in
+      let q, env' = add_quantifiers q env in
       Pexists (q, type_predicate env' p)
   | PLfresh (t) ->
       let tloc = t.lexpr_loc in
@@ -528,7 +536,7 @@ let valid_for_type ?(fresh=false) loc v t =
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
 	      make_and valid_form
-		(make_forall [c_int, i.var_name] (make_implies ineq vti))
+		(make_forall [c_int, i] (make_implies ineq vti))
 	  | _ ->
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; 
@@ -541,7 +549,7 @@ let valid_for_type ?(fresh=false) loc v t =
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
 	      make_and valid_form
-		(make_forall [c_int, i.var_name] (make_implies ineq vti))
+		(make_forall [c_int, i] (make_implies ineq vti))
 	end
     | _ -> 
 	Ptrue
@@ -572,7 +580,7 @@ and print_term fmt t = print_term_node fmt t.term_node
 
 let rec print_predicate fmt = function
   | Pforall ([_,x], p) -> 
-      fprintf fmt "(forall %s, %a)" x print_predicate p
+      fprintf fmt "(forall %s, %a)" x.var_name print_predicate p
   | Pand (p1, p2) -> 
       fprintf fmt "(%a and %a)" print_predicate p1 print_predicate p2
   | Pimplies (p1, p2) ->
@@ -647,7 +655,7 @@ that a pointer is different from all allocated pointers in [t]
     | CTarray (ty, Some s) ->
 	let ts = eval_array_size s in
 	let forall_index i vari pi =
-	  make_forall [c_int, i.var_name] 
+	  make_forall [c_int, i] 
 	    (make_implies 
 	       (Pand (Prel (int_constant "0", Le, vari), Prel (vari, Lt, ts)))
 	       pi)

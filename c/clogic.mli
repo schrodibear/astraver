@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.34 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.35 2004-10-13 10:01:17 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -33,6 +33,7 @@ type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
 type term_unop = Uminus | Ustar | Uamp | Ufloat_of_int
 
 type 'ctype quantifiers = ('ctype * string) list
+type 'ctype typed_quantifiers = ('ctype * Info.var_info) list
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
 
@@ -115,8 +116,8 @@ type 'ctype predicate =
   | Piff of 'ctype predicate * 'ctype predicate
   | Pnot of 'ctype predicate
   | Pif of 'ctype term * 'ctype predicate * 'ctype predicate
-  | Pforall of 'ctype quantifiers * 'ctype predicate
-  | Pexists of 'ctype quantifiers * 'ctype predicate
+  | Pforall of 'ctype typed_quantifiers * 'ctype predicate
+  | Pexists of 'ctype typed_quantifiers * 'ctype predicate
   | Pold of 'ctype predicate
   | Pat of 'ctype predicate * string
   | Pvalid of 'ctype term 

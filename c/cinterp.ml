@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.101 2004-10-11 15:22:48 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.102 2004-10-13 10:01:17 hubert Exp $ i*)
 
 
 open Format
@@ -210,9 +210,11 @@ let rec interp_predicate label old_label p =
     | Ptrue -> 
 	LTrue
     | Pexists (l, p) -> 
+	let l = List.fold_right(fun (t,x) l->(t,x.var_unique_name)::l) l [] in		     
 	List.fold_right
 	  (fun (t,x) p -> LExists(x,([],Ceffect.interp_type t),p)) l (f p)
-    | Pforall (l, p) ->
+    | Pforall (l, p) ->	
+	let l = List.fold_right(fun (t,x) l->(t,x.var_unique_name)::l) l [] in
 	List.fold_right
 	  (fun (t,x) p -> LForall(x,([],Ceffect.interp_type t),p))
 	  l (interp_predicate label old_label p)
