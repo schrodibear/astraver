@@ -14,13 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.mli,v 1.10 2003-01-09 13:13:47 filliatr Exp $ i*)
+(*i $Id: pvs.mli,v 1.11 2003-01-24 13:53:48 filliatr Exp $ i*)
 
 open Vcg
 
 val reset : unit -> unit
-
-val push_verbatim : string -> unit
 
 val push_obligations : obligation list -> unit
 

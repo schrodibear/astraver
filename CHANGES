@@ -1,4 +1,5 @@
 
+  o no more "pvs" declaration (the user can now edit the _why.pvs file)
   o fixed bug in type-checking of recursive functions with exceptions
   o fixed bug in loop tests automatic annotation; 
     now a warning when a loop test cannot be given a postcondition

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.34 2003-01-21 16:58:30 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.35 2003-01-24 13:53:48 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -206,8 +206,6 @@ type elem =
 let queue = Queue.create ()
 
 let reset () = Queue.clear queue
-
-let push_verbatim s = Queue.add (Verbatim s) queue
 
 let push_obligations ol = Queue.add (Obligations ol) queue
 

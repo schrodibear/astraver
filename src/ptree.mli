@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.11 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.12 2003-01-24 13:53:48 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -116,6 +116,5 @@ type decl =
   | External of Loc.t * Ident.t list * ptype_v
   | Exception of Loc.t * Ident.t * pure_type option
   | Logic of Loc.t * Ident.t * logic_type
-  | QPvs of string
 
 type file = decl list

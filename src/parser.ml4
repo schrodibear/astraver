@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.71 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.72 2003-01-24 13:53:48 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -549,9 +549,7 @@ i*)
     | "exception"; id = ident; v = OPT exception_type ->
 	Exception (loc, id, v)
     | "logic"; id = ident; ":"; t = logic_type ->
-	Logic (loc, id, t)
-    | LIDENT "pvs"; s = STRING ->
-        QPvs s ] ]
+	Logic (loc, id, t) ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]

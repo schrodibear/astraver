@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.51 2003-01-23 13:08:17 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.52 2003-01-24 13:53:48 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -148,8 +148,6 @@ let interp_decl d =
   | Logic (loc, id, t) ->
       if is_logic id lenv then raise_located loc (Clash id);
       add_global_logic id t
-  | QPvs s ->
-      Pvs.push_verbatim s
 
 (*s Processing of a channel / a file. *)
 
