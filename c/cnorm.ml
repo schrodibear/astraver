@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.14 2005-01-06 16:10:31 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.15 2005-01-12 13:26:22 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -992,7 +992,14 @@ let in_struct v1 v =
 	  nterm_type = v.var_type }
 
 	
-
+let compatible_type ty1 ty2 = 
+  Cenv.compatible_type ty1 ty2 && 
+  match ty1.Ctypes.ctype_node,ty2.Ctypes.ctype_node with
+    | Tfun _ , _  | Tenum _, _ | Tpointer _ , _ 
+    | Ctypes.Tvar _ , _ | Tvoid, _ | Tint _, _ | Tfloat _, _ -> false
+    | _, Tfun _ | _, Tenum _| _, Tpointer _  
+    | _, Ctypes.Tvar _ | _, Tvoid | _, Tint _ | _, Tfloat _ -> false
+    | _, _ -> true 
 (* assumes v2 is an array of objects of type ty *)
 let rec tab_struct loc v1 v2 s ty n n1 n2=
   let l = begin
@@ -1001,15 +1008,15 @@ let rec tab_struct loc v1 v2 s ty n n1 n2=
 	  fl
       | _ -> assert false
   end in
- (* make_and *)(List.fold_left 
+  make_and (List.fold_left 
 	      (fun p t -> 
 		 if  compatible_type t.var_type v2.nterm_type 
 		 then make_and p (not_alias loc v2 (in_struct v1 t))
 		 else p)
 	      NPtrue l)
-    (*make_forall_range loc v2 s 
+    (make_forall_range loc v2 s 
        (fun t i -> 
-	  local_separation loc n1 v1 (n2^"[i]") (indirection loc ty t))*)
+	  local_separation loc n1 v1 (n2^"[i]") (indirection loc ty t)))
 and local_separation loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with

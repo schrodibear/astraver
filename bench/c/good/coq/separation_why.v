@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation.why", characters 755-772 *)
+(* Why obligation from file "why/separation.why", characters 787-804 *)
 Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (p1: ((memory) pointer)),
@@ -16,10 +16,10 @@ Lemma f1_impl_po_1 :
                   (valid alloc (acc p2 x_0))) /\
                   (valid_range alloc (acc p1 x_0) 0 5)) /\
                   (valid_range alloc (acc p2 x_0) 0 5))) /\
-                (separation_struct_anonymous_1_array_struct_anonymous_1_array u2
-                 u1) /\
                 (valid_struct_anonymous_1_array u1 p2 p1 alloc) /\
                 (valid_struct_anonymous_1_array u2 p2 p1 alloc) /\
+                (separation_struct_anonymous_1_array_struct_anonymous_1_array u2
+                 u1 p2 p1 alloc) /\
                 (separation_intern_struct_anonymous_1_array u1 p2 p1 alloc) /\
                 (separation_intern_struct_anonymous_1_array u2 p2 p1 alloc)),
   ((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
@@ -29,7 +29,7 @@ Proof.
 unfold valid_struct_anonymous_1_array;intuition;generalize (H u1);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 775-792 *)
+(* Why obligation from file "why/separation.why", characters 807-824 *)
 Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -45,10 +45,10 @@ Lemma f1_impl_po_2 :
                   (valid alloc (acc p2 x_0))) /\
                   (valid_range alloc (acc p1 x_0) 0 5)) /\
                   (valid_range alloc (acc p2 x_0) 0 5))) /\
-                (separation_struct_anonymous_1_array_struct_anonymous_1_array u2
-                 u1) /\
                 (valid_struct_anonymous_1_array u1 p2 p1 alloc) /\
                 (valid_struct_anonymous_1_array u2 p2 p1 alloc) /\
+                (separation_struct_anonymous_1_array_struct_anonymous_1_array u2
+                 u1 p2 p1 alloc) /\
                 (separation_intern_struct_anonymous_1_array u1 p2 p1 alloc) /\
                 (separation_intern_struct_anonymous_1_array u2 p2 p1 alloc)),
   forall (Pre6: ((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
@@ -70,7 +70,7 @@ Proof.
 unfold valid_struct_anonymous_1_array;intuition;generalize (H u2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36-1198 *)
+(* Why obligation from file "why/separation.why", characters 36-1230 *)
 Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -86,10 +86,10 @@ Lemma f1_impl_po_3 :
                   (valid alloc (acc p2 x_0))) /\
                   (valid_range alloc (acc p1 x_0) 0 5)) /\
                   (valid_range alloc (acc p2 x_0) 0 5))) /\
-                (separation_struct_anonymous_1_array_struct_anonymous_1_array u2
-                 u1) /\
                 (valid_struct_anonymous_1_array u1 p2 p1 alloc) /\
                 (valid_struct_anonymous_1_array u2 p2 p1 alloc) /\
+                (separation_struct_anonymous_1_array_struct_anonymous_1_array u2
+                 u1 p2 p1 alloc) /\
                 (separation_intern_struct_anonymous_1_array u1 p2 p1 alloc) /\
                 (separation_intern_struct_anonymous_1_array u2 p2 p1 alloc)),
   forall (Pre6: ((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
@@ -163,7 +163,7 @@ p H24);intro.
 apply unchanged_union_intro;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32116-32133 *)
+(* Why obligation from file "why/separation.why", characters 48066-48083 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -189,162 +189,6 @@ Lemma f3_impl_po_1 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -368,7 +212,163 @@ Lemma f3_impl_po_1 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   ((((valid alloc u3) /\ (valid alloc (acc anonymous_2_p1 u3))) /\
   (valid alloc (acc anonymous_2_p2 u3))) /\
   (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
@@ -377,7 +377,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H u3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32139-32156 *)
+(* Why obligation from file "why/separation.why", characters 48089-48106 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -406,162 +406,6 @@ Lemma f3_impl_po_2 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -585,7 +429,163 @@ Lemma f3_impl_po_2 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -609,7 +609,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H u4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32162-32179 *)
+(* Why obligation from file "why/separation.why", characters 48112-48129 *)
 Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -638,162 +638,6 @@ Lemma f3_impl_po_3 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -817,7 +661,163 @@ Lemma f3_impl_po_3 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -856,7 +856,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w1);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32185-32202 *)
+(* Why obligation from file "why/separation.why", characters 48135-48152 *)
 Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -885,162 +885,6 @@ Lemma f3_impl_po_4 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -1064,7 +908,163 @@ Lemma f3_impl_po_4 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1118,7 +1118,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32208-32225 *)
+(* Why obligation from file "why/separation.why", characters 48158-48175 *)
 Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1147,162 +1147,6 @@ Lemma f3_impl_po_5 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -1326,7 +1170,163 @@ Lemma f3_impl_po_5 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1395,7 +1395,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32231-32248 *)
+(* Why obligation from file "why/separation.why", characters 48181-48198 *)
 Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1424,162 +1424,6 @@ Lemma f3_impl_po_6 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -1603,7 +1447,163 @@ Lemma f3_impl_po_6 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1687,7 +1687,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32254-32271 *)
+(* Why obligation from file "why/separation.why", characters 48204-48221 *)
 Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1716,162 +1716,6 @@ Lemma f3_impl_po_7 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -1895,7 +1739,163 @@ Lemma f3_impl_po_7 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -1994,7 +1994,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w5);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32277-32294 *)
+(* Why obligation from file "why/separation.why", characters 48227-48244 *)
 Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2023,162 +2023,6 @@ Lemma f3_impl_po_8 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -2202,7 +2046,163 @@ Lemma f3_impl_po_8 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -2316,7 +2316,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w6);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32300-32317 *)
+(* Why obligation from file "why/separation.why", characters 48250-48267 *)
 Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2345,162 +2345,6 @@ Lemma f3_impl_po_9 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -2524,7 +2368,163 @@ Lemma f3_impl_po_9 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -2653,7 +2653,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w7);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32323-32340 *)
+(* Why obligation from file "why/separation.why", characters 48273-48290 *)
 Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2682,162 +2682,6 @@ Lemma f3_impl_po_10 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -2861,7 +2705,163 @@ Lemma f3_impl_po_10 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -3005,7 +3005,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w8);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32346-32363 *)
+(* Why obligation from file "why/separation.why", characters 48296-48313 *)
 Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -3034,162 +3034,6 @@ Lemma f3_impl_po_11 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -3213,7 +3057,163 @@ Lemma f3_impl_po_11 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -3372,7 +3372,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w9);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32369-32387 *)
+(* Why obligation from file "why/separation.why", characters 48319-48337 *)
 Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -3401,162 +3401,6 @@ Lemma f3_impl_po_12 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -3580,7 +3424,163 @@ Lemma f3_impl_po_12 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -3754,7 +3754,7 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition;generalize (H w10);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 1237-34865 *)
+(* Why obligation from file "why/separation.why", characters 1269-50815 *)
 Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -3783,162 +3783,6 @@ Lemma f3_impl_po_13 :
                    (valid alloc (acc anonymous_2_p2 x_0))) /\
                    (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
                    (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
-                 (separation_intern_struct_anonymous_2_array u3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array u4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w1
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w2
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w3
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w4
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w5
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w6
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w7
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w8
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w9
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_intern_struct_anonymous_2_array w10
-                  anonymous_2_p2 anonymous_2_p1 alloc) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  u4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w1) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w2) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w3) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w4) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w5) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w6) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w7) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w8) /\
-                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
-                  w9) /\
                  (valid_struct_anonymous_2_array u3 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array u4 anonymous_2_p2
@@ -3962,7 +3806,163 @@ Lemma f3_impl_po_13 :
                  (valid_struct_anonymous_2_array w9 anonymous_2_p2
                   anonymous_2_p1 alloc) /\
                  (valid_struct_anonymous_2_array w10 anonymous_2_p2
-                  anonymous_2_p1 alloc)),
+                  anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array u4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w1
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w2
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w3
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w4
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w5
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w6
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w7
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w8
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w9
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_struct_anonymous_2_array_struct_anonymous_2_array w10
+                  w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array u4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w1
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w2
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w3
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w4
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w5
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w6
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w7
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w8
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w9
+                  anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_struct_anonymous_2_array w10
+                  anonymous_2_p2 anonymous_2_p1 alloc)),
   forall (Pre36: ((((valid alloc u3) /\
                  (valid alloc (acc anonymous_2_p1 u3))) /\
                  (valid alloc (acc anonymous_2_p2 u3))) /\
@@ -4196,32 +4196,32 @@ Proof.
 unfold valid_struct_anonymous_2_array;intuition.
 Admitted.
 
-(* Why obligation from file "why/separation.why", characters 35160-35216 *)
+(* Why obligation from file "why/separation.why", characters 51110-51166 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre15: (valid_struct_s_array s u t alloc) /\
+  forall (Pre15: (separation_int_array_struct_s_array v s u t alloc) /\
                  (valid_int_array v alloc) /\
-                 (separation_int_array_struct_s_array v s u t alloc) /\
+                 (valid_struct_s_array s u t alloc) /\
                  (separation_intern_struct_s_array s u t alloc)),
   (valid alloc s).
 Proof.
 unfold  valid_struct_s_array; intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35224-35251 *)
+(* Why obligation from file "why/separation.why", characters 51174-51201 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre15: (valid_struct_s_array s u t alloc) /\
+  forall (Pre15: (separation_int_array_struct_s_array v s u t alloc) /\
                  (valid_int_array v alloc) /\
-                 (separation_int_array_struct_s_array v s u t alloc) /\
+                 (valid_struct_s_array s u t alloc) /\
                  (separation_intern_struct_s_array s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_6: pointer),
@@ -4232,7 +4232,7 @@ unfold valid_struct_s_array; intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35143-35251 *)
+(* Why obligation from file "why/separation.why", characters 51093-51201 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -4240,9 +4240,9 @@ Lemma f_impl_po_3 :
   forall (t: ((memory) pointer)),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (Pre15: (valid_struct_s_array s u t alloc) /\
+  forall (Pre15: (separation_int_array_struct_s_array v s u t alloc) /\
                  (valid_int_array v alloc) /\
-                 (separation_int_array_struct_s_array v s u t alloc) /\
+                 (valid_struct_s_array s u t alloc) /\
                  (separation_intern_struct_s_array s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_6: pointer),
@@ -4276,15 +4276,15 @@ rewrite acc_upd_eq;auto.
 red in H.
 intuition.
 generalize (pointer_pair_2 (s # u)  (s # t) H2);intuition. 
-red in H0.
+red in H.
 intuition.
 apply H4.
 generalize (pointer_pair_2 v  (s # t) H2);intuition. 
 rewrite shift_zero;red in H1;auto.
-rewrite shift_zero;red in H;intuition.
+rewrite shift_zero;red in H0;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35630-35658 *)
+(* Why obligation from file "why/separation.why", characters 51580-51608 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
@@ -4294,25 +4294,25 @@ Proof.
 unfold valid_int_array;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35846-35947 *)
+(* Why obligation from file "why/separation.why", characters 51796-51897 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre5: (valid_struct_anonymous_0_array tab x alloc) /\
-                (separation_intern_struct_anonymous_0_array tab)),
+  forall (Pre5: (separation_intern_struct_anonymous_0_array tab) /\
+                (valid_struct_anonymous_0_array tab x alloc)),
   (valid alloc (shift tab 0)).
 Proof.
 unfold valid_struct_anonymous_0_array;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35846-35947 *)
+(* Why obligation from file "why/separation.why", characters 51796-51897 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre5: (valid_struct_anonymous_0_array tab x alloc) /\
-                (separation_intern_struct_anonymous_0_array tab)),
+  forall (Pre5: (separation_intern_struct_anonymous_0_array tab) /\
+                (valid_struct_anonymous_0_array tab x alloc)),
   forall (Pre2: (valid alloc (shift tab 0))),
   (valid alloc (shift (acc x (shift tab 0)) 0)).
 Proof.
