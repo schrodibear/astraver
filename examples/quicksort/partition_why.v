@@ -2,9 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Why.
-Require Exchange.
-Require ArrayPermut.
-Require Sorted.
 Require Partition.
 Require Omega.
 Require ZArithRing.

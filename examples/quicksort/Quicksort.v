@@ -7,10 +7,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-Require Export Arrays.
-Require Exchange.
-Require ArrayPermut.
-Require Sorted.
+Require Why.
 Require Partition.
 
 Require Omega.

@@ -49,7 +49,8 @@ COQLIB = @COQLIB@
 COQINCLUDES = -I lib/coq
 
 VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
-     lib/coq/WhyTuples.vo  lib/coq/WhyWf.vo    lib/coq/Why.vo   
+     lib/coq/WhyTuples.vo  lib/coq/WhyWf.vo    lib/coq/WhyPermut.vo \
+     lib/coq/WhySorted.vo  lib/coq/Why.vo   
 
 GENERATED = src/version.ml src/parser.ml
 

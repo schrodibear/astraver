@@ -3,11 +3,8 @@
 
 Require Why.
 Require Omega.
-Require ArrayPermut.
 Require Partition.
-Require Sorted.
 Require Quicksort.
-(* Require partition_why. *) 
 
 Parameter N:Z.
 
