@@ -12,7 +12,7 @@ tc:
 WHY=../../bin/why.opt
 
 %_why.v: %.ml $(WHY)
-	$(WHY) -V $<
+	$(WHY) --valid -V $<
 
 %.vo: %.v
 	coqc -I ../../lib/coq $<
