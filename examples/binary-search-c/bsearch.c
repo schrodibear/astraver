@@ -1,4 +1,12 @@
 
+/* Binary search.
+
+   An historical example; see Jon Bentley's Programming Pearls.
+
+   The following function binary_search(t,n,v) searches t[0..n-1]
+   for the value v and returns its index if any; returns -1 otherwise.
+   Assumes the length of t to be at least n. */
+
 /*W logic In : int array,int,int,int -> prop */
 
 int binary_search(int t[], int n, int v) 
