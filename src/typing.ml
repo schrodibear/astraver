@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.57 2002-07-08 11:02:32 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.58 2002-07-08 12:45:57 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -25,48 +25,11 @@ let type_v_bool = PureType PTbool
 let type_v_unit = PureType PTunit
 let type_v_float = PureType PTfloat
 
-let rec typing_term loc env = function
-  | Tvar id -> 
-      (try 
-	 (match type_in_env env id with Ref v -> v | v -> v)
-       with Not_found ->
-	 Error.unbound_variable id (Some loc))
-  | Tconst (ConstInt _) -> type_v_int
-  | Tconst (ConstBool _) -> type_v_bool
-  | Tconst ConstUnit -> type_v_unit
-  | Tconst (ConstFloat _) -> type_v_float
-  | Tapp (id, [a;b]) when id == t_eq || id == t_neq ->
-      check_same_type loc env a b; type_v_bool
-  | Tapp (id, tl) as t ->
-      if not (is_in_env env id) then Error.app_of_non_function loc;
-      (match type_in_env env id with
-	 | Arrow (bl, c) ->
-	     let ttl = List.map (fun t -> (t, typing_term loc env t)) tl in
-	     check_app loc bl c ttl
-	 | _ -> 
-	     Error.app_of_non_function loc)
-
-and check_same_type loc env a b =
-  let ta = typing_term loc env a in
-  let tb = typing_term loc env b in
-  if ta <> tb then 
-    Error.term_expected_type loc 
-      (fun fmt -> print_term fmt b) (fun fmt -> print_type_v fmt ta)
-
-and check_app loc bl c tl = match bl, tl with
-  | [], [] ->
-      c.c_result_type
-  | _, [] ->
-      Arrow (bl, c)
-  | [], _ ->
-      Error.too_many_arguments loc
-  | (_,BindType et) :: bl , (a,at) :: tl ->
-      if et <> at then 
-	Error.term_expected_type loc 
-	  (fun fmt -> print_term fmt a) (fun fmt -> print_type_v fmt et);
-      check_app loc bl c tl
-  | _ ->
-      assert false
+let typing_const = function
+  | ConstInt _ -> type_v_int
+  | ConstBool _ -> type_v_bool
+  | ConstUnit -> type_v_unit
+  | ConstFloat _ -> type_v_float
 
 (*s Utility functions for typing *)
 
@@ -339,9 +302,8 @@ let rec typef lab env expr =
 	make_node d env toplabel c
 
 and typef_desc lab env loc = function
-  | Sexpression c ->
-      let v = typing_term loc env c in
-      Expression c, (v,Effect.bottom), []
+  | Sconst c ->
+      Expression (Tconst c), (typing_const c,Effect.bottom), []
 
   | Svar id ->
       let v = 

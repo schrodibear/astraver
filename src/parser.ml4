@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.45 2002-07-08 11:02:32 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.46 2002-07-08 12:45:56 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -116,7 +116,7 @@ let bin_op op loc e1 e2 =
 
 let un_op op loc e =
   without_annot loc
-    (app (without_annot loc (Sexpression (Tapp (op,[])))) [Sterm e])
+    (app (without_annot loc (Svar op)) [Sterm e])
 
 let bool_not loc a = un_op Ident.p_not loc a
 
@@ -347,10 +347,10 @@ EXTEND
 
   ast1:
   [ [ x = prog2; "||"; y = prog1  -> 
-       let ptrue = without_annot loc (Sexpression (Tconst (ConstBool true))) in
+       let ptrue = without_annot loc (Sconst (ConstBool true)) in
        without_annot loc (Sif (x, ptrue, y))
     | x = prog2; "&&"; y = prog1 -> 
-       let pf = without_annot loc (Sexpression (Tconst (ConstBool false))) in
+       let pf = without_annot loc (Sconst (ConstBool false)) in
        without_annot loc (Sif (x, y, pf))
     | x = prog2 -> x ] ]
   ;
@@ -382,15 +382,15 @@ EXTEND
   [ [ v = ident -> 
 	Svar v
     | n = INT ->
-	Sexpression (Tconst (ConstInt (int_of_string n)))
+	Sconst (ConstInt (int_of_string n))
     | f = FLOAT ->
-	Sexpression (Tconst (ConstFloat (float_of_string f)))
+	Sconst (ConstFloat (float_of_string f))
     | LIDENT "void" ->
-	Sexpression (Tconst ConstUnit)
+	Sconst ConstUnit
     | "true" ->
-	Sexpression (Tconst (ConstBool true))
+	Sconst (ConstBool true)
     | "false" ->
-	Sexpression (Tconst (ConstBool false))
+	Sconst (ConstBool false)
     | "!"; v = ident ->
 	Srefget v
     | v = ident; ":="; p = program ->
@@ -402,7 +402,7 @@ EXTEND
     | "if"; e1 = program; "then"; e2 = program; "else"; e3 = program ->
 	Sif (e1,e2,e3)
     | "if"; e1 = program; "then"; e2 = program ->
-	Sif (e1,e2,without_annot loc (Sexpression (Tconst ConstUnit)))
+	Sif (e1,e2,without_annot loc (Sconst ConstUnit))
     | "while"; b = program; "do"; 
 	"{"; inv = OPT invariant; LIDENT "variant"; wf = variant; "}";
 	bl = block; "done" ->

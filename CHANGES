@@ -1,6 +1,7 @@
 
   o the variant relation is now necessarily an identifier
-  o terms and predicates are now separated at typing (fixes a parsing bug)
+  o terms and predicates are now typed; new declaration "logic"
+    (terms and predicates syntax are mixed; fixes a parsing bug)
 
 version 0.5,  July 2nd, 2002
 ============================
