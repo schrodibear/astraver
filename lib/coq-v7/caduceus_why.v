@@ -293,3 +293,10 @@ Admitted.
        ((i:Z) (`a <= i` /\ `i < b` -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 
+(*Why logic*) Definition unary_compl : Z -> Z.
+Admitted.
+
+
+(*Why*) Parameter unary_compl_ :
+  (x: Z)(sig_1 Z [result: Z](`result = (unary_compl x)`)).
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.65 2004-03-26 07:54:23 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.66 2004-03-26 09:05:29 filliatr Exp $ i*)
 
 
 open Format
@@ -402,6 +402,8 @@ let rec interp_expr e =
     | TEunary (Ufloat_of_int, e) ->
 	make_app "float_of_int" [interp_expr e]
     | TEunary (Utilde, e) ->
+	(* TODO: fix Why bug
+	make_app "unary_compl_" [interp_expr e] *)
 	unsupported "~ operator"
     | TEunary (Uamp, e) ->
 	interp_address e
