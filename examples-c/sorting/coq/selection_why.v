@@ -182,6 +182,45 @@ omega.
 subst; omega.
 Qed.
 
+Proof.
+intuition.
+subst; auto.
+Qed.
+
+Proof.
+intuition; 
+  try solve [subst; auto with *].
+
+unfold sorted in *|-*; intuition.
+subst result result2 min2.
+assert (k < i2-1 \/ k = i2-1).
+omega.
+intuition; subst; caduceus.
+
+Focus 2.
+assert (k < i2 \/ k=i2).
+omega.
+assert (l=min3\/l<>min3).
+omega.
+intuition;subst; caduceus.
+
+Admitted.
+
+Proof.
+intuition.
+red; intuition.
+Save.
+
+Proof.
+intuition.
+unfold sorted in *|-*; intuition.
+assert (k < n-2 \/ k=n-2).
+omega.
+intuition.
+Save.
+
+
+
 (* Why obligation from file "why/selection.why", characters 1489-1525 *)
 Lemma selection_impl_po_4 : 
   forall (t: pointer),
@@ -226,8 +265,8 @@ Lemma selection_impl_po_4 :
   (valid_index alloc t caduceus_1) /\ (valid_index alloc t i2).
 Proof.
 intuition.
-subst; auto.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 
 (* Why obligation from file "why/selection.why", characters 1464-1525 *)
 Lemma selection_impl_po_5 : 
@@ -288,23 +327,9 @@ Lemma selection_impl_po_5 :
        (i <= l /\ l < n -> (acc intP1 (shift t k)) <= (acc intP1 (shift t l))))))) /\
     (Zwf 0 (n - i) (n - i2)))).
 Proof.
-intuition; 
-  try solve [subst; auto with *].
-
-unfold sorted in *|-*; intuition.
-subst result result2 min2.
-assert (k < i2-1 \/ k = i2-1).
-omega.
-intuition; subst; caduceus.
-
-Focus 2.
-assert (k < i2 \/ k=i2).
-omega.
-assert (l=min3\/l<>min3).
-omega.
-intuition;subst; caduceus.
-
-Admitted.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
 (* Why obligation from file "why/selection.why", characters 351-820 *)
 Lemma selection_impl_po_6 : 
@@ -329,7 +354,7 @@ Lemma selection_impl_po_6 :
      (i1 <= l /\ l < n -> (acc intP (shift t k)) <= (acc intP (shift t l)))))).
 Proof.
 intuition.
-red; intuition.
+(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/selection.why", characters 265-1578 *)
@@ -362,13 +387,8 @@ Lemma selection_impl_po_7 :
   (mset intP0 t 0 (n - 1)) = (mset intP t 0 (n - 1)).
 Proof.
 intuition.
-unfold sorted in *|-*; intuition.
-assert (k < n-2 \/ k=n-2).
-omega.
-intuition.
+(* FILL PROOF HERE *)
 Save.
-
-
 
 (* Why obligation from file "why/selection.why", characters 1918-1946 *)
 Lemma swap_impl_po_1 : 
