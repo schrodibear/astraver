@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.16 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: holl.ml,v 1.17 2004-02-27 08:46:19 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -25,6 +25,7 @@ open Logic
 open Vcg
 open Format
 open Cc
+open Pp
 
 type elem = 
   | Parameter of string * cc_type

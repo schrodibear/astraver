@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.14 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: harvey.ml,v 1.15 2004-02-27 08:46:19 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -24,6 +24,7 @@ open Error
 open Logic
 open Vcg
 open Format
+open Pp
 
 let oblig = Queue.create ()
 let axiom = Queue.create ()

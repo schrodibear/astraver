@@ -80,7 +80,7 @@ byte : bin/why.byte bin/caduceus.byte
 # why
 CMO = src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/ident.cmo \
-	   src/effect.cmo src/misc.cmo src/report.cmo		\
+	   src/effect.cmo src/pp.cmo src/misc.cmo src/report.cmo	\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
            src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo      \
@@ -105,13 +105,14 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 # caduceus
-CCMO = src/linenum.cmo src/loc.cmo \
+CCMO = src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo \
 	c/creport.cmo c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
 	c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo \
+	c/ceffect.cmo \
 	c/cinterp.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 

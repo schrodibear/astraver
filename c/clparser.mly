@@ -30,7 +30,8 @@
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL
 %token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
-%token FORALL EXISTS IMPLIES AND OR NOT TRUE FALSE OLD AT RESULT LENGTH THEN AT
+%token FORALL EXISTS IMPLIES AND OR NOT 
+%token TRUE FALSE OLD AT RESULT LENGTH VALID THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS READS LOGIC PREDICATE AXIOM LBRACE RBRACE
@@ -61,8 +62,9 @@ predicate:
 | NOT predicate %prec prec_not { Pnot $2 }
 | TRUE { Ptrue }
 | FALSE { Pfalse }
-| IDENTIFIER { Pvar (loc (), $1) }
-| IDENTIFIER LPAR term_list RPAR { Papp (loc_i 1, $1, $3) }
+| IDENTIFIER { Papp (loc (), Info.default_logic_info $1, []) }
+| IDENTIFIER LPAR term_list RPAR 
+      { Papp (loc_i 1, Info.default_logic_info $1, $3) }
 | term relation term %prec prec_relation { Prel ($1, $2, $3) }
 | term relation term relation term %prec prec_relation 
       { Pand (Prel ($1, $2, $3), Prel ($3, $4, $5)) }
@@ -73,6 +75,7 @@ predicate:
 | EXISTS ne_parameters SEMICOLON predicate %prec prec_exists
       { Pexists ($2, $4) }
 | LPAR predicate RPAR { $2 }
+| VALID LPAR term COMMA term COMMA term RPAR { Pvalid ($3,$5,$7) }
 ;
 
 logic_type:
@@ -94,8 +97,8 @@ relation:
 term:
   NULL { info Tnull } 
 | CONSTANT { info (Tconstant $1) }
-| IDENTIFIER { info (Tvar $1) }
-| IDENTIFIER LPAR term_list RPAR { info (Tapp ($1, $3)) }
+| IDENTIFIER { info (Tvar (Info.default_var_info $1)) }
+| IDENTIFIER LPAR term_list RPAR { info (Tapp (Info.default_logic_info $1, $3)) }
 | term PLUS term { info (Tbinop ($1, Badd, $3)) }
 | term MINUS term { info (Tbinop ($1, Bsub, $3)) }
 | term STAR term { info (Tbinop ($1, Bmul, $3)) }
@@ -135,27 +138,23 @@ post_condition:
 ;
 
 spec:
-  pre_condition effects post_condition decreases EOF 
+  pre_condition effects post_condition decreases 
     { { requires = $1; assigns = $2; ensures = $3; decreases = $4 } }
 ;
 
 loop_annot:
-  invariant opt_variant { { invariant = $1; variant = $2 } }
+  invariant variant { { invariant = Some $1; variant = Some $2 } }
+| variant { { invariant = None; variant = Some $1 } }
+| invariant { { invariant = Some $1; variant = None } }
 ;
 
 invariant:
-  /* epsilon */       { None }
-| INVARIANT predicate { Some $2 }
-;
-
-opt_variant:
-  /* epsilon */   { None }
-| VARIANT variant { Some $2 }
+| INVARIANT predicate { $2 }
 ;
 
 variant:
-  term FOR IDENTIFIER { ($1, Some $3) }
-| term                { ($1, None) }
+  VARIANT term FOR IDENTIFIER { ($2, Some $4) }
+| VARIANT term                { ($2, None) }
 ;
 
 decreases:
@@ -163,7 +162,11 @@ decreases:
 | DECREASES variant { Some $2 }
 ;
 
-annot:
+annot: 
+  annotation EOF   { $1 }
+;
+
+annotation:
   decl             { Adecl $1 }
 | spec             { Aspec $1 }
 | loop_annot       { Aloop_annot $1 }
@@ -189,7 +192,7 @@ location:
 ;
 
 location_term:
-| IDENTIFIER { info (Tvar $1) }
+| IDENTIFIER { info (Tvar (Info.default_var_info $1)) }
 | location_term ARROW IDENTIFIER { info (Tarrow ($1, $3)) }
 | location_term DOT IDENTIFIER { info (Tdot ($1, $3)) }
 | location_term LSQUARE location_term RSQUARE { info (Tarrget ($1, $3)) }
@@ -197,12 +200,16 @@ location_term:
 ;
 
 decl:
-  LOGIC logic_type IDENTIFIER LPAR parameters RPAR { LDlogic ($3, $2, $5) }
-| PREDICATE IDENTIFIER LPAR parameters RPAR { LDpredicate_reads ($2, $4, []) }
+  LOGIC logic_type IDENTIFIER LPAR parameters RPAR 
+    { LDlogic (Info.default_logic_info $3, $2, $5, []) }
+| LOGIC logic_type IDENTIFIER LPAR parameters RPAR READS locations 
+    { LDlogic (Info.default_logic_info $3, $2, $5, $8) }
+| PREDICATE IDENTIFIER LPAR parameters RPAR 
+    { LDpredicate_reads (Info.default_logic_info $2, $4, []) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR READS locations 
-    { LDpredicate_reads ($2, $4, $7) }
+    { LDpredicate_reads (Info.default_logic_info $2, $4, $7) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR LBRACE predicate RBRACE 
-    { LDpredicate_def ($2, $4, $7) }
+    { LDpredicate_def (Info.default_logic_info $2, $4, $7) }
 | AXIOM IDENTIFIER COLON predicate { LDaxiom ($2, $4) }
 ;
 

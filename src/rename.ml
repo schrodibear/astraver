@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: rename.ml,v 1.8 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: rename.ml,v 1.9 2004-02-27 08:46:19 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -131,6 +131,7 @@ let vars_at_date r d ids =
 (* pretty-printers *)
 
 open Format
+open Pp
 
 let print fmt r = 
   fprintf fmt "@[<hov 2>";

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.87 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: util.ml,v 1.88 2004-02-27 08:46:19 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -332,6 +332,7 @@ let make_raise loc x v env =
 (*s Pretty printers (for debugging purposes) *)
 
 open Format
+open Pp
 
 let print_pre fmt l = 
   if l <> [] then begin

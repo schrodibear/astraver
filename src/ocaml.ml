@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.9 2003-04-02 11:58:57 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.10 2004-02-27 08:46:19 marche Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -27,6 +27,7 @@ open Util
 open Types
 open Env
 open Ast
+open Pp
 
 (*s pre- and postconditions *)
 

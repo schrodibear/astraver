@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.114 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.115 2004-02-27 08:46:19 marche Exp $ i*)
 
 open Options
 open Logic
@@ -25,6 +25,7 @@ open Util
 open Format
 open Misc
 open Vcg
+open Pp
 
 (* common to V7 and V8 *)
 
@@ -686,6 +687,8 @@ let print_logic_type fmt s =
     (fun x -> fprintf fmt "forall (A%d:Set),@ " x.tag)
     l;
   match t with
+  | Function ([], t) ->
+      print_pure_type fmt t
   | Function (pl, t) ->
       fprintf fmt "%a -> %a" 
 	(print_list arrow print_pure_type) pl print_pure_type t

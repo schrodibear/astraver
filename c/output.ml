@@ -146,12 +146,12 @@ let rec fprintf_assertion form a =
   | LExists(id,t,a) -> 
       fprintf form "@[<hv 1>(exists %s:%s.@ %a)@]" 
 	id t fprintf_assertion a
-  | LPred("eq_pointer",[t1;t2]) ->
-      fprintf form "@[(%a=%a)@]" 
+  | LPred("eq",[t1;t2]) ->
+      fprintf form "@[(%a = %a)@]" 
 	fprintf_term t1
 	fprintf_term t2
-  | LPred("ne_pointer",[t1;t2]) ->
-      fprintf form "@[neqv(%a,%a)@]" 
+  | LPred("neq",[t1;t2]) ->
+      fprintf form "@[(%a <> %a)@]" 
 	fprintf_term t1
 	fprintf_term t2
   | LPred(id,t::tl) ->
@@ -345,9 +345,12 @@ let make_label label e =
 let make_pre pre e =  Triple(pre,e,LTrue,None)
 
 let append block e =
-  match block with
-    | Block(l) -> Block(l@[e])
-    | _ -> Block([block;e])
+  match e with
+    | Void -> block
+    | _ ->
+	match block with    
+	  | Block(l) -> Block(l@[e])
+	  | _ -> Block([block;e])
 ;;
 
 let rec iter_expr f e =

@@ -21,11 +21,11 @@ val add_typedef : Loc.t -> string -> tctype -> unit
 val find_typedef : string -> tctype
 
 (* Logic environment *)
-val add_fun : string -> tctype list * tctype -> unit
-val find_fun : string -> tctype list * tctype
+val add_fun : string -> tctype list * tctype * Info.logic_info -> unit
+val find_fun : string -> tctype list * tctype * Info.logic_info
 
-val add_pred : string -> tctype list -> unit
-val find_pred : string -> tctype list
+val add_pred : string -> tctype list * Info.logic_info -> unit
+val find_pred : string -> tctype list * Info.logic_info 
 
 (* tag types *)
 type tag_type_definition = Incomplete | Defined of texpr ctype_node

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.35 2004-02-24 11:08:55 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.36 2004-02-27 08:46:19 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -619,11 +619,12 @@ and type_block env et (dl,sl) =
     | [] -> 
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
-	let ty = type_type d.loc env ty in
+	let ty = type_type d.loc env ty in	
 	if eq_type_node ty.ctype_node CTvoid then 
 	  error d.loc ("variable `"^x^"' declared void");
 	let i = type_initializer d.loc env ty i in
 	let info = default_var_info x in
+	if ty.ctype_storage = Static then info.var_is_static <- true;
 	let env' = Env.add x ty info env in
 	let dl',env'' = type_decls env' dl in
 	{ d with node = Tdecl (ty, info, i) } :: dl', env''
@@ -670,21 +671,22 @@ let type_logic_parameters env pl =
 let type_spec_decl ofs = function
   | LDaxiom (id, p) -> 
       Taxiom (id, type_predicate ofs Env.empty p)
-  | LDlogic (s, ty, pl) ->
+  | LDlogic (id, ty, pl, ll) ->
       let ty = type_logic_type Env.empty ty in
-      let pl,_ = type_logic_parameters Env.empty pl in
-      Cenv.add_fun s (pl, ty);
-      Tlogic (s, Function (pl, ty))
-  | LDpredicate_reads (s, pl, ll) ->
       let pl,env' = type_logic_parameters Env.empty pl in
       let ll = List.map (type_location ofs env') ll in
-      Cenv.add_pred s pl;
-      Tlogic (s, Predicate_reads (pl, ll))
-  | LDpredicate_def (s, pl, p) ->
+      Cenv.add_fun id.logic_name (pl, ty, id);
+      Tlogic (id, Function (pl, ty, ll))
+  | LDpredicate_reads (id, pl, ll) ->
+      let pl,env' = type_logic_parameters Env.empty pl in
+      let ll = List.map (type_location ofs env') ll in
+      Cenv.add_pred id.logic_name (pl,id);
+      Tlogic (id, Predicate_reads (pl, ll))
+  | LDpredicate_def (id, pl, p) ->
       let pl,env' = type_logic_parameters Env.empty pl in
       let p = type_predicate ofs env' p in
-      Cenv.add_pred s pl;
-      Tlogic (s, Predicate_def (pl, p))
+      Cenv.add_pred id.logic_name (pl,id);
+      Tlogic (id, Predicate_def (pl, p))
 
 let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
@@ -700,6 +702,7 @@ let type_decl d = match d.node with
       let ty = type_type d.loc Env.empty ty in
       add_sym d.loc x ty;
       let info = default_var_info x in
+      info.var_is_static <- true;
       Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc Env.empty ty in

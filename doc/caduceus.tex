@@ -306,7 +306,9 @@ annotations.
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               \nt{block} \te{;} \\
       & $|$ & \te{/*@} \te{logic} \nt{logic\_type} \nt{identifier} \te{(} 
-              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
+              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
+              && $[$ 
+              \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\
       & $|$ & \te{/*@} \te{predicate} \nt{identifier} \te{(} 
               \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
            && $[$ \te{\{} \nt{predicate} \te{\}} $|$ 
@@ -389,6 +391,8 @@ annotations.
       & $|$ & \verb!\length! \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\result! \\
       & $|$ & \verb!\null! \\
+      & $|$ & TODO \verb!\valid...! \\
+
   \\[0.1em]
 
   \nt{constant}\indexnt{constant}

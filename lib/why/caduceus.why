@@ -8,6 +8,7 @@ logic null : -> pointer
 logic length: pointer -> int
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
+logic valid : pointer, int, int -> prop
 
 axiom offset_shift :
   forall p:pointer. forall i:int.
@@ -16,6 +17,38 @@ axiom offset_shift :
 axiom length_shift :
   forall p:pointer. forall i:int.
   length(shift(p,i)) = length(p)
+
+axiom shift_null :
+  forall p:pointer. forall i:int.
+    p=null -> shift(p,i)=null
+
+axiom shift_not_null :
+  forall p:pointer. forall i:int.
+    p<>null -> shift(p,i)<>null
+
+axiom valid_def :
+  forall p:pointer. forall i:int. forall j:int.
+	(p <> null 
+	and 0 <= offset(p)+i 
+	and i <= j
+	and offset(p)+j <= length(p))
+	-> valid(p,i,j)	
+
+axiom valid_not_null :
+  forall p:pointer. forall i:int. forall j:int.
+	valid(p,i,j) -> p <> null 
+
+axiom valid1 :
+  forall p:pointer. forall i:int. forall j:int.
+	valid(p,i,j) -> 0 <= offset(p)+i 
+
+axiom valid2 :
+  forall p:pointer. forall i:int. forall j:int.
+	valid(p,i,j) -> i <= j
+
+axiom valid3 :
+  forall p:pointer. forall i:int. forall j:int.
+	valid(p,i,j) -> offset(p)+j <= length(p)
 
 parameter shift_ : p:pointer -> i:int -> 
   { } pointer { result = shift(p,i) }

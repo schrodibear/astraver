@@ -441,6 +441,8 @@ let discharge_methods ctx concl =
   boolean_case ctx concl
 
 (* DEBUG *)
+open Pp
+
 let print_sequent fmt (ctx, concl) =
   let print_hyp fmt = function
     | Svar (id, _) -> Ident.print fmt id

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.44 2004-02-25 17:22:34 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.45 2004-02-27 08:46:19 marche Exp $ i*)
 
 open Logic
 open Types
@@ -24,6 +24,7 @@ open Util
 open Ident
 open Format
 open Vcg
+open Pp
 
 let relation id =
   if id == t_lt then "<" 

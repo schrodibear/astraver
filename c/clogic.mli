@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.14 2004-02-24 08:15:23 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.15 2004-02-27 08:46:19 marche Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -43,8 +43,8 @@ type 'a term = ('a term_node, 'a) info
 
 and 'a term_node =
   | Tconstant of string
-  | Tvar of string
-  | Tapp of string * 'a term list
+  | Tvar of Info.var_info
+  | Tapp of Info.logic_info * 'a term list
   | Tunop of term_unop * 'a term
   | Tbinop of 'a term * term_binop * 'a term
   | Tdot of 'a term * string
@@ -64,8 +64,7 @@ type 'ctype quantifiers = ('ctype * string) list
 type ('term, 'ctype) predicate =
   | Pfalse
   | Ptrue
-  | Pvar of Loc.t * string
-  | Papp of Loc.t * string * 'term list
+  | Papp of Loc.t * Info.logic_info * 'term list
   | Prel of 'term * relation * 'term
   | Pand of ('term, 'ctype) predicate * ('term, 'ctype) predicate
   | Por of ('term, 'ctype) predicate * ('term, 'ctype) predicate
@@ -74,6 +73,7 @@ type ('term, 'ctype) predicate =
   | Pif of 'term * ('term, 'ctype) predicate * ('term, 'ctype) predicate
   | Pforall of 'ctype quantifiers * ('term, 'ctype) predicate
   | Pexists of 'ctype quantifiers * ('term, 'ctype) predicate
+  | Pvalid of 'term * 'term * 'term
 
 type 'term location = 
   | Lterm of 'term
@@ -96,5 +96,5 @@ type ('term,'ctype) loop_annot = {
 
 type ('term,'ctype) logic_symbol =
   | Predicate_reads of 'ctype list * 'term location list
-  | Predicate_def of 'ctype list * ('term,'ctype) predicate
-  | Function of 'ctype list * 'ctype
+  | Predicate_def of 'ctype list * ('term,'ctype) predicate 
+  | Function of 'ctype list * 'ctype * 'term location list

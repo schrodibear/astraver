@@ -8,6 +8,9 @@ Set Implicit Arguments.
 
 (*Why*) Parameter any_pointer : forall (_: unit), pointer.
 
+(*Why logic*) Definition null : pointer.
+Admitted.
+
 (*Why logic*) Definition length : pointer -> Z.
 Admitted.
 
@@ -17,6 +20,9 @@ Admitted.
 (*Why logic*) Definition shift : pointer -> Z -> pointer.
 Admitted.
 
+(*Why logic*) Definition valid : pointer -> Z -> Z -> Prop.
+Admitted.
+
 (*Why axiom*) Lemma offset_shift :
   (forall (p:pointer),
    (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
@@ -24,6 +30,43 @@ Admitted.
 
 (*Why axiom*) Lemma length_shift :
   (forall (p:pointer), (forall (i:Z), (length (shift p i)) = (length p))).
+Admitted.
+
+(*Why axiom*) Lemma shift_null :
+  (forall (p:pointer), (forall (i:Z), (p = null -> (shift p i) = null))).
+Admitted.
+
+(*Why axiom*) Lemma shift_not_null :
+  (forall (p:pointer), (forall (i:Z), (~(p = null) -> ~((shift p i) = null)))).
+Admitted.
+
+(*Why axiom*) Lemma valid_def :
+  (forall (p:pointer),
+   (forall (i:Z),
+    (forall (j:Z),
+     (~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <=
+      (length p) -> (valid p i j))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_not_null :
+  (forall (p:pointer),
+   (forall (i:Z), (forall (j:Z), ((valid p i j) -> ~(p = null))))).
+Admitted.
+
+(*Why axiom*) Lemma valid1 :
+  (forall (p:pointer),
+   (forall (i:Z), (forall (j:Z), ((valid p i j) -> 0 <= ((offset p) + i))))).
+Admitted.
+
+(*Why axiom*) Lemma valid2 :
+  (forall (p:pointer),
+   (forall (i:Z), (forall (j:Z), ((valid p i j) -> i <= j)))).
+Admitted.
+
+(*Why axiom*) Lemma valid3 :
+  (forall (p:pointer),
+   (forall (i:Z),
+    (forall (j:Z), ((valid p i j) -> ((offset p) + j) <= (length p))))).
 Admitted.
 
 (*Why*) Parameter shift_ :
@@ -40,7 +83,7 @@ Admitted.
 
 (*Why*) Parameter acc_ :
   forall (A5: Set), forall (p: pointer), forall (m: ((memory) A5)),
-  forall (H: 0 <= (offset p) /\ (offset p) < (length p)),
+  forall (H: ~(p = null) /\ 0 <= (offset p) /\ (offset p) < (length p)),
   (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
 (*Why logic*) Definition upd :
@@ -49,8 +92,8 @@ Admitted.
 
 (*Why*) Parameter upd_ :
   forall (A11: Set), forall (p: pointer), forall (v: A11),
-  forall (m: ((memory) A11)), forall (H: 0 <= (offset p) /\ (offset p) <
-  (length p)),
+  forall (m: ((memory) A11)), forall (H: ~(p = null) /\ 0 <= (offset p) /\
+  (offset p) < (length p)),
   (sig_2 ((memory) A11) unit
    (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
 

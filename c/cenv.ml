@@ -154,11 +154,11 @@ let add_sym l x ty =
 (*s Environments for the logical side *)
 
 let functions = 
-  (Hashtbl.create 97 : (string, tctype list * tctype) Hashtbl.t)
+  (Hashtbl.create 97 : (string, tctype list * tctype * Info.logic_info) Hashtbl.t)
 let add_fun = Hashtbl.add functions
 let find_fun = Hashtbl.find functions
 
-let predicates = (Hashtbl.create 97 : (string, tctype list) Hashtbl.t) 
+let predicates = (Hashtbl.create 97 : (string, tctype list * Info.logic_info) Hashtbl.t) 
 let add_pred = Hashtbl.add predicates
 let find_pred = Hashtbl.find predicates
 

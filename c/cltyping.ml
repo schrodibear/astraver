@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.15 2004-02-23 15:30:13 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.16 2004-02-27 08:46:19 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -67,6 +67,8 @@ let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
 
 (* Typing terms *)
 
+open Info
+
 let rec type_term env t =
   let t, ty = type_term_node t.info env t.node in
   { node = t; info = ty }
@@ -78,19 +80,19 @@ and type_term_node loc env = function
        with _ -> 
 	 Tconstant c, c_float)
   | Tvar x ->
-      let (ty,_) = 
-	try Env.find x env with Not_found -> 
-	try find_sym x with Not_found -> 
-        error loc ("unbound variable " ^ x)
+      let (ty,info) = 
+	try Env.find x.var_name env with Not_found -> 
+	try find_sym x.var_name with Not_found -> 
+        error loc ("unbound variable " ^ x.var_name)
       in 
-      Tvar x, ty
+      Tvar info, ty
   | Tapp (f, tl) ->
       (try 
-	 let pl, ty = find_fun f in
+	 let pl, ty, info = find_fun f.logic_name in
 	 let tl = type_terms loc env pl tl in
-	 Tapp (f, tl), ty
+	 Tapp (info, tl), ty
        with Not_found -> 
-	 error loc ("unbound function " ^ f))
+	 error loc ("unbound function " ^ f.logic_name))
   | Tunop (Uminus, t) -> 
       let t = type_num_term env t in
       Tunop (Uminus, t), t.info
@@ -214,12 +216,6 @@ let rec type_predicate env = function
   | Pfalse
   | Ptrue as p -> 
       p
-  | Pvar (loc, x) -> 
-      (try 
-	 (match find_pred x with
-	    | [] -> Pvar (loc, x)
-	    | _ -> error loc ("predicate " ^ x ^ " expects arguments"))
-       with Not_found -> error loc ("unbound predicate " ^ x))
   | Prel (t1, (Lt | Le | Gt | Ge as r), t2) -> 
       let t1 = type_num_term env t1 in
       let t2 = type_num_term env t2 in
@@ -241,11 +237,11 @@ let rec type_predicate env = function
       Pnot (type_predicate env p)
   | Papp (locp, p, tl) ->
       (try
-	 let pl = find_pred p in
+	 let pl,_ = find_pred p.logic_name in
 	 let tl = type_terms locp env pl tl in
 	 Papp (locp, p, tl)
        with Not_found -> 
-	 error locp ("unbound predicate " ^ p))
+	 error locp ("unbound predicate " ^ p.logic_name))
   | Pif (t, p1, p2) -> 
       (* TODO type t ? *)
       let t = type_term env t in
@@ -258,6 +254,14 @@ let rec type_predicate env = function
       let q = type_quantifiers env q in
       let env' = add_quantifiers q env in
       Pexists (q, type_predicate env' p)
+  | Pvalid (t,a,b) ->
+      let tloc = t.info in
+      let t = type_term env t in
+      let a = type_int_term env a in
+      let b = type_int_term env b in
+      (match t.info.ctype_node with
+	 | CTarray _ | CTpointer _ -> Pvalid(t,a,b)
+	 | _ -> error tloc "subscripted value is neither array nor pointer")
 
 let type_variant env = function 
   | (t, None) -> (type_int_term env t, None)
