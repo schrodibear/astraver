@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.26 2004-03-03 16:17:04 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.27 2004-03-04 10:09:05 filliatr Exp $ i*)
 
 
 open Format
@@ -201,12 +201,15 @@ let rec interp_expr e =
 	end
     | TEvar(v) -> 
         if v.var_name = "t"
- then begin
-      Loc.report Coptions.log e.texpr_loc;
-fprintf Coptions.log "translating var t: is_assigned = %b@."
-v.var_is_assigned;
-end;
+	then begin
+	  Loc.report Coptions.log e.texpr_loc;
+	  fprintf Coptions.log "translating var t: is_assigned = %b@."
+	    v.var_is_assigned;
+	end;
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
+    | TEbinary(_,(Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
+    | TEunary (Unot, _) ->
+	If(interp_boolean_expr e, Cte(Prim_int(1)), Cte(Prim_int(0)))
     | TEbinary(e1,op,e2) ->
 	build_complex_app (Var (interp_bin_op op))
 	  [interp_expr e1;interp_expr e2]
@@ -224,7 +227,7 @@ end;
     | TEnop -> 
 	assert false (* TODO *)
     | TEcond(e1,e2,e3) ->
-	If(interp_expr e1,interp_expr e2,interp_expr e3)
+	If(interp_boolean_expr e1,interp_expr e2,interp_expr e3)
     | TEstring_literal s
 	-> assert false (* TODO *)
     | TEdot(e,s)
@@ -243,7 +246,21 @@ end;
       -> assert false (* TODO *)
     | TEsizeof(t)
       -> assert false (* TODO *)
-	  
+
+and interp_boolean_expr e =
+  match e.texpr_node with
+    | TEbinary(e1, (Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
+	build_complex_app (Var (interp_bin_op op))
+	  [interp_expr e1;interp_expr e2]
+    | TEbinary (e1, Band, e2) ->
+	And(interp_boolean_expr e1, interp_boolean_expr e2)
+    | TEbinary (e1, Bor, e2) ->
+	Or(interp_boolean_expr e1, interp_boolean_expr e2)
+    | TEunary (Unot, e) ->
+	Not(interp_boolean_expr e)
+    (* otherwise e <> 0 *)
+    | _ -> build_complex_app (Var "neq_int") [interp_expr e; Cte(Prim_int(0))]
+
 and interp_incr_expr op e =
   match interp_lvalue e with
     | LocalRef v ->
@@ -433,7 +450,7 @@ let rec interp_statement stat =
 		(interp_statement_expr e3)))
   | TSnop -> Void
   | TSif(e,s1,s2) -> 
-      If(interp_expr e,interp_statement s1,interp_statement s2)
+      If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
   | TSwhile(e,s,info,annot)
       -> assert false (* TODO *)
   | TSdowhile(s,e,info,annot)

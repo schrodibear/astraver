@@ -26,5 +26,9 @@ WHY=../../bin/why.opt
 %_why.pvs: %.why $(WHY)
 	$(WHY) -V --pvs caduceus.why $<
 
+%.sxcheck: %.sx
+	cat caduceus_why.sx $< > $<.all
+	Simplify $<.all
+
 caduceus_why.v: caduceus.why $(WHY)
 	$(WHY) --coq-v8 caduceus.why
