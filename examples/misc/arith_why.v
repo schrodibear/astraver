@@ -10,7 +10,7 @@ Require ZArithRing.
 Lemma mult_po_1 : 
   (x: Z)
   (y: Z)
-  (Pre5: `x >= 0` /\ `y >= 0`)
+  (Pre9: `x >= 0` /\ `y >= 0`)
   (result: Z)
   (Post6: result = x)
   (result0: Z)
@@ -21,7 +21,7 @@ Lemma mult_po_1 :
   (a0: Z)
   (b0: Z)
   (p0: Z)
-  (Pre4: Variant1 = a0)
+  (Pre8: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0 = x * y`)
   (Test4: `a0 <> 0`)
   ~(`2` = `0`).
@@ -33,7 +33,7 @@ Save.
 Lemma mult_po_2 : 
   (x: Z)
   (y: Z)
-  (Pre5: `x >= 0` /\ `y >= 0`)
+  (Pre9: `x >= 0` /\ `y >= 0`)
   (result: Z)
   (Post6: result = x)
   (result0: Z)
@@ -44,9 +44,10 @@ Lemma mult_po_2 :
   (a0: Z)
   (b0: Z)
   (p0: Z)
-  (Pre4: Variant1 = a0)
+  (Pre8: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0 = x * y`)
   (Test4: `a0 <> 0`)
+  (Pre6: ~(`2` = `0`))
   (Test3: `(Zmod a0 2) = 1`)
   (p1: Z)
   (Post1: p1 = `p0 + b0`)
@@ -74,7 +75,7 @@ Save.
 Lemma mult_po_3 : 
   (x: Z)
   (y: Z)
-  (Pre5: `x >= 0` /\ `y >= 0`)
+  (Pre9: `x >= 0` /\ `y >= 0`)
   (result: Z)
   (Post6: result = x)
   (result0: Z)
@@ -85,9 +86,10 @@ Lemma mult_po_3 :
   (a0: Z)
   (b0: Z)
   (p0: Z)
-  (Pre4: Variant1 = a0)
+  (Pre8: Variant1 = a0)
   (Inv: `a0 >= 0` /\ `p0 + a0 * b0 = x * y`)
   (Test4: `a0 <> 0`)
+  (Pre6: ~(`2` = `0`))
   (Test2: `(Zmod a0 2) <> 1`)
   ((a:Z)
    (a = (Zdiv a0 `2`) ->
@@ -115,7 +117,7 @@ Save.
 Lemma mult_po_4 : 
   (x: Z)
   (y: Z)
-  (Pre5: `x >= 0` /\ `y >= 0`)
+  (Pre9: `x >= 0` /\ `y >= 0`)
   (result: Z)
   (Post6: result = x)
   (result0: Z)
@@ -132,7 +134,7 @@ Save.
 Lemma mult_po_5 : 
   (x: Z)
   (y: Z)
-  (Pre5: `x >= 0` /\ `y >= 0`)
+  (Pre9: `x >= 0` /\ `y >= 0`)
   (result: Z)
   (Post6: result = x)
   (result0: Z)

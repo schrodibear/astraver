@@ -5,7 +5,7 @@ Require Why.
 
 
 (* ----------- PRELIMINAIRES ------------- *)
-(* d�finition et propri�t�s de "Maximize"   *)
+(* dÃ©finition et propriÃ©tÃ©s de "Maximize"   *)
 Require Omega.
 Require ZArithRing.
 
@@ -13,13 +13,13 @@ Tactic Definition Omega' := Abstract Omega.
 
 Implicit Arguments On.
 
-(* Induction pour v�rifier qu'on est le maximum *)
+(* Induction pour vÃ©rifier qu'on est le maximum *)
 Inductive Maximize[t:(array Z); n,m:Z] : Z -> Prop :=
   Maxim_cons : (k:Z)
      (`k <= n` -> (Zle #t[k] m)) ->
      (`k < n` -> (Maximize t n m `k+1`)) -> (Maximize t n m `k`).
 
-(* Signification "extensionnelle" de ce pr�dicat: *)
+(* Signification "extensionnelle" de ce prÃ©dicat: *)
 Lemma Maximize_ext1 : (t:(array Z))(n,m,k,i:Z)
   (Maximize t n m k) -> `k <= i <= n` -> `(access t i) <= m`.
 Proof.
@@ -44,7 +44,7 @@ Proof.
          Intros; Apply H; Omega'.
 Qed.
 
-(* compatibilit� de "Zle" avec "Maximize" *)
+(* compatibilitÃ© de "Zle" avec "Maximize" *)
 Lemma Maximize_Zle: (t:(array Z))(n,m1,m2,k:Z)
   (Maximize t n m1 k) -> `k <= n` -> (Zle m1 m2) -> (Maximize t n m2 k).
 Proof.
@@ -57,7 +57,7 @@ Implicit Arguments Off.
 (* ----------- FIN PRELIMINAIRES ----------- *)
 
 
-(* D�but: preuve de "swap" *)
+(* DÃ©but: preuve de "swap" *)
 (* Why obligation from file "maximumsort.mlw", characters 206-210 *)
 Lemma swap_po_1 : 
   (i: Z)
@@ -119,7 +119,7 @@ Save.
 (* Fin: preuve de "swap" *)
 
 
-(* D�but: preuve de "maximum" *)
+(* DÃ©but: preuve de "maximum" *)
 
 (* Why obligation from file "maximumsort.mlw", characters 602-603 *)
 Lemma maximum_po_1 : 
@@ -127,66 +127,66 @@ Lemma maximum_po_1 :
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test4: `k0 = 0`)
   (`0 <= i0` /\ `i0 <= n0`) /\ (Maximize t n0 (access t i0) `0`).
 Proof.
   Intros; Split.
   Omega'.
-  Rewrite Test4 in Pre12; Tauto.
+  Rewrite Test4 in Pre18; Tauto.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 643-647 *)
+(* Why obligation from file "maximumsort.mlw", characters 637-642 *)
 Lemma maximum_po_2 : 
   (n: Z)
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
   (Post3: nk = `k0 - 1`)
-  `0 <= i0` /\ `i0 < (array_length t)`.
+  `0 <= nk` /\ `nk < (array_length t)`.
 Proof.
    Intros; Omega'.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 637-642 *)
+(* Why obligation from file "maximumsort.mlw", characters 643-647 *)
 Lemma maximum_po_3 : 
   (n: Z)
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
   (Post3: nk = `k0 - 1`)
-  (Pre3: `0 <= i0` /\ `i0 < (array_length t)`)
-  `0 <= nk` /\ `nk < (array_length t)`.
+  (Pre16: `0 <= nk` /\ `nk < (array_length t)`)
+  `0 <= i0` /\ `i0 < (array_length t)`.
 Proof.
   Intros; Omega'.
 Save.
@@ -197,18 +197,20 @@ Lemma maximum_po_4 :
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
   (Post3: nk = `k0 - 1`)
+  (Pre16: `0 <= nk` /\ `nk < (array_length t)`)
+  (Pre17: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test2: `(access t nk) > (access t i0)`)
   (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\ `n0 < (array_length t)` /\
   (Maximize t n0 (access t nk) nk).
@@ -225,24 +227,26 @@ Lemma maximum_po_5 :
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
   (Post3: nk = `k0 - 1`)
+  (Pre16: `0 <= nk` /\ `nk < (array_length t)`)
+  (Pre17: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test2: `(access t nk) > (access t i0)`)
-  (Pre11: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
+  (Pre15: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t nk) nk))
-  (Pre9: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
-         `n0 < (array_length t)` /\ (Maximize t n0 (access t nk) nk))
-  (Pre10: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
+  (Pre13: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
+          `n0 < (array_length t)` /\ (Maximize t n0 (access t nk) nk))
+  (Pre14: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t nk) nk))
   (Zwf `0` nk Variant1).
 Proof.
@@ -256,18 +260,20 @@ Lemma maximum_po_6 :
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
   (Post3: nk = `k0 - 1`)
+  (Pre16: `0 <= nk` /\ `nk < (array_length t)`)
+  (Pre17: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test1: `(access t nk) <= (access t i0)`)
   (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\ `n0 < (array_length t)` /\
   (Maximize t n0 (access t i0) nk).
@@ -282,25 +288,27 @@ Lemma maximum_po_7 :
   (k: Z)
   (i: Z)
   (t: (array Z))
-  (Pre14: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
+  (Pre20: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < (array_length t)` /\
           (Maximize t n (access t i) k))
   (Variant1: Z)
   (n0: Z)
   (k0: Z)
   (i0: Z)
-  (Pre13: Variant1 = k0)
-  (Pre12: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
+  (Pre19: Variant1 = k0)
+  (Pre18: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
   (Post3: nk = `k0 - 1`)
+  (Pre16: `0 <= nk` /\ `nk < (array_length t)`)
+  (Pre17: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test1: `(access t nk) <= (access t i0)`)
-  (Pre7: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
+  (Pre11: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
+          `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) nk))
+  (Pre9: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
          `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) nk))
-  (Pre5: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
-         `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) nk))
-  (Pre6: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
-         `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) nk))
+  (Pre10: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
+          `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) nk))
   (Zwf `0` nk Variant1).
 Proof.
   Intros; Subst nk.

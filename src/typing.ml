@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.97 2003-03-25 16:56:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.98 2003-03-28 16:16:48 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -518,7 +518,7 @@ and typef_desc lab env loc = function
 		    (* function itself is pure: we collapse terms *)
 		    | Expression cf when post t_f = None ->
 			let e = applist cf [ca] in
-			let pl = partial_pre loc e @ pre t_a @ pre t_f in
+			let pl = partial_pre loc e @ preo t_a @ preo t_f in
 			Expression e, (tapp, ef), pl
  		    (* function is [let y = ty in E]: we lift this let *)
 		    | LetIn (y, ty, ({ desc = Expression cf } as tf'))
@@ -526,14 +526,16 @@ and typef_desc lab env loc = function
 			let e = applist cf [ca] in
 			let env' = tf'.info.env in
 			let pl = 
-			  partial_pre loc e @ pre tf' @ pre t_a @ pre t_f 
+			  partial_pre loc e @ preo tf' @ preo t_a @ preo t_f 
 			in
 			LetIn (y, ty, 
 			       make_lnode loc (Expression e) env' [] kapp),
 			(tapp, ef), pl
 	            (* otherwise: true application *)
 		    | _ ->	   
-			App (t_f, Term t_a, kapp), (tapp, ef), [])
+			(* TODO: check [t_f] without effect *)
+			let pl = preo t_f @ preo t_a in
+			App (t_f, Term t_a, kapp), (tapp, ef), pl)
 	     (* argument is complex: 
 		we transform into [let v = arg in (f v)] *)
 	     | _ ->
@@ -546,7 +548,7 @@ and typef_desc lab env loc = function
 		   (* function is pure: we collapse terms *)
 		   | Expression cf when post t_f = None ->
 		       let e = applist cf [Tvar v] in
-		       Expression e, partial_pre loc e @ pre t_f
+		       Expression e, partial_pre loc e @ preo t_f
 		   (* function is [let y = ty in E]: we lift this let *)
 		   | LetIn (y, ty, ({ desc = Expression cf } as tf')) 
 		     when post tf' = None && post t_f = None ->
@@ -554,7 +556,7 @@ and typef_desc lab env loc = function
 		       let env'' = Env.add v tx tf'.info.env in
 		       LetIn (y, ty, 
 			      make_lnode loc (Expression e) env'' [] kapp),
-		       partial_pre loc e @ pre tf' @ pre t_f
+		       partial_pre loc e @ preo tf' @ preo t_f
 	           (* otherwise: true application *)
 		   | _ ->
 		       let var_v = make_var loc v tx env' in

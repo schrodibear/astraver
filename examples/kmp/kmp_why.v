@@ -23,7 +23,7 @@ Axiom M_positive : `0 <= M`.
 Lemma initnext_po_1 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
@@ -38,13 +38,13 @@ Save.
 Lemma initnext_po_2 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (well_founded lexZ).
@@ -52,24 +52,24 @@ Proof.
 Intros; Exact lexZ_well_founded.
 Save.
 
-(* Why obligation from file "kmp.mlw", characters 1584-1589 *)
+(* Why obligation from file "kmp.mlw", characters 1578-1583 *)
 Lemma initnext_po_3 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -77,29 +77,29 @@ Lemma initnext_po_3 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
-  `0 <= j0` /\ `j0 < (array_length p)`.
+  `0 <= i0` /\ `i0 < (array_length p)`.
 Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "kmp.mlw", characters 1578-1583 *)
+(* Why obligation from file "kmp.mlw", characters 1584-1589 *)
 Lemma initnext_po_4 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -107,8 +107,8 @@ Lemma initnext_po_4 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
-  (Pre3: `0 <= j0` /\ `j0 < (array_length p)`)
-  `0 <= i0` /\ `i0 < (array_length p)`.
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  `0 <= j0` /\ `j0 < (array_length p)`.
 Proof.
 Intuition.
 Save.
@@ -117,20 +117,20 @@ Save.
 Lemma initnext_po_5 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -138,6 +138,8 @@ Lemma initnext_po_5 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test6: (access p i0) = (access p j0))
   (i1: Z)
   (Post2: i1 = `i0 + 1`)
@@ -152,20 +154,20 @@ Save.
 Lemma initnext_po_6 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -173,12 +175,14 @@ Lemma initnext_po_6 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test6: (access p i0) = (access p j0))
   (i1: Z)
   (Post2: i1 = `i0 + 1`)
   (j1: Z)
   (Post3: j1 = `j0 + 1`)
-  (Pre6: `0 <= i1` /\ `i1 < (array_length next1)`)
+  (Pre10: `0 <= i1` /\ `i1 < (array_length next1)`)
   (next2: (array Z))
   (Post4: next2 = (store next1 i1 j1))
   ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
@@ -195,13 +199,13 @@ Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
   Omega'. Omega'.
   Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
   Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
-  Red; Apply H7; Omega'.
+  Red; Apply H11; Omega'.
   Apply match_right_weakening with n := z.
   Replace `i0+1-(z-1)` with `i0+1+1-z`.
   Subst i1; Assumption. Omega'. Omega'.
   Elim (Z_lt_ge_dec k `i0+1`); Intro Hk'.  
   Subst next2; Rewrite store_def_2.
-  Apply H9; Omega'. Omega'. Omega'. Omega'.
+  Apply H13; Omega'. Omega'. Omega'. Omega'.
   Cut `i0+1 = k`. Intro Heq.	
   Subst next2 i1; Rewrite Heq. Rewrite store_def_1.
   Rewrite <- Heq. Apply Next_cons. Omega'.
@@ -209,7 +213,7 @@ Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
   Apply match_right_extension; Omega' Orelse Try Assumption.
   Ring `i0-j0+j0`; Ring `0+j0`; Assumption. Omega'.
   Intros z Hz. 
-  Red; Apply H7; Omega'.
+  Red; Apply H11; Omega'.
   Omega'. Omega'.
   ArraySubst next2.
 Unfold lexZ lex Zwf pairZ; Left; Omega'.
@@ -219,20 +223,20 @@ Save.
 Lemma initnext_po_7 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -240,6 +244,8 @@ Lemma initnext_po_7 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test5: ~(access p i0) = (access p j0))
   (Test4: `j0 = 0`)
   (i1: Z)
@@ -253,20 +259,20 @@ Save.
 Lemma initnext_po_8 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -274,11 +280,13 @@ Lemma initnext_po_8 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test5: ~(access p i0) = (access p j0))
   (Test4: `j0 = 0`)
   (i1: Z)
   (Post5: i1 = `i0 + 1`)
-  (Pre5: `0 <= i1` /\ `i1 < (array_length next1)`)
+  (Pre9: `0 <= i1` /\ `i1 < (array_length next1)`)
   (next2: (array Z))
   (Post6: next2 = (store next1 i1 `0`))
   ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i1` /\ `i1 <= M`) /\
@@ -293,19 +301,19 @@ Intuition.
   Apply match_empty. Omega'. Omega'.
   Elim (Z_lt_ge_dec `j0+2` z); Intro.
   Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
-  Red; Apply H7; Omega'.
+  Red; Apply H11; Omega'.
   Apply match_right_weakening with n := z.
   Subst i1.
   Replace `i0+1-(z-1)` with `i0+1+1-z`; [ Assumption | Omega' ]. Omega'.
   Absurd (#p[i0])=(#p[j0]); [ Assumption | Idtac ].
-  Decompose [match] H14.
+  Decompose [match] H18.
   Replace i0 with `i0+1+1-2+j0`; [ Idtac | Omega' ].
   Replace #p[j0] with #p[`0+j0`]; [ Idtac | Ring `0+j0`; Reflexivity ].
   Cut `z = 2`; [ Intro Heq | Omega' ].
-  Rewrite <- Heq. Rewrite <- Post5; Apply H18; Omega'.
+  Rewrite <- Heq. Rewrite <- Post5; Apply H22; Omega'.
   Elim (Z_lt_ge_dec k `i0+1`); Intro.
   Subst next2. AccessOther.
-  Apply H9; Omega'. 
+  Apply H13; Omega'. 
   Cut `i0+1 = k`; [ Intro Heq | Omega' ].
   Rewrite Post6; Rewrite Post5; Rewrite Heq. AccessSame.
   Rewrite <- Heq. Apply Next_cons. Omega'.
@@ -313,14 +321,14 @@ Intuition.
   Intros z Hz.
   Elim (Z_lt_ge_dec `1` z); Intro.
   (* 1 < z  *)
-  Red; Apply H7; Omega'.
+  Red; Apply H11; Omega'.
   (* z = 1 *)
   Red; Intro.
   Absurd (#p[i0])=(#p[j0]); [ Assumption | Rewrite Test4 ].
-  Decompose [match] H13.
+  Decompose [match] H17.
   Replace `0` with `0+0`; [ Idtac | Omega' ].
   Replace `i0` with `i0+1-z+0`; [ Idtac | Omega' ].
-  Apply H18; Omega'.
+  Apply H22; Omega'.
   ArraySubst next2.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
@@ -329,20 +337,20 @@ Save.
 Lemma initnext_po_9 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -350,6 +358,8 @@ Lemma initnext_po_9 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test5: ~(access p i0) = (access p j0))
   (Test3: `j0 <> 0`)
   `0 <= j0` /\ `j0 < (array_length next1)`.
@@ -361,20 +371,20 @@ Save.
 Lemma initnext_po_10 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -382,9 +392,11 @@ Lemma initnext_po_10 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test5: ~(access p i0) = (access p j0))
   (Test3: `j0 <> 0`)
-  (Pre4: `0 <= j0` /\ `j0 < (array_length next1)`)
+  (Pre8: `0 <= j0` /\ `j0 < (array_length next1)`)
   (j1: Z)
   (Post7: j1 = (access next1 j0))
   ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i0` /\ `i0 <= M`) /\
@@ -396,9 +408,9 @@ Lemma initnext_po_10 :
 Proof.
 Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
   Subst j1.
-  Elim (H11 j0); Omega'.
-  Elim (H11 j0); Omega'.
-  Elim (H11 j0); Omega'.
+  Elim (H15 j0); Omega'.
+  Elim (H15 j0); Omega'.
+  Elim (H15 j0); Omega'.
   Subst j1.
   Apply match_trans with t2 := p i2 := `j0-(access   next1 j0)`.
   Apply match_left_weakening with n := j0.
@@ -406,23 +418,23 @@ Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
     with `i0-j0` ; [ Idtac | Omega' ].
   Replace `j0-(access   next1 j0)-(j0-(access   next1 j0))` 
     with `0` ; [ Assumption | Omega' ].
-  Elim (H11 j0); Omega'. Elim (H11 j0); Auto; Omega'.
+  Elim (H15 j0); Omega'. Elim (H15 j0); Auto; Omega'.
 
   Elim (Z_lt_ge_dec `j0+1` z); Intro.
   (* j0+1 < z < i0+1 *)
-  Apply (H9 z); Assumption Orelse Omega'.
+  Apply (H13 z); Assumption Orelse Omega'.
   Elim (Z_ge_lt_dec z `j0+1`); Intro.
   (* z = j0+1 *)
   Absurd (#p[i0])=(#p[j0]) ; [ Assumption | Idtac ].
-  Decompose [match] H14.
+  Decompose [match] H18.
   Replace i0 with `i0+1-z+j0`; [ Idtac | Omega' ].
   Replace j0 with `0+j0`; [ Idtac | Omega' ].
-  Apply H18; Omega'.
+  Apply H22; Omega'.
   (* next[j0]+1 < z < j0+1 *)
   Absurd (match p `j0-(z-1)` p `0` `z-1`).
-  Decompose [match] H14.
-  Elim (H11 j0); Omega' Orelse Intros.
-  Apply H21; Omega'.
+  Decompose [match] H18.
+  Elim (H15 j0); Omega' Orelse Intros.
+  Apply H25; Omega'.
   Apply match_trans with t2 := p i2 := `i0-(z-1)`.
   Apply match_sym.
   Apply match_left_weakening with n := j0.
@@ -433,7 +445,7 @@ Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
   Replace `i0-(z-1)` with `i0+1-z` ; [ Assumption | Omega' ].
   Omega'.
 Unfold lexZ lex Zwf pairZ. 
-Elim (H11 j0) ; [ Intros | Omega' ].
+Elim (H15 j0) ; [ Intros | Omega' ].
 Right. Omega'.
 Save.
 
@@ -441,20 +453,20 @@ Save.
 Lemma initnext_po_11 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre7: Variant1 = (pairZ `M - i0` j0))
+  (Pre13: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -475,20 +487,20 @@ Lemma initnext_po_11 :
   (lexZ (pairZ `M - i1` j1) Variant1).
 Proof.
 Intuition.
-Rewrite Pre7; Assumption.
+Rewrite Pre13; Assumption.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 1263-1512 *)
 Lemma initnext_po_12 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (`0 <= result0` /\ `result0 <= M`) /\ (`result0 < result` /\
@@ -512,13 +524,13 @@ Save.
 Lemma initnext_po_13 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
+  (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (i0: Z)
@@ -540,7 +552,7 @@ Save.
 Lemma initnext_po_14 : 
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
   (result: Z)
   (Post9: result = `1`)
   (result0: Z)
@@ -563,8 +575,8 @@ Lemma kmp_po_1 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
@@ -579,13 +591,13 @@ Lemma kmp_po_2 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
@@ -599,20 +611,20 @@ Lemma kmp_po_3 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
@@ -630,20 +642,20 @@ Lemma kmp_po_4 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
@@ -656,62 +668,63 @@ Proof.
 Intuition Induction result3; Tauto.
 Save.
 
-(* Why obligation from file "kmp.mlw", characters 2592-2597 *)
+(* Why obligation from file "kmp.mlw", characters 2586-2591 *)
 Lemma kmp_po_5 : 
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  `0 <= j0` /\ `j0 < (array_length p)`.
+  `0 <= i0` /\ `i0 < (array_length a)`.
 Proof.
 Intuition.
 Discriminate H14.
 Save.
 
-(* Why obligation from file "kmp.mlw", characters 2586-2591 *)
+(* Why obligation from file "kmp.mlw", characters 2592-2597 *)
 Lemma kmp_po_6 : 
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre5: `0 <= j0` /\ `j0 < (array_length p)`)
-  `0 <= i0` /\ `i0 < (array_length a)`.
+  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
+  `0 <= j0` /\ `j0 < (array_length p)`.
 Proof.
 Intuition.
+Discriminate H16.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2604-2648 *)
@@ -719,24 +732,26 @@ Lemma kmp_po_7 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test7: (access a i0) = (access p j0))
   (i1: Z)
   (Post1: i1 = `i0 + 1`)
@@ -747,14 +762,14 @@ Lemma kmp_po_7 :
   ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
   (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)).
 Proof.
-Intuition Discriminate H14 Orelse Auto with *.
+Intuition Discriminate H18 Orelse Auto with *.
 Subst j1 i1.
   Apply match_right_extension.
   Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
   Omega'. Omega'.
   Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
   Replace `i0+1-(j0+1)` with `i0-j0`. 
-  Apply (H12 k); Assumption Orelse Omega'.
+  Apply (H16 k); Assumption Orelse Omega'.
   Omega'.
   Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
@@ -764,24 +779,26 @@ Lemma kmp_po_8 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test6: ~(access a i0) = (access p j0))
   (Test5: `j0 = 0`)
   (i1: Z)
@@ -791,12 +808,12 @@ Lemma kmp_po_8 :
   ((k:Z) (`0 <= k` /\ `k < i1 - j0` -> ~(match a k p `0` M)))) /\
   (lexZ (pairZ `N - i1` j0) (pairZ `N - i0` j0)).
 Proof.
-Intuition Discriminate H14 Orelse Auto with *.
+Intuition Discriminate H18 Orelse Auto with *.
   Subst j0.
   Apply match_empty. Omega'. Omega'.
   Elim (Z_le_lt_eq_dec k `i0-j0`).
-  Intro. Apply (H12 k); Assumption Orelse Omega'.
-  Intro. Generalize H15. Apply match_contradiction_at_first. Omega'.
+  Intro. Apply (H16 k); Assumption Orelse Omega'.
+  Intro. Generalize H19. Apply match_contradiction_at_first. Omega'.
   Rewrite b. Subst j0. Ring `i0-0`. Assumption.
   Omega'.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
@@ -807,30 +824,31 @@ Lemma kmp_po_9 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test6: ~(access a i0) = (access p j0))
   (Test4: `j0 <> 0`)
   `0 <= j0` /\ `j0 < (array_length next0)`.
 Proof.
 Intuition.
-Discriminate H14.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2692-2705 *)
@@ -838,27 +856,29 @@ Lemma kmp_po_10 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
+  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
   (Test6: ~(access a i0) = (access p j0))
   (Test4: `j0 <> 0`)
-  (Pre6: `0 <= j0` /\ `j0 < (array_length next0)`)
+  (Pre10: `0 <= j0` /\ `j0 < (array_length next0)`)
   (j1: Z)
   (Post4: j1 = (access next0 j0))
   ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i0` /\ `i0 <= N`) /\
@@ -880,14 +900,14 @@ Intuition (Assert `j0<>0`; Auto with *).
   (* ~(match a k p `0` M) *)
   Elim (Z_lt_ge_dec k `i0-j0`); Intro Hck.
   (* k < i0-j0 *)
-  Apply (H14 k); Assumption Orelse Omega'.
+  Apply (H18 k); Assumption Orelse Omega'.
   Elim (Z_ge_lt_dec `i0-j0` k); Intro Hck'.
   (* k = i0-j0 *)
-  Generalize H17. Replace k with `i0-j0`.
+  Generalize H21. Replace k with `i0-j0`.
   Apply match_contradiction_at_i with i := j0.
   Omega'. Omega'. Ring `i0-j0+j0`. Ring `0+j0`. Assumption. Omega'. 
   (* i0-j0 < k *)
-  Generalize H17. Rewrite <- H.
+  Generalize H21. Rewrite <- H.
   Apply next_is_maximal with i := i0 j := j0 n := #next0[j0]. 
   Omega'. Omega'. Omega'.
   Assumption.
@@ -895,8 +915,8 @@ Intuition (Assert `j0<>0`; Auto with *).
   Unfold lexZ lex Zwf pairZ. 
   Elim (H5 j0). Intros.
   Right. Omega'. Omega'.
-Discriminate H16.
-Discriminate H16.
+Discriminate H20.
+Discriminate H20.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2338-2714 *)
@@ -904,20 +924,20 @@ Lemma kmp_po_11 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
-  (Pre7: Variant1 = (pairZ `N - i0` j0))
+  (Pre13: Variant1 = (pairZ `N - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
@@ -930,9 +950,7 @@ Lemma kmp_po_11 :
          (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
   (lexZ (pairZ `N - i1` j1) Variant1).
 Proof.
-Intuition.
-Rewrite Pre7; Assumption.
-Rewrite Pre7; Assumption.
+Intuition; Rewrite Pre13; Assumption.
 Save.
 
 Definition first_occur :=
@@ -946,13 +964,13 @@ Lemma kmp_po_12 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
@@ -973,13 +991,13 @@ Lemma kmp_po_13 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
@@ -1008,13 +1026,13 @@ Lemma kmp_po_14 :
   (a: (array A))
   (next: (array Z))
   (p: (array A))
-  (Pre9: `(array_length p) = M` /\ `(array_length next) = M` /\
-         `(array_length a) = N`)
+  (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
+          `(array_length a) = N`)
   (result: Z)
   (Post8: result = `0`)
   (result0: Z)
   (Post7: result0 = `0`)
-  (Pre8: `(array_length p) = M` /\ `(array_length next) = M`)
+  (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))

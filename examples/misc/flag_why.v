@@ -24,7 +24,7 @@ Definition monochrome [t:(array color); i,j:Z; c:color] : Prop :=
 (* Why obligation from file "flag.mlw", characters 721-726 *)
 Lemma dutch_flag_po_1 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -36,8 +36,8 @@ Lemma dutch_flag_po_1 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
@@ -49,7 +49,7 @@ Save.
 (* Why obligation from file "flag.mlw", characters 754-759 *)
 Lemma dutch_flag_po_2 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -61,21 +61,22 @@ Lemma dutch_flag_po_2 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test5: (access t0 i0) = blue)
   `0 <= b0` /\ `b0 < (array_length t0)`.
 Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "flag.mlw", characters 778-783 *)
+(* Why obligation from file "flag.mlw", characters 785-795 *)
 Lemma dutch_flag_po_3 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -87,47 +88,18 @@ Lemma dutch_flag_po_3 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test5: (access t0 i0) = blue)
-  (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
+  (Pre14: `0 <= b0` /\ `b0 < (array_length t0)`)
   (u: color)
   (Post3: u = (access t0 b0))
-  (Pre9: `0 <= b0` /\ `b0 < (array_length t0)`)
-  `0 <= i0` /\ `i0 < (array_length t0)`.
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "flag.mlw", characters 785-795 *)
-Lemma dutch_flag_po_4 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test5: (access t0 i0) = blue)
-  (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
-  (u: color)
-  (Post3: u = (access t0 b0))
-  (Pre9: `0 <= b0` /\ `b0 < (array_length t0)`)
-  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Pre12: `0 <= b0` /\ `b0 < (array_length t0)`)
+  (Pre13: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array color))
   (Post1: t1 = (store t0 b0 (access t0 i0)))
   `0 <= i0` /\ `i0 < (array_length t1)`.
@@ -137,9 +109,9 @@ ArraySubst t1.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 763-799 *)
-Lemma dutch_flag_po_5 : 
+Lemma dutch_flag_po_4 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -151,20 +123,21 @@ Lemma dutch_flag_po_5 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test5: (access t0 i0) = blue)
-  (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
+  (Pre14: `0 <= b0` /\ `b0 < (array_length t0)`)
   (u: color)
   (Post3: u = (access t0 b0))
-  (Pre9: `0 <= b0` /\ `b0 < (array_length t0)`)
-  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Pre12: `0 <= b0` /\ `b0 < (array_length t0)`)
+  (Pre13: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array color))
   (Post1: t1 = (store t0 b0 (access t0 i0)))
-  (Pre8: `0 <= i0` /\ `i0 < (array_length t1)`)
+  (Pre11: `0 <= i0` /\ `i0 < (array_length t1)`)
   (t2: (array color))
   (Post2: t2 = (store t1 i0 u))
   ((b:Z)
@@ -191,48 +164,22 @@ Assumption.
 Subst t1; Simpl; Auto.
 Assert h:`k = i0` \/ `k < i0`. Omega. Intuition.
 Subst t2 k; AccessSame.
-Subst u; Apply H5; Omega.
-Subst t2; AccessOther.
-AccessOther.
-Apply H5; Omega.
-Subst t1; Simpl; Auto.
+Subst u; Apply H7; Omega.
 Subst t2; AccessOther.
 AccessOther.
 Apply H7; Omega.
 Subst t1; Simpl; Auto.
+Subst t2; AccessOther.
+AccessOther.
+Apply H9; Omega.
+Subst t1; Simpl; Auto.
 Subst t2; Simpl; Auto.
 Save.
 
-(* Why obligation from file "flag.mlw", characters 867-872 *)
-Lemma dutch_flag_po_6 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test4: ~((access t0 i0) = blue))
-  `0 <= i0` /\ `i0 < (array_length t0)`.
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "flag.mlw", characters 886-897 *)
-Lemma dutch_flag_po_7 : 
+Lemma dutch_flag_po_5 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -244,12 +191,14 @@ Lemma dutch_flag_po_7 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test4: ~((access t0 i0) = blue))
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test3: (access t0 i0) = white)
   (i1: Z)
   (Post6: i1 = `i0 + 1`)
@@ -264,9 +213,9 @@ Subst k; Assumption.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 949-954 *)
-Lemma dutch_flag_po_8 : 
+Lemma dutch_flag_po_6 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -278,12 +227,14 @@ Lemma dutch_flag_po_8 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test4: ~((access t0 i0) = blue))
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test2: ~((access t0 i0) = white))
   (r1: Z)
   (Post7: r1 = `r0 - 1`)
@@ -292,43 +243,10 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "flag.mlw", characters 973-978 *)
-Lemma dutch_flag_po_9 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test4: ~((access t0 i0) = blue))
-  (Test2: ~((access t0 i0) = white))
-  (r1: Z)
-  (Post7: r1 = `r0 - 1`)
-  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
-  (u: color)
-  (Post10: u = (access t0 r1))
-  (Pre5: `0 <= r1` /\ `r1 < (array_length t0)`)
-  `0 <= i0` /\ `i0 < (array_length t0)`.
-Proof.
-Unfold monochrome; Intuition.
-Save.
-
 (* Why obligation from file "flag.mlw", characters 980-990 *)
-Lemma dutch_flag_po_10 : 
+Lemma dutch_flag_po_7 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -340,34 +258,36 @@ Lemma dutch_flag_po_10 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test4: ~((access t0 i0) = blue))
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test2: ~((access t0 i0) = white))
   (r1: Z)
   (Post7: r1 = `r0 - 1`)
-  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
+  (Pre9: `0 <= r1` /\ `r1 < (array_length t0)`)
   (u: color)
   (Post10: u = (access t0 r1))
-  (Pre5: `0 <= r1` /\ `r1 < (array_length t0)`)
-  (Pre6: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
+  (Pre8: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array color))
   (Post8: t1 = (store t0 r1 (access t0 i0)))
   `0 <= i0` /\ `i0 < (array_length t1)`.
 Proof.
-Intuition
+Unfold monochrome; Intuition
   (Try Subst result; Try Subst result0; Try Subst result1;
   Try Omega).
 ArraySubst t1.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 958-994 *)
-Lemma dutch_flag_po_11 : 
+Lemma dutch_flag_po_8 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -379,23 +299,25 @@ Lemma dutch_flag_po_11 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test6: `i0 < r0`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test4: ~((access t0 i0) = blue))
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
   (Test2: ~((access t0 i0) = white))
   (r1: Z)
   (Post7: r1 = `r0 - 1`)
-  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
+  (Pre9: `0 <= r1` /\ `r1 < (array_length t0)`)
   (u: color)
   (Post10: u = (access t0 r1))
-  (Pre5: `0 <= r1` /\ `r1 < (array_length t0)`)
-  (Pre6: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
+  (Pre8: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array color))
   (Post8: t1 = (store t0 r1 (access t0 i0)))
-  (Pre4: `0 <= i0` /\ `i0 < (array_length t1)`)
+  (Pre6: `0 <= i0` /\ `i0 < (array_length t1)`)
   (t2: (array color))
   (Post9: t2 = (store t1 i0 u))
   ((`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r1` /\ `r1 <= N`) /\
@@ -407,24 +329,24 @@ Unfold monochrome Zwf; Intuition Try Omega.
 Subst t2 t1; Do 2 AccessOther.
 Apply H; Omega.
 Subst t2 t1; Do 2 AccessOther. 
-Apply H3; Omega.
+Apply H7; Omega.
 Assert h:`k = r1` \/ `r1 < k`. Omega. Intuition.
 Assert h':`k = i0` \/ `i0 < k`. Omega. Intuition.
-Generalize H15; Clear H15; 
-  Subst t2 t1 k; AccessSame; Intro H15.
-Subst u; Rewrite <- H15; Subst r1.
+Generalize H19; Clear H19; 
+  Subst t2 t1 k; AccessSame; Intro H19.
+Subst u; Rewrite <- H19; Subst r1.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
 Subst t2 t1 k; AccessOther.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
 Subst t2 t1; Do 2 AccessOther.
-Apply H5; Omega.
+Apply H9; Omega.
 Subst t2 t1; Simpl; Trivial.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 473-1103 *)
-Lemma dutch_flag_po_12 : 
+Lemma dutch_flag_po_9 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)
@@ -436,8 +358,8 @@ Lemma dutch_flag_po_12 :
   (i0: Z)
   (r0: Z)
   (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+  (Pre17: Variant1 = `r0 - i0`)
+  (Pre16: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
           (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
           (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
   (Test1: `i0 >= r0`)
@@ -449,9 +371,9 @@ Replace r0 with i0. Trivial. Omega.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 513-680 *)
-Lemma dutch_flag_po_13 : 
+Lemma dutch_flag_po_10 : 
   (t: (array color))
-  (Pre14: `(array_length t) = N`)
+  (Pre18: `(array_length t) = N`)
   (result: Z)
   (Post13: result = `0`)
   (result0: Z)

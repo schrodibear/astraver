@@ -327,7 +327,7 @@ Save.
 Lemma fib4_po_1 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test4: `n <= 1`)
   `1 = (F n)`.
 Proof.
@@ -340,7 +340,7 @@ Save.
 Lemma fib4_po_2 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
   `0 <= 0` /\ `0 < (array_length t)`.
 Proof.
@@ -351,9 +351,9 @@ Save.
 Lemma fib4_po_3 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
-  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
   `0 <= 1` /\ `1 < (array_length t0)`.
@@ -365,12 +365,12 @@ Save.
 Lemma fib4_po_4 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
-  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
-  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -378,8 +378,8 @@ Lemma fib4_po_4 :
   (Variant1: Z)
   (k0: Z)
   (t2: (array Z))
-  (Pre4: Variant1 = `n + 1 - k0`)
-  (Pre3: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre6: Variant1 = `n + 1 - k0`)
+  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
          ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
   (Test2: `k0 <= n`)
@@ -388,16 +388,16 @@ Proof.
 Simpl; Intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1450-1695 *)
+(* Why obligation from file "fib.mlw", characters 1656-1665 *)
 Lemma fib4_po_5 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
-  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
-  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -405,12 +405,71 @@ Lemma fib4_po_5 :
   (Variant1: Z)
   (k0: Z)
   (t2: (array Z))
-  (Pre4: Variant1 = `n + 1 - k0`)
-  (Pre3: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre6: Variant1 = `n + 1 - k0`)
+  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
          ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
   (Test2: `k0 <= n`)
   (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
+  `0 <= k0 - 2` /\ `k0 - 2 < (array_length t2)`.
+Proof.
+Intuition.
+Save.
+
+(* Why obligation from file "fib.mlw", characters 1644-1653 *)
+Lemma fib4_po_6 : 
+  (n: Z)
+  (t: (array Z))
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
+  (Test3: `n > 1`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
+  (t0: (array Z))
+  (Post1: t0 = (store t `0` `1`))
+  (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
+  (t1: (array Z))
+  (Post2: t1 = (store t0 `1` `1`))
+  (result2: Z)
+  (Post6: result2 = `2`)
+  (Variant1: Z)
+  (k0: Z)
+  (t2: (array Z))
+  (Pre6: Variant1 = `n + 1 - k0`)
+  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+         `(array_length t2) = (array_length t)` /\
+         ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
+  (Test2: `k0 <= n`)
+  (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
+  (Pre3: `0 <= k0 - 2` /\ `k0 - 2 < (array_length t2)`)
+  `0 <= k0 - 1` /\ `k0 - 1 < (array_length t2)`.
+Proof.
+Intuition.
+Save.
+
+(* Why obligation from file "fib.mlw", characters 1450-1695 *)
+Lemma fib4_po_7 : 
+  (n: Z)
+  (t: (array Z))
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
+  (Test3: `n > 1`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
+  (t0: (array Z))
+  (Post1: t0 = (store t `0` `1`))
+  (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
+  (t1: (array Z))
+  (Post2: t1 = (store t0 `1` `1`))
+  (result2: Z)
+  (Post6: result2 = `2`)
+  (Variant1: Z)
+  (k0: Z)
+  (t2: (array Z))
+  (Pre6: Variant1 = `n + 1 - k0`)
+  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+         `(array_length t2) = (array_length t)` /\
+         ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
+  (Test2: `k0 <= n`)
+  (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
+  (Pre3: `0 <= k0 - 2` /\ `k0 - 2 < (array_length t2)`)
+  (Pre4: `0 <= k0 - 1` /\ `k0 - 1 < (array_length t2)`)
   (t3: (array Z))
   (Post3: t3 = (store t2 k0 `(access t2 k0 - 1) + (access t2 k0 - 2)`))
   (k1: Z)
@@ -425,8 +484,8 @@ Subst t3.
 Assert hi : `i=k0` \/ `i<k0`. Omega.
 Intuition.
 Subst i.  AccessSame.
-Rewrite (H11 `k0-1`). 
-Rewrite (H11 `k0-2`). 
+Rewrite (H15 `k0-1`). 
+Rewrite (H15 `k0-2`). 
 Symmetry; Auto with *.
 Omega.
 Omega.
@@ -435,16 +494,17 @@ Auto.
 Unfold Zwf; Omega.
 Save.
 
+
 (* Why obligation from file "fib.mlw", characters 1486-1598 *)
-Lemma fib4_po_6 : 
+Lemma fib4_po_8 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
-  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
-  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -462,15 +522,15 @@ Subst i t1; AccessSame. Auto.
 Save.
 
 (* Why obligation from file "fib.mlw", characters 1428-1695 *)
-Lemma fib4_po_7 : 
+Lemma fib4_po_9 : 
   (n: Z)
   (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
+  (Pre10: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
-  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
+  (Pre9: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
-  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -485,5 +545,4 @@ Lemma fib4_po_7 :
 Proof.
 Intuition.
 Save.
-
 

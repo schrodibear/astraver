@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.79 2003-03-25 16:56:33 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.80 2003-03-28 16:16:48 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -113,6 +113,7 @@ let type_c_subst_oldify env x t k =
 let effect p = p.info.kappa.c_effect
 let obligations p = p.info.obligations
 let pre p = p.info.kappa.c_pre
+let preo p = pre p @ obligations p
 let post p = p.info.kappa.c_post
 let result_type p = p.info.kappa.c_result_type
 let result_name p = p.kappa.c_result_name
@@ -412,7 +413,7 @@ let print_logic_type fmt lt =
 
 let rec print_prog fmt p = 
   let k = p.info.kappa in
-  if k.c_pre = [] && k.c_post = None then
+  if k.c_pre = [] && p.info.obligations = [] && k.c_post = None then
     fprintf fmt "@[%s:@,%a@]" p.info.label print_desc p.desc
   else
   fprintf fmt "@[<hv>[%d-%d]%s:@,@[{%a;%a}@]@ @[%a@]@ @[{%a}@]@]" 

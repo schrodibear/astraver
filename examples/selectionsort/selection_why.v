@@ -5,17 +5,17 @@ Require Why.
 Require Omega.
 
 
-(* Why obligation from file "selection.mlw", characters 812-819 *)
+(* Why obligation from file "selection.mlw", characters 804-809 *)
 Lemma selection_po_1 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -30,28 +30,28 @@ Lemma selection_po_1 :
   (Variant3: Z)
   (j0: Z)
   (min0: Z)
-  (Pre6: Variant3 = `(array_length t0) - j0`)
-  (Pre5: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-         `min0 < (array_length t0)`) /\
-         ((k:Z)
-          (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
+  (Pre12: Variant3 = `(array_length t0) - j0`)
+  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
+          `min0 < (array_length t0)`) /\
+          ((k:Z)
+           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
   (Test5: `j0 < (array_length t0)`)
-  `0 <= min0` /\ `min0 < (array_length t0)`.
+  `0 <= j0` /\ `j0 < (array_length t0)`.
 Proof.
 Auto with *.
 Save.
 
-(* Why obligation from file "selection.mlw", characters 804-809 *)
+(* Why obligation from file "selection.mlw", characters 812-819 *)
 Lemma selection_po_2 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -66,14 +66,14 @@ Lemma selection_po_2 :
   (Variant3: Z)
   (j0: Z)
   (min0: Z)
-  (Pre6: Variant3 = `(array_length t0) - j0`)
-  (Pre5: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-         `min0 < (array_length t0)`) /\
-         ((k:Z)
-          (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
+  (Pre12: Variant3 = `(array_length t0) - j0`)
+  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
+          `min0 < (array_length t0)`) /\
+          ((k:Z)
+           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
   (Test5: `j0 < (array_length t0)`)
-  (Pre4: `0 <= min0` /\ `min0 < (array_length t0)`)
-  `0 <= j0` /\ `j0 < (array_length t0)`.
+  (Pre9: `0 <= j0` /\ `j0 < (array_length t0)`)
+  `0 <= min0` /\ `min0 < (array_length t0)`.
 Proof.
 Intuition.
 Save.
@@ -81,14 +81,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 825-834 *)
 Lemma selection_po_3 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -103,12 +103,14 @@ Lemma selection_po_3 :
   (Variant3: Z)
   (j0: Z)
   (min0: Z)
-  (Pre6: Variant3 = `(array_length t0) - j0`)
-  (Pre5: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-         `min0 < (array_length t0)`) /\
-         ((k:Z)
-          (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
+  (Pre12: Variant3 = `(array_length t0) - j0`)
+  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
+          `min0 < (array_length t0)`) /\
+          ((k:Z)
+           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
   (Test5: `j0 < (array_length t0)`)
+  (Pre9: `0 <= j0` /\ `j0 < (array_length t0)`)
+  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
   (Test4: `(access t0 j0) < (access t0 min0)`)
   (min1: Z)
   (Post1: min1 = j0)
@@ -122,7 +124,7 @@ Intuition.
 Assert h: `k<j0` \/ `k=j0`. Omega. Intuition.
 Apply Zle_trans with (access t0 min0).
 Subst min1; Omega.
-Apply H8; Omega.
+Apply H12; Omega.
 Subst min1 k; Omega.
 Unfold Zwf; Omega.
 Save.
@@ -130,14 +132,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 801-834 *)
 Lemma selection_po_4 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -152,12 +154,14 @@ Lemma selection_po_4 :
   (Variant3: Z)
   (j0: Z)
   (min0: Z)
-  (Pre6: Variant3 = `(array_length t0) - j0`)
-  (Pre5: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-         `min0 < (array_length t0)`) /\
-         ((k:Z)
-          (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
+  (Pre12: Variant3 = `(array_length t0) - j0`)
+  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
+          `min0 < (array_length t0)`) /\
+          ((k:Z)
+           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
   (Test5: `j0 < (array_length t0)`)
+  (Pre9: `0 <= j0` /\ `j0 < (array_length t0)`)
+  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
   (Test3: `(access t0 j0) >= (access t0 min0)`)
   ((j:Z)
    (j = `j0 + 1` -> ((`i0 + 1 <= j` /\ `j <= (array_length t0)`) /\
@@ -174,14 +178,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 619-755 *)
 Lemma selection_po_5 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -206,14 +210,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 898-905 *)
 Lemma selection_po_6 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -240,14 +244,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 926-931 *)
 Lemma selection_po_7 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -266,10 +270,10 @@ Lemma selection_po_7 :
           ((k:Z)
            (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
           `j0 >= (array_length t0)`)
-  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
+  (Pre16: `0 <= min0` /\ `min0 < (array_length t0)`)
   (w: Z)
   (Post6: w = (access t0 min0))
-  (Pre8: `0 <= min0` /\ `min0 < (array_length t0)`)
+  (Pre14: `0 <= min0` /\ `min0 < (array_length t0)`)
   `0 <= i0` /\ `i0 < (array_length t0)`.
 Proof.
 Intuition.
@@ -278,14 +282,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 933-943 *)
 Lemma selection_po_8 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -304,11 +308,11 @@ Lemma selection_po_8 :
           ((k:Z)
            (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
           `j0 >= (array_length t0)`)
-  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
+  (Pre16: `0 <= min0` /\ `min0 < (array_length t0)`)
   (w: Z)
   (Post6: w = (access t0 min0))
-  (Pre8: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (Pre9: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Pre14: `0 <= min0` /\ `min0 < (array_length t0)`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array Z))
   (Post4: t1 = (store t0 min0 (access t0 i0)))
   `0 <= i0` /\ `i0 < (array_length t1)`.
@@ -320,14 +324,14 @@ Save.
 (* Why obligation from file "selection.mlw", characters 909-947 *)
 Lemma selection_po_9 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (Variant1: Z)
   (i0: Z)
   (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
+  (Pre18: Variant1 = `(array_length t0) - i0`)
+  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
           ((k:Z)
            (`0 <= k` /\ `k < i0` ->
@@ -346,14 +350,14 @@ Lemma selection_po_9 :
           ((k:Z)
            (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
           `j0 >= (array_length t0)`)
-  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
+  (Pre16: `0 <= min0` /\ `min0 < (array_length t0)`)
   (w: Z)
   (Post6: w = (access t0 min0))
-  (Pre8: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (Pre9: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Pre14: `0 <= min0` /\ `min0 < (array_length t0)`)
+  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array Z))
   (Post4: t1 = (store t0 min0 (access t0 i0)))
-  (Pre7: `0 <= i0` /\ `i0 < (array_length t1)`)
+  (Pre13: `0 <= i0` /\ `i0 < (array_length t1)`)
   (t2: (array Z))
   (Post5: t2 = (store t1 i0 w))
   ((i:Z)
@@ -419,7 +423,7 @@ Save.
 (* Why obligation from file "selection.mlw", characters 232-424 *)
 Lemma selection_po_10 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (`0 <= result` /\ `result <= (array_length t) - 1`) /\
@@ -437,7 +441,7 @@ Save.
 (* Why obligation from file "selection.mlw", characters 120-985 *)
 Lemma selection_po_11 : 
   (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
+  (Pre19: `(array_length t) >= 1`)
   (result: Z)
   (Post11: result = `0`)
   (i0: Z)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.37 2003-03-20 14:20:25 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.38 2003-03-28 16:16:48 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -57,6 +57,7 @@ val decomp_boolean : postcondition -> predicate * predicate
 val effect : typed_program -> Effect.t
 val obligations : typed_program -> assertion list
 val pre : typed_program -> precondition list
+val preo : typed_program -> assertion list
 val post : typed_program -> postcondition option
 val result_type : typed_program -> type_v
 val result_name : typing_info -> Ident.t

@@ -132,13 +132,26 @@ Replace x0 with `1`; Omega.
 Save.
 
 
-(* Why obligation from file "good-c/all.c", characters 821-824 *)
+(* Why obligation from file "good-c/all.c", characters 813-817 *)
 Lemma t4_po_1 : 
   (t: (array Z))
   (x: Z)
-  (Pre2: `(array_length t) = 10` /\ `x = 2` /\ `(access t 2) = 3`)
+  (Pre3: `(array_length t) = 10` /\ `x = 2` /\ `(access t 2) = 3`)
   (c_aux_4: Z)
   (Post3: c_aux_4 = x)
+  `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)`.
+Proof.
+Intuition.
+Save.
+
+(* Why obligation from file "good-c/all.c", characters 821-824 *)
+Lemma t4_po_2 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre3: `(array_length t) = 10` /\ `x = 2` /\ `(access t 2) = 3`)
+  (c_aux_4: Z)
+  (Post3: c_aux_4 = x)
+  (Pre2: `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)`)
   (c_aux_3: Z)
   (Post2: c_aux_3 = x)
   (x0: Z)
@@ -151,7 +164,6 @@ Intuition.
 Subst x c_aux_3 c_aux_4.
 AccessSame.
 Save.
-
 
 (* Why obligation from file "good-c/all.c", characters 913-916 *)
 Lemma e1_po_1 : 

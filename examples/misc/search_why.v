@@ -11,8 +11,8 @@ Lemma search1_po_1 :
   (Post3: result = `0`)
   (Variant1: Z)
   (i0: Z)
-  (Pre4: Variant1 = `(array_length t) - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
+  (Pre8: Variant1 = `(array_length t) - i0`)
+  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
   (Test4: `i0 < (array_length t)`)
   `0 <= i0` /\ `i0 < (array_length t)`.
 Proof.
@@ -26,9 +26,10 @@ Lemma search1_po_2 :
   (Post3: result = `0`)
   (Variant1: Z)
   (i0: Z)
-  (Pre4: Variant1 = `(array_length t) - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
+  (Pre8: Variant1 = `(array_length t) - i0`)
+  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
   (Test4: `i0 < (array_length t)`)
+  (Pre6: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test2: `(access t i0) <> 0`)
   ((i:Z)
    (i = `i0 + 1` -> (`0 <= i` /\
@@ -75,8 +76,8 @@ Lemma search2_po_1 :
   (Post3: result = `0`)
   (Variant1: Z)
   (i0: Z)
-  (Pre4: Variant1 = `(array_length t) - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
+  (Pre8: Variant1 = `(array_length t) - i0`)
+  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
   (Test4: `i0 < (array_length t)`)
   `0 <= i0` /\ `i0 < (array_length t)`.
 Proof.
@@ -90,9 +91,10 @@ Lemma search2_po_2 :
   (Post3: result = `0`)
   (Variant1: Z)
   (i0: Z)
-  (Pre4: Variant1 = `(array_length t) - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
+  (Pre8: Variant1 = `(array_length t) - i0`)
+  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
   (Test4: `i0 < (array_length t)`)
+  (Pre6: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test2: `(access t i0) <> 0`)
   ((i:Z)
    (i = `i0 + 1` -> (`0 <= i` /\
@@ -135,7 +137,7 @@ Save.
 (* Why obligation from file "search.mlw", characters 1510-1524 *)
 Lemma search3_po_1 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
   `0 <= 0` /\ `0 <= (array_length t)`.
 Proof.
 Intros; Omega.
@@ -144,14 +146,14 @@ Save.
 (* Why obligation from file "search.mlw", characters 1321-1342 *)
 Lemma search3_po_2 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre10: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre11: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
+  (Pre16: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre14: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre15: `0 <= 0` /\ `0 <= (array_length t)`)
   (Variant1: Z)
   (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ `i0 <= (array_length t)`)
+  (Pre12: Variant1 = `(array_length t) - i0`)
+  (Pre11: `0 <= i0` /\ `i0 <= (array_length t)`)
   (Test4: `i0 = (array_length t)`)
   ((k:Z) (`i0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
 Proof.
@@ -161,14 +163,14 @@ Save.
 (* Why obligation from file "search.mlw", characters 1357-1361 *)
 Lemma search3_po_3 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre10: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre11: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
+  (Pre16: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre14: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre15: `0 <= 0` /\ `0 <= (array_length t)`)
   (Variant1: Z)
   (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ `i0 <= (array_length t)`)
+  (Pre12: Variant1 = `(array_length t) - i0`)
+  (Pre11: `0 <= i0` /\ `i0 <= (array_length t)`)
   (Test3: `i0 <> (array_length t)`)
   `0 <= i0` /\ `i0 < (array_length t)`.
 Proof.
@@ -178,15 +180,16 @@ Save.
 (* Why obligation from file "search.mlw", characters 1384-1404 *)
 Lemma search3_po_4 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre10: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre11: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
+  (Pre16: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre14: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre15: `0 <= 0` /\ `0 <= (array_length t)`)
   (Variant1: Z)
   (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ `i0 <= (array_length t)`)
+  (Pre12: Variant1 = `(array_length t) - i0`)
+  (Pre11: `0 <= i0` /\ `i0 <= (array_length t)`)
   (Test3: `i0 <> (array_length t)`)
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test1: `(access t i0) <> 0`)
   `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`.
 Proof.
@@ -196,19 +199,20 @@ Save.
 (* Why obligation from file "search.mlw", characters 1256-1501 *)
 Lemma search3_po_5 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre10: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre11: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
+  (Pre16: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre14: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre15: `0 <= 0` /\ `0 <= (array_length t)`)
   (Variant1: Z)
   (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ `i0 <= (array_length t)`)
+  (Pre12: Variant1 = `(array_length t) - i0`)
+  (Pre11: `0 <= i0` /\ `i0 <= (array_length t)`)
   (Test3: `i0 <> (array_length t)`)
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test1: `(access t i0) <> 0`)
-  (Pre6: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
-  (Pre4: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
-  (Pre5: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
+  (Pre9: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
+  (Pre7: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
+  (Pre8: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
   (Zwf `0` `(array_length t) - (i0 + 1)` Variant1).
 Proof.
 Unfold Zwf; Intuition.
@@ -217,17 +221,18 @@ Save.
 (* Why obligation from file "search.mlw", characters 1384-1404 *)
 Lemma search3_po_6 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre10: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Pre11: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
+  (Pre16: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre14: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre15: `0 <= 0` /\ `0 <= (array_length t)`)
   (Variant1: Z)
   (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ `i0 <= (array_length t)`)
+  (Pre12: Variant1 = `(array_length t) - i0`)
+  (Pre11: `0 <= i0` /\ `i0 <= (array_length t)`)
   (Test3: `i0 <> (array_length t)`)
+  (Pre10: `0 <= i0` /\ `i0 < (array_length t)`)
   (Test1: `(access t i0) <> 0`)
-  (Pre6: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
+  (Pre9: `0 <= i0 + 1` /\ `i0 + 1 <= (array_length t)`)
   (Post11: ((k:Z)
             (`i0 + 1 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)))
   ((k:Z) (`i0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
@@ -241,8 +246,8 @@ Save.
 (* Why obligation from file "search.mlw", characters 1156-1615 *)
 Lemma search3_po_7 : 
   (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
+  (Pre17: `0 <= (array_length t)`)
+  (Pre16: `0 <= 0` /\ `0 <= (array_length t)`)
   (Post23: ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)))
   ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
 Proof.

@@ -130,8 +130,8 @@ Save.
 (* Why obligation from file "bsearch.mlw", characters 563-580 *)
 Lemma binary_search_po_1 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -142,11 +142,11 @@ Lemma binary_search_po_1 :
   (l1: Z)
   (p1: Z)
   (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
-         `p1 <= (array_length t) - 1`) /\
-         ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
+  (Pre14: Variant1 = `2 + u1 - l1`)
+  (Pre13: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
+          `p1 <= (array_length t) - 1`) /\
+          ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
+          ((`p1 > 0` -> `(access t p1) = v`)))
   (Test6: `l1 <= u1`)
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
@@ -160,8 +160,8 @@ Save.
 (* Why obligation from file "bsearch.mlw", characters 593-598 *)
 Lemma binary_search_po_2 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -172,15 +172,15 @@ Lemma binary_search_po_2 :
   (l1: Z)
   (p1: Z)
   (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
-         `p1 <= (array_length t) - 1`) /\
-         ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
+  (Pre14: Variant1 = `2 + u1 - l1`)
+  (Pre13: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
+          `p1 <= (array_length t) - 1`) /\
+          ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
+          ((`p1 > 0` -> `(access t p1) = v`)))
   (Test6: `l1 <= u1`)
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre12: `l1 <= m1` /\ `m1 <= u1`)
   `0 <= m1` /\ `m1 < (array_length t)`.
 Proof.
 Intros.
@@ -190,8 +190,8 @@ Save.
 (* Why obligation from file "bsearch.mlw", characters 616-627 *)
 Lemma binary_search_po_3 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -202,15 +202,16 @@ Lemma binary_search_po_3 :
   (l1: Z)
   (p1: Z)
   (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
-         `p1 <= (array_length t) - 1`) /\
-         ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
+  (Pre14: Variant1 = `2 + u1 - l1`)
+  (Pre13: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
+          `p1 <= (array_length t) - 1`) /\
+          ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
+          ((`p1 > 0` -> `(access t p1) = v`)))
   (Test6: `l1 <= u1`)
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre12: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre11: `0 <= m1` /\ `m1 < (array_length t)`)
   (Test5: `(access t m1) < v`)
   (l2: Z)
   (Post5: l2 = `m1 + 1`)
@@ -226,11 +227,11 @@ Subst l2 m1.
 Intros; Apply In_right_side; Assumption Orelse Intuition.
 Save.
 
-(* Why obligation from file "bsearch.mlw", characters 642-647 *)
+(* Why obligation from file "bsearch.mlw", characters 665-676 *)
 Lemma binary_search_po_4 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -241,49 +242,18 @@ Lemma binary_search_po_4 :
   (l1: Z)
   (p1: Z)
   (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
-         `p1 <= (array_length t) - 1`) /\
-         ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
+  (Pre14: Variant1 = `2 + u1 - l1`)
+  (Pre13: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
+          `p1 <= (array_length t) - 1`) /\
+          ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
+          ((`p1 > 0` -> `(access t p1) = v`)))
   (Test6: `l1 <= u1`)
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre12: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre11: `0 <= m1` /\ `m1 < (array_length t)`)
   (Test4: `(access t m1) >= v`)
-  `0 <= m1` /\ `m1 < (array_length t)`.
-Proof.
-Intros.
-Clear Pre6; Simpl in Test6.
-Simpl in Test4.
-Repeat Split; Try Omega'.
-Save.
-
-(* Why obligation from file "bsearch.mlw", characters 665-676 *)
-Lemma binary_search_po_5 : 
-  (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
-  (l0: Z)
-  (Post1: l0 = `1`)
-  (u0: Z)
-  (Post2: u0 = `(array_length t) - 1`)
-  (p0: Z)
-  (Post3: p0 = `0`)
-  (Variant1: Z)
-  (l1: Z)
-  (p1: Z)
-  (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
-         `p1 <= (array_length t) - 1`) /\
-         ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
-  (Test6: `l1 <= u1`)
-  (m1: Z)
-  (Post4: m1 = (mean l1 u1))
-  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
-  (Test4: `(access t m1) >= v`)
+  (Pre10: `0 <= m1` /\ `m1 < (array_length t)`)
   (Test3: `(access t m1) > v`)
   (u2: Z)
   (Post6: u2 = `m1 - 1`)
@@ -293,20 +263,17 @@ Lemma binary_search_po_5 :
   ((`p1 > 0` -> `(access t p1) = v`))) /\
   (Zwf `0` `2 + u2 - l1` `2 + u1 - l1`).
 Proof.
-Intros.
-Clear Pre6; Simpl in Test6.
-Simpl in Test4.
-Simpl in Test3.
-Repeat Split; Try Omega'.
+Intuition.
 Subst u2 m1.
 Intros; Apply In_left_side; Assumption Orelse Intuition.
+Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "bsearch.mlw", characters 688-747 *)
-Lemma binary_search_po_6 : 
+Lemma binary_search_po_5 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -317,16 +284,18 @@ Lemma binary_search_po_6 :
   (l1: Z)
   (p1: Z)
   (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
-         `p1 <= (array_length t) - 1`) /\
-         ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
+  (Pre14: Variant1 = `2 + u1 - l1`)
+  (Pre13: `1 <= l1` /\ `u1 <= (array_length t) - 1` /\ (`0 <= p1` /\
+          `p1 <= (array_length t) - 1`) /\
+          ((`p1 = 0` -> ((In t `1` `(array_length t) - 1`) -> (In t l1 u1)))) /\
+          ((`p1 > 0` -> `(access t p1) = v`)))
   (Test6: `l1 <= u1`)
   (m1: Z)
   (Post4: m1 = (mean l1 u1))
-  (Pre4: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre12: `l1 <= m1` /\ `m1 <= u1`)
+  (Pre11: `0 <= m1` /\ `m1 < (array_length t)`)
   (Test4: `(access t m1) >= v`)
+  (Pre10: `0 <= m1` /\ `m1 < (array_length t)`)
   (Test2: `(access t m1) <= v`)
   (p2: Z)
   (Post7: p2 = m1)
@@ -338,19 +307,17 @@ Lemma binary_search_po_6 :
   ((`p2 > 0` -> `(access t p2) = v`))) /\
   (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
-Intros.
-Simpl in Test4.
-Simpl in Test2.
-Repeat Split; Try Omega'.
-Intros; Absurd `p2 = 0`; Omega'.
-Intro; Subst p2; Omega'.
+Intuition.
+Absurd `p2 = 0`; Omega'.
+Subst p2; Omega.
+Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "bsearch.mlw", characters 327-498 *)
-Lemma binary_search_po_7 : 
+Lemma binary_search_po_6 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -367,10 +334,10 @@ Subst l0 u0; Assumption.
 Save.
 
 (* Why obligation from file "bsearch.mlw", characters 169-861 *)
-Lemma binary_search_po_8 : 
+Lemma binary_search_po_7 : 
   (t: (array Z))
-  (Pre7: `(array_length t) >= 1` /\
-         (sorted_array t `1` `(array_length t) - 1`))
+  (Pre15: `(array_length t) >= 1` /\
+          (sorted_array t `1` `(array_length t) - 1`))
   (l0: Z)
   (Post1: l0 = `1`)
   (u0: Z)
@@ -387,7 +354,6 @@ Lemma binary_search_po_8 :
   (`1 <= p1` /\ `p1 <= (array_length t) - 1`) /\ `(access t p1) = v` \/
   `p1 = 0` /\ ~(In t `1` `(array_length t) - 1`).
 Proof.
-Intros.
 Intuition.
 Elim (Z_lt_ge_dec `0` p1); Intro.
 Left; Omega'.
