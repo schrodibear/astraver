@@ -2,6 +2,13 @@ Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
 
+version 0.52 (1.52), April 7th, 2004
+====================================
+ o Coq automatic proofs of some `assigns' clauses; updated tutorial
+ o fixed bug with `assigns' clause effects
+ o added support for (global) enum
+ o new example examples-c/sorting/selection.c
+
 version 0.51 (1.51), April 6th, 2004
 ====================================
  o fixed bug with multi-dimensional arrays
