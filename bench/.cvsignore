@@ -12,3 +12,4 @@ test-alltt.tex
 batch.el
 *.bin
 a.*
+ctest.c
