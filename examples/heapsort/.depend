@@ -1,0 +1,5 @@
+swap_why.vo: swap_why.v ../../lib/coq/Why.vo
+heapsort_why.vo: heapsort_why.v ../../lib/coq/Why.vo Heap.vo Inftree.vo
+downheap_why.vo: downheap_why.v ../../lib/coq/Why.vo Heap.vo Inftree.vo
+Inftree.vo: Inftree.v ../../lib/coq/Why.vo Heap.vo
+Heap.vo: Heap.v ../../lib/coq/Why.vo

@@ -1,7 +1,13 @@
 
 parameter x : int ref
-parameter t : array 10 of int
-let p = { x = 0 } t[!x]
+
+let p = 
+  { x >= 0 }
+  while !x > 0 do 
+    { invariant 0 <= x <= x@init  variant x } 
+    x := !x - 1 
+  done 
+  { x = 0 }
 
 (**
 let p9 = (begin x := 1; 1 end + begin x := 2; 1 end) { result = 2 and x = 1 }

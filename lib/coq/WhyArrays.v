@@ -1,10 +1,10 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: WhyArrays.v,v 1.1 2002-03-21 09:49:17 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.2 2002-06-18 12:43:14 filliatr Exp $ *)
 
-(**********************************************)
-(* Functional arrays, for use in Correctness. *)
-(**********************************************)
+(**************************************)
+(* Functional arrays, for use in Why. *)
+(**************************************)
 
 (* This is an axiomatization of arrays.
  *

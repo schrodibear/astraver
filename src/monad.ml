@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.33 2002-06-18 09:28:12 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.34 2002-06-18 12:43:14 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -305,11 +305,12 @@ let wfrec_with_binders bl (phi,r) info f ren =
   let a = TTpure PTint in (* TODO: type variant *)
   let w = wf_name () in
   let k = info'.kappa in
-  let tphi = tt_arrow bl (trad_type_c ren env k) in
+  let ren' = next ren (get_writes k.c_effect) in 
+  let tphi = tt_arrow bl (trad_type_c ren' env k) in
   let vphi0 = variant_name () in
   let tphi0 = 
     let k0 = type_c_subst (subst_onev vphi vphi0) k in 
-    tt_arrow bl (trad_type_c ren env k0) 
+    tt_arrow bl (trad_type_c ren' env k0) 
   in
   let input ren =
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
@@ -333,8 +334,7 @@ let wfrec_with_binders bl (phi,r) info f ren =
       CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
       cc_lam 
 	([vphi, CC_var_binder a; w, CC_var_binder tw] @ bl)
-	(let ren' = next ren (get_writes k.c_effect) in 
-	 abstraction info' (f fw) ren');
+	(abstraction info' (f fw) ren');
       CC_term (apply_term ren env phi)] @
      input ren)
 

@@ -38,7 +38,7 @@ Lemma f91_po_3 :
 Proof.
 Intros n Variant1 n0. Unfold Zwf max.
 Case (Z_le_gt_dec `0` `101-n0`); Intros H Pre2 Test2 result0 Post5;
-Case (Z_le_gt_dec `0` `101-result0`); Intuition; Try Omega.
+Case (Z_le_gt_dec `0` `101-result0`); Intuition Omega.
 Save.
 
 Lemma f91_po_4 : 

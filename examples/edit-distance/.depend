@@ -1,0 +1,2 @@
+words.vo: words.v ../../lib/coq/WhyArrays.vo
+distance_why.vo: distance_why.v ../../lib/coq/Why.vo words.vo

@@ -1,0 +1,1 @@
+sqrt_why.vo: sqrt_why.v ../../lib/coq/Why.vo

@@ -9,3 +9,8 @@ WHY=../../bin/why.static
 
 clean::
 	rm -f *~ *.vo
+
+depend::
+	coqdep -I ../../lib/coq *.v > .depend
+
+include .depend

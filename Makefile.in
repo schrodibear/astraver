@@ -202,9 +202,9 @@ clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f lib/coq/*.vo lib/coq/*~
-	rm -f examples/*/*.vo examples/*/*~
 	rm -f $(GENERATED)
-	cd doc; make clean
+	make -C doc clean
+	make -C examples clean
 
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
@@ -216,5 +216,6 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
 	$(COQDEP) -I lib/coq */*/*.v >> .depend
+	make -C examples depend
 
 include .depend

@@ -1,0 +1,2 @@
+zaux.vo: zaux.v
+bresenham_why.vo: bresenham_why.v zaux.vo ../../lib/coq/Why.vo

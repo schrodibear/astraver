@@ -1,12 +1,11 @@
 
+DIRS = misc binary-search bresenham quicksort edit-distance heapsort sqrt
+
 all: 
-	make -C misc
-	make -C binary-search
-	make -C bresenham
-	make -C quicksort
-	make -C edit-distance
-	make -C heapsort
-	make -C sqrt
+	for d in $(DIRS); do make -C $$d; done
 
 clean::
 	rm -f */*~ */*.vo
+
+depend::
+	for d in $(DIRS); do make -C $$d depend; done
