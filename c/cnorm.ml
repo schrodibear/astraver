@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.13 2005-01-06 14:27:56 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.14 2005-01-06 16:10:31 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -1001,15 +1001,15 @@ let rec tab_struct loc v1 v2 s ty n n1 n2=
 	  fl
       | _ -> assert false
   end in
-  make_and (List.fold_left 
+ (* make_and *)(List.fold_left 
 	      (fun p t -> 
 		 if  compatible_type t.var_type v2.nterm_type 
 		 then make_and p (not_alias loc v2 (in_struct v1 t))
 		 else p)
 	      NPtrue l)
-    (make_forall_range loc v2 s 
+    (*make_forall_range loc v2 s 
        (fun t i -> 
-	  local_separation loc n1 v1 (n2^"[i]") (indirection loc ty t)))
+	  local_separation loc n1 v1 (n2^"[i]") (indirection loc ty t))*)
 and local_separation loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
@@ -1063,28 +1063,6 @@ and local_separation loc n1 v1 n2 v2 =
     | Tstruct n , Tarray (ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
     | Tarray (ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
     | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
-(*
-	let ts1 = int_nconstant (Int64.to_string s1) in
-	let i = default_var_info (fresh_index ()) in
-	let vari = { nterm_node = NTvar i; 
-		     nterm_loc = loc;
-		     nterm_type = c_int } in
-	let vi = 
-	  { nterm_node = indirection loc ty1 v1 vari;
-	    nterm_loc = loc;
-	    nterm_type = ty1 }
-	in
-	let ts2 = int_nconstant (Int64.to_string s2) in
-	let j = default_var_info (fresh_index ()) in
-	let varj = { nterm_node = NTvar j; 
-		     nterm_loc = loc;
-		     nterm_type = c_int } in
-	let vj = 
-	  { nterm_node = indirection loc ty2 v2 varj; 
-	    nterm_loc = loc;
-	    nterm_type = ty2 }
-	in
-*)
 	make_and
 	  (if compatible_type v1.nterm_type v2.nterm_type
 	   then
