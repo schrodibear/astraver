@@ -188,8 +188,7 @@ value is the \textsf{cons} of lists. In C, these \textsf{cons}
 structures can be defined as
 \begin{alltt}
 typedef struct struct_node \{
-  unsigned int m :1;
-  unsigned int c :1;
+  unsigned int m:1, c:1;
   struct struct_node *l, *r;
 \} * node;
 \end{alltt}
@@ -263,6 +262,7 @@ of a C function, whose implementation will be given latter: such
 predicates have to be `implemented' latter, either by giving
 additional \caduceus{} annotations (such as \verb|axioms|) or in the
 back-end prover. For the reachability predicate, we write
+\pagebreak
 \begin{alltt}\begin{slshape}
 /*@ predicate 
   @   reachable(node p1, node p2) 

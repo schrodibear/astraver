@@ -6,8 +6,7 @@
 #define NULL ((void*)0)
 
 typedef struct struct_node {
-  unsigned int m :1;
-  unsigned int c :1;
+  unsigned int m :1, c :1;
   struct struct_node *l, *r;
 } * node;
 
