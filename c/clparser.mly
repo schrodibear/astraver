@@ -27,7 +27,7 @@
 
 %}
 
-%token <string> IDENTIFIER STRING_LITERAL
+%token <string> IDENTIFIER STRING_LITERAL TYPENAME
 %token <Clogic.constant> CONSTANT
 %token LPAR RPAR IF ELSE COLON DOT DOTDOT AMP
 %token INT FLOAT LT GT LE GE EQ NE COMMA ARROW
@@ -38,6 +38,7 @@
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE
+%token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION
 
 %nonassoc prec_forall prec_exists
 %right IMPLIES IFF
@@ -50,7 +51,9 @@
 %left PLUS MINUS
 %left STAR SLASH PERCENT AMP
 %right prec_uminus 
+%right prec_cast
 %left DOT ARROW LSQUARE
+%right prec_par
 
 %type <Cast.parsed_annot> annot
 %start annot
@@ -101,20 +104,59 @@ lexpr:
 | BLOCK_LENGTH LPAR lexpr RPAR { info (PLblock_length $3) }
 | RESULT { info PLresult }
 /* both terms and predicates */
-| LPAR lexpr RPAR { $2 }
+| LPAR lexpr RPAR %prec prec_par { $2 }
 | IDENTIFIER { info (PLvar (Info.default_var_info $1)) }
 | IDENTIFIER LPAR lexpr_list RPAR 
     { info (PLapp (Info.default_logic_info $1, $3)) }
+/* Cast. TODO: (identifier *) lexpr needs TYPENAME (see below) */
+| LPAR logic_type_not_id RPAR lexpr %prec prec_cast { info (PLcast ($2, $4)) }
+| LPAR lexpr RPAR lexpr %prec prec_cast
+    { match $2.lexpr_node with
+	| PLvar x -> info (PLcast (LTvar x.Info.var_name, $4))
+	| _ -> raise Parse_error }
 ;
 
 logic_type:
   IDENTIFIER { LTvar $1 }
-| INT        { LTint }
-| FLOAT      { LTfloat }
-| logic_type STAR { LTpointer $1 }
+| IDENTIFIER stars { $2 (LTvar $1) }
+| logic_type_not_id { $1 }
+;
+
+logic_type_not_id:
+| VOID           { LTvoid }
+| CHAR           { LTint }       /** [char] */
+| SIGNED CHAR    { LTint }      /** [signed char] */
+| UNSIGNED CHAR  { LTint }      /** [unsigned char] */
+| SIGNED INT     { LTint }        /** [int] */
+| INT            { LTint }        /** [int] */
+| UNSIGNED INT   { LTint }       /** [unsigned int] */
+| SIGNED SHORT   { LTint }      /** [short] */
+| SHORT          { LTint }      /** [short] */
+| UNSIGNED SHORT { LTint }     /** [unsigned short] */
+| SIGNED LONG    { LTint }       /** [long] */
+| LONG           { LTint }       /** [long] */
+| UNSIGNED LONG  { LTint }      /** [unsigned long] */
+| SIGNED LONG LONG { LTint }   /** [long long] (or [_int64] on 
+					   Microsoft Visual C) */
+| LONG LONG   { LTint }   /** [long long] (or [_int64] on 
+					   Microsoft Visual C) */
+| UNSIGNED LONG LONG { LTint }  /** [unsigned long long] 
+                                (or [unsigned _int64] on Microsoft Visual C) */
+| FLOAT       { LTfloat }
+| DOUBLE      { LTfloat }
+| LONG DOUBLE { LTfloat }
 /***
-| LPAR logic_type RPAR lexpr { info (PLcast ($2, $4)) }
+| STRUCT IDENTIFIER { LTstruct $2 }
+| ENUM IDENTIFIER { LTenum $2 }
+| UNION IDENTIFIER { LTunion $2 }
 ***/
+| TYPENAME         { LTvar $1 } /* TODO: Logic_lexer should make it */
+| logic_type_not_id STAR { LTpointer $1 }
+;
+
+stars:
+  STAR { fun t -> LTpointer t }
+| stars STAR { fun t -> $1 (LTpointer t) }
 ;
 
 relation:

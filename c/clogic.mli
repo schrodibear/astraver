@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.37 2004-11-22 16:14:27 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.38 2004-11-29 15:06:54 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
 type logic_type = 
+  | LTvoid
   | LTint
   | LTfloat
   | LTarray of logic_type

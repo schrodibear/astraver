@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.62 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.63 2004-11-29 15:06:54 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -276,6 +276,7 @@ and type_type_node env = function
   | _ -> assert false
 
 let rec type_logic_type env = function
+  | LTvoid -> c_void
   | LTint -> c_int
   | LTfloat -> c_float
   | LTarray ty -> c_array (type_logic_type env ty)

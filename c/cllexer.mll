@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.27 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cllexer.mll,v 1.28 2004-11-29 15:06:54 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -29,6 +29,42 @@
 
   let lex_error lexbuf s =
     Creport.raise_located (loc lexbuf) (AnyMessage ("lexical error: " ^ s))
+
+  let identifier = 
+    let h = Hashtbl.create 97 in
+    List.iter (fun (i,t) -> Hashtbl.add h i t)
+      [
+	"if", IF;
+	"then", THEN;
+	"else", ELSE;
+	"invariant", INVARIANT;
+	"variant", VARIANT;
+	"decreases", DECREASES;
+	"for", FOR;
+	"assert", ASSERT;
+	"label", LABEL;
+	"requires", REQUIRES;
+	"ensures", ENSURES ;
+	"assigns", ASSIGNS;
+	"loop_assigns", LOOP_ASSIGNS;
+	"reads", READS;
+	"logic", LOGIC;
+	"predicate", PREDICATE;
+	"axiom", AXIOM;
+	"int", INT;
+	"float", FLOAT;
+	"void", VOID;
+	"char", CHAR;
+	"signed", SIGNED;
+	"unsigned", UNSIGNED;
+	"short", SHORT;
+	"long", LONG;
+	"double", DOUBLE;
+	"struct", STRUCT;
+	"enum", ENUM;
+	"union", UNION;
+      ];
+    fun s -> try Hashtbl.find h s with Not_found -> IDENTIFIER s
 
 }
 
@@ -64,29 +100,10 @@ rule token = parse
   | "\\fresh" { FRESH }
   | "\\valid_index" { VALID_INDEX }
   | "\\valid_range" { VALID_RANGE }
-  | "if"                    { IF }
-  | "then"                  { THEN }
-  | "else"                  { ELSE }
-  | "invariant" { INVARIANT }
-  | "variant"   { VARIANT }
-  | "decreases"   { DECREASES }
-  | "for"       { FOR }
-  | "assert"    { ASSERT }
-  | "label"     { LABEL }
-  | "requires"       { REQUIRES }
-  | "ensures"      { ENSURES } 
-  | "assigns"     { ASSIGNS }
-  | "loop_assigns"     { LOOP_ASSIGNS }
   | "\\nothing"   { NOTHING }
-  | "reads"      { READS }
-  | "logic"    { LOGIC }
-  | "predicate"    { PREDICATE }
-  | "axiom"    { AXIOM }
-  | "int" { INT }
-  | "float" { FLOAT }
   | "\\null" { NULL }
-
-  | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
+ 
+  | rL (rL | rD)*       { let s = lexeme lexbuf in identifier s }
 
   | '0'['x''X'] rH+ rIS?    { CONSTANT (IntConstant (lexeme lexbuf)) }
   | '0' rD+ rIS?            { CONSTANT (IntConstant (lexeme lexbuf)) }
