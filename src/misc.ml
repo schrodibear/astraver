@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.56 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.57 2002-10-31 16:16:33 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -474,8 +474,8 @@ let relation_string id =
   else if id == t_le || id == t_le_int || id == t_le_float then "<="
   else if id == t_gt || id == t_gt_int || id == t_gt_float then ">"
   else if id == t_ge || id == t_ge_int || id == t_ge_float then ">="
-  else if id == t_eq || id == t_eq_int || id == t_eq_float then "="
-  else if id == t_neq || id == t_neq_int || id == t_neq_float then "<>"
+  else if is_eq id then "="
+  else if is_neq id then "<>"
   else assert false
 
 let rec print_predicate fmt = function

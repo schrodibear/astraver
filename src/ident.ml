@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.34 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.35 2002-10-31 16:16:33 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -185,8 +185,20 @@ let is_float_comparison id =
   id == t_eq_float || id == t_neq_float ||
   id == t_lt_float || id == t_le_float || id == t_gt_float || id == t_ge_float 
 
+let is_bool_comparison id = id == t_eq_bool || id == t_neq_bool
+let is_unit_comparison id = id == t_eq_unit || id == t_neq_unit
+
+let is_eq id = 
+  id == t_eq || id == t_eq_int || id == t_eq_float || 
+  id == t_eq_bool || id == t_eq_unit
+
+let is_neq id = 
+  id == t_neq || id == t_neq_int || id == t_neq_float || 
+  id == t_neq_bool || id == t_neq_unit
+
 let is_relation id = 
-  is_comparison id || is_int_comparison id || is_float_comparison id
+  is_comparison id || is_int_comparison id || is_float_comparison id ||
+  is_bool_comparison id || is_unit_comparison id
 
 let is_int_arith_binop id =
   id == t_add_int || id == t_sub_int || id == t_mul_int || id == t_div_int ||
@@ -195,7 +207,6 @@ let is_int_arith_binop id =
 let is_float_arith_binop id =
   id == t_add_float || id == t_sub_float || id == t_mul_float || 
   id == t_div_float
-
 
 let is_arith_binop id =
   is_int_arith_binop id || is_float_arith_binop id

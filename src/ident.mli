@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.29 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.30 2002-10-31 16:16:33 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -138,6 +138,9 @@ val is_int_comparison : t -> bool
 val is_float_comparison : t -> bool
 
 val is_relation : t -> bool
+
+val is_eq : t -> bool
+val is_neq : t -> bool
 
 val is_int_arith_binop : t -> bool
 val is_int_arith_unop : t -> bool

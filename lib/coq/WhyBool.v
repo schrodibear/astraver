@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: WhyBool.v,v 1.5 2002-10-15 12:18:50 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.6 2002-10-31 16:16:33 filliatr Exp $ *)
 
 Require ZArith.
 Require Sumbool.
@@ -65,3 +65,27 @@ Definition btest
       | false => [p](right (q true) (q false) p) 
    end 
    p).
+
+
+(** Equality over booleans *)
+
+Definition B_eq_dec : (x,y:bool){x=y}+{~x=y}.
+Proof. Decide Equality. Qed.
+
+Definition B_eq_bool := 
+ [x,y:bool](bool_of_sumbool (B_eq_dec x y)).
+
+Definition B_noteq_bool := 
+ [x,y:bool](bool_of_sumbool (sumbool_not ? ? (B_eq_dec x y))).
+
+(** Equality over type unit *)
+
+Definition U_eq_dec : (x,y:unit){x=y}+{~x=y}.
+Proof. Decide Equality. Qed.
+
+Definition U_eq_bool := 
+ [x,y:unit](bool_of_sumbool (U_eq_dec x y)).
+
+Definition U_noteq_bool := 
+ [x,y:unit](bool_of_sumbool (sumbool_not ? ? (U_eq_dec x y))).
+

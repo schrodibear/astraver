@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.70 2002-10-31 12:29:07 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.71 2002-10-31 16:16:33 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -43,6 +43,12 @@ let prefix_id id =
   else if id == t_ge_float then "R_ge_lt_bool"
   else if id == t_eq_float then "R_eq_bool"
   else if id == t_neq_float then "R_noteq_bool"
+  (* bool cmp *)
+  else if id == t_eq_bool then "B_eq_bool"
+  else if id == t_neq_bool then "B_noteq_bool"
+  (* bool cmp *)
+  else if id == t_eq_unit then "U_eq_bool"
+  else if id == t_neq_unit then "U_noteq_bool"
   (* int ops *)
   else if id == t_add_int then "Zplus"
   else if id == t_sub_int then "Zminus"
@@ -179,9 +185,9 @@ let print_predicate fmt p =
 	openz fmt; 
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
 	closez fmt
-    | Papp (id, [a;b]) when id == t_eq ->
+    | Papp (id, [a;b]) when id == t_eq || id == t_eq_bool || id == t_eq_unit ->
 	fprintf fmt "%a = %a" print_term a print_term b
-    | Papp (id, [a;b]) when id == t_neq ->
+    | Papp (id, [a;b]) when id == t_neq || id==t_neq_bool || id==t_neq_unit ->
 	fprintf fmt "~(%a = %a)" print_term a print_term b
     | Papp (id, [a;b]) when id == t_eq_float ->
 	fprintf fmt "(@[eqT R %a %a@])" print_term a print_term b
