@@ -12,11 +12,9 @@ Parameter foo : Set.
 
 (*Why*) Parameter f1 : forall (_: Z), forall (_: bool), Z.
 
-(*Why*) Parameter f2 : forall (_: Z), bool.
 
-(*Why*) Parameter f3 :
-  forall (x: Z), forall (y: Z), forall (H: x >= 0),
-  (sig_2 Z Z (fun (y0: Z) (result: Z)  => (y0 = (y + x + result)))).
+
+
 
 (*Why*) Parameter f4 : forall (_: unit), unit.
 
@@ -26,9 +24,7 @@ Parameter foo : Set.
 
 (*Why*) Parameter f7 : forall (x: foo), foo.
 
-(*Why*) Parameter f8 :
-  forall (t: (array Z)),
-  (sig_1 unit (fun (result: unit)  => ((access t 1) = 2))).
+
 
 (* Why obligation from file "good/all.mlw", characters 675-693 *)
 Lemma p2_po_1 : 
@@ -243,7 +239,7 @@ Qed.
 (* Why obligation from file "good/all.mlw", characters 2122-2156 *)
 Lemma arr1_po_1 : 
   forall (v6: (array Z)),
-  forall (Pre2: (array_length v6) >= 1),
+  forall (Pre3: (array_length v6) >= 1),
   0 <= 0 /\ 0 < (array_length v6).
 intros; omega.
 Qed.
@@ -255,7 +251,7 @@ Qed.
 (* Why obligation from file "good/all.mlw", characters 2169-2205 *)
 Lemma arr2_po_1 : 
   forall (v6: (array Z)),
-  forall (Pre2: (array_length v6) >= 4),
+  forall (Pre3: (array_length v6) >= 4),
   0 <= (1 + 2) /\ (1 + 2) < (array_length v6).
 intros; omega.
 Qed.
@@ -268,7 +264,7 @@ Qed.
 Lemma arr3_po_1 : 
   forall (v4: Z),
   forall (v6: (array Z)),
-  forall (Pre2: (array_length v6) >= 1 /\ v4 = 0),
+  forall (Pre3: (array_length v6) >= 1 /\ v4 = 0),
   0 <= v4 /\ v4 < (array_length v6).
 intros; omega.
 Qed.
@@ -277,10 +273,10 @@ Qed.
 
 
 
-(* Why obligation from file "good/all.mlw", characters 2320-2325 *)
+(* Why obligation from file "good/all.mlw", characters 2276-2329 *)
 Lemma arr4_po_1 : 
   forall (v6: (array Z)),
-  forall (Pre3: (array_length v6) >= 10 /\ (access v6 0) = 9),
+  forall (Pre4: (array_length v6) >= 10 /\ (access v6 0) = 9),
   0 <= 0 /\ 0 < (array_length v6).
 intros; omega.
 Qed.
@@ -288,8 +284,8 @@ Qed.
 (* Why obligation from file "good/all.mlw", characters 2276-2329 *)
 Lemma arr4_po_2 : 
   forall (v6: (array Z)),
-  forall (Pre3: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  forall (Pre2: 0 <= 0 /\ 0 < (array_length v6)),
+  forall (Pre4: (array_length v6) >= 10 /\ (access v6 0) = 9),
+  forall (Pre3: 0 <= 0 /\ 0 < (array_length v6)),
   0 <= (access v6 0) /\ (access v6 0) < (array_length v6).
 intros; omega.
 Qed.
@@ -302,7 +298,11 @@ Qed.
 Lemma arr5_po_1 : 
   forall (v6: (array Z)),
   forall (Pre2: (array_length v6) >= 1),
-  0 <= 0 /\ 0 < (array_length v6).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = 0),
+  0 <= aux_1 /\ aux_1 < (array_length v6).
 intros; simpl; omega.
 Qed.
 
@@ -311,26 +311,36 @@ Qed.
 Lemma arr6_po_1 : 
   forall (v6: (array Z)),
   forall (Pre2: (array_length v6) >= 4),
-  0 <= (1 + 2) /\ (1 + 2) < (array_length v6).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = (3 + 4)),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = (1 + 2)),
+  0 <= aux_1 /\ aux_1 < (array_length v6).
 intros; simpl; omega.
 Qed.
 
 
 
-(* Why obligation from file "good/all.mlw", characters 2448-2506 *)
+(* Why obligation from file "good/all.mlw", characters 2492-2497 *)
 Lemma arr7_po_1 : 
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  0 <= (access v6 0) /\ (access v6 0) < (array_length v6).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  0 <= 0 /\ 0 < (array_length v6).
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/all.mlw", characters 2492-2497 *)
+(* Why obligation from file "good/all.mlw", characters 2448-2506 *)
 Lemma arr7_po_2 : 
   forall (v6: (array Z)),
   forall (Pre3: (array_length v6) >= 10 /\ (access v6 0) = 9),
-  forall (Pre2: 0 <= (access v6 0) /\ (access v6 0) < (array_length v6)),
-  0 <= 0 /\ 0 < (array_length v6).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  forall (Pre2: 0 <= 0 /\ 0 < (array_length v6)),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = (access v6 0)),
+  0 <= aux_1 /\ aux_1 < (array_length v6).
 intros; simpl; omega.
 Qed.
 
@@ -408,6 +418,6 @@ Qed.
 
 
 
-(*Why*) Parameter f1_ex : forall (n: Z), (EM unit unit).
 
-(*Why*) Parameter f2_ex : forall (x: Z), (tuple_2 Z (EM unit (EM Z bool))).
+
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.16 2004-07-06 15:00:26 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.17 2004-07-07 15:27:32 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -42,7 +42,7 @@ Implicit Arguments why_rewrite_var [A x t].
 Lemma why_rewrite_var_left :
  forall (A:Set) (x t:A), x = t -> forall P:A -> Prop, P t -> P x.
 Proof.
-intros; case H; trivial.
+intros; rewrite H; trivial.
 Qed.
 Implicit Arguments why_rewrite_var_left [A x t].
 

@@ -2,7 +2,8 @@
 
 WHY=../../bin/why.opt
 CADUCEUS=../../bin/caduceus.opt
-WHYOPTIONS=--coq-v8 --valid --split
+WHYOPTIONS=--coq-v8 --split -d -V
+# WHYOPTIONS=--coq-v8 --valid --split
 
 %_valid.v %_why.v: %.mlw $(WHY)
 	$(WHY) $(WHYOPTIONS) $<

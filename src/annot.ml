@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.26 2004-07-06 15:00:25 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.27 2004-07-07 15:27:32 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -393,9 +393,11 @@ let is_result_eq = function
   | Papp (id, [Tvar id'; t]) when id == t_eq && id' == result -> Some t
   | _ -> None
 
+let a_values = List.map (fun a -> a.a_value)
+
 let rec purify p =
-  let a_values = List.map (fun a -> a.a_value) in
-  if is_pure p then 
+  try
+    if not (is_pure p) then raise Exit;
     (* [pure p] computes pre, obligations and post for [p] *)
     let rec pure p = match p.desc with
       | Expression t when post p = None -> 
@@ -461,16 +463,27 @@ let rec purify p =
       | _ -> 
 	  raise Exit (* we give up *)
     in
-    try 
-      let pre,o,post = pure p in
-      let pre = List.map (anonymous p.info.loc) pre in
-      let o = List.map (anonymous p.info.loc) o in
-      let c = { p.info.kappa with c_pre = pre; c_post = create_post post } in
-      { p with 
-	  desc = Any c; 
-	  info = { p.info with obligations = o; kappa = c } }
-    with Exit -> 
-      map_desc purify p
-  else 
+    let pre,o,post = pure p in
+    let pre = List.map (anonymous p.info.loc) pre in
+    let o = List.map (anonymous p.info.loc) o in
+    let c = { p.info.kappa with c_pre = pre; c_post = create_post post } in
+    { p with 
+	desc = Any c; 
+	info = { p.info with obligations = o; kappa = c } }
+  with Exit -> 
+    let env = p.info.env in
     (* we apply purify recursively *) 
-    map_desc purify p
+    match p.desc with
+    | Aff (x, e1) ->
+	let e1 = purify e1 in
+	if is_pure e1 && post e1 <> None then begin match post e1 with
+	  | Some q1 ->
+	      let q = post_app (change_label e1.info.label p.info.label) q1 in
+	      let q = post_app (put_label_predicate env p.info.label) q in
+	      let q = post_app (subst_in_predicate (subst_onev result x)) q in
+	      post_if_none env (Some q) p
+	  | _ -> assert false
+	end else
+	  map_desc purify p
+    | _ -> 
+	map_desc purify p

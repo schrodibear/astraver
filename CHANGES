@@ -1,4 +1,5 @@
 
+  o CVC Lite output (option --cvcl; see http://chicory.stanford.edu/CVCL/)
   o Coq: parameters no more generated when -valid is not set
 
 version 1.62, June 24th, 2004

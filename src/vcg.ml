@@ -442,6 +442,7 @@ let boolean_case ctx concl = match ctx, concl with
 
 (* we try the automatic proofs successively, starting with the simplest ones *)
 let discharge_methods ctx concl =
+  (* let ctx,concl,pr = intros ctx concl in pr begin *)
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
   try reflexivity concl with Exit -> 
@@ -453,6 +454,7 @@ let discharge_methods ctx concl =
   try discriminate ctx concl with Exit ->
   try linear ctx concl with Exit ->
   boolean_case ctx concl
+  (* end *)
 
 (* DEBUG *)
 open Pp
@@ -503,7 +505,7 @@ let clean_sequent hyps concl =
 	  h :: clean hl
 	else
 	  clean hl
-    | Spred (_, p1) :: (Spred (_, p2) :: _ as hl) when p1 = p2 ->
+    | Spred (_, p1) :: ((Spred (_, p2) :: _) as hl) when p1 = p2 ->
 	clean hl
     | Spred (_, Ptrue) :: hl ->
 	clean hl

@@ -25,9 +25,9 @@ Lemma gcd1_po_1 :
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post4: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post3: y = b),
+  forall (Post6: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -36,12 +36,12 @@ Lemma gcd1_po_1 :
   forall (Test4: x1 <> y1),
   forall (Test3: x1 > y1),
   forall (x2: Z),
-  forall (Post1: x2 = (x1 - y1)),
+  forall (Post2: x2 = (x1 - y1)),
   (0 < x2 /\ 0 < y1 /\ (gcd x2 y1) = (gcd a b)) /\
   (Zwf 0 (max x2 y1) (max x1 y1)).
 Proof.
 intuition.
-subst x2; rewrite <- H4; auto.
+subst; rewrite <- H4; auto.
 unfold Zwf, max.
 case (Z_le_gt_dec x2 y1); case (Z_le_gt_dec x1 y1); intros; omega.
 Qed.
@@ -52,9 +52,9 @@ Lemma gcd1_po_2 :
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post4: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post3: y = b),
+  forall (Post6: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -63,12 +63,12 @@ Lemma gcd1_po_2 :
   forall (Test4: x1 <> y1),
   forall (Test2: x1 <= y1),
   forall (y2: Z),
-  forall (Post2: y2 = (y1 - x1)),
+  forall (Post1: y2 = (y1 - x1)),
   (0 < x1 /\ 0 < y2 /\ (gcd x1 y2) = (gcd a b)) /\
   (Zwf 0 (max x1 y2) (max x1 y1)).
 Proof.
 intuition.
-subst y2; rewrite <- H4; auto.
+subst; rewrite <- H4; auto.
 unfold Zwf, max.
 assert (h: x1 <> y1).
  assumption.
@@ -81,20 +81,21 @@ Lemma gcd1_po_3 :
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post4: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post3: y = b),
+  forall (Post6: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
   forall (Pre3: Variant1 = (max x1 y1)),
   forall (Pre2: 0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)),
   forall (Test1: x1 = y1),
-  x1 = (gcd a b).
+  forall (result: Z),
+  forall (HW_2: result = x1),
+  result = (gcd a b).
 Proof.
-intuition.
-rewrite <- H4; rewrite Test1.
-auto.
+intuition; subst.
+rewrite <- H4; auto. 
 Qed.
 
 (* Why obligation from file "gcd.mlw", characters 299-338 *)
@@ -103,9 +104,9 @@ Lemma gcd1_po_4 :
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post4: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post3: y = b),
+  forall (Post6: y = b),
   0 < x /\ 0 < y /\ (gcd x y) = (gcd a b).
 Proof.
 intuition.
@@ -119,9 +120,9 @@ Lemma gcd2_po_1 :
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
+  forall (Post6: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -139,9 +140,9 @@ Lemma gcd2_po_2 :
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
+  forall (Post6: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -163,8 +164,8 @@ assert (h_y0: y1 <> 0).
 assert (h1_y0: (y1 > 0)).
  omega.
 generalize (Z_mod_lt x1 y1 h1_y0); intro.
-subst y2 r; tauto.
-subst y2 x2 r.
+subst; tauto.
+subst.
 rewrite <- H4; auto.
 unfold Zwf.
 assert (h_y0: y1 <> 0).
@@ -180,19 +181,21 @@ Lemma gcd2_po_3 :
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
+  forall (Post6: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
   forall (Pre4: Variant1 = y1),
   forall (Pre3: 0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)),
   forall (Test1: y1 = 0),
-  x1 = (gcd a b).
+  forall (result: Z),
+  forall (HW_2: result = x1),
+  result = (gcd a b).
 Proof.
-intuition.
-rewrite <- H4; rewrite Test1; auto.
+intuition; subst.
+rewrite <- H4; auto.
 Qed.
 
 (* Why obligation from file "gcd.mlw", characters 653-694 *)
@@ -201,9 +204,9 @@ Lemma gcd2_po_4 :
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post7: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
+  forall (Post6: y = b),
   0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b).
 Proof.
 intuition.

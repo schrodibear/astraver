@@ -18,10 +18,12 @@ Lemma fib1_po_1 :
   forall (Pre11: Variant1 = n0),
   forall (Pre10: n0 >= 0),
   forall (Test2: n0 <= 1),
-  1 = (F n0).
+  forall (result0: Z),
+  forall (Post4: result0 = 1),
+  result0 = (F n0).
 Proof.
 intros.
-assert (n0 = 0%Z \/ n0 = 1%Z); intuition try (rewrite H0; auto with *).
+assert (n0 = 0%Z \/ n0 = 1%Z); intuition try (subst; auto with *).
 omega.
 Qed.
 
@@ -49,9 +51,10 @@ Lemma fib1_po_3 :
   forall (Pre10: n0 >= 0),
   forall (Test1: n0 > 1),
   forall (Pre9: (n0 - 2) >= 0),
-  forall (Pre3: (n0 - 2) >= 0),
+  forall (result0: Z),
+  forall (Post3: result0 = (n0 - 2)),
   forall (Pre4: (n0 - 2) >= 0),
-  (Zwf 0 (n0 - 2) Variant1).
+  (Zwf 0 result0 Variant1).
 Proof.
 intros; unfold Zwf; omega.
 Qed.
@@ -67,11 +70,11 @@ Lemma fib1_po_4 :
   forall (Test1: n0 > 1),
   forall (Pre9: (n0 - 2) >= 0),
   forall (aux_6: Z),
-  forall (Post4: aux_6 = (F (n0 - 2))),
+  forall (Post8: aux_6 = (F (n0 - 2))),
   (n0 - 1) >= 0.
 Proof.
-intros; omega.
-Qed.
+intuition.
+Save.
 
 (* Why obligation from file "fib.mlw", characters 413-515 *)
 Lemma fib1_po_5 : 
@@ -84,14 +87,15 @@ Lemma fib1_po_5 :
   forall (Test1: n0 > 1),
   forall (Pre9: (n0 - 2) >= 0),
   forall (aux_6: Z),
-  forall (Post4: aux_6 = (F (n0 - 2))),
+  forall (Post8: aux_6 = (F (n0 - 2))),
   forall (Pre8: (n0 - 1) >= 0),
-  forall (Pre6: (n0 - 1) >= 0),
+  forall (result0: Z),
+  forall (Post2: result0 = (n0 - 1)),
   forall (Pre7: (n0 - 1) >= 0),
-  (Zwf 0 (n0 - 1) Variant1).
+  (Zwf 0 result0 Variant1).
 Proof.
-intros; unfold Zwf; omega.
-Qed.
+intuition.
+Save.
 
 (* Why obligation from file "fib.mlw", characters 463-494 *)
 Lemma fib1_po_6 : 
@@ -104,17 +108,16 @@ Lemma fib1_po_6 :
   forall (Test1: n0 > 1),
   forall (Pre9: (n0 - 2) >= 0),
   forall (aux_6: Z),
-  forall (Post4: aux_6 = (F (n0 - 2))),
+  forall (Post8: aux_6 = (F (n0 - 2))),
   forall (Pre8: (n0 - 1) >= 0),
   forall (aux_5: Z),
-  forall (Post7: aux_5 = (F (n0 - 1))),
-  (aux_5 + aux_6) = (F n0).
+  forall (Post11: aux_5 = (F (n0 - 1))),
+  forall (result0: Z),
+  forall (Post1: result0 = (aux_5 + aux_6)),
+  result0 = (F n0).
 Proof.
-intros.
-subst aux_6 aux_5.
-symmetry; auto with *.
-Qed.
-
+intuition; subst; symmetry; auto with *.
+Save.
 
 (* Why obligation from file "fib.mlw", characters 713-715 *)
 Lemma fib2_aux_po_1 : 
@@ -122,20 +125,21 @@ Lemma fib2_aux_po_1 :
   forall (x: Z),
   forall (fx: Z),
   forall (fx_1: Z),
-  forall (Pre8: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
+  forall (Pre5: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
   forall (Variant1: Z),
   forall (n0: Z),
   forall (x0: Z),
   forall (fx0: Z),
   forall (fx_1_0: Z),
-  forall (Pre7: Variant1 = (n0 - x0)),
-  forall (Pre6: (1 <= x0 /\ x0 <= n0) /\ fx0 = (F x0) /\ fx_1_0 =
+  forall (Pre4: Variant1 = (n0 - x0)),
+  forall (Pre3: (1 <= x0 /\ x0 <= n0) /\ fx0 = (F x0) /\ fx_1_0 =
                 (F (x0 - 1))),
   forall (Test2: x0 = n0),
-  fx0 = (F n0).
+  forall (result0: Z),
+  forall (Post2: result0 = fx0),
+  result0 = (F n0).
 Proof.
-intuition.
-rewrite <- Test2; assumption.
+intuition; subst; auto.
 Qed.
 
 (* Why obligation from file "fib.mlw", characters 731-762 *)
@@ -144,14 +148,14 @@ Lemma fib2_aux_po_2 :
   forall (x: Z),
   forall (fx: Z),
   forall (fx_1: Z),
-  forall (Pre8: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
+  forall (Pre5: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
   forall (Variant1: Z),
   forall (n0: Z),
   forall (x0: Z),
   forall (fx0: Z),
   forall (fx_1_0: Z),
-  forall (Pre7: Variant1 = (n0 - x0)),
-  forall (Pre6: (1 <= x0 /\ x0 <= n0) /\ fx0 = (F x0) /\ fx_1_0 =
+  forall (Pre4: Variant1 = (n0 - x0)),
+  forall (Pre3: (1 <= x0 /\ x0 <= n0) /\ fx0 = (F x0) /\ fx_1_0 =
                 (F (x0 - 1))),
   forall (Test1: x0 <> n0),
   (1 <= (x0 + 1) /\ (x0 + 1) <= n0) /\ (fx0 + fx_1_0) = (F (x0 + 1)) /\ fx0 =
@@ -169,42 +173,16 @@ omega.
 ring (x0 + 1 - 1)%Z; trivial.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 643-783 *)
-Lemma fib2_aux_po_3 : 
-  forall (n: Z),
-  forall (x: Z),
-  forall (fx: Z),
-  forall (fx_1: Z),
-  forall (Pre8: (1 <= x /\ x <= n) /\ fx = (F x) /\ fx_1 = (F (x - 1))),
-  forall (Variant1: Z),
-  forall (n0: Z),
-  forall (x0: Z),
-  forall (fx0: Z),
-  forall (fx_1_0: Z),
-  forall (Pre7: Variant1 = (n0 - x0)),
-  forall (Pre6: (1 <= x0 /\ x0 <= n0) /\ fx0 = (F x0) /\ fx_1_0 =
-                (F (x0 - 1))),
-  forall (Test1: x0 <> n0),
-  forall (Pre5: (1 <= (x0 + 1) /\ (x0 + 1) <= n0) /\ (fx0 + fx_1_0) =
-                (F (x0 + 1)) /\ fx0 = (F (x0 + 1 - 1))),
-  forall (Pre3: (1 <= (x0 + 1) /\ (x0 + 1) <= n0) /\ (fx0 + fx_1_0) =
-                (F (x0 + 1)) /\ fx0 = (F (x0 + 1 - 1))),
-  forall (Pre4: (1 <= (x0 + 1) /\ (x0 + 1) <= n0) /\ (fx0 + fx_1_0) =
-                (F (x0 + 1)) /\ fx0 = (F (x0 + 1 - 1))),
-  (Zwf 0 (n0 - (x0 + 1)) Variant1).
-Proof.
-intuition.
-Qed.
-
-
 (* Why obligation from file "fib.mlw", characters 842-843 *)
 Lemma fib2_po_1 : 
   forall (n: Z),
-  forall (Pre4: n >= 0),
+  forall (Pre2: n >= 0),
   forall (Test2: n <= 1),
-  1 = (F n).
+  forall (result0: Z),
+  forall (Post2: result0 = 1),
+  result0 = (F n).
 Proof.
-intuition.
+intuition; subst.
 assert (h : n = 0 \/ n = 1).
  omega.
 intuition; rewrite H; auto with *.
@@ -213,24 +191,23 @@ Qed.
 (* Why obligation from file "fib.mlw", characters 849-867 *)
 Lemma fib2_po_2 : 
   forall (n: Z),
-  forall (Pre4: n >= 0),
+  forall (Pre2: n >= 0),
   forall (Test1: n > 1),
   (1 <= 1 /\ 1 <= n) /\ 1 = (F 1) /\ 1 = (F (1 - 1)).
 Proof.
 intuition.
-Qed.
-
+Save.
 
 (* Why obligation from file "fib.mlw", characters 1144-1210 *)
 Lemma fib3_po_1 : 
   forall (n: Z),
   forall (Pre4: n >= 0),
   forall (k: Z),
-  forall (Post7: k = 1),
+  forall (Post11: k = 1),
   forall (x: Z),
-  forall (Post6: x = 1),
+  forall (Post10: x = 1),
   forall (y: Z),
-  forall (Post5: y = 1),
+  forall (Post9: y = 1),
   forall (Test4: n > 0),
   forall (Variant1: Z),
   forall (k1: Z),
@@ -240,20 +217,18 @@ Lemma fib3_po_1 :
   forall (Pre2: (1 <= k1 /\ k1 <= n) /\ x1 = (F k1) /\ y1 = (F (k1 - 1))),
   forall (Test3: k1 < n),
   forall (t: Z),
-  forall (Post4: t = y1),
+  forall (Post5: t = y1),
   forall (y2: Z),
-  forall (Post1: y2 = x1),
+  forall (Post2: y2 = x1),
   forall (x2: Z),
-  forall (Post2: x2 = (x1 + t)),
+  forall (Post3: x2 = (x1 + t)),
   forall (k2: Z),
-  forall (Post3: k2 = (k1 + 1)),
+  forall (Post4: k2 = (k1 + 1)),
   ((1 <= k2 /\ k2 <= n) /\ x2 = (F k2) /\ y2 = (F (k2 - 1))) /\
   (Zwf 0 (n - k2) (n - k1)).
 Proof.
 intuition.
-subst k2; subst x2; subst t.
-subst x1 y1.
-symmetry.
+subst; symmetry.
 generalize H1.
  replace k1 with (k1 + 1 - 1)%Z.
  generalize (k1 + 1)%Z.
@@ -261,8 +236,7 @@ intros; ring (z - 1 + 1)%Z; replace (z - 1 - 1)%Z with (z - 2)%Z.
  auto with *.
 omega.
 omega.
-subst k2; ring (k1 + 1 - 1)%Z; trivial.
-subst y2; assumption.
+subst; ring (k1 + 1 - 1)%Z; trivial.
 Qed.
 
 (* Why obligation from file "fib.mlw", characters 1027-1219 *)
@@ -270,11 +244,11 @@ Lemma fib3_po_2 :
   forall (n: Z),
   forall (Pre4: n >= 0),
   forall (k: Z),
-  forall (Post7: k = 1),
+  forall (Post11: k = 1),
   forall (x: Z),
-  forall (Post6: x = 1),
+  forall (Post10: x = 1),
   forall (y: Z),
-  forall (Post5: y = 1),
+  forall (Post9: y = 1),
   forall (Test4: n > 0),
   forall (Variant1: Z),
   forall (k1: Z),
@@ -283,10 +257,12 @@ Lemma fib3_po_2 :
   forall (Pre3: Variant1 = (n - k1)),
   forall (Pre2: (1 <= k1 /\ k1 <= n) /\ x1 = (F k1) /\ y1 = (F (k1 - 1))),
   forall (Test2: k1 >= n),
-  x1 = (F n).
+  forall (result: Z),
+  forall (HW_2: result = x1),
+  result = (F n).
 Proof.
 intuition.
-replace n with k1.
+subst; replace n with k1.
  auto.
  omega.
 Qed.
@@ -296,11 +272,11 @@ Lemma fib3_po_3 :
   forall (n: Z),
   forall (Pre4: n >= 0),
   forall (k: Z),
-  forall (Post7: k = 1),
+  forall (Post11: k = 1),
   forall (x: Z),
-  forall (Post6: x = 1),
+  forall (Post10: x = 1),
   forall (y: Z),
-  forall (Post5: y = 1),
+  forall (Post9: y = 1),
   forall (Test4: n > 0),
   (1 <= k /\ k <= n) /\ x = (F k) /\ y = (F (k - 1)).
 Proof.
@@ -312,16 +288,20 @@ Lemma fib3_po_4 :
   forall (n: Z),
   forall (Pre4: n >= 0),
   forall (k: Z),
-  forall (Post7: k = 1),
+  forall (Post11: k = 1),
   forall (x: Z),
-  forall (Post6: x = 1),
+  forall (Post10: x = 1),
   forall (y: Z),
-  forall (Post5: y = 1),
+  forall (Post9: y = 1),
   forall (Test1: n <= 0),
-  x = (F n).
+  forall (result0: unit),
+  forall (Post1: result0 = tt),
+  forall (result: Z),
+  forall (HW_4: result = x),
+  result = (F n).
 Proof.
 intuition.
-subst x.
+subst.
  replace n with 0%Z.
  auto.
 omega.
@@ -335,9 +315,11 @@ Lemma fib4_po_1 :
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test4: n <= 1),
-  1 = (F n).
+  forall (result0: Z),
+  forall (Post17: result0 = 1),
+  result0 = (F n).
 Proof.
-intros.
+intros; subst.
 assert (h: n = 0 \/ n = 1).
  omega.
 intuition; rewrite H1; auto.
@@ -349,142 +331,181 @@ Lemma fib4_po_2 :
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  0 <= 0 /\ 0 < (array_length t).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = 0),
+  0 <= aux_1 /\ aux_1 < (array_length t).
 Proof.
 intros; simpl; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1430-1439 *)
+(* Why obligation from file "fib.mlw", characters 1414-1423 *)
 Lemma fib4_po_3 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  0 <= 1 /\ 1 < (array_length t0).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = 0),
+  forall (Pre1: 0 <= aux_1 /\ aux_1 < (array_length t)),
+  forall (result0: Z),
+  forall (Post1: result0 = aux_2),
+  forall (result1: Z),
+  forall (Post2: result1 = aux_1),
+  forall (result: Z),
+  forall (HW_3: result = 1),
+  forall (result2: Z),
+  forall (HW_4: result2 = 1),
+  forall (result3: Z),
+  forall (HW_5: result3 = 2),
+  (2 <= result3 /\ result3 <= (n + 1)) /\
+  (array_length (store (store t result1 result0) result2 result)) =
+  (array_length t) /\
+  (forall (i:Z),
+   (0 <= i /\ i < result3 ->
+    (access (store (store t result1 result0) result2 result) i) = (F i))).
 Proof.
-intros; subst t0; simpl; omega.
+intros; subst; simpl; omega.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1653-1683 *)
+(* Why obligation from file "fib.mlw", characters 1414-1423 *)
 Lemma fib4_po_4 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = 0),
+  forall (Pre1: 0 <= aux_1 /\ aux_1 < (array_length t)),
+  forall (result0: Z),
+  forall (Post1: result0 = aux_2),
+  forall (result1: Z),
+  forall (Post2: result1 = aux_1),
+  forall (result: Z),
+  forall (HW_3: result = 1),
+  forall (result2: Z),
+  forall (HW_4: result2 = 1),
+  forall (result3: Z),
+  forall (HW_5: result3 = 2),
   forall (k: Z),
-  forall (Post5: k = 2),
-  forall (Variant1: Z),
-  forall (k1: Z),
-  forall (t2: (array Z)),
-  forall (Pre6: Variant1 = (n + 1 - k1)),
-  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
+  forall (t0: (array Z)),
+  forall (HW_6: (2 <= k /\ k <= (n + 1)) /\ (array_length t0) =
                 (array_length t) /\
-                (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
-  forall (Test2: k1 <= n),
-  0 <= k1 /\ k1 < (array_length t2).
+                (forall (i:Z), (0 <= i /\ i < k -> (access t0 i) = (F i)))),
+  ((k <= n ->
+    ((forall (result:Z),
+      (result = ((access t0 (k - 1)) + (access t0 (k - 2))) ->
+       (forall (result0:Z),
+        (result0 = k ->
+         (forall (k0:Z),
+          (k0 = (k + 1) -> ((2 <= k0 /\ k0 <= (n + 1)) /\
+           (array_length (store t0 result0 result)) = (array_length t) /\
+           (forall (i:Z),
+            (0 <= i /\ i < k0 -> (access (store t0 result0 result) i) = (F i)))) /\
+           (Zwf 0 (n + 1 - k0) (n + 1 - k)))) /\
+         0 <= result0 /\ result0 < (array_length t0))))) /\
+    0 <= (k - 2) /\ (k - 2) < (array_length t0)) /\ 0 <= (k - 1) /\ (k - 1) <
+    (array_length t0))) /\
+  ((k > n ->
+    (forall (result:Z), (result = (access t0 n) -> result = (F n))) /\ 0 <=
+    n /\ n < (array_length t0))).
 Proof.
 simpl; intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1674-1683 *)
+(* Why obligation from file "fib.mlw", characters 1414-1423 *)
 Lemma fib4_po_5 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
-  forall (k: Z),
-  forall (Post5: k = 2),
-  forall (Variant1: Z),
-  forall (k1: Z),
-  forall (t2: (array Z)),
-  forall (Pre6: Variant1 = (n + 1 - k1)),
-  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
-                (array_length t) /\
-                (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
-  forall (Test2: k1 <= n),
-  forall (Pre2: 0 <= k1 /\ k1 < (array_length t2)),
-  0 <= (k1 - 2) /\ (k1 - 2) < (array_length t2).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = 1),
+  forall (aux_1: Z),
+  forall (Post3: aux_1 = 0),
+  forall (Pre1: 0 <= aux_1 /\ aux_1 < (array_length t)),
+  forall (result0: Z),
+  forall (Post1: result0 = aux_2),
+  forall (result1: Z),
+  forall (Post2: result1 = aux_1),
+  forall (result: Z),
+  forall (HW_3: result = 1),
+  forall (result2: Z),
+  forall (HW_4: result2 = 1),
+  0 <= result2 /\ result2 < (array_length (store t result1 result0)).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1662-1671 *)
+(* Why obligation from file "fib.mlw", characters 1430-1439 *)
 Lemma fib4_po_6 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
   forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
-  forall (k: Z),
-  forall (Post5: k = 2),
-  forall (Variant1: Z),
-  forall (k1: Z),
-  forall (t2: (array Z)),
-  forall (Pre6: Variant1 = (n + 1 - k1)),
-  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
-                (array_length t) /\
-                (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
-  forall (Test2: k1 <= n),
-  forall (Pre2: 0 <= k1 /\ k1 < (array_length t2)),
-  forall (Pre3: 0 <= (k1 - 2) /\ (k1 - 2) < (array_length t2)),
-  0 <= (k1 - 1) /\ (k1 - 1) < (array_length t2).
+  forall (aux_4: Z),
+  forall (Post8: aux_4 = 1),
+  forall (aux_3: Z),
+  forall (Post7: aux_3 = 1),
+  forall (Pre2: 0 <= aux_3 /\ aux_3 < (array_length t0)),
+  forall (result1: Z),
+  forall (Post5: result1 = aux_4),
+  forall (result2: Z),
+  forall (Post6: result2 = aux_3),
+  forall (result: Z),
+  forall (HW_41: result = 2),
+  (2 <= result /\ result <= (n + 1)) /\
+  (array_length (store t0 result2 result1)) = (array_length t) /\
+  (forall (i:Z),
+   (0 <= i /\ i < result -> (access (store t0 result2 result1) i) = (F i))).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1653-1703 *)
+(* Why obligation from file "fib.mlw", characters 1430-1439 *)
 Lemma fib4_po_7 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
+  forall (aux_4: Z),
+  forall (Post8: aux_4 = 1),
+  forall (aux_3: Z),
+  forall (Post7: aux_3 = 1),
+  forall (result1: Z),
+  forall (Post5: result1 = aux_4),
+  forall (result2: Z),
+  forall (Post6: result2 = aux_3),
+  forall (result: Z),
+  forall (HW_41: result = 2),
   forall (k: Z),
-  forall (Post5: k = 2),
-  forall (Variant1: Z),
-  forall (k1: Z),
-  forall (t2: (array Z)),
-  forall (Pre6: Variant1 = (n + 1 - k1)),
-  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
-                (array_length t) /\
-                (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
-  forall (Test2: k1 <= n),
-  forall (Pre2: 0 <= k1 /\ k1 < (array_length t2)),
-  forall (Pre3: 0 <= (k1 - 2) /\ (k1 - 2) < (array_length t2)),
-  forall (Pre4: 0 <= (k1 - 1) /\ (k1 - 1) < (array_length t2)),
-  forall (t3: (array Z)),
-  forall (Post3: t3 = (store t2 k1
-                       ((access t2 (k1 - 1)) + (access t2 (k1 - 2))))),
-  forall (k2: Z),
-  forall (Post4: k2 = (k1 + 1)),
-  ((2 <= k2 /\ k2 <= (n + 1)) /\ (array_length t3) = (array_length t) /\
-  (forall (i:Z), (0 <= i /\ i < k2 -> (access t3 i) = (F i)))) /\
-  (Zwf 0 (n + 1 - k2) (n + 1 - k1)).
+  forall (t0: (array Z)),
+  forall (HW_42: (2 <= k /\ k <= (n + 1)) /\ (array_length t0) =
+                 (array_length t) /\
+                 (forall (i:Z), (0 <= i /\ i < k -> (access t0 i) = (F i)))),
+  ((k <= n ->
+    ((forall (result:Z),
+      (result = ((access t0 (k - 1)) + (access t0 (k - 2))) ->
+       (forall (result0:Z),
+        (result0 = k ->
+         (forall (k0:Z),
+          (k0 = (k + 1) -> ((2 <= k0 /\ k0 <= (n + 1)) /\
+           (array_length (store t0 result0 result)) = (array_length t) /\
+           (forall (i:Z),
+            (0 <= i /\ i < k0 -> (access (store t0 result0 result) i) = (F i)))) /\
+           (Zwf 0 (n + 1 - k0) (n + 1 - k)))) /\
+         0 <= result0 /\ result0 < (array_length t0))))) /\
+    0 <= (k - 2) /\ (k - 2) < (array_length t0)) /\ 0 <= (k - 1) /\ (k - 1) <
+    (array_length t0))) /\
+  ((k > n ->
+    (forall (result:Z), (result = (access t0 n) -> result = (F n))) /\ 0 <=
+    n /\ n < (array_length t0))).
 Proof.
 intuition.
 subst t3; auto.
@@ -504,76 +525,48 @@ auto.
 Qed.
 
 
-(* Why obligation from file "fib.mlw", characters 1468-1713 *)
+(* Why obligation from file "fib.mlw", characters 1653-1683 *)
 Lemma fib4_po_8 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
   forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
   forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
   forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
-  forall (k: Z),
-  forall (Post5: k = 2),
   forall (Variant1: Z),
   forall (k1: Z),
   forall (t2: (array Z)),
-  forall (Pre6: Variant1 = (n + 1 - k1)),
-  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
+  forall (Pre8: Variant1 = (n + 1 - k1)),
+  forall (Pre7: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
-  forall (Test1: k1 > n),
-  (access t2 n) = (F n).
+  forall (Test2: k1 <= n),
+  forall (Pre5: 0 <= (k1 - 2) /\ (k1 - 2) < (array_length t2)),
+  forall (Pre6: 0 <= (k1 - 1) /\ (k1 - 1) < (array_length t2)),
+  forall (aux_6: Z),
+  forall (Post12: aux_6 = ((access t2 (k1 - 1)) + (access t2 (k1 - 2)))),
+  forall (aux_5: Z),
+  forall (Post11: aux_5 = k1),
+  forall (Pre4: 0 <= aux_5 /\ aux_5 < (array_length t2)),
+  forall (result3: Z),
+  forall (Post9: result3 = aux_6),
+  forall (result4: Z),
+  forall (Post10: result4 = aux_5),
+  forall (k: Z),
+  forall (HW_87: k = (k1 + 1)),
+  ((2 <= k /\ k <= (n + 1)) /\ (array_length (store t2 result4 result3)) =
+  (array_length t) /\
+  (forall (i:Z),
+   (0 <= i /\ i < k -> (access (store t2 result4 result3) i) = (F i)))) /\
+  (Zwf 0 (n + 1 - k) (n + 1 - k1)).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1468-1713 *)
-Lemma fib4_po_9 : 
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= n /\ n < (array_length t)),
-  forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
-  forall (k: Z),
-  forall (Post5: k = 2),
-  forall (Variant1: Z),
-  forall (k1: Z),
-  forall (t2: (array Z)),
-  forall (Pre6: Variant1 = (n + 1 - k1)),
-  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
-                (array_length t) /\
-                (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
-  forall (Test1: k1 > n),
-  0 <= n /\ n < (array_length t2).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "fib.mlw", characters 1504-1616 *)
-Lemma fib4_po_10 : 
-  forall (n: Z),
-  forall (t: (array Z)),
-  forall (Pre10: 0 <= n /\ n < (array_length t)),
-  forall (Test3: n > 1),
-  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
-  forall (t0: (array Z)),
-  forall (Post1: t0 = (store t 0 1)),
-  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
-  forall (t1: (array Z)),
-  forall (Post2: t1 = (store t0 1 1)),
-  forall (k: Z),
-  forall (Post5: k = 2),
-  (2 <= k /\ k <= (n + 1)) /\ (array_length t1) = (array_length t) /\
-  (forall (i:Z), (0 <= i /\ i < k -> (access t1 i) = (F i))).
 Proof.
 intuition.
 subst t1 t0; auto.

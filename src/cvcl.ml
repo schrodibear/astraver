@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.4 2004-07-06 15:00:25 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.5 2004-07-07 15:27:32 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -136,7 +136,8 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "UNIT"
   | PTarray pt -> fprintf fmt "ARRAY INT OF %a" print_pure_type pt
   | PTvarid _ -> assert false
-  | PTvar _ -> assert false
+  | PTvar {type_val=Some pt} -> print_pure_type fmt pt
+  | PTvar {tag=t} -> Format.eprintf "PTvar = %d@\n" t; assert false
   | PTexternal (_,id) -> fprintf fmt "%a" Ident.print id
 
 let rec print_predicate fmt = function
@@ -275,7 +276,7 @@ let rec print_logic_type fmt = function
 
 let print_logic fmt id t = 
   let (l,t) = Env.specialize_logic_type t in
-  fprintf fmt "%%%% Why logic@\n@[%s: %a;@]@\n@\n" id print_logic_type t
+  fprintf fmt "%%%% Why logic %s@\n@[%s: %a;@]@\n@\n" id id print_logic_type t
 
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o

@@ -182,7 +182,7 @@ lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 WHYVO=lib/coq/Why.vo
 
 bench:: $(BINARY) $(WHYVO)
-	cd bench; sh ./bench "../$(BINARY) --valid"
+	cd bench; sh ./bench "../$(BINARY)"
 
 bench-c:: $(CADUCEUS) $(WHYVO)
 	cd bench/c; sh ./bench

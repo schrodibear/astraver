@@ -3,28 +3,31 @@
 
 Require Import Why.
 
-(*Why*) Parameter set_and_test_zero :
-  forall (v: Z), forall (x: Z),
-  (sig_2 Z bool
-   (fun (x0: Z) (result: bool)  => (x0 = v /\
-    ((if result then x0 = 0 else x0 <> 0))))).
 
-(* Why obligation from file "good/set.mlw", characters 208-209 *)
+(* Why obligation from file "set.mlw", characters 201-202 *)
 Lemma p_po_1 : 
   forall (x0: Z),
-  forall (Test1: x0 = 0 /\ x0 <> 0),
-  2 = 1.
+  forall (Test2: x0 = 0 /\ x0 = 0),
+  forall (result0: Z),
+  forall (Post2: result0 = 1),
+  result0 = 1.
 Proof.
 intros; omega.
 Qed.
 
-(*Why*) Parameter set_and_test_nzero :
-  forall (v: Z), forall (x: Z),
-  (sig_2 Z bool
-   (fun (x0: Z) (result: bool)  => (x0 = v /\
-    ((if result then x0 <> 0 else x0 = 0))))).
 
-(* Why obligation from file "good/set.mlw", characters 446-457 *)
+(* Why obligation from file "set.mlw", characters 208-209 *)
+Lemma p_po_2 : 
+  forall (x0: Z),
+  forall (Test1: x0 = 0 /\ x0 <> 0),
+  forall (result0: Z),
+  forall (Post1: result0 = 2),
+  result0 = 1.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "set.mlw", characters 446-457 *)
 Lemma p2_po_1 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -35,14 +38,14 @@ Lemma p2_po_1 :
   forall (x1: Z),
   forall (Test2: x1 = y0 /\ x1 <> 0),
   forall (Pre3: y0 >= 0),
-  forall (y1: Z),
-  forall (Post1: y1 = (y0 - 1)),
-  y1 >= 0 /\ (Zwf 0 y1 y0).
+  forall (result0: Z),
+  forall (Post1: result0 = (y0 - 1)),
+  result0 >= 0 /\ (Zwf 0 result0 y0).
 Proof.
 unfold Zwf; intuition.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 358-478 *)
+(* Why obligation from file "set.mlw", characters 358-478 *)
 Lemma p2_po_2 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -58,40 +61,87 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 559-560 *)
+(* Why obligation from file "set.mlw", characters 524-560 *)
 Lemma p3_po_1 : 
   forall (y: Z),
-  forall (Pre4: y >= 0),
+  forall (Pre6: y >= 0),
   forall (Variant1: Z),
   forall (y0: Z),
-  forall (Pre3: Variant1 = y0),
-  forall (Pre2: y0 >= 0),
-  forall (Test2: true = true),
+  forall (Pre5: Variant1 = y0),
+  forall (Pre4: y0 >= 0),
   forall (x1: Z),
   forall (b: bool),
-  forall (Post11: x1 = y0 /\ ((if b then x1 <> 0 else x1 = 0))),
-  (if b then (forall (y:Z), (y = (y0 - 1) -> y >= 0 /\ (Zwf 0 y y0)))
+  forall (Post6: x1 = y0 /\ ((if b then x1 <> 0 else x1 = 0))),
+  forall (result: bool),
+  forall (Post2: result = b),
+  (if result
+   then (forall (result:Z),
+         (result = (y0 - 1) -> result >= 0 /\ (Zwf 0 result y0)))
    else y0 = 0).
 Proof.
 unfold Zwf; simple destruct b; intuition.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 683-729 *)
+(* Why obligation from file "set.mlw", characters 689-700 *)
 Lemma p4_po_1 : 
   forall (y: Z),
-  forall (Pre4: y >= 1),
+  forall (Pre6: y >= 1),
   forall (Variant1: Z),
   forall (y0: Z),
-  forall (Pre3: Variant1 = y0),
-  forall (Pre2: y0 >= 1),
-  forall (Test2: true = true),
-  forall (y1: Z),
-  forall (Post1: y1 = (y0 - 1)),
-  forall (x1: Z),
-  forall (result1: bool),
-  forall (Post11: x1 = y1 /\ ((if result1 then x1 <> 0 else x1 = 0))),
-  (if result1 then y1 >= 1 /\ (Zwf 0 y1 y0) else y1 = 0).
+  forall (Pre5: Variant1 = y0),
+  forall (Pre4: y0 >= 1),
+  forall (result: Z),
+  forall (Post2: result = (y0 - 1)),
+  (forall (x:Z),
+   (x = result /\ x <> 0 ->
+    (forall (result0:unit),
+     (result0 = tt -> result >= 1 /\ (Zwf 0 result result))))) /\
+  (forall (x:Z), (x = result /\ x = 0 -> result = 0)).
 Proof.
 unfold Zwf; simple destruct result1; intuition.
 Qed.
+
+(* Why obligation from file "set.mlw", characters 665-671 *)
+Lemma p4_po_2 : 
+  forall (y: Z),
+  forall (Pre6: y >= 1),
+  forall (Variant1: Z),
+  forall (y0: Z),
+  forall (Pre5: Variant1 = y0),
+  forall (Pre4: y0 >= 1),
+  forall (y1: Z),
+  y1 >= 1.
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "set.mlw", characters 663-798 *)
+Lemma p4_po_3 : 
+  forall (y: Z),
+  forall (Pre6: y >= 1),
+  forall (Variant1: Z),
+  forall (y0: Z),
+  forall (Pre5: Variant1 = y0),
+  forall (Pre4: y0 >= 1),
+  forall (y1: Z),
+  forall (Pre3: y1 >= 1),
+  forall (Post4: y1 >= 1 /\ (Zwf 0 y1 y1)),
+  (Zwf 0 y1 Variant1).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "set.mlw", characters 665-671 *)
+Lemma p4_po_4 : 
+  forall (y: Z),
+  forall (Pre6: y >= 1),
+  forall (Variant1: Z),
+  forall (y0: Z),
+  forall (Pre5: Variant1 = y0),
+  forall (Pre4: y0 >= 1),
+  forall (y1: Z),
+  y1 >= 1.
+Proof.
+(* FILL PROOF HERE *)
+Save.
 

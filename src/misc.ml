@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.88 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.89 2004-07-07 15:27:32 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -545,8 +545,10 @@ let relation_string id =
 let rec print_predicate fmt = function
   | Pvar id -> 
       (if debug then Ident.dbprint else Ident.print) fmt id
+(*
   | Papp (id, [t1; t2]) when is_relation id ->
       fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
+*)
   | Papp (id, l) ->
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) l
   | Ptrue ->
