@@ -30,7 +30,7 @@
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL
 %token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IMPLIES AND OR NOT 
-%token TRUE FALSE OLD AT RESULT LENGTH VALID VALID_RANGE THEN AT
+%token TRUE FALSE OLD AT RESULT LENGTH VALID VALID_INDEX VALID_RANGE THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS READS LOGIC PREDICATE AXIOM LBRACE RBRACE
@@ -69,6 +69,7 @@ lexpr:
 | EXISTS ne_parameters SEMICOLON lexpr %prec prec_exists
       { info (PLexists ($2, $4)) }
 | VALID LPAR lexpr RPAR { info (PLvalid ($3)) }
+| VALID_INDEX LPAR lexpr COMMA lexpr RPAR { info (PLvalid_index ($3,$5)) }
 | VALID_RANGE LPAR lexpr COMMA lexpr COMMA lexpr RPAR 
       { info (PLvalid_range ($3,$5,$7)) }
 /* terms */
@@ -105,7 +106,6 @@ logic_type:
   IDENTIFIER { LTvar $1 }
 | INT        { LTint }
 | FLOAT      { LTfloat }
-| logic_type LSQUARE RSQUARE { LTarray $1 }
 | logic_type STAR { LTpointer $1 }
 ;
 
@@ -220,8 +220,13 @@ parameters:
 ;
 
 ne_parameters:
-  logic_type IDENTIFIER { [($1, $2)] }
-| logic_type IDENTIFIER COMMA ne_parameters { ($1,$2) :: $4 }
+  parameter { [$1] }
+| parameter COMMA ne_parameters { $1 :: $3 }
+;
+
+parameter:
+  logic_type IDENTIFIER { ($1, $2) }
+| logic_type IDENTIFIER LSQUARE RSQUARE { (LTarray $1, $2) }
 ;
 
 %%

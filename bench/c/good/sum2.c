@@ -4,15 +4,15 @@
 
 /* on veut sum(t,i,j) = t[i]+...+t[j-1] */
 
-/*@ logic int sum(int[] t,int i,int j) 
+/*@ logic int sum(int t[], int i, int j) 
   reads i,j,t,t[*] 
 */
 
 /*@ axiom sum1 : 
-      \forall int[] t, int i; sum(t,i,i) == 0 */
+      \forall int t[], int i; sum(t,i,i) == 0 */
 /* makes simplify loop forever...
   @ axiom sum2 : 
-      \forall int[] t, int i, int j; sum(t,i,j+1) == sum(t,i,j) + t[j] */
+      \forall int t[], int i, int j; sum(t,i,j+1) == sum(t,i,j) + t[j] */
 
 /*@ requires \valid_range(t,0,n) 
   @ ensures \result == sum(t,0,n)

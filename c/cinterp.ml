@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.27 2004-03-04 10:09:05 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.28 2004-03-04 15:14:11 filliatr Exp $ i*)
 
 
 open Format
@@ -119,6 +119,8 @@ let rec interp_predicate label old_label p =
     | Pat (p, l) -> interp_predicate (Some l) old_label p
     | Pvalid (t) ->
 	LPred("valid",[ft t])
+    | Pvalid_index (t,a) ->
+	LPred("valid_index",[ft t;ft a])
     | Pvalid_range (t,a,b) ->
 	LPred("valid_range",[ft t;ft a;ft b])
 

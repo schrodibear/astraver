@@ -1,60 +1,53 @@
 
 /* Dijkstra's dutch flag */
 
-typedef enum { BLUE = 1, WHITE = 2, RED = 3 } color;
+typedef enum { BLUE, WHITE, RED } color;
 
-color t[];
-   
 /*@ predicate isColor(int i) { i == BLUE || i == WHITE || i == RED }
   @*/
 
-/*@ predicate isMonochrome(int i, int j, color c)
-  @   { (*0 <= i && i <= j && j <= \length(t) *)
-  @     \forall int k; i <= k && k < j => t[k] == c } 
+/*@ predicate isMonochrome(int t[], int i, int j, color c)
+  @   { \valid_range(t,i,j) && \forall int k; i <= k && k < j => t[k] == c } 
   @*/
 
-/*@ requires 0 <= i && i < \length(t) && 0 <= j && j < \length(t)
+/*@ requires \valid_index(t,i) && \valid_index(t,j)
   @ assigns t[i],t[j]
-  @ ensures 	  
-  @   t[i] == \old(t[j]) && t[j] == \old(t[i])
+  @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
   @*/
-void swap(int i, int j);
+void swap(int t[], int i, int j);
 
 /*@ requires 
-  @   t != \null && n == \length(t) &&
-  @   (\forall int k; 0 <= k && k < \length(t) => isColor(t[k]))
+  @   \valid_range(t,0,n) &&
+  @   (\forall int k; 0 <= k && k < n => isColor(t[k]))
   @ assigns t[*]
   @ ensures 
   @   (\exists int b, int r; 
-  @            isMonochrome(0,b,BLUE) &&
-  @            isMonochrome(b,r,WHITE) &&
-  @            isMonochrome(r,\length(t),RED))
+  @            isMonochrome(t,0,b,BLUE) &&
+  @            isMonochrome(t,b,r,WHITE) &&
+  @            isMonochrome(t,r,n,RED))
   @*/
-void flag(int n) {
+void flag(int t[], int n) {
   int b = 0;
   int i = 0;
   int r = n;
   /*@ invariant
-    @   (\forall int k; 0 <= k && k < \length(t) => isColor(t[k])) &&
-    @   0 <= b && b <= i && i <= r && r <= \length(t) &&
-    @   isMonochrome(0,b,BLUE) &&
-    @   isMonochrome(b,i,WHITE) &&
-    @   isMonochrome(r,\length(t),RED)
+    @   (\forall int k; 0 <= k && k < n => isColor(t[k])) &&
+    @   0 <= b && b <= i && i <= r && r <= n &&
+    @   isMonochrome(t,0,b,BLUE) &&
+    @   isMonochrome(t,b,i,WHITE) &&
+    @   isMonochrome(t,r,n,RED)
     @ variant r - i
     @*/
   while (i < r) {
     switch (t[i]) {
     case BLUE:  
-      swap(b, i);
-      b++;
-      i++;
+      swap(t, b++, i++);
       break;	    
     case WHITE: 
       i++; 
       break;
     case RED: 
-      r--;
-      swap(r, i);
+      swap(t, --r, i);
       break;
     }
   }

@@ -3,6 +3,7 @@
 \usepackage{fullpage}
 \usepackage{url}
 \usepackage{makeidx}
+\usepackage{alltt}
 \input{./version.tex}
 
 \newcommand{\caml}{\textsf{Caml}}
@@ -27,7 +28,13 @@
 \newcommand{\plussep}[1]{$^+_#1$}
 \newcommand{\caveat}{\paragraph{Caveat.}}
 \newcommand{\caveats}{\paragraph{Caveats.}}
-\newcommand{\bs}{\ensuremath{\backslash}}
+\newenvironment{code}{\begin{small}\begin{alltt}%
+\begin{tabular}{|p{0.97\textwidth}|}\hline%
+}{\\\hline\end{tabular}\end{alltt}\end{small}}
+\def\result{\char'134 result}
+\def\forall{\char'134 forall}
+\def\old{\char'134 old}
+\def\bs{\char'134}
 
 \makeindex
 
@@ -91,157 +98,65 @@ examples.
 \chapter{Tutorial}
 \label{tutorial}
 
-% ANSI C file where annotations are inserted as special comments
+This chapter gives an overview of \caduceus\ using trivial programs.
 
-\section{Verifying C programs}
-\label{tutorial:C}\index{C program}
+\section{Basics}
 
-\why\ also handles C programs.
-Contrary to ML input files, C input files conform to the usual ANSI C
-syntax~\cite{KR88} and annotations are inserted in the source as
-special comments of the shape 
-\begin{verbatim}
-     /*@ ... */
-\end{verbatim}
-On a C file \texttt{foo.c}, \why\ is invoked as for ML files:
-\begin{verbatim}
-     why foo.c
-\end{verbatim}
-and obligations are generated in file \texttt{foo\_why.v} (assuming prover
-\coq\ is selected).
+Let us start with a trivial function \texttt{max} computing the maximum of two
+integers:
+\begin{code}
+  
+/*@ ensures 
+  @   \result >= x && \result >= y &&
+  @   \forall int z; z >= x && z >= y => z >= \result 
+  @*/
+int max(int x, int y) \{
+  if (x > y) return x; else return y;
+\}
+\end{code}
+The specification is inserted in the source code right before the
+function definition in a comment of the shape \texttt{/*@ \dots */}.
+Any \caduceus\ annotation is placed in such a comment (or in
+a single-line comment \texttt{//@ \dots}).
+Note that the character \texttt{@} is considered as a blank inside
+annotations.
 
-\subsection{Input files}
-\index{C program!files}
+The specification is here a post-condition, introduced by the keyword
+\texttt{ensures}. This is the predicate to be valid whenever the function
+returns. The keyword \texttt{\result} denotes the value returned by
+the function, thus of type \texttt{int} in this example. The
+post-condition expresses that \texttt{\result} is the smallest integer
+greater or equal than \texttt{x} and \texttt{y} (there are plenty
+other ways to specify the \texttt{max} function).
 
-C files contain variable and function declarations, and function
-definitions. 
-A variable declaration has no particular annotation:
-\begin{verbatim}
-     int x;
-     float t[];
-     int* r;
-\end{verbatim}
-Such a declaration corresponds to a \texttt{parameter} declaration in
-an ML input file.
-
-A function declaration can be given a specification:
-\begin{verbatim}
-     int f(int x);
-     int g(int x) /*@ pre x <> 0 */;
-     int h(int x) /*@ writes r post x = r */;
-\end{verbatim}
-The specification is made of an optional precondition (following
-the keyword \texttt{pre}), an effect (in the same syntax as in ML
-programs), and an optional postcondition (following the keyword
-\texttt{post}). 
-
-A function definition is given (optional) pre- and postcondition as
-comments preceding and following the function body:
-\begin{verbatim}
-     void f() /*@ x = 0 */ { y = x++; } /*@ x = 1 and y = 0 */
-     void g(int* x) { *x = 0; } /*@ x = 0 */
-\end{verbatim}
-When the function is recursive, the variant is given right after the
-precondition, inside the same comment:
-\begin{verbatim}
-     int f(int x) /*@ x >= 0 variant x */ {
-       if (x == 0) return 0;
-       return f(x - 1);
-     } /*@ result = 0 */
-\end{verbatim}
-
-Finally, \why\ declarations can be inserted in the middle of C
-declarations, with comments of the shape \texttt{/*W}\dots\texttt{*/}:
-\begin{verbatim}
-     int x;
-     /*W logic f: int -> int */
-     int y;
-\end{verbatim}
-
-\subsection{Annotations}
-\index{C program!annotations}
-
-\paragraph{Loops annotations.}
+\subsection{Loops annotations}
 \indextt{invariant}\indextt{variant}
-Inside C code, annotations must be inserted to give loops invariant and
-variant. \texttt{for} loops are given an annotation right before the
-loop body:
-\begin{verbatim}
-     for (i = 0; i < 10; ++i)
-       /*@ invariant x = i and i <= 10 variant 10-i */
-       { x = x + 1; }
-\end{verbatim}
-Similarly for \texttt{while} loops:
-\begin{verbatim}
-     while (n >= 0) 
-       /*@ invariant 1 <= n variant n */ { 
-       if (n == 1) { n++; break; }
-       n--;
-     }
-\end{verbatim}
-On the contrary, \texttt{do} loops are annotated after the loop body:
-\begin{verbatim}
-     do {
-       x = x + 1;
-       i = i - 1;
-     }
-     /*@ invariant x = 10 - i and i >= 0 variant i */
-     while (i > 0);
-\end{verbatim}
 
-\paragraph{Other annotations.}
+
+\subsection{Other annotations}
 \indextt{assert}\indextt{label}
-Assertions can be inserted within statements, with the syntax:
-\begin{verbatim}
-     x = 2 * x;
-     /*@ assert even(x) */;
-     x = x + 1;
-\end{verbatim}
-Labels are inserted within statements with a similar syntax:
-\begin{verbatim}
-     x = 2 * x;
-     /*@ label L */;
-     x = x + 1;
-\end{verbatim}
-or using C labels directly:
-\begin{verbatim}
-     x = 2 * x;
-   L:
-     x = x + 1;
-\end{verbatim}
 
-% \subsection{C fragment currently covered}
-% \index{C program!unsupported constructs}
 
-% Section~\ref{syntax:C} gives the syntactic fragment of ANSI C
-% currently supported in \why. Additionally, some semantic restrictions
-% are added.
-% \begin{description}
-% \item[No pointer arithmetic.] Pointers are partly supported. They can
-%   be used to do reference-passing, as in:
-% \begin{verbatim}
-%      void g(int* x) { *x = 0; } /*@ x = 0 */
-%      void f() { int i = 1; g(&i); }
-% \end{verbatim}
-%   but pointer arithmetic is not allowed, as in:
-% \begin{verbatim}
-%      for (p = a; c = *p; p++) ...
-% \end{verbatim}
+\section{Pointers and arrays}
 
-% \item[Types.] Currently, the types \texttt{char},
-%   \texttt{short}, \texttt{int} and \texttt{long} are all identified
-%   (and modeled as unbound integers as in ML). Similarly, types
-%   \texttt{float} and \texttt{double} are identified (and modeled as
-%   reals as in ML).
 
-% \end{description}
+\section{Calling functions}
 
-% Note that \caml\ code can also be generated from C input files, giving
-% an ML translation of the C code. (This is not of great use, though,
-% since the C input code is already executable.)
+
+\section{The \texttt{assigns} clause}
+\label{assigns}\indextt{assigns}
 
 
 
+\section{Logical declarations}
+\indextt{predicate}\indextt{logic}\indextt{axiom}
+
+TODO \texttt{predicate} \texttt{logic} \texttt{axiom}
+
+\section{A complete example}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Reference manual}
 \label{refman}
 
@@ -325,7 +240,7 @@ except that:
   \verb!axiom! \\
   \verb!predicate! & \verb!\result! & \verb!\old! & 
   \verb!\length! & \verb!\null! \\
-  \verb!reads! & \verb!\valid! & \verb!\valid_range!
+  \verb!reads! & \verb!\valid! & \verb!valid_index! & \verb!\valid_range!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -372,9 +287,9 @@ annotations.
     & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
               $[$ \te{assigns} \nt{location}\plussep{\te{,}} $]$ \\
            && $[$ \te{ensures} \nt{predicate} $]$ 
-              $[$ \te{decreases} \nt{variant} $]$ \te{*/} 
+              $[$ \te{decreases} \nt{variant} $]$ \te{*/} \\
                   \indextt{requires}\indextt{assigns}
-                  \indextt{ensures}\indextt{decreases} \\
+                  \indextt{ensures}\indextt{decreases}
   \\[0.1em]
 
   \nt{statement}
@@ -476,6 +391,8 @@ annotations.
       & $|$ & \verb!\at! \te{(} \nt{predicate} \te{,} \nt{identifier} \te{)} \\
       & $|$ & \verb!\valid! \te{(} \nt{term} \te{)}
               \index{valid@\texttt{\bs{}valid}} \\
+      & $|$ & \verb!\valid_index! \te{(} \nt{term} \te{,} \nt{term} \te{)}
+              \index{valid\_index@\texttt{\bs{}valid\_index}} \\
       & $|$ & \verb!\valid_range! \te{(} \nt{term} \te{,} \nt{term} 
               \te{,} \nt{term} \te{)}
               \index{valid\_range@\texttt{\bs{}valid\_range}} \\

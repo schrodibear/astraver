@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.19 2004-03-03 14:08:48 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.20 2004-03-04 15:14:11 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -68,6 +68,7 @@ and lexpr_node =
   | PLforall of logic_type quantifiers * lexpr
   | PLexists of logic_type quantifiers * lexpr
   | PLvalid of lexpr
+  | PLvalid_index of lexpr * lexpr
   | PLvalid_range of lexpr * lexpr * lexpr
 
 (* typed terms *)
@@ -111,6 +112,7 @@ type 'ctype predicate =
   | Pold of 'ctype predicate
   | Pat of 'ctype predicate * string
   | Pvalid of 'ctype term 
+  | Pvalid_index of 'ctype term * 'ctype term
   | Pvalid_range of 'ctype term * 'ctype term * 'ctype term
 
 type 'term location = 

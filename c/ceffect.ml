@@ -150,6 +150,7 @@ let rec predicate p =
     | Pforall (_, p) -> predicate p	
     | Pexists (_, _) -> assert false (* TODO *)
     | Pvalid (_) -> assert false (* TODO *)
+    | Pvalid_index (_,_) -> assert false (* TODO *)
     | Pvalid_range (_, _, _) -> assert false (* TODO *)
     | Pold _ -> assert false (* TODO *)
     | Pat (_,_) -> assert false (* TODO *)
