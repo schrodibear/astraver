@@ -23,7 +23,10 @@ are not allowed by \caduceus.
 
 \subsection{Designing the loop invariant}
 
-\begin{figure}[t]
+\begin{figure}[b]
+\vspace*{-5mm}
+\hrulefill
+\vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
@@ -59,7 +62,7 @@ are not allowed by \caduceus.
 \ncline[nodesepA=1mm]{t}{n121}
 \end{picture}\label{figure}
 \end{center}
-\vspace*{-5mm}
+\vspace*{-3mm}
 \caption{The backtracking stack inside the graph structure}
 \label{fig:stack}
 \end{figure}
@@ -84,6 +87,8 @@ children when $c$ is 0, or the right children when $c$ is 1.
 \begin{figure}[b]
 \vspace*{-5mm}
 \hrulefill
+\vspace*{-2mm}
+%\fontsize{10pt}{9pt}
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}
@@ -454,35 +459,11 @@ llist a next .
 \subsection{Termination}
 \label{sec:termination}
 
-Proving termination of the algorithm is proving
-termination of the while loop. In \caduceus{}, one can annotate a
-loop by a \emph{variant}: an expression which decreases with respect
-to some well-founded ordering. It is not hard to find such a
-measure for the Schorr-Waite algorithm. There is a triple of natural
-numbers which decrease lexicographically at each iteration:
-\begin{enumerate}
-\item The number of unmarked reachable nodes;
-\item The number of reachable nodes which have $c=0$;
-\item The length of the stack
-\end{enumerate}
-There is a minor issue: in our modeling, there is no assumption on
-the finiteness of the memory, so indeed nothing tells that the set of
-reachable nodes is finite. So this is an extra assumption we have
-to insert in the pre-condition. The additional annotations for
-termination are given Figure~\ref{fig:term}, where in Coq we define
-\[
-\begin{array}{l}
-\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
-\forall p, p \in s \leftrightarrow reachable(a,l,r,root,p) 
-\end{array}
-\]
-The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
-relation are also defined in Coq according the informal definition of
-the measure above. 
 
 \begin{figure}[b]
 \vspace*{-5mm}
 \hrulefill 
+\vspace*{-2mm}
 \begin{alltt}\begin{slshape}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
@@ -498,13 +479,40 @@ void schorr_waite(node root) \{
     @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
    ...
-  \}
-\}
 \end{alltt}
 \vspace*{-5mm}
 \caption{Additional annotations for termination}
 \label{fig:term}
 \end{figure}
+
+Proving termination of the algorithm is proving
+termination of the while loop. In \caduceus{}, one can annotate a
+loop by a \emph{variant}: an expression which decreases with respect
+to some well-founded ordering. It is not hard to find such a
+measure for the Schorr-Waite algorithm. There is a triple of natural
+numbers which decrease lexicographically at each iteration:
+%\begin{enumerate}
+%\item 
+the number of unmarked reachable nodes;
+%\item 
+the number of reachable nodes which have $c=0$;
+%\item 
+the length of the stack.
+%\end{enumerate}
+There is a minor issue: in our modeling, there is no assumption on
+the finiteness of the memory, so indeed nothing tells that the set of
+reachable nodes is finite. So this is an extra assumption we have
+to insert in the pre-condition. The additional annotations for
+termination are given Figure~\ref{fig:term}, where in Coq we define
+\[
+\begin{array}{l}
+\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
+\forall p, p \in s \leftrightarrow reachable(a,l,r,root,p) 
+\end{array}
+\]
+The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
+relation are also defined in Coq according the informal definition of
+the measure above. 
 
 With the completed annotated code, \caduceus{} generates two
 additional verification conditions. The first is to show that the ordering is

@@ -11,25 +11,34 @@ anything specialized for this case study, which additionally gives the
 choice of the back-end prover.
 
 We claim this is a very successful case study, which provides a clear
-evidence that the \caduceus{} approach is powerful. Anyway, there are
-still many potential improvements. There is a clear need for
-cooperation between automatic provers and interactive
-ones. Interactive provers are nice because they are very expressive
-and allow to prove manually difficult goals, but their automatic
-tactics are less powerful than automatic provers. This is especially
-true for Coq, because any decision procedure in it needs to provide a
-checkable proof trace, making its integration very difficult.
+evidence that the \caduceus{} approach is powerful. We think that the
+ability of using predicates in annotations which are only defined on
+the prover side is fundamental. Consequently, it is probably a
+weakness of the JML annotation language for Java, that only Java
+pure methods can be used in annotations.
+
+There are still many potential improvements. There is a clear
+need for cooperation between automatic provers and interactive ones.
+Interactive provers are nice because they are very expressive and
+allow to prove manually difficult goals, but their automatic tactics
+are less powerful than automatic provers. This is especially true for
+Coq, because any decision procedure in it needs to provide a checkable
+proof trace, making its integration very difficult.
 
 Several improvements to the \caduceus{} tool are in progress. There are
-scaling up issues for dealing with code of large size. We are
+scaling up issues for dealing with code of large size. Properties of
+separation of data appears to be crucial for large programs. We are
 currently investigating solutions, in particular by integration of
-advanced static analysis techniques.
+advanced static analysis techniques, and ideas from separation
+logic~\cite{reynolds02lics}.
 
 An interesting question is what would be the next ``mountain to
-climb'' for pointer program verification? multi-procedure programs,
-separation {\Huge TODO}
+climb'' for pointer program verification? We think that
+memory allocation and multi-procedure programs (where specification of
+separation is crucial) are important issues. Significant challenges
+include advanced graph algorithms (such as planarity test) and
+Ukkonen's algorithm~\cite{ukkonen95}.
 
-{\Huge comparer ACSL avec JML}
 
 %%% Local Variables: 
 %%% mode: latex

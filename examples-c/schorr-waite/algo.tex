@@ -32,6 +32,7 @@ of the children is currently explored.
 \begin{figure}[b]
 \vspace*{-5mm}
 \hrulefill
+\vspace*{-2mm}
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;
@@ -44,7 +45,7 @@ void schorr_waite(node root) \{
         node q = t; t = p->r; p->r = p->l; p->l = q; p->c = 1;
       \}
     \} 
-    else \{ \begin{slshape}/* push */ \end{slshape}
+    else \{ \begin{slshape}/* \textbf{push} */ \end{slshape}
       node q = p; p = t; t = t->l; p->l = q; p->m = 1; p->c = 0;
     \}
   \}
@@ -68,19 +69,23 @@ new node and then explores the left child. `swing' occurs when the left
 child has been explored: the search continues to the right child. `pop' is used
 when the right child is explored: the search goes back up.        
 
-\begin{figure}[t]
+\begin{figure}[b]
+%\vspace*{-5mm}
+\hrulefill
+\vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
-\begin{picture}(100,150)(-50,0)
-\put(-80,180){\rnode{null}{\makebox(0,0)[t]{\tiny NULL}}}
+%\fbox{
+\begin{picture}(180,65)(-80,115)
+\put(-80,180){\rnode{null}{\makebox(0,0)[l]{\tiny NULL}}}
 \put(-80,160){\unode{n0}}
 \put(-70,140){\unode{n1}}
 \put(-90,140){\unode{n2}}
-\put(-90,190){\rnode{p}{\makebox(0,0)[rb]{$p$}}}
+\put(-100,180){\rnode{p}{\makebox(0,0)[r]{$p$}}}
 \put(-100,160){\rnode{t}{\makebox(0,0)[r]{$t$}}}
-\put(-100,120){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(-80,120){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(-100,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-80,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(-60,160){\rnode{fig1}}
 \put(-75,130){\rnode{n11}}
 \put(-65,130){\rnode{n12}}
@@ -97,19 +102,19 @@ when the right child is explored: the search goes back up.
 \put(0,160){\mnode{n0}}
 \put(10,140){\unode{n1}}
 \put(-10,140){\unode{n2}}
-\put(20,180){\rnode{p}{\makebox(0,0)[lb]{p}}}
-\put(-20,140){\rnode{t}{\makebox(0,0)[r]{t}}}
-\put(-20,120){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(0,120){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(-20,155){\rnode{p}{\makebox(0,0)[r]{$p$}}}
+\put(-30,140){\rnode{t}{\makebox(0,0)[r]{$t$}}}
+\put(-20,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(0,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(5,130){\rnode{n11}}
 \put(15,130){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
-\ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
+\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncline[nodesepA=1mm]{p}{n0}
+\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-50]{p}{n0}
 \ncline[nodesepA=1mm]{t}{n2}
 \ncline[linewidth=2mm,linecolor=gray]{fig1}{fig2}\Aput{push}
 \put(20,160){\rnode{fig2}}
@@ -118,75 +123,80 @@ when the right child is explored: the search goes back up.
 \put(80,160){\mnode{n0}}
 \put(90,140){\unode{n1}}
 \put(70,140){\mnode{n2}}
-\put(60,140){\rnode{p}{\makebox(0,0)[r]{p}}}
-\put(50,130){\rnode{t}{\makebox(0,0)[b]{t}}}
-\put(50,120){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(80,120){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(100,130){\rnode{n11}}
-\put(80,130){\rnode{n12}}
+\put(50,135){\rnode{p}{\makebox(0,0)[r]{$p$}}}
+\put(40,120){\rnode{t}{\makebox(0,0)[r]{$t$}}}
+\put(60,120){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(80,120){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(95,130){\rnode{n11}}
+\put(85,130){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
-\ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
-\ncarc[arcangleA=150,linewidth=1]{n2}{n0}
+\ncarc[nodesepB=1mm,arcangleA=130,linewidth=1]{n0}{null}
+\ncarc[arcangleA=140,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncline[nodesepA=1mm]{p}{n2}
-\ncline[nodesep=1mm]{t}{null2}
-\ncline[doubleline=true]{fig2}{fig3}\Aput{PUSH}
+\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-40]{p}{n2}
+\ncline[nodesepA=1mm,nodesepB=3mm]{t}{null2}
+\ncline[linewidth=2mm,linecolor=gray]{fig2}{fig3}\Aput{push}
 \put(100,160){\rnode{fig3}}
 \put(130,160){\rnode{fig4}}
+\ncline[linewidth=2mm,linecolor=gray]{fig3}{fig4}\Aput{swing}
+\end{picture}
+%}
+%
+%\fbox{
+\begin{picture}(180,65)(-80,20)
 \put(-80,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(-80,60){\mnode{n0}}
 \put(-70,40){\unode{n1}}
 \put(-90,40){\mnode{n2}}
-\put(-110,60){\rnode{p}{\makebox(0,0)[rb]{p}}}
-\put(-90,0){\rnode{t}{\makebox(0,0)[rt]{t}}}
-\put(-110,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-110,50){\rnode{p}{\makebox(0,0)[r]{$p$}}}
+\put(-60,20){\rnode{t}{\makebox(0,0)[l]{$t$}}}
+\put(-100,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(-80,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
-\put(-80,30){\rnode{n11}}
-\put(-60,30){\rnode{n12}}
+\put(-75,30){\rnode{n11}}
+\put(-65,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
 \ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncarc[arcangleA=-120,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepA=1mm]{p}{n2}
-\ncline[nodesep=1mm]{t}{null3}
+\ncline[nodesepA=1mm,nodesepB=3mm]{t}{null3}
 \ncline[nodesepB=1mm]{n2}{null2}
-\ncline[doubleline=true]{fig3}{fig4}\Aput{SWING}
 \put(-60,60){\rnode{fig4}}
 \put(-30,60){\rnode{fig5}}
 \put(0,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(0,60){\mnode{n0}}
 \put(10,40){\unode{n1}}
 \put(-10,40){\mnode{n2}}
-\put(10,70){\rnode{p}{\makebox(0,0)[lb]{p}}}
-\put(-20,60){\rnode{t}{\makebox(0,0)[rb]{t}}}
-\put(-30,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(-20,50){\rnode{p}{\makebox(0,0)[r]{$p$}}}
+\put(20,20){\rnode{t}{\makebox(0,0)[l]{$t$}}}
+\put(-20,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(0,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(0,30){\rnode{n11}}
-\put(20,30){\rnode{n12}}
+\put(5,30){\rnode{n11}}
+\put(15,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
-\ncline[nodesepA=1mm]{p}{n0}
-\ncline[nodesepA=1mm]{t}{n2}
+\ncarc[nodesepA=1mm,arcangleA=-10,arcangleB=-40]{p}{n0}
+\ncarc[nodesepA=1mm]{t}{n2}
 \ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
-\ncline[doubleline=true]{fig4}{fig5}\Aput{POP}
+\ncline[linewidth=2mm,linecolor=gray]{fig4}{fig5}\Aput{pop}
 \put(20,60){\rnode{fig5}}
 \put(50,60){\rnode{fig6}}
 \put(80,80){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
 \put(80,60){\mnode{n0}}
 \put(90,40){\unode{n1}}
 \put(70,40){\mnode{n2}}
-\put(60,60){\rnode{p}{\makebox(0,0)[r]{p}}}
-\put(100,60){\rnode{t}{\makebox(0,0)[lb]{t}}}
-\put(50,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(60,50){\rnode{p}{\makebox(0,0)[r]{$p$}}}
+\put(110,30){\rnode{t}{\makebox(0,0)[l]{$t$}}}
+\put(60,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(80,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(100,30){\rnode{n11}}
-\put(80,30){\rnode{n12}}
+\put(95,30){\rnode{n11}}
+\put(85,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
 \put(90,60){\rnode{fig1}}
@@ -196,13 +206,14 @@ when the right child is explored: the search goes back up.
 \ncline[nodesepA=1mm]{p}{n0}
 \ncline[nodesepA=1mm]{t}{n1}
 \ncarc[nodesepB=1mm,arcangleA=-120,linewidth=1]{n0}{null}
-\ncline[doubleline=true]{fig5}{fig6}\Aput{SWING}
+\ncline[linewidth=2mm,linecolor=gray]{fig5}{fig6}\Aput{swing}
 \put(110,60){\rnode{fig6}}
 \put(140,60){\rnode{fig7}}
-\ncline[doubleline=true]{fig6}{fig7}\Aput{...}
-
-\end{picture}\label{figure}
+\ncline[linewidth=2mm,linecolor=gray]{fig6}{fig7}\Aput{...}
+\end{picture}
+%}
 \end{center}
+\vspace*{2mm}
 \caption{Schorr-Waite algorithm: sample execution}
 \label{fig:algo}
 \end{figure}
@@ -251,6 +262,7 @@ node expressions from \verb|p1| using the left and right children.
 \begin{figure}[b]
 \vspace*{-5mm}
 \hrulefill
+\vspace*{-2mm}
 \begin{alltt}\begin{slshape}
 /*@ \textbf{requires}
   @  \bs{}forall node x; 
@@ -262,9 +274,9 @@ node expressions from \verb|p1| using the left and right children.
   @ &&
   @  (\bs{}forall node x; ! reachable(root,x) => x->m == \old(x->m))
   @*/\end{slshape}
-void schorr_waite(node root);
+void schorr_waite(node root) \{
 \end{alltt}
-\vspace*{-5mm}
+\vspace*{-3mm}
 \caption{Specification of Schorr-Waite algorithm in the \caduceus{}
   syntax}
 \label{fig:spec}
