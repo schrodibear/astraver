@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/abs.why", characters 89-104 *)
+(* Why obligation from file "why/abs.why", characters 72-131 *)
 Lemma abs1_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -12,50 +12,73 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/abs.why", characters 72-131 *)
+(* Why obligation from file "why/abs.why", characters 139-182 *)
 Lemma abs1_impl_po_2 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
+  forall (Pre4: (valid alloc p)),
+  forall (Test2: (acc intP p) < 0),
   forall (Pre3: (valid alloc p)),
-  forall (caduceus_1: Z),
-  forall (Post3: caduceus_1 = (acc intP p)),
-  forall (result: bool),
-  forall (Post5: (if result then caduceus_1 < 0 else caduceus_1 >= 0)),
-  (if result
-   then (forall (result:Z),
-         (result = (acc intP p) ->
-          (forall (intP0:((memory) Z)),
-           (intP0 = (upd intP p (Zopp result)) -> (acc intP0 p) >= 0)) /\
-          (valid alloc p))) /\
-   (valid alloc p) else (acc intP p) >= 0).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = (Zopp (acc intP p))),
+  forall (Pre1: (valid alloc p)),
+  forall (intP0: ((memory) Z)),
+  forall (Post9: intP0 = (upd intP p aux_2)),
+  (acc intP0 p) >= 0.
 Proof.
 destruct result; intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/abs.why", characters 316-375 *)
+(* Why obligation from file "why/abs.why", characters 190-194 *)
+Lemma abs1_impl_po_3 : 
+  forall (p: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre4: (valid alloc p)),
+  forall (Test1: (acc intP p) >= 0),
+  forall (result0: unit),
+  forall (Post1: result0 = tt),
+  (acc intP p) >= 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/abs.why", characters 383-426 *)
 Lemma abs2_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre9: (valid alloc p)),
+  forall (Pre4: (valid alloc p)),
+  forall (Test2: (acc intP p) < 0),
   forall (Pre3: (valid alloc p)),
-  forall (caduceus_1: Z),
-  forall (Post3: caduceus_1 = (acc intP p)),
-  forall (result: bool),
-  forall (Post5: (if result then caduceus_1 < 0 else caduceus_1 >= 0)),
-  (if result
-   then (forall (result:Z),
-         (result = (acc intP p) ->
-          (forall (intP0:((memory) Z)),
-           (intP0 = (upd intP p (Zopp result)) -> (acc intP0 p) >= 0)) /\
-          (valid alloc p))) /\
-   (valid alloc p) else (acc intP p) >= 0).
+  forall (aux_2: Z),
+  forall (Post4: aux_2 = (Zopp (acc intP p))),
+  forall (Pre1: (valid alloc p)),
+  forall (intP0: ((memory) Z)),
+  forall (Post9: intP0 = (upd intP p aux_2)),
+  (acc intP0 p) >= 0.
 Proof.
 (* intuition. *)
 destruct result; intuition.
 subst intP0.
 caduceus.
+Save.
+
+(* Why obligation from file "why/abs.why", characters 434-438 *)
+Lemma abs2_impl_po_2 : 
+  forall (p: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre4: (valid alloc p)),
+  forall (Test1: (acc intP p) >= 0),
+  forall (result0: unit),
+  forall (Post1: result0 = tt),
+  (acc intP p) >= 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

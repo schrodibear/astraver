@@ -9,6 +9,12 @@ mod_int: [[INT, INT] -> INT];
 
 %%%% DO NOT EDIT BELOW THIS LINE
 
+%% Why logic array_length
+array_length_INT: [ARRAY INT OF INT -> INT];
+
+%% Why logic access
+access_INT: [[ARRAY INT OF INT, INT] -> INT];
+
 %% search1_po_1, Why obligation from file "search.mlw", characters 383-392
 QUERY (FORALL (t:(ARRAY INT OF INT)):
       (FORALL (i:INT):

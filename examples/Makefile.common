@@ -5,6 +5,14 @@ CADUCEUS=../../bin/caduceus.opt
 WHYOPTIONS=--coq-v8 --split
 # WHYOPTIONS=--coq-v8 --valid --split
 
+dp: simplify cvcl
+
+simplify: $(VO:_why.vo=_why.sx)
+	dp -timeout 10 $^
+
+cvcl: $(VO:_why.vo=_why.cvc)
+	dp -timeout 10 $^
+
 %_valid.v %_why.v: %.mlw $(WHY)
 	$(WHY) $(WHYOPTIONS) $<
 

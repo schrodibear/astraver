@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.34 2004-07-19 12:23:16 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.35 2004-07-19 15:35:20 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -247,10 +247,18 @@ and desc_term loc lab env lenv = function
 	     Tapp (x, [a;b], [v]), v
 	 | (_, PTarray _), _ ->
 	     expected_type b.pp_loc (PureType PTint)
-	 | (Tvar t,_), _ ->
-	     raise_located a.pp_loc (UnboundArray t)
 	 | _ ->
-	     assert false)
+	     raise_located a.pp_loc (AnyMessage "array expected"))
+  | PPapp (x, [a;b;c]) when x == Ident.store ->
+      (match term lab env lenv a, term lab env lenv b, term lab env lenv c with
+	 | (a, PTarray v), (b, PTint), (c, tc) when v = tc ->
+	     Tapp (x, [a;b;c], [v]), PTarray v
+	 | (_, PTarray v), (_, PTint), _ ->
+	     expected_type c.pp_loc (PureType v)
+	 | (_, PTarray _), _, _ ->
+	     expected_type b.pp_loc (PureType PTint)
+	 | _ ->
+	     raise_located a.pp_loc (AnyMessage "array expected"))
   | PPapp (x, [a]) when x == Ident.array_length ->
       (match term lab env lenv a with
 	 | a, PTarray v -> 

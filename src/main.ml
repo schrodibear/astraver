@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.75 2004-07-19 12:23:16 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.76 2004-07-19 15:35:20 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -265,20 +265,6 @@ let main () =
     output "Output" 
   end else
     List.iter deal_file files
-
-let rec explain_exception fmt = function
-  | Parsing.Parse_error -> 
-      fprintf fmt "Syntax error"
-  | Stream.Error s -> 
-      fprintf fmt "Syntax error: %s" s
-  | Error (Some loc, e) | Stdpp.Exc_located (_, Error (Some loc, e)) ->
-      fprintf fmt "%a%a" Loc.report loc report e
-  | Stdpp.Exc_located (loc, e) ->
-      fprintf fmt "%a%a" Loc.report loc explain_exception e
-  | Error (_, e) ->
-      report fmt e
-  | e ->
-      fprintf fmt "Anomaly: %s" (Printexc.to_string e); raise e
 
 
 

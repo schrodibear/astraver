@@ -17,6 +17,11 @@ monochrome: [[ARRAY INT OF color, INT, INT, color] -> BOOLEAN] =
 %% Why parameter N
 N: INT;
 
+color: TYPE;
+
+%% Why logic array_length
+array_length_color: [ARRAY INT OF color -> INT];
+
 %% dutch_flag_po_1, Why obligation from file "flag.mlw", characters 771-786
 QUERY (FORALL (t:(ARRAY INT OF color)):
       ((array_length_color(t) = N) =>
@@ -38,6 +43,9 @@ QUERY (FORALL (t:(ARRAY INT OF color)):
        (monochrome(t0, b1, i1, white) AND
        (monochrome(t0, r1, N, red) AND (array_length_color(t0) = N)))))) =>
       ((i1 < r1) => ((0 <= i1) AND (i1 < array_length_color(t0)))))))))))))))))));
+
+%% Why logic access
+access_color: [[ARRAY INT OF color, INT] -> color];
 
 %% dutch_flag_po_2, Why obligation from file "flag.mlw", characters 813-818
 QUERY (FORALL (t:(ARRAY INT OF color)):
@@ -94,6 +102,9 @@ QUERY (FORALL (t:(ARRAY INT OF color)):
       ((aux_2 = t0[i1]) =>
       (FORALL (aux_1:INT):
       ((aux_1 = b1) => ((0 <= aux_1) AND (aux_1 < array_length_color(t0)))))))))))))))))))))))))))));
+
+%% Why logic store
+store_color: [[ARRAY INT OF color, INT, color] -> UNIT];
 
 %% dutch_flag_po_4, Why obligation from file "flag.mlw", characters 828-842
 QUERY (FORALL (t:(ARRAY INT OF color)):

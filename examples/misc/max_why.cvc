@@ -11,6 +11,12 @@ ASSERT 0<l;
 
 %%%% DO NOT EDIT BELOW THIS LINE
 
+%% Why logic array_length
+array_length_INT: [ARRAY INT OF INT -> INT];
+
+%% Why logic access
+access_INT: [[ARRAY INT OF INT, INT] -> INT];
+
 %% pgm_max_end_po_1, Why obligation from file "max.mlw", characters 565-578
 QUERY (FORALL (a:(ARRAY INT OF INT)):
       ((array_length_INT(a) = l) =>

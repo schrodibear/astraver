@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.20 2004-07-19 12:23:16 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.21 2004-07-19 15:35:20 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -29,6 +29,7 @@ open Cc
 open Pp
 open Ltyping
 open Env
+open Report
 
 type elem = 
   | Parameter of string * cc_type
@@ -671,38 +672,83 @@ mod_int: [[INT, INT] -> INT];
 "
   end
 
-(* first pass: we traverse all elements to collect types and closed instances
-   of function symbols *)
-let first_pass fmt = 
-  (***
-  let types_to_declare = Hashtbl.create 97 in
-  let collect_type = function
-    | PTexternal (i, id) as pt when is_closed_pure_type pt ->
-	if not (Hashtbl.mem types_to_declare pt) then 
-	  Hashtbl.add types_to_declare pt ()
-    | _ -> ()
-  in
-  Queue.iter (IterIT.element add_instance_if_closed collect_type) queue;
-  (* declaring types *)
-  Hashtbl.iter
-    (fun pt () -> fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt)
-    types_to_declare;
-  ***)
-  (* declaring predefined symbols *)
-  List.iter (fun (s,t) -> print_logic fmt s (generalize_logic_type t))
-    [ "array_length", 
-      Function ([PTarray (PTvarid (Ident.create "a"))], PTint);
-      "access",
-      let a = PTvarid (Ident.create "a") in Function ([PTarray a; PTint], a)
+let predicate_of_string s =
+  let st = Stream.of_string s in
+  let p = Grammar.Entry.parse Parser.lexpr st in
+  let env = Env.empty in
+  let lenv = Env.logical_env env in
+  let p = Ltyping.predicate Label.empty env lenv p in
+  generalize_predicate p
+
+(* declaring predefined symbols *)
+let predefined_symbols fmt = 
+  let a = PTvarid (Ident.create "a") in
+  let int_array = PTarray PTint in
+  List.iter 
+    (fun (s,t) -> print_logic fmt s (generalize_logic_type t))
+    [ "array_length", Function ([PTarray a], PTint);
+      "access", Function ([PTarray a; PTint], a);
+      "store", Function ([PTarray a; PTint; a], PTunit);
+
+      "sorted_array", Predicate [int_array; PTint; PTint];
+      "exchange"    , Predicate [int_array; int_array; PTint; PTint];
+      "sub_permut"  , Predicate [PTint; PTint; int_array; int_array];
+      "permut"      , Predicate [int_array; int_array];
+      "array_le"    , Predicate [int_array; PTint; PTint; PTint];
+      "array_ge"    , Predicate [int_array; PTint; PTint; PTint];
+    ];
+  List.iter
+    (fun (s,p) -> 
+       try 
+	 print_axiom fmt s (predicate_of_string p)
+       with e -> 
+	 eprintf "error in CVC Lite prelude: %a@." explain_exception e;
+	 exit 1)
+    [ "array_length_store",
+        "forall t:int array. forall i:int. forall v:int.
+         array_length(store(t,i,v)) = array_length(t)";
+
+      "exchange_def",
+        "forall t1:int array. forall t2:int array. forall i:int. forall j:int.
+         exchange(t1,t2,i,j) <-> 
+         (array_length(t1) = array_length(t2) and
+         t1[i] = t2[j] and t2[i] = t1[j] and
+         forall k:int. (k <> i and k <> j) -> t1[k] = t2[k])";
+
+      "permut_refl",
+        "forall t:int array. permut(t,t)";
+ 
+      "permut_sym",
+        "forall t1:int array. forall t2:int array.
+         permut(t1,t2) -> permut(t2,t1)";
+ 
+      "permut_trans",
+        "forall t1:int array. forall t2:int array. forall t3:int array.
+         (permut(t1,t2) and permut(t2,t3)) -> permut(t1,t3)";
+  
+      "permut_exchange",
+        "forall t:int array. forall i:int. forall j:int.
+         permut(t, store(store(t,i,t[j]),j,t[i]))";
+
+      "permut_array_length",
+        "forall t1:int array. forall t2:int array.
+         permut(t1,t2) -> array_length(t1) = array_length(t2)";
+
+      (* TODO: sub_permut *)
+
+      "sorted_array_def",
+        "forall t:int array. forall i:int. forall j:int.
+         sorted_array(t,i,j) <->
+         forall k:int. i <= k < j -> t[k] <= t[k+1]";
     ]
 
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
   let f = fwe ^ "_why.cvc" in
   do_not_edit f
-    (fun fmt -> if not no_cvcl_prelude then prelude fmt)
+    prelude
     sep
     (fun fmt -> 
-       first_pass fmt;
+       if not no_cvcl_prelude then predefined_symbols fmt;
        Queue.iter (print_elem fmt) queue)
 

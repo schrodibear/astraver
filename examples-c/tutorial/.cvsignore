@@ -3,3 +3,6 @@ simplify
 *.makefile
 *.log
 why
+cvcl
+out
+

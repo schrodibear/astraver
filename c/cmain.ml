@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.37 2004-07-19 12:23:16 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.38 2004-07-19 15:35:19 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -111,7 +111,7 @@ let main () =
 	      "# this makefile was automatically generated; do not edit @\n@\n";
 	    fprintf fmt "WHY=why %s@\n@\n" Coptions.why_opt;	    
 	    fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
-	    fprintf fmt ".PHONY: all coq simplify@\n@\n";
+	    fprintf fmt ".PHONY: all coq simplify cvcl@\n@\n";
 	    fprintf fmt "all: coq/caduceus_spec_why.v simplify/%s_why.sx@\n@\n" f;
 
 	    fprintf fmt "coq: coq/%s_why.vo@\n@\n" f;
@@ -121,31 +121,19 @@ let main () =
 	    fprintf fmt "\t@@echo 'why -coq-v8 [...] why/caduceus_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export caduceus_why. Require Export caduceus_tactics.\" $(CADULIB)/why/caduceus.why why/caduceus_spec.why@\n@\n";
 	    fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
 
-	    fprintf fmt "simplify:@\n";
-	    fprintf fmt "\ttime make -f %s.makefile clean do_simplify > simplify.log@\n" f;
-	    fprintf fmt "\t@@echo -n \"valid obligations: \" @\n";
-	    fprintf fmt "\t@@egrep '[0-9]+: Valid.$$' simplify.log | wc -l @\n";
-	    fprintf fmt "\t@@echo -n \"invalid obligations: \"  @\n";
-	    fprintf fmt "\t@@egrep '[0-9]+: Invalid.$$' simplify.log | wc -l @\n\n";
-	    fprintf fmt "do_simplify: simplify/%s_why.sx.all@\n" f;
+	    fprintf fmt "simplify: simplify/%s_why.sx.all@\n" f;
 	    fprintf fmt "\t@@echo 'Running Simplify on proof obligations for %s.c' && (dp -timeout 10 $<)@\n@\n" f;
 	    fprintf fmt "simplify/%s_why.sx.all: simplify/%s_why.sx@\n" f f;
 	    fprintf fmt "\t@@cat simplify/caduceus_why.sx simplify/caduceus_spec_why.sx $< > $@@@\n@\n";
 	    fprintf fmt "simplify/%s_why.sx: why/caduceus_spec.why why/%s.why@\n" f f;
 	    fprintf fmt "\t@@echo 'why -simplify [...] why/%s.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
 
-	    fprintf fmt "cvcl:@\n";
-	    fprintf fmt "\ttime make -f %s.makefile clean do_cvcl > cvcl.log@\n" f;
-	    fprintf fmt "\t@@echo -n \"valid obligations: \" @\n";
-	    fprintf fmt "\t@@egrep '[0-9]+: Valid.$$' cvcl.log | wc -l @\n";
-	    fprintf fmt "\t@@echo -n \"invalid obligations: \"  @\n";
-	    fprintf fmt "\t@@egrep '[0-9]+: Invalid.$$' cvcl.log | wc -l @\n\n";
-	    fprintf fmt "do_cvcl: cvcl/%s_why.cvc.all@\n@\n" f;
+	    fprintf fmt "cvcl: cvcl/%s_why.cvc.all@\n@\n" f;
 	    fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations for %s.c' && (dp -timeout 10 $<)@\n@\n" f;
 	    fprintf fmt "cvcl/%s_why.cvc.all: cvcl/%s_why.cvc@\n" f f;
 	    fprintf fmt "\t@@cat cvcl/caduceus_why.cvc cvcl/caduceus_spec_why.cvc $< > $@@@\n@\n";
 	    fprintf fmt "cvcl/%s_why.cvc: why/caduceus_spec.why why/%s.why@\n" f f;
-	    fprintf fmt "\t@@echo 'why -cvcl [...] why/%s.why' && $(WHY) -cvcl -dir cvcl $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
+	    fprintf fmt "\t@@echo 'why -cvcl [...] why/%s.why' && $(WHY) -cvcl -no-cvcl-prelude -dir cvcl $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
 
 	    fprintf fmt "include %s.depend@\n@\n" f;
 	    fprintf fmt "depend %s.depend: coq/caduceus_spec_why.v coq/caduceus_tactics.v coq/%s_why.v@\n" f f;

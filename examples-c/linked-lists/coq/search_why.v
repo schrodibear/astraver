@@ -9,84 +9,76 @@ Lemma search_impl_po_1 :
   forall (l: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl l)),
+  forall (Pre8: (is_list alloc tl l)),
   forall (p: pointer),
-  forall (Post2: p = l),
+  forall (Post4: p = l),
   (well_founded length_order).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/search.why", characters 200-214 *)
+(* Why obligation from file "why/search.why", characters 156-279 *)
 Lemma search_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl l)),
+  forall (Pre8: (is_list alloc tl l)),
   forall (p: pointer),
-  forall (Post2: p = l),
+  forall (Post4: p = l),
   forall (Variant1: Length),
   forall (p1: pointer),
-  forall (Pre8: Variant1 = (length alloc tl p1)),
-  forall (Pre7: (is_list alloc tl p1)),
-  forall (Test4: true = true),
-  forall (Test3: ~(p1 = null)),
-  (valid alloc p1).
+  forall (Pre7: Variant1 = (length alloc tl p1)),
+  forall (Pre6: (is_list alloc tl p1)),
+  (~(p1 = null) -> (valid alloc p1)).
 Proof.
 intuition.
 inversion Pre7; intuition.
 absurd (p1 = null); auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 183-279 *)
+(* Why obligation from file "why/search.why", characters 383-397 *)
 Lemma search_impl_po_3 : 
   forall (l: pointer),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (hd: ((memory) Z)),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl l)),
+  forall (Pre8: (is_list alloc tl l)),
   forall (p: pointer),
-  forall (Post2: p = l),
+  forall (Post4: p = l),
   forall (Variant1: Length),
   forall (p1: pointer),
-  forall (Pre8: Variant1 = (length alloc tl p1)),
-  forall (Pre7: (is_list alloc tl p1)),
-  forall (Test4: true = true),
-  forall (Test3: ~(p1 = null)),
-  forall (Pre4: (valid alloc p1)),
-  forall (caduceus_1: Z),
-  forall (Post15: caduceus_1 = (acc hd p1)),
-  forall (result1: bool),
-  forall (Post17: (if result1 then caduceus_1 <> v else caduceus_1 = v)),
-  (if result1
-   then (forall (p:pointer),
-         (p = (acc tl p1) -> (is_list alloc tl p) /\
-          (length_order (length alloc tl p) (length alloc tl p1)))) /\
-   (valid alloc p1) else (~(p1 = null) -> (acc hd p1) = v)).
+  forall (Pre7: Variant1 = (length alloc tl p1)),
+  forall (Pre6: (is_list alloc tl p1)),
+  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
+  forall (Test2: ~(p1 = null) /\ (acc hd p1) <> v),
+  (valid alloc p1).
 Proof.
 destruct result1; intuition; subst; auto.
 inversion Pre7; intuition.
 absurd (p1 = null); auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 279-279 *)
+(* Why obligation from file "why/search.why", characters 378-397 *)
 Lemma search_impl_po_4 : 
   forall (l: pointer),
   forall (v: Z),
   forall (alloc: alloc_table),
   forall (hd: ((memory) Z)),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl l)),
+  forall (Pre8: (is_list alloc tl l)),
   forall (p: pointer),
-  forall (Post2: p = l),
+  forall (Post4: p = l),
   forall (Variant1: Length),
   forall (p1: pointer),
-  forall (Pre8: Variant1 = (length alloc tl p1)),
-  forall (Pre7: (is_list alloc tl p1)),
-  forall (Test4: true = true),
-  forall (Test2: p1 = null),
-  (~(p1 = null) -> (acc hd p1) = v).
+  forall (Pre7: Variant1 = (length alloc tl p1)),
+  forall (Pre6: (is_list alloc tl p1)),
+  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
+  forall (Test2: ~(p1 = null) /\ (acc hd p1) <> v),
+  forall (p2: pointer),
+  forall (Post2: p2 = (acc tl p1)),
+  (is_list alloc tl p2) /\
+  (length_order (length alloc tl p2) (length alloc tl p1)).
 Proof.
 intuition.
 Save.
@@ -94,18 +86,21 @@ Save.
 (* Why obligation from file "why/search.why", characters 149-405 *)
 Lemma search_impl_po_5 : 
   forall (l: pointer),
+  forall (v: Z),
   forall (alloc: alloc_table),
+  forall (hd: ((memory) Z)),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl l)),
+  forall (Pre8: (is_list alloc tl l)),
   forall (p: pointer),
-  forall (Post2: p = l),
+  forall (Post4: p = l),
   forall (Variant1: Length),
   forall (p1: pointer),
-  forall (Pre8: Variant1 = (length alloc tl p1)),
-  forall (Pre7: (is_list alloc tl p1)),
-  forall (Test4: true = true),
+  forall (Pre7: Variant1 = (length alloc tl p1)),
+  forall (Pre6: (is_list alloc tl p1)),
+  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
+  forall (Test2: ~(p1 = null) /\ (acc hd p1) <> v),
   forall (p2: pointer),
-  forall (Post3: (is_list alloc tl p2) /\
+  forall (Post5: (is_list alloc tl p2) /\
                  (length_order (length alloc tl p2) (length alloc tl p1))),
   (length_order (length alloc tl p2) Variant1).
 Proof.
@@ -113,17 +108,40 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 299-320 *)
+(* Why obligation from file "why/search.why", characters 149-405 *)
 Lemma search_impl_po_6 : 
   forall (l: pointer),
+  forall (v: Z),
   forall (alloc: alloc_table),
+  forall (hd: ((memory) Z)),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl l)),
+  forall (Pre8: (is_list alloc tl l)),
   forall (p: pointer),
-  forall (Post2: p = l),
-  (is_list alloc tl p).
+  forall (Post4: p = l),
+  forall (Variant1: Length),
+  forall (p1: pointer),
+  forall (Pre7: Variant1 = (length alloc tl p1)),
+  forall (Pre6: (is_list alloc tl p1)),
+  forall (Pre5: (~(p1 = null) -> (valid alloc p1))),
+  forall (Test1: p1 = null \/ ~(p1 = null) /\ (acc hd p1) = v),
+  (forall (result:pointer),
+   (result = p1 -> (~(result = null) -> (acc hd result) = v))).
 Proof.
 intuition.
 subst; auto.
+Save.
+
+(* Why obligation from file "why/search.why", characters 299-320 *)
+Lemma search_impl_po_7 : 
+  forall (l: pointer),
+  forall (alloc: alloc_table),
+  forall (tl: ((memory) pointer)),
+  forall (Pre8: (is_list alloc tl l)),
+  forall (p: pointer),
+  forall (Post4: p = l),
+  (is_list alloc tl p).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

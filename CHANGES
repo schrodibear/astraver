@@ -1,4 +1,6 @@
 
+  o new tool `dp' to call decision procedures Simplify and CVC Lite
+    (calls the DP once for each goal with a timeout and displays stats)
   o CVC Lite output (option --cvcl; see http://chicory.stanford.edu/CVCL/)
   o Coq: parameters no more generated when -valid is not set
 

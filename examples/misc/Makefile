@@ -12,10 +12,4 @@ VO=swap0_why.vo loop0_why.vo peano_why.vo power_why.vo \
 
 all: $(VO)
 
-sx: $(VO:_why.vo=_why.sx)
-	for f in $^; do echo $$f; Simplify $$f; done
-
-cvc: $(VO:_why.vo=_why.cvc)
-	for f in $^; do echo $$f; cvcl-optimized < $$f; done
-
 include ../Makefile.common

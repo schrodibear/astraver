@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.97 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.98 2004-07-19 15:35:20 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -257,9 +257,9 @@ EXTEND
 	mk_pp loc (PPapp (Ident.access, [mk_pp loc (PPvar x); t]))
     | "if"; p0 = lexpr; "then"; p1 = lexpr; "else"; p2 = lexpr ->
 	mk_pp loc (PPif (p0, p1, p2))
-    | LIDENT "forall"; id = ident; ":"; t = primitive_type; "." ; a = lexpr -> 
+    | LIDENT "forall"; id = ident; ":"; t = logic_arg; "." ; a = lexpr -> 
 	mk_pp loc (PPforall (id, t, a))
-    | LIDENT "exists"; id = ident; ":"; t = primitive_type; "." ; a = lexpr -> 
+    | LIDENT "exists"; id = ident; ":"; t = logic_arg; "." ; a = lexpr -> 
 	mk_pp loc (PPexists (id, t, a))
     | LIDENT "fpi"; "("; e = lexpr; ","; f1 = FLOAT; ","; f2 = FLOAT; ")" ->
 	let f1 = Float_lexer.split f1 in

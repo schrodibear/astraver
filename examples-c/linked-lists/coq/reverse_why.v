@@ -11,11 +11,11 @@ Lemma rev_impl_po_1 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   (well_founded length_order).
 Proof.
 intuition.
@@ -36,24 +36,24 @@ Lemma rev_impl_po_2 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   forall (Variant1: Length),
   forall (p2: pointer),
   forall (r1: pointer),
   forall (tl0: ((memory) pointer)),
-  forall (Pre8: Variant1 = (length alloc tl0 r1)),
-  forall (Pre7: (exists lp:plist,
+  forall (Pre9: Variant1 = (length alloc tl0 r1)),
+  forall (Pre8: (exists lp:plist,
                  (exists lr:plist, (((llist alloc tl0 p2 lp) /\
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
   forall (Test2: ~(r1 = null)),
   forall (q: pointer),
-  forall (Post2: q = r1),
+  forall (Post6: q = r1),
   (valid alloc r1).
 Proof.
 intuition.
@@ -67,27 +67,26 @@ Lemma rev_impl_po_3 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   forall (Variant1: Length),
   forall (p2: pointer),
   forall (r1: pointer),
   forall (tl0: ((memory) pointer)),
-  forall (Pre8: Variant1 = (length alloc tl0 r1)),
-  forall (Pre7: (exists lp:plist,
+  forall (Pre9: Variant1 = (length alloc tl0 r1)),
+  forall (Pre8: (exists lp:plist,
                  (exists lr:plist, (((llist alloc tl0 p2 lp) /\
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
   forall (Test2: ~(r1 = null)),
   forall (q: pointer),
-  forall (Post2: q = r1),
-  forall (Pre6: (valid alloc r1)),
+  forall (Post6: q = r1),
   forall (r2: pointer),
-  forall (Post12: r2 = (acc tl0 r1)),
+  forall (Post2: r2 = (acc tl0 r1)),
   (valid alloc q).
 Proof.
 intros; subst; intuition.
@@ -98,32 +97,31 @@ Lemma rev_impl_po_4 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   forall (Variant1: Length),
   forall (p2: pointer),
   forall (r1: pointer),
   forall (tl0: ((memory) pointer)),
-  forall (Pre8: Variant1 = (length alloc tl0 r1)),
-  forall (Pre7: (exists lp:plist,
+  forall (Pre9: Variant1 = (length alloc tl0 r1)),
+  forall (Pre8: (exists lp:plist,
                  (exists lr:plist, (((llist alloc tl0 p2 lp) /\
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
   forall (Test2: ~(r1 = null)),
   forall (q: pointer),
-  forall (Post2: q = r1),
-  forall (Pre6: (valid alloc r1)),
+  forall (Post6: q = r1),
   forall (r2: pointer),
-  forall (Post12: r2 = (acc tl0 r1)),
-  forall (Pre5: (valid alloc q)),
+  forall (Post2: r2 = (acc tl0 r1)),
+  forall (Pre7: (valid alloc q)),
   forall (tl1: ((memory) pointer)),
-  forall (Post15: tl1 = (upd tl0 q p2)),
+  forall (Post17: tl1 = (upd tl0 q p2)),
   forall (p3: pointer),
-  forall (Post1: p3 = q),
+  forall (Post5: p3 = q),
   (exists lp:plist,
    (exists lr:plist, (((llist alloc tl1 p3 lp) /\ (llist alloc tl1 r2 lr)) /\
     (disjoint lp lr)) /\
@@ -166,17 +164,17 @@ Lemma rev_impl_po_5 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   forall (Variant1: Length),
   forall (p2: pointer),
   forall (r1: pointer),
   forall (tl0: ((memory) pointer)),
-  forall (Pre8: Variant1 = (length alloc tl0 r1)),
-  forall (Pre7: (exists lp:plist,
+  forall (Pre9: Variant1 = (length alloc tl0 r1)),
+  forall (Pre8: (exists lp:plist,
                  (exists lr:plist, (((llist alloc tl0 p2 lp) /\
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
@@ -185,12 +183,12 @@ Lemma rev_impl_po_5 :
   forall (p3: pointer),
   forall (r2: pointer),
   forall (tl1: ((memory) pointer)),
-  forall (Post5: (exists lp:plist,
-                  (exists lr:plist, (((llist alloc tl1 p3 lp) /\
-                   (llist alloc tl1 r2 lr)) /\ (disjoint lp lr)) /\
-                   (forall (l:plist),
-                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
-                 (length_order (length alloc tl1 r2) (length alloc tl0 r1))),
+  forall (Post10: (exists lp:plist,
+                   (exists lr:plist, (((llist alloc tl1 p3 lp) /\
+                    (llist alloc tl1 r2 lr)) /\ (disjoint lp lr)) /\
+                    (forall (l:plist),
+                     ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
+                  (length_order (length alloc tl1 r2) (length alloc tl0 r1))),
   (length_order (length alloc tl1 r2) Variant1).
 Proof.
 intros; subst; intuition.
@@ -201,24 +199,26 @@ Lemma rev_impl_po_6 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   forall (Variant1: Length),
   forall (p2: pointer),
   forall (r1: pointer),
   forall (tl0: ((memory) pointer)),
-  forall (Pre8: Variant1 = (length alloc tl0 r1)),
-  forall (Pre7: (exists lp:plist,
+  forall (Pre9: Variant1 = (length alloc tl0 r1)),
+  forall (Pre8: (exists lp:plist,
                  (exists lr:plist, (((llist alloc tl0 p2 lp) /\
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
   forall (Test1: r1 = null),
-  (forall (l0:plist),
-   ((llist alloc tl p0 l0) -> (llist alloc tl0 p2 (rev l0)))).
+  (forall (result:pointer),
+   (result = p2 ->
+    (forall (l0:plist),
+     ((llist alloc tl p0 l0) -> (llist alloc tl0 result (rev l0)))))).
 Proof.
 intuition.
 elim Pre7; clear Pre7; intuition.
@@ -238,11 +238,11 @@ Lemma rev_impl_po_7 :
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
-  forall (Pre9: (is_list alloc tl p0)),
+  forall (Pre10: (is_list alloc tl p0)),
   forall (r: pointer),
-  forall (Post4: r = p0),
+  forall (Post9: r = p0),
   forall (p: pointer),
-  forall (Post3: p = null),
+  forall (Post8: p = null),
   (exists lp:plist,
    (exists lr:plist, (((llist alloc tl p lp) /\ (llist alloc tl r lr)) /\
     (disjoint lp lr)) /\

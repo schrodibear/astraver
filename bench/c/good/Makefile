@@ -18,28 +18,21 @@ default:
 	dp -timeout 10 cvcl/*_why.cvc.all
 
 # running Simplify on all programs
-# with log in simplify.log and statictics
-simplify:
-	time make clean do_simplify > simplify.log
-	@echo -n "valid obligations: " 
-	@egrep '[0-9]+: Valid.$$' simplify.log | wc -l
-	@echo -n "invalid obligations: " 
-	@egrep '[0-9]+: Invalid.$$' simplify.log | wc -l
-
-# without log
-do_simplify: $(WFILES)
+simplify: $(WFILES)
 	for f in $(CFILES:.c=); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
-	  make -f $$f.makefile do_simplify; \
+	  make -f $$f.makefile simplify/$${f}_why.sx.all; \
 	done
+	dp -timeout 10 simplify/*_why.sx.all
 
-do_cvcl: $(CFILES)
+cvcl: $(CFILES)
 	for f in $(CFILES:.c=); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
-	  make -f $$f.makefile do_cvcl; \
+	  make -f $$f.makefile cvcl/$${f}_why.cvc.all; \
 	done
+	dp -timeout 10 cvcl/*_why.cvc.all
 
 # running Coq on all programs
 coq: $(WFILES)

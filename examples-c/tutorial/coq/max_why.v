@@ -3,23 +3,19 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/max.why", characters 91-92 *)
+(* Why obligation from file "why/max.why", characters 45-1026 *)
 Lemma max_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),
-  forall (Test2: x > y),
-  (x >= x /\ x >= y) /\ (forall (z:Z), (z >= x /\ z >= y -> z >= x)).
+  forall (result: Z),
+  forall (Post1: x > y /\ result = x \/ x <= y /\ result = y),
+  (result >= x /\ result >= y) /\
+  (forall (z:Z), (z >= x /\ z >= y -> z >= result)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/max.why", characters 98-99 *)
-Lemma max_impl_po_2 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (Test1: x <= y),
-  (y >= x /\ y >= y) /\ (forall (z:Z), (z >= x /\ z >= y -> z >= y)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

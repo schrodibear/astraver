@@ -207,6 +207,9 @@ QUERY (FORALL (n:INT):
       ((result0 = tt) =>
       (FORALL (result:INT): ((result = x) => (result = F(n)))))))))))))));
 
+%% Why logic array_length
+array_length_INT: [ARRAY INT OF INT -> INT];
+
 %% fib4_po_1, Why obligation from file "fib.mlw", characters 1393-1394
 QUERY (FORALL (n:INT):
       (FORALL (t:(ARRAY INT OF INT)):
@@ -223,6 +226,12 @@ QUERY (FORALL (n:INT):
       ((aux_2 = 1) =>
       (FORALL (aux_1:INT):
       ((aux_1 = 0) => ((0 <= aux_1) AND (aux_1 < array_length_INT(t)))))))))));
+
+%% Why logic store
+store_INT: [[ARRAY INT OF INT, INT, INT] -> UNIT];
+
+%% Why logic access
+access_INT: [[ARRAY INT OF INT, INT] -> INT];
 
 %% fib4_po_3, Why obligation from file "fib.mlw", characters 1414-1423
 QUERY (FORALL (n:INT):
