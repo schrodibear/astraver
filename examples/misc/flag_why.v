@@ -28,7 +28,7 @@ Lemma dutch_flag_po_1 :
   (Post2: result0 = `0`)
   (result1: Z)
   (Post3: result1 = N)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

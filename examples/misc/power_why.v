@@ -99,7 +99,7 @@ Lemma power1_po_1 :
   (Post1: m0 = x)
   (y0: Z)
   (Post2: y0 = `1`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

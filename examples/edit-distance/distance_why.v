@@ -26,7 +26,7 @@ Definition test_char := [a,b:A](bool_of_sumbool (A_eq_dec a b)).
 Lemma distance_po_1 : 
   (i0: Z)
   (Post1: i0 = `0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -115,7 +115,7 @@ Lemma distance_po_6 :
           `i1 > n2`)
   (i2: Z)
   (Post5: i2 = `n1 - 1`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Intuition.
 Save.
@@ -176,7 +176,7 @@ Lemma distance_po_8 :
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
   (Post8: j1 = `n2 - 1`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Intuition.
 Save.

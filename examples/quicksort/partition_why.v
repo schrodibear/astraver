@@ -88,7 +88,7 @@ Lemma partition_po_2 :
   (Post2: result = `l + 1`)
   (result0: Z)
   (Post3: result0 = r)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -114,7 +114,7 @@ Lemma partition_po_3 :
         (array_le t0 `l + 1` `i0 - 1` pv) /\ (array_ge t0 `j0 + 1` r pv) /\
         (sub_permut l r t0 t) /\ `(access t0 l) = (access t l)`)
   (Test12: `i0 < j0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -350,7 +350,7 @@ Lemma partition_po_10 :
   (Invi: ((`i0 <= i1` /\ `i1 <= r`) /\ (array_le t0 `l + 1` `i1 - 1` pv)) /\
          (`(access t0 i1) <= pv` /\ `i1 >= j0` \/ `(access t0 i1) > pv` /\
          false = false))
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Intuition.
 Save.

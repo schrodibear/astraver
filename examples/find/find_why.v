@@ -13,7 +13,7 @@ Lemma find_po_1 :
   (Post1: result = `1`)
   (result0: Z)
   (Post2: result0 = N)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -58,7 +58,7 @@ Lemma find_po_3 :
   (Post4: result2 = m0)
   (result3: Z)
   (Post5: result3 = n0)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -93,7 +93,7 @@ Lemma find_po_4 :
            (m_invariant m0 A1) /\ (n_invariant n0 A1) /\ `0 <= j0` /\
            `i0 <= N + 1` /\ (termination i0 j0 m0 n0 r A1) /\ (permut A1 A))
   (Test9: `i0 <= j0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -304,7 +304,7 @@ Lemma find_po_9 :
   (i1: Z)
   (Inv_i: ((i_invariant m0 n0 i1 r A1) /\ `i0 <= i1` /\ `i1 <= n0` /\
           (termination i1 j0 m0 n0 r A1)) /\ `(access A1 i1) >= r`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Intuition.
 Save.

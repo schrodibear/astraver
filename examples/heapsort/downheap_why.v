@@ -150,7 +150,7 @@ Lemma downheap_po_1 :
   (t: (array N Z))
   (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

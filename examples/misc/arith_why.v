@@ -16,7 +16,7 @@ Lemma mult_po_1 :
   (Post2: result0 = y)
   (result1: Z)
   (Post3: result1 = `0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

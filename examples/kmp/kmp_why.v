@@ -42,7 +42,7 @@ Lemma initnext_po_2 :
   (Test8: `1 < M`)
   (next0: (array M Z))
   (Post3: next0 = (store next `1` `0`))
-  (well_founded ? lexZ).
+  (well_founded lexZ).
 Proof.
 Intros; Exact lexZ_well_founded.
 Save.
@@ -885,7 +885,7 @@ Lemma kmp_po_1 :
   (Post2: result0 = `0`)
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
-  (well_founded ? lexZ).
+  (well_founded lexZ).
 Proof.
 Intros; Exact lexZ_well_founded.
 Save.

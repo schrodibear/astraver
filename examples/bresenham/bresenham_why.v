@@ -71,7 +71,7 @@ Lemma bresenham_po_1 :
   (Post2: y0 = `0`)
   (e0: Z)
   (Post3: e0 = `2 * y2 - x2`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

@@ -8,7 +8,7 @@ Lemma add1_po_1 :
   (Pre3: `y >= 0`)
   (result: Z)
   (Post1: result = y)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof. Auto with *. Save.
 
 Lemma add1_po_2 : 
@@ -158,7 +158,7 @@ Definition u1 := (* validation *)
 Lemma rec_add1_po_1 : 
   (y: Z)
   (Pre6: `y >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -309,7 +309,7 @@ Lemma mult1_po_1 :
   (Post2: savex = x)
   (x0: Z)
   (Post3: x0 = `0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof. Auto with *. Save.
 
 Lemma mult1_po_2 : 

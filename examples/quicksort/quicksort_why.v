@@ -12,7 +12,7 @@ Lemma quick_rec_po_1 :
   (l: Z)
   (r: Z)
   (Pre9: `0 <= l` /\ `r < N`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

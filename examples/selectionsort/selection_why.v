@@ -10,7 +10,7 @@ Lemma selection_po_1 :
   (Pre13: `n >= 1`)
   (result: Z)
   (Post1: result = `0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -34,7 +34,7 @@ Lemma selection_po_2 :
   (Post2: result1 = i0)
   (result2: Z)
   (Post3: result2 = `i0 + 1`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

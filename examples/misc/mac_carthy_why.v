@@ -4,7 +4,7 @@
 Require Why.
 
 Lemma f91_po_1 : 
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

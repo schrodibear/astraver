@@ -5,7 +5,7 @@ Require Omega.
 Lemma p_po_1 : 
   (x: Z)
   (Pre6: `x >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof. Auto with *. Save.
 
 Lemma p_po_2 : 

@@ -140,7 +140,7 @@ Lemma binary_search_po_1 :
   (Post2: u0 = N)
   (p0: Z)
   (Post3: p0 = `0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof. Auto with *. Save.
 
 Lemma binary_search_po_2 : 

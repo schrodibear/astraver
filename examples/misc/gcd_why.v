@@ -24,7 +24,7 @@ Lemma gcd1_po_1 :
   (Post1: result = a)
   (result0: Z)
   (Post2: result0 = b)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -244,7 +244,7 @@ Lemma gcd2_po_1 :
   (Post1: result = a)
   (result0: Z)
   (Post2: result0 = b)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

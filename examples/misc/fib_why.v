@@ -12,7 +12,7 @@ Hints Resolve F_0 F_1 F_n.
 Lemma fib1_po_1 : 
   (n: Z)
   (Pre8: `n >= 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -164,7 +164,7 @@ Lemma fib2_aux_po_1 :
   (fx: Z)
   (fx_1: Z)
   (Pre6: (`1 <= x` /\ `x <= n`) /\ `fx = (F x)` /\ `fx_1 = (F x - 1)`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -328,7 +328,7 @@ Lemma fib3_po_1 :
   (result1: Z)
   (Post3: result1 = `1`)
   (Test4: `n > 0`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -647,7 +647,7 @@ Lemma fib4_po_4 :
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
   (Post3: result2 = `2`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

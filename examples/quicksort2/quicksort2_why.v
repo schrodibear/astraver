@@ -68,7 +68,7 @@ Lemma quick_rec_po_1 :
   (l: Z)
   (r: Z)
   (Pre15: `0 <= l` /\ `r < N`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -106,7 +106,7 @@ Lemma quick_rec_po_3 :
   (Post2: result0 = l0)
   (result1: Z)
   (Post3: result1 = `l0 + 1`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.

@@ -249,7 +249,7 @@ Lemma sqrt_po_4 :
   (Pre1: ~(`2` = `0`))
   (result2: Z)
   (Post2: result2 = (Zdiv (`x + 1`) `2`))
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof. (* sqrt_po_4 *)
 Auto with *.
 Save.

@@ -69,7 +69,7 @@ Lemma heapsort_po_1 :
   (Pre10: `1 <= N`)
   (result: Z)
   (Post1: result = (Zdiv2 `N - 2`))
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
@@ -192,7 +192,7 @@ Lemma heapsort_po_7 :
   (Post9: (heap t0 `N - 1` `0`) /\ (permut t0 t))
   (result0: Z)
   (Post4: result0 = `N - 1`)
-  (well_founded ? (Zwf ZERO)).
+  (well_founded (Zwf ZERO)).
 Proof.
 Intuition.
 Save.
