@@ -77,6 +77,8 @@ Hint Extern 0 (valid_index _ _ _) => valid_index.
   tactics for proving 'assigns' clauses 
 ****************************************)
 
+Hint Resolve assigns_refl.
+
 Ltac CleanAssigns :=
   match goal with
 (*

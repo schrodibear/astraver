@@ -258,6 +258,10 @@ axiom assigns_trans :
   forall m1:'a memory. forall m2:'a memory. forall m3: 'a memory.
   assigns(a,m1,m2,l) -> assigns(a,m2,m3,l) -> assigns(a,m1,m3,l)
 
+axiom assigns_refl :
+  forall a:alloc_table. forall l:assign_loc. 
+  forall m:'a memory. assigns(a,m,m,l)
+
 (* memory allocation *)
 
 logic on_heap : alloc_table, pointer -> prop

@@ -3,1146 +3,2408 @@
 
 Require Export caduceus_spec_why.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-destruct result; intuition; subst; caduceus.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/sort.why", characters 381-460 *)
-Lemma sort4_2_impl_po_1 : 
+(* Why obligation from file "why/sort.why", characters 300-327 *)
+Lemma sort4_1_impl_po_1 : 
+  forall (a: Z),
+  forall (b: Z),
+  forall (c: Z),
+  forall (d: Z),
+  forall (Test2: a > b),
+  forall (tmp1: Z),
+  forall (Post2: tmp1 = a),
+  forall (a1: Z),
+  forall (Post3: a1 = b),
+  forall (b1: Z),
+  forall (Post4: b1 = tmp1),
+  ((c > d ->
+    (forall (tmp:Z),
+     (tmp = c ->
+      (forall (c:Z),
+       (c = d ->
+        (forall (d:Z),
+         (d = tmp ->
+          ((a1 > c ->
+            (forall (tmp:Z),
+             (tmp = a1 ->
+              (forall (a:Z),
+               (a = c ->
+                (forall (c:Z),
+                 (c = tmp ->
+                  ((b1 > d ->
+                    (forall (tmp:Z),
+                     (tmp = b1 ->
+                      (forall (b:Z),
+                       (b = d ->
+                        (forall (d:Z),
+                         (d = tmp ->
+                          ((b > c ->
+                            (forall (tmp:Z),
+                             (tmp = b ->
+                              (forall (b:Z),
+                               (b = c ->
+                                (forall (c:Z),
+                                 (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                          ((b <= c ->
+                            (forall (result:unit),
+                             (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                  ((b1 <= d ->
+                    (forall (result:unit),
+                     (result = tt ->
+                      ((b1 > c ->
+                        (forall (tmp:Z),
+                         (tmp = b1 ->
+                          (forall (b:Z),
+                           (b = c ->
+                            (forall (c:Z),
+                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                      ((b1 <= c ->
+                        (forall (result:unit),
+                         (result = tt -> (a <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))) /\
+          ((a1 <= c ->
+            (forall (result:unit),
+             (result = tt ->
+              ((b1 > d ->
+                (forall (tmp:Z),
+                 (tmp = b1 ->
+                  (forall (b:Z),
+                   (b = d ->
+                    (forall (d:Z),
+                     (d = tmp ->
+                      ((b > c ->
+                        (forall (tmp:Z),
+                         (tmp = b ->
+                          (forall (b:Z),
+                           (b = c ->
+                            (forall (c:Z),
+                             (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                      ((b <= c ->
+                        (forall (result:unit),
+                         (result = tt -> (a1 <= b /\ b <= c) /\ c <= d)))))))))))) /\
+              ((b1 <= d ->
+                (forall (result:unit),
+                 (result = tt ->
+                  ((b1 > c ->
+                    (forall (tmp:Z),
+                     (tmp = b1 ->
+                      (forall (b:Z),
+                       (b = c ->
+                        (forall (c:Z),
+                         (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                  ((b1 <= c ->
+                    (forall (result:unit),
+                     (result = tt -> (a1 <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))))))) /\
+  ((c <= d ->
+    (forall (result:unit),
+     (result = tt ->
+      ((a1 > c ->
+        (forall (tmp:Z),
+         (tmp = a1 ->
+          (forall (a:Z),
+           (a = c ->
+            (forall (c:Z),
+             (c = tmp ->
+              ((b1 > d ->
+                (forall (tmp:Z),
+                 (tmp = b1 ->
+                  (forall (b:Z),
+                   (b = d ->
+                    (forall (d:Z),
+                     (d = tmp ->
+                      ((b > c ->
+                        (forall (tmp:Z),
+                         (tmp = b ->
+                          (forall (b:Z),
+                           (b = c ->
+                            (forall (c:Z),
+                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                      ((b <= c ->
+                        (forall (result:unit),
+                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+              ((b1 <= d ->
+                (forall (result:unit),
+                 (result = tt ->
+                  ((b1 > c ->
+                    (forall (tmp:Z),
+                     (tmp = b1 ->
+                      (forall (b:Z),
+                       (b = c ->
+                        (forall (c:Z),
+                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                  ((b1 <= c ->
+                    (forall (result:unit),
+                     (result = tt -> (a <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))) /\
+      ((a1 <= c ->
+        (forall (result:unit),
+         (result = tt ->
+          ((b1 > d ->
+            (forall (tmp:Z),
+             (tmp = b1 ->
+              (forall (b:Z),
+               (b = d ->
+                (forall (d:Z),
+                 (d = tmp ->
+                  ((b > c ->
+                    (forall (tmp:Z),
+                     (tmp = b ->
+                      (forall (b:Z),
+                       (b = c ->
+                        (forall (c:Z),
+                         (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+                  ((b <= c ->
+                    (forall (result:unit),
+                     (result = tt -> (a1 <= b /\ b <= c) /\ c <= d)))))))))))) /\
+          ((b1 <= d ->
+            (forall (result:unit),
+             (result = tt ->
+              ((b1 > c ->
+                (forall (tmp:Z),
+                 (tmp = b1 ->
+                  (forall (b:Z),
+                   (b = c ->
+                    (forall (c:Z), (c = tmp -> (a1 <= b /\ b <= c) /\ c <= d)))))))) /\
+              ((b1 <= c ->
+                (forall (result:unit),
+                 (result = tt -> (a1 <= b1 /\ b1 <= c) /\ c <= d)))))))))))))))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 345-345 *)
+Lemma sort4_1_impl_po_2 : 
+  forall (a: Z),
+  forall (b: Z),
+  forall (c: Z),
+  forall (d: Z),
+  forall (Test1: a <= b),
+  forall (result0: unit),
+  forall (Post1: result0 = tt),
+  ((c > d ->
+    (forall (tmp:Z),
+     (tmp = c ->
+      (forall (c:Z),
+       (c = d ->
+        (forall (d:Z),
+         (d = tmp ->
+          ((a > c ->
+            (forall (tmp:Z),
+             (tmp = a ->
+              (forall (a:Z),
+               (a = c ->
+                (forall (c:Z),
+                 (c = tmp ->
+                  ((b > d ->
+                    (forall (tmp:Z),
+                     (tmp = b ->
+                      (forall (b:Z),
+                       (b = d ->
+                        (forall (d:Z),
+                         (d = tmp ->
+                          ((b > c ->
+                            (forall (tmp:Z),
+                             (tmp = b ->
+                              (forall (b:Z),
+                               (b = c ->
+                                (forall (c:Z),
+                                 (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                          ((b <= c ->
+                            (forall (result:unit),
+                             (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+                  ((b <= d ->
+                    (forall (result:unit),
+                     (result = tt ->
+                      ((b > c ->
+                        (forall (tmp:Z),
+                         (tmp = b ->
+                          (forall (b:Z),
+                           (b = c ->
+                            (forall (c:Z),
+                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                      ((b <= c ->
+                        (forall (result:unit),
+                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))) /\
+          ((a <= c ->
+            (forall (result:unit),
+             (result = tt ->
+              ((b > d ->
+                (forall (tmp:Z),
+                 (tmp = b ->
+                  (forall (b:Z),
+                   (b = d ->
+                    (forall (d:Z),
+                     (d = tmp ->
+                      ((b > c ->
+                        (forall (tmp:Z),
+                         (tmp = b ->
+                          (forall (b:Z),
+                           (b = c ->
+                            (forall (c:Z),
+                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                      ((b <= c ->
+                        (forall (result:unit),
+                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+              ((b <= d ->
+                (forall (result:unit),
+                 (result = tt ->
+                  ((b > c ->
+                    (forall (tmp:Z),
+                     (tmp = b ->
+                      (forall (b:Z),
+                       (b = c ->
+                        (forall (c:Z),
+                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                  ((b <= c ->
+                    (forall (result:unit),
+                     (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))))))) /\
+  ((c <= d ->
+    (forall (result:unit),
+     (result = tt ->
+      ((a > c ->
+        (forall (tmp:Z),
+         (tmp = a ->
+          (forall (a:Z),
+           (a = c ->
+            (forall (c:Z),
+             (c = tmp ->
+              ((b > d ->
+                (forall (tmp:Z),
+                 (tmp = b ->
+                  (forall (b:Z),
+                   (b = d ->
+                    (forall (d:Z),
+                     (d = tmp ->
+                      ((b > c ->
+                        (forall (tmp:Z),
+                         (tmp = b ->
+                          (forall (b:Z),
+                           (b = c ->
+                            (forall (c:Z),
+                             (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                      ((b <= c ->
+                        (forall (result:unit),
+                         (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+              ((b <= d ->
+                (forall (result:unit),
+                 (result = tt ->
+                  ((b > c ->
+                    (forall (tmp:Z),
+                     (tmp = b ->
+                      (forall (b:Z),
+                       (b = c ->
+                        (forall (c:Z),
+                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                  ((b <= c ->
+                    (forall (result:unit),
+                     (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))) /\
+      ((a <= c ->
+        (forall (result:unit),
+         (result = tt ->
+          ((b > d ->
+            (forall (tmp:Z),
+             (tmp = b ->
+              (forall (b:Z),
+               (b = d ->
+                (forall (d:Z),
+                 (d = tmp ->
+                  ((b > c ->
+                    (forall (tmp:Z),
+                     (tmp = b ->
+                      (forall (b:Z),
+                       (b = c ->
+                        (forall (c:Z),
+                         (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+                  ((b <= c ->
+                    (forall (result:unit),
+                     (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))) /\
+          ((b <= d ->
+            (forall (result:unit),
+             (result = tt ->
+              ((b > c ->
+                (forall (tmp:Z),
+                 (tmp = b ->
+                  (forall (b:Z),
+                   (b = c ->
+                    (forall (c:Z), (c = tmp -> (a <= b /\ b <= c) /\ c <= d)))))))) /\
+              ((b <= c ->
+                (forall (result:unit),
+                 (result = tt -> (a <= b /\ b <= c) /\ c <= d)))))))))))))))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 1378-1459 *)
+Lemma sort4_3_impl_po_1 : 
   forall (a: pointer),
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
   forall (alloc: alloc_table),
-  forall (Pre56: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
   (valid alloc a).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 381-460 *)
-Lemma sort4_2_impl_po_2 : 
+(* Why obligation from file "why/sort.why", characters 1378-1459 *)
+Lemma sort4_3_impl_po_2 : 
   forall (a: pointer),
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
   forall (alloc: alloc_table),
-  forall (Pre56: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
-  forall (Pre10: (valid alloc a)),
+  forall (Pre11: (valid alloc a)),
   (valid alloc b).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 527-559 *)
-Lemma sort4_2_impl_po_3 : 
+(* Why obligation from file "why/sort.why", characters 1534-1566 *)
+Lemma sort4_3_impl_po_3 : 
   forall (a: pointer),
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre56: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
-  forall (Pre10: (valid alloc a)),
-  forall (Pre11: (valid alloc b)),
+  forall (Pre11: (valid alloc a)),
+  forall (Pre12: (valid alloc b)),
   forall (Test2: (acc intP a) > (acc intP b)),
   forall (tmp1: Z),
   forall (Post2: tmp1 = (acc intP a)),
-  forall (Pre6: (valid alloc b)),
+  forall (Pre7: (valid alloc b)),
   forall (aux_2: Z),
   forall (Post5: aux_2 = (acc intP b)),
-  forall (Pre4: (valid alloc a)),
+  forall (Pre5: (valid alloc a)),
   forall (intP0: ((memory) Z)),
-  forall (Post51: intP0 = (upd intP a aux_2)),
-  (forall (intP:((memory) Z)),
-   (intP = (upd intP0 b tmp1) ->
-    (((((acc intP c) > (acc intP d) ->
-        (forall (tmp:Z),
-         (tmp = (acc intP c) ->
-          (forall (result:Z),
-           (result = (acc intP d) ->
-            (forall (intP0:((memory) Z)),
-             (intP0 = (upd intP c result) ->
-              (forall (intP:((memory) Z)),
-               (intP = (upd intP0 d tmp) ->
-                (((((acc intP a) > (acc intP c) ->
-                    (forall (tmp:Z),
-                     (tmp = (acc intP a) ->
-                      (forall (result:Z),
-                       (result = (acc intP c) ->
-                        (forall (intP0:((memory) Z)),
-                         (intP0 = (upd intP a result) ->
-                          (forall (intP:((memory) Z)),
-                           (intP = (upd intP0 c tmp) ->
-                            (((((acc intP b) > (acc intP d) ->
-                                (forall (tmp:Z),
-                                 (tmp = (acc intP b) ->
-                                  (forall (result:Z),
-                                   (result = (acc intP d) ->
-                                    (forall (intP0:((memory) Z)),
-                                     (intP0 = (upd intP b result) ->
-                                      (forall (intP:((memory) Z)),
-                                       (intP = (upd intP0 d tmp) ->
-                                        (((((acc intP b) > (acc intP c) ->
-                                            (forall (tmp:Z),
-                                             (tmp = (acc intP b) ->
-                                              (forall (result:Z),
-                                               (result = (acc intP c) ->
-                                                (forall (intP0:((memory) Z)),
-                                                 (intP0 = (upd intP b result) ->
-                                                  (forall (intP:((memory) Z)),
-                                                   (intP = (upd intP0 c tmp) ->
-                                                    ((acc intP a) <=
-                                                    (acc intP b) /\
-                                                    (acc intP b) <=
-                                                    (acc intP c)) /\
-                                                    (acc intP c) <=
-                                                    (acc intP d))) /\
-                                                  (valid alloc c))) /\
-                                                (valid alloc b))) /\
-                                              (valid alloc c))))) /\
-                                        (((acc intP b) <= (acc intP c) ->
-                                          (forall (result:unit),
-                                           (result = tt -> ((acc intP a) <=
-                                            (acc intP b) /\ (acc intP b) <=
-                                            (acc intP c)) /\ (acc intP c) <=
-                                            (acc intP d)))))) /\
-                                        (valid alloc b)) /\ (valid alloc c))) /\
-                                      (valid alloc d))) /\
-                                    (valid alloc b))) /\
-                                  (valid alloc d))))) /\
-                            (((acc intP b) <= (acc intP d) ->
-                              (forall (result:unit),
-                               (result = tt ->
-                                (((((acc intP b) > (acc intP c) ->
-                                    (forall (tmp:Z),
-                                     (tmp = (acc intP b) ->
-                                      (forall (result:Z),
-                                       (result = (acc intP c) ->
-                                        (forall (intP0:((memory) Z)),
-                                         (intP0 = (upd intP b result) ->
-                                          (forall (intP:((memory) Z)),
-                                           (intP = (upd intP0 c tmp) ->
-                                            ((acc intP a) <= (acc intP b) /\
-                                            (acc intP b) <= (acc intP c)) /\
-                                            (acc intP c) <= (acc intP d))) /\
-                                          (valid alloc c))) /\
-                                        (valid alloc b))) /\
-                                      (valid alloc c))))) /\
-                                (((acc intP b) <= (acc intP c) ->
-                                  (forall (result:unit),
-                                   (result = tt -> ((acc intP a) <=
-                                    (acc intP b) /\ (acc intP b) <=
-                                    (acc intP c)) /\ (acc intP c) <=
-                                    (acc intP d)))))) /\
-                                (valid alloc b)) /\ (valid alloc c)))))) /\
-                            (valid alloc b)) /\ (valid alloc d))) /\
-                          (valid alloc c))) /\
-                        (valid alloc a))) /\
-                      (valid alloc c))))) /\
-                (((acc intP a) <= (acc intP c) ->
-                  (forall (result:unit),
-                   (result = tt ->
-                    (((((acc intP b) > (acc intP d) ->
-                        (forall (tmp:Z),
-                         (tmp = (acc intP b) ->
-                          (forall (result:Z),
-                           (result = (acc intP d) ->
-                            (forall (intP0:((memory) Z)),
-                             (intP0 = (upd intP b result) ->
-                              (forall (intP:((memory) Z)),
-                               (intP = (upd intP0 d tmp) ->
-                                (((((acc intP b) > (acc intP c) ->
-                                    (forall (tmp:Z),
-                                     (tmp = (acc intP b) ->
-                                      (forall (result:Z),
-                                       (result = (acc intP c) ->
-                                        (forall (intP0:((memory) Z)),
-                                         (intP0 = (upd intP b result) ->
-                                          (forall (intP:((memory) Z)),
-                                           (intP = (upd intP0 c tmp) ->
-                                            ((acc intP a) <= (acc intP b) /\
-                                            (acc intP b) <= (acc intP c)) /\
-                                            (acc intP c) <= (acc intP d))) /\
-                                          (valid alloc c))) /\
-                                        (valid alloc b))) /\
-                                      (valid alloc c))))) /\
-                                (((acc intP b) <= (acc intP c) ->
-                                  (forall (result:unit),
-                                   (result = tt -> ((acc intP a) <=
-                                    (acc intP b) /\ (acc intP b) <=
-                                    (acc intP c)) /\ (acc intP c) <=
-                                    (acc intP d)))))) /\
-                                (valid alloc b)) /\ (valid alloc c))) /\
-                              (valid alloc d))) /\
-                            (valid alloc b))) /\
-                          (valid alloc d))))) /\
-                    (((acc intP b) <= (acc intP d) ->
-                      (forall (result:unit),
-                       (result = tt ->
-                        (((((acc intP b) > (acc intP c) ->
-                            (forall (tmp:Z),
-                             (tmp = (acc intP b) ->
-                              (forall (result:Z),
-                               (result = (acc intP c) ->
-                                (forall (intP0:((memory) Z)),
-                                 (intP0 = (upd intP b result) ->
-                                  (forall (intP:((memory) Z)),
-                                   (intP = (upd intP0 c tmp) ->
-                                    ((acc intP a) <= (acc intP b) /\
-                                    (acc intP b) <= (acc intP c)) /\
-                                    (acc intP c) <= (acc intP d))) /\
-                                  (valid alloc c))) /\
-                                (valid alloc b))) /\
-                              (valid alloc c))))) /\
-                        (((acc intP b) <= (acc intP c) ->
-                          (forall (result:unit),
-                           (result = tt -> ((acc intP a) <= (acc intP b) /\
-                            (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                            (acc intP d)))))) /\
-                        (valid alloc b)) /\ (valid alloc c)))))) /\
-                    (valid alloc b)) /\ (valid alloc d)))))) /\
-                (valid alloc a)) /\ (valid alloc c))) /\
-              (valid alloc d))) /\
-            (valid alloc c))) /\
-          (valid alloc d))))) /\
-    (((acc intP c) <= (acc intP d) ->
-      (forall (result:unit),
-       (result = tt ->
-        (((((acc intP a) > (acc intP c) ->
-            (forall (tmp:Z),
-             (tmp = (acc intP a) ->
-              (forall (result:Z),
-               (result = (acc intP c) ->
-                (forall (intP0:((memory) Z)),
-                 (intP0 = (upd intP a result) ->
-                  (forall (intP:((memory) Z)),
-                   (intP = (upd intP0 c tmp) ->
-                    (((((acc intP b) > (acc intP d) ->
-                        (forall (tmp:Z),
-                         (tmp = (acc intP b) ->
-                          (forall (result:Z),
-                           (result = (acc intP d) ->
-                            (forall (intP0:((memory) Z)),
-                             (intP0 = (upd intP b result) ->
-                              (forall (intP:((memory) Z)),
-                               (intP = (upd intP0 d tmp) ->
-                                (((((acc intP b) > (acc intP c) ->
-                                    (forall (tmp:Z),
-                                     (tmp = (acc intP b) ->
-                                      (forall (result:Z),
-                                       (result = (acc intP c) ->
-                                        (forall (intP0:((memory) Z)),
-                                         (intP0 = (upd intP b result) ->
-                                          (forall (intP:((memory) Z)),
-                                           (intP = (upd intP0 c tmp) ->
-                                            ((acc intP a) <= (acc intP b) /\
-                                            (acc intP b) <= (acc intP c)) /\
-                                            (acc intP c) <= (acc intP d))) /\
-                                          (valid alloc c))) /\
-                                        (valid alloc b))) /\
-                                      (valid alloc c))))) /\
-                                (((acc intP b) <= (acc intP c) ->
-                                  (forall (result:unit),
-                                   (result = tt -> ((acc intP a) <=
-                                    (acc intP b) /\ (acc intP b) <=
-                                    (acc intP c)) /\ (acc intP c) <=
-                                    (acc intP d)))))) /\
-                                (valid alloc b)) /\ (valid alloc c))) /\
-                              (valid alloc d))) /\
-                            (valid alloc b))) /\
-                          (valid alloc d))))) /\
-                    (((acc intP b) <= (acc intP d) ->
-                      (forall (result:unit),
-                       (result = tt ->
-                        (((((acc intP b) > (acc intP c) ->
-                            (forall (tmp:Z),
-                             (tmp = (acc intP b) ->
-                              (forall (result:Z),
-                               (result = (acc intP c) ->
-                                (forall (intP0:((memory) Z)),
-                                 (intP0 = (upd intP b result) ->
-                                  (forall (intP:((memory) Z)),
-                                   (intP = (upd intP0 c tmp) ->
-                                    ((acc intP a) <= (acc intP b) /\
-                                    (acc intP b) <= (acc intP c)) /\
-                                    (acc intP c) <= (acc intP d))) /\
-                                  (valid alloc c))) /\
-                                (valid alloc b))) /\
-                              (valid alloc c))))) /\
-                        (((acc intP b) <= (acc intP c) ->
-                          (forall (result:unit),
-                           (result = tt -> ((acc intP a) <= (acc intP b) /\
-                            (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                            (acc intP d)))))) /\
-                        (valid alloc b)) /\ (valid alloc c)))))) /\
-                    (valid alloc b)) /\ (valid alloc d))) /\
-                  (valid alloc c))) /\
-                (valid alloc a))) /\
-              (valid alloc c))))) /\
-        (((acc intP a) <= (acc intP c) ->
-          (forall (result:unit),
-           (result = tt ->
-            (((((acc intP b) > (acc intP d) ->
-                (forall (tmp:Z),
-                 (tmp = (acc intP b) ->
-                  (forall (result:Z),
-                   (result = (acc intP d) ->
-                    (forall (intP0:((memory) Z)),
-                     (intP0 = (upd intP b result) ->
-                      (forall (intP:((memory) Z)),
-                       (intP = (upd intP0 d tmp) ->
-                        (((((acc intP b) > (acc intP c) ->
-                            (forall (tmp:Z),
-                             (tmp = (acc intP b) ->
-                              (forall (result:Z),
-                               (result = (acc intP c) ->
-                                (forall (intP0:((memory) Z)),
-                                 (intP0 = (upd intP b result) ->
-                                  (forall (intP:((memory) Z)),
-                                   (intP = (upd intP0 c tmp) ->
-                                    ((acc intP a) <= (acc intP b) /\
-                                    (acc intP b) <= (acc intP c)) /\
-                                    (acc intP c) <= (acc intP d))) /\
-                                  (valid alloc c))) /\
-                                (valid alloc b))) /\
-                              (valid alloc c))))) /\
-                        (((acc intP b) <= (acc intP c) ->
-                          (forall (result:unit),
-                           (result = tt -> ((acc intP a) <= (acc intP b) /\
-                            (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                            (acc intP d)))))) /\
-                        (valid alloc b)) /\ (valid alloc c))) /\
-                      (valid alloc d))) /\
-                    (valid alloc b))) /\
-                  (valid alloc d))))) /\
-            (((acc intP b) <= (acc intP d) ->
-              (forall (result:unit),
-               (result = tt ->
-                (((((acc intP b) > (acc intP c) ->
-                    (forall (tmp:Z),
-                     (tmp = (acc intP b) ->
-                      (forall (result:Z),
-                       (result = (acc intP c) ->
-                        (forall (intP0:((memory) Z)),
-                         (intP0 = (upd intP b result) ->
-                          (forall (intP:((memory) Z)),
-                           (intP = (upd intP0 c tmp) -> ((acc intP a) <=
-                            (acc intP b) /\ (acc intP b) <= (acc intP c)) /\
-                            (acc intP c) <= (acc intP d))) /\
-                          (valid alloc c))) /\
-                        (valid alloc b))) /\
-                      (valid alloc c))))) /\
-                (((acc intP b) <= (acc intP c) ->
-                  (forall (result:unit),
-                   (result = tt -> ((acc intP a) <= (acc intP b) /\
-                    (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                    (acc intP d)))))) /\
-                (valid alloc b)) /\ (valid alloc c)))))) /\
-            (valid alloc b)) /\ (valid alloc d)))))) /\
-        (valid alloc a)) /\ (valid alloc c)))))) /\
-    (valid alloc c)) /\ (valid alloc d))) /\
+  forall (Post54: intP0 = (upd intP a aux_2)),
+  (forall (intP1:((memory) Z)),
+   (intP1 = (upd intP0 b tmp1) ->
+    (swap_ord (acc intP1 a) (acc intP1 b) (acc intP a) (acc intP b)) /\
+    (assigns alloc intP intP1 (union_loc (pointer_loc b) (pointer_loc a))))) /\
   (valid alloc b).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; caduceus.
+apply assigns_trans with intP0.
+red; subst; intuition.
+generalize (unchanged_union_elim2 _ _ _ H10).
+intro.
+generalize (unchanged_pointer_elim _ _ H11).
+intro; caduceus.
+red; subst; intuition.
+generalize (unchanged_union_elim1 _ _ _ H10).
+intro.
+generalize (unchanged_pointer_elim _ _ H11).
+intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 607-607 *)
-Lemma sort4_2_impl_po_4 : 
+(* Why obligation from file "why/sort.why", characters 1618-1618 *)
+Lemma sort4_3_impl_po_4 : 
   forall (a: pointer),
   forall (b: pointer),
   forall (c: pointer),
   forall (d: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre56: (((((((((valid alloc a) /\ (valid alloc b)) /\
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
                  (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
                  ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
                  ~(c = d)),
-  forall (Pre10: (valid alloc a)),
-  forall (Pre11: (valid alloc b)),
+  forall (Pre11: (valid alloc a)),
+  forall (Pre12: (valid alloc b)),
   forall (Test1: (acc intP a) <= (acc intP b)),
   forall (result0: unit),
   forall (Post1: result0 = tt),
-  (((((acc intP c) > (acc intP d) ->
-      (forall (tmp:Z),
-       (tmp = (acc intP c) ->
-        (forall (result:Z),
-         (result = (acc intP d) ->
-          (forall (intP0:((memory) Z)),
-           (intP0 = (upd intP c result) ->
-            (forall (intP:((memory) Z)),
-             (intP = (upd intP0 d tmp) ->
-              (((((acc intP a) > (acc intP c) ->
-                  (forall (tmp:Z),
-                   (tmp = (acc intP a) ->
-                    (forall (result:Z),
-                     (result = (acc intP c) ->
-                      (forall (intP0:((memory) Z)),
-                       (intP0 = (upd intP a result) ->
-                        (forall (intP:((memory) Z)),
-                         (intP = (upd intP0 c tmp) ->
-                          (((((acc intP b) > (acc intP d) ->
-                              (forall (tmp:Z),
-                               (tmp = (acc intP b) ->
-                                (forall (result:Z),
-                                 (result = (acc intP d) ->
-                                  (forall (intP0:((memory) Z)),
-                                   (intP0 = (upd intP b result) ->
-                                    (forall (intP:((memory) Z)),
-                                     (intP = (upd intP0 d tmp) ->
-                                      (((((acc intP b) > (acc intP c) ->
-                                          (forall (tmp:Z),
-                                           (tmp = (acc intP b) ->
-                                            (forall (result:Z),
-                                             (result = (acc intP c) ->
+  (swap_ord (acc intP a) (acc intP b) (acc intP a) (acc intP b)) /\
+  (assigns alloc intP intP (union_loc (pointer_loc b) (pointer_loc a))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 1832-1914 *)
+Lemma sort4_3_impl_po_5 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  (valid alloc c).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 1832-1914 *)
+Lemma sort4_3_impl_po_6 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (Pre23: (valid alloc c)),
+  (valid alloc d).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2002-2034 *)
+Lemma sort4_3_impl_po_7 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (Pre23: (valid alloc c)),
+  forall (Pre24: (valid alloc d)),
+  forall (Test4: (acc intP0 c) > (acc intP0 d)),
+  forall (tmp2: Z),
+  forall (Post10: tmp2 = (acc intP0 c)),
+  forall (Pre19: (valid alloc d)),
+  forall (aux_4: Z),
+  forall (Post13: aux_4 = (acc intP0 d)),
+  forall (Pre17: (valid alloc c)),
+  forall (intP1: ((memory) Z)),
+  forall (Post64: intP1 = (upd intP0 c aux_4)),
+  (forall (intP:((memory) Z)),
+   (intP = (upd intP1 d tmp2) ->
+    (swap_ord (acc intP c) (acc intP d) (acc intP0 c) (acc intP0 d)) /\
+    (assigns alloc intP0 intP (union_loc (pointer_loc d) (pointer_loc c))))) /\
+  (valid alloc d).
+Proof.
+intuition.
+subst; caduceus.
+apply assigns_trans with intP1.
+red; subst; intuition.
+generalize (unchanged_union_elim2 _ _ _ H12).
+intro.
+generalize (unchanged_pointer_elim _ _ H13).
+intro; caduceus.
+red; subst; intuition.
+generalize (unchanged_union_elim1 _ _ _ H12).
+intro.
+generalize (unchanged_pointer_elim _ _ H13).
+intro; caduceus.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2097-2097 *)
+Lemma sort4_3_impl_po_8 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (Pre23: (valid alloc c)),
+  forall (Pre24: (valid alloc d)),
+  forall (Test3: (acc intP0 c) <= (acc intP0 d)),
+  forall (result1: unit),
+  forall (Post9: result1 = tt),
+  (swap_ord (acc intP0 c) (acc intP0 d) (acc intP0 c) (acc intP0 d)) /\
+  (assigns alloc intP0 intP0 (union_loc (pointer_loc d) (pointer_loc c))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2317-2400 *)
+Lemma sort4_3_impl_po_9 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  (valid alloc a).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2317-2400 *)
+Lemma sort4_3_impl_po_10 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (Pre35: (valid alloc a)),
+  (valid alloc c).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2493-2525 *)
+Lemma sort4_3_impl_po_11 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (Pre35: (valid alloc a)),
+  forall (Pre36: (valid alloc c)),
+  forall (Test6: (acc intP1 a) > (acc intP1 c)),
+  forall (tmp3: Z),
+  forall (Post18: tmp3 = (acc intP1 a)),
+  forall (Pre31: (valid alloc c)),
+  forall (aux_6: Z),
+  forall (Post21: aux_6 = (acc intP1 c)),
+  forall (Pre29: (valid alloc a)),
+  forall (intP2: ((memory) Z)),
+  forall (Post74: intP2 = (upd intP1 a aux_6)),
+  (forall (intP:((memory) Z)),
+   (intP = (upd intP2 c tmp3) ->
+    (swap_ord (acc intP a) (acc intP c) (acc intP1 a) (acc intP1 c)) /\
+    (assigns alloc intP1 intP (union_loc (pointer_loc c) (pointer_loc a))))) /\
+  (valid alloc c).
+Proof.
+intuition.
+subst; caduceus.
+apply assigns_trans with intP2.
+red; subst; intuition.
+generalize (unchanged_union_elim2 _ _ _ H14).
+intro.
+generalize (unchanged_pointer_elim _ _ H15).
+intro; caduceus.
+red; subst; intuition.
+generalize (unchanged_union_elim1 _ _ _ H14).
+intro.
+generalize (unchanged_pointer_elim _ _ H15).
+intro; caduceus.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2591-2591 *)
+Lemma sort4_3_impl_po_12 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (Pre35: (valid alloc a)),
+  forall (Pre36: (valid alloc c)),
+  forall (Test5: (acc intP1 a) <= (acc intP1 c)),
+  forall (result2: unit),
+  forall (Post17: result2 = tt),
+  (swap_ord (acc intP1 a) (acc intP1 c) (acc intP1 a) (acc intP1 c)) /\
+  (assigns alloc intP1 intP1 (union_loc (pointer_loc c) (pointer_loc a))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2817-2901 *)
+Lemma sort4_3_impl_po_13 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  (valid alloc b).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2817-2901 *)
+Lemma sort4_3_impl_po_14 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (Pre47: (valid alloc b)),
+  (valid alloc d).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2999-3031 *)
+Lemma sort4_3_impl_po_15 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (Pre47: (valid alloc b)),
+  forall (Pre48: (valid alloc d)),
+  forall (Test8: (acc intP2 b) > (acc intP2 d)),
+  forall (tmp4: Z),
+  forall (Post26: tmp4 = (acc intP2 b)),
+  forall (Pre43: (valid alloc d)),
+  forall (aux_8: Z),
+  forall (Post29: aux_8 = (acc intP2 d)),
+  forall (Pre41: (valid alloc b)),
+  forall (intP3: ((memory) Z)),
+  forall (Post84: intP3 = (upd intP2 b aux_8)),
+  (forall (intP:((memory) Z)),
+   (intP = (upd intP3 d tmp4) ->
+    (swap_ord (acc intP b) (acc intP d) (acc intP2 b) (acc intP2 d)) /\
+    (assigns alloc intP2 intP (union_loc (pointer_loc d) (pointer_loc b))))) /\
+  (valid alloc d).
+Proof.
+intuition.
+subst; caduceus.
+apply assigns_trans with intP3.
+red; subst; intuition.
+generalize (unchanged_union_elim2 _ _ _ H16).
+intro.
+generalize (unchanged_pointer_elim _ _ H17).
+intro; caduceus.
+red; subst; intuition.
+generalize (unchanged_union_elim1 _ _ _ H16).
+intro.
+generalize (unchanged_pointer_elim _ _ H17).
+intro; caduceus.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 3100-3100 *)
+Lemma sort4_3_impl_po_16 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (Pre47: (valid alloc b)),
+  forall (Pre48: (valid alloc d)),
+  forall (Test7: (acc intP2 b) <= (acc intP2 d)),
+  forall (result3: unit),
+  forall (Post25: result3 = tt),
+  (swap_ord (acc intP2 b) (acc intP2 d) (acc intP2 b) (acc intP2 d)) /\
+  (assigns alloc intP2 intP2 (union_loc (pointer_loc d) (pointer_loc b))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 3315-3398 *)
+Lemma sort4_3_impl_po_17 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (intP3: ((memory) Z)),
+  forall (Post79: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+                   (acc intP2 d)) /\
+                  (assigns alloc intP2 intP3
+                   (union_loc (pointer_loc d) (pointer_loc b)))),
+  (valid alloc b).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 3315-3398 *)
+Lemma sort4_3_impl_po_18 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (intP3: ((memory) Z)),
+  forall (Post79: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+                   (acc intP2 d)) /\
+                  (assigns alloc intP2 intP3
+                   (union_loc (pointer_loc d) (pointer_loc b)))),
+  forall (Pre59: (valid alloc b)),
+  (valid alloc c).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 3491-3523 *)
+Lemma sort4_3_impl_po_19 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (intP3: ((memory) Z)),
+  forall (Post79: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+                   (acc intP2 d)) /\
+                  (assigns alloc intP2 intP3
+                   (union_loc (pointer_loc d) (pointer_loc b)))),
+  forall (Pre59: (valid alloc b)),
+  forall (Pre60: (valid alloc c)),
+  forall (Test10: (acc intP3 b) > (acc intP3 c)),
+  forall (tmp5: Z),
+  forall (Post34: tmp5 = (acc intP3 b)),
+  forall (Pre55: (valid alloc c)),
+  forall (aux_10: Z),
+  forall (Post37: aux_10 = (acc intP3 c)),
+  forall (Pre53: (valid alloc b)),
+  forall (intP4: ((memory) Z)),
+  forall (Post93: intP4 = (upd intP3 b aux_10)),
+  (forall (intP:((memory) Z)),
+   (intP = (upd intP4 c tmp5) ->
+    (swap_ord (acc intP b) (acc intP c) (acc intP3 b) (acc intP3 c)) /\
+    (assigns alloc intP3 intP (union_loc (pointer_loc c) (pointer_loc b))))) /\
+  (valid alloc c).
+Proof.
+intuition.
+subst; caduceus.
+apply assigns_trans with intP4.
+red; subst; intuition.
+generalize (unchanged_union_elim2 _ _ _ H18).
+intro.
+generalize (unchanged_pointer_elim _ _ H19).
+intro; caduceus.
+red; subst; intuition.
+generalize (unchanged_union_elim1 _ _ _ H18).
+intro.
+generalize (unchanged_pointer_elim _ _ H19).
+intro; caduceus.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 3589-3589 *)
+Lemma sort4_3_impl_po_20 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (intP3: ((memory) Z)),
+  forall (Post79: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+                   (acc intP2 d)) /\
+                  (assigns alloc intP2 intP3
+                   (union_loc (pointer_loc d) (pointer_loc b)))),
+  forall (Pre59: (valid alloc b)),
+  forall (Pre60: (valid alloc c)),
+  forall (Test9: (acc intP3 b) <= (acc intP3 c)),
+  forall (result4: unit),
+  forall (Post33: result4 = tt),
+  (swap_ord (acc intP3 b) (acc intP3 c) (acc intP3 b) (acc intP3 c)) /\
+  (assigns alloc intP3 intP3 (union_loc (pointer_loc c) (pointer_loc b))).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/sort.why", characters 2782-3779 *)
+Lemma sort4_3_impl_po_21 : 
+  forall (a: pointer),
+  forall (b: pointer),
+  forall (c: pointer),
+  forall (d: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre61: (((((((((valid alloc a) /\ (valid alloc b)) /\
+                 (valid alloc c)) /\ (valid alloc d)) /\ ~(a = b)) /\
+                 ~(a = c)) /\ ~(a = d)) /\ ~(b = c)) /\ ~(b = d)) /\ 
+                 ~(c = d)),
+  forall (intP0: ((memory) Z)),
+  forall (Post49: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
+                   (acc intP b)) /\
+                  (assigns alloc intP intP0
+                   (union_loc (pointer_loc b) (pointer_loc a)))),
+  forall (intP1: ((memory) Z)),
+  forall (Post59: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
+                   (acc intP0 d)) /\
+                  (assigns alloc intP0 intP1
+                   (union_loc (pointer_loc d) (pointer_loc c)))),
+  forall (intP2: ((memory) Z)),
+  forall (Post69: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
+                   (acc intP1 c)) /\
+                  (assigns alloc intP1 intP2
+                   (union_loc (pointer_loc c) (pointer_loc a)))),
+  forall (intP3: ((memory) Z)),
+  forall (Post79: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
+                   (acc intP2 d)) /\
+                  (assigns alloc intP2 intP3
+                   (union_loc (pointer_loc d) (pointer_loc b)))),
+  forall (intP4: ((memory) Z)),
+  forall (Post88: (swap_ord (acc intP4 b) (acc intP4 c) (acc intP3 b)
+                   (acc intP3 c)) /\
+                  (assigns alloc intP3 intP4
+                   (union_loc (pointer_loc c) (pointer_loc b)))),
+  ((acc intP4 a) <= (acc intP4 b) /\ (acc intP4 b) <= (acc intP4 c)) /\
+  (acc intP4 c) <= (acc intP4 d).
+Proof.
+intuition.
+
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4100-4208 *)
+Lemma sort4_4_impl_po_1 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  (valid alloc (shift t 0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4100-4208 *)
+Lemma sort4_4_impl_po_2 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre11: (valid alloc (shift t 0))),
+  (valid alloc (shift t 1)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4247-4274 *)
+Lemma sort4_4_impl_po_3 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre11: (valid alloc (shift t 0))),
+  forall (Pre13: (valid alloc (shift t 1))),
+  forall (Test2: (acc intP (shift t 0)) > (acc intP (shift t 1))),
+  forall (aux_4: pointer),
+  forall (Post59: aux_4 = (shift t 0)),
+  (valid alloc aux_4).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4247-4274 *)
+Lemma sort4_4_impl_po_4 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre11: (valid alloc (shift t 0))),
+  forall (Pre13: (valid alloc (shift t 1))),
+  forall (Test2: (acc intP (shift t 0)) > (acc intP (shift t 1))),
+  forall (aux_4: pointer),
+  forall (Post59: aux_4 = (shift t 0)),
+  forall (Pre1: (valid alloc aux_4)),
+  forall (result0: Z),
+  forall (Post61: result0 = (acc intP aux_4)),
+  result0 = (acc intP (shift t 0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4344-4399 *)
+Lemma sort4_4_impl_po_5 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre11: (valid alloc (shift t 0))),
+  forall (Pre13: (valid alloc (shift t 1))),
+  forall (Test2: (acc intP (shift t 0)) > (acc intP (shift t 1))),
+  forall (tmp1: Z),
+  forall (Post2: tmp1 = (acc intP (shift t 0))),
+  forall (caduceus_14: pointer),
+  forall (Post6: caduceus_14 = (shift t 0)),
+  forall (Pre6: (valid alloc (shift t 1))),
+  forall (aux_6: Z),
+  forall (Post5: aux_6 = (acc intP (shift t 1))),
+  (valid alloc caduceus_14).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4344-4399 *)
+Lemma sort4_4_impl_po_6 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre11: (valid alloc (shift t 0))),
+  forall (Pre13: (valid alloc (shift t 1))),
+  forall (Test2: (acc intP (shift t 0)) > (acc intP (shift t 1))),
+  forall (tmp1: Z),
+  forall (Post2: tmp1 = (acc intP (shift t 0))),
+  forall (caduceus_14: pointer),
+  forall (Post6: caduceus_14 = (shift t 0)),
+  forall (Pre6: (valid alloc (shift t 1))),
+  forall (aux_6: Z),
+  forall (Post5: aux_6 = (acc intP (shift t 1))),
+  forall (Pre3: (valid alloc caduceus_14)),
+  forall (intP0: ((memory) Z)),
+  forall (Post63: intP0 = (upd intP caduceus_14 aux_6)),
+  (forall (result:pointer),
+   (result = (shift t 1) ->
+    (forall (intP:((memory) Z)),
+     (intP = (upd intP0 result tmp1) ->
+      (((((((acc intP (shift t 2)) > (acc intP (shift t 3)) ->
+            (forall (tmp:Z),
+             (tmp = (acc intP (shift t 2)) ->
+              (forall (result:pointer),
+               (result = (shift t 2) ->
+                ((forall (result0:Z),
+                  (result0 = (acc intP (shift t 3)) ->
+                   (forall (intP0:((memory) Z)),
+                    (intP0 = (upd intP result result0) ->
+                     (forall (result:pointer),
+                      (result = (shift t 3) ->
+                       (forall (intP:((memory) Z)),
+                        (intP = (upd intP0 result tmp) ->
+                         (((((((acc intP (shift t 0)) >
+                               (acc intP (shift t 2)) ->
+                               (forall (tmp:Z),
+                                (tmp = (acc intP (shift t 0)) ->
+                                 (forall (result:pointer),
+                                  (result = (shift t 0) ->
+                                   ((forall (result0:Z),
+                                     (result0 = (acc intP (shift t 2)) ->
+                                      (forall (intP0:((memory) Z)),
+                                       (intP0 = (upd intP result result0) ->
+                                        (forall (result:pointer),
+                                         (result = (shift t 2) ->
+                                          (forall (intP:((memory) Z)),
+                                           (intP = (upd intP0 result tmp) ->
+                                            (((((((acc intP (shift t 1)) >
+                                                  (acc intP (shift t 3)) ->
+                                                  (forall (tmp:Z),
+                                                   (tmp = (acc intP
+                                                           (shift t 1)) ->
+                                                    (forall (result:pointer),
+                                                     (result = (shift t 1) ->
+                                                      ((forall (result0:Z),
+                                                        (result0 = (acc intP
+                                                                    (
+                                                                    shift t 3)) ->
+                                                         (forall (intP0:((memory) Z)),
+                                                          (intP0 = (upd intP
+                                                                    result
+                                                                    result0) ->
+                                                           (forall (result:pointer),
+                                                            (result = (
+                                                             shift t 3) ->
+                                                             (forall (intP:((memory) Z)),
+                                                              (intP = (
+                                                               upd intP0
+                                                               result tmp) ->
+                                                               ((((((
+                                                               (acc intP
+                                                                (shift t 1)) >
+                                                               (acc intP
+                                                                (shift t 2)) ->
+                                                               (forall (tmp:Z),
+                                                                (tmp = (
+                                                                 acc intP
+                                                                 (shift t 1)) ->
+                                                                 (forall (result:pointer),
+                                                                  (result = (
+                                                                   shift t 1) ->
+                                                                   ((
+                                                                   forall (result0:Z),
+                                                                   (result0 = (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 2)) ->
+                                                                    (
+                                                                    forall (intP0:((memory) Z)),
+                                                                    (
+                                                                    intP0 = (
+                                                                    upd intP
+                                                                    result
+                                                                    result0) ->
+                                                                    (
+                                                                    forall (result:pointer),
+                                                                    (
+                                                                    result = (
+                                                                    shift t 2) ->
+                                                                    (
+                                                                    forall (intP:((memory) Z)),
+                                                                    (
+                                                                    intP = (
+                                                                    upd intP0
+                                                                    result
+                                                                    tmp) ->
+                                                                    ((
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 0)) <=
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 1)) /\
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 1)) <=
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 2)) <=
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 3)))) /\
+                                                                    (
+                                                                    valid alloc
+                                                                    result))))) /\
+                                                                    (
+                                                                    valid alloc
+                                                                    result))) /\
+                                                                   (valid alloc
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                   (valid alloc
+                                                                    (
+                                                                    shift t 2)))))))) /\
+                                                               (((acc intP
+                                                                  (shift t 1)) <=
+                                                                 (acc intP
+                                                                  (shift t 2)) ->
+                                                                 (forall (result:unit),
+                                                                  (result = tt ->
+                                                                   ((
+                                                                   acc intP
+                                                                   (shift t 0)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 3))))))) /\
+                                                               (valid alloc
+                                                                (shift t 1))) /\
+                                                               (valid alloc
+                                                                (shift t 1))) /\
+                                                               (valid alloc
+                                                                (shift t 2))) /\
+                                                               (valid alloc
+                                                                (shift t 2)))) /\
+                                                             (valid alloc
+                                                              result))))) /\
+                                                         (valid alloc result))) /\
+                                                      (valid alloc
+                                                       (shift t 3))) /\
+                                                      (valid alloc
+                                                       (shift t 3)))))))) /\
+                                            (((acc intP (shift t 1)) <=
+                                              (acc intP (shift t 3)) ->
+                                              (forall (result:unit),
+                                               (result = tt ->
+                                                (((((((acc intP (shift t 1)) >
+                                                      (acc intP (shift t 2)) ->
+                                                      (forall (tmp:Z),
+                                                       (tmp = (acc intP
+                                                               (shift t 1)) ->
+                                                        (forall (result:pointer),
+                                                         (result = (shift t 1) ->
+                                                          ((forall (result0:Z),
+                                                            (result0 = (
+                                                             acc intP
+                                                             (shift t 2)) ->
+                                                             (forall (intP0:((memory) Z)),
+                                                              (intP0 = (
+                                                               upd intP
+                                                               result result0) ->
+                                                               (forall (result:pointer),
+                                                                (result = (
+                                                                 shift t 2) ->
+                                                                 (forall (intP:((memory) Z)),
+                                                                  (intP = (
+                                                                   upd intP0
+                                                                   result tmp) ->
+                                                                   ((
+                                                                   acc intP
+                                                                   (shift t 0)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 3)))) /\
+                                                                 (valid alloc
+                                                                  result))))) /\
+                                                             (valid alloc
+                                                              result))) /\
+                                                          (valid alloc
+                                                           (shift t 2))) /\
+                                                          (valid alloc
+                                                           (shift t 2)))))))) /\
+                                                (((acc intP (shift t 1)) <=
+                                                  (acc intP (shift t 2)) ->
+                                                  (forall (result:unit),
+                                                   (result = tt ->
+                                                    ((acc intP (shift t 0)) <=
+                                                    (acc intP (shift t 1)) /\
+                                                    (acc intP (shift t 1)) <=
+                                                    (acc intP (shift t 2))) /\
+                                                    (acc intP (shift t 2)) <=
+                                                    (acc intP (shift t 3))))))) /\
+                                                (valid alloc (shift t 1))) /\
+                                                (valid alloc (shift t 1))) /\
+                                                (valid alloc (shift t 2))) /\
+                                                (valid alloc (shift t 2))))))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 3))) /\
+                                            (valid alloc (shift t 3)))) /\
+                                          (valid alloc result))))) /\
+                                      (valid alloc result))) /\
+                                   (valid alloc (shift t 2))) /\
+                                   (valid alloc (shift t 2)))))))) /\
+                         (((acc intP (shift t 0)) <=
+                           (acc intP (shift t 2)) ->
+                           (forall (result:unit),
+                            (result = tt ->
+                             (((((((acc intP (shift t 1)) >
+                                   (acc intP (shift t 3)) ->
+                                   (forall (tmp:Z),
+                                    (tmp = (acc intP (shift t 1)) ->
+                                     (forall (result:pointer),
+                                      (result = (shift t 1) ->
+                                       ((forall (result0:Z),
+                                         (result0 = (acc intP (shift t 3)) ->
+                                          (forall (intP0:((memory) Z)),
+                                           (intP0 = (upd intP result result0) ->
+                                            (forall (result:pointer),
+                                             (result = (shift t 3) ->
+                                              (forall (intP:((memory) Z)),
+                                               (intP = (upd intP0 result tmp) ->
+                                                (((((((acc intP (shift t 1)) >
+                                                      (acc intP (shift t 2)) ->
+                                                      (forall (tmp:Z),
+                                                       (tmp = (acc intP
+                                                               (shift t 1)) ->
+                                                        (forall (result:pointer),
+                                                         (result = (shift t 1) ->
+                                                          ((forall (result0:Z),
+                                                            (result0 = (
+                                                             acc intP
+                                                             (shift t 2)) ->
+                                                             (forall (intP0:((memory) Z)),
+                                                              (intP0 = (
+                                                               upd intP
+                                                               result result0) ->
+                                                               (forall (result:pointer),
+                                                                (result = (
+                                                                 shift t 2) ->
+                                                                 (forall (intP:((memory) Z)),
+                                                                  (intP = (
+                                                                   upd intP0
+                                                                   result tmp) ->
+                                                                   ((
+                                                                   acc intP
+                                                                   (shift t 0)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 3)))) /\
+                                                                 (valid alloc
+                                                                  result))))) /\
+                                                             (valid alloc
+                                                              result))) /\
+                                                          (valid alloc
+                                                           (shift t 2))) /\
+                                                          (valid alloc
+                                                           (shift t 2)))))))) /\
+                                                (((acc intP (shift t 1)) <=
+                                                  (acc intP (shift t 2)) ->
+                                                  (forall (result:unit),
+                                                   (result = tt ->
+                                                    ((acc intP (shift t 0)) <=
+                                                    (acc intP (shift t 1)) /\
+                                                    (acc intP (shift t 1)) <=
+                                                    (acc intP (shift t 2))) /\
+                                                    (acc intP (shift t 2)) <=
+                                                    (acc intP (shift t 3))))))) /\
+                                                (valid alloc (shift t 1))) /\
+                                                (valid alloc (shift t 1))) /\
+                                                (valid alloc (shift t 2))) /\
+                                                (valid alloc (shift t 2)))) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result))) /\
+                                       (valid alloc (shift t 3))) /\
+                                       (valid alloc (shift t 3)))))))) /\
+                             (((acc intP (shift t 1)) <=
+                               (acc intP (shift t 3)) ->
+                               (forall (result:unit),
+                                (result = tt ->
+                                 (((((((acc intP (shift t 1)) >
+                                       (acc intP (shift t 2)) ->
+                                       (forall (tmp:Z),
+                                        (tmp = (acc intP (shift t 1)) ->
+                                         (forall (result:pointer),
+                                          (result = (shift t 1) ->
+                                           ((forall (result0:Z),
+                                             (result0 = (acc intP (shift t 2)) ->
                                               (forall (intP0:((memory) Z)),
-                                               (intP0 = (upd intP b result) ->
-                                                (forall (intP:((memory) Z)),
-                                                 (intP = (upd intP0 c tmp) ->
-                                                  ((acc intP a) <=
-                                                  (acc intP b) /\
-                                                  (acc intP b) <=
-                                                  (acc intP c)) /\
-                                                  (acc intP c) <=
-                                                  (acc intP d))) /\
-                                                (valid alloc c))) /\
-                                              (valid alloc b))) /\
-                                            (valid alloc c))))) /\
-                                      (((acc intP b) <= (acc intP c) ->
-                                        (forall (result:unit),
-                                         (result = tt -> ((acc intP a) <=
-                                          (acc intP b) /\ (acc intP b) <=
-                                          (acc intP c)) /\ (acc intP c) <=
-                                          (acc intP d)))))) /\
-                                      (valid alloc b)) /\ (valid alloc c))) /\
-                                    (valid alloc d))) /\
-                                  (valid alloc b))) /\
-                                (valid alloc d))))) /\
-                          (((acc intP b) <= (acc intP d) ->
-                            (forall (result:unit),
-                             (result = tt ->
-                              (((((acc intP b) > (acc intP c) ->
-                                  (forall (tmp:Z),
-                                   (tmp = (acc intP b) ->
-                                    (forall (result:Z),
-                                     (result = (acc intP c) ->
-                                      (forall (intP0:((memory) Z)),
-                                       (intP0 = (upd intP b result) ->
-                                        (forall (intP:((memory) Z)),
-                                         (intP = (upd intP0 c tmp) ->
-                                          ((acc intP a) <= (acc intP b) /\
-                                          (acc intP b) <= (acc intP c)) /\
-                                          (acc intP c) <= (acc intP d))) /\
-                                        (valid alloc c))) /\
-                                      (valid alloc b))) /\
-                                    (valid alloc c))))) /\
-                              (((acc intP b) <= (acc intP c) ->
-                                (forall (result:unit),
-                                 (result = tt -> ((acc intP a) <=
-                                  (acc intP b) /\ (acc intP b) <=
-                                  (acc intP c)) /\ (acc intP c) <=
-                                  (acc intP d)))))) /\
-                              (valid alloc b)) /\ (valid alloc c)))))) /\
-                          (valid alloc b)) /\ (valid alloc d))) /\
-                        (valid alloc c))) /\
-                      (valid alloc a))) /\
-                    (valid alloc c))))) /\
-              (((acc intP a) <= (acc intP c) ->
-                (forall (result:unit),
-                 (result = tt ->
-                  (((((acc intP b) > (acc intP d) ->
-                      (forall (tmp:Z),
-                       (tmp = (acc intP b) ->
-                        (forall (result:Z),
-                         (result = (acc intP d) ->
-                          (forall (intP0:((memory) Z)),
-                           (intP0 = (upd intP b result) ->
-                            (forall (intP:((memory) Z)),
-                             (intP = (upd intP0 d tmp) ->
-                              (((((acc intP b) > (acc intP c) ->
-                                  (forall (tmp:Z),
-                                   (tmp = (acc intP b) ->
-                                    (forall (result:Z),
-                                     (result = (acc intP c) ->
-                                      (forall (intP0:((memory) Z)),
-                                       (intP0 = (upd intP b result) ->
-                                        (forall (intP:((memory) Z)),
-                                         (intP = (upd intP0 c tmp) ->
-                                          ((acc intP a) <= (acc intP b) /\
-                                          (acc intP b) <= (acc intP c)) /\
-                                          (acc intP c) <= (acc intP d))) /\
-                                        (valid alloc c))) /\
-                                      (valid alloc b))) /\
-                                    (valid alloc c))))) /\
-                              (((acc intP b) <= (acc intP c) ->
-                                (forall (result:unit),
-                                 (result = tt -> ((acc intP a) <=
-                                  (acc intP b) /\ (acc intP b) <=
-                                  (acc intP c)) /\ (acc intP c) <=
-                                  (acc intP d)))))) /\
-                              (valid alloc b)) /\ (valid alloc c))) /\
-                            (valid alloc d))) /\
-                          (valid alloc b))) /\
-                        (valid alloc d))))) /\
-                  (((acc intP b) <= (acc intP d) ->
-                    (forall (result:unit),
-                     (result = tt ->
-                      (((((acc intP b) > (acc intP c) ->
-                          (forall (tmp:Z),
-                           (tmp = (acc intP b) ->
-                            (forall (result:Z),
-                             (result = (acc intP c) ->
-                              (forall (intP0:((memory) Z)),
-                               (intP0 = (upd intP b result) ->
-                                (forall (intP:((memory) Z)),
-                                 (intP = (upd intP0 c tmp) ->
-                                  ((acc intP a) <= (acc intP b) /\
-                                  (acc intP b) <= (acc intP c)) /\
-                                  (acc intP c) <= (acc intP d))) /\
-                                (valid alloc c))) /\
-                              (valid alloc b))) /\
-                            (valid alloc c))))) /\
-                      (((acc intP b) <= (acc intP c) ->
-                        (forall (result:unit),
-                         (result = tt -> ((acc intP a) <= (acc intP b) /\
-                          (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                          (acc intP d)))))) /\
-                      (valid alloc b)) /\ (valid alloc c)))))) /\
-                  (valid alloc b)) /\ (valid alloc d)))))) /\
-              (valid alloc a)) /\ (valid alloc c))) /\
-            (valid alloc d))) /\
-          (valid alloc c))) /\
-        (valid alloc d))))) /\
-  (((acc intP c) <= (acc intP d) ->
-    (forall (result:unit),
-     (result = tt ->
-      (((((acc intP a) > (acc intP c) ->
-          (forall (tmp:Z),
-           (tmp = (acc intP a) ->
-            (forall (result:Z),
-             (result = (acc intP c) ->
-              (forall (intP0:((memory) Z)),
-               (intP0 = (upd intP a result) ->
-                (forall (intP:((memory) Z)),
-                 (intP = (upd intP0 c tmp) ->
-                  (((((acc intP b) > (acc intP d) ->
-                      (forall (tmp:Z),
-                       (tmp = (acc intP b) ->
-                        (forall (result:Z),
-                         (result = (acc intP d) ->
-                          (forall (intP0:((memory) Z)),
-                           (intP0 = (upd intP b result) ->
-                            (forall (intP:((memory) Z)),
-                             (intP = (upd intP0 d tmp) ->
-                              (((((acc intP b) > (acc intP c) ->
-                                  (forall (tmp:Z),
-                                   (tmp = (acc intP b) ->
-                                    (forall (result:Z),
-                                     (result = (acc intP c) ->
-                                      (forall (intP0:((memory) Z)),
-                                       (intP0 = (upd intP b result) ->
-                                        (forall (intP:((memory) Z)),
-                                         (intP = (upd intP0 c tmp) ->
-                                          ((acc intP a) <= (acc intP b) /\
-                                          (acc intP b) <= (acc intP c)) /\
-                                          (acc intP c) <= (acc intP d))) /\
-                                        (valid alloc c))) /\
-                                      (valid alloc b))) /\
-                                    (valid alloc c))))) /\
-                              (((acc intP b) <= (acc intP c) ->
-                                (forall (result:unit),
-                                 (result = tt -> ((acc intP a) <=
-                                  (acc intP b) /\ (acc intP b) <=
-                                  (acc intP c)) /\ (acc intP c) <=
-                                  (acc intP d)))))) /\
-                              (valid alloc b)) /\ (valid alloc c))) /\
-                            (valid alloc d))) /\
-                          (valid alloc b))) /\
-                        (valid alloc d))))) /\
-                  (((acc intP b) <= (acc intP d) ->
-                    (forall (result:unit),
-                     (result = tt ->
-                      (((((acc intP b) > (acc intP c) ->
-                          (forall (tmp:Z),
-                           (tmp = (acc intP b) ->
-                            (forall (result:Z),
-                             (result = (acc intP c) ->
-                              (forall (intP0:((memory) Z)),
-                               (intP0 = (upd intP b result) ->
-                                (forall (intP:((memory) Z)),
-                                 (intP = (upd intP0 c tmp) ->
-                                  ((acc intP a) <= (acc intP b) /\
-                                  (acc intP b) <= (acc intP c)) /\
-                                  (acc intP c) <= (acc intP d))) /\
-                                (valid alloc c))) /\
-                              (valid alloc b))) /\
-                            (valid alloc c))))) /\
-                      (((acc intP b) <= (acc intP c) ->
-                        (forall (result:unit),
-                         (result = tt -> ((acc intP a) <= (acc intP b) /\
-                          (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                          (acc intP d)))))) /\
-                      (valid alloc b)) /\ (valid alloc c)))))) /\
-                  (valid alloc b)) /\ (valid alloc d))) /\
-                (valid alloc c))) /\
-              (valid alloc a))) /\
-            (valid alloc c))))) /\
-      (((acc intP a) <= (acc intP c) ->
+                                               (intP0 = (upd intP result
+                                                         result0) ->
+                                                (forall (result:pointer),
+                                                 (result = (shift t 2) ->
+                                                  (forall (intP:((memory) Z)),
+                                                   (intP = (upd intP0 result
+                                                            tmp) ->
+                                                    ((acc intP (shift t 0)) <=
+                                                    (acc intP (shift t 1)) /\
+                                                    (acc intP (shift t 1)) <=
+                                                    (acc intP (shift t 2))) /\
+                                                    (acc intP (shift t 2)) <=
+                                                    (acc intP (shift t 3)))) /\
+                                                  (valid alloc result))))) /\
+                                              (valid alloc result))) /\
+                                           (valid alloc (shift t 2))) /\
+                                           (valid alloc (shift t 2)))))))) /\
+                                 (((acc intP (shift t 1)) <=
+                                   (acc intP (shift t 2)) ->
+                                   (forall (result:unit),
+                                    (result = tt ->
+                                     ((acc intP (shift t 0)) <=
+                                     (acc intP (shift t 1)) /\
+                                     (acc intP (shift t 1)) <=
+                                     (acc intP (shift t 2))) /\
+                                     (acc intP (shift t 2)) <=
+                                     (acc intP (shift t 3))))))) /\
+                                 (valid alloc (shift t 1))) /\
+                                 (valid alloc (shift t 1))) /\
+                                 (valid alloc (shift t 2))) /\
+                                 (valid alloc (shift t 2))))))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 3))) /\
+                             (valid alloc (shift t 3))))))) /\
+                         (valid alloc (shift t 0))) /\
+                         (valid alloc (shift t 0))) /\
+                         (valid alloc (shift t 2))) /\
+                         (valid alloc (shift t 2)))) /\
+                       (valid alloc result))))) /\
+                   (valid alloc result))) /\
+                (valid alloc (shift t 3))) /\ (valid alloc (shift t 3)))))))) /\
+      (((acc intP (shift t 2)) <= (acc intP (shift t 3)) ->
         (forall (result:unit),
          (result = tt ->
-          (((((acc intP b) > (acc intP d) ->
-              (forall (tmp:Z),
-               (tmp = (acc intP b) ->
-                (forall (result:Z),
-                 (result = (acc intP d) ->
-                  (forall (intP0:((memory) Z)),
-                   (intP0 = (upd intP b result) ->
-                    (forall (intP:((memory) Z)),
-                     (intP = (upd intP0 d tmp) ->
-                      (((((acc intP b) > (acc intP c) ->
-                          (forall (tmp:Z),
-                           (tmp = (acc intP b) ->
-                            (forall (result:Z),
-                             (result = (acc intP c) ->
-                              (forall (intP0:((memory) Z)),
-                               (intP0 = (upd intP b result) ->
-                                (forall (intP:((memory) Z)),
-                                 (intP = (upd intP0 c tmp) ->
-                                  ((acc intP a) <= (acc intP b) /\
-                                  (acc intP b) <= (acc intP c)) /\
-                                  (acc intP c) <= (acc intP d))) /\
-                                (valid alloc c))) /\
-                              (valid alloc b))) /\
-                            (valid alloc c))))) /\
-                      (((acc intP b) <= (acc intP c) ->
-                        (forall (result:unit),
-                         (result = tt -> ((acc intP a) <= (acc intP b) /\
-                          (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                          (acc intP d)))))) /\
-                      (valid alloc b)) /\ (valid alloc c))) /\
-                    (valid alloc d))) /\
-                  (valid alloc b))) /\
-                (valid alloc d))))) /\
-          (((acc intP b) <= (acc intP d) ->
+          (((((((acc intP (shift t 0)) > (acc intP (shift t 2)) ->
+                (forall (tmp:Z),
+                 (tmp = (acc intP (shift t 0)) ->
+                  (forall (result:pointer),
+                   (result = (shift t 0) ->
+                    ((forall (result0:Z),
+                      (result0 = (acc intP (shift t 2)) ->
+                       (forall (intP0:((memory) Z)),
+                        (intP0 = (upd intP result result0) ->
+                         (forall (result:pointer),
+                          (result = (shift t 2) ->
+                           (forall (intP:((memory) Z)),
+                            (intP = (upd intP0 result tmp) ->
+                             (((((((acc intP (shift t 1)) >
+                                   (acc intP (shift t 3)) ->
+                                   (forall (tmp:Z),
+                                    (tmp = (acc intP (shift t 1)) ->
+                                     (forall (result:pointer),
+                                      (result = (shift t 1) ->
+                                       ((forall (result0:Z),
+                                         (result0 = (acc intP (shift t 3)) ->
+                                          (forall (intP0:((memory) Z)),
+                                           (intP0 = (upd intP result result0) ->
+                                            (forall (result:pointer),
+                                             (result = (shift t 3) ->
+                                              (forall (intP:((memory) Z)),
+                                               (intP = (upd intP0 result tmp) ->
+                                                (((((((acc intP (shift t 1)) >
+                                                      (acc intP (shift t 2)) ->
+                                                      (forall (tmp:Z),
+                                                       (tmp = (acc intP
+                                                               (shift t 1)) ->
+                                                        (forall (result:pointer),
+                                                         (result = (shift t 1) ->
+                                                          ((forall (result0:Z),
+                                                            (result0 = (
+                                                             acc intP
+                                                             (shift t 2)) ->
+                                                             (forall (intP0:((memory) Z)),
+                                                              (intP0 = (
+                                                               upd intP
+                                                               result result0) ->
+                                                               (forall (result:pointer),
+                                                                (result = (
+                                                                 shift t 2) ->
+                                                                 (forall (intP:((memory) Z)),
+                                                                  (intP = (
+                                                                   upd intP0
+                                                                   result tmp) ->
+                                                                   ((
+                                                                   acc intP
+                                                                   (shift t 0)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 1)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 2)) <=
+                                                                   (acc intP
+                                                                    (
+                                                                    shift t 3)))) /\
+                                                                 (valid alloc
+                                                                  result))))) /\
+                                                             (valid alloc
+                                                              result))) /\
+                                                          (valid alloc
+                                                           (shift t 2))) /\
+                                                          (valid alloc
+                                                           (shift t 2)))))))) /\
+                                                (((acc intP (shift t 1)) <=
+                                                  (acc intP (shift t 2)) ->
+                                                  (forall (result:unit),
+                                                   (result = tt ->
+                                                    ((acc intP (shift t 0)) <=
+                                                    (acc intP (shift t 1)) /\
+                                                    (acc intP (shift t 1)) <=
+                                                    (acc intP (shift t 2))) /\
+                                                    (acc intP (shift t 2)) <=
+                                                    (acc intP (shift t 3))))))) /\
+                                                (valid alloc (shift t 1))) /\
+                                                (valid alloc (shift t 1))) /\
+                                                (valid alloc (shift t 2))) /\
+                                                (valid alloc (shift t 2)))) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result))) /\
+                                       (valid alloc (shift t 3))) /\
+                                       (valid alloc (shift t 3)))))))) /\
+                             (((acc intP (shift t 1)) <=
+                               (acc intP (shift t 3)) ->
+                               (forall (result:unit),
+                                (result = tt ->
+                                 (((((((acc intP (shift t 1)) >
+                                       (acc intP (shift t 2)) ->
+                                       (forall (tmp:Z),
+                                        (tmp = (acc intP (shift t 1)) ->
+                                         (forall (result:pointer),
+                                          (result = (shift t 1) ->
+                                           ((forall (result0:Z),
+                                             (result0 = (acc intP (shift t 2)) ->
+                                              (forall (intP0:((memory) Z)),
+                                               (intP0 = (upd intP result
+                                                         result0) ->
+                                                (forall (result:pointer),
+                                                 (result = (shift t 2) ->
+                                                  (forall (intP:((memory) Z)),
+                                                   (intP = (upd intP0 result
+                                                            tmp) ->
+                                                    ((acc intP (shift t 0)) <=
+                                                    (acc intP (shift t 1)) /\
+                                                    (acc intP (shift t 1)) <=
+                                                    (acc intP (shift t 2))) /\
+                                                    (acc intP (shift t 2)) <=
+                                                    (acc intP (shift t 3)))) /\
+                                                  (valid alloc result))))) /\
+                                              (valid alloc result))) /\
+                                           (valid alloc (shift t 2))) /\
+                                           (valid alloc (shift t 2)))))))) /\
+                                 (((acc intP (shift t 1)) <=
+                                   (acc intP (shift t 2)) ->
+                                   (forall (result:unit),
+                                    (result = tt ->
+                                     ((acc intP (shift t 0)) <=
+                                     (acc intP (shift t 1)) /\
+                                     (acc intP (shift t 1)) <=
+                                     (acc intP (shift t 2))) /\
+                                     (acc intP (shift t 2)) <=
+                                     (acc intP (shift t 3))))))) /\
+                                 (valid alloc (shift t 1))) /\
+                                 (valid alloc (shift t 1))) /\
+                                 (valid alloc (shift t 2))) /\
+                                 (valid alloc (shift t 2))))))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 3))) /\
+                             (valid alloc (shift t 3)))) /\
+                           (valid alloc result))))) /\
+                       (valid alloc result))) /\
+                    (valid alloc (shift t 2))) /\ (valid alloc (shift t 2)))))))) /\
+          (((acc intP (shift t 0)) <= (acc intP (shift t 2)) ->
             (forall (result:unit),
              (result = tt ->
-              (((((acc intP b) > (acc intP c) ->
-                  (forall (tmp:Z),
-                   (tmp = (acc intP b) ->
-                    (forall (result:Z),
-                     (result = (acc intP c) ->
-                      (forall (intP0:((memory) Z)),
-                       (intP0 = (upd intP b result) ->
-                        (forall (intP:((memory) Z)),
-                         (intP = (upd intP0 c tmp) -> ((acc intP a) <=
-                          (acc intP b) /\ (acc intP b) <= (acc intP c)) /\
-                          (acc intP c) <= (acc intP d))) /\
-                        (valid alloc c))) /\
-                      (valid alloc b))) /\
-                    (valid alloc c))))) /\
-              (((acc intP b) <= (acc intP c) ->
+              (((((((acc intP (shift t 1)) > (acc intP (shift t 3)) ->
+                    (forall (tmp:Z),
+                     (tmp = (acc intP (shift t 1)) ->
+                      (forall (result:pointer),
+                       (result = (shift t 1) ->
+                        ((forall (result0:Z),
+                          (result0 = (acc intP (shift t 3)) ->
+                           (forall (intP0:((memory) Z)),
+                            (intP0 = (upd intP result result0) ->
+                             (forall (result:pointer),
+                              (result = (shift t 3) ->
+                               (forall (intP:((memory) Z)),
+                                (intP = (upd intP0 result tmp) ->
+                                 (((((((acc intP (shift t 1)) >
+                                       (acc intP (shift t 2)) ->
+                                       (forall (tmp:Z),
+                                        (tmp = (acc intP (shift t 1)) ->
+                                         (forall (result:pointer),
+                                          (result = (shift t 1) ->
+                                           ((forall (result0:Z),
+                                             (result0 = (acc intP (shift t 2)) ->
+                                              (forall (intP0:((memory) Z)),
+                                               (intP0 = (upd intP result
+                                                         result0) ->
+                                                (forall (result:pointer),
+                                                 (result = (shift t 2) ->
+                                                  (forall (intP:((memory) Z)),
+                                                   (intP = (upd intP0 result
+                                                            tmp) ->
+                                                    ((acc intP (shift t 0)) <=
+                                                    (acc intP (shift t 1)) /\
+                                                    (acc intP (shift t 1)) <=
+                                                    (acc intP (shift t 2))) /\
+                                                    (acc intP (shift t 2)) <=
+                                                    (acc intP (shift t 3)))) /\
+                                                  (valid alloc result))))) /\
+                                              (valid alloc result))) /\
+                                           (valid alloc (shift t 2))) /\
+                                           (valid alloc (shift t 2)))))))) /\
+                                 (((acc intP (shift t 1)) <=
+                                   (acc intP (shift t 2)) ->
+                                   (forall (result:unit),
+                                    (result = tt ->
+                                     ((acc intP (shift t 0)) <=
+                                     (acc intP (shift t 1)) /\
+                                     (acc intP (shift t 1)) <=
+                                     (acc intP (shift t 2))) /\
+                                     (acc intP (shift t 2)) <=
+                                     (acc intP (shift t 3))))))) /\
+                                 (valid alloc (shift t 1))) /\
+                                 (valid alloc (shift t 1))) /\
+                                 (valid alloc (shift t 2))) /\
+                                 (valid alloc (shift t 2)))) /\
+                               (valid alloc result))))) /\
+                           (valid alloc result))) /\
+                        (valid alloc (shift t 3))) /\
+                        (valid alloc (shift t 3)))))))) /\
+              (((acc intP (shift t 1)) <= (acc intP (shift t 3)) ->
                 (forall (result:unit),
-                 (result = tt -> ((acc intP a) <= (acc intP b) /\
-                  (acc intP b) <= (acc intP c)) /\ (acc intP c) <=
-                  (acc intP d)))))) /\
-              (valid alloc b)) /\ (valid alloc c)))))) /\
-          (valid alloc b)) /\ (valid alloc d)))))) /\
-      (valid alloc a)) /\ (valid alloc c)))))) /\
-  (valid alloc c)) /\ (valid alloc d).
+                 (result = tt ->
+                  (((((((acc intP (shift t 1)) > (acc intP (shift t 2)) ->
+                        (forall (tmp:Z),
+                         (tmp = (acc intP (shift t 1)) ->
+                          (forall (result:pointer),
+                           (result = (shift t 1) ->
+                            ((forall (result0:Z),
+                              (result0 = (acc intP (shift t 2)) ->
+                               (forall (intP0:((memory) Z)),
+                                (intP0 = (upd intP result result0) ->
+                                 (forall (result:pointer),
+                                  (result = (shift t 2) ->
+                                   (forall (intP:((memory) Z)),
+                                    (intP = (upd intP0 result tmp) ->
+                                     ((acc intP (shift t 0)) <=
+                                     (acc intP (shift t 1)) /\
+                                     (acc intP (shift t 1)) <=
+                                     (acc intP (shift t 2))) /\
+                                     (acc intP (shift t 2)) <=
+                                     (acc intP (shift t 3)))) /\
+                                   (valid alloc result))))) /\
+                               (valid alloc result))) /\
+                            (valid alloc (shift t 2))) /\
+                            (valid alloc (shift t 2)))))))) /\
+                  (((acc intP (shift t 1)) <= (acc intP (shift t 2)) ->
+                    (forall (result:unit),
+                     (result = tt -> ((acc intP (shift t 0)) <=
+                      (acc intP (shift t 1)) /\ (acc intP (shift t 1)) <=
+                      (acc intP (shift t 2))) /\ (acc intP (shift t 2)) <=
+                      (acc intP (shift t 3))))))) /\
+                  (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
+                  (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))))))) /\
+              (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
+              (valid alloc (shift t 3))) /\ (valid alloc (shift t 3))))))) /\
+          (valid alloc (shift t 0))) /\ (valid alloc (shift t 0))) /\
+          (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))))))) /\
+      (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))) /\
+      (valid alloc (shift t 3))) /\ (valid alloc (shift t 3)))) /\
+    (valid alloc result))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sort.why", characters 4510-4510 *)
+Lemma sort4_4_impl_po_7 : 
+  forall (t: pointer),
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (Pre66: (valid_range alloc t 0 4)),
+  forall (Pre11: (valid alloc (shift t 0))),
+  forall (Pre13: (valid alloc (shift t 1))),
+  forall (Test1: (acc intP (shift t 0)) <= (acc intP (shift t 1))),
+  forall (result0: unit),
+  forall (Post1: result0 = tt),
+  (((((((acc intP (shift t 2)) > (acc intP (shift t 3)) ->
+        (forall (tmp:Z),
+         (tmp = (acc intP (shift t 2)) ->
+          (forall (result:pointer),
+           (result = (shift t 2) ->
+            ((forall (result0:Z),
+              (result0 = (acc intP (shift t 3)) ->
+               (forall (intP0:((memory) Z)),
+                (intP0 = (upd intP result result0) ->
+                 (forall (result:pointer),
+                  (result = (shift t 3) ->
+                   (forall (intP:((memory) Z)),
+                    (intP = (upd intP0 result tmp) ->
+                     (((((((acc intP (shift t 0)) > (acc intP (shift t 2)) ->
+                           (forall (tmp:Z),
+                            (tmp = (acc intP (shift t 0)) ->
+                             (forall (result:pointer),
+                              (result = (shift t 0) ->
+                               ((forall (result0:Z),
+                                 (result0 = (acc intP (shift t 2)) ->
+                                  (forall (intP0:((memory) Z)),
+                                   (intP0 = (upd intP result result0) ->
+                                    (forall (result:pointer),
+                                     (result = (shift t 2) ->
+                                      (forall (intP:((memory) Z)),
+                                       (intP = (upd intP0 result tmp) ->
+                                        (((((((acc intP (shift t 1)) >
+                                              (acc intP (shift t 3)) ->
+                                              (forall (tmp:Z),
+                                               (tmp = (acc intP (shift t 1)) ->
+                                                (forall (result:pointer),
+                                                 (result = (shift t 1) ->
+                                                  ((forall (result0:Z),
+                                                    (result0 = (acc intP
+                                                                (shift t 3)) ->
+                                                     (forall (intP0:((memory) Z)),
+                                                      (intP0 = (upd intP
+                                                                result
+                                                                result0) ->
+                                                       (forall (result:pointer),
+                                                        (result = (shift t 3) ->
+                                                         (forall (intP:((memory) Z)),
+                                                          (intP = (upd intP0
+                                                                   result tmp) ->
+                                                           (((((((acc intP
+                                                                  (shift t 1)) >
+                                                                 (acc intP
+                                                                  (shift t 2)) ->
+                                                                 (forall (tmp:Z),
+                                                                  (tmp = (
+                                                                   acc intP
+                                                                   (shift t 1)) ->
+                                                                   (forall (result:pointer),
+                                                                    (
+                                                                    result = (
+                                                                    shift t 1) ->
+                                                                    ((
+                                                                    forall (result0:Z),
+                                                                    (
+                                                                    result0 = (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 2)) ->
+                                                                    (
+                                                                    forall (intP0:((memory) Z)),
+                                                                    (
+                                                                    intP0 = (
+                                                                    upd intP
+                                                                    result
+                                                                    result0) ->
+                                                                    (
+                                                                    forall (result:pointer),
+                                                                    (
+                                                                    result = (
+                                                                    shift t 2) ->
+                                                                    (
+                                                                    forall (intP:((memory) Z)),
+                                                                    (
+                                                                    intP = (
+                                                                    upd intP0
+                                                                    result
+                                                                    tmp) ->
+                                                                    ((
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 0)) <=
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 1)) /\
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 1)) <=
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 2)) <=
+                                                                    (
+                                                                    acc intP
+                                                                    (
+                                                                    shift t 3)))) /\
+                                                                    (
+                                                                    valid alloc
+                                                                    result))))) /\
+                                                                    (
+                                                                    valid alloc
+                                                                    result))) /\
+                                                                    (
+                                                                    valid alloc
+                                                                    (
+                                                                    shift t 2))) /\
+                                                                    (
+                                                                    valid alloc
+                                                                    (
+                                                                    shift t 2)))))))) /\
+                                                           (((acc intP
+                                                              (shift t 1)) <=
+                                                             (acc intP
+                                                              (shift t 2)) ->
+                                                             (forall (result:unit),
+                                                              (result = tt ->
+                                                               ((acc intP
+                                                                 (shift t 0)) <=
+                                                               (acc intP
+                                                                (shift t 1)) /\
+                                                               (acc intP
+                                                                (shift t 1)) <=
+                                                               (acc intP
+                                                                (shift t 2))) /\
+                                                               (acc intP
+                                                                (shift t 2)) <=
+                                                               (acc intP
+                                                                (shift t 3))))))) /\
+                                                           (valid alloc
+                                                            (shift t 1))) /\
+                                                           (valid alloc
+                                                            (shift t 1))) /\
+                                                           (valid alloc
+                                                            (shift t 2))) /\
+                                                           (valid alloc
+                                                            (shift t 2)))) /\
+                                                         (valid alloc result))))) /\
+                                                     (valid alloc result))) /\
+                                                  (valid alloc (shift t 3))) /\
+                                                  (valid alloc (shift t 3)))))))) /\
+                                        (((acc intP (shift t 1)) <=
+                                          (acc intP (shift t 3)) ->
+                                          (forall (result:unit),
+                                           (result = tt ->
+                                            (((((((acc intP (shift t 1)) >
+                                                  (acc intP (shift t 2)) ->
+                                                  (forall (tmp:Z),
+                                                   (tmp = (acc intP
+                                                           (shift t 1)) ->
+                                                    (forall (result:pointer),
+                                                     (result = (shift t 1) ->
+                                                      ((forall (result0:Z),
+                                                        (result0 = (acc intP
+                                                                    (
+                                                                    shift t 2)) ->
+                                                         (forall (intP0:((memory) Z)),
+                                                          (intP0 = (upd intP
+                                                                    result
+                                                                    result0) ->
+                                                           (forall (result:pointer),
+                                                            (result = (
+                                                             shift t 2) ->
+                                                             (forall (intP:((memory) Z)),
+                                                              (intP = (
+                                                               upd intP0
+                                                               result tmp) ->
+                                                               ((acc intP
+                                                                 (shift t 0)) <=
+                                                               (acc intP
+                                                                (shift t 1)) /\
+                                                               (acc intP
+                                                                (shift t 1)) <=
+                                                               (acc intP
+                                                                (shift t 2))) /\
+                                                               (acc intP
+                                                                (shift t 2)) <=
+                                                               (acc intP
+                                                                (shift t 3)))) /\
+                                                             (valid alloc
+                                                              result))))) /\
+                                                         (valid alloc result))) /\
+                                                      (valid alloc
+                                                       (shift t 2))) /\
+                                                      (valid alloc
+                                                       (shift t 2)))))))) /\
+                                            (((acc intP (shift t 1)) <=
+                                              (acc intP (shift t 2)) ->
+                                              (forall (result:unit),
+                                               (result = tt ->
+                                                ((acc intP (shift t 0)) <=
+                                                (acc intP (shift t 1)) /\
+                                                (acc intP (shift t 1)) <=
+                                                (acc intP (shift t 2))) /\
+                                                (acc intP (shift t 2)) <=
+                                                (acc intP (shift t 3))))))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 2))) /\
+                                            (valid alloc (shift t 2))))))) /\
+                                        (valid alloc (shift t 1))) /\
+                                        (valid alloc (shift t 1))) /\
+                                        (valid alloc (shift t 3))) /\
+                                        (valid alloc (shift t 3)))) /\
+                                      (valid alloc result))))) /\
+                                  (valid alloc result))) /\
+                               (valid alloc (shift t 2))) /\
+                               (valid alloc (shift t 2)))))))) /\
+                     (((acc intP (shift t 0)) <= (acc intP (shift t 2)) ->
+                       (forall (result:unit),
+                        (result = tt ->
+                         (((((((acc intP (shift t 1)) >
+                               (acc intP (shift t 3)) ->
+                               (forall (tmp:Z),
+                                (tmp = (acc intP (shift t 1)) ->
+                                 (forall (result:pointer),
+                                  (result = (shift t 1) ->
+                                   ((forall (result0:Z),
+                                     (result0 = (acc intP (shift t 3)) ->
+                                      (forall (intP0:((memory) Z)),
+                                       (intP0 = (upd intP result result0) ->
+                                        (forall (result:pointer),
+                                         (result = (shift t 3) ->
+                                          (forall (intP:((memory) Z)),
+                                           (intP = (upd intP0 result tmp) ->
+                                            (((((((acc intP (shift t 1)) >
+                                                  (acc intP (shift t 2)) ->
+                                                  (forall (tmp:Z),
+                                                   (tmp = (acc intP
+                                                           (shift t 1)) ->
+                                                    (forall (result:pointer),
+                                                     (result = (shift t 1) ->
+                                                      ((forall (result0:Z),
+                                                        (result0 = (acc intP
+                                                                    (
+                                                                    shift t 2)) ->
+                                                         (forall (intP0:((memory) Z)),
+                                                          (intP0 = (upd intP
+                                                                    result
+                                                                    result0) ->
+                                                           (forall (result:pointer),
+                                                            (result = (
+                                                             shift t 2) ->
+                                                             (forall (intP:((memory) Z)),
+                                                              (intP = (
+                                                               upd intP0
+                                                               result tmp) ->
+                                                               ((acc intP
+                                                                 (shift t 0)) <=
+                                                               (acc intP
+                                                                (shift t 1)) /\
+                                                               (acc intP
+                                                                (shift t 1)) <=
+                                                               (acc intP
+                                                                (shift t 2))) /\
+                                                               (acc intP
+                                                                (shift t 2)) <=
+                                                               (acc intP
+                                                                (shift t 3)))) /\
+                                                             (valid alloc
+                                                              result))))) /\
+                                                         (valid alloc result))) /\
+                                                      (valid alloc
+                                                       (shift t 2))) /\
+                                                      (valid alloc
+                                                       (shift t 2)))))))) /\
+                                            (((acc intP (shift t 1)) <=
+                                              (acc intP (shift t 2)) ->
+                                              (forall (result:unit),
+                                               (result = tt ->
+                                                ((acc intP (shift t 0)) <=
+                                                (acc intP (shift t 1)) /\
+                                                (acc intP (shift t 1)) <=
+                                                (acc intP (shift t 2))) /\
+                                                (acc intP (shift t 2)) <=
+                                                (acc intP (shift t 3))))))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 2))) /\
+                                            (valid alloc (shift t 2)))) /\
+                                          (valid alloc result))))) /\
+                                      (valid alloc result))) /\
+                                   (valid alloc (shift t 3))) /\
+                                   (valid alloc (shift t 3)))))))) /\
+                         (((acc intP (shift t 1)) <=
+                           (acc intP (shift t 3)) ->
+                           (forall (result:unit),
+                            (result = tt ->
+                             (((((((acc intP (shift t 1)) >
+                                   (acc intP (shift t 2)) ->
+                                   (forall (tmp:Z),
+                                    (tmp = (acc intP (shift t 1)) ->
+                                     (forall (result:pointer),
+                                      (result = (shift t 1) ->
+                                       ((forall (result0:Z),
+                                         (result0 = (acc intP (shift t 2)) ->
+                                          (forall (intP0:((memory) Z)),
+                                           (intP0 = (upd intP result result0) ->
+                                            (forall (result:pointer),
+                                             (result = (shift t 2) ->
+                                              (forall (intP:((memory) Z)),
+                                               (intP = (upd intP0 result tmp) ->
+                                                ((acc intP (shift t 0)) <=
+                                                (acc intP (shift t 1)) /\
+                                                (acc intP (shift t 1)) <=
+                                                (acc intP (shift t 2))) /\
+                                                (acc intP (shift t 2)) <=
+                                                (acc intP (shift t 3)))) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result))) /\
+                                       (valid alloc (shift t 2))) /\
+                                       (valid alloc (shift t 2)))))))) /\
+                             (((acc intP (shift t 1)) <=
+                               (acc intP (shift t 2)) ->
+                               (forall (result:unit),
+                                (result = tt -> ((acc intP (shift t 0)) <=
+                                 (acc intP (shift t 1)) /\
+                                 (acc intP (shift t 1)) <=
+                                 (acc intP (shift t 2))) /\
+                                 (acc intP (shift t 2)) <=
+                                 (acc intP (shift t 3))))))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 2))) /\
+                             (valid alloc (shift t 2))))))) /\
+                         (valid alloc (shift t 1))) /\
+                         (valid alloc (shift t 1))) /\
+                         (valid alloc (shift t 3))) /\
+                         (valid alloc (shift t 3))))))) /\
+                     (valid alloc (shift t 0))) /\
+                     (valid alloc (shift t 0))) /\
+                     (valid alloc (shift t 2))) /\ (valid alloc (shift t 2)))) /\
+                   (valid alloc result))))) /\
+               (valid alloc result))) /\
+            (valid alloc (shift t 3))) /\ (valid alloc (shift t 3)))))))) /\
+  (((acc intP (shift t 2)) <= (acc intP (shift t 3)) ->
+    (forall (result:unit),
+     (result = tt ->
+      (((((((acc intP (shift t 0)) > (acc intP (shift t 2)) ->
+            (forall (tmp:Z),
+             (tmp = (acc intP (shift t 0)) ->
+              (forall (result:pointer),
+               (result = (shift t 0) ->
+                ((forall (result0:Z),
+                  (result0 = (acc intP (shift t 2)) ->
+                   (forall (intP0:((memory) Z)),
+                    (intP0 = (upd intP result result0) ->
+                     (forall (result:pointer),
+                      (result = (shift t 2) ->
+                       (forall (intP:((memory) Z)),
+                        (intP = (upd intP0 result tmp) ->
+                         (((((((acc intP (shift t 1)) >
+                               (acc intP (shift t 3)) ->
+                               (forall (tmp:Z),
+                                (tmp = (acc intP (shift t 1)) ->
+                                 (forall (result:pointer),
+                                  (result = (shift t 1) ->
+                                   ((forall (result0:Z),
+                                     (result0 = (acc intP (shift t 3)) ->
+                                      (forall (intP0:((memory) Z)),
+                                       (intP0 = (upd intP result result0) ->
+                                        (forall (result:pointer),
+                                         (result = (shift t 3) ->
+                                          (forall (intP:((memory) Z)),
+                                           (intP = (upd intP0 result tmp) ->
+                                            (((((((acc intP (shift t 1)) >
+                                                  (acc intP (shift t 2)) ->
+                                                  (forall (tmp:Z),
+                                                   (tmp = (acc intP
+                                                           (shift t 1)) ->
+                                                    (forall (result:pointer),
+                                                     (result = (shift t 1) ->
+                                                      ((forall (result0:Z),
+                                                        (result0 = (acc intP
+                                                                    (
+                                                                    shift t 2)) ->
+                                                         (forall (intP0:((memory) Z)),
+                                                          (intP0 = (upd intP
+                                                                    result
+                                                                    result0) ->
+                                                           (forall (result:pointer),
+                                                            (result = (
+                                                             shift t 2) ->
+                                                             (forall (intP:((memory) Z)),
+                                                              (intP = (
+                                                               upd intP0
+                                                               result tmp) ->
+                                                               ((acc intP
+                                                                 (shift t 0)) <=
+                                                               (acc intP
+                                                                (shift t 1)) /\
+                                                               (acc intP
+                                                                (shift t 1)) <=
+                                                               (acc intP
+                                                                (shift t 2))) /\
+                                                               (acc intP
+                                                                (shift t 2)) <=
+                                                               (acc intP
+                                                                (shift t 3)))) /\
+                                                             (valid alloc
+                                                              result))))) /\
+                                                         (valid alloc result))) /\
+                                                      (valid alloc
+                                                       (shift t 2))) /\
+                                                      (valid alloc
+                                                       (shift t 2)))))))) /\
+                                            (((acc intP (shift t 1)) <=
+                                              (acc intP (shift t 2)) ->
+                                              (forall (result:unit),
+                                               (result = tt ->
+                                                ((acc intP (shift t 0)) <=
+                                                (acc intP (shift t 1)) /\
+                                                (acc intP (shift t 1)) <=
+                                                (acc intP (shift t 2))) /\
+                                                (acc intP (shift t 2)) <=
+                                                (acc intP (shift t 3))))))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 1))) /\
+                                            (valid alloc (shift t 2))) /\
+                                            (valid alloc (shift t 2)))) /\
+                                          (valid alloc result))))) /\
+                                      (valid alloc result))) /\
+                                   (valid alloc (shift t 3))) /\
+                                   (valid alloc (shift t 3)))))))) /\
+                         (((acc intP (shift t 1)) <=
+                           (acc intP (shift t 3)) ->
+                           (forall (result:unit),
+                            (result = tt ->
+                             (((((((acc intP (shift t 1)) >
+                                   (acc intP (shift t 2)) ->
+                                   (forall (tmp:Z),
+                                    (tmp = (acc intP (shift t 1)) ->
+                                     (forall (result:pointer),
+                                      (result = (shift t 1) ->
+                                       ((forall (result0:Z),
+                                         (result0 = (acc intP (shift t 2)) ->
+                                          (forall (intP0:((memory) Z)),
+                                           (intP0 = (upd intP result result0) ->
+                                            (forall (result:pointer),
+                                             (result = (shift t 2) ->
+                                              (forall (intP:((memory) Z)),
+                                               (intP = (upd intP0 result tmp) ->
+                                                ((acc intP (shift t 0)) <=
+                                                (acc intP (shift t 1)) /\
+                                                (acc intP (shift t 1)) <=
+                                                (acc intP (shift t 2))) /\
+                                                (acc intP (shift t 2)) <=
+                                                (acc intP (shift t 3)))) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result))) /\
+                                       (valid alloc (shift t 2))) /\
+                                       (valid alloc (shift t 2)))))))) /\
+                             (((acc intP (shift t 1)) <=
+                               (acc intP (shift t 2)) ->
+                               (forall (result:unit),
+                                (result = tt -> ((acc intP (shift t 0)) <=
+                                 (acc intP (shift t 1)) /\
+                                 (acc intP (shift t 1)) <=
+                                 (acc intP (shift t 2))) /\
+                                 (acc intP (shift t 2)) <=
+                                 (acc intP (shift t 3))))))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 2))) /\
+                             (valid alloc (shift t 2))))))) /\
+                         (valid alloc (shift t 1))) /\
+                         (valid alloc (shift t 1))) /\
+                         (valid alloc (shift t 3))) /\
+                         (valid alloc (shift t 3)))) /\
+                       (valid alloc result))))) /\
+                   (valid alloc result))) /\
+                (valid alloc (shift t 2))) /\ (valid alloc (shift t 2)))))))) /\
+      (((acc intP (shift t 0)) <= (acc intP (shift t 2)) ->
+        (forall (result:unit),
+         (result = tt ->
+          (((((((acc intP (shift t 1)) > (acc intP (shift t 3)) ->
+                (forall (tmp:Z),
+                 (tmp = (acc intP (shift t 1)) ->
+                  (forall (result:pointer),
+                   (result = (shift t 1) ->
+                    ((forall (result0:Z),
+                      (result0 = (acc intP (shift t 3)) ->
+                       (forall (intP0:((memory) Z)),
+                        (intP0 = (upd intP result result0) ->
+                         (forall (result:pointer),
+                          (result = (shift t 3) ->
+                           (forall (intP:((memory) Z)),
+                            (intP = (upd intP0 result tmp) ->
+                             (((((((acc intP (shift t 1)) >
+                                   (acc intP (shift t 2)) ->
+                                   (forall (tmp:Z),
+                                    (tmp = (acc intP (shift t 1)) ->
+                                     (forall (result:pointer),
+                                      (result = (shift t 1) ->
+                                       ((forall (result0:Z),
+                                         (result0 = (acc intP (shift t 2)) ->
+                                          (forall (intP0:((memory) Z)),
+                                           (intP0 = (upd intP result result0) ->
+                                            (forall (result:pointer),
+                                             (result = (shift t 2) ->
+                                              (forall (intP:((memory) Z)),
+                                               (intP = (upd intP0 result tmp) ->
+                                                ((acc intP (shift t 0)) <=
+                                                (acc intP (shift t 1)) /\
+                                                (acc intP (shift t 1)) <=
+                                                (acc intP (shift t 2))) /\
+                                                (acc intP (shift t 2)) <=
+                                                (acc intP (shift t 3)))) /\
+                                              (valid alloc result))))) /\
+                                          (valid alloc result))) /\
+                                       (valid alloc (shift t 2))) /\
+                                       (valid alloc (shift t 2)))))))) /\
+                             (((acc intP (shift t 1)) <=
+                               (acc intP (shift t 2)) ->
+                               (forall (result:unit),
+                                (result = tt -> ((acc intP (shift t 0)) <=
+                                 (acc intP (shift t 1)) /\
+                                 (acc intP (shift t 1)) <=
+                                 (acc intP (shift t 2))) /\
+                                 (acc intP (shift t 2)) <=
+                                 (acc intP (shift t 3))))))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 1))) /\
+                             (valid alloc (shift t 2))) /\
+                             (valid alloc (shift t 2)))) /\
+                           (valid alloc result))))) /\
+                       (valid alloc result))) /\
+                    (valid alloc (shift t 3))) /\ (valid alloc (shift t 3)))))))) /\
+          (((acc intP (shift t 1)) <= (acc intP (shift t 3)) ->
+            (forall (result:unit),
+             (result = tt ->
+              (((((((acc intP (shift t 1)) > (acc intP (shift t 2)) ->
+                    (forall (tmp:Z),
+                     (tmp = (acc intP (shift t 1)) ->
+                      (forall (result:pointer),
+                       (result = (shift t 1) ->
+                        ((forall (result0:Z),
+                          (result0 = (acc intP (shift t 2)) ->
+                           (forall (intP0:((memory) Z)),
+                            (intP0 = (upd intP result result0) ->
+                             (forall (result:pointer),
+                              (result = (shift t 2) ->
+                               (forall (intP:((memory) Z)),
+                                (intP = (upd intP0 result tmp) ->
+                                 ((acc intP (shift t 0)) <=
+                                 (acc intP (shift t 1)) /\
+                                 (acc intP (shift t 1)) <=
+                                 (acc intP (shift t 2))) /\
+                                 (acc intP (shift t 2)) <=
+                                 (acc intP (shift t 3)))) /\
+                               (valid alloc result))))) /\
+                           (valid alloc result))) /\
+                        (valid alloc (shift t 2))) /\
+                        (valid alloc (shift t 2)))))))) /\
+              (((acc intP (shift t 1)) <= (acc intP (shift t 2)) ->
+                (forall (result:unit),
+                 (result = tt -> ((acc intP (shift t 0)) <=
+                  (acc intP (shift t 1)) /\ (acc intP (shift t 1)) <=
+                  (acc intP (shift t 2))) /\ (acc intP (shift t 2)) <=
+                  (acc intP (shift t 3))))))) /\
+              (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
+              (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))))))) /\
+          (valid alloc (shift t 1))) /\ (valid alloc (shift t 1))) /\
+          (valid alloc (shift t 3))) /\ (valid alloc (shift t 3))))))) /\
+      (valid alloc (shift t 0))) /\ (valid alloc (shift t 0))) /\
+      (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))))))) /\
+  (valid alloc (shift t 2))) /\ (valid alloc (shift t 2))) /\
+  (valid alloc (shift t 3))) /\ (valid alloc (shift t 3)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

@@ -75,7 +75,6 @@ Lemma erase_impl_po_2 :
   mutable_p = (shift (shift mutable_p mutable_size) (Zopp mutable_size)).
 Proof.
 intuition.
-red; auto.
 subst; autorewrite with caduceus.
 replace (size + - size) with 0; auto with *.
 autorewrite with caduceus; auto.

@@ -6,7 +6,7 @@ typedef enum { BLUE, WHITE, RED } color;
 //@ predicate isColor(int i) { i == BLUE || i == WHITE || i == RED }
 
 /*@ predicate isMonochrome(int t[], int i, int j, color c)
-  @   { \valid_range(t,i,j) && \forall int k; i <= k && k < j => t[k] == c } 
+  @   { \valid_range(t,i,j) && \forall int k; i <= k && k <= j => t[k] == c } 
   @*/
 
 /*@ requires \valid_index(t,i) && \valid_index(t,j)
@@ -16,14 +16,14 @@ typedef enum { BLUE, WHITE, RED } color;
 void swap(int t[], int i, int j);
 
 /*@ requires n >= 0 &&
-  @   \valid_range(t,0,n) &&
+  @   \valid_range(t,0,n-1) &&
   @   (\forall int k; 0 <= k && k < n => isColor(t[k]))
-  @ assigns t[0 .. n]
+  @ assigns t[0 .. n-1]
   @ ensures 
   @   (\exists int b, int r; 
-  @            isMonochrome(t,0,b,BLUE) &&
-  @            isMonochrome(t,b,r,WHITE) &&
-  @            isMonochrome(t,r,n,RED))
+  @            isMonochrome(t,0,b-1,BLUE) &&
+  @            isMonochrome(t,b,r-1,WHITE) &&
+  @            isMonochrome(t,r,n-1,RED))
   @*/
 void flag(int t[], int n) {
   int b = 0;
@@ -32,10 +32,9 @@ void flag(int t[], int n) {
   /*@ invariant 
     @   (\forall int k; 0 <= k && k < n => isColor(t[k])) &&
     @   0 <= b && b <= i && i <= r && r <= n &&
-    @   isMonochrome(t,0,b,BLUE) &&
-    @   isMonochrome(t,b,i,WHITE) &&
-    @   isMonochrome(t,r,n,RED)
-    @ loop_assigns t[0 .. n]
+    @   isMonochrome(t,0,b-1,BLUE) &&
+    @   isMonochrome(t,b,i-1,WHITE) &&
+    @   isMonochrome(t,r,n-1,RED)
     @ variant r - i
     @*/
   while (i < r) {

@@ -4,33 +4,6 @@
 Require Export caduceus_spec_why.
 Require Export Why.
 
-Proof.
-intros; subst Variant1; trivial.
-Qed.
-
-Proof.
-destruct result0; intuition.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-destruct result0; intuition.
-Qed.
-
-Proof.
-intuition.
-Qed.
-
-Proof.
-destruct result1; intuition.
-Qed.
-
-Proof.
-intuition.
-Qed.
 (* Why obligation from file "why/break.why", characters 94-160 *)
 Lemma f1_impl_po_1 : 
   forall (Variant1: Z),
@@ -39,18 +12,7 @@ Lemma f1_impl_po_1 :
   forall (Post4: (Zwf 0 1 1)),
   (Zwf 0 1 Variant1).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;auto.
 Save.
 
 (* Why obligation from file "why/break.why", characters 498-504 *)
@@ -69,7 +31,6 @@ Lemma f2_impl_po_1 :
    (result = tt -> (forall (result:Z), (result = n2 -> result = 1)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 525-545 *)
@@ -87,7 +48,6 @@ Lemma f2_impl_po_2 :
   0 <= n2 /\ (Zwf 0 n2 n1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 364-552 *)
@@ -102,7 +62,6 @@ Lemma f2_impl_po_3 :
   (forall (result:Z), (result = n1 -> result = 1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 406-417 *)
@@ -112,7 +71,6 @@ Lemma f2_impl_po_4 :
   0 <= n.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 900-906 *)
@@ -131,7 +89,6 @@ Lemma f3_impl_po_1 :
    (result = tt -> (forall (result:Z), (result = n2 -> result = 2)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 927-947 *)
@@ -149,7 +106,6 @@ Lemma f3_impl_po_2 :
   1 <= n2 /\ (Zwf 0 n2 n1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 766-954 *)
@@ -164,7 +120,6 @@ Lemma f3_impl_po_3 :
   (forall (result:Z), (result = n1 -> result = 2)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 808-819 *)
@@ -174,7 +129,6 @@ Lemma f3_impl_po_4 :
   1 <= n.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 1304-1310 *)
@@ -193,22 +147,6 @@ Lemma f4_impl_po_1 :
    (result = tt -> (forall (result:Z), (result = i2 -> result = 3)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 1321-1321 *)
@@ -228,7 +166,6 @@ Lemma f4_impl_po_2 :
   (forall (i:Z), (i = (i2 + 1) -> i <= 3 /\ (Zwf 0 (10 - i) (10 - i2)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 1191-1362 *)
@@ -245,7 +182,6 @@ Lemma f4_impl_po_3 :
   (forall (result:Z), (result = i2 -> result = 3)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/break.why", characters 1235-1246 *)
@@ -257,6 +193,5 @@ Lemma f4_impl_po_4 :
   i1 <= 3.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

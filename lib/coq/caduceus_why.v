@@ -186,37 +186,37 @@ Admitted.
 
 
 (*Why logic*) Definition acc :
-  forall (A20:Set), ((memory) A20) -> pointer -> A20.
+  forall (A21:Set), ((memory) A21) -> pointer -> A21.
 Admitted.
 Implicit Arguments acc.
 
 
 (*Why logic*) Definition upd :
-  forall (A21:Set), ((memory) A21) -> pointer -> A21 -> ((memory) A21).
+  forall (A22:Set), ((memory) A22) -> pointer -> A22 -> ((memory) A22).
 Admitted.
 Implicit Arguments upd.
 
 
 (*Why axiom*) Lemma acc_upd :
-  forall (A22:Set),
-  (forall (m:((memory) A22)),
-   (forall (p:pointer), (forall (a:A22), (acc (upd m p a) p) = a))).
+  forall (A23:Set),
+  (forall (m:((memory) A23)),
+   (forall (p:pointer), (forall (a:A23), (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A23:Set),
-  (forall (m:((memory) A23)),
-   (forall (p1:pointer),
-    (forall (p2:pointer),
-     (forall (a:A23), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
-Admitted.
-
-(*Why axiom*) Lemma acc_upd_neq :
   forall (A24:Set),
   (forall (m:((memory) A24)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A24), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A24), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+Admitted.
+
+(*Why axiom*) Lemma acc_upd_neq :
+  forall (A25:Set),
+  (forall (m:((memory) A25)),
+   (forall (p1:pointer),
+    (forall (p2:pointer),
+     (forall (a:A25), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -240,8 +240,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns (A25:Set) (a:alloc_table)
-  (m1:((memory) A25)) (m2:((memory) A25)) (l:assign_loc)
+(*Why predicate*) Definition assigns (A26:Set) (a:alloc_table)
+  (m1:((memory) A26)) (m2:((memory) A26)) (l:assign_loc)
   := (forall (p:pointer),
       ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments assigns.
@@ -300,13 +300,19 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma assigns_trans :
-  forall (A26:Set),
+  forall (A27:Set),
   (forall (a:alloc_table),
    (forall (l:assign_loc),
-    (forall (m1:((memory) A26)),
-     (forall (m2:((memory) A26)),
-      (forall (m3:((memory) A26)),
+    (forall (m1:((memory) A27)),
+     (forall (m2:((memory) A27)),
+      (forall (m3:((memory) A27)),
        ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
+Admitted.
+
+(*Why axiom*) Lemma assigns_refl :
+  forall (A28:Set),
+  (forall (a:alloc_table),
+   (forall (l:assign_loc), (forall (m:((memory) A28)), (assigns a m m l)))).
 Admitted.
 
 (*Why logic*) Definition on_heap : alloc_table -> pointer -> Prop.

@@ -45,11 +45,10 @@ Lemma copy_impl_po_1 :
     (forall (k:Z),
      (0 <= k /\ k < n -> (acc intP0 (shift t2 k)) = (acc intP0 (shift t1 k)))))).
 Proof.
-intuition.
-subst.
-assert (k=i1-1 \/ i1<=k). omega. intuition; subst; caduceus.
-subst; valid.
-subst; valid.
+intuition; subst; auto.
+assert (k=i1-1 \/ i1<=k). 
+  omega. 
+intuition; subst; caduceus.
 Save.
 
 (* Why obligation from file "why/copy.why", characters 439-601 *)

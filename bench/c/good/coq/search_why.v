@@ -3,23 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/search.why", characters 404-484 *)
+(* Why obligation from file "why/search.why", characters 418-499 *)
 Lemma index2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -39,10 +23,9 @@ Lemma index2_impl_po_1 :
   (valid alloc (shift t i1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 496-516 *)
+(* Why obligation from file "why/search.why", characters 512-532 *)
 Lemma index2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -64,14 +47,14 @@ Lemma index2_impl_po_2 :
   forall (result1: Z),
   forall (Post4: result1 = i1),
   (forall (result:Z),
-   (result = result ->
+   (result = result1 ->
     (0 <= result /\ result < n -> (acc intP (shift t result)) = v))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 528-548 *)
+(* Why obligation from file "why/search.why", characters 545-565 *)
 Lemma index2_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -97,10 +80,14 @@ Lemma index2_impl_po_3 :
   (Zwf 0 (n - i2) (n - i1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (k=i1 \/ k<i1).
+  omega.
+intuition.
+subst; auto.
+apply H0 with k; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 175-554 *)
+(* Why obligation from file "why/search.why", characters 182-572 *)
 Lemma index2_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -122,10 +109,9 @@ Lemma index2_impl_po_4 :
     (0 <= result /\ result < n -> (acc intP (shift t result)) = v))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 224-364 *)
+(* Why obligation from file "why/search.why", characters 233-376 *)
 Lemma index2_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -138,10 +124,9 @@ Lemma index2_impl_po_5 :
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 1124-1204 *)
+(* Why obligation from file "why/search.why", characters 1169-1250 *)
 Lemma index_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -161,10 +146,9 @@ Lemma index_impl_po_1 :
   (valid alloc (shift t i1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 1216-1222 *)
+(* Why obligation from file "why/search.why", characters 1263-1269 *)
 Lemma index_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -192,10 +176,10 @@ Lemma index_impl_po_2 :
         (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 1238-1258 *)
+(* Why obligation from file "why/search.why", characters 1286-1306 *)
 Lemma index_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -221,10 +205,14 @@ Lemma index_impl_po_3 :
   (Zwf 0 (n - i2) (n - i1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (k=i1\/ k < i1).
+  omega.
+inversion_clear H1.
+subst; auto.
+apply H0 with k;auto.
 Save.
 
-(* Why obligation from file "why/search.why", characters 895-1264 *)
+(* Why obligation from file "why/search.why", characters 933-1313 *)
 Lemma index_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -248,10 +236,11 @@ Lemma index_impl_po_4 :
       (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+apply H0 with i0; auto with *.
 Save.
 
-(* Why obligation from file "why/search.why", characters 944-1084 *)
+(* Why obligation from file "why/search.why", characters 984-1127 *)
 Lemma index_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -264,6 +253,5 @@ Lemma index_impl_po_5 :
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

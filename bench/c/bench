@@ -111,8 +111,10 @@ echo "C interp (good)"
 cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 parsing="../../../bin/caduceus.opt"
-for f in purse consts param clash clash_alloc invariants switch struct \
-    assigns queue ref ifs continue; do
+for f in array assigns break call clash clash_alloc consts continue coord \
+    copy dowhile invariants ifs \
+    param passing purse queue rec ref search see sizeof \
+    struct switch ; do
     echo -n "  $f.c... "
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
 	echo -n "caduceus ok... "

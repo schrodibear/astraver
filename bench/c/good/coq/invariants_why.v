@@ -19,7 +19,6 @@ Lemma f_impl_po_1 :
   (valid alloc s).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/invariants.why", characters 590-716 *)
@@ -45,7 +44,6 @@ Lemma f_impl_po_2 :
   (valid alloc (shift c 0)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/invariants.why", characters 567-717 *)

@@ -22,7 +22,7 @@ Lemma index_impl_po_1 :
   forall (Test4: i1 < n),
   (valid alloc (shift t i1)).
 Proof.
-intuition; subst; auto.
+intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 521-527 *)
@@ -53,7 +53,8 @@ Lemma index_impl_po_2 :
         (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))))))).
 Proof.
 intuition.
-subst ; auto.
+subst.
+auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 544-564 *)
