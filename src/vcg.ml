@@ -33,9 +33,7 @@ let discharge ctx concl =
   tauto_if concl
 
 let discharge_msg () =
-  if !verbose then begin
-    eprintf "One obligation trivially discharged...\n"; flush stderr
-  end
+  if !verbose then eprintf "one obligation trivially discharged...@\n"
 
 (*s The VCG; it's trivial, we just traverse the CC term and push a 
     new obligation on each hole. *)

@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.6 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.7 2002-02-04 12:07:57 filliatr Exp $ i*)
 
 type t = string
 
@@ -64,6 +64,8 @@ let bound =
   fun () -> incr n; !n
 
 let bound_id b = b
+
+let print_bound fmt b = Format.fprintf fmt "#%d" b
 
 (*s Pre-defined. *)
 

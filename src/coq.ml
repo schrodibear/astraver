@@ -1,7 +1,8 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.5 2002-01-31 22:48:02 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.6 2002-02-04 12:07:57 filliatr Exp $ i*)
 
+open Options
 open Logic
 open Types
 open Misc
@@ -167,15 +168,14 @@ let push_obligations ol =
 
 (*s Generating the output. *)
 
-let has_prefix p = 
-  let lp = String.length p in
-  fun s -> String.length s >= lp && String.sub s 0 lp = p
+let po_regexp = Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
 
-let is_lemma s =
+let is_po s =
   try
-    if not (has_prefix "Lemma " s) then raise Not_found;
-    let r = String.index_from s 6 ' ' in
-    Some (String.sub s 6 (r - 6))
+    if Str.string_match po_regexp s 0 then
+      Some (Str.matched_group 1 s)
+    else
+      None
   with Not_found ->
     None
 
@@ -183,11 +183,15 @@ let regen oldf fmt =
   let cin = open_in oldf in
   let rec scan () =
     let s = input_line cin in
-    match is_lemma s with
-      | Some l when Hashtbl.mem oblig l ->
-	  let p = Hashtbl.find oblig l in
-	  print_lemma fmt (l,p);
-	  Hashtbl.remove oblig l;
+    match is_po s with
+      | Some l ->
+	  if Hashtbl.mem oblig l then begin
+	    if !verbose then eprintf "overwriting obligation %s@\n" l;
+	    let p = Hashtbl.find oblig l in
+	    print_lemma fmt (l,p);
+	    Hashtbl.remove oblig l
+	  end else
+	    if !verbose then eprintf "erasing obligation %s@\n" l;
 	  skip_to_dot ();
 	  scan ()
       | _ -> 

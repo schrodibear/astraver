@@ -55,23 +55,27 @@ opt: bin/why.opt
 byte : bin/why.byte
 
 bin/why.opt: $(CMX)
-	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa $^
+	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
 
 bin/why.byte: $(CMO)
-	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma $^
+	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
-top: $(CMO)
-	ocamlmktop $(BFLAGS) -o $@ gramlib.cma $^
+bin/top: $(CMO)
+	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 doc::
 	cd doc; make
 
 # bench
 
-.PHONY: bench
+.PHONY: bench test
 
 bench:: $(BINARY)
 	cd bench; ./bench ../$(BINARY)
+
+test:: $(BINARY)
+	$(BINARY) -d -V -coq bench/good/test.ml
+	cat bench/good/test_why.v
 
 # installation
 ##############
@@ -151,7 +155,7 @@ configure: configure.in
 
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
-	rm -f bin/why.opt bin/why.byte
+	rm -f bin/why.opt bin/why.byte bin/top
 	cd doc; make clean
 
 dist-clean:: clean

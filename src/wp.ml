@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.7 2002-01-31 12:44:35 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.8 2002-02-04 12:07:57 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -13,6 +13,10 @@ open Env
 open Effect
 open Typing
 open Rename
+
+(* term utilities *)
+
+let equality t1 t2 = Pterm (Tapp (t_eq, [t1; t2]))
 
 (* force a post-condition *)
 
@@ -49,14 +53,6 @@ let optpost_app f = option_app (post_app f)
 (* put a post-condition if none is present *)
 
 let post_if_none_up env top q = function
-(*i
-  | { post = None; desc = Aff (x, { desc = Expression t }) } as p -> 
-      let t = make_after_before_term env t in
-      let q =
-	optpost_app (fun q -> Pimplies (Pterm (Tapp (t_eq, [Tvar x;t])), q)) q
-      in
-      force_post true env top q p 
-i*)
   | { post = None } as p -> 
       force_post true env top q p 
   | p -> 
@@ -172,7 +168,7 @@ let rec normalize ren p =
 	  p
     | Aff (x, { desc = Expression t }) when p.post = None ->
 	let t = make_after_before_term env t in
-	let q = create_bool_post (Pterm (Tapp (t_eq, [Tvar x;t]))) in
+	let q = create_bool_post (equality (Tvar x) t) in
 	post_if_none env q p
     | Aff (_, { desc = Expression _ }) ->
 	p
@@ -182,7 +178,7 @@ let rec normalize ren p =
 (*i
     | Expression t ->
 	let t = make_after_before_term env t in
-	let c = Pterm (Tapp (t_eq, [Tvar Ident.result; t])) in
+	let c = equality (Tvar Ident.result) t in
 	post_if_none env (create_bool_post c) p
 i*)
     | Expression _ ->
@@ -196,13 +192,11 @@ i*)
     | While (b, invopt, var, bl) ->
 	change_desc p (While (normalize_boolean ren env b,
 			      invopt, var, normalize_block ren bl))
-(*i
-    | LetRef (x, ({ desc = Expression t } as e1), e2) ->
+    | LetRef (x, ({ desc = Expression t } as e1), e2) when e1.post = None ->
+	let t = make_after_before_term env t in
+	let q = create_bool_post (equality (Tvar Ident.result) t) in
 	let ren' = next ren [x] in
-	let pr = anonymous_pre false (Pterm (Tapp (t_eq, [Tvar x;t]))) in
-	change_desc p (LetRef (x, normalize ren e1, 
-			       add_pre [pr] (normalize ren' e2)))
-i*)
+	change_desc p (LetRef (x, post_if_none env q e1, normalize ren' e2))
     | LetRef (x, e1, e2) ->
 	let ren' = next ren [x] in
 	change_desc p (LetRef (x, normalize ren e1, normalize ren' e2))
@@ -297,7 +291,7 @@ i*)
 	    (fun q -> 
 	       let q = tsubst_in_predicate [x,Tbound n] q in
 	       let ti = mlize_type ti.kappa.c_result_type in
-	       Forall (x,n,ti,Pimplies (Pterm (Tapp (t_eq,[Tbound n;t])), q))) 
+	       Forall (x, n, ti, Pimplies (equality (Tbound n) t, q)))
 	    q
 	in
 	d, q

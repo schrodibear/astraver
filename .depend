@@ -1,7 +1,7 @@
-src/coq.cmo: src/ident.cmi src/logic.cmi src/misc.cmi src/types.cmi \
-    src/vcg.cmi src/coq.cmi 
-src/coq.cmx: src/ident.cmx src/logic.cmi src/misc.cmx src/types.cmi \
-    src/vcg.cmx src/coq.cmi 
+src/coq.cmo: src/ident.cmi src/logic.cmi src/misc.cmi src/options.cmi \
+    src/types.cmi src/vcg.cmi src/coq.cmi 
+src/coq.cmx: src/ident.cmx src/logic.cmi src/misc.cmx src/options.cmx \
+    src/types.cmi src/vcg.cmx src/coq.cmi 
 src/db.cmo: src/ast.cmi src/env.cmi src/error.cmi src/logic.cmi src/types.cmi \
     src/db.cmi 
 src/db.cmx: src/ast.cmi src/env.cmx src/error.cmx src/logic.cmi src/types.cmi \

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.5 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.6 2002-02-04 12:07:57 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -211,7 +211,7 @@ and trad_desc ren env ct d =
       let tv2 = v2 (*i trad_ml_type_v ren' env' v2 i*) in
       let te2 = trad ren' e2 in
       let ren'' = next ren' (get_writes ef2) in
-      let t,ty = result_tuple ren'' (current_date ren) env
+      let t,ty = result_tuple ren'' (current_date ren) env'
 		   (Ident.result, CC_var Ident.result, CC_type) (eft,qt) in
       let t = make_let_in ren' ren'' env' te2 p2
 		(current_vars ren'' (get_writes ef2),q2)
