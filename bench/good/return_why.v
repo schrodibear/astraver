@@ -4,14 +4,6 @@ Require Why.
 (*Why*) Parameter N : Z.
 
 Lemma p_po_1 : 
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (well_founded (Zwf ZERO)).
-Proof.
-Auto with *.
-Save.
-
-Lemma p_po_2 : 
   (t: (array N Z))
   (i0: Z)
   (Post1: i0 = `0`)
@@ -26,7 +18,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma p_po_3 : 
+Lemma p_po_2 : 
   (t: (array N Z))
   (i0: Z)
   (Post1: i0 = `0`)
@@ -42,7 +34,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-Lemma p_po_4 : 
+Lemma p_po_3 : 
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
@@ -58,7 +50,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma p_po_5 : 
+Lemma p_po_4 : 
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
@@ -74,7 +66,7 @@ Intuition.
 Subst Variant1; Assumption.
 Save.
 
-Lemma p_po_6 : 
+Lemma p_po_5 : 
   (i0: Z)
   (Post1: i0 = `0`)
   `0 <= i0`.
@@ -82,7 +74,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma p_po_7 : 
+Lemma p_po_6 : 
   (t: (array N Z))
   (i0: Z)
   (Post1: i0 = `0`)
@@ -101,8 +93,8 @@ Definition p := (* validation *)
           (refl_equal ? `0`)) in
         (exist_2 [i1: Z][result0: unit]i1 = `0` result tt Post1) in
       let (i1, result0, Post7) =
-        (well_founded_induction Z (Zwf ZERO) (p_po_1 i0 Post1) [Variant1: Z]
-          (i1: Z)(_: Variant1 = `N - i1`)(_0: `0 <= i1`)
+        (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+          [Variant1: Z](i1: Z)(_: Variant1 = `N - i1`)(_0: `0 <= i1`)
           (sig_2 Z (EM Z unit) [i2: Z][result0: (EM Z unit)]
            (((qcomb [result1: Z]
               (`0 <= result1` /\ `result1 < N` -> `(access t result1) = 0`)
@@ -146,7 +138,7 @@ Definition p := (* validation *)
                             let (result2, Post17) = (exist_1 [result2: Z]
                               (`0 <= result2` /\ `result2 < N` ->
                                `(access t result2) = 0`) i1
-                              (p_po_2 t i0 Post1 Variant1 i1 Pre4 Pre3 Test4
+                              (p_po_1 t i0 Post1 Variant1 i1 Pre4 Pre3 Test4
                               Test3)) in
                             (exist_1 (qcomb [result3: Z]
                                       (`0 <= result3` /\ `result3 < N` ->
@@ -181,7 +173,7 @@ Definition p := (* validation *)
                             ((i:Z)
                              (i = `i1 + 1` -> `0 <= i` /\
                               (Zwf `0` `N - i` `N - i1`))) tt
-                            (p_po_3 t i0 Post1 Variant1 i1 Pre4 Pre3 Test4
+                            (p_po_2 t i0 Post1 Variant1 i1 Pre4 Pre3 Test4
                             Test2)) in
                           (exist_1 (qcomb [result3: Z]
                                     (`0 <= result3` /\ `result3 < N` ->
@@ -207,7 +199,7 @@ Definition p := (* validation *)
                        [result4: unit]`0 <= i3` /\
                        (Zwf `0` `N - i3` `N - i1`)) i2
                       (Val Z result3)
-                      (p_po_4 i0 Post1 Variant1 i1 Pre4 Pre3 Test4 Post20 i2
+                      (p_po_3 i0 Post1 Variant1 i1 Pre4 Pre3 Test4 Post20 i2
                       Post2))
                     | (Qexn result2 Post21) => (exist_2 [i2: Z]
                       (qcomb [result3: Z]
@@ -220,7 +212,7 @@ Definition p := (* validation *)
                   Cases (decomp1 Post12) of
                   | (Qval (exist result2 Post4)) =>
                     ((wf1 `N - i2`)
-                      (p_po_5 i0 Post1 Variant1 i1 Pre4 Pre3 Test4 i2 Post4)
+                      (p_po_4 i0 Post1 Variant1 i1 Pre4 Pre3 Test4 i2 Post4)
                       i2 (refl_equal ? `N - i2`) (proj1 ? ? Post4))
                   | (Qexn result2 Post22) => (exist_2 [i3: Z]
                     (qcomb [result3: Z]
@@ -264,12 +256,12 @@ Definition p := (* validation *)
                    [result3: unit]`0 <= i3` /\ `i3 >= N`) i2
                   (Exn unit result2) Post10)
                 end end) `N - i0` i0 (refl_equal ? `N - i0`)
-          (p_po_6 i0 Post1)) in
+          (p_po_5 i0 Post1)) in
       Cases (decomp1 Post7) of
       | (Qval (exist result1 Post3)) =>
         let (result2, Post25) = (exist_1 [result2: Z]
           (`0 <= result2` /\ `result2 < N` -> `(access t result2) = 0`) 
-          N (p_po_7 t i0 Post1 i1 Post3)) in
+          N (p_po_6 t i0 Post1 i1 Post3)) in
         (exist_2 [i2: Z]
         (qcomb [result3: Z]
          (`0 <= result3` /\ `result3 < N` -> `(access t result3) = 0`)

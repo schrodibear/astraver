@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.74 2002-11-07 12:20:17 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.75 2002-11-13 15:55:59 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -285,6 +285,8 @@ let print_proof fmt = function
       fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
   | Conjunction (id1, id2) ->
       fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
+  | WfZwf t ->
+      fprintf fmt "(Zwf_well_founded %a)" print_term t
 
 let print_binder_id fmt (id,_) = Ident.print fmt id
 

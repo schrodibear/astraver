@@ -1,4 +1,7 @@
 
+  o automatic discharge of (well_founded (Zwf 0))
+  o fixed bug in local recursive functions
+
 version 0.72, November 12th, 2002
 =================================
   o caml code generation with option --ocaml (beta test)

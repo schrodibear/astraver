@@ -16,21 +16,6 @@ Lemma mult_po_1 :
   (Post5: result0 = y)
   (result1: Z)
   (Post4: result1 = `0`)
-  (well_founded (Zwf ZERO)).
-Proof.
-Auto with *.
-Save.
-
-Lemma mult_po_2 : 
-  (x: Z)
-  (y: Z)
-  (Pre5: `x >= 0` /\ `y >= 0`)
-  (result: Z)
-  (Post6: result = x)
-  (result0: Z)
-  (Post5: result0 = y)
-  (result1: Z)
-  (Post4: result1 = `0`)
   (Variant1: Z)
   (a0: Z)
   (b0: Z)
@@ -43,7 +28,7 @@ Proof.
 Intros; Omega.
 Save.
 
-Lemma mult_po_3 : 
+Lemma mult_po_2 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -82,7 +67,7 @@ Repeat Split; Try Omega.
 Subst a; Apply Z_div_lt; Try Omega.
 Save.
 
-Lemma mult_po_4 : 
+Lemma mult_po_3 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -121,7 +106,7 @@ Repeat Split; Try Omega.
 Subst a; Apply Z_div_lt; Try Omega.
 Save.
 
-Lemma mult_po_5 : 
+Lemma mult_po_4 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -149,7 +134,7 @@ Proof.
 Intros; Omega.
 Save.
 
-Lemma mult_po_6 : 
+Lemma mult_po_5 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -182,7 +167,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma mult_po_7 : 
+Lemma mult_po_6 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -208,7 +193,7 @@ Proof.
 Intros; Rewrite Pre4; Tauto.
 Save.
 
-Lemma mult_po_8 : 
+Lemma mult_po_7 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -224,7 +209,7 @@ Intuition.
 Subst result result0 result1; Ring.
 Save.
 
-Lemma mult_po_9 : 
+Lemma mult_po_8 : 
   (x: Z)
   (y: Z)
   (Pre5: `x >= 0` /\ `y >= 0`)
@@ -258,8 +243,7 @@ Definition mult := (* validation *)
           (refl_equal ? `0`)) in
         let (a0, b0, p0, result2, Post10) =
           let (a0, b0, p0, result2, Inv) =
-            (well_founded_induction Z (Zwf ZERO)
-              (mult_po_1 x y Pre5 result Post6 result0 Post5 result1 Post4)
+            (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
               [Variant1: Z](a0: Z)(b0: Z)(p0: Z)(_: Variant1 = a0)
               (Inv: `a0 >= 0` /\ `p0 + a0 * b0 = x * y`)
               (sig_4 Z Z Z unit [a1: Z][b1: Z][p1: Z][result2: unit]
@@ -286,7 +270,7 @@ Definition mult := (* validation *)
                           let (result3, Bool1) =
                             let result4 =
                               let Pre2 =
-                                (mult_po_2 x y Pre5 result Post6 result0
+                                (mult_po_1 x y Pre5 result Post6 result0
                                 Post5 result1 Post4 Variant1 a0 b0 p0 Pre4
                                 Inv Test4) in
                               (Z_eq_bool (Zmod a0 `2`)) in
@@ -314,7 +298,7 @@ Definition mult := (* validation *)
                                  (b = `2 * b0` -> (`a >= 0` /\
                                   `p2 + a * b = x * y`) /\ (Zwf `0` a a0))))) 
                               p1 result4
-                              (mult_po_3 x y Pre5 result Post6 result0 Post5
+                              (mult_po_2 x y Pre5 result Post6 result0 Post5
                               result1 Post4 Variant1 a0 b0 p0 Pre4 Inv Test4
                               Test3 p1 Post1))
                           | (right Test2) =>
@@ -326,7 +310,7 @@ Definition mult := (* validation *)
                                    (b = `2 * b0` -> (`a >= 0` /\
                                     `p0 + a * b = x * y`) /\ (Zwf `0` a a0))))) 
                                 tt
-                                (mult_po_4 x y Pre5 result Post6 result0
+                                (mult_po_3 x y Pre5 result Post6 result0
                                 Post5 result1 Post4 Variant1 a0 b0 p0 Pre4
                                 Inv Test4 Test2)) in
                               (exist_2 [p1: Z][result5: unit]
@@ -337,7 +321,7 @@ Definition mult := (* validation *)
                                   `p1 + a * b = x * y`) /\ (Zwf `0` a a0))))) 
                               p0 result4 Post14) end) in
                         let Pre3 =
-                          (mult_po_5 x y Pre5 result Post6 result0 Post5
+                          (mult_po_4 x y Pre5 result Post6 result0 Post5
                           result1 Post4 Variant1 a0 b0 p0 Pre4 Inv Test4 p1
                           Post12) in
                         let (a1, result4, Post2) =
@@ -355,11 +339,11 @@ Definition mult := (* validation *)
                         (exist_4 [a2: Z][b2: Z][p2: Z][result6: unit]
                         (`a2 >= 0` /\ `p2 + a2 * b2 = x * y`) /\
                         (Zwf `0` a2 a0) a1 b1 p1 result5
-                        (mult_po_6 x y Pre5 result Post6 result0 Post5
+                        (mult_po_5 x y Pre5 result Post6 result0 Post5
                         result1 Post4 Variant1 a0 b0 p0 Pre4 Inv Test4 p1
                         Post12 Pre3 a1 Post2 b1 Post3)) in
                       ((wf1 a1)
-                        (mult_po_7 x y Pre5 result Post6 result0 Post5
+                        (mult_po_6 x y Pre5 result Post6 result0 Post5
                         result1 Post4 Variant1 a0 b0 p0 Pre4 Inv Test4 a1 b1
                         p1 Inv0) a1 b1 p1 (refl_equal ? a1) (proj1 ? ? Inv0)) in
                     (exist_4 [a2: Z][b2: Z][p2: Z][result4: unit]
@@ -374,10 +358,10 @@ Definition mult := (* validation *)
                     (`a2 >= 0` /\ `p2 + a2 * b2 = x * y`) /\ `a2 = 0` 
                     a1 b1 p1 result3 Inv0) end) result result result0 
               result1 (refl_equal ? result)
-              (mult_po_8 x y Pre5 result Post6 result0 Post5 result1 Post4)) in
+              (mult_po_7 x y Pre5 result Post6 result0 Post5 result1 Post4)) in
           let (result3, Post15) = (exist_1 [result3: Z]`result3 = x * y` 
             p0
-            (mult_po_9 x y Pre5 result Post6 result0 Post5 result1 Post4 a0
+            (mult_po_8 x y Pre5 result Post6 result0 Post5 result1 Post4 a0
             b0 p0 Inv)) in
           (exist_4 [a1: Z][b1: Z][p1: Z][result4: Z]`result4 = x * y` 
           a0 b0 p0 result3 Post15) in

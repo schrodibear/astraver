@@ -17,6 +17,7 @@
 (*s Verification Conditions Generator. *)
 
 open Format
+open Ident
 open Misc
 open Util
 open Options
@@ -41,6 +42,7 @@ type proof =
   | Assumption of Ident.t
   | Proj1 of Ident.t
   | Conjunction of Ident.t * Ident.t
+  | WfZwf of term
 
 type validation = proof cc_term
 
@@ -69,8 +71,15 @@ let conjunction ctx = function
   | Pand (a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
   | _ -> raise Exit
 
+let wf_zwf = function
+  | Papp (id, [Tvar id']) when id == well_founded && id' == t_zwf_zero ->
+      WfZwf (Tconst (ConstInt 0))
+  | _ -> 
+      raise Exit
+
 let discharge ctx concl =
   try ptrue concl with Exit ->
+  try wf_zwf concl with Exit ->
   try reflexivity concl with Exit -> 
   try list_first (assumption concl) ctx with Exit ->
   conjunction ctx concl

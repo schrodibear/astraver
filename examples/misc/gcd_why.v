@@ -24,19 +24,6 @@ Lemma gcd1_po_1 :
   (Post5: result = a)
   (result0: Z)
   (Post4: result0 = b)
-  (well_founded (Zwf ZERO)).
-Proof.
-Auto with *.
-Save.
-
-Lemma gcd1_po_2 : 
-  (a: Z)
-  (b: Z)
-  (Pre4: `a > 0` /\ `b > 0`)
-  (result: Z)
-  (Post5: result = a)
-  (result0: Z)
-  (Post4: result0 = b)
   (Variant1: Z)
   (x0: Z)
   (y0: Z)
@@ -55,7 +42,7 @@ Unfold Zwf max.
 Case (Z_le_gt_dec x1 y0); Case (Z_le_gt_dec x0 y0); Intros; Omega.
 Save.
 
-Lemma gcd1_po_3 : 
+Lemma gcd1_po_2 : 
   (a: Z)
   (b: Z)
   (Pre4: `a > 0` /\ `b > 0`)
@@ -82,7 +69,7 @@ Assert h:~x0=y0. Assumption.
 Case (Z_le_gt_dec x0 y1); Case (Z_le_gt_dec x0 y0); Intros; Omega.
 Save.
 
-Lemma gcd1_po_4 : 
+Lemma gcd1_po_3 : 
   (a: Z)
   (b: Z)
   (Pre4: `a > 0` /\ `b > 0`)
@@ -106,7 +93,7 @@ Intuition.
 Rewrite Pre3; Assumption.
 Save.
 
-Lemma gcd1_po_5 : 
+Lemma gcd1_po_4 : 
   (a: Z)
   (b: Z)
   (Pre4: `a > 0` /\ `b > 0`)
@@ -120,7 +107,7 @@ Intuition.
 Subst; Reflexivity.
 Save.
 
-Lemma gcd1_po_6 : 
+Lemma gcd1_po_5 : 
   (a: Z)
   (b: Z)
   (Pre4: `a > 0` /\ `b > 0`)
@@ -147,10 +134,9 @@ Definition gcd1 := (* validation *)
         (refl_equal ? b)) in
       let (x0, y0, result1, Post9) =
         let (x0, y0, result1, Post3) =
-          (well_founded_induction Z (Zwf ZERO)
-            (gcd1_po_1 a b Pre4 result Post5 result0 Post4) [Variant1: Z]
-            (x0: Z)(y0: Z)(_: Variant1 = (max x0 y0))(_0: `0 < x0` /\
-            `0 < y0` /\ `(gcd x0 y0) = (gcd a b)`)
+          (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+            [Variant1: Z](x0: Z)(y0: Z)(_: Variant1 = (max x0 y0))
+            (_0: `0 < x0` /\ `0 < y0` /\ `(gcd x0 y0) = (gcd a b)`)
             (sig_3 Z Z unit [x1: Z][y1: Z][result1: unit]((`0 < x1` /\
              `0 < y1` /\ `(gcd x1 y1) = (gcd a b)`) /\ `x1 = y1`))
             [Variant1: Z; wf1: (Variant2: Z)
@@ -193,7 +179,7 @@ Definition gcd1 := (* validation *)
                             (`0 < x2` /\ `0 < y1` /\
                             `(gcd x2 y1) = (gcd a b)`) /\
                             (Zwf `0` (max x2 y1) (max x0 y0)) x1 y0 result3
-                            (gcd1_po_2 a b Pre4 result Post5 result0 Post4
+                            (gcd1_po_1 a b Pre4 result Post5 result0 Post4
                             Variant1 x0 y0 Pre3 Pre2 Test4 Test3 x1 Post1))
                         | (right Test2) =>
                             let (y1, result3, Post2) =
@@ -206,13 +192,13 @@ Definition gcd1 := (* validation *)
                             (`0 < x1` /\ `0 < y2` /\
                             `(gcd x1 y2) = (gcd a b)`) /\
                             (Zwf `0` (max x1 y2) (max x0 y0)) x0 y1 result3
-                            (gcd1_po_3 a b Pre4 result Post5 result0 Post4
+                            (gcd1_po_2 a b Pre4 result Post5 result0 Post4
                             Variant1 x0 y0 Pre3 Pre2 Test4 Test2 y1 Post2)) end) in
                       (exist_3 [x2: Z][y2: Z][result3: unit](`0 < x2` /\
                       `0 < y2` /\ `(gcd x2 y2) = (gcd a b)`) /\
                       (Zwf `0` (max x2 y2) (max x0 y0)) x1 y1 result2 Post6) in
                     ((wf1 (max x1 y1))
-                      (gcd1_po_4 a b Pre4 result Post5 result0 Post4 Variant1
+                      (gcd1_po_3 a b Pre4 result Post5 result0 Post4 Variant1
                       x0 y0 Pre3 Pre2 Test4 x1 y1 Post6) x1 y1
                       (refl_equal ? (max x1 y1)) (proj1 ? ? Post6)) in
                   (exist_3 [x2: Z][y2: Z][result3: unit](`0 < x2` /\
@@ -227,28 +213,15 @@ Definition gcd1 := (* validation *)
                   `0 < y2` /\ `(gcd x2 y2) = (gcd a b)`) /\ `x2 = y2` 
                   x1 y1 result2 Post3) end) (max result result0) result
             result0 (refl_equal ? (max result result0))
-            (gcd1_po_5 a b Pre4 result Post5 result0 Post4)) in
+            (gcd1_po_4 a b Pre4 result Post5 result0 Post4)) in
         let (result2, Post12) = (exist_1 [result2: Z]`result2 = (gcd a b)` 
-          x0 (gcd1_po_6 a b Pre4 result Post5 result0 Post4 x0 y0 Post3)) in
+          x0 (gcd1_po_5 a b Pre4 result Post5 result0 Post4 x0 y0 Post3)) in
         (exist_3 [x1: Z][y1: Z][result3: Z]`result3 = (gcd a b)` x0 y0
         result2 Post12) in
       (exist_2 [x1: Z][result2: Z]`result2 = (gcd a b)` x0 result1 Post9) in
     (exist_1 [result1: Z]`result1 = (gcd a b)` result0 Post8).
 
 Lemma gcd2_po_1 : 
-  (a: Z)
-  (b: Z)
-  (Pre5: `a >= 0` /\ `b >= 0`)
-  (result: Z)
-  (Post6: result = a)
-  (result0: Z)
-  (Post5: result0 = b)
-  (well_founded (Zwf ZERO)).
-Proof.
-Auto with *.
-Save.
-
-Lemma gcd2_po_2 : 
   (a: Z)
   (b: Z)
   (Pre5: `a >= 0` /\ `b >= 0`)
@@ -267,7 +240,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma gcd2_po_3 : 
+Lemma gcd2_po_2 : 
   (a: Z)
   (b: Z)
   (Pre5: `a >= 0` /\ `b >= 0`)
@@ -303,7 +276,7 @@ Assert h1_y0 : `y0 > 0`. Omega.
 Generalize (Z_mod_lt x0 y0 h1_y0); Omega.
 Save.
 
-Lemma gcd2_po_4 : 
+Lemma gcd2_po_3 : 
   (a: Z)
   (b: Z)
   (Pre5: `a >= 0` /\ `b >= 0`)
@@ -327,7 +300,7 @@ Intuition.
 Rewrite Pre4; Assumption.
 Save.
 
-Lemma gcd2_po_5 : 
+Lemma gcd2_po_4 : 
   (a: Z)
   (b: Z)
   (Pre5: `a >= 0` /\ `b >= 0`)
@@ -341,7 +314,7 @@ Intuition.
 Subst; Reflexivity.
 Save.
 
-Lemma gcd2_po_6 : 
+Lemma gcd2_po_5 : 
   (a: Z)
   (b: Z)
   (Pre5: `a >= 0` /\ `b >= 0`)
@@ -367,10 +340,9 @@ Definition gcd2 := (* validation *)
         (refl_equal ? b)) in
       let (x0, y0, result1, Post9) =
         let (x0, y0, result1, Post4) =
-          (well_founded_induction Z (Zwf ZERO)
-            (gcd2_po_1 a b Pre5 result Post6 result0 Post5) [Variant1: Z]
-            (x0: Z)(y0: Z)(_: Variant1 = y0)(_0: `0 <= x0` /\ `0 <= y0` /\
-            `(gcd x0 y0) = (gcd a b)`)
+          (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+            [Variant1: Z](x0: Z)(y0: Z)(_: Variant1 = y0)(_0: `0 <= x0` /\
+            `0 <= y0` /\ `(gcd x0 y0) = (gcd a b)`)
             (sig_3 Z Z unit [x1: Z][y1: Z][result1: unit]((`0 <= x1` /\
              `0 <= y1` /\ `(gcd x1 y1) = (gcd a b)`) /\ `y1 = 0`))
             [Variant1: Z; wf1: (Variant2: Z)
@@ -393,7 +365,7 @@ Definition gcd2 := (* validation *)
                     let (x1, y1, result2, Post7) =
                       let (x1, y1, result2, Post7) =
                         let Pre2 =
-                          (gcd2_po_2 a b Pre5 result Post6 result0 Post5
+                          (gcd2_po_1 a b Pre5 result Post6 result0 Post5
                           Variant1 x0 y0 Pre4 Pre3 Test2) in
                         let (r, Post3) = (exist_1 [result2: Z]
                           result2 = (Zmod x0 y0) (Zmod x0 y0)
@@ -412,7 +384,7 @@ Definition gcd2 := (* validation *)
                           (exist_3 [x2: Z][y2: Z][result4: unit](`0 <= x2` /\
                           `0 <= y2` /\ `(gcd x2 y2) = (gcd a b)`) /\
                           (Zwf `0` y2 y0) x1 y1 result3
-                          (gcd2_po_3 a b Pre5 result Post6 result0 Post5
+                          (gcd2_po_2 a b Pre5 result Post6 result0 Post5
                           Variant1 x0 y0 Pre4 Pre3 Test2 Pre2 r Post3 x1
                           Post1 y1 Post2)) in
                         (exist_3 [x2: Z][y2: Z][result3: unit](`0 <= x2` /\
@@ -422,7 +394,7 @@ Definition gcd2 := (* validation *)
                       `0 <= y2` /\ `(gcd x2 y2) = (gcd a b)`) /\
                       (Zwf `0` y2 y0) x1 y1 result2 Post7) in
                     ((wf1 y1)
-                      (gcd2_po_4 a b Pre5 result Post6 result0 Post5 Variant1
+                      (gcd2_po_3 a b Pre5 result Post6 result0 Post5 Variant1
                       x0 y0 Pre4 Pre3 Test2 x1 y1 Post7) x1 y1
                       (refl_equal ? y1) (proj1 ? ? Post7)) in
                   (exist_3 [x2: Z][y2: Z][result3: unit](`0 <= x2` /\
@@ -437,9 +409,9 @@ Definition gcd2 := (* validation *)
                   `0 <= y2` /\ `(gcd x2 y2) = (gcd a b)`) /\ `y2 = 0` 
                   x1 y1 result2 Post4) end) result0 result result0
             (refl_equal ? result0)
-            (gcd2_po_5 a b Pre5 result Post6 result0 Post5)) in
+            (gcd2_po_4 a b Pre5 result Post6 result0 Post5)) in
         let (result2, Post11) = (exist_1 [result2: Z]`result2 = (gcd a b)` 
-          x0 (gcd2_po_6 a b Pre5 result Post6 result0 Post5 x0 y0 Post4)) in
+          x0 (gcd2_po_5 a b Pre5 result Post6 result0 Post5 x0 y0 Post4)) in
         (exist_3 [x1: Z][y1: Z][result3: Z]`result3 = (gcd a b)` x0 y0
         result2 Post11) in
       (exist_2 [x1: Z][result2: Z]`result2 = (gcd a b)` x0 result1 Post9) in

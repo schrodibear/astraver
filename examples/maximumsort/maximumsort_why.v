@@ -132,19 +132,6 @@ Lemma maximum_po_1 :
   (t: (array N Z))
   (Pre10: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < N` /\
           (Maximize t n (access t i) k))
-  (well_founded (Zwf ZERO)).
-Proof.
-  Auto with datatypes.
-Save.
-
-Lemma maximum_po_2 : 
-  (N: Z)
-  (n: Z)
-  (k: Z)
-  (i: Z)
-  (t: (array N Z))
-  (Pre10: (`0 <= k` /\ `k <= i`) /\ `i <= n` /\ `n < N` /\
-          (Maximize t n (access t i) k))
   (Variant1: Z)
   (N0: Z)
   (n0: Z)
@@ -161,7 +148,7 @@ Proof.
   Rewrite Test4 in Pre8; Tauto.
 Save.
 
-Lemma maximum_po_3 : 
+Lemma maximum_po_2 : 
   (N: Z)
   (n: Z)
   (k: Z)
@@ -185,7 +172,7 @@ Proof.
    Intros; Omega'.
 Save.
 
-Lemma maximum_po_4 : 
+Lemma maximum_po_3 : 
   (N: Z)
   (n: Z)
   (k: Z)
@@ -210,7 +197,7 @@ Proof.
   Intros; Omega'.
 Save.
 
-Lemma maximum_po_5 : 
+Lemma maximum_po_4 : 
   (N: Z)
   (n: Z)
   (k: Z)
@@ -239,7 +226,7 @@ Ring `k0-1+1`; Intros;
  Apply Maximize_Zle with m1:=(access t i0); Omega' Orelse Tauto.
 Save.
 
-Lemma maximum_po_6 : 
+Lemma maximum_po_5 : 
   (N: Z)
   (n: Z)
   (k: Z)
@@ -267,7 +254,7 @@ Proof.
   Unfold Zwf; Omega'.  
 Save.
 
-Lemma maximum_po_7 : 
+Lemma maximum_po_6 : 
   (N: Z)
   (n: Z)
   (k: Z)
@@ -294,7 +281,7 @@ Proof.
   Repeat (Split; [Omega' | Auto]); Ring `k0-1+1`; Tauto.
 Save.
 
-Lemma maximum_po_8 : 
+Lemma maximum_po_7 : 
   (N: Z)
   (n: Z)
   (k: Z)
@@ -325,9 +312,9 @@ Save.
 Definition maximum := (* validation *)
   [N: Z; n: Z; k: Z; i: Z; t: (array N Z); Pre10: (`0 <= k` /\ `k <= i`) /\
    `i <= n` /\ `n < N` /\ (Maximize t n (access t i) k)]
-    (well_founded_induction Z (Zwf ZERO) (maximum_po_1 N n k i t Pre10)
-      [Variant1: Z](N0: Z)(n0: Z)(k0: Z)(i0: Z)(_: Variant1 = k0)
-      (_0: (`0 <= k0` /\ `k0 <= i0`) /\ `i0 <= n0` /\ `n0 < N0` /\
+    (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
+      (N0: Z)(n0: Z)(k0: Z)(i0: Z)(_: Variant1 = k0)(_0: (`0 <= k0` /\
+      `k0 <= i0`) /\ `i0 <= n0` /\ `n0 < N0` /\
       (Maximize t n0 (access t i0) k0))
       (sig_1 Z [result: Z]((`0 <= result` /\ `result <= n0`) /\
        (Maximize t n0 (access t result) `0`)))
@@ -350,7 +337,7 @@ Definition maximum := (* validation *)
             let (result0, Post13) = (exist_1 [result0: Z](`0 <= result0` /\
               `result0 <= n0`) /\ (Maximize t n0 (access t result0) `0`) 
               i0
-              (maximum_po_2 N n k i t Pre10 Variant1 N0 n0 k0 i0 Pre9 Pre8
+              (maximum_po_1 N n k i t Pre10 Variant1 N0 n0 k0 i0 Pre9 Pre8
               Test4)) in
             (exist_1 [result1: Z](`0 <= result1` /\ `result1 <= n0`) /\
             (Maximize t n0 (access t result1) `0`) result0 Post13)
@@ -361,11 +348,11 @@ Definition maximum := (* validation *)
               let (result0, Post7) =
                 let (result0, Bool3) =
                   let Pre2 =
-                    (maximum_po_3 N n k i t Pre10 Variant1 N0 n0 k0 i0 Pre9
+                    (maximum_po_2 N n k i t Pre10 Variant1 N0 n0 k0 i0 Pre9
                     Pre8 Test3 nk Post2) in
                   let result1 =
                     let Pre3 =
-                      (maximum_po_4 N n k i t Pre10 Variant1 N0 n0 k0 i0 Pre9
+                      (maximum_po_3 N n k i t Pre10 Variant1 N0 n0 k0 i0 Pre9
                       Pre8 Test3 nk Post2 Pre2) in
                     (Z_gt_le_bool (access t nk)) in
                   let (result2, Post8) = (result1 (access t i0)) in
@@ -381,11 +368,11 @@ Definition maximum := (* validation *)
                 | (left Test2) =>
                     let (result1, Post11) =
                       let Pre7 =
-                        (maximum_po_5 N n k i t Pre10 Variant1 N0 n0 k0 i0
+                        (maximum_po_4 N n k i t Pre10 Variant1 N0 n0 k0 i0
                         Pre9 Pre8 Test3 nk Post2 Test2) in
                       let (result3, Post12) =
                         ((wf1 nk)
-                          (maximum_po_6 N n k i t Pre10 Variant1 N0 n0 k0 i0
+                          (maximum_po_5 N n k i t Pre10 Variant1 N0 n0 k0 i0
                           Pre9 Pre8 Test3 nk Post2 Test2 Pre7) N0 n0 
                           nk nk (refl_equal ? nk) Pre7) in
                       (exist_1 [result4: Z](`0 <= result4` /\
@@ -397,11 +384,11 @@ Definition maximum := (* validation *)
                 | (right Test1) =>
                     let (result1, Post9) =
                       let Pre5 =
-                        (maximum_po_7 N n k i t Pre10 Variant1 N0 n0 k0 i0
+                        (maximum_po_6 N n k i t Pre10 Variant1 N0 n0 k0 i0
                         Pre9 Pre8 Test3 nk Post2 Test1) in
                       let (result3, Post10) =
                         ((wf1 nk)
-                          (maximum_po_8 N n k i t Pre10 Variant1 N0 n0 k0 i0
+                          (maximum_po_7 N n k i t Pre10 Variant1 N0 n0 k0 i0
                           Pre9 Pre8 Test3 nk Post2 Test1 Pre5) N0 n0 
                           nk i0 (refl_equal ? nk) Pre5) in
                       (exist_1 [result4: Z](`0 <= result4` /\
@@ -419,16 +406,6 @@ Definition maximum := (* validation *)
 (* fin preuve de maximum *)
 
 Lemma maxisort_po_1 : 
-  (N: Z)
-  (Pre6: `0 <= N`)
-  (result: Z)
-  (Post3: result = `N - 1`)
-  (well_founded (Zwf ZERO)).
-Proof.
-  Auto with datatypes.
-Save.
-
-Lemma maxisort_po_2 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -450,7 +427,7 @@ Proof.
   Intros H; Absurd `i0 < i0`; Omega'.
 Save.
 
-Lemma maxisort_po_3 : 
+Lemma maxisort_po_2 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -471,7 +448,7 @@ Proof.
   Intros;  Omega'.
 Save.
 
-Lemma maxisort_po_4 : 
+Lemma maxisort_po_3 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -526,7 +503,7 @@ Proof.
    Unfold Zwf; Omega.
 Save.
 
-Lemma maxisort_po_5 : 
+Lemma maxisort_po_4 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -556,7 +533,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma maxisort_po_6 : 
+Lemma maxisort_po_5 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -581,7 +558,7 @@ Proof.
   Unfold Zwf; Intros; Omega'.
 Save.
 
-Lemma maxisort_po_7 : 
+Lemma maxisort_po_6 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -597,7 +574,7 @@ Proof.
   Intros H; Absurd `N < N`; [Omega' | Auto].
 Save.
 
-Lemma maxisort_po_8 : 
+Lemma maxisort_po_7 : 
   (N: Z)
   (t: (array N Z))
   (Pre6: `0 <= N`)
@@ -619,11 +596,10 @@ Definition maxisort := (* validation *)
     let (result, Post3) = (exist_1 [result: Z]result = `N - 1` `N - 1`
       (refl_equal ? `N - 1`)) in
     let (i0, t0, result0, Post2) =
-      (well_founded_induction Z (Zwf ZERO)
-        (maxisort_po_1 N Pre6 result Post3) [Variant1: Z](i0: Z)
-        (t0: (array N Z))(_: Variant1 = `i0 + 1`)(_0: (`0 <= i0 + 1` /\
-        `i0 + 1 <= N`) /\ (sorted_array t0 `i0 + 1` `N - 1`) /\
-        (permut t0 t) /\
+      (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+        [Variant1: Z](i0: Z)(t0: (array N Z))(_: Variant1 = `i0 + 1`)
+        (_0: (`0 <= i0 + 1` /\ `i0 + 1 <= N`) /\
+        (sorted_array t0 `i0 + 1` `N - 1`) /\ (permut t0 t) /\
         ((`i0 + 1 < N` -> (Maximize t0 i0 (access t0 `i0 + 1`) `0`))))
         (sig_3 Z (array N Z) unit [i1: Z][t1: (array N Z)][result0: unit]
          (((`0 <= i1 + 1` /\ `i1 + 1 <= N`) /\
@@ -657,7 +633,7 @@ Definition maxisort := (* validation *)
                   let (t1, result1, Post6) =
                     let (r, Post7) =
                       let Pre2 =
-                        (maxisort_po_2 N t Pre6 result Post3 Variant1 i0 t0
+                        (maxisort_po_1 N t Pre6 result Post3 Variant1 i0 t0
                         Pre5 Pre4 Test2) in
                       let (result3, Post8) = (maximum N i0 i0 i0 t0 Pre2) in
                       (exist_1 [result4: Z](`0 <= result4` /\
@@ -665,7 +641,7 @@ Definition maxisort := (* validation *)
                       (Maximize t0 i0 (access t0 result4) `0`) result3 Post8) in
                     let (t1, result1, Post9) =
                       let Pre3 =
-                        (maxisort_po_3 N t Pre6 result Post3 Variant1 i0 t0
+                        (maxisort_po_2 N t Pre6 result Post3 Variant1 i0 t0
                         Pre5 Pre4 Test2 r Post7) in
                       let (t1, result3, Post10) = (swap N i0 r t0 Pre3) in
                       (exist_2 [t2: (array N Z)][result4: unit]
@@ -678,7 +654,7 @@ Definition maxisort := (* validation *)
                         (Maximize t2 i (access t2 `i + 1`) `0`)))) /\
                       (Zwf `0` `i + 1` `i0 + 1`))) t1
                     result1
-                    (maxisort_po_4 N t Pre6 result Post3 Variant1 i0 t0 Pre5
+                    (maxisort_po_3 N t Pre6 result Post3 Variant1 i0 t0 Pre5
                     Pre4 Test2 r Post7 t1 Post9)) in
                   let (i1, result2, Post1) =
                     let (result2, Post1) = (exist_1 [result2: Z]
@@ -690,10 +666,10 @@ Definition maxisort := (* validation *)
                   (sorted_array t2 `i2 + 1` `N - 1`) /\ (permut t2 t) /\
                   ((`i2 + 1 < N` -> (Maximize t2 i2 (access t2 `i2 + 1`) `0`)))) /\
                   (Zwf `0` `i2 + 1` `i0 + 1`) i1 t1 result2
-                  (maxisort_po_5 N t Pre6 result Post3 Variant1 i0 t0 Pre5
+                  (maxisort_po_4 N t Pre6 result Post3 Variant1 i0 t0 Pre5
                   Pre4 Test2 t1 Post6 i1 Post1)) in
                 ((wf1 `i1 + 1`)
-                  (maxisort_po_6 N t Pre6 result Post3 Variant1 i0 t0 Pre5
+                  (maxisort_po_5 N t Pre6 result Post3 Variant1 i0 t0 Pre5
                   Pre4 Test2 i1 t1 Post4) i1 t1 (refl_equal ? `i1 + 1`)
                   (proj1 ? ? Post4)) in
               (exist_3 [i2: Z][t2: (array N Z)][result2: unit]
@@ -713,8 +689,8 @@ Definition maxisort := (* validation *)
               (sorted_array t2 `i2 + 1` `N - 1`) /\ (permut t2 t) /\
               ((`i2 + 1 < N` -> (Maximize t2 i2 (access t2 `i2 + 1`) `0`)))) /\
               `i2 < 0` i1 t1 result1 Post2) end) `result + 1` result 
-        t (refl_equal ? `result + 1`) (maxisort_po_7 N t Pre6 result Post3)) in
+        t (refl_equal ? `result + 1`) (maxisort_po_6 N t Pre6 result Post3)) in
     (exist_2 [t1: (array N Z)][result1: unit](sorted_array t1 `0` `N - 1`) /\
     (permut t1 t) t0 result0
-    (maxisort_po_8 N t Pre6 result Post3 i0 t0 Post2)).
+    (maxisort_po_7 N t Pre6 result Post3 i0 t0 Post2)).
 

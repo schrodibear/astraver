@@ -150,18 +150,6 @@ Lemma downheap_po_1 :
   (t: (array N Z))
   (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
-  (well_founded (Zwf ZERO)).
-Proof.
-Auto with *.
-Save.
-
-Lemma downheap_po_2 : 
-  (N: Z)
-  (k: Z)
-  (n: Z)
-  (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
-          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
@@ -179,7 +167,7 @@ Proof.
 Intros; Omega'.
 Save.
 
-Lemma downheap_po_3 : 
+Lemma downheap_po_2 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -204,7 +192,7 @@ Proof.
 Intros; Omega'.
 Save.
 
-Lemma downheap_po_4 : 
+Lemma downheap_po_3 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -232,7 +220,7 @@ Apply select_right_son;
   [ Reflexivity | Omega' | Rewrite (R11 k0) in Test4; Omega' ].
 Save.
 
-Lemma downheap_po_5 : 
+Lemma downheap_po_4 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -260,7 +248,7 @@ Apply select_left_son;
   [ Reflexivity | Rewrite (R11 k0) in Test3; Intro; Assumption ].
 Save.
 
-Lemma downheap_po_6 : 
+Lemma downheap_po_5 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -286,7 +274,7 @@ Subst j.
 Apply select_left_son; [ Reflexivity | Intro; Absurd `2*k+2 <= n`; Omega' ].
 Save.
 
-Lemma downheap_po_7 : 
+Lemma downheap_po_6 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -311,7 +299,7 @@ Proof.
 Intros; Elim Post11; Intros; Omega'.
 Save.
 
-Lemma downheap_po_8 : 
+Lemma downheap_po_7 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -337,7 +325,7 @@ Proof.
 Intros; Omega'.
 Save.
 
-Lemma downheap_po_9 : 
+Lemma downheap_po_8 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -363,7 +351,7 @@ Proof.
 Intros; Elim Post11; Intros; Omega'.
 Save.
 
-Lemma downheap_po_10 : 
+Lemma downheap_po_9 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -397,7 +385,7 @@ Elim Post22; Intros.
 Symmetry; Apply (H13 i'); Elim Post11; Omega'.
 Save.
 
-Lemma downheap_po_11 : 
+Lemma downheap_po_10 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -427,7 +415,7 @@ Proof.
 Intros; Unfold Zwf; Decompose [select_son] Post11; Omega'.
 Save.
 
-Lemma downheap_po_12 : 
+Lemma downheap_po_11 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -458,7 +446,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma downheap_po_13 : 
+Lemma downheap_po_12 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -558,7 +546,7 @@ Elim Post11; Intros; Omega'.
     Assumption. Omega'. Omega'.
 Save.
 
-Lemma downheap_po_14 : 
+Lemma downheap_po_13 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -600,7 +588,7 @@ Omega'. Rewrite <- H10. Assumption.
 Intro. Apply H7; Omega'.
 Save.
 
-Lemma downheap_po_15 : 
+Lemma downheap_po_14 : 
   (N: Z)
   (k: Z)
   (n: Z)
@@ -640,9 +628,9 @@ Require swap_why.
 Definition downheap := (* validation *)
   [N: Z; k: Z; n: Z; t: (array N Z); Pre11: (`0 <= k` /\ `k <= n`) /\
    `n < N` /\ ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i)))]
-    (well_founded_induction Z (Zwf ZERO) (downheap_po_1 N k n t Pre11)
-      [Variant1: Z](N0: Z)(k0: Z)(n0: Z)(t0: (array N0 Z))
-      (_: Variant1 = `n0 - k0`)(_0: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+    (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
+      (N0: Z)(k0: Z)(n0: Z)(t0: (array N0 Z))(_: Variant1 = `n0 - k0`)
+      (_0: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
       ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
       (sig_2 (array N0 Z) unit [t1: (array N0 Z)][result: unit]
        ((permut t1 t0) /\
@@ -690,11 +678,11 @@ Definition downheap := (* validation *)
                       let (result1, Post14) =
                         let (result1, Bool5) =
                           let Pre2 =
-                            (downheap_po_2 N k n t Pre11 Variant1 N0 k0 n0 t0
+                            (downheap_po_1 N k n t Pre11 Variant1 N0 k0 n0 t0
                             Pre10 Pre9 j Post2 Test8 Test5) in
                           let result2 =
                             let Pre3 =
-                              (downheap_po_3 N k n t Pre11 Variant1 N0 k0 n0
+                              (downheap_po_2 N k n t Pre11 Variant1 N0 k0 n0
                               t0 Pre10 Pre9 j Post2 Test8 Test5 Pre2) in
                             (Z_lt_ge_bool (access t0 j)) in
                           let (result3, Post15) =
@@ -714,14 +702,14 @@ Definition downheap := (* validation *)
                         | (left Test4) =>
                             let (result2, Post17) = (exist_1 [result2: Z]
                               (select_son t0 k0 n0 result2) `j + 1`
-                              (downheap_po_4 N k n t Pre11 Variant1 N0 k0 n0
+                              (downheap_po_3 N k n t Pre11 Variant1 N0 k0 n0
                               t0 Pre10 Pre9 j Post2 Test8 Test5 Test4)) in
                             (exist_1 [result3: Z]
                             (select_son t0 k0 n0 result3) result2 Post17)
                         | (right Test3) =>
                             let (result2, Post16) = (exist_1 [result2: Z]
                               (select_son t0 k0 n0 result2) j
-                              (downheap_po_5 N k n t Pre11 Variant1 N0 k0 n0
+                              (downheap_po_4 N k n t Pre11 Variant1 N0 k0 n0
                               t0 Pre10 Pre9 j Post2 Test8 Test5 Test3)) in
                             (exist_1 [result3: Z]
                             (select_son t0 k0 n0 result3) result2 Post16) end) in
@@ -730,18 +718,18 @@ Definition downheap := (* validation *)
                   | (right Test2) =>
                       let (result1, Post13) = (exist_1 [result1: Z]
                         (select_son t0 k0 n0 result1) j
-                        (downheap_po_6 N k n t Pre11 Variant1 N0 k0 n0 t0
+                        (downheap_po_5 N k n t Pre11 Variant1 N0 k0 n0 t0
                         Pre10 Pre9 j Post2 Test8 Test2)) in
                       (exist_1 [result2: Z]
                       (select_son t0 k0 n0 result2) result1 Post13) end) in
                 let (t1, result0, Post18) =
                   let (result0, Bool7) =
                     let Pre4 =
-                      (downheap_po_7 N k n t Pre11 Variant1 N0 k0 n0 t0 Pre10
+                      (downheap_po_6 N k n t Pre11 Variant1 N0 k0 n0 t0 Pre10
                       Pre9 j Post2 Test8 j' Post11) in
                     let result1 =
                       let Pre5 =
-                        (downheap_po_8 N k n t Pre11 Variant1 N0 k0 n0 t0
+                        (downheap_po_7 N k n t Pre11 Variant1 N0 k0 n0 t0
                         Pre10 Pre9 j Post2 Test8 j' Post11 Pre4) in
                       (Z_lt_ge_bool (access t0 k0)) in
                     let (result2, Post19) = (result1 (access t0 j')) in
@@ -760,7 +748,7 @@ Definition downheap := (* validation *)
                       let (t1, result1, Post21) =
                         let (t1, result1, Post22) =
                           let Pre6 =
-                            (downheap_po_9 N k n t Pre11 Variant1 N0 k0 n0 t0
+                            (downheap_po_8 N k n t Pre11 Variant1 N0 k0 n0 t0
                             Pre10 Pre9 j Post2 Test8 j' Post11 Test7) in
                           let (t1, result3, Post23) =
                             (swap N0 k0 j' t0 Pre6) in
@@ -768,16 +756,16 @@ Definition downheap := (* validation *)
                           (exchange t2 t0 k0 j') t1 result3 Post23) in
                         let (t2, result2, Post24) =
                           let Pre8 =
-                            (downheap_po_10 N k n t Pre11 Variant1 N0 k0 n0
-                            t0 Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
+                            (downheap_po_9 N k n t Pre11 Variant1 N0 k0 n0 t0
+                            Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
                             Post22) in
                           let (t2, result4, Post25) =
                             ((wf1 `n0 - j'`)
-                              (downheap_po_11 N k n t Pre11 Variant1 N0 k0 n0
+                              (downheap_po_10 N k n t Pre11 Variant1 N0 k0 n0
                               t0 Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
                               Post22 Pre8) N0 j' n0 t1
                               (refl_equal ? `n0 - j'`)
-                              (downheap_po_12 N k n t Pre11 Variant1 N0 k0 n0
+                              (downheap_po_11 N k n t Pre11 Variant1 N0 k0 n0
                               t0 Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
                               Post22 Pre8)) in
                           (exist_2 [t3: (array N0 Z)][result5: unit]
@@ -799,7 +787,7 @@ Definition downheap := (* validation *)
                           `(access t3 i) = (access t0 i)`)) /\
                         ((v:Z) ((inftree t0 n0 v k0) -> (inftree t3 n0 v k0))) 
                         t2 result2
-                        (downheap_po_13 N k n t Pre11 Variant1 N0 k0 n0 t0
+                        (downheap_po_12 N k n t Pre11 Variant1 N0 k0 n0 t0
                         Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1 Post22 t2
                         Post24)) in
                       (exist_2 [t2: (array N0 Z)][result2: unit]
@@ -821,7 +809,7 @@ Definition downheap := (* validation *)
                           `(access t0 i) = (access t0 i)`)) /\
                         ((v:Z) ((inftree t0 n0 v k0) -> (inftree t0 n0 v k0))) 
                         tt
-                        (downheap_po_14 N k n t Pre11 Variant1 N0 k0 n0 t0
+                        (downheap_po_13 N k n t Pre11 Variant1 N0 k0 n0 t0
                         Pre10 Pre9 j Post2 Test8 j' Post11 Test6)) in
                       (exist_2 [t1: (array N0 Z)][result2: unit]
                       (permut t1 t0) /\
@@ -855,7 +843,7 @@ Definition downheap := (* validation *)
                   `n0 < i` /\ `i < N0` -> `(access t0 i) = (access t0 i)`)) /\
                 ((v:Z) ((inftree t0 n0 v k0) -> (inftree t0 n0 v k0))) 
                 tt
-                (downheap_po_15 N k n t Pre11 Variant1 N0 k0 n0 t0 Pre10 Pre9
+                (downheap_po_14 N k n t Pre11 Variant1 N0 k0 n0 t0 Pre10 Pre9
                 j Post2 Test1)) in
               (exist_2 [t1: (array N0 Z)][result1: unit](permut t1 t0) /\
               ((i:Z) (`k0 <= i` /\ `i <= n0` -> (heap t1 n0 i))) /\

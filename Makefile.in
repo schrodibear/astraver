@@ -196,8 +196,11 @@ src/parser.ml: src/parser.ml4
 .v.vo:
 	$(COQC) $(COQINCLUDES) $<
 
-%_why.v: %.ml $(BINARY)
-	$(BINARY) -coq $*.ml
+%_why.v: %.mlw $(BINARY)
+	$(BINARY) -coq $*.mlw
+
+%_why.pvs: %.mlw $(BINARY)
+	$(BINARY) -pvs $*.mlw
 
 # Emacs tags
 ############
