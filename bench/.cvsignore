@@ -22,3 +22,4 @@ ctest.ml
 *.ax
 *.sx
 *.baf
+bench
