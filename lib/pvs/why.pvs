@@ -25,21 +25,18 @@ END why
 why_arrays[T: TYPE]: THEORY
 BEGIN
 
-  warray: TYPE = [ n:int, [ int -> T ] ]
+  warray: TYPE = [ n:nat, [ below(n) -> T ] ]
 
-  t : VAR warray
-
-  array_length(t) : int = proj_1(t)
-
-  index_type(t) : TYPE = { x:int | 0 <= x <= proj_1(t) }
-
+  i,j : VAR int
   v : VAR T
 
-  access(t:warray, i:index_type(t)) : T = proj_2(t)(i)
+  array_length(t:warray) : int = proj_1(t)
 
-  store(t:warray, i:index_type(t), v) : warray = 
+  access(t:warray, i:below(proj_1(t))) : T = proj_2(t)(i)
+
+  store(t:warray, i:below(proj_1(t)), v): warray = 
     (proj_1(t), 
-     (LAMBDA (j:index_type(t)): IF j = i THEN v ELSE proj_2(t)(j) ENDIF))
+     (LAMBDA (j:below(proj_1(t))): IF j = i THEN v ELSE proj_2(t)(j) ENDIF))
 
 END why_arrays
 
@@ -53,8 +50,9 @@ BEGIN
   i,j,k : VAR int
   
   % t[i..j] is sorted
-  sorted_array(t,i,j) : bool =
-    forall k: i <= k and k < j implies access(t,k) <= access(t,k+1)
+  sorted_array(t:warray[int], i, j) : bool =
+    forall (k:below(proj_1(t)-1)): 
+    i <= k and k < j implies access(t,k) <= access(t,k+1)
 
 END why_int_array_pred
 
@@ -69,11 +67,13 @@ BEGIN
   i,j,k,l,r : VAR int
 
   % t[i..j] = u[i..j]
-  array_id(t,u,i,j) : bool = 
+  array_id(t:warray[T], u:warray[T], 
+	   i:below(min(proj_1(t),proj_1(u))),
+	   j:below(min(proj_1(t),proj_1(u)))) : bool = 
     forall k: i <= k and k <= j implies access(t,k) = access(u,k)
 
   % swap of elements at i and j
-  exchange(t,u,i,j) : bool = 
+  exchange(t, u, i, j) : bool = 
     array_length(t) = array_length(u) and
     0 <= i and i < array_length(t) and 0 <= j and j < array_length(t) and
     access(t,i) = access(u,j) and
@@ -82,7 +82,7 @@ BEGIN
       k /= i implies k /= j implies access(t,k) = access(u,k)
 
   % permut is the smallest equivalence relation containing exchange
-  permut(t,u) : bool
+  permut(t, u) : bool
   
   permut_exchange : 
     AXIOM forall t,u,i,j: exchange(t,u,i,j) implies permut(t,u)
@@ -95,7 +95,7 @@ BEGIN
 
   % sub_permut(t,u,i,j) defines a permutation on the sub-array i..j,
   % other elements being equal
-  sub_permut(l,r,t,u) : bool
+  sub_permut(l, r, t, u) : bool
   
   sub_permut_exchange : 
     AXIOM forall l,r,t,u,i,j: 
