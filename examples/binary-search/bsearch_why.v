@@ -153,9 +153,10 @@ Lemma binary_search_po_2 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -181,9 +182,10 @@ Lemma binary_search_po_3 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -209,9 +211,10 @@ Lemma binary_search_po_4 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -228,8 +231,6 @@ Lemma binary_search_po_4 :
   ((`p1 > 0` -> (access t p1) = v)) /\ (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
 Intros.
-Clear Pre8; Simpl in Test6.
-Simpl in Test5.
 Repeat Split; Try Omega'.
 Rewrite Post8; Clear Post8; Rewrite Post4.
 Intros; Apply In_right_side; Assumption Orelse Intuition.
@@ -246,9 +247,10 @@ Lemma binary_search_po_5 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -276,9 +278,10 @@ Lemma binary_search_po_6 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -315,9 +318,10 @@ Lemma binary_search_po_7 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -355,9 +359,10 @@ Lemma binary_search_po_8 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -386,9 +391,10 @@ Lemma binary_search_po_9 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -418,9 +424,10 @@ Lemma binary_search_po_10 :
   (p0: Z)
   (Post3: p0 = `0`)
   (Variant1: Z)
-  (u1: Z)
-  (p1: Z)
   (l1: Z)
+  (p1: Z)
+  (t: (array `N + 1` Z))
+  (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\

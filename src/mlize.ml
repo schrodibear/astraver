@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.44 2002-06-21 14:24:29 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.45 2002-06-21 15:20:24 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -138,7 +138,7 @@ and trad_desc info d ren = match d with
 			     (Monad.unit info (Tconst ConstUnit)) ren'')))
 	 ren
 
-  | While (b, inv, ((phi,_) as var), e) ->
+  | While (b, inv, ((phi,_,_) as var), e) ->
       let info' = 
 	let p = 
 	  match inv with Some a -> [pre_of_assert false a] | None -> [] 

@@ -35,8 +35,8 @@ Lemma distance_po_2 :
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
-  (t0: (array `n2 + 1` Z))
   (i1: Z)
+  (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
@@ -52,8 +52,8 @@ Lemma distance_po_3 :
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
-  (t0: (array `n2 + 1` Z))
   (i1: Z)
+  (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
@@ -77,8 +77,8 @@ Lemma distance_po_4 :
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
-  (t0: (array `n2 + 1` Z))
   (i1: Z)
+  (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
@@ -98,8 +98,8 @@ Lemma distance_po_5 :
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
-  (t0: (array `n2 + 1` Z))
   (i1: Z)
+  (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
@@ -119,8 +119,8 @@ Lemma distance_po_6 :
   (i0: Z)
   (Post1: i0 = `0`)
   (Variant1: Z)
-  (t0: (array `n2 + 1` Z))
   (i1: Z)
+  (t0: (array `n2 + 1` Z))
   (Pre4: Variant1 = `n2 + 1 - i1`)
   (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
@@ -170,8 +170,10 @@ Lemma distance_po_9 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -197,8 +199,10 @@ Lemma distance_po_10 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -231,8 +235,10 @@ Lemma distance_po_11 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -248,9 +254,12 @@ Lemma distance_po_11 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -280,8 +289,10 @@ Lemma distance_po_12 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -297,9 +308,12 @@ Lemma distance_po_12 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -332,8 +346,10 @@ Lemma distance_po_13 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -349,9 +365,12 @@ Lemma distance_po_13 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -385,8 +404,10 @@ Lemma distance_po_14 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -402,9 +423,12 @@ Lemma distance_po_14 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -471,8 +495,10 @@ Lemma distance_po_15 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -488,9 +514,12 @@ Lemma distance_po_15 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -524,8 +553,10 @@ Lemma distance_po_16 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -541,9 +572,12 @@ Lemma distance_po_16 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -614,8 +648,10 @@ Lemma distance_po_17 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -631,9 +667,12 @@ Lemma distance_po_17 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -678,8 +717,10 @@ Lemma distance_po_18 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -695,9 +736,12 @@ Lemma distance_po_18 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -737,8 +781,10 @@ Lemma distance_po_19 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -754,9 +800,12 @@ Lemma distance_po_19 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -799,8 +848,10 @@ Lemma distance_po_20 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -816,9 +867,12 @@ Lemma distance_po_20 :
   (j1: Z)
   (Post7: j1 = `n2 - 1`)
   (Variant5: Z)
-  (t3: (array `n2 + 1` Z))
-  (old2: Z)
+  (i3: Z)
   (j2: Z)
+  (old2: Z)
+  (t3: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre18: Variant5 = `j2 + 1`)
   (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
@@ -850,8 +904,10 @@ Lemma distance_po_21 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -909,8 +965,10 @@ Lemma distance_po_22 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -961,8 +1019,10 @@ Lemma distance_po_23 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -995,8 +1055,10 @@ Lemma distance_po_24 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -1030,8 +1092,10 @@ Lemma distance_po_25 :
   (i2: Z)
   (Post4: i2 = `n1 - 1`)
   (Variant3: Z)
-  (t1: (array `n2 + 1` Z))
   (i3: Z)
+  (t1: (array `n2 + 1` Z))
+  (w1: (array n1 A))
+  (w2: (array n2 A))
   (Pre20: Variant3 = `i3 + 1`)
   (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
@@ -1129,4 +1193,1482 @@ Unfold min_suffix in H4.
 Apply (H4 `0`); Omega'.
 Save.
 
+
+Definition distance := (* validation *)
+  [i: Z]
+    [j: Z]
+      [old: Z]
+        [t: (array `n2 + 1` Z)]
+          [w1: (array n1 A)]
+            [w2: (array n2 A)]
+              let (i0, result, Post1) =
+                let (result, Post1) = (exist_1 [result: Z]result = `0` 
+                  `0` (refl_equal ? `0`)) in
+                (exist_2 [i1: Z][result0: unit]i1 = `0` result tt Post1) in
+              let (i1, t0, result0, Post15) =
+                ((((((((((well_founded_induction Z) (Zwf ZERO))
+                         (distance_po_1 i0 Post1))
+                        [Variant1: Z](i1: Z)(t0: (array `n2 + 1` Z))(_: 
+                        Variant1 = `n2 + 1 - i1`)(_: `0 <= i1` /\
+                        `i1 <= n2 + 1` /\
+                        ((j:Z)
+                         (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))(sig_3 Z
+                        (array `n2 + 1` Z)
+                        unit [i2:Z][t1:(array `n2 + 1` Z)][result:unit](`
+                        0 <= i2` /\ `i2 <= n2 + 1` /\
+                        ((j:Z)
+                         (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+                        `i2 > n2`)))
+                       [Variant1: Z]
+                         [wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))(i1: Z)(t0: (array `
+                           n2 + 1` Z))(_: Variant2 = `n2 + 1 - i1`)(_: `
+                           0 <= i1` /\ `i1 <= n2 + 1` /\
+                           ((j:Z)
+                            (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))(sig_3 Z
+                           (array `n2 + 1` Z)
+                           unit [i2:Z][t1:(array `n2 + 1` Z)][result:unit](`
+                           0 <= i2` /\ `i2 <= n2 + 1` /\
+                           ((j:Z)
+                            (`0 <= j` /\ `j < i2` -> (access t1 j) = `n2 - j`)) /\
+                           `i2 > n2`))]
+                           [i1: Z]
+                             [t0: (array `n2 + 1` Z)]
+                               [Pre4: Variant1 = `n2 + 1 - i1`]
+                                 [Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
+                                   ((j:Z)
+                                    (`0 <= j` /\ `j < i1` ->
+                                     (access t0 j) = `n2 - j`))]
+                                   let (result0, Bool1) =
+                                     let (result2, Post16) =
+                                       (Z_le_gt_bool i1 n2) in
+                                     (exist_1 [result3: bool](if result3
+                                                              then `i1 <= n2`
+                                                              else `i1 > n2`) 
+                                     result2 Post16) in
+                                   (Cases (btest [result0:bool](if result0
+                                                                then `
+                                                                i1 <= n2`
+                                                                else `
+                                                                i1 > n2`) result0 Bool1) of
+                                   | (left Test2) =>
+                                       let (i2, t1, result1, Post18) =
+                                         let (i2, t1, result1, Post19) =
+                                           let (t1, result1, Post2) =
+                                             let (result1, Post2) =
+                                               (exist_1 [result1: Z](
+                                                                    store t0
+                                                                    i1
+                                                                    result1) =
+                                                                    (
+                                                                    store t0
+                                                                    i1
+                                                                    `
+                                                                    n2 - i1`) 
+                                               `n2 - i1`
+                                               (refl_equal ? (store t0 i1
+                                                              `n2 - i1`))) in
+                                             let Pre2 =
+                                               (distance_po_2 i0 Post1
+                                               Variant1 i1 t0 Pre4 Pre3 Test2
+                                               result1 Post2) in
+                                             (exist_2 [t2: (array `n2 + 1` Z)][result3: unit]
+                                             t2 = (store t0 i1 `n2 - i1`) 
+                                             (store t0 i1 result1) tt Post2) in
+                                           let (i2, result2, Post3) =
+                                             let (result2, Post3) =
+                                               (exist_1 [result2: Z]result2 =
+                                                                    `
+                                                                    i1 + 1` 
+                                               `i1 + 1`
+                                               (refl_equal ? `i1 + 1`)) in
+                                             (exist_2 [i3: Z][result3: unit]
+                                             i3 = `i1 + 1` result2 tt Post3) in
+                                           (exist_3 [i3: Z][t2: (array `
+                                           n2 + 1` Z)][result3: unit]`
+                                           0 <= i3` /\ `i3 <= n2 + 1` /\
+                                           ((j:Z)
+                                            (`0 <= j` /\ `j < i3` ->
+                                             (access t2 j) = `n2 - j`)) /\
+                                           (Zwf `0` `n2 + 1 - i3` `n2 + 1 -
+                                                                   i1`) 
+                                           i2 t1 result2
+                                           (distance_po_3 i0 Post1 Variant1
+                                           i1 t0 Pre4 Pre3 Test2 t1 Post2 i2
+                                           Post3)) in
+                                         ((((((wf1 `n2 + 1 - i2`)
+                                               (distance_po_4 i0 Post1
+                                               Variant1 i1 t0 Pre4 Pre3 Test2
+                                               i2 t1 Post19)) i2) t1)
+                                            (refl_equal ? `n2 + 1 - i2`))
+                                           (distance_po_5 i0 Post1 Variant1
+                                           i1 t0 Pre4 Pre3 Test2 i2 t1
+                                           Post19)) in
+                                       (exist_3 [i3: Z][t2: (array `n2 + 1` Z)][result2: unit]`
+                                       0 <= i3` /\ `i3 <= n2 + 1` /\
+                                       ((j:Z)
+                                        (`0 <= j` /\ `j < i3` ->
+                                         (access t2 j) = `n2 - j`)) /\
+                                       `i3 > n2` i2 t1 result1 Post18)
+                                   | (right Test1) =>
+                                       let (i2, t1, result1, Post17) =
+                                         (exist_3 [i2: Z][t1: (array `
+                                         n2 + 1` Z)][result1: unit]`0 <= i2` /\
+                                         `i2 <= n2 + 1` /\
+                                         ((j:Z)
+                                          (`0 <= j` /\ `j < i2` ->
+                                           (access t1 j) = `n2 - j`)) /\
+                                         `i2 > n2` i1 t0 tt
+                                         (distance_po_6 i0 Post1 Variant1 i1
+                                         t0 Pre4 Pre3 Test1)) in
+                                       (exist_3 [i3: Z][t2: (array `n2 + 1` Z)][result2: unit]`
+                                       0 <= i3` /\ `i3 <= n2 + 1` /\
+                                       ((j:Z)
+                                        (`0 <= j` /\ `j < i3` ->
+                                         (access t2 j) = `n2 - j`)) /\
+                                       `i3 > n2` i2 t1 result1 Post17) end))
+                      `n2 + 1 - i0`) i0) t) (refl_equal ? `n2 + 1 - i0`))
+                  (distance_po_7 t i0 Post1)) in
+              let (i2, result1, Post4) =
+                let (result1, Post4) =
+                  (exist_1 [result1: Z]result1 = `n1 - 1` `n1 - 1`
+                  (refl_equal ? `n1 - 1`)) in
+                (exist_2 [i3: Z][result2: unit]i3 = `n1 - 1` result1 
+                tt Post4) in
+              let (i3, j0, old0, t1, result2, Post20) =
+                ((((((((((((well_founded_induction Z) (Zwf ZERO))
+                           (distance_po_8 i0 Post1 i1 t0 Post15 i2 Post4))
+                          [Variant3: Z](i3: Z)(j0: Z)(old0: Z)(t1: (array `
+                          n2 + 1` Z))(w1: (array n1 A))(w2: (array n2 A))(_: 
+                          Variant3 = `i3 + 1`)(_: `(-1) <= i3` /\
+                          `i3 <= n1 - 1` /\
+                          ((j:Z)
+                           (`0 <= j` /\ `j <= n2` ->
+                            (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))(sig_5 Z
+                          Z Z (array `n2 + 1` Z)
+                          unit [i4:Z][j1:Z][old1:Z][t2:(array `n2 + 1` Z)][result:unit](`
+                          (-1) <= i4` /\ `i4 <= n1 - 1` /\
+                          ((j:Z)
+                           (`0 <= j` /\ `j <= n2` ->
+                            (min_suffix w1 w2 `i4 + 1` j (access t2 j)))) /\
+                          `i4 < 0`)))
+                         [Variant3: Z]
+                           [wf2: (Variant4: Z)(Pre5: (Zwf `0` Variant4 Variant3))(i3: Z)(j0: Z)(old0: Z)(t1: (array `
+                             n2 + 1` Z))(w1: (array n1 A))(w2: (array n2 A))(_: 
+                             Variant4 = `i3 + 1`)(_: `(-1) <= i3` /\
+                             `i3 <= n1 - 1` /\
+                             ((j:Z)
+                              (`0 <= j` /\ `j <= n2` ->
+                               (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))(sig_5 Z
+                             Z Z (array `n2 + 1` Z)
+                             unit [i4:Z][j1:Z][old1:Z][t2:(array `n2 + 1` Z)][result:unit](`
+                             (-1) <= i4` /\ `i4 <= n1 - 1` /\
+                             ((j:Z)
+                              (`0 <= j` /\ `j <= n2` ->
+                               (min_suffix w1 w2 `i4 + 1` j (access t2 j)))) /\
+                             `i4 < 0`))]
+                             [i3: Z]
+                               [j0: Z]
+                                 [old0: Z]
+                                   [t1: (array `n2 + 1` Z)]
+                                     [w1: (array n1 A)]
+                                       [w2: (array n2 A)]
+                                         [Pre20: Variant3 = `i3 + 1`]
+                                           [Pre19: `(-1) <= i3` /\
+                                             `i3 <= n1 - 1` /\
+                                             ((j:Z)
+                                              (`0 <= j` /\ `j <= n2` ->
+                                               (min_suffix w1 w2 `i3 + 1` j
+                                                (access t1 j))))]
+                                             let (result2, Bool2) =
+                                               let (result4, Post21) =
+                                                 (Z_ge_lt_bool i3 `0`) in
+                                               (exist_1 [result5: bool](
+                                               if result5 then `i3 >= 0`
+                                               else `i3 < 0`) result4 Post21) in
+                                             (Cases (btest [result2:bool](
+                                             if result2 then `i3 >= 0`
+                                             else `i3 < 0`) result2 Bool2) of
+                                             | (left Test8) =>
+                                                 let (i4, j1, old1, t2,
+                                                   result3, Post23) =
+                                                   let (i4, j1, old1, t2,
+                                                     result3, Post24) =
+                                                     let Pre6 =
+                                                       (distance_po_9 w1 w2
+                                                       i0 Post1 i1 t0 Post15
+                                                       i2 Post4 Variant3 i3
+                                                       t1 w1 w2 Pre20 Pre19
+                                                       Test8) in
+                                                     let (old1, result3,
+                                                       Post5) =
+                                                       let (result3, Post5) =
+                                                         (exist_1 [result3: Z]
+                                                         result3 =
+                                                         (access t1 n2) 
+                                                         (access t1 n2)
+                                                         (refl_equal ? (
+                                                         access t1 n2))) in
+                                                       (exist_2 [old2: Z][result4: unit]
+                                                       old2 = (access t1 n2) 
+                                                       result3 tt Post5) in
+                                                     let Pre7 = Pre6 in
+                                                     let (t2, result4,
+                                                       Post6) =
+                                                       let (result4, Post6) =
+                                                         (exist_1 [result4: Z]
+                                                         (store t1 n2 result4) =
+                                                         (store t1 n2
+                                                          `(access t1 n2) + 1`) 
+                                                         `(access t1 n2) + 1`
+                                                         (refl_equal ? (
+                                                         store t1 n2
+                                                         `(access t1 n2) + 1`))) in
+                                                       let Pre8 = Pre7 in
+                                                       (exist_2 [t3: (array `
+                                                       n2 + 1` Z)][result6: unit]
+                                                       t3 =
+                                                       (store t1 n2
+                                                        `(access t1 n2) + 1`) 
+                                                       (store t1 n2 result4)
+                                                       tt Post6) in
+                                                     let (j1, result5,
+                                                       Post7) =
+                                                       let (result5, Post7) =
+                                                         (exist_1 [result5: Z]
+                                                         result5 = `n2 - 1` 
+                                                         `n2 - 1`
+                                                         (refl_equal ? `
+                                                         n2 - 1`)) in
+                                                       (exist_2 [j2: Z][result6: unit]
+                                                       j2 = `n2 - 1` 
+                                                       result5 tt Post7) in
+                                                     let (j2, old2, t3,
+                                                       result6, Post25) =
+                                                       (((((((((((well_founded_induction
+                                                                   Z)
+                                                                  (Zwf ZERO))
+                                                                 (distance_po_10 w1
+                                                                 w2 i0 Post1
+                                                                 i1 t0 Post15
+                                                                 i2 Post4
+                                                                 Variant3 i3
+                                                                 t1 w1 w2
+                                                                 Pre20 Pre19
+                                                                 Test8 Pre6
+                                                                 old1 Post5
+                                                                 Pre7 t2
+                                                                 Post6 j1
+                                                                 Post7))
+                                                                [Variant5: Z](i3: Z)(j2: Z)(old2: Z)(t3: (array `
+                                                                n2 + 1` Z))(w1: (array n1 A))(w2: (array n2 A))(_: 
+                                                                Variant5 =
+                                                                `j2 + 1`)(_: `
+                                                                (-1) <= j2` /\
+                                                                `j2 <= n2 - 1` /\
+                                                                ((k:Z)
+                                                                 (`j2 < k` /\
+                                                                  `k <= n2` ->
+                                                                  (min_suffix w1
+                                                                   w2 i3 k
+                                                                   (access t3
+                                                                    k)))) /\
+                                                                ((k:Z)
+                                                                 (`0 <= k` /\
+                                                                  `k <= j2` ->
+                                                                  (min_suffix w1
+                                                                   w2
+                                                                   `i3 + 1` k
+                                                                   (access t3
+                                                                    k)))) /\
+                                                                (min_suffix w1
+                                                                 w2 `
+                                                                 i3 + 1`
+                                                                 `j2 + 1`
+                                                                 old2))(sig_4 Z
+                                                                Z
+                                                                (array `
+                                                                n2 + 1` Z)
+                                                                unit [j3:Z][old3:Z][t4:(array `
+                                                                n2 + 1` Z)][result:unit](`
+                                                                (-1) <= j3` /\
+                                                                `j3 <= n2 - 1` /\
+                                                                ((k:Z)
+                                                                 (`j3 < k` /\
+                                                                  `k <= n2` ->
+                                                                  (min_suffix w1
+                                                                   w2 i3 k
+                                                                   (access t4
+                                                                    k)))) /\
+                                                                ((k:Z)
+                                                                 (`0 <= k` /\
+                                                                  `k <= j3` ->
+                                                                  (min_suffix w1
+                                                                   w2
+                                                                   `i3 + 1` k
+                                                                   (access t4
+                                                                    k)))) /\
+                                                                (min_suffix w1
+                                                                 w2 `
+                                                                 i3 + 1`
+                                                                 `j3 + 1`
+                                                                 old3) /\
+                                                                `j3 < 0`)))
+                                                               [Variant5: Z]
+                                                                 [wf3: (Variant6: Z)(Pre9: (Zwf `0` Variant6 Variant5))(i3: Z)(j2: Z)(old2: Z)(t3: (array `
+                                                                   n2 + 1` Z))(w1: (array n1 A))(w2: (array n2 A))(_: 
+                                                                   Variant6 =
+                                                                   `j2 + 1`)(_: `
+                                                                   (-1) <= j2` /\
+                                                                   `j2 <=
+                                                                    n2 - 1` /\
+                                                                   ((k:Z)
+                                                                    (
+                                                                    `
+                                                                    j2 < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t3
+                                                                    k)))) /\
+                                                                   ((k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t3
+                                                                    k)))) /\
+                                                                   (min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j2 + 1`
+                                                                    old2))(sig_4 Z
+                                                                   Z
+                                                                   (array `
+                                                                   n2 + 1` Z)
+                                                                   unit [j3:Z][old3:Z][t4:(array `
+                                                                   n2 + 1` Z)][result:unit](`
+                                                                   (-1) <= j3` /\
+                                                                   `j3 <=
+                                                                    n2 - 1` /\
+                                                                   ((k:Z)
+                                                                    (
+                                                                    `
+                                                                    j3 < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t4
+                                                                    k)))) /\
+                                                                   ((k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j3` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t4
+                                                                    k)))) /\
+                                                                   (min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j3 + 1`
+                                                                    old3) /\
+                                                                   `j3 < 0`))]
+                                                                   [i3: Z]
+                                                                    [j2: Z]
+                                                                    [old2: Z]
+                                                                    [t3: (array `
+                                                                    n2 + 1` Z)]
+                                                                    [w1: (array n1 A)]
+                                                                    [w2: (array n2 A)]
+                                                                    [Pre18: 
+                                                                    Variant5 =
+                                                                    `
+                                                                    j2 + 1`]
+                                                                    [Pre17: `
+                                                                    (-1) <=
+                                                                    j2` /\
+                                                                    `j2 <=
+                                                                    n2 - 1` /\
+                                                                    ((k:Z)
+                                                                    (`
+                                                                    j2 < k` /\
+                                                                    `k <= n2` ->
+                                                                    (min_suffix w1
+                                                                    w2 i3 k
+                                                                    (access t3
+                                                                    k)))) /\
+                                                                    ((k:Z)
+                                                                    (`
+                                                                    0 <= k` /\
+                                                                    `k <= j2` ->
+                                                                    (min_suffix w1
+                                                                    w2
+                                                                    `i3 + 1`
+                                                                    k
+                                                                    (access t3
+                                                                    k)))) /\
+                                                                    (min_suffix w1
+                                                                    w2
+                                                                    `i3 + 1`
+                                                                    `j2 + 1`
+                                                                    old2)]
+                                                                    let (result6,
+                                                                    Bool3) =
+                                                                    let (result8,
+                                                                    Post26) =
+                                                                    (
+                                                                    Z_ge_lt_bool
+                                                                    j2 `
+                                                                    0`) in
+                                                                    (exist_1 [result9: bool](
+                                                                    if result9
+                                                                    then `
+                                                                    j2 >= 0`
+                                                                    else `
+                                                                    j2 < 0`) 
+                                                                    result8
+                                                                    Post26) in
+                                                                    (Cases (btest [result6:bool](
+                                                                    if result6
+                                                                    then `
+                                                                    j2 >= 0`
+                                                                    else `
+                                                                    j2 < 0`) result6 Bool3) of
+                                                                    | 
+                                                                    (left Test7) =>
+                                                                    let (j3,
+                                                                    old3, t4,
+                                                                    result7,
+                                                                    Post28) =
+                                                                    let (j3,
+                                                                    old3, t4,
+                                                                    result7,
+                                                                    Post29) =
+                                                                    let (old3,
+                                                                    t4,
+                                                                    result7,
+                                                                    Post30) =
+                                                                    let (result7,
+                                                                    Post8) =
+                                                                    (exist_1 [result7: Z]
+                                                                    result7 =
+                                                                    old2 
+                                                                    old2
+                                                                    (refl_equal ? old2)) in
+                                                                    let (old3,
+                                                                    t4,
+                                                                    result8,
+                                                                    Post31) =
+                                                                    let Pre10 =
+                                                                    (distance_po_11 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    result7
+                                                                    Post8) in
+                                                                    let (old3,
+                                                                    result8,
+                                                                    Post9) =
+                                                                    let (result8,
+                                                                    Post9) =
+                                                                    (exist_1 [result8: Z]
+                                                                    result8 =
+                                                                    (
+                                                                    access t3
+                                                                    j2) 
+                                                                    (
+                                                                    access t3
+                                                                    j2)
+                                                                    (refl_equal ? (
+                                                                    access t3
+                                                                    j2))) in
+                                                                    (exist_2 [old4: Z][result9: unit]
+                                                                    old4 =
+                                                                    (
+                                                                    access t3
+                                                                    j2) 
+                                                                    result8
+                                                                    tt Post9) in
+                                                                    let (t4,
+                                                                    result9,
+                                                                    Post32) =
+                                                                    let (result9,
+                                                                    Bool4) =
+                                                                    let Pre11 =
+                                                                    (distance_po_12 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    result7
+                                                                    Post8
+                                                                    Pre10
+                                                                    old3
+                                                                    Post9) in
+                                                                    let result10 =
+                                                                    let Pre12 =
+                                                                    (distance_po_13 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    result7
+                                                                    Post8
+                                                                    Pre10
+                                                                    old3
+                                                                    Post9
+                                                                    Pre11) in
+                                                                    (
+                                                                    test_char (
+                                                                    access w1
+                                                                    i3)) in
+                                                                    let (result11,
+                                                                    Post33) =
+                                                                    (
+                                                                    result10 (
+                                                                    access w2
+                                                                    j2)) in
+                                                                    (exist_1 [result12: bool](
+                                                                    if result12
+                                                                    then 
+                                                                    (
+                                                                    access w1
+                                                                    i3) =
+                                                                    (
+                                                                    access w2
+                                                                    j2)
+                                                                    else ~
+                                                                    (
+                                                                    access w1
+                                                                    i3) =
+                                                                    (
+                                                                    access w2
+                                                                    j2)) 
+                                                                    result11
+                                                                    Post33) in
+                                                                    (Cases (btest [result9:bool](
+                                                                    if result9
+                                                                    then 
+                                                                    (
+                                                                    access w1
+                                                                    i3) =
+                                                                    (
+                                                                    access w2
+                                                                    j2)
+                                                                    else ~
+                                                                    (
+                                                                    access w1
+                                                                    i3) =
+                                                                    (
+                                                                    access w2
+                                                                    j2)) result9 Bool4) of
+                                                                    | 
+                                                                    (left Test6) =>
+                                                                    let (t4,
+                                                                    result10,
+                                                                    Post11) =
+                                                                    let (result10,
+                                                                    Post11) =
+                                                                    (exist_1 [result10: Z]
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    result10) =
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    result7) 
+                                                                    result7
+                                                                    (refl_equal ? (
+                                                                    store t3
+                                                                    j2
+                                                                    result7))) in
+                                                                    let Pre16 =
+                                                                    Pre10 in
+                                                                    (exist_2 [t5: (array `
+                                                                    n2 + 1` Z)][result12: unit]
+                                                                    t5 =
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    result7) 
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    result10)
+                                                                    tt
+                                                                    Post11) in
+                                                                    (exist_2 [t5: (array `
+                                                                    n2 + 1` Z)][result11: unit](
+                                                                    (j:Z)
+                                                                    (
+                                                                    j =
+                                                                    `
+                                                                    j2 - 1` ->
+                                                                    `
+                                                                    (-1) <= j` /\
+                                                                    `
+                                                                    j <= n2 -
+                                                                    1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j + 1`
+                                                                    old3) /\
+                                                                    (Zwf `0` `
+                                                                    j + 1` `
+                                                                    j2 + 1`))) 
+                                                                    t4
+                                                                    result10
+                                                                    (distance_po_14 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    result7
+                                                                    Post8
+                                                                    Pre10
+                                                                    old3
+                                                                    Post9
+                                                                    Test6 t4
+                                                                    Post11))
+                                                                    | 
+                                                                    (right Test5) =>
+                                                                    let Pre13 =
+                                                                    (distance_po_15 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    result7
+                                                                    Post8
+                                                                    Pre10
+                                                                    old3
+                                                                    Post9
+                                                                    Test5) in
+                                                                    let Pre14 =
+                                                                    Pre10 in
+                                                                    let (t4,
+                                                                    result10,
+                                                                    Post10) =
+                                                                    let (result10,
+                                                                    Post10) =
+                                                                    (exist_1 [result10: Z]
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    result10) =
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    `
+                                                                    (
+                                                                    Zmin (
+                                                                    access t3
+                                                                    j2)
+                                                                    (
+                                                                    access t3
+                                                                    j2 + 1)) +
+                                                                    1`) 
+                                                                    `
+                                                                    (
+                                                                    Zmin (
+                                                                    access t3
+                                                                    j2)
+                                                                    (
+                                                                    access t3
+                                                                    j2 + 1)) +
+                                                                    1`
+                                                                    (refl_equal ? (
+                                                                    store t3
+                                                                    j2
+                                                                    `
+                                                                    (
+                                                                    Zmin (
+                                                                    access t3
+                                                                    j2)
+                                                                    (
+                                                                    access t3
+                                                                    j2 + 1)) +
+                                                                    1`))) in
+                                                                    let Pre15 =
+                                                                    Pre14 in
+                                                                    (exist_2 [t5: (array `
+                                                                    n2 + 1` Z)][result12: unit]
+                                                                    t5 =
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    `
+                                                                    (
+                                                                    Zmin (
+                                                                    access t3
+                                                                    j2)
+                                                                    (
+                                                                    access t3
+                                                                    j2 + 1)) +
+                                                                    1`) 
+                                                                    (
+                                                                    store t3
+                                                                    j2
+                                                                    result10)
+                                                                    tt
+                                                                    Post10) in
+                                                                    (exist_2 [t5: (array `
+                                                                    n2 + 1` Z)][result11: unit](
+                                                                    (j:Z)
+                                                                    (
+                                                                    j =
+                                                                    `
+                                                                    j2 - 1` ->
+                                                                    `
+                                                                    (-1) <= j` /\
+                                                                    `
+                                                                    j <= n2 -
+                                                                    1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j + 1`
+                                                                    old3) /\
+                                                                    (Zwf `0` `
+                                                                    j + 1` `
+                                                                    j2 + 1`))) 
+                                                                    t4
+                                                                    result10
+                                                                    (distance_po_16 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    result7
+                                                                    Post8
+                                                                    Pre10
+                                                                    old3
+                                                                    Post9
+                                                                    Test5
+                                                                    Pre13
+                                                                    Pre14 t4
+                                                                    Post10)) end) in
+                                                                    (exist_3 [old4: Z][t5: (array `
+                                                                    n2 + 1` Z)][result10: unit](
+                                                                    (j:Z)
+                                                                    (
+                                                                    j =
+                                                                    `
+                                                                    j2 - 1` ->
+                                                                    `
+                                                                    (-1) <= j` /\
+                                                                    `
+                                                                    j <= n2 -
+                                                                    1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j + 1`
+                                                                    old4) /\
+                                                                    (Zwf `0` `
+                                                                    j + 1` `
+                                                                    j2 + 1`))) 
+                                                                    old3 
+                                                                    t4
+                                                                    result9
+                                                                    Post32) in
+                                                                    (exist_3 [old4: Z][t5: (array `
+                                                                    n2 + 1` Z)][result9: unit](
+                                                                    (j:Z)
+                                                                    (
+                                                                    j =
+                                                                    `
+                                                                    j2 - 1` ->
+                                                                    `
+                                                                    (-1) <= j` /\
+                                                                    `
+                                                                    j <= n2 -
+                                                                    1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j + 1`
+                                                                    old4) /\
+                                                                    (Zwf `0` `
+                                                                    j + 1` `
+                                                                    j2 + 1`))) 
+                                                                    old3 
+                                                                    t4
+                                                                    result8
+                                                                    Post31) in
+                                                                    let (j3,
+                                                                    result8,
+                                                                    Post12) =
+                                                                    let (result8,
+                                                                    Post12) =
+                                                                    (exist_1 [result8: Z]
+                                                                    result8 =
+                                                                    `
+                                                                    j2 - 1` 
+                                                                    `
+                                                                    j2 - 1`
+                                                                    (refl_equal ? `
+                                                                    j2 - 1`)) in
+                                                                    (exist_2 [j4: Z][result9: unit]
+                                                                    j4 =
+                                                                    `
+                                                                    j2 - 1` 
+                                                                    result8
+                                                                    tt
+                                                                    Post12) in
+                                                                    (exist_4 [j4: Z][old4: Z][t5: (array `
+                                                                    n2 + 1` Z)][result9: unit]`
+                                                                    (-1) <=
+                                                                    j4` /\
+                                                                    `
+                                                                    j4 <=
+                                                                    n2 - 1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j4 < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j4` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j4 + 1`
+                                                                    old4) /\
+                                                                    (Zwf `0` `
+                                                                    j4 + 1` `
+                                                                    j2 + 1`) 
+                                                                    j3 
+                                                                    old3 
+                                                                    t4
+                                                                    result8
+                                                                    (distance_po_17 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7
+                                                                    old3 t4
+                                                                    Post30 j3
+                                                                    Post12)) in
+                                                                    (((((((
+                                                                    wf3 `
+                                                                    j3 + 1`)
+                                                                    (distance_po_18 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7 j3
+                                                                    old3 t4
+                                                                    Post29))
+                                                                    j3) old3)
+                                                                    t4)
+                                                                    (refl_equal ? `
+                                                                    j3 + 1`))
+                                                                    (distance_po_19 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test7 j3
+                                                                    old3 t4
+                                                                    Post29)) in
+                                                                    (exist_4 [j4: Z][old4: Z][t5: (array `
+                                                                    n2 + 1` Z)][result8: unit]`
+                                                                    (-1) <=
+                                                                    j4` /\
+                                                                    `
+                                                                    j4 <=
+                                                                    n2 - 1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j4 < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j4` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j4 + 1`
+                                                                    old4) /\
+                                                                    `
+                                                                    j4 < 0` 
+                                                                    j3 
+                                                                    old3 
+                                                                    t4
+                                                                    result7
+                                                                    Post28)
+                                                                    | 
+                                                                    (right Test4) =>
+                                                                    let (j3,
+                                                                    old3, t4,
+                                                                    result7,
+                                                                    Post27) =
+                                                                    (exist_4 [j3: Z][old3: Z][t4: (array `
+                                                                    n2 + 1` Z)][result7: unit]`
+                                                                    (-1) <=
+                                                                    j3` /\
+                                                                    `j3 <=
+                                                                    n2 - 1` /\
+                                                                    ((k:Z)
+                                                                    (`
+                                                                    j3 < k` /\
+                                                                    `k <= n2` ->
+                                                                    (min_suffix w1
+                                                                    w2 i3 k
+                                                                    (access t4
+                                                                    k)))) /\
+                                                                    ((k:Z)
+                                                                    (`
+                                                                    0 <= k` /\
+                                                                    `k <= j3` ->
+                                                                    (min_suffix w1
+                                                                    w2
+                                                                    `i3 + 1`
+                                                                    k
+                                                                    (access t4
+                                                                    k)))) /\
+                                                                    (min_suffix w1
+                                                                    w2
+                                                                    `i3 + 1`
+                                                                    `j3 + 1`
+                                                                    old3) /\
+                                                                    `j3 < 0` 
+                                                                    j2 
+                                                                    old2 
+                                                                    t3 
+                                                                    tt
+                                                                    (distance_po_20 w1
+                                                                    w2 i0
+                                                                    Post1 i1
+                                                                    t0 Post15
+                                                                    i2 Post4
+                                                                    Variant3
+                                                                    i3 t1 w1
+                                                                    w2 Pre20
+                                                                    Pre19
+                                                                    Test8
+                                                                    Pre6 old1
+                                                                    Post5
+                                                                    Pre7 t2
+                                                                    Post6 j1
+                                                                    Post7
+                                                                    Variant5
+                                                                    i3 j2
+                                                                    old2 t3
+                                                                    w1 w2
+                                                                    Pre18
+                                                                    Pre17
+                                                                    Test4)) in
+                                                                    (exist_4 [j4: Z][old4: Z][t5: (array `
+                                                                    n2 + 1` Z)][result8: unit]`
+                                                                    (-1) <=
+                                                                    j4` /\
+                                                                    `
+                                                                    j4 <=
+                                                                    n2 - 1` /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    j4 < k` /\
+                                                                    `
+                                                                    k <= n2` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2 i3 k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    (k:Z)
+                                                                    (
+                                                                    `
+                                                                    0 <= k` /\
+                                                                    `
+                                                                    k <= j4` ->
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1` k
+                                                                    (
+                                                                    access t5
+                                                                    k)))) /\
+                                                                    (
+                                                                    min_suffix w1
+                                                                    w2
+                                                                    `
+                                                                    i3 + 1`
+                                                                    `
+                                                                    j4 + 1`
+                                                                    old4) /\
+                                                                    `
+                                                                    j4 < 0` 
+                                                                    j3 
+                                                                    old3 
+                                                                    t4
+                                                                    result7
+                                                                    Post27) end))
+                                                              `j1 + 1`) 
+                                                             j1) old1) 
+                                                           t2)
+                                                          (refl_equal ? `
+                                                          j1 + 1`))
+                                                         (distance_po_21 w1
+                                                         w2 i0 Post1 i1 t0
+                                                         Post15 i2 Post4
+                                                         Variant3 i3 t1 w1 w2
+                                                         Pre20 Pre19 Test8
+                                                         Pre6 old1 Post5 Pre7
+                                                         t2 Post6 j1 Post7)) in
+                                                     let (i4, result7,
+                                                       Post13) =
+                                                       let (result7,
+                                                         Post13) =
+                                                         (exist_1 [result7: Z]
+                                                         result7 = `i3 - 1` 
+                                                         `i3 - 1`
+                                                         (refl_equal ? `
+                                                         i3 - 1`)) in
+                                                       (exist_2 [i5: Z][result8: unit]
+                                                       i5 = `i3 - 1` 
+                                                       result7 tt Post13) in
+                                                     (exist_5 [i5: Z][j3: Z][old3: Z][t4: (array `
+                                                     n2 + 1` Z)][result8: unit]`
+                                                     (-1) <= i5` /\
+                                                     `i5 <= n1 - 1` /\
+                                                     ((j:Z)
+                                                      (`0 <= j` /\
+                                                       `j <= n2` ->
+                                                       (min_suffix w1 w2
+                                                        `i5 + 1` j
+                                                        (access t4 j)))) /\
+                                                     (Zwf `0` `i5 + 1` `
+                                                     i3 + 1`) i4 j2 old2 
+                                                     t3 result7
+                                                     (distance_po_22 w1 w2 i0
+                                                     Post1 i1 t0 Post15 i2
+                                                     Post4 Variant3 i3 t1 w1
+                                                     w2 Pre20 Pre19 Test8
+                                                     Pre6 old1 Post5 Pre7 t2
+                                                     Post6 j1 Post7 j2 old2
+                                                     t3 Post25 i4 Post13)) in
+                                                   ((((((((wf2 `i4 + 1`)
+                                                           (distance_po_23 w1
+                                                           w2 i0 Post1 i1 t0
+                                                           Post15 i2 Post4
+                                                           Variant3 i3 t1 w1
+                                                           w2 Pre20 Pre19
+                                                           Test8 i4 t2
+                                                           Post24)) i4) 
+                                                         j1) old1) t2)
+                                                      (refl_equal ? `i4 + 1`))
+                                                     (distance_po_24 w1 w2 i0
+                                                     Post1 i1 t0 Post15 i2
+                                                     Post4 Variant3 i3 t1 w1
+                                                     w2 Pre20 Pre19 Test8 i4
+                                                     t2 Post24)) in
+                                                 (exist_5 [i5: Z][j2: Z][old2: Z][t3: (array `
+                                                 n2 + 1` Z)][result4: unit]`
+                                                 (-1) <= i5` /\
+                                                 `i5 <= n1 - 1` /\
+                                                 ((j:Z)
+                                                  (`0 <= j` /\ `j <= n2` ->
+                                                   (min_suffix w1 w2 `
+                                                    i5 + 1` j (access t3 j)))) /\
+                                                 `i5 < 0` i4 j1 old1 
+                                                 t2 result3 Post23)
+                                             | (right Test3) =>
+                                                 let (i4, j1, old1, t2,
+                                                   result3, Post22) =
+                                                   (exist_5 [i4: Z][j1: Z][old1: Z][t2: (array `
+                                                   n2 + 1` Z)][result3: unit]`
+                                                   (-1) <= i4` /\
+                                                   `i4 <= n1 - 1` /\
+                                                   ((j:Z)
+                                                    (`0 <= j` /\ `j <= n2` ->
+                                                     (min_suffix w1 w2
+                                                      `i4 + 1` j
+                                                      (access t2 j)))) /\
+                                                   `i4 < 0` i3 j0 old0 
+                                                   t1 tt
+                                                   (distance_po_25 w1 w2 i0
+                                                   Post1 i1 t0 Post15 i2
+                                                   Post4 Variant3 i3 t1 w1 w2
+                                                   Pre20 Pre19 Test3)) in
+                                                 (exist_5 [i5: Z][j2: Z][old2: Z][t3: (array `
+                                                 n2 + 1` Z)][result4: unit]`
+                                                 (-1) <= i5` /\
+                                                 `i5 <= n1 - 1` /\
+                                                 ((j:Z)
+                                                  (`0 <= j` /\ `j <= n2` ->
+                                                   (min_suffix w1 w2 `
+                                                    i5 + 1` j (access t3 j)))) /\
+                                                 `i5 < 0` i4 j1 old1 
+                                                 t2 result3 Post22) end))
+                        `i2 + 1`) i2) j) old) t0) (refl_equal ? `i2 + 1`))
+                  (distance_po_26 w1 w2 i0 Post1 i1 t0 Post15 i2 Post4)) in
+              let Pre21 =
+                (distance_po_27 w1 w2 i0 Post1 i1 t0 Post15 i2 Post4 i3 t1
+                Post20) in
+              let (result3, Post34) =
+                (exist_1 [result3: Z](min_dist (word_of_array w1)
+                                      (word_of_array w2) result3) (access t1
+                                                                   `0`)
+                (distance_po_28 w1 w2 i0 Post1 i1 t0 Post15 i2 Post4 i3 t1
+                Post20 Pre21)) in
+              (exist_5 [i4: Z][j1: Z][old1: Z][t2: (array `n2 + 1` Z)][result4: Z](
+              min_dist (word_of_array w1) (word_of_array w2) result4) 
+              i3 j0 old0 t1 result3 Post34).
 

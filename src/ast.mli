@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.32 2002-06-21 14:24:29 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.33 2002-06-21 15:20:24 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -13,7 +13,7 @@ type variable = Ident.t
 
 type label = string
 
-type variant = term * term
+type variant = term * pure_type * term
 
 type 'a t = 
   { desc : 'a t_desc;

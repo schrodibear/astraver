@@ -27,6 +27,9 @@ Save.
 
 
 
+
+
+
 Definition p1 := (* validation *)
   [x: Z]
     [Pre1: (q `x + 1`)]
@@ -45,6 +48,9 @@ Lemma p2_po_1 :
 Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
+
+
+
 
 
 
@@ -77,6 +83,9 @@ Lemma p3_po_1 :
 Proof. 
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -123,6 +132,9 @@ Save.
 
 
 
+
+
+
 Definition p4 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -153,6 +165,9 @@ Save.
 
 
 
+
+
+
 Definition p5 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `7` `3 + 4` p5_po_1) in
   (exist_1 [result0: Z]result0 = `7` result Post1).
@@ -164,6 +179,9 @@ Lemma p6_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -202,6 +220,9 @@ Save.
 
 
 
+
+
+
 Definition p7 := (* validation *)
   let (result, Post2) =
     let (result, Post1) = (exist_1 [result: Z]result = `4` `4`
@@ -223,6 +244,9 @@ Lemma p8_po_1 :
 Proof.
 Intuition; Rewrite Post1; Assumption.
 Save.
+
+
+
 
 
 
@@ -281,6 +305,9 @@ Save.
 
 
 
+
+
+
 Definition p9 := (* validation *)
   [x: Z]
     let (x0, result, Post3) =
@@ -322,6 +349,9 @@ Save.
 
 
 
+
+
+
 Definition p9a := (* validation *)
   [x: Z]
     let (x0, result, Post2) =
@@ -358,6 +388,9 @@ Save.
 
 
 
+
+
+
 Definition p10 := (* validation *)
   let (result1, Post1) = (fsucc `0`) in
   (exist_1 [result2: Z]result2 = `1` result1 (p10_po_1 result1 Post1)).
@@ -371,6 +404,9 @@ Lemma p11_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -416,6 +452,9 @@ Save.
 
 
 
+
+
+
 Definition p11a := (* validation *)
   let (result, Post1) =
     let (result1, Post2) = (fsucc `1`) in
@@ -436,6 +475,9 @@ Lemma p12_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -477,6 +519,9 @@ Save.
 
 
 
+
+
+
 Definition p13 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -498,6 +543,9 @@ Lemma p13a_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -546,6 +594,9 @@ Save.
 
 
 
+
+
+
 Definition p14 := (* validation *)
   [x: Z]
     [Pre1: x = `0`]
@@ -558,6 +609,9 @@ Lemma p15_po_1 :
 Proof. (* p15_po_1 *)
 Omega.
 Save.
+
+
+
 
 
 
@@ -594,6 +648,9 @@ Save.
 
 
 
+
+
+
 Definition p16 := (* validation *)
   [t: (array `10` Z)]
     let (result, Post1) =
@@ -618,6 +675,9 @@ Save.
   coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
  End:
 *)
+
+
+
 
 
 

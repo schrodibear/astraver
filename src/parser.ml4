@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.37 2002-05-07 15:53:24 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.38 2002-06-21 15:20:24 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -430,8 +430,9 @@ i*)
   [ [ LIDENT "invariant"; c = assertion -> c ] ]
   ;
   variant:
-  [ [ c = term; "for"; r = term -> (c, r)
-    | c = term -> (c, zwf_zero) ] ]
+  [ [ c = term; "for"; r = term -> (c, PTint, r)
+    | c = term; ":"; t = primitive_type; "for"; r = term -> (c, t, r)
+    | c = term -> (c, PTint, zwf_zero) ] ]
   ;
 
   (* declarations *)

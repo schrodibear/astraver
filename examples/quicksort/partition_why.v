@@ -88,9 +88,9 @@ Lemma partition_po_3 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -115,9 +115,9 @@ Lemma partition_po_4 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -126,6 +126,7 @@ Lemma partition_po_4 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   `0 <= i1` /\ `i1 < N`.
@@ -146,9 +147,9 @@ Lemma partition_po_5 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -157,6 +158,8 @@ Lemma partition_po_5 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   (Test3: `(access t0 i1) <= result`)
@@ -184,9 +187,9 @@ Lemma partition_po_6 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -195,6 +198,8 @@ Lemma partition_po_6 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   (Test2: `(access t0 i1) > result`)
@@ -222,9 +227,9 @@ Lemma partition_po_7 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -233,6 +238,8 @@ Lemma partition_po_7 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   (Test5: `(access t0 i1) <= result` /\ `i1 < j0` \/
@@ -266,9 +273,9 @@ Lemma partition_po_8 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -277,13 +284,16 @@ Lemma partition_po_8 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   (Test5: `(access t0 i1) <= result` /\ `i1 < j0` \/
           `(access t0 i1) > result` /\ true = false)
   (i2: Z)
-  (Invi: `i0 <= i2` /\ `i2 <= r` /\ (array_le t0 `l + 1` `i2 - 1` result) /\
-         (Zwf `0` `r - i2` `r - i1`))
+  (Post29: `i0 <= i2` /\ `i2 <= r` /\
+           (array_le t0 `l + 1` `i2 - 1` result) /\
+           (Zwf `0` `r - i2` `r - i1`))
   (Zwf `0` `r - i2` Variant3).
 Proof. 
 Intros. Rewrite Pre5; Tauto.
@@ -302,9 +312,9 @@ Lemma partition_po_9 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -313,13 +323,16 @@ Lemma partition_po_9 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   (Test5: `(access t0 i1) <= result` /\ `i1 < j0` \/
           `(access t0 i1) > result` /\ true = false)
   (i2: Z)
-  (Invi: `i0 <= i2` /\ `i2 <= r` /\ (array_le t0 `l + 1` `i2 - 1` result) /\
-         (Zwf `0` `r - i2` `r - i1`))
+  (Post29: `i0 <= i2` /\ `i2 <= r` /\
+           (array_le t0 `l + 1` `i2 - 1` result) /\
+           (Zwf `0` `r - i2` `r - i1`))
   `i0 <= i2` /\ `i2 <= r` /\ (array_le t0 `l + 1` `i2 - 1` result).
 Proof.
 Intuition.
@@ -338,9 +351,9 @@ Lemma partition_po_10 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -349,6 +362,8 @@ Lemma partition_po_10 :
   (Test12: `i0 < j0`)
   (Variant3: Z)
   (i1: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre5: Variant3 = `r - i1`)
   (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result))
   (Test4: `(access t0 i1) <= result` /\ `i1 >= j0` \/
@@ -373,9 +388,9 @@ Lemma partition_po_11 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -400,9 +415,9 @@ Lemma partition_po_12 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -410,9 +425,10 @@ Lemma partition_po_12 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (well_founded ? (Zwf ZERO)).
 Proof.
 Intuition.
@@ -431,9 +447,9 @@ Lemma partition_po_13 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -441,11 +457,13 @@ Lemma partition_po_13 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   `0 <= j1` /\ `j1 < N`.
@@ -466,9 +484,9 @@ Lemma partition_po_14 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -476,11 +494,14 @@ Lemma partition_po_14 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
+  (i1: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   (Test7: `(access t0 j1) >= result`)
@@ -509,9 +530,9 @@ Lemma partition_po_15 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -519,11 +540,14 @@ Lemma partition_po_15 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
+  (i1: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   (Test6: `(access t0 j1) < result`)
@@ -552,9 +576,9 @@ Lemma partition_po_16 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -562,11 +586,14 @@ Lemma partition_po_16 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
+  (i1: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   (Test9: `(access t0 j1) >= result` /\ `i1 < j1` \/
@@ -606,9 +633,9 @@ Lemma partition_po_17 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -616,18 +643,21 @@ Lemma partition_po_17 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
+  (i1: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   (Test9: `(access t0 j1) >= result` /\ `i1 < j1` \/
           `(access t0 j1) < result` /\ true = false)
   (j2: Z)
-  (Invj: `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result) /\
-         (Zwf `0` j2 j1))
+  (Post35: `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result) /\
+           (Zwf `0` j2 j1))
   (Zwf `0` j2 Variant5).
 Proof.
 Intros.
@@ -647,9 +677,9 @@ Lemma partition_po_18 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -657,18 +687,21 @@ Lemma partition_po_18 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
+  (i1: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   (Test9: `(access t0 j1) >= result` /\ `i1 < j1` \/
           `(access t0 j1) < result` /\ true = false)
   (j2: Z)
-  (Invj: `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result) /\
-         (Zwf `0` j2 j1))
+  (Post35: `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result) /\
+           (Zwf `0` j2 j1))
   `l <= j2` /\ `j2 <= j0` /\ (array_ge t0 `j2 + 1` r result).
 Proof.
 Tauto. 
@@ -687,9 +720,9 @@ Lemma partition_po_19 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -697,11 +730,14 @@ Lemma partition_po_19 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (Variant5: Z)
+  (i1: Z)
   (j1: Z)
+  (t0: (array N Z))
   (Pre8: Variant5 = j1)
   (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result))
   (Test8: `(access t0 j1) >= result` /\ `i1 >= j1` \/
@@ -726,9 +762,9 @@ Lemma partition_po_20 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -736,9 +772,10 @@ Lemma partition_po_20 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   `l <= j0` /\ `j0 <= j0` /\ (array_ge t0 `j0 + 1` r result).
 Proof.
 Intuition.
@@ -757,9 +794,9 @@ Lemma partition_po_21 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -767,13 +804,14 @@ Lemma partition_po_21 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (j1: Z)
-  (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
-         (`(access t0 j1) >= result` /\ `i1 >= j1` \/
-         `(access t0 j1) < result` /\ false = false))
+  (Post30: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
+           (`(access t0 j1) >= result` /\ `i1 >= j1` \/
+           `(access t0 j1) < result` /\ false = false))
   (Test11: `i1 < j1`)
   `0 <= i1` /\ `i1 < N` /\ (`0 <= j1` /\ `j1 < N`).
 Proof.
@@ -793,9 +831,9 @@ Lemma partition_po_22 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -803,16 +841,17 @@ Lemma partition_po_22 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (j1: Z)
-  (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
-         (`(access t0 j1) >= result` /\ `i1 >= j1` \/
-         `(access t0 j1) < result` /\ false = false))
+  (Post30: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
+           (`(access t0 j1) >= result` /\ `i1 >= j1` \/
+           `(access t0 j1) < result` /\ false = false))
   (Test11: `i1 < j1`)
   (t1: (array N Z))
-  (Post25: (exchange t1 t0 i1 j1))
+  (Post40: (exchange t1 t0 i1 j1))
   (i2: Z)
   (Post10: i2 = `i1 + 1`)
   (j2: Z)
@@ -867,9 +906,9 @@ Lemma partition_po_23 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -877,13 +916,14 @@ Lemma partition_po_23 :
         (access t0 l) = (access t l))
   (Test12: `i0 < j0`)
   (i1: Z)
-  (Invi: `i0 <= i1` /\ `i1 <= r` /\ (array_le t0 `l + 1` `i1 - 1` result) /\
-         (`(access t0 i1) <= result` /\ `i1 >= j0` \/
-         `(access t0 i1) > result` /\ false = false))
+  (Post24: `i0 <= i1` /\ `i1 <= r` /\
+           (array_le t0 `l + 1` `i1 - 1` result) /\
+           (`(access t0 i1) <= result` /\ `i1 >= j0` \/
+           `(access t0 i1) > result` /\ false = false))
   (j1: Z)
-  (Invj: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
-         (`(access t0 j1) >= result` /\ `i1 >= j1` \/
-         `(access t0 j1) < result` /\ false = false))
+  (Post30: `l <= j1` /\ `j1 <= j0` /\ (array_ge t0 `j1 + 1` r result) /\
+           (`(access t0 j1) >= result` /\ `i1 >= j1` \/
+           `(access t0 j1) < result` /\ false = false))
   (Test10: `i1 >= j1`)
   `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
   (array_le t0 `l + 1` `i1 - 1` result) /\ (array_ge t0 `j1 + 1` r result) /\
@@ -908,9 +948,9 @@ Lemma partition_po_24 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -920,10 +960,11 @@ Lemma partition_po_24 :
   (i1: Z)
   (j1: Z)
   (t1: (array N Z))
-  (Inv: `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
-        (array_le t1 `l + 1` `i1 - 1` result) /\
-        (array_ge t1 `j1 + 1` r result) /\ (sub_permut l r t1 t) /\
-        (access t1 l) = (access t l) /\ (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`))
+  (Post23: `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
+           (array_le t1 `l + 1` `i1 - 1` result) /\
+           (array_ge t1 `j1 + 1` r result) /\ (sub_permut l r t1 t) /\
+           (access t1 l) = (access t l) /\
+           (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`))
   (Zwf `(-N) - 2` `j1 - i1` Variant1).
 Proof. 
 Intros; Rewrite Pre10; Tauto.
@@ -942,9 +983,9 @@ Lemma partition_po_25 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -954,10 +995,11 @@ Lemma partition_po_25 :
   (i1: Z)
   (j1: Z)
   (t1: (array N Z))
-  (Inv: `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
-        (array_le t1 `l + 1` `i1 - 1` result) /\
-        (array_ge t1 `j1 + 1` r result) /\ (sub_permut l r t1 t) /\
-        (access t1 l) = (access t l) /\ (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`))
+  (Post23: `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
+           (array_le t1 `l + 1` `i1 - 1` result) /\
+           (array_ge t1 `j1 + 1` r result) /\ (sub_permut l r t1 t) /\
+           (access t1 l) = (access t l) /\
+           (Zwf `(-N) - 2` `j1 - i1` `j0 - i0`))
   `l + 1 <= i1` /\ `i1 <= r` /\ `j1 <= r` /\
   (array_le t1 `l + 1` `i1 - 1` result) /\ (array_ge t1 `j1 + 1` r result) /\
   (sub_permut l r t1 t) /\ (access t1 l) = (access t l).
@@ -978,9 +1020,9 @@ Lemma partition_po_26 :
   (result1: Z)
   (Post3: result1 = r)
   (Variant1: Z)
-  (t0: (array N Z))
-  (j0: Z)
   (i0: Z)
+  (j0: Z)
+  (t0: (array N Z))
   (Pre10: Variant1 = `j0 - i0`)
   (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
         (array_le t0 `l + 1` `i0 - 1` result) /\
@@ -1031,10 +1073,10 @@ Lemma partition_po_28 :
   (i0: Z)
   (j0: Z)
   (t0: (array N Z))
-  (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
-        (array_le t0 `l + 1` `i0 - 1` result) /\
-        (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
-        (access t0 l) = (access t l) /\ `i0 >= j0`)
+  (Post19: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
+           (array_le t0 `l + 1` `i0 - 1` result) /\
+           (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
+           (access t0 l) = (access t l) /\ `i0 >= j0`)
   `0 <= i0` /\ `i0 < N`.
 Proof.
 Intuition.
@@ -1055,10 +1097,10 @@ Lemma partition_po_29 :
   (i0: Z)
   (j0: Z)
   (t0: (array N Z))
-  (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
-        (array_le t0 `l + 1` `i0 - 1` result) /\
-        (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
-        (access t0 l) = (access t l) /\ `i0 >= j0`)
+  (Post19: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
+           (array_le t0 `l + 1` `i0 - 1` result) /\
+           (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
+           (access t0 l) = (access t l) /\ `i0 >= j0`)
   (Test14: `(access t0 i0) < result`)
   `0 <= l` /\ `l < N` /\ (`0 <= i0` /\ `i0 < N`).
 Proof.
@@ -1080,13 +1122,13 @@ Lemma partition_po_30 :
   (i0: Z)
   (j0: Z)
   (t0: (array N Z))
-  (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
-        (array_le t0 `l + 1` `i0 - 1` result) /\
-        (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
-        (access t0 l) = (access t l) /\ `i0 >= j0`)
+  (Post19: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
+           (array_le t0 `l + 1` `i0 - 1` result) /\
+           (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
+           (access t0 l) = (access t l) /\ `i0 >= j0`)
   (Test14: `(access t0 i0) < result`)
   (t1: (array N Z))
-  (Post34: (exchange t1 t0 l i0))
+  (Post49: (exchange t1 t0 l i0))
   `l <= i0` /\ `i0 <= r` /\ (partition_p t1 l r i0) /\ (sub_permut l r t1 t).
 Proof.
 Intuition; Clear result3 Bool7.
@@ -1144,10 +1186,10 @@ Lemma partition_po_31 :
   (i0: Z)
   (j0: Z)
   (t0: (array N Z))
-  (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
-        (array_le t0 `l + 1` `i0 - 1` result) /\
-        (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
-        (access t0 l) = (access t l) /\ `i0 >= j0`)
+  (Post19: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
+           (array_le t0 `l + 1` `i0 - 1` result) /\
+           (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
+           (access t0 l) = (access t l) /\ `i0 >= j0`)
   (Test13: `(access t0 i0) >= result`)
   `0 <= l` /\ `l < N` /\ (`0 <= i0 - 1` /\ `i0 - 1 < N`).
 Proof. 
@@ -1169,13 +1211,13 @@ Lemma partition_po_32 :
   (i0: Z)
   (j0: Z)
   (t0: (array N Z))
-  (Inv: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
-        (array_le t0 `l + 1` `i0 - 1` result) /\
-        (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
-        (access t0 l) = (access t l) /\ `i0 >= j0`)
+  (Post19: `l + 1 <= i0` /\ `i0 <= r` /\ `j0 <= r` /\
+           (array_le t0 `l + 1` `i0 - 1` result) /\
+           (array_ge t0 `j0 + 1` r result) /\ (sub_permut l r t0 t) /\
+           (access t0 l) = (access t l) /\ `i0 >= j0`)
   (Test13: `(access t0 i0) >= result`)
   (t1: (array N Z))
-  (Post30: (exchange t1 t0 l `i0 - 1`))
+  (Post45: (exchange t1 t0 l `i0 - 1`))
   `l <= i0 - 1` /\ `i0 - 1 <= r` /\ (partition_p t1 l r `i0 - 1`) /\
   (sub_permut l r t1 t).
 Proof.

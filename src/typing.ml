@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.50 2002-06-20 12:55:22 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.51 2002-06-21 15:20:24 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -128,14 +128,8 @@ let type_v_sup loc t1 t2 =
   if t1 <> t2 then Error.if_branches loc;
   t1
 
-let typed_var loc env var = var
-(*i todo: type variants
-let typed_var loc env (phi,r) = 
-  match typing_term loc env phi with
-    | PureType t -> (phi, r, t)
-    | _ -> Error.raise_with_loc (Some loc) 
-   	     (Error.AnyMessage "A variant must have a pure type")
-***i*)
+let check_type_var loc env var = ()
+(*i todo: type variants i*)
 
 (* TODO: subtype is currently structural equality *)
 let rec subtype = function
@@ -213,7 +207,7 @@ let k_add_effects k e = { k with c_effect = Effect.union k.c_effect e }
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
-let state_var lab env (phi,r) = 
+let state_var lab env (phi,_,_) = 
   let ids = term_refs env phi in
   Effect.add_reads ids Effect.bottom
 	
@@ -590,7 +584,7 @@ and typef_desc lab env loc = function
       check_type_v (Some loc) lab env' v;
       let efvar = state_var lab env' var in
       let phi0 = phi_name () in
-      let tvar = typed_var loc env' var in
+      check_type_var loc env' var;
       (* effect for a let/rec construct is computed as a fixpoint *)
       let rec state_rec c =
 	(* TODO: change label to "init" in [c] *)
