@@ -138,6 +138,11 @@ let add_typedef l x ty =
   end else
     Hashtbl.add typedef_t x ty
 
+(* used names (in order to rename heap variables when necessary) *)
+let used_names = Hashtbl.create 97
+let mark_as_used x = Hashtbl.add used_names x ()
+let is_used_name = Hashtbl.mem used_names
+
 (* variables and functions *)
 let (sym_t : (string, (texpr ctype * var_info)) Hashtbl.t) = Hashtbl.create 97
 
@@ -146,6 +151,7 @@ let is_sym = Hashtbl.mem sym_t
 let find_sym = Hashtbl.find sym_t
 
 let add_sym l x ty info = 
+  mark_as_used x;
   if is_sym x then begin
     let (t,i) = find_sym x in
     if not (eq_type t ty) then 
@@ -191,6 +197,7 @@ module Env = struct
 
   (* symbols *)
   let add x t info env = 
+    mark_as_used x;
     { env with vars = M.add x (t,info) env.vars }
 
   let find x env = M.find x env.vars
@@ -273,13 +280,16 @@ let type_of_field loc x ty =
 		      "' in something not a structure or union")
 
 let uniquize_names () =
-  let used = Hashtbl.create 97 in
-  (* all globals are considered used *)
-  Hashtbl.iter (fun x _ -> Hashtbl.add used x ()) sym_t;
-  let name n {field_name=f} = 
-    if Hashtbl.mem used f then n ^ "_" ^ f else begin 
-      Hashtbl.add used f (); f
-    end
+  let use_name n = if is_used_name n then raise Exit; mark_as_used n; n in
+  let rec next_name n i = 
+    let n_i = n ^ "_" ^ string_of_int i in
+    try use_name n_i with Exit -> next_name n (succ i)
+  in
+  let name n {field_name = f} = 
+    try use_name f with Exit -> 
+    let n_f = n ^ "_" ^ f in 
+    try use_name n_f with Exit -> 
+    next_name n_f 0
   in
   Hashtbl.iter (fun (n,_) f -> f.field_heap_var_name <- name n f) fields_t
 

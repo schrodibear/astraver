@@ -49,6 +49,7 @@ type-all:
 # rules ##################################################
 
 why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+	rm -f coq/caduceus_spec_why.v
 	$(EXECCADUCEUS) $<
 
 %: %.c

@@ -70,6 +70,9 @@ axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
 *)
+axiom shift_shift :
+  forall p:pointer. forall i:int. forall j:int.
+  shift(shift(p,i),j) = shift(p,i+j)
 
 axiom base_addr_shift :
   forall p:pointer. forall i:int.

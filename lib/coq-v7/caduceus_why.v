@@ -87,6 +87,10 @@ Admitted.
 
 Admitted.
 
+(*Why axiom*) Lemma shift_shift :
+  ((p:pointer) ((i:Z) ((j:Z) (shift (shift p i) j) = (shift p `i + j`)))).
+Admitted.
+
 (*Why axiom*) Lemma base_addr_shift :
   ((p:pointer) ((i:Z) (base_addr (shift p i)) = (base_addr p))).
 Admitted.
