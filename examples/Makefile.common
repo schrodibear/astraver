@@ -1,5 +1,5 @@
 
-WHY=../../bin/why.static
+WHY=../../bin/why.opt
 WHYOPTIONS=--valid
 
 %_why.v: %.mlw $(WHY)

@@ -1057,7 +1057,7 @@ if test "$PVSC" = no ; then
 else
     PVS=yes
     PVSFILE=`which pvs`
-    PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`
+    PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`/lib
 fi
 
 # substitutions to perform

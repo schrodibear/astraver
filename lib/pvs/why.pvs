@@ -7,6 +7,13 @@ BEGIN
   unit: unit = 0
 
   c,x,y : VAR int
+  nzy : VAR nzint
+
+  %% integer division and modulo
+  div(x, nzy) : int = floor(x / nzy)
+  mod(x, nzy) : int = x - nzy * div(x, nzy)
+
+  %% well founded relations
   zwf(c) : [int, int -> bool] = (lambda x,y: c <= y and x < y)
   zwf_zero : [int, int -> bool] = zwf(0)
 
@@ -45,7 +52,7 @@ BEGIN
   % t[i..j] is sorted
   sorted_array(t,i,j) : bool =
     i <= j and
-    forall k: i <= k < j implies access(t,k) <= access(t,k+1)
+    forall k: i <= k and k < j implies access(t,k) <= access(t,k+1)
 
 END why_int_array_pred
 
@@ -61,16 +68,16 @@ BEGIN
 
   % t[i..j] = u[i..j]
   array_id(t,u,i,j) : bool = 
-    forall k: i <= k <= j implies access(t,k) = access(u,k)
+    forall k: i <= k and k <= j implies access(t,k) = access(u,k)
 
   % swap of elements at i and j
   exchange(t,u,i,j) : bool = 
     array_length(t) = array_length(u) and
-    0 <= i < array_length(t) and 0 <= j < array_length(t) and
+    0 <= i and i < array_length(t) and 0 <= j and j < array_length(t) and
     access(t,i) = access(u,j) and
     access(t,j) = access(u,i) and
-    forall k: 0 <= k < array_length(t) implies k /= i implies k /= j implies
-      access(t,k) = access(u,k)
+    forall k: 0 <= k and k < array_length(t) implies 
+      k /= i implies k /= j implies access(t,k) = access(u,k)
 
   % permut is the smallest equivalence relation containing exchange
   permut(t,u) : bool
@@ -89,8 +96,9 @@ BEGIN
   sub_permut(l,r,t,u) : bool
   
   sub_permut_exchange : 
-    AXIOM forall l,r,t,u,i,j: l <= i <= r implies l <= j <= r implies 
-	                      exchange(t,u,i,j) implies sub_permut(l,r,t,u)
+    AXIOM forall l,r,t,u,i,j: 
+      l <= i and i <= r implies l <= j and j <= r implies 
+      exchange(t,u,i,j) implies sub_permut(l,r,t,u)
   sub_permut_refl     : 
     AXIOM forall l,r,t: sub_permut(l,r,t,t)
   sub_permut_sym      : 

@@ -1,4 +1,9 @@
 
+version 1.02, February 7th, 2003
+================================
+  o PVS: fixed integer division and modulo, fixed output
+  o haRVey: no more restriction to first-order obligations
+  o Coq: the validation is now given a type
   o distinction between preconditions and obligations
 
 version 1.0, January 31st, 2003

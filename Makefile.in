@@ -97,7 +97,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: $(VO)
 
-VERSION=1.0
+VERSION=1.02
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -127,7 +127,7 @@ bench-tc:: $(BINARY) $(WHYVO)
 test:: $(BINARY) $(WHYVO)
 	$(BINARY) -d -V -coq bench/test.ml
 
-examples:: $(STATICBINARY) $(WHYVO)
+examples:: $(BINARY) $(WHYVO)
 	make -C examples
 
 # debugging

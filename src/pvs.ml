@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.35 2003-01-24 13:53:48 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.36 2003-02-07 16:31:14 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -47,9 +47,12 @@ let print_term fmt t =
     | t ->
 	print2 fmt t
   and print2 fmt = function
-    | Tapp (id, [a;b]) when id == t_mul_int || id == t_div_int ->
-	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
-	  print2 a (if id == t_mul_int then "*" else "/") print3 b
+    | Tapp (id, [a;b]) when id == t_mul_int ->
+	fprintf fmt "@[<hov 2>%a *@ %a@]" print2 a print3 b
+    | Tapp (id, [a;b]) when id == t_div_int ->
+	fprintf fmt "(@[div(%a,%a)@])" print0 a print0 b
+    | Tapp (id, [a;b]) when id == t_mod_int ->
+	fprintf fmt "(@[mod(%a,%a)@])" print0 a print0 b
     | t ->
 	print3 fmt t
   and print3 fmt = function
@@ -64,15 +67,17 @@ let print_term fmt t =
 	if d = "1" then fprintf fmt "%s" n else fprintf fmt "%s/%s" n d
     | Tderef _ ->
 	assert false
+    | Tvar id when id == implicit ->
+	assert false
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "zwf_zero"
     | Tvar id | Tapp (id, []) -> 
-	fprintf fmt "%s" (Ident.string id)
+	Ident.print fmt id
     | Tapp (id, [t]) when id == t_neg_int ->
 	fprintf fmt "-%a" print3 t
     | Tapp (id, [a; b; c]) when id == if_then_else -> 
 	fprintf fmt "(@[if %a@ then %a@ else %a@])" print0 a print0 b print0 c
-    | Tapp (id, l) as t when is_relation id || is_int_arith id ->
+    | Tapp (id, l) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) -> 
 	fprintf fmt "%s(@[%a@])" 
@@ -95,24 +100,31 @@ let infix_relation id =
   else if id == t_ge_int then ">="
   else if id == t_eq_int then "="
   else if id == t_neq_int then "/="
+  else if id == t_lt_float then "<" 
+  else if id == t_le_float then "<="
+  else if id == t_gt_float then ">"
+  else if id == t_ge_float then ">="
+  else if id == t_eq_float then "="
+  else if id == t_neq_float then "/="
   else assert false
 
 let print_predicate fmt p =
-  let rec print0 = function
+  let rec print0 fmt = function
     | Pif (a, b, c) -> 
 	fprintf fmt "@[IF "; print_term fmt a; fprintf fmt "@ THEN ";
-	print0 b; fprintf fmt "@ ELSE "; print0 c; fprintf fmt " ENDIF@]"
+	print0 fmt b; fprintf fmt "@ ELSE "; print0 fmt c; 
+	fprintf fmt " ENDIF@]"
     | Pimplies (a, b) -> 
-	fprintf fmt "(@["; print1 a; fprintf fmt " IMPLIES@ "; print0 b;
-	fprintf fmt "@])"
-    | p -> print1 p
-  and print1 = function
-    | Por (a, b) -> print1 a; fprintf fmt " OR@ "; print2 b
-    | p -> print2 p
-  and print2 = function
-    | Pand (a, b) -> print2 a; fprintf fmt " AND@ "; print3 b
-    | p -> print3 p
-  and print3 = function
+	fprintf fmt "(@["; print1 fmt a; fprintf fmt " IMPLIES@ "; 
+	print0 fmt b; fprintf fmt "@])"
+    | p -> print1 fmt p
+  and print1 fmt = function
+    | Por (a, b) -> print1 fmt a; fprintf fmt " OR@ "; print2 fmt b
+    | p -> print2 fmt p
+  and print2 fmt = function
+    | Pand (a, b) -> print2 fmt a; fprintf fmt " AND@ "; print3 fmt b
+    | p -> print3 fmt p
+  and print3 fmt = function
     | Pfalse ->
 	fprintf fmt "False"
     | Ptrue ->
@@ -125,7 +137,7 @@ let print_predicate fmt p =
 	fprintf fmt "well_founded?(%a)" print_term t
     | Papp (id, [a;b]) when id == t_zwf_zero ->
 	fprintf fmt "zwf_zero(%a, %a)" print_term a print_term b
-    | Papp (id, [a;b]) when is_int_comparison id ->
+    | Papp (id, [a;b]) when is_int_comparison id || is_float_comparison id ->
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
     | Papp (id, [a;b]) when is_eq id ->
 	fprintf fmt "%a =@ %a" print_term a print_term b
@@ -136,23 +148,23 @@ let print_predicate fmt p =
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> 
-	fprintf fmt "NOT "; print3 p
+	fprintf fmt "NOT "; print3 fmt p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[FORALL (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
-	print0 p'; fprintf fmt "@])"
+	print0 fmt p'; fprintf fmt "@])"
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[EXIST (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
-	print0 p'; fprintf fmt "@])"
-    | p -> 
-	fprintf fmt "("; print0 p; fprintf fmt ")"
+	print0 fmt p'; fprintf fmt "@])"
+    | (Por _ | Pand _ | Pif _ | Pimplies _) as p -> 
+	fprintf fmt "(%a)" print0 p
   in
-  print0 p
+  print0 fmt p
 
 let rec print_cc_type fmt = function
   | TTpure pt -> print_pure_type fmt pt
@@ -179,7 +191,8 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq hyps
 
-let print_lemma fmt (_,id,s) =
+let print_lemma fmt (loc,id,s) =
+  fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation loc;
   fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
   print_sequent fmt s;
   fprintf fmt "@]@\n"
