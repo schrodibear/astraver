@@ -106,7 +106,7 @@ Lemma fib1_po_7 :
   `aux_3 + aux_4 = (F n0)`.
 Proof.
 Intros.
-Rewrite Post4; Rewrite Post7.
+Subst aux_4 aux_3.
 Symmetry; Auto with *.
 Save.
 
@@ -207,7 +207,7 @@ Lemma fib2_aux_po_3 :
   `fx0 = (F x0 + 1 - 1)`.
 Proof.
 Intuition.
-Rewrite H0; Rewrite H7; Symmetry.
+Subst fx0 fx_2; Symmetry.
 Generalize H5. Replace x0 with `(x0+1)-1`. Generalize `x0+1`.
 Intros; Ring `z-1+1`; Replace `z-1-1` with `z-2`. 
 Auto with *.
@@ -362,7 +362,7 @@ Lemma fib3_po_2 :
 Proof.
 Intuition.
 Subst k1; Subst x1; Subst t.
-Rewrite H; Rewrite H3.
+Subst x0 y0.
 Symmetry.
 Generalize H1. Replace k0 with `(k0+1)-1`. Generalize `k0+1`.
 Intros; Ring `z-1+1`; Replace `z-1-1` with `z-2`. 
@@ -758,7 +758,7 @@ Intuition.
 Subst t3.
 Assert hi : `i=k0` \/ `i<k0`. Omega.
 Intuition.
-Rewrite H1. Rewrite store_def_1.
+Subst i. Rewrite store_def_1.
 Rewrite (H2 `k0-1`). 
 Rewrite (H2 `k0-2`). 
 Symmetry; Auto with *.
@@ -818,9 +818,9 @@ Lemma fib4_po_10 :
 Proof.
 Intuition.
 Assert hi: `i=0` \/ `i=1`. Omega. Intuition.
-Rewrite H1; Rewrite Post2; Rewrite store_def_2; Try Omega.
-Rewrite Post1; Rewrite store_def_1; Try Omega. Auto.
-Rewrite H1; Rewrite Post2; Rewrite store_def_1; Try Omega. Auto.
+Subst i t1; Rewrite store_def_2; Try Omega.
+Subst t0; Rewrite store_def_1; Try Omega. Auto.
+Subst i t1; Rewrite store_def_1; Try Omega. Auto.
 Save.
 
 Lemma fib4_po_11 : 

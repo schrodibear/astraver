@@ -69,17 +69,17 @@ Lemma mult_po_3 :
      (b = `2 * b0` -> (`a >= 0` /\ `p1 + a * b = x * y`) /\ (Zwf `0` a a0))))).
 Proof.
 Intuition.
-Rewrite H3; Apply Z_div_ge0; Omega.
+Subst a; Apply Z_div_ge0; Omega.
 Rewrite (Z_div_mod_eq a0 `2`) in H2.
 Rewrite <- H2.
 Subst p1.
-Rewrite H3. Rewrite H4.
+Subst a b.
 Rewrite Test3.
 Ring.
 Omega.
 Unfold Zwf. 
 Repeat Split; Try Omega.
-Rewrite H3; Apply Z_div_lt; Try Omega.
+Subst a; Apply Z_div_lt; Try Omega.
 Save.
 
 Lemma mult_po_4 : 
@@ -106,10 +106,10 @@ Lemma mult_po_4 :
      (b = `2 * b0` -> (`a >= 0` /\ `p0 + a * b = x * y`) /\ (Zwf `0` a a0))))).
 Proof.
 Intuition.
-Rewrite H3; Apply Z_div_ge0; Try Omega.
+Subst a; Apply Z_div_ge0; Try Omega.
 Rewrite (Z_div_mod_eq a0 `2`) in H2.
 Rewrite <- H2.
-Rewrite H3. Rewrite H4.
+Subst a b.
 Replace `a0%2` with `0`.
 Ring.
 Cut `2 > 0`; [ Intro h | Omega ].
@@ -118,7 +118,7 @@ Cut ~`a0%2 = 1`; Intros; Try Omega.
 Omega.
 Unfold Zwf.
 Repeat Split; Try Omega.
-Rewrite H3; Apply Z_div_lt; Try Omega.
+Subst a; Apply Z_div_lt; Try Omega.
 Save.
 
 Lemma mult_po_5 : 
@@ -241,7 +241,7 @@ Lemma mult_po_9 :
   `p0 = x * y`.
 Proof.
 Intuition.
-Rewrite H2 in H4.
+Subst a0.
 Rewrite <- H4.
 Ring.
 Save.

@@ -129,11 +129,11 @@ Lemma power1_po_2 :
 Proof.
 Simpl; Intros.
 Repeat Split; Try Omega.
-Rewrite H0; Clear H0.
+Subst n1.
 Decompose [and] Pre2; Clear Pre2.
 Rewrite (Zodd_div2 n0 H1 Test3) in H0. Rewrite H0.
-Rewrite H; Clear H.
-Rewrite Post3; Clear Post3.
+Subst m.
+Subst y2.
 Rewrite Zpower_exp.
 Replace (Zpower m1 `1`) with m1.
 Rewrite Zpower_2n.
@@ -144,8 +144,8 @@ Generalize (Zdiv2_ge_0 n0); Omega.
 Unfold Zpower; Unfold Zpower_pos; Simpl; Ring.
 Generalize (Zdiv2_ge_0 n0); Omega.
 Omega.
-Rewrite H0; Apply Zdiv2_ge_0; Omega.
-Rewrite H0; Apply Zdiv2_lt; Omega.
+Subst n1; Apply Zdiv2_ge_0; Omega.
+Subst n1; Apply Zdiv2_lt; Omega.
 Save.
 
 Lemma power1_po_3 : 
@@ -173,15 +173,15 @@ Simpl; Intros.
 Repeat Split; Try Omega.
 Decompose [and] Pre2; Clear Pre2.
 Rewrite (Zeven_div2 n0 Test2) in H1. Rewrite H1.
-Rewrite H; Clear H.
-Rewrite H0; Clear H0.
+Subst m.
+Subst n1.
 Rewrite Zpower_2n.
 Unfold square.
 Unfold div2.
 Ring.
 Generalize (Zdiv2_ge_0 n0); Omega.
-Rewrite H0; Apply Zdiv2_ge_0; Omega.
-Rewrite H0; Apply Zdiv2_lt; Omega.
+Subst n1; Apply Zdiv2_ge_0; Omega.
+Subst n1; Apply Zdiv2_lt; Omega.
 Save.
 
 Lemma power1_po_4 : 
@@ -248,8 +248,8 @@ Lemma power1_po_6 :
 Proof.
 Intros.
 Split; [ Idtac | Omega].
-Rewrite Post2; Ring.
-Rewrite Post1; Trivial.
+Subst y0; Ring.
+Subst m0; Trivial.
 Save.
 
 Lemma power1_po_7 : 
