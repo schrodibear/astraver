@@ -1,4 +1,6 @@
 
+  o arbitrary side-effects now allowed in tests (if / while)
+
 version 1.06, March 18th, 2003
 ==============================
   o label "init" suppressed; new syntax label:expression to insert labels

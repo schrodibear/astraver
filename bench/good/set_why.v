@@ -9,7 +9,7 @@ Require Why.
   (sig_2 Z bool [x0: Z][result: bool](`x0 = v` /\
    ((if result then `x0 = 0` else `x0 <> 0`)))).
 
-(* Why obligation from file "set.mlw", characters 208-209 *)
+(* Why obligation from file "good/set.mlw", characters 208-209 *)
 Lemma p_po_1 : 
   (x0: Z)
   (Test1: `x0 = 0` /\ `x0 <> 0`)
@@ -23,7 +23,7 @@ Save.
   (sig_2 Z bool [x0: Z][result: bool](`x0 = v` /\
    ((if result then `x0 <> 0` else `x0 = 0`)))).
 
-(* Why obligation from file "set.mlw", characters 372-465 *)
+(* Why obligation from file "good/set.mlw", characters 372-465 *)
 Lemma p2_po_1 : 
   (y: Z)
   (Pre6: `y >= 0`)
@@ -41,7 +41,7 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
-(* Why obligation from file "set.mlw", characters 358-478 *)
+(* Why obligation from file "good/set.mlw", characters 358-478 *)
 Lemma p2_po_2 : 
   (y: Z)
   (Pre6: `y >= 0`)
@@ -57,7 +57,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "set.mlw", characters 559-560 *)
+(* Why obligation from file "good/set.mlw", characters 559-560 *)
 Lemma p3_po_1 : 
   (y: Z)
   (Pre4: `y >= 0`)
@@ -75,7 +75,7 @@ Proof.
 Unfold Zwf; Destruct b; Intuition.
 Save.
 
-(* Why obligation from file "set.mlw", characters 683-729 *)
+(* Why obligation from file "good/set.mlw", characters 683-729 *)
 Lemma p4_po_1 : 
   (y: Z)
   (Pre4: `y >= 1`)
