@@ -300,7 +300,7 @@ exact
 Qed.
 
 End lexico.
-
+(*
 Section LT_WF_REL.
 Variable A : Set.
 
@@ -328,7 +328,7 @@ exists x; trivial.
 Qed.
 
 End LT_WF_REL.
-
+*)
 Definition lex_nat := lex _ _ lt lt.
 
 Lemma lex_nat_well_founded : well_founded lex_nat.
@@ -357,6 +357,11 @@ Definition interp_mark_c_and_stack (e : weight_type)
   let (n,m) := p in
     interp_mark_c e n /\ interp_stack e m.
 
+Require Import Inverse_Image.
+
+Definition inv_lt_rel (A:Set) B (lt : B -> B -> Prop) F (x:A) (y:A) :=
+   exists2 n : B, F x n & (forall m, F y m -> lt n m).
+
 Definition order_mark_c_and_stack : weight_type -> 
   weight_type -> Prop := 
   inv_lt_rel _ natnat lex_nat interp_mark_c_and_stack.
@@ -365,7 +370,8 @@ Lemma order_mark_c_and_stack_wf :
   well_founded order_mark_c_and_stack.
 Proof.
 unfold order_mark_c_and_stack.
-apply well_founded_inv_rel_compat.
+unfold inv_lt_rel.
+apply wf_inverse_rel.
 apply lex_nat_well_founded.
 Qed.
 
@@ -389,7 +395,8 @@ Lemma order_mark_m_and_c_and_stack_wf :
   well_founded order_mark_m_and_c_and_stack.
 Proof.
 unfold order_mark_m_and_c_and_stack.
-apply well_founded_inv_rel_compat.
+unfold inv_lt_rel.
+apply wf_inverse_rel.
 apply lex_natnatnat_well_founded.
 Qed.
 
