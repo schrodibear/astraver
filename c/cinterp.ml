@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.72 2004-04-07 09:18:47 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.73 2004-04-14 07:33:55 marche Exp $ i*)
 
 
 open Format
@@ -695,34 +695,44 @@ let collect_locations acc loc =
   in
   try
     let p = StringMap.find var acc in
-    StringMap.add var (LApp("union_loc",[iloc;p])) acc
+    StringMap.add var (iloc::p) acc
   with
-      Not_found -> StringMap.add var iloc acc
+      Not_found -> 
+	assert false (* it is a real assert false *)
+	(* old was: StringMap.add var iloc acc *)
 
 
 
-let interp_assigns = function
-  | Some [] ->
-      assert false (* nothing: TODO *)
+let map_of_assigns assigns =
+  HeapVarSet.fold 
+    (fun v acc -> StringMap.add v [] acc) assigns StringMap.empty 
+
+let rec make_union_loc = function
+  | [] -> LVar "nothing_loc"
+  | [l] -> l
+  | l::r -> LApp("union_loc",[l;make_union_loc r])
+
+let interp_assigns assigns = function
   | Some locl ->
-      let l = List.fold_left collect_locations StringMap.empty locl in
+      let l = List.fold_left collect_locations (map_of_assigns assigns) locl in
       StringMap.fold
 	(fun v p acc ->
 	   make_and acc
 	     (LPred("assigns",
-		    [LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; p])))
+		    [LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; 
+		     make_union_loc p])))
 	l LTrue
   | None ->
       LTrue
  
 
 
-let interp_spec s =
+let interp_spec effect_assigns s =
   let tpre = interp_predicate_opt None "" s.requires
   and tpost = 
     make_and
       (interp_predicate_opt None "" s.ensures)
-      (interp_assigns s.assigns)
+      (interp_assigns effect_assigns s.assigns)
   in (tpre,tpost)
 
 
@@ -859,7 +869,8 @@ let rec interp_statement ab stat = match stat.st_node with
   | TSlogic_label(l) -> 
       Output.Label l
   | TSspec (spec,s) ->
-      let (pre,post) = interp_spec spec in
+      let eff = Ceffect.statement s in
+      let (pre,post) = interp_spec eff.Ceffect.assigns spec in
       Triple(pre,interp_statement ab s,post,None)
 
 and interp_block ab (decls,stats) =
@@ -961,7 +972,7 @@ let interp_fun_params pre params =
 
 
 let interp_function_spec id sp ty pl =
-  let pre,post = interp_spec sp in
+  let pre,post = interp_spec id.function_writes sp in
   let pre,tpl = interp_fun_params pre pl in
   let r = HeapVarSet.elements id.function_reads in
   let w = HeapVarSet.elements id.function_writes in
@@ -1026,7 +1037,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       let f = id.var_name in
       lprintf "translating function %s@." f;
       begin try
-	let pre,post = interp_spec spec in
+	let pre,post = interp_spec id.function_writes spec in
 	let pre,tparams = interp_fun_params pre params in
 	abrupt_return := None;
 	let tblock = catch_return (interp_statement false block) in

@@ -275,6 +275,9 @@ Admitted.
 (*Why axiom*) Lemma false_not_true : ~(false = true).
 Admitted.
 
+(*Why logic*) Definition nothing_loc : assign_loc.
+Admitted.
+
 (*Why logic*) Definition pointer_loc : pointer -> assign_loc.
 Admitted.
 
@@ -295,6 +298,10 @@ Admitted.
   := (forall (p:pointer),
       ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments assigns.
+
+(*Why axiom*) Lemma unchanged_nothing_intro :
+  (forall (p:pointer), (unchanged p nothing_loc)).
+Admitted.
 
 (*Why axiom*) Lemma unchanged_pointer_intro :
   (forall (p1:pointer),

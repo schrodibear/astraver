@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.8 2004-04-07 09:18:47 marche Exp $ i*)
+(*i $Id: ceffect.mli,v 1.9 2004-04-14 07:33:55 marche Exp $ i*)
 
 val interp_type : Cast.tctype -> string
 
@@ -39,6 +39,8 @@ val locations : Cast.tterm Clogic.location list -> HeapVarSet.t
 val predicate : Cast.predicate -> HeapVarSet.t
 
 val expr : Cast.texpr -> effect
+
+val statement : Cast.tstatement -> effect
 
 (* computes effects for logical symbols only *)
 val file : Cast.tfile -> unit

@@ -149,7 +149,7 @@ the command is:
 \begin{verbatim}
 >  make -f max.makefile coq
 \end{verbatim}
-This command will generate the proof obligations, together will some
+This command will generate the proof obligations, together with some
 Coq \emph{modeling} of the C program (file \verb|caduceus_why.v|):
 \begin{verbatim}
 why [...] why/caduceus_spec.why
@@ -164,7 +164,7 @@ coqc -I coq coq/caduceus_spec_why.v
 coqc -I coq coq/max_why.v
 \end{verbatim}
 The last file contains two proof
-obligations (two lemmas which proofs have to be filled in); see the
+obligations (two lemmas whose proofs have to be filled in); see the
 \why\ manual for more details~\cite{Why}. On this example, the
 compilation succeeds, because the default tactic given
 (\texttt{intuition}) solves the obligations. In general, the proofs of
@@ -389,12 +389,12 @@ shift t j
 \end{verbatim}
 We meet here for the first time the function \verb|shift|:
 $(\verb|shift|~p~i)$ denotes in the logic the C expression $p+i$
-(pointer arithmetic), hence $(\verb|shift|~t~i)~\#~s$ then denotes
+(pointer arithmetic), hence $(\verb|shift|~t~i)~\#~s$ denotes
 $t[i]$ in the memory state $s$. Dealing with pointer arithmetic in
 general will be explained in Section~\ref{pointer-arith}. For the
 moment, we only have to deal again with the shape
 $p~\verb|#|~(\verb|upd|~s~q~v)$, by using the \verb|caduceus|
-tactics. However, this does not work immediately, because indeed we do
+tactic. However, this does not work immediately, because indeed we do
 not know whether $i$ and $j$ are different. So the Coq proof may be made by
 a case reasoning such as:
 \begin{verbatim}
@@ -422,7 +422,7 @@ index otherwise:
 int index(int t[], int n, int v) \{
   int i = 0;
   /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
-    variant n - i */ 
+    @ variant n - i */ 
   while (i < n) \{
     if (t[i] == v) break;
     i++;
@@ -612,7 +612,7 @@ Coq. The problem now is that when proving post-condition of
 \verb|test1|, we do not see anymore the implementation of
 \verb|credit| but only its specification, and in this specification,
 nothing is said about modification of memory locations other than
-\verb|p->balance|. So, the right thing to do is to add a so-called
+\verb|p->balance|. So, the right thing to do is to add an 
 \emph{\texttt{assigns} clause}\indextt{assigns} into the specification
 of \verb|credit|. The program now looks like
 \begin{code}
@@ -865,7 +865,7 @@ except that:
   \verb!\block_length! & \verb!\null! \\
   \verb!reads! & \verb!\valid! & \verb!\valid_index! &
   \verb!\valid_range! & \verb!\fresh! \\
-  \verb!\base_addr!
+  \verb!\base_addr! & \verb!\nothing!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -908,9 +908,13 @@ annotations.
               \nt{predicate} \te{*/} \\
   \\[0.1em]
 
+  \nt{assigned\_locs}
+    & $::=$ & \nt{location}\plussep{\te{,}} $|$ \verb!\nothing! \\
+  \\[0.1em]
+
   \nt{spec}
     & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
-              $[$ \te{assigns} \nt{location}\plussep{\te{,}} $]$ \\
+              $[$ \te{assigns} \nt{assigned\_locs} $]$ \\
            && $[$ \te{ensures} \nt{predicate} $]$ 
               $[$ \te{decreases} \nt{variant} $]$ \te{*/} \\
                   \indextt{requires}\indextt{assigns}

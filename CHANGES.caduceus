@@ -2,6 +2,8 @@ Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
 
+ o support for 'assigns \nothing'
+
 version 0.52 (1.52), April 7th, 2004
 ====================================
  o Coq automatic proofs of some `assigns' clauses; updated tutorial

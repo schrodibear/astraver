@@ -199,6 +199,7 @@ axiom false_not_true : false <> true
 
 (* modeling assigns clauses *)
 
+logic nothing_loc : -> assign_loc
 logic pointer_loc : pointer -> assign_loc
 logic all_loc : pointer -> assign_loc
 logic range_loc : pointer,int,int -> assign_loc
@@ -209,6 +210,9 @@ predicate assigns (a:alloc_table,m1:'a memory,m2:'a memory,l:assign_loc) =
  forall p:pointer.
     valid(a,p) -> unchanged(p,l) -> acc(m2,p)=acc(m1,p)
 
+
+axiom unchanged_nothing_intro :
+  forall p:pointer. unchanged(p,nothing_loc)
 
 axiom unchanged_pointer_intro : 
   forall p1:pointer.forall p2:pointer.

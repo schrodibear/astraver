@@ -32,11 +32,15 @@ int test1(purse *p1, purse *p2) {
     return p1->balance;
 }
 
-//@ ensures \fresh(\result) && purse_inv(\result) 
+/*@ assigns \nothing
+  @ ensures \fresh(\result) && purse_inv(\result) 
+  @*/
 purse *new_purse();
 
 
-//@ ensures \result == 150
+/*@ assigns \nothing
+  @ ensures \result == 150
+  @*/
 int test2() {
     purse *p1 = new_purse();
     purse *p2 = new_purse();
