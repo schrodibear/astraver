@@ -35,17 +35,17 @@ bads () {
 }
 
 # 1. Syntax
-echo "=== Checking parsing ==="
+echo "=== Checking parsing errors ==="
 bads bad/syntax --parse-only
 echo ""
 
 # 2. Typing
-echo "=== Checking typing ==="
+echo "=== Checking typing errors ==="
 bads bad/typing --type-only
 echo ""
 
 # 2. Other
-echo "=== Checking typing ==="
+echo "=== Checking other errors ==="
 bads bad/other
 echo ""
 
