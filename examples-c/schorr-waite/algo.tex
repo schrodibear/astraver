@@ -1,0 +1,51 @@
+
+\section{Description of the Schorr-Waite algorithm}
+
+\begin{lstlisting}[language=C]{}
+
+/* Schorr-Waite algorithm */
+
+typedef struct struct_node {
+  unsigned int m :1;
+  unsigned int c :1;
+  struct struct_node *l, *r;
+} * node;
+
+#define NULL ((void*)0)
+
+void schorr_waite(node root) {
+  node t = root;
+  node p = NULL;
+  while (p != NULL || (t != NULL && ! t->m)) {
+    if (t == NULL || t->m) {
+      if (p->c) {
+	/* pop */
+	node q = t;
+	t = p;
+	p = p->r;
+	t->r = q;
+      } else {
+	/* swing */
+	node q = t;
+	t = p->r;
+	p->r = p->l;
+	p->l = q;
+	p->c = 1;
+      }
+    } else {
+      /* push */
+      node q = p;
+      p = t;
+      t = t->l;
+      p->l = q;
+      p->m = 1;
+      p->c = 0;
+    }
+  }
+}
+\end{lstlisting}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "rapport"
+%%% End: 

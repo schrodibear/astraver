@@ -1,0 +1,73 @@
+\documentclass{llncs}
+
+\usepackage{amssymb}
+\usepackage{alltt}
+\usepackage{url}
+\usepackage{pstricks}
+\usepackage{pst-node}
+\usepackage{comment}
+\usepackage{times}
+\usepackage{listings}
+
+\input{./macros.tex}
+
+% LLNCS hack: too many space around subsection titles
+\makeatletter
+\def\subsection{\@startsection{subsection}{2}{\z@}{-8pt plus-3pt minus
+ -3pt}{5pt plus 3pt minus 0pt}{\normalsize\bf\boldmath
+\pretolerance=10000\relax\rightskip=0pt plus8em}}
+\makeatother
+
+\pagestyle{plain}
+
+\begin{document}
+
+\title{A case study of C Program Verification: the Schorr-Waite algorithm}
+\author{Thierry Hubert and Claude March\'e}
+\institute{PCRI --- LRI (CNRS UMR 8623) --- INRIA Futurs ---
+  Universit\'e Paris 11 \\
+B\^at 490, Universit\'e Paris-sud, 91405 Orsay cedex, France \\
+\{\texttt{hubert},\texttt{marche}\}\texttt{@lri.fr} 
+}
+\maketitle
+
+\begin{abstract}
+%   Our goal is the verification of C programs at the source code level
+%   using formal proof tools. Programs are specified using annotations such
+%   as pre- and postconditions and global invariants. An
+%   original approach is presented which allows to formally prove that a
+%   function implementation satisfies its specification and is free of
+%   null pointer dereferencing and out-of-bounds array access. 
+%   The method is not bound to a particular back-end theorem prover.  A
+%   significant part of the ANSI C language is supported, including
+%   pointer arithmetic and possible pointer aliasing.  We describe a
+%   prototype tool and give some experimental results.
+
+% \noindent{\bf Keywords:} C programming language, Hoare logic, pointer programs,
+% formal verification and proof.
+\end{abstract}
+
+\footnotetext{This research was partly supported by the ``projet
+  GECCOO de l'ACI S\'ecurit\'e Informatique'', CNRS \& INRIA,
+  \url{http://gecco.lri.fr} + Dassault ? } 
+
+\input{./intro.tex}
+\input{./algo.tex}
+\input{./proof.tex}
+\input{./concl.tex}
+
+%\bigskip
+% \paragraph{Acknowledgments.} 
+% We thank June Andronick from Axalto, Dillon Pariente and
+% Emmanuel Ledinot from Dassault Aviation for their very useful feedback
+% about the specification language and the \caduceus{} prototype.
+
+\bibliographystyle{abbrv}
+\input{biblio-demons}
+
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
