@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.36 2002-03-19 23:45:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.37 2002-03-22 16:18:28 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -443,11 +443,15 @@ and typef_desc lab env loc = function
 	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
 	     (* TODO: rename [x] to avoid capture *)
 	     let info = { loc = loc; pre = []; post = None } in
-	     let var_x = { desc = Var x; info = info } in
-	     let app_f_x = 
-	       { desc = App (f, Term var_x, Some kapp); info = info } 
+	     let env' = Env.add x tx env in
+	     let var_x = 
+	       make_node (Var x) env' (label_name()) (type_c_of_v tx) 
 	     in
-	     typef_desc lab env loc (LetIn (x, a, app_f_x)))
+	     let app_f_x = 
+	       make_node (App (t_f, Term var_x, Some kapp)) 
+		 env' (label_name()) kapp
+	     in
+	     LetIn (x, t_a, app_f_x), (tapp, ef), [])
 
   | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in

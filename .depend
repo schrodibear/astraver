@@ -105,8 +105,8 @@ src/util.cmi: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
 src/vcg.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
 lib/coq/WhyWf.vo: lib/coq/WhyWf.v
-lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyWf.vo lib/coq/WhyArrays.vo
 lib/coq/WhyTuples.vo: lib/coq/WhyTuples.v
 lib/coq/WhyInt.vo: lib/coq/WhyInt.v
 lib/coq/WhyBool.vo: lib/coq/WhyBool.v
 lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
+lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyWf.vo lib/coq/WhyArrays.vo
