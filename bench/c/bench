@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# benchmark for caduceus
+
+# C files to parse with success
+echo "C parsing"
+cd good/syntax
+parsing="../../../bin/caduceus.opt -parse-only"
+for f in *.c; do
+    echo -n "  "$f"... "
+    if ! gcc -c $f > /dev/null 2>&1; then
+	echo "GCC failed"
+	gcc -c $f
+	exit 1
+    fi
+    echo -n "GCC ok... "
+    if ! $parsing  $f > /dev/null 2>&1; then
+	echo "caduceus FAILED"
+	$parsing $f
+	exit 1
+    fi
+    echo -n "caduceus ok... "
+done
