@@ -1,4 +1,5 @@
-*.pvs
+*.why.pvs
 *.prf
 .pvscontext
 *.bin
+*.why.v

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.1 2002-01-24 15:59:30 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.2 2002-01-25 09:47:00 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -62,9 +62,9 @@ let print_term fmt t =
     | Tapp (id, l) as t when is_relation id || is_arith id ->
 	fprintf fmt "@[("; print0 t; fprintf fmt ")@]"
     | Tapp (id, tl) -> 
-	fprintf fmt "%s(@[" (Ident.string id);
+	fprintf fmt "(@[%s " (Ident.string id);
 	print_list fmt 
-	  (fun fmt () -> fprintf fmt ",@ ") (fun _ t -> print0 t) tl;
+	  (fun fmt () -> fprintf fmt "@ ") (fun _ t -> print0 t) tl;
 	fprintf fmt "@])"
   in
   print0 t
@@ -82,8 +82,8 @@ let rec print_pure_type fmt = function
 let print_predicate fmt p =
   let rec print0 = function
     | Pif (a, b, c) -> 
-	fprintf fmt "((@["; print1 a; fprintf fmt " -> "; print0 b; 
-	fprintf fmt "@ ) /\ (~"; print3 a; fprintf fmt " -> "; print0 c; 
+	fprintf fmt "((@["; print1 a; fprintf fmt " ->@ "; print0 b; 
+	fprintf fmt ") /\@ (~"; print3 a; fprintf fmt " ->@ "; print0 c; 
 	fprintf fmt "@]))"
     | Pimplies (a, b) -> 
 	fprintf fmt "(@["; print1 a; fprintf fmt " ->@ "; print0 b;
@@ -96,6 +96,8 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " /\@ "; print3 b
     | p -> print3 p
   and print3 = function
+    | Pterm (Tconst (ConstBool false)) -> fprintf fmt "False"
+    | Pterm (Tconst (ConstBool true)) -> fprintf fmt "True"
     | Pterm t -> print_term fmt t
     | Pnot p -> fprintf fmt "~"; print3 p
     | Forall (id,n,t,p) -> 
