@@ -110,3 +110,14 @@ lib/coq/WhyInt.vo: lib/coq/WhyInt.v
 lib/coq/WhyBool.vo: lib/coq/WhyBool.v
 lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
 lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyWf.vo lib/coq/WhyArrays.vo
+examples/misc/swap_why.vo: examples/misc/swap_why.v
+examples/misc/power_why.vo: examples/misc/power_why.v
+examples/misc/peano_why.vo: examples/misc/peano_why.v
+examples/misc/loop0_why.vo: examples/misc/loop0_why.v
+examples/bresenham/zaux.vo: examples/bresenham/zaux.v
+examples/bresenham/bresenham_why.vo: examples/bresenham/bresenham_why.v examples/bresenham/zaux.vo lib/coq/Why.vo
+examples/binary-search/bsearch_why.vo: examples/binary-search/bsearch_why.v
+bench/good/while2_why.vo: bench/good/while2_why.v lib/coq/Why.vo
+bench/good/while1_why.vo: bench/good/while1_why.v lib/coq/Why.vo
+bench/good/po_why.vo: bench/good/po_why.v lib/coq/Why.vo
+bench/good/all_why.vo: bench/good/all_why.v lib/coq/Why.vo

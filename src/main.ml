@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.26 2002-03-26 13:43:41 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.27 2002-03-28 14:50:28 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -172,7 +172,7 @@ Prover options:
 let parse_args () =
   let files = ref [] in
   let rec parse = function
-    | [] -> !files
+    | [] -> List.rev !files
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
     | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover := Coq; parse args

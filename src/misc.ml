@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.27 2002-03-25 16:06:27 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.28 2002-03-28 14:50:28 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -293,9 +293,9 @@ let rec print_term fmt = function
   | Tconst (ConstFloat f) -> 
       fprintf fmt "%f" f
   | Tbound b ->
-      fprintf fmt "#%d" (Ident.bound_id b)
+      Ident.print_bound fmt b
   | Tvar id -> 
-      fprintf fmt "%s" (Ident.string id)
+      Ident.print fmt id
   | Tapp (id, tl) -> 
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 
@@ -320,23 +320,18 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "false"
   | Pimplies (a, b) -> 
-      fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " ->@ ";
-      print_predicate fmt b; fprintf fmt "@])"
+      fprintf fmt "(@[%a ->@ %a@])" print_predicate a print_predicate b
   | Pif (a, b, c) -> 
-      fprintf fmt "(@[if "; print_term fmt a; fprintf fmt " then@ ";
-      print_predicate fmt b; fprintf fmt " else@ ";
-      print_predicate fmt c; fprintf fmt "@])"
+      fprintf fmt "(@[if %a then@ %a else@ %a@])" 
+	print_term a print_predicate b print_predicate c
   | Pand (a, b) ->
-      fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " and@ ";
-      print_predicate fmt b; fprintf fmt "@])"
+      fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
   | Por (a, b) ->
-      fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " or@ ";
-      print_predicate fmt b; fprintf fmt "@])"
+      fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
   | Pnot a ->
-      fprintf fmt "(not "; print_predicate fmt a; fprintf fmt ")"
+      fprintf fmt "(not %a)" print_predicate a
   | Forall (_,b,_,p) ->
-      fprintf fmt "(forall #%d: " (Ident.bound_id b);
-      print_predicate fmt p; fprintf fmt ")"
+      fprintf fmt "(forall #%d: %a)" (Ident.bound_id b) print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 
