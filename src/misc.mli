@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.71 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.72 2004-07-12 13:12:53 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -26,6 +26,7 @@ open Cc
 
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
+val is_closed_pure_type : pure_type -> bool
 
 (* Substitution within assertions and pre/post-conditions *)
 val asst_app : (predicate -> predicate) -> assertion -> assertion

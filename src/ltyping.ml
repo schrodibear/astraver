@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.29 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.30 2004-07-12 13:12:52 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -127,26 +127,7 @@ let predicate_expected loc =
 let term_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "term expected"))
 
-(* Table of closed instances *)
-
-module Instances = 
-  Set.Make(struct type t = pure_type list let compare = compare end)
-
-let instances_t = Hashtbl.create 97
-
-let instances = Hashtbl.find instances_t
-
-let add_instance x i =
-  let s = try Hashtbl.find instances_t x with Not_found -> Instances.empty in
-  Hashtbl.replace instances_t x (Instances.add i s)
-
-let instance x vars = 
-  let i = List.map (fun v -> v.type_val) vars in
-  begin try 
-    let ci = List.map (function None -> raise Exit | Some pt -> pt) i in
-    add_instance x ci
-  with Exit -> () end;
-  i
+let instance _ = List.map (fun v -> v.type_val)
 
 (* typing predicates *)
 
@@ -234,7 +215,8 @@ and desc_term loc lab env lenv = function
 	     assert false)
   | PPapp (x, [a]) when x == Ident.array_length ->
       (match term lab env lenv a with
-	 | a, PTarray v -> Tapp (x, [a], [Some v]), PTint
+	 | a, PTarray v -> 
+	     Tapp (x, [a], [Some v]), PTint
 	 | Tvar t, _ -> raise_located a.pp_loc (UnboundArray t)
 	 | _ -> raise_located a.pp_loc (AnyMessage "array expected"))
   | PPapp (id, [a; b; c]) when id == if_then_else ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.9 2004-07-09 15:38:29 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.10 2004-07-12 13:12:52 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -27,6 +27,8 @@ open Vcg
 open Format
 open Cc
 open Pp
+open Ltyping
+open Env
 
 type elem = 
   | Parameter of string * cc_type
@@ -83,6 +85,8 @@ let external_type = function
   | PTexternal _ | PTarray (PTexternal _) -> true
   | _ -> false
 
+let underscore fmt () = fprintf fmt "_"
+
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "INT"
   | PTbool -> fprintf fmt "BOOLEAN"
@@ -92,7 +96,10 @@ let rec print_pure_type fmt = function
   | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal (_,id) -> fprintf fmt "%a" Ident.print id
+  | PTexternal ([],id) -> fprintf fmt "%a" Ident.print id
+  | PTexternal (pl,id) -> 
+      fprintf fmt "%a_%a" 
+	(print_list underscore print_pure_type) pl Ident.print id
 
 let instance fmt = function
   | [] -> 
@@ -102,8 +109,7 @@ let instance fmt = function
 	| None -> assert false 
 	| Some pt -> print_pure_type fmt pt 
       in 
-      fprintf fmt "_%a" 
-	(print_list (fun fmt () -> fprintf fmt "_") one) ptl
+      fprintf fmt "_%a" (print_list underscore one) ptl
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -245,6 +251,31 @@ let rec print_cc_type fmt = function
       fprintf fmt "Set"
 ***)
 
+(* Table of closed instances *)
+
+module Instances = 
+  Set.Make(struct type t = pure_type list let compare = compare end)
+
+let instances_t = Hashtbl.create 97
+
+let instances = Hashtbl.find instances_t
+
+let add_instance x i =
+  let s = try Hashtbl.find instances_t x with Not_found -> Instances.empty in
+  Hashtbl.replace instances_t x (Instances.add i s)
+
+let instance x i = 
+  try 
+    let ci = 
+      List.map 
+	(function Some pt when is_closed_pure_type pt -> pt | _ -> raise Exit)
+	i
+    in
+    add_instance x ci
+  with Exit -> 
+    ()
+
+let iter_instances f = Hashtbl.iter (fun x -> Instances.iter (f x)) instances_t
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
@@ -266,12 +297,28 @@ let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p.Env.scheme_type
 
+let rec print_logic_type fmt = function
+  | Logic.Predicate [] ->
+      fprintf fmt "BOOLEAN"
+  | Logic.Predicate [pt] ->
+      fprintf fmt "[%a -> BOOLEAN]" print_pure_type pt
+  | Logic.Predicate pl ->
+      fprintf fmt "[[%a] -> BOOLEAN]" (print_list comma print_pure_type) pl
+  | Function ([], pt) ->
+      print_pure_type fmt pt
+  | Function ([pt1], pt2) ->
+      fprintf fmt "[%a -> %a]" print_pure_type pt1 print_pure_type pt2
+  | Function (pl, pt) ->
+      fprintf fmt "[[%a] -> %a]" 
+	(print_list comma print_pure_type) pl print_pure_type pt
+
 let print_predicate fmt id p =
   fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
   let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[<hov 2>%s: [%a -> BOOLEAN] =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+  assert (bl <> []);
+  fprintf fmt "@[<hov 2>%s: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
     id
-    (print_list space (fun fmt (_,pt) -> print_pure_type fmt pt)) bl 
+    print_logic_type (Logic.Predicate (List.map snd bl))
     (print_list comma 
        (fun fmt (x,pt) -> 
 	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
@@ -283,17 +330,37 @@ let print_parameter fmt id c =
   fprintf fmt 
     "@[<hov 2>%s: %a;@]@\n@\n" id print_cc_type c
 
-let rec print_logic_type fmt = function
-  | Logic.Predicate pl ->
-      fprintf fmt "[%a -> BOOLEAN]" (print_list space print_pure_type) pl
-  | Function (pl, pt) ->
-      fprintf fmt "[%a -> %a]" 
-	(print_list space print_pure_type) pl print_pure_type pt
+let rec subst_pure_type s = function
+  | PTvarid id as t ->
+      (try List.assoc (Ident.string id) s with Not_found -> t)
+  | PTexternal (l, id) ->
+      PTexternal (List.map (subst_pure_type s) l, id)
+  | PTarray ta -> PTarray (subst_pure_type s ta)
+  | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
 
+let subst_logic_type s = function
+  | Function (tl, tr) -> 
+      Function (List.map (subst_pure_type s) tl, subst_pure_type s tr)
+  | Logic.Predicate tl -> 
+      Logic.Predicate (List.map (subst_pure_type s) tl)
 
 let print_logic fmt id t = 
-  let (l,t) = Env.specialize_logic_type t in
-  fprintf fmt "%%%% Why logic %s@\n@[%s: %a;@]@\n@\n" id id print_logic_type t
+  fprintf fmt "%%%% Why logic %s@\n" id;
+  if t.scheme_vars = [] then
+    fprintf fmt "@[%s: %a;@]@\n@\n" id print_logic_type t.scheme_type
+  else
+    try
+      Instances.iter 
+	(fun i -> 
+	   assert (List.length t.scheme_vars = List.length i);
+	   let s = List.combine t.scheme_vars i in
+	   let t = subst_logic_type s t.scheme_type in
+	   fprintf fmt "@[%s_%a: %a;@]@\n" id 
+	     (print_list underscore print_pure_type) i print_logic_type t)
+	(instances (Ident.create id));
+      fprintf fmt "@\n"
+    with Not_found ->
+      fprintf fmt "%%%% no closed instance@\n@\n"
 
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o
@@ -302,85 +369,109 @@ let print_elem fmt = function
   | Logic (id, t) -> print_logic fmt id t
   | Parameter (id, t) -> print_parameter fmt id t
 
-let prelude = ref 
-(* TODO pas de polymorphisme pour array_length: que faire ? *)
-"
+let prelude fmt = 
+fprintf fmt "
 UNIT: TYPE;
 tt: UNIT;
-array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];
 "
-(*TODO prelude about exchange, permut and sorted
-"(BG_PUSH 
-  ; array_length
-  (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t)))
-  ; booleans
-  (DISTINCT |@true| |@false|)
-  ; exchange
-  (FORALL (t1 t2 i j)
-	  (IFF (EQ (exchange t1 t2 i j) |@true|)
-	       (AND (EQ (array_length t1) (array_length t2))
-		    (EQ (select t1 i) (select t2 j))
-		    (EQ (select t1 j) (select t2 i))
-		    (FORALL (k) (IMPLIES (AND (NEQ k i) (NEQ k j))
-					 (EQ (select t1 k) (select t2 k)))))))
-  (FORALL (t1 t2 i j)
-	  (IMPLIES (EQ (exchange t1 t2 i j) |@true|)
-		   (EQ (array_length t1) (array_length t2))))
-  ; permut
-  (FORALL (t) (EQ (permut t t) |@true|))
-  (FORALL (t1 t2) (IMPLIES (EQ (permut t1 t2) |@true|)
-			   (EQ (permut t2 t1) |@true|)))
-  (FORALL (t1 t2 t3) (IMPLIES (AND (EQ (permut t1 t2) |@true|)
-				   (EQ (permut t2 t3) |@true|))
-			      (EQ (permut t1 t3) |@true|)))
-  (FORALL 
-   (t i j) 
-   (EQ (permut t (store (store t i (select t j)) j (select t i))) |@true|))
-  (FORALL (t1 t2)
-	  (IMPLIES (EQ (permut t1 t2) |@true|)
-		   (EQ (array_length t1) (array_length t2))))
-  ; sub_permut
-  (FORALL (t g d) (EQ (sub_permut g d t t) |@true|))
-  (FORALL (t1 t2 g d) (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
-			   (EQ (sub_permut g d t2 t1) |@true|)))
-  (FORALL (t1 t2 t3 g d) (IMPLIES (AND (EQ (sub_permut g d t1 t2) |@true|)
-				       (EQ (sub_permut g d t2 t3) |@true|))
-				  (EQ (sub_permut g d t1 t3) |@true|)))
-  (FORALL 
-   (t g d i j) 
-   (IMPLIES (AND (<= g i) (<= i d) (<= g j) (<= j d))
-	    (EQ (sub_permut g d t 
-			    (store (store t i (select t j)) j (select t i))) 
-		|@true|)))
-  (FORALL 
-   (t1 t2 g d i j)
-   (IMPLIES (AND (EQ (exchange t1 t2 i j) |@true|)
-		 (<= g i) (<= i d) (<= g j) (<= j d))
-	    (EQ (sub_permut g d t1 t2) |@true|)))
-  (FORALL (t1 t2 i j) 
-	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
-		   (EQ (permut t1 t2) |@true|)))
-  (FORALL (t1 t2 i j)
-	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
-		   (EQ (array_length t1) (array_length t2))))
-  ; sorted_array
-  (FORALL 
-   (t i j) 
-   (IFF (EQ (sorted_array t i j) |@true|)
-	(IMPLIES (<= i j)
-		 (FORALL (k) (IMPLIES (AND (<= i k) (< k j))
-				      (<= (select t k) (select t (+ k 1))))))))
-)"
-*)
+
+(* ieration over terms (function [f]) and types (function [g]) *)
+module IterTT = struct
+
+  let rec predicate f g = function
+    | Pand (_, a, b)
+    | Por (a, b)
+    | Piff (a, b)
+    | Forallb (_, a, b)
+    | Pimplies (_, a, b) -> predicate f g a; predicate f g b
+    | Pif (a, b, c) -> f a; predicate f g b; predicate f g c
+    | Pnot a -> predicate f g a
+    | Exists (_, _, v, p)
+    | Forall (_, _, _, v, p) -> g v; predicate f g p
+    | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
+    | Papp (_, tl, _) -> List.iter f tl
+	
+  let logic_type g = function
+    | Function (l, pt) -> List.iter g l; g pt
+    | Logic.Predicate l -> List.iter g l
+
+  let rec cc_type f g = function
+    | TTpure pt -> g pt
+    | TTarray cc -> cc_type f g cc
+    | TTarrow (b, cc)
+    | TTlambda (b, cc) -> cc_binder f g b; cc_type f g cc
+    | TTtuple (bl, ccopt) -> 
+	List.iter (cc_binder f g) bl; 
+	option_iter (cc_type f g) ccopt
+    | TTpred p ->
+	predicate f g p
+    | TTapp (cc, ccl) ->
+	cc_type f g cc; List.iter (cc_type f g) ccl
+    | TTterm t ->
+	f t
+    | TTSet ->
+	()
+	
+  and cc_binder f g = function
+    | _, CC_var_binder cc -> cc_type f g cc
+    | _, CC_pred_binder p -> predicate f g p
+    | _, CC_untyped_binder -> ()
+	
+  let element f g = function
+    | Parameter (_,cc) -> 
+	cc_type f g cc
+    | Logic (_, lt) -> 
+	logic_type g lt.scheme_type
+    | Oblig (_,_,(ctx,p)) -> 
+	List.iter 
+	  (function 
+	     | Svar (_,cc) -> cc_type f g cc | Spred (_,p) -> predicate f g p)
+	  ctx;
+	predicate f g p
+    | Axiom (_, p) -> 
+	predicate f g p.scheme_type
+    | Predicate (_, {scheme_type=(bl,p)}) -> 
+	List.iter (fun (_,pt) -> g pt) bl; predicate f g p
+
+end
+
+(* first pass: we traverse all elements to collect types and closed instances
+   of function symbols *)
+let first_pass fmt = 
+  let rec collect_term = function
+    | Tapp (id, tl, i) -> instance id i; List.iter collect_term tl
+    | _ -> ()
+  in
+  let types_to_declare = Hashtbl.create 97 in
+  let collect_type = function
+    | PTexternal (i, id) as pt when is_closed_pure_type pt ->
+	if not (Hashtbl.mem types_to_declare pt) then 
+	  Hashtbl.add types_to_declare pt ()
+    | _ -> ()
+  in
+  Queue.iter (IterTT.element collect_term collect_type) queue;
+  (* declaring types *)
+  Hashtbl.iter
+    (fun pt () -> fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt)
+    types_to_declare;
+  (* declaring predefined symbols *)
+  List.iter (fun (s,t) -> print_logic fmt s (generalize_logic_type t))
+    [ "array_length", 
+      Function ([PTarray (PTvarid (Ident.create "a"))], PTint);
+      "access",
+      let a = PTvarid (Ident.create "a") in Function ([PTarray a; PTint], a)
+    ]
 
 let output_file fwe =
   let sep = "%%%% DO NOT EDIT BELOW THIS LINE" in
   let f = fwe ^ "_why.cvc" in
   do_not_edit f
-    (fun fmt -> if not no_cvcl_prelude then fprintf fmt "@[%s@]@\n" !prelude)
+    (fun fmt -> if not no_cvcl_prelude then prelude fmt)
     sep
-    (fun fmt -> Queue.iter (print_elem fmt) queue)
+    (fun fmt -> 
+       first_pass fmt;
+       Queue.iter (print_elem fmt) queue)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.91 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.92 2004-07-12 13:12:52 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -132,6 +132,12 @@ let unlocated_wprintf f =
   Format.eprintf "warning: "; Format.eprintf f
 
 (*s Various utility functions. *)
+
+let rec is_closed_pure_type = function
+  | PTint | PTbool | PTreal | PTunit -> true
+  | PTarray pt -> is_closed_pure_type pt
+  | PTvarid _ | PTvar _ -> false
+  | PTexternal (ptl,_) -> List.for_all is_closed_pure_type ptl
 
 let rationalize s =
   let n = String.length s in

@@ -11,11 +11,11 @@ src/coq.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx src/loc.cmx \
     src/logic.cmi src/misc.cmx src/options.cmx src/pp.cmx src/regen.cmx \
     src/report.cmx src/types.cmi src/util.cmx src/vcg.cmx src/coq.cmi 
 src/cvcl.cmo: src/cc.cmi src/env.cmi src/error.cmi src/ident.cmi src/loc.cmi \
-    src/logic.cmi src/misc.cmi src/options.cmi src/pp.cmi src/vcg.cmi \
-    src/cvcl.cmi 
+    src/logic.cmi src/ltyping.cmi src/misc.cmi src/options.cmi src/pp.cmi \
+    src/util.cmi src/vcg.cmi src/cvcl.cmi 
 src/cvcl.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx src/loc.cmx \
-    src/logic.cmi src/misc.cmx src/options.cmx src/pp.cmx src/vcg.cmx \
-    src/cvcl.cmi 
+    src/logic.cmi src/ltyping.cmx src/misc.cmx src/options.cmx src/pp.cmx \
+    src/util.cmx src/vcg.cmx src/cvcl.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/ast.cmi src/effect.cmi src/error.cmi src/ident.cmi \
