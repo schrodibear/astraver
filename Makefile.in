@@ -122,7 +122,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: coq-@COQVER@
 coq-v7: $(VO7)
-coq-v8: $(VO7) $(VO)
+coq-v8: $(VO7) $(VO8)
 
 VERSION=1.32
 
@@ -203,8 +203,8 @@ install-mizar-yes:
 local: $(STATICBINARY) $(WHY2HTML) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
-	mkdir -p $(COQLIB)/contrib/why
-	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
+	mkdir -p $(COQLIB)/newcontrib/why
+	cp -f $(VO8) $(VFILES) $(COQLIB)/newcontrib/why
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSLIB)/why
 	mkdir -p $(MIZFILES)/mml/dict
@@ -344,7 +344,7 @@ BINARYNAME = $(NAME)-$(OSTYPE)
 
 linux: binary
 
-BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO) \
+BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO7) $(VO8) \
 	doc/why.1 doc/manual.ps \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.* lib/mizar/dict/why.*
 
