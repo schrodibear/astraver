@@ -14,13 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.25 2005-01-06 14:27:55 hubert Exp $ i*)
+(*i $Id: cltyping.mli,v 1.26 2005-01-12 08:19:55 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
 open Clogic
 open Cast
 open Cenv
+
+val offset : int ref
 
 (* logical environments *)
 val type_term : Env.t -> parsed_term  -> tterm

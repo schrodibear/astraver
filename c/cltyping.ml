@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.70 2005-01-06 14:27:55 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.71 2005-01-12 08:19:55 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -22,6 +22,12 @@ open Creport
 open Cerror
 open Cenv
 open Ctypes
+
+(* location offset (for warnings) *)
+
+let offset = ref 0
+
+let warning (lb,le) s = warning (!offset+lb, !offset+le) s
 
 let option_app f = function Some x -> Some (f x) | None -> None
 

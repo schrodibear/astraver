@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.85 2005-01-06 14:27:56 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.86 2005-01-12 08:19:55 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -124,6 +124,7 @@ let offset ofs (ls, le) = (ofs + ls, ofs + le)
 
 let with_offset ofs f x =
   try
+    Cltyping.offset := ofs; (* for warnings *)
     f x
   with 
     | Stdpp.Exc_located (loc, e) -> 
