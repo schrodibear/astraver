@@ -125,8 +125,6 @@ let loop_variant_1 hyps concl =
     | _ -> 
 	raise Exit
 
-(* tautologies in linear first-order logic *)
-
 (* unification of terms *)
 let rec unif_term u = function
   | Tconst c, Tconst c' when c = c' -> u
@@ -190,6 +188,17 @@ let lookup_instance id bvars p q ctx =
     (List.map (fun (x, _, ty) -> x, CC_var_binder (TTpure ty)) bvars')
     (cc_applist (CC_var id) (List.map cc_var (vars @ [hpx])))
 
+(* checks whether [p] is an instance of [c] and returns the instance *)
+let unify bvars p c =
+  let u0 = 
+    List.fold_right (fun (_,n,_) -> Idmap.add n None) bvars Idmap.empty 
+  in
+  let u = unif_pred u0 (p, c) in
+  List.map
+    (fun (_,n,_) -> match Idmap.find n u with
+       | None -> raise Exit (* does not instanciate all variables *)
+       | Some x -> x) bvars
+
 (* alpha-equivalence over predicates *)
 let alpha = unif_pred Idmap.empty
 
@@ -207,28 +216,59 @@ let lookup_boolean_instance a b =
 
 let boolean_wp_lemma = Ident.create "why_boolean_wp"
 
-(* [qe_forall (forall x1...forall xn. p => q) = [x1;...;xn],p,q] *)
+(* [qe_forall (forall x1...forall xn. p) = [x1;...;xn],p] *)
 let rec qe_forall = function
-  | Pimplies (p, q) -> 
-      [], p, q
-  | Forall (id, n, ty, p) -> 
-      let vl, p, q = qe_forall p in (id, n, ty) :: vl, p, q
-  | _ -> 
-      raise Exit
- 
-(* ctx = xk:tk, ..., x1:t1 *)
+  | Forall (id, n, ty, p) -> let vl, p = qe_forall p in (id, n, ty) :: vl, p
+  | p -> [], p
+
+(* introduction of universal quantifiers and implications;
+   return the new goal (context-conclusion), together with a proof-term
+   modifier to apply to the proof-term found for the new goal. *)
+let rec intros ctx = function
+  | Forall (id, n, t, p) ->
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      let ctx', concl', f = intros (Svar (id', TTpure t) :: ctx) p' in
+      ctx', concl',
+      (fun pr -> 
+	 ProofTerm (cc_lam [id', CC_var_binder (TTpure t)] (CC_hole (f pr))))
+  | Pimplies (a, b) -> 
+      let h = fresh_hyp () in 
+      let ctx', concl', f = intros (Spred (h, a) :: ctx) b in
+      ctx', concl', 
+      (fun pr -> ProofTerm (cc_lam [h, CC_pred_binder a] (CC_hole (f pr))))
+  | c -> 
+      ctx, c, (fun pr -> pr)
+
+(* Tautologies in linear minimal first-order logic.
+   Context [ctx] is given in reverse order ([ctx = xk:tk, ..., x1:t1]). 
+
+   First, we introduce universal quantifiers and implications with [intros].
+
+   Then, we cut the context at the last [WP] and reverse it at the same
+   time, with [cut_context].
+
+   Then we apply the linear rules: assumption, and-elimination,
+   forall-elimination and implication-elimination. Regarding 
+   forall-elimination, there are two cases: (1) the hypothesis is
+   [forall x. P] and the goal matches [P], and (2) the hypothesis
+   is [forall x. P => Q] and there is another hypothesis matching [P]. *)
+
 let linear ctx concl = 
+  let ctx, concl, pr_intros = intros ctx concl in
+  (***
   let concl = match concl with (* TODO: comprendre l'origine *)
     | Pif (Tconst (ConstBool true), c, _) -> c
     | _ -> concl
   in
+  ***)
   let rec search = function
     | [] -> 
 	raise Exit
-    | Svar _ :: ctx -> 
-	search ctx
-    | Spred (id, p) :: _ when p = concl ->
+    (* assumption *)
+    | Spred (id, p) :: _ when p = concl -> (* alpha-equivalence ? *)
 	Assumption id
+    (* and-elimination *)
     | Spred (id, Pand (a, b)) :: ctx ->
 	begin try
 	  search ctx
@@ -236,7 +276,9 @@ let linear ctx concl =
 	  let h1 = fresh_hyp () in
 	  let h2 = fresh_hyp () in
 	  let pr = 
-	    try (* particular case for an if-then-else WP *)
+            (* particular case for an if-then-else WP *)
+	    (***
+	    try
 	      (match a, b with
 		 | Pimplies (a, qt), Pimplies (b, qf) ->
 		     let b,hb = lookup_boolean_instance a b ctx in
@@ -253,6 +295,7 @@ let linear ctx concl =
 		 | _ -> 
 		     raise Exit)
 	    with Exit ->
+            ***)
 	      let ctx' = (Spred (h1, a)) :: (Spred (h2, b)) :: ctx in
 	      search ctx'
 	  in
@@ -260,19 +303,30 @@ let linear ctx concl =
 			       [h1, CC_pred_binder a; h2, CC_pred_binder b],
 			       CC_var id, CC_hole pr))
 	end
+    (* forall-elimination *)
     | Spred (id, (Forall _ as a)) :: ctx -> 
 	begin try
 	  search ctx
 	with Exit ->
-	  let bvars,p,q = qe_forall a in
-	  let qx,pr_qx = lookup_instance id bvars p q ctx in
-	  let h1 = fresh_hyp () in
-	  let ctx' = Spred (h1, qx) :: ctx in
-	  ProofTerm 
-	    (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
-		       CC_hole (search ctx')))
+	  let bvars,p = qe_forall a in
+	  try
+	    (* 1. try to unify [p] and [concl] *)
+	    let vars = unify bvars p concl in
+	    ProofTerm (cc_applist (CC_var id) (List.map cc_var vars))
+	  with Exit -> match p with
+	    | Pimplies (p, q) ->
+  	    (* 2. *)
+		let qx,pr_qx = lookup_instance id bvars p q ctx in
+		let h1 = fresh_hyp () in
+		let ctx' = Spred (h1, qx) :: ctx in
+		ProofTerm 
+		  (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
+			     CC_hole (search ctx')))
+	    | _ ->
+		raise Exit
 	end
-    | Spred (id, Pimplies (p, q)) :: ctx ->
+    (* implication-elimination *)
+    | Spred (id, Pimplies (p, q)) :: ctx -> (* alpha-equivalence ? *)
 	begin try
 	  search ctx
 	with Exit ->
@@ -283,6 +337,7 @@ let linear ctx concl =
 	    (CC_letin (false, [hq, CC_pred_binder q],
 		       CC_app (CC_var id, CC_var hp), CC_hole (search ctx')))
 	end
+    (* skip this hypothesis (or variable) *)
     | _ :: ctx ->
 	search ctx
   in
@@ -292,7 +347,7 @@ let linear ctx concl =
     | Spred (id, _) as h :: _ when is_wp id -> h :: acc
     | h :: ctx -> cut_context (h :: acc) ctx
   in
-  search (cut_context [] ctx)
+  pr_intros (search (cut_context [] ctx))
 
 (* ..., v=t, p(v) |- p(t) *)
 let rewrite_var_lemma = Ident.create "why_rewrite_var"

@@ -238,15 +238,3 @@ Subst k; Auto.
 Apply Post11 with k; Omega.
 Save.
 
-(* Why obligation from file "search.mlw", characters 1156-1615 *)
-Lemma search3_po_7 : 
-  (t: (array Z))
-  (Pre13: `0 <= (array_length t)`)
-  (Pre12: `0 <= 0` /\ `0 <= (array_length t)`)
-  (Post23: ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)))
-  ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
-Proof.
-Trivial.
-Save.
-
-
