@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.48 2004-06-29 12:37:39 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.49 2004-06-30 08:57:53 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -444,17 +444,16 @@ let tpred t = match t.term_node with
       { t with term_node = Tbinop (t, Bsub, int_constant "1") }
 
 let make_and p1 p2 = match p1, p2 with
-(*  | Ptrue, _ -> p2
+  | Ptrue, _ -> p2
   | _, Ptrue -> p1
-*)
   | _ -> Pand (p1, p2)
 
 let make_implies p1 = function
-  (* | Ptrue -> Ptrue *)
+  | Ptrue -> Ptrue
   | p2 -> Pimplies (p1, p2)
 
 let make_forall q = function
-  (* | Ptrue -> Ptrue *)
+  | Ptrue -> Ptrue
   | p -> Pforall (q, p)
 
 let fresh_index = 
@@ -629,7 +628,8 @@ that a pointer is different from all allocated pointers in [t]
       print_allocs allocs print_term t;
     match tag_type_definition n with
     | Defined (CTstruct (_, Decl fl)) ->
-	List.fold_right 
+	let allocs',form' as res = 
+	  List.fold_right 
 	  (fun (tyf, f, _) (allocs,form) -> 
 	     let tf = 
 	       { term_node = Tdot (t, find_field n f); term_type = tyf }
@@ -637,7 +637,10 @@ that a pointer is different from all allocated pointers in [t]
 	     let allocs',form' = local_alloc_for allocs tf in
 	     allocs', make_and form form')
 	  fl 
-	  ((fun x -> make_and (allocs x) (Prel (x, Neq, t))), Ptrue)
+	  (allocs, Ptrue)
+	in
+	Format.eprintf "  local_alloc_fields ---> %a@." print_predicate form'; 
+	res 
     | Defined _ ->
 	assert false
     | Incomplete ->
@@ -647,7 +650,10 @@ that a pointer is different from all allocated pointers in [t]
       print_allocs allocs print_term t;
     match t.term_type.ctype_node with
     | CTstruct (n, _) ->
-	local_alloc_fields allocs n t
+	let allocs_t = allocs t in
+	let allocs x = make_and (allocs x) (Prel (x, Neq, t)) in
+	let allocs',form = local_alloc_fields allocs n t in
+	allocs', make_and allocs_t form
     | CTarray (ty, None) ->
 	error loc ("array size missing in `" ^ v.var_name ^ "'")
     | CTarray (ty, Some s) ->
@@ -658,6 +664,7 @@ that a pointer is different from all allocated pointers in [t]
 	       (Pand (Prel (int_constant "0", Le, vari), Prel (vari, Lt, ts)))
 	       pi)
 	in
+	let allocs_t = allocs t in
 	let allocs x = make_and (allocs x) (Prel (x, Neq, t)) in
 	begin match ty.ctype_node with
 	  | CTstruct (n, _) ->
@@ -682,9 +689,9 @@ that a pointer is different from all allocated pointers in [t]
 	      (* x -> forall i 0<=i<ts -> allocs_i x *)
 	      (fun x -> forall_index i vari (allocs_i x)),
 	      (* forall j 0<=j<ts -> form_j *)
-	      begin let p = forall_index j varj form_j in
-	      Format.eprintf "  ---> %a@." print_predicate p; p end
-	  | _ ->
+	      begin let p = make_and allocs_t (forall_index j varj form_j) in
+	      Format.eprintf "  local_alloc_for (struct arr) ---> %a@." print_predicate p; p end
+	  | CTarray _ ->
 	      Format.eprintf "  cas d'un tableau d'autre nature@.";
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
@@ -702,7 +709,10 @@ that a pointer is different from all allocated pointers in [t]
 	      (* x -> forall i 0<=i<ts -> allocs_i x *)
 	      (fun x -> forall_index i vari (allocs_i x)),
 	      (* forall j 0<=j<ts -> form_j *)
-	      forall_index j varj form_j
+	      begin let p = make_and allocs_t (forall_index j varj form_j) in
+	      Format.eprintf "  local_alloc_for (other arr) ---> %a@." print_predicate p; p end
+	  | _ ->
+	      allocs, allocs_t
 	end
     | _ ->
 	Format.eprintf "autre (%a)@." print_term t;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.68 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.69 2004-06-30 08:57:53 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -175,6 +175,15 @@ val por : predicate -> predicate -> predicate
 val pnot : predicate -> predicate
 
 val simplify : predicate -> predicate
+
+(*s Debug functions *)
+
+module Size : sig
+  val predicate : predicate -> int
+  val term : term -> int
+  val postcondition : postcondition -> int
+  val postcondition_opt : postcondition option -> int
+end 
 
 (*s functions over CC terms *)
 

@@ -91,11 +91,11 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 1081-1097 *)
+(* Why obligation from file "why/passing.why", characters 1120-1136 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre4: (valid_range alloc t 0 1)),
+  forall (Pre4: (valid_range alloc t 0 1) /\ (forall (index_1:Z), True)),
   (valid_index alloc t 0).
 Proof.
 intuition.

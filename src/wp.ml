@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.84 2004-05-18 09:34:23 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.85 2004-06-30 08:57:53 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -105,6 +105,7 @@ let add_pre_and_oblig p = add_to_wp p.info.loc (pre p @ obligations p)
     [wp: typed_program -> postcondition option -> assertion option] *)
 
 let rec wp p q =
+  (* Format.eprintf "wp with size(q) = %d@." (Size.postcondition_opt q); *)
   let q = option_app (force_post_loc p.info.loc) q in
   let env = p.info.env in
   let lab = p.info.label in

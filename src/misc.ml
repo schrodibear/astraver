@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.86 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.87 2004-06-30 08:57:53 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -457,6 +457,37 @@ let rec simplify = function
   | Pif (Tconst (ConstBool true), a, _) -> simplify a
   | Pif (Tconst (ConstBool false), _, b) -> simplify b
   | p -> map_predicate simplify p
+
+(*s Debug functions *)
+
+module Size = struct
+
+  let rec term = function
+    | Tconst _ | Tvar _ | Tderef _ -> 1 
+    | Tapp (_, tl) -> List.fold_left (fun s t -> s + term t) 1 tl
+
+  let rec predicate = function
+    | Pvar _ | Ptrue | Pfalse -> 1
+    | Papp (_, tl) -> List.fold_left (fun s t -> s + term t) 1 tl
+    | Pand (_, p1, p2) 
+    | Por (p1, p2) 
+    | Piff (p1, p2) 
+    | Pimplies (_, p1, p2) -> 1 + predicate p1 + predicate p2
+    | Pif (t, p1, p2) -> 1 + term t + predicate p1 + predicate p2
+    | Pnot p -> 1 + predicate p
+    | Forall (_,_,_,_,p) -> 1 + predicate p
+    | Exists (_,_,_,p) -> 1 + predicate p
+    | Forallb (_,_,_,p1,p2,p3) -> 1+ predicate p1 + predicate p2 + predicate p3
+    | Pfpi (t,_,_) -> 1 + term t
+
+  let assertion a = predicate a.a_value
+
+  let postcondition (q,ql) = 
+    assertion q + List.fold_left (fun s (_,q) -> s + assertion q) 0 ql
+
+  let postcondition_opt = function None -> 0 | Some q -> postcondition q
+
+end
 
 (*s functions over CC terms *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.25 2004-05-25 12:33:04 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.26 2004-06-30 08:57:53 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -149,7 +149,7 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(EQ %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->
       fprintf fmt "@[(NEQ %a@ %a)@]" print_term a print_term b
-  | Papp (id, tl) when is_relation id || is_arith id ->
+  | Papp (id, tl) when is_int_comparison id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Papp (id, [a;b]) when id == t_zwf_zero ->
       fprintf fmt "@[(AND (<= 0 %a)@ (< %a %a))@]" 
