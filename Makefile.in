@@ -382,7 +382,7 @@ FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
         bench/c/bench bench/c/*/*.c bench/c/*/*/*.c \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc \
-	lib/why/*.why bin/
+	lib/why/*.why
 
 distrib export: source export-doc export-examples export-examples-c linux
 	make -C $(HOME)/www/why install
