@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.46 2002-07-08 12:45:56 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.47 2002-07-08 12:46:35 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -14,15 +14,15 @@ let gram = Grammar.create (Plexer.make ())
 let gec s = Grammar.Entry.create gram s
 
 (* logic *)
-let predicate = gec "predicate"
-let predicate0 = gec "predicate0"
-let predicate1 = gec "predicate1"
-let predicate2 = gec "predicate2"
-let predicate3 = gec "predicate3"
-let predicate4 = gec "predicate4"
-let predicate5 = gec "predicate5"
-let predicate6 = gec "predicate6"
-let predicate7 = gec "predicate7"
+let lexpr = gec "lexpr"
+let lexpr0 = gec "lexpr0"
+let lexpr1 = gec "lexpr1"
+let lexpr2 = gec "lexpr2"
+let lexpr3 = gec "lexpr3"
+let lexpr4 = gec "lexpr4"
+let lexpr5 = gec "lexpr5"
+let lexpr6 = gec "lexpr6"
+let lexpr7 = gec "lexpr7"
 let pp_relation = gec "pp_relation"
 let constant = gec "constant"
 
@@ -74,7 +74,7 @@ let exception_type = gec "exception_type"
 let assertion = gec "assertion"
 let precondition = gec "precondition"
 let postcondition = gec "postcondition"
-let predicate = gec "predicate"
+let lexpr = gec "lexpr"
 let name = gec "name"
 
 let decl = gec "decl"
@@ -151,47 +151,47 @@ EXTEND
     | LIDENT "void" -> ConstUnit
     | f = FLOAT -> ConstFloat (float_of_string f) ] ]
   ;
-  predicate:
-  [ [ a = predicate0; "->"; b = predicate -> infix_pp loc a PPimplies b
-    | a = predicate0 -> a ] ]
+  lexpr:
+  [ [ a = lexpr0; "->"; b = lexpr -> infix_pp loc a PPimplies b
+    | a = lexpr0 -> a ] ]
   ; 
-  predicate0:
-  [ [ a = predicate0; "or"; b = predicate1 -> infix_pp loc a PPor b
-    | a = predicate1 -> a ] ]
+  lexpr0:
+  [ [ a = lexpr0; "or"; b = lexpr1 -> infix_pp loc a PPor b
+    | a = lexpr1 -> a ] ]
   ; 
-  predicate1:
-  [ [ a = predicate1; "and"; b = predicate2 -> infix_pp loc a PPand b
-    | a = predicate2 -> a ] ]
+  lexpr1:
+  [ [ a = lexpr1; "and"; b = lexpr2 -> infix_pp loc a PPand b
+    | a = lexpr2 -> a ] ]
   ;
-  predicate2:
-  [ [ "not"; a = predicate3 -> prefix_pp loc PPnot a
-    | a = predicate3 -> a ] ]
+  lexpr2:
+  [ [ "not"; a = lexpr3 -> prefix_pp loc PPnot a
+    | a = lexpr3 -> a ] ]
   ;
-  predicate3:
-  [ [ a = predicate4; r = pp_relation; b = predicate4 -> 
+  lexpr3:
+  [ [ a = lexpr4; r = pp_relation; b = lexpr4 -> 
 	infix_pp loc a r b
-    | a = predicate4; r1 = pp_relation; b = predicate4;
-      r2 = pp_relation; c = predicate4 -> 
+    | a = lexpr4; r1 = pp_relation; b = lexpr4;
+      r2 = pp_relation; c = lexpr4 -> 
 	infix_pp loc (infix_pp loc a r1 b) PPand (infix_pp loc b r2 c)
-    | a = predicate4 -> 
+    | a = lexpr4 -> 
 	a ] ]
   ;
-  predicate4:
-  [ [ a = predicate4; "+"; b = predicate5 -> infix_pp loc a PPadd b
-    | a = predicate4; "-"; b = predicate5 -> infix_pp loc a PPsub b
-    | a = predicate5 -> a ] ]
+  lexpr4:
+  [ [ a = lexpr4; "+"; b = lexpr5 -> infix_pp loc a PPadd b
+    | a = lexpr4; "-"; b = lexpr5 -> infix_pp loc a PPsub b
+    | a = lexpr5 -> a ] ]
   ;
-  predicate5:
-  [ [ a = predicate5; "*"; b = predicate6 -> infix_pp loc a PPmul b
-    | a = predicate5; "/"; b = predicate6 -> infix_pp loc a PPdiv b
-    | a = predicate5; "%"; b = predicate6 -> infix_pp loc a PPmod b
-    | a = predicate6 -> a ] ]
+  lexpr5:
+  [ [ a = lexpr5; "*"; b = lexpr6 -> infix_pp loc a PPmul b
+    | a = lexpr5; "/"; b = lexpr6 -> infix_pp loc a PPdiv b
+    | a = lexpr5; "%"; b = lexpr6 -> infix_pp loc a PPmod b
+    | a = lexpr6 -> a ] ]
   ;
-  predicate6:
-  [ [ "-"; a = predicate6 -> prefix_pp loc PPneg a
-    | a = predicate7 -> a ] ]
+  lexpr6:
+  [ [ "-"; a = lexpr6 -> prefix_pp loc PPneg a
+    | a = lexpr7 -> a ] ]
   ;
-  predicate7:
+  lexpr7:
   [ [ "true" -> 
 	mk_pp loc PPtrue
     | "false" -> 
@@ -204,16 +204,16 @@ EXTEND
 ***)
     | x = qualid_ident ->
 	mk_pp loc (PPvar x)
-    | x = qualid_ident; "("; l = LIST1 predicate SEP ","; ")" -> 
+    | x = qualid_ident; "("; l = LIST1 lexpr SEP ","; ")" -> 
 	mk_pp loc (PPapp (x,l))
-    | x = qualid_ident; "["; t = predicate; "]" -> 
+    | x = qualid_ident; "["; t = lexpr; "]" -> 
 	mk_pp loc (PPapp (Ident.access, [mk_pp loc (PPvar x); t]))
-    | "if"; p0 = predicate; "then"; p1 = predicate; "else"; p2 = predicate ->
+    | "if"; p0 = lexpr; "then"; p1 = lexpr; "else"; p2 = lexpr ->
 	mk_pp loc (PPif (p0, p1, p2))
     | LIDENT "forall"; id = ident; ":"; t = primitive_type; 
-      "." ; a = predicate -> 
+      "." ; a = lexpr -> 
 	mk_pp loc (PPforall (id, t, a))
-    | "("; a = predicate; ")" -> 
+    | "("; a = lexpr; ")" -> 
 	a ] ] 
   ;
   pp_relation:
@@ -245,7 +245,7 @@ EXTEND
 	t ] ]
   ;
   simple_type_v:
-  [ [ "array"; size = predicate; "of"; v = simple_type_v -> PVarray (size,v)
+  [ [ "array"; size = lexpr; "of"; v = simple_type_v -> PVarray (size,v)
     | v = simple_type_v; "ref" -> PVref v
     | t = primitive_type -> PVpure t
     | "("; v = type_v; ")" -> v ] ] 
@@ -304,7 +304,7 @@ EXTEND
 
   (* Programs *)
   assertion:
-  [ [ c = predicate; n = name -> { a_name = n; a_value = c } ] ]
+  [ [ c = lexpr; n = name -> { a_name = n; a_value = c } ] ]
   ;
   name:
   [ [ "as"; id = ident -> Ident.Name id
@@ -473,8 +473,8 @@ i*)
   [ [ LIDENT "invariant"; c = assertion -> c ] ]
   ;
   variant:
-  [ [ c = predicate; "for"; r = ident -> (c, r)
-    | c = predicate -> (c, Ident.t_zwf_zero) ] ]
+  [ [ c = lexpr; "for"; r = ident -> (c, r)
+    | c = lexpr -> (c, Ident.t_zwf_zero) ] ]
   ;
   exception_type:
   [ [ "of"; v = primitive_type -> v ] ]
