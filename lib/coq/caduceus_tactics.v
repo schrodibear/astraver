@@ -1,6 +1,8 @@
 
 Require Export caduceus_why.
 
+Notation " p # f " := (acc f p) (at level 30, f at level 0).
+
 Ltac Acc_upd :=
   rewrite acc_upd ||
   (rewrite acc_upd_eq; [ idtac | progress auto with * ]) ||

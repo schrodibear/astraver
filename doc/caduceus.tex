@@ -35,6 +35,7 @@
 \def\at{\char'134 at}
 \def\forall{\char'134 forall}
 \def\valid{\char'134 valid}
+\def\fresh{\char'134 fresh}
 \def\old{\char'134 old}
 \def\bs{\char'134}
 
@@ -106,7 +107,7 @@ examples.
 
 To introduce how the \caduceus{} tool must be used in practice, let us
 start with a trivial program: function \texttt{max} computing the
-maximum of two integers:
+maximum of two integers: \indextt{ensures}
 \begin{code}
 /*@ ensures 
   @   \result >= x && \result >= y &&
@@ -188,7 +189,6 @@ attempted, but counter-examples given in file \texttt{simplify.log}
 may be consulted, to discover missing pre-conditions for instance.
 
 \section{Pointer access and modification}
-\index{valid@\texttt{\bs{}valid}}
 
 Let us consider now a small program involving a pointer, in a file
 \verb|abs.c|: 
@@ -253,7 +253,7 @@ which is not provable.
 
 To fix this problem, one should specify a pre-condition to function
 \verb|abs|, which can be given using the \verb|\valid| predicate of
-\caduceus{} as follows:
+\caduceus{} as follows: \index{valid@\texttt{\bs{}valid}}\indextt{requires}
 \begin{code}
 /*@ requires \valid(p)
   @ ensures *p >= 0
@@ -266,28 +266,16 @@ If you run \caduceus{} again on this version, you will first notice
 that the first obligation is now automatically discharge by Why, and
 Simplify will succeed to prove the second obligation. If you run Coq
 instead, then this obligation will not be proved automatically: you
-will have to make the proof by hand. Here is the goal to solve, after
-executing the \verb|intuition| tactic:
+will have to make the proof by hand. After 
+executing the \verb|intuition| tactic, the goal to solve has the
+following shape:
 \begin{verbatim}
-1 subgoal
-p : pointer
-alloc : alloc
-intP : memory Z
-Pre9 : valid alloc p
-Pre3 : valid alloc p
-caduceus_1 : Z
-Post3 : caduceus_1 = acc intP p
+...
 result : bool
-Post5 : if result then caduceus_1 < 0 else caduceus_1 >= 0
+Post5 : if result then ... else ...
 ______________________________________(1/1)
 if result
-then
- (forall result0 : Z,
-  result0 = acc intP p ->
-  (forall intP0 : memory Z,
-   intP0 = upd intP p (- result0) -> acc intP0 p >= 0) /\ valid alloc p) /\
- valid alloc p
-else acc intP p >= 0
+then ...
 \end{verbatim}
 It is indeed quite large, because it has two cases depending on the
 value of \verb|result|, which is (see \verb|Post5|) the condition of
@@ -299,31 +287,55 @@ destruct result; intuition.
 instead of \verb|intuition| alone. This will then result in one
 subgoal (the other case has been solved automatically):
 \begin{verbatim}
-1 subgoal
-p : pointer
-alloc : alloc
+...
 intP : memory Z
-Pre9 : valid alloc p
-Pre3 : valid alloc p
-caduceus_1 : Z
-Post3 : caduceus_1 = acc intP p
-Post5 : caduceus_1 < 0
+...
 result : Z
-H : result = acc intP p
+H : result = p # intP
 intP0 : memory Z
 H0 : intP0 = upd intP p (- result)
 ______________________________________(1/1)
-acc intP0 p >= 0
+p # intP0 >= 0
 \end{verbatim}
+\indextt{upd}\indextt{\#}\indextt{memory}
+This should be read as follows: \verb|intP| and \verb|intP0| are
+\emph{memory states} containing integers. \verb|p # intP| denotes the
+value stored in \verb|intP| at ``address'' \verb|p|, i.e it is the
+logical representation of the C expression \verb|*p|. \verb|upd| the
+logical function representing memory update: $(\verb|upd|~s~p~v)$ is
+the memory state obtained from $s$ by putting value $v$ at
+``address'' $p$. Addresses considered here must not be understood by
+integers like in a real computer, but simply an abstract type: this
+why in the following we will refer to them as \emph{pointers} instead
+of addresses.
+
+So, what should be proved is that the value stored at pointer \verb|p|
+in the memory state \verb|intP0| is non-negative. But
 
 \section{Arrays}
 \index{valid\_index@\texttt{\bs{}valid\_index}}
 \index{valid\_range@\texttt{\bs{}valid\_range}}
-
-\section{Structures}
-
-\section{Loop annotations}
 \indextt{invariant}\indextt{variant}
+
+
+
+\begin{code}
+/*@ requires \valid_range(t,0,n)
+  @ ensures 
+  @   (0 <= \result < n => t[\result] == v) &&
+  @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
+  @*/
+int index(int t[], int n, int v) {
+  int i = 0;
+  /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
+    variant n - i */ 
+  while (i < n) {
+    if (t[i] == v) break;
+    i++;
+  }
+  return i;
+}
+\end{code}
 
 A loop can be annotated with an invariant (a property which holds at
 the loop entrance and is preserved by the loop body) and a variant (a
@@ -336,26 +348,65 @@ A loop annotation is placed right before the loop; the keyword
 (resp. the variant). The invariant is optional and must appear before
 the variant when present.
 
-Here is an example with a trivial loop:
-\begin{code}
+\section{Structures}
 
-  int i = 0;
-  int s = 0;
-  /*@ invariant s == i variant 10-i */
-  while (i++ < 10) s++;
+\begin{code}
+typedef struct {
+  int balance;
+} purse;
+
+//@ predicate purse_inv(purse *p) { \valid(p) && p->balance >= 0 }
+
+/*@ requires purse_inv(p) && s >= 0
+  @ assigns p->balance
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
+  @*/
+void credit(purse *p,int s) {
+  p->balance = p->balance + s;
+}
+
+/*@ requires purse_inv(p) && 0 <= s <= p->balance
+  @ assigns p->balance
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) - s
+  @*/
+void withdraw(purse *p,int s) {
+  p->balance = p->balance - s;
+}
 \end{code}
 
-
-
-
-
+\section{Memory modeling and pointer arithmetic}
 
 \section{Calling functions}
 
-
-\section{The \texttt{assigns} clause}
+\subsection{The \texttt{assigns} clause}
 \label{assigns}\indextt{assigns}
 
+\begin{code}
+/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
+  @ assigns p1->balance, p2->balance
+  @ ensures \result == 0
+  @*/
+int test1(purse *p1, purse *p2) {
+    p1->balance = 0;
+    credit(p2,100);
+    return p1->balance;
+}
+
+//@ ensures \fresh(\result) && purse_inv(\result) 
+purse *new_purse();
+
+
+//@ ensures \result == 150
+int test2() {
+    purse *p1 = new_purse();
+    purse *p2 = new_purse();
+    credit(p1,100);
+    credit(p2,200);
+    withdraw(p1,50);
+    withdraw(p2,100);
+    return p1->balance + p2->balance;
+}
+\end{code}
 
 \section{Logical declarations}
 \indextt{predicate}\indextt{logic}\indextt{axiom}
