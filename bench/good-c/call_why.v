@@ -2,7 +2,6 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Why.
-Require WhyFloat.
 
 
 Lemma f_po_1 : 
