@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.43 2002-11-05 08:44:50 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.44 2002-11-21 16:23:09 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -140,7 +140,9 @@ let ml_parser c =
  
 let c_parser c = 
   let d = Clexer.parse c in
-  Cinterp.interp d
+  let p = Cinterp.interp d in
+  print_if_debug print_pfile p;
+  p
 
 let deal_channel parsef cin =
   let p = parsef cin in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.60 2002-11-05 08:19:33 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.61 2002-11-21 16:23:09 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -543,3 +543,59 @@ let print_env fmt e =
   fold_all (fun (id, v) () -> fprintf fmt "%a:%a, " Ident.dbprint id 
 		print_type_info v) e ()
 
+(*s For debugging purposes *)
+
+open Ptree
+
+let rec print_ptree fmt p = match p.pdesc with
+  | Svar x -> Ident.print fmt x
+  | Srefget x -> fprintf fmt "!%a" Ident.print x
+  | Srefset (x, p) -> fprintf fmt "@[%a := %a@]" Ident.print x print_ptree p
+  | Sarrget (_, x, p) -> fprintf fmt "%a[%a]" Ident.print x print_ptree p
+  | Sarrset (_, x, p1, p2) ->
+      fprintf fmt "@[%a[%a] := %a@]" Ident.print x 
+	print_ptree p1 print_ptree p2
+  | Sseq bl ->
+      fprintf fmt "begin@\n  @[%a@]@\nend" print_block bl
+  | Swhile (p1, _, _, p2) ->
+      fprintf fmt "while %a do@\n  @[%a@]@\ndone" print_ptree p1 print_ptree p2
+  | Sif (p1, p2, p3) ->
+      fprintf fmt "@[<hv 2>if %a then@ %a else@ %a@]" 
+	print_ptree p1 print_ptree p2 print_ptree p3
+  | Slam (bl, p) ->
+      fprintf fmt "fun <...> ->@ %a" print_ptree p
+  | Sapp (p, a) ->
+      fprintf fmt "(%a %a)" print_ptree p print_arg a
+  | Sletref _ -> 
+      fprintf fmt "<Sletref>"
+  | Sletin _ ->
+      fprintf fmt "<Sletin>"
+  | Srec _ ->
+      fprintf fmt "<Srec>"
+  | Sraise _ -> 
+      fprintf fmt "<Sraise>"
+  | Stry _ ->
+      fprintf fmt "<Stry>"
+  | Sconst c -> print_term fmt (Tconst c)
+
+and print_arg fmt = function
+  | Sterm p -> print_ptree fmt p
+  | Stype _ -> fprintf fmt "<Stype>"
+
+and print_block_st fmt = function
+  | Slabel l -> fprintf fmt "%s:" l
+  | Sassert _ -> fprintf fmt "<Sassert>"
+  | Sstatement p -> print_ptree fmt p
+
+and print_block fmt =
+  print_list (fun fmt () -> fprintf fmt ";@\n") print_block_st fmt
+
+let print_decl fmt = function
+  | Program (id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
+  | Parameter (_, ids, v) -> fprintf fmt "parameter <...>"
+  | External (_, ids, v) -> fprintf fmt "external <...>"
+  | Exception (_, id, pto) -> fprintf fmt "exception %a <...>" Ident.print id
+  | Logic (_, id, lt) -> fprintf fmt "logic %a : <...>" Ident.print id
+  | QPvs s -> fprintf fmt "pvs \"%s\"" s
+
+let print_pfile = print_list newline print_decl

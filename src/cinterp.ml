@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.9 2002-11-21 14:04:08 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.10 2002-11-21 16:23:09 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -104,6 +104,8 @@ let mk_seq loc e1 e2 = match e1, e2 with
   | e1, e2 -> mk_expr loc (Sseq [Sstatement e1; Sstatement e2])
 
 let ml_const l c = mk_expr l (Sconst c)
+let ml_true l = ml_const l (ConstBool true)
+let ml_false l = ml_const l (ConstBool false)
 let ml_var l id = mk_expr l (Svar id)
 let ml_refget l id = mk_expr l (Srefget id)
 let ml_refset l id e = mk_expr l (Srefset (id, e))
@@ -323,6 +325,8 @@ let rec interp_expr cenv et e =
     in
     coerce ml.loc et ml ct
 
+(*s [interp_boolean] returns an ML expression of type [bool] *)
+
 and interp_boolean cenv = function
   | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq as op), e2) ->
       let m1t1 = interp_expr cenv None e1 in
@@ -330,11 +334,11 @@ and interp_boolean cenv = function
       let e,_ = interp_binop l op m1t1 m2t2 in
       e
   | CEbinary (l, e1, And, e2) ->
-      ml_if l (interp_boolean cenv e1) (interp_boolean cenv e2) (c_false l)
+      ml_if l (interp_boolean cenv e1) (interp_boolean cenv e2) (ml_false l)
   | CEbinary (l, e1, Or, e2) ->
-      ml_if l (interp_boolean cenv e1) (c_true l) (interp_boolean cenv e2)
+      ml_if l (interp_boolean cenv e1) (ml_true l) (interp_boolean cenv e2)
   | CEunary (l, Not, e) ->
-      ml_if l (interp_boolean cenv e) (c_false l) (c_true l)
+      ml_if l (interp_boolean cenv e) (ml_false l) (ml_true l)
   | e ->
       let m,_ as mt = interp_expr cenv None e in 
       let e,_ = 
@@ -363,10 +367,8 @@ let rec interp_statement cenv et = function
 	(mk_expr l (Swhile (interp_statement cenv (Some c_bool) s2, Some i, v, 
 			    interp_statement cenv (Some void) bl)))
   | CSdowhile (l, s, an, e) ->
-      (* = s ; while (!e) s *)
-      let not_e = CEunary (loc_of_expr e, Not, e) in
-      interp_statement cenv et 
-	(CSblock (l, ([], [s; CSwhile (l, not_e, an, s)])))
+      (* do s while (e) = s ; while (e) s *)
+      interp_statement cenv et (CSblock (l, ([], [s; CSwhile (l, e, an, s)])))
   | CSwhile (l, e, an, s) ->
       let (i,v) = interp_loop_annot an in
       mk_expr l
