@@ -3,6 +3,7 @@ version 1.32
 ============
   o output for Coq version 8 with --coq-v8
     (--coq is now equivalent to --coq-v7, and is still the default output)
+    examples in V7 syntax now in examples-v7/ and in V8 syntax in examples/
   o Mizar output (with option --mizar)
     Mizar article in lib/mizar/why.miz (installed by "make install")
 
