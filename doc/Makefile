@@ -3,13 +3,16 @@ all: manual.ps doc.ps
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
-SRCFILES=ast.mli typing.mli typing.ml monad.mli monad.ml mlize.mli mlize.ml
+SRCFILES=../src/loc.mli ../src/logic.mli ../src/types.mli \
+	 ../src/ptree.mli ../src/ltyping.mli ../src/ast.mli ../src/env.mli \
+         ../src/typing.mli ../src/typing.ml ../src/wp.mli ../src/wp.ml \
+	 ../src/monad.mli ../src/monad.ml ../src/mlize.mli ../src/mlize.ml
 
-dep.ps::
+dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
 
-code.tex:
-	cd ../src; ocamlweb --no-preamble -o ../doc/code.tex $(SRCFILES)
+code.tex: $(SRCFILES)
+	ocamlweb --no-preamble -o $@ $(SRCFILES)
 
 manual.dvi: manual.tex
 	latex manual

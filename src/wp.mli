@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.mli,v 1.9 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: wp.mli,v 1.10 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s Weakest preconditions *)
 
 open Types
 open Env

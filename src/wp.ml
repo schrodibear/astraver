@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.64 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.65 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s Weakest preconditions *)
 
 open Ident
 open Error
@@ -56,11 +58,14 @@ let need_a_post p =
   match p.desc with Lam _ | Rec _ -> false | _ -> true
 
 (*s Weakest precondition of an annotated program:
-    $wp(e{Q'}, Q) = forall y,v. Q' => Q$ 
-
+    \begin{verbatim}
+    wp(e{Q'}, Q) = forall y,v. Q' => Q
+    \end{verbatim}
     When [e] may raise exceptions:
-    $wp(e{Q'|Q'1|...Q'k}, Q|Q1|...Qk) = (forall y,v. Q' => Q) and ...
-    and (forall y,x. Q'k => Qk)$ *)
+    \begin{verbatim}
+    wp(e{Q'|Q'1|...Q'k}, Q|Q1|...Qk) =
+    (forall y,v. Q' => Q) and ... and (forall y,x. Q'k => Qk)
+    \end{verbatim} *)
 
 let abstract_wp (q',ql') (q,ql) res out =
   assert (List.length ql' = List.length ql);
@@ -78,7 +83,7 @@ let abstract_wp (q',ql') (q,ql) res out =
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
 
-    wp: typed_program -> postcondition option -> assertion option *)
+    [wp: typed_program -> postcondition option -> assertion option] *)
 
 let rec wp p q =
   let env = p.info.env in
@@ -139,14 +144,14 @@ and wp_desc info d q =
 	let q2 = saturate_post e2.info w1 q in
 	let e'2,w2 = wp e2 q2 in
 	TabAff (ck, x, e'1, e'2), w2
-    (* conditional: two cases *)
+
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 (filter_post p2.info q) in
 	let p'3,w3 = wp p3 (filter_post p3.info q) in
 	(match w2, w3 with
 	   | Some {a_value=q2}, Some {a_value=q3} -> 
-	       (* $wp(if p1 then p2 else p3, q) = 
-		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
+	       (* $wp(if p1 then p2 else p3, q) =$ *)
+	       (* $wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
 	       let q1 = create_postval (Pif (Tvar result1, q2, q3)) in
 	       let q1 = saturate_post p1.info q1 q in
@@ -172,6 +177,7 @@ and wp_desc info d q =
         Report.raise_unlocated 
 	  (AnyMessage ("cannot compute wp due to capture variable;\n" ^
                        "please rename variable " ^ Ident.string x))
+
     | LetIn (x, e1, e2) ->
 	let e'2, w2 = wp e2 (filter_post e2.info q) in
 	let q1 = optnamed_app (subst_in_predicate (subst_onev x result)) w2 in
@@ -194,17 +200,19 @@ and wp_desc info d q =
 	let q = Annot.sup (Some qbl) q in (* exc. posts taken from [q] *)
 	let e',_ = wp e q in
 	While (b', inv, var, e'), None
-    (* $wp(raise E, _, R) = R$ *)
+
     | Raise (id, None) ->
+	(* $wp(raise E, _, R) = R$ *)
 	d, option_app (fun (_,ql) -> List.assoc id ql) q
-    (* $wp(raise (E e), _, R) = wp(e, R, R)$ *)
     | Raise (id, Some e) ->
+        (* $wp(raise (E e), _, R) = wp(e, R, R)$ *)
 	let make_post (_,ql) = let r = List.assoc id ql in (r, ql) in
 	let qe = filter_post e.info (option_app make_post q) in
 	let e',w = wp e qe in
 	Raise (id, Some e'), w
-    (* $wp(try e1 with E -> e2, Q, R) = wp(e1, Q, wp(e2, Q, R))$ *)
+
     | Try (e, hl) ->
+        (* $wp(try e1 with E -> e2, Q, R) = wp(e1, Q, wp(e2, Q, R))$ *)
 	let subst w = function
 	  | None -> w
 	  | Some x -> optnamed_app (subst_in_predicate (subst_onev x result)) w
@@ -217,8 +225,9 @@ and wp_desc info d q =
 	let hl',hwl = List.split hl' in
 	let make_post (q,ql) = 
 	  let hpost (x,r) =
-	    x, try (match List.assoc x hwl with None -> r | Some w -> w)
-	       with Not_found -> r
+	    x, 
+	    try (match List.assoc x hwl with None -> r | Some w -> w)
+	    with Not_found -> r
 	  in
 	  (q, List.map hpost ql)
 	in

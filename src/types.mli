@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: types.mli,v 1.13 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.14 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s Types for programs *)
 
 open Logic
 
@@ -44,7 +46,7 @@ type 'a binder_type =
 
 type 'a binder = Ident.t * 'a binder_type
 
-(*s Typed types *)
+(*s Types of values ([type_v]) and computations ([type_c]) *)
 
 type type_v = 
   | Ref of type_v

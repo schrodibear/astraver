@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.59 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.60 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s Translation of imperative programs into functional ones. *)
 
 open Ident
 open Logic
@@ -29,10 +31,9 @@ open Monad
 
 let make_info env k = { env = env; label = label_name (); kappa = k }
 
-(*s Translation of imperative programs into functional ones.
-    [ren] is the current renamings of variables,
+(*s [ren] is the current renamings of variables,
     [e] is the imperative program to translate, annotated with type+effects.
-    We return the translated program in type [cc_term] *)
+    We return the translated program in type [predicate cc_term] *)
 
 let rec trad e =
   cross_label e.info.label (trad_desc e.info e.desc)

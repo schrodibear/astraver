@@ -14,11 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.mli,v 1.11 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.12 2002-10-18 11:18:38 filliatr Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
-open Logic
 open Types
 open Ptree
 open Ast

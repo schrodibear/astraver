@@ -14,14 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.mli,v 1.6 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: mlize.mli,v 1.7 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s translation of imperative programs into intermediate functional programs *)
 
 open Ast
 open Cc
 open Env
 open Logic
-
-(* translation of imperative programs into intermediate functional programs *)
 
 val trans : typed_program -> Rename.t -> predicate cc_term
 

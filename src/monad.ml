@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.57 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.58 2002-10-18 11:18:38 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -162,12 +162,12 @@ and make_applied_post ren env k = function
       let tt = make_post ren env result k q in
       Some (TTapp (tt, [tt_var result]))
 
-(* builds (Val Ex) *) 
+(* builds [Val Ex] *) 
 
 let make_valx x =
   CC_app (CC_term (Tvar Ident.exn_val), CC_type (exn_arg_type x))
 
-(* builds (Val_e1 (Val_e2 ... (Val_en t))) *)
+(* builds [Val_e1 (Val_e2 ... (Val_en t))] *)
 
 let make_val t xs = 
   List.fold_right (fun x cc -> CC_app (make_valx x, cc)) xs t
@@ -228,8 +228,9 @@ let unit info r ren =
 	  (* proof obligation *)
 	  let h = 
 	    let q = apply_post info.label ren env q in
-	    let a = 
-	      match r with Value _ -> post_val q | Exn (x,_) -> post_exn x q 
+	    let a = match r with 
+	      | Value _ -> post_val q 
+	      | Exn (x,_) -> post_exn x q 
 	    in
 	    match r with
 	      | Value t | Exn (_, Some t) ->
@@ -257,7 +258,7 @@ let unit info r ren =
       t :: hole,
       holet)
 
-(*s Case patterns *)
+(*s \pagebreak Case patterns *)
 
 (* pattern for an exception: (Val (Val ... (Exn v))) *)
 let exn_pattern dep x res xs =
@@ -342,6 +343,7 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
     else
       e1 ren
   in
+
   let cc2 =
     if x1 = [] then
       (* e1 does not raise any exception *)

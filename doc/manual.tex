@@ -909,6 +909,15 @@ Evaluation of ML programs obey to the following rules:
   evaluated first and, if \texttt{true}, then $e_2$ is evaluated; in
   $e_1$ \texttt{||} $e_2$, $e_1$ is evaluated first and, if
   \texttt{false}, then $e_2$ is evaluated.
+  Stated otherwise, the following identities hold:
+  \begin{displaymath}
+    \begin{array}{rcl}
+      e_1 ~ \te{\&\&} ~ e_2 & \approx & 
+      \te{if} ~ e_1 ~ \te{then} ~ e_2 ~ \te{else false} \\[0.5em]
+      e_1 ~ \te{||} ~ e_2 & \approx & 
+      \te{if} ~ e_1 ~ \te{then true else} ~ e_2
+    \end{array}
+  \end{displaymath}
 \item
   In a function call, the argument is evaluated first, then the
   function; consequently multiple arguments are evaluated from right

@@ -14,22 +14,21 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.17 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.18 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s Environment for imperative programs.
+ 
+   Here we manage the global environment, which is imperative,
+   and we provide a functional local environment. 
+  
+   The most important functions, [is_in_env], [type_in_env] and [fold_all]
+   first look in the local environment then in the global one. *)
 
 open Logic
 open Types
 open Ast
 
-(* Environment for imperative programs.
- * 
- * Here we manage the global environment, which is imperative,
- * and we provide a functional local environment. 
- *
- * The most important functions, [is_in_env], [type_in_env] and [fold_all]
- * first look in the local environment then in the global one.
- *)
-
-(* local environments *)
+(*s local environments *)
 
 type local_env
 
@@ -39,7 +38,7 @@ val add_set : Ident.t -> local_env -> local_env
 val is_local : local_env -> Ident.t -> bool
 val is_local_set : local_env -> Ident.t -> bool
 
-(* typed programs *)
+(*s typed programs *)
 
 type typing_info = 
   { env : local_env;
@@ -48,7 +47,7 @@ type typing_info =
   
 type typed_program = typing_info Ast.t
 
-(* global environment *)
+(*s global environment *)
 
 val add_global : Ident.t -> type_v -> typed_program option -> unit
 val add_global_set : Ident.t -> unit
@@ -59,22 +58,22 @@ val lookup_global : Ident.t -> type_v
 val all_vars : unit -> Ident.set
 val all_refs : unit -> Ident.set
 
-(* exceptions (only global) *)
+(*s exceptions (only global) *)
 
 val add_exception : Ident.t -> pure_type option -> unit
 val is_exception : Ident.t -> bool
 val find_exception : Ident.t -> pure_type option
 
-(* a table keeps the program (for extraction) *)
+(*s a table keeps the program (for extraction) *)
 
 val find_pgm : Ident.t -> typed_program option
 
-(* a table keeps the initializations of mutable objects *)
+(*s a table keeps the initializations of mutable objects *)
 
 val initialize : Ident.t -> term -> unit
 val find_init : Ident.t -> term
 
-(* access in env (local then global) *)
+(*s access in env (local then global) *)
 
 val type_in_env : local_env -> Ident.t -> type_v
 val is_in_env : local_env -> Ident.t -> bool

@@ -14,12 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.6 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.7 2002-10-18 11:18:38 filliatr Exp $ i*)
+
+(*s Parse trees. *)
 
 open Logic
 open Types
-
-(*s Parse trees. *)
 
 (*s Logical expressions (for both terms and predicates) *)
 

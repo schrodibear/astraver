@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.mli,v 1.21 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.22 2002-10-18 11:18:38 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -39,7 +39,7 @@ val exn_arg_type : Ident.t -> cc_type
 
 type interp = Rename.t -> predicate cc_term
 
-(* The [unit] operator encapsulates a term in a computation. *)
+(*s The [unit] operator encapsulates a term in a computation. *)
 
 type result = 
   | Value of term
@@ -47,7 +47,7 @@ type result =
 
 val unit : typing_info -> result -> interp
 
-(* [compose k1 e1 e2] evaluates computation [e1] of type [k1] and 
+(*s [compose k1 e1 e2] evaluates computation [e1] of type [k1] and 
    passes its result (actually, a variable naming this result) to a
    second computation [e2]. [apply] is a variant of [compose] where
    [e2] is abstracted (typically, a function) and thus must be applied
@@ -58,7 +58,7 @@ val compose :
 val apply   : 
   typing_info -> interp -> typing_info -> (Ident.t -> interp) -> interp
 
-(*s Monadic operator to raise exceptions *)
+(*s Monadic operator to raise and handle exceptions *)
 
 val exn : typing_info -> Ident.t -> term option -> interp
 
