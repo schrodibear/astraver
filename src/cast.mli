@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.12 2002-12-10 15:03:13 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.13 2002-12-18 16:21:44 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -25,14 +25,21 @@ type constant_expression = unit
 
 type annot = int * string
 
-type parameters = (pure_type * Ident.t) list
+type ctype =
+  | CTpure of pure_type
+  | CTarray of ctype
+  | CTpointer of ctype
+  | CTfun of ctype list * ctype
+
+type parameters = (ctype * Ident.t) list
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
   | Aand | Axor | Aor
 
 type unary_operator = 
-  | Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec | Uplus | Uminus | Not
+  | Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec 
+  | Uplus | Uminus | Not | Ustar | Uamp
 
 type binary_operator =
   | Plus | Minus | Mult | Div | Mod | Lt | Gt | Le | Ge | Eq | Neq 
@@ -74,7 +81,7 @@ and block = decl list * cstatement list
 and annotated_block = Loc.t * annot option * block * annot option
 
 and decl = 
-  | Ctypedecl of Loc.t * declarator * pure_type
-  | Cfundef of Loc.t * Ident.t * parameters * pure_type * annotated_block
+  | Ctypedecl of Loc.t * declarator * ctype
+  | Cfundef of Loc.t * Ident.t * parameters * ctype * annotated_block
 
 type file = decl list

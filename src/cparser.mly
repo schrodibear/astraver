@@ -112,8 +112,8 @@ unary_expression
         ;
 
 unary_operator
-        : AMP { uns () }
-        | STAR { uns () }
+        : AMP { Uamp }
+        | STAR { Ustar }
         | PLUS { Uplus }
         | MINUS { Uminus }
         | TILDE { uns () }
@@ -248,7 +248,9 @@ constant_expression
 declaration
         : declaration_specifiers SEMICOLON { uns() }
         | declaration_specifiers init_declarator_list SEMICOLON 
-	    { List.map (fun d -> Ctypedecl (loc(), d, $1)) $2 }
+	    { List.map (fun (p,d) -> 
+			  let v = if p then CTpointer $1 else $1 in
+			  Ctypedecl (loc(), d, v)) $2 }
         ;
 
 declaration_specifiers
@@ -270,7 +272,7 @@ init_declarator
             { $1 }
         | declarator EQUAL c_initializer 
 	    { match $1 with 
-		| CDvar (id, _) -> CDvar (id, Some $3) 
+		| p, CDvar (id, _) -> p, CDvar (id, Some $3) 
 		| d -> d 
 	    }
         ;
@@ -284,18 +286,18 @@ storage_class_specifier
         ;
 
 type_specifier
-        : VOID { PTunit }
-        | CHAR { PTint }
-        | SHORT { PTint }
-        | INT { PTint }
-        | LONG { PTint }
-        | FLOAT { PTfloat }
-        | DOUBLE { PTfloat }
+        : VOID { CTpure PTunit }
+        | CHAR { CTpure PTint }
+        | SHORT { CTpure PTint }
+        | INT { CTpure PTint }
+        | LONG { CTpure PTint }
+        | FLOAT { CTpure PTfloat }
+        | DOUBLE { CTpure PTfloat }
         | SIGNED { uns() }
         | UNSIGNED { uns() }
         | struct_or_union_specifier { uns() }
         | enum_specifier { uns() }
-        | TYPE_NAME { PTexternal (Ident.create $1) }
+        | TYPE_NAME { CTpure (PTexternal (Ident.create $1)) }
         ;
 
 struct_or_union_specifier
@@ -358,8 +360,8 @@ type_qualifier
         ;
 
 declarator
-        : pointer direct_declarator { uns() }
-        | direct_declarator { $1 }
+        : pointer direct_declarator { true, $2 }
+        | direct_declarator { false, $1 }
         ;
 
 direct_declarator
@@ -386,10 +388,10 @@ annot
         ;
 
 pointer
-        : STAR { }
-        | STAR type_qualifier_list { }
-        | STAR pointer { }
-        | STAR type_qualifier_list pointer { }
+        : STAR { () }
+        | STAR type_qualifier_list { uns () }
+        | STAR pointer { uns () }
+        | STAR type_qualifier_list pointer { uns () }
         ;
 
 type_qualifier_list
@@ -410,7 +412,11 @@ parameter_list
 
 parameter_declaration
         : declaration_specifiers declarator 
-            { ($1, match $2 with CDvar (id,_) -> id | _ -> uns()) }
+            { match $2 with 
+		| false, CDvar (id, _) -> $1, id 
+		| true, CDvar (id, _) -> CTpointer $1, id 
+		| false, CDarr (id, _) -> CTarray $1, id
+		| _ -> uns() }
         | declaration_specifiers abstract_declarator { uns() }
         | declaration_specifiers { ($1, Ident.anonymous) }
         ;
@@ -542,7 +548,7 @@ function_definition
         | declaration_specifiers declarator compound_statement_with_post
 	    { let (lb,b,q) = $3 in
               match $2 with
-		| CDfun (id, pl, p) -> 
+		| false, CDfun (id, pl, p) -> 
 		    let lb = add_pre_loc lb p in
 		    Cfundef (loc (), id, pl, $1, (lb,p,b,q))
 		| _ -> uns () }

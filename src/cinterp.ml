@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.21 2002-12-10 15:03:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.22 2002-12-18 16:21:44 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -48,12 +48,6 @@ let interp_c_post = parse_annot Parser.parse_c_post
 let interp_loop_annot (ofs, s) = Parser.parse_c_loop_annot ofs s
 
 (*s Typing C programs *)
-
-type ctype =
-  | CTpure of pure_type
-  | CTarray of ctype
-  | CTpointer of ctype
-  | CTfun of ctype list * ctype
 
 let void = CTpure PTunit
 let c_int = CTpure PTint
@@ -287,12 +281,14 @@ let rec no_effect = function
   | CEvar _ | CEconst _  -> true
   | CEbinary (_, e1, _, e2) -> no_effect e1 && no_effect e2
   | CEunary (_, (Uplus | Uminus | Not), e) -> no_effect e
+  | CEunary (_, (Uamp | Ustar), _) -> true
   | CEcond (_, e1, e2, e3) -> no_effect e1 && no_effect e2 && no_effect e3
   | _ -> false
 
 let rec is_pure cenv = function
   | CEvar (l, id) ->
       (match get_type l cenv id with
+	 | CTpointer _, _
 	 | CTpure _, false -> true
 	 | _ -> false)
   | CEconst _  -> true
@@ -300,6 +296,8 @@ let rec is_pure cenv = function
       is_pure cenv e1 && is_pure cenv e2
   | CEunary (_, (Uplus | Uminus | Not), e) -> 
       is_pure cenv e
+  | CEunary (_, Uamp, _) ->
+      true
   | CEcond (_, e1, e2, e3) -> 
       is_pure cenv e1 && is_pure cenv e2 && is_pure cenv e3
   | _ -> 
@@ -308,7 +306,7 @@ let rec is_pure cenv = function
 (*s Left values *)
 
 type lvalue = 
-  | LVid of Loc.t * Ident.t
+  | LVid of Loc.t * Ident.t (* ML reference *)
   | LVarr of Loc.t * Ident.t * cexpr
 
 let interp_lvalue cenv = function
@@ -316,6 +314,10 @@ let interp_lvalue cenv = function
       (match get_type l cenv id with
 	 | CTpure _ as ct, true -> LVid (l, id), ct
 	 | _ -> raise_located l (NotAReference id))
+  | CEunary (l, Ustar, CEvar (l', id)) ->
+      (match get_type l' cenv id with
+	 | CTpointer (CTpure _ as ct), true -> LVid (l, id), ct
+	 | _ -> raise_located l (AnyMessage "not a left-value"))
   | CEarrget (l, CEvar(l', id), e) ->
       (match get_type l' cenv id with
 	 | CTarray ct, _ -> LVarr (l, id, e), ct
@@ -336,8 +338,8 @@ let rec interp_expr cenv et e =
     let ml,ct = match e with
       | CEvar (l, id) -> 
 	  (match get_type l cenv id with
-	     | ct, true -> ml_refget l id, ct
-	     | ct, _ -> ml_var l id , ct)
+	     | CTpointer _ as ct, _ | ct, false -> ml_var l id , ct 
+	     | ct, true -> ml_refget l id, ct)
       | CEassign (l, lv, op, e) -> 
 	  let lv, ct = interp_lvalue cenv lv in
 	  let mt = interp_expr cenv (Some ct) e in
@@ -393,6 +395,18 @@ let rec interp_expr cenv et e =
 	     | CTpure PTint -> ml_unop l t_neg_int m, t
 	     | CTpure PTfloat -> ml_unop l t_neg_float m, t
 	     | _ -> expected_num l)
+      | CEunary (l, Ustar, CEvar (l', id)) ->
+	  (match get_type l' cenv id with
+	     | CTpointer ct, true -> ml_refget l id, ct
+	     | _ -> unsupported l)
+      | CEunary (l, Ustar, _) ->
+	  unsupported l
+      | CEunary (l, Uamp, CEvar (l', id)) ->
+	  (match get_type l' cenv id with
+	     | CTpure _ as ct, true -> ml_var l id, CTpointer ct
+	     | _ -> unsupported l)
+      | CEunary (l, Uamp, _) ->
+	  unsupported l
       | CEarrget (l, CEvar (l', id), e) ->
 	  let m,_ = interp_expr cenv (Some c_int) e in
 	  (match get_type l' cenv id with
@@ -595,6 +609,16 @@ let rec interp_statement cenv et abrupt = function
       (* do s while (e) = s ; while (e) s *)
       interp_statement cenv et abrupt
 	(CSblock (l, ([], [s; CSwhile (l, e, an, s)])))
+(*** EXP
+  | CSwhile (l, e, an, s) when not (no_effect e) ->
+      (* turned into [{ v = e; while(v) { s; v = e; } }] *)
+      let v = fresh_c_var () in
+      let v_e = CSexpr (l, CEassign (l, CEvar (l, v), Aequal, e)) in
+      interp_statement cenv et abrupt
+	(CSblock (l, ([Ctypedecl (l, CDvar (v, Some e), PTint)],
+		      [CSwhile (l, CEvar (l, v), an, 
+				CSblock (l, ([], [s; v_e])))])))
+***)
   | CSwhile (l, e, an, s) ->
       let (i,v) = interp_loop_annot an in
       let m, st = interp_statement cenv et true s in
@@ -633,8 +657,8 @@ and interp_block l cenv et abrupt (d,b) =
     | [] ->
 	cenv, []
     | Ctypedecl (l, CDvar (id, Some e), v) :: dl ->
-	let m,_ = interp_expr cenv (Some (CTpure v)) e in
-	let cenv' = Idmap.add id (CTpure v, true) cenv in
+	let m,_ = interp_expr cenv (Some v) e in
+	let cenv' = Idmap.add id (v, true) cenv in
 	let cenv'',lv = interp_locals cenv' dl in
 	cenv'', (id, m) :: lv
     | Ctypedecl (l, CDvar (_, None), _) :: _ -> 
@@ -675,12 +699,23 @@ let interp_annotated_block cenv et (l, p, bl, q) =
   in
   { pdesc = bl.pdesc; pre = p; post = q; ploc=l }, st.abrupt_return
 
+(***
 let interp_binder (pt, id) = (id, BindType (PVpure pt))
+***)
+
+let interp_binder (v, id) = 
+  let t = match v with
+    | CTpure pt -> PVpure pt
+    | CTpointer (CTpure pt) -> PVref (PVpure pt)
+    | CTarray (CTpure pt) -> PVarray (PVpure pt)
+    | _ -> assert false
+  in
+  id, BindType t
 
 let interp_binders = List.map interp_binder
 
 let interp_fun_type bl v =
-  CTfun (List.map (fun (v,_) -> CTpure v) bl, CTpure v), false
+  CTfun (List.map (fun (v,_) -> v) bl, CTpure v), false
 
 let interp_fun id cenv l bl v (l,p,bs,q) =
   let bs,var = 
@@ -695,7 +730,12 @@ let interp_fun id cenv l bl v (l,p,bs,q) =
   let cenv' = 
     let blv = interp_fun_type bl v in
     let cenv = if isrec then Idmap.add id blv cenv else cenv in
-    List.fold_right (fun (v,id) -> Idmap.add id (CTpure v, false)) bl cenv 
+    List.fold_right 
+      (function
+	 | (CTpure _ as v, id) -> Idmap.add id (v, false)
+	 | (CTpointer _ | CTarray _ as v, id) -> Idmap.add id (v, true)
+	 | _ -> assert false)
+      bl cenv 
   in
   return_exception := Ident.create ("Return_" ^ Ident.string id);
   let bs',ar = interp_annotated_block cenv' (CTpure v) bs in
@@ -711,25 +751,36 @@ let interp_fun id cenv l bl v (l,p,bs,q) =
 (*s C declarations *)
 
 let interp_decl cenv = function
-  | Ctypedecl (l, CDvar (id, _), v) -> 
-      [ Parameter (l, [id], PVref (PVpure v)) ],
-      Idmap.add id (CTpure v, true) cenv
-  | Ctypedecl (l, CDarr (id, _), v) ->
-      [ Parameter (l, [id], PVarray (PVpure v)) ],
-      Idmap.add id (CTarray (CTpure v), true) cenv
-  | Ctypedecl (l, CDfun (id, bl, an), v) -> 
-      let bl = if bl = [] then [PTunit, anonymous] else bl in
-      let k = interp_c_spec v an in
-      let blp = List.map (fun (v, id) -> (id, BindType (PVpure v))) bl in
+  (* pt id; *)
+  | Ctypedecl (l, CDvar (id, _), (CTpure pt as v)) -> 
+      [ Parameter (l, [id], PVref (PVpure pt)) ],
+      Idmap.add id (v, true) cenv
+  (* pt* id; *)
+  | Ctypedecl (l, CDvar (id, _), (CTpointer (CTpure pt) as v)) -> 
+      [ Parameter (l, [id], PVref (PVpure pt)) ],
+      Idmap.add id (v, true) cenv
+  (* pt id[]; *)
+  | Ctypedecl (l, CDarr (id, _), (CTpure pt as v)) ->
+      [ Parameter (l, [id], PVarray (PVpure pt)) ],
+      Idmap.add id (CTarray v, true) cenv
+  (* pt id(bl); *)
+  | Ctypedecl (l, CDfun (id, bl, an), CTpure pt) -> 
+      let bl = if bl = [] then [CTpure PTunit, anonymous] else bl in
+      let k = interp_c_spec pt an in
+      let blp = interp_binders bl in
       [ Parameter (l, [id], PVarrow (blp, k)) ],
-      Idmap.add id (interp_fun_type bl v) cenv
-  | Cfundef (l, id, bl, v, bs) ->
-      let bl = if bl = [] then [PTunit, anonymous] else bl in
-      let blv = interp_fun_type bl v in
-      let e,ar = interp_fun id cenv l bl v bs in
+      Idmap.add id (interp_fun_type bl pt) cenv
+  | Ctypedecl _ ->
+      assert false
+  | Cfundef (l, id, bl, CTpure pt, bs) ->
+      let bl = if bl = [] then [CTpure PTunit, anonymous] else bl in
+      let blv = interp_fun_type bl pt in
+      let e,ar = interp_fun id cenv l bl pt bs in
       let d = [ Program (id, e) ] in
-      (if ar then (Exception (l, !return_exception, Some v)) :: d else d),
+      (if ar then (Exception (l, !return_exception, Some pt)) :: d else d),
       Idmap.add id blv cenv
+  | Cfundef _ ->
+      assert false
 
 let interp l = 
   let rec interp_list cenv = function
