@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.9 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.10 2002-03-13 14:26:41 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -227,6 +227,10 @@ let abstraction env k e ren =
   let c = abs_pre env p e ren in
   let bl = binding_of_alist ren env al in
   make_abs (List.rev bl) c
+
+let fresh id e ren =
+  let id',ren' = Rename.fresh ren id in
+  e id' ren'
 
 
 (*i****

@@ -1,29 +1,28 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.6 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.7 2002-03-13 14:26:41 filliatr Exp $ i*)
+
+(*s Effects. *)
 
 open Ident
 open Misc
 
-(* The type of effects.
- *
- * An effect is composed of two lists (r,w) of variables.
- * The first one is the list of read-only variables
- * and the second one is the list of read-write variables.
- *
- * INVARIANT: 1. each list is sorted in decreasing order for Pervasives.compare
- *            2. there are no duplicate elements in each list
- *            3. the two lists are disjoint
- *)
+(*s An effect is composed of two lists (r,w) of variables.
+    The first one is the list of read-only variables
+    and the second one is the list of read-write variables.
+ 
+    INVARIANT: 
+    1. each list is sorted in decreasing order for Pervasives.compare
+    2. there are no duplicate elements in each list
+    3. the two lists are disjoint *)
 
 type t = Ident.t list * Ident.t list
 
-
-(* the empty effect *)
+(*s the empty effect *)
 
 let bottom = ([], [])
 
-(* basic operations *)
+(*s basic operations *)
 
 let push x l =
   let rec push_rec = function
@@ -53,7 +52,7 @@ let rec basic_union = function
       else
 	v1 :: basic_union (l1,l2)
 
-(* adds reads and writes variables *)
+(*s adds reads and writes variables *)
 
 let add_read id ((r,w) as e) =
   (* if the variable is already a RW it is ok, otherwise adds it as a RO. *)
@@ -71,18 +70,18 @@ let add_write id (r,w) =
   else
     r, push id w
 
-(* access *)
+(*s access *)
 
 let get_reads = basic_union
 let get_writes = snd
 let get_repr e = (get_reads e, get_writes e)
 
-(* tests *)
+(*s tests *)
 
 let is_read  (r,_) id = List.mem id r
 let is_write (_,w) id = List.mem id w
 
-(* union and disjunction *)
+(*s union and disjunction *)
 
 let union (r1,w1) (r2,w2) = basic_union (r1,r2), basic_union (w1,w2)
 
@@ -103,28 +102,28 @@ let disj (r1,w1) (r2,w2) =
   and w = basic_union (w1,w2) in
   r,w
 
-(* comparison relation *)
+(*s comparison relation *)
 
 let le e1 e2 = failwith "effects: le: not yet implemented"
 
 let inf e1 e2 = failwith "effects: inf: not yet implemented"
 
-(* composition *)
+(*s composition *)
 
 let compose (r1,w1) (r2,w2) =
   let r = basic_union (r1, diff (r2,w1)) in
   let w = basic_union (w1,w2) in
   r,w
 
-(* remove *)
+(*s remove *)
 
 let remove (r,w) name = basic_remove name r, basic_remove name w
 
-(* occurrence *)
+(*s occurrence *)
 
 let occur x (r,w) = List.mem x r || List.mem x w
 
-(* substitution *)
+(*s substitution *)
 
 let subst_list (x,x') l =
   if List.mem x l then push x' (basic_remove x l) else l
@@ -133,7 +132,7 @@ let subst_one (r,w) s = subst_list s r, subst_list s w
 
 let subst s e = List.fold_left subst_one e s
 
-(* pretty-print *)
+(*s pretty-print *)
 
 open Format
 
