@@ -463,14 +463,6 @@ Intuition.
 Apply (iter_sqrt_invar4 x y0 z0); Try Omega.
 Save.
 
-
-
-
-
-
-
-
-
 Definition sqrt := (* validation *)
   [x: Z; Pre7: `x >= 0`]
     let (result, Post9) =

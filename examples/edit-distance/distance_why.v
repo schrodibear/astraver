@@ -1129,7 +1129,6 @@ Unfold min_suffix in H4.
 Apply (H4 `0`); Omega'.
 Save.
 
-
 Definition distance := (* validation *)
   [i: Z; j: Z; old: Z; t: (array `n2 + 1` Z); w1: (array n1 A);
    w2: (array n2 A)]

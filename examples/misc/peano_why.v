@@ -106,12 +106,6 @@ Lemma add1_po_7 :
   x0 = `x + y`.
 Proof. Intros; Omega. Save.
 
-
-
-
-
-
-
 Definition add1 := (* validation *)
   [y: Z; x: Z; Pre3: `y >= 0`]
     let (result, Post1) = (exist_1 [result: Z]result = y y
@@ -186,11 +180,6 @@ Lemma u1_po_2 :
   (Post3: r0 = `result + 7`)
   r0 = `10`.
 Proof. Intros; Omega. Save.
-
-
-
-
-
 
 Definition u1 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `3` `3`
@@ -267,11 +256,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
 Definition rec_add1 := (* validation *)
   [y: Z; x: Z; Pre6: `y >= 0`]
     (well_founded_induction Z (Zwf ZERO) (rec_add1_po_1 y Pre6) [Variant1: Z]
@@ -330,12 +314,6 @@ Lemma u11_po_2 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
 
 Definition u11 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `3` `3`
@@ -518,12 +496,6 @@ Generalize H1. Ring `x*(y-0)`. Intro; Ring; Assumption.
 Omega.
 Save.
 
-
-
-
-
-
-
 Definition mult1 := (* validation *)
   [y: Z; x: Z; Pre4: `x >= 0` /\ `y >= 0`]
     let (result, Post1) = (exist_1 [result: Z]result = y y
@@ -614,11 +586,6 @@ Lemma u2_po_2 :
   (Post3: r0 = `result * 6`)
   r0 = `24`.
 Proof. Intros; Omega. Save.
-
-
-
-
-
 
 Definition u2 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `4` `4`

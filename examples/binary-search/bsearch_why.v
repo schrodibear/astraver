@@ -480,8 +480,6 @@ Decompose [In] H8.
 Absurd `l1 <= i <= u1`; Omega'.
 Save.
 
-
-
 Definition binary_search := (* validation *)
   [l: Z; m: Z; p: Z; t: (array `N + 1` Z); u: Z; Pre7: (sorted_array t `1` N)]
     let (l0, result, Post1) =

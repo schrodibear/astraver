@@ -140,9 +140,6 @@ Proof.
 Intros; Apply quicksort_trivial; Intuition.
 Save.
 
-
-
-
 Definition quick_rec := (* validation *)
   [l: Z; r: Z; t: (array N Z); Pre9: `0 <= l` /\ `r < N`]
     (well_founded_induction Z (Zwf `(-1)`) (quick_rec_po_1 l r Pre9)
@@ -228,10 +225,6 @@ Lemma quicksort_po_2 :
 Proof.
 Intuition EAuto.
 Save.
-
-
-
-
 
 Definition quicksort := (* validation *)
   [t: (array N Z)]

@@ -279,9 +279,6 @@ Rewrite Post1; Rewrite Post2; Rewrite Post3.
 Unfold invariant; Omega'.
 Save.
 
-
-
-
 Definition bresenham := (* validation *)
   [e: Z; x: Z; y: Z]
     let (x0, result, Post1) =

@@ -528,8 +528,6 @@ Save.
 
 Require swap_why.
 
-
-
 Definition downheap := (* validation *)
   [N: Z; k: Z; n: Z; t: (array N Z); Pre11: `0 <= k` /\ `k <= n` /\
    `n < N` /\ ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i)))]

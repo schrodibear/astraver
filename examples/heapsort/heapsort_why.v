@@ -531,7 +531,6 @@ Save.
 Require swap_why.
 Require downheap_why.
 
-
 Definition heapsort := (* validation *)
   [N: Z; t: (array N Z); Pre10: `1 <= N`]
     let (t0, result, Post9) =

@@ -49,10 +49,6 @@ Intros; Rewrite Post3; Rewrite Post2; Rewrite Post1.
 Auto with datatypes.
 Save.
 
-
-
-
-
 Definition swap := (* validation *)
   [i: Z; j: Z; t: (array N Z); Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\
    `j < N`)]
@@ -1223,10 +1219,6 @@ Unfold Zpred; Omega.
 Assumption.
 Assumption.
 Save.
-
-
-
-
 
 Definition partition := (* validation *)
   [l: Z; r: Z; t: (array N Z); Pre14: `0 <= l` /\ `l < r` /\ `r < N`]
