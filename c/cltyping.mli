@@ -14,13 +14,21 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.1 2004-01-14 16:33:28 filliatr Exp $ i*)
+(*i $Id: cltyping.mli,v 1.2 2004-02-04 13:45:19 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
 open Clogic
+open Cast
 
-val type_predicate : 'a -> parsed_predicate -> Cast.predicate
-val type_spec : 'a -> parsed_spec -> Cast.predicate spec
-val type_loop_annot : 'a -> parsed_loop_annot -> Cast.loop_annot
+(* logical environments *)
+
+type env
+val empty : env
+val add_fun : string -> tctype list * tctype -> env -> env
+val add_pred : string -> tctype list -> env -> env
+
+val type_predicate : env -> parsed_predicate -> Cast.predicate
+val type_spec : env -> parsed_spec -> Cast.predicate spec
+val type_loop_annot : env -> parsed_loop_annot -> Cast.loop_annot
 

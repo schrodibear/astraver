@@ -383,10 +383,10 @@ annotations.
       & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{term} \nt{relation} \nt{term} 
               $[$ \nt{relation} \nt{term} $]$ \\
-      & $|$ & \nt{predicate} \te{implies} \nt{predicate} \\
-      & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
-      & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
-      & $|$ & \te{not} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{=>} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{||} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{\&\&} \nt{predicate} \\
+      & $|$ & \te{!} \nt{predicate} \\
       & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
               \te{else} \nt{predicate} \\
       & $|$ & \te{forall} \nt{identifier} \te{:} \nt{primitive\_type}

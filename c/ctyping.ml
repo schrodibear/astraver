@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.16 2004-02-03 08:24:43 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.17 2004-02-04 13:45:20 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -42,48 +42,6 @@ let loop_annot env a =
   let iv = Cllexer.loop_annot a in
   Cltyping.type_loop_annot env iv
 
-
-(*s Pretty-printing of types *)
-
-let rec print_type fmt t = match t.ctype_node with
-  | CTvoid -> fprintf fmt "void"
-  | CTint (s, i) -> fprintf fmt "%a %a" print_sign s print_integer i
-  | CTfloat f -> print_float fmt f
-  | CTvar x -> fprintf fmt "%s" x
-  | CTarray (ty, None) -> fprintf fmt "%a[]" print_type ty
-  | CTarray (ty, Some e) -> fprintf fmt "%a[_]" print_type ty
-  | CTpointer ty -> fprintf fmt "%a*" print_type ty
-  | CTstruct_named x -> fprintf fmt "struct %s" x
-  | CTstruct (_, fl) -> fprintf fmt "struct _ { %a}" print_fields fl
-  | CTunion_named x -> fprintf fmt "union %s" x
-  | CTunion (_, fl) -> fprintf fmt "union _ { %a}" print_fields fl
-  | CTenum_named x -> fprintf fmt "enum %s" x
-  | CTenum (_, el) -> fprintf fmt "enum _ { %a}" print_enums el
-  | CTfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
-
-and print_sign fmt = function
-  | Signed -> fprintf fmt "signed"
-  | Unsigned -> fprintf fmt "unsigned"
-
-and print_integer fmt = function
-  | Char -> fprintf fmt "char"
-  | Short -> fprintf fmt "short"
-  | Int -> fprintf fmt "int"
-  | Long -> fprintf fmt "long"
-  | LongLong -> fprintf fmt "long long"
-
-and print_float fmt = function
-  | Float -> fprintf fmt "float"
-  | Double -> fprintf fmt "double"
-  | LongDouble -> fprintf fmt "long double"
-
-and print_fields fmt = function
-  | [] -> ()
-  | (ty, x, _) :: fl -> fprintf fmt "%a %s; %a" print_type ty x print_fields fl
-
-and print_enums fmt = function
-  | [] -> ()
-  | (x, _) :: el -> fprintf fmt "%s, %a" x print_enums el
 
 (*s Some predefined types, subtype relation, etc. *)
 
@@ -282,9 +240,13 @@ module Env = struct
 
   module M = Map.Make(String)
 
-  type t = { vars : (texpr ctype * var_info) M.t; tags : texpr ctype M.t }
+  type t = { 
+    vars : (texpr ctype * var_info) M.t; 
+    tags : texpr ctype M.t;
+    lenv : Cltyping.env
+  }
 
-  let empty = { vars = M.empty; tags = M.empty }
+  let empty = { vars = M.empty; tags = M.empty; lenv = Cltyping.empty }
 
   let add x t info env = 
     { env with vars = M.add x (t,info) env.vars }
@@ -299,6 +261,8 @@ module Env = struct
   (* look for a tagged type first in locals then in globals *)
   let find_tag_type x env = 
     try M.find x env.tags with Not_found -> find_tag_type x
+
+  let logic env = env.lenv
 
 end
 
@@ -690,7 +654,7 @@ and type_statement_node loc env et = function
       (* TODO: vérifier existence label *)
       TSgoto lab, mt_status
   | CSfor (e1, e2, e3, an, s) ->
-      let an = option_app (loop_annot env) an in
+      let an = option_app (loop_annot (Env.logic env)) an in
       let e1 = type_expr env e1 in
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
@@ -699,14 +663,14 @@ and type_statement_node loc env et = function
       TSfor (e1, e2, e3, s, li, an),
       { mt_status with abrupt_return = st.abrupt_return }
   | CSdowhile (s, an, e) ->
-      let an = option_app (loop_annot env) an in
+      let an = option_app (loop_annot (Env.logic env)) an in
       let s, st = type_statement env et s in
       let e = type_boolean env e in
       let li = { loop_break = st.break; loop_continue = st.continue } in
       TSdowhile (s, e, li, an), 
       { mt_status with abrupt_return = st.abrupt_return }
   | CSwhile (e, an, s) ->
-      let an = option_app (loop_annot env) an in
+      let an = option_app (loop_annot (Env.logic env)) an in
       let e = type_boolean env e in
       let s, st = type_statement env et s in
       let li = { loop_break = st.break; loop_continue = st.continue } in
@@ -776,8 +740,9 @@ and type_block env et (dl,sl) =
 
 and type_annotated_block env et (p,bl,q) =
   let bl,st = type_block env et bl in
-  let p = option_app (predicate env) p in
-  let q = option_app (predicate env) q in
+  let lenv = Env.logic env in
+  let p = option_app (predicate lenv) p in
+  let q = option_app (predicate lenv) q in
   (p, bl, q), st
 
 let type_parameters loc env pl =
