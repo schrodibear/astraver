@@ -13,6 +13,7 @@ Ltac caduceus := repeat Acc_upd.
 
 Hint Resolve neq_base_addr_neq_shift.
 Hint Resolve neq_offset_neq_shift.
+Hint Resolve eq_offset_eq_shift.
 
 Ltac valid := match goal with
   | id:(valid_range ?X1 ?X2 ?X3 ?X4) |- (valid ?X1 (shift ?X2 ?X5))

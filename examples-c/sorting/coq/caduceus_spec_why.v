@@ -23,3 +23,14 @@ Admitted.
     ((sorted alloc intP0 t 0 (n - 1)) /\
     (mset intP0 t 0 (n - 1)) = (mset intP t 0 (n - 1))))).
 
+(*Why*) Parameter swap_parameter :
+  forall (t: pointer), forall (i: Z), forall (j: Z),
+  forall (alloc: alloc_table), forall (intP: ((memory) Z)),
+  forall (H: (valid_index alloc t i) /\ (valid_index alloc t j)),
+  (sig_2 ((memory) Z) unit
+   (fun (intP0: ((memory) Z)) (result: unit)  => (((acc intP0 (shift t i)) =
+    (acc intP (shift t j)) /\ (acc intP0 (shift t j)) =
+    (acc intP (shift t i))) /\
+    (assigns alloc intP intP0
+     (union_loc (pointer_loc (shift t j)) (pointer_loc (shift t i))))))).
+

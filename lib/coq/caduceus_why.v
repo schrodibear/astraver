@@ -126,6 +126,15 @@ Admitted.
        ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
+(*Why axiom*) Lemma eq_offset_eq_shift :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      ((base_addr p1) = (base_addr p2) ->
+       (((offset p1) + i) = ((offset p2) + j) -> (shift p1 i) = (shift p2 j))))))).
+Admitted.
+
 (*Why axiom*) Lemma valid_index_valid_shift :
   (forall (a:alloc_table),
    (forall (p:pointer),

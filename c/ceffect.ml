@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.31 2004-04-05 08:29:23 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.32 2004-04-07 11:57:46 marche Exp $ i*)
 
 open Cast
 open Coptions
@@ -198,6 +198,26 @@ let locations ll =
   List.fold_left
     (fun acc l -> union acc (location l)) empty ll
 
+let assign_location loc =
+  match loc with
+    |  Lterm t ->
+	 begin 
+	   match t.term_node with
+	     | Tarrget(t1,t2) ->
+		 { reads = add_alloc (union (term t1) (term t2));
+		   assigns = add_pointer_var t1.term_type empty }
+	     | Tarrow (t1,f) -> 
+		 { reads = add_alloc (term t1);
+		   assigns = add_field_var f t.term_type empty }
+	     | _ -> assert false
+	 end
+    | Lstar t ->
+	{ reads = add_alloc (term t);
+	  assigns = add_pointer_var t.term_type empty }
+    | Lrange(t1,t2,t3) -> 
+	{ reads = add_alloc (union (term t1) (union (term t2) (term t3)));
+	  assigns = add_pointer_var t1.term_type empty }
+	  
 
 let rec predicate p = 
   match p with
@@ -238,14 +258,19 @@ let variant (t,_) = term t
 
 let loop_annot a = 
   let r = union (option predicate a.invariant) (option variant a.variant) in
-  { reads = r; assigns = empty }
+  { reads = r; assigns = empty (* TODO *) }
 
 let spec sp = 
-  { reads = 
-      union 
-	(union (option predicate sp.requires) (option predicate sp.ensures))
-	(option variant sp.decreases);
-    assigns = option locations sp.Clogic.assigns }
+  ef_union
+    { reads = 
+	union 
+	  (union (option predicate sp.requires) (option predicate sp.ensures))
+	  (option variant sp.decreases);
+      assigns = empty }
+    (ef_option 
+       (List.fold_left
+	  (fun acc l -> ef_union acc (assign_location l)) ef_empty)
+       sp.Clogic.assigns)
 
 open Cast
 

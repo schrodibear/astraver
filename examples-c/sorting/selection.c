@@ -1,6 +1,16 @@
 
 /* Selection sort */
 
+/*@ requires \valid_index(t,i) &&  \valid_index(t,j)
+  @ assigns t[i],t[j]
+  @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
+  @*/
+void swap(int t[],int i,int j) {
+  int tmp = t[i]; 
+  t[i] = t[j]; 
+  t[i] = tmp;
+}
+
 //@ logic intmset mset(int t[],int i,int j) reads t[*]
 
 /*@ predicate sorted(int t[],int i,int j) {
@@ -13,7 +23,6 @@
   @*/
 void selection(int t[],int n) {
   int i,j,min;
-  int tmp;
   init:
   /*@ (* t[0..i-1] is already sorted *)
     @ invariant 
@@ -37,6 +46,7 @@ void selection(int t[],int n) {
       if (t[j] < t[min]) min = j;
     }
     /* we swap t[i] and t[min] */
-    tmp = t[min]; t[min] = t[i]; t[i] = tmp;
+    swap(t,min,i);
   }
 }
+

@@ -3,7 +3,7 @@ all: selection
 
 %: %.c 
 	caduceus $*.c
-	make -f $*.makefile simplify
+	#	make -f $*.makefile simplify
 	make -f $*.makefile coq
 
 clean:
