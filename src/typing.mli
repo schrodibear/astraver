@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.mli,v 1.12 2002-10-18 11:18:38 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.13 2003-01-16 15:42:48 filliatr Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
@@ -27,3 +27,4 @@ val typef : LabelSet.t -> local_env -> parsed_program -> typed_program
 
 val check_for_not_mutable : Loc.t -> type_v -> unit
 
+val is_pure_type_v : type_v -> bool

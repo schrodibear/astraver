@@ -148,30 +148,43 @@ fi
 #  	fi
 #  fi
 
-# coq
+# Coq
 AC_CHECK_PROG(COQC,coqc,coqc,no)
 if test "$COQC" = no ; then
-	AC_MSG_ERROR(Cannot find coqc.)
-fi
-AC_CHECK_PROG(COQDEP,coqdep,coqdep,true)
-if test "$COQDEP" = true ; then
+    COQ=no
+    AC_MSG_WARN(Cannot find coqc.)
+else
+    COQ=yes
+    AC_CHECK_PROG(COQDEP,coqdep,coqdep,true)
+    if test "$COQDEP" = true ; then
 	AC_MSG_WARN(Cannot find coqdep.)
+    fi
+    COQLIB=`coqc -where`
+
+    AC_MSG_CHECKING(Coq version)
+    COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
+
+    case $COQVERSION in
+    7.3)
+	AC_MSG_RESULT($COQVERSION)
+	cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
+    7.3*)
+	AC_MSG_RESULT($COQVERSION)
+	cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+    *)
+	COQ=no
+	AC_MSG_WARN(You need Coq 7.3 or later; Coq discarded);;
+    esac
 fi
-COQLIB=`coqc -where`
 
-AC_MSG_CHECKING(Coq version)
-COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
-
-case $COQVERSION in
-  7.3)
-    AC_MSG_RESULT($COQVERSION)
-    cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
-  7.3*)
-    AC_MSG_RESULT($COQVERSION)
-    cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
-  *)
-    AC_MSG_ERROR(You need Coq 7.3 or later);;
-esac
+# PVS
+AC_CHECK_PROG(PVSC,pvs,pvs,no)
+if test "$PVSC" = no ; then
+    PVS=no
+    AC_MSG_WARN(Cannot find PVS.)
+else
+    PVS=yes
+fi
 
 # substitutions to perform
 AC_SUBST(OCAMLC)
@@ -185,9 +198,14 @@ AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(CAMLP4O)
 AC_SUBST(CAMLP4LIB)
+
+AC_SUBST(COQ)
 AC_SUBST(COQC)
 AC_SUBST(COQDEP)
 AC_SUBST(COQLIB)
+
+AC_SUBST(PVS)
+AC_SUBST(PVSC)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.49 2003-01-09 16:13:59 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.50 2003-01-16 15:42:48 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -22,6 +22,7 @@ open Ast
 open Cc
 open Types
 open Env
+open Typing
 open Format
 open Error
 open Report
@@ -47,10 +48,10 @@ let push_obligations ol = match prover with
 let push_validation id v = 
   if valid && prover = Coq then Coq.push_validation id v
 
-let push_parameter id v = match prover with
-  | Pvs -> Pvs.push_parameter id v
-  | Coq -> Coq.push_parameter id v
-  | HolLight -> Holl.push_parameter id v
+let push_parameter id v tv = match prover with
+  | Pvs -> if is_pure_type_v v then Pvs.push_parameter id tv
+  | Coq -> Coq.push_parameter id tv
+  | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
   | Harvey -> () (* nothing to do? *)
 
 let output fwe = 
@@ -81,7 +82,7 @@ let interp_program id p =
   let p = Typing.typef Env.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
-  Typing.check_for_not_mutable ploc v;
+  check_for_not_mutable ploc v;
   Env.add_global id v None;
   print_if_debug print_type_c c;
   if type_only then raise Exit;
@@ -115,8 +116,8 @@ let add_external loc v id =
   if Env.is_global id then raise_located loc (Clash id);
   Env.add_global id v None
 
-let add_parameter tv id =
-  push_parameter (Ident.string id) tv
+let add_parameter v tv id =
+  push_parameter (Ident.string id) v tv
     
 let interp_decl d = 
   let env = Env.empty in
@@ -132,7 +133,7 @@ let interp_decl d =
       if ocaml then Ocaml.push_parameters ids v;
       if not (is_mutable v) then
 	let tv = Monad.trad_type_v (initial_renaming env) env v in
-	List.iter (add_parameter tv) ids
+	List.iter (add_parameter v tv) ids
   | External (loc, ids, v) -> 
       let v = Ltyping.type_v loc lab env lenv v in
       if is_mutable v then raise_located loc MutableExternal;

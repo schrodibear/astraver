@@ -17,7 +17,7 @@ void main()
     x = x + 1;
     i = i - 1;
   }
-    /*@ invariant x = 10 - i and i >= 0 variant i */
+  /*@ invariant x = 10 - i and i >= 0 variant i */
   while (i > 0);
 } 
 /*@ x = 10 */

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.53 2003-01-09 16:50:21 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.54 2003-01-16 15:42:48 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -205,10 +205,13 @@ val warning : string -> unit
 val wprintf : Loc.t -> ('a, Format.formatter, unit) format -> 'a
 val unlocated_wprintf : ('a, Format.formatter, unit) format -> 'a
 
-(* [do_not_edit sep f after] updates the part of file [f] following a
+(* [do_not_edit f before sep after] updates the part of file [f] following a
    line matching [sep] exactly (e.g. \verb!(* DO NOT EDIT BELOW THIS LINE *)!);
    a backup of the original file is done in [f.bak].
-   when [f] does not exists, it is created, with nothing above this line. *)
+   when [f] does not exists, it is created by calling [before], inserting
+   [sep] and then calling [after]. *)
 
-val do_not_edit : string -> string -> (out_channel -> unit) -> unit
+val do_not_edit : 
+  string -> (formatter -> unit) -> string -> (formatter -> unit) -> unit
 
+val file_formatter : (Format.formatter -> unit) -> (out_channel -> unit)

@@ -69,7 +69,7 @@ GENERATED = src/version.ml src/parser.ml \
 BINARY=bin/why.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 
-all: $(BINARY) $(VO)
+all: $(BINARY) coq-@COQ@
 
 opt: bin/why.opt
 
@@ -89,7 +89,8 @@ bin/top: $(CMO)
 
 static:: $(STATICBINARY)
 
-coq:: $(VO)
+coq-no:
+coq-yes: $(VO)
 
 VERSION=0.92
 
@@ -131,13 +132,21 @@ src/logic.ml: src/logic.mli
 # installation
 ##############
 
-install: $(BINARY) $(VO)
+install: install-binary install-coq-@COQ@ install-pvs-@PVS@
+
+install-binary: $(BINARY) 
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why
 	mkdir -p $(MANDIR)/man1
 	cp -f doc/why.1 $(MANDIR)/man1
+
+install-coq-no:
+install-coq-yes:
 	mkdir -p $(COQLIB)/contrib/why
 	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
+
+install-pvs-no:
+install-pvs-yes:
 
 local: $(STATICBINARY) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
@@ -156,7 +165,7 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 doc/version.tex: Makefile.in
 	echo "\newcommand{\whyversion}{$(VERSION)}" > $@
 
-doc/manual.html: doc/manual.tex
+doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
 
 # special rules
@@ -261,7 +270,8 @@ export-examples:
 	echo "*** faire make all dans $(WWW)/examples ***"
 
 export-doc: doc/manual.ps doc/manual.html
-	cp $^ $(WWW)
+	cp $^ $(WWW)/manual
+	(cd $(WWW)/manual; hacha manual.html)
 
 BINARYNAME = $(NAME)-$(OSTYPE)
 
@@ -309,7 +319,8 @@ coq-clean::
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
-	$(COQDEP) $(COQINCLUDES) lib/coq/*.v >> .depend
+	if test @COQ@ == yes; then \
+	  $(COQDEP) $(COQINCLUDES) lib/coq/*.v >> .depend; fi
 
 alldepend:
 	make -C examples depend

@@ -6,3 +6,4 @@
 *.pvs
 old
 *.ml
+pvstc.el

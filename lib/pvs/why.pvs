@@ -1,15 +1,35 @@
 why: THEORY
 BEGIN
 
+  IMPORTING why_arrays
+ 
   unit: TYPE = int
   unit: unit = 0
 
   c,x,y : VAR int
-  zwf(c) : [int, int -> bool] = (lambda x,y: c <= x and x < y)
+  zwf(c) : [int, int -> bool] = (lambda x,y: c <= y and x < y)
   zwf_zero : [int, int -> bool] = zwf(0)
 
   zwf_wf : AXIOM forall c: well_founded?(zwf(c))
 
 END why
 
+
+why_arrays[T: TYPE]: THEORY
+BEGIN
+
+  warray: TYPE = [ n:int, [ below(n) -> T ] ]
+
+  t : VAR warray
+  i,j : VAR int
+  v : VAR T
+
+  array_length(t) : int = proj_1(t)
+
+  access(t, i) : T = proj_2(t)(i)
+
+  store(t, i, v) : warray = 
+    (proj_1(t), (LAMBDA j: IF j = i THEN v ELSE proj_2(t)(j) ENDIF))
+
+END why_arrays
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.66 2003-01-09 16:50:21 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.67 2003-01-16 15:42:48 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -538,10 +538,16 @@ let print_wp fmt = function
   | None -> fprintf fmt "<no weakest precondition>"
   | Some {a_value=p} -> print_predicate fmt p
 
-let do_not_edit sep file after =
+let file_formatter f cout =
+  let fmt = formatter_of_out_channel cout in
+  f fmt;
+  pp_print_flush fmt ()
+
+let do_not_edit file before sep after =
   let cout = 
     if not (Sys.file_exists file) then begin
       let cout = open_out file in
+      file_formatter before cout;
       output_string cout ("\n" ^ sep ^ "\n\n");
       cout
     end else begin
@@ -562,7 +568,8 @@ let do_not_edit sep file after =
       cout
     end
   in
-  after cout;
+  file_formatter after cout;
   close_out cout
 
-    
+
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.31 2003-01-10 12:47:41 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.32 2003-01-16 15:42:48 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -89,8 +89,7 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "real"
-  | PTarray v -> 
-      fprintf fmt "[int -> "; print_pure_type fmt v; fprintf fmt "]"
+  | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
 let infix_relation id =
@@ -118,6 +117,10 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " AND@ "; print3 b
     | p -> print3 p
   and print3 = function
+    | Pfalse ->
+	fprintf fmt "False"
+    | Ptrue ->
+	fprintf fmt "True"
     | Pvar id when id == default_post ->
 	fprintf fmt "False"
     | Pvar id -> 
@@ -157,13 +160,15 @@ let print_predicate fmt p =
 
 let rec print_cc_type fmt = function
   | TTpure pt -> print_pure_type fmt pt
-  | TTarray v -> fprintf fmt "[int -> %a]" print_cc_type v
-  | TTlambda _
-  | TTarrow _
+  | TTarray v -> fprintf fmt "warray[%a]" print_cc_type v
+  | TTarrow ((_, CC_var_binder t1), t2) ->
+      fprintf fmt "[%a -> %a]" print_cc_type t1 print_cc_type t2
+  | TTterm t -> print_term fmt t
   | TTtuple _ 
   | TTpred _ 
-  | TTapp _ 
-  | TTterm _ -> assert false
+  | TTlambda _
+  | TTarrow _
+  | TTapp _ -> assert false
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
@@ -188,11 +193,11 @@ let print_obligations fmt ol =
   if ol <> [] then fprintf fmt "@\n"
 
 let begin_theory fmt th =
-  fprintf fmt "%s: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  why: LIBRARY = \"../../lib/pvs\"@\n  importing why@@why@\n@\n"
+  fprintf fmt "%s_why: THEORY@\nBEGIN@\n@\n" th;
+  fprintf fmt "  why: LIBRARY = \"../../lib/pvs\"@\n  importing why@@why@\n"
     
 let end_theory fmt th =
-  fprintf fmt "END %s@\n" th
+  fprintf fmt "END %s_why@\n" th
 
 let print_parameter fmt id v =
   fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_cc_type v
@@ -218,13 +223,13 @@ let output_elem fmt = function
   | Parameter (id, v) -> print_parameter fmt id v
 
 let output_file fwe =
+  let sep = "  %% DO NOT EDIT BELOW THIS LINE" in
   let f = fwe ^ "_why.pvs" in
-  let cout = open_out f in
-  let fmt = formatter_of_out_channel cout in
   let th = Filename.basename fwe in
-  begin_theory fmt th;
-  Queue.iter (output_elem fmt) queue;
-  end_theory fmt th;
-  pp_print_flush fmt ();
-  close_out cout
-
+  do_not_edit f
+    (fun fmt ->
+       begin_theory fmt th)
+    sep
+    (fun fmt ->
+       Queue.iter (output_elem fmt) queue;
+       end_theory fmt th)

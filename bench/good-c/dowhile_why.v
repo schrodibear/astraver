@@ -32,7 +32,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "good-c/dowhile.c", characters 146-167 *)
+(* Why obligation from file "good-c/dowhile.c", characters 144-165 *)
 Lemma main_po_2 : 
   (x: Z)
   (Pre4: `x >= 0`)
@@ -49,7 +49,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good-c/dowhile.c", characters 54-213 *)
+(* Why obligation from file "good-c/dowhile.c", characters 54-211 *)
 Lemma main_po_3 : 
   (x: Z)
   (Pre4: `x >= 0`)

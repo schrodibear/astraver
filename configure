@@ -932,7 +932,7 @@ fi
 #  	fi
 #  fi
 
-# coq
+# Coq
 # Extract the first word of "coqc", so it can be a program name with args.
 set dummy coqc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
@@ -964,12 +964,14 @@ else
 fi
 
 if test "$COQC" = no ; then
-	{ echo "configure: error: Cannot find coqc." 1>&2; exit 1; }
-fi
-# Extract the first word of "coqdep", so it can be a program name with args.
+    COQ=no
+    echo "configure: warning: Cannot find coqc." 1>&2
+else
+    COQ=yes
+    # Extract the first word of "coqdep", so it can be a program name with args.
 set dummy coqdep; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:973: checking for $ac_word" >&5
+echo "configure:975: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_COQDEP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -996,27 +998,72 @@ else
   echo "$ac_t""no" 1>&6
 fi
 
-if test "$COQDEP" = true ; then
+    if test "$COQDEP" = true ; then
 	echo "configure: warning: Cannot find coqdep." 1>&2
+    fi
+    COQLIB=`coqc -where`
+
+    echo $ac_n "checking Coq version""... $ac_c" 1>&6
+echo "configure:1008: checking Coq version" >&5
+    COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([^ ]*\) .*$|\1|p' `
+
+    case $COQVERSION in
+    7.3)
+	echo "$ac_t""$COQVERSION" 1>&6
+	cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
+    7.3*)
+	echo "$ac_t""$COQVERSION" 1>&6
+	cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+    *)
+	COQ=no
+	echo "configure: warning: You need Coq 7.3 or later; Coq discarded" 1>&2;;
+    esac
 fi
-COQLIB=`coqc -where`
 
-echo $ac_n "checking Coq version""... $ac_c" 1>&6
-echo "configure:1006: checking Coq version" >&5
-COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([^ ]*\) .*$|\1|p' `
+# PVS
+# Extract the first word of "pvs", so it can be a program name with args.
+set dummy pvs; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1028: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_prog_PVSC'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test -n "$PVSC"; then
+  ac_cv_prog_PVSC="$PVSC" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_prog_PVSC="pvs"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_prog_PVSC" && ac_cv_prog_PVSC="no"
+fi
+fi
+PVSC="$ac_cv_prog_PVSC"
+if test -n "$PVSC"; then
+  echo "$ac_t""$PVSC" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
 
-case $COQVERSION in
-  7.3)
-    echo "$ac_t""$COQVERSION" 1>&6
-    cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
-  7.3*)
-    echo "$ac_t""$COQVERSION" 1>&6
-    cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
-  *)
-    { echo "configure: error: You need Coq 7.3 or later" 1>&2; exit 1; };;
-esac
+if test "$PVSC" = no ; then
+    PVS=no
+    echo "configure: warning: Cannot find PVS." 1>&2
+else
+    PVS=yes
+fi
 
 # substitutions to perform
+
+
+
+
+
 
 
 
@@ -1189,11 +1236,14 @@ s%@OCAMLWEB@%$OCAMLWEB%g
 s%@CAMLP4O@%$CAMLP4O%g
 s%@COQC@%$COQC%g
 s%@COQDEP@%$COQDEP%g
+s%@PVSC@%$PVSC%g
 s%@OCAMLBEST@%$OCAMLBEST%g
 s%@OCAMLVERSION@%$OCAMLVERSION%g
 s%@OCAMLLIB@%$OCAMLLIB%g
 s%@CAMLP4LIB@%$CAMLP4LIB%g
+s%@COQ@%$COQ%g
 s%@COQLIB@%$COQLIB%g
+s%@PVS@%$PVS%g
 
 CEOF
 EOF

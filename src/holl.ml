@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.6 2003-01-13 09:53:06 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.7 2003-01-16 15:42:48 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -226,10 +226,10 @@ let print_obl_list fmt =
 let output_file fwe =
   let sep = "(* DO NOT EDIT BELOW THIS LINE *)" in
   let f = fwe ^ "_why.ml" in
-  do_not_edit sep f
-    (fun cout ->
-       let fmt = formatter_of_out_channel cout in
+  do_not_edit f 
+    (fun _ -> ())
+    sep 
+    (fun fmt ->
        fprintf fmt "prioritize_int();;\n\n";
        Queue.iter (print_elem fmt) elem_q;
-       print_obl_list fmt;
-       pp_print_flush fmt ())
+       print_obl_list fmt)
