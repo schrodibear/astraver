@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.29 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.30 2002-03-18 10:29:27 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -16,7 +16,7 @@ open Monad
 let make_info env k = { env = env; label = label_name (); kappa = k }
 
 let kunit = type_c_of_v (PureType PTunit)
-	   
+
 (*s Translation of imperative programs into functional ones.
     [ren] is the current renamings of variables,
     [e] is the imperative program to translate, annotated with type+effects.
@@ -135,45 +135,22 @@ and trad_desc info d ren = match d with
 	 ren
 
   | While (b, inv, ((phi,_) as var), e) ->
-      let vphi = variant_name () in
       let info = 
-	let eq = anonymous_pre false (equality (Tvar vphi) phi) in
 	let p = 
 	  match inv with Some a -> [pre_of_assert false a] | None -> [] 
 	in
-	{ info with kappa = { info.kappa with c_pre = eq :: p }}
+	{ info with kappa = { info.kappa with c_pre = p }}
       in
-      Monad.wf var vphi info
+      Monad.wfrec var info
 	(fun w -> 
-	   let kexit = kunit in
-	   let info_exit = make_info info.env kexit in
 	   let exit = Monad.unit info (Tconst ConstUnit) in
-	   let kloop = { kunit with c_effect = info.kappa.c_effect } in
-	   let info_loop = make_info info.env kloop in
-	   let loop = Monad.compose e.info (trad e)
-			(fun _ -> Monad.apply info w 
-			     (fun v -> Monad.unit info (Tvar v)))
-	   in
-	   Monad.abstraction info
-	     (trad_conditional info b.info (trad b)
-		info_loop loop info_exit exit))
+	   let loop = Monad.compose e.info (trad e) (fun _ -> w) in
+	   trad_conditional info b.info (trad b) info loop info exit)
 	ren
 
   | Rec _ -> 
       failwith "Mlize.trad: Rec"
-
 (*i***
-  | While (b, inv, var, bl) ->
-      (* EXP: we do not generate the obligation at the end of test *)
-      let b' =
-	{ b with info={ b.info with kappa={ b.info.kappa with c_post=None }}}
-      in
-      let ren' = next ren (get_writes eft) in
-      let tb = trad ren' b' in
-      let tbl = trad_block ren' env bl in
-      let var' = typed_var env var in
-      make_while ren env var' (tb,b.info.kappa) tbl (inv,ct)
-
   | LetRec (f,bl,v,var,e) ->
       let c = match tt with Arrow(_,c) -> c | _ -> assert false in
       let (_,ef,_,_) = decomp_kappa c in

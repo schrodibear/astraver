@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.19 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.20 2002-03-18 10:29:27 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -260,9 +260,9 @@ let fresh id e ren =
     \begin{verbatim}
     [h:(I x)](well_founded_induction
               A R ?::(well_founded A R)
-              [Phi:A] (x) Phi=phi(x)->(I x)-> \exists x'.res.(Q x x' res)
-              [Phi0:A][w:(Phi:A)(Phi<Phi0)-> ...]
-                [x][eq:Phi_0=phi(x)][h:(I x)]
+              [Phi:A] (x) Phi=phi(x) -> <info>
+              [Phi:A][w:(Phi0:A) Phi0<Phi -> (x) Phi=phi(x) -> <info>]
+                [x][eq:Phi=phi(x)][h:(I x)]
 
                       <body where w <- (w phi(x1) ? x1 ? ?)>
 
@@ -270,27 +270,42 @@ let fresh id e ren =
     \end{verbatim}
 *)
 
-let wf (phi,r) vphi info f ren =
+let wfrec (phi,r) info f ren =
+  let env = info.env in
+  let vphi = variant_name () in
+  let info' = 
+    let eq = anonymous_pre false (equality (Tvar vphi) phi) in
+    { info with kappa = { info.kappa with c_pre = eq :: info.kappa.c_pre }}
+  in
   let a = TTpure PTint in (* TODO: type variant *)
   let w = wf_name () in
-  let k = info.kappa in
-  let tphi = trad_type_c ren info.env k in
+  let k = info'.kappa in
+  let tphi = trad_type_c ren env k in
   let vphi0 = variant_name () in
-  let tphi0 = trad_type_c ren info.env (type_c_subst [vphi,vphi0] k) in
+  let tphi0 = trad_type_c ren env (type_c_subst [vphi,vphi0] k) in
+  let input ren =
+    let r,_ = get_repr k.c_effect in
+    let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r) in
+    let pl = (anonymous_pre false (equality phi phi)) :: info.kappa.c_pre in
+    let holes = List.map (fun p -> CC_hole (apply_pre ren env p).p_value) pl in
+    input @ holes
+  in
   let tw = 
     let r_phi0_phi = predicate_of_term (applist r [Tvar vphi0; Tvar vphi]) in
     TTarrow ((vphi0, CC_var_binder a),
 	     TTarrow ((pre_name Anonymous, CC_pred_binder r_phi0_phi), tphi0))
   in
   let fw ren = 
-    let tphi = apply_term ren info.env phi in
+    let tphi = apply_term ren env phi in
     let decphi = predicate_of_term (applist r [tphi; Tvar vphi]) in
-    CC_app (CC_var w, [CC_expr tphi; CC_hole decphi]) 
+    CC_app (CC_var w, [CC_expr tphi; CC_hole decphi] @ input ren) 
   in
   CC_app (CC_var well_founded_induction,
 	  [CC_expr r;
 	   CC_hole (papplist (Pvar well_founded) [r]);
 	   CC_type (TTarrow ((vphi, CC_var_binder a), tphi));
 	   CC_lam ([vphi, CC_var_binder a; w, CC_var_binder tw],
-		   f fw ren);
-	   CC_expr (apply_term ren info.env phi)])
+		   let ren' = next ren (get_writes k.c_effect) in 
+		   Monad.abstraction info' (f fw) ren');
+	   CC_expr (apply_term ren env phi)] @
+	  input ren)

@@ -87,6 +87,9 @@ bench-tc:: $(BINARY)
 test:: $(BINARY)
 	$(BINARY) -d -V -coq bench/test.ml
 
+examples::
+	make -C examples/misc
+
 # installation
 ##############
 
