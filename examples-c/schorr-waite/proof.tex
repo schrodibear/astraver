@@ -109,18 +109,30 @@ It's have 9 assertion :
 
 \begin{lstlisting}[language=C]{}
 
-/*@ logic Length mesure (node p , node t) reads p->m,p->c,p->l,p->r*/
+/*@ logic Length weight (node p , node t) reads p->m,p->c,p->l,p->r*/
 
-/*@ NE PAS OUBLIER le nouveau requires */
+/*@ \bs{}exists plist l; reachable_elements(root,root,l) */
 void schorr_waite(node root) {
   node t = root;
   node p = NULL;
-  /*@variant A AJOUTER
+  /*@variant weight(p,t) for order_mark_m_and_c_and_stack 
     @*/
   while (p != NULL || (t != NULL && ! t->m)) {
    ...
   }
 }
+
+To proof the termination of the while we need an addition in the
+precondition. This addition specifies there are a list of all the
+graph's elements.
+
+The clause variant specifies the order who decrease for all step of
+while. This order is the function order_mark_m_and_c_stack, this
+function is an order lexicographic of the number of graph's elements
+not mark with m, the number of graph's elements not mark with c and the number
+of element in the \texttt{stack}. 
+
+
 \end{lstlisting}
 
 %%% Local Variables: 
