@@ -1,6 +1,8 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.11 2002-03-06 16:04:52 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.12 2002-03-11 16:22:38 filliatr Exp $ i*)
+
+(*s Names separation *)
 
 open Logic
 open Types
@@ -18,36 +20,20 @@ let lookup_var ids locop id =
   end
 
 let check_ref idl loc id =
-  if (not (Ids.mem id idl)) & (not (Env.is_global id)) then
+  if (not (Ids.mem id idl)) && (not (Env.is_global id)) then
     Error.unbound_reference id (Some loc)
 
-(* db types: do nothing for the moment! *)
-
-let rec db_type_v ids = function
-  | Ref v -> Ref (db_type_v ids v)
-  | Array (c,v) -> Array (c,db_type_v ids v)
-  | Arrow (bl,c) -> Arrow (List.map (db_binder ids) bl, db_type_c ids c)
-  | PureType _ as v -> v
-and db_type_c ids c =
-  { c_result_name = c.c_result_name;
-    c_result_type = db_type_v ids c.c_result_type;
-    c_effect = c.c_effect; c_pre = c.c_pre; c_post = c.c_post }
-  (* TODO: db_condition? *)
-and db_binder ids = function
-  | (n, BindType v) -> (n, BindType (db_type_v ids v))
-  | b -> b
-
-(* db binders *)
+(*s Crossing binders *)
 
 let rec db_binders ((tids,pids,refs) as idl) = function
   | [] -> 
       idl, []
   | (id, BindType (Ref _ | Array _ as v)) :: rem ->
       let idl',rem' = db_binders (tids,pids,Ids.add id refs) rem in
-      idl', (id, BindType (db_type_v tids v)) :: rem'
+      idl', (id, BindType v) :: rem'
   | (id, BindType v) :: rem ->
       let idl',rem' = db_binders (tids,Ids.add id pids,refs) rem in
-      idl', (id, BindType (db_type_v tids v)) :: rem'
+      idl', (id, BindType v) :: rem'
   | ((id, BindSet) as t) :: rem ->
       let idl',rem' = db_binders (Ids.add id tids,pids,refs) rem in
       idl', t :: rem'
@@ -125,8 +111,7 @@ let db_prog e =
 	  
     | LetRec (f,bl,v,var,e) ->
 	let (tids',ids',refs'),bl' = db_binders idl bl in
-	LetRec (f, bl, db_type_v tids' v, var, 
-		db (tids',Ids.add f ids',refs') e)
+	LetRec (f, bl, v, var, db (tids',Ids.add f ids',refs') e)
     | Expression _ as x -> 
 	x
     | Coerce e -> 
@@ -138,7 +123,7 @@ let db_prog e =
     | Term ({ desc = Var id } as t) -> 
 	if Ids.mem id refs then Refarg (t.info.loc, id) else Term (db idl t)
     | Term t -> Term (db idl t)
-    | Type v -> Type (db_type_v tids v)
+    | Type v -> Type v
     | Refarg _ -> assert false
 
   and db idl e =

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.18 2002-03-06 16:04:52 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.19 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -209,6 +209,7 @@ EXTEND
   [ [ "{"; p = OPT pre_condition; "}";
       (id,v) = result; e = effects; 
       "{"; q = OPT post_condition; "}" ->
+	let q = optpost_app (subst_in_predicate [id,Ident.result]) q in
         { c_result_name = id; c_result_type = v;
 	  c_effect = e; c_pre = list_of_some p; c_post = q } 
     | v = type_v -> 
@@ -427,7 +428,7 @@ i*)
   [ [ "let"; id = ident; "="; p = program -> 
 	Program (id, p)
     | "external"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
-	External (ids, v)
+	External (loc, ids, v)
     | LIDENT "pvs"; s = STRING ->
         QPvs s ] ]
   ;

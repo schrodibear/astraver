@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.21 2002-03-11 15:17:58 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.22 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -19,7 +19,6 @@ open Effect
 module LabelSet = Set.Make(struct type t = string let compare = compare end)
 
 let initial_labels = LabelSet.singleton "0"
-
 
 (*s Typing of terms (used to type pure expressions). *)
 
@@ -73,6 +72,53 @@ and check_app loc bl c tl = match bl, tl with
   | _ ->
       assert false
 
+(*s Checking types *)
+
+let check_predicate loc lab env p =
+  let vars = predicate_vars p in
+  Idset.iter
+    (fun id -> 
+       let _,l = un_at id in
+       if not (LabelSet.mem l lab) then Error.unbound_label l loc) vars
+
+let check_pre loc lab env p = check_predicate loc lab env p.p_value
+
+let check_assertion loc lab env a = check_predicate loc lab env a.a_value
+
+let check_effect loc env e =
+  let check_ref id =
+    if not (Env.is_ref env id) then Error.unbound_reference id loc
+  in
+  let r,w = Effect.get_repr e in
+  List.iter check_ref r;
+  List.iter check_ref w
+
+let rec check_type_v loc lab env = function
+  | Ref v -> 
+      check_type_v loc lab env v
+  | Array (t, v) -> 
+      check_type_v loc lab env v
+  | Arrow (bl, c) -> 
+      let env' = check_binders loc lab env bl in check_type_c loc lab env' c
+  | PureType _ -> 
+      ()
+
+and check_type_c loc lab env c =
+  check_effect loc env c.c_effect;
+  check_type_v loc lab env c.c_result_type;
+  List.iter (check_pre loc lab env) c.c_pre;
+  option_iter (check_assertion loc lab env) c.c_post
+
+and check_binders loc lab env = function
+  | [] ->
+      env
+  | (id, BindType v) :: bl ->
+      check_type_v loc lab env v;
+      check_binders loc lab (Env.add (id, v) env) bl
+  | (id, BindSet) :: bl ->
+      check_binders loc lab (Env.add_set id env) bl
+  | (id, Untyped) :: bl ->
+      check_binders loc lab env bl
 
 (*s Utility functions for typing *)
 
@@ -97,7 +143,7 @@ let rec subtype = function
       v1 = v2
 
 let compose3effects x y z = Effect.compose x (Effect.compose y z)
-      
+
 let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
   | Arrow ([x,BindType v], k) ->
       x, v, k
@@ -112,13 +158,6 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
 
 let expected_type loc t et =
   if t <> et then Error.expected_type loc (fun fmt -> print_type_v fmt et)
-
-(*i
-let check_complex_arg loc x k =
-  let (_,t),e,_,q = decomp_kappa k in
-  if Effect.occur x e || occur_type_v x t || occur_post x q then
-    Error.too_complex_argument loc
-i*)
 
 let type_eq loc = function
   | PureType PTint -> Ident.t_eq_int
@@ -137,7 +176,7 @@ let coerce p env k =
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
-let state_var ren env (phi,r) = 
+let state_var lab env (phi,r) = 
   let ids = term_refs env phi in
   Effect.add_reads ids Effect.bottom
 	
@@ -248,17 +287,17 @@ let rec typef lab env expr =
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = List.map assert_pre p1 @ expr.info.pre in
-  let lab = label_name () in
+  let toplabel = label_name () in
   match q, d with
     | None, Coerce expr' ->
 	let c = { c_result_name = result; c_result_type = v;
 		  c_effect = Effect.union e' (effect expr');
 		  c_pre = p' @ (pre expr'); c_post = post expr' } in
-	make_node expr'.desc env lab c
+	make_node expr'.desc env toplabel c
     | _ ->
 	let c = { c_result_name = result; c_result_type = v;
 		  c_effect = e'; c_pre = p'; c_post = q } in
-	make_node d env lab c
+	make_node d env toplabel c
 
 and typef_desc lab env loc = function
   | Expression c ->
@@ -336,7 +375,7 @@ and typef_desc lab env loc = function
       assert false
 
   | Lam (bl, e) ->
-      let env' = traverse_binders env bl in
+      let env' = check_binders (Some loc) lab env bl in
       let t_e = typef initial_labels env' e in
       let v = make_arrow bl t_e.info.kappa in
       let ef = Effect.bottom in
@@ -428,7 +467,8 @@ and typef_desc lab env loc = function
       If (t_b, t_e1, t_e2), (v,ef), []
 
   | LetRec (f,bl,v,var,e) ->
-      let env' = traverse_binders env bl in
+      let env' = check_binders (Some loc) lab env bl in
+      check_type_v (Some loc) lab env' v;
       let efvar = state_var lab env' var in
       let phi0 = phi_name () in
       let tvar = typed_var env' var in
@@ -458,10 +498,6 @@ and typef_desc lab env loc = function
       let lab' = LabelSet.add s lab in
       typef_desc lab' env loc d
 	
-and typef_arg lab env = function
-  | Term a -> let t_a = typef lab env a in Term t_a
-  | Refarg _ | Type _ as a -> a 
-
 and typef_block lab env bl =
   let rec ef_block lab tyres = function
     | [] ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.8 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.9 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -47,15 +47,14 @@ let find id env =
 let is_local env id =
   try
     match Penv.find id env with TypeV _ -> true | Set -> false
-  with
-      Not_found -> false
+  with Not_found -> 
+    false
 
 let is_local_set env id =
   try
     match Penv.find id env with TypeV _ -> false | Set -> true
-  with
-      Not_found -> false
-
+  with Not_found -> 
+    false
 
 (* typed programs *)
 
@@ -82,8 +81,6 @@ let (pgm_table : (typed_program option) Idmap.t ref) = ref Idmap.empty
 let (init_table : term Idmap.t ref) = ref Idmap.empty
 
 (* Operations on the global environment. *)
-
-let is_mutable = function Ref _ | Array _ -> true | _ -> false
 
 let add_global id v p =
   try
@@ -147,7 +144,10 @@ let type_in_env env id =
   try find id env with Not_found -> lookup_global id
 
 let is_in_env env id =
-  (is_global id) or (is_local env id)
+  (is_global id) || (is_local env id)
+
+let is_ref env id =
+  try is_mutable (type_in_env env id) with Not_found -> false
 
 let fold_all f lenv x0 =
   let x1 = Penv.fold f !env x0 in

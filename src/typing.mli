@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.mli,v 1.5 2002-03-04 16:15:58 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.6 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -13,7 +13,7 @@ module LabelSet : Set.S with type elt = string
 
 val initial_labels : LabelSet.t
 
-(*i val cic_type_v : local_env -> Rename.t -> type_v -> type_v i*)
+val check_type_v : Loc.t option -> LabelSet.t -> local_env -> type_v -> unit
 
 val effect_app : Rename.t -> local_env
             -> typing_info Ast.t

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.18 2002-03-11 15:17:58 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.19 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -29,8 +29,6 @@ let force_post env q e = match q with
 let post_if_none env q p = match post p with
   | None -> force_post env q p 
   | _ -> p
-
-let optpost_app f = option_app (post_app f)
 
 (* misc. *)
 

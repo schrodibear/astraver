@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.5 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.6 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -58,6 +58,7 @@ val find_init : Ident.t -> term
 
 val type_in_env : local_env -> Ident.t -> type_v
 val is_in_env : local_env -> Ident.t -> bool
+val is_ref : local_env -> Ident.t -> bool
 
 type type_info = Set | TypeV of type_v
 val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a

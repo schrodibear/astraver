@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.16 2002-03-11 11:46:22 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.17 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -60,14 +60,19 @@ let interp_program id p =
   v, ol
 
 (*s Processing of a program. *)
+
+let add_external loc v id =
+  if Env.is_global id then Error.clash id (Some loc);
+  Env.add_global id v None
     
 let interp_decl = function
   | Program (id, p) ->
       let v,ol = interp_program id p in
       push_obligations ol;
       Env.add_global id v None
-  | External (ids, v) -> 
-      List.iter (fun id -> Env.add_global id v None) ids
+  | External (loc, ids, v) -> 
+      Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
+      List.iter (add_external loc v) ids
   | QPvs s ->
       Pvs.push_verbatim s
 

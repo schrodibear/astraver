@@ -32,8 +32,5 @@ BUGS
 IMPLEMENTATION
 ==============
 
- - force result name "result" internally (but keep given name for PP)
-
  - variant = identifier ?
 
- - well-formedness of types (in external, in particular)

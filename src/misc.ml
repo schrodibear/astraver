@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.17 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.18 2002-03-11 16:22:38 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -17,6 +17,8 @@ let map_succeed f =
   map_f 
 
 let option_app f = function None -> None | Some x -> Some (f x)
+
+let option_iter f = function None -> () | Some x -> f x
 
 let list_of_some = function None -> [] | Some x -> [x]
 
@@ -92,6 +94,8 @@ let pre_app f x =
   { p_assert = x.p_assert; p_name = x.p_name; p_value = f x.p_value }
 
 let post_app = named_app
+
+let optpost_app f = option_app (post_app f)
 
 let anonymous x = { a_name = Anonymous; a_value = x }
 
