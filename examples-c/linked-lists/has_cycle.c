@@ -4,8 +4,7 @@
 /*@ requires
   @   \valid(l)
   @ ensures 
-  @   (\result != 0 => cyclic(l)) &&
-  @   (\result == 0 => !cyclic(l)) 
+  @   \result <=> cyclic(l) 
   @*/
 int cyclic(list l) {
   list l1 = l;

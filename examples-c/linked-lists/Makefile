@@ -1,9 +1,9 @@
 
+all: reverse 
+
 rev:
 	caduceus reverse.c
 	make -f reverse.makefile do_simplify
-
-all: reverse has_cycle
 
 %: %.c 
 	caduceus $*.c
