@@ -57,6 +57,7 @@ GENERATED = src/version.ml src/parser.ml
 ##############
 
 BINARY=bin/why.$(OCAMLBEST)
+STATICBINARY=bin/why.static
 
 all: $(BINARY) $(VO)
 
@@ -69,6 +70,9 @@ bin/why.opt: $(CMX)
 
 bin/why.byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
+
+bin/why.static: $(CMX)
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
@@ -109,6 +113,11 @@ install: $(BINARY)
 
 local: $(BINARY)
 	cp -f $(BINARY) $$HOME/bin/$$OSTYPE/why
+
+demons: $(STATICBINARY)
+	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why
+	make -C doc manual.ps
+	cp doc/manual.ps /users/demons/demons/docs/why.ps
 
 # special rules
 ###############

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.37 2002-03-22 16:18:28 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.38 2002-03-25 13:05:14 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -192,6 +192,9 @@ let type_eq_neq id =
 
 let make_node p env l k = 
   { desc = p; info = { env = env; label = l; kappa = k } }
+
+let make_lnode p env k = 
+  { desc = p; info = { env = env; label = label_name (); kappa = k } }
 
 let coerce p env k = 
   let l = label_name () in Coerce (make_node p env l k)
@@ -432,7 +435,7 @@ and typef_desc lab env loc = function
 	     let kapp = type_c_rsubst [x,ca] kapp in
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     (match t_f.desc with
-		| Expression cf when t_f.info.kappa.c_post = None ->
+		| Expression cf when post t_f = None ->
 		    let pl = (pre t_a) @ (pre t_f) in
 		    let e = Expression (applist cf [ca]) in
 		    coerce e env kapp, (tapp, ef), pl
@@ -444,14 +447,14 @@ and typef_desc lab env loc = function
 	     (* TODO: rename [x] to avoid capture *)
 	     let info = { loc = loc; pre = []; post = None } in
 	     let env' = Env.add x tx env in
-	     let var_x = 
-	       make_node (Var x) env' (label_name()) (type_c_of_v tx) 
+	     let app_f_x,pl = match t_f.desc with
+	       | Expression cf when post t_f = None ->
+		   Expression (applist cf [Tvar x]), pre t_f
+	       | _ ->
+		   let var_x = make_lnode (Var x) env' (type_c_of_v tx) in
+		   App (t_f, Term var_x, Some kapp), []
 	     in
-	     let app_f_x = 
-	       make_node (App (t_f, Term var_x, Some kapp)) 
-		 env' (label_name()) kapp
-	     in
-	     LetIn (x, t_a, app_f_x), (tapp, ef), [])
+	     LetIn (x, t_a, make_lnode app_f_x env' kapp), (tapp, ef), pl)
 
   | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in

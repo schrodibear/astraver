@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.28 2002-03-20 15:01:55 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.29 2002-03-25 13:05:14 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -18,12 +18,14 @@ let term = gec "term"
 let term0 = gec "term0"
 let term1 = gec "term1"
 let predicate = gec "predicate"
+let predicate00 = gec "predicate00"
 let predicate0 = gec "predicate0"
 let predicate1 = gec "predicate1"
 let predicate2 = gec "predicate2"
 let constant = gec "constant"
 
 (* types *)
+let primitive_type = gec "primitive_type"
 let type_v   = gec "type_v"
 let simple_type_v   = gec "simple_type_v"
 let type_c   = gec "type_c"
@@ -163,7 +165,12 @@ EXTEND
     | f = FLOAT -> ConstFloat (float_of_string f) ] ]
   ;
   predicate:
-  [ [ a = predicate0; "->"; b = predicate -> Pimplies (a,b)
+  [ [ LIDENT "forall"; id = ident; ":"; t = primitive_type; 
+      "." ; a = predicate -> forall id (PureType t) a 
+    | a = predicate00 -> a ] ]
+  ; 
+  predicate00:
+  [ [ a = predicate0; "->"; b = predicate00 -> Pimplies (a,b)
     | a = predicate0 -> a ] ]
   ; 
   predicate0:
@@ -188,6 +195,13 @@ EXTEND
   ;
 
   (* Types *)
+  primitive_type:
+  [ [ "int" -> PTint
+    | "bool" -> PTbool
+    | "float" -> PTfloat
+    | "unit" -> PTunit 
+    | id = ident -> PTexternal id ] ]
+  ;
   (* [ident] is expansed to allow factorization *)
   type_v:
   [ [ v = simple_type_v; "->"; c = type_c -> 
@@ -201,12 +215,7 @@ EXTEND
   simple_type_v:
   [ [ "array"; size = term; "of"; v = simple_type_v -> Array (size,v)
     | v = simple_type_v; "ref" -> Ref v
-    | "int" -> PureType PTint
-    | "bool" -> PureType PTbool
-    | "float" -> PureType PTfloat
-    | "unit" -> PureType PTunit 
-    | id = LIDENT -> PureType (PTexternal (Ident.create id))
-    | id = UIDENT -> PureType (PTexternal (Ident.create id))
+    | t = primitive_type -> PureType t
     | "("; v = type_v; ")" -> v ] ] 
   ;
   type_c:

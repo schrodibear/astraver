@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.34 2002-03-20 15:01:56 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.35 2002-03-25 13:05:14 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -271,16 +271,6 @@ and wp_desc info d q =
 	let p'2,w2 = wp p2 q in
 	let p'3,w3 = wp p3 q in
 	(match w2, w3, post p1 with
-	   (***
-	   | Some {a_value=q2}, Some {a_value=q3}, Some {a_value=q1} -> 
-	       (* $wp(if p1 then p2 else p3, q) = 
-		  q1(true) => wp(p2, q) and q1(false) => wp(p3, q)$ *)
-	       let q1 = make_before_after q1 in
-	       let q1t = tsubst_in_predicate [Ident.result,ttrue] q1 in
-	       let q1f = tsubst_in_predicate [Ident.result,tfalse] q1 in
-	       let w = Pand (Pimplies (q1t, q2), Pimplies (q1f, q3)) in
-	       If (p1, p'2, p'3), create_post w
-           ***)
 	   | Some {a_value=q2}, Some {a_value=q3}, _ -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)

@@ -467,8 +467,9 @@ Usual precedences apply to arithmetical operations.
 Syntax of predicates is given in Figure~\ref{fig:predicates}.
 It is a first-order quantifier-free syntax, independent from the \pvs\ one.
 
-Precedence of \te{and} is stronger than \te{or}'s, which is
-stronger than implication's. Implication is right associative.
+Precedences are the following (from strongest to weakest): \te{not}, 
+\te{and}, \te{or}, implication, and \te{forall}. 
+Implication is right associative.
 
 Syntactic sugar: $t_1 ~ R_1 ~ t_2 ~ R_2 ~ t_3$ is equivalent to
 $t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$.
@@ -478,16 +479,21 @@ $t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{predicate}\indexnt{predicate}
-    & $::=$ & \nt{predicate} \te{->} \nt{predicate} \\
+    & $::=$ & \te{true} \\
+      & $|$ & \te{false} \\
+      & $|$ & \nt{identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{term} \nt{relation} \nt{term} 
+              $[$ \nt{relation} \nt{term} $]$ \\
+      & $|$ & \nt{predicate} \te{->} \nt{predicate} \\
       & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
       & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
       & $|$ & \te{not} \nt{predicate} \\
       & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
               \te{else} \nt{predicate} \\
-      & $|$ & \nt{term} \\
-      & $|$ & \nt{term} \nt{relation} \nt{term} 
-              $[$ \nt{relation} \nt{term} $]$ \\
-      & $|$ & \te{(} \nt{predicate} \te{)}
+      & $|$ & \te{forall} \nt{identifier} \te{:} \nt{primitive\_type}
+              \te{.} \nt{predicate} \\
+      & $|$ & \te{(} \nt{predicate} \te{)} \\
   \\[0.1em]
 
   \nt{relation}\indexnt{relation}
