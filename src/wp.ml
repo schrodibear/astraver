@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.21 2002-03-13 10:01:38 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.22 2002-03-13 10:35:30 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -269,9 +269,13 @@ and wp_desc info d q =
     | Lam (bl, p) ->
 	let p',w = wp p None in
 	Lam (bl, p'), None
-    | LetIn (x, p1, p2) ->
-	failwith "todo: wp let in"
+    | LetIn (x, e1, e2) ->
+	let e'2, w = wp e2 q in
+	let q' = optpost_app (subst_in_predicate [x, result]) w in
+	let e'1,w' = wp e1 q' in
+	LetIn (x, e'1, e'2), w'
     | LetRef (x, e1, e2) ->
+	(* same as LetIn: correct? *)
 	let e'2, w = wp e2 q in
 	let q' = optpost_app (subst_in_predicate [x, result]) w in
 	let e'1,w' = wp e1 q' in

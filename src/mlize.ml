@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.17 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.18 2002-03-13 10:35:30 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -78,6 +78,15 @@ and trad_desc info d ren = match d with
 	     (fun v1 -> 
 		Monad.compose info (fun _ -> CC_app (CC_var v1, [CC_var v2]))
 		  (fun v -> Monad.unit info (Tvar v))))
+	ren
+
+  | LetIn (x, e1, e2) ->
+      Monad.compose e1.info (trad e1)
+	(fun v1 ren' ->
+	   let t1 = trad_ml_type_v ren info.env (result_type e1) in
+	   CC_letin (false, [x, CC_var_binder t1], CC_expr (Tvar v1), 
+		     Monad.compose e2.info (trad e2) 
+		       (fun v2 -> Monad.unit info (Tvar v2)) ren'))
 	ren
 
   | _ -> failwith "Mlize.trad: TODO"

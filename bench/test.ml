@@ -3,7 +3,7 @@
 
 external r : int ref
 
-let p = (if !r = 1 || !r = 2 then r := 3) { r <> 1 and r <> 2 }
+let p = (let x = 1 in r := x) { r > 0 }
 
 (** let p = begin r := 2; r := !r end { r = 2 } **)
 
