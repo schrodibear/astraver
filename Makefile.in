@@ -49,6 +49,9 @@ $(PROG).byte: $(CMO)
 top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma $^
 
+doc::
+	cd doc; make
+
 # bench
 
 bench::
@@ -122,6 +125,7 @@ configure: configure.in
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f $(PROG) $(PROG).byte
+	cd doc; make clean
 
 .depend depend::
 	rm -f .depend
