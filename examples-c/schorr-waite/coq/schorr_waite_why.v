@@ -99,7 +99,8 @@ intros root alloc l m r _ t _ p _
  Variant1 c0 l0 m0 p1 r0 t1 _
  ((_,I2),(stack,(_,I9))).
 intros; apply I9; intuition.
-apply I2; auto.
+apply I2.
+assumption.
 left; exists (@nil pointer); constructor.
 Qed.
 

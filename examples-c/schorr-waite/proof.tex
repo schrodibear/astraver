@@ -60,7 +60,7 @@ void schorr_waite(node root) \{
     @              p2->r))
     @ &&
     @  (I8 :: \bs{}forall node x; ! \old(reachable(root,x)) => x->m == \old(x->m)) &&
-    @  (I9 :: \bs{}forall node x; x != \null && \old(reachable(root,x)) => \valid(x)) 
+    @  (I9 :: \bs{}forall node x; x != \bs{}null && \old(reachable(root,x)) => \valid(x)) 
     @*/
   while (p != NULL || (t != NULL && ! t->m)) \{
     if (t == NULL || t->m) \{
@@ -107,33 +107,34 @@ It's have 9 assertion :
 
 \subsection{Termination}
 
-\begin{lstlisting}[language=C]{}
+\begin{alltt}
+/*@ logic Length weight(node p , node t) reads p->m,p->c,p->l,p->r*/
 
-/*@ logic Length weight (node p , node t) reads p->m,p->c,p->l,p->r*/
-
-/*@ \bs{}exists plist l; reachable_elements(root,root,l) */
-void schorr_waite(node root) {
+/*@ requires \bs{}exists plist l; reachable_elements(root,root,l) */
+void schorr_waite(node root) \{
   node t = root;
   node p = NULL;
   /*@variant weight(p,t) for order_mark_m_and_c_and_stack 
     @*/
-  while (p != NULL || (t != NULL && ! t->m)) {
+  while (p != NULL || (t != NULL && ! t->m)) \{
    ...
-  }
-}
+  \}
+\}
+\end{alltt}
 
 To proof the termination of the while we need an addition in the
 precondition. This addition specifies there are a list of all the
 graph's elements.
 
 The clause variant specifies the order who decrease for all step of
-while. This order is the function order_mark_m_and_c_stack, this
+while. This order is the function \verb|order_mark_m_and_c_stack|, this
 function is an order lexicographic of the number of graph's elements
 not mark with m, the number of graph's elements not mark with c and the number
 of element in the \texttt{stack}. 
 
 
-\end{lstlisting}
+
+
 
 %%% Local Variables: 
 %%% mode: latex
