@@ -280,11 +280,11 @@ init_declarator
         ;
 
 storage_class_specifier
-        : TYPEDEF { }
-        | EXTERN { }
-        | STATIC { }
-        | AUTO { }
-        | REGISTER { }
+        : TYPEDEF { Typedef }
+        | EXTERN { Extern }
+        | STATIC { uns () }
+        | AUTO { uns () }
+        | REGISTER { uns () }
         ;
 
 type_specifier

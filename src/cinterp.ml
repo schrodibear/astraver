@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.36 2003-05-13 12:30:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.37 2003-06-12 11:18:32 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -62,6 +62,12 @@ let rec pvtype_of_ctype = function
   | CTarray c -> assert false
   | CTpointer c -> PVref (pvtype_of_ctype c)
   | CTfun _ -> assert false
+
+let rec ctype_of_pvtype = function
+  | PVpure pt -> CTpure pt
+  | PVref v -> CTpointer (ctype_of_pvtype v)
+  | PVarray v -> CTarray (ctype_of_pvtype v)
+  | PVarrow _ -> assert false
 
 let rec print_ctype fmt = function
   | CTpure PTint -> fprintf fmt "int"
@@ -782,6 +788,35 @@ let interp_fun id cenv l bl v (l,p,bs,q) =
   in
   e, ar
 		    
+let add_many ids t = List.fold_right (fun id -> Idmap.add id t) ids
+
+let interp_why_decl d cenv = match d with
+  | Parameter (_, ids, PVref (PVpure pt)) 
+  | External  (_, ids, PVref (PVpure pt)) -> 
+      add_many ids (CTpure pt, true) cenv
+  | Parameter (_, ids, PVarray (PVpure pt))
+  | External  (_, ids, PVarray (PVpure pt)) -> 
+      add_many ids (CTarray (CTpure pt), true) cenv
+  | Parameter (_, ids, PVpure pt)
+  | External  (_, ids, PVpure pt) ->
+      add_many ids (CTpure pt, false) cenv
+  | Parameter (l, ids, PVarrow (bl, k))
+  | External  (l, ids, PVarrow (bl, k)) ->
+      let pt = match k.pc_result_type with
+	| PVpure pt -> pt
+	| _ -> unsupported l
+      in
+      let binder = function
+	| _, BindType v -> ctype_of_pvtype v
+	| _ -> unsupported l
+      in
+      add_many ids (CTfun (List.map binder bl, CTpure pt), false) cenv
+  | Parameter (l, _, _) | External (l, _, _) ->
+      unsupported l
+  | Exception _ | Logic _ -> 
+      cenv
+  | Program (_, p) ->
+      unsupported p.ploc
 
 (*s C declarations *)
 
@@ -818,7 +853,7 @@ let interp_decl cenv = function
       assert false
   | Cspecdecl (l,wd) ->
       let d = Parser.parse_c_decl l wd in
-      [d], cenv
+      [d], interp_why_decl d cenv
 
 let interp l = 
   let rec interp_list cenv = function

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.17 2003-04-04 11:59:36 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.18 2003-06-12 11:18:32 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -58,6 +58,8 @@ type cexpr =
   | CEcond of Loc.t * cexpr * cexpr * cexpr
 
 type c_initializer = cexpr option
+
+type storage_class = Typedef | Extern
 
 type declarator =
   | CDvar of Ident.t * c_initializer
