@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.18 2004-03-02 15:49:06 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.19 2004-03-03 14:08:48 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -108,6 +108,8 @@ type 'ctype predicate =
   | Pif of 'ctype term * 'ctype predicate * 'ctype predicate
   | Pforall of 'ctype quantifiers * 'ctype predicate
   | Pexists of 'ctype quantifiers * 'ctype predicate
+  | Pold of 'ctype predicate
+  | Pat of 'ctype predicate * string
   | Pvalid of 'ctype term 
   | Pvalid_range of 'ctype term * 'ctype term * 'ctype term
 

@@ -151,7 +151,8 @@ let rec predicate p =
     | Pexists (_, _) -> assert false (* TODO *)
     | Pvalid (_) -> assert false (* TODO *)
     | Pvalid_range (_, _, _) -> assert false (* TODO *)
-
+    | Pold _ -> assert false (* TODO *)
+    | Pat (_,_) -> assert false (* TODO *)
 
 let file l = List.iter decl l
 
