@@ -49,4 +49,4 @@ IMPLEMENTATION
 
  - simplify predicates (e.g. if true then ...)
 
- - wf recursion only on type int (built-in in Monad.wf)
+ - wf recursion only on type int (built-in in Monad.wfrec)

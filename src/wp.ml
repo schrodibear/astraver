@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.29 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.30 2002-03-18 15:19:54 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -37,12 +37,6 @@ let while_post info b inv =
   match inv with
     | None -> Some (anonymous s)
     | Some i -> Some { a_value = pand i.a_value s; a_name = i.a_name }
-
-(*i**
-let top_point_block = function
-  | Label s :: _ as b -> s, b
-  | b -> let s = label_name() in s, (Label s)::b
-**i*)
 
 let while_post_block env inv (phi,r) e = 
   let lab = e.info.label in
@@ -262,12 +256,13 @@ and wp_desc info d q =
 	(* TODO: does not propagate inside [e2] *)
 	let q = optpost_app (tsubst_in_predicate [result, tvoid]) q in
 	let v = fresh_var () in
-	let st = make_raw_store info.env (x,x) (Tvar v) (Tvar result) in
+	let st = make_raw_store info.env (x,x) (Tvar result) (Tvar v) in
 	let q = optpost_app (tsubst_in_predicate [x, st]) q in
-	let e'2,w2 = wp e2 q in
-	let w2 = optpost_app (subst_in_predicate [v, result]) w2 in
-	let e'1,w1 = wp e1 w2 in
-	TabAff (ck, x, e'1, e2), w1
+	let _,w1 = wp e1 q in
+	let e'1,_ = wp e1 None in
+	let w1 = optpost_app (subst_in_predicate [v, result]) w1 in
+	let e'2,w2 = wp e2 w1 in
+	TabAff (ck, x, e'1, e'2), w2
     (* conditional: two cases depending on [p1.post] *)
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 q in

@@ -2,11 +2,10 @@
 (* Test program *)
 
 external x : int ref
+external t : array 10 of int
 
-let p = 
-  { x >= 0 }
-  while !x > 0 do { invariant 0 <= x and x <= x@0 variant x } x := !x - 1 done 
-  { x = 0 }
+let p = (t[begin t[0] := 3; 4 end] := begin t[4] := 0; 1 end) 
+        { access(t,4) = 1 }
 
 (***
 

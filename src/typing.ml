@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.32 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.33 2002-03-18 15:19:54 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -400,12 +400,6 @@ and typef_desc lab env loc = function
 	Effect.union (Effect.union efe efb) (Effect.union efinv efphi)
       in
       let v = type_v_unit in
-(*i***
-      let var' = 
-	let al = List.map (fun id -> (id,at_id id "")) (just_reads ef) in
-	subst_in_term al var 
-      in
-***i*)
       While (t_b,invopt,var,t_e), (v,ef), []
       
   | Lam ([],_) ->

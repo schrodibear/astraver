@@ -96,8 +96,8 @@ examples::
 install: $(BINARY)
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why
-#	mkdir -p $(MANDIR)/man1
-#	cp -f doc/why.1 $(MANDIR)/man1
+	mkdir -p $(MANDIR)/man1
+	cp -f doc/why.1 $(MANDIR)/man1
 
 local: $(BINARY)
 	cp -f $(BINARY) $$HOME/bin/$$OSTYPE/why

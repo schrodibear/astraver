@@ -124,3 +124,19 @@ Lemma add1_po_7 :
   ((if false then `z0 > 0` else `z0 <= 0`)) ->
   x0 = `x + y`.
 Proof. Intros; Omega. Save.
+
+Lemma u1_po_1 : 
+  (result: Z) 
+  result = `3` ->
+  `7 >= 0`.
+Proof. Intros; Omega. Save.
+
+Lemma u1_po_2 : 
+  (result: Z) 
+  result = `3` ->
+  `7 >= 0` ->
+  (r0: Z) 
+  r0 = `result + 7` ->
+  r0 = `10`.
+Proof. Intros; Omega. Save.
+

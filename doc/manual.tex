@@ -1,9 +1,11 @@
 \documentclass[a4paper,12pt]{report}
 
 \usepackage{fullpage}
+\usepackage{url}
 
 \newcommand{\caml}{\textsf{Caml}}
 \newcommand{\pvs}{\textsf{PVS}}
+\newcommand{\coq}{\textsf{Coq}}
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
@@ -32,19 +34,27 @@ Jean-Christophe Filli\^atre
 
 \why\ is a tool to generate proof obligations from annotated programs.
 Currently, the input syntax is a fragment of \caml\ (with annotations),
-and the output is a \pvs\ theory. Syntax is given in chapter~\ref{syntax}.
+and the output is a \pvs\ theory or a \coq\ file.
+Syntax is given in Chapter~\ref{syntax}.
 
 
 \section{Usage}
 
 \why\ is invoked as a batch compiler, given a list of input files:
 \begin{center}
-  \texttt{why} \textit{file}$_1$\texttt{.ml} $\cdots$
+  \texttt{why} [\textit{options}] \textit{file}$_1$\texttt{.ml} $\cdots$
     \textit{file}$_n$\texttt{.ml}
 \end{center}
-Each file \textit{file}\texttt{.ml} will be compiled into a \pvs\ theory,
-in file \textit{file}\texttt{.pvs}.
 
+\noindent Options are
+\begin{description}
+\item[\texttt{-pvs}, \texttt{-coq}]: 
+  Selects the prover; It defaults to \coq.
+\end{description}
+
+Each file \textit{file}\texttt{.ml} will be compiled into a \pvs\ theory
+\textit{file}\texttt{\_why.pvs} or a \coq\ module
+\texttt{file}\texttt{\_why.v}.
 If no file is given, then standard input is processed and a \pvs\ theory
 named \texttt{WhyOutput} is printed on standard output.
 
@@ -98,13 +108,17 @@ program, so that the initial value of $x$ can be referred to as $x@0$.
 \section{Installation}
 
 To compile \why, you need both \textsf{Objective Caml} and
-\textsf{Camlp4} to be installed, in version at least 3.01.
+\textsf{Camlp4} to be installed, in version at least 3.01. (Both can
+be fetched from \url{http://caml.inria.fr}.)
 Then 
 
 \begin{enumerate}
 \item Configure with \texttt{./configure}
 
-  
+  The directory for binaries defaults to \texttt{/usr/local/bin}; you
+  can specify another directory with the \texttt{-{}-bindir}
+  option. Similarly, you can change the directory for man pages with
+  \texttt{-{}-mandir}.
 
 \item Compile with \texttt{make}
 
