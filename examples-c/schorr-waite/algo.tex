@@ -102,7 +102,7 @@ when the right child is explored, and goes back up.
 \put(20,130){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
-\ncarc[arcangleA=120,linewidth=1]{n0}{null}
+\ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
@@ -123,7 +123,7 @@ when the right child is explored, and goes back up.
 \put(80,130){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
-\ncarc[arcangleA=120,linewidth=1]{n0}{null}
+\ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncarc[arcangleA=150,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null3}
@@ -144,7 +144,7 @@ when the right child is explored, and goes back up.
 \put(-60,30){\rnode{n12}}
 \ncline[linestyle=dotted]{-}{n1}{n11}
 \ncline[linestyle=dotted]{-}{n1}{n12}
-\ncarc[arcangleA=120,linewidth=1]{n0}{null}
+\ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncarc[arcangleA=-120,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepA=1mm]{p}{n2}
@@ -170,7 +170,7 @@ when the right child is explored, and goes back up.
 \ncline[nodesepB=1mm]{n2}{null3}
 \ncline[nodesepA=1mm]{p}{n0}
 \ncline[nodesepA=1mm]{t}{n2}
-\ncarc[arcangleA=120,linewidth=1]{n0}{null}
+\ncarc[nodesepB=1mm,arcangleA=120,linewidth=1]{n0}{null}
 \ncline[doubleline=true]{fig4}{fig5}\Aput{POP}
 \put(20,60){\rnode{fig5}}
 \put(50,60){\rnode{fig6}}
@@ -192,9 +192,11 @@ when the right child is explored, and goes back up.
 \ncline[nodesepB=1mm]{n2}{null3}
 \ncline[nodesepA=1mm]{p}{n0}
 \ncline[nodesepA=1mm]{t}{n1}
-\ncarc[arcangleA=-120,linewidth=1]{n0}{null}
+\ncarc[nodesepB=1mm,arcangleA=-120,linewidth=1]{n0}{null}
 \ncline[doubleline=true]{fig5}{fig6}\Aput{SWING}
-\put(90,60){\rnode{fig6}}
+\put(110,60){\rnode{fig6}}
+\put(140,60){\rnode{fig7}}
+\ncline[doubleline=true]{fig6}{fig7}\Aput{...}
 
 \end{picture}\label{figure}
 \end{center}
