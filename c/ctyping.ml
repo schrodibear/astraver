@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.6 2003-12-24 14:36:13 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.7 2003-12-24 14:36:58 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -348,7 +348,9 @@ and type_expr_node loc env = function
       assert false (*TODO*)
   (* these other binops cannot be built by the parser *)
   | CEbinary (_, (Bdiv_float|Bmul_float|Bsub_float|Badd_float
-		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int), _) ->
+		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int
+		 |Bsub_pointer|Bsub_pointer_int
+		 |Badd_int_pointer|Badd_pointer_int), _) ->
       assert false
   | CEcall (e, el) ->
       assert false (*TODO*)
