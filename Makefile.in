@@ -145,7 +145,7 @@ CVERSION=0.1
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
-	echo "let cversion = \""$(CVERSION)"\"" > $@
+	echo "let cversion = \""$(CVERSION)"\"" >> $@
 	echo "let date = \""`date`"\"" >> $@
 # 	echo "let sources = \""`pwd`"\"" >> $@
 # 	echo "let coqlib = \""$(COQLIB)"\"" >> $@
@@ -336,7 +336,8 @@ FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
 	examples/Makefile* \
 	examples/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
-	bench/bench.in bench/good*/*.mlw bench/good*/*.c bench/good*/*.v \
+	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
+        bench/c/bench bench/c/*/*.c bench/c/*/*/*.c \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc
 
 distrib export: source export-doc export-examples linux
