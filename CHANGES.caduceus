@@ -1,11 +1,9 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
-
- o new feature: invariants
-
-version 0.53, April 22nd, 2004
+version 0.54, April 22nd, 2004
 ==============================
+ o new feature: invariants
  o fixed bug with construct t[x].y
  o support for 'assigns \nothing'
 
