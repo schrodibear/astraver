@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.19 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.20 2003-03-18 14:24:28 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -216,14 +216,14 @@ and type_if lab env lenv a b c =
     | _ -> raise_located a.pp_loc ShouldBeBoolean
 
 and type_tvar loc lab env lenv x = 
-  let x, xu = 
+  let xu = 
     if is_at x then begin
       let xu,l = un_at x in
       if not (is_reference env xu) then raise_located loc (NotAReference xu);
       if not (Label.mem l lab) then raise_located loc (UnboundLabel l);
-      at_id xu (Label.find lab l), xu
+      xu
     end else 
-      x, x
+      x
   in
   if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
   match find_logic xu lenv with

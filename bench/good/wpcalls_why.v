@@ -6,7 +6,7 @@ Require Why.
 (*Why*) Parameter f :
   (_: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = 1 - x`)).
 
-(* Why obligation from file "good/wpcalls.mlw", characters 130-134 *)
+(* Why obligation from file "good/wpcalls.mlw", characters 146-150 *)
 Lemma p_po_1 : 
   (x: Z)
   (t: unit)

@@ -6,6 +6,7 @@ parameter f : unit -> { } unit writes x { x = 1 - x@ }
 let p (u:unit) =
   {}
   begin
+    label init;
     let t = void in void;
     (f void);
     (f void);

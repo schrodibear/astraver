@@ -49,9 +49,9 @@ parameter incrx : unit -> { } unit writes x { x = x@ + 1 }
 
 let p12 = { x = 0 } (incrx void) { x = 1 }
 
-let p13 = {} begin (incrx void); (incrx void) end { x = x@init + 2 }
+let p13 = {} begin (incrx void); (incrx void) end { x = x@ + 2 }
 
-let p13a = {} (incrx (incrx void)) { x = x@init + 2 }
+let p13a = {} (incrx (incrx void)) { x = x@ + 2 }
 
 (* function with side-effects, result and post-condition *)
 

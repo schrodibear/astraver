@@ -6,6 +6,7 @@ parameter t : int array
 let selection =
   { array_length(t) >= 1 }
   begin
+    label init;
     let i = ref 0 in
     while !i < (array_length t)-1 do
       (* t[0..i-1] is already sorted *)

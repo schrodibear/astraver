@@ -323,7 +323,7 @@ Save.
 
 
 
-(* Why obligation from file "fib.mlw", characters 1367-1368 *)
+(* Why obligation from file "fib.mlw", characters 1375-1376 *)
 Lemma fib4_po_1 : 
   (n: Z)
   (t: (array Z))
@@ -336,7 +336,7 @@ Assert h: `n=0` \/ `n=1`. Omega.
 Intuition; Rewrite H1; Auto.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1388-1397 *)
+(* Why obligation from file "fib.mlw", characters 1396-1405 *)
 Lemma fib4_po_2 : 
   (n: Z)
   (t: (array Z))
@@ -347,7 +347,7 @@ Proof.
 Intros; Simpl; Omega.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1404-1413 *)
+(* Why obligation from file "fib.mlw", characters 1412-1421 *)
 Lemma fib4_po_3 : 
   (n: Z)
   (t: (array Z))
@@ -361,7 +361,7 @@ Proof.
 Intros; Subst t0; Simpl; Omega.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1627-1657 *)
+(* Why obligation from file "fib.mlw", characters 1635-1665 *)
 Lemma fib4_po_4 : 
   (n: Z)
   (t: (array Z))
@@ -388,7 +388,7 @@ Proof.
 Simpl; Intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1442-1687 *)
+(* Why obligation from file "fib.mlw", characters 1450-1695 *)
 Lemma fib4_po_5 : 
   (n: Z)
   (t: (array Z))
@@ -435,7 +435,7 @@ Auto.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1478-1590 *)
+(* Why obligation from file "fib.mlw", characters 1486-1598 *)
 Lemma fib4_po_6 : 
   (n: Z)
   (t: (array Z))
@@ -461,7 +461,7 @@ Subst t0; AccessSame. Auto.
 Subst i t1; AccessSame. Auto.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1420-1687 *)
+(* Why obligation from file "fib.mlw", characters 1428-1695 *)
 Lemma fib4_po_7 : 
   (n: Z)
   (t: (array Z))

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.77 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.78 2003-03-18 14:24:28 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -445,6 +445,8 @@ i*)
     | "{"; pre = OPT pre_condition; "}"; p = program; 
       "{"; post = OPT post_condition; "}" -> 
         mk_prog loc p (list_of_some pre) post
+    | l = ident; ":"; p = program ->
+	without_annot loc (Sseq [Slabel (Ident.string l); Sstatement p])
     ] ]
   ;
   recfun:

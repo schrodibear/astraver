@@ -30,6 +30,7 @@ parameter A : int array (* the array *)
 
 let find =
   { array_length(A) = N+1 }
+  init:
   let m = ref 1 in let n = ref N in
   while !m < !n do
     { invariant m_invariant(m,A) and n_invariant(n,A) and permut(A,A@init) 
@@ -83,4 +84,4 @@ let find =
         begin n := f; m := f end
     end
   done
-  { found(A) and permut(A,A@init) }
+  { found(A) and permut(A,A@) }

@@ -321,18 +321,6 @@ The visibility of a label is the same as a local variable's one. In
 the code above, label \texttt{L} is not visible outside of the
 outermost sequence.
 
-\indextt{init}
-A particular label \texttt{init} is automatically inserted at the
-beginning of the program, so that the initial value of \texttt{x}
-can always be referred to as \texttt{x@init}. 
-Example:
-\begin{verbatim}
-     while !x > 0 do 
-       { invariant 0 <= x <= x@init  variant x } 
-       x := !x - 1 
-     done
-\end{verbatim}
-
 Labels provide an alternative to the traditional use of
 \emph{auxiliary variables}\index{Auxiliary variable}. Indeed, they
 allow you to relate the values of references at any points of the

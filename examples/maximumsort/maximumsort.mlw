@@ -31,8 +31,9 @@ let rec maximum (t:int array)(n,k,i:int): int { variant k } =
 (* Maximum sort *)
 let maxisort (t:int array) =
   { 0 <= array_length(t) }
+  init:
   (let i = ref ((array_length t)-1) in
-    while !i >= 0 do
+   while !i >= 0 do
       { invariant 0 <= i+1 <= array_length(t)
             and sorted_array(t,i+1,array_length(t)-1) 
 	    and permut(t,t@init) 

@@ -37,6 +37,7 @@ let partition =
     let i = ref (l+1) in
     let j = ref r in
     begin
+      label init;
       while !i < !j do
       	{ invariant l+1 <= i <= r and j <= r
                  and array_le(t, l+1, i-1, pv)

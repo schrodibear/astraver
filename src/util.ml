@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.74 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.75 2003-03-18 14:24:28 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -108,21 +108,6 @@ let type_c_subst_oldify env x t k =
     c_pre = List.map (asst_app (tsubst_in_predicate s)) k.c_pre;
     c_post = option_app (post_app (tsubst_in_predicate s_old)) k.c_post }
 
-(*s Normalization of types: get rid of label "init" everywhere *)
-
-let rec normalize_type_v = function
-  | Ref v -> Ref (normalize_type_v v)
-  | Array v -> Array (normalize_type_v v)
-  | Arrow (bl, c) -> Arrow (bl, normalize_type_c c)
-  | PureType _ as v -> v
-
-and normalize_type_c k = 
-  { c_result_name = k.c_result_name;
-    c_result_type = normalize_type_v k.c_result_type;
-    c_effect = k.c_effect;
-    c_pre = List.map (asst_app (erase_label "init")) k.c_pre;
-    c_post = optpost_app (change_label "init" "") k.c_post }
-
 (*s shortcuts for typing information *)
 
 let effect p = p.info.kappa.c_effect
@@ -190,7 +175,7 @@ let rec traverse_binders env = function
 	  
 let initial_renaming env =
   let ids = Env.fold_all (fun (id,_) l -> id::l) env [] in
-  update empty_ren "init" ids
+  update empty_ren "%init" ids
 
 
 (*s Occurrences *)

@@ -15,6 +15,7 @@ logic Zpower : int,int -> int
 
 let power1 =
   { n >= 0 }
+  init:
   begin
     m := x; 
     y := 1;
@@ -26,5 +27,5 @@ let power1 =
       n := (div2 !n)
     done
   end
-  { y = Zpower(x,n@init) }
+  { y = Zpower(x,n@) }
 

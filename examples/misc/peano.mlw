@@ -5,6 +5,7 @@
 
 let add1 = fun (x:int ref) (y:int) ->
   { y >= 0 }
+  init:
   (let z = ref y in
    while !z > 0 do
      { invariant 0 <= z and x = x@init + (y - z) as I
@@ -33,6 +34,7 @@ let u11 = let r = ref 3 in {} (rec_add1 r 7) { r = 10 }
 
 let mult1 = fun (x:int ref) (y:int) ->
   { x >= 0 and y >= 0 }
+  init:
   (let z = ref y in
    let savex = !x in
    begin

@@ -380,22 +380,6 @@ Intros; Omega.
 Save.
 
 
-
-
-
-(* Why obligation from file "good/all.mlw", characters 2855-2907 *)
-Lemma an3_po_1 : 
-  (v4: Z)
-  (Pre1: `v4 >= 0`)
-  (v9: Z)
-  (Post1: v9 = `v4 + 1`)
-  `v9 > v4`.
-Proof.
-Intros; Omega.
-Save.
-
-
-
 (*Why*) Inductive ET_E1 [T:Set] : Set :=
   | Val_E1 : T -> (ET_E1 T)
   | Exn_E1 : (ET_E1 T).

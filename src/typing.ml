@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.93 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.94 2003-03-18 14:24:28 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -477,7 +477,7 @@ and typef_desc lab env loc = function
 
   | Slam (bl, e) ->
       let bl',env',_ = binders loc lab env (logical_env env) bl in
-      let t_e = typef (Label.init lab) env' e in
+      let t_e = typef lab env' e in
       let v = make_arrow_type t_e.info.label bl' t_e.info.kappa in
       let ef = Effect.bottom in
       Lam (bl',t_e), (v,ef), []
@@ -620,10 +620,9 @@ and typef_desc lab env loc = function
       let phi0 = phi_name () in
       (* effects for a let/rec construct are computed as a fixpoint *)
       let type_body c =
-	(* TODO: change label to "init" in [c] *)
 	let tf = make_arrow bl' c in
 	let env'' = add_rec f (add f tf env') in
-	typef (Label.init lab) env'' e
+	typef lab env'' e
       in
       let fixpoint_reached c1 c2 =
 	c1.c_effect = c2.c_effect && 

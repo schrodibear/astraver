@@ -14,6 +14,7 @@ let heapsort =
   fun (t:int array) ->
     { 1 <= array_length(t) }
     begin
+      label init;
      (* first pass: we build the heap by calling downheap for 
 	k=(array_length(t)-2)/2 to 0 *)
       {}

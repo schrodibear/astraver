@@ -3,7 +3,7 @@ Require Why.
 Require Omega.
 Require ZArithRing.
 
-(* Why obligation from file "peano.mlw", characters 170-301 *)
+(* Why obligation from file "peano.mlw", characters 178-309 *)
 Lemma add1_po_1 : 
   (y: Z)
   (x: Z)
@@ -25,7 +25,7 @@ Proof.
 Unfold Zwf; Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 203-239 *)
+(* Why obligation from file "peano.mlw", characters 211-247 *)
 Lemma add1_po_2 : 
   (y: Z)
   (x: Z)
@@ -37,7 +37,7 @@ Proof.
 Unfold Zwf; Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 136-319 *)
+(* Why obligation from file "peano.mlw", characters 158-309 *)
 Lemma add1_po_3 : 
   (y: Z)
   (x: Z)
@@ -53,14 +53,14 @@ Intuition.
 Save.
 
 
-(* Why obligation from file "peano.mlw", characters 359-383 *)
+(* Why obligation from file "peano.mlw", characters 367-391 *)
 Lemma u1_po_1 : 
   (result: Z)
   (Post1: result = `3`)
   `7 >= 0`.
 Proof. Intros; Omega. Save.
 
-(* Why obligation from file "peano.mlw", characters 359-383 *)
+(* Why obligation from file "peano.mlw", characters 367-391 *)
 Lemma u1_po_2 : 
   (result: Z)
   (Post1: result = `3`)
@@ -71,7 +71,7 @@ Lemma u1_po_2 :
 Proof. Intros; Omega. Save.
 
 
-(* Why obligation from file "peano.mlw", characters 519-537 *)
+(* Why obligation from file "peano.mlw", characters 527-545 *)
 Lemma rec_add1_po_1 : 
   (y: Z)
   (Pre8: `y >= 0`)
@@ -88,7 +88,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 472-559 *)
+(* Why obligation from file "peano.mlw", characters 480-567 *)
 Lemma rec_add1_po_2 : 
   (y: Z)
   (Pre8: `y >= 0`)
@@ -108,7 +108,7 @@ Proof.
 Intros; Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 500-541 *)
+(* Why obligation from file "peano.mlw", characters 508-549 *)
 Lemma rec_add1_po_3 : 
   (y: Z)
   (Pre8: `y >= 0`)
@@ -128,7 +128,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 486-541 *)
+(* Why obligation from file "peano.mlw", characters 494-549 *)
 Lemma rec_add1_po_4 : 
   (y: Z)
   (Pre8: `y >= 0`)
@@ -144,7 +144,7 @@ Intros; Omega.
 Save.
 
 
-(* Why obligation from file "peano.mlw", characters 600-628 *)
+(* Why obligation from file "peano.mlw", characters 608-636 *)
 Lemma u11_po_1 : 
   (result: Z)
   (Post1: result = `3`)
@@ -153,7 +153,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 600-628 *)
+(* Why obligation from file "peano.mlw", characters 608-636 *)
 Lemma u11_po_2 : 
   (result: Z)
   (Post1: result = `3`)
@@ -166,7 +166,7 @@ Intros; Omega.
 Save.
 
 
-(* Why obligation from file "peano.mlw", characters 917-931 *)
+(* Why obligation from file "peano.mlw", characters 933-947 *)
 Lemma mult1_po_1 : 
   (y: Z)
   (x: Z)
@@ -188,7 +188,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 817-961 *)
+(* Why obligation from file "peano.mlw", characters 833-977 *)
 Lemma mult1_po_2 : 
   (y: Z)
   (x: Z)
@@ -207,7 +207,7 @@ Lemma mult1_po_2 :
   (Test2: `z0 > 0`)
   (Pre4: `savex >= 0`)
   (x2: Z)
-  (Post8: `x2 = x1 + savex`)
+  (Post9: `x2 = x1 + savex`)
   (z1: Z)
   (Post2: z1 = `z0 - 1`)
   (`0 <= z1` /\ `x2 = x * (y - z1)`) /\ (Zwf `0` z1 z0).
@@ -220,7 +220,7 @@ Subst x1.
 Ring.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 852-888 *)
+(* Why obligation from file "peano.mlw", characters 868-904 *)
 Lemma mult1_po_3 : 
   (y: Z)
   (x: Z)
@@ -237,7 +237,7 @@ Intros.
 Subst result; Split; [ Omega | Ring ]; Assumption.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 793-968 *)
+(* Why obligation from file "peano.mlw", characters 809-984 *)
 Lemma mult1_po_4 : 
   (y: Z)
   (x: Z)
@@ -261,14 +261,14 @@ Omega.
 Save.
 
 
-(* Why obligation from file "peano.mlw", characters 1026-1051 *)
+(* Why obligation from file "peano.mlw", characters 1042-1067 *)
 Lemma u2_po_1 : 
   (result: Z)
   (Post1: result = `4`)
   `result >= 0` /\ `6 >= 0`.
 Proof. Intros; Omega. Save.
 
-(* Why obligation from file "peano.mlw", characters 1026-1051 *)
+(* Why obligation from file "peano.mlw", characters 1042-1067 *)
 Lemma u2_po_2 : 
   (result: Z)
   (Post1: result = `4`)

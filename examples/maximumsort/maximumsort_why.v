@@ -310,7 +310,7 @@ Save.
 
 (* fin preuve de maximum *)
 
-(* Why obligation from file "maximumsort.mlw", characters 1124-1144 *)
+(* Why obligation from file "maximumsort.mlw", characters 1131-1151 *)
 Lemma maxisort_po_1 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -334,7 +334,7 @@ Proof.
   Intros H; Absurd `i0 < i0`; Omega'.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 1156-1169 *)
+(* Why obligation from file "maximumsort.mlw", characters 1163-1176 *)
 Lemma maxisort_po_2 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -353,14 +353,14 @@ Lemma maxisort_po_2 :
   (Pre7: (`0 <= i0` /\ `i0 <= i0`) /\ `i0 <= i0` /\
          `i0 < (array_length t0)` /\ (Maximize t0 i0 (access t0 i0) i0))
   (r: Z)
-  (Post6: (`0 <= r` /\ `r <= i0`) /\ (Maximize t0 i0 (access t0 r) `0`))
+  (Post7: (`0 <= r` /\ `r <= i0`) /\ (Maximize t0 i0 (access t0 r) `0`))
   (`0 <= i0` /\ `i0 < (array_length t0)`) /\ `0 <= r` /\
   `r < (array_length t0)`.
 Proof.
   Intros;  Omega'.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 1116-1169 *)
+(* Why obligation from file "maximumsort.mlw", characters 1123-1176 *)
 Lemma maxisort_po_3 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -379,11 +379,11 @@ Lemma maxisort_po_3 :
   (Pre7: (`0 <= i0` /\ `i0 <= i0`) /\ `i0 <= i0` /\
          `i0 < (array_length t0)` /\ (Maximize t0 i0 (access t0 i0) i0))
   (r: Z)
-  (Post6: (`0 <= r` /\ `r <= i0`) /\ (Maximize t0 i0 (access t0 r) `0`))
+  (Post7: (`0 <= r` /\ `r <= i0`) /\ (Maximize t0 i0 (access t0 r) `0`))
   (Pre6: (`0 <= i0` /\ `i0 < (array_length t0)`) /\ `0 <= r` /\
          `r < (array_length t0)`)
   (t1: (array Z))
-  (Post8: (exchange t1 t0 i0 r))
+  (Post9: (exchange t1 t0 i0 r))
   ((i:Z)
    (i = `i0 - 1` -> ((`0 <= i + 1` /\ `i + 1 <= (array_length t1)`) /\
     (sorted_array t1 `i + 1` `(array_length t1) - 1`) /\ (permut t1 t) /\
@@ -398,7 +398,7 @@ Proof.
    (* post-condition 1 *)
    Unfold sorted_array in H0;  Unfold sorted_array.
    Intros C1 k C2 C3;
-   Case Post8.
+   Case Post9.
     Intros Clength C4 C5 C6 C7 C8.
      Case (Z_eq_dec k i0).
        Intros C9; Rewrite C9; Rewrite C6; Rewrite C8; Try Omega'.
@@ -410,7 +410,7 @@ Proof.
    Split. Apply permut_trans with t':=t0; Auto.
    EApply exchange_is_permut; EAuto.
    (* post-condition 3 *)
-   Decompose [and] Post6; Clear Post6. Case Post8; Clear Post8.
+   Decompose [and] Post7; Clear Post7. Case Post9; Clear Post9.
    Intros Clength C1 C2 C3 C4 C5 C5a; Replace `i+1` with i0. Rewrite C3.
      Apply Maximize_ext2; Intros i' C6.
      Case (Z_eq_dec i' r).
@@ -422,7 +422,7 @@ Proof.
    Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 911-1086 *)
+(* Why obligation from file "maximumsort.mlw", characters 918-1093 *)
 Lemma maxisort_po_4 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
@@ -440,7 +440,7 @@ Proof.
   Intros H; Absurd `(array_length t) < (array_length t)`; [Omega' | Auto].
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 808-1254 *)
+(* Why obligation from file "maximumsort.mlw", characters 844-1201 *)
 Lemma maxisort_po_5 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)

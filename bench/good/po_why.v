@@ -189,7 +189,7 @@ Save.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1234-1292 *)
+(* Why obligation from file "good/po.mlw", characters 1234-1288 *)
 Lemma p13_po_1 : 
   (x: Z)
   (x0: Z)
@@ -204,7 +204,7 @@ Save.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1305-1347 *)
+(* Why obligation from file "good/po.mlw", characters 1301-1339 *)
 Lemma p13a_po_1 : 
   (x: Z)
   (x0: Z)
@@ -223,7 +223,7 @@ Save.
   (_: unit)(x: Z)
   (sig_2 Z Z [x0: Z][result: Z](`x0 = x + 1` /\ `result = x0`)).
 
-(* Why obligation from file "good/po.mlw", characters 1495-1533 *)
+(* Why obligation from file "good/po.mlw", characters 1487-1525 *)
 Lemma p14_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -238,7 +238,7 @@ Save.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1584-1616 *)
+(* Why obligation from file "good/po.mlw", characters 1576-1608 *)
 Lemma p15_po_1 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10`)
@@ -250,7 +250,7 @@ Save.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1629-1666 *)
+(* Why obligation from file "good/po.mlw", characters 1621-1658 *)
 Lemma p16_po_1 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10`)
@@ -262,7 +262,7 @@ Save.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1679-1738 *)
+(* Why obligation from file "good/po.mlw", characters 1671-1730 *)
 Lemma p17_po_1 : 
   (t: (array Z))
   (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
@@ -281,7 +281,7 @@ Save.
 *)
 
 
-(* Why obligation from file "good/po.mlw", characters 1725-1729 *)
+(* Why obligation from file "good/po.mlw", characters 1717-1721 *)
 Lemma p17_po_2 : 
   (t: (array Z))
   (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
@@ -293,7 +293,7 @@ Intros; Simpl; Omega.
 Save.
 
 
-(* Why obligation from file "good/po.mlw", characters 1796-1798 *)
+(* Why obligation from file "good/po.mlw", characters 1788-1790 *)
 Lemma p18_po_1 : 
   (t: (array Z))
   (x: Z)

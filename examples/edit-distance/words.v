@@ -304,7 +304,7 @@ Defined.
 Definition suffix := 
   (fix Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F).
 
-(*s To use [fix_eq], we need to establish extensionality of [F]. *)
+(*s To use [Fix_eq], we need to establish extensionality of [F]. *)
 
 Lemma extensionality :   
   (x:Z; f,g:((y:Z)(Zwf_up n y x)->word))
@@ -327,7 +327,7 @@ Lemma suffix_is_cons :
   (suffix i) = (cons (access t i) (suffix `i+1`)).
 Proof.
 Intros i Hi.
-Rewrite (fix_eq Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F
+Rewrite (Fix_eq Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F
          extensionality).
 Unfold F.
 Case (Z_lt_ge_dec i `0`).
@@ -342,7 +342,7 @@ Save.
 
 Lemma suffix_n_is_eps : (suffix n) = eps. 
 Proof.
-Rewrite (fix_eq Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F
+Rewrite (Fix_eq Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F
          extensionality).
 Unfold F.
 Case (Z_lt_ge_dec n `0`).

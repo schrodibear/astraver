@@ -91,7 +91,7 @@ Save.
 
 (*Why*) Parameter x : Z.
 
-(* Why obligation from file "power.mlw", characters 498-510 *)
+(* Why obligation from file "power.mlw", characters 506-518 *)
 Lemma power1_po_1 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -136,7 +136,7 @@ Subst n1; Apply Zdiv2_ge_0; Omega.
 Subst n1; Apply Zdiv2_lt; Omega.
 Save.
 
-(* Why obligation from file "power.mlw", characters 478-510 *)
+(* Why obligation from file "power.mlw", characters 486-518 *)
 Lemma power1_po_2 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -173,7 +173,7 @@ Subst n1; Apply Zdiv2_ge_0; Omega.
 Subst n1; Apply Zdiv2_lt; Omega.
 Save.
 
-(* Why obligation from file "power.mlw", characters 406-451 *)
+(* Why obligation from file "power.mlw", characters 414-459 *)
 Lemma power1_po_3 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -189,7 +189,7 @@ Subst y0; Ring.
 Subst m0; Trivial.
 Save.
 
-(* Why obligation from file "power.mlw", characters 324-594 *)
+(* Why obligation from file "power.mlw", characters 345-575 *)
 Lemma power1_po_4 : 
   (n: Z)
   (Pre4: `n >= 0`)
