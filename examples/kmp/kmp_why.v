@@ -61,7 +61,6 @@ Lemma initnext_po_3 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -88,7 +87,6 @@ Lemma initnext_po_4 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -116,7 +114,6 @@ Lemma initnext_po_5 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -150,7 +147,6 @@ Lemma initnext_po_6 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -172,6 +168,29 @@ Lemma initnext_po_6 :
   (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)).
 Proof.
 Intuition.
+Rewrite Post7; Rewrite Post8.
+Apply match_right_extension.
+Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
+  Omega'. Omega'.
+  Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
+  Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
+  Red; Apply H3; Omega'.
+  Apply match_right_weakening with n := z.
+  Replace `i0+1-(z-1)` with `i0+1+1-z`.
+  Rewrite Post7 in H7; Assumption. Omega'. Omega'.
+  Elim (Z_lt_ge_dec k `i0+1`); Intro Hk'.  
+  Rewrite Post9; Rewrite store_def_2.
+  Apply H6; Omega'. Omega'. Omega'. Omega'.
+  Cut `i0+1 = k`. Intro Heq.	
+  Rewrite Post9; Rewrite Post7; Rewrite Heq. Rewrite store_def_1.
+  Rewrite <- Heq. Apply Next_cons. Omega'.
+  Rewrite Post8; Replace `i0+1-(j0+1)` with `i0-j0`.
+  Apply match_right_extension; Omega' Orelse Try Assumption.
+  Ring `i0-j0+j0`; Ring `0+j0`; Assumption. Omega'.
+  Intros z Hz. 
+  Red; Apply H3; Omega'.
+  Omega'. Omega'.
+Unfold lexZ lex Zwf pairZ; Left; Omega'.
 Save.
 
 Lemma initnext_po_7 : 
@@ -188,7 +207,6 @@ Lemma initnext_po_7 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -204,7 +222,7 @@ Lemma initnext_po_7 :
   (Post6: (store next1 i1 result7) = (store next1 i1 `0`))
   `0 <= i1` /\ `i1 < M`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma initnext_po_8 : 
@@ -221,7 +239,6 @@ Lemma initnext_po_8 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -241,7 +258,41 @@ Lemma initnext_po_8 :
   ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
   (lexZ (pairZ `M - i1` j0) (pairZ `M - i0` j0)).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+  Rewrite Test4.
+  Apply match_empty. Omega'. Omega'.
+  Elim (Z_lt_ge_dec `j0+2` z); Intro.
+  Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
+  Red; Apply H3; Omega'.
+  Apply match_right_weakening with n := z.
+  Rewrite Post5 in H7.
+  Replace `i0+1-(z-1)` with `i0+1+1-z`; [ Assumption | Omega' ]. Omega'.
+  Absurd (#p[i0])=(#p[j0]); [ Assumption | Idtac ].
+  Decompose [match] H7.
+  Replace i0 with `i0+1+1-2+j0`; [ Idtac | Omega' ].
+  Replace #p[j0] with #p[`0+j0`]; [ Idtac | Ring `0+j0`; Reflexivity ].
+  Cut `z = 2`; [ Intro Heq | Omega' ].
+  Rewrite <- Heq. Rewrite <- Post5; Apply H11; Omega'.
+  Elim (Z_lt_ge_dec k `i0+1`); Intro.
+  Rewrite Post6; Rewrite store_def_2.
+  Apply H6; Omega'. Omega'. Omega'. Omega'.
+  Cut `i0+1 = k`; [ Intro Heq | Omega' ].
+  Rewrite Post6; Rewrite Post5; Rewrite Heq. Rewrite store_def_1.
+  Rewrite <- Heq. Apply Next_cons. Omega'.
+  Apply match_empty; Omega'.
+  Intros z Hz.
+  Elim (Z_lt_ge_dec `1` z); Intro.
+  (* 1 < z  *)
+  Red; Apply H3; Omega'.
+  (* z = 1 *)
+  Red; Intro.
+  Absurd (#p[i0])=(#p[j0]); [ Assumption | Rewrite Test4 ].
+  Decompose [match] H5.
+  Replace `0` with `0+0`; [ Idtac | Omega' ].
+  Replace `i0` with `i0+1-z+0`; [ Idtac | Omega' ].
+  Apply H11; Omega'.
+  Omega'.
+Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
 
 Lemma initnext_po_9 : 
@@ -258,7 +309,6 @@ Lemma initnext_po_9 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -270,7 +320,7 @@ Lemma initnext_po_9 :
   (Test3: ~(j0 = `0`))
   `0 <= j0` /\ `j0 < M`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma initnext_po_10 : 
@@ -287,7 +337,6 @@ Lemma initnext_po_10 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -306,7 +355,47 @@ Lemma initnext_po_10 :
   ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
   (lexZ (pairZ `M - i0` j1) (pairZ `M - i0` j0)).
 Proof.
-(* FILL PROOF HERE *)
+Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
+  Rewrite Post4. 
+  Elim (H8 j0); Omega'.
+  Elim (H8 j0); Omega'.
+  Elim (H8 j0); Omega'.
+  Rewrite Post4.
+  Apply match_trans with t2 := p i2 := `j0-(access   next1 j0)`.
+  Apply match_left_weakening with n := j0.
+  Replace `i0-(access   next1 j0)-(j0-(access   next1 j0))` 
+    with `i0-j0` ; [ Idtac | Omega' ].
+  Replace `j0-(access   next1 j0)-(j0-(access   next1 j0))` 
+    with `0` ; [ Assumption | Omega' ].
+  Elim (H8 j0); Omega'. Elim (H8 j0); Auto; Omega'.
+
+  Elim (Z_lt_ge_dec `j0+1` z); Intro.
+  (* j0+1 < z < i0+1 *)
+  Apply (H5 z); Assumption Orelse Omega'.
+  Elim (Z_ge_lt_dec z `j0+1`); Intro.
+  (* z = j0+1 *)
+  Absurd (#p[i0])=(#p[j0]) ; [ Assumption | Idtac ].
+  Decompose [match] H9.
+  Replace i0 with `i0+1-z+j0`; [ Idtac | Omega' ].
+  Replace j0 with `0+j0`; [ Idtac | Omega' ].
+  Apply H13; Omega'.
+  (* next[j0]+1 < z < j0+1 *)
+  Absurd (match p `j0-(z-1)` p `0` `z-1`).
+  Decompose [match] H9.
+  Elim (H8 j0); Omega' Orelse Intros.
+  Apply H16; Omega'.
+  Apply match_trans with t2 := p i2 := `i0-(z-1)`.
+  Apply match_sym.
+  Apply match_left_weakening with n := j0.
+  Replace `i0-(z-1)-(j0-(z-1))` with `i0-j0` ; [ Idtac | Omega' ].
+  Ring `j0-(z-1)-(j0-(z-1))`. Assumption.
+  Omega'.
+  Apply match_right_weakening with n := z.
+  Replace `i0-(z-1)` with `i0+1-z` ; [ Assumption | Omega' ].
+  Omega'.
+Unfold lexZ lex Zwf pairZ. 
+Elim (H8 j0) ; [ Intros | Omega' ].
+Right. Omega'.
 Save.
 
 Lemma initnext_po_11 : 
@@ -323,7 +412,6 @@ Lemma initnext_po_11 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -334,15 +422,16 @@ Lemma initnext_po_11 :
   (i1: Z)
   (j1: Z)
   (next2: (array M Z))
-  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
-        (match p `i1 - j1` p `0` j1) /\
-        ((z:Z)
-         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
-        (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
+  (Inv0: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
+         (match p `i1 - j1` p `0` j1) /\
+         ((z:Z)
+          (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+         ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+         (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
   (lexZ (pairZ `M - i1` j1) Variant1).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Rewrite Pre8; Assumption.
 Save.
 
 Lemma initnext_po_12 : 
@@ -359,7 +448,6 @@ Lemma initnext_po_12 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -370,18 +458,18 @@ Lemma initnext_po_12 :
   (i1: Z)
   (j1: Z)
   (next2: (array M Z))
-  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
-        (match p `i1 - j1` p `0` j1) /\
-        ((z:Z)
-         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
-        (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
+  (Inv0: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
+         (match p `i1 - j1` p `0` j1) /\
+         ((z:Z)
+          (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+         ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+         (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
   `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
   (match p `i1 - j1` p `0` j1) /\
   ((z:Z) (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
   ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma initnext_po_13 : 
@@ -398,7 +486,6 @@ Lemma initnext_po_13 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (p: (array M A))
   (Pre8: Variant1 = (pairZ `M - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
@@ -412,7 +499,7 @@ Lemma initnext_po_13 :
   ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
   `i0 >= M - 1`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma initnext_po_14 : 
@@ -432,7 +519,13 @@ Lemma initnext_po_14 :
     ~(match p `result + 1 - z` p `0` z))) /\
   ((k:Z) (`0 < k` /\ `k <= result` -> (Next p k (access next0 k)))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Rewrite Post1; Rewrite Post2.
+Apply match_empty ; Omega'.
+Absurd `1 < z`; Omega'.
+Replace k with `1` ; [ Rewrite Post3; Rewrite store_def_1 | Omega' ].
+Apply next_1_0; Omega'.
+Omega'.
 Save.
 
 Lemma initnext_po_15 : 
@@ -456,7 +549,7 @@ Lemma initnext_po_15 :
         `i0 >= M - 1`)
   ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next1 j)))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma initnext_po_16 : 
@@ -469,682 +562,16 @@ Lemma initnext_po_16 :
   (Test1: `1 >= M`)
   ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next j)))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Absurd `0 < j`; Omega'.
 Save.
 
 
 
 
-Definition initnext := (* validation *)
-  [u: unit]
-    [next: (array M Z)]
-      [p: (array M A)]
-        let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
-          (refl_equal ? `1`)) in
-        let (i0, next0, result0, Post13) =
-          let (result0, Post2) = (exist_1 [result0: Z]result0 = `0` `0`
-            (refl_equal ? `0`)) in
-          let (i0, j0, next0, result1, Post14) =
-            let (result1, Bool4) =
-              let (result3, Post15) = (Z_lt_ge_bool `1` M) in
-              (exist_1 [result4: bool](if result4 then `1 < M` else `1 >= M`) 
-              result3 Post15) in
-            (Cases (btest [result1:bool](if result1 then `1 < M`
-                                         else `1 >= M`) result1 Bool4) of
-            | (left Test8) =>
-                let (i0, j0, next0, result2, Post17) =
-                  let (next0, result2, Post3) =
-                    let (result2, Post3) =
-                      (exist_1 [result2: Z](store next `1` result2) =
-                                           (store next `1` `0`) `0`
-                      (refl_equal ? (store next `1` `0`))) in
-                    let Pre1 =
-                      (initnext_po_1 next result Post1 result0 Post2 Test8
-                      result2 Post3) in
-                    (exist_2 [next1: (array M Z)][result4: unit]next1 =
-                                                                (store next
-                                                                 `1` `
-                                                                 0`) 
-                    (store next `1` result2) tt Post3) in
-                  let (i0, j0, next1, result3, Inv) =
-                    (((((((((((well_founded_induction prodZZ) lexZ)
-                              (initnext_po_2 next result Post1 result0 Post2
-                              Test8 next0 Post3))
-                             [Variant1: prodZZ](i0: Z)(j0: Z)(next1: (array M Z))(p: (array M A))(_: 
-                             Variant1 = (pairZ `M - i0` j0))(Inv: `0 <= j0` /\
-                             `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
-                             (match p `i0 - j0` p `0` j0) /\
-                             ((z:Z)
-                              (`j0 + 1 < z` /\ `z < i0 + 1` ->
-                               ~(match p `i0 + 1 - z` p `0` z))) /\
-                             ((k:Z)
-                              (`0 < k` /\ `k <= i0` ->
-                               (Next p k (access next1 k)))))(sig_4 Z Z
-                             (array M Z)
-                             unit [i1:Z][j1:Z][next2:(array M Z)][result:unit](`
-                             0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\
-                             `i1 <= M`) /\ (match p `i1 - j1` p `0` j1) /\
-                             ((z:Z)
-                              (`j1 + 1 < z` /\ `z < i1 + 1` ->
-                               ~(match p `i1 + 1 - z` p `0` z))) /\
-                             ((k:Z)
-                              (`0 < k` /\ `k <= i1` ->
-                               (Next p k (access next2 k)))) /\
-                             `i1 >= M - 1`)))
-                            [Variant1: prodZZ]
-                              [wf1: (Variant2: prodZZ)(Pre2: (lexZ Variant2
-                                                              Variant1))(i0: Z)(j0: Z)(next1: (array M Z))(p: (array M A))(_: 
-                                Variant2 = (pairZ `M - i0` j0))(Inv: `
-                                0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\
-                                `i0 <= M`) /\ (match p `i0 - j0` p `0` j0) /\
-                                ((z:Z)
-                                 (`j0 + 1 < z` /\ `z < i0 + 1` ->
-                                  ~(match p `i0 + 1 - z` p `0` z))) /\
-                                ((k:Z)
-                                 (`0 < k` /\ `k <= i0` ->
-                                  (Next p k (access next1 k)))))(sig_4 Z Z
-                                (array M Z)
-                                unit [i1:Z][j1:Z][next2:(array M Z)][result:unit](`
-                                0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\
-                                `i1 <= M`) /\ (match p `i1 - j1` p `0` j1) /\
-                                ((z:Z)
-                                 (`j1 + 1 < z` /\ `z < i1 + 1` ->
-                                  ~(match p `i1 + 1 - z` p `0` z))) /\
-                                ((k:Z)
-                                 (`0 < k` /\ `k <= i1` ->
-                                  (Next p k (access next2 k)))) /\
-                                `i1 >= M - 1`))]
-                                [i0: Z]
-                                  [j0: Z]
-                                    [next1: (array M Z)]
-                                      [p: (array M A)]
-                                        [Pre8: Variant1 = (pairZ `M - i0` j0)]
-                                          [Inv: `0 <= j0` /\ `j0 <= M` /\
-                                            (`j0 < i0` /\ `i0 <= M`) /\
-                                            (match p `i0 - j0` p `0` j0) /\
-                                            ((z:Z)
-                                             (`j0 + 1 < z` /\ `z < i0 + 1` ->
-                                              ~(match p `i0 + 1 - z` p `0` z))) /\
-                                            ((k:Z)
-                                             (`0 < k` /\ `k <= i0` ->
-                                              (Next p k (access next1 k))))]
-                                            let (result3, Bool1) =
-                                              let (result5, Post18) =
-                                                (Z_lt_ge_bool i0 `M - 1`) in
-                                              (exist_1 [result6: bool](
-                                              if result6 then `i0 < M - 1`
-                                              else `i0 >= M - 1`) result5
-                                              Post18) in
-                                            (Cases (btest [result3:bool](
-                                            if result3 then `i0 < M - 1`
-                                            else `i0 >= M - 1`) result3 Bool1) of
-                                            | (left Test7) =>
-                                                let (i1, j1, next2, result4,
-                                                  Inv) =
-                                                  let (i1, j1, next2,
-                                                    result4, Inv) =
-                                                    let (i1, j1, next2,
-                                                      result4, Inv) =
-                                                      let (result4, Bool3) =
-                                                        let Pre3 =
-                                                          (initnext_po_3 next
-                                                          p result Post1
-                                                          result0 Post2 Test8
-                                                          next0 Post3
-                                                          Variant1 i0 j0
-                                                          next1 p Pre8 Inv
-                                                          Test7) in
-                                                        let result5 =
-                                                          let Pre4 =
-                                                            (initnext_po_4 next
-                                                            p result Post1
-                                                            result0 Post2
-                                                            Test8 next0 Post3
-                                                            Variant1 i0 j0
-                                                            next1 p Pre8 Inv
-                                                            Test7 Pre3) in
-                                                          (A_eq_bool (
-                                                           access p i0)) in
-                                                        let (result6,
-                                                          Post19) =
-                                                          (result5 (access p
-                                                                    j0)) in
-                                                        (exist_1 [result7: bool](
-                                                        if result7
-                                                        then (access p i0) =
-                                                             (access p j0)
-                                                        else ~(access p i0) =
-                                                              (access p j0)) 
-                                                        result6 Post19) in
-                                                      (Cases (btest [result4:bool](
-                                                      if result4
-                                                      then (access p i0) =
-                                                           (access p j0)
-                                                      else ~(access p i0) =
-                                                            (access p j0)) result4 Bool3) of
-                                                      | (left Test6) =>
-                                                          let (i1, j1, next2,
-                                                            result5, Inv) =
-                                                            let (i1, result5,
-                                                              Post7) =
-                                                              let (result5,
-                                                                Post7) =
-                                                                (exist_1 [result5: Z]
-                                                                result5 =
-                                                                `i0 + 1` 
-                                                                `i0 + 1`
-                                                                (refl_equal ? `
-                                                                i0 + 1`)) in
-                                                              (exist_2 [i2: Z][result6: unit]
-                                                              i2 = `i0 + 1` 
-                                                              result5 
-                                                              tt Post7) in
-                                                            let (j1, result6,
-                                                              Post8) =
-                                                              let (result6,
-                                                                Post8) =
-                                                                (exist_1 [result6: Z]
-                                                                result6 =
-                                                                `j0 + 1` 
-                                                                `j0 + 1`
-                                                                (refl_equal ? `
-                                                                j0 + 1`)) in
-                                                              (exist_2 [j2: Z][result7: unit]
-                                                              j2 = `j0 + 1` 
-                                                              result6 
-                                                              tt Post8) in
-                                                            let (next2,
-                                                              result7,
-                                                              Post9) =
-                                                              let (result7,
-                                                                Post9) =
-                                                                (exist_1 [result7: Z]
-                                                                (store next1
-                                                                 i1 result7) =
-                                                                (store next1
-                                                                 i1 j1) 
-                                                                j1
-                                                                (refl_equal ? (
-                                                                store next1
-                                                                i1 j1))) in
-                                                              let Pre7 =
-                                                                (initnext_po_5 next
-                                                                p result
-                                                                Post1 result0
-                                                                Post2 Test8
-                                                                next0 Post3
-                                                                Variant1 i0
-                                                                j0 next1 p
-                                                                Pre8 Inv
-                                                                Test7 Test6
-                                                                i1 Post7 j1
-                                                                Post8 result7
-                                                                Post9) in
-                                                              (exist_2 [next3: (array M Z)][result9: unit]
-                                                              next3 =
-                                                              (store next1 i1
-                                                               j1) (store next1
-                                                                    i1
-                                                                    result7)
-                                                              tt Post9) in
-                                                            (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result8: unit]`
-                                                            0 <= j2` /\
-                                                            `j2 <= M` /\
-                                                            (`j2 < i2` /\
-                                                            `i2 <= M`) /\
-                                                            (match p
-                                                             `i2 - j2` p `
-                                                             0` j2) /\
-                                                            ((z:Z)
-                                                             (`j2 + 1 < z` /\
-                                                              `z < i2 + 1` ->
-                                                              ~(match p
-                                                                `i2 + 1 - z`
-                                                                p `0` z))) /\
-                                                            ((k:Z)
-                                                             (`0 < k` /\
-                                                              `k <= i2` ->
-                                                              (Next p k
-                                                               (access next3
-                                                                k)))) /\
-                                                            (lexZ (pairZ `
-                                                                   M - i2` j2)
-                                                             (pairZ `
-                                                              M - i0` j0)) 
-                                                            i1 j1 next2
-                                                            result7
-                                                            (initnext_po_6 next
-                                                            p result Post1
-                                                            result0 Post2
-                                                            Test8 next0 Post3
-                                                            Variant1 i0 j0
-                                                            next1 p Pre8 Inv
-                                                            Test7 Test6 i1
-                                                            Post7 j1 Post8
-                                                            next2 Post9)) in
-                                                          (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result6: unit]`
-                                                          0 <= j2` /\
-                                                          `j2 <= M` /\
-                                                          (`j2 < i2` /\
-                                                          `i2 <= M`) /\
-                                                          (match p `i2 - j2`
-                                                           p `0` j2) /\
-                                                          ((z:Z)
-                                                           (`j2 + 1 < z` /\
-                                                            `z < i2 + 1` ->
-                                                            ~(match p
-                                                              `i2 + 1 - z` p
-                                                              `0` z))) /\
-                                                          ((k:Z)
-                                                           (`0 < k` /\
-                                                            `k <= i2` ->
-                                                            (Next p k
-                                                             (access next3 k)))) /\
-                                                          (lexZ (pairZ `
-                                                                 M - i2` j2)
-                                                           (pairZ `M - i0` j0)) 
-                                                          i1 j1 next2 
-                                                          result5 Inv)
-                                                      | (right Test5) =>
-                                                          let (i1, j1, next2,
-                                                            result5, Inv) =
-                                                            let (result5,
-                                                              Bool2) =
-                                                              let (result7,
-                                                                Post20) =
-                                                                (Z_eq_bool j0
-                                                                   `0`) in
-                                                              (exist_1 [result8: bool](
-                                                              if result8
-                                                              then j0 = `0`
-                                                              else ~(j0 =
-                                                              `0`)) result7
-                                                              Post20) in
-                                                            (Cases (btest [result5:bool](
-                                                            if result5
-                                                            then j0 = `0`
-                                                            else ~(j0 = `
-                                                            0`)) result5 Bool2) of
-                                                            | (left Test4) =>
-                                                                let (i1,
-                                                                  next2,
-                                                                  result6,
-                                                                  Inv) =
-                                                                  let (i1,
-                                                                    result6,
-                                                                    Post5) =
-                                                                    let (result6,
-                                                                    Post5) =
-                                                                    (exist_1 [result6: Z]
-                                                                    result6 =
-                                                                    `
-                                                                    i0 + 1` 
-                                                                    `
-                                                                    i0 + 1`
-                                                                    (refl_equal ? `
-                                                                    i0 + 1`)) in
-                                                                    (exist_2 [i2: Z][result7: unit]
-                                                                    i2 =
-                                                                    `
-                                                                    i0 + 1` 
-                                                                    result6
-                                                                    tt Post5) in
-                                                                  let (next2,
-                                                                    result7,
-                                                                    Post6) =
-                                                                    let (result7,
-                                                                    Post6) =
-                                                                    (exist_1 [result7: Z]
-                                                                    (
-                                                                    store next1
-                                                                    i1
-                                                                    result7) =
-                                                                    (
-                                                                    store next1
-                                                                    i1 `
-                                                                    0`) 
-                                                                    `0`
-                                                                    (refl_equal ? (
-                                                                    store next1
-                                                                    i1 `
-                                                                    0`))) in
-                                                                    let Pre6 =
-                                                                    (initnext_po_7 next
-                                                                    p result
-                                                                    Post1
-                                                                    result0
-                                                                    Post2
-                                                                    Test8
-                                                                    next0
-                                                                    Post3
-                                                                    Variant1
-                                                                    i0 j0
-                                                                    next1 p
-                                                                    Pre8 Inv
-                                                                    Test7
-                                                                    Test5
-                                                                    Test4 i1
-                                                                    Post5
-                                                                    result7
-                                                                    Post6) in
-                                                                    (exist_2 [next3: (array M Z)][result9: unit]
-                                                                    next3 =
-                                                                    (
-                                                                    store next1
-                                                                    i1 `
-                                                                    0`) 
-                                                                    (
-                                                                    store next1
-                                                                    i1
-                                                                    result7)
-                                                                    tt Post6) in
-                                                                  (exist_3 [i2: Z][next3: (array M Z)][result8: unit]`
-                                                                  0 <= j0` /\
-                                                                  `j0 <= M` /\
-                                                                  (`j0 < i2` /\
-                                                                  `i2 <= M`) /\
-                                                                  (match p
-                                                                   `i2 - j0`
-                                                                   p `
-                                                                   0` j0) /\
-                                                                  ((z:Z)
-                                                                   (`
-                                                                    j0 + 1 <
-                                                                    z` /\
-                                                                    `
-                                                                    z < i2 +
-                                                                    1` ->
-                                                                    ~(
-                                                                    match p
-                                                                    `
-                                                                    i2 + 1 -
-                                                                    z` p `
-                                                                    0` z))) /\
-                                                                  ((k:Z)
-                                                                   (`
-                                                                    0 < k` /\
-                                                                    `
-                                                                    k <= i2` ->
-                                                                    (
-                                                                    Next p k
-                                                                    (
-                                                                    access next3
-                                                                    k)))) /\
-                                                                  (lexZ (
-                                                                   pairZ `
-                                                                   M - i2` j0)
-                                                                   (pairZ `
-                                                                    M - i0`
-                                                                    j0)) 
-                                                                  i1 
-                                                                  next2
-                                                                  result7
-                                                                  (initnext_po_8 next
-                                                                  p result
-                                                                  Post1
-                                                                  result0
-                                                                  Post2 Test8
-                                                                  next0 Post3
-                                                                  Variant1 i0
-                                                                  j0 next1 p
-                                                                  Pre8 Inv
-                                                                  Test7 Test5
-                                                                  Test4 i1
-                                                                  Post5 next2
-                                                                  Post6)) in
-                                                                (exist_4 [i2: Z][j1: Z][next3: (array M Z)][result7: unit]`
-                                                                0 <= j1` /\
-                                                                `j1 <= M` /\
-                                                                (`j1 < i2` /\
-                                                                `i2 <= M`) /\
-                                                                (match p
-                                                                 `i2 - j1` p
-                                                                 `0` j1) /\
-                                                                ((z:Z)
-                                                                 (`j1 + 1 < z` /\
-                                                                  `z < i2 + 1` ->
-                                                                  ~(match p
-                                                                    `
-                                                                    i2 + 1 -
-                                                                    z` p `
-                                                                    0` z))) /\
-                                                                ((k:Z)
-                                                                 (`0 < k` /\
-                                                                  `k <= i2` ->
-                                                                  (Next p k
-                                                                   (access next3
-                                                                    k)))) /\
-                                                                (lexZ (
-                                                                 pairZ `
-                                                                 M - i2` j1)
-                                                                 (pairZ `
-                                                                  M - i0` j0)) 
-                                                                i1 j0 
-                                                                next2 
-                                                                result6 Inv)
-                                                            | (right Test3) =>
-                                                                let Pre5 =
-                                                                  (initnext_po_9 next
-                                                                  p result
-                                                                  Post1
-                                                                  result0
-                                                                  Post2 Test8
-                                                                  next0 Post3
-                                                                  Variant1 i0
-                                                                  j0 next1 p
-                                                                  Pre8 Inv
-                                                                  Test7 Test5
-                                                                  Test3) in
-                                                                let (j1,
-                                                                  result6,
-                                                                  Post4) =
-                                                                  let (result6,
-                                                                    Post4) =
-                                                                    (exist_1 [result6: Z]
-                                                                    result6 =
-                                                                    (
-                                                                    access next1
-                                                                    j0) 
-                                                                    (
-                                                                    access next1
-                                                                    j0)
-                                                                    (refl_equal ? (
-                                                                    access next1
-                                                                    j0))) in
-                                                                  (exist_2 [j2: Z][result7: unit]
-                                                                  j2 =
-                                                                  (access next1
-                                                                   j0) 
-                                                                  result6 
-                                                                  tt Post4) in
-                                                                (exist_4 [i1: Z][j2: Z][next2: (array M Z)][result7: unit]`
-                                                                0 <= j2` /\
-                                                                `j2 <= M` /\
-                                                                (`j2 < i1` /\
-                                                                `i1 <= M`) /\
-                                                                (match p
-                                                                 `i1 - j2` p
-                                                                 `0` j2) /\
-                                                                ((z:Z)
-                                                                 (`j2 + 1 < z` /\
-                                                                  `z < i1 + 1` ->
-                                                                  ~(match p
-                                                                    `
-                                                                    i1 + 1 -
-                                                                    z` p `
-                                                                    0` z))) /\
-                                                                ((k:Z)
-                                                                 (`0 < k` /\
-                                                                  `k <= i1` ->
-                                                                  (Next p k
-                                                                   (access next2
-                                                                    k)))) /\
-                                                                (lexZ (
-                                                                 pairZ `
-                                                                 M - i1` j2)
-                                                                 (pairZ `
-                                                                  M - i0` j0)) 
-                                                                i0 j1 
-                                                                next1 
-                                                                result6
-                                                                (initnext_po_10 next
-                                                                p result
-                                                                Post1 result0
-                                                                Post2 Test8
-                                                                next0 Post3
-                                                                Variant1 i0
-                                                                j0 next1 p
-                                                                Pre8 Inv
-                                                                Test7 Test5
-                                                                Test3 Pre5 j1
-                                                                Post4)) end) in
-                                                          (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result6: unit]`
-                                                          0 <= j2` /\
-                                                          `j2 <= M` /\
-                                                          (`j2 < i2` /\
-                                                          `i2 <= M`) /\
-                                                          (match p `i2 - j2`
-                                                           p `0` j2) /\
-                                                          ((z:Z)
-                                                           (`j2 + 1 < z` /\
-                                                            `z < i2 + 1` ->
-                                                            ~(match p
-                                                              `i2 + 1 - z` p
-                                                              `0` z))) /\
-                                                          ((k:Z)
-                                                           (`0 < k` /\
-                                                            `k <= i2` ->
-                                                            (Next p k
-                                                             (access next3 k)))) /\
-                                                          (lexZ (pairZ `
-                                                                 M - i2` j2)
-                                                           (pairZ `M - i0` j0)) 
-                                                          i1 j1 next2 
-                                                          result5 Inv) end) in
-                                                    (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result5: unit]`
-                                                    0 <= j2` /\ `j2 <= M` /\
-                                                    (`j2 < i2` /\
-                                                    `i2 <= M`) /\
-                                                    (match p `i2 - j2` p `
-                                                     0` j2) /\
-                                                    ((z:Z)
-                                                     (`j2 + 1 < z` /\
-                                                      `z < i2 + 1` ->
-                                                      ~(match p `i2 + 1 - z`
-                                                        p `0` z))) /\
-                                                    ((k:Z)
-                                                     (`0 < k` /\ `k <= i2` ->
-                                                      (Next p k
-                                                       (access next3 k)))) /\
-                                                    (lexZ (pairZ `M - i2` j2)
-                                                     (pairZ `M - i0` j0)) 
-                                                    i1 j1 next2 result4 Inv) in
-                                                  (((((((wf1 (pairZ `
-                                                              M - i1` j1))
-                                                         (initnext_po_11 next
-                                                         p result Post1
-                                                         result0 Post2 Test8
-                                                         next0 Post3 Variant1
-                                                         i0 j0 next1 p Pre8
-                                                         Inv Test7 i1 j1
-                                                         next2 Inv)) 
-                                                        i1) j1) next2)
-                                                     (refl_equal ? (pairZ `
-                                                                    M - i1`
-                                                                    j1)))
-                                                    (initnext_po_12 next p
-                                                    result Post1 result0
-                                                    Post2 Test8 next0 Post3
-                                                    Variant1 i0 j0 next1 p
-                                                    Pre8 Inv Test7 i1 j1
-                                                    next2 Inv)) in
-                                                (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result5: unit]`
-                                                0 <= j2` /\ `j2 <= M` /\
-                                                (`j2 < i2` /\ `i2 <= M`) /\
-                                                (match p `i2 - j2` p `0` j2) /\
-                                                ((z:Z)
-                                                 (`j2 + 1 < z` /\
-                                                  `z < i2 + 1` ->
-                                                  ~(match p `i2 + 1 - z` p
-                                                    `0` z))) /\
-                                                ((k:Z)
-                                                 (`0 < k` /\ `k <= i2` ->
-                                                  (Next p k (access next3 k)))) /\
-                                                `i2 >= M - 1` i1 j1 next2
-                                                result4 Inv)
-                                            | (right Test2) =>
-                                                let (i1, j1, next2, result4,
-                                                  Inv) =
-                                                  (exist_4 [i1: Z][j1: Z][next2: (array M Z)][result4: unit]`
-                                                  0 <= j1` /\ `j1 <= M` /\
-                                                  (`j1 < i1` /\ `i1 <= M`) /\
-                                                  (match p `i1 - j1` p `0` j1) /\
-                                                  ((z:Z)
-                                                   (`j1 + 1 < z` /\
-                                                    `z < i1 + 1` ->
-                                                    ~(match p `i1 + 1 - z` p
-                                                      `0` z))) /\
-                                                  ((k:Z)
-                                                   (`0 < k` /\ `k <= i1` ->
-                                                    (Next p k
-                                                     (access next2 k)))) /\
-                                                  `i1 >= M - 1` i0 j0 
-                                                  next1 tt
-                                                  (initnext_po_13 next p
-                                                  result Post1 result0 Post2
-                                                  Test8 next0 Post3 Variant1
-                                                  i0 j0 next1 p Pre8 Inv
-                                                  Test2)) in
-                                                (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result5: unit]`
-                                                0 <= j2` /\ `j2 <= M` /\
-                                                (`j2 < i2` /\ `i2 <= M`) /\
-                                                (match p `i2 - j2` p `0` j2) /\
-                                                ((z:Z)
-                                                 (`j2 + 1 < z` /\
-                                                  `z < i2 + 1` ->
-                                                  ~(match p `i2 + 1 - z` p
-                                                    `0` z))) /\
-                                                ((k:Z)
-                                                 (`0 < k` /\ `k <= i2` ->
-                                                  (Next p k (access next3 k)))) /\
-                                                `i2 >= M - 1` i1 j1 next2
-                                                result4 Inv) end))
-                           (pairZ `M - result` result0)) result) result0)
-                        next0) (refl_equal ? (pairZ `M - result` result0)))
-                      (initnext_po_14 next p result Post1 result0 Post2 Test8
-                      next0 Post3)) in
-                  (exist_4 [i1: Z][j1: Z][next2: (array M Z)][result4: unit](
-                  (j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next2 j)))) 
-                  i0 j0 next1 result3
-                  (initnext_po_15 next p result Post1 result0 Post2 Test8
-                  next0 Post3 i0 j0 next1 Inv)) in
-                (exist_4 [i1: Z][j1: Z][next1: (array M Z)][result3: unit](
-                (j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next1 j)))) 
-                i0 j0 next0 result2 Post17)
-            | (right Test1) =>
-                let (result2, Post16) =
-                  (exist_1 [result2: unit]((j:Z)
-                                           (`0 < j` /\ `j < M` ->
-                                            (Next p j (access next j)))) 
-                  tt
-                  (initnext_po_16 next p result Post1 result0 Post2 Test1)) in
-                (exist_4 [i0: Z][j0: Z][next0: (array M Z)][result3: unit](
-                (j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))) 
-                result result0 next result2 Post16) end) in
-          (exist_3 [i1: Z][next1: (array M Z)][result2: unit]((j:Z)
-                                                              (`0 < j` /\
-                                                               `j < M` ->
-                                                               (Next p j
-                                                                (access next1
-                                                                 j)))) 
-          i0 next0 result1 Post14) in
-        (exist_2 [next1: (array M Z)][result1: unit]((j:Z)
-                                                     (`0 < j` /\ `j < M` ->
-                                                      (Next p j
-                                                       (access next1 j)))) 
-        next0 result0 Post13).
-
 (*Why*) Parameter N : Z.
+Axiom N_positive : `0 <= N`.
+
 
 Lemma kmp_po_1 : 
   (p: (array M A))
@@ -1156,7 +583,7 @@ Lemma kmp_po_1 :
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (well_founded ? lexZ).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Exact lexZ_well_founded.
 Save.
 
 Lemma kmp_po_2 : 
@@ -1169,10 +596,8 @@ Lemma kmp_po_2 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1183,7 +608,7 @@ Lemma kmp_po_2 :
   (if result3 then `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false
    else `j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false).
 Proof.
-(* FILL PROOF HERE *)
+Intuition Induction result3; Tauto.
 Save.
 
 Lemma kmp_po_3 : 
@@ -1196,10 +621,8 @@ Lemma kmp_po_3 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1210,7 +633,7 @@ Lemma kmp_po_3 :
   (if result3 then `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false
    else `j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false).
 Proof.
-(* FILL PROOF HERE *)
+Intuition Induction result3; Tauto.
 Save.
 
 Lemma kmp_po_4 : 
@@ -1223,10 +646,8 @@ Lemma kmp_po_4 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1234,7 +655,8 @@ Lemma kmp_po_4 :
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
   `0 <= j0` /\ `j0 < M`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Discriminate H7.
 Save.
 
 Lemma kmp_po_5 : 
@@ -1247,10 +669,8 @@ Lemma kmp_po_5 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1259,7 +679,7 @@ Lemma kmp_po_5 :
   (Pre2: `0 <= j0` /\ `j0 < M`)
   `0 <= i0` /\ `i0 < N`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma kmp_po_6 : 
@@ -1272,10 +692,8 @@ Lemma kmp_po_6 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1291,7 +709,16 @@ Lemma kmp_po_6 :
   ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
   (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)).
 Proof.
-(* FILL PROOF HERE *)
+Intuition Discriminate H7 Orelse Auto with *.
+Rewrite Post7; Rewrite Post8.
+  Apply match_right_extension.
+  Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
+  Omega'. Omega'.
+  Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
+  Replace `i0+1-(j0+1)` with `i0-j0`. 
+  Apply (H5 k); Assumption Orelse Omega'.
+  Omega'.
+  Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
 
 Lemma kmp_po_7 : 
@@ -1304,10 +731,8 @@ Lemma kmp_po_7 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1322,7 +747,15 @@ Lemma kmp_po_7 :
   ((k:Z) (`0 <= k` /\ `k < i1 - j0` -> ~(match a k p `0` M))) /\
   (lexZ (pairZ `N - i1` j0) (pairZ `N - i0` j0)).
 Proof.
-(* FILL PROOF HERE *)
+Intuition Discriminate H7 Orelse Auto with *.
+  Rewrite Test5.
+  Apply match_empty. Omega'. Omega'.
+  Elim (Z_le_lt_eq_dec k `i0-j0`).
+  Intro. Apply (H5 k); Assumption Orelse Omega'.
+  Intro. Generalize H8. Apply match_contradiction_at_first. Omega'.
+  Rewrite b. Rewrite Test5. Ring `i0-0`. Rewrite <- Test5. Assumption.
+  Omega'.
+Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
 
 Lemma kmp_po_8 : 
@@ -1335,10 +768,8 @@ Lemma kmp_po_8 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1348,7 +779,8 @@ Lemma kmp_po_8 :
   (Test4: ~(j0 = `0`))
   `0 <= j0` /\ `j0 < M`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Discriminate H7.
 Save.
 
 Lemma kmp_po_9 : 
@@ -1361,11 +793,8 @@ Lemma kmp_po_9 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (next0: (array M Z))
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1381,7 +810,37 @@ Lemma kmp_po_9 :
   ((k:Z) (`0 <= k` /\ `k < i0 - j1` -> ~(match a k p `0` M))) /\
   (lexZ (pairZ `N - i0` j1) (pairZ `N - i0` j0)).
 Proof.
-(* FILL PROOF HERE *)
+Intuition (Assert `j0<>0`; Auto with *).
+  (* invariant *)
+  Elim (Post15 j0); Intros. Omega'.
+  Omega'.
+  Elim (Post15 j0); Intros; Omega'.
+  Elim (Post15 j0); Intros; Omega'.
+  Apply next_iteration with j := j0.
+  Omega'.
+  Omega'.
+  Assumption.
+  Rewrite Post5; Apply (Post15 j0); Omega'.
+  (* ~(match a k p `0` M) *)
+  Elim (Z_lt_ge_dec k `i0-j0`); Intro Hck.
+  (* k < i0-j0 *)
+  Apply (H7 k); Assumption Orelse Omega'.
+  Elim (Z_ge_lt_dec `i0-j0` k); Intro Hck'.
+  (* k = i0-j0 *)
+  Generalize H10. Replace k with `i0-j0`.
+  Apply match_contradiction_at_i with i := j0.
+  Omega'. Omega'. Ring `i0-j0+j0`. Ring `0+j0`. Assumption. Omega'. 
+  (* i0-j0 < k *)
+  Generalize H10.
+  Apply next_is_maximal with i := i0 j := j0 n := #next0[j0]. 
+  Omega'. Omega'. Omega'.
+  Assumption.
+  Apply (Post15 j0); Omega'.
+  Unfold lexZ lex Zwf pairZ. 
+  Elim (Post15 j0). Intros.
+  Right. Omega'. Omega'.
+Discriminate H9.
+Discriminate H9.
 Save.
 
 Lemma kmp_po_10 : 
@@ -1394,10 +853,8 @@ Lemma kmp_po_10 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1405,13 +862,15 @@ Lemma kmp_po_10 :
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
   (i1: Z)
   (j1: Z)
-  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
-        (match a `i1 - j1` p `0` j1) /\
-        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
-        (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
+  (Inv0: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
+         (match a `i1 - j1` p `0` j1) /\
+         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
+         (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
   (lexZ (pairZ `N - i1` j1) Variant1).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Rewrite Pre5; Assumption.
+Rewrite Pre5; Assumption.
 Save.
 
 Lemma kmp_po_11 : 
@@ -1424,10 +883,8 @@ Lemma kmp_po_11 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1435,15 +892,15 @@ Lemma kmp_po_11 :
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
   (i1: Z)
   (j1: Z)
-  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
-        (match a `i1 - j1` p `0` j1) /\
-        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
-        (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
+  (Inv0: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
+         (match a `i1 - j1` p `0` j1) /\
+         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
+         (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
   `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
   (match a `i1 - j1` p `0` j1) /\
   ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma kmp_po_12 : 
@@ -1456,10 +913,8 @@ Lemma kmp_po_12 :
   (next0: (array M Z))
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (a: (array N A))
   (i0: Z)
   (j0: Z)
-  (p: (array M A))
   (Pre5: Variant1 = (pairZ `N - i0` j0))
   (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
         (match a `i0 - j0` p `0` j0) /\
@@ -1470,7 +925,7 @@ Lemma kmp_po_12 :
   ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))) /\ (`j0 < M` /\
   `i0 >= N` \/ `j0 >= M` /\ false = false).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma kmp_po_13 : 
@@ -1486,8 +941,19 @@ Lemma kmp_po_13 :
   `result <= N`) /\ (match a `result - result0` p `0` result0) /\
   ((k:Z) (`0 <= k` /\ `k < result - result0` -> ~(match a k p `0` M))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Generalize M_positive; Omega'.
+Generalize N_positive; Omega'.
+Rewrite Post1; Rewrite Post2.
+Apply match_empty.
+Generalize N_positive; Omega'. Generalize M_positive; Omega'.
+Absurd `0 <= k`; Omega'.
 Save.
+
+Definition first_occur :=
+  [p:(array M A)][a:(array N A)][r:Z]  
+     (`0 <= r < N` -> (match a r p `0` M))
+  /\ ((k:Z) `0 <= k < r` -> ~(match a k p `0` M)).
 
 Lemma kmp_po_14 : 
   (a: (array N A))
@@ -1507,7 +973,12 @@ Lemma kmp_po_14 :
   (Test10: j0 = M)
   (first_occur p a `i0 - M`).
 Proof.
-(* FILL PROOF HERE *)
+Intros.
+Decompose [and] Inv.
+Unfold first_occur. 
+Split. 
+Intro. Rewrite <- Test10. Replace `i0-M` with `i0-j0`. Assumption. Omega'.
+Replace `i0-M` with `i0-j0`. Assumption. Omega'.
 Save.
 
 Lemma kmp_po_15 : 
@@ -1528,441 +999,18 @@ Lemma kmp_po_15 :
   (Test9: ~(j0 = M))
   (first_occur p a i0).
 Proof.
-(* FILL PROOF HERE *)
+Intros. Unfold first_occur. Decompose [and] Inv.
+Split. 
+Intro. Absurd `i0 < N`; Omega'.
+Intros k Hk. 
+Elim (Z_lt_ge_dec k `i0-j0`); Intro Hk'.
+Apply H3; Omega'.
+Red; Intro. Decompose [match] H5.
+Absurd `k <= N-M`; Omega'.
 Save.
 
 
 
 
-Definition kmp := (* validation *)
-  [a: (array N A)]
-    [next: (array M Z)]
-      [p: (array M A)]
-        let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
-          (refl_equal ? `0`)) in
-        let (i0, next0, result0, Post13) =
-          let (result0, Post2) = (exist_1 [result0: Z]result0 = `0` `0`
-            (refl_equal ? `0`)) in
-          let (i0, j0, next0, result1, Post14) =
-            let (next0, result1, Post15) =
-              let (next0, result3, Post16) = (initnext tt next p) in
-              (exist_2 [next1: (array M Z)][result4: unit]((j:Z)
-                                                           (`0 < j` /\
-                                                            `j < M` ->
-                                                            (Next p j
-                                                             (access next1 j)))) 
-              next0 result3 Post16) in
-            let (i0, j0, result2, Inv) =
-              ((((((((((well_founded_induction prodZZ) lexZ)
-                       (kmp_po_1 p result Post1 result0 Post2 next0 Post15))
-                      [Variant1: prodZZ](a: (array N A))(i0: Z)(j0: Z)(next0: (array M Z))(p: (array M A))(_: 
-                      Variant1 = (pairZ `N - i0` j0))(Inv: `0 <= j0` /\
-                      `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
-                      (match a `i0 - j0` p `0` j0) /\
-                      ((k:Z)
-                       (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))(sig_3 Z
-                      Z unit [i1:Z][j1:Z][result:unit](`0 <= j1` /\
-                      `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
-                      (match a `i1 - j1` p `0` j1) /\
-                      ((k:Z)
-                       (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
-                      (`j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\
-                      false = false))))
-                     [Variant1: prodZZ]
-                       [wf1: (Variant2: prodZZ)(Pre1: (lexZ Variant2 Variant1))(a: (array N A))(i0: Z)(j0: Z)(next0: (array M Z))(p: (array M A))(_: 
-                         Variant2 = (pairZ `N - i0` j0))(Inv: `0 <= j0` /\
-                         `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
-                         (match a `i0 - j0` p `0` j0) /\
-                         ((k:Z)
-                          (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))(sig_3 Z
-                         Z unit [i1:Z][j1:Z][result:unit](`0 <= j1` /\
-                         `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
-                         (match a `i1 - j1` p `0` j1) /\
-                         ((k:Z)
-                          (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
-                         (`j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\
-                         false = false)))]
-                         [a: (array N A)]
-                           [i0: Z]
-                             [j0: Z]
-                               [next0: (array M Z)]
-                                 [p: (array M A)]
-                                   [Pre5: Variant1 = (pairZ `N - i0` j0)]
-                                     [Inv: `0 <= j0` /\ `j0 <= M` /\
-                                       (`j0 <= i0` /\ `i0 <= N`) /\
-                                       (match a `i0 - j0` p `0` j0) /\
-                                       ((k:Z)
-                                        (`0 <= k` /\ `k < i0 - j0` ->
-                                         ~(match a k p `0` M)))]
-                                       let (result2, Post4) =
-                                         let (result2, Bool1) =
-                                           let (result4, Post17) =
-                                             (Z_lt_ge_bool j0 M) in
-                                           (exist_1 [result5: bool](if result5
-                                                                    then `
-                                                                    j0 < M`
-                                                                    else `
-                                                                    j0 >= M`) 
-                                           result4 Post17) in
-                                         (Cases (btest [result2:bool](
-                                         if result2 then `j0 < M`
-                                         else `j0 >= M`) result2 Bool1) of
-                                         | (left Test2) =>
-                                             let (result3, Bool2) =
-                                               let (result5, Post18) =
-                                                 (Z_lt_ge_bool i0 N) in
-                                               (exist_1 [result6: bool](
-                                               if result6 then `i0 < N`
-                                               else `i0 >= N`) result5
-                                               Post18) in
-                                             (exist_1 [result4: bool](
-                                             if result4 then `j0 < M` /\
-                                             `i0 < N` \/ `j0 >= M` /\
-                                             true = false else `j0 < M` /\
-                                             `i0 >= N` \/ `j0 >= M` /\
-                                             false = false) result3
-                                             (kmp_po_2 a p result Post1
-                                             result0 Post2 next0 Post15
-                                             Variant1 a i0 j0 p Pre5 Inv
-                                             Test2 result3 Bool2))
-                                         | (right Test1) =>
-                                             let (result3, Post3) =
-                                               (exist_1 [result3: bool]
-                                               result3 = false false
-                                               (refl_equal ? false)) in
-                                             (exist_1 [result4: bool](
-                                             if result4 then `j0 < M` /\
-                                             `i0 < N` \/ `j0 >= M` /\
-                                             true = false else `j0 < M` /\
-                                             `i0 >= N` \/ `j0 >= M` /\
-                                             false = false) result3
-                                             (kmp_po_3 a p result Post1
-                                             result0 Post2 next0 Post15
-                                             Variant1 a i0 j0 p Pre5 Inv
-                                             Test1 result3 Post3)) end) in
-                                       (Cases (btest [result2:bool](if result2
-                                                                    then `
-                                                                    j0 < M` /\
-                                                                    `
-                                                                    i0 < N` \/
-                                                                    `
-                                                                    j0 >= M` /\
-                                                                    true =
-                                                                    false
-                                                                    else `
-                                                                    j0 < M` /\
-                                                                    `
-                                                                    i0 >= N` \/
-                                                                    `
-                                                                    j0 >= M` /\
-                                                                    false =
-                                                                    false) result2 Post4) of
-                                       | (left Test8) =>
-                                           let (i1, j1, result3, Inv) =
-                                             let (i1, j1, result3, Inv) =
-                                               let (i1, j1, result3, Inv) =
-                                                 let (result3, Bool4) =
-                                                   let Pre2 =
-                                                     (kmp_po_4 a p result
-                                                     Post1 result0 Post2
-                                                     next0 Post15 Variant1 a
-                                                     i0 j0 p Pre5 Inv Test8) in
-                                                   let result4 =
-                                                     let Pre3 =
-                                                       (kmp_po_5 a p result
-                                                       Post1 result0 Post2
-                                                       next0 Post15 Variant1
-                                                       a i0 j0 p Pre5 Inv
-                                                       Test8 Pre2) in
-                                                     (A_eq_bool (access a i0)) in
-                                                   let (result5, Post19) =
-                                                     (result4 (access p j0)) in
-                                                   (exist_1 [result6: bool](
-                                                   if result6
-                                                   then (access a i0) =
-                                                        (access p j0)
-                                                   else ~(access a i0) =
-                                                         (access p j0)) 
-                                                   result5 Post19) in
-                                                 (Cases (btest [result3:bool](
-                                                 if result3
-                                                 then (access a i0) =
-                                                      (access p j0)
-                                                 else ~(access a i0) =
-                                                       (access p j0)) result3 Bool4) of
-                                                 | (left Test7) =>
-                                                     let (i1, j1, result4,
-                                                       Inv) =
-                                                       let (i1, result4,
-                                                         Post7) =
-                                                         let (result4,
-                                                           Post7) =
-                                                           (exist_1 [result4: Z]
-                                                           result4 = `
-                                                           i0 + 1` `i0 + 1`
-                                                           (refl_equal ? `
-                                                           i0 + 1`)) in
-                                                         (exist_2 [i2: Z][result5: unit]
-                                                         i2 = `i0 + 1` 
-                                                         result4 tt Post7) in
-                                                       let (j1, result5,
-                                                         Post8) =
-                                                         let (result5,
-                                                           Post8) =
-                                                           (exist_1 [result5: Z]
-                                                           result5 = `
-                                                           j0 + 1` `j0 + 1`
-                                                           (refl_equal ? `
-                                                           j0 + 1`)) in
-                                                         (exist_2 [j2: Z][result6: unit]
-                                                         j2 = `j0 + 1` 
-                                                         result5 tt Post8) in
-                                                       (exist_3 [i2: Z][j2: Z][result6: unit]`
-                                                       0 <= j2` /\
-                                                       `j2 <= M` /\
-                                                       (`j2 <= i2` /\
-                                                       `i2 <= N`) /\
-                                                       (match a `i2 - j2` p
-                                                        `0` j2) /\
-                                                       ((k:Z)
-                                                        (`0 <= k` /\
-                                                         `k < i2 - j2` ->
-                                                         ~(match a k p `0` M))) /\
-                                                       (lexZ (pairZ `
-                                                              N - i2` j2)
-                                                        (pairZ `N - i0` j0)) 
-                                                       i1 j1 result5
-                                                       (kmp_po_6 a p result
-                                                       Post1 result0 Post2
-                                                       next0 Post15 Variant1
-                                                       a i0 j0 p Pre5 Inv
-                                                       Test8 Test7 i1 Post7
-                                                       j1 Post8)) in
-                                                     (exist_3 [i2: Z][j2: Z][result5: unit]`
-                                                     0 <= j2` /\ `j2 <= M` /\
-                                                     (`j2 <= i2` /\
-                                                     `i2 <= N`) /\
-                                                     (match a `i2 - j2` p `
-                                                      0` j2) /\
-                                                     ((k:Z)
-                                                      (`0 <= k` /\
-                                                       `k < i2 - j2` ->
-                                                       ~(match a k p `0` M))) /\
-                                                     (lexZ (pairZ `N - i2` j2)
-                                                      (pairZ `N - i0` j0)) 
-                                                     i1 j1 result4 Inv)
-                                                 | (right Test6) =>
-                                                     let (i1, j1, result4,
-                                                       Inv) =
-                                                       let (result4, Bool3) =
-                                                         let (result6,
-                                                           Post20) =
-                                                           (Z_eq_bool j0 `0`) in
-                                                         (exist_1 [result7: bool](
-                                                         if result7
-                                                         then j0 = `0`
-                                                         else ~(j0 = `
-                                                         0`)) result6 Post20) in
-                                                       (Cases (btest [result4:bool](
-                                                       if result4
-                                                       then j0 = `0`
-                                                       else ~(j0 = `0`)) result4 Bool3) of
-                                                       | (left Test5) =>
-                                                           let (i1, result5,
-                                                             Post6) =
-                                                             let (result5,
-                                                               Post6) =
-                                                               (exist_1 [result5: Z]
-                                                               result5 =
-                                                               `i0 + 1` 
-                                                               `i0 + 1`
-                                                               (refl_equal ? `
-                                                               i0 + 1`)) in
-                                                             (exist_2 [i2: Z][result6: unit]
-                                                             i2 = `i0 + 1` 
-                                                             result5 
-                                                             tt Post6) in
-                                                           (exist_3 [i2: Z][j1: Z][result6: unit]`
-                                                           0 <= j1` /\
-                                                           `j1 <= M` /\
-                                                           (`j1 <= i2` /\
-                                                           `i2 <= N`) /\
-                                                           (match a `
-                                                            i2 - j1` p `
-                                                            0` j1) /\
-                                                           ((k:Z)
-                                                            (`0 <= k` /\
-                                                             `k < i2 - j1` ->
-                                                             ~(match a k p
-                                                               `0` M))) /\
-                                                           (lexZ (pairZ `
-                                                                  N - i2` j1)
-                                                            (pairZ `N - i0`
-                                                             j0)) i1
-                                                           j0 result5
-                                                           (kmp_po_7 a p
-                                                           result Post1
-                                                           result0 Post2
-                                                           next0 Post15
-                                                           Variant1 a i0 j0 p
-                                                           Pre5 Inv Test8
-                                                           Test6 Test5 i1
-                                                           Post6))
-                                                       | (right Test4) =>
-                                                           let Pre4 =
-                                                             (kmp_po_8 a p
-                                                             result Post1
-                                                             result0 Post2
-                                                             next0 Post15
-                                                             Variant1 a i0 j0
-                                                             p Pre5 Inv Test8
-                                                             Test6 Test4) in
-                                                           let (j1, result5,
-                                                             Post5) =
-                                                             let (result5,
-                                                               Post5) =
-                                                               (exist_1 [result5: Z]
-                                                               result5 =
-                                                               (access next0
-                                                                j0) (
-                                                                    access next0
-                                                                    j0)
-                                                               (refl_equal ? (
-                                                               access next0
-                                                               j0))) in
-                                                             (exist_2 [j2: Z][result6: unit]
-                                                             j2 =
-                                                             (access next0 j0) 
-                                                             result5 
-                                                             tt Post5) in
-                                                           (exist_3 [i1: Z][j2: Z][result6: unit]`
-                                                           0 <= j2` /\
-                                                           `j2 <= M` /\
-                                                           (`j2 <= i1` /\
-                                                           `i1 <= N`) /\
-                                                           (match a `
-                                                            i1 - j2` p `
-                                                            0` j2) /\
-                                                           ((k:Z)
-                                                            (`0 <= k` /\
-                                                             `k < i1 - j2` ->
-                                                             ~(match a k p
-                                                               `0` M))) /\
-                                                           (lexZ (pairZ `
-                                                                  N - i1` j2)
-                                                            (pairZ `N - i0`
-                                                             j0)) i0
-                                                           j1 result5
-                                                           (kmp_po_9 a p
-                                                           result Post1
-                                                           result0 Post2
-                                                           next0 Post15
-                                                           Variant1 a i0 j0
-                                                           next0 p Pre5 Inv
-                                                           Test8 Test6 Test4
-                                                           Pre4 j1 Post5)) end) in
-                                                     (exist_3 [i2: Z][j2: Z][result5: unit]`
-                                                     0 <= j2` /\ `j2 <= M` /\
-                                                     (`j2 <= i2` /\
-                                                     `i2 <= N`) /\
-                                                     (match a `i2 - j2` p `
-                                                      0` j2) /\
-                                                     ((k:Z)
-                                                      (`0 <= k` /\
-                                                       `k < i2 - j2` ->
-                                                       ~(match a k p `0` M))) /\
-                                                     (lexZ (pairZ `N - i2` j2)
-                                                      (pairZ `N - i0` j0)) 
-                                                     i1 j1 result4 Inv) end) in
-                                               (exist_3 [i2: Z][j2: Z][result4: unit]`
-                                               0 <= j2` /\ `j2 <= M` /\
-                                               (`j2 <= i2` /\ `i2 <= N`) /\
-                                               (match a `i2 - j2` p `0` j2) /\
-                                               ((k:Z)
-                                                (`0 <= k` /\ `k < i2 - j2` ->
-                                                 ~(match a k p `0` M))) /\
-                                               (lexZ (pairZ `N - i2` j2)
-                                                (pairZ `N - i0` j0)) 
-                                               i1 j1 result3 Inv) in
-                                             ((((((wf1 (pairZ `N - i1` j1))
-                                                   (kmp_po_10 a p result
-                                                   Post1 result0 Post2 next0
-                                                   Post15 Variant1 a i0 j0 p
-                                                   Pre5 Inv Test8 i1 j1 Inv))
-                                                  i1) j1)
-                                                (refl_equal ? (pairZ `
-                                                               N - i1` j1)))
-                                               (kmp_po_11 a p result Post1
-                                               result0 Post2 next0 Post15
-                                               Variant1 a i0 j0 p Pre5 Inv
-                                               Test8 i1 j1 Inv)) in
-                                           (exist_3 [i2: Z][j2: Z][result4: unit]`
-                                           0 <= j2` /\ `j2 <= M` /\
-                                           (`j2 <= i2` /\ `i2 <= N`) /\
-                                           (match a `i2 - j2` p `0` j2) /\
-                                           ((k:Z)
-                                            (`0 <= k` /\ `k < i2 - j2` ->
-                                             ~(match a k p `0` M))) /\
-                                           (`j2 < M` /\ `i2 >= N` \/
-                                           `j2 >= M` /\ false = false) 
-                                           i1 j1 result3 Inv)
-                                       | (right Test3) =>
-                                           let (i1, j1, result3, Inv) =
-                                             (exist_3 [i1: Z][j1: Z][result3: unit]`
-                                             0 <= j1` /\ `j1 <= M` /\
-                                             (`j1 <= i1` /\ `i1 <= N`) /\
-                                             (match a `i1 - j1` p `0` j1) /\
-                                             ((k:Z)
-                                              (`0 <= k` /\ `k < i1 - j1` ->
-                                               ~(match a k p `0` M))) /\
-                                             (`j1 < M` /\ `i1 >= N` \/
-                                             `j1 >= M` /\ false = false) 
-                                             i0 j0 tt
-                                             (kmp_po_12 a p result Post1
-                                             result0 Post2 next0 Post15
-                                             Variant1 a i0 j0 p Pre5 Inv
-                                             Test3)) in
-                                           (exist_3 [i2: Z][j2: Z][result4: unit]`
-                                           0 <= j2` /\ `j2 <= M` /\
-                                           (`j2 <= i2` /\ `i2 <= N`) /\
-                                           (match a `i2 - j2` p `0` j2) /\
-                                           ((k:Z)
-                                            (`0 <= k` /\ `k < i2 - j2` ->
-                                             ~(match a k p `0` M))) /\
-                                           (`j2 < M` /\ `i2 >= N` \/
-                                           `j2 >= M` /\ false = false) 
-                                           i1 j1 result3 Inv) end))
-                    (pairZ `N - result` result0)) result) result0)
-                 (refl_equal ? (pairZ `N - result` result0)))
-                (kmp_po_13 a p result Post1 result0 Post2 next0 Post15)) in
-            let (result3, Post21) =
-              let (result3, Bool5) =
-                let (result5, Post22) = (Z_eq_bool j0 M) in
-                (exist_1 [result6: bool](if result6 then j0 = M else ~(j0 =
-                                         M)) result5
-                Post22) in
-              (Cases (btest [result3:bool](if result3 then j0 = M else ~(j0 =
-                                           M)) result3 Bool5) of
-              | (left Test10) =>
-                  let (result4, Post24) =
-                    (exist_1 [result4: Z](first_occur p a result4) `i0 - M`
-                    (kmp_po_14 a p result Post1 result0 Post2 next0 Post15 i0
-                    j0 Inv Test10)) in
-                  (exist_1 [result5: Z](first_occur p a result5) result4
-                  Post24)
-              | (right Test9) =>
-                  let (result4, Post23) =
-                    (exist_1 [result4: Z](first_occur p a result4) i0
-                    (kmp_po_15 a p result Post1 result0 Post2 next0 Post15 i0
-                    j0 Inv Test9)) in
-                  (exist_1 [result5: Z](first_occur p a result5) result4
-                  Post23) end) in
-            (exist_4 [i1: Z][j1: Z][next1: (array M Z)][result4: Z](first_occur p
-                                                                    a result4) 
-            i0 j0 next0 result3 Post21) in
-          (exist_3 [i1: Z][next1: (array M Z)][result2: Z](first_occur p a
-                                                           result2) i0
-          next0 result1 Post14) in
-        (exist_2 [next1: (array M Z)][result1: Z](first_occur p a result1) 
-        next0 result0 Post13).
+
 
