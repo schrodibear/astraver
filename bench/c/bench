@@ -112,7 +112,7 @@ cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 parsing="../../../bin/caduceus.opt"
 for f in purse consts param clash clash_alloc invariants switch struct \
-    assigns queue; do
+    assigns queue ref; do
     echo -n "  $f.c... "
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
 	echo -n "caduceus ok... "
