@@ -154,6 +154,9 @@ clean::
 	rm -f bin/why.opt bin/why.byte
 	cd doc; make clean
 
+dist-clean:: clean
+	rm -f Makefile
+
 .depend depend::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
