@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.5 2003-10-27 16:13:37 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.6 2003-10-27 16:21:19 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
 open Ident
+open Options
 open Misc
 open Error
 open Logic
@@ -187,14 +188,73 @@ let print_obligation fmt (loc, o, s) =
 
 let prelude = ref 
 "(BG_PUSH 
-   (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t)))
-   (DISTINCT |@true| |@false|))"
+  ; array_length
+  (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t)))
+  ; booleans
+  (DISTINCT |@true| |@false|)
+  ; exchange
+  (FORALL (t1 t2 i j)
+	  (IFF (EQ (exchange t1 t2 i j) |@true|)
+	       (AND (EQ (array_length t1) (array_length t2))
+		    (EQ (select t1 i) (select t2 j))
+		    (EQ (select t1 j) (select t2 i))
+		    (FORALL (k) (IMPLIES (AND (NEQ k i) (NEQ k j))
+					 (EQ (select t1 k) (select t2 k)))))))
+  (FORALL (t1 t2 i j)
+	  (IMPLIES (EQ (exchange t1 t2 i j) |@true|)
+		   (EQ (array_length t1) (array_length t2))))
+  ; permut
+  (FORALL (t) (EQ (permut t t) |@true|))
+  (FORALL (t1 t2) (IMPLIES (EQ (permut t1 t2) |@true|)
+			   (EQ (permut t2 t1) |@true|)))
+  (FORALL (t1 t2 t3) (IMPLIES (AND (EQ (permut t1 t2) |@true|)
+				   (EQ (permut t2 t3) |@true|))
+			      (EQ (permut t1 t3) |@true|)))
+  (FORALL 
+   (t i j) 
+   (EQ (permut t (store (store t i (select t j)) j (select t i))) |@true|))
+  (FORALL (t1 t2)
+	  (IMPLIES (EQ (permut t1 t2) |@true|)
+		   (EQ (array_length t1) (array_length t2))))
+  ; sub_permut
+  (FORALL (t g d) (EQ (sub_permut g d t t) |@true|))
+  (FORALL (t1 t2 g d) (IMPLIES (EQ (sub_permut g d t1 t2) |@true|)
+			   (EQ (sub_permut g d t2 t1) |@true|)))
+  (FORALL (t1 t2 t3 g d) (IMPLIES (AND (EQ (sub_permut g d t1 t2) |@true|)
+				       (EQ (sub_permut g d t2 t3) |@true|))
+				  (EQ (sub_permut g d t1 t3) |@true|)))
+  (FORALL 
+   (t g d i j) 
+   (IMPLIES (AND (<= g i) (<= i d) (<= g j) (<= j d))
+	    (EQ (sub_permut g d t 
+			    (store (store t i (select t j)) j (select t i))) 
+		|@true|)))
+  (FORALL 
+   (t1 t2 g d i j)
+   (IMPLIES (AND (EQ (exchange t1 t2 i j) |@true|)
+		 (<= g i) (<= i d) (<= g j) (<= j d))
+	    (EQ (sub_permut g d t1 t2) |@true|)))
+  (FORALL (t1 t2 i j) 
+	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
+		   (EQ (permut t1 t2) |@true|)))
+  (FORALL (t1 t2 i j)
+	  (IMPLIES (EQ (sub_permut i j t1 t2) |@true|)
+		   (EQ (array_length t1) (array_length t2))))
+  ; sorted_array
+  (FORALL 
+   (t i j) 
+   (IFF (EQ (sorted_array t i j) |@true|)
+	(IMPLIES (<= i j)
+		 (FORALL (k) (IMPLIES (AND (<= i k) (< k j))
+				      (<= (select t k) (select t (+ k 1))))))))
+)"
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
   let f = fwe ^ "_why.sx" in
   do_not_edit f
-    (fun fmt -> fprintf fmt "@[%s@]@\n" !prelude)
+    (fun fmt -> 
+       if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
     sep
     (fun fmt -> Queue.iter (print_obligation fmt) oblig)
 

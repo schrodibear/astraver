@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.28 2003-09-23 11:09:48 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.29 2003-10-27 16:21:19 filliatr Exp $ i*)
 
 open Format
 
@@ -29,6 +29,7 @@ let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref "Require Why."
 let mizar_environ_ = ref None
+let no_simplify_prelude_ = ref false
 let werror_ = ref false
 
 let ocaml_ = ref false
@@ -131,6 +132,10 @@ Coq-specific options:
   --coq-preamble <text>
               gives some Coq preamble to be substituted to \"Require Why\"
 
+Simplify-specific options:
+  --no-simplify-prelude
+              suppress the Simplify prelude (BG_PUSHs for Why's symbols)
+
 Mizar-specific options:
   --mizar-environ <text>
               sets the Mizar `environ'
@@ -188,6 +193,8 @@ let files =
     | ("-mizarenvironfrom" | "--mizarenvironfrom" | 
        "-mizar-environ-from"|"--mizar-environ-from") :: [] ->
 	usage (); exit 1
+    | ("--no-simplify-prelude" | "-no-simplify-prelude") :: args ->
+	no_simplify_prelude_ := true; parse args
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
 	ocaml_annot_ := true; parse args
@@ -217,6 +224,7 @@ let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = !coq_preamble_
 let mizar_environ = !mizar_environ_
+let no_simplify_prelude = !no_simplify_prelude_
 let wol = !wol_
 let werror = !werror_
 
