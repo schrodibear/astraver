@@ -35,6 +35,7 @@ void flag(int t[], int n) {
     @   isMonochrome(t,0,b,BLUE) &&
     @   isMonochrome(t,b,i,WHITE) &&
     @   isMonochrome(t,r,n,RED)
+    @ loop_assigns t[0 .. n]
     @ variant r - i
     @*/
   while (i < r) {
