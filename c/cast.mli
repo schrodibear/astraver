@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.29 2004-02-23 14:02:37 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.30 2004-02-24 08:15:23 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -115,14 +115,18 @@ type pctype = cexpr ctype
 
 (* parsed logic AST *)
 
-type parsed_predicate = (Loc.t term, logic_type) predicate
-type parsed_spec = (Loc.t term, parsed_predicate) spec
-type parsed_loop_annot = (Loc.t term, logic_type) loop_annot
+type parsed_term = Loc.t term
+type parsed_predicate = (parsed_term, logic_type) predicate
+type parsed_spec = (parsed_term, parsed_predicate) spec
+type parsed_loop_annot = (parsed_term, logic_type) loop_annot
 type parsed_logic_type = Clogic.logic_type
 
 type parsed_decl = 
   | LDlogic of string * parsed_logic_type * (parsed_logic_type * string) list
-  | LDpredicate of string * (parsed_logic_type * string) list
+  | LDpredicate_reads of 
+      string * (parsed_logic_type * string) list * parsed_term location list
+  | LDpredicate_def of 
+      string * (parsed_logic_type * string) list * parsed_predicate
   | LDaxiom of string * parsed_predicate
 
 type parsed_code_annot = Assert of parsed_predicate | Label of string
@@ -242,7 +246,7 @@ and tstatement_node =
 and tblock = tdecl located list * tstatement list
 
 and tdecl = 
-  | Tlogic of string * tctype logic_symbol
+  | Tlogic of string * (tterm,tctype) logic_symbol
   | Taxiom of string * predicate
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype

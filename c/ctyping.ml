@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.32 2004-02-23 14:51:48 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.33 2004-02-24 08:15:23 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -43,6 +43,7 @@ let with_offset ofs f x =
     | Error (Some loc, e) ->
 	raise (Error (Some (offset ofs loc), e))
 
+let type_location ofs env l = with_offset ofs (type_location env) l
 let type_predicate ofs env p = with_offset ofs (type_predicate env) p
 let type_spec ty env (ofs,s) = with_offset ofs (type_spec ~result:ty env) s
 let type_loop_annot env (ofs,a) = with_offset ofs (type_loop_annot env) a
@@ -583,21 +584,32 @@ let type_parameters loc env pl =
     pl 
     ([], env)
   
-let type_logic_parameters env = 
-  List.map (fun (ty, _) -> type_logic_type env ty)
+let type_logic_parameters env pl = 
+  List.fold_right
+    (fun (ty,x) (pl,env) ->
+       let info = default_var_info x in
+       let ty = type_logic_type env ty in ty :: pl, Env.add x ty info env)
+    pl 
+    ([], env)
 
 let type_spec_decl ofs = function
   | LDaxiom (id, p) -> 
       Taxiom (id, type_predicate ofs Env.empty p)
   | LDlogic (s, ty, pl) ->
       let ty = type_logic_type Env.empty ty in
-      let pl = type_logic_parameters Env.empty pl in
+      let pl,_ = type_logic_parameters Env.empty pl in
       Cenv.add_fun s (pl, ty);
       Tlogic (s, Function (pl, ty))
-  | LDpredicate (s, pl) ->
-      let pl = type_logic_parameters Env.empty pl in
+  | LDpredicate_reads (s, pl, ll) ->
+      let pl,env' = type_logic_parameters Env.empty pl in
+      let ll = List.map (type_location ofs env') ll in
       Cenv.add_pred s pl;
-      Tlogic (s, Predicate pl)
+      Tlogic (s, Predicate_reads (pl, ll))
+  | LDpredicate_def (s, pl, p) ->
+      let pl,env' = type_logic_parameters Env.empty pl in
+      let p = type_predicate ofs env' p in
+      Cenv.add_pred s pl;
+      Tlogic (s, Predicate_def (pl, p))
 
 let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 

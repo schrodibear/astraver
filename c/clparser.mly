@@ -33,7 +33,7 @@
 %token FORALL EXISTS IMPLIES AND OR NOT TRUE FALSE OLD AT RESULT LENGTH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
-%token REQUIRES ENSURES ASSIGNS LOGIC PREDICATE AXIOM
+%token REQUIRES ENSURES ASSIGNS READS LOGIC PREDICATE AXIOM LBRACE RBRACE
 
 %nonassoc prec_forall prec_exists
 %right IMPLIES
@@ -198,7 +198,11 @@ location_term:
 
 decl:
   LOGIC logic_type IDENTIFIER LPAR parameters RPAR { LDlogic ($3, $2, $5) }
-| PREDICATE IDENTIFIER LPAR parameters RPAR { LDpredicate ($2, $4) }
+| PREDICATE IDENTIFIER LPAR parameters RPAR { LDpredicate_reads ($2, $4, []) }
+| PREDICATE IDENTIFIER LPAR parameters RPAR READS locations 
+    { LDpredicate_reads ($2, $4, $7) }
+| PREDICATE IDENTIFIER LPAR parameters RPAR LBRACE predicate RBRACE 
+    { LDpredicate_def ($2, $4, $7) }
 | AXIOM IDENTIFIER COLON predicate { LDaxiom ($2, $4) }
 ;
 

@@ -272,10 +272,11 @@ except that:
   \verb!\true! & \verb!\false! & \verb!if! & \verb!then! & \verb!else! \\
   \verb!invariant! & \verb!variant! & \verb!for! & \verb!label! & 
   \verb!assert! \\ 
-  \verb!requires! & \verb!ensures! & \verb!modifiable! & \verb!logic! & 
+  \verb!requires! & \verb!ensures! & \verb!assigns! & \verb!logic! & 
   \verb!axiom! \\
   \verb!predicate! & \verb!\result! & \verb!\old! & 
-  \verb!\length! & \verb!\null!
+  \verb!\length! & \verb!\null! \\
+  \verb!reads!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -307,14 +308,17 @@ annotations.
       & $|$ & \te{/*@} \te{logic} \nt{logic\_type} \nt{identifier} \te{(} 
               \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
       & $|$ & \te{/*@} \te{predicate} \nt{identifier} \te{(} 
-              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \te{*/} \\
+              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
+           && $[$ \te{\{} \nt{predicate} \te{\}} $|$ 
+              \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\
       & $|$ & \te{/*@} \te{axiom} \nt{identifier} \te{:} 
               \nt{predicate} \te{*/} \\
   \\[0.1em]
 
   \nt{spec}
     & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
-              $[$ \te{modifiable} \nt{location}\plussep{\te{,}} $]$\\
+              $[$ \te{assigns} \nt{location}\plussep{\te{,}} $]$ \\
+                  \indextt{assigns}
            && $[$ \te{ensures} \nt{predicate} $]$ 
               $[$ \te{decreases} \nt{variant} $]$ \te{*/} \\
   \\[0.1em]
@@ -333,8 +337,8 @@ annotations.
   \\[0.1em]
 
   \nt{loop\_annot}
-    & $::=$ & \te{/*@} \te{invariant} \nt{predicate} 
-              \te{variant} \nt{variant} \te{*/}  \\
+    & $::=$ & \te{/*@} $[$ \te{invariant} \nt{predicate} $]$
+              $[$ \te{variant} \nt{variant} $]$ \te{*/}  \\
   \nt{variant} 
     & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
 

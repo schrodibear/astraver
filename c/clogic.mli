@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.13 2004-02-23 15:30:13 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.14 2004-02-24 08:15:23 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -33,10 +33,6 @@ type logic_type =
   | LTarray of logic_type
   | LTpointer of logic_type
   | LTvar of string
-
-type 'ltype logic_symbol =
-  | Predicate of 'ltype list
-  | Function of 'ltype list * 'ltype
 
 type ('a, 'b) info = { node : 'a; info : 'b }
 
@@ -98,5 +94,7 @@ type ('term,'ctype) loop_annot = {
   variant : 'term variant option
 }
 
-
-
+type ('term,'ctype) logic_symbol =
+  | Predicate_reads of 'ctype list * 'term location list
+  | Predicate_def of 'ctype list * ('term,'ctype) predicate
+  | Function of 'ctype list * 'ctype
