@@ -1,4 +1,5 @@
 
+enum E { x = 1 , y = x + 3 };
 
-
-typedef enum { x = 1 , y = x + 3 } foo;
+/*@ ensures y == 4 */
+void f() { }

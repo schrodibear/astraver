@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.79 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.80 2004-12-02 15:08:47 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -308,6 +308,7 @@ and type_type_node loc env = function
 		   let e = type_int_expr env e in
 		   eval_const_expr e
 	     in
+	     set_const_value i v;
 	     (f, v) :: enum_fields (Int64.succ v) fl
       in
       let fl = enum_fields Int64.zero fl in
