@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.33 2004-04-05 12:51:13 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.34 2004-04-22 11:23:56 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -160,7 +160,18 @@ and type_term_node loc env = function
       Tbinop (t1, Bmod, t2), c_int
   | PLdot (t, x) ->
       let t = type_term env t in
-      Tdot (t, x), type_of_field loc env x t.term_type
+      let t_dot_x = match t.term_node with
+	| Tunop (Ustar, e) -> 
+	    Tarrow (e, x)
+	| Tarrget (e1, e2) -> 
+	    let a = 
+	      { term_node = Tbinop (e1, Badd, e2); term_type = e1.term_type }
+	    in
+	    Tarrow (a, x)
+	| _ -> 
+	    Tdot (t, x)
+      in
+      t_dot_x, type_of_field loc env x t.term_type
   | PLarrow (t, x) ->
       let t = type_term env t in
       begin match t.term_type.ctype_node with

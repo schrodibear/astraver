@@ -18,7 +18,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/sum1.why", characters 125-172 *)
+(* Why obligation from file "why/sum1.why", characters 222-270 *)
 Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (Pre4: x = 0),
@@ -31,23 +31,18 @@ Lemma main_impl_po_1 :
   forall (x0: Z),
   forall (Pre3: Variant1 = (10 - i2)),
   forall (Pre2: x0 = i2 /\ i2 <= 10),
-  forall (Test2: true = true),
-  forall (caduceus_1: Z),
-  forall (Post2: caduceus_1 = i2),
-  forall (result1: bool),
-  forall (Post17: (if result1 then caduceus_1 < 10 else caduceus_1 >= 10)),
-  (if result1
-   then (forall (x:Z),
-         (x = (x0 + 1) ->
-          (forall (i:Z),
-           (i = (i2 + 1) -> (x = i /\ i <= 10) /\ (Zwf 0 (10 - i) (10 - i2))))))
-   else x0 = 10).
+  forall (Test2: i2 < 10),
+  forall (x1: Z),
+  forall (Post2: x1 = (x0 + 1)),
+  forall (i3: Z),
+  forall (Post3: i3 = (i2 + 1)),
+  (x1 = i3 /\ i3 <= 10) /\ (Zwf 0 (10 - i3) (10 - i2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum1.why", characters 191-223 *)
+(* Why obligation from file "why/sum1.why", characters 160-192 *)
 Lemma main_impl_po_2 : 
   forall (x: Z),
   forall (Pre4: x = 0),
@@ -56,6 +51,23 @@ Lemma main_impl_po_2 :
   forall (i1: Z),
   forall (Post1: i1 = 0),
   x = i1 /\ i1 <= 10.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/sum1.why", characters 98-284 *)
+Lemma main_impl_po_3 : 
+  forall (x: Z),
+  forall (Pre4: x = 0),
+  forall (i: Z),
+  forall (Post5: i = 0),
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  forall (i2: Z),
+  forall (x0: Z),
+  forall (Post4: (x0 = i2 /\ i2 <= 10) /\ i2 >= 10),
+  x0 = 10.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

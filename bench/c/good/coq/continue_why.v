@@ -19,77 +19,123 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/continue.why", characters 101-147 *)
+(* Why obligation from file "why/continue.why", characters 222-236 *)
 Lemma f1_impl_po_1 : 
   forall (n: Z),
-  forall (Post5: n = 10),
+  forall (Post4: n = 10),
   forall (Variant1: Z),
   forall (n1: Z),
   forall (Pre3: Variant1 = n1),
   forall (Pre2: 0 <= n1),
-  forall (Test2: true = true),
-  forall (caduceus_2: Z),
-  forall (Post1: caduceus_2 = n1),
-  forall (result0: bool),
-  forall (Post16: (if result0 then caduceus_2 > 0 else caduceus_2 <= 0)),
-  (if result0
-   then (forall (result:Z),
-         (result = n1 ->
-          ((result = 5 -> (forall (n:Z), (n = 0 -> 0 <= n /\ (Zwf 0 n n1))))) /\
-          ((result <> 5 ->
-            (forall (n:Z), (n = (n1 - 1) -> 0 <= n /\ (Zwf 0 n n1)))))))
-   else n1 = 0).
+  forall (Test4: n1 > 0),
+  forall (Test3: n1 = 5),
+  forall (n2: Z),
+  forall (Post1: n2 = 0),
+  0 <= n2 /\ (Zwf 0 n2 n1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 167-179 *)
+(* Why obligation from file "why/continue.why", characters 252-273 *)
 Lemma f1_impl_po_2 : 
   forall (n: Z),
-  forall (Post5: n = 10),
+  forall (Post4: n = 10),
+  forall (Variant1: Z),
+  forall (n1: Z),
+  forall (Pre3: Variant1 = n1),
+  forall (Pre2: 0 <= n1),
+  forall (Test4: n1 > 0),
+  forall (Test2: n1 <> 5),
+  forall (n2: Z),
+  forall (Post2: n2 = (n1 - 1)),
+  0 <= n2 /\ (Zwf 0 n2 n1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/continue.why", characters 136-148 *)
+Lemma f1_impl_po_3 : 
+  forall (n: Z),
+  forall (Post4: n = 10),
   0 <= n.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 542-589 *)
+(* Why obligation from file "why/continue.why", characters 331-333 *)
+Lemma f1_impl_po_4 : 
+  forall (n: Z),
+  forall (Post4: n = 10),
+  forall (n1: Z),
+  forall (Post3: 0 <= n1 /\ n1 <= 0),
+  n1 = 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/continue.why", characters 620-634 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
-  forall (Post6: i = 17),
+  forall (Post5: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
   forall (i2: Z),
   forall (Pre3: Variant1 = (10 - i2)),
   forall (Pre2: i2 <= 10),
-  forall (Test2: true = true),
-  forall (caduceus_2: Z),
-  forall (Post2: caduceus_2 = i2),
-  forall (result1: bool),
-  forall (Post17: (if result1 then caduceus_2 < 10 else caduceus_2 >= 10)),
-  (if result1
-   then (forall (result:Z),
-         (result = i2 ->
-          ((result = 5 ->
-            (forall (i:Z), (i = 6 -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))))) /\
-          ((result <> 5 ->
-            (forall (i:Z),
-             (i = (i2 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2))))))))
-   else i2 = 10).
+  forall (Test4: i2 < 10),
+  forall (Test3: i2 = 5),
+  forall (i3: Z),
+  forall (Post2: i3 = 6),
+  i3 <= 10 /\ (Zwf 0 (10 - i3) (10 - i2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 608-621 *)
+(* Why obligation from file "why/continue.why", characters 644-648 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
-  forall (Post6: i = 17),
+  forall (Post5: i = 17),
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  forall (Variant1: Z),
+  forall (i2: Z),
+  forall (Pre3: Variant1 = (10 - i2)),
+  forall (Pre2: i2 <= 10),
+  forall (Test4: i2 < 10),
+  forall (Test2: i2 <> 5),
+  (forall (i:Z), (i = (i2 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2)))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/continue.why", characters 515-528 *)
+Lemma f2_impl_po_3 : 
+  forall (i: Z),
+  forall (Post5: i = 17),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   i1 <= 10.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/continue.why", characters 740-742 *)
+Lemma f2_impl_po_4 : 
+  forall (i: Z),
+  forall (Post5: i = 17),
+  forall (i1: Z),
+  forall (Post1: i1 = 0),
+  forall (i2: Z),
+  forall (Post4: i2 <= 10 /\ i2 >= 10),
+  i2 = 10.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

@@ -478,24 +478,22 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3382-3474 *)
+(* Why obligation from file "why/skip_lists.why", characters 3382-3400 *)
 Lemma random_level_impl_po_1 : 
   forall (prob0: R),
-  forall (Post4: prob0 = (Rdiv (IZR 0250000) (IZR 1000000))),
+  forall (Post3: prob0 = (Rdiv (IZR 0250000) (IZR 1000000))),
   forall (lvl: Z),
-  forall (Post3: lvl = 1),
+  forall (Post2: lvl = 1),
   forall (Variant1: Z),
   forall (lvl1: Z),
   forall (Pre3: Variant1 = 0),
   forall (Test4: true = true),
-  forall (caduceus_2: R),
-  forall (Post16: (Rle (Rdiv (IZR 0000000) (IZR 1000000)) caduceus_2) /\
-                  (Rle caduceus_2 (Rdiv (IZR 1000000) (IZR 1000000)))),
-  forall (Test3: (Rlt caduceus_2 prob0)),
-  forall (caduceus_1: Z),
-  forall (Post1: caduceus_1 = lvl1),
+  forall (caduceus_1: R),
+  forall (Post15: (Rle (Rdiv (IZR 0000000) (IZR 1000000)) caduceus_1) /\
+                  (Rle caduceus_1 (Rdiv (IZR 1000000) (IZR 1000000)))),
+  forall (Test3: (Rlt caduceus_1 prob0)),
   forall (result1: bool),
-  forall (Post19: (if result1 then caduceus_1 < 16 else caduceus_1 >= 16)),
+  forall (Post18: (if result1 then lvl1 < 16 else lvl1 >= 16)),
   (if result1 then (forall (lvl:Z), (lvl = (lvl1 + 1) -> (Zwf 0 0 0)))
    else 1 <= lvl1 /\ lvl1 <= 16).
 Proof.
@@ -503,43 +501,43 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3474-3474 *)
+(* Why obligation from file "why/skip_lists.why", characters 3400-3400 *)
 Lemma random_level_impl_po_2 : 
   forall (prob0: R),
-  forall (Post4: prob0 = (Rdiv (IZR 0250000) (IZR 1000000))),
+  forall (Post3: prob0 = (Rdiv (IZR 0250000) (IZR 1000000))),
   forall (lvl: Z),
-  forall (Post3: lvl = 1),
+  forall (Post2: lvl = 1),
   forall (Variant1: Z),
   forall (lvl1: Z),
   forall (Pre3: Variant1 = 0),
   forall (Test4: true = true),
-  forall (caduceus_2: R),
-  forall (Post16: (Rle (Rdiv (IZR 0000000) (IZR 1000000)) caduceus_2) /\
-                  (Rle caduceus_2 (Rdiv (IZR 1000000) (IZR 1000000)))),
-  forall (Test2: (Rge caduceus_2 prob0)),
+  forall (caduceus_1: R),
+  forall (Post15: (Rle (Rdiv (IZR 0000000) (IZR 1000000)) caduceus_1) /\
+                  (Rle caduceus_1 (Rdiv (IZR 1000000) (IZR 1000000)))),
+  forall (Test2: (Rge caduceus_1 prob0)),
   1 <= lvl1 /\ lvl1 <= 16.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3288-3546 *)
+(* Why obligation from file "why/skip_lists.why", characters 3288-3472 *)
 Lemma random_level_impl_po_3 : 
   forall (prob0: R),
-  forall (Post4: prob0 = (Rdiv (IZR 0250000) (IZR 1000000))),
+  forall (Post3: prob0 = (Rdiv (IZR 0250000) (IZR 1000000))),
   forall (lvl: Z),
-  forall (Post3: lvl = 1),
+  forall (Post2: lvl = 1),
   forall (Variant1: Z),
   forall (Pre3: Variant1 = 0),
   forall (Test4: true = true),
-  forall (Post5: (Zwf 0 0 0)),
+  forall (Post4: (Zwf 0 0 0)),
   (Zwf 0 0 Variant1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4042-4061 *)
+(* Why obligation from file "why/skip_lists.why", characters 3968-3987 *)
 Lemma search_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -567,7 +565,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3971-4142 *)
+(* Why obligation from file "why/skip_lists.why", characters 3897-4068 *)
 Lemma search_impl_po_2 : 
   forall (l: pointer),
   forall (v: Z),
@@ -630,7 +628,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3889-4474 *)
+(* Why obligation from file "why/skip_lists.why", characters 3815-4400 *)
 Lemma search_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -658,7 +656,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3835-4635 *)
+(* Why obligation from file "why/skip_lists.why", characters 3761-4561 *)
 Lemma search_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc_table),

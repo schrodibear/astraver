@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.73 2004-04-14 07:33:55 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.74 2004-04-22 11:23:56 filliatr Exp $ i*)
 
 
 open Format
@@ -112,7 +112,8 @@ let rec interp_term label old_label t =
 	let te1 = f t1 and te2 = f t2 in
 	let var = global_var_for_type t.term_type in
 	LApp("acc",[interp_var label var;LApp("shift",[te1;te2])])
-    | Tdot ({term_node = Tunop (Ustar, t)}, field)
+    | Tdot ({term_node = Tunop (Ustar, t)}, field) ->
+	assert false
     | Tdot (t, field)
     | Tarrow (t, field) -> 
 	let te = f t in
@@ -385,7 +386,8 @@ let rec interp_expr e =
 	If(interp_boolean_expr e1, interp_expr e2, interp_expr e3)
     | TEstring_literal s -> 
 	unsupported "string literal"
-    | TEdot ({texpr_node = TEunary (Ustar, e)}, s)
+    | TEdot ({texpr_node = TEunary (Ustar, e)}, s) ->
+	assert false
     | TEdot (e,s)
     | TEarrow (e,s) ->
 	let te = interp_expr e in
@@ -528,7 +530,8 @@ and interp_lvalue e =
 	let var = global_var_for_type e.texpr_type in
 	HeapRef(var,build_complex_app (Var "shift_")
 		  [interp_expr e1; interp_expr e2])
-    | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+    | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
+	assert false
     | TEdot (e1,f)
     | TEarrow (e1,f) ->
 	HeapRef(f,interp_expr e1)
@@ -545,7 +548,8 @@ and interp_address e = match e.texpr_node with
       interp_expr e1
   | TEarrget (e1, e2) ->
       build_complex_app (Var "shift_") [interp_expr e1; interp_expr e2]
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
+      assert false
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
       begin match e.texpr_type.ctype_node with
@@ -652,7 +656,8 @@ let collect_locations acc loc =
       | Lterm t -> 
 	  begin
 	    match t.term_node with
-	      | Tdot({term_node = Tunop (Clogic.Ustar, e)}, f)
+	      | Tdot({term_node = Tunop (Clogic.Ustar, e)}, f) ->
+		  assert false
 	      | Tdot(e,f)
 	      | Tarrow(e,f) ->
 		  f,LApp("pointer_loc",[interp_term (Some "") "" e])

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.33 2004-04-07 14:47:00 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.34 2004-04-22 11:23:56 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -151,7 +151,8 @@ let rec term t =
 	if v.var_is_static
 	then add_var v.var_name t.term_type empty
 	else empty
-    | Tdot ({term_node = Tunop (Ustar, t1)}, f)
+    | Tdot ({term_node = Tunop (Ustar, t1)}, f) -> 
+	assert false
     | Tdot (t1,f)
     | Tarrow (t1,f) -> 
 	add_alloc (add_field_var f t.term_type (term t1))
@@ -206,7 +207,8 @@ let assign_location loc =
 	     | Tarrget(t1,t2) ->
 		 { reads = add_alloc (union (term t1) (term t2));
 		   assigns = add_pointer_var t1.term_type empty }
-	     | Tdot ({term_node = Tunop (Ustar, t1)}, f)
+	     | Tdot ({term_node = Tunop (Ustar, t1)}, f) ->
+		 assert false
 	     | Tdot (t1,f)
 	     | Tarrow (t1,f) -> 
 		 { reads = add_alloc (term t1);
@@ -295,7 +297,8 @@ let rec expr e = match e.texpr_node with
       if v.var_is_static
       then reads_add_var v.var_name e.texpr_type ef_empty
       else ef_empty
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
+      assert false
   | TEdot (e1, f)
   | TEarrow (e1, f) ->	
       reads_add_alloc (reads_add_field_var f e.texpr_type (expr e1))
@@ -339,7 +342,8 @@ and assign_expr e = match e.texpr_node with
   | TEarrget (e1, e2) ->
       reads_add_alloc 
 	(ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2))
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
+      assert false
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
       reads_add_alloc (assigns_add_field_var f e.texpr_type (expr e1))
@@ -359,7 +363,8 @@ and address_expr e = match e.texpr_node with
       expr e1
   | TEarrget (e1, e2) ->
       ef_union (expr e1) (expr e2) 
-  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
+  | TEdot ({texpr_node = TEunary (Ustar, e1)}, f) ->
+      assert false
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
       begin match e1.texpr_type.ctype_node with

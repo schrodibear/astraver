@@ -1,4 +1,9 @@
 
+version 1.53, April 22nd, 2004
+==============================
+  o fixed bug with construct t[x].y
+  o add support for \nothing
+
 version 1.51, April 6th, 2004
 =============================
   o Simplify typing constraints only with --simplify-typing option

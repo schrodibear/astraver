@@ -19,7 +19,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/dowhile.why", characters 291-315 *)
+(* Why obligation from file "why/dowhile.why", characters 344-344 *)
 Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -32,23 +32,45 @@ Lemma main_impl_po_1 :
   forall (x1: Z),
   forall (Pre3: Variant1 = i1),
   forall (Pre2: x1 = (10 - i1) /\ 10 >= i1 /\ i1 > 0),
-  forall (Test2: true = true),
-  forall (caduceus_3: Z),
-  forall (Post3: caduceus_3 = x1),
-  (forall (result:Z),
-   (result = i1 ->
-    (forall (result0:Z),
-     (result0 = (result - 1) ->
-      ((result0 > 0 -> ((caduceus_3 + 1) = (10 - (result - 1)) /\ 10 >=
-        (result - 1) /\ (result - 1) > 0) /\ (Zwf 0 (result - 1) i1))) /\
-      ((result0 <= 0 -> (caduceus_3 + 1) = 10)))))).
+  forall (Test4: true = true),
+  forall (x2: Z),
+  forall (Post3: x2 = (x1 + 1)),
+  forall (i2: Z),
+  forall (Post4: i2 = (i1 - 1)),
+  forall (Test3: i2 > 0),
+  (x2 = (10 - i2) /\ 10 >= i2 /\ i2 > 0) /\ (Zwf 0 i2 i1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/dowhile.why", characters 344-344 *)
+Lemma main_impl_po_2 : 
+  forall (x: Z),
+  forall (Pre4: x >= 0),
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (i0: Z),
+  forall (Post2: i0 = 10),
+  forall (Variant1: Z),
+  forall (i1: Z),
+  forall (x1: Z),
+  forall (Pre3: Variant1 = i1),
+  forall (Pre2: x1 = (10 - i1) /\ 10 >= i1 /\ i1 > 0),
+  forall (Test4: true = true),
+  forall (x2: Z),
+  forall (Post3: x2 = (x1 + 1)),
+  forall (i2: Z),
+  forall (Post4: i2 = (i1 - 1)),
+  forall (Test2: i2 <= 0),
+  x2 = 10.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/dowhile.why", characters 173-237 *)
-Lemma main_impl_po_2 : 
+Lemma main_impl_po_3 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
   forall (x0: Z),
@@ -61,8 +83,8 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 124-525 *)
-Lemma main_impl_po_3 : 
+(* Why obligation from file "why/dowhile.why", characters 124-420 *)
+Lemma main_impl_po_4 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
   forall (x0: Z),
@@ -71,7 +93,7 @@ Lemma main_impl_po_3 :
   forall (Post2: i0 = 10),
   forall (i1: Z),
   forall (x1: Z),
-  forall (Post7: (x1 = (10 - i1) /\ 10 >= i1 /\ i1 > 0) /\ false = true),
+  forall (Post6: (x1 = (10 - i1) /\ 10 >= i1 /\ i1 > 0) /\ false = true),
   x1 = 10.
 Proof.
 intuition.

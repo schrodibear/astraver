@@ -19,7 +19,7 @@ intuition.
 subst; omega.
 Save.
 
-(* Why obligation from file "why/arith.why", characters 138-162 *)
+(* Why obligation from file "why/arith.why", characters 308-406 *)
 Lemma test_impl_po_1 : 
   forall (k: Z),
   forall (j: Z),
@@ -27,13 +27,14 @@ Lemma test_impl_po_1 :
   forall (Post5: l = 1),
   forall (m: Z),
   forall (Post4: m = 12),
-  forall (caduceus_4: Z),
-  forall (Post1: caduceus_4 = j),
-  (forall (l0:Z),
-   (l0 = (l * j) ->
-    (forall (result:Z),
-     (result = l0 -> (caduceus_4 + k) = (j + k) /\
-      (j + (result + 10 * k + (caduceus_4 + k) + m)) = (3 * j + 11 * k + 12))))).
+  forall (i0: Z),
+  forall (Post1: i0 = (j + k)),
+  forall (l1: Z),
+  forall (Post2: l1 = (l * j)),
+  forall (caduceus_1: Z),
+  forall (Post3: caduceus_1 = l1),
+  i0 = (j + k) /\ (j + (caduceus_1 + 10 * k + i0 + m)) =
+  (3 * j + 11 * k + 12).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
