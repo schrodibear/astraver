@@ -373,7 +373,45 @@ droit est inchangé et leur fils changer est maintenant la pointeur
 qui les precède dans la pile ou bien t si ce pointer est en tête de la pile.
 \end{slide}
 \begin{slide}{La preuves Simplify}
+\begin{comment}
+. invariant vrai init
+. poste condition
+. 3 fois invariant preserve resp. pop swing push
+. validite des acces
+. po1 = WF order
+. po2 = validite de l'acces a t->m dans la boucle while 
+. po3 = validite de l'acces a t->m dans la premiere condition du if 
+. po4 = validite de l'acces a  p->c dans la seconde condition du if 
+. po5 = validite de t dans 't->r = q' dans la premiere branche du if 
+. po6 = preservation de l'invariant de boucle pour le ``pop'' 
+. po7 = validite de p dans ``p->r = p->l'' dans la seconde branche du
+  if (swing) 
+. po8 = preservation de l'invariant de boucle pour le ``swing'' 
+. po9 = validite de l'acces a  t dans la branche ``push'' 
+. po10 = validite de l'acces a p dans la branche ``push'' 
+. po11 = preservation de l'invariant de boucle pour le ``push'' 
+. po12 = po du a la terminaison
+. po13 = post-condition de la fonction
+. po14 = l'invariant vrai au debut de la boucle 
 
+avec Simplify: 
+
+.***.*.*..*.** (6/8/0)
+
+-> 4/12 (po5,7,9 et 10)
+
+ajout axiome reachable(p,p) : 
+
+.....*.*..*.** (9/5/0)   
+
+-> 7/12 (po2,3,4 en plus)
+
+\end{comment}
+
+. invariant vrai init
+. post cond
+. 3 fois invariant preserve resp. pop swing push
+. validit	 des acc
 \end{slide}
 \begin{slide}{La preuve Coq}
 Nous devons d''abord definir les predicates utilisés par caduceus.
@@ -435,10 +473,81 @@ Ce predicat represente l'accesibilite par des noeuds non marquer d'un noeuds a u
 \begin{slide}{La preuve Coq}
 \fontsize{10pt}{9pt}
 \begin{alltt}
-
+Lemma path_no_cycle : forall (a : alloc_table) 
+  (p1 p2 : pointer) (l r : memory pointer) 
+  (pa : list pointer), path a l r p1 p2 pa -> 
+  exists pa' :list pointer, 
+  incl pa' pa /\ no_rep pa' /\ path a l r p1 p2 pa'.   
 \end{alltt}
+Ce lemme affirme que s'y il existe un chemin de p1 a p2, alors il
+existe un chemin de p1 a p2 sans repetition.
+\end{slide}
+\begin{slide}{La preuve Coq}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+Lemma path_upd_left : forall (alloc : alloc_table) 
+  (l r : memory pointer) (p:pointer)
+  (lp : list pointer) (p1 p0 p2 : pointer), 
+  ~ In p lp -> path alloc l r p1 p0 lp -> 
+  path alloc (upd l p p2) r p1 p0 lp.
+\end{alltt}
+Les quatres lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
+\texttt{path\_inv\_upd\_left} et \texttt{path\_inv\_upd\_right}
+affirme que si il y a un chemin entre p1 et p2 et que l'ont modifie le
+graphe en dehors de ce chemin alors ce chemin existe toujours. 
+\end{slide}
+\begin{slide}{La preuve de terminaison}
+Pour prouver la terminaison il faut monter la terminaison de la boucle
+while. Pour cela en caduceus on annote la boucle avec \emph{variant}:
+une expression qui decroit a chaque tour de la boucle.
+La mesure qui decroit strictement pour cette boucle est: 
+\begin{enumerate}
+\item le nombre de noeud non marquer.
+\item le nombre de noeuds qui ont $c=0$
+\item la taille de la pile
+\end{enumerate}
+\end{slide}
+\begin{slide}{La preuve de terminaison}
+Pour la preuve de terminaison on doit rajouter les elements suivant a
+l'annotation du code.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+/*@ logic Length weight(node p, node t) 
+            reads p->m,p->c,p->l,p->r  */
+/*@ predicate reachable_elements(node root, plist s) 
+            reads root->l,root->r */ 
+/*@ requires 
+       \bs{}exists plist s; reachable_elements(root,s) && 
+     ... */\end{slshape}
+void schorr_waite(node root) \{
+  node t = root; node p = NULL;\begin{slshape}
+  /*@ invariant ...
+    @ variant weight(p,t) for order_mark_m_and_c_and_stack 
+    @*/\end{slshape}
+  while (p != NULL || (t != NULL && ! t->m)) \{
+   ...
+\end{alltt}
+ou en Coq on definit :
+\[
+\begin{array}{l}
+\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
+\forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
+\end{array}
+\]
+Les fontions \verb|weight| et \verb|order_mark_m_and_c_and_stack| sont
+la definition de la mesure precedente.
+
+\end{slide}
+\begin{slide}{Conclusion}
+On a prouve les differents aspects de l'algorithme Schorr Waite.
+
+
+
+
 \end{slide}
 \end{document}
+
+
 
 
 %%% Local Variables: 
