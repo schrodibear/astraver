@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.86 2003-12-15 14:58:08 marche Exp $ i*)
+(*i $Id: parser.ml4,v 1.87 2003-12-15 15:50:56 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -318,13 +318,13 @@ EXTEND
     ] ]
   ;
   reads:
-  [ [ LIDENT "reads"; l = LIST0 ident SEP "," -> l ] ]
+  [ [ "reads"; l = LIST0 ident SEP "," -> l ] ]
   ;
   writes:
-  [ [ LIDENT "writes"; l = LIST0 ident SEP "," -> l ] ]
+  [ [ "writes"; l = LIST0 ident SEP "," -> l ] ]
   ;
   raises:
-  [ [ LIDENT "raises"; l = LIST0 ident SEP "," -> l ] ]
+  [ [ "raises"; l = LIST0 ident SEP "," -> l ] ]
   ;
   pre_condition:
   [ [ c = assertion -> c ] ]

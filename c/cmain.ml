@@ -9,6 +9,7 @@ let files = Queue.create ()
 let add_file f = Queue.add f files
 
 let interp_file f =
+  Loc.set_file f;
   let c = open_in f in
   let d = Clexer.parse c in
   if !parse_only then raise Exit;

@@ -3,7 +3,7 @@
 # benchmark for caduceus
 
 # C files to parse with success
-echo "C parsing"
+echo "C parsing (good)"
 cd good/syntax
 parsing="../../../../bin/caduceus.opt -parse-only"
 for f in *.c; do
@@ -16,8 +16,29 @@ for f in *.c; do
     echo -n "GCC ok... "
     if ! $parsing  $f > /dev/null 2>&1; then
 	echo "caduceus FAILED"
-	$parsing $f
+	#$parsing $f
+	#exit 1
+    else
+	echo "caduceus ok... "
+    fi
+done
+
+echo "C parsing (bad)"
+cd ../../bad-syn
+parsing="../../../bin/caduceus.opt -parse-only"
+for f in *.c; do
+    echo -n "  "$f"... "
+    if gcc -c $f > /dev/null 2>&1; then
+	echo "GCC failed (accepted a bad file)"
+	gcc -c $f
 	exit 1
     fi
-    echo "caduceus ok... "
+    echo -n "GCC ok... "
+    if $parsing  $f > /dev/null 2>&1; then
+	echo "caduceus FAILED (accepted a bad file)"
+	#$parsing $f
+	#exit 1
+    else
+	echo "caduceus ok... "
+    fi
 done

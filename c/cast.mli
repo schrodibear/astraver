@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.2 2003-12-10 09:53:24 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.3 2003-12-15 15:50:56 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -23,28 +23,6 @@ type 'a located = { node : 'a; loc : Loc.t }
 type annot = int * string
 
 type storage_class = No_storage | Extern | Auto | Static | Register
-
-type ctype_expr =
-  | CTvoid
-  | CTchar
-  | CTshort
-  | CTint
-  | CTlong
-  | CTfloat
-  | CTdouble
-  | CTvar of string
-  | CTarray of ctype_expr
-  | CTpointer of ctype_expr
-  (* only for the sym table *)
-  | CTfun of ctype list * ctype_expr
-
-and ctype = { 
-  ctype_expr : ctype_expr;
-  ctype_storage : storage_class;
-  ctype_const : bool;
-  ctype_volatile : bool;
-  ctype_signed : bool 
-}
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
@@ -60,7 +38,39 @@ type binary_operator =
 
 type shift = Left | Right
 
-type cexpr = cexpr_node located
+type ctype_expr =
+  | CTvoid
+  | CTchar
+  | CTshort
+  | CTint
+  | CTlong
+  | CTlonglong
+  | CTfloat
+  | CTdouble
+  | CTlongdouble
+  | CTvar of string
+  | CTarray of ctype_expr * cexpr option
+  | CTpointer of ctype_expr
+  | CTstruct_named of string
+  | CTstruct_decl of string option * parameters 
+  | CTunion_named of string
+  | CTunion_decl of string option * parameters
+  | CTenum_named of string
+  | CTenum_decl of string option * (string * cexpr option) list
+  (* only for the sym table *)
+  | CTfun of parameters * ctype_expr
+
+and ctype = { 
+  ctype_expr : ctype_expr;
+  ctype_storage : storage_class;
+  ctype_const : bool;
+  ctype_volatile : bool;
+  ctype_signed : bool 
+}
+
+and parameters = (ctype * string) list
+
+and cexpr = cexpr_node located
 
 and cexpr_node =
   | CEnop
@@ -115,8 +125,6 @@ and decl =
   | Ctypedef of ctype * string
   | Cdecl of ctype * string * c_initializer
   | Cfundef of ctype * string * parameters * annotated_block located
-
-and parameters = (ctype * string) list
 
 type file = decl located list
 

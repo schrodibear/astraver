@@ -55,15 +55,13 @@
     | Stypedef 
     | Sstorage of storage_class
     | Stype of ctype_expr
+    | Slong
+    | Sshort
     | Sconst
     | Svolatile
     | Ssigned of bool (* true = signed / false = unsigned *)
-    | Sstruct_named of string
     | Sstruct_decl of string option * parameters 
-    | Sunion_named of string
     | Sunion_decl of string option * parameters
-    | Senum_named of string
-    | Senum_decl of string option * (string * cexpr option) list
 	
   and specifiers = specifier list
 
@@ -77,9 +75,106 @@
   and parameters = (specifiers * declarator * string) list
 
   (* interps a list of specifiers / declarators as a [ctype] *)
+  (* TODO: short/long *)
 
-  let interp_type specs decl = 
-    failwith "todo"
+  let storage_class = 
+    let rec loop st = function
+      | [] -> 
+	  st
+      | Sstorage st' :: s when st = No_storage -> 
+	  loop st' s
+      | Sstorage st' :: s when st' = st ->
+	  warning "duplicate storage class"; loop st s
+      | Sstorage st' :: _ ->
+	  error "multiple storage class"
+      | _ :: s -> 
+	  loop st s
+    in
+    loop No_storage
+
+  let sign =
+    let rec loop so = function
+      | [] -> 
+	  so
+      | Ssigned b' :: sp -> 
+	  (match so with 
+	     | None -> loop (Some b') sp
+	     | Some b when b = b' -> warning "duplicate (un)signed"; loop so sp
+	     | Some b -> error "both signed and unsigned")
+      | _ :: sp -> 
+	  loop so sp
+    in
+    loop None
+
+  let apply_sign sg ty = match sg, ty with
+    | (None | Some false), CTchar -> false
+    | None, _ -> true
+    | Some b, (CTshort | CTint | CTlong | CTlonglong) -> b
+    | Some _, _ -> error "signed or unsigned invalid"
+
+  type length = Short | Long | LongLong
+
+  let length =
+    let rec loop lo = function
+      | [] -> 
+	  lo
+      | (Sshort | Slong as s) :: sp -> 
+	  (match s, lo with 
+	     | Sshort, None -> 
+		 loop (Some Short) sp
+	     | Slong, None -> 
+		 loop (Some Long) sp
+	     | Sshort, Some Short -> 
+		 warning "duplicate short"; loop lo sp
+	     | Sshort, Some (Long | LongLong) | Slong, Some Short -> 
+		 error "both long and short specified"
+	     | Slong, Some Long -> 
+		 loop (Some LongLong) sp
+	     | Slong, Some LongLong ->
+		 error "too long for caduceus"
+	     | _ -> 
+		 assert false)
+      | _ :: sp -> 
+	  loop lo sp
+    in
+    loop None
+
+  let rec interp_type specs decl = 
+    let st = storage_class specs in
+    let sg = sign specs in
+    let lg = length specs in
+    let rec base_type tyo = function
+      | [] -> 
+	  (match tyo with 
+	     | Some ty -> ty 
+	     | None when st = No_storage && sg = None && lg = None -> 
+		 error "data definition has no type or storage class"
+	     | None -> CTint)
+      | Stype t :: sp when tyo = None ->
+	  base_type (Some t) sp
+      | Sstruct_decl (so, pl) :: sp when tyo = None ->
+	  base_type (Some (CTstruct_decl (so, params pl))) sp
+      | Sunion_decl (so, pl) :: sp when tyo = None ->
+	  base_type (Some (CTunion_decl (so, params pl))) sp
+      | (Stype _ | Sstruct_decl _ | Sunion_decl _) :: _ ->
+	  error "two or more data types in declaration"
+      | _ :: sp ->
+	  base_type tyo sp
+    and full_type ty = function
+      | Dsimple -> ty
+      | Dpointer d -> full_type (CTpointer ty) d
+      | Darray (d, so) -> CTarray (full_type ty d, so)
+      | Dfunction (d, pl, _) -> CTfun (params pl, full_type ty d)
+      | Dbitfield (d, e) -> assert false
+    and params = 
+      List.map (fun (s,d,x) -> (interp_type s d, x))
+    in
+    let ty = full_type (base_type None specs) decl in
+    { ctype_expr = ty;
+      ctype_storage = st;
+      ctype_const = List.exists ((=) Sconst) specs;
+      ctype_volatile = List.exists ((=) Svolatile) specs;
+      ctype_signed = apply_sign sg ty }
 
   let interp_param (s, d, id) = interp_type s d, id
   let interp_params = List.map interp_param
@@ -122,6 +217,9 @@
 %token DOT AMP EXL TILDE MINUS PLUS STAR SLASH PERCENT LT GT HAT PIPE
 %token QUESTION EOF
 
+%nonassoc specs
+%nonassoc TYPE_NAME
+
 %type <Cast.file> file
 %start file
 %%
@@ -147,9 +245,9 @@ postfix_expression
 	    { locate (CEcall ($1, [])) }
         | postfix_expression LPAR argument_expression_list RPAR 
 	    { locate (CEcall ($1, $3)) }
-        | postfix_expression DOT IDENTIFIER 
+        | postfix_expression DOT identifier/*ICI*/ 
 	    { locate (CEdot ($1, $3)) }
-        | postfix_expression PTR_OP IDENTIFIER 
+        | postfix_expression PTR_OP identifier/*ICI*/ 
 	    { locate (CEarrow ($1, $3)) }
         | postfix_expression INC_OP 
 	    { locate (CEunary (Postfix_inc, $1)) }
@@ -318,12 +416,22 @@ declaration
 	    { [locate (Cspecdecl $1)] }
         ;
 
+/* the precedence specs indicates to keep going with declaration_specifiers */
 declaration_specifiers
-        : storage_class_specifier { [$1] }
+        : storage_class_specifier %prec specs { [$1] }
         | storage_class_specifier declaration_specifiers { $1 :: $2 }
         | type_specifier { [$1] }
-        | type_specifier declaration_specifiers { $1 :: $2 }
-        | type_qualifier { [$1] }
+        | type_specifier declaration_specifiers_no_name { $1 :: $2 }
+        | type_qualifier %prec specs { [$1] }
+        | type_qualifier declaration_specifiers { $1 :: $2 }
+        ;
+/* same thing, with TYPE_NAME no more allowed */
+declaration_specifiers_no_name
+        : storage_class_specifier %prec specs { [$1] }
+        | storage_class_specifier declaration_specifiers_no_name { $1 :: $2 }
+        | type_specifier_no_name { [$1] }
+        | type_specifier_no_name declaration_specifiers_no_name { $1 :: $2 }
+        | type_qualifier %prec specs { [$1] }
         | type_qualifier declaration_specifiers { $1 :: $2 }
         ;
 
@@ -348,30 +456,38 @@ storage_class_specifier
         ;
 
 type_specifier
+        : type_specifier_no_name { $1 }
+        | TYPE_NAME { Stype (CTvar $1) }
+        ;
+type_specifier_no_name
         : VOID { Stype CTvoid }
         | CHAR { Stype CTchar }
-        | SHORT { Stype CTshort }
+        | SHORT { Sshort }
         | INT { Stype CTint }
-        | LONG { Stype CTlong }
+        | LONG { Slong }
         | FLOAT { Stype CTfloat }
         | DOUBLE { Stype CTdouble }
         | SIGNED { Ssigned true }
         | UNSIGNED { Ssigned false }
         | struct_or_union_specifier { $1 }
         | enum_specifier { $1 }
-        | TYPE_NAME { Stype (CTvar $1) }
         ;
 
+identifier
+        : IDENTIFIER { $1 }
+        | TYPE_NAME  { $1 }
+	;
+
 struct_or_union_specifier
-        : struct_or_union IDENTIFIER LBRACE struct_declaration_list RBRACE 
+        : struct_or_union identifier/*ICI*/ LBRACE struct_declaration_list RBRACE 
             { if $1 then 
 		Sstruct_decl (Some $2, $4) 
 	      else 
 		Sunion_decl (Some $2, $4) }
         | struct_or_union LBRACE struct_declaration_list RBRACE 
 	    { if $1 then Sstruct_decl (None, $3) else Sunion_decl (None, $3) }
-        | struct_or_union IDENTIFIER 
-	    { if $1 then Sstruct_named $2 else Sunion_named $2 }
+        | struct_or_union identifier/*ICI*/ 
+	    { Stype (if $1 then CTstruct_named $2 else CTunion_named $2) }
         ;
 
 struct_or_union
@@ -390,9 +506,16 @@ struct_declaration
         ;
 
 specifier_qualifier_list
-        : type_specifier specifier_qualifier_list { $1 :: $2 }
+        : type_specifier specifier_qualifier_list_no_name { $1 :: $2 }
         | type_specifier { [$1] }
         | type_qualifier specifier_qualifier_list { $1 :: $2 }
+        | type_qualifier %prec specs { [$1] }
+        ;
+/* same thing, with TYPE_NAME no more allowed */
+specifier_qualifier_list_no_name
+        : type_specifier_no_name specifier_qualifier_list_no_name { $1 :: $2 }
+        | type_specifier_no_name { [$1] }
+        | type_qualifier specifier_qualifier_list_no_name { $1 :: $2 }
         | type_qualifier { [$1] }
         ;
 
@@ -412,11 +535,11 @@ struct_declarator
 
 enum_specifier
         : ENUM LBRACE enumerator_list RBRACE 
-            { Senum_decl (None, $3) }
-        | ENUM IDENTIFIER LBRACE enumerator_list RBRACE 
-	    { Senum_decl (Some $2, $4) }
-        | ENUM IDENTIFIER 
-	    { Senum_named $2 }
+            { Stype (CTenum_decl (None, $3)) }
+        | ENUM identifier/*ICI*/ LBRACE enumerator_list RBRACE 
+	    { Stype (CTenum_decl (Some $2, $4)) }
+        | ENUM identifier/*ICI*/ 
+	    { Stype (CTenum_named $2) }
         ;
 
 enumerator_list
@@ -440,7 +563,7 @@ declarator
         ;
 
 direct_declarator
-        : IDENTIFIER 
+        : identifier
             { $1, Dsimple }
         | LPAR declarator RPAR 
 	    { uns() }
@@ -552,7 +675,7 @@ statement
         ;
 
 labeled_statement
-        : IDENTIFIER COLON statement { locate (CSlabel ($1, $3)) }
+        : identifier/*ICI*/ COLON statement { locate (CSlabel ($1, $3)) }
         | CASE constant_expression COLON statement { locate (CScase ($2, $4)) }
         | DEFAULT COLON statement { locate (CSdefault $3) }
         ;
@@ -618,7 +741,7 @@ iteration_statement
         ;
 
 jump_statement
-        : GOTO IDENTIFIER SEMICOLON { locate (CSgoto $2) }
+        : GOTO identifier/*ICI*/ SEMICOLON { locate (CSgoto $2) }
         | CONTINUE SEMICOLON { locate CScontinue }
         | BREAK SEMICOLON { locate CSbreak }
         | RETURN SEMICOLON { locate (CSreturn None) }
@@ -636,28 +759,39 @@ external_declaration
         ;
 
 function_definition
-        : declaration_specifiers declarator declaration_list compound_statement
-            { let b,q = $4, None in
+        : function_prototype compound_statement_with_post
+            { Ctypes.pop (); (* pushed by function_prototype *)
+	      let b,q = $2 in
+	      let ty,id,pl,p = $1 in
+	      let l = add_pre_loc (loc_i 2) p in
+	      locate (Cfundef (ty, id, pl, with_loc l (p,b,q))) }
+        ;
+	      
+function_prototype
+        : declaration_specifiers declarator declaration_list 
+            { Ctypes.push ();
 	      match $2 with
 		| id, Dfunction (d, pl, p) ->
-		    let lb = add_pre_loc (loc_i 4) p in
 		    let ty = interp_type $1 d in
-		    locate 
-		      (Cfundef (ty, id, interp_params pl, with_loc lb (p,b,q)))
+		    let pl = interp_params pl in
+		    List.iter (fun (_,x) -> Ctypes.remove x) pl;
+		    ty, id, pl, p
 		| _ -> uns () }
-        | declaration_specifiers declarator compound_statement_with_post
-	    { let (b,q) = $3 in
-              match $2 with
+        | declaration_specifiers declarator 
+	    { Ctypes.push ();
+	      match $2 with
 		| id, Dfunction (d, pl, p) -> 
-		    let lb = add_pre_loc (loc_i 3) p in
 		    let ty = interp_type $1 d in
-		    locate
-		      (Cfundef (ty, id, interp_params pl, with_loc lb (p,b,q)))
+		    let pl = interp_params pl in
+		    List.iter (fun (_,x) -> Ctypes.remove x) pl;
+		    ty, id, pl, p
 		| _ -> uns () }
         | declarator declaration_list compound_statement 
-	    { uns () }
+	    { Ctypes.push ();
+	      uns () }
         | declarator compound_statement 
-	    { uns () }
+	    { Ctypes.push ();
+	      uns () }
         ;
 
 %%
