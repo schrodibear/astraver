@@ -1,8 +1,22 @@
-(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
+(*
+ * The Why certification tool
+ * Copyright (C) 2002 Jean-Christophe FILLIATRE
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
 
 (* This file is a contribution by Christine Paulin *)
 
-(* $Id: WhyExn.v,v 1.1 2002-10-09 16:43:05 filliatr Exp $ *)
+(* $Id: WhyExn.v,v 1.2 2002-11-14 09:38:05 filliatr Exp $ *)
 
 Implicit Arguments On.
 
