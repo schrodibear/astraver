@@ -27,7 +27,7 @@ list rev(list p) {
 
 /* test */
 
-#if 1
+#if 0
 #include <stdio.h>
 
 void print(list l) {

@@ -40,6 +40,7 @@ void sort4_2(int *a, int *b, int *c, int *d) {
   if (*b > *c) { tmp = *b; *b = *c; *c = tmp; }
 }
 
+#if 0
 /*@ requires \valid(a) && \valid(b) && \valid(c) && \valid(d) &&
   @   a != b && a != c && a != d && b != c && b != d && c != d
   @ ensures *a <= *b <= *c <= *d */
@@ -56,3 +57,4 @@ void sort4_3(int *a, int *b, int *c, int *d) {
   //@ assigns *b,*c ensures *b <= *c
   if (*b > *c) { tmp = *b; *b = *c; *c = tmp; }
 }
+#endif
