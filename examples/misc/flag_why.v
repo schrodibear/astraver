@@ -339,6 +339,10 @@ Lemma dutch_flag_po_11 :
   (monochrome t2 r1 N red) /\ (Zwf `0` `r1 - i0` `r0 - i0`).
 Proof.
 Unfold monochrome Zwf; Intuition Try Omega.
+Rewrite Post7; Rewrite store_def_2; Try Omega.
+Rewrite Post6; Rewrite store_def_2; Try Omega.
+Apply H0; Omega.
+
 Save.
 
 Lemma dutch_flag_po_12 : 
