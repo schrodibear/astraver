@@ -18,10 +18,6 @@ FEATURES
  - mutually recursive functions 
    (many variants over the same type, one relation)
 
- - option to pass a default tactic (to be inserted into Coq scripts)
-
- - floats (mostly pretty-print); equality over types bool and unit
-
 COQ
 ===
 
@@ -29,8 +25,6 @@ DOCUMENTATION
 =============
 
  - bibliography
-
- - examples
 
  - Why library (in ref man)
 
@@ -51,9 +45,8 @@ IMPLEMENTATION
 
  - suppress Coerce node?
 
- - automatic proofs of trivial obligations such as
+ - automatic proof of obligations such as
   
      x=t, A and P(t) |- P(x)
-     A and B |- A
-     A, B |- A and B
+
      
