@@ -171,8 +171,8 @@ invariant has 9 assertions:
   remains unchanged.
 \item {I4a} : defines the backtracking stack as on Figure~\ref{fig:stack}.
 \item {I4b} : means that all nodes in the \texttt{stack} are marked.
-\item {I4c} : the trickest annotation, due to {\Huge ?}, means that
-  any valid {\Huge non null ?} node, initially reachable from root, 
+\item {I4c} : the trickest annotation, means that
+  any valid node, initially reachable from root, 
   and not yet marked, is reachable by traversing only
   unmarked nodes, either from t or from the right children of a node
   in the stack.
@@ -451,7 +451,8 @@ llist a next .
 \subsection{Termination}
 \label{sec:termination}
 
-\begin{figure}[t]
+\begin{figure}[b]
+\hrulefill
 \begin{alltt}\begin{slshape}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
@@ -471,6 +472,7 @@ void schorr_waite(node root) \{
   \}
 \}
 \end{alltt}
+\vspace*{-5mm}
 \caption{Additional annotations for termination}
 \label{fig:term}
 \end{figure}

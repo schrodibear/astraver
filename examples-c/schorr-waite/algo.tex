@@ -29,7 +29,8 @@ at the end of the traversal, they will have to be all marked. The
 boolean field $c$ is used internally by the algorithm, to denote which
 of the children is currently explored.
  
-\begin{figure}[t]
+\begin{figure}[b]
+\hrulefill
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root;
@@ -55,15 +56,15 @@ void schorr_waite(node root) \{
 \end{figure}
 
 The Schorr-Waite graph-marking algorithm, written directly in true C
-source code, is then given in Figure~\ref{fig:code}.This algorithm is
-a non-recursive graph marking. In the Figure~\ref{fig:algo} we can see
-two pointers t and p and 3 moves push,swing and pop. t is the current
-state and p is used for backtracking. Push is used when t isn't
-marked id when the subgraph are totally not explore, this move is
-marked t and descends into it's left child. Swing is used the left
-children of t are explored, this move is decends t into it's right
-brother. Pop is used when the left and right children of t are
-explored, this move go up in the graph.        
+source code, is given in Figure~\ref{fig:code}. 
+%This algorithm is a non-recursive graph marking. 
+A sample execution is illustrated in Figure~\ref{fig:algo}, with each
+possible move `push', `swing' and `pop'. $t$ is the next node to
+explore and $p$ is the head of the backtracking stack. `push' marks a
+new node and then goes to the left child. `swing' occurs when the left
+child has been explored, and goes to the right child. `pop' is used
+when the right child is explored, and goes back up.        
+
 \begin{figure}[t]
 \begin{center}
   \unitlength=0.5mm
@@ -174,12 +175,9 @@ explored, this move go up in the graph.
 
 \end{picture}\label{figure}
 \end{center}
-\caption{Schorr-Waite algorithm}
+\caption{Schorr-Waite algorithm: sample execution}
 \label{fig:algo}
 \end{figure}
-
-{\Huge decrire l'algo informellement, avec des dessins pour illustrer
-  les operations pop, push et swing}
 
 \subsection{Formal specification of the algorithm}
 
@@ -217,7 +215,8 @@ depends on: in this case, it does depend only on \verb|p1| and
 in fact as $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$ that is all the
 node expressions from \verb|p1| using the left and right children.
 
-\begin{figure}[t]
+\begin{figure}[b]
+\hrulefill
 \begin{alltt}\begin{slshape}
 /*@ requires 
   @   \bs{}forall node x; 
@@ -282,10 +281,10 @@ graph has been traversed. The third assertion says that for the nodes
 which were not reachable, their mark is not changed by the algorithm,
 that is the unreachable node are not traversed by the algorithm.
 
-{\Huge dire quelque chose a propos de la logique, en particulier les
-  "erreurs" : pas de logique 3 valuee, dereference x->r autorisée meme
-  si x est nul, etc.}
-
+Notice that we use a standard first order logic: every function is
+total (no 3-valued logic) so that an expression \verb|p->f| is valid
+even if \verb|p| is \verb|null|, but meaningless (very similarly to
+division by zero for example).
 
 With respect to the most recent formal specification given in
 Isabelle/HOL~\cite{mehta03cade}, we added two things: first the
