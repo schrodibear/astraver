@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.18 2004-03-04 12:49:44 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.19 2004-03-17 10:36:18 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -56,6 +56,7 @@ let main () =
     then file_copy theorysrc theory
   end;
   Queue.iter (fun f -> try interp_file f with Exit -> ()) files
+  (* engendrer les spec why *)
 
 let rec explain_exception fmt = function
   | Parsing.Parse_error -> 

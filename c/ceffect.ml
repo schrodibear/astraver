@@ -44,8 +44,8 @@ let rec pointer_heap_var ty =
     | CTpointer ty ->
 	let v,_ = pointer_heap_var ty in
 	( v ^ "P", "pointer")
-    | CTstruct _ -> "pointer", "pointer"
-    | CTunion _ -> "pointer", "pointer"
+    | CTstruct _ -> "pointer", "pointer" (* probably wrong *)
+    | CTunion _ -> "pointer", "pointer" (* probably wrong *)
     | CTenum _ -> "int", "int"
     | CTfun _ -> assert false (* bad typing ! *)
 
