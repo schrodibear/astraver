@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.19 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.20 2004-07-09 12:32:44 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -200,7 +200,7 @@ let print_predicate fmt p =
     | p ->
 	print2 fmt p
   and print2 fmt = function
-    | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
+    | Pand (_, a, b) | Forallb (_, a, b) ->
 	fprintf fmt "@[%a &@ %a@]" print3 a print2 b
     | p ->
 	print3 fmt p

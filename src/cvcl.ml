@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.7 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.8 2004-07-09 12:32:43 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -181,7 +181,7 @@ let rec print_predicate fmt = function
       fprintf fmt 
      "@[((%a=TRUE => %a) AND@ (%a=FALSE => %a))@]"
       print_term a print_predicate b print_term a print_predicate c
-  | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
+  | Pand (_, a, b) | Forallb (_, a, b) ->
       fprintf fmt "@[(%a AND@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "@[(%a OR@ %a)@]" print_predicate a print_predicate b

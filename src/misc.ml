@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.90 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.91 2004-07-09 12:32:44 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -229,7 +229,7 @@ let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
   | Papp (_, l, _) -> List.fold_left collect_term s l
   | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) | Piff (a, b)
-  | Forallb (_, _, _, _, a, b) -> 
+  | Forallb (_, a, b) -> 
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
   | Pnot a -> collect_pred s a
@@ -269,7 +269,7 @@ let rec map_predicate f = function
   | Pnot a -> Pnot (f a)
   | Forall (w, id, b, v, p) -> Forall (w, id, b, v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
-  | Forallb (w, id, v, p, a, b) -> Forallb (w, id, v, f p, f a, f b)
+  | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
 
 let rec tsubst_in_predicate s = function
@@ -480,7 +480,7 @@ module Size = struct
     | Pnot p -> 1 + predicate p
     | Forall (_,_,_,_,p) -> 1 + predicate p
     | Exists (_,_,_,p) -> 1 + predicate p
-    | Forallb (_,_,_,p1,p2,p3) -> 1+ predicate p1 + predicate p2 + predicate p3
+    | Forallb (_,p1,p2) -> 1+ predicate p1 + predicate p2
     | Pfpi (t,_,_) -> 1 + term t
 
   let assertion a = predicate a.a_value
@@ -562,8 +562,11 @@ let rec print_predicate fmt = function
   | Pif (a, b, c) -> 
       fprintf fmt "(@[if %a then@ %a else@ %a@])" 
 	print_term a print_predicate b print_predicate c
-  | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
+  | Pand (_, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
+  | Forallb (_, ptrue, pfalse) ->
+      fprintf fmt "(@[forallb(%a,@ %a)@])" 
+	print_predicate ptrue print_predicate pfalse
   | Por (a, b) ->
       fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
   | Pnot a ->

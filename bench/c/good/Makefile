@@ -1,5 +1,5 @@
 
-CADUCEUS=../../../bin/caduceus.opt 
+CADUCEUS=../../../bin/caduceus.opt
 CADUCEUSLIB=$(shell pwd)/../../../lib
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
@@ -50,7 +50,7 @@ type-all:
 
 why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
-	$(EXECCADUCEUS) $<
+	$(EXECCADUCEUS) -why-opt "-d -V" $<
 
 %: %.c
 	rm -f why/$*.why

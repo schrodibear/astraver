@@ -160,7 +160,7 @@ let rec unif_pred u = function
   | Papp (id, tl, _), Papp (id', tl', _) when id == id' -> 
       unif_terms u (tl, tl')
   | Ptrue, Ptrue | Pfalse, Pfalse -> u
-  | Forallb (_, _, _, _, a, b), Forallb (_, _, _, _, a', b')
+  | Forallb (_, a, b), Forallb (_, a', b')
   | Pimplies (_, a, b), Pimplies (_, a', b') 
   | Pand (_, a, b), Pand (_, a', b')
   | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
@@ -244,8 +244,11 @@ let boolean_wp_lemma = Ident.create "why_boolean_wp"
 let rec qe_forall = function
   | Forall (_, id, n, ty, p) -> 
       let vl, p = qe_forall p in (id, n, ty) :: vl, p
-  | Forallb (_, id, n, p, _, _) -> 
-      let vl, p = qe_forall p in (id, n, PTbool) :: vl, p
+  | Forallb (_, ptrue, pfalse) -> 
+      let id = fresh_var () in
+      let n = Ident.bound id in
+      let p = Pif (Tvar n, ptrue, pfalse) in
+      [(id, n, PTbool)], p
   | p -> 
       [], p
 
@@ -272,7 +275,10 @@ let boolean_forall_lemma = Ident.create "why_boolean_forall"
 let make_forall_proof id = function
   | Forall _ -> 
       CC_var id
-  | Forallb (_, _, n, q, _, _) -> 
+  | Forallb (_, qtrue, qfalse) -> 
+      let x = fresh_var () in
+      let n = Ident.bound x in
+      let q = Pif (Tvar n, qtrue, qfalse) in
       cc_applist (CC_var boolean_forall_lemma) 
 	[cc_lam [n, CC_var_binder (TTpure PTbool)] (CC_type (TTpred q)); 
 	 CC_var id]
@@ -321,7 +327,7 @@ let linear ctx concl =
 			       CC_var id, CC_hole (search ctx')))
 	end
     (* forall-elimination *)
-    | Spred (id, (Forall (true,_,_,_,_) | Forallb (true,_,_,_,_,_) as a)) 
+    | Spred (id, (Forall (true,_,_,_,_) | Forallb (true,_,_) as a)) 
       :: ctx -> 
 	let id = make_forall_proof id a in
 	begin try

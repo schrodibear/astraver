@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.44 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.45 2004-07-09 12:32:44 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -84,9 +84,8 @@ let rec find_predicate_vars acc p =
     | Forall (_,_,_,t,p) 
     | Exists (_,_,t,p) ->
 	find_predicate_vars (find_pure_type_vars acc t) p
-    | Forallb (_,_,_,p1,p2,p3) ->
-	find_predicate_vars 
-	  (find_predicate_vars (find_predicate_vars acc p1) p2) p3
+    | Forallb (_,p1,p2) ->
+	find_predicate_vars (find_predicate_vars acc p1) p2
 
 let generalize_predicate p =
   let l = find_predicate_vars [] p in
@@ -159,7 +158,7 @@ let rec subst_predicate s p =
   | Pnot a -> Pnot (f a)
   | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
-  | Forallb (w, id, v, p, a, b) -> Forallb (w, id, v, f p, f a, f b)
+  | Forallb (w, a, b) -> Forallb (w, f a, f b)
   | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
 
 let specialize_predicate = specialize_scheme subst_predicate

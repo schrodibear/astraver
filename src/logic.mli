@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.23 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.24 2004-07-09 12:32:44 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -66,7 +66,10 @@ type predicate =
   | Piff of predicate * predicate
   | Pnot of predicate
   | Forall of is_wp * Ident.t * Ident.t * pure_type * predicate
+(*
   | Forallb of is_wp * Ident.t * Ident.t * predicate * predicate * predicate
+*)
+  | Forallb of is_wp * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
   | Pfpi of term * real_constant * real_constant
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.126 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.127 2004-07-09 12:32:43 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -192,7 +192,7 @@ let print_predicate_v7 fmt p =
     | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (_, a, b) | Forallb (_, _, _, _, a, b) -> 
+    | Pand (_, a, b) | Forallb (_, a, b) -> 
         fprintf fmt "%a /\\@ %a" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function
@@ -470,7 +470,7 @@ let print_predicate_v8 fmt p =
     | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (_, a, b) | Forallb (_, _, _, _, a, b) -> 
+    | Pand (_, a, b) | Forallb (_, a, b) -> 
         fprintf fmt "%a /\\@ %a" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function

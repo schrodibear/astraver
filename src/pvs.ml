@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.56 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.57 2004-07-09 12:32:44 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -152,7 +152,7 @@ let print_predicate fmt p =
     | Por (a, b) -> print1 fmt a; fprintf fmt " OR@ "; print2 fmt b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (_, a, b) | Forallb (_, _, _, _, a, b) -> 
+    | Pand (_, a, b) | Forallb (_, a, b) -> 
         print2 fmt a; fprintf fmt " AND@ "; print3 fmt b
     | p -> print3 fmt p
   and print3 fmt = function

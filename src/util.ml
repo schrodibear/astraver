@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.97 2004-07-08 13:43:32 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.98 2004-07-09 12:32:44 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -198,7 +198,7 @@ let rec occur_predicate id = function
   | Papp (_, l, _) -> List.exists (occur_term id) l
   | Pif (a, b, c) -> 
       occur_term id a || occur_predicate id b || occur_predicate id c
-  | Forallb (_, _, _, _, a, b) 
+  | Forallb (_, a, b) 
   | Pimplies (_, a, b) 
   | Pand (_, a, b) 
   | Piff (a, b) 
@@ -239,12 +239,18 @@ and occur_arrow id bl c = match bl with
 
 let forall ?(is_wp=false) x v p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
+(***
   | PureType PTbool ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
       Forallb (is_wp, x, n, p, simplify ptrue, simplify pfalse)
+***)
+  | PureType PTbool ->
+      let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
+      let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
+      Pand (is_wp, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
