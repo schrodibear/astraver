@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.69 2004-03-22 10:20:10 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.70 2004-07-01 11:51:21 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -74,7 +74,7 @@ let is_pure_type_scheme s =
 
 let push_parameter id v tv = match prover with
   | Pvs -> if is_pure_type_scheme v then Pvs.push_parameter id tv
-  | Coq _ -> Coq.push_parameter id tv
+  | Coq _ -> if is_pure_type_scheme v || valid then Coq.push_parameter id tv
   | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
   | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)

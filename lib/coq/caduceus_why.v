@@ -28,15 +28,9 @@ Admitted.
 (*Why logic*) Definition lsr : Z -> Z -> Z.
 Admitted.
 
-(*Why*) Parameter any_int :
-  forall (_: unit), (sig_1 Z (fun (result: Z)  => (True))).
 
 
-(*Why*) Parameter any_real :
-  forall (_: unit), (sig_1 R (fun (result: R)  => (True))).
 
-(*Why*) Parameter any_pointer :
-  forall (_: unit), (sig_1 pointer (fun (result: pointer)  => (True))).
 
 (*Why*) Parameter null : pointer.
 
@@ -67,13 +61,7 @@ Admitted.
 (*Why predicate*) Definition ge_pointer  (p1:pointer) (p2:pointer)
   := (base_addr p1) = (base_addr p2) /\ (offset p1) >= (offset p2).
 
-(*Why*) Parameter eq_pointer :
-  forall (p: pointer), forall (q: pointer),
-  (sig_1 bool (fun (result: bool)  => ((if result then p = q else ~(p = q))))).
 
-(*Why*) Parameter neq_pointer :
-  forall (p: pointer), forall (q: pointer),
-  (sig_1 bool (fun (result: bool)  => ((if result then ~(p = q) else p = q)))).
 
 (*Why predicate*) Definition valid  (a:alloc_table) (p:pointer)
   := ~(p = null) /\ 0 <= (offset p) /\ (offset p) < (block_length a p).
@@ -188,68 +176,23 @@ Admitted.
      ((offset p1) - (offset p2))))).
 Admitted.
 
-(*Why*) Parameter shift_ :
-  forall (p: pointer), forall (i: Z),
-  (sig_1 pointer (fun (result: pointer)  => (result = (shift p i)))).
 
-(*Why*) Parameter sub_pointer_ :
-  forall (p1: pointer), forall (p2: pointer),
-  forall (H: (base_addr p1) = (base_addr p2)),
-  (sig_1 Z (fun (result: Z)  => (result = ((offset p1) - (offset p2))))).
 
-(*Why*) Parameter lt_pointer_ :
-  forall (p1: pointer), forall (p2: pointer),
-  forall (H: (base_addr p1) = (base_addr p2)),
-  (sig_1 bool
-   (fun (result: bool)  =>
-    ((if result then (offset p1) < (offset p2) else (offset p1) >=
-      (offset p2))))).
 
-(*Why*) Parameter le_pointer_ :
-  forall (p1: pointer), forall (p2: pointer),
-  forall (H: (base_addr p1) = (base_addr p2)),
-  (sig_1 bool
-   (fun (result: bool)  =>
-    ((if result then (offset p1) <= (offset p2) else (offset p1) >
-      (offset p2))))).
 
-(*Why*) Parameter gt_pointer_ :
-  forall (p1: pointer), forall (p2: pointer),
-  forall (H: (base_addr p1) = (base_addr p2)),
-  (sig_1 bool
-   (fun (result: bool)  =>
-    ((if result then (offset p1) > (offset p2) else (offset p1) <=
-      (offset p2))))).
 
-(*Why*) Parameter ge_pointer_ :
-  forall (p1: pointer), forall (p2: pointer),
-  forall (H: (base_addr p1) = (base_addr p2)),
-  (sig_1 bool
-   (fun (result: bool)  =>
-    ((if result then (offset p1) >= (offset p2) else (offset p1) <
-      (offset p2))))).
 
 (*Why logic*) Definition acc :
   forall (A41:Set), ((memory) A41) -> pointer -> A41.
 Admitted.
 Implicit Arguments acc.
 
-(*Why*) Parameter acc_ :
-  forall (A5: Set), forall (p: pointer), forall (alloc: alloc_table),
-  forall (m: ((memory) A5)), forall (H: (valid alloc p)),
-  (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
 (*Why logic*) Definition upd :
   forall (A42:Set), ((memory) A42) -> pointer -> A42 -> ((memory) A42).
 Admitted.
 Implicit Arguments upd.
 
-(*Why*) Parameter upd_ :
-  forall (A11: Set), forall (p: pointer), forall (v: A11),
-  forall (alloc: alloc_table), forall (m: ((memory) A11)),
-  forall (H: (valid alloc p)),
-  (sig_2 ((memory) A11) unit
-   (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
 
 (*Why axiom*) Lemma acc_upd :
   forall (A43:Set),
@@ -280,6 +223,26 @@ Admitted.
   (forall (a:alloc_table),
    (forall (p:pointer),
     ((fresh a p) -> (forall (i:Z), ~(valid a (shift p i)))))).
+Admitted.
+
+(*Why predicate*) Definition alloc_extends  (a1:alloc_table) (a2:alloc_table)
+  := (forall (p:pointer),
+      ((block_length a1 p) > 0 -> (block_length a1 p) = (block_length a2 p))).
+
+(*Why axiom*) Lemma alloc_extends_valid :
+  (forall (a1:alloc_table),
+   (forall (a2:alloc_table),
+    ((alloc_extends a1 a2) ->
+     (forall (p:pointer), ((valid a1 p) -> (valid a2 p)))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_valid_range :
+  (forall (a1:alloc_table),
+   (forall (a2:alloc_table),
+    ((alloc_extends a1 a2) ->
+     (forall (p:pointer),
+      (forall (i:Z),
+       (forall (j:Z), ((valid_range a1 p i j) -> (valid_range a2 p i j)))))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).

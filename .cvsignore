@@ -4,3 +4,4 @@ Makefile
 export
 .depend.coq
 tmp
+gmon.out

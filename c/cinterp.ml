@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.91 2004-06-30 14:34:04 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.92 2004-07-01 11:51:21 filliatr Exp $ i*)
 
 
 open Format
@@ -250,6 +250,9 @@ let rec interp_predicate label old_label p =
 	LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
     | Pvalid_range (t,a,b) ->
 	LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
+    | Palloc_extends ->
+	LPred("alloc_extends", [interp_var (Some old_label) "alloc";
+				interp_var label "alloc"])
 
 let interp_predicate_opt label old_label pred =
   match pred with
@@ -842,8 +845,10 @@ let interp_spec effect_reads effect_assigns s =
 
 let alloc_on_stack loc v t =
   let form = 
-    Pand (snd (Cltyping.separation loc v t),
-	  Cltyping.valid_for_type ~fresh:true loc v t) 
+    Cltyping.make_and 
+      (snd (Cltyping.separation loc v t))
+      (Cltyping.make_and 
+	 (Cltyping.valid_for_type ~fresh:true loc v t) Palloc_extends)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
 		      interp_predicate None "" form,None))

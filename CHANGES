@@ -1,4 +1,6 @@
 
+  o Coq: parameters no more generated when -valid is not set
+
 version 1.62, June 24th, 2004
 =============================
   o new option --all-vc to get all verification conditions (no more

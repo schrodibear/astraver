@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.17 2004-06-30 09:42:37 filliatr Exp $ i*)
+(*i $Id: cltyping.mli,v 1.18 2004-07-01 11:51:21 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -45,5 +45,4 @@ val separation :
   Loc.t -> Info.var_info -> 
   ?allocs:(tterm -> predicate) -> tterm -> (tterm -> predicate) * predicate
 
-
-
+val make_and : predicate -> predicate -> predicate

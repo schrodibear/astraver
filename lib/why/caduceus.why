@@ -195,7 +195,20 @@ logic fresh : alloc_table,pointer -> prop
 axiom fresh_not_valid :
   forall a:alloc_table. forall p:pointer. 
     fresh(a,p) -> forall i:int. not(valid(a,shift(p,i)))
-	
+
+predicate alloc_extends(a1 : alloc_table, a2 : alloc_table) =
+  forall p:pointer. 
+    block_length(a1,p) > 0 -> block_length(a1,p) = block_length(a2,p)
+
+axiom alloc_extends_valid : 
+  forall a1:alloc_table. forall a2:alloc_table.
+    alloc_extends(a1,a2) -> forall p:pointer. valid(a1,p) -> valid(a2,p)
+
+axiom alloc_extends_valid_range : 
+  forall a1:alloc_table. forall a2:alloc_table.
+    alloc_extends(a1,a2) -> 
+    forall p:pointer. forall i:int. forall j:int.
+      valid_range(a1,p,i,j) -> valid_range(a2,p,i,j)
 
 (* exceptions *)
 exception Break

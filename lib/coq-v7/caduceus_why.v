@@ -28,13 +28,9 @@ Admitted.
 (*Why logic*) Definition lsr : Z -> Z -> Z.
 Admitted.
 
-(*Why*) Parameter any_int : (_: unit)(sig_1 Z [result: Z](True)).
 
 
-(*Why*) Parameter any_real : (_: unit)(sig_1 R [result: R](True)).
 
-(*Why*) Parameter any_pointer :
-  (_: unit)(sig_1 pointer [result: pointer](True)).
 
 (*Why*) Parameter null : pointer.
 
@@ -67,13 +63,7 @@ Admitted.
 (*Why predicate*) Definition ge_pointer  [p1:pointer] [p2:pointer]
   := (base_addr p1) = (base_addr p2) /\ `(offset p1) >= (offset p2)`.
 
-(*Why*) Parameter eq_pointer :
-  (p: pointer)(q: pointer)
-  (sig_1 bool [result: bool]((if result then p = q else ~(p = q)))).
 
-(*Why*) Parameter neq_pointer :
-  (p: pointer)(q: pointer)
-  (sig_1 bool [result: bool]((if result then ~(p = q) else p = q))).
 
 (*Why predicate*) Definition valid  [a:alloc_table] [p:pointer]
   := ~(p = null) /\ `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
@@ -193,55 +183,22 @@ Admitted.
      `(sub_pointer p1 p2) = (offset p1) - (offset p2)`))).
 Admitted.
 
-(*Why*) Parameter shift_ :
-  (p: pointer)(i: Z)(sig_1 pointer [result: pointer](result = (shift p i))).
 
-(*Why*) Parameter sub_pointer_ :
-  (p1: pointer)(p2: pointer)(H: (base_addr p1) = (base_addr p2))
-  (sig_1 Z [result: Z](`result = (offset p1) - (offset p2)`)).
 
-(*Why*) Parameter lt_pointer_ :
-  (p1: pointer)(p2: pointer)(H: (base_addr p1) = (base_addr p2))
-  (sig_1 bool [result: bool]
-   ((if result then `(offset p1) < (offset p2)`
-     else `(offset p1) >= (offset p2)`))).
 
-(*Why*) Parameter le_pointer_ :
-  (p1: pointer)(p2: pointer)(H: (base_addr p1) = (base_addr p2))
-  (sig_1 bool [result: bool]
-   ((if result then `(offset p1) <= (offset p2)`
-     else `(offset p1) > (offset p2)`))).
 
-(*Why*) Parameter gt_pointer_ :
-  (p1: pointer)(p2: pointer)(H: (base_addr p1) = (base_addr p2))
-  (sig_1 bool [result: bool]
-   ((if result then `(offset p1) > (offset p2)`
-     else `(offset p1) <= (offset p2)`))).
 
-(*Why*) Parameter ge_pointer_ :
-  (p1: pointer)(p2: pointer)(H: (base_addr p1) = (base_addr p2))
-  (sig_1 bool [result: bool]
-   ((if result then `(offset p1) >= (offset p2)`
-     else `(offset p1) < (offset p2)`))).
 
 (*Why logic*) Definition acc : (A41:Set) ((memory) A41) -> pointer -> A41.
 Admitted.
 Implicits acc [1].
 
-(*Why*) Parameter acc_ :
-  (A5: Set)(p: pointer)(alloc: alloc_table)(m: ((memory) A5))
-  (H: (valid alloc p))(sig_1 A5 [result: A5](result = (acc m p))).
 
 (*Why logic*) Definition upd :
   (A42:Set) ((memory) A42) -> pointer -> A42 -> ((memory) A42).
 Admitted.
 Implicits upd [1].
 
-(*Why*) Parameter upd_ :
-  (A11: Set)(p: pointer)(v: A11)(alloc: alloc_table)(m: ((memory) A11))
-  (H: (valid alloc p))
-  (sig_2 ((memory) A11) unit [m0: ((memory) A11)][result: unit]
-   (m0 = (upd m p v))).
 
 (*Why axiom*) Lemma acc_upd :
   (A43:Set)
@@ -269,6 +226,25 @@ Admitted.
 (*Why axiom*) Lemma fresh_not_valid :
   ((a:alloc_table)
    ((p:pointer) ((fresh a p) -> ((i:Z) ~(valid a (shift p i)))))).
+Admitted.
+
+(*Why predicate*) Definition alloc_extends  [a1:alloc_table] [a2:alloc_table]
+  := ((p:pointer)
+      (`(block_length a1 p) > 0` ->
+       `(block_length a1 p) = (block_length a2 p)`)).
+
+(*Why axiom*) Lemma alloc_extends_valid :
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((alloc_extends a1 a2) -> ((p:pointer) ((valid a1 p) -> (valid a2 p)))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_extends_valid_range :
+  ((a1:alloc_table)
+   ((a2:alloc_table)
+    ((alloc_extends a1 a2) ->
+     ((p:pointer)
+      ((i:Z) ((j:Z) ((valid_range a1 p i j) -> (valid_range a2 p i j)))))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
