@@ -33,6 +33,18 @@ Admitted.
 (*Why logic*) Definition sub_pointer : pointer -> pointer -> Z.
 Admitted.
 
+(*Why predicate*) Definition lt_pointer  (p1:pointer) (p2:pointer)
+  := (base_addr p1) = (base_addr p2) /\ (offset p1) < (offset p2).
+
+(*Why predicate*) Definition le_pointer  (p1:pointer) (p2:pointer)
+  := (base_addr p1) = (base_addr p2) /\ (offset p1) <= (offset p2).
+
+(*Why predicate*) Definition gt_pointer  (p1:pointer) (p2:pointer)
+  := (base_addr p1) = (base_addr p2) /\ (offset p1) > (offset p2).
+
+(*Why predicate*) Definition ge_pointer  (p1:pointer) (p2:pointer)
+  := (base_addr p1) = (base_addr p2) /\ (offset p1) >= (offset p2).
+
 (*Why*) Parameter eq_pointer :
   forall (p: pointer), forall (q: pointer),
   (sig_1 bool (fun (result: bool)  => ((if result then p = q else ~(p = q))))).
@@ -143,6 +155,38 @@ Admitted.
   forall (p1: pointer), forall (p2: pointer),
   forall (H: (base_addr p1) = (base_addr p2)),
   (sig_1 Z (fun (result: Z)  => (result = ((offset p1) - (offset p2))))).
+
+(*Why*) Parameter lt_pointer_ :
+  forall (p1: pointer), forall (p2: pointer),
+  forall (H: (base_addr p1) = (base_addr p2)),
+  (sig_1 bool
+   (fun (result: bool)  =>
+    ((if result then (offset p1) < (offset p2) else (offset p1) >=
+      (offset p2))))).
+
+(*Why*) Parameter le_pointer_ :
+  forall (p1: pointer), forall (p2: pointer),
+  forall (H: (base_addr p1) = (base_addr p2)),
+  (sig_1 bool
+   (fun (result: bool)  =>
+    ((if result then (offset p1) <= (offset p2) else (offset p1) >
+      (offset p2))))).
+
+(*Why*) Parameter gt_pointer_ :
+  forall (p1: pointer), forall (p2: pointer),
+  forall (H: (base_addr p1) = (base_addr p2)),
+  (sig_1 bool
+   (fun (result: bool)  =>
+    ((if result then (offset p1) > (offset p2) else (offset p1) <=
+      (offset p2))))).
+
+(*Why*) Parameter ge_pointer_ :
+  forall (p1: pointer), forall (p2: pointer),
+  forall (H: (base_addr p1) = (base_addr p2)),
+  (sig_1 bool
+   (fun (result: bool)  =>
+    ((if result then (offset p1) >= (offset p2) else (offset p1) <
+      (offset p2))))).
 
 (*Why logic*) Definition acc :
   forall (A32:Set), ((memory) A32) -> pointer -> A32.

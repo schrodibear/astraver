@@ -12,6 +12,15 @@ logic offset: pointer -> int
 logic shift: pointer,int -> pointer
 logic sub_pointer: pointer,pointer -> int
 
+predicate lt_pointer(p1:pointer,p2:pointer) =
+  base_addr(p1) = base_addr(p2) and offset(p1) < offset(p2)
+predicate le_pointer(p1:pointer,p2:pointer) =
+  base_addr(p1) = base_addr(p2) and offset(p1) <= offset(p2)
+predicate gt_pointer(p1:pointer,p2:pointer) =
+  base_addr(p1) = base_addr(p2) and offset(p1) > offset(p2)
+predicate ge_pointer(p1:pointer,p2:pointer) =
+  base_addr(p1) = base_addr(p2) and offset(p1) >= offset(p2)
+
 parameter eq_pointer : 
   p:pointer -> q:pointer -> {} bool { if result then p=q else p<>q }
 parameter neq_pointer : 
@@ -95,6 +104,22 @@ parameter shift_ : p:pointer -> i:int ->
 
 parameter sub_pointer_ : p1:pointer -> p2:pointer ->
   { base_addr(p1) = base_addr(p2) } int { result = offset(p1) - offset(p2) }
+
+parameter lt_pointer_ : p1:pointer -> p2:pointer ->
+  { base_addr(p1) = base_addr(p2) } bool 
+  { if result then offset(p1) < offset(p2) else offset(p1) >= offset(p2) }
+
+parameter le_pointer_ : p1:pointer -> p2:pointer ->
+  { base_addr(p1) = base_addr(p2) } bool 
+  { if result then offset(p1) <= offset(p2) else offset(p1) > offset(p2) }
+
+parameter gt_pointer_ : p1:pointer -> p2:pointer ->
+  { base_addr(p1) = base_addr(p2) } bool 
+  { if result then offset(p1) > offset(p2) else offset(p1) <= offset(p2) }
+
+parameter ge_pointer_ : p1:pointer -> p2:pointer ->
+  { base_addr(p1) = base_addr(p2) } bool 
+  { if result then offset(p1) >= offset(p2) else offset(p1) < offset(p2) }
 
 (* pointer access *)
 logic acc: 'a memory, pointer -> 'a

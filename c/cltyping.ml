@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.30 2004-03-25 13:05:15 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.31 2004-03-25 17:00:59 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -55,8 +55,13 @@ let expected_type loc t1 t2 =
   if not (eq_type t1 t2) then raise_located loc (ExpectedType (t1, t2))
 
 let expected_num loc t = match t.term_type.ctype_node with
-  | CTint _ | CTfloat _ -> ()
+  | CTenum _ | CTint _ | CTfloat _ -> ()
   | _ -> error loc "invalid operand (expected integer or float)"
+
+let expected_num_pointer loc t = match t.term_type.ctype_node with
+  | CTenum _ | CTint _ | CTfloat _ 
+  | CTarray _ | CTpointer _ -> ()
+  | _ -> error loc "invalid operand (expected integer, float or pointer)"
 
 let expected_int loc t = match t.term_type.ctype_node with
   | CTint _ -> ()
@@ -205,6 +210,11 @@ and type_num_term env t =
   expected_num t.lexpr_loc tt;
   tt
 
+and type_num_pointer_term env t =
+  let tt = type_term env t in
+  expected_num_pointer t.lexpr_loc tt;
+  tt
+
 and type_terms loc env at tl =
   let rec type_list = function
     | [], [] -> 
@@ -267,8 +277,11 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let p2 = type_predicate env p2 in
       Pand (p1, p2)
   | PLrel (t1, (Lt | Le | Gt | Ge as r), t2) -> 
-      let t1 = type_num_term env t1 in
-      let t2 = type_num_term env t2 in
+      let loc = Loc.join t1.lexpr_loc t2.lexpr_loc in
+      let t1 = type_num_pointer_term env t1 in
+      let t2 = type_num_pointer_term env t2 in
+      if not (compatible t1 t2) then 
+	error loc "comparison of incompatible types";
       Prel (t1, r, t2)
   | PLrel (t1, (Eq | Neq as r), t2) -> 
       let loc = Loc.join t1.lexpr_loc t2.lexpr_loc in
