@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.91 2005-02-14 13:17:16 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.92 2005-02-16 13:14:28 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -1006,9 +1006,11 @@ let type_decl d = match d.node with
 	      match add_sym d.loc x (noattr (Tfun (spl, ty_res))) 
 		(Fun_info info) with
 		| Var_info _ -> assert false
-		| Fun_info f -> f
+		| Fun_info f -> 
+		    if f.args = [] then f.args <- List.map snd pl;
+		    f
 	    in
-	    Tfunspec (function_spec d.loc x None, ty_res, info, pl)
+	    Tfunspec (function_spec d.loc x None, ty_res, info)
 	| _ -> 
 	    let ty = type_type d.loc (Env.empty ()) ty in
 	    let info = 
@@ -1035,9 +1037,9 @@ let type_decl d = match d.node with
       let info = 
 	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with 
 	  | Var_info _ -> assert false
-	  | Fun_info f -> f
+	  | Fun_info f -> f.args <- List.map snd pl; f
       in
-      Tfunspec (s, ty, info, pl)
+      Tfunspec (s, ty, info)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc (Env.empty ()) ty in
       let et = if eq_type ty c_void then None else Some ty in
@@ -1050,7 +1052,7 @@ let type_decl d = match d.node with
       let info = 
 	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with
 	  | Var_info v -> assert false
-	  | Fun_info f -> f
+	  | Fun_info f -> f.args <- List.map snd pl; f
       in
       let bl,st = type_statement env et bl in
       if st.term && et <> None then
@@ -1059,7 +1061,7 @@ let type_decl d = match d.node with
 	error d.loc "break statement not within a loop or switch";
       if st.continue then 
 	error d.loc "continue statement not within a loop";
-      Tfundef (s, ty, info, pl, bl)
+      Tfundef (s, ty, info, bl)
 
 let type_file = List.map (fun d -> { d with node = type_decl d })
 

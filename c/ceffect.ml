@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.80 2005-01-31 10:18:06 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.81 2005-02-16 13:14:27 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -891,8 +891,8 @@ let decl d =
     | Naxiom(id,p) -> () (* TODO *)
     | Ntypedef(ctype,id) -> () 
     | Ntypedecl(ctype) -> ()
-    | Nfunspec(spec,ctype,id,params) -> () (* TODO *)
-    | Nfundef(spec,ctype,id,params,block) -> () (* TODO *)
+    | Nfunspec(spec,ctype,id) -> () (* TODO *)
+    | Nfundef(spec,ctype,id,block) -> () (* TODO *)
 
 let file l = List.iter decl l
 
@@ -924,9 +924,9 @@ let functions dl =
     end
   in
   let decl d = match d.node with
-    | Nfunspec (sp, _, id, _) ->
+    | Nfunspec (sp, _, id) ->
 	declare id (spec sp)
-    | Nfundef (sp, _, id, _, s) ->
+    | Nfundef (sp, _, id, s) ->
 	let ef_spec = spec sp and ef_body = statement s in
 	begin
 	  match sp.Clogic.assigns with

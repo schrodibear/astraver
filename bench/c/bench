@@ -123,8 +123,13 @@ rm -f simplify/*_why.sx.all
 for f in $FILES; do
     echo -n "  Generating simplify VCG for $f.c... "
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
-        make -f $f.makefile simplify/${f}_why.sx.all > /tmp/caduceus.tmp 2>&1
-	echo "ok"
+        if make -f $f.makefile simplify/${f}_why.sx.all > /tmp/caduceus.tmp 2>&1 ; then
+	    echo "ok"
+	else
+	   echo "why FAILED :"
+	   cat /tmp/caduceus.tmp
+	   exit 1
+	fi
     else
 	echo "caduceus FAILED (rejected a good file) :"
 	cat /tmp/caduceus.tmp

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.6 2005-01-19 16:19:20 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.7 2005-02-16 13:14:27 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -46,7 +46,7 @@ let declare_struct fmt s (_,fields) =
   begin match Cenv.tag_type_definition s with
     | Cenv.TTStructUnion(_,fields) ->
 	List.iter (fun f ->
-		     fprintf fmt "%a %s;@\n" ctype f.var_type f.var_name) fields 
+		     fprintf fmt "%a %s;@\n" ctype f.var_type f.var_unique_name) fields 
     | _ -> assert false
   end;
   fprintf fmt "};@]@\n@\n"
@@ -70,7 +70,7 @@ let rec nterm fmt t = match t.nterm_node with
   | NTconstant (IntConstant s | FloatConstant s) ->
       fprintf fmt "%s" s
   | NTvar x ->
-      fprintf fmt "%s" x.var_name
+      fprintf fmt "%s" x.var_unique_name
   | NTapp (li, tl) ->
       fprintf fmt "%s(%a)" li.logic_name (print_list comma nterm) tl
   | NTunop (op, t) ->
@@ -80,7 +80,7 @@ let rec nterm fmt t = match t.nterm_node with
   | NTbinop (t1, op, t2) ->
       fprintf fmt "%a %s %a" nterm_p t1 (term_binop op) nterm_p t2
   | NTarrow (t, vi) ->
-      fprintf fmt "%a->%s" nterm_p t vi.var_name
+      fprintf fmt "%a->%s" nterm_p t vi.var_unique_name
   | NTif (t1, t2, t3) ->
       fprintf fmt "%a ? %a : %a" nterm_p t1 nterm_p t2 nterm_p t3
   | NTold t ->
@@ -105,7 +105,7 @@ and nterm_p fmt t = match t.nterm_node with
       fprintf fmt "(%a)" nterm t
 
 
-let quantifier fmt (ty, x) = fprintf fmt "%a %s" ctype ty x.var_name
+let quantifier fmt (ty, x) = fprintf fmt "%a %s" ctype ty x.var_unique_name
 
 let quantifiers = print_list comma quantifier
 
@@ -157,11 +157,11 @@ let rec npredicate fmt = function
   | NPnamed (id, p) ->
       fprintf fmt "%s:: %a" id npredicate p
 
-let parameter fmt (ty, x) = fprintf fmt "%a %s" ctype ty x.var_name
+let parameter fmt  x = fprintf fmt "%a %s" ctype x.var_type x.var_unique_name
 
 let parameters = print_list comma parameter
 
-let logic_parameter fmt (x, ty) = fprintf fmt "%a %s" ctype ty x.var_name
+let logic_parameter fmt (x, ty) = fprintf fmt "%a %s" ctype ty x.var_unique_name
 
 let logic_parameters = print_list comma logic_parameter
 
@@ -255,11 +255,11 @@ let rec nexpr fmt e = match e.nexpr_node with
   | NEstring_literal s ->
       fprintf fmt "\"%S\"" s
   | NEvar (Var_info x) ->
-      fprintf fmt "%s" x.var_name
+      fprintf fmt "%s" x.var_unique_name
   | NEvar (Fun_info x) ->
       fprintf fmt "%s" x.fun_name
   | NEarrow (e, x) ->
-      fprintf fmt "%a->%s" nexpr_p e x.var_name
+      fprintf fmt "%a->%s" nexpr_p e x.var_unique_name
   | NEstar e ->
       fprintf fmt "*%a" nexpr_p e
   | NEseq (e1, e2) ->
@@ -331,10 +331,10 @@ let rec nstatement fmt s = match s.nst_node with
   | NSblock b ->
       fprintf fmt "@[{@\n  @[%a@]@\n}@]" nblock b
   | NSdecl (ty, vi, None,rem) ->
-      fprintf fmt "%a %s;@\n" ctype ty vi.var_name;
+      fprintf fmt "%a %s;@\n" ctype ty vi.var_unique_name;
       nstatement fmt rem
   | NSdecl (ty, vi, Some i, rem) ->
-      fprintf fmt "@[<hov 2>{@\n%a %s = %a;@\n" ctype ty vi.var_name c_initializer i;
+      fprintf fmt "@[<hov 2>{@\n%a %s = %a;@\n" ctype ty vi.var_unique_name c_initializer i;
       nstatement fmt rem;
       fprintf fmt "}@\n@]"
 
@@ -358,15 +358,15 @@ and ndecl fmt d = match d.node with
   | Ntypedecl ty ->
       fprintf fmt "%a;@\n" ctype ty
   | Ndecl (ty, vi, None) ->
-      fprintf fmt "%a %s;@\n" ctype ty vi.var_name
+      fprintf fmt "%a %s;@\n" ctype ty vi.var_unique_name
   | Ndecl (ty, vi, Some i) ->
-      fprintf fmt "%a %s = %a;@\n" ctype ty vi.var_name c_initializer i
-  | Nfunspec (s, ty, fi, pl) ->
+      fprintf fmt "%a %s = %a;@\n" ctype ty vi.var_unique_name c_initializer i
+  | Nfunspec (s, ty, fi) ->
       fprintf fmt "%a%a %s(@[%a@]);@\n" spec s ctype ty fi.fun_name
-	parameters pl
-  | Nfundef (s, ty, fi, pl, st) ->
+	parameters fi.args
+  | Nfundef (s, ty, fi, st) ->
       fprintf fmt "%a%a %s(@[%a@])@\n%a@\n" spec s ctype ty fi.fun_name
-	(print_list comma parameter) pl nstatement st
+	 parameters fi.args nstatement st
 
 let nfile fmt p = 
   fprintf fmt "@[";

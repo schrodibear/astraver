@@ -185,7 +185,7 @@ let add_sym l x ty info =
   mark_as_used n; 
   set_unique_name info n;
   if n <> x then Coptions.lprintf "renaming %s into %s@." x n;
-  if is_sym x then begin
+  try
     let d = find_sym x in
     if not (eq_type (var_type d) ty) then 
       (* TODO accepter fonctions avec arguments si aucun la première fois 
@@ -195,11 +195,10 @@ let add_sym l x ty info =
 	error l ("conflicting types for " ^ x);
       end;
     d
-  end else begin
+  with Not_found ->
     set_var_type info ty;
     Hashtbl.add sym_t x info;
     info
-  end
 
 (*s Environments for the logical side *)
 

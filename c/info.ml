@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.20 2005-01-11 13:20:03 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.21 2005-02-16 13:14:28 hubert Exp $ i*)
 
 open Ctypes
 
@@ -92,6 +92,7 @@ type fun_info =
       mutable function_writes : HeapVarSet.t;
       mutable has_assigns : bool;
       mutable fun_type : Ctypes.ctype;
+      mutable args : var_info list;
     }
 
 let default_fun_info x =
@@ -101,6 +102,7 @@ let default_fun_info x =
     function_writes = HeapVarSet.empty; 
     has_assigns = false;
     fun_type = c_void;
+    args = [];
   }
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.136 2005-02-11 12:50:32 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.137 2005-02-16 13:14:27 hubert Exp $ i*)
 
 
 open Format
@@ -1314,8 +1314,8 @@ let interp_fun_params params =
   if params=[]
   then ["tt",unit_type]
   else List.fold_right 
-    (fun (t,id) tpl ->
-       let tt = Ceffect.interp_type t in
+    (fun (id) tpl ->
+       let tt = Ceffect.interp_type id.var_type in
        (id.var_unique_name,base_type tt)::tpl)
  params []
 
@@ -1385,14 +1385,14 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ndecl(ctype,v,init) -> 
       (* global initialisations already handled in cinit.ml *)
       why
-  | Nfunspec(spec,ctype,id,params) -> 
-      let _,_,_,spec = interp_function_spec id spec ctype params in
+  | Nfunspec(spec,ctype,id) -> 
+      let _,_,_,spec = interp_function_spec id spec ctype id.args in
       (why_code, spec :: why_spec,
        prover_decl)
-  | Nfundef(spec,ctype,id,params,block) ->      
+  | Nfundef(spec,ctype,id,block) ->      
       reset_tmp_var ();
       let tparams,pre,post,tspec = 
-	interp_function_spec id spec ctype params in
+	interp_function_spec id spec ctype id.args in
       let f = id.fun_unique_name in
       if Coptions.verify id.fun_name then begin try
 	lprintf "translating function %s@." f;
@@ -1400,7 +1400,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	let may_break = ref false in
 	let list_of_refs =
 	  List.fold_right
-	    (fun (ty,id) bl ->
+	    (fun id bl ->
 	       if id.var_is_assigned
 	       then 
 		 let n = id.var_unique_name in
@@ -1408,7 +1408,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 		 unset_formal_param id;
 		 (id.var_unique_name,n) :: bl
 	       else bl) 
-	    params [] 
+	    id.args [] 
 	in
 	let tblock = catch_return 
 		       (interp_statement false may_break block) in

@@ -141,7 +141,6 @@ let add_init l =
 		ctype_const = false;
 		ctype_volatile = false},
 	       invariants_initially_established_info,
-	       [],
 	       {st_node = TSblock ([], assigns decl);
 		st_break = false;    
 		st_continue = false; 

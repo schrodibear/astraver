@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.26 2005-02-14 13:17:16 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.27 2005-02-16 13:14:27 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -678,39 +678,6 @@ and statement s =
     nst_term = s.st_term;
     nst_loc = s.st_loc;
   }
-(*and decl e1=
-  match e1 with    
-  | Tlogic(info, l) -> Nlogic (info , logic_symbol l)
-  | Taxiom (s, p) -> Naxiom (s, predicate p)
-  | Tinvariant(s, p) -> Ninvariant (s, predicate p)
-  | Ttypedef (t, s) -> Ntypedef((ctype t),s)
-  | Ttypedecl t -> Ntypedecl (ctype t)
-  | Tdecl (t, v, c) -> 
-(* traitement des locales precedemment dans cinterp a rebrancher 
-   if v.var_is_referenced then
-   let t = { nterm_node = NTresult; 
-   nterm_loc = d.loc;
-   nterm_type = Ctypes.c_pointer ctype } in
-   Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
-   else
-*)
-      let decl =
-	if var_is_referenced_or_struct_or_union v
-	then
-	  begin
-	    set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
-	    Tdecl(v.var_type,v,ilist ((*c_initializer_option*) c))
-	  end
-	else Tdecl(t,v,(*c_initializer_option*) c)
-      in 
-      nlocated decl
-  | Tfunspec (s, t, f, l) -> Nfunspec (spec s,ctype t,f,
-				   (List.map (fun (x,y) -> (ctype x,y)) l))
-  | Tfundef (s, t, f, l, st) -> Nfundef (spec s,ctype t,f,
-				   (List.map (fun (x,y) -> (ctype x,y)) l),
-				    statement st)
-*)
-
 
 let global_decl e1 =
   match e1 with    
@@ -733,20 +700,28 @@ let global_decl e1 =
 	  Ndecl(v.var_type,v,ilist (c_initializer_option c))
 	end
       else Ndecl(t,v,c_initializer_option c)
-  | Tfunspec (s, t, f, l) -> Nfunspec (spec s,ctype t,f,
-				   (List.map (fun (x,y) -> (ctype x,y)) l))
-  | Tfundef (s, t, f, l, st) ->
+  | Tfunspec (s, t, f) -> 
+      set_var_type (Fun_info f) (ctype f.fun_type);
+      List.iter (fun arg -> 
+		   set_var_type (Var_info arg) (ctype arg.var_type)) f.args;
+      Nfunspec (spec s,ctype t,f)
+
+  | Tfundef (s, t, f, st) ->
       let validity_for_struct = 
 	List.fold_left 
-	  (fun acc (x,y) ->
+	  (fun acc y ->
+	     let x = y.var_type in
 	     match x.Ctypes.ctype_node with
 	       | Tstruct _ | Tunion _ -> NPand (NPvalid 
 						  {nterm_node = NTvar y;
 						   nterm_type = x;
 						   nterm_loc = Loc.dummy},acc)
 	       | _ -> acc) 
-	  NPtrue l in
-      Nfundef (spec ~add:validity_for_struct s,ctype t,f,l,statement st)
+	  NPtrue f.args in
+      set_var_type (Fun_info f) (ctype f.fun_type);
+      List.iter (fun arg -> 
+		   set_var_type (Var_info arg) (ctype arg.var_type)) f.args;
+      Nfundef (spec ~add:validity_for_struct s,ctype t,f,statement st)
   | Tghost(x,cinit) ->
       let cinit = 
 	match cinit with
