@@ -14,15 +14,17 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.19 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.20 2004-04-30 14:19:04 filliatr Exp $ i*)
 
 (*s Logic. *)
+
+type float_constant = string * string * string (* int / frac / exp *)
 
 type constant =
   | ConstInt of int
   | ConstBool of bool
   | ConstUnit
-  | ConstFloat of string
+  | ConstFloat of float_constant
 
 type term =
   | Tvar of Ident.t
@@ -62,7 +64,7 @@ type predicate =
   | Forall of is_wp * Ident.t * Ident.t * pure_type * predicate
   | Forallb of is_wp * Ident.t * Ident.t * predicate * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
-  | Pfpi of term * string * string
+  | Pfpi of term * float_constant * float_constant
 
 type logic_type =
   | Predicate of pure_type list

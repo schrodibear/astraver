@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.15 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.16 2004-04-30 14:19:05 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -141,8 +141,10 @@ let rec print_term fmt t =
 	fprintf fmt "FALSE" 
     | Tconst ConstUnit -> 
 	fprintf fmt "(Extract 0)" 
-    | Tconst (ConstFloat f) ->
-	fprintf fmt "%s" f
+    | Tconst (ConstFloat (i,f,"")) ->
+	fprintf fmt "%s.%s" i f
+    | Tconst (ConstFloat (i,f,e)) ->
+	fprintf fmt "%s.%se%s" i f e
     | Tderef _ -> 
 	assert false
     (* arithmetic *)

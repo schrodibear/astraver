@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.83 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.84 2004-04-30 14:19:04 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -489,8 +489,8 @@ let rec print_term fmt = function
       fprintf fmt "%b" b
   | Tconst ConstUnit -> 
       fprintf fmt "void" 
-  | Tconst (ConstFloat f) -> 
-      fprintf fmt "%s" f
+  | Tconst (ConstFloat (i,f,e)) -> 
+      fprintf fmt "%s.%se%s" i f e
   | Tvar id -> 
       (if debug then Ident.dbprint else Ident.print) fmt id
   | Tderef id ->
@@ -535,8 +535,9 @@ let rec print_predicate fmt = function
   | Exists (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
 	(if debug then Ident.dbprint else Ident.print) b print_predicate p
-  | Pfpi (t, f1, f2) ->
-      fprintf fmt "@[<hov 2>fpi(%a,@ %s,@ %s)@]" print_term t f1 f2
+  | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
+      fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
+	print_term t i1 f1 e1 i2 f2 e2
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 

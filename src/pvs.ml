@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.52 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.53 2004-04-30 14:19:05 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -36,14 +36,16 @@ let relation id =
   else assert false
 
 let print_float fmt = function
-  | "0" | "0.0" -> 
+  | "","0",_ | "0","",_ | "0","0",_ -> 
       fprintf fmt "0"
-  | f ->
-      let n,d = rationalize f in
-      if d = "1" then 
-	fprintf fmt "(%s :: real)" n 
-      else 
-	fprintf fmt "(%s / %s)" n d
+  | i,f,e ->
+      let e = (if e = "" then 0 else int_of_string e) - String.length f in
+      if e = 0 then
+	fprintf fmt "(%s%s :: real)" i f
+      else if e > 0 then
+	fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
+      else
+	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
 
 let print_term fmt t = 
   let rec print0 fmt = function

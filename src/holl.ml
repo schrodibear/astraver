@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.19 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.20 2004-04-30 14:19:04 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -110,10 +110,15 @@ let rec print_term fmt = function
       fprintf fmt "F" 
   | Tconst ConstUnit -> 
       fprintf fmt "one" 
-  | Tconst (ConstFloat f) ->
-      let n,d = rationalize f in
-      if d = "1" then fprintf fmt "(real_of_num %s)" n
-      else fprintf fmt "(real_of_num %s / real_of_num %s)" n d
+  | Tconst (ConstFloat (i,f,e)) ->
+      let e = (if e = "" then 0 else int_of_string e) - String.length f in
+      if e = 0 then
+	fprintf fmt "(real_of_num %s%s)" i f
+      else if e > 0 then
+	fprintf fmt "(real_of_num (%s%s * 1%s))" i f (String.make e '0')
+      else
+	fprintf fmt "(real_of_num %s%s / real_of_num 1%s)" 
+	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
   (* arithmetic *)

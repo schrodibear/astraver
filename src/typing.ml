@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.103 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.104 2004-04-30 14:19:05 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -286,7 +286,7 @@ let partial_pre loc = function
       let p = neq (unref_term b) (Tconst (ConstInt 0)) in
       [anonymous loc p]
   | Tapp (id, [a]) when id == t_sqrt_float ->
-      let p = ge_float (unref_term a) (Tconst (ConstFloat "0.")) in
+      let p = ge_float (unref_term a) (Tconst (ConstFloat ("0","",""))) in
       [anonymous loc p]
   | _ ->
       []

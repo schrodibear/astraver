@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.11 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.12 2004-04-30 14:19:05 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -84,7 +84,8 @@ let constant fmt = function
   | ConstInt n -> fprintf fmt "%d" n
   | ConstBool b -> fprintf fmt "%b" b
   | ConstUnit -> fprintf fmt "()"
-  | ConstFloat f -> fprintf fmt "%s" f
+  | ConstFloat (i,f,"") -> fprintf fmt "%s.%s" i f
+  | ConstFloat (i,f,e) -> fprintf fmt "%s.%se%s" i f e
 
 (*s logical expressions *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.93 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.94 2004-04-30 14:19:05 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -190,7 +190,7 @@ EXTEND
     | "true" -> ConstBool true
     | "false" -> ConstBool false
     | LIDENT "void" -> ConstUnit
-    | f = FLOAT -> ConstFloat f ] ]
+    | f = FLOAT -> let (f,i,e) = Float_lexer.split f in ConstFloat (f,i,e) ] ]
   ;
   lexpr:
   [ [ a = lexpr0; "->"; b = lexpr -> infix_pp loc a PPimplies b
@@ -255,6 +255,8 @@ EXTEND
     | LIDENT "exists"; id = ident; ":"; t = primitive_type; "." ; a = lexpr -> 
 	mk_pp loc (PPexists (id, t, a))
     | LIDENT "fpi"; "("; e = lexpr; ","; f1 = FLOAT; ","; f2 = FLOAT; ")" ->
+	let f1 = Float_lexer.split f1 in
+	let f2 = Float_lexer.split f2 in
 	mk_pp loc (PPfpi (e, f1, f2))
     | "("; a = lexpr; ")" -> 
 	a ] ] 
@@ -422,6 +424,7 @@ EXTEND
     | n = INT ->
 	without_annot loc (Sconst (ConstInt (int_of_string n)))
     | f = FLOAT ->
+	let f = Float_lexer.split f in
 	without_annot loc (Sconst (ConstFloat f))
     | LIDENT "void" ->
 	without_annot loc (Sconst ConstUnit)

@@ -7,3 +7,4 @@ cparser.ml
 cparser.mli
 *.output
 linenum.ml
+float_lexer.ml

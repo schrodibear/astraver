@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.121 2004-03-22 13:46:06 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.122 2004-04-30 14:19:04 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -149,12 +149,9 @@ let print_term_v7 fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
-    | Tconst (ConstFloat f) -> 
+    | Tconst (ConstFloat (i,f,e)) -> 
 	assert (!inz == 0); (* TODO: floats inside integer expressions *)
-	let n,d = rationalize f in
-	let pint fmt s = openz fmt; fprintf fmt "%s" s; closez fmt in
-	if d = "1" then fprintf fmt "(IZR %a)" pint n
-	else fprintf fmt "(Rdiv (IZR %a) (IZR %a))" pint n pint d
+	failwith "float constants not supported with Coq V7"
     | Tvar id when id == implicit ->
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
@@ -422,10 +419,15 @@ let print_term_v8 fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "tt" 
-    | Tconst (ConstFloat f) -> 
-	let n,d = rationalize f in
-	if d = "1" then fprintf fmt "(IZR %s)" n
-	else fprintf fmt "(Rdiv (IZR %s) (IZR %s))" n d
+    | Tconst (ConstFloat (i,f,e)) -> 
+	let f = if f = "0" then "" else f in
+	let e = (if e = "" then 0 else int_of_string e) - String.length f in
+	if e = 0 then
+	  fprintf fmt "(%s%s)%%R" i f
+	else if e > 0 then
+	  fprintf fmt "(%s%s * 1%s)%%R" i f (String.make e '0')
+	else
+	  fprintf fmt "(%s%s / 1%s)%%R" i f (String.make (-e) '0')
     | Tvar id when id == implicit ->
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
