@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.69 2004-10-18 08:04:48 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.70 2004-10-18 08:51:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -868,49 +868,59 @@ let type_file = List.map (fun d -> { d with node = type_decl d })
 
 open Int64
 
-let rec sizeof loc ty = 
+let sizeof loc = 
   let incomplete_type () = 
     error loc "invalid application of `sizeof' to an incomplete type"
   in
-  match ty.ctype_node with
-  | CTvoid -> of_int 1
-  | CTint (_, Char) -> of_int 1 
-  | CTint (_, Short) -> of_int 2
-  | CTint (_, Int) -> of_int 4 (* architecture dependent *)
-  | CTint (_, Long) -> of_int 4
-  | CTint (_, LongLong) -> of_int 8
-  | CTint (_, Bitfield e) -> 
-      let n = eval_const_expr e in
-      let d = div n (of_int 8) in
-      if rem n (of_int 8) = zero then d else succ d
-  | CTfloat Float -> of_int 4
-  | CTfloat Double -> of_int 8
-  | CTfloat LongDouble -> of_int 12
-  | CTvar x -> assert false (* should be expansed *)
-  | CTarray (ty, Some e) -> 
-      let n = eval_const_expr e in
-      mul n (sizeof loc ty)
-  | CTarray (ty, None) -> incomplete_type ()
-  | CTpointer _ -> of_int 4
-  | CTstruct (n, _) ->
-      (match tag_type_definition n with
-	 | Incomplete -> 
-	     incomplete_type ()
-	 | Defined (CTstruct (_, Decl fl)) -> 
-	     List.fold_left (fun s (ty,_,_) -> add s (sizeof loc ty)) 
-	       (of_int 0) fl
-	 | Defined _ -> 
-	     assert false)
-  | CTunion (n, _) ->
-      (match tag_type_definition n with
-	 | Incomplete -> 
-	     incomplete_type ()
-	 | Defined (CTunion (_, Decl fl)) -> 
-	     List.fold_left (fun s (ty,_,_) -> max s (sizeof loc ty)) 
-	       (of_int 0) fl
-	 | Defined _ -> 
-	     assert false)
-  | CTenum _ -> of_int 4
-  | CTtyped_fun _
-  | CTfun _ -> of_int 4 (* function pointer? *)
+  let warned = ref false in
+  let architecture () =
+    if not !warned then begin 
+      warned := true;
+      warning loc "compiler/architecture-dependent sizeof"
+    end
+  in
+  let rec sizeof ty = match ty.ctype_node with
+    | CTvoid -> of_int 1
+    | CTint (_, Char) -> of_int 1 
+    | CTint (_, Short) -> of_int 2
+    | CTint (_, Int) -> architecture (); of_int 4
+    | CTint (_, Long) -> of_int 4
+    | CTint (_, LongLong) -> of_int 8
+    | CTint (_, Bitfield e) -> 
+	architecture ();
+	let n = eval_const_expr e in
+	let d = div n (of_int 8) in
+	if rem n (of_int 8) = zero then d else succ d
+    | CTfloat Float -> of_int 4
+    | CTfloat Double -> of_int 8
+    | CTfloat LongDouble -> of_int 12
+    | CTvar x -> assert false (* should be expansed *)
+    | CTarray (ty, Some e) -> 
+	let n = eval_const_expr e in
+	mul n (sizeof ty)
+    | CTarray (ty, None) -> incomplete_type ()
+    | CTpointer _ -> of_int 4
+    | CTstruct (n, _) ->
+	(match tag_type_definition n with
+	   | Incomplete -> 
+	       incomplete_type ()
+	   | Defined (CTstruct (_, Decl fl)) -> 
+	       List.fold_left (fun s (ty,_,_) -> add s (sizeof ty)) 
+		 (of_int 0) fl
+	   | Defined _ -> 
+	       assert false)
+    | CTunion (n, _) ->
+	(match tag_type_definition n with
+	   | Incomplete -> 
+	       incomplete_type ()
+	   | Defined (CTunion (_, Decl fl)) -> 
+	       List.fold_left (fun s (ty,_,_) -> max s (sizeof ty)) 
+		 (of_int 0) fl
+	   | Defined _ -> 
+	       assert false)
+    | CTenum _ -> of_int 4
+    | CTtyped_fun _
+    | CTfun _ -> of_int 4 (* function pointer? *)
+  in
+  sizeof
 

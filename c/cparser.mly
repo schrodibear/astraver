@@ -117,7 +117,7 @@
     loop None
 
   let apply_sign sg ty = match sg, ty with
-    | None, t -> t
+    | None, _ -> ty
     | Some b, (CTint (_, i)) -> CTint (b, i)
     | Some _, _ -> error "signed or unsigned invalid"
 
@@ -147,6 +147,19 @@
 	  loop lo sp
     in
     loop None
+
+  let apply_length lg ty = match lg, ty with
+    | None, _ -> ty
+    | Some Short, (CTint (s, _)) -> CTint (s, Cast.Short)
+    | Some Long, (CTint (s, _)) -> CTint (s, Cast.Long)
+    | Some LongLong, (CTint (s, _)) -> CTint (s, Cast.LongLong)
+    | Some Long, CTfloat Double -> CTfloat LongDouble
+    | Some _, CTfloat Float 
+    | Some Short, CTfloat _ -> 
+	error "long or short specified with floating type"
+    | Some LongLong, CTfloat _ -> 
+	error "the only valid combination is `long double'"
+    | Some _, _ -> ty
 
   (* debug *)
   let rec explain_type fmt = function
@@ -182,14 +195,10 @@
     let rec base_type tyo = function
       | [] -> 
 	  (match tyo with 
-	     | Some ty -> ty 
+	     | Some ty -> ty
 	     | None when gl && st = No_storage && sg = None && lg = None -> 
 		 error "data definition has no type or storage class"
-	     | None -> match lg with
-		 | None -> CTint (Signed, Int)
-		 | Some Short -> CTint (Signed, Cast.Short)
-		 | Some Long -> CTint (Signed, Cast.Long)
-		 | Some LongLong -> CTint (Signed, Cast.LongLong))
+	     | None -> CTint (Signed, Int))
       | Stype t :: sp when tyo = None ->
 	  base_type (Some t) sp
       | Sstruct_decl (so, pl) :: sp when tyo = None ->
@@ -212,6 +221,7 @@
     in
     let bt = base_type None specs in
     let bt = apply_sign sg bt in
+    let bt = apply_length lg bt in
     let bt = { ctype_node = bt; ctype_storage = st;
 	       ctype_const = cst; ctype_volatile = vl } 
     in

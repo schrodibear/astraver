@@ -222,7 +222,7 @@ c/cltyping.cmi: c/cast.cmi c/cenv.cmi c/clogic.cmi src/env.cmi c/info.cmi \
     src/loc.cmi 
 c/cparser.cmi: c/cast.cmi c/clogic.cmi 
 c/creport.cmi: c/cast.cmi c/cerror.cmi src/loc.cmi 
-c/ctyping.cmi: c/cast.cmi 
+c/ctyping.cmi: c/cast.cmi src/loc.cmi 
 c/cconst.cmo: c/creport.cmi c/cconst.cmi 
 c/cconst.cmx: c/creport.cmx c/cconst.cmi 
 c/ceffect.cmo: c/cast.cmi c/clogic.cmi c/cltyping.cmi c/coptions.cmi \
