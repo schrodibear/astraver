@@ -1,0 +1,1 @@
+selection_why.vo: selection_why.v ../../lib/coq/Why.vo

@@ -222,7 +222,7 @@ Lemma binary_search_po_4 :
   (Pre4: `l1 <= m1` /\ `m1 <= u1`)
   (Test5: `(access t m1) < v`)
   (l2: Z)
-  (Post8: l2 = `m1 + 1`)
+  (Post5: l2 = `m1 + 1`)
   (`1 <= l2` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((`p1 = 0` -> ((In t `1` N) -> (In t l2 u1)))) /\
   ((`p1 > 0` -> `(access t p1) = v`))) /\
@@ -230,9 +230,8 @@ Lemma binary_search_po_4 :
 Proof.
 Intros.
 Repeat Split; Try Omega'.
-Rewrite Post8; Clear Post8; Rewrite Post4.
+Subst l2 m1.
 Intros; Apply In_right_side; Assumption Orelse Intuition.
-Rewrite <- Post4; Assumption.
 Save.
 
 Lemma binary_search_po_5 : 
@@ -289,7 +288,7 @@ Lemma binary_search_po_6 :
   (Test4: `(access t m1) >= v`)
   (Test3: `(access t m1) > v`)
   (u2: Z)
-  (Post7: u2 = `m1 - 1`)
+  (Post6: u2 = `m1 - 1`)
   (`1 <= l1` /\ `u2 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u2)))) /\
   ((`p1 > 0` -> `(access t p1) = v`))) /\
@@ -300,9 +299,8 @@ Clear Pre6; Simpl in Test6.
 Simpl in Test4.
 Simpl in Test3.
 Repeat Split; Try Omega'.
-Rewrite Post7; Clear Post7; Rewrite Post4.
+Subst u2 m1.
 Intros; Apply In_left_side; Assumption Orelse Intuition.
-Rewrite <- Post4; Assumption.
 Save.
 
 Lemma binary_search_po_7 : 
@@ -329,9 +327,9 @@ Lemma binary_search_po_7 :
   (Test4: `(access t m1) >= v`)
   (Test2: `(access t m1) <= v`)
   (p2: Z)
-  (Post5: p2 = m1)
+  (Post7: p2 = m1)
   (l2: Z)
-  (Post6: l2 = `u1 + 1`)
+  (Post8: l2 = `u1 + 1`)
   (`1 <= l2` /\ `u1 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u1)))) /\
   ((`p2 > 0` -> `(access t p2) = v`))) /\
@@ -343,7 +341,7 @@ Simpl in Test4.
 Simpl in Test2.
 Repeat Split; Try Omega'.
 Intros; Absurd `p2 = 0`; Omega'.
-Intro; Rewrite Post5; Omega'.
+Intro; Subst p2; Omega'.
 Save.
 
 Lemma binary_search_po_8 : 
@@ -465,13 +463,13 @@ Definition binary_search := (* validation *)
          Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> `(access t p1) = v`))]
-          let (result2, Bool1) =
+          let (result2, Bool3) =
             let (result4, Post13) = (Z_le_gt_bool l1 u1) in
             (exist_1 [result5: bool]
             (if result5 then `l1 <= u1` else `l1 > u1`) result4 Post13) in
           (Cases (btest
                   [result2:bool](if result2 then `l1 <= u1` else `l1 > u1`)
-                  result2 Bool1) of
+                  result2 Bool3) of
           | (left Test6) =>
               let (l2, m1, p2, u2, result3, Post9) =
                 let (l2, m1, p2, u2, result3, Post10) =
@@ -485,7 +483,7 @@ Definition binary_search := (* validation *)
                     (binary_search_po_2 t Pre7 l0 Post1 u0 Post2 p0 Post3
                     Variant1 l1 p1 u1 Pre6 Pre5 Test6 m1 Post4) in
                   let (l2, p2, u2, result4, Post10) =
-                    let (result4, Bool3) =
+                    let (result4, Bool2) =
                       let result5 =
                         let Pre2 =
                           (binary_search_po_3 t Pre7 l0 Post1 u0 Post2 p0
@@ -501,14 +499,14 @@ Definition binary_search := (* validation *)
                             [result4:bool](if result4
                                            then `(access t m1) < v`
                                            else `(access t m1) >= v`)
-                            result4 Bool3) of
+                            result4 Bool2) of
                     | (left Test5) =>
-                        let (l2, result5, Post8) =
-                          let (result5, Post8) = (exist_1 [result5: Z]
+                        let (l2, result5, Post5) =
+                          let (result5, Post5) = (exist_1 [result5: Z]
                             result5 = `m1 + 1` `m1 + 1`
                             (refl_equal ? `m1 + 1`)) in
                           (exist_2 [l3: Z][result6: unit]
-                          l3 = `m1 + 1` result5 tt Post8) in
+                          l3 = `m1 + 1` result5 tt Post5) in
                         (exist_4 [l3: Z][p2: Z][u2: Z][result6: unit]
                         (`1 <= l3` /\ `u2 <= N` /\ (`0 <= p2` /\
                         `p2 <= N`) /\
@@ -518,10 +516,10 @@ Definition binary_search := (* validation *)
                         result5
                         (binary_search_po_4 t Pre7 l0 Post1 u0 Post2 p0 Post3
                         Variant1 l1 p1 u1 Pre6 Pre5 Test6 m1 Post4 Pre4 Test5
-                        l2 Post8))
+                        l2 Post5))
                     | (right Test4) =>
                         let (l2, p2, u2, result5, Post10) =
-                          let (result5, Bool2) =
+                          let (result5, Bool1) =
                             let result6 =
                               let Pre3 =
                                 (binary_search_po_5 t Pre7 l0 Post1 u0 Post2
@@ -537,14 +535,14 @@ Definition binary_search := (* validation *)
                                   [result5:bool](if result5
                                                  then `(access t m1) > v`
                                                  else `(access t m1) <= v`)
-                                  result5 Bool2) of
+                                  result5 Bool1) of
                           | (left Test3) =>
-                              let (u2, result6, Post7) =
-                                let (result6, Post7) = (exist_1 [result6: Z]
+                              let (u2, result6, Post6) =
+                                let (result6, Post6) = (exist_1 [result6: Z]
                                   result6 = `m1 - 1` `m1 - 1`
                                   (refl_equal ? `m1 - 1`)) in
                                 (exist_2 [u3: Z][result7: unit]
-                                u3 = `m1 - 1` result6 tt Post7) in
+                                u3 = `m1 - 1` result6 tt Post6) in
                               (exist_4 [l2: Z][p2: Z][u3: Z][result7: unit]
                               (`1 <= l2` /\ `u3 <= N` /\ (`0 <= p2` /\
                               `p2 <= N`) /\
@@ -554,22 +552,22 @@ Definition binary_search := (* validation *)
                               p1 u2 result6
                               (binary_search_po_6 t Pre7 l0 Post1 u0 Post2 p0
                               Post3 Variant1 l1 p1 u1 Pre6 Pre5 Test6 m1
-                              Post4 Pre4 Test4 Test3 u2 Post7))
+                              Post4 Pre4 Test4 Test3 u2 Post6))
                           | (right Test2) =>
                               let (l2, p2, result6, Post10) =
-                                let (p2, result6, Post5) =
-                                  let (result6, Post5) =
+                                let (p2, result6, Post7) =
+                                  let (result6, Post7) =
                                     (exist_1 [result6: Z]result6 = m1 
                                     m1 (refl_equal ? m1)) in
                                   (exist_2 [p3: Z][result7: unit]
-                                  p3 = m1 result6 tt Post5) in
-                                let (l2, result7, Post6) =
-                                  let (result7, Post6) =
+                                  p3 = m1 result6 tt Post7) in
+                                let (l2, result7, Post8) =
+                                  let (result7, Post8) =
                                     (exist_1 [result7: Z]
                                     result7 = `u1 + 1` `u1 + 1`
                                     (refl_equal ? `u1 + 1`)) in
                                   (exist_2 [l3: Z][result8: unit]
-                                  l3 = `u1 + 1` result7 tt Post6) in
+                                  l3 = `u1 + 1` result7 tt Post8) in
                                 (exist_3 [l3: Z][p3: Z][result8: unit]
                                 (`1 <= l3` /\ `u1 <= N` /\ (`0 <= p3` /\
                                 `p3 <= N`) /\
@@ -579,7 +577,7 @@ Definition binary_search := (* validation *)
                                 l2 p2 result7
                                 (binary_search_po_7 t Pre7 l0 Post1 u0 Post2
                                 p0 Post3 Variant1 l1 p1 u1 Pre6 Pre5 Test6 m1
-                                Post4 Pre4 Test4 Test2 p2 Post5 l2 Post6)) in
+                                Post4 Pre4 Test4 Test2 p2 Post7 l2 Post8)) in
                               (exist_4 [l3: Z][p3: Z][u2: Z][result7: unit]
                               (`1 <= l3` /\ `u2 <= N` /\ (`0 <= p3` /\
                               `p3 <= N`) /\

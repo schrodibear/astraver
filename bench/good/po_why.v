@@ -167,7 +167,7 @@ Definition p8 := (* validation *)
 
 Lemma p9_po_1 : 
   (x0: Z)
-  (Post2: x0 = `2`)
+  (Post3: x0 = `2`)
   ((x:Z) (x = `1` -> `1 + 1 = 2` /\ `x = 1`)).
 Proof.
 Intuition.
@@ -175,9 +175,9 @@ Save.
 
 Lemma p9_po_2 : 
   (aux_2: Z)
-  (Post3: ((x:Z) (x = `1` -> `1 + aux_2 = 2` /\ `x = 1`)))
+  (Post4: ((x:Z) (x = `1` -> `1 + aux_2 = 2` /\ `x = 1`)))
   (x1: Z)
-  (Post1: x1 = `1`)
+  (Post2: x1 = `1`)
   `1 + aux_2 = 2` /\ `x1 = 1`.
 Proof.
 Intuition.
@@ -186,34 +186,34 @@ Save.
 
 Definition p9 := (* validation *)
   [x: Z]
-    let (x0, aux_2, Post3) =
-      let (x0, result, Post2) =
-        let (result, Post2) = (exist_1 [result: Z]result = `2` `2`
+    let (x0, aux_2, Post4) =
+      let (x0, result, Post3) =
+        let (result, Post3) = (exist_1 [result: Z]result = `2` `2`
           (refl_equal ? `2`)) in
-        (exist_2 [x1: Z][result0: unit]x1 = `2` result tt Post2) in
-      let (result0, Post4) = (exist_1 [result0: Z]
+        (exist_2 [x1: Z][result0: unit]x1 = `2` result tt Post3) in
+      let (result0, Post5) = (exist_1 [result0: Z]
         ((x:Z) (x = `1` -> `1 + result0 = 2` /\ `x = 1`)) `1`
-        (p9_po_1 x0 Post2)) in
+        (p9_po_1 x0 Post3)) in
       (exist_2 [x1: Z][result1: Z]
-      ((x:Z) (x = `1` -> `1 + result1 = 2` /\ `x = 1`)) x0 result0 Post4) in
-    let (x1, result, Post5) =
-      let (x1, aux_1, Post6) =
-        let (x1, result, Post1) =
-          let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+      ((x:Z) (x = `1` -> `1 + result1 = 2` /\ `x = 1`)) x0 result0 Post5) in
+    let (x1, result, Post6) =
+      let (x1, aux_1, Post7) =
+        let (x1, result, Post2) =
+          let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
             (refl_equal ? `1`)) in
-          (exist_2 [x2: Z][result0: unit]x2 = `1` result tt Post1) in
-        let (result0, Post7) = (exist_1 [result0: Z]`result0 + aux_2 = 2` /\
-          `x1 = 1` `1` (p9_po_2 aux_2 Post3 x1 Post1)) in
+          (exist_2 [x2: Z][result0: unit]x2 = `1` result tt Post2) in
+        let (result0, Post8) = (exist_1 [result0: Z]`result0 + aux_2 = 2` /\
+          `x1 = 1` `1` (p9_po_2 aux_2 Post4 x1 Post2)) in
         (exist_2 [x2: Z][result1: Z]`result1 + aux_2 = 2` /\ `x2 = 1` 
-        x1 result0 Post7) in
-      let (result, Post8) = (exist_1 [result: Z]`result = 2` /\
-        `x1 = 1` `aux_1 + aux_2` Post6) in
-      (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post8) in
-    (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post5).
+        x1 result0 Post8) in
+      let (result, Post9) = (exist_1 [result: Z]`result = 2` /\
+        `x1 = 1` `aux_1 + aux_2` Post7) in
+      (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post9) in
+    (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post6).
 
 Lemma p9a_po_1 : 
   (x0: Z)
-  (Post1: x0 = `1`)
+  (Post2: x0 = `1`)
   `1 + 1 = 2` /\ `x0 = 1`.
 Proof.
 Intuition.
@@ -222,18 +222,18 @@ Save.
 
 Definition p9a := (* validation *)
   [x: Z]
-    let (x0, aux_1, Post2) =
-      let (x0, result, Post1) =
-        let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+    let (x0, aux_1, Post3) =
+      let (x0, result, Post2) =
+        let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
           (refl_equal ? `1`)) in
-        (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post1) in
-      let (result0, Post3) = (exist_1 [result0: Z]`result0 + 1 = 2` /\
-        `x0 = 1` `1` (p9a_po_1 x0 Post1)) in
+        (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post2) in
+      let (result0, Post4) = (exist_1 [result0: Z]`result0 + 1 = 2` /\
+        `x0 = 1` `1` (p9a_po_1 x0 Post2)) in
       (exist_2 [x1: Z][result1: Z]`result1 + 1 = 2` /\ `x1 = 1` x0 result0
-      Post3) in
-    let (result, Post4) = (exist_1 [result: Z]`result = 2` /\
-      `x0 = 1` `aux_1 + 1` Post2) in
-    (exist_2 [x1: Z][result0: Z]`result0 = 2` /\ `x1 = 1` x0 result Post4).
+      Post4) in
+    let (result, Post5) = (exist_1 [result: Z]`result = 2` /\
+      `x0 = 1` `aux_1 + 1` Post3) in
+    (exist_2 [x1: Z][result0: Z]`result0 = 2` /\ `x1 = 1` x0 result Post5).
 
 (*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result: Z](`result = x + 1`)).
 

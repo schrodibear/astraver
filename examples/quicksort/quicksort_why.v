@@ -175,12 +175,12 @@ Definition quick_rec := (* validation *)
         ((sorted_array t1 l0 r0) /\ (sub_permut l0 r0 t1 t0)));
        l0: Z; r0: Z; t0: (array N Z); Pre8: Variant1 = `1 + r0 - l0`;
        Pre7: `0 <= l0` /\ `r0 < N`]
-        let (result, Bool1) =
+        let (result, Bool2) =
           let (result1, Post2) = (Z_lt_ge_bool l0 r0) in
           (exist_1 [result2: bool]
           (if result2 then `l0 < r0` else `l0 >= r0`) result1 Post2) in
         (Cases (btest [result:bool](if result then `l0 < r0` else `l0 >= r0`)
-                result Bool1) of
+                result Bool2) of
         | (left Test2) =>
             let (t1, result0, Post4) =
               let (t1, p, Post5) =

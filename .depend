@@ -1,32 +1,38 @@
+src/annot.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
+    src/logic.cmi src/misc.cmi src/types.cmi src/util.cmi src/annot.cmi 
+src/annot.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
+    src/logic.cmx src/misc.cmx src/types.cmi src/util.cmx src/annot.cmi 
 src/cinterp.cmo: src/cast.cmi src/effect.cmi src/ident.cmi src/logic.cmi \
     src/parser.cmi src/ptree.cmi src/types.cmi src/cinterp.cmi 
-src/cinterp.cmx: src/cast.cmi src/effect.cmx src/ident.cmx src/logic.cmi \
+src/cinterp.cmx: src/cast.cmi src/effect.cmx src/ident.cmx src/logic.cmx \
     src/parser.cmx src/ptree.cmi src/types.cmi src/cinterp.cmi 
 src/clexer.cmo: src/cparser.cmi 
 src/clexer.cmx: src/cparser.cmx 
 src/coq.cmo: src/cc.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/options.cmi src/types.cmi src/util.cmi src/vcg.cmi src/coq.cmi 
-src/coq.cmx: src/cc.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
+src/coq.cmx: src/cc.cmi src/ident.cmx src/logic.cmx src/misc.cmx \
     src/options.cmx src/types.cmi src/util.cmx src/vcg.cmx src/coq.cmi 
 src/cparser.cmo: src/cast.cmi src/ident.cmi src/logic.cmi src/ptree.cmi \
     src/cparser.cmi 
-src/cparser.cmx: src/cast.cmi src/ident.cmx src/logic.cmi src/ptree.cmi \
+src/cparser.cmx: src/cast.cmi src/ident.cmx src/logic.cmx src/ptree.cmi \
     src/cparser.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/ast.cmi src/effect.cmi src/error.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/report.cmi src/types.cmi src/env.cmi 
 src/env.cmx: src/ast.cmi src/effect.cmx src/error.cmi src/ident.cmx \
-    src/logic.cmi src/misc.cmx src/report.cmx src/types.cmi src/env.cmi 
+    src/logic.cmx src/misc.cmx src/report.cmx src/types.cmi src/env.cmi 
 src/ident.cmo: src/ident.cmi 
 src/ident.cmx: src/ident.cmi 
 src/loc.cmo: src/loc.cmi 
 src/loc.cmx: src/loc.cmi 
+src/logic.cmo: src/ident.cmi src/logic.cmi 
+src/logic.cmx: src/ident.cmx src/logic.cmi 
 src/ltyping.cmo: src/effect.cmi src/env.cmi src/error.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/ptree.cmi src/report.cmi src/types.cmi \
     src/util.cmi src/ltyping.cmi 
 src/ltyping.cmx: src/effect.cmx src/env.cmx src/error.cmi src/ident.cmx \
-    src/logic.cmi src/misc.cmx src/ptree.cmi src/report.cmx src/types.cmi \
+    src/logic.cmx src/misc.cmx src/ptree.cmi src/report.cmx src/types.cmi \
     src/util.cmx src/ltyping.cmi 
 src/main.cmo: src/ast.cmi src/cc.cmi src/cinterp.cmi src/clexer.cmo \
     src/coq.cmi src/env.cmi src/error.cmi src/ident.cmi src/loc.cmi \
@@ -41,18 +47,18 @@ src/main.cmx: src/ast.cmi src/cc.cmi src/cinterp.cmx src/clexer.cmx \
 src/misc.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/ident.cmi \
     src/logic.cmi src/ptree.cmi src/types.cmi src/misc.cmi 
 src/misc.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/ident.cmx \
-    src/logic.cmi src/ptree.cmi src/types.cmi src/misc.cmi 
+    src/logic.cmx src/ptree.cmi src/types.cmi src/misc.cmi 
 src/mlize.cmo: src/ast.cmi src/cc.cmi src/env.cmi src/ident.cmi src/logic.cmi \
     src/misc.cmi src/monad.cmi src/rename.cmi src/types.cmi src/util.cmi \
     src/mlize.cmi 
-src/mlize.cmx: src/ast.cmi src/cc.cmi src/env.cmx src/ident.cmx src/logic.cmi \
+src/mlize.cmx: src/ast.cmi src/cc.cmi src/env.cmx src/ident.cmx src/logic.cmx \
     src/misc.cmx src/monad.cmx src/rename.cmx src/types.cmi src/util.cmx \
     src/mlize.cmi 
 src/monad.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi \
     src/ident.cmi src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi \
     src/util.cmi src/monad.cmi 
 src/monad.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/env.cmx \
-    src/ident.cmx src/logic.cmi src/misc.cmx src/rename.cmx src/types.cmi \
+    src/ident.cmx src/logic.cmx src/misc.cmx src/rename.cmx src/types.cmi \
     src/util.cmx src/monad.cmi 
 src/options.cmo: src/version.cmo src/options.cmi 
 src/options.cmx: src/version.cmx src/options.cmi 
@@ -60,15 +66,15 @@ src/parser.cmo: src/effect.cmi src/env.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/misc.cmi src/ptree.cmi src/rename.cmi src/types.cmi \
     src/util.cmi src/parser.cmi 
 src/parser.cmx: src/effect.cmx src/env.cmx src/ident.cmx src/loc.cmx \
-    src/logic.cmi src/misc.cmx src/ptree.cmi src/rename.cmx src/types.cmi \
+    src/logic.cmx src/misc.cmx src/ptree.cmi src/rename.cmx src/types.cmi \
     src/util.cmx src/parser.cmi 
 src/pvs.cmo: src/cc.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/types.cmi src/util.cmi src/vcg.cmi src/pvs.cmi 
-src/pvs.cmx: src/cc.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
+src/pvs.cmx: src/cc.cmi src/ident.cmx src/logic.cmx src/misc.cmx \
     src/types.cmi src/util.cmx src/vcg.cmx src/pvs.cmi 
 src/red.cmo: src/ast.cmi src/cc.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/util.cmi src/red.cmi 
-src/red.cmx: src/ast.cmi src/cc.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
+src/red.cmx: src/ast.cmi src/cc.cmi src/ident.cmx src/logic.cmx src/misc.cmx \
     src/util.cmx src/red.cmi 
 src/rename.cmo: src/error.cmi src/ident.cmi src/misc.cmi src/report.cmi \
     src/rename.cmi 
@@ -77,29 +83,30 @@ src/rename.cmx: src/error.cmi src/ident.cmx src/misc.cmx src/report.cmx \
 src/report.cmo: src/ast.cmi src/error.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/types.cmi src/report.cmi 
 src/report.cmx: src/ast.cmi src/error.cmi src/ident.cmx src/loc.cmx \
-    src/logic.cmi src/types.cmi src/report.cmi 
-src/typing.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/error.cmi \
-    src/ident.cmi src/logic.cmi src/ltyping.cmi src/misc.cmi src/options.cmi \
-    src/ptree.cmi src/rename.cmi src/report.cmi src/types.cmi src/util.cmi \
-    src/typing.cmi 
-src/typing.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/error.cmi \
-    src/ident.cmx src/logic.cmi src/ltyping.cmx src/misc.cmx src/options.cmx \
-    src/ptree.cmi src/rename.cmx src/report.cmx src/types.cmi src/util.cmx \
-    src/typing.cmi 
+    src/logic.cmx src/types.cmi src/report.cmi 
+src/typing.cmo: src/annot.cmi src/ast.cmi src/effect.cmi src/env.cmi \
+    src/error.cmi src/ident.cmi src/logic.cmi src/ltyping.cmi src/misc.cmi \
+    src/options.cmi src/ptree.cmi src/rename.cmi src/report.cmi src/types.cmi \
+    src/util.cmi src/typing.cmi 
+src/typing.cmx: src/annot.cmx src/ast.cmi src/effect.cmx src/env.cmx \
+    src/error.cmi src/ident.cmx src/logic.cmx src/ltyping.cmx src/misc.cmx \
+    src/options.cmx src/ptree.cmi src/rename.cmx src/report.cmx src/types.cmi \
+    src/util.cmx src/typing.cmi 
 src/util.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi src/util.cmi 
 src/util.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/env.cmx src/ident.cmx \
-    src/logic.cmi src/misc.cmx src/rename.cmx src/types.cmi src/util.cmi 
+    src/logic.cmx src/misc.cmx src/rename.cmx src/types.cmi src/util.cmi 
 src/vcg.cmo: src/cc.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/options.cmi src/types.cmi src/util.cmi src/vcg.cmi 
-src/vcg.cmx: src/cc.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
+src/vcg.cmx: src/cc.cmi src/ident.cmx src/logic.cmx src/misc.cmx \
     src/options.cmx src/types.cmi src/util.cmx src/vcg.cmi 
-src/wp.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/error.cmi \
-    src/ident.cmi src/logic.cmi src/misc.cmi src/rename.cmi src/report.cmi \
+src/wp.cmo: src/annot.cmi src/ast.cmi src/effect.cmi src/env.cmi \
+    src/error.cmi src/ident.cmi src/logic.cmi src/misc.cmi src/report.cmi \
     src/types.cmi src/util.cmi src/wp.cmi 
-src/wp.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/error.cmi \
-    src/ident.cmx src/logic.cmi src/misc.cmx src/rename.cmx src/report.cmx \
+src/wp.cmx: src/annot.cmx src/ast.cmi src/effect.cmx src/env.cmx \
+    src/error.cmi src/ident.cmx src/logic.cmx src/misc.cmx src/report.cmx \
     src/types.cmi src/util.cmx src/wp.cmi 
+src/annot.cmi: src/ast.cmi src/env.cmi src/logic.cmi src/types.cmi 
 src/ast.cmi: src/ident.cmi src/logic.cmi src/ptree.cmi src/types.cmi 
 src/cast.cmi: src/ident.cmi src/loc.cmi src/logic.cmi src/ptree.cmi 
 src/cc.cmi: src/ident.cmi src/logic.cmi 
@@ -132,55 +139,15 @@ src/util.cmi: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/cc.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
-lib/coq/WhyTuples.vo: lib/coq/WhyTuples.v
-lib/coq/WhySorted.vo: lib/coq/WhySorted.v lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo
-lib/coq/WhyPermut.vo: lib/coq/WhyPermut.v lib/coq/WhyArrays.vo
-lib/coq/WhyInt.vo: lib/coq/WhyInt.v
-lib/coq/WhyFloat.vo: lib/coq/WhyFloat.v lib/coq/Why.vo
-lib/coq/WhyExn.vo: lib/coq/WhyExn.v
-lib/coq/WhyCoqDev.vo: lib/coq/WhyCoqDev.v
-lib/coq/WhyCoqCompat.vo: lib/coq/WhyCoqCompat.v
-lib/coq/WhyCoq73.vo: lib/coq/WhyCoq73.v
-lib/coq/WhyBool.vo: lib/coq/WhyBool.v
-lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
 lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo
-examples/sqrt/sqrt_why.vo: examples/sqrt/sqrt_why.v lib/coq/Why.vo
-examples/selectionsort/selection_why.vo: examples/selectionsort/selection_why.v lib/coq/Why.vo
-examples/quicksort2/quicksort2_why.vo: examples/quicksort2/quicksort2_why.v lib/coq/Why.vo
-examples/quicksort/quicksort_why.vo: examples/quicksort/quicksort_why.v lib/coq/Why.vo examples/quicksort/Partition.vo examples/quicksort/Quicksort.vo examples/quicksort/partition_why.vo
-examples/quicksort/partition_why.vo: examples/quicksort/partition_why.v lib/coq/Why.vo examples/quicksort/Partition.vo
-examples/quicksort/Quicksort.vo: examples/quicksort/Quicksort.v lib/coq/Why.vo examples/quicksort/Partition.vo
-examples/quicksort/Partition.vo: examples/quicksort/Partition.v lib/coq/Why.vo
-examples/misc/swap0_why.vo: examples/misc/swap0_why.v lib/coq/Why.vo
-examples/misc/power_why.vo: examples/misc/power_why.v lib/coq/Why.vo
-examples/misc/peano_why.vo: examples/misc/peano_why.v lib/coq/Why.vo
-examples/misc/mac_carthy_why.vo: examples/misc/mac_carthy_why.v lib/coq/Why.vo
-examples/misc/loop0_why.vo: examples/misc/loop0_why.v lib/coq/Why.vo
-examples/misc/gcd_why.vo: examples/misc/gcd_why.v lib/coq/Why.vo
-examples/misc/flag_why.vo: examples/misc/flag_why.v lib/coq/Why.vo
-examples/misc/fib_why.vo: examples/misc/fib_why.v lib/coq/Why.vo
-examples/misc/arith_why.vo: examples/misc/arith_why.v lib/coq/Why.vo
-examples/kmp/kmp_why.vo: examples/kmp/kmp_why.v lib/coq/Why.vo examples/kmp/Match.vo examples/kmp/Next.vo examples/kmp/Lex.vo
-examples/kmp/Next.vo: examples/kmp/Next.v examples/kmp/Match.vo
-examples/kmp/Match.vo: examples/kmp/Match.v
-examples/kmp/Lex.vo: examples/kmp/Lex.v
-examples/heapsort/swap_why.vo: examples/heapsort/swap_why.v lib/coq/Why.vo
-examples/heapsort/heapsort_why.vo: examples/heapsort/heapsort_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo examples/heapsort/downheap_why.vo
-examples/heapsort/downheap_why.vo: examples/heapsort/downheap_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo
-examples/heapsort/Inftree.vo: examples/heapsort/Inftree.v lib/coq/Why.vo examples/heapsort/Heap.vo
-examples/heapsort/Heap.vo: examples/heapsort/Heap.v lib/coq/Why.vo
-examples/find/find_why.vo: examples/find/find_why.v examples/find/find_spec.vo examples/find/find_lemmas.vo examples/find/find_proofs.vo lib/coq/Why.vo
-examples/find/find_spec.vo: examples/find/find_spec.v lib/coq/WhyArrays.vo
-examples/find/find_proofs.vo: examples/find/find_proofs.v examples/find/find_spec.vo examples/find/find_lemmas.vo lib/coq/Why.vo
-examples/find/find_lemmas.vo: examples/find/find_lemmas.v examples/find/find_spec.vo lib/coq/Why.vo
-examples/edit-distance/words.vo: examples/edit-distance/words.v lib/coq/WhyArrays.vo
-examples/edit-distance/distance_why.vo: examples/edit-distance/distance_why.v lib/coq/Why.vo examples/edit-distance/words.vo
-examples/bresenham/zaux.vo: examples/bresenham/zaux.v
-examples/bresenham/bresenham_why.vo: examples/bresenham/bresenham_why.v examples/bresenham/zaux.vo lib/coq/Why.vo
-examples/binary-search/bsearch_why.vo: examples/binary-search/bsearch_why.v lib/coq/Why.vo
-bench/tmp/floats_why.vo: bench/tmp/floats_why.v lib/coq/Why.vo lib/coq/WhyFloat.vo
-bench/good/recfun_why.vo: bench/good/recfun_why.v lib/coq/Why.vo
-bench/good/po_why.vo: bench/good/po_why.v lib/coq/Why.vo
-bench/good/loops_why.vo: bench/good/loops_why.v lib/coq/Why.vo
-bench/good/exns_why.vo: bench/good/exns_why.v lib/coq/Why.vo
-bench/good/all_why.vo: bench/good/all_why.v lib/coq/Why.vo
+lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
+lib/coq/WhyBool.vo: lib/coq/WhyBool.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Bool_nat.vo
+lib/coq/WhyCoq73.vo: lib/coq/WhyCoq73.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith_base.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Wf_nat.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Compare_dec.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Peano_dec.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo
+lib/coq/WhyCoqCompat.vo: lib/coq/WhyCoqCompat.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
+lib/coq/WhyCoqDev.vo: lib/coq/WhyCoqDev.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
+lib/coq/WhyExn.vo: lib/coq/WhyExn.v
+lib/coq/WhyFloat.vo: lib/coq/WhyFloat.v lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/Reals/Reals.vo
+lib/coq/WhyInt.vo: lib/coq/WhyInt.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith_dec.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zdiv.vo
+lib/coq/WhyPermut.vo: lib/coq/WhyPermut.v lib/coq/WhyArrays.vo
+lib/coq/WhySorted.vo: lib/coq/WhySorted.v lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo
+lib/coq/WhyTuples.vo: lib/coq/WhyTuples.v

@@ -298,16 +298,16 @@ Definition c3 := (* validation *)
     (Cases (btest [result:bool](if result then `v4 = 1` else `v4 <> 1`)
             result Bool1) of
     | (left Test2) =>
-        let (v9, result0, Post2) =
-          let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+        let (v9, result0, Post1) =
+          let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
             (refl_equal ? `2`)) in
-          (exist_2 [v10: Z][result1: unit]v10 = `2` result0 tt Post2) in
+          (exist_2 [v10: Z][result1: unit]v10 = `2` result0 tt Post1) in
         (Build_tuple_2 v9 result0)
     | (right Test1) =>
-        let (v9, result0, Post1) =
-          let (result0, Post1) = (exist_1 [result0: Z]result0 = `3` `3`
+        let (v9, result0, Post2) =
+          let (result0, Post2) = (exist_1 [result0: Z]result0 = `3` `3`
             (refl_equal ? `3`)) in
-          (exist_2 [v10: Z][result1: unit]v10 = `3` result0 tt Post1) in
+          (exist_2 [v10: Z][result1: unit]v10 = `3` result0 tt Post2) in
         (Build_tuple_2 v9 result0) end).
 
 Definition l1 := (* validation *)
@@ -317,19 +317,19 @@ Definition l1 := (* validation *)
 
 Definition l2 := (* validation *)
   [v4: Z]
-    let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
+    let (x, Post2) = (exist_1 [result: Z]result = `1` `1`
       (refl_equal ? `1`)) in
-    let (v9, result, Post2) =
-      let (result, Post2) = (exist_1 [result: Z]result = x x
+    let (v9, result, Post1) =
+      let (result, Post1) = (exist_1 [result: Z]result = x x
         (refl_equal ? x)) in
-      (exist_2 [v10: Z][result0: unit]v10 = x result tt Post2) in
+      (exist_2 [v10: Z][result0: unit]v10 = x result tt Post1) in
     (Build_tuple_2 v9 result).
 
 Definition l3 := (* validation *)
-  let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
+  let (x, Post2) = (exist_1 [result: Z]result = `1` `1`
     (refl_equal ? `1`)) in
   let result =
-    let (y, Post2) = (exist_1 [result: Z]result = `2` `2`
+    let (y, Post1) = (exist_1 [result: Z]result = `2` `2`
       (refl_equal ? `2`)) in
     `x + y` in
   result.
@@ -344,50 +344,50 @@ Definition l4 := (* validation *)
 
 Definition l5 := (* validation *)
   [v1: bool; v4: Z]
-    let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
+    let (x, Post3) = (exist_1 [result: Z]result = `1` `1`
       (refl_equal ? `1`)) in
     let (v10, v9, result) =
-      let (v9, result, Post2) =
-        let (result, Post2) = (exist_1 [result: bool]result = true true
+      let (v9, result, Post1) =
+        let (result, Post1) = (exist_1 [result: bool]result = true true
           (refl_equal ? true)) in
-        (exist_2 [v10: bool][result0: unit]v10 = true result tt Post2) in
-      let (v10, result0, Post3) =
-        let (result0, Post3) = (exist_1 [result0: Z]result0 = x x
+        (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1) in
+      let (v10, result0, Post2) =
+        let (result0, Post2) = (exist_1 [result0: Z]result0 = x x
           (refl_equal ? x)) in
-        (exist_2 [v11: Z][result1: unit]v11 = x result0 tt Post3) in
+        (exist_2 [v11: Z][result1: unit]v11 = x result0 tt Post2) in
       (Build_tuple_3 v9 v10 result0) in
     (Build_tuple_3 v10 v9 result).
 
 Definition lr1 := (* validation *)
-  let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+  let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
     (refl_equal ? `1`)) in
-  let (x0, result0, Post2) =
-    let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+  let (x0, result0, Post1) =
+    let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
       (refl_equal ? `2`)) in
-    (exist_2 [x1: Z][result1: unit]x1 = `2` result0 tt Post2) in
+    (exist_2 [x1: Z][result1: unit]x1 = `2` result0 tt Post1) in
   result0.
 
 Definition lr2 := (* validation *)
-  let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+  let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
     (refl_equal ? `1`)) in
   let (x0, result0) =
-    let (x0, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]
+    let (x0, result0, Post1) =
+      let (result0, Post1) = (exist_1 [result0: Z]
         result0 = `result + 1` `result + 1` (refl_equal ? `result + 1`)) in
-      (exist_2 [x1: Z][result1: unit]x1 = `result + 1` result0 tt Post2) in
+      (exist_2 [x1: Z][result1: unit]x1 = `result + 1` result0 tt Post1) in
     (Build_tuple_2 x0 x0) in
   result0.
 
 Definition lr3 := (* validation *)
-  let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+  let (result, Post3) = (exist_1 [result: Z]result = `1` `1`
     (refl_equal ? `1`)) in
   let (x0, result0) =
     let (result0, Post2) = (exist_1 [result0: Z]result0 = result result
       (refl_equal ? result)) in
-    let (x0, result1, Post3) =
-      let (result1, Post3) = (exist_1 [result1: Z]result1 = result0 result0
+    let (x0, result1, Post1) =
+      let (result1, Post1) = (exist_1 [result1: Z]result1 = result0 result0
         (refl_equal ? result0)) in
-      (exist_2 [x1: Z][result2: unit]x1 = result0 result1 tt Post3) in
+      (exist_2 [x1: Z][result2: unit]x1 = result0 result1 tt Post1) in
     (Build_tuple_2 x0 result1) in
   result0.
 
@@ -590,22 +590,22 @@ Definition fc2 := (* validation *)
 
 Lemma fc3_po_1 : 
   (result: Z)
-  (Post1: result = `0`)
+  (Post2: result = `0`)
   (result0: Z)
-  (Post2: result0 = `0`)
+  (Post1: result0 = `0`)
   `result >= 0`.
 Proof. Intros; Omega. Save.
 
 
 
 Definition fc3 := (* validation *)
-  let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
+  let (result, Post2) = (exist_1 [result: Z]result = `0` `0`
     (refl_equal ? `0`)) in
   let result0 =
-    let (result0, Post2) = (exist_1 [result0: Z]result0 = `0` `0`
+    let (result0, Post1) = (exist_1 [result0: Z]result0 = `0` `0`
       (refl_equal ? `0`)) in
     let (b0, result1, Post3) =
-      let Pre1 = (fc3_po_1 result Post1 result0 Post2) in
+      let Pre1 = (fc3_po_1 result Post2 result0 Post1) in
       let (b0, r, Post4) = (f3 result result0 Pre1) in
       (exist_2 [b1: Z][result2: Z]`b1 = result0 + result + result2` b0 
       r Post4) in

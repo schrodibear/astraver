@@ -400,7 +400,7 @@ Lemma p13_po_2 :
   (Post6: ((x:Z) (x = `3` -> `x = 2`)))
   (Post10: ((x:Z) (x = `1` -> `x = 2`)))
   (x0: Z)
-  (Post3: x0 = `1`)
+  (Post1: x0 = `1`)
   `x0 = 2`.
 Proof.
 Repeat (Intuition; Induction result).
@@ -409,7 +409,7 @@ Save.
 Lemma p13_po_3 : 
   (Post13: ((x:Z) (x = `2` -> `x = 2`)))
   (x1: Z)
-  (Post1: x1 = `2`)
+  (Post2: x1 = `2`)
   `x1 = 2`.
 Proof.
 Intuition.
@@ -418,7 +418,7 @@ Save.
 Lemma p13_po_4 : 
   (Post14: ((x:Z) (x = `3` -> `x = 2`)))
   (x1: Z)
-  (Post2: x1 = `3`)
+  (Post3: x1 = `3`)
   `x1 = 2`.
 Proof.
 Intuition.
@@ -442,15 +442,15 @@ Definition p13 := (* validation *)
           Post9) in
         Cases (decomp1 Post8) of
         | (Qval (exist result0 Post10)) =>
-          let (x0, result1, Post3) =
-            let (result1, Post3) = (exist_1 [result1: Z]result1 = `1` 
+          let (x0, result1, Post1) =
+            let (result1, Post1) = (exist_1 [result1: Z]result1 = `1` 
               `1` (refl_equal ? `1`)) in
-            (exist_2 [x1: Z][result2: unit]x1 = `1` result1 tt Post3) in
+            (exist_2 [x1: Z][result2: unit]x1 = `1` result1 tt Post1) in
           (exist_2 [x1: Z]
           (qcomb [result2: unit]((x:Z) (x = `2` -> `x = 2`))
            (qcomb [result2: Z]((x:Z) (x = `3` -> `x = 2`)) [result2: unit]
             `x1 = 2`)) x0
-          (Val unit (Val Z result1)) (p13_po_2 Post6 Post10 x0 Post3))
+          (Val unit (Val Z result1)) (p13_po_2 Post6 Post10 x0 Post1))
         | (Qexn result0 Post11) => (exist_2 [x0: Z]
           (qcomb [result1: unit]((x:Z) (x = `2` -> `x = 2`))
            (qcomb [result1: Z]((x:Z) (x = `3` -> `x = 2`)) [result1: unit]
@@ -465,19 +465,19 @@ Definition p13 := (* validation *)
     | (Qval (Qval (exist result Post12))) => (exist_2 [x1: Z][result0: unit]
       `x1 = 2` x0 result Post12)
     | (Qexn _ Post13) =>
-      let (x1, result0, Post1) =
-        let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
-          (refl_equal ? `2`)) in
-        (exist_2 [x2: Z][result1: unit]x2 = `2` result0 tt Post1) in
-      (exist_2 [x2: Z][result1: unit]`x2 = 2` x1 result0
-      (p13_po_3 Post13 x1 Post1))
-    | (Qval (Qexn result Post14)) =>
       let (x1, result0, Post2) =
-        let (result0, Post2) = (exist_1 [result0: Z]result0 = `3` `3`
-          (refl_equal ? `3`)) in
-        (exist_2 [x2: Z][result1: unit]x2 = `3` result0 tt Post2) in
+        let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+          (refl_equal ? `2`)) in
+        (exist_2 [x2: Z][result1: unit]x2 = `2` result0 tt Post2) in
       (exist_2 [x2: Z][result1: unit]`x2 = 2` x1 result0
-      (p13_po_4 Post14 x1 Post2))
+      (p13_po_3 Post13 x1 Post2))
+    | (Qval (Qexn result Post14)) =>
+      let (x1, result0, Post3) =
+        let (result0, Post3) = (exist_1 [result0: Z]result0 = `3` `3`
+          (refl_equal ? `3`)) in
+        (exist_2 [x2: Z][result1: unit]x2 = `3` result0 tt Post3) in
+      (exist_2 [x2: Z][result1: unit]`x2 = 2` x1 result0
+      (p13_po_4 Post14 x1 Post3))
     end.
 
 Lemma p14_po_1 : 

@@ -114,7 +114,7 @@ Lemma bresenham_po_3 :
   (Pre2: (best x1 y1))
   (Test3: `e1 < 0`)
   (e2: Z)
-  (Post6: e2 = `e1 + 2 * y2`)
+  (Post4: e2 = `e1 + 2 * y2`)
   ((x:Z)
    (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\ (invariant x y1 e2)) /\
     (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
@@ -147,9 +147,9 @@ Lemma bresenham_po_4 :
   (Pre2: (best x1 y1))
   (Test2: `e1 >= 0`)
   (y3: Z)
-  (Post4: y3 = `y1 + 1`)
+  (Post5: y3 = `y1 + 1`)
   (e2: Z)
-  (Post5: e2 = `e1 + 2 * (y2 - x2)`)
+  (Post6: e2 = `e1 + 2 * (y2 - x2)`)
   ((x:Z)
    (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\ (invariant x y3 e2)) /\
     (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
@@ -159,7 +159,7 @@ Subst x.
 Unfold invariant. Unfold invariant in Pre3.
 Split. Split. Omega'.
 Split. 
-Rewrite Post4.
+Subst y3.
 Replace `2*(x1+1+1)*y2-(2*(y1+1)+1)*x2` 
    with `2*(x1+1)*y2+2*y2-(2*y1+1)*x2-2*x2`;
  [ Omega' | Ring ].
@@ -264,13 +264,13 @@ Definition bresenham := (* validation *)
           `x3 > x2`));
          e1: Z; x1: Z; y1: Z; Pre4: Variant1 = `x2 + 1 - x1`;
          Pre3: (`0 <= x1` /\ `x1 <= x2 + 1`) /\ (invariant x1 y1 e1)]
-          let (result2, Bool1) =
+          let (result2, Bool2) =
             let (result4, Post11) = (Z_le_gt_bool x1 x2) in
             (exist_1 [result5: bool]
             (if result5 then `x1 <= x2` else `x1 > x2`) result4 Post11) in
           (Cases (btest
                   [result2:bool](if result2 then `x1 <= x2` else `x1 > x2`)
-                  result2 Bool1) of
+                  result2 Bool2) of
           | (left Test4) =>
               let (e2, x3, y3, result3, Post8) =
                 let (e2, x3, y3, result3, Post9) =
@@ -278,7 +278,7 @@ Definition bresenham := (* validation *)
                     (bresenham_po_2 x0 Post1 y0 Post2 e0 Post3 Variant1 e1 x1
                     y1 Pre4 Pre3 Test4) in
                   let (e2, y3, result3, Post12) =
-                    let (result3, Bool2) =
+                    let (result3, Bool1) =
                       let (result5, Post13) = (Z_lt_ge_bool e1 `0`) in
                       (exist_1 [result6: bool]
                       (if result6 then `e1 < 0` else `e1 >= 0`) result5
@@ -286,14 +286,14 @@ Definition bresenham := (* validation *)
                     (Cases (btest
                             [result3:bool](if result3 then `e1 < 0`
                                            else `e1 >= 0`)
-                            result3 Bool2) of
+                            result3 Bool1) of
                     | (left Test3) =>
-                        let (e2, result4, Post6) =
-                          let (result4, Post6) = (exist_1 [result4: Z]
+                        let (e2, result4, Post4) =
+                          let (result4, Post4) = (exist_1 [result4: Z]
                             result4 = `e1 + 2 * y2` `e1 + 2 * y2`
                             (refl_equal ? `e1 + 2 * y2`)) in
                           (exist_2 [e3: Z][result5: unit]
-                          e3 = `e1 + 2 * y2` result4 tt Post6) in
+                          e3 = `e1 + 2 * y2` result4 tt Post4) in
                         (exist_3 [e3: Z][y3: Z][result5: unit]
                         ((x:Z)
                          (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\
@@ -301,22 +301,22 @@ Definition bresenham := (* validation *)
                           (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))) e2
                         y1 result4
                         (bresenham_po_3 x0 Post1 y0 Post2 e0 Post3 Variant1
-                        e1 x1 y1 Pre4 Pre3 Test4 Pre2 Test3 e2 Post6))
+                        e1 x1 y1 Pre4 Pre3 Test4 Pre2 Test3 e2 Post4))
                     | (right Test2) =>
                         let (e2, y3, result4, Post14) =
-                          let (y3, result4, Post4) =
-                            let (result4, Post4) = (exist_1 [result4: Z]
+                          let (y3, result4, Post5) =
+                            let (result4, Post5) = (exist_1 [result4: Z]
                               result4 = `y1 + 1` `y1 + 1`
                               (refl_equal ? `y1 + 1`)) in
                             (exist_2 [y4: Z][result5: unit]
-                            y4 = `y1 + 1` result4 tt Post4) in
-                          let (e2, result5, Post5) =
-                            let (result5, Post5) = (exist_1 [result5: Z]
+                            y4 = `y1 + 1` result4 tt Post5) in
+                          let (e2, result5, Post6) =
+                            let (result5, Post6) = (exist_1 [result5: Z]
                               result5 = `e1 + 2 * (y2 - x2)` `e1 + 2 *
                                                               (y2 - x2)`
                               (refl_equal ? `e1 + 2 * (y2 - x2)`)) in
                             (exist_2 [e3: Z][result6: unit]
-                            e3 = `e1 + 2 * (y2 - x2)` result5 tt Post5) in
+                            e3 = `e1 + 2 * (y2 - x2)` result5 tt Post6) in
                           (exist_3 [e3: Z][y4: Z][result6: unit]
                           ((x:Z)
                            (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\
@@ -324,8 +324,8 @@ Definition bresenham := (* validation *)
                             (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))) e2
                           y3 result5
                           (bresenham_po_4 x0 Post1 y0 Post2 e0 Post3 Variant1
-                          e1 x1 y1 Pre4 Pre3 Test4 Pre2 Test2 y3 Post4 e2
-                          Post5)) in
+                          e1 x1 y1 Pre4 Pre3 Test4 Pre2 Test2 y3 Post5 e2
+                          Post6)) in
                         (exist_3 [e3: Z][y4: Z][result5: unit]
                         ((x:Z)
                          (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\

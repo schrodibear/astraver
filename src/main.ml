@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.37 2002-10-09 16:43:06 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.38 2002-10-15 09:05:53 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -55,7 +55,7 @@ let interp_program id p =
   if type_only then raise Exit;
 
   if_debug eprintf "* weakest preconditions@.";
-  let p,wp = Wp.propagate p in
+  let p,wp = Wp.wp p in
   print_if_debug print_wp wp;
   print_if_debug print_prog p;
   if wp_only then raise Exit;

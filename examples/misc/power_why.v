@@ -297,18 +297,18 @@ Definition power1 := (* validation *)
           ((`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0`) /\ `n1 <= 0`));
          m1: Z; n0: Z; y1: Z; Pre3: Variant1 = n0;
          Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`]
-          let (result1, Bool1) =
+          let (result1, Bool2) =
             let (result3, Post9) = (Z_gt_le_bool n0 `0`) in
             (exist_1 [result4: bool]
             (if result4 then `n0 > 0` else `n0 <= 0`) result3 Post9) in
           (Cases (btest
                   [result1:bool](if result1 then `n0 > 0` else `n0 <= 0`)
-                  result1 Bool1) of
+                  result1 Bool2) of
           | (left Test4) =>
               let (m2, n1, y2, result2, Post6) =
                 let (m2, n1, y2, result2, Post7) =
                   let (y2, result2, Post10) =
-                    let (result2, Bool2) =
+                    let (result2, Bool1) =
                       let (result4, Post11) = (is_odd n0) in
                       (exist_1 [result5: bool]
                       (if result5 then (Zodd n0) else (Zeven n0)) result4
@@ -316,7 +316,7 @@ Definition power1 := (* validation *)
                     (Cases (btest
                             [result2:bool](if result2 then (Zodd n0)
                                            else (Zeven n0))
-                            result2 Bool2) of
+                            result2 Bool1) of
                     | (left Test3) =>
                         let (y2, result3, Post3) =
                           let (result3, Post3) = (exist_1 [result3: Z]

@@ -1,1 +1,1 @@
-bsearch_why.vo: bsearch_why.v ../../lib/coq/Why.vo
+bsearch_why.vo: bsearch_why.v ../../lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zcomplements.vo

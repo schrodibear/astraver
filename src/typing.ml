@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.73 2002-10-14 09:44:16 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.74 2002-10-15 09:05:53 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -311,7 +311,7 @@ let rec typef lab env expr =
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = p @ List.map assert_pre p1 in
-  match q, d with
+  let pr = match q, d with
     | None, App (_,_,k') ->
 	let c = { c_result_name = result; c_result_type = v; c_effect = e'; 
 		  c_pre = p'; c_post = k'.c_post } in
@@ -320,6 +320,8 @@ let rec typef lab env expr =
 	let c = { c_result_name = result; c_result_type = v;
 		  c_effect = e'; c_pre = p'; c_post = q } in
 	make_node d env toplabel c
+  in
+  Annot.normalize pr
 
 and typef_desc lab env loc = function
   | Sconst c ->

@@ -1,2 +1,2 @@
-zaux.vo: zaux.v
-bresenham_why.vo: bresenham_why.v zaux.vo ../../lib/coq/Why.vo
+bresenham_why.vo: bresenham_why.v ./zaux.vo ../../lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo
+zaux.vo: zaux.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo

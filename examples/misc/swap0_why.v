@@ -5,11 +5,11 @@ Lemma swap1_po_1 :
   (x: Z)
   (y: Z)
   (t: Z)
-  (Post1: t = x)
+  (Post3: t = x)
   (x0: Z)
-  (Post2: x0 = y)
+  (Post1: x0 = y)
   (y0: Z)
-  (Post3: y0 = t)
+  (Post2: y0 = t)
   `x0 = y` /\ `y0 = x`.
 Proof.
 Intuition.
@@ -17,18 +17,18 @@ Save.
 
 Definition swap1 := (* validation *)
   [x: Z; y: Z]
-    let (t, Post1) = (exist_1 [result: Z]result = x x (refl_equal ? x)) in
+    let (t, Post3) = (exist_1 [result: Z]result = x x (refl_equal ? x)) in
     let (x0, y0, result, Post4) =
-      let (x0, result, Post2) =
-        let (result, Post2) = (exist_1 [result: Z]result = y y
+      let (x0, result, Post1) =
+        let (result, Post1) = (exist_1 [result: Z]result = y y
           (refl_equal ? y)) in
-        (exist_2 [x1: Z][result0: unit]x1 = y result tt Post2) in
-      let (y0, result0, Post3) =
-        let (result0, Post3) = (exist_1 [result0: Z]result0 = t t
+        (exist_2 [x1: Z][result0: unit]x1 = y result tt Post1) in
+      let (y0, result0, Post2) =
+        let (result0, Post2) = (exist_1 [result0: Z]result0 = t t
           (refl_equal ? t)) in
-        (exist_2 [y1: Z][result1: unit]y1 = t result0 tt Post3) in
+        (exist_2 [y1: Z][result1: unit]y1 = t result0 tt Post2) in
       (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 y0
-      result0 (swap1_po_1 x y t Post1 x0 Post2 y0 Post3)) in
+      result0 (swap1_po_1 x y t Post3 x0 Post1 y0 Post2)) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
     result Post4).
 
@@ -36,11 +36,11 @@ Lemma swap2_po_1 :
   (x: Z)
   (y: Z)
   (t: Z)
-  (Post1: t = x)
+  (Post3: t = x)
   (x0: Z)
-  (Post2: x0 = y)
+  (Post1: x0 = y)
   (y0: Z)
-  (Post3: y0 = t)
+  (Post2: y0 = t)
   `x0 = y` /\ `y0 = x`.
 Proof.
 Intuition.
@@ -49,18 +49,18 @@ Save.
 Definition swap2 := (* validation *)
   [x: Z; y: Z]
     let (x0, y0, result, Post4) =
-      let (t, Post1) = (exist_1 [result: Z]result = x x (refl_equal ? x)) in
+      let (t, Post3) = (exist_1 [result: Z]result = x x (refl_equal ? x)) in
       let (x0, y0, result, Post5) =
-        let (x0, result, Post2) =
-          let (result, Post2) = (exist_1 [result: Z]result = y y
+        let (x0, result, Post1) =
+          let (result, Post1) = (exist_1 [result: Z]result = y y
             (refl_equal ? y)) in
-          (exist_2 [x1: Z][result0: unit]x1 = y result tt Post2) in
-        let (y0, result0, Post3) =
-          let (result0, Post3) = (exist_1 [result0: Z]result0 = t t
+          (exist_2 [x1: Z][result0: unit]x1 = y result tt Post1) in
+        let (y0, result0, Post2) =
+          let (result0, Post2) = (exist_1 [result0: Z]result0 = t t
             (refl_equal ? t)) in
-          (exist_2 [y1: Z][result1: unit]y1 = t result0 tt Post3) in
+          (exist_2 [y1: Z][result1: unit]y1 = t result0 tt Post2) in
         (exist_3 [x1: Z][y1: Z][result1: unit]`x1 = y` /\ `y1 = x` x0 
-        y0 result0 (swap2_po_1 x y t Post1 x0 Post2 y0 Post3)) in
+        y0 result0 (swap2_po_1 x y t Post3 x0 Post1 y0 Post2)) in
       (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
       result Post5) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`x1 = y` /\ `y1 = x` x0 y0 
@@ -70,11 +70,11 @@ Lemma swap3_po_1 :
   (a: Z)
   (b: Z)
   (t: Z)
-  (Post1: t = a)
+  (Post3: t = a)
   (a0: Z)
-  (Post2: a0 = b)
+  (Post1: a0 = b)
   (b0: Z)
-  (Post3: b0 = t)
+  (Post2: b0 = t)
   `a0 = b` /\ `b0 = a`.
 Proof.
 Intuition.
@@ -82,26 +82,26 @@ Save.
 
 Definition swap3 := (* validation *)
   [a: Z; b: Z]
-    let (t, Post1) = (exist_1 [result: Z]result = a a (refl_equal ? a)) in
+    let (t, Post3) = (exist_1 [result: Z]result = a a (refl_equal ? a)) in
     let (a0, b0, result, Post4) =
-      let (a0, result, Post2) =
-        let (result, Post2) = (exist_1 [result: Z]result = b b
+      let (a0, result, Post1) =
+        let (result, Post1) = (exist_1 [result: Z]result = b b
           (refl_equal ? b)) in
-        (exist_2 [a1: Z][result0: unit]a1 = b result tt Post2) in
-      let (b0, result0, Post3) =
-        let (result0, Post3) = (exist_1 [result0: Z]result0 = t t
+        (exist_2 [a1: Z][result0: unit]a1 = b result tt Post1) in
+      let (b0, result0, Post2) =
+        let (result0, Post2) = (exist_1 [result0: Z]result0 = t t
           (refl_equal ? t)) in
-        (exist_2 [b1: Z][result1: unit]b1 = t result0 tt Post3) in
+        (exist_2 [b1: Z][result1: unit]b1 = t result0 tt Post2) in
       (exist_3 [a1: Z][b1: Z][result1: unit]`a1 = b` /\ `b1 = a` a0 b0
-      result0 (swap3_po_1 a b t Post1 a0 Post2 b0 Post3)) in
+      result0 (swap3_po_1 a b t Post3 a0 Post1 b0 Post2)) in
     (exist_3 [a1: Z][b1: Z][result0: unit]`a1 = b` /\ `b1 = a` a0 b0 
     result Post4).
 
 Lemma test_swap3_po_1 : 
   (result: Z)
-  (Post1: result = `1`)
+  (Post2: result = `1`)
   (result0: Z)
-  (Post2: result0 = `2`)
+  (Post1: result0 = `2`)
   (c0: Z)
   (d0: Z)
   (Post4: `c0 = result0` /\ `d0 = result`)
@@ -111,15 +111,15 @@ Intuition.
 Save.
 
 Definition test_swap3 := (* validation *)
-  let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+  let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
     (refl_equal ? `1`)) in
   let (c0, result0) =
-    let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+    let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
       (refl_equal ? `2`)) in
     let (c0, d0, result1, Post3) =
       let (c0, d0, result2, Post4) = (swap3 result result0) in
       (exist_3 [c1: Z][d1: Z][result3: unit]`d1 = 1` c0 d0 result2
-      (test_swap3_po_1 result Post1 result0 Post2 c0 d0 Post4)) in
+      (test_swap3_po_1 result Post2 result0 Post1 c0 d0 Post4)) in
     (Build_tuple_2 c0 result1) in
   result0.
 
@@ -179,9 +179,9 @@ Definition swap4 := (* validation *)
 
 Lemma test_swap4_po_1 : 
   (result: Z)
-  (Post1: result = `1`)
+  (Post2: result = `1`)
   (result0: Z)
-  (Post2: result0 = `2`)
+  (Post1: result0 = `2`)
   (c0: Z)
   (d0: Z)
   (Post4: `c0 = result0` /\ `d0 = result`)
@@ -192,16 +192,16 @@ Save.
 
 Definition test_swap4 := (* validation *)
   [tmp: Z]
-    let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+    let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
       (refl_equal ? `1`)) in
     let (c0, tmp0, result0) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+      let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
         (refl_equal ? `2`)) in
       let (c0, d0, tmp0, result1, Post3) =
         let (c0, d0, tmp0, result2, Post4) = (swap4 result result0 tmp) in
         (exist_4 [c1: Z][d1: Z][tmp1: Z][result3: unit]`d1 = 1` c0 d0 
         tmp0 result2
-        (test_swap4_po_1 result Post1 result0 Post2 c0 d0 Post4)) in
+        (test_swap4_po_1 result Post2 result0 Post1 c0 d0 Post4)) in
       (Build_tuple_3 c0 tmp0 result1) in
     (Build_tuple_2 tmp0 result0).
 

@@ -224,7 +224,7 @@ Lemma distance_po_9 :
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Test7: `j2 >= 0`)
   (temp: Z)
-  (Post9: temp = old2)
+  (Post12: temp = old2)
   `0 <= j2` /\ `j2 < n2 + 1`.
 Proof.
 Intuition.
@@ -273,10 +273,10 @@ Lemma distance_po_10 :
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Test7: `j2 >= 0`)
   (temp: Z)
-  (Post9: temp = old2)
+  (Post12: temp = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
-  (Post10: old3 = (access t3 j2))
+  (Post9: old3 = (access t3 j2))
   `0 <= j2` /\ `j2 < n2`.
 Proof.
 Auto with *.
@@ -325,10 +325,10 @@ Lemma distance_po_11 :
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Test7: `j2 >= 0`)
   (temp: Z)
-  (Post9: temp = old2)
+  (Post12: temp = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
-  (Post10: old3 = (access t3 j2))
+  (Post9: old3 = (access t3 j2))
   (Pre11: `0 <= j2` /\ `j2 < n2`)
   `0 <= i3` /\ `i3 < n1`.
 Proof.
@@ -378,13 +378,13 @@ Lemma distance_po_12 :
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Test7: `j2 >= 0`)
   (temp: Z)
-  (Post9: temp = old2)
+  (Post12: temp = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
-  (Post10: old3 = (access t3 j2))
+  (Post9: old3 = (access t3 j2))
   (Test6: (access w1 i3) = (access w2 j2))
   (t4: (array `n2 + 1` Z))
-  (Post12: t4 = (store t3 j2 temp))
+  (Post10: t4 = (store t3 j2 temp))
   ((j:Z)
    (j = `j2 - 1` -> ((`(-1) <= j` /\ `j <= n2 - 1`) /\
     ((k:Z) (`j < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t4 k)))) /\
@@ -394,14 +394,14 @@ Lemma distance_po_12 :
 Proof.
 Intuition.
 Unfold min_suffix.
-Rewrite Post12.
+Subst t4.
 ArrayAccess j2 k Hj2k.
   (* j2=k *)
   Rewrite (suffix_is_cons ? w1 i3); [ Idtac | Omega' ].
   Rewrite (suffix_is_cons ? w2 k); [ Idtac | Omega' ].
   Rewrite Test6. Rewrite <- Hj2k.
   Apply min_dist_equal.
-  Rewrite Post9; Assumption.
+  Subst temp; Assumption.
   Omega'.
   (* j2<>k *)
   Unfold min_suffix in H10.
@@ -409,14 +409,14 @@ ArrayAccess j2 k Hj2k.
   Omega'.
   Omega'.
 Unfold min_suffix.
-Rewrite Post12.
+Subst t4.
 Rewrite store_def_2.
 Unfold min_suffix in H11; Apply H11; Omega'.
 Omega'.
 Omega'.
 Omega'.
 Replace `j+1` with j2; [ Idtac | Omega' ].
-Rewrite Post10.
+Subst old3.
 Unfold min_suffix; Unfold min_suffix in H11; Apply H11; Omega'.
 Unfold Zwf; Omega'.
 Save.
@@ -464,10 +464,10 @@ Lemma distance_po_13 :
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Test7: `j2 >= 0`)
   (temp: Z)
-  (Post9: temp = old2)
+  (Post12: temp = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
-  (Post10: old3 = (access t3 j2))
+  (Post9: old3 = (access t3 j2))
   (Test5: ~(access w1 i3) = (access w2 j2))
   `0 <= j2 + 1` /\ `j2 + 1 < n2 + 1`.
 Proof.
@@ -517,10 +517,10 @@ Lemma distance_po_14 :
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Test7: `j2 >= 0`)
   (temp: Z)
-  (Post9: temp = old2)
+  (Post12: temp = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
-  (Post10: old3 = (access t3 j2))
+  (Post9: old3 = (access t3 j2))
   (Test5: ~(access w1 i3) = (access w2 j2))
   (Pre13: `0 <= j2 + 1` /\ `j2 + 1 < n2 + 1`)
   (Pre14: `0 <= j2` /\ `j2 < n2 + 1`)
@@ -560,7 +560,7 @@ Omega'.
 Omega'.
 Omega'.
 Replace `j+1` with j2; [ Idtac | Omega' ].
-Rewrite Post10; Apply H11; Omega'.
+Subst old3; Apply H11; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
@@ -1028,13 +1028,13 @@ Definition distance := (* validation *)
          ((j:Z)
           (`0 <= j` /\ `j <= n2` ->
            (min_suffix w1 w2 `i3 + 1` j (access t1 j))))]
-          let (result2, Bool2) =
+          let (result2, Bool4) =
             let (result4, Post22) = (Z_ge_lt_bool i3 `0`) in
             (exist_1 [result5: bool]
             (if result5 then `i3 >= 0` else `i3 < 0`) result4 Post22) in
           (Cases (btest
                   [result2:bool](if result2 then `i3 >= 0` else `i3 < 0`)
-                  result2 Bool2) of
+                  result2 Bool4) of
           | (left Test8) =>
               let (i4, j1, old1, t2, result3, Post16) =
                 let (i4, j1, old1, t2, result3, Post17) =
@@ -1133,7 +1133,7 @@ Definition distance := (* validation *)
                             let (j3, old3, t4, result7, Post14) =
                               let (j3, old3, t4, result7, Post18) =
                                 let (old3, t4, result7, Post24) =
-                                  let (temp, Post9) = (exist_1 [result7: Z]
+                                  let (temp, Post12) = (exist_1 [result7: Z]
                                     result7 = old2 old2
                                     (refl_equal ? old2)) in
                                   let (old3, t4, result7, Post25) =
@@ -1142,25 +1142,24 @@ Definition distance := (* validation *)
                                       Post4 i2 Post5 Variant3 i3 t1 Pre20
                                       Pre19 Test8 Pre6 old1 Post6 Pre7 t2
                                       Post7 j1 Post8 Variant5 j2 old2 t3
-                                      Pre18 Pre17 Test7 temp Post9) in
-                                    let (old3, result7, Post10) =
-                                      let (result7, Post10) =
+                                      Pre18 Pre17 Test7 temp Post12) in
+                                    let (old3, result7, Post9) =
+                                      let (result7, Post9) =
                                         (exist_1 [result7: Z]
                                         result7 = (access t3 j2) (access t3
                                                                   j2)
                                         (refl_equal ? (access t3 j2))) in
                                       (exist_2 [old4: Z][result8: unit]
-                                      old4 = (access t3 j2) result7 tt
-                                      Post10) in
+                                      old4 = (access t3 j2) result7 tt Post9) in
                                     let (t4, result8, Post26) =
-                                      let (result8, Bool4) =
+                                      let (result8, Bool2) =
                                         let Pre11 =
                                           (distance_po_10 w1 w2 i0 Post1 i1
                                           t0 Post4 i2 Post5 Variant3 i3 t1
                                           Pre20 Pre19 Test8 Pre6 old1 Post6
                                           Pre7 t2 Post7 j1 Post8 Variant5 j2
                                           old2 t3 Pre18 Pre17 Test7 temp
-                                          Post9 Pre10 old3 Post10) in
+                                          Post12 Pre10 old3 Post9) in
                                         let result9 =
                                           let Pre12 =
                                             (distance_po_11 w1 w2 i0 Post1 i1
@@ -1168,7 +1167,7 @@ Definition distance := (* validation *)
                                             Pre20 Pre19 Test8 Pre6 old1 Post6
                                             Pre7 t2 Post7 j1 Post8 Variant5
                                             j2 old2 t3 Pre18 Pre17 Test7 temp
-                                            Post9 Pre10 old3 Post10 Pre11) in
+                                            Post12 Pre10 old3 Post9 Pre11) in
                                           (test_char (access w1 i3)) in
                                         let (result10, Post27) =
                                           (result9 (access w2 j2)) in
@@ -1188,10 +1187,10 @@ Definition distance := (* validation *)
                                                                     i3) =
                                                                    (access w2
                                                                     j2))
-                                              result8 Bool4) of
+                                              result8 Bool2) of
                                       | (left Test6) =>
-                                          let (t4, result9, Post12) =
-                                            let (result9, Post12) =
+                                          let (t4, result9, Post10) =
+                                            let (result9, Post10) =
                                               (exist_1 [result9: Z]
                                               (store t3 j2 result9) =
                                               (store t3 j2 temp) temp
@@ -1203,7 +1202,7 @@ Definition distance := (* validation *)
                                                                     store t3
                                                                     j2
                                                                     result9)
-                                            tt Post12) in
+                                            tt Post10) in
                                           (exist_2 [t5: (array `n2 + 1` Z)]
                                           [result10: unit]
                                           ((j:Z)
@@ -1226,8 +1225,8 @@ Definition distance := (* validation *)
                                           Pre20 Pre19 Test8 Pre6 old1 Post6
                                           Pre7 t2 Post7 j1 Post8 Variant5 j2
                                           old2 t3 Pre18 Pre17 Test7 temp
-                                          Post9 Pre10 old3 Post10 Test6 t4
-                                          Post12))
+                                          Post12 Pre10 old3 Post9 Test6 t4
+                                          Post10))
                                       | (right Test5) =>
                                           let Pre13 =
                                             (distance_po_13 w1 w2 i0 Post1 i1
@@ -1235,7 +1234,7 @@ Definition distance := (* validation *)
                                             Pre20 Pre19 Test8 Pre6 old1 Post6
                                             Pre7 t2 Post7 j1 Post8 Variant5
                                             j2 old2 t3 Pre18 Pre17 Test7 temp
-                                            Post9 Pre10 old3 Post10 Test5) in
+                                            Post12 Pre10 old3 Post9 Test5) in
                                           let Pre14 = Pre10 in
                                           let (t4, result9, Post11) =
                                             let (result9, Post11) =
@@ -1284,7 +1283,7 @@ Definition distance := (* validation *)
                                           Pre20 Pre19 Test8 Pre6 old1 Post6
                                           Pre7 t2 Post7 j1 Post8 Variant5 j2
                                           old2 t3 Pre18 Pre17 Test7 temp
-                                          Post9 Pre10 old3 Post10 Test5 Pre13
+                                          Post12 Pre10 old3 Post9 Test5 Pre13
                                           Pre14 t4 Post11)) end) in
                                     (exist_3 [old4: Z]
                                     [t5: (array `n2 + 1` Z)][result9: unit]

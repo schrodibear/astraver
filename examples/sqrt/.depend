@@ -1,1 +1,1 @@
-sqrt_why.vo: sqrt_why.v ../../lib/coq/Why.vo
+sqrt_why.vo: sqrt_why.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zcomplements.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zdiv.vo ../../lib/coq/Why.vo

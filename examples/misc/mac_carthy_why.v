@@ -76,13 +76,13 @@ Definition f91 := (* validation *)
        (sig_1 Z [result: Z](`n0 <= 100` /\ `result = 91` \/ `n0 >= 101` /\
         `result = n0 - 10`));
        n0: Z; Pre2: Variant1 = (max `0` `101 - n0`)]
-        let (result, Bool1) =
+        let (result, Bool2) =
           let (result1, Post2) = (Z_le_gt_bool n0 `100`) in
           (exist_1 [result2: bool]
           (if result2 then `n0 <= 100` else `n0 > 100`) result1 Post2) in
         (Cases (btest
                 [result:bool](if result then `n0 <= 100` else `n0 > 100`)
-                result Bool1) of
+                result Bool2) of
         | (left Test2) =>
             let (result0, Post4) =
               let (aux_2, Post5) =

@@ -1,2 +1,2 @@
-words.vo: words.v ../../lib/coq/WhyArrays.vo
-distance_why.vo: distance_why.v ../../lib/coq/Why.vo words.vo
+distance_why.vo: distance_why.v ../../lib/coq/Why.vo ./words.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo
+words.vo: words.v /users/homepc8-123/jcf/coq/V7/theories/Lists/PolyList.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo ../../lib/coq/WhyArrays.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo

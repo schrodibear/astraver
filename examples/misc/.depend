@@ -1,6 +1,9 @@
-swap0_why.vo: swap0_why.v ../../lib/coq/Why.vo
-power_why.vo: power_why.v ../../lib/coq/Why.vo
-peano_why.vo: peano_why.v ../../lib/coq/Why.vo
-mac_carthy_why.vo: mac_carthy_why.v ../../lib/coq/Why.vo
+arith_why.vo: arith_why.v ../../lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zdiv.vo
+fib_why.vo: fib_why.v ../../lib/coq/Why.vo
+flag_why.vo: flag_why.v ../../lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo
+gcd_why.vo: gcd_why.v ../../lib/coq/Why.vo
 loop0_why.vo: loop0_why.v ../../lib/coq/Why.vo
-arith_why.vo: arith_why.v ../../lib/coq/Why.vo
+mac_carthy_why.vo: mac_carthy_why.v ../../lib/coq/Why.vo
+peano_why.vo: peano_why.v ../../lib/coq/Why.vo
+power_why.vo: power_why.v /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo ../../lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zcomplements.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zpower.vo
+swap0_why.vo: swap0_why.v ../../lib/coq/Why.vo
