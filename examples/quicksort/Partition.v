@@ -127,67 +127,6 @@ Save.
 
 (* Lemmas about partition_p and sub_permut *)
 
-Lemma sub_permut_function :
-  (N:Z)(t,t':(array N Z))(g,d:Z)
-  `0 <= g` -> `d < N`
-  -> (sub_permut g d t t')
-  -> (i:Z) `g <= i <= d`
-    -> (EX j:Z | `g <= j <= d` /\ #t[i]=#t'[j])
-    /\ (EX j:Z | `g <= j <= d` /\ #t'[i]=#t[j]).
-Proof.
-Intros N t t' g d hyp1 hyp2.
-Induction 1; Intros.
-(* 1. exchange *)
-Elim H2; Intros.
-Elim (Z_eq_dec i0 i); Intros.
-(* i0 = i *)
-Split ; [ Exists j | Exists j ].
-Split; [ Assumption | Rewrite a; Assumption ].
-Split; [ Assumption | Rewrite a; Symmetry; Assumption ].
-(* i0 <> i *)
-Elim (Z_eq_dec i0 j); Intros.
-(* i0 = j *)
-Split ; [ Exists i | Exists i ].
-Split; [ Assumption | Rewrite a; Assumption ].
-Split; [ Assumption | Rewrite a; Symmetry; Assumption ].
-(* i0 <> j *)
-Split ; [ Exists i0 | Exists i0 ].
-Split; [ Assumption | Apply H8; Omega ].
-Split; [ Assumption | Symmetry; Apply H8; Omega ].
-
-(* 2. refl *)
-Split ; [ Exists i | Exists i].
-Split; [ Assumption | Trivial ].
-Split; [ Assumption | Trivial ].
-
-(* 3. sym *)
-Elim (H1 i H2). Auto.
-
-(* 4. trans *)
-Split.
-
-Elim (H1 i H4). Intros.
-Elim H5; Intros.
-Elim H7; Intros.
-Elim (H3 x H8). Intros.
-Elim H10; Intros.
-Elim H12; Intros.
-Exists x0. Split ; [ Assumption | Idtac ].
-Elim H7; Intros.
-Exact (trans_eq Z (access t0 i) (access t'0 x) (access t'' x0) H16 H14).
-
-Elim (H3 i H4). Intros.
-Elim H6; Intros.
-Elim H7; Intros.
-Elim (H1 x H8). Intros.
-Elim H11; Intros.
-Elim H12; Intros.
-Exists x0. Split ; [ Assumption | Idtac ].
-Elim H7; Intros.
-Exact (trans_eq Z (access t'' i) (access t'0 x) (access t0 x0) H16 H14).
-Save.
-
-
 Lemma partition_p_permut_left :
   (N:Z)(t,t':(array N Z))(g,d,p:Z)
   `0 <= g` -> `g < d` -> `d < N` -> `g <= p <= d`

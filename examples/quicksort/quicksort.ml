@@ -19,7 +19,7 @@
    [Partition_prog]. *)
 
 (* The recursive part of the quicksort algorithm:
-   a recursive function to sort between [g] and [d] *)
+   a recursive function to sort between [l] and [r] *)
 
 let quick_rec =
   let rec quick_rec (t:array N of int)(l,r:int) : unit 
