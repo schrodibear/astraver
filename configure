@@ -566,8 +566,8 @@ OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
 echo "ocaml library path is $OCAMLLIB"
 
 case $OCAMLVERSION in
-  0.*|1.*|2.00|3.00*)
-        { echo "configure: error: You need Objective 3.01 or later" 1>&2; exit 1; };;
+  0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*)
+        { echo "configure: error: You need Objective 3.06 or later" 1>&2; exit 1; };;
 esac
 
 

@@ -44,3 +44,4 @@ type validation = proof cc_term
 val vcg : string -> (Loc.t * predicate) cc_term -> obligation list * validation
 
 val logs : Log.t ref
+val log_print_function : (Format.formatter -> sequent -> unit) ref

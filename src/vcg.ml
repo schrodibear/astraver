@@ -52,12 +52,15 @@ type validation = proof cc_term
 
 let logs = ref ([] : Log.t)
 
-let log l p lemma_name =
+let log_print_function = 
+  ref (fun fmt (_,p) -> fprintf fmt "@[%a@]@?" print_predicate p)
+
+let log l sq lemma_name =
   if wol then
     let s = 
       let buf = Buffer.create 1024 in
       let fmt = formatter_of_buffer buf in
-      fprintf fmt "@[%a@]@?" print_predicate p;
+      !log_print_function fmt sq;
       Buffer.contents buf
     in
     if_debug (fun () -> eprintf "at %d, %b, %s@\n" l (lemma_name = None) s) ();
@@ -132,7 +135,7 @@ let discharge_methods ctx concl =
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in
-  log (snd loc) concl None;
+  log (snd loc) (ctx, concl) None;
   if_verbose eprintf "one obligation trivially discharged@.";
   pr
 
@@ -187,9 +190,10 @@ let vcg base t =
   let push loc ctx concl = 
     incr cpt;
     let id = base ^ "_po_" ^ string_of_int !cpt in
-    log (snd loc) concl (Some id);
     let ctx' = clean_sequent (List.rev ctx) concl in
-    po := (id, (ctx', concl)) :: !po;
+    let sq = (ctx', concl) in
+    po := (id, sq) :: !po;
+    log (snd loc) sq (Some id);
     Lemma (id, hyps_names ctx')
   in
   let rec traverse ctx = function

@@ -473,8 +473,7 @@ Lemma p18_po_1 :
   (Post2: aux_2 = x)
   (x0: Z)
   (Post1: x0 = `0`)
-  `(access (store t x0 aux_2) 0) = x` /\ `0 <= x0` /\
-  `x0 < (array_length t)`.
+  `(access (store t x0 aux_2) 0) = x` /\ `0 <= x0` /\ `x0 < (array_length t)`.
 Proof.
 Intuition.
 Subst x0; AccessSame.

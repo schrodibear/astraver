@@ -14,13 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.mli,v 1.10 2003-01-09 13:13:47 filliatr Exp $ i*)
+(*i $Id: holl.mli,v 1.1 2003-01-09 13:13:47 filliatr Exp $ i*)
+
+(*s HOL Light output *)
 
 open Vcg
 
 val reset : unit -> unit
-
-val push_verbatim : string -> unit
 
 val push_obligations : obligation list -> unit
 

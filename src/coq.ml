@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.80 2002-12-10 15:03:13 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.81 2003-01-09 13:13:47 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -259,17 +259,19 @@ and print_binder_type fmt = function
 
 
 let print_sequent fmt (hyps,concl) =
-  let rec print_seq = function
+  let rec print_seq fmt = function
     | [] ->
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_cc_type v;
-	print_seq hyps
+	print_seq fmt hyps
     | Spred (id, p) :: hyps -> 
 	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_predicate p;
-	print_seq hyps
+	print_seq fmt hyps
   in
-  print_seq hyps
+  fprintf fmt "@[%a@]@?" print_seq hyps
+
+let _ = Vcg.log_print_function := print_sequent
 
 let print_proof fmt = function
   | Lemma (s, []) ->
