@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.12 2004-02-11 11:15:29 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.13 2004-02-13 08:42:07 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -280,8 +280,9 @@ let type_variant env = function
   | (t, None) -> (type_int_term env t, None)
   | (t, r) -> (type_term env t, r)
 
-let type_loop_annot env (i,v) =
-  option_app (type_predicate env) i, type_variant env v
+let type_loop_annot env la =
+  { invariant = option_app (type_predicate env) la.invariant;
+    variant = option_app (type_variant env) la.variant }
 
 let rec type_location env = function
   | Lterm t -> 

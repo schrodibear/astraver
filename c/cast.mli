@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.27 2004-02-11 11:15:29 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.28 2004-02-13 08:42:07 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -140,10 +140,9 @@ and cstatement_node =
   | CSnop
   | CSexpr of cexpr
   | CSif of cexpr * cstatement * cstatement
-  | CSwhile of cexpr * (offset * parsed_loop_annot) option * cstatement
-  | CSdowhile of cstatement * (offset * parsed_loop_annot) option * cexpr
-  | CSfor of 
-      cexpr * cexpr * cexpr * (offset * parsed_loop_annot) option * cstatement
+  | CSwhile of (offset * parsed_loop_annot) * cexpr * cstatement
+  | CSdowhile of (offset * parsed_loop_annot) * cstatement * cexpr
+  | CSfor of (offset * parsed_loop_annot) * cexpr * cexpr * cexpr * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -227,10 +226,9 @@ and tstatement_node =
   | TSnop
   | TSexpr of texpr
   | TSif of texpr * tstatement * tstatement
-  | TSwhile of texpr * tstatement * loop_info * loop_annot option
-  | TSdowhile of tstatement * texpr * loop_info * loop_annot option
-  | TSfor of 
-      texpr * texpr * texpr * tstatement * loop_info * loop_annot option
+  | TSwhile of loop_annot * texpr * tstatement * loop_info 
+  | TSdowhile of loop_annot * tstatement * texpr * loop_info
+  | TSfor of loop_annot * texpr * texpr * texpr * tstatement * loop_info
   | TSblock of tblock
   | TSreturn of texpr option
   | TSbreak

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.11 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.12 2004-02-13 08:42:07 filliatr Exp $ i*)
 
 (*****
 
@@ -894,6 +894,7 @@ let interp l =
 
 ***)
 
+open Clogic
 open Cast
 open Format
 open Output
@@ -1107,11 +1108,13 @@ let rec interp_statement stat acc =
 	    | None -> Void
 	    | Some e -> interp_expr e
 	end
-    | TSfor(e1,e2,e3,body,info,annot) ->
+    | TSfor(annot,e1,e2,e3,body,info) ->
 	let (inv,dec) =
 	  match annot with
-	    | None -> (LTrue,LConst (Prim_int 0))
-	    | Some(i,d) -> assert false (* TODO *)
+	    | { invariant = None; variant = None } -> 
+		(LTrue,LConst (Prim_int 0))
+	    | _ -> 
+		assert false (* TODO *)
 	in
 	interp_statement_expr e1
 	  (make_while (interp_expr e2) inv dec 

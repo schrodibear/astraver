@@ -37,6 +37,12 @@ do_simplify: arith_why.sxcheck sum2_why.sxcheck
 	cat caduceus_why.sx $< > $<.all
 	Simplify $<.all
 
+type-all:
+	export CADUCEUSLIB=../../../lib/why; \
+	for f in *.c; do \
+	  $(CADUCEUS) -type-only $$f; \
+	done
+
 include .depend
 
 depend .depend:

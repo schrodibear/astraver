@@ -1,7 +1,10 @@
+CADUCEUS=../../bin/caduceus.opt 
+CADUCEUSLIB=../../lib/why
+EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
 test:
 	-gcc -Wall -c test.c
-	../../bin/caduceus.opt -v -type-only test.c
+	$(EXECCADUCEUS) -v -type-only test.c
 
 gcc:
 	gcc -Wall test.c && ./a.out

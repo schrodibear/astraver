@@ -43,6 +43,8 @@
   let vwarning s = if verbose then warning s
   let dwarning s = if debug then warning s
 
+  let no_loop_annot = { Clogic.invariant = None; Clogic.variant = None }
+
   let add_pre_loc lb = function
     | Some (b,_) -> Loc.join (b,0) lb 
     | _ -> lb
@@ -697,8 +699,8 @@ direct_declarator
 
 /* ADDED FOR WHY */
 loop_annot
-        : LOOP_ANNOT                   { Some $1 }
-        | /* epsilon */ %prec no_annot { None }
+        : LOOP_ANNOT                   { $1 }
+        | /* epsilon */ %prec no_annot { symbol_start (), no_loop_annot }
         ;
 
 pointer
@@ -840,18 +842,19 @@ selection_statement
         ;
 
 iteration_statement
-        : WHILE LPAR expression RPAR loop_annot statement 
-            { locate (CSwhile ($3, $5, $6)) }
-        | DO statement loop_annot WHILE LPAR expression RPAR SEMICOLON 
-	    { locate (CSdowhile ($2, $3, $6)) }
-        | FOR LPAR expression_statement expression_statement RPAR 
-          loop_annot statement
-	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
-			     locate CEnop, $6, $7)) }
-        | FOR LPAR expression_statement expression_statement expression RPAR 
-          loop_annot statement 
-	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
-			     $5, $7, $8)) }
+        : loop_annot WHILE LPAR expression RPAR statement 
+            { locate (CSwhile ($1, $4, $6)) }
+        | loop_annot DO statement WHILE LPAR expression RPAR SEMICOLON 
+	    { locate (CSdowhile ($1, $3, $6)) }
+        | loop_annot FOR LPAR expression_statement expression_statement RPAR 
+          statement
+	    { locate (CSfor ($1, expr_of_statement $4, expr_of_statement $5, 
+			     locate CEnop, $7)) }
+        | loop_annot 
+          FOR LPAR expression_statement expression_statement expression RPAR 
+          statement 
+	    { locate (CSfor ($1, expr_of_statement $4, expr_of_statement $5, 
+			     $6, $8)) }
         ;
 
 jump_statement

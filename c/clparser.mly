@@ -140,12 +140,17 @@ spec:
 ;
 
 loop_annot:
-  invariant VARIANT variant { ($1, $3) }
+  invariant opt_variant { { invariant = $1; variant = $2 } }
 ;
 
 invariant:
   /* epsilon */       { None }
 | INVARIANT predicate { Some $2 }
+;
+
+opt_variant:
+  /* epsilon */   { None }
+| VARIANT variant { Some $2 }
 ;
 
 variant:

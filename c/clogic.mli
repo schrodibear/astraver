@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.11 2004-02-11 11:15:29 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.12 2004-02-13 08:42:07 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -93,7 +93,10 @@ type ('term,'pred) spec = {
   decreases : 'term variant option
 }
 
-type ('term,'ctype) loop_annot = 
-    ('term,'ctype) predicate option * 'term variant
+type ('term,'ctype) loop_annot = {
+  invariant : ('term,'ctype) predicate option;
+  variant : 'term variant option
+}
+
 
 

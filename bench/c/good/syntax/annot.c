@@ -13,12 +13,13 @@ int f(int x) {
 
 int g();
 
-/*@ ensures result > 0 */
+/*@ ensures \result > 0 */
 int g() {
   int s = 0;
   int i = 0;
   /*@ assert s == 0 */;
-  while (i < 10) /*@ invariant 0 <= i <= 10 variant 10 - i */ 
+  /*@ invariant 0 <= i <= 10 variant 10 - i */ 
+  while (i < 10) 
   {
     s += i++;
   }
@@ -33,11 +34,13 @@ int fact(int n) {
 
 void h() {
   int i = 1000;
-  do i--; /*@ invariant i >= 0 variant i */ while (i > 0);
+  /*@ invariant i >= 0 variant i */ 
+  do i--; while (i > 0);
   { 
     int j = 0;
     /*@ assert j == 0 */;
-    for (; j < 10; j++) /*@ invariant i >= 0 variant i */ i += j; 
+    /*@ invariant i >= 0 variant i */ 
+    for (; j < 10; j++) i += j; 
   }
 }
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.28 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.29 2004-02-13 08:42:08 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -504,28 +504,28 @@ and type_statement_node loc env et = function
   | CSgoto lab ->
       (* TODO: vérifier existence label *)
       TSgoto lab, mt_status
-  | CSfor (e1, e2, e3, an, s) -> 
-      let an = option_app (type_loop_annot env) an in
+  | CSfor (an, e1, e2, e3, s) -> 
+      let an = type_loop_annot env an in
       let e1 = type_expr env e1 in
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
       let s,st = type_statement env et s in
       let li = { loop_break = st.break; loop_continue = st.continue } in
-      TSfor (e1, e2, e3, s, li, an),
+      TSfor (an, e1, e2, e3, s, li),
       { mt_status with abrupt_return = st.abrupt_return }
-  | CSdowhile (s, an, e) ->
-      let an = option_app (type_loop_annot env) an in
+  | CSdowhile (an, s, e) ->
+      let an = type_loop_annot env an in
       let s, st = type_statement env et s in
       let e = type_boolean env e in
       let li = { loop_break = st.break; loop_continue = st.continue } in
-      TSdowhile (s, e, li, an), 
+      TSdowhile (an, s, e, li), 
       { mt_status with abrupt_return = st.abrupt_return }
-  | CSwhile (e, an, s) ->
-      let an = option_app (type_loop_annot env) an in
+  | CSwhile (an, e, s) ->
+      let an = type_loop_annot env an in
       let e = type_boolean env e in
       let s, st = type_statement env et s in
       let li = { loop_break = st.break; loop_continue = st.continue } in
-      TSwhile (e, s, li, an), 
+      TSwhile (an, e, s, li), 
       { mt_status with abrupt_return = st.abrupt_return }
   | CSreturn None ->
       if et <> None then warning loc 

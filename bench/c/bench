@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # benchmark for caduceus
+export CADUCEUSLIB=`pwd`/../../lib/why
 
 # C files to parse with success
 echo "C parsing (good)"

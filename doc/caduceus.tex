@@ -294,14 +294,14 @@ annotations.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{c\_file}
-    & $::=$ & \nt{c\_declaration}\etoile\ \\
+    & $::=$ & \nt{declaration}\etoile\ \\
   \\[0.1em]
 
-  \nt{c\_declaration}
-    & $::=$ & \nt{c\_spec} \nt{c\_type} \nt{identifier} \te{(} 
+  \nt{declaration}
+    & $::=$ & \nt{spec} \nt{type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               \te{;} \\
-      & $|$ & \nt{c\_spec} \nt{c\_type} \nt{identifier} \te{(} 
+      & $|$ & \nt{spec} \nt{type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               \nt{block} \te{;} \\
       & $|$ & \te{/*@} \te{logic} \nt{logic\_type} \nt{identifier} \te{(} 
@@ -312,7 +312,7 @@ annotations.
               \nt{predicate} \te{*/} \\
   \\[0.1em]
 
-  \nt{c\_spec}
+  \nt{spec}
     & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
               $[$ \te{modifiable} \nt{location}\plussep{\te{,}} $]$\\
            && $[$ \te{ensures} \nt{predicate} $]$ 
@@ -320,19 +320,19 @@ annotations.
   \\[0.1em]
 
   \nt{statement}
-    & $::=$ & \te{while} \te{(} \nt{c\_expr} \te{)}
-              \nt{c\_loop\_annot} \nt{statement} \\
-    &   $|$ & \te{do} \nt{statement} \nt{c\_loop\_annot} 
-              \te{while} \te{(} \nt{c\_expr} \te{)} \\
-    &   $|$ & \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
-              $[$ \nt{c\_expr} $]$ \te{)} \\
-           && \nt{c\_loop\_annot} \nt{statement} \\
+    & $::=$ & \nt{loop\_annot} \te{while} \te{(} \nt{expr} \te{)}
+              \nt{statement} \\
+    &   $|$ & \nt{loop\_annot} \te{do} \nt{statement} 
+              \te{while} \te{(} \nt{expr} \te{)} \\
+    &   $|$ & \nt{loop\_annot} \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
+              $[$ \nt{expr} $]$ \te{)} \\
+           && \nt{statement} \\
     &   $|$ & \te{/*@} \te{assert} \nt{predicate} \te{*/} \\ \indextt{assert}
     &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
-    &   $|$ & \nt{c\_spec} \nt{statement} \\
+    &   $|$ & \nt{spec} \nt{statement} \\
   \\[0.1em]
 
-  \nt{c\_loop\_annot}
+  \nt{loop\_annot}
     & $::=$ & \te{/*@} \te{invariant} \nt{predicate} 
               \te{variant} \nt{variant} \te{*/}  \\
   \nt{variant} 

@@ -11,8 +11,8 @@ int x;
 void main() 
 {
   int i = 0;
+  /*@ invariant x == i && i <= 10 variant 10-i */
   for (i = 0; i < 10; ++i)
-    /*@ invariant x == i && i <= 10 variant 10-i */
     x = x + 1;
 } 
 
