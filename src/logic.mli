@@ -1,5 +1,5 @@
 
-(*i $Id: logic.mli,v 1.5 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.6 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -14,6 +14,9 @@ type term =
   | Tbound of Ident.bound
   | Tconst of constant
   | Tapp of Ident.t * term list
+
+type substitution = term Ident.map
+type var_substitution = Ident.t Ident.map
 
 (*s Pure types. *)
 

@@ -13,7 +13,7 @@ Lemma p1_po_1 :
   (Post1: x0 = `x + 1`)
   (q x0).
 Proof. 
-Intuition Rewrite Post1.
+Intros; Rewrite Post1; Assumption.
 Save.
 
 Lemma p2_po_1 : 
@@ -22,7 +22,7 @@ Lemma p2_po_1 :
   (Post1: x0 = `3 + 4`)
   (q x0).
 Proof.
-Intuition Rewrite Post1.
+Intros; Rewrite Post1; Assumption.
 Save.
 
 Lemma p3_po_1 : 

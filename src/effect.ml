@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.10 2002-03-19 14:31:50 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.11 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 (*s Effects. *)
 
@@ -94,16 +94,16 @@ let occur x (r,w) = List.mem x r || List.mem x w
 
 (*s substitution *)
 
-let list_subst (x,x') l =
+let list_subst x x' l =
   let rec subst = function
     | [] -> []
     | y :: r -> if y = x then x' :: r else y :: subst r
   in
   if List.mem x l then subst l else l
 
-let subst_one s (r,w) = (list_subst s r, list_subst s w)
+let subst_one x x' (r,w) = (list_subst x x' r, list_subst x x' w)
 
-let subst = List.fold_right subst_one
+let subst = Idmap.fold subst_one
 
 (*s pretty-print *)
 

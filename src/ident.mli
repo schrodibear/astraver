@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.15 2002-03-27 14:15:11 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.16 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -13,6 +13,7 @@ module Idset : Set.S with type elt = t
 type set = Idset.t
 
 module Idmap : Map.S with type key = t
+type 'a map = 'a Idmap.t
 
 val next_away : t -> set -> t
 

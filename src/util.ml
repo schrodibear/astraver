@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.27 2002-03-28 16:12:43 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.28 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -46,13 +46,15 @@ let term_refs env c =
 
 let gen_change_label f c =
   let ids = Idset.elements (predicate_vars c) in
-  let al = 
-    map_succeed
-      (function id -> 
-	 if is_at id then (id, f (un_at id)) else failwith "caught")
-      ids
+  let s = 
+    List.fold_left 
+      (fun s id -> 
+	 if is_at id then 
+	   try Idmap.add id (f (un_at id)) s with Failure _ -> s
+	 else s)
+      Idmap.empty ids
   in
-  subst_in_predicate al c
+  subst_in_predicate s c
 
 let erase_label l c =
   gen_change_label 
@@ -64,8 +66,10 @@ let change_label l1 l2 c =
 
 let put_label_term env l t =
   let ids = term_refs env t in
-  let al = List.map (fun id -> (id, at_id id l)) (Idset.elements ids) in
-  subst_in_term al t
+  let s = 
+    Idset.fold (fun id s -> Idmap.add id (at_id id l) s) ids Idmap.empty 
+  in
+  subst_in_term s t
 
 (*s shortcuts for typing information *)
 
@@ -79,11 +83,11 @@ let result_type p = p.info.kappa.c_result_type
     according to a given renaming of variables (and a date that means
     `before' in the case of the post-condition). *)
 
-let make_assoc_list before ren env ids =
+let make_subst before ren env ids =
   Idset.fold
-    (fun id al ->
+    (fun id s ->
        if is_reference env id then
-	 (id, current_var ren id) :: al
+	 Idmap.add id (current_var ren id) s
        else if is_at id then
 	 let uid,d = un_at id in
 	 if is_reference env uid then begin
@@ -92,33 +96,33 @@ let make_assoc_list before ren env ids =
 	     | "", Some l -> l
 	     | _ -> d
 	   in
-	   (id, var_at_date ren d' uid) :: al
+	   Idmap.add id (var_at_date ren d' uid) s
 	 end else
-	   al
+	   s
        else
-	 al) 
-    ids []
+	 s) 
+    ids Idmap.empty
 
 let apply_term ren env t =
   let ids = term_vars t in
-  let al = make_assoc_list None ren env ids in
-  subst_in_term al t
+  let s = make_subst None ren env ids in
+  subst_in_term s t
 
 let apply_pre ren env c =
   let ids = predicate_vars c.p_value in
-  let al = make_assoc_list None ren env ids in
+  let s = make_subst None ren env ids in
   { p_assert = c.p_assert; p_name = c.p_name; 
-    p_value = subst_in_predicate al c.p_value }
+    p_value = subst_in_predicate s c.p_value }
 
 let apply_assert ren env c =
   let ids = predicate_vars c.a_value in
-  let al = make_assoc_list None ren env ids in
-  { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
+  let s = make_subst None ren env ids in
+  { a_name = c.a_name; a_value = subst_in_predicate s c.a_value }
  
 let apply_post before ren env c =
   let ids = predicate_vars c.a_value in
-  let al = make_assoc_list (Some before) ren env ids in
-  { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
+  let s = make_subst (Some before) ren env ids in
+  { a_name = c.a_name; a_value = subst_in_predicate s c.a_value }
   
 (*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
     as we cross the binders [bl]. *)
@@ -184,7 +188,7 @@ and occur_arrow id bl c = match bl with
 
 let forall x v p =
   let n = Ident.bound () in
-  let p = tsubst_in_predicate [x, Tbound n] p in
+  let p = tsubst_in_predicate (Idmap.add x (Tbound n) Idmap.empty) p in
   Forall (x, n, mlize_type v, p)
 
 let foralls =
@@ -195,7 +199,7 @@ let foralls =
 
 let rec type_c_subst s c =
   let {c_result_name=id; c_result_type=t; c_effect=e; c_pre=p; c_post=q} = c in
-  let s' = s @ List.map (fun (x,x') -> (at_id x "", at_id x' "")) s in
+  let s' = Idmap.fold (fun x x' -> Idmap.add (at_id x "") (at_id x' "")) s s in
   { c_result_name = id;
     c_result_type = type_v_subst s t;
     c_effect = Effect.subst s e;
@@ -264,8 +268,8 @@ let equality t1 t2 = Papp (t_eq, [t1; t2])
 let decomp_boolean = function
   | Some { a_value = c } -> 
       (* q -> if result then q(true) else q(false) *)
-      let ctrue = tsubst_in_predicate [Ident.result,ttrue] c in
-      let cfalse = tsubst_in_predicate [Ident.result,tfalse] c in
+      let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) c in
+      let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) c in
       simplify ctrue, simplify cfalse
   | None -> 
       equality (Tvar Ident.result) ttrue,

@@ -1,14 +1,15 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.10 2002-03-28 16:12:43 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.11 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 open Ast
+open Ident
 open Misc
 open Util
 
 let rec cc_subst subst = function
   | CC_var id as c -> 
-      (try CC_expr (List.assoc id subst) with Not_found -> c)
+      (try CC_expr (Idmap.find id subst) with Not_found -> c)
   | CC_letin (b,bl,c1,c2) ->
       CC_letin (b, cc_subst_binders subst bl,
 		cc_subst subst c1, cc_subst (cc_cross_binders subst bl) c2)
@@ -42,7 +43,7 @@ and cc_subst_binder subst = function
 
 and cc_cross_binders subst = function
   | [] -> subst
-  | (id,_) :: bl -> cc_cross_binders (List.remove_assoc id subst) bl
+  | (id,_) :: bl -> cc_cross_binders (Idmap.remove id subst) bl
 
 and cc_type_subst subst = function
   | TTarray (t, tt) -> 
@@ -54,9 +55,7 @@ and cc_type_subst subst = function
       TTarrow (cc_subst_binder subst b, 
 	       cc_type_subst (cc_cross_binders subst [b]) tt)
   | TTtuple (ttl, p) -> 
-      let subst' =
-	List.fold_right List.remove_assoc (List.map fst ttl) subst 
-      in
+      let subst' = List.fold_right Idmap.remove (List.map fst ttl) subst in
       TTtuple (List.map (fun (id,t) -> (id, cc_type_subst subst t)) ttl,
 	       option_app (tsubst_in_predicate subst') p)
   | TTpure _ as t -> 
@@ -74,7 +73,7 @@ let is_eta_redex bl al =
     List.for_all2
       (fun (id,_) t -> match t with CC_var id' -> id=id' | _ -> false)
       bl al
-  with Invalid_argument("List.for_all2") -> 
+  with Invalid_argument "List.for_all2" -> 
     false
 
 let is_expr = function CC_expr _ -> true | _ -> false
@@ -84,13 +83,13 @@ let is_iota_redex l1 l2 =
   List.for_all is_expr l2
 
 let rec iota_subst = function
-  | [], [] -> []
-  | (id,_) :: l1, CC_expr t :: l2 -> (id,t) :: iota_subst (l1, l2)
+  | [], [] -> Idmap.empty
+  | (id,_) :: l1, CC_expr t :: l2 -> Idmap.add id t (iota_subst (l1, l2))
   | _ -> assert false
 
 let rec red = function
   | CC_letin (_, [id,_], CC_expr c1, e2) ->
-      red (cc_subst [id,c1] e2)
+      red (cc_subst (subst_one id c1) e2)
   | CC_letin (dep, bl, e1, e2) ->
       (match red e2 with
 	 | CC_tuple al when is_eta_redex bl al ->

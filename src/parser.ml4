@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.32 2002-03-27 14:15:11 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.33 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -219,7 +219,8 @@ EXTEND
   [ [ "{"; p = OPT pre_condition; "}";
       (id,v) = result; e = effects; 
       "{"; q = OPT post_condition; "}" ->
-	let q = optpost_app (subst_in_predicate [id,Ident.result]) q in
+	let s = subst_onev id Ident.result in
+	let q = optpost_app (subst_in_predicate s) q in
         { c_result_name = id; c_result_type = v;
 	  c_effect = e; c_pre = list_of_some p; c_post = q } 
     | v = type_v -> 

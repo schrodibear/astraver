@@ -197,6 +197,7 @@ clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f lib/coq/*.vo lib/coq/*~
+	rm -f examples/*/*.vo examples/*/*~
 	rm -f $(GENERATED)
 	cd doc; make clean
 

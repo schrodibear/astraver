@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.40 2002-03-27 14:15:11 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.41 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -265,7 +265,7 @@ let state_post lab env (id,v,ef) loc = function
 		 Effect.add_write id e, c
 	       else
 		 Effect.add_read id e,
-		 subst_in_predicate [id, at_id id ""] c
+		 subst_in_predicate (subst_onev id (at_id id "")) c
 	     else if is_at id then begin
 	       let uid,l = un_at id in
 	       if l <> "" && not (LabelSet.mem l lab) then 
@@ -433,7 +433,7 @@ and typef_desc lab env loc = function
       (match t_a.desc with
 	 (* argument is pure: it is substituted *)
 	 | Expression ca when post t_a = None ->
-	     let kapp = type_c_rsubst [x,ca] kapp in
+	     let kapp = type_c_rsubst (subst_one x ca) kapp in
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     (match t_f.desc with
 	       (* function itself is pure: we collapse terms *)
@@ -448,7 +448,7 @@ and typef_desc lab env loc = function
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
 	     let v = fresh_var () in
-	     let kapp = type_c_subst [x,v] kapp in
+	     let kapp = type_c_subst (subst_onev x v) kapp in
 	     let info = { loc = loc; pre = []; post = None } in
 	     let env' = Env.add v tx env in
 	     let app_f_v,pl = match t_f.desc with
@@ -475,7 +475,7 @@ and typef_desc lab env loc = function
       let tr = type_in_env env r in
       expected_type locr tr tx;
       check_for_alias locr r (result_type t_f);
-      let kapp = type_c_subst [x,r] kapp in
+      let kapp = type_c_subst (subst_onev x r) kapp in
       let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let ef = Effect.union (effect t_f) eapp in
       App (t_f, a, Some kapp), (tapp, ef), []

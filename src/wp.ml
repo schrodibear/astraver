@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.36 2002-03-28 16:12:43 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.37 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -234,33 +234,33 @@ and wp_desc info d q =
   match d with
     (* TODO: check if likely *)
     | Var x ->
-	d, optpost_app (tsubst_in_predicate [result,Tvar x]) q
+	d, optpost_app (tsubst_in_predicate (subst_one result (Tvar x))) q
     (* $wp(E,q) = q[result \leftarrow E]$ *)
     | Expression t ->
-	d, optpost_app (tsubst_in_predicate [result,t]) q
+	d, optpost_app (tsubst_in_predicate (subst_one result t)) q
     (* $wp(!x,q) = q[result \leftarrow x]$ *)
     | Acc x ->
-	d, optpost_app (subst_in_predicate [result,x]) q
+	d, optpost_app (subst_in_predicate (subst_onev result x)) q
     (* $wp(x := e, q) = wp(e, q[result\leftarrow void; x\leftarrow result])$ *)
     | Aff (x, p) ->
-	let q = optpost_app (tsubst_in_predicate [result, tvoid]) q in
-	let q = optpost_app (subst_in_predicate [x, result]) q in
+	let q = optpost_app (tsubst_in_predicate (subst_one result tvoid)) q in
+	let q = optpost_app (subst_in_predicate (subst_onev x result)) q in
 	let p',w = wp p q in
 	Aff (x, p'), w
     | TabAcc (ck, x, e1) ->
 	let t = make_raw_access info.env (x,x) (Tvar result) in
-	let q = optpost_app (tsubst_in_predicate [result, t]) q in
+	let q = optpost_app (tsubst_in_predicate (subst_one result t)) q in
 	let e'1,w = wp e1 q in
 	TabAcc (ck, x, e'1), w
     | TabAff (ck, x, e1, e2) ->
 	(* TODO: does not propagate inside [e2] *)
-	let q = optpost_app (tsubst_in_predicate [result, tvoid]) q in
+	let q = optpost_app (tsubst_in_predicate (subst_one result tvoid)) q in
 	let v = fresh_var () in
 	let st = make_raw_store info.env (x,x) (Tvar result) (Tvar v) in
-	let q = optpost_app (tsubst_in_predicate [x, st]) q in
+	let q = optpost_app (tsubst_in_predicate (subst_one x st)) q in
 	let _,w1 = wp e1 q in
 	let e'1,_ = wp e1 None in
-	let w1 = optpost_app (subst_in_predicate [v, result]) w1 in
+	let w1 = optpost_app (subst_in_predicate (subst_onev v result)) w1 in
 	let e'2,w2 = wp e2 w1 in
 	TabAff (ck, x, e'1, e'2), w2
     (* conditional: two cases depending on [p1.post] *)
@@ -295,13 +295,13 @@ and wp_desc info d q =
 	Lam (bl, p'), None
     | LetIn (x, e1, e2) ->
 	let e'2, w = wp e2 q in
-	let q' = optpost_app (subst_in_predicate [x, result]) w in
+	let q' = optpost_app (subst_in_predicate (subst_onev x result)) w in
 	let e'1,w' = wp e1 q' in
 	LetIn (x, e'1, e'2), w'
     | LetRef (x, e1, e2) ->
 	(* same as LetIn: correct? *)
 	let e'2, w = wp e2 q in
-	let q' = optpost_app (subst_in_predicate [x, result]) w in
+	let q' = optpost_app (subst_in_predicate (subst_onev x result)) w in
 	let e'1,w' = wp e1 q' in
 	LetRef (x, e'1, e'2), w'
     | Rec (f, bl, v, var, e) ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.29 2002-03-28 16:12:43 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.30 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -159,9 +159,9 @@ and collect_pred s = function
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
 
-let rec tsubst_in_term alist = function
-  | Tvar x as t -> (try List.assoc x alist with Not_found -> t)
-  | Tapp (x,l) -> Tapp (x, List.map (tsubst_in_term alist) l)
+let rec tsubst_in_term s = function
+  | Tvar x as t -> (try Idmap.find x s with Not_found -> t)
+  | Tapp (x,l) -> Tapp (x, List.map (tsubst_in_term s) l)
   | Tconst _ | Tbound _ as t -> t
 
 let rec map_predicate f = function
@@ -173,18 +173,18 @@ let rec map_predicate f = function
   | Forall (id, b, v, p) -> Forall (id, b, v, f p)
   | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
-let rec tsubst_in_predicate alist = function
-  | Papp (id, l) -> Papp (id, List.map (tsubst_in_term alist) l)
-  | Pif (a, b ,c) -> Pif (tsubst_in_term alist a, 
-			  tsubst_in_predicate alist b, 
-			  tsubst_in_predicate alist c)
-  | p -> map_predicate (tsubst_in_predicate alist) p
+let rec tsubst_in_predicate s = function
+  | Papp (id, l) -> Papp (id, List.map (tsubst_in_term s) l)
+  | Pif (a, b ,c) -> Pif (tsubst_in_term s a, 
+			  tsubst_in_predicate s b, 
+			  tsubst_in_predicate s c)
+  | p -> map_predicate (tsubst_in_predicate s) p
 
-let subst_in_term alist = 
-  tsubst_in_term (List.map (fun (id,id') -> (id, Tvar id')) alist)
+let subst_in_term s = 
+  tsubst_in_term (Idmap.map (fun id -> Tvar id) s)
 
-let subst_in_predicate alist = 
-  tsubst_in_predicate (List.map (fun (id,id') -> (id, Tvar id')) alist)
+let subst_in_predicate s = 
+  tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
 
 let rec bsubst_in_term alist = function
   | Tbound n as t -> (try List.assoc n alist with Not_found -> t)
@@ -194,6 +194,10 @@ let rec bsubst_in_term alist = function
 let rec bsubst_in_predicate alist = function
   | Papp (id, l) -> Papp (id, List.map (bsubst_in_term alist) l)
   | p -> map_predicate (bsubst_in_predicate alist) p
+
+let subst_one x t = Idmap.add x t Idmap.empty
+
+let subst_onev = subst_one
 
 let equals_true = function
   | Tapp (id, _) as t when is_relation id -> t

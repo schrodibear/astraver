@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.25 2002-03-28 16:12:43 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.26 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -70,12 +70,15 @@ val predicate_of_term : term -> predicate
 val term_vars : term -> Ident.set
 val predicate_vars : predicate -> Ident.set
 
-val subst_in_term : (Ident.t * Ident.t) list -> term -> term
-val tsubst_in_term : (Ident.t * term) list -> term -> term
+val subst_in_term : var_substitution -> term -> term
+val tsubst_in_term : substitution -> term -> term
 
-val subst_in_predicate : (Ident.t * Ident.t) list -> predicate -> predicate
-val tsubst_in_predicate : (Ident.t * term) list -> predicate -> predicate
+val subst_in_predicate : var_substitution -> predicate -> predicate
+val tsubst_in_predicate : substitution -> predicate -> predicate
 val bsubst_in_predicate : (Ident.bound * term) list -> predicate -> predicate
+
+val subst_one : Ident.t -> term -> substitution
+val subst_onev : Ident.t -> Ident.t -> var_substitution
 
 val equals_true : term -> term
 val equals_false : term -> term

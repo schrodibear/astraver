@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.24 2002-03-20 16:01:44 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.25 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -142,7 +142,7 @@ let unit info t ren =
 	  []
       | Some c -> 
 	  let c = apply_post info.label ren env c in
-	  let c = tsubst_in_predicate [result, t] c.a_value in
+	  let c = tsubst_in_predicate (subst_one result t) c.a_value in
 	  [ CC_hole c ]
     in
     CC_tuple (
@@ -186,7 +186,7 @@ let gen_compose isapp info1 e1 e2 ren =
 	[], false
     | Some q1 -> 
 	let q1 = apply_post info1.label ren' env q1 in
-	let hyp = subst_in_predicate [Ident.result, res1] q1.a_value in
+	let hyp = subst_in_predicate (subst_onev result res1) q1.a_value in
 	[post_name q1.a_name, CC_pred_binder hyp], true 
   in
   let vo = current_vars ren' w1 in
@@ -286,7 +286,7 @@ let wfrec (phi,r) info f ren =
   let k = info'.kappa in
   let tphi = trad_type_c ren env k in
   let vphi0 = variant_name () in
-  let tphi0 = trad_type_c ren env (type_c_subst [vphi,vphi0] k) in
+  let tphi0 = trad_type_c ren env (type_c_subst (subst_onev vphi vphi0) k) in
   let input ren =
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
     let pl = (anonymous_pre false (equality phi phi)) :: info.kappa.c_pre in

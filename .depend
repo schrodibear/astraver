@@ -83,7 +83,7 @@ src/wp.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
 src/ast.cmi: src/ident.cmi src/loc.cmi src/logic.cmi src/types.cmi 
 src/coq.cmi: src/ast.cmi src/vcg.cmi 
 src/db.cmi: src/ast.cmi src/types.cmi 
-src/effect.cmi: src/ident.cmi 
+src/effect.cmi: src/ident.cmi src/logic.cmi 
 src/env.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/error.cmi: src/ast.cmi src/effect.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/types.cmi 

@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.16 2002-03-27 14:15:11 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.17 2002-04-10 08:35:18 filliatr Exp $ i*)
 
 type t = string
 
@@ -9,7 +9,9 @@ let string s = s
 
 module Idset = Set.Make(struct type t = string let compare = compare end)
 type set = Idset.t
+
 module Idmap = Map.Make(struct type t = string let compare = compare end)
+type 'a map = 'a Idmap.t
 
 let is_index s = 
   let n = String.length s in
