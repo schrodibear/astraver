@@ -32,7 +32,16 @@ Lemma f_impl_po_2 :
 Proof.
 intuition.
 subst; auto.
-Admitted.
+red.
+intros.
+red in H7.
+apply H7.
+apply alloc_stack_valid with i alloc;auto.
+apply unchanged_pointer_intro.
+intro;subst.
+generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
+tauto.
+Save.
 
 (* Why obligation from file "why/ref.why", characters 275-422 *)
 Lemma g_impl_po_1 : 

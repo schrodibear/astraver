@@ -135,10 +135,12 @@ inversion_clear H5.
 inversion_clear H6.
 inversion_clear H7.
 inversion_clear H8.
-Admitted.
-
-
-
+generalize (fresh_not_valid _ _ H6 0).
+intros.
+intro.
+rewrite shift_zero in H8.
+apply H8;subst;auto.
+Save.
 
 
 

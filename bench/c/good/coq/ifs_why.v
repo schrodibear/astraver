@@ -40,7 +40,7 @@ Lemma V4A_impl_po_2 :
   ((acc intP (shift Ch_Pn 0)) = 0 -> (valid alloc (shift Pn_Bac 0)) /\
    (valid alloc (shift Pn_Bac 0))).
 Proof.
-intuition.
+intuition;rewrite shift_zero.
 Admitted.
 
 (* Why obligation from file "why/ifs.why", characters 454-1161 *)
@@ -105,8 +105,10 @@ Lemma V4A_impl_po_4 :
                  (acc intP (shift SPMEP 0)) <> 0) /\ aux_4 = 0),
   (valid alloc caduceus_19).
 Proof.
-intuition; subst; auto.
-Admitted.
+intuition; subst; auto;rewrite shift_zero;auto;
+generalize (valid_anonymous_0_CPRE_VC_pointer alloc VC Parametre H);
+unfold valid_anonymous_0_CPRE_VC;tauto.
+Save.
 
 (* Why obligation from file "why/ifs.why", characters 427-1162 *)
 Lemma V4A_impl_po_5 : 
