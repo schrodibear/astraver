@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: navig.ml,v 1.4 2003-06-19 07:29:58 filliatr Exp $ i*)
+(*i $Id: navig.ml,v 1.5 2003-06-20 12:47:08 filliatr Exp $ i*)
 
 module type Tree = sig
 
@@ -32,7 +32,7 @@ module type NavTree = sig
   type tree
   type t
 
-  val create : tree -> t
+  val create : tree list -> t
 
   exception NoMove
   val down : t -> t
@@ -59,8 +59,6 @@ module MakeNavTree (T : Tree) = struct
 
   let no_move () = raise NoMove
 
-  let create x = x, Up no_move, Left no_move, Right no_move
-
   let up (_, Up f, _, _) = f ()
   let left (_, _, Left f, _) = f ()
   let right (_, _, _, Right f) = f ()
@@ -71,21 +69,30 @@ module MakeNavTree (T : Tree) = struct
     | x :: l ->
 	let rec self =
 	  x, Up (fun () -> t), Left no_move, 
-	  Right (fun () -> sibling t self l)
+	  Right (fun () -> sibling (fun () -> t) self l)
 	in
 	self
 
-  and sibling t ls = function
+  and sibling up ls = function
     | [] ->
 	raise NoMove
     | x :: l -> 
 	let rec self =
-	  x, Up (fun () -> t), Left (fun () -> ls), 
-	  Right (fun () -> sibling t self l)
+	  x, Up up, Left (fun () -> ls), 
+	  Right (fun () -> sibling up self l)
 	in
 	self
 
-  let down ((x, up, _, _) as t) = first_child t (T.children x)
+  let down ((x, _, _, _) as t) = first_child t (T.children x)
+
+  let create = function
+    | [] ->
+	invalid_arg "NavTree.create"
+    | x :: l -> 
+	let rec self =
+	  x, Up no_move, Left no_move, Right (fun () -> sibling no_move self l)
+	in
+	self
 
   type info = T.info
   let info (x,_,_,_) = T.info x

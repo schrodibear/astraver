@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: navig.mli,v 1.4 2003-06-19 07:29:59 filliatr Exp $ i*)
+(*i $Id: navig.mli,v 1.5 2003-06-20 12:47:08 filliatr Exp $ i*)
 
 (*s trees *)
 
@@ -36,7 +36,7 @@ module type NavTree = sig
   type tree (* type of trees *)
   type t    (* type of navigable trees *)
 
-  val create : tree -> t
+  val create : tree list -> t
 
   (* functions to navigate in the tree; 
      must raise [NoMove] when the move is not possible *)
