@@ -38,7 +38,7 @@ subst; rewrite acc_upd_eq; omega.
 unfold assigns.
 intuition.
 assert (p0<>p).
-apply unchanged_pointer1; assumption.
+apply unchanged_pointer_intro; assumption.
 subst balance0.
 rewrite acc_upd_neq; auto.
 Save.
@@ -94,15 +94,30 @@ Lemma test1_po_3 :
   forall (Post7: result1 = (acc balance1 p1)),
   result1 = 0 /\
   (assigns alloc balance balance1
-   (union_loc (pointer_loc p2) (pointer_loc p1))) /\
-  (assigns alloc balance balance1 (pointer_loc p1)).
+   (union_loc (pointer_loc p2) (pointer_loc p1))).
 Proof.
 unfold purse_inv; intuition.
-subst.
-
+subst result1.
+rewrite H8; intuition.
+subst balance0.
+rewrite acc_upd_eq; auto.
+apply unchanged_pointer_elim;auto.
+unfold assigns; intuition.
+assert (p<>p2).
+apply unchanged_pointer_intro.
+apply unchanged_union_intro1 with (pointer_loc p1).
+assumption.
+rewrite H8; intuition.
+subst balance0.
+assert (p<>p1).
+apply unchanged_pointer_intro.
+apply unchanged_union_intro2 with (pointer_loc p2).
+assumption.
+rewrite acc_upd_neq; auto.
+apply unchanged_pointer_elim; auto.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1051-1069 *)
+(* Why obligation from file "why/purse.why", characters 981-999 *)
 Lemma withdraw_po_1 : 
   forall (p: pointer),
   forall (s: Z),
@@ -114,7 +129,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1095-1118 *)
+(* Why obligation from file "why/purse.why", characters 1025-1048 *)
 Lemma withdraw_po_2 : 
   forall (p: pointer),
   forall (s: Z),
@@ -138,9 +153,14 @@ omega.
 subst balance0.
 rewrite acc_upd_eq.
 omega.
+unfold assigns; intuition.
+assert (p0<>p).
+apply unchanged_pointer_intro; auto.
+subst balance0.
+rewrite acc_upd_neq; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1441-1458 *)
+(* Why obligation from file "why/purse.why", characters 1371-1388 *)
 Lemma test2_po_1 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
@@ -153,7 +173,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1474-1491 *)
+(* Why obligation from file "why/purse.why", characters 1404-1421 *)
 Lemma test2_po_2 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
@@ -168,10 +188,11 @@ Lemma test2_po_2 :
                  (assigns alloc balance balance0 (pointer_loc p1))),
   (purse_inv alloc balance0 p2) /\ 200 >= 0.
 Proof.
-intuition.
+unfold purse_inv; intuition.
+
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1509-1527 *)
+(* Why obligation from file "why/purse.why", characters 1439-1457 *)
 Lemma test2_po_3 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
@@ -194,7 +215,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1547-1566 *)
+(* Why obligation from file "why/purse.why", characters 1477-1496 *)
 Lemma test2_po_4 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
@@ -223,7 +244,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1590-1609 *)
+(* Why obligation from file "why/purse.why", characters 1520-1539 *)
 Lemma test2_po_5 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
@@ -258,7 +279,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1640-1659 *)
+(* Why obligation from file "why/purse.why", characters 1570-1589 *)
 Lemma test2_po_6 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),
@@ -296,7 +317,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1619-1660 *)
+(* Why obligation from file "why/purse.why", characters 1549-1590 *)
 Lemma test2_po_7 : 
   forall (alloc: alloc),
   forall (balance: ((memory) Z)),

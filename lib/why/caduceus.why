@@ -97,24 +97,28 @@ logic unchanged : pointer,assign_loc -> prop
 
 predicate assigns (a:alloc,m1:'a memory,m2:'a memory,l:assign_loc) =
  forall p:pointer.
-    (not(fresh(a,p)) and unchanged(p,l)) -> acc(m1,p)=acc(m2,p)
+    (valid(a,p) and unchanged(p,l)) -> acc(m2,p)=acc(m1,p)
 
 
-axiom unchanged_pointer1 : 
-  forall p1:pointer. forall p2:pointer.
-    unchanged(p1,pointer_loc(p2)) -> p1 <> p2
-
-axiom unchanged_pointer2 : 
+axiom unchanged_pointer_elim : 
   forall p1:pointer.forall p2:pointer.
     p1 <> p2 -> unchanged(p1,pointer_loc(p2))
 
-axiom unchanged_union1 : 
-  forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
-    unchanged(p,union_loc(l1,l2)) ->
-       unchanged(p,l1) and unchanged(p,l2)
+axiom unchanged_pointer_intro : 
+  forall p1:pointer. forall p2:pointer.
+    unchanged(p1,pointer_loc(p2)) -> p1 <> p2
 
-axiom unchanged_union2 : 
+axiom unchanged_union_elim : 
   forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
      unchanged(p,l1) and unchanged(p,l2) -> 
      unchanged(p,union_loc(l1,l2))
+
+axiom unchanged_union_intro1 : 
+  forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
+    unchanged(p,union_loc(l1,l2)) -> unchanged(p,l1) 
+
+axiom unchanged_union_intro2 : 
+  forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
+    unchanged(p,union_loc(l1,l2)) -> unchanged(p,l2)
+
 

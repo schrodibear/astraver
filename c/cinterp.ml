@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.45 2004-03-23 08:04:34 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.46 2004-03-23 09:44:08 marche Exp $ i*)
 
 
 open Format
@@ -28,10 +28,6 @@ let global_var_for_type t =
   match t.ctype_node with
     | CTint _ -> "intP"
     | _ -> assert false (* TODO *)
-
-let interp_param (t,id) =
-  (* TODO : tester si param is assigned *)
-  (id,base_type (Ceffect.interp_type t))
 
 let interp_rel = function
   | Lt -> "lt_int"
@@ -380,6 +376,8 @@ and interp_lvalue e =
 	  
 
 
+module StringMap = Map.Make(String)
+
 let collect_locations acc loc =
   match loc with
     | Lterm t -> 
@@ -389,10 +387,10 @@ let collect_locations acc loc =
 		let loc = LApp("pointer_loc",[interp_term (Some "") "" e]) in
 		begin
 		  try
-		    let p = List.assoc f acc in
-		    (f,LApp("union_loc",[loc;p]))::acc
+		    let p = StringMap.find f acc in
+		    StringMap.add f (LApp("union_loc",[loc;p])) acc
 		  with
-		      Not_found -> (f,loc)::acc
+		      Not_found -> StringMap.add f loc acc
 		end
 	    | _ -> assert false (* TODO *)
 	end
@@ -400,16 +398,14 @@ let collect_locations acc loc =
     | Lrange(t1,t2,t3) -> assert false (* TODO *)
 
 
-
-
 let interp_assigns locl =
-  let l = List.fold_left collect_locations [] locl in
-  List.fold_left
-    (fun acc (v,p) ->
+  let l = List.fold_left collect_locations StringMap.empty locl in
+  StringMap.fold
+    (fun v p acc ->
        make_and acc
 	 (LPred("assigns",
 		[LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; p])))
-    LTrue l
+    l LTrue
 
 	 
 
@@ -704,14 +700,31 @@ let interp_axiom p =
 let interp_effects e =
   HeapVarSet.fold (fun var acc -> var::acc) e []
 
-let interp_fun_params params =
+(*
+let interp_param pre (t,id) =
+  (* TODO : tester si param is assigned *)
+  let tt = Ceffect.interp_type t in
+  (if tt="pointer" then make_and (LNot(LPred("fresh",[LVar id]))) pre
+			 else pre),
+  (id,base_type tt)
+*)
+
+let interp_fun_params pre params =
   if params=[]
-  then ["tt",unit_type]
-  else List.map interp_param params 
+  then pre, ["tt",unit_type]
+  else List.fold_right 
+    (fun (t,id) (pre,tpl) ->
+       let tt = Ceffect.interp_type t in
+       (((*if tt="pointer" 
+	 then make_and (LNot(LPred("fresh",[LVar "alloc";LVar id]))) pre
+	 else*) pre),
+	(id,base_type tt)::tpl))
+ params (pre,[])
+
 
 let interp_function_spec id sp ty pl =
-  let tpl = interp_fun_params pl in
   let pre,post = interp_spec_option sp in
+  let pre,tpl = interp_fun_params pre pl in
   let r = HeapVarSet.elements id.function_reads in
   let w = HeapVarSet.elements id.function_writes in
   let annot_type = 
@@ -725,6 +738,7 @@ let interp_function_spec id sp ty pl =
       annot_type
   in
   Param (false, id.var_name ^ "_parameter", ty)
+
 
 let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   match decl.node with
@@ -763,8 +777,8 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
        prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
       lprintf "translating function %s@." id.var_name;
-      let tparams = interp_fun_params params in
       let pre,post = interp_spec_option spec in
+      let pre,tparams = interp_fun_params pre params in
       abrupt_return := None;
       let tblock = catch_return (interp_statement false block) in
       ((Def(id.var_name,Fun(tparams,pre,tblock,post,None)))::why_code,

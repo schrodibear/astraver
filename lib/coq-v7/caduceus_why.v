@@ -115,31 +115,35 @@ Admitted.
 
 (*Why predicate*) Definition assigns [A31:Set] [a:alloc] [m1:((memory) A31)]
   [m2:((memory) A31)] [l:assign_loc]
-  := ((p:pointer)
-      (~(fresh a p) /\ (unchanged p l) -> (acc m1 p) = (acc m2 p))).
+  := ((p:pointer) ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicits assigns [1].
 
-(*Why axiom*) Lemma unchanged_pointer1 :
-  ((p1:pointer)
-   ((p2:pointer) ((unchanged p1 (pointer_loc p2)) -> ~(p1 = p2)))).
-Admitted.
-
-(*Why axiom*) Lemma unchanged_pointer2 :
+(*Why axiom*) Lemma unchanged_pointer_elim :
   ((p1:pointer)
    ((p2:pointer) (~(p1 = p2) -> (unchanged p1 (pointer_loc p2))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union1 :
-  ((l1:assign_loc)
-   ((l2:assign_loc)
-    ((p:pointer)
-     ((unchanged p (union_loc l1 l2)) -> (unchanged p l1) /\ (unchanged p l2))))).
+(*Why axiom*) Lemma unchanged_pointer_intro :
+  ((p1:pointer)
+   ((p2:pointer) ((unchanged p1 (pointer_loc p2)) -> ~(p1 = p2)))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union2 :
+(*Why axiom*) Lemma unchanged_union_elim :
   ((l1:assign_loc)
    ((l2:assign_loc)
     ((p:pointer)
      ((unchanged p l1) /\ (unchanged p l2) -> (unchanged p (union_loc l1 l2)))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_union_intro1 :
+  ((l1:assign_loc)
+   ((l2:assign_loc)
+    ((p:pointer) ((unchanged p (union_loc l1 l2)) -> (unchanged p l1))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_union_intro2 :
+  ((l1:assign_loc)
+   ((l2:assign_loc)
+    ((p:pointer) ((unchanged p (union_loc l1 l2)) -> (unchanged p l2))))).
 Admitted.
 

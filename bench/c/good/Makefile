@@ -77,4 +77,4 @@ depend .depend:
 	coqdep -R ../../../lib/coq Coq.why -I coq coq/*.v > .depend
 
 clean:
-	rm -f why/*.why coq/*.vo coq/caduceus_spec_why.v
+	rm -f why/*.why coq/*.vo coq/caduceus_why.v coq/caduceus_spec_why.v
