@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.11 2002-02-05 15:01:55 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.12 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -17,6 +17,8 @@ open Rename
 (* term utilities *)
 
 let equality t1 t2 = Papp (t_eq, [t1; t2])
+
+let post e = e.info.kappa.c_post
 
 (* force a post-condition *)
 
@@ -46,21 +48,19 @@ let force_post up env top q e =
   in
   let c' = { e.info.kappa with c_post = q' } in
   let i = { env = e.info.env; kappa = c' } in
-  { desc = e.desc; pre = e.pre; post = q'; loc = e.loc; info = i }
+  { desc = e.desc; info = i }
 
 let optpost_app f = option_app (post_app f)
 
 (* put a post-condition if none is present *)
 
-let post_if_none_up env top q = function
-  | { post = None } as p -> 
-      force_post true env top q p 
-  | p -> 
-      p
+let post_if_none_up env top q p = match p.info.kappa.c_post with
+  | None -> force_post true env top q p 
+  | _ -> p
 
-let post_if_none env q = function
-  | { post = None } as p -> force_post false env "" q p 
-  | p -> p
+let post_if_none env q p = match p.info.kappa.c_post with
+  | None -> force_post false env "" q p 
+  | _ -> p
 
 let create_bool_post c =
   Some { a_value = c; a_name = Name (bool_name()) }
@@ -70,14 +70,16 @@ let is_conditional p = match p.desc with If _ -> true | _ -> false
 (* [annotation_candidate p] determines if p is a candidate for a 
  * post-condition *)
 
+(*i DEAD
 let annotation_candidate = function
   | { desc = If _ | LetIn _ | LetRef _ ; post = None } -> true
   | _ -> false
+i*)
 
 (* [extract_pre p] erase the pre-condition of p and returns it *)
 
 let extract_pre pr =
-  { desc = pr.desc; pre = []; post = pr.post; loc = pr.loc;
+  { desc = pr.desc; 
     info = { env = pr.info.env; kappa = { pr.info.kappa with c_pre = [] } } },
   pr.info.kappa.c_pre
 
@@ -86,7 +88,7 @@ let extract_pre pr =
 let add_pre p1 pr =
   let k = pr.info.kappa in
   let p' = p1 @ k.c_pre in
-  { desc = pr.desc; pre = p'; post = pr.post; loc = pr.loc;
+  { desc = pr.desc; 
     info = { env = pr.info.env; kappa = { k with c_pre = p' } } }
   
 (* change the statement *)
@@ -131,11 +133,13 @@ let add_decreasing env inv (var,r) lab bl =
 (* [post_last_statement env top q bl] annotates the last statement of the
  * sequence bl with q if necessary *)
 
+(*i DEAD
 let post_last_statement env top q bl =
   match List.rev bl with
     | Statement e :: rem when annotation_candidate e -> 
 	List.rev ((Statement (post_if_none_up env top q e)) :: rem)
     | _ -> bl
+i*)
 
 (*s Normalization. In this first pass, we
     (1) annotate the function calls
@@ -157,6 +161,7 @@ let lift_pre p = match p.desc with
 let rec normalize ren p =
   let env = p.info.env in
   let p = lift_pre p in
+  let k = p.info.kappa in
   match p.desc with
     | App (f,l) ->
 	let _,(_,so,ok),capp = effect_app ren env f l in
@@ -166,7 +171,7 @@ let rec normalize ren p =
 	  post_if_none env q p
 	else
 	  p
-    | Aff (x, { desc = Expression t }) when p.post = None ->
+    | Aff (x, { desc = Expression t }) when k.c_post = None ->
 	let t = make_after_before_term env t in
 	let q = create_bool_post (equality (Tvar x) t) in
 	post_if_none env q p
@@ -192,7 +197,8 @@ i*)
     | While (b, invopt, var, bl) ->
 	change_desc p (While (normalize_boolean ren env b,
 			      invopt, var, normalize_block ren bl))
-    | LetRef (x, ({ desc = Expression t } as e1), e2) when e1.post = None ->
+    | LetRef (x, ({ desc = Expression t } as e1), e2) 
+      when e1.info.kappa.c_post = None ->
 	let t = make_after_before_term env t in
 	let q = create_bool_post (equality (Tvar Ident.result) t) in
 	let ren' = next ren [x] in
@@ -222,53 +228,49 @@ and normalize_block ren = function
 
 and normalize_boolean ren env b =
   let k = b.info.kappa in
-  Error.check_no_effect b.loc k.c_effect;
   let give_post b q =
-    { b with post = q; info = { b.info with kappa = { k with c_post = q } } }
+    { b with info = { b.info with kappa = { k with c_post = q } } }
   in
-  if is_bool k.c_result_type then
-    let q = k.c_post in
-    match q with
-      | Some _ ->
-	  (* a postcondition; nothing to do *)
-	  normalize ren (give_post b (force_bool_name q))
-      | None -> begin
-	  match b.desc with
-	    | Expression (Tapp (id, [t1;t2])) when is_relation id ->
-		let c = Pif (Tvar Ident.result, 
-			     relation id t1 t2, not_relation id t1 t2) in
-		give_post b (create_bool_post c)
-	    | Expression c ->
-		(* expression E -> if result then E else not E *)
-		let c = Pif (Tvar Ident.result, 
-			     equality c ttrue, equality c tfalse) in
-		give_post b (create_bool_post c)
-	    | If (e1, e2, e3) ->
-		let ne1 = normalize_boolean ren env e1 in
-		let ne2 = normalize_boolean ren env e2 in
-		let ne3 = normalize_boolean ren env e3 in
-		let q1t,q1f = decomp_boolean ne1.post in
-		let q2t,q2f = decomp_boolean ne2.post in
-		let q3t,q3f = decomp_boolean ne3.post in
-		let c = Pif (Tvar Ident.result,
-			     por (pand q1t q2t) (pand q1f q3t),
-			     por (pand q1t q2f) (pand q1f q3f)) in
-		let b' = change_desc b (If (ne1,ne2,ne3)) in
-		give_post b' (create_bool_post c)
-	    | _ -> 
-		let b = normalize ren b in
-		assert (b.post <> None);
-		normalize_boolean ren env b
-	end
-  else
-    Error.should_be_boolean b.loc
+  let q = k.c_post in
+  match q with
+    | Some _ ->
+	(* a postcondition; nothing to do *)
+	normalize ren (give_post b (force_bool_name q))
+    | None -> begin
+	match b.desc with
+	  | Expression (Tapp (id, [t1;t2])) when is_relation id ->
+	      let c = Pif (Tvar Ident.result, 
+			   relation id t1 t2, not_relation id t1 t2) in
+	      give_post b (create_bool_post c)
+	  | Expression c ->
+	      (* expression E -> if result then E else not E *)
+	      let c = Pif (Tvar Ident.result, 
+			   equality c ttrue, equality c tfalse) in
+	      give_post b (create_bool_post c)
+	  | If (e1, e2, e3) ->
+	      let ne1 = normalize_boolean ren env e1 in
+	      let ne2 = normalize_boolean ren env e2 in
+	      let ne3 = normalize_boolean ren env e3 in
+	      let q1t,q1f = decomp_boolean (post ne1) in
+	      let q2t,q2f = decomp_boolean (post ne2) in
+	      let q3t,q3f = decomp_boolean (post ne3) in
+	      let c = Pif (Tvar Ident.result,
+			   por (pand q1t q2t) (pand q1f q3t),
+			   por (pand q1t q2f) (pand q1f q3f)) in
+	      let b' = change_desc b (If (ne1,ne2,ne3)) in
+	      give_post b' (create_bool_post c)
+	  | _ -> 
+	      let b = normalize ren b in
+	      assert (post b <> None);
+	      normalize_boolean ren env b
+      end
 
 (*s WP. [wp ren p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary. *)
 
 let rec wp ren p q =
   let env = p.info.env in
-  let q = if q = None then p.post else q in
+  let q = if q = None then post p else q in
   let d,w = wp_desc ren p.info p.desc q in
   let p = change_desc p d in
   post_if_none env q p, w
@@ -307,7 +309,7 @@ i*)
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp ren p2 q in
 	let p'3,w3 = wp ren p3 q in
-	(match w2, w3, p1.post with
+	(match w2, w3, post p1 with
 	   | Some {a_value=q2}, Some {a_value=q3}, Some {a_value=q1} -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  q1(true) => wp(p2, q) and q1(false) => wp(p3, q)$ *)
@@ -376,7 +378,7 @@ and wp_block ren bl q = match bl with
       let efp = p.info.kappa.c_effect in
       let ren' = next ren (get_writes efp) in
       let bl', w = wp_block ren' bl q in
-      let w = if is_conditional p && p.post <> None then p.post else w in
+      let w = if is_conditional p && post p <> None then post p else w in
       let p', w' = wp ren p w in
       Statement p' :: bl', w'
   | Label l :: bl ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.7 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.8 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -29,6 +29,11 @@ let difference l1 l2 =
     | a::rem -> if List.mem a l2 then diff rem else a::(diff rem)
   in
   diff l1
+
+let rec list_combine3 a b c = match a, b, c with
+  | [], [], [] -> []
+  | xa::ra, xb::rb, xc::rc -> (xa, xb, xc) :: list_combine3 ra rb rc
+  | _ -> invalid_arg "list_combine3"
 
 (*s Functions on names *)
 

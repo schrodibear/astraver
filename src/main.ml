@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.9 2002-01-31 22:48:02 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.10 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -28,6 +28,7 @@ let output fwe = match !prover with
 (*s Processing os a single declaration [p]. *)
 
 let interp_program id p =
+  let ploc = p.info.loc in
   if !debug then eprintf "=== interpreting program %a ===@\n" Ident.print id;
   let p = Db.db_prog p in
   if !debug then eprintf "=== typing with effects ===@\n";
@@ -36,7 +37,7 @@ let interp_program id p =
   let p = Typing.states ren env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
-  Error.check_for_not_mutable p.loc v;
+  Error.check_for_not_mutable ploc v;
   if !debug then begin print_type_c err_formatter c; eprintf "@\n" end;
   if !debug then eprintf "=== weakest preconditions ===@\n";
   let p = Wp.propagate ren p in

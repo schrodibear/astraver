@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.9 2002-02-05 15:01:55 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.10 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -137,56 +137,6 @@ let rec convert = function
   | (v1,v2) -> 
       v1 = v2
       
-let effect_app ren env f args =
-  let n = List.length args in
-  let tf = f.info.kappa.c_result_type in (* TODO: external function type *)
-  let bl,c = 
-    match tf with
-      | Arrow (bl, c) ->
-	  if List.length bl <> n then Error.partial_app f.loc;
-	  bl,c
-      | _ -> Error.app_of_non_function f.loc
-  in
-  let check_type loc v t so =
-    let v' = type_v_rsubst so v in
-    if not (convert (v',t)) then 
-      Error.ill_typed_argument loc (fun fmt -> print_type_v fmt v')
-  in
-  let s,so,ok = 
-    (* s est la substitution des références, so celle des autres arg. 
-     * ok nous dit si les arguments sont sans effet i.e. des expressions *)
-    List.fold_left
-    (fun (s,so,ok) (b,a) ->
-       match b,a with
-	 | (id,BindType (Ref _ | Array _ as v)), Refarg id' ->
-	     let ta = type_in_env env id' in
-	     check_type f.loc v ta so;
-	     (id,id')::s, so, ok
-	 | (id,_), Refarg _ -> 
-	     Error.should_be_a_reference f.loc id
-	 | (id,BindType v), Term t ->
-	     let ta = t.info.kappa.c_result_type in
-	     check_type f.loc v ta so;
-	     (match t.desc with
-		| Expression c -> s, (id,c)::so, ok
-		| _ -> s,so,false)
-	 | (id,BindSet), Type v ->
-	     failwith "TODO"
-	     (*i TODO
-	     let c = Monad.trad_ml_type_v ren env v in s, (id,c)::so, ok i*)
-	 | (id,BindSet), Term t -> 
-	     Error.expects_a_type id t.loc
-	 | (id,BindType _), Type _ -> 
-	     Error.expects_a_term id
-	 | (_,Untyped), _ -> 
-	     assert false)
-    ([],[],true)
-    (List.combine bl args)
-  in
-  let c' = type_c_subst s c in
-  (bl,c), (s,so,ok), 
-  { c' with c_result_type = type_v_rsubst so c'.c_result_type }
-
 (* [is_pure p] tests wether the program p is an expression or not. *)
 
 let rec is_pure_type_v = function
@@ -215,7 +165,7 @@ let rec is_pure_desc ren env = function
   | Debug (_,p) -> is_pure ren env p
   | PPoint (_,d) -> is_pure_desc ren env d
 and is_pure ren env p =
-  p.pre = [] && p.post = None && is_pure_desc ren env p.desc
+  p.info.pre = [] && p.info.post = None && is_pure_desc ren env p.desc
 and is_pure_arg ren env = function
   | Term p -> is_pure ren env p
   | Type _ -> true
@@ -402,17 +352,17 @@ let states_expression ren env expr =
 		     assert false) 
 	    args ([],pl,e) 
 	in
-	Error.check_for_non_constant p.loc a;
+	Error.check_for_non_constant p.info.loc a;
 	let t = applist a args in
 	t, (partial_pre t) @ pl, e
     | _ -> 
 	assert false
   in
-  let e0 = state_pre ren env expr.pre in
+  let e0 = state_pre ren env expr.info.pre in
   let c,pl,e = effect [] expr.desc in
-  let v = typing_term expr.loc env c in
+  let v = typing_term expr.info.loc env c in
   let ef = Effect.union e0 e in
-  Expression c, (v,ef), expr.pre @ pl
+  Expression c, (v,ef), expr.info.pre @ pl
 
 
 (* We infer here the type with effects.
@@ -453,7 +403,7 @@ let rec states_desc ren env loc = function
       Error.check_for_reference loc x et;
       let s_e1 = states ren env e1 in
       if s_e1.info.kappa.c_result_type <> deref_type et then 
-	Error.expected_type s_e1.loc 
+	Error.expected_type e1.info.loc 
 	  (fun fmt -> ()) (fun fmt -> print_type_v fmt (deref_type et));
       let e = s_e1.info.kappa.c_effect in
       let ef = add_write x e in
@@ -484,6 +434,7 @@ let rec states_desc ren env loc = function
       let efphi = state_var ren env (var,r) in
       let ren' = next ren [] in
       let s_b = states ren' env b in
+      Error.check_no_effect b.info.loc s_b.info.kappa.c_effect;
       let s_bl,_,ef_bl,_ = states_block ren' env bl in
       let cb = s_b.info.kappa in
       let efinv = state_inv ren env invopt in
@@ -519,16 +470,14 @@ let rec states_desc ren env loc = function
             mais le séquencement ne sera pas correct. *)
 
   | App (f, args) ->
-      let s_f = states ren env f in
+      let (s_f, s_args, capp) = states_app ren env f args in
       let eff = s_f.info.kappa.c_effect in
-      let s_args = List.map (states_arg ren env) args in
       let ef_args = 
 	List.map 
 	  (function Term t -> t.info.kappa.c_effect 
 	          | _ -> Effect.bottom) 
 	  s_args 
       in
-      let _,_,capp = effect_app ren env s_f s_args in
       let tapp = capp.c_result_type in
       let efapp = capp.c_effect in
       let ef = 
@@ -553,7 +502,7 @@ let rec states_desc ren env loc = function
       let s_e1 = states ren env e1 in
       let ef1 = s_e1.info.kappa.c_effect in
       let v1 = s_e1.info.kappa.c_result_type in
-      Error.check_for_not_mutable e1.loc v1;
+      Error.check_for_not_mutable e1.info.loc v1;
       let env' = add (x,v1) env in
       let s_e2 = states ren env' e2 in
       let ef2 = s_e2.info.kappa.c_effect in
@@ -563,6 +512,7 @@ let rec states_desc ren env loc = function
 	    
   | If (b, e1, e2) ->
       let s_b = states ren env b in
+      Error.check_no_effect b.info.loc s_b.info.kappa.c_effect;
       let s_e1 = states ren env e1
       and s_e2 = states ren env e2 in
       let efb = s_b.info.kappa.c_effect in
@@ -621,19 +571,16 @@ and states ren env expr =
     if is_pure_desc ren env expr.desc then
       states_expression ren env expr
     else
-      let (d,ve) = states_desc ren env expr.loc expr.desc in (d,ve,[])
+      let (d,ve) = states_desc ren env expr.info.loc expr.desc in (d,ve,[])
   in
-  let ep = state_pre ren env expr.pre in
-  let (eq,q) = state_post ren env (result,v,e) expr.post in
+  let ep = state_pre ren env expr.info.pre in
+  let (eq,q) = state_post ren env (result,v,e) expr.info.post in
   let e' = Effect.union e (Effect.union ep eq) in
-  let p' = p1 @ expr.pre in
+  let p' = p1 @ expr.info.pre in
   let c = { c_result_name = result; c_result_type = v;
 	    c_effect = e'; c_pre = p'; c_post = q } in
   let tinfo = { env = env; kappa = c } in
-  { desc = d;
-    loc = expr.loc;
-    pre = p'; post = q; (* on les conserve aussi ici pour prog_wp *)
-    info = tinfo }
+  { desc = d; info = tinfo }
 
 
 and states_block ren env bl =
@@ -660,4 +607,87 @@ and states_block ren env bl =
 	(Statement s_e)::bl, t, Effect.compose efe ef, ren''
   in
   ef_block ren None bl
+
+and states_app ren env f args =
+  let floc = f.info.loc in
+  let argsloc = List.map (function Term t -> t.info.loc | _ -> floc) args in
+  let s_f = states ren env f in
+  let s_args = List.map (states_arg ren env) args in
+  let n = List.length args in
+  let tf = s_f.info.kappa.c_result_type in (* TODO: external function type *)
+  let bl,c = 
+    match tf with
+      | Arrow (bl, c) ->
+	  if List.length bl <> n then Error.partial_app floc;
+	  bl,c
+      | _ -> Error.app_of_non_function floc
+  in
+  let check_type loc v t so =
+    let v' = type_v_rsubst so v in
+    if not (convert (v',t)) then 
+      Error.ill_typed_argument loc (fun fmt -> print_type_v fmt v')
+  in
+  let s,so,ok = 
+    (* s est la substitution des références, so celle des autres arg. 
+     * ok nous dit si les arguments sont sans effet i.e. des expressions *)
+    List.fold_left
+    (fun (s,so,ok) (b,a,tloc) ->
+       match b,a with
+	 | (id,BindType (Ref _ | Array _ as v)), Refarg id' ->
+	     let ta = type_in_env env id' in
+	     check_type floc v ta so;
+	     (id,id')::s, so, ok
+	 | (id,_), Refarg _ -> 
+	     Error.should_be_a_reference floc id
+	 | (id,BindType v), Term t ->
+	     let ta = t.info.kappa.c_result_type in
+	     check_type floc v ta so;
+	     (match t.desc with
+		| Expression c -> s, (id,c)::so, ok
+		| _ -> s,so,false)
+	 | (id,BindSet), Type v ->
+	     failwith "TODO"
+	     (*i TODO
+	     let c = Monad.trad_ml_type_v ren env v in s, (id,c)::so, ok i*)
+	 | (id,BindSet), Term t -> 
+	     Error.expects_a_type id tloc
+	 | (id,BindType _), Type _ -> 
+	     Error.expects_a_term id
+	 | (_,Untyped), _ -> 
+	     assert false)
+    ([],[],true)
+    (list_combine3 bl s_args argsloc)
+  in
+  let c' = type_c_subst s c in
+  s_f, s_args, (*i (bl,c), (s,so,ok), i*)
+  { c' with c_result_type = type_v_rsubst so c'.c_result_type }
+
+
+let effect_app ren env f args =
+  let n = List.length args in
+  let tf = f.info.kappa.c_result_type in (* TODO: external function type *)
+  let bl,c = match tf with
+    | Arrow (bl, c) -> bl,c
+    | _ -> assert false
+  in
+  let s,so,ok = 
+    (* s est la substitution des références, so celle des autres arg. 
+     * ok nous dit si les arguments sont sans effet i.e. des expressions *)
+    List.fold_left
+    (fun (s,so,ok) (b,a) ->
+       match b,a with
+	 | (id,BindType (Ref _ | Array _ as v)), Refarg id' ->
+	     (id,id')::s, so, ok
+	 | (id,BindType v), Term t ->
+	     (match t.desc with
+		| Expression c -> s, (id,c)::so, ok
+		| _ -> s,so,false)
+	 | _ -> 
+	     assert false)
+    ([],[],true)
+    (List.combine bl args)
+  in
+  let c' = type_c_subst s c in
+  (bl,c), (s,so,ok),
+  { c' with c_result_type = type_v_rsubst so c'.c_result_type }
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.4 2001-08-24 19:07:16 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.5 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -81,23 +81,24 @@ i*)
 (* db programs *)
   
 let db_prog e =
+  let loc = e.info.loc in
   (* tids = type Ident.ts, ids = variables, refs = references and arrays *)
   let rec db_desc ((tids,ids,refs) as idl) = function
     | (Var x) as t ->
-	(match lookup_var ids (Some e.loc) x with
+	(match lookup_var ids (Some loc) x with
 	     None -> t
 	   | Some c -> Expression c)
     | (Acc x) as t ->
-	check_ref refs e.loc x;
+	check_ref refs loc x;
 	t
     | Aff (x,e1) ->
-	check_ref refs e.loc x;
+	check_ref refs loc x;
 	Aff (x, db idl e1)
     | TabAcc (b,x,e1) ->
-	check_ref refs e.loc x;
+	check_ref refs loc x;
 	TabAcc(b,x,db idl e1)
     | TabAff (b,x,e1,e2) ->
-	check_ref refs e.loc x;
+	check_ref refs loc x;
 	TabAff (b,x, db idl e1, db idl e2)
     | Seq bl ->
 	Seq (List.map (function
@@ -139,8 +140,7 @@ let db_prog e =
 
   and db idl e =
     { desc = db_desc idl e.desc ;
-      pre = e.pre; post = e.post;
-      loc = e.loc; info = e.info }
+      info = { pre = e.info.pre; post = e.info.post; loc = e.info.loc } }
 
   in
   let ids = [] (* TODO: logical variables here *) in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.7 2002-02-05 15:01:55 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.8 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -142,8 +142,7 @@ and trad_desc ren env ct d =
   | If (b, e1, e2) ->
       (*i EXP: we do not generate the obligation at the end of test i*)
       let b' =
-	{ b with post=None; 
-	  info={ b.info with kappa={ b.info.kappa with c_post=None }}}
+	{ b with info={ b.info with kappa={ b.info.kappa with c_post=None }}}
       in
       let tb = trad ren b' in
       let _,efb,_,_ = decomp_kappa b.info.kappa in
@@ -158,8 +157,7 @@ and trad_desc ren env ct d =
   | While (b, inv, var, bl) ->
       (*i EXP: we do not generate the obligation at the end of test i*)
       let b' =
-	{ b with post=None; 
-	  info={ b.info with kappa={ b.info.kappa with c_post=None }}}
+	{ b with info={ b.info with kappa={ b.info.kappa with c_post=None }}}
       in
       let ren' = next ren (get_writes eft) in
       let tb = trad ren' b' in

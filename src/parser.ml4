@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.10 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.11 2002-02-05 16:00:01 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -96,7 +96,7 @@ let conj = function
   | Some a,Some b -> Some (conj_assert a b)
 
 let without_effect loc d = 
-  { desc = d; pre = []; post = None; loc = loc; info = () }
+  { desc = d; info = { pre = []; post = None; loc = loc } }
 
 let type_without_effect v =
   { c_result_name = Ident.result; c_result_type = v;
@@ -116,10 +116,9 @@ let zwf_zero = Tvar Ident.t_zwf_zero
 
 let mk_prog loc p pre post =
   { desc = p.desc; 
-    pre = p.pre @ pre; 
-    post = conj (p.post,post); 
-    loc = loc; 
-    info = () }
+    info = { pre = p.info.pre @ pre; 
+	     post = conj (p.info.post, post); 
+	     loc = loc } }
 
 EXTEND 
 
@@ -389,7 +388,7 @@ i*)
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 
 	  | [] -> 
-	      if p.pre <> [] || p.post <> None then
+	      if p.info.pre <> [] || p.info.post <> None then
 		warning "Some annotations are lost";
 	      p.desc
           | _  -> 
