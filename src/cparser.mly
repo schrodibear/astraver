@@ -554,11 +554,19 @@ labeled_statement
         ;
 
 compound_statement
-        : LBRACE RBRACE { [], [] }
-        | LBRACE statement_list RBRACE { [], $2 }
-        | LBRACE declaration_list RBRACE { $2, [] }
-        | LBRACE declaration_list statement_list RBRACE { $2, $3 }
+        : compound_statement_LBRACE RBRACE 
+            { Ctypes.pop (); [], [] }
+        | compound_statement_LBRACE statement_list RBRACE 
+	    { Ctypes.pop (); [], $2 }
+        | compound_statement_LBRACE declaration_list RBRACE 
+	    { Ctypes.pop (); $2, [] }
+        | compound_statement_LBRACE declaration_list statement_list RBRACE 
+	    { Ctypes.pop (); $2, $3 }
         ;
+
+compound_statement_LBRACE:
+  LBRACE { Ctypes.push () }
+;
 
 /* ADDED FOR WHY */
 compound_statement_with_post
