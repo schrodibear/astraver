@@ -1,7 +1,7 @@
 Require Import Why.
 Require Export caduceus_why.
 Require Export List.
-
+Require Export GenericLists.
 
 Axiom pointer_eq_dec : forall p1 p2:pointer, {p1=p2}+{p1<>p2}.
 
@@ -22,50 +22,265 @@ Fixpoint pair_in_list (p1:pointer) (p2:pointer)(l:list pointer) {struct l} : Pro
                                       \/ pair_in_list p1 p2 m
   end.
 
+Lemma pair_in_list_in :forall (p1 p2 p3: pointer) ( l : list pointer), pair_in_list p1 p2 (p3::l) -> In p2 l. 
+intros.
+induction l.
+simpl in H.
+auto.
+simpl in H.
+inversion_clear H.
+tauto.
+auto.
+destruct (l).
+inversion_clear H.
+inversion_clear H0.
+subst.
+left;auto.
+tauto.
+intuition;subst;simpl;auto.
+inversion_clear H.
+left;tauto.
+inversion_clear H0.
+right;left;tauto.
+assert (pair_in_list p1 p2 (p3::p::l)).
+right;auto.
+clear H.
+generalize (IHl H0).
+intro.
+inversion_clear H.
+right;left;auto.
+right;right.
+auto.
+Qed.
+
 (** * Paths *)
 
 (** [(reachable t p1 l p2)] :
     there is a path from pointer [p1] to pointer [p2] using links in store [t],
     and the list of pointers along this path is [l]. *)
-Inductive reachable (a: alloc_table) (l: memory pointer)(r: memory pointer) : pointer ->  pointer -> Prop :=
-  | Path_null : forall p:pointer, reachable a l r p  p
+Inductive reachable (a: alloc_table) (l: memory pointer)(r: memory pointer) : 
+pointer ->  pointer -> list pointer -> Prop :=
+  | Path_null : forall p:pointer, reachable a l r p  p nil
   | Path_left :
       forall p1 p2:pointer,
+      forall lp : list pointer,
         valid a p1 ->
-          reachable a l r (acc l p1) p2-> reachable a l r p1  p2
+          reachable a l r (acc l p1) p2 lp-> reachable a l r p1  p2 (p1::lp)
   | Path_right :
       	forall p1 p2:pointer,
+      forall lp : list pointer ,
         	valid a p1 ->
-        	  reachable a l r (acc r p1)  p2 -> reachable a l r p1 p2.
+        	  reachable a l r (acc r p1)  p2 lp -> reachable a l r p1 p2 (p1::lp). 
+
+Axiom eq_pointer_dec : forall p1 p2 : pointer, {p1 = p2} + {p1 <> p2}.
+
+Fixpoint sans_rep (l:list pointer) {struct l}: Prop :=
+match l with
+| nil => True
+| (a::l) => (if In_dec eq_pointer_dec a l then False else True)  /\ sans_rep l
+end.
+
+Lemma split_list : forall  (p : pointer) (path : list pointer), (In p path) ->
+exists x : list pointer ,  exists y : list pointer, path = x ++ (p::y).
+intros.
+induction path.
+inversion H.
+generalize (in_inv H).
+intuition.
+exists (nil: list pointer).
+exists path.
+subst;auto.
+inversion H0;inversion H2.
+exists (a::x).
+exists x0.
+subst;auto.
+Qed.
+
+Lemma split_reachacle_1 : forall (a : alloc_table)
+( l r : memory pointer) (path1: list pointer) (p1 p2 p : pointer) , 
+reachable a l r p1 p2 (path1++ p :: nil) -> 
+reachable a l r p1 p path1 /\ reachable a l r p p2 (p :: nil).
+induction path1.
+simpl; intuition.
+inversion H; subst; constructor.
+inversion H; subst; auto.
+simpl; intros.
+inversion H; subst.
+generalize (IHpath1 (acc l a0) p2 p H5); intuition.
+constructor 2; auto.
+generalize (IHpath1 (acc r a0) p2 p H5); intuition.
+constructor 3; auto.
+Qed.
+
+Lemma split_reachable : forall (a : alloc_table) (p1 p2 : pointer) 
+( l r : memory pointer) (path2 path1: list pointer), 
+reachable a l r p1 p2 (path1++path2) -> exists p3 : pointer , 
+reachable a l r p1 p3 path1 /\ reachable a l r p3 p2 path2.
+induction path2.
+exists p2.
+intuition.
+rewrite <- app_nil_end in H.
+auto.
+constructor.
+intros.
+exists a0.
+replace (path1++a0 :: path2) with ((path1++a0::nil)++path2) in H.
+generalize (IHpath2 (path1++a0::nil) H).
+intros (p3, (hp3a,hp3b)).
+generalize (split_reachacle_1 a l r path1 p1 p3 a0 hp3a).
+intuition.
+inversion H2; subst.
+constructor 2; auto.
+inversion H6; subst; auto.
+constructor 3; auto.
+inversion H6; subst; auto.
+rewrite app_ass; auto.
+Qed.
+
+Lemma split_lists : forall (A:Set)(x:A) l, In x l -> exists l1, exists l2, l = l1 ++ x :: l2.
+induction l; simpl; intuition.
+exists (nil :list  A); exists l; subst; auto.
+elim H; clear H; intros l1 H; elim H; clear H; intros l2 H.
+exists (a :: l1); exists l2; subst; auto.
+Qed.
 
 
-Inductive reachable_no_cycle (a: alloc_table) 
-:  memory pointer->memory pointer->pointer-> pointer->list pointer -> Prop :=
-  | Path_no_cycle_null : forall l r : memory pointer,forall p2:pointer,
-       reachable_no_cycle a l r p2 p2 (p2::nil)
-  | Path_no_cycle_left :
-      forall l r : memory pointer,
-      forall p1 p2:pointer, forall lp : list pointer,
-        valid a p1 -> ~ (In p1 lp) ->
-        reachable_no_cycle a l r (acc l p1) p2 lp ->
-          reachable_no_cycle a l r p1 p2 (p1::lp)
-  | Path_no_cycle_right : 
-       forall l r : memory pointer,
-      	forall p1 p2:pointer, forall lp : list pointer,
-        	valid a p1 -> ~ (In p1 lp) ->
-                  reachable_no_cycle a l r (acc r p1) p2 lp -> 
-                  reachable_no_cycle a l r p1 p2 (p1::lp).
-   
-Inductive unmarked_reachable (a: alloc_table) (l: memory pointer)(m:memory Z)(r: memory pointer) : pointer ->  pointer -> Prop :=
-  | Path_unmarked_null : forall p:pointer, (acc m p) = 0 ->unmarked_reachable a l m r p  p
-  | Path_unmarked_left :
-      forall p1 p2:pointer,
-        valid a p1 ->
-          unmarked_reachable a l m r (acc l p1) p2-> (acc m p1) = 0 -> unmarked_reachable a l m r p1  p2
-  | Path_unmarked_right :
-      	forall p1 p2:pointer,
-        	valid a p1 ->
-        	  unmarked_reachable a l m r (acc r p1)  p2 -> (acc m p1) = 0-> unmarked_reachable a l m r p1 p2.
+Lemma sans_rep_sublist1 : forall (l : list pointer)(p:pointer), sans_rep (p::l) -> 
+sans_rep l. 
+intros.
+destruct H.
+apply H0.
+Qed.
+
+Lemma sans_rep_sublist : forall (l l1 l2 : list pointer), sans_rep l -> 
+l = l1 ++ l2 -> sans_rep l2. 
+induction l.
+intros.
+assert (l1++l2=nil);auto.
+generalize (app_eq_nil l1 l2 H1).
+intuition;subst;auto.
+intros.
+destruct l1.
+assert (a::l = l2).
+auto.
+subst;auto.
+apply IHl with l1.
+apply sans_rep_sublist1 with a;auto.
+rewrite <-app_comm_cons in H0.
+inversion H0.
+auto.
+Qed.
+
+Ltac caseq t := generalize (refl_equal t);pattern t at -1;case t.
+
+
+Lemma sans_rep_p : forall (p1:pointer)(lp:list pointer), sans_rep(p1::lp)->
+~In p1 lp.
+intros.
+simpl in H.
+intro.
+inversion_clear H.
+caseq (In_dec eq_pointer_dec p1 lp).
+intros i e.
+rewrite e in H1.
+elim H1.
+intros i.
+elim (i H0).
+Qed.
+
+
+Lemma sans_rep_false : forall (p1 : pointer)(lp : list pointer),
+sans_rep (p1 :: p1 :: lp) -> False.
+intros.
+simpl in H.
+inversion_clear H.
+casetype False.
+destruct (In_dec eq_pointer_dec p1 (p1 :: lp));auto.
+apply n.
+left;auto.
+Qed.
+
+Lemma reachable_no_cycle : forall (a : alloc_table) (p1 p2 : pointer) 
+( l r : memory pointer) (path : list pointer), reachable a l r p1 p2 (path) -> 
+exists path' : list pointer, sans_rep (path') /\ reachable a l r p1 p2  (path'). 
+intros.
+induction H.
+exists (@nil pointer). 
+intuition.
+simpl;auto.
+constructor.
+inversion IHreachable.
+case (In_dec eq_pointer_dec p1 x).
+intro.
+generalize (split_list  p1 x i);intro.
+inversion_clear H2;inversion_clear H3.
+exists (p1::x1).
+inversion_clear H1.
+split.
+clear H4 i IHreachable H0 H a l r p2 lp.
+induction x.
+generalize (app_cons_not_nil x0 x1 p1).
+intro;elim H;auto.
+apply sans_rep_sublist with (a::x) (x0);auto.
+generalize (Path_left a l r p1 p2  x H H4).
+subst x.
+intro.
+generalize (split_reachable a p1 p2 l r (p1::x1) (p1::x0) H1).
+intros (p3, (Hp3a,Hp3b)).
+inversion Hp3b;subst;auto.
+intro.
+exists (p1::x).
+split.
+simpl.
+case (In_dec eq_pointer_dec p1 x);intuition.
+inversion_clear H1.
+constructor 2;auto.
+inversion IHreachable.
+case (In_dec eq_pointer_dec p1 x).
+intro.
+generalize (split_list  p1 x i);intro.
+inversion_clear H2;inversion_clear H3.
+exists (p1::x1).
+inversion_clear H1.
+split.
+clear H4 i IHreachable H0 H a l r p2 lp.
+induction x.
+generalize (app_cons_not_nil x0 x1 p1).
+intro;elim H;auto.
+apply sans_rep_sublist with (a::x) (x0);auto.
+generalize (Path_right a l r p1 p2  x H H4).
+subst x.
+intro.
+generalize (split_reachable a p1 p2 l r (p1::x1) (p1::x0) H1).
+intros (p3, (Hp3a,Hp3b)).
+inversion Hp3b;subst;auto.
+intro.
+exists (p1::x).
+split.
+simpl.
+case (In_dec eq_pointer_dec p1 x);intuition.
+inversion_clear H1.
+constructor 3;auto.
+Qed.
+
+Lemma reachable_in_list : forall (a:alloc_table)(l r: memory pointer)
+(p1 p2 : pointer)(lp: list pointer), reachable a l r p1 p2 lp -> 
+(exists lp' : list pointer, lp = p1::lp')  \/ lp = nil.
+intros.
+inversion H;subst.
+right.
+auto.
+left.
+exists lp0;auto.
+left.
+exists lp0;auto.
+Qed.
+
+
+Definition unmarked_reachable (a: alloc_table) (m:memory Z)
+(l: memory pointer)(r: memory pointer) (p1:pointer) (p2:pointer): Prop :=
+exists lp : list pointer, (forall x : pointer, In x lp -> (acc m x) = 0 ) 
+/\ reachable a l r p1 p2 lp.
 
 Inductive stkOk   (c:memory Z) (l: memory pointer)(r: memory pointer) 
 (iL : memory pointer)(iR: memory pointer) : pointer ->  list pointer -> Prop :=
@@ -75,267 +290,16 @@ stkOk  c l r iL iR p stk -> ((acc iL p) = if Zneq_bool (acc c p) 0 then (acc l p
 ((acc iR p) = if Zneq_bool (acc c p) 0 then t else (acc r p)) -> 
 stkOk  c l r iL iR t (cons p stk).
 
-Inductive clr_list (a: alloc_table)  (c:memory Z) (l: memory pointer)
+Definition clr_list (a: alloc_table)  (c:memory Z) (l: memory pointer)
 (r: memory pointer) : pointer ->list pointer-> Prop :=
-| clr_list_nil : forall t : pointer , clr_list a c l r t nil 
-| clr_list_cons : 
-   forall t : pointer, forall p : pointer, forall stack : list pointer, 
-     clr_list a c l r p stack -> valid a t ->
-       (p = if Zneq_bool (acc c t) 0 then (acc r t) else (acc l t)) ->
-          clr_list a c l r t (cons p stack).
+let next t := if Z_eq_dec (acc c t) 0 then (acc l t) else (acc r t) in
+llist a next .
 
 Inductive all_in_list (m:memory Z) : list pointer -> Prop :=
 | all_in_list_nil : all_in_list m nil 
 | all_in_list_cons : forall l : list pointer, forall t : pointer,
 all_in_list m l -> (acc m t) <> 0 -> all_in_list m (cons t l).
 
-Lemma reachable_unchanged:forall l0 r0 l r : memory pointer,
-(forall x : pointer, (acc r0 x) = (acc r x) /\ (acc l0 x)= (acc l x)) -> 
-forall a :alloc_table ,forall root x : pointer , reachable a l0 r0 root x -> reachable a l r root x. 
-intros.
-induction H0.
-constructor.
-apply Path_left;auto.
-generalize (H p1);intuition.
-replace (acc l p1) with (acc l0 p1);auto. 
-generalize (H p1);intuition.
-apply Path_right;auto.
-replace (acc r p1) with (acc r0 p1);auto.
-Qed.
-
-
-Lemma mem : forall (x:pointer) l, {In x l}+{~ In x l}.
-induction l;simpl;auto.
-elim (pointer_eq_dec a x).
-intro;left;left;auto.
-intro ne1;elim IHl.
-intro e2;left;right;auto.
-tauto.
-Qed.
-
-Section acyclic_path.
-
-Variable a: alloc_table.
-Variables l r: memory pointer.
-Axiom T:False.
-
-(*Lemma concat : forall (p1 p2 p3: pointer) list,~(In p1 list)-> reachable_no_cycle a l r p1 p2 list ->
-reachable_no_cycle a l r p2 p3 list -> reachable_no_cycle a l r p1 p3 list.
-intros.
-induction H0;auto.
-apply Path_no_cycle_left;auto.
-apply IHreachable_no_cycle.
-intuition.
-apply H2.
-unfold In in H4;intuition.
-inversion H3.
-
-*)
-
-(*
-Lemma affaibli : forall (lp:list pointer) (p1 p2:pointer), reachable_no_cycle a l r p1 p2 lp ->
- reachable_no_cycle a l r p1 p2 nil.
-fix 4.
-intros lp p1 p2 H;inversion H.
-intros;constructor.
-constructor 2;auto.
-apply (affaibli _ _ _ H2).
-intros;constructor 2;[auto|auto|idtac]. 
-exact H2.
-apply affaibli with lp.
-intros;constructor 3;[auto|auto|idtac].
-exact H2.
-Qed.
-
-inversion H1;subst.
-constructor.
-apply H1.
-generalize lp H1;clear IHreachable_no_cycle H1 H0 lp;induction lp;auto.
-intros;apply IHlp.
-
-induction lp.
-auto.
-intros;apply IHlp.
-inversion H;subst.
-constructor.
-constructor 2;auto.
-intro;apply H1;simpl;right;auto. 
-
-
-intro H3;destruct H3.
-intro H0;induction H0.
-constructor.
-constructor 2;auto.
-generalize (IHreachable_no_cycle IHlp); clear IHreachable_no_cycle;intro reach.
-intros;constructor 2.
-auto.
-*)
-Scheme Reach_ind := Induction for reachable_no_cycle Sort Prop.
-
-Inductive Tail (A:Set): list A -> list A -> Prop:=
-Tail_id : forall l,Tail A l l
-|Tail_cons : forall a l m, Tail A l m -> Tail A l (a::m).
-
-Implicit Arguments Tail [A].
-Implicit Arguments Tail_id [A].
-Implicit Arguments Tail_cons [A].
-
-Fixpoint chop_until_last (p:pointer) (lp:list pointer) {struct lp} : list pointer:=
-match lp with
-nil => nil
-| x::q => if mem p q then chop_until_last p q else p::q
-end. 
-
-Fixpoint last (A:Set) (a:A) (l:list A) {struct l}:A :=
-match l with
-nil => a
-| x::q => last A a q
-end.
-
-Implicit Arguments last [A].
-
-Lemma chop_path : forall visited p,In p visited ->
-reachable_no_cycle a l r p (last p visited) (chop_until_last p visited).
-induction visited.
-simpl;intros p H;elim H.
-simpl last.
-simpl chop_until_last.
-intro p;destruct (mem p visited).
-intro.
-apply IHvisited;auto.
-intro H;destruct H.
-clear a0 H IHvisited.
-generalize visited n;clear visited n.
-induction visited.
-intros;constructor 1.
-intuition.
-
-
-
-(*simpl.
-intros.
-assert (H1:p<>p0).
-tauto.
-assert (H2:~In p0 visited).
-tauto.*)
-intros p0 H.
-apply chop_path;auto.
-intuition.
-
-Qed.
-
-Lemma remove_cycle: forall p1 p2, reachable a l r p1 p2 -> 
-exists visited:list pointer,
- (forall p0,In p0 visited -> 
-(exists lp, reachable_no_cycle a l r p0 p2 lp)) ->
-(reachable_no_cycle a l r p1 p2 visited).
-intros p1 p2 R.
-induction R.
-exists (p::nil). 
-intros;constructor.
-destruct IHR.
-elim (mem p1 x).
-Focus 2.
-intro notIn;exists (p1::x);intros;constructor 2;auto.
-apply H0.
-intros.
-simpl In in H1.
-destruct (H1 p0 (or_intror (p1=p0) H2)).
-exists x0.
-assumption.
-Focus 2.
-destruct IHR.
-elim (mem p1 x).
-Focus 2.
-intro notIn;exists (p1::x);intros;constructor 3;auto.
-apply H0.
-intros.
-simpl In in H1.
-destruct (H1 p0 (or_intror (p1=p0) H2)).
-exists x0.
-assumption.
-intro.
-exists x.
-intro.
-generalize (H0 H2);intro.
-
-auto.
-inversion H3.
-rewrite H6 in H4.
-inversion H4.
-rewrite H10 in H2;rewrite H12 in H2;elim (notIn H2).
-exists (p1::lp).
-subst lp.
-split.
-constructor.
-destruct x;inversion H15.
-
-constructor 2.
-auto.
-exists x0;split;auto.
-destruct H3.
-inversion H3.
-
-constructor 2.
-
-(* lemme : si reachable l alors reachable nil *)
-intros;elim (mem (acc l p0) visited).
-intro H2;generalize (H1 (acc l p0) H2);intro H3;apply IHR;auto.
-elim T. (* lemme: ajout d'une etape \u00e0 la fin d'un chemin *)
-intros;elim (mem (acc r p0) visited).
-intro H2;generalize (H1 (acc r p0) H2);intro H3;apply IHR;auto.
-elim T. (* lemme: ajout d'une etape \u00e0 la fin d'un chemin *)
- 
-
-
-
-
-Lemma reachable_reachable_no_cycle : forall  (a: alloc_table)
- (l: memory pointer)(r: memory pointer) (p1 p2:pointer) ,
-reachable a l r p1 p2 -> reachable_no_cycle a l r p1 p2 nil.
-intros.
-
-induction H.
-apply Path_no_cycle_null.
-
-apply Path_no_cycle_left;auto.
-
-
-
-Lemma reachable_no_cylce_reachable : forall  (a: alloc_table)
- (l: memory pointer)(r: memory pointer) (p1 p2:pointer) ,
-reachable_no_cycle a l r p1 p2 -> reachable a l r p1 p2.
-intros.
-induction H.
-apply Path_null.
-apply Path_left;auto.
-
-
-
-
-(*Lemma reachable_lnoloop : forall a : alloc_table, forall l r : memory pointer , 
-forall p x :pointer, x<>p -> reachable a l r x (acc l p) -> (acc l p) <> p.
-intros.
-inversion H0; subst; auto.
-intuition.
-apply H2.
-rewrite H4; auto.
-intuition.
-apply H2.
-rewrite H4; auto.
-
-
-Lemma reachable_rnull : forall a : alloc_table, forall l r : memory pointer , 
-forall p x :pointer,reachable a l r x (acc l p) -> reachable a l (upd r p null) x (acc l p).
-intros.
-inversion H.
-constructor.
-
-
-apply Path_left;subst;auto.
-
-apply Path_right.
-auto.
-*)
-
-
+Definition isreachable (a: alloc_table) (l: memory pointer)(r: memory pointer) 
+(p1 :pointer) (p2:pointer) : Prop :=
+exists lp : list pointer, reachable a l r p1 p2 lp. 

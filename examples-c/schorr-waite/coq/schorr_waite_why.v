@@ -5,7 +5,7 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 294-615 *)
+(* Why obligation from file "why/schorr_waite.why", characters 296-617 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -13,7 +13,7 @@ Lemma schorr_waite_impl_po_1 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -28,19 +28,19 @@ Lemma schorr_waite_impl_po_1 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -52,10 +52,10 @@ Lemma schorr_waite_impl_po_1 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
 Proof.
@@ -65,7 +65,7 @@ inversion_clear H2;intuition.
 apply H4;intuition.
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2586-2704 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2639-2757 *)
 Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -73,7 +73,7 @@ Lemma schorr_waite_impl_po_2 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -88,19 +88,19 @@ Lemma schorr_waite_impl_po_2 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -112,10 +112,10 @@ Lemma schorr_waite_impl_po_2 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -125,7 +125,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2726-2783 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2779-2836 *)
 Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -133,7 +133,7 @@ Lemma schorr_waite_impl_po_3 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -148,19 +148,19 @@ Lemma schorr_waite_impl_po_3 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -172,10 +172,10 @@ Lemma schorr_waite_impl_po_3 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -187,7 +187,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2924-2948 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2977-3001 *)
 Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -195,7 +195,7 @@ Lemma schorr_waite_impl_po_4 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -210,19 +210,19 @@ Lemma schorr_waite_impl_po_4 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -234,10 +234,10 @@ Lemma schorr_waite_impl_po_4 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -259,9 +259,92 @@ Proof.
  intuition;subst;auto.
 Save.
 
-Axiom Essai :(forall (l : memory pointer), forall p: pointer, (upd l p null) = (upd (upd l p null) p null)). 
- 
-(* Why obligation from file "why/schorr_waite.why", characters 2901-2948 *)
+Lemma l1 : forall (alloc : alloc_table) ( l r : memory pointer) (p:pointer)(lp : list pointer)(p1 p0 p2:pointer)  , 
+~ In p lp ->reachable alloc l r p1 p0 lp -> reachable alloc l (upd r p p2) p1 p0 lp.
+induction lp.
+intros.
+inversion H0;subst.
+constructor.
+intros.
+inversion H0;subst.
+constructor 2;auto.
+apply IHlp.
+intro;apply H.
+right.
+auto.
+auto.
+constructor 3;auto.
+assert (p <> a).
+intro.
+apply H.
+left.
+auto.
+replace (acc (upd r p null) a) with (acc r a ).
+apply IHlp.
+intro;apply H.
+right.
+auto.
+auto.
+rewrite acc_upd_neq;auto.
+symmetry.
+apply acc_upd_neq.
+auto.
+Qed.
+
+Lemma l1bis : forall (alloc : alloc_table) ( l r : memory pointer) (p:pointer)(lp : list pointer)(p1 p0 p2:pointer)  , 
+~ In p lp ->reachable alloc l r p1 p0 lp -> reachable alloc (upd l p p2) r p1 p0 lp.
+induction lp.
+intros.
+inversion H0;subst.
+constructor.
+intros.
+inversion H0;subst.
+constructor 2;auto.
+apply IHlp.
+intro;apply H.
+right.
+auto.
+rewrite acc_upd_neq;auto.
+intro;subst.
+apply H.
+left;auto.
+constructor 3;auto.
+apply IHlp.
+intro;apply H.
+right.
+auto.
+auto.
+Qed.
+
+Lemma l2 :
+forall (alloc : alloc_table) (c0: memory Z) (l0 r0: memory pointer)
+( l2 : list pointer) (p1 t1: pointer) ,~In p1 l2->lpath alloc
+       (fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0)
+       (p1 # r0) l2 null ->
+lpath alloc
+  (fun t : pointer =>
+   if Z_eq_dec (t # c0) 0 then t # l0 else t # (upd r0 p1 t1)) (p1 # r0) l2
+  null.
+intros.
+induction H0.
+constructor.
+constructor 2;auto.
+replace (p0 # (upd r0 p1 p2)) with (p0 # r0).
+rewrite acc_upd_neq.
+apply IHlpath.
+intuition.
+intro;subst;elim H;left;auto.
+symmetry.
+apply acc_upd_neq.
+intuition.
+apply H.
+left.
+auto.
+Qed.
+
+Axiom termination_admitted: (Zwf 0 0 0).
+
+(* Why obligation from file "why/schorr_waite.why", characters 2954-3001 *)
 Lemma schorr_waite_impl_po_5 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -269,7 +352,7 @@ Lemma schorr_waite_impl_po_5 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -284,19 +367,19 @@ Lemma schorr_waite_impl_po_5 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -308,10 +391,10 @@ Lemma schorr_waite_impl_po_5 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -331,15 +414,15 @@ Lemma schorr_waite_impl_po_5 :
   forall (r1: ((memory) pointer)),
   forall (Post64: r1 = (upd r0 caduceus_7 q)),
   ((forall (x_7:pointer),
-    ((reachable alloc l r root x_7) -> (reachable alloc l0 r1 t2 x_7) \/
-     (reachable alloc l0 r1 p2 x_7))) /\
+    ((isreachable alloc l r root x_7) -> (isreachable alloc l0 r1 t2 x_7) \/
+     (isreachable alloc l0 r1 p2 x_7))) /\
   (exists stack:plist, ((((((clr_list alloc c0 l0 r1 p2 stack) /\
    (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
    (forall (x_6:pointer),
-    (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\ (acc m0 x_6) =
-     0 -> (unmarked_reachable alloc l0 m0 r1 t2 x_6) \/
+    (((valid alloc x_6) /\ (isreachable alloc l r root x_6)) /\
+     (acc m0 x_6) = 0 -> (unmarked_reachable alloc m0 l0 r1 t2 x_6) \/
      (exists y:pointer, (in_list y stack) /\
-      (unmarked_reachable alloc l0 m0 r1 (acc r1 y) x_6))))) /\
+      (unmarked_reachable alloc m0 l0 r1 (acc r1 y) x_6))))) /\
    (forall (x_5:pointer),
     (~(in_list x_5 stack) -> (acc r1 x_5) = (acc r x_5) /\
      (acc l0 x_5) = (acc l x_5)))) /\
@@ -349,58 +432,634 @@ Lemma schorr_waite_impl_po_5 :
       (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\ (acc r p2) = p1)) /\
       (((acc c0 p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
    (forall (x_4:pointer),
-    (~(reachable alloc l r root x_4) -> (acc m0 x_4) = (acc m x_4)))) /\
+    (~(isreachable alloc l r root x_4) -> (acc m0 x_4) = (acc m x_4)))) /\
    (forall (x_3:pointer),
-    (~(x_3 = null) /\ (reachable alloc l r root x_3) -> (valid alloc x_3))))) /\
+    (~(x_3 = null) /\ (isreachable alloc l r root x_3) -> (valid alloc x_3))))) /\
   (Zwf 0 0 0).
 Proof.
 (* preservation of loop invariant for the first branch of if "pop" *)
 intuition.
 generalize (H x_7 H3).
 subst.
-intro.
-inversion_clear H2.
+intuition.
 left.
+unfold isreachable.
 inversion H4;subst.
+inversion H2;subst.
+exists (p1::nil).
 apply Path_right;auto.
 assert (acc (upd r0 p1 null) p1 = null).
 apply acc_upd.
-rewrite H2.
+rewrite H5.
 apply Path_null.
-inversion H2.
-elim H6.
-auto.
-inversion H2.
-elim H6.
-auto.
-inversion H4;subst.
+inversion H5;elim H7;auto.
+inversion H5;elim H7;auto.
+inversion_clear H4;subst.
+unfold isreachable.
+generalize (reachable_no_cycle alloc p1 x_7 l0 r0 x H2).
+intros.
+inversion_clear H4.
+inversion_clear H5.
+inversion H6;subst.
 left.
+exists (@nil pointer).
 apply Path_null.
 left.
+exists (p1::lp).
 apply Path_left;auto.
-replace (upd (upd r0 p1 null) p1 null) with (upd r0 p1 null).
-auto.
-apply Essai.
+case (In_dec eq_pointer_dec p1 lp).
+intro.
+simpl in H4.
+inversion_clear H4.
+destruct In_dec.
+inversion H8.
+elim (n i).
+intro.
+apply l1;auto.
 right.
-clear H H1 H3 H0 H4 H2 Pre31 Pre34 Pre32 Pre37 Pre33 Test4 root l m r.
-
-induction H5.
-apply Path_null.
-apply Path_left;auto.
-
-
-
-inversion_clear H0;subst.
-exists (cons p1 x0).
+exists (lp).
+case (In_dec eq_pointer_dec p1 lp).
+intro.
+simpl in H4.
+inversion_clear H4.
+destruct In_dec.
+inversion H8.
+elim (n i).
+intro.
+apply l1;auto.
+inversion_clear H0.
+exists (tail x).
 intuition.
-apply clr_list_cons.
-
-
-
+inversion H3;subst.
+elim H1.
+auto.
+simpl.
+destruct (Z_eq_dec (p1 # c0) 0).
+elim (Test4 e).
+unfold clr_list.
+unfold llist.
+apply l2;auto.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l3 H3).
+intuition.
+apply H9 with p_0;auto.
+destruct x.
+inversion H0.
+simpl in H0.
+unfold in_list in *|-*.
+right;auto.
+generalize (H8 x_6).
+intuition.
+inversion H10.
+inversion H13.
+inversion H15;subst.
+inversion_clear H0;elim H2;auto.
+inversion_clear H16;elim H2;auto.
+inversion_clear H16;elim H2;auto.
+inversion_clear H10.
+inversion_clear H13.
+unfold in_list in H10.
+destruct x;inversion H10;subst.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 x0 x H3).
+intuition.
+subst.
+casetype False.
+assert ((x0#r0) <> null).
+inversion H14.
+inversion_clear H2.
+inversion H16.
+subst.
+inversion H0;auto.
+inversion H2;auto.
+inversion H2;auto.
+assert (In (x0#r0) x).
+inversion_clear H3.
+destruct (Z_eq_dec (x0 # c0) 0 ).
+elim (Test4 e).
+inversion H16.
+tauto.
+left;auto.
+apply (H9 (x0#r0)).
+unfold in_list.
+simpl;auto.
+inversion H14.
+inversion_clear H16.
+apply H17.
+generalize (reachable_in_list alloc l0 r0 (x0#r0) x_6 x1 H18).
+intros.
+inversion H16.
+inversion H19;subst.
+left;auto.
+subst.
+inversion H18;subst.
+casetype False.
+apply (H9 (x0#r0)).
+unfold in_list.
+right;auto.
+auto.
+right.
+exists (x0).
+simpl.
+split.
+auto.
+assert (In x0 x).
+auto.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p0 x H3).
+intros (s,h).
+subst p1.
+assert (p0 <> x0).
+intro.
+subst.
+apply h;auto.
+rewrite acc_upd_neq;auto.
+inversion H14.
+inversion_clear H16.
+unfold unmarked_reachable.
+exists x1.
+split;auto.
+apply l1.
+intro.
+generalize (H17 p0 H16).
+intro.
+apply H9 with p0.
+unfold in_list.
+left;auto.
+auto.
+auto.
+(*i6*)
+subst.
+generalize (eq_pointer_dec x_5 p1).
+intro.
+destruct x.
+inversion H3.
+subst.
+elim H1;auto.
+inversion_clear H2;subst;caduceus.
+generalize (H6 null p1).
+intros.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = null) /\
+     (p # c0 = 0 -> p # l = null /\ p # r = p # r0)).
+apply H2.
+simpl.
+intuition.
+inversion_clear H10.
+generalize (H11 Test4).
+intuition.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+assert (~ In x_5 (p::x)).
+intro;inversion_clear H2;auto.
+generalize (H7 x_5 H2).
+intuition.
+(*i6b*)
+subst.
+generalize (eq_pointer_dec x_5 p1).
+intro.
+destruct x.
+inversion H3.
+subst.
+elim H1;auto.
+inversion_clear H2;subst;caduceus.
+generalize (H6 null p1).
+intros.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = null) /\
+     (p # c0 = 0 -> p # l = null /\ p # r = p # r0)).
+apply H2.
+simpl.
+intuition.
+inversion_clear H10.
+generalize (H11 Test4).
+intuition.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+assert (~ In x_5 (p::x)).
+intro;inversion_clear H2;auto.
+generalize (H7 x_5 H2).
+intuition.
+(*i7a*)
+subst.
+destruct x.
+inversion H3.
+subst.
+elim H1;auto.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons null ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H6 p0 p3 H2);intro.
+inversion_clear H11.
+generalize (H12 H10);intuition.
+auto.
+subst.
+destruct x.
+inversion H3.
+subst.
+elim H1;auto.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons null ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H6 p0 p3 H2);intro.
+inversion_clear H11.
+generalize (H12 H10);intuition.
+auto.
+subst.
+destruct x.
+inversion H3.
+subst.
+elim H1;auto.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons null ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H6 p0 p3 H2);intro.
+inversion_clear H11.
+generalize (H13 H10);intuition.
+auto.
+subst.
+assert (p3<> p1).
+intro;subst.
+elim (Test4 H10).
+caduceus.
+destruct x.
+inversion H3.
+subst.
+elim H1;auto.
+unfold clr_list in H3.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H3).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons null ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H6 p0 p3 H11);intro.
+inversion_clear H12.
+generalize (H14 H10);intuition.
+auto.
+apply termination_admitted.
+(*i1*)
+generalize (H x_7 H5).
+intuition.
+inversion_clear H7.
+subst.
+unfold isreachable.
+generalize (reachable_no_cycle alloc t1 x_7 l0 r0 x H6). 
+intro.
+inversion_clear H7.
+inversion_clear H8.
+generalize (In_dec eq_pointer_dec p1 x0).
+intro.
+inversion_clear H8.
+generalize (split_list p1 x0 H10).
+intros (lp0,(lp1,H11)).
+subst x0.
+generalize (split_reachable alloc t1 x_7 l0 r0 (p1::lp1) (lp0) H9).
+intros (p3,(H11,H12)) .
+inversion H12;subst.
+left.
+exists (p1::lp1).
+constructor 2;auto.
+apply l1;auto.
+apply sans_rep_p.
+apply (sans_rep_sublist (lp0 ++ p1 :: lp1) lp0 (p1::lp1)  H7).
+auto.
+right.
+exists lp1.
+apply l1;auto.
+apply sans_rep_p.
+apply (sans_rep_sublist (lp0 ++ p1 :: lp1) lp0 (p1::lp1)  H7).
+auto.
+left.
+exists (p1::x0).
+constructor 3;auto.
+rewrite acc_upd_eq;auto.
+apply l1;auto.
+(*i1b*)
+subst.
+inversion_clear H7.
+generalize (reachable_no_cycle alloc p1 x_7 l0 r0 x H6). 
+intros (path', (H7,H8)).
+inversion H8;subst.
+unfold isreachable.
+left.
+exists (@nil pointer).
+constructor.
+left.
+exists (p1::lp).
+apply Path_left;auto.
+apply l1;auto.
+apply sans_rep_p;auto.
+right.
+exists lp.
+apply l1;auto.
+apply sans_rep_p;auto.
+(*recuperation de la list*)
+inversion_clear H0.
+exists (tail x).
+intuition.
+(*i2*)
+inversion H5;subst.
+elim H1.
+auto.
+simpl.
+destruct (Z_eq_dec (p1 # c0) 0).
+elim (Test4 e).
+unfold clr_list.
+unfold llist.
+apply l2;auto.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l3 H5).
+intuition.
+(*i3*)
+apply H11 with p_0;auto.
+destruct x.
+inversion H0.
+simpl in H0.
+unfold in_list in *|-*.
+right;auto.
+(*i4*)
+generalize (H10 x_6).
+intuition.
+inversion H12.
+inversion_clear H15.
+inversion H17;subst.
+elim (H4 H13).
+assert (In t1 (t1::lp)).
+left;auto.
+generalize (H16 t1 H19);intro;elim (H4 H20).
+assert (In t1 (t1::lp)).
+left;auto.
+generalize (H16 t1 H19);intro;elim (H4 H20).
+(*i4b*)
+inversion_clear H12.
+inversion_clear H15.
+unfold in_list in H12.
+destruct x;inversion H12;subst.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 x0 x H5).
+intros (e,lp).
+subst.
+casetype False.
+assert ((x0#r0) <> null).
+inversion H16.
+inversion_clear H15.
+inversion H18.
+subst.
+inversion H0;auto.
+inversion H15;auto.
+inversion H15;auto.
+assert (In (x0#r0) x).
+inversion_clear H5.
+destruct (Z_eq_dec (x0 # c0) 0 ).
+elim (Test4 e).
+inversion H18.
+tauto.
+left;auto.
+apply (H11 (x0#r0)).
+unfold in_list.
+simpl;auto.
+inversion H16.
+inversion_clear H18.
+apply H19.
+generalize (reachable_in_list alloc l0 r0 (x0#r0) x_6 x1 H20).
+intros.
+inversion H18.
+inversion H21;subst.
+left;auto.
+subst.
+inversion H20;subst.
+casetype False.
+apply (H11 (x0#r0)).
+unfold in_list.
+right;auto.
+auto.
+right.
+exists (x0).
+simpl.
+split.
+auto.
+assert (In x0 x).
+auto.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p0 x H5).
+intros (s,h).
+subst p1.
+assert (p0 <> x0).
+intro.
+subst.
+apply h;auto.
+rewrite acc_upd_neq;auto.
+inversion H16.
+inversion_clear H19.
+unfold unmarked_reachable.
+exists x1.
+split;auto.
+apply l1.
+intro.
+generalize (H20 p0 H19).
+intro.
+apply H11 with p0.
+unfold in_list.
+left;auto.
+auto.
+auto.
+(*i6*)
+subst.
+generalize (eq_pointer_dec x_5 p1).
+intro.
+destruct x.
+inversion H5.
+subst.
+elim H1;auto.
+inversion_clear H12;subst;caduceus.
+generalize (H8 t1 p1).
+intros.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = t1) /\
+     (p # c0 = 0 -> p # l = t1 /\ p # r = p # r0)).
+apply H12.
+simpl.
+intuition.
+inversion_clear H13.
+generalize (H14 Test4).
+intuition.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+assert (~ In x_5 (p::x)).
+intro;inversion_clear H12;auto.
+generalize (H9 x_5 H12).
+intuition.
+(*i6b*)
+subst.
+generalize (eq_pointer_dec x_5 p1).
+intro.
+destruct x.
+inversion H5.
+subst.
+elim H1;auto.
+inversion_clear H12;subst;caduceus.
+generalize (H8 t1 p1).
+intros.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = t1) /\
+     (p # c0 = 0 -> p # l = t1 /\ p # r = p # r0)).
+apply H12.
+simpl.
+intuition.
+inversion_clear H13.
+generalize (H14 Test4).
+intuition.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+assert (~ In x_5 (p::x)).
+intro;inversion_clear H12;auto.
+generalize (H9 x_5 H12).
+intuition.
+(*i7a*)
+subst.
+destruct x.
+inversion H5.
+subst.
+elim H1;auto.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H8 p0 p3 H13);intro.
+inversion_clear H14.
+generalize (H15 H12);intuition.
+auto.
+subst.
+destruct x.
+inversion H5.
+subst.
+elim H1;auto.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H8 p0 p3 H13);intro.
+inversion_clear H14.
+generalize (H15 H12);intuition.
+auto.
+subst.
+destruct x.
+inversion H5.
+subst.
+elim H1;auto.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H8 p0 p3 H13);intro.
+inversion_clear H14.
+generalize (H16 H12);intuition.
+auto.
+subst.
+assert (p3<> p1).
+intro;subst.
+elim (Test4 H12).
+caduceus.
+destruct x.
+inversion H5.
+subst.
+elim H1;auto.
+unfold clr_list in H5.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H5).
+intros (s,h).
+subst.
+replace (cons p ( tail (p::x))) with (p::x) in H0.
+assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
+simpl.
+simpl in H0.
+auto.
+generalize (H8 p0 p3 H14);intro.
+inversion_clear H15.
+generalize (H17 H12);intuition.
+auto.
+apply termination_admitted.
 Save.
-*)
 
-(* Why obligation from file "why/schorr_waite.why", characters 3096-3132 *)
+
+(* Why obligation from file "why/schorr_waite.why", characters 3149-3185 *)
 Lemma schorr_waite_impl_po_6 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -408,7 +1067,7 @@ Lemma schorr_waite_impl_po_6 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -423,19 +1082,19 @@ Lemma schorr_waite_impl_po_6 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -447,10 +1106,10 @@ Lemma schorr_waite_impl_po_6 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -473,7 +1132,7 @@ Proof.
 intuition; subst;auto.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3096-3132 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3149-3185 *)
 Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -481,7 +1140,7 @@ Lemma schorr_waite_impl_po_7 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -496,19 +1155,19 @@ Lemma schorr_waite_impl_po_7 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -520,10 +1179,10 @@ Lemma schorr_waite_impl_po_7 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -552,16 +1211,17 @@ Lemma schorr_waite_impl_po_7 :
         (forall (c:((memory) Z)),
          (c = (upd c0 result 1) ->
           ((forall (x_7:pointer),
-            ((reachable alloc l r root x_7) ->
-             (reachable alloc l1 r1 t2 x_7) \/ (reachable alloc l1 r1 p1 x_7))) /\
+            ((isreachable alloc l r root x_7) ->
+             (isreachable alloc l1 r1 t2 x_7) \/
+             (isreachable alloc l1 r1 p1 x_7))) /\
           (exists stack:plist, ((((((clr_list alloc c l1 r1 p1 stack) /\
            (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
            (forall (x_6:pointer),
-            (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
+            (((valid alloc x_6) /\ (isreachable alloc l r root x_6)) /\
              (acc m0 x_6) = 0 ->
-             (unmarked_reachable alloc l1 m0 r1 t2 x_6) \/
+             (unmarked_reachable alloc m0 l1 r1 t2 x_6) \/
              (exists y:pointer, (in_list y stack) /\
-              (unmarked_reachable alloc l1 m0 r1 (acc r1 y) x_6))))) /\
+              (unmarked_reachable alloc m0 l1 r1 (acc r1 y) x_6))))) /\
            (forall (x_5:pointer),
             (~(in_list x_5 stack) -> (acc r1 x_5) = (acc r x_5) /\
              (acc l1 x_5) = (acc l x_5)))) /\
@@ -572,23 +1232,438 @@ Lemma schorr_waite_impl_po_7 :
                 (acc r p2) = p1)) /\
               (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2))))))) /\
            (forall (x_4:pointer),
-            (~(reachable alloc l r root x_4) -> (acc m0 x_4) = (acc m x_4)))) /\
+            (~(isreachable alloc l r root x_4) -> (acc m0 x_4) = (acc m x_4)))) /\
            (forall (x_3:pointer),
-            (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+            (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
              (valid alloc x_3))))) /\
           (Zwf 0 0 0))) /\
         (valid alloc result))))) /\
     (valid alloc result))).
 Proof.
-(* preservation of loop invariant, and also ..., in the "swing" case *)
-(*
-intuition.
-generalize (H x H7).
 intros.
-*)
-Admitted.
+split;subst;auto with *.
+intros.
+split;subst;auto with *.
+intros;split.
+intros;split.
+intros.
+inversion_clear Pre35.
+(*1*)
+generalize (H1 x_7 H0);clear H1.
+intros [H3|H4].
+unfold isreachable.
+inversion H3;subst.
+generalize (reachable_no_cycle alloc t1 x_7 l0 r0 x H1).
+intros (path,(H4,H5)).
+generalize ( In_dec eq_pointer_dec p1 path).
+intros [H|H].
+generalize (split_list p1 path H). 
+intros (path',(path'',H6)).
+subst.
+generalize (split_reachable alloc t1 x_7 l0 r0  (p1::path'') path' H5).
+intros (p3,(H6,H7)).
+inversion H7;subst.
+right.
+exists (p1::path'').
+constructor 3;auto.
+rewrite acc_upd_eq.
+assert (path' ++ p1 :: path'' = path' ++ p1 :: path'').
+auto.
+generalize (sans_rep_sublist (path' ++ p1 :: path'') path' (p1::path'') H4 H8).
+intros.
+apply l1bis;auto.
+apply sans_rep_p;auto.
+apply l1;auto.
+apply sans_rep_p;auto.
+auto.
+left.
+exists (path'').
+assert (path' ++ p1 :: path'' = path' ++ p1 :: path'').
+auto.
+generalize (sans_rep_sublist (path' ++ p1 :: path'') path' (p1::path'') H4 H8).
+intros.
+apply l1bis;auto.
+apply sans_rep_p;auto.
+apply l1;auto.
+apply sans_rep_p;auto.
+right.
+exists (p1::path).
+constructor 2;auto.
+rewrite acc_upd_eq.
+apply l1bis;auto.
+apply l1;auto.
+auto.
+inversion_clear H4.
+unfold isreachable.
+generalize (reachable_no_cycle alloc p1 x_7 l0 r0 x H1).
+intros (path,(sans_rep,reach)).
+inversion reach;subst.
+right.
+exists (@nil pointer).
+constructor.
+right.
+exists (p1::lp).
+constructor 3;auto.
+rewrite acc_upd_eq.
+apply l1;auto.
+apply sans_rep_p;auto.
+apply l1bis;auto.
+apply sans_rep_p;auto.
+auto.
+left.
+exists lp.
+apply l1;auto.
+apply sans_rep_p;auto.
+apply l1bis;auto.
+apply sans_rep_p;auto.
+(*recuperation de la list*)
+inversion_clear Pre35.
+inversion_clear H1.
+exists x.
+inversion_clear H2.
+inversion_clear H1.
+inversion_clear H2.
+inversion_clear H1.
+inversion_clear H2.
+inversion_clear H1.
+split.
+split.
+split.
+split.
+split.
+split.
+(*i2*)
+inversion H2;subst.
+inversion Pre19.
+elim H.
+auto.
+unfold clr_list.
+unfold llist.
+destruct (Z_eq_dec (p1 # (upd c0 p1 1)) 0).
+rewrite acc_upd_eq in e.
+inversion e.
+auto.
+unfold clr_list in H2.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l3 H2).
+intros (p,In).
+constructor 2;auto.
+caduceus.
+simpl.
+rewrite Test3 in H9.
+simpl in H9.
+apply lpath_eq_fun with      (fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0);auto.
+intros.
+assert (p1<> p0).
+intro;subst.
+apply In;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+auto.
+intros.
+generalize (H7 x_6 H1);clear H7;intros [H7|H7].
+unfold unmarked_reachable in H7.
+inversion_clear H7.
+inversion_clear H9.
+unfold clr_list in H2.
+inversion H10;subst.
+decompose [and] H1.
+elim Test5.
+intro;subst.
+inversion H11.
+elim H;auto.
+intros (H13,H14).
+elim H14;auto.
+elim Test5.
+intro;subst.
+inversion H9.
+elim H;auto.
+intros (H13,H14).
+elim H14;auto.
+generalize (H7 t1).
+intro.
+apply H.
+left;auto.
+elim Test5.
+intro;subst.
+inversion H9.
+elim H;auto.
+intros (H13,H14).
+elim H14;auto.
+generalize (H7 t1).
+intro.
+apply H.
+left;auto.
+inversion_clear H7.
+inversion_clear H9.
+inversion_clear H10.
+inversion_clear H9.
+destruct x.
+inversion H7.
+unfold clr_list in H2.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H2).
+intros (sub,H12).
+subst.
+inversion H11;subst.
+inversion H7.
+subst x0.
+left.
+unfold unmarked_reachable.
+exists (@nil pointer).
+split;auto.
+constructor.
+assert (In x0 x).
+auto.
+clear H.
+right.
+exists x0.
+split.
+right;auto.
+rewrite acc_upd_neq.
+unfold unmarked_reachable.
+exists (@nil pointer).
+split;auto.
+constructor.
+intro;subst;apply H12;auto.
+inversion H7.
+subst.
+left.
+unfold unmarked_reachable.
+exists (x0 # r0 :: lp).
+split;auto.
+constructor 2;auto.
+assert (in_list x0 (x0::x)).
+left;auto.
+apply l1.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+rewrite acc_upd_neq;auto.
+generalize (H8 (x0) H13).
+intro.
+intro.
+assert (In (x0#r0) ((x0#r0)::lp)).
+left;auto.
+generalize (H10 (x0#r0) H16).
+intro.
+rewrite H15 in H14.
+elim (H14 H17).
+assert (In x0 x).
+auto.
+clear H13.
+right.
+exists x0.
+split;auto.
+unfold unmarked_reachable.
+exists (x0#r0::lp).
+split;auto.
+rewrite acc_upd_neq.
+constructor 2;auto.
+assert (In p (p::x)).
+left;auto.
+rewrite acc_upd_neq.
+apply l1.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+auto.
+intro;subst.
+generalize (H8 (x0#r0) H13).
+intro.
+apply H15.
+apply H10.
+left;auto.
+intro;subst.
+apply H12;auto.
+inversion H7.
+subst.
+left.
+unfold unmarked_reachable.
+exists (x0 # r0 :: lp).
+split;auto.
+constructor 3;auto.
+assert (in_list x0 (x0::x)).
+left;auto.
+apply l1.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+rewrite acc_upd_neq;auto.
+generalize (H8 (x0) H13).
+intro.
+assert (In (x0#r0) ((x0#r0)::lp)).
+left;auto.
+generalize (H10 (x0#r0) H15).
+intro.
+intro.
+rewrite H17 in H14.
+elim (H14 H16).
+assert (In x0 x).
+auto.
+clear H13.
+right.
+exists x0.
+split;auto.
+unfold unmarked_reachable.
+exists (x0#r0::lp).
+split;auto.
+rewrite acc_upd_neq.
+constructor 3;auto.
+assert (In p (p::x)).
+left;auto.
+rewrite acc_upd_neq.
+apply l1.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+auto.
+intro;subst.
+generalize (H8 (x0#r0) H13).
+intro.
+apply H15.
+apply H10.
+left;auto.
+intro;subst.
+apply H12;auto.
+(*i5*)
+intros.
+generalize (H6 x_5 H1).
+assert (x_5 <>p1).
+unfold clr_list in H2.
+destruct x.
+inversion H2.
+subst.
+inversion Pre17.
+elim H;auto.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H2).
+intros (sub,H12).
+subst.
+intro;subst.
+apply H1;left;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+(*i6*)
+intros.
+generalize (eq_pointer_dec p0 (p1#r0)).
+intros [H9|H9].
+subst.
+unfold clr_list in H2.
+destruct x.
+inversion H2.
+subst.
+inversion Pre17.
+elim H;auto.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H2).
+intros (sub,H12).
+subst.
+inversion_clear H1;subst;caduceus.
+inversion_clear H;subst.
+caduceus.
+split;intro.
+assert (pair_in_list t1 p2 (cons t1 (p2 :: x)) ).
+simpl;left;auto.
+generalize (H5 t1 p2 H9).
+intros (H10,H11).
+apply H11;auto.
+inversion H.
+inversion_clear H.
+inversion_clear H1.
+destruct x.
+inversion H9.
+subst p0.
+intros.
+assert (p2<>p).
+intro;subst p.
+apply H12;left;auto.
+caduceus.
+apply H5.
+right.
+rewrite <- H.
+left;auto.
+destruct x.
+tauto.
+assert (In p2 x).
+apply (pair_in_list_in (p#r0) p2 p0 ).
+auto.
+assert (p2<> p).
+intro;subst.
+apply H12;right;auto.
+caduceus.
+apply H5.
+right;right;auto.
+inversion_clear H1.
+inversion_clear H10.
+elim (H9 ).
+auto.
+destruct x;auto.
+inversion H10.
+unfold clr_list in H2.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H2).
+intros (sub,H12).
+subst.
+generalize (pair_in_list_in p0 p2 p (x) H10).
+intro.
+assert (p2<>p).
+intro;subst;apply H12;auto.
+caduceus.
+apply H5.
+right;auto.
+(*i7*)
+auto.
+(*i8*)
+auto.
+(*termination*)
+apply termination_admitted.
+Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3396-3408 *)
+
+
+(* Why obligation from file "why/schorr_waite.why", characters 3449-3461 *)
 Lemma schorr_waite_impl_po_8 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -596,7 +1671,7 @@ Lemma schorr_waite_impl_po_8 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -611,19 +1686,19 @@ Lemma schorr_waite_impl_po_8 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -635,10 +1710,10 @@ Lemma schorr_waite_impl_po_8 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -650,11 +1725,10 @@ Lemma schorr_waite_impl_po_8 :
   forall (Post2: p2 = t1),
   (valid alloc t1).
 Proof.
-(* validity of t in "t->l" in the "push" case *)
 intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3458-3484 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3511-3537 *)
 Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -662,7 +1736,7 @@ Lemma schorr_waite_impl_po_9 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -677,19 +1751,19 @@ Lemma schorr_waite_impl_po_9 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -701,10 +1775,10 @@ Lemma schorr_waite_impl_po_9 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -720,11 +1794,10 @@ Lemma schorr_waite_impl_po_9 :
   forall (Post6: caduceus_3 = p2),
   (valid alloc caduceus_3).
 Proof.
-(* validity of p in "p->l = q" in the "push" case *)
-intuition;subst;auto.
+intros;subst;tauto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3435-3484 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3488-3537 *)
 Lemma schorr_waite_impl_po_10 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -732,7 +1805,7 @@ Lemma schorr_waite_impl_po_10 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -747,19 +1820,19 @@ Lemma schorr_waite_impl_po_10 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -771,10 +1844,10 @@ Lemma schorr_waite_impl_po_10 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -800,16 +1873,17 @@ Lemma schorr_waite_impl_po_10 :
         (forall (c:((memory) Z)),
          (c = (upd c0 result 0) ->
           ((forall (x_7:pointer),
-            ((reachable alloc l r root x_7) ->
-             (reachable alloc l1 r0 t2 x_7) \/ (reachable alloc l1 r0 p2 x_7))) /\
+            ((isreachable alloc l r root x_7) ->
+             (isreachable alloc l1 r0 t2 x_7) \/
+             (isreachable alloc l1 r0 p2 x_7))) /\
           (exists stack:plist, ((((((clr_list alloc c l1 r0 p2 stack) /\
            (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m1 p_0) <> 0))) /\
            (forall (x_6:pointer),
-            (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
+            (((valid alloc x_6) /\ (isreachable alloc l r root x_6)) /\
              (acc m1 x_6) = 0 ->
-             (unmarked_reachable alloc l1 m1 r0 t2 x_6) \/
+             (unmarked_reachable alloc m1 l1 r0 t2 x_6) \/
              (exists y:pointer, (in_list y stack) /\
-              (unmarked_reachable alloc l1 m1 r0 (acc r0 y) x_6))))) /\
+              (unmarked_reachable alloc m1 l1 r0 (acc r0 y) x_6))))) /\
            (forall (x_5:pointer),
             (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
              (acc l1 x_5) = (acc l x_5)))) /\
@@ -820,21 +1894,337 @@ Lemma schorr_waite_impl_po_10 :
                 (acc r p2) = p1)) /\
               (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r0 p2))))))) /\
            (forall (x_4:pointer),
-            (~(reachable alloc l r root x_4) -> (acc m1 x_4) = (acc m x_4)))) /\
+            (~(isreachable alloc l r root x_4) -> (acc m1 x_4) = (acc m x_4)))) /\
            (forall (x_3:pointer),
-            (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+            (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
              (valid alloc x_3))))) /\
           (Zwf 0 0 0))) /\
         (valid alloc result))))) /\
     (valid alloc result))).
 Proof.
-(* preservation of the loop invariant in the "push" case *)
-(*
-intuition.
-*)
-Admitted.
+(*push*)
+intros.
+split;subst;auto with *.
+intros.
+split;subst;auto with *.
+intros;split.
+intros;split.
+intros.
+subst.
+inversion_clear Pre35.
+generalize (H x_7 H0);clear H.
+intros [H|H].
+inversion_clear H.
+generalize (reachable_no_cycle alloc t1 x_7 l0 r0 x H2). 
+intros (path,(H,H3)).
+unfold isreachable.
+inversion H3;subst.
+right.
+exists (@nil pointer).
+apply l1bis;auto.
+left.
+exists lp.
+apply l1bis;auto.
+apply sans_rep_p;auto.
+right.
+exists (t1::lp).
+constructor 3;auto.
+apply l1bis;auto.
+apply sans_rep_p;auto.
+unfold isreachable.
+inversion_clear H.
+generalize  (reachable_no_cycle alloc p1 x_7 l0 r0 x H2).
+intros (path,(H,H3)).
+generalize (In_dec eq_pointer_dec t1 path).
+intros [H4|H4].
+generalize (split_list t1 path H4).
+intros (path',(path'',H5)).
+subst path.
+generalize (split_reachable alloc p1 x_7 l0 r0 (t1 :: path'') path'   H3 ).
+intros (p3,(H5,H6)).
+inversion H6;subst.
+left.
+exists (path'').
+apply l1bis;auto.
+generalize (sans_rep_sublist (path' ++ t1 :: path'') path' (t1::path'') H). 
+intro.
+apply sans_rep_p.
+apply H7.
+auto.
+right.
+exists (t1::path'').
+constructor 3;auto.
+caduceus.
+apply l1bis;auto.
+generalize (sans_rep_sublist (path' ++ t1 :: path'') path' (t1::path'') H). 
+intro.
+apply sans_rep_p.
+apply H7.
+auto.
+right.
+exists (t1::path).
+constructor 2;auto.
+caduceus.
+apply l1bis;auto.
+(*recuperation de la list*)
+inversion_clear Pre35.
+inversion_clear H1.
+exists x.
+inversion_clear H2.
+inversion_clear H1.
+inversion_clear H2.
+inversion_clear H1.
+inversion_clear H2.
+inversion_clear H1.
+split.
+split.
+split.
+split.
+split.
+split.
+(*i2*)
 
-(* Why obligation from file "why/schorr_waite.why", characters 287-3672 *)
+
+inversion H2;subst.
+inversion Pre19.
+elim H.
+auto.
+unfold clr_list.
+unfold llist.
+destruct (Z_eq_dec (p1 # (upd c0 p1 1)) 0).
+rewrite acc_upd_eq in e.
+inversion e.
+auto.
+unfold clr_list in H2.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l3 H2).
+intros (p,In).
+constructor 2;auto.
+caduceus.
+simpl.
+rewrite Test3 in H9.
+simpl in H9.
+apply lpath_eq_fun with      (fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0);auto.
+intros.
+assert (p1<> p0).
+intro;subst.
+apply In;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+rewrite acc_upd_neq;auto.
+auto.
+intros.
+generalize (H7 x_6 H1);clear H7;intros [H7|H7].
+unfold unmarked_reachable in H7.
+inversion_clear H7.
+inversion_clear H9.
+unfold clr_list in H2.
+inversion H10;subst.
+decompose [and] H1.
+elim Test5.
+intro;subst.
+inversion H11.
+elim H;auto.
+intros (H13,H14).
+elim H14;auto.
+elim Test5.
+intro;subst.
+inversion H9.
+elim H;auto.
+intros (H13,H14).
+elim H14;auto.
+generalize (H7 t1).
+intro.
+apply H.
+left;auto.
+elim Test5.
+intro;subst.
+inversion H9.
+elim H;auto.
+intros (H13,H14).
+elim H14;auto.
+generalize (H7 t1).
+intro.
+apply H.
+left;auto.
+inversion_clear H7.
+inversion_clear H9.
+inversion_clear H10.
+inversion_clear H9.
+destruct x.
+inversion H7.
+unfold clr_list in H2.
+generalize (llist_no_rep alloc 
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H2).
+intros (sub,H12).
+subst.
+inversion H11;subst.
+inversion H7.
+subst x0.
+left.
+unfold unmarked_reachable.
+exists (@nil pointer).
+split;auto.
+constructor.
+assert (In x0 x).
+auto.
+clear H.
+right.
+exists x0.
+split.
+right;auto.
+rewrite acc_upd_neq.
+unfold unmarked_reachable.
+exists (@nil pointer).
+split;auto.
+constructor.
+intro;subst;apply H12;auto.
+inversion H7.
+subst.
+left.
+unfold unmarked_reachable.
+exists (x0 # r0 :: lp).
+split;auto.
+constructor 2;auto.
+assert (in_list x0 (x0::x)).
+left;auto.
+apply l1.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+rewrite acc_upd_neq;auto.
+generalize (H8 (x0) H13).
+intro.
+intro.
+assert (In (x0#r0) ((x0#r0)::lp)).
+left;auto.
+generalize (H10 (x0#r0) H16).
+intro.
+rewrite H15 in H14.
+elim (H14 H17).
+assert (In x0 x).
+auto.
+clear H13.
+right.
+exists x0.
+split;auto.
+unfold unmarked_reachable.
+exists (x0#r0::lp).
+split;auto.
+rewrite acc_upd_neq.
+constructor 2;auto.
+assert (In p (p::x)).
+left;auto.
+rewrite acc_upd_neq.
+apply l1.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+auto.
+intro;subst.
+generalize (H8 (x0#r0) H13).
+intro.
+apply H15.
+apply H10.
+left;auto.
+intro;subst.
+apply H12;auto.
+inversion H7.
+subst.
+left.
+unfold unmarked_reachable.
+exists (x0 # r0 :: lp).
+split;auto.
+constructor 3;auto.
+assert (in_list x0 (x0::x)).
+left;auto.
+apply l1.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+intro.
+generalize (H8 (x0) H13).
+intro.
+apply H15.
+apply H10.
+right;auto.
+rewrite acc_upd_neq;auto.
+generalize (H8 (x0) H13).
+intro.
+assert (In (x0#r0) ((x0#r0)::lp)).
+left;auto.
+generalize (H10 (x0#r0) H15).
+intro.
+intro.
+rewrite H17 in H14.
+elim (H14 H16).
+assert (In x0 x).
+auto.
+clear H13.
+right.
+exists x0.
+split;auto.
+unfold unmarked_reachable.
+exists (x0#r0::lp).
+split;auto.
+rewrite acc_upd_neq.
+constructor 3;auto.
+assert (In p (p::x)).
+left;auto.
+rewrite acc_upd_neq.
+apply l1.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+apply l1bis.
+generalize (H8 p H13).
+intros.
+intro.
+apply H15.
+apply H10.
+right;auto.
+auto.
+intro;subst.
+generalize (H8 (x0#r0) H13).
+intro.
+apply H15.
+apply H10.
+left;auto.
+intro;subst.
+apply H12;auto.
+
+
+
+Save.
+
+(* Why obligation from file "why/schorr_waite.why", characters 289-3725 *)
 Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -842,7 +2232,7 @@ Lemma schorr_waite_impl_po_11 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
@@ -857,19 +2247,19 @@ Lemma schorr_waite_impl_po_11 :
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x_7:pointer),
-                  ((reachable alloc l r root x_7) ->
-                   (reachable alloc l0 r0 t1 x_7) \/
-                   (reachable alloc l0 r0 p1 x_7))) /\
+                  ((isreachable alloc l r root x_7) ->
+                   (isreachable alloc l0 r0 t1 x_7) \/
+                   (isreachable alloc l0 r0 p1 x_7))) /\
                  (exists stack:plist,
                   ((((((clr_list alloc c0 l0 r0 p1 stack) /\
                   (forall (p_0:pointer),
                    ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
                   (forall (x_6:pointer),
-                   (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\
-                    (acc m0 x_6) = 0 ->
-                    (unmarked_reachable alloc l0 m0 r0 t1 x_6) \/
+                   (((valid alloc x_6) /\
+                    (isreachable alloc l r root x_6)) /\ (acc m0 x_6) = 0 ->
+                    (unmarked_reachable alloc m0 l0 r0 t1 x_6) \/
                     (exists y:pointer, (in_list y stack) /\
-                     (unmarked_reachable alloc l0 m0 r0 (acc r0 y) x_6))))) /\
+                     (unmarked_reachable alloc m0 l0 r0 (acc r0 y) x_6))))) /\
                   (forall (x_5:pointer),
                    (~(in_list x_5 stack) -> (acc r0 x_5) = (acc r x_5) /\
                     (acc l0 x_5) = (acc l x_5)))) /\
@@ -881,132 +2271,26 @@ Lemma schorr_waite_impl_po_11 :
                      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
                        (acc r p2) = (acc r0 p2))))))) /\
                   (forall (x_4:pointer),
-                   (~(reachable alloc l r root x_4) -> (acc m0 x_4) =
+                   (~(isreachable alloc l r root x_4) -> (acc m0 x_4) =
                     (acc m x_4)))) /\
                   (forall (x_3:pointer),
-                   (~(x_3 = null) /\ (reachable alloc l r root x_3) ->
+                   (~(x_3 = null) /\ (isreachable alloc l r root x_3) ->
                     (valid alloc x_3))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test1: p1 = null /\ (t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0)),
   ((forall (x_2:pointer), (acc l x_2) = (acc l0 x_2) /\
     (acc r x_2) = (acc r0 x_2)) /\
   (forall (x_1:pointer),
-   ((valid alloc x_1) /\ (reachable alloc l0 r0 root x_1) -> (acc m0 x_1) <>
-    0))) /\
+   ((valid alloc x_1) /\ (isreachable alloc l0 r0 root x_1) ->
+    (acc m0 x_1) <> 0))) /\
   (forall (x_0:pointer),
-   (~(reachable alloc l0 r0 root x_0) -> (acc m0 x_0) = (acc m x_0))).
+   (~(isreachable alloc l0 r0 root x_0) -> (acc m0 x_0) = (acc m x_0))).
 Proof.
-(* post-condition of the function *)
 intuition.
-inversion_clear H0; intuition.
-subst p1.
-inversion H4.
-subst x0.
-generalize (H8 x); intuition.
-inversion H1.
-elim H14.
-auto.
-inversion_clear H0; intuition.
-subst p1.
-inversion H4.
-subst x0.
-generalize (H8 x); intuition.
-inversion H1.
-elim H14.
-auto.
-inversion_clear H0; intuition.
-subst p1.
-inversion H4.
-subst x0.
-generalize (H12 x).
-intuition.
-assert (reachable alloc l r root x).
-apply reachable_unchanged with l0 r0 ;auto.
-generalize (H14 H1 H5);intros.
-inversion_clear H15.
-subst t1.
-inversion H16.
-subst;elim H6.
-intros.
-elim H0;auto.
-subst.
-inversion H3.
-elim H0;auto.
-inversion H3.
-elim H0;auto.
-inversion H16.
-inversion H15.
-inversion H17.
-inversion H1.
-elim H17;auto.
-inversion_clear H0; intuition.
-apply H7.
-intro.
-apply H4.
-apply reachable_unchanged with l r ;auto.
-intro.
-assert (in_list x1 x0 -> False).
-subst p1.
-inversion H5.
-subst x0.
-auto.
-inversion H12.
-elim H16;auto.
-generalize (H9 x1 H12).
-intuition.
-intuition.
-inversion_clear H0; intuition.
-subst p1.
-inversion H3.
-subst x0.
-generalize (H9 x); intuition.
-inversion H1.
-elim H15.
-auto.
-inversion_clear H0; intuition.
-subst p1.
-inversion H3.
-subst x0.
-generalize (H9 x); intuition.
-inversion H1.
-elim H15.
-auto.
-inversion_clear H0; intuition.
-subst p1.
-inversion H3.
-subst x0.
-generalize (H13 x).
-intuition.
-assert (reachable alloc l r root x).
-apply reachable_unchanged with l0 r0 ;auto.
-generalize (H15 H1 H6);intros.
-inversion_clear H16.
-inversion H17;auto.
-subst.
-auto.
-inversion H17.
-inversion H16.
-inversion H18.
-inversion H1.
-elim H18;auto.
-inversion_clear H0; intuition.
-apply H8.
-intro.
-apply H3.
-apply reachable_unchanged with l r ;auto.
-intro.
-assert (in_list x1 x0 -> False).
-subst p1.
-inversion H6.
-subst x0.
-auto.
-inversion H13.
-elim H17;auto.
-generalize (H10 x1 H13).
-intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 645-2557 *)
+(* Why obligation from file "why/schorr_waite.why", characters 647-2610 *)
 Lemma schorr_waite_impl_po_12 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -1015,22 +2299,22 @@ Lemma schorr_waite_impl_po_12 :
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  (~(x = null) /\ (reachable alloc l r root x) ->
+                  (~(x = null) /\ (isreachable alloc l r root x) ->
                    (valid alloc x) /\ (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   (forall (x_7:pointer),
-   ((reachable alloc l r root x_7) -> (reachable alloc l r t x_7) \/
-    (reachable alloc l r p x_7))) /\
+   ((isreachable alloc l r root x_7) -> (isreachable alloc l r t x_7) \/
+    (isreachable alloc l r p x_7))) /\
   (exists stack:plist, ((((((clr_list alloc c l r p stack) /\
    (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m p_0) <> 0))) /\
    (forall (x_6:pointer),
-    (((valid alloc x_6) /\ (reachable alloc l r root x_6)) /\ (acc m x_6) =
-     0 -> (unmarked_reachable alloc l m r t x_6) \/
+    (((valid alloc x_6) /\ (isreachable alloc l r root x_6)) /\ (acc m x_6) =
+     0 -> (unmarked_reachable alloc m l r t x_6) \/
      (exists y:pointer, (in_list y stack) /\
-      (unmarked_reachable alloc l m r (acc r y) x_6))))) /\
+      (unmarked_reachable alloc m l r (acc r y) x_6))))) /\
    (forall (x_5:pointer),
     (~(in_list x_5 stack) -> (acc r x_5) = (acc r x_5) /\
      (acc l x_5) = (acc l x_5)))) /\
@@ -1040,18 +2324,11 @@ Lemma schorr_waite_impl_po_12 :
       (((acc c p2) <> 0 -> (acc l p2) = (acc l p2) /\ (acc r p2) = p1)) /\
       (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r p2))))))) /\
    (forall (x_4:pointer),
-    (~(reachable alloc l r root x_4) -> (acc m x_4) = (acc m x_4)))) /\
+    (~(isreachable alloc l r root x_4) -> (acc m x_4) = (acc m x_4)))) /\
    (forall (x_3:pointer),
-    (~(x_3 = null) /\ (reachable alloc l r root x_3) -> (valid alloc x_3)))).
+    (~(x_3 = null) /\ (isreachable alloc l r root x_3) -> (valid alloc x_3)))).
 Proof.
-(* loop invariant true at the beginning *)
 intuition.
-left; subst; auto.
-exists (@nil pointer).
-intuition.
-constructor.
-left; subst; auto.
-simpl in H; tauto.
-simpl in H; tauto.
+(* FILL PROOF HERE *)
 Save.
 

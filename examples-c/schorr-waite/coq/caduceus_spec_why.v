@@ -18,18 +18,18 @@ Defined.
 exact in_list.
 Defined.
 
+(*Why logic*) Definition isreachable :
+  alloc_table -> ((memory) pointer) -> ((memory) pointer) -> pointer
+  -> pointer -> Prop.
+exact isreachable.
+Defined.
+
 (*Why logic*) Definition pair_in_list : pointer -> pointer -> plist -> Prop.
 exact pair_in_list.
 Defined.
 
-(*Why logic*) Definition reachable :
-  alloc_table -> ((memory) pointer) -> ((memory) pointer) -> pointer
-  -> pointer -> Prop.
-exact reachable.
-Defined.
-
 (*Why logic*) Definition unmarked_reachable :
-  alloc_table -> ((memory) pointer) -> ((memory) Z) -> ((memory) pointer)
+  alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
   -> pointer -> pointer -> Prop.
-exact unmarked_reachable.
+exact unmarked_reachable .
 Defined.

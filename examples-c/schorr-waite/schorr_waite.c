@@ -13,10 +13,9 @@ typedef struct struct_node {
 
 /*@ predicate pair_in_list(node p1,node p2, plist stack) */
 
-/*@ predicate reachable (node p1, node p2) reads p1->r,p1->l */
+/*@ predicate isreachable (node p1, node p2) reads p1->r,p1->l */
 
 /*@ predicate unmarked_reachable (node p1, node p2) reads p1->r,p1->l,p1->m */
-
 /* predicate stkOk (node p, plist stack) reads p->c,p->l,p->r,\old(p->l),\old(p->r)*/
 
 /*@ predicate clr_list (node p, plist stack) reads p->c,p->l,p->r*/
@@ -24,22 +23,22 @@ typedef struct struct_node {
 #define NULL ((void*)0)
 
 /*@ requires 
-  @   \forall node x; x!=\null && reachable(root,x) => \valid(x) && ! x ->m  
+  @   \forall node x; x!=\null && isreachable(root,x) => \valid(x) && ! x ->m  
   @ ensures 
   @   (\forall node x; \old (x->l) == x->l && \old (x->r) == x->r) &&
-  @   (\forall node x; \valid(x) && reachable (root,x) => x->m) &&
-  @   (\forall node x; ! reachable (root,x) => x->m == \old(x->m))
+  @   (\forall node x; \valid(x) && isreachable (root,x) => x->m) &&
+  @   (\forall node x; ! isreachable (root,x) => x->m == \old(x->m))
 */
 void schorr_waite(node root) {
   node t = root;
   node p = NULL;
   /*@invariant
-    @ (\forall node x; \old(reachable(root,x)) =>
-    @       (reachable(t,x) || reachable(p,x)))&&
+    @ (\forall node x; \old(isreachable(root,x)) =>
+    @       (isreachable(t,x) || isreachable(p,x)))&&
     @ \exists plist stack;
     @   clr_list (p,stack) &&
     @   (\forall node p; in_list (p,stack) => p->m) &&
-    @   (\forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
+    @   (\forall node x; \valid(x) && \old(isreachable(root,x)) && !x->m =>
     @      unmarked_reachable(t,x) || 
     @      (\exists node y; in_list(y,stack) && unmarked_reachable(y->r,x))) &&
     @  (\forall node x; !in_list(x,stack) =>  
@@ -49,8 +48,8 @@ void schorr_waite(node root) {
 	          (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
                   &&
 	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)))&&
-    @  (\forall node x; ! \old(reachable(root,x)) => x->m == \old(x->m)) &&
-    @  (\forall node x; x != \null && \old(reachable(root,x)) => \valid(x)) 
+    @  (\forall node x; ! \old(isreachable(root,x)) => x->m == \old(x->m)) &&
+    @  (\forall node x; x != \null && \old(isreachable(root,x)) => \valid(x)) 
   */
   /*      (\forall node p1; (\forall node p2;
               pair_in_list(p1,p2,stack) => 
