@@ -25,8 +25,6 @@ void sort4_4(int t[]) {
   if (t[1] > t[3]) { tmp = t[1]; t[1] = t[3]; t[3] = tmp; }
   if (t[1] > t[2]) { tmp = t[1]; t[1] = t[2]; t[2] = tmp; }
 }
-#endif
-
 
 
 /* commented because of memory explosion */
