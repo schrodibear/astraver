@@ -18,8 +18,8 @@ Lemma add1_po_2 :
   (result: Z) 
   result = y ->
   (Variant1: Z) 
-  (x0: Z) 
   (z0: Z) 
+  (x0: Z) 
   `0 <= z0` /\
   x0 = `x + (y - z0)` ->
   Variant1 = z0 ->
@@ -44,8 +44,8 @@ Lemma add1_po_3 :
   (result: Z) 
   result = y ->
   (Variant1: Z) 
-  (x0: Z) 
   (z0: Z) 
+  (x0: Z) 
   `0 <= z0` /\
   x0 = `x + (y - z0)` ->
   Variant1 = z0 ->
@@ -69,8 +69,8 @@ Lemma add1_po_4 :
   (result: Z) 
   result = y ->
   (Variant1: Z) 
-  (x0: Z) 
   (z0: Z) 
+  (x0: Z) 
   `0 <= z0` /\
   x0 = `x + (y - z0)` ->
   Variant1 = z0 ->
@@ -91,8 +91,8 @@ Lemma add1_po_5 :
   (result: Z) 
   result = y ->
   (Variant1: Z) 
-  (x0: Z) 
   (z0: Z) 
+  (x0: Z) 
   `0 <= z0` /\
   x0 = `x + (y - z0)` ->
   Variant1 = z0 ->
@@ -167,8 +167,8 @@ Lemma mult1_po_2 :
   (x0: Z) 
   x0 = `0` ->
   (Variant3: Z) 
-  (x1: Z) 
   (z0: Z) 
+  (x1: Z) 
   `0 <= z0` /\
   x1 = `x * (y - z0)` ->
   Variant3 = z0 ->
@@ -193,8 +193,8 @@ Lemma mult1_po_3 :
   (x0: Z) 
   x0 = `0` ->
   (Variant3: Z) 
-  (x1: Z) 
   (z0: Z) 
+  (x1: Z) 
   `0 <= z0` /\
   x1 = `x * (y - z0)` ->
   Variant3 = z0 ->
@@ -231,8 +231,8 @@ Lemma mult1_po_4 :
   (x0: Z) 
   x0 = `0` ->
   (Variant3: Z) 
-  (x1: Z) 
   (z0: Z) 
+  (x1: Z) 
   `0 <= z0` /\
   x1 = `x * (y - z0)` ->
   Variant3 = z0 ->
@@ -262,8 +262,8 @@ Lemma mult1_po_5 :
   (x0: Z) 
   x0 = `0` ->
   (Variant3: Z) 
-  (x1: Z) 
   (z0: Z) 
+  (x1: Z) 
   `0 <= z0` /\
   x1 = `x * (y - z0)` ->
   Variant3 = z0 ->
@@ -291,8 +291,8 @@ Lemma mult1_po_6 :
   (x0: Z) 
   x0 = `0` ->
   (Variant3: Z) 
-  (x1: Z) 
   (z0: Z) 
+  (x1: Z) 
   `0 <= z0` /\
   x1 = `x * (y - z0)` ->
   Variant3 = z0 ->
