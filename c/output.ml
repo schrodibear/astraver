@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.23 2004-12-02 17:24:26 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.24 2004-12-07 17:19:24 hubert Exp $ i*)
 
 open Format;;
 
@@ -399,13 +399,14 @@ let make_label label e =
 
 let make_pre pre e =  Triple(pre,e,LTrue,None)
 
-let append block e =
-  match e with
-    | Void -> block
-    | _ ->
-	match block with    
-	  | Block(l) -> Block(l@[e])
-	  | _ -> Block([block;e])
+let append e1 e2 =
+  match e1,e2 with
+    | Void,_ -> e2
+    | _,Void -> e1
+    | Block(l1),Block(l2) -> Block(l1@l2)
+    | Block(l1),_ -> Block(l1@[e2])
+    | _,Block(l2) -> Block(e1::l2)
+    | _ -> Block [e1;e2]
 ;;
 
 let rec iter_expr f e =

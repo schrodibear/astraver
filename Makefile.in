@@ -115,7 +115,7 @@ bin/top: $(CMO)
 CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
-	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
+	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cinit.cmo \
 	c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo c/cnorm.cmo \

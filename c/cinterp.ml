@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.119 2004-12-06 14:16:02 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.120 2004-12-07 17:19:24 hubert Exp $ i*)
 
 
 open Format
@@ -119,20 +119,9 @@ let rec interp_term label old_label t =
 	LConst(Prim_float c)
     | NTvar id ->
 	let n = id.var_unique_name in
-	if id.var_is_referenced then
-	  begin match t.nterm_type.ctype_node with
-	    | Tstruct _ | Tunion _ -> 
-		if id.var_is_assigned && not id.var_is_a_formal_param then
-		  interp_var label n
-		else LVar n 		  
-	    | _ -> 
-		let var = global_var_for_type t.nterm_type in
-		LApp("acc",[LVar var; LVar n])
-	  end
-	else 
-	  if id.var_is_assigned && not id.var_is_a_formal_param then
-	    interp_var label n
-	  else LVar n
+	if id.var_is_assigned && not id.var_is_a_formal_param then
+	  interp_var label n
+	else LVar n
     | NTold t ->	interp_term (Some old_label) old_label t
     | NTbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op t.nterm_type op,[f t1;f t2])
@@ -380,15 +369,7 @@ let rec interp_expr e =
 	Cte(Prim_float c)
     | NEvar(Var_info v) -> 
 	let n = v.var_unique_name in
-	(*if v.var_is_referenced then
-	  begin match e.nexpr_type.ctype_node with
-	    | CTstruct _ | CTunion _ -> 
-		if v.var_is_assigned then Deref n else Var n
-	    | _ -> 
-		let var = global_var_for_type e.nexpr_type in
-		make_app "acc_" [Var var; Var n]
-	  end
-	else*) if v.var_is_assigned then Deref n else Var n
+	if v.var_is_assigned then Deref n else Var n
     | NEvar(Fun_info v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | NEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
@@ -848,17 +829,39 @@ let weak_invariants_for hvs =
        else make_and (weak_invariant id p) acc) 
     Ceffect.weak_invariants LTrue
 
-let interp_spec effect_reads effect_assigns s =
+(* we memoize the translation of strong invariants *)
+let strong_invariant = 
+  let h = Hashtbl.create 97 in
+  fun id p -> 
+    try 
+      Hashtbl.find h id
+    with Not_found -> 
+      let p = interp_predicate None "" p in
+      Hashtbl.add h id p;
+      p
+
+let strong_invariants_for hvs =
+  Hashtbl.fold
+    (fun id (p,e) acc -> 
+       if Ceffect.intersect_only_alloc e hvs then acc
+       else make_and (strong_invariant id p) acc) 
+    Ceffect.strong_invariants LTrue
+
+let interp_spec add_inv effect_reads effect_assigns s =
   let tpre = 
-    make_and
-      (interp_predicate_opt None "" s.requires)
-      (weak_invariants_for effect_reads)
+    make_and 
+      (make_and
+	 (interp_predicate_opt None "" s.requires)
+	 (if add_inv then weak_invariants_for effect_reads else LTrue))
+      (strong_invariants_for effect_reads)
   and tpost = 
     make_and
-      (interp_predicate_opt None "" s.ensures)
-      (make_and 
-	 (interp_assigns "" effect_assigns s.assigns)
-	 (weak_invariants_for effect_assigns))
+      (make_and
+	 (interp_predicate_opt None "" s.ensures)
+	 (make_and 
+	    (interp_assigns "" effect_assigns s.assigns)
+	    (if add_inv then weak_invariants_for effect_assigns else LTrue)))
+      (strong_invariants_for effect_assigns)
   in 
   (tpre,tpost)
 
@@ -880,12 +883,6 @@ let interp_decl d acc =
     | Ndecl(ctype,v,init) -> 
 	lprintf 
 	  "translating local declaration of %s@." v.var_unique_name;
-	if v.var_is_referenced then
-	  let t = { nterm_node = NTresult; 
-		    nterm_loc = d.loc;
-		    nterm_type = Ctypes.c_pointer ctype } in
-	  Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
-	else
 	  let tinit = match init with 
 	    | None ->
 		begin match ctype.Ctypes.ctype_node with
@@ -1099,7 +1096,7 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       Output.Label l
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
-      let pre,post = interp_spec eff.Ceffect.reads eff.Ceffect.assigns spec in
+      let pre,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns spec in
       Triple(pre,interp_statement ab may_break s,post,None)
 
 and interp_block ab may_break (decls,stats) =
@@ -1271,7 +1268,11 @@ let heap_var_unique_names v =
 
 let interp_function_spec id sp ty pl =
   let tpl = interp_fun_params pl in
-  let pre,post = interp_spec id.function_reads id.function_writes sp in
+  let pre,post = 
+    interp_spec 
+      (id <> Cinit.invariants_initially_established_info)
+      id.function_reads id.function_writes sp 
+  in
   let r = heap_var_unique_names id.function_reads in
   let w = heap_var_unique_names id.function_writes in
   let annot_type = 
@@ -1324,13 +1325,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ntypedecl _ ->
       assert false
   | Ndecl(ctype,v,init) -> 
-      lprintf "translating global declaration of %s@." v.var_unique_name;
-      begin match init with 
-	| None ->
-	    ()
-	| _ -> 
-	    warning decl.loc ("ignoring initializer for " ^ v.var_unique_name);
-      end;
+      (* global initialisations already handled in cinit.ml *)
       why
   | Nfunspec(spec,ctype,id,params) -> 
       let _,_,_,spec = interp_function_spec id spec ctype params in

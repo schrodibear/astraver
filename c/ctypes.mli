@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.5 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: ctypes.mli,v 1.6 2004-12-07 17:19:24 hubert Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -58,6 +58,7 @@ val c_int : ctype
 val c_float : ctype
 val c_string : ctype
 val c_array :  ctype ->  ctype
+val c_array_size :  ctype -> int64 ->  ctype
 val c_pointer :  ctype ->  ctype
 val c_void_star : ctype
 val c_addr : ctype

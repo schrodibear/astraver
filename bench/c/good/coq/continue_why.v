@@ -60,7 +60,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 680-686 *)
+(* Why obligation from file "why/continue.why", characters 664-670 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -81,7 +81,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 704-704 *)
+(* Why obligation from file "why/continue.why", characters 688-688 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -100,7 +100,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 541-790 *)
+(* Why obligation from file "why/continue.why", characters 528-769 *)
 Lemma f2_impl_po_3 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -116,7 +116,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 584-596 *)
+(* Why obligation from file "why/continue.why", characters 570-582 *)
 Lemma f2_impl_po_4 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -127,7 +127,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1162-1168 *)
+(* Why obligation from file "why/continue.why", characters 1117-1123 *)
 Lemma f3_impl_po_1 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
@@ -147,7 +147,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1186-1186 *)
+(* Why obligation from file "why/continue.why", characters 1141-1141 *)
 Lemma f3_impl_po_2 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
@@ -165,7 +165,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1006-1272 *)
+(* Why obligation from file "why/continue.why", characters 964-1222 *)
 Lemma f3_impl_po_3 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),
@@ -179,7 +179,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/continue.why", characters 1048-1079 *)
+(* Why obligation from file "why/continue.why", characters 1005-1036 *)
 Lemma f3_impl_po_4 : 
   forall (i1: Z),
   forall (Post1: i1 = 0),

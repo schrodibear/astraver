@@ -1,10 +1,14 @@
 
-struct queue { 
+typedef struct queue { 
   char *contents;
   int length;
   int first, last;
   unsigned int empty, full :1;
-} q;
+} queue;
+
+char t[] = { 0, 0, 0, 0, 0 } ;
+
+queue q = { t, 5, 0, 0, 0, 1};
 
 /*@ invariant q_invariant : 
   @   \valid_range(q.contents, 0, q.length-1) &&

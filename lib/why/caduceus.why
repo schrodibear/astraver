@@ -131,6 +131,9 @@ axiom valid_range_valid_shift :
   forall a:alloc_table. forall p:pointer. forall i:int. forall j:int. forall k:int.
   valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
 
+axiom valid_range_valid :
+  forall a:alloc_table. forall p:pointer. forall i:int. forall j:int. 
+  valid_range(a,p,i,j) -> i <= 0 <= j -> valid(a,p)
 
 axiom valid_range_valid_index :
   forall a:alloc_table. forall p:pointer. forall i:int. forall j:int. forall k:int.

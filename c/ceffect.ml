@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.64 2004-12-06 14:16:02 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.65 2004-12-07 17:19:24 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -290,6 +290,12 @@ let weak_invariants = Hashtbl.create 97
 let add_weak_invariant id p =
   Hashtbl.add weak_invariants id (p, predicate p)
 
+(* table for strong invariants *)
+let strong_invariants = Hashtbl.create 97
+
+let add_strong_invariant id p =
+  Hashtbl.add strong_invariants id (p, predicate p)
+
 let intersect_only_alloc e1 e2 =
   HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
 
@@ -299,6 +305,13 @@ let weak_invariants_for hvs =
        if intersect_only_alloc e hvs then acc
        else union e acc) 
     weak_invariants empty
+
+let strong_invariants_for hvs =
+  Hashtbl.fold
+    (fun _ (_,e) acc -> 
+       if intersect_only_alloc e hvs then acc
+       else union e acc) 
+    strong_invariants empty
 
 let spec sp = 
   ef_union
@@ -476,7 +489,7 @@ let decl d =
 	let t = { nterm_node = NTvar v; 
 		  nterm_loc = Loc.dummy;
 		  nterm_type = ty } in
-	add_weak_invariant id (invariant_for_global d.loc v t) 
+	add_strong_invariant id (invariant_for_global d.loc v t) 
     | Ndecl(ctype,v,init) -> () (* TODO *)
     | Naxiom(id,p) -> () (* TODO *)
     | Ntypedef(ctype,id) -> () 
@@ -496,7 +509,10 @@ let functions dl =
     lprintf "effects for function %s before invariants: reads %a writes %a@." 
       id.fun_name print_effects ef.reads print_effects ef.assigns;
     let ef  = {
-      reads = union ef.reads (weak_invariants_for (union ef.reads ef.assigns));
+      reads = union 
+		(union ef.reads 
+		   (weak_invariants_for (union ef.reads ef.assigns)))
+		  (strong_invariants_for (union ef.reads ef.assigns)) ;
       assigns = ef.assigns }
     in
     lprintf "effects for function %s: reads %a writes %a@." id.fun_name 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.14 2004-11-30 14:31:22 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.15 2004-12-07 17:19:24 hubert Exp $ i*)
 
 val interp_type : Cast.nctype -> string
 
@@ -54,6 +54,9 @@ val functions : Cast.nfile -> bool
 
 (* table for weak invariants *)
 val weak_invariants : (string, Cast.npredicate * HeapVarSet.t) Hashtbl.t
+
+(* table for strong invariants *)
+val strong_invariants : (string, Cast.npredicate * HeapVarSet.t) Hashtbl.t
 
 (* table of warnings from computation of effects *)
 val warnings : (Loc.t * string) Queue.t

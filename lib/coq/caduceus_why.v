@@ -163,6 +163,14 @@ Admitted.
        ((valid_range a p i j) -> (i <= k /\ k <= j -> (valid a (shift p k))))))))).
 Admitted.
 
+(*Why axiom*) Lemma valid_range_valid :
+  (forall (a:alloc_table),
+   (forall (p:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      ((valid_range a p i j) -> (i <= 0 /\ 0 <= j -> (valid a p))))))).
+Admitted.
+
 (*Why axiom*) Lemma valid_range_valid_index :
   (forall (a:alloc_table),
    (forall (p:pointer),

@@ -14,6 +14,7 @@ Lemma f_impl_po_1 :
 Proof.
 intuition.
 subst; auto.
+apply valid_index_valid_shift;auto.
 Save.
 
 (* Why obligation from file "why/passing.why", characters 93-155 *)
@@ -66,7 +67,7 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 688-703 *)
+(* Why obligation from file "why/passing.why", characters 796-811 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),

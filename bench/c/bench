@@ -114,7 +114,7 @@ parsing="../../../bin/caduceus.opt"
 for f in array assigns break call clash clash_alloc clash_redef \
     continue coord \
     copy dowhile invariants ifs logic_cast \
-    param passing purse queue rec ref ref_glob search see sizeof \
+    param passing purse queue rec ref search see sizeof \
     struct switch enum ; do
     echo -n "  $f.c... "
     rm -f coq/caduceus_spec_why.v

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/logic_cast.why", characters 323-351 *)
+(* Why obligation from file "why/logic_cast.why", characters 308-336 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
@@ -23,7 +23,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 286-351 *)
+(* Why obligation from file "why/logic_cast.why", characters 271-336 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
@@ -40,14 +40,14 @@ Lemma f_impl_po_2 :
   forall (Post5: caduceus_1 = (shift t I2)),
   forall (Pre4: (valid alloc caduceus_1)),
   forall (intP1: ((memory) Z)),
-  forall (Post16: intP1 = (upd intP0 caduceus_1 I2)),
+  forall (Post15: intP1 = (upd intP0 caduceus_1 I2)),
   (forall (I:Z),
    (I = (I2 + 1) -> (0 <= I /\ I <= 4) /\ (Zwf 0 (4 - I) (4 - I2)))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 224-254 *)
+(* Why obligation from file "why/logic_cast.why", characters 210-240 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: pointer),

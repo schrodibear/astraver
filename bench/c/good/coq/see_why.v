@@ -3,16 +3,16 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/see.why", characters 314-345 *)
+(* Why obligation from file "why/see.why", characters 409-440 *)
 Lemma k_impl_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),
   forall (b3: Z),
   forall (caduceus_2: Z),
-  forall (Post19: caduceus_2 = b3 /\ b3 = (1 - b0)),
+  forall (Post18: caduceus_2 = b3 /\ b3 = (1 - b0)),
   forall (b4: Z),
   forall (aux_1: Z),
-  forall (Post21: aux_1 = b4 /\ b4 = (1 - b3)),
+  forall (Post20: aux_1 = b4 /\ b4 = (1 - b3)),
   forall (result0: Z),
   forall (Post7: result0 = (1 - aux_1)),
   (forall (result:Z),

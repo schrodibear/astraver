@@ -14,104 +14,17 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.4 2004-12-06 14:16:02 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.5 2004-12-07 17:19:24 hubert Exp $ i*)
 
 open Creport
 open Cconst
 open Info
 open Cenv
 open Cltyping
-
-(* Sizeof *)
-
 open Ctypes
 open Cast
 open Clogic
 open Int64
-
-(*
-let rec sizeof loc = 
-  let incomplete_type () = 
-    error loc "invalid application of `sizeof' to an incomplete type"
-  in
-  let warned = ref false in
-  let architecture () =
-    if not !warned then begin 
-      warned := true;
-      warning loc "compiler/architecture-dependent sizeof"
-    end
-  in
-  let rec sizeof (ty : Ctypes.ctype) = match ty.Ctypes.ctype_node with
-    | Tvoid -> of_int 1
-    | Tint (_, Ctypes.Char) -> of_int 1 
-    | Tint (_, Ctypes.Short) -> of_int 2
-    | Tint (_, Ctypes.Int) -> architecture (); of_int 4
-    | Tint (_, Ctypes.Long) -> of_int 4
-    | Tint (_, Ctypes.LongLong) -> of_int 8
-(*
-    | CTint (_, Bitfield e) -> 
-	architecture ();
-	let n = eval_const_expr e in
-	let d = div n (of_int 8) in
-	if rem n (of_int 8) = zero then d else succ d
-*)
-    | Tint (_, Ctypes.Bitfield) -> 
-	unsupported loc "sizeof bitfield"
-    | Tfloat Float -> of_int 4
-    | Tfloat Double -> of_int 8
-    | Tfloat LongDouble -> of_int 12
-    | Ctypes.Tvar x -> assert false (* should be expansed *)
-(*
-    | CTarray (ty, Some e) -> 
-	let n = eval_const_expr e in
-	mul n (sizeof ty)
-    | Tarray (ty, None) -> incomplete_type ()
-*)
-    | Tarray (ty) -> incomplete_type ()
-    | Tpointer _ -> of_int 4
-    | Tstruct (n) ->
-	(match tag_type_definition n with
-	   | Incomplete -> 
-	       incomplete_type ()
-	   | Defined (Tstruct (_), fl) -> 
-	       List.fold_left (fun s (ty,_) -> add s (sizeof ty)) 
-		 (of_int 0) fl
-	   | Defined _ -> 
-	       assert false)
-    | Tunion (n) ->
-	(match tag_type_definition n with
-	   | Incomplete -> 
-	       incomplete_type ()
-	   | Defined (Tunion (_), fl) -> 
-	       List.fold_left (fun s (ty,_) -> max s (sizeof ty)) 
-		 (of_int 0) fl
-	   | Defined _ -> 
-	       assert false)
-    | Tenum _ -> of_int 4
-    | Tfun _ -> of_int 4 (* function pointer? *)
-  in
-  sizeof
-
-and eval_const_expr (e : texpr) = match e.texpr_node with
-  | TEconstant (IntConstant c) -> Cconst.int e.texpr_loc c
-  | TEunary (Uplus, t) -> eval_const_expr t
-  | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr t)
-  | TEbinary (t1, Cast.Badd_int, t2) -> 
-      Int64.add (eval_const_expr t1)  (eval_const_expr t2)
-  | TEbinary (t1, Cast.Bsub_int, t2) -> 
-      Int64.sub (eval_const_expr t1)  (eval_const_expr t2)
-  | TEbinary (t1, Cast.Bmul_int, t2) -> 
-      Int64.mul (eval_const_expr t1)  (eval_const_expr t2)
-  | TEbinary (t1, Cast.Bdiv_int, t2) -> 
-      Int64.div (eval_const_expr t1)  (eval_const_expr t2)
-  | TEcast (_, e) -> eval_const_expr e
-  | TEsizeof t -> sizeof e.texpr_loc t
-  | TEvar (Var_info v) ->
-      if e.texpr_type.Ctypes.ctype_const 
-      then v.enum_constant_value
-      else error e.texpr_loc "not a const variable"
-  | _ -> error e.texpr_loc "not a constant expression" *)
-
 
 
 
@@ -119,15 +32,6 @@ let noption f o =
   match o with
     | None -> None
     | Some x -> Some (f x)
-
-(*let cinteger i =
-  match i with 
-    | Char -> Char
-    | Short -> Short
-    | Int -> Int
-    | Long -> Int
-    | LongLong -> LongLong
-    | Bitfield (e) -> Bitfield (eval_const_expr e)*)
 
 let rec ctype (t : tctype) : nctype =
   let nctype =
@@ -190,6 +94,12 @@ let rec ctype (t : tctype) : nctype =
     ctype_volatile = t.Ctypes.ctype_volatile;
   }
 
+let var_requires_indirection v =
+  v.var_is_referenced && 
+  (match v.var_type.Ctypes.ctype_node with
+     | Tstruct _ | Tunion _ -> false
+     | _ -> true)
+
 open Cast
 
 let rec expr t =
@@ -207,15 +117,8 @@ and expr_node loc ty t =
       | TEvar env_info ->
 	  (match env_info with
 	    | Var_info v -> 
-		if v.var_is_referenced && 
-		  (match ty.Ctypes.ctype_node with
-		    | Tstruct _ | Tunion _ -> false
-		    | _ -> true)
-		then
+		if var_requires_indirection v then
 		  begin
-(*
-		    unset_assigned v;
-*)
 		    NEstar
 		      {nexpr_node= NEvar env_info;
 		       nexpr_type = noattr (Tpointer ty);
@@ -267,7 +170,13 @@ and expr_node loc ty t =
 let rec term_node loc t =
   match t with
   | Tconstant constant -> NTconstant constant
-  | Tvar var_info -> NTvar var_info
+  | Tvar var_info -> 
+      if var_requires_indirection var_info then
+	NTstar { nterm_node = NTvar var_info;
+		 nterm_loc = loc;
+		 nterm_type = var_info.var_type}
+      else
+	NTvar var_info
   | Tapp (logic_info ,l) -> NTapp (
       logic_info, 
       List.map (fun x -> (term x)) l)
@@ -300,7 +209,7 @@ and term t =
 { 
   nterm_node = term_node t.term_loc t.term_node;
   nterm_loc = t.term_loc;
-  nterm_type = ctype t.term_type;
+  nterm_type = t.term_type;
 }
 
 let nlocation l =
@@ -367,6 +276,10 @@ let rec c_initializer c = match c with
 let c_initializer_option = function
   | None -> None
   | Some i -> Some (c_initializer i)
+
+let ilist = function
+  | None -> None
+  | Some i -> Some (Ilist [i])
 
 let variant v = let (x,y) = v in ((term x), y)
 
@@ -500,7 +413,22 @@ and decl e1=
   | Tinvariant(s, p) -> Ninvariant (s, predicate p)
   | Ttypedef (t, s) -> Ntypedef((ctype t),s)
   | Ttypedecl t -> Ntypedecl (ctype t)
-  | Tdecl (t, v, c) -> Ndecl ((ctype t),v,c_initializer_option c)
+  | Tdecl (t, v, c) -> 
+(* traitement des locales precedemment dans cinterp a rebrancher 
+if v.var_is_referenced then
+	  let t = { nterm_node = NTresult; 
+		    nterm_loc = d.loc;
+		    nterm_type = Ctypes.c_pointer ctype } in
+	  Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
+	else
+*)	
+      if var_requires_indirection v
+      then
+	begin
+	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	  Ndecl(v.var_type,v,ilist (c_initializer_option c))
+	end
+      else Ndecl(t,v,c_initializer_option c)
   | Tfunspec (s, t, f, l) -> Nfunspec (spec s,ctype t,f,
 				   (List.map (fun (x,y) -> (ctype x,y)) l))
   | Tfundef (s, t, f, l, st) -> Nfundef (spec s,ctype t,f,
@@ -511,7 +439,29 @@ and nlocated l = {
   loc = l.loc}
 
 
-let file = List.map (fun d -> { node = decl d.node ; loc = d.loc})
+let global_decl e1 =
+  match e1 with    
+  | Tlogic(info, l) -> Nlogic (info , logic_symbol l)
+  | Taxiom (s, p) -> Naxiom (s, predicate p)
+  | Tinvariant(s, p) -> Ninvariant (s, predicate p)
+  | Ttypedef (t, s) -> Ntypedef((ctype t),s)
+  | Ttypedecl t -> Ntypedecl (ctype t)
+  | Tdecl (t, v, c) -> 
+      if var_requires_indirection v
+      then
+	begin
+	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	  Ndecl(v.var_type,v,ilist (c_initializer_option c))
+	end
+      else Ndecl(t,v,c_initializer_option c)
+  | Tfunspec (s, t, f, l) -> Nfunspec (spec s,ctype t,f,
+				   (List.map (fun (x,y) -> (ctype x,y)) l))
+  | Tfundef (s, t, f, l, st) -> Nfundef (spec s,ctype t,f,
+				   (List.map (fun (x,y) -> (ctype x,y)) l),
+				    statement st)
+
+
+let file = List.map (fun d -> { node = global_decl d.node ; loc = d.loc})
 
 
 
@@ -553,6 +503,13 @@ let make_forall q = function
   | NPtrue -> NPtrue
   | p -> NPforall (q, p)
 
+let make_valid_range_from_0 t s ts=
+  if s = Int64.one
+  then
+    NPvalid t
+  else
+    NPvalid_range (t, nzero, tpred ts)
+
 let fresh_index = 
   let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
 
@@ -584,9 +541,10 @@ let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
 	error loc ("array size missing in `" ^ v.var_name ^ "'")
     | Tarray (ty, Some s) ->
 	let ts = int_nconstant (Int64.to_string s) in
+	let vrange = make_valid_range_from_0 t s ts in
 	let valid_form =
 	  make_and
-	    (NPvalid_range (t, nzero, tpred ts))
+	    vrange
 	    (if fresh then NPfresh t else NPtrue)
 	in		   
 	begin match ty.Ctypes.ctype_node with

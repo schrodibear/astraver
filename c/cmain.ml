@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.46 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.47 2004-12-07 17:19:24 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -84,6 +84,8 @@ let main () =
   (* typing *)
   let tfiles = List.map type_file pfiles in
   if type_only then exit 0;
+  (* initialisation of global variables *)
+  let tfiles = List.map (fun (f,p) -> (f,Cinit.add_init p)) tfiles in
   (* normalisation *)
   let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
   (* effects *)

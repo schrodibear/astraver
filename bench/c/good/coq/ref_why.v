@@ -3,25 +3,26 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/ref.why", characters 182-196 *)
+(* Why obligation from file "why/ref.why", characters 252-266 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (alloc0: alloc_table),
   forall (i: pointer),
-  forall (Post4: (alloc_stack i alloc alloc0)),
+  forall (Post4: ((valid alloc0 i) /\ (fresh alloc i)) /\
+                 (alloc_stack i alloc alloc0)),
   (valid alloc0 i).
 Proof.
 intuition.
-apply alloc_stack_p with alloc; auto.
 Save.
 
-(* Why obligation from file "why/ref.why", characters 174-215 *)
+(* Why obligation from file "why/ref.why", characters 244-285 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (alloc0: alloc_table),
   forall (i: pointer),
-  forall (Post4: (alloc_stack i alloc alloc0)),
+  forall (Post4: ((valid alloc0 i) /\ (fresh alloc i)) /\
+                 (alloc_stack i alloc alloc0)),
   forall (Pre4: (valid alloc0 i)),
   forall (intP0: ((memory) Z)),
   forall (Post7: (acc intP0 i) = 1 /\
@@ -35,7 +36,7 @@ intuition.
 subst; auto.
 Admitted.
 
-(* Why obligation from file "why/ref.why", characters 335-482 *)
+(* Why obligation from file "why/ref.why", characters 405-552 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),

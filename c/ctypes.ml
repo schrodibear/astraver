@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.8 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.9 2004-12-07 17:19:24 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -63,6 +63,7 @@ let c_char = noattr (Tint (Unsigned, Char))
 let c_float = noattr (Tfloat Float)
 let c_string = noattr (Tpointer c_char)
 let c_array ty = noattr (Tarray (ty,None))
+let c_array_size ty n = noattr (Tarray (ty,Some n))
 let c_pointer ty = noattr (Tpointer ty)
 let c_void_star = c_pointer c_void
 let c_addr = noattr (Tvar "addr")

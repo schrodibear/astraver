@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.81 2004-12-06 14:16:02 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.82 2004-12-07 17:19:24 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -28,6 +28,15 @@ open Cenv
 open Lib
 open Ctypes
 open Int64
+
+
+let int_teconstant n = 
+  { texpr_node = TEconstant (IntConstant n); 
+    texpr_loc = Loc.dummy;
+    texpr_type = c_int }
+
+let tezero = int_teconstant "0"
+
 
 (* evaluation static *)
 let rec sizeof loc = 
@@ -778,7 +787,7 @@ and type_statement_node loc env et = function
   | CSswitch (e, s) ->
       let e = type_int_expr env e in
       let s,st = type_statement env et s in
-      TSswitch (e, s), { st with break = false }
+      TSswitch (e, s), { st with break = false ; term = true }
   | CScase (e, s) ->
       let e = type_int_expr env e in
       let s,st = type_statement env et s in
