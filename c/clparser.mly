@@ -29,7 +29,7 @@
 
 %token <string> IDENTIFIER STRING_LITERAL TYPENAME
 %token <Clogic.constant> CONSTANT
-%token LPAR RPAR IF ELSE COLON DOT DOTDOT AMP
+%token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP
 %token INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IFF IMPLIES AND OR NOT 
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR
@@ -40,6 +40,7 @@
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION
 
+%right prec_named
 %nonassoc prec_forall prec_exists
 %right IMPLIES IFF
 %left OR
@@ -114,6 +115,7 @@ lexpr:
     { match $2.lexpr_node with
 	| PLvar x -> info (PLcast (LTvar x.Info.var_name, $4))
 	| _ -> raise Parse_error }
+| IDENTIFIER COLONCOLON lexpr %prec prec_named { info (PLnamed ($1, $3)) }
 ;
 
 logic_type:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.65 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.66 2004-12-01 14:45:22 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -241,7 +241,7 @@ and type_term_node loc env = function
       end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _
-  | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->
+  | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse | PLnamed _ ->
       raise_located loc (AnyMessage "syntax error")
 
 and type_int_term env t =
@@ -420,6 +420,8 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       (* interpret term [t] as [t != 0] *)
       let t = type_int_term env p0 in
       Prel (t, Neq, zero)
+  | PLnamed (n, p) ->
+      Pnamed (n, type_predicate env p)
 
 let type_variant env = function 
   | (t, None) -> (type_int_term env t, None)

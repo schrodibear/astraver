@@ -22,7 +22,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/call.why", characters 323-357 *)
+(* Why obligation from file "why/call.why", characters 326-360 *)
 Lemma main_impl_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),

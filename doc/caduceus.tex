@@ -1080,10 +1080,20 @@ annotations.
   \\[0.1em]
   
   \nt{logic\_type}
-    & $::=$ & \te{int} $|$ \te{float} $|$ \nt{logic\_type} \te{[]} 
-            $|$ \nt{identifier} \\
+    & $::=$ & \te{void} $|$ \nt{sign} \te{char} $|$
+              \nt{sign} \te{short} $|$
+              \nt{sign} \te{int} $|$ 
+              \nt{sign} \te{long} \\
+      & $|$ & \nt{sign} \te{long long} $|$
+              \te{float} $|$ 
+              \te{double} $|$ 
+              \te{long double} \\
+      & $|$ & \nt{logic\_type} \te{*} $|$
+              \nt{identifier} \\
   \nt{logic\_parameter}
     & $::=$ & \nt{logic\_type} \nt{identifier} \\
+  \nt{sign}
+    & $::=$ & ( \te{signed} $|$ \te{unsigned} )? \\
 
   \\[0.1em]
 
@@ -1119,6 +1129,7 @@ annotations.
       & $|$ & \nt{term} \te{[} \nt{term} \te{]} \\
 %      & $|$ & \nt{term} \te{?} \nt{term} \te{:} \nt{term} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
+      & $|$ & \te{(} \nt{logic\_type} \te{)} \nt{term} \\
       & $|$ & \verb!\old! \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\at! \te{(} \nt{term} \te{,} \nt{identifier} \te{)} \\
       & $|$ & \verb!\block_length! \te{(} \nt{term} \te{)} \\
@@ -1165,6 +1176,7 @@ annotations.
               \index{valid\_range@\texttt{\bs{}valid\_range}} \\
       & $|$ & \verb!\fresh! \te{(} \nt{term} \te{)}
               \index{fresh@\texttt{\bs{}fresh}} \\
+      & $|$ & \nt{identifier} \te{::} \nt{predicate} \\
   \\[0.1em]
 
   \nt{relation}\indexnt{relation}

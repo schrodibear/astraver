@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.116 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.117 2004-12-01 14:45:22 filliatr Exp $ i*)
 
 
 open Format
@@ -259,6 +259,8 @@ let rec interp_predicate label old_label p =
 	LPred("valid_index",[interp_var label "alloc"; ft t;ft a])
     | NPvalid_range (t,a,b) ->
 	LPred("valid_range",[interp_var label "alloc"; ft t;ft a;ft b])
+    | NPnamed (n, p) ->
+	LNamed (n, f p)
 
 let interp_predicate_opt label old_label pred =
   match pred with

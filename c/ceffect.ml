@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.61 2004-11-30 14:31:22 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.62 2004-12-01 14:45:22 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -265,6 +265,7 @@ let rec predicate p =
 	add_alloc (union (term t1) (union (term t2) (term t3)))
     | NPold p -> predicate p
     | NPat (p,_) -> predicate p
+    | NPnamed (_, p) -> predicate p
 
 let logic_type ls =
   match ls with

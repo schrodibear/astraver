@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.1 2004-11-30 14:31:23 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.2 2004-12-01 14:45:22 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -329,7 +329,7 @@ let rec predicate p =
     | Pvalid_index (t1 , t2) -> NPvalid_index (term t1 , term t2) 
     | Pvalid_range (t1,t2,t3) -> NPvalid_range (term t1, term t2 , term t3)
     | Pfresh t -> NPfresh (term t)  
-
+    | Pnamed (n, p) -> NPnamed (n, predicate p)
 
 let loop_annot a =
   {

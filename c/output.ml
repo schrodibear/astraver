@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.20 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: output.ml,v 1.21 2004-12-01 14:45:22 filliatr Exp $ i*)
 
 open Format;;
 
@@ -84,6 +84,7 @@ type assertion =
   | LExists of string * base_type * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
+  | LNamed of string * assertion
 ;;
 
 let make_or a1 a2 =
@@ -136,6 +137,7 @@ let rec iter_assertion f a =
   | LForall(id,(l,t),a) -> List.iter f l;f t; iter_assertion f a
   | LExists(id,(l,t),a) -> List.iter f l;f t; iter_assertion f a
   | LPred(id,l) -> f id; List.iter (iter_term f) l
+  | LNamed (_, a) -> iter_assertion f a
 ;;
 
 let fprintf_base_type form (l,t) =
@@ -195,6 +197,8 @@ let rec fprintf_assertion form a =
       List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
       fprintf form ")@]"
   | LPred(_,_) -> assert false      
+  | LNamed (n, a) ->
+      fprintf form "@[(* %s: *) %a@]" n fprintf_assertion a
 ;;
 
 (*s types *)
@@ -505,7 +509,7 @@ let rec fprintf_expr form e =
 	fprintf form "@]->@ @[<hv 0>{ "; 
 	if pre <> LTrue 
 	then fprintf_assertion form pre;
-	fprintf form " }@ %a@]" fprintf_expr body;
+	fprintf form " }@ %a@]@ " fprintf_expr body;
 	begin
 	  match signals with
 	    | None -> 

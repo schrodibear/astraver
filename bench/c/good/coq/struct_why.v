@@ -46,7 +46,7 @@ Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 840-852 *)
+(* Why obligation from file "why/struct.why", characters 837-849 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -63,7 +63,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 890-903 *)
+(* Why obligation from file "why/struct.why", characters 887-900 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -83,7 +83,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 908-932 *)
+(* Why obligation from file "why/struct.why", characters 905-929 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -106,7 +106,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 873-932 *)
+(* Why obligation from file "why/struct.why", characters 870-929 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.mli,v 1.10 2004-11-08 16:10:01 filliatr Exp $ i*)
+(*i $Id: output.mli,v 1.11 2004-12-01 14:45:22 filliatr Exp $ i*)
 
 type constant =
   | Prim_int of int
@@ -45,6 +45,7 @@ type assertion =
   | LExists of string * base_type * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
+  | LNamed of string * assertion
 ;;
 
 val make_or : assertion -> assertion -> assertion
