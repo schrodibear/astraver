@@ -88,7 +88,7 @@ static:: $(STATICBINARY)
 
 coq:: $(VO)
 
-VERSION=0.7
+VERSION=0.71
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
