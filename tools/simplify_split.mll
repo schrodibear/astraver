@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify_split.mll,v 1.2 2004-07-15 14:27:03 filliatr Exp $ i*)
+(*i $Id: simplify_split.mll,v 1.3 2004-07-15 15:08:51 filliatr Exp $ i*)
 
 {
 
@@ -30,7 +30,7 @@
   let print s = output_string !outc s
 
   let start_file () =
-    let f = Filename.temp_file "cvcl" ".cvc" in
+    let f = Filename.temp_file "simplify" ".sx" in
     outc := open_out f;
     print (Buffer.contents buf);
     f
@@ -55,7 +55,8 @@ rule split = parse
       { let file = start_file () in 
 	print (lexeme lexbuf); end_file file; split lexbuf }
   | "("
-      { let file = start_file () in query lexbuf; end_file file; split lexbuf }
+      { let file = start_file () in 
+	print (lexeme lexbuf); query lexbuf; end_file file; split lexbuf }
   | eof 
       { () }
   | _ 
@@ -83,6 +84,7 @@ and query = parse
 
   let iter cb f =
     callback := cb;
+    Buffer.reset buf;
     let c = open_in f in
     let lb = from_channel c in
     split lb;

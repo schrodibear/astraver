@@ -230,6 +230,7 @@ install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
+	cp -f $(DP) $(BINDIR)/dp$(EXE)
 
 install-lib: 
 	mkdir -p $(LIBDIR)/caduceus/why
@@ -265,10 +266,11 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(VO)
+local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) $(VO)
 	cp -f bin/why.opt $$HOME/bin/$$OSTYPE/why
 	cp -f $(CADUCEUS) $$HOME/bin/$$OSTYPE/caduceus
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
+	cp -f $(DP) $$HOME/bin/$$OSTYPE/dp
 	mkdir -p $(COQLIB)/contrib7/why
 	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib7/why
 	mkdir -p $(COQLIB)/contrib/why

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.15 2004-07-15 14:27:03 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.16 2004-07-15 15:08:51 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -214,7 +214,7 @@ let rec print_cc_type fmt = function
   | TTarray v -> 
       fprintf fmt "(@[ARRAY INT OF %a@])" print_cc_type v
   | TTarrow ((_,CC_var_binder t1), t2) -> 
-      fprintf fmt "[%a ->@%a]" print_cc_type t1 print_cc_type t2
+      fprintf fmt "[%a ->@ %a]" print_cc_type t1 print_cc_type t2
   | _ -> 
       assert false
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl_split.mll,v 1.1 2004-07-15 13:45:37 filliatr Exp $ i*)
+(*i $Id: cvcl_split.mll,v 1.2 2004-07-15 15:08:51 filliatr Exp $ i*)
 
 {
 
@@ -37,14 +37,18 @@
 
   let end_file file =
     close_out !outc;
-    !callback file
+    !callback file;
+    Sys.remove file
 
 }
 
 (* copy everything into [buf] until we find a query *)
 rule split = parse
   | "QUERY" 
-      { let file = start_file () in query lexbuf; end_file file; split lexbuf }
+      { let file = start_file () in 
+	print "QUERY"; query lexbuf; end_file file; split lexbuf }
+  | "%" [^'\n']* '\n' 
+      { Buffer.add_string buf (lexeme lexbuf); split lexbuf }
   | eof 
       { () }
   | _ 
@@ -53,7 +57,8 @@ rule split = parse
 (* copy the query up to the semi-colon *)
 and query = parse
   | ";" { print ";" }
-  | "%" [^'\n']* '\n' { print (lexeme lexbuf); query lexbuf }
+  | "%" [^'\n']* '\n' 
+        { print (lexeme lexbuf); query lexbuf }
   | eof { () }
   | _   { print (lexeme lexbuf); query lexbuf }
 
@@ -61,6 +66,7 @@ and query = parse
 
   let iter cb f =
     callback := cb;
+    Buffer.reset buf;
     let c = open_in f in
     let lb = from_channel c in
     split lb;
