@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.10 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.11 2002-03-04 16:14:23 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -255,11 +255,15 @@ and trad_desc ren env ct d =
       let t = make_letrec ren' env' (phi0,var') f bl' (te,e.info.kappa) c in
       CC_lam (bl', t)
 
+  | Coerce e ->
+      failwith "Mlize.trad: Coerce: todo"
+
   | PPoint (s,d) ->       
       let ren' = push_date ren s in
       trad_desc ren' env ct d
 
-  | Debug _ -> failwith "Mlise.trad: Debug: not implemented"
+  | Debug _ -> 
+      failwith "Mlise.trad: Debug: not implemented"
 
 
 and trad_binders ren env = function

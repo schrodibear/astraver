@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.9 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.10 2002-03-04 16:14:23 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -127,12 +127,14 @@ let db_prog e =
 	let (tids',ids',refs'),bl' = db_binders idl bl in
 	LetRec (f, bl, db_type_v tids' v, var, 
 		db (tids',Ids.add f ids',refs') e)
-	  
+    | Expression _ as x -> 
+	x
+    | Coerce e -> 
+	Coerce (db idl e)
     | Debug (s,e1) ->
 	Debug (s, db idl e1)
-	  
-    | Expression _ as x -> x
-    | PPoint (s,d) -> PPoint (s, db_desc idl d)
+    | PPoint (s,d) -> 
+	PPoint (s, db_desc idl d)
 	  
   and db_arg ((tids,_,refs) as idl) = function
     | Term ({ desc = Var id } as t) -> 

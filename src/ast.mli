@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.12 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.13 2002-03-04 16:14:23 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -39,6 +39,7 @@ and 'a t_desc =
   | LetIn of variable * 'a t * 'a t
   | LetRec of variable * type_v binder list * type_v * (term * term) * 'a t
   | Expression of term
+  | Coerce of 'a t
 
   | PPoint of string * 'a t_desc
   | Debug of string * 'a t

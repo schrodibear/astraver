@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.15 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.16 2002-03-04 16:14:23 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -128,6 +128,8 @@ let type_eq loc = function
   | _ -> Error.expected_type loc 
 	 (fun fmt -> fprintf fmt "unit, bool, int or float")
 
+let coerce p env k = Coerce { desc = p; info = { env = env; kappa = k } }
+
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
@@ -207,15 +209,7 @@ let state_post lab env (id,v,ef) loc = function
       ef, Some { a_name = q.a_name; a_value = c }
 
 
-(*s Detection and typing of pure expressions.
-  
-    Pure expressions are programs without neither effects nor 
-    pre/post-conditions, but access to variables and arrays are allowed.
-
-    We collect the preconditions for array access([e<N] for [t[e]])
-    as we traverse the term. *)
-
-(* [is_pure p] tests wether the program [p] is an expression or not. *)
+(*s Detection of pure functions. *)
 
 let rec is_pure_type_v = function
   | PureType _ -> true
@@ -229,6 +223,8 @@ and is_pure_type_c c =
   is_pure_type_v c.c_result_type && c.c_effect = Effect.bottom &&
   c.c_pre = [] && c.c_post = None
 
+(*s Preconditions for partial functions. *)
+
 let partial_pre = function
   | Tapp (id, [a;b]) when id == t_div ->
       let p = neq b (Tconst (ConstInt 0)) in
@@ -238,48 +234,6 @@ let partial_pre = function
       [anonymous_pre true p]
   | _ ->
       []
-
-(*i***
-let typef_expression lab env expr =
-  let rec effect pl = function
-    | Var id -> 
-	Tvar id, pl, Effect.bottom
-    | Expression c -> 
-	c, pl, Effect.bottom
-    | Acc id -> 
-	Tvar id, pl, Effect.add_read id Effect.bottom
-    | TabAcc (_,id,p) ->
-	let c,pl,ef = effect pl p.desc in
-	let pre = make_pre_access env id c in
-	make_raw_access env (id,id) c, 
-	(anonymous_pre true pre) :: pl, Effect.add_read id ef
-    | App (p,args) ->
-	let a,pl,e = effect pl p.desc in
-	let args,pl,e =
-	  List.fold_right
-	    (fun arg (l,pl,e) -> 
-	       match arg with
-		 | Term p ->
-		     let carg,pl,earg = effect pl p.desc in
-		     carg::l, pl, Effect.union e earg
-		 | Type v ->
-		     failwith "TODO"
-		 | Refarg _ -> 
-		     assert false) 
-	    args ([],pl,e) 
-	in
-	Error.check_for_non_constant p.info.loc a;
-	let t = applist a args in
-	t, (partial_pre t) @ pl, e
-    | _ -> 
-	assert false
-  in
-  let e0 = state_pre lab env (Some expr.info.loc) expr.info.pre in
-  let c,pl,e = effect [] expr.desc in
-  let v = typing_term expr.info.loc env c in
-  let ef = Effect.union e0 e in
-  Expression c, (v,ef), expr.info.pre @ pl
-***i*)
 
 (*s Typing programs. We infer here the type with effects. 
     [lab] is the set of labels, [env] the environment 
@@ -389,31 +343,34 @@ and typef_desc lab env loc = function
   | App (f, Term a) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
-      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let t_a = typef lab env a in
       expected_type a.info.loc (result_type t_a) tx;
+      let _,eapp,_,_ = decomp_kappa kapp in
       let ef = compose3effects (effect t_a) (effect t_f) eapp in
       (match t_a.desc with
 	 | Expression ca when t_a.info.kappa.c_post = None ->
-	     let tapp' = type_v_rsubst [x,ca] tapp in
+	     let kapp = type_c_rsubst [x,ca] kapp in
+	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     (match t_f.desc with
 		| Expression cf when t_f.info.kappa.c_post = None ->
 		    let pl = (pre t_a) @ (pre t_f) in
-		    Expression (applist cf [ca]), (tapp', ef), pl
+		    let e = Expression (applist cf [ca]) in
+		    coerce e env kapp, (tapp, ef), pl
 		| _ ->	   
-		    App (t_f, Term t_a), (tapp', ef), [])
+		    coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
 	 | _ ->
-	     App (t_f, Term t_a), (tapp, ef), [])
+	     let (_,tapp),_,_,_ = decomp_kappa kapp in
+	     coerce (App (t_f, Term t_a)) env kapp, (tapp, ef), [])
 
   | App (f, (Refarg (locr,r) as a)) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
-      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let tr = type_in_env env r in
       expected_type locr tr tx;
+      let kapp = type_c_subst [x,r] kapp in
+      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let ef = Effect.compose (effect t_f) eapp in
-      let tapp' = type_v_subst [x,r] tapp in
-      App (t_f, a), (tapp', ef), []
+      coerce (App (t_f, a)) env kapp, (tapp, ef), []
 
   | App (f, Type _) ->
       failwith "todo: typing: application to a type"
@@ -480,11 +437,16 @@ and typef_desc lab env loc = function
       let tf = make_arrow bl t_e.info.kappa in
       LetRec (f,bl,v,var,t_e), (tf,Effect.bottom), []
 
+  | Coerce e ->
+      let te = typef lab env e in
+      Coerce te, (result_type te, effect te), []
+
   | PPoint (s,d) -> 
       let lab' = LabelSet.add s lab in
       typef_desc lab' env loc d
 	
-  | Debug _ -> failwith "Typing.typef: Debug: TODO"
+  | Debug _ -> 
+      failwith "Typing.typef: Debug: TODO"
 
 
 and typef_arg lab env = function
@@ -515,63 +477,6 @@ and typef_block lab env bl =
 	(Statement t_e)::bl, t, Effect.compose efe ef
   in
   ef_block lab None bl
-
-(*i***
-and typef_app ren env f args =
-  let floc = f.info.loc in
-  let argsloc = List.map arg_loc args in
-  let t_f = typef ren env f in
-  let t_args = List.map (typef_arg ren env) args in
-  let n = List.length args in
-  let tf = t_f.info.kappa.c_result_type in (* TODO: external function type *)
-  let bl,c = 
-    match tf with
-      | Arrow (bl, c) ->
-	  if List.length bl <> n then Error.partial_app floc;
-	  bl,c
-      | _ -> 
-	  Error.app_of_non_function floc
-  in
-  let check_type loc v t so =
-    let v' = type_v_rsubst so v in
-    if not (subtype (v',t)) then 
-      Error.ill_typed_argument loc (fun fmt -> print_type_v fmt v')
-  in
-  let s,so,ok = 
-    (* [s] is the references substitution, [so] other args substitution. *)
-    (* [ok] means arguments are side-effects free i.e. expressions *)
-    List.fold_left
-    (fun (s,so,ok) (b,a,tloc) ->
-       match b,a with
-	 | (id,BindType (Ref _ | Array _ as v)), Refarg (loc, id') ->
-	     let ta = type_in_env env id' in
-	     check_type loc v ta so;
-	     (id,id')::s, so, ok
-	 | (id,_), Refarg (loc,_) -> 
-	     Error.should_not_be_a_reference loc
-	 | (id,BindType v), Term t ->
-	     let ta = t.info.kappa.c_result_type in
-	     check_type tloc v ta so;
-	     (match t.desc with
-		| Expression c -> s, (id,c)::so, ok
-		| _ -> s,so,false)
-	 | (id,BindSet), Type v ->
-	     failwith "TODO"
-	     (*i TODO
-	     let c = Monad.trad_ml_type_v ren env v in s, (id,c)::so, ok i*)
-	 | (id,BindSet), Term t -> 
-	     Error.expects_a_type id tloc
-	 | (id,BindType _), Type _ -> 
-	     Error.expects_a_term id
-	 | (_,Untyped), _ -> 
-	     assert false)
-    ([],[],true)
-    (list_combine3 bl t_args argsloc)
-  in
-  let c' = type_c_subst s c in
-  t_f, t_args, (*i (bl,c), (s,so,ok), i*)
-  { c' with c_result_type = type_v_rsubst so c'.c_result_type }
-***i*)
 
 let effect_app ren env f args =
   let n = List.length args in
