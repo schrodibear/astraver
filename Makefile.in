@@ -428,6 +428,7 @@ source: doc/manual.ps export/$(NAME).tar.gz
 export/$(NAME).tar.gz:
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
+	cd $(EXPORT); rm -f $(GENERATED)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
 
 tarball: 

@@ -4,7 +4,7 @@
 
 pgm=$1
 option=$2
-coqc="coqc -R ../lib/coq Coq.why"
+coqc="coqc -I ../lib/coq"
 
 pvstc () {
     context=`dirname $1`
