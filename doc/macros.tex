@@ -1,30 +1,53 @@
 
 \newcommand{\kw}[1]{\ensuremath{\mathsf{#1}}}
 
+% types
+\newcommand{\bool}{\kw{bool}}
+\newcommand{\unit}{\kw{unit}}
+\newcommand{\tref}[1]{\ensuremath{#1~\kw{ref}}}
+\newcommand{\tarray}[2]{\ensuremath{\kw{array}~#1~\kw{of}~#2}}
+
 % constructs
 \newcommand{\prepost}[3]{\ensuremath{\{#1\}\,#2\,\{#3\}}}
+\newcommand{\result}{\ensuremath{\mathit{result}}}
+
+\newcommand{\void}{\kw{void}}
 \newcommand{\access}[1]{\ensuremath{!#1}}
 \newcommand{\assign}[2]{\ensuremath{#1~:=~#2}}
+\newcommand{\pref}[1]{\ensuremath{\kw{ref}~#1}}
 \newcommand{\taccess}[2]{\ensuremath{#1[#2]}}
 \newcommand{\tassign}[3]{\ensuremath{#1[#2]~:=~#3}}
 % \newcommand{\block}[1]{\ensuremath{\kw{begin}~#1~\kw{end}}}
 \newcommand{\seq}[2]{\ensuremath{#1;~#2}}
 \newcommand{\plabel}[2]{\ensuremath{#1:#2}}
 \newcommand{\assert}[2]{\ensuremath{\kw{assert}~\{#1\};~#2}}
-\newcommand{\while}[5]{\ensuremath{\kw{while}~#1~\kw{do}~\{\kw{invariant}~#2~\kw{variant}~#3~\kw{for}~#4\}~#5~\kw{done}}}
+\newcommand{\while}[4]{\ensuremath{\kw{while}~#1~\kw{do}~\{\kw{invariant}~#2~\kw{variant}~#3\}~#4~\kw{done}}}
 \newcommand{\ite}[3]{\ensuremath{\kw{if}~#1~\kw{then}~#2~\kw{else}~#3}}
 \newcommand{\fun}[3]{\ensuremath{\kw{fun}~#1:#2\rightarrow#3}}
 \newcommand{\app}[2]{\ensuremath{(#1~#2)}}
-\newcommand{\rec}[3]{\ensuremath{\kw{rec}~#1:#2=#3}}
+\newcommand{\rec}[4]{\ensuremath{\kw{rec}~#1:#2~\{\kw{variant}~#3\}=#4}}
 \newcommand{\letin}[3]{\ensuremath{\kw{let}~#1=#2~\kw{in}~#3}}
-
-\newcommand{\tref}[1]{\ensuremath{#1~\kw{ref}}}
-\newcommand{\tarray}[2]{\ensuremath{\kw{array}~#1~\kw{of}~#2}}
+\newcommand{\coerce}[2]{\ensuremath{(#1:#2)}}
 
 \newcommand{\statement}{\textit{statement}}
 \newcommand{\program}{\textit{program}}
 \newcommand{\expression}{\textit{expression}}
 \newcommand{\predicate}{\textit{predicate}}
+
+% inference rules
+\newcommand{\espacev}{\rule{0in}{1em}}
+\newcommand{\espacevn}{\rule[-0.4em]{0in}{1em}}
+\newcommand{\irule}[2]
+  {\frac{\espacevn\displaystyle#1}{\espacev\displaystyle#2}}
+\newcommand{\typage}[3]{#1 \, \vdash \, #2 : #3}
+\newcommand{\iname}[1]{\textsf{#1}}
+
+\newcommand{\emptyef}{\bot}
+\newcommand{\wf}[1]{#1~\kw{wf}}
+\newcommand{\pur}[1]{#1~\kw{pure}}
+\newcommand{\variant}[1]{#1~\kw{variant}}
+
+\newcommand{\wpre}[2]{\ensuremath{\mathit{wp}(#1,#2)}}
 
 %%% Local Variables: 
 %%% mode: latex

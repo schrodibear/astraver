@@ -1,8 +1,16 @@
 \documentclass[a4paper,12pt]{article}
 
+\usepackage{amssymb}
+\usepackage{ocamlweb}
+\usepackage{epsfig}
 \input{./macros.tex}
+
 \begin{document}
 \input{rules.tex}
+\newpage
+\section{Code}
+\begin{center}\epsfig{file=./dep.ps,width=\linewidth}\end{center}
+\input{code.tex}
 \end{document}
 
 %%% Local Variables: 

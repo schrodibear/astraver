@@ -18,20 +18,25 @@
     e
       & ::= & \prepost{p}{s}{p} \\[1em]
     s
-      & ::= & x \\
+      & ::= & E \\
       &   | & \access{x} \\
       &   | & \assign{x}{e} \\
+      &   | & \pref{e} \\
       &   | & \taccess{x}{e} \\ % sugar?
       &   | & \tassign{x}{e}{e} \\ % sugar?
       &   | & \seq{e}{e} \\
       &   | & \plabel{x}{e} \\
       &   | & \assert{p}{e} \\
-      &   | & \while{e}{p}{t}{p}{e} \\
+      &   | & \while{e}{p}{v}{e} \\
       &   | & \ite{e}{e}{e} \\
+      &   | & \letin{x}{e}{e} \\
       &   | & \fun{x}{\tau}{e} \\
       &   | & \app{e}{e} \\
-      &   | & \rec{x}{\tau}{e} \\
-      &   | & \letin{x}{e}{e}
+      &   | & \rec{x}{\tau}{v}{e} \\
+      &   | & \coerce{e}{\kappa} \\[1em]
+    E & ::= & x \\
+      &   | & \mathit{constant} \\
+      &   | & f(E,\dots,E) \\
   \end{array}
 \end{displaymath}
 
@@ -39,7 +44,211 @@
 
 \section{Typing}
 
+\begin{displaymath}
+\begin{array}{c}
+
+  % variable
+  \irule{\mathit{Type}(c)=\tau}
+        {\typage \Gamma c {(\tau,\emptyef)} }
+  \iname{CONST}
+
+  \qquad
+
+  \irule{x:\tau \in \Gamma}
+        {\typage \Gamma x {(\tau,\emptyef)} }
+  \iname{VAR}
+
+  \\[1.5em]
+
+  \irule{\typage {\Gamma,x:\tau} e {\kappa}
+         \qquad
+         \Gamma \vdash_a \wf{\tau}}
+        {\typage \Gamma {\fun{x}{\tau}{e}} 
+                         {((x:\tau)\rightarrow\kappa,\emptyef)}}
+  \iname{FUN}
+
+  \\[1.5em]
+
+  % application à un terme
+  \irule{\typage \Gamma {e_1} {(\tau_2\rightarrow(\tau_1,\epsilon),
+                               \epsilon_1)}
+         \qquad
+         \typage \Gamma {e_2} {(\tau_2,\epsilon_2)}
+         \qquad
+         \pur{\tau_2}}
+        {\typage \Gamma {\app{e_1}{e_2}} 
+                         {(\tau_1,\epsilon_1\sqcup\epsilon_2\sqcup\epsilon)}}
+  \iname{APP} 
+
+  \\[1.5em]
+
+  % application à une référence
+  \irule{\typage \Gamma e 
+               {((x:\tref{\tau_1})\rightarrow(\tau,\epsilon),
+                 \epsilon_2)}
+         \qquad
+         r:\tref{\tau_1}\in\Gamma
+         \qquad
+         r\notin(\tau,\epsilon)}
+        {\typage \Gamma {\app{e}{r}} 
+                         {(\tau[x\leftarrow r],
+                           \epsilon_2\sqcup\epsilon[x\leftarrow r])}}
+  \iname{APPREF} 
+
+  \\[1.5em]
+
+  % fonction récursive
+
+  \irule{\begin{array}{c}
+         \Gamma\vdash_a\wf{\vec{\tau}}
+         \qquad
+         \Gamma,\vec{x}:\vec{\tau} \vdash_a \wf{\kappa}
+         \\[0.3em]
+         \typage {\Gamma,f:(\vec{x}:\vec{\tau})\rightarrow\kappa,
+                          \vec{x}:\vec{\tau}}
+                  e {\kappa}
+         \qquad
+         \typage {Pre(\Gamma,\vec{x}:\vec{\tau})} \nu {\variant{A}}
+        \end{array}}
+        {\typage
+            \Gamma
+            {\rec{f}{(\vec{x}:\vec{\tau}):\kappa}{\nu}{e}}
+            {((\vec{x}:\vec{\tau})\rightarrow\kappa,\emptyef)}}
+  \iname{REC}
+
+  \\[1.5em]
+
+  % conditionnelle
+  \irule{\typage \Gamma {e_1} {(\bool,\epsilon_1)}
+         \qquad  
+         \typage \Gamma {e_2} {(\tau,\epsilon_2)}
+         \qquad
+         \typage \Gamma {e_3} {(\tau,\epsilon_3)}}
+        {\typage \Gamma {\ite{e_1}{e_2}{e_3}}
+                         {(\tau,\epsilon_1\sqcup\epsilon_2\sqcup\epsilon_3)}}
+  \iname{COND}
+  
+  \\[1.5em]
+  
+  % let in
+
+  \irule{\typage \Gamma {e_1} {(\tau_1,\epsilon_1)}
+         \qquad
+         \pur{\tau_1}
+         \qquad
+         \typage {\Gamma,x:\tau_1} {e_2} (\tau,\epsilon)}
+        {\typage \Gamma {\letin{x}{e_1}{e_2}} 
+                         {(\tau,\epsilon_1\sqcup\epsilon)}}
+  \iname{LET}
+
+  \\[1.5em]
+
+  % let ref in
+
+  \irule{\typage \Gamma {e_1} {(\tref{\tau_1},\epsilon_1)}
+         \qquad
+         \typage {\Gamma,x:\tref{\tau_1}} {e_2} {(\tau_2,\epsilon_2)}
+         \qquad
+         x\notin\tau_2}
+        {\typage \Gamma {\letin{x}{e_1}{e_2}} 
+                         {(\tau_2,\epsilon_1\sqcup\epsilon_2\backslash x)}}
+  \iname{LETREF}
+
+  \\[1.5em]
+
+  % sequence 
+  \irule{\typage \Gamma {e_1} {(\unit,\epsilon_1)}
+         \qquad 
+         \typage \Gamma {e_2} {(\tau,\epsilon_2)}}
+        {\typage \Gamma {\seq{e_1}{e_2}} {(\tau,\epsilon_1\sqcup\epsilon_2)}}
+  \iname{SEQ}
+
+  \\[1.5em]
+
+  % boucle
+  \irule{\begin{array}{c}
+         \typage \Gamma {e_1} {(\bool,\epsilon_1)}
+         \qquad
+         \typage \Gamma {e_2} {(\unit,\epsilon_2)}
+         \\[0.3em]
+         \typage{Pre(\Gamma)}{P}{\kw{Prop}}
+         \qquad
+         \typage{Pre(\Gamma)}{\nu}{\variant{A}}
+         \end{array}}
+        {\typage \Gamma {\while{e_1}{P}{\nu}{e_2}}
+                         {(\unit,\epsilon_1\sqcup\epsilon_2)}}
+   \iname{LOOP}
+
+  \\[1.5em]
+
+  % création
+  \irule{\typage \Gamma e {(\tau,\epsilon)}
+         \qquad
+         \pur{\tau}}
+        {\typage \Gamma {\pref{e}} {(\tref{\tau},\epsilon)}}
+  \iname{REF}
+
+  \qquad
+
+  % accès
+  \irule{x:\tref{\tau} \in \Gamma}
+        {\typage \Gamma {!x} {(\tau,(\{x\},\emptyset))}}
+  \iname{DEREF}
+
+  \\[1.5em]
+
+  % affectation
+  \irule{x:\tref{\tau} \in \Gamma
+         \qquad
+         \typage \Gamma e {(\tau,(\rho,\omega))}}
+        {\typage \Gamma {\assign{x}{e}} 
+                         {(\unit,(\{x\}\cup\rho,\{x\}\cup\omega))}}
+  \iname{AFF}
+
+\end{array}
+\end{displaymath}
+
 \section{Weakest preconditions}
+
+\begin{displaymath}
+  \begin{array}{rl}
+    \wpre{E}{q} & = 
+       q[\result \leftarrow E] \\
+    \wpre{\access{x}}{q} & = 
+       q[\result \leftarrow x] \\
+    \wpre{\assign{x}{e}}{q} & = 
+       \wpre{e}{q[\result\leftarrow\void; x\leftarrow\result]} \\
+    \wpre{\pref{e}}{q} & =
+       \mathit{meaningless} \\ % cf typing
+    \wpre{\taccess{t}{e}}{q} & =
+       \wpre{e}{q[\result\leftarrow t[\result]]} \\
+    \wpre{\tassign{t}{e_1}{e_2}}{q} & =
+       ??? \\
+    \wpre{\seq{e_1}{e_2}}{q} & =
+       \wpre{e_1}{\wpre{e_2}{q}} \\
+    \wpre{\plabel{l}{e}}{q} & =
+       \wpre{e}{q}[x_l\leftarrow x] \\
+    \wpre{\assert{p}{e}}{q} & =
+       \wpre{e}{q} \\ % ???
+    \wpre{\ite{e_1}{e_2}{e_3}}{q} & =
+       \wpre{e_1}{\ite{\result}{\wpre{e_2}{q}}{\wpre{e_3}{q}}} \\
+    \wpre{\letin{x}{e_1}{e_2}}{q} & =
+       \wpre{e_1}{\wpre{e_2}{q}[x\leftarrow\result]} \\
+    \wpre{\fun{x}{\tau}{e}}{q} & =
+       \\
+    \wpre{\app{e_1}{e_2}}{q} & =
+       \\
+    \wpre{\rec{x}{\tau}{\phi}{e}}{q} & =
+       \\
+    \wpre{\coerce{e}{\kappa}}{q} & =
+       \wpre{e}{q} \\ % ???
+  \end{array}
+\end{displaymath}
+
+\begin{displaymath}
+  \wpre{\while{e_1}{I}{\phi}{e_2}}{q} = I 
+\end{displaymath}
+
 
 \section{Functional interpretation}
 
