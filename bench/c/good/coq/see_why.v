@@ -3,16 +3,6 @@
 
 Require Import Why.
 
-Proof.
-intuition.
-Qed.
-
-
-Proof.
-intuition.
-subst; ring.
-Qed.
-
 (* Why obligation from file "why/see.why", characters 89-91 *)
 Lemma f_impl_po_1 : 
   forall (b: Z),
@@ -21,7 +11,6 @@ Lemma f_impl_po_1 :
   b0 = b0 /\ b0 = (1 - b).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/see.why", characters 738-770 *)
@@ -43,6 +32,6 @@ Lemma k_impl_po_1 :
         ((1 - result) * result0) = 1)))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; ring.
 Save.
 
