@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.36 2004-04-22 13:24:13 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.37 2004-04-22 14:25:10 marche Exp $ i*)
 
 open Cast
 open Coptions
@@ -277,7 +277,7 @@ let loop_annot a =
 let weak_invariants = Hashtbl.create 97
 
 let add_weak_invariant id p =
-  Hashtbl.add weak_invariants id (Ceffect.predicate p)
+  Hashtbl.add weak_invariants id (predicate p)
 
 let weak_invariants_for hvs =
   Hashtbl.fold

@@ -113,8 +113,8 @@ Lemma average_impl_po_5 :
   (min intP t n) <= ((Zdiv sum1 n)) /\ ((Zdiv sum1 n)) <= (max intP t n).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Admitted.
+
+Save.
 
 (* Why obligation from file "why/average.why", characters 670-698 *)
 Lemma min_impl_po_1 : 
