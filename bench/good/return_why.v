@@ -1,5 +1,4 @@
 
-Add LoadPath "../lib/coq".
 Require Why.
 
 (*Why*) Parameter N : Z.

@@ -323,7 +323,7 @@ direct_declarator
         ;
 
 annot
-        : ANNOT         { Some $1 }
+        : ANNOT         { Some (loc (), $1) }
         | /* epsilon */ { None }
         ;
 

@@ -3,7 +3,7 @@
 # auto bench for why
 
 pgm=$1
-coqc="coqc -I ../lib/coq"
+coqc="coqc -R ../lib/coq Coq.why"
 
 goods () {
     for f in $1/*.mlw; do

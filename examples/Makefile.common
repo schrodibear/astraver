@@ -6,7 +6,7 @@ WHYOPTIONS=--valid
 	$(WHY) $(WHYOPTIONS) $<
 
 %.vo: %.v
-	coqc -I ../../lib/coq $<
+	coqc -R ../../lib/coq Coq.why $<
 
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $(WHYOPTIONS) $<
@@ -19,6 +19,6 @@ clean::
 	rm -f *~ *.vo
 
 depend::
-	coqdep -I ../../lib/coq *.v > .depend
+	coqdep -R ../../lib/coq Coq.why *.v > .depend
 
 include .depend

@@ -49,12 +49,12 @@ CMX      = $(CMO:.cmo=.cmx)
 COQC   = @COQC@
 COQDEP = @COQDEP@
 COQLIB = @COQLIB@
-COQINCLUDES = -I lib/coq
+COQINCLUDES = -R lib/coq Coq.why
 
 VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
      lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo \
-     lib/coq/WhyCoqCompat.vo
+     lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo
 VFILES=$(VO:.vo=.v)
 
 GENERATED = src/version.ml src/parser.ml \
@@ -133,8 +133,10 @@ install: $(BINARY) $(VO)
 	mkdir -p $(COQLIB)/contrib/why
 	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
 
-local: $(STATICBINARY)
+local: $(STATICBINARY) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
+	mkdir -p $(COQLIB)/contrib/why
+	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
 
 demons: $(STATICBINARY) doc/manual.ps
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why
@@ -293,7 +295,7 @@ coq-clean::
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
-	$(COQDEP) -I lib/coq lib/coq/*.v >> .depend
+	$(COQDEP) $(COQINCLUDES) lib/coq/*.v >> .depend
 
 alldepend:
 	make -C examples depend

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.62 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.63 2002-11-05 14:56:19 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -97,10 +97,6 @@ let decl = gec "decl"
 let decls = gec "decls"
 let logic_type = gec "logic_type"
 let logic_arg = gec "logic_arg"
-
-let c_pre_condition = gec "c_pre_condition"
-let c_post_condition = gec "c_post_condition"
-let c_spec = gec "c_spec"
 
 (*s Utility functions. *)
 
@@ -549,7 +545,16 @@ i*)
   ] ]
   ;
 
-  (* C annotations *)
+END
+;;
+
+(*s C annotations *)
+
+let c_pre_condition = gec "c_pre_condition"
+let c_post_condition = gec "c_post_condition"
+let c_spec = gec "c_spec"
+
+EXTEND
   c_pre_condition:
   [ [ LIDENT "pre"; p = pre_condition -> p ] ];
   c_post_condition:

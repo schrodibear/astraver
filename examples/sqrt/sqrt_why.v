@@ -14,7 +14,6 @@
 
 
 Require ZArith.
-Add LoadPath "/users/demons/filliatr/local/soft/why/lib/coq".
 Require Zcomplements.
 Require ZArithRing.
 Require Zdiv.

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.4 2002-10-17 15:01:52 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.5 2002-11-05 14:56:19 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -23,7 +23,7 @@ open Ptree
 
 type constant_expression = unit
 
-type annot = string
+type annot = Loc.t * string
 
 type declarator =
   | CDvar of Ident.t

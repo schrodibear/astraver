@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.2 2002-10-17 15:01:52 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.3 2002-11-05 14:56:19 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
@@ -33,7 +33,7 @@ let parse_c_spec s =
 let interp_c_spec v an = 
   let (p,e,q) = match an with
     | None -> [], Effect.bottom, None
-    | Some s -> parse_c_spec s
+    | Some (loc, s) -> parse_c_spec s
   in
   { pc_result_name = result; pc_result_type = PVpure v;
     pc_effect = e; pc_pre = p; pc_post = q }
