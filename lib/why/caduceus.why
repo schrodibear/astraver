@@ -70,6 +70,9 @@ axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
 *)
+axiom shift_zero :
+  forall p:pointer. shift(p,0) = p
+
 axiom shift_shift :
   forall p:pointer. forall i:int. forall j:int.
   shift(shift(p,i),j) = shift(p,i+j)

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/coord.why", characters 155-212 *)
+(* Why obligation from file "why/coord.why", characters 148-193 *)
 Lemma g_impl_po_1 : 
   forall (index: Z),
   forall (alloc: alloc_table),

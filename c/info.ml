@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.12 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.13 2004-11-05 16:24:18 marche Exp $ i*)
 
 type var_info =
     {
@@ -23,6 +23,7 @@ type var_info =
       mutable var_unique_name : string;
       mutable var_is_assigned : bool;
       mutable var_is_static : bool;
+      mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
     }
 
@@ -35,12 +36,17 @@ let default_var_info x =
     var_unique_name = x;
     var_is_assigned = false;
     var_is_static = false;
+    var_is_a_formal_param = false;
     enum_constant_value = Int64.zero;
   }
 
 let set_assigned v = v.var_is_assigned <- true
 
 let set_static v = v.var_is_static <- true
+
+let set_formal_param v = v.var_is_a_formal_param <- true
+
+let unset_formal_param v = v.var_is_a_formal_param <- false
 
 let set_const_value v n = v.enum_constant_value <- n
 
@@ -59,16 +65,6 @@ type logic_info =
 let default_logic_info x =
   { logic_name = x;
     logic_args = HeapVarSet.empty }
-
-(*
-type field_info = { 
-  field_name : string;
-(*
-  field_tag : string;
-*)
-  mutable field_heap_var_name : string;
-}
-*)
 
 type fun_info =
     {

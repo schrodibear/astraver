@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+ 
+ o fixed bug with assigned parameters and assigns clauses
  o fixed bug with multiple assigned parameters
 
 version 0.66, October 26th, 2004

@@ -75,6 +75,9 @@ Admitted.
   := ~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
      (block_length a p).
 
+(*Why axiom*) Lemma shift_zero : (forall (p:pointer), (shift p 0) = p).
+Admitted.
+
 (*Why axiom*) Lemma shift_shift :
   (forall (p:pointer),
    (forall (i:Z), (forall (j:Z), (shift (shift p i) j) = (shift p (i + j))))).

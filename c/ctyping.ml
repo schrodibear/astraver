@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.74 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.75 2004-11-05 16:24:18 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -730,6 +730,7 @@ let type_parameters loc env pl =
   let type_one (ty,x) (pl,env) =
     let info = default_var_info x in
     let ty = type_type loc env ty in 
+    set_formal_param info;
     (ty,info) :: pl, Env.add x ty (Var_info info) env
   in
   let is_void (ty,_) = ty.ctype_node = CTvoid in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.107 2004-10-28 10:34:57 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.108 2004-11-05 16:24:18 marche Exp $ i*)
 
 
 open Format
@@ -115,7 +115,7 @@ let rec interp_term label old_label t =
     | Tconstant (FloatConstant c) ->
 	LConst(Prim_float(float_of_string c))
     | Tvar id ->
-	if id.var_is_assigned then
+	if id.var_is_assigned && not id.var_is_a_formal_param then
 	  interp_var label id.var_unique_name
 	else LVar id.var_unique_name
     | Told t ->	interp_term (Some old_label) old_label t
@@ -1387,17 +1387,18 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	       then 
 		 let n = id.var_unique_name in
 		 set_unique_name (Var_info id) ("mutable_" ^ n); 
+		 unset_formal_param id;
 		 (id.var_unique_name,n) :: bl
 	       else bl) 
 	    params [] 
 	in
 	let tblock = catch_return (interp_statement false may_break block) in
 	assert (not !may_break);
+	let tblock = make_label "init" tblock in
 	let tblock =
 	  List.fold_right
 	    (fun (mut_id,id) bl ->
 	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
-	let tblock = make_label "init" tblock in
 	printf "generating Why code for function %s@." f;
 	((Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
 	 tspec :: why_spec,

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.12 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.13 2004-11-05 16:24:18 marche Exp $ i*)
 
 type var_info = private 
     {
@@ -23,6 +23,7 @@ type var_info = private
       mutable var_unique_name : string;
       mutable var_is_assigned : bool;
       mutable var_is_static : bool;
+      mutable var_is_a_formal_param : bool;
       mutable enum_constant_value : int64;
     }
 
@@ -31,6 +32,10 @@ val default_var_info : string -> var_info
 val set_assigned : var_info -> unit
 
 val set_static : var_info -> unit
+
+val set_formal_param : var_info -> unit
+
+val unset_formal_param : var_info -> unit
 
 val set_const_value : var_info -> int64 -> unit
 
@@ -43,14 +48,6 @@ type logic_info =
     }
 
 val default_logic_info : string -> logic_info
-
-(*
-type field_info = { 
-  field_name : string;
-  field_tag : string;
-  mutable field_heap_var_name : string;
-}
-*)
 
 type fun_info =
     {

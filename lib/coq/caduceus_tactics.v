@@ -3,6 +3,9 @@ Require Export caduceus_why.
 
 Notation " p # f " := (acc f p) (at level 30, f at level 0).
 
+Hint Rewrite shift_zero : caduceus.
+Hint Rewrite shift_shift : caduceus.
+
 (* tactic to prove the equality of two pointers *)
 Ltac eq_pointer :=
   repeat rewrite shift_shift;
