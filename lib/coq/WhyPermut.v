@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.12 2003-11-25 12:15:33 paulin Exp $ *)
+(* $Id: WhyPermut.v,v 1.13 2003-12-17 16:17:22 marche Exp $ *)
 
 Require Import WhyArrays.
 Require Import Omega.
@@ -195,8 +195,8 @@ Lemma sub_permut_function :
    (d < array_length t)%Z ->
    forall i:Z,
      (g <= i <= d)%Z ->
-     ( exists j : Z | (g <= j <= d)%Z /\ access t i = access t' j) /\
-     ( exists j : Z | (g <= j <= d)%Z /\ access t' i = access t j).
+     ( exists j : Z, (g <= j <= d)%Z /\ access t i = access t' j) /\
+     ( exists j : Z, (g <= j <= d)%Z /\ access t' i = access t j).
 Proof.
 intros A t t' g d.
 simple induction 1; intros.
