@@ -30,7 +30,7 @@ Definition g3 := (* validation *)
       (exist_2 [i1: Z][result2: Z]`result2 = 0` i0 result1 Post5) in
     (exist_1 [result1: Z]`result1 = 0` result0 Post2).
 
-(* Why obligation from file "passing.c", characters 212-267 *)
+(* Why obligation from file "good-c/passing.c", characters 212-267 *)
 Lemma f_po_1 : 
   (x: (array Z))
   (Pre2: `(array_length x) = 1`)
@@ -39,7 +39,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "passing.c", characters 212-267 *)
+(* Why obligation from file "good-c/passing.c", characters 212-267 *)
 Lemma f_po_2 : 
   (x: (array Z))
   (Pre2: `(array_length x) = 1`)

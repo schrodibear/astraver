@@ -3,7 +3,7 @@
 
 Require Why.
 
-(* Why obligation from file "rec2.c", characters 70-91 *)
+(* Why obligation from file "good-c/rec2.c", characters 70-91 *)
 Lemma f_po_1 : 
   (x: Z)
   (Pre8: `x >= 0`)
@@ -17,7 +17,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "rec2.c", characters 101-109 *)
+(* Why obligation from file "good-c/rec2.c", characters 101-109 *)
 Lemma f_po_2 : 
   (x: Z)
   (Pre8: `x >= 0`)
@@ -31,7 +31,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "rec2.c", characters 46-130 *)
+(* Why obligation from file "good-c/rec2.c", characters 46-130 *)
 Lemma f_po_3 : 
   (x: Z)
   (Pre8: `x >= 0`)
