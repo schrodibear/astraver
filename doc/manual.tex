@@ -439,7 +439,41 @@ next section.
 
 \section{Caml code generation}
 \label{ocamlcode}\index{Caml code generation}
-TODO
+In order to run your \why\ code, true \caml\ code can be
+produced with option \texttt{--ocaml}: 
+\begin{verbatim}
+     why --ocaml foo.mlw
+\end{verbatim}
+When this option is selected, there is no generation of proof
+obligations (\coq\ or \pvs\ files are not produced or updated).
+The \caml\ code is written on standard output, unless redirected to
+some file with option \texttt{--output} (see Section~\ref{usage}).
+
+Programs' annotations can be inserted as comments in the \caml\ code,
+with option \texttt{--ocaml-annot}. The default behavior is no
+annotation. 
+
+When the input file contains \texttt{parameter} declarations, the
+\caml\ code generated is a functor, with these parameters as
+arguments. For instance, the following input file
+\begin{verbatim}
+     parameter x : int ref
+     let f (y:int) = x := !x + y
+\end{verbatim}
+is translated into the following piece of \caml\ code:
+\begin{verbatim}
+     module type Parameters = sig
+       val x : int ref
+     end
+
+     module Make(P : Parameters) = struct
+       open P
+       let f = fun y (*:int*) -> x := !x + y
+     end
+\end{verbatim}
+\texttt{external} declarations are supposed to be realized by some
+external \caml\ code. However, it is possible to make them arguments
+of the functor too, with command line option \texttt{--ocaml-ext}.
 
 
 \section{Installation}
