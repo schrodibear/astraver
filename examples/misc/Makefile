@@ -1,7 +1,7 @@
 
 WHY=../../bin/why.opt
 
-all: swap_why.vo loop0_why.vo
+all: swap_why.vo loop0_why.vo peano_why.vo
 
 %_why.v: %.ml $(WHY)
 	time $(WHY) -V $<
