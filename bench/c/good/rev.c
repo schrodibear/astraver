@@ -27,7 +27,7 @@ list rev(list p) {
           llist(p, lp) && llist(r, lr) && disjoint(lp, lr) &&
           \forall plist l; 
             llist(\old(p), l) => eq_list(app(rev(lr), lp), rev(l))
-    @ variant r for ll_order */
+    @ variant r for ll_order (* ??? *) */
   while (r != nil) {
     list q = r;
     r = r->tl;

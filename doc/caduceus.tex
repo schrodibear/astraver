@@ -264,7 +264,7 @@ except that:
 \item comments are enclosed by \texttt{(*} and \texttt{*)} (so that
   you can put comments inside annotations without messing traditional
   C compilers)
-\item some character sequences are now recognized as keywords: \par
+\item the set of keywords is different: \par
   \begin{center}
   \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
   \verb!\forall! & \verb!\exists! & \verb!int! & \verb!float! &
@@ -276,7 +276,7 @@ except that:
   \verb!axiom! \\
   \verb!predicate! & \verb!\result! & \verb!\old! & 
   \verb!\length! & \verb!\null! \\
-  \verb!reads!
+  \verb!reads! & \verb!\valid! & \verb!\valid_range!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -284,9 +284,11 @@ except that:
 \subsection{Syntax}
 
 Annotations are inserted into programs as special comments of the shape
-\texttt{/*@ ... */} or \texttt{/*W ... */}.
-Figure~\ref{fig:cfiles} gives the syntax for the C constructs which
-differ from traditional C syntax w.r.t annotations.
+\texttt{/*@ ... */}.
+Figure~\ref{fig:cfiles} gives the syntax for the additional C
+constructs containing annotations; some are C declarations
+(non-terminal \nt{declaration}) and some are C statements (non-terminal
+\nt{statement}).
 Figure~\ref{fig:logic} gives the syntax for the
 annotations. 
 
@@ -320,9 +322,10 @@ annotations.
   \nt{spec}
     & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
               $[$ \te{assigns} \nt{location}\plussep{\te{,}} $]$ \\
-                  \indextt{assigns}
            && $[$ \te{ensures} \nt{predicate} $]$ 
-              $[$ \te{decreases} \nt{variant} $]$ \te{*/} \\
+              $[$ \te{decreases} \nt{variant} $]$ \te{*/} 
+                  \indextt{requires}\indextt{assigns}
+                  \indextt{ensures}\indextt{decreases} \\
   \\[0.1em]
 
   \nt{statement}
@@ -391,7 +394,11 @@ annotations.
       & $|$ & \verb!\length! \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\result! \\
       & $|$ & \verb!\null! \\
-      & $|$ & TODO \verb!\valid...! \\
+      & $|$ & \verb!\valid! \te{(} \nt{term} \te{)}
+              \index{valid@\texttt{\bs{}valid}} \\
+      & $|$ & \verb!\valid_range! \te{(} \nt{term} \te{,} \nt{term} 
+              \te{,} \nt{term} \te{)}
+              \index{valid\_range@\texttt{\bs{}valid\_range}} \\
 
   \\[0.1em]
 

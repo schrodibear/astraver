@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.39 2004-03-03 07:12:06 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.40 2004-03-03 08:35:17 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -89,6 +89,9 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       if verbose || debug then eprintf 
 	"expected %a, found %a@." print_type e.texpr_type print_type ty;
       error e.texpr_loc "incompatible type"
+
+let compat_pointers ty1 ty2 = 
+  (ty1.ctype_node = CTvoid) || (ty2.ctype_node = CTvoid) || eq_type ty1 ty2
 
 (* convert [e1] and [e2] to the same arithmetic type *)
 let conversion e1 e2 =
@@ -343,7 +346,7 @@ and type_expr_node loc env = function
 	    TEbinary (e1, op, e2), c_int
 	| (CTpointer ty1  | CTarray (ty1,_)), 
 	  (CTpointer ty2 | CTarray (ty2,_)) ->
-	    if not (eq_type ty1 ty2) then
+	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    TEbinary (e1, op, e2), c_int
 	| (CTpointer _  | CTarray _), (CTint _ | CTfloat _)

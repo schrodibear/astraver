@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.19 2004-03-02 15:49:06 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.20 2004-03-03 08:35:17 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -199,7 +199,8 @@ let rec type_logic_type env = function
   | LTfloat -> c_float
   | LTarray ty -> c_array (type_logic_type env ty)
   | LTpointer ty -> c_pointer (type_logic_type env ty)
-  | LTvar id -> noattr (CTvar id)
+  | LTvar id ->  
+      noattr (try (find_typedef id).ctype_node with Not_found -> CTvar id)
 
 (** abandon provisoire 
 let rec type_logic_type env = function
