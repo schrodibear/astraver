@@ -13,9 +13,9 @@ let binary_search =
   begin
     l := 1; u := N; p := 0;
     while !l <= !u do
-      { invariant 1 <= l and u <= N and 0 <= p and p <= N
+      { invariant 1 <= l and u <= N and 0 <= p <= N
                and (p = 0 -> In(t,1,N) -> In(t,l,u))
-               and (p > 0 -> access(t,p)=v)
+               and (p > 0 -> t[p]=v)
         variant 2+u-l }
       m := (mean !l !u);
       assert { l <= m and m <= u };
@@ -28,5 +28,5 @@ let binary_search =
       end       
     done
   end
-  { (1 <= p and p <= N and access(t,p)=v) or (p = 0 and not In(t,1,N)) }
+  { (1 <= p <= N and t[p]=v) or (p = 0 and not In(t,1,N)) }
 

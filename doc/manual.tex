@@ -35,28 +35,6 @@ Jean-Christophe Filli\^atre
 \why\ is a tool to generate proof obligations from annotated programs.
 Currently, the input syntax is a fragment of \caml\ (with annotations),
 and the output is a \pvs\ theory or a \coq\ file.
-Syntax is given in Chapter~\ref{syntax}.
-
-
-\section{Usage}
-
-\why\ is invoked as a batch compiler, given a list of input files:
-\begin{center}
-  \texttt{why} [\textit{options}] \textit{file}$_1$\texttt{.ml} $\cdots$
-    \textit{file}$_n$\texttt{.ml}
-\end{center}
-
-\noindent Options are
-\begin{description}
-\item[\texttt{-pvs}, \texttt{-coq}]: 
-  Selects the prover; It defaults to \coq.
-\end{description}
-
-Each file \textit{file}\texttt{.ml} will be compiled into a \pvs\ theory
-\textit{file}\texttt{\_why.pvs} or a \coq\ module
-\texttt{file}\texttt{\_why.v}.
-If no file is given, then standard input is processed and a \pvs\ theory
-named \texttt{WhyOutput} is printed on standard output.
 
 
 \section{Principles}
@@ -130,9 +108,54 @@ Then
 
 
 \chapter{Reference manual}
-\label{syntax}
+\label{refman}
+
+\section{Usage}
+\label{usage}
+
+\why\ is invoked as a batch compiler, given a list of input files:
+\begin{center}
+  \texttt{why} [\textit{options}] \textit{file}$_1$\texttt{.ml} $\cdots$
+    \textit{file}$_n$\texttt{.ml}
+\end{center}
+Each file \textit{file}\texttt{.ml} will be compiled into a \pvs\ theory
+\textit{file}\texttt{\_why.pvs} or a \coq\ module
+\textit{file}\texttt{\_why.v}.
+If no file is given, then standard input is processed and a \pvs\ theory
+named \texttt{WhyOutput} is printed on standard output.
+
+Options are the following:
+\begin{description}
+  \item[Generic options:] ~\par
+  \item[\texttt{--help}]: ~\par    
+    Give usage and exit. 
+  \item[\texttt{--verbose}]: ~\par 
+    Verbose mode. In this mode, \why\ prints on error output
+    information like the program being processed, the obligations
+    being erased or overwritten, etc.
+  \item[\texttt{--quiet}]: ~\par  
+    Quiet mode (default).
+  \item[\texttt{--debug}]: ~\par 
+    Debugging mode. In this mode, \why\ details everything it does,
+    printing a lot of material on error output. Not of use for the
+    casual user.
+
+  \item[Overall options:] ~\par
+  \item[\texttt{--parse-only}]: ~\par  
+    Stop after parsing.
+  \item[\texttt{--type-only}]:  ~\par  
+    Stop after typing.
+  \item[\texttt{--wp-only}]:    ~\par  
+    Stop after annotation.
+
+  \item[Prover options:] ~\par
+  \item[\texttt{--pvs}, \texttt{--coq}]: ~\par 
+    Select the prover; It defaults to \coq.
+\end{description}
+
 
 \section{Logic syntax}
+\label{syntax:logic}
 
 \subsection{Terms}
 
@@ -148,8 +171,8 @@ Usual precedences apply to arithmetical operations.
       & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
       & $|$ & \te{-} \nt{term} \\
       & $|$ & \nt{identifier} \\
-      & $|$ & \nt{identifier} 
-              \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{identifier} \te{[} \nt{term} \te{]} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
   \\[0.1em]
 
@@ -158,7 +181,7 @@ Usual precedences apply to arithmetical operations.
     & $::=$ & \nt{floating-point-constant} \\
     & $::=$ & \te{true} \\
     & $::=$ & \te{false} \\
-    & $::=$ & \te{skip} \\
+    & $::=$ & \te{void} \\
   \\[0.1em]
 
   \nt{arith\_op}
@@ -175,8 +198,11 @@ Usual precedences apply to arithmetical operations.
 Syntax of predicates is given in Figure~\ref{fig:predicates}.
 It is a first-order quantifier-free syntax, independent from the \pvs\ one.
 
-Precedence of \te{and} is stronger than \te{or}'s one, which is
-stronger than the implication's one. Implication is right associative.
+Precedence of \te{and} is stronger than \te{or}'s, which is
+stronger than implication's. Implication is right associative.
+
+Syntactic sugar: $t_1 ~ R_1 ~ t_2 ~ R_2 ~ t_3$ is equivalent to
+$t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$.
 
 \begin{figure}[htbp]
 \begin{center}
@@ -188,7 +214,8 @@ stronger than the implication's one. Implication is right associative.
       & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
       & $|$ & \te{not} \nt{predicate} \\
       & $|$ & \nt{term} \\
-      & $|$ & \nt{term} \nt{relation} \nt{term} \\
+      & $|$ & \nt{term} \nt{relation} \nt{term} 
+              $[$ \nt{relation} \nt{term} $]$ \\
       & $|$ & \te{(} \nt{predicate} \te{)}
   \\[0.1em]
 
@@ -248,7 +275,7 @@ Syntax of types is given in Figure~\ref{fig:types}.
 
 \subsection{ML expressions}
 
-Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
+Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 \begin{figure}[htbp]
 \begin{center}
 \hrulefill\\

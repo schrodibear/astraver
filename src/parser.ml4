@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.25 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.26 2002-03-19 15:31:39 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -153,6 +153,8 @@ EXTEND
     | c = constant -> Tconst c
     | x = qualid_ident -> Tvar x
     | x = qualid_ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
+    | x = qualid_ident; "["; t = term; "]" -> Tapp (Ident.access, [Tvar x; t])
+
     | "("; a = term; ")" -> a ] ]
   ;
   constant:
@@ -177,6 +179,8 @@ EXTEND
   predicate2:
   [ [ t = term -> predicate_of_term loc t
     | t1 = term; r = relation; t2 = term -> Papp (r, [t1;t2])
+    | t1 = term; r1 = relation; t2 = term; r2 = relation; t3 = term ->
+	Pand (Papp (r1, [t1;t2]), Papp (r2, [t2;t3]))
     | "not"; a = predicate -> Pnot a
     | "true" -> Ptrue
     | "false" -> Pfalse

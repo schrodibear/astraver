@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.21 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.22 2002-03-19 15:31:39 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -137,13 +137,13 @@ Generic Options:
   --warranty     prints license and exits
 
 Typing/Annotations options:
-  -p, --parse-only  exits after parsing
-  -tc, --type-only  exits after type-checking
-  -wp, --wp-only    exits after annotation
+  -p,  --parse-only  exits after parsing
+  -tc, --type-only   exits after type-checking
+  -wp, --wp-only     exits after annotation
 
 Prover options:
-  --coq      selects COQ prover (default)
-  --pvs      selects PVS prover
+  --coq   selects COQ prover (default)
+  --pvs   selects PVS prover
 ";
   flush stderr
 

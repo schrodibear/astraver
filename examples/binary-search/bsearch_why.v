@@ -157,14 +157,14 @@ Lemma binary_search_po_2 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (m1: Z) 
@@ -190,14 +190,14 @@ Lemma binary_search_po_3 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (m1: Z) 
@@ -223,14 +223,14 @@ Lemma binary_search_po_4 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (m1: Z) 
@@ -242,7 +242,7 @@ Lemma binary_search_po_4 :
   (if true then `(access t m1) < v` else `(access t m1) >= v`) ->
   (l2: Z) 
   l2 = `m1 + 1` ->
-  `1 <= l2` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l2` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l2 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\ (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
@@ -268,14 +268,14 @@ Lemma binary_search_po_5 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (m1: Z) 
@@ -306,14 +306,14 @@ Lemma binary_search_po_6 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (m1: Z) 
@@ -328,7 +328,7 @@ Lemma binary_search_po_6 :
   (if true then `(access t m1) > v` else `(access t m1) <= v`) ->
   (u2: Z) 
   u2 = `m1 - 1` ->
-  `1 <= l1` /\ `u2 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u2 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u2)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\ (Zwf `0` `2 + u2 - l1` `2 + u1 - l1`).
 Proof.
@@ -355,14 +355,14 @@ Lemma binary_search_po_7 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (m1: Z) 
@@ -379,7 +379,7 @@ Lemma binary_search_po_7 :
   p2 = m1 ->
   (l2: Z) 
   l2 = `u1 + 1` ->
-  `1 <= l2` /\ `u1 <= N` /\ `0 <= p2` /\ `p2 <= N` /\
+  `1 <= l2` /\ `u1 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((p2 = `0` -> ((In t `1` N) -> (In t l2 u1)))) /\
   ((`p2 > 0` -> (access t p2) = v)) /\ (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
@@ -405,20 +405,20 @@ Lemma binary_search_po_8 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (l2: Z) 
   (p2: Z) 
   (u2: Z) 
-  `1 <= l2` /\ `u2 <= N` /\ `0 <= p2` /\ `p2 <= N` /\
+  `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
   ((`p2 > 0` -> (access t p2) = v)) /\
   (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`) ->
@@ -441,24 +441,24 @@ Lemma binary_search_po_9 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   (l2: Z) 
   (p2: Z) 
   (u2: Z) 
-  `1 <= l2` /\ `u2 <= N` /\ `0 <= p2` /\ `p2 <= N` /\
+  `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
   ((`p2 > 0` -> (access t p2) = v)) /\
   (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`) ->
-  `1 <= l2` /\ `u2 <= N` /\ `0 <= p2` /\ `p2 <= N` /\
+  `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
   ((`p2 > 0` -> (access t p2) = v)).
 Proof.
@@ -478,17 +478,17 @@ Lemma binary_search_po_10 :
   (u1: Z) 
   (p1: Z) 
   (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
   Variant1 = `2 + u1 - l1` ->
   (result2: bool) 
   (if result2 then `l1 <= u1` else `l1 > u1`) ->
   (if false then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) ->
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\
   ((if false then `l1 <= u1` else `l1 > u1`)).
@@ -506,7 +506,7 @@ Lemma binary_search_po_11 :
   u0 = N ->
   (p0: Z) 
   p0 = `0` ->
-  `1 <= l0` /\ `u0 <= N` /\ `0 <= p0` /\ `p0 <= N` /\
+  `1 <= l0` /\ `u0 <= N` /\ (`0 <= p0` /\ `p0 <= N`) /\
   ((p0 = `0` -> ((In t `1` N) -> (In t l0 u0)))) /\
   ((`p0 > 0` -> (access t p0) = v)).
 Proof.
@@ -528,7 +528,7 @@ Lemma binary_search_po_12 :
   (l1: Z) 
   (p1: Z) 
   (u1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ `0 <= p1` /\ `p1 <= N` /\
+  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\
   ((if false then `l1 <= u1` else `l1 > u1`)) ->
