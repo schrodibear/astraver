@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.31 2004-02-23 14:02:38 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.32 2004-02-23 14:51:48 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -381,7 +381,8 @@ and check_lvalue loc e = match e.texpr_node with
   | TEunary (Ustar, _)
   | TEarrget _ 
   | TEarrow _ 
-  | TEdot _ -> 
+  | TEdot _
+  | TEbinary (_,(Badd_pointer_int | Badd_int_pointer | Bsub_pointer_int),_) ->
       ()
   | TEcast (_, e) ->
       check_lvalue loc e

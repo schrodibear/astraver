@@ -21,12 +21,19 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       eq_type ty1 ty2 (* TODO: taille? *)
   | CTpointer ty1, CTpointer ty2 ->
       eq_type ty1 ty2
+  | CTarray (ty1, _), CTpointer ty2 | CTpointer ty1, CTarray (ty2, _) ->
+      eq_type ty1 ty2
   | CTstruct (s1, _), CTstruct (s2, _) ->
       s1 = s2
   | CTunion (u1, _), CTunion (u2, _) ->
       u1 = u2
   | CTenum (e1, _), CTenum (e2, _) ->
       e1 = e2
+  | CTpointer {ctype_node = CTfun _ as tn1}, (CTfun _ as tn2)
+  | (CTfun _ as tn1), CTpointer {ctype_node = CTfun _ as tn2} ->
+      eq_type_node tn1 tn2
+  | CTfun ([], ty1), CTfun (_, ty2) | CTfun (_, ty1), CTfun ([], ty2) ->
+      eq_type ty1 ty2
   | CTfun (pl1, ty1), CTfun (pl2, ty2) ->
       eq_type ty1 ty2 &&
       (try List.for_all2 (fun (ty1,_) (ty2,_) -> eq_type ty1 ty2) pl1 pl2

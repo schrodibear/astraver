@@ -3,7 +3,7 @@ CADUCEUSLIB=../../lib/why
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
 test:
-	-gcc -Wall -c test.c
+	-gcc -ansi -pedantic -Wall -c test.c
 	$(EXECCADUCEUS) -v -type-only test.c
 
 gcc:
