@@ -1,4 +1,6 @@
 
+version 1.64, October 13th, 2004
+================================
   o Coq output now in V8 syntax when Coq V8 is detected at configuration
 
 version 1.63, August 26th, 2004

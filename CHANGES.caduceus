@@ -1,6 +1,8 @@
 Note: These are the changes for Caduceus.
 
- o new option -coq-tactic
+version 0.64, October 13th, 2004
+================================
+ o new option -coq-tactic (to set a default tactic for Coq proofs)
  o handling of parameters which are modified in function body
  o renaming when name clash between local and global variable.
  o support for enum constants, and strict constant evaluation
