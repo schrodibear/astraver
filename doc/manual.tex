@@ -806,7 +806,7 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
       & $|$ & \te{(} \nt{prog}\plus\  \te{)} \\
   \\[0.1em]
 
-  \nt{block}
+  \nt{block}\indexnt{block}
     & $::=$ & \nt{block\_statement}\plussep{\te{;}} \\
   \\[0.1em]
 
@@ -823,7 +823,7 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
               \te{||} $|$ \te{\&\&} \\
   \\[0.1em]
 
-  \nt{binders}
+  \nt{binders}\indexnt{binders}
     & $::=$ & \te{(} \nt{identifier}\plussep{\te{,}} \te{:}
               \nt{value\_type} \te{)}\plus \\
   \\[0.1em]
@@ -845,7 +845,7 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 
   \\[0.1em]
 
-  \nt{handler} 
+  \nt{handler}\indexnt{handler}
     & $::=$ & \nt{identifier} \te{->} \nt{prog} \\
       & $|$ & \nt{identifier} \nt{identifier} \te{->} \nt{prog} \\
   
@@ -901,7 +901,24 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \subsection{ML semantics}
 \label{semantics:ml}\index{ML program!semantics}
 
-TODO
+Evaluation of ML programs obey to the following rules:
+\begin{itemize}
+\item 
+  Logical connective \texttt{\&\&} and \texttt{||} are lazy and
+  evaluated from left to right: in $e_1$ \texttt{\&\&} $e_2$, $e_1$ is
+  evaluated first and, if \texttt{true}, then $e_2$ is evaluated; in
+  $e_1$ \texttt{||} $e_2$, $e_1$ is evaluated first and, if
+  \texttt{false}, then $e_2$ is evaluated.
+\item
+  In a function call, the argument is evaluated first, then the
+  function; consequently multiple arguments are evaluated from right
+  to left. In particular, this applies to all infix operators (except
+  \texttt{\&\&} and \texttt{||}).
+\item
+  In the array assignment $t$\texttt{[}$e_2$\texttt{] :=} $e_1$,
+  expression $e_1$ is evaluated first, then expression $e_2$.
+\end{itemize}
+
 
 \subsection{Predefined functions}
 
