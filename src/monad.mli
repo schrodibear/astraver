@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.18 2002-09-12 13:20:55 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.19 2002-09-18 06:27:31 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -37,8 +37,10 @@ val unit : typing_info -> result -> interp
    [e2] is abstracted (typically, a function) and thus must be applied
    to its input. *)
 
-val compose : typing_info -> interp -> (Ident.t -> interp) -> interp
-val apply   : typing_info -> interp -> (Ident.t -> interp) -> interp
+val compose : 
+  typing_info -> interp -> typing_info -> (Ident.t -> interp) -> interp
+val apply   : 
+  typing_info -> interp -> typing_info -> (Ident.t -> interp) -> interp
 
 (*s Monadic operator to raise exceptions *)
 

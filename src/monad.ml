@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.47 2002-09-12 15:12:45 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.48 2002-09-18 06:27:31 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -246,13 +246,12 @@ let let_pre (id, h) cc =
 
 let let_many_pre = List.fold_right let_pre
 
-let gen_compose isapp info1 e1 e2 ren =
+let gen_compose isapp info1 e1 info2 e2 ren =
   let env = info1.env in
   let k1 = info1.kappa in
   let (res1,v1),ef1,p1,q1 = decomp_kappa k1 in
   let ren = push_date ren info1.label in
   let r1,w1,x1 = get_repr ef1 in
-  assert (x1 = []); (* TODO *)
   let ren' = next ren w1 in
   let res1,ren' = fresh ren' res1 in
   let tt1 = trad_type_v ren env v1 in
@@ -276,7 +275,15 @@ let gen_compose isapp info1 e1 e2 ren =
     else 
       e1 ren 
   in
-  let cc = CC_letin (dep, bl, cc1, e2 res1 ren') in
+  let cc2 =
+    if x1 = [] then
+      (* e1 does not raise any exception *)
+      e2 res1 ren'
+    else
+      (* e1 may raise an exception *)
+      assert false
+  in
+  let cc = CC_letin (dep, bl, cc1, cc2) in
   let_many_pre pre1 cc
 
 let compose = gen_compose false

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.55 2002-09-12 13:20:55 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.56 2002-09-18 06:27:31 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -39,7 +39,7 @@ and trad_desc info d ren = match d with
 
   | Aff (x, e1) ->
       Monad.compose 
-	e1.info (trad e1)
+	e1.info (trad e1) info
 	(fun res1 ren' -> 
 	   let tx = trad_type_in_env ren info.env x in
 	   let ren'' = next ren' [x] in
@@ -59,10 +59,10 @@ and trad_desc info d ren = match d with
   | LetIn (x, e1, e2) ->
       let k1 = { e1.info.kappa with c_result_name = x } in
       let info1 = { e1.info with kappa = k1 } in
-      Monad.compose info1 (trad e1)
+      Monad.compose info1 (trad e1) info
 	(fun v1 ren' ->
 	   let te2 = 
-	     Monad.compose e2.info (trad e2) 
+	     Monad.compose e2.info (trad e2) info
 	       (fun v2 -> Monad.unit info (Value (Tvar v2))) ren' 
 	   in
 	   if v1 <> x then
@@ -73,32 +73,32 @@ and trad_desc info d ren = match d with
 	ren
 
   | LetRef (x, e1, e2) ->
-      Monad.compose e1.info (trad e1)
+      Monad.compose e1.info (trad e1) info
 	(fun v1 ren' ->
 	   let t1 = trad_type_v ren info.env (result_type e1) in
 	   let ren'' = next ren' [x] in
 	   let x' = current_var ren'' x in
 	   CC_letin (false, [x', CC_var_binder t1], CC_var v1, 
-		     Monad.compose e2.info (trad e2)
+		     Monad.compose e2.info (trad e2) info
 		       (fun v2 -> Monad.unit info (Value (Tvar v2))) ren''))
 	ren
 
   | App (e1, Term e2, kapp) ->
       let infoapp = make_info info.env kapp in
-      Monad.compose e2.info (trad e2)
+      Monad.compose e2.info (trad e2) info
 	(fun v2 -> 
-	   Monad.compose e1.info (trad e1)
+	   Monad.compose e1.info (trad e1) info
 	     (fun v1 -> 
 		Monad.apply infoapp 
-		  (fun _ -> CC_app (CC_var v1, CC_var v2))
+		  (fun _ -> CC_app (CC_var v1, CC_var v2)) info
 		  (fun v -> Monad.unit info (Value (Tvar v)))))
 	ren
 
   | App (e1, Refarg r, kapp) ->
       let infoapp = make_info info.env kapp in
-      Monad.compose e1.info (trad e1)
+      Monad.compose e1.info (trad e1) info
 	(fun v1 -> 
-	   Monad.apply infoapp (fun _ -> CC_var v1)
+	   Monad.apply infoapp (fun _ -> CC_var v1) info
 	     (fun v -> Monad.unit info (Value (Tvar v))))
 	ren
 
@@ -112,7 +112,7 @@ and trad_desc info d ren = match d with
       cc_lam bl' te
 
   | TabAcc (_, x, e1) ->
-      Monad.compose e1.info (trad e1)
+      Monad.compose e1.info (trad e1) info
 	(fun v1 ren' -> 
 	   let x' = current_var ren' x in
 	   let t = make_raw_access info.env (x,x') (Tvar v1) in
@@ -121,9 +121,9 @@ and trad_desc info d ren = match d with
 	ren
 
   | TabAff (_, x, e1, e2) ->
-       Monad.compose e2.info (trad e2)
+       Monad.compose e2.info (trad e2) info
 	 (fun v2 -> 
-	    Monad.compose e1.info (trad e1)
+	    Monad.compose e1.info (trad e1) info
 	      (fun v1 ren' -> 
 		 let tx = trad_type_in_env ren info.env x in
 		 let x' = current_var ren' x in
@@ -148,7 +148,7 @@ and trad_desc info d ren = match d with
       Monad.wfrec var info'
 	(fun w -> 
 	   let exit = Monad.unit info (Value (Tconst ConstUnit)) in
-	   let loop = Monad.compose e.info (trad e) (fun _ -> w) in
+	   let loop = Monad.compose e.info (trad e) infoc (fun _ -> w) in
 	   trad_conditional infoc b.info (trad b) infoc loop infoc exit)
 	ren
 
@@ -166,7 +166,7 @@ and trad_desc info d ren = match d with
       Monad.exn info id None ren
 
   | Raise (id, Some e) ->
-      Monad.compose e.info (trad e) 
+      Monad.compose e.info (trad e) info
 	(fun v -> Monad.exn info id (Some (Tvar v))) 
 	ren
 
@@ -197,20 +197,20 @@ and trad_block info =
     | (Label s) :: bl ->
 	cross_label s (block res bl)
     | (Statement e) :: bl ->
-	Monad.compose e.info (trad e) (fun x -> block (Some x) bl)
+	Monad.compose e.info (trad e) info (fun x -> block (Some x) bl)
   in
   block None
 
 (* to be used for both [if] and [while] *)
 and trad_conditional info info1 te1 info2 te2 info3 te3 =
-  Monad.compose info1 te1
+  Monad.compose info1 te1 info
     (fun resb ren' -> 
        let q1 = 
 	 option_app (apply_post info1.label ren' info.env) info1.kappa.c_post
        in
        let branch infob eb tb = 
 	 let t = 
-	   Monad.compose infob eb 
+	   Monad.compose infob eb info
 	     (fun r -> Monad.unit info (Value (Tvar r))) ren'
 	 in
 	 match q1 with
