@@ -3,13 +3,13 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/flag.why", characters 796-824 *)
+(* Why obligation from file "why/flag.why", characters 815-843 *)
 Lemma flag_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -36,13 +36,13 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/flag.why", characters 952-998 *)
+(* Why obligation from file "why/flag.why", characters 971-1017 *)
 Lemma flag_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -100,22 +100,44 @@ assert (k=b1 \/ k = i1 \/ (k<> b1 /\ k <>i1)).
 omega.
 intuition.
 subst.
-rewrite H12.
+rewrite H13.
 intuition.
 subst.
+rewrite H16;intuition.
 rewrite H15;intuition.
-rewrite H14;intuition.
 red;subst;intuition.
-
+unfold valid_range in *|-*; intuition.
+assert (k=b1 \/ k < b1 ).
+omega.
+intuition.
+subst.
+rewrite H13.
+auto.
+rewrite H15;auto.
+red in H6;intuition.
+red;subst;intuition.
+unfold valid_range in *|-*; intuition.
+assert (k=i1 \/ k < i1 ).
+omega.
+intuition.
+subst.
+rewrite H16.
+red in H5;intuition.
+rewrite H15;auto.
+red in H5;intuition.
+red;subst;intuition.
+unfold valid_range in *|-*; intuition.
+rewrite H15;auto.
+red in H3;intuition.
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1342-1372 *)
+(* Why obligation from file "why/flag.why", characters 1361-1391 *)
 Lemma flag_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -152,16 +174,24 @@ Lemma flag_impl_po_3 :
   (isMonochrome alloc intP0 t r1 n RED)) /\ (Zwf 0 (r1 - i2) (r1 - i1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+red;subst;intuition.
+unfold valid_range in *|-*;intuition.
+assert (k=i1 \/ k<i1).
+omega.
+intuition.
+subst.
+auto.
+red in H5;intuition.
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1471-1505 *)
+(* Why obligation from file "why/flag.why", characters 1490-1524 *)
 Lemma flag_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -207,16 +237,45 @@ Lemma flag_impl_po_4 :
   (valid_index alloc t result4) /\ (valid_index alloc t i1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst.
+assert (k=(r1-1) \/ k = i1 \/ (k<> (r1-1) /\ k <>i1)).
+omega.
+intuition.
+subst.
+rewrite H4;intuition.
+subst;rewrite H13;intuition.
+rewrite H12;intuition.
+red;subst;intuition.
+unfold valid_range in *|-*; intuition.
+assert (k=i1 \/ k < i1 ).
+omega.
+intuition.
+rewrite H12;intuition.
+red in H6;intuition.
+red;subst;intuition.
+unfold valid_range in *|-*; intuition.
+assert (k=r1-1 \/ k < r1-1).
+omega.
+intuition.
+rewrite H12;intuition.
+red in H5;intuition.
+red;subst;intuition.
+unfold valid_range in *|-*; intuition.
+assert (k=(r1-1) \/ k >= r1).
+omega.
+intuition.
+subst;rewrite H4;intuition.
+rewrite H12;intuition.
+red in H3;intuition.
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1580-1580 *)
+(* Why obligation from file "why/flag.why", characters 1599-1599 *)
 Lemma flag_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -254,16 +313,19 @@ Lemma flag_impl_po_5 :
   (isMonochrome alloc intP0 t r1 n RED)) /\ (Zwf 0 (r1 - i1) (r1 - i1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+elimtype False.
+assert (isColor (shift t i1 # intP0)).
+intuition.
+red in H4;subst;intuition.
 Save.
 
-(* Why obligation from file "why/flag.why", characters 295-1588 *)
+(* Why obligation from file "why/flag.why", characters 314-1607 *)
 Lemma flag_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -292,16 +354,19 @@ Lemma flag_impl_po_6 :
   (assigns alloc intP intP0 (range_loc t 0 n)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+assert (i1=r1).
+omega.
+subst.
+exists b1;exists r1;intuition.
+Admitted.
 
-(* Why obligation from file "why/flag.why", characters 343-744 *)
+(* Why obligation from file "why/flag.why", characters 362-763 *)
 Lemma flag_impl_po_7 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (Pre11: (valid_range alloc t 0 n) /\
+  forall (Pre11: (n >= 0 /\ (valid_range alloc t 0 n)) /\
                  (forall (k:Z),
                   (0 <= k /\ k < n -> (isColor (acc intP (shift t k)))))),
   forall (b: Z),
@@ -316,7 +381,7 @@ Lemma flag_impl_po_7 :
   (isMonochrome alloc intP t b i WHITE)) /\
   (isMonochrome alloc intP t r n RED).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition; subst; unfold isMonochrome; intuition;
+red in H2; red;intuition.
 Save.
 

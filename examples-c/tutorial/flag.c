@@ -15,7 +15,7 @@ typedef enum { BLUE, WHITE, RED } color;
   @*/
 void swap(int t[], int i, int j);
 
-/*@ requires 
+/*@ requires n >= 0 &&
   @   \valid_range(t,0,n) &&
   @   (\forall int k; 0 <= k && k < n => isColor(t[k]))
   @ assigns t[0 .. n]
@@ -29,7 +29,7 @@ void flag(int t[], int n) {
   int b = 0;
   int i = 0;
   int r = n;
-  /*@ invariant
+  /*@ invariant 
     @   (\forall int k; 0 <= k && k < n => isColor(t[k])) &&
     @   0 <= b && b <= i && i <= r && r <= n &&
     @   isMonochrome(t,0,b,BLUE) &&
