@@ -9,7 +9,7 @@ Require Export LinkedLists.
 (* Why obligation from file "why/reverse.why", characters 166-709 *)
 Lemma rev_impl_po_1 : 
   forall (p0: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
   forall (Pre9: (is_list alloc tl p0)),
   forall (p: pointer),
@@ -36,7 +36,7 @@ Qed.
 (* Why obligation from file "why/reverse.why", characters 172-226 *)
 Lemma rev_impl_po_2 : 
   forall (p0: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
   forall (Pre9: (is_list alloc tl p0)),
   forall (p: pointer),
@@ -141,7 +141,7 @@ Save.
 (* Why obligation from file "why/reverse.why", characters 166-709 *)
 Lemma rev_impl_po_3 : 
   forall (p0: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
   forall (Pre9: (is_list alloc tl p0)),
   forall (p: pointer),
@@ -179,7 +179,7 @@ Save.
 (* Why obligation from file "why/reverse.why", characters 256-538 *)
 Lemma rev_impl_po_4 : 
   forall (p0: pointer),
-  forall (alloc: alloc),
+  forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
   forall (Pre9: (is_list alloc tl p0)),
   forall (p: pointer),

@@ -13,7 +13,7 @@ Definition plist := list pointer.
     there is a path from pointer [p1] to pointer [p2] using links in store [t],
     and the list of pointers along this path is [l]. *)
 
-Inductive lpath (a: alloc) (t: memory pointer) : pointer -> plist -> pointer -> Prop :=
+Inductive lpath (a: alloc_table) (t: memory pointer) : pointer -> plist -> pointer -> Prop :=
   | Path_null : forall p:pointer, lpath a t p nil p
   | Path_cons :
       forall p1 p2:pointer,
@@ -29,7 +29,7 @@ Hint Constructors lpath.
 (** [(llist t p l)]: there is a (finite) linked list starting from pointer [p]
     using links in store [t], and this list of pointers is [l] *)
 
-Definition llist (a: alloc) (t: memory pointer) (p:pointer) (l:plist) :=
+Definition llist (a: alloc_table) (t: memory pointer) (p:pointer) (l:plist) :=
   lpath a t p l null.
 
 Hint Unfold llist .
@@ -38,13 +38,13 @@ Hint Unfold llist .
     inductive definition of [llist])  *)
 
 Lemma llist_null :
- forall (a: alloc) (t: memory pointer) (p:pointer), llist a t p nil -> p = null.
+ forall (a: alloc_table) (t: memory pointer) (p:pointer), llist a t p nil -> p = null.
 Proof.
 unfold llist; inversion 1; trivial.
 Qed.
 
 Lemma llist_cons :
- forall (a: alloc) (t: memory pointer) (p1 p2:pointer) (l:plist),
+ forall (a: alloc_table) (t: memory pointer) (p1 p2:pointer) (l:plist),
    llist a t p1 (cons p2 l) -> p1 = p2 /\ llist a t (acc t p2) l.
 Proof.
 unfold llist; inversion 1; intuition.
@@ -53,7 +53,7 @@ Qed.
 (** invariance of a list when updating a cell outside of this list *)
 
 Lemma llist_pset_same :
- forall (a: alloc) (t: memory pointer) (p:pointer) (l:plist),
+ forall (a: alloc_table) (t: memory pointer) (p:pointer) (l:plist),
    llist a t p l ->
    forall p1 p2:pointer,
      ~ In p1 l -> llist a (upd t p1 p2) p l.
@@ -69,7 +69,7 @@ Hint Resolve llist_pset_same .
 (** [llist] is a function *)
 
 Lemma llist_function :
- forall (a a': alloc) (t: memory pointer) (l1 l2:plist) (p:pointer),
+ forall (a a': alloc_table) (t: memory pointer) (l1 l2:plist) (p:pointer),
    llist a t p l1 -> llist a' t p l2 -> l1 = l2.
 Proof.
 simple induction l1; intuition.
@@ -85,7 +85,7 @@ apply H with (acc t a0); auto.
 Qed.
 
 Lemma llist_append :
- forall (a: alloc) (t: memory pointer) (l1 l2:plist) (p:pointer),
+ forall (a: alloc_table) (t: memory pointer) (l1 l2:plist) (p:pointer),
    llist a t p (app l1 l2) ->
     exists p' : pointer, lpath a t p l1 p' /\ llist a t p' l2.
 Proof.
@@ -129,7 +129,7 @@ Qed.
 (** a list starting with [p] does not contain [p] in its remaining elements *)
 
 Lemma llist_not_starting :
- forall (a: alloc) (t: memory pointer) (p:pointer) (l:plist),
+ forall (a: alloc_table) (t: memory pointer) (p:pointer) (l:plist),
    llist a t (acc t p) l -> ~ In p l.
 Proof.
 red; intros.
@@ -146,7 +146,7 @@ Qed.
 
 (** * Finite lists characterization *)
 
-Inductive is_list (a: alloc) (t: memory pointer) : pointer -> Prop :=
+Inductive is_list (a: alloc_table) (t: memory pointer) : pointer -> Prop :=
   | List_null : is_list a t null
   | List_cons :
       forall p:pointer,
@@ -155,7 +155,7 @@ Inductive is_list (a: alloc) (t: memory pointer) : pointer -> Prop :=
 Hint Constructors is_list.
 
 Lemma is_list_llist :
- forall (a: alloc) (t: memory pointer) (p:pointer),
+ forall (a: alloc_table) (t: memory pointer) (p:pointer),
    is_list a t p -> exists l : plist, llist a t p l.
 Proof.
 intros; elim H.
@@ -165,7 +165,7 @@ exists (cons p0 x); intuition.
 Qed.
 
 Lemma llist_is_list :
- forall (a: alloc) (t: memory pointer) (l:plist) (p:pointer),
+ forall (a: alloc_table) (t: memory pointer) (l:plist) (p:pointer),
    llist a t p l -> is_list a t p.
 Proof.
 simple induction l; intuition.
@@ -177,12 +177,12 @@ Qed.
 (** * WF relation over linked lists *)
 
 Definition StorePointerPair := ((memory pointer) * pointer)%type.
-Definition store_pointer_pair (a: alloc) (t: memory pointer) (p:pointer) := (t, p).
+Definition store_pointer_pair (a: alloc_table) (t: memory pointer) (p:pointer) := (t, p).
 
 Definition ll_order (c1 c2: memory pointer * pointer) : Prop :=
   let (t1, p1) := c1 in
   let (t2, p2) := c2 in
-    exists a : alloc,
+    exists a : alloc_table,
     exists l1 : plist,
     exists l2 : plist,
     llist a t1 p1 l1 /\ llist a t2 p2 l2 /\ (length l1 < length l2)%nat.
@@ -192,7 +192,7 @@ Proof.
 apply well_founded_inv_lt_rel_compat with
  (F := fun (x:StorePointerPair) n =>
          let (t, p) := x in 
-         exists a : alloc,
+         exists a : alloc_table,
          exists l : plist, llist a t p l /\ length l = n).
 unfold ll_order, inv_lt_rel.
 simple destruct x; simple destruct y; intuition.

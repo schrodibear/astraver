@@ -9,14 +9,14 @@
 list rev(list p0) {
   list p = p0;
   list r = p;
-  p = nil;
+  p = NULL;
   /*@ invariant 
         \exists plist lp; \exists plist lr;
           llist(p, lp) && llist(r, lr) && disjoint(lp, lr) &&
           \forall plist l; 
             \old(llist(p0, l)) => app(rev(lr), lp) == rev(l)
     @ variant store_pointer_pair(r) for ll_order */
-  while (r != nil) {
+  while (r != NULL) {
     list q = r;
     r = r->tl;
     q->tl = p;
@@ -31,8 +31,8 @@ list rev(list p0) {
 #include <stdio.h>
 
 void print(list l) {
-  if (l == nil) 
-    printf("nil\n");
+  if (l == NULL) 
+    printf("NULL\n");
   else {
     printf("%d :: ", l->hd);
     print(l->tl);
@@ -40,7 +40,7 @@ void print(list l) {
 }
 
 int main() {
-  /* 1::2::3::nil */
+  /* 1::2::3::NULL */
   struct struct_list l[3];
   list r;
   l[0].hd = 1;
@@ -48,7 +48,7 @@ int main() {
   l[1].hd = 2;
   l[1].tl = &l[2];
   l[2].hd = 3;
-  l[2].tl = nil;
+  l[2].tl = NULL;
   print(l);
   r = rev(l);
   print(r);

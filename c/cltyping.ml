@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.32 2004-03-29 13:51:07 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.33 2004-04-05 12:51:13 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -51,8 +51,17 @@ let compatible t1 t2 =
   (pointer_or_array_type t1.term_type && is_null t2) ||
   (pointer_or_array_type t2.term_type && is_null t1)
 
+let compatible_term_type t ty = 
+  sub_type t.term_type ty || 
+  sub_type ty t.term_type ||
+  (pointer_or_array_type ty && is_null t)
+
 let expected_type loc t1 t2 =
   if not (eq_type t1 t2) then raise_located loc (ExpectedType (t1, t2))
+
+let expected_term_type loc t1 t2 =
+  if not (compatible_term_type t1 t2) 
+  then raise_located loc (ExpectedType (t1.term_type, t2))
 
 let expected_num loc t = match t.term_type.ctype_node with
   | CTenum _ | CTint _ | CTfloat _ -> ()
@@ -221,7 +230,7 @@ and type_terms loc env at tl =
 	[]
     | et :: etl, ({lexpr_loc=tloc} as t) :: tl ->
 	let t = type_term env t in
-	expected_type tloc t.term_type et;
+	expected_term_type tloc t et;
 	t :: type_list (etl, tl)
     | [], _ ->
 	raise_located loc TooManyArguments

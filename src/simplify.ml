@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.18 2004-04-05 08:29:23 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.19 2004-04-05 12:51:13 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -95,6 +95,8 @@ let rec print_term fmt = function
       fprintf fmt "@[(- 0 %a)@]" print_term t
   | Tapp (id, tl) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
+  | Tapp (id, []) ->
+      Ident.print fmt id 
   | Tapp (id, tl) ->
       fprintf fmt "@[(%a@ %a)@]" 
 	Ident.print id (print_list space print_term) tl
@@ -219,6 +221,10 @@ let print_elem fmt = function
 let logic_typing fmt =
   Env.iter_global_logic
     (fun f s -> match s.Env.scheme_type with
+       | Function ([], PTexternal (_,ty)) ->
+	   fprintf fmt
+	     "@[(BG_PUSH (EQ (IS%a %a) |@@true|))@]@\n@\n" 
+	     Ident.print ty Ident.print f 
        | Function (pl, PTexternal (_,ty)) ->
 	   let n = ref 0 in
 	   let pl = List.map (fun pt -> incr n; "x"^string_of_int !n, pt) pl in
@@ -229,17 +235,12 @@ let logic_typing fmt =
 		  | _ -> acc) pl []
 	   in
 	   fprintf fmt
-(* PATS: pas au point
-	     "@[(BG_PUSH (FORALL (%a) (PATS (IS%a (%a %a)))@ (IMPLIES (AND %a)
-              (EQ (IS%a (%a %a)) |@@true|))))@]@\n@\n"
-*)	     
-	     "@[(BG_PUSH (FORALL (%a)@ (IMPLIES (AND %a)
-              (EQ (IS%a (%a %a)) |@@true|))))@]@\n@\n"
+             "@[(BG_PUSH (FORALL (%a) (PATS (MPAT %a))@ (IMPLIES (AND %a)
+               (EQ (IS%a (%a %a)) |@@true|))))@]@\n@\n"
 	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
-(*
-	     Ident.print ty Ident.print f 
-	     (print_list space (fun fmt (x,_) -> fprintf fmt "%s" x)) pl
-*)
+	     (print_list space (fun fmt (x,t) -> 
+				  fprintf fmt "(IS%s %s)" t x))
+	     epl
 	     (print_list space (fun fmt (x,t) -> 
 				  fprintf fmt "(EQ (IS%s %s) |@@true|)" t x))
 	     epl
@@ -318,6 +319,6 @@ let output_file fwe =
        if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
     sep
     (fun fmt -> 
-       (* logic_typing fmt; *)
+       logic_typing fmt; 
        Queue.iter (print_elem fmt) queue)
 

@@ -671,7 +671,7 @@ let fprintf_why_decls form decls =
       (function Logic _ | Predicate _ -> true | _ -> false) 
       decls
   in
-  List.iter (fprintf_why_decl form) logic;
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) logic;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) other
 ;;
 
