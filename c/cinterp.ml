@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.47 2004-03-23 12:54:53 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.48 2004-03-23 13:20:55 marche Exp $ i*)
 
 
 open Format
@@ -468,11 +468,14 @@ let rec interp_statement_expr e =
 		       make_app (interp_incr_op op) [Deref(v.var_name); one])
 	    | HeapRef(var,e1) -> 
 		(* let tmp1 = e1 in
-		   upd var tmp1 (op tmp1 1) *)
+		   let tmp2 = acc var tmp1 in 
+		   upd var tmp1 (op tmp2 1) *)
 		Let("caduceus1",e1,
-		    make_app "upd_"
-		      [Var var; Var "caduceus1"; 
-		       make_app (interp_incr_op op) [Var "caduceus1"; one]])
+		    Let("caduceus2",
+			make_app "acc_" [Var var; Var "caduceus1"],
+			make_app "upd_"
+			  [Var var; Var "caduceus1"; 
+			   make_app (interp_incr_op op) [Var "caduceus2"; one]]))
 	end
     | TEsizeof _ -> assert false (* TODO *)
     | TEsizeof_expr _ -> assert false (* TODO *)

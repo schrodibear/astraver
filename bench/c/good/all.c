@@ -54,6 +54,7 @@ void t3() { y = t[++x]; }
     ensures x == 3 && t[2] == 5 */ 
 void t4() { t[x] += x++; } 
 
+#if 0
 /* evaluation order */
 
 /*@ requires x == 2 
@@ -76,5 +77,6 @@ void e4() { y = ++x + x; }
     ensures y == 6 */ 
 void e5() { y = ++x + x++; }
 
+#endif
 
 
