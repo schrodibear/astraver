@@ -743,25 +743,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1694-1698 *)
-Lemma fib4_po_8 : 
-  (n: Z)
-  (t: (array Z))
-  (Pre8: `0 <= n` /\ `n < (array_length t)`)
-  (Test3: `n > 1`)
-  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
-  (t0: (array Z))
-  (Post1: t0 = (store t `0` `1`))
-  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
-  (t1: (array Z))
-  (Post2: t1 = (store t0 `1` `1`))
-  (t2: (array Z))
-  (Post11: `(access t2 n) = (F n)` /\ `0 <= n` /\ `n < (array_length t2)`)
-  `0 <= n` /\ `n < (array_length t2)`.
-Proof.
-Intuition.
-Save.
-
 Definition fib4 (* validation *)
   : (n: Z)(t: (array Z))(_: `0 <= n` /\ `n < (array_length t)`)
     (sig_2 (array Z) Z [t0: (array Z)][result: Z](`result = (F n)`))
@@ -892,8 +873,11 @@ Definition fib4 (* validation *)
                (fib4_po_7 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1 Post2 result2
                Post6 k0 t2 Post5)) in
              let Pre5 =
-               (fib4_po_8 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1 Post2 t2
-               Post11) in
+               let (HW_55, HW_56) = Pre8 in
+               let (HW_57, HW_58) = Pre7 in
+               let (HW_59, HW_60) = Pre6 in
+               let (HW_61, HW_62) = Post11 in
+               HW_62 in
              let (result3, Post13) = (exist_1 [result3: Z]
                `result3 = (F n)` (access t2 n) (proj1 ? ? Post11)) in
              (exist_2 [t3: (array Z)][result4: Z]`result4 = (F n)` t2 

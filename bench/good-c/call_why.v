@@ -54,17 +54,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good-c/call.c", characters 170-180 *)
-Lemma main_po_2 : 
-  (x0: Z)
-  (Post1: x0 = `0`)
-  (c_aux_2: Z)
-  (Post5: ((result:Z) (`result = 2` -> `result = 2`)) /\ `1 = c_aux_2`)
-  `1 = c_aux_2`.
-Proof.
-Intuition.
-Save.
-
 Definition main (* validation *)
   : (_: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = 2`))
   := [_: unit; x: Z]
@@ -85,7 +74,8 @@ Definition main (* validation *)
              (exist_2 [x2: Z][result2: Z]
              ((result:Z) (`result = 2` -> `result = 2`)) /\ `1 = result2` 
              x1 result1 Post6) in
-           let Pre3 = (main_po_2 x0 Post1 c_aux_2 Post5) in
+           let Pre3 = let (HW_1, HW_2) = Post5 in
+                      HW_2 in
            let (result0, Post7) =
              let Pre1 = Pre3 in
              let Pre2 = Pre1 in

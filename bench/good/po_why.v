@@ -201,19 +201,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/po.mlw", characters 701-702 *)
-Lemma p9_po_2 : 
-  (aux_2: Z)
-  (Post4: ((x:Z) (x = `1` -> `1 + aux_2 = 2` /\ `x = 1`)))
-  (x1: Z)
-  (Post2: x1 = `1`)
-  `1 + aux_2 = 2` /\ `x1 = 1`.
-Proof.
-Intuition.
-Save.
-
-
-
 Definition p9 (* validation *)
   : (x: Z)(sig_2 Z Z [x0: Z][result: Z](`result = 2` /\ `x0 = 1`))
   := [x: Z]
@@ -235,7 +222,8 @@ Definition p9 (* validation *)
              (exist_2 [x2: Z][result0: unit]x2 = `1` result tt Post2) in
            let (result0, Post8) = (exist_1 [result0: Z]
              `result0 + aux_2 = 2` /\ `x1 = 1` `1`
-             (p9_po_2 aux_2 Post4 x1 Post2)) in
+             let HW_1 = (Post4 x1 Post2) in
+             HW_1) in
            (exist_2 [x2: Z][result1: Z]`result1 + aux_2 = 2` /\ `x2 = 1` 
            x1 result0 Post8) in
          let (result, Post9) = (exist_1 [result: Z]`result = 2` /\
@@ -532,21 +520,6 @@ Intuition.
 Subst x0; AccessSame.
 Save.
 
-(* Why obligation from file "good/po.mlw", characters 1754-1824 *)
-Lemma p18_po_2 : 
-  (t: (array Z))
-  (x: Z)
-  (Pre2: `(array_length t) = 10`)
-  (aux_2: Z)
-  (Post2: aux_2 = x)
-  (aux_1: Z)
-  (Post4: `(access (store t aux_1 aux_2) 0) = x` /\ `0 <= aux_1` /\
-          `aux_1 < (array_length t)`)
-  `0 <= aux_1` /\ `aux_1 < (array_length t)`.
-Proof.
-Intuition.
-Save.
-
 Definition p18 (* validation *)
   : (t: (array Z))(x: Z)(_: `(array_length t) = 10`)
     (sig_3 (array Z) Z unit [t0: (array Z)][x0: Z][result: unit]
@@ -567,7 +540,8 @@ Definition p18 (* validation *)
            (exist_2 [x1: Z][result1: Z]
            `(access (store t result1 aux_2) 0) = x` /\ `0 <= result1` /\
            `result1 < (array_length t)` x0 result0 Post5) in
-         let Pre1 = (p18_po_2 t x Pre2 aux_2 Post2 aux_1 Post4) in
+         let Pre1 = let (HW_1, HW_2) = Post4 in
+                    HW_2 in
          let (t0, result, Post6) = (exist_2 [t1: (array Z)][result1: unit]
            `(access t1 0) = x` (store t aux_1 aux_2) tt (proj1 ? ? Post4)) in
          (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 

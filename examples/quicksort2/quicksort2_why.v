@@ -4,24 +4,8 @@
 Require Why.
 
 
-(* Why obligation from file "quicksort2.mlw", characters 230-234 *)
-Lemma swap_po_1 : 
-  (i: Z)
-  (j: Z)
-  (t: (array Z))
-  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
-         `j < (array_length t)`)
-  (Pre4: `0 <= i` /\ `i < (array_length t)`)
-  (v: Z)
-  (Post3: v = (access t i))
-  (Pre2: `0 <= i` /\ `i < (array_length t)`)
-  `0 <= j` /\ `j < (array_length t)`.
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "quicksort2.mlw", characters 241-250 *)
-Lemma swap_po_2 : 
+Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -40,7 +24,7 @@ Intros; ArraySubst t0.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 211-257 *)
-Lemma swap_po_3 : 
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -73,17 +57,20 @@ Definition swap (* validation *)
          result = (access t i) (access t i) (refl_equal ? (access t i))) in
        let (t0, result, Post4) =
          let Pre2 = Pre4 in
-         let Pre3 = (swap_po_1 i j t Pre5 Pre4 v Post3 Pre2) in
+         let Pre3 =
+           let (HW_1, HW_2) = Pre5 in
+           let (HW_3, HW_4) = HW_1 in
+           HW_2 in
          let (t0, result, Post1) = (exist_2 [t1: (array Z)][result1: unit]
            t1 = (store t i (access t j)) (store t i (access t j)) tt
            (refl_equal ? (store t i (access t j)))) in
-         let Pre1 = (swap_po_2 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1) in
+         let Pre1 = (swap_po_1 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1) in
          let (t1, result0, Post2) = (exist_2 [t2: (array Z)][result2: unit]
            t2 = (store t0 j v) (store t0 j v) tt
            (refl_equal ? (store t0 j v))) in
          (exist_2 [t2: (array Z)][result1: unit](exchange t2 t i j) t1
          result0
-         (swap_po_3 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1 Pre1 t1 Post2)) in
+         (swap_po_2 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1 Pre1 t1 Post2)) in
        (exist_2 [t1: (array Z)][result0: unit](exchange t1 t i j) t0 
        result Post4).
 
@@ -287,57 +274,8 @@ Rewrite H13; Assumption.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 623-989 *)
-Lemma quick_rec_po_6 : 
-  (l: Z)
-  (r: Z)
-  (t: (array Z))
-  (Pre23: `0 <= l` /\ `r < (array_length t)`)
-  (Variant1: Z)
-  (l0: Z)
-  (r0: Z)
-  (t0: (array Z))
-  (Pre22: Variant1 = `1 + r0 - l0`)
-  (Pre21: `0 <= l0` /\ `r0 < (array_length t0)`)
-  (Test6: `l0 < r0`)
-  (Pre20: `0 <= l0` /\ `l0 < (array_length t0)`)
-  (v: Z)
-  (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (Variant3: Z)
-  (i0: Z)
-  (m0: Z)
-  (t1: (array Z))
-  (Pre8: Variant3 = `1 + r0 - i0`)
-  (Pre7: ((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-         ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-         (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-         `m0 < i0`) /\ `i0 <= r0 + 1`)
-  (Test5: `i0 <= r0`)
-  (m1: Z)
-  (t2: (array Z))
-  (Post29: ((i:Z)
-            (i = `i0 + 1` ->
-             (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t2 j) < v`)) /\
-             ((j:Z) (`m1 < j` /\ `j < i` -> `(access t2 j) >= v`)) /\
-             (sub_permut l0 r0 t2 t0) /\ `(access t2 l0) = v` /\
-             (`l0 <= m1` /\ `m1 < i`) /\ `i <= r0 + 1`) /\
-             (Zwf `0` `1 + r0 - i` `1 + r0 - i0`))))
-  (i1: Z)
-  (Post14: i1 = `i0 + 1`)
-  (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t2 j) < v`)) /\
-  ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t2 j) >= v`)) /\
-  (sub_permut l0 r0 t2 t0) /\ `(access t2 l0) = v` /\ (`l0 <= m1` /\
-  `m1 < i1`) /\ `i1 <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i1` `1 + r0 - i0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "quicksort2.mlw", characters 654-859 *)
-Lemma quick_rec_po_7 : 
+Lemma quick_rec_po_6 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -365,7 +303,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 998-1011 *)
-Lemma quick_rec_po_8 : 
+Lemma quick_rec_po_7 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -398,7 +336,7 @@ Intuition ArrayLength; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 1020-1044 *)
-Lemma quick_rec_po_9 : 
+Lemma quick_rec_po_8 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -434,7 +372,7 @@ Intuition ArrayLength.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 465-1143 *)
-Lemma quick_rec_po_10 : 
+Lemma quick_rec_po_9 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -474,7 +412,7 @@ Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 1053-1077 *)
-Lemma quick_rec_po_11 : 
+Lemma quick_rec_po_10 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -517,7 +455,7 @@ Intros; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 465-1143 *)
-Lemma quick_rec_po_12 : 
+Lemma quick_rec_po_11 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -560,7 +498,7 @@ Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 594-1086 *)
-Lemma quick_rec_po_13 : 
+Lemma quick_rec_po_12 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -671,7 +609,7 @@ Assumption.
 Save.
 
 (* Why obligation from file "quicksort2.mlw", characters 503-1086 *)
-Lemma quick_rec_po_14 : 
+Lemma quick_rec_po_13 : 
   (l: Z)
   (r: Z)
   (t: (array Z))
@@ -947,11 +885,17 @@ Definition quick_rec (* validation *)
                                      `m2 < i2`) /\ `i2 <= r0 + 1`) /\
                                      (Zwf `0` `1 + r0 - i2` `1 + r0 - i0`) 
                                      i1 m1 t2 result4
-                                     (quick_rec_po_6 l r t Pre23 Variant1 l0
-                                     r0 t0 Pre22 Pre21 Test6 Pre20 v Post18
-                                     result0 Post17 result1 Post16 Variant3
-                                     i0 m0 t1 Pre8 Pre7 Test5 m1 t2 Post29 i1
-                                     Post14)) in
+                                     let (HW_83, HW_84) = Pre23 in
+                                     let (HW_85, HW_86) = Pre21 in
+                                     let (HW_87, HW_88) = Pre20 in
+                                     let (HW_89, HW_90) = Pre7 in
+                                     let (HW_91, HW_92) = HW_90 in
+                                     let (HW_93, HW_94) = HW_92 in
+                                     let (HW_95, HW_96) = HW_94 in
+                                     let (HW_97, HW_98) = HW_96 in
+                                     let (HW_99, HW_100) = HW_97 in
+                                     let HW_101 = (Post29 i1 Post14) in
+                                     HW_101) in
                                    ((wf2 `1 + r0 - i1`)
                                      (loop_variant_1 Pre8 Post19) i1 
                                      m1 t2 (refl_equal ? `1 + r0 - i1`)
@@ -997,11 +941,11 @@ Definition quick_rec (* validation *)
                                  `i2 > r0` i1 m1 t2 result3 Post15) end)
                            `1 + r0 - result1` result1 result0 t0
                            (refl_equal ? `1 + r0 - result1`)
-                           (quick_rec_po_7 l r t Pre23 Variant1 l0 r0 t0
+                           (quick_rec_po_6 l r t Pre23 Variant1 l0 r0 t0
                            Pre22 Pre21 Test6 Pre20 v Post18 result0 Post17
                            result1 Post16)) in
                        let Pre19 =
-                         (quick_rec_po_8 l r t Pre23 Variant1 l0 r0 t0 Pre22
+                         (quick_rec_po_7 l r t Pre23 Variant1 l0 r0 t0 Pre22
                          Pre21 Test6 Pre20 v Post18 result0 Post17 result1
                          Post16 i0 m0 t1 Post15) in
                        let (t2, result3, Post35) =
@@ -1011,7 +955,7 @@ Definition quick_rec (* validation *)
                          (exist_2 [t3: (array Z)][result6: unit]
                          (exchange t3 t1 l0 m0) t2 result5 Post36) in
                        let Pre18 =
-                         (quick_rec_po_9 l r t Pre23 Variant1 l0 r0 t0 Pre22
+                         (quick_rec_po_8 l r t Pre23 Variant1 l0 r0 t0 Pre22
                          Pre21 Test6 Pre20 v Post18 result0 Post17 result1
                          Post16 i0 m0 t1 Post15 Pre19 t2 Post35) in
                        let (t3, result4, Post37) =
@@ -1019,7 +963,7 @@ Definition quick_rec (* validation *)
                          let Pre13 = Pre12 in
                          let (t3, result6, Post38) =
                            ((wf1 `1 + (m0 - 1) - l0`)
-                             (quick_rec_po_10 l r t Pre23 Variant1 l0 r0 t0
+                             (quick_rec_po_9 l r t Pre23 Variant1 l0 r0 t0
                              Pre22 Pre21 Test6 Pre20 v Post18 result0 Post17
                              result1 Post16 i0 m0 t1 Post15 Pre19 t2 Post35
                              Pre18 Pre12 Pre13) l0 `m0 - 1` t2
@@ -1028,7 +972,7 @@ Definition quick_rec (* validation *)
                          (sorted_array t4 l0 `m0 - 1`) /\
                          (sub_permut l0 `m0 - 1` t4 t2) t3 result6 Post38) in
                        let Pre17 =
-                         (quick_rec_po_11 l r t Pre23 Variant1 l0 r0 t0 Pre22
+                         (quick_rec_po_10 l r t Pre23 Variant1 l0 r0 t0 Pre22
                          Pre21 Test6 Pre20 v Post18 result0 Post17 result1
                          Post16 i0 m0 t1 Post15 Pre19 t2 Post35 Pre18 t3
                          Post37) in
@@ -1037,7 +981,7 @@ Definition quick_rec (* validation *)
                          let Pre16 = Pre15 in
                          let (t4, result7, Post40) =
                            ((wf1 `1 + r0 - (m0 + 1)`)
-                             (quick_rec_po_12 l r t Pre23 Variant1 l0 r0 t0
+                             (quick_rec_po_11 l r t Pre23 Variant1 l0 r0 t0
                              Pre22 Pre21 Test6 Pre20 v Post18 result0 Post17
                              result1 Post16 i0 m0 t1 Post15 Pre19 t2 Post35
                              Pre18 t3 Post37 Pre17 Pre15 Pre16) `m0 + 1` 
@@ -1048,7 +992,7 @@ Definition quick_rec (* validation *)
                        (exist_4 [i1: Z][m1: Z][t5: (array Z)][result6: unit]
                        (sorted_array t5 l0 r0) /\ (sub_permut l0 r0 t5 t0) 
                        i0 m0 t4 result5
-                       (quick_rec_po_13 l r t Pre23 Variant1 l0 r0 t0 Pre22
+                       (quick_rec_po_12 l r t Pre23 Variant1 l0 r0 t0 Pre22
                        Pre21 Test6 Pre20 v Post18 result0 Post17 result1
                        Post16 i0 m0 t1 Post15 Pre19 t2 Post35 Pre18 t3 Post37
                        Pre17 t4 Post39)) in
@@ -1068,7 +1012,7 @@ Definition quick_rec (* validation *)
                let (result0, Post23) = (exist_1 [result0: unit]
                  (sorted_array t0 l0 r0) /\ (sub_permut l0 r0 t0 t0) 
                  tt
-                 (quick_rec_po_14 l r t Pre23 Variant1 l0 r0 t0 Pre22 Pre21
+                 (quick_rec_po_13 l r t Pre23 Variant1 l0 r0 t0 Pre22 Pre21
                  Test1)) in
                (exist_2 [t1: (array Z)][result1: unit]
                (sorted_array t1 l0 r0) /\ (sub_permut l0 r0 t1 t0) t0 

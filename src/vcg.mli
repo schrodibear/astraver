@@ -38,6 +38,7 @@ type proof =
   | WfZwf of term
   | Loop_variant_1 of Ident.t * Ident.t
   | Absurd of Ident.t
+  | ProofTerm of proof cc_term
 
 type validation = proof cc_term
 

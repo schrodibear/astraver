@@ -45,6 +45,7 @@ type proof =
   | WfZwf of term
   | Loop_variant_1 of Ident.t * Ident.t
   | Absurd of Ident.t
+  | ProofTerm of proof cc_term
 
 type validation = proof cc_term
 
@@ -124,6 +125,83 @@ let loop_variant_1 hyps concl =
     | _ -> 
 	raise Exit
 
+(* tautologies in linear first-order logic *)
+
+let lookup_instance p n ctx =
+  let update id' = function 
+    | None -> Some id' 
+    | Some id as u -> if id == id' then u else raise Exit
+  in
+  let rec unif_term u = function
+    | Tvar id, Tvar id' when id == n -> update id' u
+    | Tvar id, Tvar id' when id == id' -> u
+    | Tconst c, Tconst c' -> if c = c' then u else raise Exit
+    | Tderef _, _ | _, Tderef _ -> assert false
+    | Tapp (id, tl), Tapp (id', tl') when id == id' -> unif_terms u (tl, tl')
+    | _ -> raise Exit
+  and unif_terms u = function
+    | [], [] -> u
+    | t :: tl, t' :: tl' -> unif_terms (unif_term u (t, t')) (tl, tl')
+    | _ -> raise Exit
+  in
+  let rec unif_pred u = function
+    | Pvar id, Pvar id' when id == id' -> u
+    | Papp (id, tl), Papp (id', tl') when id == id' -> unif_terms u (tl, tl')
+    | Ptrue, Ptrue | Pfalse, Pfalse -> u
+    | Pimplies (a, b), Pimplies (a', b') 
+    | Pand (a, b), Pand (a', b')
+    | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
+    | Pif (a, b, c), Pif (a', b', c') ->
+	unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
+    | Pnot a, Pnot a' -> unif_pred u (a, a')
+    (* TODO: alpha-conversion *)
+    | Forall (_, n, _, p), Forall (_, n', _, p') when p = p' -> u
+    | Exists (_, n, _, p), Exists (_, n', _, p') when p = p' -> u
+    | _ -> raise Exit
+  in
+  let rec lookup = function
+    | Svar _ -> raise Exit
+    | Spred (id, p') -> match unif_pred None (p, p') with
+	| None -> assert false (* unif mais qui ne donne pas de variable *)
+	| Some x -> x, id
+  in
+  list_first lookup ctx
+
+let rec linear ctx concl = 
+  let rec search = function
+    | [] -> 
+	raise Exit
+    | Svar _ :: ctx -> 
+	search ctx
+    | Spred (id, p) :: _ when p = concl ->
+	Assumption id
+    | Spred (id, Pand (a, b)) :: ctx ->
+	(* TODO: essayer search ctx d'abord ? *)
+	let h1 = fresh_hyp () in
+	let h2 = fresh_hyp () in
+	let ctx' = (Spred (h1, a)) :: (Spred (h2, b)) :: ctx in
+	ProofTerm (CC_letin (false,
+			     [h1, CC_pred_binder a; h2, CC_pred_binder b],
+			     CC_var id,
+			     CC_hole (search ctx')))
+    | Spred (id, Forall (_, n, _, Pimplies (p, q))) :: ctx -> 
+	begin try
+	  let x,hpx = lookup_instance p n ctx in
+	  let qx = subst_in_predicate (subst_onev n x) q in
+	  let h1 = fresh_hyp () in
+	  let ctx' = Spred (h1, qx) :: ctx in
+	  ProofTerm 
+	    (CC_letin (false, [h1, CC_pred_binder qx],
+		       CC_app (CC_app (CC_var id, CC_var x), CC_var hpx),
+		       CC_hole (search ctx')))
+	with Exit ->
+	  search ctx
+	end
+    | _ :: ctx ->
+	search ctx
+  in
+  search (List.rev ctx)
+
 let discharge_methods ctx concl =
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
@@ -131,7 +209,8 @@ let discharge_methods ctx concl =
   try absurd ctx with Exit ->
   try list_first (assumption concl) ctx with Exit ->
   try conjunction ctx concl with Exit ->
-  loop_variant_1 ctx concl
+  try loop_variant_1 ctx concl with Exit ->
+  linear ctx concl
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in

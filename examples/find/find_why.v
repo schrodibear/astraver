@@ -588,189 +588,8 @@ Generalize (subgoal_3 m0 n0 i0 j0 i1 j1 A A0 A1 A3 Pre21 Inv_mn Test14
 Intuition.
 Save.
 
-(* Why obligation from file "find.mlw", characters 2620-2629 *)
-Lemma find_po_13 : 
-  (A: (array Z))
-  (Pre21: `(array_length A) = N + 1`)
-  (result: Z)
-  (Post16: result = `1`)
-  (result0: Z)
-  (Post15: result0 = N)
-  (Variant1: Z)
-  (A0: (array Z))
-  (m0: Z)
-  (n0: Z)
-  (Pre20: Variant1 = `n0 - m0`)
-  (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\ (permut A0 A) /\
-           `1 <= m0` /\ `n0 <= N`)
-  (Test14: `m0 < n0`)
-  (Pre19: `0 <= f` /\ `f < (array_length A0)`)
-  (r: Z)
-  (Post14: r = (access A0 f))
-  (result2: Z)
-  (Post13: result2 = m0)
-  (result3: Z)
-  (Post12: result3 = n0)
-  (Variant3: Z)
-  (A1: (array Z))
-  (i0: Z)
-  (j0: Z)
-  (Pre17: Variant3 = `N + 2 + j0 - i0`)
-  (Inv_ij: (i_invariant m0 n0 i0 r A1) /\ (j_invariant m0 n0 j0 r A1) /\
-           (m_invariant m0 A1) /\ (n_invariant n0 A1) /\ `0 <= j0` /\
-           `i0 <= N + 1` /\ (termination i0 j0 m0 n0 r A1) /\ (permut A1 A))
-  (Test9: `i0 <= j0`)
-  (i1: Z)
-  (Inv_i: ((i_invariant m0 n0 i1 r A1) /\ `i0 <= i1` /\ `i1 <= n0` /\
-          (termination i1 j0 m0 n0 r A1)) /\ `(access A1 i1) >= r`)
-  (j1: Z)
-  (Inv_j: ((j_invariant m0 n0 j1 r A1) /\ `j1 <= j0` /\ `m0 <= j1` /\
-          (termination i1 j1 m0 n0 r A1)) /\ `r >= (access A1 j1)`)
-  (Pre16: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
-  (Test8: `i1 <= j1`)
-  (A2: (array Z))
-  (Post26: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
-           `r <= (access A2 j1)` /\
-           ((i:Z)
-            (i = `i1 + 1` ->
-             ((j:Z)
-              (j = `j1 - 1` -> ((i_invariant m0 n0 i r A2) /\
-               (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
-               (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
-               (termination i j m0 n0 r A2) /\ (permut A2 A)) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
-  (Pre15: (exchange A2 A1 i1 j1))
-  `(access A2 i1) <= r`.
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "find.mlw", characters 2642-2651 *)
-Lemma find_po_14 : 
-  (A: (array Z))
-  (Pre21: `(array_length A) = N + 1`)
-  (result: Z)
-  (Post16: result = `1`)
-  (result0: Z)
-  (Post15: result0 = N)
-  (Variant1: Z)
-  (A0: (array Z))
-  (m0: Z)
-  (n0: Z)
-  (Pre20: Variant1 = `n0 - m0`)
-  (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\ (permut A0 A) /\
-           `1 <= m0` /\ `n0 <= N`)
-  (Test14: `m0 < n0`)
-  (Pre19: `0 <= f` /\ `f < (array_length A0)`)
-  (r: Z)
-  (Post14: r = (access A0 f))
-  (result2: Z)
-  (Post13: result2 = m0)
-  (result3: Z)
-  (Post12: result3 = n0)
-  (Variant3: Z)
-  (A1: (array Z))
-  (i0: Z)
-  (j0: Z)
-  (Pre17: Variant3 = `N + 2 + j0 - i0`)
-  (Inv_ij: (i_invariant m0 n0 i0 r A1) /\ (j_invariant m0 n0 j0 r A1) /\
-           (m_invariant m0 A1) /\ (n_invariant n0 A1) /\ `0 <= j0` /\
-           `i0 <= N + 1` /\ (termination i0 j0 m0 n0 r A1) /\ (permut A1 A))
-  (Test9: `i0 <= j0`)
-  (i1: Z)
-  (Inv_i: ((i_invariant m0 n0 i1 r A1) /\ `i0 <= i1` /\ `i1 <= n0` /\
-          (termination i1 j0 m0 n0 r A1)) /\ `(access A1 i1) >= r`)
-  (j1: Z)
-  (Inv_j: ((j_invariant m0 n0 j1 r A1) /\ `j1 <= j0` /\ `m0 <= j1` /\
-          (termination i1 j1 m0 n0 r A1)) /\ `r >= (access A1 j1)`)
-  (Pre16: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
-  (Test8: `i1 <= j1`)
-  (A2: (array Z))
-  (Post26: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
-           `r <= (access A2 j1)` /\
-           ((i:Z)
-            (i = `i1 + 1` ->
-             ((j:Z)
-              (j = `j1 - 1` -> ((i_invariant m0 n0 i r A2) /\
-               (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
-               (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
-               (termination i j m0 n0 r A2) /\ (permut A2 A)) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
-  (Pre15: (exchange A2 A1 i1 j1))
-  (Pre14: `(access A2 i1) <= r`)
-  `r <= (access A2 j1)`.
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "find.mlw", characters 2499-2697 *)
-Lemma find_po_15 : 
-  (A: (array Z))
-  (Pre21: `(array_length A) = N + 1`)
-  (result: Z)
-  (Post16: result = `1`)
-  (result0: Z)
-  (Post15: result0 = N)
-  (Variant1: Z)
-  (A0: (array Z))
-  (m0: Z)
-  (n0: Z)
-  (Pre20: Variant1 = `n0 - m0`)
-  (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\ (permut A0 A) /\
-           `1 <= m0` /\ `n0 <= N`)
-  (Test14: `m0 < n0`)
-  (Pre19: `0 <= f` /\ `f < (array_length A0)`)
-  (r: Z)
-  (Post14: r = (access A0 f))
-  (result2: Z)
-  (Post13: result2 = m0)
-  (result3: Z)
-  (Post12: result3 = n0)
-  (Variant3: Z)
-  (A1: (array Z))
-  (i0: Z)
-  (j0: Z)
-  (Pre17: Variant3 = `N + 2 + j0 - i0`)
-  (Inv_ij: (i_invariant m0 n0 i0 r A1) /\ (j_invariant m0 n0 j0 r A1) /\
-           (m_invariant m0 A1) /\ (n_invariant n0 A1) /\ `0 <= j0` /\
-           `i0 <= N + 1` /\ (termination i0 j0 m0 n0 r A1) /\ (permut A1 A))
-  (Test9: `i0 <= j0`)
-  (i1: Z)
-  (Inv_i: ((i_invariant m0 n0 i1 r A1) /\ `i0 <= i1` /\ `i1 <= n0` /\
-          (termination i1 j0 m0 n0 r A1)) /\ `(access A1 i1) >= r`)
-  (j1: Z)
-  (Inv_j: ((j_invariant m0 n0 j1 r A1) /\ `j1 <= j0` /\ `m0 <= j1` /\
-          (termination i1 j1 m0 n0 r A1)) /\ `r >= (access A1 j1)`)
-  (Pre16: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
-  (Test8: `i1 <= j1`)
-  (A2: (array Z))
-  (Post26: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
-           `r <= (access A2 j1)` /\
-           ((i:Z)
-            (i = `i1 + 1` ->
-             ((j:Z)
-              (j = `j1 - 1` -> ((i_invariant m0 n0 i r A2) /\
-               (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
-               (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
-               (termination i j m0 n0 r A2) /\ (permut A2 A)) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
-  (Pre15: (exchange A2 A1 i1 j1))
-  (Pre14: `(access A2 i1) <= r`)
-  (Pre13: `r <= (access A2 j1)`)
-  (i2: Z)
-  (Post6: i2 = `i1 + 1`)
-  (j2: Z)
-  (Post7: j2 = `j1 - 1`)
-  ((i_invariant m0 n0 i2 r A2) /\ (j_invariant m0 n0 j2 r A2) /\
-  (m_invariant m0 A2) /\ (n_invariant n0 A2) /\ `0 <= j2` /\ `i2 <= N + 1` /\
-  (termination i2 j2 m0 n0 r A2) /\ (permut A2 A)) /\
-  (Zwf `0` `N + 2 + j2 - i2` `N + 2 + j0 - i0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "find.mlw", characters 2482-2697 *)
-Lemma find_po_16 : 
+Lemma find_po_13 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -819,7 +638,7 @@ Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "find.mlw", characters 1703-1916 *)
-Lemma find_po_17 : 
+Lemma find_po_14 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -857,7 +676,7 @@ Auto.
 Save.
 
 (* Why obligation from file "find.mlw", characters 2726-2741 *)
-Lemma find_po_18 : 
+Lemma find_po_15 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -892,7 +711,7 @@ Intuition (Elim H13; Omega).
 Save.
 
 (* Why obligation from file "find.mlw", characters 2776-2783 *)
-Lemma find_po_19 : 
+Lemma find_po_16 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -938,7 +757,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "find.mlw", characters 2819-2826 *)
-Lemma find_po_20 : 
+Lemma find_po_17 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -985,7 +804,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "find.mlw", characters 2846-2870 *)
-Lemma find_po_21 : 
+Lemma find_po_18 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -1034,7 +853,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "find.mlw", characters 1467-1571 *)
-Lemma find_po_22 : 
+Lemma find_po_19 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -1050,7 +869,7 @@ Subst result0; Exact (Lemma_2 A).
 Save.
 
 (* Why obligation from file "find.mlw", characters 1415-2885 *)
-Lemma find_po_23 : 
+Lemma find_po_20 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -1707,28 +1526,103 @@ Definition find (* validation *)
                                                      let Pre15 =
                                                        (proj1 ? ? Post26) in
                                                      let Pre14 =
-                                                       (find_po_13 A Pre21
-                                                       result Post16 result0
-                                                       Post15 Variant1 A0 m0
-                                                       n0 Pre20 Inv_mn Test14
-                                                       Pre19 r Post14 result2
-                                                       Post13 result3 Post12
-                                                       Variant3 A1 i0 j0
-                                                       Pre17 Inv_ij Test9 i1
-                                                       Inv_i j1 Inv_j Pre16
-                                                       Test8 A2 Post26 Pre15) in
+                                                       let (HW_427, HW_428) =
+                                                         Inv_mn in
+                                                       let (HW_429, HW_430) =
+                                                         HW_428 in
+                                                       let (HW_431, HW_432) =
+                                                         HW_430 in
+                                                       let (HW_433, HW_434) =
+                                                         HW_432 in
+                                                       let (HW_435, HW_436) =
+                                                         Pre19 in
+                                                       let (HW_437, HW_438) =
+                                                         Inv_ij in
+                                                       let (HW_439, HW_440) =
+                                                         HW_438 in
+                                                       let (HW_441, HW_442) =
+                                                         HW_440 in
+                                                       let (HW_443, HW_444) =
+                                                         HW_442 in
+                                                       let (HW_445, HW_446) =
+                                                         HW_444 in
+                                                       let (HW_447, HW_448) =
+                                                         HW_446 in
+                                                       let (HW_449, HW_450) =
+                                                         HW_448 in
+                                                       let (HW_451, HW_452) =
+                                                         Inv_i in
+                                                       let (HW_453, HW_454) =
+                                                         HW_451 in
+                                                       let (HW_455, HW_456) =
+                                                         HW_454 in
+                                                       let (HW_457, HW_458) =
+                                                         HW_456 in
+                                                       let (HW_459, HW_460) =
+                                                         Inv_j in
+                                                       let (HW_461, HW_462) =
+                                                         HW_459 in
+                                                       let (HW_463, HW_464) =
+                                                         HW_462 in
+                                                       let (HW_465, HW_466) =
+                                                         HW_464 in
+                                                       let (HW_467, HW_468) =
+                                                         Pre16 in
+                                                       let (HW_469, HW_470) =
+                                                         Post26 in
+                                                       let (HW_471, HW_472) =
+                                                         HW_470 in
+                                                       HW_471 in
                                                      let Pre13 =
-                                                       (find_po_14 A Pre21
-                                                       result Post16 result0
-                                                       Post15 Variant1 A0 m0
-                                                       n0 Pre20 Inv_mn Test14
-                                                       Pre19 r Post14 result2
-                                                       Post13 result3 Post12
-                                                       Variant3 A1 i0 j0
-                                                       Pre17 Inv_ij Test9 i1
-                                                       Inv_i j1 Inv_j Pre16
-                                                       Test8 A2 Post26 Pre15
-                                                       Pre14) in
+                                                       let (HW_473, HW_474) =
+                                                         Inv_mn in
+                                                       let (HW_475, HW_476) =
+                                                         HW_474 in
+                                                       let (HW_477, HW_478) =
+                                                         HW_476 in
+                                                       let (HW_479, HW_480) =
+                                                         HW_478 in
+                                                       let (HW_481, HW_482) =
+                                                         Pre19 in
+                                                       let (HW_483, HW_484) =
+                                                         Inv_ij in
+                                                       let (HW_485, HW_486) =
+                                                         HW_484 in
+                                                       let (HW_487, HW_488) =
+                                                         HW_486 in
+                                                       let (HW_489, HW_490) =
+                                                         HW_488 in
+                                                       let (HW_491, HW_492) =
+                                                         HW_490 in
+                                                       let (HW_493, HW_494) =
+                                                         HW_492 in
+                                                       let (HW_495, HW_496) =
+                                                         HW_494 in
+                                                       let (HW_497, HW_498) =
+                                                         Inv_i in
+                                                       let (HW_499, HW_500) =
+                                                         HW_497 in
+                                                       let (HW_501, HW_502) =
+                                                         HW_500 in
+                                                       let (HW_503, HW_504) =
+                                                         HW_502 in
+                                                       let (HW_505, HW_506) =
+                                                         Inv_j in
+                                                       let (HW_507, HW_508) =
+                                                         HW_505 in
+                                                       let (HW_509, HW_510) =
+                                                         HW_508 in
+                                                       let (HW_511, HW_512) =
+                                                         HW_510 in
+                                                       let (HW_513, HW_514) =
+                                                         Pre16 in
+                                                       let (HW_515, HW_516) =
+                                                         Post26 in
+                                                       let (HW_517, HW_518) =
+                                                         HW_516 in
+                                                       let (HW_519, HW_520) =
+                                                         HW_518 in
+                                                       HW_519 in
                                                      let (i2, result9,
                                                        Post6) =
                                                        let (result9, Post6) =
@@ -1772,17 +1666,59 @@ Definition find (* validation *)
                                                                i3` `N + 2 +
                                                                     j0 - i0`) 
                                                      A2 i2 j2 result10
-                                                     (find_po_15 A Pre21
-                                                     result Post16 result0
-                                                     Post15 Variant1 A0 m0 n0
-                                                     Pre20 Inv_mn Test14
-                                                     Pre19 r Post14 result2
-                                                     Post13 result3 Post12
-                                                     Variant3 A1 i0 j0 Pre17
-                                                     Inv_ij Test9 i1 Inv_i j1
-                                                     Inv_j Pre16 Test8 A2
-                                                     Post26 Pre15 Pre14 Pre13
-                                                     i2 Post6 j2 Post7)) in
+                                                     let (HW_521, HW_522) =
+                                                       Inv_mn in
+                                                     let (HW_523, HW_524) =
+                                                       HW_522 in
+                                                     let (HW_525, HW_526) =
+                                                       HW_524 in
+                                                     let (HW_527, HW_528) =
+                                                       HW_526 in
+                                                     let (HW_529, HW_530) =
+                                                       Pre19 in
+                                                     let (HW_531, HW_532) =
+                                                       Inv_ij in
+                                                     let (HW_533, HW_534) =
+                                                       HW_532 in
+                                                     let (HW_535, HW_536) =
+                                                       HW_534 in
+                                                     let (HW_537, HW_538) =
+                                                       HW_536 in
+                                                     let (HW_539, HW_540) =
+                                                       HW_538 in
+                                                     let (HW_541, HW_542) =
+                                                       HW_540 in
+                                                     let (HW_543, HW_544) =
+                                                       HW_542 in
+                                                     let (HW_545, HW_546) =
+                                                       Inv_i in
+                                                     let (HW_547, HW_548) =
+                                                       HW_545 in
+                                                     let (HW_549, HW_550) =
+                                                       HW_548 in
+                                                     let (HW_551, HW_552) =
+                                                       HW_550 in
+                                                     let (HW_553, HW_554) =
+                                                       Inv_j in
+                                                     let (HW_555, HW_556) =
+                                                       HW_553 in
+                                                     let (HW_557, HW_558) =
+                                                       HW_556 in
+                                                     let (HW_559, HW_560) =
+                                                       HW_558 in
+                                                     let (HW_561, HW_562) =
+                                                       Pre16 in
+                                                     let (HW_563, HW_564) =
+                                                       Post26 in
+                                                     let (HW_565, HW_566) =
+                                                       HW_564 in
+                                                     let (HW_567, HW_568) =
+                                                       HW_566 in
+                                                     let HW_569 =
+                                                       (HW_568 i2 Post6) in
+                                                     let HW_570 =
+                                                       (HW_569 j2 Post7) in
+                                                     HW_570) in
                                                    (exist_4 [A3: (array Z)]
                                                    [i3: Z][j3: Z]
                                                    [result9: unit]
@@ -1817,7 +1753,7 @@ Definition find (* validation *)
                                                                i1` `N + 2 +
                                                                     j0 - i0`) 
                                                      tt
-                                                     (find_po_16 A Pre21
+                                                     (find_po_13 A Pre21
                                                      result Post16 result0
                                                      Post15 Variant1 A0 m0 n0
                                                      Pre20 Inv_mn Test14
@@ -1895,12 +1831,12 @@ Definition find (* validation *)
                                    `N + 2 + result3 - result2` A0 result2
                                    result3
                                    (refl_equal ? `N + 2 + result3 - result2`)
-                                   (find_po_17 A Pre21 result Post16 result0
+                                   (find_po_14 A Pre21 result Post16 result0
                                    Post15 Variant1 A0 m0 n0 Pre20 Inv_mn
                                    Test14 Pre19 r Post14 result2 Post13
                                    result3 Post12)) in
                                let Pre18 =
-                                 (find_po_18 A Pre21 result Post16 result0
+                                 (find_po_15 A Pre21 result Post16 result0
                                  Post15 Variant1 A0 m0 n0 Pre20 Inv_mn Test14
                                  Pre19 r Post14 result2 Post13 result3 Post12
                                  A1 i0 j0 Inv_ij) in
@@ -1929,7 +1865,7 @@ Definition find (* validation *)
                                      `1 <= m1` /\ `n2 <= N`) /\
                                      (Zwf `0` `n2 - m1` `n0 - m0`) m0 
                                      n1 result6
-                                     (find_po_19 A Pre21 result Post16
+                                     (find_po_16 A Pre21 result Post16
                                      result0 Post15 Variant1 A0 m0 n0 Pre20
                                      Inv_mn Test14 Pre19 r Post14 result2
                                      Post13 result3 Post12 A1 i0 j0 Inv_ij
@@ -1964,7 +1900,7 @@ Definition find (* validation *)
                                            `n1 <= N`) /\
                                            (Zwf `0` `n1 - m2` `n0 - m0`) 
                                            m1 n0 result7
-                                           (find_po_20 A Pre21 result Post16
+                                           (find_po_17 A Pre21 result Post16
                                            result0 Post15 Variant1 A0 m0 n0
                                            Pre20 Inv_mn Test14 Pre19 r Post14
                                            result2 Post13 result3 Post12 A1
@@ -1996,7 +1932,7 @@ Definition find (* validation *)
                                              `n2 <= N`) /\
                                              (Zwf `0` `n2 - m2` `n0 - m0`) 
                                              m1 n1 result8
-                                             (find_po_21 A Pre21 result
+                                             (find_po_18 A Pre21 result
                                              Post16 result0 Post15 Variant1
                                              A0 m0 n0 Pre20 Inv_mn Test14
                                              Pre19 r Post14 result2 Post13
@@ -2062,10 +1998,10 @@ Definition find (* validation *)
                    (permut A2 A) /\ `1 <= m2` /\ `n2 <= N`) /\ `m2 >= n2` 
                    A1 m1 n1 result2 Inv_mn0) end) `result0 - result` 
              A result result0 (refl_equal ? `result0 - result`)
-             (find_po_22 A Pre21 result Post16 result0 Post15)) in
+             (find_po_19 A Pre21 result Post16 result0 Post15)) in
          (exist_3 [A1: (array Z)][m1: Z][result2: unit](found A1) /\
          (permut A1 A) A0 m0 result1
-         (find_po_23 A Pre21 result Post16 result0 Post15 A0 m0 n0 Inv_mn)) in
+         (find_po_20 A Pre21 result Post16 result0 Post15 A0 m0 n0 Inv_mn)) in
        (exist_2 [A1: (array Z)][result1: unit](found A1) /\ (permut A1 A) 
        A0 result0 Post20).
 

@@ -58,24 +58,8 @@ Implicit Arguments Off.
 
 
 (* Début: preuve de "swap" *)
-(* Why obligation from file "maximumsort.mlw", characters 206-210 *)
-Lemma swap_po_1 : 
-  (i: Z)
-  (j: Z)
-  (t: (array Z))
-  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
-         `j < (array_length t)`)
-  (Pre4: `0 <= i` /\ `i < (array_length t)`)
-  (v: Z)
-  (Post3: v = (access t i))
-  (Pre2: `0 <= i` /\ `i < (array_length t)`)
-  `0 <= j` /\ `j < (array_length t)`.
-Proof.
-  Intros; Omega.
-Save.
-
 (* Why obligation from file "maximumsort.mlw", characters 217-226 *)
-Lemma swap_po_2 : 
+Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -93,9 +77,8 @@ Proof.
 Intuition ArraySubst t0.
 Save.
 
-
 (* Why obligation from file "maximumsort.mlw", characters 187-233 *)
-Lemma swap_po_3 : 
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -128,17 +111,20 @@ Definition swap (* validation *)
          result = (access t i) (access t i) (refl_equal ? (access t i))) in
        let (t0, result, Post4) =
          let Pre2 = Pre4 in
-         let Pre3 = (swap_po_1 i j t Pre5 Pre4 v Post3 Pre2) in
+         let Pre3 =
+           let (HW_1, HW_2) = Pre5 in
+           let (HW_3, HW_4) = HW_1 in
+           HW_2 in
          let (t0, result, Post1) = (exist_2 [t1: (array Z)][result1: unit]
            t1 = (store t i (access t j)) (store t i (access t j)) tt
            (refl_equal ? (store t i (access t j)))) in
-         let Pre1 = (swap_po_2 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1) in
+         let Pre1 = (swap_po_1 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1) in
          let (t1, result0, Post2) = (exist_2 [t2: (array Z)][result2: unit]
            t2 = (store t0 j v) (store t0 j v) tt
            (refl_equal ? (store t0 j v))) in
          (exist_2 [t2: (array Z)][result1: unit](exchange t2 t i j) t1
          result0
-         (swap_po_3 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1 Pre1 t1 Post2)) in
+         (swap_po_2 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1 Pre1 t1 Post2)) in
        (exist_2 [t1: (array Z)][result0: unit](exchange t1 t i j) t0 
        result Post4).
 
@@ -552,43 +538,8 @@ Proof.
    Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 876-1194 *)
-Lemma maxisort_po_4 : 
-  (t: (array Z))
-  (Pre10: `0 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = `(array_length t) - 1`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array Z))
-  (Pre9: Variant1 = `i0 + 1`)
-  (Pre8: (`0 <= i0 + 1` /\ `i0 + 1 <= (array_length t0)`) /\
-         (sorted_array t0 `i0 + 1` `(array_length t0) - 1`) /\
-         (permut t0 t) /\
-         ((`i0 + 1 < (array_length t0)` ->
-           (Maximize t0 i0 (access t0 `i0 + 1`) `0`))))
-  (Test2: `i0 >= 0`)
-  (t1: (array Z))
-  (Post6: ((i:Z)
-           (i = `i0 - 1` -> ((`0 <= i + 1` /\
-            `i + 1 <= (array_length t1)`) /\
-            (sorted_array t1 `i + 1` `(array_length t1) - 1`) /\
-            (permut t1 t) /\
-            ((`i + 1 < (array_length t1)` ->
-              (Maximize t1 i (access t1 `i + 1`) `0`)))) /\
-            (Zwf `0` `i + 1` `i0 + 1`))))
-  (i1: Z)
-  (Post1: i1 = `i0 - 1`)
-  ((`0 <= i1 + 1` /\ `i1 + 1 <= (array_length t1)`) /\
-  (sorted_array t1 `i1 + 1` `(array_length t1) - 1`) /\ (permut t1 t) /\
-  ((`i1 + 1 < (array_length t1)` -> (Maximize t1 i1 (access t1 `i1 + 1`) `0`)))) /\
-  (Zwf `0` `i1 + 1` `i0 + 1`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "maximumsort.mlw", characters 911-1086 *)
-Lemma maxisort_po_5 : 
+Lemma maxisort_po_4 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
   (result: Z)
@@ -606,7 +557,7 @@ Proof.
 Save.
 
 (* Why obligation from file "maximumsort.mlw", characters 808-1254 *)
-Lemma maxisort_po_6 : 
+Lemma maxisort_po_5 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
   (result: Z)
@@ -724,8 +675,12 @@ Definition maxisort (* validation *)
                      ((`i2 + 1 < (array_length t2)` ->
                        (Maximize t2 i2 (access t2 `i2 + 1`) `0`)))) /\
                      (Zwf `0` `i2 + 1` `i0 + 1`) i1 t1 result2
-                     (maxisort_po_4 t Pre10 result Post3 Variant1 i0 t0 Pre9
-                     Pre8 Test2 t1 Post6 i1 Post1)) in
+                     let (HW_55, HW_56) = Pre8 in
+                     let (HW_57, HW_58) = HW_55 in
+                     let (HW_59, HW_60) = HW_56 in
+                     let (HW_61, HW_62) = HW_60 in
+                     let HW_63 = (Post6 i1 Post1) in
+                     HW_63) in
                    ((wf1 `i1 + 1`) (loop_variant_1 Pre9 Post4) i1 t1
                      (refl_equal ? `i1 + 1`) (proj1 ? ? Post4)) in
                  (exist_3 [i2: Z][t2: (array Z)][result2: unit]
@@ -752,8 +707,8 @@ Definition maxisort (* validation *)
                    (Maximize t2 i2 (access t2 `i2 + 1`) `0`)))) /\
                  `i2 < 0` i1 t1 result1 Post2) end) `result + 1` result 
            t (refl_equal ? `result + 1`)
-           (maxisort_po_5 t Pre10 result Post3)) in
+           (maxisort_po_4 t Pre10 result Post3)) in
        (exist_2 [t1: (array Z)][result1: unit]
        (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t) 
-       t0 result0 (maxisort_po_6 t Pre10 result Post3 i0 t0 Post2)).
+       t0 result0 (maxisort_po_5 t Pre10 result Post3 i0 t0 Post2)).
 

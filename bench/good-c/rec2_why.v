@@ -17,22 +17,8 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good-c/rec2.c", characters 101-109 *)
-Lemma f_po_2 : 
-  (x: Z)
-  (Pre8: `x >= 0`)
-  (Variant1: Z)
-  (x0: Z)
-  (Pre7: Variant1 = x0)
-  (Pre6: `x0 >= 0`)
-  (Post10: ((result:Z) (`result = 0` -> `result = 0`)) /\ `x0 - 1 >= 0`)
-  `x0 - 1 >= 0`.
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "good-c/rec2.c", characters 46-130 *)
-Lemma f_po_3 : 
+Lemma f_po_2 : 
   (x: Z)
   (Pre8: `x >= 0`)
   (Variant1: Z)
@@ -99,13 +85,14 @@ Definition f (* validation *)
                    Post5) end) in
              Cases (decomp1 Post3) of
              | (Qval (exist result0 Post10)) =>
-               let Pre5 = (f_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Post10) in
+               let Pre5 = let (HW_1, HW_2) = Post10 in
+                          HW_2 in
                let (result1, Post12) =
                  let Pre3 = Pre5 in
                  let Pre4 = Pre3 in
                  let (result3, Post13) =
                    ((wf1 `x0 - 1`)
-                     (f_po_3 x Pre8 Variant1 x0 Pre7 Pre6 Post10 Pre5 Pre3
+                     (f_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Post10 Pre5 Pre3
                      Pre4) `x0 - 1` (refl_equal ? `x0 - 1`) Pre4) in
                  (exist_1 [result4: Z]`result4 = 0` result3 Post13) in
                (exist_1 (qcomb [result2: Z]`result2 = 0` [result2: Z]

@@ -35,35 +35,17 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
-(* Why obligation from file "good-c/continue.c", characters 103-154 *)
-Lemma f1_po_3 : 
-  (result: Z)
-  (Post4: result = `10`)
-  (Variant1: Z)
-  (n0: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `0 <= n0`)
-  (Test4: `n0 > 0`)
-  (n1: Z)
-  (Post17: ((n:Z) (n = `n1 - 1` -> `0 <= n` /\ (Zwf `0` n n0))))
-  (n2: Z)
-  (Post2: n2 = `n1 - 1`)
-  `0 <= n2` /\ (Zwf `0` n2 n0).
-Proof.
-Unfold Zwf; Intuition.
-Save.
-
 (* Why obligation from file "good-c/continue.c", characters 84-90 *)
-Lemma f1_po_4 : 
+Lemma f1_po_3 : 
   (result: Z)
   (Post4: result = `10`)
   `0 <= result`.
 Proof.
-Intuition.
+Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 164-165 *)
-Lemma f1_po_5 : 
+Lemma f1_po_4 : 
   (result: Z)
   (Post4: result = `10`)
   (n0: Z)
@@ -183,8 +165,8 @@ Definition f1 (* validation *)
                            (qcomb [result4: unit]`0 <= n3` /\ (Zwf `0` n3 n0)
                             [result4: unit]`0 <= n3` /\ (Zwf `0` n3 n0)) 
                            n2 (Val unit result3)
-                           (f1_po_3 result Post4 Variant1 n0 Pre3 Pre2 Test4
-                           n1 Post17 n2 Post2))
+                           let HW_1 = (Post17 n2 Post2) in
+                           HW_1)
                          | (Qexn _0 Post5) => (exist_2 [n2: Z]
                            (qcomb [result2: unit]`0 <= n2` /\ (Zwf `0` n2 n0)
                             [result2: unit]`0 <= n2` /\ (Zwf `0` n2 n0)) 
@@ -209,9 +191,9 @@ Definition f1 (* validation *)
                      `0 <= n1` /\ `n1 <= 0` n0 tt (conj ? ? Pre2 Test1)) in
                    (exist_2 [n2: Z][result2: unit]`0 <= n2` /\ `n2 <= 0` 
                    n1 result1 Post3) end) result result (refl_equal ? result)
-             (f1_po_4 result Post4)) in
+             (f1_po_3 result Post4)) in
          let (result1, Post18) = (exist_1 [result1: Z]`result1 = 0` n0
-           (f1_po_5 result Post4 n0 Post3)) in
+           (f1_po_4 result Post4 n0 Post3)) in
          (exist_2 [n1: Z][result2: Z]`result2 = 0` n0 result1 Post18) in
        (exist_1 [result1: Z]`result1 = 0` result0 Post7).
 
@@ -253,28 +235,8 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "good-c/continue.c", characters 216-327 *)
-Lemma f2_po_3 : 
-  (result: Z)
-  (Post5: result = `17`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (Variant1: Z)
-  (i1: Z)
-  (Pre3: Variant1 = `10 - i1`)
-  (Pre2: `i1 <= 10`)
-  (Test4: `i1 < 10`)
-  (i2: Z)
-  (Post18: ((i:Z) (i = `i2 + 1` -> `i <= 10` /\ (Zwf `0` `10 - i` `10 - i1`))))
-  (i3: Z)
-  (Post3: i3 = `i2 + 1`)
-  `i3 <= 10` /\ (Zwf `0` `10 - i3` `10 - i1`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "good-c/continue.c", characters 260-267 *)
-Lemma f2_po_4 : 
+Lemma f2_po_3 : 
   (result: Z)
   (Post5: result = `17`)
   (i0: Z)
@@ -285,7 +247,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 337-338 *)
-Lemma f2_po_5 : 
+Lemma f2_po_4 : 
   (result: Z)
   (Post5: result = `17`)
   (i0: Z)
@@ -421,8 +383,8 @@ Definition f2 (* validation *)
                             (Zwf `0` `10 - i4` `10 - i1`) [result5: unit]
                             `i4 <= 10` /\ (Zwf `0` `10 - i4` `10 - i1`)) 
                            i3 (Val unit result4)
-                           (f2_po_3 result Post5 i0 Post1 Variant1 i1 Pre3
-                           Pre2 Test4 i2 Post18 i3 Post3))
+                           let HW_1 = (Post18 i3 Post3) in
+                           HW_1)
                          | (Qexn _0 Post6) => (exist_2 [i3: Z]
                            (qcomb [result3: unit]`i3 <= 10` /\
                             (Zwf `0` `10 - i3` `10 - i1`) [result3: unit]
@@ -449,9 +411,9 @@ Definition f2 (* validation *)
                      `i2 <= 10` /\ `i2 >= 10` i1 tt (conj ? ? Pre2 Test1)) in
                    (exist_2 [i3: Z][result3: unit]`i3 <= 10` /\ `i3 >= 10` 
                    i2 result2 Post4) end) `10 - i0` i0
-             (refl_equal ? `10 - i0`) (f2_po_4 result Post5 i0 Post1)) in
+             (refl_equal ? `10 - i0`) (f2_po_3 result Post5 i0 Post1)) in
          let (result2, Post19) = (exist_1 [result2: Z]`result2 = 10` 
-           i1 (f2_po_5 result Post5 i0 Post1 i1 Post4)) in
+           i1 (f2_po_4 result Post5 i0 Post1 i1 Post4)) in
          (exist_2 [i2: Z][result3: Z]`result3 = 10` i1 result2 Post19) in
        (exist_1 [result1: Z]`result1 = 10` result0 Post8).
 

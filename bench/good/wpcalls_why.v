@@ -16,19 +16,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/wpcalls.mlw", characters 170-180 *)
-Lemma p_po_2 : 
-  (x: Z)
-  (Post2: ((x0:Z) (`x0 = 1 - x` -> ((x1:Z) (`x1 = 1 - x0` -> `x1 = x`)))))
-  (x0: Z)
-  (Post4: `x0 = 1 - x`)
-  (x1: Z)
-  (Post6: `x1 = 1 - x0`)
-  `x1 = x`.
-Proof.
-Intuition.
-Save.
-
 Definition p (* validation *)
   : (u: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](True))
   := [u: unit; x: Z]
@@ -47,7 +34,10 @@ Definition p (* validation *)
        let (x1, result1, Post6) =
          let (x1, result3, Post7) = (f tt x0) in
          (exist_2 [x2: Z][result4: unit]`x2 = 1 - x0` x1 result3 Post7) in
-       let Pre1 = (p_po_2 x Post2 x0 Post4 x1 Post6) in
+       let Pre1 =
+         let HW_1 = (Post2 x0 Post4) in
+         let HW_2 = (HW_1 x1 Post6) in
+         HW_2 in
        let (result2, Post8) = (exist_1 [result2: unit]True tt I) in
        (exist_2 [x2: Z][result3: unit]True x1 result2 I).
 

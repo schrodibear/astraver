@@ -248,19 +248,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 821-880 *)
-Lemma p7_po_2 : 
-  (x0: Z)
-  (Post1: x0 = `1`)
-  (Post4: ((x:Z) (x = `2` -> False)))
-  (x1: Z)
-  (Post2: x1 = `2`)
-  False.
-Proof.
-Intuition.
-Save.
-
-
 Definition p7 (* validation *)
   : (x: Z)
     (sig_2 Z (EM unit unit) [x0: Z][result: (EM unit unit)]
@@ -282,7 +269,8 @@ Definition p7 (* validation *)
            (exist_2 [x2: Z][result3: unit]x2 = `2` result2 tt Post2) in
          (exist_2 [x2: Z]
          (qcomb [result3: unit]`x2 = 1` [result3: unit]False) x1
-         (Val unit result2) (p7_po_2 x0 Post1 Post4 x1 Post2))
+         (Val unit result2) let HW_1 = (Post4 x1 Post2) in
+                            HW_1)
        | (Qexn _ Post5) => (exist_2 [x1: Z]
          (qcomb [result1: unit]`x1 = 1` [result1: unit]False) x0
          (Exn unit tt) Post5)
@@ -296,19 +284,6 @@ Lemma p8_po_1 :
 Proof.
 Intuition.
 Save.
-
-(* Why obligation from file "good/exns.mlw", characters 894-979 *)
-Lemma p8_po_2 : 
-  (x0: Z)
-  (Post1: x0 = `1`)
-  (Post5: ((x:Z) (x = `2` -> False)))
-  (x1: Z)
-  (Post2: x1 = `2`)
-  False.
-Proof.
-Intuition.
-Save.
-
 
 Definition p8 (* validation *)
   : (x: Z)
@@ -334,7 +309,8 @@ Definition p8 (* validation *)
            (exist_2 [x2: Z][result3: unit]x2 = `2` result2 tt Post2) in
          (exist_2 [x2: Z]
          (qcomb [result3: Z]`x2 = 1` /\ `result3 = 1` [result3: unit]False) 
-         x1 (Val Z result2) (p8_po_2 x0 Post1 Post5 x1 Post2))
+         x1 (Val Z result2) let HW_1 = (Post5 x1 Post2) in
+                            HW_1)
        | (Qexn result1 Post6) => (exist_2 [x1: Z]
          (qcomb [result2: Z]`x1 = 1` /\ `result2 = 1` [result2: unit]False) 
          x0 (Exn unit result1) Post6)
@@ -450,37 +426,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1366-1404 *)
-Lemma p13_po_2 : 
-  (Post6: ((x:Z) (x = `3` -> `x = 2`)))
-  (Post10: ((x:Z) (x = `1` -> `x = 2`)))
-  (x0: Z)
-  (Post1: x0 = `1`)
-  `x0 = 2`.
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "good/exns.mlw", characters 1351-1462 *)
-Lemma p13_po_3 : 
-  (Post13: ((x:Z) (x = `2` -> `x = 2`)))
-  (x1: Z)
-  (Post2: x1 = `2`)
-  `x1 = 2`.
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "good/exns.mlw", characters 1351-1462 *)
-Lemma p13_po_4 : 
-  (Post14: ((x:Z) (x = `3` -> `x = 2`)))
-  (x1: Z)
-  (Post3: x1 = `3`)
-  `x1 = 2`.
-Proof.
-Intuition.
-Save.
-
 
 Definition p13 (* validation *)
   : (x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = 2`))
@@ -510,7 +455,8 @@ Definition p13 (* validation *)
              (qcomb [result4: unit]((x:Z) (x = `2` -> `x = 2`))
               (qcomb [result4: Z]((x:Z) (x = `3` -> `x = 2`)) [result4: unit]
                `x1 = 2`)) x0
-             (Val unit (Val Z result3)) (p13_po_2 Post6 Post10 x0 Post1))
+             (Val unit (Val Z result3)) let HW_1 = (Post10 x0 Post1) in
+                                        HW_1)
            | (Qexn result2 Post11) => (exist_2 [x0: Z]
              (qcomb [result3: unit]((x:Z) (x = `2` -> `x = 2`))
               (qcomb [result3: Z]((x:Z) (x = `3` -> `x = 2`)) [result3: unit]
@@ -530,14 +476,16 @@ Definition p13 (* validation *)
              `2` (refl_equal ? `2`)) in
            (exist_2 [x2: Z][result1: unit]x2 = `2` result0 tt Post2) in
          (exist_2 [x2: Z][result1: unit]`x2 = 2` x1 result0
-         (p13_po_3 Post13 x1 Post2))
+         let HW_2 = (Post13 x1 Post2) in
+         HW_2)
        | (Qval (Qexn result0 Post14)) =>
          let (x1, result1, Post3) =
            let (result1, Post3) = (exist_1 [result1: Z]result1 = `3` 
              `3` (refl_equal ? `3`)) in
            (exist_2 [x2: Z][result2: unit]x2 = `3` result1 tt Post3) in
          (exist_2 [x2: Z][result2: unit]`x2 = 2` x1 result1
-         (p13_po_4 Post14 x1 Post3))
+         let HW_3 = (Post14 x1 Post3) in
+         HW_3)
        end.
 
 (* Why obligation from file "good/exns.mlw", characters 1534-1557 *)

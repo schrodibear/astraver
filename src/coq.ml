@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.85 2003-02-05 08:49:54 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.86 2003-02-11 15:31:22 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -275,28 +275,6 @@ let print_sequent fmt (hyps,concl) =
 
 let _ = Vcg.log_print_function := print_sequent
 
-let print_proof fmt = function
-  | Lemma (s, []) ->
-      fprintf fmt "%s" s
-  | Lemma (s, vl) ->
-      fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
-  | True ->
-      fprintf fmt "I"
-  | Reflexivity t ->
-      fprintf fmt "@[(refl_equal ? %a)@]" print_term t
-  | Assumption id -> 
-      Ident.print fmt id
-  | Proj1 id ->
-      fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
-  | Conjunction (id1, id2) ->
-      fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
-  | WfZwf t ->
-      fprintf fmt "(Zwf_well_founded %a)" print_term t
-  | Loop_variant_1 (h, h') ->
-      fprintf fmt "(loop_variant_1 %a %a)" Ident.print h Ident.print h'
-  | Absurd h ->
-      fprintf fmt "(False_ind ? %a)" Ident.print h
-
 let print_binder_id fmt (id,_) = Ident.print fmt id
 
 let collect_lambdas = 
@@ -357,7 +335,7 @@ let rec print_cc_term fmt = function
       (print_list comma print_binder_id) bl
       print_cc_term c print_cc_term c1
   | CC_term c ->
-      fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
+      fprintf fmt "@[%a@]" print_term c
   | CC_hole pr ->
       print_proof fmt pr
   | CC_type t ->
@@ -365,6 +343,30 @@ let rec print_cc_term fmt = function
 
 and print_case fmt (p,e) =
   fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term e
+
+and print_proof fmt = function
+  | Lemma (s, []) ->
+      fprintf fmt "%s" s
+  | Lemma (s, vl) ->
+      fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
+  | True ->
+      fprintf fmt "I"
+  | Reflexivity t ->
+      fprintf fmt "@[(refl_equal ? %a)@]" print_term t
+  | Assumption id -> 
+      Ident.print fmt id
+  | Proj1 id ->
+      fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
+  | Conjunction (id1, id2) ->
+      fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
+  | WfZwf t ->
+      fprintf fmt "(Zwf_well_founded %a)" print_term t
+  | Loop_variant_1 (h, h') ->
+      fprintf fmt "(loop_variant_1 %a %a)" Ident.print h Ident.print h'
+  | Absurd h ->
+      fprintf fmt "(False_ind ? %a)" Ident.print h
+  | ProofTerm t ->
+      fprintf fmt "@[%a@]" print_cc_term t
 
       
 let reprint_obligation fmt (loc,id,s) =

@@ -7,24 +7,8 @@ Require Omega.
 Require ZArithRing.
 
 
-(* Why obligation from file "partition.mlw", characters 1340-1344 *)
-Lemma swap_po_1 : 
-  (i: Z)
-  (j: Z)
-  (t: (array Z))
-  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
-         `j < (array_length t)`)
-  (Pre4: `0 <= i` /\ `i < (array_length t)`)
-  (v: Z)
-  (Post3: v = (access t i))
-  (Pre2: `0 <= i` /\ `i < (array_length t)`)
-  `0 <= j` /\ `j < (array_length t)`.
-Proof. 
-Intros; Omega.
-Save.
-
 (* Why obligation from file "partition.mlw", characters 1353-1362 *)
-Lemma swap_po_2 : 
+Lemma swap_po_1 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -38,12 +22,12 @@ Lemma swap_po_2 :
   (t0: (array Z))
   (Post1: t0 = (store t i (access t j)))
   `0 <= j` /\ `j < (array_length t0)`.
-Proof.
+Proof. 
 Intros; ArraySubst t0.
 Save.
 
 (* Why obligation from file "partition.mlw", characters 1319-1371 *)
-Lemma swap_po_3 : 
+Lemma swap_po_2 : 
   (i: Z)
   (j: Z)
   (t: (array Z))
@@ -76,17 +60,20 @@ Definition swap (* validation *)
          result = (access t i) (access t i) (refl_equal ? (access t i))) in
        let (t0, result, Post4) =
          let Pre2 = Pre4 in
-         let Pre3 = (swap_po_1 i j t Pre5 Pre4 v Post3 Pre2) in
+         let Pre3 =
+           let (HW_1, HW_2) = Pre5 in
+           let (HW_3, HW_4) = HW_1 in
+           HW_2 in
          let (t0, result, Post1) = (exist_2 [t1: (array Z)][result1: unit]
            t1 = (store t i (access t j)) (store t i (access t j)) tt
            (refl_equal ? (store t i (access t j)))) in
-         let Pre1 = (swap_po_2 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1) in
+         let Pre1 = (swap_po_1 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1) in
          let (t1, result0, Post2) = (exist_2 [t2: (array Z)][result2: unit]
            t2 = (store t0 j v) (store t0 j v) tt
            (refl_equal ? (store t0 j v))) in
          (exist_2 [t2: (array Z)][result1: unit](exchange t2 t i j) t1
          result0
-         (swap_po_3 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1 Pre1 t1 Post2)) in
+         (swap_po_2 i j t Pre5 Pre4 v Post3 Pre2 Pre3 t0 Post1 Pre1 t1 Post2)) in
        (exist_2 [t1: (array Z)][result0: unit](exchange t1 t i j) t0 
        result Post4).
 

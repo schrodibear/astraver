@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.68 2003-01-30 21:39:28 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.69 2003-02-11 15:31:22 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -98,6 +98,7 @@ let variant_name = gen_sym "Variant"
 let phi_name = gen_sym "rphi"
 let for_name = gen_sym "for"
 let label_name = let f = gen_sym "_label_" in fun () -> Ident.string (f ())
+let fresh_hyp = gen_sym "HW_"
 let fresh_var = gen_sym "aux_"
 let fresh_c_var = gen_sym "c_aux_"
 let wf_name = gen_sym "wf"

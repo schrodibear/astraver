@@ -173,38 +173,8 @@ Subst n1; Apply Zdiv2_ge_0; Omega.
 Subst n1; Apply Zdiv2_lt; Omega.
 Save.
 
-(* Why obligation from file "power.mlw", characters 372-561 *)
-Lemma power1_po_3 : 
-  (n: Z)
-  (Pre4: `n >= 0`)
-  (m0: Z)
-  (Post1: m0 = x)
-  (y0: Z)
-  (Post2: y0 = `1`)
-  (Variant1: Z)
-  (m1: Z)
-  (n0: Z)
-  (y1: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `(Zpower x n) = y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Test4: `n0 > 0`)
-  (y2: Z)
-  (Post10: ((m:Z)
-            (m = `m1 * m1` ->
-             ((n1:Z)
-              (n1 = (div2 n0) -> (`(Zpower x n) = y2 * (Zpower m n1)` /\
-               `n1 >= 0`) /\ (Zwf `0` n1 n0))))))
-  (m2: Z)
-  (Post4: m2 = `m1 * m1`)
-  (n1: Z)
-  (Post5: n1 = (div2 n0))
-  (`(Zpower x n) = y2 * (Zpower m2 n1)` /\ `n1 >= 0`) /\ (Zwf `0` n1 n0).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "power.mlw", characters 406-451 *)
-Lemma power1_po_4 : 
+Lemma power1_po_3 : 
   (n: Z)
   (Pre4: `n >= 0`)
   (m0: Z)
@@ -220,7 +190,7 @@ Subst m0; Trivial.
 Save.
 
 (* Why obligation from file "power.mlw", characters 324-594 *)
-Lemma power1_po_5 : 
+Lemma power1_po_4 : 
   (n: Z)
   (Pre4: `n >= 0`)
   (m0: Z)
@@ -340,8 +310,10 @@ Definition power1 (* validation *)
                      (exist_4 [m3: Z][n2: Z][y3: Z][result5: unit]
                      (`(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0`) /\
                      (Zwf `0` n2 n0) m2 n1 y2 result4
-                     (power1_po_3 n Pre4 m0 Post1 y0 Post2 Variant1 m1 n0 y1
-                     Pre3 Pre2 Test4 y2 Post10 m2 Post4 n1 Post5)) in
+                     let (HW_5, HW_6) = Pre2 in
+                     let HW_7 = (Post10 m2 Post4) in
+                     let HW_8 = (HW_7 n1 Post5) in
+                     HW_8) in
                    ((wf1 n1) (loop_variant_1 Pre3 Post7) m2 n1 y2
                      (refl_equal ? n1) (proj1 ? ? Post7)) in
                  (exist_4 [m3: Z][n2: Z][y3: Z][result3: unit]
@@ -355,8 +327,8 @@ Definition power1 (* validation *)
                  (exist_4 [m3: Z][n2: Z][y3: Z][result3: unit]
                  (`(Zpower x n) = y3 * (Zpower m3 n2)` /\ `n2 >= 0`) /\
                  `n2 <= 0` m2 n1 y2 result2 Post6) end) n m0 n y0
-           (refl_equal ? n) (power1_po_4 n Pre4 m0 Post1 y0 Post2)) in
+           (refl_equal ? n) (power1_po_3 n Pre4 m0 Post1 y0 Post2)) in
        (exist_4 [m2: Z][n1: Z][y2: Z][result2: unit]`y2 = (Zpower x n)` 
        m1 n0 y1 result1
-       (power1_po_5 n Pre4 m0 Post1 y0 Post2 m1 n0 y1 Post6)).
+       (power1_po_4 n Pre4 m0 Post1 y0 Post2 m1 n0 y1 Post6)).
 

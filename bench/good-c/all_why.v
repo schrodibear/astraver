@@ -191,16 +191,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good-c/all.c", characters 544-548 *)
-Lemma t1_po_2 : 
-  (t: (array Z))
-  (Pre2: `(array_length t) = 10` /\ `(access t 0) = 1`)
-  (Pre1: `0 <= 0` /\ `0 < (array_length t)`)
-  `(access t 0) = 1`.
-Proof.
-Intuition.
-Save.
-
 Definition t1 (* validation *)
   : (_: unit)(t: (array Z))(y: Z)(_: `(array_length t) = 10` /\
     `(access t 0) = 1`)(sig_2 Z unit [y0: Z][result: unit](`y0 = 1`))
@@ -208,7 +198,8 @@ Definition t1 (* validation *)
       `(access t 0) = 1`]
        let Pre1 = (t1_po_1 t Pre2) in
        let (result, Post1) = (exist_1 [result: Z]`result = 1` (access t `0`)
-         (t1_po_2 t Pre2 Pre1)) in
+         let (HW_3, HW_4) = Pre2 in
+         HW_4) in
        (exist_2 [y1: Z][result0: unit]`y1 = 1` result tt Post1).
 
 (* Why obligation from file "good-c/all.c", characters 635-638 *)
@@ -224,19 +215,6 @@ Lemma t2_po_1 :
 Proof.
 Intuition.
 Subst c_aux_2 x; Auto.
-Save.
-
-(* Why obligation from file "good-c/all.c", characters 633-639 *)
-Lemma t2_po_2 : 
-  (t: (array Z))
-  (x: Z)
-  (Pre2: `(array_length t) = 10` /\ `x = 0` /\ `(access t 0) = 1`)
-  (aux_1: Z)
-  (Post4: `(access t aux_1) = 1` /\ `0 <= aux_1` /\
-          `aux_1 < (array_length t)`)
-  `0 <= aux_1` /\ `aux_1 < (array_length t)`.
-Proof.
-Intuition.
 Save.
 
 Definition t2 (* validation *)
@@ -262,7 +240,11 @@ Definition t2 (* validation *)
              `0 <= result1` /\ `result1 < (array_length t)` x0 result0 Post6) in
            (exist_2 [x1: Z][result0: Z]`(access t result0) = 1` /\
            `0 <= result0` /\ `result0 < (array_length t)` x0 result Post5) in
-         let Pre1 = (t2_po_2 t x Pre2 aux_1 Post4) in
+         let Pre1 =
+           let (HW_5, HW_6) = Pre2 in
+           let (HW_7, HW_8) = HW_6 in
+           let (HW_9, HW_10) = Post4 in
+           HW_10 in
          let (result, Post7) =
            let (result, Post8) = (exist_1 [result: Z]
              `(access t result) = 1` aux_1 (proj1 ? ? Post4)) in
@@ -283,19 +265,6 @@ Intuition.
 Replace x0 with `1`; Omega.
 Save.
 
-(* Why obligation from file "good-c/all.c", characters 724-730 *)
-Lemma t3_po_2 : 
-  (t: (array Z))
-  (x: Z)
-  (Pre2: `(array_length t) = 10` /\ `x = 0` /\ `(access t 1) = 1`)
-  (aux_1: Z)
-  (Post3: `(access t aux_1) = 1` /\ `0 <= aux_1` /\
-          `aux_1 < (array_length t)`)
-  `0 <= aux_1` /\ `aux_1 < (array_length t)`.
-Proof.
-Intuition.
-Save.
-
 Definition t3 (* validation *)
   : (_: unit)(t: (array Z))(x: Z)(y: Z)(_: `(array_length t) = 10` /\
     `x = 0` /\ `(access t 1) = 1`)
@@ -313,7 +282,11 @@ Definition t3 (* validation *)
              `result0 < (array_length t)` x0 (t3_po_1 t x Pre2 x0 Post1)) in
            (exist_2 [x1: Z][result1: Z]`(access t result1) = 1` /\
            `0 <= result1` /\ `result1 < (array_length t)` x0 result0 Post4) in
-         let Pre1 = (t3_po_2 t x Pre2 aux_1 Post3) in
+         let Pre1 =
+           let (HW_5, HW_6) = Pre2 in
+           let (HW_7, HW_8) = HW_6 in
+           let (HW_9, HW_10) = Post3 in
+           HW_10 in
          let (result, Post5) =
            let (result, Post6) = (exist_1 [result: Z]
              `(access t result) = 1` aux_1 (proj1 ? ? Post3)) in
@@ -339,25 +312,6 @@ Proof.
 Intuition.
 Subst x c_aux_3 c_aux_4.
 AccessSame.
-Save.
-
-(* Why obligation from file "good-c/all.c", characters 813-824 *)
-Lemma t4_po_2 : 
-  (t: (array Z))
-  (x: Z)
-  (Pre2: `(array_length t) = 10` /\ `x = 2` /\ `(access t 2) = 3`)
-  (c_aux_4: Z)
-  (Post3: c_aux_4 = x)
-  (x0: Z)
-  (aux_3: Z)
-  (Post5: (`x0 = 3` /\ `(access (store t c_aux_4 aux_3) 2) = 5`) /\
-          `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)`)
-  (aux_2: Z)
-  (Post11: (`x0 = 3` /\ `(access (store t aux_2 aux_3) 2) = 5`) /\
-           `0 <= aux_2` /\ `aux_2 < (array_length t)`)
-  `0 <= aux_2` /\ `aux_2 < (array_length t)`.
-Proof.
-Intuition.
 Save.
 
 Definition t4 (* validation *)
@@ -403,7 +357,14 @@ Definition t4 (* validation *)
              `(access (store t result aux_3) 2) = 5`) /\ `0 <= result` /\
              `result < (array_length t)` c_aux_4 Post5) in
            let Pre1 =
-             (t4_po_2 t x Pre2 c_aux_4 Post3 x0 aux_3 Post5 aux_2 Post11) in
+             let (HW_5, HW_6) = Pre2 in
+             let (HW_7, HW_8) = HW_6 in
+             let (HW_9, HW_10) = Post5 in
+             let (HW_11, HW_12) = HW_9 in
+             let (HW_13, HW_14) = HW_10 in
+             let (HW_15, HW_16) = Post11 in
+             let (HW_17, HW_18) = HW_15 in
+             HW_16 in
            let (t0, result, Post12) = (exist_2 [t5: (array Z)][result1: unit]
              `x0 = 3` /\ `(access t5 2) = 5` (store t aux_2 aux_3) tt
              (proj1 ? ? Post11)) in
@@ -508,20 +469,6 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good-c/all.c", characters 1017-1024 *)
-Lemma e3_po_2 : 
-  (x: Z)
-  (Pre1: `x = 2`)
-  (x0: Z)
-  (c_aux_11: Z)
-  (Post5: ((result:Z) (result = x0 -> `c_aux_11 + result = 5`)))
-  (c_aux_12: Z)
-  (Post3: c_aux_12 = x0)
-  `c_aux_11 + c_aux_12 = 5`.
-Proof.
-Intuition.
-Save.
-
 Definition e3 (* validation *)
   : (_: unit)(x: Z)(y: Z)(_: `x = 2`)
     (sig_3 Z Z unit [x0: Z][y0: Z][result: unit](`y0 = 5`))
@@ -549,7 +496,8 @@ Definition e3 (* validation *)
              (refl_equal ? x0)) in
            let (result, Post9) = (exist_1 [result: Z]
              `result = 5` `c_aux_11 + c_aux_12`
-             (e3_po_2 x Pre1 x0 c_aux_11 Post5 c_aux_12 Post3)) in
+             let HW_1 = (Post5 c_aux_12 Post3) in
+             HW_1) in
            (exist_1 [result0: Z]`result0 = 5` result Post9) in
          (exist_2 [x1: Z][result0: Z]`result0 = 5` x0 result Post8) in
        (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 5` x0 result tt Post4).
@@ -561,20 +509,6 @@ Lemma e4_po_1 :
   (x0: Z)
   (Post1: x0 = `x + 1`)
   ((result:Z) (result = x0 -> `x0 + result = 6`)).
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "good-c/all.c", characters 1071-1078 *)
-Lemma e4_po_2 : 
-  (x: Z)
-  (Pre1: `x = 2`)
-  (x0: Z)
-  (c_aux_13: Z)
-  (Post4: ((result:Z) (result = x0 -> `c_aux_13 + result = 6`)))
-  (c_aux_14: Z)
-  (Post2: c_aux_14 = x0)
-  `c_aux_13 + c_aux_14 = 6`.
 Proof.
 Intuition.
 Save.
@@ -600,7 +534,8 @@ Definition e4 (* validation *)
              (refl_equal ? x0)) in
            let (result, Post7) = (exist_1 [result: Z]
              `result = 6` `c_aux_13 + c_aux_14`
-             (e4_po_2 x Pre1 x0 c_aux_13 Post4 c_aux_14 Post2)) in
+             let HW_1 = (Post4 c_aux_14 Post2) in
+             HW_1) in
            (exist_1 [result0: Z]`result0 = 6` result Post7) in
          (exist_2 [x1: Z][result0: Z]`result0 = 6` x0 result Post6) in
        (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 6` x0 result tt Post3).
@@ -612,23 +547,6 @@ Lemma e5_po_1 :
   (x0: Z)
   (Post1: x0 = `x + 1`)
   ((result:Z) (result = x0 -> ((x:Z) (x = `x0 + 1` -> `x0 + result = 6`)))).
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "good-c/all.c", characters 1131-1134 *)
-Lemma e5_po_2 : 
-  (x: Z)
-  (Pre1: `x = 2`)
-  (x0: Z)
-  (c_aux_15: Z)
-  (Post5: ((result:Z)
-           (result = x0 -> ((x:Z) (x = `x0 + 1` -> `c_aux_15 + result = 6`)))))
-  (c_aux_16: Z)
-  (Post3: c_aux_16 = x0)
-  (x1: Z)
-  (Post2: x1 = `x0 + 1`)
-  `c_aux_15 + c_aux_16 = 6`.
 Proof.
 Intuition.
 Save.
@@ -664,7 +582,9 @@ Definition e5 (* validation *)
                  tt Post2) in
                let (result0, Post10) = (exist_1 [result0: Z]
                  `c_aux_15 + result0 = 6` c_aux_16
-                 (e5_po_2 x Pre1 x0 c_aux_15 Post5 c_aux_16 Post3 x1 Post2)) in
+                 let HW_1 = (Post5 c_aux_16 Post3) in
+                 let HW_2 = (HW_1 x1 Post2) in
+                 HW_2) in
                (exist_2 [x2: Z][result1: Z]`c_aux_15 + result1 = 6` x1
                result0 Post10) in
              (exist_2 [x2: Z][result0: Z]`c_aux_15 + result0 = 6` x1 

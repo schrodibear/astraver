@@ -106,42 +106,24 @@ Proof.
 Unfold Zwf; Intuition.
 Save.
 
-(* Why obligation from file "good-c/break.c", characters 201-248 *)
-Lemma f2_po_3 : 
-  (result: Z)
-  (Post4: result = `10`)
-  (Variant1: Z)
-  (n0: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `0 <= n0`)
-  (Test4: `n0 >= 0`)
-  (n1: Z)
-  (Post24: ((n:Z) (n = `n1 - 1` -> `0 <= n` /\ (Zwf `0` n n0))))
-  (n2: Z)
-  (Post2: n2 = `n1 - 1`)
-  `0 <= n2` /\ (Zwf `0` n2 n0).
-Proof.
-Unfold Zwf; Intuition.
-Save.
-
 (* Why obligation from file "good-c/break.c", characters 182-188 *)
-Lemma f2_po_4 : 
+Lemma f2_po_3 : 
   (result: Z)
   (Post4: result = `10`)
   `0 <= result`.
 Proof.
-Intros; Omega.
+Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "good-c/break.c", characters 147-248 *)
-Lemma f2_po_5 : 
+Lemma f2_po_4 : 
   (result: Z)
   (Post4: result = `10`)
   (n0: Z)
   (Post3: `0 <= n0` /\ `n0 < 0`)
   `n0 = 1`.
 Proof.
-Intuition.
+Intros; Omega.
 Save.
 
 Definition f2 (* validation *)
@@ -261,8 +243,8 @@ Definition f2 (* validation *)
                            (qcomb [result4: unit]`n3 = 1` [result4: unit]
                             `0 <= n3` /\ (Zwf `0` n3 n0)) n2
                            (Val unit result3)
-                           (f2_po_3 result Post4 Variant1 n0 Pre3 Pre2 Test4
-                           n1 Post24 n2 Post2))
+                           let HW_1 = (Post24 n2 Post2) in
+                           HW_1)
                          | (Qexn _0 Post25) => (exist_2 [n2: Z]
                            (qcomb [result2: unit]`n2 = 1` [result2: unit]
                             `0 <= n2` /\ (Zwf `0` n2 n0)) n1 (Exn unit tt)
@@ -297,10 +279,10 @@ Definition f2 (* validation *)
                        (qcomb [result2: unit]`n2 = 1` [result2: unit]
                         `0 <= n2` /\ `n2 < 0`) n1 (Exn unit tt) Post12)
                      end end) result result (refl_equal ? result)
-               (f2_po_4 result Post4)) in
+               (f2_po_3 result Post4)) in
            Cases (decomp1 Post9) of
            | (Qval (exist result1 Post3)) => (exist_2 [n1: Z][result2: unit]
-             `n1 = 1` n0 result1 (f2_po_5 result Post4 n0 Post3))
+             `n1 = 1` n0 result1 (f2_po_4 result Post4 n0 Post3))
            | (Qexn _0 Post28) =>
              let (result1, Post29) = (exist_1 [result1: unit]`n0 = 1` 
                tt Post28) in
@@ -345,26 +327,8 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "good-c/break.c", characters 369-416 *)
-Lemma f3_po_3 : 
-  (result: Z)
-  (Post4: result = `10`)
-  (Variant1: Z)
-  (n0: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `1 <= n0`)
-  (Test4: `n0 >= 0`)
-  (n1: Z)
-  (Post24: ((n:Z) (n = `n1 - 1` -> `1 <= n` /\ (Zwf `0` n n0))))
-  (n2: Z)
-  (Post2: n2 = `n1 - 1`)
-  `1 <= n2` /\ (Zwf `0` n2 n0).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "good-c/break.c", characters 350-356 *)
-Lemma f3_po_4 : 
+Lemma f3_po_3 : 
   (result: Z)
   (Post4: result = `10`)
   `1 <= result`.
@@ -373,7 +337,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "good-c/break.c", characters 315-416 *)
-Lemma f3_po_5 : 
+Lemma f3_po_4 : 
   (result: Z)
   (Post4: result = `10`)
   (n0: Z)
@@ -500,8 +464,8 @@ Definition f3 (* validation *)
                            (qcomb [result4: unit]`n3 = 2` [result4: unit]
                             `1 <= n3` /\ (Zwf `0` n3 n0)) n2
                            (Val unit result3)
-                           (f3_po_3 result Post4 Variant1 n0 Pre3 Pre2 Test4
-                           n1 Post24 n2 Post2))
+                           let HW_1 = (Post24 n2 Post2) in
+                           HW_1)
                          | (Qexn _0 Post25) => (exist_2 [n2: Z]
                            (qcomb [result2: unit]`n2 = 2` [result2: unit]
                             `1 <= n2` /\ (Zwf `0` n2 n0)) n1 (Exn unit tt)
@@ -536,10 +500,10 @@ Definition f3 (* validation *)
                        (qcomb [result2: unit]`n2 = 2` [result2: unit]
                         `1 <= n2` /\ `n2 < 0`) n1 (Exn unit tt) Post12)
                      end end) result result (refl_equal ? result)
-               (f3_po_4 result Post4)) in
+               (f3_po_3 result Post4)) in
            Cases (decomp1 Post9) of
            | (Qval (exist result1 Post3)) => (exist_2 [n1: Z][result2: unit]
-             `n1 = 2` n0 result1 (f3_po_5 result Post4 n0 Post3))
+             `n1 = 2` n0 result1 (f3_po_4 result Post4 n0 Post3))
            | (Qexn _0 Post28) =>
              let (result1, Post29) = (exist_1 [result1: unit]`n0 = 2` 
                tt Post28) in
@@ -568,27 +532,8 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "good-c/break.c", characters 495-600 *)
-Lemma f4_po_2 : 
-  (result: Z)
-  (Post4: result = `0`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (Variant1: Z)
-  (i1: Z)
-  (Pre3: Variant1 = `10 - i1`)
-  (Pre2: `i1 <= 3`)
-  (Test4: `i1 < 10`)
-  (Post21: ((i:Z) (i = `i1 + 1` -> `i <= 3` /\ (Zwf `0` `10 - i` `10 - i1`))))
-  (i2: Z)
-  (Post2: i2 = `i1 + 1`)
-  `i2 <= 3` /\ (Zwf `0` `10 - i2` `10 - i1`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "good-c/break.c", characters 539-545 *)
-Lemma f4_po_3 : 
+Lemma f4_po_2 : 
   (result: Z)
   (Post4: result = `0`)
   (i0: Z)
@@ -599,7 +544,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "good-c/break.c", characters 495-600 *)
-Lemma f4_po_4 : 
+Lemma f4_po_3 : 
   (result: Z)
   (Post4: result = `0`)
   (i0: Z)
@@ -708,8 +653,8 @@ Definition f4 (* validation *)
                            (qcomb [result5: unit]`i3 = 3` [result5: unit]
                             `i3 <= 3` /\ (Zwf `0` `10 - i3` `10 - i1`)) 
                            i2 (Val unit result4)
-                           (f4_po_2 result Post4 i0 Post1 Variant1 i1 Pre3
-                           Pre2 Test4 Post21 i2 Post2))
+                           let HW_1 = (Post21 i2 Post2) in
+                           HW_1)
                          | (Qexn _ Post22) => (exist_2 [i2: Z]
                            (qcomb [result3: unit]`i2 = 3` [result3: unit]
                             `i2 <= 3` /\ (Zwf `0` `10 - i2` `10 - i1`)) 
@@ -744,10 +689,10 @@ Definition f4 (* validation *)
                        (qcomb [result3: unit]`i3 = 3` [result3: unit]
                         `i3 <= 3` /\ `i3 >= 10`) i2 (Exn unit tt) Post12)
                      end end) `10 - i0` i0 (refl_equal ? `10 - i0`)
-               (f4_po_3 result Post4 i0 Post1)) in
+               (f4_po_2 result Post4 i0 Post1)) in
            Cases (decomp1 Post9) of
            | (Qval (exist result2 Post3)) => (exist_2 [i2: Z][result3: unit]
-             `i2 = 3` i1 result2 (f4_po_4 result Post4 i0 Post1 i1 Post3))
+             `i2 = 3` i1 result2 (f4_po_3 result Post4 i0 Post1 i1 Post3))
            | (Qexn _ Post25) =>
              let (result2, Post26) = (exist_1 [result2: unit]`i1 = 3` 
                tt Post25) in

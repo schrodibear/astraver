@@ -203,49 +203,8 @@ Subst t1; Simpl; Auto.
 Subst t2; Simpl; Auto.
 Save.
 
-(* Why obligation from file "flag.mlw", characters 733-848 *)
-Lemma dutch_flag_po_6 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test5: (access t0 i0) = blue)
-  (t1: (array color))
-  (Post23: ((b:Z)
-            (b = `b0 + 1` ->
-             ((i:Z)
-              (i = `i0 + 1` -> ((`0 <= b` /\ `b <= i`) /\ (`i <= r0` /\
-               `r0 <= N`) /\ (monochrome t1 `0` b blue) /\
-               (monochrome t1 b i white) /\ (monochrome t1 r0 N red) /\
-               `(array_length t1) = N`) /\ (Zwf `0` `r0 - i` `r0 - i0`))))))
-  (b1: Z)
-  (Post4: b1 = `b0 + 1`)
-  (i1: Z)
-  (Post5: i1 = `i0 + 1`)
-  ((`0 <= b1` /\ `b1 <= i1`) /\ (`i1 <= r0` /\ `r0 <= N`) /\
-  (monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 i1 white) /\
-  (monochrome t1 r0 N red) /\ `(array_length t1) = N`) /\
-  (Zwf `0` `r0 - i1` `r0 - i0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "flag.mlw", characters 867-872 *)
-Lemma dutch_flag_po_7 : 
+Lemma dutch_flag_po_6 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -271,7 +230,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 886-897 *)
-Lemma dutch_flag_po_8 : 
+Lemma dutch_flag_po_7 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -305,7 +264,7 @@ Subst k; Assumption.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 949-954 *)
-Lemma dutch_flag_po_9 : 
+Lemma dutch_flag_po_8 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -334,7 +293,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 973-978 *)
-Lemma dutch_flag_po_10 : 
+Lemma dutch_flag_po_9 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -367,7 +326,7 @@ Unfold monochrome; Intuition.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 980-990 *)
-Lemma dutch_flag_po_11 : 
+Lemma dutch_flag_po_10 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -406,7 +365,7 @@ ArraySubst t1.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 958-994 *)
-Lemma dutch_flag_po_12 : 
+Lemma dutch_flag_po_11 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -463,7 +422,7 @@ Subst t2 t1; Simpl; Trivial.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 473-1103 *)
-Lemma dutch_flag_po_13 : 
+Lemma dutch_flag_po_12 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -490,7 +449,7 @@ Replace r0 with i0. Trivial. Omega.
 Save.
 
 (* Why obligation from file "flag.mlw", characters 513-680 *)
-Lemma dutch_flag_po_14 : 
+Lemma dutch_flag_po_13 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -668,10 +627,16 @@ Definition dutch_flag (* validation *)
                                  `(array_length t2) = N`) /\
                                  (Zwf `0` `r0 - i2` `r0 - i0`) b1 i1 
                                  t1 result6
-                                 (dutch_flag_po_6 t Pre14 result Post13
-                                 result0 Post12 result1 Post11 Variant1 b0 i0
-                                 r0 t0 Pre13 Pre12 Test6 Test5 t1 Post23 b1
-                                 Post4 i1 Post5)) in
+                                 let (HW_89, HW_90) = Pre12 in
+                                 let (HW_91, HW_92) = HW_89 in
+                                 let (HW_93, HW_94) = HW_90 in
+                                 let (HW_95, HW_96) = HW_93 in
+                                 let (HW_97, HW_98) = HW_94 in
+                                 let (HW_99, HW_100) = HW_98 in
+                                 let (HW_101, HW_102) = HW_100 in
+                                 let HW_103 = (Post23 b1 Post4) in
+                                 let HW_104 = (HW_103 i1 Post5) in
+                                 HW_104) in
                                (exist_5 [b2: Z][i2: Z][r1: Z]
                                [t2: (array color)][result5: unit]
                                ((`0 <= b2` /\ `b2 <= i2`) /\ (`i2 <= r1` /\
@@ -685,7 +650,7 @@ Definition dutch_flag (* validation *)
                                let (i1, r1, t1, result4, Post14) =
                                  let (result4, Bool1) =
                                    let Pre3 =
-                                     (dutch_flag_po_7 t Pre14 result Post13
+                                     (dutch_flag_po_6 t Pre14 result Post13
                                      result0 Post12 result1 Post11 Variant1
                                      b0 i0 r0 t0 Pre13 Pre12 Test6 Test4) in
                                    let (result6, Post22) =
@@ -717,7 +682,7 @@ Definition dutch_flag (* validation *)
                                      `(array_length t1) = N`) /\
                                      (Zwf `0` `r1 - i2` `r0 - i0`) i1 
                                      r0 t0 result5
-                                     (dutch_flag_po_8 t Pre14 result Post13
+                                     (dutch_flag_po_7 t Pre14 result Post13
                                      result0 Post12 result1 Post11 Variant1
                                      b0 i0 r0 t0 Pre13 Pre12 Test6 Test4
                                      Test3 i1 Post6))
@@ -732,7 +697,7 @@ Definition dutch_flag (* validation *)
                                          r2 = `r0 - 1` result5 tt Post7) in
                                        let (t1, result6, Post14) =
                                          let Pre7 =
-                                           (dutch_flag_po_9 t Pre14 result
+                                           (dutch_flag_po_8 t Pre14 result
                                            Post13 result0 Post12 result1
                                            Post11 Variant1 b0 i0 r0 t0 Pre13
                                            Pre12 Test6 Test4 Test2 r1 Post7) in
@@ -745,7 +710,7 @@ Definition dutch_flag (* validation *)
                                          let (t1, result6, Post14) =
                                            let Pre5 = Pre7 in
                                            let Pre6 =
-                                             (dutch_flag_po_10 t Pre14 result
+                                             (dutch_flag_po_9 t Pre14 result
                                              Post13 result0 Post12 result1
                                              Post11 Variant1 b0 i0 r0 t0
                                              Pre13 Pre12 Test6 Test4 Test2 r1
@@ -759,7 +724,7 @@ Definition dutch_flag (* validation *)
                                              (refl_equal ? (store t0 r1
                                                             (access t0 i0)))) in
                                            let Pre4 =
-                                             (dutch_flag_po_11 t Pre14 result
+                                             (dutch_flag_po_10 t Pre14 result
                                              Post13 result0 Post12 result1
                                              Post11 Variant1 b0 i0 r0 t0
                                              Pre13 Pre12 Test6 Test4 Test2 r1
@@ -782,7 +747,7 @@ Definition dutch_flag (* validation *)
                                            `(array_length t3) = N`) /\
                                            (Zwf `0` `r1 - i0` `r0 - i0`) 
                                            t2 result7
-                                           (dutch_flag_po_12 t Pre14 result
+                                           (dutch_flag_po_11 t Pre14 result
                                            Post13 result0 Post12 result1
                                            Post11 Variant1 b0 i0 r0 t0 Pre13
                                            Pre12 Test6 Test4 Test2 r1 Post7
@@ -849,7 +814,7 @@ Definition dutch_flag (* validation *)
                        (monochrome t1 `0` b1 blue) /\
                        (monochrome t1 b1 r1 white) /\
                        (monochrome t1 r1 N red) b0 i0 r0 t0 tt
-                       (dutch_flag_po_13 t Pre14 result Post13 result0 Post12
+                       (dutch_flag_po_12 t Pre14 result Post13 result0 Post12
                        result1 Post11 Variant1 b0 i0 r0 t0 Pre13 Pre12 Test1)) in
                      (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array color)]
                      [result4: unit](monochrome t2 `0` b2 blue) /\
@@ -857,7 +822,7 @@ Definition dutch_flag (* validation *)
                      (monochrome t2 r2 N red) b1 i1 r1 t1 result3 Post19) end)
                `result1 - result0` result result0 result1 t
                (refl_equal ? `result1 - result0`)
-               (dutch_flag_po_14 t Pre14 result Post13 result0 Post12 result1
+               (dutch_flag_po_13 t Pre14 result Post13 result0 Post12 result1
                Post11)) in
            (Build_tuple_4 b0 i0 t0 result2) in
          (Build_tuple_3 b0 t0 result1) in

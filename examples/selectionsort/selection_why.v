@@ -171,56 +171,8 @@ Subst k; Omega.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "selection.mlw", characters 557-840 *)
-Lemma selection_po_5 : 
-  (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
-          ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
-            ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
-              `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (Variant3: Z)
-  (j0: Z)
-  (min0: Z)
-  (Pre6: Variant3 = `(array_length t0) - j0`)
-  (Pre5: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-         `min0 < (array_length t0)`) /\
-         ((k:Z)
-          (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
-  (Test5: `j0 < (array_length t0)`)
-  (min1: Z)
-  (Post21: ((j:Z)
-            (j = `j0 + 1` -> ((`i0 + 1 <= j` /\ `j <= (array_length t0)`) /\
-             (`i0 <= min1` /\ `min1 < (array_length t0)`) /\
-             ((k:Z)
-              (`i0 <= k` /\ `k < j` -> `(access t0 min1) <= (access t0 k)`))) /\
-             (Zwf `0` `(array_length t0) - j` `(array_length t0) - j0`))))
-  (j1: Z)
-  (Post2: j1 = `j0 + 1`)
-  ((`i0 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i0 <= min1` /\
-  `min1 < (array_length t0)`) /\
-  ((k:Z) (`i0 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`))) /\
-  (Zwf `0` `(array_length t0) - j1` `(array_length t0) - j0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "selection.mlw", characters 603-739 *)
-Lemma selection_po_6 : 
+Lemma selection_po_5 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -252,7 +204,7 @@ Subst result1 k; Omega.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 882-889 *)
-Lemma selection_po_7 : 
+Lemma selection_po_6 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -286,7 +238,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 910-915 *)
-Lemma selection_po_8 : 
+Lemma selection_po_7 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -324,7 +276,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 917-927 *)
-Lemma selection_po_9 : 
+Lemma selection_po_8 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -366,7 +318,7 @@ ArraySubst t1.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 893-931 *)
-Lemma selection_po_10 : 
+Lemma selection_po_9 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -464,50 +416,8 @@ Apply H4; Omega.
 Subst t2 t1; Simpl; Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "selection.mlw", characters 125-969 *)
-Lemma selection_po_11 : 
-  (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
-          ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
-            ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
-              `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (t1: (array Z))
-  (Post17: ((i:Z)
-            (i = `i0 + 1` -> ((`0 <= i` /\ `i <= (array_length t1) - 1`) /\
-             (sorted_array t1 `0` `i - 1`) /\ (permut t1 t) /\
-             ((k:Z)
-              (`0 <= k` /\ `k < i` ->
-               ((l:Z)
-                (`i <= l` /\ `l < (array_length t1)` ->
-                 `(access t1 k) <= (access t1 l)`))))) /\
-             (Zwf `0` `(array_length t1) - i` `(array_length t0) - i0`))))
-  (i1: Z)
-  (Post9: i1 = `i0 + 1`)
-  ((`0 <= i1` /\ `i1 <= (array_length t1) - 1`) /\
-  (sorted_array t1 `0` `i1 - 1`) /\ (permut t1 t) /\
-  ((k:Z)
-   (`0 <= k` /\ `k < i1` ->
-    ((l:Z)
-     (`i1 <= l` /\ `l < (array_length t1)` ->
-      `(access t1 k) <= (access t1 l)`))))) /\
-  (Zwf `0` `(array_length t1) - i1` `(array_length t0) - i0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "selection.mlw", characters 216-408 *)
-Lemma selection_po_12 : 
+Lemma selection_po_10 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -525,7 +435,7 @@ Unfold sorted_array; Intros; Omega.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 104-969 *)
-Lemma selection_po_13 : 
+Lemma selection_po_11 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -834,11 +744,16 @@ Definition selection (* validation *)
                                            (Zwf `0` `(array_length t0) - j2` `
                                            (array_length t0) - j0`) j1 
                                            min1 result5
-                                           (selection_po_5 t Pre13 result
-                                           Post11 Variant1 i0 t0 Pre12 Pre11
-                                           Test6 result1 Post8 result2 Post7
-                                           Variant3 j0 min0 Pre6 Pre5 Test5
-                                           min1 Post21 j1 Post2)) in
+                                           let (HW_67, HW_68) = Pre11 in
+                                           let (HW_69, HW_70) = HW_67 in
+                                           let (HW_71, HW_72) = HW_68 in
+                                           let (HW_73, HW_74) = HW_72 in
+                                           let (HW_75, HW_76) = Pre5 in
+                                           let (HW_77, HW_78) = HW_75 in
+                                           let (HW_79, HW_80) = HW_76 in
+                                           let (HW_81, HW_82) = HW_79 in
+                                           let HW_83 = (Post21 j1 Post2) in
+                                           HW_83) in
                                          ((wf2 `(array_length t0) - j1`)
                                            (loop_variant_1 Pre6 Post13) 
                                            j1 min1
@@ -880,12 +795,12 @@ Definition selection (* validation *)
                                  `(array_length t0) - result2` result2
                                  result1
                                  (refl_equal ? `(array_length t0) - result2`)
-                                 (selection_po_6 t Pre13 result Post11
+                                 (selection_po_5 t Pre13 result Post11
                                  Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                  Post8 result2 Post7)) in
                              let (t1, result4, Post24) =
                                let Pre10 =
-                                 (selection_po_7 t Pre13 result Post11
+                                 (selection_po_6 t Pre13 result Post11
                                  Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                  Post8 result2 Post7 j0 min0 Post3) in
                                let (w, Post6) = (exist_1 [result4: Z]
@@ -894,7 +809,7 @@ Definition selection (* validation *)
                                let (t1, result4, Post25) =
                                  let Pre8 = Pre10 in
                                  let Pre9 =
-                                   (selection_po_8 t Pre13 result Post11
+                                   (selection_po_7 t Pre13 result Post11
                                    Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                    Post8 result2 Post7 j0 min0 Post3 Pre10 w
                                    Post6 Pre8) in
@@ -905,7 +820,7 @@ Definition selection (* validation *)
                                    (refl_equal ? (store t0 min0
                                                   (access t0 i0)))) in
                                  let Pre7 =
-                                   (selection_po_9 t Pre13 result Post11
+                                   (selection_po_8 t Pre13 result Post11
                                    Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                    Post8 result2 Post7 j0 min0 Post3 Pre10 w
                                    Post6 Pre8 Pre9 t1 Post4) in
@@ -927,7 +842,7 @@ Definition selection (* validation *)
                                    (Zwf `0` `(array_length t3) - i` `
                                    (array_length t0) - i0`))) t2
                                  result5
-                                 (selection_po_10 t Pre13 result Post11
+                                 (selection_po_9 t Pre13 result Post11
                                  Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                  Post8 result2 Post7 j0 min0 Post3 Pre10 w
                                  Post6 Pre8 Pre9 t1 Post4 Pre7 t2 Post5)) in
@@ -1004,8 +919,12 @@ Definition selection (* validation *)
                        (Zwf `0` `(array_length t2) - i2` `(array_length t0) -
                                                           i0`) i1
                        t1 result2
-                       (selection_po_11 t Pre13 result Post11 Variant1 i0 t0
-                       Pre12 Pre11 Test6 t1 Post17 i1 Post9)) in
+                       let (HW_182, HW_183) = Pre11 in
+                       let (HW_184, HW_185) = HW_182 in
+                       let (HW_186, HW_187) = HW_183 in
+                       let (HW_188, HW_189) = HW_187 in
+                       let HW_190 = (Post17 i1 Post9) in
+                       HW_190) in
                      ((wf1 `(array_length t1) - i1`)
                        (loop_variant_1 Pre12 Post12) i1 t1
                        (refl_equal ? `(array_length t1) - i1`)
@@ -1042,10 +961,10 @@ Definition selection (* validation *)
                    `i2 >= (array_length t2) - 1` i1 t1 result1 Post10) end)
              `(array_length t) - result` result t
              (refl_equal ? `(array_length t) - result`)
-             (selection_po_12 t Pre13 result Post11)) in
+             (selection_po_10 t Pre13 result Post11)) in
          (exist_2 [t1: (array Z)][result1: unit]
          (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t) 
-         t0 result0 (selection_po_13 t Pre13 result Post11 i0 t0 Post10)) in
+         t0 result0 (selection_po_11 t Pre13 result Post11 i0 t0 Post10)) in
        (exist_2 [t1: (array Z)][result0: unit]
        (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t) 
        t0 result Post15).

@@ -42,30 +42,8 @@ Apply (H0 k). Omega. Assumption.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "search.mlw", characters 237-449 *)
-Lemma search1_po_3 : 
-  (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `(array_length t) - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < (array_length t)`)
-  (Post21: ((i:Z)
-            (i = `i0 + 1` -> (`0 <= i` /\
-             ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> 0`))) /\
-             (Zwf `0` `(array_length t) - i` `(array_length t) - i0`))))
-  (i1: Z)
-  (Post1: i1 = `i0 + 1`)
-  (`0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`))) /\
-  (Zwf `0` `(array_length t) - i1` `(array_length t) - i0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "search.mlw", characters 286-334 *)
-Lemma search1_po_4 : 
+Lemma search1_po_3 : 
   (t: (array Z))
   (result: Z)
   (Post3: result = `0`)
@@ -75,7 +53,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "search.mlw", characters 455-476 *)
-Lemma search1_po_5 : 
+Lemma search1_po_4 : 
   (t: (array Z))
   (result: Z)
   (Post3: result = `0`)
@@ -240,8 +218,9 @@ Definition search1 (* validation *)
                             (Zwf `0` `(array_length t) - i2` `(array_length t) -
                                                               i0`)) i1
                            (Val Z result3)
-                           (search1_po_3 t result Post3 Variant1 i0 Pre4 Pre3
-                           Test4 Post21 i1 Post1))
+                           let (HW_5, HW_6) = Pre3 in
+                           let HW_7 = (Post21 i1 Post1) in
+                           HW_7)
                          | (Qexn result2 Post22) => (exist_2 [i1: Z]
                            (qcomb [result3: Z]`(access t result3) = 0`
                             [result3: unit](`0 <= i1` /\
@@ -299,7 +278,7 @@ Definition search1 (* validation *)
                        Post11)
                      end end) `(array_length t) - result` result
                (refl_equal ? `(array_length t) - result`)
-               (search1_po_4 t result Post3)) in
+               (search1_po_3 t result Post3)) in
            Cases (decomp1 Post8) of
            | (Qval (exist result1 Post2)) =>
              let (result2, Post26) =
@@ -308,7 +287,7 @@ Definition search1 (* validation *)
                           (`0 <= k` /\ `k < (array_length t)` ->
                            `(access t k) <> 0`))
                          [result2: Z]`(access t result2) = 0`) (Exn Z tt)
-               (search1_po_5 t result Post3 i0 Post2)) in
+               (search1_po_4 t result Post3 i0 Post2)) in
              Cases (decomp1 Post26) of
              | (Qval (exist result3 Post27)) => (exist_2 [i1: Z]
                (qcomb [result4: Z]`(access t result4) = 0`
@@ -426,40 +405,18 @@ Apply (H0 k). Omega. Assumption.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "search.mlw", characters 747-946 *)
-Lemma search2_po_3 : 
-  (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `(array_length t) - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < (array_length t)`)
-  (Post20: ((i:Z)
-            (i = `i0 + 1` -> (`0 <= i` /\
-             ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> 0`))) /\
-             (Zwf `0` `(array_length t) - i` `(array_length t) - i0`))))
-  (i1: Z)
-  (Post1: i1 = `i0 + 1`)
-  (`0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`))) /\
-  (Zwf `0` `(array_length t) - i1` `(array_length t) - i0`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "search.mlw", characters 796-844 *)
-Lemma search2_po_4 : 
+Lemma search2_po_3 : 
   (t: (array Z))
   (result: Z)
   (Post3: result = `0`)
   `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
 Proof.
-Intuition. 
+Intuition.
 Save.
 
 (* Why obligation from file "search.mlw", characters 952-973 *)
-Lemma search2_po_5 : 
+Lemma search2_po_4 : 
   (t: (array Z))
   (result: Z)
   (Post3: result = `0`)
@@ -620,8 +577,9 @@ Definition search2 (* validation *)
                             (Zwf `0` `(array_length t) - i2` `(array_length t) -
                                                               i0`)) i1
                            (Val unit result3)
-                           (search2_po_3 t result Post3 Variant1 i0 Pre4 Pre3
-                           Test4 Post20 i1 Post1))
+                           let (HW_5, HW_6) = Pre3 in
+                           let HW_7 = (Post20 i1 Post1) in
+                           HW_7)
                          | (Qexn _ Post21) => (exist_2 [i1: Z]
                            (qcomb [result2: unit]`(access t i1) = 0`
                             [result2: unit](`0 <= i1` /\
@@ -678,7 +636,7 @@ Definition search2 (* validation *)
                         `i2 >= (array_length t)`) i1 (Exn unit tt) Post11)
                      end end) `(array_length t) - result` result
                (refl_equal ? `(array_length t) - result`)
-               (search2_po_4 t result Post3)) in
+               (search2_po_3 t result Post3)) in
            Cases (decomp1 Post8) of
            | (Qval (exist result1 Post2)) =>
              let (result2, Post25) =
@@ -687,7 +645,7 @@ Definition search2 (* validation *)
                           (`0 <= k` /\ `k < (array_length t)` ->
                            `(access t k) <> 0`))
                          [result2: Z]`(access t result2) = 0`) (Exn Z tt)
-               (search2_po_5 t result Post3 i0 Post2)) in
+               (search2_po_4 t result Post3 i0 Post2)) in
              Cases (decomp1 Post25) of
              | (Qval (exist result3 Post26)) => (exist_2 [i1: Z]
                (qcomb [result4: unit]`(access t i1) = 0`
