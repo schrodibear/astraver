@@ -214,55 +214,75 @@ Qed.
 
 (* Obligations *)
 
-(* Why obligation from file , characters 838-842 *)
-Lemma downheap_po_1 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z)
-   (Test5:(j + 1 <= n0)%Z), (0 <= j)%Z /\ (j < array_length t0)%Z.
+(* Why obligation from file "downheap.mlw", characters 838-842 *)
+Lemma downheap_po_1 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (Test5: (j + 1) <= n0),
+  0 <= j /\ j < (array_length t0).
 Proof.
 intros; Omega'.
 Qed.
 
-(* Why obligation from file , characters 845-851 *)
-Lemma downheap_po_2 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z)
-   (Test5:(j + 1 <= n0)%Z)
-   (Pre8:(0 <= j)%Z /\ (j < array_length t0)%Z),
-   (0 <= j + 1)%Z /\ (j + 1 < array_length t0)%Z.
+(* Why obligation from file "downheap.mlw", characters 845-851 *)
+Lemma downheap_po_2 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (Test5: (j + 1) <= n0),
+  forall (Pre8: 0 <= j /\ j < (array_length t0)),
+  0 <= (j + 1) /\ (j + 1) < (array_length t0).
 Proof.
 intros; Omega'.
 Qed.
 
-(* Why obligation from file , characters 857-860 *)
-Lemma downheap_po_3 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z)
-   (Test5:(j + 1 <= n0)%Z) (Pre8:(0 <= j)%Z /\ (j < array_length t0)%Z)
-   (Pre9:(0 <= j + 1)%Z /\ (j + 1 < array_length t0)%Z)
-   (Test4:(access t0 j < access t0 (j + 1))%Z),
-   select_son t0 k0 n0 (j + 1).
+(* Why obligation from file "downheap.mlw", characters 857-860 *)
+Lemma downheap_po_3 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (Test5: (j + 1) <= n0),
+  forall (Pre8: 0 <= j /\ j < (array_length t0)),
+  forall (Pre9: 0 <= (j + 1) /\ (j + 1) < (array_length t0)),
+  forall (Test4: (access t0 j) < (access t0 (j + 1))),
+  (select_son t0 k0 n0 (j + 1)).
 Proof.
 intros.
 subst j; rewrite (R11 k0).
@@ -270,20 +290,28 @@ apply select_right_son;
  [ reflexivity | Omega' | rewrite (R11 k0) in Test4; Omega' ].
 Qed.
 
-(* Why obligation from file , characters 866-867 *)
-Lemma downheap_po_4 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z)
-   (Test5:(j + 1 <= n0)%Z) (Pre8:(0 <= j)%Z /\ (j < array_length t0)%Z)
-   (Pre9:(0 <= j + 1)%Z /\ (j + 1 < array_length t0)%Z)
-   (Test3:(access t0 j >= access t0 (j + 1))%Z), select_son t0 k0 n0 j.
+(* Why obligation from file "downheap.mlw", characters 866-867 *)
+Lemma downheap_po_4 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (Test5: (j + 1) <= n0),
+  forall (Pre8: 0 <= j /\ j < (array_length t0)),
+  forall (Pre9: 0 <= (j + 1) /\ (j + 1) < (array_length t0)),
+  forall (Test3: (access t0 j) >= (access t0 (j + 1))),
+  (select_son t0 k0 n0 j).
 Proof.
 intros.
 subst j.
@@ -291,18 +319,25 @@ apply select_left_son;
  [ reflexivity | rewrite (R11 k0) in Test3; intro; assumption ].
 Qed.
 
-(* Why obligation from file , characters 873-874 *)
-Lemma downheap_po_5 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z)
-   (Test2:(j + 1 > n0)%Z), select_son t0 k0 n0 j.
+(* Why obligation from file "downheap.mlw", characters 873-874 *)
+Lemma downheap_po_5 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (Test2: (j + 1) > n0),
+  (select_son t0 k0 n0 j).
 Proof.
 intros.
 subst j.
@@ -310,62 +345,83 @@ apply select_left_son;
  [ reflexivity | intro; absurd (2 * k + 2 <= n)%Z; Omega' ].
 Qed.
 
-(* Why obligation from file , characters 939-943 *)
-Lemma downheap_po_6 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j'),
-   (0 <= k0)%Z /\ (k0 < array_length t0)%Z.
+(* Why obligation from file "downheap.mlw", characters 939-943 *)
+Lemma downheap_po_6 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  0 <= k0 /\ k0 < (array_length t0).
 Proof.
 intros; elim Post12; intros; Omega'.
 Qed.
 
-(* Why obligation from file , characters 946-951 *)
-Lemma downheap_po_7 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j')
-   (Pre23:(0 <= k0)%Z /\ (k0 < array_length t0)%Z),
-   (0 <= j')%Z /\ (j' < array_length t0)%Z.
+(* Why obligation from file "downheap.mlw", characters 946-951 *)
+Lemma downheap_po_7 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  forall (Pre23: 0 <= k0 /\ k0 < (array_length t0)),
+  0 <= j' /\ j' < (array_length t0).
 Proof.
 intros; elim Post12; intros; Omega'.
 Qed.
 
-(* Why obligation from file , characters 978-995 *)
-Lemma downheap_po_8 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j')
-   (Pre23:(0 <= k0)%Z /\ (k0 < array_length t0)%Z)
-   (Pre24:(0 <= j')%Z /\ (j' < array_length t0)%Z)
-   (Test7:(access t0 k0 < access t0 j')%Z)
-   (Pre22:((0 <= k0)%Z /\ (k0 < array_length t0)%Z) /\
-          (0 <= j')%Z /\ (j' < array_length t0)%Z) (t1:array Z)
-   (Post23:exchange t1 t0 k0 j'),
-   ((0 <= j')%Z /\ (j' <= n0)%Z) /\
-   (n0 < array_length t1)%Z /\
-   (forall i:Z, (j' + 1 <= i)%Z /\ (i <= n0)%Z -> heap t1 n0 i).
+(* Why obligation from file "downheap.mlw", characters 978-995 *)
+Lemma downheap_po_8 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  forall (Pre23: 0 <= k0 /\ k0 < (array_length t0)),
+  forall (Pre24: 0 <= j' /\ j' < (array_length t0)),
+  forall (Test7: (access t0 k0) < (access t0 j')),
+  forall (Pre22: (0 <= k0 /\ k0 < (array_length t0)) /\ 0 <= j' /\ j' <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (Post23: (exchange t1 t0 k0 j')),
+  (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+  (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i))).
 Proof.
 intuition; try (elim Post12; SameLength t1 t0; Omega').
 apply heap_id with (t := t0).
@@ -376,100 +432,123 @@ elim Post23; intros.
 symmetry; apply (H22 i'); elim Post12; Omega'.
 Qed.
 
-(* Why obligation from file , characters 665-1228 *)
-Lemma downheap_po_9 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j')
-   (Pre23:(0 <= k0)%Z /\ (k0 < array_length t0)%Z)
-   (Pre24:(0 <= j')%Z /\ (j' < array_length t0)%Z)
-   (Test7:(access t0 k0 < access t0 j')%Z)
-   (Pre22:((0 <= k0)%Z /\ (k0 < array_length t0)%Z) /\
-          (0 <= j')%Z /\ (j' < array_length t0)%Z) (t1:array Z)
-   (Post23:exchange t1 t0 k0 j')
-   (Pre21 Pre19
-    Pre20:((0 <= j')%Z /\ (j' <= n0)%Z) /\
-          (n0 < array_length t1)%Z /\
-          (forall i:Z, (j' + 1 <= i)%Z /\ (i <= n0)%Z -> heap t1 n0 i)),
-   Zwf 0 (n0 - j') Variant1.
+(* Why obligation from file "downheap.mlw", characters 665-1228 *)
+Lemma downheap_po_9 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  forall (Pre23: 0 <= k0 /\ k0 < (array_length t0)),
+  forall (Pre24: 0 <= j' /\ j' < (array_length t0)),
+  forall (Test7: (access t0 k0) < (access t0 j')),
+  forall (Pre22: (0 <= k0 /\ k0 < (array_length t0)) /\ 0 <= j' /\ j' <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (Post23: (exchange t1 t0 k0 j')),
+  forall (Pre21: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  forall (Pre19: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  forall (Pre20: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  (Zwf 0 (n0 - j') Variant1).
 Proof.
 intros; unfold Zwf; decompose [select_son] Post12; Omega'.
 Qed.
 
-(* Why obligation from file , characters 671-759 *)
-Lemma downheap_po_10 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j')
-   (Pre23:(0 <= k0)%Z /\ (k0 < array_length t0)%Z)
-   (Pre24:(0 <= j')%Z /\ (j' < array_length t0)%Z)
-   (Test7:(access t0 k0 < access t0 j')%Z)
-   (Pre22:((0 <= k0)%Z /\ (k0 < array_length t0)%Z) /\
-          (0 <= j')%Z /\ (j' < array_length t0)%Z) (t1:array Z)
-   (Post23:exchange t1 t0 k0 j')
-   (Pre21 Pre19
-    Pre20:((0 <= j')%Z /\ (j' <= n0)%Z) /\
-          (n0 < array_length t1)%Z /\
-          (forall i:Z, (j' + 1 <= i)%Z /\ (i <= n0)%Z -> heap t1 n0 i)),
-   ((0 <= j')%Z /\ (j' <= n0)%Z) /\
-   (n0 < array_length t1)%Z /\
-   (forall i:Z, (j' + 1 <= i)%Z /\ (i <= n0)%Z -> heap t1 n0 i).
+(* Why obligation from file "downheap.mlw", characters 671-759 *)
+Lemma downheap_po_10 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  forall (Pre23: 0 <= k0 /\ k0 < (array_length t0)),
+  forall (Pre24: 0 <= j' /\ j' < (array_length t0)),
+  forall (Test7: (access t0 k0) < (access t0 j')),
+  forall (Pre22: (0 <= k0 /\ k0 < (array_length t0)) /\ 0 <= j' /\ j' <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (Post23: (exchange t1 t0 k0 j')),
+  forall (Pre21: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  forall (Pre19: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  forall (Pre20: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+  (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i))).
 Proof.
 trivial.
 Qed.
 
-(* Why obligation from file , characters 957-999 *)
-Lemma downheap_po_11 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j')
-   (Pre23:(0 <= k0)%Z /\ (k0 < array_length t0)%Z)
-   (Pre24:(0 <= j')%Z /\ (j' < array_length t0)%Z)
-   (Test7:(access t0 k0 < access t0 j')%Z)
-   (Pre22:((0 <= k0)%Z /\ (k0 < array_length t0)%Z) /\
-          (0 <= j')%Z /\ (j' < array_length t0)%Z) (t1:array Z)
-   (Post23:exchange t1 t0 k0 j')
-   (Pre21:((0 <= j')%Z /\ (j' <= n0)%Z) /\
-          (n0 < array_length t1)%Z /\
-          (forall i:Z, (j' + 1 <= i)%Z /\ (i <= n0)%Z -> heap t1 n0 i))
-   (t2:array Z)
-   (Post25:permut t2 t1 /\
-           (forall i:Z, (j' <= i)%Z /\ (i <= n0)%Z -> heap t2 n0 i) /\
-           (forall i:Z,
-              (0 <= i)%Z /\ (i < j')%Z \/
-              (j' < i)%Z /\ (i < 2 * j' + 1)%Z \/
-              (n0 < i)%Z /\ (i < array_length t2)%Z ->
-              access t2 i = access t1 i) /\
-           (forall v:Z, inftree t1 n0 v j' -> inftree t2 n0 v j')),
-   permut t2 t0 /\
-   (forall i:Z, (k0 <= i)%Z /\ (i <= n0)%Z -> heap t2 n0 i) /\
-   (forall i:Z,
-      (0 <= i)%Z /\ (i < k0)%Z \/
-      (k0 < i)%Z /\ (i < 2 * k0 + 1)%Z \/
-      (n0 < i)%Z /\ (i < array_length t2)%Z ->
-      access t2 i = access t0 i) /\
-   (forall v:Z, inftree t0 n0 v k0 -> inftree t2 n0 v k0).
+(* Why obligation from file "downheap.mlw", characters 957-999 *)
+Lemma downheap_po_11 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  forall (Pre23: 0 <= k0 /\ k0 < (array_length t0)),
+  forall (Pre24: 0 <= j' /\ j' < (array_length t0)),
+  forall (Test7: (access t0 k0) < (access t0 j')),
+  forall (Pre22: (0 <= k0 /\ k0 < (array_length t0)) /\ 0 <= j' /\ j' <
+                 (array_length t0)),
+  forall (t1: (array Z)),
+  forall (Post23: (exchange t1 t0 k0 j')),
+  forall (Pre21: (0 <= j' /\ j' <= n0) /\ n0 < (array_length t1) /\
+                 (forall (i:Z), ((j' + 1) <= i /\ i <= n0 -> (heap t1 n0 i)))),
+  forall (t2: (array Z)),
+  forall (Post25: (permut t2 t1) /\
+                  (forall (i:Z), (j' <= i /\ i <= n0 -> (heap t2 n0 i))) /\
+                  (forall (i:Z),
+                   (0 <= i /\ i < j' \/ j' < i /\ i < (2 * j' + 1) \/ n0 <
+                    i /\ i < (array_length t2) -> (access t2 i) =
+                    (access t1 i))) /\
+                  (forall (v:Z),
+                   ((inftree t1 n0 v j') -> (inftree t2 n0 v j')))),
+  (permut t2 t0) /\ (forall (i:Z), (k0 <= i /\ i <= n0 -> (heap t2 n0 i))) /\
+  (forall (i:Z),
+   (0 <= i /\ i < k0 \/ k0 < i /\ i < (2 * k0 + 1) \/ n0 < i /\ i <
+    (array_length t2) -> (access t2 i) = (access t0 i))) /\
+  (forall (v:Z), ((inftree t0 n0 v k0) -> (inftree t2 n0 v k0))).
 Proof.
 intuition.
 (* permut *)
@@ -572,29 +651,33 @@ elim Post12; intros; Omega'.
  Omega'.
 Qed.
 
-(* Why obligation from file , characters 999-999 *)
-Lemma downheap_po_12 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test8:(j <= n0)%Z) (j':Z)
-   (Post12:select_son t0 k0 n0 j')
-   (Pre23:(0 <= k0)%Z /\ (k0 < array_length t0)%Z)
-   (Pre24:(0 <= j')%Z /\ (j' < array_length t0)%Z)
-   (Test6:(access t0 k0 >= access t0 j')%Z),
-   permut t0 t0 /\
-   (forall i:Z, (k0 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i) /\
-   (forall i:Z,
-      (0 <= i)%Z /\ (i < k0)%Z \/
-      (k0 < i)%Z /\ (i < 2 * k0 + 1)%Z \/
-      (n0 < i)%Z /\ (i < array_length t0)%Z ->
-      access t0 i = access t0 i) /\
-   (forall v:Z, inftree t0 n0 v k0 -> inftree t0 n0 v k0).
+(* Why obligation from file "downheap.mlw", characters 999-999 *)
+Lemma downheap_po_12 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test8: j <= n0),
+  forall (j': Z),
+  forall (Post12: (select_son t0 k0 n0 j')),
+  forall (Pre23: 0 <= k0 /\ k0 < (array_length t0)),
+  forall (Pre24: 0 <= j' /\ j' < (array_length t0)),
+  forall (Test6: (access t0 k0) >= (access t0 j')),
+  (permut t0 t0) /\ (forall (i:Z), (k0 <= i /\ i <= n0 -> (heap t0 n0 i))) /\
+  (forall (i:Z),
+   (0 <= i /\ i < k0 \/ k0 < i /\ i < (2 * k0 + 1) \/ n0 < i /\ i <
+    (array_length t0) -> (access t0 i) = (access t0 i))) /\
+  (forall (v:Z), ((inftree t0 n0 v k0) -> (inftree t0 n0 v k0))).
 Proof.
 intuition.
 elim (Z_le_lt_eq_dec k0 i); [ intro HHHi | intro HHHi | intuition ].
@@ -621,25 +704,28 @@ intro.
 Qed.
 
 
-(* Why obligation from file , characters 999-999 *)
-Lemma downheap_po_13 :
- forall (k n:Z) (t:array Z)
-   (Pre27:((0 <= k)%Z /\ (k <= n)%Z) /\
-          (n < array_length t)%Z /\
-          (forall i:Z, (k + 1 <= i)%Z /\ (i <= n)%Z -> heap t n i))
-   (Variant1 k0 n0:Z) (t0:array Z) (Pre26:Variant1 = (n0 - k0)%Z)
-   (Pre25:((0 <= k0)%Z /\ (k0 <= n0)%Z) /\
-          (n0 < array_length t0)%Z /\
-          (forall i:Z, (k0 + 1 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i))
-   (j:Z) (Post3:j = (2 * k0 + 1)%Z) (Test1:(j > n0)%Z),
-   permut t0 t0 /\
-   (forall i:Z, (k0 <= i)%Z /\ (i <= n0)%Z -> heap t0 n0 i) /\
-   (forall i:Z,
-      (0 <= i)%Z /\ (i < k0)%Z \/
-      (k0 < i)%Z /\ (i < 2 * k0 + 1)%Z \/
-      (n0 < i)%Z /\ (i < array_length t0)%Z ->
-      access t0 i = access t0 i) /\
-   (forall v:Z, inftree t0 n0 v k0 -> inftree t0 n0 v k0).
+(* Why obligation from file "downheap.mlw", characters 999-999 *)
+Lemma downheap_po_13 : 
+  forall (k: Z),
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre27: (0 <= k /\ k <= n) /\ n < (array_length t) /\
+                 (forall (i:Z), ((k + 1) <= i /\ i <= n -> (heap t n i)))),
+  forall (Variant1: Z),
+  forall (k0: Z),
+  forall (n0: Z),
+  forall (t0: (array Z)),
+  forall (Pre26: Variant1 = (n0 - k0)),
+  forall (Pre25: (0 <= k0 /\ k0 <= n0) /\ n0 < (array_length t0) /\
+                 (forall (i:Z), ((k0 + 1) <= i /\ i <= n0 -> (heap t0 n0 i)))),
+  forall (j: Z),
+  forall (Post3: j = (2 * k0 + 1)),
+  forall (Test1: j > n0),
+  (permut t0 t0) /\ (forall (i:Z), (k0 <= i /\ i <= n0 -> (heap t0 n0 i))) /\
+  (forall (i:Z),
+   (0 <= i /\ i < k0 \/ k0 < i /\ i < (2 * k0 + 1) \/ n0 < i /\ i <
+    (array_length t0) -> (access t0 i) = (access t0 i))) /\
+  (forall (v:Z), ((inftree t0 n0 v k0) -> (inftree t0 n0 v k0))).
 Proof.
 intuition.
 elim (Z_le_lt_eq_dec k0 i); [ intro HHHi | intro HHHi | intuition ].

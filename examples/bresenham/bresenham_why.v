@@ -67,30 +67,50 @@ Qed.
 
 (*s Program correctness. *)
 
-(* Why obligation from file , characters 1620-1630 *)
-Lemma bresenham_po_1 :
- forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
-   (Post3:e0 = (2 * y2 - x2)%Z) (Variant1 e1 x1 y1:Z)
-   (Pre4:Variant1 = (x2 + 1 - x1)%Z)
-   (Pre3:((0 <= x1)%Z /\ (x1 <= x2 + 1)%Z) /\ invariant x1 y1 e1)
-   (Test4:(x1 <= x2)%Z), best x1 y1.
+(* Why obligation from file "bresenham.mlw", characters 1620-1630 *)
+Lemma bresenham_po_1 : 
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (y0: Z),
+  forall (Post2: y0 = 0),
+  forall (e0: Z),
+  forall (Post3: e0 = (2 * y2 - x2)),
+  forall (Variant1: Z),
+  forall (e1: Z),
+  forall (x1: Z),
+  forall (y1: Z),
+  forall (Pre4: Variant1 = (x2 + 1 - x1)),
+  forall (Pre3: (0 <= x1 /\ x1 <= (x2 + 1)) /\ (invariant x1 y1 e1)),
+  forall (Test4: x1 <= x2),
+  (best x1 y1).
 Proof.
 intros.
 decompose [and] Pre3.
 exact (invariant_is_ok x1 y1 e1 H0).
 Qed.
 
-(* Why obligation from file , characters 1656-1672 *)
-Lemma bresenham_po_2 :
- forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
-   (Post3:e0 = (2 * y2 - x2)%Z) (Variant1 e1 x1 y1:Z)
-   (Pre4:Variant1 = (x2 + 1 - x1)%Z)
-   (Pre3:((0 <= x1)%Z /\ (x1 <= x2 + 1)%Z) /\ invariant x1 y1 e1)
-   (Test4:(x1 <= x2)%Z) (Pre2:best x1 y1) (Test3:(e1 < 0)%Z) (e2:Z)
-   (Post4:e2 = (e1 + 2 * y2)%Z) (x:Z),
-   x = (x1 + 1)%Z ->
-   (((0 <= x)%Z /\ (x <= x2 + 1)%Z) /\ invariant x y1 e2) /\
-   Zwf 0 (x2 + 1 - x) (x2 + 1 - x1).
+(* Why obligation from file "bresenham.mlw", characters 1656-1672 *)
+Lemma bresenham_po_2 : 
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (y0: Z),
+  forall (Post2: y0 = 0),
+  forall (e0: Z),
+  forall (Post3: e0 = (2 * y2 - x2)),
+  forall (Variant1: Z),
+  forall (e1: Z),
+  forall (x1: Z),
+  forall (y1: Z),
+  forall (Pre4: Variant1 = (x2 + 1 - x1)),
+  forall (Pre3: (0 <= x1 /\ x1 <= (x2 + 1)) /\ (invariant x1 y1 e1)),
+  forall (Test4: x1 <= x2),
+  forall (Pre2: (best x1 y1)),
+  forall (Test3: e1 < 0),
+  forall (e2: Z),
+  forall (Post4: e2 = (e1 + 2 * y2)),
+  (forall (x:Z),
+   (x = (x1 + 1) -> ((0 <= x /\ x <= (x2 + 1)) /\ (invariant x y1 e2)) /\
+    (Zwf 0 (x2 + 1 - x) (x2 + 1 - x1)))).
 Proof.
 intros.
 rewrite H; clear x H.
@@ -106,18 +126,30 @@ Omega'.
 unfold Zwf; Omega'.
 Qed.
 
-(* Why obligation from file , characters 1684-1738 *)
-Lemma bresenham_po_3 :
- forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
-   (Post3:e0 = (2 * y2 - x2)%Z) (Variant1 e1 x1 y1:Z)
-   (Pre4:Variant1 = (x2 + 1 - x1)%Z)
-   (Pre3:((0 <= x1)%Z /\ (x1 <= x2 + 1)%Z) /\ invariant x1 y1 e1)
-   (Test4:(x1 <= x2)%Z) (Pre2:best x1 y1) (Test2:(e1 >= 0)%Z) (y3:Z)
-   (Post5:y3 = (y1 + 1)%Z) (e2:Z) (Post6:e2 = (e1 + 2 * (y2 - x2))%Z)
-   (x:Z),
-   x = (x1 + 1)%Z ->
-   (((0 <= x)%Z /\ (x <= x2 + 1)%Z) /\ invariant x y3 e2) /\
-   Zwf 0 (x2 + 1 - x) (x2 + 1 - x1).
+(* Why obligation from file "bresenham.mlw", characters 1684-1738 *)
+Lemma bresenham_po_3 : 
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (y0: Z),
+  forall (Post2: y0 = 0),
+  forall (e0: Z),
+  forall (Post3: e0 = (2 * y2 - x2)),
+  forall (Variant1: Z),
+  forall (e1: Z),
+  forall (x1: Z),
+  forall (y1: Z),
+  forall (Pre4: Variant1 = (x2 + 1 - x1)),
+  forall (Pre3: (0 <= x1 /\ x1 <= (x2 + 1)) /\ (invariant x1 y1 e1)),
+  forall (Test4: x1 <= x2),
+  forall (Pre2: (best x1 y1)),
+  forall (Test2: e1 >= 0),
+  forall (y3: Z),
+  forall (Post5: y3 = (y1 + 1)),
+  forall (e2: Z),
+  forall (Post6: e2 = (e1 + 2 * (y2 - x2))),
+  (forall (x:Z),
+   (x = (x1 + 1) -> ((0 <= x /\ x <= (x2 + 1)) /\ (invariant x y3 e2)) /\
+    (Zwf 0 (x2 + 1 - x) (x2 + 1 - x1)))).
 Proof.
 intros.
 subst x.
@@ -135,11 +167,15 @@ Omega'.
 unfold Zwf; Omega'.
 Qed.
 
-(* Why obligation from file , characters 1493-1532 *)
-Lemma bresenham_po_4 :
- forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
-   (Post3:e0 = (2 * y2 - x2)%Z),
-   ((0 <= x0)%Z /\ (x0 <= x2 + 1)%Z) /\ invariant x0 y0 e0.
+(* Why obligation from file "bresenham.mlw", characters 1493-1532 *)
+Lemma bresenham_po_4 : 
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (y0: Z),
+  forall (Post2: y0 = 0),
+  forall (e0: Z),
+  forall (Post3: e0 = (2 * y2 - x2)),
+  (0 <= x0 /\ x0 <= (x2 + 1)) /\ (invariant x0 y0 e0).
 Proof.
 intuition.
 Omega'.

@@ -4,44 +4,60 @@
 Require Import Why.
 Require Import Omega.
 
-(* Why obligation from file , characters 153-157 *)
-Lemma swap_po_1 :
- forall (i j:Z) (t:array Z)
-   (Pre5:((0 <= i)%Z /\ (i < array_length t)%Z) /\
-         (0 <= j)%Z /\ (j < array_length t)%Z)
-   (Pre4:(0 <= i)%Z /\ (i < array_length t)%Z) (v:Z)
-   (Post3:v = access t i) (Pre2:(0 <= i)%Z /\ (i < array_length t)%Z),
-   (0 <= j)%Z /\ (j < array_length t)%Z.
+(* Why obligation from file "swap.mlw", characters 153-157 *)
+Lemma swap_po_1 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (Pre4: 0 <= i /\ i < (array_length t)),
+  forall (v: Z),
+  forall (Post3: v = (access t i)),
+  forall (Pre2: 0 <= i /\ i < (array_length t)),
+  0 <= j /\ j < (array_length t).
 Proof.
 tauto.
 Qed.
 
-(* Why obligation from file , characters 166-175 *)
-Lemma swap_po_2 :
- forall (i j:Z) (t:array Z)
-   (Pre5:((0 <= i)%Z /\ (i < array_length t)%Z) /\
-         (0 <= j)%Z /\ (j < array_length t)%Z)
-   (Pre4:(0 <= i)%Z /\ (i < array_length t)%Z) (v:Z)
-   (Post3:v = access t i) (Pre2:(0 <= i)%Z /\ (i < array_length t)%Z)
-   (Pre3:(0 <= j)%Z /\ (j < array_length t)%Z) (t0:array Z)
-   (Post1:t0 = store t i (access t j)),
-   (0 <= j)%Z /\ (j < array_length t0)%Z.
+(* Why obligation from file "swap.mlw", characters 166-175 *)
+Lemma swap_po_2 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (Pre4: 0 <= i /\ i < (array_length t)),
+  forall (v: Z),
+  forall (Post3: v = (access t i)),
+  forall (Pre2: 0 <= i /\ i < (array_length t)),
+  forall (Pre3: 0 <= j /\ j < (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post1: t0 = (store t i (access t j))),
+  0 <= j /\ j < (array_length t0).
 Proof.
 intros; ArraySubst t0.
 Qed.
 
 
-(* Why obligation from file , characters 132-184 *)
-Lemma swap_po_3 :
- forall (i j:Z) (t:array Z)
-   (Pre5:((0 <= i)%Z /\ (i < array_length t)%Z) /\
-         (0 <= j)%Z /\ (j < array_length t)%Z)
-   (Pre4:(0 <= i)%Z /\ (i < array_length t)%Z) (v:Z)
-   (Post3:v = access t i) (Pre2:(0 <= i)%Z /\ (i < array_length t)%Z)
-   (Pre3:(0 <= j)%Z /\ (j < array_length t)%Z) (t0:array Z)
-   (Post1:t0 = store t i (access t j))
-   (Pre1:(0 <= j)%Z /\ (j < array_length t0)%Z) (t1:array Z)
-   (Post2:t1 = store t0 j v), exchange t1 t i j.
+(* Why obligation from file "swap.mlw", characters 132-184 *)
+Lemma swap_po_3 : 
+  forall (i: Z),
+  forall (j: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (0 <= i /\ i < (array_length t)) /\ 0 <= j /\ j <
+                (array_length t)),
+  forall (Pre4: 0 <= i /\ i < (array_length t)),
+  forall (v: Z),
+  forall (Post3: v = (access t i)),
+  forall (Pre2: 0 <= i /\ i < (array_length t)),
+  forall (Pre3: 0 <= j /\ j < (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post1: t0 = (store t i (access t j))),
+  forall (Pre1: 0 <= j /\ j < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (Post2: t1 = (store t0 j v)),
+  (exchange t1 t i j).
 Proof.
 intros; subst t1 t0 v.
 auto with datatypes.

@@ -8,132 +8,197 @@ Require Import Quicksort.
 
 Require Import partition_why.
 
-(* Why obligation from file , characters 1603-1620 *)
-Lemma quick_rec_po_1 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z) (Test2:(l0 < r0)%Z),
-   ((0 <= l0)%Z /\ (l0 < r0)%Z) /\ (r0 < array_length t0)%Z.
+(* Why obligation from file "quicksort.mlw", characters 1603-1620 *)
+Lemma quick_rec_po_1 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test2: l0 < r0),
+  (0 <= l0 /\ l0 < r0) /\ r0 < (array_length t0).
 Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file , characters 1646-1667 *)
-Lemma quick_rec_po_2 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z) (Test2:(l0 < r0)%Z)
-   (Pre12:((0 <= l0)%Z /\ (l0 < r0)%Z) /\ (r0 < array_length t0)%Z)
-   (t1:array Z) (p:Z)
-   (Post5:((l0 <= p)%Z /\ (p <= r0)%Z) /\
-          partition_p t1 l0 r0 p /\ sub_permut l0 r0 t1 t0),
-   (0 <= l0)%Z /\ (p - 1 < array_length t1)%Z.
+(* Why obligation from file "quicksort.mlw", characters 1646-1667 *)
+Lemma quick_rec_po_2 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test2: l0 < r0),
+  forall (Pre12: (0 <= l0 /\ l0 < r0) /\ r0 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (p: Z),
+  forall (Post5: (l0 <= p /\ p <= r0) /\ (partition_p t1 l0 r0 p) /\
+                 (sub_permut l0 r0 t1 t0)),
+  0 <= l0 /\ (p - 1) < (array_length t1).
   Proof.
   intuition SameLength t1 t0; omega.
 Qed.
 
-(* Why obligation from file , characters 1523-1762 *)
-Lemma quick_rec_po_3 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z) (Test2:(l0 < r0)%Z)
-   (Pre12:((0 <= l0)%Z /\ (l0 < r0)%Z) /\ (r0 < array_length t0)%Z)
-   (t1:array Z) (p:Z)
-   (Post5:((l0 <= p)%Z /\ (p <= r0)%Z) /\
-          partition_p t1 l0 r0 p /\ sub_permut l0 r0 t1 t0)
-   (Pre11 Pre5 Pre6:(0 <= l0)%Z /\ (p - 1 < array_length t1)%Z),
-   Zwf 0 (1 + (p - 1) - l0) Variant1.
+(* Why obligation from file "quicksort.mlw", characters 1523-1762 *)
+Lemma quick_rec_po_3 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test2: l0 < r0),
+  forall (Pre12: (0 <= l0 /\ l0 < r0) /\ r0 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (p: Z),
+  forall (Post5: (l0 <= p /\ p <= r0) /\ (partition_p t1 l0 r0 p) /\
+                 (sub_permut l0 r0 t1 t0)),
+  forall (Pre11: 0 <= l0 /\ (p - 1) < (array_length t1)),
+  forall (Pre5: 0 <= l0 /\ (p - 1) < (array_length t1)),
+  forall (Pre6: 0 <= l0 /\ (p - 1) < (array_length t1)),
+  (Zwf 0 (1 + (p - 1) - l0) Variant1).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1671-1692 *)
-Lemma quick_rec_po_4 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z) (Test2:(l0 < r0)%Z)
-   (Pre12:((0 <= l0)%Z /\ (l0 < r0)%Z) /\ (r0 < array_length t0)%Z)
-   (t1:array Z) (p:Z)
-   (Post5:((l0 <= p)%Z /\ (p <= r0)%Z) /\
-          partition_p t1 l0 r0 p /\ sub_permut l0 r0 t1 t0)
-   (Pre11:(0 <= l0)%Z /\ (p - 1 < array_length t1)%Z) (t2:array Z)
-   (Post8:sorted_array t2 l0 (p - 1) /\ sub_permut l0 (p - 1) t2 t1),
-   (0 <= p + 1)%Z /\ (r0 < array_length t2)%Z.
+(* Why obligation from file "quicksort.mlw", characters 1671-1692 *)
+Lemma quick_rec_po_4 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test2: l0 < r0),
+  forall (Pre12: (0 <= l0 /\ l0 < r0) /\ r0 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (p: Z),
+  forall (Post5: (l0 <= p /\ p <= r0) /\ (partition_p t1 l0 r0 p) /\
+                 (sub_permut l0 r0 t1 t0)),
+  forall (Pre11: 0 <= l0 /\ (p - 1) < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (Post8: (sorted_array t2 l0 (p - 1)) /\
+                 (sub_permut l0 (p - 1) t2 t1)),
+  0 <= (p + 1) /\ r0 < (array_length t2).
 Proof.
 intuition; SameLength t2 t1; SameLength t1 t0; omega.
 Qed.
 
-(* Why obligation from file , characters 1523-1762 *)
-Lemma quick_rec_po_5 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z) (Test2:(l0 < r0)%Z)
-   (Pre12:((0 <= l0)%Z /\ (l0 < r0)%Z) /\ (r0 < array_length t0)%Z)
-   (t1:array Z) (p:Z)
-   (Post5:((l0 <= p)%Z /\ (p <= r0)%Z) /\
-          partition_p t1 l0 r0 p /\ sub_permut l0 r0 t1 t0)
-   (Pre11:(0 <= l0)%Z /\ (p - 1 < array_length t1)%Z) (t2:array Z)
-   (Post8:sorted_array t2 l0 (p - 1) /\ sub_permut l0 (p - 1) t2 t1)
-   (Pre10 Pre8 Pre9:(0 <= p + 1)%Z /\ (r0 < array_length t2)%Z),
-   Zwf 0 (1 + r0 - (p + 1)) Variant1.
+(* Why obligation from file "quicksort.mlw", characters 1523-1762 *)
+Lemma quick_rec_po_5 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test2: l0 < r0),
+  forall (Pre12: (0 <= l0 /\ l0 < r0) /\ r0 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (p: Z),
+  forall (Post5: (l0 <= p /\ p <= r0) /\ (partition_p t1 l0 r0 p) /\
+                 (sub_permut l0 r0 t1 t0)),
+  forall (Pre11: 0 <= l0 /\ (p - 1) < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (Post8: (sorted_array t2 l0 (p - 1)) /\
+                 (sub_permut l0 (p - 1) t2 t1)),
+  forall (Pre10: 0 <= (p + 1) /\ r0 < (array_length t2)),
+  forall (Pre8: 0 <= (p + 1) /\ r0 < (array_length t2)),
+  forall (Pre9: 0 <= (p + 1) /\ r0 < (array_length t2)),
+  (Zwf 0 (1 + r0 - (p + 1)) Variant1).
 Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file , characters 1631-1703 *)
-Lemma quick_rec_po_6 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z) (Test2:(l0 < r0)%Z)
-   (Pre12:((0 <= l0)%Z /\ (l0 < r0)%Z) /\ (r0 < array_length t0)%Z)
-   (t1:array Z) (p:Z)
-   (Post5:((l0 <= p)%Z /\ (p <= r0)%Z) /\
-          partition_p t1 l0 r0 p /\ sub_permut l0 r0 t1 t0)
-   (Pre11:(0 <= l0)%Z /\ (p - 1 < array_length t1)%Z) (t2:array Z)
-   (Post8:sorted_array t2 l0 (p - 1) /\ sub_permut l0 (p - 1) t2 t1)
-   (Pre10:(0 <= p + 1)%Z /\ (r0 < array_length t2)%Z) (t3:array Z)
-   (Post10:sorted_array t3 (p + 1) r0 /\ sub_permut (p + 1) r0 t3 t2),
-   sorted_array t3 l0 r0 /\ sub_permut l0 r0 t3 t0.
+(* Why obligation from file "quicksort.mlw", characters 1631-1703 *)
+Lemma quick_rec_po_6 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test2: l0 < r0),
+  forall (Pre12: (0 <= l0 /\ l0 < r0) /\ r0 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (p: Z),
+  forall (Post5: (l0 <= p /\ p <= r0) /\ (partition_p t1 l0 r0 p) /\
+                 (sub_permut l0 r0 t1 t0)),
+  forall (Pre11: 0 <= l0 /\ (p - 1) < (array_length t1)),
+  forall (t2: (array Z)),
+  forall (Post8: (sorted_array t2 l0 (p - 1)) /\
+                 (sub_permut l0 (p - 1) t2 t1)),
+  forall (Pre10: 0 <= (p + 1) /\ r0 < (array_length t2)),
+  forall (t3: (array Z)),
+  forall (Post10: (sorted_array t3 (p + 1) r0) /\
+                  (sub_permut (p + 1) r0 t3 t2)),
+  (sorted_array t3 l0 r0) /\ (sub_permut l0 r0 t3 t0).
 Proof.
 intros.
 apply quicksort_lemma with (t1 := t1) (t2 := t2) (p := p); intuition.
  Qed.
 
-(* Why obligation from file , characters 1703-1703 *)
-Lemma quick_rec_po_7 :
- forall (l r:Z) (t:array Z)
-   (Pre15:(0 <= l)%Z /\ (r < array_length t)%Z) (Variant1 l0 r0:Z)
-   (t0:array Z) (Pre14:Variant1 = (1 + r0 - l0)%Z)
-   (Pre13:(0 <= l0)%Z /\ (r0 < array_length t0)%Z)
-   (Test1:(l0 >= r0)%Z),
-   sorted_array t0 l0 r0 /\ sub_permut l0 r0 t0 t0.
+(* Why obligation from file "quicksort.mlw", characters 1703-1703 *)
+Lemma quick_rec_po_7 : 
+  forall (l: Z),
+  forall (r: Z),
+  forall (t: (array Z)),
+  forall (Pre15: 0 <= l /\ r < (array_length t)),
+  forall (Variant1: Z),
+  forall (l0: Z),
+  forall (r0: Z),
+  forall (t0: (array Z)),
+  forall (Pre14: Variant1 = (1 + r0 - l0)),
+  forall (Pre13: 0 <= l0 /\ r0 < (array_length t0)),
+  forall (Test1: l0 >= r0),
+  (sorted_array t0 l0 r0) /\ (sub_permut l0 r0 t0 t0).
 Proof.
 intros; apply quicksort_trivial; intuition.
 Qed.
 
 
-(* Why obligation from file , characters 1877-1984 *)
-Lemma quicksort_po_1 :
- forall t:array Z,
-   (0 <= 0)%Z /\ (array_length t - 1 < array_length t)%Z.
+(* Why obligation from file "quicksort.mlw", characters 1877-1984 *)
+Lemma quicksort_po_1 : 
+  forall (t: (array Z)),
+  0 <= 0 /\ ((array_length t) - 1) < (array_length t).
 Proof.
 intuition omega.
 Qed.
 
-(* Why obligation from file , characters 1877-1984 *)
-Lemma quicksort_po_2 :
- forall (t:array Z)
-   (Pre1:(0 <= 0)%Z /\ (array_length t - 1 < array_length t)%Z)
-   (t0:array Z)
-   (Post1:sorted_array t0 0 (array_length t - 1) /\
-          sub_permut 0 (array_length t - 1) t0 t),
-   sorted_array t0 0 (array_length t0 - 1) /\ permut t0 t.
+(* Why obligation from file "quicksort.mlw", characters 1877-1984 *)
+Lemma quicksort_po_2 : 
+  forall (t: (array Z)),
+  forall (Pre1: 0 <= 0 /\ ((array_length t) - 1) < (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post1: (sorted_array t0 0 ((array_length t) - 1)) /\
+                 (sub_permut 0 ((array_length t) - 1) t0 t)),
+  (sorted_array t0 0 ((array_length t0) - 1)) /\ (permut t0 t).
 Proof.
 intuition eauto.
 SameLength t0 t; rewrite H3; trivial.

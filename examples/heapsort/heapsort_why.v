@@ -82,58 +82,71 @@ Qed.
 
 (* Obligations. *)
 
-(* Why obligation from file , characters 849-885 *)
-Lemma heapsort_po_1 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (k:Z)
-   (Post3:k = Zdiv2 (array_length t - 2)) (Variant1 k1:Z) (t0:array Z)
-   (Pre6:Variant1 = (k1 + 1)%Z)
-   (Pre5:((-1 <= k1)%Z /\ (k1 <= array_length t0 - 1)%Z) /\
-         (forall i:Z,
-            (k1 + 1 <= i)%Z /\ (i <= array_length t0 - 1)%Z ->
-            heap t0 (array_length t0 - 1) i) /\ permut t0 t)
-   (Test2:(k1 >= 0)%Z),
-   ((0 <= k1)%Z /\ (k1 <= array_length t0 - 1)%Z) /\
-   (array_length t0 - 1 < array_length t0)%Z /\
-   (forall i:Z,
-      (k1 + 1 <= i)%Z /\ (i <= array_length t0 - 1)%Z ->
-      heap t0 (array_length t0 - 1) i).
+(* Why obligation from file "heapsort.mlw", characters 849-885 *)
+Lemma heapsort_po_1 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (k: Z),
+  forall (Post3: k = (Zdiv2 ((array_length t) - 2))),
+  forall (Variant1: Z),
+  forall (k1: Z),
+  forall (t0: (array Z)),
+  forall (Pre6: Variant1 = (k1 + 1)),
+  forall (Pre5: ((Zopp 1) <= k1 /\ k1 <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k1 + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permut t0 t)),
+  forall (Test2: k1 >= 0),
+  (0 <= k1 /\ k1 <= ((array_length t0) - 1)) /\ ((array_length t0) - 1) <
+  (array_length t0) /\
+  (forall (i:Z),
+   ((k1 + 1) <= i /\ i <= ((array_length t0) - 1) ->
+    (heap t0 ((array_length t0) - 1) i))).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 849-897 *)
-Lemma heapsort_po_2 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (k:Z)
-   (Post3:k = Zdiv2 (array_length t - 2)) (Variant1 k1:Z) (t0:array Z)
-   (Pre6:Variant1 = (k1 + 1)%Z)
-   (Pre5:((-1 <= k1)%Z /\ (k1 <= array_length t0 - 1)%Z) /\
-         (forall i:Z,
-            (k1 + 1 <= i)%Z /\ (i <= array_length t0 - 1)%Z ->
-            heap t0 (array_length t0 - 1) i) /\ permut t0 t)
-   (Test2:(k1 >= 0)%Z)
-   (Pre4:((0 <= k1)%Z /\ (k1 <= array_length t0 - 1)%Z) /\
-         (array_length t0 - 1 < array_length t0)%Z /\
-         (forall i:Z,
-            (k1 + 1 <= i)%Z /\ (i <= array_length t0 - 1)%Z ->
-            heap t0 (array_length t0 - 1) i)) (t1:array Z)
-   (Post11:permut t1 t0 /\
-           (forall i:Z,
-              (k1 <= i)%Z /\ (i <= array_length t0 - 1)%Z ->
-              heap t1 (array_length t0 - 1) i) /\
-           (forall i:Z,
-              (0 <= i)%Z /\ (i < k1)%Z \/
-              (k1 < i)%Z /\ (i < 2 * k1 + 1)%Z \/
-              (array_length t0 - 1 < i)%Z /\ (i < array_length t1)%Z ->
-              access t1 i = access t0 i) /\
-           (forall v:Z,
-              inftree t0 (array_length t0 - 1) v k1 ->
-              inftree t1 (array_length t0 - 1) v k1)) (k2:Z)
-   (Post1:k2 = (k1 - 1)%Z),
-   (((-1 <= k2)%Z /\ (k2 <= array_length t1 - 1)%Z) /\
-    (forall i:Z,
-       (k2 + 1 <= i)%Z /\ (i <= array_length t1 - 1)%Z ->
-       heap t1 (array_length t1 - 1) i) /\ permut t1 t) /\
-   Zwf 0 (k2 + 1) (k1 + 1).
+(* Why obligation from file "heapsort.mlw", characters 849-897 *)
+Lemma heapsort_po_2 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (k: Z),
+  forall (Post3: k = (Zdiv2 ((array_length t) - 2))),
+  forall (Variant1: Z),
+  forall (k1: Z),
+  forall (t0: (array Z)),
+  forall (Pre6: Variant1 = (k1 + 1)),
+  forall (Pre5: ((Zopp 1) <= k1 /\ k1 <= ((array_length t0) - 1)) /\
+                (forall (i:Z),
+                 ((k1 + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i))) /\
+                (permut t0 t)),
+  forall (Test2: k1 >= 0),
+  forall (Pre4: (0 <= k1 /\ k1 <= ((array_length t0) - 1)) /\
+                ((array_length t0) - 1) < (array_length t0) /\
+                (forall (i:Z),
+                 ((k1 + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                  (heap t0 ((array_length t0) - 1) i)))),
+  forall (t1: (array Z)),
+  forall (Post11: (permut t1 t0) /\
+                  (forall (i:Z),
+                   (k1 <= i /\ i <= ((array_length t0) - 1) ->
+                    (heap t1 ((array_length t0) - 1) i))) /\
+                  (forall (i:Z),
+                   (0 <= i /\ i < k1 \/ k1 < i /\ i < (2 * k1 + 1) \/
+                    ((array_length t0) - 1) < i /\ i < (array_length t1) ->
+                    (access t1 i) = (access t0 i))) /\
+                  (forall (v:Z),
+                   ((inftree t0 ((array_length t0) - 1) v k1) ->
+                    (inftree t1 ((array_length t0) - 1) v k1)))),
+  forall (k2: Z),
+  forall (Post1: k2 = (k1 - 1)),
+  (((Zopp 1) <= k2 /\ k2 <= ((array_length t1) - 1)) /\
+  (forall (i:Z),
+   ((k2 + 1) <= i /\ i <= ((array_length t1) - 1) ->
+    (heap t1 ((array_length t1) - 1) i))) /\
+  (permut t1 t)) /\ (Zwf 0 (k2 + 1) (k1 + 1)).
 Proof.
 intuition SameLength t1 t0; try omega.
 rewrite H10; auto with *.
@@ -141,14 +154,17 @@ apply permut_trans with (t' := t0); assumption.
 unfold Zwf; Omega'.
 Qed.
 
-(* Why obligation from file , characters 633-817 *)
-Lemma heapsort_po_3 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (k:Z)
-   (Post3:k = Zdiv2 (array_length t - 2)),
-   ((-1 <= k)%Z /\ (k <= array_length t - 1)%Z) /\
-   (forall i:Z,
-      (k + 1 <= i)%Z /\ (i <= array_length t - 1)%Z ->
-      heap t (array_length t - 1) i) /\ permut t t.
+(* Why obligation from file "heapsort.mlw", characters 633-817 *)
+Lemma heapsort_po_3 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (k: Z),
+  forall (Post3: k = (Zdiv2 ((array_length t) - 2))),
+  ((Zopp 1) <= k /\ k <= ((array_length t) - 1)) /\
+  (forall (i:Z),
+   ((k + 1) <= i /\ i <= ((array_length t) - 1) ->
+    (heap t ((array_length t) - 1) i))) /\
+  (permut t t).
 Proof.
 intros.
 generalize (lem_div2_0 (array_length t) Pre16); intuition try Omega'.
@@ -158,58 +174,76 @@ apply (lem_div2_2 (array_length t) i); trivial || Omega'.
 auto with datatypes.
 Qed.
 
-(* Why obligation from file , characters 537-970 *)
-Lemma heapsort_po_4 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (k:Z)
-   (Post3:k = Zdiv2 (array_length t - 2)) (k1:Z) (t0:array Z)
-   (Post2:(((-1 <= k1)%Z /\ (k1 <= array_length t0 - 1)%Z) /\
-           (forall i:Z,
-              (k1 + 1 <= i)%Z /\ (i <= array_length t0 - 1)%Z ->
-              heap t0 (array_length t0 - 1) i) /\ permut t0 t) /\
-          (k1 < 0)%Z), heap t0 (array_length t0 - 1) 0 /\ permut t0 t.
+(* Why obligation from file "heapsort.mlw", characters 537-970 *)
+Lemma heapsort_po_4 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (k: Z),
+  forall (Post3: k = (Zdiv2 ((array_length t) - 2))),
+  forall (k1: Z),
+  forall (t0: (array Z)),
+  forall (Post2: (((Zopp 1) <= k1 /\ k1 <= ((array_length t0) - 1)) /\
+                 (forall (i:Z),
+                  ((k1 + 1) <= i /\ i <= ((array_length t0) - 1) ->
+                   (heap t0 ((array_length t0) - 1) i))) /\
+                 (permut t0 t)) /\ k1 < 0),
+  (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t).
 Proof.
 intuition.
 SameLength t0 t; auto with *.
 Qed.
 
-(* Why obligation from file , characters 1502-1515 *)
-Lemma heapsort_po_5 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (t0:array Z)
-   (Post9:heap t0 (array_length t0 - 1) 0 /\ permut t0 t) (k:Z)
-   (Post6:k = (array_length t0 - 1)%Z) (Variant3 k1:Z) (t1:array Z)
-   (Pre15:Variant3 = k1)
-   (Pre14:((0 <= k1)%Z /\ (k1 <= array_length t1 - 1)%Z) /\
-          (forall i:Z, (0 <= i)%Z /\ (i <= k1)%Z -> heap t1 k1 i) /\
-          ((k1 + 1 <= array_length t1 - 1)%Z ->
-           (access t1 0 <= access t1 (k1 + 1))%Z) /\
-          ((k1 + 1 <= array_length t1 - 1)%Z ->
-           sorted_array t1 (k1 + 1) (array_length t1 - 1)) /\
-          permut t1 t) (Test4:(k1 >= 1)%Z),
-   ((0 <= 0)%Z /\ (0 < array_length t1)%Z) /\
-   (0 <= k1)%Z /\ (k1 < array_length t1)%Z.
+(* Why obligation from file "heapsort.mlw", characters 1502-1515 *)
+Lemma heapsort_po_5 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post9: (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t)),
+  forall (k: Z),
+  forall (Post6: k = ((array_length t0) - 1)),
+  forall (Variant3: Z),
+  forall (k1: Z),
+  forall (t1: (array Z)),
+  forall (Pre15: Variant3 = k1),
+  forall (Pre14: (0 <= k1 /\ k1 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k1 -> (heap t1 k1 i))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k1 + 1)))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k1 + 1) ((array_length t1) - 1)))) /\
+                 (permut t1 t)),
+  forall (Test4: k1 >= 1),
+  (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k1 /\ k1 < (array_length t1).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 1525-1546 *)
-Lemma heapsort_po_6 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (t0:array Z)
-   (Post9:heap t0 (array_length t0 - 1) 0 /\ permut t0 t) (k:Z)
-   (Post6:k = (array_length t0 - 1)%Z) (Variant3 k1:Z) (t1:array Z)
-   (Pre15:Variant3 = k1)
-   (Pre14:((0 <= k1)%Z /\ (k1 <= array_length t1 - 1)%Z) /\
-          (forall i:Z, (0 <= i)%Z /\ (i <= k1)%Z -> heap t1 k1 i) /\
-          ((k1 + 1 <= array_length t1 - 1)%Z ->
-           (access t1 0 <= access t1 (k1 + 1))%Z) /\
-          ((k1 + 1 <= array_length t1 - 1)%Z ->
-           sorted_array t1 (k1 + 1) (array_length t1 - 1)) /\
-          permut t1 t) (Test4:(k1 >= 1)%Z)
-   (Pre13:((0 <= 0)%Z /\ (0 < array_length t1)%Z) /\
-          (0 <= k1)%Z /\ (k1 < array_length t1)%Z) (t2:array Z)
-   (Post15:exchange t2 t1 0 k1),
-   ((0 <= 0)%Z /\ (0 <= k1 - 1)%Z) /\
-   (k1 - 1 < array_length t2)%Z /\
-   (forall i:Z, (0 + 1 <= i)%Z /\ (i <= k1 - 1)%Z -> heap t2 (k1 - 1) i).
+(* Why obligation from file "heapsort.mlw", characters 1525-1546 *)
+Lemma heapsort_po_6 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post9: (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t)),
+  forall (k: Z),
+  forall (Post6: k = ((array_length t0) - 1)),
+  forall (Variant3: Z),
+  forall (k1: Z),
+  forall (t1: (array Z)),
+  forall (Pre15: Variant3 = k1),
+  forall (Pre14: (0 <= k1 /\ k1 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k1 -> (heap t1 k1 i))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k1 + 1)))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k1 + 1) ((array_length t1) - 1)))) /\
+                 (permut t1 t)),
+  forall (Test4: k1 >= 1),
+  forall (Pre13: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k1 /\ k1 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (Post15: (exchange t2 t1 0 k1)),
+  (0 <= 0 /\ 0 <= (k1 - 1)) /\ (k1 - 1) < (array_length t2) /\
+  (forall (i:Z), ((0 + 1) <= i /\ i <= (k1 - 1) -> (heap t2 (k1 - 1) i))).
 Proof.
 intuition.
 SameLength t2 t1; omega.
@@ -225,45 +259,52 @@ intros i0 Hi0.
  apply H18; Omega'.
 Qed.
 
-(* Why obligation from file , characters 1502-1558 *)
-Lemma heapsort_po_7 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (t0:array Z)
-   (Post9:heap t0 (array_length t0 - 1) 0 /\ permut t0 t) (k:Z)
-   (Post6:k = (array_length t0 - 1)%Z) (Variant3 k1:Z) (t1:array Z)
-   (Pre15:Variant3 = k1)
-   (Pre14:((0 <= k1)%Z /\ (k1 <= array_length t1 - 1)%Z) /\
-          (forall i:Z, (0 <= i)%Z /\ (i <= k1)%Z -> heap t1 k1 i) /\
-          ((k1 + 1 <= array_length t1 - 1)%Z ->
-           (access t1 0 <= access t1 (k1 + 1))%Z) /\
-          ((k1 + 1 <= array_length t1 - 1)%Z ->
-           sorted_array t1 (k1 + 1) (array_length t1 - 1)) /\
-          permut t1 t) (Test4:(k1 >= 1)%Z)
-   (Pre13:((0 <= 0)%Z /\ (0 < array_length t1)%Z) /\
-          (0 <= k1)%Z /\ (k1 < array_length t1)%Z) (t2:array Z)
-   (Post15:exchange t2 t1 0 k1)
-   (Pre12:((0 <= 0)%Z /\ (0 <= k1 - 1)%Z) /\
-          (k1 - 1 < array_length t2)%Z /\
-          (forall i:Z,
-             (0 + 1 <= i)%Z /\ (i <= k1 - 1)%Z -> heap t2 (k1 - 1) i))
-   (t3:array Z)
-   (Post17:permut t3 t2 /\
-           (forall i:Z,
-              (0 <= i)%Z /\ (i <= k1 - 1)%Z -> heap t3 (k1 - 1) i) /\
-           (forall i:Z,
-              (0 <= i)%Z /\ (i < 0)%Z \/
-              (0 < i)%Z /\ (i < 2 * 0 + 1)%Z \/
-              (k1 - 1 < i)%Z /\ (i < array_length t3)%Z ->
-              access t3 i = access t2 i) /\
-           (forall v:Z,
-              inftree t2 (k1 - 1) v 0 -> inftree t3 (k1 - 1) v 0))
-   (k2:Z) (Post4:k2 = (k1 - 1)%Z),
-   (((0 <= k2)%Z /\ (k2 <= array_length t3 - 1)%Z) /\
-    (forall i:Z, (0 <= i)%Z /\ (i <= k2)%Z -> heap t3 k2 i) /\
-    ((k2 + 1 <= array_length t3 - 1)%Z ->
-     (access t3 0 <= access t3 (k2 + 1))%Z) /\
-    ((k2 + 1 <= array_length t3 - 1)%Z ->
-     sorted_array t3 (k2 + 1) (array_length t3 - 1)) /\ permut t3 t) /\
-   Zwf 0 k2 k1.
+(* Why obligation from file "heapsort.mlw", characters 1502-1558 *)
+Lemma heapsort_po_7 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post9: (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t)),
+  forall (k: Z),
+  forall (Post6: k = ((array_length t0) - 1)),
+  forall (Variant3: Z),
+  forall (k1: Z),
+  forall (t1: (array Z)),
+  forall (Pre15: Variant3 = k1),
+  forall (Pre14: (0 <= k1 /\ k1 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k1 -> (heap t1 k1 i))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k1 + 1)))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k1 + 1) ((array_length t1) - 1)))) /\
+                 (permut t1 t)),
+  forall (Test4: k1 >= 1),
+  forall (Pre13: (0 <= 0 /\ 0 < (array_length t1)) /\ 0 <= k1 /\ k1 <
+                 (array_length t1)),
+  forall (t2: (array Z)),
+  forall (Post15: (exchange t2 t1 0 k1)),
+  forall (Pre12: (0 <= 0 /\ 0 <= (k1 - 1)) /\ (k1 - 1) < (array_length t2) /\
+                 (forall (i:Z),
+                  ((0 + 1) <= i /\ i <= (k1 - 1) -> (heap t2 (k1 - 1) i)))),
+  forall (t3: (array Z)),
+  forall (Post17: (permut t3 t2) /\
+                  (forall (i:Z),
+                   (0 <= i /\ i <= (k1 - 1) -> (heap t3 (k1 - 1) i))) /\
+                  (forall (i:Z),
+                   (0 <= i /\ i < 0 \/ 0 < i /\ i < (2 * 0 + 1) \/ (k1 - 1) <
+                    i /\ i < (array_length t3) -> (access t3 i) =
+                    (access t2 i))) /\
+                  (forall (v:Z),
+                   ((inftree t2 (k1 - 1) v 0) -> (inftree t3 (k1 - 1) v 0)))),
+  forall (k2: Z),
+  forall (Post4: k2 = (k1 - 1)),
+  ((0 <= k2 /\ k2 <= ((array_length t3) - 1)) /\
+  (forall (i:Z), (0 <= i /\ i <= k2 -> (heap t3 k2 i))) /\
+  (((k2 + 1) <= ((array_length t3) - 1) -> (access t3 0) <=
+    (access t3 (k2 + 1)))) /\
+  (((k2 + 1) <= ((array_length t3) - 1) ->
+    (sorted_array t3 (k2 + 1) ((array_length t3) - 1)))) /\
+  (permut t3 t)) /\ (Zwf 0 k2 k1).
 Proof.
 intuition.
 SameLength t3 t2; omega.
@@ -329,17 +370,21 @@ apply exchange_is_permut with (i := 0%Z) (j := k1).
  assumption.
  Qed.
 
-(* Why obligation from file , characters 1206-1470 *)
-Lemma heapsort_po_8 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (t0:array Z)
-   (Post9:heap t0 (array_length t0 - 1) 0 /\ permut t0 t) (k:Z)
-   (Post6:k = (array_length t0 - 1)%Z),
-   ((0 <= k)%Z /\ (k <= array_length t0 - 1)%Z) /\
-   (forall i:Z, (0 <= i)%Z /\ (i <= k)%Z -> heap t0 k i) /\
-   ((k + 1 <= array_length t0 - 1)%Z ->
-    (access t0 0 <= access t0 (k + 1))%Z) /\
-   ((k + 1 <= array_length t0 - 1)%Z ->
-    sorted_array t0 (k + 1) (array_length t0 - 1)) /\ permut t0 t.
+(* Why obligation from file "heapsort.mlw", characters 1206-1470 *)
+Lemma heapsort_po_8 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post9: (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t)),
+  forall (k: Z),
+  forall (Post6: k = ((array_length t0) - 1)),
+  (0 <= k /\ k <= ((array_length t0) - 1)) /\
+  (forall (i:Z), (0 <= i /\ i <= k -> (heap t0 k i))) /\
+  (((k + 1) <= ((array_length t0) - 1) -> (access t0 0) <=
+    (access t0 (k + 1)))) /\
+  (((k + 1) <= ((array_length t0) - 1) ->
+    (sorted_array t0 (k + 1) ((array_length t0) - 1)))) /\
+  (permut t0 t).
 Proof.
 intuition SameLength t0 t; try omega.
 apply heap_all.
@@ -349,19 +394,24 @@ intro; absurd (array_length t0 - 1 + 1 <= array_length t0 - 1)%Z;
  Omega'.
 Qed.
 
-(* Why obligation from file , characters 1127-1569 *)
-Lemma heapsort_po_9 :
- forall (t:array Z) (Pre16:(1 <= array_length t)%Z) (t0:array Z)
-   (Post9:heap t0 (array_length t0 - 1) 0 /\ permut t0 t) (k:Z)
-   (Post6:k = (array_length t0 - 1)%Z) (k1:Z) (t1:array Z)
-   (Post5:(((0 <= k1)%Z /\ (k1 <= array_length t1 - 1)%Z) /\
-           (forall i:Z, (0 <= i)%Z /\ (i <= k1)%Z -> heap t1 k1 i) /\
-           ((k1 + 1 <= array_length t1 - 1)%Z ->
-            (access t1 0 <= access t1 (k1 + 1))%Z) /\
-           ((k1 + 1 <= array_length t1 - 1)%Z ->
-            sorted_array t1 (k1 + 1) (array_length t1 - 1)) /\
-           permut t1 t) /\ (k1 < 1)%Z),
-   sorted_array t1 0 (array_length t1 - 1) /\ permut t1 t.
+(* Why obligation from file "heapsort.mlw", characters 1127-1569 *)
+Lemma heapsort_po_9 : 
+  forall (t: (array Z)),
+  forall (Pre16: 1 <= (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post9: (heap t0 ((array_length t0) - 1) 0) /\ (permut t0 t)),
+  forall (k: Z),
+  forall (Post6: k = ((array_length t0) - 1)),
+  forall (k1: Z),
+  forall (t1: (array Z)),
+  forall (Post5: ((0 <= k1 /\ k1 <= ((array_length t1) - 1)) /\
+                 (forall (i:Z), (0 <= i /\ i <= k1 -> (heap t1 k1 i))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) -> (access t1 0) <=
+                   (access t1 (k1 + 1)))) /\
+                 (((k1 + 1) <= ((array_length t1) - 1) ->
+                   (sorted_array t1 (k1 + 1) ((array_length t1) - 1)))) /\
+                 (permut t1 t)) /\ k1 < 1),
+  (sorted_array t1 0 ((array_length t1) - 1)) /\ (permut t1 t).
 Proof.
 intuition.
 elim (Z_le_lt_eq_dec 1 (array_length t) Pre16); intro.
