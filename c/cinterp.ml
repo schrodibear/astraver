@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.133 2005-02-02 14:02:48 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.134 2005-02-03 10:44:38 hubert Exp $ i*)
 
 
 open Format
@@ -1015,80 +1015,6 @@ let noattr loc ty e =
     nexpr_loc  = loc
   }
 
-let rec pop_initializer loc t i =
-  match i with 
-    | [] -> (noattr loc t NEnop),[]
-    | (Iexpr e)::l -> e,l
-    | (Ilist [])::l -> pop_initializer loc t l
-    | (Ilist l)::l' -> 
-	let e,r = pop_initializer loc t l in e,r@l'
-
-let rec init_expr loc t lvalue initializers =
-  match t.Ctypes.ctype_node with
-    | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
-	let x,l = pop_initializer loc t initializers in
-	[{nst_node =NSexpr (noattr loc t (NEassign(lvalue,x)));
-	  nst_break = false;    
-	  nst_continue = false; 
-	  nst_return = false;   
-	  nst_term = true;
-	  nst_loc = loc     
-	 }], l
-    | Tstruct n ->
-	begin match Cenv.tag_type_definition n with
-	  | Cenv.TTStructUnion (Tstruct (_), fl) ->
-	      List.fold_left 
-		(fun (acc,init)  f -> 
-		   let block, init' =
-		     init_expr loc f.var_type 
-		       (in_struct lvalue f) init
-		   in (acc@block,init'))
-		([],initializers)  fl
-	  | _ ->
-	      assert false
-	end
-    | Tunion n ->
-	begin match Cenv.tag_type_definition n with
-	  | Cenv.TTStructUnion (Tstruct (_), f::_) ->
-	      let block, init' =
-		init_expr loc f.var_type 
-		  (noattr loc f.var_type (NEarrow(lvalue, f)))
-		  initializers
-	      in (block,init')
-	  | _ ->
-	      assert false
-	end
-    | Tarray (ty,Some t) ->
-	let rec init_cells i (block,init) =
-	  if i >= t then (block,init)
-	  else
-	    let ts = {
-	      nexpr_node = NEconstant (IntConstant (Int64.to_string i));
-	      nexpr_type = {Ctypes.ctype_node = Tint (Signed,Ctypes.Int);
-			      ctype_storage = No_storage;
-			      ctype_const = false;
-			      ctype_volatile = false;};
-	      nexpr_loc  =  loc }
-	    in
-	    let (b,init') = 
-	      init_expr loc ty 
-		(noattr loc ty 
-		   (NEstar(noattr loc
-			     {Ctypes.ctype_node = Tpointer ty;
-			      ctype_storage = No_storage;
-			      ctype_const = false;
-			      ctype_volatile = false;}
-			     (NEbinary (lvalue,Badd,ts))))) 
-		init 
-	    in
-	    init_cells (Int64.add i Int64.one) (block@b,init')
-	in
-	init_cells Int64.zero ([],initializers)
-    | Tarray (ty,None) -> assert false
-    | Tfun (_, _) -> assert false
-    | Tvar _ -> assert false
-    | Tvoid -> assert false
-
 (* [ab] indicates if returns are abrupt *)
 
 let rec interp_statement ab may_break stat = match stat.nst_node with
@@ -1218,28 +1144,10 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
 		      alloc_on_stack stat.nst_loc v t*)
 	      | Tvoid | Tvar _ | Tfun _ -> assert false
 	    end,([],[])
-	| Some i  ->   
-	    begin match ctype.Ctypes.ctype_node with
-	      | Tenum _ | Tint _ | Tfloat _ | Tarray (_, None) | Tpointer _ -> 
-		  interp_expr (fst (pop_initializer stat.nst_loc ctype [i])),
-		  ([],[])
-	      | Tarray (_, Some n) ->
-		  App (Var "alloca_parameter", Cte (Prim_int n)),
-		  init_expr stat.nst_loc ctype
-		    { nexpr_node = NEvar (Var_info v);
-		      nexpr_type = ctype;
-		      nexpr_loc  = stat.nst_loc;
-		    } [i]
-			 
-	      | Tstruct _ | Tunion _ ->
-		  App (Var "alloca_parameter", Cte (Prim_int Int64.one)),
-		  init_expr stat.nst_loc ctype
-		    { nexpr_node = NEvar (Var_info v);
-		      nexpr_type = ctype;
-		      nexpr_loc  = stat.nst_loc;
-		    } [i]
-	      | Tvoid | Tvar _ | Tfun _ -> assert false
-	     end
+	| Some (Iexpr e)  ->   
+	    interp_expr e, ([],[])
+	| Some (Ilist _) ->
+	    assert false
       in
       let decl = List.fold_left (fun acc x ->
 				   acc@[interp_statement ab may_break x]) 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.88 2005-02-01 15:17:39 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.89 2005-02-03 10:44:38 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -734,6 +734,12 @@ let type_initializer_option loc env ty = function
   | None -> None
   | Some i -> Some (type_initializer loc env ty i)
 
+let array_size_from_initializer loc ty i = match ty.ctype_node, i with
+  | Tarray (ety, None), Some (Ilist l) -> 
+      let s = of_int (List.length l) in
+      { ty with ctype_node = Tarray (ety, Some s) }
+  | _ -> 
+      ty
 
 (*s Statements *)
 
@@ -855,6 +861,7 @@ and type_block env et (dl,sl) =
 	if eq_type_node ty.ctype_node Tvoid then 
 	  error d.loc ("variable `" ^ x ^ "' declared void");
 	let i = type_initializer_option d.loc env ty i in
+	let ty = array_size_from_initializer d.loc ty i in
 	let info = default_var_info x in
 	if ty.ctype_storage = Static then set_static info;
 	let env' = Env.add x ty (Var_info info) env in
@@ -977,13 +984,6 @@ let function_spec loc f = function
 	 s'
        with Not_found -> 
 	 Hashtbl.add function_specs f s; s)
-
-let array_size_from_initializer loc ty i = match ty.ctype_node, i with
-  | Tarray (ety, None), Some (Ilist l) -> 
-      let s = of_int (List.length l) in
-      { ty with ctype_node = Tarray (ety, Some s) }
-  | _ -> 
-      ty
 
 let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
