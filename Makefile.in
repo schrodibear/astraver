@@ -17,7 +17,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 BINDIR=@bindir@
-LIBDIR=@libdir@
+LIBDIR=@libdir@/why
 
 # where to install the man page
 MANDIR=@mandir@
@@ -203,12 +203,17 @@ src/logic.ml: src/logic.mli
 # installation
 ##############
 
-install: install-binary install-man install-coq-@COQ@ install-pvs-@PVS@ 
+install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@ 
 
-install-binary: $(BINARY) $(WHY2HTML)
+install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML)
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why
+	cp -f $(CADUCEUS) $(BINDIR)/caduceus
 	cp -f $(WHY2HTML) $(BINDIR)/why2html
+
+install-lib:
+	mkdir -p $(LIBDIR)
+	cp -f lib/why/*.why $(LIBDIR)
 
 install-man:
 	mkdir -p $(MANDIR)/man1
@@ -234,8 +239,9 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local: bin/why.opt $(WHY2HTML) $(VO)
+local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(VO)
 	cp -f bin/why.opt $$HOME/bin/$$OSTYPE/why
+	cp -f $(CADUCEUS) $$HOME/bin/$$OSTYPE/caduceus
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
 	mkdir -p $(COQLIB)/contrib7/why
 	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib7/why

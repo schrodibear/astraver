@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.9 2004-03-04 11:54:50 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.10 2004-03-12 16:19:06 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -37,7 +37,7 @@ let libdir =
     Format.fprintf log "CADUCEUSLIB is set to %s@." v;
     v
   with Not_found -> 
-    let p = Filename.concat Cversion.libdir "why" in
+    let p = Cversion.libdir in
     Format.fprintf log 
       "CADUCEUSLIB is not set, using %s as default@." p;
     p
