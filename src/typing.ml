@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.89 2003-02-03 16:09:09 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.90 2003-02-05 08:07:48 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -176,7 +176,7 @@ let k_add_effects k e = { k with c_effect = Effect.union k.c_effect e }
 
 let state_var lab env (phi,r) = 
   let lenv = logical_env env in
-  let phi,tphi = Ltyping.term lab lenv phi in
+  let phi,tphi = Ltyping.term lab env lenv phi in
   let ids = term_refs env phi in
   (phi,tphi,r), Effect.add_reads ids Effect.bottom
 	
@@ -206,18 +206,18 @@ let predicates_effect lab env loc pl =
 
 let state_pre lab env loc pl =
   let lenv = logical_env env in
-  let pl = List.map (type_assert lab lenv) pl in
+  let pl = List.map (type_assert lab env lenv) pl in
   predicates_effect lab env loc (List.map (fun x -> x.a_value) pl), pl
 
 let state_assert lab env loc a =
-  let a = type_assert lab (logical_env env) a in
+  let a = type_assert lab env (logical_env env) a in
   predicates_effect lab env loc [a.a_value], a
 
 let state_inv lab env loc = function
   | None -> 
       Effect.bottom, None
   | Some i -> 
-      let i = type_assert lab (logical_env env) i in
+      let i = type_assert lab env (logical_env env) i in
       predicates_effect lab env loc [i.a_value], Some i
 	
 
@@ -232,7 +232,7 @@ let state_post lab env (id,v,ef) loc = function
       Effect.bottom, None
   | Some q ->
       check_unbound_exn loc (snd q);
-      let q = type_post lab (logical_env env) id v ef q in
+      let q = type_post lab env (logical_env env) id v ef q in
       let ids = post_vars q in
       let ef,q = 
 	Idset.fold

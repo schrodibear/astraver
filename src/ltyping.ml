@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.15 2003-01-30 12:17:21 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.16 2003-02-05 08:07:48 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -97,10 +97,11 @@ let make_arith loc = function
   | _ ->
       expected_num loc
 
-let check_label loc lab =
+let check_label loc lab env =
   if_labelled 
-    (fun (_,l) -> 
-       if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l))
+    (fun (id,l) -> 
+       if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l);
+       if not (is_reference env id) then raise_located loc (NotAReference id))
 
 let predicate_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "predicate expected"))
@@ -108,14 +109,14 @@ let predicate_expected loc =
 let term_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "term expected"))
 
-let rec predicate lab lenv p =
-  desc_predicate p.pp_loc lab lenv p.pp_desc
+let rec predicate lab env lenv p =
+  desc_predicate p.pp_loc lab env lenv p.pp_desc
 
-and desc_predicate loc lab lenv = function
+and desc_predicate loc lab env lenv = function
   | PPvar x ->
       type_pvar loc lenv x
   | PPapp (x, pl) ->
-      type_papp loc lenv x (List.map (term lab lenv) pl)
+      type_papp loc lenv x (List.map (term lab env lenv) pl)
   | PPtrue ->
       Ptrue
   | PPfalse ->
@@ -123,29 +124,31 @@ and desc_predicate loc lab lenv = function
   | PPconst _ ->
       predicate_expected loc
   | PPinfix (a, PPand, b) ->
-      Pand (predicate lab lenv a, predicate lab lenv b)
+      Pand (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPor, b) ->
-      Por (predicate lab lenv a, predicate lab lenv b)
+      Por (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPimplies, b) ->
-      Pimplies (predicate lab lenv a, predicate lab lenv b)
+      Pimplies (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
-      make_comparison loc (term lab lenv a, r, term lab lenv b)
+      make_comparison loc (term lab env lenv a, r, term lab env lenv b)
   | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv | PPmod), _) -> 
       predicate_expected loc
   | PPprefix (PPneg, _) ->
       predicate_expected loc
   | PPprefix (PPnot, a) ->
-      Pnot (predicate lab lenv a)
+      Pnot (predicate lab env lenv a)
   | PPif (a, b, c) ->
-      (match term lab lenv a with
-	 | ta, PTbool -> Pif (ta, predicate lab lenv b, predicate lab lenv c)
-	 | _ -> raise_located a.pp_loc ShouldBeBoolean)
+      (match term lab env lenv a with
+	 | ta, PTbool -> 
+	     Pif (ta, predicate lab env lenv b, predicate lab env lenv c)
+	 | _ -> 
+	     raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, a) ->
       let v = PureType pt in
-      forall id v (predicate lab (Env.add_logic id v lenv) a)
+      forall id v (predicate lab env (Env.add_logic id v lenv) a)
   | PPexists (id, pt, a) ->
       let v = PureType pt in
-      exists id v (predicate lab (Env.add_logic id v lenv) a)
+      exists id v (predicate lab env (Env.add_logic id v lenv) a)
 
 and type_pvar loc lenv x =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
@@ -160,15 +163,14 @@ and type_papp loc lenv x tl =
     | Predicate at -> check_type_args loc at tl; Papp (x, List.map fst tl)
     | _ -> predicate_expected loc
 
-and term lab lenv t =
-  desc_term t.pp_loc lab lenv t.pp_desc
+and term lab env lenv t =
+  desc_term t.pp_loc lab env lenv t.pp_desc
 
-and desc_term loc lab lenv = function
+and desc_term loc lab env lenv = function
   | PPvar x ->
-      check_label loc lab x;
-      Tvar x, type_tvar loc lenv x
+      Tvar x, type_tvar loc lab env lenv x
   | PPapp (x, [a;b]) when x == Ident.access ->
-      (match term lab lenv a, term lab lenv b with
+      (match term lab env lenv a, term lab env lenv b with
 	 | (a, PTarray v), (b, PTint) ->
 	     Tapp (x, [a;b]), v
 	 | (_, PTarray _), _ ->
@@ -178,16 +180,16 @@ and desc_term loc lab lenv = function
 	 | _ ->
 	     assert false)
   | PPapp (x, [a]) when x == Ident.array_length ->
-      (match term lab lenv a with
+      (match term lab env lenv a with
 	 | a, PTarray _ -> Tapp (x, [a]), PTint
 	 | Tvar t, _ -> raise_located a.pp_loc (UnboundArray t)
 	 | _ -> raise_located a.pp_loc (AnyMessage "array expected"))
   | PPapp (id, [a; b; c]) when id == if_then_else ->
-      type_if lab lenv a b c
+      type_if lab env lenv a b c
   | PPif (a, b, c) ->
-      type_if lab lenv a b c
+      type_if lab env lenv a b c
   | PPapp (x, tl) ->
-      let tl = List.map (term lab lenv) tl in
+      let tl = List.map (term lab env lenv) tl in
       Tapp (x, List.map fst tl), type_tapp loc lenv x tl
   | PPtrue ->
       ttrue, PTbool
@@ -196,19 +198,19 @@ and desc_term loc lab lenv = function
   | PPconst c ->
       Tconst c, type_const c
   | PPinfix (a, (PPadd|PPsub|PPmul|PPdiv|PPmod as r), b) ->
-      make_arith loc (term lab lenv a, r, term lab lenv b)
+      make_arith loc (term lab env lenv a, r, term lab env lenv b)
   | PPinfix (_, (PPand|PPor|PPimplies|PPlt|PPle|PPgt|PPge|PPeq|PPneq), _) ->
       term_expected loc
   | PPprefix (PPneg, a) ->
-      (match term lab lenv a with
+      (match term lab env lenv a with
 	 | ta, PTint -> Tapp (t_neg_int, [ta]), PTint
 	 | ta, PTfloat -> Tapp (t_neg_float, [ta]), PTfloat
 	 | _ -> expected_num loc)
   | PPprefix (PPnot, _) | PPforall _ | PPexists _ ->
       term_expected loc
 
-and type_if lab lenv a b c =
-  match term lab lenv a, term lab lenv b, term lab lenv c with
+and type_if lab env lenv a b c =
+  match term lab env lenv a, term lab env lenv b, term lab env lenv c with
     | (ta, PTbool), (tb, tyb), (tc, tyc) -> 
 	if tyb <> tyc then 
 	  raise_located c.pp_loc 
@@ -216,10 +218,11 @@ and type_if lab lenv a b c =
 	Tapp (if_then_else, [ta; tb; tc]), tyb
     | _ -> raise_located a.pp_loc ShouldBeBoolean
 
-and type_tvar loc lenv x = 
-  let x = if is_at x then fst (un_at x) else x in
-  if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
-  match find_logic x lenv with
+and type_tvar loc lab env lenv x = 
+  let xu = if is_at x then fst (un_at x) else x in
+  if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
+  check_label loc lab env x;
+  match find_logic xu lenv with
     | Function ([], t) -> t
     | _ -> raise_located loc (MustBePure)
 
@@ -258,11 +261,14 @@ and type_const = function
 
 (*s Checking types *)
 
-let type_assert lab lenv a = { a with a_value = predicate lab lenv a.a_value }
+let type_assert lab env lenv a = 
+  { a with a_value = predicate lab env lenv a.a_value }
 
-let type_post lab lenv id v ef (a,al) = 
+let type_post lab env lenv id v ef (a,al) = 
   let lab' = LabelSet.add "" lab in 
-  let a' = let lenv' = Env.add_logic id v lenv in type_assert lab' lenv' a in
+  let a' = 
+    let lenv' = Env.add_logic id v lenv in type_assert lab' env lenv' a 
+  in
   let xs = Effect.get_exns ef in
   let type_exn_post (x,a) =
     let loc = a.a_value.pp_loc in
@@ -272,7 +278,7 @@ let type_post lab lenv id v ef (a,al) =
       | None -> lenv
       | Some pt -> Env.add_logic result (PureType pt) lenv
     in
-    (x, type_assert lab' lenv' a)
+    (x, type_assert lab' env lenv' a)
   in
   (a', List.map type_exn_post al)
 
@@ -303,8 +309,8 @@ and type_c loc lab env lenv c =
   check_effect loc env c.pc_effect;
   let v = type_v loc lab env lenv c.pc_result_type in
   let id = c.pc_result_name in
-  let p = List.map (type_assert lab lenv) c.pc_pre in
-  let q = option_app (type_post lab lenv id v c.pc_effect) c.pc_post in
+  let p = List.map (type_assert lab env lenv) c.pc_pre in
+  let q = option_app (type_post lab env lenv id v c.pc_effect) c.pc_post in
   let s = subst_onev id Ident.result in
   let q = optpost_app (subst_in_predicate s) q in
   { c_result_name = c.pc_result_name; c_effect = c.pc_effect;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.9 2003-01-10 15:27:59 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.10 2003-02-05 08:07:48 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -31,16 +31,17 @@ val type_c :
   Loc.t -> LabelSet.t -> local_env -> logical_env -> ptype_c -> type_c
 
 val predicate : 
-  LabelSet.t -> logical_env -> lexpr -> predicate
+  LabelSet.t -> local_env -> logical_env -> lexpr -> predicate
 
 val term : 
-  LabelSet.t -> logical_env -> lexpr -> term * pure_type
+  LabelSet.t -> local_env -> logical_env -> lexpr -> term * pure_type
 
-val type_assert : LabelSet.t -> logical_env -> lexpr asst -> assertion
+val type_assert : 
+  LabelSet.t -> local_env -> logical_env -> lexpr asst -> assertion
 
 val type_post : 
-  LabelSet.t -> logical_env -> Ident.t -> type_v -> Effect.t -> lexpr post -> 
-  postcondition
+  LabelSet.t -> local_env -> logical_env -> Ident.t -> type_v -> Effect.t -> 
+  lexpr post -> postcondition
 
 val binders : 
   Loc.t -> LabelSet.t -> local_env -> logical_env -> 
