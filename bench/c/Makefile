@@ -11,3 +11,20 @@ gcc:
 
 test.i: test.c
 	gcc -E $^ > $@
+
+caduceus.why %.why: %.c $(CADUCEUS)
+	$(EXECCADUCEUS) -v $<
+
+WHY=../../bin/why.opt
+
+%_why.v %_valid.v: %.why $(WHY)
+	$(WHY) --valid -V --coq-v8 --coq-preamble "Require Export Why" caduceus.why $<
+
+%_why.sx: %.why $(WHY)
+	$(WHY) -V --simplify --no-simplify-prelude caduceus.why $<
+
+%_why.pvs: %.why $(WHY)
+	$(WHY) -V --pvs caduceus.why $<
+
+caduceus_why.v: caduceus.why $(WHY)
+	$(WHY) --coq-v8 caduceus.why

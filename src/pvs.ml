@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.43 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.44 2004-02-25 17:22:34 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -94,7 +94,7 @@ let rec print_pure_type fmt = function
   | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
   | PTvarid _ -> assert false 
   | PTexternal(_,_) 
-  | PTvar _ -> failwith "no polymorphism with PVS yet"
+  | PTvar _ -> failwith "no polymorphism with PVS"
 
 let infix_relation id =
   if id == t_lt_int then "<" 
@@ -176,7 +176,7 @@ let rec print_cc_type fmt = function
   | TTarrow ((_, CC_var_binder t1), t2) ->
       fprintf fmt "[%a -> %a]" print_cc_type t1 print_cc_type t2
   | TTterm t -> print_term fmt t
-  | TTSet -> assert false (* TODO ? *)
+  | TTSet -> failwith "no polymorphism with PVS"
   | TTtuple _ 
   | TTpred _ 
   | TTlambda _
@@ -216,16 +216,22 @@ let end_theory fmt th =
 let print_parameter fmt id v =
   fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_cc_type v
 
+let print_logic_type fmt = function
+  | Function (pl, t) -> 
+      fprintf fmt "[%a -> %a]"
+	(print_list comma print_pure_type) pl print_pure_type t
+  | Predicate pl -> 
+      fprintf fmt "[%a -> bool]"
+	(print_list comma print_pure_type) pl
+
 let print_logic fmt id s = 
   let (l,t) = Env.specialize_logic_type s in
-  assert false; (* quantifications *)
-  match t with
-  | Function (pl, t) -> fprintf fmt "%% logic %s (TODO)@\n" id
-  | Predicate pl -> fprintf fmt "%% logic %s (TODO)@\n" id
+  if l <> [] then failwith "no polymorphism with PVS";
+  fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_logic_type t
 
 let print_axiom fmt id p =
   let (l,p) = Env.specialize_predicate p in  
-  assert false; (* quantifications *)
+  if l <> [] then failwith "no polymorphism with PVS";
   fprintf fmt "  %s: AXIOM @[%a@]@\n@\n" id print_predicate p
 
 type elem = 
