@@ -14,6 +14,7 @@ loop0_valid.vo: loop0_valid.v ../../lib/coq/Why.vo ./loop0_why.vo
 loop0_why.vo: loop0_why.v ../../lib/coq/Why.vo
 mac_carthy_valid.vo: mac_carthy_valid.v ../../lib/coq/Why.vo ./mac_carthy_why.vo
 mac_carthy_why.vo: mac_carthy_why.v ../../lib/coq/Why.vo
+max_why.vo: max_why.v ../../lib/coq/Why.vo
 peano_valid.vo: peano_valid.v ../../lib/coq/Why.vo ./peano_why.vo
 peano_why.vo: peano_why.v ../../lib/coq/Why.vo
 power_valid.vo: power_valid.v ../../lib/coq/Why.vo ./power_why.vo
