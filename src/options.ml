@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.27 2003-09-23 10:38:22 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.28 2003-09-23 11:09:48 filliatr Exp $ i*)
 
 open Format
 
@@ -42,6 +42,32 @@ let c_file = ref false
 type coq_version = V7 | V8
 type prover = Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify
 let prover_ = ref (Coq V7)
+
+(*s extracting the Mizar environ from a file *)
+
+let environ_re = Str.regexp "[ ]*environ\\([ \t]\\|$\\)"
+let begin_re = Str.regexp "[ ]*begin[ \n]"
+let mizar_environ_from f =
+  let buf = Buffer.create 1024 in
+  let c = open_in f in
+  let rec look_for_environ () =
+    let s = input_line c in
+    if Str.string_match environ_re s 0 then 
+      read_environ () 
+    else 
+      look_for_environ ()
+  and read_environ () =
+    let s = input_line c in
+    if Str.string_match begin_re s 0 then raise Exit;
+    Buffer.add_string buf s;
+    Buffer.add_char buf '\n';
+    read_environ ()
+  in
+  try
+    look_for_environ ()
+  with End_of_file | Exit ->
+    close_in c;
+    Buffer.contents buf
 
 (*s Parsing the command-line *)
 
@@ -108,6 +134,8 @@ Coq-specific options:
 Mizar-specific options:
   --mizar-environ <text>
               sets the Mizar `environ'
+  --mizar-environ-from <file>
+              gets Mizar `environ' from <file>
 
 Misc options:
   --ocaml        Ocaml code output
@@ -153,6 +181,12 @@ let files =
       :: s :: args -> mizar_environ_ := Some s; parse args
     | ("-mizarenviron" | "--mizarenviron" | 
        "-mizar-environ"|"--mizar-environ") :: [] ->
+	usage (); exit 1
+    | ("-mizarenvironfrom" | "--mizarenvironfrom" | 
+       "-mizar-environ-from" | "--mizar-environ-from") 
+      :: f :: args -> mizar_environ_ := Some (mizar_environ_from f); parse args
+    | ("-mizarenvironfrom" | "--mizarenvironfrom" | 
+       "-mizar-environ-from"|"--mizar-environ-from") :: [] ->
 	usage (); exit 1
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 

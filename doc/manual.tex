@@ -760,8 +760,8 @@ Command line options are the following:
     Stop after annotation.
 
   \item[Prover selection:] ~\par
-  \item[\texttt{--coq}, \texttt{--pvs}, \texttt{--hol-light}, 
-        \texttt{--harvey}, \texttt{--simplify}]: ~\par 
+  \item[\texttt{--coq}, \texttt{--pvs}, \texttt{--mizar}, 
+        \texttt{--hol-light}, \texttt{--harvey}, \texttt{--simplify}]: ~\par 
     Select the prover; it defaults to \coq.
 
   \item[Coq-specific options:] ~\par
@@ -776,6 +776,14 @@ Command line options are the following:
   \item[\texttt{--coq-preamble}] \textit{text} : ~\par
     Give some \coq\ preamble to be substituted to \texttt{Require Why}
     when generating a \emph{new} \coq\ file.
+
+  \item[Mizar-specific options:] ~\par
+  \item[\texttt{--mizar-environ}] \textit{text} : ~\par
+    Give the \mizar\ preamble to be used 
+    when generating a \emph{new} \mizar\ file.
+  \item[\texttt{--mizar-environ-from}] \textit{file} : ~\par
+    Extract the \mizar\ preamble from \textit{file}, to be used
+    when generating a \emph{new} \mizar\ file.
 
   \item[Caml code generation options:] ~\par
   \item[\texttt{--ocaml}]: ~\par 
