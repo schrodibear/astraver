@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.83 2005-02-18 14:38:59 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.84 2005-02-21 09:52:16 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -605,7 +605,7 @@ let rec pop_initializer loc t i =
   match i with 
     | [] ->{ nterm_node = 
 	       (match t.Ctypes.ctype_node with
-		  | Tint _ -> NTconstant(IntConstant "0")
+		  | Tint _ | Tenum _ -> NTconstant(IntConstant "0")
 		  | Tfloat _ -> NTconstant(FloatConstant "0.0")
 		  | Tpointer _ -> 
 		      NTcast (t,
