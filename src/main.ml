@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.23 2002-03-20 15:01:55 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.24 2002-03-20 16:01:44 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -17,9 +17,9 @@ let reset () = match !prover with
   | Pvs -> Pvs.reset ()
   | Coq -> Coq.reset ()
 
-let push_obligations ol = match !prover with
-  | Pvs -> Pvs.push_obligations ol
-  | Coq -> Coq.push_obligations ol
+let push_obligations id ol = match !prover with
+  | Pvs -> Pvs.push_obligations (fst ol)
+  | Coq -> Coq.push_obligations id ol
 
 let output fwe = match !prover with
   | Pvs -> Pvs.output_file fwe
@@ -59,9 +59,10 @@ let interp_program id p =
   print_if_debug print_cc_term cc;
 
   if_debug eprintf "* generating obligations@.";
-  let ol = Vcg.vcg (Ident.string id) cc in
-  push_obligations ol;
-  if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
+  let ids = Ident.string id in
+  let ol = Vcg.vcg ids cc in
+  push_obligations ids ol;
+  if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length (fst ol));
   flush stderr
 
 (*s Processing of a program. *)
@@ -143,8 +144,10 @@ Typing/Annotations options:
   -wp, --wp-only     exits after annotation
 
 Prover options:
-  --coq   selects COQ prover (default)
-  --pvs   selects PVS prover
+  --coq       selects COQ prover (default)
+  --pvs       selects PVS prover
+  --valid, 
+  --no-valid  set/unset the functional validation (Coq only; default is no)
 ";
   flush stderr
 
@@ -163,6 +166,8 @@ let parse_args () =
     | ("-v" | "-version" | "--version") :: _ -> banner (); exit 0
     | ("-warranty" | "--warranty") :: _ -> copying (); exit 0
     | ("-V" | "--verbose") :: args -> verbose := true; parse args
+    | ("-valid" | "--valid") :: args -> valid := true; parse args
+    | ("-novalid" | "--no-valid") :: args -> valid := false; parse args
     | f :: args -> files := f :: !files; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))

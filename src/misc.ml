@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.24 2002-03-20 15:01:55 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.25 2002-03-20 16:01:44 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -35,6 +35,10 @@ let rec list_combine3 a b c = match a, b, c with
   | [], [], [] -> []
   | xa::ra, xb::rb, xc::rc -> (xa, xb, xc) :: list_combine3 ra rb rc
   | _ -> invalid_arg "list_combine3"
+
+let rec list_first f = function
+  | [] -> raise Exit
+  | x :: l -> try f x with Exit -> list_first f l
 
 (*s Functions on names *)
 
@@ -253,7 +257,7 @@ let rec cc_applist f l = match (f, l) with
   | CC_app (f, l), l' -> CC_app (f, l @ l')
   | f, l -> CC_app (f, l)
 
-let cc_lam = List.fold_right (fun b c -> CC_lam (b, c))
+let cc_lam bl c = List.fold_right (fun b c -> CC_lam (b, c)) bl c
 
 (*s functions over AST *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.23 2002-03-20 15:01:55 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.24 2002-03-20 16:01:44 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -81,14 +81,16 @@ and cc_bind_type =
 
 and cc_binder = variable * cc_bind_type
 
-type cc_term =
+(* ['a] is the type of holes *)
+
+type 'a cc_term =
   | CC_var of variable
-  | CC_letin of bool * cc_binder list * cc_term * cc_term
-  | CC_lam of cc_binder * cc_term
-  | CC_app of cc_term * cc_term list
-  | CC_tuple of cc_term list
-  | CC_case of cc_term * (cc_binder list * cc_term) list
-  | CC_if of cc_term * cc_term * cc_term
+  | CC_letin of bool * cc_binder list * 'a cc_term * 'a cc_term
+  | CC_lam of cc_binder * 'a cc_term
+  | CC_app of 'a cc_term * 'a cc_term list
+  | CC_tuple of 'a cc_term list
+  | CC_case of 'a cc_term * (cc_binder list * 'a cc_term) list
+  | CC_if of 'a cc_term * 'a cc_term * 'a cc_term
   | CC_expr of term
-  | CC_hole of predicate
+  | CC_hole of 'a
   | CC_type of cc_type

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.17 2002-03-20 15:01:55 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.18 2002-03-20 16:01:44 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -156,17 +156,12 @@ let rec print_cc_type fmt = function
   | TTtuple _ -> 
       assert false
 
-let occur_sequent id = function
-  | Spred (_,p) -> occur_predicate id p
-  | Svar _ -> false
-
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
     | [] ->
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
-	if List.exists (occur_sequent id) hyps || occur_predicate id concl then
-	  fprintf fmt "(%a: %a)@\n" Ident.print id print_cc_type v;
+	fprintf fmt "(%a: %a)@\n" Ident.print id print_cc_type v;
 	print_seq hyps
     | Spred (id, p) :: hyps -> 
 	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_predicate p;
@@ -175,57 +170,83 @@ let print_sequent fmt (hyps,concl) =
   print_seq hyps
 
 let print_lemma fmt (id,s) =
-  fprintf fmt "@[<hov 2>Lemma %s : @\n" id;
-  print_sequent fmt s;
-  fprintf fmt ".@]@\n"
+  fprintf fmt "@[<hov 2>Lemma %s : @\n%a.@]@\n" id print_sequent s
 
 let print_obligation fmt o = 
   print_lemma fmt o;
   fprintf fmt "Proof.@\n(* FILL PROOF HERE *)@\nSave.@\n@\n"
 
 
+let print_validation fmt (id,v) =
+  fprintf fmt "@[Definition %s_valid := O(*TODO*).@\n@]@\n" id
+
 (*s Queueing elements. *)
 
-let oblig = Hashtbl.create 97
+let oblig_t = Hashtbl.create 97
+let oblig_q = Queue.create ()
 
-let queue = Queue.create ()
+let valid_t = Hashtbl.create 97
+let valid_q = Queue.create ()
 
-let reset () = Queue.clear queue; Hashtbl.clear oblig
+let reset () = 
+  Queue.clear oblig_q; Hashtbl.clear oblig_t; 
+  Queue.clear valid_q; Hashtbl.clear valid_t
 
-let push_obligations ol = 
-  List.iter (fun o -> Queue.add o queue) ol;
-  List.iter (fun (l,p) -> Hashtbl.add oblig l p) ol
-
+let push_obligations id (ol,v) = 
+  List.iter (fun o -> Queue.add o oblig_q) ol;
+  List.iter (fun (l,p) -> Hashtbl.add oblig_t l p) ol;
+  if !valid then begin
+    Queue.add (id,v) valid_q;
+    Hashtbl.add valid_t id v 
+  end
 
 (*s Generating the output. *)
 
-let po_regexp = Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
+let oblig_regexp = Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
+let valid_regexp = Str.regexp "Definition[ ]+\\(.*\\)_valid[ ]*:=[ ]*"
 
-let is_po s =
+type line = 
+  | Oblig of string
+  | Valid of string
+  | Other
+
+let check_line s =
   try
-    if Str.string_match po_regexp s 0 then
-      Some (Str.matched_group 1 s)
-    else
-      None
+    if Str.string_match oblig_regexp s 0 then
+      Oblig (Str.matched_group 1 s)
+    else if Str.string_match valid_regexp s 0 then
+      Valid (Str.matched_group 1 s)
+    else 
+      Other
   with Not_found ->
-    None
+    Other
 
 let regen oldf fmt =
   let cin = open_in oldf in
   let rec scan () =
     let s = input_line cin in
-    match is_po s with
-      | Some l ->
-	  if Hashtbl.mem oblig l then begin
+    match check_line s with
+      | Oblig l ->
+	  if Hashtbl.mem oblig_t l then begin
 	    if !verbose then eprintf "overwriting obligation %s@\n" l;
-	    let p = Hashtbl.find oblig l in
+	    let p = Hashtbl.find oblig_t l in
 	    print_lemma fmt (l,p);
-	    Hashtbl.remove oblig l
+	    Hashtbl.remove oblig_t l
 	  end else
 	    if !verbose then eprintf "erasing obligation %s@\n" l;
 	  skip_to_dot ();
 	  scan ()
-      | _ -> 
+      | Valid id ->
+	  if Hashtbl.mem valid_t id then begin
+	    if !verbose then eprintf "overwriting validation %s@\n" id;
+	    let v = Hashtbl.find valid_t id in
+	    print_validation fmt (id,v);
+	    Hashtbl.remove valid_t id
+	  end else
+	    if !verbose then eprintf "erasing validation %s@\n" id;
+	  skip_to_dot ();
+	  scan ()
+      | Other -> 
 	  fprintf fmt "%s@\n" s;
 	  scan ()
   and skip_to_dot () =
@@ -239,12 +260,14 @@ let regen oldf fmt =
     try scan () with End_of_file -> 
     try tail () with End_of_file -> close_in cin
   end;
-  Queue.iter 
-    (function (l,_) as o -> if Hashtbl.mem oblig l then print_obligation fmt o)
-    queue
+  let remaining q h f = 
+    Queue.iter (function (x,_) as o -> if Hashtbl.mem h x then f o) q
+  in
+  remaining oblig_q oblig_t (print_obligation fmt);
+  remaining valid_q valid_t (print_validation fmt)
 
 let first_time fmt =
-  Queue.iter (print_obligation fmt) queue
+  Queue.iter (print_obligation fmt) oblig_q
 
 let print_in_file p f =
   let cout = open_out f in

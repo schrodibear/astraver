@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.23 2002-03-20 15:01:55 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.24 2002-03-20 16:01:44 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -116,7 +116,7 @@ and trad_type_in_env ren env id =
     type [interp] (functions producing a [cc_term] when given a renaming
     data structure). *)
 
-type interp = Rename.t -> cc_term
+type interp = Rename.t -> predicate cc_term
 
 
 (*s [unit k t ren env] constructs the tuple 

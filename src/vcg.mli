@@ -13,4 +13,11 @@ type sequent = context_element list * predicate
 
 type obligation = string * sequent
 
-val vcg : string -> cc_term -> obligation list
+type proof = 
+  | Lemma of string * Ident.t list
+  | Reflexivity of term
+  | Assumption of Ident.t
+
+type validation = proof cc_term
+
+val vcg : string -> predicate cc_term -> obligation list * validation

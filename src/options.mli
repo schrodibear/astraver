@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: options.mli,v 1.5 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.6 2002-03-20 16:01:44 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -16,8 +16,6 @@ val if_debug : ('a -> unit) -> 'a -> unit
 val if_debug_2 : ('a -> 'b -> unit) -> 'a -> 'b -> unit
 val if_debug_3 : ('a -> 'b -> 'c -> unit) -> 'a -> 'b -> 'c -> unit
 
-(*i val dprintf : ('a, Format.formatter, unit) format -> 'a i*)
-
 (*s Typing options *)
 
 val parse_only : bool ref
@@ -30,3 +28,4 @@ type prover = Coq | Pvs
 
 val prover : prover ref
 
+val valid : bool ref
