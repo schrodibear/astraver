@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.5 2002-12-04 15:35:20 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.6 2002-12-04 15:43:58 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -98,6 +98,18 @@ Axiom store_def_2 : (T:Set)(t:(array T))(v:T)
 
 Hints Resolve new_def store_def_1 store_def_2 : datatypes v62.
 
+
+(* A tactic to simplify access in arrays *)
+
+Tactic Definition WhyArrays :=
+  Repeat Rewrite store_def_1;
+  Repeat Rewrite array_length_store.
+
+Tactic Definition WhyAccessStore i j H :=
+  Elim (Z_eq_dec i j); [ 
+    Intro H; Rewrite H; Rewrite store_def_1; WhyArrays
+  | Intro H; Rewrite store_def_2; 
+             [ Idtac | Idtac | Idtac | Exact H ] ].
 
 (* Syntax and pretty-print for arrays *)
 
