@@ -21,7 +21,7 @@ let u1 = let r = ref 3 in (add1 r 7) { r = 10 }
 (* [mult1 x y] muliplies [x] by [y], modifiying [x] *)
 
 let mult1 = fun (x:int ref) (y:int) ->
-  { y >= 0 }
+  { x >= 0 and y >= 0 }
   (let z = ref y in
    let savex = !x in
    begin
