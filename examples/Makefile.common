@@ -20,7 +20,7 @@ cvcl: $(VO:_why.vo=_why.cvc)
 	$(CADUCEUS) $<
 
 %.vo: %.v
-	coqc -R ../../lib/coq Coq.why $(OPT) $<
+	coqc -I ../../lib/coq $(OPT) $<
 
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $<
@@ -52,6 +52,6 @@ clean::
 	rm -f *_valid.v
 
 depend:: $(VO:.vo=.v)
-	coqdep -R ../../lib/coq Coq.why *.v > .depend
+	coqdep -I ../../lib/coq *.v > .depend
 
 include .depend

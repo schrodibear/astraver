@@ -6,7 +6,7 @@ Require Import Omega.
 Require Import Zdiv.
 Require Import ZArithRing.
 
-(* Why obligation from file "arith.mlw", characters 358-368 *)
+(* Why obligation from file "arith.mlw", characters 358-367 *)
 Lemma mult_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -29,7 +29,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "arith.mlw", characters 374-386 *)
+(* Why obligation from file "arith.mlw", characters 374-385 *)
 Lemma mult_po_2 : 
   forall (x: Z),
   forall (y: Z),
@@ -70,7 +70,7 @@ unfold Zwf.
 subst; apply Z_div_lt; try omega.
 Qed.
 
-(* Why obligation from file "arith.mlw", characters 386-386 *)
+(* Why obligation from file "arith.mlw", characters 385-385 *)
 Lemma mult_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -114,32 +114,8 @@ repeat split; try omega.
 subst; apply Z_div_lt; try omega.
 Qed.
 
-(* Why obligation from file "arith.mlw", characters 400-406 *)
+(* Why obligation from file "arith.mlw", characters 268-432 *)
 Lemma mult_po_4 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (Pre5: x >= 0 /\ y >= 0),
-  forall (a: Z),
-  forall (Post10: a = x),
-  forall (b: Z),
-  forall (Post9: b = y),
-  forall (p: Z),
-  forall (Post8: p = 0),
-  forall (Variant1: Z),
-  forall (a1: Z),
-  forall (b1: Z),
-  forall (p1: Z),
-  forall (Pre4: Variant1 = a1),
-  forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
-  forall (Test4: a1 <> 0),
-  forall (p2: Z),
-  ~(2 = 0).
-Proof.
-intuition.
-Qed.
-
-(* Why obligation from file "arith.mlw", characters 268-436 *)
-Lemma mult_po_5 : 
   forall (x: Z),
   forall (y: Z),
   forall (Pre5: x >= 0 /\ y >= 0),
@@ -157,16 +133,14 @@ Lemma mult_po_5 :
   forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
   forall (Test1: a1 = 0),
   forall (result: Z),
-  forall (HW_14: result = p1),
+  forall (HW_11: result = p1),
   result = (x * y).
 Proof.
-intuition; subst.
-rewrite <- H2.
-ring.
+intuition.
 Qed.
 
-(* Why obligation from file "arith.mlw", characters 304-333 *)
-Lemma mult_po_6 : 
+(* Why obligation from file "arith.mlw", characters 304-330 *)
+Lemma mult_po_5 : 
   forall (x: Z),
   forall (y: Z),
   forall (Pre5: x >= 0 /\ y >= 0),
@@ -177,6 +151,12 @@ Lemma mult_po_6 :
   forall (p: Z),
   forall (Post8: p = 0),
   a >= 0 /\ (p + a * b) = (x * y).
+Proof.
+intuition; subst.
+rewrite <- H2.
+ring.
+Qed.
+
 Proof.
 intuition; subst; ring.
 Save.

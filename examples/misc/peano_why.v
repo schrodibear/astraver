@@ -3,7 +3,7 @@ Require Import Why.
 Require Import Omega.
 Require Import ZArithRing.
 
-(* Why obligation from file "peano.mlw", characters 272-301 *)
+(* Why obligation from file "peano.mlw", characters 272-300 *)
 Lemma add1_po_1 : 
   forall (y: Z),
   forall (x: Z),
@@ -25,7 +25,7 @@ Lemma add1_po_1 :
  unfold Zwf; intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 178-309 *)
+(* Why obligation from file "peano.mlw", characters 178-305 *)
 Lemma add1_po_2 : 
   forall (y: Z),
   forall (x: Z),
@@ -43,7 +43,7 @@ Proof.
 unfold Zwf; intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 211-247 *)
+(* Why obligation from file "peano.mlw", characters 211-246 *)
 Lemma add1_po_3 : 
   forall (y: Z),
   forall (x: Z),
@@ -56,7 +56,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "peano.mlw", characters 367-391 *)
+(* Why obligation from file "peano.mlw", characters 367-390 *)
 Lemma u1_po_1 : 
   forall (r: Z),
   forall (Post2: r = 3),
@@ -67,7 +67,7 @@ Lemma u1_po_1 :
  intros; omega.
  Qed.
 
-(* Why obligation from file "peano.mlw", characters 367-391 *)
+(* Why obligation from file "peano.mlw", characters 367-390 *)
 Lemma u1_po_2 : 
   forall (r: Z),
   forall (Post2: r = 3),
@@ -82,7 +82,7 @@ Lemma u1_po_2 :
  Qed.
 
 
-(* Why obligation from file "peano.mlw", characters 527-545 *)
+(* Why obligation from file "peano.mlw", characters 527-544 *)
 Lemma rec_add1_po_1 : 
   forall (y: Z),
   forall (Pre8: y >= 0),
@@ -99,7 +99,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 480-567 *)
+(* Why obligation from file "peano.mlw", characters 480-566 *)
 Lemma rec_add1_po_2 : 
   forall (y: Z),
   forall (Pre8: y >= 0),
@@ -120,7 +120,7 @@ Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 508-549 *)
+(* Why obligation from file "peano.mlw", characters 508-546 *)
 Lemma rec_add1_po_3 : 
   forall (y: Z),
   forall (Pre8: y >= 0),
@@ -140,7 +140,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 549-549 *)
+(* Why obligation from file "peano.mlw", characters 546-546 *)
 Lemma rec_add1_po_4 : 
   forall (y: Z),
   forall (Pre8: y >= 0),
@@ -158,7 +158,7 @@ intros; omega.
 Qed.
 
 
-(* Why obligation from file "peano.mlw", characters 608-636 *)
+(* Why obligation from file "peano.mlw", characters 608-635 *)
 Lemma u11_po_1 : 
   forall (r: Z),
   forall (Post2: r = 3),
@@ -169,7 +169,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 608-636 *)
+(* Why obligation from file "peano.mlw", characters 608-635 *)
 Lemma u11_po_2 : 
   forall (r: Z),
   forall (Post2: r = 3),
@@ -184,7 +184,7 @@ intros; omega.
 Qed.
 
 
-(* Why obligation from file "peano.mlw", characters 933-947 *)
+(* Why obligation from file "peano.mlw", characters 933-946 *)
 Lemma mult1_po_1 : 
   forall (y: Z),
   forall (x: Z),
@@ -206,7 +206,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 933-967 *)
+(* Why obligation from file "peano.mlw", characters 933-966 *)
 Lemma mult1_po_2 : 
   forall (y: Z),
   forall (x: Z),
@@ -238,7 +238,7 @@ subst.
 ring.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 833-977 *)
+(* Why obligation from file "peano.mlw", characters 833-973 *)
 Lemma mult1_po_3 : 
   forall (y: Z),
   forall (x: Z),
@@ -267,7 +267,7 @@ generalize H2.
 omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 868-904 *)
+(* Why obligation from file "peano.mlw", characters 868-903 *)
 Lemma mult1_po_4 : 
   forall (y: Z),
   forall (x: Z),
@@ -285,7 +285,7 @@ subst z; split; [ omega | ring ]; assumption.
 Qed.
 
 
-(* Why obligation from file "peano.mlw", characters 1042-1067 *)
+(* Why obligation from file "peano.mlw", characters 1042-1066 *)
 Lemma u2_po_1 : 
   forall (r: Z),
   forall (Post2: r = 4),
@@ -296,7 +296,7 @@ Lemma u2_po_1 :
  intros; omega.
  Qed.
 
-(* Why obligation from file "peano.mlw", characters 1042-1067 *)
+(* Why obligation from file "peano.mlw", characters 1042-1066 *)
 Lemma u2_po_2 : 
   forall (r: Z),
   forall (Post2: r = 4),
@@ -311,7 +311,7 @@ Lemma u2_po_2 :
  Qed.
 
 
-(* Why obligation from file "peano.mlw", characters 1330-1375 *)
+(* Why obligation from file "peano.mlw", characters 1330-1374 *)
 Lemma mult2_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -326,7 +326,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 1185-1391 *)
+(* Why obligation from file "peano.mlw", characters 1185-1390 *)
 Lemma mult2_po_2 : 
   forall (x: Z),
   forall (y: Z),

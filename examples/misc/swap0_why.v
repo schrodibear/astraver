@@ -1,7 +1,7 @@
 Require Import Why.
 Require Import Omega.
 
-(* Why obligation from file "swap0.mlw", characters 149-174 *)
+(* Why obligation from file "swap0.mlw", characters 149-171 *)
 Lemma swap1_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -17,7 +17,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 316-358 *)
+(* Why obligation from file "swap0.mlw", characters 316-355 *)
 Lemma swap2_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -33,7 +33,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 509-534 *)
+(* Why obligation from file "swap0.mlw", characters 509-531 *)
 Lemma swap3_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -49,7 +49,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 654-678 *)
+(* Why obligation from file "swap0.mlw", characters 654-677 *)
 Lemma test_swap3_po_1 : 
   forall (c: Z),
   forall (Post2: c = 1),
@@ -66,7 +66,7 @@ Qed.
 
 
 
-(* Why obligation from file "swap0.mlw", characters 790-826 *)
+(* Why obligation from file "swap0.mlw", characters 790-825 *)
 Lemma call_swap3_y_x_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -80,7 +80,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 945-1014 *)
+(* Why obligation from file "swap0.mlw", characters 945-1013 *)
 Lemma swap4_po_1 : 
   forall (a: Z),
   forall (b: Z),
@@ -96,7 +96,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 1109-1133 *)
+(* Why obligation from file "swap0.mlw", characters 1109-1132 *)
 Lemma test_swap4_po_1 : 
   forall (c: Z),
   forall (Post2: c = 1),
@@ -112,7 +112,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 1187-1218 *)
+(* Why obligation from file "swap0.mlw", characters 1187-1217 *)
 Lemma call_swap4_x_y_po_1 : 
   forall (x: Z),
   forall (y: Z),
@@ -126,7 +126,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "swap0.mlw", characters 1240-1271 *)
+(* Why obligation from file "swap0.mlw", characters 1240-1270 *)
 Lemma call_swap4_y_x_po_1 : 
   forall (x: Z),
   forall (y: Z),
