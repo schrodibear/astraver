@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.31 2004-07-12 14:54:53 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.32 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -68,25 +68,33 @@ let other_cmp = function
 
 let rec unify t1 t2 = 
   match (t1,t2) with
-  | (PTarray ta,PTarray tb) -> unify ta tb
-  | (PTvarid _,_) -> assert false
-  | (_,PTvarid _) -> assert false
-  | (PTexternal(l1,i1),PTexternal(l2,i2)) ->
-      i1 = i2 && List.length l1 = List.length l2 &&
-      List.for_all2 unify l1 l2
-  | (PTvar v1,_) ->
+  | (PTvar v1, _) ->
       begin
 	match v1.type_val with
 	  | None -> v1.type_val <- Some t2; true
 	  | Some ta -> unify ta t2
       end
-  | (_,PTvar v2) ->
+  | (_, PTvar v2) ->
       begin
 	match v2.type_val with 
 	  | None -> v2.type_val <- Some t1; true
 	  | Some tb -> unify t1 tb
       end
-  | _ -> t1 = t2
+
+  | (PTarray ta, PTarray tb) -> unify ta tb
+  | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
+      i1 = i2 && List.length l1 = List.length l2 &&
+      List.for_all2 unify l1 l2
+  | (PTexternal _ | PTarray _), _
+  | _, (PTexternal _ | PTarray _) ->
+      false
+
+  | (PTvarid xa, PTvarid xb) -> xa = xb
+  | (PTvarid _, _)
+  | (_, PTvarid _) -> 
+      false
+  | (PTunit | PTreal | PTbool | PTint), _ -> 
+      t1 = t2
 
 let make_comparison loc = function
   | (a,PTint), (PPlt|PPle|PPgt|PPge|PPeq|PPneq as r), (b,PTint) ->
@@ -134,7 +142,8 @@ module Instances =
 
 let instances_t = Hashtbl.create 97
 
-let instances = Hashtbl.find instances_t
+let instances x = 
+  try Hashtbl.find instances_t x with Not_found -> Instances.empty
 
 let add_instance x i =
   let s = try Hashtbl.find instances_t x with Not_found -> Instances.empty in
@@ -197,7 +206,8 @@ and desc_predicate loc lab env lenv = function
 	     raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, a) ->
       let v = PureType pt in
-      forall id v (predicate lab env (Env.add_logic id v lenv) a)
+      forall id v 
+	(predicate lab env (Env.add_logic ~generalize:false id v lenv) a)
   | PPexists (id, pt, a) ->
       let v = PureType pt in
       exists id v (predicate lab env (Env.add_logic id v lenv) a)

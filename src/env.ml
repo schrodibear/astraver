@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.45 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.46 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -114,24 +114,20 @@ let rec subst_pure_type s t =
     | PTarray ta -> PTarray (subst_pure_type s ta)
     | PTint | PTreal | PTbool | PTunit | PTvar _ -> t
 
-let subst_logic_type s t =
-  match t with
-    | Function(tl,tr) -> 
-	Function(List.map (subst_pure_type s) tl,subst_pure_type s tr)
-    | Predicate(tl) -> 
-	Predicate(List.map (subst_pure_type s) tl)
+let subst_logic_type s = function
+  | Function (tl,tr) -> 
+      Function (List.map (subst_pure_type s) tl, subst_pure_type s tr)
+  | Predicate (tl) -> 
+      Predicate (List.map (subst_pure_type s) tl)
 
-let rec subst_type_v s t =
-  match t with
+let rec subst_type_v s = function
   | Ref t -> Ref (subst_type_v s t)
   | Array t -> Array (subst_type_v s t)
-  | Arrow(bl,c) ->
-      Arrow(List.map (subst_binder s) bl,subst_type_c s c)
-  | PureType t -> PureType(subst_pure_type s t)
-and subst_binder s ((id,t) as b) =
-  match t with
-    | BindSet | Untyped -> b
-    | BindType t -> (id,BindType (subst_type_v s t))
+  | Arrow (bl,c) -> Arrow (List.map (subst_binder s) bl,subst_type_c s c)
+  | PureType t -> PureType (subst_pure_type s t)
+and subst_binder s ((id,t) as b) = match t with
+  | BindSet | Untyped -> b
+  | BindType t -> (id, BindType (subst_type_v s t))
 and subst_type_c s c =
   { c with c_result_type = subst_type_v s c.c_result_type }
 
@@ -141,17 +137,25 @@ let specialize_scheme subst s =
       (fun x -> (x,new_type_var()))
       s.scheme_vars
   in 
-  (List.map snd env,subst env s.scheme_type)
+  (List.map snd env, subst env s.scheme_type)
 
 let specialize_logic_type = specialize_scheme subst_logic_type
 
 let specialize_type_v = specialize_scheme subst_type_v
 
+(***
+let rec subst_term s = function
+  | Tapp (id, tl, i) -> 
+      Tapp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
+  | Tconst _ | Tvar _ | Tderef _ as t -> 
+      t
+***)
+
 let rec subst_predicate s p =
   let f = subst_predicate s in
   match p with
   | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
-  | Pif (a, b, c) -> Pif (a, f b, f c)
+  | Pif (a, b, c) -> Pif ((*subst_term s*) a, f b, f c)
   | Pand (w, a, b) -> Pand (w, f a, f b)
   | Por (a, b) -> Por (f a, f b)
   | Piff (a, b) -> Piff (f a, f b)
@@ -159,7 +163,13 @@ let rec subst_predicate s p =
   | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
-  | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
+(***
+  | Papp (id, tl, i) -> 
+      Papp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
+  | Pfpi (t, a, b) -> Pfpi (subst_term s t, a, b)
+***)
+  | Papp _ | Pfpi _ 
+  | Ptrue | Pfalse | Pvar _ as p -> p
 
 let specialize_predicate = specialize_scheme subst_predicate
 
@@ -497,8 +507,8 @@ let add_logic_aux id vars v env = match v with
   | _ -> 
       env
 
-let add_logic id v env =
-  let l = find_type_v_vars [] v in
+let add_logic ?(generalize=true) id v env =
+  let l = if generalize then find_type_v_vars [] v else [] in
   add_logic_aux id l v env
 
 let logical_env (m,_,_) = 

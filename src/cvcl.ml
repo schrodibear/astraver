@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.11 2004-07-12 14:54:53 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.12 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -261,16 +261,15 @@ let print_obligation fmt (loc, o, s) =
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation loc;
   fprintf fmt "@[<hov 2>QUERY %a;@]@\n@\n" print_sequent s
 
-(* substitution of type variables by pure types *)
-module Subst = struct
+(* generic substitution parameterized by a substitution over [pure_type] *)
+module type Substitution = sig
+  type substitution
+  val pure_type : substitution -> pure_type -> pure_type
+end
 
-  let rec pure_type s = function
-    | PTvarid id as t ->
-	(try List.assoc (Ident.string id) s with Not_found -> t)
-    | PTexternal (l, id) ->
-	PTexternal (List.map (pure_type s) l, id)
-    | PTarray ta -> PTarray (pure_type s ta)
-    | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
+module GenSubst(S : Substitution) = struct
+
+  include S
 
   let logic_type s = function
     | Function (tl, tr) -> 
@@ -302,6 +301,22 @@ module Subst = struct
     | Ptrue | Pfalse | Pvar _ as p -> p
 
 end
+
+(* substitution of unification type variables within instances *)
+module SI = struct
+
+  type substitution = (int * pure_type) list
+
+  let rec pure_type s = function
+    | PTvar v as t ->
+	(try List.assoc v.tag s with Not_found -> t)
+    | PTexternal (l, id) ->
+	PTexternal (List.map (pure_type s) l, id)
+    | PTarray ta -> PTarray (pure_type s ta)
+    | PTint | PTreal | PTbool | PTunit | PTvarid _ as t -> t
+
+end
+module SubstI = GenSubst(SI)
 
 (* the following module collects instances (within [Tapp] and [Papp]) *)
 module OpenInstances = struct
@@ -341,30 +356,64 @@ let rec unify s t1 t2 = match (t1,t2) with
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
       if i1 <> i2 || List.length l1 <> List.length l2 then raise Exit;
       List.fold_left2 unify s l1 l2
-  | (PTvar _, _)
   | (_, PTvar _)
   | (_, PTvarid _) ->
       assert false
+  | (PTvar {type_val=Some v1}, _) ->
+      unify s v1 t2
+  | (PTvar {tag=t;type_val=None}, _) ->
+      begin
+	try
+	  let t1 = List.assoc t s in
+	  if t1 <> t2 then raise Exit;
+	  s
+	with Not_found ->
+	  (t, t2) :: s
+      end
   | (PTvarid v1, _) ->
+      assert false
+(***
+      let v1 = Ident.string v1 in
       begin
 	try
 	  let t1 = List.assoc v1 s in
 	  if t1 <> t2 then raise Exit;
 	  s
 	with Not_found ->
-	  (v1,t2) :: s
+	  (v1, t2) :: s
       end
+***)
   | PTint, PTint
   | PTbool, PTbool
   | PTreal, PTreal
   | PTunit, PTunit -> s
   | _ -> raise Exit
 
+let unify_i = List.fold_left2 unify
+
 let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
+  eprintf "p = %a@." Util.print_predicate p.scheme_type;
   let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
-  
-  fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p.Env.scheme_type
+  let all_i = OpenInstances.S.elements all_i in
+  let rec iter s = function
+    | [] ->
+	eprintf "subst = %a@."
+	  (print_list space (fun fmt (t,pt) -> fprintf fmt "[%d -> %a]" t print_pure_type pt)) s;
+	let ps = SubstI.predicate s p.scheme_type in
+	fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate ps
+    | (x,oi) :: oil ->
+	Instances.iter 
+	  (fun ci -> 
+	     eprintf "x = %a unify %a / %a@." Ident.print x
+	       (print_list comma Util.print_pure_type) oi
+	       (print_list comma Util.print_pure_type) ci
+	     ;
+	     try let s = unify_i s oi ci in iter s oil
+	     with Exit -> ()) 
+	  (instances x)
+  in
+  iter [] all_i
 
 let rec print_logic_type fmt = function
   | Logic.Predicate [] ->
@@ -399,6 +448,20 @@ let print_parameter fmt id c =
   fprintf fmt 
     "@[<hov 2>%s: %a;@]@\n@\n" id print_cc_type c
 
+(* substitution of type variables ([PTvarid]) by pure types *)
+module SV = struct
+  type substitution = (string * pure_type) list
+  let rec pure_type s = function
+    | PTvarid id as t ->
+	(try List.assoc (Ident.string id) s with Not_found -> t)
+    | PTexternal (l, id) ->
+	PTexternal (List.map (pure_type s) l, id)
+    | PTarray ta -> PTarray (pure_type s ta)
+    | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
+  let instance i = i
+end
+module SubstV = GenSubst(SV)
+
 let print_logic fmt id t = 
   fprintf fmt "%%%% Why logic %s@\n" id;
   if t.scheme_vars = [] then
@@ -409,7 +472,7 @@ let print_logic fmt id t =
 	(fun i -> 
 	   assert (List.length t.scheme_vars = List.length i);
 	   let s = List.combine t.scheme_vars i in
-	   let t = Subst.logic_type s t.scheme_type in
+	   let t = SubstV.logic_type s t.scheme_type in
 	   fprintf fmt "@[%s_%a: %a;@]@\n" id 
 	     (print_list underscore print_pure_type) i print_logic_type t)
 	(instances (Ident.create id));

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.29 2004-07-08 13:43:31 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.30 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -98,7 +98,8 @@ val iter_global_logic : (Ident.t -> logic_type scheme -> unit) -> unit
 
 type logical_env
 
-val add_logic : Ident.t -> type_v -> logical_env -> logical_env
+val add_logic : 
+  ?generalize:bool -> Ident.t -> type_v -> logical_env -> logical_env
 val is_logic : Ident.t -> logical_env -> bool
 
 val new_type_var : unit -> type_var

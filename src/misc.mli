@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.72 2004-07-12 13:12:53 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.73 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -204,11 +204,6 @@ val arg_loc : Ptree.arg -> Loc.t
 (*s Pretty-print *)
 
 open Format
-
-val print_term : formatter -> term -> unit
-val print_predicate : formatter -> predicate -> unit
-val print_assertion : formatter -> assertion -> unit
-val print_wp : formatter -> assertion option -> unit
 
 val warning : string -> unit
 val wprintf : Loc.t -> ('a, Format.formatter, unit) format -> 'a

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.93 2004-07-12 14:54:53 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.94 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -521,77 +521,6 @@ let arg_loc = function
   | Stype _ -> assert false (* TODO *)
 
 open Format
-open Pp
-
-let rec print_term fmt = function
-  | Tconst (ConstInt n) -> 
-      fprintf fmt "%d" n
-  | Tconst (ConstBool b) -> 
-      fprintf fmt "%b" b
-  | Tconst ConstUnit -> 
-      fprintf fmt "void" 
-  | Tconst (ConstFloat (i,f,e)) -> 
-      fprintf fmt "%s.%se%s" i f e
-  | Tvar id -> 
-      (if debug then Ident.dbprint else Ident.print) fmt id
-  | Tderef id ->
-      fprintf fmt "!%a" Ident.lprint id
-  | Tapp (id, tl, _) -> 
-      fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
-
-let relation_string id =
-  if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
-  else if id == t_le || id == t_le_int || id == t_le_real then "<="
-  else if id == t_gt || id == t_gt_int || id == t_gt_real then ">"
-  else if id == t_ge || id == t_ge_int || id == t_ge_real then ">="
-  else if is_eq id then "="
-  else if is_neq id then "<>"
-  else assert false
-
-let rec print_predicate fmt = function
-  | Pvar id -> 
-      (if debug then Ident.dbprint else Ident.print) fmt id
-(*
-  | Papp (id, [t1; t2]) when is_relation id ->
-      fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
-*)
-  | Papp (id, l, _) ->
-      fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) l
-  | Ptrue ->
-      fprintf fmt "true"
-  | Pfalse ->
-      fprintf fmt "false"
-  | Pimplies (_, a, b) -> 
-      fprintf fmt "(@[%a ->@ %a@])" print_predicate a print_predicate b
-  | Piff (a, b) -> 
-      fprintf fmt "(@[%a <->@ %a@])" print_predicate a print_predicate b
-  | Pif (a, b, c) -> 
-      fprintf fmt "(@[if %a then@ %a else@ %a@])" 
-	print_term a print_predicate b print_predicate c
-  | Pand (_, a, b) ->
-      fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
-  | Forallb (_, ptrue, pfalse) ->
-      fprintf fmt "(@[forallb(%a,@ %a)@])" 
-	print_predicate ptrue print_predicate pfalse
-  | Por (a, b) ->
-      fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
-  | Pnot a ->
-      fprintf fmt "(not %a)" print_predicate a
-  | Forall (_,_,b,_,p) ->
-      fprintf fmt "@[<hov 2>(forall %a:@ %a)@]" 
-	(if debug then Ident.dbprint else Ident.print) b print_predicate p
-  | Exists (_,b,_,p) ->
-      fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
-	(if debug then Ident.dbprint else Ident.print) b print_predicate p
-  | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
-      fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
-	print_term t i1 f1 e1 i2 f2 e2
-
-let print_assertion fmt a = print_predicate fmt a.a_value
-
-let print_wp fmt = function
-  | None -> fprintf fmt "<no weakest precondition>"
-  | Some {a_value=p} -> print_predicate fmt p
 
 let file_formatter f cout =
   let fmt = formatter_of_out_channel cout in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.99 2004-07-12 14:54:53 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.100 2004-07-13 11:31:24 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -24,6 +24,7 @@ open Ast
 open Env
 open Rename
 open Cc
+open Options
 
 (*s References mentioned by a predicate *)
 
@@ -368,6 +369,109 @@ let make_raise loc x v env =
 open Format
 open Pp
 
+let rec print_pure_type fmt = function
+  | PTint -> fprintf fmt "int"
+  | PTbool -> fprintf fmt "bool"
+  | PTunit -> fprintf fmt "unit"
+  | PTreal -> fprintf fmt "real"
+  | PTarray t -> fprintf fmt "(%a array)" print_pure_type t
+  | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
+  | PTvarid(id) -> fprintf fmt "'%a" Ident.print id
+  | PTvar {tag=t; type_val=None} -> fprintf fmt "'a#%d" t
+  | PTvar {tag=t; type_val=Some pt} -> 
+      fprintf fmt "'a#%d(=%a)" t print_pure_type pt
+  | PTexternal([t],id) -> 
+      fprintf fmt "(%a %a)" print_pure_type t Ident.print id
+  | PTexternal(l,id) -> fprintf fmt "((%a) %a)" 
+      (print_list space print_pure_type) l
+      Ident.print id
+
+let rec print_logic_type fmt lt =
+  let print_args = print_list comma print_pure_type in
+  match lt with
+    | Predicate l -> fprintf fmt "%a -> prop" print_args l
+    | Function (l, pt) -> 
+	fprintf fmt "%a -> %a" print_args l print_pure_type pt
+
+let rec print_term fmt = function
+  | Tconst (ConstInt n) -> 
+      fprintf fmt "%d" n
+  | Tconst (ConstBool b) -> 
+      fprintf fmt "%b" b
+  | Tconst ConstUnit -> 
+      fprintf fmt "void" 
+  | Tconst (ConstFloat (i,f,e)) -> 
+      fprintf fmt "%s.%se%s" i f e
+  | Tvar id -> 
+      (if debug then Ident.dbprint else Ident.print) fmt id
+  | Tderef id ->
+      fprintf fmt "!%a" Ident.lprint id
+  | Tapp (id, tl, []) -> 
+      fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
+  | Tapp (id, tl, i) -> 
+      fprintf fmt "%s(%a)[%a]" 
+	(Ident.string id) (print_list comma print_term) tl
+	(print_list comma print_pure_type) i
+
+let relation_string id =
+  if id == t_lt || id == t_lt_int || id == t_lt_real then "<" 
+  else if id == t_le || id == t_le_int || id == t_le_real then "<="
+  else if id == t_gt || id == t_gt_int || id == t_gt_real then ">"
+  else if id == t_ge || id == t_ge_int || id == t_ge_real then ">="
+  else if is_eq id then "="
+  else if is_neq id then "<>"
+  else assert false
+
+let rec print_predicate fmt = function
+  | Pvar id -> 
+      (if debug then Ident.dbprint else Ident.print) fmt id
+(*
+  | Papp (id, [t1; t2]) when is_relation id ->
+      fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
+*)
+  | Papp (id, l, []) ->
+      fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) l
+  | Papp (id, l, i) ->
+      fprintf fmt "%s(%a)[%a]" 
+	(Ident.string id) (print_list comma print_term) l
+	(print_list comma print_pure_type) i
+  | Ptrue ->
+      fprintf fmt "true"
+  | Pfalse ->
+      fprintf fmt "false"
+  | Pimplies (_, a, b) -> 
+      fprintf fmt "(@[%a ->@ %a@])" print_predicate a print_predicate b
+  | Piff (a, b) -> 
+      fprintf fmt "(@[%a <->@ %a@])" print_predicate a print_predicate b
+  | Pif (a, b, c) -> 
+      fprintf fmt "(@[if %a then@ %a else@ %a@])" 
+	print_term a print_predicate b print_predicate c
+  | Pand (_, a, b) ->
+      fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
+  | Forallb (_, ptrue, pfalse) ->
+      fprintf fmt "(@[forallb(%a,@ %a)@])" 
+	print_predicate ptrue print_predicate pfalse
+  | Por (a, b) ->
+      fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
+  | Pnot a ->
+      fprintf fmt "(not %a)" print_predicate a
+  | Forall (_,_,b,v,p) ->
+      fprintf fmt "@[<hov 2>(forall %a:%a.@ %a)@]" 
+	(if debug then Ident.dbprint else Ident.print) b 
+	print_pure_type v print_predicate p
+  | Exists (_,b,_,p) ->
+      fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
+	(if debug then Ident.dbprint else Ident.print) b print_predicate p
+  | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
+      fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
+	print_term t i1 f1 e1 i2 f2 e2
+
+let print_assertion fmt a = print_predicate fmt a.a_value
+
+let print_wp fmt = function
+  | None -> fprintf fmt "<no weakest precondition>"
+  | Some {a_value=p} -> print_predicate fmt p
+
 let print_pre fmt l = 
   if l <> [] then begin
     fprintf fmt "@[ ";
@@ -389,21 +493,7 @@ let print_post fmt = function
       fprintf fmt "@[ %a@ %a @]" print_assertion c 
 	(print_list space print_exn) l
 
-let rec print_pure_type fmt = function
-  | PTint -> fprintf fmt "int"
-  | PTbool -> fprintf fmt "bool"
-  | PTunit -> fprintf fmt "unit"
-  | PTreal -> fprintf fmt "real"
-  | PTarray t -> fprintf fmt "(%a array)" print_pure_type t
-  | PTexternal([],id) -> fprintf fmt "%a" Ident.print id
-  | PTvarid(id) -> fprintf fmt "'%a" Ident.print id
-  | PTvar(v) -> fprintf fmt "'a%d" v.tag
-  | PTexternal([t],id) -> fprintf fmt "(%a %a)" print_pure_type t Ident.print id
-  | PTexternal(l,id) -> fprintf fmt "((%a) %a)" 
-      (print_list space print_pure_type) l
-      Ident.print id
-
-and print_type_v fmt = function
+let rec print_type_v fmt = function
   | Arrow (b,c) ->
       fprintf fmt "@[<hov 2>%a ->@ %a@]" 
 	(print_list arrow pp_binder) b print_type_c c
@@ -445,12 +535,6 @@ and print_type_c fmt c =
       print_type_v v 
       Effect.print e
       print_post q
-
-let rec print_logic_type fmt lt =
-  let print_args = print_list comma print_pure_type in
-  match lt with
-    | Predicate l -> fprintf fmt "%a -> prop" print_args l
-    | Function (l, pt) -> fprintf fmt "%a -> %a" print_args l print_pure_type pt
 
 (*s Pretty-print of typed programs *)
 
