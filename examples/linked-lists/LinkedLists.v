@@ -101,9 +101,20 @@ Elim H; Clear H; Intuition.
 Exists (cons a x0); Exists x1; Simpl; Subst; Auto.
 Save.
 
-Lemma x_eq_app_cons_x_absurd : .
+Lemma list_length_absurd : (A:Set)(l1,l2:(list A))
+  ~(length l1)=(length l2) -> ~l1=l2..
 Proof.
-length
+Induction l1; Induction l2; Simpl; Intuition.
+Discriminate H1.
+Discriminate H1.
+Injection H2; Intros.
+Apply (H l0); Intuition.
+Save.
+
+Lemma length_app : (A:Set)(l1,l2:(list A))
+  (length (app l1 l2)) = (plus (length l1) (length l2)).
+Proof.
+Induction l1; Simpl; Intuition.
 Save.
 
 Lemma llist_not_starting : 
@@ -117,7 +128,8 @@ Subst l.
 Elim (llist_append t x (cons p x0) (pget t p) H); Intuition.
 Inversion H3; Subst.
 Generalize (llist_function t x0 (app x (cons p x0)) (pget t p) H8 H).
-
+Intro; Apply (list_length_absurd ? x0 (app x (cons p x0))); Auto.
+Rewrite length_app; Simpl; Omega.
 Save.
 
 (***
