@@ -20,9 +20,9 @@ external parameter lsr : int -> int -> int
 
 (* default variable initialisation *)
 
-parameter any_int: unit -> int
-parameter any_real: unit -> real
-parameter any_pointer: unit -> pointer
+parameter any_int: unit -> {} int { true }
+parameter any_real: unit -> {} real { true }
+parameter any_pointer: unit -> {} pointer { true }
 
 (* pointer arithmetic *)
 
@@ -188,7 +188,14 @@ axiom acc_upd_neq :
     p1 <> p2 -> acc(upd(m,p1,a),p2) = acc(m,p2)
 
 (* memory allocation *)
+
+(* fresh(a,p) means that the memory block of p is not allocated in a *)
 logic fresh : alloc_table,pointer -> prop
+
+axiom fresh_not_valid :
+  forall a:alloc_table. forall p:pointer. 
+    fresh(a,p) -> forall i:int. not(valid(a,shift(p,i)))
+	
 
 (* exceptions *)
 exception Break

@@ -83,6 +83,7 @@ type expr =
   | Triple of assertion * expr * assertion * ((string * assertion) option)
   | Assert of assertion  (*r only in blocks *)
   | Label of string
+  | BlackBox of why_type
 ;;
 
 (*

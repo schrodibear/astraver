@@ -28,12 +28,15 @@ Admitted.
 (*Why logic*) Definition lsr : Z -> Z -> Z.
 Admitted.
 
-(*Why*) Parameter any_int : forall (_: unit), Z.
+(*Why*) Parameter any_int :
+  forall (_: unit), (sig_1 Z (fun (result: Z)  => (True))).
 
 
-(*Why*) Parameter any_real : forall (_: unit), R.
+(*Why*) Parameter any_real :
+  forall (_: unit), (sig_1 R (fun (result: R)  => (True))).
 
-(*Why*) Parameter any_pointer : forall (_: unit), pointer.
+(*Why*) Parameter any_pointer :
+  forall (_: unit), (sig_1 pointer (fun (result: pointer)  => (True))).
 
 (*Why*) Parameter null : pointer.
 
@@ -271,6 +274,12 @@ Admitted.
 Admitted.
 
 (*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
+Admitted.
+
+(*Why axiom*) Lemma fresh_not_valid :
+  (forall (a:alloc_table),
+   (forall (p:pointer),
+    ((fresh a p) -> (forall (i:Z), ~(valid a (shift p i)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.31 2004-06-10 15:40:31 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.32 2004-06-22 14:52:16 marche Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -125,6 +125,16 @@ type 'term location =
   | Lterm of 'term
   | Lstar of 'term (* e[*] *)
   | Lrange of 'term * 'term * 'term (* e[e..e] *)
+
+(* should be :
+  | Lvar of Info.var_info
+  | Larrget of 'term location * 'term
+  | Larrow of 'term location * Info.field_info
+  | Ldot of 'term location * Info.field_info
+  | Lrange of 'term location * 'term * 'term (* l[e..e] *)
+  | Lallrange of 'term location  (* l[*] *)
+  | Lstar of 'term location (* *l *)
+*)
 
 type 'term variant = 'term * string option
 

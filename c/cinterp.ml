@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.86 2004-06-10 15:40:30 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.87 2004-06-22 14:52:16 marche Exp $ i*)
 
 
 open Format
@@ -837,6 +837,15 @@ let interp_spec effect_reads effect_assigns s =
   (tpre,tpost)
 
 
+let alloc_on_stack loc v ty =
+
+  let form = 
+    Pand (Cltyping.local_alloc_post loc v ty,
+      Cltyping.valid_for_type ~fresh:true loc v Tresult ty) 
+  in
+  BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
+		      interp_predicate None "" form,None))
+      
 let interp_decl d acc = 
   match d.node with 
     | Tdecl(ctype,v,init) -> 
@@ -849,7 +858,7 @@ let interp_decl d acc =
 		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
 		  | CTfloat _ -> App(Var("any_real"),Var("void"))
 		  | CTfun _ -> assert false
-		  | _ -> App(Var("any_pointer"),Var("void"))
+		  | _ -> alloc_on_stack d.loc v ctype
 		end
 	    | Iexpr e -> interp_expr e		
 	    | Ilist _ -> unsupported "structured initializer for local var"
@@ -1152,7 +1161,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       begin match ctype.ctype_node with
 	| CTstruct _ | CTarray _ -> 
 	    let id = "valid_" ^ v.var_name in
-	    add_weak_invariant id (Cltyping.valid_for_type decl.loc v ctype)
+	    add_weak_invariant id (Cltyping.valid_for_type decl.loc v (Tvar v) ctype)
 	| _ -> 
 	    ()
       end;

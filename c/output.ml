@@ -332,6 +332,7 @@ type expr =
   | Triple of assertion * expr * assertion * ((string * assertion) option)
   | Assert of assertion  (*r only in blocks *)
   | Label of string
+  | BlackBox of why_type
 ;;
 
 let rec make_app_rec accu l =
@@ -405,6 +406,8 @@ let rec iter_expr f e =
 	option_iter (fun (_,a) -> iter_assertion f a) exceps
     | Assert(e) -> iter_assertion f e
     | Label s -> ()
+    | BlackBox(ty) -> iter_why_type f ty
+
 
 let fprintf_variant form = function
   | t, None -> fprintf_term form t
@@ -504,6 +507,10 @@ let rec fprintf_expr form e =
 	  fprintf_assertion e
     | Label s ->
 	fprintf form "@[<hv 0>label@ %s@]" s
+    | BlackBox(t) ->
+	fprintf form "@[<hv 0>[ %a ]@]" 
+	  (fprintf_type false) t
+
 	  
 
 and fprintf_expr_list form l =
