@@ -7,6 +7,10 @@ FEATURES
 
  - Coq output
 
+ - pure code output (with annotations as comments)
+
+ - functional code output (mainly to check the interpretation; auto-check?)
+
  - arguments which are types
 
  - primitive functions, like =, applied to non-pure terms

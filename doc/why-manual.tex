@@ -35,8 +35,8 @@ and the output is a \pvs\ theory. Syntax is given in chapter~\ref{syntax}.
 
 \why\ is invoked as a batch compiler, given a list of input files:
 \begin{center}
-  \texttt{why} \textit{file1}\texttt{.ml} $\cdots$
-    \textit{file$n$}\texttt{.ml}
+  \texttt{why} \textit{file}$_1$\texttt{.ml} $\cdots$
+    \textit{file}$_n$\texttt{.ml}
 \end{center}
 Each file \textit{file}\texttt{.ml} will be compiled into a \pvs\ theory,
 in file \textit{file}\texttt{.pvs}.
@@ -47,22 +47,48 @@ named \texttt{WhyOutput} is printed on standard output.
 
 \section{Principles}
 
+\subsection{Input files}
+
 The input file may contain the following kinds of declaration:
 \begin{itemize}
-  \item \te{pvs "\textit{any \pvs\ material}"} \par
+  \item \te{pvs "}\textit{any \pvs\ material}\te{"} \par
     Copies the \pvs\ material as-is in the output theory.
 
   \item \te{external} $x_1,\dots,x_n: \tau$ \par 
     Declares some external program values of type $\tau$.
     They may be constants (i.e. of a primitive type), references 
-    or functions. This is only to be used to introduce values to be used
+    or functions. This is to introduce values to be used
     in the program part; values to be used in the specification part
     must be introduced using the \te{pvs} declaration.
 
-  \item \te{let $x$ = \textit{annotated-program}} \par
+  \item \te{let $x$ =} \textit{annotated-program} \par
     Generates the lemmas corresponding to the total correctness of
     the given program, and declares it with name $x$.
 \end{itemize}
+
+\subsection{Annotations}
+
+Annotations are predicates over the values of the program variables
+visible at the corresponding program point.
+
+Any annotation may refer to the value(s) of a variable.  For a mutable
+variable $x$ (a reference or an array), the current value is simply
+referred to as $x$. Within a postcondition, the value before the
+computation (i.e. at the precondition point) is referred to as $x@$.
+
+Additionally, labels may be inserted in programs (using the 
+\te{label} keyword; see the syntax chapter) and the value of $x$ at the
+program point labelled $L$ is referred to as $x@L$.
+A particular label `0' is automatically inserted at the beginning of the 
+program, so that the initial value of $x$ can be referred to as $x@0$.
+
+\paragraph{Example.} Here are examples of program annotations:
+\begin{enumerate}
+\item
+  \verb#{ x >= 0 } x := (sqrt !x) { x >= 0 and (x >= 1 -> x <= x@) }# 
+\item
+  \verb#while !x < N do { invariant x@0 <= x variant N - x } x := !x+1 done#
+\end{enumerate}
 
 
 \section{Installation}
@@ -110,7 +136,7 @@ Usual precedences apply to arithmetical operations.
   \\[0.1em]
 
   \nt{arith\_op}
-    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/}
+    & $::=$ & \te{+} $|$~ \te{-} $|$~ \te{*} $|$~ \te{/}
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of terms}
@@ -141,8 +167,8 @@ stronger than the implication's one. Implication is right associative.
   \\[0.1em]
 
   \nt{relation}
-    & $::=$ & \te{=} $|$ \te{/=} $|$ 
-              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
+    & $::=$ & \te{=} $|$~ \te{/=} $|$~ 
+              \te{<} $|$~ \te{<=} $|$~ \te{>} $|$~ \te{>=}
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of predicates}
@@ -179,7 +205,12 @@ Syntax of types is given in Figure~\ref{fig:types}.
 
   \nt{binders}
     & $::=$ & \te{(} \nt{identifier}\te{,}\dots\te{,}\nt{identifier}  \te{:}
-              \nt{value\_type}  \te{)} $+$ \\
+              \nt{value\_type}  \te{)} $+$ 
+  \\[0.1em]
+
+  \nt{primitive\_type}
+    & $::=$ & \te{int} $|$~ \te{bool} $|$~ \te{float} $|$~ 
+              \te{unit} $|$~ \nt{identifier}
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of types}
