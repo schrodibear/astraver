@@ -27,3 +27,8 @@ Defined.
 exact reachable.
 Defined.
 
+(*Why logic*) Definition unmarked_reachable :
+  alloc_table -> ((memory) pointer) -> ((memory) Z) -> ((memory) pointer)
+  -> pointer -> pointer -> Prop.
+exact unmarked_reachable.
+Defined.

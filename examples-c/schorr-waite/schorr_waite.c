@@ -7,7 +7,7 @@ typedef struct struct_node {
   struct struct_node *l, *r;
 } * node;
 
-/*@ logic plist cons(node p, plist l) */
+/*@ logic plist cons(node p, plist pl) */
 
 /*@ predicate in_list(node p,plist stack) */
 
@@ -15,45 +15,50 @@ typedef struct struct_node {
 
 /*@ predicate reachable (node p1, node p2) reads p1->r,p1->l */
 
+/*@ predicate unmarked_reachable (node p1, node p2) reads p1->r,p1->l,p1->m */
+
 /* predicate stkOk (node p, plist stack) reads p->c,p->l,p->r,\old(p->l),\old(p->r)*/
 
 /*@ predicate clr_list (node p, plist stack) reads p->c,p->l,p->r*/
 
-#define null ((void*)0)
+#define NULL ((void*)0)
+
 /*@ requires 
-  @   \forall node x; reachable (root,x) => ! x ->m 
+  @   \forall node x; x!=\null && reachable(root,x) => \valid(x) && ! x ->m  
   @ ensures 
   @   (\forall node x; \old (x->l) == x->l && \old (x->r) == x->r) &&
-  @   (\forall node x; reachable (root,x) => x->m) &&
+  @   (\forall node x; \valid(x) && reachable (root,x) => x->m) &&
   @   (\forall node x; ! reachable (root,x) => x->m == \old(x->m))
 */
 void schorr_waite(node root) {
   node t = root;
-  node p = null;
+  node p = NULL;
   /*@invariant
     @ (\forall node x; \old(reachable(root,x)) =>
     @       (reachable(t,x) || reachable(p,x)))&&
     @ \exists plist stack;
     @   clr_list (p,stack) &&
     @   (\forall node p; in_list (p,stack) => p->m) &&
-    @   (\forall node x; \old(reachable(root,x)) && x->m =>
-    @       reachable(t,x) || 
-    @       (\forall node y ; in_list(y,stack)=> reachable(y->r,x))) &&
+    @   (\forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
+    @       unmarked_reachable(t,x) || 
+    @       (\exists node y ; in_list(y,stack) && unmarked_reachable(y->r,x))) &&
     @  (\forall node x; !in_list(x,stack) =>  
             (x->r == \old(x->r) && x->l == \old(x->l))) &&
     @  (\forall node p1; (\forall node p2;
               pair_in_list(p1,p2,cons(t,stack)) => 
 	          (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
                   &&
-	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)))
+	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)))&&
+    @  (\forall node x; ! \old(reachable(root,x)) => x->m == \old(x->m)) &&
+    @  (\forall node x; x != \null && \old(reachable(root,x)) => \valid(x)) 
   */
   /*      (\forall node p1; (\forall node p2;
               pair_in_list(p1,p2,stack) => 
 	          (\old(p2->l) == (p2->c ? p2->l : p1)) &&
 	          (\old(p2->r) == (p2->c ? p1 : p2->r))))
   */
-  while (p != null || (t != null && ! t->m)) {
-    if (t == null || t->m) {
+  while (p != NULL || (t != NULL && ! t->m)) {
+    if (t == NULL || t->m) {
       if (p->c) {
 	/* pop */
 	node q = t;

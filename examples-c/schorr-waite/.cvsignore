@@ -19,3 +19,5 @@ test.c
 cvcl
 pvs
 *.out
+simplify
+why
