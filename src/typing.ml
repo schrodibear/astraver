@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.14 2002-03-01 16:31:25 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.15 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -28,13 +28,6 @@ let type_v_bool = PureType PTbool
 let type_v_unit = PureType PTunit
 let type_v_float = PureType PTfloat
 
-(*i***
-let check_num loc a t =
-  if not (t = type_v_int || t = type_v_float) then
-    Error.term_expected_type loc 
-      (fun fmt -> print_term fmt a) (fun fmt -> fprintf fmt "int or float")
-***i*)
-
 let rec typing_term loc env = function
   | Tvar id -> 
       (try 
@@ -57,30 +50,6 @@ let rec typing_term loc env = function
 	     Error.app_of_non_function loc)
   | Tbound _ ->
       assert false
-(*i***
-  | Tapp (id, [a;b]) when is_arith id ->
-      check_two_nums loc env a b
-  | Tapp (id, [a]) when id == t_neg ->
-      let ta = typing_term loc env a in
-      check_num loc a ta; ta
-  | Tapp (id, [a;b]) when is_comparison id ->
-      let _ = check_two_nums loc env a b in
-      type_v_bool
-  | Tapp (id, [Tvar a; b]) when id == access ->
-      let tb = typing_term loc env b in
-      if tb <> type_v_int then 
-	Error.term_expected_type loc 
-	  (fun fmt -> print_term fmt b) (fun fmt -> fprintf fmt "int");
-      (match type_in_env env a with 
-	 | Array (_,v) -> v 
-	 | _ -> raise (Error.Error (Some loc, Error.NotAnArray a)))
-  | Tapp (id, [a]) when id == t_sqrt ->
-      let ta = typing_term loc env a in
-      if ta <> type_v_float then
-	Error.term_expected_type loc 
-	  (fun fmt -> print_term fmt a) (fun fmt -> fprintf fmt "float");
-      type_v_float
-***i*)
 
 and check_same_type loc env a b =
   let ta = typing_term loc env a in
@@ -103,18 +72,6 @@ and check_app loc bl c tl = match bl, tl with
       check_app loc bl c tl
   | _ ->
       assert false
-
-
-(*i***
-and check_two_nums loc env a b =
-  let ta = typing_term loc env a in
-  check_num loc a ta;
-  let tb = typing_term loc env b in
-  if ta <> tb then 
-    Error.term_expected_type loc 
-      (fun fmt -> print_term fmt b) (fun fmt -> print_type_v fmt ta);
-  ta
-***i*)
 
 let type_of_expression ren env t = typing_term Loc.dummy env t
 
@@ -162,6 +119,14 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
 
 let expected_type loc t et =
   if t <> et then Error.expected_type loc (fun fmt -> print_type_v fmt et)
+
+let type_eq loc = function
+  | PureType PTint -> Ident.t_eq_int
+  | PureType PTbool -> Ident.t_eq_bool
+  | PureType PTfloat -> Ident.t_eq_float
+  | PureType PTunit -> Ident.t_eq_unit
+  | _ -> Error.expected_type loc 
+	 (fun fmt -> fprintf fmt "unit, bool, int or float")
 
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
@@ -239,7 +204,6 @@ let state_post lab env (id,v,ef) loc = function
 	       e,c)
 	  ids (Effect.bottom, q.a_value)
       in
-      (*i let c = abstract [id,v'] c in i*)
       ef, Some { a_name = q.a_name; a_value = c }
 
 
@@ -264,23 +228,6 @@ and is_pure_arg = function
 and is_pure_type_c c =
   is_pure_type_v c.c_result_type && c.c_effect = Effect.bottom &&
   c.c_pre = [] && c.c_post = None
-
-let rec is_pure env p =
-  p.info.pre = [] && p.info.post = None && is_pure_desc env p.desc
-and is_pure_desc env = function
-  | Var id -> not (is_in_env env id) || (is_pure_type_v (type_in_env env id))
-  | Acc id -> is_pure_type_v (deref_type (type_in_env env id))
-  | Expression _ -> true
-  | TabAcc (_,_,p) -> is_pure env p
-  | App (e1,e2) -> is_pure env e1 && is_pure_arg env e2
-  | Aff _ | TabAff _ | Seq _ | While _ | If _ 
-  | Lam _ | LetRef _ | LetIn _ | LetRec _ -> false
-  | Debug (_,p) -> is_pure env p
-  | PPoint (_,d) -> is_pure_desc env d
-and is_pure_arg env = function
-  | Term p -> is_pure env p
-  | Type _ -> true
-  | Refarg _ -> false
 
 let partial_pre = function
   | Tapp (id, [a;b]) when id == t_div ->
@@ -340,11 +287,6 @@ let typef_expression lab env expr =
 
 let rec typef lab env expr =
   let (d,(v,e),p1) = typef_desc lab env expr.info.loc expr.desc in
-(*i***
-    if is_pure_desc env expr.desc then
-      typef_expression lab env expr
-    else
-***i*)
   let loc = Some expr.info.loc in
   let ep = state_pre lab env loc expr.info.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
@@ -437,6 +379,12 @@ and typef_desc lab env loc = function
       let v = make_arrow bl t_e.info.kappa in
       let ef = Effect.bottom in
       Lam(bl,t_e), (v,ef), []
+
+  | App ({desc=Var id} as e, Term a) when id == Ident.t_eq ->
+      let t_a = typef lab env a in
+      let eq = type_eq a.info.loc (result_type t_a) in
+      typef_desc lab env loc (App ({e with desc = Var eq}, Term a))
+      (* TODO: avoid recursive call *)
 	 
   | App (f, Term a) ->
       let t_f = typef lab env f in
@@ -568,7 +516,7 @@ and typef_block lab env bl =
   in
   ef_block lab None bl
 
-
+(*i***
 and typef_app ren env f args =
   let floc = f.info.loc in
   let argsloc = List.map arg_loc args in
@@ -623,7 +571,7 @@ and typef_app ren env f args =
   let c' = type_c_subst s c in
   t_f, t_args, (*i (bl,c), (s,so,ok), i*)
   { c' with c_result_type = type_v_rsubst so c'.c_result_type }
-
+***i*)
 
 let effect_app ren env f args =
   let n = List.length args in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.14 2002-03-04 14:07:55 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.15 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -108,7 +108,7 @@ let rec app f = function
 
 let bin_op op loc e1 e2 =
   without_annot loc
-    (app (without_annot loc (Expression (Tapp (op,[])))) [Term e1; Term e2])
+    (app (without_annot loc (Var op)) [Term e1; Term e2])
 
 let un_op op loc e =
   without_annot loc

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.6 2002-03-04 14:07:55 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.7 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -124,7 +124,7 @@ let all_vars () =
     | TypeV (Arrow _ | PureType _) -> Idset.add id s 
     | _ -> s
   in
-  Penv.fold add_var !env Idset.empty
+  Penv.fold add_var !env (Idset.add t_eq (Idset.singleton t_neq))
 
 let all_refs () =
   let add_ref (id,v) s = match v with
@@ -167,42 +167,54 @@ let x = Ident.create "x"
 let y = Ident.create "y"
 let int = PureType PTint
 let bool = PureType PTbool
+let unit = PureType PTunit
+let float = PureType PTfloat
 
-let compare_type op =
-  let q = Pif (Tvar Ident.result,
+let compare_type op t =
+  let q = Pif (Tvar result,
 	       relation op (Tvar x) (Tvar y),
 	       not_relation op (Tvar x) (Tvar y))
   in
-  Arrow ([x, BindType int; y, BindType int], 
-	 { c_result_name = Ident.result;
+  Arrow ([x, BindType t; y, BindType t], 
+	 { c_result_name = result;
 	   c_result_type = bool;
 	   c_effect = Effect.bottom;
 	   c_pre = []; c_post = Some (anonymous q) })
 
-let _ = add_global Ident.t_lt (compare_type Ident.t_lt) None
-let _ = add_global Ident.t_le (compare_type Ident.t_le) None
-let _ = add_global Ident.t_gt (compare_type Ident.t_gt) None
-let _ = add_global Ident.t_ge (compare_type Ident.t_ge) None
+let _ = add_global t_lt (compare_type t_lt int) None
+let _ = add_global t_le (compare_type t_le int) None
+let _ = add_global t_gt (compare_type t_gt int) None
+let _ = add_global t_ge (compare_type t_ge int) None
+
+let _ = add_global t_eq_int (compare_type t_eq int) None
+let _ = add_global t_eq_unit (compare_type t_eq unit) None
+let _ = add_global t_eq_bool (compare_type t_eq bool) None
+let _ = add_global t_eq_float (compare_type t_eq float) None
+
+let _ = add_global t_neq_int (compare_type t_neq int) None
+let _ = add_global t_neq_unit (compare_type t_neq unit) None
+let _ = add_global t_neq_bool (compare_type t_neq bool) None
+let _ = add_global t_neq_float (compare_type t_neq float) None
 
 let bin_arith_type = 
   Arrow ([x, BindType int; y, BindType int], 
-	 { c_result_name = Ident.result;
+	 { c_result_name = result;
 	   c_result_type = int;
 	   c_effect = Effect.bottom;
 	   c_pre = []; c_post = None })
 
-let _ = add_global Ident.t_add bin_arith_type None
-let _ = add_global Ident.t_sub bin_arith_type None
-let _ = add_global Ident.t_mul bin_arith_type None
+let _ = add_global t_add bin_arith_type None
+let _ = add_global t_sub bin_arith_type None
+let _ = add_global t_mul bin_arith_type None
 
 let un_arith_type = 
   Arrow ([x, BindType int], 
-	 { c_result_name = Ident.result;
+	 { c_result_name = result;
 	   c_result_type = int;
 	   c_effect = Effect.bottom;
 	   c_pre = []; c_post = None })
 
-let _ = add_global Ident.t_neg un_arith_type None
+let _ = add_global t_neg un_arith_type None
 
 (* We also maintain a table of the currently edited proofs of programs
  * in order to add them in the environnement when the user does Save *)

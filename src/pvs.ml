@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.8 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.9 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -60,8 +60,8 @@ let print_term fmt t =
 	fprintf fmt "@[("; print0 t; fprintf fmt ")@]"
     | Tapp (id, tl) -> 
 	fprintf fmt "%s(@[" (Ident.string id);
-	print_list fmt 
-	  (fun fmt () -> fprintf fmt ",@ ") (fun _ t -> print0 t) tl;
+	print_list  
+	  (fun fmt () -> fprintf fmt ",@ ") (fun _ t -> print0 t) fmt tl;
 	fprintf fmt "@])"
   in
   print0 t
@@ -94,7 +94,7 @@ let print_predicate fmt p =
     | Pvar id -> Ident.print fmt id
     | Papp (id, l) -> 	
 	fprintf fmt "%s(@[" (Ident.string id);
-	print_list fmt (fun fmt () -> fprintf fmt ",@ ") print_term l;
+	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> fprintf fmt "NOT "; print3 p
     | Forall (id,n,t,p) -> 
@@ -140,7 +140,7 @@ let print_lemma fmt (id,s) =
   fprintf fmt "@]@\n"
 
 let print_obligations fmt ol = 
-  print_list fmt (fun fmt () -> fprintf fmt "@\n") print_lemma ol;
+  print_list (fun fmt () -> fprintf fmt "@\n") print_lemma fmt ol;
   if ol <> [] then fprintf fmt "@\n"
 
 let begin_theory fmt th =

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.11 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.12 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -262,12 +262,13 @@ let arg_loc = function
 
 open Format
 
-let rec print_list fmt sep print = function
+let rec print_list sep print fmt = function
   | [] -> ()
   | [x] -> print fmt x
-  | x :: r -> print fmt x; sep fmt (); print_list fmt sep print r
+  | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
 
 let comma fmt () = fprintf fmt ",@ "
+let arrow fmt () = fprintf fmt "@ -> "
 let nothing fmt () = ()
 
 let hov n fmt f x = pp_open_hovbox fmt n; f x; pp_close_box fmt ()
@@ -286,15 +287,13 @@ let rec print_term fmt = function
   | Tvar id -> 
       fprintf fmt "%s" (Ident.string id)
   | Tapp (id, tl) -> 
-      fprintf fmt "%s(" (Ident.string id);
-      print_list fmt comma print_term tl; fprintf fmt ")"
+      fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 
 let rec print_predicate fmt = function
   | Pvar id -> 
       Ident.print fmt id
   | Papp (id, l) ->
-      fprintf fmt "%s(" (Ident.string id);
-      print_list fmt comma print_term l; fprintf fmt ")"
+      fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) l
   | Ptrue ->
       fprintf fmt "true"
   | Pfalse ->

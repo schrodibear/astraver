@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: rename.ml,v 1.2 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: rename.ml,v 1.3 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -111,14 +111,14 @@ open Format
 
 let print fmt r = 
   fprintf fmt "@[<hov 2>";
-  print_list fmt pp_print_newline
+  print_list pp_print_newline
     (fun fmt (d,l) -> 
        fprintf fmt "%s: " d;
-       print_list fmt pp_print_space 
+       print_list pp_print_space 
 	 (fun fmt (id,id') -> 
 	    fprintf fmt "(%s,%s)" (Ident.string id) (Ident.string id'))
-	 l)
-    r.levels
+	 fmt l)
+    fmt r.levels
 
 
  

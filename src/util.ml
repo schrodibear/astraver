@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.8 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.9 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -225,57 +225,65 @@ open Format
 
 let print_pre fmt l = 
   if l <> [] then begin
-    fprintf fmt "@[pre@ ";
+    fprintf fmt "@[ ";
     print_list 
-      fmt pp_print_space (fun fmt p -> print_predicate fmt p.p_value) l;
-    fprintf fmt "@]"
+      pp_print_space (fun fmt p -> print_predicate fmt p.p_value) fmt l;
+    fprintf fmt " @]"
   end
 
 let print_post fmt = function
-  | None -> 
-      ()
-  | Some c -> 
-      fprintf fmt "@[post@ "; print_predicate fmt c.a_value; fprintf fmt "@]"
+  | None -> ()
+  | Some c -> fprintf fmt "@[ %a @]" print_predicate c.a_value
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "float"
-  | PTarray (s,t) -> 
-      fprintf fmt "array("; print_term fmt s; fprintf fmt ","; 
-      print_pure_type fmt t; fprintf fmt ")"
+  | PTarray (s,t) -> fprintf fmt "array(%a,%a)" print_term s print_pure_type t
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
 and print_type_v fmt = function
-  | Ref v -> 
-      fprintf fmt "@["; print_type_v fmt v; fprintf fmt "@ ref@]"
-  | Array (cc,v) -> 
-      fprintf fmt "@[array"; print_term fmt cc; fprintf fmt "@ of ";
-      print_type_v fmt v; fprintf fmt "@]"
   | Arrow (b,c) ->
-      fprintf fmt "@["; print_list fmt (fun _ _ -> ()) pp_binder b;
-      fprintf fmt "@,"; print_type_c fmt c; fprintf fmt "@]"
+      fprintf fmt "@[%a@ -> %a@]" (print_list arrow pp_binder) b print_type_c c
+  | v -> 
+      print_type_v2 fmt v
+
+and pp_binder fmt = function
+  | id, BindType v when id == Ident.anonymous -> 
+      print_type_v2 fmt v
+  | id, BindType v ->
+      fprintf fmt "@[%a:%a@]" Ident.print id print_type_v v; 
+  | id, BindSet -> 
+      fprintf fmt "%a:Set" Ident.print id
+  | id, Untyped -> 
+      fprintf fmt "<untyped>"
+
+and print_type_v2 fmt = function
+  | Ref v -> 
+      fprintf fmt "@[%a@ ref@]" print_type_v v
+  | Array (cc,v) -> 
+      fprintf fmt "@[array@ %a@ of %a@]" print_term cc print_type_v v
   | PureType pt -> 
       print_pure_type fmt pt
+  | Arrow _ as v ->
+      fprintf fmt "(%a)" print_type_v v
 
 and print_type_c fmt c =
   let id = c.c_result_name in
   let v = c.c_result_type in
-  fprintf fmt "@[returns %s: " (Ident.string id);
-  print_type_v fmt v; fprintf fmt "@ ";
-  Effect.print fmt c.c_effect; fprintf fmt "@ ";
-  print_pre fmt c.c_pre; fprintf fmt "@ ";
-  print_post fmt c.c_post; fprintf fmt " end@]"
-
-and pp_binder fmt = function
-  | id,BindType v -> 
-      fprintf fmt "(@[%s:@ " (Ident.string id); 
-      print_type_v fmt v; fprintf fmt "@])"
-  | id,BindSet -> 
-      fprintf fmt "(%s: Set)" (Ident.string id)
-  | id,Untyped -> 
-      fprintf fmt "(%s)" (Ident.string id)
+  let p = c.c_pre in
+  let q = c.c_post in
+  let e = c.c_effect in
+  if e = Effect.bottom && p = [] && q = None then
+    print_type_v fmt v
+  else
+    fprintf fmt "@[{%a} returns %a: %a@ %a{%a}@]" 
+      print_pre p
+      Ident.print id 
+      print_type_v v 
+      Effect.print e
+      print_post q
 
 (*s Pretty-print of cc-terms (intermediate terms) *)
 
@@ -294,8 +302,8 @@ let rec print_cc_term fmt = function
       fprintf fmt "%s" (Ident.string id)
   | CC_letin (_,bl,c,c1) ->
       fprintf fmt "@[@[<hov 2>let ";
-      print_list fmt comma 
-	(fun fmt (id,b) -> Ident.print fmt id; print_binder fmt b) bl;
+      print_list comma 
+	(fun fmt (id,b) -> Ident.print fmt id; print_binder fmt b) fmt bl;
       fprintf fmt " =@ "; print_cc_term fmt c;
       fprintf fmt " in@]@\n"; print_cc_term fmt c1; fprintf fmt "@]"
   | CC_lam (bl,c) ->
@@ -303,14 +311,10 @@ let rec print_cc_term fmt = function
       print_binders fmt bl;
       fprintf fmt "@,"; print_cc_term fmt c; fprintf fmt "@]"
   | CC_app (f,args) ->
-      fprintf fmt "@[<hov 2>("; 
-      print_cc_term fmt f; fprintf fmt "@ ";
-      print_list fmt pp_print_space print_cc_term args;
-      fprintf fmt ")@]"
+      fprintf fmt "@[<hov 2>(%a@ %a)@]" 
+      print_cc_term f (print_list pp_print_space print_cc_term) args
   | CC_tuple cl ->
-      fprintf fmt "@[<hov 2>(";
-      print_list fmt comma print_cc_term cl;
-      fprintf fmt ")@]"
+      fprintf fmt "@[<hov 2>(%a)@]" (print_list comma print_cc_term) cl
   | CC_case (b,[bl1,e1; bl2,e2]) ->
       let branch bl e =
 	print_binders fmt bl; fprintf fmt "@,"; print_cc_term fmt e in
@@ -333,8 +337,8 @@ let rec print_cc_term fmt = function
       fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"
 
 and print_binders fmt bl =
-  print_list fmt nothing 
+  print_list nothing 
     (fun fmt (id,b) -> 
        fprintf fmt "[%s" (Ident.string id);
        print_binder fmt b; fprintf fmt "]") 
-    bl
+    fmt bl

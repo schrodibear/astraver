@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.9 2002-02-05 15:01:55 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.10 2002-03-04 15:26:34 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -75,7 +75,7 @@ let print_term fmt t =
 	fprintf fmt "(@[%s " (Ident.string id); print_terms tl;
 	fprintf fmt "@])"
   and print_terms tl =
-    print_list fmt (fun fmt () -> fprintf fmt "@ ") (fun _ t -> print0 t) tl
+    print_list (fun fmt () -> fprintf fmt "@ ") (fun _ t -> print0 t) fmt tl
   in
   print0 t
 
@@ -131,7 +131,7 @@ i*)
 	print_term fmt b; closez fmt
     | Papp (id, l) ->
 	fprintf fmt "(@[%s " (Ident.string id); 
-	print_list fmt (fun fmt () -> fprintf fmt "@ ") print_term l;
+	print_list (fun fmt () -> fprintf fmt "@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> fprintf fmt "~"; print3 p
     | Forall (id,n,t,p) -> 

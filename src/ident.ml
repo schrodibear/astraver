@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.11 2002-03-04 14:07:55 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.12 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 type t = string
 
@@ -84,6 +84,16 @@ let t_gt = "@gt"
 let t_ge = "@ge"
 let t_eq = "@eq"
 let t_neq = "@neq"
+
+let t_eq_int = "@eq_int"
+let t_eq_bool = "@eq_bool"
+let t_eq_float = "@eq_float"
+let t_eq_unit = "@eq_unit"
+
+let t_neq_int = "@neq_int"
+let t_neq_bool = "@neq_bool"
+let t_neq_float = "@neq_float"
+let t_neq_unit = "@neq_unit"
 
 let t_zwf_zero = "zwf_zero"
 let result = "result"

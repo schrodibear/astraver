@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.8 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.9 2002-03-04 15:26:35 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -21,7 +21,7 @@ let check_ref idl loc id =
   if (not (Ids.mem id idl)) & (not (Env.is_global id)) then
     Error.unbound_reference id (Some loc)
 
-(* db types  : just do nothing for the moment ! *)
+(* db types: do nothing for the moment! *)
 
 let rec db_type_v ids = function
   | Ref v -> Ref (db_type_v ids v)
@@ -32,7 +32,7 @@ and db_type_c ids c =
   { c_result_name = c.c_result_name;
     c_result_type = db_type_v ids c.c_result_type;
     c_effect = c.c_effect; c_pre = c.c_pre; c_post = c.c_post }
-  (* TODO: db_condition ? *)
+  (* TODO: db_condition? *)
 and db_binder ids = function
   | (n, BindType v) -> (n, BindType (db_type_v ids v))
   | b -> b
