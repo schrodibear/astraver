@@ -23,7 +23,7 @@ are not allowed by \caduceus.
 
 \subsection{Designing the loop invariant}
 
-\begin{figure}[b]
+\begin{figure}[t]
 \vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
@@ -60,7 +60,6 @@ are not allowed by \caduceus.
 \ncline[nodesepA=1mm]{t}{n121}
 \end{picture}\label{figure}
 \end{center}
-\vspace*{-3mm}
 \caption{The backtracking stack inside the graph structure}
 \label{fig:stack}
 \end{figure}
@@ -82,64 +81,45 @@ children when $c$ is 0, or the right children when $c$ is 1.
 
 \subsection{Writing the loop invariant}
 
-\begin{figure}[b]
-%\fontsize{10pt}{9pt}
+\begin{figure*}[tp]
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}
   /*@ invariant
     @  (I1 :: \bs{}forall node x; 
-    @    \old(reachable(root,x)) => 
-    @      reachable(t,x) || reachable(p,x))
+    @    \old(reachable(root,x)) => reachable(t,x) || reachable(p,x))
     @ &&
     @  (I2 :: \bs{}forall node x; x != \bs{}null => 
-    @         (reachable(t,x) || 
-    @          reachable(p,x)) => 
-    @            \old(reachable(root,x)))
+    @         (reachable(t,x) || reachable(p,x)) => \old(reachable(root,x)))
     @ &&
     @  (I3 :: \bs{}forall node x; 
-    @       ! \old(reachable(root,x)) => 
-    @             x->m == \old(x->m)) 
+    @       ! \old(reachable(root,x)) => x->m == \old(x->m)) 
     @ &&
     @  \bs{}exists plist stack;
-    @  (I4a :: clr_list (p,stack)) 
+    @    (I4a :: clr_list (p,stack)) 
     @  &&
-    @  (I4b :: \bs{}forall node p; 
-    @             in_list (p,stack) => p->m) 
+    @    (I4b :: \bs{}forall node p; in_list (p,stack) => p->m) 
     @  &&
-    @  (I4c :: \bs{}forall node x; 
-    @          \valid(x) && 
-    @          \old(reachable(root,x)) && 
-    @          !x->m =>
+    @    (I4c :: \bs{}forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
     @          unmarked_reachable(t,x) || 
-    @          (\bs{}exists node y; 
-    @             in_list(y,stack) && 
-    @             unmarked_reachable(y->r,x))) 
+    @          (\bs{}exists node y; in_list(y,stack) && unmarked_reachable(y->r,x))) 
     @  &&
-    @  (I4d :: \bs{}forall node x; 
-    @             !in_list(x,stack) =>  
-    @             (x->r == \old(x->r) && 
-    @              x->l == \old(x->l))) 
+    @    (I4d :: \bs{}forall node x; 
+    @             !in_list(x,stack) => (x->r == \old(x->r) && x->l == \old(x->l))) 
     @  &&
-    @  (I4e :: 
-    @    \bs{}forall node p1; 
-    @      \bs{}forall node p2;
-    @        pair_in_list(p1,p2,cons(t,stack)) 
-    @        =>(p2->c => 
-    @             \old(p2->l) == p2->l && 
-    @          \old(p2->r) == p1)
+    @    (I4e :: 
+    @      \bs{}forall node p1; \bs{}forall node p2; 
+    @        pair_in_list(p1,p2,cons(t,stack)) =>
+    @            (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
     @          &&
-    @          (!p2->c => 
-    @             \old(p2->l) == p1 && 
-    @          \old(p2->r) == p2->r)) 
+    @            (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)) 
     @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
     ...
 \end{alltt}
-\vspace*{-5mm}
 \caption{The loop invariant}
 \label{fig:loopinv}
-\end{figure}
+\end{figure*}
 
 The loop invariant as it is written in the \caduceus{} annotation
 language is displayed on Figure~\ref{fig:loopinv}.  For specifying this
@@ -150,10 +130,11 @@ logical function symbols can be declared, as the \verb|reachable|
 predicate already introduced, which can take as arguments either C
 types or logical types. Here we declare
 \begin{alltt}\begin{slshape}
-/*@ logic plist cons(node p, plist l) */
-/*@ predicate in_list(node p,plist l) */
-/*@ predicate pair_in_list(node p1,
-                    node p2,plist l) */\end{slshape}
+//@ logic plist cons(node p, plist l) 
+//@ predicate in_list(node p,plist l) 
+/*@ predicate 
+  @   pair_in_list(node p1,node p2,
+  @                plist l) */\end{slshape}
 \end{alltt}
 which first introduces the logical type \verb|plist| for finite lists
 of pointers, then a logical function symbol \verb|cons| which adds an
@@ -164,14 +145,15 @@ consecutive elements in a list $l$.
 
 The loop invariant finally requires the declaration of two predicates:
 \begin{alltt}\begin{slshape}
-/*@ predicate unmarked_reachable (node p1,
-                                  node p2) 
+/*@ predicate 
+  @   unmarked_reachable(node p1,node p2) 
   @   reads p1->r,p1->l,p1->m */\end{slshape}
 \end{alltt}
 specifies that $p_2$ is reachable from $p_1$ by traversing only
 unmarked nodes; and
 \begin{alltt}\begin{slshape}
-/*@ predicate clr_list(node p,plist stack) 
+/*@ predicate 
+  @   clr_list(node p,plist stack) 
   @   reads p->c,p->l,p->r */\end{slshape}
 \end{alltt}
 specifies that \verb|stack| is the list of pointers obtained from $p$ as
@@ -189,7 +171,8 @@ invariant is made of eight assertions:
   \verb|root| if the graph is cyclic.
 \item[I3] means that for initially unreachable nodes, the mark
   remain unchanged.
-\item[I4a] defines the backtracking stack as on Figure~\ref{fig:stack}.
+\item[I4a] defines the backtracking stack as on
+  Figure~\ref{fig:stack}. {\Huge dire que clr\_list sera defini dans le prouveur}
 \item[I4b] means that all nodes in the \texttt{stack} are marked.
 \item[I4c] is the trickiest annotation: it means that
   any valid node, initially reachable from root, 
@@ -283,7 +266,8 @@ assertion of the loop invariant, as soon as one knows the simple fact
 that \verb|t| is reachable from itself! So one thing that can be done
 is to add in the source an axiom for \verb|reachable|:
 \begin{alltt}\begin{slshape}
-//@ axiom reachable_refl : \bs{}forall node p ; reachable(p,p) 
+/*@ axiom reachable_refl : 
+  @   \bs{}forall node p ; reachable(p,p) */
 \end{slshape}\end{alltt}
 Indeed with that new axiom, Simplify automatically solves the three
 remaining obligations for validity of pointer dereferencing: we have
@@ -316,8 +300,15 @@ can be defined inductively with the Prolog-like clauses:
   \verb|    clr_list|(a,next(c,l,r,p),s).
 \end{array}
 \]
-where $next(c,l,r,p) = \verb|if|~select(c,p) =
-0~\verb|then|~select(l,p)~\verb|else|~select(r,p)$. Here we see that
+where 
+\[
+\begin{array}{l}
+next(c,l,r,p) = \\
+\quad \verb|if|~select(c,p) =
+0~\verb|then|~select(l,p)~\verb|else|~select(r,p)
+\end{array}
+\]
+Here we see that
 the component-as-array modeling is exposed to the user: the
 \verb|clr_list| predicate has two arguments in C, but in the modeling
 it is given extras arguments $a$, $c$, $l$, $r$ which are arrays
@@ -349,8 +340,9 @@ and then
 \verb|reachable|(a,l,r, p_1, p_2) = \exists s,~\verb|path|(a,l,r, p_1,
 p_2, s) \\
 \verb|unmarked_reachable|(a,m,l,r, p_1, p_2) = \\
-\qquad\qquad\qquad \exists s,~\verb|path|(a,l,r, p_1,
-p_2, s) \land \forall p, p \in s \rightarrow \\ select(m,p) = 0 \\
+\qquad \exists s,~\verb|path|(a,l,r, p_1,
+p_2, s) \land \\
+\qquad\qquad \forall p, p \in s \rightarrow select(m,p) = 0 \\
 \end{array} 
 \]
 Notice that it is now easy to establish the validity of the axiom
@@ -362,9 +354,9 @@ there is a path which has no cycle:
 \[
 \begin{array}{l}
 \forall a, p_1, p_2, l, r, s,~\verb|path|(a,l,r,p_1,p_2,s) \rightarrow
- \\\qquad\qquad\qquad
-  \exists s', s' \subseteq s \land \verb|no_rep|(s') \land \\
-  \verb|                   path|(a,l,r,p_1, p_2, s')
+ \\\qquad
+  \exists s', s' \subseteq s \land \verb|no_rep|(s') \land
+  \verb|path|(a,l,r,p_1, p_2, s') 
 \end{array}
 \] 
 where \verb|no_rep| is a simple predicate on a list which says that no
@@ -470,20 +462,14 @@ llist a next .
 \end{alltt}
 \end{comment}
 
-\subsection{Termination}
-\label{sec:termination}
-
-
-\begin{figure}[b]
+\begin{figure*}[tp]
 \begin{alltt}\begin{slshape}
 /*@ logic Length weight(node p, node t) 
             reads p->m,p->c,p->l,p->r  */
-/*@ predicate reachable_elements(node root,
-                                 plist s) 
+/*@ predicate reachable_elements(node root, plist s) 
             reads root->l,root->r */ 
 /*@ requires 
-       \bs{}exists plist s; 
-         reachable_elements(root,s) && 
+       \bs{}exists plist s; reachable_elements(root,s) && 
      ... */\end{slshape}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}
@@ -494,10 +480,17 @@ void schorr_waite(node root) \{
   while (p != NULL || (t != NULL && ! t->m)) \{
    ...
 \end{alltt}
-\vspace*{-5mm}
 \caption{Additional annotations for termination}
 \label{fig:term}
-\end{figure}
+\end{figure*}
+
+\subsection{Termination}
+\label{sec:termination}
+
+{\Huge il faut expliquer pourquoi on l'a fait et pas les autres : les
+  autres auraient pu le faire aussi, a la condition d'utiliser un
+  prouveur d'ordre superieur. dire ca en conclusion ?}
+
 
 Proving the termination of the algorithm is proving the
 termination of the while loop. In \caduceus{}, one can annotate a
@@ -552,6 +545,7 @@ them. Approximately 40\% of the work was devoted to the termination proof,
 both in term of lines of Coq text and of time spent: proving the
 obligations without termination required around 3 weeks, and the
 termination proof required 2 more weeks.
+{\Huge discuter ces chiffres, dire que ce n'est pas si grand que ca}
 
 
 

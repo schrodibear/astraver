@@ -9,16 +9,26 @@ invalid pointer dereferencing may occur, and the
 termination. Moreover we used a tool for arbitrary C programs, without
 anything specialized for this case study, which additionally gives the
 choice of the back-end prover.
+{\Huge ajouter plus de comparaison avec travaux anterieur. 
+
+repondre a la question : Does the architecture or technology of
+caudceus makes it better suited for these types of verification.
+
+comparaison
+  avec travaus d'analyse statique. \cite{sagiv02toplas,reps03esop} Program Analysis via Graph Reachability
+Static Program Analysis via 3-Valued Logic
+}
 
 We claim this is a very successful case study, which provides a clear
 evidence that the \caduceus{} approach is powerful. We think that the
 ability of using predicates in annotations which are only defined on
 the prover side is fundamental. Consequently, it is probably a
 weakness of the JML annotation language for Java, that only Java
-pure methods can be used in annotations.
+pure methods can be used in annotations. {\Huge expliquer plus }
 
 There are still many potential improvements. There is a clear
-need for cooperation between automatic provers and interactive ones.
+need for cooperation between automatic provers and interactive
+ones. {\Huge detailler plus, car le referee n'a pas compris}
 Interactive provers are nice because they are very expressive and
 allow to prove manually difficult goals, but their automatic tactics
 are less powerful than automatic provers. This is especially true for
@@ -39,6 +49,13 @@ separation is crucial) are important issues. Significant challenges
 include advanced graph algorithms (such as planarity test) and
 Ukkonen's algorithm~\cite{ukkonen95}.
 
+
+{\Huge prendre le temps d'expliquer plus ce vers quoi on va : 1) faire
+  des preuves d'algo plus complique, 2) traiter des programmes C
+  simples mais gros (programmes embarques) }
+This tool is currently under
+experimentation at Axalto (smart cards) and Dassault Aviation
+(aeronautics). 
 
 %%% Local Variables: 
 %%% mode: latex

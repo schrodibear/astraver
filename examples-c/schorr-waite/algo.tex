@@ -10,72 +10,30 @@ quite difficult to establish.
 
 \subsection{The C source code}
 
-In the version we consider here, we assume that the nodes have
-at most two children, which is the situation for example in a garbage
-collector of a pure lisp interpreter, where the only memory allocated
-value is the \textsf{cons} of lists. In C, these \textsf{cons}
-structures can be defined as
-\begin{alltt}
-typedef struct struct_node \{
-  unsigned int m :1;
-  unsigned int c :1;
-  struct struct_node *l, *r;
-\} * node;
-\end{alltt}
-where $l$ and $r$ are respectively pointers to the left and to the
-right child (they may be assigned to NULL). The boolean field $m$ is a
-mark: initially, all nodes of the graph will be assumed unmarked, and
-at the end of the traversal, they will have to be all marked. The
-boolean field $c$ is used internally by the algorithm, to denote which
-of the children is currently explored.
- 
-\begin{figure}[b]
-%\vspace*{-5mm}
-%\hrulefill
-%\vspace*{-2mm}
+\begin{figure*}[t]
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;
-  while (p != NULL || 
-        (t != NULL && ! t->m)) \{
+  while (p != NULL || (t != NULL && ! t->m)) \{
     if (t == NULL || t->m) \{
       if (p->c) \{ \begin{slshape}/* \textbf{pop} */\end{slshape}
-        node q = t; t = p; 
-        p = p->r; t->r = q;
+        node q = t; t = p; p = p->r; t->r = q;
       \} 
       else \{ \begin{slshape}/* \textbf{swing} */\end{slshape}
-        node q = t; t = p->r; 
-        p->r = p->l; p->l = q; p->c = 1;
+        node q = t; t = p->r; p->r = p->l; p->l = q; p->c = 1;
       \}
     \} 
     else \{ \begin{slshape}/* \textbf{push} */ \end{slshape}
-      node q = p; p = t; t = t->l; 
-      p->l = q; p->m = 1; p->c = 0;
+      node q = p; p = t; t = t->l; p->l = q; p->m = 1; p->c = 0;
     \}
   \}
 \}
 \end{alltt}
-%\vspace*{-5mm}
 \caption{C version of the Schorr-Waite algorithm}
 \label{fig:code}
-\end{figure}
-
-The Schorr-Waite graph-marking algorithm, written directly in true C
-source code, is given in Figure~\ref{fig:code}. 
-%This algorithm is a non-recursive graph marking. 
-The beginning of a sample execution is illustrated in
-Figure~\ref{fig:algo}, with each possible move `push', `swing' and
-`pop'. The black nodes represent marked nodes, whereas white nodes are
-unmarked. The sample graph shown is a tree for readibility, but of
-course any graph could be given. $t$ is the next node to 
-explore and $p$ is the head of the backtracking stack. `push' marks a
-new node and then explores the left child. `swing' occurs when the left
-child has been explored: the search continues to the right child. `pop' is used
-when the right child is explored: the search goes back up.        
+\end{figure*}
 
 \begin{figure*}
-%\vspace*{-5mm}
-%\hrulefill
 \vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
@@ -223,6 +181,60 @@ when the right child is explored: the search goes back up.
 \label{fig:algo}
 \end{figure*}
 
+In the version we consider here, we assume that the nodes have
+at most two children, which is the situation for example in a garbage
+collector of a pure lisp interpreter, where the only memory allocated
+value is the \textsf{cons} of lists. In C, these \textsf{cons}
+structures can be defined as
+\begin{alltt}
+typedef struct struct_node \{
+  unsigned int m :1;
+  unsigned int c :1;
+  struct struct_node *l, *r;
+\} * node;
+\end{alltt}
+where $l$ and $r$ are respectively pointers to the left and to the
+right child (they may be assigned to NULL). The boolean field $m$ is a
+mark: initially, all nodes of the graph will be assumed unmarked, and
+at the end of the traversal, they will have to be all marked. The
+boolean field $c$ is used internally by the algorithm, to denote which
+of the children is currently explored.
+ 
+\begin{figure*}
+\begin{alltt}\begin{slshape}
+/*@ \textbf{requires}
+  @  \bs{}forall node x; 
+  @     x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
+  @ \textbf{ensures}
+  @  (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @ &&
+  @  (\bs{}forall node x; x != \bs{}null && reachable(root,x) => x->m) 
+  @ &&
+  @  (\bs{}forall node x; !reachable(root,x) => x->m == \old(x->m))
+  @*/\end{slshape}
+void schorr_waite(node root) \{
+  ...
+\}
+\end{alltt}
+\caption{Specification of Schorr-Waite algorithm in the \caduceus{}
+  syntax}
+\label{fig:spec}
+\end{figure*}
+
+The Schorr-Waite graph-marking algorithm, written directly in true C
+source code, is given in Figure~\ref{fig:code}. 
+%This algorithm is a non-recursive graph marking. 
+The beginning of a sample execution is illustrated in
+Figure~\ref{fig:algo}, with each possible move `push', `swing' and
+`pop'. The black nodes represent marked nodes, whereas white nodes are
+unmarked. The sample graph shown is a tree for readibility, but of
+course any graph could be given. $t$ is the next node to 
+explore and $p$ is the head of the backtracking stack. `push' marks a
+new node and then explores the left child. `swing' occurs when the left
+child has been explored: the search continues to the right child. `pop' is used
+when the right child is explored: the search goes back up.        
+
+
 \subsection{Formal specification of the algorithm}
 
 The first step in the formal verification process is to give a formal
@@ -251,7 +263,8 @@ predicates have to be `implemented' latter, either by giving
 additional \caduceus{} annotations (such as \verb|axioms|) or in the
 back-end prover. For the reachability predicate, this is written as
 \begin{alltt}\begin{slshape}
-/*@ predicate reachable (node p1, node p2) 
+/*@ predicate 
+  @   reachable(node p1, node p2) 
   @   reads p1->l,p1->r */
 \end{slshape}\end{alltt}
 This declares a binary predicate on nodes, but nothing yet is
@@ -262,32 +275,7 @@ depends on: in this case, it does depend on \verb|p1| and
 \verb|p1->l,p1->r| is a \caduceus{} idiom, that should be understood
 in fact as $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$ that is all the
 node expressions from \verb|p1| using the left and right children.
-
-\begin{figure}[b]
-
-\begin{alltt}\begin{slshape}
-/*@ \textbf{requires}
-  @  \bs{}forall node x; 
-  @     x != \bs{}null && 
-  @     reachable(root,x) => \valid(x) 
-  @     && ! x->m  
-  @ \textbf{ensures}
-  @  (\bs{}forall node x; \old(x->l) == x->l 
-  @     && \old(x->r) == x->r) 
-  @ &&
-  @  (\bs{}forall node x; x != \bs{}null 
-  @     && reachable(root,x) => x->m) 
-  @ &&
-  @  (\bs{}forall node x; !reachable(root,x) 
-  @     => x->m == \old(x->m))
-  @*/\end{slshape}
-void schorr_waite(node root) \{
-\end{alltt}
-\vspace*{-3mm}
-\caption{Specification of Schorr-Waite algorithm in the \caduceus{}
-  syntax}
-\label{fig:spec}
-\end{figure}
+{\Huge expliquer mieux, il y a de la place}
 
 Once this \texttt{reachable} predicate is declared, it is possible to
 give a formal specification to the algorithm, even if we did not give
