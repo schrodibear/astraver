@@ -165,15 +165,15 @@ else
     COQVERSION=`coqc -v | sed -n -e 's|.*version* *\([[^ ]]*\) .*$|\1|p' `
 
     case $COQVERSION in
-    7.3)
+    7.3.1)
 	AC_MSG_RESULT($COQVERSION)
 	cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
-    7.3*)
+    7.3.1*)
 	AC_MSG_RESULT($COQVERSION)
 	cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
     *)
 	COQ=no
-	AC_MSG_WARN(You need Coq 7.3 or later; Coq discarded);;
+	AC_MSG_WARN(You need Coq 7.3.1 or later; Coq discarded);;
     esac
 fi
 

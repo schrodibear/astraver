@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.14 2003-01-16 16:05:38 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.15 2003-01-30 12:17:21 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -31,6 +31,9 @@ open Report
 
 let expected_num loc =
   raise_located loc (ExpectedType (fun fmt -> fprintf fmt "int or float"))
+
+let expected_type loc et =
+  raise_located loc (ExpectedType (fun fmt -> print_type_v fmt et))
 
 (*s Typing predicates *)
 
@@ -168,6 +171,8 @@ and desc_term loc lab lenv = function
       (match term lab lenv a, term lab lenv b with
 	 | (a, PTarray v), (b, PTint) ->
 	     Tapp (x, [a;b]), v
+	 | (_, PTarray _), _ ->
+	     expected_type b.pp_loc (PureType PTint)
 	 | (Tvar t,_), _ ->
 	     raise_located a.pp_loc (UnboundArray t)
 	 | _ ->
