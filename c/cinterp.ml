@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.77 2004-05-03 12:59:18 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.78 2004-05-04 12:37:12 filliatr Exp $ i*)
 
 
 open Format
@@ -168,6 +168,8 @@ let rec interp_predicate label old_label p =
 	LNot (f p)
     | Pimplies (p1, p2) -> 
 	make_impl (f p1) (f p2)
+    | Piff (p1, p2) -> 
+	make_equiv (f p1) (f p2)
     | Por (p1, p2) -> 
 	make_or (f p1) (f p2)
     | Pand (p1, p2) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.54 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.55 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -144,6 +144,9 @@ let print_predicate fmt p =
     | Pimplies (_, a, b) -> 
 	fprintf fmt "@[("; print1 fmt a; fprintf fmt " IMPLIES@ "; 
 	print0 fmt b; fprintf fmt ")@]"
+    | Piff (a, b) -> 
+	fprintf fmt "@[("; print1 fmt a; fprintf fmt " IFF@ "; 
+	print0 fmt b; fprintf fmt ")@]"
     | p -> print1 fmt p
   and print1 fmt = function
     | Por (a, b) -> print1 fmt a; fprintf fmt " OR@ "; print2 fmt b
@@ -192,7 +195,7 @@ let print_predicate fmt p =
     | Pfpi (t,f1,f2) ->
 	fprintf fmt 
 	"@[fpi(%a,%a,%a)@]" print_term t print_real f1 print_real f2
-    | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
+    | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p

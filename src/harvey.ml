@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.18 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.19 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -122,6 +122,8 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(and@ %a@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "@[(or@ %a@ %a)@]" print_predicate a print_predicate b
+  | Piff (a, b) ->
+      fprintf fmt "@[(<->@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
   | Forall (_,id,n,_,p) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.21 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.22 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -24,7 +24,7 @@ open Types
 (*s Logical expressions (for both terms and predicates) *)
 
 type pp_infix = 
-  PPand | PPor | PPimplies | 
+  PPand | PPor | PPimplies | PPiff |
   PPlt | PPle | PPgt | PPge | PPeq | PPneq |
   PPadd | PPsub | PPmul | PPdiv | PPmod
 

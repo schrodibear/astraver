@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.37 2004-04-22 14:25:10 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.38 2004-05-04 12:37:12 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -244,6 +244,7 @@ let rec predicate p =
     | Prel (t1, _, t2) -> union (term t1) (term t2)
     | Pand (p1, p2)
     | Por (p1, p2) 
+    | Piff (p1, p2) 
     | Pimplies (p1, p2) -> union (predicate p1) (predicate p2)
     | Pnot p -> predicate p
     | Pif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))

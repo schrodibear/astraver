@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.23 2004-05-03 12:59:18 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.24 2004-05-04 12:37:12 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -46,6 +46,7 @@ rule token = parse
   | "\\forall"  { FORALL }
   | "\\exists"  { EXISTS }
   | "=>" { IMPLIES }
+  | "<=>" { IFF }
   | "&&"     { AND }
   | "||"      { OR }
   | "!"     { NOT }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.123 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.124 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -184,6 +184,8 @@ let print_predicate_v7 fmt p =
 	  print_term_v7 a print0 b print0 c
     | Pimplies (_, a, b) -> 
 	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
+    | Piff (a, b) -> 
+	fprintf fmt "(@[%a <->@ %a@])" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
     | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
@@ -238,7 +240,7 @@ let print_predicate_v7 fmt p =
 	  print_pure_type t print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Coq V7"
-    | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
+    | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p
@@ -460,6 +462,8 @@ let print_predicate_v8 fmt p =
 	  print_term_v8 a print0 b print0 c
     | Pimplies (_, a, b) -> 
 	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
+    | Piff (a, b) -> 
+	fprintf fmt "(@[%a <->@ %a@])" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
     | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
@@ -512,7 +516,7 @@ let print_predicate_v8 fmt p =
 	  print_pure_type t print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Coq V8"
-    | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
+    | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p

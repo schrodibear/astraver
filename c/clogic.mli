@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.27 2004-05-03 12:59:18 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.28 2004-05-04 12:37:12 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -64,6 +64,7 @@ and lexpr_node =
   | PLand of lexpr * lexpr
   | PLor of lexpr * lexpr
   | PLimplies of lexpr * lexpr
+  | PLiff of lexpr * lexpr
   | PLnot of lexpr
   | PLif of lexpr * lexpr * lexpr
   | PLforall of logic_type quantifiers * lexpr
@@ -108,6 +109,7 @@ type 'ctype predicate =
   | Pand of 'ctype predicate * 'ctype predicate
   | Por of 'ctype predicate * 'ctype predicate
   | Pimplies of 'ctype predicate * 'ctype predicate
+  | Piff of 'ctype predicate * 'ctype predicate
   | Pnot of 'ctype predicate
   | Pif of 'ctype term * 'ctype predicate * 'ctype predicate
   | Pforall of 'ctype quantifiers * 'ctype predicate

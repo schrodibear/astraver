@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.92 2004-04-30 14:30:21 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.93 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -201,6 +201,7 @@ let rec occur_predicate id = function
   | Forallb (_, _, _, _, a, b) 
   | Pimplies (_, a, b) 
   | Pand (_, a, b) 
+  | Piff (a, b) 
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
   | Pnot a -> occur_predicate id a
   | Forall (_,_,_,_,a) -> occur_predicate id a

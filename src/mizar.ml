@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.17 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.18 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -187,6 +187,8 @@ let print_predicate fmt p =
   let rec print0 fmt = function
     | Pimplies (_, a, b) ->
 	fprintf fmt "(@[%a implies@ %a@])" print1 a print0 b
+    | Piff ( a, b) ->
+	fprintf fmt "(@[%a iff@ %a@])" print1 a print0 b
     | Pif (a, b, c) ->
 	fprintf fmt "(@[(%a = TRUE implies %a) &@ (%a = FALSE implies %a)@])" 
 	print_term a print0 b print_term a print0 c
@@ -235,7 +237,7 @@ let print_predicate fmt p =
 	  print_pure_type t print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Mizar"
-    | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
+    | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p

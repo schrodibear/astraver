@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.36 2004-05-03 12:59:18 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.37 2004-05-04 12:37:12 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -216,7 +216,7 @@ and type_term_node loc env = function
   | PLcast (ty, t) ->
       unsupported "logic cast"
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
-  | PLexists _ | PLforall _ | PLnot _ | PLimplies _ 
+  | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->
       raise (Stdpp.Exc_located (loc, Parsing.Parse_error))
 
@@ -316,6 +316,8 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       Por (type_predicate env p1, type_predicate env p2)
   | PLimplies (p1, p2) -> 
       Pimplies (type_predicate env p1, type_predicate env p2) 
+  | PLiff (p1, p2) -> 
+      Piff (type_predicate env p1, type_predicate env p2) 
   | PLnot p -> 
       Pnot (type_predicate env p)
   | PLapp (p, tl) ->

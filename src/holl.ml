@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.21 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.22 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -180,6 +180,10 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "(@[%a ==>@ %a@])" print_predicate a print_predicate b
+  | Piff (a, b) ->
+      fprintf fmt "(@[(@[%a ==>@ %a@]) /\\@ (@[%a ==>@ %a@])@])" 
+	print_predicate a print_predicate b
+	print_predicate b print_predicate a
   | Pif (a, b, c) ->
       fprintf fmt "(@[if %a@ then %a@ else %a@])" 
 	print_term a print_predicate b print_predicate c

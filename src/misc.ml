@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.85 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.86 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -228,7 +228,7 @@ let rec collect_term s = function
 let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
   | Papp (_, l) -> List.fold_left collect_term s l
-  | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) 
+  | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) | Piff (a, b)
   | Forallb (_, _, _, _, a, b) -> 
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
@@ -265,6 +265,7 @@ let rec map_predicate f = function
   | Pif (a, b, c) -> Pif (a, f b, f c)
   | Pand (w, a, b) -> Pand (w, f a, f b)
   | Por (a, b) -> Por (f a, f b)
+  | Piff (a, b) -> Piff (f a, f b)
   | Pnot a -> Pnot (f a)
   | Forall (w, id, b, v, p) -> Forall (w, id, b, v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
@@ -520,6 +521,8 @@ let rec print_predicate fmt = function
       fprintf fmt "false"
   | Pimplies (_, a, b) -> 
       fprintf fmt "(@[%a ->@ %a@])" print_predicate a print_predicate b
+  | Piff (a, b) -> 
+      fprintf fmt "(@[%a <->@ %a@])" print_predicate a print_predicate b
   | Pif (a, b, c) -> 
       fprintf fmt "(@[if %a then@ %a else@ %a@])" 
 	print_term a print_predicate b print_predicate c

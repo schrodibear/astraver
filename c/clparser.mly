@@ -30,7 +30,7 @@
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL
 %token LPAR RPAR IF ELSE COLON DOT DOTDOT 
 %token INT FLOAT LT GT LE GE EQ NE COMMA ARROW
-%token FORALL EXISTS IMPLIES AND OR NOT 
+%token FORALL EXISTS IFF IMPLIES AND OR NOT 
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR
 %token VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
@@ -39,7 +39,7 @@
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE
 
 %nonassoc prec_forall prec_exists
-%right IMPLIES
+%right IMPLIES IFF
 %left OR
 %left AND
 %nonassoc prec_not
@@ -59,6 +59,7 @@
 lexpr:
   /* predicates */
   lexpr IMPLIES lexpr { info (PLimplies ($1, $3)) }
+| lexpr IFF lexpr { info (PLiff ($1, $3)) }
 | lexpr OR lexpr     { info (PLor ($1, $3)) }
 | lexpr AND lexpr    { info (PLand ($1, $3)) }
 | NOT lexpr %prec prec_not { info (PLnot $2) }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.95 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.96 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -194,6 +194,7 @@ EXTEND
   ;
   lexpr:
   [ [ a = lexpr0; "->"; b = lexpr -> infix_pp loc a PPimplies b
+    | a = lexpr0; "<->"; b = lexpr -> infix_pp loc a PPiff b
     | a = lexpr0 -> a ] ]
   ; 
   lexpr0:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.26 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.27 2004-05-04 12:37:13 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -143,6 +143,8 @@ and desc_predicate loc lab env lenv = function
       predicate_expected loc
   | PPinfix (a, PPand, b) ->
       Pand (false, predicate lab env lenv a, predicate lab env lenv b)
+  | PPinfix (a, PPiff, b) ->
+      Piff (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPor, b) ->
       Por (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPimplies, b) ->
@@ -224,7 +226,8 @@ and desc_term loc lab env lenv = function
       Tconst c, type_const c
   | PPinfix (a, (PPadd|PPsub|PPmul|PPdiv|PPmod as r), b) ->
       make_arith loc (term lab env lenv a, r, term lab env lenv b)
-  | PPinfix (_, (PPand|PPor|PPimplies|PPlt|PPle|PPgt|PPge|PPeq|PPneq), _) ->
+  | PPinfix (_, (PPand|PPor|PPiff|PPimplies
+		|PPlt|PPle|PPgt|PPge|PPeq|PPneq), _) ->
       term_expected loc
   | PPprefix (PPneg, a) ->
       (match term lab env lenv a with

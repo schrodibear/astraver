@@ -56,6 +56,7 @@ type assertion =
   | LTrue | LFalse
   | LAnd of assertion * assertion
   | LOr of assertion * assertion
+  | LIff of assertion * assertion
   | LNot of assertion
   | LImpl of assertion * assertion
   | LIf of term * assertion * assertion
@@ -101,7 +102,7 @@ let make_equiv a1 a2 =
   match (a1,a2) with
     | (LTrue,_) -> a2
     | (_,LTrue) -> a1
-    | (_,_) -> LAnd(LImpl(a1,a2),LImpl(a2,a1))
+    | (_,_) -> LIff(a1,a2)
 
 let rec iter_assertion f a =
   match a with
@@ -109,6 +110,7 @@ let rec iter_assertion f a =
   | LFalse -> () 
   | LAnd(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
   | LOr(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
+  | LIff(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
   | LNot(a1) -> iter_assertion f a1
   | LImpl(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
   | LIf(t,a1,a2) -> 
@@ -139,6 +141,10 @@ let rec fprintf_assertion form a =
 	fprintf_assertion a2
   | LOr(a1,a2) -> 
       fprintf form "@[(%a@ or %a)@]" 
+	fprintf_assertion a1 
+	fprintf_assertion a2
+  | LIff(a1,a2) -> 
+      fprintf form "@[(%a@ <-> %a)@]" 
 	fprintf_assertion a1 
 	fprintf_assertion a2
   | LNot(a1) -> 

@@ -19,6 +19,7 @@ type assertion =
   | LTrue | LFalse
   | LAnd of assertion * assertion
   | LOr of assertion * assertion
+  | LIff of assertion * assertion
   | LNot of assertion
   | LImpl of assertion * assertion
   | LIf of term * assertion * assertion
