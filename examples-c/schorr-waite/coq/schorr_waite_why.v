@@ -5,49 +5,50 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 248-569 *)
+(* Why obligation from file "why/schorr_waite.why", characters 253-571 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   (p1 = null -> (~(t1 = null) -> (valid alloc t1))).
 Proof.
@@ -55,49 +56,50 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 1981-2099 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2137-2254 *)
 Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -107,49 +109,50 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2121-2178 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2274-2331 *)
 Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -161,49 +164,50 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2319-2343 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2457-2481 *)
 Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -226,49 +230,50 @@ Proof.
 Save.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 2296-2343 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2434-2481 *)
 Lemma schorr_waite_impl_po_5 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -288,22 +293,26 @@ Lemma schorr_waite_impl_po_5 :
   forall (r1: ((memory) pointer)),
   forall (Post64: r1 = (upd r0 caduceus_7 q)),
   ((forall (x:pointer),
-    ((reachable alloc l r root x) -> (reachable alloc l0 r1 t2 x) \/
-     (reachable alloc l0 r1 p2 x))) /\
-  (exists stack:plist, ((((clr_list alloc c0 l0 r1 p2 stack) /\
+    ((reachable alloc r struct_node_l root x) ->
+     (reachable alloc r1 struct_node_l0 t2 x) \/
+     (reachable alloc r1 struct_node_l0 p2 x))) /\
+  (exists stack:plist, ((((clr_list alloc c0 r1 struct_node_l0 p2 stack) /\
    (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
    (forall (x:pointer),
-    ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-     (reachable alloc l0 r1 t2 x) \/
+    ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <> 0 ->
+     (reachable alloc r1 struct_node_l0 t2 x) \/
      (forall (y:pointer),
-      ((in_list y stack) -> (reachable alloc l0 r1 (acc r1 y) x)))))) /\
+      ((in_list y stack) -> (reachable alloc r1 struct_node_l0 (acc r1 y) x)))))) /\
    (forall (x:pointer),
-    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\ (acc l0 x) = (acc l x)))) /\
+    (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
+     (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
    (forall (p1:pointer),
     (forall (p2:pointer),
-     ((pair_in_list p1 p2 stack) ->
-      (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\ (acc r p2) = p1)) /\
-      (((acc c0 p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2)))))))) /\
+     ((pair_in_list p1 p2 (cons t2 stack)) ->
+      (((acc c0 p2) <> 0 ->
+        (acc struct_node_l p2) = (acc struct_node_l0 p2) /\ (acc r p2) = p1)) /\
+      (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
+        (acc r p2) = (acc r1 p2)))))))) /\
   (Zwf 0 0 0).
 Proof.
 (* preservation of loop invariant for the first branch of if "pop" *)
@@ -346,49 +355,50 @@ apply clr_list_cons.
 Save.
 *)
 
-(* Why obligation from file "why/schorr_waite.why", characters 2489-2525 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2628-2676 *)
 Lemma schorr_waite_impl_po_6 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -404,56 +414,57 @@ Lemma schorr_waite_impl_po_6 :
   forall (Post18: caduceus_6 = p1),
   forall (Pre19: (valid alloc p1)),
   forall (aux_1: pointer),
-  forall (Post17: aux_1 = (acc l0 p1)),
+  forall (Post17: aux_1 = (acc struct_node_l0 p1)),
   (valid alloc caduceus_6).
 Proof.
 (* validity of p in "p->r = p->l" in second branch of if "swing" *)
 intuition; subst;auto.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2489-2525 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2628-2676 *)
 Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -469,37 +480,42 @@ Lemma schorr_waite_impl_po_7 :
   forall (Post18: caduceus_6 = p1),
   forall (Pre19: (valid alloc p1)),
   forall (aux_1: pointer),
-  forall (Post17: aux_1 = (acc l0 p1)),
+  forall (Post17: aux_1 = (acc struct_node_l0 p1)),
   forall (Pre17: (valid alloc caduceus_6)),
   forall (r1: ((memory) pointer)),
   forall (Post56: r1 = (upd r0 caduceus_6 aux_1)),
   (forall (result:pointer),
    (result = p1 ->
-    (forall (l1:((memory) pointer)),
-     (l1 = (upd l0 result q) ->
+    (forall (struct_node_l1:((memory) pointer)),
+     (struct_node_l1 = (upd struct_node_l0 result q) ->
       (forall (result:pointer),
        (result = p1 ->
         (forall (c:((memory) Z)),
          (c = (upd c0 result 1) ->
           ((forall (x:pointer),
-            ((reachable alloc l r root x) -> (reachable alloc l1 r1 t2 x) \/
-             (reachable alloc l1 r1 p1 x))) /\
-          (exists stack:plist, ((((clr_list alloc c l1 r1 p1 stack) /\
+            ((reachable alloc r struct_node_l root x) ->
+             (reachable alloc r1 struct_node_l1 t2 x) \/
+             (reachable alloc r1 struct_node_l1 p1 x))) /\
+          (exists stack:plist,
+           ((((clr_list alloc c r1 struct_node_l1 p1 stack) /\
            (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
            (forall (x:pointer),
-            ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-             (reachable alloc l1 r1 t2 x) \/
+            ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <> 0 ->
+             (reachable alloc r1 struct_node_l1 t2 x) \/
              (forall (y:pointer),
-              ((in_list y stack) -> (reachable alloc l1 r1 (acc r1 y) x)))))) /\
+              ((in_list y stack) ->
+               (reachable alloc r1 struct_node_l1 (acc r1 y) x)))))) /\
            (forall (x:pointer),
             (~(in_list x stack) -> (acc r1 x) = (acc r x) /\
-             (acc l1 x) = (acc l x)))) /\
+             (acc struct_node_l1 x) = (acc struct_node_l x)))) /\
            (forall (p1:pointer),
             (forall (p2:pointer),
-             ((pair_in_list p1 p2 stack) ->
-              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
+             ((pair_in_list p1 p2 (cons t2 stack)) ->
+              (((acc c p2) <> 0 ->
+                (acc struct_node_l p2) = (acc struct_node_l1 p2) /\
                 (acc r p2) = p1)) /\
-              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r1 p2)))))))) /\
+              (((acc c p2) = 0 -> (acc struct_node_l p2) = p1 /\
+                (acc r p2) = (acc r1 p2)))))))) /\
           (Zwf 0 0 0))) /\
         (valid alloc result))))) /\
     (valid alloc result))).
@@ -512,49 +528,50 @@ intros.
 *)
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2785-2797 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2936-2960 *)
 Lemma schorr_waite_impl_po_8 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -570,49 +587,50 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2847-2871 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3008-3044 *)
 Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -623,7 +641,7 @@ Lemma schorr_waite_impl_po_9 :
   forall (p2: pointer),
   forall (Post2: p2 = t1),
   forall (t2: pointer),
-  forall (Post3: t2 = (acc l0 t1)),
+  forall (Post3: t2 = (acc struct_node_l0 t1)),
   forall (caduceus_3: pointer),
   forall (Post6: caduceus_3 = p2),
   (valid alloc caduceus_3).
@@ -632,49 +650,50 @@ Proof.
 intuition;subst;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 2824-2871 *)
+(* Why obligation from file "why/schorr_waite.why", characters 2985-3044 *)
 Lemma schorr_waite_impl_po_10 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test6: ~(p1 = null) \/ p1 = null /\ ~(t1 = null) /\ (acc m0 t1) = 0),
@@ -685,12 +704,12 @@ Lemma schorr_waite_impl_po_10 :
   forall (p2: pointer),
   forall (Post2: p2 = t1),
   forall (t2: pointer),
-  forall (Post3: t2 = (acc l0 t1)),
+  forall (Post3: t2 = (acc struct_node_l0 t1)),
   forall (caduceus_3: pointer),
   forall (Post6: caduceus_3 = p2),
   forall (Pre7: (valid alloc caduceus_3)),
-  forall (l1: ((memory) pointer)),
-  forall (Post48: l1 = (upd l0 caduceus_3 q)),
+  forall (struct_node_l1: ((memory) pointer)),
+  forall (Post48: struct_node_l1 = (upd struct_node_l0 caduceus_3 q)),
   (forall (result:pointer),
    (result = p2 ->
     (forall (m:((memory) Z)),
@@ -700,24 +719,29 @@ Lemma schorr_waite_impl_po_10 :
         (forall (c:((memory) Z)),
          (c = (upd c0 result 0) ->
           ((forall (x:pointer),
-            ((reachable alloc l r root x) -> (reachable alloc l1 r0 t2 x) \/
-             (reachable alloc l1 r0 p2 x))) /\
-          (exists stack:plist, ((((clr_list alloc c l1 r0 p2 stack) /\
+            ((reachable alloc r struct_node_l root x) ->
+             (reachable alloc r0 struct_node_l1 t2 x) \/
+             (reachable alloc r0 struct_node_l1 p2 x))) /\
+          (exists stack:plist,
+           ((((clr_list alloc c r0 struct_node_l1 p2 stack) /\
            (forall (p:pointer), ((in_list p stack) -> (acc m p) <> 0))) /\
            (forall (x:pointer),
-            ((reachable alloc l r root x) /\ (acc m x) <> 0 ->
-             (reachable alloc l1 r0 t2 x) \/
+            ((reachable alloc r struct_node_l root x) /\ (acc m x) <> 0 ->
+             (reachable alloc r0 struct_node_l1 t2 x) \/
              (forall (y:pointer),
-              ((in_list y stack) -> (reachable alloc l1 r0 (acc r0 y) x)))))) /\
+              ((in_list y stack) ->
+               (reachable alloc r0 struct_node_l1 (acc r0 y) x)))))) /\
            (forall (x:pointer),
             (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-             (acc l1 x) = (acc l x)))) /\
+             (acc struct_node_l1 x) = (acc struct_node_l x)))) /\
            (forall (p1:pointer),
             (forall (p2:pointer),
-             ((pair_in_list p1 p2 stack) ->
-              (((acc c p2) <> 0 -> (acc l p2) = (acc l1 p2) /\
+             ((pair_in_list p1 p2 (cons t2 stack)) ->
+              (((acc c p2) <> 0 ->
+                (acc struct_node_l p2) = (acc struct_node_l1 p2) /\
                 (acc r p2) = p1)) /\
-              (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r0 p2)))))))) /\
+              (((acc c p2) = 0 -> (acc struct_node_l p2) = p1 /\
+                (acc r p2) = (acc r0 p2)))))))) /\
           (Zwf 0 0 0))) /\
         (valid alloc result))))) /\
     (valid alloc result))).
@@ -728,56 +752,59 @@ intuition.
 *)
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 241-3059 *)
+(* Why obligation from file "why/schorr_waite.why", characters 246-3224 *)
 Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   forall (Variant1: Z),
   forall (c0: ((memory) Z)),
-  forall (l0: ((memory) pointer)),
   forall (m0: ((memory) Z)),
   forall (p1: pointer),
   forall (r0: ((memory) pointer)),
+  forall (struct_node_l0: ((memory) pointer)),
   forall (t1: pointer),
   forall (Pre36: Variant1 = 0),
   forall (Pre35: (forall (x:pointer),
-                  ((reachable alloc l r root x) ->
-                   (reachable alloc l0 r0 t1 x) \/
-                   (reachable alloc l0 r0 p1 x))) /\
+                  ((reachable alloc r struct_node_l root x) ->
+                   (reachable alloc r0 struct_node_l0 t1 x) \/
+                   (reachable alloc r0 struct_node_l0 p1 x))) /\
                  (exists stack:plist,
-                  ((((clr_list alloc c0 l0 r0 p1 stack) /\
+                  ((((clr_list alloc c0 r0 struct_node_l0 p1 stack) /\
                   (forall (p:pointer), ((in_list p stack) -> (acc m0 p) <> 0))) /\
                   (forall (x:pointer),
-                   ((reachable alloc l r root x) /\ (acc m0 x) <> 0 ->
-                    (reachable alloc l0 r0 t1 x) \/
+                   ((reachable alloc r struct_node_l root x) /\ (acc m0 x) <>
+                    0 -> (reachable alloc r0 struct_node_l0 t1 x) \/
                     (forall (y:pointer),
                      ((in_list y stack) ->
-                      (reachable alloc l0 r0 (acc r0 y) x)))))) /\
+                      (reachable alloc r0 struct_node_l0 (acc r0 y) x)))))) /\
                   (forall (x:pointer),
                    (~(in_list x stack) -> (acc r0 x) = (acc r x) /\
-                    (acc l0 x) = (acc l x)))) /\
+                    (acc struct_node_l0 x) = (acc struct_node_l x)))) /\
                   (forall (p1:pointer),
                    (forall (p2:pointer),
-                    ((pair_in_list p1 p2 stack) ->
-                     (((acc c0 p2) <> 0 -> (acc l p2) = (acc l0 p2) /\
+                    ((pair_in_list p1 p2 (cons t1 stack)) ->
+                     (((acc c0 p2) <> 0 ->
+                       (acc struct_node_l p2) = (acc struct_node_l0 p2) /\
                        (acc r p2) = p1)) /\
-                     (((acc c0 p2) = 0 -> (acc l p2) = p1 /\
+                     (((acc c0 p2) = 0 -> (acc struct_node_l p2) = p1 /\
                        (acc r p2) = (acc r0 p2)))))))),
   forall (Pre34: (p1 = null -> (~(t1 = null) -> (valid alloc t1)))),
   forall (Test1: p1 = null /\ (t1 = null \/ ~(t1 = null) /\ (acc m0 t1) <> 0)),
-  ((forall (x:pointer), (acc l x) = (acc l0 x) /\ (acc r x) = (acc r0 x)) /\
-  (forall (x:pointer), ((reachable alloc l0 r0 root x) -> (acc m0 x) <> 0))) /\
+  ((forall (x:pointer), (acc struct_node_l x) = (acc struct_node_l0 x) /\
+    (acc r x) = (acc r0 x)) /\
   (forall (x:pointer),
-   (~(reachable alloc l0 r0 root x) -> (acc m0 x) = (acc m x))).
+   ((reachable alloc r0 struct_node_l0 root x) -> (acc m0 x) <> 0))) /\
+  (forall (x:pointer),
+   (~(reachable alloc r0 struct_node_l0 root x) -> (acc m0 x) = (acc m x))).
 Proof.
 (* post-condition of the function *)
 (*
@@ -786,37 +813,41 @@ inversion_clear H0;intuition.
 *)
 Admitted.
 
-(* Why obligation from file "why/schorr_waite.why", characters 599-1952 *)
+(* Why obligation from file "why/schorr_waite.why", characters 599-2110 *)
 Lemma schorr_waite_impl_po_12 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
   forall (c: ((memory) Z)),
-  forall (l: ((memory) pointer)),
   forall (m: ((memory) Z)),
   forall (r: ((memory) pointer)),
+  forall (struct_node_l: ((memory) pointer)),
   forall (Pre37: (forall (x:pointer),
-                  ((reachable alloc l r root x) -> (acc m x) = 0))),
+                  ((reachable alloc r struct_node_l root x) -> (acc m x) = 0))),
   forall (t: pointer),
   forall (Post35: t = root),
   forall (p: pointer),
   forall (Post34: p = null),
   (forall (x:pointer),
-   ((reachable alloc l r root x) -> (reachable alloc l r t x) \/
-    (reachable alloc l r p x))) /\
-  (exists stack:plist, ((((clr_list alloc c l r p stack) /\
+   ((reachable alloc r struct_node_l root x) ->
+    (reachable alloc r struct_node_l t x) \/
+    (reachable alloc r struct_node_l p x))) /\
+  (exists stack:plist, ((((clr_list alloc c r struct_node_l p stack) /\
    (forall (p:pointer), ((in_list p stack) -> (acc m p) <> 0))) /\
    (forall (x:pointer),
-    ((reachable alloc l r root x) /\ (acc m x) <> 0 ->
-     (reachable alloc l r t x) \/
+    ((reachable alloc r struct_node_l root x) /\ (acc m x) <> 0 ->
+     (reachable alloc r struct_node_l t x) \/
      (forall (y:pointer),
-      ((in_list y stack) -> (reachable alloc l r (acc r y) x)))))) /\
+      ((in_list y stack) -> (reachable alloc r struct_node_l (acc r y) x)))))) /\
    (forall (x:pointer),
-    (~(in_list x stack) -> (acc r x) = (acc r x) /\ (acc l x) = (acc l x)))) /\
+    (~(in_list x stack) -> (acc r x) = (acc r x) /\
+     (acc struct_node_l x) = (acc struct_node_l x)))) /\
    (forall (p1:pointer),
     (forall (p2:pointer),
-     ((pair_in_list p1 p2 stack) ->
-      (((acc c p2) <> 0 -> (acc l p2) = (acc l p2) /\ (acc r p2) = p1)) /\
-      (((acc c p2) = 0 -> (acc l p2) = p1 /\ (acc r p2) = (acc r p2))))))).
+     ((pair_in_list p1 p2 (cons t stack)) ->
+      (((acc c p2) <> 0 -> (acc struct_node_l p2) = (acc struct_node_l p2) /\
+        (acc r p2) = p1)) /\
+      (((acc c p2) = 0 -> (acc struct_node_l p2) = p1 /\
+        (acc r p2) = (acc r p2))))))).
 Proof.
 (* loop invariant true at the beginning *)
 intuition.
@@ -825,7 +856,7 @@ exists (@nil pointer).
 intuition.
 constructor.
 left; subst; auto.
-inversion H.
-inversion H.
+simpl in H; tauto.
+simpl in H; tauto.
 Save.
 
