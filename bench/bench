@@ -47,6 +47,8 @@ echo ""
 echo "=== Checking good files ==="
 goods good
 
+exit 0
+
 # 4. Showing the results
 for f in good/*.ml; do
     coq=good/`basename $f .ml`_why.v

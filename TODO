@@ -38,4 +38,4 @@ IMPLEMENTATION
 
  - variant = identifier ?
 
- - Coq: well_founded / zwf_zero (revoir syntaxe produite)
+ - wp: function application: wrong when function has effects

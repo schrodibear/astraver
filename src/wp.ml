@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.10 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.11 2002-02-05 15:01:55 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -121,7 +121,7 @@ let add_decreasing env inv (var,r) lab bl =
   let ids = term_now_vars env var in
   let al = Idset.fold (fun id l -> (id,at_id id lab) :: l) ids [] in
   let var_lab = subst_in_term al var in
-  let dec = papplist r [var;var_lab] in
+  let dec = papplist r [var; var_lab] in
   let post = match inv with
     | None -> anonymous dec
     | Some i -> { a_value = Pand (dec, i.a_value); a_name = i.a_name }
@@ -351,10 +351,13 @@ i*)
     | _ -> 
 	failwith "todo wp"
 
+(*i TODO: FAUX il faut quantifier également par rapport aux variables 
+    modifiées par l'appel i*)
 and wp_app info q =
   optpost_app 
     (fun q -> 
        let n = Ident.bound () in
+       let q = make_before_after q in
        let q = tsubst_in_predicate [Ident.result,Tbound n] q in
        let ti = mlize_type info.kappa.c_result_type in
        let rname = info.kappa.c_result_name in

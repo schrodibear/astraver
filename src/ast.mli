@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.7 2002-01-31 22:48:02 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.8 2002-02-05 15:01:55 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -54,6 +54,15 @@ and 'a arg =
   | Term of 'a t
   | Refarg of variable
   | Type of type_v
+
+(*i
+type parsed_info = {
+  pre  : precondition list;
+  post : postcondition option;
+  loc  : Loc.t }
+
+type parsed_program = parsed_info t
+i*)
 
 type parsed_program = unit t
 

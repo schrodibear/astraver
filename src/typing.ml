@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.8 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.9 2002-02-05 15:01:55 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -198,7 +198,8 @@ and is_pure_arg = function
   | (_,BindSet) -> true
   | (_,Untyped) -> false
 and is_pure_type_c c =
-  is_pure_type_v c.c_result_type && c.c_pre = [] && c.c_post = None
+  is_pure_type_v c.c_result_type && c.c_effect = Effect.bottom &&
+  c.c_pre = [] && c.c_post = None
 
 let rec is_pure_desc ren env = function
   | Var id -> not (is_in_env env id) || (is_pure_type_v (type_in_env env id))

@@ -125,8 +125,8 @@ src/parser.cmx: src/parser.ml4
 .mly.mli:
 	$(OCAMLYACC) -v $<
 
-%_why.v: %.ml
-	$(BINARY) -coq $<
+%_why.v: %.ml $(BINARY)
+	$(BINARY) -coq $*.ml
 
 # Emacs tags
 ############

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.6 2002-02-04 12:07:57 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.7 2002-02-05 15:01:55 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -156,8 +156,13 @@ and trad_desc ren env ct d =
   (* Translation of the while. *)
 
   | While (b, inv, var, bl) ->
+      (*i EXP: we do not generate the obligation at the end of test i*)
+      let b' =
+	{ b with post=None; 
+	  info={ b.info with kappa={ b.info.kappa with c_post=None }}}
+      in
       let ren' = next ren (get_writes eft) in
-      let tb = trad ren' b in
+      let tb = trad ren' b' in
       let tbl = trad_block ren' env bl in
       let var' = typed_var ren env var in
       make_while ren env var' (tb,b.info.kappa) tbl (inv,ct)
