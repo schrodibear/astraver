@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.37 2002-06-24 09:37:35 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.38 2002-06-24 10:59:55 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -313,10 +313,11 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
     tt_arrow bl (trad_type_c ren' env k0) 
   in
   let input ren =
+    let args = List.map (fun (id,_) -> CC_var id) bl in
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
     let pl = (anonymous_pre false (equality phi phi)) :: info.kappa.c_pre in
     let holes = List.map (fun p -> CC_hole (apply_pre ren env p).p_value) pl in
-    input @ holes
+    args @ input @ holes
   in
   let tw = 
     let r_phi0_phi = predicate_of_term (applist r [Tvar vphi0; Tvar vphi]) in
