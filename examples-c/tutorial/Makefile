@@ -1,6 +1,19 @@
 
+FILES = max abs swap search purse 
 
-all: max abs swap search purse 
+coq:
+	for f in $(FILES); do \
+	  caduceus $$f.c; \
+	  make -f $$f.makefile coq; \
+	done
+
+simplify:
+	for f in $(FILES); do \
+	  caduceus $$f.c; \
+	  make -f $$f.makefile simplify; \
+	done
+
+.PHONY: coq simplify
 
 %: %.c 
 	caduceus $*.c
