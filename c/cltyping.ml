@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.8 2004-02-10 09:00:03 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.9 2004-02-10 10:38:09 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -56,6 +56,8 @@ let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
   | CTfloat _, CTfloat _ -> c_float
   | _ -> assert false
 
+(* Typing terms *)
+
 let rec type_term env t =
   let t, ty = type_term_node t.info env t.node in
   { node = t; info = ty }
@@ -84,7 +86,7 @@ and type_term_node loc env = function
       let t = type_num_term env t in
       Tunop (Uminus, t), t.info
   | Tunop (Ustar, t) -> 
-      assert false
+      assert false (*TODO*)
   | Tbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
       let t1 = type_num_term env t1 in
       let t2 = type_num_term env t2 in
@@ -94,9 +96,22 @@ and type_term_node loc env = function
       let t2 = type_int_term env t2 in
       Tbinop (t1, Bmod, t2), c_int
   | Tdot (t, x) ->
-      assert false
+      assert false (*TODO*)
   | Tarrow (t, x) ->
-      assert false
+      let t = type_term env t in
+      begin match t.info.ctype_node with
+	| CTpointer { ctype_node = CTstruct (_,fl) } -> 
+	    Tarrow (t, x), type_of_struct_field loc x fl
+	| CTpointer { ctype_node = CTunion (_,fl) } -> 
+	    Tarrow (t, x), type_of_union_field loc x fl
+	| CTpointer { ctype_node = CTstruct_named _ | CTunion_named _ } ->
+	    error loc "dereferencing pointer to incomplete type"
+	| CTpointer _ ->
+	    error loc ("request for member `" ^ x ^ 
+		       "' in something not a structure or union")
+	| _ -> 
+	    error loc "invalid type argument of `->'"
+      end
   | Tarrget (t1, t2) ->
       let t1 = type_term env t1 in
       (match t1.info.ctype_node with
@@ -106,15 +121,21 @@ and type_term_node loc env = function
 	 | _ ->
 	     error loc "subscripted value is neither array nor pointer")
   | Tif (t1, t2, t3) ->
-      assert false
+      (* TODO type de t1 ? *)
+      assert false (*TODO*)
   | Told t ->
-      assert false
+      let t = type_term env t in
+      Told t, t.info
   | Tat (t, l) ->
-      assert false
+      let t = type_term env t in
+      Tat (t, l), t.info
   | Tlength t ->
-      assert false
+      let t = type_term env t in
+      (match t.info.ctype_node with
+	 | CTarray _ | CTpointer _ -> Tlength t, c_int
+	 | _ -> error loc "subscripted value is neither array nor pointer")
   | Tresult ->
-      assert false
+      assert false (*TODO*)
 
 and type_int_term env t =
   let tt = type_term env t in
@@ -180,10 +201,16 @@ let rec type_predicate env = function
 	    | [] -> Pvar (loc, x)
 	    | _ -> error loc ("predicate " ^ x ^ " expects arguments"))
        with Not_found -> error loc ("unbound predicate " ^ x))
-  | Prel (t1, r, t2) -> 
+  | Prel (t1, (Lt | Le | Gt | Ge as r), t2) -> 
+      let t1 = type_num_term env t1 in
+      let t2 = type_num_term env t2 in
+      Prel (t1, r, t2)
+  | Prel (t1, (Eq | Neq as r), t2) -> 
+      let loc = Loc.join t1.info t2.info in
       let t1 = type_term env t1 in
       let t2 = type_term env t2 in
-      (*TODO verif *) 
+      if not (compatible t1.info t2.info) then 
+	error loc "comparison of incompatible types";
       Prel (t1, r, t2)
   | Pand (p1, p2) -> 
       Pand (type_predicate env p1, type_predicate env p2)
@@ -213,9 +240,9 @@ let rec type_predicate env = function
       let env' = Env.add x pt (Info.default_var_info x) env in
       Pexists (x, pt, type_predicate env' p)
 
-let type_variant env (t, r) = 
-  let t = type_term env t in
-  (t, r) (* TODO et=int ? *)
+let type_variant env = function 
+  | (t, None) -> (type_int_term env t, None)
+  | (t, r) -> (type_term env t, r)
 
 let type_loop_annot env (i,v) =
   option_app (type_predicate env) i, type_variant env v

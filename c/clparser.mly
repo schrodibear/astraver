@@ -35,11 +35,12 @@
 %token INVARIANT VARIANT FOR LABEL ASSERT 
 %token REQUIRES ENSURES MODIFIABLE LOGIC PREDICATE AXIOM
 
+%nonassoc prec_forall prec_exists
 %right IMPLIES
 %left OR
 %left AND
 %nonassoc prec_not
-%nonassoc prec_if prec_forall prec_exists
+%nonassoc prec_if
 %nonassoc prec_relation
 
 %right QUESTION prec_question

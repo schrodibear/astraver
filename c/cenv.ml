@@ -158,3 +158,13 @@ module Env = struct
 
 end
 
+(* Field access *)
+
+let rec type_of_field su l x = function
+  | [] -> error l (su ^ " has no member named `" ^ x ^ "'")
+  | (ty, y, _) :: _ when x = y -> ty
+  | _ :: fl -> type_of_field su l x fl
+
+let type_of_struct_field = type_of_field "structure"
+let type_of_union_field = type_of_field "union"
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.23 2004-02-10 10:05:48 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.24 2004-02-10 10:38:09 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -101,16 +101,6 @@ let warn_for_read_only loc e =
       warning loc "assigment of read-only location"
   | _ -> 
       ()
-
-(* Field access *)
-
-let rec type_of_field su l x = function
-  | [] -> error l (su ^ " has no member named `" ^ x ^ "'")
-  | (ty, y, _) :: _ when x = y -> ty
-  | _ :: fl -> type_of_field su l x fl
-
-let type_of_struct_field = type_of_field "structure"
-let type_of_union_field = type_of_field "union"
 
 (*s Types *)
 
