@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.5 2002-11-19 13:31:10 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.6 2002-11-19 16:49:15 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
@@ -51,27 +51,70 @@ let mk_seq loc e1 e2 = match e1, e2 with
   | { pdesc=Sseq l1 }, e2 -> mk_expr loc (Sseq (l1 @ [Sstatement e2]))
   | e1, e2 -> mk_expr loc (Sseq [Sstatement e1; Sstatement e2])
 
+let interp_binop = function
+  | Plus -> t_add
+  | Minus -> t_sub
+  | Mult -> t_mul
+  | Div -> t_div
+  | Mod -> t_mod_int
+  | Lt -> t_lt
+  | Gt -> t_gt
+  | Le -> t_le
+  | Ge -> t_ge
+  | Eq -> t_eq
+  | Neq -> t_neq
+  | _ -> assert false
+
+let mk_binop l op e1 e2 =
+  mk_expr l (Sapp (mk_expr l (Sapp (mk_expr l (Svar op), Sterm e1)), Sterm e2))
+
+let c_true = mk_expr Loc.dummy (Sconst (ConstInt 1))
+let c_false = mk_expr Loc.dummy (Sconst (ConstInt 0))
+
 let rec interp_expr = function
   | CEvar (loc, id) -> 
-      mk_expr loc (Svar id)
+      mk_expr loc (Srefget id)
   | CEassign (loc, CEvar (_,id), Aequal, e) -> 
       mk_expr loc (Srefset (id, interp_expr e))
-  | CEassign _ -> 
+  | CEassign _ ->
       assert false
   | CEseq (loc, e1, e2) -> 
       mk_seq loc (interp_expr e1) (interp_expr e2)
-  | CEcond _ ->
+  | CEcond (l, e1, e2, e3) ->
+      mk_expr l (Sif (interp_boolean e1, interp_expr e2, interp_expr e3))
+  | CEcall (l, e, el) ->
+      List.fold_left 
+	(fun f a -> mk_expr l (Sapp (f, Sterm (interp_expr a))))
+	(interp_expr e) el
+  | CEbinary (l, e1, (Plus | Minus | Mult | Div | Mod as op), e2) ->
+      mk_binop l (interp_binop op) (interp_expr e1) (interp_expr e2)
+  | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq | And | Or), e2) as e ->
+      mk_expr l (Sif (interp_boolean e, c_true, c_false))
+  | CEbinary (l, e1, (Bw_and | Bw_or | Bw_xor as op), e2) ->
       assert false
-  | CEcall _ ->
-      assert false
-  | CEbinary _ ->
-      assert false
+  | CEunary (l, Prefix_inc, CEvar (_, id)) ->
+      let getid = mk_expr l (Srefget id) in
+      let incrid = (* id := !id + 1 *)
+	mk_expr l (Srefset (id, mk_binop l (interp_binop Plus) getid
+			      (mk_expr l (Sconst (ConstInt 1))))) 
+      in
+      mk_expr l (Sseq [Sstatement incrid; Sstatement getid])
   | CEunary _ ->
       assert false
   | CEarrget _ ->
       assert false
-  | CEconst _ ->
-      assert false
+  | CEconst (l, s) ->
+      mk_expr l (Sconst (ConstInt (int_of_string s)))
+
+and interp_boolean = function
+  | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq as op), e2) ->
+      mk_binop l (interp_binop op) (interp_expr e1) (interp_expr e2)
+  | CEbinary (l, e1, And, e2) ->
+      mk_expr l (Sif (interp_boolean e1, interp_boolean e2, c_false))
+  | CEbinary (l, e1, Or, e2) ->
+      mk_expr l (Sif (interp_boolean e1, c_true, interp_boolean e2))
+  | e ->
+      let e = interp_expr e in mk_expr e.loc (Sif (e, c_true, c_false))
 
 let append_to_block l s1 s2 = match s1, s2 with
   | _, None -> s1
