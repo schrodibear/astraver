@@ -90,7 +90,8 @@ CMO = src/lib.cmo src/compat.cmo \
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
            src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo      \
-	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
+	   src/mlize.cmo src/red.cmo src/vcg.cmo \
+	   src/monomorph.cmo src/pvs.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo src/cvcl.cmo \
            src/regen.cmo src/mizar.cmo src/coq.cmo \
            src/ocaml.cmo src/fpi.cmo src/main.cmo
@@ -267,7 +268,7 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) $(VO)
+local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) coq-@COQ@
 	cp -f bin/why.opt $$HOME/bin/$$OSTYPE/why
 	cp -f $(CADUCEUS) $$HOME/bin/$$OSTYPE/caduceus
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html

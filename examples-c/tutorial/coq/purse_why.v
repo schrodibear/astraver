@@ -4,7 +4,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/purse.why", characters 149-234 *)
+(* Why obligation from file "why/purse.why", characters 149-233 *)
 Lemma credit0_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
@@ -16,7 +16,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 129-235 *)
+(* Why obligation from file "why/purse.why", characters 129-234 *)
 Lemma credit0_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
@@ -36,7 +36,7 @@ subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 490-575 *)
+(* Why obligation from file "why/purse.why", characters 490-574 *)
 Lemma credit_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
@@ -48,7 +48,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 470-576 *)
+(* Why obligation from file "why/purse.why", characters 470-575 *)
 Lemma credit_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
@@ -69,7 +69,7 @@ subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 930-953 *)
+(* Why obligation from file "why/purse.why", characters 930-952 *)
 Lemma test1_impl_po_1 : 
   forall (p1: pointer),
   forall (p2: pointer),
@@ -82,7 +82,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 966-993 *)
+(* Why obligation from file "why/purse.why", characters 966-992 *)
 Lemma test1_impl_po_2 : 
   forall (p1: pointer),
   forall (p2: pointer),
@@ -99,7 +99,7 @@ unfold purse_inv; intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 958-1018 *)
+(* Why obligation from file "why/purse.why", characters 958-1015 *)
 Lemma test1_impl_po_3 : 
   forall (p1: pointer),
   forall (p2: pointer),
@@ -126,7 +126,7 @@ rewrite H8; intuition.
 subst balance0; caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1213-1240 *)
+(* Why obligation from file "why/purse.why", characters 1213-1239 *)
 Lemma test2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -139,7 +139,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1256-1283 *)
+(* Why obligation from file "why/purse.why", characters 1256-1282 *)
 Lemma test2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -167,7 +167,7 @@ which contradicts H0.
 *)
 Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1301-1329 *)
+(* Why obligation from file "why/purse.why", characters 1301-1328 *)
 Lemma test2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -192,7 +192,7 @@ rewrite H16; intuition.
 (* again we need p1 <> p2 *)
 Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1349-1378 *)
+(* Why obligation from file "why/purse.why", characters 1349-1377 *)
 Lemma test2_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -221,7 +221,7 @@ Proof.
 unfold purse_inv; intuition.
 Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1386-1474 *)
+(* Why obligation from file "why/purse.why", characters 1386-1473 *)
 Lemma test2_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -256,7 +256,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1386-1474 *)
+(* Why obligation from file "why/purse.why", characters 1386-1473 *)
 Lemma test2_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -292,7 +292,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1336-1483 *)
+(* Why obligation from file "why/purse.why", characters 1336-1480 *)
 Lemma test2_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (balance: ((memory) Z)),
@@ -339,7 +339,7 @@ rewrite H11; intuition.
 rewrite H10.
 Admitted.
 
-(* Why obligation from file "why/purse.why", characters 1723-1808 *)
+(* Why obligation from file "why/purse.why", characters 1723-1807 *)
 Lemma withdraw0_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
@@ -351,7 +351,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 1703-1809 *)
+(* Why obligation from file "why/purse.why", characters 1703-1808 *)
 Lemma withdraw0_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),
@@ -371,7 +371,7 @@ subst; caduceus.
 subst;caduceus.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 2103-2188 *)
+(* Why obligation from file "why/purse.why", characters 2103-2187 *)
 Lemma withdraw_impl_po_1 : 
   forall (p: pointer),
   forall (s: Z),
@@ -383,7 +383,7 @@ Proof.
 unfold purse_inv; intuition.
 Save.
 
-(* Why obligation from file "why/purse.why", characters 2083-2189 *)
+(* Why obligation from file "why/purse.why", characters 2083-2188 *)
 Lemma withdraw_impl_po_2 : 
   forall (p: pointer),
   forall (s: Z),

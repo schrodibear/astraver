@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
-      (Why version is 1 + Caduceus version)
 
+
+ o support for PVS output
  o new predicate alloc_extends (used in local allocations)
  o added automatic annotations expressing the separation of the
    various globals (resp. the various locals of a given function)
@@ -39,20 +40,20 @@ version 0.54, April 22nd, 2004
  o fixed bug with construct t[x].y
  o support for 'assigns \nothing'
 
-version 0.52 (1.52), April 7th, 2004
-====================================
+version 0.52, April 7th, 2004
+=============================
  o Coq automatic proofs of some `assigns' clauses; updated tutorial
  o fixed bug with `assigns' clause effects
  o added support for (global) enum
  o new example examples-c/sorting/selection.c
 
-version 0.51 (1.51), April 6th, 2004
-====================================
+version 0.51, April 6th, 2004
+=============================
  o fixed bug with multi-dimensional arrays
  o fixed bug in effect inference for predicates (alloc was missing)
 
-version 0.50 (1.50), March 26th, 2004
-=====================================
+version 0.50, March 26th, 2004
+==============================
  o first public release
 
 

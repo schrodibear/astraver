@@ -67,7 +67,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 380-409 *)
+(* Why obligation from file "why/sum2.why", characters 380-408 *)
 Lemma test1_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -92,7 +92,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 380-409 *)
+(* Why obligation from file "why/sum2.why", characters 380-408 *)
 Lemma test1_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -120,7 +120,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 361-438 *)
+(* Why obligation from file "why/sum2.why", characters 361-437 *)
 Lemma test1_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -148,7 +148,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 209-447 *)
+(* Why obligation from file "why/sum2.why", characters 209-443 *)
 Lemma test1_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -171,7 +171,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 258-325 *)
+(* Why obligation from file "why/sum2.why", characters 258-324 *)
 Lemma test1_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -188,7 +188,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 982-1005 *)
+(* Why obligation from file "why/sum2.why", characters 982-1004 *)
 Lemma test2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -212,7 +212,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 966-1064 *)
+(* Why obligation from file "why/sum2.why", characters 966-1063 *)
 Lemma test2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -244,7 +244,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 729-1103 *)
+(* Why obligation from file "why/sum2.why", characters 729-1099 *)
 Lemma test2_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -267,7 +267,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 780-887 *)
+(* Why obligation from file "why/sum2.why", characters 780-886 *)
 Lemma test2_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),

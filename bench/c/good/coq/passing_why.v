@@ -16,7 +16,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/passing.why", characters 159-187 *)
+(* Why obligation from file "why/passing.why", characters 159-186 *)
 Lemma f_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -30,7 +30,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 124-187 *)
+(* Why obligation from file "why/passing.why", characters 124-186 *)
 Lemma f_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -49,7 +49,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 414-460 *)
+(* Why obligation from file "why/passing.why", characters 414-457 *)
 Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -73,7 +73,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 526-714 *)
+(* Why obligation from file "why/passing.why", characters 526-713 *)
 Lemma g_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -94,7 +94,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 804-820 *)
+(* Why obligation from file "why/passing.why", characters 804-819 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),

@@ -18,7 +18,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/sum1.why", characters 254-303 *)
+(* Why obligation from file "why/sum1.why", characters 254-302 *)
 Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (Pre4: x = 0),
@@ -42,7 +42,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum1.why", characters 149-312 *)
+(* Why obligation from file "why/sum1.why", characters 149-308 *)
 Lemma main_impl_po_2 : 
   forall (x: Z),
   forall (Pre4: x = 0),
@@ -62,7 +62,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum1.why", characters 191-223 *)
+(* Why obligation from file "why/sum1.why", characters 191-222 *)
 Lemma main_impl_po_3 : 
   forall (x: Z),
   forall (Pre4: x = 0),

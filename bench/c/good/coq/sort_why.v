@@ -488,7 +488,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 381-461 *)
+(* Why obligation from file "why/sort.why", characters 381-460 *)
 Lemma sort4_2_impl_po_1 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -505,7 +505,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 381-461 *)
+(* Why obligation from file "why/sort.why", characters 381-460 *)
 Lemma sort4_2_impl_po_2 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -523,7 +523,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 527-560 *)
+(* Why obligation from file "why/sort.why", characters 527-559 *)
 Lemma sort4_2_impl_po_3 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -840,7 +840,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 607-611 *)
+(* Why obligation from file "why/sort.why", characters 607-607 *)
 Lemma sort4_2_impl_po_4 : 
   forall (a: pointer),
   forall (b: pointer),

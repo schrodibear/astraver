@@ -12,7 +12,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "why/rec.why", characters 74-133 *)
+(* Why obligation from file "why/rec.why", characters 74-132 *)
 Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (Pre3: x >= 0),
@@ -22,7 +22,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/rec.why", characters 33-160 *)
+(* Why obligation from file "why/rec.why", characters 33-159 *)
 Lemma f_impl_po_2 : 
   forall (x: Z),
   forall (Pre3: x >= 0),

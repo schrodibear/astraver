@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pp.mli,v 1.3 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: pp.mli,v 1.4 2004-08-26 13:00:44 filliatr Exp $ i*)
 
 open Format
 
@@ -27,6 +27,7 @@ val alt : formatter -> unit -> unit
 val newline : formatter -> unit -> unit
 val comma : formatter -> unit -> unit
 val semi : formatter -> unit -> unit
+val underscore : formatter -> unit -> unit
 val arrow : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
 val hov : int -> formatter -> ('a -> unit) -> 'a -> unit

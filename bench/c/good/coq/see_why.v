@@ -7,7 +7,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/see.why", characters 738-770 *)
+(* Why obligation from file "why/see.why", characters 738-769 *)
 Lemma k_impl_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),

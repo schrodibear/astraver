@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/all.why", characters 121-197 *)
+(* Why obligation from file "why/all.why", characters 121-196 *)
 Lemma f2_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -14,7 +14,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 235-311 *)
+(* Why obligation from file "why/all.why", characters 235-310 *)
 Lemma f3_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -25,7 +25,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 416-465 *)
+(* Why obligation from file "why/all.why", characters 416-462 *)
 Lemma f4_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -40,7 +40,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 590-627 *)
+(* Why obligation from file "why/all.why", characters 590-624 *)
 Lemma f5_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -53,7 +53,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 706-782 *)
+(* Why obligation from file "why/all.why", characters 706-781 *)
 Lemma f6_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 1),
@@ -64,7 +64,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 891-892 *)
+(* Why obligation from file "why/all.why", characters 891-891 *)
 Lemma f7a_impl_po_1 : 
   forall (x: Z),
   forall (Test2: x = 0),
@@ -73,7 +73,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 898-899 *)
+(* Why obligation from file "why/all.why", characters 898-898 *)
 Lemma f7a_impl_po_2 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -83,7 +83,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 821-921 *)
+(* Why obligation from file "why/all.why", characters 821-920 *)
 Lemma f7a_impl_po_3 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -94,7 +94,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1031-1032 *)
+(* Why obligation from file "why/all.why", characters 1031-1031 *)
 Lemma f7b_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x <> 0),
@@ -104,7 +104,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1038-1039 *)
+(* Why obligation from file "why/all.why", characters 1038-1038 *)
 Lemma f7b_impl_po_2 : 
   forall (x: Z),
   forall (Test1: x <> 0),
@@ -113,7 +113,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 960-1061 *)
+(* Why obligation from file "why/all.why", characters 960-1060 *)
 Lemma f7b_impl_po_3 : 
   forall (x: Z),
   forall (Pre1: x <> 0),
@@ -124,7 +124,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1230-1232 *)
+(* Why obligation from file "why/all.why", characters 1230-1231 *)
 Lemma t1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -139,7 +139,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1099-1282 *)
+(* Why obligation from file "why/all.why", characters 1099-1281 *)
 Lemma t1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -152,7 +152,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1583-1756 *)
+(* Why obligation from file "why/all.why", characters 1583-1753 *)
 Lemma t2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -176,7 +176,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 2019-2138 *)
+(* Why obligation from file "why/all.why", characters 2019-2135 *)
 Lemma t3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -198,7 +198,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 2404-2427 *)
+(* Why obligation from file "why/all.why", characters 2404-2426 *)
 Lemma t4_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -213,7 +213,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 2548-2742 *)
+(* Why obligation from file "why/all.why", characters 2548-2739 *)
 Lemma t4_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),

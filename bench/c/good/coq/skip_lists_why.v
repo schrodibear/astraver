@@ -63,7 +63,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 138-168 *)
+(* Why obligation from file "why/skip_lists.why", characters 138-167 *)
 Lemma init_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (forward: ((memory) pointer)),
@@ -78,7 +78,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 591-608 *)
+(* Why obligation from file "why/skip_lists.why", characters 591-607 *)
 Lemma insert_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -93,7 +93,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 733-749 *)
+(* Why obligation from file "why/skip_lists.why", characters 733-748 *)
 Lemma insert_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -114,7 +114,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 1018-1037 *)
+(* Why obligation from file "why/skip_lists.why", characters 1018-1036 *)
 Lemma insert_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -146,7 +146,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 946-1119 *)
+(* Why obligation from file "why/skip_lists.why", characters 946-1118 *)
 Lemma insert_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -204,7 +204,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 1152-1323 *)
+(* Why obligation from file "why/skip_lists.why", characters 1152-1322 *)
 Lemma insert_impl_po_5 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -241,7 +241,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 887-1356 *)
+(* Why obligation from file "why/skip_lists.why", characters 887-1353 *)
 Lemma insert_impl_po_6 : 
   forall (l: pointer),
   forall (v: Z),
@@ -674,7 +674,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 863-1451 *)
+(* Why obligation from file "why/skip_lists.why", characters 863-1447 *)
 Lemma insert_impl_po_7 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -706,7 +706,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 1650-1650 *)
+(* Why obligation from file "why/skip_lists.why", characters 1649-1649 *)
 Lemma insert_impl_po_8 : 
   forall (l: pointer),
   forall (v: Z),
@@ -896,7 +896,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 1650-1650 *)
+(* Why obligation from file "why/skip_lists.why", characters 1649-1649 *)
 Lemma insert_impl_po_9 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1086,7 +1086,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 791-1697 *)
+(* Why obligation from file "why/skip_lists.why", characters 791-1693 *)
 Lemma insert_impl_po_10 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1115,7 +1115,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 791-1697 *)
+(* Why obligation from file "why/skip_lists.why", characters 791-1693 *)
 Lemma insert_impl_po_11 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1281,7 +1281,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 2563-2601 *)
+(* Why obligation from file "why/skip_lists.why", characters 2563-2600 *)
 Lemma insert_impl_po_12 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1325,7 +1325,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 2563-2601 *)
+(* Why obligation from file "why/skip_lists.why", characters 2563-2600 *)
 Lemma insert_impl_po_13 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1373,7 +1373,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3304-3304 *)
+(* Why obligation from file "why/skip_lists.why", characters 3303-3303 *)
 Lemma insert_impl_po_14 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1421,7 +1421,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3304-3304 *)
+(* Why obligation from file "why/skip_lists.why", characters 3303-3303 *)
 Lemma insert_impl_po_15 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1469,7 +1469,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 2494-3369 *)
+(* Why obligation from file "why/skip_lists.why", characters 2494-3365 *)
 Lemma insert_impl_po_16 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1511,7 +1511,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3790-3815 *)
+(* Why obligation from file "why/skip_lists.why", characters 3790-3814 *)
 Lemma random_level_impl_po_1 : 
   forall (prob0: R),
   forall (Post5: (eq R prob0 (0250000 / 1000000)%R)),
@@ -1532,7 +1532,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3643-3823 *)
+(* Why obligation from file "why/skip_lists.why", characters 3643-3819 *)
 Lemma random_level_impl_po_2 : 
   forall (prob0: R),
   forall (Post5: (eq R prob0 (0250000 / 1000000)%R)),
@@ -1552,7 +1552,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 3643-3823 *)
+(* Why obligation from file "why/skip_lists.why", characters 3643-3819 *)
 Lemma random_level_impl_po_3 : 
   forall (prob0: R),
   forall (Post5: (eq R prob0 (0250000 / 1000000)%R)),
@@ -1572,7 +1572,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4142-4158 *)
+(* Why obligation from file "why/skip_lists.why", characters 4142-4157 *)
 Lemma search_impl_po_1 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1588,7 +1588,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4423-4442 *)
+(* Why obligation from file "why/skip_lists.why", characters 4423-4441 *)
 Lemma search_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1615,7 +1615,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4353-4522 *)
+(* Why obligation from file "why/skip_lists.why", characters 4353-4521 *)
 Lemma search_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1658,7 +1658,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4554-4720 *)
+(* Why obligation from file "why/skip_lists.why", characters 4554-4719 *)
 Lemma search_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1690,7 +1690,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4295-4752 *)
+(* Why obligation from file "why/skip_lists.why", characters 4295-4749 *)
 Lemma search_impl_po_5 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1753,7 +1753,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4272-4846 *)
+(* Why obligation from file "why/skip_lists.why", characters 4272-4842 *)
 Lemma search_impl_po_6 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1780,7 +1780,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4955-4955 *)
+(* Why obligation from file "why/skip_lists.why", characters 4954-4954 *)
 Lemma search_impl_po_7 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1816,7 +1816,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4955-4955 *)
+(* Why obligation from file "why/skip_lists.why", characters 4954-4954 *)
 Lemma search_impl_po_8 : 
   forall (l: pointer),
   forall (v: Z),
@@ -1852,7 +1852,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4200-5002 *)
+(* Why obligation from file "why/skip_lists.why", characters 4200-4998 *)
 Lemma search_impl_po_9 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -1876,7 +1876,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/skip_lists.why", characters 4200-5002 *)
+(* Why obligation from file "why/skip_lists.why", characters 4200-4998 *)
 Lemma search_impl_po_10 : 
   forall (l: pointer),
   forall (v: Z),

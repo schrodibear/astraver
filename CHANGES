@@ -1,11 +1,12 @@
 
   o WP completely redesigned: side-effects free expressions are now
     given an adequate specification, so that the WP calculus does not
-    enter them. Results in significantly simpler proof obligations.
+    enter them. It results in significantly simpler proof obligations.
   o new tool `dp' to call decision procedures Simplify and CVC Lite
     (calls the DP once for each goal with a timeout and displays stats)
   o CVC Lite output (option --cvcl; see http://chicory.stanford.edu/CVCL/)
   o Coq: parameters no more generated when -valid is not set
+  o PVS: support for Why polymorphic symbols and/or axioms
 
 version 1.62, June 24th, 2004
 =============================

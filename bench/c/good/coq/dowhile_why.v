@@ -19,7 +19,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/dowhile.why", characters 390-401 *)
+(* Why obligation from file "why/dowhile.why", characters 390-396 *)
 Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -44,7 +44,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 407-411 *)
+(* Why obligation from file "why/dowhile.why", characters 407-407 *)
 Lemma main_impl_po_2 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -91,7 +91,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 166-422 *)
+(* Why obligation from file "why/dowhile.why", characters 166-418 *)
 Lemma main_impl_po_3 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -111,7 +111,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 208-272 *)
+(* Why obligation from file "why/dowhile.why", characters 208-271 *)
 Lemma main_impl_po_4 : 
   forall (x: Z),
   forall (Pre4: x >= 0),

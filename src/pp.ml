@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pp.ml,v 1.3 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: pp.ml,v 1.4 2004-08-26 13:00:44 filliatr Exp $ i*)
 
 (*s Pretty-print library *)
 
@@ -30,6 +30,7 @@ let rec print_list sep print fmt = function
   | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
 
 let comma fmt () = fprintf fmt ",@ "
+let underscore fmt () = fprintf fmt "_"
 let semi fmt () = fprintf fmt ";@ "
 let space fmt () = fprintf fmt "@ "
 let alt fmt () = fprintf fmt "|@ "

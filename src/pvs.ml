@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.57 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.58 2004-08-26 13:00:44 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -46,6 +46,22 @@ let print_real fmt = function
 	fprintf fmt "(%s%s * 1%s)" i f (String.make e '0')
       else
 	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
+
+let rec print_pure_type fmt = function
+  | PTint -> fprintf fmt "int"
+  | PTbool -> fprintf fmt "bool"
+  | PTunit -> fprintf fmt "unit"
+  | PTreal -> fprintf fmt "real"
+  | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
+  | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
+  | PTexternal(i,id) -> fprintf fmt "%a%a" Ident.print id instance i
+  | PTvarid _ -> assert false 
+  | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
+  | PTvar _ -> assert false
+
+and instance fmt = function
+  | [] -> ()
+  | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -90,7 +106,7 @@ let print_term fmt t =
 	assert false
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "zwf_zero"
-    | Tvar id | Tapp (id, [], _) -> 
+    | Tvar id ->
 	Ident.print fmt id
     | Tapp (id, [t], _) when id == t_neg_int || id == t_neg_real ->
 	fprintf fmt "-%a" print3 t
@@ -98,24 +114,13 @@ let print_term fmt t =
 	fprintf fmt "(@[if %a@ then %a@ else %a@])" print0 a print0 b print0 c
     | Tapp (id, l, _) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
-    | Tapp (id, tl, _) -> 
-	fprintf fmt "%s(@[%a@])" 
-	  (Ident.string id) (print_list comma print0) tl
+    | Tapp (id, [], i) -> 
+	fprintf fmt "%a%a" Ident.print id instance i
+    | Tapp (id, tl, i) -> 
+	fprintf fmt "%a%a(@[%a@])" 
+	  Ident.print id instance i (print_list comma print0) tl
   in
   print0 fmt t
-
-let rec print_pure_type fmt = function
-  | PTint -> fprintf fmt "int"
-  | PTbool -> fprintf fmt "bool"
-  | PTunit -> fprintf fmt "unit"
-  | PTreal -> fprintf fmt "real"
-  | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
-  | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
-  | PTexternal(l,id) -> 
-      fprintf fmt "%s[%a]" (Ident.string id) (print_list comma print_pure_type) l
-  | PTvarid _ -> assert false 
-  | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
-  | PTvar _ -> failwith "no polymorphism with PVS"
 
 let print_logic_binder fmt (id,pt) =
   fprintf fmt "%s:%a" (Ident.string id) print_pure_type pt
@@ -174,8 +179,8 @@ let print_predicate fmt p =
 	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [a;b], _) when is_neq id ->
 	fprintf fmt "%a /=@ %a" print_term a print_term b
-    | Papp (id, l, _) -> 	
-	fprintf fmt "%s(@[" (Ident.string id);
+    | Papp (id, l, i) -> 	
+	fprintf fmt "%a%a(@[" Ident.print id instance i;
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
     | Pnot p -> 
@@ -206,7 +211,7 @@ let rec print_cc_type fmt = function
   | TTarrow ((_, CC_var_binder t1), t2) ->
       fprintf fmt "[%a -> %a]" print_cc_type t1 print_cc_type t2
   | TTterm t -> print_term fmt t
-  | TTSet -> failwith "no polymorphism with PVS"
+  | TTSet
   | TTtuple _ 
   | TTpred _ 
   | TTlambda _
@@ -226,16 +231,6 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq hyps
 
-let print_lemma fmt (loc,id,s) =
-  fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation loc;
-  fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
-  print_sequent fmt s;
-  fprintf fmt "@]@\n"
-
-let print_obligations fmt ol = 
-  print_list (fun fmt () -> fprintf fmt "@\n") print_lemma fmt ol;
-  if ol <> [] then fprintf fmt "@\n"
-
 let begin_theory fmt th =
   fprintf fmt "%s_why: THEORY@\nBEGIN@\n@\n" th;
   fprintf fmt "  %s@\n" Options.pvs_preamble
@@ -243,32 +238,51 @@ let begin_theory fmt th =
 let end_theory fmt th =
   fprintf fmt "END %s_why@\n" th
 
-let print_parameter fmt id v =
-  fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_cc_type v
-
 let print_logic_type fmt = function
-  | Function (pl, t) -> 
-      fprintf fmt "[%a -> %a]"
-	(print_list comma print_pure_type) pl print_pure_type t
+  | Predicate [] ->
+      fprintf fmt "bool"
   | Predicate pl -> 
       fprintf fmt "[%a -> bool]"
 	(print_list comma print_pure_type) pl
+  | Function ([], pt) ->
+      print_pure_type fmt pt
+  | Function (pl, t) -> 
+      fprintf fmt "[%a -> %a]"
+	(print_list comma print_pure_type) pl print_pure_type t
 
-let print_logic fmt id s = 
-  let (l,t) = Env.specialize_logic_type s in
-  if l <> [] then failwith "no polymorphism with PVS";
-  fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_logic_type t
+module Mono = struct
 
-let print_axiom fmt id p =
-  let (l,p) = Env.specialize_predicate p in  
-  if l <> [] then failwith "no polymorphism with PVS";
-  fprintf fmt "  %s: AXIOM @[%a@]@\n@\n" id print_predicate p
+  let declare_type fmt pt = 
+    fprintf fmt "@[%a: NONEMPTY_TYPE;@]@\n@\n" print_pure_type pt
 
-let print_predicate fmt id p =
-  let (l,(bl,p)) = Env.specialize_predicate_def p in
-  if l <> [] then failwith "no polymorphism with PVS";
-  fprintf fmt "  %s(@[%a@]) : bool = @[%a@]@\n@\n"
-    id (print_list comma print_logic_binder) bl print_predicate p
+  let print_logic_instance fmt id i t = 
+    fprintf fmt "%%%% Why logic %s@\n" id;
+    fprintf fmt "  %s%a: @[%a@]@\n@\n" id instance i print_logic_type t
+
+  let print_axiom_instance fmt id i p =
+    fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
+    fprintf fmt "  %s%a: AXIOM @[%a@]@\n@\n" id instance i print_predicate p
+
+  let print_predicate_def_instance fmt id i (bl,p) =
+    fprintf fmt "  %s%a(@[%a@]) : bool = @[%a@]@\n@\n"
+      id instance i (print_list comma print_logic_binder) bl print_predicate p
+
+  let print_obligation fmt (loc,id,s) =
+    fprintf fmt "  @[%% %a @]@\n" Loc.report_obligation loc;
+    fprintf fmt "  @[<hov 2>%s: LEMMA@\n" id;
+    print_sequent fmt s;
+    fprintf fmt "@]@\n"
+
+  let print_parameter fmt id v =
+    fprintf fmt "  %s: @[%a@]@\n@\n" id print_cc_type v
+
+end
+
+module Output = Monomorph.Make(Mono)
+
+let print_obligations fmt ol = 
+  print_list (fun fmt () -> fprintf fmt "@\n") Output.print_obligation fmt ol;
+  if ol <> [] then fprintf fmt "@\n"
 
 type elem = 
   | Verbatim of string
@@ -295,10 +309,10 @@ let push_predicate id p = Queue.add (Predicate (id, p)) queue
 let output_elem fmt = function
   | Verbatim s -> fprintf fmt "  %s@\n@\n" s
   | Obligations ol -> print_obligations fmt ol
-  | Parameter (id, v) -> print_parameter fmt id v
-  | Logic (id, t) -> print_logic fmt id t
-  | Axiom (id, p) -> print_axiom fmt id p
-  | Predicate (id, p) -> print_predicate fmt id p
+  | Parameter (id, v) -> Output.print_parameter fmt id v
+  | Logic (id, t) -> Output.print_logic fmt id t
+  | Axiom (id, p) -> Output.print_axiom fmt id p
+  | Predicate (id, p) -> Output.print_predicate_def fmt id p
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in

@@ -19,7 +19,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/continue.why", characters 236-250 *)
+(* Why obligation from file "why/continue.why", characters 236-242 *)
 Lemma f1_impl_po_1 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -37,7 +37,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 265-286 *)
+(* Why obligation from file "why/continue.why", characters 265-285 *)
 Lemma f1_impl_po_2 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -55,7 +55,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 113-335 *)
+(* Why obligation from file "why/continue.why", characters 113-331 *)
 Lemma f1_impl_po_3 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -70,7 +70,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 153-165 *)
+(* Why obligation from file "why/continue.why", characters 153-164 *)
 Lemma f1_impl_po_4 : 
   forall (n: Z),
   forall (Post7: n = 10),
@@ -80,7 +80,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 663-677 *)
+(* Why obligation from file "why/continue.why", characters 663-669 *)
 Lemma f2_impl_po_1 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -101,7 +101,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 687-691 *)
+(* Why obligation from file "why/continue.why", characters 687-687 *)
 Lemma f2_impl_po_2 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -121,7 +121,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 513-784 *)
+(* Why obligation from file "why/continue.why", characters 513-780 *)
 Lemma f2_impl_po_3 : 
   forall (i: Z),
   forall (Post9: i = 17),
@@ -138,7 +138,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/continue.why", characters 555-568 *)
+(* Why obligation from file "why/continue.why", characters 555-567 *)
 Lemma f2_impl_po_4 : 
   forall (i: Z),
   forall (Post9: i = 17),

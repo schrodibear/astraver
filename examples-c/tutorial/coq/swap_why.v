@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/swap.why", characters 154-182 *)
+(* Why obligation from file "why/swap.why", characters 154-181 *)
 Lemma swap_impl_po_1 : 
   forall (t: pointer),
   forall (i: Z),
@@ -16,7 +16,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 263-291 *)
+(* Why obligation from file "why/swap.why", characters 263-290 *)
 Lemma swap_impl_po_2 : 
   forall (t: pointer),
   forall (i: Z),
@@ -38,7 +38,7 @@ caduceus.
 caduceus.
 Save.
 
-(* Why obligation from file "why/swap.why", characters 237-292 *)
+(* Why obligation from file "why/swap.why", characters 237-291 *)
 Lemma swap_impl_po_3 : 
   forall (t: pointer),
   forall (i: Z),
@@ -60,7 +60,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/swap.why", characters 237-292 *)
+(* Why obligation from file "why/swap.why", characters 237-291 *)
 Lemma swap_impl_po_4 : 
   forall (t: pointer),
   forall (i: Z),

@@ -19,7 +19,7 @@ intuition.
 subst; omega.
 Save.
 
-(* Why obligation from file "why/arith.why", characters 136-534 *)
+(* Why obligation from file "why/arith.why", characters 136-531 *)
 Lemma test_impl_po_1 : 
   forall (k: Z),
   forall (j: Z),

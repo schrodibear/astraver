@@ -12,7 +12,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 782-865 *)
+(* Why obligation from file "why/flag.why", characters 782-864 *)
 Lemma flag_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -46,7 +46,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 940-989 *)
+(* Why obligation from file "why/flag.why", characters 940-986 *)
 Lemma flag_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -106,7 +106,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1330-1351 *)
+(* Why obligation from file "why/flag.why", characters 1330-1350 *)
 Lemma flag_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -151,7 +151,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1491-1528 *)
+(* Why obligation from file "why/flag.why", characters 1491-1525 *)
 Lemma flag_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -206,7 +206,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 1587-1591 *)
+(* Why obligation from file "why/flag.why", characters 1587-1587 *)
 Lemma flag_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -253,7 +253,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 295-1599 *)
+(* Why obligation from file "why/flag.why", characters 295-1595 *)
 Lemma flag_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
@@ -291,7 +291,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 343-745 *)
+(* Why obligation from file "why/flag.why", characters 343-744 *)
 Lemma flag_impl_po_7 : 
   forall (t: pointer),
   forall (n: Z),

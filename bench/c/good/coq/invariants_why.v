@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/invariants.why", characters 384-442 *)
+(* Why obligation from file "why/invariants.why", characters 384-441 *)
 Lemma f_impl_po_1 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -22,7 +22,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 583-709 *)
+(* Why obligation from file "why/invariants.why", characters 583-708 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -53,7 +53,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 560-710 *)
+(* Why obligation from file "why/invariants.why", characters 560-709 *)
 Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -82,7 +82,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 560-710 *)
+(* Why obligation from file "why/invariants.why", characters 560-709 *)
 Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -114,7 +114,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 718-722 *)
+(* Why obligation from file "why/invariants.why", characters 718-718 *)
 Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),

@@ -19,7 +19,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 404-485 *)
+(* Why obligation from file "why/search.why", characters 404-484 *)
 Lemma index2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -42,7 +42,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 496-517 *)
+(* Why obligation from file "why/search.why", characters 496-516 *)
 Lemma index2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -71,7 +71,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 528-549 *)
+(* Why obligation from file "why/search.why", characters 528-548 *)
 Lemma index2_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -100,7 +100,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 175-558 *)
+(* Why obligation from file "why/search.why", characters 175-554 *)
 Lemma index2_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -125,7 +125,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 224-365 *)
+(* Why obligation from file "why/search.why", characters 224-364 *)
 Lemma index2_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -141,7 +141,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 1124-1205 *)
+(* Why obligation from file "why/search.why", characters 1124-1204 *)
 Lemma index_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -164,7 +164,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 1216-1227 *)
+(* Why obligation from file "why/search.why", characters 1216-1222 *)
 Lemma index_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -195,7 +195,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 1238-1259 *)
+(* Why obligation from file "why/search.why", characters 1238-1258 *)
 Lemma index_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -224,7 +224,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 895-1268 *)
+(* Why obligation from file "why/search.why", characters 895-1264 *)
 Lemma index_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -251,7 +251,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/search.why", characters 944-1085 *)
+(* Why obligation from file "why/search.why", characters 944-1084 *)
 Lemma index_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
