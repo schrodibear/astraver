@@ -207,7 +207,7 @@ Lemma mult_po_7 :
   (a1: Z)
   (b1: Z)
   (p1: Z)
-  (Inv: `a1 >= 0` /\ `p1 + a1 * b1` = `x * y` /\ (Zwf `0` a1 a0))
+  (Inv0: `a1 >= 0` /\ `p1 + a1 * b1` = `x * y` /\ (Zwf `0` a1 a0))
   (Zwf `0` a1 Variant1).
 Proof.
 Intros; Rewrite Pre4; Tauto.
@@ -233,7 +233,7 @@ Lemma mult_po_8 :
   (a1: Z)
   (b1: Z)
   (p1: Z)
-  (Inv: `a1 >= 0` /\ `p1 + a1 * b1` = `x * y` /\ (Zwf `0` a1 a0))
+  (Inv0: `a1 >= 0` /\ `p1 + a1 * b1` = `x * y` /\ (Zwf `0` a1 a0))
   `a1 >= 0` /\ `p1 + a1 * b1` = `x * y`.
 Proof.
 Intuition.
@@ -301,6 +301,10 @@ Save.
 
 
 
+
+
+
+
 Definition mult := (* validation *)
   [x: Z; y: Z; Pre5: `x >= 0` /\ `y >= 0`]
     let (result, Post1) = (exist_1 [result: Z]result = x x
@@ -336,7 +340,7 @@ Definition mult := (* validation *)
                         result2 Bool1) of
                 | (left Test4) =>
                     let (a1, b1, p1, result3, Inv) =
-                      let (a1, b1, p1, result3, Inv) =
+                      let (a1, b1, p1, result3, Inv0) =
                         let (p1, result3, Post12) =
                           let (result3, Bool2) =
                             let result4 =
@@ -417,10 +421,10 @@ Definition mult := (* validation *)
                       ((wf1 a1)
                         (mult_po_7 x y Pre5 result Post1 result0 Post2
                         result1 Post3 Variant1 a0 b0 p0 Pre4 Inv Test4 a1 b1
-                        p1 Inv) a1 b1 p1 (refl_equal ? a1)
+                        p1 Inv0) a1 b1 p1 (refl_equal ? a1)
                         (mult_po_8 x y Pre5 result Post1 result0 Post2
                         result1 Post3 Variant1 a0 b0 p0 Pre4 Inv Test4 a1 b1
-                        p1 Inv)) in
+                        p1 Inv0)) in
                     (exist_4 [a2: Z][b2: Z][p2: Z][result4: unit]`a2 >= 0` /\
                     `p2 + a2 * b2` = `x * y` /\ a2 = `0` a1 b1 p1 result3
                     Inv)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.38 2002-06-24 11:50:57 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.39 2002-06-24 13:58:14 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -61,12 +61,12 @@ let next s r = function
   | Anonymous -> incr r; Ident.create (s ^ string_of_int !r)
   | Name id -> id
 
-let reset_names_tables = ref []
-let reset_names () = List.iter (fun f -> f ()) !reset_names_tables
+let reset_names_table = ref []
+let reset_names () = List.iter (fun f -> f ()) !reset_names_table
 
 let gen_sym_name s =
   let r = ref 0 in 
-  reset_names_tables := (fun () -> r := 0) :: !reset_names_tables;
+  reset_names_table := (fun () -> r := 0) :: !reset_names_table;
   next s r
 
 let gen_sym s = let g = gen_sym_name s in fun () -> g Anonymous
@@ -84,6 +84,23 @@ let fresh_var = gen_sym "aux_"
 let wf_name = gen_sym "wf"
 
 let id_of_name = function Name id -> id | Anonymous -> default
+
+let is_post id =
+  let s = Ident.string id in
+  String.length s >= 4 && String.sub s 0 4 = "Post"
+
+let post_name_from = 
+  let avoid = ref Idset.empty in
+  reset_names_table := (fun () -> avoid := Idset.empty) :: !reset_names_table;
+  function
+  | Anonymous ->
+      post_name Anonymous
+  | Name id when is_post id ->
+      post_name Anonymous
+  | Name id -> 
+      let id' = Ident.next_away id !avoid in
+      avoid := Idset.add id' !avoid;
+      id'
 
 let warning s = Format.eprintf "warning: %s\n" s
 

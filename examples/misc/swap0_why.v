@@ -26,6 +26,7 @@ Save.
 
 
 
+
 Definition swap1 := (* validation *)
   [x: Z; y: Z]
     let (result, Post1) = (exist_1 [result: Z]result = x x
@@ -57,6 +58,7 @@ Lemma swap2_po_1 :
 Proof.
 Intuition.
 Save.
+
 
 
 
@@ -103,6 +105,7 @@ Lemma swap3_po_1 :
 Proof.
 Intuition.
 Save.
+
 
 
 
@@ -168,6 +171,8 @@ Save.
 
 
 
+
+
 Definition test_swap3 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
     (refl_equal ? `1`)) in
@@ -209,6 +214,7 @@ Save.
 
 
 
+
 Definition call_swap3_y_x := (* validation *)
   [x: Z; y: Z]
     let (y0, x0, result0, Post1) = (swap3 y x) in
@@ -228,6 +234,7 @@ Lemma swap4_po_1 :
 Proof.
 Intuition.
 Save.
+
 
 
 
@@ -281,6 +288,7 @@ Save.
 
 
 
+
 Definition test_swap4 := (* validation *)
   [tmp: Z]
     let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
@@ -319,6 +327,7 @@ Save.
 
 
 
+
 Definition call_swap4_x_y := (* validation *)
   [tmp: Z; x: Z; y: Z; Pre1: x = `3`]
     let (x0, y0, tmp0, result0, Post1) = (swap4 x y tmp) in
@@ -336,6 +345,7 @@ Lemma call_swap4_y_x_po_1 :
 Proof.
 Intuition.
 Save.
+
 
 
 

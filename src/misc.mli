@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.29 2002-06-24 11:50:57 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.30 2002-06-24 13:58:14 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -55,6 +55,8 @@ val for_name    : unit -> Ident.t
 val label_name  : unit -> string
 val wf_name     : unit -> Ident.t
 val fresh_var   : unit -> Ident.t
+
+val post_name_from : Ident.name -> Ident.t
 
 val reset_names : unit -> unit
 

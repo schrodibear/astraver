@@ -60,7 +60,7 @@ GENERATED = src/version.ml src/parser.ml
 BINARY=bin/why.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 
-all: $(BINARY) $(VO)
+all: $(BINARY) $(STATICBINARY) $(VO)
 
 opt: bin/why.opt
 
