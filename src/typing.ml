@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.63 2002-09-06 11:45:21 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.64 2002-09-06 13:38:54 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -137,9 +137,6 @@ let make_lnode p env k =
 
 let make_var x t env =
   make_lnode (Var x) env (type_c_of_v t)
-
-let coerce p env k = 
-  let l = label_name () in Coerce (make_node p env l k)
 
 let make_arrow_type lab bl k =
   let k = 
@@ -297,11 +294,6 @@ let rec typef lab env expr =
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = p @ List.map assert_pre p1 in
   match q, d with
-    | None, Coerce expr' ->
-	let c = { c_result_name = result; c_result_type = v;
-		  c_effect = Effect.union e' (effect expr');
-		  c_pre = p' @ (pre expr'); c_post = post expr' } in
-	make_node expr'.desc env toplabel c
     | None, App (_,_,k') ->
 	let c = { c_result_name = result; c_result_type = v; c_effect = e'; 
 		  c_pre = p'; c_post = k'.c_post } in
@@ -452,7 +444,7 @@ and typef_desc lab env loc = function
 		    | Expression cf when post t_f = None ->
 			let e = applist cf [ca] in
 			let pl = partial_pre e @ pre t_a @ pre t_f in
-			coerce (Expression e) env kapp, (tapp, ef), pl
+			Expression e, (tapp, ef), pl
  		    (* function is [let y = ty in E]: we lift this let *)
 		    | LetIn (y, ty, ({ desc = Expression cf } as tf'))
 		      when post tf' = None && post t_f = None ->
