@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.ml,v 1.31 2002-10-09 16:43:06 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.32 2002-10-10 17:04:43 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -84,6 +84,8 @@ let exn_exn = create "Exn"
 let exn_post = create "qcomb"
 let exn_qval = create "Qval"
 let exn_qexn = create "Qexn"
+let exist = create "exist"
+let decomp n = create ("decomp" ^ string_of_int n)
 
 (*s Pre-defined. *)
 

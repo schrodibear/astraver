@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ident.mli,v 1.27 2002-10-09 16:43:06 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.28 2002-10-10 17:04:43 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -46,6 +46,8 @@ val exn_exn : t
 val exn_post : t
 val exn_qval : t
 val exn_qexn : t
+val exist : t
+val decomp : int -> t
 
 (*s Some pre-defined identifiers. *)
 

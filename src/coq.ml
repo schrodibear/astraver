@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.65 2002-10-09 18:00:45 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.66 2002-10-10 17:04:43 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -310,12 +310,8 @@ let rec print_cc_term fmt = function
       fprintf fmt "@\nelse@\n  ";
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
-  | CC_case (x, None, pl) ->
-      fprintf fmt "@[Cases %a of@\n%a@\nend@]" Ident.print x
-	(print_list newline print_case) pl
-  | CC_case (x, Some (qx,n), pl) ->
-      fprintf fmt "@[Cases (decomp%d %a %a) of@\n%a@\nend@]" 
-	n Ident.print x Ident.print qx 
+  | CC_case (e, pl) ->
+      fprintf fmt "@[Cases %a of@\n%a@\nend@]" print_cc_term e
 	(print_list newline print_case) pl
   | CC_letin (_,[id,_],c,c1) ->
       fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"

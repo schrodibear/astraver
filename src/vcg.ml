@@ -138,11 +138,17 @@ let vcg base t =
 	let br'2 = traverse ctx br2 in
 	CC_letin (dep, bl1, e'1, CC_if (CC_var idb', br'1, br'2))
     (* special treatment for the composition of exceptions *)
-    | CC_letin (dep, bl, e1, CC_case (x, qx, br)) when List.mem_assoc x bl ->
+    | CC_letin (dep, bl, e1, CC_case (CC_term (Tvar _) as e2, br)) ->
+	let e'1 = traverse ctx e1 in
+	let ctx = traverse_binders ctx bl in
+	let br' = List.map (traverse_case ctx) br in
+	CC_letin (dep, bl, e'1, CC_case (e2, br'))
+    | CC_letin (dep, bl, e1, CC_case (e2, br)) ->
 	let e'1 = traverse ctx e1 in
 	let ctx = traverse_binders ctx (cut_last_binders bl) in
+	let e'2 = traverse ctx e2 in
 	let br' = List.map (traverse_case ctx) br in
-	CC_letin (dep, bl, e'1, CC_case (x, qx, br'))
+	CC_letin (dep, bl, e'1, CC_case (e'2, br'))
     | CC_letin (dep, bl, e1, e2) -> 
 	let e'1 = traverse ctx e1 in
 	let e'2 = traverse (traverse_binders ctx bl) e2 in
@@ -154,9 +160,10 @@ let vcg base t =
 	let f' = traverse ctx f in
 	let a' = traverse ctx a in
 	CC_app (f', a')
-    | CC_case (x, qx, pl) ->
+    | CC_case (e, pl) ->
+	let e' = traverse ctx e in
 	let pl' = List.map (traverse_case ctx) pl in
-	CC_case (x, qx, pl')
+	CC_case (e', pl')
     | CC_tuple (el,p) ->
 	let el' = List.map (traverse ctx) el in
 	CC_tuple (el',p)
@@ -168,7 +175,7 @@ let vcg base t =
   and traverse_case ctx (p,e) =
     p, traverse (traverse_pattern ctx p) e
   and traverse_pattern ctx = function
-    | PPvariable (id, v) -> (Svar (id,v)) :: ctx
+    | PPvariable (id,b) -> traverse_binder ctx (id,b)
     | PPcons (_, pl) -> List.fold_left traverse_pattern ctx pl
   and traverse_binder ctx = function
     | id, CC_var_binder v -> (Svar (id,v)) :: ctx

@@ -13,3 +13,310 @@ Definition p2 := (* validation *)
                                                                     result)
   Post1).
 
+Definition p2a := (* validation *)
+  let (result, Post1) =
+    (exist_1 (qcomb [result: unit]True [result: Z]False) (Exn Z tt) I) in
+  Cases (decomp1 Post1) of
+  | (Qval (exist result Post2)) =>
+    (exist_1 (qcomb [result0: unit]True
+              (qcomb [result0: Z]False [result0: unit]False)) (Val unit
+                                                                (Exn unit
+                                                                  result))
+    Post2)
+  | (Qexn _ Post3) =>
+    (exist_1 (qcomb [result0: unit]True
+              (qcomb [result0: Z]False [result0: unit]False)) (Exn
+                                                                (EM Z unit)
+                                                                tt) I)
+  end.
+
+Definition p3 := (* validation *)
+  let (result, Post1) =
+    let (result, Post2) = (exist_1 [result: Z]`result = 1` `1`
+      (refl_equal ? `1`)) in
+    (exist_1 (qcomb [result0: Z]`result0 = 1` [result0: unit]`2 = 1`) 
+    (Exn unit result) Post2) in
+  Cases (decomp1 Post1) of
+  | (Qval (exist result Post3)) =>
+    let (result0, Post5) =
+      let (result0, Post6) = (exist_1 [result0: Z]`result0 = 1` `2` Post3) in
+      (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+      (Exn unit result0) Post6) in
+    Cases (decomp1 Post5) of
+    | (Qval (exist result0 Post7)) =>
+      (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+      (Val Z result0) Post7)
+    | (Qexn result0 Post8) =>
+      (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+      (Exn unit result0) Post8)
+    end
+  | (Qexn result Post4) =>
+    (exist_1 (qcomb [result0: Z]`result0 = 1` [result0: unit]False) (Exn unit
+                                                                    result)
+    Post4)
+  end.
+
+Lemma p4_po_1 : 
+  (Test1: false = true)
+  `2 = 1`.
+Proof.
+Intro H; Discriminate H.
+Save.
+
+
+Definition p4 := (* validation *)
+  let (result, Post1) = (exist_1 [result: bool]result = true true
+    (refl_equal ? true)) in
+  (Cases (btest [result:bool]result = true result Post1) of
+  | (left Test2) =>
+      let (result0, Post7) =
+        let (result0, Post8) = (exist_1 [result0: Z]`result0 = 1` `1`
+          (refl_equal ? `1`)) in
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Exn unit result0) Post8) in
+      Cases (decomp1 Post7) of
+      | (Qval (exist result0 Post9)) =>
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Val Z result0) Post9)
+      | (Qexn result0 Post10) =>
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Exn unit result0) Post10)
+      end
+  | (right Test1) =>
+      let (result0, Post3) =
+        let (result0, Post4) = (exist_1 [result0: Z]`result0 = 1` `2`
+          (p4_po_1 Test1)) in
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Exn unit result0) Post4) in
+      Cases (decomp1 Post3) of
+      | (Qval (exist result0 Post5)) =>
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Val Z result0) Post5)
+      | (Qexn result0 Post6) =>
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Exn unit result0) Post6)
+      end end).
+
+Lemma p5_po_1 : 
+  (Test1: false = true)
+  False.
+Proof.
+Intro H; Discriminate H.
+Save.
+
+
+Definition p5 := (* validation *)
+  let (result, Post3) =
+    let (result, Post1) = (exist_1 [result: bool]result = true true
+      (refl_equal ? true)) in
+    (Cases (btest [result:bool]result = true result Post1) of
+    | (left Test2) =>
+        let (result0, Post5) =
+          let (result0, Post6) = (exist_1 [result0: Z]`result0 = 1` `1`
+            (refl_equal ? `1`)) in
+          (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+          (Exn unit result0) Post6) in
+        Cases (decomp1 Post5) of
+        | (Qval (exist result0 Post7)) =>
+          (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+          (Val Z result0) Post7)
+        | (Qexn result0 Post8) =>
+          (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+          (Exn unit result0) Post8)
+        end
+    | (right Test1) =>
+        let (result0, Post4) = (exist_1 [result0: unit]False tt
+          (p5_po_1 Test1)) in
+        (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
+        (Val Z result0) Post4) end) in
+  Cases (decomp1 Post3) of
+  | (Qval (exist result Post9)) =>
+    let (result0, Post11) =
+      (exist_1 (qcomb [result0: unit]False [result0: unit]False) (Exn unit
+                                                                   tt)
+      Post9) in
+    Cases (decomp1 Post11) of
+    | (Qval (exist result0 Post12)) =>
+      (exist_1 (qcomb [result1: unit]False
+                (qcomb [result1: Z]`result1 = 1` [result1: unit]False)) 
+      (Val unit (Val Z result0)) Post12)
+    | (Qexn _ Post13) =>
+      (exist_1 (qcomb [result1: unit]False
+                (qcomb [result1: Z]`result1 = 1` [result1: unit]False)) 
+      (Exn (EM Z unit) tt) Post13)
+    end
+  | (Qexn result Post10) =>
+    (exist_1 (qcomb [result0: unit]False
+              (qcomb [result0: Z]`result0 = 1` [result0: unit]False)) 
+    (Val unit (Exn unit result)) Post10)
+  end.
+
+Lemma p6_po_1 : 
+  (Test2: true = false)
+  False.
+Proof.
+Intro H; Discriminate H.
+Save.
+
+Definition p6 := (* validation *)
+  let (result, Post3) =
+    let (result, Post1) = (exist_1 [result: bool]result = false false
+      (refl_equal ? false)) in
+    (Cases (btest [result:bool]result = false result Post1) of
+    | (left Test2) =>
+        let (result0, Post5) =
+          let (result0, Post6) = (exist_1 [result0: Z]False `1`
+            (p6_po_1 Test2)) in
+          (exist_1 (qcomb [result1: Z]False [result1: unit]True) (Exn unit
+                                                                   result0)
+          Post6) in
+        Cases (decomp1 Post5) of
+        | (Qval (exist result0 Post7)) =>
+          (exist_1 (qcomb [result1: Z]False [result1: unit]True) (Val Z
+                                                                   result0)
+          I)
+        | (Qexn result0 Post8) =>
+          (exist_1 (qcomb [result1: Z]False [result1: unit]True) (Exn unit
+                                                                   result0)
+          Post8)
+        end
+    | (right Test1) =>
+        let (result0, Post4) = (exist_1 [result0: unit]True tt I) in
+        (exist_1 (qcomb [result1: Z]False [result1: unit]True) (Val Z
+                                                                 result0)
+        I) end) in
+  Cases (decomp1 Post3) of
+  | (Qval (exist result Post9)) =>
+    let (result0, Post11) =
+      (exist_1 (qcomb [result0: unit]True [result0: unit]False) (Exn unit tt)
+      I) in
+    Cases (decomp1 Post11) of
+    | (Qval (exist result0 Post12)) =>
+      (exist_1 (qcomb [result1: unit]True
+                (qcomb [result1: Z]False [result1: unit]False)) (Val unit
+                                                                  (Val Z
+                                                                    result0))
+      Post12)
+    | (Qexn _ Post13) =>
+      (exist_1 (qcomb [result1: unit]True
+                (qcomb [result1: Z]False [result1: unit]False)) (Exn
+                                                                  (EM Z unit)
+                                                                  tt) I)
+    end
+  | (Qexn result Post10) =>
+    (exist_1 (qcomb [result0: unit]True
+              (qcomb [result0: Z]False [result0: unit]False)) (Val unit
+                                                                (Exn unit
+                                                                  result))
+    Post10)
+  end.
+
+Lemma p7_po_1 : 
+  (x0: Z)
+  (Post1: x0 = `1`)
+  `x0 = 1`.
+Proof.
+Intuition.
+Save.
+
+Lemma p7_po_2 : 
+  (x0: Z)
+  (Post1: x0 = `1`)
+  (Post4: ((x:Z) (x = `2` -> False)))
+  (x1: Z)
+  (Post2: x1 = `2`)
+  False.
+Proof.
+Intuition.
+Save.
+
+Definition p7 := (* validation *)
+  [x: Z]
+    let (x0, result, Post1) =
+      let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+        (refl_equal ? `1`)) in
+      (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post1) in
+    let (result0, Post3) =
+      (exist_1 (qcomb [result0: unit]`x0 = 1` [result0: unit]
+                ((x:Z) (x = `2` -> False))) (Exn unit tt)
+      (p7_po_1 x0 Post1)) in
+    Cases (decomp1 Post3) of
+    | (Qval (exist result0 Post4)) =>
+      let (x1, result1, Post2) =
+        let (result1, Post2) = (exist_1 [result1: Z]result1 = `2` `2`
+          (refl_equal ? `2`)) in
+        (exist_2 [x2: Z][result2: unit]x2 = `2` result1 tt Post2) in
+      (exist_2 [x2: Z](qcomb [result2: unit]`x2 = 1` [result2: unit]False) 
+      x1 (Val unit result1) (p7_po_2 x0 Post1 Post4 x1 Post2))
+    | (Qexn _ Post5) => (exist_2 [x1: Z]
+      (qcomb [result1: unit]`x1 = 1` [result1: unit]False) x0 (Exn unit tt)
+      Post5)
+    end.
+
+Lemma p8_po_1 : 
+  (x0: Z)
+  (Post1: x0 = `1`)
+  `x0 = 1` /\ `x0 = 1`.
+Proof.
+Intuition.
+Save.
+
+Lemma p8_po_2 : 
+  (x0: Z)
+  (Post1: x0 = `1`)
+  (Post5: ((x:Z) (x = `2` -> False)))
+  (x1: Z)
+  (Post2: x1 = `2`)
+  False.
+Proof.
+Intuition.
+Save.
+
+Definition p8 := (* validation *)
+  [x: Z]
+    let (x0, result, Post1) =
+      let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+        (refl_equal ? `1`)) in
+      (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post1) in
+    let (result0, Post3) =
+      let (result0, Post4) = (exist_1 [result0: Z]`x0 = 1` /\
+        `result0 = 1` x0 (p8_po_1 x0 Post1)) in
+      (exist_1 (qcomb [result1: Z]`x0 = 1` /\ `result1 = 1` [result1: unit]
+                ((x:Z) (x = `2` -> False))) (Exn unit result0)
+      Post4) in
+    Cases (decomp1 Post3) of
+    | (Qval (exist result0 Post5)) =>
+      let (x1, result1, Post2) =
+        let (result1, Post2) = (exist_1 [result1: Z]result1 = `2` `2`
+          (refl_equal ? `2`)) in
+        (exist_2 [x2: Z][result2: unit]x2 = `2` result1 tt Post2) in
+      (exist_2 [x2: Z]
+      (qcomb [result2: Z]`x2 = 1` /\ `result2 = 1` [result2: unit]False) 
+      x1 (Val Z result1) (p8_po_2 x0 Post1 Post5 x1 Post2))
+    | (Qexn result0 Post6) => (exist_2 [x1: Z]
+      (qcomb [result1: Z]`x1 = 1` /\ `result1 = 1` [result1: unit]False) 
+      x0 (Exn unit result0) Post6)
+    end.
+
+Lemma p9_po_1 : 
+  (x0: Z)
+  (Post1: x0 = `1`)
+  `x0 = 1` /\ `x0 = 1`.
+Proof.
+Intuition.
+Save.
+
+Definition p9 := (* validation *)
+  [x: Z]
+    let (x0, result, Post2) =
+      let (x0, result, Post1) =
+        let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+          (refl_equal ? `1`)) in
+        (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post1) in
+      let (result0, Post3) = (exist_1 [result0: Z]`x0 = 1` /\
+        `result0 = 1` x0 (p9_po_1 x0 Post1)) in
+      (exist_2 [x1: Z][result1: Z]`x1 = 1` /\ `result1 = 1` x0 result0 Post3) in
+    (exist_2 [x1: Z]
+    (qcomb [result0: Z]`x1 = 1` /\ `result0 = 1` [result0: unit]False) 
+    x0 (Exn unit result) Post2).
+

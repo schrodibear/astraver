@@ -1,10 +1,10 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.53 2002-10-09 18:00:45 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.54 2002-10-10 17:04:43 filliatr Exp $ i*)
 
 open Format
-open Ident
 open Misc
+open Ident
 open Effect
 open Util
 open Logic
@@ -52,9 +52,11 @@ let arrow_pred ren env v pl =
 let arrow_vars = 
   List.fold_right (fun (id,v) t -> TTarrow ((id, CC_var_binder v), t))
 
+(* type of the argument of an exception; unit if none *)
 let exn_arg_type x =
   TTpure (match find_exception x with None -> PTunit | Some pt -> pt)
 
+(* monadic type for exceptions: (EM E1 (EM E1 ... (EM Ek T))) *)
 let trad_exn_type =
   List.fold_right (fun id t -> TTapp (Ident.exn_type, [exn_arg_type id; t]))
 
@@ -129,7 +131,8 @@ let rec make_exn ty x v = function
       assert false
   | y :: yl when x = y -> 
       let v = match v with Some v -> v | None -> Tconst ConstUnit in
-      CC_app (CC_app (CC_term (Tvar Ident.exn_exn), CC_type ty), CC_term v)
+      CC_app (CC_app (CC_term (Tvar Ident.exn_exn), 
+		      CC_type (trad_exn_type yl ty)), CC_term v)
   | y :: yl -> 
       CC_app (make_val y, make_exn ty x v yl)
 
@@ -234,24 +237,27 @@ let unit info r ren =
 
 (*s Case patterns *)
 
-(* pattern for an exception: (Val_e1 (Val_e2 ... (Exn_ei v))) *)
-let exn_pattern x res xs =
+(* pattern for an exception: (Val (Val ... (Exn v))) *)
+let exn_pattern dep x res xs =
   let rec make = function
     | [] -> 
 	assert false
     | y :: yl when x = y -> 
-	PPcons (Ident.exn_exn,
-		match res with 
-		  | None -> [PPvariable (Ident.anonymous, TTpure PTunit)]
-		  | Some (v,t) -> [PPvariable (v, TTpure t)])
+	PPcons ((if dep then exn_qexn else exn_exn), res)
     | y :: yl -> 
-	PPcons (Ident.exn_val, [make yl])
+	PPcons ((if dep then exn_qval else exn_val), [make yl])
   in
   make xs
 
-(* pattern for a value: (Val_e1 (Val_e2 ... (Val_en v))) *)
-let val_pattern (res,t) xs =
-  let t = [PPvariable (res, t)] in
+(***
+  match res with 
+  | None -> [PPvariable (Ident.anonymous, TTpure PTunit)]
+  | Some (v,t) -> [PPvariable (v, TTpure t)]
+***)
+
+(* pattern for a value: (Val (Val ... (Val v))) *)
+let val_pattern dep res xs =
+  let t = if dep then [PPcons (exist, res)] else res in
   List.hd (List.fold_right (fun x cc -> [PPcons (Ident.exn_qval, cc)]) xs t)
 
 (*s [compose k1 e1 e2 ren env] constructs the term
@@ -274,6 +280,12 @@ let let_pre (id, h) cc =
   CC_letin (false, [id, CC_pred_binder h], CC_hole h, cc)
 
 let let_many_pre = List.fold_right let_pre
+
+let decomp x b v = 
+  let var id = CC_term (Tvar id) in
+  match b with
+  | [] -> var v
+  | (id,_) :: _ -> CC_app (var (decomp (List.length x)), var id)
 
 let gen_compose isapp info1 e1 info2 e2 ren =
   let env = info1.env in
@@ -318,20 +330,29 @@ let gen_compose isapp info1 e1 info2 e2 ren =
       (* e1 may raise an exception *)
       let q1 = option_app (apply_post info1.label ren' env) q1 in
       let q1 = optpost_app (subst_in_predicate (subst_onev result res1)) q1 in
-      let abs_post a c = 
-	CC_lam ((post_name a.a_name, CC_pred_binder a.a_value), c)
+      let pat_post a = 
+	PPvariable (post_name a.a_name, CC_pred_binder a.a_value) 
       in
       let exn_branch x =
 	let xt = find_exception x in
 	let r = Exn (x, option_app (fun _ -> Tvar res1) xt) in
-	let res1 = option_app (fun pt1 -> res1, pt1) xt in
-	let add_hyp q = abs_post (post_exn x q) in
-	exn_pattern x res1 x1, option_fold add_hyp q1 (unit info2 r ren')
+	let px = 
+	  (match xt with 
+	     | Some pt1 -> PPvariable (res1, CC_var_binder (TTpure pt1))
+	     | None -> PPvariable (anonymous, CC_var_binder (TTpure PTunit))) 
+	  ::
+	  (match q1 with
+	     | Some q1 -> let a = post_exn x q1 in [pat_post a]
+	     | None -> [])
+	in
+	exn_pattern dep x px x1, unit info2 r ren'
       in
-      let cp = match b' with [q,_] -> Some (q, List.length x1) | _ -> None in
-      CC_case (res1, cp,
-	       (val_pattern (res1, tv1) x1, 
-		option_fold (fun (q,_) -> abs_post q) q1 (e2 res1 ren')) ::
+      let pres1 = 
+	(PPvariable (res1, CC_var_binder tv1)) :: 
+	(match q1 with Some (q,_) -> [pat_post q] | None -> [])
+      in
+      CC_case (decomp x1 b' res1,
+	       (val_pattern dep pres1 x1, e2 res1 ren') ::
 	       (List.map exn_branch x1))
   in
   let cc = CC_letin (dep, bl, cc1, cc2) in

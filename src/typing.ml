@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.71 2002-10-01 14:45:59 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.72 2002-10-10 17:04:43 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -574,7 +574,7 @@ and typef_desc lab env loc = function
 
   | Sraise (id, e, ct) ->
       if not (is_exception id) then raise_located loc (UnboundException id);
-      let t_e = match find_exception id , e with
+      let t_e, ef = match find_exception id , e with
 	| None, Some _ -> 
 	    raise_located loc (ExceptionArgument (id, false))
 	| Some _, None ->
@@ -582,15 +582,15 @@ and typef_desc lab env loc = function
 	| Some xt, Some e ->
 	    let t_e = typef lab env e in
 	    expected_type e.loc (result_type t_e) (PureType xt);
-	    Some t_e
+	    Some t_e, effect t_e
 	| None, None -> 
-	    None
+	    None, Effect.bottom
       in
       let v = match ct with 
 	| None -> type_v_unit 
 	| Some v -> type_v loc lab env (logical_env env) v
       in
-      Raise (id, t_e), (v, Effect.add_exn id Effect.bottom), []
+      Raise (id, t_e), (v, Effect.add_exn id ef), []
 
   | Stry (e, hl) ->
       let te = typef lab env e in
