@@ -53,8 +53,7 @@ information. A formal method gives you the ability of telling the
 machine both \emph{how} to compute and \emph{why} it is correct; hence
 the name of this tool, \why.
 
-\why\ is a certification tool.
-It generates proof obligations from annotated programs.
+% TODO
 
 \medskip
 
@@ -185,7 +184,7 @@ The input file contains the following kinds of declaration:
 
 Annotations are inserted into the program to give its specification.
 Annotations are written in a first-order predicate calculus syntax
-which is not related to \pvs\ or \coq\ syntax. This syntax is given in
+which is not related to \pvs\ or \coq\ syntax. Its syntax is given in
 Section~\ref{syntax:logic}. 
 
 Annotations are predicates over the values of the variables
@@ -238,7 +237,7 @@ or even better
 
 \subsection{Assertions}
 \index{Assertion}
-Assertions are inserted within sequences using the \texttt{assert}
+Assertions can be inserted within sequences using the \texttt{assert}
 keyword. Example:
 \begin{verbatim}
      begin 
@@ -285,7 +284,7 @@ For instance, the famous Mac Carthy's 91 function is written:
           n - 10)
        { (n <= 100 and result = 91) or (n >= 101 and result = n - 10) }
 \end{verbatim}
-Variants are similar to the ones annotating loops.
+Variants are similar to the ones for loops.
 
 \subsection{Labels}
 \index{Label}
@@ -332,8 +331,8 @@ Exceptions are raised with the construct \texttt{raise}:
 \end{verbatim}
 and caught with the construct \texttt{try \dots\ with \dots\ end}:
 \begin{verbatim}
-     try (f 0) with E -> 1
-     try (f 0) with F x -> x
+     try (f 0) with E -> 1 end 
+     try (f 0) with F x -> x end
 \end{verbatim}
 It is not possible to catch an exception which is not possibly raised
 by the expression following the \texttt{try}.
@@ -389,9 +388,9 @@ Section~\ref{syntax:mltypes} gives the syntax of types.
 \section{Weakest preconditions}
 \label{wp}\index{Weakest precondition}
 To achieve completeness, annotations are propagated inside
-subexpression using a calculus of weakest preconditions.
+subexpressions using a calculus of weakest preconditions.
 However, this mechanism does not propagate an annotation inside an
-expression which already has a postcondition. Instead, it propagates
+expression if it already has a postcondition. Instead, it propagates
 inside the expression its own postcondition. As a result, an
 expression with a postcondition appears as a \emph{black box} from the
 outside. 
