@@ -506,9 +506,10 @@ Definition sqrt := (* validation *)
                                     let (z1, result5, Post2) =
                                       let (result5, Post2) =
                                         (exist_1 [result5: Z]
-                                        result5 =
-                                        (Zdiv (`(Zdiv x z0) + z0`) `2`) 
-                                        (Zdiv (`(Zdiv x z0) + z0`) `2`)
+                                        result5 = (Zdiv (`(Zdiv x z0) + z0`)
+                                                   `2`) (Zdiv (`(Zdiv x z0) +
+                                                                z0`)
+                                                         `2`)
                                         (refl_equal ? (Zdiv (`(Zdiv x z0) +
                                                               z0`)
                                                        `2`))) in

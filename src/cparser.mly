@@ -30,7 +30,9 @@
 
 %}
 
-%token <string> IDENTIFIER CONSTANT STRING_LITERAL ANNOT TYPE_NAME
+%token <int * string> ANNOT
+
+%token <string> IDENTIFIER CONSTANT STRING_LITERAL TYPE_NAME
 %token SIZEOF
 %token PTR_OP INC_OP DEC_OP LEFT_OP RIGHT_OP LE_OP GE_OP EQ_OP NE_OP
 %token AND_OP OR_OP MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN ADD_ASSIGN
@@ -57,10 +59,10 @@ file
         ;
 
 primary_expression
-        : IDENTIFIER { }
-        | CONSTANT { }
-        | STRING_LITERAL { }
-        | LPAR expression RPAR { }
+        : IDENTIFIER { CEvar (loc (), Ident.create $1) }
+        | CONSTANT { uns() }
+        | STRING_LITERAL { uns() }
+        | LPAR expression RPAR { $2 }
         ;
 
 postfix_expression
@@ -166,8 +168,8 @@ conditional_expression
         ;
 
 assignment_expression
-        : conditional_expression { }
-        | unary_expression assignment_operator assignment_expression { }
+        : conditional_expression { uns() }
+        | unary_expression assignment_operator assignment_expression { uns() }
         ;
 
 assignment_operator
@@ -185,8 +187,8 @@ assignment_operator
         ;
 
 expression
-        : assignment_expression { }
-        | expression COMMA assignment_expression { }
+        : assignment_expression { $1 }
+        | expression COMMA assignment_expression { CEseq (loc(), $1, $3) }
         ;
 
 constant_expression
@@ -322,8 +324,9 @@ direct_declarator
             { match $1 with CDvar id -> CDfun (id, [], $4) | _ -> uns () }
         ;
 
+/* ADDED FOR WHY */
 annot
-        : ANNOT         { Some (loc (), $1) }
+        : ANNOT         { Some $1 }
         | /* epsilon */ { None }
         ;
 
@@ -412,20 +415,25 @@ labeled_statement
         ;
 
 compound_statement
-        : LBRACE RBRACE { }
-        | LBRACE statement_list RBRACE { }
-        | LBRACE declaration_list RBRACE { }
-        | LBRACE declaration_list statement_list RBRACE { }
+        : LBRACE RBRACE { [], [] }
+        | LBRACE statement_list RBRACE { [], $2 }
+        | LBRACE declaration_list RBRACE { $2, [] }
+        | LBRACE declaration_list statement_list RBRACE { $2, $3 }
+        ;
+
+/* ADDED FOR WHY */
+annot_compound_statement
+        : annot compound_statement annot { (loc (), $1, $2, $3) }
         ;
 
 declaration_list
-        : declaration { }
-        | declaration_list declaration { }
+        : declaration { $1 }
+        | declaration_list declaration { $1 @ $2 }
         ;
 
 statement_list
-        : statement { }
-        | statement_list statement { }
+        : statement { [$1] }
+        | statement_list statement { $1 @ [$2] }
         ;
 
 expression_statement
@@ -465,7 +473,8 @@ external_declaration
         ;
 
 function_definition
-        : declaration_specifiers declarator declaration_list compound_statement { }
+        : declaration_specifiers declarator declaration_list compound_statement
+            { }
         | declaration_specifiers declarator compound_statement { }
         | declarator declaration_list compound_statement { }
         | declarator compound_statement { }

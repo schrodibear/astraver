@@ -14,29 +14,64 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.3 2002-11-05 14:56:19 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.4 2002-11-07 12:20:17 filliatr Exp $ i*)
 
 (* Interpretation of C programs *)
 
 open Format
+open Misc
 open Ident
 open Logic
 open Types
 open Cast
 open Ptree
 
-let parse_c_spec s =
-  eprintf "parsing: %s@\n" s; flush stderr;
-  let st = Stream.of_string s in
-  Grammar.Entry.parse Parser.c_spec st
+let parse_annot f = option_app (fun (ofs, s) -> f ofs s)
 
 let interp_c_spec v an = 
-  let (p,e,q) = match an with
-    | None -> [], Effect.bottom, None
-    | Some (loc, s) -> parse_c_spec s
+  let (p,e,q) = match parse_annot Parser.parse_c_spec an with
+    | None -> ([], Effect.bottom, None) 
+    | Some k -> k
   in
   { pc_result_name = result; pc_result_type = PVpure v;
     pc_effect = e; pc_pre = p; pc_post = q }
+
+let interp_c_pre an = list_of_some (parse_annot Parser.parse_c_pre an)
+
+let interp_c_post = parse_annot Parser.parse_c_post
+
+let mk_ptree l d p q = { pdesc = d ; pre = p; post = q; loc = l }
+let mk_expr l d = mk_ptree l d [] None
+
+let mk_seq loc e1 e2 = match e1, e2 with
+  | { pdesc=Sseq l1 }, { pdesc=Sseq l2 } -> mk_expr loc (Sseq (l1 @ l2))
+  | e1, { pdesc=Sseq l2 } -> mk_expr loc (Sseq (Sstatement e1 :: l2))
+  | { pdesc=Sseq l1 }, e2 -> mk_expr loc (Sseq (l1 @ [Sstatement e2]))
+  | e1, e2 -> mk_expr loc (Sseq [Sstatement e1; Sstatement e2])
+
+let rec interp_expr = function
+  | CEvar (loc, id) -> 
+      mk_expr loc (Svar id)
+  | CEassign (loc, Lvar (_,id), Aequal, e) -> 
+      mk_expr loc (Srefset (id, interp_expr e))
+  | CEassign _ -> 
+      assert false
+  | CEseq (loc, e1, e2) -> 
+      mk_seq loc (interp_expr e1) (interp_expr e2)
+
+let interp_statement = function
+  | CSexpr (_, e) -> Sstatement (interp_expr e)
+
+let interp_block (l, p, b, q) =
+  { pdesc = Sseq (List.map interp_statement b);
+    pre = interp_c_pre p; post = interp_c_post q; loc = l }
+
+let interp_binder (pt, id) = (id, BindType (PVpure pt))
+
+let interp_binders = List.map interp_binder
+
+let interp_fun l bl v bs =
+  mk_ptree l (Slam (interp_binders bl, interp_block bs)) [] None
 
 let interp_decl = function
   | Ctypedecl (l, CDvar id, v) -> 
@@ -47,6 +82,9 @@ let interp_decl = function
       Parameter (l, [id], PVarrow (bl, k))
   | Ctypedecl _ -> 
       assert false
+  | Cfundef (l, id, bl, v, bs) ->
+      let bl = if bl = [] then [PTunit, anonymous] else bl in
+      Program (id, interp_fun l bl v bs)
 
 let interp = List.map interp_decl
 

@@ -5,3 +5,8 @@ ctest_why.v
 ctest_why.vo
 test.mlw
 
+.pvscontext
+test.ml
+test_why.pvs
+test_why.prf
+test-alltt.tex

@@ -513,9 +513,9 @@ Definition dutch_flag := (* validation *)
                                   let (t1, result4, Post1) =
                                     let (result4, Post1) =
                                       (exist_1 [result4: color]
-                                      (store t0 b0 result4) =
-                                      (store t0 b0 (access t0 i0)) (access t0
-                                                                    i0)
+                                      (store t0 b0 result4) = (store t0 b0
+                                                               (access t0 i0)) 
+                                      (access t0 i0)
                                       (refl_equal ? (store t0 b0
                                                      (access t0 i0)))) in
                                     let Pre10 = Pre8 in
@@ -607,10 +607,8 @@ Definition dutch_flag := (* validation *)
                                 Post22) in
                               (Cases (btest
                                       [result4:bool](if result4
-                                                     then (access t0 i0) =
-                                                          white
-                                                     else ~((access t0 i0) =
-                                                     white))
+                                                     then (access t0 i0) = white
+                                                     else ~((access t0 i0) = white))
                                       result4 Bool1) of
                               | (left Test3) =>
                                   let (i1, result5, Post6) =
@@ -662,8 +660,8 @@ Definition dutch_flag := (* validation *)
                                         let (t1, result6, Post8) =
                                           let (result6, Post8) =
                                             (exist_1 [result6: color]
-                                            (store t0 r1 result6) =
-                                            (store t0 r1 (access t0 i0)) 
+                                            (store t0 r1 result6) = (
+                                            store t0 r1 (access t0 i0)) 
                                             (access t0 i0)
                                             (refl_equal ? (store t0 r1
                                                            (access t0 i0)))) in
@@ -675,8 +673,8 @@ Definition dutch_flag := (* validation *)
                                         let (t2, result7, Post9) =
                                           let (result7, Post9) =
                                             (exist_1 [result7: color]
-                                            (store t1 i0 result7) =
-                                            (store t1 i0 u) u
+                                            (store t1 i0 result7) = (
+                                            store t1 i0 u) u
                                             (refl_equal ? (store t1 i0 u))) in
                                           let Pre7 = Pre5 in
                                           (exist_2 [t3: (array N color)]

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.73 2002-11-05 08:19:32 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.74 2002-11-07 12:20:17 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -175,10 +175,6 @@ let print_predicate fmt p =
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
-    | Papp (id, [a;b]) when id == t_eq ->
-	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
-    | Papp (id, [a;b]) when id == t_neq ->
-	fprintf fmt "~(%a =@ %a)" print_term a print_term b
     | Papp (id, [t]) when id == well_founded ->
 	fprintf fmt "@[(well_founded %a)@]" print_term t
     | Papp (id, [a;b]) when id == t_zwf_zero ->
@@ -187,14 +183,14 @@ let print_predicate fmt p =
 	openz fmt; 
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
 	closez fmt
-    | Papp (id, [a;b]) when id == t_eq || id == t_eq_bool || id == t_eq_unit ->
-	fprintf fmt "%a = %a" print_term a print_term b
-    | Papp (id, [a;b]) when id == t_neq || id==t_neq_bool || id==t_neq_unit ->
-	fprintf fmt "~(%a = %a)" print_term a print_term b
     | Papp (id, [a;b]) when id == t_eq_float ->
 	fprintf fmt "(@[eqT R %a %a@])" print_term a print_term b
     | Papp (id, [a;b]) when id == t_neq_float ->
 	fprintf fmt "~(@[eqT R %a %a@])" print_term a print_term b
+    | Papp (id, [a;b]) when is_eq id ->
+	fprintf fmt "@[%a = %a@]" print_term a print_term b
+    | Papp (id, [a;b]) when is_neq id -> 
+	fprintf fmt "@[~(%a = %a)@]" print_term a print_term b
     | Papp (id, [a;b]) when is_float_comparison id ->
 	fprintf fmt "(@[%s %a %a@])" (pprefix_id id) print_term a print_term b
     | Papp (id, l) ->

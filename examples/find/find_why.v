@@ -1423,9 +1423,8 @@ Definition find := (* validation *)
                                                           let (result6,
                                                             Post1) =
                                                             (exist_1 [result6: Z]
-                                                            result6 =
-                                                            `i1 + 1` 
-                                                            `i1 + 1`
+                                                            result6 = `
+                                                            i1 + 1` `i1 + 1`
                                                             (refl_equal ? `
                                                             i1 + 1`)) in
                                                           (exist_2 [i3: Z]
@@ -1587,9 +1586,8 @@ Definition find := (* validation *)
                                                           let (result7,
                                                             Post2) =
                                                             (exist_1 [result7: Z]
-                                                            result7 =
-                                                            `j1 - 1` 
-                                                            `j1 - 1`
+                                                            result7 = `
+                                                            j1 - 1` `j1 - 1`
                                                             (refl_equal ? `
                                                             j1 - 1`)) in
                                                           (exist_2 [j3: Z]
@@ -1711,8 +1709,7 @@ Definition find := (* validation *)
                                                       Pre17 Test8) in
                                                     let (w, Post5) =
                                                       (exist_1 [result8: Z]
-                                                      result8 =
-                                                      (access A1 i1) 
+                                                      result8 = (access A1 i1) 
                                                       (access A1 i1)
                                                       (refl_equal ? (
                                                       access A1 i1))) in
@@ -1735,9 +1732,9 @@ Definition find := (* validation *)
                                                           Post3) =
                                                           (exist_1 [result8: Z]
                                                           (store A1 i1
-                                                           result8) =
-                                                          (store A1 i1
-                                                           (access A1 j1)) 
+                                                           result8) = (
+                                                          store A1 i1
+                                                          (access A1 j1)) 
                                                           (access A1 j1)
                                                           (refl_equal ? (
                                                           store A1 i1
@@ -1746,9 +1743,8 @@ Definition find := (* validation *)
                                                         (exist_2 [A3: (
                                                         array `N + 1` Z)]
                                                         [result10: unit]
-                                                        A3 =
-                                                        (store A1 i1
-                                                         (access A1 j1)) 
+                                                        A3 = (store A1 i1
+                                                              (access A1 j1)) 
                                                         (store A1 i1 result8)
                                                         tt Post3) in
                                                       let (A3, result9,
@@ -1757,8 +1753,8 @@ Definition find := (* validation *)
                                                           Post4) =
                                                           (exist_1 [result9: Z]
                                                           (store A2 j1
-                                                           result9) =
-                                                          (store A2 j1 w) 
+                                                           result9) = (
+                                                          store A2 j1 w) 
                                                           w
                                                           (refl_equal ? (
                                                           store A2 j1 w))) in

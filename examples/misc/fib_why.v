@@ -719,8 +719,8 @@ Lemma fib4_po_7 :
   (Pre4: `0 <= k0 - 2` /\ `k0 - 2 < N`)
   (Pre5: `0 <= k0 - 1` /\ `k0 - 1 < N`)
   (result4: Z)
-  (Post3: (store t2 k0 result4) =
-          (store t2 k0 `(access t2 k0 - 1) + (access t2 k0 - 2)`))
+  (Post3: (store t2 k0 result4) = (store t2 k0
+                                   `(access t2 k0 - 1) + (access t2 k0 - 2)`))
   `0 <= k0` /\ `k0 < N`.
 Proof.
 Intros; Omega.
@@ -919,9 +919,9 @@ Definition fib4 := (* validation *)
                             Pre4) in
                           let (t3, result4, Post3) =
                             let (result4, Post3) = (exist_1 [result4: Z]
-                              (store t2 k0 result4) =
-                              (store t2 k0
-                               `(access t2 k0 - 1) + (access t2 k0 - 2)`) 
+                              (store t2 k0 result4) = (store t2 k0
+                                                       `(access t2 k0 - 1) +
+                                                        (access t2 k0 - 2)`) 
                               `(access t2 k0 - 1) + (access t2 k0 - 2)`
                               (refl_equal ? (store t2 k0
                                              `(access t2 k0 - 1) +
@@ -931,9 +931,8 @@ Definition fib4 := (* validation *)
                               result2 Post6 Variant1 k0 t2 Pre8 Pre7 Test2
                               Pre4 Pre5 result4 Post3) in
                             (exist_2 [t4: (array N Z)][result6: unit]
-                            t4 =
-                            (store t2 k0
-                             `(access t2 k0 - 1) + (access t2 k0 - 2)`) 
+                            t4 = (store t2 k0
+                                  `(access t2 k0 - 1) + (access t2 k0 - 2)`) 
                             (store t2 k0 result4) tt Post3) in
                           let (k1, result5, Post4) =
                             let (result5, Post4) = (exist_1 [result5: Z]

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.26 2002-11-05 08:19:33 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.27 2002-11-07 12:20:17 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -92,12 +92,12 @@ let rec print_pure_type fmt = function
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
 let infix_relation id =
-  if id == t_lt then "<" 
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
-  else if id == t_eq || id == t_eq_int then "="
-  else if id == t_neq || id == t_neq_int then "/="
+  if id == t_lt_int then "<" 
+  else if id == t_le_int then "<="
+  else if id == t_gt_int then ">"
+  else if id == t_ge_int then ">="
+  else if id == t_eq_int then "="
+  else if id == t_neq_int then "/="
   else assert false
 
 let print_predicate fmt p =
@@ -120,8 +120,12 @@ let print_predicate fmt p =
 	Ident.print fmt id
     | Papp (id, [t]) when id == well_founded ->
 	fprintf fmt "well_founded?(%a)" print_term t
-    | Papp (id, [a;b]) when is_relation id ->
+    | Papp (id, [a;b]) when is_int_comparison id ->
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
+    | Papp (id, [a;b]) when is_eq id ->
+	fprintf fmt "%a =@ %a" print_term a print_term b
+    | Papp (id, [a;b]) when is_neq id ->
+	fprintf fmt "%a /=@ %a" print_term a print_term b
     | Papp (id, l) -> 	
 	fprintf fmt "%s(@[" (Ident.string id);
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;

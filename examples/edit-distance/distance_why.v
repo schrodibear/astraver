@@ -1050,8 +1050,9 @@ Definition distance := (* validation *)
                   let Pre7 = Pre6 in
                   let (t2, result4, Post7) =
                     let (result4, Post7) = (exist_1 [result4: Z]
-                      (store t1 n2 result4) =
-                      (store t1 n2 `(access t1 n2) + 1`) `(access t1 n2) + 1`
+                      (store t1 n2 result4) = (store t1 n2
+                                               `(access t1 n2) + 1`) 
+                      `(access t1 n2) + 1`
                       (refl_equal ? (store t1 n2 `(access t1 n2) + 1`))) in
                     let Pre8 = Pre7 in
                     (exist_2 [t3: (array `n2 + 1` Z)][result6: unit]
@@ -1174,26 +1175,25 @@ Definition distance := (* validation *)
                                         (exist_1 [result11: bool]
                                         (if result11
                                          then (access w1 i3) = (access w2 j2)
-                                         else ~(access w1 i3) =
-                                               (access w2 j2)) result10
-                                        Post27) in
+                                         else ~(access w1 i3) = (access w2 j2)) 
+                                        result10 Post27) in
                                       (Cases (btest
                                               [result8:bool](if result8
                                                              then (access w1
-                                                                   i3) =
-                                                                  (access w2
-                                                                   j2)
+                                                                   i3) = (
+                                                                  access w2
+                                                                  j2)
                                                              else ~(access w1
-                                                                    i3) =
-                                                                   (access w2
-                                                                    j2))
+                                                                    i3) = (
+                                                                   access w2
+                                                                   j2))
                                               result8 Bool2) of
                                       | (left Test6) =>
                                           let (t4, result9, Post10) =
                                             let (result9, Post10) =
                                               (exist_1 [result9: Z]
-                                              (store t3 j2 result9) =
-                                              (store t3 j2 temp) temp
+                                              (store t3 j2 result9) = (
+                                              store t3 j2 temp) temp
                                               (refl_equal ? (store t3 j2 temp))) in
                                             let Pre16 = Pre10 in
                                             (exist_2 [t5: (array `n2 + 1` Z)]
@@ -1239,13 +1239,13 @@ Definition distance := (* validation *)
                                           let (t4, result9, Post11) =
                                             let (result9, Post11) =
                                               (exist_1 [result9: Z]
-                                              (store t3 j2 result9) =
-                                              (store t3 j2
-                                               `(Zmin (access t3 j2)
-                                                 (access t3 j2 + 1)) +
-                                                1`) `(Zmin (access t3 j2)
-                                                      (access t3 j2 + 1)) +
-                                                     1`
+                                              (store t3 j2 result9) = (
+                                              store t3 j2
+                                              `(Zmin (access t3 j2)
+                                                (access t3 j2 + 1)) +
+                                               1`) `(Zmin (access t3 j2)
+                                                     (access t3 j2 + 1)) +
+                                                    1`
                                               (refl_equal ? (store t3 j2
                                                              `(Zmin (
                                                                access t3 j2)
@@ -1255,11 +1255,10 @@ Definition distance := (* validation *)
                                             let Pre15 = Pre14 in
                                             (exist_2 [t5: (array `n2 + 1` Z)]
                                             [result11: unit]
-                                            t5 =
-                                            (store t3 j2
-                                             `(Zmin (access t3 j2)
-                                               (access t3 j2 + 1)) +
-                                              1`) (store t3 j2 result9)
+                                            t5 = (store t3 j2
+                                                  `(Zmin (access t3 j2)
+                                                    (access t3 j2 + 1)) +
+                                                   1`) (store t3 j2 result9)
                                             tt Post11) in
                                           (exist_2 [t5: (array `n2 + 1` Z)]
                                           [result10: unit]

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.63 2002-11-05 14:56:19 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.64 2002-11-07 12:20:17 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -24,7 +24,27 @@ open Types
 open Ptree
 open Env
 
-let gram = Grammar.create (Plexer.make ())
+(*s Lexer. Wrapper around [Plexer.make] to take an offset into account. *)
+
+let offset = ref 0
+
+let with_offset n f x =
+  let old = !offset in
+  try
+    offset := n; let y = f x in offset := old; y
+  with e ->
+    offset := old; raise e
+
+let loc_offset lf n = let (b,e) = lf n in (b + !offset, e + !offset)
+
+let lexer = 
+  let l = Plexer.make () in
+  { l with 
+    Token.func = fun cs -> let ts,lf = l.Token.func cs in ts, loc_offset lf }
+
+(*s grammar entries *)
+
+let gram = Grammar.create lexer
 let gec s = Grammar.Entry.create gram s
 
 (* logic *)
@@ -567,3 +587,13 @@ EXTEND
 END
 ;;
 
+type 'a c_parser = int -> string -> 'a
+
+let parse_with_offset f n s =
+  Format.eprintf "parse_with_offset : %d %s@\n" n s;
+  let st = Stream.of_string s in
+  with_offset n (Grammar.Entry.parse f) st
+
+let parse_c_spec = parse_with_offset c_spec
+let parse_c_pre = parse_with_offset pre_condition
+let parse_c_post = parse_with_offset post_condition

@@ -49,7 +49,7 @@ A computer program is telling the machine \emph{how} to compute some
 output from its input. It is not giving the meaning of this
 computation, nor the reason \emph{why} the program is correct. In the
 best case, comments inserted in the code would give part of this
-information. A formal method gives you the ability of telling the
+information. A formal method gives you the ability to tell the
 machine both \emph{how} to compute and \emph{why} it is correct; hence
 the name of this tool, \why.
 
@@ -852,12 +852,16 @@ Syntax of types is given in Figure~\ref{fig:types}.
 
   \nt{computation\_type}\indexnt{computation\_type}
     & $::=$ & \te{\{} $[$ \nt{precondition} $]$ \te{\}} \\
-      &     & $[$ \te{returns} \nt{identifier} \te{:} $]$ \nt{value\_type} \\
-      &     & $[$ \te{reads} \nt{identifier}\etoilesep{\te{,}} $]$
-              $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ 
-              $[$ \te{raises}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
+      &     & $[$ \te{returns} \nt{identifier} \te{:} $]$ \nt{value\_type}
+              \nt{effects} \\
       &     & \te{\{} $[$ \nt{postcondition} $]$ \te{\}} \\
       & $|$ & \nt{value\_type} \\
+  \\[0.1em]
+
+  \nt{effects}
+    & $::=$ & $[$ \te{reads} \nt{identifier}\etoilesep{\te{,}} $]$
+              $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ 
+              $[$ \te{raises}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
   \\[0.1em]
 
   \nt{primitive\_type}\indexnt{primitive\_type}
@@ -1097,6 +1101,95 @@ These are the functions predefined in \why:
   As for integers.
 
 \end{description}
+
+
+\section{C programs}
+\label{syntax:C}\index{C program!syntax}
+
+Contrary to ML input files, C input files conform to the usual ANSI C
+syntax and annotations are inserted in the source as comments.
+
+\subsection{Lexical conventions}
+\label{lexical:c}\index{Lexical conventions!C programs}
+
+The lexical conventions conform to the ANSI C standard (see
+for instance~\cite{KR88}).
+
+\subsection{Annotations}
+\index{C program!annotations}
+
+Annotations are inserted as special comments of the shape
+\begin{verbatim}
+     /*@ ... */
+\end{verbatim}
+Note that within annotations the syntax in use is the one given in
+Section~\ref{syntax:logic}, with its own lexical conventions,
+different from the C ones. In particular, comments are enclosed by
+\texttt{(*} and \texttt{*)}.
+
+\subsection{Syntax}
+
+The syntax of C files corresponds to a fragment of the ANSI C syntax
+and is given in Figure~\ref{fig:cfiles}.
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{c\_file}
+    & $::=$ & \nt{c\_declaration}\etoile\ \\
+  \\[0.1em]
+
+  \nt{c\_declaration}
+    & $::=$ & \nt{c\_type} \nt{identifier} \\
+      & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
+              \nt{parameter}\etoilesep{\te{,}} \te{)} $[$ \nt{c\_spec} $]$ \\
+  \\[0.1em]
+
+  \nt{c\_type}
+    & $::=$ & \nt{void} $|$ \nt{char} $|$ \nt{short} $|$ \nt{int} 
+              $|$ \nt{long} $|$ \nt{float} $|$ \nt{double} 
+              $|$ \te{identifier} \\
+  \\[0.1em]
+
+  \nt{parameter}
+    & $::=$ & \nt{c\_type} \nt{identifier} \\
+  \\[0.1em]
+
+  \nt{c\_expr}
+    & $::=$ & \nt{identifier} \\
+    &   $|$ & ... \\
+  \\[0.1em]
+
+  \nt{c\_statement}
+    & $::=$ & \nt{c\_expr} \\
+    &   $|$ & ... \\
+  \\[0.1em]
+
+  \nt{c\_spec}
+    & $::=$ & \te{/*@} $[$ \te{pre} \nt{precondition} $]$ \nt{effects}
+              $[$ \te{post} \nt{postcondition} $]$ \te{*/}  \\
+  \nt{c\_pre}
+    & $::=$ & \te{/*@} \nt{precondition} \te{*/}  \\
+  \nt{c\_post}
+    & $::=$ & \te{/*@} \nt{postcondition} \te{*/}  \\
+  \nt{c\_loop\_annot}
+    & $::=$ & \te{/*@} \te{invariant} \nt{assertion} 
+              \te{variant} \nt{wf\_arg} \te{*/}  \\
+  \\[0.1em]
+
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of C files}
+\label{fig:cfiles}
+\end{center}           
+\end{figure}
+
+
+
+\bibliographystyle{plain}
+\bibliography{./biblio}
+
 
 \newpage
 \addcontentsline{toc}{chapter}{Index}

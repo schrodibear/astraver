@@ -3,9 +3,9 @@ src/annot.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
 src/annot.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
     src/logic.cmx src/misc.cmx src/types.cmi src/util.cmx src/annot.cmi 
 src/cinterp.cmo: src/cast.cmi src/effect.cmi src/ident.cmi src/logic.cmi \
-    src/parser.cmi src/ptree.cmi src/types.cmi src/cinterp.cmi 
+    src/misc.cmi src/parser.cmi src/ptree.cmi src/types.cmi src/cinterp.cmi 
 src/cinterp.cmx: src/cast.cmi src/effect.cmx src/ident.cmx src/logic.cmx \
-    src/parser.cmx src/ptree.cmi src/types.cmi src/cinterp.cmi 
+    src/misc.cmx src/parser.cmx src/ptree.cmi src/types.cmi src/cinterp.cmi 
 src/clexer.cmo: src/cparser.cmi 
 src/clexer.cmx: src/cparser.cmx 
 src/coq.cmo: src/cc.cmi src/ident.cmi src/logic.cmi src/misc.cmi \

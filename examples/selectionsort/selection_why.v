@@ -851,9 +851,9 @@ Definition selection := (* validation *)
                                 Post6) in
                               let (t1, result4, Post4) =
                                 let (result4, Post4) = (exist_1 [result4: Z]
-                                  (store t0 min0 result4) =
-                                  (store t0 min0 (access t0 i0)) (access t0
-                                                                  i0)
+                                  (store t0 min0 result4) = (store t0 min0
+                                                             (access t0 i0)) 
+                                  (access t0 i0)
                                   (refl_equal ? (store t0 min0 (access t0 i0)))) in
                                 let Pre9 = Pre7 in
                                 (exist_2 [t2: (array n Z)][result6: unit]

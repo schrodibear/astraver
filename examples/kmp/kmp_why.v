@@ -608,10 +608,10 @@ Definition initnext := (* validation *)
                                 result6 Post19) in
                               (Cases (btest
                                       [result4:bool](if result4
-                                                     then (access p i0) =
-                                                          (access p j0)
-                                                     else ~(access p i0) =
-                                                           (access p j0))
+                                                     then (access p i0) = (
+                                                          access p j0)
+                                                     else ~(access p i0) = (
+                                                           access p j0))
                                       result4 Bool2) of
                               | (left Test6) =>
                                   let (i1, j1, next2, result5, Inv0) =
@@ -632,8 +632,9 @@ Definition initnext := (* validation *)
                                     let (next2, result7, Post4) =
                                       let (result7, Post4) =
                                         (exist_1 [result7: Z]
-                                        (store next1 i1 result7) =
-                                        (store next1 i1 j1) j1
+                                        (store next1 i1 result7) = (store next1
+                                                                    i1 j1) 
+                                        j1
                                         (refl_equal ? (store next1 i1 j1))) in
                                       let Pre7 =
                                         (initnext_po_5 next p result Post9
@@ -703,8 +704,8 @@ Definition initnext := (* validation *)
                                           let (next2, result7, Post6) =
                                             let (result7, Post6) =
                                               (exist_1 [result7: Z]
-                                              (store next1 i1 result7) =
-                                              (store next1 i1 `0`) `0`
+                                              (store next1 i1 result7) = (
+                                              store next1 i1 `0`) `0`
                                               (refl_equal ? (store next1 i1
                                                              `0`))) in
                                             let Pre6 =
@@ -1355,10 +1356,10 @@ Definition kmp := (* validation *)
                           Post19) in
                         (Cases (btest
                                 [result3:bool](if result3
-                                               then (access a i0) =
-                                                    (access p j0)
-                                               else ~(access a i0) =
-                                                     (access p j0))
+                                               then (access a i0) = (
+                                                    access p j0)
+                                               else ~(access a i0) = (
+                                                     access p j0))
                                 result3 Bool3) of
                         | (left Test7) =>
                             let (i1, j1, result4, Inv0) =
