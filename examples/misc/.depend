@@ -1,5 +1,7 @@
 arith_valid.vo: arith_valid.v ../../lib/coq/Why.vo ./arith_why.vo
 arith_why.vo: arith_why.v ../../lib/coq/Why.vo
+copy_valid.vo: copy_valid.v ../../lib/coq/Why.vo ./copy_why.vo
+copy_why.vo: copy_why.v ../../lib/coq/Why.vo ../../lib/coq/WhyFloat.vo
 csearch_valid.vo: csearch_valid.v ../../lib/coq/Why.vo ./csearch_why.vo
 csearch_why.vo: csearch_why.v ../../lib/coq/Why.vo
 fib_valid.vo: fib_valid.v ../../lib/coq/Why.vo ./fib_why.vo
