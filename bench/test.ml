@@ -1,4 +1,9 @@
 
+logic c : int
+
+let p = 1 { result = c }
+
+(***
 exception E
 
 let p = raise E
@@ -12,6 +17,8 @@ let f (a_:int) (b_:int) =
     !a
   end)
  { result = a_ + b_ }
+
+***)
 
 
 
