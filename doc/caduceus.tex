@@ -349,20 +349,23 @@ annotations.
   \nt{term}\indexnt{term}
     & $::=$ & \nt{constant} \\
       & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
-      & $|$ & \te{-} \nt{term} \\
-      & $|$ & \nt{lab\_identifier} \\
-      & $|$ & \nt{lab\_identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
-      & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
-      & $|$ & \te{if} \nt{term} \te{then} \nt{term} \te{else} \nt{term} \\
+      & $|$ & \te{-} \nt{term} $|$ \te{+} \nt{term}  \\
+      & $|$ & \te{*} \nt{term} \\
+      & $|$ & \nt{term} \te{->} \nt{identifier} \\
+      & $|$ & \nt{term} \te{.} \nt{identifier} \\
+      & $|$ & \nt{labeled\_identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{term} \te{[} \nt{term} \te{]} \\
+      & $|$ & \nt{term} \te{?} \nt{term} \te{:} \nt{term} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
+      & $|$ & \verb!\old! \te{(} \nt{term} \te{)} \\
+      & $|$ & \verb!\length! \te{(} \nt{term} \te{)} \\
+      & $|$ & \verb!\result! \\
   \\[0.1em]
 
   \nt{constant}\indexnt{constant}
     & $::=$ & \nt{integer-constant} \\
       & $|$ & \nt{floating-point-constant} \\
-      & $|$ & \te{true} \\
-      & $|$ & \te{false} \\
-      & $|$ & \te{void} \\
   \\[0.1em]
 
   \nt{arith\_op}\indexnt{arith\_op}
@@ -390,7 +393,7 @@ annotations.
   \\[0.1em]
 
   \nt{relation}\indexnt{relation}
-    & $::=$ & \te{=} $|$ \te{<>} $|$ 
+    & $::=$ & \te{==} $|$ \te{!=} $|$ 
               \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
 \end{tabular}\\
 \hrulefill
