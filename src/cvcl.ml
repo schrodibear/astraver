@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.10 2004-07-12 13:12:52 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.11 2004-07-12 14:54:53 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -102,14 +102,8 @@ let rec print_pure_type fmt = function
 	(print_list underscore print_pure_type) pl Ident.print id
 
 let instance fmt = function
-  | [] -> 
-      ()
-  | ptl -> 
-      let one fmt = function 
-	| None -> assert false 
-	| Some pt -> print_pure_type fmt pt 
-      in 
-      fprintf fmt "_%a" (print_list underscore one) ptl
+  | [] -> ()
+  | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
 
 let rec print_term fmt = function
   | Tvar id -> 
@@ -183,8 +177,8 @@ let rec print_predicate fmt = function
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
       fprintf fmt "@[((0 <= %a) AND@ (%a < %a))@]" 
 	print_term b print_term a print_term b
-  | Papp (id, tl, _) -> 
-      fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
+  | Papp (id, tl, i) -> 
+      fprintf fmt "@[%a%a(%a)@]" Ident.print id instance i print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(%a =>@ %a)@]" print_predicate a print_predicate b
   | Piff (a, b) ->
@@ -251,32 +245,6 @@ let rec print_cc_type fmt = function
       fprintf fmt "Set"
 ***)
 
-(* Table of closed instances *)
-
-module Instances = 
-  Set.Make(struct type t = pure_type list let compare = compare end)
-
-let instances_t = Hashtbl.create 97
-
-let instances = Hashtbl.find instances_t
-
-let add_instance x i =
-  let s = try Hashtbl.find instances_t x with Not_found -> Instances.empty in
-  Hashtbl.replace instances_t x (Instances.add i s)
-
-let instance x i = 
-  try 
-    let ci = 
-      List.map 
-	(function Some pt when is_closed_pure_type pt -> pt | _ -> raise Exit)
-	i
-    in
-    add_instance x ci
-  with Exit -> 
-    ()
-
-let iter_instances f = Hashtbl.iter (fun x -> Instances.iter (f x)) instances_t
-
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
@@ -293,8 +261,109 @@ let print_obligation fmt (loc, o, s) =
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation loc;
   fprintf fmt "@[<hov 2>QUERY %a;@]@\n@\n" print_sequent s
 
+(* substitution of type variables by pure types *)
+module Subst = struct
+
+  let rec pure_type s = function
+    | PTvarid id as t ->
+	(try List.assoc (Ident.string id) s with Not_found -> t)
+    | PTexternal (l, id) ->
+	PTexternal (List.map (pure_type s) l, id)
+    | PTarray ta -> PTarray (pure_type s ta)
+    | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
+
+  let logic_type s = function
+    | Function (tl, tr) -> 
+	Function (List.map (pure_type s) tl, pure_type s tr)
+    | Logic.Predicate tl -> 
+	Logic.Predicate (List.map (pure_type s) tl)
+
+  let rec term s = function
+    | Tapp (x, tl, i) -> 
+	Tapp (x, List.map (term s) tl, List.map (pure_type s) i)
+    | t -> 
+	t
+
+  let rec predicate s = function
+    | Papp (x, tl, i) ->
+	Papp (x, List.map (term s) tl, List.map (pure_type s) i)
+    | Pimplies (w, a, b) -> Pimplies (w, predicate s a, predicate s b)
+    | Pif (a, b, c) -> Pif (a, predicate s b, predicate s c)
+    | Pand (w, a, b) -> Pand (w, predicate s a, predicate s b)
+    | Por (a, b) -> Por (predicate s a, predicate s b)
+    | Piff (a, b) -> Piff (predicate s a, predicate s b)
+    | Pnot a -> Pnot (predicate s a)
+    | Forall (w, id, b, v, p) -> 
+	Forall (w, id, b, pure_type s v, predicate s p)
+    | Exists (id, b, v, p) -> 
+	Exists (id, b, pure_type s v, predicate s p)
+    | Forallb (w, a, b) -> Forallb (w, predicate s a, predicate s b)
+    | Pfpi (t, a, b) -> Pfpi (term s t, a, b)
+    | Ptrue | Pfalse | Pvar _ as p -> p
+
+end
+
+(* the following module collects instances (within [Tapp] and [Papp]) *)
+module OpenInstances = struct
+
+  module S = 
+    Set.Make(struct 
+	       type t = Ident.t * pure_type list 
+	       let compare = compare
+	     end)
+
+  let add ((_,i) as e) s =
+    let is_open pt = not (is_closed_pure_type pt) in
+    if List.exists is_open i then S.add e s else s
+
+  let rec term s = function
+    | Tvar _ | Tderef _ | Tconst _ -> s
+    | Tapp (id, l, i) -> List.fold_left term (add (id,i) s) l
+	
+  let rec predicate s = function
+    | Pvar _ | Ptrue | Pfalse -> s
+    | Papp (id, l, i) -> List.fold_left term (add (id,i) s) l
+    | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) | Piff (a, b)
+    | Forallb (_, a, b) -> predicate (predicate s a) b
+    | Pif (a, b, c) -> predicate (predicate (term s a) b) c
+    | Pnot a -> predicate s a
+    | Forall (_, _, _, _, p) -> predicate s p
+    | Exists (_, _, _, p) -> predicate s p
+    | Pfpi (t, _, _) -> term s t
+	
+end
+
+(* unification of an open instance [t1] with a closed instance [t2];
+   raises [Exit] if unification fails *)
+let rec unify s t1 t2 = match (t1,t2) with
+  | (PTarray ta, PTarray tb) -> 
+      unify s ta tb
+  | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
+      if i1 <> i2 || List.length l1 <> List.length l2 then raise Exit;
+      List.fold_left2 unify s l1 l2
+  | (PTvar _, _)
+  | (_, PTvar _)
+  | (_, PTvarid _) ->
+      assert false
+  | (PTvarid v1, _) ->
+      begin
+	try
+	  let t1 = List.assoc v1 s in
+	  if t1 <> t2 then raise Exit;
+	  s
+	with Not_found ->
+	  (v1,t2) :: s
+      end
+  | PTint, PTint
+  | PTbool, PTbool
+  | PTreal, PTreal
+  | PTunit, PTunit -> s
+  | _ -> raise Exit
+
 let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
+  let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
+  
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p.Env.scheme_type
 
 let rec print_logic_type fmt = function
@@ -330,20 +399,6 @@ let print_parameter fmt id c =
   fprintf fmt 
     "@[<hov 2>%s: %a;@]@\n@\n" id print_cc_type c
 
-let rec subst_pure_type s = function
-  | PTvarid id as t ->
-      (try List.assoc (Ident.string id) s with Not_found -> t)
-  | PTexternal (l, id) ->
-      PTexternal (List.map (subst_pure_type s) l, id)
-  | PTarray ta -> PTarray (subst_pure_type s ta)
-  | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
-
-let subst_logic_type s = function
-  | Function (tl, tr) -> 
-      Function (List.map (subst_pure_type s) tl, subst_pure_type s tr)
-  | Logic.Predicate tl -> 
-      Logic.Predicate (List.map (subst_pure_type s) tl)
-
 let print_logic fmt id t = 
   fprintf fmt "%%%% Why logic %s@\n" id;
   if t.scheme_vars = [] then
@@ -354,7 +409,7 @@ let print_logic fmt id t =
 	(fun i -> 
 	   assert (List.length t.scheme_vars = List.length i);
 	   let s = List.combine t.scheme_vars i in
-	   let t = subst_logic_type s t.scheme_type in
+	   let t = Subst.logic_type s t.scheme_type in
 	   fprintf fmt "@[%s_%a: %a;@]@\n" id 
 	     (print_list underscore print_pure_type) i print_logic_type t)
 	(instances (Ident.create id));
@@ -378,8 +433,12 @@ int_of_real: [REAL -> INT];
 mod_int: [[INT, INT] -> INT];
 "
 
-(* ieration over terms (function [f]) and types (function [g]) *)
-module IterTT = struct
+(* iteration over instances (function [f]) and types (function [g]) *)
+module IterIT = struct
+
+  let rec term f = function
+    | Tapp (x, tl, i) -> f x i; List.iter (term f) tl
+    | _ -> ()
 
   let rec predicate f g = function
     | Pand (_, a, b)
@@ -387,12 +446,12 @@ module IterTT = struct
     | Piff (a, b)
     | Forallb (_, a, b)
     | Pimplies (_, a, b) -> predicate f g a; predicate f g b
-    | Pif (a, b, c) -> f a; predicate f g b; predicate f g c
+    | Pif (a, b, c) -> term f a; predicate f g b; predicate f g c
     | Pnot a -> predicate f g a
     | Exists (_, _, v, p)
     | Forall (_, _, _, v, p) -> g v; predicate f g p
     | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
-    | Papp (_, tl, _) -> List.iter f tl
+    | Papp (id, tl, i) -> f id i; List.iter (term f) tl
 	
   let logic_type g = function
     | Function (l, pt) -> List.iter g l; g pt
@@ -411,7 +470,7 @@ module IterTT = struct
     | TTapp (cc, ccl) ->
 	cc_type f g cc; List.iter (cc_type f g) ccl
     | TTterm t ->
-	f t
+	term f t
     | TTSet ->
 	()
 	
@@ -441,10 +500,6 @@ end
 (* first pass: we traverse all elements to collect types and closed instances
    of function symbols *)
 let first_pass fmt = 
-  let rec collect_term = function
-    | Tapp (id, tl, i) -> instance id i; List.iter collect_term tl
-    | _ -> ()
-  in
   let types_to_declare = Hashtbl.create 97 in
   let collect_type = function
     | PTexternal (i, id) as pt when is_closed_pure_type pt ->
@@ -452,7 +507,7 @@ let first_pass fmt =
 	  Hashtbl.add types_to_declare pt ()
     | _ -> ()
   in
-  Queue.iter (IterTT.element collect_term collect_type) queue;
+  Queue.iter (IterIT.element add_instance_if_closed collect_type) queue;
   (* declaring types *)
   Hashtbl.iter
     (fun pt () -> fprintf fmt "@[%a: TYPE;@]@\n@\n" print_pure_type pt)

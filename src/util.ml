@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.98 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.99 2004-07-12 14:54:53 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -321,7 +321,7 @@ let array_info env id =
 
 let make_raw_access env (id,id') c =
   let pt = array_info env id in
-  Tapp (Ident.access, [Tvar id'; c], [Some pt])
+  Tapp (Ident.access, [Tvar id'; c], [pt])
 
 let make_pre_access env id c =
   let pt = array_info env id in
@@ -330,7 +330,7 @@ let make_pre_access env id c =
       
 let make_raw_store env (id,id') c1 c2 =
   let pt = array_info env id in
-  Tapp (Ident.store, [Tvar id'; c1; c2], [Some pt])
+  Tapp (Ident.store, [Tvar id'; c1; c2], [pt])
 
 (*s to build AST *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.24 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.25 2004-07-12 14:54:53 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -41,7 +41,7 @@ type pure_type =
 and type_var =
   { tag : int; mutable type_val : pure_type option }
 
-type instance = pure_type option list
+type instance = pure_type list
 
 type term =
   | Tvar of Ident.t

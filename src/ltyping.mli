@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.14 2004-07-12 13:12:52 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.15 2004-07-12 14:54:53 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -58,10 +58,10 @@ val expected_num : Loc.t -> 'a
    symbols that have been used so far. 
    It is later used to generate all monomorphic
    instances of symbols/predicates/axioms in the CVC Lite output. *)
-(***
+
 module Instances : Set.S with type elt = pure_type list
 
+val add_instance_if_closed : Ident.t -> pure_type list -> unit
 val instances : Ident.t -> Instances.t
 
 val iter_instances : (Ident.t -> pure_type list -> unit) -> unit
-***)

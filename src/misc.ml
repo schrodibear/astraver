@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.92 2004-07-12 13:12:52 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.93 2004-07-12 14:54:53 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -433,7 +433,7 @@ let ge_real = relation t_ge_real
 let eq = relation t_eq
 let neq = relation t_neq
 
-let array_length id i = Tapp (array_length, [Tderef id], [Some i])
+let array_length id i = Tapp (array_length, [Tderef id], [i])
 
 let lt_int = relation t_lt_int
 let le_int = relation t_le_int
