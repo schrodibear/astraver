@@ -27,6 +27,7 @@
 \newcommand{\plussep}[1]{$^+_#1$}
 \newcommand{\caveat}{\paragraph{Caveat.}}
 \newcommand{\caveats}{\paragraph{Caveats.}}
+\newcommand{\bs}{\ensuremath{\backslash}}
 
 \makeindex
 
@@ -201,31 +202,31 @@ or using C labels directly:
      x = x + 1;
 \end{verbatim}
 
-\subsection{C fragment currently covered}
-\index{C program!unsupported constructs}
+% \subsection{C fragment currently covered}
+% \index{C program!unsupported constructs}
 
-Section~\ref{syntax:C} gives the syntactic fragment of ANSI C
-currently supported in \why. Additionally, some semantic restrictions
-are added.
-\begin{description}
-\item[No pointer arithmetic.] Pointers are partly supported. They can
-  be used to do reference-passing, as in:
-\begin{verbatim}
-     void g(int* x) { *x = 0; } /*@ x = 0 */
-     void f() { int i = 1; g(&i); }
-\end{verbatim}
-  but pointer arithmetic is not allowed, as in:
-\begin{verbatim}
-     for (p = a; c = *p; p++) ...
-\end{verbatim}
+% Section~\ref{syntax:C} gives the syntactic fragment of ANSI C
+% currently supported in \why. Additionally, some semantic restrictions
+% are added.
+% \begin{description}
+% \item[No pointer arithmetic.] Pointers are partly supported. They can
+%   be used to do reference-passing, as in:
+% \begin{verbatim}
+%      void g(int* x) { *x = 0; } /*@ x = 0 */
+%      void f() { int i = 1; g(&i); }
+% \end{verbatim}
+%   but pointer arithmetic is not allowed, as in:
+% \begin{verbatim}
+%      for (p = a; c = *p; p++) ...
+% \end{verbatim}
 
-\item[Types.] Currently, the types \texttt{char},
-  \texttt{short}, \texttt{int} and \texttt{long} are all identified
-  (and modeled as unbound integers as in ML). Similarly, types
-  \texttt{float} and \texttt{double} are identified (and modeled as
-  reals as in ML).
+% \item[Types.] Currently, the types \texttt{char},
+%   \texttt{short}, \texttt{int} and \texttt{long} are all identified
+%   (and modeled as unbound integers as in ML). Similarly, types
+%   \texttt{float} and \texttt{double} are identified (and modeled as
+%   reals as in ML).
 
-\end{description}
+% \end{description}
 
 % Note that \caml\ code can also be generated from C input files, giving
 % an ML translation of the C code. (This is not of great use, though,
@@ -240,32 +241,46 @@ are added.
 \label{usage}\index{Option, of the command line}
 
 
-\section{C programs}
-\label{syntax:C}\index{C program!syntax}
+\section{Input Files Syntax}
+\label{syntax}\index{Syntax (of input files)}
 
-Contrary to ML input files, C input files conform to the usual ANSI C
+C files conform to the usual ANSI C
 syntax and annotations are inserted in the source as comments.
 
 \subsection{Lexical conventions}
 \label{lexical:c}\index{Lexical conventions!C programs}
 
+\subsubsection{Code}
+
 The lexical conventions conform to the ANSI C standard (see
 for instance~\cite{KR88}).
 
-\subsection{Annotations}
-\index{C program!annotations}
+\subsubsection{Annotations}
+\index{Annotations}
 
-Annotations are inserted as special comments of the shape
-\texttt{/*@ ... */} or \texttt{/*W ... */}.
-Note that within annotations the syntax in use is the one given in
-Section~\ref{syntax:logic}, with its own lexical conventions,
-different from the C ones. In particular, comments are enclosed by
-\texttt{(*} and \texttt{*)}.
+Within annotations the lexical conventions are the same as C ones,
+except that:
+\begin{itemize}
+\item comments are enclosed by \texttt{(*} and \texttt{*)} (so that
+  you can put comments inside annotations without messing traditional
+  C compilers)
+\item some character sequences are now recognized as keywords: \par
+  \begin{center}
+  \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
+    \verb!\result! & \verb!\forall! & \verb!\exists! & \verb!\old! \\
+    \verb!invariant! & \verb!variant! & & \\ 
+  \end{tabular}
+  \end{center}
+\end{itemize}
 
 \subsection{Syntax}
 
-The syntax of C files is a fragment of the ANSI C syntax
-and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
+Annotations are inserted into programs as special comments of the shape
+\texttt{/*@ ... */} or \texttt{/*W ... */}.
+Figure~\ref{fig:cfiles} gives the syntax for the C constructs which
+differ from traditional C syntax w.r.t annotations.
+Figure~\ref{fig:logic} gives the syntax for the
+annotations. 
 
 \begin{figure}[htbp]
 \begin{center}
@@ -276,9 +291,7 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
   \\[0.1em]
 
   \nt{c\_declaration}
-    & $::=$ & \nt{c\_type} $[$ \te{*} $]$ \nt{identifier} \te{;} \\
-      & $|$ & \nt{c\_type} \nt{identifier} \te{[]} \te{;} \\
-      & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
+    & $::=$ & \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               $[$ \nt{c\_spec} $]$ \te{;} \\
       & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
@@ -288,87 +301,21 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
               \nt{logic\_type} \te{*/} \\
   \\[0.1em]
 
-  \nt{c\_type}
-    & $::=$ & \te{void} $|$ \te{char} $|$ \te{short} $|$ \te{int} 
-              $|$ \te{long} $|$ \te{float} $|$ \te{double} 
-              $|$ \nt{identifier} \\
-  \\[0.1em]
-
-  \nt{parameter}
-    & $::=$ & \nt{c\_type} $[$ \te{*} $]$ \nt{identifier} 
-          $|$ \nt{c\_type} \nt{identifier} \te{[]} \\
-  \\[0.1em]
-
   \nt{c\_spec}
     & $::=$ & \te{/*@} $[$ \te{pre} \nt{precondition} $]$ \nt{effects}
               $[$ \te{post} \nt{postcondition} $]$ \te{*/}  \\
   \\[0.1em]
 
-  \nt{c\_expr}
-    & $::=$ & \nt{integer-constant} \\
-    &   $|$ & \nt{identifier} \\
-    &   $|$ & \nt{identifier} \te{[} \nt{c\_expr} \te{]} \\
-    &   $|$ & \nt{c\_expr} \te{,} \nt{c\_expr} \\
-    &   $|$ & \nt{c\_expr} \nt{assignment\_operator} \nt{c\_expr} \\
-    &   $|$ & \nt{c\_expr} \nt{binary\_operator} \nt{c\_expr} \\
-    &   $|$ & \nt{c\_expr} \nt{postfix\_operator} \\
-    &   $|$ & \nt{prefix\_operator} \nt{c\_expr} \\
-    &   $|$ & \nt{identifier} \te{(} \nt{c\_expr}\etoilesep{\te{,}} \te{)} \\
-    &   $|$ & \nt{c\_expr} \te{?} \nt{c\_expr} \te{:} \nt{c\_expr} \\
-  \\[0.1em]
-
-  \nt{assignment\_operator}
-    & $::=$ & \te{=} $|$ \te{*=} $|$ \te{/=} $|$ \te{\%=} $|$ \te{+=} 
-          $|$ \te{-=} $|$ \te{<<=} $|$ \te{>>=} $|$ \te{\&=} $|$ \te{\^{}=}
-          $|$ \te{|=}
-  \\[0.1em]
-
-  \nt{prefix\_operator}
-    & $::=$ & \te{++} $|$ \te{--} $|$ \te{-} $|$ \te{!} $|$ \te{\&}
-          $|$ \te{*}
-  \\[0.1em]
-
-  \nt{postfix\_operator}
-    & $::=$ & \te{++} $|$ \te{--}
-  \\[0.1em]
-
-  \nt{binary\_operator}
-    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} $|$ \te{<} 
-          $|$ \te{>} $|$ \te{<=} $|$ \te{>=} $|$ \te{==} $|$ \te{!=} 
-          $|$ \te{\&} $|$ \te{\^{}} $|$ \te{|} $|$ \te{\&\&} $|$ \te{||} \\
-  \\[0.1em]
-
-\end{tabular}\\
-\hrulefill
-\caption{Syntax of C files: declarations and expressions}
-\label{fig:cfiles:a}
-\end{center}           
-\end{figure}
-
-\begin{figure}[htbp]
-\begin{center}
-\hrulefill\\
-\begin{tabular}{lrl}
   \nt{statement}
-    & $::=$ & \nt{c\_expr} \\
-    &   $|$ & \te{if} \te{(} \nt{c\_expr} \te{)} \nt{statement} 
-              $[$ \te{else} \nt{statement} $]$ \\
-    &   $|$ & \te{while} \te{(} \nt{c\_expr} \te{)}
+    & $::=$ & \te{while} \te{(} \nt{c\_expr} \te{)}
               \nt{c\_loop\_annot} \nt{statement} \\
     &   $|$ & \te{do} \nt{statement} \nt{c\_loop\_annot} 
               \te{while} \te{(} \nt{c\_expr} \te{)} \\
     &   $|$ & \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
               $[$ \nt{c\_expr} $]$ \te{)} \\
            && \nt{c\_loop\_annot} \nt{statement} \\
-    &   $|$ & \nt{identifier} \te{:} \nt{statement} \\
-    &   $|$ & \te{/*@} \te{assert} \nt{assertion} \te{*/} \\ \indextt{assert}
+    &   $|$ & \te{/*@} \te{assert} \nt{predicate} \te{*/} \\ \indextt{assert}
     &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
-    &   $|$ & \nt{block} \\
-  \\[0.1em]
-
-  \nt{block}
-    & $::=$ & \te{\{} \nt{c\_declaration}\etoile\ 
-              \nt{statement}\etoilesep{\te{;}} \te{\}}\\
   \\[0.1em]
 
   \nt{annotated\_block}
@@ -376,21 +323,82 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
   \\[0.1em]
 
   \nt{c\_pre}
-    & $::=$ & \te{/*@} $[$ \nt{precondition} $]$ $[$ \te{variant} \nt{wf\_arg}
+    & $::=$ & \te{/*@} $[$ \nt{predicate} $]$ $[$ \te{variant} \nt{wf\_arg}
               $]$ \te{*/}  \\
   \nt{c\_post}
-    & $::=$ & \te{/*@} $[$ \nt{postcondition} $]$ \te{*/}  \\
+    & $::=$ & \te{/*@} $[$ \nt{predicate} $]$ \te{*/}  \\
   \nt{c\_loop\_annot}
-    & $::=$ & \te{/*@} \te{invariant} \nt{assertion} 
+    & $::=$ & \te{/*@} \te{invariant} \nt{predicate} 
               \te{variant} \nt{wf\_arg} \te{*/}  \\
-  \\[0.1em]
+  \nt{wf\_arg} 
+    & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
 
+  \\[0.1em]
 \end{tabular}\\
 \hrulefill
-\caption{Syntax of C files (cont'd): statements and annotations}
-\label{fig:cfiles:b}
+\caption{Annotations within C constructs}
+\label{fig:cfiles}
 \end{center}           
 \end{figure}
+
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{term}\indexnt{term}
+    & $::=$ & \nt{constant} \\
+      & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
+      & $|$ & \te{-} \nt{term} \\
+      & $|$ & \nt{lab\_identifier} \\
+      & $|$ & \nt{lab\_identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
+      & $|$ & \te{if} \nt{term} \te{then} \nt{term} \te{else} \nt{term} \\
+      & $|$ & \te{(} \nt{term} \te{)} \\
+  \\[0.1em]
+
+  \nt{constant}\indexnt{constant}
+    & $::=$ & \nt{integer-constant} \\
+      & $|$ & \nt{floating-point-constant} \\
+      & $|$ & \te{true} \\
+      & $|$ & \te{false} \\
+      & $|$ & \te{void} \\
+  \\[0.1em]
+
+  \nt{arith\_op}\indexnt{arith\_op}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} \\
+  \\[0.1em]
+
+  \nt{predicate}\indexnt{predicate}
+    & $::=$ & \te{true} \\
+      & $|$ & \te{false} \\
+      & $|$ & \nt{identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{term} \nt{relation} \nt{term} 
+              $[$ \nt{relation} \nt{term} $]$ \\
+      & $|$ & \nt{predicate} \te{->} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
+      & $|$ & \te{not} \nt{predicate} \\
+      & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
+              \te{else} \nt{predicate} \\
+      & $|$ & \te{forall} \nt{identifier} \te{:} \nt{primitive\_type}
+              \te{.} \nt{predicate} \\
+      & $|$ & \te{exists} \nt{identifier} \te{:} \nt{primitive\_type}
+              \te{.} \nt{predicate} \\
+      & $|$ & \te{(} \nt{predicate} \te{)} \\
+  \\[0.1em]
+
+  \nt{relation}\indexnt{relation}
+    & $::=$ & \te{=} $|$ \te{<>} $|$ 
+              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of annotations}
+\label{fig:logic}
+\end{center}            
+\end{figure}
+
 
 
 \nocite{*}

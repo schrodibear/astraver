@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.6 2003-12-23 13:23:41 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.7 2004-01-12 14:59:53 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -173,6 +173,28 @@ and wdecl = parse
   | "*/" { WDECL (!annot_start_pos, Buffer.contents buf) }
   | eof  { lex_error lexbuf "Unterminated annotation" }
   | _    { Buffer.add_char buf (lexeme_char lexbuf 0); wdecl lexbuf }
+
+(* tokens for the logic *)
+
+and ltoken = parse
+  | [' ' '\t' '\012' '\r' '\n']+ { ltoken lexbuf }
+  | rL (rL | rD)*       { let s = lexeme lexbuf in
+			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
+
+  | '0'['x''X'] rH+ rIS?    { CONSTANT (lexeme lexbuf)}
+  | '0' rD+ rIS?            { CONSTANT (lexeme lexbuf) }
+  | rD+ rIS?                { CONSTANT (lexeme lexbuf) }
+  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (lexeme lexbuf) }
+
+  | rD+ rE rFS?             { CONSTANT (lexeme lexbuf) }
+  | rD* "." rD+ (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
+  | rD+ "." rD* (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
+
+  | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
+
+  | eof { EOF }
+  | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
+ 
 
 {
 
