@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.22 2003-09-15 08:40:40 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.23 2003-09-17 15:48:47 filliatr Exp $ i*)
 
 open Format
 
@@ -38,7 +38,7 @@ let wol_ = ref false
 
 let c_file = ref false
 
-type prover = Coq | Pvs | HolLight | Harvey | Simplify
+type prover = Coq | Pvs | HolLight | Mizar | Harvey | Simplify
 let prover_ = ref Coq
 
 (*s Parsing the command-line *)
@@ -91,6 +91,7 @@ Prover selection:
   --coq       selects COQ prover (default)
   --pvs       selects PVS prover
   --hol-light selects HOL Light prover
+  --mizar     selects Mizar prover
   --harvey    selects haRVey prover
   --simplify  selects Simplify prover
 
@@ -118,6 +119,7 @@ let files =
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover_ := Coq; parse args
     | ("-hol-light" | "--hol-light") :: args -> prover_ := HolLight; parse args
+    | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args

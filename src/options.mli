@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.21 2003-09-15 08:40:40 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.22 2003-09-17 15:48:47 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -49,7 +49,7 @@ val wp_only : bool
 
 (*s Prover options *)
 
-type prover = Coq | Pvs | HolLight | Harvey | Simplify
+type prover = Coq | Pvs | HolLight | Mizar | Harvey | Simplify
 
 val prover : prover
 

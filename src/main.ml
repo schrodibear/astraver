@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.59 2003-09-15 08:40:40 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.60 2003-09-17 15:48:47 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -40,6 +40,7 @@ let reset () =
   | Pvs -> Pvs.reset ()
   | Coq -> Coq.reset ()
   | HolLight -> Holl.reset ()
+  | Mizar -> Mizar.reset ()
   | Harvey -> Harvey.reset ()
   | Simplify -> Simplify.reset ()
 
@@ -47,6 +48,7 @@ let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
   | Coq -> Coq.push_obligations ol
   | HolLight -> Holl.push_obligations ol
+  | Mizar -> Mizar.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
   | Simplify -> Simplify.push_obligations ol
 
@@ -57,6 +59,7 @@ let push_parameter id v tv = match prover with
   | Pvs -> if is_pure_type_v v then Pvs.push_parameter id tv
   | Coq -> Coq.push_parameter id tv
   | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
+  | Mizar -> if is_pure_type_v v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)
 
 let output fwe = 
@@ -69,6 +72,7 @@ let output fwe =
     | Pvs -> Pvs.output_file fwe
     | Coq -> Coq.output_file fwe
     | HolLight -> Holl.output_file fwe
+    | Mizar -> Mizar.output_file fwe
     | Harvey -> Harvey.output_file fwe
     | Simplify -> Simplify.output_file fwe
   end
