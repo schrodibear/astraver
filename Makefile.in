@@ -417,10 +417,11 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli > .depend
 
-depend-coq coq-depend:
+.depend.coq: lib/coq*/*.v
 	if test @COQ@ == yes; then \
-	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v >> .depend; \
-	  $(COQDEP) -R lib/coq-v7 Coq.why lib/coq-v7/*.v >> .depend; \
+	  rm -f .depend.coq; \
+	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v > .depend.coq; \
+	  $(COQDEP) -R lib/coq-v7 Coq.why lib/coq-v7/*.v >> .depend.coq; \
 	fi
 
 alldepend:
@@ -428,3 +429,4 @@ alldepend:
 	make -C examples depend
 
 include .depend
+include .depend.coq

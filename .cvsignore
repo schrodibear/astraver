@@ -3,4 +3,5 @@ config.status
 Makefile
 export
 .depend
+.depend.coq
 tmp
