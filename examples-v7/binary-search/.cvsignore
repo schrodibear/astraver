@@ -1,0 +1,5 @@
+*.vo
+*.wol
+.pvscontext
+
+*_valid.v
