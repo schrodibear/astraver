@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.24 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.25 2002-03-13 10:48:13 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -168,6 +168,18 @@ let type_eq loc = function
   | PureType PTunit -> Ident.t_eq_unit
   | _ -> Error.expected_type loc 
 	 (fun fmt -> fprintf fmt "unit, bool, int or float")
+
+let type_neq loc = function
+  | PureType PTint -> Ident.t_neq_int
+  | PureType PTbool -> Ident.t_neq_bool
+  | PureType PTfloat -> Ident.t_neq_float
+  | PureType PTunit -> Ident.t_neq_unit
+  | _ -> Error.expected_type loc 
+	 (fun fmt -> fprintf fmt "unit, bool, int or float")
+
+let type_eq_neq id =
+  assert (is_eq_neq id);
+  if id == t_eq then type_eq else type_neq
 
 let make_node p env l k = 
   { desc = p; info = { env = env; label = l; kappa = k } }
@@ -384,9 +396,9 @@ and typef_desc lab env loc = function
       let ef = Effect.bottom in
       Lam(bl,t_e), (v,ef), []
 
-  | App ({desc=Var id} as e, Term a) when id == Ident.t_eq ->
+  | App ({desc=Var id} as e, Term a) when is_eq_neq id ->
       let t_a = typef lab env a in
-      let eq = type_eq a.info.loc (result_type t_a) in
+      let eq = type_eq_neq id a.info.loc (result_type t_a) in
       typef_desc lab env loc (App ({e with desc = Var eq}, Term a))
       (* TODO: avoid recursive call *)
 	 

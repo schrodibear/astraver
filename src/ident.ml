@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.14 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.15 2002-03-13 10:48:13 filliatr Exp $ i*)
 
 type t = string
 
@@ -113,6 +113,9 @@ let well_founded_induction = "well_founded_induction"
 let p_and = "and"
 let p_or = "or"
 let p_not = "not"
+
+let is_eq_neq id =
+  id == t_eq || id == t_neq
 
 let is_comparison id =
   id == t_lt || id == t_le || id == t_gt || id == t_ge

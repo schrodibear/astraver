@@ -44,7 +44,7 @@ let ar2 = -1
 let ar3 = 1+1
 let ar4 = 1-1
 let ar5 = 1*1
-(*TODO let ar6 = 1/1 *)
+let ar6 = 1/1
 
 (* assignement *)
 let a1 = v4 := 1
@@ -61,9 +61,24 @@ let s4 = begin v4 := 1; 2 end
 (* conditionals *)
 let c1 = if true then 1 else 2
 let c2 = if !v1 then 1 else 2
-(* let c3 = if !v4 = 1 then v4 := 2 else v4 := 3 *)
-
-(* arrays *)
+let c3 = if !v4 = 1 then v4 := 2 else v4 := 3
 
 (* local variables *)
+let l1 = let x = 1 in x
+let l2 = let x = 1 in v4 := x
+let l3 = let x = 1 in let y = 2 in x + y
+let l4 = v4 := (let x = 1 in 1)
+let l5 = let x = 1 in begin v1 := true; v4 := x end
+
+(* relations *)
+let r1 = 1 = 1
+let r2 = 2 > 1
+let r3 = 2 >= 1
+let r4 = 1 < 2
+let r5 = 1 <= 2
+let r6 = 1 <> 2
+let r7 = 1 = 2 || 2 = 3
+let r8 = 1 = 2 && 2 = 3
+
+(* arrays *)
 
