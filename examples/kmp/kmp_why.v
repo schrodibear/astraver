@@ -28,12 +28,9 @@ Lemma initnext_po_1 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
-  (result2: Z)
-  (Post1: (store next `1` result2) = (store next `1` `0`))
-  `0 <= 1` /\ `1 < (array_length (store next 1 result2))`.
+  `0 <= 1` /\ `1 < (array_length next)`.
 Proof.
 Intuition.
-Simpl; Omega.
 Save.
 
 Lemma initnext_po_2 : 
@@ -45,6 +42,7 @@ Lemma initnext_po_2 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (well_founded lexZ).
@@ -61,13 +59,14 @@ Lemma initnext_po_3 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -89,13 +88,14 @@ Lemma initnext_po_4 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -103,7 +103,7 @@ Lemma initnext_po_4 :
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
   (Test7: `i0 < M - 1`)
-  (Pre4: `0 <= j0` /\ `j0 < (array_length p)`)
+  (Pre3: `0 <= j0` /\ `j0 < (array_length p)`)
   `0 <= i0` /\ `i0 < (array_length p)`.
 Proof.
 Intuition.
@@ -118,13 +118,14 @@ Lemma initnext_po_5 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -137,12 +138,9 @@ Lemma initnext_po_5 :
   (Post2: i1 = `i0 + 1`)
   (j1: Z)
   (Post3: j1 = `j0 + 1`)
-  (result7: Z)
-  (Post4: (store next1 i1 result7) = (store next1 i1 j1))
-  `0 <= i1` /\ `i1 < (array_length (store next1 i1 result7))`.
+  `0 <= i1` /\ `i1 < (array_length next1)`.
 Proof.
 Intuition.
-Simpl; Omega.
 Save.
 
 Lemma initnext_po_6 : 
@@ -154,13 +152,14 @@ Lemma initnext_po_6 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -173,6 +172,7 @@ Lemma initnext_po_6 :
   (Post2: i1 = `i0 + 1`)
   (j1: Z)
   (Post3: j1 = `j0 + 1`)
+  (Pre6: `0 <= i1` /\ `i1 < (array_length next1)`)
   (next2: (array Z))
   (Post4: next2 = (store next1 i1 j1))
   ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
@@ -189,13 +189,13 @@ Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
   Omega'. Omega'.
   Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
   Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
-  Red; Apply H5; Omega'.
+  Red; Apply H7; Omega'.
   Apply match_right_weakening with n := z.
   Replace `i0+1-(z-1)` with `i0+1+1-z`.
   Subst i1; Assumption. Omega'. Omega'.
   Elim (Z_lt_ge_dec k `i0+1`); Intro Hk'.  
   Subst next2; Rewrite store_def_2.
-  Apply H7; Omega'. Omega'. Omega'. Omega'.
+  Apply H9; Omega'. Omega'. Omega'. Omega'.
   Cut `i0+1 = k`. Intro Heq.	
   Subst next2 i1; Rewrite Heq. Rewrite store_def_1.
   Rewrite <- Heq. Apply Next_cons. Omega'.
@@ -203,7 +203,7 @@ Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
   Apply match_right_extension; Omega' Orelse Try Assumption.
   Ring `i0-j0+j0`; Ring `0+j0`; Assumption. Omega'.
   Intros z Hz. 
-  Red; Apply H5; Omega'.
+  Red; Apply H7; Omega'.
   Omega'. Omega'.
   ArraySubst next2.
 Unfold lexZ lex Zwf pairZ; Left; Omega'.
@@ -218,13 +218,14 @@ Lemma initnext_po_7 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -236,12 +237,9 @@ Lemma initnext_po_7 :
   (Test4: `j0 = 0`)
   (i1: Z)
   (Post5: i1 = `i0 + 1`)
-  (result7: Z)
-  (Post6: (store next1 i1 result7) = (store next1 i1 `0`))
-  `0 <= i1` /\ `i1 < (array_length (store next1 i1 result7))`.
+  `0 <= i1` /\ `i1 < (array_length next1)`.
 Proof.
 Intuition.
-Simpl; Omega.
 Save.
 
 Lemma initnext_po_8 : 
@@ -253,13 +251,14 @@ Lemma initnext_po_8 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -271,6 +270,7 @@ Lemma initnext_po_8 :
   (Test4: `j0 = 0`)
   (i1: Z)
   (Post5: i1 = `i0 + 1`)
+  (Pre5: `0 <= i1` /\ `i1 < (array_length next1)`)
   (next2: (array Z))
   (Post6: next2 = (store next1 i1 `0`))
   ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i1` /\ `i1 <= M`) /\
@@ -285,19 +285,19 @@ Intuition.
   Apply match_empty. Omega'. Omega'.
   Elim (Z_lt_ge_dec `j0+2` z); Intro.
   Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
-  Red; Apply H5; Omega'.
+  Red; Apply H7; Omega'.
   Apply match_right_weakening with n := z.
   Subst i1.
   Replace `i0+1-(z-1)` with `i0+1+1-z`; [ Assumption | Omega' ]. Omega'.
   Absurd (#p[i0])=(#p[j0]); [ Assumption | Idtac ].
-  Decompose [match] H10.
+  Decompose [match] H14.
   Replace i0 with `i0+1+1-2+j0`; [ Idtac | Omega' ].
   Replace #p[j0] with #p[`0+j0`]; [ Idtac | Ring `0+j0`; Reflexivity ].
   Cut `z = 2`; [ Intro Heq | Omega' ].
-  Rewrite <- Heq. Rewrite <- Post5; Apply H14; Omega'.
+  Rewrite <- Heq. Rewrite <- Post5; Apply H18; Omega'.
   Elim (Z_lt_ge_dec k `i0+1`); Intro.
   Subst next2. AccessOther.
-  Apply H7; Omega'. 
+  Apply H9; Omega'. 
   Cut `i0+1 = k`; [ Intro Heq | Omega' ].
   Rewrite Post6; Rewrite Post5; Rewrite Heq. AccessSame.
   Rewrite <- Heq. Apply Next_cons. Omega'.
@@ -305,14 +305,14 @@ Intuition.
   Intros z Hz.
   Elim (Z_lt_ge_dec `1` z); Intro.
   (* 1 < z  *)
-  Red; Apply H5; Omega'.
+  Red; Apply H7; Omega'.
   (* z = 1 *)
   Red; Intro.
   Absurd (#p[i0])=(#p[j0]); [ Assumption | Rewrite Test4 ].
-  Decompose [match] H8.
+  Decompose [match] H13.
   Replace `0` with `0+0`; [ Idtac | Omega' ].
   Replace `i0` with `i0+1-z+0`; [ Idtac | Omega' ].
-  Apply H14; Omega'.
+  Apply H18; Omega'.
   ArraySubst next2.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
@@ -326,13 +326,14 @@ Lemma initnext_po_9 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -356,13 +357,14 @@ Lemma initnext_po_10 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -372,7 +374,7 @@ Lemma initnext_po_10 :
   (Test7: `i0 < M - 1`)
   (Test5: ~(access p i0) = (access p j0))
   (Test3: `j0 <> 0`)
-  (Pre5: `0 <= j0` /\ `j0 < (array_length next1)`)
+  (Pre4: `0 <= j0` /\ `j0 < (array_length next1)`)
   (j1: Z)
   (Post7: j1 = (access next1 j0))
   ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i0` /\ `i0 <= M`) /\
@@ -384,9 +386,9 @@ Lemma initnext_po_10 :
 Proof.
 Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
   Subst j1.
-  Elim (H9 j0); Omega'.
-  Elim (H9 j0); Omega'.
-  Elim (H9 j0); Omega'.
+  Elim (H11 j0); Omega'.
+  Elim (H11 j0); Omega'.
+  Elim (H11 j0); Omega'.
   Subst j1.
   Apply match_trans with t2 := p i2 := `j0-(access   next1 j0)`.
   Apply match_left_weakening with n := j0.
@@ -394,23 +396,23 @@ Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
     with `i0-j0` ; [ Idtac | Omega' ].
   Replace `j0-(access   next1 j0)-(j0-(access   next1 j0))` 
     with `0` ; [ Assumption | Omega' ].
-  Elim (H9 j0); Omega'. Elim (H9 j0); Auto; Omega'.
+  Elim (H11 j0); Omega'. Elim (H11 j0); Auto; Omega'.
 
   Elim (Z_lt_ge_dec `j0+1` z); Intro.
   (* j0+1 < z < i0+1 *)
-  Apply (H7 z); Assumption Orelse Omega'.
+  Apply (H9 z); Assumption Orelse Omega'.
   Elim (Z_ge_lt_dec z `j0+1`); Intro.
   (* z = j0+1 *)
   Absurd (#p[i0])=(#p[j0]) ; [ Assumption | Idtac ].
-  Decompose [match] H12.
+  Decompose [match] H14.
   Replace i0 with `i0+1-z+j0`; [ Idtac | Omega' ].
   Replace j0 with `0+j0`; [ Idtac | Omega' ].
-  Apply H16; Omega'.
+  Apply H18; Omega'.
   (* next[j0]+1 < z < j0+1 *)
   Absurd (match p `j0-(z-1)` p `0` `z-1`).
-  Decompose [match] H12.
-  Elim (H9 j0); Omega' Orelse Intros.
-  Apply H19; Omega'.
+  Decompose [match] H14.
+  Elim (H11 j0); Omega' Orelse Intros.
+  Apply H21; Omega'.
   Apply match_trans with t2 := p i2 := `i0-(z-1)`.
   Apply match_sym.
   Apply match_left_weakening with n := j0.
@@ -421,7 +423,7 @@ Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
   Replace `i0-(z-1)` with `i0+1-z` ; [ Assumption | Omega' ].
   Omega'.
 Unfold lexZ lex Zwf pairZ. 
-Elim (H9 j0) ; [ Intros | Omega' ].
+Elim (H11 j0) ; [ Intros | Omega' ].
 Right. Omega'.
 Save.
 
@@ -434,13 +436,14 @@ Lemma initnext_po_11 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
   (i0: Z)
   (j0: Z)
   (next1: (array Z))
-  (Pre8: Variant1 = (pairZ `M - i0` j0))
+  (Pre7: Variant1 = (pairZ `M - i0` j0))
   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
         (match p `i0 - j0` p `0` j0) /\
         ((z:Z)
@@ -461,7 +464,7 @@ Lemma initnext_po_11 :
   (lexZ (pairZ `M - i1` j1) Variant1).
 Proof.
 Intuition.
-Rewrite Pre8; Assumption.
+Rewrite Pre7; Assumption.
 Save.
 
 Lemma initnext_po_12 : 
@@ -473,6 +476,7 @@ Lemma initnext_po_12 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (`0 <= result0` /\ `result0 <= M`) /\ (`result0 < result` /\
@@ -502,6 +506,7 @@ Lemma initnext_po_13 :
   (result0: Z)
   (Post8: result0 = `0`)
   (Test8: `1 < M`)
+  (Pre8: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (i0: Z)
@@ -552,20 +557,16 @@ Definition initnext := (* validation *)
                 result1 Bool4) of
         | (left Test8) =>
             let (i0, j0, next0, result2, Post17) =
-              let (next0, result2, Post1) =
-                let (result2, Post1) = (exist_1 [result2: Z]
-                  (store next `1` result2) = (store next `1` `0`) `0`
-                  (refl_equal ? (store next `1` `0`))) in
-                let Pre1 =
-                  (initnext_po_1 next p Pre9 result Post9 result0 Post8 Test8
-                  result2 Post1) in
-                (exist_2 [next1: (array Z)][result4: unit]
-                next1 = (store next `1` `0`) (store next `1` result2) 
-                tt Post1) in
+              let Pre8 =
+                (initnext_po_1 next p Pre9 result Post9 result0 Post8 Test8) in
+              let (next0, result2, Post1) = (exist_2 [next1: (array Z)]
+                [result4: unit]
+                next1 = (store next `1` `0`) (store next `1` `0`) tt
+                (refl_equal ? (store next `1` `0`))) in
               let (i0, j0, next1, result3, Inv) =
                 (well_founded_induction prodZZ lexZ
                   (initnext_po_2 next p Pre9 result Post9 result0 Post8 Test8
-                  next0 Post1) [Variant1: prodZZ](i0: Z)(j0: Z)
+                  Pre8 next0 Post1) [Variant1: prodZZ](i0: Z)(j0: Z)
                   (next1: (array Z))(_: Variant1 = (pairZ `M - i0` j0))
                   (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\
                   `i0 <= M`) /\ (match p `i0 - j0` p `0` j0) /\
@@ -585,7 +586,7 @@ Definition initnext := (* validation *)
                     (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
                    `(array_length next2) = M`) /\ `i1 >= M - 1`))
                   [Variant1: prodZZ; wf1: (Variant2: prodZZ)
-                   (Pre2: (lexZ Variant2 Variant1))(i0: Z)(j0: Z)
+                   (Pre1: (lexZ Variant2 Variant1))(i0: Z)(j0: Z)
                    (next1: (array Z))(_: Variant2 = (pairZ `M - i0` j0))
                    (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\
                    `i0 <= M`) /\ (match p `i0 - j0` p `0` j0) /\
@@ -606,7 +607,7 @@ Definition initnext := (* validation *)
                      (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
                     `(array_length next2) = M`) /\ `i1 >= M - 1`));
                    i0: Z; j0: Z; next1: (array Z);
-                   Pre8: Variant1 = (pairZ `M - i0` j0); Inv: (`0 <= j0` /\
+                   Pre7: Variant1 = (pairZ `M - i0` j0); Inv: (`0 <= j0` /\
                    `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
                    (match p `i0 - j0` p `0` j0) /\
                    ((z:Z)
@@ -629,15 +630,15 @@ Definition initnext := (* validation *)
                           let (i1, j1, next2, result4, Inv0) =
                             let (i1, j1, next2, result4, Inv0) =
                               let (result4, Bool2) =
-                                let Pre4 =
+                                let Pre3 =
                                   (initnext_po_3 next p Pre9 result Post9
-                                  result0 Post8 Test8 next0 Post1 Variant1 i0
-                                  j0 next1 Pre8 Inv Test7) in
+                                  result0 Post8 Test8 Pre8 next0 Post1
+                                  Variant1 i0 j0 next1 Pre7 Inv Test7) in
                                 let result5 =
-                                  let Pre3 =
+                                  let Pre2 =
                                     (initnext_po_4 next p Pre9 result Post9
-                                    result0 Post8 Test8 next0 Post1 Variant1
-                                    i0 j0 next1 Pre8 Inv Test7 Pre4) in
+                                    result0 Post8 Test8 Pre8 next0 Post1
+                                    Variant1 i0 j0 next1 Pre7 Inv Test7 Pre3) in
                                   (A_eq_bool (access p i0)) in
                                 let (result6, Post19) =
                                   (result5 (access p j0)) in
@@ -669,24 +670,18 @@ Definition initnext := (* validation *)
                                         (refl_equal ? `j0 + 1`)) in
                                       (exist_2 [j2: Z][result7: unit]
                                       j2 = `j0 + 1` result6 tt Post3) in
+                                    let Pre6 =
+                                      (initnext_po_5 next p Pre9 result Post9
+                                      result0 Post8 Test8 Pre8 next0 Post1
+                                      Variant1 i0 j0 next1 Pre7 Inv Test7
+                                      Test6 i1 Post2 j1 Post3) in
                                     let (next2, result7, Post4) =
-                                      let (result7, Post4) =
-                                        (exist_1 [result7: Z]
-                                        (store next1 i1 result7) = (store next1
-                                                                    i1 j1) 
-                                        j1
-                                        (refl_equal ? (store next1 i1 j1))) in
-                                      let Pre7 =
-                                        (initnext_po_5 next p Pre9 result
-                                        Post9 result0 Post8 Test8 next0 Post1
-                                        Variant1 i0 j0 next1 Pre8 Inv Test7
-                                        Test6 i1 Post2 j1 Post3 result7
-                                        Post4) in
                                       (exist_2 [next3: (array Z)]
                                       [result9: unit]
                                       next3 = (store next1 i1 j1) (store next1
-                                                                   i1 result7)
-                                      tt Post4) in
+                                                                   i1 j1) 
+                                      tt
+                                      (refl_equal ? (store next1 i1 j1))) in
                                     (exist_4 [i2: Z][j2: Z][next3: (array Z)]
                                     [result8: unit]((`0 <= j2` /\
                                     `j2 <= M`) /\ (`j2 < i2` /\ `i2 <= M`) /\
@@ -702,9 +697,9 @@ Definition initnext := (* validation *)
                                      (pairZ `M - i0` j0)) i1
                                     j1 next2 result7
                                     (initnext_po_6 next p Pre9 result Post9
-                                    result0 Post8 Test8 next0 Post1 Variant1
-                                    i0 j0 next1 Pre8 Inv Test7 Test6 i1 Post2
-                                    j1 Post3 next2 Post4)) in
+                                    result0 Post8 Test8 Pre8 next0 Post1
+                                    Variant1 i0 j0 next1 Pre7 Inv Test7 Test6
+                                    i1 Post2 j1 Post3 Pre6 next2 Post4)) in
                                   (exist_4 [i2: Z][j2: Z][next3: (array Z)]
                                   [result6: unit]((`0 <= j2` /\ `j2 <= M`) /\
                                   (`j2 < i2` /\ `i2 <= M`) /\
@@ -742,24 +737,18 @@ Definition initnext := (* validation *)
                                               (refl_equal ? `i0 + 1`)) in
                                             (exist_2 [i2: Z][result7: unit]
                                             i2 = `i0 + 1` result6 tt Post5) in
+                                          let Pre5 =
+                                            (initnext_po_7 next p Pre9 result
+                                            Post9 result0 Post8 Test8 Pre8
+                                            next0 Post1 Variant1 i0 j0 next1
+                                            Pre7 Inv Test7 Test5 Test4 i1
+                                            Post5) in
                                           let (next2, result7, Post6) =
-                                            let (result7, Post6) =
-                                              (exist_1 [result7: Z]
-                                              (store next1 i1 result7) = (
-                                              store next1 i1 `0`) `0`
-                                              (refl_equal ? (store next1 i1
-                                                             `0`))) in
-                                            let Pre6 =
-                                              (initnext_po_7 next p Pre9
-                                              result Post9 result0 Post8
-                                              Test8 next0 Post1 Variant1 i0
-                                              j0 next1 Pre8 Inv Test7 Test5
-                                              Test4 i1 Post5 result7 Post6) in
                                             (exist_2 [next3: (array Z)]
                                             [result9: unit]
                                             next3 = (store next1 i1 `0`) 
-                                            (store next1 i1 result7) 
-                                            tt Post6) in
+                                            (store next1 i1 `0`) tt
+                                            (refl_equal ? (store next1 i1 `0`))) in
                                           (exist_3 [i2: Z][next3: (array Z)]
                                           [result8: unit]((`0 <= j0` /\
                                           `j0 <= M`) /\ (`j0 < i2` /\
@@ -776,10 +765,10 @@ Definition initnext := (* validation *)
                                            (pairZ `M - i0` j0)) i1
                                           next2 result7
                                           (initnext_po_8 next p Pre9 result
-                                          Post9 result0 Post8 Test8 next0
-                                          Post1 Variant1 i0 j0 next1 Pre8 Inv
-                                          Test7 Test5 Test4 i1 Post5 next2
-                                          Post6)) in
+                                          Post9 result0 Post8 Test8 Pre8
+                                          next0 Post1 Variant1 i0 j0 next1
+                                          Pre7 Inv Test7 Test5 Test4 i1 Post5
+                                          Pre5 next2 Post6)) in
                                         (exist_4 [i2: Z][j1: Z]
                                         [next3: (array Z)][result7: unit]
                                         ((`0 <= j1` /\ `j1 <= M`) /\
@@ -796,11 +785,11 @@ Definition initnext := (* validation *)
                                          (pairZ `M - i0` j0)) i1
                                         j0 next2 result6 Inv0)
                                     | (right Test3) =>
-                                        let Pre5 =
+                                        let Pre4 =
                                           (initnext_po_9 next p Pre9 result
-                                          Post9 result0 Post8 Test8 next0
-                                          Post1 Variant1 i0 j0 next1 Pre8 Inv
-                                          Test7 Test5 Test3) in
+                                          Post9 result0 Post8 Test8 Pre8
+                                          next0 Post1 Variant1 i0 j0 next1
+                                          Pre7 Inv Test7 Test5 Test3) in
                                         let (j1, result6, Post7) =
                                           let (result6, Post7) =
                                             (exist_1 [result6: Z]
@@ -826,9 +815,9 @@ Definition initnext := (* validation *)
                                          (pairZ `M - i0` j0)) i0
                                         j1 next1 result6
                                         (initnext_po_10 next p Pre9 result
-                                        Post9 result0 Post8 Test8 next0 Post1
-                                        Variant1 i0 j0 next1 Pre8 Inv Test7
-                                        Test5 Test3 Pre5 j1 Post7)) end) in
+                                        Post9 result0 Post8 Test8 Pre8 next0
+                                        Post1 Variant1 i0 j0 next1 Pre7 Inv
+                                        Test7 Test5 Test3 Pre4 j1 Post7)) end) in
                                   (exist_4 [i2: Z][j2: Z][next3: (array Z)]
                                   [result6: unit]((`0 <= j2` /\ `j2 <= M`) /\
                                   (`j2 < i2` /\ `i2 <= M`) /\
@@ -858,8 +847,8 @@ Definition initnext := (* validation *)
                             i1 j1 next2 result4 Inv0) in
                           ((wf1 (pairZ `M - i1` j1))
                             (initnext_po_11 next p Pre9 result Post9 result0
-                            Post8 Test8 next0 Post1 Variant1 i0 j0 next1 Pre8
-                            Inv Test7 i1 j1 next2 Inv0) i1 j1 next2
+                            Post8 Test8 Pre8 next0 Post1 Variant1 i0 j0 next1
+                            Pre7 Inv Test7 i1 j1 next2 Inv0) i1 j1 next2
                             (refl_equal ? (pairZ `M - i1` j1))
                             (proj1 ? ? Inv0)) in
                         (exist_4 [i2: Z][j2: Z][next3: (array Z)]
@@ -900,13 +889,13 @@ Definition initnext := (* validation *)
                   (pairZ `M - result` result0) result result0 next0
                   (refl_equal ? (pairZ `M - result` result0))
                   (initnext_po_12 next p Pre9 result Post9 result0 Post8
-                  Test8 next0 Post1)) in
+                  Test8 Pre8 next0 Post1)) in
               (exist_4 [i1: Z][j1: Z][next2: (array Z)][result4: unit]
               `(array_length next2) = M` /\
               ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next2 j)))) 
               i0 j0 next1 result3
               (initnext_po_13 next p Pre9 result Post9 result0 Post8 Test8
-              next0 Post1 i0 j0 next1 Inv)) in
+              Pre8 next0 Post1 i0 j0 next1 Inv)) in
             (exist_4 [i1: Z][j1: Z][next1: (array Z)][result3: unit]
             `(array_length next1) = M` /\
             ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next1 j)))) 

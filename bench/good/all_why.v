@@ -625,51 +625,38 @@ Definition arr4 := (* validation *)
 Lemma arr5_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 1`)
-  (result: Z)
-  (Post1: (store v6 `0` result) = (store v6 `0` `1`))
-  `0 <= 0` /\ `0 < (array_length (store v6 0 result))`.
+  `0 <= 0` /\ `0 < (array_length v6)`.
 Proof. (* arr5_po_1 *)
 Intros; Simpl; Omega.
 Save.
 
-
-
-
 Definition arr5 := (* validation *)
   [v6: (array Z); Pre2: `(array_length v6) >= 1`]
-    let (result, Post1) = (exist_1 [result: Z]
-      (store v6 `0` result) = (store v6 `0` `1`) `1`
-      (refl_equal ? (store v6 `0` `1`))) in
-    let Pre1 = (arr5_po_1 v6 Pre2 result Post1) in
+    let Pre1 = (arr5_po_1 v6 Pre2) in
     (exist_2 [v10: (array Z)][result1: unit]
-    v10 = (store v6 `0` `1`) (store v6 `0` result) tt Post1).
+    v10 = (store v6 `0` `1`) (store v6 `0` `1`) tt
+    (refl_equal ? (store v6 `0` `1`))).
 
 Lemma arr6_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 4`)
-  (result: Z)
-  (Post1: (store v6 `1 + 2` result) = (store v6 `1 + 2` `3 + 4`))
-  `0 <= 1 + 2` /\ `1 + 2 < (array_length (store v6 1 + 2 result))`.
+  `0 <= 1 + 2` /\ `1 + 2 < (array_length v6)`.
 Proof. (* arr6_po_1 *)
 Intros; Simpl; Omega.
 Save.
 
 
-
-
 Definition arr6 := (* validation *)
   [v6: (array Z); Pre2: `(array_length v6) >= 4`]
-    let (result, Post1) = (exist_1 [result: Z]
-      (store v6 `1 + 2` result) = (store v6 `1 + 2` `3 + 4`) `3 + 4`
-      (refl_equal ? (store v6 `1 + 2` `3 + 4`))) in
-    let Pre1 = (arr6_po_1 v6 Pre2 result Post1) in
+    let Pre1 = (arr6_po_1 v6 Pre2) in
     (exist_2 [v10: (array Z)][result1: unit]
-    v10 = (store v6 `1 + 2` `3 + 4`) (store v6 `1 + 2` result) tt Post1).
+    v10 = (store v6 `1 + 2` `3 + 4`) (store v6 `1 + 2` `3 + 4`) tt
+    (refl_equal ? (store v6 `1 + 2` `3 + 4`))).
 
 Lemma arr7_po_1 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
-  `0 <= 0` /\ `0 < (array_length v6)`.
+  `0 <= (access v6 0)` /\ `(access v6 0) < (array_length v6)`.
 Proof. (* arr7_po_1 *)
 Intros; Omega.
 Save.
@@ -677,34 +664,20 @@ Save.
 Lemma arr7_po_2 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
-  (Pre2: `0 <= 0` /\ `0 < (array_length v6)`)
-  (result: Z)
-  (Post1: (store v6 (access v6 `0`) result) = (store v6 (access v6 `0`) `1`))
-  `0 <= (access v6 0)` /\
-  `(access v6 0) < (array_length (store v6 (access v6 0) result))`.
+  (Pre2: `0 <= (access v6 0)` /\ `(access v6 0) < (array_length v6)`)
+  `0 <= 0` /\ `0 < (array_length v6)`.
 Proof. (* arr7_po_2 *)
 Intros; Simpl; Omega.
 Save.
 
 
-
-
-
-
-
-
-
-
 Definition arr7 := (* validation *)
   [v6: (array Z); Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`]
     let Pre2 = (arr7_po_1 v6 Pre3) in
-    let (result, Post1) = (exist_1 [result: Z]
-      (store v6 (access v6 `0`) result) = (store v6 (access v6 `0`) `1`) 
-      `1` (refl_equal ? (store v6 (access v6 `0`) `1`))) in
-    let Pre1 = (arr7_po_2 v6 Pre3 Pre2 result Post1) in
+    let Pre1 = (arr7_po_2 v6 Pre3 Pre2) in
     (exist_2 [v10: (array Z)][result1: unit]
-    v10 = (store v6 (access v6 `0`) `1`) (store v6 (access v6 `0`) result) 
-    tt Post1).
+    v10 = (store v6 (access v6 `0`) `1`) (store v6 (access v6 `0`) `1`) 
+    tt (refl_equal ? (store v6 (access v6 `0`) `1`))).
 
 Definition fc1 := (* validation *)
   (f5 v5).

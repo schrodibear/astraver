@@ -414,9 +414,7 @@ Definition p15 := (* validation *)
 Lemma p16_po_1 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10`)
-  (result: Z)
-  (Post1: (store t `9` result) = (store t `9` `1`))
-  `0 <= 9` /\ `9 < (array_length (store t 9 result))`.
+  `0 <= 9` /\ `9 < (array_length t)`.
 Proof. (* p16_po_1 *)
 Intros; Simpl; Omega.
 Save.
@@ -425,18 +423,16 @@ Save.
 
 Definition p16 := (* validation *)
   [t: (array Z); Pre2: `(array_length t) = 10`]
-    let (result, Post1) = (exist_1 [result: Z]
-      (store t `9` result) = (store t `9` `1`) `1`
-      (refl_equal ? (store t `9` `1`))) in
-    let Pre1 = (p16_po_1 t Pre2 result Post1) in
+    let Pre1 = (p16_po_1 t Pre2) in
     (exist_2 [t1: (array Z)][result1: unit]
-    t1 = (store t `9` `1`) (store t `9` result) tt Post1).
+    t1 = (store t `9` `1`) (store t `9` `1`) tt
+    (refl_equal ? (store t `9` `1`))).
 
 Lemma p17_po_1 : 
   (t: (array Z))
   (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
          `(access t 0) < 10`)
-  `0 <= 0` /\ `0 < (array_length t)`.
+  `0 <= (access t 0)` /\ `(access t 0) < (array_length t)`.
 Proof. (* p17_po_1 *)
 Intros; Omega.
 Save.
@@ -454,11 +450,8 @@ Lemma p17_po_2 :
   (t: (array Z))
   (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
          `(access t 0) < 10`)
-  (Pre2: `0 <= 0` /\ `0 < (array_length t)`)
-  (result: Z)
-  (Post1: (store t (access t `0`) result) = (store t (access t `0`) `1`))
-  `0 <= (access t 0)` /\
-  `(access t 0) < (array_length (store t (access t 0) result))`.
+  (Pre2: `0 <= (access t 0)` /\ `(access t 0) < (array_length t)`)
+  `0 <= 0` /\ `0 < (array_length t)`.
 Proof.
 Intros; Simpl; Omega.
 Save.
@@ -467,11 +460,62 @@ Definition p17 := (* validation *)
   [t: (array Z); Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
    `(access t 0) < 10`]
     let Pre2 = (p17_po_1 t Pre3) in
-    let (result, Post1) = (exist_1 [result: Z]
-      (store t (access t `0`) result) = (store t (access t `0`) `1`) 
-      `1` (refl_equal ? (store t (access t `0`) `1`))) in
-    let Pre1 = (p17_po_2 t Pre3 Pre2 result Post1) in
+    let Pre1 = (p17_po_2 t Pre3 Pre2) in
     (exist_2 [t1: (array Z)][result1: unit]
-    t1 = (store t (access t `0`) `1`) (store t (access t `0`) result) 
-    tt Post1).
+    t1 = (store t (access t `0`) `1`) (store t (access t `0`) `1`) tt
+    (refl_equal ? (store t (access t `0`) `1`))).
+
+Lemma p18_po_1 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre2: `(array_length t) = 10`)
+  (aux_2: Z)
+  (Post2: aux_2 = x)
+  (x0: Z)
+  (Post1: x0 = `0`)
+  `(access (store t x0 aux_2) 0) = x` /\ `0 <= x0` /\
+  `x0 < (array_length t)`.
+Proof.
+Intuition.
+Subst x0; AccessSame.
+Save.
+
+Lemma p18_po_2 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre2: `(array_length t) = 10`)
+  (aux_2: Z)
+  (Post2: aux_2 = x)
+  (aux_1: Z)
+  (Post4: `(access (store t aux_1 aux_2) 0) = x` /\ `0 <= aux_1` /\
+          `aux_1 < (array_length t)`)
+  `0 <= aux_1` /\ `aux_1 < (array_length t)`.
+Proof.
+Intuition.
+Save.
+
+Definition p18 := (* validation *)
+  [t: (array Z); x: Z; Pre2: `(array_length t) = 10`]
+    let (aux_2, Post2) = (exist_1 [result: Z]result = x x
+      (refl_equal ? x)) in
+    let (t0, x0, result, Post3) =
+      let (x0, aux_1, Post4) =
+        let (x0, result, Post1) =
+          let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
+            (refl_equal ? `0`)) in
+          (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
+        let (result0, Post5) = (exist_1 [result0: Z]
+          `(access (store t result0 aux_2) 0) = x` /\ `0 <= result0` /\
+          `result0 < (array_length t)` x0
+          (p18_po_1 t x Pre2 aux_2 Post2 x0 Post1)) in
+        (exist_2 [x1: Z][result1: Z]
+        `(access (store t result1 aux_2) 0) = x` /\ `0 <= result1` /\
+        `result1 < (array_length t)` x0 result0 Post5) in
+      let Pre1 = (p18_po_2 t x Pre2 aux_2 Post2 aux_1 Post4) in
+      let (t0, result, Post6) = (exist_2 [t1: (array Z)][result1: unit]
+        `(access t1 0) = x` (store t aux_1 aux_2) tt (proj1 ? ? Post4)) in
+      (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 
+      t0 x0 result Post6) in
+    (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 
+    t0 x0 result Post3).
 

@@ -48,6 +48,20 @@ type proof =
 
 type validation = proof cc_term
 
+(*s Log for the why-viewer *)
+
+let logs = ref ([] : Log.t)
+
+let log l p is_discharged =
+  if viewer then
+    let s = 
+      let buf = Buffer.create 1024 in
+      let fmt = formatter_of_buffer buf in
+      fprintf fmt "@[%a@]@?" print_predicate p;
+      Buffer.contents buf
+    in
+    logs := (l, s, is_discharged) :: !logs
+
 (*s We automatically prove the trivial obligations *)
 
 (* ... |- true *)
@@ -62,7 +76,7 @@ let reflexivity = function
   | Papp (id, [a;b]) when is_eq id && a = b -> Reflexivity a
   | _ -> raise Exit
 
-(* ..., h:P, ...|- P *)
+(* ..., h:P, ...|- P  and ..., h:P and Q, ...|- P *)
 let assumption concl = function
   | Spred (id, p) when p = concl -> Assumption id 
   | Spred (id, Pand (a, b)) when a = concl -> Proj1 id
@@ -117,7 +131,7 @@ let discharge_methods ctx concl =
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in
-  (* eprintf "obligation %a discharged at %d-%d@\n" print_predicate concl (fst loc) (snd loc); *)
+  log (snd loc) concl true;
   if_verbose eprintf "one obligation trivially discharged@.";
   pr
 
@@ -170,7 +184,7 @@ let vcg base t =
   let po = ref [] in
   let cpt = ref 0 in
   let push loc ctx concl = 
-    (* eprintf "obligation at %d-%d@\n" (fst loc) (snd loc); *)
+    log (snd loc) concl false;
     incr cpt;
     let id = base ^ "_po_" ^ string_of_int !cpt in
     let ctx' = clean_sequent (List.rev ctx) concl in

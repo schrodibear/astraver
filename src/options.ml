@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.13 2002-12-05 16:25:11 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.14 2002-12-11 10:33:13 filliatr Exp $ i*)
 
 open Format
 
@@ -32,6 +32,7 @@ let ocaml_ = ref false
 let ocaml_annot_ = ref false
 let ocaml_externals_ = ref false
 let output_ = ref None
+let viewer_ = ref false
 
 type prover = Coq | Pvs | Harvey
 let prover_ = ref Coq
@@ -129,6 +130,8 @@ let files =
 	output_ := Some f; parse args
     | ("-o" | "-output" | "--output") :: [] -> 
 	usage (); exit 1
+    | ("--viewer") :: args ->
+	viewer_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -143,6 +146,7 @@ let wp_only = !wp_only_
 let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
+let viewer = !viewer_
 
 let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_

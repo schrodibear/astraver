@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.70 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.71 2002-12-11 10:33:14 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -145,19 +145,17 @@ and wp_desc info d q =
 	let q = optpost_app (tsubst_in_predicate (subst_one result t)) q in
 	let e'1,w = wp e1 q in
 	TabAcc (ck, x, e'1), w
-    | TabAff (ck, x, e1, e2) ->
-	(* TODO: does not propagate inside [e1] *)
-	let q = optpost_app (tsubst_in_predicate (subst_one result tvoid)) q in
-	let v = fresh_var () in
-	let st = make_raw_store info.env (x,x) (Tvar result) (Tvar v) in
-	let q1 = optpost_app (tsubst_in_predicate (subst_one x st)) q in
-	let q1 = filter_post e1.info q1 in
-	let _,w1 = wp e1 q1 in
+    | TabAff (ck, x, 
+	      ({desc=Expression ce1} as e1), ({desc=Expression ce2} as e2)) ->
+	let w = optpost_val q in
+	let w = optasst_app (tsubst_in_predicate (subst_one result tvoid)) w in
+	let st = make_raw_store info.env (x,x) ce1 ce2 in
+	let w = optasst_app (tsubst_in_predicate (subst_one x st)) w in
 	let e'1,_ = wp e1 None in
-	let w1 = optasst_app (subst_in_predicate (subst_onev v result)) w1 in
-	let q2 = saturate_post e2.info w1 q in
-	let e'2,w2 = wp e2 q2 in
-	TabAff (ck, x, e'1, e'2), w2
+	let e'2,_ = wp e2 None in
+	TabAff (ck, x, e'1, e'2), w
+    | TabAff _ ->
+	assert false
 
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 (filter_post p2.info q) in

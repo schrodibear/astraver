@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.69 2002-12-10 15:03:14 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.70 2002-12-11 10:33:13 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -389,9 +389,10 @@ let rec print_prog fmt p =
   if k.c_pre = [] && k.c_post = None then
     fprintf fmt "@[%s:@,%a@]" p.info.label print_desc p.desc
   else
-  fprintf fmt "@[<hv>[%d-%d]%s:@,@[{%a}@]@ @[%a@]@ @[{%a}@]@]" 
+  fprintf fmt "@[<hv>[%d-%d]%s:@,@[{%a;%a}@]@ @[%a@]@ @[{%a}@]@]" 
     (fst p.info.loc) (snd p.info.loc)
-    p.info.label print_pre k.c_pre print_desc p.desc print_post k.c_post
+    p.info.label print_pre k.c_pre print_pre p.info.obligations 
+    print_desc p.desc print_post k.c_post
 
 and print_desc fmt = function
   | Var id -> 

@@ -309,6 +309,7 @@ Lemma selection_po_8 :
   (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
   (w: Z)
   (Post6: w = (access t0 min0))
+  (Pre8: `0 <= min0` /\ `min0 < (array_length t0)`)
   `0 <= i0` /\ `i0 < (array_length t0)`.
 Proof.
 Intuition.
@@ -345,12 +346,14 @@ Lemma selection_po_9 :
   (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
   (w: Z)
   (Post6: w = (access t0 min0))
+  (Pre8: `0 <= min0` /\ `min0 < (array_length t0)`)
   (Pre9: `0 <= i0` /\ `i0 < (array_length t0)`)
-  (result4: Z)
-  (Post4: (store t0 min0 result4) = (store t0 min0 (access t0 i0)))
-  `0 <= min0` /\ `min0 < (array_length (store t0 min0 result4))`.
+  (t1: (array Z))
+  (Post4: t1 = (store t0 min0 (access t0 i0)))
+  `0 <= i0` /\ `i0 < (array_length t1)`.
 Proof.
 Intuition.
+ArraySubst t1.
 Save.
 
 Lemma selection_po_10 : 
@@ -384,51 +387,11 @@ Lemma selection_po_10 :
   (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
   (w: Z)
   (Post6: w = (access t0 min0))
+  (Pre8: `0 <= min0` /\ `min0 < (array_length t0)`)
   (Pre9: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array Z))
   (Post4: t1 = (store t0 min0 (access t0 i0)))
-  (result5: Z)
-  (Post5: (store t1 i0 result5) = (store t1 i0 w))
-  `0 <= i0` /\ `i0 < (array_length (store t1 i0 result5))`.
-Proof.
-Intuition.
-ArraySubst t1.
-Save.
-
-Lemma selection_po_11 : 
-  (t: (array Z))
-  (Pre13: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (t0: (array Z))
-  (Pre12: Variant1 = `(array_length t0) - i0`)
-  (Pre11: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
-          ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
-            ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
-              `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (j0: Z)
-  (min0: Z)
-  (Post3: ((`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
-          ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
-          `j0 >= (array_length t0)`)
-  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (w: Z)
-  (Post6: w = (access t0 min0))
-  (Pre9: `0 <= i0` /\ `i0 < (array_length t0)`)
-  (t1: (array Z))
-  (Post4: t1 = (store t0 min0 (access t0 i0)))
+  (Pre7: `0 <= i0` /\ `i0 < (array_length t1)`)
   (t2: (array Z))
   (Post5: t2 = (store t1 i0 w))
   ((i:Z)
@@ -456,7 +419,7 @@ ArraySubst t1.
 Apply sorted_array_id with t0.
 Assumption.
 Unfold array_id; Intros.
-Subst t2 t1; Do 2 AccessOther.
+Subst t2; Do 2 AccessOther.
 Replace `i0-1+1` with i0.
 Subst t2 t1; Do 2 AccessOther.
 Subst w.
@@ -469,18 +432,18 @@ Apply exchange_is_permut with min0 i0; Auto with *.
 Assumption.
 Assert h:`k=i0` \/ `k<i0`. Omega. Intuition.
 Subst k.
-Subst t2; Simpl in H19.
+Subst t2; Simpl in H23.
 AccessSame.
 AccessOther.
-Subst t1; Simpl in H19.
+Subst t1; Simpl in H23.
 Assert h:`l=min0` \/ `min0<>l`. Omega. Intuition.
 Subst l; AccessSame.
 Subst w; Apply H11; Omega.
 AccessOther.
 Subst w; Apply H11; Try Omega.
-Subst t2; Simpl in H19. AccessOther.
+Subst t2; Simpl in H23. AccessOther.
 AccessOther.
-Subst t1; Simpl in H19.
+Subst t1; Simpl in H23.
 Assert h:`l=min0` \/ `min0<>l`. Omega. Intuition.
 Subst l; AccessSame.
 AccessOther.
@@ -491,7 +454,7 @@ Apply H4; Omega.
 Subst t2 t1; Simpl; Unfold Zwf; Omega.
 Save.
 
-Lemma selection_po_12 : 
+Lemma selection_po_11 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -532,7 +495,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma selection_po_13 : 
+Lemma selection_po_12 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -549,7 +512,7 @@ Intuition.
 Unfold sorted_array; Intros; Omega.
 Save.
 
-Lemma selection_po_14 : 
+Lemma selection_po_13 : 
   (t: (array Z))
   (Pre13: `(array_length t) >= 1`)
   (result: Z)
@@ -895,40 +858,31 @@ Definition selection := (* validation *)
                               result4 = (access t0 min0) (access t0 min0)
                               (refl_equal ? (access t0 min0))) in
                             let (t1, result4, Post25) =
+                              let Pre8 = Pre10 in
                               let Pre9 =
                                 (selection_po_8 t Pre13 result Post11
                                 Variant1 i0 t0 Pre12 Pre11 Test6 result1
                                 Post8 result2 Post7 j0 min0 Post3 Pre10 w
-                                Post6) in
+                                Post6 Pre8) in
                               let (t1, result4, Post4) =
-                                let (result4, Post4) = (exist_1 [result4: Z]
-                                  (store t0 min0 result4) = (store t0 min0
-                                                             (access t0 i0)) 
-                                  (access t0 i0)
-                                  (refl_equal ? (store t0 min0 (access t0 i0)))) in
-                                let Pre7 =
-                                  (selection_po_9 t Pre13 result Post11
-                                  Variant1 i0 t0 Pre12 Pre11 Test6 result1
-                                  Post8 result2 Post7 j0 min0 Post3 Pre10 w
-                                  Post6 Pre9 result4 Post4) in
                                 (exist_2 [t2: (array Z)][result6: unit]
                                 t2 = (store t0 min0 (access t0 i0)) (
                                                                     store t0
                                                                     min0
-                                                                    result4)
-                                tt Post4) in
+                                                                    (
+                                                                    access t0
+                                                                    i0)) 
+                                tt
+                                (refl_equal ? (store t0 min0 (access t0 i0)))) in
+                              let Pre7 =
+                                (selection_po_9 t Pre13 result Post11
+                                Variant1 i0 t0 Pre12 Pre11 Test6 result1
+                                Post8 result2 Post7 j0 min0 Post3 Pre10 w
+                                Post6 Pre8 Pre9 t1 Post4) in
                               let (t2, result5, Post5) =
-                                let (result5, Post5) = (exist_1 [result5: Z]
-                                  (store t1 i0 result5) = (store t1 i0 w) 
-                                  w (refl_equal ? (store t1 i0 w))) in
-                                let Pre8 =
-                                  (selection_po_10 t Pre13 result Post11
-                                  Variant1 i0 t0 Pre12 Pre11 Test6 result1
-                                  Post8 result2 Post7 j0 min0 Post3 Pre10 w
-                                  Post6 Pre9 t1 Post4 result5 Post5) in
                                 (exist_2 [t3: (array Z)][result7: unit]
-                                t3 = (store t1 i0 w) (store t1 i0 result5) 
-                                tt Post5) in
+                                t3 = (store t1 i0 w) (store t1 i0 w) 
+                                tt (refl_equal ? (store t1 i0 w))) in
                               (exist_2 [t3: (array Z)][result6: unit]
                               ((i:Z)
                                (i = `i0 + 1` -> ((`0 <= i` /\
@@ -943,10 +897,10 @@ Definition selection := (* validation *)
                                 (Zwf `0` `(array_length t3) - i` `(array_length t0) -
                                                                   i0`))) 
                               t2 result5
-                              (selection_po_11 t Pre13 result Post11 Variant1
+                              (selection_po_10 t Pre13 result Post11 Variant1
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
-                              Post7 j0 min0 Post3 Pre10 w Post6 Pre9 t1 Post4
-                              t2 Post5)) in
+                              Post7 j0 min0 Post3 Pre10 w Post6 Pre8 Pre9 t1
+                              Post4 Pre7 t2 Post5)) in
                             (exist_2 [t2: (array Z)][result5: unit]
                             ((i:Z)
                              (i = `i0 + 1` -> ((`0 <= i` /\
@@ -1017,7 +971,7 @@ Definition selection := (* validation *)
                         `(access t2 k) <= (access t2 l)`))))) /\
                     (Zwf `0` `(array_length t2) - i2` `(array_length t0) - i0`) 
                     i1 t1 result2
-                    (selection_po_12 t Pre13 result Post11 Variant1 i0 t0
+                    (selection_po_11 t Pre13 result Post11 Variant1 i0 t0
                     Pre12 Pre11 Test6 t1 Post17 i1 Post9)) in
                   ((wf1 `(array_length t1) - i1`)
                     (loop_variant_1 Pre12 Post12) i1 t1
@@ -1055,10 +1009,10 @@ Definition selection := (* validation *)
                 `i2 >= (array_length t2) - 1` i1 t1 result1 Post10) end)
           `(array_length t) - result` result t
           (refl_equal ? `(array_length t) - result`)
-          (selection_po_13 t Pre13 result Post11)) in
+          (selection_po_12 t Pre13 result Post11)) in
       (exist_2 [t1: (array Z)][result1: unit]
       (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t) 
-      t0 result0 (selection_po_14 t Pre13 result Post11 i0 t0 Post10)) in
+      t0 result0 (selection_po_13 t Pre13 result Post11 i0 t0 Post10)) in
     (exist_2 [t1: (array Z)][result0: unit]
     (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t) t0 
     result Post15).

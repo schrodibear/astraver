@@ -93,6 +93,7 @@ Lemma dutch_flag_po_3 :
   (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
   (u: color)
   (Post3: u = (access t0 b0))
+  (Pre9: `0 <= b0` /\ `b0 < (array_length t0)`)
   `0 <= i0` /\ `i0 < (array_length t0)`.
 Proof.
 Intuition.
@@ -121,12 +122,14 @@ Lemma dutch_flag_po_4 :
   (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
   (u: color)
   (Post3: u = (access t0 b0))
+  (Pre9: `0 <= b0` /\ `b0 < (array_length t0)`)
   (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
-  (result4: color)
-  (Post1: (store t0 b0 result4) = (store t0 b0 (access t0 i0)))
-  `0 <= b0` /\ `b0 < (array_length (store t0 b0 result4))`.
+  (t1: (array color))
+  (Post1: t1 = (store t0 b0 (access t0 i0)))
+  `0 <= i0` /\ `i0 < (array_length t1)`.
 Proof.
 Intuition.
+ArraySubst t1.
 Save.
 
 Lemma dutch_flag_po_5 : 
@@ -152,43 +155,11 @@ Lemma dutch_flag_po_5 :
   (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
   (u: color)
   (Post3: u = (access t0 b0))
+  (Pre9: `0 <= b0` /\ `b0 < (array_length t0)`)
   (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array color))
   (Post1: t1 = (store t0 b0 (access t0 i0)))
-  (result5: color)
-  (Post2: (store t1 i0 result5) = (store t1 i0 u))
-  `0 <= i0` /\ `i0 < (array_length (store t1 i0 result5))`.
-Proof.
-Intuition.
-Subst t1; Simpl; Auto.
-Save.
-
-Lemma dutch_flag_po_6 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test5: (access t0 i0) = blue)
-  (Pre11: `0 <= b0` /\ `b0 < (array_length t0)`)
-  (u: color)
-  (Post3: u = (access t0 b0))
-  (Pre10: `0 <= i0` /\ `i0 < (array_length t0)`)
-  (t1: (array color))
-  (Post1: t1 = (store t0 b0 (access t0 i0)))
+  (Pre8: `0 <= i0` /\ `i0 < (array_length t1)`)
   (t2: (array color))
   (Post2: t2 = (store t1 i0 u))
   ((b:Z)
@@ -205,39 +176,29 @@ Subst t2; AccessOther.
 Subst t1; AccessOther.
 Auto.
 Subst t1; Simpl; Auto.
-Subst t1; Simpl; Auto.
-Omega.
 Assert h:`b0 = i0` \/ `b0 < i0`. Omega. Intuition.
 Subst k t2 b0.
 AccessSame.
 Subst u; Assumption.
-Subst t1; Simpl; Omega.
 Subst t2; AccessOther.
-Subst t1 k; AccessSame.
+Subst k; AccessSame.
 Assumption.
 Subst t1; Simpl; Auto.
-Subst t1; Simpl; Auto.
-Omega.
 Assert h:`k = i0` \/ `k < i0`. Omega. Intuition.
 Subst t2 k; AccessSame.
 Subst u; Apply H5; Omega.
-Subst t1; Simpl; Auto.
 Subst t2; AccessOther.
-Subst t1; AccessOther.
+AccessOther.
 Apply H5; Omega.
 Subst t1; Simpl; Auto.
-Subst t1; Simpl; Auto.
-Omega.
 Subst t2; AccessOther.
-Subst t1; AccessOther.
+AccessOther.
 Apply H7; Omega.
 Subst t1; Simpl; Auto.
-Subst t1; Simpl; Auto.
-Omega.
-Subst t2 t1; Simpl; Auto.
+Subst t2; Simpl; Auto.
 Save.
 
-Lemma dutch_flag_po_7 : 
+Lemma dutch_flag_po_6 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -277,7 +238,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma dutch_flag_po_8 : 
+Lemma dutch_flag_po_7 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -302,7 +263,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma dutch_flag_po_9 : 
+Lemma dutch_flag_po_8 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -335,7 +296,7 @@ Assert h:`k<i0` \/ k=i0. Omega. Intuition.
 Subst k; Assumption.
 Save.
 
-Lemma dutch_flag_po_10 : 
+Lemma dutch_flag_po_9 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -361,6 +322,38 @@ Lemma dutch_flag_po_10 :
   `0 <= r1` /\ `r1 < (array_length t0)`.
 Proof.
 Intuition.
+Save.
+
+Lemma dutch_flag_po_10 : 
+  (t: (array color))
+  (Pre14: `(array_length t) = N`)
+  (result: Z)
+  (Post13: result = `0`)
+  (result0: Z)
+  (Post12: result0 = `0`)
+  (result1: Z)
+  (Post11: result1 = N)
+  (Variant1: Z)
+  (b0: Z)
+  (i0: Z)
+  (r0: Z)
+  (t0: (array color))
+  (Pre13: Variant1 = `r0 - i0`)
+  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
+          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
+          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
+  (Test6: `i0 < r0`)
+  (Test4: ~((access t0 i0) = blue))
+  (Test2: ~((access t0 i0) = white))
+  (r1: Z)
+  (Post7: r1 = `r0 - 1`)
+  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
+  (u: color)
+  (Post10: u = (access t0 r1))
+  (Pre5: `0 <= r1` /\ `r1 < (array_length t0)`)
+  `0 <= i0` /\ `i0 < (array_length t0)`.
+Proof.
+Unfold monochrome; Intuition.
 Save.
 
 Lemma dutch_flag_po_11 : 
@@ -389,9 +382,16 @@ Lemma dutch_flag_po_11 :
   (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
   (u: color)
   (Post10: u = (access t0 r1))
-  `0 <= i0` /\ `i0 < (array_length t0)`.
+  (Pre5: `0 <= r1` /\ `r1 < (array_length t0)`)
+  (Pre6: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (t1: (array color))
+  (Post8: t1 = (store t0 r1 (access t0 i0)))
+  `0 <= i0` /\ `i0 < (array_length t1)`.
 Proof.
-Unfold monochrome; Intuition.
+Intuition
+  (Try Subst result; Try Subst result0; Try Subst result1;
+  Try Omega).
+ArraySubst t1.
 Save.
 
 Lemma dutch_flag_po_12 : 
@@ -420,82 +420,11 @@ Lemma dutch_flag_po_12 :
   (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
   (u: color)
   (Post10: u = (access t0 r1))
-  (Pre6: `0 <= i0` /\ `i0 < (array_length t0)`)
-  (result6: color)
-  (Post8: (store t0 r1 result6) = (store t0 r1 (access t0 i0)))
-  `0 <= r1` /\ `r1 < (array_length (store t0 r1 result6))`.
-Proof.
-Intuition
-  (Try Subst result; Try Subst result0; Try Subst result1;
-  Try Omega).
-Save.
-
-Lemma dutch_flag_po_13 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test4: ~((access t0 i0) = blue))
-  (Test2: ~((access t0 i0) = white))
-  (r1: Z)
-  (Post7: r1 = `r0 - 1`)
-  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
-  (u: color)
-  (Post10: u = (access t0 r1))
+  (Pre5: `0 <= r1` /\ `r1 < (array_length t0)`)
   (Pre6: `0 <= i0` /\ `i0 < (array_length t0)`)
   (t1: (array color))
   (Post8: t1 = (store t0 r1 (access t0 i0)))
-  (result7: color)
-  (Post9: (store t1 i0 result7) = (store t1 i0 u))
-  `0 <= i0` /\ `i0 < (array_length (store t1 i0 result7))`.
-Proof.
-Intuition.
-Subst t1; Simpl; Omega.
-Save.
-
-Lemma dutch_flag_po_14 : 
-  (t: (array color))
-  (Pre14: `(array_length t) = N`)
-  (result: Z)
-  (Post13: result = `0`)
-  (result0: Z)
-  (Post12: result0 = `0`)
-  (result1: Z)
-  (Post11: result1 = N)
-  (Variant1: Z)
-  (b0: Z)
-  (i0: Z)
-  (r0: Z)
-  (t0: (array color))
-  (Pre13: Variant1 = `r0 - i0`)
-  (Pre12: (`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r0` /\ `r0 <= N`) /\
-          (monochrome t0 `0` b0 blue) /\ (monochrome t0 b0 i0 white) /\
-          (monochrome t0 r0 N red) /\ `(array_length t0) = N`)
-  (Test6: `i0 < r0`)
-  (Test4: ~((access t0 i0) = blue))
-  (Test2: ~((access t0 i0) = white))
-  (r1: Z)
-  (Post7: r1 = `r0 - 1`)
-  (Pre7: `0 <= r1` /\ `r1 < (array_length t0)`)
-  (u: color)
-  (Post10: u = (access t0 r1))
-  (Pre6: `0 <= i0` /\ `i0 < (array_length t0)`)
-  (t1: (array color))
-  (Post8: t1 = (store t0 r1 (access t0 i0)))
+  (Pre4: `0 <= i0` /\ `i0 < (array_length t1)`)
   (t2: (array color))
   (Post9: t2 = (store t1 i0 u))
   ((`0 <= b0` /\ `b0 <= i0`) /\ (`i0 <= r1` /\ `r1 <= N`) /\
@@ -511,7 +440,7 @@ Apply H3; Omega.
 Assert h:`k = r1` \/ `r1 < k`. Omega. Intuition.
 Assert h':`k = i0` \/ `i0 < k`. Omega. Intuition.
 Subst t2 t1 k; AccessSame.
-Subst u; Rewrite <- H11; Subst r1.
+Subst u; Rewrite <- H15; Subst r1.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
 Subst t2 t1 k; AccessOther.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
@@ -520,7 +449,7 @@ Apply H5; Omega.
 Subst t2 t1; Simpl; Trivial.
 Save.
 
-Lemma dutch_flag_po_15 : 
+Lemma dutch_flag_po_13 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -546,7 +475,7 @@ Intuition.
 Replace r0 with i0. Trivial. Omega. 
 Save.
 
-Lemma dutch_flag_po_16 : 
+Lemma dutch_flag_po_14 : 
   (t: (array color))
   (Pre14: `(array_length t) = N`)
   (result: Z)
@@ -641,43 +570,28 @@ Definition dutch_flag := (* validation *)
                                   result4 = (access t0 b0) (access t0 b0)
                                   (refl_equal ? (access t0 b0))) in
                                 let (t1, result4, Post24) =
+                                  let Pre9 = Pre11 in
                                   let Pre10 =
                                     (dutch_flag_po_3 t Pre14 result Post13
                                     result0 Post12 result1 Post11 Variant1 b0
                                     i0 r0 t0 Pre13 Pre12 Test6 Test5 Pre11 u
-                                    Post3) in
+                                    Post3 Pre9) in
                                   let (t1, result4, Post1) =
-                                    let (result4, Post1) =
-                                      (exist_1 [result4: color]
-                                      (store t0 b0 result4) = (store t0 b0
-                                                               (access t0 i0)) 
-                                      (access t0 i0)
-                                      (refl_equal ? (store t0 b0
-                                                     (access t0 i0)))) in
-                                    let Pre8 =
-                                      (dutch_flag_po_4 t Pre14 result Post13
-                                      result0 Post12 result1 Post11 Variant1
-                                      b0 i0 r0 t0 Pre13 Pre12 Test6 Test5
-                                      Pre11 u Post3 Pre10 result4 Post1) in
                                     (exist_2 [t2: (array color)]
                                     [result6: unit]
                                     t2 = (store t0 b0 (access t0 i0)) 
-                                    (store t0 b0 result4) tt Post1) in
+                                    (store t0 b0 (access t0 i0)) tt
+                                    (refl_equal ? (store t0 b0 (access t0 i0)))) in
+                                  let Pre8 =
+                                    (dutch_flag_po_4 t Pre14 result Post13
+                                    result0 Post12 result1 Post11 Variant1 b0
+                                    i0 r0 t0 Pre13 Pre12 Test6 Test5 Pre11 u
+                                    Post3 Pre9 Pre10 t1 Post1) in
                                   let (t2, result5, Post2) =
-                                    let (result5, Post2) =
-                                      (exist_1 [result5: color]
-                                      (store t1 i0 result5) = (store t1 i0 u) 
-                                      u (refl_equal ? (store t1 i0 u))) in
-                                    let Pre9 =
-                                      (dutch_flag_po_5 t Pre14 result Post13
-                                      result0 Post12 result1 Post11 Variant1
-                                      b0 i0 r0 t0 Pre13 Pre12 Test6 Test5
-                                      Pre11 u Post3 Pre10 t1 Post1 result5
-                                      Post2) in
                                     (exist_2 [t3: (array color)]
                                     [result7: unit]
-                                    t3 = (store t1 i0 u) (store t1 i0 result5)
-                                    tt Post2) in
+                                    t3 = (store t1 i0 u) (store t1 i0 u) 
+                                    tt (refl_equal ? (store t1 i0 u))) in
                                   (exist_2 [t3: (array color)][result6: unit]
                                   ((b:Z)
                                    (b = `b0 + 1` ->
@@ -691,10 +605,10 @@ Definition dutch_flag := (* validation *)
                                       `(array_length t3) = N`) /\
                                       (Zwf `0` `r0 - i` `r0 - i0`))))) 
                                   t2 result5
-                                  (dutch_flag_po_6 t Pre14 result Post13
+                                  (dutch_flag_po_5 t Pre14 result Post13
                                   result0 Post12 result1 Post11 Variant1 b0
                                   i0 r0 t0 Pre13 Pre12 Test6 Test5 Pre11 u
-                                  Post3 Pre10 t1 Post1 t2 Post2)) in
+                                  Post3 Pre9 Pre10 t1 Post1 Pre8 t2 Post2)) in
                                 (exist_2 [t2: (array color)][result5: unit]
                                 ((b:Z)
                                  (b = `b0 + 1` ->
@@ -728,7 +642,7 @@ Definition dutch_flag := (* validation *)
                               `(array_length t2) = N`) /\
                               (Zwf `0` `r0 - i2` `r0 - i0`) b1 i1 t1 
                               result6
-                              (dutch_flag_po_7 t Pre14 result Post13 result0
+                              (dutch_flag_po_6 t Pre14 result Post13 result0
                               Post12 result1 Post11 Variant1 b0 i0 r0 t0
                               Pre13 Pre12 Test6 Test5 t1 Post23 b1 Post4 i1
                               Post5)) in
@@ -745,7 +659,7 @@ Definition dutch_flag := (* validation *)
                             let (i1, r1, t1, result4, Post14) =
                               let (result4, Bool1) =
                                 let Pre3 =
-                                  (dutch_flag_po_8 t Pre14 result Post13
+                                  (dutch_flag_po_7 t Pre14 result Post13
                                   result0 Post12 result1 Post11 Variant1 b0
                                   i0 r0 t0 Pre13 Pre12 Test6 Test4) in
                                 let (result6, Post22) =
@@ -776,7 +690,7 @@ Definition dutch_flag := (* validation *)
                                   `(array_length t1) = N`) /\
                                   (Zwf `0` `r1 - i2` `r0 - i0`) i1 r0 
                                   t0 result5
-                                  (dutch_flag_po_9 t Pre14 result Post13
+                                  (dutch_flag_po_8 t Pre14 result Post13
                                   result0 Post12 result1 Post11 Variant1 b0
                                   i0 r0 t0 Pre13 Pre12 Test6 Test4 Test3 i1
                                   Post6))
@@ -791,7 +705,7 @@ Definition dutch_flag := (* validation *)
                                       r2 = `r0 - 1` result5 tt Post7) in
                                     let (t1, result6, Post14) =
                                       let Pre7 =
-                                        (dutch_flag_po_10 t Pre14 result
+                                        (dutch_flag_po_9 t Pre14 result
                                         Post13 result0 Post12 result1 Post11
                                         Variant1 b0 i0 r0 t0 Pre13 Pre12
                                         Test6 Test4 Test2 r1 Post7) in
@@ -801,48 +715,33 @@ Definition dutch_flag := (* validation *)
                                                                   r1)
                                         (refl_equal ? (access t0 r1))) in
                                       let (t1, result6, Post14) =
+                                        let Pre5 = Pre7 in
                                         let Pre6 =
+                                          (dutch_flag_po_10 t Pre14 result
+                                          Post13 result0 Post12 result1
+                                          Post11 Variant1 b0 i0 r0 t0 Pre13
+                                          Pre12 Test6 Test4 Test2 r1 Post7
+                                          Pre7 u Post10 Pre5) in
+                                        let (t1, result6, Post8) =
+                                          (exist_2 [t2: (array color)]
+                                          [result8: unit]
+                                          t2 = (store t0 r1 (access t0 i0)) 
+                                          (store t0 r1 (access t0 i0)) 
+                                          tt
+                                          (refl_equal ? (store t0 r1
+                                                         (access t0 i0)))) in
+                                        let Pre4 =
                                           (dutch_flag_po_11 t Pre14 result
                                           Post13 result0 Post12 result1
                                           Post11 Variant1 b0 i0 r0 t0 Pre13
                                           Pre12 Test6 Test4 Test2 r1 Post7
-                                          Pre7 u Post10) in
-                                        let (t1, result6, Post8) =
-                                          let (result6, Post8) =
-                                            (exist_1 [result6: color]
-                                            (store t0 r1 result6) = (
-                                            store t0 r1 (access t0 i0)) 
-                                            (access t0 i0)
-                                            (refl_equal ? (store t0 r1
-                                                           (access t0 i0)))) in
-                                          let Pre4 =
-                                            (dutch_flag_po_12 t Pre14 result
-                                            Post13 result0 Post12 result1
-                                            Post11 Variant1 b0 i0 r0 t0 Pre13
-                                            Pre12 Test6 Test4 Test2 r1 Post7
-                                            Pre7 u Post10 Pre6 result6 Post8) in
-                                          (exist_2 [t2: (array color)]
-                                          [result8: unit]
-                                          t2 = (store t0 r1 (access t0 i0)) 
-                                          (store t0 r1 result6) tt Post8) in
+                                          Pre7 u Post10 Pre5 Pre6 t1 Post8) in
                                         let (t2, result7, Post9) =
-                                          let (result7, Post9) =
-                                            (exist_1 [result7: color]
-                                            (store t1 i0 result7) = (
-                                            store t1 i0 u) u
-                                            (refl_equal ? (store t1 i0 u))) in
-                                          let Pre5 =
-                                            (dutch_flag_po_13 t Pre14 result
-                                            Post13 result0 Post12 result1
-                                            Post11 Variant1 b0 i0 r0 t0 Pre13
-                                            Pre12 Test6 Test4 Test2 r1 Post7
-                                            Pre7 u Post10 Pre6 t1 Post8
-                                            result7 Post9) in
                                           (exist_2 [t3: (array color)]
                                           [result9: unit]
-                                          t3 = (store t1 i0 u) (store t1 i0
-                                                                result7)
-                                          tt Post9) in
+                                          t3 = (store t1 i0 u) (store t1 i0 u)
+                                          tt
+                                          (refl_equal ? (store t1 i0 u))) in
                                         (exist_2 [t3: (array color)]
                                         [result8: unit]((`0 <= b0` /\
                                         `b0 <= i0`) /\ (`i0 <= r1` /\
@@ -853,11 +752,12 @@ Definition dutch_flag := (* validation *)
                                         `(array_length t3) = N`) /\
                                         (Zwf `0` `r1 - i0` `r0 - i0`) 
                                         t2 result7
-                                        (dutch_flag_po_14 t Pre14 result
+                                        (dutch_flag_po_12 t Pre14 result
                                         Post13 result0 Post12 result1 Post11
                                         Variant1 b0 i0 r0 t0 Pre13 Pre12
                                         Test6 Test4 Test2 r1 Post7 Pre7 u
-                                        Post10 Pre6 t1 Post8 t2 Post9)) in
+                                        Post10 Pre5 Pre6 t1 Post8 Pre4 t2
+                                        Post9)) in
                                       (exist_2 [t2: (array color)]
                                       [result7: unit]((`0 <= b0` /\
                                       `b0 <= i0`) /\ (`i0 <= r1` /\
@@ -916,14 +816,14 @@ Definition dutch_flag := (* validation *)
                     (monochrome t1 `0` b1 blue) /\
                     (monochrome t1 b1 r1 white) /\
                     (monochrome t1 r1 N red) b0 i0 r0 t0 tt
-                    (dutch_flag_po_15 t Pre14 result Post13 result0 Post12
+                    (dutch_flag_po_13 t Pre14 result Post13 result0 Post12
                     result1 Post11 Variant1 b0 i0 r0 t0 Pre13 Pre12 Test1)) in
                   (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array color)]
                   [result4: unit](monochrome t2 `0` b2 blue) /\
                   (monochrome t2 b2 r2 white) /\ (monochrome t2 r2 N red) 
                   b1 i1 r1 t1 result3 Post19) end) `result1 - result0` 
             result result0 result1 t (refl_equal ? `result1 - result0`)
-            (dutch_flag_po_16 t Pre14 result Post13 result0 Post12 result1
+            (dutch_flag_po_14 t Pre14 result Post13 result0 Post12 result1
             Post11)) in
         (Build_tuple_4 b0 i0 t0 result2) in
       (Build_tuple_3 b0 t0 result1) in

@@ -570,9 +570,7 @@ Lemma fib4_po_2 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
-  (result0: Z)
-  (Post1: (store t `0` result0) = (store t `0` `1`))
-  `0 <= 0` /\ `0 < (array_length (store t 0 result0))`.
+  `0 <= 0` /\ `0 < (array_length t)`.
 Proof.
 Intros; Simpl; Omega.
 Save.
@@ -582,11 +580,10 @@ Lemma fib4_po_3 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
+  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
-  (result1: Z)
-  (Post2: (store t0 `1` result1) = (store t0 `1` `1`))
-  `0 <= 1` /\ `1 < (array_length (store t0 1 result1))`.
+  `0 <= 1` /\ `1 < (array_length t0)`.
 Proof.
 Intros; Subst t0; Simpl; Omega.
 Save.
@@ -596,8 +593,10 @@ Lemma fib4_po_4 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
+  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
+  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -605,15 +604,12 @@ Lemma fib4_po_4 :
   (Variant1: Z)
   (k0: Z)
   (t2: (array Z))
-  (Pre6: Variant1 = `n + 1 - k0`)
-  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre4: Variant1 = `n + 1 - k0`)
+  (Pre3: (`2 <= k0` /\ `k0 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
          ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
   (Test2: `k0 <= n`)
-  (result4: Z)
-  (Post3: (store t2 k0 result4) = (store t2 k0
-                                   `(access t2 k0 - 1) + (access t2 k0 - 2)`))
-  `0 <= k0` /\ `k0 < (array_length (store t2 k0 result4))`.
+  `0 <= k0` /\ `k0 < (array_length t2)`.
 Proof.
 Simpl; Intuition.
 Save.
@@ -623,8 +619,10 @@ Lemma fib4_po_5 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
+  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
+  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -632,11 +630,12 @@ Lemma fib4_po_5 :
   (Variant1: Z)
   (k0: Z)
   (t2: (array Z))
-  (Pre6: Variant1 = `n + 1 - k0`)
-  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre4: Variant1 = `n + 1 - k0`)
+  (Pre3: (`2 <= k0` /\ `k0 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
          ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
   (Test2: `k0 <= n`)
+  (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
   (t3: (array Z))
   (Post3: t3 = (store t2 k0 `(access t2 k0 - 1) + (access t2 k0 - 2)`))
   (k1: Z)
@@ -651,8 +650,8 @@ Subst t3.
 Assert hi : `i=k0` \/ `i<k0`. Omega.
 Intuition.
 Subst i.  AccessSame.
-Rewrite (H5 `k0-1`). 
-Rewrite (H5 `k0-2`). 
+Rewrite (H11 `k0-1`). 
+Rewrite (H11 `k0-2`). 
 Symmetry; Auto with *.
 Omega.
 Omega.
@@ -666,8 +665,10 @@ Lemma fib4_po_6 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
+  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
+  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -681,10 +682,7 @@ Subst t1 t0; Auto.
 Assert hi: `i=0` \/ `i=1`. Omega. Intuition.
 Subst i t1; AccessOther.
 Subst t0; AccessSame. Auto.
-Subst t0; Simpl; Omega.
-Subst t0; Simpl; Omega.
 Subst i t1; AccessSame. Auto.
-Subst t0; Simpl; Omega.
 Save.
 
 Lemma fib4_po_7 : 
@@ -692,8 +690,10 @@ Lemma fib4_po_7 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
+  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
+  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (result2: Z)
@@ -714,8 +714,10 @@ Lemma fib4_po_8 :
   (t: (array Z))
   (Pre8: `0 <= n` /\ `n < (array_length t)`)
   (Test3: `n > 1`)
+  (Pre7: `0 <= 0` /\ `0 < (array_length t)`)
   (t0: (array Z))
   (Post1: t0 = (store t `0` `1`))
+  (Pre6: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
   (t2: (array Z))
@@ -740,20 +742,14 @@ Definition fib4 := (* validation *)
         Post14)
     | (right Test3) =>
         let (t0, result0, Post10) =
-          let (t0, result0, Post1) =
-            let (result0, Post1) = (exist_1 [result0: Z]
-              (store t `0` result0) = (store t `0` `1`) `1`
-              (refl_equal ? (store t `0` `1`))) in
-            let Pre1 = (fib4_po_2 n t Pre8 Test3 result0 Post1) in
-            (exist_2 [t1: (array Z)][result2: unit]
-            t1 = (store t `0` `1`) (store t `0` result0) tt Post1) in
-          let (t1, result1, Post2) =
-            let (result1, Post2) = (exist_1 [result1: Z]
-              (store t0 `1` result1) = (store t0 `1` `1`) `1`
-              (refl_equal ? (store t0 `1` `1`))) in
-            let Pre2 = (fib4_po_3 n t Pre8 Test3 t0 Post1 result1 Post2) in
-            (exist_2 [t2: (array Z)][result3: unit]
-            t2 = (store t0 `1` `1`) (store t0 `1` result1) tt Post2) in
+          let Pre7 = (fib4_po_2 n t Pre8 Test3) in
+          let (t0, result0, Post1) = (exist_2 [t1: (array Z)][result2: unit]
+            t1 = (store t `0` `1`) (store t `0` `1`) tt
+            (refl_equal ? (store t `0` `1`))) in
+          let Pre6 = (fib4_po_3 n t Pre8 Test3 Pre7 t0 Post1) in
+          let (t1, result1, Post2) = (exist_2 [t2: (array Z)][result3: unit]
+            t2 = (store t0 `1` `1`) (store t0 `1` `1`) tt
+            (refl_equal ? (store t0 `1` `1`))) in
           let (t2, result2, Post11) =
             let (result2, Post6) = (exist_1 [result2: Z]result2 = `2` 
               `2` (refl_equal ? `2`)) in
@@ -769,7 +765,7 @@ Definition fib4 := (* validation *)
                  ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t3 i) = (F i)`))) /\
                  `k1 > n`))
                 [Variant1: Z; wf1: (Variant2: Z)
-                 (Pre3: (Zwf `0` Variant2 Variant1))(k0: Z)(t2: (array Z))
+                 (Pre1: (Zwf `0` Variant2 Variant1))(k0: Z)(t2: (array Z))
                  (_: Variant2 = `n + 1 - k0`)(_0: (`2 <= k0` /\
                  `k0 <= n + 1`) /\ `(array_length t2) = (array_length t)` /\
                  ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
@@ -778,8 +774,8 @@ Definition fib4 := (* validation *)
                   `(array_length t3) = (array_length t)` /\
                   ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t3 i) = (F i)`))) /\
                   `k1 > n`));
-                 k0: Z; t2: (array Z); Pre6: Variant1 = `n + 1 - k0`;
-                 Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+                 k0: Z; t2: (array Z); Pre4: Variant1 = `n + 1 - k0`;
+                 Pre3: (`2 <= k0` /\ `k0 <= n + 1`) /\
                  `(array_length t2) = (array_length t)` /\
                  ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`))]
                   let (result3, Bool1) =
@@ -793,23 +789,20 @@ Definition fib4 := (* validation *)
                   | (left Test2) =>
                       let (k1, t3, result4, Post5) =
                         let (k1, t3, result4, Post7) =
-                          let (t3, result4, Post3) =
-                            let (result4, Post3) = (exist_1 [result4: Z]
-                              (store t2 k0 result4) = (store t2 k0
-                                                       `(access t2 k0 - 1) +
-                                                        (access t2 k0 - 2)`) 
-                              `(access t2 k0 - 1) + (access t2 k0 - 2)`
-                              (refl_equal ? (store t2 k0
-                                             `(access t2 k0 - 1) +
-                                              (access t2 k0 - 2)`))) in
-                            let Pre4 =
-                              (fib4_po_4 n t Pre8 Test3 t0 Post1 t1 Post2
-                              result2 Post6 Variant1 k0 t2 Pre6 Pre5 Test2
-                              result4 Post3) in
-                            (exist_2 [t4: (array Z)][result6: unit]
+                          let Pre2 =
+                            (fib4_po_4 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1
+                            Post2 result2 Post6 Variant1 k0 t2 Pre4 Pre3
+                            Test2) in
+                          let (t3, result4, Post3) = (exist_2 [t4: (array Z)]
+                            [result6: unit]
                             t4 = (store t2 k0
                                   `(access t2 k0 - 1) + (access t2 k0 - 2)`) 
-                            (store t2 k0 result4) tt Post3) in
+                            (store t2 k0
+                             `(access t2 k0 - 1) + (access t2 k0 - 2)`) 
+                            tt
+                            (refl_equal ? (store t2 k0
+                                           `(access t2 k0 - 1) +
+                                            (access t2 k0 - 2)`))) in
                           let (k1, result5, Post4) =
                             let (result5, Post4) = (exist_1 [result5: Z]
                               result5 = `k0 + 1` `k0 + 1`
@@ -822,10 +815,10 @@ Definition fib4 := (* validation *)
                           ((i:Z)
                            (`0 <= i` /\ `i < k2` -> `(access t4 i) = (F i)`))) /\
                           (Zwf `0` `n + 1 - k2` `n + 1 - k0`) k1 t3 result5
-                          (fib4_po_5 n t Pre8 Test3 t0 Post1 t1 Post2 result2
-                          Post6 Variant1 k0 t2 Pre6 Pre5 Test2 t3 Post3 k1
-                          Post4)) in
-                        ((wf1 `n + 1 - k1`) (loop_variant_1 Pre6 Post7) 
+                          (fib4_po_5 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1
+                          Post2 result2 Post6 Variant1 k0 t2 Pre4 Pre3 Test2
+                          Pre2 t3 Post3 k1 Post4)) in
+                        ((wf1 `n + 1 - k1`) (loop_variant_1 Pre4 Post7) 
                           k1 t3 (refl_equal ? `n + 1 - k1`)
                           (proj1 ? ? Post7)) in
                       (exist_3 [k2: Z][t4: (array Z)][result5: unit]
@@ -841,7 +834,7 @@ Definition fib4 := (* validation *)
                         `(array_length t3) = (array_length t)` /\
                         ((i:Z)
                          (`0 <= i` /\ `i < k1` -> `(access t3 i) = (F i)`))) /\
-                        `k1 > n` k0 t2 tt (conj ? ? Pre5 Test1)) in
+                        `k1 > n` k0 t2 tt (conj ? ? Pre3 Test1)) in
                       (exist_3 [k2: Z][t4: (array Z)][result5: unit]
                       ((`2 <= k2` /\ `k2 <= n + 1`) /\
                       `(array_length t4) = (array_length t)` /\
@@ -849,13 +842,14 @@ Definition fib4 := (* validation *)
                        (`0 <= i` /\ `i < k2` -> `(access t4 i) = (F i)`))) /\
                       `k2 > n` k1 t3 result4 Post5) end) `n + 1 - result2`
                 result2 t1 (refl_equal ? `n + 1 - result2`)
-                (fib4_po_6 n t Pre8 Test3 t0 Post1 t1 Post2 result2 Post6)) in
+                (fib4_po_6 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1 Post2 result2
+                Post6)) in
             (exist_2 [t3: (array Z)][result4: unit]`(access t3 n) = (F n)` /\
             `0 <= n` /\ `n < (array_length t3)` t2 result3
-            (fib4_po_7 n t Pre8 Test3 t0 Post1 t1 Post2 result2 Post6 k0 t2
-            Post5)) in
-          let Pre7 =
-            (fib4_po_8 n t Pre8 Test3 t0 Post1 t1 Post2 t2 Post11) in
+            (fib4_po_7 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1 Post2 result2
+            Post6 k0 t2 Post5)) in
+          let Pre5 =
+            (fib4_po_8 n t Pre8 Test3 Pre7 t0 Post1 Pre6 t1 Post2 t2 Post11) in
           let (result3, Post13) = (exist_1 [result3: Z]
             `result3 = (F n)` (access t2 n) (proj1 ? ? Post11)) in
           (exist_2 [t3: (array Z)][result4: Z]`result4 = (F n)` t2 result3

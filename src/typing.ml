@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.85 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.86 2002-12-11 10:33:13 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -160,7 +160,7 @@ let make_lnode loc p env o k =
 	     obligations = o; kappa = k } }
 
 let make_var loc x t env =
-  make_lnode loc (Var x) env [] (type_c_of_v t)
+  make_lnode loc (Expression (Tvar x)) env [] (type_c_of_v t)
 
 let make_arrow_type lab bl k =
   let k = 
@@ -385,7 +385,14 @@ and typef_desc lab env loc = function
 	    let pre = anonymous loc (make_pre_access env x c) in
 	    Expression t, t_e.info.obligations @ [pre]
 	| _ ->
-	    TabAcc (check, x, t_e), []
+	    (* turned into [let v = e in x[v]] *)
+	    let v = fresh_var () in
+	    let env' = Env.add v type_v_int env in
+	    let varv = make_var loc v type_v_int env' in
+	    let pre = anonymous loc (make_pre_access env x (Tvar v)) in
+	    let k = k_add_effects (type_c_of_v ty) (add_read x bottom) in
+	    LetIn (v, t_e,
+		   make_lnode loc (TabAcc (check, x, varv)) env' [pre] k), []
       in
       s, (ty, ef), p
 
@@ -399,12 +406,12 @@ and typef_desc lab env loc = function
       let ef2 = t_e2.info.kappa.c_effect in
       let ef = Effect.add_write x (Effect.union ef1 ef2) in
       let v = type_v_unit in
-      let d = match t_e1.desc, post t_e1, t_e2.desc, post t_e2 with
-	| Expression _, None, Expression _, None ->
+      let d,p = match t_e1.desc, post t_e1, t_e2.desc, post t_e2 with
+	| Expression ce1, None, Expression _, None ->
 	    (* simple enough to be left as is *)
-	    TabAff (check, x, t_e1, t_e2)
+	    let pre = anonymous loc (make_pre_access env x ce1) in
+	    TabAff (check, x, t_e1, t_e2), [pre]
 	| _ ->
-	    (*i TODO: we cannot prove 0 <= e1 < size(x)! i*)
 	    (* turned into [let v2 = e2 in let v1 = e1 in x[v1] := v2] *)
 	    let v1 = fresh_var () in
 	    let v2 = fresh_var () in
@@ -412,14 +419,19 @@ and typef_desc lab env loc = function
 	    let env1 = Env.add v1 type_v_int env2 in
 	    let varv1 = make_var loc v1 type_v_int env2 in
 	    let varv2 = make_var loc v2 et env2 in
+	    let pre1 = anonymous loc (make_pre_access env x (Tvar v1)) in
 	    let k = type_c_of_v type_v_unit in
+	    let k0 = k_add_effects k (add_write x bottom) in
+	    let k1 = k_add_effects k0 ef1 in
 	    LetIn (v2, t_e2,
 		   make_lnode loc
 		     (LetIn (v1, t_e1,
 			     make_lnode loc (TabAff (check, x, varv1, varv2))
-			       env1 [] k)) env2 [] k)
+			       env1 [pre1] k0)) 
+		     env2 [] k1),
+	    []
       in
-      d, (v,ef), []
+      d, (v,ef), p
 
   | Sseq bl ->
       let bl,v,ef = typef_block lab env bl in

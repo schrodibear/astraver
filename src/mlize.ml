@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.64 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.65 2002-12-11 10:33:13 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -131,8 +131,7 @@ and trad_desc info d ren = match d with
 	(fun v1 ren' -> 
 	   let x' = current_var ren' x in
 	   let t = make_raw_access info.env (x,x') (Tvar v1) in
-	   let p = anonymous info.loc (make_pre_access info.env x (Tvar v1)) in
-	   insert_pre info.env p (Monad.unit info (Value t)) ren')
+	   Monad.unit info (Value t) ren')
 	ren
 
   | TabAff (_, x, e1, e2) ->
@@ -145,11 +144,9 @@ and trad_desc info d ren = match d with
 		 let ren'' = next ren' [x] in
   		 let x'' = current_var ren'' x in
 		 let st = make_raw_store info.env (x,x') (Tvar v1) (Tvar v2) in
-		 let p = make_pre_access info.env x (Tvar v1) in
 		 CC_letin (false, [x'', CC_var_binder tx], CC_term st,
-			   insert_pre info.env (anonymous info.loc p)
-			     (Monad.unit info (Value (Tconst ConstUnit))) 
-			     ren'')))
+			   (Monad.unit info (Value (Tconst ConstUnit))) 
+			   ren'')))
 	 ren
 
   | While (b, inv, var, e) ->

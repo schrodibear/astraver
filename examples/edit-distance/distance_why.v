@@ -38,9 +38,7 @@ Lemma distance_po_1 :
   (Pre3: (`0 <= i1` /\ `i1 <= n2 + 1`) /\ `(array_length t0) = n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test2: `i1 <= n2`)
-  (result1: Z)
-  (Post2: (store t0 i1 result1) = (store t0 i1 `n2 - i1`))
-  `0 <= i1` /\ `i1 < (array_length (store t0 i1 result1))`.
+  `0 <= i1` /\ `i1 < (array_length t0)`.
 Proof.
 Simpl; Intuition.
 Save.
@@ -60,6 +58,7 @@ Lemma distance_po_2 :
   (Pre3: (`0 <= i1` /\ `i1 <= n2 + 1`) /\ `(array_length t0) = n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`)))
   (Test2: `i1 <= n2`)
+  (Pre2: `0 <= i1` /\ `i1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 i1 `n2 - i1`))
   (i2: Z)
@@ -71,7 +70,7 @@ Proof.
 Intuition.
 ArraySubst t1.
 Subst t1. AccessStore i1 j Hij; Try Omega'.
-Apply H6; Omega'.
+Apply H8; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
@@ -147,9 +146,27 @@ Lemma distance_po_5 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
-  (result4: Z)
-  (Post7: (store t1 n2 result4) = (store t1 n2 `(access t1 n2) + 1`))
-  `0 <= n2` /\ `n2 < (array_length (store t1 n2 result4))`.
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
+  (t2: (array Z))
+  (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
+  (j1: Z)
+  (Post8: j1 = `n2 - 1`)
+  (Variant5: Z)
+  (j2: Z)
+  (old2: Z)
+  (t3: (array Z))
+  (Pre13: Variant5 = `j2 + 1`)
+  (Pre12: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
+          ((k:Z)
+           (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
+          ((k:Z)
+           (`0 <= k` /\ `k <= j2` ->
+            (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
+          (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
+  (Test7: `j2 >= 0`)
+  (temp: Z)
+  (Post12: temp = old2)
+  `0 <= j2` /\ `j2 < (array_length t3)`.
 Proof.
 Intuition.
 Save.
@@ -181,6 +198,7 @@ Lemma distance_po_6 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -189,8 +207,8 @@ Lemma distance_po_6 :
   (j2: Z)
   (old2: Z)
   (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
+  (Pre13: Variant5 = `j2 + 1`)
+  (Pre12: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
@@ -200,7 +218,10 @@ Lemma distance_po_6 :
   (Test7: `j2 >= 0`)
   (temp: Z)
   (Post12: temp = old2)
-  `0 <= j2` /\ `j2 < (array_length t3)`.
+  (Pre11: `0 <= j2` /\ `j2 < (array_length t3)`)
+  (old3: Z)
+  (Post9: old3 = (access t3 j2))
+  `0 <= j2` /\ `j2 < (array_length w2)`.
 Proof.
 Intuition.
 Save.
@@ -232,6 +253,7 @@ Lemma distance_po_7 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -240,8 +262,8 @@ Lemma distance_po_7 :
   (j2: Z)
   (old2: Z)
   (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
+  (Pre13: Variant5 = `j2 + 1`)
+  (Pre12: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
@@ -251,10 +273,11 @@ Lemma distance_po_7 :
   (Test7: `j2 >= 0`)
   (temp: Z)
   (Post12: temp = old2)
-  (Pre12: `0 <= j2` /\ `j2 < (array_length t3)`)
+  (Pre11: `0 <= j2` /\ `j2 < (array_length t3)`)
   (old3: Z)
   (Post9: old3 = (access t3 j2))
-  `0 <= j2` /\ `j2 < (array_length w2)`.
+  (Pre8: `0 <= j2` /\ `j2 < (array_length w2)`)
+  `0 <= i3` /\ `i3 < (array_length w1)`.
 Proof.
 Intuition.
 Save.
@@ -286,6 +309,7 @@ Lemma distance_po_8 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -294,8 +318,8 @@ Lemma distance_po_8 :
   (j2: Z)
   (old2: Z)
   (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
+  (Pre13: Variant5 = `j2 + 1`)
+  (Pre12: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
@@ -305,13 +329,46 @@ Lemma distance_po_8 :
   (Test7: `j2 >= 0`)
   (temp: Z)
   (Post12: temp = old2)
-  (Pre12: `0 <= j2` /\ `j2 < (array_length t3)`)
+  (Pre11: `0 <= j2` /\ `j2 < (array_length t3)`)
   (old3: Z)
   (Post9: old3 = (access t3 j2))
-  (Pre9: `0 <= j2` /\ `j2 < (array_length w2)`)
-  `0 <= i3` /\ `i3 < (array_length w1)`.
+  (Test6: (access w1 i3) = (access w2 j2))
+  (Pre10: `0 <= j2` /\ `j2 < (array_length t3)`)
+  (t4: (array Z))
+  (Post10: t4 = (store t3 j2 temp))
+  ((j:Z)
+   (j = `j2 - 1` -> ((`(-1) <= j` /\ `j <= n2 - 1`) /\
+    `(array_length t4) = n2 + 1` /\
+    ((k:Z) (`j < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t4 k)))) /\
+    ((k:Z)
+     (`0 <= k` /\ `k <= j` -> (min_suffix w1 w2 `i3 + 1` k (access t4 k)))) /\
+    (min_suffix w1 w2 `i3 + 1` `j + 1` old3)) /\ (Zwf `0` `j + 1` `j2 + 1`))).
 Proof.
 Intuition.
+ArraySubst t4.
+Unfold min_suffix.
+Subst t4.
+AccessStore j2 k Hj2k.
+  (* j2=k *)
+  Rewrite (suffix_is_cons n1 w1 i3); [ Idtac | Omega' ].
+  Rewrite (suffix_is_cons n2 w2 k); [ Idtac | Omega' ].
+  Rewrite Test6. Rewrite <- Hj2k.
+  Apply min_dist_equal.
+  Subst temp; Assumption.
+  Omega'.
+  (* j2<>k *)
+  Unfold min_suffix in H16.
+  Apply H16; Omega'.
+  Omega'.
+  Omega'.
+Unfold min_suffix.
+Subst t4.
+AccessOther.
+Unfold min_suffix in H19; Apply H19; Omega'.
+Replace `j+1` with j2; [ Idtac | Omega' ].
+Subst old3.
+Unfold min_suffix; Unfold min_suffix in H19; Apply H19; Omega'.
+Unfold Zwf; Omega'.
 Save.
 
 Lemma distance_po_9 : 
@@ -341,6 +398,7 @@ Lemma distance_po_9 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -349,8 +407,8 @@ Lemma distance_po_9 :
   (j2: Z)
   (old2: Z)
   (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
+  (Pre13: Variant5 = `j2 + 1`)
+  (Pre12: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
@@ -360,15 +418,48 @@ Lemma distance_po_9 :
   (Test7: `j2 >= 0`)
   (temp: Z)
   (Post12: temp = old2)
-  (Pre12: `0 <= j2` /\ `j2 < (array_length t3)`)
+  (Pre11: `0 <= j2` /\ `j2 < (array_length t3)`)
   (old3: Z)
   (Post9: old3 = (access t3 j2))
-  (Test6: (access w1 i3) = (access w2 j2))
-  (result9: Z)
-  (Post10: (store t3 j2 result9) = (store t3 j2 temp))
-  `0 <= j2` /\ `j2 < (array_length (store t3 j2 result9))`.
+  (Test5: ~(access w1 i3) = (access w2 j2))
+  (Pre9: `0 <= j2` /\ `j2 < (array_length t3)`)
+  (t4: (array Z))
+  (Post11: t4 = (store t3 j2 `(Zmin (access t3 j2) (access t3 j2 + 1)) + 1`))
+  ((j:Z)
+   (j = `j2 - 1` -> ((`(-1) <= j` /\ `j <= n2 - 1`) /\
+    `(array_length t4) = n2 + 1` /\
+    ((k:Z) (`j < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t4 k)))) /\
+    ((k:Z)
+     (`0 <= k` /\ `k <= j` -> (min_suffix w1 w2 `i3 + 1` k (access t4 k)))) /\
+    (min_suffix w1 w2 `i3 + 1` `j + 1` old3)) /\ (Zwf `0` `j + 1` `j2 + 1`))).
 Proof.
 Intuition.
+ArraySubst t4.
+Unfold min_suffix.
+Rewrite Post11; Clear Post11.
+AccessStore j2 k Hj2k.
+  (* j2=k *)
+  Rewrite <- Hj2k.  
+  Rewrite (suffix_is_cons n1 w1 i3); [ Idtac | Omega' ].
+  Rewrite (suffix_is_cons n2 w2 j2); [ Idtac | Omega' ].
+  Apply min_dist_diff. 
+  Assumption.
+  Rewrite <- (suffix_is_cons n1 w1 i3); [ Idtac | Omega' ].
+  Apply H16; Omega'.
+  Rewrite <- (suffix_is_cons n2 w2 j2); [ Idtac | Omega' ].
+  Apply H19; Omega'.
+  Omega'.
+  (* j2<> k *)
+  Apply H16; Omega'.
+  Omega'.
+  Omega'.
+Rewrite Post11; Clear Post11.
+Unfold min_suffix.
+AccessOther.
+Apply H19; Omega'.
+Replace `j+1` with j2; [ Idtac | Omega' ].
+Subst old3; Apply H19; Omega'.
+Unfold Zwf; Omega'.
 Save.
 
 Lemma distance_po_10 : 
@@ -398,6 +489,7 @@ Lemma distance_po_10 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -406,243 +498,8 @@ Lemma distance_po_10 :
   (j2: Z)
   (old2: Z)
   (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
-          ((k:Z)
-           (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
-          ((k:Z)
-           (`0 <= k` /\ `k <= j2` ->
-            (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
-          (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Test7: `j2 >= 0`)
-  (temp: Z)
-  (Post12: temp = old2)
-  (Pre12: `0 <= j2` /\ `j2 < (array_length t3)`)
-  (old3: Z)
-  (Post9: old3 = (access t3 j2))
-  (Test6: (access w1 i3) = (access w2 j2))
-  (t4: (array Z))
-  (Post10: t4 = (store t3 j2 temp))
-  ((j:Z)
-   (j = `j2 - 1` -> ((`(-1) <= j` /\ `j <= n2 - 1`) /\
-    `(array_length t4) = n2 + 1` /\
-    ((k:Z) (`j < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t4 k)))) /\
-    ((k:Z)
-     (`0 <= k` /\ `k <= j` -> (min_suffix w1 w2 `i3 + 1` k (access t4 k)))) /\
-    (min_suffix w1 w2 `i3 + 1` `j + 1` old3)) /\ (Zwf `0` `j + 1` `j2 + 1`))).
-Proof.
-Intuition.
-ArraySubst t4.
-Unfold min_suffix.
-Subst t4.
-AccessStore j2 k Hj2k.
-  (* j2=k *)
-  Rewrite (suffix_is_cons n1 w1 i3); [ Idtac | Omega' ].
-  Rewrite (suffix_is_cons n2 w2 k); [ Idtac | Omega' ].
-  Rewrite Test6. Rewrite <- Hj2k.
-  Apply min_dist_equal.
-  Subst temp; Assumption.
-  Omega'.
-  (* j2<>k *)
-  Unfold min_suffix in H14.
-  Apply H14; Omega'.
-  Omega'.
-  Omega'.
-Unfold min_suffix.
-Subst t4.
-AccessOther.
-Unfold min_suffix in H17; Apply H17; Omega'.
-Replace `j+1` with j2; [ Idtac | Omega' ].
-Subst old3.
-Unfold min_suffix; Unfold min_suffix in H17; Apply H17; Omega'.
-Unfold Zwf; Omega'.
-Save.
-
-Lemma distance_po_11 : 
-  (t: (array Z))
-  (w1: (array A))
-  (w2: (array A))
-  (Pre19: `(array_length w1) = n1` /\ `(array_length w2) = n2` /\
-          `(array_length t) = n2 + 1`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (i1: Z)
-  (t0: (array Z))
-  (Post4: ((`0 <= i1` /\ `i1 <= n2 + 1`) /\ `(array_length t0) = n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`))) /\
-          `i1 > n2`)
-  (i2: Z)
-  (Post5: i2 = `n1 - 1`)
-  (Variant3: Z)
-  (i3: Z)
-  (t1: (array Z))
-  (Pre17: Variant3 = `i3 + 1`)
-  (Pre16: (`(-1) <= i3` /\ `i3 <= n1 - 1`) /\ `(array_length t1) = n2 + 1` /\
-          ((j:Z)
-           (`0 <= j` /\ `j <= n2` ->
-            (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Test8: `i3 >= 0`)
-  (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
-  (old1: Z)
-  (Post6: old1 = (access t1 n2))
-  (t2: (array Z))
-  (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
-  (j1: Z)
-  (Post8: j1 = `n2 - 1`)
-  (Variant5: Z)
-  (j2: Z)
-  (old2: Z)
-  (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
-          ((k:Z)
-           (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
-          ((k:Z)
-           (`0 <= k` /\ `k <= j2` ->
-            (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
-          (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Test7: `j2 >= 0`)
-  (temp: Z)
-  (Post12: temp = old2)
-  (Pre12: `0 <= j2` /\ `j2 < (array_length t3)`)
-  (old3: Z)
-  (Post9: old3 = (access t3 j2))
-  (Test5: ~(access w1 i3) = (access w2 j2))
-  (result9: Z)
-  (Post11: (store t3 j2 result9) = (store t3 j2
-                                    `(Zmin (access t3 j2) (access t3 j2 + 1)) +
-                                     1`))
-  `0 <= j2` /\ `j2 < (array_length (store t3 j2 result9))`.
-Proof.
-Intuition.
-Save.
-
-Lemma distance_po_12 : 
-  (t: (array Z))
-  (w1: (array A))
-  (w2: (array A))
-  (Pre19: `(array_length w1) = n1` /\ `(array_length w2) = n2` /\
-          `(array_length t) = n2 + 1`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (i1: Z)
-  (t0: (array Z))
-  (Post4: ((`0 <= i1` /\ `i1 <= n2 + 1`) /\ `(array_length t0) = n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`))) /\
-          `i1 > n2`)
-  (i2: Z)
-  (Post5: i2 = `n1 - 1`)
-  (Variant3: Z)
-  (i3: Z)
-  (t1: (array Z))
-  (Pre17: Variant3 = `i3 + 1`)
-  (Pre16: (`(-1) <= i3` /\ `i3 <= n1 - 1`) /\ `(array_length t1) = n2 + 1` /\
-          ((j:Z)
-           (`0 <= j` /\ `j <= n2` ->
-            (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Test8: `i3 >= 0`)
-  (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
-  (old1: Z)
-  (Post6: old1 = (access t1 n2))
-  (t2: (array Z))
-  (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
-  (j1: Z)
-  (Post8: j1 = `n2 - 1`)
-  (Variant5: Z)
-  (j2: Z)
-  (old2: Z)
-  (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
-          ((k:Z)
-           (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
-          ((k:Z)
-           (`0 <= k` /\ `k <= j2` ->
-            (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
-          (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Test7: `j2 >= 0`)
-  (temp: Z)
-  (Post12: temp = old2)
-  (Pre12: `0 <= j2` /\ `j2 < (array_length t3)`)
-  (old3: Z)
-  (Post9: old3 = (access t3 j2))
-  (Test5: ~(access w1 i3) = (access w2 j2))
-  (t4: (array Z))
-  (Post11: t4 = (store t3 j2 `(Zmin (access t3 j2) (access t3 j2 + 1)) + 1`))
-  ((j:Z)
-   (j = `j2 - 1` -> ((`(-1) <= j` /\ `j <= n2 - 1`) /\
-    `(array_length t4) = n2 + 1` /\
-    ((k:Z) (`j < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t4 k)))) /\
-    ((k:Z)
-     (`0 <= k` /\ `k <= j` -> (min_suffix w1 w2 `i3 + 1` k (access t4 k)))) /\
-    (min_suffix w1 w2 `i3 + 1` `j + 1` old3)) /\ (Zwf `0` `j + 1` `j2 + 1`))).
-Proof.
-Intuition.
-ArraySubst t4.
-Unfold min_suffix.
-Rewrite Post11; Clear Post11.
-AccessStore j2 k Hj2k.
-  (* j2=k *)
-  Rewrite <- Hj2k.  
-  Rewrite (suffix_is_cons n1 w1 i3); [ Idtac | Omega' ].
-  Rewrite (suffix_is_cons n2 w2 j2); [ Idtac | Omega' ].
-  Apply min_dist_diff. 
-  Assumption.
-  Rewrite <- (suffix_is_cons n1 w1 i3); [ Idtac | Omega' ].
-  Apply H14; Omega'.
-  Rewrite <- (suffix_is_cons n2 w2 j2); [ Idtac | Omega' ].
-  Apply H17; Omega'.
-  Omega'.
-  (* j2<> k *)
-  Apply H14; Omega'.
-  Omega'.
-  Omega'.
-Rewrite Post11; Clear Post11.
-Unfold min_suffix.
-AccessOther.
-Apply H17; Omega'.
-Replace `j+1` with j2; [ Idtac | Omega' ].
-Subst old3; Apply H17; Omega'.
-Unfold Zwf; Omega'.
-Save.
-
-Lemma distance_po_13 : 
-  (t: (array Z))
-  (w1: (array A))
-  (w2: (array A))
-  (Pre19: `(array_length w1) = n1` /\ `(array_length w2) = n2` /\
-          `(array_length t) = n2 + 1`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (i1: Z)
-  (t0: (array Z))
-  (Post4: ((`0 <= i1` /\ `i1 <= n2 + 1`) /\ `(array_length t0) = n2 + 1` /\
-          ((j:Z) (`0 <= j` /\ `j < i1` -> `(access t0 j) = n2 - j`))) /\
-          `i1 > n2`)
-  (i2: Z)
-  (Post5: i2 = `n1 - 1`)
-  (Variant3: Z)
-  (i3: Z)
-  (t1: (array Z))
-  (Pre17: Variant3 = `i3 + 1`)
-  (Pre16: (`(-1) <= i3` /\ `i3 <= n1 - 1`) /\ `(array_length t1) = n2 + 1` /\
-          ((j:Z)
-           (`0 <= j` /\ `j <= n2` ->
-            (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Test8: `i3 >= 0`)
-  (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
-  (old1: Z)
-  (Post6: old1 = (access t1 n2))
-  (t2: (array Z))
-  (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
-  (j1: Z)
-  (Post8: j1 = `n2 - 1`)
-  (Variant5: Z)
-  (j2: Z)
-  (old2: Z)
-  (t3: (array Z))
-  (Pre14: Variant5 = `j2 + 1`)
-  (Pre13: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
+  (Pre13: Variant5 = `j2 + 1`)
+  (Pre12: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
@@ -673,7 +530,7 @@ Proof.
 Intuition.
 Save.
 
-Lemma distance_po_14 : 
+Lemma distance_po_11 : 
   (t: (array Z))
   (w1: (array A))
   (w2: (array A))
@@ -700,6 +557,7 @@ Lemma distance_po_14 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -730,7 +588,7 @@ Replace `n2` with `(j1+1)`; [ Idtac | Omega' ].
 Apply H13; Omega'.
 Save.
 
-Lemma distance_po_15 : 
+Lemma distance_po_12 : 
   (t: (array Z))
   (w1: (array A))
   (w2: (array A))
@@ -757,6 +615,7 @@ Lemma distance_po_15 :
   (Pre15: `0 <= n2` /\ `n2 < (array_length t1)`)
   (old1: Z)
   (Post6: old1 = (access t1 n2))
+  (Pre14: `0 <= n2` /\ `n2 < (array_length t1)`)
   (t2: (array Z))
   (Post7: t2 = (store t1 n2 `(access t1 n2) + 1`))
   (j1: Z)
@@ -781,11 +640,11 @@ Lemma distance_po_15 :
 Proof.
 Intuition.
 Replace `i4+1` with i3; [ Idtac | Omega' ].
-Apply H16; Omega'.
+Apply H18; Omega'.
 Unfold Zwf; Omega'.
 Save.
 
-Lemma distance_po_16 : 
+Lemma distance_po_13 : 
   (t: (array Z))
   (w1: (array A))
   (w2: (array A))
@@ -816,7 +675,7 @@ Apply suffix_length; Omega'.
 Omega'.
 Save.
 
-Lemma distance_po_17 : 
+Lemma distance_po_14 : 
   (t: (array Z))
   (w1: (array A))
   (w2: (array A))
@@ -845,7 +704,7 @@ Intuition.
 Omega'.
 Save.
 
-Lemma distance_po_18 : 
+Lemma distance_po_15 : 
   (t: (array Z))
   (w1: (array A))
   (w2: (array A))
@@ -919,16 +778,13 @@ Definition distance := (* validation *)
           | (left Test2) =>
               let (i2, t1, result1, Post4) =
                 let (i2, t1, result1, Post20) =
-                  let (t1, result1, Post2) =
-                    let (result1, Post2) = (exist_1 [result1: Z]
-                      (store t0 i1 result1) = (store t0 i1 `n2 - i1`) 
-                      `n2 - i1` (refl_equal ? (store t0 i1 `n2 - i1`))) in
-                    let Pre2 =
-                      (distance_po_1 t w1 w2 Pre19 i0 Post1 Variant1 i1 t0
-                      Pre4 Pre3 Test2 result1 Post2) in
-                    (exist_2 [t2: (array Z)][result3: unit]
-                    t2 = (store t0 i1 `n2 - i1`) (store t0 i1 result1) 
-                    tt Post2) in
+                  let Pre2 =
+                    (distance_po_1 t w1 w2 Pre19 i0 Post1 Variant1 i1 t0 Pre4
+                    Pre3 Test2) in
+                  let (t1, result1, Post2) = (exist_2 [t2: (array Z)]
+                    [result3: unit]
+                    t2 = (store t0 i1 `n2 - i1`) (store t0 i1 `n2 - i1`) 
+                    tt (refl_equal ? (store t0 i1 `n2 - i1`))) in
                   let (i2, result2, Post3) =
                     let (result2, Post3) = (exist_1 [result2: Z]
                       result2 = `i1 + 1` `i1 + 1` (refl_equal ? `i1 + 1`)) in
@@ -940,7 +796,7 @@ Definition distance := (* validation *)
                   ((j:Z) (`0 <= j` /\ `j < i3` -> `(access t2 j) = n2 - j`))) /\
                   (Zwf `0` `n2 + 1 - i3` `n2 + 1 - i1`) i2 t1 result2
                   (distance_po_2 t w1 w2 Pre19 i0 Post1 Variant1 i1 t0 Pre4
-                  Pre3 Test2 t1 Post2 i2 Post3)) in
+                  Pre3 Test2 Pre2 t1 Post2 i2 Post3)) in
                 ((wf1 `n2 + 1 - i2`) (loop_variant_1 Pre4 Post20) i2 
                   t1 (refl_equal ? `n2 + 1 - i2`) (proj1 ? ? Post20)) in
               (exist_3 [i3: Z][t2: (array Z)][result2: unit]((`0 <= i3` /\
@@ -1016,20 +872,13 @@ Definition distance := (* validation *)
                       (refl_equal ? (access t1 n2))) in
                     (exist_2 [old2: Z][result4: unit]
                     old2 = (access t1 n2) result3 tt Post6) in
-                  let (t2, result4, Post7) =
-                    let (result4, Post7) = (exist_1 [result4: Z]
-                      (store t1 n2 result4) = (store t1 n2
-                                               `(access t1 n2) + 1`) 
-                      `(access t1 n2) + 1`
-                      (refl_equal ? (store t1 n2 `(access t1 n2) + 1`))) in
-                    let Pre6 =
-                      (distance_po_5 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2
-                      Post5 Variant3 i3 t1 Pre17 Pre16 Test8 Pre15 old1 Post6
-                      result4 Post7) in
-                    (exist_2 [t3: (array Z)][result6: unit]
+                  let Pre14 = Pre15 in
+                  let (t2, result4, Post7) = (exist_2 [t3: (array Z)]
+                    [result6: unit]
                     t3 = (store t1 n2 `(access t1 n2) + 1`) (store t1 n2
-                                                             result4)
-                    tt Post7) in
+                                                             `(access t1 n2) +
+                                                              1`) tt
+                    (refl_equal ? (store t1 n2 `(access t1 n2) + 1`))) in
                   let (j1, result5, Post8) =
                     let (result5, Post8) = (exist_1 [result5: Z]
                       result5 = `n2 - 1` `n2 - 1` (refl_equal ? `n2 - 1`)) in
@@ -1060,7 +909,7 @@ Definition distance := (* validation *)
                        (min_suffix w1 w2 `i3 + 1` `j3 + 1` old3)) /\
                        `j3 < 0`))
                       [Variant5: Z; wf3: (Variant6: Z)
-                       (Pre7: (Zwf `0` Variant6 Variant5))(j2: Z)(old2: Z)
+                       (Pre6: (Zwf `0` Variant6 Variant5))(j2: Z)(old2: Z)
                        (t3: (array Z))(_: Variant6 = `j2 + 1`)
                        (_0: (`(-1) <= j2` /\ `j2 <= n2 - 1`) /\
                        `(array_length t3) = n2 + 1` /\
@@ -1083,7 +932,7 @@ Definition distance := (* validation *)
                         (min_suffix w1 w2 `i3 + 1` `j3 + 1` old3)) /\
                         `j3 < 0`));
                        j2: Z; old2: Z; t3: (array Z);
-                       Pre14: Variant5 = `j2 + 1`; Pre13: (`(-1) <= j2` /\
+                       Pre13: Variant5 = `j2 + 1`; Pre12: (`(-1) <= j2` /\
                        `j2 <= n2 - 1`) /\ `(array_length t3) = n2 + 1` /\
                        ((k:Z)
                         (`j2 < k` /\ `k <= n2` ->
@@ -1109,12 +958,12 @@ Definition distance := (* validation *)
                                     result7 = old2 old2
                                     (refl_equal ? old2)) in
                                   let (old3, t4, result7, Post25) =
-                                    let Pre12 =
-                                      (distance_po_6 t w1 w2 Pre19 i0 Post1
+                                    let Pre11 =
+                                      (distance_po_5 t w1 w2 Pre19 i0 Post1
                                       i1 t0 Post4 i2 Post5 Variant3 i3 t1
-                                      Pre17 Pre16 Test8 Pre15 old1 Post6 t2
-                                      Post7 j1 Post8 Variant5 j2 old2 t3
-                                      Pre14 Pre13 Test7 temp Post12) in
+                                      Pre17 Pre16 Test8 Pre15 old1 Post6
+                                      Pre14 t2 Post7 j1 Post8 Variant5 j2
+                                      old2 t3 Pre13 Pre12 Test7 temp Post12) in
                                     let (old3, result7, Post9) =
                                       let (result7, Post9) =
                                         (exist_1 [result7: Z]
@@ -1125,22 +974,22 @@ Definition distance := (* validation *)
                                       old4 = (access t3 j2) result7 tt Post9) in
                                     let (t4, result8, Post26) =
                                       let (result8, Bool2) =
-                                        let Pre9 =
-                                          (distance_po_7 t w1 w2 Pre19 i0
+                                        let Pre8 =
+                                          (distance_po_6 t w1 w2 Pre19 i0
                                           Post1 i1 t0 Post4 i2 Post5 Variant3
                                           i3 t1 Pre17 Pre16 Test8 Pre15 old1
-                                          Post6 t2 Post7 j1 Post8 Variant5 j2
-                                          old2 t3 Pre14 Pre13 Test7 temp
-                                          Post12 Pre12 old3 Post9) in
+                                          Post6 Pre14 t2 Post7 j1 Post8
+                                          Variant5 j2 old2 t3 Pre13 Pre12
+                                          Test7 temp Post12 Pre11 old3 Post9) in
                                         let result9 =
-                                          let Pre8 =
-                                            (distance_po_8 t w1 w2 Pre19 i0
+                                          let Pre7 =
+                                            (distance_po_7 t w1 w2 Pre19 i0
                                             Post1 i1 t0 Post4 i2 Post5
                                             Variant3 i3 t1 Pre17 Pre16 Test8
-                                            Pre15 old1 Post6 t2 Post7 j1
-                                            Post8 Variant5 j2 old2 t3 Pre14
-                                            Pre13 Test7 temp Post12 Pre12
-                                            old3 Post9 Pre9) in
+                                            Pre15 old1 Post6 Pre14 t2 Post7
+                                            j1 Post8 Variant5 j2 old2 t3
+                                            Pre13 Pre12 Test7 temp Post12
+                                            Pre11 old3 Post9 Pre8) in
                                           (test_char (access w1 i3)) in
                                         let (result10, Post27) =
                                           (result9 (access w2 j2)) in
@@ -1161,28 +1010,15 @@ Definition distance := (* validation *)
                                                                    j2))
                                               result8 Bool2) of
                                       | (left Test6) =>
+                                          let Pre10 = Pre11 in
                                           let (t4, result9, Post10) =
-                                            let (result9, Post10) =
-                                              (exist_1 [result9: Z]
-                                              (store t3 j2 result9) = (
-                                              store t3 j2 temp) temp
-                                              (refl_equal ? (store t3 j2 temp))) in
-                                            let Pre11 =
-                                              (distance_po_9 t w1 w2 Pre19 i0
-                                              Post1 i1 t0 Post4 i2 Post5
-                                              Variant3 i3 t1 Pre17 Pre16
-                                              Test8 Pre15 old1 Post6 t2 Post7
-                                              j1 Post8 Variant5 j2 old2 t3
-                                              Pre14 Pre13 Test7 temp Post12
-                                              Pre12 old3 Post9 Test6 result9
-                                              Post10) in
                                             (exist_2 [t5: (array Z)]
                                             [result11: unit]
                                             t5 = (store t3 j2 temp) (
                                                                     store t3
-                                                                    j2
-                                                                    result9)
-                                            tt Post10) in
+                                                                    j2 temp)
+                                            tt
+                                            (refl_equal ? (store t3 j2 temp))) in
                                           (exist_2 [t5: (array Z)]
                                           [result10: unit]
                                           ((j:Z)
@@ -1201,46 +1037,31 @@ Definition distance := (* validation *)
                                              `j + 1` old3)) /\
                                             (Zwf `0` `j + 1` `j2 + 1`))) 
                                           t4 result9
-                                          (distance_po_10 t w1 w2 Pre19 i0
+                                          (distance_po_8 t w1 w2 Pre19 i0
                                           Post1 i1 t0 Post4 i2 Post5 Variant3
                                           i3 t1 Pre17 Pre16 Test8 Pre15 old1
-                                          Post6 t2 Post7 j1 Post8 Variant5 j2
-                                          old2 t3 Pre14 Pre13 Test7 temp
-                                          Post12 Pre12 old3 Post9 Test6 t4
-                                          Post10))
+                                          Post6 Pre14 t2 Post7 j1 Post8
+                                          Variant5 j2 old2 t3 Pre13 Pre12
+                                          Test7 temp Post12 Pre11 old3 Post9
+                                          Test6 Pre10 t4 Post10))
                                       | (right Test5) =>
+                                          let Pre9 = Pre11 in
                                           let (t4, result9, Post11) =
-                                            let (result9, Post11) =
-                                              (exist_1 [result9: Z]
-                                              (store t3 j2 result9) = (
-                                              store t3 j2
-                                              `(Zmin (access t3 j2)
-                                                (access t3 j2 + 1)) +
-                                               1`) `(Zmin (access t3 j2)
-                                                     (access t3 j2 + 1)) +
-                                                    1`
-                                              (refl_equal ? (store t3 j2
-                                                             `(Zmin (
-                                                               access t3 j2)
-                                                               (access t3
-                                                                j2 + 1)) +
-                                                              1`))) in
-                                            let Pre10 =
-                                              (distance_po_11 t w1 w2 Pre19
-                                              i0 Post1 i1 t0 Post4 i2 Post5
-                                              Variant3 i3 t1 Pre17 Pre16
-                                              Test8 Pre15 old1 Post6 t2 Post7
-                                              j1 Post8 Variant5 j2 old2 t3
-                                              Pre14 Pre13 Test7 temp Post12
-                                              Pre12 old3 Post9 Test5 result9
-                                              Post11) in
                                             (exist_2 [t5: (array Z)]
                                             [result11: unit]
                                             t5 = (store t3 j2
                                                   `(Zmin (access t3 j2)
                                                     (access t3 j2 + 1)) +
-                                                   1`) (store t3 j2 result9)
-                                            tt Post11) in
+                                                   1`) (store t3 j2
+                                                        `(Zmin (access t3 j2)
+                                                          (access t3 j2 + 1)) +
+                                                         1`) tt
+                                            (refl_equal ? (store t3 j2
+                                                           `(Zmin (access t3
+                                                                   j2)
+                                                             (access t3 j2 +
+                                                              1)) +
+                                                            1`))) in
                                           (exist_2 [t5: (array Z)]
                                           [result10: unit]
                                           ((j:Z)
@@ -1259,13 +1080,13 @@ Definition distance := (* validation *)
                                              `j + 1` old3)) /\
                                             (Zwf `0` `j + 1` `j2 + 1`))) 
                                           t4 result9
-                                          (distance_po_12 t w1 w2 Pre19 i0
+                                          (distance_po_9 t w1 w2 Pre19 i0
                                           Post1 i1 t0 Post4 i2 Post5 Variant3
                                           i3 t1 Pre17 Pre16 Test8 Pre15 old1
-                                          Post6 t2 Post7 j1 Post8 Variant5 j2
-                                          old2 t3 Pre14 Pre13 Test7 temp
-                                          Post12 Pre12 old3 Post9 Test5 t4
-                                          Post11)) end) in
+                                          Post6 Pre14 t2 Post7 j1 Post8
+                                          Variant5 j2 old2 t3 Pre13 Pre12
+                                          Test7 temp Post12 Pre11 old3 Post9
+                                          Test5 Pre9 t4 Post11)) end) in
                                     (exist_3 [old4: Z][t5: (array Z)]
                                     [result9: unit]
                                     ((j:Z)
@@ -1318,12 +1139,12 @@ Definition distance := (* validation *)
                                 (min_suffix w1 w2 `i3 + 1` `j4 + 1` old4)) /\
                                 (Zwf `0` `j4 + 1` `j2 + 1`) j3 old3 t4
                                 result8
-                                (distance_po_13 t w1 w2 Pre19 i0 Post1 i1 t0
+                                (distance_po_10 t w1 w2 Pre19 i0 Post1 i1 t0
                                 Post4 i2 Post5 Variant3 i3 t1 Pre17 Pre16
-                                Test8 Pre15 old1 Post6 t2 Post7 j1 Post8
-                                Variant5 j2 old2 t3 Pre14 Pre13 Test7 old3 t4
-                                Post24 j3 Post13)) in
-                              ((wf3 `j3 + 1`) (loop_variant_1 Pre14 Post18)
+                                Test8 Pre15 old1 Post6 Pre14 t2 Post7 j1
+                                Post8 Variant5 j2 old2 t3 Pre13 Pre12 Test7
+                                old3 t4 Post24 j3 Post13)) in
+                              ((wf3 `j3 + 1`) (loop_variant_1 Pre13 Post18)
                                 j3 old3 t4 (refl_equal ? `j3 + 1`)
                                 (proj1 ? ? Post18)) in
                             (exist_4 [j4: Z][old4: Z][t5: (array Z)]
@@ -1352,7 +1173,7 @@ Definition distance := (* validation *)
                                 (min_suffix w1 w2 `i3 + 1` k (access t4 k)))) /\
                               (min_suffix w1 w2 `i3 + 1` `j3 + 1` old3)) /\
                               `j3 < 0` j2 old2 t3 tt
-                              (conj ? ? Pre13 Test4)) in
+                              (conj ? ? Pre12 Test4)) in
                             (exist_4 [j4: Z][old4: Z][t5: (array Z)]
                             [result8: unit]((`(-1) <= j4` /\
                             `j4 <= n2 - 1`) /\
@@ -1366,9 +1187,9 @@ Definition distance := (* validation *)
                             (min_suffix w1 w2 `i3 + 1` `j4 + 1` old4)) /\
                             `j4 < 0` j3 old3 t4 result7 Post14) end) 
                       `j1 + 1` j1 old1 t2 (refl_equal ? `j1 + 1`)
-                      (distance_po_14 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2
+                      (distance_po_11 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2
                       Post5 Variant3 i3 t1 Pre17 Pre16 Test8 Pre15 old1 Post6
-                      t2 Post7 j1 Post8)) in
+                      Pre14 t2 Post7 j1 Post8)) in
                   let (i4, result7, Post15) =
                     let (result7, Post15) = (exist_1 [result7: Z]
                       result7 = `i3 - 1` `i3 - 1` (refl_equal ? `i3 - 1`)) in
@@ -1381,9 +1202,9 @@ Definition distance := (* validation *)
                    (`0 <= j` /\ `j <= n2` ->
                     (min_suffix w1 w2 `i5 + 1` j (access t4 j))))) /\
                   (Zwf `0` `i5 + 1` `i3 + 1`) i4 j2 old2 t3 result7
-                  (distance_po_15 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5
-                  Variant3 i3 t1 Pre17 Pre16 Test8 Pre15 old1 Post6 t2 Post7
-                  j1 Post8 j2 old2 t3 Post14 i4 Post15)) in
+                  (distance_po_12 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5
+                  Variant3 i3 t1 Pre17 Pre16 Test8 Pre15 old1 Post6 Pre14 t2
+                  Post7 j1 Post8 j2 old2 t3 Post14 i4 Post15)) in
                 ((wf2 `i4 + 1`) (loop_variant_1 Pre17 Post17) i4 j1 old1 
                   t2 (refl_equal ? `i4 + 1`) (proj1 ? ? Post17)) in
               (exist_5 [i5: Z][j2: Z][old2: Z][t3: (array Z)][result4: unit]
@@ -1410,14 +1231,14 @@ Definition distance := (* validation *)
                 (min_suffix w1 w2 `i5 + 1` j (access t3 j))))) /\
               `i5 < 0` i4 j1 old1 t2 result3 Post16) end) `i2 + 1` i2 
         j old t0 (refl_equal ? `i2 + 1`)
-        (distance_po_16 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5)) in
+        (distance_po_13 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5)) in
     let Pre18 =
-      (distance_po_17 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5 i3 t1
+      (distance_po_14 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5 i3 t1
       Post16) in
     let (result3, Post28) = (exist_1 [result3: Z]
       (min_dist (word_of_array n1 w1) (word_of_array n2 w2) result3) 
       (access t1 `0`)
-      (distance_po_18 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5 i3 t1
+      (distance_po_15 t w1 w2 Pre19 i0 Post1 i1 t0 Post4 i2 Post5 i3 t1
       Post16 Pre18)) in
     (exist_5 [i4: Z][j1: Z][old1: Z][t2: (array Z)][result4: Z]
     (min_dist (word_of_array n1 w1) (word_of_array n2 w2) result4) i3 
