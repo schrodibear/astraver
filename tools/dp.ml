@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.8 2005-02-14 08:57:44 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.9 2005-03-15 08:37:46 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -62,7 +62,7 @@ let call_harvey f =
     let rec iter i =
       let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
       if Sys.file_exists fi then begin
-	let cmd = sprintf "ulimit -t %d; rv %s > out 2>&1 && grep \"Proof obligation in\" out | grep -q \"is valid\"" !timeout fi in
+	let cmd = sprintf "timeout %d rv %s > out 2>&1 && grep \"Proof obligation in\" out | grep -q \"is valid\"" !timeout fi in
 	call cmd;
 	iter (i+1)
       end

@@ -43,7 +43,7 @@ cvcl: $(CFILES)
 	done
 	dp -timeout 10 cvcl/*_why.cvc.all
 
-harvey:
+harvey: $(WFILES)
 	for f in $(BENCHFILES); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \

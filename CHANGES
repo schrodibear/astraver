@@ -1,5 +1,5 @@
 
-version 1.74, March 8th, 2005
+version 1.75, March 15th, 2005
 =============================
   o fixed installation issue with Coq 8.0pl2 
   o new option -where to print Why's library path
