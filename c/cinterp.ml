@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.135 2005-02-08 12:48:16 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.136 2005-02-11 12:50:32 hubert Exp $ i*)
 
 
 open Format
@@ -719,21 +719,12 @@ and interp_statement_expr e =
 			  [Var var; Var "caduceus1"; 
 			   bin_op op (Var "caduceus2") (interp_expr e)]))
 	end 
-(*
-    | NEsizeof _ 
-*)
     | NEcast (_, _)
     | NEcond (_, _, _)
     | NEbinary (_, _, _)
     | NEunary (_, _)
     | NEstar _ 
-(*
-    | NEarrget (_, _)
-*)
     | NEarrow (_, _)
-(*
-    | NEdot (_, _)
-*)
     | NEvar _
     | NEstring_literal _
     | NEconstant _ -> 

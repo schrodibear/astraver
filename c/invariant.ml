@@ -64,9 +64,6 @@ let axiom_for s ty t v validity=
   Cast.Naxiom 
     ("valid_" ^ s ^ "_pointer", 
      NPforall ([ty,v], NPimplies (NPvalid t, validity)))
-(***
-		  NPapp (find_pred ("internal_separation_" ^ s), [t])))))
-***)
 
 let not_alias loc x y = 
   let ba t = { nterm_node = NTbase_addr t; 
@@ -105,6 +102,12 @@ let make_forall_range loc t b f =
 		      NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
     make_forall [c_int, i] (make_implies ineq (f ti vari))
      
+let make_var x ty =
+  let info = default_var_info x in
+  Info.set_var_type (Var_info info) ty;
+  info, 
+  { nterm_node = NTvar info; nterm_loc = Loc.dummy; nterm_type = ty } 
+
 (* assumes v2 is an array of objects of type ty *)
 let rec tab_struct loc mark v1 v2 s ty n n1 n2=
   let l = begin
@@ -200,33 +203,33 @@ and local_separation loc mark n1 v1 n2 v2 =
     | _, _ -> NPtrue
 
 
-let rec separation_intern ?(use_pred=false) loc n1 v1 =
+let rec separation_intern ?(use_pred=false) loc sterm n1 v1 =
   match v1.nterm_type.Ctypes.ctype_node with
     | Tarray (_,None) -> 
-	error loc ("array size missing in `" ^ n1 ^ "'")
-    | Tarray(ty,Some s) -> 
-	begin
-	  match ty.Ctypes.ctype_node with
-	    | Tarray (_,None) -> 
-		error loc ("array size missing in `" ^ n1 ^ "[i]'")
-	    | Tarray (_,_)  
-	    | Tstruct _ ->
-		make_and
-		  (make_forall_range loc v1 s 
-		     (fun t1 i1 ->
-			make_forall_range loc v1 s
-			  (fun t2 i2 -> 
-			     if i1 = nzero && i2 = nzero then NPtrue 
-			     else
-			       make_implies (NPrel (i1, Neq, i2)) 
-				 (not_alias loc t1 t2))))
-		  (make_forall_range loc v1 s 
-		     (fun t i -> 
-			separation_intern ~use_pred:true loc (n1^"[i]") 
-			  (noattr_term ty t.nterm_node)))
-		  
-	    | _ -> NPtrue
-	end
+	error loc ("array size missing in `" ^ n1.var_name ^ "'")
+    | Tarray(ty,Some s) ->
+	  begin
+	    match ty.Ctypes.ctype_node with
+	      | Tarray (_,None) -> 
+		error loc ("array size missing in `" ^ n1.var_name ^ "[i]'")
+	      | Tarray (_,_)  
+	      | Tstruct _ ->
+		  make_and
+		    (make_forall_range loc v1 s 
+		       (fun t1 i1 ->
+			  make_forall_range loc v1 s
+			    (fun t2 i2 -> 
+			       if i1 = nzero && i2 = nzero then NPtrue 
+			       else
+				 make_implies (NPrel (i1, Neq, i2)) 
+				   (not_alias loc t1 t2))))
+		    (make_forall_range loc v1 s 
+		       (fun t i -> 
+			  separation_intern ~use_pred:true loc 
+			    sterm n1 
+			    (noattr_term ty t.nterm_node)))    
+	      | _ -> NPtrue
+	  end
     | Tstruct n -> 
 	let l =
 	  begin
@@ -241,7 +244,7 @@ let rec separation_intern ?(use_pred=false) loc n1 v1 =
 	    | (v::l) -> 
 		make_and
 		  (make_and 
-		     (separation_intern ~use_pred:true loc v.var_name 
+		     (separation_intern ~use_pred:true loc sterm v 
 			(in_struct v1 v))
 		     (List.fold_left 
 			(fun acc x -> 
@@ -304,11 +307,7 @@ let separation s1 ty1 s2 (ty2,fl) decls =
   end else
     decls
 
-let make_var x ty =
-  let info = default_var_info x in
-  Info.set_var_type (Var_info info) ty;
-  info, 
-  { nterm_node = NTvar info; nterm_loc = Loc.dummy; nterm_type = ty } 
+
     
 let add_predicates l =
   (* first we enter all names in environment *)
@@ -327,6 +326,7 @@ let add_predicates l =
   let f s (ty,fl) l2 = 
     let ty = noattr_type ty in
     let st,t = make_var s ty in
+    let stru,sterm = make_var s (noattr_type (Tstruct s)) in 
     let l2 =
       List.fold_right 
 	 (fun f acc -> 
@@ -360,7 +360,7 @@ let add_predicates l =
 	Cast.Nlogic (info,
 		     NPredicate_def 
 		       ([st,ty],
-			(separation_intern Loc.dummy s t))))::l2 in
+			(separation_intern Loc.dummy sterm st t))))::l2 in
     Cenv.fold_all_struct (separation s ty) l2
   in
   Cenv.fold_all_struct f l
