@@ -22,7 +22,7 @@ int test(int t[],int n) {
       @ variant n-i
       @*/
   {
-    s /* += */ = s + t[i];
+    s += t[i];
   }
   return s;
 }
