@@ -10,7 +10,7 @@ float f;
 double g;
 long double h;
 
-void i;
+/* void i; GCC refused by 3.2.3 */
 
 /* arrays */
 
