@@ -477,1202 +477,365 @@ Lemma schorr_waite_impl_po_6 :
    (weight alloc m0 c0 l0 r0 p1 t1)).
 Proof.
 (* preservation of loop invariant for the first branch of if "pop" *)
-intuition.
-generalize (H3 x H6);clear H3.
+intros.
+split;subst.
+inversion_clear Pre35.
+inversion_clear H.
+split;subst.
+split;subst.
+intros.
+(*i1*)
+generalize (H1 x H);clear H1.
 intro.
-subst.
-intuition.
+inversion_clear H1.
+unfold reachable in *|- *.
+inversion_clear H3.
+generalize (path_no_cycle alloc t1 x l0 r0 x0 H1).
+intros.
+inversion_clear H3.
+inversion_clear H4.
 inversion_clear H5.
-inversion H3;subst.
+inversion H6;subst.
 left.
-unfold reachable.
 exists (p1::nil).
 constructor 3;auto.
 caduceus.
 constructor.
-inversion H5;elim H8;auto.
-inversion H5;elim H8;auto.
-inversion_clear H5;subst.
-unfold reachable.
-generalize (path_no_cycle alloc p1 x l0 r0 x0 H3).
-intros.
-inversion_clear H5.
-inversion_clear H7.
-inversion_clear H8.
-inversion H9;subst.
-left.
-exists (@nil pointer).
-constructor.
-left.
-exists (p1::lp).
-constructor; auto.
 case (In_dec eq_pointer_dec p1 lp).
-intro.
-inversion_clear H7.
-destruct (In_dec eq_pointer_dec p1 lp).
-inversion H11.
-elim (n i).
-intro.
-apply path_upd_right; auto.
-right.
-exists lp.
-case (In_dec eq_pointer_dec p1 lp).
-intro.
-inversion_clear H7.
-destruct (In_dec eq_pointer_dec p1 lp).
-inversion H11.
-elim (n i).
-intro.
-apply path_upd_right; auto.
-(*i1bis*)
-apply H4;subst.
-auto.
-inversion_clear H8.
-unfold reachable.
-generalize 
-  (path_no_cycle alloc p1 x l0 
-    (upd r0 p1 null) x0 H5).
-intros (path,(incl,(no_rep,reach))).
-inversion reach;subst.
-right.
-exists (@nil pointer).
-constructor.
-case  (In_dec eq_pointer_dec p1 lp).
-intro.
-generalize (no_rep_p _ _ no_rep).
-intro.
-elim (H9 i).
-intro.
-right.
-exists (p1::lp).
-constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-rewrite acc_upd_eq in H8.
-left.
-exists lp.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-auto.
-apply H4;subst.
-auto.
-inversion_clear H8.
-unfold reachable.
-generalize 
-  (path_no_cycle alloc (p1#r0) x l0 
-    (upd r0 p1 null) x0 H5).
-intros (path,(incl,(no_rep,reach))).
-inversion reach;subst.
-right.
-exists (p1::nil ).
-constructor 3;auto.
-constructor.
-case  (In_dec eq_pointer_dec p1 lp).
 intro.
 generalize (split_list p1 lp i).
-intros (path',(path'',sub)).
+intros (path,(path',pathpre)).
 subst.
 generalize 
- (split_path alloc (p1 # r0) x l0 
-  (upd r0 p1 null)  (p1 :: path'') (p1 # r0 :: path' ) reach).
-intros (p3,(no_used,reach2)).
-inversion reach2;subst.
-right.
-exists (p1::path'').
-constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-rewrite acc_upd_eq in H14;auto.
+ (split_path alloc (t1 # l0) x l0 
+  r0  (p1 :: path') path H7).
+intros (p3,(reach,reach')).
+inversion reach';subst.
 left.
-exists path''.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
+exists (p1::path').
+constructor 2;auto.
+apply path_upd_right ;auto.
+assert (t1 :: path ++ p1 :: path' = t1 :: path ++ p1 :: path').
+auto.
+generalize (no_rep_sublist (t1 :: path ++ p1 :: path') (t1::path) (p1::path') H4 H8).
 intro.
+apply (no_rep_p p1 path' H9).
 right.
-exists (p1::p1#r0::lp).
+exists path'.
+apply path_upd_right ;auto.
+assert (t1 :: path ++ p1 :: path' = t1 :: path ++ p1 :: path').
+auto.
+generalize (no_rep_sublist (t1 :: path ++ p1 :: path') (t1::path) (p1::path') H4 H8).
+intro.
+apply (no_rep_p p1 path' H9).
+intro.
+left;exists (p1::t1::lp).
 constructor 3;auto.
+caduceus.
 constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-case (eq_pointer_dec p1 (p1#r0)).
+apply path_upd_right ;auto.
+case (In_dec eq_pointer_dec p1 lp).
 intro.
-rewrite acc_upd_eq in H8;auto.
+generalize (split_list p1 lp i).
+intros (path,(path',pathpre)).
+subst.
+generalize 
+ (split_path alloc (t1 # r0) x l0 
+  r0  (p1 :: path') path H7).
+intros (p3,(reach,reach')).
+inversion reach';subst.
 left.
+exists (p1::path').
+constructor 2;auto.
+apply path_upd_right ;auto.
+assert (t1 :: path ++ p1 :: path' = t1 :: path ++ p1 :: path').
+auto.
+generalize (no_rep_sublist (t1 :: path ++ p1 :: path') (t1::path) (p1::path') H4 H8).
+intro.
+apply (no_rep_p p1 path' H9).
+right.
+exists path'.
+apply path_upd_right ;auto.
+assert (t1 :: path ++ p1 :: path' = t1 :: path ++ p1 :: path').
+auto.
+generalize (no_rep_sublist (t1 :: path ++ p1 :: path') (t1::path) (p1::path') H4 H8).
+intro.
+apply (no_rep_p p1 path' H9).
+intro.
+generalize (eq_pointer_dec p1 t1).
+intros [h|h].
+subst.
+caduceus.
+right.
 exists lp.
-apply path_inv_upd_right with p1 null;auto.
-rewrite e.
+apply path_upd_right ;auto.
+left.
+exists (p1::t1::lp).
+constructor 3;auto.
+caduceus.
+constructor 3;auto.
+rewrite acc_upd_neq;auto.
+apply path_upd_right ;auto.
+(*i1b*)
+unfold reachable in *|-*.
+inversion_clear H3.
+generalize 
+  (path_no_cycle alloc p1 x l0 r0 x0 H1).
+intros (path,(_,(no_rep,reach))).
+inversion reach;subst.
+left;exists (@nil pointer);constructor.
+left;exists (p1::lp);constructor 2;auto.
+apply path_upd_right ;auto.
 apply no_rep_p;auto.
-intro.
-rewrite acc_upd_neq in H8;auto.
-case  (In_dec eq_pointer_dec p1 lp).
-intro.
-generalize (split_list p1 (lp) i).
-intros (path',(path'',sub)).
+right;exists  lp;apply path_upd_right ;auto.
+apply no_rep_p;auto.
+(*i1bis*)
+intros.
+generalize (H2 x H);clear H2;intros.
+apply H2.
+unfold reachable.
+inversion_clear H3.
+inversion_clear H4.
+generalize 
+  (path_no_cycle alloc p1 x l0 (upd r0 p1 t1) x0 H3).
+intros (path,(_,(no_rep,reach))).
+inversion reach;subst.
+right;exists (@nil pointer);constructor.
+right;exists (p1::lp);constructor 2;auto.
+apply path_inv_upd_right with p1 t1; auto.
+apply no_rep_p;auto.
+left;exists lp.
+rewrite acc_upd_eq in H5;auto.
+apply path_inv_upd_right with p1 t1; auto.
+apply no_rep_p;auto.
+inversion_clear H4.
+generalize 
+  (path_no_cycle alloc (p1#r0) x l0 (upd r0 p1 t1) x0 H3).
+intros (path,(_,(no_rep,reach))).
+generalize (In_dec eq_pointer_dec p1 path).
+intros [h|h].
+generalize (split_list p1 path h).
+intros (path',(path'',pathpre)).
 subst.
 generalize 
  (split_path alloc (p1 # r0) x l0 
-   (upd r0 p1 null)  (p1 :: path'') 
-   ( p1#r0::path' ) reach).
-intros (p3,(no_used,reach2)).
-inversion reach2;subst.
-right.
-exists (p1::path'').
-constructor 2;auto.
-apply path_inv_upd_right with (p1) null;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-rewrite acc_upd_eq in H14;auto.
-left.
-exists path''.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-intro.
-right.
-exists (p1::p1#r0::lp).
-constructor 3;auto.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-assert (~In p1 (p1#r0::lp)).
-intro.
-inversion H9.
-elim (n );auto.
-apply n0;auto.
-simpl.
-split.
-destruct (In_dec eq_pointer_dec p1 (p1 # r0 :: lp)).
-elim (H9 i).
+    (upd r0 p1 t1) (p1 :: path'') path' reach).
+intros (p3,(reach',reach'')).
+inversion reach'';subst.
+right;exists (p1::path'');constructor 2;auto.
+apply path_inv_upd_right with p1 t1; auto.
+assert (path' ++ p1 :: path'' = path' ++ p1 :: path'').
 auto.
+generalize (no_rep_sublist ( path' ++ p1 :: path'') path' (p1::path'') no_rep H4).
+intro.
+apply (no_rep_p p1 path'' H5).
+rewrite acc_upd_eq in H9;auto.
+left;exists path'';apply path_inv_upd_right with p1 t1; auto.
+assert (path' ++ p1 :: path'' = path' ++ p1 :: path'').
 auto.
-clear H4.
-inversion_clear H2.
+generalize (no_rep_sublist ( path' ++ p1 :: path'') path' (p1::path'') no_rep H4).
+intro.
+apply (no_rep_p p1 path'' H5).
+right;exists (p1::path);constructor 3;auto.
+apply path_inv_upd_right with p1 t1; auto.
+(* recuperation de la liste*)
+inversion_clear H0.
+inversion_clear H.
+inversion_clear H0.
+inversion_clear H.
+inversion_clear H0.
+inversion_clear H.
+inversion_clear H0.
 exists (tail x).
-intuition.
-inversion H4;subst.
-elim H1.
-auto.
+split.
+split.
+split.
+split.
+split.
+split.
+(*i2*)
+inversion H;subst.
+elimtype False.
+elim Pre31;auto.
 simpl.
 destruct (Z_eq_dec (p1 # c0) 0).
 elim (Test4 e).
 unfold clr_list.
 unfold llist.
 apply clr_list_upd_right;auto.
-unfold clr_list in H4.
+unfold clr_list in H.
 generalize (llist_no_rep alloc 
   (fun t : pointer => 
      if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) 
-  p1 p1 l1 H4).
-intuition.
-apply H11 with p_0;auto.
-destruct x.
-inversion H2.
-simpl in H2.
-unfold in_list in *|-*.
-right;auto.
-generalize (H10 x0).
-intuition.
-inversion H12.
-inversion H15.
-inversion H17;subst.
-subst x0.
-inversion_clear H2;elim H5;auto.
-inversion_clear H18;elim H5;auto.
-inversion_clear H18;elim H5;auto.
-inversion_clear H12.
-inversion_clear H15.
-unfold in_list in H12.
-destruct x;inversion H12;subst.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-  (fun t : pointer => 
-     if Z_eq_dec (t # c0) 0 then t # l0 else t # r0)
-     p1 x1 x H4).
-intuition.
-subst.
-casetype False.
-assert ((x1#r0) <> null).
-inversion H16.
-inversion_clear H5.
-inversion H18.
-subst.
-inversion H2;auto.
-inversion H5;auto.
-inversion H5;auto.
-assert (In (x1#r0) x).
-inversion_clear H4.
-destruct (Z_eq_dec (x1 # c0) 0 ).
-elim (Test4 e).
-inversion H18.
-tauto.
-left;auto.
-apply (H11 (x1#r0)).
-unfold in_list.
-simpl;auto.
-inversion H16.
-inversion_clear H18.
-apply H19.
-generalize 
-  (path_in_list alloc l0 r0 (x1#r0) x0 x2 H20).
-intros.
-inversion H18.
-inversion H21;subst.
-left;auto.
-subst.
-inversion H20;subst.
-casetype False.
-apply (H11 (x1#r0)).
-unfold in_list.
-right;auto.
-auto.
-right.
-exists (x1).
-simpl.
-split.
-auto.
-assert (In x1 x).
-auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
- (fun t : pointer => 
-  if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) 
-  p1 p0 x H4).
-intros (s,h).
-subst p1.
-assert (p0 <> x1).
-intro.
-subst.
-apply h;auto.
-rewrite acc_upd_neq;auto.
-inversion H16.
-inversion_clear H18.
-unfold unmarked_reachable.
-exists x2.
-split;auto.
-apply path_upd_right.
-intro.
-generalize (H19 p0 H18).
-intro.
-apply H11 with p0.
-unfold in_list.
-left;auto.
-auto.
-auto.
-(*i6*)
-subst.
-generalize (eq_pointer_dec x0 p1).
-intro.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-inversion_clear H5;subst;caduceus.
-generalize (H8 null p1).
-intros.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = null) /\
-     (p # c0 = 0 -> p # l = null /\ p # r = p # r0)).
-apply H5.
-simpl.
-intuition.
-inversion_clear H12.
-generalize (H13 Test4).
-intuition.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (~ In x0 (p::x)).
-intro;inversion_clear H5;auto.
-generalize (H9 x0 H5).
-intuition.
-(*i6b*)
-subst.
-generalize (eq_pointer_dec x0 p1).
-intro.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-inversion_clear H5;subst;caduceus.
-generalize (H8 null p1).
-intros.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = null) /\
-     (p # c0 = 0 -> p # l = null /\ p # r = p # r0)).
-apply H5.
-simpl.
-intuition.
-inversion_clear H12.
-generalize (H13 Test4).
-intuition.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (~ In x0 (p::x)).
-intro;inversion_clear H5;auto.
-generalize (H9 x0 H5).
-intuition.
-(*i7a*)
-subst.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H0.
-assert (pair_in_list p0 p3 (cons null ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H8 p0 p3 H5);intro.
-inversion_clear H13.
-generalize (H14 H12);intuition.
-auto.
-subst.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons null ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H8 p0 p3 H5);intro.
-inversion_clear H13.
-generalize (H14 H12);intuition.
-auto.
-subst.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons null ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H8 p0 p3 H5);intro.
-inversion_clear H13.
-generalize (H15 H12);intuition.
-auto.
-subst.
-assert (p3<> p1).
-intro;subst.
-elim (Test4 H12).
-caduceus.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons null ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H8 p0 p3 H13);intro.
-inversion_clear H14.
-generalize (H16 H12);intuition.
-auto.
-(* termination *)
-red.
-red.
-subst.
-inversion H0.
-inversion_clear H2.
-exists (existS (fun _ => natnat) (mesure_mark m0 x)
-   (existS (fun _ => nat) (mesure_mark c0 x) (List.length (tail x0)))).
-red.
-split.
-red; simpl.
-exists x.
-split.
-red.
-inversion_clear H5.
-split;auto.
-intros.
-red.
-split;intro.
-red in H7.
-generalize (H7 p2);intro;clear H7.
-inversion_clear H8.
-apply (H7 ).
-left.
-apply H4;auto.
-generalize (H5 H8);clear H5;intro.
-inversion_clear H5.
-inversion_clear H10.
-generalize (path_no_cycle alloc (p1 # r0) p2 l0 (upd r0 p1 null) x1 H5).
-intros (path',(_,(no_rep,reach))).
-generalize (In_dec eq_pointer_dec p1 path').
-intros [H11|H11].
-generalize (split_list p1 path' H11);intros (lp1,(lp2,H12)).
-subst.
-generalize (split_path alloc (p1 # r0) p2 l0 (upd r0 p1 null)  (p1 :: lp2) lp1 reach ).
-intros (p3,(H13,H12)).
-unfold reachable.
-assert (lp1 ++ p1 :: lp2 = lp1 ++ p1 :: lp2).
-auto.
-generalize (no_rep_sublist (lp1 ++ p1 :: lp2) lp1 (p1::lp2) no_rep H10).
-intros.
-inversion H12;subst.
-right;exists (p1::lp2).
-constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-rewrite acc_upd_eq  in H20.
-left;exists lp2.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-auto.
-right.
-unfold reachable.
-exists (p1::path').
-constructor 3;auto.
-apply path_inv_upd_right with p1 null;auto.
-unfold reachable in *|-*.
-inversion_clear H10.
-generalize (path_no_cycle alloc p1 p2 l0 (upd r0 p1 null) x1 H5).
-intros (path',(_,(no_rep,reach))).
-inversion reach;subst.
-right;exists (@nil pointer);
-apply path_inv_upd_right with p2 null;auto.
-right.
-exists (p1::lp).
-constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-rewrite acc_upd_eq in H11.
-left.
-exists (lp).
-inversion H11;subst;constructor;auto.
-inversion H12;elim H14;auto.
-inversion H12;elim H14;auto.
-auto.
-unfold reachable in *|-*.
-intros Q.
-generalize (H7 p2);intros (H8,H9);clear H7.
-generalize (H9 H5 Q );intro;clear H9.
-assert ((exists lp : list pointer, path alloc l r root p2 lp) \/
-     (exists lp : list pointer, path alloc l r root p2 lp) -> (exists lp : list pointer, path alloc l r root p2 lp)).
-intros [P|P];auto.
-generalize (H9 H7);clear H9 ;intro.
-generalize (H3 p2 H9);clear H9 H7;intros [H7|H7].
-inversion_clear H7.
-inversion H9;subst.
-right ;exists (p1::nil);constructor 3;auto;caduceus;constructor.
-inversion H7;elim H11;auto.
-inversion H7;elim H11;auto.
-inversion_clear H7.
-generalize (path_no_cycle alloc p1 p2 l0 r0 x1 H9).
-intros (path',(_,(no_rep,reach))).
-inversion reach;subst.
-right ;exists (@nil pointer);constructor.
-right ;exists (p1::lp);constructor 2;auto.
-apply path_upd_right;auto.
-apply no_rep_p;auto.
-left;exists lp;apply path_upd_right;auto.
-apply no_rep_p;auto.
-auto.
-red.
-split.
-red; simpl.
-exists x.
-split.
-red.
-inversion_clear H5.
-split;auto.
-intros.
-red.
-split;intro.
-red in H7.
-generalize (H7 p2);intro;clear H7.
-inversion_clear H8.
-apply (H7 ).
-left.
-apply H4;auto.
-generalize (H5 H8);clear H5;intro.
-inversion_clear H5.
-inversion_clear H10.
-generalize (path_no_cycle alloc (p1 # r0) p2 l0 (upd r0 p1 null) x1 H5).
-intros (path',(_,(no_rep,reach))).
-generalize (In_dec eq_pointer_dec p1 path').
-intros [H11|H11].
-generalize (split_list p1 path' H11);intros (lp1,(lp2,H12)).
-subst.
-generalize (split_path alloc (p1 # r0) p2 l0 (upd r0 p1 null)  (p1 :: lp2) lp1 reach ).
-intros (p3,(H13,H12)).
-unfold reachable.
-assert (lp1 ++ p1 :: lp2 = lp1 ++ p1 :: lp2).
-auto.
-generalize (no_rep_sublist (lp1 ++ p1 :: lp2) lp1 (p1::lp2) no_rep H10).
-intros.
-inversion H12;subst.
-right;exists (p1::lp2).
-constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-rewrite acc_upd_eq  in H20.
-left;exists lp2.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-auto.
-right.
-unfold reachable.
-exists (p1::path').
-constructor 3;auto.
-apply path_inv_upd_right with p1 null;auto.
-unfold reachable in *|-*.
-inversion_clear H10.
-generalize (path_no_cycle alloc p1 p2 l0 (upd r0 p1 null) x1 H5).
-intros (path',(_,(no_rep,reach))).
-inversion reach;subst.
-right;exists (@nil pointer);
-apply path_inv_upd_right with p2 null;auto.
-right.
-exists (p1::lp).
-constructor 2;auto.
-apply path_inv_upd_right with p1 null;auto.
-apply no_rep_p;auto.
-rewrite acc_upd_eq in H11.
-left.
-exists (lp).
-inversion H11;subst;constructor;auto.
-inversion H12;elim H14;auto.
-inversion H12;elim H14;auto.
-auto.
-unfold reachable in *|-*.
-intros Q.
-generalize (H7 p2);intros (H8,H9);clear H7.
-generalize (H9 H5 Q );intro;clear H9.
-assert ((exists lp : list pointer, path alloc l r root p2 lp) \/
-     (exists lp : list pointer, path alloc l r root p2 lp) -> (exists lp : list pointer, path alloc l r root p2 lp)).
-intros [P|P];auto.
-generalize (H9 H7);clear H9 ;intro.
-generalize (H3 p2 H9);clear H9 H7;intros [H7|H7].
-inversion_clear H7.
-inversion H9;subst.
-right ;exists (p1::nil);constructor 3;auto;caduceus;constructor.
-inversion H7;elim H11;auto.
-inversion H7;elim H11;auto.
-inversion_clear H7.
-generalize (path_no_cycle alloc p1 p2 l0 r0 x1 H9).
-intros (path',(_,(no_rep,reach))).
-inversion reach;subst.
-right ;exists (@nil pointer);constructor.
-right ;exists (p1::lp);constructor 2;auto.
-apply path_upd_right;auto.
-apply no_rep_p;auto.
-left;exists lp;apply path_upd_right;auto.
-apply no_rep_p;auto.
-auto.
-red.
-exists (tail x0).
-split;auto.
-simpl.
-inversion_clear H6.
-inversion_clear H2.
-inversion_clear H6.
-inversion_clear H2.
-inversion_clear H6.
-inversion_clear H2.
-inversion H6;subst.
-inversion Pre31;elim H2;auto.
-destruct (Z_eq_dec (p1 # c0) 0).
-elim (Test4 e).
-simpl.
-unfold clr_list.
-unfold llist.
-apply clr_list_upd_right;auto.
-unfold clr_list in H6.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l1 H6).
-intros (_,h); apply h.
-intros.
-unfold interp_mark_m_and_c_and_stack in H2.
-red.
-destruct m1.
-inversion_clear H2.
-unfold interp_mark_c_and_stack in H8.
-destruct n.
-inversion_clear H8.
-assert (x1 = (mesure_mark m0 x)).
-red in H7; simpl in H7.
-inversion_clear H7.
-inversion_clear H8.
-unfold reachable_elements in *|-*.
-inversion_clear H5;inversion_clear H7.
-subst x1.
-apply mesure_mark_eq;auto.
-intro.
-generalize (H11 p);generalize (H12 p);intros.
-inversion_clear H7.
-generalize (H15 H13);intro.
-inversion_clear H10.
-apply H16.
-intros Q.
-right.
-apply H4;auto.
-generalize (H7 Q);clear H7;intro.
-inversion_clear H7.
-right ;auto.
-left;auto.
-intro.
-generalize (H11 p);generalize (H12 p);intros.
-inversion_clear H10;inversion_clear H7.
-generalize (H15 H13);intro.
-apply H10.
-intros Q.
-generalize (H7 Q);clear H7;intro.
-assert (reachable alloc l r root p \/ reachable alloc l r root p ->
-reachable alloc l r root p).
-intros [P|P];auto.
-generalize (H17 H7);clear H7;clear H17;intro.
-generalize (H3 p H7).
-intros [h|h] ; [ right; apply h | left ; apply h].
-subst x1.
-unfold lex.
-apply Relation_Operators.right_lex.
-assert (x2 = (mesure_mark c0 x)).
-red in H2; simpl in H2.
-inversion_clear H2.
-inversion_clear H8.
-unfold reachable_elements in *|-*.
-inversion_clear H5;inversion_clear H2.
-subst x2.
-apply mesure_mark_eq;auto.
-intro.
-generalize (H11 p);generalize (H12 p);intros.
-inversion_clear H2.
-generalize (H15 H13);intro.
-inversion_clear H10.
-apply H16.
-intros Q.
-right.
-apply H4;auto.
-generalize (H2 Q);clear H2;intro.
-inversion_clear H2.
-right ;auto.
-left;auto.
-intro.
-generalize (H11 p);generalize (H12 p);intros.
-inversion_clear H10;inversion_clear H2.
-generalize (H15 H13);intro.
-apply H10.
-intros Q;generalize (H2 Q);clear H2;intro.
-assert (reachable alloc l r root p \/ reachable alloc l r root p ->
-reachable alloc l r root p).
-intros [P|P];auto.
-generalize (H17 H2);clear H17;intro;clear H2.
-generalize (H3 p H17).
-intros [h|h] ; [ right ; apply h | left ; apply h].
-subst x2.
-unfold lex_nat.
-unfold lex.
-apply Relation_Operators.right_lex.
-red in H9;simpl in H9.
-inversion_clear H9.
-inversion_clear H8.
-subst.
-inversion_clear H6.
-inversion_clear H8.
-inversion_clear H6.
-inversion_clear H8.
-inversion_clear H6.
-inversion_clear H8.
-destruct x0.
-inversion H6;subst.
-elim H1;auto.
-simpl.
-unfold clr_list in *|-*.
-generalize (@llist_function alloc alloc (fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) 
-(p::x0) x1 p1 H6 H9).
-intro;subst.
-auto.
-(*i1*)
-generalize (H3 x H8).
-intuition.
-inversion_clear H10.
-subst.
-unfold reachable.
-generalize (path_no_cycle alloc t1 x l0 r0 x0 H9). 
-intro.
-inversion_clear H10.
-inversion_clear H11.
-inversion_clear H12.
-generalize (In_dec eq_pointer_dec p1 x1).
-intro.
-inversion_clear H12.
-generalize (split_list p1 x1 H14).
-intros (lp0,(lp1,H15)).
-subst x1.
-generalize 
-  (split_path alloc t1 _ l0 r0 (p1::lp1) 
-    (lp0) H13).
-intros (p3,(H15,H16)) .
-inversion H16;subst.
-left.
-exists (p1::lp1).
-constructor 2;auto.
-apply path_upd_right;auto.
-apply no_rep_p.
-apply (no_rep_sublist (lp0 ++ p1 :: lp1) lp0 (p1::lp1)  H11).
-auto.
-right.
-exists lp1.
-apply path_upd_right;auto.
-apply no_rep_p.
-apply (no_rep_sublist (lp0 ++ p1 :: lp1) lp0 (p1::lp1)  H11).
-auto.
-left.
-exists (p1::x1).
-constructor 3;auto.
-rewrite acc_upd_eq;auto.
-apply path_upd_right;auto.
-(*i1b*)
-subst.
-inversion_clear H10.
-generalize 
- (path_no_cycle alloc p1 x l0 r0 x0 H9). 
-intros (path', (H10,H11)).
-inversion_clear H11.
-inversion H13;subst.
-unfold reachable.
-left.
-exists (@nil pointer).
-constructor.
-left.
-exists (p1::lp).
-apply Path_left;auto.
-apply path_upd_right;auto.
-apply no_rep_p;auto.
-right.
-exists lp.
-apply path_upd_right;auto.
-apply no_rep_p;auto.
-(*i1bis*)
-apply H4;subst.
-auto.
-inversion_clear H10.
-unfold reachable.
-generalize 
-  (path_no_cycle alloc p1 x l0 (upd r0 p1 t1) 
-   x0 H9).
-intros (path,(incl,(no_rep,reach))).
-inversion reach;subst.
-right.
-exists (@nil pointer).
-constructor.
-case  (In_dec eq_pointer_dec p1 lp).
-intro.
-generalize (no_rep_p p1 lp no_rep).
-intro.
-elim (H12 i).
-intro.
-right.
-exists (p1::lp).
-constructor 2;auto.
-apply path_inv_upd_right with p1 t1;auto.
-rewrite acc_upd_eq in H11.
-left.
-exists lp.
-apply path_inv_upd_right with p1 t1;auto.
-apply no_rep_p;auto.
-auto.
-apply H4;subst.
-auto.
-inversion_clear H10.
-unfold reachable.
-generalize 
-  (path_no_cycle alloc (p1#r0) x l0 
-   (upd r0 p1 t1) x0 H9).
-intros (path,(incl,(no_rep,reach))).
-inversion reach;subst.
-right.
-exists (p1::nil ).
-constructor 3;auto.
-constructor.
-case  (In_dec eq_pointer_dec p1 lp).
-intro.
-generalize (split_list p1 lp i).
-intros (path',(path'',sub)).
-subst.
-generalize 
- (split_path alloc (p1 # r0) x l0 
-  (upd r0 p1 t1)  (p1 :: path'') (p1 # r0 :: path' ) reach).
-intros (p3,(no_used,reach2)).
-inversion reach2;subst.
-right.
-exists (p1::path'').
-constructor 2;auto.
-apply path_inv_upd_right with p1 t1;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-rewrite acc_upd_eq in H17;auto.
-left.
-exists path''.
-apply path_inv_upd_right with p1 t1;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-intro.
-right.
-exists (p1::p1#r0::lp).
-constructor 3;auto.
-constructor 2;auto.
-apply path_inv_upd_right with p1 t1;auto.
-case (eq_pointer_dec p1 (p1#r0)).
-intro.
-rewrite acc_upd_eq in H11;auto.
-left.
-exists lp.
-apply path_inv_upd_right with p1 t1;auto.
-rewrite e.
-apply no_rep_p;auto.
-intro.
-rewrite acc_upd_neq in H11;auto.
-case  (In_dec eq_pointer_dec p1 lp).
-intro.
-generalize (split_list p1 (lp) i).
-intros (path',(path'',sub)).
-subst.
-generalize (split_path alloc (p1 # r0) 
-  x l0 (upd r0 p1 t1)  (p1 :: path'') ( p1#r0::path' ) reach).
-intros (p3,(no_used,reach2)).
-inversion reach2;subst.
-right.
-exists (p1::path'').
-constructor 2;auto.
-apply path_inv_upd_right with (p1) t1;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-rewrite acc_upd_eq in H17;auto.
-left.
-exists path''.
-apply path_inv_upd_right with p1 t1;auto.
-apply no_rep_p.
-apply no_rep_sublist with (p1 # r0 :: path' ++ p1 :: path'') (p1 # r0 :: path');auto.
-intro.
-right.
-exists (p1::p1#r0::lp).
-constructor 3;auto.
-apply path_inv_upd_right with p1 t1;auto.
-apply no_rep_p;auto.
-assert (~In p1 (p1#r0::lp)).
-intro.
-inversion H12.
-elim (n );auto.
-apply n0;auto.
-simpl.
-split.
-destruct (In_dec eq_pointer_dec p1 (p1 # r0 :: lp)).
-elim (H12 i).
-auto.
-auto.
-clear H4.
-(*recuperation de la list*)
-inversion_clear H2.
-exists (tail x).
-intuition.
-(*i2*)
-inversion H4;subst.
-elim H1.
-auto.
-simpl.
-destruct (Z_eq_dec (p1 # c0) 0).
-elim (Test4 e).
-unfold clr_list.
-unfold llist.
-apply clr_list_upd_right;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-  (fun t : pointer =>  
-    if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) 
-  p1 p1 l1 H4).
+  p1 p1 l1 H).
 intuition.
 (*i3*)
-apply H13 with p_0;auto.
+intros.
+apply H8 .
+unfold in_list.
+unfold GenericLists.in_list.
 destruct x.
-inversion H2.
-simpl in H2.
-unfold in_list in *|-*.
+inversion H;subst.
+elimtype False;elim Pre32;auto.
 right;auto.
 (*i4*)
-generalize (H12 x0).
-intuition.
-inversion H14.
-inversion_clear H17.
-inversion H19;subst.
-elim (H7 H15).
-assert (In t1 (t1::lp)).
-left;auto.
-generalize (H18 t1 H21);intro;elim (H7 H22).
-assert (In t1 (t1::lp)).
-left;auto.
-generalize (H18 t1 H21);intro;elim (H7 H22).
-(*i4b*)
-inversion_clear H14.
-inversion_clear H17.
-unfold in_list in H14.
-destruct x;inversion H14;subst.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => 
-  if Z_eq_dec (t # c0) 0 then t # l0 else t # r0)
-   p1 x1 x H4).
-intros (e,lp).
-subst.
-casetype False.
-assert ((x1#r0) <> null).
-inversion H18.
-inversion_clear H17.
-inversion H20.
-subst.
-inversion H2;auto.
-inversion H17;auto.
-inversion H17;auto.
-assert (In (x1#r0) x).
-inversion_clear H4.
-destruct (Z_eq_dec (x1 # c0) 0 ).
-elim (Test4 e).
-inversion H20.
-tauto.
-left;auto.
-apply (H13 (x1#r0)).
-unfold in_list.
-simpl;auto.
-inversion H18.
-inversion_clear H20.
-apply H21.
-generalize 
-  (path_in_list alloc l0 r0 (x1#r0) x0 x2 H22).
 intros.
-inversion H20.
-inversion H23;subst.
-left;auto.
-subst.
-inversion H22;subst.
-casetype False.
-apply (H13 (x1#r0)).
-unfold in_list.
-right;auto.
-auto.
-right.
-exists (x1).
-simpl.
-split.
-auto.
-assert (In x1 x).
-auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => 
-  if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) 
-  p1 p0 x H4).
-intros (s,h).
-subst p1.
-assert (p0 <> x1).
-intro.
-subst.
-apply h;auto.
-rewrite acc_upd_neq;auto.
-inversion H18.
-inversion_clear H21.
-unfold unmarked_reachable.
-exists x2.
-split;auto.
-apply path_upd_right.
-intro.
-generalize (H22 p0 H21).
-intro.
-apply H13 with p0.
-unfold in_list.
-left;auto.
-auto.
-auto.
-(*i6*)
-subst.
-generalize (eq_pointer_dec x0 p1).
-intro.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-inversion_clear H14;subst;caduceus.
-generalize (H10 t1 p1).
+generalize (H7 x0 H0).
 intros.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => 
-  if Z_eq_dec (t # c0) 0 then t # l0 else t # r0)
-   p1 p x H4).
-intros (s,h).
-subst.
-assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = t1) /\
-     (p # c0 = 0 -> p # l = t1 /\ p # r = p # r0)).
-apply H14.
-simpl.
-intuition.
-inversion_clear H15.
-generalize (H16 Test4).
-intuition.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (~ In x0 (p::x)).
-intro;inversion_clear H14;auto.
-generalize (H11 x0 H14).
-intuition.
-(*i6b*)
-subst.
-generalize (eq_pointer_dec x0 p1).
-intro.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-inversion_clear H14;subst;caduceus.
-generalize (H10 t1 p1).
-intros.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (((p # c0 = 0 -> False) -> p # l = p # l0 /\ p # r = t1) /\
-     (p # c0 = 0 -> p # l = t1 /\ p # r = p # r0)).
-apply H14.
-simpl.
-intuition.
-inversion_clear H15.
-generalize (H16 Test4).
-intuition.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-assert (~ In x0 (p::x)).
-intro;inversion_clear H14;auto.
-generalize (H11 x0 H14).
-intuition.
-(*i7a*)
-subst.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H10 p0 p3 H15);intro.
-inversion_clear H16.
-generalize (H17 H14);intuition.
-auto.
-subst.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
-simpl.
-simpl in H0.
-auto.
-generalize (H10 p0 p3 H15);intro.
-inversion_clear H16.
-generalize (H17 H14);intuition.
-auto.
-subst.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
-generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H10 p0 p3 H15);intro.
-inversion_clear H16.
-generalize (H18 H14);intuition.
-auto.
-subst.
-assert (p3<> p1).
+inversion_clear H9.
+elim Test5.
 intro;subst.
-elim (Test4 H14).
-caduceus.
-destruct x.
-inversion H4.
-subst.
-elim H1;auto.
-unfold clr_list in H4.
+inversion_clear H10.
+inversion_clear H9.
+inversion_clear H0.
+inversion_clear H9.
+inversion H11;subst.
+elimtype False;elim H0;auto.
+elimtype False;elim H9;auto.
+elimtype False;elim H9;auto.
+intros (h1,h2).
+inversion_clear H10.
+inversion_clear H9.
+inversion H11;subst.
+inversion_clear H0.
+elim (h2 H12).
+assert (In t1 (t1::lp)).
+left;auto.
+generalize (H10 t1 H13);intro.
+elim (h2 H14).
+assert (In t1 (t1::lp)).
+left;auto.
+generalize (H10 t1 H13);intro.
+elim (h2 H14).
+unfold clr_list in H.
+inversion_clear H10.
+inversion_clear H9.
+inversion H;subst.
+elimtype False;elim Pre32;auto.
 generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p x H4).
-intros (s,h).
-subst.
-replace (cons p ( tail (p::x))) with (p::x) in H2.
-assert (pair_in_list p0 p3 (cons t1 ( p :: x))).
-simpl.
-simpl in H2.
-auto.
-generalize (H10 p0 p3 H16);intro.
+(fun t : pointer => 
+  if Z_eq_dec (t # c0) 0 then t # l0 else t # r0)
+   p1 p1 l1 H).
+intros (_,no).
+inversion H10;subst.
+destruct (Z_eq_dec (x1 # c0) 0).
+elim (Test4 e).
+inversion H12;subst.
+replace (x1#r0) with null in H11.
+inversion H11;subst.
+inversion_clear H13.
+inversion H15;subst.
+inversion_clear  H0.
+inversion_clear  H13.
+elimtype False;elim H0;auto.
+elimtype False;elim H13;auto.
+elimtype False;elim H13;auto.
+assert (In (x1#r0) (x1 :: x1 # r0 :: l2)).
+right;left;auto.
+generalize (H8 (x1 # r0) H15).
+intro.
+inversion_clear H11.
 inversion_clear H17.
-generalize (H19 H14);intuition.
+inversion H18;subst.
+inversion_clear H0.
+elim (H16 H19).
+assert (In (x1#r0) (x1 # r0 :: lp)).
+left;auto.
+generalize (H11 (x1#r0) H20).
+intro.
+elim (H16 H21).
+assert (In (x1#r0) (x1 # r0 :: lp)).
+left;auto.
+generalize (H11 (x1#r0) H20).
+intro.
+elim (H16 H21).
+right.
+exists x1.
+split.
+simpl;auto.
+rewrite acc_upd_neq.
+red.
+inversion_clear H11.
+inversion_clear H14.
+exists x.
+split;auto.
+apply path_upd_right ;auto.
+assert (In p1 (p1::l1)).
+left;auto.
+generalize (H8 p1 H14).
+intro.
+intro.
+generalize (H11 p1 H17).
 auto.
+intro;subst.
+apply no;auto.
+(*i5*)
+intros.
+inversion H;subst.
+elimtype False;elim Pre31;auto.
+simpl in H0.
+generalize (eq_pointer_dec x0 p1).
+intros [h|h].
+subst.
+caduceus.
+assert (pair_in_list t1 p1 (cons t1 (p1 :: l1))). 
+unfold pair_in_list.
+unfold GenericLists.pair_in_list.
+left.
+auto.
+generalize (H5 t1 p1 H11).
+intros (h1,h2).
+generalize (h1 Test4).
+clear Test6; intuition.
+caduceus.
+apply H6.
+intro;apply H0.
+inversion H11;auto.
+elim h;auto .
+(*i6*)
+intros.
+inversion H;subst.
+elimtype False;elim Pre31;auto.
+generalize (llist_no_rep alloc 
+(fun t : pointer => 
+  if Z_eq_dec (t # c0) 0 then t # l0 else t # r0)
+   p1 p1 l1 H).
+intros (_,no).
+rewrite acc_upd_neq.
+apply H5.
+right.
+simpl in H0;auto.
+simpl in H0.
+intro;subst.
+apply no.
+apply pair_in_list_in with p0 p2;auto.
+(*i7*)
+intros.
+apply H4;auto.
+(*i8*)
+intros.
+apply H3;auto.
 (*terminaison*)
 red.
 red.
 subst.
-inversion H0.
+(*inversion_clear Pre35.
+inversion_clear H0.
+inversion_clear H1.
+inversion_clear H0.
+inversion_clear H1.
+inversion_clear H0.
+inversion_clear H1.
+inversion_clear H0.*)
+inversion_clear Pre37.
+inversion_clear H0.
+inversion_clear Pre35.
+inversion_clear H2.
+inversion_clear H3.
+inversion_clear H2.
+inversion_clear H3.
+inversion_clear H2.
+inversion_clear H3.
 inversion_clear H2.
 exists (existS (fun _ => natnat) (mesure_mark m0 x)
    (existS (fun _ => nat) (mesure_mark c0 x) (List.length (tail x0)))).
@@ -1682,7 +845,7 @@ red; simpl.
 exists x.
 split.
 red.
-inversion_clear H8.
+inversion_clear H1.
 split;auto.
 intros.
 red.
@@ -1690,31 +853,32 @@ split;intro.
 red in H10.
 generalize (H10 p2);intro;clear H10.
 inversion_clear H11.
-apply (H10 ).
+apply H10.
 intros Q.
-right;apply H4;auto.
-generalize (H8 Q);clear H8;intro.
-inversion_clear H8.
-inversion_clear H11.
-generalize (path_no_cycle alloc (p1 # r0) p2 l0 (upd r0 p1 t1) x1 H8).
+inversion_clear H0.
+right;apply H13;auto.
+generalize (H1 Q);clear H1;intro.
+inversion_clear H0.
+inversion_clear H1.
+generalize (path_no_cycle alloc (p1 # r0) p2 l0 (upd r0 p1 t1) x1 H0).
 intros (path',(_,(no_rep,reach))).
 generalize (In_dec eq_pointer_dec p1 path').
-intros [H11|H11].
-generalize (split_list p1 path' H11);intros (lp1,(lp2,H15)).
+intros [O|O].
+generalize (split_list p1 path' O);intros (lp1,(lp2,S)).
 subst.
 generalize (split_path alloc (p1 # r0) p2 l0 (upd r0 p1 t1)  (p1 :: lp2) lp1 reach ).
-intros (p3,(H16,H15)).
+intros (p3,(Path,Path')).
 unfold reachable.
 assert (lp1 ++ p1 :: lp2 = lp1 ++ p1 :: lp2).
 auto.
-generalize (no_rep_sublist (lp1 ++ p1 :: lp2) lp1 (p1::lp2) no_rep H13).
+generalize (no_rep_sublist (lp1 ++ p1 :: lp2) lp1 (p1::lp2) no_rep H1).
 intros.
-inversion H15;subst.
+inversion Path';subst.
 right;exists (p1::lp2).
 constructor 2;auto.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
-rewrite acc_upd_eq  in H22.
+rewrite acc_upd_eq  in H20.
 left;exists lp2.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
@@ -1725,8 +889,8 @@ exists (p1::path').
 constructor 3;auto.
 apply path_inv_upd_right with p1 t1;auto.
 unfold reachable in *|-*.
-inversion_clear H11.
-generalize (path_no_cycle alloc p1 p2 l0 (upd r0 p1 t1) x1 H8).
+inversion_clear H1.
+generalize (path_no_cycle alloc p1 p2 l0 (upd r0 p1 t1) x1 H0).
 intros (path',(_,(no_rep,reach))).
 inversion reach;subst.
 right;exists (@nil pointer);
@@ -1736,25 +900,26 @@ exists (p1::lp).
 constructor 2;auto.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
-rewrite acc_upd_eq in H13.
-left;exists (lp).
+rewrite acc_upd_eq in H14.
+left;exists lp.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
 auto.
 unfold reachable in *|-*.
 generalize (H10 p2);intros (H11,H12);clear H10.
-generalize (H12 H8);intro;clear H12.
+generalize (H12 H1);intro;clear H12.
 intros Q;generalize (H10 Q);clear H10;intro.
 assert ((exists lp : list pointer, path alloc l r root p2 lp) \/
       (exists lp : list pointer, path alloc l r root p2 lp)->(exists lp : list pointer, path alloc l r root p2 lp)).
 intros [P|P];auto.
 generalize (H12 H10);clear H12 H10;intro.
-generalize (H3 p2 H10);clear H10;intros [H12|H12].
-inversion_clear H12.
+inversion_clear H0.
+generalize (H12 p2 H10);clear H10;intros [P|P].
+inversion_clear P.
 generalize (In_dec eq_pointer_dec p1 x1).
 intros [P|P].
 generalize (split_list p1 x1 P);intros (L1,(L2,sub));subst.
-generalize (split_path alloc t1 p2 l0 r0 (p1::L2) L1  H10);intros (p3,(P2,P3)).
+generalize (split_path alloc t1 p2 l0 r0 (p1::L2) L1  H0);intros (p3,(P2,P3)).
 generalize (path_no_cycle alloc p3 p2 l0 r0 (p1::L2) P3).
 intros (path',(_,(no_rep,reach))).
 inversion reach;subst.
@@ -1766,8 +931,8 @@ left;exists lp;inversion P3;subst;
   apply path_upd_right;auto;apply no_rep_p;auto.
 right;exists (p1::x1);constructor 3;auto;caduceus;
   apply path_upd_right;auto;apply no_rep_p;auto.
-inversion_clear H12.
-generalize (path_no_cycle alloc p1 p2 l0 r0 x1 H10).
+inversion_clear P.
+generalize (path_no_cycle alloc p1 p2 l0 r0 x1 H0).
 intros (path',(_,(no_rep,reach))).
 inversion reach;subst.
 right ;exists (@nil pointer);constructor.
@@ -1783,7 +948,7 @@ red; simpl.
 exists x.
 split.
 red.
-inversion_clear H8.
+inversion_clear H1.
 split;auto.
 intros.
 red.
@@ -1791,42 +956,42 @@ split;intro.
 red in H10.
 generalize (H10 p2);intro;clear H10.
 inversion_clear H11.
-apply (H10 ).
-intros Q;right;apply H4;auto.
-generalize (H8 Q);clear H8;intro.
-inversion_clear H8.
-inversion_clear H11.
-generalize (path_no_cycle alloc (p1 # r0) p2 l0 (upd r0 p1 t1) x1 H8).
+apply H10.
+inversion_clear H0.
+intros Q;right;apply H13;auto.
+generalize (H1 Q);clear H1;intro.
+inversion_clear H0.
+inversion_clear H1.
+generalize (path_no_cycle alloc (p1 # r0) p2 l0 (upd r0 p1 t1) x1 H0).
 intros (path',(_,(no_rep,reach))).
 generalize (In_dec eq_pointer_dec p1 path').
-intros [H11|H11].
-generalize (split_list p1 path' H11);intros (lp1,(lp2,H13)).
+intros [P|P].
+generalize (split_list p1 path' P);intros (lp1,(lp2,S)).
 subst.
 generalize (split_path alloc (p1 # r0) p2 l0 (upd r0 p1 t1)  (p1 :: lp2) lp1 reach ).
-intros (p3,(H14,H13)).
+intros (p3,(S1,S2)).
 unfold reachable.
 assert (lp1 ++ p1 :: lp2 = lp1 ++ p1 :: lp2).
 auto.
-generalize (no_rep_sublist (lp1 ++ p1 :: lp2) lp1 (p1::lp2) no_rep H15).
+generalize (no_rep_sublist (lp1 ++ p1 :: lp2) lp1 (p1::lp2) no_rep H1).
 intros.
-inversion H13;subst.
+inversion S2;subst.
 right;exists (p1::lp2).
 constructor 2;auto.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
-rewrite acc_upd_eq  in H22.
+rewrite acc_upd_eq  in H20;auto.
 left;exists lp2.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
-auto.
 right.
 unfold reachable.
 exists (p1::path').
 constructor 3;auto.
 apply path_inv_upd_right with p1 t1;auto.
 unfold reachable in *|-*.
-inversion_clear H11.
-generalize (path_no_cycle alloc p1 p2 l0 (upd r0 p1 t1) x1 H8).
+inversion_clear H1.
+generalize (path_no_cycle alloc p1 p2 l0 (upd r0 p1 t1) x1 H0).
 intros (path',(_,(no_rep,reach))).
 inversion reach;subst.
 right;exists (@nil pointer);
@@ -1836,26 +1001,27 @@ exists (p1::lp).
 constructor 2;auto.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
-rewrite acc_upd_eq in H13.
+rewrite acc_upd_eq in H14.
 left.
-exists (lp).
+exists lp.
 apply path_inv_upd_right with p1 t1;auto.
 apply no_rep_p;auto.
 auto.
 unfold reachable in *|-*.
 generalize (H10 p2);clear H10;intros (H10,H11).
-intros Q;generalize (H11 H8 Q);intro;clear H11.
+intros Q;generalize (H11 H1 Q);intro;clear H11.
 assert ((exists lp : list pointer, path alloc l r root p2 lp) \/
       (exists lp : list pointer, path alloc l r root p2 lp)->
 (exists lp : list pointer, path alloc l r root p2 lp)).
 intros [P|P];auto.
 generalize (H11 H12);clear H11 H12 ;intro.
-generalize (H3 p2 H11);clear H11;intros [H11|H11].
-inversion_clear H11.
+inversion_clear H0.
+generalize (H12 p2 H11);clear H11;intros [P|P].
+inversion_clear P.
 generalize (In_dec eq_pointer_dec p1 x1).
 intros [P|P].
 generalize (split_list p1 x1 P);intros (L1,(L2,sub));subst.
-generalize (split_path alloc t1 p2 l0 r0 (p1::L2) L1  H12);intros (p3,(P2,P3)).
+generalize (split_path alloc t1 p2 l0 r0 (p1::L2) L1  H0);intros (p3,(P2,P3)).
 generalize (path_no_cycle alloc p3 p2 l0 r0 (p1::L2) P3).
 intros (path',(_,(no_rep,reach))).
 inversion reach;subst.
@@ -1867,8 +1033,8 @@ left;exists lp;inversion P3;subst;
   apply path_upd_right;auto;apply no_rep_p;auto.
 right;exists (p1::x1);constructor 3;auto;caduceus;
   apply path_upd_right;auto;apply no_rep_p;auto.
-inversion_clear H11.
-generalize (path_no_cycle alloc p1 p2 l0 r0 x1 H12).
+inversion_clear P.
+generalize (path_no_cycle alloc p1 p2 l0 r0 x1 H0).
 intros (path',(_,(no_rep,reach))).
 inversion reach;subst.
 right;exists (@nil pointer);constructor.
@@ -1880,23 +1046,17 @@ red.
 exists (tail x0).
 split;auto.
 simpl.
-inversion_clear H9.
-inversion_clear H2.
-inversion_clear H9.
-inversion_clear H2.
-inversion_clear H9.
-inversion_clear H2.
-inversion H9;subst.
-elim H1;auto.
+inversion H3;subst.
+elimtype False;elim Pre31;auto.
 destruct (Z_eq_dec (p1 # c0) 0).
 elim (Test4 e).
 simpl.
 unfold clr_list.
 unfold llist.
 apply clr_list_upd_right;auto.
-unfold clr_list in H9.
+unfold clr_list in H3.
 generalize (llist_no_rep alloc 
-(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l1 H9).
+(fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) p1 p1 l1 H3).
 tauto.
 intros.
 unfold interp_mark_m_and_c_and_stack in H2.
@@ -1911,34 +1071,37 @@ red in H10; simpl in H10.
 inversion_clear H10.
 inversion_clear H11.
 unfold reachable_elements in *|-*.
-inversion_clear H10;inversion_clear H8.
+inversion_clear H10.
+inversion_clear H1.
 subst x1.
 apply mesure_mark_eq;auto.
 intro.
-generalize (H14 p);generalize (H15 p);intros.
+generalize (H14 p);generalize (H15 p);intros;clear H14;clear H15.
 inversion_clear H13.
-generalize (H18 H16);intro.
-inversion_clear H8.
-apply H19.
+generalize (H15 H16);intro;clear H15.
+inversion_clear H0.
+inversion_clear H1.
+apply H0.
 intros Q.
 right.
-apply H4;auto.
+apply H17;auto.
 generalize (H13 Q);clear H7;intro.
-inversion_clear H7.
+inversion_clear H1.
 right ;auto.
 left;auto.
 intro.
 generalize (H15 p);generalize (H14 p);intros.
-inversion_clear H13;inversion_clear H8.
-generalize (H18 H16);intro.
+inversion_clear H13;inversion_clear H1.
+generalize (H18 H16);intro;clear H18.
 apply H13.
 intros Q.
-generalize (H8 Q);clear H8;intro.
+generalize (H1  Q);clear H1;intro.
 assert (reachable alloc l r root p \/ reachable alloc l r root p ->
 reachable alloc l r root p).
 intros [P|P];auto.
-generalize (H20 H8);clear H8;clear H20;intro.
-generalize (H3 p H8).
+inversion_clear H0.
+generalize (H18 H1);clear H1;clear H18;intro.
+generalize (H20 p H0).
 intros [h|h] ; [ right ; apply h | left ; apply h].
 subst x1.
 unfold lex.
@@ -1948,34 +1111,36 @@ red in H2; simpl in H2.
 inversion_clear H2.
 inversion_clear H11.
 unfold reachable_elements in *|-*.
-inversion_clear H2;inversion_clear H8.
+inversion_clear H2;inversion_clear H1.
 subst x2.
 apply mesure_mark_eq;auto.
 intro.
 generalize (H14 p);generalize (H15 p);intros.
 inversion_clear H13.
 generalize (H18 H16);intro.
-inversion_clear H8.
+inversion_clear H1.
 apply H19.
 intros Q.
 right.
-apply H4;auto.
+inversion_clear H0.
+apply H21;auto.
 generalize (H13 Q);clear H7;intro.
-inversion_clear H7.
+inversion_clear H0.
 right ;auto.
 left;auto.
 intro.
 generalize (H15 p);generalize (H14 p);intros.
-inversion_clear H13;inversion_clear H8.
+inversion_clear H13;inversion_clear H1.
 generalize (H18 H16);intro.
 apply H13.
 intros Q.
-generalize (H8 Q);clear H8;intro.
+generalize (H1 Q);clear H1;intro.
 assert (reachable alloc l r root p \/ reachable alloc l r root p ->
 reachable alloc l r root p).
 intros [P|P];auto.
-generalize (H20 H8);clear H8;clear H20;intro.
-generalize (H3 p H8).
+generalize (H20 H1);clear H1;clear H20;intro.
+inversion_clear H0.
+generalize (H20 p H1).
 intros [h|h] ; [right ; apply h | left ; apply h].
 subst x2.
 unfold lex_nat.
@@ -1985,19 +1150,13 @@ red in H12;simpl in H12.
 inversion_clear H12.
 inversion_clear H11.
 subst.
-inversion_clear H9.
-inversion_clear H11.
-inversion_clear H9.
-inversion_clear H11.
-inversion_clear H9.
-inversion_clear H11.
 destruct x0.
-inversion H9;subst.
-elim H1;auto.
+inversion H3;subst.
+elimtype False;elim Pre32;auto.
 simpl.
 unfold clr_list in *|-*.
 generalize (@llist_function alloc alloc (fun t : pointer => if Z_eq_dec (t # c0) 0 then t # l0 else t # r0) 
-(p::x0) x1 p1 H9 H12).
+(p::x0) x1 p1 H3 H12).
 intro;subst.
 auto.
 Save.
