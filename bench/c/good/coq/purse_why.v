@@ -359,32 +359,3 @@ subst balance0.
 rewrite acc_upd_neq; intuition.
 Save.
 
-Proof.
-intuition.
-Save.
-
-Proof.
-unfold purse_inv; intuition.
-
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-(* FILL PROOF HERE *)
-Save.
-

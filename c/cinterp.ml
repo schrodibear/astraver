@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.50 2004-03-23 14:47:59 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.51 2004-03-23 15:50:33 filliatr Exp $ i*)
 
 
 open Format
@@ -771,13 +771,11 @@ let interp_function_spec id sp ty pl =
 let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   match decl.node with
   | Tlogic(id,ltype) -> 
-      lprintf 
-      "translating logic declaration of %s@." id.logic_name;
+      lprintf "translating logic declaration of %s@." id.logic_name;
       (why_code, cinterp_logic_symbol id ltype::why_spec,
        prover_decl)
   | Taxiom(id,p) -> 
-      lprintf 
-      "translating axiom declaration %s@." id;      
+      lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
       (why_code, Axiom(id,a)::why_spec, prover_decl)
   | Ttypedef(ctype,id) -> 
@@ -785,8 +783,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ttypedecl(ctype) -> 
       assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 
-      lprintf 
-        "translating global declaration of %s@." v.var_name;
+      lprintf "translating global declaration of %s@." v.var_name;
       let t = base_type (Ceffect.interp_type ctype) in
       begin
 	match init with 
