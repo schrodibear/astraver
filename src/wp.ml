@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.27 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.28 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -44,7 +44,8 @@ let top_point_block = function
 
 let while_post_block env inv (phi,r) bl = 
   let lab,bl = top_point_block bl in
-  let decphi = papplist r [phi; put_label_term env lab phi] in
+  let decphit = applist r [phi; put_label_term env lab phi] in
+  let decphi = predicate_of_term decphit in
   let q = match inv with
     | None -> anonymous decphi
     | Some i -> { a_value = pand i.a_value decphi; a_name = i.a_name }

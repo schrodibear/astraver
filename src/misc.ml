@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.22 2002-03-14 16:13:41 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.23 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -57,31 +57,27 @@ let next s r = function
   | Anonymous -> incr r; Ident.create (s ^ string_of_int !r)
   | Name id -> id
 
-let reset_names,pre_name,post_name,inv_name,
-    test_name,bool_name,variant_name,phi_name,for_name,label_name,fresh_var =
-  let pre = ref 0 in
-  let post = ref 0 in
-  let inv = ref 0 in
-  let test = ref 0 in
-  let bool = ref 0 in
-  let var = ref 0 in
-  let phi = ref 0 in
-  let forr = ref 0 in
-  let label = ref 0 in
-  let fvar = ref 0 in
-    (fun () -> 
-       pre := 0; post := 0; inv := 0; test := 0; 
-       bool := 0; var := 0; phi := 0; label := 0),
-    (next "Pre" pre),
-    (next "Post" post),
-    (next "Inv" inv),
-    (next "Test" test),
-    (fun () -> next "Bool" bool Anonymous),
-    (next "Variant" var),
-    (fun () -> next "rphi" phi Anonymous),
-    (fun () -> next "for" forr Anonymous),
-    (fun () -> Ident.string (next "_label_" label Anonymous)),
-    (fun () -> next "_var_" fvar Anonymous)
+let reset_names_tables = ref []
+let reset_names () = List.iter (fun f -> f ()) !reset_names_tables
+
+let gen_sym_name s =
+  let r = ref 0 in 
+  reset_names_tables := (fun () -> r := 0) :: !reset_names_tables;
+  next s r
+
+let gen_sym s = let g = gen_sym_name s in fun () -> g Anonymous
+
+let pre_name = gen_sym_name "Pre"
+let post_name = gen_sym_name "Post"
+let inv_name = gen_sym_name "Inv"
+let test_name = gen_sym_name "Test"
+let bool_name = gen_sym "Bool"
+let variant_name = gen_sym "Variant"
+let phi_name = gen_sym "rphi"
+let for_name = gen_sym "for"
+let label_name = let f = gen_sym "_label_" in fun () -> Ident.string (f ())
+let fresh_var = gen_sym "_var_"
+let wf_name = gen_sym "wf"
 
 let id_of_name = function Name id -> id | Anonymous -> default
 
@@ -135,6 +131,11 @@ let papplist f l = match (f,l) with
   | f, [] -> f
   | Pvar id, l -> Papp (id, l)
   | Papp (id, l), l' -> Papp (id, l @ l')
+  | _ -> assert false
+
+let rec predicate_of_term = function
+  | Tvar x -> Pvar x
+  | Tapp (id, l) -> Papp (id, l)
   | _ -> assert false
 
 let rec collect_term s = function

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.20 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.21 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -433,6 +433,8 @@ let rec print_cc_type fmt = function
       print_pure_type fmt pt
   | TTarray (s, t) -> 
       fprintf fmt "(array %a %a)" print_term s print_cc_type t
+  | TTlambda (b, t) ->
+      fprintf fmt "[%a]%a" print_binder b print_cc_type t
   | TTarrow (b, t) -> 
       fprintf fmt "(%a)%a" print_binder b print_cc_type t
   | TTtuple (bl, None) -> 
@@ -490,6 +492,8 @@ let rec print_cc_term fmt = function
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole c ->
       fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"
+  | CC_type t ->
+      print_cc_type fmt t
 
 and print_binders fmt bl =
   print_list nothing (fun fmt b -> fprintf fmt "[%a]" print_binder b) fmt bl

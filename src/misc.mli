@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.20 2002-03-14 16:13:41 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.21 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -41,17 +41,20 @@ val if_labelled : (Ident.t * string -> unit) -> Ident.t -> unit
 type avoid = Ident.set
 val renaming_of_ids : avoid -> Ident.t list -> (Ident.t * Ident.t) list * avoid
 
-val reset_names : unit -> unit
 val pre_name    : Ident.name -> Ident.t
 val post_name   : Ident.name -> Ident.t
 val inv_name    : Ident.name -> Ident.t
 val test_name   : Ident.name -> Ident.t
+
 val bool_name   : unit -> Ident.t
-val variant_name : Ident.name -> Ident.t
+val variant_name : unit -> Ident.t
 val phi_name    : unit -> Ident.t
 val for_name    : unit -> Ident.t
 val label_name  : unit -> string
-val fresh_var : unit -> Ident.t
+val wf_name     : unit -> Ident.t
+val fresh_var   : unit -> Ident.t
+
+val reset_names : unit -> unit
 
 val id_of_name : Ident.name -> Ident.t
 
@@ -59,6 +62,8 @@ val id_of_name : Ident.name -> Ident.t
 
 val applist : term -> term list -> term
 val papplist : predicate -> term list -> predicate
+
+val predicate_of_term : term -> predicate
 
 val term_vars : term -> Ident.set
 val predicate_vars : predicate -> Ident.set

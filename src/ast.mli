@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.20 2002-03-15 13:00:31 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.21 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -13,7 +13,7 @@ type variable = Ident.t
 
 type label = string
 
-type variant = term * predicate
+type variant = term * term
 
 type 'a t = 
   { desc : 'a t_desc;
@@ -70,6 +70,7 @@ type decl =
 type cc_type =
   | TTpure of pure_type
   | TTarray of term * cc_type
+  | TTlambda of cc_binder * cc_type
   | TTarrow of cc_binder * cc_type
   | TTtuple of (variable * cc_type) list * predicate option
 
@@ -90,3 +91,4 @@ type cc_term =
   | CC_if of cc_term * cc_term * cc_term
   | CC_expr of term
   | CC_hole of predicate
+  | CC_type of cc_type

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.6 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.7 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Ast
 open Misc
@@ -30,6 +30,8 @@ let rec cc_subst subst = function
       CC_expr (tsubst_in_term subst c)
   | CC_hole ty ->
       CC_hole (tsubst_in_predicate subst ty)
+  | CC_type t ->
+      CC_type (cc_type_subst subst t)
 
 and cc_subst_binders subst = List.map (cc_subst_binder subst)
 
@@ -45,6 +47,9 @@ and cc_cross_binders subst = function
 and cc_type_subst subst = function
   | TTarray (t, tt) -> 
       TTarray (tsubst_in_term subst t, cc_type_subst subst tt)
+  | TTlambda (b, tt) ->
+      TTlambda (cc_subst_binder subst b,
+		cc_type_subst (cc_cross_binders subst [b]) tt)
   | TTarrow (b, tt) -> 
       TTarrow (cc_subst_binder subst b, 
 	       cc_type_subst (cc_cross_binders subst [b]) tt)
@@ -104,6 +109,6 @@ let rec red = function
       CC_if (red a, red b, red c)
   | CC_tuple al ->
       CC_tuple (List.map red al)
-  | CC_var _ | CC_hole _ | CC_expr _ as e -> e
+  | CC_var _ | CC_hole _ | CC_expr _ | CC_type _ as e -> e
 
 

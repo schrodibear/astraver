@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.17 2002-03-15 13:00:32 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.18 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -255,9 +255,42 @@ let fresh id e ren =
   let id',ren' = Rename.fresh ren id in
   e id' ren'
 
-(*s Well-founded recursion. *)
+(*s Well-founded recursion. 
+
+    \begin{verbatim}
+    [h:(I x)](well_founded_induction
+              A R ?::(well_founded A R)
+              [Phi:A] (x) Phi=phi(x)->(I x)-> \exists x'.res.(Q x x' res)
+              [Phi0:A][w:(Phi:A)(Phi<Phi0)-> ...]
+                [x][eq:Phi_0=phi(x)][h:(I x)]
+
+                      <body where w <- (w phi(x1) ? x1 ? ?)>
+
+              phi(x) x ? ?)
+    \end{verbatim}
+*)
 
 let wf (phi,r) vphi info f ren =
-  failwith "todo"
-
-
+  let w = wf_name () in
+  let k = info.kappa in
+  let tphi = trad_type_c ren info.env k in
+  let vphi0 = variant_name () in
+  let tphi0 = trad_type_c ren info.env (type_c_subst [vphi,vphi0] k) in
+  let tw = 
+    let r_phi0_phi = predicate_of_term (applist r [Tvar vphi0; Tvar vphi]) in
+    TTarrow ((vphi0, CC_untyped_binder),
+	     TTarrow ((pre_name Anonymous, CC_pred_binder r_phi0_phi), tphi0))
+  in
+  let fw ren = 
+    let tphi = apply_term ren info.env phi in
+    let decphi = predicate_of_term (applist r [tphi; Tvar vphi]) in
+    CC_app (CC_var w, [CC_expr tphi; CC_hole decphi]) 
+  in
+  CC_app (CC_var well_founded_induction,
+	  [CC_expr r;
+	   CC_hole (papplist (Pvar well_founded) [r]);
+	   CC_type (TTarrow ((vphi, CC_untyped_binder), tphi));
+	   CC_lam ([vphi0, CC_untyped_binder;
+		    w, CC_var_binder tw],
+		   f fw ren);
+	   CC_expr (apply_term ren info.env phi)])

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.7 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.8 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -41,6 +41,7 @@ type error =
   | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
+  | AnyMessage of string
 
 exception Error of (Loc.t option) * error
 

@@ -62,7 +62,8 @@ let vcg base t =
 	List.iter (fun (bl,e) -> traverse (traverse_binders ctx bl) e) pl
     | CC_if (a,b,c) ->
 	traverse ctx a; traverse ctx b; traverse ctx c
-    | CC_expr _ -> 
+    | CC_expr _ 
+    | CC_type _ -> 
 	()
     | CC_hole p -> 
 	if not (discharge ctx p) then push ctx p else discharge_msg ()

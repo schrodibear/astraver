@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.10 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.11 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -40,10 +40,13 @@ type error =
   | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
   | NoVariableAtDate of Ident.t * string
+  | AnyMessage of string
 
 exception Error of (Loc.t option) * error
 
 let report fmt = function
+  | AnyMessage s ->
+      fprintf fmt "%s" s
   | UnboundVariable id ->
       fprintf fmt "Unbound variable %s" (Ident.string id)
   | UnboundReference id ->

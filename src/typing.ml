@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.30 2002-03-15 13:00:32 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.31 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -130,8 +130,14 @@ let type_v_sup loc t1 t2 =
   if t1 <> t2 then Error.if_branches loc;
   t1
 
-(* todo: type variants *)
-let typed_var env (phi,r) = (phi, r)
+let typed_var loc env var = var
+(*i todo: type variants
+let typed_var loc env (phi,r) = 
+  match typing_term loc env phi with
+    | PureType t -> (phi, r, t)
+    | _ -> Error.raise_with_loc (Some loc) 
+   	     (Error.AnyMessage "A variant must have a pure type")
+***i*)
 
 (* TODO: subtype is currently structural equality *)
 let rec subtype = function
@@ -382,8 +388,8 @@ and typef_desc lab env loc = function
       let bl,v,ef = typef_block lab env bl in
       Seq bl, (v,ef), []
 	      
-  | While (b, invopt, (var,r), bl) ->
-      let efphi = state_var lab env (var,r) in
+  | While (b, invopt, var, bl) ->
+      let efphi = state_var lab env var in
       let t_b = typef lab env b in
       Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
       let t_bl,_,ef_bl = typef_block lab env bl in
@@ -394,11 +400,13 @@ and typef_desc lab env loc = function
 	Effect.union (Effect.union ef_bl efb) (Effect.union efinv efphi)
       in
       let v = type_v_unit in
+(*i***
       let var' = 
 	let al = List.map (fun id -> (id,at_id id "")) (just_reads ef) in
 	subst_in_term al var 
       in
-      While (t_b,invopt,(var',r),t_bl), (v,ef), []
+***i*)
+      While (t_b,invopt,var,t_bl), (v,ef), []
       
   | Lam ([],_) ->
       assert false
@@ -503,7 +511,7 @@ and typef_desc lab env loc = function
       check_type_v (Some loc) lab env' v;
       let efvar = state_var lab env' var in
       let phi0 = phi_name () in
-      let tvar = typed_var env' var in
+      let tvar = typed_var loc env' var in
       (* effect for a let/rec construct is computed as a fixpoint *)
       let rec state_rec c =
 	(* TODO: change label to "0" in [c] *)

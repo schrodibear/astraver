@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.9 2002-03-15 13:00:32 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.10 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -63,9 +63,9 @@ val is_ref : local_env -> Ident.t -> bool
 type type_info = Set | TypeV of type_v
 val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
 
-(* local environnements also contains a list of recursive functions
- * with the associated variant *)
+(* local environments also contain a list of recursive functions
+   with the associated variant *)
 
 val add_recursion : Ident.t * (Ident.t * variant) -> local_env -> local_env
-val find_recursion : Ident.t -> local_env -> Ident.t * variant
 
+val find_recursion : Ident.t -> local_env -> Ident.t * variant

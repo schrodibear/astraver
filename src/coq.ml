@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.13 2002-03-14 14:38:09 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.14 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -151,6 +151,7 @@ let rec print_cc_type fmt = function
       print_pure_type fmt pt
   | TTarray (s, v) -> 
       fprintf fmt "(array %a %a)" print_term s print_cc_type v
+  | TTlambda _
   | TTarrow _ 
   | TTtuple _ -> 
       assert false

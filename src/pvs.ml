@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.11 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.12 2002-03-15 14:08:33 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -112,6 +112,7 @@ let print_predicate fmt p =
 let rec print_cc_type fmt = function
   | TTpure pt -> print_pure_type fmt pt
   | TTarray (_, v) -> fprintf fmt "[int -> %a]" print_cc_type v
+  | TTlambda _
   | TTarrow _
   | TTtuple _ -> assert false
 
