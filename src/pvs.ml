@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.6 2002-01-31 12:44:35 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.7 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -78,7 +78,7 @@ let rec print_pure_type fmt = function
 let print_predicate fmt p =
   let rec print0 = function
     | Pif (a, b, c) -> 
-	fprintf fmt "@[IF "; print0 a; fprintf fmt "@ THEN ";
+	fprintf fmt "@[IF "; print_term fmt a; fprintf fmt "@ THEN ";
 	print0 b; fprintf fmt "@ ELSE "; print0 c; fprintf fmt " ENDIF@]"
     | Pimplies (a, b) -> 
 	fprintf fmt "(@["; print1 a; fprintf fmt " IMPLIES@ "; print0 b;
@@ -91,7 +91,11 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " AND@ "; print3 b
     | p -> print3 p
   and print3 = function
-    | Pterm t -> print_term fmt t
+    | Pvar id -> Ident.print fmt id
+    | Papp (id, l) -> 	
+	fprintf fmt "%s(@[" (Ident.string id);
+	print_list fmt (fun fmt () -> fprintf fmt ",@ ") print_term l;
+	fprintf fmt "@])"
     | Pnot p -> fprintf fmt "NOT "; print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in

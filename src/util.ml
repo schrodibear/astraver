@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.5 2001-08-24 19:00:08 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.6 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -216,8 +216,6 @@ let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 (* [decomp_boolean c] returns the specs R and S of a boolean expression *)
 
 let decomp_boolean = function
-  | Some { a_value = Pif (Pterm (Tvar id),a,b) } when id = Ident.result ->
-      a,b
   | Some { a_value = c } -> 
       (* q -> if result then q(true) else q(false) *)
       let ctrue = tsubst_in_predicate [Ident.result,ttrue] c in
@@ -244,8 +242,7 @@ let make_raw_access ren env (id,id') c =
 
 let make_pre_access ren env id c =
   let size,_ = array_info ren env id in
-  Pand (Pterm (Tapp (Ident.t_le, [Tconst (ConstInt 0); c])),
-	Pterm (Tapp (Ident.t_lt, [c; size])))
+  Pand (le (Tconst (ConstInt 0)) c, lt c size)
       
 let make_raw_store ren env (id,id') c1 c2 =
   let size,_ = array_info ren env id in

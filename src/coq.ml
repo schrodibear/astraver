@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.6 2002-02-04 12:07:57 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.7 2002-02-04 16:42:20 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -18,34 +18,37 @@ let relation id =
   else if id == t_gt then ">"
   else if id == t_ge then ">="
   else if id == t_eq then "="
-  else if id == t_noteq then "/="
+  else if id == t_noteq then "<>"
   else assert false
+
+let inz = ref 0
+let openz fmt = if !inz == 0 then fprintf fmt "`@["; incr inz 
+let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
 
 let print_term fmt t = 
   let rec print0 = function
     | Tapp (id, [a;b]) when is_relation id ->
-	fprintf fmt "@[<hov 2>`"; print1 a; 
-	fprintf fmt " %s@ " (relation id);
-	print1 b; fprintf fmt "`@]"
+	fprintf fmt "(@[<hov 2>Z%s_bool@ " (Ident.string id);
+	print1 a; fprintf fmt "@ "; print1 b; fprintf fmt "@])"
     | t -> 
 	print1 t
   and print1 = function
     | Tapp (id, [a;b]) when id == t_add || id == t_sub ->
-	fprintf fmt "@[<hov 2>"; print1 a;
+	openz fmt; print1 a;
 	fprintf fmt " %s@ " (if id == t_add then "+" else "-");
-	print2 b; fprintf fmt "@]"
+	print2 b; closez fmt
     | t ->
 	print2 t
   and print2 = function
     | Tapp (id, [a;b]) when id == t_mul || id == t_div ->
-	fprintf fmt "@[<hov 2>"; print2 a;
+	openz fmt; print2 a;
 	fprintf fmt " %s@ " (if id == t_mul then "*" else "/");
-	print3 b; fprintf fmt "@]"
+	print3 b; closez fmt
     | t ->
 	print3 t
   and print3 = function
     | Tconst (ConstInt n) -> 
-	fprintf fmt "%d" n
+	openz fmt; fprintf fmt "%d" n; closez fmt
     | Tconst (ConstBool b) -> 
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
@@ -53,20 +56,27 @@ let print_term fmt t =
     | Tconst (ConstFloat f) -> 
 	(* TODO *)
 	assert (floor f = f);
-	fprintf fmt "%d" (truncate f)
+	openz fmt; fprintf fmt "%d" (truncate f); closez fmt
     | Tbound _ ->
 	assert false
+    | Tvar id when id == t_zwf_zero ->
+	openz fmt; fprintf fmt "(Zwf "; 
+	fprintf fmt "0"; fprintf fmt ")"; closez fmt
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
     | Tapp (id, [t]) when id == t_neg ->
-	fprintf fmt "-"; print3 t
+	openz fmt; fprintf fmt "-"; print3 t; closez fmt
     | Tapp (id, l) as t when is_relation id || is_arith id ->
 	fprintf fmt "@[("; print0 t; fprintf fmt ")@]"
+    | Tapp (id, tl) when id == t_zwf_zero -> 
+	openz fmt;
+	fprintf fmt "(@[Zwf 0 "; print_terms tl; fprintf fmt "@])";
+	closez fmt
     | Tapp (id, tl) -> 
-	fprintf fmt "(@[%s " (Ident.string id);
-	print_list fmt 
-	  (fun fmt () -> fprintf fmt "@ ") (fun _ t -> print0 t) tl;
+	fprintf fmt "(@[%s " (Ident.string id); print_terms tl;
 	fprintf fmt "@])"
+  and print_terms tl =
+    print_list fmt (fun fmt () -> fprintf fmt "@ ") (fun _ t -> print0 t) tl
   in
   print0 t
 
@@ -83,9 +93,13 @@ let rec print_pure_type fmt = function
 let print_predicate fmt p =
   let rec print0 = function
     | Pif (a, b, c) -> 
+	fprintf fmt "(@[if "; print_term fmt a; fprintf fmt "@ then ";
+	print0 b; fprintf fmt "@ else "; print0 c; fprintf fmt "@])"
+(*i
 	fprintf fmt "((@["; print1 a; fprintf fmt " ->@ "; print0 b; 
 	fprintf fmt ") /\@ (~"; print3 a; fprintf fmt " ->@ "; print0 c; 
 	fprintf fmt "@]))"
+i*)
     | Pimplies (a, b) -> 
 	fprintf fmt "(@["; print1 a; fprintf fmt " ->@ "; print0 b;
 	fprintf fmt "@])"
@@ -97,9 +111,29 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " /\@ "; print3 b
     | p -> print3 p
   and print3 = function
-    | Pterm (Tconst (ConstBool false)) -> fprintf fmt "False"
-    | Pterm (Tconst (ConstBool true)) -> fprintf fmt "True"
-    | Pterm t -> print_term fmt t
+    | Ptrue -> fprintf fmt "True"
+    | Pfalse -> fprintf fmt "False"
+    | Pvar id -> Ident.print fmt id
+    | Papp (id, [a;b]) when id == t_eq ->
+	print_term fmt a; fprintf fmt " =@ "; print_term fmt b
+    | Papp (id, [t]) when id == well_founded ->
+	fprintf fmt "@[(well_founded ?@ "; print_term fmt t; fprintf fmt ")@]"
+    | Papp (id, [a;b]) when id == t_noteq ->
+	fprintf fmt "~("; 
+	print_term fmt a; fprintf fmt " =@ "; print_term fmt b;
+	fprintf fmt ")"
+    | Papp (id, [a;b]) when id == t_zwf_zero ->
+	fprintf fmt "(Zwf `0` "; 
+	print_term fmt a; fprintf fmt " ";
+	print_term fmt b; fprintf fmt ")"
+    | Papp (id, [a;b]) when is_comparison id ->
+	openz fmt; print_term fmt a; 
+	fprintf fmt " %s@ " (relation id);
+	print_term fmt b; closez fmt
+    | Papp (id, l) ->
+	fprintf fmt "(@[%s " (Ident.string id); 
+	print_list fmt (fun fmt () -> fprintf fmt "@ ") print_term l;
+	fprintf fmt "@])"
     | Pnot p -> fprintf fmt "~"; print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in

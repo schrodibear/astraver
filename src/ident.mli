@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.7 2002-02-04 12:07:57 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.8 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 (*s Indentifiers. *)
 
@@ -66,5 +66,6 @@ val p_or : t
 val p_and : t
 val p_not : t
 
+val is_comparison : t -> bool
 val is_relation : t -> bool
 val is_arith : t -> bool

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.5 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.6 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -316,10 +316,10 @@ let make_block ren env finish bl =
  *)
 
 let eq ty e1 e2 =
-  Tapp (Ident.t_eq, [e1; e2])
+  Papp (Ident.t_eq, [e1; e2])
 
 let lt r e1 e2 = match r with
-  | Tvar id -> Tapp (id, [e1; e2])
+  | Tvar id -> Papp (id, [e1; e2])
   | _ -> assert false
 
 let is_recursive env = function
@@ -337,14 +337,14 @@ let dec_phi ren env s svi =
     (fun (phi0,(cphi,r,_)) f -> 
        let phi = subst_in_term svi (subst_in_term s cphi) in
        let phi = apply_term ren env phi in
-       [CC_expr phi; CC_hole (Pterm (lt r phi (Tvar phi0)))])
+       [CC_expr phi; CC_hole (lt r phi (Tvar phi0))])
 
 let eq_phi ren env s svi =
   if_recursion env
     (fun (phi0,(cphi,_,a)) f ->
        let phi = subst_in_term svi (subst_in_term s cphi) in
        let phi = apply_term ren env phi in
-       [CC_hole (Pterm (eq a phi phi))])
+       [CC_hole (eq a phi phi)])
 
 let is_ref_binder = function 
   | (_,BindType (Ref _ | Array _)) -> true
@@ -513,9 +513,9 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
 	     let v = List.rev (current_vars ren'' (get_writes ef)) in
 	       CC_app (CC_var id_w,
 		       [CC_expr (phi_of ren'');
-			CC_hole (Pterm (lt r (phi_of ren'') (Tvar id_phi0)))]
+			CC_hole (lt r (phi_of ren'') (Tvar id_phi0))]
 		       @(List.map (fun (_,id) -> CC_var id) v)
-		       @(CC_hole (Pterm (eq a (phi_of ren'') (phi_of ren''))))
+		       @(CC_hole (eq a (phi_of ren'') (phi_of ren'')))
 		       ::(match i with
 			    | None -> [] 
 			    | Some c -> 
@@ -544,7 +544,7 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
   in
   let t = 
     CC_lam ([var_name Anonymous,
-	     CC_pred_binder (Pterm (eq a (Tvar id_phi0) (phi_of ren')))],t) 
+	     CC_pred_binder (eq a (Tvar id_phi0) (phi_of ren'))],t) 
   in
   let bl = binding_of_alist ren env (current_vars ren' (get_writes ef)) in
   make_abs (List.rev bl) t
@@ -553,7 +553,7 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
 let make_while ren env (cphi,r,a) (tb,cb) tbl (i,c) =
   let (_,ef,_,is) = decomp_kappa c in
   let phi_of ren = apply_term ren env cphi in
-  let wf_a_r = Tapp (Ident.well_founded, [(*i a; i*) r]) in
+  let wf_a_r = Papp (Ident.well_founded, [(*i a; i*) r]) in
 
   let before = current_date ren in
   let ren' = next ren (get_writes ef) in
@@ -586,14 +586,14 @@ i*)
   in
   CC_app (CC_expr (Tapp (well_founded_induction, [])),
 	  [(*i CC_expr a; i*) CC_expr r;
-	   CC_hole (Pterm wf_a_r);
+	   CC_hole wf_a_r;
 	   (*i CC_expr (Term.mkNamedLambda id_phi a v); i*)
 	   CC_lam ([id_phi0, CC_var_binder (PureType a);
 		    (*i id_w, CC_typed_binder tw i*) ],
 		   body);
 	   CC_expr (phi_of ren)]
 	  @(List.map (fun (_,id) -> CC_var id) vars)
-          @(CC_hole (Pterm (eq a (phi_of ren) (phi_of ren))))
+          @(CC_hole (eq a (phi_of ren) (phi_of ren)))
 	  ::(match i with
 	       | None -> [] 
 	       | Some c -> [CC_hole (apply_assert ren env c).a_value])) 
@@ -613,7 +613,7 @@ i*)
 let make_letrec ren env (id_phi0,(cphi,r,a)) idf bl (te,ce) c =
   let (_,ef,p,q) = decomp_kappa c in
   let phi_of ren = apply_term ren env cphi in
-  let wf_a_r = Tapp (well_founded, [(*i a; i*) r]) in
+  let wf_a_r = Papp (well_founded, [(*i a; i*) r]) in
 
   let before = current_date ren in
   let al = current_vars ren (get_reads ef) in
@@ -645,7 +645,7 @@ i*)
     let bod = abs_pre ren env (te,v) p in
     let bod = 
       CC_lam ([var_name Anonymous,
-	       CC_pred_binder (Pterm (eq a (Tvar id_phi0) (phi_of ren)))],
+	       CC_pred_binder (eq a (Tvar id_phi0) (phi_of ren))],
 	       bod) 
     in
     let bl' = binding_of_alist ren env al in
@@ -654,7 +654,7 @@ i*)
   let t =
     CC_app (CC_expr (Tapp (well_founded_induction, [])),
 	    [(*i CC_expr a; i*) CC_expr r;
-	     CC_hole (Pterm wf_a_r);
+	     CC_hole wf_a_r;
 	     (*i CC_expr (Term.mkNamedLambda id_phi a v); i*)
 	     CC_lam ([id_phi0, CC_var_binder (PureType a);
 		      (*i idf, CC_typed_binder tw i*) ],
@@ -662,7 +662,7 @@ i*)
 	     CC_expr (phi_of ren)]
 	    @(List.map (fun (id,_) -> CC_var id) bl)
 	    @(List.map (fun (_,id) -> CC_var id) vars)
-            @[CC_hole (Pterm (eq a (phi_of ren) (phi_of ren)))]
+            @[CC_hole (eq a (phi_of ren) (phi_of ren))]
 	   )
   in
   (* on abstrait juste par rapport aux variables de ef *)

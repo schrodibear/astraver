@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.6 2002-01-24 13:41:05 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.7 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -365,10 +365,10 @@ and cic_binders env ren = function
 
 let partial_pre = function
   | Tapp (id, [a;b]) when id == t_div ->
-      let p = Pterm (Tapp (t_noteq, [b; Tconst (ConstInt 0)])) in
+      let p = Papp (t_noteq, [b; Tconst (ConstInt 0)]) in
       [anonymous_pre true p]
   | Tapp (id, [a]) when id == t_sqrt ->
-      let p = Pterm (Tapp (t_ge, [a; Tconst (ConstInt 0)])) in
+      let p = ge a  (Tconst (ConstInt 0)) in
       [anonymous_pre true p]
   | _ ->
       []

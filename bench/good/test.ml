@@ -1,6 +1,9 @@
 
-let test_let = 
-  (let x = ref 0 in
-   if !x > 0 then x := !x - 1 else x := !x + 1)
-  { x = 1 }
+external x: int ref
 
+let test_let = 
+   begin
+   if !x < 0 then x := !x + 1;
+   if !x > 1 then x := !x - 1
+   end
+  { Q(x) }

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.8 2002-02-04 12:07:57 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.9 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -16,7 +16,7 @@ open Rename
 
 (* term utilities *)
 
-let equality t1 t2 = Pterm (Tapp (t_eq, [t1; t2]))
+let equality t1 t2 = Papp (t_eq, [t1; t2])
 
 (* force a post-condition *)
 
@@ -121,7 +121,7 @@ let add_decreasing env inv (var,r) lab bl =
   let ids = term_now_vars env var in
   let al = Idset.fold (fun id l -> (id,at_id id lab) :: l) ids [] in
   let var_lab = subst_in_term al var in
-  let dec = Pterm (applist r [var;var_lab]) in
+  let dec = papplist r [var;var_lab] in
   let post = match inv with
     | None -> anonymous dec
     | Some i -> { a_value = Pand (dec, i.a_value); a_name = i.a_name }
@@ -235,10 +235,13 @@ and normalize_boolean ren env b =
       | None -> begin
 	  (* nothing *)
 	  match b.desc with
+	    | Expression (Tapp (id, [t1;t2])) when id == t_gt ->
+		let c = Pif (Tvar Ident.result, gt t1 t2, le t1 t2) in
+		give_post b (create_bool_post c)
 	    | Expression c ->
 		(* expression E -> if result then E else not E *)
-		let c = Pif (Pterm (Tvar Ident.result), 
-			     Pterm c, Pnot (Pterm c)) in
+		let c = Pif (Tvar Ident.result, 
+			     equality c ttrue, equality c tfalse) in
 		give_post b (create_bool_post c)
 	    | If (e1, e2, e3) ->
 		let ne1 = normalize_boolean ren env e1 in
@@ -247,7 +250,7 @@ and normalize_boolean ren env b =
 		let q1t,q1f = decomp_boolean ne1.post in
 		let q2t,q2f = decomp_boolean ne2.post in
 		let q3t,q3f = decomp_boolean ne3.post in
-		let c = Pif (Pterm (Tvar Ident.result),
+		let c = Pif (Tvar Ident.result,
 			     por (pand q1t q2t) (pand q1f q3t),
 			     por (pand q1t q2f) (pand q1f q3f)) in
 		let b' = change_desc b (If (ne1,ne2,ne3)) in
@@ -308,7 +311,7 @@ i*)
 	let q' = match w2, w3 with
 	  | Some q2, Some q3 -> 
 	      let result1 = p1.info.kappa.c_result_name in
-	      let q = Pif (Pterm (Tvar result1), q2.a_value, q3.a_value) in
+	      let q = Pif (Tvar result1, q2.a_value, q3.a_value) in
 	      create_bool_post q
 	  | _ ->
 	      None

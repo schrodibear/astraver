@@ -20,11 +20,11 @@ type obligation = string * sequent
 (*s We automatically remove the obligations discharged by assumption. *)
 
 let reflexivity = function
-  | Pterm (Tapp (id, [a;b])) -> id == Ident.t_eq && a = b
+  | Papp (id, [a;b]) -> id == Ident.t_eq && a = b
   | _ -> false
 
 let tauto_if = function
-  | Pif (Pterm t, Pterm t', Pnot (Pterm t'')) -> t = t' && t = t''
+  (* | Pif (t, Pterm t', Pnot (Pterm t'')) -> t = t' && t = t'' *)
   | _ -> false
 
 let discharge ctx concl =

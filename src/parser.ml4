@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.8 2002-01-31 22:48:02 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.9 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -78,6 +78,13 @@ let decl = gec "decl"
 let decls = gec "decls"
 
 (*s Utility functions. *)
+
+let predicate_of_term loc = function
+  | Tvar id -> Pvar id
+  | Tapp (id, lt) -> Papp (id, lt)
+  | Tconst _ -> raise (Stdpp.Exc_located (loc, 
+					  Stream.Error "predicate expected"))
+  | Tbound _ -> assert false
 
 let conj_assert {a_name=n; a_value=a} {a_value=b} = 
   { a_value = Pand (a,b); a_name = n }
@@ -169,9 +176,11 @@ EXTEND
     | a = predicate2 -> a ] ]
   ;
   predicate2:
-  [ [ t = term -> Pterm t
-    | t1 = term; r = relation; t2 = term -> Pterm (Tapp (r, [t1;t2]))
+  [ [ t = term -> predicate_of_term loc t
+    | t1 = term; r = relation; t2 = term -> Papp (r, [t1;t2])
     | "not"; a = predicate -> Pnot a
+    | "true" -> Ptrue
+    | "false" -> Pfalse
     | "("; a = predicate; ")" -> a ] ] 
   ;
 

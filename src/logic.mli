@@ -1,5 +1,5 @@
 
-(*i $Id: logic.mli,v 1.4 2001-08-21 20:57:01 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.5 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -26,9 +26,12 @@ type pure_type =
   | PTexternal of Ident.t
 
 type predicate =
-  | Pterm of term
+  | Pvar of Ident.t
+  | Papp of Ident.t * term list
+  | Ptrue
+  | Pfalse
   | Pimplies of predicate * predicate
-  | Pif of predicate * predicate * predicate
+  | Pif of term * predicate * predicate
   | Pand of predicate * predicate
   | Por of predicate * predicate
   | Pnot of predicate

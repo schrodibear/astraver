@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.5 2001-08-24 19:00:07 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.6 2002-02-04 16:42:21 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -87,16 +87,23 @@ let applist f l = match (f,l) with
   | Tapp (id, l), l' -> Tapp (id, l @ l')
   | (Tbound _ | Tconst _), _ -> assert false
 
+let papplist f l = match (f,l) with
+  | f, [] -> f
+  | Pvar id, l -> Papp (id, l)
+  | Papp (id, l), l' -> Papp (id, l @ l')
+  | _ -> assert false
+
 let rec collect_term s = function
   | Tvar id -> Idset.add id s
   | Tapp (_, l) -> List.fold_left collect_term s l
   | Tconst _ | Tbound _ -> s
 
 and collect_pred s = function
-  | Pterm t -> collect_term s t
+  | Pvar _ | Ptrue | Pfalse -> s
+  | Papp (_, l) -> List.fold_left collect_term s l
   | Pimplies (a, b) | Pand (a, b) | Por (a, b) -> 
       collect_pred (collect_pred s a) b
-  | Pif (a, b, c) -> collect_pred (collect_pred (collect_pred s a) b) c
+  | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
   | Pnot a -> collect_pred s a
   | Forall (_, _, _, p) -> collect_pred s p
 
@@ -110,15 +117,18 @@ let rec tsubst_in_term alist = function
 
 let rec map_predicate f = function
   | Pimplies (a, b) -> Pimplies (f a, f b)
-  | Pif (a, b, c) -> Pif (f a, f b, f c)
+  | Pif (a, b, c) -> Pif (a, f b, f c)
   | Pand (a, b) -> Pand (f a, f b)
   | Por (a, b) -> Por (f a, f b)
   | Pnot a -> Pnot (f a)
   | Forall (id, b, v, p) -> Forall (id, b, v, f p)
-  | Pterm _ as p -> p
+  | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_predicate alist = function
-  | Pterm t -> Pterm (tsubst_in_term alist t)
+  | Papp (id, l) -> Papp (id, List.map (tsubst_in_term alist) l)
+  | Pif (a, b ,c) -> Pif (tsubst_in_term alist a, 
+			  tsubst_in_predicate alist b, 
+			  tsubst_in_predicate alist c)
   | p -> map_predicate (tsubst_in_predicate alist) p
 
 let subst_in_term alist = 
@@ -132,7 +142,7 @@ let rec bsubst_in_term alist = function
   | Tconst _ | Tvar _ as t -> t
 
 let rec bsubst_in_predicate alist = function
-  | Pterm t -> Pterm (bsubst_in_term alist t)
+  | Papp (id, l) -> Papp (id, List.map (bsubst_in_term alist) l)
   | p -> map_predicate (bsubst_in_predicate alist) p
 
 let equals_true = function
@@ -164,9 +174,10 @@ let rec occur_term id = function
   | Tconst _ | Tbound _ -> false
 
 let rec occur_predicate id = function
-  | Pterm t -> occur_term id t
+  | Pvar _ | Ptrue | Pfalse -> false
+  | Papp (_, l) -> List.exists (occur_term id) l
   | Pif (a, b, c) -> 
-      occur_predicate id a || occur_predicate id b || occur_predicate id c
+      occur_term id a || occur_predicate id b || occur_predicate id c
   | Pimplies (a, b) -> occur_predicate id a || occur_predicate id b
   | Pand (a, b) -> occur_predicate id a || occur_predicate id b
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
@@ -177,24 +188,29 @@ let rec occur_predicate id = function
 
 let ttrue = Tconst (ConstBool true)
 let tfalse = Tconst (ConstBool false)
-let ptrue = Pterm ttrue
-let pfalse = Pterm tfalse
+let tresult = Tvar Ident.result
+
+let relation op t1 t2 = Papp (op, [t1; t2])
+let lt = relation t_lt
+let le = relation t_le
+let gt = relation t_gt
+let ge = relation t_ge
 
 let pif a b c =
-  if a = ptrue then b else if a = pfalse then c else Pif (a, b ,c)
+  if a = ttrue then b else if a = tfalse then c else Pif (a, b ,c)
 
 let pand a b = 
-  if a = ptrue then b else if b = ptrue then a else
-  if a = pfalse || b = pfalse then pfalse else
+  if a = Ptrue then b else if b = Ptrue then a else
+  if a = Pfalse || b = Pfalse then Pfalse else
   Pand (a, b)
 
 let por a b =
-  if a = ptrue || b = ptrue then ptrue else
-  if a = pfalse then b else if b = pfalse then a else
+  if a = Ptrue || b = Ptrue then Ptrue else
+  if a = Pfalse then b else if b = Pfalse then a else
   Por (a, b)
 
 let pnot a =
-  if a = ptrue then pfalse else if a = pfalse then ptrue else Pnot a
+  if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a
 
 (*s Pretty-print *)
 
@@ -228,12 +244,20 @@ let rec print_term fmt = function
       print_list fmt comma print_term tl; fprintf fmt ")"
 
 let rec print_predicate fmt = function
-  | Pterm t -> print_term fmt t
+  | Pvar id -> 
+      Ident.print fmt id
+  | Papp (id, l) ->
+      fprintf fmt "%s(" (Ident.string id);
+      print_list fmt comma print_term l; fprintf fmt ")"
+  | Ptrue ->
+      fprintf fmt "true"
+  | Pfalse ->
+      fprintf fmt "false"
   | Pimplies (a, b) -> 
       fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " ->@ ";
       print_predicate fmt b; fprintf fmt "@])"
   | Pif (a, b, c) -> 
-      fprintf fmt "(@[if "; print_predicate fmt a; fprintf fmt " then@ ";
+      fprintf fmt "(@[if "; print_term fmt a; fprintf fmt " then@ ";
       print_predicate fmt b; fprintf fmt " else@ ";
       print_predicate fmt c; fprintf fmt "@])"
   | Pand (a, b) ->
