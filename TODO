@@ -42,3 +42,4 @@ IMPLEMENTATION
 
  - array bounds checking: only when index is pure for the moment
 
+ - wp(t[e1] := e2) does not propagate wp inside e2
