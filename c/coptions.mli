@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.6 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.7 2004-03-17 17:07:15 filliatr Exp $ i*)
 
 (*s environment variables *)
 
@@ -31,10 +31,11 @@ val with_cpp : bool
 val cpp_command : string
 val cpp_dump : bool
 
-val files : string Queue.t
+val files : unit -> string list 
 
 (*s The log file *)
 
 val log : Format.formatter;;
+val lprintf : ('a, Format.formatter, unit) format -> 'a
 val close_log : unit -> unit;;
 

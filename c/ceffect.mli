@@ -20,5 +20,9 @@ val locations : Cast.tterm Clogic.location list -> HeapVarSet.t
 
 val predicate : Cast.predicate -> HeapVarSet.t
 
+(* computes effects for logical symbols only *)
 val file : Cast.tfile -> unit
 
+(* computes functions effects; 
+   return [true] when fixpoint is reached (no more modification) *)
+val functions : Cast.tfile -> bool

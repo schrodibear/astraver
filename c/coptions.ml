@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.10 2004-03-12 16:19:06 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.11 2004-03-17 17:07:15 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -23,6 +23,8 @@ let c = ref stdout
 let log =
   c := open_out "caduceus.log";
   Format.formatter_of_out_channel !c
+
+let lprintf s = Format.fprintf log s
 
 let close_log () =
   Format.fprintf log "End of log.@.";
@@ -53,8 +55,9 @@ let debug = ref false
 let verbose = ref false
 let werror = ref false
 
-let files = Queue.create ()
-let add_file f = Queue.add f files
+let files_ = ref []
+let add_file f = files_ := f :: !files_
+let files () = List.rev !files_
 
 let version () = 
   Printf.printf "This is Caduceus version %s, compiled on %s

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.45 2004-03-17 09:54:37 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.46 2004-03-17 17:07:15 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -752,7 +752,7 @@ let type_decl d = match d.node with
 	error d.loc "break statement not within a loop or switch";
       if st.continue then 
 	error d.loc "continue statement not within a loop";
-      Tfundef (s, ty, f, pl, bl)
+      Tfundef (s, ty, info, pl, bl)
 
 let type_file = List.map (fun d -> { d with node = type_decl d })
 

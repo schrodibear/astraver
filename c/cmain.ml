@@ -14,22 +14,24 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.19 2004-03-17 10:36:18 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.20 2004-03-17 17:07:15 filliatr Exp $ i*)
 
 open Format
 open Coptions
 open Cerror
 open Creport
 
-let interp_file f =
+let parse_file f =
   let ppf = Cpp.cpp f in
   let c = open_in ppf in
   let p = Clexer.parse c in
   close_in c;
-  if parse_only then raise Exit;
-  let p = Ctyping.type_file p in
-  if type_only then raise Exit;
-  Ceffect.file p;
+  f, p
+
+let type_file (f,p) = 
+  (f, Ctyping.type_file p)
+
+let interp_file (f,p) =
   let (why,prover) = Cinterp.interp p in
   let f = Filename.chop_extension f in
   let ch = open_out (f ^ ".why") in
@@ -55,7 +57,21 @@ let main () =
       Digest.file theory <> Digest.file theorysrc
     then file_copy theorysrc theory
   end;
-  Queue.iter (fun f -> try interp_file f with Exit -> ()) files
+  (* parsing *)
+  let pfiles = List.map parse_file (files ()) in
+  if parse_only then exit 0;
+  (* typing *)
+  let tfiles = List.map type_file pfiles in
+  if type_only then exit 0;
+  (* effects *)
+  List.iter (fun (_,p) -> Ceffect.file p) tfiles;
+  while (not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles)) do 
+    () 
+  done;
+  (* Why interpretation *)
+  List.iter interp_file tfiles
+
+
   (* engendrer les spec why *)
 
 let rec explain_exception fmt = function

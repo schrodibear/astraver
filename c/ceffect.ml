@@ -1,5 +1,6 @@
 
 open Cast
+open Coptions
 open Clogic
 open Info
 open Format
@@ -122,11 +123,14 @@ let rec term t =
 	  (term t2) 
     | Tunop (Ustar, t) ->
 	add_pointer_var t.term_type (term t)
-    | Tunop (_,_) -> assert false (* TODO *)
-    | Tblock_length _ -> assert false (* TODO *)
-    | Tat (_, _) -> assert false (* TODO *)
-    | Told _ -> assert false (* TODO *)
-    | Tif (_, _, _) -> assert false (* TODO *)
+    | Tunop (Uminus, t) -> term t
+    | Tblock_length t -> term t
+    | Tat (t, _) -> 
+	term t
+    | Told t -> 
+	term t
+    | Tif (t1, t2, t3) -> 
+	union (term t1) (union (term t2) (term t3))
     | Tbinop (t1, _, t2) -> 
 	union (term t1) (term t2) 
     | Tapp (id, l) -> 
@@ -135,9 +139,9 @@ let rec term t =
 	  id.logic_args
 	  l
     | Tconstant _ -> empty
-    | Tnull -> assert false (* TODO *)
-    | Tresult -> assert false (* TODO *)
-    | Tcast _ -> assert false (* TODO *)
+    | Tnull -> empty
+    | Tresult -> empty
+    | Tcast (_, t) -> term t
 
 let location loc =
   match loc with
@@ -164,24 +168,28 @@ let logic_type ls =
 let rec predicate p = 
   match p with
     | Ptrue -> empty
-    | Pfalse -> assert false (* TODO *)
-    | Papp (_, _) -> assert false (* TODO *)
-    | Prel (t1, _, t2) -> 
-	union (term t1) (term t2)
-    | Pand (_, _) -> assert false (* TODO *)
-    | Por (_, _) -> assert false (* TODO *)
-    | Pimplies (_, _) -> assert false (* TODO *)
-    | Pnot _ -> assert false (* TODO *)
-    | Pif (_, _, _) -> assert false (* TODO *)
+    | Pfalse -> empty
+    | Papp (id, tl) -> 	
+	List.fold_left 
+	  (fun acc t -> union acc (term t)) 
+	  id.logic_args
+	  tl
+    | Prel (t1, _, t2) -> union (term t1) (term t2)
+    | Pand (p1, p2)
+    | Por (p1, p2) 
+    | Pimplies (p1, p2) -> union (predicate p1) (predicate p2)
+    | Pnot p -> predicate p
+    | Pif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))
     | Pforall (_, p) -> predicate p	
-    | Pexists (_, _) -> assert false (* TODO *)
-    | Pvalid (_) -> assert false (* TODO *)
-    | Pvalid_index (_,_) -> assert false (* TODO *)
-    | Pvalid_range (_, _, _) -> assert false (* TODO *)
-    | Pold _ -> assert false (* TODO *)
-    | Pat (_,_) -> assert false (* TODO *)
+    | Pexists (_, p) -> predicate p
+    | Pvalid t -> term t
+    | Pvalid_index (t1,t2) -> union (term t1) (term t2)
+    | Pvalid_range (t1,t2, t3) -> union (term t1) (union (term t2) (term t3))
+    | Pold p -> predicate p
+    | Pat (p,_) -> predicate p
 
 let option f = function None -> empty | Some x -> f x
+let ef_option f = function None -> ef_empty | Some x -> f x
 
 let variant (t,_) = term t
 
@@ -231,7 +239,11 @@ let rec expr e = match e.texpr_node with
   | TEincr (_, e) ->
       assign_expr e
   | TEcall (e, el) ->
-      List.fold_left (fun ef arg -> ef_union (expr arg) ef) (expr e) el
+      let ef = match e.texpr_node with
+	| TEvar v -> { reads = v.function_reads; assigns = v.function_writes } 
+	| _ -> expr e
+      in
+      List.fold_left (fun ef arg -> ef_union (expr arg) ef) ef el
   | TEcond (e1, e2, e3) ->
       ef_union (ef_union (expr e1) (expr e2)) (expr e3)
   | TEcast (_, e) | TEsizeof_expr e ->
@@ -307,14 +319,16 @@ and initializer_ = function
   | Ilist il -> 
       List.fold_left (fun ef i -> ef_union (initializer_ i) ef) ef_empty il
 
+let print_effects fmt l =
+  print_list space pp_print_string fmt (HeapVarSet.elements l)
+
 let decl d =
   match d.Cast.node with
     | Tlogic(id,ltype) -> 
 	let l = logic_type ltype in
-	fprintf Coptions.log 
+	lprintf 
 	  "effects of logic declaration of %s: %a@." id.logic_name
-	  (print_list space pp_print_string) 
-	  (HeapVarSet.elements l);
+	  print_effects l;
 	id.logic_args <- l
     | Taxiom(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 
@@ -323,7 +337,30 @@ let decl d =
     | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
     | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)
 
-
-
 let file l = List.iter decl l
+
+let functions dl = 
+  let fixpoint = ref true in
+  let declare id ef =
+    lprintf "effects for function %s: reads %a writes %a@." id.var_name 
+      print_effects ef.reads print_effects ef.assigns;
+    if not (HeapVarSet.subset ef.reads id.function_reads) then begin
+      fixpoint := false;
+      id.function_reads <- ef.reads
+    end;
+    if not (HeapVarSet.subset ef.assigns id.function_writes) then begin
+      fixpoint := false;
+      id.function_writes <- ef.assigns
+    end
+  in
+  let decl d = match d.node with
+    | Tfunspec (sp, _, id, _) ->
+	declare id (spec sp)
+    | Tfundef (sp, _, id, _, s) ->
+	declare id (ef_union (ef_option spec sp) (statement s))
+    | _ -> 
+	()
+  in
+  List.iter decl dl;
+  !fixpoint
 

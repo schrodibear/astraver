@@ -14,10 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.33 2004-03-17 16:13:58 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.34 2004-03-17 17:07:15 filliatr Exp $ i*)
 
 
 open Format
+open Coptions
 open Output
 open Info
 open Cast
@@ -205,7 +206,7 @@ let rec interp_expr e =
         if v.var_name = "t"
 	then begin
 	  Loc.report Coptions.log e.texpr_loc;
-	  fprintf Coptions.log "translating var t: is_assigned = %b@."
+	  lprintf "translating var t: is_assigned = %b@."
 	    v.var_is_assigned;
 	end;
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
@@ -343,7 +344,7 @@ let interp_spec s =
 let interp_decl d acc = 
   match d.node with 
     | Tdecl(ctype,v,init) -> 
-	fprintf Coptions.log 
+	lprintf 
 	  "translating local declaration of %s@." v.var_name;
 	let tinit =
 	  match init with 
@@ -527,12 +528,12 @@ let interp_effects e =
 let interp_located_tdecl (why_decls,prover_decl) decl =
   match decl.node with
   | Tlogic(id,ltype) -> 
-      fprintf Coptions.log 
+      lprintf 
       "translating logic declaration of %s@." id.logic_name;
       ((Logic(false,id.logic_name,cinterp_logic_symbol id ltype))::why_decls,
        prover_decl)
   | Taxiom(id,p) -> 
-      fprintf Coptions.log 
+      lprintf 
       "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
       (Axiom(id,a)::why_decls,prover_decl)
@@ -540,7 +541,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
       (why_decls,prover_decl) 
   | Ttypedecl(ctype) -> assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 
-      fprintf Coptions.log 
+      lprintf 
         "translating global declaration of %s@." v.var_name;
       let t = base_type (Ceffect.interp_type ctype) in
       begin
@@ -550,7 +551,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
 	  | _ -> assert false (* TODO *)
       end
   | Tfunspec(spec,ctype,id,params) -> 
-      fprintf Coptions.log "translating function %s@." id.var_name;
+      lprintf "translating function %s@." id.var_name;
       let tparams = List.map interp_param params in
       let pre,post = interp_spec spec in
       let reads = interp_effects id.function_reads in
@@ -566,7 +567,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
       in
       ((Param(false,id.var_name,local_type))::why_decls, prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
-      fprintf Coptions.log "translating function %s@." id;
+      lprintf "translating function %s@." id.var_name;
       let tparams = 
 	if params=[]
 	then ["tt",unit_type]
@@ -574,7 +575,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
       in
       let pre,post = interp_spec_option spec in
       let tblock = interp_statement block in
-      ((Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls,
+      ((Def(id.var_name,Fun(tparams,pre,tblock,post,None)))::why_decls,
        prover_decl)
 
 
