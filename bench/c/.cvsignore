@@ -2,3 +2,8 @@ test.c
 test.i
 a.out
 caduceus.why
+*_valid.v
+*.sx*
+test.why
+test_why.v
+caduceus_why.v
