@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.92 2004-07-01 11:51:21 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.93 2004-07-06 11:49:01 filliatr Exp $ i*)
 
 
 open Format
@@ -216,8 +216,11 @@ let rec interp_predicate label old_label p =
 	List.fold_right
 	  (fun (t,x) p -> LForall(x,([],Ceffect.interp_type t),p))
 	  l (interp_predicate label old_label p)
-    | Pif (_, _, _) -> 
-	unsupported "logic if-then-else predicate"
+    | Pif (t, p1, p2) -> 
+	let t = ft t in
+	let zero = LConst (Prim_int 0) in
+	LAnd (make_impl (LPred ("neq_int", [t; zero])) (f p1),
+	      make_impl (LPred ("eq_int",  [t; zero])) (f p2))
     | Pnot p -> 
 	LNot (f p)
     | Pimplies (p1, p2) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.51 2004-06-30 14:34:04 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.52 2004-07-06 11:49:01 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -340,8 +340,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
        with Not_found -> 
 	 error p0.lexpr_loc ("unbound predicate " ^ p.logic_name))
   | PLif (t, p1, p2) -> 
-      (* TODO type t ? *)
-      let t = type_term env t in
+      let t = type_int_term env t in
       Pif (t, type_predicate env p1, type_predicate env p2)
   | PLforall (q, p) -> 
       let q = type_quantifiers env q in

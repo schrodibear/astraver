@@ -44,8 +44,8 @@
 %left AND
 %nonassoc prec_not
 %nonassoc prec_if
-%left prec_relation LT GT LE GE EQ NE
 %right QUESTION prec_question
+%left prec_relation LT GT LE GE EQ NE
 %left PLUS MINUS
 %left STAR SLASH PERCENT AMP
 %right prec_uminus 
