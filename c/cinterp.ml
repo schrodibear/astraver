@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.111 2004-11-22 16:14:27 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.112 2004-11-23 15:58:02 marche Exp $ i*)
 
 
 open Format
@@ -374,8 +374,13 @@ let rec interp_expr e =
     | TEvar(Var_info v) -> 
 	let n = v.var_unique_name in
 	if v.var_is_referenced then
-	  let var = global_var_for_type e.texpr_type in
-	  make_app "acc_" [Var var; Var n]
+	  begin match e.texpr_type.ctype_node with
+	    | CTstruct _ | CTunion _ -> 
+		if v.var_is_assigned then Deref n else Var n
+	    | _ -> 
+		let var = global_var_for_type e.texpr_type in
+		make_app "acc_" [Var var; Var n]
+	  end
 	else if v.var_is_assigned then Deref n else Var n
     | TEvar(Fun_info v) -> assert false
     (* a ``boolean'' expression is [if e then 1 else 0] *)
@@ -607,7 +612,10 @@ and interp_lvalue e =
 and interp_address e = match e.texpr_node with
   | TEvar (Var_info v) -> 
       assert (v.var_is_referenced); 
-      Var v.var_unique_name
+       begin match e.texpr_type.ctype_node with
+       | CTstruct _ | CTunion _ -> Deref v.var_unique_name
+       | _ -> Var v.var_unique_name
+       end
   | TEvar (Fun_info v) -> unsupported "& operator on functions"
   | TEunary (Ustar, e1) ->
       interp_expr e1

@@ -27,8 +27,6 @@ typedef struct struct_list {
 /*@ axiom disjoint_nil2 : \forall plist l; disjoint(nil(),l) */
 
 
-/*@ predicate is_list(list l) reads l->tl */
-
 /*@ predicate finite(list l) reads l->tl */
 
 /*@ predicate cyclic(list l) reads l->tl */
@@ -55,6 +53,8 @@ typedef struct struct_list {
 	   \exists plist l1; l == cons(p1,l1) && lpath(p1->tl,l1,p2)) */
 
 /*@ predicate llist(list p, plist l) { lpath(p,l,\null) } */ 
+
+/*@ predicate is_list(list l) { \exists plist pl ; llist(l,pl) } */
 
 /*@ axiom is_list_llist_ax :
      \forall list p; is_list(p) <=> \exists plist l; llist(p,l) */
