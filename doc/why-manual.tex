@@ -1,4 +1,4 @@
-\documentclass[12pt]{report}
+\documentclass[a4paper,12pt]{report}
 
 \usepackage{fullpage}
 
@@ -141,7 +141,7 @@ Usual precedences apply to arithmetical operations.
 \hrulefill
 \caption{Syntax of terms}
 \label{fig:terms}
-\end{center}		
+\end{center}            
 \end{figure}
 
 \section{Predicates}
@@ -173,7 +173,7 @@ stronger than the implication's one. Implication is right associative.
 \hrulefill
 \caption{Syntax of predicates}
 \label{fig:predicates}
-\end{center}		
+\end{center}            
 \end{figure}
 
 \section{Types}
@@ -205,7 +205,7 @@ Syntax of types is given in Figure~\ref{fig:types}.
 
   \nt{binders}
     & $::=$ & \te{(} \nt{identifier}\te{,}\dots\te{,}\nt{identifier}  \te{:}
-              \nt{value\_type}  \te{)} $+$ 
+              \nt{value\_type}  \te{)}$^+$ 
   \\[0.1em]
 
   \nt{primitive\_type}
@@ -215,7 +215,7 @@ Syntax of types is given in Figure~\ref{fig:types}.
 \hrulefill
 \caption{Syntax of types}
 \label{fig:types}
-\end{center}		
+\end{center}            
 \end{figure}
 
 \section{Annotated Caml programs}
@@ -226,7 +226,7 @@ Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{prog} 
-    & $::=$ & \te{\{} \nt{predicate} \te{\}} $*$
+    & $::=$ & \te{\{} \nt{predicate} \te{\}}$^*$
               \nt{statement} 
               $[$ \te{\{} \nt{predicate} \te{\}} $]$ \\
 
@@ -251,7 +251,7 @@ Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
               value\_type \\
       &     & \te{\{}  \te{variant}  \nt{wf\_arg}  \te{\}}
               \te{=}  \nt{prog}  $[$~ \te{in}  \nt{prog} $]$ \\
-      & $|$ & \te{(}  \nt{prog}  \nt{prog}$*$~  \te{)} \\
+      & $|$ & \te{(}  \nt{prog}$^+$~  \te{)} \\
 
       & & \\[0.1em]
 
@@ -260,7 +260,7 @@ Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
       & $|$ & \te{!}  \nt{identifier} \\
       & $|$ & \nt{identifier}  \te{[}  \nt{expression}  \te{]} \\
       & $|$ & \nt{integer} \\
-      & $|$ & \te{(}  \nt{expression}$+$~  \te{)} \\
+      & $|$ & \te{(}  \nt{expression}$^+$~  \te{)} \\
 
       & & \\[0.1em]
 
@@ -300,7 +300,7 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{file}
-    & $::=$ & \nt{declaration} $*$
+    & $::=$ & \nt{declaration}$^*$
   \\[0.1em]
 
   \nt{declaration}
@@ -312,7 +312,7 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \hrulefill
 \caption{Syntax of input files}
 \label{fig:input}
-\end{center}		
+\end{center}            
 \end{figure}
 
 \end{document}
