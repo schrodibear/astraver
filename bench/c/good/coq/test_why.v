@@ -119,8 +119,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/test.why", characters 120-121 *)
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/test.why", characters 164-165 *)
 Lemma f_impl_po_1 : 
+  forall (alloc: alloc),
+  forall (p: pointer),
+  forall (Pre1: (valid alloc (shift (shift p 2) (Zopp 3)))),
   forall (i: Z),
   forall (Post3: i = 0),
   forall (a: Z),

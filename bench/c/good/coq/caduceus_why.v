@@ -123,6 +123,11 @@ Admitted.
   forall (p: pointer), forall (i: Z),
   (sig_1 pointer (fun (result: pointer)  => (result = (shift p i)))).
 
+(*Why*) Parameter sub_pointer_ :
+  forall (p1: pointer), forall (p2: pointer),
+  forall (H: (base_addr p1) = (base_addr p2)),
+  (sig_1 Z (fun (result: Z)  => (result = ((offset p1) - (offset p2))))).
+
 (*Why logic*) Definition acc :
   forall (A32:Set), ((memory) A32) -> pointer -> A32.
 Admitted.
