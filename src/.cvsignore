@@ -9,3 +9,4 @@ cparser.mli
 linenum.ml
 float_lexer.ml
 compat.ml
+*.annot
