@@ -236,6 +236,7 @@ when the right child is explored: the search goes back up.
 
 
 \subsection{Formal specification of the algorithm}
+\label{sec:spec}
 
 The first step in the formal verification process is to give a formal
 specification to the \verb|schorr_waite| function. The informal
@@ -261,7 +262,7 @@ in the back-end prover. This is very similar to a forward declaration
 of a C function, whose implementation will be given latter: such
 predicates have to be `implemented' latter, either by giving
 additional \caduceus{} annotations (such as \verb|axioms|) or in the
-back-end prover. For the reachability predicate, this is written as
+back-end prover. For the reachability predicate, we write
 \begin{alltt}\begin{slshape}
 /*@ predicate 
   @   reachable(node p1, node p2) 
@@ -271,11 +272,16 @@ This declares a binary predicate on nodes, but nothing yet is
 said about its semantics. The \texttt{reads} clause that follows the predicate
 declaration above gives information on which data the predicate
 depends on: in this case, it does depend on \verb|p1| and
-\verb|p2| but also on the graph structure itself. The syntax
-\verb|p1->l,p1->r| is a \caduceus{} idiom, that should be understood
-in fact as $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$ that is all the
-node expressions from \verb|p1| using the left and right children.
-{\Huge expliquer mieux, il y a de la place}
+\verb|p2| but also on the children of \verb|p1|. This may be confusing
+at first, because in fact this predicate depends not only on the
+children of \verb|p1|, but also the grand children and so on. To
+really understand the meaning of the \texttt{reads} clause, one needs
+to remember that we use the component-as-array modeling: this
+declaration indeed mean that this predicate will have, on the prover
+side, additional `array' arguments \verb|l| and \verb|r| respectively
+representing the left and right child of all nodes. We will come back
+to this in Section~\ref{sec:coq}.
+
 
 Once this \texttt{reachable} predicate is declared, it is possible to
 give a formal specification to the algorithm, even if we did not give

@@ -59,14 +59,15 @@ language, where specifications are given inside regular C comments, in
 the spirit of the Java Modeling Language~\cite{leavens00jml}. It is
 not the purpose of this paper to describe \caduceus{} internal
 technology, we refer to~\cite{filliatre04icfem} for details. Roughly
-speaking, \caduceus{} is a verification condition generator, based on
-a weakest precondition calculus and a monadic translation to
-functional programs. An original feature is its multi-prover output:
-the user may choose to establish the validity of the generated
-conditions with several different provers, both automatic and
-interactive ones. In this paper, we illustrate the use of the
-Simplify~\cite{simplify} automatic prover and the
-Coq~\cite{CoqProofAssistant} proof assistant. 
+speaking, \caduceus{} is a verification condition generator, from
+programs annotated with pre- and post-conditions. Those conditions are
+generated using a weakest precondition calculus and a monadic
+translation to functional programs. An original feature of \caduceus{}
+is its multi-prover output: the user may choose to establish the
+validity of the generated conditions with several different provers,
+both automatic and interactive ones. In this paper, we illustrate the
+use of the Simplify~\cite{simplify} automatic prover and the
+Coq~\cite{CoqProofAssistant} proof assistant.
 
 To provide an evidence that \caduceus{} is a powerful approach (and
 tool) to formal verification of C source, according to Bornat's
