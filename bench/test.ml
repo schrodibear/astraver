@@ -1,9 +1,12 @@
 
-parameter x : int ref
+parameter x,y : int ref
 
-let p = (begin x := 1; 1 end + begin x := 2; 1 end) { result = 2 and x = 1 }
-
-let p9 = (begin x := 1; 1 end + 1) { result = 2 and x = 1 }
+let p = 
+  while true do
+    { invariant x = y variant x }
+    x := !y;
+    y := !x
+  done
 
 (****
 

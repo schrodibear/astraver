@@ -2,7 +2,7 @@
 WHY=../../bin/why.static
 
 %_why.v: %.ml $(WHY)
-	$(WHY) $<
+	$(WHY) --valid $<
 
 %.vo: %.v
 	coqc -I ../../lib/coq $<

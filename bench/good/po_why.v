@@ -22,6 +22,9 @@ Save.
 
 
 
+
+
+
 Definition p1 := (* validation *)
   [x: Z]
     [Pre1: (q `x + 1`)]
@@ -40,6 +43,9 @@ Lemma p2_po_1 :
 Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
+
+
+
 
 
 
@@ -67,6 +73,9 @@ Lemma p3_po_1 :
 Proof. 
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -103,6 +112,9 @@ Save.
 
 
 
+
+
+
 Definition p4 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -128,6 +140,9 @@ Save.
 
 
 
+
+
+
 Definition p5 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `7` `3 + 4` p5_po_1) in
   (exist_1 [result0: Z]result0 = `7` result Post1).
@@ -139,6 +154,9 @@ Lemma p6_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -167,6 +185,9 @@ Save.
 
 
 
+
+
+
 Definition p7 := (* validation *)
   let (result, Post2) =
     let (result, Post1) = (exist_1 [result: Z]result = `4` `4`
@@ -188,6 +209,9 @@ Lemma p8_po_1 :
 Proof.
 Intuition; Rewrite Post1; Assumption.
 Save.
+
+
+
 
 
 
@@ -236,6 +260,9 @@ Save.
 
 
 
+
+
+
 Definition p9 := (* validation *)
   [x: Z]
     let (x0, result, Post3) =
@@ -266,6 +293,30 @@ Definition p9 := (* validation *)
       (exist_2 [x2: Z][result2: Z]result2 = `2` /\ x2 = `1` x1 result1 Post8) in
     (exist_2 [x2: Z][result1: Z]result1 = `2` /\ x2 = `1` x1 result0 Post5).
 
+Lemma p9a_po_1 : 
+  (x0: Z)
+  (Post1: x0 = `1`)
+  `1 + 1` = `2` /\ x0 = `1`.
+Proof.
+Intuition.
+Save.
+
+
+Definition p9a := (* validation *)
+  [x: Z]
+    let (x0, result, Post2) =
+      let (x0, result, Post1) =
+        let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+          (refl_equal ? `1`)) in
+        (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post1) in
+      let (result0, Post3) = (exist_1 [result0: Z]`result0 + 1` = `2` /\
+        x0 = `1` `1` (p9a_po_1 x0 Post1)) in
+      (exist_2 [x1: Z][result1: Z]`result1 + 1` = `2` /\ x1 = `1` x0 
+      result0 Post3) in
+    let (result0, Post4) = (exist_1 [result0: Z]result0 = `2` /\
+      x0 = `1` `result + 1` Post2) in
+    (exist_2 [x1: Z][result1: Z]result1 = `2` /\ x1 = `1` x0 result0 Post4).
+
 (*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result:Z](result = `x + 1`)).
 
 Lemma p10_po_1 : 
@@ -275,6 +326,9 @@ Lemma p10_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -295,6 +349,9 @@ Lemma p11_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -330,6 +387,9 @@ Save.
 
 
 
+
+
+
 Definition p11a := (* validation *)
   let (result, Post1) =
     let (result1, Post2) = (fsucc `1`) in
@@ -350,6 +410,9 @@ Lemma p12_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -381,6 +444,9 @@ Save.
 
 
 
+
+
+
 Definition p13 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -402,6 +468,9 @@ Lemma p13a_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -440,6 +509,9 @@ Save.
 
 
 
+
+
+
 Definition p14 := (* validation *)
   [x: Z]
     [Pre1: x = `0`]
@@ -459,6 +531,9 @@ Save.
 
 
 
+
+
+
 Definition p15 := (* validation *)
   [t: (array `10` Z)]let Pre1 = p15_po_1 in
                      (access t `0`).
@@ -471,6 +546,9 @@ Lemma p16_po_1 :
 Proof. (* p16_po_1 *)
 Intros; Omega.
 Save.
+
+
+
 
 
 
@@ -502,6 +580,9 @@ Save.
   coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
  End:
 *)
+
+
+
 
 
 

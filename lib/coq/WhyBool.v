@@ -1,10 +1,10 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: WhyBool.v,v 1.3 2002-06-20 12:55:22 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.4 2002-06-21 14:22:32 filliatr Exp $ *)
 
 Require ZArith.
 Require Sumbool.
-Require Bool_nat.
+Require Export Bool_nat.
 
 Definition annot_bool :
   (b:bool) { b':bool | if b' then b=true else b=false }.
@@ -59,7 +59,7 @@ Save.
 (** Conversely, we build a [sumbool] out of a boolean, 
     for the need of validations *)
 
-Definition sumbool_of_bool 
+Definition btest
   [q:bool->Prop][b:bool][p:(q b)] : {(q true)}+{(q false)} :=
   (<[b:bool](q b)->{(q true)}+{(q false)}>
    Cases b of true => [p](left (q true) (q false) p) 

@@ -8,6 +8,9 @@ Require Omega.
 
 
 
+
+
+
 Definition oppose := (* validation *)
   [u: unit]
     [x: Z]
@@ -108,6 +111,9 @@ Save.
 
 
 
+
+
+
 Definition test := (* validation *)
   [x: Z]
     [Pre4: `x <= 10`]
@@ -127,9 +133,8 @@ Definition test := (* validation *)
                           (exist_1 [result2: bool](if result2 then `x0 < 10`
                                                    else `x0 >= 10`) result1
                           Post4) in
-                        (Cases (sumbool_of_bool [result:bool](if result
-                                                              then `x0 < 10`
-                                                              else `x0 >= 10`) result Bool1) of
+                        (Cases (btest [result:bool](if result then `x0 < 10`
+                                                    else `x0 >= 10`) result Bool1) of
                         | (left Test2) =>
                             let (x1, result0, Post6) =
                               let (x1, result0, Post7) =
@@ -165,8 +170,7 @@ Definition test := (* validation *)
           let (result2, Post9) = (Z_gt_le_bool x0 `0`) in
           (exist_1 [result3: bool](if result3 then `x0 > 0` else `x0 <= 0`) 
           result2 Post9) in
-        (Cases (sumbool_of_bool [result0:bool](if result0 then `x0 > 0`
-                                               else `x0 <= 0`) result0 Bool2) of
+        (Cases (btest [result0:bool](if result0 then `x0 > 0` else `x0 <= 0`) result0 Bool2) of
         | (left Test4) =>
             let (x1, result1, Post11) =
               let (x1, result3, Post12) = (oppose tt x0) in

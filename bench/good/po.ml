@@ -28,6 +28,8 @@ let p8 =
 
 let p9 = (begin x := 1; 1 end + begin x := 2; 1 end) { result = 2 and x = 1 }
 
+let p9a = (begin x := 1; 1 end + 1) { result = 2 and x = 1 }
+
 (* function with a post-condition *)
 
 parameter fsucc : x:int -> { } int { result = x + 1 }

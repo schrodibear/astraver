@@ -45,7 +45,7 @@ BUGS
 IMPLEMENTATION
 ==============
 
- - references mentioned in specs are addes to read references; e.g.
+ - references mentioned in specs are added to read references; e.g.
        t:array 10 of int -> {} unit { access(t,1) = 2 }
     => t:array 10 of int -> {} unit reads t { access(t,1) = 2 }
 

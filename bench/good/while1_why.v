@@ -78,6 +78,9 @@ Save.
 
 
 
+
+
+
 Definition p := (* validation *)
   [i: Z]
     [Pre6: `i <= 10`]
@@ -96,9 +99,8 @@ Definition p := (* validation *)
                         (exist_1 [result2: bool](if result2 then `i0 < 10`
                                                  else `i0 >= 10`) result1
                         Post2) in
-                      (Cases (sumbool_of_bool [result:bool](if result
-                                                            then `i0 < 10`
-                                                            else `i0 >= 10`) result Bool1) of
+                      (Cases (btest [result:bool](if result then `i0 < 10`
+                                                  else `i0 >= 10`) result Bool1) of
                       | (left Test2) =>
                           let Pre3 = Pre4 in
                           let (i1, result0, Post4) =
