@@ -6,7 +6,7 @@ Require Export LinkedLists.
 
 (* Definition eq_list := (@eq (list pointer)). *)
 
-(* Why obligation from file "why/reverse.why", characters 161-641 *)
+(* Why obligation from file "why/reverse.why", characters 161-637 *)
 Lemma rev_impl_po_1 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -31,7 +31,7 @@ rewrite app_ass; auto.
 Qed.
 
 
-(* Why obligation from file "why/reverse.why", characters 575-589 *)
+(* Why obligation from file "why/reverse.why", characters 575-588 *)
 Lemma rev_impl_po_2 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -57,12 +57,12 @@ Lemma rev_impl_po_2 :
   (valid alloc r1).
 Proof.
 intuition.
-elim Pre7; clear Pre7; intuition.
+elim Pre8; clear Pre8; intuition.
 elim H; clear H; intuition.
 inversion H3; intuition.
 Qed.
 
-(* Why obligation from file "why/reverse.why", characters 599-617 *)
+(* Why obligation from file "why/reverse.why", characters 599-616 *)
 Lemma rev_impl_po_3 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -90,9 +90,12 @@ Lemma rev_impl_po_3 :
   (valid alloc q).
 Proof.
 intros; subst; intuition.
+elim Pre8;intros;elim H;intros;elim H0;intuition.
+inversion H7;auto.
+elim Test2;auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 591-629 *)
+(* Why obligation from file "why/reverse.why", characters 591-626 *)
 Lemma rev_impl_po_4 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -129,7 +132,7 @@ Lemma rev_impl_po_4 :
   (length_order (length alloc tl1 r2) (length alloc tl0 r1)).
 Proof.
 intuition.
-elim Pre7; clear Pre7; intuition.
+elim Pre8; clear Pre8; intuition.
 elim H; clear H; intuition.
 inversion H3.
 absurd (r1 = null); intuition.
@@ -149,7 +152,7 @@ rewrite app_rev_cons.
 apply H1; auto.
 unfold length_order, length.
 exists alloc.
-elim Pre7; clear Pre7; intuition.
+elim Pre8; clear Pre8; intuition.
 elim H; clear H; intuition.
 subst.
 inversion H3; intuition.
@@ -159,7 +162,7 @@ apply llist_not_starting with alloc tl0; auto.
 rewrite <- H6; simpl; omega.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 161-641 *)
+(* Why obligation from file "why/reverse.why", characters 161-637 *)
 Lemma rev_impl_po_5 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -194,7 +197,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 161-641 *)
+(* Why obligation from file "why/reverse.why", characters 161-637 *)
 Lemma rev_impl_po_6 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -221,19 +224,19 @@ Lemma rev_impl_po_6 :
      ((llist alloc tl p0 l0) -> (llist alloc tl0 result (rev l0)))))).
 Proof.
 intuition.
-elim Pre7; clear Pre7; intuition.
-elim H0; clear H0; intuition.
-elim (is_list_llist alloc tl p0 Pre9); intros l1 Hl1.
+elim Pre8; clear Pre8; intuition.
+elim H1; clear H1; intuition.
+elim (is_list_llist alloc tl p0 Pre10); intros l1 Hl1.
 subst.
 assert (x0 = nil).
-inversion_clear H4; intuition.
-inversion_clear H0. elim H4; auto.
+inversion_clear H5; intuition.
+inversion_clear H. elim H5; auto.
 subst x0.
-generalize (H2 l0 H); simpl; intro.
-rewrite <- H0; auto.
+generalize (H3 l0 H0); simpl; intro.
+rewrite <- H; auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 216-486 *)
+(* Why obligation from file "why/reverse.why", characters 216-485 *)
 Lemma rev_impl_po_7 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -250,7 +253,7 @@ Lemma rev_impl_po_7 :
 Proof.
 intros; subst.
 exists (nil (A:=pointer)).
-elim (is_list_llist alloc tl p0 Pre9); intros l Hl; exists l.
+elim (is_list_llist alloc tl p0 Pre10); intros l Hl; exists l.
 intuition.
 rewrite <- app_nil_end; auto.
 rewrite (llist_function _ _ _ _ _ _ Hl H); auto.
