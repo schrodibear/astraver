@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.106 2004-10-21 14:52:45 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.107 2004-10-28 10:34:57 filliatr Exp $ i*)
 
 
 open Format
@@ -1387,8 +1387,10 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	       then 
 		 let n = id.var_unique_name in
 		 set_unique_name (Var_info id) ("mutable_" ^ n); 
-		 [id.var_unique_name,n]
-	       else bl) params [] in
+		 (id.var_unique_name,n) :: bl
+	       else bl) 
+	    params [] 
+	in
 	let tblock = catch_return (interp_statement false may_break block) in
 	assert (not !may_break);
 	let tblock =
