@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.41 2002-06-24 09:37:35 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.42 2002-06-24 11:50:57 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -159,26 +159,26 @@ let rec print_cc_type fmt = function
   | TTpure pt -> 
       print_pure_type fmt pt
   | TTarray (s, v) -> 
-      fprintf fmt "(array %a %a)" print_term s print_cc_type v
+      fprintf fmt "(@[array@ %a@ %a@])" print_term s print_cc_type v
   | TTlambda (b, t) ->
-      fprintf fmt "[%a]%a" print_binder b print_cc_type t
+      fprintf fmt "[%a]@,%a" print_binder b print_cc_type t
 (*i***
   | TTarrow ((id, CC_var_binder t1), t2) when not (occur_cc_type id t2) -> 
       fprintf fmt "%a -> %a" print_cc_type t1 print_cc_type t2
 ***i*)
   | TTarrow (b, t) -> 
-      fprintf fmt "(%a)%a" print_binder b print_cc_type t
+      fprintf fmt "(%a)@,%a" print_binder b print_cc_type t
   | TTtuple ([_,t], None) -> 
       print_cc_type fmt t
   | TTtuple (bl, None) ->
-      fprintf fmt "(tuple_%d %a)" (List.length bl) 
+      fprintf fmt "(@[tuple_%d@ %a@])" (List.length bl) 
 	(print_list space (fun fmt (_,t) -> print_cc_type fmt t)) bl
   | TTtuple (bl, Some q) -> 
-      fprintf fmt "(sig_%d %a %a(%a))" (List.length bl)
+      fprintf fmt "(@[sig_%d@ %a@ %a(%a)@])" (List.length bl)
 	(print_list space (fun fmt (_,t) -> print_cc_type fmt t)) bl 
 	(print_list nothing 
 	     (fun fmt (id,t) -> 
-		fprintf fmt "[%a:%a]" Ident.print id print_cc_type t)) bl
+		fprintf fmt "[%a:%a]@," Ident.print id print_cc_type t)) bl
 	print_cc_type q
   | TTpred p ->
       print_predicate fmt p
@@ -215,13 +215,28 @@ let print_proof fmt = function
 
 let print_binder_id fmt (id,_) = Ident.print fmt id
 
+let collect_lambdas = 
+  let rec collect bl = function
+    | CC_lam (b,c) -> collect (b :: bl) c
+    | c -> List.rev bl, c
+  in
+  collect []
+
+let print_lambdas = print_list semi print_binder
+
+let rec collect_app l = function
+  | CC_app (e1, e2) -> collect_app (e2 :: l) e1
+  | p -> p :: l
+
 let rec print_cc_term fmt = function
   | CC_var id -> 
       Ident.print fmt id
-  | CC_lam (b,c) ->
-      fprintf fmt "@[<hov 2>[%a]@,%a@]" print_binder b print_cc_term c
+  | CC_lam _ as t ->
+      let bl,c = collect_lambdas t in
+      fprintf fmt "@[<hov 2>[@[%a@]]@,%a@]" print_lambdas bl print_cc_term c
   | CC_app (f,a) ->
-      fprintf fmt "@[<hov 2>(%a@ %a)@]" print_cc_term f print_cc_term a
+      let tl = collect_app [a] f in
+      fprintf fmt "@[<hov 2>(%a)@]" (print_list space print_cc_term) tl
   | CC_tuple (cl, None) ->
       fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
 	(print_list space print_cc_term) cl
@@ -237,7 +252,7 @@ let rec print_cc_term fmt = function
 		     CC_lam ((idt, CC_pred_binder _), brt),
 		     CC_lam ((idf, CC_pred_binder _), brf)))
     when idb = idb' ->
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (btest [%a:bool]%a %a %a) of@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end)@]"
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (@[btest@ [%a:bool]%a@ %a@ %a@]) of@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end)@]"
       (print_list comma print_binder_id) bl print_cc_term e1 
 	Ident.print idb print_predicate q Ident.print idb Ident.print qb
 	Ident.print idt print_cc_term brt

@@ -165,6 +165,77 @@ Proof.
 Intros; Apply quicksort_trivial; Intuition.
 Save.
 
+Definition quick_rec := (* validation *)
+  [l: Z; r: Z; t: (array N Z); Pre: `0 <= l` /\ `r < N`]
+    (well_founded_induction Z (Zwf `(-1)`) (quick_rec_po_1 l r Pre)
+      [Variant1: Z](l: Z)(r: Z)(t0: (array N Z))(_: Variant1 = `r - l`)
+      (Pre: `0 <= l` /\ `r < N`)
+      (sig_2 (array N Z) unit [t1:(array N Z)][result:unit]
+       ((sorted_array t1 l r) /\ (sub_permut l r t1 t0)))
+      [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `(-1)` Variant2 Variant1))
+       (l: Z)(r: Z)(t0: (array N Z))(_: Variant2 = `r - l`)(Pre: `0 <= l` /\
+       `r < N`)
+       (sig_2 (array N Z) unit [t1:(array N Z)][result:unit]
+        ((sorted_array t1 l r) /\ (sub_permut l r t1 t0)));
+       l: Z; r: Z; t0: (array N Z); Pre3: Variant1 = `r - l`;
+       Pre: `0 <= l` /\ `r < N`]
+        let (result, Bool1) =
+          let (result1, Post2) = (Z_lt_ge_bool l r) in
+          (exist_1 [result2: bool]
+          (if result2 then `l < r` else `l >= r`) result1 Post2) in
+        (Cases (btest [result:bool](if result then `l < r` else `l >= r`)
+                result Bool1) of
+        | (left Test2) =>
+            let (t1, result0, Post4) =
+              let (t1, result0, Post5) =
+                let Pre2 =
+                  (quick_rec_po_2 l r Pre Variant1 l r Pre3 Pre Test2) in
+                let (t1, result2, Post6) = (partition l r t0 Pre2) in
+                (exist_2 [t2: (array N Z)][result3: Z]`l <= result3` /\
+                `result3 <= r` /\ (partition_p t2 l r result3) /\
+                (sub_permut l r t2 t0) t1 result2 Post6) in
+              let (t2, result1, Post7) =
+                let (t2, result1, Post8) =
+                  let Pre =
+                    (quick_rec_po_3 l r Pre Variant1 l r t0 Pre3 Pre Test2 t1
+                    result0 Post5) in
+                  let (t2, result3, Post9) =
+                    ((wf1 `result0 - 1 - l`)
+                      (quick_rec_po_4 l r Pre Variant1 l r t0 Pre3 Pre Test2
+                      t1 result0 Post5 Pre) l `result0 - 1` t1
+                      (refl_equal ? `result0 - 1 - l`) Pre t1 Pre) in
+                  (exist_2 [t3: (array N Z)][result4: unit]
+                  (sorted_array t3 l `result0 - 1`) /\
+                  (sub_permut l `result0 - 1` t3 t1) t2 result3 Post9) in
+                let (t3, result2, Post10) =
+                  let Pre =
+                    (quick_rec_po_5 l r Pre Variant1 l r t0 Pre3 Pre Test2 t1
+                    result0 Post5 t2 Post8) in
+                  let (t3, result4, Post11) =
+                    ((wf1 `r - (result0 + 1)`)
+                      (quick_rec_po_6 l r Pre Variant1 l r t0 Pre3 Pre Test2
+                      t1 result0 Post5 t2 Post8 Pre) `result0 + 1` r 
+                      t2 (refl_equal ? `r - (result0 + 1)`) Pre t2 Pre) in
+                  (exist_2 [t4: (array N Z)][result5: unit]
+                  (sorted_array t4 `result0 + 1` r) /\
+                  (sub_permut `result0 + 1` r t4 t2) t3 result4 Post11) in
+                (exist_2 [t4: (array N Z)][result3: unit]
+                (sorted_array t4 l r) /\ (sub_permut l r t4 t0) t3 result2
+                (quick_rec_po_7 l r Pre Variant1 l r t0 Pre3 Pre Test2 t1
+                result0 Post5 t2 Post8 t3 Post10)) in
+              (exist_2 [t3: (array N Z)][result2: unit]
+              (sorted_array t3 l r) /\ (sub_permut l r t3 t0) t2 result1
+              Post7) in
+            (exist_2 [t2: (array N Z)][result1: unit](sorted_array t2 l r) /\
+            (sub_permut l r t2 t0) t1 result0 Post4)
+        | (right Test1) =>
+            let (result0, Post3) = (exist_1 [result0: unit]
+              (sorted_array t0 l r) /\ (sub_permut l r t0 t0) tt
+              (quick_rec_po_8 l r Pre Variant1 l r t0 Pre3 Pre Test1)) in
+            (exist_2 [t1: (array N Z)][result1: unit](sorted_array t1 l r) /\
+            (sub_permut l r t1 t0) t0 result0 Post3) end) `r - l` l r 
+      t (refl_equal ? `r - l`) Pre).
+
 Lemma quicksort_po_1 : 
   `0 <= 0` /\ `N - 1 < N`.
 Proof.
@@ -180,4 +251,11 @@ Lemma quicksort_po_2 :
 Proof.
 Intuition EAuto.
 Save.
+
+Definition quicksort := (* validation *)
+  [t: (array N Z)]
+    let Pre = quicksort_po_1 in
+    let (t0, result1, Post1) = (quick_rec `0` `N - 1` t Pre) in
+    (exist_2 [t1: (array N Z)][result2: unit](sorted_array t1 `0` `N - 1`) /\
+    (permut t1 t) t0 result1 (quicksort_po_2 t Pre t0 Post1)).
 
