@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.13 2002-11-27 08:14:36 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.14 2002-11-27 16:43:29 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -298,6 +298,7 @@ let rec interp_expr cenv et e =
 	  assert (t2 = t3); (* TODO: coercion int/float *)
 	  ml_if l m1 m2 m3, t2
       | CEcall (l, e, el) ->
+	  (* vérifier que tous les arguments sont purs ? *)
 	  assert false;
 (***
 	  List.fold_left 
