@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.6 2002-01-24 15:59:30 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.7 2002-01-31 12:44:35 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -106,25 +106,6 @@ let is_bool = function
   | PureType PTbool -> true
   | _ -> false
 
-(*i
-let result_eq_true = 
-  Pterm (Tapp (t_eq, [Tvar result; Tconst (ConstBool true)]))
-
-let result_eq_false = 
-  Pterm (Tapp (t_eq, [Tvar result; Tconst (ConstBool false)]))
-
-let spec_and r1 s1 r2 s2 =
-  Pand (Pimplies (result_eq_true, Pand (r1, r2)),
-	Pimplies (result_eq_false, Por (s1, s2)))
-
-let spec_or r1 s1 r2 s2 =
-  Pand (Pimplies (result_eq_true, Por (r1, r2)),
-	Pimplies (result_eq_false, Pand (s1, s2)))
-
-let spec_not r s =
-  Pand (Pimplies (result_eq_true, s), Pimplies (result_eq_false, r))
-i*)
-
 (* top point of a program *)
 
 let top_point = function
@@ -159,152 +140,6 @@ let post_last_statement env top q bl =
     | Statement e :: rem when annotation_candidate e -> 
 	List.rev ((Statement (post_if_none_up env top q e)) :: rem)
     | _ -> bl
-
-(* [propagate_desc] moves the annotations inside the program 
- * [info] is the typing information coming from the outside annotations *)
-
-(*i
-let rec propagate_desc ren info d = 
-  let env = info.env in
-  let p = info.kappa.c_pre in
-  let q = info.kappa.c_post in
-  match d with
-    | If (e1,e2,e3) ->
-      (* propagation number 2 *)
-	let e1' = normalize_boolean ren env (propagate ren e1) in
-	if e2.post = None || e3.post = None then
-	  let top = label_name() in
-	  let ren' = push_date ren top in
-	  PPoint (top, If (e1', 
-			   propagate ren' (post_if_none_up env top q e2),
-			   propagate ren' (post_if_none_up env top q e3)))
-	else
-	  If (e1', propagate ren e2, propagate ren e3)
-    | Aff (x,e) ->
-      	Aff (x, propagate ren e)
-    | TabAcc (ch,x,e) ->
-      	TabAcc (ch, x, propagate ren e)
-    | TabAff (ch,x,({desc=Expression c} as e1),e2) ->
-	let p = make_pre_access ren env x c in
-	let e1' = add_pre [(anonymous_pre true p)] e1 in
-      	TabAff (false, x, propagate ren e1', propagate ren e2)
-    | TabAff (ch,x,e1,e2) ->
-      	TabAff (ch, x, propagate ren e1, propagate ren e2)
-    | App (f,l) ->
-      	App (propagate ren f, List.map (propagate_arg ren) l)
-    | SApp (f,l) ->
-	let l = 
-	  List.map (fun e -> normalize_boolean ren env (propagate ren e)) l
-	in
-      	SApp (f, l)
-    | Lam (bl,e) ->
-      	Lam (bl, propagate ren e)
-    | Seq bl ->
-	let top,bl = top_point_block bl in
-	let bl = post_last_statement env top q bl in
-      	Seq (propagate_block ren env bl)
-    | While (b,inv,var,bl) ->
-	let b = normalize_boolean ren env (propagate ren b) in
-	let lab,bl = top_point_block bl in
-	let bl = add_decreasing env inv var lab bl in
-      	While (b,inv,var,propagate_block ren env bl)
-    | LetRef (x,e1,e2) ->
-	let top = label_name() in
-	let ren' = push_date ren top in
-	PPoint (top, LetRef (x, propagate ren' e1, 
-	      		     propagate ren' (post_if_none_up env top q e2)))
-    | LetIn (x,e1,e2) ->
-	let top = label_name() in
-	let ren' = push_date ren top in
-      	PPoint (top, LetIn (x, propagate ren' e1, 
-			    propagate ren' (post_if_none_up env top q e2)))
-    | LetRec (f,bl,v,var,e) ->
-      	LetRec (f, bl, v, var, propagate ren e)
-    | PPoint (s,d) -> 
-      	PPoint (s, propagate_desc ren info d)
-    | Debug _ | Var _ 
-    | Acc _ | Expression _ as d -> d
-	  
-
-(* [propagate] adds new annotations if possible *)
-and propagate ren p =
-  let env = p.info.env in
-  let p = match p.desc with
-    | App (f,l) ->
-	let _,(_,so,ok),capp = effect_app ren env f l in
-	let qapp = capp.c_post in
-	if ok then
-	  let q = option_app (named_app (tsubst_in_predicate so)) qapp in
-	  post_if_none env q p
-	else
-	  p
-    | _ -> p
-  in
-  let d = propagate_desc ren p.info p.desc in
-  let p = change_desc p d in
-  match d with
-    | Aff (x,e) ->
-	let e1,p1 = extract_pre e in
-	change_desc (add_pre p1 p) (Aff (x,e1))
-
-    | TabAff (check, x, ({ desc = Expression _ } as e1), e2) ->
-	let e1',p1 = extract_pre e1 in
-	let e2',p2 = extract_pre e2 in
-	change_desc (add_pre (p1@p2) p) (TabAff (check,x,e1',e2'))
-
-    | While (b,inv,_,_) ->
-	let _,s = decomp_boolean b.post in
-	let s = make_before_after s in
-	let q = match inv with
-	    None -> Some (anonymous s)
-	  | Some i -> Some { a_value = Pand (i.a_value, s); a_name = i.a_name }
-	in
-	(*i let q = option_app (named_app abstract_unit) q in i*)
-	post_if_none env q p
-
-    | SApp ([Var id], [e1;e2]) when id == p_and || id == p_or ->
-	let q1 = e1.info.kappa.c_post 
-	and q2 = e2.info.kappa.c_post in
-	let (r1,s1) = decomp_boolean q1
-	and (r2,s2) = decomp_boolean q2 in
-	let q =
-	  let c = (if id == p_and then spec_and else spec_or) r1 s1 r2 s2 in
-	  create_bool_post c
-	in
-	post_if_none env q p
-
-    | SApp ([Var id], [e1]) when id == p_not ->
-	let q1 = e1.info.kappa.c_post in
-	let (r1,s1) = decomp_boolean q1 in
-	let q = create_bool_post (spec_not r1 s1) in
-	post_if_none env q p
-
-    | _ -> p
-
-and propagate_arg ren = function
-  | Type _ | Refarg _ as a -> a
-  | Term e -> Term (propagate ren e)
-
-
-and propagate_block ren env = function 
-  | [] -> 
-      []
-  | (Statement p) :: (Assert q) :: rem when annotation_candidate p ->
-      let q' =
-	(*i let ((id,v),_,_,_) = p.info.kappa in
-	let tv = Monad.trad_ml_type_v ren env v in
-	named_app (abstract [id,tv]) i*) q
-      in
-      let p' = post_if_none env (Some q') p in
-      (Statement (propagate ren p')) :: (Assert q) 
-      :: (propagate_block ren env rem)
-  | (Statement p) :: rem ->
-      (Statement (propagate ren p)) :: (propagate_block ren env rem)
-  | (Label s as x) :: rem ->
-      x :: propagate_block (push_date ren s) env rem
-  | x :: rem ->
-      x :: propagate_block ren env rem
-i*)
 
 (*s Normalization. In this first pass, we
     (1) annotate the function calls
@@ -361,6 +196,13 @@ i*)
     | While (b, invopt, var, bl) ->
 	change_desc p (While (normalize_boolean ren env b,
 			      invopt, var, normalize_block ren bl))
+(*i
+    | LetRef (x, ({ desc = Expression t } as e1), e2) ->
+	let ren' = next ren [x] in
+	let pr = anonymous_pre false (Pterm (Tapp (t_eq, [Tvar x;t]))) in
+	change_desc p (LetRef (x, normalize ren e1, 
+			       add_pre [pr] (normalize ren' e2)))
+i*)
     | LetRef (x, e1, e2) ->
 	let ren' = next ren [x] in
 	change_desc p (LetRef (x, normalize ren e1, normalize ren' e2))
@@ -440,9 +282,10 @@ and wp_desc ren info d q =
   match d with
     (* $wp(E,q) = q[result \leftarrow E]$ *)
     | Expression t ->
+	let q = optpost_app make_before_after q in
 	d, optpost_app (tsubst_in_predicate [result,t]) q
-    (* $wp(x := E, q) = q[x\leftarrow E]$ *)
 (*i    
+    (* $wp(x := E, q) = q[x\leftarrow E]$ *)
     | Aff (x, { desc = Expression t }) -> 
 	d, optpost_app (tsubst_in_predicate [x,t]) q
 i*)
@@ -493,7 +336,6 @@ i*)
 	let ren' = initial_renaming env' in
 	let p',w = wp ren' p None in
 	Lam (bl, p'), None
-    (* Other cases... *)
     | LetRef (x, e1, e2) ->
 	let ren' = next ren [x] in
 	let e'2, w = wp ren' e2 q in

@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.5 2002-01-24 15:59:30 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.6 2002-01-31 12:44:35 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -7,8 +7,6 @@ open Misc
 open Ident
 open Format
 open Vcg
-
-let out_file f = f ^ ".why.pvs"
 
 let relation id =
   if id == t_lt then "<" 
@@ -147,4 +145,32 @@ let begin_theory fmt th =
     
 let end_theory fmt th =
   fprintf fmt "END %s@\n" th
+
+
+type elem = 
+  | Verbatim of string
+  | Obligations of obligation list
+
+let queue = Queue.create ()
+
+let reset () = Queue.clear queue
+
+let push_verbatim s = Queue.add (Verbatim s) queue
+
+let push_obligations ol = Queue.add (Obligations ol) queue
+
+let output_elem fmt = function
+  | Verbatim s -> fprintf fmt "  %s@\n@\n" s
+  | Obligations ol -> print_obligations fmt ol
+
+let output_file fwe =
+  let f = fwe ^ "_why.pvs" in
+  let cout = open_out f in
+  let fmt = formatter_of_out_channel cout in
+  let th = Filename.basename fwe in
+  begin_theory fmt th;
+  Queue.iter (output_elem fmt) queue;
+  end_theory fmt th;
+  pp_print_flush fmt ();
+  close_out cout
 

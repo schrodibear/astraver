@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.3 2002-01-25 13:18:18 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.4 2002-01-31 12:44:35 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -151,3 +151,63 @@ let print_obligations fmt ol =
   print_list fmt (fun fmt () -> fprintf fmt "@\n") print_lemma ol;
   if ol <> [] then fprintf fmt "@\n"
 
+
+(*s Queueing elements. *)
+
+type elem = 
+  | Verbatim of string
+  | Obligations of obligation list
+
+let already = Hashtbl.create 97
+
+let queue = Queue.create ()
+
+let reset () = Queue.clear queue; Hashtbl.clear already
+
+let push_verbatim s = Queue.add (Verbatim s) queue
+
+let push_obligations ol = 
+  Queue.add (Obligations ol) queue;
+  List.iter (fun (l,_) -> Hashtbl.add already l false) ol
+
+
+(*s Generating the output. *)
+
+let has_prefix p = 
+  let lp = String.length p in
+  fun s -> String.length s >= lp && String.sub s 0 lp = p
+
+let scan_lines f file =
+  if Sys.file_exists file then begin
+    let cin = open_in file in
+    try while true do f (input_line cin) done
+    with End_of_file -> close_in cin
+  end
+
+let is_lemma s =
+  try
+    if not (has_prefix "Lemma " s) then raise Not_found;
+    let r = String.index_from s 6 ' ' in
+    Some (String.sub s 6 (r - 6))
+  with Not_found ->
+    None
+
+let scan f = 
+  let scan_f s = match is_lemma s with 
+    | None -> ()
+    | Some l -> Hashtbl.add already l true
+  in
+  scan_lines scan_f f
+
+let output_elem fmt = function
+  | Verbatim s -> fprintf fmt "%s@\n@\n" s
+  | Obligations ol -> print_obligations fmt ol
+
+let output_file fwe =
+  let f = fwe ^ "_why.v" in
+  scan f;
+  let cout = open_out f in
+  let fmt = formatter_of_out_channel cout in
+  Queue.iter (output_elem fmt) queue;
+  pp_print_flush fmt ();
+  close_out cout

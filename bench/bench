@@ -38,7 +38,7 @@ goods good
 
 # 4. Showing the results
 for f in good/*.ml; do
-    pvs=good/`basename $f .ml`.why.pvs
+    pvs=good/`basename $f .ml`_why.pvs
     echo "==== "$pvs" ===="
     cat $pvs
     echo "==== "$f" ===="

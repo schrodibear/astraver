@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.4 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.5 2002-01-31 12:44:35 filliatr Exp $ i*)
 
 open Ast
 open Misc
@@ -94,32 +94,3 @@ let rec red = function
   | CC_var _ | CC_hole _ | CC_expr _ as e -> e
 
 
-(* How to reduce uncomplete proof terms when they have become constr *)
-(*i
-open Term
-open Reduction
-
-(* Il ne faut pas reduire de redexe (beta/iota) qui impliquerait
- * la substitution d'une métavariable.
- * 
- * On commence par rendre toutes les applications binaire (strong bin_app)
- * puis on applique la reduction spéciale programmes définie dans
- * typing/reduction *)
-
-(*i
-let bin_app = function
-  | DOPN(AppL,v) as c ->
-      (match Array.length v with
-	 | 1 -> v.(0)
-	 | 2 -> c
-	 | n ->
-	     let f = DOPN(AppL,Array.sub v 0 (pred n)) in
-	     DOPN(AppL,[|f;v.(pred n)|]))
-  | c -> c
-i*)
-
-let red_cci c = 
-  (*i let c = strong bin_app c in i*) 
-  strong whd_programs (Global.env ()) Evd.empty c
-
-i*)

@@ -1,0 +1,4 @@
+dir ../src
+load_printer "ident.cmo"
+install_printer Ident.print
+set arguments ../bench/good/test.ml

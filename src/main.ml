@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.7 2002-01-24 15:59:30 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.8 2002-01-31 12:44:35 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -11,28 +11,26 @@ open Error
 open Rename
 open Util
 
-let header fmt f = match !prover with
-  | Pvs -> Pvs.begin_theory fmt f
-  | Coq -> ()
+(*s Prover selection. *)
 
-let trailer fmt f = match !prover with
-  | Pvs -> Pvs.end_theory fmt f
-  | Coq -> ()
+let reset () = match !prover with
+  | Pvs -> Pvs.reset ()
+  | Coq -> Coq.reset ()
 
-let print_obligations = function
-  | Pvs -> Pvs.print_obligations 
-  | Coq -> Coq.print_obligations
+let push_obligations ol = match !prover with
+  | Pvs -> Pvs.push_obligations ol
+  | Coq -> Coq.push_obligations ol
 
-let out_file f = match !prover with
-  | Pvs -> Pvs.out_file f
-  | Coq -> Coq.out_file f
+let output fwe = match !prover with
+  | Pvs -> Pvs.output_file fwe
+  | Coq -> Coq.output_file fwe
+
+(*s Processing os a single declaration [p]. *)
 
 let interp_program id p =
-  if !debug then eprintf "=== interpreting program %s@\n" (Ident.string id);
-  (* 1. globalization *)
+  if !debug then eprintf "=== interpreting program %a ===@\n" Ident.print id;
   let p = Db.db_prog p in
-  (* 2. typing with effects *)
-  if !debug then eprintf "=== typing with effects...@\n";
+  if !debug then eprintf "=== typing with effects ===@\n";
   let env = Env.empty in
   let ren = initial_renaming env in
   let p = Typing.states ren env p in
@@ -40,49 +38,49 @@ let interp_program id p =
   let v = c.c_result_type in
   Error.check_for_not_mutable p.loc v;
   if !debug then begin print_type_c err_formatter c; eprintf "@\n" end;
-  (* 3. w.p. *)
+  if !debug then eprintf "=== weakest preconditions ===@\n";
   let p = Wp.propagate ren p in
-  (* 4. functionalization *)
-  if !debug then eprintf "=== functionalization...@\n";
+  if !debug then eprintf "=== functionalization ===@\n";
   let cc = Mlize.trans ren p in
   let cc = Red.red cc in
   if !debug then begin print_cc_term err_formatter cc; eprintf "@\n" end;
-  (* 5. VCG *)
+  if !debug then eprintf "=== generating obligations ===@\n";
   let ol = Vcg.vcg (Ident.string id) cc in
   if !verbose then eprintf "%d proof obligation(s)@\n" (List.length ol);
   flush stderr;
   v, ol
+
+(*s Processing of a program. *)
     
-let interp_decl fmt = function
+let interp_decl = function
   | Program (id, p) ->
       let v,ol = interp_program id p in
-      print_obligations !prover fmt ol;
+      push_obligations ol;
       Env.add_global id v None
   | External (ids, v) -> 
       List.iter (fun id -> Env.add_global id v None) ids
   | QPvs s ->
-      if !prover = Pvs then fprintf fmt "  %s@\n@\n" s
+      Pvs.push_verbatim s
   | QCoq s ->
-      if !prover = Coq then fprintf fmt "%s@\n@\n" s
+      Coq.push_verbatim s
 
-let deal_channel theo cin fmt =
+(*s Processinf of a channel / a file. *)
+
+let deal_channel cin =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
-  header fmt theo;
-  List.iter (interp_decl fmt) d;
-  trailer fmt theo
+  List.iter interp_decl d
 
 let deal_file f =
   Loc.set_file f;
+  reset ();
   let cin = open_in f in 
   let fwe = Filename.chop_extension f in
-  let base = Filename.basename fwe in
-  let cout = open_out (out_file fwe) in
-  let fmt = formatter_of_out_channel cout in
-  deal_channel base cin fmt;
+  deal_channel cin;
   close_in cin;
-  pp_print_flush fmt ();
-  close_out cout
+  output fwe
+
+(*s Command line parsing. *)
 
 let usage () =
   eprintf "
@@ -117,9 +115,10 @@ let parse_args () =
 
 let main () =
   let files = parse_args () in
-  if files = [] then
-    deal_channel "WhyOutput" stdin std_formatter
-  else
+  if files = [] then begin
+    deal_channel stdin;
+    output "WhyOutput" 
+  end else
     List.iter deal_file files
 
 let rec explain_exception fmt = function
