@@ -2,8 +2,6 @@
 INPUT
 =====
 
- - syntax for a <= b <= c in predicates
-
 FEATURES
 ========
 
@@ -20,6 +18,13 @@ FEATURES
 
  - mutually recursive functions 
    (many variants over the same type, one relation)
+
+COQ
+===
+
+ - validation
+
+ - libraries
 
 DOCUMENTATION
 =============
