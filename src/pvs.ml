@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.48 2004-03-08 19:26:48 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.49 2004-03-10 14:37:39 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -84,11 +84,11 @@ let print_term fmt t =
 	fprintf fmt "zwf_zero"
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
-    | Tapp (id, [t]) when id == t_neg_int ->
+    | Tapp (id, [t]) when id == t_neg_int || id == t_neg_float ->
 	fprintf fmt "-%a" print3 t
     | Tapp (id, [a; b; c]) when id == if_then_else -> 
 	fprintf fmt "(@[if %a@ then %a@ else %a@])" print0 a print0 b print0 c
-    | Tapp (id, l) as t when is_relation id || is_int_arith_binop id ->
+    | Tapp (id, l) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) -> 
 	fprintf fmt "%s(@[%a@])" 
