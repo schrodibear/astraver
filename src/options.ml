@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.31 2004-02-12 09:37:35 marche Exp $ i*)
+(*i $Id: options.ml,v 1.32 2004-03-01 14:48:49 filliatr Exp $ i*)
 
 open Format
 
@@ -28,6 +28,7 @@ let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref None
+let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
 let no_simplify_prelude_ = ref false
 let no_harvey_prelude_ = ref false
@@ -133,6 +134,10 @@ Coq-specific options:
   --coq-preamble <text>
               gives some Coq preamble to be substituted to \"Require Why\"
 
+PVS-specific options:
+  --pvs-preamble <text>
+              gives some PVS preamble to be substituted to \"importing why@why\"
+
 Simplify-specific options:
   --no-simplify-prelude
               suppress the Simplify prelude (BG_PUSHs for Why's symbols)
@@ -182,6 +187,10 @@ let files =
       :: s :: args -> coq_preamble_ := Some s; parse args
     | ("-coqpreamble"|"--coqpreamble"|"-coq-preamble"|"--coq-preamble")::[] ->
 	usage (); exit 1
+    | ("-pvspreamble" | "--pvspreamble" | "-pvs-preamble" | "--pvs-preamble") 
+      :: s :: args -> pvs_preamble_ := Some s; parse args
+    | ("-pvspreamble"|"--pvspreamble"|"-pvs-preamble"|"--pvs-preamble")::[] ->
+	usage (); exit 1
     | ("-mizarenviron" | "--mizarenviron" | 
        "-mizar-environ" | "--mizar-environ") 
       :: s :: args -> mizar_environ_ := Some s; parse args
@@ -228,6 +237,9 @@ let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with
   | None when prover = Coq V7 -> "Require Why."
   | None -> "Require Import Why."
+  | Some s -> s
+let pvs_preamble = match !pvs_preamble_ with
+  | None -> "importing why@why"
   | Some s -> s
 
 let mizar_environ = !mizar_environ_

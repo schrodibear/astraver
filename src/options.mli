@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.28 2003-11-04 14:07:57 marche Exp $ i*)
+(*i $Id: options.mli,v 1.29 2004-03-01 14:48:49 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -58,6 +58,8 @@ val prover : prover
 val valid : bool
 val coq_tactic : string option
 val coq_preamble : string
+
+val pvs_preamble : string
 
 val mizar_environ : string option
 

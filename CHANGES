@@ -1,4 +1,5 @@
 
+  o new option --pvs-preamble
   o change in syntax: "external" is now a modifier for "parameter" and
     "logic" (see the manual for explanaitions); to be conservative, 
     the following substitutions have to be made:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.45 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.46 2004-03-01 14:48:50 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -93,8 +93,10 @@ let rec print_pure_type fmt = function
   | PTfloat -> fprintf fmt "real"
   | PTarray v -> fprintf fmt "warray[%a]" print_pure_type v
   | PTexternal([],id) -> fprintf fmt "%s" (Ident.string id)
+  | PTexternal(l,id) -> 
+      fprintf fmt "%s[%a]" (Ident.string id) (print_list comma print_pure_type) l
   | PTvarid _ -> assert false 
-  | PTexternal(_,_) 
+  | PTvar { type_val = Some t} -> fprintf fmt "%a" print_pure_type t      
   | PTvar _ -> failwith "no polymorphism with PVS"
 
 let infix_relation id =
@@ -209,7 +211,7 @@ let print_obligations fmt ol =
 
 let begin_theory fmt th =
   fprintf fmt "%s_why: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  importing why@@why@\n"
+  fprintf fmt "  %s@\n" Options.pvs_preamble
     
 let end_theory fmt th =
   fprintf fmt "END %s_why@\n" th
