@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.48 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.49 2002-07-11 09:22:27 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -41,11 +41,10 @@ let print_term fmt t =
     | t -> 
 	print1 fmt t
   and print1 fmt = function
-    | Tapp (id, [a;b]) when id == t_add_int || id == t_sub_int ->
-	openz fmt; 
-	fprintf fmt "%a %s@ %a" 
-	  print1 a (if id == t_add_int then "+" else "-") print2 b; 
-	closez fmt
+    | Tapp (id, [a;b]) when id == t_add_int ->
+	openz fmt; fprintf fmt "%a +@ %a" print1 a print2 b; closez fmt
+    | Tapp (id, [a;b]) when id == t_sub_int ->
+	openz fmt; fprintf fmt "%a -@ %a" print1 a print2 b; closez fmt
     | t ->
 	print2 fmt t
   and print2 fmt = function
@@ -101,10 +100,10 @@ let rec print_pure_type fmt = function
   | PTexternal id -> Ident.print fmt id
 
 let infix_relation id =
-  if id == t_lt_int || id == t_lt then "<" 
-  else if id == t_le_int || id == t_le then "<="
-  else if id == t_gt_int || id == t_gt then ">"
-  else if id == t_ge_int || id == t_ge then ">="
+  if id == t_lt_int then "<" 
+  else if id == t_le_int then "<="
+  else if id == t_gt_int then ">"
+  else if id == t_ge_int then ">="
   else if id == t_eq_int then "="
   else if id == t_neq_int then "<>"
   else assert false
@@ -138,10 +137,14 @@ let print_predicate fmt p =
 	fprintf fmt "@[(well_founded ?@ %a)@]" print_term t
     | Papp (id, [a;b]) when id == t_zwf_zero ->
 	fprintf fmt "(Zwf `0` %a %a)" print_term a print_term b
-    | Papp (id, [a;b]) when is_int_comparison id || is_comparison id ->
+    | Papp (id, [a;b]) when is_int_comparison id ->
 	openz fmt; 
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
 	closez fmt
+    | Papp (id, [a;b]) when id == t_eq ->
+	fprintf fmt "%a = %a" print_term a print_term b
+    | Papp (id, [a;b]) when id == t_neq ->
+	fprintf fmt "~(%a = %a)" print_term a print_term b
     | Papp (id, l) ->
 	fprintf fmt "(@[%s %a@])" (Ident.string id)
 	  (print_list space print_term) l

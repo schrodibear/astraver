@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.20 2002-07-04 11:10:23 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.21 2002-07-11 09:22:27 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -9,6 +9,12 @@ open Misc
 open Util
 
 (*s Reductions of interpretations. *)
+
+let in_rng id s =
+  try
+    Idmap.iter (fun _ t -> if occur_term id t then raise Exit) s; false
+  with Exit ->
+    true
 
 (*s Traversing binders and substitution within CC types *)
 
@@ -51,14 +57,12 @@ and cc_type_subst s = function
 let is_eta_redex bl al =
   try
     List.for_all2
-      (fun (id,_) t -> match t with CC_var id' -> id=id' | _ -> false)
+      (fun (id,_) t -> match t with CC_var id' -> id = id' | _ -> false)
       bl al
   with Invalid_argument "List.for_all2" -> 
     false
 
 let is_term = function CC_term _ -> true | _ -> false
-
-let dterm = function CC_term t -> t | _ -> assert false
 
 let is_iota_redex l1 l2 = 
   (List.length l1 = List.length l2) && List.for_all is_term l2
@@ -94,6 +98,10 @@ let rec red sp s cct =
 		    red sp s e1
 		| re2 ->
 		    CC_letin (dep, bl', re1, re2)))
+  | CC_lam ((id, CC_var_binder c), e) when in_rng id s ->
+      let id' = bound id in
+      let e' = red Idmap.empty (subst_one id (Tvar id')) e in
+      CC_lam ((id', CC_var_binder (cc_type_subst s c)), red sp s e')
   | CC_lam (b, e) ->
       let b',s' = cc_subst_binder s b in
       CC_lam (b', red sp s' e)
@@ -112,8 +120,7 @@ let rec red sp s cct =
   | CC_if (a,b,c) ->
       CC_if (red sp s a, red sp s b, red sp s c)
   | CC_tuple (al, po) ->
-      CC_tuple (List.map (red sp s) al,
-		option_app (cc_type_subst s) po)
+      CC_tuple (List.map (red sp s) al,	option_app (cc_type_subst s) po)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
   | CC_hole ty ->

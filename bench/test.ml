@@ -1,7 +1,9 @@
 
-logic f : int,int -> prop
+logic p : int,int -> prop
 
-let x = 1.1 = 2.2
+let rec f (a:int) (b:int) : int { variant a } =
+  { p(a,b) }
+  (f (a+b) a)
 
 (***
 exception E of int
