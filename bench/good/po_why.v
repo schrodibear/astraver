@@ -7,7 +7,7 @@ Require Import Omega.
 (*Why logic*) Definition q : Z -> Prop.
 Admitted.
 
-(* Why obligation from file "good/po.mlw", characters 153-194 *)
+(* Why obligation from file "good/po.mlw", characters 153-193 *)
 Lemma p1_po_1 : 
   forall (x: Z),
   forall (Pre1: (q (x + 1))),
@@ -21,7 +21,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 205-243 *)
+(* Why obligation from file "good/po.mlw", characters 205-242 *)
 Lemma p2_po_1 : 
   forall (Pre1: (q 7)),
   forall (x0: Z),
@@ -34,7 +34,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 254-306 *)
+(* Why obligation from file "good/po.mlw", characters 254-305 *)
 Lemma p3_po_1 : 
   forall (x: Z),
   forall (x0: Z),
@@ -49,7 +49,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 317-360 *)
+(* Why obligation from file "good/po.mlw", characters 317-359 *)
 Lemma p4_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 7),
@@ -63,7 +63,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 371-396 *)
+(* Why obligation from file "good/po.mlw", characters 371-395 *)
 Lemma p5_po_1 : 
   (3 + 4) = 7.
 Proof.
@@ -73,7 +73,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 407-445 *)
+(* Why obligation from file "good/po.mlw", characters 407-444 *)
 Lemma p6_po_1 : 
   forall (a: Z),
   forall (Post2: a = 3),
@@ -87,7 +87,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 456-501 *)
+(* Why obligation from file "good/po.mlw", characters 456-500 *)
 Lemma p7_po_1 : 
   forall (aux_1: Z),
   forall (Post2: aux_1 = (4 + 4)),
@@ -101,7 +101,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 573-598 *)
+(* Why obligation from file "good/po.mlw", characters 573-595 *)
 Lemma p8_po_1 : 
   forall (x: Z),
   forall (Pre1: (q (x + 1))),
@@ -117,7 +117,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 709-728 *)
+(* Why obligation from file "good/po.mlw", characters 709-725 *)
 Lemma p9_po_1 : 
   forall (x0: Z),
   forall (Post4: x0 = 2),
@@ -134,7 +134,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "good/po.mlw", characters 770-789 *)
+(* Why obligation from file "good/po.mlw", characters 770-786 *)
 Lemma p9a_po_1 : 
   forall (x0: Z),
   forall (Post2: x0 = 1),
@@ -149,7 +149,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 924-951 *)
+(* Why obligation from file "good/po.mlw", characters 924-950 *)
 Lemma p10_po_1 : 
   forall (result: Z),
   forall (Post1: result = 0),
@@ -163,7 +163,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 963-1004 *)
+(* Why obligation from file "good/po.mlw", characters 963-1003 *)
 Lemma p11_po_1 : 
   forall (aux_2: Z),
   forall (Post2: aux_2 = (3 + 1)),
@@ -177,7 +177,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1017-1063 *)
+(* Why obligation from file "good/po.mlw", characters 1017-1062 *)
 Lemma p11a_po_1 : 
   forall (a: Z),
   forall (Post2: a = (1 + 1)),
@@ -192,7 +192,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1190-1222 *)
+(* Why obligation from file "good/po.mlw", characters 1190-1221 *)
 Lemma p12_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -208,7 +208,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1234-1288 *)
+(* Why obligation from file "good/po.mlw", characters 1234-1287 *)
 Lemma p13_po_1 : 
   forall (x: Z),
   forall (x0: Z),
@@ -223,7 +223,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1301-1339 *)
+(* Why obligation from file "good/po.mlw", characters 1301-1338 *)
 Lemma p13a_po_1 : 
   forall (x: Z),
   forall (x0: Z),
@@ -239,7 +239,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1487-1525 *)
+(* Why obligation from file "good/po.mlw", characters 1487-1524 *)
 Lemma p14_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -256,7 +256,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1576-1608 *)
+(* Why obligation from file "good/po.mlw", characters 1576-1607 *)
 Lemma p15_po_1 : 
   forall (t: (array Z)),
   forall (Pre3: (array_length t) = 10),
@@ -269,7 +269,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1621-1658 *)
+(* Why obligation from file "good/po.mlw", characters 1621-1657 *)
 Lemma p16_po_1 : 
   forall (t: (array Z)),
   forall (Pre2: (array_length t) = 10),
@@ -286,7 +286,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/po.mlw", characters 1717-1721 *)
+(* Why obligation from file "good/po.mlw", characters 1717-1720 *)
 Lemma p17_po_1 : 
   forall (t: (array Z)),
   forall (Pre3: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
@@ -308,7 +308,7 @@ Qed.
 *)
 
 
-(* Why obligation from file "good/po.mlw", characters 1671-1730 *)
+(* Why obligation from file "good/po.mlw", characters 1671-1729 *)
 Lemma p17_po_2 : 
   forall (t: (array Z)),
   forall (Pre3: (array_length t) = 10 /\ 0 <= (access t 0) /\ (access t 0) <
@@ -324,7 +324,7 @@ intros; simpl; omega.
 Qed.
 
 
-(* Why obligation from file "good/po.mlw", characters 1774-1794 *)
+(* Why obligation from file "good/po.mlw", characters 1774-1791 *)
 Lemma p18_po_1 : 
   forall (t: (array Z)),
   forall (x: Z),

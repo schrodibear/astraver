@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/exns.mlw", characters 493-511 *)
+(* Why obligation from file "good/exns.mlw", characters 493-507 *)
 Lemma p4_po_1 : 
   forall (Test1: false = true),
   forall (result0: Z),
@@ -13,7 +13,7 @@ Proof.
 intros; discriminate Test1.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 597-597 *)
+(* Why obligation from file "good/exns.mlw", characters 596-596 *)
 Lemma p5_po_1 : 
   forall (Test1: false = true),
   forall (result0: unit),
@@ -23,7 +23,7 @@ Proof.
 intros; discriminate Test1.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 710-721 *)
+(* Why obligation from file "good/exns.mlw", characters 710-720 *)
 Lemma p6_po_1 : 
   forall (Test2: true = false),
   forall (result0: Z),
@@ -34,7 +34,7 @@ intros; discriminate Test2.
 Save.
 
 
-(* Why obligation from file "good/exns.mlw", characters 979-991 *)
+(* Why obligation from file "good/exns.mlw", characters 979-990 *)
 Lemma p8_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 1),
@@ -46,7 +46,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "good/exns.mlw", characters 1071-1091 *)
+(* Why obligation from file "good/exns.mlw", characters 1071-1088 *)
 Lemma p9_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 1),
@@ -63,7 +63,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/exns.mlw", characters 1244-1261 *)
+(* Why obligation from file "good/exns.mlw", characters 1244-1258 *)
 Lemma p11_po_1 : 
   forall (result: Z),
   forall (Post2: result = 1),
@@ -74,7 +74,7 @@ Save.
 
 
 
-(* Why obligation from file "good/exns.mlw", characters 1632-1632 *)
+(* Why obligation from file "good/exns.mlw", characters 1630-1630 *)
 Lemma p14_po_1 : 
   forall (x: Z),
   forall (Test1: x <> 1),

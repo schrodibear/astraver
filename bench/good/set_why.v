@@ -4,7 +4,7 @@
 Require Import Why.
 
 
-(* Why obligation from file "good/set.mlw", characters 208-209 *)
+(* Why obligation from file "good/set.mlw", characters 208-208 *)
 Lemma p_po_1 : 
   forall (x0: Z),
   forall (Test1: x0 = 0 /\ x0 <> 0),
@@ -15,7 +15,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 446-457 *)
+(* Why obligation from file "good/set.mlw", characters 446-456 *)
 Lemma p2_po_1 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -33,7 +33,7 @@ Proof.
 unfold Zwf; intuition.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 358-478 *)
+(* Why obligation from file "good/set.mlw", characters 358-477 *)
 Lemma p2_po_2 : 
   forall (y: Z),
   forall (Pre6: y >= 0),
@@ -49,7 +49,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 524-560 *)
+(* Why obligation from file "good/set.mlw", characters 524-559 *)
 Lemma p3_po_1 : 
   forall (y: Z),
   forall (Pre4: y >= 0),
@@ -69,7 +69,7 @@ Proof.
 unfold Zwf; intros; subst result0; destruct b; intuition.
 Qed.
 
-(* Why obligation from file "good/set.mlw", characters 683-729 *)
+(* Why obligation from file "good/set.mlw", characters 683-726 *)
 Lemma p4_po_1 : 
   forall (y: Z),
   forall (Pre4: y >= 1),

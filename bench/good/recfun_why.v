@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "good/recfun.mlw", characters 124-134 *)
+(* Why obligation from file "good/recfun.mlw", characters 124-133 *)
 Lemma f1_po_1 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -18,7 +18,7 @@ intros; omega.
 Qed.
 
 
-(* Why obligation from file "good/recfun.mlw", characters 98-157 *)
+(* Why obligation from file "good/recfun.mlw", characters 98-156 *)
 Lemma f1_po_2 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -36,7 +36,7 @@ Proof.
 intros; unfold Zwf; omega.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 140-141 *)
+(* Why obligation from file "good/recfun.mlw", characters 140-140 *)
 Lemma f1_po_3 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -52,7 +52,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "good/recfun.mlw", characters 313-322 *)
+(* Why obligation from file "good/recfun.mlw", characters 313-321 *)
 Lemma f2_po_1 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -68,7 +68,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 267-337 *)
+(* Why obligation from file "good/recfun.mlw", characters 267-336 *)
 Lemma f2_po_2 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -88,7 +88,7 @@ Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 326-326 *)
+(* Why obligation from file "good/recfun.mlw", characters 323-323 *)
 Lemma f2_po_3 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -108,7 +108,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/recfun.mlw", characters 472-482 *)
+(* Why obligation from file "good/recfun.mlw", characters 472-481 *)
 Lemma f3_po_1 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -125,7 +125,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 427-502 *)
+(* Why obligation from file "good/recfun.mlw", characters 427-501 *)
 Lemma f3_po_2 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -146,7 +146,7 @@ Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 453-486 *)
+(* Why obligation from file "good/recfun.mlw", characters 453-483 *)
 Lemma f3_po_3 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -166,7 +166,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 486-486 *)
+(* Why obligation from file "good/recfun.mlw", characters 483-483 *)
 Lemma f3_po_4 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -187,7 +187,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/recfun.mlw", characters 666-672 *)
+(* Why obligation from file "good/recfun.mlw", characters 666-671 *)
 Lemma f4_po_1 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -206,7 +206,7 @@ Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 604-695 *)
+(* Why obligation from file "good/recfun.mlw", characters 604-694 *)
 Lemma f4_po_2 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -226,7 +226,7 @@ Proof.
 intros; unfold Zwf; omega.
 Qed.
 
-(* Why obligation from file "good/recfun.mlw", characters 634-676 *)
+(* Why obligation from file "good/recfun.mlw", characters 634-673 *)
 Lemma f4_po_3 : 
   forall (a: Z),
   forall (Pre8: a >= 0),
@@ -251,7 +251,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/recfun.mlw", characters 676-676 *)
+(* Why obligation from file "good/recfun.mlw", characters 673-673 *)
 Lemma f4_po_4 : 
   forall (a: Z),
   forall (Pre8: a >= 0),

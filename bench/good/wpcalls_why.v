@@ -4,7 +4,7 @@
 Require Import Why.
 
 
-(* Why obligation from file "good/wpcalls.mlw", characters 184-206 *)
+(* Why obligation from file "good/wpcalls.mlw", characters 184-205 *)
 Lemma p_po_1 : 
   forall (x: Z),
   forall (result: unit),
