@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.98 2003-03-28 16:16:48 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.99 2003-08-25 08:27:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -469,6 +469,7 @@ and typef_desc lab env loc = function
   | Slam (bl, e) ->
       let bl',env',_ = binders loc lab env (logical_env env) bl in
       let t_e = typef lab env' e in
+      check_for_not_mutable e.ploc t_e.info.kappa.c_result_type;
       let v = make_arrow_type t_e.info.label bl' t_e.info.kappa in
       let ef = Effect.bottom in
       Lam (bl',t_e), (v,ef), []

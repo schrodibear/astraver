@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: viewer.ml,v 1.6 2003-06-20 12:47:08 filliatr Exp $ i*)
+(*i $Id: viewer.ml,v 1.7 2003-08-25 08:27:33 filliatr Exp $ i*)
 
 open Format
 open Options
@@ -278,7 +278,7 @@ let main () =
   let _ = view#selection#set_mode `SINGLE in
   let _ = view#set_rules_hint true in
   let col = GTree.view_column ~title:"Source files" ()
-	      ~renderer:(GTree.cell_renderer_text(), ["text",filename_col]) in
+	      ~renderer:(GTree.cell_renderer_text [], ["text",filename_col]) in
   let _ = view#append_column col in
 
   (* vertical paned *)
