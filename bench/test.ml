@@ -1,23 +1,30 @@
 
 (* Test program *)
 
-let rec rec_add1 (x:int ref) (y:int) : unit { variant y } =
-  { y >= 0 }
-  (if 0 < y then begin x := !x + 1; (rec_add1 x (y-1)) end)
-  { x = x@ + y }
+parameter x : int ref
 
-(* test *)
+let p = x = x
 
-let u11 = let r = ref 3 in (rec_add1 r 7) { r = 10 }
+(****
+external build_Noeud_value : value -> value -> value -> value
 
-(***
-external f : x:int -> y:int -> z:int -> { Pf(x,y,z) } unit { }
+external access_contenu : value -> value
 
-let p =
-  fun (x:int) (y:int) (z:int) ->
-    { P(x,y,z) }
-    begin
-      (f (x+y) z z)
-    end
-    { Q }
+external compareTo : value -> value -> int
+
+let has = fun (this:value) (c : value) ->
+	
+	let res = ref false in
+	let test = ref (compareTo (access_contenu this) c) in
+	begin
+	if test = 0 then res := true
+	else 
+	   if test > 0 then
+		res := (has (access_gauche this) c)
+	    else 
+		res := (has (access_droit this) c);
+	!res
+	end    
+    
+
 ***)

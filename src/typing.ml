@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.45 2002-04-29 08:47:37 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.46 2002-05-06 08:56:39 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -168,21 +168,22 @@ let expected_type loc t et =
 let check_for_alias loc id v = 
   if occur_type_v id v then Error.raise_with_loc (Some loc) (Error.Alias id)
 
+let expected_cmp loc =
+  Error.expected_type loc (fun fmt -> fprintf fmt "unit, bool, int or float")
+
 let type_eq loc = function
   | PureType PTint -> Ident.t_eq_int
   | PureType PTbool -> Ident.t_eq_bool
   | PureType PTfloat -> Ident.t_eq_float
   | PureType PTunit -> Ident.t_eq_unit
-  | _ -> Error.expected_type loc 
-	 (fun fmt -> fprintf fmt "unit, bool, int or float")
+  | _ -> expected_cmp loc
 
 let type_neq loc = function
   | PureType PTint -> Ident.t_neq_int
   | PureType PTbool -> Ident.t_neq_bool
   | PureType PTfloat -> Ident.t_neq_float
   | PureType PTunit -> Ident.t_neq_unit
-  | _ -> Error.expected_type loc 
-	 (fun fmt -> fprintf fmt "unit, bool, int or float")
+  | _ -> expected_cmp loc
 
 let type_eq_neq id =
   assert (is_eq_neq id);
@@ -450,6 +451,9 @@ and typef_desc lab env loc = function
       typef_desc lab env loc (App ({e with desc = Var eq}, Term a, None))
       (* TODO: avoid recursive call *)
 	 
+  | App ({desc=Var id} as e, Refarg (loca,_), None) when is_eq_neq id ->
+      expected_cmp loca
+
   | App (f, Term a, None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
