@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.28 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.29 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -38,19 +38,19 @@ let while_post info b inv =
     | None -> Some (anonymous s)
     | Some i -> Some { a_value = pand i.a_value s; a_name = i.a_name }
 
+(*i**
 let top_point_block = function
   | Label s :: _ as b -> s, b
   | b -> let s = label_name() in s, (Label s)::b
+**i*)
 
-let while_post_block env inv (phi,r) bl = 
-  let lab,bl = top_point_block bl in
+let while_post_block env inv (phi,r) e = 
+  let lab = e.info.label in
   let decphit = applist r [phi; put_label_term env lab phi] in
   let decphi = predicate_of_term decphit in
-  let q = match inv with
+  match inv with
     | None -> anonymous decphi
     | Some i -> { a_value = pand i.a_value decphi; a_name = i.a_name }
-  in
-  bl, q
 
 (* misc. *)
 
@@ -127,9 +127,9 @@ let rec normalize p =
 	change_desc p (Seq (normalize_block bl))
     | Lam (bl, e) ->
 	change_desc p (Lam (bl, normalize e))
-    | While (b, invopt, var, bl) ->
+    | While (b, invopt, var, e) ->
 	let b' = normalize_boolean env b in
-	let p = change_desc p (While (b', invopt, var, normalize_block bl)) in
+	let p = change_desc p (While (b', invopt, var, normalize e)) in
 	let q = while_post p.info b' invopt in
 	post_if_none env q p
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
@@ -323,11 +323,11 @@ and wp_desc info d q =
 	LetRef (x, e'1, e'2), w'
     | Rec _ ->
 	failwith "todo: wp rec"
-    | While (b, inv, var, bl) ->
+    | While (b, inv, var, e) ->
 	let b',_ = wp b None in
-	let bl,q = while_post_block info.env inv var bl in
-	let bl',_ = wp_block bl (Some q) in
-	While (b', inv, var, bl'), None
+	let q = while_post_block info.env inv var e in
+	let e',_ = wp e (Some q) in
+	While (b', inv, var, e'), None
     | Coerce p ->
 	let p',w = wp p q in
 	Coerce p', w

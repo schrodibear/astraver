@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.21 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.22 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -383,10 +383,10 @@ and print_desc fmt = function
       fprintf fmt "%a[%a] :=@ %a" Ident.print id print_prog p1 print_prog p2
   | Seq bl -> 
       fprintf fmt "begin@\n  @[%a@]@\nend" print_block bl
-  | While (p, i, var, bl) ->
+  | While (p, i, var, e) ->
       fprintf fmt 
 	"while %a do@\n  { invariant %a variant _ }@\n  @[%a@]@\ndone" 
-	print_prog p print_post i print_block bl
+	print_prog p print_post i print_prog e
   | If (p1, p2, p3) ->
       fprintf fmt "if %a then@ %a else@ %a" 
 	print_prog p1 print_prog p2 print_prog p3

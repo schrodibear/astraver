@@ -48,3 +48,5 @@ IMPLEMENTATION
  - suppress Coerce node?
 
  - simplify predicates (e.g. if true then ...)
+
+ - wf recursion only on type int (built-in in Monad.wf)

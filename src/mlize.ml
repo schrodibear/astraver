@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.28 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.29 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -13,6 +13,10 @@ open Env
 open Effect
 open Monad
 
+let make_info env k = { env = env; label = label_name (); kappa = k }
+
+let kunit = type_c_of_v (PureType PTunit)
+	   
 (*s Translation of imperative programs into functional ones.
     [ren] is the current renamings of variables,
     [e] is the imperative program to translate, annotated with type+effects.
@@ -81,7 +85,7 @@ and trad_desc info d ren = match d with
       assert false
 
   | App (e1, Term e2, Some kapp) ->
-      let infoapp = { env = info.env; label = label_name (); kappa = kapp } in
+      let infoapp = make_info info.env kapp in
       Monad.compose e2.info (trad e2)
 	(fun v2 -> 
 	   Monad.compose e1.info (trad e1)
@@ -92,7 +96,7 @@ and trad_desc info d ren = match d with
 	ren
 
   | App (e1, Refarg (_,r), Some kapp) ->
-      let infoapp = { env = info.env; label = label_name (); kappa = kapp } in
+      let infoapp = make_info info.env kapp in
       Monad.compose e1.info (trad e1)
 	(fun v1 -> 
 	   Monad.apply infoapp (fun _ -> CC_var v1)
@@ -130,8 +134,30 @@ and trad_desc info d ren = match d with
 			   Monad.unit info (Tconst ConstUnit) ren'')))
 	 ren
 
-  | While (b, inv, var, bl) ->
-      failwith "Mlize.trad: While"
+  | While (b, inv, ((phi,_) as var), e) ->
+      let vphi = variant_name () in
+      let info = 
+	let eq = anonymous_pre false (equality (Tvar vphi) phi) in
+	let p = 
+	  match inv with Some a -> [pre_of_assert false a] | None -> [] 
+	in
+	{ info with kappa = { info.kappa with c_pre = eq :: p }}
+      in
+      Monad.wf var vphi info
+	(fun w -> 
+	   let kexit = kunit in
+	   let info_exit = make_info info.env kexit in
+	   let exit = Monad.unit info (Tconst ConstUnit) in
+	   let kloop = { kunit with c_effect = info.kappa.c_effect } in
+	   let info_loop = make_info info.env kloop in
+	   let loop = Monad.compose e.info (trad e)
+			(fun _ -> Monad.apply info w 
+			     (fun v -> Monad.unit info (Tvar v)))
+	   in
+	   Monad.abstraction info
+	     (trad_conditional info b.info (trad b)
+		info_loop loop info_exit exit))
+	ren
 
   | Rec _ -> 
       failwith "Mlize.trad: Rec"

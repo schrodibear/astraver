@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.24 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.25 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -356,7 +356,7 @@ EXTEND
     | "while"; b = program; "do"; 
 	"{"; inv = OPT invariant; LIDENT "variant"; wf = variant; "}";
 	bl = block; "done" ->
-	  While (b, inv, wf, bl)
+	  While (b, inv, wf, without_annot loc (Seq bl))
 (*i
     | "for"; i = ident; "="; v1 = program; "to"; v2 = program;
 	"do"; "{"; inv = invariant; "}"; bl = block; "done" -> 

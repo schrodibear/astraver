@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.14 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.15 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -116,7 +116,7 @@ i*)
     | Pfalse -> fprintf fmt "False"
     | Pvar id -> Ident.print fmt id
     | Papp (id, [a;b]) when id == t_eq ->
-	print_term fmt a; fprintf fmt " =@ "; print_term fmt b
+	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [t]) when id == well_founded ->
 	fprintf fmt "@[(well_founded ?@ "; print_term fmt t; fprintf fmt ")@]"
     | Papp (id, [a;b]) when id == t_neq ->

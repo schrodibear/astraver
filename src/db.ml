@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.15 2002-03-13 16:15:46 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.16 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 (*s Names separation *)
 
@@ -94,11 +94,8 @@ let db_prog e =
 			 | x -> x) bl)
     | If (e1,e2,e3) ->
 	If (db idl e1, db idl e2, db idl e3)
-    | While (b,inv,var,bl) ->
-	let bl' = List.map (function
-			      | Statement p -> Statement (db idl p)
-			      | x -> x) bl in
-	While (db idl b, inv, var, bl')
+    | While (b,inv,var,e) ->
+	While (db idl b, inv, var, db idl e)
 	  
     | Lam (bl,e) ->
 	let idl',bl' = db_binders idl bl in Lam(bl', db idl' e)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.18 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.19 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -271,6 +271,7 @@ let fresh id e ren =
 *)
 
 let wf (phi,r) vphi info f ren =
+  let a = TTpure PTint in (* TODO: type variant *)
   let w = wf_name () in
   let k = info.kappa in
   let tphi = trad_type_c ren info.env k in
@@ -278,7 +279,7 @@ let wf (phi,r) vphi info f ren =
   let tphi0 = trad_type_c ren info.env (type_c_subst [vphi,vphi0] k) in
   let tw = 
     let r_phi0_phi = predicate_of_term (applist r [Tvar vphi0; Tvar vphi]) in
-    TTarrow ((vphi0, CC_untyped_binder),
+    TTarrow ((vphi0, CC_var_binder a),
 	     TTarrow ((pre_name Anonymous, CC_pred_binder r_phi0_phi), tphi0))
   in
   let fw ren = 
@@ -289,8 +290,7 @@ let wf (phi,r) vphi info f ren =
   CC_app (CC_var well_founded_induction,
 	  [CC_expr r;
 	   CC_hole (papplist (Pvar well_founded) [r]);
-	   CC_type (TTarrow ((vphi, CC_untyped_binder), tphi));
-	   CC_lam ([vphi0, CC_untyped_binder;
-		    w, CC_var_binder tw],
+	   CC_type (TTarrow ((vphi, CC_var_binder a), tphi));
+	   CC_lam ([vphi, CC_var_binder a; w, CC_var_binder tw],
 		   f fw ren);
 	   CC_expr (apply_term ren info.env phi)])

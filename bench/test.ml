@@ -4,11 +4,7 @@
 external x : int ref
 
 let p = 
-  begin 
-    while !x > 0 do { invariant x >= 0 variant u } x := !x - 1 done;
-    x := !x + 1
-  end
-  { x = 1 }
+  while !x > 0 do { invariant x >= 0 variant x } x := !x - 1 done
 
 (***
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.31 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.32 2002-03-15 15:44:08 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -388,16 +388,16 @@ and typef_desc lab env loc = function
       let bl,v,ef = typef_block lab env bl in
       Seq bl, (v,ef), []
 	      
-  | While (b, invopt, var, bl) ->
+  | While (b, invopt, var, e) ->
       let efphi = state_var lab env var in
       let t_b = typef lab env b in
-      Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
-      let t_bl,_,ef_bl = typef_block lab env bl in
-      let cb = t_b.info.kappa in
-      let efinv = state_inv lab env (Some loc) invopt in
       let efb = t_b.info.kappa.c_effect in
+      Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
+      let t_e = typef lab env e in
+      let efe = t_e.info.kappa.c_effect in
+      let efinv = state_inv lab env (Some loc) invopt in
       let ef = 
-	Effect.union (Effect.union ef_bl efb) (Effect.union efinv efphi)
+	Effect.union (Effect.union efe efb) (Effect.union efinv efphi)
       in
       let v = type_v_unit in
 (*i***
@@ -406,7 +406,7 @@ and typef_desc lab env loc = function
 	subst_in_term al var 
       in
 ***i*)
-      While (t_b,invopt,var,t_bl), (v,ef), []
+      While (t_b,invopt,var,t_e), (v,ef), []
       
   | Lam ([],_) ->
       assert false
