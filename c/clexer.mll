@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.15 2004-03-03 15:25:02 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.16 2004-07-21 08:07:08 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -22,11 +22,12 @@
 
   open Cparser
   open Lexing
+  open Cerror
 
   let loc lexbuf = (lexeme_start lexbuf, lexeme_end lexbuf)
 
   let lex_error lexbuf s =
-    raise (Stdpp.Exc_located (loc lexbuf, Stream.Error s))
+    Creport.raise_located (loc lexbuf) (AnyMessage ("lexical error: " ^ s))
 
   let annot_start_pos = ref 0
   let buf = Buffer.create 1024
@@ -187,6 +188,6 @@ and annot = parse
     try
       Cparser.file token lb
     with Parsing.Parse_error as e ->
-      raise (Stdpp.Exc_located (loc lb, e))
+      Creport.raise_located (loc lb) (AnyMessage "Syntax error")
 
 }

@@ -25,11 +25,11 @@ provers () {
 	$coqc "$base"_why.v
 	exit 1
     fi
-    if ! $coqc -I $dir "$base"_valid.v > /dev/null 2>&1; then
-	echo "coq validation FAILED"
-	$coqc -I $dir "$base"_valid.v
-	exit 1
-    fi
+#      if ! $coqc -I $dir "$base"_valid.v > /dev/null 2>&1; then
+#  	echo "coq validation FAILED"
+#  	$coqc -I $dir "$base"_valid.v
+#  	exit 1
+#      fi
     echo -n "coq ok... "
     # running PVS
     if ! $pgm --pvs $f > /dev/null 2>&1; then

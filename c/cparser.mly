@@ -23,6 +23,7 @@
   open Ptree
   open Cast
   open Parsing
+  open Cerror
 
   let loc () = (symbol_start (), symbol_end ())
   let loc_i i = (rhs_start i, rhs_end i)
@@ -31,13 +32,12 @@
   let locate_i i x = { node = x; loc = loc_i i }
   let with_loc l x = { node = x; loc = l }
 
-  let error s = raise (Stdpp.Exc_located (loc (), Stream.Error s))
+  let error s = 
+    Creport.raise_located (loc ()) (AnyMessage ("Syntax error: " ^ s))
 
-  let uns () =
-    raise (Stdpp.Exc_located (loc (), Stream.Error "Unsupported C syntax"))
-  let unss s =
-    raise (Stdpp.Exc_located (loc (), 
-			      Stream.Error ("Unsupported C syntax: " ^ s)))
+  let uns () = error "Unsupported C syntax"
+  let unss s = error ("Unsupported C syntax: " ^ s)
+
   let warning s =
     Format.eprintf "%a warning: %s\n" Loc.report_line (symbol_start ()) s
   let vwarning s = if verbose then warning s

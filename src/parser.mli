@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.mli,v 1.17 2004-07-19 15:35:20 filliatr Exp $ i*)
+(*i $Id: parser.mli,v 1.18 2004-07-21 08:07:09 filliatr Exp $ i*)
 
 (* Grammar for the programs *)
 
@@ -28,3 +28,4 @@ val type_c  : ptype_c Grammar.Entry.e
 val decls : (decl list) Grammar.Entry.e
 
 val lexpr : lexpr Grammar.Entry.e
+

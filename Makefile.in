@@ -61,7 +61,7 @@ V8FILES=$(VO8:.vo=.v)
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
-GENERATED = src/version.ml src/parser.ml src/linenum.ml \
+GENERATED = src/version.ml src/compat.ml src/parser.ml src/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml \
 	    intf/hilight.ml tools/why2html.ml src/float_lexer.ml \
@@ -83,7 +83,8 @@ opt: bin/why.opt bin/caduceus.opt
 byte : bin/why.byte bin/caduceus.byte
 
 # why
-CMO = src/lib.cmo src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
+CMO = src/lib.cmo src/compat.cmo \
+      src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/ident.cmo src/float_lexer.cmo \
 	   src/effect.cmo src/pp.cmo src/misc.cmo src/report.cmo	\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
@@ -110,7 +111,7 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 # caduceus
-CCMO = src/lib.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
+CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo \
 	c/creport.cmo c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
@@ -311,16 +312,16 @@ doc/caduceus.html: doc/caduceus.tex doc/version.tex
 # special rules
 ###############
 
-CAMLP4=@CAMLP4O@ pa_extend.cmo
+CAMLP4=@CAMLP4O@ pa_extend.cmo pa_macro.cmo
 
-src/parser.cmo: src/parser.ml4
-	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -impl" -impl $<
+src/%.cmo: src/%.ml4
+	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -DOCAML@OCAMLV@ -impl" -impl $<
 
-src/parser.cmx: src/parser.ml4
-	$(OCAMLOPT) -c $(OFLAGS) -pp "$(CAMLP4) -impl" -impl $<
+src/%.cmx: src/%.ml4
+	$(OCAMLOPT) -c $(OFLAGS) -pp "$(CAMLP4) -DOCAML@OCAMLV@ -impl" -impl $<
 
-src/parser.ml: src/parser.ml4
-	$(CAMLP4) pr_o.cmo -impl $< > $@
+src/%.ml: src/%.ml4
+	$(CAMLP4) pr_o.cmo -DOCAML@OCAMLV@ -impl $< > $@
 
 # generic rules
 ###############
@@ -476,6 +477,7 @@ clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f c/*.cm[iox] c/*.o c/*~
 	rm -f intf/*.cm[iox] intf/*.o intf/*~
+	rm -f tools/*.cm[iox] tools/*.o tools/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)

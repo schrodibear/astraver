@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.62 2004-06-25 07:00:53 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.63 2004-07-21 08:07:08 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -39,7 +39,7 @@ let with_offset ofs f x =
     f x
   with 
     | Stdpp.Exc_located (loc, e) -> 
-	raise (Stdpp.Exc_located (offset ofs loc, e))
+	raise (Stdpp.Exc_located (Compat.offset ofs loc, e))
     | Error (Some loc, e) ->
 	raise (Error (Some (offset ofs loc), e))
 

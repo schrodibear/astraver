@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.35 2004-07-19 15:35:20 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.36 2004-07-21 08:07:09 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -130,10 +130,10 @@ let make_arith loc = function
       expected_num loc
 
 let predicate_expected loc =
-  raise (Stdpp.Exc_located (loc, Stream.Error "predicate expected"))
+  raise_located loc (AnyMessage "syntax error: predicate expected")
 
 let term_expected loc =
-  raise (Stdpp.Exc_located (loc, Stream.Error "term expected"))
+  raise_located loc (AnyMessage "syntax error: term expected")
 
 (* Table of closed instances *)
 

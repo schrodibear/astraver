@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.mli,v 1.3 2004-07-19 15:35:20 filliatr Exp $ i*)
+(*i $Id: report.mli,v 1.4 2004-07-21 08:07:09 filliatr Exp $ i*)
 
 open Format
 
@@ -26,4 +26,4 @@ val raise_located : Loc.t -> Error.t -> 'a
 val raise_unlocated : Error.t -> 'a
 val raise_locop : Loc.t option -> Error.t -> 'a
 
-val explain_exception : formatter -> exn -> unit
+val explain_exception : Format.formatter -> exn -> unit

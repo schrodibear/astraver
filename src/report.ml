@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.7 2004-07-19 15:35:20 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.8 2004-07-21 08:07:09 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -130,6 +130,7 @@ let raise_located loc e = raise (Error (Some loc, e))
 let raise_unlocated e = raise (Error (None, e))
 let raise_locop locop e = raise (Error (locop, e))
 
+
 let rec explain_exception fmt = function
   | Parsing.Parse_error -> 
       fprintf fmt "Syntax error"
@@ -138,7 +139,7 @@ let rec explain_exception fmt = function
   | Error (Some loc, e) | Stdpp.Exc_located (_, Error (Some loc, e)) ->
       fprintf fmt "%a%a" Loc.report loc report e
   | Stdpp.Exc_located (loc, e) ->
-      fprintf fmt "%a%a" Loc.report loc explain_exception e
+      fprintf fmt "%a%a" Loc.report (Compat.make_loc loc) explain_exception e
   | Error (_, e) ->
       report fmt e
   | e ->

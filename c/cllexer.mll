@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.25 2004-06-10 15:40:31 marche Exp $ i*)
+(*i $Id: cllexer.mll,v 1.26 2004-07-21 08:07:08 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -22,11 +22,12 @@
 
   open Clparser
   open Lexing
+  open Cerror
 
   let loc lexbuf = (lexeme_start lexbuf, lexeme_end lexbuf)
 
   let lex_error lexbuf s =
-    raise (Stdpp.Exc_located (loc lexbuf, Stream.Error s))
+    Creport.raise_located (loc lexbuf) (AnyMessage ("lexical error: " ^ s))
 
 }
 
@@ -144,9 +145,9 @@ and comment = parse
     with 
       | Parsing.Parse_error as e -> 
 	  let loc = ofs + lexeme_start lb, ofs + lexeme_end lb in
-	  raise (Stdpp.Exc_located (loc, e))
-      | Stdpp.Exc_located ((ls, le), e) -> 
-	  raise (Stdpp.Exc_located ((ofs + ls, ofs + le), e))
+	  Creport.raise_located loc (AnyMessage "Syntax error")
+      | Stdpp.Exc_located (loc, e) -> 
+	  raise (Stdpp.Exc_located (Compat.offset ofs loc, e))
 
   let annot = parse_with_offset Clparser.annot
 

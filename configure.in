@@ -60,8 +60,11 @@ echo "ocaml library path is $OCAMLLIB"
 case $OCAMLVERSION in
   0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*)
         AC_MSG_ERROR(You need Objective 3.07 or later);;
+  3.07*)
+	OCAMLV=307;;
+  3.08*)
+	OCAMLV=308;;
 esac
-
 
 # then we look for ocamlopt; if not present, we issue a warning
 # if the version is not the same, we also discard it
@@ -73,7 +76,7 @@ if test "$OCAMLOPT" = no ; then
 else
 	AC_MSG_CHECKING(ocamlopt version)
 	TMPVERSION=`$OCAMLOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
-	if test "$TMPVERSION" != $OCAMLVERSION ; then
+	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
 	    AC_MSG_RESULT(differs from ocamlc; ocamlopt discarded.)
 	    OCAMLOPT=no
 	else
@@ -87,7 +90,7 @@ AC_CHECK_PROG(OCAMLCDOTOPT,ocamlc.opt,ocamlc.opt,no)
 if test "$OCAMLCDOTOPT" != no ; then
 	AC_MSG_CHECKING(ocamlc.opt version)
 	TMPVERSION=`$OCAMLCDOTOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
-	if test "$TMPVERSION" != $OCAMLVERSION ; then
+	if test "$TMPVERSION" != "$OCAMLVERSION" ; then
 	    AC_MSG_RESULT(differs from ocamlc; ocamlc.opt discarded.)
 	else
 	    AC_MSG_RESULT(ok)
@@ -101,7 +104,7 @@ if test "$OCAMLOPT" != no ; then
     if test "$OCAMLOPTDOTOPT" != no ; then
 	AC_MSG_CHECKING(ocamlc.opt version)
 	TMPVER=`$OCAMLOPTDOTOPT -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
-	if test "$TMPVER" != $OCAMLVERSION ; then
+	if test "$TMPVER" != "$OCAMLVERSION" ; then
 	    AC_MSG_RESULT(differs from ocamlc; ocamlopt.opt discarded.)
 	else
 	    AC_MSG_RESULT(ok)
@@ -141,7 +144,7 @@ fi
 CAMLP4LIB=`camlp4o -where`
 CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
 AC_MSG_CHECKING(camlp4 version)
-if test "$CAMLP4VERSION" != $OCAMLVERSION ; then
+if test "$CAMLP4VERSION" != "$OCAMLVERSION" ; then
     AC_MSG_ERROR(differs from ocaml version)
 else
     AC_MSG_RESULT(ok)
@@ -243,6 +246,7 @@ AC_SUBST(OCAMLLEX)
 AC_SUBST(OCAMLYACC)
 AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
+AC_SUBST(OCAMLV)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
 AC_SUBST(CAMLP4O)

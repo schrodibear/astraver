@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.52 2004-07-06 11:49:01 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.53 2004-07-21 08:07:08 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -226,7 +226,7 @@ and type_term_node loc env = function
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->
-      raise (Stdpp.Exc_located (loc, Parsing.Parse_error))
+      raise_located loc (AnyMessage "syntax error")
 
 and type_int_term env t =
   let tt = type_term env t in

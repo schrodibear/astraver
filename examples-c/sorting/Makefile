@@ -13,7 +13,13 @@ simplify:
 	  make -f $$f.makefile simplify; \
 	done
 
-.PHONY: coq simplify
+cvcl:
+	for f in $(FILES); do \
+	  caduceus $$f.c; \
+	  make -f $$f.makefile cvcl; \
+	done
+
+.PHONY: coq simplify cvcl
 
 %: %.c 
 	caduceus $*.c

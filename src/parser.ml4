@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.98 2004-07-19 15:35:20 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.99 2004-07-21 08:07:09 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -22,6 +22,7 @@ open Misc
 open Util
 open Types
 open Ptree
+open Compat
 
 (*s Lexer. Wrapper around [Plexer.make] to take an offset into account. *)
 
@@ -34,18 +35,21 @@ let with_offset n f x =
   with e ->
     offset := old; raise e
 
-let loc_offset lf n = let (b,e) = lf n in (b + !offset, e + !offset)
-(* 3.08
 let loc_offset lf n = 
+  IFDEF OCAML307 THEN
+  let (b,e) = lf n in (b + !offset, e + !offset)
+  ELSE
   let (b,e) = lf n in 
-  ({ b with Lexing.pos_cnum = b.pos_cnum + !offset }, 
-   { e with Lexing.pos_cnum = b.pos_cnum + !offset })
-*)
+    ({ b with Lexing.pos_cnum = b.Lexing.pos_cnum + !offset }, 
+     { e with Lexing.pos_cnum = b.Lexing.pos_cnum + !offset })
+  END
 
 let lexer = 
   let l = Plexer.make () in
   { l with 
     Token.func = fun cs -> let ts,lf = l.Token.func cs in ts, loc_offset lf }
+
+let join (b,_) (_,e) = (b,e)
 
 (*s grammar entries *)
 
@@ -122,13 +126,18 @@ let logic_arg = gec "logic_arg"
 
 (*s Utility functions. *)
 
-let mk_pp loc d = { pp_loc = loc; pp_desc = d }
-let infix_pp loc a i b = mk_pp loc (PPinfix (a, i, b))
-let prefix_pp loc p a = mk_pp loc (PPprefix (p, a))
+let mk_ppl loc d = { pp_loc = loc; pp_desc = d }
+let mk_pp loc = mk_ppl (make_loc loc)
+
+let infix_ppl loc a i b = mk_ppl loc (PPinfix (a, i, b))
+let infix_pp loc = infix_ppl (make_loc loc)
+
+let prefix_ppl loc p a = mk_ppl loc (PPprefix (p, a))
+let prefix_pp loc = prefix_ppl (make_loc loc)
 
 let conj_assert {a_name=n; a_value=a} {a_value=b} = 
-  let loc = Loc.join a.pp_loc b.pp_loc in
-  { a_value = infix_pp loc a PPand b; a_name = n; a_loc = loc }
+  let loc = join a.pp_loc b.pp_loc in
+  { a_value = infix_ppl loc a PPand b; a_name = n; a_loc = loc }
 
 let conj = function
   | None, None     -> None
@@ -137,8 +146,10 @@ let conj = function
   | Some (a,[]), Some (b,[]) -> Some (conj_assert a b, [])
   | _ -> assert false (* TODO *)
 
-let without_annot loc d = 
+let without_annotl loc d = 
   { pdesc = d; pre = []; oblig = []; post = None; ploc = loc }
+
+let without_annot loc = without_annotl (make_loc loc)
 
 let no_loc (_,e) = (e,e)
 
@@ -148,12 +159,13 @@ let rec app f = function
   | [a] -> 
       Sapp (f, a)
   | a :: l -> 
-      let loc = Loc.join f.ploc (arg_loc a) in 
-      app (without_annot loc (Sapp (f, a))) l
+      let loc = join f.ploc (arg_loc a) in 
+      app (without_annotl loc (Sapp (f, a))) l
 
 let bin_op (loc_op,op) loc e1 e2 =
-  let f = without_annot loc_op (Svar op) in
-  let f_e1 = without_annot (Loc.join e1.ploc loc_op) (Sapp (f, Sterm e1)) in
+  let loc_op = make_loc loc_op in
+  let f = without_annotl loc_op (Svar op) in
+  let f_e1 = without_annotl (join e1.ploc loc_op) (Sapp (f, Sterm e1)) in
   without_annot loc (Sapp (f_e1, Sterm e2))
 
 let un_op op loc e =
@@ -165,14 +177,14 @@ let mk_prog loc p pre post =
     pre = pre; 
     oblig = p.pre @ p.oblig;
     post = conj (p.post, post); 
-    ploc = loc }
+    ploc = make_loc loc }
 
 let rec_name = function Srec (x,_,_,_,_) -> x | _ -> assert false
 
 let check_block loc b =
   let is_statement = function Sstatement _ -> true | _ -> false in
   if not (List.exists is_statement b) then
-    Report.raise_located loc 
+    Report.raise_located (make_loc loc)
       (Error.AnyMessage "a sequence must contain at least one statement")
 
 EXTEND 
@@ -349,9 +361,9 @@ EXTEND
   [ [ c = assertion -> (c,[]) 
     | c = assertion; "|"; l = LIST1 exn_condition SEP "|" -> (c,l) 
     | "|"; l = LIST1 exn_condition SEP "|" -> 
-	wprintf loc "no postcondition; false inserted@\n";
+	wprintf (make_loc loc) "no postcondition; false inserted@\n";
         if werror then exit 1;
-	(anonymous loc (mk_pp loc PPfalse), l)
+	(anonymous (make_loc loc) (mk_pp loc PPfalse), l)
   ] ]
   ;
   exn_condition:
@@ -373,7 +385,8 @@ EXTEND
 
   (* Programs *)
   assertion:
-  [ [ c = lexpr; n = name -> { a_name = n; a_value = c; a_loc = loc } ] ]
+  [ [ c = lexpr; n = name -> 
+       { a_name = n; a_value = c; a_loc = make_loc loc } ] ]
   ;
   name:
   [ [ "as"; id = ident -> Ident.Name id
@@ -552,16 +565,16 @@ i*)
 	Program (rec_name p, without_annot loc p)
     | e = external_; 
       "parameter"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
-	Parameter (loc, e, ids, v)
+	Parameter (make_loc loc, e, ids, v)
     | "exception"; id = ident; v = OPT exception_type ->
-	Exception (loc, id, v)
+	Exception (make_loc loc, id, v)
     | e = external_; "logic"; ids = LIST1 ident SEP ","; ":"; t = logic_type ->
-	Logic (loc, e, ids, t)
+	Logic (make_loc loc, e, ids, t)
     | "axiom"; id = ident; ":"; p = lexpr ->
-	Axiom (loc, id, p)
+	Axiom (make_loc loc, id, p)
     | "predicate"; id = ident; "("; bl = LIST0 logic_binder SEP ","; ")";
       "="; p = lexpr ->
-	Predicate_def (loc, id, bl, p)
+	Predicate_def (make_loc loc, id, bl, p)
   ] ]
   ;
   logic_binder:
@@ -586,3 +599,4 @@ i*)
 
 END
 ;;
+

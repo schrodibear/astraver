@@ -41,7 +41,6 @@ Lemma selection_impl_po_1 :
   (valid alloc (shift t j3)).
 Proof.
 intuition.
-subst; auto.
 Qed.
 
 (* Why obligation from file "why/selection.why", characters 1364-1479 *)
@@ -83,20 +82,6 @@ Lemma selection_impl_po_2 :
   (valid alloc (shift t min3)).
 Proof.
 intuition.
-assert (k < j3 \/ k=j3).
-omega.
-intuition.
-generalize (H7 k).
-subst; auto with *.
-subst; omega.
-
-(* subgoal 2 *)
-assert (k < j3 \/ k=j3).
-omega.
-intuition.
-subst; auto with *.
-
-subst; auto.
 Qed.
 
 (* Why obligation from file "why/selection.why", characters 1494-1503 *)
@@ -147,6 +132,8 @@ Lemma selection_impl_po_3 :
     (Zwf 0 (n - j) (n - j3)))).
 Proof.
 intuition.
+Admitted.
+(****
 unfold sorted in *|-*; intuition.
 assert (k < i2-1 \/ k = i2-1).
 omega.
@@ -181,7 +168,25 @@ subst; rewrite H12; auto with *.
 rewrite H14; auto with *.
 
 Admitted.
+***)
 
+(***
+assert (k < j3 \/ k=j3).
+omega.
+intuition.
+generalize (H7 k).
+subst; auto with *.
+subst; omega.
+
+(* subgoal 2 *)
+assert (k < j3 \/ k=j3).
+omega.
+intuition.
+subst; auto with *.
+
+subst; auto.
+
+***)
 
 (* Why obligation from file "why/selection.why", characters 1518-1522 *)
 Lemma selection_impl_po_4 : 
@@ -231,6 +236,7 @@ Lemma selection_impl_po_4 :
     (Zwf 0 (n - j) (n - j3)))).
 Proof.
 intuition.
+
 assert (k=i2).
 omega.
 subst; omega.

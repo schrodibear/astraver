@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.38 2004-07-19 15:35:19 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.39 2004-07-21 08:07:08 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -154,7 +154,7 @@ let rec explain_exception fmt = function
   | Error (Some loc, e) | Stdpp.Exc_located (_, Error (Some loc, e)) ->
       fprintf fmt "%a%a" Loc.report loc report e
   | Stdpp.Exc_located (loc, e) ->
-      fprintf fmt "%a%a" Loc.report loc explain_exception e
+      fprintf fmt "%a%a" Loc.report (Compat.make_loc loc) explain_exception e
   | Error (_, e) ->
       report fmt e
   | e ->

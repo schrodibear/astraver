@@ -1,4 +1,7 @@
 
+  o WP completely redesigned: side-effects free expressions are now
+    given an adequate specification, so that the WP calculus does not
+    enter them. Results in significantly simpler proof obligations.
   o new tool `dp' to call decision procedures Simplify and CVC Lite
     (calls the DP once for each goal with a timeout and displays stats)
   o CVC Lite output (option --cvcl; see http://chicory.stanford.edu/CVCL/)
