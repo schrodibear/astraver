@@ -197,8 +197,8 @@ examples:: $(BINARY) $(WHYVO)
 
 db debug: bin/why.byte src/logic.cmo
 
-src/logic.ml: src/logic.mli
-	cp -f $^ $@
+#src/logic.ml: src/logic.mli
+#	cp -f $^ $@
 
 # installation
 ##############
