@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.32 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.33 2004-07-13 13:17:12 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -66,8 +66,8 @@ let other_cmp = function
   | _ -> assert false
 
 
-let rec unify t1 t2 = 
-  match (t1,t2) with
+let rec unify t1 t2 = match (t1,t2) with
+  (* instantiable variables *)
   | (PTvar v1, _) ->
       begin
 	match v1.type_val with
@@ -80,7 +80,7 @@ let rec unify t1 t2 =
 	  | None -> v2.type_val <- Some t1; true
 	  | Some tb -> unify t1 tb
       end
-
+  (* recursive types *)
   | (PTarray ta, PTarray tb) -> unify ta tb
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
       i1 = i2 && List.length l1 = List.length l2 &&
@@ -88,7 +88,7 @@ let rec unify t1 t2 =
   | (PTexternal _ | PTarray _), _
   | _, (PTexternal _ | PTarray _) ->
       false
-
+  (* other cases *)
   | (PTvarid xa, PTvarid xb) -> xa = xb
   | (PTvarid _, _)
   | (_, PTvarid _) -> 
@@ -426,7 +426,7 @@ and binders loc lab env lenv = function
   | (id, BindType v) :: bl ->
       let v = type_v loc lab env lenv v in
       let bl',env',lenv' = 
-	binders loc lab (Env.add id v env) (Env.add_logic id v lenv) bl 
+	binders loc lab (Env.add id v env) (Env.add_logic ~generalize:false id v lenv) bl 
       in
       (id, BindType v) :: bl', env', lenv'
   | (id, BindSet) :: bl ->

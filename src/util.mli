@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.45 2004-07-13 11:31:25 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.46 2004-07-13 13:17:12 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -133,6 +133,7 @@ val print_type_v : formatter -> type_v -> unit
 val print_type_c : formatter -> type_c -> unit
 val print_prog : formatter -> typed_program -> unit
 
+val print_cc_type : formatter -> Cc.cc_type -> unit
 val print_cc_term : formatter -> ('a * predicate) Cc.cc_term -> unit
 val print_cc_pattern : formatter -> Cc.cc_pattern -> unit
 

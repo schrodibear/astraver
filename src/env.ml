@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.46 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.47 2004-07-13 13:17:12 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -120,6 +120,29 @@ let subst_logic_type s = function
   | Predicate (tl) -> 
       Predicate (List.map (subst_pure_type s) tl)
 
+let rec subst_term s = function
+  | Tapp (id, tl, i) -> 
+      Tapp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
+  | Tconst _ | Tvar _ | Tderef _ as t -> 
+      t
+
+let rec subst_predicate s p =
+  let f = subst_predicate s in
+  match p with
+  | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
+  | Pif (a, b, c) -> Pif (subst_term s a, f b, f c)
+  | Pand (w, a, b) -> Pand (w, f a, f b)
+  | Por (a, b) -> Por (f a, f b)
+  | Piff (a, b) -> Piff (f a, f b)
+  | Pnot a -> Pnot (f a)
+  | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
+  | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
+  | Forallb (w, a, b) -> Forallb (w, f a, f b)
+  | Papp (id, tl, i) -> 
+      Papp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
+  | Pfpi (t, a, b) -> Pfpi (subst_term s t, a, b)
+  | Ptrue | Pfalse | Pvar _ as p -> p
+
 let rec subst_type_v s = function
   | Ref t -> Ref (subst_type_v s t)
   | Array t -> Array (subst_type_v s t)
@@ -129,7 +152,10 @@ and subst_binder s ((id,t) as b) = match t with
   | BindSet | Untyped -> b
   | BindType t -> (id, BindType (subst_type_v s t))
 and subst_type_c s c =
-  { c with c_result_type = subst_type_v s c.c_result_type }
+  { c with 
+    c_result_type = subst_type_v s c.c_result_type;
+    c_pre = List.map (asst_app (subst_predicate s)) c.c_pre;
+    c_post = option_app (post_app (subst_predicate s)) c.c_post }
 
 let specialize_scheme subst s =
   let env =
@@ -142,34 +168,6 @@ let specialize_scheme subst s =
 let specialize_logic_type = specialize_scheme subst_logic_type
 
 let specialize_type_v = specialize_scheme subst_type_v
-
-(***
-let rec subst_term s = function
-  | Tapp (id, tl, i) -> 
-      Tapp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
-  | Tconst _ | Tvar _ | Tderef _ as t -> 
-      t
-***)
-
-let rec subst_predicate s p =
-  let f = subst_predicate s in
-  match p with
-  | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
-  | Pif (a, b, c) -> Pif ((*subst_term s*) a, f b, f c)
-  | Pand (w, a, b) -> Pand (w, f a, f b)
-  | Por (a, b) -> Por (f a, f b)
-  | Piff (a, b) -> Piff (f a, f b)
-  | Pnot a -> Pnot (f a)
-  | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
-  | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
-  | Forallb (w, a, b) -> Forallb (w, f a, f b)
-(***
-  | Papp (id, tl, i) -> 
-      Papp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
-  | Pfpi (t, a, b) -> Pfpi (subst_term s t, a, b)
-***)
-  | Papp _ | Pfpi _ 
-  | Ptrue | Pfalse | Pvar _ as p -> p
 
 let specialize_predicate = specialize_scheme subst_predicate
 

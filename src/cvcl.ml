@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.12 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.13 2004-07-13 13:17:12 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -96,12 +96,9 @@ let rec print_pure_type fmt = function
   | PTvarid _ -> assert false
   | PTvar {type_val=Some pt} -> print_pure_type fmt pt
   | PTvar _ -> assert false
-  | PTexternal ([],id) -> fprintf fmt "%a" Ident.print id
-  | PTexternal (pl,id) -> 
-      fprintf fmt "%a_%a" 
-	(print_list underscore print_pure_type) pl Ident.print id
+  | PTexternal (i,id) -> fprintf fmt "%a%a" Ident.print id instance i
 
-let instance fmt = function
+and instance fmt = function
   | [] -> ()
   | ptl -> fprintf fmt "_%a" (print_list underscore print_pure_type) ptl
 
@@ -277,6 +274,10 @@ module GenSubst(S : Substitution) = struct
     | Logic.Predicate tl -> 
 	Logic.Predicate (List.map (pure_type s) tl)
 
+  let binder s (id,pt) = (id, pure_type s pt)
+
+  let binders s = List.map (binder s)
+
   let rec term s = function
     | Tapp (x, tl, i) -> 
 	Tapp (x, List.map (term s) tl, List.map (pure_type s) i)
@@ -301,6 +302,22 @@ module GenSubst(S : Substitution) = struct
     | Ptrue | Pfalse | Pvar _ as p -> p
 
 end
+
+(* substitution of type variables ([PTvarid]) by pure types *)
+module SV = struct
+
+  type substitution = (string * pure_type) list
+
+  let rec pure_type s = function
+    | PTvarid id as t ->
+	(try List.assoc (Ident.string id) s with Not_found -> t)
+    | PTexternal (l, id) ->
+	PTexternal (List.map (pure_type s) l, id)
+    | PTarray ta -> PTarray (pure_type s ta)
+    | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
+
+end
+module SubstV = GenSubst(SV)
 
 (* substitution of unification type variables within instances *)
 module SI = struct
@@ -362,6 +379,8 @@ let rec unify s t1 t2 = match (t1,t2) with
   | (PTvar {type_val=Some v1}, _) ->
       unify s v1 t2
   | (PTvar {tag=t;type_val=None}, _) ->
+      assert false
+(***
       begin
 	try
 	  let t1 = List.assoc t s in
@@ -370,9 +389,8 @@ let rec unify s t1 t2 = match (t1,t2) with
 	with Not_found ->
 	  (t, t2) :: s
       end
+***)
   | (PTvarid v1, _) ->
-      assert false
-(***
       let v1 = Ident.string v1 in
       begin
 	try
@@ -382,7 +400,6 @@ let rec unify s t1 t2 = match (t1,t2) with
 	with Not_found ->
 	  (v1, t2) :: s
       end
-***)
   | PTint, PTint
   | PTbool, PTbool
   | PTreal, PTreal
@@ -393,27 +410,25 @@ let unify_i = List.fold_left2 unify
 
 let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
-  eprintf "p = %a@." Util.print_predicate p.scheme_type;
   let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
   let all_i = OpenInstances.S.elements all_i in
+  eprintf "id = %s length(all_i) = %d@." id (List.length all_i);
   let rec iter s = function
     | [] ->
-	eprintf "subst = %a@."
-	  (print_list space (fun fmt (t,pt) -> fprintf fmt "[%d -> %a]" t print_pure_type pt)) s;
-	let ps = SubstI.predicate s p.scheme_type in
-	fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate ps
+	if List.for_all (fun x -> List.mem_assoc x s && is_closed_pure_type (List.assoc x s)) p.scheme_vars then
+	  let ps = SubstV.predicate s p.scheme_type in
+	  fprintf fmt "@[<hov 2>ASSERT %a;@]@\n" print_predicate ps
     | (x,oi) :: oil ->
+	eprintf "x = %a #instances = %d@." Ident.print x (Instances.cardinal (instances x));
 	Instances.iter 
 	  (fun ci -> 
-	     eprintf "x = %a unify %a / %a@." Ident.print x
-	       (print_list comma Util.print_pure_type) oi
-	       (print_list comma Util.print_pure_type) ci
-	     ;
 	     try let s = unify_i s oi ci in iter s oil
 	     with Exit -> ()) 
-	  (instances x)
+	  (instances x);
+	iter s oil
   in
-  iter [] all_i
+  iter [] all_i;
+  fprintf fmt "@\n"
 
 let rec print_logic_type fmt = function
   | Logic.Predicate [] ->
@@ -430,17 +445,32 @@ let rec print_logic_type fmt = function
       fprintf fmt "[[%a] -> %a]" 
 	(print_list comma print_pure_type) pl print_pure_type pt
 
-let print_predicate fmt id p =
+let print_predicate_def fmt id p0 =
   fprintf fmt "@[%%%% Why predicate %s@]@\n" id;
-  let (bl,p) = p.Env.scheme_type in
+  let print i bl p =
+    fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
+      id instance i
+      print_logic_type (Logic.Predicate (List.map snd bl))
+      (print_list comma 
+	 (fun fmt (x,pt) -> 
+	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
+      print_predicate p
+  in
+  let (bl,p) = p0.scheme_type in
   assert (bl <> []);
-  fprintf fmt "@[<hov 2>%s: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
-    id
-    print_logic_type (Logic.Predicate (List.map snd bl))
-    (print_list comma 
-       (fun fmt (x,pt) -> 
-	  fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
-    print_predicate p
+  if p0.scheme_vars = [] then
+    print [] bl p
+  else begin
+    Instances.iter
+      (fun i ->
+	 assert (List.length p0.scheme_vars = List.length i);
+	 let s = List.combine p0.scheme_vars i in
+	 let bl = SubstV.binders s bl in
+	 let p = SubstV.predicate s p in
+	 print i bl p)
+      (instances (Ident.create id));
+    fprintf fmt "@\n"
+  end
 
 let print_parameter fmt id c =
   fprintf fmt 
@@ -448,42 +478,26 @@ let print_parameter fmt id c =
   fprintf fmt 
     "@[<hov 2>%s: %a;@]@\n@\n" id print_cc_type c
 
-(* substitution of type variables ([PTvarid]) by pure types *)
-module SV = struct
-  type substitution = (string * pure_type) list
-  let rec pure_type s = function
-    | PTvarid id as t ->
-	(try List.assoc (Ident.string id) s with Not_found -> t)
-    | PTexternal (l, id) ->
-	PTexternal (List.map (pure_type s) l, id)
-    | PTarray ta -> PTarray (pure_type s ta)
-    | PTint | PTreal | PTbool | PTunit | PTvar _ as t -> t
-  let instance i = i
-end
-module SubstV = GenSubst(SV)
-
 let print_logic fmt id t = 
   fprintf fmt "%%%% Why logic %s@\n" id;
   if t.scheme_vars = [] then
     fprintf fmt "@[%s: %a;@]@\n@\n" id print_logic_type t.scheme_type
-  else
-    try
-      Instances.iter 
-	(fun i -> 
-	   assert (List.length t.scheme_vars = List.length i);
-	   let s = List.combine t.scheme_vars i in
-	   let t = SubstV.logic_type s t.scheme_type in
-	   fprintf fmt "@[%s_%a: %a;@]@\n" id 
-	     (print_list underscore print_pure_type) i print_logic_type t)
-	(instances (Ident.create id));
-      fprintf fmt "@\n"
-    with Not_found ->
-      fprintf fmt "%%%% no closed instance@\n@\n"
+  else begin
+    Instances.iter 
+      (fun i -> 
+	 assert (List.length t.scheme_vars = List.length i);
+	 let s = List.combine t.scheme_vars i in
+	 let t = SubstV.logic_type s t.scheme_type in
+	 fprintf fmt "@[%s_%a: %a;@]@\n" id 
+	   (print_list underscore print_pure_type) i print_logic_type t)
+      (instances (Ident.create id));
+    fprintf fmt "@\n"
+  end
 
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o
   | Axiom (id, p) -> print_axiom fmt id p
-  | Predicate (id, p) -> print_predicate fmt id p
+  | Predicate (id, p) -> print_predicate_def fmt id p
   | Logic (id, t) -> print_logic fmt id t
   | Parameter (id, t) -> print_parameter fmt id t
 
