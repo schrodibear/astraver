@@ -14,9 +14,19 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.mli,v 1.2 2002-10-17 15:01:52 filliatr Exp $ i*)
+(* $Id: ctypes.mli,v 1.1 2003-12-08 13:02:51 filliatr Exp $ *)
 
-(* Interpretation of C programs *)
+(* Parsing C requires to separate identifiers and type names during
+   lexical analysis. This table is for this purpose. It is fill during
+   syntactic analysis. *)
 
-val interp : Cast.file -> Ptree.file
+val add : string -> unit
+
+val remove : string -> unit
+
+val mem : string -> bool
+
+val push : unit -> unit
+
+val pop : unit -> unit
 

@@ -14,19 +14,30 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: ctypes.mli,v 1.1 2003-10-29 16:51:20 filliatr Exp $ *)
+(* $Id: ctypes.ml,v 1.1 2003-12-08 13:02:51 filliatr Exp $ *)
 
-(* Parsing C requires to separate identifiers and type names during
-   lexical analysis. This table is for this purpose. It is fill during
-   syntactic analysis. *)
+module Sset = Set.Make(String)
 
-val add : string -> unit
+let stack = ref [ref Sset.empty]
 
-val remove : string -> unit
+let add s = match !stack with
+  | m :: _ -> m := Sset.add s !m
+  | [] -> assert false
 
-val mem : string -> bool
+let remove s = match !stack with
+  | m :: _ -> m := Sset.remove s !m
+  | [] -> assert false
 
-val push : unit -> unit
+let mem s = match !stack with
+  | m :: _ -> Sset.mem s !m
+  | [] -> assert false
 
-val pop : unit -> unit
+let push () = match !stack with
+  | (m :: _) as s -> stack := ref !m :: s
+  | [] -> assert false
 
+let pop () = match !stack with
+  | _ :: s -> stack := s
+  | [] -> assert false
+
+      

@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.40 2003-12-05 15:49:30 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.1 2003-12-08 13:02:50 filliatr Exp $ i*)
+
+(*****
 
 (*s Interpretation of C programs *)
 
@@ -35,7 +37,7 @@ open Error
 let parse_annot f = option_app (fun (ofs, s) -> f ofs s)
 
 let interp_c_spec v an = 
-  let (p,e,q) = match parse_annot Parser.parse_c_spec an with
+  let (p,e,q) = match parse_annot Clexer.parse_spec an with
     | None -> ([], Effect.bottom, None) 
     | Some k -> k
   in
@@ -55,8 +57,6 @@ let interp_c_annot = Parser.parse_c_annot
 let simple_type t = 
   { ctype_expr = t; ctype_storage = No_storage;
     ctype_const = false; ctype_volatile = false; ctype_signed = true }
-
-(*****
 
 let void = CTpure PTunit
 let c_int = CTpure PTint

@@ -166,4 +166,8 @@ and wdecl = parse
       Cparser.file token lb
     with Parsing.Parse_error as e ->
       raise (Stdpp.Exc_located (loc lb, e))
+
+  let parse_spec c =
+    failwith "todo"
+
 }

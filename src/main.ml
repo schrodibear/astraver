@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.61 2003-09-22 21:46:11 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.62 2003-12-08 13:03:34 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -171,12 +171,6 @@ let ml_parser c =
    let st = Stream.of_channel c in
    Grammar.Entry.parse Parser.decls st
  
-let c_parser c = 
-  let d = Clexer.parse c in
-  let p = Cinterp.interp d in
-  print_if_debug print_pfile p;
-  p
-
 let deal_channel parsef cin =
   let p = parsef cin in
   if parse_only then exit 0;
@@ -186,9 +180,7 @@ let deal_file f =
   Loc.set_file f;
   reset ();
   let cin = open_in f in 
-  c_file := Filename.check_suffix f ".c";
-  let parsef = if !c_file then c_parser else ml_parser in
-  deal_channel parsef cin;
+  deal_channel ml_parser cin;
   close_in cin;
   let fwe = Filename.chop_extension f in
   output fwe

@@ -31,22 +31,9 @@ OCAMLLIB = @OCAMLLIB@
 OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
-INCLUDES = -I src -I intf
+INCLUDES = -I src -I c -I intf
 BFLAGS   = -g $(INCLUDES) -I +camlp4 -I +lablgtk2
 OFLAGS   = $(INCLUDES) -I +camlp4 -I +lablgtk2
-
-CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
-	   src/effect.cmo src/misc.cmo src/report.cmo		\
-           src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
-           src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
-           src/monad.cmo      \
-	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
-	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
-           src/regen.cmo src/mizar.cmo src/coq.cmo \
-           src/ctypes.cmo src/cparser.cmo src/clexer.cmo src/cinterp.cmo \
-           src/ocaml.cmo src/main.cmo
-
-CMX      = $(CMO:.cmo=.cmx)
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -71,7 +58,7 @@ PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/parser.ml \
-	    src/clexer.ml src/cparser.ml src/cparser.mli \
+	    c/clexer.ml c/cparser.ml c/cparser.mli \
 	    intf/hilight.ml tools/why2html.ml
 
 # main targets
@@ -83,9 +70,21 @@ WHY2HTML=bin/why2html.$(OCAMLBEST)
 
 all: $(BINARY) coq-@COQ@ $(WHY2HTML)
 
-opt: bin/why.opt
+opt: bin/why.opt bin/caduceus.opt
 
-byte : bin/why.byte
+byte : bin/why.byte bin/caduceus.byte
+
+# why
+CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
+	   src/effect.cmo src/misc.cmo src/report.cmo		\
+           src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
+           src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
+           src/monad.cmo      \
+	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
+	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
+           src/regen.cmo src/mizar.cmo src/coq.cmo \
+           src/ocaml.cmo src/main.cmo
+CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
@@ -98,6 +97,22 @@ bin/why.static: $(CMX) src/why.cmx
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
 	strip $@
 
+bin/top: $(CMO)
+	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
+
+# caduceus
+CCMO = src/loc.cmo c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
+       c/cinterp.cmo c/cmain.cmo
+CCMX = $(CCMO:.cmo=.cmx)
+
+bin/caduceus.opt: $(CCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
+	strip $@
+
+bin/caduceus.byte: $(CCMO)
+	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
+
+# graphical interface
 GCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
 GCMX = $(GCMO:.cmo=.cmx)
 
@@ -108,9 +123,7 @@ bin/gwhy.opt: $(GCMX)
 bin/gwhy.byte: $(GCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma lablgtk.cma $^
 
-bin/top: $(CMO)
-	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
-
+# tools
 bin/why2html.byte: tools/why2html.ml
 	$(OCAMLC) $(BFLAGS) -o $@ $^
 
@@ -296,10 +309,10 @@ tags:
 	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
 
 otags:
-	otags src/*.mli src/*.ml
+	otags src/*.mli src/*.ml c/*.mli c/*.ml intf/*.mli intf/*.ml
 
 wc:
-	ocamlwc -p src/*.ml* intf/*.ml*
+	ocamlwc -p src/*.ml* c/*.ml* intf/*.ml*
 
 # distrib
 #########
@@ -310,7 +323,7 @@ EXPORT=export/$(NAME)
 FTP = $(HOME)/ftp/why
 WWW = $(HOME)/WWW/why
 
-FILES =src/*.ml* intf/*.ml* tools/*.ml* \
+FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
        Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
@@ -376,6 +389,8 @@ configure: configure.in
 
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
+	rm -f c/*.cm[iox] c/*.o c/*~
+	rm -f intf/*.cm[iox] intf/*.o intf/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
 	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
@@ -391,7 +406,7 @@ coq-clean::
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
-	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli intf/*.ml intf/*.mli > .depend
+	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli > .depend
 	if test @COQ@ == yes; then \
 	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v >> .depend; \
 	  $(COQDEP) -R lib/coq-v7 Coq.why lib/coq-v7/*.v >> .depend; \

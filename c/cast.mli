@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.20 2003-12-05 15:49:30 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.1 2003-12-08 13:02:50 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 

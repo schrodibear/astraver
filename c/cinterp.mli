@@ -14,30 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: ctypes.ml,v 1.1 2003-10-29 16:51:20 filliatr Exp $ *)
+(*i $Id: cinterp.mli,v 1.1 2003-12-08 13:02:50 filliatr Exp $ i*)
 
-module Sset = Set.Make(String)
+(* Interpretation of C programs *)
 
-let stack = ref [ref Sset.empty]
+val interp : Cast.file -> Ptree.file
 
-let add s = match !stack with
-  | m :: _ -> m := Sset.add s !m
-  | [] -> assert false
-
-let remove s = match !stack with
-  | m :: _ -> m := Sset.remove s !m
-  | [] -> assert false
-
-let mem s = match !stack with
-  | m :: _ -> Sset.mem s !m
-  | [] -> assert false
-
-let push () = match !stack with
-  | (m :: _) as s -> stack := ref !m :: s
-  | [] -> assert false
-
-let pop () = match !stack with
-  | _ :: s -> stack := s
-  | [] -> assert false
-
-      

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.mli,v 1.15 2003-05-13 12:30:13 filliatr Exp $ i*)
+(*i $Id: parser.mli,v 1.16 2003-12-08 13:03:34 filliatr Exp $ i*)
 
 (* Grammar for the programs *)
 
@@ -27,13 +27,3 @@ val type_c  : ptype_c Grammar.Entry.e
 
 val decls : (decl list) Grammar.Entry.e
 
-(* Entries for the C parser *)
-
-type 'a c_parser = int -> string -> 'a
-
-val parse_c_spec : (lexpr asst list * Effect.t * lexpr post option) c_parser
-val parse_c_pre : (lexpr asst option * variant option) c_parser
-val parse_c_post : (lexpr post option) c_parser
-val parse_c_loop_annot : (lexpr asst option * variant) c_parser
-val parse_c_decl : decl c_parser
-val parse_c_annot : block_st c_parser

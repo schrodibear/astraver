@@ -653,3 +653,70 @@ function_definition
         ;
 
 %%
+
+(* C annotations *)
+
+(***
+(* Entries for the C parser *)
+
+type 'a c_parser = int -> string -> 'a
+
+val parse_c_spec : (lexpr asst list * Effect.t * lexpr post option) c_parser
+val parse_c_pre : (lexpr asst option * variant option) c_parser
+val parse_c_post : (lexpr post option) c_parser
+val parse_c_loop_annot : (lexpr asst option * variant) c_parser
+val parse_c_decl : decl c_parser
+val parse_c_annot : block_st c_parser
+***)
+
+(***
+
+let c_pre_condition = gec "c_pre_condition"
+let c_post_condition = gec "c_post_condition"
+let c_spec = gec "c_spec"
+let c_loop_annot = gec "c_loop_annot"
+let c_pre = gec "c_pre"
+let c_variant = gec "c_variant"
+let c_post = gec "c_post"
+let c_annot = gec "c_annot"
+
+EXTEND
+  c_pre_condition:
+  [ [ LIDENT "pre"; p = pre_condition -> p ] ];
+  c_post_condition:
+  [ [ LIDENT "post"; q = post_condition -> q ] ];
+  c_spec:
+  [ [ p = OPT c_pre_condition; e = effects; q = OPT c_post_condition; EOI -> 
+      (list_of_some p, e, q)
+  ] ];
+  c_loop_annot:
+  [ [ i = OPT invariant; LIDENT "variant"; v = variant -> i,v
+  ] ];
+  c_pre:
+  [ [ p = OPT pre_condition; v = OPT c_variant -> p,v ] ];
+  c_variant:
+  [ [ LIDENT "variant"; v = variant -> v ] ];
+  c_post:
+  [ [ q = OPT post_condition -> q ] ];
+  c_annot:
+  [ [ LIDENT "assert"; p = assertion -> Sassert p 
+    | LIDENT "label"; s = ident -> Slabel (Ident.string s) ] ];
+END
+;;
+
+type 'a c_parser = int -> string -> 'a
+
+let parse_with_offset f n s =
+  (* Options.if_debug_3 Format.eprintf "parse_with_offset : %d %s@\n" n s; *)
+  let st = Stream.of_string s in
+  with_offset n (Grammar.Entry.parse f) st
+
+let parse_c_spec = parse_with_offset c_spec
+let parse_c_pre = parse_with_offset c_pre
+let parse_c_post = parse_with_offset c_post
+let parse_c_loop_annot = parse_with_offset c_loop_annot
+let parse_c_decl = parse_with_offset decl
+let parse_c_annot = parse_with_offset c_annot
+
+***)
+
