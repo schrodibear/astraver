@@ -248,7 +248,7 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 
 doc/version.tex: Makefile.in
 	echo "\newcommand{\whyversion}{$(VERSION)}" > $@
-	echo "\newcommand{\caduceusversion}{$(CVERSION)}" > $@
+	echo "\newcommand{\caduceusversion}{$(CVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html

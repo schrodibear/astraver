@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.110 2004-01-06 11:04:51 marche Exp $ i*)
+(*i $Id: coq.ml,v 1.111 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -653,6 +653,7 @@ and print_list_par sep pr fmt l =
 
 let v8 = match prover with Coq V8 -> true | _ -> false
 
+let print_predicate = if v8 then print_predicate_v8 else print_predicate_v7
 let print_sequent = if v8 then print_sequent_v8 else print_sequent_v7
 let print_cc_type = if v8 then print_cc_type_v8 else print_cc_type_v7
 let print_cc_term = if v8 then print_cc_term_v8 else print_cc_term_v7
@@ -675,6 +676,14 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
+let reprint_axiom fmt id p =
+  fprintf fmt
+     "@[<hov 2>(*Why axiom*) Lemma %s :@ @[%a@].@]@\n" id print_predicate p
+
+let print_axiom fmt id p = 
+  reprint_axiom fmt id p;
+  fprintf fmt "Admitted.@\n";
+
 open Regen
 
 module Gen = Regen.Make(
@@ -684,12 +693,14 @@ struct
     begin match e with
       | Parameter (id, c) -> print_parameter fmt id c
       | Obligation o -> print_obligation fmt o
+      | Axiom (id, p) -> print_axiom fmt id p
     end;
     fprintf fmt "@\n"
       
   let reprint_element fmt = function
     | Parameter (id, c) -> reprint_parameter fmt id c
     | Obligation o -> reprint_obligation fmt o
+    | Axiom (id, p) -> reprint_axiom fmt id p
 
   let re_oblig_loc = Str.regexp "(\\* Why obligation from .*\\*)"
 
@@ -712,6 +723,9 @@ let push_obligations =
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))
 
+let push_axiom id p =
+  Gen.add_elem (Ax, id) (Axiom (id, p))
+
 let _ = 
   Gen.add_regexp 
     "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
@@ -720,7 +734,9 @@ let _ =
   Gen.add_regexp 
     "Definition[ ]+\\([^ ]*\\)[ ]*(\\* validation \\*)[ ]*" Valid;
   Gen.add_regexp 
-    "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param
+    "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param;
+  Gen.add_regexp 
+    "(\\*Why axiom\\*) Lemma[ ]+\\([^ ]*\\)[ ]*:[ ]*" Ax
 
 (* validations *)
 

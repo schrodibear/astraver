@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.40 2003-12-15 14:58:08 marche Exp $ i*)
+(*i $Id: pvs.ml,v 1.41 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -215,10 +215,14 @@ let end_theory fmt th =
 let print_parameter fmt id v =
   fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_cc_type v
 
+let print_axiom fmt id v =
+  fprintf fmt "  %s: AXIOM @[%a@]@\n@\n" id print_predicate v
+
 type elem = 
   | Verbatim of string
   | Obligations of obligation list
   | Parameter of string * cc_type
+  | Axiom of string * predicate
 
 let queue = Queue.create ()
 
@@ -228,10 +232,13 @@ let push_obligations ol = Queue.add (Obligations ol) queue
 
 let push_parameter id v = Queue.add (Parameter (id,v)) queue
 
+let push_axiom id p = Queue.add (Axiom (id, p)) queue
+
 let output_elem fmt = function
   | Verbatim s -> fprintf fmt "  %s@\n@\n" s
   | Obligations ol -> print_obligations fmt ol
   | Parameter (id, v) -> print_parameter fmt id v
+  | Axiom (id, p) -> print_axiom fmt id p
 
 let output_file fwe =
   let sep = "  %% DO NOT EDIT BELOW THIS LINE" in

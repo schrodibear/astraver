@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.7 2003-12-15 14:58:08 marche Exp $ i*)
+(*i $Id: simplify.ml,v 1.8 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -26,11 +26,17 @@ open Logic
 open Vcg
 open Format
 
-let oblig = Queue.create ()
+type elem = 
+  | Oblig of obligation 
+  | Axiom of string * predicate
 
-let reset () = Queue.clear oblig
+let queue = Queue.create ()
 
-let push_obligations = List.iter (fun o -> Queue.add o oblig)
+let reset () = Queue.clear queue
+
+let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
+
+let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
 (*s Pretty print *)
 
@@ -186,6 +192,14 @@ let print_obligation fmt (loc, o, s) =
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation loc;
   fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s
 
+let print_axiom fmt id p =
+  fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@]@\n" id;
+  fprintf fmt " @[<hov 2>%a@])@]@\n@\n" print_predicate p
+
+let print_elem fmt = function
+  | Oblig o -> print_obligation fmt o
+  | Axiom (id, p) -> print_axiom fmt id p
+
 let prelude = ref 
 "(BG_PUSH 
   ; array_length
@@ -256,5 +270,5 @@ let output_file fwe =
     (fun fmt -> 
        if not no_simplify_prelude then fprintf fmt "@[%s@]@\n" !prelude)
     sep
-    (fun fmt -> Queue.iter (print_obligation fmt) oblig)
+    (fun fmt -> Queue.iter (print_elem fmt) queue)
 

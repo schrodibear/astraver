@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.12 2003-11-04 14:07:57 marche Exp $ i*)
+(*i $Id: harvey.ml,v 1.13 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -26,10 +26,13 @@ open Vcg
 open Format
 
 let oblig = Queue.create ()
+let axiom = Queue.create ()
 
-let reset () = Queue.clear oblig
+let reset () = Queue.clear oblig; Queue.clear axiom
 
 let push_obligations = List.iter (fun o -> Queue.add o oblig)
+
+let push_axiom id p = Queue.add (id, p) axiom
 
 (*s Pretty print *)
 
@@ -162,6 +165,19 @@ exception NotFirstOrder
 
 let prepare_sequent (ctx, c) = filter_context ctx, c
 
+let output_axioms f =
+  let fname = f ^ "_axioms.rv" in
+  let cout = open_out fname in
+  let fmt = formatter_of_out_channel cout in
+  fprintf fmt "(@[";
+  Queue.iter 
+    (fun (id, p) -> 
+       fprintf fmt ";; why axiom %s@\n(@[%a@])@\n" id print_predicate p)
+    axiom;
+  fprintf fmt "@])@\n";
+  pp_print_flush fmt ();
+  close_out cout
+
 let output_obligation f (loc, o, s) = 
   try
     let s = prepare_sequent s in
@@ -177,6 +193,8 @@ let output_obligation f (loc, o, s) =
   with NotFirstOrder ->
     unlocated_wprintf "obligation %s is not first-order@\n" o
 
-let output_file f = Queue.iter (output_obligation f) oblig
+let output_file f = 
+  output_axioms f;
+  Queue.iter (output_obligation f) oblig
 
 

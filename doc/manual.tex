@@ -193,6 +193,11 @@ The input file contains the following kinds of declaration:
      logic is_int : float -> prop
 \end{verbatim}
 
+  \item\indextt{axiom} 
+    \te{axiom} $x$ \te{:} \textsl{predicate}
+
+    Declares an axiom of name $x$.
+
 \end{itemize}
 
 
@@ -572,9 +577,7 @@ with \why. C programs can be verified using \caduceus\ (see
 
 \why\ is invoked as a batch compiler, given a list of input files:
 \begin{center}
-  \texttt{why} [\textit{options}] 
-  \textit{file}$_1$\texttt{.}\{\texttt{mlw},\texttt{c}\} $\cdots$
-  \textit{file}$_n$\texttt{.}\{\texttt{mlw},\texttt{c}\}
+  \texttt{why} [\textit{options}] \textit{file}$_1$ $\cdots$ \textit{file}$_n$
 \end{center}
 If no file is given, then standard input is processed and output is
 named \texttt{Output\_why}.
@@ -1202,6 +1205,7 @@ Syntax of input files is given in Figure~\ref{fig:input}.
               $[$ \te{of} \nt{primitive\_type} $]$ \\ \indextt{exception}
       & $|$ & \te{logic} \nt{identifier}\plussep{\te{,}}
               \te{:} \nt{logic\_type} \\
+      & $|$ & \te{axiom} \nt{identifier} \te{:} \nt{predicate} \\
    \\[0.1em]
 
   \nt{logic\_type}

@@ -14,13 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.6 2003-09-23 10:38:22 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.7 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
 open Format
 open Options
 open Cc
+open Logic
 open Vcg
 open Misc
 
@@ -28,12 +29,14 @@ type element_kind =
   | Param
   | Oblig
   | Valid (* obsolete but helps porting from old versions *)
+  | Ax
 
 type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
+  | Axiom of string * predicate
 
 module type S = sig
  
@@ -58,6 +61,7 @@ module Make(X : S) = struct
     | Param, s -> fprintf fmt "parameter %s" s
     | Oblig, s -> fprintf fmt "obligation %s" s
     | Valid, s -> fprintf fmt "validation %s" s
+    | Ax, s -> fprintf fmt "axiom %s" s
 
   let elem_t = Hashtbl.create 97 (* maps [element_id] to [element] *)
   let elem_q = Queue.create ()   (* queue of [element_id * element] *)

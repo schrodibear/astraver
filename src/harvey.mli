@@ -14,13 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.mli,v 1.1 2002-12-05 16:25:11 filliatr Exp $ i*)
+(*i $Id: harvey.mli,v 1.2 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 open Vcg
 
 val reset : unit -> unit
 
 val push_obligations : obligation list -> unit
+
+val push_axiom : string -> Logic.predicate -> unit
 
 val output_file : string -> unit
 

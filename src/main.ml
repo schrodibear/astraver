@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.62 2003-12-08 13:03:34 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.63 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -32,6 +32,14 @@ open Util
 (*s Prover dependent functions. *)
 
 let typed_progs = ref [] (* for the GUI *)
+
+let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp x = match prover with
+  | Pvs -> f_pvs x
+  | Coq _ -> f_coq x
+  | HolLight -> f_hol x
+  | Mizar -> f_miz x 
+  | Harvey -> f_hrv x
+  | Simplify -> f_smp x
 
 let reset () =
   typed_progs := [];
@@ -63,6 +71,14 @@ let push_parameter id v tv = match prover with
   | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
   | Mizar -> if is_pure_type_v v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)
+
+let push_axiom id p = match prover with
+  | Pvs -> Pvs.push_axiom id p
+  | Coq _ -> Coq.push_axiom id p
+  | HolLight -> Holl.push_axiom id p
+  | Mizar -> Mizar.push_axiom id p
+  | Harvey -> Harvey.push_axiom id p
+  | Simplify -> Simplify.push_axiom id p
 
 let output fwe = 
   if wol then begin
@@ -134,7 +150,7 @@ let add_external loc v id =
 
 let add_parameter v tv id =
   push_parameter (Ident.string id) v tv
-    
+
 let interp_decl d = 
   let env = Env.empty in
   let lab = Label.empty in
@@ -164,6 +180,9 @@ let interp_decl d =
 	add_global_logic id t
       in
       List.iter add ids
+  | Axiom (loc, id, p) ->
+      let p = Ltyping.predicate lab env lenv p in
+      push_axiom (Ident.string id) p
 
 (*s Processing of a channel / a file. *)
 

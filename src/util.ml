@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.84 2003-12-18 12:24:06 marche Exp $ i*)
+(*i $Id: util.ml,v 1.85 2004-01-29 09:15:01 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -662,5 +662,7 @@ let print_decl fmt = function
   | Exception (_, id, pto) -> fprintf fmt "exception %a <...>" Ident.print id
   | Logic (_, ids, lt) -> 
       fprintf fmt "logic %a : <...>" (print_list comma Ident.print) ids
+  | Axiom (_, id, p) ->
+      fprintf fmt "axiom %a : <...>" Ident.print id
 
 let print_pfile = print_list newline print_decl

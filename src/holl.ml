@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.13 2003-12-15 14:58:07 marche Exp $ i*)
+(*i $Id: holl.ml,v 1.14 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -29,12 +29,15 @@ open Cc
 type elem = 
   | Parameter of string * cc_type
   | Obligation of obligation
+  | Axiom of string * predicate
 
 let elem_q = Queue.create ()
 
 let reset () = Queue.clear elem_q
 
 let push_parameter id v = Queue.add (Parameter (id, v)) elem_q
+
+let push_axiom id p = Queue.add (Axiom (id, p)) elem_q
 
 let push_obligations = List.iter (fun o -> Queue.add (Obligation o) elem_q)
 
@@ -206,8 +209,13 @@ let print_sequent fmt (hyps,concl) =
   in
   fprintf fmt "@[%a@]@?" print_seq hyps
 
+(* TODO *)
 let print_parameter fmt id v =
   fprintf fmt "(* parameter %s *);;" id
+
+(* TODO *)
+let print_axiom fmt id v =
+  fprintf fmt "(* axiom %s *);;" id
 
 let print_obligation fmt loc id sq =
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation loc;
@@ -216,13 +224,14 @@ let print_obligation fmt loc id sq =
 let print_elem fmt = function
   | Parameter (id, v) -> print_parameter fmt id v
   | Obligation (loc, s, sq) -> print_obligation fmt loc s sq
+  | Axiom (id, p) -> print_axiom fmt id p
 
 let print_obl_list fmt = 
   let comma = ref false in
   let print = function
     | Obligation (_,id,_) -> 
 	if !comma then fprintf fmt "; "; fprintf fmt "%s" id; comma := true
-    | Parameter _ -> 
+    | Parameter _ | Axiom _ -> 
 	()
   in
   fprintf fmt "let all = ["; 

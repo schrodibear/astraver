@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.88 2003-12-18 12:24:06 marche Exp $ i*)
+(*i $Id: parser.ml4,v 1.89 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -541,7 +541,10 @@ i*)
     | "exception"; id = ident; v = OPT exception_type ->
 	Exception (loc, id, v)
     | "logic"; ids = LIST1 ident SEP ","; ":"; t = logic_type ->
-	Logic (loc, ids, t) ] ]
+	Logic (loc, ids, t)
+    | "axiom"; id = ident; ":"; p = lexpr ->
+	Axiom (loc, id, p)
+  ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]

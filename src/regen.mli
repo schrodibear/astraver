@@ -14,24 +14,27 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.4 2003-09-23 10:38:22 filliatr Exp $ i*)
+(*i $Id: regen.mli,v 1.5 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
 open Format
 open Cc
+open Logic
 open Vcg
 
 type element_kind = 
   | Param
   | Oblig
   | Valid (* obsolete but helps porting from old versions *)
+  | Ax
 
 type element_id = element_kind * string
 
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
+  | Axiom of string * predicate
 
 module type S = sig
  

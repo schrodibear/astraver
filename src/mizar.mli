@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.mli,v 1.1 2003-09-17 15:48:47 filliatr Exp $ i*)
+(*i $Id: mizar.mli,v 1.2 2004-01-29 09:15:00 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -25,5 +25,7 @@ val reset : unit -> unit
 val push_obligations : obligation list -> unit
 
 val push_parameter : string -> Cc.cc_type -> unit
+
+val push_axiom : string -> Logic.predicate -> unit
 
 val output_file : string -> unit
