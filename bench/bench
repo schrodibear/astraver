@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# auto bench for why
+
+pgm=../bin/why
+
+goods () {
+    echo "  checking good files"
+    for f in $1/*.ml; do
+	echo -n "    "$f"... "
+	if $pgm $f > /dev/null 2>&1; 
+        then echo "ok"; else echo "FAILED!"; exit 1; fi
+    done
+}
+
+bads () {
+    echo "  checking bad files"
+    for f in $1/*.ml; do
+	echo -n "    "$f"... "
+	if $pgm $f > /dev/null 2>&1; 
+        then echo "FAILED!"; exit 1; else echo "ok"; fi
+    done
+}
+
+# 1. Syntax
+echo "=== Checking parsing ==="
+bads bad/syntax
+echo ""
+echo "=== Checking typing ==="
+bads bad/typing
+echo ""
+echo "=== Checking good files ==="
+goods good
+
