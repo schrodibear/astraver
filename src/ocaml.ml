@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.8 2003-03-28 16:16:48 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.9 2003-04-02 11:58:57 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -166,8 +166,8 @@ and exprd fmt = function
       fprintf fmt "@[<hv>begin@;<1 2>%a@ end@]" block bl
   | While (e1, inv, var, { desc = Seq e2 }) ->
       fprintf fmt "@[<hv>while %a do@;<1 2>%a@ done@]" expr e1 block e2
-  | While _ ->
-      assert false
+  | While (e1, inv, var, e2) ->
+      fprintf fmt "@[<hv>while %a do@;<1 2>%a@ done@]" expr e1 expr e2
   | If (e1, e2, e3) ->
       fprintf fmt "(@[<hv>if %a then@;<1 2>%a@ else@;<1 2>%a@])" 
 	expr e1 expr e2 expr e3

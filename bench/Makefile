@@ -6,13 +6,16 @@ tc:
 	./bench "../bin/why.opt -tc"
 
 ml:
-	../bin/why.opt --ocaml test.mlw
+	../bin/why.opt --ocaml test.mlw > test.ml
+	ocamlc -c -i test.ml
 
 c:
 	../bin/why.opt -d -V --valid --coq-tactic Magic ctest.c
 	coqc -R ../lib/coq Coq.why ctest_why.v
 	coqc -R ../lib/coq Coq.why ctest_valid.v
 	#coqide ctest_why.v
+	../bin/why.opt --ocaml ctest.c > ctest.ml
+	ocamlc -c -i ctest.ml
 
 pvs:
 	../bin/why.opt --pvs -d -V test.mlw
