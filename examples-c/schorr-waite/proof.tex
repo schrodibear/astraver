@@ -74,34 +74,34 @@ void schorr_waite(node root) \{
   node t = root;
   node p = NULL;\begin{slshape}
   /*@ invariant
-    @   (I1 :: \bs{}forall node x; 
+    @  (I1 :: \bs{}forall node x; 
     @     \old(reachable(root,x)) => 
     @        reachable(t,x) || reachable(p,x))
     @ &&
-    @   (I2 :: \bs{}forall node x; x != \null => 
+    @  (I2 :: \bs{}forall node x; x != \null => 
     @     ((reachable(t,x) || reachable(p,x)) => 
     @        \old(reachable(root,x))))
     @ &&
-    @  (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => x->m == \old(x->m)) &&
-    @  (I4 :: \bs{}forall node x; x != \bs{}null && \old(reachable(root,x)) => \valid(x)) 
+    @  (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
+    @     x->m == \old(x->m)) 
     @ &&
-    @ \bs{}exists plist stack;
-    @   (I5a :: clr_list (p,stack)) 
+    @  \bs{}exists plist stack;
+    @   (I4a :: clr_list (p,stack)) 
     @   &&
-    @   (I5b :: \bs{}forall node p; in_list (p,stack) => p->m) 
+    @   (I4b :: \bs{}forall node p; in_list (p,stack) => p->m) 
     @   &&
-    @   (I5c :: \bs{}forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
+    @   (I4c :: \bs{}forall node x; \valid(x) && \old(reachable(root,x)) && !x->m =>
     @      unmarked_reachable(t,x) || 
     @      (\bs{}exists node y; in_list(y,stack) && unmarked_reachable(y->r,x))) 
     @   &&
-    @   (I5d :: \bs{}forall node x; !in_list(x,stack) =>  
+    @   (I4d :: \bs{}forall node x; !in_list(x,stack) =>  
     @      (x->r == \old(x->r) && x->l == \old(x->l))) 
     @   &&
-    @   (I5e :: \bs{}forall node p1; \bs{}forall node p2;
-              pair_in_list(p1,p2,cons(t,stack)) => 
-	          (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
-                  &&
-    @	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) ==
+    @   (I4e :: \bs{}forall node p1; \bs{}forall node p2;
+    @          pair_in_list(p1,p2,cons(t,stack)) => 
+    @         (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
+    @         &&
+    @        (!p2->c => \old(p2->l) == p1 && \old(p2->r) ==
     @              p2->r)) 
     @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
@@ -163,19 +163,16 @@ invariant has 9 assertions:
   node, because null may not be reachable from root is the graph is cyclic.
 \item {I3} : means that for nodes initially unreachable, the mark
   remains unchanged.
-\item {I4} : means all nodes different of null and
-  reachable by root before the function are valid ({\huge utile ????
-    preservation triviale ??? })
-\item {I5a} : defines the backtracking stack as on Figure~\ref{fig:stack}.
-\item {I5b} : means that all nodes in the \texttt{stack} are marked.
-\item {I5c} : the trickest annotation, due to {\Huge ?}, means that
+\item {I4a} : defines the backtracking stack as on Figure~\ref{fig:stack}.
+\item {I4b} : means that all nodes in the \texttt{stack} are marked.
+\item {I4c} : the trickest annotation, due to {\Huge ?}, means that
   any valid {\Huge non null ?} node, initially reachable from root, 
   and not yet marked, is reachable by traversing only
   unmarked nodes, either from t or from the right children of a node
   in the stack.
-\item {I5d} : means all nodes out of \texttt{stack} have
+\item {I4d} : means all nodes out of \texttt{stack} have
   the same children as before the function. 
-\item {I5e} : a trick one also, that is essential for being able to
+\item {I4e} : a trick one also, that is essential for being able to
   `recover' the correct children of nodes of the stack, as it can be
   seen again on Figure~\ref{fig:stack}: if p1 is in
   the stack, followed by p2 (or if p1 is t and p2 is the head of the
@@ -193,12 +190,33 @@ invariant has 9 assertions:
 . invariant vrai init
 . post cond
 . 3 fois invariant preserve resp. pop swing push
-. validité des l'accès
-. autres ?
+. validité des accès
+. po1 = WF order
+. po2 = validity of access to t->m in the condition of while 
+. po3 = validity of access to t->m in the condition of the first if 
+. po4 = validity of access to p->c in the condition of the second if 
+. po5 = validity of t in 't->r = q' in the first branch of if 
+. po6 = preservation of loop invariant for "pop" 
+. po7 = validity of p in "p->r = p->l" in second branch of if (swing) 
+. po8 = preservation of loop invariant for "swing" 
+. po9 = validity of acces to t in the "push" branch
+. po10 = validity of acces to p in the "push" branch
+. po11 = preservation of loop invariant for "push" 
+. po12 = dummy po due to variant
+. po13 = post-condition of the function
+. po14 = loop invariant true at the beginning 
 
-with Simplify: 4/12
+with Simplify: 
 
-ajout axiome reachable(p,p) : 7/12
+.***.*.*..*.** (6/8/0)
+
+-> 4/12 (po5,7,9 et 10)
+
+ajout axiome reachable(p,p) : 
+
+.....*.*..*.** (9/5/0)   
+
+-> 7/12 (po2,3,4 en plus)
 
 
 passage a Coq:

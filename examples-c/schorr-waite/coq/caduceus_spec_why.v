@@ -44,6 +44,7 @@ exists (@nil pointer).
 constructor.
 Qed.
 
+
 (*Why logic*) Definition unmarked_reachable :
   alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
   -> pointer -> pointer -> Prop.

@@ -101,7 +101,7 @@ void schorr_waite(node root) {
     @        (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)))
     @   &&
     @   (I8 :: \forall node x; 
-    @      ! \old(reachable(root,x)) => x->m == \old(x->m)) 
+    @      ! \old(reachable(root,x)) => x->m == \old(x->m))) 
     @
     @ variant weight(p,t) for order_mark_m_and_c_and_stack
     @
