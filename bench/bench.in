@@ -27,7 +27,7 @@ provers () {
     fi
     if ! $coqc -I $dir "$base"_valid.v > /dev/null 2>&1; then
 	echo "coq validation FAILED"
-	$coqc "$base"_valid.v
+	$coqc -I $dir "$base"_valid.v
 	exit 1
     fi
     echo -n "coq ok... "
