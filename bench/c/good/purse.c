@@ -14,7 +14,7 @@ void credit(purse *p,int s) {
   p->balance = p->balance + s;
 }
 
-/*@ requires purse_inv(p) && s >= p->balance
+/*@ requires purse_inv(p) && 0 <= s <= p->balance
   @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) - s
   @*/

@@ -4,6 +4,9 @@ CADUCEUSLIB=../../../lib/
 
 all: coq/struct_why.vo coq/pointer_why.vo
 
+purse: why/purse.why coq/caduceus_spec_why.v coq/purse_why.vo
+
+
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
 why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
@@ -11,8 +14,11 @@ why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 
 WHY=../../../bin/why.opt
 
+coq/caduceus_spec_why.v: why/caduceus_spec.why $(WHY)
+	$(WHY) -dir coq --valid -V --coq-v8 --coq-preamble "Require Export caduceus_why." why/caduceus.why $<
+
 coq/%_why.v coq/%_valid.v: why/%.why $(WHY)
-	$(WHY) -dir coq --valid -V --coq-v8 --coq-preamble "Require Export Why" why/caduceus.why why/caduceus_spec.why $<
+	$(WHY) -dir coq --valid -V --coq-v8 --coq-preamble "Require Export caduceus_spec_why." why/caduceus.why why/caduceus_spec.why $<
 
 simplify/%_why.sx: why/%.why $(WHY)
 	$(WHY) -dir simplify -V --simplify --no-simplify-prelude why/caduceus.why why/caduceus_spec.why $<
@@ -49,3 +55,6 @@ include .depend
 
 depend .depend:
 	coqdep -R ../../../lib/coq Coq.why -I coq coq/*.v > .depend
+
+clean:
+	rm -f why/*.why coq/*.vo coq/caduceus_spec_why.v
