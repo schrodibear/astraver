@@ -8,7 +8,7 @@ Ltac Omega' := abstract omega.
 
 (* Parameters and axioms *)
 
-(*Why*) Parameter v : Z.
+Parameter v : Z.
 
 (* Specification *)
 
@@ -135,11 +135,11 @@ Qed.
 
 (* Obligations *)
 
-(* Why obligation from file "bsearch.mlw", characters 576-593 *)
+(* Why obligation from file "bsearch.mlw", characters 585-602 *)
 Lemma binary_search_po_1 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),
@@ -150,15 +150,14 @@ Lemma binary_search_po_1 :
   forall (l1: Z),
   forall (p1: Z),
   forall (u1: Z),
-  forall (Pre14: Variant1 = (2 + u1 - l1)),
-  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
-                 ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Pre6: Variant1 = (2 + u1 - l1)),
+  forall (Pre5: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                ((array_length t) - 1)) /\
+                ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                ((p1 > 0 -> (access t p1) = v))),
   forall (Test6: l1 <= u1),
   forall (m1: Z),
-  forall (Post4: m1 = (mean l1 u1)),
+  forall (Post5: m1 = (mean l1 u1)),
   l1 <= m1 /\ m1 <= u1.
  Proof.
  intros.
@@ -167,11 +166,11 @@ split.
 rewrite Post4; apply ge_mean; Omega'.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 606-611 *)
+(* Why obligation from file "bsearch.mlw", characters 615-624 *)
 Lemma binary_search_po_2 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),
@@ -182,27 +181,26 @@ Lemma binary_search_po_2 :
   forall (l1: Z),
   forall (p1: Z),
   forall (u1: Z),
-  forall (Pre14: Variant1 = (2 + u1 - l1)),
-  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
-                 ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Pre6: Variant1 = (2 + u1 - l1)),
+  forall (Pre5: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                ((array_length t) - 1)) /\
+                ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                ((p1 > 0 -> (access t p1) = v))),
   forall (Test6: l1 <= u1),
   forall (m1: Z),
-  forall (Post4: m1 = (mean l1 u1)),
-  forall (Pre12: l1 <= m1 /\ m1 <= u1),
+  forall (Post5: m1 = (mean l1 u1)),
+  forall (Pre4: l1 <= m1 /\ m1 <= u1),
   0 <= m1 /\ m1 < (array_length t).
 Proof.
 intros.
 Omega'.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 629-640 *)
+(* Why obligation from file "bsearch.mlw", characters 638-649 *)
 Lemma binary_search_po_3 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),
@@ -213,20 +211,19 @@ Lemma binary_search_po_3 :
   forall (l1: Z),
   forall (p1: Z),
   forall (u1: Z),
-  forall (Pre14: Variant1 = (2 + u1 - l1)),
-  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
-                 ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Pre6: Variant1 = (2 + u1 - l1)),
+  forall (Pre5: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                ((array_length t) - 1)) /\
+                ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                ((p1 > 0 -> (access t p1) = v))),
   forall (Test6: l1 <= u1),
   forall (m1: Z),
-  forall (Post4: m1 = (mean l1 u1)),
-  forall (Pre12: l1 <= m1 /\ m1 <= u1),
-  forall (Pre11: 0 <= m1 /\ m1 < (array_length t)),
+  forall (Post5: m1 = (mean l1 u1)),
+  forall (Pre4: l1 <= m1 /\ m1 <= u1),
+  forall (Pre3: 0 <= m1 /\ m1 < (array_length t)),
   forall (Test5: (access t m1) < v),
   forall (l2: Z),
-  forall (Post5: l2 = (m1 + 1)),
+  forall (Post10: l2 = (m1 + 1)),
   (1 <= l2 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
   ((array_length t) - 1)) /\
   ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l2 u1)))) /\
@@ -238,11 +235,11 @@ subst l2 m1.
 intros; apply In_right_side; assumption || intuition.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 678-689 *)
+(* Why obligation from file "bsearch.mlw", characters 687-698 *)
 Lemma binary_search_po_4 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),
@@ -253,22 +250,21 @@ Lemma binary_search_po_4 :
   forall (l1: Z),
   forall (p1: Z),
   forall (u1: Z),
-  forall (Pre14: Variant1 = (2 + u1 - l1)),
-  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
-                 ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Pre6: Variant1 = (2 + u1 - l1)),
+  forall (Pre5: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                ((array_length t) - 1)) /\
+                ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                ((p1 > 0 -> (access t p1) = v))),
   forall (Test6: l1 <= u1),
   forall (m1: Z),
-  forall (Post4: m1 = (mean l1 u1)),
-  forall (Pre12: l1 <= m1 /\ m1 <= u1),
-  forall (Pre11: 0 <= m1 /\ m1 < (array_length t)),
+  forall (Post5: m1 = (mean l1 u1)),
+  forall (Pre4: l1 <= m1 /\ m1 <= u1),
+  forall (Pre3: 0 <= m1 /\ m1 < (array_length t)),
   forall (Test4: (access t m1) >= v),
-  forall (Pre10: 0 <= m1 /\ m1 < (array_length t)),
+  forall (Pre2: 0 <= m1 /\ m1 < (array_length t)),
   forall (Test3: (access t m1) > v),
   forall (u2: Z),
-  forall (Post6: u2 = (m1 - 1)),
+  forall (Post8: u2 = (m1 - 1)),
   (1 <= l1 /\ u2 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
   ((array_length t) - 1)) /\
   ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u2)))) /\
@@ -279,11 +275,11 @@ subst u2 m1.
 intros; apply In_left_side; assumption || intuition.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 701-760 *)
+(* Why obligation from file "bsearch.mlw", characters 710-769 *)
 Lemma binary_search_po_5 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),
@@ -294,24 +290,23 @@ Lemma binary_search_po_5 :
   forall (l1: Z),
   forall (p1: Z),
   forall (u1: Z),
-  forall (Pre14: Variant1 = (2 + u1 - l1)),
-  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
-                 ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Pre6: Variant1 = (2 + u1 - l1)),
+  forall (Pre5: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                ((array_length t) - 1)) /\
+                ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                ((p1 > 0 -> (access t p1) = v))),
   forall (Test6: l1 <= u1),
   forall (m1: Z),
-  forall (Post4: m1 = (mean l1 u1)),
-  forall (Pre12: l1 <= m1 /\ m1 <= u1),
-  forall (Pre11: 0 <= m1 /\ m1 < (array_length t)),
+  forall (Post5: m1 = (mean l1 u1)),
+  forall (Pre4: l1 <= m1 /\ m1 <= u1),
+  forall (Pre3: 0 <= m1 /\ m1 < (array_length t)),
   forall (Test4: (access t m1) >= v),
-  forall (Pre10: 0 <= m1 /\ m1 < (array_length t)),
+  forall (Pre2: 0 <= m1 /\ m1 < (array_length t)),
   forall (Test2: (access t m1) <= v),
   forall (p2: Z),
-  forall (Post7: p2 = m1),
+  forall (Post6: p2 = m1),
   forall (l2: Z),
-  forall (Post8: l2 = (u1 + 1)),
+  forall (Post7: l2 = (u1 + 1)),
   (1 <= l2 /\ u1 <= ((array_length t) - 1) /\ (0 <= p2 /\ p2 <=
   ((array_length t) - 1)) /\
   ((p2 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l2 u1)))) /\
@@ -322,11 +317,11 @@ absurd (p2 = 0%Z); Omega'.
 subst p2; omega.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 310-776 *)
+(* Why obligation from file "bsearch.mlw", characters 319-785 *)
 Lemma binary_search_po_6 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),
@@ -337,12 +332,11 @@ Lemma binary_search_po_6 :
   forall (l1: Z),
   forall (p1: Z),
   forall (u1: Z),
-  forall (Pre14: Variant1 = (2 + u1 - l1)),
-  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
-                 ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Pre6: Variant1 = (2 + u1 - l1)),
+  forall (Pre5: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                ((array_length t) - 1)) /\
+                ((p1 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                ((p1 > 0 -> (access t p1) = v))),
   forall (Test1: l1 > u1),
   (1 <= p1 /\ p1 <= ((array_length t) - 1)) /\ (access t p1) = v \/ p1 = 0 /\
   ~(In t 1 ((array_length t) - 1)).
@@ -360,11 +354,11 @@ decompose [In] H9.
 absurd (l1 <= i <= u1)%Z; Omega'.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 350-511 *)
+(* Why obligation from file "bsearch.mlw", characters 359-520 *)
 Lemma binary_search_po_7 : 
   forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (Pre7: (array_length t) >= 1 /\
+                (sorted_array t 1 ((array_length t) - 1))),
   forall (l0: Z),
   forall (Post1: l0 = 1),
   forall (u0: Z),

@@ -1,13 +1,13 @@
 
-parameter v : int
-
-parameter t : int array
-
-parameter l,u,p,m : int ref
+external parameter v : int
 
 external parameter mean : int -> int -> int
 
 external logic In : int array,int,int -> prop
+
+parameter t : int array
+
+parameter l,u,p,m : int ref
 
 let binary_search =
   { array_length(t) >= 1 and sorted_array(t,1,array_length(t)-1) }
