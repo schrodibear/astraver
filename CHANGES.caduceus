@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+version 0.76, March 29th, 2005
+==============================
  o functions bodies effects are now computed only for functions to be verified
  o names changes in the model: 
      assign_loc -> pset
