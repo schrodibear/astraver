@@ -501,6 +501,7 @@ statement_list
 
 expression_statement
         : SEMICOLON { CSnop (loc ()) }
+	| ANNOT SEMICOLON { CSassert (loc (), $1) } /* ADDED FOR WHY */
         | expression SEMICOLON { CSexpr (loc (), $1) }
         ;
 

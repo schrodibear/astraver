@@ -12,6 +12,7 @@
 \newcommand{\hollight}{\textsf{HOL Light}\index{HOL Light@\textsf{HOL Light}}}
 \newcommand{\krakatoa}{\textsf{Krakatoa}\index{Krakatoa@\textsf{Krakatoa}}}
 \newcommand{\java}{\textsc{Java}\index{Java@\textsf{Java}}}
+\newcommand{\jml}{\textsc{JML}\index{JML@\textsf{JML}}}
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
@@ -253,9 +254,9 @@ Here \texttt{x = 0} is an assumption and \texttt{odd(x)} is an obligation.
 
 
 \subsubsection{Assertions}
-\index{Assertion}
-Assertions can be inserted within sequences using the \texttt{assert}
-keyword. Example:
+\index{Assertion}\indextt{assert}
+Within sequences, a simpler way to insert obligations is to use the
+\texttt{assert} construct. Example:
 \begin{verbatim}
      begin 
        x := 2 * !x;
@@ -263,12 +264,12 @@ keyword. Example:
        x := !x - 1
      end
 \end{verbatim}
-Assertions are not taken into consideration when computing weakest
-preconditions, but may help handling the proofs by introducing cuts.
-
+Note that such assertions can be used to introduce \emph{proof cuts},
+to ease the discharge of the forthcoming obligations.
 
 \subsubsection{Loops annotations}
-\index{Loop}\index{Invariant}\index{Variant}\indextt{while}
+\index{Loop}\index{Invariant}\index{Variant}
+\indextt{while}\indextt{invariant}\indextt{variant}
 Loops can (and usually must) be given invariants and must always be
 given variants. Both are introduced as a single annotation following
 the \texttt{do} keyword:
@@ -359,9 +360,19 @@ are not possibly raised by the program.
 \label{absurd}\indextt{absurd}
 
 The construct \texttt{absurd} can be used to denote an unreachable
-point in the code.
-
-TODO
+point in the code. Example:
+\begin{verbatim}
+     { 0 <= x <= 1 }
+     if x = 0 then 
+       ...
+     else if x = 1 then 
+       ...
+     else 
+       absurd
+     { ... }
+\end{verbatim}
+At such program points, the user will be asked to prove that the
+context is indeed absurd, which corresponds to the obligation \texttt{false}.
 
 \subsection{Types with effect}
 \label{types}\index{Type}
@@ -518,7 +529,9 @@ declarations, with comments of the shape \texttt{/*W}\dots\texttt{*/}:
 \subsection{Annotations}
 \index{C program!annotations}
 
-Inside C code, annotations can be inserted to give loops invariant and
+\paragraph{Loops annotations.}
+\indextt{invariant}\indextt{variant}
+Inside C code, annotations must be inserted to give loops invariant and
 variant. \texttt{for} loops are given an annotation right before the
 loop body:
 \begin{verbatim}
@@ -544,6 +557,14 @@ On the contrary, \texttt{do} loops are annotated after the loop body:
      while (i > 0);
 \end{verbatim}
 
+\paragraph{Other annotations.}
+\indextt{assert}
+Assertions can be inserted within statements, with the syntax:
+\begin{verbatim}
+     x = 2 * x;
+     /*@ assert even(x) */;
+     x = x + 1;
+\end{verbatim}
 
 \subsection{C fragment currently covered}
 \index{C program!unsupported constructs}
@@ -655,7 +676,7 @@ They are also available on the \why\ web site, at
 achieved by using \why\ in combination with the \krakatoa\ 
 tool~\cite{Krakatoa}. Developed by C.~March\'e and X.~Urbain, this 
 tool tackles \java\ programs annotated using the Java Modeling
-Language (JML)~\cite{JML}. Such programs are translated into
+Language (\jml)~\cite{JML}. Such programs are translated into
 \why\ ML input code, expressing the semantics of the original \java\ 
 code. A \coq\ model is produced beside.
 
@@ -1214,7 +1235,7 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
       \nt{block\_statement}
     & $::=$ & \nt{prog} \\
       & $|$ & \te{label} \nt{identifier} \\
-      & $|$ & \te{assert} \te{\{} \nt{assertion} \te{\}} \\
+      & $|$ & \te{assert} \te{\{} \nt{assertion} \te{\}} \\ \indextt{assert}
   \\[0.1em]
  
   \nt{infix}
@@ -1501,6 +1522,7 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
     &   $|$ & \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
               $[$ \nt{c\_expr} $]$ \te{)} \\
            && \nt{c\_loop\_annot} \nt{statement} \\
+    &   $|$ & \te{/*@} \te{assert} \nt{assertion} \te{*/} \\ \indextt{assert}
     &   $|$ & \nt{block} \\
   \\[0.1em]
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.30 2003-03-20 09:57:36 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.31 2003-03-26 07:10:17 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -47,6 +47,8 @@ let interp_c_pre an = parse_annot Parser.parse_c_pre an
 let interp_c_post = parse_annot Parser.parse_c_post
 
 let interp_loop_annot (ofs, s) = Parser.parse_c_loop_annot ofs s
+
+let interp_c_assert = Parser.parse_c_assert
 
 (*s Typing C programs *)
 
@@ -96,7 +98,7 @@ let loc_of_statement = function
   | CSreturn (l, _) -> l
   | CSbreak l -> l
   | CScontinue l -> l
-
+  | CSassert (l, _) -> l
 
 (* the environment gives the C type, together with a boolean indicating
    if a reference is used in the ML translation *)
@@ -148,6 +150,9 @@ let ml_try_with_Ex l e1 exn k2 =
   let tmp = fresh_c_var () in
   mk_expr l (Stry (e1, [(exn, Some tmp), k2 tmp]))
 let ml_try_with_E l e1 exn e2 = mk_expr l (Stry (e1, [(exn, None), e2]))
+
+let ml_assert l p = 
+  mk_expr l (Sseq [Sassert p; Sstatement (ml_const l ConstUnit)])
 
 let c_true l = ml_const l (ConstInt 1)
 let c_false l = ml_const l (ConstInt 0)
@@ -654,7 +659,9 @@ let rec interp_statement cenv et abrupt = function
   | CScontinue l -> 
       ml_raise_continue l (Some (PVpure PTunit)), 
       { mt_status with continue = true }
-		  
+  | CSassert (l, (ofs, a)) ->
+      let a = interp_c_assert ofs a in
+      ml_assert l a, mt_status
 
 (*s C blocks *)
 

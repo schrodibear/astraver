@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.79 2003-03-25 16:56:33 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.80 2003-03-26 07:10:18 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -93,6 +93,7 @@ let prog7 = gec "prog7"
 let recfun = gec "recfun"
 let arg = gec "arg"
 let block = gec "block"
+let any_block = gec "any_block"
 let block_statement = gec "block_statement"
 let handler = gec "handler"
 let relation = gec "relation"
@@ -156,6 +157,12 @@ let mk_prog loc p pre post =
 
 let rec_name = function Srec (x,_,_,_,_) -> x | _ -> assert false
 
+let check_block loc b =
+  let is_statement = function Sstatement _ -> true | _ -> false in
+  if not (List.exists is_statement b) then
+    Report.raise_located loc 
+      (Error.AnyMessage "a sequence must contain at least one statement")
+
 EXTEND 
 
   ident:
@@ -193,8 +200,7 @@ EXTEND
   ;
   lexpr2:
   [ [ LIDENT "not"; a = lexpr3 -> prefix_pp loc PPnot a
-    | a = lexpr3 -> a ] ]
-  ;
+    | a = lexpr3 -> a ] ]  ;
   lexpr3:
   [ [ a = lexpr4; r = pp_relation; b = lexpr4 -> 
 	infix_pp loc a r b
@@ -464,7 +470,10 @@ i*)
   [ [ ":"; t = type_v -> t ] ]
   ;
   block:
-  [ [ s = block_statement; ";"; b = block -> s :: b
+  [ [ b = any_block -> check_block loc b; b ] ]
+  ;
+  any_block:
+  [ [ s = block_statement; ";"; b = any_block -> s :: b
     | s = block_statement                 -> [s] ] ]
   ;
   block_statement:
@@ -541,6 +550,7 @@ let c_loop_annot = gec "c_loop_annot"
 let c_pre = gec "c_pre"
 let c_variant = gec "c_variant"
 let c_post = gec "c_post"
+let c_assert = gec "c_assert"
 
 EXTEND
   c_pre_condition:
@@ -560,6 +570,8 @@ EXTEND
   [ [ LIDENT "variant"; v = variant -> v ] ];
   c_post:
   [ [ q = OPT post_condition -> q ] ];
+  c_assert:
+  [ [ LIDENT "assert"; p = assertion -> p ] ];
 END
 ;;
 
@@ -575,3 +587,4 @@ let parse_c_pre = parse_with_offset c_pre
 let parse_c_post = parse_with_offset c_post
 let parse_c_loop_annot = parse_with_offset c_loop_annot
 let parse_c_decl = parse_with_offset decl
+let parse_c_assert = parse_with_offset c_assert

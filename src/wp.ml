@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.78 2003-03-25 16:56:33 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.79 2003-03-26 07:10:18 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -85,10 +85,17 @@ let abstract_wp (q',ql') (q,ql) res out =
   in
   pands (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
 
-(*s Adding precondition(s) to the wp *)
+(*s Adding precondition and obligations to the wp *)
 
-let add_pre pl w = 
-  List.fold_left pand w (List.map (fun p -> p.a_value) pl)
+let add_to_wp loc al w =
+  let al = List.map (fun p -> p.a_value) al in
+  if al = [] then
+    w
+  else match w with
+    | Some w -> Some (asst_app (fun w -> List.fold_left pand w al) w) 
+    | None -> Some (wp_named loc (pands al))
+
+let add_pre_and_oblig p = add_to_wp p.info.loc (pre p @ obligations p)
 
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
@@ -115,7 +122,7 @@ let rec wp p q =
     | _ -> 
 	force_wp_name w
   in
-  let w = optasst_app (add_pre (pre p @ obligations p)) w in
+  let w = add_pre_and_oblig p w in
   p, w
 
 and wp_desc info d q = 
@@ -265,6 +272,6 @@ and wp_block bl q = match bl with
       Label l :: bl', optasst_app (erase_label l) w
   | Assert p :: bl ->
       let bl', w = wp_block bl q in
-      Assert p :: bl', optasst_app (fun c -> pand p.a_value c) w
+      Assert p :: bl', add_to_wp p.a_loc [p] w
 
 let wp p = wp p None

@@ -557,35 +557,30 @@ Lemma find_po_12 :
   (Pre9: `0 <= j1` /\ `j1 < (array_length A2)`)
   (A3: (array Z))
   (Post4: A3 = (store A2 j1 w))
-  (exchange A3 A1 i1 j1) /\ `(access A3 i1) <= r` /\ `r <= (access A3 j1)` /\
-  ((i:Z)
-   (i = `i1 + 1` ->
-    ((j:Z)
-     (j = `j1 - 1` -> ((i_invariant m0 n0 i r A3) /\
-      (j_invariant m0 n0 j r A3) /\ (m_invariant m0 A3) /\
-      (n_invariant n0 A3) /\ `0 <= j` /\ `i <= N + 1` /\
-      (termination i j m0 n0 r A3) /\ (permut A3 A)) /\
-      (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))).
+  ((((i:Z)
+     (i = `i1 + 1` ->
+      ((j:Z)
+       (j = `j1 - 1` -> ((i_invariant m0 n0 i r A3) /\
+        (j_invariant m0 n0 j r A3) /\ (m_invariant m0 A3) /\
+        (n_invariant n0 A3) /\ `0 <= j` /\ `i <= N + 1` /\
+        (termination i j m0 n0 r A3) /\ (permut A3 A)) /\
+        (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))) /\
+  `r <= (access A3 j1)`) /\ `(access A3 i1) <= r`) /\ (exchange A3 A1 i1 j1).
 Proof.
 Intros.
 Subst r.
 Assert H:(exchange A3 A1 i1 j1).
 Subst A3. Subst A2. Subst w.
 Auto with datatypes.
-Split. Assumption.
+
 Assert H0:`(access A3 i1) <= (access A0 f)`.
 Elim H; Intros; Rewrite H3; Omega.
-Split. Assumption.
 Assert H1:`(access A0 f) <= (access A3 j1)`.
 Elim H; Intros; Rewrite H5; Omega.
-Split. Assumption.
-Intros.
-Subst i.
-Subst j.
 Generalize (subgoal_3 m0 n0 i0 j0 i1 j1 A A0 A1 A3 Pre21 Inv_mn Test14 
   zero_f_SN Inv_ij 
   Test9 Inv_i Inv_j Pre16 Test8 H H0 H1).
-Intuition.
+Intuition Subst; Intuition.
 Save.
 
 (* Why obligation from file "find.mlw", characters 2490-2705 *)

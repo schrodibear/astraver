@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.56 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.57 2003-03-26 07:10:17 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -57,8 +57,7 @@ let push_parameter id v tv = match prover with
 let output fwe = 
   if wol then begin
     let cout = open_out (fwe ^ ".wol") in
-    output_value cout !Vcg.logs;
-    close_out cout
+    output_value cout !Vcg.logs;    close_out cout
   end else if ocaml then 
     Options.output Ocaml.output 
   else begin match prover with
@@ -193,10 +192,10 @@ let rec explain_exception fmt = function
       fprintf fmt "Syntax error"
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
+  | Error (Some loc, e) | Stdpp.Exc_located (_, Error (Some loc, e)) ->
+      fprintf fmt "%a%a" Loc.report loc report e
   | Stdpp.Exc_located (loc, e) ->
       fprintf fmt "%a%a" Loc.report loc explain_exception e
-  | Error (Some loc, e) ->
-      fprintf fmt "%a%a" Loc.report loc report e
   | Error (_, e) ->
       report fmt e
   | e ->

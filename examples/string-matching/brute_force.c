@@ -3,11 +3,11 @@
 
 /*W logic match : int array, int, int array, int, int -> prop */
 
-void OUTPUT(char x[], char y[], int j) 
-     /*@ pre match(x,0,y,j,array_length(x)) reads x,y */;
+void OUTPUT(int j);
 
 void BF(char x[], int m, char y[], int n) 
-/*@ 0 <= n and 0 <= m and array_length(x) = m and array_length(y) = n */
+/*@ array_length(x) = m and array_length(y) = n and
+    0 <= n and 0 <= m and n >= m - 1 */
 {
   int i = 0, j = 0;
 
@@ -16,8 +16,10 @@ void BF(char x[], int m, char y[], int n)
   {
     for (i = 0; i < m && x[i] == y[i + j]; ++i) 
     /*@ invariant 0 <= i <= m and match(x,0,y,j,i)  variant m - i */;
-    if (i >= m)
-      OUTPUT(x,y,j);
+    if (i >= m) {
+      OUTPUT(j);
+      /*@ assert match(x,0,y,j,array_length(x)) */;
+    }
   }
 }
    
