@@ -41,8 +41,7 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
   | _ ->
       false
 
-(* [sub_type ty1 ty2] is true if type [ty1] can be coerced
-   to type [ty2] (with function [coerce] below) *)
+(* [sub_type ty1 ty2] is true if type [ty1] can be coerced to type [ty2] *)
 
 let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
   | CTint _, CTfloat _ -> true

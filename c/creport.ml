@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.6 2004-02-23 14:02:38 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.7 2004-02-24 10:27:22 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -57,6 +57,7 @@ and print_integer fmt = function
   | Int -> fprintf fmt "int"
   | Long -> fprintf fmt "long"
   | LongLong -> fprintf fmt "long long"
+  | Bitfield _ -> fprintf fmt "int (bitfield)"
 
 and print_float fmt = function
   | Float -> fprintf fmt "float"
@@ -87,5 +88,5 @@ let raise_locop locop e = raise (Error (locop, e))
 
 let error l s = raise (Error (Some l, AnyMessage s))
 let warning l s = 
-  Format.eprintf "%a warning: %s\n" Loc.report_line (fst l) s
+  Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s
 

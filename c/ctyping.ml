@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.33 2004-02-24 08:15:23 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.34 2004-02-24 10:27:22 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -65,6 +65,14 @@ let float_op = function
   | Bdiv -> Bdiv_float
   | _ -> assert false
 
+let type_op op ty = match ty.ctype_node with 
+  | CTint _ -> int_op op 
+  | CTfloat _ -> float_op op 
+  | _ -> assert false 
+
+let is_bitfield ty = match ty.ctype_node with
+  | CTint (_, Bitfield _) -> true
+  | _ -> false
 
 (* Coercions (ints to floats, floats to int) *)
 
@@ -81,6 +89,28 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
       if verbose || debug then eprintf 
 	"expected %a, found %a@." print_type e.texpr_type print_type ty;
       error e.texpr_loc "incompatible type"
+
+(* convert [e1] and [e2] to the same arithmetic type *)
+let conversion e1 e2 =
+  let ty1 = e1.texpr_type in
+  let ty2 = e2.texpr_type in
+  match ty1.ctype_node, ty2.ctype_node with
+    | CTint _, CTint _ -> e1, e2, ty1
+    | CTfloat _, CTint _ -> e1, coerce ty1 e2, ty1
+    | CTint _, CTfloat _ -> coerce ty2 e1, e2, ty2
+    | CTfloat _, CTfloat _ -> e1, e2, ty1
+    | _ -> assert false
+
+(* type the assignment of [e2] into a left value of type [ty1] *)
+let type_assignment loc ty1 e2 =
+  let ty2 = e2.texpr_type in
+  if (arith_type ty1 && arith_type ty2) || 
+     (sub_type ty2 ty1) || 
+     (pointer_type ty1 && is_null e2) 
+  then
+    coerce ty1 e2
+  else
+    error loc "incompatible types in assignment"
 
 (* warns for assigments over read-only left-value *)
 
@@ -113,8 +143,10 @@ let rec type_type loc env ty =
   { ty with ctype_node = type_type_node loc env ty.ctype_node }
 
 and type_type_node loc env = function
-  | CTvoid | CTint _ | CTfloat _ as ty -> 
+  | CTvoid | CTfloat _ as ty -> 
       ty
+  | CTint (s,i) ->
+      CTint (s, type_integer loc env i)
   | CTvar x -> 
       (* TODO: les attributs sont perdus *)
       (try (find_typedef x).ctype_node with Not_found -> assert false)
@@ -136,6 +168,10 @@ and type_type_node loc env = function
       Env.find_tag_type loc env tyn
   | CTfun (pl, tyn) ->
       CTfun (List.map (type_parameter loc env) pl, type_type loc env tyn)
+
+and type_integer loc env = function
+  | Char | Short | Int | Long | LongLong as i -> i
+  | Bitfield e -> Bitfield (type_expr env e)
 
 (*s Expressions *)
 
@@ -196,26 +232,24 @@ and type_expr_node loc env = function
       else
 	error loc "type mismatch in conditional expression"
   | CEassign (e1, e2) ->
-      let e1loc = e1.loc in
+      let e1_loc = e1.loc in
       let e1 = type_lvalue env e1 in
-      warn_for_read_only e1loc e1;
+      warn_for_read_only e1_loc e1;
       let ty1 = e1.texpr_type in
       let e2 = type_expr env e2 in
-      let ty2 = e2.texpr_type in
-      if (arith_type ty1 && arith_type ty2) || 
-	(sub_type ty2 ty1) || 
-	(pointer_type ty1 && is_null e2) 
-      then
-	TEassign (e1, coerce ty1 e2), ty1
-      else
-	error loc "incompatible types in assignment"
+      let e2 = type_assignment loc ty1 e2 in
+      TEassign (e1, e2), ty1
   | CEassign_op (e1, ( Badd | Bsub | Bmul | Bdiv | Bmod 
 		     | Bbw_and | Bbw_xor | Bbw_or 
 		     | Bshift_left | Bshift_right as op), e2) ->
-      (match type_expr_node loc env (CEbinary (e1, op, e2)) with
-	 | TEbinary (te1, op', te2), ty -> 
+      let b = { node = CEbinary (e1, op, e2); loc = loc } in
+      let b = type_expr env b in
+      (match b.texpr_node with
+	 | TEbinary (te1, op', te2) -> 
 	     check_lvalue e1.loc te1;
-	     TEassign_op (te1, op', te2), te1.texpr_type (* TODO type ok? *)
+	     let ty1 = te1.texpr_type in
+	     let _ = type_assignment loc ty1 b in
+	     TEassign_op (te1, op', te2), ty1
 	 | _ -> 
 	     assert false)
   | CEassign_op _ ->
@@ -237,9 +271,12 @@ and type_expr_node loc env = function
       end
   | CEunary (Uamp, e) ->
       (* TODO: cas où e est une fonction *)
-      (* TODO: exclure champ de bit et register *)
       let e = type_lvalue env e in
-      TEunary (Uamp, e), noattr (CTpointer e.texpr_type)
+      let ty = e.texpr_type in
+      if is_bitfield ty then error loc "cannot take address of bitfield";
+      if ty.ctype_storage = Register then 
+	warning loc "address of register requested";
+      TEunary (Uamp, e), noattr (CTpointer ty)
   | CEunary (Ustar, e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
@@ -254,16 +291,10 @@ and type_expr_node loc env = function
       assert false
   | CEbinary (e1, (Bmul | Bdiv as op), e2) ->
       let e1 = type_arith_expr env e1 in
-      let ty1 = e1.texpr_type in
       let e2 = type_arith_expr env e2 in
-      let ty2 = e2.texpr_type in
-      begin match ty1.ctype_node, ty2.ctype_node with
-	| CTint _, CTint _ -> TEbinary (e1, int_op op, e2), ty1
-	| CTfloat _, CTint _ -> TEbinary (e1, float_op op, coerce ty1 e2), ty1
-	| CTint _, CTfloat _ -> TEbinary (coerce ty2 e1, float_op op, e2), ty2
-	| CTfloat _, CTfloat _ -> TEbinary (e1, float_op op, e2), ty1
-	| _ -> assert false
-      end
+      let e1,e2,ty = conversion e1 e2 in
+      let op = type_op op ty in 
+      TEbinary (e1, op, e2), ty
   | CEbinary (e1, Bmod, e2) ->
       let e1 = type_int_expr env e1 in
       let e2 = type_int_expr env e2 in
@@ -274,10 +305,9 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| CTint _, CTint _ -> TEbinary (e1, Badd_int, e2), ty1
-	| CTint _ , CTfloat _ -> TEbinary (coerce ty2 e1, Badd_float, e2), ty2
-	| CTfloat _ , CTint _ -> TEbinary (e1, Badd_float, coerce ty1 e2), ty1
-	| CTfloat _ , CTfloat _ -> TEbinary (e1, Badd_float, e2), ty2
+	| (CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	    let e1,e2,ty = conversion e1 e2 in
+	    TEbinary (e1, type_op Badd ty, e2), ty
 	| (CTpointer _ | CTarray _), CTint _ -> 
 	    TEbinary (e1, Badd_pointer_int, e2), ty1
 	| CTint _, (CTpointer _ | CTarray _) ->
@@ -290,10 +320,9 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| CTint _, CTint _ -> TEbinary (e1, Bsub_int, e2), ty1
-	| CTint _ , CTfloat _ -> TEbinary (coerce ty2 e1, Bsub_float, e2), ty2
-	| CTfloat _ , CTint _ -> TEbinary (e1, Bsub_float, coerce ty1 e2), ty1
-	| CTfloat _ , CTfloat _ -> TEbinary (e1, Bsub_float, e2), ty2
+	| (CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	    let e1,e2,ty = conversion e1 e2 in
+	    TEbinary (e1, type_op Bsub ty, e2), ty
 	| (CTpointer _ | CTarray _), CTint _ -> 
 	    TEbinary (e1, Bsub_pointer_int, e2), ty1
 	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
@@ -306,12 +335,13 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| CTint _, CTint _ -> TEbinary (e1, op, e2), c_int
-	| CTint _ , CTfloat _ -> TEbinary (coerce ty2 e1, op, e2), c_int
-	| CTfloat _ , CTint _ -> TEbinary (e1, op, coerce ty1 e2), c_int
-	| CTfloat _ , CTfloat _ -> TEbinary (e1, op, e2), c_int
-	| (CTpointer _  | CTarray _), (CTpointer _  | CTarray _) ->
-	    (* TODO: warning pointeurs types différents *)
+	| (CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	    let e1,e2,_ = conversion e1 e2 in
+	    TEbinary (e1, op, e2), c_int
+	| (CTpointer ty1  | CTarray (ty1,_)), 
+	  (CTpointer ty2 | CTarray (ty2,_)) ->
+	    if not (eq_type ty1 ty2) then
+	      warning loc "comparison of distinct pointer types lacks a cast";
 	    TEbinary (e1, op, e2), c_int
 	| (CTpointer _  | CTarray _), (CTint _ | CTfloat _)
 	| (CTint _ | CTfloat _), (CTpointer _  | CTarray _) ->
@@ -395,7 +425,20 @@ and type_expr_option env eo = option_app (type_expr env) eo
 and type_parameter loc env (ty, x) = (type_type loc env ty, x)
 
 and type_field loc env (ty, x, bf) = 
-  (type_type loc env ty, x, type_expr_option env bf)
+  let ty = type_type loc env ty in
+  let bf = type_expr_option env bf in
+  match bf, ty.ctype_node with
+    | _, CTvoid ->
+	error loc ("field `"^x^"' declared void")
+    | None, _ ->
+	(ty, x, bf)
+    | Some e, CTint (s, i) -> 
+	(match i with 
+	   | Int -> ()
+	   | _ -> warning loc ("bit-field `"^x^"' type invalid in ANSI C"));
+	({ty with ctype_node = CTint (s, Bitfield e)}, x, bf)
+    | Some _, _ -> 
+	error loc ("bit-field `"^x^"' has invalid type")
 
 (*s Typing of integers expressions: to be used when coercion is not allowed
     (array subscript, array size, enum value, etc.) *)
@@ -545,13 +588,14 @@ and type_block env et (dl,sl) =
     | [] -> 
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
-	(* TODO: ty = void interdit *)
-	let ty' = type_type d.loc env ty in
-	let i = type_initializer env ty' i in
+	let ty = type_type d.loc env ty in
+	if eq_type_node ty.ctype_node CTvoid then 
+	  error d.loc ("variable `"^x^"' declared void");
+	let i = type_initializer env ty i in
 	let info = default_var_info x in
-	let env' = Env.add x ty' info env in
+	let env' = Env.add x ty info env in
 	let dl',env'' = type_decls env' dl in
-	{ d with node = Tdecl (ty', info, i) } :: dl', env''
+	{ d with node = Tdecl (ty, info, i) } :: dl', env''
     | { node = Ctypedecl ty } as d :: dl ->
 	let ty' = type_type d.loc env ty in
 	let dl',env' = type_decls env dl in

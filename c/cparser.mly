@@ -182,7 +182,11 @@
 	     | Some ty -> ty 
 	     | None when gl && st = No_storage && sg = None && lg = None -> 
 		 error "data definition has no type or storage class"
-	     | None -> CTint (Signed, Int))
+	     | None -> match lg with
+		 | None -> CTint (Signed, Int)
+		 | Some Short -> CTint (Signed, Cast.Short)
+		 | Some Long -> CTint (Signed, Cast.Long)
+		 | Some LongLong -> CTint (Signed, Cast.LongLong))
       | Stype t :: sp when tyo = None ->
 	  base_type (Some t) sp
       | Sstruct_decl (so, pl) :: sp when tyo = None ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.30 2004-02-24 08:15:23 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.31 2004-02-24 10:27:22 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -28,7 +28,7 @@ type storage_class = No_storage | Extern | Auto | Static | Register
 
 type sign = Signed | Unsigned
 
-type cinteger = Char | Short | Int | Long | LongLong
+type 'expr cinteger = Char | Short | Int | Long | LongLong | Bitfield of 'expr
 
 type cfloat = Float | Double | LongDouble
 
@@ -36,7 +36,7 @@ type 'a tagged = Tag | Decl of 'a
 
 type 'expr ctype_node =
   | CTvoid
-  | CTint of sign * cinteger
+  | CTint of sign * 'expr cinteger
   | CTfloat of cfloat
   | CTvar of string
   | CTarray of 'expr ctype * 'expr option
