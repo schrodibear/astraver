@@ -44,6 +44,7 @@ Lemma swap_po_3 :
   (Post3: t1 = (store t0 j result))
   (exchange t1 t i j).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Rewrite Post3; Rewrite Post2; Rewrite Post1.
+Auto with datatypes.
 Save.
 

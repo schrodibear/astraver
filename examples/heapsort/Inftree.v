@@ -8,8 +8,7 @@
 (**************************************************************************)
 
 Require ZArith.
-Require Arrays.
-Require ArrayPermut.
+Require Why.
 Require Omega.
 
 Require Heap.
