@@ -1,6 +1,6 @@
 /*
- * The Why certification tool
- * Copyright (C) 2002 Jean-Christophe FILLIATRE
+ * The Caduceus certification tool
+ * Copyright (C) 2003 Jean-Christophe Filliâtre - Claude Marché
  * 
  * This software is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public
