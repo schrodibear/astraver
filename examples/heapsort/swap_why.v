@@ -8,8 +8,12 @@ Lemma swap_po_1 :
   (N: Z)
   (i: Z)
   (j: Z)
-  (Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
-  `0 <= i` /\ `i < N`.
+  (t: (array N Z))
+  (Pre5: (`0 <= i` /\ `i < N`) /\ `0 <= j` /\ `j < N`)
+  (Pre1: `0 <= i` /\ `i < N`)
+  (v: Z)
+  (Post1: v = (access t i))
+  `0 <= j` /\ `j < N`.
 Proof.
 Intros; Omega.
 Save.
@@ -19,21 +23,7 @@ Lemma swap_po_2 :
   (i: Z)
   (j: Z)
   (t: (array N Z))
-  (Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
-  (Pre1: `0 <= i` /\ `i < N`)
-  (v: Z)
-  (Post1: v = (access t i))
-  `0 <= j` /\ `j < N`.
-Proof.
-Intros; Omega.
-Save.
-
-Lemma swap_po_3 : 
-  (N: Z)
-  (i: Z)
-  (j: Z)
-  (t: (array N Z))
-  (Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\ `j < N`))
+  (Pre5: (`0 <= i` /\ `i < N`) /\ `0 <= j` /\ `j < N`)
   (Pre1: `0 <= i` /\ `i < N`)
   (v: Z)
   (Post1: v = (access t i))
@@ -49,13 +39,13 @@ Auto with datatypes.
 Save.
 
 Definition swap := (* validation *)
-  [N: Z; i: Z; j: Z; t: (array N Z); Pre5: `0 <= i` /\ `i < N` /\
-   (`0 <= j` /\ `j < N`)]
-    let Pre1 = (swap_po_1 N i j Pre5) in
+  [N: Z; i: Z; j: Z; t: (array N Z); Pre5: (`0 <= i` /\ `i < N`) /\
+   `0 <= j` /\ `j < N`]
+    let Pre1 = (proj1 ? ? Pre5) in
     let (v, Post1) = (exist_1 [result: Z]result = (access t i) (access t i)
       (refl_equal ? (access t i))) in
     let (t0, result, Post4) =
-      let Pre2 = (swap_po_2 N i j t Pre5 Pre1 v Post1) in
+      let Pre2 = (swap_po_1 N i j t Pre5 Pre1 v Post1) in
       let (t0, result, Post2) =
         let (result, Post2) = (exist_1 [result: Z]
           (store t i result) = (store t i (access t j)) (access t j)
@@ -71,7 +61,7 @@ Definition swap := (* validation *)
         (exist_2 [t2: (array N Z)][result2: unit]
         t2 = (store t0 j v) (store t0 j result0) tt Post3) in
       (exist_2 [t2: (array N Z)][result1: unit](exchange t2 t i j) t1 
-      result0 (swap_po_3 N i j t Pre5 Pre1 v Post1 Pre2 t0 Post2 t1 Post3)) in
+      result0 (swap_po_2 N i j t Pre5 Pre1 v Post1 Pre2 t0 Post2 t1 Post3)) in
     (exist_2 [t1: (array N Z)][result0: unit](exchange t1 t i j) t0 result
     Post4).
 

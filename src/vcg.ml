@@ -23,6 +23,8 @@ type proof =
   | Lemma of string * Ident.t list
   | Reflexivity of term
   | Assumption of Ident.t
+  | Proj1 of Ident.t
+  | Conjunction of Ident.t * Ident.t
 
 type validation = proof cc_term
 
@@ -36,10 +38,21 @@ let reflexivity = function
 
 let assumption concl = function
   | Spred (id, p) when p = concl -> Assumption id 
+  | Spred (id, Pand (a, b)) when a = concl -> Proj1 id
+  | _ -> raise Exit
+
+let lookup_hyp a = 
+  let test = function Spred (id, b) when a = b -> id | _ -> raise Exit in
+  list_first test
+
+let conjunction ctx = function
+  | Pand (a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
   | _ -> raise Exit
 
 let discharge ctx concl =
-  try reflexivity concl with Exit -> list_first (assumption concl) ctx
+  try reflexivity concl with Exit -> 
+  try list_first (assumption concl) ctx with Exit ->
+  conjunction ctx concl
 
 let discharge_msg () =
   if_verbose eprintf "one obligation trivially discharged@."

@@ -1,3 +1,8 @@
 
-let test = (float_of_int 2) { result = float_of_int(2) }
+logic a : unit -> prop
+logic b : unit -> prop
+logic c : unit -> prop
+
+let test = true { a(void) and (b(void) and c(void)) }
+
 

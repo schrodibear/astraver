@@ -303,8 +303,8 @@ Lemma sqrt_po_6 :
   (Pre4: ~(z0 = `0`))
   (z1: Z)
   (Post4: z1 = (Zdiv (`(Zdiv x z0) + z0`) `2`))
-  `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-  `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)` /\ (Zwf `0` y1 y0).
+  (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
+  `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\ (Zwf `0` y1 y0).
 Proof. (* sqrt_po_6 *)
 Unfold Zwf.
 Intuition.
@@ -335,8 +335,8 @@ Lemma sqrt_po_7 :
   (Test2: `z0 < y0`)
   (y1: Z)
   (z1: Z)
-  (Post6: `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-          `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)` /\
+  (Post6: (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
+          `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\
           (Zwf `0` y1 y0))
   (Zwf `0` y1 Variant1).
 Proof. (* sqrt_po_7 *)
@@ -354,63 +354,10 @@ Lemma sqrt_po_8 :
   (Pre1: ~(`2` = `0`))
   (result2: Z)
   (Post2: result2 = (Zdiv (`x + 1`) `2`))
-  (Variant1: Z)
-  (y0: Z)
-  (z0: Z)
-  (Pre6: Variant1 = y0)
-  (Pre5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Test2: `z0 < y0`)
-  (y1: Z)
-  (z1: Z)
-  (Post6: `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-          `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)` /\
-          (Zwf `0` y1 y0))
-  `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-  `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`.
-Proof. (* sqrt_po_8 *)
-Intuition Try Omega.
-Save.
-
-
-
-Lemma sqrt_po_9 : 
-  (x: Z)
-  (Pre7: `x >= 0`)
-  (Test5: `x <> 0`)
-  (Test3: `x > 3`)
-  (result1: Z)
-  (Post1: result1 = x)
-  (Pre1: ~(`2` = `0`))
-  (result2: Z)
-  (Post2: result2 = (Zdiv (`x + 1`) `2`))
-  (Variant1: Z)
-  (y0: Z)
-  (z0: Z)
-  (Pre6: Variant1 = y0)
-  (Pre5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Test1: `z0 >= y0`)
-  `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-  `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)` /\ `z0 >= y0`.
-Proof. (* sqrt_po_9 *)
-Intuition.
-Save.
-
-Lemma sqrt_po_10 : 
-  (x: Z)
-  (Pre7: `x >= 0`)
-  (Test5: `x <> 0`)
-  (Test3: `x > 3`)
-  (result1: Z)
-  (Post1: result1 = x)
-  (Pre1: ~(`2` = `0`))
-  (result2: Z)
-  (Post2: result2 = (Zdiv (`x + 1`) `2`))
   `result2 > 0` /\ `result1 > 0` /\
   `result2 = (Zdiv ((Zdiv x result1) + result1) 2)` /\
   `x < (result1 + 1) * (result1 + 1)` /\ `x < (result2 + 1) * (result2 + 1)`.
-Proof.
+Proof. (* sqrt_po_8 *)
 Intuition.
 Rewrite Post2.
 Assert `(x+1)/2 >= 1`.
@@ -441,8 +388,7 @@ Rewrite H; Omega.
 Rewrite H; Trivial.
 Save.
 
-
-Lemma sqrt_po_11 : 
+Lemma sqrt_po_9 : 
   (x: Z)
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
@@ -454,11 +400,11 @@ Lemma sqrt_po_11 :
   (Post2: result2 = (Zdiv (`x + 1`) `2`))
   (y0: Z)
   (z0: Z)
-  (Post5: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)` /\
+  (Post5: (`z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
+          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`) /\
           `z0 >= y0`)
   `y0 * y0 <= x` /\ `x < (y0 + 1) * (y0 + 1)`.
-Proof.
+Proof. (* sqrt_po_9 *)
 Intuition.
 Apply (iter_sqrt_invar4 x y0 z0); Try Omega.
 Save.
@@ -515,10 +461,10 @@ Definition sqrt := (* validation *)
                           `x < (y0 + 1) * (y0 + 1)` /\
                           `x < (z0 + 1) * (z0 + 1)`)
                           (sig_3 Z Z unit [y1: Z][z1: Z][result3: unit]
-                           (`z1 > 0` /\ `y1 > 0` /\
+                           ((`z1 > 0` /\ `y1 > 0` /\
                            `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
                            `x < (y1 + 1) * (y1 + 1)` /\
-                           `x < (z1 + 1) * (z1 + 1)` /\ `z1 >= y1`))
+                           `x < (z1 + 1) * (z1 + 1)`) /\ `z1 >= y1`))
                           [Variant1: Z; wf1: (Variant2: Z)
                            (Pre2: (Zwf `0` Variant2 Variant1))(y0: Z)(z0: Z)
                            (_: Variant2 = y0)(_0: `z0 > 0` /\ `y0 > 0` /\
@@ -526,10 +472,10 @@ Definition sqrt := (* validation *)
                            `x < (y0 + 1) * (y0 + 1)` /\
                            `x < (z0 + 1) * (z0 + 1)`)
                            (sig_3 Z Z unit [y1: Z][z1: Z][result3: unit]
-                            (`z1 > 0` /\ `y1 > 0` /\
+                            ((`z1 > 0` /\ `y1 > 0` /\
                             `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
                             `x < (y1 + 1) * (y1 + 1)` /\
-                            `x < (z1 + 1) * (z1 + 1)` /\ `z1 >= y1`));
+                            `x < (z1 + 1) * (z1 + 1)`) /\ `z1 >= y1`));
                            y0: Z; z0: Z; Pre6: Variant1 = y0;
                            Pre5: `z0 > 0` /\ `y0 > 0` /\
                            `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
@@ -571,10 +517,10 @@ Definition sqrt := (* validation *)
                                       z2 = (Zdiv (`(Zdiv x z0) + z0`) `2`) 
                                       result5 tt Post4) in
                                     (exist_3 [y2: Z][z2: Z][result6: unit]
-                                    `z2 > 0` /\ `y2 > 0` /\
+                                    (`z2 > 0` /\ `y2 > 0` /\
                                     `z2 = (Zdiv ((Zdiv x y2) + y2) 2)` /\
                                     `x < (y2 + 1) * (y2 + 1)` /\
-                                    `x < (z2 + 1) * (z2 + 1)` /\
+                                    `x < (z2 + 1) * (z2 + 1)`) /\
                                     (Zwf `0` y2 y0) y1 z1 result5
                                     (sqrt_po_6 x Pre7 Test5 Test3 result1
                                     Post1 Pre1 result2 Post2 Variant1 y0 z0
@@ -584,40 +530,34 @@ Definition sqrt := (* validation *)
                                     (sqrt_po_7 x Pre7 Test5 Test3 result1
                                     Post1 Pre1 result2 Post2 Variant1 y0 z0
                                     Pre6 Pre5 Test2 y1 z1 Post6) y1 z1
-                                    (refl_equal ? y1)
-                                    (sqrt_po_8 x Pre7 Test5 Test3 result1
-                                    Post1 Pre1 result2 Post2 Variant1 y0 z0
-                                    Pre6 Pre5 Test2 y1 z1 Post6)) in
+                                    (refl_equal ? y1) (proj1 ? ? Post6)) in
                                 (exist_3 [y2: Z][z2: Z][result5: unit]
-                                `z2 > 0` /\ `y2 > 0` /\
+                                (`z2 > 0` /\ `y2 > 0` /\
                                 `z2 = (Zdiv ((Zdiv x y2) + y2) 2)` /\
                                 `x < (y2 + 1) * (y2 + 1)` /\
-                                `x < (z2 + 1) * (z2 + 1)` /\ `z2 >= y2` 
+                                `x < (z2 + 1) * (z2 + 1)`) /\ `z2 >= y2` 
                                 y1 z1 result4 Post5)
                             | (right Test1) =>
                                 let (y1, z1, result4, Post5) =
                                   (exist_3 [y1: Z][z1: Z][result4: unit]
-                                  `z1 > 0` /\ `y1 > 0` /\
+                                  (`z1 > 0` /\ `y1 > 0` /\
                                   `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
                                   `x < (y1 + 1) * (y1 + 1)` /\
-                                  `x < (z1 + 1) * (z1 + 1)` /\ `z1 >= y1` 
-                                  y0 z0 tt
-                                  (sqrt_po_9 x Pre7 Test5 Test3 result1 Post1
-                                  Pre1 result2 Post2 Variant1 y0 z0 Pre6 Pre5
-                                  Test1)) in
+                                  `x < (z1 + 1) * (z1 + 1)`) /\ `z1 >= y1` 
+                                  y0 z0 tt (conj ? ? Pre5 Test1)) in
                                 (exist_3 [y2: Z][z2: Z][result5: unit]
-                                `z2 > 0` /\ `y2 > 0` /\
+                                (`z2 > 0` /\ `y2 > 0` /\
                                 `z2 = (Zdiv ((Zdiv x y2) + y2) 2)` /\
                                 `x < (y2 + 1) * (y2 + 1)` /\
-                                `x < (z2 + 1) * (z2 + 1)` /\ `z2 >= y2` 
+                                `x < (z2 + 1) * (z2 + 1)`) /\ `z2 >= y2` 
                                 y1 z1 result4 Post5) end) result1 result1
                           result2 (refl_equal ? result1)
-                          (sqrt_po_10 x Pre7 Test5 Test3 result1 Post1 Pre1
+                          (sqrt_po_8 x Pre7 Test5 Test3 result1 Post1 Pre1
                           result2 Post2)) in
                       let (result4, Post17) = (exist_1 [result4: Z]
                         `result4 * result4 <= x` /\
                         `x < (result4 + 1) * (result4 + 1)` y0
-                        (sqrt_po_11 x Pre7 Test5 Test3 result1 Post1 Pre1
+                        (sqrt_po_9 x Pre7 Test5 Test3 result1 Post1 Pre1
                         result2 Post2 y0 z0 Post5)) in
                       (exist_3 [y1: Z][z1: Z][result5: Z]
                       `result5 * result5 <= x` /\

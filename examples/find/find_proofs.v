@@ -124,9 +124,9 @@ Lemma subgoal_2 : (m1,n1,i2,j2,i3,j3:Z)(A,A0,A1:(array (Zs N) Z))
     /\(termination i2 j2 m1 n1 (#A0[f]) A1)
     /\(permut A1 A) ->
   `i2 <= j2` ->
-  (i_invariant m1 n1 i3 (#A0[f]) A1)
+  ((i_invariant m1 n1 i3 (#A0[f]) A1)
      /\`i2 <= i3`/\`i3 <= n1`
-     /\(termination i3 j2 m1 n1 (#A0[f]) A1)
+     /\(termination i3 j2 m1 n1 (#A0[f]) A1))
     /\`(access   A1 i3) >= (access   A0 f)` ->
   (j_invariant m1 n1 j3 (#A0[f]) A1)
     /\`j3 <= j2`/\`m1 <= j3` 
@@ -175,13 +175,13 @@ Lemma subgoal_3 : (m0,n0,i0,j0,i1,j1:Z)(A,A0,A1,A2:(array (Zs N) Z))
                      /\(termination i0 j0 m0 n0 (#A0[f]) A1)
                        /\(permut A1 A)
  -> `i0 <= j0`
- -> (i_invariant m0 n0 i1 (#A0[f]) A1)
+ -> ((i_invariant m0 n0 i1 (#A0[f]) A1)
            /\`i0 <= i1`
-             /\`i1 <= n0`/\(termination i1 j0 m0 n0 (#A0[f]) A1)
+             /\`i1 <= n0`/\(termination i1 j0 m0 n0 (#A0[f]) A1))
           /\`(access   A1 i1) >= (access   A0 f)`
- -> (j_invariant m0 n0 j1 (#A0[f]) A1)
+ -> ((j_invariant m0 n0 j1 (#A0[f]) A1)
            /\`j1 <= j0`
-             /\`m0 <= j1`/\(termination i1 j1 m0 n0 (#A0[f]) A1)
+             /\`m0 <= j1`/\(termination i1 j1 m0 n0 (#A0[f]) A1))
           /\`(access   A0 f) >= (access   A1 j1)`
  -> `(access   A1 j1) <= (access   A0 f) <= (access   A1 i1)`
  -> `i1 <= j1`
@@ -208,29 +208,29 @@ Split.
 Split.
 (* [i_invariant] *)
   Apply Lemma_8_10 with j:=j1 A':=A1 ; Try Assumption.
-  Decompose [and] Inv_i. Elim H. Abstract Omega.
+  Decompose [and] Inv_i. Elim H1. Abstract Omega.
   Abstract Omega. Abstract Omega.  
   Decompose [and] Inv_i. Assumption.
   Decompose [and] Inv_j. Assumption.
 Split.
 (* [j_invariant] *)
   Apply Lemma_9_11 with i:=i1 A':=A1 ; Try Assumption.
-  Decompose [and] Inv_j. Elim H. Abstract Omega. 
-  Decompose [and] Inv_i. Elim H. Abstract Omega. 
+  Decompose [and] Inv_j. Elim H1. Abstract Omega. 
+  Decompose [and] Inv_i. Elim H1. Abstract Omega. 
   Decompose [and] Inv_mn. Assumption.
   Decompose [and] Inv_j. Assumption.
   Decompose [and] Inv_i. Assumption.
 Split.
 (* [m_invariant] *)
   Apply Lemma_12' with i:=i1 j:=j1 A:=A1.
-  Decompose [and] Inv_i. Elim H. Abstract Omega.
+  Decompose [and] Inv_i. Elim H1. Abstract Omega.
   Auto with datatypes.
   Decompose [and] Inv_ij. Assumption.
 Split.
 (* [n_invariant] *)
   Apply Lemma_13' with i:=i1 j:=j1 A:=A1.
-  Decompose [and] Inv_i. Elim H. Abstract Omega.
-  Decompose [and] Inv_j. Elim H. Abstract Omega.
+  Decompose [and] Inv_i. Elim H1. Abstract Omega.
+  Decompose [and] Inv_j. Elim H1. Abstract Omega.
   Auto with datatypes.
   Decompose [and] Inv_ij. Assumption.
 Split.
@@ -243,8 +243,8 @@ Split.
 (* [termination] *)
   Unfold termination. 
   Left. Unfold Zpred. 
-  Decompose [and] Inv_i. Elim H. Intros. 
-  Decompose [and] Inv_j. Elim H6. Intros. 
+  Decompose [and] Inv_i. Elim H1. Intros. 
+  Decompose [and] Inv_j. Elim H8. Intros. 
   Abstract Omega.
 (* [permut] *)
   Decompose [and] Inv_ij. EAuto with datatypes.
@@ -258,12 +258,12 @@ Lemma subgoal_5 : (m1,n1,i2,j2:Z)(A,A0,A1:(array (Zs N) Z))
     /\`1 <= m1`/\`n1 <= N` ->
   `m1 < n1` ->
   `0 <= f < (Zs N)` ->
-  (i_invariant m1 n1 i2 (#A0[f]) A1)
+  ((i_invariant m1 n1 i2 (#A0[f]) A1)
      /\(j_invariant m1 n1 j2 (#A0[f]) A1)
      /\(m_invariant m1 A1)/\(n_invariant n1 A1)
      /\`0 <= j2`/\`i2 <= N+1`
      /\(termination i2 j2 m1 n1 (#A0[f]) A1)
-     /\(permut A1 A)
+     /\(permut A1 A))
     /\`i2 > j2` ->
   `m1 < i2`/\`j2 < n1` ->
   `f <= j2` ->
@@ -290,12 +290,12 @@ Lemma subgoal_6 : (m1,n1,i2,j2:Z)(A,A0,A1:(array (Zs N) Z))
     /\`1 <= m1`/\`n1 <= N` ->
   `m1 < n1` ->
   `0 <= f < (Zs N)` ->
-  (i_invariant m1 n1 i2 (#A0[f]) A1)
+  ((i_invariant m1 n1 i2 (#A0[f]) A1)
      /\(j_invariant m1 n1 j2 (#A0[f]) A1)
      /\(m_invariant m1 A1)/\(n_invariant n1 A1)
      /\`0 <= j2`/\`i2 <= N+1`
      /\(termination i2 j2 m1 n1 (#A0[f]) A1)
-     /\(permut A1 A)
+     /\(permut A1 A))
     /\`i2 > j2` ->
   `m1 < i2`/\`j2 < n1` ->
   `f > j2` ->
@@ -309,7 +309,7 @@ Intros m1 n1 i2 j2 A A0 A1 HH_44 HH_43 HH_41 HH_40 HH_39 HH_36 HH_33.
 Decompose [and] HH_40.
 Split; [ Idtac | Split ; [Idtac | Split ; [ Assumption | Split ; 
           [ Assumption | Idtac ]]]].
-Abstract (Unfold Zwf; Elim H; Elim H0; Elim H1; Elim H2; Intros; Omega).
+Abstract (Unfold Zwf; Elim H; Elim H1; Elim H2; Elim H3; Intros; Omega).
 Apply Lemma_6_b with m:=m1 n:=n1 j:=j2 r:=#A0[f]; Auto.
 Abstract Omega.
 Save.
@@ -320,12 +320,12 @@ Lemma subgoal_7 : (m1,n1,i2,j2:Z)(A,A0,A1:(array (Zs N) Z))
     /\(n_invariant n1 A0)/\(permut A0 A)/\`1 <= m1`/\`n1 <= N` ->
   `m1 < n1` ->
   `0 <= f < (Zs N)` ->
-  (i_invariant m1 n1 i2 (#A0[f]) A1)
+  ((i_invariant m1 n1 i2 (#A0[f]) A1)
      /\(j_invariant m1 n1 j2 (#A0[f]) A1)
      /\(m_invariant m1 A1)/\(n_invariant n1 A1)
      /\`0 <= j2`/\`i2 <= N+1`
      /\(termination i2 j2 m1 n1 (#A0[f]) A1)
-     /\(permut A1 A)
+     /\(permut A1 A))
      /\`i2 > j2` ->
   `m1 < i2`/\`j2 < n1` ->
   `f > j2` ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.53 2002-07-22 08:46:51 uid1331 Exp $ i*)
+(*i $Id: coq.ml,v 1.54 2002-07-22 14:37:06 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -141,10 +141,10 @@ let print_predicate fmt p =
 	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
-    | Por (a, b) -> fprintf fmt "%a \/@ %a" print1 a print2 b
+    | Por (a, b) -> fprintf fmt "%a \/@ %a" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (a, b) -> fprintf fmt "%a /\@ %a" print2 a print3 b
+    | Pand (a, b) -> fprintf fmt "%a /\@ %a" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function
     | Ptrue -> 
@@ -253,6 +253,10 @@ let print_proof fmt = function
       fprintf fmt "@[(refl_equal ? %a)@]" print_term t
   | Assumption id -> 
       Ident.print fmt id
+  | Proj1 id ->
+      fprintf fmt "@[(proj1 ? ? %a)@]" Ident.print id
+  | Conjunction (id1, id2) ->
+      fprintf fmt "@[(conj ? ? %a %a)@]" Ident.print id1 Ident.print id2
 
 let print_binder_id fmt (id,_) = Ident.print fmt id
 

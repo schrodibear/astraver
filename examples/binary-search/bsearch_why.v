@@ -223,9 +223,9 @@ Lemma binary_search_po_4 :
   (Test5: `(access t m1) < v`)
   (l2: Z)
   (Post8: l2 = `m1 + 1`)
-  `1 <= l2` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (`1 <= l2` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((`p1 = 0` -> ((In t `1` N) -> (In t l2 u1)))) /\
-  ((`p1 > 0` -> `(access t p1) = v`)) /\
+  ((`p1 > 0` -> `(access t p1) = v`))) /\
   (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
 Intros.
@@ -290,9 +290,9 @@ Lemma binary_search_po_6 :
   (Test3: `(access t m1) > v`)
   (u2: Z)
   (Post7: u2 = `m1 - 1`)
-  `1 <= l1` /\ `u2 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (`1 <= l1` /\ `u2 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u2)))) /\
-  ((`p1 > 0` -> `(access t p1) = v`)) /\
+  ((`p1 > 0` -> `(access t p1) = v`))) /\
   (Zwf `0` `2 + u2 - l1` `2 + u1 - l1`).
 Proof.
 Intros.
@@ -332,9 +332,9 @@ Lemma binary_search_po_7 :
   (Post5: p2 = m1)
   (l2: Z)
   (Post6: l2 = `u1 + 1`)
-  `1 <= l2` /\ `u1 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+  (`1 <= l2` /\ `u1 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u1)))) /\
-  ((`p2 > 0` -> `(access t p2) = v`)) /\
+  ((`p2 > 0` -> `(access t p2) = v`))) /\
   (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
 Intros.
@@ -367,9 +367,9 @@ Lemma binary_search_po_8 :
   (l2: Z)
   (p2: Z)
   (u2: Z)
-  (Post10: `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+  (Post10: (`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
            ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-           ((`p2 > 0` -> `(access t p2) = v`)) /\
+           ((`p2 > 0` -> `(access t p2) = v`))) /\
            (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`))
   (Zwf `0` `2 + u2 - l2` Variant1).
 Proof.
@@ -386,27 +386,14 @@ Lemma binary_search_po_9 :
   (Post2: u0 = N)
   (p0: Z)
   (Post3: p0 = `0`)
-  (Variant1: Z)
-  (l1: Z)
-  (p1: Z)
-  (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
-  (Test6: `l1 <= u1`)
-  (l2: Z)
-  (p2: Z)
-  (u2: Z)
-  (Post10: `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
-           ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-           ((`p2 > 0` -> `(access t p2) = v`)) /\
-           (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`))
-  `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
-  ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-  ((`p2 > 0` -> `(access t p2) = v`)).
+  `1 <= l0` /\ `u0 <= N` /\ (`0 <= p0` /\ `p0 <= N`) /\
+  ((`p0 = 0` -> ((In t `1` N) -> (In t l0 u0)))) /\
+  ((`p0 > 0` -> `(access t p0) = v`)).
 Proof.
 Intuition.
+Generalize N_positive; Intro.
+Repeat Split; Intros; Try Omega'.
+Rewrite Post1; Rewrite Post2; Assumption.
 Save.
 
 Lemma binary_search_po_10 : 
@@ -418,57 +405,14 @@ Lemma binary_search_po_10 :
   (Post2: u0 = N)
   (p0: Z)
   (Post3: p0 = `0`)
-  (Variant1: Z)
   (l1: Z)
   (p1: Z)
   (u1: Z)
-  (Pre6: Variant1 = `2 + u1 - l1`)
-  (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-         ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-         ((`p1 > 0` -> `(access t p1) = v`)))
-  (Test1: `l1 > u1`)
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> `(access t p1) = v`)) /\ `l1 > u1`.
-Proof.
-Intuition.
-Save.
-
-Lemma binary_search_po_11 : 
-  (t: (array `N + 1` Z))
-  (Pre7: (sorted_array t `1` N))
-  (l0: Z)
-  (Post1: l0 = `1`)
-  (u0: Z)
-  (Post2: u0 = N)
-  (p0: Z)
-  (Post3: p0 = `0`)
-  `1 <= l0` /\ `u0 <= N` /\ (`0 <= p0` /\ `p0 <= N`) /\
-  ((`p0 = 0` -> ((In t `1` N) -> (In t l0 u0)))) /\
-  ((`p0 > 0` -> `(access t p0) = v`)).
-Proof.
-Intros.
-Generalize N_positive; Intro.
-Repeat Split; Intros; Try Omega'.
-Rewrite Post1; Rewrite Post2; Assumption.
-Save.
-
-Lemma binary_search_po_12 : 
-  (t: (array `N + 1` Z))
-  (Pre7: (sorted_array t `1` N))
-  (l0: Z)
-  (Post1: l0 = `1`)
-  (u0: Z)
-  (Post2: u0 = N)
-  (p0: Z)
-  (Post3: p0 = `0`)
-  (l1: Z)
-  (p1: Z)
-  (u1: Z)
-  (Post9: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+  (Post9: (`1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
           ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-          ((`p1 > 0` -> `(access t p1) = v`)) /\ `l1 > u1`)
-  `1 <= p1` /\ `p1 <= N` /\ `(access t p1) = v` \/ `p1 = 0` /\ ~(In t `1` N).
+          ((`p1 > 0` -> `(access t p1) = v`))) /\ `l1 > u1`)
+  (`1 <= p1` /\ `p1 <= N`) /\ `(access t p1) = v` \/ `p1 = 0` /\
+  ~(In t `1` N).
 Proof.
 Intros.
 Intuition.
@@ -478,7 +422,7 @@ Right.
 Cut `p1 = 0`; [ Intro | Omega' ].
 Split. Assumption.
 Intro. 
-Generalize (H0 H5 H7); Intro.
+Generalize (H2 H4 H7); Intro.
 Decompose [In] H8.
 Absurd `l1 <= i <= u1`; Omega'.
 Save.
@@ -505,18 +449,18 @@ Definition binary_search := (* validation *)
         ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
         ((`p1 > 0` -> `(access t p1) = v`)))
         (sig_5 Z Z Z Z unit [l2: Z][m1: Z][p2: Z][u2: Z][result2: unit]
-         (`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+         ((`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
          ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-         ((`p2 > 0` -> `(access t p2) = v`)) /\ `l2 > u2`))
+         ((`p2 > 0` -> `(access t p2) = v`))) /\ `l2 > u2`))
         [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
          (l1: Z)(m0: Z)(p1: Z)(u1: Z)(_: Variant2 = `2 + u1 - l1`)
          (_0: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
          ((`p1 > 0` -> `(access t p1) = v`)))
          (sig_5 Z Z Z Z unit [l2: Z][m1: Z][p2: Z][u2: Z][result2: unit]
-          (`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+          ((`1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
           ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-          ((`p2 > 0` -> `(access t p2) = v`)) /\ `l2 > u2`));
+          ((`p2 > 0` -> `(access t p2) = v`))) /\ `l2 > u2`));
          l1: Z; m0: Z; p1: Z; u1: Z; Pre6: Variant1 = `2 + u1 - l1`;
          Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
          ((`p1 = 0` -> ((In t `1` N) -> (In t l1 u1)))) /\
@@ -566,9 +510,10 @@ Definition binary_search := (* validation *)
                           (exist_2 [l3: Z][result6: unit]
                           l3 = `m1 + 1` result5 tt Post8) in
                         (exist_4 [l3: Z][p2: Z][u2: Z][result6: unit]
-                        `1 <= l3` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+                        (`1 <= l3` /\ `u2 <= N` /\ (`0 <= p2` /\
+                        `p2 <= N`) /\
                         ((`p2 = 0` -> ((In t `1` N) -> (In t l3 u2)))) /\
-                        ((`p2 > 0` -> `(access t p2) = v`)) /\
+                        ((`p2 > 0` -> `(access t p2) = v`))) /\
                         (Zwf `0` `2 + u2 - l3` `2 + u1 - l1`) l2 p1 u1
                         result5
                         (binary_search_po_4 t Pre7 l0 Post1 u0 Post2 p0 Post3
@@ -601,10 +546,10 @@ Definition binary_search := (* validation *)
                                 (exist_2 [u3: Z][result7: unit]
                                 u3 = `m1 - 1` result6 tt Post7) in
                               (exist_4 [l2: Z][p2: Z][u3: Z][result7: unit]
-                              `1 <= l2` /\ `u3 <= N` /\ (`0 <= p2` /\
+                              (`1 <= l2` /\ `u3 <= N` /\ (`0 <= p2` /\
                               `p2 <= N`) /\
                               ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u3)))) /\
-                              ((`p2 > 0` -> `(access t p2) = v`)) /\
+                              ((`p2 > 0` -> `(access t p2) = v`))) /\
                               (Zwf `0` `2 + u3 - l2` `2 + u1 - l1`) l1 
                               p1 u2 result6
                               (binary_search_po_6 t Pre7 l0 Post1 u0 Post2 p0
@@ -626,63 +571,61 @@ Definition binary_search := (* validation *)
                                   (exist_2 [l3: Z][result8: unit]
                                   l3 = `u1 + 1` result7 tt Post6) in
                                 (exist_3 [l3: Z][p3: Z][result8: unit]
-                                `1 <= l3` /\ `u1 <= N` /\ (`0 <= p3` /\
+                                (`1 <= l3` /\ `u1 <= N` /\ (`0 <= p3` /\
                                 `p3 <= N`) /\
                                 ((`p3 = 0` -> ((In t `1` N) -> (In t l3 u1)))) /\
-                                ((`p3 > 0` -> `(access t p3) = v`)) /\
+                                ((`p3 > 0` -> `(access t p3) = v`))) /\
                                 (Zwf `0` `2 + u1 - l3` `2 + u1 - l1`) 
                                 l2 p2 result7
                                 (binary_search_po_7 t Pre7 l0 Post1 u0 Post2
                                 p0 Post3 Variant1 l1 p1 u1 Pre6 Pre5 Test6 m1
                                 Post4 Pre4 Test4 Test2 p2 Post5 l2 Post6)) in
                               (exist_4 [l3: Z][p3: Z][u2: Z][result7: unit]
-                              `1 <= l3` /\ `u2 <= N` /\ (`0 <= p3` /\
+                              (`1 <= l3` /\ `u2 <= N` /\ (`0 <= p3` /\
                               `p3 <= N`) /\
                               ((`p3 = 0` -> ((In t `1` N) -> (In t l3 u2)))) /\
-                              ((`p3 > 0` -> `(access t p3) = v`)) /\
+                              ((`p3 > 0` -> `(access t p3) = v`))) /\
                               (Zwf `0` `2 + u2 - l3` `2 + u1 - l1`) l2 
                               p2 u1 result6 Post10) end) in
                         (exist_4 [l3: Z][p3: Z][u3: Z][result6: unit]
-                        `1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
+                        (`1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\
+                        `p3 <= N`) /\
                         ((`p3 = 0` -> ((In t `1` N) -> (In t l3 u3)))) /\
-                        ((`p3 > 0` -> `(access t p3) = v`)) /\
+                        ((`p3 > 0` -> `(access t p3) = v`))) /\
                         (Zwf `0` `2 + u3 - l3` `2 + u1 - l1`) l2 p2 u2
                         result5 Post10) end) in
                   (exist_5 [l3: Z][m2: Z][p3: Z][u3: Z][result5: unit]
-                  `1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
+                  (`1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
                   ((`p3 = 0` -> ((In t `1` N) -> (In t l3 u3)))) /\
-                  ((`p3 > 0` -> `(access t p3) = v`)) /\
+                  ((`p3 > 0` -> `(access t p3) = v`))) /\
                   (Zwf `0` `2 + u3 - l3` `2 + u1 - l1`) l2 m1 p2 u2 result4
                   Post10) in
                 ((wf1 `2 + u2 - l2`)
                   (binary_search_po_8 t Pre7 l0 Post1 u0 Post2 p0 Post3
                   Variant1 l1 p1 u1 Pre6 Pre5 Test6 l2 p2 u2 Post10) 
                   l2 m1 p2 u2 (refl_equal ? `2 + u2 - l2`)
-                  (binary_search_po_9 t Pre7 l0 Post1 u0 Post2 p0 Post3
-                  Variant1 l1 p1 u1 Pre6 Pre5 Test6 l2 p2 u2 Post10)) in
+                  (proj1 ? ? Post10)) in
               (exist_5 [l3: Z][m2: Z][p3: Z][u3: Z][result4: unit]
-              `1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
+              (`1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
               ((`p3 = 0` -> ((In t `1` N) -> (In t l3 u3)))) /\
-              ((`p3 > 0` -> `(access t p3) = v`)) /\ `l3 > u3` l2 m1 
+              ((`p3 > 0` -> `(access t p3) = v`))) /\ `l3 > u3` l2 m1 
               p2 u2 result3 Post9)
           | (right Test1) =>
               let (l2, m1, p2, u2, result3, Post9) = (exist_5 [l2: Z][m1: Z]
-                [p2: Z][u2: Z][result3: unit]`1 <= l2` /\ `u2 <= N` /\
+                [p2: Z][u2: Z][result3: unit](`1 <= l2` /\ `u2 <= N` /\
                 (`0 <= p2` /\ `p2 <= N`) /\
                 ((`p2 = 0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-                ((`p2 > 0` -> `(access t p2) = v`)) /\ `l2 > u2` l1 m0 
-                p1 u1 tt
-                (binary_search_po_10 t Pre7 l0 Post1 u0 Post2 p0 Post3
-                Variant1 l1 p1 u1 Pre6 Pre5 Test1)) in
+                ((`p2 > 0` -> `(access t p2) = v`))) /\ `l2 > u2` l1 
+                m0 p1 u1 tt (conj ? ? Pre5 Test1)) in
               (exist_5 [l3: Z][m2: Z][p3: Z][u3: Z][result4: unit]
-              `1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
+              (`1 <= l3` /\ `u3 <= N` /\ (`0 <= p3` /\ `p3 <= N`) /\
               ((`p3 = 0` -> ((In t `1` N) -> (In t l3 u3)))) /\
-              ((`p3 > 0` -> `(access t p3) = v`)) /\ `l3 > u3` l2 m1 
+              ((`p3 > 0` -> `(access t p3) = v`))) /\ `l3 > u3` l2 m1 
               p2 u2 result3 Post9) end) `2 + u0 - l0` l0 m p0 u0
         (refl_equal ? `2 + u0 - l0`)
-        (binary_search_po_11 t Pre7 l0 Post1 u0 Post2 p0 Post3)) in
-    (exist_5 [l2: Z][m1: Z][p2: Z][u2: Z][result3: unit]`1 <= p2` /\
-    `p2 <= N` /\ `(access t p2) = v` \/ `p2 = 0` /\ ~(In t `1` N) l1 
+        (binary_search_po_9 t Pre7 l0 Post1 u0 Post2 p0 Post3)) in
+    (exist_5 [l2: Z][m1: Z][p2: Z][u2: Z][result3: unit](`1 <= p2` /\
+    `p2 <= N`) /\ `(access t p2) = v` \/ `p2 = 0` /\ ~(In t `1` N) l1 
     m0 p1 u1 result2
-    (binary_search_po_12 t Pre7 l0 Post1 u0 Post2 p0 Post3 l1 p1 u1 Post9)).
+    (binary_search_po_10 t Pre7 l0 Post1 u0 Post2 p0 Post3 l1 p1 u1 Post9)).
 

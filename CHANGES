@@ -1,4 +1,9 @@
 
+  o more obligations automatically discharged (A and B |- A ; A,B |- A and B)
+  o fixed associativity in Coq pretty-print for /\ and \/ (right)
+    right associativity adopted in Why
+  o fixed typing and Coq output for primitive float_of_int
+
 version 0.6, July 19th, 2002
 ============================
   o examples: find

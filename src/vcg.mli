@@ -17,6 +17,8 @@ type proof =
   | Lemma of string * Ident.t list
   | Reflexivity of term
   | Assumption of Ident.t
+  | Proj1 of Ident.t
+  | Conjunction of Ident.t * Ident.t
 
 type validation = proof cc_term
 

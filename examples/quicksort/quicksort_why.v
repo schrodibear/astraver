@@ -27,7 +27,7 @@ Lemma quick_rec_po_2 :
   (Pre8: Variant1 = `1 + r0 - l0`)
   (Pre7: `0 <= l0` /\ `r0 < N`)
   (Test2: `l0 < r0`)
-  `0 <= l0` /\ `l0 < r0` /\ `r0 < N`.
+  (`0 <= l0` /\ `l0 < r0`) /\ `r0 < N`.
 Proof.
 Intros; Omega.
 Save.
@@ -45,7 +45,7 @@ Lemma quick_rec_po_3 :
   (Test2: `l0 < r0`)
   (t1: (array N Z))
   (p: Z)
-  (Post5: `l0 <= p` /\ `p <= r0` /\ (partition_p t1 l0 r0 p) /\
+  (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
   `0 <= l0` /\ `p - 1 < N`.
 Proof.
@@ -65,7 +65,7 @@ Lemma quick_rec_po_4 :
   (Test2: `l0 < r0`)
   (t1: (array N Z))
   (p: Z)
-  (Post5: `l0 <= p` /\ `p <= r0` /\ (partition_p t1 l0 r0 p) /\
+  (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
   (Pre4: `0 <= l0` /\ `p - 1 < N`)
   (Zwf `0` `1 + (p - 1) - l0` Variant1).
@@ -87,7 +87,7 @@ Lemma quick_rec_po_5 :
   (Test2: `l0 < r0`)
   (t1: (array N Z))
   (p: Z)
-  (Post5: `l0 <= p` /\ `p <= r0` /\ (partition_p t1 l0 r0 p) /\
+  (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
   (t2: (array N Z))
   (Post8: (sorted_array t2 l0 `p - 1`) /\ (sub_permut l0 `p - 1` t2 t1))
@@ -109,7 +109,7 @@ Lemma quick_rec_po_6 :
   (Test2: `l0 < r0`)
   (t1: (array N Z))
   (p: Z)
-  (Post5: `l0 <= p` /\ `p <= r0` /\ (partition_p t1 l0 r0 p) /\
+  (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
   (t2: (array N Z))
   (Post8: (sorted_array t2 l0 `p - 1`) /\ (sub_permut l0 `p - 1` t2 t1))
@@ -132,7 +132,7 @@ Lemma quick_rec_po_7 :
   (Test2: `l0 < r0`)
   (t1: (array N Z))
   (p: Z)
-  (Post5: `l0 <= p` /\ `p <= r0` /\ (partition_p t1 l0 r0 p) /\
+  (Post5: (`l0 <= p` /\ `p <= r0`) /\ (partition_p t1 l0 r0 p) /\
           (sub_permut l0 r0 t1 t0))
   (t2: (array N Z))
   (Post8: (sorted_array t2 l0 `p - 1`) /\ (sub_permut l0 `p - 1` t2 t1))
@@ -187,8 +187,8 @@ Definition quick_rec := (* validation *)
                 let Pre2 =
                   (quick_rec_po_2 l r Pre9 Variant1 l0 r0 Pre8 Pre7 Test2) in
                 let (t1, result2, Post6) = (partition l0 r0 t0 Pre2) in
-                (exist_2 [t2: (array N Z)][result3: Z]`l0 <= result3` /\
-                `result3 <= r0` /\ (partition_p t2 l0 r0 result3) /\
+                (exist_2 [t2: (array N Z)][result3: Z](`l0 <= result3` /\
+                `result3 <= r0`) /\ (partition_p t2 l0 r0 result3) /\
                 (sub_permut l0 r0 t2 t0) t1 result2 Post6) in
               let (t2, result0, Post7) =
                 let (t2, result0, Post8) =

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.51 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.52 2002-07-22 14:37:06 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -156,11 +156,11 @@ EXTEND
     | a = lexpr0 -> a ] ]
   ; 
   lexpr0:
-  [ [ a = lexpr0; "or"; b = lexpr1 -> infix_pp loc a PPor b
+  [ [ a = lexpr1; "or"; b = lexpr0 -> infix_pp loc a PPor b
     | a = lexpr1 -> a ] ]
   ; 
   lexpr1:
-  [ [ a = lexpr1; "and"; b = lexpr2 -> infix_pp loc a PPand b
+  [ [ a = lexpr2; "and"; b = lexpr1 -> infix_pp loc a PPand b
     | a = lexpr2 -> a ] ]
   ;
   lexpr2:
