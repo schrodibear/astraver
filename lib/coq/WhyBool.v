@@ -1,10 +1,9 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: WhyBool.v,v 1.4 2002-06-21 14:22:32 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.5 2002-10-15 12:18:50 filliatr Exp $ *)
 
 Require ZArith.
 Require Sumbool.
-Require Export Bool_nat.
 
 Definition annot_bool :
   (b:bool) { b':bool | if b' then b=true else b=false }.

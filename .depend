@@ -139,12 +139,12 @@ src/util.cmi: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/cc.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
-lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo
+lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyCoqCompat.vo lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo lib/coq/WhyExn.vo
 lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
-lib/coq/WhyBool.vo: lib/coq/WhyBool.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Bool_nat.vo
+lib/coq/WhyBool.vo: lib/coq/WhyBool.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo
 lib/coq/WhyCoq73.vo: lib/coq/WhyCoq73.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith_base.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Wf_nat.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Compare_dec.vo /users/homepc8-123/jcf/coq/V7/theories/Arith/Peano_dec.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo
-lib/coq/WhyCoqCompat.vo: lib/coq/WhyCoqCompat.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
-lib/coq/WhyCoqDev.vo: lib/coq/WhyCoqDev.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
+lib/coq/WhyCoqCompat.vo: lib/coq/WhyCoqCompat.v /users/homepc8-123/jcf/coq/V7/theories/Arith/Bool_nat.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
+lib/coq/WhyCoqDev.vo: lib/coq/WhyCoqDev.v /users/homepc8-123/jcf/coq/V7/theories/Arith/Bool_nat.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
 lib/coq/WhyExn.vo: lib/coq/WhyExn.v
 lib/coq/WhyFloat.vo: lib/coq/WhyFloat.v lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/Reals/Reals.vo
 lib/coq/WhyInt.vo: lib/coq/WhyInt.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith_dec.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zdiv.vo
