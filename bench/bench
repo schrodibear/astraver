@@ -18,10 +18,16 @@ pvstc () {
 provers () {
     file=$1
     base=$2
+    dir=`dirname $1`
     # running Coq
     if ! $coqc "$base"_why.v > /dev/null 2>&1; then
 	echo "coq FAILED"
 	$coqc "$base"_why.v
+	exit 1
+    fi
+    if ! $coqc -I $dir "$base"_valid.v > /dev/null 2>&1; then
+	echo "coq validation FAILED"
+	$coqc "$base"_valid.v
 	exit 1
     fi
     echo -n "coq ok... "
@@ -123,16 +129,4 @@ echo ""
 # 4. C benchmark
 echo "=== Checking good C files ==="
 good_c good-c
-
-exit 0
-
-# Showing the results
-for f in good/*.mlw; do
-    coq=good/`basename $f .mlw`_why.v
-    echo "==== "$coq" ===="
-    cat $coq
-    echo "==== "$f" ===="
-    cat $f
-    read foo
-done
 

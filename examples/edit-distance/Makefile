@@ -1,5 +1,5 @@
 
-all: words.vo distance_why.vo
+all: words.vo distance_valid.vo
 
 include ../Makefile.common
 

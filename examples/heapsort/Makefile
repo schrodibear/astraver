@@ -1,7 +1,7 @@
 
 ML=swap.mlw downheap.mlw heapsort.mlw
-WH=$(ML:.mlw=_why.v)
-VO=$(ML:.mlw=_why.vo)
+WH=$(ML:.mlw=_valid.v)
+VO=$(ML:.mlw=_valid.vo)
 
 all: heap.vo Inftree.vo $(VO)
 

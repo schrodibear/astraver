@@ -1,4 +1,4 @@
 
-all: zaux.vo bresenham_why.vo
+all: zaux.vo bresenham_valid.vo
 
 include ../Makefile.common

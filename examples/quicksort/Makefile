@@ -1,8 +1,8 @@
 
-all: Partition.vo Quicksort.vo partition_why.vo quicksort_why.vo
+all: Partition.vo Quicksort.vo partition_valid.vo quicksort_valid.vo
 
 include ../Makefile.common
 
-partition_why.v quicksort_why.v: partition.mlw quicksort.mlw $(WHY)
+partition_valid.v quicksort_valid.v: partition.mlw quicksort.mlw $(WHY)
 	$(WHY) $(WHYOPTIONS) partition.mlw quicksort.mlw
 

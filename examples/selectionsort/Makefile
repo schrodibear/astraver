@@ -1,5 +1,5 @@
 
-all: selection_why.vo
+all: selection_valid.vo
 
 include ../Makefile.common
 

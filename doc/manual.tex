@@ -705,7 +705,9 @@ Command line options are the following:
   \item[\texttt{--valid}, \texttt{--no-valid}]: ~\par
     Set/Unset the functional validation. Only meaningful with the
     \coq\ prover. When set, \why\ outputs a functional interpretation
-    of each program. Default is no validation. 
+    of each program (in a file \textit{f}\texttt{\_valid.v} for each
+    input file \textit{f}\texttt{.}\textit{xxx}). Default is
+    no validation.  
   \item[\texttt{--coq-tactic}] \textit{tactic} : ~\par
     Give a \coq\ tactic to be inserted as proof for new obligations.
   \item[\texttt{--coq-preamble}] \textit{text} : ~\par

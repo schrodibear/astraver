@@ -25,3 +25,4 @@ hol:
 test:
 	../bin/why.opt -d -V --valid --coq-tactic Magic test.mlw
 	coqc -R ../lib/coq Coq.why test_why.v
+	coqc -R ../lib/coq Coq.why test_valid.v
