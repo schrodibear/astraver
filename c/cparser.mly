@@ -254,7 +254,7 @@
   (* old style function prototype: f(x,y,z) t1 x; t2 y; ...
      some parameters may be omitted *)
   let old_style_params pl decls =
-    let pids = List.map (fun (_,_,x) -> x) pl in
+    let pids = List.map (fun (_,x) -> x) pl in
     let h = Hashtbl.create 17 in
     (* we first check that no parameter is initialized or occurs twice *)
     List.iter
@@ -265,30 +265,22 @@
 	     if Hashtbl.mem h x then error ("duplicate declaration for " ^ x);
 	     Hashtbl.add h x ty
 	 | Cdecl (_,x,_) -> error ("parameter " ^ x ^ " is initialized")
-	 | _ -> ()) decls;
-    (* look for the type for [x] in decls; defaults to [int] *)
-    let type_for x =
-      try Hashtbl.find h x with Not_found -> interp_type false [] Dsimple
-    in
+	 | _ -> ()) 
+      decls;
     (* do it for all parameters *)
-    List.map
-      (function 
-	 | ([], Dsimple, x) -> 
-	     (type_for x, x)
-	 | _ -> 
-	     error "parm types given both in parmlist and separately")
-      pl
+    List.map (fun (tx, x) -> (try Hashtbl.find h x with Not_found -> tx), x) pl
 
-  let function_declaration specs d decls = match d with
-    | id, Dfunction (d, pl) ->
-	let ty = interp_type false specs d in
-	let pl = 
-	  if decls = [] then interp_params pl else old_style_params pl decls 
-	in
-	List.iter (fun (_,x) -> Ctypes.remove x) pl;
-	ty, id, pl
-    | _ -> 
-	raise Parsing.Parse_error
+  let function_declaration specs (id,d) decls = 
+    let ty = interp_type false specs d in
+    match ty.ctype_node with
+      | CTfun (pl, tyf) ->
+	  let pl = 
+	    if decls = [] then pl else old_style_params pl decls 
+	  in
+	  List.iter (fun (_,x) -> Ctypes.remove x) pl;
+	  tyf, id, pl
+      | _ -> 
+	  raise Parsing.Parse_error
 
 %}
 
@@ -923,6 +915,7 @@ attrib:
 | identifier {}
 | identifier LPAR RPAR {}
 | identifier LPAR argument_expression_list RPAR {}
+| CONST {}
 ;
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.13 2004-02-10 10:05:48 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.14 2004-02-20 14:36:50 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -45,6 +45,7 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | [' ' '\t' '\012' '\r' '\n']+        
                             { token lexbuf }
+  | "//" [^ '\n']* '\n'     { token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "/*@"                   { annot_start_pos := lexeme_start lexbuf + 4;
 			      Buffer.clear buf; annot lexbuf }

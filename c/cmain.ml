@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.11 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.12 2004-02-20 14:36:50 filliatr Exp $ i*)
 
-(*i $Id: cmain.ml,v 1.11 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.12 2004-02-20 14:36:50 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -62,11 +62,13 @@ let file_copy src dest =
   close_in cin; close_out cout
 
 let main () = 
-  let theory = "caduceus.why" in
-  let theorysrc = Filename.concat Coptions.libdir theory in
-  if not (Sys.file_exists theory) or
-    Digest.file theory <> Digest.file theorysrc
-  then file_copy theorysrc theory;
+  if not (parse_only || type_only) then begin
+    let theory = "caduceus.why" in
+    let theorysrc = Filename.concat Coptions.libdir theory in
+    if not (Sys.file_exists theory) ||
+      Digest.file theory <> Digest.file theorysrc
+    then file_copy theorysrc theory
+  end;
   Queue.iter (fun f -> try interp_file f with Exit -> ()) files
 
 let rec explain_exception fmt = function
