@@ -1,4 +1,7 @@
 
+  o improved automatic proof (thus less obligations)
+  o validation in a separate file f_valid.v
+
 version 1.02, February 7th, 2003
 ================================
   o PVS: fixed integer division and modulo, fixed output

@@ -127,14 +127,16 @@ let loop_variant_1 hyps concl =
 
 (* tautologies in linear first-order logic *)
 
-let lookup_instance p n ctx =
-  let update id' = function 
-    | None -> Some id' 
-    | Some id as u -> if id == id' then u else raise Exit
-  in
+(* lookup for an instance of p(v1...vn) where the vi are bound variables *)
+let lookup_instance p bvars ctx =
+  let u0 = List.fold_right (fun v -> Idmap.add v None) bvars Idmap.empty in
   let rec unif_term u = function
-    | Tvar id, Tvar id' when id == n -> update id' u
     | Tvar id, Tvar id' when id == id' -> u
+    | Tvar id, Tvar id' -> 
+	(try (match Idmap.find id u with
+		| None -> Idmap.add id (Some id') u
+		| Some id'' -> if id' == id'' then u else raise Exit)
+	 with Not_found -> raise Exit)
     | Tconst c, Tconst c' -> if c = c' then u else raise Exit
     | Tderef _, _ | _, Tderef _ -> assert false
     | Tapp (id, tl), Tapp (id', tl') when id == id' -> unif_terms u (tl, tl')
@@ -154,20 +156,43 @@ let lookup_instance p n ctx =
     | Pif (a, b, c), Pif (a', b', c') ->
 	unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
     | Pnot a, Pnot a' -> unif_pred u (a, a')
-    (* TODO: alpha-conversion *)
-    | Forall (_, n, _, p), Forall (_, n', _, p') when p = p' -> u
-    | Exists (_, n, _, p), Exists (_, n', _, p') when p = p' -> u
+    | Forall (_, n, _, p), Forall (_, n', _, p') 
+    | Exists (_, n, _, p), Exists (_, n', _, p') ->
+	let p'n = subst_in_predicate (subst_onev n' n) p' in 
+	unif_pred u (p, p'n)
     | _ -> raise Exit
   in
   let rec lookup = function
-    | Svar _ -> raise Exit
-    | Spred (id, p') -> match unif_pred None (p, p') with
-	| None -> assert false (* unif mais qui ne donne pas de variable *)
-	| Some x -> x, id
+    | Svar _ -> 
+	raise Exit
+    | Spred (id, p') -> 
+	let u = unif_pred u0 (p, p') in
+	List.map (fun x -> match Idmap.find x u with
+		    | None -> raise Exit (* TODO: on pourrait quand meme *)
+		    | Some x' -> x') bvars, 
+	id
   in
   list_first lookup ctx
 
-let rec linear ctx concl = 
+let rec intros ctx = function
+  | Forall (id, n, t, p) ->
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      intros (Svar (id', TTpure t) :: ctx) p'
+  | Pimplies (a, b) -> 
+      let h = fresh_hyp () in intros (Spred (h, a) :: ctx) b
+  | c -> 
+      ctx, c
+
+(* [qe_forall (forall x1...forall xn. p => q) = [x1;...;xn],p,q] *)
+let rec qe_forall = function
+  | Pimplies (p, q) -> [], p, q
+  | Forall (_, n, _, p) -> let vl, p, q = qe_forall p in n::vl, p, q
+  | _ -> raise Exit
+  
+(* ctx = xk:tk, ..., x1:t1 *)
+let linear ctx concl = 
+  (* let ctx,concl = intros ctx concl in FAUX *)
   let rec search = function
     | [] -> 
 	raise Exit
@@ -184,16 +209,29 @@ let rec linear ctx concl =
 			     [h1, CC_pred_binder a; h2, CC_pred_binder b],
 			     CC_var id,
 			     CC_hole (search ctx')))
-    | Spred (id, Forall (_, n, _, Pimplies (p, q))) :: ctx -> 
+    | Spred (id, (Forall _ as a)) :: ctx -> 
 	begin try
-	  let x,hpx = lookup_instance p n ctx in
-	  let qx = subst_in_predicate (subst_onev n x) q in
+	  let bvars,p,q = qe_forall a in
+	  let vars,hpx = lookup_instance p bvars ctx in
+	  let qx = subst_in_predicate (subst_manyv bvars vars) q in
 	  let h1 = fresh_hyp () in
 	  let ctx' = Spred (h1, qx) :: ctx in
 	  ProofTerm 
 	    (CC_letin (false, [h1, CC_pred_binder qx],
-		       CC_app (CC_app (CC_var id, CC_var x), CC_var hpx),
+		       CC_app (cc_applist (CC_var id) (List.map cc_var vars), 
+			       CC_var hpx),
 		       CC_hole (search ctx')))
+	with Exit ->
+	  search ctx
+	end
+    | Spred (id, Pimplies (p, q)) :: ctx ->
+	begin try
+	  let hp = lookup_hyp p ctx in
+	  let hq = fresh_hyp () in
+	  let ctx' = Spred (hq, q) :: ctx in
+	  ProofTerm
+	    (CC_letin (false, [hq, CC_pred_binder q],
+		       CC_app (CC_var id, CC_var hp), CC_hole (search ctx')))
 	with Exit ->
 	  search ctx
 	end

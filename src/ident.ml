@@ -14,16 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.42 2003-01-16 16:05:38 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.43 2003-02-12 15:57:21 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
-let create = 
+let hashcons = 
   let h = Hashtbl.create 97 in
-  let hashcons id = 
-    try Hashtbl.find h id with Not_found -> Hashtbl.add h id id; id 
-  in
-  fun s -> hashcons { stamp = 0; name = s; label = None }
+  fun id -> try Hashtbl.find h id with Not_found -> Hashtbl.add h id id; id 
+
+let create s = hashcons { stamp = 0; name = s; label = None }
 
 let string s = s.name
 
@@ -76,19 +75,19 @@ let print_name fmt = function
 
 (*s Labelled identifiers. *)
 
-let at_id id d = { id with label = Some d }
+let at_id id d = hashcons { id with label = Some d }
 
 let is_at id = id.label <> None
 
 let un_at = function
-  | { label = Some d } as id -> { id with label = None }, d
+  | { label = Some d } as id -> hashcons { id with label = None }, d
   | _ -> invalid_arg "Ident.un_at"
 
 (*s Bound variables. *)
 
 let bound =
   let n = ref 0 in
-  fun s -> incr n; { s with stamp = !n }
+  fun s -> incr n; hashcons { s with stamp = !n }
 
 (*s Exceptions names and constructors *)
 

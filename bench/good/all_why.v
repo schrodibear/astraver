@@ -109,57 +109,12 @@ Save.
 
 
 
-
 (* Why obligation from file "good/all.mlw", characters 955-1002 *)
 Lemma p9_po_1 : 
   ((x:Z) ((y:Z) (`x = y` -> `x = y`))).
 Proof.
 Auto.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 (* Why obligation from file "good/all.mlw", characters 1198-1201 *)
 Lemma ar6_po_1 : 

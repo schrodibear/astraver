@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.55 2003-02-11 15:31:22 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.56 2003-02-12 15:57:21 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -119,6 +119,7 @@ val tsubst_in_predicate : substitution -> predicate -> predicate
 
 val subst_one : Ident.t -> term -> substitution
 val subst_onev : Ident.t -> Ident.t -> var_substitution
+val subst_manyv : Ident.t list -> Ident.t list -> var_substitution
 
 val type_v_subst : var_substitution -> type_v -> type_v
 val type_c_subst : var_substitution -> type_c -> type_c
@@ -170,6 +171,7 @@ val simplify : predicate -> predicate
 
 (*s functions over CC terms *)
 
+val cc_var : Ident.t -> 'a cc_term
 val cc_applist : 'a cc_term -> 'a cc_term list -> 'a cc_term
 val cc_lam : cc_binder list -> 'a cc_term -> 'a cc_term
 

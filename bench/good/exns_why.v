@@ -100,31 +100,3 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1563-1586 *)
-Lemma p14_po_2 : 
-  (x: Z)
-  (Post10: ((`x = 2` -> `x = 2`)) /\
-           ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
-             ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))))
-  (Test3: `x <> 2`)
-  ((`x = 3` -> `x = 3`)) /\ ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)).
-Proof.
-Intuition.
-Save.
-
-(* Why obligation from file "good/exns.mlw", characters 1592-1615 *)
-Lemma p14_po_3 : 
-  (x: Z)
-  (Post10: ((`x = 2` -> `x = 2`)) /\
-           ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
-             ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))))
-  (Post18: ((`x = 3` -> `x = 3`)) /\
-           ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))
-  (Test5: `x <> 3`)
-  `x <> 1` /\ `x <> 2` /\ `x <> 3`.
-Proof.
-Intuition.
-Save.
-
-
-

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.69 2003-02-11 15:31:22 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.70 2003-02-12 15:57:21 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -274,6 +274,11 @@ let subst_one x t = Idmap.add x t Idmap.empty
 
 let subst_onev = subst_one
 
+let rec subst_manyv vl1 vl2 = match vl1, vl2 with
+  | [], [] -> Idmap.empty
+  | x1 :: l1, x2 :: l2 -> Idmap.add x1 x2 (subst_manyv l1 l2)
+  | _ -> invalid_arg "subst_manyv"
+  
 let rec unref_term = function
   | Tderef id -> Tvar id
   | Tapp (id, tl) -> Tapp (id, List.map unref_term tl)
@@ -438,6 +443,8 @@ let rec simplify = function
   | p -> map_predicate simplify p
 
 (*s functions over CC terms *)
+
+let cc_var x = CC_var x
 
 let rec cc_applist f l = match (f, l) with
   | f, [] -> f
