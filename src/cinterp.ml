@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.17 2002-12-02 13:42:55 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.18 2002-12-02 15:17:20 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -100,6 +100,8 @@ let loc_of_statement = function
   | CSfor (l, _, _, _, _, _) -> l
   | CSblock (l, _) -> l
   | CSreturn (l, _) -> l
+  | CSbreak l -> l
+  | CScontinue l -> l
 
 
 (* the environment gives the C type, together with a boolean indicating
@@ -139,7 +141,21 @@ let ml_letref l x e1 e2 = mk_expr l (Sletref (x, e1, e2))
 let ml_app l f x = mk_expr l (Sapp (f, Sterm x))
 
 let return_exception = ref (Ident.create "Return")
-let ml_raise_return l e v = mk_expr l (Sraise (!return_exception, e, v))
+let break_exception = Ident.create "Break"
+let continue_exception = Ident.create "Continue"
+
+let ml_raise l x e v = 
+  let m = mk_expr l (Sraise (x, e, v)) in
+  let pfalse = Misc.anonymous { pp_loc = l; pp_desc = PPfalse } in
+  { m with post = Some (pfalse, []) }
+let ml_raise_return l e v = ml_raise l !return_exception e v
+let ml_raise_break l v = ml_raise l break_exception None v
+let ml_raise_continue l v = ml_raise l continue_exception None v
+
+let ml_try_with_Ex l e1 exn k2 =
+  let tmp = fresh_var () in
+  mk_expr l (Stry (e1, [(exn, Some tmp), k2 tmp]))
+let ml_try_with_E l e1 exn e2 = mk_expr l (Stry (e1, [(exn, None), e2]))
 
 let c_true l = ml_const l (ConstInt 1)
 let c_false l = ml_const l (ConstInt 0)
@@ -440,6 +456,22 @@ let append_to_block l s1 s2 = match s1, s2 with
   | CSblock (_, (d, bl)), Some s2 -> CSblock (l, (d, bl @ [s2]))
   | _, Some s2 -> CSblock (l, ([], [s1; s2]))
 
+(*s [break] and [continue] are translated using exceptions.
+    The following helper functions are used to catch them inside or around
+    loops. *)
+
+let break b l e =
+  if b then
+    ml_try_with_E l e break_exception (ml_const l ConstUnit)
+  else 
+    e
+
+let continue b l e =
+  if b then
+    ml_try_with_E l e continue_exception (ml_const l ConstUnit)
+  else
+    e
+
 (*s [interp_statement] interprets a C statement.
     [et] is the expected type for the returned value (if any).
     [abrupt] indicates if the ML program must return abruptly (with a 
@@ -476,8 +508,7 @@ let rec interp_statement cenv et abrupt = function
       assert (not (st.break || st.continue));
       mk_seq l m1
 	(mk_expr l (Swhile (interp_boolean cenv s2, Some i, v, mbl))),
-      { st with always_return = false }
-	
+      { mt_status with abrupt_return = st.abrupt_return }
   | CSdowhile (l, s, an, e) ->
       (* do s while (e) = s ; while (e) s *)
       interp_statement cenv et abrupt
@@ -485,8 +516,10 @@ let rec interp_statement cenv et abrupt = function
   | CSwhile (l, e, an, s) ->
       let (i,v) = interp_loop_annot an in
       let m, st = interp_statement cenv et true s in
-      mk_expr l (Swhile (interp_boolean cenv e, Some i, v, m)),
-      { st with always_return = false }
+      let m = continue st.continue l m in
+      let w = mk_expr l (Swhile (interp_boolean cenv e, Some i, v, m)) in
+      let w = break st.break l w in
+      w, { mt_status with abrupt_return = st.abrupt_return }
   | CScond (l, e1, s2, s3) ->
       let m2, st2 = interp_statement cenv et abrupt s2 in
       let m3, st3 = interp_statement cenv et abrupt s3 in
@@ -503,6 +536,13 @@ let rec interp_statement cenv et abrupt = function
 	{ mt_status with always_return = true; abrupt_return = true }
       else
 	m, { mt_status with always_return = true }
+  | CSbreak l ->
+      ml_raise_break l (Some (PVpure PTunit)), 
+      { mt_status with break = true }
+  | CScontinue l -> 
+      ml_raise_continue l (Some (PVpure PTunit)), 
+      { mt_status with continue = true }
+		  
 
 (*s C blocks *)
 
@@ -542,9 +582,16 @@ and interp_block l cenv et abrupt (d,b) =
 (*s C functions *)
 
 let interp_annotated_block cenv et (l, p, bl, q) =
-  let mlbl, st = interp_block l cenv et false bl in
-  (* assert (not (st.abrupt_return || st.break || st.continue)); *)
-  { pdesc = mlbl.pdesc; pre = interp_c_pre p; post = interp_c_post q; loc=l },
+  let bl, st = interp_block l cenv et false bl in
+  if st.break || st.continue then
+    raise_located l (AnyMessage "unbound break or continue");
+  let bl = 
+    if st.abrupt_return then
+      ml_try_with_Ex l bl !return_exception (ml_var l)
+    else 
+      bl
+  in
+  { pdesc = bl.pdesc; pre = interp_c_pre p; post = interp_c_post q; loc=l },
   st.abrupt_return
 
 let interp_binder (pt, id) = (id, BindType (PVpure pt))
@@ -584,9 +631,12 @@ let interp_decl cenv = function
       (if ar then (Exception (l, !return_exception, Some v)) :: d else d),
       Idmap.add id (interp_fun_type bl v) cenv
 
-let interp = 
+let interp l = 
   let rec interp_list cenv = function
     | [] -> []
     | d :: l -> let d',cenv' = interp_decl cenv d in d' @ interp_list cenv' l
   in
-  interp_list Idmap.empty
+  (Exception (Loc.dummy, break_exception, None)) ::
+  (Exception (Loc.dummy, continue_exception, None)) ::
+  interp_list Idmap.empty l
+

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.64 2002-12-02 13:42:55 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.65 2002-12-02 15:17:20 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -566,11 +566,20 @@ let rec print_ptree fmt p = match p.pdesc with
       fprintf fmt "<Sletin>"
   | Srec _ ->
       fprintf fmt "<Srec>"
-  | Sraise _ -> 
-      fprintf fmt "<Sraise>"
-  | Stry _ ->
-      fprintf fmt "<Stry>"
+  | Sraise (x, None, _) -> 
+      fprintf fmt "raise %a" Ident.print x
+  | Sraise (x, Some e, _) -> 
+      fprintf fmt "raise (%a %a)" Ident.print x print_ptree e
+  | Stry (e, hl) ->
+      fprintf fmt "@[<v>try %a with@\n  @[%a@]@\nend@]" 
+	print_ptree e (print_list newline print_phandler) hl
   | Sconst c -> print_term fmt (Tconst c)
+
+and print_phandler fmt = function
+  | (x, None), e -> 
+      fprintf fmt "| %a => %a" Ident.print x print_ptree e
+  | (x, Some y), e -> 
+      fprintf fmt "| %a %a => %a" Ident.print x Ident.print y print_ptree e
 
 and print_arg fmt = function
   | Sterm p -> print_ptree fmt p

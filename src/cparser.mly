@@ -520,8 +520,8 @@ iteration_statement
 
 jump_statement
         : GOTO IDENTIFIER SEMICOLON { uns () }
-        | CONTINUE SEMICOLON { uns () }
-        | BREAK SEMICOLON { uns () }
+        | CONTINUE SEMICOLON { CScontinue (loc ()) }
+        | BREAK SEMICOLON { CSbreak (loc ()) }
         | RETURN SEMICOLON { CSreturn (loc (), None) }
         | RETURN expression SEMICOLON { CSreturn (loc (), Some $2) }
         ;
