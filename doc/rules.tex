@@ -33,6 +33,8 @@
       &   | & \fun{x}{\tau}{e} \\
       &   | & \app{e}{e} \\
       &   | & \rec{x}{\tau}{v}{e} \\
+      &   | & \raisex{x}{e} \\
+      &   | & \try{e}{x~x \rightarrow e ~|~ \dots ~|~ x~x \rightarrow e} \\
       &   | & \coerce{e}{\kappa} \\[1em]
     E & ::= & x \\
       &   | & \mathit{constant} \\
@@ -208,6 +210,30 @@
 \end{array}
 \end{displaymath}
 
+\begin{displaymath}
+  \begin{array}{c}
+
+    \irule{x:\exn{\tau_1}\in\Gamma 
+           \qquad
+           \typage \Gamma e {(\tau_1, (\rho,\omega,\chi))}}
+          {\typage \Gamma {(\raisex{x}{e} : \tau)} 
+                          {(\tau,(\rho,\omega,\{x\}\cup\chi))}}
+   \iname{RAISE}
+
+  \\[1.5em]
+
+    \irule{x_i:\exn{\tau_i}\in\Gamma 
+           \qquad
+           \typage \Gamma e {(\tau, \epsilon)}
+           \qquad
+           \typage {\Gamma,v_i:\tau_i} {e_i} {(\tau, \epsilon_i)}}
+          {\typage \Gamma {\try{e}{x_i~v_i\rightarrow e_i}} 
+                   {(\tau, \epsilon\backslash\{x_i\}\cup\bigcup\epsilon_i)}}
+   \iname{TRY}
+
+  \end{array}
+\end{displaymath}
+
 \section{Weakest preconditions}
 
 \begin{displaymath}
@@ -235,7 +261,12 @@
     \wpre{\ite{e_1}{e_2}{e_3}}{q} & =
        \wpre{e_1}{\ite{\result}{\wpre{e_2}{q}}{\wpre{e_3}{q}}} \\
     \wpre{\letin{x}{e_1}{e_2}}{q} & =
-       \wpre{e_1}{\wpre{e_2}{q}[x\leftarrow\result]} \\
+       \wpre{e_1}{\wpre{e_2}{q}[x\leftarrow\result]} \\[1em]
+
+    \wprx{\raisex{x}{e}}{q}{r} & = 
+       \wprx{e}{r}{r} \\
+    \wprx{\try{e}{x_i~v_i\rightarrow e_i}}{q}{r} & = 
+       \wprx{e}{q}{\wprx{e_i}{q}{r}[v_i\leftarrow\result]} \\
   \end{array}
 \end{displaymath}
 

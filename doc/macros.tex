@@ -29,6 +29,9 @@
 \newcommand{\app}[2]{\ensuremath{(#1~#2)}}
 \newcommand{\rec}[4]{\ensuremath{\kw{rec}~#1:#2~\{\kw{variant}~#3\}=#4}}
 \newcommand{\letin}[3]{\ensuremath{\kw{let}~#1=#2~\kw{in}~#3}}
+\newcommand{\raisex}[2]{\ensuremath{\kw{raise}~(#1~#2)}}
+\newcommand{\exn}[1]{\ensuremath{\kw{Exn}~#1}}
+\newcommand{\try}[2]{\ensuremath{\kw{try}~#1~\kw{with}~#2~\kw{end}}}
 \newcommand{\coerce}[2]{\ensuremath{(#1:#2)}}
 
 \newcommand{\statement}{\textit{statement}}
@@ -50,6 +53,7 @@
 \newcommand{\variant}[1]{#1~\kw{variant}}
 
 \newcommand{\wpre}[2]{\ensuremath{\mathit{wp}(#1,#2)}}
+\newcommand{\wprx}[3]{\ensuremath{\mathit{wp}(#1,#2,#3)}}
 
 \newcommand{\barre}[1]{\ensuremath{\overline{#1}}}
 
