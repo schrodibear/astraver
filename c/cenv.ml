@@ -172,7 +172,7 @@ let rec next_name ?local_names n i =
 
 let unique_name ?local_names n = try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
-(* variables and functions *)
+(* global variables and functions *)
 
 let (sym_t : (string, env_info) Hashtbl.t) = Hashtbl.create 97
 
