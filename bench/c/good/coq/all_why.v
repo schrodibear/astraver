@@ -202,35 +202,29 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 870-916 *)
+(* Why obligation from file "why/all.why", characters 898-899 *)
 Lemma f7a_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
-  forall (caduceus_1: Z),
-  forall (Post1: caduceus_1 = x),
-  forall (result: bool),
-  forall (Post5: (if result then caduceus_1 = 0 else caduceus_1 <> 0)),
-  (if result then 1 = 1 else 2 = 1).
+  forall (Test1: x <> 0),
+  2 = 1.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 1041-1087 *)
+(* Why obligation from file "why/all.why", characters 1031-1032 *)
 Lemma f7b_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x <> 0),
-  forall (caduceus_1: Z),
-  forall (Post1: caduceus_1 = x),
-  forall (result: bool),
-  forall (Post5: (if result then caduceus_1 = 0 else caduceus_1 <> 0)),
-  (if result then 1 = 2 else 2 = 2).
+  forall (Test2: x = 0),
+  1 = 2.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 1272-1318 *)
+(* Why obligation from file "why/all.why", characters 1210-1256 *)
 Lemma t1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -247,7 +241,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 1759-1767 *)
+(* Why obligation from file "why/all.why", characters 1697-1705 *)
 Lemma t2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -270,7 +264,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 2144-2146 *)
+(* Why obligation from file "why/all.why", characters 2082-2084 *)
 Lemma t3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -291,7 +285,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 2385-2432 *)
+(* Why obligation from file "why/all.why", characters 2323-2370 *)
 Lemma t4_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),

@@ -199,6 +199,9 @@ test:: $(BINARY) $(WHYVO)
 examples:: $(BINARY) $(WHYVO)
 	make -C examples
 
+examples-c:: $(BINARY) $(CADUCEUS) $(WHYVO)
+	make -C examples-c
+
 # debugging
 
 db debug: bin/why.byte src/logic.cmo
@@ -376,8 +379,10 @@ FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
        Version Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
+	examples-c/*/*.c examples-c/Makefile examples-c/*/Makefile \
+	examples-c/*/coq/*.v \
 	examples/Makefile* \
-	examples-c/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
+	examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
         bench/c/bench bench/c/*/*.c bench/c/*/*/*.c \

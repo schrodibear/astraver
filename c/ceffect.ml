@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.32 2004-04-07 11:57:46 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.33 2004-04-07 14:47:00 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -200,15 +200,26 @@ let locations ll =
 
 let assign_location loc =
   match loc with
-    |  Lterm t ->
+    | Lterm t ->
 	 begin 
 	   match t.term_node with
 	     | Tarrget(t1,t2) ->
 		 { reads = add_alloc (union (term t1) (term t2));
 		   assigns = add_pointer_var t1.term_type empty }
+	     | Tdot ({term_node = Tunop (Ustar, t1)}, f)
+	     | Tdot (t1,f)
 	     | Tarrow (t1,f) -> 
 		 { reads = add_alloc (term t1);
 		   assigns = add_field_var f t.term_type empty }
+	     | Tunop (Ustar, t1) ->
+		 { reads = add_alloc (term t1);
+		   assigns = add_pointer_var t1.term_type empty }
+	     | Tvar v ->
+		 { reads = empty;
+		   assigns = 
+		     if v.var_is_static
+		     then add_var v.var_name t.term_type empty
+		     else empty }
 	     | _ -> assert false
 	 end
     | Lstar t ->
