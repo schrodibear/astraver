@@ -1,0 +1,333 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% Why parameter N
+N: INT;
+
+%% dutch_flag_po_1, Why obligation from file "flag.mlw", characters 771-786
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) => ((0 <= i1) AND (i1 < array_length(t0)))))))))))))))))));
+
+%% dutch_flag_po_2, Why obligation from file "flag.mlw", characters 813-818
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] = blue) => ((0 <= b1) AND (b1 < array_length(t0)))))))))))))))))))));
+
+%% dutch_flag_po_3, Why obligation from file "flag.mlw", characters 828-842
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] = blue) =>
+      (((0 <= b1) AND (b1 < array_length(t0))) =>
+      (FORALL (u:color):
+      ((u = t0[b1]) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      (FORALL (aux_2:color):
+      ((aux_2 = t0[i1]) =>
+      (FORALL (aux_1:INT):
+      ((aux_1 = b1) => ((0 <= aux_1) AND (aux_1 < array_length(t0)))))))))))))))))))))))))))));
+
+%% dutch_flag_po_4, Why obligation from file "flag.mlw", characters 828-842
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] = blue) =>
+      (((0 <= b1) AND (b1 < array_length(t0))) =>
+      (FORALL (u:color):
+      ((u = t0[b1]) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      (FORALL (aux_2:color):
+      ((aux_2 = t0[i1]) =>
+      (FORALL (aux_1:INT):
+      ((aux_1 = b1) =>
+      (((0 <= aux_1) AND (aux_1 < array_length(t0))) =>
+      (FORALL (t1:(ARRAY INT OF color)):
+      ((t1 = (t0 WITH [aux_1] := aux_2)) =>
+      (FORALL (result:color):
+      ((result = u) =>
+      (FORALL (result0:INT):
+      ((result0 = i1) =>
+      ((FORALL (t:ARRAY INT OF color):
+       ((t = (t1 WITH [result0] := result)) =>
+       (FORALL (b:INT):
+       ((b = (b1 + 1)) =>
+       (FORALL (i:INT):
+       ((i = (i1 + 1)) =>
+       ((((0 <= b) AND (b <= i)) AND
+        (((i <= r1) AND (r1 <= N)) AND
+        (monochrome(t, 0, b, blue) AND
+        (monochrome(t, b, i, white) AND
+        (monochrome(t, r1, N, red) AND (array_length(t) = N)))))) AND
+       ((0 <= (r1 - i1)) AND ((r1 - i) < (r1 - i1)))))))))) AND
+      ((0 <= result0) AND (result0 < array_length(t1)))))))))))))))))))))))))))))))))))));
+
+%% dutch_flag_po_5, Why obligation from file "flag.mlw", characters 945-956
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= blue) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] = white) =>
+      (FORALL (i2:INT):
+      ((i2 = (i1 + 1)) =>
+      ((((0 <= b1) AND (b1 <= i2)) AND
+       (((i2 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i2, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) AND
+      ((0 <= (r1 - i1)) AND ((r1 - i2) < (r1 - i1))))))))))))))))))))))))));
+
+%% dutch_flag_po_6, Why obligation from file "flag.mlw", characters 1008-1013
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= blue) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= white) =>
+      (FORALL (r2:INT):
+      ((r2 = (r1 - 1)) => ((0 <= r2) AND (r2 < array_length(t0)))))))))))))))))))))))));
+
+%% dutch_flag_po_7, Why obligation from file "flag.mlw", characters 1023-1037
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= blue) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= white) =>
+      (FORALL (r2:INT):
+      ((r2 = (r1 - 1)) =>
+      (((0 <= r2) AND (r2 < array_length(t0))) =>
+      (FORALL (u:color):
+      ((u = t0[r2]) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      (FORALL (aux_6:color):
+      ((aux_6 = t0[i1]) =>
+      (FORALL (aux_5:INT):
+      ((aux_5 = r2) => ((0 <= aux_5) AND (aux_5 < array_length(t0)))))))))))))))))))))))))))))))));
+
+%% dutch_flag_po_8, Why obligation from file "flag.mlw", characters 1023-1037
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 < r1) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= blue) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      ((t0[i1] /= white) =>
+      (FORALL (r2:INT):
+      ((r2 = (r1 - 1)) =>
+      (((0 <= r2) AND (r2 < array_length(t0))) =>
+      (FORALL (u:color):
+      ((u = t0[r2]) =>
+      (((0 <= i1) AND (i1 < array_length(t0))) =>
+      (FORALL (aux_6:color):
+      ((aux_6 = t0[i1]) =>
+      (FORALL (aux_5:INT):
+      ((aux_5 = r2) =>
+      (((0 <= aux_5) AND (aux_5 < array_length(t0))) =>
+      (FORALL (t1:(ARRAY INT OF color)):
+      ((t1 = (t0 WITH [aux_5] := aux_6)) =>
+      (FORALL (result:color):
+      ((result = u) =>
+      (FORALL (result0:INT):
+      ((result0 = i1) =>
+      ((FORALL (t:ARRAY INT OF color):
+       ((t = (t1 WITH [result0] := result)) =>
+       ((((0 <= b1) AND (b1 <= i1)) AND
+        (((i1 <= r2) AND (r2 <= N)) AND
+        (monochrome(t, 0, b1, blue) AND
+        (monochrome(t, b1, i1, white) AND
+        (monochrome(t, r2, N, red) AND (array_length(t) = N)))))) AND
+       ((0 <= (r1 - i1)) AND ((r2 - i1) < (r1 - i1)))))) AND
+      ((0 <= result0) AND (result0 < array_length(t1)))))))))))))))))))))))))))))))))))))))));
+
+%% dutch_flag_po_9, Why obligation from file "flag.mlw", characters 532-1162
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (FORALL (Variant1:INT):
+      (FORALL (b1:INT):
+      (FORALL (i1:INT):
+      (FORALL (r1:INT):
+      (FORALL (t0:(ARRAY INT OF color)):
+      ((Variant1 = (r1 - i1)) =>
+      ((((0 <= b1) AND (b1 <= i1)) AND
+       (((i1 <= r1) AND (r1 <= N)) AND
+       (monochrome(t0, 0, b1, blue) AND
+       (monochrome(t0, b1, i1, white) AND
+       (monochrome(t0, r1, N, red) AND (array_length(t0) = N)))))) =>
+      ((i1 >= r1) =>
+      (monochrome(t0, 0, b1, blue) AND
+      (monochrome(t0, b1, r1, white) AND monochrome(t0, r1, N, red)))))))))))))))))));
+
+%% dutch_flag_po_10, Why obligation from file "flag.mlw", characters 572-739
+QUERY (FORALL (t:(ARRAY INT OF color)):
+      ((array_length(t) = N) =>
+      (FORALL (b:INT):
+      ((b = 0) =>
+      (FORALL (i:INT):
+      ((i = 0) =>
+      (FORALL (r:INT):
+      ((r = N) =>
+      (((0 <= b) AND (b <= i)) AND
+      (((i <= r) AND (r <= N)) AND
+      (monochrome(t, 0, b, blue) AND
+      (monochrome(t, b, i, white) AND
+      (monochrome(t, r, N, red) AND (array_length(t) = N))))))))))))));
+

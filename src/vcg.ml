@@ -497,9 +497,12 @@ let clean_sequent hyps concl =
     | [] ->
 	[]
     | Svar (x, v) as h :: hl -> 
+(***
 	if List.exists (occur_as_var x) hl then
 	  clean (filter_up_to x hl)
-	else if List.exists (occur_in_hyp x) hl || occur_predicate x concl then
+	else 
+***)
+	if List.exists (occur_in_hyp x) hl || occur_predicate x concl then
 	  h :: clean hl
 	else
 	  clean hl

@@ -14,11 +14,14 @@
 (IMPLIES (EQ x1 (- x0 1))
 (AND (AND (<= 0 x1) (<= x1 x)) (AND (<= 0 x0) (< x1 x0))))))))))))
 
-;; p_po_2, Why obligation from file "loop0.mlw", characters 281-297
-(FORALL (x) (IMPLIES (>= x 0) (AND (<= 0 x) (<= x x))))
-
-;; p_po_3, Why obligation from file "loop0.mlw", characters 227-348
+;; p_po_2, Why obligation from file "loop0.mlw", characters 248-335
 (FORALL (x)
 (IMPLIES (>= x 0)
-(FORALL (x0) (IMPLIES (AND (AND (<= 0 x0) (<= x0 x)) (<= x0 0)) (EQ x0 0)))))
+(FORALL (Variant1)
+(FORALL (x0)
+(IMPLIES (EQ Variant1 x0)
+(IMPLIES (AND (<= 0 x0) (<= x0 x)) (IMPLIES (<= x0 0) (EQ x0 0))))))))
+
+;; p_po_3, Why obligation from file "loop0.mlw", characters 281-297
+(FORALL (x) (IMPLIES (>= x 0) (AND (<= 0 x) (<= x x))))
 

@@ -1,0 +1,34 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% p_po_1, Why obligation from file "loop0.mlw", characters 316-327
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x0:INT):
+      ((Variant1 = x0) =>
+      (((0 <= x0) AND (x0 <= x)) =>
+      ((x0 > 0) =>
+      (FORALL (x1:INT):
+      ((x1 = (x0 - 1)) =>
+      (((0 <= x1) AND (x1 <= x)) AND ((0 <= x0) AND (x1 < x0))))))))))));
+
+%% p_po_2, Why obligation from file "loop0.mlw", characters 248-335
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x0:INT):
+      ((Variant1 = x0) =>
+      (((0 <= x0) AND (x0 <= x)) => ((x0 <= 0) => (x0 = 0))))))));
+
+%% p_po_3, Why obligation from file "loop0.mlw", characters 281-297
+QUERY (FORALL (x:INT): ((x >= 0) => ((0 <= x) AND (x <= x))));
+

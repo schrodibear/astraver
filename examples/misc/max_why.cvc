@@ -1,0 +1,142 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+l: INT;
+ASSERT 0<l;
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% pgm_max_end_po_1, Why obligation from file "max.mlw", characters 565-578
+QUERY (FORALL (a:(ARRAY INT OF INT)):
+      ((array_length(a) = l) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (y0:INT):
+      ((y0 = 1) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (l - y1)) =>
+      ((((0 <= y1) AND (y1 <= l)) AND
+       (((0 <= x1) AND (x1 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y1)) => (a[k] <= a[x1]))))) =>
+      ((y1 < l) => ((0 <= y1) AND (y1 < array_length(a)))))))))))))));
+
+%% pgm_max_end_po_2, Why obligation from file "max.mlw", characters 565-578
+QUERY (FORALL (a:(ARRAY INT OF INT)):
+      ((array_length(a) = l) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (y0:INT):
+      ((y0 = 1) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (l - y1)) =>
+      ((((0 <= y1) AND (y1 <= l)) AND
+       (((0 <= x1) AND (x1 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y1)) => (a[k] <= a[x1]))))) =>
+      ((y1 < l) =>
+      (((0 <= y1) AND (y1 < array_length(a))) =>
+      ((0 <= x1) AND (x1 < array_length(a))))))))))))))));
+
+%% pgm_max_end_po_3, Why obligation from file "max.mlw", characters 584-591
+QUERY (FORALL (a:(ARRAY INT OF INT)):
+      ((array_length(a) = l) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (y0:INT):
+      ((y0 = 1) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (l - y1)) =>
+      ((((0 <= y1) AND (y1 <= l)) AND
+       (((0 <= x1) AND (x1 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y1)) => (a[k] <= a[x1]))))) =>
+      ((y1 < l) =>
+      (((0 <= y1) AND (y1 < array_length(a))) =>
+      (((0 <= x1) AND (x1 < array_length(a))) =>
+      ((a[y1] > a[x1]) =>
+      (FORALL (x2:INT):
+      ((x2 = y1) =>
+      (FORALL (y:INT):
+      ((y = (y1 + 1)) =>
+      ((((0 <= y) AND (y <= l)) AND
+       (((0 <= x2) AND (x2 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y)) => (a[k] <= a[x2]))))) AND
+      ((0 <= (l - y1)) AND ((l - y) < (l - y1)))))))))))))))))))))));
+
+%% pgm_max_end_po_4, Why obligation from file "max.mlw", characters 591-591
+QUERY (FORALL (a:(ARRAY INT OF INT)):
+      ((array_length(a) = l) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (y0:INT):
+      ((y0 = 1) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (l - y1)) =>
+      ((((0 <= y1) AND (y1 <= l)) AND
+       (((0 <= x1) AND (x1 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y1)) => (a[k] <= a[x1]))))) =>
+      ((y1 < l) =>
+      (((0 <= y1) AND (y1 < array_length(a))) =>
+      (((0 <= x1) AND (x1 < array_length(a))) =>
+      ((a[y1] <= a[x1]) =>
+      (FORALL (result3:UNIT):
+      ((result3 = tt) =>
+      (FORALL (y:INT):
+      ((y = (y1 + 1)) =>
+      ((((0 <= y) AND (y <= l)) AND
+       (((0 <= x1) AND (x1 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y)) => (a[k] <= a[x1]))))) AND
+      ((0 <= (l - y1)) AND ((l - y) < (l - y1)))))))))))))))))))))));
+
+%% pgm_max_end_po_5, Why obligation from file "max.mlw", characters 415-620
+QUERY (FORALL (a:(ARRAY INT OF INT)):
+      ((array_length(a) = l) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (y0:INT):
+      ((y0 = 1) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (l - y1)) =>
+      ((((0 <= y1) AND (y1 <= l)) AND
+       (((0 <= x1) AND (x1 < l)) AND
+       (FORALL (k:INT): (((0 <= k) AND (k < y1)) => (a[k] <= a[x1]))))) =>
+      ((y1 >= l) =>
+      ((FORALL (a0:ARRAY INT OF INT):
+       (((array_length(a0) = l) AND
+        ((a0[x1] = a[(l - 1)]) AND
+        ((a0[(l - 1)] = a[x1]) AND
+        (FORALL (k:INT):
+        (((0 <= k) AND (k < l)) =>
+        ((k /= x1) => ((k /= (l - 1)) => (a0[k] = a[k])))))))) =>
+       ((FORALL (k:INT):
+        (((0 <= k) AND (k < (l - 1))) => ((k /= x1) => (a0[k] = a[k])))) AND
+       ((a0[x1] = a[(l - 1)]) AND
+       ((a0[(l - 1)] = a[x1]) AND
+       (FORALL (k:INT):
+       (((0 <= k) AND (k < (l - 1))) => (a0[k] <= a0[(l - 1)])))))))) AND
+      (array_length(a) = l))))))))))))));
+
+%% pgm_max_end_po_6, Why obligation from file "max.mlw", characters 449-533
+QUERY (FORALL (a:(ARRAY INT OF INT)):
+      ((array_length(a) = l) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (y0:INT):
+      ((y0 = 1) =>
+      (((0 <= y0) AND (y0 <= l)) AND
+      (((0 <= x0) AND (x0 < l)) AND
+      (FORALL (k:INT): (((0 <= k) AND (k < y0)) => (a[k] <= a[x0])))))))))));
+

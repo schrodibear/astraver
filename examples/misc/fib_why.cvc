@@ -1,0 +1,275 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+F : [INT -> INT];
+ASSERT F(0) = 1;
+ASSERT F(1) = 1;
+ASSERT FORALL (n:INT): n >= 2 => F(n) = F(n - 1) + F(n - 2);
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% fib1_po_1, Why obligation from file "fib.mlw", characters 447-448
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = n0) =>
+      ((n0 >= 0) =>
+      ((n0 <= 1) =>
+      (FORALL (result0:INT): ((result0 = 1) => (result0 = F(n0)))))))))));
+
+%% fib1_po_2, Why obligation from file "fib.mlw", characters 480-494
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = n0) => ((n0 >= 0) => ((n0 > 1) => ((n0 - 2) >= 0))))))));
+
+%% fib1_po_3, Why obligation from file "fib.mlw", characters 413-515
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = n0) =>
+      ((n0 >= 0) =>
+      ((n0 > 1) =>
+      (((n0 - 2) >= 0) =>
+      (FORALL (result0:INT):
+      ((result0 = (n0 - 2)) =>
+      (((n0 - 2) >= 0) => ((0 <= Variant1) AND (result0 < Variant1)))))))))))));
+
+%% fib1_po_4, Why obligation from file "fib.mlw", characters 463-477
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = n0) =>
+      ((n0 >= 0) =>
+      ((n0 > 1) =>
+      (((n0 - 2) >= 0) =>
+      (FORALL (aux_6:INT): ((aux_6 = F((n0 - 2))) => ((n0 - 1) >= 0)))))))))));
+
+%% fib1_po_5, Why obligation from file "fib.mlw", characters 413-515
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = n0) =>
+      ((n0 >= 0) =>
+      ((n0 > 1) =>
+      (((n0 - 2) >= 0) =>
+      (FORALL (aux_6:INT):
+      ((aux_6 = F((n0 - 2))) =>
+      (((n0 - 1) >= 0) =>
+      (FORALL (result0:INT):
+      ((result0 = (n0 - 1)) =>
+      (((n0 - 1) >= 0) => ((0 <= Variant1) AND (result0 < Variant1))))))))))))))));
+
+%% fib1_po_6, Why obligation from file "fib.mlw", characters 463-494
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = n0) =>
+      ((n0 >= 0) =>
+      ((n0 > 1) =>
+      (((n0 - 2) >= 0) =>
+      (FORALL (aux_6:INT):
+      ((aux_6 = F((n0 - 2))) =>
+      (((n0 - 1) >= 0) =>
+      (FORALL (aux_5:INT):
+      ((aux_5 = F((n0 - 1))) =>
+      (FORALL (result0:INT):
+      ((result0 = (aux_5 + aux_6)) => (result0 = F(n0)))))))))))))))));
+
+%% fib2_aux_po_1, Why obligation from file "fib.mlw", characters 713-715
+QUERY (FORALL (n:INT):
+      (FORALL (x:INT):
+      (FORALL (fx:INT):
+      (FORALL (fx_1:INT):
+      ((((1 <= x) AND (x <= n)) AND ((fx = F(x)) AND (fx_1 = F((x - 1))))) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      (FORALL (x0:INT):
+      (FORALL (fx0:INT):
+      (FORALL (fx_1_0:INT):
+      ((Variant1 = (n0 - x0)) =>
+      ((((1 <= x0) AND (x0 <= n0)) AND
+       ((fx0 = F(x0)) AND (fx_1_0 = F((x0 - 1))))) =>
+      ((x0 = n0) =>
+      (FORALL (result0:INT): ((result0 = fx0) => (result0 = F(n0)))))))))))))))));
+
+%% fib2_aux_po_2, Why obligation from file "fib.mlw", characters 731-762
+QUERY (FORALL (n:INT):
+      (FORALL (x:INT):
+      (FORALL (fx:INT):
+      (FORALL (fx_1:INT):
+      ((((1 <= x) AND (x <= n)) AND ((fx = F(x)) AND (fx_1 = F((x - 1))))) =>
+      (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      (FORALL (x0:INT):
+      (FORALL (fx0:INT):
+      (FORALL (fx_1_0:INT):
+      ((Variant1 = (n0 - x0)) =>
+      ((((1 <= x0) AND (x0 <= n0)) AND
+       ((fx0 = F(x0)) AND (fx_1_0 = F((x0 - 1))))) =>
+      ((x0 /= n0) =>
+      (((1 <= (x0 + 1)) AND ((x0 + 1) <= n0)) AND
+      (((fx0 + fx_1_0) = F((x0 + 1))) AND (fx0 = F(((x0 + 1) - 1))))))))))))))))));
+
+%% fib2_po_1, Why obligation from file "fib.mlw", characters 842-843
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      ((n <= 1) =>
+      (FORALL (result0:INT): ((result0 = 1) => (result0 = F(n)))))));
+
+%% fib2_po_2, Why obligation from file "fib.mlw", characters 849-867
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      ((n > 1) =>
+      (((1 <= 1) AND (1 <= n)) AND ((1 = F(1)) AND (1 = F((1 - 1))))))));
+
+%% fib3_po_1, Why obligation from file "fib.mlw", characters 1144-1210
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (k:INT):
+      ((k = 1) =>
+      (FORALL (x:INT):
+      ((x = 1) =>
+      (FORALL (y:INT):
+      ((y = 1) =>
+      ((n > 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (k1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (n - k1)) =>
+      ((((1 <= k1) AND (k1 <= n)) AND ((x1 = F(k1)) AND (y1 = F((k1 - 1))))) =>
+      ((k1 < n) =>
+      (FORALL (t:INT):
+      ((t = y1) =>
+      (FORALL (y2:INT):
+      ((y2 = x1) =>
+      (FORALL (x2:INT):
+      ((x2 = (x1 + t)) =>
+      (FORALL (k2:INT):
+      ((k2 = (k1 + 1)) =>
+      ((((1 <= k2) AND (k2 <= n)) AND ((x2 = F(k2)) AND (y2 = F((k2 - 1))))) AND
+      ((0 <= (n - k1)) AND ((n - k2) < (n - k1))))))))))))))))))))))))))));
+
+%% fib3_po_2, Why obligation from file "fib.mlw", characters 1027-1219
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (k:INT):
+      ((k = 1) =>
+      (FORALL (x:INT):
+      ((x = 1) =>
+      (FORALL (y:INT):
+      ((y = 1) =>
+      ((n > 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (k1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = (n - k1)) =>
+      ((((1 <= k1) AND (k1 <= n)) AND ((x1 = F(k1)) AND (y1 = F((k1 - 1))))) =>
+      ((k1 >= n) =>
+      (FORALL (result:INT): ((result = x1) => (result = F(n))))))))))))))))))));
+
+%% fib3_po_3, Why obligation from file "fib.mlw", characters 1061-1100
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (k:INT):
+      ((k = 1) =>
+      (FORALL (x:INT):
+      ((x = 1) =>
+      (FORALL (y:INT):
+      ((y = 1) =>
+      ((n > 0) =>
+      (((1 <= k) AND (k <= n)) AND ((x = F(k)) AND (y = F((k - 1))))))))))))));
+
+%% fib3_po_4, Why obligation from file "fib.mlw", characters 1219-1219
+QUERY (FORALL (n:INT):
+      ((n >= 0) =>
+      (FORALL (k:INT):
+      ((k = 1) =>
+      (FORALL (x:INT):
+      ((x = 1) =>
+      (FORALL (y:INT):
+      ((y = 1) =>
+      ((n <= 0) =>
+      (FORALL (result0:UNIT):
+      ((result0 = tt) =>
+      (FORALL (result:INT): ((result = x) => (result = F(n)))))))))))))));
+
+%% fib4_po_1, Why obligation from file "fib.mlw", characters 1393-1394
+QUERY (FORALL (n:INT):
+      (FORALL (t:(ARRAY INT OF INT)):
+      (((0 <= n) AND (n < array_length(t))) =>
+      ((n <= 1) =>
+      (FORALL (result0:INT): ((result0 = 1) => (result0 = F(n))))))));
+
+%% fib4_po_2, Why obligation from file "fib.mlw", characters 1414-1423
+QUERY (FORALL (n:INT):
+      (FORALL (t:(ARRAY INT OF INT)):
+      (((0 <= n) AND (n < array_length(t))) =>
+      ((n > 1) =>
+      (FORALL (aux_2:INT):
+      ((aux_2 = 1) =>
+      (FORALL (aux_1:INT):
+      ((aux_1 = 0) => ((0 <= aux_1) AND (aux_1 < array_length(t)))))))))));
+
+%% fib4_po_3, Why obligation from file "fib.mlw", characters 1414-1423
+QUERY (FORALL (n:INT):
+      (FORALL (t:(ARRAY INT OF INT)):
+      (((0 <= n) AND (n < array_length(t))) =>
+      ((n > 1) =>
+      (FORALL (aux_2:INT):
+      ((aux_2 = 1) =>
+      (FORALL (aux_1:INT):
+      ((aux_1 = 0) =>
+      (((0 <= aux_1) AND (aux_1 < array_length(t))) =>
+      (FORALL (t0:(ARRAY INT OF INT)):
+      ((t0 = (t WITH [aux_1] := aux_2)) =>
+      (FORALL (result:INT):
+      ((result = 1) =>
+      (FORALL (result0:INT):
+      ((result0 = 1) =>
+      ((FORALL (t1:ARRAY INT OF INT):
+       ((t1 = (t0 WITH [result0] := result)) =>
+       (FORALL (result:INT):
+       ((result = 2) =>
+       ((((2 <= result) AND (result <= (n + 1))) AND
+        ((array_length(t1) = array_length(t)) AND
+        (FORALL (i:INT): (((0 <= i) AND (i < result)) => (t1[i] = F(i)))))) AND
+       (FORALL (k:INT):
+       (FORALL (t0:ARRAY INT OF INT):
+       ((((2 <= k) AND (k <= (n + 1))) AND
+        ((array_length(t0) = array_length(t)) AND
+        (FORALL (i:INT): (((0 <= i) AND (i < k)) => (t0[i] = F(i)))))) =>
+       (((k <= n) =>
+        (((FORALL (result:INT):
+          ((result = (t0[(k - 1)] + t0[(k - 2)])) =>
+          (FORALL (result0:INT):
+          ((result0 = k) =>
+          ((FORALL (t1:ARRAY INT OF INT):
+           ((t1 = (t0 WITH [result0] := result)) =>
+           (FORALL (k0:INT):
+           ((k0 = (k + 1)) =>
+           ((((2 <= k0) AND (k0 <= (n + 1))) AND
+            ((array_length(t1) = array_length(t)) AND
+            (FORALL (i:INT): (((0 <= i) AND (i < k0)) => (t1[i] = F(i)))))) AND
+           ((0 <= ((n + 1) - k)) AND (((n + 1) - k0) < ((n + 1) - k)))))))) AND
+          ((0 <= result0) AND (result0 < array_length(t0)))))))) AND
+         ((0 <= (k - 2)) AND ((k - 2) < array_length(t0)))) AND
+        ((0 <= (k - 1)) AND ((k - 1) < array_length(t0))))) AND
+       ((k > n) =>
+       ((FORALL (result:INT): ((result = t0[n]) => (result = F(n)))) AND
+       ((0 <= n) AND (n < array_length(t0)))))))))))))) AND
+      ((0 <= result0) AND (result0 < array_length(t0)))))))))))))))))));
+

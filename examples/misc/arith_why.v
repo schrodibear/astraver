@@ -34,6 +34,10 @@ Lemma mult_po_2 :
   forall (x: Z),
   forall (y: Z),
   forall (Pre5: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (Post10: a = x),
+  forall (b: Z),
+  forall (Post9: b = y),
   forall (p: Z),
   forall (Post8: p = 0),
   forall (Variant1: Z),
@@ -46,7 +50,7 @@ Lemma mult_po_2 :
   forall (Pre2: ~(2 = 0)),
   forall (Test3: ((Zmod a1 2)) = 1),
   forall (p2: Z),
-  forall (Post2: p2 = (p1 + b1)),
+  forall (Post3: p2 = (p1 + b1)),
   forall (a: Z),
   forall (HW_3: a = ((Zdiv a1 2))),
   forall (b: Z),
@@ -71,6 +75,10 @@ Lemma mult_po_3 :
   forall (x: Z),
   forall (y: Z),
   forall (Pre5: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (Post10: a = x),
+  forall (b: Z),
+  forall (Post9: b = y),
   forall (p: Z),
   forall (Post8: p = 0),
   forall (Variant1: Z),
@@ -83,7 +91,7 @@ Lemma mult_po_3 :
   forall (Pre2: ~(2 = 0)),
   forall (Test2: ((Zmod a1 2)) <> 1),
   forall (result1: unit),
-  forall (Post1: result1 = tt),
+  forall (Post2: result1 = tt),
   forall (a: Z),
   forall (HW_7: a = ((Zdiv a1 2))),
   forall (b: Z),
@@ -149,11 +157,10 @@ Lemma mult_po_5 :
   forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
   forall (Test1: a1 = 0),
   forall (result: Z),
-  forall (HW_12: result = p1),
+  forall (HW_14: result = p1),
   result = (x * y).
 Proof.
-intuition.
-subst.
+intuition; subst.
 rewrite <- H2.
 ring.
 Qed.

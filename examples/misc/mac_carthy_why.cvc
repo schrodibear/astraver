@@ -1,0 +1,58 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+max: [[INT, INT] -> INT];
+ASSERT FORALL (x,y:INT): (x >= y AND max(x,y)=x) OR (x < y AND max(x,y)=y);
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% f91_po_1, Why obligation from file "mac_carthy.mlw", characters 131-263
+QUERY (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = max(0, (101 - n0))) =>
+      ((n0 <= 100) =>
+      (FORALL (result0:INT):
+      ((result0 = (n0 + 11)) =>
+      ((0 <= Variant1) AND (max(0, (101 - result0)) < Variant1))))))));
+
+%% f91_po_2, Why obligation from file "mac_carthy.mlw", characters 131-263
+QUERY (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = max(0, (101 - n0))) =>
+      ((n0 <= 100) =>
+      (FORALL (aux_3:INT):
+      (((((n0 + 11) <= 100) AND (aux_3 = 91)) OR
+       (((n0 + 11) >= 101) AND (aux_3 = ((n0 + 11) - 10)))) =>
+      (FORALL (result0:INT):
+      ((result0 = aux_3) =>
+      ((0 <= Variant1) AND (max(0, (101 - result0)) < Variant1))))))))));
+
+%% f91_po_3, Why obligation from file "mac_carthy.mlw", characters 158-178
+QUERY (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = max(0, (101 - n0))) =>
+      ((n0 <= 100) =>
+      (FORALL (aux_3:INT):
+      (((((n0 + 11) <= 100) AND (aux_3 = 91)) OR
+       (((n0 + 11) >= 101) AND (aux_3 = ((n0 + 11) - 10)))) =>
+      (FORALL (result0:INT):
+      ((((aux_3 <= 100) AND (result0 = 91)) OR
+       ((aux_3 >= 101) AND (result0 = (aux_3 - 10)))) =>
+      (((n0 <= 100) AND (result0 = 91)) OR
+      ((n0 >= 101) AND (result0 = (n0 - 10))))))))))));
+
+%% f91_po_4, Why obligation from file "mac_carthy.mlw", characters 190-196
+QUERY (FORALL (Variant1:INT):
+      (FORALL (n0:INT):
+      ((Variant1 = max(0, (101 - n0))) =>
+      ((n0 > 100) =>
+      (FORALL (result0:INT):
+      ((result0 = (n0 - 10)) =>
+      (((n0 <= 100) AND (result0 = 91)) OR
+      ((n0 >= 101) AND (result0 = (n0 - 10))))))))));
+

@@ -1,0 +1,80 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% swap1_po_1, Why obligation from file "swap0.mlw", characters 149-174
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (FORALL (t:INT):
+      ((t = x) =>
+      (FORALL (x0:INT):
+      ((x0 = y) => (FORALL (y0:INT): ((y0 = t) => ((x0 = y) AND (y0 = x))))))))));
+
+%% swap2_po_1, Why obligation from file "swap0.mlw", characters 316-358
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (FORALL (t:INT):
+      ((t = x) =>
+      (FORALL (x0:INT):
+      ((x0 = y) => (FORALL (y0:INT): ((y0 = t) => ((x0 = y) AND (y0 = x))))))))));
+
+%% swap3_po_1, Why obligation from file "swap0.mlw", characters 509-534
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (FORALL (t:INT):
+      ((t = a) =>
+      (FORALL (a0:INT):
+      ((a0 = b) => (FORALL (b0:INT): ((b0 = t) => ((a0 = b) AND (b0 = a))))))))));
+
+%% test_swap3_po_1, Why obligation from file "swap0.mlw", characters 654-678
+QUERY (FORALL (c:INT):
+      ((c = 1) =>
+      (FORALL (d:INT):
+      ((d = 2) =>
+      (FORALL (c1:INT):
+      (FORALL (d1:INT): (((c1 = d) AND (d1 = c)) => (d1 = 1))))))));
+
+%% call_swap3_y_x_po_1, Why obligation from file "swap0.mlw", characters 790-826
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (FORALL (y0:INT):
+      (FORALL (x0:INT): (((y0 = x) AND (x0 = y)) => ((x0 = y) AND (y0 = x)))))));
+
+%% swap4_po_1, Why obligation from file "swap0.mlw", characters 945-1014
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (FORALL (tmp0:INT):
+      ((tmp0 = a) =>
+      (FORALL (a0:INT):
+      ((a0 = b) =>
+      (FORALL (b0:INT): ((b0 = tmp0) => ((a0 = b) AND (b0 = a))))))))));
+
+%% test_swap4_po_1, Why obligation from file "swap0.mlw", characters 1109-1133
+QUERY (FORALL (c:INT):
+      ((c = 1) =>
+      (FORALL (d:INT):
+      ((d = 2) =>
+      (FORALL (c1:INT):
+      (FORALL (d1:INT): (((c1 = d) AND (d1 = c)) => (d1 = 1))))))));
+
+%% call_swap4_x_y_po_1, Why obligation from file "swap0.mlw", characters 1187-1218
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      ((x = 3) =>
+      (FORALL (x0:INT):
+      (FORALL (y0:INT): (((x0 = y) AND (y0 = x)) => (y0 = 3)))))));
+
+%% call_swap4_y_x_po_1, Why obligation from file "swap0.mlw", characters 1240-1271
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      ((x = 3) =>
+      (FORALL (y0:INT):
+      (FORALL (x0:INT): (((y0 = x) AND (x0 = y)) => (y0 = 3)))))));
+

@@ -1,0 +1,227 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT];
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% add1_po_1, Why obligation from file "peano.mlw", characters 272-301
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      ((y >= 0) =>
+      (FORALL (z:INT):
+      ((z = y) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x0:INT):
+      (FORALL (z1:INT):
+      ((Variant1 = z1) =>
+      (((0 <= z1) AND (x0 = (x + (y - z1)))) =>
+      ((z1 > 0) =>
+      (FORALL (x1:INT):
+      ((x1 = (x0 + 1)) =>
+      (FORALL (z2:INT):
+      ((z2 = (z1 - 1)) =>
+      (((0 <= z2) AND (x1 = (x + (y - z2)))) AND ((0 <= z1) AND (z2 < z1))))))))))))))))));
+
+%% add1_po_2, Why obligation from file "peano.mlw", characters 178-309
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      ((y >= 0) =>
+      (FORALL (z:INT):
+      ((z = y) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x0:INT):
+      (FORALL (z1:INT):
+      ((Variant1 = z1) =>
+      (((0 <= z1) AND (x0 = (x + (y - z1)))) =>
+      ((z1 <= 0) => (x0 = (x + y)))))))))))));
+
+%% add1_po_3, Why obligation from file "peano.mlw", characters 211-247
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      ((y >= 0) =>
+      (FORALL (z:INT): ((z = y) => ((0 <= z) AND (x = (x + (y - z)))))))));
+
+%% u1_po_1, Why obligation from file "peano.mlw", characters 367-391
+QUERY (FORALL (r:INT):
+      ((r = 3) => (FORALL (result:INT): ((result = 7) => (7 >= 0)))));
+
+%% u1_po_2, Why obligation from file "peano.mlw", characters 367-391
+QUERY (FORALL (r:INT):
+      ((r = 3) =>
+      (FORALL (result:INT):
+      ((result = 7) =>
+      ((7 >= 0) => (FORALL (r1:INT): ((r1 = (r + 7)) => (r1 = 10))))))));
+
+%% rec_add1_po_1, Why obligation from file "peano.mlw", characters 527-545
+QUERY (FORALL (y:INT):
+      ((y >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (y0:INT):
+      (FORALL (x0:INT):
+      ((Variant1 = y0) =>
+      ((y0 >= 0) =>
+      ((0 < y0) => (FORALL (x1:INT): ((x1 = (x0 + 1)) => ((y0 - 1) >= 0)))))))))));
+
+%% rec_add1_po_2, Why obligation from file "peano.mlw", characters 480-567
+QUERY (FORALL (y:INT):
+      ((y >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (y0:INT):
+      (FORALL (x0:INT):
+      ((Variant1 = y0) =>
+      ((y0 >= 0) =>
+      ((0 < y0) =>
+      (FORALL (x1:INT):
+      ((x1 = (x0 + 1)) =>
+      (((y0 - 1) >= 0) =>
+      (FORALL (result1:INT):
+      ((result1 = (y0 - 1)) =>
+      (((y0 - 1) >= 0) => ((0 <= Variant1) AND (result1 < Variant1))))))))))))))));
+
+%% rec_add1_po_3, Why obligation from file "peano.mlw", characters 508-549
+QUERY (FORALL (y:INT):
+      ((y >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (y0:INT):
+      (FORALL (x0:INT):
+      ((Variant1 = y0) =>
+      ((y0 >= 0) =>
+      ((0 < y0) =>
+      (FORALL (x1:INT):
+      ((x1 = (x0 + 1)) =>
+      (((y0 - 1) >= 0) =>
+      (FORALL (x2:INT): ((x2 = (x1 + (y0 - 1))) => (x2 = (x0 + y0)))))))))))))));
+
+%% rec_add1_po_4, Why obligation from file "peano.mlw", characters 549-549
+QUERY (FORALL (y:INT):
+      ((y >= 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (y0:INT):
+      (FORALL (x0:INT):
+      ((Variant1 = y0) =>
+      ((y0 >= 0) =>
+      ((0 >= y0) =>
+      (FORALL (result0:UNIT): ((result0 = tt) => (x0 = (x0 + y0))))))))))));
+
+%% u11_po_1, Why obligation from file "peano.mlw", characters 608-636
+QUERY (FORALL (r:INT):
+      ((r = 3) => (FORALL (result:INT): ((result = 7) => (7 >= 0)))));
+
+%% u11_po_2, Why obligation from file "peano.mlw", characters 608-636
+QUERY (FORALL (r:INT):
+      ((r = 3) =>
+      (FORALL (result:INT):
+      ((result = 7) =>
+      ((7 >= 0) => (FORALL (r1:INT): ((r1 = (r + 7)) => (r1 = 10))))))));
+
+%% mult1_po_1, Why obligation from file "peano.mlw", characters 933-947
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (z:INT):
+      ((z = y) =>
+      (FORALL (savex:INT):
+      ((savex = x) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (z1:INT):
+      ((Variant1 = z1) =>
+      (((0 <= z1) AND (x1 = (x * (y - z1)))) => ((z1 > 0) => (savex >= 0))))))))))))))));
+
+%% mult1_po_2, Why obligation from file "peano.mlw", characters 933-967
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (z:INT):
+      ((z = y) =>
+      (FORALL (savex:INT):
+      ((savex = x) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (z1:INT):
+      ((Variant1 = z1) =>
+      (((0 <= z1) AND (x1 = (x * (y - z1)))) =>
+      ((z1 > 0) =>
+      ((savex >= 0) =>
+      (FORALL (x2:INT):
+      ((x2 = (x1 + savex)) =>
+      (FORALL (z2:INT):
+      ((z2 = (z1 - 1)) =>
+      (((0 <= z2) AND (x2 = (x * (y - z2)))) AND ((0 <= z1) AND (z2 < z1)))))))))))))))))))))));
+
+%% mult1_po_3, Why obligation from file "peano.mlw", characters 833-977
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (z:INT):
+      ((z = y) =>
+      (FORALL (savex:INT):
+      ((savex = x) =>
+      (FORALL (x0:INT):
+      ((x0 = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (z1:INT):
+      ((Variant1 = z1) =>
+      (((0 <= z1) AND (x1 = (x * (y - z1)))) =>
+      ((z1 <= 0) => (x1 = (x * y)))))))))))))))));
+
+%% mult1_po_4, Why obligation from file "peano.mlw", characters 868-904
+QUERY (FORALL (y:INT):
+      (FORALL (x:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (z:INT):
+      ((z = y) =>
+      (FORALL (savex:INT):
+      ((savex = x) =>
+      (FORALL (x0:INT): ((x0 = 0) => ((0 <= z) AND (x0 = (x * (y - z)))))))))))));
+
+%% u2_po_1, Why obligation from file "peano.mlw", characters 1042-1067
+QUERY (FORALL (r:INT):
+      ((r = 4) =>
+      (FORALL (result:INT): ((result = 6) => ((r >= 0) AND (6 >= 0))))));
+
+%% u2_po_2, Why obligation from file "peano.mlw", characters 1042-1067
+QUERY (FORALL (r:INT):
+      ((r = 4) =>
+      (FORALL (result:INT):
+      ((result = 6) =>
+      (((r >= 0) AND (6 >= 0)) =>
+      (FORALL (r1:INT): ((r1 = (r * 6)) => (r1 = 24))))))));
+
+%% mult2_po_1, Why obligation from file "peano.mlw", characters 1330-1375
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x0:INT):
+      (FORALL (y0:INT):
+      ((Variant1 = x0) =>
+      (((x0 >= 0) AND (y0 >= 0)) =>
+      ((x0 /= 0) =>
+      (((((x0 - 1) >= 0) AND (y0 >= 0)) AND (y0 >= 0)) AND (y0 >= 0)))))))))));
+
+%% mult2_po_2, Why obligation from file "peano.mlw", characters 1185-1391
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x0:INT):
+      (FORALL (y0:INT):
+      ((Variant1 = x0) =>
+      (((x0 >= 0) AND (y0 >= 0)) =>
+      (((x0 /= 0) =>
+       (((((x0 - 1) >= 0) AND (y0 >= 0)) AND (y0 >= 0)) AND (y0 >= 0))) =>
+      (FORALL (result:INT):
+      ((((x0 = 0) AND (result = 0)) OR
+       ((x0 /= 0) AND (result = (y0 + ((x0 - 1) * y0))))) =>
+      (result = (x0 * y0)))))))))))));
+

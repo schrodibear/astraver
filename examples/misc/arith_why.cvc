@@ -1,0 +1,132 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT];
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% mult_po_1, Why obligation from file "arith.mlw", characters 358-368
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (a:INT):
+      ((a = x) =>
+      (FORALL (b:INT):
+      ((b = y) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (a1:INT):
+      (FORALL (b1:INT):
+      (FORALL (p1:INT):
+      ((Variant1 = a1) =>
+      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
+      ((a1 /= 0) => (2 /= 0)))))))))))))))));
+
+%% mult_po_2, Why obligation from file "arith.mlw", characters 374-386
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (a:INT):
+      ((a = x) =>
+      (FORALL (b:INT):
+      ((b = y) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (a1:INT):
+      (FORALL (b1:INT):
+      (FORALL (p1:INT):
+      ((Variant1 = a1) =>
+      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
+      ((a1 /= 0) =>
+      ((2 /= 0) =>
+      ((mod_int(a1, 2) = 1) =>
+      (FORALL (p2:INT):
+      ((p2 = (p1 + b1)) =>
+      (FORALL (a:INT):
+      ((a = (a1 / 2)) =>
+      (FORALL (b:INT):
+      ((b = (2 * b1)) =>
+      (((a >= 0) AND ((p2 + (a * b)) = (x * y))) AND
+      ((0 <= a1) AND (a < a1)))))))))))))))))))))))))));
+
+%% mult_po_3, Why obligation from file "arith.mlw", characters 386-386
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (a:INT):
+      ((a = x) =>
+      (FORALL (b:INT):
+      ((b = y) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (a1:INT):
+      (FORALL (b1:INT):
+      (FORALL (p1:INT):
+      ((Variant1 = a1) =>
+      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
+      ((a1 /= 0) =>
+      ((2 /= 0) =>
+      ((mod_int(a1, 2) /= 1) =>
+      (FORALL (result1:UNIT):
+      ((result1 = tt) =>
+      (FORALL (a:INT):
+      ((a = (a1 / 2)) =>
+      (FORALL (b:INT):
+      ((b = (2 * b1)) =>
+      (((a >= 0) AND ((p1 + (a * b)) = (x * y))) AND
+      ((0 <= a1) AND (a < a1)))))))))))))))))))))))))));
+
+%% mult_po_4, Why obligation from file "arith.mlw", characters 400-406
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (a:INT):
+      ((a = x) =>
+      (FORALL (b:INT):
+      ((b = y) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (a1:INT):
+      (FORALL (b1:INT):
+      (FORALL (p1:INT):
+      ((Variant1 = a1) =>
+      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
+      ((a1 /= 0) => (FORALL (p2:INT): (2 /= 0))))))))))))))))));
+
+%% mult_po_5, Why obligation from file "arith.mlw", characters 268-436
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (a:INT):
+      ((a = x) =>
+      (FORALL (b:INT):
+      ((b = y) =>
+      (FORALL (p:INT):
+      ((p = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (a1:INT):
+      (FORALL (b1:INT):
+      (FORALL (p1:INT):
+      ((Variant1 = a1) =>
+      (((a1 >= 0) AND ((p1 + (a1 * b1)) = (x * y))) =>
+      ((a1 = 0) =>
+      (FORALL (result:INT): ((result = p1) => (result = (x * y))))))))))))))))))));
+
+%% mult_po_6, Why obligation from file "arith.mlw", characters 304-333
+QUERY (FORALL (x:INT):
+      (FORALL (y:INT):
+      (((x >= 0) AND (y >= 0)) =>
+      (FORALL (a:INT):
+      ((a = x) =>
+      (FORALL (b:INT):
+      ((b = y) =>
+      (FORALL (p:INT): ((p = 0) => ((a >= 0) AND ((p + (a * b)) = (x * y))))))))))));
+

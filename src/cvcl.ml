@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.5 2004-07-07 15:27:32 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.6 2004-07-08 11:48:25 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -293,7 +293,7 @@ tt: UNIT;
 array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
 sqrt_real: [REAL -> REAL];
 int_of_real: [REAL -> INT];
-mod_int: [INT, INT -> INT];
+mod_int: [[INT, INT] -> INT];
 "
 (*TODO prelude about exchange, permut and sorted
 "(BG_PUSH 

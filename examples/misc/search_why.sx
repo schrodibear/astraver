@@ -2,7 +2,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; search1_po_1, Why obligation from file "search.mlw", characters 383-388
+;; search1_po_1, Why obligation from file "search.mlw", characters 383-392
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (EQ i 0)
@@ -13,7 +13,23 @@
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
 (IMPLIES (< i1 (array_length t)) (AND (<= 0 i1) (< i1 (array_length t)))))))))))
 
-;; search1_po_2, Why obligation from file "search.mlw", characters 414-414
+;; search1_po_2, Why obligation from file "search.mlw", characters 398-414
+(FORALL (t)
+(FORALL (i)
+(IMPLIES (EQ i 0)
+(FORALL (Variant1)
+(FORALL (i1)
+(IMPLIES (EQ Variant1 (- (array_length t) i1))
+(IMPLIES (AND (<= 0 i1)
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
+(IMPLIES (< i1 (array_length t))
+(IMPLIES (AND (<= 0 i1) (< i1 (array_length t)))
+(IMPLIES (EQ (select t i1) 0)
+(FORALL (result1)
+(IMPLIES (EQ result1 i1)
+(FORALL (result) (IMPLIES (EQ result result1) (EQ (select t result) 0)))))))))))))))
+
+;; search1_po_3, Why obligation from file "search.mlw", characters 414-414
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (EQ i 0)
@@ -25,34 +41,37 @@
 (IMPLIES (< i1 (array_length t))
 (IMPLIES (AND (<= 0 i1) (< i1 (array_length t)))
 (IMPLIES (NEQ (select t i1) 0)
+(FORALL (result1)
+(IMPLIES (EQ result1 tt)
 (FORALL (i)
 (IMPLIES (EQ i (+ i1 1))
 (AND
 (AND (<= 0 i)
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
 (AND (<= 0 (- (array_length t) i1))
-(< (- (array_length t) i) (- (array_length t) i1))))))))))))))))
+(< (- (array_length t) i) (- (array_length t) i1))))))))))))))))))
 
-;; search1_po_3, Why obligation from file "search.mlw", characters 286-334
+;; search1_po_4, Why obligation from file "search.mlw", characters 237-442
+(FORALL (t)
+(FORALL (i)
+(IMPLIES (EQ i 0)
+(FORALL (Variant1)
+(FORALL (i1)
+(IMPLIES (EQ Variant1 (- (array_length t) i1))
+(IMPLIES (AND (<= 0 i1)
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
+(IMPLIES (>= i1 (array_length t))
+(FORALL (k)
+(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0)))))))))))
+
+;; search1_po_5, Why obligation from file "search.mlw", characters 286-334
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (EQ i 0)
 (AND (<= 0 i)
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0)))))))
 
-;; search1_po_4, Why obligation from file "search.mlw", characters 448-469
-(FORALL (t)
-(FORALL (i)
-(IMPLIES (EQ i 0)
-(FORALL (i1)
-(IMPLIES (AND
-         (AND (<= 0 i1)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
-         (>= i1 (array_length t)))
-(FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0))))))))
-
-;; search2_po_1, Why obligation from file "search.mlw", characters 885-890
+;; search2_po_1, Why obligation from file "search.mlw", characters 885-894
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (EQ i 0)
@@ -63,7 +82,21 @@
          (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
 (IMPLIES (< i1 (array_length t)) (AND (<= 0 i1) (< i1 (array_length t)))))))))))
 
-;; search2_po_2, Why obligation from file "search.mlw", characters 911-911
+;; search2_po_2, Why obligation from file "search.mlw", characters 900-911
+(FORALL (t)
+(FORALL (i)
+(IMPLIES (EQ i 0)
+(FORALL (Variant1)
+(FORALL (i1)
+(IMPLIES (EQ Variant1 (- (array_length t) i1))
+(IMPLIES (AND (<= 0 i1)
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
+(IMPLIES (< i1 (array_length t))
+(IMPLIES (AND (<= 0 i1) (< i1 (array_length t)))
+(IMPLIES (EQ (select t i1) 0)
+(FORALL (result) (IMPLIES (EQ result i1) (EQ (select t result) 0)))))))))))))
+
+;; search2_po_3, Why obligation from file "search.mlw", characters 911-911
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (EQ i 0)
@@ -75,32 +108,35 @@
 (IMPLIES (< i1 (array_length t))
 (IMPLIES (AND (<= 0 i1) (< i1 (array_length t)))
 (IMPLIES (NEQ (select t i1) 0)
+(FORALL (result1)
+(IMPLIES (EQ result1 tt)
 (FORALL (i)
 (IMPLIES (EQ i (+ i1 1))
 (AND
 (AND (<= 0 i)
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0))))
 (AND (<= 0 (- (array_length t) i1))
-(< (- (array_length t) i) (- (array_length t) i1))))))))))))))))
+(< (- (array_length t) i) (- (array_length t) i1))))))))))))))))))
 
-;; search2_po_3, Why obligation from file "search.mlw", characters 789-837
+;; search2_po_4, Why obligation from file "search.mlw", characters 740-939
+(FORALL (t)
+(FORALL (i)
+(IMPLIES (EQ i 0)
+(FORALL (Variant1)
+(FORALL (i1)
+(IMPLIES (EQ Variant1 (- (array_length t) i1))
+(IMPLIES (AND (<= 0 i1)
+         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
+(IMPLIES (>= i1 (array_length t))
+(FORALL (k)
+(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0)))))))))))
+
+;; search2_po_5, Why obligation from file "search.mlw", characters 789-837
 (FORALL (t)
 (FORALL (i)
 (IMPLIES (EQ i 0)
 (AND (<= 0 i)
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i)) (NEQ (select t k) 0)))))))
-
-;; search2_po_4, Why obligation from file "search.mlw", characters 945-966
-(FORALL (t)
-(FORALL (i)
-(IMPLIES (EQ i 0)
-(FORALL (i1)
-(IMPLIES (AND
-         (AND (<= 0 i1)
-         (FORALL (k) (IMPLIES (AND (<= 0 k) (< k i1)) (NEQ (select t k) 0))))
-         (>= i1 (array_length t)))
-(FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (array_length t))) (NEQ (select t k) 0))))))))
 
 ;; search3_po_1, Why obligation from file "search.mlw", characters 1503-1517
 (FORALL (t)
@@ -110,7 +146,8 @@
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
-(IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (result)
+(IMPLIES (EQ result 0)
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
 (FORALL (Variant1)
 (FORALL (i0)
@@ -118,25 +155,43 @@
 (IMPLIES (AND (<= 0 i0) (<= i0 (array_length t)))
 (IMPLIES (EQ i0 (array_length t))
 (FORALL (k)
-(IMPLIES (AND (<= i0 k) (< k (array_length t))) (NEQ (select t k) 0)))))))))))))
+(IMPLIES (AND (<= i0 k) (< k (array_length t))) (NEQ (select t k) 0))))))))))))))
 
-;; search3_po_3, Why obligation from file "search.mlw", characters 1350-1354
+;; search3_po_3, Why obligation from file "search.mlw", characters 1350-1358
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
-(IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (result)
+(IMPLIES (EQ result 0)
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
 (FORALL (Variant1)
 (FORALL (i0)
 (IMPLIES (EQ Variant1 (- (array_length t) i0))
 (IMPLIES (AND (<= 0 i0) (<= i0 (array_length t)))
-(IMPLIES (NEQ i0 (array_length t)) (AND (<= 0 i0) (< i0 (array_length t)))))))))))))
+(IMPLIES (NEQ i0 (array_length t)) (AND (<= 0 i0) (< i0 (array_length t))))))))))))))
 
-;; search3_po_4, Why obligation from file "search.mlw", characters 1377-1397
+;; search3_po_4, Why obligation from file "search.mlw", characters 1364-1365
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (result)
+(IMPLIES (EQ result 0)
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (Variant1)
+(FORALL (i0)
+(IMPLIES (EQ Variant1 (- (array_length t) i0))
+(IMPLIES (AND (<= 0 i0) (<= i0 (array_length t)))
+(IMPLIES (NEQ i0 (array_length t))
+(IMPLIES (AND (<= 0 i0) (< i0 (array_length t)))
+(IMPLIES (EQ (select t i0) 0)
+(FORALL (result1) (IMPLIES (EQ result1 i0) (EQ (select t result1) 0))))))))))))))))
+
+;; search3_po_5, Why obligation from file "search.mlw", characters 1377-1397
+(FORALL (t)
+(IMPLIES (<= 0 (array_length t))
+(IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (result)
+(IMPLIES (EQ result 0)
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
 (FORALL (Variant1)
 (FORALL (i0)
@@ -145,13 +200,14 @@
 (IMPLIES (NEQ i0 (array_length t))
 (IMPLIES (AND (<= 0 i0) (< i0 (array_length t)))
 (IMPLIES (NEQ (select t i0) 0)
-(AND (<= 0 (+ i0 1)) (<= (+ i0 1) (array_length t)))))))))))))))
+(AND (<= 0 (+ i0 1)) (<= (+ i0 1) (array_length t))))))))))))))))
 
-;; search3_po_5, Why obligation from file "search.mlw", characters 1249-1494
+;; search3_po_6, Why obligation from file "search.mlw", characters 1249-1494
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
-(IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (result)
+(IMPLIES (EQ result 0)
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
 (FORALL (Variant1)
 (FORALL (i0)
@@ -161,15 +217,17 @@
 (IMPLIES (AND (<= 0 i0) (< i0 (array_length t)))
 (IMPLIES (NEQ (select t i0) 0)
 (IMPLIES (AND (<= 0 (+ i0 1)) (<= (+ i0 1) (array_length t)))
+(FORALL (result1)
+(IMPLIES (EQ result1 (+ i0 1))
 (IMPLIES (AND (<= 0 (+ i0 1)) (<= (+ i0 1) (array_length t)))
-(IMPLIES (AND (<= 0 (+ i0 1)) (<= (+ i0 1) (array_length t)))
-(AND (<= 0 Variant1) (< (- (array_length t) (+ i0 1)) Variant1)))))))))))))))))
+(AND (<= 0 Variant1) (< (- (array_length t) result1) Variant1)))))))))))))))))))
 
-;; search3_po_6, Why obligation from file "search.mlw", characters 1377-1397
+;; search3_po_7, Why obligation from file "search.mlw", characters 1377-1397
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
-(IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
+(FORALL (result)
+(IMPLIES (EQ result 0)
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))
 (FORALL (Variant1)
 (FORALL (i0)
@@ -183,9 +241,9 @@
          (IMPLIES (AND (<= (+ i0 1) k) (< k (array_length t)))
          (NEQ (select t k) 0)))
 (FORALL (k)
-(IMPLIES (AND (<= i0 k) (< k (array_length t))) (NEQ (select t k) 0)))))))))))))))))
+(IMPLIES (AND (<= i0 k) (< k (array_length t))) (NEQ (select t k) 0))))))))))))))))))
 
-;; search3_po_7, Why obligation from file "search.mlw", characters 1149-1608
+;; search3_po_8, Why obligation from file "search.mlw", characters 1149-1608
 (FORALL (t)
 (IMPLIES (<= 0 (array_length t))
 (IMPLIES (AND (<= 0 0) (<= 0 (array_length t)))

@@ -103,6 +103,7 @@ Qed.
 
 (* Why obligation from file "power.mlw", characters 553-565 *)
 Lemma power1_po_1 : 
+  forall (m: Z),
   forall (n: Z),
   forall (Pre4: n >= 0),
   forall (m0: Z),
@@ -118,7 +119,7 @@ Lemma power1_po_1 :
   forall (Test4: n0 > 0),
   forall (Test3: (Zodd n0)),
   forall (y2: Z),
-  forall (Post3: y2 = (y1 * m1)),
+  forall (Post5: y2 = (y1 * m1)),
   forall (m: Z),
   forall (HW_3: m = (m1 * m1)),
   forall (n1: Z),
@@ -127,28 +128,26 @@ Lemma power1_po_1 :
 Proof.
 simpl; intros.
 repeat split; try omega.
-subst n1.
 decompose [and] Pre2; clear Pre2.
 rewrite (Zodd_div2 n0 H0 Test3) in H.
  rewrite H.
-subst m.
-subst y2.
 rewrite Zpower_exp.
 replace (Zpower m1 1) with m1.
 rewrite Zpower_2n.
 unfold square.
-unfold div2.
+subst m2 n1 y2; unfold div2.
 ring.
 generalize (Zdiv2_ge_0 n0); omega.
 unfold Zpower; unfold Zpower_pos; simpl; ring.
 generalize (Zdiv2_ge_0 n0); omega.
 omega.
-subst n1; apply Zdiv2_ge_0; omega.
-subst n1; apply Zdiv2_lt; omega.
+subst; apply Zdiv2_ge_0; omega.
+subst; apply Zdiv2_lt; omega.
 Qed.
 
 (* Why obligation from file "power.mlw", characters 565-565 *)
 Lemma power1_po_2 : 
+  forall (m: Z),
   forall (n: Z),
   forall (Pre4: n >= 0),
   forall (m0: Z),
@@ -163,6 +162,8 @@ Lemma power1_po_2 :
   forall (Pre2: (Zpower x n) = (y1 * (Zpower m1 n0)) /\ n0 >= 0),
   forall (Test4: n0 > 0),
   forall (Test2: (Zeven n0)),
+  forall (result3: unit),
+  forall (Post4: result3 = tt),
   forall (m: Z),
   forall (HW_7: m = (m1 * m1)),
   forall (n1: Z),
@@ -174,15 +175,13 @@ repeat split; try omega.
 decompose [and] Pre2; clear Pre2.
 rewrite (Zeven_div2 n0 Test2) in H.
  rewrite H.
-subst m.
-subst n1.
 rewrite Zpower_2n.
 unfold square.
-unfold div2.
+subst; unfold div2.
 ring.
 generalize (Zdiv2_ge_0 n0); omega.
-subst n1; apply Zdiv2_ge_0; omega.
-subst n1; apply Zdiv2_lt; omega.
+subst; apply Zdiv2_ge_0; omega.
+subst; apply Zdiv2_lt; omega.
 Qed.
 
 (* Why obligation from file "power.mlw", characters 427-616 *)

@@ -4,7 +4,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; pgm_max_end_po_1, Why obligation from file "max.mlw", characters 555-560
+;; pgm_max_end_po_1, Why obligation from file "max.mlw", characters 565-578
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x0)
@@ -21,7 +21,7 @@
          (IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x1))))))
 (IMPLIES (< y1 l) (AND (<= 0 y1) (< y1 (array_length a)))))))))))))))
 
-;; pgm_max_end_po_2, Why obligation from file "max.mlw", characters 563-568
+;; pgm_max_end_po_2, Why obligation from file "max.mlw", characters 565-578
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x0)
@@ -40,7 +40,7 @@
 (IMPLIES (AND (<= 0 y1) (< y1 (array_length a)))
 (AND (<= 0 x1) (< x1 (array_length a))))))))))))))))
 
-;; pgm_max_end_po_3, Why obligation from file "max.mlw", characters 574-581
+;; pgm_max_end_po_3, Why obligation from file "max.mlw", characters 584-591
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x0)
@@ -69,7 +69,7 @@
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x2))))))
 (AND (<= 0 (- l y1)) (< (- l y) (- l y1)))))))))))))))))))))))
 
-;; pgm_max_end_po_4, Why obligation from file "max.mlw", characters 581-581
+;; pgm_max_end_po_4, Why obligation from file "max.mlw", characters 591-591
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x0)
@@ -88,15 +88,53 @@
 (IMPLIES (AND (<= 0 y1) (< y1 (array_length a)))
 (IMPLIES (AND (<= 0 x1) (< x1 (array_length a)))
 (IMPLIES (<= (select a y1) (select a x1))
+(FORALL (result3)
+(IMPLIES (EQ result3 tt)
 (FORALL (y)
 (IMPLIES (EQ y (+ y1 1))
 (AND
 (AND (AND (<= 0 y) (<= y l))
 (AND (AND (<= 0 x1) (< x1 l))
 (FORALL (k) (IMPLIES (AND (<= 0 k) (< k y)) (<= (select a k) (select a x1))))))
-(AND (<= 0 (- l y1)) (< (- l y) (- l y1)))))))))))))))))))))
+(AND (<= 0 (- l y1)) (< (- l y) (- l y1)))))))))))))))))))))))
 
-;; pgm_max_end_po_5, Why obligation from file "max.mlw", characters 439-523
+;; pgm_max_end_po_5, Why obligation from file "max.mlw", characters 415-620
+(FORALL (a)
+(IMPLIES (EQ (array_length a) l)
+(FORALL (x0)
+(IMPLIES (EQ x0 0)
+(FORALL (y0)
+(IMPLIES (EQ y0 1)
+(FORALL (Variant1)
+(FORALL (x1)
+(FORALL (y1)
+(IMPLIES (EQ Variant1 (- l y1))
+(IMPLIES (AND (AND (<= 0 y1) (<= y1 l))
+         (AND (AND (<= 0 x1) (< x1 l))
+         (FORALL (k)
+         (IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x1))))))
+(IMPLIES (>= y1 l)
+(AND
+(FORALL (a0)
+(IMPLIES
+(AND (EQ (array_length a0) l)
+(AND (EQ (select a0 x1) (select a (- l 1)))
+(AND (EQ (select a0 (- l 1)) (select a x1))
+(FORALL (k)
+(IMPLIES (AND (<= 0 k) (< k l))
+(IMPLIES (NEQ k x1)
+(IMPLIES (NEQ k (- l 1)) (EQ (select a0 k) (select a k)))))))))
+(AND
+(FORALL (k)
+(IMPLIES (AND (<= 0 k) (< k (- l 1)))
+(IMPLIES (NEQ k x1) (EQ (select a0 k) (select a k)))))
+(AND (EQ (select a0 x1) (select a (- l 1)))
+(AND (EQ (select a0 (- l 1)) (select a x1))
+(FORALL (k)
+(IMPLIES (AND (<= 0 k) (< k (- l 1))) (<= (select a0 k) (select a0 (- l 1))))))))))
+(EQ (array_length a) l))))))))))))))
+
+;; pgm_max_end_po_6, Why obligation from file "max.mlw", characters 449-533
 (FORALL (a)
 (IMPLIES (EQ (array_length a) l)
 (FORALL (x0)
@@ -107,37 +145,4 @@
 (AND (AND (<= 0 x0) (< x0 l))
 (FORALL (k)
 (IMPLIES (AND (<= 0 k) (< k y0)) (<= (select a k) (select a x0))))))))))))
-
-;; pgm_max_end_po_6, Why obligation from file "max.mlw", characters 345-797
-(FORALL (a)
-(IMPLIES (EQ (array_length a) l)
-(FORALL (x0)
-(IMPLIES (EQ x0 0)
-(FORALL (y0)
-(IMPLIES (EQ y0 1)
-(FORALL (x1)
-(FORALL (y1)
-(IMPLIES (AND
-         (AND (AND (<= 0 y1) (<= y1 l))
-         (AND (AND (<= 0 x1) (< x1 l))
-         (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k y1)) (<= (select a k) (select a x1))))))
-         (>= y1 l))
-(IMPLIES (EQ (array_length a) l)
-(FORALL (a0)
-(IMPLIES (AND (EQ (array_length a0) l)
-         (AND (EQ (select a0 x1) (select a (- l 1)))
-         (AND (EQ (select a0 (- l 1)) (select a x1))
-         (FORALL (k)
-         (IMPLIES (AND (<= 0 k) (< k l))
-         (IMPLIES (NEQ k x1)
-         (IMPLIES (NEQ k (- l 1)) (EQ (select a0 k) (select a k)))))))))
-(AND
-(FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (- l 1)))
-(IMPLIES (NEQ k x1) (EQ (select a0 k) (select a k)))))
-(AND (EQ (select a0 x1) (select a (- l 1)))
-(AND (EQ (select a0 (- l 1)) (select a x1))
-(FORALL (k)
-(IMPLIES (AND (<= 0 k) (< k (- l 1))) (<= (select a0 k) (select a0 (- l 1))))))))))))))))))))
 

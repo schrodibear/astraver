@@ -1,0 +1,140 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% gcd1_po_1, Why obligation from file "gcd.mlw", characters 391-403
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a > 0) AND (b > 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = max(x1, y1)) =>
+      (((0 < x1) AND ((0 < y1) AND (gcd(x1, y1) = gcd(a, b)))) =>
+      ((x1 /= y1) =>
+      ((x1 > y1) =>
+      (FORALL (x2:INT):
+      ((x2 = (x1 - y1)) =>
+      (((0 < x2) AND ((0 < y1) AND (gcd(x2, y1) = gcd(a, b)))) AND
+      ((0 <= max(x1, y1)) AND (max(x2, y1) < max(x1, y1))))))))))))))))))));
+
+%% gcd1_po_2, Why obligation from file "gcd.mlw", characters 419-431
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a > 0) AND (b > 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = max(x1, y1)) =>
+      (((0 < x1) AND ((0 < y1) AND (gcd(x1, y1) = gcd(a, b)))) =>
+      ((x1 /= y1) =>
+      ((x1 <= y1) =>
+      (FORALL (y2:INT):
+      ((y2 = (y1 - x1)) =>
+      (((0 < x1) AND ((0 < y2) AND (gcd(x1, y2) = gcd(a, b)))) AND
+      ((0 <= max(x1, y1)) AND (max(x1, y2) < max(x1, y1))))))))))))))))))));
+
+%% gcd1_po_3, Why obligation from file "gcd.mlw", characters 262-441
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a > 0) AND (b > 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = max(x1, y1)) =>
+      (((0 < x1) AND ((0 < y1) AND (gcd(x1, y1) = gcd(a, b)))) =>
+      ((x1 = y1) =>
+      (FORALL (result:INT): ((result = x1) => (result = gcd(a, b)))))))))))))))));
+
+%% gcd1_po_4, Why obligation from file "gcd.mlw", characters 299-338
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a > 0) AND (b > 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) => ((0 < x) AND ((0 < y) AND (gcd(x, y) = gcd(a, b)))))))))));
+
+%% gcd2_po_1, Why obligation from file "gcd.mlw", characters 723-730
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a >= 0) AND (b >= 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = y1) =>
+      (((0 <= x1) AND ((0 <= y1) AND (gcd(x1, y1) = gcd(a, b)))) =>
+      ((y1 /= 0) => (y1 /= 0))))))))))))));
+
+%% gcd2_po_2, Why obligation from file "gcd.mlw", characters 741-777
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a >= 0) AND (b >= 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = y1) =>
+      (((0 <= x1) AND ((0 <= y1) AND (gcd(x1, y1) = gcd(a, b)))) =>
+      ((y1 /= 0) =>
+      ((y1 /= 0) =>
+      (FORALL (r:INT):
+      ((r = mod_int(x1, y1)) =>
+      (FORALL (x2:INT):
+      ((x2 = y1) =>
+      (FORALL (y2:INT):
+      ((y2 = r) =>
+      (((0 <= x2) AND ((0 <= y2) AND (gcd(x2, y2) = gcd(a, b)))) AND
+      ((0 <= y1) AND (y2 < y1)))))))))))))))))))))));
+
+%% gcd2_po_3, Why obligation from file "gcd.mlw", characters 617-787
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a >= 0) AND (b >= 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) =>
+      (FORALL (Variant1:INT):
+      (FORALL (x1:INT):
+      (FORALL (y1:INT):
+      ((Variant1 = y1) =>
+      (((0 <= x1) AND ((0 <= y1) AND (gcd(x1, y1) = gcd(a, b)))) =>
+      ((y1 = 0) =>
+      (FORALL (result:INT): ((result = x1) => (result = gcd(a, b)))))))))))))))));
+
+%% gcd2_po_4, Why obligation from file "gcd.mlw", characters 653-694
+QUERY (FORALL (a:INT):
+      (FORALL (b:INT):
+      (((a >= 0) AND (b >= 0)) =>
+      (FORALL (x:INT):
+      ((x = a) =>
+      (FORALL (y:INT):
+      ((y = b) => ((0 <= x) AND ((0 <= y) AND (gcd(x, y) = gcd(a, b)))))))))));
+

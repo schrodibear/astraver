@@ -12,7 +12,7 @@ Lemma p_po_1 :
   forall (Pre2: 0 <= x0 /\ x0 <= x),
   forall (Test2: x0 > 0),
   forall (x1: Z),
-  forall (Post1: x1 = (x0 - 1)),
+  forall (Post2: x1 = (x0 - 1)),
   (0 <= x1 /\ x1 <= x) /\ (Zwf 0 x1 x0).
  Proof.
  intuition.

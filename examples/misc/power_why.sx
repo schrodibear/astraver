@@ -16,7 +16,7 @@
 
 ;; DO NOT EDIT BELOW THIS LINE
 
-;; power1_po_1, Why obligation from file "power.mlw", characters 506-518
+;; power1_po_1, Why obligation from file "power.mlw", characters 553-565
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)
@@ -40,7 +40,7 @@
 (AND (AND (EQ (Zpower x n) (* y2 (Zpower m n1))) (>= n1 0))
 (AND (<= 0 n0) (< n1 n0)))))))))))))))))))))))
 
-;; power1_po_2, Why obligation from file "power.mlw", characters 518-518
+;; power1_po_2, Why obligation from file "power.mlw", characters 565-565
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)
@@ -55,32 +55,35 @@
 (IMPLIES (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
 (IMPLIES (> n0 0)
 (IMPLIES (EQ (Zeven n0) |@true|)
+(FORALL (result3)
+(IMPLIES (EQ result3 tt)
 (FORALL (m)
 (IMPLIES (EQ m (* m1 m1))
 (FORALL (n1)
 (IMPLIES (EQ n1 (div2 n0))
 (AND (AND (EQ (Zpower x n) (* y1 (Zpower m n1))) (>= n1 0))
-(AND (<= 0 n0) (< n1 n0)))))))))))))))))))))
+(AND (<= 0 n0) (< n1 n0)))))))))))))))))))))))
 
-;; power1_po_3, Why obligation from file "power.mlw", characters 414-459
-(FORALL (n)
-(IMPLIES (>= n 0)
-(FORALL (m0)
-(IMPLIES (EQ m0 x)
-(FORALL (y0)
-(IMPLIES (EQ y0 1) (AND (EQ (Zpower x n) (* y0 (Zpower m0 n))) (>= n 0))))))))
-
-;; power1_po_4, Why obligation from file "power.mlw", characters 345-575
+;; power1_po_3, Why obligation from file "power.mlw", characters 427-616
 (FORALL (n)
 (IMPLIES (>= n 0)
 (FORALL (m0)
 (IMPLIES (EQ m0 x)
 (FORALL (y0)
 (IMPLIES (EQ y0 1)
+(FORALL (Variant1)
 (FORALL (m1)
 (FORALL (n0)
 (FORALL (y1)
-(IMPLIES (AND (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
-         (<= n0 0))
-(EQ y1 (Zpower x n))))))))))))
+(IMPLIES (EQ Variant1 n0)
+(IMPLIES (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
+(IMPLIES (<= n0 0) (EQ y1 (Zpower x n)))))))))))))))
+
+;; power1_po_4, Why obligation from file "power.mlw", characters 461-506
+(FORALL (n)
+(IMPLIES (>= n 0)
+(FORALL (m0)
+(IMPLIES (EQ m0 x)
+(FORALL (y0)
+(IMPLIES (EQ y0 1) (AND (EQ (Zpower x n) (* y0 (Zpower m0 n))) (>= n 0))))))))
 

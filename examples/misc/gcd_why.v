@@ -36,7 +36,7 @@ Lemma gcd1_po_1 :
   forall (Test4: x1 <> y1),
   forall (Test3: x1 > y1),
   forall (x2: Z),
-  forall (Post2: x2 = (x1 - y1)),
+  forall (Post3: x2 = (x1 - y1)),
   (0 < x2 /\ 0 < y1 /\ (gcd x2 y1) = (gcd a b)) /\
   (Zwf 0 (max x2 y1) (max x1 y1)).
 Proof.
@@ -63,7 +63,7 @@ Lemma gcd1_po_2 :
   forall (Test4: x1 <> y1),
   forall (Test2: x1 <= y1),
   forall (y2: Z),
-  forall (Post1: y2 = (y1 - x1)),
+  forall (Post2: y2 = (y1 - x1)),
   (0 < x1 /\ 0 < y2 /\ (gcd x1 y2) = (gcd a b)) /\
   (Zwf 0 (max x1 y2) (max x1 y1)).
 Proof.
@@ -91,7 +91,7 @@ Lemma gcd1_po_3 :
   forall (Pre2: 0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)),
   forall (Test1: x1 = y1),
   forall (result: Z),
-  forall (HW_2: result = x1),
+  forall (HW_4: result = x1),
   result = (gcd a b).
 Proof.
 intuition; subst.
@@ -151,11 +151,11 @@ Lemma gcd2_po_2 :
   forall (Test2: y1 <> 0),
   forall (Pre2: ~(y1 = 0)),
   forall (r: Z),
-  forall (Post3: r = ((Zmod x1 y1))),
+  forall (Post4: r = ((Zmod x1 y1))),
   forall (x2: Z),
-  forall (Post1: x2 = y1),
+  forall (Post2: x2 = y1),
   forall (y2: Z),
-  forall (Post2: y2 = r),
+  forall (Post3: y2 = r),
   (0 <= x2 /\ 0 <= y2 /\ (gcd x2 y2) = (gcd a b)) /\ (Zwf 0 y2 y1).
 Proof.
 intuition.
@@ -191,7 +191,7 @@ Lemma gcd2_po_3 :
   forall (Pre3: 0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)),
   forall (Test1: y1 = 0),
   forall (result: Z),
-  forall (HW_2: result = x1),
+  forall (HW_4: result = x1),
   result = (gcd a b).
 Proof.
 intuition; subst.

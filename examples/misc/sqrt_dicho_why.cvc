@@ -1,0 +1,103 @@
+
+UNIT: TYPE;
+tt: UNIT;
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [[INT, INT] -> INT];
+
+
+%%%% DO NOT EDIT BELOW THIS LINE
+
+%% sqrt_po_1, Why obligation from file "sqrt_dicho.mlw", characters 326-346
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (inf:INT):
+      ((inf = 0) =>
+      (FORALL (sup:INT):
+      ((sup = (x + 1)) =>
+      (FORALL (mil:INT):
+      ((mil = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (inf1:INT):
+      (FORALL (sup1:INT):
+      ((Variant1 = (sup1 - inf1)) =>
+      ((((inf1 * inf1) <= x) AND ((x < (sup1 * sup1)) AND (inf1 < sup1))) =>
+      (((inf1 + 1) /= sup1) => (2 /= 0)))))))))))))));
+
+%% sqrt_po_2, Why obligation from file "sqrt_dicho.mlw", characters 375-386
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (inf:INT):
+      ((inf = 0) =>
+      (FORALL (sup:INT):
+      ((sup = (x + 1)) =>
+      (FORALL (mil:INT):
+      ((mil = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (inf1:INT):
+      (FORALL (sup1:INT):
+      ((Variant1 = (sup1 - inf1)) =>
+      ((((inf1 * inf1) <= x) AND ((x < (sup1 * sup1)) AND (inf1 < sup1))) =>
+      (((inf1 + 1) /= sup1) =>
+      (FORALL (mil2:INT):
+      ((mil2 = ((inf1 + (sup1 + 1)) / 2)) =>
+      ((x < (mil2 * mil2)) =>
+      (FORALL (sup2:INT):
+      ((sup2 = mil2) =>
+      ((((inf1 * inf1) <= x) AND ((x < (sup2 * sup2)) AND (inf1 < sup2))) AND
+      ((0 <= (sup1 - inf1)) AND ((sup2 - inf1) < (sup1 - inf1)))))))))))))))))))))));
+
+%% sqrt_po_3, Why obligation from file "sqrt_dicho.mlw", characters 392-403
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (inf:INT):
+      ((inf = 0) =>
+      (FORALL (sup:INT):
+      ((sup = (x + 1)) =>
+      (FORALL (mil:INT):
+      ((mil = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (inf1:INT):
+      (FORALL (sup1:INT):
+      ((Variant1 = (sup1 - inf1)) =>
+      ((((inf1 * inf1) <= x) AND ((x < (sup1 * sup1)) AND (inf1 < sup1))) =>
+      (((inf1 + 1) /= sup1) =>
+      (FORALL (mil2:INT):
+      ((mil2 = ((inf1 + (sup1 + 1)) / 2)) =>
+      ((x >= (mil2 * mil2)) =>
+      (FORALL (inf2:INT):
+      ((inf2 = mil2) =>
+      ((((inf2 * inf2) <= x) AND ((x < (sup1 * sup1)) AND (inf2 < sup1))) AND
+      ((0 <= (sup1 - inf1)) AND ((sup1 - inf2) < (sup1 - inf1)))))))))))))))))))))));
+
+%% sqrt_po_4, Why obligation from file "sqrt_dicho.mlw", characters 185-409
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (inf:INT):
+      ((inf = 0) =>
+      (FORALL (sup:INT):
+      ((sup = (x + 1)) =>
+      (FORALL (mil:INT):
+      ((mil = 0) =>
+      (FORALL (Variant1:INT):
+      (FORALL (inf1:INT):
+      (FORALL (sup1:INT):
+      ((Variant1 = (sup1 - inf1)) =>
+      ((((inf1 * inf1) <= x) AND ((x < (sup1 * sup1)) AND (inf1 < sup1))) =>
+      (((inf1 + 1) = sup1) =>
+      (FORALL (result:INT):
+      ((result = inf1) =>
+      (((result * result) <= x) AND (x < ((result + 1) * (result + 1))))))))))))))))))));
+
+%% sqrt_po_5, Why obligation from file "sqrt_dicho.mlw", characters 235-287
+QUERY (FORALL (x:INT):
+      ((x >= 0) =>
+      (FORALL (inf:INT):
+      ((inf = 0) =>
+      (FORALL (sup:INT):
+      ((sup = (x + 1)) =>
+      (FORALL (mil:INT):
+      ((mil = 0) =>
+      (((inf * inf) <= x) AND ((x < (sup * sup)) AND (inf < sup)))))))))));
+
