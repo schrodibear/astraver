@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.14 2002-03-14 16:13:41 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.15 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -355,67 +355,6 @@ let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
 	  (vx,tva (*i trad_ml_type_v ren env tva i*)) (t',ty)
   in
   eval_args ren (List.combine vi args)
-
-
-(* [make_if ren env (tb,cb) ren' (t1,c1) (t2,c2)]
- * constructs the term corresponding to a if expression, i.e
- *
- *       [p] let o1, b [,q1] = m1 [?::p1] in
- *           Cases b of
- *              R => let o2, v2 [,q2] = t1  [?::p2] in 
- *                   (proj (o1,o2)), v2 [,?::q] 
- *            | S => let o2, v2 [,q2] = t2  [?::p2] in 
- *                   (proj (o1,o2)), v2 [,?::q] 
- *)
-
-let make_if_case ren env ty (tb,qb) (br1,br2) =
-  let ty1,ty2 = match qb with
-    | Some q ->  
-  	let q = apply_post ren env (current_date ren) q in
-        (*i let q = post_app (subst_in_predicate [Ident.result,idb]) q in i*)
-	decomp_boolean (Some q)
-    | None ->
-	print_cc_term err_formatter tb; pp_print_flush err_formatter ();
-	assert false
-  in
-  let n = test_name Anonymous in
-  (CC_if (tb, CC_lam ([n, CC_pred_binder ty1], br1),
-	  CC_lam ([n, CC_pred_binder ty2], br2)))
-
-let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
-  let ((_,tvb),eb,pb,qb) = decomp_kappa cb in
-  let ((_,tv1),e1,p1,q1) = decomp_kappa c1 in
-  let ((_,tv2),e2,p2,q2) = decomp_kappa c2 in
-  let ((_,t),e,p,q) = decomp_kappa c in
-
-  let wb = get_writes eb in
-  let resb = Ident.create "resultb" in
-  let res = Ident.result in
-  let tyb = tvb (*i trad_ml_type_v ren' env tvb i*) in
-  let tt = t (*i trad_ml_type_v ren env t i*) in
-
-  (* une branche de if *)
-  let branch cbr f_br  = 
-    let (tv_br,e_br,p_br,q_br) = decomp_kappa cbr in
-    let w_br = get_writes e_br in
-    let ren'' = next ren' w_br in
-    let t,ty = result_tuple ren'' (current_date ren') env
-		 (res,CC_var res,CC_type) (e,q) in
-    make_let_in ren' ren'' env f_br p_br (current_vars ren'' w_br,q_br)
-      (res,tt) (t,ty),
-    ty
-  in
-  let t1,ty1 = branch c1 t1 in
-  let t2,ty2 = branch c2 t2 in
-  let ty = ty1 in
-  let qb = force_bool_name qb in
-  let t = make_if_case ren env ty (tb,qb) (t1,t2) in
-  let pre = List.map (bind_pre ren env) pb in
-  make_abs pre t
-(*i
-  let t = make_if_case ren env ty (resb,CC_var resb,qb) (t1,t2) in
-  make_let_in ren ren' env tb pb (current_vars ren' wb,None) (resb,tyb) (t,ty)
-i*)
 
 
 (*s [make_while ren env (cphi,r,a) (tb,cb) (te,ce) c]

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.19 2002-03-14 16:13:41 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.20 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -365,9 +365,9 @@ and print_type_c fmt c =
 let rec print_prog fmt p = 
   let k = p.info.kappa in
   if k.c_pre = [] && k.c_post = None then
-    fprintf fmt "@[%s:%a@]" p.info.label print_desc p.desc
+    fprintf fmt "@[%s:@,%a@]" p.info.label print_desc p.desc
   else
-    fprintf fmt "@[%s:{%a}@ %a@ {%a}@]" 
+    fprintf fmt "@[%s:@,@[{%a}@ %a@ @]{%a}@]" 
       p.info.label print_pre k.c_pre print_desc p.desc print_post k.c_post
 
 and print_desc fmt = function
@@ -376,7 +376,7 @@ and print_desc fmt = function
   | Acc id -> 
       fprintf fmt "!%a" Ident.print id
   | Aff (id, p) -> 
-      fprintf fmt "%a :=@ %a" Ident.print id print_prog p
+      fprintf fmt "@[%a :=@ %a@]" Ident.print id print_prog p
   | TabAcc (_, id, p) -> 
       fprintf fmt "%a[%a]" Ident.print id print_prog p
   | TabAff (_, id, p1, p2) -> 
@@ -393,9 +393,9 @@ and print_desc fmt = function
   | Lam (bl, p) -> 
       fprintf fmt "<fun>"
   | App (p, a, None) -> 
-      fprintf fmt "(%a %a)" print_prog p print_arg a
+      fprintf fmt "(@[%a@ %a@])" print_prog p print_arg a
   | App (p, a, Some k) -> 
-      fprintf fmt "(%a %a :: %a)" print_prog p print_arg a print_type_c k
+      fprintf fmt "(@[%a %a ::@ %a@])" print_prog p print_arg a print_type_c k
   | LetRef (id, p1, p2) ->
       fprintf fmt "let %a = %a in %a" 
 	Ident.print id print_prog p1 print_prog p2

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.28 2002-03-14 14:38:09 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.29 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -311,7 +311,6 @@ let rec typef lab env expr =
   let ep = state_pre lab env loc expr.info.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let toplabel = label_name () in
-  (*i let q = optpost_app (change_label "" toplabel) q in i*)
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = List.map assert_pre p1 @ expr.info.pre in
   match q, d with
@@ -320,6 +319,10 @@ let rec typef lab env expr =
 		  c_effect = Effect.union e' (effect expr');
 		  c_pre = p' @ (pre expr'); c_post = post expr' } in
 	make_node expr'.desc env toplabel c
+    | None, App (_,_,Some k') ->
+	let c = { c_result_name = result; c_result_type = v; c_effect = e'; 
+		  c_pre = p'; c_post = k'.c_post } in
+	make_node d env toplabel c
     | _ ->
 	let c = { c_result_name = result; c_result_type = v;
 		  c_effect = e'; c_pre = p'; c_post = q } in
@@ -440,15 +443,10 @@ and typef_desc lab env loc = function
 	     (* TODO: rename [x] to avoid capture *)
 	     let info = { loc = loc; pre = []; post = None } in
 	     let var_x = { desc = Var x; info = info } in
-	     let app_f_x = { desc = App (f, Term var_x, None); info = info } in
+	     let app_f_x = 
+	       { desc = App (f, Term var_x, Some kapp); info = info } 
+	     in
 	     typef_desc lab env loc (LetIn (x, a, app_f_x)))
-(*i***
-	     if occur_post x qapp then
-	       App (t_f, Term t_a, Some kapp), (tapp, ef), []
-	     else
-	       let kapp = { kapp with c_pre = [] } in
-	       App (t_f, Term t_a, Some kapp), (tapp, ef), []
-***i*)
 
   | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in

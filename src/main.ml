@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.20 2002-03-14 14:38:09 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.21 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -132,7 +132,7 @@ Generic Options:
   -h, --help     prints this message
   -V, --verbose  verbose mode
   -q, --quiet    quiet mode (default)
-  -d, --debug    debugging mode
+  -d, --debug    debugging mode (implies verbose mode)
   -v, --version  prints version and exits
   --warranty     prints license and exits
 

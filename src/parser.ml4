@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.22 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.23 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -112,7 +112,7 @@ let un_op op loc e =
 
 let bool_not loc a = un_op Ident.p_not loc a
 
-let zwf_zero = Tvar Ident.t_zwf_zero
+let zwf_zero = Pvar Ident.t_zwf_zero
 
 let mk_prog loc p pre post =
   { desc = p.desc; 
@@ -415,7 +415,7 @@ i*)
   [ [ LIDENT "invariant"; c = assertion -> c ] ]
   ;
   variant:
-  [ [ c = term; "for"; r = term -> (c, r)
+  [ [ c = term; "for"; r = predicate -> (c, r)
     | c = term -> (c, zwf_zero) ] ]
   ;
 

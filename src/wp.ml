@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.26 2002-03-14 16:18:45 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.27 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -28,6 +28,28 @@ let force_post env q e = match q with
 let post_if_none env q p = match post p with
   | None -> force_post env q p 
   | _ -> p
+
+(* post-condition of [while b do inv I done] i.e. [I and not B] *)
+
+let while_post info b inv = 
+  let _,s = decomp_boolean (post b) in
+  let s = change_label b.info.label info.label s in
+  match inv with
+    | None -> Some (anonymous s)
+    | Some i -> Some { a_value = pand i.a_value s; a_name = i.a_name }
+
+let top_point_block = function
+  | Label s :: _ as b -> s, b
+  | b -> let s = label_name() in s, (Label s)::b
+
+let while_post_block env inv (phi,r) bl = 
+  let lab,bl = top_point_block bl in
+  let decphi = papplist r [phi; put_label_term env lab phi] in
+  let q = match inv with
+    | None -> anonymous decphi
+    | Some i -> { a_value = pand i.a_value decphi; a_name = i.a_name }
+  in
+  bl, q
 
 (* misc. *)
 
@@ -105,8 +127,10 @@ let rec normalize p =
     | Lam (bl, e) ->
 	change_desc p (Lam (bl, normalize e))
     | While (b, invopt, var, bl) ->
-	change_desc p (While (normalize_boolean env b,
-			      invopt, var, normalize_block bl))
+	let b' = normalize_boolean env b in
+	let p = change_desc p (While (b', invopt, var, normalize_block bl)) in
+	let q = while_post p.info b' invopt in
+	post_if_none env q p
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_bool_post (equality (Tvar Ident.result) t) in
 	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
@@ -195,7 +219,7 @@ let rec wp p q =
   let postp = post p in
   let q0 = if postp = None then q else postp in
   let lab = p.info.label in
-  let q0 = optpost_app (change_label "" lab) q0 in (* ADDED *)
+  let q0 = optpost_app (change_label "" lab) q0 in
   let d,w = wp_desc p.info p.desc q0 in
   let p = change_desc p d in
   let w = optpost_app (erase_label lab) w in
@@ -297,9 +321,12 @@ and wp_desc info d q =
 	let e'1,w' = wp e1 q' in
 	LetRef (x, e'1, e'2), w'
     | Rec _ ->
-	failwith "todo: wp let rec"
-    | While (b, invopt, (var,r), bl) ->
-	d, invopt (* TODO: check *)
+	failwith "todo: wp rec"
+    | While (b, inv, var, bl) ->
+	let b',_ = wp b None in
+	let bl,q = while_post_block info.env inv var bl in
+	let bl',_ = wp_block bl (Some q) in
+	While (b', inv, var, bl'), None
     | Coerce p ->
 	let p',w = wp p q in
 	Coerce p', w

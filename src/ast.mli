@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.18 2002-03-13 16:15:46 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.19 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -13,6 +13,8 @@ type variable = Ident.t
 
 type label = string
 
+type user_variant = term * predicate
+
 type 'a t = 
   { desc : 'a t_desc;
     info : 'a }
@@ -24,13 +26,13 @@ and 'a t_desc =
   | TabAcc of bool * variable * 'a t
   | TabAff of bool * variable * 'a t * 'a t
   | Seq of 'a block
-  | While of 'a t * assertion option * (term * term) * 'a block
+  | While of 'a t * assertion option * user_variant * 'a block
   | If of 'a t * 'a t * 'a t
   | Lam of type_v binder list * 'a t
   | App of 'a t * 'a arg * type_c option
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
-  | Rec of variable * type_v binder list * type_v * (term * term) * 'a t
+  | Rec of variable * type_v binder list * type_v * user_variant * 'a t
   | Expression of term
   | Coerce of 'a t
 

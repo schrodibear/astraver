@@ -1,13 +1,18 @@
 
 (* Test program *)
 
-external t : array 10 of int
+external x : int ref
 
-let p1 = { access(t,0)=0 } begin t[t[0]] := 1 end { access(t,0) = 1 }
-
-let p2 = t[begin t[0] := 1; 0 end] { result = 1 }
+let p = 
+  begin 
+    while !x > 0 do { invariant x >= 0 variant x } x := !x - 1 done;
+    x := !x + 1
+  end
+  { x = 1 }
 
 (***
+
+external t : array 10 of int
 
 (*** BUG capture global/local ***)
 

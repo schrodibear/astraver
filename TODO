@@ -35,7 +35,7 @@ BUGS
    let f = fun (u:unit) -> x := 0
    let g = fun (x':int ref) -> begin (f void); x' := 1 end
    =======================================================
-   => rename locals (globals are unique)
+   => rename locals in Db (globals are unique)
 
 IMPLEMENTATION
 ==============
@@ -43,3 +43,8 @@ IMPLEMENTATION
  - array bounds checking: only when index is pure for the moment
 
  - wp(t[e1] := e2) does not propagate wp inside e2
+   inconsistent evaluation order between Wp and Mlize
+
+ - suppress Coerce node?
+
+ - simplify predicates (e.g. if true then ...)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.24 2002-03-14 16:13:41 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.25 2002-03-15 10:00:13 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -144,40 +144,6 @@ and trad_desc info d ren = match d with
   | _ -> failwith "Mlize.trad: TODO"
 
 (*i***
-
-  | TabAff (check, x, e1, e2) ->
-      let _,ty_elem = array_info env x in
-      let te1 = trad ren e1 in
-      let (_,ef1,p1,q1) = decomp_kappa e1.info.kappa in
-      let w1 = get_writes ef1 in
-      let ren' = next ren w1 in
-      let te2 = trad ren' e2 in
-      let (_,ef2,p2,q2) = decomp_kappa e2.info.kappa in
-      let w2 = get_writes ef2 in
-      let ren'' = next ren' w2 in
-      let id1 = Ident.create "index" in
-      let id2 = Ident.create "v" in
-      let ren''' = next ren'' [x] in
-      let t,ty = result_tuple ren''' (current_date ren) env
-		   (rest, CC_expr (Tconst ConstUnit), CC_type) (eft,qt) in
-      let store = make_raw_store env (x,current_var ren'' x) (Tvar id1)
-		   (Tvar id2) in
-      let t = make_let_in ren'' ren''' env (CC_expr store) [] ([],None) 
-		(current_var ren''' x, type_in_env env x) (t,ty) in
-      let t = make_let_in ren' ren'' env te2 p2
-     		(current_vars ren'' w2,q2) (id2,ty_elem) (t,ty) in
-      let t = 
-	if check then
-	  let h = make_pre_access env x (Tvar id1) in
-	  let_in_pre ty (anonymous_pre true h) t
-	else
-	  t 
-      in
-      make_let_in ren ren' env te1 p1
-	(current_vars ren' w1,q1) (id1,PureType PTint) (t,ty)
-
-  (* Translation of the while. *)
-
   | While (b, inv, var, bl) ->
       (*i EXP: we do not generate the obligation at the end of test i*)
       let b' =
@@ -189,26 +155,6 @@ and trad_desc info d ren = match d with
       let var' = typed_var env var in
       make_while ren env var' (tb,b.info.kappa) tbl (inv,ct)
 
-  | LetRef (x, e1, e2) ->
-      let (_,v1),ef1,p1,q1 = decomp_kappa e1.info.kappa in
-      let te1 = trad ren e1 in
-      let tv1 = v1 (*i trad_ml_type_v ren env v1 i*) in
-      let env' = add (x,Ref v1) env in
-      let ren' = next ren [x] in
-      let (_,v2),ef2,p2,q2 = decomp_kappa e2.info.kappa in
-      let tv2 = v2 (*i trad_ml_type_v ren' env' v2 i*) in
-      let te2 = trad ren' e2 in
-      let ren'' = next ren' (get_writes ef2) in
-      let t,ty = result_tuple ren'' (current_date ren) env'
-		   (Ident.result, CC_var Ident.result, CC_type) (eft,qt) in
-      let t = make_let_in ren' ren'' env' te2 p2
-		(current_vars ren'' (get_writes ef2),q2)
-		(Ident.result,tv2) (t,ty) in
-      let t = make_let_in ren ren' env te1 p1
-     		(current_vars ren' (get_writes ef1),q1) (x,tv1) (t,ty) 
-      in
-      t
-
   | LetRec (f,bl,v,var,e) ->
       let c = match tt with Arrow(_,c) -> c | _ -> assert false in
       let (_,ef,_,_) = decomp_kappa c in
@@ -219,7 +165,6 @@ and trad_desc info d ren = match d with
       let te = trad ren' e in
       let t = make_letrec ren' env' (phi0,var') f bl' (te,e.info.kappa) c in
       CC_lam (bl', t)
-
 ****i*)
 
 and trad_binders ren env = function
