@@ -280,7 +280,7 @@ Admitted.
    ((p2:pointer)
     ((a:Z)
      ((b:Z)
-      (((i:Z) (`a <= i` /\ `i < b` -> ~(p1 = (shift p2 i)))) ->
+      (((i:Z) (`a <= i` /\ `i <= b` -> ~(p1 = (shift p2 i)))) ->
        (unchanged p1 (range_loc p2 a b))))))).
 Admitted.
 
@@ -290,7 +290,7 @@ Admitted.
     ((a:Z)
      ((b:Z)
       ((unchanged p1 (range_loc p2 a b)) ->
-       ((i:Z) (`a <= i` /\ `i < b` -> ~(p1 = (shift p2 i))))))))).
+       ((i:Z) (`a <= i` /\ `i <= b` -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 
 (*Why logic*) Definition unary_compl : Z -> Z.

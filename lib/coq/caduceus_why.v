@@ -295,7 +295,7 @@ Admitted.
    (forall (p2:pointer),
     (forall (a:Z),
      (forall (b:Z),
-      ((forall (i:Z), (a <= i /\ i < b -> ~(p1 = (shift p2 i)))) ->
+      ((forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i)))) ->
        (unchanged p1 (range_loc p2 a b))))))).
 Admitted.
 
@@ -305,7 +305,7 @@ Admitted.
     (forall (a:Z),
      (forall (b:Z),
       ((unchanged p1 (range_loc p2 a b)) ->
-       (forall (i:Z), (a <= i /\ i < b -> ~(p1 = (shift p2 i))))))))).
+       (forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 
 (*Why logic*) Definition unary_compl : Z -> Z.

@@ -201,14 +201,14 @@ axiom unchanged_range_intro :
   forall p1:pointer.forall p2:pointer.
     forall a:int. forall b:int.
  	(forall i:int.
-	    (a <= i < b) -> (p1 <> shift(p2,i))) -> 
+	    (a <= i <= b) -> (p1 <> shift(p2,i))) -> 
   	       unchanged(p1,range_loc(p2,a,b))	
 
 axiom unchanged_range_elim :
   forall p1:pointer.forall p2:pointer.
     forall a:int. forall b:int.
        unchanged(p1,range_loc(p2,a,b)) ->
- 	(forall i:int. a <= i < b -> p1 <> shift(p2,i))  
+ 	(forall i:int. a <= i <= b -> p1 <> shift(p2,i))  
 
 (* bitwise operations *)
 logic unary_compl : int -> int

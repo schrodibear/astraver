@@ -1,4 +1,4 @@
-\documentclass[a4paper,12pt]{report}
+\documentclass[12pt,a4paper,twoside,openright]{report}
 
 \usepackage{fullpage}
 \usepackage{url}
@@ -61,8 +61,6 @@ Jean-Christophe Filli\^atre and Claude March\'e
 \end{center}
 
 
-\tableofcontents
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter*{Foreword}
 \addcontentsline{toc}{chapter}{Foreword}
@@ -81,7 +79,7 @@ the complete syntax of annotations, list of features, etc.
 
 \subsection*{License}
 
-The \caduceus\ certification tool is \copyright\ 2003 Laboratoire de
+The \caduceus\ certification tool is \copyright\ 2003-2004 Laboratoire de
 Recherche en Informatique (\url{www.lri.fr}).
 It is open source and freely available under the terms of the GNU
 GENERAL PUBLIC LICENSE Version 2. See the files \texttt{COPYING} and
@@ -131,14 +129,14 @@ The specification is here a post-condition, introduced by the keyword
 returns. The keyword \texttt{\result} denotes the value returned by
 the function, thus of type \texttt{int} in this example. The
 post-condition expresses that \texttt{\result} is the smallest integer
-greater or equal than \texttt{x} and \texttt{y} (there are plenty
+greater than or equal to \texttt{x} and \texttt{y} (there are plenty
 other ways to specify the \texttt{max} function).
 
 The proof obligations are generated in two steps. First, the caduceus
 tool must be run on the source file \texttt{max.c} with
 the command:
 \begin{verbatim}
-   caduceus max.c
+> caduceus max.c
 \end{verbatim}
 This generates several files, some of them in sub-directories. Among
 those files, a file named \texttt{max.makefile} is generated, which
@@ -149,7 +147,7 @@ The second step is then to generate proof obligations for some
 prover. If the proofs are to be made with the \coq\ proof assistant, 
 the command is:
 \begin{verbatim}
-    make -f max.makefile coq
+>  make -f max.makefile coq
 \end{verbatim}
 This command will generate the proof obligations, together will some
 Coq \emph{modeling} of the C program (file \verb|caduceus_why.v|):
@@ -175,7 +173,7 @@ this file must be filled in manually, using \texttt{coqide} for instance.
 As an alternative to \coq\, let us use the \simplify\ decision procedure.
 The \texttt{make} command becomes:
 \begin{verbatim}
-    make -f max.makefile simplify
+> make -f max.makefile simplify
 \end{verbatim}
 The obligations are also discharged automatically in that case:
 \begin{verbatim}
@@ -206,13 +204,10 @@ Running \caduceus{} and then Simplify results in:
 > caduceus abs.c
 generating Why code for function abs1
 > make -f abs.makefile simplify
-make[1]: Entering directory `/home/demons6/marche/recherche/caduceus'
-abs.makefile:36: abs.depend: No such file or directory
-why -coq-v8 -dir coq -coq-preamble "Require Export caduceus_why. Require Export caduceus_tactics." /usr/local/lib/caduceus/why/caduceus.why why/caduceus_spec.why
-why -coq-v8 -dir coq -coq-preamble "Require Export caduceus_spec_why." -coq-tactic "intuition" /usr/local/lib/caduceus/why/caduceus.why why/caduceus_spec.why why/abs.why
-coqdep -I coq coq/*.v > abs.depend
-make[1]: Leaving directory `/home/demons6/marche/recherche/caduceus'
-make[1]: Entering directory `/home/demons6/marche/recherche/caduceus'
+[...]
+why [...] why/caduceus_spec.why
+why [...] why/abs.why
+[...]
 time make -f abs.makefile clean do_simplify > simplify.log
 
 real    0m0.244s
@@ -222,7 +217,7 @@ valid obligations:       1
 invalid obligations:       1
 \end{verbatim}
 so it that case, there are two proof obligations and only one of them
-has been proved. To investigate the unporved one, we may look at file
+has been proved. To investigate the unproved one, we may look at file
 \verb|simplify.log|:
 \begin{verbatim}
 > cat simplify.log
@@ -266,7 +261,7 @@ void abs2(int *p) \{
 \}
 \end{code}
 If you run \caduceus{} again on this version, you will first notice
-that the first obligation is now automatically discharge by Why, and
+that the first obligation is now automatically discharged by Why, and
 Simplify will succeed to prove the second obligation. If you run Coq
 instead, then this obligation will not be proved automatically: you
 will have to make the proof by hand. After 
@@ -305,12 +300,12 @@ p # intP0 >= 0
 follows: \verb|intP| and \verb|intP0| are \emph{memory states}
 containing integers. \verb|p # intP| denotes the value stored in
 \verb|intP| at ``address'' \verb|p|, i.e it is the logical
-representation of the C expression \verb|*p|. \verb|upd| the logical
+representation of the C expression \verb|*p|. \verb|upd| is the logical
 function representing memory update: $(\verb|upd|~s~p~v)$ is the
 memory state obtained from $s$ by putting value $v$ at ``address''
-$p$. Addresses considered here must not be understood by integers like
-in a real computer, but simply an abstract type \verb|pointer|: this
-why in the following we will refer to them as \emph{pointers} instead
+$p$. Addresses considered here must not be seen as integers like
+in a real computer, but simply an abstract datatype \verb|pointer|: this
+is why in the following we will refer to them as \emph{pointers} instead
 of addresses.
 
 So, what should be proved is that the value stored at pointer \verb|p|
@@ -365,7 +360,7 @@ more details: for example\index{old@\texttt{\bs{}old}}
 /*@ requires \valid_index(t,i) && \valid_index(t,j) 
   @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
 \end{code}
-where in the post-condition, $\old(e)$ means the value of expression
+where in the post-condition, $\verb|\old|(e)$ means the value of expression
 $e$ before execution of the function.
 
 With Simplify, this new specification is still proved
@@ -395,12 +390,12 @@ shift t j
 We meet here for the first time the function \verb|shift|:
 $(\verb|shift|~p~i)$ denotes in the logic the C expression $p+i$
 (pointer arithmetic), hence $(\verb|shift|~t~i)~\#~s$ then denotes
-$t[i]$ is the memory state $s$. Dealing with pointer arithmetic in
+$t[i]$ in the memory state $s$. Dealing with pointer arithmetic in
 general will be explained in Section~\ref{pointer-arith}. For the
 moment, we only have to deal again with the shape
 $p~\verb|#|~(\verb|upd|~s~q~v)$, by using the \verb|caduceus|
-tactics. However, this des not work immediately, because indeed we do
-not known whether $i$ and $j$ are different. So the Coq may be made by
+tactics. However, this does not work immediately, because indeed we do
+not know whether $i$ and $j$ are different. So the Coq proof may be made by
 a case reasoning such as:
 \begin{verbatim}
 assert (i=j \/ i<>j); [omega | intuition].
@@ -419,7 +414,7 @@ index otherwise:
 \index{forall@\texttt{\bs{}forall}}
 \indextt{invariant}\indextt{variant}
 \begin{code}
-/*@ requires \valid_range(t,0,n)
+/*@ requires \valid_range(t,0,n-1)
   @ ensures 
   @   (0 <= \result < n => t[\result] == v) &&
   @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
@@ -435,10 +430,11 @@ int index(int t[], int n, int v) \{
   return i;
 \}
 \end{code}
-In the pre-condition, the new predicate $\verb|valid_range|(t,0,n)$ is used
-to specify that all memory locations $t[i]$ for $0\leq i < n$ are
-valid. Notice also the use of universal quantification in the
-post-condition. 
+In the pre-condition, the new predicate $\verb|valid_range|(t,0,n-1)$ is used
+to specify that all memory locations $t[i]$ for $0\leq i \leq n-1$ are
+valid. Notice also the use of universal quantification
+(\verb|\forall|) in the post-condition, together with the symbol
+\verb|=>| to denote logical implication. 
 
 A very important novelty is for the \verb|while| loop: it is annotated
 with an invariant (a property which holds at 
@@ -484,7 +480,7 @@ typedef struct \{
 \end{code}
 The new thing here is this last \verb|predicate|\indextt{predicate}
 declaration: it is simply a definition in the logic of a new predicate
-\verb|purse_inv|, which applies to a (pointer to a) purse , stating
+\verb|purse_inv|, which applies to a (pointer to a) purse, stating
 that it is valid and its balance is non-negative. One may now specify
 two functions for crediting and withdrawing money has follows:
 \begin{code}
@@ -503,7 +499,7 @@ void withdraw(purse *p,int s) \{
 \}
 \end{code}
 The four obligations are solved automatically by Simplify. With Coq,
-the first to do manually is to unfold the definition of
+the first thing to do manually is to unfold the definition of
 \verb|purse_inv|, and indeed the first obligation for \verb|credit|,
 to show that access to \verb|p->balance| is valid, is solved by
 \begin{verbatim}
@@ -534,7 +530,7 @@ p # balance0 = p # balance + s
 \end{verbatim}
 We meet again the notation $p~\#~s$ where $s$ is now \verb|balance| or
 \verb|balance0|: these are also memory states with integer memory
-cells, the represents the values if the \verb|balance| field for each
+cells, they represent the values of the \verb|balance| field for each
 pointer to a purse. In general, there will be memory states whose
 names corresponds to names of each fields of structures, this is a
 representation of memory states already present in an early work on
@@ -546,99 +542,8 @@ shape $p~\verb|#|~(\verb|upd|~s~q~v)$, and the proofs are done by
 \begin{verbatim}
 subst; caduceus.
 \end{verbatim}
-for each subgoals. The situation is alomost the same for
+for each subgoals. The situation is almost the same for
 \verb|withdraw|.
-
-\section{Memory model and pointer arithmetic
-\label{pointer-arith}}
-\index{Pointer arithmetic}
-
-The C language makes almost no distinction between arrays and
-pointers, and \caduceus\ identifies both notions on the model side.
-A pointer \texttt{p} is either the \texttt{null} pointer, or
-designates a particular element of an allocated memory block. In this
-case, \texttt{p} is a pair of a base address, \texttt{base\_addr(p)},
-and an offset inside the block, \texttt{offset(p)}. Pointer arithmetic
-is only a matter of changing offsets inside a given block. If
-\texttt{i} is an integer then the pointer \texttt{p+i} has the same
-base address as \texttt{p} and offset \texttt{offset(p)+i}.
-This situation is illustrated below:
-\newcommand{\carre}[1]{\multicolumn{#1}{|c|}{}}
-\begin{center}
-  \begin{tabular}{rlllllll}
-    &\qquad\qquad\qquad\qquad&&&p&\qquad\qquad\qquad&p&\hspace{-1em}+i=shift(p,i)
-    \\
-    &\multicolumn{3}{c}{\leftarrowfill offset(p)\rightarrowfill}&
-      $\downarrow$&&$\downarrow$
-    \\\cline{2-8}
-    base\_addr(p)&\carre{3}&\carre{1}&\carre{1}&\carre{1}&\carre{1}
-    \\\cline{2-8}\\[-0.5em]
-    &\multicolumn{7}{c}{\leftarrowfill block\_length(a,p)\rightarrowfill}
-  \end{tabular}
-\end{center}
-A memory block is constituted of zero, one or several elements; the
-length of the block \texttt{p} points at is
-\texttt{block\_length(a,p)}, where \texttt{a} is the current
-allocation map. This map is precisely telling if a given base address
-corresponds to an allocated block and, if so, its length. The map
-\texttt{a} changes whenever memory is allocated.
-
-Pointer arithmetic may produce pointers pointing outside blocks; there
-is nothing wrong with this (no proof obligation generated). But
-whenever a pointer is dereferenced a proof obligation is generated
-expressing the validity of this access:
-\begin{displaymath}
-  \mathtt{valid}(a,p) \equiv p\not=\mathtt{null} ~ \land ~ 
-    0 \le \mathtt{offset}(p) < \mathtt{block\_length}(a,p)
-\end{displaymath}
-Additional predicates are introduced to express that access to
-\texttt{p+i} and to the whole range \texttt{p[i\dots j]} is valid:
-\begin{displaymath}
-  \mathtt{valid\_index}(a,p,i) \equiv p\not=\mathtt{null} ~ \land ~ 
-    0 \le \mathtt{offset}(p)+i < \mathtt{block\_length}(a,p)
-\end{displaymath}
-\begin{displaymath}
-  \mathtt{valid\_range}(a,p,i,j) \equiv 
-  \begin{array}[t]{l}
-    p\not=\mathtt{null} ~ \land ~ 
-    0 \le \mathtt{offset}(p)+i ~\land~ i\le j ~\land~ \\
-    \mathtt{offset}(p)+j < \mathtt{block\_length}(a,p)
-  \end{array}
-\end{displaymath}
-Note that two different blocks are truly \emph{separated} i.e. there
-is no way to access and/or modify any element of a block using a
-pointer related to another block. There is no way to
-express that two blocks allocated with two different calls to
-\texttt{malloc} are contiguous in memory. In particular, a C program
-realizing a buffer overflow cannot be proved correct.
-
-\medskip
-
-As specified in the ANSI C standard, pointer subtraction and pointer
-comparison is restricted to pointers with a same base address.
-When it is so, pointer subtraction (resp. comparison) corresponds to
-the subtraction (resp. comparison) of offsets.
-
-\medskip
-
-The following table summarizes the various pointer notions:
-\begin{center}
-  \begin{tabular}{l|l|l}
-    C syntax & annotation syntax & logic \\\hline
-    \texttt{p+i} & \texttt{p+i} & \texttt{shift(p,i)} \\
-    \texttt{p-q} & \texttt{p-q} & \texttt{sub\_pointer(p,q)} \\
-    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} & 
-    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} &
-    \{\texttt{lt},\texttt{le},\texttt{gt},\texttt{ge}\}\texttt{\_pointer(p,q)}
-    \\
-        & \texttt{\valid(p)} & \texttt{valid(a,p)} \\
-        & \texttt{\valid\_index(p,i)} & \texttt{valid\_index(a,p,i)} \\
-        & \texttt{\valid\_range(p,i,j)} & \texttt{valid\_range(a,p,i,j)} \\
-        & \texttt{\block\_length(p)} & \texttt{block\_length(a,p)} \\
-        & \texttt{\base\_addr(p)} & \texttt{base\_addr(p)}
-  \end{tabular}
-\end{center}
-
 
 \section{Calling functions}
 \label{assigns}
@@ -658,8 +563,8 @@ int test1(purse *p1, purse *p2) \{
 This function requires three proof obligations, two of them being
 solved by Simplify. Unfortunately, this time the counter-example
 proposed by Simplify is not easy to interpret. Let's go to Coq proofs:
-the first obligation is to show the validity os use of pointer
-\verb|p1| in \verb|p1->balance = 0|, it is solves by 
+the first obligation is to show the validity of use of pointer
+\verb|p1| in \verb|p1->balance = 0|, it is solved by 
 \begin{verbatim}
 unfold purse_inv; intuition.
 \end{verbatim}
@@ -688,13 +593,13 @@ but the \verb|caduceus| tactic does not solve the goal this time,
 because indeed the tactic needs to find whether \verb|p1| is equal to
 \verb|p2| or not. Although it would be provable by cases, at this
 point one should understand that the case where \verb|p1=p2| is not
-supposed to happen, and indeed the result of \verb|test1| would not be
+supposed to happen, and indeed the returned value of \verb|test1| would not be
 0 in that case but 100. In other words, the third obligation, which is
 the proof of the post-condition, will not be provable. This is an
 instance of the so-called \emph{pointer aliasing} problem, and in fact
 one should avoid this aliasing in the pre-condition of \verb|test1| by
 requiring also \verb|p1 != p2|.\index{pointer
-  aliaising}\index{aliasing} 
+  aliasing}\index{aliasing} 
 
 With that addition, the second obligation is provable in Coq with
 \begin{verbatim}
@@ -715,26 +620,29 @@ of \verb|credit|. The program now looks like
   @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
   @*/
-void credit(purse *p,int s) {
+void credit(purse *p,int s) \{
   p->balance = p->balance + s;
-}
+\}
 
 /*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
   @ ensures \result == 0
   @*/
-int test1(purse *p1, purse *p2) {
+int test1(purse *p1, purse *p2) \{
     p1->balance = 0;
     credit(p2,100);
     return p1->balance;
-}
+\}
 \end{code}
-Of course, that modification requires to make again the verification
-of function \verb|credit|: the second obligation is a bit more
-complicated, it is nevertheless solves by Simplify automatically. With
-Coq, the proof must be completed also follows
-
+The \emph{assigns} clause \verb|assigns p->balance| is very similar to
+the ones of ESC/Java~\cite{?} and JML~\cite{JML}: it specifies that no
+other memory locations than \verb|p->balance| may be modified by the
+function.  Of course, that modification requires to make again the
+verification of function \verb|credit|: the second obligation is a bit
+more complicated, it is nevertheless solves by Simplify automatically.
+With Coq, the proof must be completed also follows
+\begin{verbatim}
 TODO
-
+\end{verbatim}
 Let's now go back to function \verb|test1|: the three obligations are
 now solved by Simplify, and for the Coq proof of the third obligation,
 after \verb|unfold purse_inv; intuition|, we have to solve
@@ -765,9 +673,9 @@ Post7 : result1 = p1 # balance1
 ______________________________________(1/1)
 result1 = 0
 \end{verbatim}
-Now the important hypothesis with have is \verb|H8|: it specifies that
+Now the important hypothesis we have is \verb|H8|: it specifies that
 between memory states \verb|balance0| and \verb|balance1|, the only
-memory location that has been modified is the one pointed by
+memory location that has been assigned is the one pointed by
 \verb|p2|. So, since we now that \verb|p1| and \verb|p2| are different
 (\verb|H0|), we should have \verb|p1 # balance1 = p1 # balance0|. We proceed
 by tactics
@@ -799,7 +707,7 @@ which is proved by \verb|subst; caduceus|.
 
 \section{A complete example}
 
-
+TODO
 
 
 
@@ -870,39 +778,6 @@ numerous but smaller proof obligations).
 \indextt{predicate}\indextt{logic}\indextt{axiom}
 
 TODO
-
-\section{Unsupported features}
-
-If a feature is not supported by \caduceus, it is reported on the
-error output and the corresponding function is skipped:
-\begin{verbatim}
-unsupported feature (goto); skipping function f
-\end{verbatim}
-It means that no \why\ code is produced for function \texttt{f}, and
-thus no proof obligations, but \texttt{f} may still be called in other
-parts of the code and its specification is visible.
-
-\subsection{Features not supported in current version}
-The following features are not yet supported by \caduceus\ but will be
-so in future versions of the tool:
-\begin{itemize}
-\item \texttt{switch} constructs
-\item string literals (e.g. \texttt{"hello world"})
-\item arithmetic overflow (currently all integers types are mapped to
-  arbitrary precision integers on the prover side)
-\item \texttt{sizeof}
-\end{itemize}
-
-\subsection{Other unsupported features}
-The following features are not planed be supported by \caduceus:
-\begin{itemize}
-\item arbitrary \texttt{goto} (some simple \texttt{goto}'s will be supported)
-\item function pointer (apart from trivial situations where we know at
-  compile-time which function is pointed at)
-\item pointer cast (e.g. casting an \texttt{int*} to a \texttt{void*},
-  passing it to a function which casts it back to \texttt{int*})
-\item any non-ANSI feature
-\end{itemize}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1165,12 +1040,145 @@ annotations.
 
 
 
+
+
+
+\section{Memory model and pointer arithmetic
+\label{pointer-arith}}
+\index{Pointer arithmetic}
+
+The C language makes almost no distinction between arrays and
+pointers, and \caduceus\ identifies both notions on the model side.
+A pointer \texttt{p} is either the \texttt{null} pointer, or
+designates a particular element of an allocated memory block. In this
+case, \texttt{p} is a pair of a base address, \texttt{base\_addr(p)},
+and an offset inside the block, \texttt{offset(p)}. Pointer arithmetic
+is only a matter of changing offsets inside a given block. If
+\texttt{i} is an integer then the pointer \texttt{p+i} has the same
+base address as \texttt{p} and offset \texttt{offset(p)+i}.
+This situation is illustrated below:
+\newcommand{\carre}[1]{\multicolumn{#1}{|c|}{}}
+\begin{center}
+  \begin{tabular}{rlllllll}
+    &\qquad\qquad\qquad\qquad&&&p&\qquad\qquad\qquad&p&\hspace{-1em}+i=shift(p,i)
+    \\
+    &\multicolumn{3}{c}{\leftarrowfill offset(p)\rightarrowfill}&
+      $\downarrow$&&$\downarrow$
+    \\\cline{2-8}
+    base\_addr(p)&\carre{3}&\carre{1}&\carre{1}&\carre{1}&\carre{1}
+    \\\cline{2-8}\\[-0.5em]
+    &\multicolumn{7}{c}{\leftarrowfill block\_length(a,p)\rightarrowfill}
+  \end{tabular}
+\end{center}
+A memory block is constituted of zero, one or several elements; the
+length of the block \texttt{p} points at is
+\texttt{block\_length(a,p)}, where \texttt{a} is the current
+\emph{allocation map}, of type \verb|alloc|. This map is precisely
+telling if a given base address corresponds to an allocated block and,
+if so, its length. The map \texttt{a} changes whenever memory is
+allocated.
+
+Pointer arithmetic may produce pointers pointing outside blocks; there
+is nothing wrong with this (no proof obligation generated). But
+whenever a pointer is dereferenced a proof obligation is generated
+expressing the validity of this access:
+\begin{displaymath}
+  \mathtt{valid}(a,p) \equiv p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p) < \mathtt{block\_length}(a,p)
+\end{displaymath}
+Additional predicates are introduced to express that access to
+\texttt{p+i} and to the whole range \texttt{p[i\dots j]} is valid:
+\begin{displaymath}
+  \mathtt{valid\_index}(a,p,i) \equiv p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p)+i < \mathtt{block\_length}(a,p)
+\end{displaymath}
+\begin{displaymath}
+  \mathtt{valid\_range}(a,p,i,j) \equiv 
+  \begin{array}[t]{l}
+    p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p)+i ~\land~ i\le j ~\land~ \\
+    \mathtt{offset}(p)+j < \mathtt{block\_length}(a,p)
+  \end{array}
+\end{displaymath}
+Note that two different blocks are truly \emph{separated} i.e. there
+is no way to access and/or modify any element of a block using a
+pointer related to another block. There is no way to
+express that two blocks allocated with two different calls to
+\texttt{malloc} are contiguous in memory. In particular, a C program
+realizing a buffer overflow cannot be proved correct.
+
+\medskip
+
+As specified in the ANSI C standard, pointer subtraction and pointer
+comparison is restricted to pointers with a same base address.
+When it is so, pointer subtraction (resp. comparison) corresponds to
+the subtraction (resp. comparison) of offsets.
+
+\medskip
+
+The following table summarizes the various pointer notions:
+\begin{center}
+  \begin{tabular}{l|l|l}
+    C syntax & annotation syntax & logic \\\hline
+    \texttt{p+i} & \texttt{p+i} & \texttt{shift(p,i)} \\
+    \texttt{p-q} & \texttt{p-q} & \texttt{sub\_pointer(p,q)} \\
+    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} & 
+    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} &
+    \{\texttt{lt},\texttt{le},\texttt{gt},\texttt{ge}\}\texttt{\_pointer(p,q)}
+    \\
+        & \texttt{\valid(p)} & \texttt{valid(a,p)} \\
+        & \texttt{\valid\_index(p,i)} & \texttt{valid\_index(a,p,i)} \\
+        & \texttt{\valid\_range(p,i,j)} & \texttt{valid\_range(a,p,i,j)} \\
+        & \texttt{\block\_length(p)} & \texttt{block\_length(a,p)} \\
+        & \texttt{\base\_addr(p)} & \texttt{base\_addr(p)}
+  \end{tabular}
+\end{center}
+
+
+\section{Unsupported features}
+
+If a feature is not supported by \caduceus, it is reported on the
+error output and the corresponding function is skipped:
+\begin{verbatim}
+unsupported feature (goto); skipping function f
+\end{verbatim}
+It means that no \why\ code is produced for function \texttt{f}, and
+thus no proof obligations, but \texttt{f} may still be called in other
+parts of the code and its specification is visible.
+
+\subsection{Features not supported in current version}
+The following features are not yet supported by \caduceus\ but will be
+so in future versions of the tool:
+\begin{itemize}
+\item \texttt{switch} constructs
+\item string literals (e.g. \texttt{"hello world"})
+\item arithmetic overflow (currently all integers types are mapped to
+  arbitrary precision integers on the prover side)
+\item \texttt{sizeof}
+\end{itemize}
+
+\subsection{Other unsupported features}
+The following features are not planed be supported by \caduceus:
+\begin{itemize}
+\item arbitrary \texttt{goto} (some simple \texttt{goto}'s will be supported)
+\item function pointer (apart from trivial situations where we know at
+  compile-time which function is pointed at)
+\item pointer cast (e.g. casting an \texttt{int*} to a \texttt{void*},
+  passing it to a function which casts it back to \texttt{int*})
+\item any non-ANSI feature
+\end{itemize}
+
+
+
 \nocite{*}
 \bibliographystyle{plain}
 \bibliography{./biblio}
 
 
-\newpage
+%\cleardoublepage
+\tableofcontents
+
+%\cleardoublepage
 \addcontentsline{toc}{chapter}{Index}
 \printindex
 

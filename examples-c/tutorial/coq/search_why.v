@@ -3,14 +3,14 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/search.why", characters 161-207 *)
+(* Why obligation from file "why/search.why", characters 173-219 *)
 Lemma index_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post3: i = 0),
   forall (Variant1: Z),
@@ -54,14 +54,14 @@ subst; auto.
 apply (H0 i0); auto with *.
 Save.
 
-(* Why obligation from file "why/search.why", characters 237-381 *)
+(* Why obligation from file "why/search.why", characters 249-393 *)
 Lemma index_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (v: Z),
   forall (alloc: alloc),
   forall (intP: ((memory) Z)),
-  forall (Pre6: (valid_range alloc t 0 n)),
+  forall (Pre6: (valid_range alloc t 0 (n - 1))),
   forall (i: Z),
   forall (Post3: i = 0),
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
