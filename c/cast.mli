@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.6 2003-12-23 13:23:41 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.7 2003-12-23 15:11:00 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -50,6 +50,7 @@ and 'expr ctype = {
 }
 
 and 'expr parameters = ('expr ctype * string) list
+
 
 (*s C parsed abstract syntax trees *)
 
@@ -92,10 +93,10 @@ and cexpr_node =
   | CEsizeof_expr of cexpr
   | CEsizeof of cexpr ctype
 
-type c_initializer = 
+type 'expr c_initializer = 
   | Inothing
-  | Iexpr of cexpr
-  | Ilist of c_initializer list
+  | Iexpr of 'expr
+  | Ilist of 'expr c_initializer list
 
 type cstatement = cstatement_node located
 
@@ -125,10 +126,78 @@ and decl =
   | Cspecdecl of annot
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
-  | Cdecl of cexpr ctype * string * c_initializer
+  | Cdecl of cexpr ctype * string * cexpr c_initializer
   | Cfundef of 
       cexpr ctype * string * cexpr parameters * annotated_block located
 
 type file = decl located list
 
 
+(*s C typed abstract syntax trees *)
+
+open Logic
+
+type texpr = {
+  texpr_node : texpr_node;
+  texpr_type : texpr ctype;
+  texpr_loc  : Loc.t
+}
+
+and texpr_node =
+  | TEnop
+  | TEconstant of string
+  | TEstring_literal of string
+  | TEvar of string
+  | TEdot of lvalue * string
+  | TEarrow of lvalue * string
+  | TEarrget of lvalue * texpr
+  | TEseq of texpr * texpr
+  | TEassign of lvalue * assign_operator * texpr
+  | TEunary of unary_operator * texpr
+  | TEbinary of texpr * binary_operator * texpr
+  | TEcall of texpr * texpr list
+  | TEcond of texpr * texpr * texpr
+  | TEshift of texpr * shift * texpr
+  | TEcast of texpr ctype * texpr
+  | TEsizeof_expr of texpr
+  | TEsizeof of texpr ctype
+
+and lvalue = texpr (* TODO: cf CIL *)
+
+type variant = term * pure_type * string
+
+type loop_annotation = predicate option * variant
+
+type tstatement = tstatement_node located
+
+and tstatement_node =
+  | TSnop
+  | TSexpr of texpr
+  | TScond of texpr * tstatement * tstatement
+  | TSwhile of texpr * loop_annotation * tstatement
+  | TSdowhile of tstatement * loop_annotation * texpr
+  | TSfor of texpr * texpr * texpr option * loop_annotation * tstatement
+  | TSblock of block
+  | TSreturn of texpr option
+  | TSbreak
+  | TScontinue
+  | TSlabel of string * tstatement
+  | TSswitch of texpr * tstatement
+  | TScase of texpr * tstatement
+  | TSdefault of tstatement
+  | TSgoto of string
+  | TSassert of predicate
+
+and tblock = tdecl located list * tstatement list
+
+and annotated_tblock = predicate option * tblock * predicate option
+
+and tdecl = 
+  | Tlogic of string list * logic_type
+  | Ttypedef of texpr ctype * string
+  | Ttypedecl of texpr ctype
+  | Tdecl of texpr ctype * string * texpr c_initializer
+  | Tfundef of 
+      texpr ctype * string * texpr parameters * annotated_tblock located
+
+type tfile = tdecl located list

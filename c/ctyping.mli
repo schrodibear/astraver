@@ -14,9 +14,8 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.mli,v 1.3 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: ctyping.mli,v 1.1 2003-12-23 15:11:00 filliatr Exp $ i*)
 
-(* Interpretation of C programs *)
+(* Typing C programs *)
 
-val interp : Cast.tfile -> Ptree.file
-
+val type_file : Cast.file -> Cast.tfile

@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.7 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.8 2003-12-23 15:11:00 filliatr Exp $ i*)
 
-(*i $Id: cmain.ml,v 1.7 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.8 2003-12-23 15:11:00 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -38,12 +38,12 @@ let cpp f =
 let interp_file f =
   let ppf,rm_ppf = cpp f in
   let c = open_in ppf in
-  let d = Clexer.parse c in
+  let p = Clexer.parse c in
   close_in c;
   if parse_only then raise Exit;
-  (* TODO: typing *)
+  let p = Ctyping.type_file p in
   if type_only then raise Exit;
-  let p = Cinterp.interp d in
+  let p = Cinterp.interp p in
   rm_ppf ()
 
 let main () = Queue.iter (fun f -> try interp_file f with Exit -> ()) files

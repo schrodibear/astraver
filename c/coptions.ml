@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.3 2003-12-23 13:23:41 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.4 2003-12-23 15:11:00 filliatr Exp $ i*)
 
 let parse_only = ref false
 let type_only = ref false
@@ -37,7 +37,9 @@ let _ =
         "-ccp", Arg.String ((:=) cpp_command), 
 	  " <cmd>  sets the C preprocessor";
 	"-d", Arg.Set debug,
-          "  debugging mode" ]
+          "  debugging mode";
+	"-v", Arg.Set verbose,
+          "  verbose mode" ]
       add_file "caduceus [options] file..."
 
 let parse_only = !parse_only
