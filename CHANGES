@@ -1,4 +1,7 @@
 
+  o Simplify output: do not fail on floats anymore (now uninterpreted symbols)
+  o added primitive int_of_real: real -> int (in both logic and programs)
+
 version 1.60, May 18th, 2004
 ============================
   o fixed WP for while loops (may break Coq proofs)

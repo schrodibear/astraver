@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.44 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.45 2004-05-25 12:33:03 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -95,6 +95,7 @@ val t_mod_int : t
 val t_sqrt_real : t
 
 val t_real_of_int : t
+val t_int_of_real : t
 
 val t_lt : t
 val t_le : t

@@ -1,6 +1,10 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
+
+ o fixed bug with void parameters
+ o added support for cast from float to int (interpreted as Why's int_of_real)
+
 version 0.60, May 18th, 2004
 ============================
  o new option -why-opt to pass options to Why (in generated makefile)

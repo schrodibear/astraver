@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.80 2004-05-13 14:06:27 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.81 2004-05-25 12:33:03 filliatr Exp $ i*)
 
 
 open Format
@@ -37,26 +37,47 @@ let global_var_for_array_type t =
     | CTpointer ty | CTarray(ty,_) -> global_var_for_type ty
     | _ -> assert false
 
-let interp_rel t1 t2 r = match t1.ctype_node, t2.ctype_node, r with
-  | (CTenum _ | CTint _), (CTenum _ | CTint _), Lt -> "lt_int"
-  | (CTenum _ | CTint _), (CTenum _ | CTint _), Gt -> "gt_int"
-  | (CTenum _ | CTint _), (CTenum _ | CTint _), Le -> "le_int"
-  | (CTenum _ | CTint _), (CTenum _ | CTint _), Ge -> "ge_int"
-  | (CTenum _ | CTint _), (CTenum _ | CTint _), Eq -> "eq_int"
-  | (CTenum _ | CTint _), (CTenum _ | CTint _), Neq -> "neq_int"
-  | CTfloat _, CTfloat _, Lt -> "lt_real"
-  | CTfloat _, CTfloat _, Gt -> "gt_real"
-  | CTfloat _, CTfloat _, Le -> "le_real"
-  | CTfloat _, CTfloat _, Ge -> "ge_real"
-  | CTfloat _, CTfloat _, Eq -> "eq_real"
-  | CTfloat _, CTfloat _, Neq -> "neq_real"
-  | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Lt -> "lt_pointer"
-  | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Le -> "le_pointer"
-  | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Gt -> "gt_pointer"
-  | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Ge -> "ge_pointer"
-  | _, _, Eq -> "eq"
-  | _, _, Neq -> "neq"
-  | _ -> assert false
+let interp_int_rel = function
+  | Lt -> "lt_int"
+  | Le -> "le_int"
+  | Gt -> "gt_int"
+  | Ge -> "ge_int"
+  | Eq -> "eq_int"
+  | Neq -> "neq_int"
+
+let interp_real_rel = function
+  | Lt -> "lt_real"
+  | Le -> "le_real"
+  | Gt -> "gt_real"
+  | Ge -> "ge_real"
+  | Eq -> "eq_real"
+  | Neq -> "neq_real"
+
+let interp_pointer_rel = function
+  | Lt -> "lt_pointer"
+  | Le -> "le_pointer"
+  | Gt -> "gt_pointer"
+  | Ge -> "ge_pointer"
+  | Eq -> "eq"
+  | Neq -> "neq"
+
+let float_of_int t = 
+  { term_type = Cltyping.c_float; term_node = Tunop (Ufloat_of_int, t) }
+
+let interp_rel t1 t2 r = 
+  match t1.term_type.ctype_node, t2.term_type.ctype_node with
+  | (CTenum _ | CTint _), (CTenum _ | CTint _) -> 
+      t1, interp_int_rel r, t2
+  | CTfloat _, CTfloat _ -> 
+      t1, interp_real_rel r, t2
+  | (CTenum _ | CTint _), CTfloat _ -> 
+      float_of_int t1, interp_real_rel r, t2
+  | CTfloat _, (CTenum _ | CTint _) -> 
+      t1, interp_real_rel r, float_of_int t2
+  | (CTarray _|CTpointer _), (CTarray _|CTpointer _) -> 
+      t1, interp_pointer_rel r, t2
+  | _ ->
+      (match r with Eq -> t1,"eq",t2 | Neq -> t1,"neq",t2 | _ -> assert false)
 
 let interp_term_bin_op ty op =
   match ty.ctype_node, op with
@@ -125,6 +146,8 @@ let rec interp_term label old_label t =
 	LApp("acc",[interp_var label var;te1])
     | Tunop (Uminus, t1) -> 
 	LApp(interp_term_un_op t1.term_type Uminus, [f t1])
+    | Tunop (Ufloat_of_int, t1) ->
+	LApp("real_of_int", [f t1])
     | Tapp (g, l) -> 
 	LApp(g.logic_name,
 	     (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
@@ -175,7 +198,8 @@ let rec interp_predicate label old_label p =
     | Pand (p1, p2) -> 
 	make_and (f p1) (f p2)
     | Prel (t1, op, t2) ->
-	LPred(interp_rel t1.term_type t2.term_type op,[ft t1;ft t2])
+	let t1,op,t2 = interp_rel t1 t2 op in
+	LPred(op,[ft t1;ft t2])
     | Papp (v, tl) ->
 	LPred(v.logic_name, 
 	      (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
@@ -406,7 +430,7 @@ let rec interp_expr e =
 	  | _ -> assert false
 	end
     | TEunary (Uint_of_float, e) ->
-	unsupported "int_of_float"
+	make_app "int_of_real" [interp_expr e]
     | TEunary (Ufloat_of_int, e) ->
 	make_app "real_of_int" [interp_expr e]
     | TEunary (Utilde, e) ->
@@ -435,6 +459,8 @@ let rec interp_expr e =
 	      interp_expr e
 	  | CTfloat _, (CTenum _ | CTint _) ->
 	      make_app "real_of_int" [interp_expr e]
+	  | (CTenum _ | CTint _), CTfloat _ ->
+	      make_app "int_of_real" [interp_expr e]
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      interp_expr e
 	  | _ -> 

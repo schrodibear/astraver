@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.40 2004-05-13 14:06:27 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.41 2004-05-25 12:33:03 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -171,6 +171,7 @@ let rec term t =
     | Tunop (Ustar, t) ->
 	add_alloc (add_pointer_var t.term_type (term t))
     | Tunop (Uminus, t) -> term t
+    | Tunop (Ufloat_of_int, t) -> term t
     | Tbase_addr t -> term t
     | Tblock_length t -> add_alloc (term t)
     | Tat (t, _) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyFloat.v,v 1.8 2003-09-25 09:02:43 filliatr Exp $ *)
+(* $Id: WhyFloat.v,v 1.9 2004-05-25 12:33:03 filliatr Exp $ *)
 
 Require Why.
 Require Export Rbase.
@@ -38,3 +38,10 @@ Parameter R_noteq_bool :
 Parameter why_any_float : (_: unit)(sig_1 R [result: R](True)).
 *)
 
+(* rounding toward zero (to conform to ANSI C) *)
+Parameter int_of_real : R -> Z.
+
+Axiom int_of_real_pos : 
+  forall r, r >= 0 -> IZR (int_of_real r) <= r < IZR (int_of_real r + 1).
+Axiom int_of_real_neg : 
+  forall r, r <= 0 -> IZR (int_of_real r - 1) < r <= IZR (int_of_real r).

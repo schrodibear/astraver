@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.124 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.125 2004-05-25 12:33:03 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -82,6 +82,7 @@ let prefix_id id =
   else if id == t_neg_real then "Ropp"
   else if id == t_sqrt_real then "sqrt"
   else if id == t_real_of_int then "IZR"
+  else if id == t_int_of_real then "int_of_real"
   else assert false
 
 let infix_relation id =

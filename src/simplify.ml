@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.24 2004-05-13 08:51:24 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.25 2004-05-25 12:33:04 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -63,9 +63,18 @@ let prefix id =
   else if id == t_div_int then "int_div"
   else if id == t_mod_int then "int_mod"
   (* real ops *)
-  else if is_real_comparison id || is_real_arith id || id == t_real_of_int 
-  then
-    Report.raise_unlocated (AnyMessage "Simplify does not support reals")
+  else if id == t_add_real then "add_real"
+  else if id == t_sub_real then "sub_real"
+  else if id == t_mul_real then "mul_real"
+  else if id == t_div_real then "div_real"
+  else if id == t_neg_real then "neg_real"
+  else if id == t_sqrt_real then "sqrt_real"
+  else if id == t_real_of_int then "real_of_int"
+  else if id == t_int_of_real then "int_of_real"
+  else if id == t_lt_real then "lt_real"
+  else if id == t_le_real then "le_real"
+  else if id == t_gt_real then "gt_real"
+  else if id == t_ge_real then "ge_real"
   else assert false
 
 let rec print_term fmt = function
@@ -77,8 +86,16 @@ let rec print_term fmt = function
       fprintf fmt "|@@%b|" b
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
-  | Tconst (ConstFloat _) ->
-      Report.raise_unlocated (AnyMessage "Simplify does not support reals")
+  | Tconst (ConstFloat (i,f,e)) ->
+      let f = if f = "0" then "" else f in
+      let e = (if e = "" then 0 else int_of_string e) - String.length f in
+      if e = 0 then
+	fprintf fmt "(real_of_int %s%s)" i f
+      else if e > 0 then
+	fprintf fmt "(real_of_int (* %s%s 1%s))" i f (String.make e '0')
+      else
+	fprintf fmt "(div_real (real_of_int %s%s) (real_of_int 1%s))" 
+	  i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
   | Tapp (id, [a; b; c]) when id == if_then_else ->

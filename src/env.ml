@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.42 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.43 2004-05-25 12:33:03 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -411,6 +411,8 @@ let _ = add_global t_sqrt_real (un_arith_type real) None
 
 let _ = add_global t_real_of_int 
 	  (make_arrow [x, BindType int] (make_c real None)) None
+let _ = add_global t_int_of_real
+	  (make_arrow [x, BindType real] (make_c int None)) None
 
 let any t = 
   make_arrow [x, BindType unit] 
@@ -473,6 +475,7 @@ let _ = agl "div_real" real_binop_arith
 let _ = agl "neg_real" (Function ([PTreal], PTreal))
 let _ = agl "sqrt_real" (Function ([PTreal], PTreal))
 let _ = agl "real_of_int" (Function ([PTint], PTreal))
+let _ = agl "int_of_real" (Function ([PTreal], PTint))
 
 let _ = agl "sorted_array" (Predicate [int_array; PTint; PTint])
 let _ = agl "exchange"     (Predicate [int_array; int_array; PTint; PTint])

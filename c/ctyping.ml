@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.57 2004-05-13 08:51:23 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.58 2004-05-25 12:33:03 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -431,7 +431,7 @@ and type_expr_node loc env = function
 	    let rec check_args i el' = function
 	      | [], [] -> 
 		  TEcall (e, List.rev el'), ty
-	      | e :: el, (t, _) :: tl when sub_type e.texpr_type t ->
+	      | e :: el, (t, _) :: tl when compatible_type e.texpr_type t ->
 		  check_args (succ i) (coerce t e :: el') (el, tl)
 	      | e :: _, _ :: _ ->
 		  error loc ("incompatible type for argument " ^ 
@@ -684,7 +684,7 @@ and type_block env et (dl,sl) =
 	if Env.mem x env then error d.loc ("redeclaration of `" ^ x ^ "'");
 	let ty = type_type d.loc env ty in	
 	if eq_type_node ty.ctype_node CTvoid then 
-	  error d.loc ("variable `"^x^"' declared void");
+	  error d.loc ("variable `" ^ x ^ "' declared void");
 	let i = type_initializer d.loc env ty i in
 	let info = default_var_info x in
 	if ty.ctype_storage = Static then info.var_is_static <- true;
@@ -715,21 +715,28 @@ and type_block env et (dl,sl) =
   let sl', st = type_bl sl in
   (dl', sl'), st
 
-
 let type_parameters loc env pl =
-  List.fold_right
-    (fun (ty,x) (pl,env) ->
-       let info = default_var_info x in
-       let ty = type_type loc env ty in (ty,x) :: pl, Env.add x ty info env)
-    pl 
-    ([], env)
+  let type_one (ty,x) (pl,env) =
+    let info = default_var_info x in
+    let ty = type_type loc env ty in 
+    (ty,x) :: pl, Env.add x ty info env
+  in
+  let is_void (ty,_) = ty.ctype_node = CTvoid in
+  let pl, env = List.fold_right type_one pl ([], env) in
+  match pl with
+    | [p] when is_void p -> 
+	[], env
+    | _ -> 
+	if List.exists is_void pl then 
+	  error loc "`void' in parameter list must be the entire list";
+	pl, env
   
 let type_logic_parameters env pl = 
   List.fold_right
     (fun (ty,x) (pl,env) ->
        let info = default_var_info x in
        let ty = type_logic_type env ty in 
-	       (x,ty) :: pl, Env.add x ty info env)
+       (x,ty) :: pl, Env.add x ty info env)
     pl 
     ([], env)
 

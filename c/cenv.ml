@@ -50,6 +50,8 @@ let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
   | CTpointer { ctype_node = CTvoid }, CTpointer _ -> true
   | _ -> eq_type ty1 ty2
 
+let compatible_type ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
+
 let arith_type ty = match ty.ctype_node with
   | CTint _ | CTfloat _ -> true
   | _ -> false
