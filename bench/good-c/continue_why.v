@@ -5,52 +5,52 @@ Require Why.
 
 (* Why obligation from file "good-c/continue.c", characters 130-139 *)
 Lemma f1_po_1 : 
-  (result: Z)
-  (Post4: result = `10`)
+  (n: Z)
+  (Post4: n = `10`)
   (Variant1: Z)
-  (n0: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `0 <= n0`)
-  (Test4: `n0 > 0`)
-  (Test3: `n0 = 5`)
   (n1: Z)
-  (Post1: n1 = `0`)
-  `0 <= n1` /\ (Zwf `0` n1 n0).
+  (Pre3: Variant1 = n1)
+  (Pre2: `0 <= n1`)
+  (Test4: `n1 > 0`)
+  (Test3: `n1 = 5`)
+  (n2: Z)
+  (Post1: n2 = `0`)
+  `0 <= n2` /\ (Zwf `0` n2 n1).
 Proof.
 Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 109-141 *)
 Lemma f1_po_2 : 
-  (result: Z)
-  (Post4: result = `10`)
+  (n: Z)
+  (Post4: n = `10`)
   (Variant1: Z)
-  (n0: Z)
-  (Pre3: Variant1 = n0)
-  (Pre2: `0 <= n0`)
-  (Test4: `n0 > 0`)
-  (Test2: `n0 <> 5`)
-  ((n:Z) (n = `n0 - 1` -> `0 <= n` /\ (Zwf `0` n n0))).
+  (n1: Z)
+  (Pre3: Variant1 = n1)
+  (Pre2: `0 <= n1`)
+  (Test4: `n1 > 0`)
+  (Test2: `n1 <> 5`)
+  ((n:Z) (n = `n1 - 1` -> `0 <= n` /\ (Zwf `0` n n1))).
 Proof.
 Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 84-90 *)
 Lemma f1_po_3 : 
-  (result: Z)
-  (Post4: result = `10`)
-  `0 <= result`.
+  (n: Z)
+  (Post4: n = `10`)
+  `0 <= n`.
 Proof.
 Unfold Zwf; Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 164-165 *)
 Lemma f1_po_4 : 
-  (result: Z)
-  (Post4: result = `10`)
-  (n0: Z)
-  (Post3: `0 <= n0` /\ `n0 <= 0`)
-  `n0 = 0`.
+  (n: Z)
+  (Post4: n = `10`)
+  (n1: Z)
+  (Post3: `0 <= n1` /\ `n1 <= 0`)
+  `n1 = 0`.
 Proof.
 Intuition.
 Save.
@@ -58,19 +58,19 @@ Save.
 
 (* Why obligation from file "good-c/continue.c", characters 312-321 *)
 Lemma f2_po_1 : 
-  (result: Z)
-  (Post5: result = `17`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (Variant1: Z)
+  (i: Z)
+  (Post5: i = `17`)
   (i1: Z)
-  (Pre3: Variant1 = `10 - i1`)
-  (Pre2: `i1 <= 10`)
-  (Test4: `i1 < 10`)
-  (Test3: `i1 = 5`)
+  (Post1: i1 = `0`)
+  (Variant1: Z)
   (i2: Z)
-  (Post2: i2 = `6`)
-  `i2 <= 10` /\ (Zwf `0` `10 - i2` `10 - i1`).
+  (Pre3: Variant1 = `10 - i2`)
+  (Pre2: `i2 <= 10`)
+  (Test4: `i2 < 10`)
+  (Test3: `i2 = 5`)
+  (i3: Z)
+  (Post2: i3 = `6`)
+  `i3 <= 10` /\ (Zwf `0` `10 - i3` `10 - i2`).
 Proof.
 Intuition.
 Unfold Zwf; Omega.
@@ -78,17 +78,17 @@ Save.
 
 (* Why obligation from file "good-c/continue.c", characters 291-323 *)
 Lemma f2_po_2 : 
-  (result: Z)
-  (Post5: result = `17`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (Variant1: Z)
+  (i: Z)
+  (Post5: i = `17`)
   (i1: Z)
-  (Pre3: Variant1 = `10 - i1`)
-  (Pre2: `i1 <= 10`)
-  (Test4: `i1 < 10`)
-  (Test2: `i1 <> 5`)
-  ((i:Z) (i = `i1 + 1` -> `i <= 10` /\ (Zwf `0` `10 - i` `10 - i1`))).
+  (Post1: i1 = `0`)
+  (Variant1: Z)
+  (i2: Z)
+  (Pre3: Variant1 = `10 - i2`)
+  (Pre2: `i2 <= 10`)
+  (Test4: `i2 < 10`)
+  (Test2: `i2 <> 5`)
+  ((i:Z) (i = `i2 + 1` -> `i <= 10` /\ (Zwf `0` `10 - i` `10 - i2`))).
 Proof.
 Intuition.
 Unfold Zwf; Omega.
@@ -96,24 +96,24 @@ Save.
 
 (* Why obligation from file "good-c/continue.c", characters 260-267 *)
 Lemma f2_po_3 : 
-  (result: Z)
-  (Post5: result = `17`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  `i0 <= 10`.
+  (i: Z)
+  (Post5: i = `17`)
+  (i1: Z)
+  (Post1: i1 = `0`)
+  `i1 <= 10`.
 Proof.
 Intuition.
 Save.
 
 (* Why obligation from file "good-c/continue.c", characters 337-338 *)
 Lemma f2_po_4 : 
-  (result: Z)
-  (Post5: result = `17`)
-  (i0: Z)
-  (Post1: i0 = `0`)
+  (i: Z)
+  (Post5: i = `17`)
   (i1: Z)
-  (Post4: `i1 <= 10` /\ `i1 >= 10`)
-  `i1 = 10`.
+  (Post1: i1 = `0`)
+  (i2: Z)
+  (Post4: `i2 <= 10` /\ `i2 >= 10`)
+  `i2 = 10`.
 Proof.
 Intuition.
 Save.

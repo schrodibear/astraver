@@ -54,9 +54,9 @@ Lemma NSN_po_3 :
   (Pre1: `0 <= 1` /\ `1 < (array_length x)`)
   (c_aux_2: Z)
   (Post1: c_aux_2 = (access x `1`))
-  (result2: bool)
-  (Post28: (if result2 then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
-  (if result2
+  (result: bool)
+  (Post28: (if result then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
+  (if result
    then ((k:Z)
          (k = `2` ->
           ((ell:Z)
@@ -79,16 +79,16 @@ Lemma NSN_po_4 :
   (y: (array Z))
   (Pre12: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `2 <= m`)
-  (ell0: Z)
-  (k0: Z)
-  (Pre11: `k0 > 0` /\ `ell0 > 0`)
-  (j0: Z)
-  (Post7: j0 = `0`)
-  (Variant1: Z)
+  (ell1: Z)
+  (k1: Z)
+  (Pre11: `k1 > 0` /\ `ell1 > 0`)
   (j1: Z)
-  (Pre10: Variant1 = `n - m - j1`)
-  (Pre9: `0 <= j1`)
-  (Test2: `j1 <= n - m`)
+  (Post7: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre10: Variant1 = `n - m - j2`)
+  (Pre9: `0 <= j2`)
+  (Test2: `j2 <= n - m`)
   `0 <= 1` /\ `1 < (array_length x)`.
 Proof.
 Auto with *.
@@ -102,20 +102,20 @@ Lemma NSN_po_5 :
   (y: (array Z))
   (Pre12: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `2 <= m`)
-  (ell0: Z)
-  (k0: Z)
-  (Pre11: `k0 > 0` /\ `ell0 > 0`)
-  (j0: Z)
-  (Post7: j0 = `0`)
-  (Variant1: Z)
+  (ell1: Z)
+  (k1: Z)
+  (Pre11: `k1 > 0` /\ `ell1 > 0`)
   (j1: Z)
-  (Pre10: Variant1 = `n - m - j1`)
-  (Pre9: `0 <= j1`)
-  (Test2: `j1 <= n - m`)
+  (Post7: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre10: Variant1 = `n - m - j2`)
+  (Pre9: `0 <= j2`)
+  (Test2: `j2 <= n - m`)
   (Pre5: `0 <= 1` /\ `1 < (array_length x)`)
   (c_aux_8: Z)
   (Post9: c_aux_8 = (access x `1`))
-  `0 <= j1 + 1` /\ `j1 + 1 < (array_length y)`.
+  `0 <= j2 + 1` /\ `j2 + 1 < (array_length y)`.
 Proof.
 Intuition.
 Save.
@@ -128,29 +128,29 @@ Lemma NSN_po_6 :
   (y: (array Z))
   (Pre12: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `2 <= m`)
-  (ell0: Z)
-  (k0: Z)
-  (Pre11: `k0 > 0` /\ `ell0 > 0`)
-  (j0: Z)
-  (Post7: j0 = `0`)
-  (Variant1: Z)
+  (ell1: Z)
+  (k1: Z)
+  (Pre11: `k1 > 0` /\ `ell1 > 0`)
   (j1: Z)
-  (Pre10: Variant1 = `n - m - j1`)
-  (Pre9: `0 <= j1`)
-  (Test2: `j1 <= n - m`)
+  (Post7: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre10: Variant1 = `n - m - j2`)
+  (Pre9: `0 <= j2`)
+  (Test2: `j2 <= n - m`)
   (Pre5: `0 <= 1` /\ `1 < (array_length x)`)
   (c_aux_8: Z)
   (Post9: c_aux_8 = (access x `1`))
-  (Pre4: `0 <= j1 + 1` /\ `j1 + 1 < (array_length y)`)
+  (Pre4: `0 <= j2 + 1` /\ `j2 + 1 < (array_length y)`)
   (c_aux_9: Z)
-  (Post8: c_aux_9 = (access y `j1 + 1`))
-  (result6: bool)
-  (Post31: (if result6 then `c_aux_8 <> c_aux_9` else `c_aux_8 = c_aux_9`))
-  (if result6
+  (Post8: c_aux_9 = (access y `j2 + 1`))
+  (result3: bool)
+  (Post31: (if result3 then `c_aux_8 <> c_aux_9` else `c_aux_8 = c_aux_9`))
+  (if result3
    then ((j:Z)
-         (j = `j1 + k0` -> `0 <= j` /\ (Zwf `0` `n - m - j` `n - m - j1`)))
+         (j = `j2 + k1` -> `0 <= j` /\ (Zwf `0` `n - m - j` `n - m - j2`)))
    else ((result:Z)
-         (result = `j1 + 2` ->
+         (result = `j2 + 2` ->
           ((result0:Z)
            (((`result0 = 0` -> (match x `2` y result `m - 2`))) /\
             ((`result0 <> 0` -> ~(match x `2` y result `m - 2`))) ->
@@ -158,24 +158,24 @@ Lemma NSN_po_6 :
               ((result:Z)
                (result = (access x `0`) ->
                 ((result0:Z)
-                 (result0 = (access y j1) ->
+                 (result0 = (access y j2) ->
                   ((`result = result0` ->
                     ((result:Z)
-                     (result = j1 ->
+                     (result = j2 ->
                       ((j:Z)
-                       (j = `j1 + ell0` -> `0 <= j` /\
-                        (Zwf `0` `n - m - j` `n - m - j1`))) /\
-                      (match x `0` y j1 (array_length x)))))) /\
+                       (j = `j2 + ell1` -> `0 <= j` /\
+                        (Zwf `0` `n - m - j` `n - m - j2`))) /\
+                      (match x `0` y j2 (array_length x)))))) /\
                   ((`result <> result0` ->
                     ((j:Z)
-                     (j = `j1 + ell0` -> `0 <= j` /\
-                      (Zwf `0` `n - m - j` `n - m - j1`))))))) /\
-                `0 <= j1` /\ `j1 < (array_length y)`)) /\
+                     (j = `j2 + ell1` -> `0 <= j` /\
+                      (Zwf `0` `n - m - j` `n - m - j2`))))))) /\
+                `0 <= j2` /\ `j2 < (array_length y)`)) /\
               `0 <= 0` /\ `0 < (array_length x)`)) /\
             ((`result0 <> 0` ->
               ((j:Z)
-               (j = `j1 + ell0` -> `0 <= j` /\
-                (Zwf `0` `n - m - j` `n - m - j1`)))))))))).
+               (j = `j2 + ell1` -> `0 <= j` /\
+                (Zwf `0` `n - m - j` `n - m - j2`)))))))))).
 Proof.
 Destruct result6; Unfold Zwf; Intuition.
 Subst.

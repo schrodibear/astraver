@@ -68,22 +68,22 @@ Save.
 Lemma heapsort_po_1 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = (Zdiv2 `(array_length t) - 2`))
+  (k: Z)
+  (Post3: k = (Zdiv2 `(array_length t) - 2`))
   (Variant1: Z)
-  (k0: Z)
+  (k1: Z)
   (t0: (array Z))
-  (Pre6: Variant1 = `k0 + 1`)
-  (Pre5: (`(-1) <= k0` /\ `k0 <= (array_length t0) - 1`) /\
+  (Pre6: Variant1 = `k1 + 1`)
+  (Pre5: (`(-1) <= k1` /\ `k1 <= (array_length t0) - 1`) /\
          ((i:Z)
-          (`k0 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
+          (`k1 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
            (heap t0 `(array_length t0) - 1` i))) /\
          (permut t0 t))
-  (Test2: `k0 >= 0`)
-  (`0 <= k0` /\ `k0 <= (array_length t0) - 1`) /\
+  (Test2: `k1 >= 0`)
+  (`0 <= k1` /\ `k1 <= (array_length t0) - 1`) /\
   `(array_length t0) - 1 < (array_length t0)` /\
   ((i:Z)
-   (`k0 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
+   (`k1 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
     (heap t0 `(array_length t0) - 1` i))).
 Proof.
 Intuition.
@@ -93,42 +93,42 @@ Save.
 Lemma heapsort_po_2 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = (Zdiv2 `(array_length t) - 2`))
+  (k: Z)
+  (Post3: k = (Zdiv2 `(array_length t) - 2`))
   (Variant1: Z)
-  (k0: Z)
+  (k1: Z)
   (t0: (array Z))
-  (Pre6: Variant1 = `k0 + 1`)
-  (Pre5: (`(-1) <= k0` /\ `k0 <= (array_length t0) - 1`) /\
+  (Pre6: Variant1 = `k1 + 1`)
+  (Pre5: (`(-1) <= k1` /\ `k1 <= (array_length t0) - 1`) /\
          ((i:Z)
-          (`k0 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
+          (`k1 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
            (heap t0 `(array_length t0) - 1` i))) /\
          (permut t0 t))
-  (Test2: `k0 >= 0`)
-  (Pre4: (`0 <= k0` /\ `k0 <= (array_length t0) - 1`) /\
+  (Test2: `k1 >= 0`)
+  (Pre4: (`0 <= k1` /\ `k1 <= (array_length t0) - 1`) /\
          `(array_length t0) - 1 < (array_length t0)` /\
          ((i:Z)
-          (`k0 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
+          (`k1 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
            (heap t0 `(array_length t0) - 1` i))))
   (t1: (array Z))
   (Post11: (permut t1 t0) /\
            ((i:Z)
-            (`k0 <= i` /\ `i <= (array_length t0) - 1` ->
+            (`k1 <= i` /\ `i <= (array_length t0) - 1` ->
              (heap t1 `(array_length t0) - 1` i))) /\
            ((i:Z)
-            (`0 <= i` /\ `i < k0` \/ `k0 < i` /\ `i < 2 * k0 + 1` \/
+            (`0 <= i` /\ `i < k1` \/ `k1 < i` /\ `i < 2 * k1 + 1` \/
              `(array_length t0) - 1 < i` /\ `i < (array_length t1)` ->
              `(access t1 i) = (access t0 i)`)) /\
            ((v:Z)
-            ((inftree t0 `(array_length t0) - 1` v k0) ->
-             (inftree t1 `(array_length t0) - 1` v k0))))
-  (k1: Z)
-  (Post1: k1 = `k0 - 1`)
-  ((`(-1) <= k1` /\ `k1 <= (array_length t1) - 1`) /\
+            ((inftree t0 `(array_length t0) - 1` v k1) ->
+             (inftree t1 `(array_length t0) - 1` v k1))))
+  (k2: Z)
+  (Post1: k2 = `k1 - 1`)
+  ((`(-1) <= k2` /\ `k2 <= (array_length t1) - 1`) /\
   ((i:Z)
-   (`k1 + 1 <= i` /\ `i <= (array_length t1) - 1` ->
+   (`k2 + 1 <= i` /\ `i <= (array_length t1) - 1` ->
     (heap t1 `(array_length t1) - 1` i))) /\
-  (permut t1 t)) /\ (Zwf `0` `k1 + 1` `k0 + 1`).
+  (permut t1 t)) /\ (Zwf `0` `k2 + 1` `k1 + 1`).
 Proof.
 Intuition (SameLength t1 t0; Try Omega).
 Rewrite H10; Auto with *.
@@ -140,11 +140,11 @@ Save.
 Lemma heapsort_po_3 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = (Zdiv2 `(array_length t) - 2`))
-  (`(-1) <= result` /\ `result <= (array_length t) - 1`) /\
+  (k: Z)
+  (Post3: k = (Zdiv2 `(array_length t) - 2`))
+  (`(-1) <= k` /\ `k <= (array_length t) - 1`) /\
   ((i:Z)
-   (`result + 1 <= i` /\ `i <= (array_length t) - 1` ->
+   (`k + 1 <= i` /\ `i <= (array_length t) - 1` ->
     (heap t `(array_length t) - 1` i))) /\
   (permut t t).
 Proof.
@@ -160,15 +160,15 @@ Save.
 Lemma heapsort_po_4 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = (Zdiv2 `(array_length t) - 2`))
-  (k0: Z)
+  (k: Z)
+  (Post3: k = (Zdiv2 `(array_length t) - 2`))
+  (k1: Z)
   (t0: (array Z))
-  (Post2: ((`(-1) <= k0` /\ `k0 <= (array_length t0) - 1`) /\
+  (Post2: ((`(-1) <= k1` /\ `k1 <= (array_length t0) - 1`) /\
           ((i:Z)
-           (`k0 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
+           (`k1 + 1 <= i` /\ `i <= (array_length t0) - 1` ->
             (heap t0 `(array_length t0) - 1` i))) /\
-          (permut t0 t)) /\ `k0 < 0`)
+          (permut t0 t)) /\ `k1 < 0`)
   (heap t0 `(array_length t0) - 1` `0`) /\ (permut t0 t).
 Proof.
 Intuition.
@@ -181,22 +181,22 @@ Lemma heapsort_po_5 :
   (Pre16: `1 <= (array_length t)`)
   (t0: (array Z))
   (Post9: (heap t0 `(array_length t0) - 1` `0`) /\ (permut t0 t))
-  (result0: Z)
-  (Post6: result0 = `(array_length t0) - 1`)
+  (k: Z)
+  (Post6: k = `(array_length t0) - 1`)
   (Variant3: Z)
-  (k0: Z)
+  (k1: Z)
   (t1: (array Z))
-  (Pre15: Variant3 = k0)
-  (Pre14: (`0 <= k0` /\ `k0 <= (array_length t1) - 1`) /\
-          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            `(access t1 0) <= (access t1 k0 + 1)`)) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            (sorted_array t1 `k0 + 1` `(array_length t1) - 1`))) /\
+  (Pre15: Variant3 = k1)
+  (Pre14: (`0 <= k1` /\ `k1 <= (array_length t1) - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t1 k1 i))) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            `(access t1 0) <= (access t1 k1 + 1)`)) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            (sorted_array t1 `k1 + 1` `(array_length t1) - 1`))) /\
           (permut t1 t))
-  (Test4: `k0 >= 1`)
-  (`0 <= 0` /\ `0 < (array_length t1)`) /\ `0 <= k0` /\
-  `k0 < (array_length t1)`.
+  (Test4: `k1 >= 1`)
+  (`0 <= 0` /\ `0 < (array_length t1)`) /\ `0 <= k1` /\
+  `k1 < (array_length t1)`.
 Proof.
 Intuition.
 Save.
@@ -207,26 +207,26 @@ Lemma heapsort_po_6 :
   (Pre16: `1 <= (array_length t)`)
   (t0: (array Z))
   (Post9: (heap t0 `(array_length t0) - 1` `0`) /\ (permut t0 t))
-  (result0: Z)
-  (Post6: result0 = `(array_length t0) - 1`)
+  (k: Z)
+  (Post6: k = `(array_length t0) - 1`)
   (Variant3: Z)
-  (k0: Z)
+  (k1: Z)
   (t1: (array Z))
-  (Pre15: Variant3 = k0)
-  (Pre14: (`0 <= k0` /\ `k0 <= (array_length t1) - 1`) /\
-          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            `(access t1 0) <= (access t1 k0 + 1)`)) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            (sorted_array t1 `k0 + 1` `(array_length t1) - 1`))) /\
+  (Pre15: Variant3 = k1)
+  (Pre14: (`0 <= k1` /\ `k1 <= (array_length t1) - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t1 k1 i))) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            `(access t1 0) <= (access t1 k1 + 1)`)) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            (sorted_array t1 `k1 + 1` `(array_length t1) - 1`))) /\
           (permut t1 t))
-  (Test4: `k0 >= 1`)
-  (Pre13: (`0 <= 0` /\ `0 < (array_length t1)`) /\ `0 <= k0` /\
-          `k0 < (array_length t1)`)
+  (Test4: `k1 >= 1`)
+  (Pre13: (`0 <= 0` /\ `0 < (array_length t1)`) /\ `0 <= k1` /\
+          `k1 < (array_length t1)`)
   (t2: (array Z))
-  (Post15: (exchange t2 t1 `0` k0))
-  (`0 <= 0` /\ `0 <= k0 - 1`) /\ `k0 - 1 < (array_length t2)` /\
-  ((i:Z) (`0 + 1 <= i` /\ `i <= k0 - 1` -> (heap t2 `k0 - 1` i))).
+  (Post15: (exchange t2 t1 `0` k1))
+  (`0 <= 0` /\ `0 <= k1 - 1`) /\ `k1 - 1 < (array_length t2)` /\
+  ((i:Z) (`0 + 1 <= i` /\ `i <= k1 - 1` -> (heap t2 `k1 - 1` i))).
 Proof.
 Intuition.
 SameLength t2 t1; Omega.
@@ -244,44 +244,44 @@ Lemma heapsort_po_7 :
   (Pre16: `1 <= (array_length t)`)
   (t0: (array Z))
   (Post9: (heap t0 `(array_length t0) - 1` `0`) /\ (permut t0 t))
-  (result0: Z)
-  (Post6: result0 = `(array_length t0) - 1`)
+  (k: Z)
+  (Post6: k = `(array_length t0) - 1`)
   (Variant3: Z)
-  (k0: Z)
+  (k1: Z)
   (t1: (array Z))
-  (Pre15: Variant3 = k0)
-  (Pre14: (`0 <= k0` /\ `k0 <= (array_length t1) - 1`) /\
-          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            `(access t1 0) <= (access t1 k0 + 1)`)) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            (sorted_array t1 `k0 + 1` `(array_length t1) - 1`))) /\
+  (Pre15: Variant3 = k1)
+  (Pre14: (`0 <= k1` /\ `k1 <= (array_length t1) - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t1 k1 i))) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            `(access t1 0) <= (access t1 k1 + 1)`)) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            (sorted_array t1 `k1 + 1` `(array_length t1) - 1`))) /\
           (permut t1 t))
-  (Test4: `k0 >= 1`)
-  (Pre13: (`0 <= 0` /\ `0 < (array_length t1)`) /\ `0 <= k0` /\
-          `k0 < (array_length t1)`)
+  (Test4: `k1 >= 1`)
+  (Pre13: (`0 <= 0` /\ `0 < (array_length t1)`) /\ `0 <= k1` /\
+          `k1 < (array_length t1)`)
   (t2: (array Z))
-  (Post15: (exchange t2 t1 `0` k0))
-  (Pre12: (`0 <= 0` /\ `0 <= k0 - 1`) /\ `k0 - 1 < (array_length t2)` /\
-          ((i:Z) (`0 + 1 <= i` /\ `i <= k0 - 1` -> (heap t2 `k0 - 1` i))))
+  (Post15: (exchange t2 t1 `0` k1))
+  (Pre12: (`0 <= 0` /\ `0 <= k1 - 1`) /\ `k1 - 1 < (array_length t2)` /\
+          ((i:Z) (`0 + 1 <= i` /\ `i <= k1 - 1` -> (heap t2 `k1 - 1` i))))
   (t3: (array Z))
   (Post17: (permut t3 t2) /\
-           ((i:Z) (`0 <= i` /\ `i <= k0 - 1` -> (heap t3 `k0 - 1` i))) /\
+           ((i:Z) (`0 <= i` /\ `i <= k1 - 1` -> (heap t3 `k1 - 1` i))) /\
            ((i:Z)
             (`0 <= i` /\ `i < 0` \/ `0 < i` /\ `i < 2 * 0 + 1` \/
-             `k0 - 1 < i` /\ `i < (array_length t3)` ->
+             `k1 - 1 < i` /\ `i < (array_length t3)` ->
              `(access t3 i) = (access t2 i)`)) /\
            ((v:Z)
-            ((inftree t2 `k0 - 1` v `0`) -> (inftree t3 `k0 - 1` v `0`))))
-  (k1: Z)
-  (Post4: k1 = `k0 - 1`)
-  ((`0 <= k1` /\ `k1 <= (array_length t3) - 1`) /\
-  ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t3 k1 i))) /\
-  ((`k1 + 1 <= (array_length t3) - 1` ->
-    `(access t3 0) <= (access t3 k1 + 1)`)) /\
-  ((`k1 + 1 <= (array_length t3) - 1` ->
-    (sorted_array t3 `k1 + 1` `(array_length t3) - 1`))) /\
-  (permut t3 t)) /\ (Zwf `0` k1 k0).
+            ((inftree t2 `k1 - 1` v `0`) -> (inftree t3 `k1 - 1` v `0`))))
+  (k2: Z)
+  (Post4: k2 = `k1 - 1`)
+  ((`0 <= k2` /\ `k2 <= (array_length t3) - 1`) /\
+  ((i:Z) (`0 <= i` /\ `i <= k2` -> (heap t3 k2 i))) /\
+  ((`k2 + 1 <= (array_length t3) - 1` ->
+    `(access t3 0) <= (access t3 k2 + 1)`)) /\
+  ((`k2 + 1 <= (array_length t3) - 1` ->
+    (sorted_array t3 `k2 + 1` `(array_length t3) - 1`))) /\
+  (permut t3 t)) /\ (Zwf `0` k2 k1).
 Proof.
 Intuition.
 SameLength t3 t2; Omega.
@@ -342,14 +342,13 @@ Lemma heapsort_po_8 :
   (Pre16: `1 <= (array_length t)`)
   (t0: (array Z))
   (Post9: (heap t0 `(array_length t0) - 1` `0`) /\ (permut t0 t))
-  (result0: Z)
-  (Post6: result0 = `(array_length t0) - 1`)
-  (`0 <= result0` /\ `result0 <= (array_length t0) - 1`) /\
-  ((i:Z) (`0 <= i` /\ `i <= result0` -> (heap t0 result0 i))) /\
-  ((`result0 + 1 <= (array_length t0) - 1` ->
-    `(access t0 0) <= (access t0 result0 + 1)`)) /\
-  ((`result0 + 1 <= (array_length t0) - 1` ->
-    (sorted_array t0 `result0 + 1` `(array_length t0) - 1`))) /\
+  (k: Z)
+  (Post6: k = `(array_length t0) - 1`)
+  (`0 <= k` /\ `k <= (array_length t0) - 1`) /\
+  ((i:Z) (`0 <= i` /\ `i <= k` -> (heap t0 k i))) /\
+  ((`k + 1 <= (array_length t0) - 1` -> `(access t0 0) <= (access t0 k + 1)`)) /\
+  ((`k + 1 <= (array_length t0) - 1` ->
+    (sorted_array t0 `k + 1` `(array_length t0) - 1`))) /\
   (permut t0 t).
 Proof.
 Intuition SameLength t0 t; Try Omega.
@@ -365,17 +364,17 @@ Lemma heapsort_po_9 :
   (Pre16: `1 <= (array_length t)`)
   (t0: (array Z))
   (Post9: (heap t0 `(array_length t0) - 1` `0`) /\ (permut t0 t))
-  (result0: Z)
-  (Post6: result0 = `(array_length t0) - 1`)
-  (k0: Z)
+  (k: Z)
+  (Post6: k = `(array_length t0) - 1`)
+  (k1: Z)
   (t1: (array Z))
-  (Post5: ((`0 <= k0` /\ `k0 <= (array_length t1) - 1`) /\
-          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            `(access t1 0) <= (access t1 k0 + 1)`)) /\
-          ((`k0 + 1 <= (array_length t1) - 1` ->
-            (sorted_array t1 `k0 + 1` `(array_length t1) - 1`))) /\
-          (permut t1 t)) /\ `k0 < 1`)
+  (Post5: ((`0 <= k1` /\ `k1 <= (array_length t1) - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k1` -> (heap t1 k1 i))) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            `(access t1 0) <= (access t1 k1 + 1)`)) /\
+          ((`k1 + 1 <= (array_length t1) - 1` ->
+            (sorted_array t1 `k1 + 1` `(array_length t1) - 1`))) /\
+          (permut t1 t)) /\ `k1 < 1`)
   (sorted_array t1 `0` `(array_length t1) - 1`) /\ (permut t1 t).
 Proof.
 Intuition.

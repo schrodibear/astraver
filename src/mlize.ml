@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.68 2003-03-25 16:56:33 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.69 2003-04-28 07:37:42 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -88,7 +88,9 @@ and trad_desc info d ren = match d with
 	ren
 
   | LetRef (x, e1, e2) ->
-      Monad.compose e1.info (trad e1) info
+      let k1 = { e1.info.kappa with c_result_name = x } in
+      let info1 = { e1.info with kappa = k1 } in
+      Monad.compose info1 (trad e1) info
 	(fun v1 ren' ->
 	   let t1 = trad_type_v ren info.env (result_type e1) in
 	   let ren'' = next ren' [x] in

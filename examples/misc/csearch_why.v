@@ -9,14 +9,14 @@ Lemma index_po_1 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
+  (i: Z)
+  (Post4: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `n - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`)))
-  (Test2: `i0 < n`)
-  `0 <= i0` /\ `i0 < (array_length t)`.
+  (i1: Z)
+  (Pre4: Variant1 = `n - i1`)
+  (Pre3: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`)))
+  (Test2: `i1 < n`)
+  `0 <= i1` /\ `i1 < (array_length t)`.
 Proof.
 Intuition.
 Save.
@@ -27,26 +27,26 @@ Lemma index_po_2 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
+  (i: Z)
+  (Post4: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `n - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`)))
-  (Test2: `i0 < n`)
-  (Pre2: `0 <= i0` /\ `i0 < (array_length t)`)
+  (i1: Z)
+  (Pre4: Variant1 = `n - i1`)
+  (Pre3: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`)))
+  (Test2: `i1 < n`)
+  (Pre2: `0 <= i1` /\ `i1 < (array_length t)`)
   (c_aux_1: Z)
-  (Post1: c_aux_1 = (access t i0))
-  (result1: bool)
-  (Post14: (if result1 then `c_aux_1 = v` else `c_aux_1 <> v`))
-  (if result1 then (`0 <= i0` /\ `i0 < n` -> `(access t i0) = v`)
+  (Post1: c_aux_1 = (access t i1))
+  (result0: bool)
+  (Post14: (if result0 then `c_aux_1 = v` else `c_aux_1 <> v`))
+  (if result0 then (`0 <= i1` /\ `i1 < n` -> `(access t i1) = v`)
    else ((i:Z)
-         (i = `i0 + 1` -> (`0 <= i` /\
+         (i = `i1 + 1` -> (`0 <= i` /\
           ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> v`))) /\
-          (Zwf `0` `n - i` `n - i0`)))).
+          (Zwf `0` `n - i` `n - i1`)))).
 Proof.
-Destruct result1; Intuition.
-Assert `k=i0` \/ `k<i0`. Omega. Intuition.
+Destruct result0; Intuition.
+Assert `k=i1` \/ `k<i1`. Omega. Intuition.
 Subst k c_aux_1; Auto.
 Apply (H0 k); Auto with *.
 Unfold Zwf; Omega.
@@ -58,9 +58,9 @@ Lemma index_po_3 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
-  `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> v`)).
+  (i: Z)
+  (Post4: i = `0`)
+  `0 <= i` /\ ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> v`)).
 Proof.
 Intuition.
 Save.
@@ -71,13 +71,13 @@ Lemma index_po_4 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
-  (i0: Z)
-  (Post3: (`0 <= i0` /\
-          ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`))) /\ `
-          i0 >= n`)
-  (`0 <= i0` /\ `i0 < n` -> `(access t i0) = v`).
+  (i: Z)
+  (Post4: i = `0`)
+  (i1: Z)
+  (Post3: (`0 <= i1` /\
+          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`))) /\ `
+          i1 >= n`)
+  (`0 <= i1` /\ `i1 < n` -> `(access t i1) = v`).
 Proof.
 Intuition.
 Save.
@@ -89,14 +89,14 @@ Lemma index2_po_1 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
+  (i: Z)
+  (Post4: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `n - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`)))
-  (Test2: `i0 < n`)
-  `0 <= i0` /\ `i0 < (array_length t)`.
+  (i1: Z)
+  (Pre4: Variant1 = `n - i1`)
+  (Pre3: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`)))
+  (Test2: `i1 < n`)
+  `0 <= i1` /\ `i1 < (array_length t)`.
 Proof.
 Intuition.
 Save.
@@ -107,26 +107,26 @@ Lemma index2_po_2 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
+  (i: Z)
+  (Post4: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `n - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`)))
-  (Test2: `i0 < n`)
-  (Pre2: `0 <= i0` /\ `i0 < (array_length t)`)
+  (i1: Z)
+  (Pre4: Variant1 = `n - i1`)
+  (Pre3: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`)))
+  (Test2: `i1 < n`)
+  (Pre2: `0 <= i1` /\ `i1 < (array_length t)`)
   (c_aux_2: Z)
-  (Post1: c_aux_2 = (access t i0))
-  (result1: bool)
-  (Post15: (if result1 then `c_aux_2 = v` else `c_aux_2 <> v`))
-  (if result1 then (`0 <= i0` /\ `i0 < n` -> `(access t i0) = v`)
+  (Post1: c_aux_2 = (access t i1))
+  (result0: bool)
+  (Post15: (if result0 then `c_aux_2 = v` else `c_aux_2 <> v`))
+  (if result0 then (`0 <= i1` /\ `i1 < n` -> `(access t i1) = v`)
    else ((i:Z)
-         (i = `i0 + 1` -> (`0 <= i` /\
+         (i = `i1 + 1` -> (`0 <= i` /\
           ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> v`))) /\
-          (Zwf `0` `n - i` `n - i0`)))).
+          (Zwf `0` `n - i` `n - i1`)))).
 Proof.
-Destruct result1; Intuition.
-Assert `k=i0` \/ `k<i0`. Omega. Intuition.
+Destruct result0; Intuition.
+Assert `k=i1` \/ `k<i1`. Omega. Intuition.
 Subst k c_aux_2; Auto.
 Apply (H0 k); Auto with *.
 Unfold Zwf; Omega.
@@ -138,9 +138,9 @@ Lemma index2_po_3 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
-  `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> v`)).
+  (i: Z)
+  (Post4: i = `0`)
+  `0 <= i` /\ ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> v`)).
 Proof.
 Intuition.
 Save.
@@ -151,12 +151,12 @@ Lemma index2_po_4 :
   (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
-  (i0: Z)
-  (Post3: (`0 <= i0` /\
-          ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`))) /\ `
-          i0 >= n`)
+  (i: Z)
+  (Post4: i = `0`)
+  (i1: Z)
+  (Post3: (`0 <= i1` /\
+          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`))) /\ `
+          i1 >= n`)
   (`0 <= n` /\ `n < n` -> `(access t n) = v`).
 Proof.
 Intuition.

@@ -31,18 +31,18 @@ Hints Resolve mean1 mean2.
 Lemma sqrt_po_1 : 
   (x: Z)
   (Pre5: `x >= 0`)
-  (result: Z)
-  (Post7: result = `0`)
-  (result0: Z)
-  (Post6: result0 = `x + 1`)
-  (result1: Z)
-  (Post5: result1 = `0`)
+  (inf: Z)
+  (Post7: inf = `0`)
+  (sup: Z)
+  (Post6: sup = `x + 1`)
+  (mil: Z)
+  (Post5: mil = `0`)
   (Variant1: Z)
-  (inf0: Z)
-  (sup0: Z)
-  (Pre4: Variant1 = `sup0 - inf0`)
-  (Pre3: `inf0 * inf0 <= x` /\ `x < sup0 * sup0` /\ `inf0 < sup0`)
-  (Test4: `inf0 + 1 <> sup0`)
+  (inf1: Z)
+  (sup1: Z)
+  (Pre4: Variant1 = `sup1 - inf1`)
+  (Pre3: `inf1 * inf1 <= x` /\ `x < sup1 * sup1` /\ `inf1 < sup1`)
+  (Test4: `inf1 + 1 <> sup1`)
   ~(`2` = `0`).
 Proof.
 Intuition.
@@ -52,40 +52,40 @@ Save.
 Lemma sqrt_po_2 : 
   (x: Z)
   (Pre5: `x >= 0`)
-  (result: Z)
-  (Post7: result = `0`)
-  (result0: Z)
-  (Post6: result0 = `x + 1`)
-  (result1: Z)
-  (Post5: result1 = `0`)
+  (inf: Z)
+  (Post7: inf = `0`)
+  (sup: Z)
+  (Post6: sup = `x + 1`)
+  (mil: Z)
+  (Post5: mil = `0`)
   (Variant1: Z)
-  (inf0: Z)
-  (sup0: Z)
-  (Pre4: Variant1 = `sup0 - inf0`)
-  (Pre3: `inf0 * inf0 <= x` /\ `x < sup0 * sup0` /\ `inf0 < sup0`)
-  (Test4: `inf0 + 1 <> sup0`)
-  (Pre2: ~(`2` = `0`))
-  (mil1: Z)
-  (Post1: mil1 = (Zdiv (`inf0 + (sup0 + 1)`) `2`))
-  (Test3: `x < mil1 * mil1`)
+  (inf1: Z)
   (sup1: Z)
-  (Post2: sup1 = mil1)
-  (`inf0 * inf0 <= x` /\ `x < sup1 * sup1` /\ `inf0 < sup1`) /\
-  (Zwf `0` `sup1 - inf0` `sup0 - inf0`).
+  (Pre4: Variant1 = `sup1 - inf1`)
+  (Pre3: `inf1 * inf1 <= x` /\ `x < sup1 * sup1` /\ `inf1 < sup1`)
+  (Test4: `inf1 + 1 <> sup1`)
+  (Pre2: ~(`2` = `0`))
+  (mil2: Z)
+  (Post1: mil2 = (Zdiv (`inf1 + (sup1 + 1)`) `2`))
+  (Test3: `x < mil2 * mil2`)
+  (sup2: Z)
+  (Post2: sup2 = mil2)
+  (`inf1 * inf1 <= x` /\ `x < sup2 * sup2` /\ `inf1 < sup2`) /\
+  (Zwf `0` `sup2 - inf1` `sup1 - inf1`).
 Proof.
 Intuition.
-Subst sup1; Trivial.
-Subst mil1 sup1.
-Replace `inf0+(sup0+1)` with `(inf0+(sup0-1))+1*2`; Try Omega.
+Subst sup2; Trivial.
+Subst mil2 sup2.
+Replace `inf1+(sup1+1)` with `(inf1+(sup1-1))+1*2`; Try Omega.
 Rewrite Z_div_plus; Try Omega.
-Assert `inf0 <= (inf0+(sup0-1))/2`.
+Assert `inf1 <= (inf1+(sup1-1))/2`.
 Apply mean1; Omega.
 Omega.
 Unfold Zwf.
 Split; Try Omega.
-Subst mil1 sup1. 
-Replace `inf0+(sup0+1)` with `(inf0+1)+sup0`; Try Omega.
-Assert `((inf0+1)+sup0)/2 < sup0`.
+Subst mil2 sup2. 
+Replace `inf1+(sup1+1)` with `(inf1+1)+sup1`; Try Omega.
+Assert `((inf1+1)+sup1)/2 < sup1`.
 Apply mean2; Omega.
 Omega.
 Save.
@@ -94,38 +94,38 @@ Save.
 Lemma sqrt_po_3 : 
   (x: Z)
   (Pre5: `x >= 0`)
-  (result: Z)
-  (Post7: result = `0`)
-  (result0: Z)
-  (Post6: result0 = `x + 1`)
-  (result1: Z)
-  (Post5: result1 = `0`)
+  (inf: Z)
+  (Post7: inf = `0`)
+  (sup: Z)
+  (Post6: sup = `x + 1`)
+  (mil: Z)
+  (Post5: mil = `0`)
   (Variant1: Z)
-  (inf0: Z)
-  (sup0: Z)
-  (Pre4: Variant1 = `sup0 - inf0`)
-  (Pre3: `inf0 * inf0 <= x` /\ `x < sup0 * sup0` /\ `inf0 < sup0`)
-  (Test4: `inf0 + 1 <> sup0`)
-  (Pre2: ~(`2` = `0`))
-  (mil1: Z)
-  (Post1: mil1 = (Zdiv (`inf0 + (sup0 + 1)`) `2`))
-  (Test2: `x >= mil1 * mil1`)
   (inf1: Z)
-  (Post3: inf1 = mil1)
-  (`inf1 * inf1 <= x` /\ `x < sup0 * sup0` /\ `inf1 < sup0`) /\
-  (Zwf `0` `sup0 - inf1` `sup0 - inf0`).
+  (sup1: Z)
+  (Pre4: Variant1 = `sup1 - inf1`)
+  (Pre3: `inf1 * inf1 <= x` /\ `x < sup1 * sup1` /\ `inf1 < sup1`)
+  (Test4: `inf1 + 1 <> sup1`)
+  (Pre2: ~(`2` = `0`))
+  (mil2: Z)
+  (Post1: mil2 = (Zdiv (`inf1 + (sup1 + 1)`) `2`))
+  (Test2: `x >= mil2 * mil2`)
+  (inf2: Z)
+  (Post3: inf2 = mil2)
+  (`inf2 * inf2 <= x` /\ `x < sup1 * sup1` /\ `inf2 < sup1`) /\
+  (Zwf `0` `sup1 - inf2` `sup1 - inf1`).
 Proof.
 Intuition.
-Subst mil1 inf1; Omega.
-Subst mil1 inf1.
-Replace `inf0+(sup0+1)` with `(inf0+1)+sup0`; Try Omega.
-Assert `((inf0+1)+sup0)/2 < sup0`.
+Subst mil2 inf2; Omega.
+Subst mil2 inf2.
+Replace `inf1+(sup1+1)` with `(inf1+1)+sup1`; Try Omega.
+Assert `((inf1+1)+sup1)/2 < sup1`.
 Apply mean2; Omega.
 Omega.
 Unfold Zwf; Split; Try Omega.
-Subst inf1 mil1.
-Replace `inf0+(sup0+1)` with `(inf0+1)+sup0`; Try Omega.
-Assert `inf0+1 <= ((inf0+1)+sup0)/2`.
+Subst inf2 mil2.
+Replace `inf1+(sup1+1)` with `(inf1+1)+sup1`; Try Omega.
+Assert `inf1+1 <= ((inf1+1)+sup1)/2`.
 Apply mean1; Omega.
 Omega.
 Save.
@@ -134,17 +134,17 @@ Save.
 Lemma sqrt_po_4 : 
   (x: Z)
   (Pre5: `x >= 0`)
-  (result: Z)
-  (Post7: result = `0`)
-  (result0: Z)
-  (Post6: result0 = `x + 1`)
-  (result1: Z)
-  (Post5: result1 = `0`)
-  `result * result <= x` /\ `x < result0 * result0` /\ `result < result0`.
+  (inf: Z)
+  (Post7: inf = `0`)
+  (sup: Z)
+  (Post6: sup = `x + 1`)
+  (mil: Z)
+  (Post5: mil = `0`)
+  `inf * inf <= x` /\ `x < sup * sup` /\ `inf < sup`.
 Proof.
 Intuition.
-Subst result; Omega.
-Subst result0.
+Subst inf; Omega.
+Subst sup.
 Ring `(x+1)*(x+1)`.
 Assert `0 <= x*x`.
 Auto with *.
@@ -155,17 +155,17 @@ Save.
 Lemma sqrt_po_5 : 
   (x: Z)
   (Pre5: `x >= 0`)
-  (result: Z)
-  (Post7: result = `0`)
-  (result0: Z)
-  (Post6: result0 = `x + 1`)
-  (result1: Z)
-  (Post5: result1 = `0`)
-  (inf0: Z)
-  (sup0: Z)
-  (Post4: (`inf0 * inf0 <= x` /\ `x < sup0 * sup0` /\ `inf0 < sup0`) /\
-          `inf0 + 1 = sup0`)
-  `inf0 * inf0 <= x` /\ `x < (inf0 + 1) * (inf0 + 1)`.
+  (inf: Z)
+  (Post7: inf = `0`)
+  (sup: Z)
+  (Post6: sup = `x + 1`)
+  (mil: Z)
+  (Post5: mil = `0`)
+  (inf1: Z)
+  (sup1: Z)
+  (Post4: (`inf1 * inf1 <= x` /\ `x < sup1 * sup1` /\ `inf1 < sup1`) /\
+          `inf1 + 1 = sup1`)
+  `inf1 * inf1 <= x` /\ `x < (inf1 + 1) * (inf1 + 1)`.
 Proof.
 Intuition.
 Rewrite H0; Assumption.

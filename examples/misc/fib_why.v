@@ -221,42 +221,42 @@ Save.
 Lemma fib3_po_1 : 
   (n: Z)
   (Pre4: `n >= 0`)
-  (result: Z)
-  (Post8: result = `1`)
-  (result0: Z)
-  (Post7: result0 = `1`)
-  (result1: Z)
-  (Post6: result1 = `1`)
+  (k: Z)
+  (Post8: k = `1`)
+  (x: Z)
+  (Post7: x = `1`)
+  (y: Z)
+  (Post6: y = `1`)
   (Test4: `n > 0`)
   (Variant1: Z)
-  (k0: Z)
-  (x0: Z)
-  (y0: Z)
-  (Pre3: Variant1 = `n - k0`)
-  (Pre2: (`1 <= k0` /\ `k0 <= n`) /\ `x0 = (F k0)` /\ `y0 = (F k0 - 1)`)
-  (Test3: `k0 < n`)
-  (t: Z)
-  (Post4: t = y0)
-  (y1: Z)
-  (Post1: y1 = x0)
-  (x1: Z)
-  (Post2: x1 = `x0 + t`)
   (k1: Z)
-  (Post3: k1 = `k0 + 1`)
-  ((`1 <= k1` /\ `k1 <= n`) /\ `x1 = (F k1)` /\ `y1 = (F k1 - 1)`) /\
-  (Zwf `0` `n - k1` `n - k0`).
+  (x1: Z)
+  (y1: Z)
+  (Pre3: Variant1 = `n - k1`)
+  (Pre2: (`1 <= k1` /\ `k1 <= n`) /\ `x1 = (F k1)` /\ `y1 = (F k1 - 1)`)
+  (Test3: `k1 < n`)
+  (t: Z)
+  (Post4: t = y1)
+  (y2: Z)
+  (Post1: y2 = x1)
+  (x2: Z)
+  (Post2: x2 = `x1 + t`)
+  (k2: Z)
+  (Post3: k2 = `k1 + 1`)
+  ((`1 <= k2` /\ `k2 <= n`) /\ `x2 = (F k2)` /\ `y2 = (F k2 - 1)`) /\
+  (Zwf `0` `n - k2` `n - k1`).
 Proof.
 Intuition.
-Subst k1; Subst x1; Subst t.
-Subst x0 y0.
+Subst k2; Subst x2; Subst t.
+Subst x1 y1.
 Symmetry.
-Generalize H1. Replace k0 with `(k0+1)-1`. Generalize `k0+1`.
+Generalize H1. Replace k1 with `(k1+1)-1`. Generalize `k1+1`.
 Intros; Ring `z-1+1`; Replace `z-1-1` with `z-2`. 
 Auto with *.
 Omega.
 Omega.
-Subst k1; Ring `k0+1-1`; Trivial.
-Subst y1; Assumption.
+Subst k2; Ring `k1+1-1`; Trivial.
+Subst y2; Assumption.
 Unfold Zwf; Omega.
 Save.
 
@@ -264,60 +264,55 @@ Save.
 Lemma fib3_po_2 : 
   (n: Z)
   (Pre4: `n >= 0`)
-  (result: Z)
-  (Post8: result = `1`)
-  (result0: Z)
-  (Post7: result0 = `1`)
-  (result1: Z)
-  (Post6: result1 = `1`)
+  (k: Z)
+  (Post8: k = `1`)
+  (x: Z)
+  (Post7: x = `1`)
+  (y: Z)
+  (Post6: y = `1`)
   (Test4: `n > 0`)
-  (`1 <= result` /\ `result <= n`) /\ `result0 = (F result)` /\
-  `result1 = (F result - 1)`.
+  (`1 <= k` /\ `k <= n`) /\ `x = (F k)` /\ `y = (F k - 1)`.
 Proof.
-Intuition.
-Subst result result0.
-Auto with *.
-Subst result result1.
-Auto with *.
+Intuition; Subst; Auto with *.
 Save.
 
 (* Why obligation from file "fib.mlw", characters 1009-1201 *)
 Lemma fib3_po_3 : 
   (n: Z)
   (Pre4: `n >= 0`)
-  (result: Z)
-  (Post8: result = `1`)
-  (result0: Z)
-  (Post7: result0 = `1`)
-  (result1: Z)
-  (Post6: result1 = `1`)
+  (k: Z)
+  (Post8: k = `1`)
+  (x: Z)
+  (Post7: x = `1`)
+  (y: Z)
+  (Post6: y = `1`)
   (Test4: `n > 0`)
-  (k0: Z)
-  (x0: Z)
-  (y0: Z)
-  (Post5: ((`1 <= k0` /\ `k0 <= n`) /\ `x0 = (F k0)` /\ `y0 = (F k0 - 1)`) /\
-          `k0 >= n`)
-  `x0 = (F n)`.
+  (k1: Z)
+  (x1: Z)
+  (y1: Z)
+  (Post5: ((`1 <= k1` /\ `k1 <= n`) /\ `x1 = (F k1)` /\ `y1 = (F k1 - 1)`) /\
+          `k1 >= n`)
+  `x1 = (F n)`.
 Proof.
 Intuition.
-Replace n with k0. Auto. Omega.
+Replace n with k1. Auto. Omega.
 Save.
 
 (* Why obligation from file "fib.mlw", characters 991-1201 *)
 Lemma fib3_po_4 : 
   (n: Z)
   (Pre4: `n >= 0`)
-  (result: Z)
-  (Post8: result = `1`)
-  (result0: Z)
-  (Post7: result0 = `1`)
-  (result1: Z)
-  (Post6: result1 = `1`)
+  (k: Z)
+  (Post8: k = `1`)
+  (x: Z)
+  (Post7: x = `1`)
+  (y: Z)
+  (Post6: y = `1`)
   (Test1: `n <= 0`)
-  `result0 = (F n)`.
+  `x = (F n)`.
 Proof.
 Intuition.
-Subst result0. Replace n  with `0`. Auto.
+Subst x. Replace n  with `0`. Auto.
 Omega.
 Save.
 
@@ -373,17 +368,17 @@ Lemma fib4_po_4 :
   (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
-  (result2: Z)
-  (Post6: result2 = `2`)
+  (k: Z)
+  (Post6: k = `2`)
   (Variant1: Z)
-  (k0: Z)
+  (k1: Z)
   (t2: (array Z))
-  (Pre6: Variant1 = `n + 1 - k0`)
-  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre6: Variant1 = `n + 1 - k1`)
+  (Pre5: (`2 <= k1` /\ `k1 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
-         ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
-  (Test2: `k0 <= n`)
-  `0 <= k0` /\ `k0 < (array_length t2)`.
+         ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t2 i) = (F i)`)))
+  (Test2: `k1 <= n`)
+  `0 <= k1` /\ `k1 < (array_length t2)`.
 Proof.
 Simpl; Intuition.
 Save.
@@ -400,18 +395,18 @@ Lemma fib4_po_5 :
   (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
-  (result2: Z)
-  (Post6: result2 = `2`)
+  (k: Z)
+  (Post6: k = `2`)
   (Variant1: Z)
-  (k0: Z)
+  (k1: Z)
   (t2: (array Z))
-  (Pre6: Variant1 = `n + 1 - k0`)
-  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre6: Variant1 = `n + 1 - k1`)
+  (Pre5: (`2 <= k1` /\ `k1 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
-         ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
-  (Test2: `k0 <= n`)
-  (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
-  `0 <= k0 - 2` /\ `k0 - 2 < (array_length t2)`.
+         ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t2 i) = (F i)`)))
+  (Test2: `k1 <= n`)
+  (Pre2: `0 <= k1` /\ `k1 < (array_length t2)`)
+  `0 <= k1 - 2` /\ `k1 - 2 < (array_length t2)`.
 Proof.
 Intuition.
 Save.
@@ -428,19 +423,19 @@ Lemma fib4_po_6 :
   (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
-  (result2: Z)
-  (Post6: result2 = `2`)
+  (k: Z)
+  (Post6: k = `2`)
   (Variant1: Z)
-  (k0: Z)
+  (k1: Z)
   (t2: (array Z))
-  (Pre6: Variant1 = `n + 1 - k0`)
-  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Pre6: Variant1 = `n + 1 - k1`)
+  (Pre5: (`2 <= k1` /\ `k1 <= n + 1`) /\
          `(array_length t2) = (array_length t)` /\
-         ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
-  (Test2: `k0 <= n`)
-  (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
-  (Pre3: `0 <= k0 - 2` /\ `k0 - 2 < (array_length t2)`)
-  `0 <= k0 - 1` /\ `k0 - 1 < (array_length t2)`.
+         ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t2 i) = (F i)`)))
+  (Test2: `k1 <= n`)
+  (Pre2: `0 <= k1` /\ `k1 < (array_length t2)`)
+  (Pre3: `0 <= k1 - 2` /\ `k1 - 2 < (array_length t2)`)
+  `0 <= k1 - 1` /\ `k1 - 1 < (array_length t2)`.
 Proof.
 Intuition.
 Save.
@@ -457,35 +452,35 @@ Lemma fib4_po_7 :
   (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
-  (result2: Z)
-  (Post6: result2 = `2`)
+  (k: Z)
+  (Post6: k = `2`)
   (Variant1: Z)
-  (k0: Z)
-  (t2: (array Z))
-  (Pre6: Variant1 = `n + 1 - k0`)
-  (Pre5: (`2 <= k0` /\ `k0 <= n + 1`) /\
-         `(array_length t2) = (array_length t)` /\
-         ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`)))
-  (Test2: `k0 <= n`)
-  (Pre2: `0 <= k0` /\ `k0 < (array_length t2)`)
-  (Pre3: `0 <= k0 - 2` /\ `k0 - 2 < (array_length t2)`)
-  (Pre4: `0 <= k0 - 1` /\ `k0 - 1 < (array_length t2)`)
-  (t3: (array Z))
-  (Post3: t3 = (store t2 k0 `(access t2 k0 - 1) + (access t2 k0 - 2)`))
   (k1: Z)
-  (Post4: k1 = `k0 + 1`)
-  ((`2 <= k1` /\ `k1 <= n + 1`) /\ `(array_length t3) = (array_length t)` /\
-  ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t3 i) = (F i)`))) /\
-  (Zwf `0` `n + 1 - k1` `n + 1 - k0`).
+  (t2: (array Z))
+  (Pre6: Variant1 = `n + 1 - k1`)
+  (Pre5: (`2 <= k1` /\ `k1 <= n + 1`) /\
+         `(array_length t2) = (array_length t)` /\
+         ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t2 i) = (F i)`)))
+  (Test2: `k1 <= n`)
+  (Pre2: `0 <= k1` /\ `k1 < (array_length t2)`)
+  (Pre3: `0 <= k1 - 2` /\ `k1 - 2 < (array_length t2)`)
+  (Pre4: `0 <= k1 - 1` /\ `k1 - 1 < (array_length t2)`)
+  (t3: (array Z))
+  (Post3: t3 = (store t2 k1 `(access t2 k1 - 1) + (access t2 k1 - 2)`))
+  (k2: Z)
+  (Post4: k2 = `k1 + 1`)
+  ((`2 <= k2` /\ `k2 <= n + 1`) /\ `(array_length t3) = (array_length t)` /\
+  ((i:Z) (`0 <= i` /\ `i < k2` -> `(access t3 i) = (F i)`))) /\
+  (Zwf `0` `n + 1 - k2` `n + 1 - k1`).
 Proof.
 Intuition.
 Subst t3; Auto.
 Subst t3.
-Assert hi : `i=k0` \/ `i<k0`. Omega.
+Assert hi : `i=k1` \/ `i<k1`. Omega.
 Intuition.
 Subst i.  AccessSame.
-Rewrite (H15 `k0-1`). 
-Rewrite (H15 `k0-2`). 
+Rewrite (H15 `k1-1`). 
+Rewrite (H15 `k1-2`). 
 Symmetry; Auto with *.
 Omega.
 Omega.
@@ -507,11 +502,10 @@ Lemma fib4_po_8 :
   (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
-  (result2: Z)
-  (Post6: result2 = `2`)
-  (`2 <= result2` /\ `result2 <= n + 1`) /\
-  `(array_length t1) = (array_length t)` /\
-  ((i:Z) (`0 <= i` /\ `i < result2` -> `(access t1 i) = (F i)`)).
+  (k: Z)
+  (Post6: k = `2`)
+  (`2 <= k` /\ `k <= n + 1`) /\ `(array_length t1) = (array_length t)` /\
+  ((i:Z) (`0 <= i` /\ `i < k` -> `(access t1 i) = (F i)`)).
 Proof.
 Intuition.
 Subst t1 t0; Auto.
@@ -533,14 +527,14 @@ Lemma fib4_po_9 :
   (Pre8: `0 <= 1` /\ `1 < (array_length t0)`)
   (t1: (array Z))
   (Post2: t1 = (store t0 `1` `1`))
-  (result2: Z)
-  (Post6: result2 = `2`)
-  (k0: Z)
+  (k: Z)
+  (Post6: k = `2`)
+  (k1: Z)
   (t2: (array Z))
-  (Post5: ((`2 <= k0` /\ `k0 <= n + 1`) /\
+  (Post5: ((`2 <= k1` /\ `k1 <= n + 1`) /\
           `(array_length t2) = (array_length t)` /\
-          ((i:Z) (`0 <= i` /\ `i < k0` -> `(access t2 i) = (F i)`))) /\
-          `k0 > n`)
+          ((i:Z) (`0 <= i` /\ `i < k1` -> `(access t2 i) = (F i)`))) /\
+          `k1 > n`)
   `(access t2 n) = (F n)` /\ `0 <= n` /\ `n < (array_length t2)`.
 Proof.
 Intuition.

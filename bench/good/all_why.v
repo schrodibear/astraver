@@ -353,11 +353,11 @@ Save.
 
 (* Why obligation from file "good/all.mlw", characters 2645-2653 *)
 Lemma fc3_po_1 : 
-  (result: Z)
-  (Post2: result = `0`)
-  (result0: Z)
-  (Post1: result0 = `0`)
-  `result >= 0`.
+  (a: Z)
+  (Post2: a = `0`)
+  (b: Z)
+  (Post1: b = `0`)
+  `a >= 0`.
 Proof. Intros; Omega. Save.
 
 

@@ -24,10 +24,10 @@ Lemma initnext_po_1 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   `0 <= 1` /\ `1 < (array_length next)`.
 Proof.
@@ -39,10 +39,10 @@ Lemma initnext_po_2 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
@@ -57,27 +57,27 @@ Lemma initnext_po_3 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
+  (i1: Z)
+  (j1: Z)
   (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
         ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  `0 <= i0` /\ `i0 < (array_length p)`.
+  (Test7: `i1 < M - 1`)
+  `0 <= i1` /\ `i1 < (array_length p)`.
 Proof.
 Intuition.
 Save.
@@ -87,28 +87,28 @@ Lemma initnext_po_4 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
+  (i1: Z)
+  (j1: Z)
   (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
         ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  `0 <= j0` /\ `j0 < (array_length p)`.
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  `0 <= j1` /\ `j1 < (array_length p)`.
 Proof.
 Intuition.
 Save.
@@ -118,34 +118,34 @@ Lemma initnext_po_5 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
-        ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test6: (access p i0) = (access p j0))
   (i1: Z)
-  (Post2: i1 = `i0 + 1`)
   (j1: Z)
-  (Post3: j1 = `j0 + 1`)
-  `0 <= i1` /\ `i1 < (array_length next1)`.
+  (next1: (array Z))
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`)
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test6: (access p i1) = (access p j1))
+  (i2: Z)
+  (Post2: i2 = `i1 + 1`)
+  (j2: Z)
+  (Post3: j2 = `j1 + 1`)
+  `0 <= i2` /\ `i2 < (array_length next1)`.
 Proof.
 Intuition.
 Save.
@@ -155,42 +155,42 @@ Lemma initnext_po_6 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
-        ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test6: (access p i0) = (access p j0))
   (i1: Z)
-  (Post2: i1 = `i0 + 1`)
   (j1: Z)
-  (Post3: j1 = `j0 + 1`)
-  (Pre10: `0 <= i1` /\ `i1 < (array_length next1)`)
+  (next1: (array Z))
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`)
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test6: (access p i1) = (access p j1))
+  (i2: Z)
+  (Post2: i2 = `i1 + 1`)
+  (j2: Z)
+  (Post3: j2 = `j1 + 1`)
+  (Pre10: `0 <= i2` /\ `i2 < (array_length next1)`)
   (next2: (array Z))
-  (Post4: next2 = (store next1 i1 j1))
-  ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
-  (match p `i1 - j1` p `0` j1) /\
-  ((z:Z) (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-  ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+  (Post4: next2 = (store next1 i2 j2))
+  ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 < i2` /\ `i2 <= M`) /\
+  (match p `i2 - j2` p `0` j2) /\
+  ((z:Z) (`j2 + 1 < z` /\ `z < i2 + 1` -> ~(match p `i2 + 1 - z` p `0` z))) /\
+  ((k:Z) (`0 < k` /\ `k <= i2` -> (Next p k (access next2 k)))) /\
   `(array_length next2) = M`) /\
-  (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)).
+  (lexZ (pairZ `M - i2` j2) (pairZ `M - i1` j1)).
 Proof.
 Intuition.
 Subst i1 j1.
@@ -224,33 +224,33 @@ Lemma initnext_po_7 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
-        ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test5: ~(access p i0) = (access p j0))
-  (Test4: `j0 = 0`)
   (i1: Z)
-  (Post5: i1 = `i0 + 1`)
-  `0 <= i1` /\ `i1 < (array_length next1)`.
+  (j1: Z)
+  (next1: (array Z))
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`)
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test5: ~(access p i1) = (access p j1))
+  (Test4: `j1 = 0`)
+  (i2: Z)
+  (Post5: i2 = `i1 + 1`)
+  `0 <= i2` /\ `i2 < (array_length next1)`.
 Proof.
 Intuition.
 Save.
@@ -260,41 +260,41 @@ Lemma initnext_po_8 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
-        ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test5: ~(access p i0) = (access p j0))
-  (Test4: `j0 = 0`)
   (i1: Z)
-  (Post5: i1 = `i0 + 1`)
-  (Pre9: `0 <= i1` /\ `i1 < (array_length next1)`)
+  (j1: Z)
+  (next1: (array Z))
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`)
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test5: ~(access p i1) = (access p j1))
+  (Test4: `j1 = 0`)
+  (i2: Z)
+  (Post5: i2 = `i1 + 1`)
+  (Pre9: `0 <= i2` /\ `i2 < (array_length next1)`)
   (next2: (array Z))
-  (Post6: next2 = (store next1 i1 `0`))
-  ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i1` /\ `i1 <= M`) /\
-  (match p `i1 - j0` p `0` j0) /\
-  ((z:Z) (`j0 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-  ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+  (Post6: next2 = (store next1 i2 `0`))
+  ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i2` /\ `i2 <= M`) /\
+  (match p `i2 - j1` p `0` j1) /\
+  ((z:Z) (`j1 + 1 < z` /\ `z < i2 + 1` -> ~(match p `i2 + 1 - z` p `0` z))) /\
+  ((k:Z) (`0 < k` /\ `k <= i2` -> (Next p k (access next2 k)))) /\
   `(array_length next2) = M`) /\
-  (lexZ (pairZ `M - i1` j0) (pairZ `M - i0` j0)).
+  (lexZ (pairZ `M - i2` j1) (pairZ `M - i1` j1)).
 Proof.
 Intuition.
   Rewrite Test4.
@@ -338,31 +338,31 @@ Lemma initnext_po_9 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
+  (i1: Z)
+  (j1: Z)
   (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
         ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
         `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test5: ~(access p i0) = (access p j0))
-  (Test3: `j0 <> 0`)
-  `0 <= j0` /\ `j0 < (array_length next1)`.
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test5: ~(access p i1) = (access p j1))
+  (Test3: `j1 <> 0`)
+  `0 <= j1` /\ `j1 < (array_length next1)`.
 Proof.
 Intuition.
 Save.
@@ -372,39 +372,39 @@ Lemma initnext_po_10 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
-        ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length p)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test5: ~(access p i0) = (access p j0))
-  (Test3: `j0 <> 0`)
-  (Pre8: `0 <= j0` /\ `j0 < (array_length next1)`)
+  (i1: Z)
   (j1: Z)
-  (Post7: j1 = (access next1 j0))
-  ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i0` /\ `i0 <= M`) /\
-  (match p `i0 - j1` p `0` j1) /\
-  ((z:Z) (`j1 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-  ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
+  (next1: (array Z))
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`)
+  (Test7: `i1 < M - 1`)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length p)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test5: ~(access p i1) = (access p j1))
+  (Test3: `j1 <> 0`)
+  (Pre8: `0 <= j1` /\ `j1 < (array_length next1)`)
+  (j2: Z)
+  (Post7: j2 = (access next1 j1))
+  ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 < i1` /\ `i1 <= M`) /\
+  (match p `i1 - j2` p `0` j2) /\
+  ((z:Z) (`j2 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+  ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
   `(array_length next1) = M`) /\
-  (lexZ (pairZ `M - i0` j1) (pairZ `M - i0` j0)).
+  (lexZ (pairZ `M - i1` j2) (pairZ `M - i1` j1)).
 Proof.
 Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
   Subst j1.
@@ -454,37 +454,37 @@ Lemma initnext_po_11 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (next1: (array Z))
-  (Pre13: Variant1 = (pairZ `M - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
-        ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`)
-  (Test7: `i0 < M - 1`)
   (i1: Z)
   (j1: Z)
+  (next1: (array Z))
+  (Pre13: Variant1 = (pairZ `M - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`)
+  (Test7: `i1 < M - 1`)
+  (i2: Z)
+  (j2: Z)
   (next2: (array Z))
-  (Inv0: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
-         (match p `i1 - j1` p `0` j1) /\
+  (Inv0: ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 < i2` /\ `i2 <= M`) /\
+         (match p `i2 - j2` p `0` j2) /\
          ((z:Z)
-          (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-         ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+          (`j2 + 1 < z` /\ `z < i2 + 1` -> ~(match p `i2 + 1 - z` p `0` z))) /\
+         ((k:Z) (`0 < k` /\ `k <= i2` -> (Next p k (access next2 k)))) /\
          `(array_length next2) = M`) /\
-         (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
-  (lexZ (pairZ `M - i1` j1) Variant1).
+         (lexZ (pairZ `M - i2` j2) (pairZ `M - i1` j1)))
+  (lexZ (pairZ `M - i2` j2) Variant1).
 Proof.
 Intuition.
 Rewrite Pre13; Assumption.
@@ -495,20 +495,18 @@ Lemma initnext_po_12 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
-  (`0 <= result0` /\ `result0 <= M`) /\ (`result0 < result` /\
-  `result <= M`) /\ (match p `result - result0` p `0` result0) /\
-  ((z:Z)
-   (`result0 + 1 < z` /\ `z < result + 1` ->
-    ~(match p `result + 1 - z` p `0` z))) /\
-  ((k:Z) (`0 < k` /\ `k <= result` -> (Next p k (access next0 k)))) /\
+  (`0 <= j` /\ `j <= M`) /\ (`j < i` /\ `i <= M`) /\
+  (match p `i - j` p `0` j) /\
+  ((z:Z) (`j + 1 < z` /\ `z < i + 1` -> ~(match p `i + 1 - z` p `0` z))) /\
+  ((k:Z) (`0 < k` /\ `k <= i` -> (Next p k (access next0 k)))) /\
   `(array_length next0) = M`.
 Proof.
 Intuition.
@@ -525,23 +523,23 @@ Lemma initnext_po_13 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test8: `1 < M`)
   (Pre14: `0 <= 1` /\ `1 < (array_length next)`)
   (next0: (array Z))
   (Post1: next0 = (store next `1` `0`))
-  (i0: Z)
-  (j0: Z)
+  (i1: Z)
+  (j1: Z)
   (next1: (array Z))
-  (Inv: ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 < i0` /\ `i0 <= M`) /\
-        (match p `i0 - j0` p `0` j0) /\
+  (Inv: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
         ((z:Z)
-         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-        `(array_length next1) = M`) /\ `i0 >= M - 1`)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next1 k)))) /\
+        `(array_length next1) = M`) /\ `i1 >= M - 1`)
   `(array_length next1) = M` /\
   ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next1 j)))).
 Proof.
@@ -553,10 +551,10 @@ Lemma initnext_po_14 :
   (next: (array Z))
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M`)
-  (result: Z)
-  (Post9: result = `1`)
-  (result0: Z)
-  (Post8: result0 = `0`)
+  (i: Z)
+  (Post9: i = `1`)
+  (j: Z)
+  (Post8: j = `0`)
   (Test1: `1 >= M`)
   `(array_length next) = M` /\
   ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next j)))).
@@ -577,10 +575,10 @@ Lemma kmp_po_1 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   `(array_length p) = M` /\ `(array_length next) = M`.
 Proof.
 Intuition.
@@ -593,10 +591,10 @@ Lemma kmp_po_2 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
@@ -613,26 +611,26 @@ Lemma kmp_po_3 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test2: `j0 < M`)
-  (result3: bool)
-  (Bool4: (if result3 then `i0 < N` else `i0 >= N`))
-  (if result3 then `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false
-   else `j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false).
+  (i1: Z)
+  (j1: Z)
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test2: `j1 < M`)
+  (result1: bool)
+  (Bool4: (if result1 then `i1 < N` else `i1 >= N`))
+  (if result1 then `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false
+   else `j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false).
 Proof.
 Intuition Induction result3; Tauto.
 Save.
@@ -644,26 +642,26 @@ Lemma kmp_po_4 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test1: `j0 >= M`)
-  (result3: bool)
-  (Post5: result3 = false)
-  (if result3 then `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false
-   else `j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false).
+  (i1: Z)
+  (j1: Z)
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test1: `j1 >= M`)
+  (result1: bool)
+  (Post5: result1 = false)
+  (if result1 then `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false
+   else `j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false).
 Proof.
 Intuition Induction result3; Tauto.
 Save.
@@ -675,23 +673,23 @@ Lemma kmp_po_5 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  `0 <= i0` /\ `i0 < (array_length a)`.
+  (i1: Z)
+  (j1: Z)
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  `0 <= i1` /\ `i1 < (array_length a)`.
 Proof.
 Intuition.
 Discriminate H14.
@@ -704,24 +702,24 @@ Lemma kmp_po_6 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
-  `0 <= j0` /\ `j0 < (array_length p)`.
+  (i1: Z)
+  (j1: Z)
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
+  `0 <= j1` /\ `j1 < (array_length p)`.
 Proof.
 Intuition.
 Discriminate H16.
@@ -734,33 +732,33 @@ Lemma kmp_po_7 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test7: (access a i0) = (access p j0))
   (i1: Z)
-  (Post1: i1 = `i0 + 1`)
   (j1: Z)
-  (Post2: j1 = `j0 + 1`)
-  ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
-  (match a `i1 - j1` p `0` j1) /\
-  ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
-  (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)).
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test7: (access a i1) = (access p j1))
+  (i2: Z)
+  (Post1: i2 = `i1 + 1`)
+  (j2: Z)
+  (Post2: j2 = `j1 + 1`)
+  ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 <= i2` /\ `i2 <= N`) /\
+  (match a `i2 - j2` p `0` j2) /\
+  ((k:Z) (`0 <= k` /\ `k < i2 - j2` -> ~(match a k p `0` M)))) /\
+  (lexZ (pairZ `N - i2` j2) (pairZ `N - i1` j1)).
 Proof.
 Intuition Discriminate H18 Orelse Auto with *.
 Subst j1 i1.
@@ -781,32 +779,32 @@ Lemma kmp_po_8 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test6: ~(access a i0) = (access p j0))
-  (Test5: `j0 = 0`)
   (i1: Z)
-  (Post3: i1 = `i0 + 1`)
-  ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i1` /\ `i1 <= N`) /\
-  (match a `i1 - j0` p `0` j0) /\
-  ((k:Z) (`0 <= k` /\ `k < i1 - j0` -> ~(match a k p `0` M)))) /\
-  (lexZ (pairZ `N - i1` j0) (pairZ `N - i0` j0)).
+  (j1: Z)
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test6: ~(access a i1) = (access p j1))
+  (Test5: `j1 = 0`)
+  (i2: Z)
+  (Post3: i2 = `i1 + 1`)
+  ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i2` /\ `i2 <= N`) /\
+  (match a `i2 - j1` p `0` j1) /\
+  ((k:Z) (`0 <= k` /\ `k < i2 - j1` -> ~(match a k p `0` M)))) /\
+  (lexZ (pairZ `N - i2` j1) (pairZ `N - i1` j1)).
 Proof.
 Intuition Discriminate H18 Orelse Auto with *.
   Subst j0.
@@ -826,27 +824,27 @@ Lemma kmp_po_9 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test6: ~(access a i0) = (access p j0))
-  (Test4: `j0 <> 0`)
-  `0 <= j0` /\ `j0 < (array_length next0)`.
+  (i1: Z)
+  (j1: Z)
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test6: ~(access a i1) = (access p j1))
+  (Test4: `j1 <> 0`)
+  `0 <= j1` /\ `j1 < (array_length next0)`.
 Proof.
 Intuition.
 Save.
@@ -858,33 +856,33 @@ Lemma kmp_po_10 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre11: `0 <= i0` /\ `i0 < (array_length a)`)
-  (Pre12: `0 <= j0` /\ `j0 < (array_length p)`)
-  (Test6: ~(access a i0) = (access p j0))
-  (Test4: `j0 <> 0`)
-  (Pre10: `0 <= j0` /\ `j0 < (array_length next0)`)
+  (i1: Z)
   (j1: Z)
-  (Post4: j1 = (access next0 j0))
-  ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i0` /\ `i0 <= N`) /\
-  (match a `i0 - j1` p `0` j1) /\
-  ((k:Z) (`0 <= k` /\ `k < i0 - j1` -> ~(match a k p `0` M)))) /\
-  (lexZ (pairZ `N - i0` j1) (pairZ `N - i0` j0)).
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
+  (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
+  (Test6: ~(access a i1) = (access p j1))
+  (Test4: `j1 <> 0`)
+  (Pre10: `0 <= j1` /\ `j1 < (array_length next0)`)
+  (j2: Z)
+  (Post4: j2 = (access next0 j1))
+  ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 <= i1` /\ `i1 <= N`) /\
+  (match a `i1 - j2` p `0` j2) /\
+  ((k:Z) (`0 <= k` /\ `k < i1 - j2` -> ~(match a k p `0` M)))) /\
+  (lexZ (pairZ `N - i1` j2) (pairZ `N - i1` j1)).
 Proof.
 Intuition (Assert `j0<>0`; Auto with *).
   (* invariant *)
@@ -926,29 +924,29 @@ Lemma kmp_po_11 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (Variant1: prodZZ)
-  (i0: Z)
-  (j0: Z)
-  (Pre13: Variant1 = (pairZ `N - i0` j0))
-  (Inv: (`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
-  (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
   (i1: Z)
   (j1: Z)
-  (Inv0: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
-         (match a `i1 - j1` p `0` j1) /\
-         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
-         (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
-  (lexZ (pairZ `N - i1` j1) Variant1).
+  (Pre13: Variant1 = (pairZ `N - i1` j1))
+  (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
+  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (i2: Z)
+  (j2: Z)
+  (Inv0: ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 <= i2` /\ `i2 <= N`) /\
+         (match a `i2 - j2` p `0` j2) /\
+         ((k:Z) (`0 <= k` /\ `k < i2 - j2` -> ~(match a k p `0` M)))) /\
+         (lexZ (pairZ `N - i2` j2) (pairZ `N - i1` j1)))
+  (lexZ (pairZ `N - i2` j2) Variant1).
 Proof.
 Intuition; Rewrite Pre13; Assumption.
 Save.
@@ -966,17 +964,17 @@ Lemma kmp_po_12 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
-  (`0 <= result0` /\ `result0 <= M`) /\ (`result0 <= result` /\
-  `result <= N`) /\ (match a `result - result0` p `0` result0) /\
-  ((k:Z) (`0 <= k` /\ `k < result - result0` -> ~(match a k p `0` M))).
+  (`0 <= j` /\ `j <= M`) /\ (`j <= i` /\ `i <= N`) /\
+  (match a `i - j` p `0` j) /\
+  ((k:Z) (`0 <= k` /\ `k < i - j` -> ~(match a k p `0` M))).
 Proof.
 Intuition.
 Generalize M_positive; Omega'.
@@ -993,22 +991,22 @@ Lemma kmp_po_13 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
-  (i0: Z)
-  (j0: Z)
-  (Inv: ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M)))) /\
-        (`j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false))
-  (Test10: `j0 = M`)
-  (first_occur p a `i0 - M`).
+  (i1: Z)
+  (j1: Z)
+  (Inv: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
+        (`j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false))
+  (Test10: `j1 = M`)
+  (first_occur p a `i1 - M`).
 Proof.
 Intros.
 Decompose [and] Inv.
@@ -1028,22 +1026,22 @@ Lemma kmp_po_14 :
   (p: (array A))
   (Pre15: `(array_length p) = M` /\ `(array_length next) = M` /\
           `(array_length a) = N`)
-  (result: Z)
-  (Post8: result = `0`)
-  (result0: Z)
-  (Post7: result0 = `0`)
+  (i: Z)
+  (Post8: i = `0`)
+  (j: Z)
+  (Post7: j = `0`)
   (Pre14: `(array_length p) = M` /\ `(array_length next) = M`)
   (next0: (array Z))
   (Post15: `(array_length next0) = M` /\
            ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
-  (i0: Z)
-  (j0: Z)
-  (Inv: ((`0 <= j0` /\ `j0 <= M`) /\ (`j0 <= i0` /\ `i0 <= N`) /\
-        (match a `i0 - j0` p `0` j0) /\
-        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M)))) /\
-        (`j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false))
-  (Test9: `j0 <> M`)
-  (first_occur p a i0).
+  (i1: Z)
+  (j1: Z)
+  (Inv: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
+        (`j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false))
+  (Test9: `j1 <> M`)
+  (first_occur p a i1).
 Proof.
 Intros. Unfold first_occur. Decompose [and] Inv.
 Split. 

@@ -13,38 +13,38 @@ Lemma copy_po_1 :
   (t1: (array Z))
   (t2: (array Z))
   (Pre6: `(array_length t1) >= n` /\ `(array_length t2) >= n`)
-  (result: Z)
-  (Post5: result = n)
+  (i: Z)
+  (Post5: i = n)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t3: (array Z))
-  (Pre5: Variant1 = i0)
-  (Pre4: `(array_length t3) >= n` /\ `i0 <= n` /\
-         ((k:Z) (`i0 <= k` /\ `k < n` -> `(access t3 k) = (access t1 k)`)))
+  (Pre5: Variant1 = i1)
+  (Pre4: `(array_length t3) >= n` /\ `i1 <= n` /\
+         ((k:Z) (`i1 <= k` /\ `k < n` -> `(access t3 k) = (access t1 k)`)))
   (Test2: true = true)
   (c_aux_2: Z)
-  (Post2: c_aux_2 = i0)
-  (i1: Z)
-  (Post1: i1 = `i0 - 1`)
+  (Post2: c_aux_2 = i1)
+  (i2: Z)
+  (Post1: i2 = `i1 - 1`)
   ((`c_aux_2 > 0` ->
     ((result:Z)
-     (result = i1 ->
+     (result = i2 ->
       (((t2:(array Z))
-        (t2 = (store t3 result (access t1 i1)) ->
-         (`(array_length t2) >= n` /\ `i1 <= n` /\
-         ((k:Z) (`i1 <= k` /\ `k < n` -> `(access t2 k) = (access t1 k)`))) /\
-         (Zwf `0` i1 i0))) /\
-      `0 <= result` /\ `result < (array_length t3)`) /\ `0 <= i1` /\
-      `i1 < (array_length t1)`)))) /\
+        (t2 = (store t3 result (access t1 i2)) ->
+         (`(array_length t2) >= n` /\ `i2 <= n` /\
+         ((k:Z) (`i2 <= k` /\ `k < n` -> `(access t2 k) = (access t1 k)`))) /\
+         (Zwf `0` i2 i1))) /\
+      `0 <= result` /\ `result < (array_length t3)`) /\ `0 <= i2` /\
+      `i2 < (array_length t1)`)))) /\
   ((`c_aux_2 <= 0` ->
     ((k:Z) (`0 <= k` /\ `k < n` -> `(access t3 k) = (access t1 k)`)))).
 Proof.
 Intuition.
 Subst t0; Trivial.
-Assert k=i1 \/ `i1<k`. Omega. Intuition.
-Subst result0 k t0.
+Assert k=i2 \/ `i2<k`. Omega. Intuition.
+Subst result k t0.
 AccessSame.
-Subst result0 t0; AccessOther.
+Subst result t0; AccessOther.
 Apply H4; Omega.
 Unfold Zwf; Omega.
 Save.
@@ -55,10 +55,10 @@ Lemma copy_po_2 :
   (t1: (array Z))
   (t2: (array Z))
   (Pre6: `(array_length t1) >= n` /\ `(array_length t2) >= n`)
-  (result: Z)
-  (Post5: result = n)
-  `(array_length t2) >= n` /\ `result <= n` /\
-  ((k:Z) (`result <= k` /\ `k < n` -> `(access t2 k) = (access t1 k)`)).
+  (i: Z)
+  (Post5: i = n)
+  `(array_length t2) >= n` /\ `i <= n` /\
+  ((k:Z) (`i <= k` /\ `k < n` -> `(access t2 k) = (access t1 k)`)).
 Proof.
 Auto with *.
 Save.

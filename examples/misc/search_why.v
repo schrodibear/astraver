@@ -7,14 +7,14 @@ Require Why.
 (* Why obligation from file "search.mlw", characters 390-395 *)
 Lemma search1_po_1 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
+  (i: Z)
+  (Post3: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < (array_length t)`)
-  `0 <= i0` /\ `i0 < (array_length t)`.
+  (i1: Z)
+  (Pre8: Variant1 = `(array_length t) - i1`)
+  (Pre7: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`)))
+  (Test4: `i1 < (array_length t)`)
+  `0 <= i1` /\ `i1 < (array_length t)`.
 Proof.
 Auto with *.
 Save.
@@ -22,22 +22,22 @@ Save.
 (* Why obligation from file "search.mlw", characters 387-421 *)
 Lemma search1_po_2 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
+  (i: Z)
+  (Post3: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < (array_length t)`)
-  (Pre6: `0 <= i0` /\ `i0 < (array_length t)`)
-  (Test2: `(access t i0) <> 0`)
+  (i1: Z)
+  (Pre8: Variant1 = `(array_length t) - i1`)
+  (Pre7: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`)))
+  (Test4: `i1 < (array_length t)`)
+  (Pre6: `0 <= i1` /\ `i1 < (array_length t)`)
+  (Test2: `(access t i1) <> 0`)
   ((i:Z)
-   (i = `i0 + 1` -> (`0 <= i` /\
+   (i = `i1 + 1` -> (`0 <= i` /\
     ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> 0`))) /\
-    (Zwf `0` `(array_length t) - i` `(array_length t) - i0`))).
+    (Zwf `0` `(array_length t) - i` `(array_length t) - i1`))).
 Proof.
 Intuition.
-Assert k=i0 \/ `k<i0`. Omega. Intuition.
+Assert k=i1 \/ `k<i1`. Omega. Intuition.
 Subst k. Auto.
 Apply (H0 k). Omega. Assumption.
 Unfold Zwf; Omega.
@@ -46,9 +46,9 @@ Save.
 (* Why obligation from file "search.mlw", characters 286-334 *)
 Lemma search1_po_3 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
-  `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
+  (i: Z)
+  (Post3: i = `0`)
+  `0 <= i` /\ ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> 0`)).
 Proof.
 Intuition.
 Save.
@@ -56,12 +56,12 @@ Save.
 (* Why obligation from file "search.mlw", characters 455-476 *)
 Lemma search1_po_4 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
-  (i0: Z)
-  (Post2: (`0 <= i0` /\
-          ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`))) /\
-          `i0 >= (array_length t)`)
+  (i: Z)
+  (Post3: i = `0`)
+  (i1: Z)
+  (Post2: (`0 <= i1` /\
+          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`))) /\
+          `i1 >= (array_length t)`)
   ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
 Proof.
 Intuition.
@@ -72,14 +72,14 @@ Save.
 (* Why obligation from file "search.mlw", characters 892-897 *)
 Lemma search2_po_1 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
+  (i: Z)
+  (Post3: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < (array_length t)`)
-  `0 <= i0` /\ `i0 < (array_length t)`.
+  (i1: Z)
+  (Pre8: Variant1 = `(array_length t) - i1`)
+  (Pre7: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`)))
+  (Test4: `i1 < (array_length t)`)
+  `0 <= i1` /\ `i1 < (array_length t)`.
 Proof.
 Auto with *.
 Save.
@@ -87,22 +87,22 @@ Save.
 (* Why obligation from file "search.mlw", characters 889-918 *)
 Lemma search2_po_2 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
+  (i: Z)
+  (Post3: i = `0`)
   (Variant1: Z)
-  (i0: Z)
-  (Pre8: Variant1 = `(array_length t) - i0`)
-  (Pre7: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`)))
-  (Test4: `i0 < (array_length t)`)
-  (Pre6: `0 <= i0` /\ `i0 < (array_length t)`)
-  (Test2: `(access t i0) <> 0`)
+  (i1: Z)
+  (Pre8: Variant1 = `(array_length t) - i1`)
+  (Pre7: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`)))
+  (Test4: `i1 < (array_length t)`)
+  (Pre6: `0 <= i1` /\ `i1 < (array_length t)`)
+  (Test2: `(access t i1) <> 0`)
   ((i:Z)
-   (i = `i0 + 1` -> (`0 <= i` /\
+   (i = `i1 + 1` -> (`0 <= i` /\
     ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> 0`))) /\
-    (Zwf `0` `(array_length t) - i` `(array_length t) - i0`))).
+    (Zwf `0` `(array_length t) - i` `(array_length t) - i1`))).
 Proof.
 Intuition.
-Assert k=i0 \/ `k<i0`. Omega. Intuition.
+Assert k=i1 \/ `k<i1`. Omega. Intuition.
 Subst k. Auto.
 Apply (H0 k). Omega. Assumption.
 Unfold Zwf; Omega.
@@ -111,9 +111,9 @@ Save.
 (* Why obligation from file "search.mlw", characters 796-844 *)
 Lemma search2_po_3 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
-  `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
+  (i: Z)
+  (Post3: i = `0`)
+  `0 <= i` /\ ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> 0`)).
 Proof.
 Intuition.
 Save.
@@ -121,12 +121,12 @@ Save.
 (* Why obligation from file "search.mlw", characters 952-973 *)
 Lemma search2_po_4 : 
   (t: (array Z))
-  (result: Z)
-  (Post3: result = `0`)
-  (i0: Z)
-  (Post2: (`0 <= i0` /\
-          ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> 0`))) /\
-          `i0 >= (array_length t)`)
+  (i: Z)
+  (Post3: i = `0`)
+  (i1: Z)
+  (Post2: (`0 <= i1` /\
+          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> 0`))) /\
+          `i1 >= (array_length t)`)
   ((k:Z) (`0 <= k` /\ `k < (array_length t)` -> `(access t k) <> 0`)).
 Proof.
 Intuition.

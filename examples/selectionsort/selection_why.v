@@ -9,34 +9,34 @@ Require Omega.
 Lemma selection_po_1 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
   (Variant3: Z)
-  (j0: Z)
-  (min0: Z)
-  (Pre12: Variant3 = `(array_length t0) - j0`)
-  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (j1: Z)
+  (min1: Z)
+  (Pre12: Variant3 = `(array_length t0) - j1`)
+  (Pre11: (`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
-  (Test5: `j0 < (array_length t0)`)
-  `0 <= j0` /\ `j0 < (array_length t0)`.
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`)))
+  (Test5: `j1 < (array_length t0)`)
+  `0 <= j1` /\ `j1 < (array_length t0)`.
 Proof.
 Auto with *.
 Save.
@@ -45,35 +45,35 @@ Save.
 Lemma selection_po_2 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
   (Variant3: Z)
-  (j0: Z)
-  (min0: Z)
-  (Pre12: Variant3 = `(array_length t0) - j0`)
-  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (j1: Z)
+  (min1: Z)
+  (Pre12: Variant3 = `(array_length t0) - j1`)
+  (Pre11: (`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
-  (Test5: `j0 < (array_length t0)`)
-  (Pre9: `0 <= j0` /\ `j0 < (array_length t0)`)
-  `0 <= min0` /\ `min0 < (array_length t0)`.
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`)))
+  (Test5: `j1 < (array_length t0)`)
+  (Pre9: `0 <= j1` /\ `j1 < (array_length t0)`)
+  `0 <= min1` /\ `min1 < (array_length t0)`.
 Proof.
 Intuition.
 Save.
@@ -82,43 +82,43 @@ Save.
 Lemma selection_po_3 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
   (Variant3: Z)
-  (j0: Z)
-  (min0: Z)
-  (Pre12: Variant3 = `(array_length t0) - j0`)
-  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
-          ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
-  (Test5: `j0 < (array_length t0)`)
-  (Pre9: `0 <= j0` /\ `j0 < (array_length t0)`)
-  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (Test4: `(access t0 j0) < (access t0 min0)`)
+  (j1: Z)
   (min1: Z)
-  (Post1: min1 = j0)
+  (Pre12: Variant3 = `(array_length t0) - j1`)
+  (Pre11: (`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
+          ((k:Z)
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`)))
+  (Test5: `j1 < (array_length t0)`)
+  (Pre9: `0 <= j1` /\ `j1 < (array_length t0)`)
+  (Pre10: `0 <= min1` /\ `min1 < (array_length t0)`)
+  (Test4: `(access t0 j1) < (access t0 min1)`)
+  (min2: Z)
+  (Post1: min2 = j1)
   ((j:Z)
-   (j = `j0 + 1` -> ((`i0 + 1 <= j` /\ `j <= (array_length t0)`) /\
-    (`i0 <= min1` /\ `min1 < (array_length t0)`) /\
-    ((k:Z) (`i0 <= k` /\ `k < j` -> `(access t0 min1) <= (access t0 k)`))) /\
-    (Zwf `0` `(array_length t0) - j` `(array_length t0) - j0`))).
+   (j = `j1 + 1` -> ((`i1 + 1 <= j` /\ `j <= (array_length t0)`) /\
+    (`i1 <= min2` /\ `min2 < (array_length t0)`) /\
+    ((k:Z) (`i1 <= k` /\ `k < j` -> `(access t0 min2) <= (access t0 k)`))) /\
+    (Zwf `0` `(array_length t0) - j` `(array_length t0) - j1`))).
 Proof.
 Intuition.
 Assert h: `k<j0` \/ `k=j0`. Omega. Intuition.
@@ -133,41 +133,41 @@ Save.
 Lemma selection_po_4 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
   (Variant3: Z)
-  (j0: Z)
-  (min0: Z)
-  (Pre12: Variant3 = `(array_length t0) - j0`)
-  (Pre11: (`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (j1: Z)
+  (min1: Z)
+  (Pre12: Variant3 = `(array_length t0) - j1`)
+  (Pre11: (`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
-  (Test5: `j0 < (array_length t0)`)
-  (Pre9: `0 <= j0` /\ `j0 < (array_length t0)`)
-  (Pre10: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (Test3: `(access t0 j0) >= (access t0 min0)`)
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`)))
+  (Test5: `j1 < (array_length t0)`)
+  (Pre9: `0 <= j1` /\ `j1 < (array_length t0)`)
+  (Pre10: `0 <= min1` /\ `min1 < (array_length t0)`)
+  (Test3: `(access t0 j1) >= (access t0 min1)`)
   ((j:Z)
-   (j = `j0 + 1` -> ((`i0 + 1 <= j` /\ `j <= (array_length t0)`) /\
-    (`i0 <= min0` /\ `min0 < (array_length t0)`) /\
-    ((k:Z) (`i0 <= k` /\ `k < j` -> `(access t0 min0) <= (access t0 k)`))) /\
-    (Zwf `0` `(array_length t0) - j` `(array_length t0) - j0`))).
+   (j = `j1 + 1` -> ((`i1 + 1 <= j` /\ `j <= (array_length t0)`) /\
+    (`i1 <= min1` /\ `min1 < (array_length t0)`) /\
+    ((k:Z) (`i1 <= k` /\ `k < j` -> `(access t0 min1) <= (access t0 k)`))) /\
+    (Zwf `0` `(array_length t0) - j` `(array_length t0) - j1`))).
 Proof.
 Intuition.
 Assert h: `k<j0` \/ `k=j0`. Omega. Intuition.
@@ -179,28 +179,27 @@ Save.
 Lemma selection_po_5 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (`i0 + 1 <= result2` /\ `result2 <= (array_length t0)`) /\
-  (`i0 <= result1` /\ `result1 < (array_length t0)`) /\
-  ((k:Z)
-   (`i0 <= k` /\ `k < result2` -> `(access t0 result1) <= (access t0 k)`)).
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
+  (`i1 + 1 <= j` /\ `j <= (array_length t0)`) /\ (`i1 <= min` /\
+  `min < (array_length t0)`) /\
+  ((k:Z) (`i1 <= k` /\ `k < j` -> `(access t0 min) <= (access t0 k)`)).
 Proof.
 Intuition.
 Assert h:`k=i0`. Omega.
@@ -211,32 +210,32 @@ Save.
 Lemma selection_po_6 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (j0: Z)
-  (min0: Z)
-  (Post3: ((`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
+  (j1: Z)
+  (min1: Z)
+  (Post3: ((`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
-          `j0 >= (array_length t0)`)
-  `0 <= min0` /\ `min0 < (array_length t0)`.
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`))) /\
+          `j1 >= (array_length t0)`)
+  `0 <= min1` /\ `min1 < (array_length t0)`.
 Proof.
 Intuition.
 Save.
@@ -245,36 +244,36 @@ Save.
 Lemma selection_po_7 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (j0: Z)
-  (min0: Z)
-  (Post3: ((`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
+  (j1: Z)
+  (min1: Z)
+  (Post3: ((`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
-          `j0 >= (array_length t0)`)
-  (Pre16: `0 <= min0` /\ `min0 < (array_length t0)`)
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`))) /\
+          `j1 >= (array_length t0)`)
+  (Pre16: `0 <= min1` /\ `min1 < (array_length t0)`)
   (w: Z)
-  (Post6: w = (access t0 min0))
-  (Pre14: `0 <= min0` /\ `min0 < (array_length t0)`)
-  `0 <= i0` /\ `i0 < (array_length t0)`.
+  (Post6: w = (access t0 min1))
+  (Pre14: `0 <= min1` /\ `min1 < (array_length t0)`)
+  `0 <= i1` /\ `i1 < (array_length t0)`.
 Proof.
 Intuition.
 Save.
@@ -283,39 +282,39 @@ Save.
 Lemma selection_po_8 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (j0: Z)
-  (min0: Z)
-  (Post3: ((`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
+  (j1: Z)
+  (min1: Z)
+  (Post3: ((`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
-          `j0 >= (array_length t0)`)
-  (Pre16: `0 <= min0` /\ `min0 < (array_length t0)`)
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`))) /\
+          `j1 >= (array_length t0)`)
+  (Pre16: `0 <= min1` /\ `min1 < (array_length t0)`)
   (w: Z)
-  (Post6: w = (access t0 min0))
-  (Pre14: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Post6: w = (access t0 min1))
+  (Pre14: `0 <= min1` /\ `min1 < (array_length t0)`)
+  (Pre15: `0 <= i1` /\ `i1 < (array_length t0)`)
   (t1: (array Z))
-  (Post4: t1 = (store t0 min0 (access t0 i0)))
-  `0 <= i0` /\ `i0 < (array_length t1)`.
+  (Post4: t1 = (store t0 min1 (access t0 i1)))
+  `0 <= i1` /\ `i1 < (array_length t1)`.
 Proof.
 Intuition.
 ArraySubst t1.
@@ -325,50 +324,50 @@ Save.
 Lemma selection_po_9 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
+  (i: Z)
+  (Post11: i = `0`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre18: Variant1 = `(array_length t0) - i0`)
-  (Pre17: (`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-          (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Pre18: Variant1 = `(array_length t0) - i1`)
+  (Pre17: (`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+          (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
           ((k:Z)
-           (`0 <= k` /\ `k < i0` ->
+           (`0 <= k` /\ `k < i1` ->
             ((l:Z)
-             (`i0 <= l` /\ `l < (array_length t0)` ->
+             (`i1 <= l` /\ `l < (array_length t0)` ->
               `(access t0 k) <= (access t0 l)`)))))
-  (Test6: `i0 < (array_length t0) - 1`)
-  (result1: Z)
-  (Post8: result1 = i0)
-  (result2: Z)
-  (Post7: result2 = `i0 + 1`)
-  (j0: Z)
-  (min0: Z)
-  (Post3: ((`i0 + 1 <= j0` /\ `j0 <= (array_length t0)`) /\ (`i0 <= min0` /\
-          `min0 < (array_length t0)`) /\
+  (Test6: `i1 < (array_length t0) - 1`)
+  (min: Z)
+  (Post8: min = i1)
+  (j: Z)
+  (Post7: j = `i1 + 1`)
+  (j1: Z)
+  (min1: Z)
+  (Post3: ((`i1 + 1 <= j1` /\ `j1 <= (array_length t0)`) /\ (`i1 <= min1` /\
+          `min1 < (array_length t0)`) /\
           ((k:Z)
-           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
-          `j0 >= (array_length t0)`)
-  (Pre16: `0 <= min0` /\ `min0 < (array_length t0)`)
+           (`i1 <= k` /\ `k < j1` -> `(access t0 min1) <= (access t0 k)`))) /\
+          `j1 >= (array_length t0)`)
+  (Pre16: `0 <= min1` /\ `min1 < (array_length t0)`)
   (w: Z)
-  (Post6: w = (access t0 min0))
-  (Pre14: `0 <= min0` /\ `min0 < (array_length t0)`)
-  (Pre15: `0 <= i0` /\ `i0 < (array_length t0)`)
+  (Post6: w = (access t0 min1))
+  (Pre14: `0 <= min1` /\ `min1 < (array_length t0)`)
+  (Pre15: `0 <= i1` /\ `i1 < (array_length t0)`)
   (t1: (array Z))
-  (Post4: t1 = (store t0 min0 (access t0 i0)))
-  (Pre13: `0 <= i0` /\ `i0 < (array_length t1)`)
+  (Post4: t1 = (store t0 min1 (access t0 i1)))
+  (Pre13: `0 <= i1` /\ `i1 < (array_length t1)`)
   (t2: (array Z))
-  (Post5: t2 = (store t1 i0 w))
+  (Post5: t2 = (store t1 i1 w))
   ((i:Z)
-   (i = `i0 + 1` -> ((`0 <= i` /\ `i <= (array_length t2) - 1`) /\
+   (i = `i1 + 1` -> ((`0 <= i` /\ `i <= (array_length t2) - 1`) /\
     (sorted_array t2 `0` `i - 1`) /\ (permut t2 t) /\
     ((k:Z)
      (`0 <= k` /\ `k < i` ->
       ((l:Z)
        (`i <= l` /\ `l < (array_length t2)` ->
         `(access t2 k) <= (access t2 l)`))))) /\
-    (Zwf `0` `(array_length t2) - i` `(array_length t0) - i0`))).
+    (Zwf `0` `(array_length t2) - i` `(array_length t0) - i1`))).
 Proof.
 Intuition.
 ArraySubst t2.
@@ -424,15 +423,14 @@ Save.
 Lemma selection_po_10 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (`0 <= result` /\ `result <= (array_length t) - 1`) /\
-  (sorted_array t `0` `result - 1`) /\ (permut t t) /\
+  (i: Z)
+  (Post11: i = `0`)
+  (`0 <= i` /\ `i <= (array_length t) - 1`) /\
+  (sorted_array t `0` `i - 1`) /\ (permut t t) /\
   ((k:Z)
-   (`0 <= k` /\ `k < result` ->
+   (`0 <= k` /\ `k < i` ->
     ((l:Z)
-     (`result <= l` /\ `l < (array_length t)` ->
-      `(access t k) <= (access t l)`)))).
+     (`i <= l` /\ `l < (array_length t)` -> `(access t k) <= (access t l)`)))).
 Proof.
 Intuition.
 Unfold sorted_array; Intros; Omega.
@@ -442,18 +440,18 @@ Save.
 Lemma selection_po_11 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)
-  (result: Z)
-  (Post11: result = `0`)
-  (i0: Z)
+  (i: Z)
+  (Post11: i = `0`)
+  (i1: Z)
   (t0: (array Z))
-  (Post10: ((`0 <= i0` /\ `i0 <= (array_length t0) - 1`) /\
-           (sorted_array t0 `0` `i0 - 1`) /\ (permut t0 t) /\
+  (Post10: ((`0 <= i1` /\ `i1 <= (array_length t0) - 1`) /\
+           (sorted_array t0 `0` `i1 - 1`) /\ (permut t0 t) /\
            ((k:Z)
-            (`0 <= k` /\ `k < i0` ->
+            (`0 <= k` /\ `k < i1` ->
              ((l:Z)
-              (`i0 <= l` /\ `l < (array_length t0)` ->
+              (`i1 <= l` /\ `l < (array_length t0)` ->
                `(access t0 k) <= (access t0 l)`))))) /\
-           `i0 >= (array_length t0) - 1`)
+           `i1 >= (array_length t0) - 1`)
   (sorted_array t0 `0` `(array_length t0) - 1`) /\ (permut t0 t).
 Proof.
 Intuition.

@@ -51,14 +51,14 @@ Save.
 
 (* Why obligation from file "swap0.mlw", characters 654-678 *)
 Lemma test_swap3_po_1 : 
-  (result: Z)
-  (Post2: result = `1`)
-  (result0: Z)
-  (Post1: result0 = `2`)
-  (c0: Z)
-  (d0: Z)
-  (Post4: `c0 = result0` /\ `d0 = result`)
-  `d0 = 1`.
+  (c: Z)
+  (Post2: c = `1`)
+  (d: Z)
+  (Post1: d = `2`)
+  (c1: Z)
+  (d1: Z)
+  (Post4: `c1 = d` /\ `d1 = c`)
+  `d1 = 1`.
 Proof. (* test_swap3_po_1 *)
 Intuition.
 Save.
@@ -96,14 +96,14 @@ Save.
 
 (* Why obligation from file "swap0.mlw", characters 1109-1133 *)
 Lemma test_swap4_po_1 : 
-  (result: Z)
-  (Post2: result = `1`)
-  (result0: Z)
-  (Post1: result0 = `2`)
-  (c0: Z)
-  (d0: Z)
-  (Post4: `c0 = result0` /\ `d0 = result`)
-  `d0 = 1`.
+  (c: Z)
+  (Post2: c = `1`)
+  (d: Z)
+  (Post1: d = `2`)
+  (c1: Z)
+  (d1: Z)
+  (Post4: `c1 = d` /\ `d1 = c`)
+  `d1 = 1`.
 Proof. (* test_swap4_po_1 *)
 Intuition.
 Save.

@@ -10,12 +10,12 @@ Lemma f_po_1 :
   (ddd: Z)
   (z: Z)
   (Pre1: `y = ddd`)
-  (result: Z)
-  (Post3: result = z)
+  (u: Z)
+  (Post3: u = z)
   (c_aux_1: Z)
-  (Post2: c_aux_1 = result)
-  (u0: Z)
-  (Post1: u0 = `result + 1`)
+  (Post2: c_aux_1 = u)
+  (u1: Z)
+  (Post1: u1 = `u + 1`)
   `c_aux_1 = z`.
 Proof.
 Intuition.

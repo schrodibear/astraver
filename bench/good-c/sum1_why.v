@@ -7,21 +7,21 @@ Require Why.
 Lemma main_po_1 : 
   (x: Z)
   (Pre4: `x = 0`)
-  (result: Z)
-  (Post5: result = `0`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  (Variant1: Z)
+  (i: Z)
+  (Post5: i = `0`)
   (i1: Z)
+  (Post1: i1 = `0`)
+  (Variant1: Z)
+  (i2: Z)
   (x0: Z)
-  (Pre3: Variant1 = `10 - i1`)
-  (Pre2: `x0 = i1` /\ `i1 <= 10`)
-  (Test2: `i1 < 10`)
+  (Pre3: Variant1 = `10 - i2`)
+  (Pre2: `x0 = i2` /\ `i2 <= 10`)
+  (Test2: `i2 < 10`)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
-  (i2: Z)
-  (Post3: i2 = `i1 + 1`)
-  (`x1 = i2` /\ `i2 <= 10`) /\ (Zwf `0` `10 - i2` `10 - i1`).
+  (i3: Z)
+  (Post3: i3 = `i2 + 1`)
+  (`x1 = i3` /\ `i3 <= 10`) /\ (Zwf `0` `10 - i3` `10 - i2`).
 Proof.
 Intuition.
 Unfold Zwf; Omega.
@@ -31,11 +31,11 @@ Save.
 Lemma main_po_2 : 
   (x: Z)
   (Pre4: `x = 0`)
-  (result: Z)
-  (Post5: result = `0`)
-  (i0: Z)
-  (Post1: i0 = `0`)
-  `x = i0` /\ `i0 <= 10`.
+  (i: Z)
+  (Post5: i = `0`)
+  (i1: Z)
+  (Post1: i1 = `0`)
+  `x = i1` /\ `i1 <= 10`.
 Proof.
 Intuition.
 Save.
@@ -44,13 +44,13 @@ Save.
 Lemma main_po_3 : 
   (x: Z)
   (Pre4: `x = 0`)
-  (result: Z)
-  (Post5: result = `0`)
-  (i0: Z)
-  (Post1: i0 = `0`)
+  (i: Z)
+  (Post5: i = `0`)
   (i1: Z)
+  (Post1: i1 = `0`)
+  (i2: Z)
   (x0: Z)
-  (Post4: (`x0 = i1` /\ `i1 <= 10`) /\ `i1 >= 10`)
+  (Post4: (`x0 = i2` /\ `i2 <= 10`) /\ `i2 >= 10`)
   `x0 = 10`.
 Proof.
 Intuition.

@@ -7,18 +7,18 @@ Require Why.
 Lemma test_po_1 : 
   (k: Z)
   (j: Z)
-  (result: Z)
-  (Post4: result = `1`)
+  (l: Z)
+  (Post4: l = `1`)
   (i0: Z)
   (Post1: i0 = `j + k`)
-  (l0: Z)
-  (Post2: l0 = `result * j`)
+  (l1: Z)
+  (Post2: l1 = `l * j`)
   (j0: Z)
-  (Post3: j0 = `j + (l0 + 10 * k + i0)`)
+  (Post3: j0 = `j + (l1 + 10 * k + i0)`)
   `i0 = j + k` /\ `j0 = 3 * j + 11 * k`.
 Proof.
 Intuition.
-Subst result; Omega.
+Subst; Omega.
 Save.
 
 

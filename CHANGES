@@ -1,4 +1,7 @@
 
+  o better names given to local references in proof obligations
+  o improved automatic proof
+
 version 1.10, April 4th, 2003
 ==============================
   o C: added label statement and alternate syntax /*@ label id */ 

@@ -21,13 +21,13 @@ Save.
 
 (* Why obligation from file "good-c/pointer.c", characters 187-196 *)
 Lemma h_po_1 : 
-  (result: Z)
-  (Post2: result = `0`)
-  (z0: Z)
+  (z: Z)
+  (Post2: z = `0`)
+  (z1: Z)
   (c_aux_2: Z)
-  (Post4: `z0 = 1` /\ `c_aux_2 = 0`)
+  (Post4: `z1 = 1` /\ `c_aux_2 = 0`)
   (c_aux_3: Z)
-  (Post1: c_aux_3 = z0)
+  (Post1: c_aux_3 = z1)
   `c_aux_2 + c_aux_3 = 1`.
 Proof.
 Intuition.

@@ -8,19 +8,19 @@ Lemma add1_po_1 :
   (y: Z)
   (x: Z)
   (Pre3: `y >= 0`)
-  (result: Z)
-  (Post3: result = y)
+  (z: Z)
+  (Post3: z = y)
   (Variant1: Z)
   (x0: Z)
-  (z0: Z)
-  (Pre2: Variant1 = z0)
-  (I: `0 <= z0` /\ `x0 = x + (y - z0)`)
-  (Test2: `z0 > 0`)
+  (z1: Z)
+  (Pre2: Variant1 = z1)
+  (I: `0 <= z1` /\ `x0 = x + (y - z1)`)
+  (Test2: `z1 > 0`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
-  (z1: Z)
-  (Post2: z1 = `z0 - 1`)
-  (`0 <= z1` /\ `x1 = x + (y - z1)`) /\ (Zwf `0` z1 z0).
+  (z2: Z)
+  (Post2: z2 = `z1 - 1`)
+  (`0 <= z2` /\ `x1 = x + (y - z2)`) /\ (Zwf `0` z2 z1).
 Proof. 
 Unfold Zwf; Intros; Omega.
 Save.
@@ -30,9 +30,9 @@ Lemma add1_po_2 :
   (y: Z)
   (x: Z)
   (Pre3: `y >= 0`)
-  (result: Z)
-  (Post3: result = y)
-  `0 <= result` /\ `x = x + (y - result)`.
+  (z: Z)
+  (Post3: z = y)
+  `0 <= z` /\ `x = x + (y - z)`.
 Proof.
 Unfold Zwf; Intros; Omega.
 Save.
@@ -42,11 +42,11 @@ Lemma add1_po_3 :
   (y: Z)
   (x: Z)
   (Pre3: `y >= 0`)
-  (result: Z)
-  (Post3: result = y)
+  (z: Z)
+  (Post3: z = y)
   (x0: Z)
-  (z0: Z)
-  (I: (`0 <= z0` /\ `x0 = x + (y - z0)`) /\ `z0 <= 0`)
+  (z1: Z)
+  (I: (`0 <= z1` /\ `x0 = x + (y - z1)`) /\ `z1 <= 0`)
   `x0 = x + y`.
 Proof.
 Intuition.
@@ -55,19 +55,19 @@ Save.
 
 (* Why obligation from file "peano.mlw", characters 367-391 *)
 Lemma u1_po_1 : 
-  (result: Z)
-  (Post1: result = `3`)
+  (r: Z)
+  (Post1: r = `3`)
   `7 >= 0`.
 Proof. Intros; Omega. Save.
 
 (* Why obligation from file "peano.mlw", characters 367-391 *)
 Lemma u1_po_2 : 
-  (result: Z)
-  (Post1: result = `3`)
+  (r: Z)
+  (Post1: r = `3`)
   (Pre1: `7 >= 0`)
-  (r0: Z)
-  (Post3: `r0 = result + 7`)
-  `r0 = 10`.
+  (r1: Z)
+  (Post3: `r1 = r + 7`)
+  `r1 = 10`.
 Proof. Intros; Omega. Save.
 
 
@@ -146,8 +146,8 @@ Save.
 
 (* Why obligation from file "peano.mlw", characters 608-636 *)
 Lemma u11_po_1 : 
-  (result: Z)
-  (Post1: result = `3`)
+  (r: Z)
+  (Post1: r = `3`)
   `7 >= 0`.
 Proof.
 Intros; Omega.
@@ -155,12 +155,12 @@ Save.
 
 (* Why obligation from file "peano.mlw", characters 608-636 *)
 Lemma u11_po_2 : 
-  (result: Z)
-  (Post1: result = `3`)
+  (r: Z)
+  (Post1: r = `3`)
   (Pre1: `7 >= 0`)
-  (r0: Z)
-  (Post3: `r0 = result + 7`)
-  `r0 = 10`.
+  (r1: Z)
+  (Post3: `r1 = r + 7`)
+  `r1 = 10`.
 Proof.
 Intros; Omega.
 Save.
@@ -171,18 +171,18 @@ Lemma mult1_po_1 :
   (y: Z)
   (x: Z)
   (Pre6: `x >= 0` /\ `y >= 0`)
-  (result: Z)
-  (Post4: result = y)
+  (z: Z)
+  (Post4: z = y)
   (savex: Z)
   (Post3: savex = x)
   (x0: Z)
   (Post1: x0 = `0`)
   (Variant1: Z)
   (x1: Z)
-  (z0: Z)
-  (Pre5: Variant1 = z0)
-  (I: `0 <= z0` /\ `x1 = x * (y - z0)`)
-  (Test2: `z0 > 0`)
+  (z1: Z)
+  (Pre5: Variant1 = z1)
+  (I: `0 <= z1` /\ `x1 = x * (y - z1)`)
+  (Test2: `z1 > 0`)
   `savex >= 0`.
 Proof.
 Intros; Omega.
@@ -193,28 +193,28 @@ Lemma mult1_po_2 :
   (y: Z)
   (x: Z)
   (Pre6: `x >= 0` /\ `y >= 0`)
-  (result: Z)
-  (Post4: result = y)
+  (z: Z)
+  (Post4: z = y)
   (savex: Z)
   (Post3: savex = x)
   (x0: Z)
   (Post1: x0 = `0`)
   (Variant1: Z)
   (x1: Z)
-  (z0: Z)
-  (Pre5: Variant1 = z0)
-  (I: `0 <= z0` /\ `x1 = x * (y - z0)`)
-  (Test2: `z0 > 0`)
+  (z1: Z)
+  (Pre5: Variant1 = z1)
+  (I: `0 <= z1` /\ `x1 = x * (y - z1)`)
+  (Test2: `z1 > 0`)
   (Pre4: `savex >= 0`)
   (x2: Z)
   (Post9: `x2 = x1 + savex`)
-  (z1: Z)
-  (Post2: z1 = `z0 - 1`)
-  (`0 <= z1` /\ `x2 = x * (y - z1)`) /\ (Zwf `0` z1 z0).
+  (z2: Z)
+  (Post2: z2 = `z1 - 1`)
+  (`0 <= z2` /\ `x2 = x * (y - z2)`) /\ (Zwf `0` z2 z1).
 Proof.
 Simpl; Intros.
 Repeat Split; Unfold Zwf; Try Omega.
-Subst z1 x2 savex.
+Subst z2 x2 savex.
 Decompose [and] I.
 Subst x1.
 Ring.
@@ -225,16 +225,16 @@ Lemma mult1_po_3 :
   (y: Z)
   (x: Z)
   (Pre6: `x >= 0` /\ `y >= 0`)
-  (result: Z)
-  (Post4: result = y)
+  (z: Z)
+  (Post4: z = y)
   (savex: Z)
   (Post3: savex = x)
   (x0: Z)
   (Post1: x0 = `0`)
-  `0 <= result` /\ `x0 = x * (y - result)`.
+  `0 <= z` /\ `x0 = x * (y - z)`.
 Proof. 
 Intros.
-Subst result; Split; [ Omega | Ring ]; Assumption.
+Subst z; Split; [ Omega | Ring ]; Assumption.
 Save.
 
 (* Why obligation from file "peano.mlw", characters 809-984 *)
@@ -242,19 +242,19 @@ Lemma mult1_po_4 :
   (y: Z)
   (x: Z)
   (Pre6: `x >= 0` /\ `y >= 0`)
-  (result: Z)
-  (Post4: result = y)
+  (z: Z)
+  (Post4: z = y)
   (savex: Z)
   (Post3: savex = x)
   (x0: Z)
   (Post1: x0 = `0`)
   (x1: Z)
-  (z0: Z)
-  (I: (`0 <= z0` /\ `x1 = x * (y - z0)`) /\ `z0 <= 0`)
+  (z1: Z)
+  (I: (`0 <= z1` /\ `x1 = x * (y - z1)`) /\ `z1 <= 0`)
   `x1 = x * y`.
 Proof. 
 Simpl; Intros.
-Cut `z0 = 0`.
+Cut `z1 = 0`.
 Intros eq; Rewrite eq in I. Intuition.
 Generalize H4. Ring `x*(y-0)`. Intro; Ring; Assumption.
 Omega.
@@ -263,19 +263,19 @@ Save.
 
 (* Why obligation from file "peano.mlw", characters 1042-1067 *)
 Lemma u2_po_1 : 
-  (result: Z)
-  (Post1: result = `4`)
-  `result >= 0` /\ `6 >= 0`.
+  (r: Z)
+  (Post1: r = `4`)
+  `r >= 0` /\ `6 >= 0`.
 Proof. Intros; Omega. Save.
 
 (* Why obligation from file "peano.mlw", characters 1042-1067 *)
 Lemma u2_po_2 : 
-  (result: Z)
-  (Post1: result = `4`)
-  (Pre1: `result >= 0` /\ `6 >= 0`)
-  (r0: Z)
-  (Post3: `r0 = result * 6`)
-  `r0 = 24`.
+  (r: Z)
+  (Post1: r = `4`)
+  (Pre1: `r >= 0` /\ `6 >= 0`)
+  (r1: Z)
+  (Post3: `r1 = r * 6`)
+  `r1 = 24`.
 Proof. Intros; Omega. Save.
 
 

@@ -97,21 +97,21 @@ Lemma quick_rec_po_2 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
   (Variant3: Z)
-  (i0: Z)
-  (m0: Z)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Pre12: Variant3 = `1 + r0 - i0`)
-  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-          ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-          `m0 < i0`) /\ `i0 <= r0 + 1`)
-  (Test5: `i0 <= r0`)
-  `0 <= i0` /\ `i0 < (array_length t1)`.
+  (Pre12: Variant3 = `1 + r0 - i1`)
+  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+          ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+          `m1 < i1`) /\ `i1 <= r0 + 1`)
+  (Test5: `i1 <= r0`)
+  `0 <= i1` /\ `i1 < (array_length t1)`.
 Proof.
 Intuition.
 ArrayLength.
@@ -133,26 +133,26 @@ Lemma quick_rec_po_3 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
   (Variant3: Z)
-  (i0: Z)
-  (m0: Z)
-  (t1: (array Z))
-  (Pre12: Variant3 = `1 + r0 - i0`)
-  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-          ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-          `m0 < i0`) /\ `i0 <= r0 + 1`)
-  (Test5: `i0 <= r0`)
-  (Pre10: `0 <= i0` /\ `i0 < (array_length t1)`)
-  (Test4: `(access t1 i0) < v`)
+  (i1: Z)
   (m1: Z)
-  (Post13: m1 = `m0 + 1`)
-  (`0 <= i0` /\ `i0 < (array_length t1)`) /\ `0 <= m1` /\
-  `m1 < (array_length t1)`.
+  (t1: (array Z))
+  (Pre12: Variant3 = `1 + r0 - i1`)
+  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+          ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+          `m1 < i1`) /\ `i1 <= r0 + 1`)
+  (Test5: `i1 <= r0`)
+  (Pre10: `0 <= i1` /\ `i1 < (array_length t1)`)
+  (Test4: `(access t1 i1) < v`)
+  (m2: Z)
+  (Post13: m2 = `m1 + 1`)
+  (`0 <= i1` /\ `i1 < (array_length t1)`) /\ `0 <= m2` /\
+  `m2 < (array_length t1)`.
 Proof.
 Intuition ArrayLength; Omega.
 Save.
@@ -173,34 +173,34 @@ Lemma quick_rec_po_4 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
   (Variant3: Z)
-  (i0: Z)
-  (m0: Z)
-  (t1: (array Z))
-  (Pre12: Variant3 = `1 + r0 - i0`)
-  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-          ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-          `m0 < i0`) /\ `i0 <= r0 + 1`)
-  (Test5: `i0 <= r0`)
-  (Pre10: `0 <= i0` /\ `i0 < (array_length t1)`)
-  (Test4: `(access t1 i0) < v`)
+  (i1: Z)
   (m1: Z)
-  (Post13: m1 = `m0 + 1`)
-  (Pre9: (`0 <= i0` /\ `i0 < (array_length t1)`) /\ `0 <= m1` /\
-         `m1 < (array_length t1)`)
+  (t1: (array Z))
+  (Pre12: Variant3 = `1 + r0 - i1`)
+  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+          ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+          `m1 < i1`) /\ `i1 <= r0 + 1`)
+  (Test5: `i1 <= r0`)
+  (Pre10: `0 <= i1` /\ `i1 < (array_length t1)`)
+  (Test4: `(access t1 i1) < v`)
+  (m2: Z)
+  (Post13: m2 = `m1 + 1`)
+  (Pre9: (`0 <= i1` /\ `i1 < (array_length t1)`) /\ `0 <= m2` /\
+         `m2 < (array_length t1)`)
   (t2: (array Z))
-  (Post30: (exchange t2 t1 i0 m1))
+  (Post30: (exchange t2 t1 i1 m2))
   ((i:Z)
-   (i = `i0 + 1` ->
-    (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t2 j) < v`)) /\
-    ((j:Z) (`m1 < j` /\ `j < i` -> `(access t2 j) >= v`)) /\
-    (sub_permut l0 r0 t2 t0) /\ `(access t2 l0) = v` /\ (`l0 <= m1` /\
-    `m1 < i`) /\ `i <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i` `1 + r0 - i0`))).
+   (i = `i1 + 1` ->
+    (((j:Z) (`l0 < j` /\ `j <= m2` -> `(access t2 j) < v`)) /\
+    ((j:Z) (`m2 < j` /\ `j < i` -> `(access t2 j) >= v`)) /\
+    (sub_permut l0 r0 t2 t0) /\ `(access t2 l0) = v` /\ (`l0 <= m2` /\
+    `m2 < i`) /\ `i <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i` `1 + r0 - i1`))).
 Proof.
 Intuition.
 Assert hj : `j < m1` \/ j = m1. Omega. 
@@ -237,28 +237,28 @@ Lemma quick_rec_po_5 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
   (Variant3: Z)
-  (i0: Z)
-  (m0: Z)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Pre12: Variant3 = `1 + r0 - i0`)
-  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-          ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-          `m0 < i0`) /\ `i0 <= r0 + 1`)
-  (Test5: `i0 <= r0`)
-  (Pre10: `0 <= i0` /\ `i0 < (array_length t1)`)
-  (Test3: `(access t1 i0) >= v`)
+  (Pre12: Variant3 = `1 + r0 - i1`)
+  (Pre11: ((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+          ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+          (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+          `m1 < i1`) /\ `i1 <= r0 + 1`)
+  (Test5: `i1 <= r0`)
+  (Pre10: `0 <= i1` /\ `i1 < (array_length t1)`)
+  (Test3: `(access t1 i1) >= v`)
   ((i:Z)
-   (i = `i0 + 1` ->
-    (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-    ((j:Z) (`m0 < j` /\ `j < i` -> `(access t1 j) >= v`)) /\
-    (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-    `m0 < i`) /\ `i <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i` `1 + r0 - i0`))).
+   (i = `i1 + 1` ->
+    (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+    ((j:Z) (`m1 < j` /\ `j < i` -> `(access t1 j) >= v`)) /\
+    (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+    `m1 < i`) /\ `i <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i` `1 + r0 - i1`))).
 Proof.
 Intuition.
 Assert hj : `j < i0` \/ `j = i0`. Omega. Intuition.
@@ -282,14 +282,14 @@ Lemma quick_rec_po_6 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  ((j:Z) (`l0 < j` /\ `j <= result0` -> `(access t0 j) < v`)) /\
-  ((j:Z) (`result0 < j` /\ `j < result1` -> `(access t0 j) >= v`)) /\
-  (sub_permut l0 r0 t0 t0) /\ `(access t0 l0) = v` /\ (`l0 <= result0` /\
-  `result0 < result1`) /\ `result1 <= r0 + 1`.
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  ((j:Z) (`l0 < j` /\ `j <= m` -> `(access t0 j) < v`)) /\
+  ((j:Z) (`m < j` /\ `j < i` -> `(access t0 j) >= v`)) /\
+  (sub_permut l0 r0 t0 t0) /\ `(access t0 l0) = v` /\ (`l0 <= m` /\
+  `m < i`) /\ `i <= r0 + 1`.
 Proof.
 Intuition.
 Save.
@@ -310,19 +310,19 @@ Lemma quick_rec_po_7 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (i0: Z)
-  (m0: Z)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Post15: (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-           ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-           `m0 < i0`) /\ `i0 <= r0 + 1`) /\ `i0 > r0`)
-  (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
-  `m0 < (array_length t1)`.
+  (Post15: (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+           ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+           `m1 < i1`) /\ `i1 <= r0 + 1`) /\ `i1 > r0`)
+  (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m1` /\
+  `m1 < (array_length t1)`.
 Proof.
 Intuition ArrayLength; Omega.
 Save.
@@ -343,22 +343,22 @@ Lemma quick_rec_po_8 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (i0: Z)
-  (m0: Z)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Post15: (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-           ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-           `m0 < i0`) /\ `i0 <= r0 + 1`) /\ `i0 > r0`)
-  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
-          `m0 < (array_length t1)`)
+  (Post15: (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+           ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+           `m1 < i1`) /\ `i1 <= r0 + 1`) /\ `i1 > r0`)
+  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m1` /\
+          `m1 < (array_length t1)`)
   (t2: (array Z))
-  (Post32: (exchange t2 t1 l0 m0))
-  `0 <= l0` /\ `m0 - 1 < (array_length t2)`.
+  (Post32: (exchange t2 t1 l0 m1))
+  `0 <= l0` /\ `m1 - 1 < (array_length t2)`.
 Proof.
 Intuition ArrayLength.
 Save.
@@ -379,25 +379,25 @@ Lemma quick_rec_po_9 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (i0: Z)
-  (m0: Z)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Post15: (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-           ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-           `m0 < i0`) /\ `i0 <= r0 + 1`) /\ `i0 > r0`)
-  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
-          `m0 < (array_length t1)`)
+  (Post15: (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+           ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+           `m1 < i1`) /\ `i1 <= r0 + 1`) /\ `i1 > r0`)
+  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m1` /\
+          `m1 < (array_length t1)`)
   (t2: (array Z))
-  (Post32: (exchange t2 t1 l0 m0))
-  (Pre22: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
-  (Pre16: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
-  (Pre17: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
-  (Zwf `0` `1 + (m0 - 1) - l0` Variant1).
+  (Post32: (exchange t2 t1 l0 m1))
+  (Pre22: `0 <= l0` /\ `m1 - 1 < (array_length t2)`)
+  (Pre16: `0 <= l0` /\ `m1 - 1 < (array_length t2)`)
+  (Pre17: `0 <= l0` /\ `m1 - 1 < (array_length t2)`)
+  (Zwf `0` `1 + (m1 - 1) - l0` Variant1).
 Proof.
 Intuition.
 Unfold Zwf; Omega.
@@ -419,25 +419,25 @@ Lemma quick_rec_po_10 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (i0: Z)
-  (m0: Z)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Post15: (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-           ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-           `m0 < i0`) /\ `i0 <= r0 + 1`) /\ `i0 > r0`)
-  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
-          `m0 < (array_length t1)`)
+  (Post15: (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+           ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+           `m1 < i1`) /\ `i1 <= r0 + 1`) /\ `i1 > r0`)
+  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m1` /\
+          `m1 < (array_length t1)`)
   (t2: (array Z))
-  (Post32: (exchange t2 t1 l0 m0))
-  (Pre22: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
+  (Post32: (exchange t2 t1 l0 m1))
+  (Pre22: `0 <= l0` /\ `m1 - 1 < (array_length t2)`)
   (t3: (array Z))
-  (Post34: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
-  `0 <= m0 + 1` /\ `r0 < (array_length t3)`.
+  (Post34: (sorted_array t3 l0 `m1 - 1`) /\ (sub_permut l0 `m1 - 1` t3 t2))
+  `0 <= m1 + 1` /\ `r0 < (array_length t3)`.
 Proof.
 Intuition.
 Generalize (sub_permut_length H20);
@@ -462,28 +462,28 @@ Lemma quick_rec_po_11 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (i0: Z)
-  (m0: Z)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Post15: (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-           ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-           `m0 < i0`) /\ `i0 <= r0 + 1`) /\ `i0 > r0`)
-  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
-          `m0 < (array_length t1)`)
+  (Post15: (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+           ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+           `m1 < i1`) /\ `i1 <= r0 + 1`) /\ `i1 > r0`)
+  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m1` /\
+          `m1 < (array_length t1)`)
   (t2: (array Z))
-  (Post32: (exchange t2 t1 l0 m0))
-  (Pre22: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
+  (Post32: (exchange t2 t1 l0 m1))
+  (Pre22: `0 <= l0` /\ `m1 - 1 < (array_length t2)`)
   (t3: (array Z))
-  (Post34: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
-  (Pre21: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
-  (Pre19: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
-  (Pre20: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
-  (Zwf `0` `1 + r0 - (m0 + 1)` Variant1).
+  (Post34: (sorted_array t3 l0 `m1 - 1`) /\ (sub_permut l0 `m1 - 1` t3 t2))
+  (Pre21: `0 <= m1 + 1` /\ `r0 < (array_length t3)`)
+  (Pre19: `0 <= m1 + 1` /\ `r0 < (array_length t3)`)
+  (Pre20: `0 <= m1 + 1` /\ `r0 < (array_length t3)`)
+  (Zwf `0` `1 + r0 - (m1 + 1)` Variant1).
 Proof.
 Intuition.
 Unfold Zwf; Omega.
@@ -505,27 +505,27 @@ Lemma quick_rec_po_12 :
   (Pre24: `0 <= l0` /\ `l0 < (array_length t0)`)
   (v: Z)
   (Post18: v = (access t0 l0))
-  (result0: Z)
-  (Post17: result0 = l0)
-  (result1: Z)
-  (Post16: result1 = `l0 + 1`)
-  (i0: Z)
-  (m0: Z)
+  (m: Z)
+  (Post17: m = l0)
+  (i: Z)
+  (Post16: i = `l0 + 1`)
+  (i1: Z)
+  (m1: Z)
   (t1: (array Z))
-  (Post15: (((j:Z) (`l0 < j` /\ `j <= m0` -> `(access t1 j) < v`)) /\
-           ((j:Z) (`m0 < j` /\ `j < i0` -> `(access t1 j) >= v`)) /\
-           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m0` /\
-           `m0 < i0`) /\ `i0 <= r0 + 1`) /\ `i0 > r0`)
-  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m0` /\
-          `m0 < (array_length t1)`)
+  (Post15: (((j:Z) (`l0 < j` /\ `j <= m1` -> `(access t1 j) < v`)) /\
+           ((j:Z) (`m1 < j` /\ `j < i1` -> `(access t1 j) >= v`)) /\
+           (sub_permut l0 r0 t1 t0) /\ `(access t1 l0) = v` /\ (`l0 <= m1` /\
+           `m1 < i1`) /\ `i1 <= r0 + 1`) /\ `i1 > r0`)
+  (Pre23: (`0 <= l0` /\ `l0 < (array_length t1)`) /\ `0 <= m1` /\
+          `m1 < (array_length t1)`)
   (t2: (array Z))
-  (Post32: (exchange t2 t1 l0 m0))
-  (Pre22: `0 <= l0` /\ `m0 - 1 < (array_length t2)`)
+  (Post32: (exchange t2 t1 l0 m1))
+  (Pre22: `0 <= l0` /\ `m1 - 1 < (array_length t2)`)
   (t3: (array Z))
-  (Post34: (sorted_array t3 l0 `m0 - 1`) /\ (sub_permut l0 `m0 - 1` t3 t2))
-  (Pre21: `0 <= m0 + 1` /\ `r0 < (array_length t3)`)
+  (Post34: (sorted_array t3 l0 `m1 - 1`) /\ (sub_permut l0 `m1 - 1` t3 t2))
+  (Pre21: `0 <= m1 + 1` /\ `r0 < (array_length t3)`)
   (t4: (array Z))
-  (Post36: (sorted_array t4 `m0 + 1` r0) /\ (sub_permut `m0 + 1` r0 t4 t3))
+  (Post36: (sorted_array t4 `m1 + 1` r0) /\ (sub_permut `m1 + 1` r0 t4 t3))
   (sorted_array t4 l0 r0) /\ (sub_permut l0 r0 t4 t0).
 Proof.
 Intuition.

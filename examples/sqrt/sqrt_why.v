@@ -234,8 +234,8 @@ Lemma sqrt_po_3 :
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
   (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
+  (y: Z)
+  (Post5: y = x)
   ~(`2` = `0`).
 Proof. (* sqrt_po_3 *)
 Auto with *.
@@ -247,22 +247,22 @@ Lemma sqrt_po_4 :
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
   (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
+  (y: Z)
+  (Post5: y = x)
   (Pre6: ~(`2` = `0`))
-  (result2: Z)
-  (Post4: result2 = (Zdiv (`x + 1`) `2`))
+  (z: Z)
+  (Post4: z = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
-  (y0: Z)
-  (z0: Z)
-  (Pre5: Variant1 = y0)
-  (Pre4: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Test2: `z0 < y0`)
   (y1: Z)
-  (Post1: y1 = z0)
+  (z1: Z)
+  (Pre5: Variant1 = y1)
+  (Pre4: `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
+         `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`)
+  (Test2: `z1 < y1`)
+  (y2: Z)
+  (Post1: y2 = z1)
   (Pre2: ~(`2` = `0`))
-  ~(z0 = `0`).
+  ~(z1 = `0`).
 Proof. 
 Intuition.
 Save.
@@ -274,26 +274,26 @@ Lemma sqrt_po_5 :
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
   (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
+  (y: Z)
+  (Post5: y = x)
   (Pre6: ~(`2` = `0`))
-  (result2: Z)
-  (Post4: result2 = (Zdiv (`x + 1`) `2`))
+  (z: Z)
+  (Post4: z = (Zdiv (`x + 1`) `2`))
   (Variant1: Z)
-  (y0: Z)
-  (z0: Z)
-  (Pre5: Variant1 = y0)
-  (Pre4: `z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-         `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Test2: `z0 < y0`)
   (y1: Z)
-  (Post1: y1 = z0)
-  (Pre2: ~(`2` = `0`))
-  (Pre3: ~(z0 = `0`))
   (z1: Z)
-  (Post2: z1 = (Zdiv (`(Zdiv x z0) + z0`) `2`))
-  (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
-  `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\ (Zwf `0` y1 y0).
+  (Pre5: Variant1 = y1)
+  (Pre4: `z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
+         `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`)
+  (Test2: `z1 < y1`)
+  (y2: Z)
+  (Post1: y2 = z1)
+  (Pre2: ~(`2` = `0`))
+  (Pre3: ~(z1 = `0`))
+  (z2: Z)
+  (Post2: z2 = (Zdiv (`(Zdiv x z1) + z1`) `2`))
+  (`z2 > 0` /\ `y2 > 0` /\ `z2 = (Zdiv ((Zdiv x y2) + y2) 2)` /\
+  `x < (y2 + 1) * (y2 + 1)` /\ `x < (z2 + 1) * (z2 + 1)`) /\ (Zwf `0` y2 y1).
 Proof. 
 Unfold Zwf; Intuition.
 Subst z1.
@@ -310,14 +310,13 @@ Lemma sqrt_po_6 :
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
   (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
+  (y: Z)
+  (Post5: y = x)
   (Pre6: ~(`2` = `0`))
-  (result2: Z)
-  (Post4: result2 = (Zdiv (`x + 1`) `2`))
-  `result2 > 0` /\ `result1 > 0` /\
-  `result2 = (Zdiv ((Zdiv x result1) + result1) 2)` /\
-  `x < (result1 + 1) * (result1 + 1)` /\ `x < (result2 + 1) * (result2 + 1)`.
+  (z: Z)
+  (Post4: z = (Zdiv (`x + 1`) `2`))
+  `z > 0` /\ `y > 0` /\ `z = (Zdiv ((Zdiv x y) + y) 2)` /\
+  `x < (y + 1) * (y + 1)` /\ `x < (z + 1) * (z + 1)`.
 Proof. 
 (* sqrt_po_6 *)
 Intuition.
@@ -356,17 +355,17 @@ Lemma sqrt_po_7 :
   (Pre7: `x >= 0`)
   (Test5: `x <> 0`)
   (Test3: `x > 3`)
-  (result1: Z)
-  (Post5: result1 = x)
+  (y: Z)
+  (Post5: y = x)
   (Pre6: ~(`2` = `0`))
-  (result2: Z)
-  (Post4: result2 = (Zdiv (`x + 1`) `2`))
-  (y0: Z)
-  (z0: Z)
-  (Post3: (`z0 > 0` /\ `y0 > 0` /\ `z0 = (Zdiv ((Zdiv x y0) + y0) 2)` /\
-          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`) /\
-          `z0 >= y0`)
-  `y0 * y0 <= x` /\ `x < (y0 + 1) * (y0 + 1)`.
+  (z: Z)
+  (Post4: z = (Zdiv (`x + 1`) `2`))
+  (y1: Z)
+  (z1: Z)
+  (Post3: (`z1 > 0` /\ `y1 > 0` /\ `z1 = (Zdiv ((Zdiv x y1) + y1) 2)` /\
+          `x < (y1 + 1) * (y1 + 1)` /\ `x < (z1 + 1) * (z1 + 1)`) /\
+          `z1 >= y1`)
+  `y1 * y1 <= x` /\ `x < (y1 + 1) * (y1 + 1)`.
 Proof.
 Intuition.
 Apply (iter_sqrt_invar4 x y0 z0); Try Omega.

@@ -322,20 +322,20 @@ Save.
 Lemma maxisort_po_1 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = `(array_length t) - 1`)
+  (i: Z)
+  (Post3: i = `(array_length t) - 1`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre9: Variant1 = `i0 + 1`)
-  (Pre8: (`0 <= i0 + 1` /\ `i0 + 1 <= (array_length t0)`) /\
-         (sorted_array t0 `i0 + 1` `(array_length t0) - 1`) /\
+  (Pre9: Variant1 = `i1 + 1`)
+  (Pre8: (`0 <= i1 + 1` /\ `i1 + 1 <= (array_length t0)`) /\
+         (sorted_array t0 `i1 + 1` `(array_length t0) - 1`) /\
          (permut t0 t) /\
-         ((`i0 + 1 < (array_length t0)` ->
-           (Maximize t0 i0 (access t0 `i0 + 1`) `0`))))
-  (Test2: `i0 >= 0`)
-  (`0 <= i0` /\ `i0 <= i0`) /\ `i0 <= i0` /\ `i0 < (array_length t0)` /\
-  (Maximize t0 i0 (access t0 i0) i0).
+         ((`i1 + 1 < (array_length t0)` ->
+           (Maximize t0 i1 (access t0 `i1 + 1`) `0`))))
+  (Test2: `i1 >= 0`)
+  (`0 <= i1` /\ `i1 <= i1`) /\ `i1 <= i1` /\ `i1 < (array_length t0)` /\
+  (Maximize t0 i1 (access t0 i1) i1).
 Proof.
   Intros; Split. Omega'. Split. Omega'. Split. Omega'.
   Constructor 1. Omega'.
@@ -346,23 +346,23 @@ Save.
 Lemma maxisort_po_2 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = `(array_length t) - 1`)
+  (i: Z)
+  (Post3: i = `(array_length t) - 1`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre9: Variant1 = `i0 + 1`)
-  (Pre8: (`0 <= i0 + 1` /\ `i0 + 1 <= (array_length t0)`) /\
-         (sorted_array t0 `i0 + 1` `(array_length t0) - 1`) /\
+  (Pre9: Variant1 = `i1 + 1`)
+  (Pre8: (`0 <= i1 + 1` /\ `i1 + 1 <= (array_length t0)`) /\
+         (sorted_array t0 `i1 + 1` `(array_length t0) - 1`) /\
          (permut t0 t) /\
-         ((`i0 + 1 < (array_length t0)` ->
-           (Maximize t0 i0 (access t0 `i0 + 1`) `0`))))
-  (Test2: `i0 >= 0`)
-  (Pre7: (`0 <= i0` /\ `i0 <= i0`) /\ `i0 <= i0` /\
-         `i0 < (array_length t0)` /\ (Maximize t0 i0 (access t0 i0) i0))
+         ((`i1 + 1 < (array_length t0)` ->
+           (Maximize t0 i1 (access t0 `i1 + 1`) `0`))))
+  (Test2: `i1 >= 0`)
+  (Pre7: (`0 <= i1` /\ `i1 <= i1`) /\ `i1 <= i1` /\
+         `i1 < (array_length t0)` /\ (Maximize t0 i1 (access t0 i1) i1))
   (r: Z)
-  (Post7: (`0 <= r` /\ `r <= i0`) /\ (Maximize t0 i0 (access t0 r) `0`))
-  (`0 <= i0` /\ `i0 < (array_length t0)`) /\ `0 <= r` /\
+  (Post7: (`0 <= r` /\ `r <= i1`) /\ (Maximize t0 i1 (access t0 r) `0`))
+  (`0 <= i1` /\ `i1 < (array_length t0)`) /\ `0 <= r` /\
   `r < (array_length t0)`.
 Proof.
   Intros;  Omega'.
@@ -372,31 +372,31 @@ Save.
 Lemma maxisort_po_3 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = `(array_length t) - 1`)
+  (i: Z)
+  (Post3: i = `(array_length t) - 1`)
   (Variant1: Z)
-  (i0: Z)
+  (i1: Z)
   (t0: (array Z))
-  (Pre9: Variant1 = `i0 + 1`)
-  (Pre8: (`0 <= i0 + 1` /\ `i0 + 1 <= (array_length t0)`) /\
-         (sorted_array t0 `i0 + 1` `(array_length t0) - 1`) /\
+  (Pre9: Variant1 = `i1 + 1`)
+  (Pre8: (`0 <= i1 + 1` /\ `i1 + 1 <= (array_length t0)`) /\
+         (sorted_array t0 `i1 + 1` `(array_length t0) - 1`) /\
          (permut t0 t) /\
-         ((`i0 + 1 < (array_length t0)` ->
-           (Maximize t0 i0 (access t0 `i0 + 1`) `0`))))
-  (Test2: `i0 >= 0`)
-  (Pre7: (`0 <= i0` /\ `i0 <= i0`) /\ `i0 <= i0` /\
-         `i0 < (array_length t0)` /\ (Maximize t0 i0 (access t0 i0) i0))
+         ((`i1 + 1 < (array_length t0)` ->
+           (Maximize t0 i1 (access t0 `i1 + 1`) `0`))))
+  (Test2: `i1 >= 0`)
+  (Pre7: (`0 <= i1` /\ `i1 <= i1`) /\ `i1 <= i1` /\
+         `i1 < (array_length t0)` /\ (Maximize t0 i1 (access t0 i1) i1))
   (r: Z)
-  (Post7: (`0 <= r` /\ `r <= i0`) /\ (Maximize t0 i0 (access t0 r) `0`))
-  (Pre6: (`0 <= i0` /\ `i0 < (array_length t0)`) /\ `0 <= r` /\
+  (Post7: (`0 <= r` /\ `r <= i1`) /\ (Maximize t0 i1 (access t0 r) `0`))
+  (Pre6: (`0 <= i1` /\ `i1 < (array_length t0)`) /\ `0 <= r` /\
          `r < (array_length t0)`)
   (t1: (array Z))
-  (Post9: (exchange t1 t0 i0 r))
+  (Post9: (exchange t1 t0 i1 r))
   ((i:Z)
-   (i = `i0 - 1` -> ((`0 <= i + 1` /\ `i + 1 <= (array_length t1)`) /\
+   (i = `i1 - 1` -> ((`0 <= i + 1` /\ `i + 1 <= (array_length t1)`) /\
     (sorted_array t1 `i + 1` `(array_length t1) - 1`) /\ (permut t1 t) /\
     ((`i + 1 < (array_length t1)` -> (Maximize t1 i (access t1 `i + 1`) `0`)))) /\
-    (Zwf `0` `i + 1` `i0 + 1`))).
+    (Zwf `0` `i + 1` `i1 + 1`))).
 Proof.
  Intros; Decompose [and] Pre8; Clear Pre8; Split.
    ArrayLength.
@@ -434,12 +434,11 @@ Save.
 Lemma maxisort_po_4 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = `(array_length t) - 1`)
-  (`0 <= result + 1` /\ `result + 1 <= (array_length t)`) /\
-  (sorted_array t `result + 1` `(array_length t) - 1`) /\ (permut t t) /\
-  ((`result + 1 < (array_length t)` ->
-    (Maximize t result (access t `result + 1`) `0`))).
+  (i: Z)
+  (Post3: i = `(array_length t) - 1`)
+  (`0 <= i + 1` /\ `i + 1 <= (array_length t)`) /\
+  (sorted_array t `i + 1` `(array_length t) - 1`) /\ (permut t t) /\
+  ((`i + 1 < (array_length t)` -> (Maximize t i (access t `i + 1`) `0`))).
 Proof.
   Intros;  Subst result; Ring `(array_length t)-1+1`; Split.   Omega'.
   Split. Unfold sorted_array; Intros H; 
@@ -452,16 +451,16 @@ Save.
 Lemma maxisort_po_5 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)
-  (result: Z)
-  (Post3: result = `(array_length t) - 1`)
-  (i0: Z)
+  (i: Z)
+  (Post3: i = `(array_length t) - 1`)
+  (i1: Z)
   (t0: (array Z))
-  (Post2: ((`0 <= i0 + 1` /\ `i0 + 1 <= (array_length t0)`) /\
-          (sorted_array t0 `i0 + 1` `(array_length t0) - 1`) /\
+  (Post2: ((`0 <= i1 + 1` /\ `i1 + 1 <= (array_length t0)`) /\
+          (sorted_array t0 `i1 + 1` `(array_length t0) - 1`) /\
           (permut t0 t) /\
-          ((`i0 + 1 < (array_length t0)` ->
-            (Maximize t0 i0 (access t0 `i0 + 1`) `0`)))) /\
-          `i0 < 0`)
+          ((`i1 + 1 < (array_length t0)` ->
+            (Maximize t0 i1 (access t0 `i1 + 1`) `0`)))) /\
+          `i1 < 0`)
   (sorted_array t0 `0` `(array_length t0) - 1`) /\ (permut t0 t).
 Proof.
   Intros; Cut `i0+1=0`; [Intros H; Rewrite H in Post2; Split; Tauto | Omega'].

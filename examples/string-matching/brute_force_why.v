@@ -14,22 +14,22 @@ Lemma BF_po_1 :
   (y: (array Z))
   (Pre10: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `0 <= m`)
-  (j0: Z)
-  (Post1: j0 = `0`)
-  (Variant1: Z)
   (j1: Z)
-  (Pre9: Variant1 = `n - m + 1 - j1`)
-  (Pre8: `0 <= j1`)
-  (Test8: `j1 <= n - m`)
-  (i1: Z)
-  (Post2: i1 = `0`)
-  (Variant3: Z)
+  (Post1: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre9: Variant1 = `n - m + 1 - j2`)
+  (Pre8: `0 <= j2`)
+  (Test8: `j2 <= n - m`)
   (i2: Z)
-  (Pre6: Variant3 = `m - i2`)
-  (Pre5: (`0 <= i2` /\ `i2 <= m`) /\ (match x `0` y j1 i2))
+  (Post2: i2 = `0`)
+  (Variant3: Z)
+  (i3: Z)
+  (Pre6: Variant3 = `m - i3`)
+  (Pre5: (`0 <= i3` /\ `i3 <= m`) /\ (match x `0` y j2 i3))
   (Test5: true = true)
-  (Test4: `i2 < m`)
-  `0 <= i2` /\ `i2 < (array_length x)`.
+  (Test4: `i3 < m`)
+  `0 <= i3` /\ `i3 < (array_length x)`.
 Proof.
 Auto with *.
 Save.
@@ -42,25 +42,25 @@ Lemma BF_po_2 :
   (y: (array Z))
   (Pre10: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `0 <= m`)
-  (j0: Z)
-  (Post1: j0 = `0`)
-  (Variant1: Z)
   (j1: Z)
-  (Pre9: Variant1 = `n - m + 1 - j1`)
-  (Pre8: `0 <= j1`)
-  (Test8: `j1 <= n - m`)
-  (i1: Z)
-  (Post2: i1 = `0`)
-  (Variant3: Z)
+  (Post1: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre9: Variant1 = `n - m + 1 - j2`)
+  (Pre8: `0 <= j2`)
+  (Test8: `j2 <= n - m`)
   (i2: Z)
-  (Pre6: Variant3 = `m - i2`)
-  (Pre5: (`0 <= i2` /\ `i2 <= m`) /\ (match x `0` y j1 i2))
+  (Post2: i2 = `0`)
+  (Variant3: Z)
+  (i3: Z)
+  (Pre6: Variant3 = `m - i3`)
+  (Pre5: (`0 <= i3` /\ `i3 <= m`) /\ (match x `0` y j2 i3))
   (Test5: true = true)
-  (Test4: `i2 < m`)
-  (Pre4: `0 <= i2` /\ `i2 < (array_length x)`)
+  (Test4: `i3 < m`)
+  (Pre4: `0 <= i3` /\ `i3 < (array_length x)`)
   (c_aux_1: Z)
-  (Post4: c_aux_1 = (access x i2))
-  `0 <= i2 + j1` /\ `i2 + j1 < (array_length y)`.
+  (Post4: c_aux_1 = (access x i3))
+  `0 <= i3 + j2` /\ `i3 + j2 < (array_length y)`.
 Proof.
 Auto with *.
 Save.
@@ -73,43 +73,43 @@ Lemma BF_po_3 :
   (y: (array Z))
   (Pre10: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `0 <= m`)
-  (j0: Z)
-  (Post1: j0 = `0`)
-  (Variant1: Z)
   (j1: Z)
-  (Pre9: Variant1 = `n - m + 1 - j1`)
-  (Pre8: `0 <= j1`)
-  (Test8: `j1 <= n - m`)
-  (i1: Z)
-  (Post2: i1 = `0`)
-  (Variant3: Z)
+  (Post1: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre9: Variant1 = `n - m + 1 - j2`)
+  (Pre8: `0 <= j2`)
+  (Test8: `j2 <= n - m`)
   (i2: Z)
-  (Pre6: Variant3 = `m - i2`)
-  (Pre5: (`0 <= i2` /\ `i2 <= m`) /\ (match x `0` y j1 i2))
+  (Post2: i2 = `0`)
+  (Variant3: Z)
+  (i3: Z)
+  (Pre6: Variant3 = `m - i3`)
+  (Pre5: (`0 <= i3` /\ `i3 <= m`) /\ (match x `0` y j2 i3))
   (Test5: true = true)
-  (Test4: `i2 < m`)
-  (Pre4: `0 <= i2` /\ `i2 < (array_length x)`)
+  (Test4: `i3 < m`)
+  (Pre4: `0 <= i3` /\ `i3 < (array_length x)`)
   (c_aux_1: Z)
-  (Post4: c_aux_1 = (access x i2))
-  (Pre3: `0 <= i2 + j1` /\ `i2 + j1 < (array_length y)`)
+  (Post4: c_aux_1 = (access x i3))
+  (Pre3: `0 <= i3 + j2` /\ `i3 + j2 < (array_length y)`)
   (c_aux_2: Z)
-  (Post3: c_aux_2 = (access y `i2 + j1`))
-  (result6: bool)
-  (Post26: (if result6 then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
-  (if result6
+  (Post3: c_aux_2 = (access y `i3 + j2`))
+  (result4: bool)
+  (Post26: (if result4 then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
+  (if result4
    then ((i:Z)
-         (i = `i2 + 1` -> ((`0 <= i` /\ `i <= m`) /\ (match x `0` y j1 i)) /\
-          (Zwf `0` `m - i` `m - i2`)))
-   else ((`i2 >= m` ->
+         (i = `i3 + 1` -> ((`0 <= i` /\ `i <= m`) /\ (match x `0` y j2 i)) /\
+          (Zwf `0` `m - i` `m - i3`)))
+   else ((`i3 >= m` ->
           ((result:Z)
-           (result = j1 ->
+           (result = j2 ->
             ((j:Z)
-             (j = `j1 + 1` -> `0 <= j` /\
-              (Zwf `0` `n - m + 1 - j` `n - m + 1 - j1`))) /\
-            (match x `0` y j1 (array_length x)))))) /\
-   ((`i2 < m` ->
+             (j = `j2 + 1` -> `0 <= j` /\
+              (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))) /\
+            (match x `0` y j2 (array_length x)))))) /\
+   ((`i3 < m` ->
      ((j:Z)
-      (j = `j1 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j1`)))))).
+      (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`)))))).
 Proof.
 Destruct result6; Intuition.
 Subst i.
@@ -130,31 +130,31 @@ Lemma BF_po_4 :
   (y: (array Z))
   (Pre10: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `0 <= m`)
-  (j0: Z)
-  (Post1: j0 = `0`)
-  (Variant1: Z)
   (j1: Z)
-  (Pre9: Variant1 = `n - m + 1 - j1`)
-  (Pre8: `0 <= j1`)
-  (Test8: `j1 <= n - m`)
-  (i1: Z)
-  (Post2: i1 = `0`)
-  (Variant3: Z)
+  (Post1: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre9: Variant1 = `n - m + 1 - j2`)
+  (Pre8: `0 <= j2`)
+  (Test8: `j2 <= n - m`)
   (i2: Z)
-  (Pre6: Variant3 = `m - i2`)
-  (Pre5: (`0 <= i2` /\ `i2 <= m`) /\ (match x `0` y j1 i2))
+  (Post2: i2 = `0`)
+  (Variant3: Z)
+  (i3: Z)
+  (Pre6: Variant3 = `m - i3`)
+  (Pre5: (`0 <= i3` /\ `i3 <= m`) /\ (match x `0` y j2 i3))
   (Test5: true = true)
-  (Test3: `i2 >= m`)
-  ((`i2 >= m` ->
+  (Test3: `i3 >= m`)
+  ((`i3 >= m` ->
     ((result:Z)
-     (result = j1 ->
+     (result = j2 ->
       ((j:Z)
-       (j = `j1 + 1` -> `0 <= j` /\
-        (Zwf `0` `n - m + 1 - j` `n - m + 1 - j1`))) /\
-      (match x `0` y j1 (array_length x)))))) /\
-  ((`i2 < m` ->
+       (j = `j2 + 1` -> `0 <= j` /\
+        (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))) /\
+      (match x `0` y j2 (array_length x)))))) /\
+  ((`i3 < m` ->
     ((j:Z)
-     (j = `j1 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j1`))))).
+     (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))))).
 Proof.
 Intuition.
 Unfold Zwf; Omega.
@@ -170,16 +170,16 @@ Lemma BF_po_5 :
   (y: (array Z))
   (Pre10: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `0 <= m`)
-  (j0: Z)
-  (Post1: j0 = `0`)
-  (Variant1: Z)
   (j1: Z)
-  (Pre9: Variant1 = `n - m + 1 - j1`)
-  (Pre8: `0 <= j1`)
-  (Test8: `j1 <= n - m`)
-  (i1: Z)
-  (Post2: i1 = `0`)
-  (`0 <= i1` /\ `i1 <= m`) /\ (match x `0` y j1 i1).
+  (Post1: j1 = `0`)
+  (Variant1: Z)
+  (j2: Z)
+  (Pre9: Variant1 = `n - m + 1 - j2`)
+  (Pre8: `0 <= j2`)
+  (Test8: `j2 <= n - m`)
+  (i2: Z)
+  (Post2: i2 = `0`)
+  (`0 <= i2` /\ `i2 <= m`) /\ (match x `0` y j2 i2).
 Proof.
 Intuition.
 Subst i1; Apply match_empty; Auto with *.
@@ -193,9 +193,9 @@ Lemma BF_po_6 :
   (y: (array Z))
   (Pre10: `(array_length x) = m` /\ `(array_length y) = n` /\ `0 <= n` /\
           `0 <= m`)
-  (j0: Z)
-  (Post1: j0 = `0`)
-  `0 <= j0`.
+  (j1: Z)
+  (Post1: j1 = `0`)
+  `0 <= j1`.
 Proof.
 Intuition.
 Save.
