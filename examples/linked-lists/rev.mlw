@@ -1,0 +1,56 @@
+
+external null : pointer
+external eq_pointer : 
+  p1:pointer -> p2:pointer -> {} bool { if result then p1=p2 else p1<>p2 }
+external ne_pointer : 
+  p1:pointer -> p2:pointer -> {} bool { if result then p1<>p2 else p1=p2 }
+external is_null : p:pointer -> {} bool { if result then p=null else p<>null }
+
+external access_int : int_store -> pointer -> int
+external update_int : int_store -> pointer -> int -> int_store
+
+external access_pointer : pointer_store -> pointer -> pointer
+external update_pointer : pointer_store -> pointer -> pointer -> pointer_store
+
+logic is_valid_int : int_store, pointer -> prop
+logic is_valid_pointer : pointer_store, pointer -> prop
+
+logic list_of : pointer_store, pointer, plist -> prop
+
+logic is_list : int_store, pointer_store, pointer -> prop
+logic triple : int_store, pointer_store, pointer -> Triple
+
+(* global state = stores for fields hd and tl *)
+
+parameter Lhd : int_store ref
+parameter Ltl : pointer_store ref
+
+(* in-place list reversal *)
+
+logic rev : plist -> plist
+logic app : plist, plist -> plist
+logic disjoint : plist, plist -> prop
+
+let rev (p0:pointer) =
+  { exists l:plist. list_of(Ltl, p0, l) }
+  let p = ref p0 in
+  let r = ref !p in
+  begin
+    p := null;
+    while (ne_pointer !r null) do
+      { invariant  exists lp:plist. exists lr:plist.
+                   list_of(Ltl, p, lp) and list_of(Ltl, r, lr) and
+	           disjoint(lp, lr) and 
+	           forall l:plist. 
+	           list_of(Ltl, p0, l) -> app(rev(lr), lp) = rev(l)
+        variant triple(Lhd, Ltl, r) for tl_order }
+      let q = ref !r in
+      begin
+      r := (access_pointer !Ltl !r);
+      Ltl := (update_pointer !Ltl !q !p);
+      p := !q
+      end
+    done
+  end
+  {}
+
