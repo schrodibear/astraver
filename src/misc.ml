@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.58 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.59 2002-11-05 08:19:33 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -185,7 +185,7 @@ let applist f l = match (f,l) with
   | f, [] -> f
   | Tvar id, l -> Tapp (id, l)
   | Tapp (id, l), l' -> Tapp (id, l @ l')
-  | Tconst _, _ -> assert false
+  | (Tconst _ | Tderef _), _ -> assert false
 
 let papplist f l = match (f,l) with
   | f, [] -> f
@@ -199,7 +199,7 @@ let rec predicate_of_term = function
   | _ -> assert false
 
 let rec collect_term s = function
-  | Tvar id -> Idset.add id s
+  | Tvar id | Tderef id -> Idset.add id s
   | Tapp (_, l) -> List.fold_left collect_term s l
   | Tconst _ -> s
 
@@ -224,6 +224,8 @@ let post_vars (q,al) =
 
 let rec tsubst_in_term s = function
   | Tvar x as t -> 
+      (try Idmap.find x s with Not_found -> t)
+  | Tderef x as t ->
       (try Idmap.find x s with Not_found -> t)
   | Tapp (x,l) -> 
       Tapp (x, List.map (tsubst_in_term s) l)
@@ -262,7 +264,7 @@ let subst_one x t = Idmap.add x t Idmap.empty
 let subst_onev = subst_one
 
 let rec unref_term = function
-  | Tapp (id, [t]) when id == deref -> unref_term t
+  | Tderef id -> Tvar id
   | Tapp (id, tl) -> Tapp (id, List.map unref_term tl)
   | Tvar _ | Tconst _ as t -> t
 
@@ -475,6 +477,8 @@ let rec print_term fmt = function
       fprintf fmt "%s" f
   | Tvar id -> 
       Ident.lprint fmt id
+  | Tderef id ->
+      fprintf fmt "!%a" Ident.lprint id
   | Tapp (id, tl) -> 
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 

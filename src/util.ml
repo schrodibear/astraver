@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.59 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.60 2002-11-05 08:19:33 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -167,7 +167,7 @@ let initial_renaming env =
 (*s Occurrences *)
 
 let rec occur_term id = function
-  | Tvar id' -> id = id'
+  | Tvar id' | Tderef id' -> id = id'
   | Tapp (_, l) -> List.exists (occur_term id) l
   | Tconst _ -> false
 

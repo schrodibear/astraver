@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.36 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.37 2002-11-05 08:19:32 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -161,7 +161,6 @@ let result = create "result"
 let default = create "_"
 let access = create "access"
 let store = create "store"
-let deref = create "deref"
 let annot_bool = create "annot_bool"
 let well_founded = create "well_founded"
 let well_founded_induction = create "well_founded_induction"

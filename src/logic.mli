@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.11 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.12 2002-11-05 08:19:32 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -27,6 +27,7 @@ type constant =
 type term =
   | Tvar of Ident.t
   | Tconst of constant
+  | Tderef of Ident.t
   | Tapp of Ident.t * term list
 
 type substitution = term Ident.map

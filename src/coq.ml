@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.72 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.73 2002-11-05 08:19:32 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -112,7 +112,7 @@ let print_term fmt t =
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
-    | Tapp (d, _) when d == deref ->
+    | Tderef _ ->
 	assert false
     | Tapp (id, [t]) when id == t_neg_int ->
 	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt

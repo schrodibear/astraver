@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.25 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.26 2002-11-05 08:19:33 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -66,6 +66,8 @@ let print_term fmt t =
     | Tconst (ConstFloat f) -> 
 	let n,d = rationalize f in
 	if d = "1" then fprintf fmt "%s" n else fprintf fmt "%s/%s" n d
+    | Tderef _ ->
+	assert false
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
     | Tapp (id, [t]) when id == t_neg_int ->

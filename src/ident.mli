@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.31 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.32 2002-11-05 08:19:32 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -123,7 +123,6 @@ val result : t
 val default : t
 val access : t
 val store : t
-val deref : t
 val annot_bool : t
 val well_founded : t
 val well_founded_induction : t

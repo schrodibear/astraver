@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.79 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.80 2002-11-05 08:19:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -363,7 +363,7 @@ and typef_desc lab env loc = function
   | Srefget id ->
       let v = check_ref_type loc env id in
       let ef = Effect.add_read id Effect.bottom in
-      Expression (Tapp (deref, [Tvar id])), (v,ef), []
+      Expression (Tderef id), (v,ef), []
 
   | Srefset (x, e1) ->
       let et = check_ref_type loc env x in

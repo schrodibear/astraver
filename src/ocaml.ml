@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.2 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.3 2002-11-05 08:19:33 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -114,7 +114,7 @@ let rec expression fmt = function
       Ident.print fmt id
   | Tconst c -> 
       constant fmt c
-  | Tapp (d, [Tvar id]) when d == deref ->
+  | Tderef id ->
       fprintf fmt "!%a" Ident.print id
   | Tapp (id, [a; b]) when id == access ->
       fprintf fmt "%a.(%a)" expression a expression b
