@@ -239,16 +239,146 @@ Definition t2 := (* validation *)
       (exist_2 [x1: Z][result0: Z]`result0 = 1` x0 result Post7) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 1` x0 result tt Post3).
 
+Lemma t3_po_1 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre2: `(array_length t) = 10` /\ `x = 0` /\ `(access t 1) = 1`)
+  (x0: Z)
+  (Post1: x0 = `x + 1`)
+  `(access t x0) = 1` /\ `0 <= x0` /\ `x0 < (array_length t)`.
+Proof.
+Intuition.
+Replace x0 with `1`; Omega.
+Save.
+
+Lemma t3_po_2 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre2: `(array_length t) = 10` /\ `x = 0` /\ `(access t 1) = 1`)
+  (aux_1: Z)
+  (Post3: `(access t aux_1) = 1` /\ `0 <= aux_1` /\
+          `aux_1 < (array_length t)`)
+  `0 <= aux_1` /\ `aux_1 < (array_length t)`.
+Proof.
+Intuition.
+Save.
+
+Definition t3 := (* validation *)
+  [_: unit; t: (array Z); x: Z; y: Z; Pre2: `(array_length t) = 10` /\
+   `x = 0` /\ `(access t 1) = 1`]
+    let (x0, result, Post2) =
+      let (x0, aux_1, Post3) =
+        let (x0, result, Post1) =
+          let (result, Post1) = (exist_1 [result: Z]result = `x + 1` 
+            `x + 1` (refl_equal ? `x + 1`)) in
+          (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
+        let (result0, Post4) = (exist_1 [result0: Z]
+          `(access t result0) = 1` /\ `0 <= result0` /\
+          `result0 < (array_length t)` x0 (t3_po_1 t x Pre2 x0 Post1)) in
+        (exist_2 [x1: Z][result1: Z]`(access t result1) = 1` /\
+        `0 <= result1` /\ `result1 < (array_length t)` x0 result0 Post4) in
+      let Pre1 = (t3_po_2 t x Pre2 aux_1 Post3) in
+      let (result, Post5) =
+        let (result, Post6) = (exist_1 [result: Z]
+          `(access t result) = 1` aux_1 (proj1 ? ? Post3)) in
+        (exist_1 [result0: Z]`result0 = 1` (access t result) Post6) in
+      (exist_2 [x1: Z][result0: Z]`result0 = 1` x0 result Post5) in
+    (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 1` x0 result tt Post2).
+
+Lemma t4_po_1 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre2: `(array_length t) = 10` /\ `x = 2` /\ `(access t 2) = 3`)
+  (c_aux_4: Z)
+  (Post3: c_aux_4 = x)
+  (c_aux_3: Z)
+  (Post2: c_aux_3 = x)
+  (x0: Z)
+  (Post1: x0 = `x + 1`)
+  (`x0 = 3` /\
+  `(access (store t c_aux_4 (access t c_aux_4) + c_aux_3) 2) = 5`) /\
+  `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)`.
+Proof.
+Intuition.
+Subst x c_aux_3 c_aux_4.
+AccessSame.
+Save.
+
+Lemma t4_po_2 : 
+  (t: (array Z))
+  (x: Z)
+  (Pre2: `(array_length t) = 10` /\ `x = 2` /\ `(access t 2) = 3`)
+  (c_aux_4: Z)
+  (Post3: c_aux_4 = x)
+  (x0: Z)
+  (aux_3: Z)
+  (Post5: (`x0 = 3` /\ `(access (store t c_aux_4 aux_3) 2) = 5`) /\
+          `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)`)
+  (aux_2: Z)
+  (Post11: (`x0 = 3` /\ `(access (store t aux_2 aux_3) 2) = 5`) /\
+           `0 <= aux_2` /\ `aux_2 < (array_length t)`)
+  `0 <= aux_2` /\ `aux_2 < (array_length t)`.
+Proof.
+Intuition.
+Save.
+
+Definition t4 := (* validation *)
+  [_: unit; t: (array Z); x: Z; Pre2: `(array_length t) = 10` /\ `x = 2` /\
+   `(access t 2) = 3`]
+    let (c_aux_4, Post3) = (exist_1 [result: Z]result = x x
+      (refl_equal ? x)) in
+    let (t0, x0, result, Post4) =
+      let (x0, aux_3, Post5) =
+        let (x0, aux_1, Post6) =
+          let (c_aux_3, Post2) = (exist_1 [result: Z]result = x x
+            (refl_equal ? x)) in
+          let (x0, result, Post7) =
+            let (x0, result, Post1) =
+              let (result, Post1) = (exist_1 [result: Z]
+                result = `x + 1` `x + 1` (refl_equal ? `x + 1`)) in
+              (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
+            let (result0, Post8) = (exist_1 [result0: Z](`x0 = 3` /\
+              `(access (store t c_aux_4 (access t c_aux_4) + result0) 2) = 5`) /\
+              `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)` c_aux_3
+              (t4_po_1 t x Pre2 c_aux_4 Post3 c_aux_3 Post2 x0 Post1)) in
+            (exist_2 [x1: Z][result1: Z](`x1 = 3` /\
+            `(access (store t c_aux_4 (access t c_aux_4) + result1) 2) = 5`) /\
+            `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)` x0 result0 Post8) in
+          (exist_2 [x1: Z][result0: Z](`x1 = 3` /\
+          `(access (store t c_aux_4 (access t c_aux_4) + result0) 2) = 5`) /\
+          `0 <= c_aux_4` /\ `c_aux_4 < (array_length t)` x0 result Post7) in
+        let (result, Post9) = (exist_1 [result: Z](`x0 = 3` /\
+          `(access (store t c_aux_4 result) 2) = 5`) /\ `0 <= c_aux_4` /\
+          `c_aux_4 < (array_length t)` `(access t c_aux_4) + aux_1` Post6) in
+        (exist_2 [x1: Z][result0: Z](`x1 = 3` /\
+        `(access (store t c_aux_4 result0) 2) = 5`) /\ `0 <= c_aux_4` /\
+        `c_aux_4 < (array_length t)` x0 result Post9) in
+      let (t0, result, Post10) =
+        let (aux_2, Post11) = (exist_1 [result: Z](`x0 = 3` /\
+          `(access (store t result aux_3) 2) = 5`) /\ `0 <= result` /\
+          `result < (array_length t)` c_aux_4 Post5) in
+        let Pre1 =
+          (t4_po_2 t x Pre2 c_aux_4 Post3 x0 aux_3 Post5 aux_2 Post11) in
+        let (t0, result, Post12) = (exist_2 [t5: (array Z)][result1: unit]
+          `x0 = 3` /\ `(access t5 2) = 5` (store t aux_2 aux_3) tt
+          (proj1 ? ? Post11)) in
+        (exist_2 [t5: (array Z)][result0: unit]`x0 = 3` /\
+        `(access t5 2) = 5` t0 result Post12) in
+      (exist_3 [t5: (array Z)][x1: Z][result0: unit]`x1 = 3` /\
+      `(access t5 2) = 5` t0 x0 result Post10) in
+    (exist_3 [t5: (array Z)][x1: Z][result0: unit]`x1 = 3` /\
+    `(access t5 2) = 5` t0 x0 result Post4).
+
 Lemma e1_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
-  (c_aux_3: Z)
-  (Post3: c_aux_3 = x)
-  (c_aux_4: Z)
-  (Post2: c_aux_4 = x)
+  (c_aux_5: Z)
+  (Post3: c_aux_5 = x)
+  (c_aux_6: Z)
+  (Post2: c_aux_6 = x)
   (x0: Z)
   (Post1: x0 = `x + 1`)
-  `c_aux_3 + c_aux_4 = 4`.
+  `c_aux_5 + c_aux_6 = 4`.
 Proof.
 Intuition.
 Save.
@@ -256,11 +386,11 @@ Save.
 Definition e1 := (* validation *)
   [_: unit; x: Z; y: Z; Pre1: `x = 2`]
     let (x0, result, Post4) =
-      let (c_aux_3, Post3) = (exist_1 [result: Z]result = x x
+      let (c_aux_5, Post3) = (exist_1 [result: Z]result = x x
         (refl_equal ? x)) in
       let (x0, result, Post5) =
-        let (x0, c_aux_5, Post6) =
-          let (c_aux_4, Post2) = (exist_1 [result: Z]result = x x
+        let (x0, c_aux_7, Post6) =
+          let (c_aux_6, Post2) = (exist_1 [result: Z]result = x x
             (refl_equal ? x)) in
           let (x0, result, Post7) =
             let (x0, result, Post1) =
@@ -268,14 +398,14 @@ Definition e1 := (* validation *)
                 result = `x + 1` `x + 1` (refl_equal ? `x + 1`)) in
               (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
             let (result0, Post8) = (exist_1 [result0: Z]
-              `c_aux_3 + result0 = 4` c_aux_4
-              (e1_po_1 x Pre1 c_aux_3 Post3 c_aux_4 Post2 x0 Post1)) in
-            (exist_2 [x1: Z][result1: Z]`c_aux_3 + result1 = 4` x0 result0
+              `c_aux_5 + result0 = 4` c_aux_6
+              (e1_po_1 x Pre1 c_aux_5 Post3 c_aux_6 Post2 x0 Post1)) in
+            (exist_2 [x1: Z][result1: Z]`c_aux_5 + result1 = 4` x0 result0
             Post8) in
-          (exist_2 [x1: Z][result0: Z]`c_aux_3 + result0 = 4` x0 result
+          (exist_2 [x1: Z][result0: Z]`c_aux_5 + result0 = 4` x0 result
           Post7) in
         let (result, Post9) = (exist_1 [result: Z]
-          `result = 4` `c_aux_3 + c_aux_5` Post6) in
+          `result = 4` `c_aux_5 + c_aux_7` Post6) in
         (exist_2 [x1: Z][result0: Z]`result0 = 4` x0 result Post9) in
       (exist_2 [x1: Z][result0: Z]`result0 = 4` x0 result Post5) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 4` x0 result tt Post4).
@@ -283,11 +413,11 @@ Definition e1 := (* validation *)
 Lemma e2_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
-  (c_aux_6: Z)
-  (Post2: c_aux_6 = x)
+  (c_aux_8: Z)
+  (Post2: c_aux_8 = x)
   (x0: Z)
   (Post1: x0 = `x + 1`)
-  `c_aux_6 + x0 = 5`.
+  `c_aux_8 + x0 = 5`.
 Proof.
 Intuition.
 Save.
@@ -295,21 +425,21 @@ Save.
 Definition e2 := (* validation *)
   [_: unit; x: Z; y: Z; Pre1: `x = 2`]
     let (x0, result, Post3) =
-      let (c_aux_6, Post2) = (exist_1 [result: Z]result = x x
+      let (c_aux_8, Post2) = (exist_1 [result: Z]result = x x
         (refl_equal ? x)) in
       let (x0, result, Post4) =
-        let (x0, c_aux_7, Post5) =
+        let (x0, c_aux_9, Post5) =
           let (x0, result, Post1) =
             let (result, Post1) = (exist_1 [result: Z]
               result = `x + 1` `x + 1` (refl_equal ? `x + 1`)) in
             (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
           let (result0, Post6) = (exist_1 [result0: Z]
-            `c_aux_6 + result0 = 5` x0
-            (e2_po_1 x Pre1 c_aux_6 Post2 x0 Post1)) in
-          (exist_2 [x1: Z][result1: Z]`c_aux_6 + result1 = 5` x0 result0
+            `c_aux_8 + result0 = 5` x0
+            (e2_po_1 x Pre1 c_aux_8 Post2 x0 Post1)) in
+          (exist_2 [x1: Z][result1: Z]`c_aux_8 + result1 = 5` x0 result0
           Post6) in
         let (result, Post7) = (exist_1 [result: Z]
-          `result = 5` `c_aux_6 + c_aux_7` Post5) in
+          `result = 5` `c_aux_8 + c_aux_9` Post5) in
         (exist_2 [x1: Z][result0: Z]`result0 = 5` x0 result Post7) in
       (exist_2 [x1: Z][result0: Z]`result0 = 5` x0 result Post4) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 5` x0 result tt Post3).
@@ -317,11 +447,11 @@ Definition e2 := (* validation *)
 Lemma e3_po_1 : 
   (x: Z)
   (Pre1: `x = 2`)
-  (c_aux_8: Z)
-  (Post2: c_aux_8 = x)
+  (c_aux_10: Z)
+  (Post2: c_aux_10 = x)
   (x0: Z)
   (Post1: x0 = `x + 1`)
-  ((result:Z) (result = x0 -> `c_aux_8 + result = 5`)).
+  ((result:Z) (result = x0 -> `c_aux_10 + result = 5`)).
 Proof.
 Intuition.
 Save.
@@ -330,11 +460,11 @@ Lemma e3_po_2 :
   (x: Z)
   (Pre1: `x = 2`)
   (x0: Z)
-  (c_aux_9: Z)
-  (Post5: ((result:Z) (result = x0 -> `c_aux_9 + result = 5`)))
-  (c_aux_10: Z)
-  (Post3: c_aux_10 = x0)
-  `c_aux_9 + c_aux_10 = 5`.
+  (c_aux_11: Z)
+  (Post5: ((result:Z) (result = x0 -> `c_aux_11 + result = 5`)))
+  (c_aux_12: Z)
+  (Post3: c_aux_12 = x0)
+  `c_aux_11 + c_aux_12 = 5`.
 Proof.
 Intuition.
 Save.
@@ -342,8 +472,8 @@ Save.
 Definition e3 := (* validation *)
   [_: unit; x: Z; y: Z; Pre1: `x = 2`]
     let (x0, result, Post4) =
-      let (x0, c_aux_9, Post5) =
-        let (c_aux_8, Post2) = (exist_1 [result: Z]result = x x
+      let (x0, c_aux_11, Post5) =
+        let (c_aux_10, Post2) = (exist_1 [result: Z]result = x x
           (refl_equal ? x)) in
         let (x0, result, Post6) =
           let (x0, result, Post1) =
@@ -351,19 +481,19 @@ Definition e3 := (* validation *)
               result = `x + 1` `x + 1` (refl_equal ? `x + 1`)) in
             (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
           let (result0, Post7) = (exist_1 [result0: Z]
-            ((result:Z) (result = x0 -> `result0 + result = 5`)) c_aux_8
-            (e3_po_1 x Pre1 c_aux_8 Post2 x0 Post1)) in
+            ((result:Z) (result = x0 -> `result0 + result = 5`)) c_aux_10
+            (e3_po_1 x Pre1 c_aux_10 Post2 x0 Post1)) in
           (exist_2 [x1: Z][result1: Z]
           ((result:Z) (result = x1 -> `result1 + result = 5`)) x0 result0
           Post7) in
         (exist_2 [x1: Z][result0: Z]
         ((result:Z) (result = x1 -> `result0 + result = 5`)) x0 result Post6) in
       let (result, Post8) =
-        let (c_aux_10, Post3) = (exist_1 [result: Z]result = x0 x0
+        let (c_aux_12, Post3) = (exist_1 [result: Z]result = x0 x0
           (refl_equal ? x0)) in
         let (result, Post9) = (exist_1 [result: Z]
-          `result = 5` `c_aux_9 + c_aux_10`
-          (e3_po_2 x Pre1 x0 c_aux_9 Post5 c_aux_10 Post3)) in
+          `result = 5` `c_aux_11 + c_aux_12`
+          (e3_po_2 x Pre1 x0 c_aux_11 Post5 c_aux_12 Post3)) in
         (exist_1 [result0: Z]`result0 = 5` result Post9) in
       (exist_2 [x1: Z][result0: Z]`result0 = 5` x0 result Post8) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 5` x0 result tt Post4).
@@ -382,11 +512,11 @@ Lemma e4_po_2 :
   (x: Z)
   (Pre1: `x = 2`)
   (x0: Z)
-  (c_aux_11: Z)
-  (Post4: ((result:Z) (result = x0 -> `c_aux_11 + result = 6`)))
-  (c_aux_12: Z)
-  (Post2: c_aux_12 = x0)
-  `c_aux_11 + c_aux_12 = 6`.
+  (c_aux_13: Z)
+  (Post4: ((result:Z) (result = x0 -> `c_aux_13 + result = 6`)))
+  (c_aux_14: Z)
+  (Post2: c_aux_14 = x0)
+  `c_aux_13 + c_aux_14 = 6`.
 Proof.
 Intuition.
 Save.
@@ -394,7 +524,7 @@ Save.
 Definition e4 := (* validation *)
   [_: unit; x: Z; y: Z; Pre1: `x = 2`]
     let (x0, result, Post3) =
-      let (x0, c_aux_11, Post4) =
+      let (x0, c_aux_13, Post4) =
         let (x0, result, Post1) =
           let (result, Post1) = (exist_1 [result: Z]result = `x + 1` 
             `x + 1` (refl_equal ? `x + 1`)) in
@@ -406,11 +536,11 @@ Definition e4 := (* validation *)
         ((result:Z) (result = x1 -> `result1 + result = 6`)) x0 result0
         Post5) in
       let (result, Post6) =
-        let (c_aux_12, Post2) = (exist_1 [result: Z]result = x0 x0
+        let (c_aux_14, Post2) = (exist_1 [result: Z]result = x0 x0
           (refl_equal ? x0)) in
         let (result, Post7) = (exist_1 [result: Z]
-          `result = 6` `c_aux_11 + c_aux_12`
-          (e4_po_2 x Pre1 x0 c_aux_11 Post4 c_aux_12 Post2)) in
+          `result = 6` `c_aux_13 + c_aux_14`
+          (e4_po_2 x Pre1 x0 c_aux_13 Post4 c_aux_14 Post2)) in
         (exist_1 [result0: Z]`result0 = 6` result Post7) in
       (exist_2 [x1: Z][result0: Z]`result0 = 6` x0 result Post6) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 6` x0 result tt Post3).
@@ -429,14 +559,14 @@ Lemma e5_po_2 :
   (x: Z)
   (Pre1: `x = 2`)
   (x0: Z)
-  (c_aux_13: Z)
+  (c_aux_15: Z)
   (Post5: ((result:Z)
-           (result = x0 -> ((x:Z) (x = `x0 + 1` -> `c_aux_13 + result = 6`)))))
-  (c_aux_14: Z)
-  (Post3: c_aux_14 = x0)
+           (result = x0 -> ((x:Z) (x = `x0 + 1` -> `c_aux_15 + result = 6`)))))
+  (c_aux_16: Z)
+  (Post3: c_aux_16 = x0)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
-  `c_aux_13 + c_aux_14 = 6`.
+  `c_aux_15 + c_aux_16 = 6`.
 Proof.
 Intuition.
 Save.
@@ -444,7 +574,7 @@ Save.
 Definition e5 := (* validation *)
   [_: unit; x: Z; y: Z; Pre1: `x = 2`]
     let (x0, result, Post4) =
-      let (x0, c_aux_13, Post5) =
+      let (x0, c_aux_15, Post5) =
         let (x0, result, Post1) =
           let (result, Post1) = (exist_1 [result: Z]result = `x + 1` 
             `x + 1` (refl_equal ? `x + 1`)) in
@@ -458,8 +588,8 @@ Definition e5 := (* validation *)
          (result = x1 -> ((x:Z) (x = `x1 + 1` -> `result1 + result = 6`)))) 
         x0 result0 Post6) in
       let (x1, result, Post7) =
-        let (x1, c_aux_15, Post8) =
-          let (c_aux_14, Post3) = (exist_1 [result: Z]result = x0 x0
+        let (x1, c_aux_17, Post8) =
+          let (c_aux_16, Post3) = (exist_1 [result: Z]result = x0 x0
             (refl_equal ? x0)) in
           let (x1, result, Post9) =
             let (x1, result, Post2) =
@@ -467,14 +597,14 @@ Definition e5 := (* validation *)
                 result = `x0 + 1` `x0 + 1` (refl_equal ? `x0 + 1`)) in
               (exist_2 [x2: Z][result0: unit]x2 = `x0 + 1` result tt Post2) in
             let (result0, Post10) = (exist_1 [result0: Z]
-              `c_aux_13 + result0 = 6` c_aux_14
-              (e5_po_2 x Pre1 x0 c_aux_13 Post5 c_aux_14 Post3 x1 Post2)) in
-            (exist_2 [x2: Z][result1: Z]`c_aux_13 + result1 = 6` x1 result0
+              `c_aux_15 + result0 = 6` c_aux_16
+              (e5_po_2 x Pre1 x0 c_aux_15 Post5 c_aux_16 Post3 x1 Post2)) in
+            (exist_2 [x2: Z][result1: Z]`c_aux_15 + result1 = 6` x1 result0
             Post10) in
-          (exist_2 [x2: Z][result0: Z]`c_aux_13 + result0 = 6` x1 result
+          (exist_2 [x2: Z][result0: Z]`c_aux_15 + result0 = 6` x1 result
           Post9) in
         let (result, Post11) = (exist_1 [result: Z]
-          `result = 6` `c_aux_13 + c_aux_15` Post8) in
+          `result = 6` `c_aux_15 + c_aux_17` Post8) in
         (exist_2 [x2: Z][result0: Z]`result0 = 6` x1 result Post11) in
       (exist_2 [x2: Z][result0: Z]`result0 = 6` x1 result Post7) in
     (exist_3 [x1: Z][y1: Z][result0: unit]`y1 = 6` x0 result tt Post4).

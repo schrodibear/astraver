@@ -26,9 +26,13 @@ void t1() /*@ array_length(t) = 10 and t[0] = 1 */ { y = t[0]; } /*@ y = 1 */
 void t2()
 /*@ array_length(t) = 10 and x = 0 and t[0] = 1 */ { y = t[x++]; } /*@ y = 1 */
 
-/* void t3() */
-/* @ array_length(t) = 10 and x = 0 and t[1] = 1 * / { y = t[++x]; } /*@ y = 1 */
+void t3()
+/*@ array_length(t) = 10 and x = 0 and t[1] = 1 */ { y = t[++x]; } /*@ y = 1 */
 
+void t4() 
+/*@ array_length(t) = 10 and x = 2 and t[2] = 3 */ 
+{ t[x] += x++; } 
+/*@ x = 3 and t[2] = 5 */
 
 /* evaluation order */
 
