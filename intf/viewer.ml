@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: viewer.ml,v 1.4 2003-06-19 07:29:59 filliatr Exp $ i*)
+(*i $Id: viewer.ml,v 1.5 2003-06-19 07:37:52 filliatr Exp $ i*)
 
 open Format
 open Options
@@ -69,13 +69,22 @@ module Tree = struct
     | _ :: bl -> statements bl
 
   let children x = match x.desc with
-    | Seq bl -> statements bl
-    | If (e1, e2, e3) -> [e1; e2; e3]
     | Aff (_, e) -> [e]
+    | If (e1, e2, e3) -> [e1; e2; e3]
+    | Seq bl -> statements bl
+    | While (e1, _, _, e2) -> [e1; e2]
+    | LetIn (_, e1, e2) -> [e1; e2]
+    | LetRef (_, e1, e2) -> [e1; e2]
+    | TabAcc (_, _, e) -> [e]
+    | TabAff (_, _, e1, e2) -> [e1; e2]
     | App (e1, Term e2, _) -> [e2; e1]
     | App (e1, _, _) -> [e1]
-    | While (e1, _, _, e2) -> [e1; e2]
-    | _ -> []
+    | Lam (_, e) -> [e]
+    | Rec (_, _, _, _, e) -> [e]
+    | Try (e, pl) -> e :: List.map snd pl
+    | Raise (_, Some e) -> [e]
+    | Raise _ 
+    | Var _ | Acc _ | Expression _ | Absurd -> []
 
 end
 
