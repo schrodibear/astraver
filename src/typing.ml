@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.92 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.93 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -193,7 +193,7 @@ let predicates_effect lab env loc pl =
 	   Effect.add_read id e
 	 else if is_at id then begin
 	   let uid,l = un_at id in
-	   if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l);
+	   if not (Label.mem l lab) then raise_located loc (UnboundLabel l);
 	   if is_reference env uid then
 	     Effect.add_read uid e
 	   else
@@ -245,7 +245,7 @@ let state_post lab env (id,v,ef) loc = function
 		 post_app (subst_in_predicate (subst_onev id (at_id id ""))) q
 	     else if is_at id then begin
 	       let uid,l = un_at id in
-	       if l <> "" && not (LabelSet.mem l lab) then 
+	       if l <> "" && not (Label.mem l lab) then 
 		 raise_located loc (UnboundLabel l);
 	       if is_reference env uid then
 		 Effect.add_read uid e, q
@@ -346,6 +346,7 @@ let without_exn_check f x =
 
 let rec typef lab env expr =
   let toplabel = label_name () in
+  let lab = Label.add toplabel lab in
   let (d,(v,e),o1) = typef_desc lab env expr.ploc expr.pdesc in
   let loc = expr.ploc in
   let (ep,p) = state_pre lab env loc expr.pre in
@@ -476,7 +477,7 @@ and typef_desc lab env loc = function
 
   | Slam (bl, e) ->
       let bl',env',_ = binders loc lab env (logical_env env) bl in
-      let t_e = typef initial_labels env' e in
+      let t_e = typef (Label.init lab) env' e in
       let v = make_arrow_type t_e.info.label bl' t_e.info.kappa in
       let ef = Effect.bottom in
       Lam (bl',t_e), (v,ef), []
@@ -622,7 +623,7 @@ and typef_desc lab env loc = function
 	(* TODO: change label to "init" in [c] *)
 	let tf = make_arrow bl' c in
 	let env'' = add_rec f (add f tf env') in
-	typef initial_labels env'' e
+	typef (Label.init lab) env'' e
       in
       let fixpoint_reached c1 c2 =
 	c1.c_effect = c2.c_effect && 
@@ -702,7 +703,7 @@ and typef_block lab env bl =
 	let bl,t,ef = ef_block lab tyres block in
 	(Assert p)::bl, t, Effect.union ep ef
     | (Slabel s) :: block ->
-	let lab' = LabelSet.add s lab in
+	let lab' = Label.add s lab in
 	let bl,t,ef = ef_block lab' tyres block in
 	(Label s)::bl, t, ef
     | (Sstatement e) :: block ->

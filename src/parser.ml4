@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.76 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.77 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -441,9 +441,7 @@ i*)
     | "try"; p = program; "with"; hl = LIST1 handler SEP "|"; "end" ->
 	without_annot loc (Stry (p, hl))
     | "("; p = program; args = LIST0 arg; ")" ->
-	(match args with 
-	   | [] -> p
-           | _  -> without_annot loc (app p args))
+	if args = [] then p else without_annot loc (app p args)
     | "{"; pre = OPT pre_condition; "}"; p = program; 
       "{"; post = OPT post_condition; "}" -> 
         mk_prog loc p (list_of_some pre) post
@@ -510,8 +508,8 @@ i*)
 	Parameter (loc, ids, v)
     | "exception"; id = ident; v = OPT exception_type ->
 	Exception (loc, id, v)
-    | "logic"; id = ident; ":"; t = logic_type ->
-	Logic (loc, id, t) ] ]
+    | "logic"; ids = LIST1 ident SEP ","; ":"; t = logic_type ->
+	Logic (loc, ids, t) ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]

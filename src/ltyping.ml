@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.18 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.19 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -98,12 +98,6 @@ let make_arith loc = function
   | _ ->
       expected_num loc
 
-let check_label loc lab env =
-  if_labelled 
-    (fun (id,l) -> 
-       if not (is_reference env id) then raise_located loc (NotAReference id);
-       if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l))
-
 let predicate_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "predicate expected"))
 
@@ -171,7 +165,7 @@ and term lab env lenv t =
 
 and desc_term loc lab env lenv = function
   | PPvar x ->
-      Tvar x, type_tvar loc lab env lenv x
+      type_tvar loc lab env lenv x
   | PPapp (x, [a;b]) when x == Ident.access ->
       (match term lab env lenv a, term lab env lenv b with
 	 | (a, PTarray v), (b, PTint) ->
@@ -222,11 +216,18 @@ and type_if lab env lenv a b c =
     | _ -> raise_located a.pp_loc ShouldBeBoolean
 
 and type_tvar loc lab env lenv x = 
-  let xu = if is_at x then fst (un_at x) else x in
+  let x, xu = 
+    if is_at x then begin
+      let xu,l = un_at x in
+      if not (is_reference env xu) then raise_located loc (NotAReference xu);
+      if not (Label.mem l lab) then raise_located loc (UnboundLabel l);
+      at_id xu (Label.find lab l), xu
+    end else 
+      x, x
+  in
   if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
-  check_label loc lab env x;
   match find_logic xu lenv with
-    | Function ([], t) -> t
+    | Function ([], t) -> Tvar x, t
     | _ -> raise_located loc (MustBePure)
 
 and type_tapp loc lenv x tl =
@@ -268,7 +269,7 @@ let type_assert lab env lenv a =
   { a with a_value = predicate lab env lenv a.a_value }
 
 let type_post lab env lenv id v ef (a,al) = 
-  let lab' = LabelSet.add "" lab in 
+  let lab' = Label.add "" lab in 
   let a' = 
     let lenv' = Env.add_logic id v lenv in type_assert lab' env lenv' a 
   in

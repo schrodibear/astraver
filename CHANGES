@@ -1,4 +1,6 @@
 
+  o syntax: logic may introduce several identifiers in a single declaration
+
 version 1.05, March 11th, 2003
 ==============================
   o linear proof search restricted to WP obligations

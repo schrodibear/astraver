@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.64 2003-02-28 16:37:22 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.65 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -484,6 +484,7 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   let w = wf_name () in
   let k = info'.kappa in
   let ren' = next ren (get_writes k.c_effect) in 
+  let ren' = if bl = [] then ren' else push_date ren' "init" in
   let tphi = tt_arrow bl (trad_type_c ren' env k) in
   let vphi0 = variant_name () in
   let tphi0 = 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.28 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.29 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -325,7 +325,25 @@ let logical_env (m,_,_) =
 
 (*s Labels *)
 
-module LabelSet = Set.Make(struct type t = string let compare = compare end)
+module Label = struct
 
-let initial_labels = LabelSet.singleton "init"
+  module LabelSet = Set.Make(struct type t = string let compare = compare end)
 
+  (* a label environment is a pair [(i,s)] where [i] is the label for "init"
+     and [s] the set of current visible labels *)
+
+  type t = string option * LabelSet.t
+
+  let empty = (None, LabelSet.singleton "init")
+
+  let add l (i, s) = ((if i = None then Some l else i), LabelSet.add l s)
+
+  let init (_, s) = (None, s)
+
+  let mem l (_, s) = LabelSet.mem l s
+
+  let find (i, s) = function 
+    | "init" -> (match i with Some i -> i | None -> assert false)
+    | l -> assert (LabelSet.mem l s); l
+
+end

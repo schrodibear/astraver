@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.mli,v 1.13 2003-01-16 15:42:48 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.14 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
@@ -23,7 +23,7 @@ open Ptree
 open Ast
 open Env
 
-val typef : LabelSet.t -> local_env -> parsed_program -> typed_program
+val typef : Label.t -> local_env -> parsed_program -> typed_program
 
 val check_for_not_mutable : Loc.t -> type_v -> unit
 

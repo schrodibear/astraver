@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.20 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.21 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -101,6 +101,11 @@ val logical_env : local_env -> logical_env
 
 (*s Labels *)
 
-module LabelSet : Set.S with type elt = string
-
-val initial_labels : LabelSet.t
+module Label : sig 
+  type t 
+  val empty : t (* only contains "init" *)
+  val add : string -> t -> t
+  val init : t -> t (* reset the "init" position *)
+  val mem : string -> t -> bool
+  val find : t -> string -> string (* canonizes wrt "init" value *)
+end

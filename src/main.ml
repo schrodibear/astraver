@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.54 2003-02-18 16:54:56 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.55 2003-03-18 13:45:15 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -79,7 +79,7 @@ let interp_program id p =
 
   if_debug eprintf "* typing with effects@.";
   let env = Env.empty in
-  let p = Typing.typef Env.initial_labels env p in
+  let p = Typing.typef Label.empty env p in
   let c = p.info.kappa in
   let c = 
     { c with c_post = optpost_app (change_label p.info.label "") c.c_post }
@@ -126,7 +126,7 @@ let add_parameter v tv id =
     
 let interp_decl d = 
   let env = Env.empty in
-  let lab = Env.initial_labels in
+  let lab = Label.empty in
   let lenv = Env.logical_env env in
   match d with 
   | Program (id, p) ->
@@ -149,9 +149,12 @@ let interp_decl d =
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
       add_exception id v
-  | Logic (loc, id, t) ->
-      if is_logic id lenv then raise_located loc (Clash id);
-      add_global_logic id t
+  | Logic (loc, ids, t) ->
+      let add id =
+	if is_logic id lenv then raise_located loc (Clash id);
+	add_global_logic id t
+      in
+      List.iter add ids
 
 (*s Processing of a channel / a file. *)
 

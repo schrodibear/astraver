@@ -11,7 +11,7 @@ tc:
 
 WHY=../../bin/why.opt
 
-%_why.v: %.mlw $(WHY)
+%_why.v %_valid.v: %.mlw $(WHY)
 	$(WHY) --valid -V $<
 
 %.vo: %.v

@@ -172,11 +172,13 @@ The input file contains the following kinds of declaration:
 
     Declares a new exception $E$, possibly with an argument of type $\tau$.
 
-  \item\indextt{logic}
-    \te{logic} $x$ \te{:} $\tau_1,\dots,\tau_n$ \te{->} $\tau$
+  \item\indextt{logic}\indextt{prop}
+    \te{logic} $x_1,\dots,x_n$ \te{:} $\tau_1,\dots,\tau_m$ \te{->} $\tau$
 
-    Declares a symbol $x$ belonging to the logic. $x$ is either a
-    predicate (when $\tau$ is \te{prop}) or a function symbol.
+    Declares symbols $x_1,\dots,x_n$ belonging to the logic. 
+    The $x_i$ are either
+    predicates (when $\tau$ is \te{prop}), constants (when $m=0$) or
+    function symbols. 
     Examples:
 \begin{verbatim}
      logic max : int,int -> int
@@ -1283,11 +1285,13 @@ Syntax of input files is given in Figure~\ref{fig:input}.
               \te{:} \nt{value\_type} \\ \indextt{external}
       & $|$ & \te{exception} \nt{identifier} 
               $[$ \te{of} \nt{primitive\_type} $]$ \\ \indextt{exception}
-      & $|$ & \te{logic} \nt{identifier} \te{:} \nt{logic\_type} \\
+      & $|$ & \te{logic} \nt{identifier}\plussep{\te{,}}
+              \te{:} \nt{logic\_type} \\
    \\[0.1em]
 
   \nt{logic\_type}
-    & $::=$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} \te{prop} \\
+    & $::=$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} \te{prop} 
+              \\ \indextt{prop}
       & $|$ & \nt{logic\_arg\_type}\etoilesep{\te{,}} \te{->} 
               \nt{primitive\_type} \\ \indextt{logic}
    \\[0.1em]

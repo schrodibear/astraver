@@ -2,7 +2,7 @@
 Require Why.
 
 
-(* Why obligation from file "good/init.mlw", characters 41-84 *)
+(* Why obligation from file "init.mlw", characters 41-84 *)
 Lemma f_po_1 : 
   (x: Z)
   (x0: Z)
@@ -13,7 +13,7 @@ Intuition.
 Save.
 
 
-(* Why obligation from file "good/init.mlw", characters 103-149 *)
+(* Why obligation from file "init.mlw", characters 103-149 *)
 Lemma g_po_1 : 
   (x: Z)
   (x0: Z)

@@ -4,3 +4,25 @@ parameter x : int ref
 let f (u:unit) = {} begin x := 1 - !x end { x = 1 - x@init }
 
 let g (u:unit) = {} begin (f void); (f void) end { x = x@init }
+
+let h1 =
+  { x = 0 }
+  let f1 = fun (u:unit) -> { x = 1 } x := 2 { x@init = 1 } in
+  void
+  { x = 0 and x@init = 0 }
+
+(***
+let h2 =
+  { x = 0 }
+  let rec f2 (u:unit) : unit { variant x } = { x = 1 } x := 2 { x@init = 1 } in
+  begin x := 1; (f2 void) end
+  { x@init = 0 }
+
+let h3 =
+  { x = 0 }
+  let rec f3 (u:unit) : unit { variant x } = 
+    { x = 2 } begin x := 1; (f3 void); x := 3 end { x@init = 2 } in
+  void
+  { x = 0 and x@init = 0 }
+***)
+
