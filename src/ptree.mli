@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ptree.mli,v 1.3 2002-07-09 11:45:02 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.4 2002-07-24 15:01:29 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -100,3 +100,4 @@ type decl =
   | Logic of Loc.t * Ident.t * logic_type
   | QPvs of string
 
+type file = decl list

@@ -1,3 +1,4 @@
+/* from http://www.lysator.liu.se/c/ANSI-C-grammar-y.html */
 
 %{
 %}
@@ -25,6 +26,7 @@
 
 file
         : translation_unit EOF { }
+        | EOF { }
         ;
 
 primary_expression

@@ -118,6 +118,7 @@ rule token = parse
   | "?"                     { QUESTION }
 
   | eof { EOF }
+  | '"' { lex_error lexbuf "Unterminated string" }
   | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
 
 and comment = parse
@@ -127,4 +128,10 @@ and comment = parse
 
 {
 
+  let parse c =
+    let lb = from_channel c in
+    try
+      Cparser.file token lb
+    with Parsing.Parse_error as e ->
+      raise (Stdpp.Exc_located (loc lb, e))
 }

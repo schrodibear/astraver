@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.33 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.34 2002-07-24 15:01:29 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -13,7 +13,7 @@ open Report
 open Misc
 open Util
 
-(*s Prover selection. *)
+(*s Prover dependent functions. *)
 
 let reset () = match prover with
   | Pvs -> Pvs.reset ()
@@ -115,11 +115,17 @@ let interp_decl d =
   | QPvs s ->
       Pvs.push_verbatim s
 
-(*s Processinf of a channel / a file. *)
+(*s Processing of a channel / a file. *)
 
-let deal_channel cin =
-  let st = Stream.of_channel cin in
-  let d = Grammar.Entry.parse Parser.decls st in
+let ml_parser c = 
+   let st = Stream.of_channel c in
+   Grammar.Entry.parse Parser.decls st
+ 
+let c_parser c = 
+  Clexer.parse c; []
+
+let deal_channel parsef cin =
+  let d = parsef cin in
   if parse_only then exit 0;
   List.iter interp_decl d
 
@@ -127,19 +133,22 @@ let deal_file f =
   Loc.set_file f;
   reset ();
   let cin = open_in f in 
-  let fwe = Filename.chop_extension f in
-  deal_channel cin;
+  let parsef = if Filename.check_suffix f ".c" then c_parser else ml_parser in
+  deal_channel parsef cin;
   close_in cin;
+  let fwe = Filename.chop_extension f in
   output fwe
 
 let main () =
   if files = [] then begin
-    deal_channel stdin;
+    deal_channel ml_parser stdin;
     output "WhyOutput" 
   end else
     List.iter deal_file files
 
 let rec explain_exception fmt = function
+  | Parsing.Parse_error -> 
+      fprintf fmt "Syntax error"
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
   | Stdpp.Exc_located (loc, e) ->
