@@ -20,7 +20,10 @@ Admitted.
 (*Why logic*) Definition shift : pointer -> Z -> pointer.
 Admitted.
 
-(*Why logic*) Definition valid : pointer -> Z -> Z -> Prop.
+(*Why logic*) Definition valid : pointer -> Prop.
+Admitted.
+
+(*Why logic*) Definition valid_range : pointer -> Z -> Z -> Prop.
 Admitted.
 
 (*Why axiom*) Lemma offset_shift :
@@ -42,31 +45,49 @@ Admitted.
 
 (*Why axiom*) Lemma valid_def :
   (forall (p:pointer),
-   (forall (i:Z),
-    (forall (j:Z),
-     (~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <=
-      (length p) -> (valid p i j))))).
+   (~(p = null) /\ 0 <= (offset p) /\ (offset p) < (length p) -> (valid p))).
 Admitted.
 
 (*Why axiom*) Lemma valid_not_null :
-  (forall (p:pointer),
-   (forall (i:Z), (forall (j:Z), ((valid p i j) -> ~(p = null))))).
+  (forall (p:pointer), ((valid p) -> ~(p = null))).
 Admitted.
 
 (*Why axiom*) Lemma valid1 :
-  (forall (p:pointer),
-   (forall (i:Z), (forall (j:Z), ((valid p i j) -> 0 <= ((offset p) + i))))).
+  (forall (p:pointer), ((valid p) -> 0 <= (offset p))).
 Admitted.
 
 (*Why axiom*) Lemma valid2 :
-  (forall (p:pointer),
-   (forall (i:Z), (forall (j:Z), ((valid p i j) -> i <= j)))).
+  (forall (p:pointer), ((valid p) -> (offset p) < (length p))).
 Admitted.
 
-(*Why axiom*) Lemma valid3 :
+(*Why axiom*) Lemma valid_range_def :
   (forall (p:pointer),
    (forall (i:Z),
-    (forall (j:Z), ((valid p i j) -> ((offset p) + j) <= (length p))))).
+    (forall (j:Z),
+     (~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
+      (length p) -> (valid_range p i j))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_range_not_null :
+  (forall (p:pointer),
+   (forall (i:Z), (forall (j:Z), ((valid_range p i j) -> ~(p = null))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_range1 :
+  (forall (p:pointer),
+   (forall (i:Z),
+    (forall (j:Z), ((valid_range p i j) -> 0 <= ((offset p) + i))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_range2 :
+  (forall (p:pointer),
+   (forall (i:Z), (forall (j:Z), ((valid_range p i j) -> i <= j)))).
+Admitted.
+
+(*Why axiom*) Lemma valid_range3 :
+  (forall (p:pointer),
+   (forall (i:Z),
+    (forall (j:Z), ((valid_range p i j) -> ((offset p) + j) < (length p))))).
 Admitted.
 
 (*Why*) Parameter shift_ :

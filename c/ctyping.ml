@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.38 2004-03-02 16:51:45 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.39 2004-03-03 07:12:06 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -247,6 +247,7 @@ and type_expr_node loc env = function
       (match b.texpr_node with
 	 | TEbinary (te1, op', te2) -> 
 	     check_lvalue e1.loc te1;
+	     warn_for_read_only e1.loc te1;
 	     let ty1 = te1.texpr_type in
 	     let _ = type_assignment loc ty1 b in
 	     TEassign_op (te1, op', te2), ty1
@@ -255,7 +256,9 @@ and type_expr_node loc env = function
   | CEassign_op _ ->
       assert false
   | CEincr (op, e) ->
+      let e_loc = e.loc in
       let e = type_lvalue env e in
+      warn_for_read_only e_loc e;
       begin match e.texpr_type.ctype_node with
 	| CTint _ | CTfloat _ | CTpointer _ -> TEincr (op, e), e.texpr_type
 	| _ -> error loc "wrong type to {de,in}crement"
