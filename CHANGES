@@ -1,4 +1,6 @@
 
+version 1.69, January 4th, 2005
+===============================
   o labeled predicates with syntax ":id: predicate" and lowest precedence
 
 version 1.64, October 13th, 2004

@@ -1,7 +1,7 @@
 Note: These are the changes for Caduceus.
 
-version 0.69, still to be released
-=================================
+version 0.69, January 4th, 2005
+===============================
  o automatic invariants for expressing the so-called 'separation' of
    global variables
  o proof obligations added to show that global variables
