@@ -1,6 +1,7 @@
 
 DIRS = misc binary-search bresenham quicksort edit-distance heapsort sqrt kmp \
-       selectionsort find quicksort2 maximumsort string-matching
+       selectionsort find quicksort2 maximumsort string-matching \
+       binary-search-c
 
 all: 
 	for d in $(DIRS); do make -C $$d; done

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.60 2003-09-17 15:48:47 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.61 2003-09-22 21:46:11 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -38,7 +38,7 @@ let reset () =
   Vcg.logs := []; 
   match prover with
   | Pvs -> Pvs.reset ()
-  | Coq -> Coq.reset ()
+  | Coq _ -> Coq.reset ()
   | HolLight -> Holl.reset ()
   | Mizar -> Mizar.reset ()
   | Harvey -> Harvey.reset ()
@@ -46,18 +46,20 @@ let reset () =
 
 let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
-  | Coq -> Coq.push_obligations ol
+  | Coq _ -> Coq.push_obligations ol
   | HolLight -> Holl.push_obligations ol
   | Mizar -> Mizar.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
   | Simplify -> Simplify.push_obligations ol
 
+let prover_is_coq = match prover with Coq _ -> true | _ -> false
+
 let push_validation id tt v = 
-  if valid && prover = Coq then Coq.push_validation id tt v
+  if valid && prover_is_coq then Coq.push_validation id tt v
 
 let push_parameter id v tv = match prover with
   | Pvs -> if is_pure_type_v v then Pvs.push_parameter id tv
-  | Coq -> Coq.push_parameter id tv
+  | Coq _ -> Coq.push_parameter id tv
   | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
   | Mizar -> if is_pure_type_v v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)
@@ -70,7 +72,7 @@ let output fwe =
     Options.output Ocaml.output 
   else begin match prover with
     | Pvs -> Pvs.output_file fwe
-    | Coq -> Coq.output_file fwe
+    | Coq _ -> Coq.output_file fwe
     | HolLight -> Holl.output_file fwe
     | Mizar -> Mizar.output_file fwe
     | Harvey -> Harvey.output_file fwe

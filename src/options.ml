@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.25 2003-09-22 15:57:48 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.26 2003-09-22 21:46:11 filliatr Exp $ i*)
 
 open Format
 
@@ -39,8 +39,9 @@ let wol_ = ref false
 
 let c_file = ref false
 
-type prover = Coq | Pvs | HolLight | Mizar | Harvey | Simplify
-let prover_ = ref Coq
+type coq_version = V7 | V8
+type prover = Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify
+let prover_ = ref (Coq V7)
 
 (*s Parsing the command-line *)
 
@@ -122,7 +123,9 @@ let files =
     | [] -> List.rev !filesq
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
-    | ("-coq" | "--coq") :: args -> prover_ := Coq; parse args
+    | ("-coq" | "--coq" | "-coq-v7" | "--coq-v7") :: args -> 
+	prover_ := Coq V7; parse args
+    | ("-coq-v8" | "--coq-v8") :: args -> prover_ := Coq V8; parse args
     | ("-hol-light" | "--hol-light") :: args -> prover_ := HolLight; parse args
     | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args

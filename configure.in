@@ -167,14 +167,17 @@ else
     case $COQVERSION in
     7.3.1)
 	AC_MSG_RESULT($COQVERSION)
+	COQVER=--coq-v7
 	WHYLIBCOQ=lib/coq-v7
 	cp -f lib/coq/WhyCoq73.v lib/coq-v7/WhyCoqCompat.v;;
     7.3.1*|7.4*)
 	AC_MSG_RESULT($COQVERSION)
+	COQVER=--coq-v7
 	WHYLIBCOQ=lib/coq-v7
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
     8.*)
 	AC_MSG_RESULT($COQVERSION)
+	COQVER=--coq-v8
 	WHYLIBCOQ=lib/coq;;
     *)
 	COQ=no
@@ -230,6 +233,7 @@ AC_SUBST(COQ)
 AC_SUBST(COQC)
 AC_SUBST(COQDEP)
 AC_SUBST(COQLIB)
+AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 
 AC_SUBST(PVS)
@@ -241,5 +245,6 @@ AC_SUBST(MIZF)
 AC_SUBST(MIZARLIB)
 
 # Finally create the Makefile from Makefile.in
-AC_OUTPUT(Makefile)
-chmod a-w Makefile
+AC_OUTPUT(Makefile bench/bench examples/Makefile.common)
+chmod a-w Makefile bench/bench examples/Makefile.common
+chmod a+x bench/bench

@@ -3,10 +3,10 @@ WHY=../../bin/why.opt
 WHYOPTIONS=--valid
 
 %_valid.v %_why.v: %.mlw $(WHY)
-	$(WHY) --coq $(WHYOPTIONS) $<
+	$(WHY) @COQVER@ $(WHYOPTIONS) $<
 
 %_valid.v %_why.v: %.c $(WHY)
-	$(WHY) --coq $(WHYOPTIONS) $<
+	$(WHY) @COQVER@ $(WHYOPTIONS) $<
 
 %.vo: %.v
 	coqc -R ../../lib/coq Coq.why $<
