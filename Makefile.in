@@ -46,9 +46,9 @@ CMX      = $(CMO:.cmo=.cmx)
 # main targets
 ##############
 
-PROG=bin/why.$(OCAMLBEST)
+BINARY=bin/why.$(OCAMLBEST)
 
-all: $(PROG)
+all: $(BINARY)
 
 opt: bin/why.opt
 
@@ -70,20 +70,20 @@ doc::
 
 .PHONY: bench
 
-bench:: $(PROG)
-	cd bench; ./bench ../$(PROG)
+bench:: $(BINARY)
+	cd bench; ./bench ../$(BINARY)
 
 # installation
 ##############
 
-install: $(PROG)
+install: $(BINARY)
 	mkdir -p $(BINDIR)
-	cp -f $(PROG) $(BINDIR)/why
+	cp -f $(BINARY) $(BINDIR)/why
 #	mkdir -p $(MANDIR)/man1
-#	cp -f $(PROG).1 $(MANDIR)/man1
+#	cp -f doc/why.1 $(MANDIR)/man1
 
-local: $(PROG)
-	cp -f $(PROG) $$HOME/bin/$$OSTYPE/why
+local: $(BINARY)
+	cp -f $(BINARY) $$HOME/bin/$$OSTYPE/why
 
 # special rules
 ###############
