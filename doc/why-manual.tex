@@ -1,8 +1,12 @@
-\documentclass[a4paper,12pt]{report}
+\documentclass[12pt]{report}
+
+\usepackage{fullpage}
 
 \newcommand{\caml}{\textsf{Caml}}
-\newcommand{\t}[1]{\texttt{#1}}
-\newcommand{\nt}[1]{\textsl{#1}}
+\newcommand{\pvs}{\textsf{PVS}}
+\newcommand{\why}{\textsf{Why}}
+\newcommand{\te}[1]{\texttt{#1}~}
+\newcommand{\nt}[1]{\textsl{#1}~}
 
 \begin{document}
 
@@ -20,113 +24,264 @@
 
 \tableofcontents
 
-\chapter{Usage}
+\chapter{The \why\ tool}
+
+\why\ is a tool to generate proof obligations from annotated programs.
+Currently, the input syntax is a fragment of \caml\ (with annotations),
+and the output is a \pvs\ theory. Syntax is given in chapter~\ref{syntax}.
+
+
+\section{Usage}
+
+\why\ is invoked as a batch compiler, given a list of input files:
+\begin{center}
+  \texttt{why} \textit{file1}\texttt{.ml} $\cdots$
+    \textit{file$n$}\texttt{.ml}
+\end{center}
+Each file \textit{file}\texttt{.ml} will be compiled into a \pvs\ theory,
+in file \textit{file}\texttt{.pvs}.
+
+If no file is given, then standard input is processed and a \pvs\ theory
+named \texttt{WhyOutput} is printed on standard output.
+
+
+\section{Principles}
+
+The input file may contain the following kinds of declaration:
+\begin{itemize}
+  \item \te{pvs "\textit{any \pvs\ material}"} \par
+    Copies the \pvs\ material as-is in the output theory.
+
+  \item \te{external} $x_1,\dots,x_n: \tau$ \par 
+    Declares some external program values of type $\tau$.
+    They may be constants (i.e. of a primitive type), references 
+    or functions. This is only to be used to introduce values to be used
+    in the program part; values to be used in the specification part
+    must be introduced using the \te{pvs} declaration.
+
+  \item \te{let $x$ = \textit{annotated-program}} \par
+    Generates the lemmas corresponding to the total correctness of
+    the given program, and declares it with name $x$.
+\end{itemize}
+
+
+\section{Installation}
+
+To compile \why, you need both \textsf{Objective Caml} and
+\textsf{Camlp4} to be installed, in version at least 3.01.
+Then 
+
+\begin{enumerate}
+\item Configure with \texttt{./configure}
+\item Compile with \texttt{make}
+\item \why\ executable \texttt{bin/why}. It is standalone, 
+  so you can move it anywhere, or make a symbolic link to it from anywhere.
+\end{enumerate}
+
 
 \chapter{Syntax}
+\label{syntax}
 
-\section{Terms and predicates}
-
-\subsection{Terms}
+\section{Terms}
 
 Syntax of terms is given in Figure~\ref{fig:terms}.
+Usual precedences apply to arithmetical operations.
 
 \begin{figure}[htbp]
 \begin{center}
-\hrulefill
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{term}
+    & $::=$ & \nt{constant} \\
+      & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
+      & $|$ & \te{-} \nt{term} \\
+      & $|$ & \nt{identifier} \\
+      & $|$ & \nt{identifier} 
+              \te{(} \nt{term} \te{,} \dots \te{,} \nt{term} \te{)} \\
+      & $|$ & \te{(} \nt{term} \te{)} \\
+  \\[0.1em]
 
+  \nt{constant}
+    & $::=$ & \nt{integer-constant} \\
+    & $::=$ & \nt{floating-point-constant} \\
+    & $::=$ & \te{true} \\
+    & $::=$ & \te{false} \\
+    & $::=$ & \te{skip} \\
+  \\[0.1em]
+
+  \nt{arith\_op}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/}
+\end{tabular}\\
 \hrulefill
 \caption{Syntax of terms}
 \label{fig:terms}
 \end{center}		
 \end{figure}
 
-\subsection{Predicates}
+\section{Predicates}
 
 Syntax of predicates is given in Figure~\ref{fig:predicates}.
+It is a first-order quantifier-free syntax, independent from the \pvs\ one.
+
+Precedence of \te{and} is stronger than \te{or}'s one, which is
+stronger than the implication's one. Implication is right associative.
 
 \begin{figure}[htbp]
 \begin{center}
-\hrulefill
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{predicate}
+    & $::=$ & \nt{predicate} \te{->} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
+      & $|$ & \te{not} \nt{predicate} \\
+      & $|$ & \nt{term} \\
+      & $|$ & \nt{term} \nt{relation} \nt{term} \\
+      & $|$ & \te{(} \nt{predicate} \te{)}
+  \\[0.1em]
 
+  \nt{relation}
+    & $::=$ & \te{=} $|$ \te{/=} $|$ 
+              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
+\end{tabular}\\
 \hrulefill
 \caption{Syntax of predicates}
 \label{fig:predicates}
 \end{center}		
 \end{figure}
 
-\subsection{Annotated Caml programs}
+\section{Types}
+
+Syntax of types is given in Figure~\ref{fig:types}.
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{value\_type}
+    & $::=$ & \nt{primitive\_type} \\
+      & $|$ & \nt{value\_type} \te{ref} \\
+      & $|$ & \te{array} \nt{term} \te{of} \nt{value\_type} \\
+      & $|$ & \nt{binders} \nt{computation\_type} 
+  \\[0.1em]
+
+  \nt{computation\_type}
+    & $::=$ & \te{returns} \nt{identifier} \te{:} \nt{value\_type} \\
+      &     & $[$~ \te{reads} 
+                   \nt{identifier}\te{,}\ldots\te{,}\nt{identifier} $]$~ \\
+      &     & $[$~ \te{writes} 
+                   \nt{identifier}\te{,}\ldots\te{,}\nt{identifier} $]$~ \\
+      &     & $[$~ \te{pre} \nt{predicate} $]$ ~ 
+              $[$~ \te{post} \nt{predicate} $]$ \\
+      &     & \te{end} \\
+      & $|$ & \nt{value\_type}
+  \\[0.1em]
+
+  \nt{binders}
+    & $::=$ & \te{(} \nt{identifier}\te{,}\dots\te{,}\nt{identifier}  \te{:}
+              \nt{value\_type}  \te{)} $+$ \\
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of types}
+\label{fig:types}
+\end{center}		
+\end{figure}
+
+\section{Annotated Caml programs}
 
 Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
 \begin{figure}[htbp]
 \begin{center}
-\hrulefill
+\hrulefill\\
 \begin{tabular}{lrl}
-  prog & $::=$ & \verb!{! ~ predicate ~ \verb!}! *
-                 ~ statement ~ [ \verb!{! ~ predicate ~ \verb!}! ] \\
+  \nt{prog} 
+    & $::=$ & \te{\{} \nt{predicate} \te{\}} $*$
+              \nt{statement} 
+              $[$ \te{\{} \nt{predicate} \te{\}} $]$ \\
 
-    & & \\[0.1em]
+       & & \\[0.1em]
 
-    statement
-         & ::= & expression \\
-         &   | & identifier ~ \verb!:=! ~ prog \\
-         &   | & identifier ~ \verb![! ~ expression ~ \verb!]!
-                 ~ \verb!:=! ~ prog \\
-         &   | & \verb!let! ~ identifier ~ \verb!=! ~ \verb!ref! ~
-                  prog ~ \verb!in! ~ prog \\
-         &   | & \verb!if! ~ prog ~ \verb!then! ~ prog
-                 ~ [ \verb!else! ~ prog ] \\
-         &   | & \verb!while! ~ prog ~ \verb!do!
-                 ~ loop\_annot ~ block ~ \verb!done! \\
-         &   | & \verb!begin! ~ block ~ \verb!end! \\
-         &   | & \verb!let! ~ identifier ~ \verb!=! ~ prog ~
-                 \verb!in! ~ prog \\
-         &   | & \verb!fun! ~ binders ~ \verb!->! ~ prog \\
-         &   | & \verb!let! ~ \verb!rec! ~ identifier ~ binder ~ \verb!:!
-                 ~ value\_type \\
-         &     & ~~ \verb!{! ~ \verb!variant! ~ wf\_arg ~ \verb!}!
-                 ~ \verb!=! ~ prog ~ [ \verb!in! ~ prog ] \\
-         &   | & \verb!(! ~ prog ~~ prog ~ \verb!)! \\
+  \nt{statement}
+    & $::=$ & \nt{expression} \\
+      & $|$ & \nt{identifier}  \te{:=}  \nt{prog} \\
+      & $|$ & \nt{identifier}  \te{[}  \nt{expression}  \te{]}
+              \te{:=}  \nt{prog} \\
+      & $|$ & \te{let}  \nt{identifier}  \te{=}  \te{ref} 
+              \nt{prog}  \te{in}  \nt{prog} \\
+      & $|$ & \te{if}  \nt{prog}  \te{then}  \nt{prog}
+              $[$~ \te{else}  \nt{prog} $]$ \\
+      & $|$ & \te{while}  \nt{prog}  \te{do}
+              \nt{loop\_annot}  \nt{block}  \te{done} \\
+      & $|$ & \te{begin}  \nt{block}  \te{end} \\
+      & $|$ & \te{let}  \nt{identifier}  \te{=}  \nt{prog} 
+              \te{in}  \nt{prog} \\
+      & $|$ & \te{fun}  \nt{binders}  \te{->}  \nt{prog} \\
+      & $|$ & \te{let}  \te{rec}  \nt{identifier}  \nt{binders}  \te{:}
+              value\_type \\
+      &     & \te{\{}  \te{variant}  \nt{wf\_arg}  \te{\}}
+              \te{=}  \nt{prog}  $[$~ \te{in}  \nt{prog} $]$ \\
+      & $|$ & \te{(}  \nt{prog}  \nt{prog}$*$~  \te{)} \\
 
-    & & \\[1em]
+      & & \\[0.1em]
 
-    expression
-         & ::= & identifier \\
-         &   | & \verb@!@ ~ identifier \\
-         &   | & identifier ~ \verb![! ~ expression ~ \verb!]! \\
-         &   | & integer \\
-         &   | & \verb!(! ~ expression+  \verb!)! \\
+  \nt{expression}
+    & $::=$ & \nt{identifier} \\
+      & $|$ & \te{!}  \nt{identifier} \\
+      & $|$ & \nt{identifier}  \te{[}  \nt{expression}  \te{]} \\
+      & $|$ & \nt{integer} \\
+      & $|$ & \te{(}  \nt{expression}$+$~  \te{)} \\
 
-    & & \\[1em]
+      & & \\[0.1em]
 
-    block & ::= & block\_statement ~ [ ~ \verb!;! ~ block ~ ] \\
+  \nt{block} 
+    & $::=$ & \nt{block\_statement}  $[$~ \te{;} \nt{block} $]$ \\
 
-    & & \\[0.1em]
+      & & \\[0.1em]
 
-    block\_statement
-          & ::= & prog \\
-          &   | & \verb!label! ~ identifier \\
-          &   | & \verb!assert! ~ \verb!{! ~ predicate ~ \verb!}! \\
+  \nt{block\_statement}
+    & $::=$ & \nt{prog} \\
+      & $|$ & \te{label}  \nt{identifier} \\
+      & $|$ & \te{assert}  \te{\{}  \nt{predicate}  \te{\}} \\
 
-    & & \\[1em]
+      & & \\[0.1em]
 
-    binders & ::= & \verb!(! ~ identifier,\dots,identifier ~ \verb!:!
-                    ~ value\_type ~ \verb!)! + \\
+  \nt{loop\_annot}
+    & $::=$ & \te{\{}  \te{invariant}  \nt{predicate} 
+              \te{variant}  \nt{wf\_arg}  \te{\}} \\
+      & & \\[0.1em]
 
-    & & \\[1em]
+  \nt{wf\_arg} 
+    & $::=$ & \nt{term}  $[$~ \te{for} \nt{term} $]$ \\
 
-    loop\_annot
-          & ::= & \verb!{! ~ \verb!invariant! ~ predicate ~
-                  \verb!variant! ~ wf\_arg ~ \verb!}! \\
-    & & \\[0.1em]
-
-    wf\_arg & ::= & cic\_term ~ [ \verb!for! ~ cic\_term ] \\
-
-  \end{array}
-$$
+\end{tabular}\\
 \hrulefill
 \caption{Syntax of annotated programs}
 \label{fig:caml}
 \end{center}
+\end{figure}
+
+\section{Input files}
+
+Syntax of input files is given in Figure~\ref{fig:input}.
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{file}
+    & $::=$ & \nt{declaration} $*$
+  \\[0.1em]
+
+  \nt{declaration}
+    & $::=$ & \te{let} \nt{identifier} \te{=} \nt{prog} \\
+      & $|$ & \te{external} \nt{identifier}\te{,}\dots\te{,}\nt{identifier}
+              \te{:} \nt{value\_type} \\
+      & $|$ & \te{pvs} \nt{string}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of input files}
+\label{fig:input}
+\end{center}		
 \end{figure}
 
 \end{document}

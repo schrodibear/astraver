@@ -1,7 +1,30 @@
 
- - variant = identifier ?
+FEATURES
+========
+
+ - Java input
+   see http://home.inreach.com/bronikov/grammars/java.html
+
+ - Coq output
 
  - arguments which are types
+
+ - primitive functions, like =, applied to non-pure terms
+
+ - option to suppress termination obligations
+
+DOCUMENTATION
+=============
+
+ - bibliography
+
+ - examples
+
+BUGS
+====
+
+IMPLEMENTATION
+==============
 
  - no substitution when result name is not "result" => force it?
 
@@ -9,5 +32,5 @@
 
  - suppress duplication of pre/post conditions in AST
 
- - Java input
-   see http://home.inreach.com/bronikov/grammars/java.html
+ - variant = identifier ?
+
