@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.39 2002-06-21 14:24:29 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.40 2002-06-24 08:48:04 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -37,6 +37,7 @@ let arith id =
   else if id == t_sub then "Zminus"
   else if id == t_mul then "Zmult"
   else if id == t_div then "Zdiv"
+  else if id == t_mod then "Zmod"
   else if id == t_neg then "Zopp"
   else assert false
 
@@ -49,8 +50,6 @@ let print_term fmt t =
     | Tapp (id, [a;b]) when is_relation id ->
 	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (relation_bool id)
 	print1 a print1 b
-    | Tapp (id, [a;b]) when id == t_eq_int ->
-	fprintf fmt "(@[Z_eq_bool %a@ %a@])" print_term a print_term b
     | t -> 
 	print1 fmt t
   and print1 fmt = function
@@ -85,19 +84,16 @@ let print_term fmt t =
 	openz fmt; fprintf fmt "%d" (truncate f); closez fmt
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
-    (* partial application of arithmetical operators *)
-    | Tapp (id, []) | Tvar id when is_arith_unop id ->
-	fprintf fmt "%s" (arith id)
-    | Tapp (id, [t]) when is_arith_binop id ->
-	fprintf fmt "@[(%s %a)@]" (arith id) print0 t
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
     | Tapp (id, [t]) when id == t_neg ->
 	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt
-    | Tapp (id, l) as t when is_relation id || is_arith id ->
+    | Tapp (id, [_;_]) as t when is_relation id || is_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) when id == t_zwf_zero -> 
 	openz fmt; fprintf fmt "(@[Zwf 0 %a@])" print_terms tl; closez fmt
+    | Tapp (id, tl) when is_arith id -> 
+	fprintf fmt "(@[%s %a@])" (arith id) print_terms tl
     | Tapp (id, tl) -> 
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
   and print_terms fmt tl =
@@ -157,7 +153,7 @@ let print_predicate fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
-    | p -> 
+    | (Por _ | Pand _ | Pif _ | Pimplies _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p

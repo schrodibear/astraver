@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.21 2002-06-20 12:55:22 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.22 2002-06-24 08:48:04 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -123,7 +123,7 @@ let is_relation id =
   id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int
 
 let is_arith_binop id =
-  id == t_add || id == t_sub || id == t_mul || id == t_div
+  id == t_add || id == t_sub || id == t_mul || id == t_div || id == t_mod
 
 let is_arith_unop id = 
   id == t_neg
