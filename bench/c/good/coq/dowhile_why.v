@@ -4,8 +4,23 @@
 Require Import Why.
 
 
-(* Why obligation from file "why/dowhile.why", characters 271-294 *)
-Lemma main_po_1 : 
+Proof.
+intuition.
+Qed.
+
+Proof.
+intuition.
+Qed.
+
+Proof.
+intuition.
+discriminate H0.
+Qed.
+
+
+
+(* Why obligation from file "why/dowhile.why", characters 291-315 *)
+Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
   forall (x0: Z),
@@ -18,21 +33,22 @@ Lemma main_po_1 :
   forall (Pre3: Variant1 = i1),
   forall (Pre2: x1 = (10 - i1) /\ 10 >= i1 /\ i1 > 0),
   forall (Test2: true = true),
-  forall (caduceus3: Z),
-  forall (Post3: caduceus3 = x1),
+  forall (caduceus_3: Z),
+  forall (Post3: caduceus_3 = x1),
   (forall (result:Z),
    (result = i1 ->
     (forall (result0:Z),
      (result0 = (result - 1) ->
-      ((result0 > 0 -> ((caduceus3 + 1) = (10 - (result - 1)) /\ 10 >=
+      ((result0 > 0 -> ((caduceus_3 + 1) = (10 - (result - 1)) /\ 10 >=
         (result - 1) /\ (result - 1) > 0) /\ (Zwf 0 (result - 1) i1))) /\
-      ((result0 <= 0 -> (caduceus3 + 1) = 10)))))).
+      ((result0 <= 0 -> (caduceus_3 + 1) = 10)))))).
 Proof.
 intuition.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/dowhile.why", characters 159-218 *)
-Lemma main_po_2 : 
+(* Why obligation from file "why/dowhile.why", characters 173-237 *)
+Lemma main_impl_po_2 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
   forall (x0: Z),
@@ -42,10 +58,11 @@ Lemma main_po_2 :
   x0 = (10 - i0) /\ 10 >= i0 /\ i0 > 0.
 Proof.
 intuition.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/dowhile.why", characters 119-500 *)
-Lemma main_po_3 : 
+(* Why obligation from file "why/dowhile.why", characters 124-525 *)
+Lemma main_impl_po_3 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
   forall (x0: Z),
@@ -58,8 +75,6 @@ Lemma main_po_3 :
   x1 = 10.
 Proof.
 intuition.
-discriminate H0.
-Qed.
-
-
+(* FILL PROOF HERE *)
+Save.
 

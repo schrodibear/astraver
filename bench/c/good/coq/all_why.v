@@ -4,194 +4,69 @@
 Require Import Why.
 
 
-(* Why obligation from file "all.why", characters 254-262 *)
-Lemma e1_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 2),
-  forall (caduceus4: Z),
-  forall (Post3: caduceus4 = x),
-  forall (caduceus: Z),
-  forall (Post2: caduceus = x),
-  forall (x0: Z),
-  forall (Post1: x0 = (caduceus + 1)),
-  (caduceus4 + caduceus) = 4.
 Proof.
 intuition.Save.
 
-(* Why obligation from file "all.why", characters 439-441 *)
-Lemma e2_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 2),
-  forall (caduceus5: Z),
-  forall (Post2: caduceus5 = x),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 1)),
-  (caduceus5 + x0) = 5.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 634-642 *)
-Lemma e3_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 2),
-  forall (caduceus: Z),
-  forall (Post2: caduceus = x),
-  forall (x0: Z),
-  forall (Post1: x0 = (caduceus + 1)),
-  (caduceus + x0) = 5.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 819-821 *)
-Lemma e4_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 2),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 1)),
-  (x0 + x0) = 6.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 998-1000 *)
-Lemma e5_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 2),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 1)),
-  (forall (result:Z),
-   (result = x0 -> (forall (x:Z), (x = (result + 1) -> (x0 + result) = 6)))).
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 1182-1226 *)
-Lemma f1_po_1 : 
-  forall (x0: Z),
-  forall (Post1: x0 = 0),
-  x0 = 0.
 Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 1259-1325 *)
-Lemma f2_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 0),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 1)),
-  x0 = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 1358-1424 *)
-Lemma f3_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 0),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 1)),
-  x0 = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 1556-1564 *)
-Lemma f4_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 0),
-  forall (caduceus: Z),
-  forall (Post2: caduceus = x),
-  forall (x0: Z),
-  forall (Post1: x0 = (caduceus + 1)),
-  x0 = 1 /\ caduceus = 0.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 1704-1706 *)
-Lemma f5_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 0),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 1)),
-  x0 = 1 /\ x0 = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 1774-1840 *)
-Lemma f6_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 1),
-  forall (x0: Z),
-  forall (Post1: x0 = (x + 2)),
-  x0 = 3.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 1918-1962 *)
-Lemma f7a_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x = 0),
-  forall (caduceus1: Z),
-  forall (Post1: caduceus1 = x),
-  forall (result: bool),
-  forall (Post5: (if result then caduceus1 = 0 else caduceus1 <> 0)),
-  (if result then 1 = 1 else 2 = 1).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 2072-2116 *)
-Lemma f7b_po_1 : 
-  forall (x: Z),
-  forall (Pre1: x <> 0),
-  forall (caduceus2: Z),
-  forall (Post1: caduceus2 = x),
-  forall (result: bool),
-  forall (Post5: (if result then caduceus2 = 0 else caduceus2 <> 0)),
-  (if result then 1 = 2 else 2 = 2).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 2293-2322 *)
-Lemma t1_po_1 : 
-  forall (intP: ((memory) Z)),
-  forall (t: pointer),
-  forall (Pre3: (valid_index t 0) /\ (acc intP (shift t 0)) = 1),
-  forall (aux_1: pointer),
-  forall (Post3: aux_1 = (shift t 0)),
-  ~(aux_1 = null) /\ 0 <= (offset aux_1) /\ (offset aux_1) <
-  (block_length aux_1).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 2293-2322 *)
-Lemma t1_po_2 : 
-  forall (intP: ((memory) Z)),
-  forall (t: pointer),
-  forall (Pre3: (valid_index t 0) /\ (acc intP (shift t 0)) = 1),
-  forall (aux_1: pointer),
-  forall (Post3: aux_1 = (shift t 0)),
-  forall (Pre1: ~(aux_1 = null) /\ 0 <= (offset aux_1) /\ (offset aux_1) <
-                (block_length aux_1)),
-  forall (result: Z),
-  forall (Post5: result = (acc intP aux_1)),
-  result = 1.
 Proof.
 tauto.
 Qed.
@@ -243,52 +118,191 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "all.why", characters 2622-2630 *)
-Lemma t2_po_1 : 
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 34-83 *)
+Lemma f1_impl_po_1 : 
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  x0 = 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 121-197 *)
+Lemma f2_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  x0 = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 235-311 *)
+Lemma f3_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  x0 = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 453-461 *)
+Lemma f4_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (caduceus: Z),
+  forall (Post2: caduceus = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (caduceus + 1)),
+  x0 = 1 /\ caduceus = 0.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 621-623 *)
+Lemma f5_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  x0 = 1 /\ x0 = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 706-782 *)
+Lemma f6_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 1),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 2)),
+  x0 = 3.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 870-916 *)
+Lemma f7a_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (caduceus_1: Z),
+  forall (Post1: caduceus_1 = x),
+  forall (result: bool),
+  forall (Post5: (if result then caduceus_1 = 0 else caduceus_1 <> 0)),
+  (if result then 1 = 1 else 2 = 1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 1041-1087 *)
+Lemma f7b_impl_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x <> 0),
+  forall (caduceus_1: Z),
+  forall (Post1: caduceus_1 = x),
+  forall (result: bool),
+  forall (Post5: (if result then caduceus_1 = 0 else caduceus_1 <> 0)),
+  (if result then 1 = 2 else 2 = 2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 1272-1318 *)
+Lemma t1_impl_po_1 : 
+  forall (alloc: alloc),
+  forall (intP: ((memory) Z)),
+  forall (t: pointer),
+  forall (Pre3: (valid_index alloc t 0) /\ (acc intP (shift t 0)) = 1),
+  forall (caduceus_1: pointer),
+  forall (Post1: caduceus_1 = t),
+  forall (result: pointer),
+  forall (Post4: result = (shift caduceus_1 0)),
+  (forall (result0:Z), (result0 = (acc intP result) -> result0 = 1)) /\
+  (valid alloc result).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/all.why", characters 1759-1767 *)
+Lemma t2_impl_po_1 : 
+  forall (alloc: alloc),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre3: ((valid_index t 0) /\ x = 0) /\ (acc intP (shift t 0)) = 1),
+  forall (Pre3: ((valid_index alloc t 0) /\ x = 0) /\
+                (acc intP (shift t 0)) = 1),
+  forall (caduceus_1: pointer),
+  forall (Post3: caduceus_1 = t),
   forall (caduceus: Z),
   forall (Post2: caduceus = x),
   forall (x0: Z),
   forall (Post1: x0 = (caduceus + 1)),
   (forall (result:pointer),
-   (result = (shift t caduceus) ->
+   (result = (shift caduceus_1 caduceus) ->
     (forall (result0:Z), (result0 = (acc intP result) -> result0 = 1)) /\
-    ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-    (block_length result))).
+    (valid alloc result))).
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 2876-2878 *)
-Lemma t3_po_1 : 
+(* Why obligation from file "why/all.why", characters 2144-2146 *)
+Lemma t3_impl_po_1 : 
+  forall (alloc: alloc),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre3: ((valid_index t 1) /\ x = 0) /\ (acc intP (shift t 1)) = 1),
+  forall (Pre3: ((valid_index alloc t 1) /\ x = 0) /\
+                (acc intP (shift t 1)) = 1),
+  forall (caduceus_1: pointer),
+  forall (Post2: caduceus_1 = t),
   forall (x0: Z),
   forall (Post1: x0 = (x + 1)),
   (forall (result:pointer),
-   (result = (shift t x0) ->
+   (result = (shift caduceus_1 x0) ->
     (forall (result0:Z), (result0 = (acc intP result) -> result0 = 1)) /\
-    ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-    (block_length result))).
+    (valid alloc result))).
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "all.why", characters 3045-3090 *)
-Lemma t4_po_1 : 
+(* Why obligation from file "why/all.why", characters 2385-2432 *)
+Lemma t4_impl_po_1 : 
+  forall (alloc: alloc),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre6: ((valid_index t 2) /\ x = 2) /\ (acc intP (shift t 2)) = 3),
-  forall (caduceus3: pointer),
-  forall (Post1: caduceus3 = t),
+  forall (Pre6: ((valid_index alloc t 2) /\ x = 2) /\
+                (acc intP (shift t 2)) = 3),
+  forall (caduceus_1: pointer),
+  forall (Post1: caduceus_1 = t),
   forall (result: pointer),
-  forall (Post5: result = (shift caduceus3 x)),
+  forall (Post5: result = (shift caduceus_1 x)),
   (forall (result0:Z),
    (result0 = (acc intP result) ->
     (forall (result1:Z),
@@ -298,11 +312,10 @@ Lemma t4_po_1 :
         (forall (intP0:((memory) Z)),
          (intP0 = (upd intP result (result0 + result1)) -> x = 3 /\
           (acc intP0 (shift t 2)) = 5)) /\
-        ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-        (block_length result))))))) /\
-  ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-  (block_length result).
+        (valid alloc result))))))) /\
+  (valid alloc result).
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 

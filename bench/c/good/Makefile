@@ -21,7 +21,7 @@ coq/%_why.v coq/%_valid.v: why/%.why $(WHY)
 	$(WHY) -dir coq --valid --coq-v8 --coq-preamble "Require Export caduceus_spec_why." why/caduceus.why why/caduceus_spec.why $<
 
 simplify/%_why.sx: why/%.why $(WHY)
-	$(WHY) -dir simplify -V --simplify --no-simplify-prelude why/caduceus.why why/caduceus_spec.why $<
+	$(WHY) -dir simplify --simplify --no-simplify-prelude why/caduceus.why why/caduceus_spec.why $<
 
 coq/caduceus_why.v: why/caduceus.why $(WHY)
 	$(WHY) -dir coq --coq-v8 why/caduceus.why
@@ -73,6 +73,12 @@ type-all:
 	  $(CADUCEUS) -type-only $$f; \
 	done
 
+simplify-all:
+	export CADUCEUSLIB=../../../lib/why; \
+	for f in *.c; do \
+	  make why/`basename $$f .c`.why; \
+	  make -f `basename $$f .c`.makefile simplify; \
+	done
 include .depend
 
 depend .depend:

@@ -18,12 +18,13 @@ int f2(int *x) {
 int* r;
 
 
-#if 0
 /*@ requires \valid(r)
   @ ensures *r == 1 */
 int g() { 
   return f(r); 
 }
+
+void * malloc(int);
 
 /*@ ensures *r == 1 */
 int g2() { 
@@ -33,5 +34,4 @@ int g2() {
 
 /*@ ensures \result == 1 */
 int h() { int z = 0; return f(&z) + z; }
-#endif
 

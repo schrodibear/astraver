@@ -3,8 +3,24 @@
 
 Require Import caduceus_spec_why.
 
-(* Why obligation from file "why/continue.why", characters 96-140 *)
-Lemma f1_po_1 : 
+Proof.
+destruct result0; intuition.
+Qed.
+
+Proof.
+intuition.
+Qed.
+
+Proof.
+destruct result1; intuition.
+Qed.
+
+Proof.
+intuition.
+Qed.
+
+(* Why obligation from file "why/continue.why", characters 101-147 *)
+Lemma f1_impl_po_1 : 
   forall (n: Z),
   forall (Post5: n = 10),
   forall (Variant1: Z),
@@ -12,10 +28,10 @@ Lemma f1_po_1 :
   forall (Pre3: Variant1 = n1),
   forall (Pre2: 0 <= n1),
   forall (Test2: true = true),
-  forall (caduceus2: Z),
-  forall (Post1: caduceus2 = n1),
+  forall (caduceus_2: Z),
+  forall (Post1: caduceus_2 = n1),
   forall (result0: bool),
-  forall (Post16: (if result0 then caduceus2 > 0 else caduceus2 <= 0)),
+  forall (Post16: (if result0 then caduceus_2 > 0 else caduceus_2 <= 0)),
   (if result0
    then (forall (result:Z),
          (result = n1 ->
@@ -24,20 +40,22 @@ Lemma f1_po_1 :
             (forall (n:Z), (n = (n1 - 1) -> 0 <= n /\ (Zwf 0 n n1)))))))
    else n1 = 0).
 Proof.
-destruct result0; intuition.
-Qed.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/continue.why", characters 160-172 *)
-Lemma f1_po_2 : 
+(* Why obligation from file "why/continue.why", characters 167-179 *)
+Lemma f1_impl_po_2 : 
   forall (n: Z),
   forall (Post5: n = 10),
   0 <= n.
 Proof.
 intuition.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/continue.why", characters 564-609 *)
-Lemma f2_po_1 : 
+(* Why obligation from file "why/continue.why", characters 542-589 *)
+Lemma f2_impl_po_1 : 
   forall (i: Z),
   forall (Post6: i = 17),
   forall (i1: Z),
@@ -47,10 +65,10 @@ Lemma f2_po_1 :
   forall (Pre3: Variant1 = (10 - i2)),
   forall (Pre2: i2 <= 10),
   forall (Test2: true = true),
-  forall (caduceus4: Z),
-  forall (Post2: caduceus4 = i2),
+  forall (caduceus_2: Z),
+  forall (Post2: caduceus_2 = i2),
   forall (result1: bool),
-  forall (Post17: (if result1 then caduceus4 < 10 else caduceus4 >= 10)),
+  forall (Post17: (if result1 then caduceus_2 < 10 else caduceus_2 >= 10)),
   (if result1
    then (forall (result:Z),
          (result = i2 ->
@@ -61,11 +79,12 @@ Lemma f2_po_1 :
              (i = (i2 + 1) -> i <= 10 /\ (Zwf 0 (10 - i) (10 - i2))))))))
    else i2 = 10).
 Proof.
-destruct result1; intuition.
-Qed.
+intuition.
+(* FILL PROOF HERE *)
+Save.
 
-(* Why obligation from file "why/continue.why", characters 628-641 *)
-Lemma f2_po_2 : 
+(* Why obligation from file "why/continue.why", characters 608-621 *)
+Lemma f2_impl_po_2 : 
   forall (i: Z),
   forall (Post6: i = 17),
   forall (i1: Z),
@@ -73,5 +92,6 @@ Lemma f2_po_2 :
   i1 <= 10.
 Proof.
 intuition.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 

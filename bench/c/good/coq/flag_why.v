@@ -3,8 +3,17 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/flag.why", characters 296-341 *)
-Lemma flag_po_1 : 
+Proof.
+intuition.
+destruct result0; intuition.
+Save.
+
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/flag.why", characters 301-348 *)
+Lemma flag_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (BLUE: Z),
@@ -36,10 +45,10 @@ Lemma flag_po_1 :
                  (isMonochrome alloc intP0 t b1 i1 WHITE)) /\
                  (isMonochrome alloc intP0 t r1 n RED)),
   forall (Test2: true = true),
-  forall (caduceus6: Z),
-  forall (Post1: caduceus6 = i1),
+  forall (caduceus_6: Z),
+  forall (Post1: caduceus_6 = i1),
   forall (result0: bool),
-  forall (Post26: (if result0 then caduceus6 < r1 else caduceus6 >= r1)),
+  forall (Post26: (if result0 then caduceus_6 < r1 else caduceus_6 >= r1)),
   (if result0
    then (forall (result:pointer),
          (result = (shift t i1) ->
@@ -55,10 +64,10 @@ Lemma flag_po_1 :
                     (forall (i:Z),
                      (i = (result0 + 1) ->
                       (forall (intP:((memory) Z)),
-                       (((acc intP (shift t result)) = (acc intP0
-                                                        (shift t result0)) /\
-                        (acc intP (shift t result0)) = (acc intP0
-                                                        (shift t result))) /\
+                       (((acc intP (shift t result)) =
+                        (acc intP0 (shift t result0)) /\
+                        (acc intP (shift t result0)) =
+                        (acc intP0 (shift t result))) /\
                         (assigns alloc intP0 intP
                          (union_loc (pointer_loc (shift t result0))
                           (pointer_loc (shift t result)))) ->
@@ -99,10 +108,10 @@ Lemma flag_po_1 :
                           (forall (r:Z),
                            (r = (r1 - 1) ->
                             (forall (intP:((memory) Z)),
-                             (((acc intP (shift t r)) = (acc intP0
-                                                         (shift t i1)) /\
-                              (acc intP (shift t i1)) = (acc intP0
-                                                         (shift t r))) /\
+                             (((acc intP (shift t r)) =
+                              (acc intP0 (shift t i1)) /\
+                              (acc intP (shift t i1)) =
+                              (acc intP0 (shift t r))) /\
                               (assigns alloc intP0 intP
                                (union_loc (pointer_loc (shift t i1))
                                 (pointer_loc (shift t r)))) ->
@@ -137,11 +146,11 @@ Lemma flag_po_1 :
    (assigns alloc intP intP0 (range_loc t 0 n))).
 Proof.
 intuition.
-destruct result0; intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/flag.why", characters 365-776 *)
-Lemma flag_po_2 : 
+(* Why obligation from file "why/flag.why", characters 372-783 *)
+Lemma flag_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (BLUE: Z),
@@ -166,6 +175,7 @@ Lemma flag_po_2 :
   (isMonochrome alloc intP t b i WHITE)) /\
   (isMonochrome alloc intP t r n RED).
 Proof.
+intuition.
 (* FILL PROOF HERE *)
 Save.
 

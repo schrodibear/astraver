@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.55 2004-03-24 09:58:09 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.56 2004-03-24 14:25:13 filliatr Exp $ i*)
 
 
 open Format
@@ -360,7 +360,7 @@ let rec interp_expr e =
     | TEunary (Utilde, e) ->
 	unsupported "~ operator"
     | TEunary (Uamp, e) ->
-	unsupported "& operator"
+	interp_address e
     | TEcall(e,args) -> 
 	begin
 	  match e.texpr_node with
@@ -469,6 +469,24 @@ and interp_lvalue e =
 	HeapRef(f,interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
+
+and interp_address e = match e.texpr_node with
+  | TEvar v -> 
+      begin match e.texpr_type.ctype_node with
+	| CTstruct _ | CTunion _ -> Var v.var_name
+	| _ -> unsupported "& operator"
+      end
+  | TEunary (Ustar, e1) ->
+      interp_expr e1
+  | TEarrget (e1, e2) ->
+      build_complex_app (Var "shift_") [interp_expr e1; interp_expr e2]
+  | TEdot (e1, _)
+  | TEarrow (e1, _) ->
+      interp_expr e1
+  | TEcast (_, e1) ->
+      interp_address e1
+  | _ -> 
+      assert false (* not a left value *)
 
 and interp_statement_expr e =
   match e.texpr_node with

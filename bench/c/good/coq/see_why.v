@@ -3,36 +3,46 @@
 
 Require Import Why.
 
-(* Why obligation from file "good-c/see.c", characters 122-123 *)
-Lemma f_po_1 : 
+Proof.
+intuition.
+Qed.
+
+
+Proof.
+intuition.
+subst; ring.
+Qed.
+
+(* Why obligation from file "why/see.why", characters 89-91 *)
+Lemma f_impl_po_1 : 
   forall (b: Z),
   forall (b0: Z),
   forall (Post1: b0 = (1 - b)),
   b0 = b0 /\ b0 = (1 - b).
 Proof.
 intuition.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 
-
-(* Why obligation from file "good-c/see.c", characters 196-203 *)
-Lemma k_po_1 : 
+(* Why obligation from file "why/see.why", characters 738-770 *)
+Lemma k_impl_po_1 : 
   forall (b0: Z),
   forall (Post1: b0 = 1),
   forall (b3: Z),
-  forall (c_aux_1: Z),
-  forall (Post2: c_aux_1 = b3 /\ b3 = (1 - b0)),
+  forall (caduceus_2: Z),
+  forall (Post4: caduceus_2 = b3 /\ b3 = (1 - b0)),
   forall (b4: Z),
-  forall (c_aux_2: Z),
-  forall (Post4: c_aux_2 = b4 /\ b4 = (1 - b3)),
+  forall (aux_1: Z),
+  forall (Post6: aux_1 = b4 /\ b4 = (1 - b3)),
   (forall (result:Z),
    (forall (b:Z),
     (result = b /\ b = (1 - b4) ->
      (forall (result0:Z),
       (forall (b0:Z),
-       (result0 = b0 /\ b0 = (1 - b) -> (c_aux_1 + (1 - c_aux_2)) = 0 /\
+       (result0 = b0 /\ b0 = (1 - b) -> (caduceus_2 + (1 - aux_1)) = 0 /\
         ((1 - result) * result0) = 1)))))).
 Proof.
 intuition.
-subst; ring.
-Qed.
+(* FILL PROOF HERE *)
+Save.
 

@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.24 2004-03-24 09:58:09 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.25 2004-03-24 14:25:13 filliatr Exp $ i*)
 
 open Cast
 open Coptions
 open Clogic
+open Creport
 open Info
 open Format
 open Pp
@@ -32,21 +33,10 @@ let interp_type ctype =
   | CTarray(t,None) -> "pointer"      
   | CTarray(t,Some e) -> "pointer"
   | CTpointer(t) -> "pointer"      
+  | CTunion _
   | CTstruct _ -> "pointer"
   | CTvar x -> x (* must be a logic type *)
-  | _ -> assert false (* TODO *)
-(*
-  | tyn -> eprintf "%a@." Creport.print_type_node tyn; exit 1
-  | CTvar of string
-  | CTstruct_named of string
-  | CTstruct of string * 'expr field list
-  | CTunion_named of string
-  | CTunion of string * 'expr field list
-  | CTenum_named of string
-  | CTenum of string * (string * 'expr option) list
-  | CTfun of 'expr parameter list * 'expr ctype
-*)
-
+  | CTfun _ -> unsupported "first-class functions"
 
 let rec pointer_heap_var ty =
   match ty.ctype_node with
@@ -63,7 +53,7 @@ let rec pointer_heap_var ty =
 	let v,_ = pointer_heap_var ty in
 	(v ^ "P", "pointer")
     | CTstruct _ 
-    | CTunion _ -> assert false (* TODO *)
+    | CTunion _ -> assert false
     | CTfun _ -> assert false (* bad typing ! *)
 
 let memory_type t = ([t],"memory")
@@ -279,9 +269,9 @@ let rec expr e = match e.texpr_node with
   | TEunary (Ustar, e) ->
       reads_add_pointer_var e.texpr_type (expr e)
   | TEunary (Uamp, e) ->
-      assert false (*TODO*)
-  | TEunary ((Uplus | Uminus | Unot | Utilde | Ufloat_of_int | Uint_of_float),
-	     e) ->
+      address_expr e
+  | TEunary 
+      ((Uplus | Uminus | Unot | Utilde | Ufloat_of_int | Uint_of_float), e) ->
       expr e
   | TEincr (_, e) ->
       assign_expr e
@@ -296,6 +286,7 @@ let rec expr e = match e.texpr_node with
   | TEcast (_, e) | TEsizeof_expr e ->
       expr e
 
+(* effects for [e = ...] *)
 and assign_expr e = match e.texpr_node with
   | TEvar v -> 
       if v.var_is_static
@@ -310,6 +301,25 @@ and assign_expr e = match e.texpr_node with
       assigns_add_field_var f e.texpr_type (expr e1)
   | TEcast (_, e1) ->
       assign_expr e1
+  | _ -> 
+      assert false (* not a left value *)
+
+(* effects for [&e] *)
+and address_expr e = match e.texpr_node with
+  | TEvar v -> 
+      begin match e.texpr_type.ctype_node with
+	| CTstruct _ | CTunion _ -> ef_empty
+	| _ -> ef_empty (* unsupported "& operator" *)
+      end
+  | TEunary (Ustar, e1) ->
+      expr e1
+  | TEarrget (e1, e2) ->
+      ef_union (expr e1) (expr e2) 
+  | TEdot (e1, f)
+  | TEarrow (e1, f) ->
+      expr e1
+  | TEcast (_, e1) ->
+      address_expr e1
   | _ -> 
       assert false (* not a left value *)
 
@@ -349,7 +359,7 @@ and block (dl, sl) =
   let local_decl d = match d.node with
     | Tdecl (_, _, i) -> initializer_ i
     | Ttypedecl _ -> ef_empty
-    | _ -> assert false (* unsupported local declaration *)
+    | _ -> ef_empty (* unsupported local declaration *)
   in
   List.fold_left
     (fun ef s -> ef_union (statement s) ef)
