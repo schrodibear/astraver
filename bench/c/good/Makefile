@@ -1,7 +1,7 @@
 
 CADUCEUS=../../../bin/caduceus.opt
 
-%_why.v %_valid.v: %.c $(WHY)
+%.why %_valid.v: %.c $(CADUCEUS)
 	$(CADUCEUS) $<
 
 WHY=../../../bin/why.opt
