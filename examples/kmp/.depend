@@ -1,0 +1,4 @@
+Next.vo: Next.v Match.vo
+Match.vo: Match.v
+Lex.vo: Lex.v
+KMP.vo: KMP.v Match.vo Next.vo Lex.vo
