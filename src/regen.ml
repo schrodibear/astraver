@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.9 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: regen.ml,v 1.10 2004-03-17 09:50:11 marche Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -142,6 +142,7 @@ module Make(X : S) = struct
   let output_file margin f =
     if Sys.file_exists f then begin
       let fbak = f ^ ".bak" in
+      if Sys.file_exists fbak then Sys.remove fbak;
       Sys.rename f fbak; 
       if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
       print_in_file margin (regen fbak) f
