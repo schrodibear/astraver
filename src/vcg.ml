@@ -117,7 +117,7 @@ let discharge_methods ctx concl =
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in
-  eprintf "obligation %a discharged at %d-%d@\n" print_predicate concl (fst loc) (snd loc);
+  (* eprintf "obligation %a discharged at %d-%d@\n" print_predicate concl (fst loc) (snd loc); *)
   if_verbose eprintf "one obligation trivially discharged@.";
   pr
 
@@ -170,7 +170,7 @@ let vcg base t =
   let po = ref [] in
   let cpt = ref 0 in
   let push loc ctx concl = 
-    eprintf "obligation at %d-%d@\n" (fst loc) (snd loc);
+    (* eprintf "obligation at %d-%d@\n" (fst loc) (snd loc); *)
     incr cpt;
     let id = base ^ "_po_" ^ string_of_int !cpt in
     let ctx' = clean_sequent (List.rev ctx) concl in

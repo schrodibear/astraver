@@ -370,7 +370,7 @@ direct_declarator
         | direct_declarator LSQUARE constant_expression RSQUARE 
 	    { uns() }
         | direct_declarator LSQUARE RSQUARE 
-	    { uns() }
+	    { match $1 with CDvar (id,_) -> CDarr (id, None) | _ -> uns () }
         | direct_declarator LPAR parameter_type_list RPAR annot 
 	    { match $1 with CDvar (id,_) -> CDfun (id, $3, $5) | _ -> uns () }
         | direct_declarator LPAR identifier_list RPAR 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.51 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.52 2002-12-10 15:03:14 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -89,6 +89,7 @@ val for_name    : unit -> Ident.t
 val label_name  : unit -> string
 val wf_name     : unit -> Ident.t
 val fresh_var   : unit -> Ident.t
+val fresh_c_var   : unit -> Ident.t
 
 val post_name_from : Ident.name -> Ident.t
 

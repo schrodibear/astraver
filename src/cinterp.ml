@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.20 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.21 2002-12-10 15:03:13 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -131,10 +131,11 @@ let ml_refget l id = mk_expr l (Srefget id)
 let ml_refset l id e = mk_expr l (Srefset (id, e))
 let ml_if l e1 e2 e3 = mk_expr l (Sif (e1, e2, e3))
 let ml_let_tmp l e1 k2 = 
-  let tmp = fresh_var () in 
+  let tmp = fresh_c_var () in 
   let e2,r = k2 tmp in
   mk_expr l (Sletin (tmp, e1, e2)), r
 let ml_arrget l id e = mk_expr l (Sarrget (true, id, e))
+let ml_arrset l id e1 e2 = mk_expr l (Sarrset (true, id, e1, e2))
 let ml_unop l op e = mk_expr l (Sapp (mk_expr l (Svar op), Sterm e))
 let ml_letref l x e1 e2 = mk_expr l (Sletref (x, e1, e2))
 let ml_app l f x = mk_expr l (Sapp (f, Sterm x))
@@ -152,7 +153,7 @@ let ml_raise_break l v = ml_raise l break_exception None v
 let ml_raise_continue l v = ml_raise l continue_exception None v
 
 let ml_try_with_Ex l e1 exn k2 =
-  let tmp = fresh_var () in
+  let tmp = fresh_c_var () in
   mk_expr l (Stry (e1, [(exn, Some tmp), k2 tmp]))
 let ml_try_with_E l e1 exn e2 = mk_expr l (Stry (e1, [(exn, None), e2]))
 
@@ -273,25 +274,52 @@ let coerce l et e t = match et with
   | _ ->
       e, t
 
-(*s Purity of C expressions (to give a natural interpretation) *)
+(*s Purity of C expressions (to give a natural interpretation).
 
-let rec is_pure = function
+    When [no_effect e] is true, it means that we know [e] has no side effect.
+    Beware: it does not mean that [e] can be left in place without
+    enforcing evaluation order; e.g.
+    [f(x, x++)] cannot be translated to [f(!x, begin x := !x+1; !x end)] 
+
+    [is_pure] really means that [e] is a substitutable expression *)
+
+let rec no_effect = function
   | CEvar _ | CEconst _  -> true
-  | CEbinary (_, e1, _, e2) -> is_pure e1 && is_pure e2
-  | CEunary (_, (Uplus | Uminus | Not), e) -> is_pure e
-  | CEcond (_, e1, e2, e3) -> is_pure e1 && is_pure e2 && is_pure e3
+  | CEbinary (_, e1, _, e2) -> no_effect e1 && no_effect e2
+  | CEunary (_, (Uplus | Uminus | Not), e) -> no_effect e
+  | CEcond (_, e1, e2, e3) -> no_effect e1 && no_effect e2 && no_effect e3
   | _ -> false
+
+let rec is_pure cenv = function
+  | CEvar (l, id) ->
+      (match get_type l cenv id with
+	 | CTpure _, false -> true
+	 | _ -> false)
+  | CEconst _  -> true
+  | CEbinary (_, e1, _, e2) -> 
+      is_pure cenv e1 && is_pure cenv e2
+  | CEunary (_, (Uplus | Uminus | Not), e) -> 
+      is_pure cenv e
+  | CEcond (_, e1, e2, e3) -> 
+      is_pure cenv e1 && is_pure cenv e2 && is_pure cenv e3
+  | _ -> 
+      false
 
 (*s Left values *)
 
 type lvalue = 
   | LVid of Loc.t * Ident.t
+  | LVarr of Loc.t * Ident.t * cexpr
 
 let interp_lvalue cenv = function
   | CEvar (l, id) ->
       (match get_type l cenv id with
-	 | ct, true -> LVid (l, id), ct
+	 | CTpure _ as ct, true -> LVid (l, id), ct
 	 | _ -> raise_located l (NotAReference id))
+  | CEarrget (l, CEvar(l', id), e) ->
+      (match get_type l' cenv id with
+	 | CTarray ct, _ -> LVarr (l, id, e), ct
+	 | _ -> raise_located l' (NotAnArray id))
   | e ->
       raise_located (loc_of_expr e) (AnyMessage "not a left-value")
 
@@ -311,18 +339,13 @@ let rec interp_expr cenv et e =
 	     | ct, true -> ml_refget l id, ct
 	     | ct, _ -> ml_var l id , ct)
       | CEassign (l, lv, op, e) -> 
-	  (match interp_lvalue cenv lv with
-	     | LVid (_, id), ct -> 
-		 let mt = interp_expr cenv (Some ct) e in
-		 let getid = ml_refget l id in
-		 let m',t = match op with
-		   | Aequal -> mt
-		   | _ -> interp_binop l (interp_assign_op op) (getid,ct) mt
-		 in
-		 if et = Some void then
-		   ml_refset l id m', void
-		 else
-		   mk_seq l (ml_refset l id m') getid, t)
+	  let lv, ct = interp_lvalue cenv lv in
+	  let mt = interp_expr cenv (Some ct) e in
+	  let f v = match op with
+	    | Aequal -> mt
+	    | _ -> interp_binop l (interp_assign_op op) (v, ct) mt
+	  in
+	  interp_assignment l cenv et lv f true
       | CEseq (l, e1, e2) -> 
 	  let m1,t1 = interp_expr cenv (Some void) e1 in
 	  let m2,t2 = interp_expr cenv et e2 in
@@ -336,44 +359,30 @@ let rec interp_expr cenv et e =
       | CEcall (l, e, el) ->
 	  interp_call l cenv e el
       | CEbinary (l, e1, (Plus | Minus | Mult | Div | Mod as op), e2) ->
-	  let m1,t1 as m1t1 = interp_expr cenv None e1 in
-	  let m2t2 = interp_expr cenv None e2 in
-	  if is_pure e1 then
-	    interp_binop l op m1t1 m2t2
+	  if no_effect e1 && no_effect e2 then
+	    let m1 = interp_expr cenv None e1 in
+	    let m2 = interp_expr cenv None e2 in
+	    interp_binop l op m1 m2
 	  else
-	    (* let tmp = e1 in tmp op e2 *)
-	    ml_let_tmp l m1 (fun x -> interp_binop l op (ml_var l x, t1) m2t2)
+	    bind l cenv None e1
+	      (fun m1 -> bind l cenv None e2
+		   (fun m2 -> interp_binop l op m1 m2))
       | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq | And | Or), e2) as e ->
 	  int_of_bool l (interp_boolean cenv e), c_int
       | CEbinary (l, e1, (Bw_and | Bw_or | Bw_xor as op), e2) ->
 	  assert false
-      | CEunary (l, (Prefix_inc | Prefix_dec as op), lv) ->
-	  (match interp_lvalue cenv lv with
-	     | LVid (_, id), ct -> 
-		 let getid = ml_refget l id in
-		 let id_1,_ = 
-		   interp_binop l (interp_unary_op op) (getid, ct) 
-		     (ml_const l (ConstInt 1), c_int)
-		 in
-		 let incrid = ml_refset l id id_1 in (* id := !id +- 1 *)
-		 if et = Some void then 
-		   incrid, void
-		 else 
-		   mk_seq l incrid getid, ct)
-      | CEunary (l, (Postfix_inc | Postfix_dec as op), lv) ->
-	  (match interp_lvalue cenv lv with
-	     | LVid (_, id), ct -> 
-		 let getid = ml_refget l id in
-		 let id_1,_ = 
-		   interp_binop l (interp_unary_op op) (getid, ct) 
-		     (ml_const l (ConstInt 1), c_int)
-		 in
-		 let incrid = ml_refset l id id_1 in (* id := !id +- 1 *)
-		 if et = Some void then 
-		   incrid, void
-		 else 
-		   ml_let_tmp l getid 
-		     (fun x -> mk_seq l incrid (ml_var l x), ct))
+      | CEunary (l, (Prefix_inc | Prefix_dec | 
+		     Postfix_inc | Postfix_dec as op), lv) ->
+	  let lv,ct = interp_lvalue cenv lv in
+	  let f v = 
+	    interp_binop l (interp_unary_op op) (v, ct) 
+	      (ml_const l (ConstInt 1), c_int)
+	  in
+	  let after = match op with 
+	    | Prefix_inc | Prefix_dec -> true 
+	    | _ -> false 
+	  in
+	  interp_assignment l cenv et lv f after
       | CEunary (l, Not, e) ->
 	  ml_if l (interp_boolean cenv e) (c_false l) (c_true l), c_int
       | CEunary (l, Uplus, e) ->
@@ -401,6 +410,69 @@ let rec interp_expr cenv et e =
     in
     coerce ml.ploc et ml ct
 
+(*s [interp_assignment lv f] translates the assignement [lv <- f(lv)];
+    [after] indicates if the value to return is the value of [lv] after 
+    the assignment *)
+
+and interp_assignment l cenv et lv f after =
+  if et = Some void then
+    (* v <- f(v) *)
+    match lv with
+     | LVid (_, id) -> 
+	 ml_refset l id (fst (f (ml_refget l id))), void
+     | LVarr (l', id, e) when is_pure cenv e ->
+	 let m,_ = interp_expr cenv (Some c_int) e in
+	 ml_arrset l id m (fst (f (ml_arrget l' id m))), void
+     | LVarr (l', id, e) ->
+	 let m,_ = interp_expr cenv (Some c_int) e in
+	 ml_let_tmp l m
+	   (fun v -> 
+	      let v = ml_var l v in
+	      ml_arrset l id v (fst (f (ml_arrget l' id v))), void)
+  else if after then
+    (* v <- f(v); v *)
+    match lv with
+     | LVid (_, id) -> 
+	 let getit = ml_refget l id in
+	 let m,t = f getit in
+	 mk_seq l (ml_refset l id m) getit, t
+     | LVarr (l', id, e) when is_pure cenv e ->
+	 let mi,_ = interp_expr cenv (Some c_int) e in
+	 let getit = ml_arrget l' id mi in
+	 let m,t = f getit in
+	 mk_seq l (ml_arrset l id mi m) getit, t
+     | LVarr (l', id, e) ->
+	 let mi,_ = interp_expr cenv (Some c_int) e in
+	 ml_let_tmp l mi
+	   (fun v -> 
+	      let v = ml_var l v in
+	      let getit = ml_arrget l' id v in
+	      let m,t = f getit in
+	      mk_seq l (ml_arrset l id v m) getit, t)
+  else 
+    (* let v0 = v in v <- f(v0); v0 *)
+    match lv with
+      | LVid (_, id) -> 
+	  ml_let_tmp l (ml_refget l id)
+	    (fun v0 -> 
+	       let m,t = f (ml_refget l id) in
+	       mk_seq l (ml_refset l id m) (ml_var l v0), t)
+      | LVarr (l', id, e) when is_pure cenv e ->
+	  let mi,_ = interp_expr cenv (Some c_int) e in
+	  ml_let_tmp l (ml_arrget l' id mi)
+	    (fun v0 ->
+	       let m,t = f (ml_arrget l' id mi) in
+	       mk_seq l (ml_arrset l id mi m) (ml_var l v0), t)
+      | LVarr (l', id, e) ->
+	  let mi,_ = interp_expr cenv (Some c_int) e in
+	  ml_let_tmp l mi
+	    (fun vi -> 
+	       let vi = ml_var l vi in
+	       ml_let_tmp l (ml_arrget l' id vi)
+		 (fun v0 ->
+		    let m,t = f (ml_arrget l' id vi) in
+		    mk_seq l (ml_arrset l id vi m) (ml_var l v0), t))
+
 (*s [interp_call] translates a function call *)
 
 and interp_call l cenv e el = 
@@ -419,22 +491,33 @@ and interp_call l cenv e el =
     | _, [] ->
 	raise_located l TooManyArguments
     | a :: al, at :: pt ->
-	let m,_ = interp_expr cenv (Some at) a in
-	if is_pure a then
-	  interp_args (m :: args) (al, pt)
-	else
-	  ml_let_tmp l m (fun x -> interp_args (ml_var l x :: args) (al, pt))
+	bind l cenv (Some at) a
+	  (fun (m,_) -> interp_args (m :: args) (al, pt))
   in
   interp_args [] (el, pt)
 
- 
+(*s Monadic operator to enforce evaluation order when needed *)
+
+and bind l cenv et e f =
+  let m,t as mt = interp_expr cenv et e in
+  if is_pure cenv e then
+    f mt
+  else
+    ml_let_tmp l m (fun x -> f (ml_var l x, t))
+    
 (*s [interp_boolean] returns an ML expression of type [bool] *)
 
 and interp_boolean cenv = function
   | CEbinary (l, e1, (Gt | Lt | Ge | Le | Eq | Neq as op), e2) ->
-      let m1t1 = interp_expr cenv None e1 in
-      let m2t2 = interp_expr cenv None e2 in
-      let e,_ = interp_binop l op m1t1 m2t2 in
+      let e,_ = 
+	if no_effect e1 && no_effect e2 then
+	  let m1 = interp_expr cenv None e1 in
+	  let m2 = interp_expr cenv None e2 in
+	  interp_binop l op m1 m2
+	else
+	  bind l cenv None e1
+	    (fun m1 -> bind l cenv None e2 (fun m2 -> interp_binop l op m1 m2))
+      in
       e
   | CEbinary (l, e1, And, e2) ->
       ml_if l (interp_boolean cenv e1) (interp_boolean cenv e2) (ml_false l)
@@ -631,14 +714,15 @@ let interp_decl cenv = function
   | Ctypedecl (l, CDvar (id, _), v) -> 
       [ Parameter (l, [id], PVref (PVpure v)) ],
       Idmap.add id (CTpure v, true) cenv
+  | Ctypedecl (l, CDarr (id, _), v) ->
+      [ Parameter (l, [id], PVarray (PVpure v)) ],
+      Idmap.add id (CTarray (CTpure v), true) cenv
   | Ctypedecl (l, CDfun (id, bl, an), v) -> 
       let bl = if bl = [] then [PTunit, anonymous] else bl in
       let k = interp_c_spec v an in
       let blp = List.map (fun (v, id) -> (id, BindType (PVpure v))) bl in
       [ Parameter (l, [id], PVarrow (blp, k)) ],
       Idmap.add id (interp_fun_type bl v) cenv
-  | Ctypedecl _ -> 
-      assert false
   | Cfundef (l, id, bl, v, bs) ->
       let bl = if bl = [] then [PTunit, anonymous] else bl in
       let blv = interp_fun_type bl v in

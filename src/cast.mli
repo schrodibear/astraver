@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.11 2002-12-02 15:17:20 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.12 2002-12-10 15:03:13 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -54,7 +54,7 @@ type c_initializer = cexpr option
 
 type declarator =
   | CDvar of Ident.t * c_initializer
-  | CDarr of Ident.t * constant_expression
+  | CDarr of Ident.t * constant_expression option
   | CDfun of Ident.t * parameters * annot option
 
 type cstatement = 

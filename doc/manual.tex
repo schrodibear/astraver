@@ -1154,6 +1154,7 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
 
   \nt{c\_declaration}
     & $::=$ & \nt{c\_type} \nt{identifier} \te{;} \\
+      & $|$ & \nt{c\_type} \te{[]} \nt{identifier} \te{;} \\
       & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               $[$ \nt{c\_spec} $]$ \te{;} \\

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.79 2002-12-06 10:11:19 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.80 2002-12-10 15:03:13 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -171,6 +171,8 @@ let print_predicate fmt p =
     | Ptrue -> 
 	fprintf fmt "True"
     | Pfalse -> 
+	fprintf fmt "False"
+    | Pvar id when id == default_post ->
 	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id

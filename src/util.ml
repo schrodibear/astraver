@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.68 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.69 2002-12-10 15:03:14 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -583,8 +583,9 @@ let rec print_ptree fmt p = match p.pdesc with
   | Sletref (id, e1, e2) -> 
       fprintf fmt "@[let %a = ref %a in@ %a@]" 
 	Ident.print id print_ptree e1 print_ptree e2
-  | Sletin _ ->
-      fprintf fmt "<Sletin>"
+  | Sletin (id, e1, e2) ->
+      fprintf fmt "@[let %a = %a in@ %a@]"
+	Ident.print id print_ptree e1 print_ptree e2
   | Srec _ ->
       fprintf fmt "<Srec>"
   | Sraise (x, None, _) -> 

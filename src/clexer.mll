@@ -119,7 +119,7 @@ rule token = parse
   | "="                     { EQUAL }
   | "("                     { LPAR }
   | ")"                     { RPAR }
-  | ("["|"<:")              { RSQUARE }
+  | ("["|"<:")              { LSQUARE }
   | ("]"|":>")              { RSQUARE }
   | "."                     { DOT }
   | "&"                     { AMP }

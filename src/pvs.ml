@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.29 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.30 2002-12-10 15:03:14 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -118,6 +118,8 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " AND@ "; print3 b
     | p -> print3 p
   and print3 = function
+    | Pvar id when id == default_post ->
+	fprintf fmt "False"
     | Pvar id -> 
 	Ident.print fmt id
     | Papp (id, [t]) when id == well_founded ->
