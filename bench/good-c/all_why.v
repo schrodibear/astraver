@@ -4,171 +4,230 @@
 Require Import Why.
 
 
-(* Why obligation from file , characters 117-120 *)
-Lemma f2_po_1 : forall (x:Z) (Pre1:x = 0%Z), (x + 1)%Z = 1%Z.
+(* Why obligation from file "good-c/all.c", characters 117-120 *)
+Lemma f2_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  (x + 1) = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 163-166 *)
-Lemma f3_po_1 : forall (x:Z) (Pre1:x = 0%Z), (x + 1)%Z = 1%Z.
+(* Why obligation from file "good-c/all.c", characters 163-166 *)
+Lemma f3_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  (x + 1) = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 213-216 *)
-Lemma f4_po_1 :
- forall (x:Z) (Pre1:x = 0%Z) (c_aux_1:Z) (Post2:c_aux_1 = x) (x0:Z)
-   (Post1:x0 = (x + 1)%Z), x0 = 1%Z /\ c_aux_1 = 0%Z.
+(* Why obligation from file "good-c/all.c", characters 213-216 *)
+Lemma f4_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (c_aux_1: Z),
+  forall (Post2: c_aux_1 = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  x0 = 1 /\ c_aux_1 = 0.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 273-276 *)
-Lemma f5_po_1 :
- forall (x:Z) (Pre1:x = 0%Z) (x0:Z) (Post1:x0 = (x + 1)%Z),
-   x0 = 1%Z /\ x0 = 1%Z.
+(* Why obligation from file "good-c/all.c", characters 273-276 *)
+Lemma f5_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  x0 = 1 /\ x0 = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 329-335 *)
-Lemma f6_po_1 : forall (x:Z) (Pre1:x = 1%Z), (x + 2)%Z = 3%Z.
+(* Why obligation from file "good-c/all.c", characters 329-335 *)
+Lemma f6_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 1),
+  (x + 2) = 3.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 396-397 *)
-Lemma f7a_po_1 :
- forall (x:Z) (Pre1:x = 0%Z) (Test1:x <> 0%Z), 2%Z = 1%Z.
+(* Why obligation from file "good-c/all.c", characters 396-397 *)
+Lemma f7a_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 0),
+  forall (Test1: x <> 0),
+  2 = 1.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 454-455 *)
-Lemma f7b_po_1 :
- forall (x:Z) (Pre1:x <> 0%Z) (Test2:x = 0%Z), 1%Z = 2%Z.
+(* Why obligation from file "good-c/all.c", characters 454-455 *)
+Lemma f7b_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x <> 0),
+  forall (Test2: x = 0),
+  1 = 2.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 544-548 *)
-Lemma t1_po_1 :
- forall (t:array Z) (Pre2:array_length t = 10%Z /\ access t 0 = 1%Z),
-   (0 <= 0)%Z /\ (0 < array_length t)%Z.
+(* Why obligation from file "good-c/all.c", characters 544-548 *)
+Lemma t1_po_1 : 
+  forall (t: (array Z)),
+  forall (Pre2: (array_length t) = 10 /\ (access t 0) = 1),
+  0 <= 0 /\ 0 < (array_length t).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 544-548 *)
-Lemma t1_po_2 :
- forall (t:array Z) (Pre2:array_length t = 10%Z /\ access t 0 = 1%Z)
-   (Pre1:(0 <= 0)%Z /\ (0 < array_length t)%Z), access t 0 = 1%Z.
+(* Why obligation from file "good-c/all.c", characters 544-548 *)
+Lemma t1_po_2 : 
+  forall (t: (array Z)),
+  forall (Pre2: (array_length t) = 10 /\ (access t 0) = 1),
+  forall (Pre1: 0 <= 0 /\ 0 < (array_length t)),
+  (access t 0) = 1.
 Proof.
 tauto.
 Qed.
 
-(* Why obligation from file , characters 635-638 *)
-Lemma t2_po_1 :
- forall (t:array Z) (x:Z)
-   (Pre2:array_length t = 10%Z /\ x = 0%Z /\ access t 0 = 1%Z)
-   (c_aux_2:Z) (Post2:c_aux_2 = x) (x0:Z) (Post1:x0 = (x + 1)%Z),
-   access t c_aux_2 = 1%Z /\
-   (0 <= c_aux_2)%Z /\ (c_aux_2 < array_length t)%Z.
+(* Why obligation from file "good-c/all.c", characters 635-638 *)
+Lemma t2_po_1 : 
+  forall (t: (array Z)),
+  forall (x: Z),
+  forall (Pre2: (array_length t) = 10 /\ x = 0 /\ (access t 0) = 1),
+  forall (c_aux_2: Z),
+  forall (Post2: c_aux_2 = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (access t c_aux_2) = 1 /\ 0 <= c_aux_2 /\ c_aux_2 < (array_length t).
 Proof.
 intuition.
 subst c_aux_2 x; auto.
 Qed.
 
 
-(* Why obligation from file , characters 726-729 *)
-Lemma t3_po_1 :
- forall (t:array Z) (x:Z)
-   (Pre2:array_length t = 10%Z /\ x = 0%Z /\ access t 1 = 1%Z) 
-   (x0:Z) (Post1:x0 = (x + 1)%Z),
-   access t x0 = 1%Z /\ (0 <= x0)%Z /\ (x0 < array_length t)%Z.
+(* Why obligation from file "good-c/all.c", characters 726-729 *)
+Lemma t3_po_1 : 
+  forall (t: (array Z)),
+  forall (x: Z),
+  forall (Pre2: (array_length t) = 10 /\ x = 0 /\ (access t 1) = 1),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (access t x0) = 1 /\ 0 <= x0 /\ x0 < (array_length t).
 Proof.
 intuition.
 replace x0 with 1%Z; omega.
 Qed.
 
 
-(* Why obligation from file , characters 813-817 *)
-Lemma t4_po_1 :
- forall (t:array Z) (x:Z)
-   (Pre3:array_length t = 10%Z /\ x = 2%Z /\ access t 2 = 3%Z)
-   (c_aux_4:Z) (Post3:c_aux_4 = x),
-   (0 <= c_aux_4)%Z /\ (c_aux_4 < array_length t)%Z.
+(* Why obligation from file "good-c/all.c", characters 813-817 *)
+Lemma t4_po_1 : 
+  forall (t: (array Z)),
+  forall (x: Z),
+  forall (Pre3: (array_length t) = 10 /\ x = 2 /\ (access t 2) = 3),
+  forall (c_aux_4: Z),
+  forall (Post3: c_aux_4 = x),
+  0 <= c_aux_4 /\ c_aux_4 < (array_length t).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 821-824 *)
-Lemma t4_po_2 :
- forall (t:array Z) (x:Z)
-   (Pre3:array_length t = 10%Z /\ x = 2%Z /\ access t 2 = 3%Z)
-   (c_aux_4:Z) (Post3:c_aux_4 = x)
-   (Pre2:(0 <= c_aux_4)%Z /\ (c_aux_4 < array_length t)%Z) (c_aux_3:Z)
-   (Post2:c_aux_3 = x) (x0:Z) (Post1:x0 = (x + 1)%Z),
-   (x0 = 3%Z /\
-    access (store t c_aux_4 (access t c_aux_4 + c_aux_3)%Z) 2 = 5%Z) /\
-   (0 <= c_aux_4)%Z /\ (c_aux_4 < array_length t)%Z.
+(* Why obligation from file "good-c/all.c", characters 821-824 *)
+Lemma t4_po_2 : 
+  forall (t: (array Z)),
+  forall (x: Z),
+  forall (Pre3: (array_length t) = 10 /\ x = 2 /\ (access t 2) = 3),
+  forall (c_aux_4: Z),
+  forall (Post3: c_aux_4 = x),
+  forall (Pre2: 0 <= c_aux_4 /\ c_aux_4 < (array_length t)),
+  forall (c_aux_3: Z),
+  forall (Post2: c_aux_3 = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (x0 = 3 /\ (access (store t c_aux_4 ((access t c_aux_4) + c_aux_3)) 2) =
+  5) /\ 0 <= c_aux_4 /\ c_aux_4 < (array_length t).
 Proof.
 intuition.
 subst x c_aux_3 c_aux_4.
 AccessSame.
 Qed.
 
-(* Why obligation from file , characters 913-916 *)
-Lemma e1_po_1 :
- forall (x:Z) (Pre1:x = 2%Z) (c_aux_5:Z) (Post3:c_aux_5 = x)
-   (c_aux_6:Z) (Post2:c_aux_6 = x) (x0:Z) (Post1:x0 = (x + 1)%Z),
-   (c_aux_5 + c_aux_6)%Z = 4%Z.
+(* Why obligation from file "good-c/all.c", characters 913-916 *)
+Lemma e1_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 2),
+  forall (c_aux_5: Z),
+  forall (Post3: c_aux_5 = x),
+  forall (c_aux_6: Z),
+  forall (Post2: c_aux_6 = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (c_aux_5 + c_aux_6) = 4.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 967-970 *)
-Lemma e2_po_1 :
- forall (x:Z) (Pre1:x = 2%Z) (c_aux_8:Z) (Post2:c_aux_8 = x) (x0:Z)
-   (Post1:x0 = (x + 1)%Z), (c_aux_8 + x0)%Z = 5%Z.
+(* Why obligation from file "good-c/all.c", characters 967-970 *)
+Lemma e2_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 2),
+  forall (c_aux_8: Z),
+  forall (Post2: c_aux_8 = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (c_aux_8 + x0) = 5.
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 1017-1020 *)
-Lemma e3_po_1 :
- forall (x:Z) (Pre1:x = 2%Z) (c_aux_10:Z) (Post2:c_aux_10 = x) 
-   (x0:Z) (Post1:x0 = (x + 1)%Z) (result:Z),
-   result = x0 -> (c_aux_10 + result)%Z = 5%Z.
+(* Why obligation from file "good-c/all.c", characters 1017-1020 *)
+Lemma e3_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 2),
+  forall (c_aux_10: Z),
+  forall (Post2: c_aux_10 = x),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (forall (result:Z), (result = x0 -> (c_aux_10 + result) = 5)).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 1071-1074 *)
-Lemma e4_po_1 :
- forall (x:Z) (Pre1:x = 2%Z) (x0:Z) (Post1:x0 = (x + 1)%Z) (result:Z),
-   result = x0 -> (x0 + result)%Z = 6%Z.
+(* Why obligation from file "good-c/all.c", characters 1071-1074 *)
+Lemma e4_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 2),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (forall (result:Z), (result = x0 -> (x0 + result) = 6)).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 1125-1128 *)
-Lemma e5_po_1 :
- forall (x:Z) (Pre1:x = 2%Z) (x0:Z) (Post1:x0 = (x + 1)%Z) (result:Z),
-   result = x0 -> forall x:Z, x = (x0 + 1)%Z -> (x0 + result)%Z = 6%Z.
+(* Why obligation from file "good-c/all.c", characters 1125-1128 *)
+Lemma e5_po_1 : 
+  forall (x: Z),
+  forall (Pre1: x = 2),
+  forall (x0: Z),
+  forall (Post1: x0 = (x + 1)),
+  (forall (result:Z),
+   (result = x0 -> (forall (x:Z), (x = (x0 + 1) -> (x0 + result) = 6)))).
 Proof.
 intuition.
 Qed.

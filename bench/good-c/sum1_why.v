@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "sum1.c", characters 74-165 *)
+(* Why obligation from file "good-c/sum1.c", characters 74-165 *)
 Lemma main_po_1 : 
   forall (x: Z),
   forall (Pre4: x = 0),
@@ -26,7 +26,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "sum1.c", characters 118-135 *)
+(* Why obligation from file "good-c/sum1.c", characters 118-135 *)
 Lemma main_po_2 : 
   forall (x: Z),
   forall (Pre4: x = 0),
@@ -39,7 +39,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "sum1.c", characters 74-165 *)
+(* Why obligation from file "good-c/sum1.c", characters 74-165 *)
 Lemma main_po_3 : 
   forall (x: Z),
   forall (Pre4: x = 0),

@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "break.c", characters 34-82 *)
+(* Why obligation from file "good-c/break.c", characters 34-82 *)
 Lemma f1_po_1 : 
   forall (Variant1: Z),
   forall (Pre3: Variant1 = 1),
@@ -14,7 +14,7 @@ Proof.
 intros; subst Variant1; trivial.
 Qed.
 
-(* Why obligation from file "break.c", characters 227-233 *)
+(* Why obligation from file "good-c/break.c", characters 227-233 *)
 Lemma f2_po_1 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -31,7 +31,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 208-235 *)
+(* Why obligation from file "good-c/break.c", characters 208-235 *)
 Lemma f2_po_2 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -46,7 +46,7 @@ Proof.
 unfold Zwf; intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 182-188 *)
+(* Why obligation from file "good-c/break.c", characters 182-188 *)
 Lemma f2_po_3 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -55,7 +55,7 @@ Proof.
 unfold Zwf; intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 147-248 *)
+(* Why obligation from file "good-c/break.c", characters 147-248 *)
 Lemma f2_po_4 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -67,7 +67,7 @@ intros; omega.
 Qed.
 
 
-(* Why obligation from file "break.c", characters 395-401 *)
+(* Why obligation from file "good-c/break.c", characters 395-401 *)
 Lemma f3_po_1 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -85,7 +85,7 @@ intuition.
 (* FILL PROOF HERE *)
 Qed.
 
-(* Why obligation from file "break.c", characters 376-403 *)
+(* Why obligation from file "good-c/break.c", characters 376-403 *)
 Lemma f3_po_2 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -100,7 +100,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 350-356 *)
+(* Why obligation from file "good-c/break.c", characters 350-356 *)
 Lemma f3_po_3 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -109,7 +109,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 315-416 *)
+(* Why obligation from file "good-c/break.c", characters 315-416 *)
 Lemma f3_po_4 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -121,7 +121,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "break.c", characters 576-594 *)
+(* Why obligation from file "good-c/break.c", characters 576-594 *)
 Lemma f4_po_1 : 
   forall (i: Z),
   forall (Post4: i = 0),
@@ -138,7 +138,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 539-545 *)
+(* Why obligation from file "good-c/break.c", characters 539-545 *)
 Lemma f4_po_2 : 
   forall (i: Z),
   forall (Post4: i = 0),
@@ -149,7 +149,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "break.c", characters 495-600 *)
+(* Why obligation from file "good-c/break.c", characters 495-600 *)
 Lemma f4_po_3 : 
   forall (i: Z),
   forall (Post4: i = 0),

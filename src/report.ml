@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: report.ml,v 1.5 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.6 2003-09-24 15:23:09 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -119,6 +119,9 @@ let report fmt = function
   | CannotBeRaised id ->
       fprintf fmt "Exception %a cannot be raised by this expression" 
 	Ident.print id
+  | MutableMutable ->
+      fprintf fmt 
+	"A mutable type cannot contain another mutable type or a function"
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.21 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.22 2003-09-24 15:23:09 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -314,14 +314,20 @@ let warn_refs loc env p =
 
 let rec type_v loc lab env lenv = function
   | PVref v -> 
-      Ref (type_v loc lab env lenv v)
+      Ref (pure_type_v loc lab env lenv v)
   | PVarray v -> 
-      Array (type_v loc lab env lenv v)
+      Array (pure_type_v loc lab env lenv v)
   | PVarrow (bl, c) -> 
       let bl',env',lenv' = binders loc lab env lenv bl in 
       make_arrow bl' (type_c loc lab env' lenv' c)
   | PVpure pt -> 
       PureType pt
+
+and pure_type_v loc lab env lenv = function
+  | PVpure pt ->
+      PureType pt
+  | _ ->
+      raise_located loc MutableMutable
 
 and type_c loc lab env lenv c =
   let ef = c.pc_effect in

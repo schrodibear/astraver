@@ -6,19 +6,21 @@ Require Import Why.
 
 
 
-(* Why obligation from file , characters 212-267 *)
-Lemma f_po_1 :
- forall (x:array Z) (Pre2:array_length x = 1%Z),
-   (0 <= 0)%Z /\ (0 < array_length x)%Z.
+(* Why obligation from file "good-c/passing.c", characters 212-267 *)
+Lemma f_po_1 : 
+  forall (x: (array Z)),
+  forall (Pre2: (array_length x) = 1),
+  0 <= 0 /\ 0 < (array_length x).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 212-267 *)
-Lemma f_po_2 :
- forall (x:array Z) (Pre2:array_length x = 1%Z)
-   (Pre1:(0 <= 0)%Z /\ (0 < array_length x)%Z),
-   access (store x 0 1%Z) 0 = 1%Z.
+(* Why obligation from file "good-c/passing.c", characters 212-267 *)
+Lemma f_po_2 : 
+  forall (x: (array Z)),
+  forall (Pre2: (array_length x) = 1),
+  forall (Pre1: 0 <= 0 /\ 0 < (array_length x)),
+  (access (store x 0 1) 0) = 1.
 Proof.
 intuition.
 Qed.

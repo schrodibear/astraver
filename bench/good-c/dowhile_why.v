@@ -4,7 +4,7 @@
 Require Import Why.
 
 
-(* Why obligation from file "dowhile.c", characters 91-126 *)
+(* Why obligation from file "good-c/dowhile.c", characters 91-126 *)
 Lemma main_po_1 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -31,7 +31,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "dowhile.c", characters 144-165 *)
+(* Why obligation from file "good-c/dowhile.c", characters 144-165 *)
 Lemma main_po_2 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -48,7 +48,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "dowhile.c", characters 54-211 *)
+(* Why obligation from file "good-c/dowhile.c", characters 54-211 *)
 Lemma main_po_3 : 
   forall (x: Z),
   forall (Pre4: x >= 0),

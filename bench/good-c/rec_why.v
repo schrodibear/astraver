@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "rec.c", characters 115-123 *)
+(* Why obligation from file "good-c/rec.c", characters 115-123 *)
 Lemma f_po_1 : 
   forall (x: Z),
   forall (Pre8: x >= 0),
@@ -17,7 +17,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "rec.c", characters 46-144 *)
+(* Why obligation from file "good-c/rec.c", characters 46-144 *)
 Lemma f_po_2 : 
   forall (x: Z),
   forall (Pre8: x >= 0),

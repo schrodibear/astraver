@@ -3,7 +3,7 @@
 
 Require Import Why.
 
-(* Why obligation from file "continue.c", characters 130-139 *)
+(* Why obligation from file "good-c/continue.c", characters 130-139 *)
 Lemma f1_po_1 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -20,7 +20,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "continue.c", characters 109-141 *)
+(* Why obligation from file "good-c/continue.c", characters 109-141 *)
 Lemma f1_po_2 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -35,7 +35,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "continue.c", characters 84-90 *)
+(* Why obligation from file "good-c/continue.c", characters 84-90 *)
 Lemma f1_po_3 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -44,7 +44,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "continue.c", characters 164-165 *)
+(* Why obligation from file "good-c/continue.c", characters 164-165 *)
 Lemma f1_po_4 : 
   forall (n: Z),
   forall (Post4: n = 10),
@@ -56,7 +56,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "continue.c", characters 312-321 *)
+(* Why obligation from file "good-c/continue.c", characters 312-321 *)
 Lemma f2_po_1 : 
   forall (i: Z),
   forall (Post5: i = 17),
@@ -75,7 +75,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "continue.c", characters 291-323 *)
+(* Why obligation from file "good-c/continue.c", characters 291-323 *)
 Lemma f2_po_2 : 
   forall (i: Z),
   forall (Post5: i = 17),
@@ -92,7 +92,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "continue.c", characters 260-267 *)
+(* Why obligation from file "good-c/continue.c", characters 260-267 *)
 Lemma f2_po_3 : 
   forall (i: Z),
   forall (Post5: i = 17),
@@ -103,7 +103,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "continue.c", characters 337-338 *)
+(* Why obligation from file "good-c/continue.c", characters 337-338 *)
 Lemma f2_po_4 : 
   forall (i: Z),
   forall (Post5: i = 17),
