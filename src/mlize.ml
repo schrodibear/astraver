@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.31 2002-03-19 12:59:33 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.32 2002-03-20 15:01:55 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -108,7 +108,7 @@ and trad_desc info d ren = match d with
       let bl',env' = trad_binders ren info.env bl in
       let ren' = initial_renaming env' in
       let te = trans e ren' in
-      CC_lam (bl', te)
+      cc_lam bl' te
 
   | TabAcc (_, x, e1) ->
       Monad.compose e1.info (trad e1)
@@ -206,7 +206,7 @@ and trad_conditional info info1 te1 info2 te2 info3 te3 =
 	       let n = test_name Anonymous in
 	       let q = apply_post info1.label ren' info.env q1 in
 	       let q = tsubst_in_predicate [result, tb] q.a_value in
-	       CC_lam ([n, CC_pred_binder q], t)
+	       CC_lam ((n, CC_pred_binder q), t)
 	   | None -> t
        in
        CC_if (CC_var resb, branch info2 te2 ttrue, branch info3 te3 tfalse))

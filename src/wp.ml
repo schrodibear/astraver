@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.33 2002-03-19 12:59:33 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.34 2002-03-20 15:01:56 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -48,8 +48,8 @@ let while_post_block env inv (phi,r) e =
 
 (* misc. *)
 
-let create_bool_post c =
-  Some { a_value = c; a_name = Name (bool_name()) }
+let create_post c =
+  Some { a_value = c; a_name = Name (post_name Anonymous) }
 
 let is_conditional p = match p.desc with If _ -> true | _ -> false
 
@@ -104,7 +104,7 @@ let rec normalize p =
     | Aff (x, ({desc = Expression t} as e1)) 
       when post e1 = None && k.c_post = None ->
 	let t = put_label_term env p.info.label t in
-	let q = create_bool_post (equality (Tvar x) t) in
+	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
     | Aff (x, e) ->
 	change_desc p (Aff (x, normalize e))
@@ -127,12 +127,12 @@ let rec normalize p =
 	let q = while_post p.info b' invopt in
 	post_if_none env q p
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
-	let q = create_bool_post (equality (Tvar Ident.result) t) in
+	let q = create_post (equality (Tvar Ident.result) t) in
 	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
     | LetRef (x, e1, e2) ->
 	change_desc p (LetRef (x, normalize e1, normalize e2))
     | LetIn (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
-	let q = create_bool_post (equality (Tvar Ident.result) t) in
+	let q = create_post (equality (Tvar Ident.result) t) in
 	change_desc p (LetIn (x, post_if_none env q e1, normalize e2))
     | LetIn (x, e1, e2) ->
 	change_desc p (LetIn (x, normalize e1, normalize e2))
@@ -187,7 +187,7 @@ and normalize_boolean env b =
 			   equality c ttrue, equality c tfalse) in *)
 	      (* expression E -> result=E *)
 	      let c = equality (Tvar Ident.result) c in
-	      give_post b (create_bool_post c)
+	      give_post b (create_post c)
 	  | If (e1, e2, e3) ->
 	      let ne1 = normalize_boolean env e1 in
 	      let ne2 = normalize_boolean env e2 in
@@ -199,7 +199,7 @@ and normalize_boolean env b =
 			   por (pand q1t q2t) (pand q1f q3t),
 			   por (pand q1t q2f) (pand q1f q3f)) in
 	      let b' = change_desc b (If (ne1,ne2,ne3)) in
-	      give_post b' (create_bool_post c)
+	      give_post b' (create_post c)
 	  | _ -> 
 	      normalize b
       end
@@ -279,14 +279,14 @@ and wp_desc info d q =
 	       let q1t = tsubst_in_predicate [Ident.result,ttrue] q1 in
 	       let q1f = tsubst_in_predicate [Ident.result,tfalse] q1 in
 	       let w = Pand (Pimplies (q1t, q2), Pimplies (q1f, q3)) in
-	       If (p1, p'2, p'3), create_bool_post w
+	       If (p1, p'2, p'3), create_post w
            ***)
 	   | Some {a_value=q2}, Some {a_value=q3}, _ -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
 	       let q1 = Pif (Tvar result1, q2, q3) in
-	       let p'1,w1 = wp p1 (create_bool_post q1) in
+	       let p'1,w1 = wp p1 (create_post q1) in
 	       If (p'1, p'2, p'3), w1
 	   | _ ->
 	       let p'1,_ = wp p1 None in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.27 2002-03-19 23:45:33 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.28 2002-03-20 15:01:55 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -179,6 +179,8 @@ EXTEND
     | t1 = term; r = relation; t2 = term -> Papp (r, [t1;t2])
     | t1 = term; r1 = relation; t2 = term; r2 = relation; t3 = term ->
 	Pand (Papp (r1, [t1;t2]), Papp (r2, [t2;t3]))
+    | "if"; t = term; "then"; p1 = predicate; "else"; p2 = predicate ->
+	Pif (t, p1, p2)
     | "not"; a = predicate -> Pnot a
     | "true" -> Ptrue
     | "false" -> Pfalse
@@ -233,7 +235,7 @@ EXTEND
   [ [ LIDENT "reads"; l = LIST0 ident SEP "," -> l ] ]
   ;
   writes:
-  [ [ LIDENT "writes"; l=LIST0 ident SEP "," -> l ] ]
+  [ [ LIDENT "writes"; l = LIST0 ident SEP "," -> l ] ]
   ;
   pre_condition:
   [ [ c = assertion -> pre_of_assert false c ] ]

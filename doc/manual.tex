@@ -550,11 +550,10 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{prog}\indexnt{prog}
-    & $::=$ & \te{\{} \nt{predicate} \te{\}}\etoile\
+    & $::=$ & \te{\{} \nt{assertion} \te{\}}\etoile\
               \nt{statement} 
-              $[$ \te{\{} \nt{predicate} \te{\}} $]$ \\
-
-       & & \\[0.1em]
+              $[$ \te{\{} \nt{assertion} \te{\}} $]$ \\
+  \\[0.1em]
 
   \nt{statement}\indexnt{statement}
     & $::=$ & \nt{constant} \\
@@ -579,27 +578,24 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
       &     & \te{\{} \te{variant} \nt{wf\_arg} \te{\}}
               \te{=} \nt{prog} $[$ \te{in} \nt{prog} $]$ \\
       & $|$ & \te{(} \nt{prog}\plus\  \te{)} \\
-
-      & & \\[0.1em]
+  \\[0.1em]
 
   \nt{block}
     & $::=$ & \nt{block\_statement}\plussep{\te{;}} \\
-
-      & & \\[0.1em]
+  \\[0.1em]
 
       \nt{block\_statement}
     & $::=$ & \nt{prog} \\
       & $|$ & \te{label} \nt{identifier} \\
-      & $|$ & \te{assert} \te{\{} \nt{predicate} \te{\}} \\
-
-      & & \\[0.1em]
+      & $|$ & \te{assert} \te{\{} \nt{assertion} \te{\}} \\
+  \\[0.1em]
  
   \nt{infix}
     & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ 
               \te{=} $|$ \te{<>} $|$ 
               \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=} $|$
               \te{||} $|$ \te{\&\&} \\
-      & & \\[0.1em]
+  \\[0.1em]
 
   \nt{binders}
     & $::=$ & \te{(} \nt{identifier}\plussep{\te{,}} \te{:}
@@ -607,12 +603,16 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
   \\[0.1em]
 
   \nt{loop\_annot}
-    & $::=$ & \te{\{} \te{invariant} \nt{predicate} 
+    & $::=$ & \te{\{} \te{invariant} \nt{assertion} 
               \te{variant} \nt{wf\_arg} \te{\}} \\
-      & & \\[0.1em]
+  \\[0.1em]
 
   \nt{wf\_arg} 
     & $::=$ & \nt{term} $[$ \te{for} \nt{term} $]$ \\
+  \\[0.1em]
+
+  \nt{assertion} 
+    & $::=$ & \nt{predicate} $[$ \te{as} \nt{identifier} $]$ \\
 
 \end{tabular}\\
 \hrulefill

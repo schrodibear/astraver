@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.22 2002-03-19 14:31:50 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.23 2002-03-20 15:01:55 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -227,7 +227,7 @@ let insert_many_pre env pl t =
 
 let make_abs bl t = match bl with
   | [] -> t
-  | _  -> CC_lam (bl, t)
+  | _  -> cc_lam bl t
 
 let bind_pre ren env p =
   pre_name p.p_name, CC_pred_binder (apply_pre ren env p).p_value
@@ -238,7 +238,7 @@ let abs_pre env pl t =
        if p.p_assert then
 	 insert_pre env p t
        else
-	 (fun ren -> CC_lam ([bind_pre ren env p], t ren)))
+	 (fun ren -> CC_lam (bind_pre ren env p, t ren)))
     t pl
 
 let abstraction info e ren =
@@ -307,8 +307,9 @@ let wfrec (phi,r) info f ren =
 	  [CC_expr r;
 	   CC_hole (papplist (Pvar well_founded) [r]);
 	   CC_type (TTarrow ((vphi, CC_var_binder a), tphi));
-	   CC_lam ([vphi, CC_var_binder a; w, CC_var_binder tw],
-		   let ren' = next ren (get_writes k.c_effect) in 
-		   abstraction info' (f fw) ren');
+	   cc_lam 
+	     [vphi, CC_var_binder a; w, CC_var_binder tw]
+	     (let ren' = next ren (get_writes k.c_effect) in 
+	      abstraction info' (f fw) ren');
 	   CC_expr (apply_term ren env phi)] @
 	  input ren)

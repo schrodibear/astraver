@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.8 2002-03-19 12:59:33 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.9 2002-03-20 15:01:56 filliatr Exp $ i*)
 
 open Ast
 open Misc
@@ -12,9 +12,9 @@ let rec cc_subst subst = function
   | CC_letin (b,bl,c1,c2) ->
       CC_letin (b, cc_subst_binders subst bl,
 		cc_subst subst c1, cc_subst (cc_cross_binders subst bl) c2)
-  | CC_lam (bl, c) ->
-      CC_lam (cc_subst_binders subst bl, 
-	      cc_subst (cc_cross_binders subst bl) c)
+  | CC_lam (b, c) ->
+      CC_lam (cc_subst_binder subst b, 
+	      cc_subst (cc_cross_binders subst [b]) c)
   | CC_app (c, cl) ->
       CC_app (cc_subst subst c, List.map (cc_subst subst) cl)
   | CC_tuple cl ->

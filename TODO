@@ -49,3 +49,6 @@ IMPLEMENTATION
  - simplify predicates (e.g. if true then ...)
 
  - wf recursion only on type int (built-in in Monad.wfrec)
+
+ - proof obligations related to if-then-else:
+   replace "b:bool,h:Q(b),h':Q(true)" with "Q(true)" directly

@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.12 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.13 2002-03-20 15:01:56 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -117,7 +117,7 @@ let rec print_cc_type fmt = function
   | TTtuple _ -> assert false
 
 let occur_sequent id = function
-  | Spred p -> occur_predicate id p
+  | Spred (_,p) -> occur_predicate id p
   | Svar _ -> false
 
 let print_sequent fmt (hyps,concl) =
@@ -128,7 +128,7 @@ let print_sequent fmt (hyps,concl) =
 	if List.exists (occur_sequent id) hyps || occur_predicate id concl then
 	  fprintf fmt "FORALL (%a: %a) :@\n" Ident.print id print_cc_type v;
 	print_seq hyps
-    | Spred p :: hyps -> 
+    | Spred (_,p) :: hyps -> 
 	print_predicate fmt p; fprintf fmt " IMPLIES@\n";
 	print_seq hyps
   in

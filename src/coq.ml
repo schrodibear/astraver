@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.16 2002-03-19 14:31:50 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.17 2002-03-20 15:01:55 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -157,7 +157,7 @@ let rec print_cc_type fmt = function
       assert false
 
 let occur_sequent id = function
-  | Spred p -> occur_predicate id p
+  | Spred (_,p) -> occur_predicate id p
   | Svar _ -> false
 
 let print_sequent fmt (hyps,concl) =
@@ -166,13 +166,10 @@ let print_sequent fmt (hyps,concl) =
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
 	if List.exists (occur_sequent id) hyps || occur_predicate id concl then
-	begin
-	  fprintf fmt "(%s: " (Ident.string id); 
-	  print_cc_type fmt v; fprintf fmt ") @\n"
-	end;
+	  fprintf fmt "(%a: %a)@\n" Ident.print id print_cc_type v;
 	print_seq hyps
-    | Spred p :: hyps -> 
-	print_predicate fmt p; fprintf fmt " ->@\n";
+    | Spred (id, p) :: hyps -> 
+	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_predicate p;
 	print_seq hyps
   in
   print_seq hyps

@@ -11,7 +11,7 @@ open Ast
 
 type context_element =
   | Svar of Ident.t * cc_type
-  | Spred of predicate
+  | Spred of Ident.t * predicate
 
 type sequent = context_element list * predicate
 
@@ -28,7 +28,7 @@ let tauto_if = function
   | _ -> false
 
 let discharge ctx concl =
-  List.exists (function Spred p -> p = concl | _ -> false) ctx ||
+  List.exists (function Spred (_,p) -> p = concl | _ -> false) ctx ||
   reflexivity concl ||
   tauto_if concl
 
@@ -51,8 +51,8 @@ let vcg base t =
 	()
     | CC_letin (_, bl, e1, e2) -> 
 	traverse ctx e1; traverse (traverse_binders ctx bl) e2
-    | CC_lam (bl, e) ->
-	traverse (traverse_binders ctx bl) e
+    | CC_lam (b, e) ->
+	traverse (traverse_binders ctx [b]) e
     | CC_app (e, el) ->
 	traverse ctx e; List.iter (traverse ctx) el
     | CC_tuple el ->
@@ -69,7 +69,7 @@ let vcg base t =
 	if not (discharge ctx p) then push ctx p else discharge_msg ()
   and traverse_binder ctx = function
     | id, CC_var_binder v -> (Svar (id,v)) :: ctx
-    | _,  CC_pred_binder p -> (Spred p) :: ctx
+    | id,  CC_pred_binder p -> (Spred (id,p)) :: ctx
     | id, CC_untyped_binder -> assert false
   and traverse_binders ctx = List.fold_left traverse_binder ctx
   in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.23 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.24 2002-03-20 15:01:55 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -252,6 +252,8 @@ let rec cc_applist f l = match (f, l) with
   | f, [] -> f
   | CC_app (f, l), l' -> CC_app (f, l @ l')
   | f, l -> CC_app (f, l)
+
+let cc_lam = List.fold_right (fun b c -> CC_lam (b, c))
 
 (*s functions over AST *)
 
