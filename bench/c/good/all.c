@@ -42,11 +42,11 @@ int t[];
     ensures y == 1 */ 
 void t1() { y = t[0]; }
 
-/*@ requires \valid_index(t,0) == 10 && x == 0 && t[0] == 1 
+/*@ requires \valid_index(t,0) && x == 0 && t[0] == 1 
     ensures y == 1 */ 
 void t2() { y = t[x++]; }
 
-/*@ requires \valid_index(t,1) == 10 && x == 0 && t[1] == 1 
+/*@ requires \valid_index(t,1) && x == 0 && t[1] == 1 
     ensures y == 1 */ 
 void t3() { y = t[++x]; }
 

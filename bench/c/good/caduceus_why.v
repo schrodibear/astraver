@@ -11,8 +11,6 @@ Set Implicit Arguments.
 (*Why logic*) Definition null : pointer.
 Admitted.
 
-Admitted.
-
 (*Why logic*) Definition block_length : pointer -> Z.
 Admitted.
 
@@ -34,8 +32,6 @@ Admitted.
 (*Why axiom*) Lemma offset_shift :
   (forall (p:pointer),
    (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
-Admitted.
-
 Admitted.
 
 (*Why axiom*) Lemma block_length_shift :
