@@ -1,11 +1,6 @@
 
-INPUT
-=====
-
 FEATURES
 ========
-
- - pure code output (with annotations as comments) --to-ocaml / -o
 
  - arguments which are types
 
@@ -17,8 +12,18 @@ FEATURES
 
  - keyword absurd (similar to "assert false" in ocaml)
 
+ - suppress dependent types for array
+   (=> array_length function to be used instead of static size information)
+
 COQ
 ===
+
+ - simplification tactic for arrays
+
+PVS
+===
+
+ - still needs heavy checks
 
 DOCUMENTATION
 =============
@@ -31,6 +36,8 @@ MISC
 ====
 
  - emacs mode
+   - switch .mlw / _why.v
+   - menu / keys -> typecheck, wp, coq, pvs, ocaml
 
 BUGS
 ====
