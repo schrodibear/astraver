@@ -292,6 +292,34 @@ allow you to relate the values of references at any points of the
 program. 
 
 
+\subsection{Exceptions}
+\label{exception}\index{Exception}
+
+Exceptions are raised with the construct \texttt{raise}:
+\begin{verbatim}
+     raise E
+     raise (F 1)
+\end{verbatim}
+and caught with the construct \texttt{try \dots\ with \dots\ end}:
+\begin{verbatim}
+     try (f 0) with E -> 1
+     try (f 0) with F x -> x
+\end{verbatim}
+It is not possible to catch an exception which is not possibly raised
+by the expression following the \texttt{try}.
+
+Postconditions are extended to specify the behavior in case of
+uncaught exceptions:
+\begin{verbatim}
+     (raise E) { false | E => true }
+     (raise (F 1)) { false | F => result = 1 }
+\end{verbatim}
+In a postcondition regarding an exception, \texttt{result} refers to
+the value carried by the exception (if any).
+In postconditions, it is not possible to mention exceptions which
+are not possibly raised by the program.
+
+
 \section{Types with effect}
 \label{types}\index{Type}
 
@@ -318,7 +346,7 @@ Side effects must be explicited beside the result type:
 \begin{verbatim}
      unit -> { x >= 0 } unit writes x { x < x@ }
      a:int ref -> b:int ref -> { } unit reads b writes a { a = a@ + b }
-     n:int -> { } int raises Negative { result = sqrt(n) }
+     n:int -> { } int raises Negative { result = sqrt(n) | Negative => n< 0 }
 \end{verbatim}
 Finally, the result may be given a name other than \texttt{result},
 with the following syntax:
