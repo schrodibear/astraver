@@ -206,6 +206,6 @@ dist-clean:: clean
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
-	$(COQDEP) -I lib/coq lib/coq/*.v >> .depend
+	$(COQDEP) -I lib/coq */*/*.v >> .depend
 
 include .depend
