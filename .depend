@@ -123,6 +123,7 @@ lib/coq/WhyTuples.vo: lib/coq/WhyTuples.v
 lib/coq/WhySorted.vo: lib/coq/WhySorted.v lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo
 lib/coq/WhyPermut.vo: lib/coq/WhyPermut.v lib/coq/WhyArrays.vo
 lib/coq/WhyInt.vo: lib/coq/WhyInt.v
+lib/coq/WhyFloat.vo: lib/coq/WhyFloat.v lib/coq/Why.vo
 lib/coq/WhyBool.vo: lib/coq/WhyBool.v
 lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
 lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo
@@ -161,4 +162,5 @@ examples/binary-search/bsearch_why.vo: examples/binary-search/bsearch_why.v lib/
 bench/good/recfun_why.vo: bench/good/recfun_why.v lib/coq/Why.vo
 bench/good/po_why.vo: bench/good/po_why.v lib/coq/Why.vo
 bench/good/loops_why.vo: bench/good/loops_why.v lib/coq/Why.vo
+bench/good/floats_why.vo: bench/good/floats_why.v lib/coq/Why.vo lib/coq/WhyFloat.vo
 bench/good/all_why.vo: bench/good/all_why.v lib/coq/Why.vo

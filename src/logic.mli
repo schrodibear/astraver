@@ -1,5 +1,5 @@
 
-(*i $Id: logic.mli,v 1.8 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.9 2002-07-19 11:23:53 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -7,7 +7,7 @@ type constant =
   | ConstInt of int
   | ConstBool of bool
   | ConstUnit
-  | ConstFloat of float
+  | ConstFloat of string
 
 type term =
   | Tvar of Ident.t

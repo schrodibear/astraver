@@ -148,7 +148,7 @@ Save.
 
 Definition ar6 := (* validation *)
   let Pre1 = ar6_po_1 in
-  `(Zdiv 1 1)`.
+  (Zdiv `1` `1`).
 
 Lemma ar7_po_1 : 
   ~(`1` = `0`).
@@ -158,7 +158,7 @@ Save.
 
 Definition ar7 := (* validation *)
   let Pre1 = ar7_po_1 in
-  `(Zmod 1 1)`.
+  (Zmod `1` `1`).
 
 Definition a1 := (* validation *)
   [v4: Z]

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.49 2002-07-11 11:52:09 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.50 2002-07-19 11:23:53 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -149,7 +149,7 @@ EXTEND
     | "true" -> ConstBool true
     | "false" -> ConstBool false
     | LIDENT "void" -> ConstUnit
-    | f = FLOAT -> ConstFloat (float_of_string f) ] ]
+    | f = FLOAT -> ConstFloat f ] ]
   ;
   lexpr:
   [ [ a = lexpr0; "->"; b = lexpr -> infix_pp loc a PPimplies b
@@ -374,7 +374,7 @@ EXTEND
     | x = prog6 -> x ] ]
   ;
   ast6:
-  [ [ "-"; x = prog6 -> un_op Ident.t_neg_int loc x
+  [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
     | LIDENT "sqrt"; x = prog6 -> un_op Ident.t_sqrt loc x
     | x = ast7 -> without_annot loc x ] ]
   ;
@@ -384,7 +384,7 @@ EXTEND
     | n = INT ->
 	Sconst (ConstInt (int_of_string n))
     | f = FLOAT ->
-	Sconst (ConstFloat (float_of_string f))
+	Sconst (ConstFloat f)
     | LIDENT "void" ->
 	Sconst ConstUnit
     | "true" ->

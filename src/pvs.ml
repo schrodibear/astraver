@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.20 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.21 2002-07-19 11:23:53 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -49,9 +49,8 @@ let print_term fmt t =
     | Tconst ConstUnit -> 
 	fprintf fmt "unit" 
     | Tconst (ConstFloat f) -> 
-	(* TODO *)
-	assert (floor f = f);
-	fprintf fmt "%d" (truncate f)
+	let n,d = rationalize f in
+	if d = "1" then fprintf fmt "%s" n else fprintf fmt "%s/%s" n d
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
     | Tapp (id, [t]) when id == t_neg_int ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.43 2002-07-09 11:45:01 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.44 2002-07-19 11:23:53 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -106,6 +106,12 @@ let post_name_from =
 let warning s = Format.eprintf "warning: %s\n" s
 
 (*s Various utility functions. *)
+
+let rationalize s =
+  let n = String.length s in
+  let i = String.index s '.' in
+  let d = n - i - 1 in
+  String.sub s 0 i ^ String.sub s (succ i) d, "1" ^ String.make d '0'
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
@@ -410,7 +416,7 @@ let rec print_term fmt = function
   | Tconst ConstUnit -> 
       fprintf fmt "void" 
   | Tconst (ConstFloat f) -> 
-      fprintf fmt "%f" f
+      fprintf fmt "%s" f
   | Tvar id -> 
       Ident.lprint fmt id
   | Tapp (id, tl) -> 
