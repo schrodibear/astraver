@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.107 2004-04-30 14:50:16 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.108 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -372,7 +372,7 @@ let rec typef lab env expr =
 	      c_pre = p; c_post = q' } in
     make_node loc d env toplabel ol c
   in
-  Annot.normalize pr
+  pr (*Annot.normalize pr*)
 
 and typef_desc lab env loc = function
   | Sconst c ->

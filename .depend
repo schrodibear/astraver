@@ -46,18 +46,18 @@ src/ltyping.cmo: src/effect.cmi src/env.cmi src/error.cmi src/ident.cmi \
 src/ltyping.cmx: src/effect.cmx src/env.cmx src/error.cmi src/ident.cmx \
     src/logic.cmi src/misc.cmx src/options.cmx src/ptree.cmi src/report.cmx \
     src/types.cmi src/util.cmx src/ltyping.cmi 
-src/main.cmo: src/ast.cmi src/cc.cmi src/coq.cmi src/env.cmi src/error.cmi \
-    src/fpi.cmi src/harvey.cmi src/holl.cmi src/ident.cmi src/loc.cmi \
-    src/logic.cmi src/ltyping.cmi src/misc.cmi src/mizar.cmi src/mlize.cmi \
-    src/monad.cmi src/ocaml.cmi src/options.cmi src/parser.cmi src/ptree.cmi \
-    src/pvs.cmi src/red.cmi src/report.cmi src/simplify.cmi src/types.cmi \
-    src/typing.cmi src/util.cmi src/vcg.cmi src/wp.cmi 
-src/main.cmx: src/ast.cmi src/cc.cmi src/coq.cmx src/env.cmx src/error.cmi \
-    src/fpi.cmx src/harvey.cmx src/holl.cmx src/ident.cmx src/loc.cmx \
-    src/logic.cmi src/ltyping.cmx src/misc.cmx src/mizar.cmx src/mlize.cmx \
-    src/monad.cmx src/ocaml.cmx src/options.cmx src/parser.cmx src/ptree.cmi \
-    src/pvs.cmx src/red.cmx src/report.cmx src/simplify.cmx src/types.cmi \
-    src/typing.cmx src/util.cmx src/vcg.cmx src/wp.cmx 
+src/main.cmo: src/annot.cmi src/ast.cmi src/cc.cmi src/coq.cmi src/env.cmi \
+    src/error.cmi src/fpi.cmi src/harvey.cmi src/holl.cmi src/ident.cmi \
+    src/loc.cmi src/logic.cmi src/ltyping.cmi src/misc.cmi src/mizar.cmi \
+    src/mlize.cmi src/monad.cmi src/ocaml.cmi src/options.cmi src/parser.cmi \
+    src/ptree.cmi src/pvs.cmi src/red.cmi src/report.cmi src/simplify.cmi \
+    src/types.cmi src/typing.cmi src/util.cmi src/vcg.cmi src/wp.cmi 
+src/main.cmx: src/annot.cmx src/ast.cmi src/cc.cmi src/coq.cmx src/env.cmx \
+    src/error.cmi src/fpi.cmx src/harvey.cmx src/holl.cmx src/ident.cmx \
+    src/loc.cmx src/logic.cmi src/ltyping.cmx src/misc.cmx src/mizar.cmx \
+    src/mlize.cmx src/monad.cmx src/ocaml.cmx src/options.cmx src/parser.cmx \
+    src/ptree.cmi src/pvs.cmx src/red.cmx src/report.cmx src/simplify.cmx \
+    src/types.cmi src/typing.cmx src/util.cmx src/vcg.cmx src/wp.cmx 
 src/misc.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/options.cmi src/pp.cmi src/ptree.cmi src/types.cmi \
     src/misc.cmi 

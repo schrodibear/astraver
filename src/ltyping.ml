@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.27 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.28 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -165,7 +165,7 @@ and desc_predicate loc lab env lenv = function
 	     raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, a) ->
       let v = PureType pt in
-      forall false id v (predicate lab env (Env.add_logic id v lenv) a)
+      forall id v (predicate lab env (Env.add_logic id v lenv) a)
   | PPexists (id, pt, a) ->
       let v = PureType pt in
       exists id v (predicate lab env (Env.add_logic id v lenv) a)

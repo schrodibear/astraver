@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.93 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.94 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -237,23 +237,26 @@ and occur_arrow id bl c = match bl with
   | (_, (BindSet | Untyped)) :: bl' -> 
       occur_arrow id bl' c
 
-let forall w x v p = match v with
+let forall ?(is_wp=false) x v p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
   | PureType PTbool ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
-      Forallb (w, x, n, p, simplify ptrue, simplify pfalse)
+      Forallb (is_wp, x, n, p, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
-      Forall (w, x, n, mlize_type v, p)
+      Forall (is_wp, x, n, mlize_type v, p)
 
-let foralls w =
+let foralls ?(is_wp=false) =
   List.fold_right
-    (fun (x,v) p -> if occur_predicate x p then forall w x v p else p)
+    (fun (x,v) p -> if occur_predicate x p then forall ~is_wp x v p else p)
     
+let pforall ?(is_wp=false) x v p =
+  if p = Ptrue then Ptrue else forall ~is_wp x v p
+
 let exists x v p = 
   let n = Ident.bound x in
   let p = subst_in_predicate (subst_onev x n) p in
@@ -346,8 +349,7 @@ open Pp
 let print_pre fmt l = 
   if l <> [] then begin
     fprintf fmt "@[ ";
-    print_list 
-      pp_print_space (fun fmt p -> print_predicate fmt p.a_value) fmt l;
+    print_list semi (fun fmt p -> print_predicate fmt p.a_value) fmt l;
     fprintf fmt " @]"
   end
 

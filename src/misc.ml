@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.87 2004-06-30 08:57:53 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.88 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -435,12 +435,12 @@ let le_int = relation t_le_int
 let pif a b c =
   if a = ttrue then b else if a = tfalse then c else Pif (a, b ,c)
 
-let pand w a b = 
+let pand ?(is_wp=false) a b = 
   if a = Ptrue then b else if b = Ptrue then a else
   if a = Pfalse || b = Pfalse then Pfalse else
-  Pand (w, a, b)
+  Pand (is_wp, a, b)
 
-let pands w = List.fold_left (pand w) Ptrue
+let pands ?(is_wp=false) = List.fold_left (pand ~is_wp) Ptrue
 
 let por a b =
   if a = Ptrue || b = Ptrue then Ptrue else
@@ -449,6 +449,9 @@ let por a b =
 
 let pnot a =
   if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a
+
+let pimplies ?(is_wp=false) p1 p2 = 
+  if p2 = Ptrue then Ptrue else Pimplies (is_wp, p1, p2)
 
 (*s [simplify] only performs simplications which are Coq reductions.
      Currently: only [if true] and [if false] *)

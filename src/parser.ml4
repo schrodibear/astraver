@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.96 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.97 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -35,6 +35,12 @@ let with_offset n f x =
     offset := old; raise e
 
 let loc_offset lf n = let (b,e) = lf n in (b + !offset, e + !offset)
+(* 3.08
+let loc_offset lf n = 
+  let (b,e) = lf n in 
+  ({ b with Lexing.pos_cnum = b.pos_cnum + !offset }, 
+   { e with Lexing.pos_cnum = b.pos_cnum + !offset })
+*)
 
 let lexer = 
   let l = Plexer.make () in

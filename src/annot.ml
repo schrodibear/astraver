@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.23 2004-05-13 08:51:24 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.24 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -85,7 +85,7 @@ let while_post loc info b inv =
 	let s = change_label b.info.label info.label s in
 	match inv with
 	  | None -> Some (anonymous loc s, ql)
-	  | Some i -> Some ({ a_value = pand false i.a_value s; 
+	  | Some i -> Some ({ a_value = pand i.a_value s; 
 			      a_name = Name (post_name_from i.a_name);
 			      a_loc = loc }, ql)
 
@@ -97,7 +97,7 @@ let while_post_block env inv (phi,_,r) e =
     | None -> 
 	anonymous e.info.loc decphi, ql
     | Some i -> 
-	{ a_value = pand false i.a_value decphi; 
+	{ a_value = pand i.a_value decphi; 
 	  a_name = Name (post_name_from i.a_name);
 	  a_loc = e.info.loc }, ql
 
@@ -298,8 +298,8 @@ and normalize_boolean force env b =
 		      let q2t,q2f = decomp_boolean q2 in
 		      let c = 
 			Pif (Tvar Ident.result,
-			     pand false q1t q2t,
-			     por q1f (pand false q1t q2f))
+			     pand q1t q2t,
+			     por q1f (pand q1t q2f))
 		      in
 		      let b' = change_desc b (If (ne1,ne2,ne3)) in
 		      give_post b' (create_post c)
@@ -310,8 +310,8 @@ and normalize_boolean force env b =
 		      let q3t,q3f = decomp_boolean q3 in
 		      let c = 
 			Pif (Tvar Ident.result,
-			     por q1t (pand false q1f q3t),
-			     pand false q1f q3f)
+			     por q1t (pand q1f q3t),
+			     pand q1f q3f)
 		      in
 		      let b' = change_desc b (If (ne1,ne2,ne3)) in
 		      give_post b' (create_post c)
@@ -322,8 +322,8 @@ and normalize_boolean force env b =
 		      let q3t,q3f = decomp_boolean q3 in
 		      let c = 
 			Pif (Tvar Ident.result,
-			     por (pand false q1t q2t) (pand false q1f q3t),
-			     por (pand false q1t q2f) (pand false q1f q3f)) 
+			     por (pand q1t q2t) (pand q1f q3t),
+			     por (pand q1t q2f) (pand q1f q3f)) 
 		      in
 		      let b' = change_desc b (If (ne1,ne2,ne3)) in
 		      give_post b' (create_post c)
@@ -334,3 +334,131 @@ and normalize_boolean force env b =
 	  | _ -> 
 	      b
       end
+
+let map_desc f p =
+  let d = match p.desc with
+    | Var _ 
+    | Acc _ 
+    | Expression _
+    | Absurd
+    | Any _ as d -> 
+	d
+    | Aff (x, e) -> 
+	Aff (x, f e)
+    | TabAcc (b, x, e) -> 
+	TabAcc (b, x, f e)
+    | TabAff (b, x, e1, e2) -> 
+	TabAff (b, x, f e1, f e2)
+    | Seq bl -> 
+	let block_st = function
+	  | Label _ | Assert _ as s -> s
+	  | Statement e -> Statement (f e)
+	in
+	Seq (List.map block_st bl)
+    | While (e1, inv, var, e2) ->
+	While (f e1, inv, var, f e2)
+    | If (e1, e2, e3) ->
+	If (f e1, f e2, f e3)
+    | Lam (bl, e) ->
+	Lam (bl, f e)
+    | App (e1, Term e2, k) ->
+	App (f e1, Term (f e2), k)
+    | App (e1, a, k) ->
+	App (f e1, a, k)
+    | LetRef (x, e1, e2) ->
+	LetRef (x, f e1, f e2)
+    | LetIn (x, e1, e2) ->
+	LetIn (x, f e1, f e2)
+    | Rec (x, bl, v, var, e) ->
+	Rec (x, bl, v, var, f e)
+    | Raise (x, Some e) ->
+	Raise (x, Some (f e))
+    | Raise _ as d ->
+	d
+    | Try (e1, eql) ->
+	Try (f e1, List.map (fun (p, e) -> (p, f e)) eql)
+  in
+  { p with desc = d }
+
+type pure = 
+  | PureTerm of term (* result = term *)
+  | PurePred of postcondition (* q(result) *)
+
+let q_true_false q =
+  let ctrue = tsubst_in_predicate (subst_one Ident.result ttrue) q in
+  let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) q in
+  simplify ctrue, simplify cfalse
+
+let rec purify p =
+  let a_values = List.map (fun a -> a.a_value) in
+  if is_pure p then 
+    let rec pure p = match p.desc with
+      | Expression t when post p = None -> 
+	  [],
+	  equality (Tvar Ident.result) (unref_term t)
+      | LetIn (x, e1, e2) when post p = None -> 
+	  (* TODO: optimiser quand post1 de la forme result=E *)
+	  let pre1,post1 = pure e1 in
+	  let pre2,post2 = pure e2 in
+	  let tyx = result_type e1 in
+	  let post1_x = subst_in_predicate (subst_onev result x) post1 in
+	  (* pre1 and forall x. post1(x) => pre2 *)
+	  (pre1 @ [pforall x tyx (pimplies post1_x (pands pre2))]),
+	  (* forall x. post1(x) => post2 *)
+	  pforall x tyx (pimplies post1_x post2)
+      | If (e1, e2, e3) when post p = None -> 
+	  let p1,q1 = pure e1 in
+	  let p2,q2 = pure e2 in
+	  let p3,q3 = pure e3 in
+	  let q1t,q1f = q_true_false q1 in
+	  begin match e2.desc, e3.desc with
+	    | _, Expression (Tconst (ConstBool false)) (* e1 && e2 *) ->
+		let q2t,q2f = q_true_false q2 in
+		p1 @ [pimplies q1t (pands p2)],
+		Pif (Tvar Ident.result, pand q1t q2t, por q1f (pand q1t q2f))
+	    | Expression (Tconst (ConstBool true)), _ (* e1 || e2 *) ->
+		let q3t,q3f = q_true_false q3 in
+		p1 @ [pimplies q1f (pands p3)],
+		Pif (Tvar Ident.result, por q1t (pand q1f q3t), pand q1f q3f)
+	    | Expression (Tconst (ConstBool false)),
+	      Expression (Tconst (ConstBool true)) (* not e1 *) ->
+		p1, Pif (Tvar Ident.result, q1f, q1t)
+	    | _ -> 
+		(* p1 and (q1(true) => p2) and (q1(false) => p3) *)
+		p1 @ [pimplies q1t (pands p2); pimplies q1f (pands p3)],
+		(* q1(true) and q2 or q1(false) and q3 *)
+		por (pand q1t q2) (pand q1f q3)
+	  end
+
+	  (*let q2t,q2f = q_true_false q2 in
+	  let q3t,q3f = q_true_false q3 in*)
+	  (* if result then 
+	       post1(true) and post2(true) or post1(false) and post3(true)
+	     else
+	       post1(true) and post2(false) or post1(false) and post3(false) *)
+	  (*Pif (Tvar Ident.result,
+	       por (pand q1t q2t) (pand q1f q3t),
+	       por (pand q1t q2f) (pand q1f q3f))*)
+
+      | App (e1, Term e2, k) when post p = None || post p = k.c_post ->
+	  (* TODO : collecter oblig/pre de e1 et e2 *)
+	  begin match k.c_post with
+	    | Some (q,_) -> [], q.a_value
+	    | None -> raise Exit
+	  end
+      | _ -> 
+	  raise Exit (* we give up *)
+    in
+    try 
+      let pre,post = pure p in
+      let pre = List.map (anonymous p.info.loc) pre in
+      let o = p.info.obligations @ pre in
+      let c = { p.info.kappa with c_post = create_post post } in
+      { p with 
+	  desc = Any c; 
+	  info = { p.info with obligations = o; kappa = c } }
+    with Exit -> 
+      map_desc purify p
+  else 
+    (* we apply purify recursively *) 
+    map_desc purify p

@@ -36,6 +36,7 @@ harvey:
 simplify:
 	../bin/why.opt --simplify -d -V test.mlw
 	Simplify test_why.sx
+
 mizar:
 	../bin/why.opt --mizar -d -V test.mlw
 	mzf test_why.miz
@@ -44,6 +45,7 @@ hol:
 	../bin/why.opt --hol-light -d -V test.mlw
 
 test:
-	../bin/why.opt --coq-v8 -d -V --valid --coq-tactic magic test.mlw
+	../bin/why.opt --coq-v8 -d -V --coq-tactic magic test.mlw
+#	../bin/why.opt --coq-v8 -d -V --valid --coq-tactic magic test.mlw
 	coqc -R ../lib/coq Coq.why test_why.v
 	coqc -R ../lib/coq Coq.why test_valid.v

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.mli,v 1.4 2002-10-17 15:01:52 filliatr Exp $ i*)
+(*i $Id: annot.mli,v 1.5 2004-07-02 14:45:46 filliatr Exp $ i*)
 
 open Env
 open Types
@@ -51,4 +51,7 @@ val force_post :
 val create_postval : 'a -> 'a asst option
 
 val change_desc : 'a Ast.t -> 'a Ast.t_desc -> 'a Ast.t
+
+
+val purify : typed_program -> typed_program
 
