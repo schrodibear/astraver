@@ -42,7 +42,7 @@ CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
            src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
-   	   src/regen.cmo src/mizar.cmo src/coq.cmo \
+           src/regen.cmo src/mizar.cmo src/coq.cmo \
            src/cparser.cmo src/clexer.cmo src/cinterp.cmo \
            src/ocaml.cmo src/main.cmo
 
@@ -116,7 +116,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: $(VO)
 
-VERSION=1.3
+VERSION=1.31
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -278,7 +278,7 @@ EXPORT=export/$(NAME)
 FTP = $(HOME)/ftp/why
 WWW = $(HOME)/WWW/why
 
-FILES =src/*.ml* Makefile.in configure.in configure .depend \
+FILES =src/*.ml* intf/*.ml* Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
 	examples/Makefile* examples/*/*.mlw examples/*/*.v examples/*/*.sx \
