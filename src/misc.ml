@@ -1,12 +1,13 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.45 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.46 2002-09-06 11:56:52 filliatr Exp $ i*)
 
 open Ident
 open Logic
 open Types 
 open Ast
 open Ptree
+open Cc
 
 (*s Utility functions. *)
 

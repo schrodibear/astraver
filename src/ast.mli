@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.42 2002-09-06 11:45:20 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.43 2002-09-06 11:56:52 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -8,14 +8,13 @@ open Logic
 open Types
 open Ptree
 
-(*s AST. ['a] is the type of information associated to the nodes. 
-    ['b] is the type of predicate. *)
-
 type variable = Ident.t
 
 type label = string
 
 type variant = term * pure_type * variable
+
+(* ['a] is the type of information associated to the nodes. *)
 
 type 'a t = 
   { desc : 'a t_desc;
@@ -50,35 +49,4 @@ and 'a block_st =
   | Statement of 'a t
 
 and 'a block = 'a block_st list
-
-(*s Intermediate CC terms. *)
-
-type cc_type =
-  | TTpure of pure_type
-  | TTarray of term * cc_type
-  | TTlambda of cc_binder * cc_type
-  | TTarrow of cc_binder * cc_type
-  | TTtuple of cc_binder list * cc_type option
-  | TTpred of predicate
-  | TTapp of Ident.t * cc_type
-
-and cc_bind_type = 
-  | CC_var_binder of cc_type
-  | CC_pred_binder of predicate
-  | CC_untyped_binder
-
-and cc_binder = variable * cc_bind_type
-
-(* ['a] is the type of holes *)
-
-type 'a cc_term =
-  | CC_var of variable
-  | CC_letin of bool * cc_binder list * 'a cc_term * 'a cc_term
-  | CC_lam of cc_binder * 'a cc_term
-  | CC_app of 'a cc_term * 'a cc_term
-  | CC_tuple of 'a cc_term list * cc_type option
-  | CC_if of 'a cc_term * 'a cc_term * 'a cc_term
-  | CC_term of term
-  | CC_hole of 'a
-  | CC_type of cc_type
 

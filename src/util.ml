@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.43 2002-09-06 11:45:21 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.44 2002-09-06 11:56:52 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -9,6 +9,7 @@ open Types
 open Ast
 open Env
 open Rename
+open Cc
 
 (*s References mentioned by a predicate *)
 

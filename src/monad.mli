@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.16 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.17 2002-09-06 11:56:52 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -8,6 +8,7 @@
 open Logic
 open Types
 open Ast
+open Cc
 open Env
 
 (*s Translation of types *)

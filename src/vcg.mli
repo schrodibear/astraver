@@ -3,7 +3,7 @@
 
 open Types
 open Logic
-open Ast
+open Cc
 
 type context_element =
   | Svar of Ident.t * cc_type

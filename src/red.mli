@@ -1,8 +1,8 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.mli,v 1.3 2002-03-20 16:01:44 filliatr Exp $ i*)
+(*i $Id: red.mli,v 1.4 2002-09-06 11:56:52 filliatr Exp $ i*)
 
-open Ast
+open Cc
 open Logic 
 
 (* reduction on intermediate programs 

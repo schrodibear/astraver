@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.35 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.36 2002-09-06 11:56:52 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -8,6 +8,7 @@ open Logic
 open Types
 open Ast
 open Ptree
+open Cc
 
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool

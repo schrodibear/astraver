@@ -7,7 +7,7 @@ open Util
 open Options
 open Logic
 open Types
-open Ast
+open Cc
 
 (*s Sequents and obligations. *)
 

@@ -1,10 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.35 2002-07-29 13:38:38 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.36 2002-09-06 11:56:52 filliatr Exp $ i*)
 
 open Options
 open Ptree
 open Ast
+open Cc
 open Types
 open Env
 open Format
