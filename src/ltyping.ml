@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.20 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.21 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -119,11 +119,11 @@ and desc_predicate loc lab env lenv = function
   | PPconst _ ->
       predicate_expected loc
   | PPinfix (a, PPand, b) ->
-      Pand (predicate lab env lenv a, predicate lab env lenv b)
+      Pand (false, predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPor, b) ->
       Por (predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, PPimplies, b) ->
-      Pimplies (predicate lab env lenv a, predicate lab env lenv b)
+      Pimplies (false, predicate lab env lenv a, predicate lab env lenv b)
   | PPinfix (a, (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
       make_comparison loc (term lab env lenv a, r, term lab env lenv b)
   | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv | PPmod), _) -> 
@@ -140,7 +140,7 @@ and desc_predicate loc lab env lenv = function
 	     raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, a) ->
       let v = PureType pt in
-      forall id v (predicate lab env (Env.add_logic id v lenv) a)
+      forall false id v (predicate lab env (Env.add_logic id v lenv) a)
   | PPexists (id, pt, a) ->
       let v = PureType pt in
       exists id v (predicate lab env (Env.add_logic id v lenv) a)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.81 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.82 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -191,12 +191,12 @@ let rec occur_predicate id = function
   | Papp (_, l) -> List.exists (occur_term id) l
   | Pif (a, b, c) -> 
       occur_term id a || occur_predicate id b || occur_predicate id c
-  | Forallb (_, _, _, a, b) 
-  | Pimplies (a, b) 
-  | Pand (a, b) 
+  | Forallb (_, _, _, _, a, b) 
+  | Pimplies (_, a, b) 
+  | Pand (_, a, b) 
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
   | Pnot a -> occur_predicate id a
-  | Forall (_,_,_,a) -> occur_predicate id a
+  | Forall (_,_,_,_,a) -> occur_predicate id a
   | Exists (_,_,_,a) -> occur_predicate id a
 
 let occur_assertion id a = occur_predicate id a.a_value
@@ -228,22 +228,22 @@ and occur_arrow id bl c = match bl with
   | (_, (BindSet | Untyped)) :: bl' -> 
       occur_arrow id bl' c
 
-let forall x v p = match v with
+let forall w x v p = match v with
   (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
   | PureType PTbool ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
-      Forallb (x, n, p, simplify ptrue, simplify pfalse)
+      Forallb (w, x, n, p, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
-      Forall (x, n, mlize_type v, p)
+      Forall (w, x, n, mlize_type v, p)
 
-let foralls =
+let foralls w =
   List.fold_right
-    (fun (x,v) p -> if occur_predicate x p then forall x v p else p)
+    (fun (x,v) p -> if occur_predicate x p then forall w x v p else p)
     
 let exists x v p = 
   let n = Ident.bound x in
@@ -292,7 +292,7 @@ let make_raw_access env (id,id') c =
 let make_pre_access env id c =
   let _ = array_info env id in
   let c = unref_term c in
-  Pand (le_int (Tconst (ConstInt 0)) c, lt_int c (array_length id))
+  Pand (false, le_int (Tconst (ConstInt 0)) c, lt_int c (array_length id))
       
 let make_raw_store env (id,id') c1 c2 =
   let _ = array_info env id in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.75 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.76 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -226,11 +226,12 @@ let rec collect_term s = function
 let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
   | Papp (_, l) -> List.fold_left collect_term s l
-  | Pimplies (a, b) | Pand (a, b) | Por (a, b) | Forallb (_, _, _, a, b) -> 
+  | Pimplies (_, a, b) | Pand (_, a, b) | Por (a, b) 
+  | Forallb (_, _, _, _, a, b) -> 
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
   | Pnot a -> collect_pred s a
-  | Forall (_, _, _, p) -> collect_pred s p
+  | Forall (_, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
 
 let term_vars = collect_term Idset.empty
@@ -257,14 +258,14 @@ let rec tsubst_in_term s = function
       t
 
 let rec map_predicate f = function
-  | Pimplies (a, b) -> Pimplies (f a, f b)
+  | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
   | Pif (a, b, c) -> Pif (a, f b, f c)
-  | Pand (a, b) -> Pand (f a, f b)
+  | Pand (w, a, b) -> Pand (w, f a, f b)
   | Por (a, b) -> Por (f a, f b)
   | Pnot a -> Pnot (f a)
-  | Forall (id, b, v, p) -> Forall (id, b, v, f p)
+  | Forall (w, id, b, v, p) -> Forall (w, id, b, v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
-  | Forallb (id, v, p, a, b) -> Forallb (id, v, f p, f a, f b)
+  | Forallb (w, id, v, p, a, b) -> Forallb (w, id, v, f p, f a, f b)
   | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_predicate s = function
@@ -429,12 +430,12 @@ let le_int = relation t_le_int
 let pif a b c =
   if a = ttrue then b else if a = tfalse then c else Pif (a, b ,c)
 
-let pand a b = 
+let pand w a b = 
   if a = Ptrue then b else if b = Ptrue then a else
   if a = Pfalse || b = Pfalse then Pfalse else
-  Pand (a, b)
+  Pand (w, a, b)
 
-let pands = List.fold_left pand Ptrue
+let pands w = List.fold_left (pand w) Ptrue
 
 let por a b =
   if a = Ptrue || b = Ptrue then Ptrue else
@@ -534,18 +535,18 @@ let rec print_predicate fmt = function
       fprintf fmt "true"
   | Pfalse ->
       fprintf fmt "false"
-  | Pimplies (a, b) -> 
+  | Pimplies (_, a, b) -> 
       fprintf fmt "(@[%a ->@ %a@])" print_predicate a print_predicate b
   | Pif (a, b, c) -> 
       fprintf fmt "(@[if %a then@ %a else@ %a@])" 
 	print_term a print_predicate b print_predicate c
-  | Pand (a, b) | Forallb (_, _, _, a, b) ->
+  | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "(not %a)" print_predicate a
-  | Forall (_,b,_,p) ->
+  | Forall (_,_,b,_,p) ->
       fprintf fmt "@[<hov 2>(forall %a:@ %a)@]" 
 	Ident.dbprint b print_predicate p
   | Exists (_,b,_,p) ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.9 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.10 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -160,18 +160,18 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(%s %a)@]" (prefix_id id) print_terms tl
   | Papp (id, tl) -> 
       fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
-  | Pimplies (a, b) ->
+  | Pimplies (_, a, b) ->
       fprintf fmt "(@[%a ==>@ %a@])" print_predicate a print_predicate b
   | Pif (a, b, c) ->
       fprintf fmt "(@[if %a@ then %a@ else %a@])" 
 	print_term a print_predicate b print_predicate c
-  | Pand (a, b) | Forallb (_, _, _, a, b) ->
+  | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
       fprintf fmt "@[(%a /\\@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "@[(%a \\/@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[~(%a)@]" print_predicate a
-  | Forall (id,n,t,p) -> 
+  | Forall (_,id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "(@[!%s:%a.@ %a@])" (Ident.string id')

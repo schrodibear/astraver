@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.7 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.8 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -99,18 +99,18 @@ let rec print_predicate fmt = function
       fprintf fmt "true"
   | Pfalse ->
       fprintf fmt "false"
-  | Pimplies (a, b) ->
+  | Pimplies (_, a, b) ->
       fprintf fmt "@[(->@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
       fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_predicate b
 	print_predicate c
-  | Pand (a, b) | Forallb (_, _, _, a, b) ->
+  | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
       fprintf fmt "@[(and@ %a@ %a)@]" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "@[(or@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
-  | Forall (id,n,_,p) -> 
+  | Forall (_,id,n,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id' print_predicate p'
@@ -153,7 +153,7 @@ let rec filter_context = function
 exception NotFirstOrder
 
 let rec prepare_conclusion = function
-  | Forall (_, _, _, p) -> prepare_conclusion p
+  | Forall (_, _, _, _, p) -> prepare_conclusion p
   | p -> p
 
 let prepare_sequent (ctx, c) = 

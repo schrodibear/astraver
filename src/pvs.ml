@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.37 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.38 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -114,7 +114,7 @@ let print_predicate fmt p =
 	fprintf fmt "@[IF "; print_term fmt a; fprintf fmt "@ THEN ";
 	print0 fmt b; fprintf fmt "@ ELSE "; print0 fmt c; 
 	fprintf fmt " ENDIF@]"
-    | Pimplies (a, b) -> 
+    | Pimplies (_, a, b) -> 
 	fprintf fmt "(@["; print1 fmt a; fprintf fmt " IMPLIES@ "; 
 	print0 fmt b; fprintf fmt "@])"
     | p -> print1 fmt p
@@ -122,7 +122,7 @@ let print_predicate fmt p =
     | Por (a, b) -> print1 fmt a; fprintf fmt " OR@ "; print2 fmt b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (a, b) | Forallb (_, _, _, a, b) -> 
+    | Pand (_, a, b) | Forallb (_, _, _, _, a, b) -> 
         print2 fmt a; fprintf fmt " AND@ "; print3 fmt b
     | p -> print3 fmt p
   and print3 fmt = function
@@ -150,7 +150,7 @@ let print_predicate fmt p =
 	fprintf fmt "@])"
     | Pnot p -> 
 	fprintf fmt "NOT "; print3 fmt p
-    | Forall (id,n,t,p) -> 
+    | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[FORALL (%s: " (Ident.string id');

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.16 2003-03-25 16:56:33 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.17 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -85,7 +85,7 @@ let while_post loc info b inv =
 	let s = change_label b.info.label info.label s in
 	match inv with
 	  | None -> Some (anonymous loc s, ql)
-	  | Some i -> Some ({ a_value = pand i.a_value s; 
+	  | Some i -> Some ({ a_value = pand false i.a_value s; 
 			      a_name = Name (post_name_from i.a_name);
 			      a_loc = loc }, ql)
 
@@ -97,7 +97,7 @@ let while_post_block env inv (phi,_,r) e =
     | None -> 
 	anonymous e.info.loc decphi, ql
     | Some i -> 
-	{ a_value = pand i.a_value decphi; 
+	{ a_value = pand false i.a_value decphi; 
 	  a_name = Name (post_name_from i.a_name);
 	  a_loc = e.info.loc }, ql
 
@@ -276,9 +276,11 @@ and normalize_boolean force env b =
 		    let q1t,q1f = decomp_boolean q1 in
 		    let q2t,q2f = decomp_boolean q2 in
 		    let q3t,q3f = decomp_boolean q3 in
-		    let c = Pif (Tvar Ident.result,
-				 por (pand q1t q2t) (pand q1f q3t),
-				 por (pand q1t q2f) (pand q1f q3f)) in
+		    let c = 
+		      Pif (Tvar Ident.result,
+			   por (pand false q1t q2t) (pand false q1f q3t),
+			   por (pand false q1t q2f) (pand false q1f q3f)) 
+		    in
 		    let b' = change_desc b (If (ne1,ne2,ne3)) in
 		    give_post b' (create_post c)
 		| _ ->

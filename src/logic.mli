@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.14 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.15 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -43,18 +43,20 @@ type pure_type =
   | PTarray of pure_type
   | PTexternal of Ident.t
 
+type is_wp = bool
+
 type predicate =
   | Pvar of Ident.t
   | Papp of Ident.t * term list
   | Ptrue
   | Pfalse
-  | Pimplies of predicate * predicate
+  | Pimplies of is_wp * predicate * predicate
   | Pif of term * predicate * predicate
-  | Pand of predicate * predicate
+  | Pand of is_wp * predicate * predicate
   | Por of predicate * predicate
   | Pnot of predicate
-  | Forall of Ident.t * Ident.t * pure_type * predicate
-  | Forallb of Ident.t * Ident.t * predicate * predicate * predicate
+  | Forall of is_wp * Ident.t * Ident.t * pure_type * predicate
+  | Forallb of is_wp * Ident.t * Ident.t * predicate * predicate * predicate
   | Exists of Ident.t * Ident.t * pure_type * predicate
 
 type logic_type =

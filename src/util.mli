@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.38 2003-03-28 16:16:48 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.39 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -64,8 +64,8 @@ val result_name : typing_info -> Ident.t
 
 val erase_exns : typing_info -> typing_info
 
-val forall : Ident.t -> type_v -> predicate -> predicate
-val foralls : (Ident.t  * type_v) list -> predicate -> predicate
+val forall : is_wp -> Ident.t -> type_v -> predicate -> predicate
+val foralls : is_wp -> (Ident.t  * type_v) list -> predicate -> predicate
 
 val exists : Ident.t -> type_v -> predicate -> predicate
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.79 2003-03-26 07:10:18 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.80 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -76,14 +76,14 @@ let abstract_wp (q',ql') (q,ql) res out =
   assert (List.length ql' = List.length ql);
   let quantify a' a res =
     let vars = match res with Some b -> b :: out | None -> out in
-    foralls vars (Pimplies (a'.a_value, a.a_value)) 
+    foralls true vars (Pimplies (true, a'.a_value, a.a_value)) 
   in
   let quantify_h (x',a') (x,a) =
     assert (x' = x);
     let pt = find_exception x in
     quantify a' a (option_app (fun t -> (result, PureType t)) pt)
   in
-  pands (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
+  pands true (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
 
 (*s Adding precondition and obligations to the wp *)
 
@@ -92,8 +92,8 @@ let add_to_wp loc al w =
   if al = [] then
     w
   else match w with
-    | Some w -> Some (asst_app (fun w -> List.fold_left pand w al) w) 
-    | None -> Some (wp_named loc (pands al))
+    | Some w -> Some (asst_app (fun w -> List.fold_left (pand true) w al) w) 
+    | None -> Some (wp_named loc (pands true al))
 
 let add_pre_and_oblig p = add_to_wp p.info.loc (pre p @ obligations p)
 

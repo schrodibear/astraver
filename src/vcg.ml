@@ -84,7 +84,7 @@ let reflexivity = function
 (* ..., h:P, ...|- P  and ..., h:P and Q, ...|- P *)
 let assumption concl = function
   | Spred (id, p) when p = concl -> Assumption id 
-  | Spred (id, Pand (a, b)) when a = concl -> Proj1 id
+  | Spred (id, Pand (_, a, b)) when a = concl -> Proj1 id
   | _ -> raise Exit
 
 (* alpha-equivalence ? *)
@@ -107,7 +107,7 @@ let discriminate ctx concl =
 
 (* ..., h:A, ..., h':B, ... |- A and B *)
 let conjunction ctx = function
-  | Pand (a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
+  | Pand (_, a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
   | _ -> raise Exit
 
 (* ... |- (well_founded (Zwf 0)) *)
@@ -124,7 +124,7 @@ let loop_variant_1 hyps concl =
     | _ -> raise Exit
   in
   let rec lookup_h' phi1 phi0 = function
-    | Spred (h', Pand (_, Papp (id, [t1; t0]))) 
+    | Spred (h', Pand (_, _, Papp (id, [t1; t0]))) 
       when id == t_zwf_zero && t1 = phi1 && t0 = phi0 -> h'
     | _ -> raise Exit
   in
@@ -158,9 +158,9 @@ let rec unif_pred u = function
   | Pvar id, Pvar id' when id == id' -> u
   | Papp (id, tl), Papp (id', tl') when id == id' -> unif_terms u (tl, tl')
   | Ptrue, Ptrue | Pfalse, Pfalse -> u
-  | Forallb (_, _, _, a, b), Forallb (_, _, _, a', b')
-  | Pimplies (a, b), Pimplies (a', b') 
-  | Pand (a, b), Pand (a', b')
+  | Forallb (_, _, _, _, a, b), Forallb (_, _, _, _, a', b')
+  | Pimplies (_, a, b), Pimplies (_, a', b') 
+  | Pand (_, a, b), Pand (_, a', b')
   | Por (a, b), Por (a', b') -> unif_pred (unif_pred u (a, a')) (b, b')
   | Pif (a, b, c), Pif (a', b', c') ->
       unif_pred (unif_pred (unif_term u (a, a')) (b, b')) (c, c')
@@ -175,7 +175,7 @@ let rec unif_pred u = function
        with Not_found ->
 	 raise Exit)
   | Pnot a, Pnot a' -> unif_pred u (a, a')
-  | Forall (_, n, _, p), Forall (_, n', _, p') 
+  | Forall (_, _, n, _, p), Forall (_, _, n', _, p') 
   | Exists (_, n, _, p), Exists (_, n', _, p') ->
       let p'n = subst_in_predicate (subst_onev n' n) p' in 
       unif_pred u (p, p'n)
@@ -203,7 +203,7 @@ let lookup_instance id bvars p q hpx p' =
       bvars ([], [], Idmap.empty)
   in
   List.fold_right
-    (fun (x, n, ty) p -> Forall (x, n, ty, p))
+    (fun (x, n, ty) p -> Forall (true, x, n, ty, p))
     bvars' (simplify (tsubst_in_predicate s q)),
   cc_lam 
     (List.map (fun (x, _, ty) -> x, CC_var_binder (TTpure ty)) bvars')
@@ -240,9 +240,9 @@ let boolean_wp_lemma = Ident.create "why_boolean_wp"
 
 (* [qe_forall (forall x1...forall xn. p) = [x1;...;xn],p] *)
 let rec qe_forall = function
-  | Forall (id, n, ty, p) -> 
+  | Forall (_, id, n, ty, p) -> 
       let vl, p = qe_forall p in (id, n, ty) :: vl, p
-  | Forallb (id, n, p, _, _) -> 
+  | Forallb (_, id, n, p, _, _) -> 
       let vl, p = qe_forall p in (id, n, PTbool) :: vl, p
   | p -> 
       [], p
@@ -251,14 +251,14 @@ let rec qe_forall = function
    return the new goal (context-conclusion), together with a proof-term
    modifier to apply to the proof-term found for the new goal. *)
 let rec intros ctx = function
-  | Forall (id, n, t, p) ->
+  | Forall (true, id, n, t, p) ->
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
       let ctx', concl', f = intros (Svar (id', TTpure t) :: ctx) p' in
       ctx', concl',
       (fun pr -> 
 	 ProofTerm (cc_lam [id', CC_var_binder (TTpure t)] (CC_hole (f pr))))
-  | Pimplies (a, b) -> 
+  | Pimplies (true, a, b) -> 
       let h = fresh_hyp () in 
       let ctx', concl', f = intros (Spred (h, a) :: ctx) b in
       ctx', concl', 
@@ -270,7 +270,7 @@ let boolean_forall_lemma = Ident.create "why_boolean_forall"
 let make_forall_proof id = function
   | Forall _ -> 
       CC_var id
-  | Forallb (_, n, q, _, _) -> 
+  | Forallb (_, _, n, q, _, _) -> 
       cc_applist (CC_var boolean_forall_lemma) 
 	[cc_lam [n, CC_var_binder (TTpure PTbool)] (CC_type (TTpred q)); 
 	 CC_var id]
@@ -307,7 +307,7 @@ let linear ctx concl =
     | Spred (id, p) :: _ when alpha_eq p concl ->
 	Assumption id
     (* and-elimination *)
-    | Spred (id, Pand (a, b)) :: ctx ->
+    | Spred (id, Pand (true, a, b)) :: ctx ->
 	begin try
 	  search ctx
 	with Exit ->
@@ -319,7 +319,8 @@ let linear ctx concl =
 			       CC_var id, CC_hole (search ctx')))
 	end
     (* forall-elimination *)
-    | Spred (id, (Forall _ | Forallb _ as a)) :: ctx -> 
+    | Spred (id, (Forall (true,_,_,_,_) | Forallb (true,_,_,_,_,_) as a)) 
+      :: ctx -> 
 	let id = make_forall_proof id a in
 	begin try
 	  search ctx
@@ -330,7 +331,7 @@ let linear ctx concl =
 	    let vars = unify bvars p concl in
 	    ProofTerm (cc_applist id (List.map cc_term vars))
 	  with Exit -> match p with
-	    | Pimplies (p, q) ->
+	    | Pimplies (true, p, q) ->
   	    (* 2. we have [p => q]: try to unify [p] and an hypothesis *)
 		first_hyp 
 		  (fun h ph ->
@@ -341,13 +342,13 @@ let linear ctx concl =
 		       (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
 				  CC_hole (search ctx'))))
 		  ctx
-	    | Pand (p1, p2) ->
+	    | Pand (true, p1, p2) ->
             (* 3. we have [a and b]: split under the quantifiers *)
                 let h1 = fresh_hyp () in
 		let h2 = fresh_hyp () in
 		let qpi pi =
 		  List.fold_right
-		    (fun (x, n, ty) p -> Forall (x, n, ty, p)) bvars pi
+		    (fun (x, n, ty) p -> Forall (true, x, n, ty, p)) bvars pi
 		in
 		let qp1 = qpi p1 in
 		let qp2 = qpi p2 in
@@ -371,7 +372,7 @@ let linear ctx concl =
 		raise Exit
 	end
     (* implication-elimination *)
-    | Spred (id, Pimplies (p, q)) :: ctx ->
+    | Spred (id, Pimplies (true, p, q)) :: ctx ->
 	begin try
 	  search ctx
 	with Exit ->

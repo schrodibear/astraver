@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.91 2003-04-25 12:10:04 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.92 2003-04-28 14:15:42 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -158,14 +158,14 @@ let print_predicate fmt p =
     | Pif (a, b, c) -> 
 	fprintf fmt "(@[if %a@ then %a@ else %a@])"
 	  print_term a print0 b print0 c
-    | Pimplies (a, b) -> 
+    | Pimplies (_, a, b) -> 
 	fprintf fmt "(@[%a ->@ %a@])" print1 a print0 b
     | p -> print1 fmt p
   and print1 fmt = function
     | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (a, b) | Forallb (_, _, _, a, b) -> 
+    | Pand (_, a, b) | Forallb (_, _, _, _, a, b) -> 
         fprintf fmt "%a /\\@ %a" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function
@@ -200,7 +200,7 @@ let print_predicate fmt p =
 	  (print_list space print_term) l
     | Pnot p -> 
 	fprintf fmt "~%a" print3 p
-    | Forall (id,n,t,p) -> 
+    | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
