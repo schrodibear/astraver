@@ -1,5 +1,7 @@
 
-  o caml code generation with option --ocaml
+version 0.72, November 12th, 2002
+=================================
+  o caml code generation with option --ocaml (beta test)
     (customized with --ocaml-annot, --ocaml-ext, --output)
   o quantifier "exists" added to the logic syntax
   o manual: added lexical conventions
