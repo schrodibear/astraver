@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.33 2003-01-20 15:36:01 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.34 2003-01-21 16:58:30 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -35,28 +35,24 @@ let relation id =
   else assert false
 
 let print_term fmt t = 
-  let rec print0 = function
+  let rec print0 fmt = function
     | Tapp (id, [a;b]) when is_relation id ->
-	fprintf fmt "@[<hov 2>"; print1 a; 
-	fprintf fmt " %s@ " (relation id);
-	print1 b; fprintf fmt "@]"
+	fprintf fmt "@[<hov 2>%a %s@ %a@]" print1 a (relation id) print1 b
     | t -> 
-	print1 t
-  and print1 = function
+	print1 fmt t
+  and print1 fmt = function
     | Tapp (id, [a;b]) when id == t_add_int || id == t_sub_int ->
-	fprintf fmt "@[<hov 2>"; print1 a;
-	fprintf fmt " %s@ " (if id == t_add_int then "+" else "-");
-	print2 b; fprintf fmt "@]"
+	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
+	  print1 a (if id == t_add_int then "+" else "-") print2 b
     | t ->
-	print2 t
-  and print2 = function
+	print2 fmt t
+  and print2 fmt = function
     | Tapp (id, [a;b]) when id == t_mul_int || id == t_div_int ->
-	fprintf fmt "@[<hov 2>"; print2 a;
-	fprintf fmt " %s@ " (if id == t_mul_int then "*" else "/");
-	print3 b; fprintf fmt "@]"
+	fprintf fmt "@[<hov 2>%a %s@ %a@]" 
+	  print2 a (if id == t_mul_int then "*" else "/") print3 b
     | t ->
-	print3 t
-  and print3 = function
+	print3 fmt t
+  and print3 fmt = function
     | Tconst (ConstInt n) -> 
 	fprintf fmt "%d" n
     | Tconst (ConstBool b) -> 
@@ -73,16 +69,16 @@ let print_term fmt t =
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
     | Tapp (id, [t]) when id == t_neg_int ->
-	fprintf fmt "-"; print3 t
+	fprintf fmt "-%a" print3 t
+    | Tapp (id, [a; b; c]) when id == if_then_else -> 
+	fprintf fmt "(@[if %a@ then %a@ else %a@])" print0 a print0 b print0 c
     | Tapp (id, l) as t when is_relation id || is_int_arith id ->
-	fprintf fmt "@[("; print0 t; fprintf fmt ")@]"
+	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) -> 
-	fprintf fmt "%s(@[" (Ident.string id);
-	print_list  
-	  (fun fmt () -> fprintf fmt ",@ ") (fun _ t -> print0 t) fmt tl;
-	fprintf fmt "@])"
+	fprintf fmt "%s(@[%a@])" 
+	  (Ident.string id) (print_list comma print0) tl
   in
-  print0 t
+  print0 fmt t
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"

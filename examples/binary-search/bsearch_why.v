@@ -153,7 +153,6 @@ Lemma binary_search_po_1 :
   `l1 <= m1` /\ `m1 <= u1`.
 Proof. 
 Intros.
-Clear Pre8; Simpl in Test6.
 Split. Rewrite Post4; Apply le_mean; Omega'.
 Rewrite Post4; Apply ge_mean; Omega'.
 Save.
@@ -185,7 +184,6 @@ Lemma binary_search_po_2 :
   `0 <= m1` /\ `m1 < (array_length t)`.
 Proof.
 Intros.
-Clear Pre8.
 Omega'.
 Save.
 
@@ -341,7 +339,6 @@ Lemma binary_search_po_6 :
   (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
 Intros.
-Clear Pre8; Simpl in Test6.
 Simpl in Test4.
 Simpl in Test2.
 Repeat Split; Try Omega'.

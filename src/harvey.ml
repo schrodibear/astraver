@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.4 2003-01-10 12:47:41 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.5 2003-01-21 16:58:30 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -69,6 +69,9 @@ let rec print_term fmt = function
       Report.raise_unlocated (AnyMessage "haRVey does not support floats")
   | Tderef _ -> 
       assert false
+  | Tapp (id, [a; b; c]) when id == if_then_else -> 
+      fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
+	print_term c
   | Tapp (id, tl) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, tl) ->

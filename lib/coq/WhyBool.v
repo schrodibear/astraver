@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyBool.v,v 1.8 2003-01-07 16:54:07 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.9 2003-01-21 16:58:30 filliatr Exp $ *)
 
 Require ZArith.
 Require Sumbool.
@@ -27,6 +27,8 @@ Intro b.
 Exists b. Case b; Trivial.
 Save.
 
+Definition if_then_else [A:Set; a:bool; b,c:A] := if a then b else c.
+Implicits if_then_else.
 
 (* Logical connectives *)
 

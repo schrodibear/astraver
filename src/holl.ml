@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.7 2003-01-16 15:42:48 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.8 2003-01-21 16:58:30 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -114,6 +114,9 @@ let rec print_term fmt = function
       fprintf fmt "(@[%a /@ %a@])" print_term a print_term b
   | Tapp (id, [a]) when id == t_neg_int || id == t_neg_float ->
       fprintf fmt "(@[--%a@])" print_term a
+  | Tapp (id, [a; b; c]) when id == if_then_else -> 
+      fprintf fmt "(@[if %a@ then %a@ else %a@])" 
+	print_term a print_term b print_term c
   | Tapp (id, tl) when is_relation id || is_arith id -> 
       fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
   (* arrays *)

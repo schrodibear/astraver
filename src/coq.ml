@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.82 2003-01-10 12:47:41 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.83 2003-01-21 16:58:30 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -118,6 +118,8 @@ let print_term fmt t =
 	openz fmt; fprintf fmt "(-%a)" print3 t; closez fmt
     | Tapp (id, [_;_]) as t when is_relation id || is_int_arith_binop id ->
 	fprintf fmt "@[(%a)@]" print0 t
+    | Tapp (id, [a; b; c]) when id == if_then_else -> 
+	fprintf fmt "(@[if_then_else %a@ %a@ %a@])" print0 a print0 b print0 c
     | Tapp (id, tl) when id == t_zwf_zero -> 
 	fprintf fmt "(@[Zwf 0 %a@])" print_terms tl
     | Tapp (id, tl) when is_relation id || is_arith id -> 
