@@ -11,6 +11,7 @@ type effect =
 
 (* all heap vars and their associated types *)
 val heap_vars : (string, Output.base_type) Hashtbl.t
+val print_heap_vars : Format.formatter -> unit -> unit
 
 val heap_var_type : string -> Output.base_type
 

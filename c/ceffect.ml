@@ -55,6 +55,17 @@ let pointer_heap_array_var ty =
 
 let heap_vars = Hashtbl.create 97
 
+let print_heap_vars fmt () =
+  let base_type fmt = function
+    | [], s -> fprintf fmt "%s" s
+    | [x], s -> fprintf fmt "%s %s" x s
+    | l, s -> fprintf fmt "(%a) %s" (print_list comma pp_print_string) l s
+  in
+  fprintf fmt "@[";
+  Hashtbl.iter 
+    (fun s t -> fprintf fmt "(%s:%a)" s base_type t) Ceffect.heap_vars;
+  fprintf fmt "@]"
+
 let heap_var_type = Hashtbl.find heap_vars
 
 let declare_heap_var v ty =
@@ -320,19 +331,20 @@ and initializer_ = function
       List.fold_left (fun ef i -> ef_union (initializer_ i) ef) ef_empty il
 
 let print_effects fmt l =
-  print_list space pp_print_string fmt (HeapVarSet.elements l)
+  fprintf fmt "@[%a@]"
+    (print_list space pp_print_string) (HeapVarSet.elements l)
 
 let decl d =
   match d.Cast.node with
     | Tlogic(id,ltype) -> 
 	let l = logic_type ltype in
 	lprintf 
-	  "effects of logic declaration of %s: %a@." id.logic_name
+	  "effects of logic declaration of %s: @[%a@]@." id.logic_name
 	  print_effects l;
 	id.logic_args <- l
     | Taxiom(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 
-    | Ttypedecl(ctype) -> assert false (* TODO *)
+    | Ttypedecl(ctype) -> ()
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Tfunspec(spec,ctype,id,params) -> () (* TODO *)
     | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)

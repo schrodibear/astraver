@@ -115,6 +115,14 @@ axiom acc_upd_neq :
   forall m : 'a memory. forall p1: pointer. forall p2 : pointer. 
   forall a: 'a.
     p1 <> p2 -> acc(upd(m,p1,a),p2) = acc(m,p2)
+
+(* exceptions *)
+exception Break
+exception Continue
+exception Return
+exception Return_int of int
+exception Return_float of float
+exception Return_pointer of pointer
  
 (* integer pointer/arrays *)
 parameter intP : int memory ref

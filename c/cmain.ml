@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.21 2004-03-19 11:16:07 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.22 2004-03-19 11:18:49 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -65,17 +65,15 @@ let main () =
   if type_only then exit 0;
   (* effects *)
   List.iter (fun (_,p) -> Ceffect.file p) tfiles;
-  while (not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles)) do 
+  while not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles) do 
     () 
   done;
+  lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
   (* Why specs *)
   let file = Lib.file "why" "caduceus_spec.why" in
   Pp.print_in_file (fun fmt -> Cinterp.output_specs fmt tfiles) file;
   (* Why interpretation *)
   List.iter interp_file tfiles
-
-
-  (* engendrer les spec why *)
 
 let rec explain_exception fmt = function
   | Parsing.Parse_error -> 
