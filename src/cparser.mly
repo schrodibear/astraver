@@ -24,6 +24,7 @@
   open Parsing
 
   let loc () = (symbol_start (), symbol_end ())
+  let loc_i i = (rhs_start i, rhs_end i)
 
   let uns () =
     raise (Stdpp.Exc_located (loc (), Stream.Error "Unsupported C syntax"))
@@ -60,130 +61,167 @@ file
 
 primary_expression
         : IDENTIFIER { CEvar (loc (), Ident.create $1) }
-        | CONSTANT { uns() }
+        | CONSTANT { CEconst (loc (), $1) }
         | STRING_LITERAL { uns() }
         | LPAR expression RPAR { $2 }
         ;
 
 postfix_expression
-        : primary_expression { }
-        | postfix_expression LSQUARE expression RSQUARE { }
-        | postfix_expression LPAR RPAR { }
-        | postfix_expression LPAR argument_expression_list RPAR { }
-        | postfix_expression DOT IDENTIFIER { }
-        | postfix_expression PTR_OP IDENTIFIER { }
-        | postfix_expression INC_OP { }
-        | postfix_expression DEC_OP { }
+        : primary_expression 
+            { $1 }
+        | postfix_expression LSQUARE expression RSQUARE 
+	    { CEarrget (loc (), $1, $3) }
+        | postfix_expression LPAR RPAR 
+	    { CEcall (loc (), $1, []) }
+        | postfix_expression LPAR argument_expression_list RPAR 
+	    { CEcall (loc (), $1, $3) }
+        | postfix_expression DOT IDENTIFIER 
+	    { uns () }
+        | postfix_expression PTR_OP IDENTIFIER 
+	    { uns() }
+        | postfix_expression INC_OP 
+	    { CEunary (loc (), Postfix_inc, $1) }
+        | postfix_expression DEC_OP
+	    { CEunary (loc (), Postfix_dec, $1)}
         ;
 
 argument_expression_list
-        : assignment_expression { }
-        | argument_expression_list COMMA assignment_expression { }
+        : assignment_expression { [$1] }
+        | argument_expression_list COMMA assignment_expression { $1 @ [$3] }
         ;
 
 unary_expression
-        : postfix_expression { }
-        | INC_OP unary_expression { }
-        | DEC_OP unary_expression { }
-        | unary_operator cast_expression { }
-        | SIZEOF unary_expression { }
-        | SIZEOF LPAR type_name RPAR { }
+        : postfix_expression { $1 }
+        | INC_OP unary_expression { CEunary (loc (), Prefix_inc, $2) }
+        | DEC_OP unary_expression { CEunary (loc (), Prefix_dec, $2) }
+        | unary_operator cast_expression { uns () }
+        | SIZEOF unary_expression { uns () }
+        | SIZEOF LPAR type_name RPAR { uns () }
         ;
 
 unary_operator
-        : AMP { }
-        | STAR { }
-        | PLUS { }
-        | MINUS { }
-        | TILDE { }
-        | EXL { }
+        : AMP { uns () }
+        | STAR { uns () }
+        | PLUS { Uplus }
+        | MINUS { Uminus }
+        | TILDE { uns () }
+        | EXL { Not }
         ;
 
 cast_expression
-        : unary_expression { }
-        | LPAR type_name RPAR cast_expression { }
+        : unary_expression { $1 }
+        | LPAR type_name RPAR cast_expression { uns () }
         ;
 
 multiplicative_expression
-        : cast_expression { }
-        | multiplicative_expression STAR cast_expression { }
-        | multiplicative_expression SLASH cast_expression { }
-        | multiplicative_expression PERCENT cast_expression { }
+        : cast_expression 
+            { $1 }
+        | multiplicative_expression STAR cast_expression 
+	    { CEbinary (loc (), $1, Mult, $3) }
+        | multiplicative_expression SLASH cast_expression 
+	    { CEbinary (loc (), $1, Div, $3) }
+        | multiplicative_expression PERCENT cast_expression 
+	    { CEbinary (loc (), $1, Mod, $3) }
         ;
 
 additive_expression
-        : multiplicative_expression { }
-        | additive_expression PLUS multiplicative_expression { }
-        | additive_expression MINUS multiplicative_expression { }
+        : multiplicative_expression 
+           { $1 }
+        | additive_expression PLUS multiplicative_expression 
+	    { CEbinary (loc (), $1, Plus, $3) }
+        | additive_expression MINUS multiplicative_expression 
+	    { CEbinary (loc (), $1, Minus, $3) }
         ;
 
 shift_expression
-        : additive_expression { }
-        | shift_expression LEFT_OP additive_expression { }
-        | shift_expression RIGHT_OP additive_expression { }
+        : additive_expression { $1 }
+        | shift_expression LEFT_OP additive_expression { uns () }
+        | shift_expression RIGHT_OP additive_expression { uns () }
         ;
 
 relational_expression
-        : shift_expression { }
-        | relational_expression LT shift_expression { }
-        | relational_expression GT shift_expression { }
-        | relational_expression LE_OP shift_expression { }
-        | relational_expression GE_OP shift_expression { }
+        : shift_expression 
+            { $1 }
+        | relational_expression LT shift_expression 
+	    { CEbinary (loc (), $1, Lt, $3) }
+        | relational_expression GT shift_expression
+	    { CEbinary (loc (), $1, Gt, $3) }
+        | relational_expression LE_OP shift_expression
+	    { CEbinary (loc (), $1, Le, $3) }
+        | relational_expression GE_OP shift_expression
+	    { CEbinary (loc (), $1, Ge, $3) }
         ;
 
 equality_expression
-        : relational_expression { }
-        | equality_expression EQ_OP relational_expression { }
-        | equality_expression NE_OP relational_expression { }
+        : relational_expression 
+            { $1 }
+        | equality_expression EQ_OP relational_expression 
+	    { CEbinary (loc (), $1, Eq, $3) }
+        | equality_expression NE_OP relational_expression 
+	    { CEbinary (loc (), $1, Neq, $3) }
         ;
 
 and_expression
-        : equality_expression { }
-        | and_expression AMP equality_expression { }
+        : equality_expression 
+            { $1 }
+        | and_expression AMP equality_expression 
+	    { CEbinary (loc (), $1, Bw_and, $3) }
         ;
 
 exclusive_or_expression
-        : and_expression { }
-        | exclusive_or_expression HAT and_expression { }
+        : and_expression 
+            { $1 }
+        | exclusive_or_expression HAT and_expression 
+	    { CEbinary (loc (), $1, Bw_xor, $3) }
         ;
 
 inclusive_or_expression
-        : exclusive_or_expression { }
-        | inclusive_or_expression PIPE exclusive_or_expression { }
+        : exclusive_or_expression 
+            { $1 }
+        | inclusive_or_expression PIPE exclusive_or_expression 
+	    { CEbinary (loc (), $1, Bw_or, $3) }
         ;
 
 logical_and_expression
-        : inclusive_or_expression { }
-        | logical_and_expression AND_OP inclusive_or_expression { }
+        : inclusive_or_expression 
+            { $1 }
+        | logical_and_expression AND_OP inclusive_or_expression 
+	    { CEbinary (loc (), $1, And, $3) }
         ;
 
 logical_or_expression
-        : logical_and_expression { }
-        | logical_or_expression OR_OP logical_and_expression { }
+        : logical_and_expression 
+            { $1 }
+        | logical_or_expression OR_OP logical_and_expression 
+	    { CEbinary (loc (), $1, Or, $3) }
         ;
 
 conditional_expression
-        : logical_or_expression { }
-        | logical_or_expression QUESTION expression COLON conditional_expression { }
+        : logical_or_expression 
+            { $1 }
+        | logical_or_expression QUESTION expression COLON conditional_expression 
+	    { CEcond (loc (), $1, $3, $5) }
         ;
 
 assignment_expression
-        : conditional_expression { uns() }
-        | unary_expression assignment_operator assignment_expression { uns() }
+        : conditional_expression 
+            { $1 }
+        | unary_expression assignment_operator assignment_expression 
+	    { CEassign (loc (), $1, $2, $3) }
         ;
 
 assignment_operator
-        : EQUAL { }
-        | MUL_ASSIGN { }
-        | DIV_ASSIGN { }
-        | MOD_ASSIGN { }
-        | ADD_ASSIGN { }
-        | SUB_ASSIGN { }
-        | LEFT_ASSIGN { }
-        | RIGHT_ASSIGN { }
-        | AND_ASSIGN { }
-        | XOR_ASSIGN { }
-        | OR_ASSIGN { }
+        : EQUAL { Aequal }
+        | MUL_ASSIGN { Amul }
+        | DIV_ASSIGN { Adiv }
+        | MOD_ASSIGN { Amod }
+        | ADD_ASSIGN { Aadd }
+        | SUB_ASSIGN { Asub }
+        | LEFT_ASSIGN { Aleft }
+        | RIGHT_ASSIGN { Aright }
+        | AND_ASSIGN { Aand }
+        | XOR_ASSIGN { Axor }
+        | OR_ASSIGN { Aor }
         ;
 
 expression
@@ -192,7 +230,7 @@ expression
         ;
 
 constant_expression
-        : conditional_expression { }
+        : conditional_expression { $1 }
         ;
 
 declaration
@@ -400,18 +438,18 @@ c_initializer_list
         ;
 
 statement
-        : labeled_statement { }
-        | compound_statement { }
-        | expression_statement { }
-        | selection_statement { }
-        | iteration_statement { }
-        | jump_statement { }
+        : labeled_statement { $1 }
+        | compound_statement { CSblock (loc (), $1) }
+        | expression_statement { $1 }
+        | selection_statement { $1 }
+        | iteration_statement { $1 }
+        | jump_statement { $1 }
         ;
 
 labeled_statement
-        : IDENTIFIER COLON statement { }
-        | CASE constant_expression COLON statement { }
-        | DEFAULT COLON statement { }
+        : IDENTIFIER COLON statement { uns () }
+        | CASE constant_expression COLON statement { uns () }
+        | DEFAULT COLON statement { uns () }
         ;
 
 compound_statement
@@ -437,29 +475,36 @@ statement_list
         ;
 
 expression_statement
-        : SEMICOLON { }
-        | expression SEMICOLON { }
+        : SEMICOLON { CSnop (loc ()) }
+        | expression SEMICOLON { CSexpr (loc (), $1) }
         ;
 
 selection_statement
-        : IF LPAR expression RPAR statement { }
-        | IF LPAR expression RPAR statement ELSE statement { }
-        | SWITCH LPAR expression RPAR statement { }
+        : IF LPAR expression RPAR statement 
+            { CScond (loc (), $3, $5, CSnop (loc ())) }
+        | IF LPAR expression RPAR statement ELSE statement 
+	    { CScond (loc (), $3, $5, $7) }
+        | SWITCH LPAR expression RPAR statement 
+	    { uns () }
         ;
 
 iteration_statement
-        : WHILE LPAR expression RPAR statement { }
-        | DO statement WHILE LPAR expression RPAR SEMICOLON { }
-        | FOR LPAR expression_statement expression_statement RPAR statement { }
-        | FOR LPAR expression_statement expression_statement expression RPAR statement { }
+        : WHILE LPAR expression RPAR ANNOT statement 
+            { CSwhile (loc (), $3, $5, $6) }
+        | DO ANNOT statement WHILE LPAR expression RPAR SEMICOLON 
+	    { CSdowhile (loc (), $2, $3, $6) }
+        | FOR LPAR expression_statement expression_statement RPAR ANNOT statement 
+	    { CSfor (loc (), $3, $4, None, $6, $7) }
+        | FOR LPAR expression_statement expression_statement expression RPAR ANNOT statement 
+	    { CSfor (loc (), $3, $4, Some $5, $7, $8) }
         ;
 
 jump_statement
-        : GOTO IDENTIFIER SEMICOLON { }
-        | CONTINUE SEMICOLON { }
-        | BREAK SEMICOLON { }
-        | RETURN SEMICOLON { }
-        | RETURN expression SEMICOLON { }
+        : GOTO IDENTIFIER SEMICOLON { uns () }
+        | CONTINUE SEMICOLON { uns () }
+        | BREAK SEMICOLON { uns () }
+        | RETURN SEMICOLON { uns () }
+        | RETURN expression SEMICOLON { uns () }
         ;
 
 translation_unit
@@ -468,16 +513,21 @@ translation_unit
         ;
 
 external_declaration
-        : function_definition { uns() }
+        : function_definition { [$1] }
         | declaration { $1 }
         ;
 
 function_definition
         : declaration_specifiers declarator declaration_list compound_statement
-            { }
-        | declaration_specifiers declarator compound_statement { }
-        | declarator declaration_list compound_statement { }
-        | declarator compound_statement { }
+            { uns () }
+        | declaration_specifiers declarator annot_compound_statement 
+	    { match $2 with
+		| CDfun (id, pl, None) -> Cfundef (loc (), id, pl, $1, $3)
+		| _ -> uns () }
+        | declarator declaration_list compound_statement 
+	    { uns () }
+        | declarator compound_statement 
+	    { uns () }
         ;
 
 %%

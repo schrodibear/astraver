@@ -1141,15 +1141,19 @@ and is given in Figure~\ref{fig:cfiles}.
   \\[0.1em]
 
   \nt{c\_declaration}
-    & $::=$ & \nt{c\_type} \nt{identifier} \\
+    & $::=$ & \nt{c\_type} \nt{identifier} \te{;} \\
       & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
-              \nt{parameter}\etoilesep{\te{,}} \te{)} $[$ \nt{c\_spec} $]$ \\
+              \nt{parameter}\etoilesep{\te{,}} \te{)} 
+              $[$ \nt{c\_spec} $]$ \te{;} \\
+      & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
+              \nt{parameter}\etoilesep{\te{,}} \te{)} 
+              \nt{annotated\_block} \te{;} \\
   \\[0.1em]
 
   \nt{c\_type}
-    & $::=$ & \nt{void} $|$ \nt{char} $|$ \nt{short} $|$ \nt{int} 
-              $|$ \nt{long} $|$ \nt{float} $|$ \nt{double} 
-              $|$ \te{identifier} \\
+    & $::=$ & \te{void} $|$ \te{char} $|$ \te{short} $|$ \te{int} 
+              $|$ \te{long} $|$ \te{float} $|$ \te{double} \\
+    &   $|$ & \nt{identifier} \\
   \\[0.1em]
 
   \nt{parameter}
@@ -1157,13 +1161,56 @@ and is given in Figure~\ref{fig:cfiles}.
   \\[0.1em]
 
   \nt{c\_expr}
-    & $::=$ & \nt{identifier} \\
-    &   $|$ & ... \\
+    & $::=$ & \nt{integer-constant} \\
+    &   $|$ & \nt{identifier} \\
+    &   $|$ & \nt{identifier} \te{[} \nt{c\_expr} \te{]} \\
+    &   $|$ & \nt{c\_expr} \te{,} \nt{c\_expr} \\
+    &   $|$ & \nt{c\_expr} \nt{assignment\_operator} \nt{c\_expr} \\
+    &   $|$ & \nt{c\_expr} \nt{binary\_operator} \nt{c\_expr} \\
+    &   $|$ & \nt{c\_expr} \nt{postfix\_operator} \\
+    &   $|$ & \nt{prefix\_operator} \nt{c\_expr} \\
+    &   $|$ & \nt{identifier} \te{(} \te{)} \\
+    &   $|$ & \nt{c\_expr} \te{?} \nt{c\_expr} \te{:} \nt{c\_expr} \\
+  \\[0.1em]
+
+  \nt{assignment\_operator}
+    & $::=$ & \te{=} $|$ \te{*=} $|$ \te{/=} $|$ \te{\%=} $|$ \te{+=} 
+          $|$ \te{-=} $|$ \te{<<=} $|$ \te{>>=} $|$ \te{\&=} $|$ \te{\^{}=}
+          $|$ \te{|=}
+  \\[0.1em]
+
+  \nt{prefix\_operator}
+    & $::=$ & \te{++} $|$ \te{--} $|$ \te{-} $|$ \te{!}
+  \\[0.1em]
+
+  \nt{postfix\_operator}
+    & $::=$ & \te{++} $|$ \te{--}
+  \\[0.1em]
+
+  \nt{binary\_operator}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} $|$ \te{<} 
+          $|$ \te{>} $|$ \te{<=} $|$ \te{>=} $|$ \te{==} $|$ \te{!=} 
+          $|$ \te{\&} $|$ \te{\^} $|$ \te{|} $|$ \te{\&\&} $|$ \te{||} \\
   \\[0.1em]
 
   \nt{c\_statement}
     & $::=$ & \nt{c\_expr} \\
-    &   $|$ & ... \\
+    &   $|$ & \te{if} \te{(} \nt{c\_expr} \te{)} \nt{statement} 
+              $[$ \te{else} \nt{statement} $]$ \\
+    &   $|$ & \te{while} \te{(} \nt{c\_expr} \te{)} \nt{statement} \\
+    &   $|$ & \te{do} \nt{statement} \te{while} \te{(} \nt{c\_expr} \te{)} \\
+    &   $|$ & \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
+              $[$ \nt{c\_expr} $]$ \te{)} \nt{statement} \\
+    &   $|$ & \nt{block} \\
+  \\[0.1em]
+
+  \nt{block}
+    & $::=$ & \te{\{} \nt{c\_declaration}\etoile\ 
+              \nt{statement}\etoilesep{\te{;}} \te{\}}\\
+  \\[0.1em]
+
+  \nt{annotated\_block}
+    & $::=$ & $[$ \nt{c\_pre} $]$ \nt{block} $[$ \nt{c\_post} $]$ \\
   \\[0.1em]
 
   \nt{c\_spec}

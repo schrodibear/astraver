@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.64 2002-11-07 12:20:17 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.65 2002-11-19 13:31:10 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -573,6 +573,7 @@ END
 let c_pre_condition = gec "c_pre_condition"
 let c_post_condition = gec "c_post_condition"
 let c_spec = gec "c_spec"
+let c_loop_annot = gec "c_loop_annot"
 
 EXTEND
   c_pre_condition:
@@ -582,6 +583,9 @@ EXTEND
   c_spec:
   [ [ p = OPT c_pre_condition; e = effects; q = OPT c_post_condition; EOI -> 
       (list_of_some p, e, q)
+  ] ];
+  c_loop_annot:
+  [ [ LIDENT "invariant"; i = assertion; LIDENT "variant"; v = variant -> i,v
   ] ]
   ;
 END
@@ -597,3 +601,4 @@ let parse_with_offset f n s =
 let parse_c_spec = parse_with_offset c_spec
 let parse_c_pre = parse_with_offset pre_condition
 let parse_c_post = parse_with_offset post_condition
+let parse_c_loop_annot = parse_with_offset c_loop_annot

@@ -14,13 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.mli,v 1.8 2002-11-07 12:20:17 filliatr Exp $ i*)
+(*i $Id: parser.mli,v 1.9 2002-11-19 13:31:10 filliatr Exp $ i*)
 
 (* Grammar for the programs *)
 
 open Types
 open Ptree
-open Ast
 
 val program : parsed_program Grammar.Entry.e
 val type_v  : ptype_v Grammar.Entry.e
@@ -35,3 +34,4 @@ type 'a c_parser = int -> string -> 'a
 val parse_c_spec : (lexpr pre list * Effect.t * lexpr post option) c_parser
 val parse_c_pre : (lexpr pre) c_parser
 val parse_c_post : (lexpr post) c_parser
+val parse_c_loop_annot : (lexpr asst * variant) c_parser

@@ -1,4 +1,5 @@
 
+  o Emacs mode for editing Why ML source
   o automatic discharge of ...|-(well_founded (Zwf 0))
     and of ...,v=t,...,I and (Zwf 0 t' t),...|-(Zwf 0 t' v)
   o fixed bug in local recursive functions

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.6 2002-11-07 12:20:17 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.7 2002-11-19 13:31:10 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -36,21 +36,40 @@ type assign_operator =
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
   | Aand | Axor | Aor
 
-type lvalue = 
-  | Lvar of Loc.t * Ident.t
+type unary_operator = 
+  | Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec | Uplus | Uminus | Not
+
+type binary_operator =
+  | Plus | Minus | Mult | Div | Mod | Lt | Gt | Le | Ge | Eq | Neq 
+  | Bw_and | Bw_xor | Bw_or | And | Or
 
 type cexpr =
+  | CEconst of Loc.t * string
   | CEvar of Loc.t * Ident.t
+  | CEarrget of Loc.t * cexpr * cexpr
   | CEseq of Loc.t * cexpr * cexpr
-  | CEassign of Loc.t * lvalue * assign_operator * cexpr
+  | CEassign of Loc.t * cexpr * assign_operator * cexpr
+  | CEunary of Loc.t * unary_operator * cexpr
+  | CEbinary of Loc.t * cexpr * binary_operator * cexpr
+  | CEcall of Loc.t * cexpr * cexpr list
+  | CEcond of Loc.t * cexpr * cexpr * cexpr
 
 type cstatement = 
+  | CSnop of Loc.t
   | CSexpr of Loc.t * cexpr
+  | CScond of Loc.t * cexpr * cstatement * cstatement
+  | CSwhile of Loc.t * cexpr * annot * cstatement
+  | CSdowhile of Loc.t * annot * cstatement * cexpr
+  | CSfor of 
+      Loc.t * cstatement * cstatement * cexpr option * annot * cstatement
+  | CSblock of Loc.t * block
 
-type block = Loc.t * annot option * cstatement list * annot option
+and block = decl list * cstatement list
 
-type decl = 
+and annotated_block = Loc.t * annot option * block * annot option
+
+and decl = 
   | Ctypedecl of Loc.t * declarator * pure_type
-  | Cfundef of Loc.t * Ident.t * parameters * pure_type * block
+  | Cfundef of Loc.t * Ident.t * parameters * pure_type * annotated_block
 
 type file = decl list
