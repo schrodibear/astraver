@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.6 2003-10-15 08:36:14 filliatr Exp $ *)
+(* $Id: WhyCM.v,v 1.7 2003-10-27 09:43:10 filliatr Exp $ *)
 
 Require Export WhyArrays.
 
@@ -133,7 +133,7 @@ unfold cstore_update; case (eq_adr_dec a a0); intuition.
 subst a; WhyArrays; trivial.
 Qed.
 
-Hints Resolve is_valid_set .
+Hint Resolve is_valid_set .
 
 End Store.
 
@@ -158,7 +158,7 @@ Definition pointer_store := PointerStore.cstore.
 Definition pget := PointerStore.get.
 Definition pset := PointerStore.set.
 Definition is_valid_pointer := PointerStore.is_valid.
-Hints Unfold pget pset is_valid_pointer .
+Hint Unfold pget pset is_valid_pointer .
 
 (* The set of allocated addresses *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.10 2003-09-25 13:55:01 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.11 2003-10-27 09:43:10 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -98,7 +98,7 @@ Axiom
       (0 <= j < array_length t)%Z ->
       i <> j -> access (store t i v) j = access t j.
 
-Hints Resolve new_def store_def_1 store_def_2 : datatypes v62.
+Hint Resolve new_def store_def_1 store_def_2 : datatypes v62.
 
 
 (* A tactic to simplify access in arrays *)

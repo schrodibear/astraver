@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.7 2003-09-25 13:55:01 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.8 2003-10-27 09:43:10 filliatr Exp $ *)
 
 Require Export WhyArrays.
 Require Import WhyPermut.
@@ -84,7 +84,7 @@ apply sorted_elements_1 with (n := n) (m := m);
 omega.
 Qed.
 
-Hints Resolve sorted_elements : datatypes v62.
+Hint Resolve sorted_elements : datatypes v62.
 
 (* A sub-array of a sorted array is sorted *)
 
@@ -98,7 +98,7 @@ intros.
 apply H; omega.
 Qed.
 
-Hints Resolve sub_sorted_array : datatypes v62.
+Hint Resolve sub_sorted_array : datatypes v62.
 
 (* Extension on the left of the property of being sorted *)
 

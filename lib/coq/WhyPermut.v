@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.10 2003-10-15 08:36:15 filliatr Exp $ *)
+(* $Id: WhyPermut.v,v 1.11 2003-10-27 09:43:10 filliatr Exp $ *)
 
 Require Import WhyArrays.
 Require Import Omega.
@@ -54,7 +54,7 @@ intros A t i j H_i H_j.
 AccessStore j i H; WhyArrays; auto with datatypes.
 Qed.
 
-Hints Resolve exchange_1 : v62 datatypes.
+Hint Resolve exchange_1 : v62 datatypes.
 
 
 Lemma exchange_proof :
@@ -71,7 +71,7 @@ cut (j <> k); auto with datatypes.
 AccessOther; auto with datatypes.
 Qed.
 
-Hints Resolve exchange_proof : v62 datatypes.
+Hint Resolve exchange_proof : v62 datatypes.
 
 
 Lemma exchange_sym :
@@ -85,7 +85,7 @@ intros.
  rewrite (H3 k); auto with datatypes.
 Qed.
 
-Hints Resolve exchange_sym : v62 datatypes.
+Hint Resolve exchange_sym : v62 datatypes.
 
 
 Lemma exchange_id :
@@ -110,7 +110,7 @@ case (Z_eq_dec k j).
  assumption.
 Qed.
 
-Hints Resolve exchange_id : v62 datatypes.
+Hint Resolve exchange_id : v62 datatypes.
 
 
 Lemma exchange_length :
@@ -121,7 +121,7 @@ intros A t t' i j.
 simple_induction 1; auto.
 Qed.
 
-Hints Resolve exchange_length : v62 datatypes.
+Hint Resolve exchange_length : v62 datatypes.
 
 (****************************************************************************)
 (*                    Permutations of elements in arrays                    *)
@@ -141,7 +141,7 @@ Inductive permut (A:Set) : array A -> array A -> Prop :=
       forall t t' t'':array A,
         permut t t' -> permut t' t'' -> permut t t''.
 
-Hints Resolve exchange_is_permut permut_refl permut_sym permut_trans :
+Hint Resolve exchange_is_permut permut_refl permut_sym permut_trans :
  v62 datatypes.
 
 Lemma permut_length :
@@ -152,7 +152,7 @@ elim H0; auto.
 omega.
 Qed.
 
-Hints Resolve permut_length : v62 datatypes.
+Hint Resolve permut_length : v62 datatypes.
 
 (* We also define the permutation on a segment of an array, ,
  * the other parts of the array being unchanged
@@ -174,7 +174,7 @@ Inductive sub_permut (A:Set) (g d:Z) : array A -> array A -> Prop :=
         sub_permut g d t t' ->
         sub_permut g d t' t'' -> sub_permut g d t t''.
 
-Hints Resolve exchange_is_sub_permut sub_permut_refl sub_permut_sym
+Hint Resolve exchange_is_sub_permut sub_permut_refl sub_permut_sym
  sub_permut_trans : v62 datatypes.
 
 Lemma sub_permut_length :
@@ -186,7 +186,7 @@ elim H2; auto.
 omega.
 Qed.
 
-Hints Resolve sub_permut_length : v62 datatypes.
+Hint Resolve sub_permut_length : v62 datatypes.
 
 Lemma sub_permut_function :
  forall (A:Set) (t t':array A) (g d:Z),
@@ -279,7 +279,7 @@ unfold array_id.
 auto with datatypes.
 Qed.
 
-Hints Resolve array_id_refl : v62 datatypes.
+Hint Resolve array_id_refl : v62 datatypes.
 
 Lemma array_id_sym :
  forall (A:Set) (t t':array A) (g d:Z),
@@ -290,7 +290,7 @@ unfold array_id.
 symmetry; auto with datatypes.
 Qed.
 
-Hints Resolve array_id_sym : v62 datatypes.
+Hint Resolve array_id_sym : v62 datatypes.
 
 Lemma array_id_trans :
  forall (A:Set) (t t' t'':array A) (g d:Z),
@@ -301,7 +301,7 @@ unfold array_id.
 apply trans_eq with (y := access t' i); auto with datatypes.
 Qed.
 
-Hints Resolve array_id_trans : v62 datatypes.
+Hint Resolve array_id_trans : v62 datatypes.
 
 (* Outside the segment [g,d] the elements are equal *)
 
@@ -326,7 +326,7 @@ apply array_id_trans with t'0; auto with datatypes.
 rewrite (sub_permut_length H0); auto.
 Qed.
 
-Hints Resolve sub_permut_id .
+Hint Resolve sub_permut_id .
 
 Lemma sub_permut_eq :
  forall (A:Set) (t t':array A) (g d:Z),
@@ -352,7 +352,7 @@ intros A t t' g d.
 simple_induction 1; intros; eauto with datatypes.
 Qed.
 
-Hints Resolve sub_permut_is_permut .
+Hint Resolve sub_permut_is_permut .
 
 (* If we have a sub-permutation on an empty segment, then we have a 
  * sub-permutation on any segment.
