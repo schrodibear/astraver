@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.25 2004-03-03 15:25:02 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.26 2004-03-03 16:17:04 marche Exp $ i*)
 
 
 open Format
@@ -208,7 +208,8 @@ v.var_is_assigned;
 end;
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
     | TEbinary(e1,op,e2) ->
-	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
+	build_complex_app (Var (interp_bin_op op))
+	  [interp_expr e1;interp_expr e2]
     | TEarrget(e1,e2) ->
 	let te1 = interp_expr e1 and te2 = interp_expr e2 in
 	let var = global_var_for_type e.texpr_type in
@@ -230,10 +231,12 @@ end;
       -> assert false (* TODO *)
     | TEarrow(e,s)
       -> assert false (* TODO *)
-    | TEunary(op,e)
-      -> assert false (* TODO *)
-    | TEcall(e,args)
-      -> assert false (* TODO *)
+    | TEunary(Ustar,e1) -> 
+	let te1 = interp_expr e1 in
+	let var = global_var_for_type e.texpr_type in
+	make_app "acc_" [Var var;te1]
+    | TEunary(_,_) -> assert false (* TODO *)	
+    | TEcall(e,args) -> assert false (* TODO *)
     | TEcast(t,e)
       -> assert false (* TODO *)
     | TEsizeof_expr(e)
@@ -309,6 +312,11 @@ and interp_lvalue e =
 	HeapRef(f,interp_expr { e with texpr_node = TEunary(Ustar,e1) })
     | _ -> assert false (* wrong typing of lvalue ??? *)
 	  
+
+let interp_spec s =
+  let tpre = interp_predicate_opt None "" s.requires
+  and tpost = interp_predicate_opt None "" s.ensures
+  in (tpre,tpost)
 
 
 
@@ -423,10 +431,9 @@ let rec interp_statement stat =
 	     (append 
 		(interp_statement body) 
 		(interp_statement_expr e3)))
-  | TSnop
-      -> assert false (* TODO *)
-  | TSif(e,s1,s2)
-      -> assert false (* TODO *)
+  | TSnop -> Void
+  | TSif(e,s1,s2) -> 
+      If(interp_expr e,interp_statement s1,interp_statement s2)
   | TSwhile(e,s,info,annot)
       -> assert false (* TODO *)
   | TSdowhile(s,e,info,annot)
@@ -445,23 +452,19 @@ let rec interp_statement stat =
       -> assert false (* TODO *)
   | TSgoto(lab)
       -> assert false (* TODO *)
-  | TSassert(pred)
-      -> assert false (* TODO *)
+  | TSassert(pred) -> 
+      Output.Assert(interp_predicate None "init" pred)
   | TSlogic_label(l)
       -> assert false (* TODO *)
   | TSspec (spec,s) ->
-      assert false (* TODO *)
+      let (pre,post) = interp_spec spec in
+      Triple(pre,interp_statement s,post,None)
 
 and interp_block (decls,stats) =
   let b = 
     List.fold_right 
       (fun s acc -> append (interp_statement s) acc) stats Void in
   List.fold_right interp_decl decls b 
-
-let interp_spec s =
-  let tpre = interp_predicate_opt None "" s.requires
-  and tpost = interp_predicate_opt None "" s.ensures
-  in (tpre,tpost)
 
 let no_spec = 
   { requires = None; 
