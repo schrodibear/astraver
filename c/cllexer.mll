@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.1 2004-01-13 15:24:35 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.2 2004-01-14 10:57:24 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -44,6 +44,7 @@ rule token = parse
 
   | "forall"  { FORALL }
   | "exists"  { EXISTS }
+  | "implies" { IMPLIES }
   | "and"     { AND }
   | "or"      { OR }
   | "not"     { NOT }
@@ -55,6 +56,15 @@ rule token = parse
   | "if"                    { IF }
   | "then"                  { THEN }
   | "else"                  { ELSE }
+  | "invariant" { INVARIANT }
+  | "variant"   { VARIANT }
+  | "for"       { FOR }
+  | "assert"    { ASSERT }
+  | "label"     { LABEL }
+  | "pre"       { PRE }
+  | "post"      { POST }
+  | "reads"     { READS }
+  | "writes"    { WRITES }
 
   | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
 
@@ -95,5 +105,20 @@ rule token = parse
  
 
 {
+
+  let parse_with_offset f (ofs, s) =
+    let lb = from_string s in
+    try
+      f token lb
+    with 
+      | Parsing.Parse_error as e -> 
+	  let loc = ofs + lexeme_start lb, ofs + lexeme_end lb in
+	  raise (Stdpp.Exc_located (loc, e))
+      | Stdpp.Exc_located ((ls, le), e) -> 
+	  raise (Stdpp.Exc_located ((ofs + ls, ofs + le), e))
+
+  let predicate = parse_with_offset Clparser.predicate
+  let spec = parse_with_offset Clparser.spec
+  let loop_annot = parse_with_offset Clparser.loop_annot
 
 }

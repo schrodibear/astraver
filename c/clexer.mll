@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.9 2004-01-13 15:24:35 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.10 2004-01-14 10:57:24 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -182,8 +182,5 @@ and wdecl = parse
       Cparser.file token lb
     with Parsing.Parse_error as e ->
       raise (Stdpp.Exc_located (loc lb, e))
-
-  let parse_spec c =
-    failwith "todo"
 
 }

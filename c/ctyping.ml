@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.13 2004-01-09 15:49:50 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.14 2004-01-14 10:57:24 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -290,11 +290,35 @@ end
 
 (*s Logic *)
 
-let rec type_predicate env p = 
+let rec type_term env t =
   assert false (*TODO*)
 
-let type_loop_annot env a =
+let rec type_predicate env p = 
   assert false (*TODO*)
+(***
+  | Pfalse
+  | Ptrue as p -> p
+  | Pvar x -> (*TODO*) Pvar x
+  | Prel of 'a term * relation * 'a term
+  | Pand of 'a predicate * 'a predicate
+  | Por of 'a predicate * 'a predicate
+  | Pimplies of 'a predicate * 'a predicate
+  | Pnot of 'a predicate
+  | Papp of string * 'a term list
+  | Pif of 'a term * 'a predicate * 'a predicate
+  | Pforall of string * pure_type * 'a predicate
+  | Pexists of string * pure_type * 'a predicate
+***)
+
+let predicate env p =
+  let p = Cllexer.predicate p in
+  type_predicate env p
+
+let type_variant env (t, r) = (type_term env t, r)
+
+let type_loop_annot env a =
+  let (i,v) = Cllexer.loop_annot a in
+  option_app (type_predicate env) i, type_variant env v
 
 (*s Types *)
 
@@ -680,7 +704,7 @@ and type_statement_node loc env et = function
       (* TODO: vérifier existence label *)
       TSgoto lab, mt_status
   | CSfor (e1, e2, e3, an, s) ->
-      let an = type_loop_annot env an in
+      let an = option_app (type_loop_annot env) an in
       let e1 = type_expr env e1 in
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
@@ -689,14 +713,14 @@ and type_statement_node loc env et = function
       TSfor (e1, e2, e3, s, li, an),
       { mt_status with abrupt_return = st.abrupt_return }
   | CSdowhile (s, an, e) ->
-      let an = type_loop_annot env an in
+      let an = option_app (type_loop_annot env) an in
       let s, st = type_statement env et s in
       let e = type_boolean env e in
       let li = { loop_break = st.break; loop_continue = st.continue } in
       TSdowhile (s, e, li, an), 
       { mt_status with abrupt_return = st.abrupt_return }
   | CSwhile (e, an, s) ->
-      let an = type_loop_annot env an in
+      let an = option_app (type_loop_annot env) an in
       let e = type_boolean env e in
       let s, st = type_statement env et s in
       let li = { loop_break = st.break; loop_continue = st.continue } in

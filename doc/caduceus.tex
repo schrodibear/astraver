@@ -267,8 +267,12 @@ except that:
 \item some character sequences are now recognized as keywords: \par
   \begin{center}
   \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
-    \verb!\result! & \verb!\forall! & \verb!\exists! & \verb!\old! \\
-    \verb!invariant! & \verb!variant! & & \\ 
+  \verb!forall! & \verb!exists! & \verb!implies! & \verb!and! & \verb!or! \\
+  \verb!true! & \verb!false! & \verb!if! & \verb!then! & \verb!else! \\
+  \verb!invariant! & \verb!variant! & \verb!for! & \verb!label! & 
+  \verb!assert! \\ 
+  \verb!pre! & \verb!post! & \verb!reads! & \verb!writes! \\ 
+  \verb!\result! & \verb!\old! & \verb!\length!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -379,7 +383,7 @@ annotations.
       & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{term} \nt{relation} \nt{term} 
               $[$ \nt{relation} \nt{term} $]$ \\
-      & $|$ & \nt{predicate} \te{->} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{implies} \nt{predicate} \\
       & $|$ & \nt{predicate} \te{or} \nt{predicate} \\
       & $|$ & \nt{predicate} \te{and} \nt{predicate} \\
       & $|$ & \te{not} \nt{predicate} \\

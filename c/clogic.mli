@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.2 2004-01-13 15:24:35 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.3 2004-01-14 10:57:24 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -39,7 +39,7 @@ type label = Current | Before | At of string
 type ('a, 'b) info = { node : 'a; info : 'b }
 
 type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
-type term_unop = Uplus | Uminus | Ustar
+type term_unop = Uminus | Ustar
 
 type 'a term = ('a term_node, 'a) info
 
@@ -47,7 +47,10 @@ and 'a term_node =
   | Tconstant of string
   | Tvar of string * label
   | Tapp of string * 'a term list
+  | Tunop of term_unop * 'a term
   | Tbinop of 'a term * term_binop * 'a term
+  | Tdot of 'a term * string
+  | Tarrow of 'a term * string
   | Tif of 'a term * 'a term * 'a term
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
@@ -67,4 +70,14 @@ and 'a predicate_node =
   | Pif of 'a term * 'a predicate * 'a predicate
   | Pforall of string * pure_type * 'a predicate
   | Pexists of string * pure_type * 'a predicate
+
+type effects = string list * string list
+
+type 'a spec = 'a predicate option * effects * 'a predicate option
+
+type 'a annot_statement = Assert of 'a predicate | Label of string
+
+type 'a variant = 'a term * string option
+
+type 'a loop_annot = 'a predicate option * 'a variant
 
