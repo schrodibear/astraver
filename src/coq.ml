@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.45 2002-07-04 09:31:12 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.46 2002-07-04 11:10:22 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -245,8 +245,6 @@ let rec print_cc_term fmt = function
   | CC_tuple (cl, Some q) ->
       fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
 	print_cc_type q (print_list space print_cc_term) cl
-  | CC_case _ ->
-      fprintf fmt "<Case (TODO)>"
   (* special treatment for the if-then-else *)
   | CC_letin (_, ([idb, CC_var_binder (TTpure PTbool); 
 		   qb, CC_pred_binder q] as bl), e1, 

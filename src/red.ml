@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.19 2002-07-04 09:31:13 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.20 2002-07-04 11:10:23 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -109,11 +109,6 @@ let rec red sp s cct =
 	     red (Idmap.add x ra sp) s e
 	 | rf, ra -> 
 	     CC_app (rf, ra))
-  | CC_case (e1, el) ->
-      let red_branch (bl,e) = 
-	let bl',s' = cc_subst_binders s bl in (bl', red sp s' e)
-      in
-      CC_case (red sp s e1, List.map red_branch el)
   | CC_if (a,b,c) ->
       CC_if (red sp s a, red sp s b, red sp s c)
   | CC_tuple (al, po) ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.37 2002-07-04 09:31:13 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.38 2002-07-04 11:10:23 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -427,16 +427,6 @@ let rec print_cc_term fmt = function
       fprintf fmt "@[<hov 2>(%a@ %a)@]" print_cc_term f print_cc_term a
   | CC_tuple (cl,_) ->
       fprintf fmt "@[<hov 2>(%a)@]" (print_list comma print_cc_term) cl
-  | CC_case (b,[bl1,e1; bl2,e2]) ->
-      let branch bl e =
-	print_binders fmt bl; fprintf fmt "@,"; print_cc_term fmt e in
-      fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
-      hov 0 fmt (branch bl1) e1;
-      fprintf fmt "@\nelse@\n  ";
-      hov 0 fmt (branch bl2) e2;
-      fprintf fmt "@]"
-  | CC_case _ ->
-      fprintf fmt "<Case...>"
   | CC_if (b,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
       hov 0 fmt (print_cc_term fmt) e1;
