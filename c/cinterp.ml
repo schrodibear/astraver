@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.124 2004-12-14 13:51:54 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.125 2004-12-15 16:03:46 hubert Exp $ i*)
 
 
 open Format
@@ -98,7 +98,14 @@ let interp_term_bin_op ty op =
   | Tfloat _, Bdiv -> "div_real"
   | (Tpointer _ | Tarray _), Badd -> "shift"
   | (Tpointer _ | Tarray _), Bsub -> "sub_pointer"
-  | _ -> assert false
+  | Tfloat _, Bmod -> assert false
+  | Tarray (_, _), (Bmod|Bdiv|Bmul) -> assert false
+  | Tpointer _, (Bmod|Bdiv|Bmul) -> assert false
+  | Tfun (_, _), _-> assert false 
+  | Tunion _ , _ -> assert false
+  | Tstruct _ , _-> assert false
+  | Tvar _ , _-> assert false 
+  | Tvoid , _-> assert false
 
 let interp_term_un_op ty op = match ty.ctype_node, op with
   | (Tenum _ | Tint _), Uminus -> "neg_int"
@@ -895,15 +902,16 @@ let interp_spec add_inv effect_reads effect_assigns s =
 let alloc_on_stack loc v t =
   let form = 
     Cnorm.make_and 
-      (List.fold_left (fun x (_,y) -> Cnorm.make_and x y) 
-	 NPtrue (snd(Cnorm.separation loc v t)))
+      (List.fold_left (fun x v2 -> Cnorm.make_and x 
+			   (Cnorm.separation loc v v2)) 
+	 NPtrue !Ceffect.global_var)
       (Cnorm.valid_for_type ~fresh:true loc v t)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
 		      make_and 
 			(interp_predicate None "" form)
 			(LPred ("alloc_stack", 
-				[LVar "result"; LVar "alloc@"; LVar "alloc"])), 
+				[LVar "result"; LVar "alloc@"; LVar "alloc"])),
 		      None))
       
 let interp_decl d acc = 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.8 2004-12-14 13:51:54 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.9 2004-12-15 16:03:46 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -640,158 +640,223 @@ let print_allocs =
 	       term_loc = Loc.dummy;
 	       term_type = c_pointer c_void } in
   fun fmt p -> fprintf fmt "fun x -> %a" print_predicate (p varx)
+ 
+let not_alias loc x y = 
+  let ba t = { nterm_node = NTbase_addr t; 
+	       nterm_loc = loc;
+	       nterm_type = c_addr } in 
+  NPrel (ba x, Neq, ba y)
+
+let forall_index i ts vari pi =
+  make_forall [c_int, i] 
+    (make_implies 
+       (NPand (NPrel (nzero, Le, vari), NPrel (vari, Lt, ts)))
+       pi)
+
+let var_to_term loc v =
+  {
+    nterm_node = NTvar v; 
+    nterm_loc = loc;
+    nterm_type = v.var_type}
+
+let in_struct v1 v =
+  { nterm_node = NTarrow (v1, v); 
+    nterm_loc = v1.nterm_loc;
+    nterm_type = v.var_type }
+
+
+let rec tab_struct loc v1 v2 s ty n n1 n2=
+  let ts = int_nconstant (Int64.to_string s) in
+  let i = default_var_info (fresh_index ()) in
+  let vari = { nterm_node = NTvar i; 
+	       nterm_loc = loc;
+	       nterm_type = c_int } in
+  let vi = 
+    { nterm_node = NTbinop (v1, Badd, vari); 
+      nterm_loc = loc;
+      nterm_type = ty }
+  in
+  let l = begin
+    match  tag_type_definition n with
+      | TTStructUnion ((Tstruct _),fl) ->
+	  fl
+      | _ -> assert false
+  end in
+  make_and (List.fold_left 
+	      (fun p (_,t) -> 
+		 if  compatible_type t.var_type v2.nterm_type 
+		 then make_and p (not_alias loc v2 (in_struct v1 t))
+		 else p)
+	      NPtrue l)
+    (forall_index i ts vari (local_separation loc n1 v1 (n2^"[i]") vi))
+and local_separation loc n1 v1 n2 v2 =
+  match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
+  with
+    | Tarray (ty, None), _ ->
+	error loc ("array size missing in `" ^ n1 ^ "'")
+    | _, Tarray (ty, None) ->
+	error loc ("array size missing in `" ^ n2 ^ "'")
+    | Tstruct n1, Tstruct n2 ->
+	let l1 = begin
+	  match  tag_type_definition n1 with
+	    | TTStructUnion ((Tstruct _),fl) ->
+		fl
+	    | _ -> assert false
+	end in
+	let l2 = begin
+	  match  tag_type_definition n2 with
+	    | TTStructUnion ((Tstruct _),fl) ->
+		fl
+	    | _ -> assert false
+	end in
+	make_and
+	  (if compatible_type v1.nterm_type v2.nterm_type
+	   then
+	     (not_alias loc v1 v2)
+	   else
+	     (make_and 
+		(List.fold_left
+		   (fun p (_,v) ->
+		      if compatible_type v1.nterm_type v.var_type
+		      then
+			make_and (not_alias loc v1 (in_struct v2 v)) p
+		      else
+			p)
+		   NPtrue l2)
+		(List.fold_left
+		   (fun p (_,v) ->
+		      if compatible_type v2.nterm_type v.var_type
+		      then
+			make_and (not_alias loc v2 (in_struct v2 v)) p
+		      else
+			p)
+		   NPtrue l1)))
+	  (List.fold_left 
+	     (fun p (_,t1) -> 
+		List.fold_left 
+		  (fun p (_,t2) -> 
+		     make_and p 
+		       (local_separation loc n1 (in_struct v1 t1) 
+			  n2 (in_struct v2 t2)))
+		  p l2)
+	     NPtrue l1)
+    | Tstruct n , Tarray (ty,Some s) -> tab_struct loc v1 v2 s ty n n1 n2
+    | Tarray (ty,Some s) , Tstruct n -> tab_struct loc v2 v1 s ty n n1 n2
+    | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->
+	let ts1 = int_nconstant (Int64.to_string s1) in
+	let i = default_var_info (fresh_index ()) in
+	let vari = { nterm_node = NTvar i; 
+		     nterm_loc = loc;
+		     nterm_type = c_int } in
+	let vi = 
+	  { nterm_node = NTbinop (v1, Badd, vari); 
+	    nterm_loc = loc;
+	    nterm_type = ty1 }
+	in
+	let ts2 = int_nconstant (Int64.to_string s2) in
+	let j = default_var_info (fresh_index ()) in
+	let varj = { nterm_node = NTvar j; 
+		     nterm_loc = loc;
+		     nterm_type = c_int } in
+	let vj = 
+	  { nterm_node = NTbinop (v1, Badd, vari); 
+	    nterm_loc = loc;
+	    nterm_type = ty2 }
+	in
+	make_and
+	  (if compatible_type v1.nterm_type v2.nterm_type
+	   then
+	     (not_alias loc v1 v2)
+	   else
+	     NPtrue)
+	  (make_and 
+	     (forall_index i ts1 vari 
+		(local_separation loc (n1^"[i]") vi n2 v2))
+	     (forall_index j ts2 varj 
+		(local_separation loc n1 v1 (n2^"[j]") vj)))
+    | _, _ -> NPtrue
+
+    
+let rec separation_intern loc v1 =
+  let rec local_separation_intern loc n1 v1 =
+    match v1.nterm_type.Ctypes.ctype_node with
+      | Tarray (_,None) -> 
+	  error loc ("array size missing in `" ^ n1 ^ "'")
+      | Tarray(ty,Some s) -> 
+	  begin
+	    match ty.Ctypes.ctype_node with
+	      | Tarray (_,None) -> 
+		  error loc ("array size missing in `" ^ n1 ^ "[i]'")
+	      | Tarray (_,_)  
+	      | Tstruct _ ->
+		  let ts = int_nconstant (Int64.to_string s) in
+		  let i = default_var_info (fresh_index ()) in
+		  let vari = { nterm_node = NTvar i; 
+			       nterm_loc = loc;
+			       nterm_type = c_int } in
+		  let vi = 
+		    { nterm_node = NTbinop (v1, Badd, vari); 
+		      nterm_loc = loc;
+		      nterm_type = v1.nterm_type }
+		  in
+		  let star_vi = 
+		    { nterm_node = NTstar vi; 
+		      nterm_loc = loc;
+		      nterm_type = ty }
+		  in
+		  let j = default_var_info (fresh_index ()) in
+		  let varj = { nterm_node = NTvar j; 
+			       nterm_loc = loc;
+			       nterm_type = c_int } in
+		  let vj = 
+		    { nterm_node = NTbinop (v1, Badd, varj); 
+		      nterm_loc = loc;
+		      nterm_type = v1.nterm_type }
+		  in
+		  make_and
+		    (forall_index i ts vari 
+		       (forall_index j ts varj
+			  (make_implies (NPrel (vari, Neq, varj)) 
+			     (not_alias loc vi vj))))
+		    (forall_index i ts vari
+		       (local_separation_intern loc (n1^"[i]") star_vi))
+	      | _ -> NPtrue
+	  end
+      | Tstruct n -> 
+	  let l =
+	    begin
+	      match  tag_type_definition n with
+		| TTStructUnion ((Tstruct _),fl) ->
+		    fl
+		| _ -> assert false
+	    end  
+	  in
+	  let rec f l =
+	    match l with
+	      | ((_,v)::l) -> make_and
+		    (make_and 
+		    (local_separation_intern loc v.var_name 
+		       (var_to_term loc v))
+		    (List.fold_left 
+		       (fun acc (_,x)-> 
+			  make_and acc (local_separation loc 
+					  v.var_name (in_struct v1 v) 
+					  x.var_name (in_struct v1 x))) 
+		       NPtrue l))
+		    (f l)
+	      | [] -> NPtrue
+	  in
+	  f l
+      | _ -> NPtrue
+  in
+  local_separation_intern loc v1.var_name (var_to_term loc v1) 
+	  
+	
+let separation loc v1 v2 =
+  local_separation loc v1.var_name (var_to_term loc v1) 
+    v2.var_name (var_to_term loc v2)  
 
 (*
-let separation loc v ?(allocs=(fun x -> NPtrue)) (t : Cast.nterm) =
-  let not_alias x y = 
-    let ba t = { nterm_node = NTbase_addr t; 
-		 nterm_loc = loc;
-		 nterm_type = c_addr } in 
-    NPrel (ba x, Neq, ba y)
-  in
-(*
-[local_alloc_for t] returns a pair (allocs,f), f is a formula expressing that 
-all allocations in [t] are not aliased and [allocs] is a function expressing
-that a pointer is different from all allocated pointers in [t]
-*)
-  let rec local_alloc_fields allocs n t =	
-    (* Format.eprintf "local_alloc_fields@.  allocs = %a@.  t = %a@." 
-        print_allocs allocs print_term t; *)
-    match tag_type_definition n with
-    | TTStructUnion ((Tstruct _),fl) ->
-	let allocs',form' as res = 
-	  List.fold_right 
-	  (fun (tyf, f) (allocs,form) -> 
-	     let tf = 
-	       { nterm_node = NTarrow (t, f); 
-		 nterm_loc = t.nterm_loc;
-		 nterm_type = ctype tyf }
-	     in
-	     let allocs',form' = local_alloc_for allocs tf in
-	     allocs', make_and form form')
-	  fl 
-	  (allocs, NPtrue)
-	in
-	(*
-	Format.eprintf "  local_alloc_fields ---> %a@." print_predicate form'; 
-	*)
-	res 
-    | TTIncomplete ->
-	error loc ("`" ^ v.var_name ^ "' has incomplete type")
-    |  _ ->
-	assert false
-  and local_alloc_for allocs (t : Cast.nterm) = 
-    (* Format.eprintf "local_alloc_for@.  allocs = %a@.  t = %a@." 
-        print_allocs allocs print_term t; *)
-    match t.nterm_type.Ctypes.ctype_node with
-    | Tstruct n ->
-	let allocs_t = allocs t in
-	let allocs x = make_and (allocs x) (not_alias x t) in
-	let allocs',form = local_alloc_fields allocs n t in
-	allocs', make_and allocs_t form
-    | Tarray (ty, None) ->
-	error loc ("array size missing in `" ^ v.var_name ^ "'")
-    | Tarray (ty, Some s) ->
-	let ts = int_nconstant (Int64.to_string s) in
-	let forall_index i vari pi =
-	  make_forall [c_int, i] 
-	    (make_implies 
-	       (NPand (NPrel (nzero, Le, vari), NPrel (vari, Lt, ts)))
-	       pi)
-	in
-	let allocs_t = allocs t in
-	begin match ty.Ctypes.ctype_node with
-	  | Tstruct n ->
-	      (* Format.eprintf "  cas d'un tableau de struct@."; *)
-	      let i = default_var_info (fresh_index ()) in
-	      let vari = { nterm_node = NTvar i; 
-			   nterm_loc = t.nterm_loc;
-			   nterm_type = c_int } in
-	      let ti = 
-		{ nterm_node = NTbinop (t, Badd, vari); 
-		  nterm_loc = t.nterm_loc;
-		  nterm_type = t.nterm_type }
-	      in
-	      let allocs_i,_ = local_alloc_fields (fun x -> NPtrue) n ti in
-	      let j = default_var_info (fresh_index ()) in
-	      let varj ={ nterm_node = NTvar j; 
-			  nterm_loc = t.nterm_loc;
-			  nterm_type = c_int } in
-	      let allocs' x =
-		(* allocs x and x<>t and 
-		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
-		make_and 
-		  (make_and (allocs x) (not_alias x t))
-		  (forall_index i vari
-		     (make_implies (NPrel (vari, Neq, varj)) (allocs_i x)))
-	      in
-	      let tj = 
-		{ nterm_node = NTbinop (t, Badd, varj); 
-		  nterm_loc = t.nterm_loc;
-		  nterm_type = t.nterm_type }
-	      in
-	      let _,form_j = local_alloc_fields allocs' n tj in
-	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
-	      (fun x -> 
-		 make_and 
-		   (make_and (allocs x) (not_alias x t))
-		   (forall_index i vari (allocs_i x))),
-	      (* forall j 0<=j<ts -> form_j *)
-	      make_and allocs_t (forall_index j varj form_j)
-	  | Tarray _ ->
-	      (* Format.eprintf "  cas d'un tableau d'autre nature@."; *)
-	      let i = default_var_info (fresh_index ()) in
-	      let vari = { nterm_node = NTvar i; 
-			   nterm_loc = t.nterm_loc;
-			   nterm_type = c_int } in
-	      let ti = { nterm_node = 
-			   NTstar {
-			     nterm_node = NTbinop (t, Badd, vari); 
-			     nterm_type = t.nterm_type;
-			     nterm_loc = t.nterm_loc ;
-			   } ;
-			 nterm_loc = t.nterm_loc;
-			 nterm_type = ty } in
-	      let allocs_i,_ = local_alloc_for (fun x -> NPtrue) ti in
-	      let j = default_var_info (fresh_index ()) in
-	      let varj ={ nterm_node = NTvar j; 
-			  nterm_loc = t.nterm_loc;
-			  nterm_type = c_int } in
-	      let allocs' x =
-		(* allocs x and x<> t and
-		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
-		make_and 
-		  (make_and (allocs x) (not_alias x t))
-		  (forall_index i vari
-		     (make_implies (NPrel (vari, Neq, varj)) (allocs_i x)))
-	      in
-	      let tj = { nterm_node = 
-			   NTstar {
-			     nterm_node = NTbinop (t, Badd, varj); 
-			     nterm_type = t.nterm_type;
-			     nterm_loc = t.nterm_loc ;
-			   } ;
-			 nterm_loc = t.nterm_loc;
-			 nterm_type = ty } in
-	      let _,form_j = local_alloc_for allocs' tj in
-	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
-	      (fun x -> 
-		 make_and 
-		   (make_and (allocs x) (not_alias x t))
-		   (forall_index i vari (allocs_i x))),
-	      (* forall j 0<=j<ts -> form_j *)
-	      make_and allocs_t (forall_index j varj form_j)
-	  | _ ->
-	      let allocs x = make_and (allocs x) (not_alias x t) in
-	      allocs, allocs_t
-	end
-    | _ ->
-	(* Format.eprintf "autre (%a)@." print_term t; *)
-	allocs, NPtrue
-  in
-  local_alloc_for allocs t
-*)
-
 let separation loc v ?(allocs=(fun n x -> [])) (t : Cast.nterm) =
   let not_alias x y = 
     let ba t = { nterm_node = NTbase_addr t; 
@@ -965,3 +1030,4 @@ that a pointer is different from all allocated pointers in [t]
 	allocs, []
   in
   local_alloc_for allocs t v.var_name
+*)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.48 2004-12-08 10:42:28 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.49 2004-12-15 16:03:46 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -145,7 +145,7 @@ let rec explain_exception fmt = function
       raise e
 
 
-(* for debugging
+(* for debugging 
 let () = main ()
 *)
 

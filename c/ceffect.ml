@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.68 2004-12-14 13:51:54 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.69 2004-12-15 16:03:46 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -101,7 +101,10 @@ let alloc =
 let heap_var_type v = 
   if v == alloc
   then ([], "alloc_table")
-  else Hashtbl.find heap_vars v.var_unique_name
+  else 
+    try
+      Hashtbl.find heap_vars v.var_unique_name
+    with Not_found -> assert false
 
 let is_memory_var v = 
   if v == alloc then false
@@ -466,14 +469,24 @@ let print_effects fmt l =
     (HeapVarSet.elements l)
 
 (* first pass: declare invariants and computes effects for logics *)
-
+let global_var = ref []
+		   
 let invariant_for_global =
-  let allocs = ref (fun n x -> (*NPtrue*) []) in
+  fun loc v ->
+    let form =
+      List.fold_left (fun p x -> 
+			("separation_"^v.var_name^"_"^x.var_name,
+			 Cnorm.separation loc v x)::p) 
+	[] !global_var in 
+      global_var := v::!global_var;
+    ("separation_intern_"^v.var_name, (Cnorm.separation_intern loc v))::form
+ 
+(*  let allocs = ref (fun n x -> (*NPtrue*) []) in
   fun loc v t ->
     let allocs',form = Cnorm.separation ~allocs:!allocs loc v t in
     allocs := allocs';
     form
-
+*)
 let not_a_constant_value loc = error loc "is not a constant value"
 
 let binop loc = function
@@ -664,10 +677,10 @@ let decl d =
 		let t = { nterm_node = NTvar v; 
 			  nterm_loc = Loc.dummy;
 			  nterm_type = ty } in
-		  List.iter (fun (x,y) -> 
-(*			       (eprintf "%s : %a @." x Cprint.npredicate y);*)
-			       add_strong_invariant x y) 
-		    (invariant_for_global d.loc v t);
+		List.iter (fun (x,y) -> 
+			     (*(eprintf "%s : %a @." x Cprint.npredicate y);*)
+			     add_strong_invariant x y) 
+		  (invariant_for_global d.loc v);
 		add_strong_invariant ("valid_" ^ v.var_name) 
 		  (Cnorm.valid_for_type d.loc v t)
 	    | _ -> ()

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.15 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.16 2004-12-15 16:03:46 hubert Exp $ i*)
 
 val interp_type : Cast.nctype -> string
 
@@ -25,6 +25,8 @@ type effect =
       reads : HeapVarSet.t;
       assigns : HeapVarSet.t;
     }
+
+val global_var :  Info.var_info list ref
 
 val intersect_only_alloc : HeapVarSet.t -> HeapVarSet.t -> bool
 

@@ -11,7 +11,7 @@ Lemma V4A_impl_po_1 :
   forall (VC: ((memory) pointer)),
   forall (alloc: alloc_table),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_Ch_Pn_SPMEP Ch_Pn SPMEP) /\
+                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
@@ -32,7 +32,7 @@ Lemma V4A_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_Ch_Pn_SPMEP Ch_Pn SPMEP) /\
+                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
@@ -54,7 +54,7 @@ Lemma V4A_impl_po_3 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_Ch_Pn_SPMEP Ch_Pn SPMEP) /\
+                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
@@ -80,7 +80,7 @@ Lemma V4A_impl_po_4 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_Ch_Pn_SPMEP Ch_Pn SPMEP) /\
+                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
@@ -119,7 +119,7 @@ Lemma V4A_impl_po_5 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre35: (valid alloc Parametre) /\
-                 (separation_Ch_Pn_SPMEP Ch_Pn SPMEP) /\
+                 (separation_SPMEP_Ch_Pn Ch_Pn SPMEP) /\
                  (valid_Ch_Pn alloc Ch_Pn) /\ (valid_SPMEP alloc SPMEP)),
   forall (Pre9: (valid alloc Parametre)),
   forall (caduceus_19: pointer),
