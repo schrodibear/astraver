@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.17 2002-06-21 14:24:29 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.18 2002-06-25 12:52:44 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -97,8 +97,10 @@ let rec red sp s cct =
       CC_lam (b', red sp s' e)
   | CC_app (f, a) ->
       (match red sp s f, red sp s a with
+	 (* two terms *)
 	 | CC_term tf, CC_term ta ->
 	     CC_term (applist tf [ta])
+	 (* beta-redex *)
 	 | CC_lam ((x,_),e) as rf, CC_term ta ->
 	     red sp (Idmap.add x ta s) e
 	 | CC_lam ((x,_),e) as rf, ra ->

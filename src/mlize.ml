@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.46 2002-06-24 14:34:44 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.47 2002-06-25 12:52:44 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -30,12 +30,9 @@ and trad_desc info d ren = match d with
   | Var id ->
       assert (not (is_reference info.env id));
       if is_rec id then
-	(try find_rec id ren 
-	 with e -> Printf.eprintf "BUG:%s\n" (string id);flush stderr; raise e)
-      else (*if is_local info.env id then*)
+	find_rec id ren 
+      else
 	CC_var id
-      (*else
-	CC_term (Tvar id)*)
 
   | Acc _ ->
       assert false
@@ -162,11 +159,11 @@ and trad_desc info d ren = match d with
   | Rec (f, bl, v, var, e) -> 
       let bl',env' = trad_binders ren info.env bl in
       let ren' = initial_renaming env' in
+      let recf w ren = cc_lam bl' (abstraction e.info w ren) in
       cc_lam bl' 
 	(abstraction e.info 
 	   (Monad.wfrec_with_binders bl' var e.info
-	      (fun w -> 
-		 with_rec f (fun ren -> cc_lam bl' (w ren)) (trad e)))
+	      (fun w -> with_rec f (recf w) (trad e)))
 	   ren')
 
 and trad_binders ren env = function

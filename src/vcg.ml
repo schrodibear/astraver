@@ -42,19 +42,32 @@ let discharge ctx concl =
 let discharge_msg () =
   if_verbose eprintf "one obligation trivially discharged@."
 
-(*s Cleaning the sequent: we remove variables not occuring at all in
-    hypotheses or conclusion *)
+(*s Cleaning the sequents *)
 
 let occur_in_hyp id = function
   | Spred (_,p) -> occur_predicate id p
   | Svar _ -> false
 
+let occur_as_var id = function
+  | Svar (id',_) -> id = id'
+  | Spred _ -> false
+
 let clean_sequent hyps concl =
+  (* if a variable appears twice, we remove the first and its dependencies *)
+  let rec filter_up_to x = function
+    | [] -> []
+    | Svar (y,_) :: _ as hl when x = y -> hl
+    | Spred (_,p) :: hl when occur_predicate x p -> filter_up_to x hl
+    | h :: hl -> h :: filter_up_to x hl
+  in
+  (* we remove variables not occuring at all in hypotheses or conclusion *)
   let rec clean = function
     | [] ->
 	[]
-    | Svar (id, v) as h :: hl -> 
-	if List.exists (occur_in_hyp id) hl || occur_predicate id concl then
+    | Svar (x, v) as h :: hl -> 
+	if List.exists (occur_as_var x) hl then
+	  clean (filter_up_to x hl)
+	else if List.exists (occur_in_hyp x) hl || occur_predicate x concl then
 	  h :: clean hl
 	else
 	  clean hl

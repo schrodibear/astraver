@@ -8,5 +8,5 @@ all: Heap.vo Inftree.vo $(VO)
 include ../Makefile.common
 
 $(WH): $(ML) $(WHY)
-	$(WHY) $(ML)
+	$(WHY) $(WHYOPTIONS) $(ML)
 

@@ -96,7 +96,7 @@ doc::
 .PHONY: bench test
 
 bench:: $(BINARY) $(VO)
-	cd bench; ./bench ../$(BINARY)
+	cd bench; ./bench "../$(BINARY) --valid"
 
 bench-tc:: $(BINARY) $(VO)
 	cd bench; ./bench "../$(BINARY) -tc"

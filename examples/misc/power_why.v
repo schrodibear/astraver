@@ -325,6 +325,9 @@ Save.
 
 
 
+
+
+
 Definition power1 := (* validation *)
   [m: Z; n: Z; y: Z; Pre4: `n >= 0`]
     let (m0, result, Post1) =

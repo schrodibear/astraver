@@ -1,4 +1,10 @@
 
+let rec rec_add1 (x:int ref) (y:int) : unit { variant y } =
+  { y >= 0 }
+  (if 0 < y then begin x := !x + 1; (rec_add1 x (y-1)) end)
+  { x = x@ + y }
+
+(***
 parameter x,y,z : int ref
 
 let p = 
@@ -7,6 +13,7 @@ let p =
     { invariant x = i variant x }
     x := i
   done
+***)
 
 (****
 

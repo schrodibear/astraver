@@ -51,6 +51,8 @@ Save.
 
 
 
+
+
 Definition swap := (* validation *)
   [i: Z; j: Z; t: (array N Z); Pre5: `0 <= i` /\ `i < N` /\ (`0 <= j` /\
    `j < N`)]
@@ -1221,6 +1223,8 @@ Unfold Zpred; Omega.
 Assumption.
 Assumption.
 Save.
+
+
 
 
 

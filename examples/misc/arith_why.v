@@ -306,6 +306,9 @@ Save.
 
 
 
+
+
+
 Definition mult := (* validation *)
   [x: Z; y: Z; Pre5: `x >= 0` /\ `y >= 0`]
     let (result, Post1) = (exist_1 [result: Z]result = x x

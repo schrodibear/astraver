@@ -1,4 +1,4 @@
-quicksort_why.vo: quicksort_why.v ../../lib/coq/Why.vo Partition.vo Quicksort.vo
+quicksort_why.vo: quicksort_why.v ../../lib/coq/Why.vo Partition.vo Quicksort.vo partition_why.vo
 partition_why.vo: partition_why.v ../../lib/coq/Why.vo Partition.vo
 Quicksort.vo: Quicksort.v ../../lib/coq/Why.vo Partition.vo
 Partition.vo: Partition.v ../../lib/coq/Why.vo

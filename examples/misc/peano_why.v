@@ -112,15 +112,6 @@ Proof. Intros; Omega. Save.
 
 
 
-
-
-
-
-
-
-
-
-
 Definition add1 := (* validation *)
   [y: Z; x: Z; Pre3: `y >= 0`]
     let (result, Post1) = (exist_1 [result: Z]result = y y
@@ -201,16 +192,6 @@ Proof. Intros; Omega. Save.
 
 
 
-
-
-
-
-
-
-
-
-
-
 Definition u1 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `3` `3`
     (refl_equal ? `3`)) in
@@ -223,20 +204,18 @@ Definition u1 := (* validation *)
 
 Lemma rec_add1_po_1 : 
   (y: Z)
-  (Pre5: `y >= 0`)
+  (Pre6: `y >= 0`)
   (well_founded ? (Zwf ZERO)).
 Proof.
 Auto with *.
 Save.
 
 Lemma rec_add1_po_2 : 
-  (y: Z)
-  (Pre5: `y >= 0`)
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: Variant1 = y)
-  (Pre3: `y >= 0`)
+  (Pre5: Variant1 = y)
+  (Pre4: `y >= 0`)
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -246,30 +225,26 @@ Intros; Omega.
 Save.
 
 Lemma rec_add1_po_3 : 
-  (y: Z)
-  (Pre5: `y >= 0`)
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: Variant1 = y)
-  (Pre3: `y >= 0`)
+  (Pre5: Variant1 = y)
+  (Pre4: `y >= 0`)
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
-  (Pre2: `y - 1 >= 0`)
+  (Pre3: `y - 1 >= 0`)
   (Zwf `0` `y - 1` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
 Save.
 
 Lemma rec_add1_po_4 : 
-  (y: Z)
-  (Pre5: `y >= 0`)
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: Variant1 = y)
-  (Pre3: `y >= 0`)
+  (Pre5: Variant1 = y)
+  (Pre4: `y >= 0`)
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -281,13 +256,11 @@ Intros; Omega.
 Save.
 
 Lemma rec_add1_po_5 : 
-  (y: Z)
-  (Pre5: `y >= 0`)
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: Variant1 = y)
-  (Pre3: `y >= 0`)
+  (Pre5: Variant1 = y)
+  (Pre4: `y >= 0`)
   (Test1: `0 >= y`)
   x0 = `x0 + y`.
 Proof.
@@ -299,25 +272,15 @@ Save.
 
 
 
-
-
-
-
-
-
-
-
-
-
 Definition rec_add1 := (* validation *)
-  [y: Z; x: Z; Pre5: `y >= 0`]
-    (well_founded_induction Z (Zwf ZERO) (rec_add1_po_1 y Pre5) [Variant1: Z]
+  [y: Z; x: Z; Pre6: `y >= 0`]
+    (well_founded_induction Z (Zwf ZERO) (rec_add1_po_1 y Pre6) [Variant1: Z]
       (y: Z)(x0: Z)(_: Variant1 = y)(_: `y >= 0`)
       (sig_2 Z unit [x1:Z][result:unit](x1 = `x0 + y`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (y: Z)(x0: Z)(_: Variant2 = y)(_: `y >= 0`)
        (sig_2 Z unit [x1:Z][result:unit](x1 = `x0 + y`)); y: Z; x0: Z;
-       Pre4: Variant1 = y; Pre3: `y >= 0`]
+       Pre5: Variant1 = y; Pre4: `y >= 0`]
         let (result, Bool1) =
           let (result1, Post3) = (Z_lt_ge_bool `0` y) in
           (exist_1 [result2: bool]
@@ -332,25 +295,22 @@ Definition rec_add1 := (* validation *)
                 (exist_2 [x2: Z][result1: unit]x2 = `x0 + 1` result0 
                 tt Post1) in
               let (x2, result1, Post6) =
-                let Pre2 =
-                  (rec_add1_po_2 y Pre5 Variant1 y x0 Pre4 Pre3 Test2 x1
-                  Post1) in
+                let Pre3 =
+                  (rec_add1_po_2 Variant1 y x0 Pre5 Pre4 Test2 x1 Post1) in
                 let (x2, result3, Post7) =
                   ((wf1 `y - 1`)
-                    (rec_add1_po_3 y Pre5 Variant1 y x0 Pre4 Pre3 Test2 x1
-                    Post1 Pre2) `y - 1` x1 (refl_equal ? `y - 1`) Pre2 
-                    x1 Pre2) in
+                    (rec_add1_po_3 Variant1 y x0 Pre5 Pre4 Test2 x1 Post1
+                    Pre3) `y - 1` x1 (refl_equal ? `y - 1`) Pre3) in
                 (exist_2 [x3: Z][result4: unit]x3 = `x1 + (y - 1)` x2 
                 result3 Post7) in
               (exist_2 [x3: Z][result2: unit]x3 = `x0 + y` x2 result1
-              (rec_add1_po_4 y Pre5 Variant1 y x0 Pre4 Pre3 Test2 x1 Post1 x2
-              Post6)) in
+              (rec_add1_po_4 Variant1 y x0 Pre5 Pre4 Test2 x1 Post1 x2 Post6)) in
             (exist_2 [x2: Z][result1: unit]x2 = `x0 + y` x1 result0 Post5)
         | (right Test1) =>
             let (result0, Post4) = (exist_1 [result0: unit]x0 = `x0 + y` 
-              tt (rec_add1_po_5 y Pre5 Variant1 y x0 Pre4 Pre3 Test1)) in
+              tt (rec_add1_po_5 Variant1 y x0 Pre5 Pre4 Test1)) in
             (exist_2 [x1: Z][result1: unit]x1 = `x0 + y` x0 result0 Post4) end)
-      y y x (refl_equal ? y) Pre5).
+      y y x (refl_equal ? y) Pre6).
 
 Lemma u11_po_1 : 
   (result: Z)
@@ -370,15 +330,6 @@ Lemma u11_po_2 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
 
 
 
@@ -573,15 +524,6 @@ Save.
 
 
 
-
-
-
-
-
-
-
-
-
 Definition mult1 := (* validation *)
   [y: Z; x: Z; Pre4: `x >= 0` /\ `y >= 0`]
     let (result, Post1) = (exist_1 [result: Z]result = y y
@@ -672,16 +614,6 @@ Lemma u2_po_2 :
   (Post3: r0 = `result * 6`)
   r0 = `24`.
 Proof. Intros; Omega. Save.
-
-
-
-
-
-
-
-
-
-
 
 
 
