@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.24 2004-03-03 14:08:48 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.25 2004-03-03 15:25:02 filliatr Exp $ i*)
 
 
 open Format
@@ -449,6 +449,8 @@ let rec interp_statement stat =
       -> assert false (* TODO *)
   | TSlogic_label(l)
       -> assert false (* TODO *)
+  | TSspec (spec,s) ->
+      assert false (* TODO *)
 
 and interp_block (decls,stats) =
   let b = 

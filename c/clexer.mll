@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.14 2004-02-20 14:36:50 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.15 2004-03-03 15:25:02 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -31,6 +31,14 @@
   let annot_start_pos = ref 0
   let buf = Buffer.create 1024
 
+  let make_annot s =
+    let loc = !annot_start_pos in
+    match Cllexer.annot (loc, s) with
+      | Cast.Adecl d -> DECL (loc, d)
+      | Cast.Aspec s -> SPEC (loc, s)
+      | Cast.Acode_annot a -> CODE_ANNOT (loc, a)
+      | Cast.Aloop_annot a -> LOOP_ANNOT (loc, a)
+	 
 }
 
 let space = [' ' '\t' '\012' '\r']
@@ -45,10 +53,14 @@ let rIS = ('u'|'U'|'l'|'L')*
 rule token = parse
   | [' ' '\t' '\012' '\r' '\n']+        
                             { token lexbuf }
-  | "//" [^ '\n']* '\n'     { token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "/*@"                   { annot_start_pos := lexeme_start lexbuf + 4;
 			      Buffer.clear buf; annot lexbuf }
+  | "//@" [^ '\n']* '\n'    { annot_start_pos := lexeme_start lexbuf + 4;
+			      let s = lexeme lexbuf in
+			      make_annot 
+				(String.sub s 3 (String.length s - 4)) }
+  | "//" [^ '\n']* '\n'     { token lexbuf }
   | "auto"                  { AUTO }
   | "break"                 { BREAK }
   | "case"                  { CASE }
@@ -164,13 +176,7 @@ and comment = parse
   | _    { comment lexbuf }
 
 and annot = parse
-  | "*/" { let loc = !annot_start_pos in
-	   match Cllexer.annot (loc, Buffer.contents buf) with
-	     | Cast.Adecl d -> DECL (loc, d)
-	     | Cast.Aspec s -> SPEC (loc, s)
-	     | Cast.Acode_annot a -> CODE_ANNOT (loc, a)
-	     | Cast.Aloop_annot a -> LOOP_ANNOT (loc, a)
-	 }
+  | "*/" { make_annot (Buffer.contents buf) }
   | eof  { lex_error lexbuf "Unterminated annotation" }
   | _    { Buffer.add_char buf (lexeme_char lexbuf 0); annot lexbuf }
 

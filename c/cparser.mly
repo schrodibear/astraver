@@ -788,6 +788,7 @@ statement
         | selection_statement { $1 }
         | iteration_statement { $1 }
         | jump_statement { $1 }
+	| SPEC statement { locate (CSspec ($1,$2)) }
         ;
 
 labeled_statement

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.41 2004-03-03 13:12:15 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.42 2004-03-03 15:25:02 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -45,7 +45,7 @@ let with_offset ofs f x =
 
 let type_location ofs env l = with_offset ofs (type_location env) l
 let type_predicate ofs env p = with_offset ofs (type_predicate env) p
-let type_spec ty env (ofs,s) = with_offset ofs (type_spec ~result:ty env) s
+let type_spec ?result env (ofs,s) = with_offset ofs (type_spec result env) s
 let type_loop_annot env (ofs,a) = with_offset ofs (type_loop_annot env) a
 
 (*s Some predefined types, subtype relation, etc. *)
@@ -618,6 +618,10 @@ and type_statement_node loc env et = function
       TSassert p, mt_status
   | CSannot (_, Label l) ->
       TSlogic_label l, mt_status
+  | CSspec (spec, s) ->
+      let spec = type_spec env spec in
+      let s,st = type_statement env et s in
+      TSspec (spec, s), st
 
 and type_block env et (dl,sl) = 
   let rec type_decls env = function
@@ -716,7 +720,7 @@ let type_decl d = match d.node with
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc Env.empty ty in
       let pl,env = type_parameters d.loc Env.empty pl in
-      let s = type_spec ty env s in
+      let s = type_spec ~result:ty env s in
       let info = default_var_info f in
       add_sym d.loc f (noattr (CTfun (pl, ty))) info;
       Tfunspec (s, ty, info, pl)
@@ -724,7 +728,7 @@ let type_decl d = match d.node with
       let ty = type_type d.loc Env.empty ty in
       let et = if eq_type ty c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
-      let s = option_app (type_spec ty env) s in
+      let s = option_app (type_spec ~result:ty env) s in
       let info = default_var_info f in
       add_sym d.loc f (noattr (CTfun (pl, ty))) info;
       let bl,st = type_block env et bl in

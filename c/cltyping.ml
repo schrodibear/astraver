@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.21 2004-03-03 14:08:49 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.22 2004-03-03 15:25:02 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -308,9 +308,12 @@ let rec type_location env = function
   | Lrange (l1, l2, l3) -> 
       Lrange (type_term env l1, type_term env l2, type_term env l3)
 
-let type_spec ~result:ty env s = 
+let type_spec result env s = 
   let p = option_app (type_predicate env) s.requires in
-  let env' = Env.add "\\result" ty (Info.default_var_info "\\result") env in
+  let env' = match result with
+    | None -> env
+    | Some ty -> Env.add "\\result" ty (Info.default_var_info "\\result") env
+  in
   let q = option_app (type_predicate env') s.ensures in
   let v = option_app (type_variant env) s.decreases in
   let m = List.map (type_location env) s.assigns in

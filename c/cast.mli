@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.35 2004-03-03 13:12:15 marche Exp $ i*)
+(*i $Id: cast.mli,v 1.36 2004-03-03 15:25:02 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -158,6 +158,7 @@ and cstatement_node =
   | CScase of cexpr * cstatement
   | CSgoto of string
   | CSannot of (offset * parsed_code_annot)
+  | CSspec of (offset * parsed_spec) * cstatement
 
 and block = decl located list * cstatement list
 
@@ -245,6 +246,7 @@ and tstatement_node =
   | TSgoto of string
   | TSassert of predicate
   | TSlogic_label of string
+  | TSspec of spec * tstatement
 
 and tblock = tdecl located list * tstatement list
 
