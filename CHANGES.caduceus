@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+ o support for sizeof
+
 version 0.64, October 13th, 2004
 ================================
  o new option -coq-tactic (to set a default tactic for Coq proofs)

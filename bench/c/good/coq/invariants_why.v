@@ -12,17 +12,17 @@ Lemma f_impl_po_1 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre7: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                (~((base_addr c) = (base_addr s)) /\
-                (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\ (acc x s) <=
-                (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
   (valid alloc s).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 590-716 *)
+(* Why obligation from file "why/invariants.why", characters 387-444 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -31,24 +31,22 @@ Lemma f_impl_po_2 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre7: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                (~((base_addr c) = (base_addr s)) /\
-                (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\ (acc x s) <=
-                (acc y s)) /\ (acc y s) <= 100),
-  forall (Pre6: (valid alloc s)),
-  forall (t: Z),
-  forall (Post7: t = ((acc x s) + n)),
-  forall (Pre5: (valid alloc s)),
-  forall (Test2: t <= ((acc y s) - 20)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = s),
-  (valid alloc (shift c 0)).
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre3: (valid alloc s)),
+  forall (caduceus_4: Z),
+  forall (Post17: caduceus_4 = (acc x s)),
+  forall (result: Z),
+  forall (Post18: result = (caduceus_4 + n)),
+  result = ((acc x s) + n).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 567-717 *)
+(* Why obligation from file "why/invariants.why", characters 467-525 *)
 Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -57,27 +55,25 @@ Lemma f_impl_po_3 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre7: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                (~((base_addr c) = (base_addr s)) /\
-                (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\ (acc x s) <=
-                (acc y s)) /\ (acc y s) <= 100),
-  forall (Pre6: (valid alloc s)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
   forall (t: Z),
-  forall (Post7: t = ((acc x s) + n)),
-  forall (Pre5: (valid alloc s)),
-  forall (Test2: t <= ((acc y s) - 20)),
-  forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = s),
-  forall (Pre4: (valid alloc (shift c 0))),
-  forall (aux_4: Z),
-  forall (Post4: aux_4 = (t + (acc intP (shift c 0)))),
-  (valid alloc caduceus_2).
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre6: (valid alloc s)),
+  forall (caduceus_3: Z),
+  forall (Post12: caduceus_3 = (acc y s)),
+  forall (result: Z),
+  forall (Post13: result = (caduceus_3 - 20)),
+  result = ((acc y s) - 20).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 567-717 *)
+(* Why obligation from file "why/invariants.why", characters 590-716 *)
 Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -86,31 +82,25 @@ Lemma f_impl_po_4 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre7: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                (~((base_addr c) = (base_addr s)) /\
-                (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\ (acc x s) <=
-                (acc y s)) /\ (acc y s) <= 100),
-  forall (Pre6: (valid alloc s)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
   forall (t: Z),
-  forall (Post7: t = ((acc x s) + n)),
-  forall (Pre5: (valid alloc s)),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
   forall (Test2: t <= ((acc y s) - 20)),
   forall (caduceus_2: pointer),
-  forall (Post5: caduceus_2 = s),
-  forall (Pre4: (valid alloc (shift c 0))),
-  forall (aux_4: Z),
-  forall (Post4: aux_4 = (t + (acc intP (shift c 0)))),
-  forall (Pre1: (valid alloc caduceus_2)),
-  forall (x0: ((memory) Z)),
-  forall (Post13: x0 = (upd x caduceus_2 aux_4)),
-  (0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
+  forall (Post11: caduceus_2 = s),
+  (valid alloc (shift c 0)).
 Proof.
 intuition.
 subst; caduceus.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 727-727 *)
+(* Why obligation from file "why/invariants.why", characters 616-714 *)
 Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -119,18 +109,202 @@ Lemma f_impl_po_5 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre7: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
-                (~((base_addr c) = (base_addr s)) /\
-                (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\ (acc x s) <=
-                (acc y s)) /\ (acc y s) <= 100),
-  forall (Pre6: (valid alloc s)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
   forall (t: Z),
-  forall (Post7: t = ((acc x s) + n)),
-  forall (Pre5: (valid alloc s)),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
+  forall (Test2: t <= ((acc y s) - 20)),
+  forall (caduceus_2: pointer),
+  forall (Post11: caduceus_2 = s),
+  forall (Pre13: (valid alloc (shift c 0))),
+  forall (caduceus_1: pointer),
+  forall (Post4: caduceus_1 = c),
+  forall (result0: pointer),
+  forall (Post5: result0 = (shift caduceus_1 0)),
+  result0 = (shift c 0).
+Proof.
+intuition.
+Save.
+(* Why obligation from file "why/invariants.why", characters 603-715 *)
+Lemma f_impl_po_6 : 
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (c: pointer),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
+  forall (t: Z),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
+  forall (Test2: t <= ((acc y s) - 20)),
+  forall (caduceus_2: pointer),
+  forall (Post11: caduceus_2 = s),
+  forall (Pre13: (valid alloc (shift c 0))),
+  forall (aux_2: pointer),
+  forall (Post6: aux_2 = (shift c 0)),
+  (valid alloc aux_2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/invariants.why", characters 603-715 *)
+Lemma f_impl_po_7 : 
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (c: pointer),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
+  forall (t: Z),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
+  forall (Test2: t <= ((acc y s) - 20)),
+  forall (caduceus_2: pointer),
+  forall (Post11: caduceus_2 = s),
+  forall (Pre13: (valid alloc (shift c 0))),
+  forall (aux_2: pointer),
+  forall (Post6: aux_2 = (shift c 0)),
+  forall (Pre11: (valid alloc aux_2)),
+  forall (result0: Z),
+  forall (Post7: result0 = (acc intP aux_2)),
+  result0 = (acc intP (shift c 0)).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/invariants.why", characters 590-716 *)
+Lemma f_impl_po_8 : 
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (c: pointer),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
+  forall (t: Z),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
+  forall (Test2: t <= ((acc y s) - 20)),
+  forall (caduceus_2: pointer),
+  forall (Post11: caduceus_2 = s),
+  forall (Pre13: (valid alloc (shift c 0))),
+  forall (aux_3: Z),
+  forall (Post8: aux_3 = (acc intP (shift c 0))),
+  forall (result0: Z),
+  forall (Post9: result0 = (t + aux_3)),
+  result0 = (t + (acc intP (shift c 0))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/invariants.why", characters 567-717 *)
+Lemma f_impl_po_9 : 
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (c: pointer),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
+  forall (t: Z),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
+  forall (Test2: t <= ((acc y s) - 20)),
+  forall (caduceus_2: pointer),
+  forall (Post11: caduceus_2 = s),
+  forall (Pre17: (valid alloc (shift c 0))),
+  forall (aux_4: Z),
+  forall (Post10: aux_4 = (t + (acc intP (shift c 0)))),
+  (valid alloc caduceus_2).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/invariants.why", characters 567-717 *)
+Lemma f_impl_po_10 : 
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (c: pointer),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
+  forall (t: Z),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
+  forall (Test2: t <= ((acc y s) - 20)),
+  forall (caduceus_2: pointer),
+  forall (Post11: caduceus_2 = s),
+  forall (Pre17: (valid alloc (shift c 0))),
+  forall (aux_4: Z),
+  forall (Post10: aux_4 = (t + (acc intP (shift c 0)))),
+  forall (Pre14: (valid alloc caduceus_2)),
+  forall (x0: ((memory) Z)),
+  forall (Post30: x0 = (upd x caduceus_2 aux_4)),
+  (0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/invariants.why", characters 727-727 *)
+Lemma f_impl_po_11 : 
+  forall (n: Z),
+  forall (alloc: alloc_table),
+  forall (c: pointer),
+  forall (intP: ((memory) Z)),
+  forall (s: pointer),
+  forall (x: ((memory) Z)),
+  forall (y: ((memory) Z)),
+  forall (Pre20: n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (valid alloc s) /\
+                 (~((base_addr c) = (base_addr s)) /\
+                 (valid_range alloc c 0 1)) /\ (0 <= (acc x s) /\
+                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100),
+  forall (Pre19: (valid alloc s)),
+  forall (t: Z),
+  forall (Post19: t = ((acc x s) + n)),
+  forall (Pre18: (valid alloc s)),
   forall (Test1: t > ((acc y s) - 20)),
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition.
+(* FILL PROOF HERE *)
 Save.
+
