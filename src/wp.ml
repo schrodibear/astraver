@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.4 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.5 2002-01-24 13:41:05 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -348,13 +348,22 @@ let rec normalize ren p =
 	let c = Pterm (Tapp (t_eq, [Tvar Ident.result; t])) in
 	post_if_none env (create_bool_post c) p
 i*)
+    | Expression _ ->
+	p
     | Seq bl ->
 	change_desc p (Seq (normalize_block ren bl))
     | Lam (bl,e) ->
 	let env' = traverse_binders env bl in
 	let ren' = initial_renaming env' in
 	change_desc p (Lam (bl, normalize ren' e))
-    | _ -> p
+    | While (b, invopt, var, bl) ->
+	change_desc p (While (normalize_boolean ren env b,
+			      invopt, var, normalize_block ren bl))
+    | LetRef (x, e1, e2) ->
+	let ren' = next ren [x] in
+	change_desc p (LetRef (x, normalize ren e1, normalize ren' e2))
+    | _ -> 
+	failwith "todo normalize"
 
 and normalize_block ren = function
   | [] ->
@@ -483,6 +492,14 @@ i*)
 	let p',w = wp ren' p None in
 	Lam (bl, p'), None
     (* Other cases... *)
+    | LetRef (x, e1, e2) ->
+	let ren' = next ren [x] in
+	let e'2, w = wp ren' e2 q in
+	let q' = optpost_app (subst_in_predicate [x, result]) w in
+	let e'1,w' = wp ren e1 q' in
+	LetRef (x, e'1, e'2), w'
+    | While (b, invopt, (var,r), bl) ->
+	d, invopt
     | _ -> 
 	failwith "todo wp"
 

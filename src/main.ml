@@ -1,5 +1,5 @@
 
-(*i $Id: main.ml,v 1.5 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.6 2002-01-24 13:41:05 filliatr Exp $ i*)
 
 open Ast
 open Types
@@ -10,6 +10,9 @@ open Rename
 open Util
 
 let debug = ref false
+
+type prover = Coq | Pvs
+let prover = ref Coq
 
 let interp_program id p =
   if !debug then eprintf "=== interpreting program %s@\n" (Ident.string id);
@@ -43,8 +46,10 @@ let interp_decl fmt = function
       Env.add_global id v None
   | External (ids, v) -> 
       List.iter (fun id -> Env.add_global id v None) ids
-  | Pvs s ->
-      fprintf fmt "  %s@\n@\n" s
+  | QPvs s ->
+      if !prover = Pvs then fprintf fmt "  %s@\n@\n" s
+  | QCoq s ->
+      if !prover = Coq then fprintf fmt "%s@\n@\n" s
 
 let deal_channel theo cin fmt =
   let st = Stream.of_channel cin in
@@ -65,11 +70,18 @@ let deal_file f =
   pp_print_flush fmt ();
   close_out cout
 
+let usage () =
+  eprintf "usage: why [-d|--debug] [--pvs] [--coq] [files...]\n";
+  flush stderr
+
 let parse_args () =
   let files = ref [] in
   let rec parse = function
     | [] -> !files
-    | "-d" :: args -> debug := true; parse args
+    | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
+    | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
+    | ("-coq" | "--coq") :: args -> prover := Coq; parse args
+    | ("-d" | "--debug") :: args -> debug := true; parse args
     | f :: args -> files := f :: !files; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))

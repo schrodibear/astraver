@@ -2,7 +2,7 @@
 
 # auto bench for why
 
-pgm=../bin/why
+pgm=$1
 
 goods () {
     echo "  checking good files"

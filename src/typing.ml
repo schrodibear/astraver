@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.5 2001-08-24 19:00:08 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.6 2002-01-24 13:41:05 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -481,7 +481,7 @@ let rec states_desc ren env loc = function
       let bl,v,ef,_ = states_block ren env bl in
       Seq bl, (v,ef)
 	      
-  | While(b, invopt, (var,r), bl) ->
+  | While (b, invopt, (var,r), bl) ->
       let efphi = state_var ren env (var,r) in
       let ren' = next ren [] in
       let s_b = states ren' env b in

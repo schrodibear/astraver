@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.6 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.7 2002-01-24 13:41:05 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -105,7 +105,7 @@ let un_op op loc e =
 
 let bool_not loc a = un_op Ident.p_not loc a
 
-let zwf_zero = Tapp (Ident.t_zwf_zero, [])
+let zwf_zero = Tvar Ident.t_zwf_zero
 
 let mk_prog loc p pre post =
   { desc = p.desc; 
@@ -328,7 +328,7 @@ EXTEND
 	Expression (Tconst (ConstInt (int_of_string n)))
     | f = FLOAT ->
 	Expression (Tconst (ConstFloat (float_of_string f)))
-    | LIDENT "skip" ->
+    | LIDENT "void" ->
 	Expression (Tconst ConstUnit)
     | "true" ->
 	Expression (Tconst (ConstBool true))
@@ -429,7 +429,9 @@ i*)
     | "external"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
 	External (ids, v)
     | LIDENT "pvs"; s = STRING ->
-        Pvs s ] ]
+        QPvs s
+    | LIDENT "coq"; s = STRING ->
+        QCoq s ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]

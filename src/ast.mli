@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.5 2001-08-23 20:24:34 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.6 2002-01-24 13:41:05 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -45,8 +45,9 @@ and 'a t_desc =
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
   | LetRec of variable * type_v binder list * type_v * (term * term) * 'a t
-  | PPoint of string * 'a t_desc
   | Expression of term
+
+  | PPoint of string * 'a t_desc
   | Debug of string * 'a t
 
 and 'a arg =
@@ -61,7 +62,8 @@ type parsed_program = unit t
 type decl = 
   | Program of Ident.t * parsed_program
   | External of Ident.t list * type_v
-  | Pvs of string
+  | QPvs of string
+  | QCoq of string
 
 (*s Intermediate type for CC terms. *)
 

@@ -13,6 +13,15 @@
 # See the GNU Library General Public License version 2 for more details
 # (enclosed in the file LGPL).
 
+# where to install the binaries
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+BINDIR=@bindir@
+
+# where to install the man page
+MANDIR=@mandir@
+
+# other variables
 OCAMLC   = @OCAMLC@
 OCAMLOPT = @OCAMLOPT@
 OCAMLDEP = @OCAMLDEP@
@@ -36,14 +45,18 @@ CMX      = $(CMO:.cmo=.cmx)
 # main targets
 ##############
 
-PROG = bin/why
+PROG=bin/why.$(OCAMLBEST)
 
 all: $(PROG)
 
-$(PROG): $(CMX)
+opt: bin/why.opt
+
+byte : bin/why.byte
+
+bin/why.opt: $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa $^
 
-$(PROG).byte: $(CMO)
+bin/why.byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma $^
 
 top: $(CMO)
@@ -54,9 +67,20 @@ doc::
 
 # bench
 
-bench::
-	make $(PROG)
-	cd bench; ./bench
+bench:: $(PROG)
+	cd bench; ./bench ../$(PROG)
+
+# installation
+##############
+
+install: $(PROG)
+	mkdir -p $(BINDIR)
+	cp -f $(PROG) $(BINDIR)/why
+#	mkdir -p $(MANDIR)/man1
+#	cp -f $(PROG).1 $(MANDIR)/man1
+
+local: $(PROG)
+	cp -f $(PROG) $$HOME/bin/$$OSTYPE/why
 
 # special rules
 ###############
@@ -124,7 +148,7 @@ configure: configure.in
 
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
-	rm -f $(PROG) $(PROG).byte
+	rm -f bin/why.opt bin/why.byte
 	cd doc; make clean
 
 .depend depend::
