@@ -85,9 +85,11 @@ overflow is known to be a major source of bugs), and it is indeed
 mandatory with the \caduceus{} approach. The second additional
 property we show is an extra behavioral property: everything outside
 the graph structure remains unchanged. The third additional property is
-the termination: although informal termination arguments were known
-since Topor~\cite{topor79acta}, % ({\Huge A VERIFIER}),
-no formal verification has been made before. This is now done.
+the termination: informal termination arguments were known
+since Topor~\cite{topor79acta}, and Abrial~\cite{abrial03fme} has a
+termination proof integrated in the B refinement process, but we are
+the first to provide a formal proof termination on the implementation
+itself.
 
 This paper is organized as follows.  Section~\ref{sec:overview} gives
 an overview of the \caduceus{} tool.  In Section~\ref{sec:algo}, we

@@ -4,64 +4,88 @@
 We presented a machine-checked full verification of the Schorr-Waite
 algorithm, directly on a real C source version of it. We have not only
 proved the behavioral properties of it, like previous
-works~\cite{bornat00mpc,mehta03cade}, but we have also proved that no
-invalid pointer dereferencing may occur, and the
-termination. 
-{\Huge il faut expliquer pourquoi on a fait la terminaison et pas les autres : les
-  autres auraient pu le faire aussi, a la condition d'utiliser un
-  prouveur d'ordre superieur. dire ca en conclusion ?}
+works~\cite{bornat00mpc,mehta03cade,abrial03fme}, but we have also
+proved that no invalid pointer dereferencing may occur, and the
+termination.
 
+The termination does not use any unique feature of \caduceus{}:
+termination is indeed established in~\cite{abrial03fme} as a condition
+for refinement, and we believe that it could probably also proved by
+others as well. The important point is that termination is smoothly
+integrated in our methodology, thanks to the powerful clause
+\texttt{variant} we have, allowing to use arbitrary well-founded
+relation.
 
-Moreover we used a tool for arbitrary C programs, without
-anything specialized for this case study, which additionally gives the
-choice of the back-end prover.
-{\Huge ajouter plus de comparaison avec travaux anterieur. 
+Regarding the absence of invalid pointer dereferencing, it has to be
+said that advanced static analysis techniques are able to establish it
+also. The Schorr-Waite algorithm is one of the examples automatically
+handled by the TVLA approach~\cite{sagiv02toplas,reps03esop}, where a powerful
+analysis of reachability in pointer structures is done. But as far as
+we know, only our approach is able to handle both the pointer
+dereferencing checks and the validity of behavioral properties given
+by the user. Notice that with \caduceus, as shown in
+Section~\ref{sec:simplify}, absence of invalid pointer dereferencing
+is established automatically, even if \caduceus{} does not any kind of
+reachability analysis by itself.
 
-repondre a la question : Does the architecture or technology of
-caudceus makes it better suited for these types of verification.
+Finally, we emphasize again that we use a generic tool for arbitrary C
+programs, without anything specialized for this case study, which
+additionally gives the choice of the back-end prover.  We claim this
+is a very successful case study, which provides a clear evidence that
+the \caduceus{} approach is powerful. We think that the ability of
+using predicates in annotations which are only defined on the prover
+side is fundamental. As said before, our specification language is
+inspired from JML annotation language for Java. But with JML, as far
+as we know, it is not possible to declare predicates without also
+defined them as Java methods: this are the so-called \emph{pure}
+methods. The latter choice is natural for the main goal of JML, that
+is runtime assertion checking: specifications must be executable. But
+for the goal of formal verification, we believe that this is not a
+good choice, in other words we do not agree with the claim
+in~\cite{leavens03a} that JML is suitable both for runtime assertime
+checking and formal verification. Of course, it should be easy to
+simply relax the JML constraint that pure methods must have an
+implementation. But then runtime assertion checking is not possible
+anymore: achieving both runtime assertion checking and formal
+verification with exactly the same JML annotations remains, to us, an
+open problem.
 
-comparaison
-  avec travaus d'analyse statique. \cite{sagiv02toplas,reps03esop} Program Analysis via Graph Reachability
-Static Program Analysis via 3-Valued Logic
-}
+There are still many potential improvements in our approach. One
+improvement clearly emphasized by this case study is the ability to
+perform proofs with \emph{cooperation} between automatic provers and
+interactive ones. Interactive provers are nice because they are very
+expressive and allow to prove manually difficult goals, but their
+automatic tactics are less powerful than automatic provers. This is
+especially true for Coq, because any decision procedure in it needs to
+provide a checkable proof trace, making its integration very
+difficult. So one of the major goal of our research is now the develop
+a platform for verification where automatic theorem proving will be
+used as far as possible, and only when this fail the user would be ask
+for manual interaction.
 
-We claim this is a very successful case study, which provides a clear
-evidence that the \caduceus{} approach is powerful. We think that the
-ability of using predicates in annotations which are only defined on
-the prover side is fundamental. Consequently, it is probably a
-weakness of the JML annotation language for Java, that only Java
-pure methods can be used in annotations. {\Huge expliquer plus }
+This case study was motivated by Bornat's assertion given at the
+beginning. But the Schorr-Waite program is not representative of the
+kind of C program we are really interested in. We focus in particular
+to embedded industrial C programs, where a high level of confidence is
+required: \caduceus{} is currently under experimentation at Axalto
+(smart cards) and Dassault Aviation (aeronautics). For this goal,
+several improvements to the \caduceus{} tool are in progress. There
+are scaling up issues for dealing with code of large size. Automatic
+annotation of programs is an important need (\`a la ESC/Java for
+example). Properties of separation of data appear to be crucial for
+large programs. We are currently investigating solutions, in
+particular by integration of advanced static analysis techniques, and
+ideas from separation logic~\cite{reynolds02lics}. Generally speaking
+adding static analysis techniques to our setting is a major goal.
 
-There are still many potential improvements. There is a clear
-need for cooperation between automatic provers and interactive
-ones. {\Huge detailler plus, car le referee n'a pas compris}
-Interactive provers are nice because they are very expressive and
-allow to prove manually difficult goals, but their automatic tactics
-are less powerful than automatic provers. This is especially true for
-Coq, because any decision procedure in it needs to provide a checkable
-proof trace, making its integration very difficult.
-
-Several improvements to the \caduceus{} tool are in progress. There are
-scaling up issues for dealing with code of large size. Properties of
-separation of data appear to be crucial for large programs. We are
-currently investigating solutions, in particular by integration of
-advanced static analysis techniques, and ideas from separation
-logic~\cite{reynolds02lics}.
-
-An interesting question is what would be the next ``mountain to
-climb'' for pointer program verification? We think that
+Among more academic future work, we wonder what would be the next
+``mountain to climb'' for pointer program verification? We think that
 memory allocation and multi-procedure programs (where specification of
 separation is crucial) are important issues. Significant challenges
 include advanced graph algorithms (such as planarity test) and
 Ukkonen's algorithm~\cite{ukkonen95}.
 
 
-{\Huge prendre le temps d'expliquer plus ce vers quoi on va : 1) faire
-  des preuves d'algo plus complique, 2) traiter des programmes C
-  simples mais gros (programmes embarques) }
-This tool is currently under
-experimentation at Axalto (smart cards) and Dassault Aviation
-(aeronautics). 
 
 %%% Local Variables: 
 %%% mode: latex
