@@ -1,0 +1,1 @@
+maximumsort_why.vo: maximumsort_why.v ../../lib/coq/Why.vo
