@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.7 2002-11-19 13:31:10 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.8 2002-11-20 16:57:04 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -63,6 +63,7 @@ type cstatement =
   | CSfor of 
       Loc.t * cstatement * cstatement * cexpr option * annot * cstatement
   | CSblock of Loc.t * block
+  | CSreturn of Loc.t * cexpr option
 
 and block = decl list * cstatement list
 

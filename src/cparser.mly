@@ -28,6 +28,13 @@
 
   let uns () =
     raise (Stdpp.Exc_located (loc (), Stream.Error "Unsupported C syntax"))
+  let unss s =
+    raise (Stdpp.Exc_located (loc (), 
+			      Stream.Error ("Unsupported C syntax: " ^ s)))
+
+  let add_pre_loc lb = function
+    | Some (b,_) -> Loc.join (b,0) lb 
+    | _ -> lb
 
 %}
 
@@ -460,8 +467,8 @@ compound_statement
         ;
 
 /* ADDED FOR WHY */
-annot_compound_statement
-        : annot compound_statement annot { (loc (), $1, $2, $3) }
+compound_statement_with_post
+        : compound_statement annot { (loc (), $1, $2) }
         ;
 
 declaration_list
@@ -503,8 +510,8 @@ jump_statement
         : GOTO IDENTIFIER SEMICOLON { uns () }
         | CONTINUE SEMICOLON { uns () }
         | BREAK SEMICOLON { uns () }
-        | RETURN SEMICOLON { uns () }
-        | RETURN expression SEMICOLON { uns () }
+        | RETURN SEMICOLON { CSreturn (loc (), None) }
+        | RETURN expression SEMICOLON { CSreturn (loc (), Some $2) }
         ;
 
 translation_unit
@@ -520,9 +527,12 @@ external_declaration
 function_definition
         : declaration_specifiers declarator declaration_list compound_statement
             { uns () }
-        | declaration_specifiers declarator annot_compound_statement 
-	    { match $2 with
-		| CDfun (id, pl, None) -> Cfundef (loc (), id, pl, $1, $3)
+        | declaration_specifiers declarator compound_statement_with_post
+	    { let (lb,b,q) = $3 in
+              match $2 with
+		| CDfun (id, pl, p) -> 
+		    let lb = add_pre_loc lb p in
+		    Cfundef (loc (), id, pl, $1, (lb,p,b,q))
 		| _ -> uns () }
         | declarator declaration_list compound_statement 
 	    { uns () }

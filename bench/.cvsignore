@@ -11,3 +11,4 @@ test_why.prf
 test-alltt.tex
 batch.el
 *.bin
+a.*
