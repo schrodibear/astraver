@@ -5,7 +5,7 @@ Require Import Why.
 
 
 
-(* Why obligation from file "good/exns.mlw", characters 838-845 *)
+(* Why obligation from file "good/exns.mlw", characters 903-910 *)
 Lemma p7_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 1),
@@ -15,7 +15,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "good/exns.mlw", characters 923-925 *)
+(* Why obligation from file "good/exns.mlw", characters 988-990 *)
 Lemma p8_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 1),
@@ -25,7 +25,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "good/exns.mlw", characters 1020-1022 *)
+(* Why obligation from file "good/exns.mlw", characters 1085-1087 *)
 Lemma p9_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 1),
@@ -42,7 +42,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/exns.mlw", characters 1372-1379 *)
+(* Why obligation from file "good/exns.mlw", characters 1447-1454 *)
 Lemma p13_po_1 : 
   (forall (x:Z), (x = 2 -> x = 2)).
 Proof.
@@ -51,7 +51,7 @@ Qed.
 
 
 
-(* Why obligation from file "good/exns.mlw", characters 1557-1557 *)
+(* Why obligation from file "good/exns.mlw", characters 1632-1632 *)
 Lemma p14_po_1 : 
   forall (x: Z),
   forall (Test1: x <> 1),

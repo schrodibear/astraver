@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.105 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.106 2004-04-30 14:47:57 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -672,7 +672,7 @@ and typef_desc lab env loc = function
 	    None, Effect.bottom
       in
       let v = match ct with 
-	| None -> type_v_unit 
+	| None -> PureType (PTvar (new_type_var ()))
 	| Some v -> type_v loc lab env (logical_env env) v
       in
       Raise (id, t_e), (v, Effect.add_exn id ef), []

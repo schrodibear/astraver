@@ -3,28 +3,31 @@
 
 exception E
 
-let p1 = {} (raise E) { false | E => true }
+let p1 = {} (raise E : unit) { false | E => true }
 
 (* exception with an argument *)
 
 exception F of int
 
-let p2 = {} raise (F 1) { false | F => result = 1 }
+let p2 = {} raise (F 1) : unit { false | F => result = 1 }
 
-let p2a = {} raise (F (raise E : int)) { false | E => true | F => false }
+let p2a = 
+  {} raise (F (raise E : int)) : unit { false | E => true | F => false }
 
 (* composition of exceptions with other constructs *)
 
-let p3 = {} begin raise (F 1); raise (F 2) end { false | F => result = 1 }
+let p3 = 
+  {} begin raise (F 1); raise (F 2) : unit end { false | F => result = 1 }
 
 let p4 = 
-  {} (if true then raise (F 1) else raise (F 2)) { false | F => result = 1 }
+  {} (if true then raise (F 1) : unit else raise (F 2) : unit) 
+  { false | F => result = 1 }
 
 let p5 = 
   {} 
   begin
     if true then raise (F 1);
-    raise E
+    raise E : unit
   end
   { false | E => false | F => result = 1 }
 
@@ -32,7 +35,7 @@ let p6 =
   {} 
   begin
     if false then raise (F 1);
-    raise E
+    raise E : unit
   end
   { false | E => true | F => false }
 
@@ -49,7 +52,8 @@ let p8 =
   { false | F => x = 1 and result = 1 }
 
 let p9 = 
-  {} (raise (F begin x := 1; !x end)) { false | F => x = 1 and result = 1 }
+  {} (raise (F begin x := 1; !x end) : unit) 
+  { false | F => x = 1 and result = 1 }
 
 (* try / with *)
 
@@ -85,7 +89,7 @@ let p14 =
     if !x = 1 then raise E1;
     if !x = 2 then raise E2;
     if !x = 3 then raise E3;
-    raise E
+    raise E : unit
   end
   { false | E1 => x = 1 | E2 => x = 2 | E3 => x = 3 
   | E => x <> 1 and x <> 2 and x <> 3 }
