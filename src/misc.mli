@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.50 2002-12-06 10:32:55 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.51 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -45,10 +45,14 @@ val optexn_app :
   Ident.t -> 
   (predicate -> predicate) -> postcondition option -> postcondition option
 
-val anonymous : 'a -> 'a asst
+val anonymous : Loc.t -> 'a -> 'a asst
 
 val force_post_name : postcondition option -> postcondition option
 val force_bool_name : postcondition option -> postcondition option
+
+val force_loc : Loc.t -> assertion -> assertion
+val force_post_loc : Loc.t -> postcondition -> postcondition
+val force_type_c_loc : Loc.t -> type_c -> type_c
 
 val post_val : postcondition -> assertion
 val post_exn : Ident.t -> postcondition -> assertion

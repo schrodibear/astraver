@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.70 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.71 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -125,7 +125,8 @@ let infix_pp loc a i b = mk_pp loc (PPinfix (a, i, b))
 let prefix_pp loc p a = mk_pp loc (PPprefix (p, a))
 
 let conj_assert {a_name=n; a_value=a} {a_value=b} = 
-  { a_value = infix_pp (Loc.join a.pp_loc b.pp_loc) a PPand b; a_name = n }
+  let loc = Loc.join a.pp_loc b.pp_loc in
+  { a_value = infix_pp loc a PPand b; a_name = n; a_loc = loc }
 
 let conj = function
   | None, None     -> None
@@ -135,7 +136,7 @@ let conj = function
   | _ -> assert false (* TODO *)
 
 let without_annot loc d = 
-  { pdesc = d; pre = []; post = None; loc = loc }
+  { pdesc = d; pre = []; post = None; ploc = loc }
 
 let rec app f = function
   | [] -> 
@@ -143,7 +144,7 @@ let rec app f = function
   | [a] -> 
       Sapp (f, a)
   | a :: l -> 
-      let loc = Loc.join f.loc (arg_loc a) in 
+      let loc = Loc.join f.ploc (arg_loc a) in 
       app (without_annot loc (Sapp (f, a))) l
 
 let bin_op op loc e1 e2 =
@@ -158,7 +159,7 @@ let mk_prog loc p pre post =
   { pdesc = p.pdesc; 
     pre = p.pre @ pre; 
     post = conj (p.post, post); 
-    loc = loc }
+    ploc = loc }
 
 let rec_name = function Srec (x,_,_,_,_) -> x | _ -> assert false
 
@@ -325,7 +326,7 @@ EXTEND
     | c = assertion; "|"; l = LIST1 exn_condition SEP "|" -> (c,l) 
     | "|"; l = LIST1 exn_condition SEP "|" -> 
 	wprintf loc "no postcondition; false inserted@\n";
-	(anonymous (mk_pp loc PPfalse), l)
+	(anonymous loc (mk_pp loc PPfalse), l)
   ] ]
   ;
   exn_condition:
@@ -347,7 +348,7 @@ EXTEND
 
   (* Programs *)
   assertion:
-  [ [ c = lexpr; n = name -> { a_name = n; a_value = c } ] ]
+  [ [ c = lexpr; n = name -> { a_name = n; a_value = c; a_loc = loc } ] ]
   ;
   name:
   [ [ "as"; id = ident -> Ident.Name id
@@ -575,6 +576,9 @@ let c_pre_condition = gec "c_pre_condition"
 let c_post_condition = gec "c_post_condition"
 let c_spec = gec "c_spec"
 let c_loop_annot = gec "c_loop_annot"
+let c_pre = gec "c_pre"
+let c_variant = gec "c_variant"
+let c_post = gec "c_post"
 
 EXTEND
   c_pre_condition:
@@ -587,8 +591,13 @@ EXTEND
   ] ];
   c_loop_annot:
   [ [ LIDENT "invariant"; i = assertion; LIDENT "variant"; v = variant -> i,v
-  ] ]
-  ;
+  ] ];
+  c_pre:
+  [ [ p = OPT pre_condition; v = OPT c_variant -> p,v ] ];
+  c_variant:
+  [ [ LIDENT "variant"; v = variant -> v ] ];
+  c_post:
+  [ [ q = OPT post_condition -> q ] ];
 END
 ;;
 
@@ -600,6 +609,6 @@ let parse_with_offset f n s =
   with_offset n (Grammar.Entry.parse f) st
 
 let parse_c_spec = parse_with_offset c_spec
-let parse_c_pre = parse_with_offset pre_condition
-let parse_c_post = parse_with_offset post_condition
+let parse_c_pre = parse_with_offset c_pre
+let parse_c_post = parse_with_offset c_post
 let parse_c_loop_annot = parse_with_offset c_loop_annot

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.35 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.36 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -67,6 +67,7 @@ val decomp : int -> t
 
 val anonymous : t
 val implicit : t
+val default_post : t
 
 val t_add : t
 val t_sub : t

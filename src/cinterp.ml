@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.19 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.20 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -41,7 +41,7 @@ let interp_c_spec v an =
   { pc_result_name = result; pc_result_type = PVpure v;
     pc_effect = e; pc_pre = p; pc_post = q }
 
-let interp_c_pre an = list_of_some (parse_annot Parser.parse_c_pre an)
+let interp_c_pre an = parse_annot Parser.parse_c_pre an
 
 let interp_c_post = parse_annot Parser.parse_c_post
 
@@ -113,7 +113,7 @@ let get_type l cenv id =
 
 (*s ML constructors *)
 
-let mk_ptree l d p q = { pdesc = d ; pre = p; post = q; loc = l }
+let mk_ptree l d p q = { pdesc = d ; pre = p; post = q; ploc = l }
 let mk_expr l d = mk_ptree l d [] None
 
 let mk_seq loc e1 e2 = match e1, e2 with
@@ -145,7 +145,7 @@ let continue_exception = Ident.create "Continue"
 
 let ml_raise l x e v = 
   let m = mk_expr l (Sraise (x, e, v)) in
-  let pfalse = Misc.anonymous { pp_loc = l; pp_desc = PPfalse } in
+  let pfalse = Misc.anonymous l { pp_loc = l; pp_desc = PPfalse } in
   { m with post = Some (pfalse, []) }
 let ml_raise_return l e v = ml_raise l !return_exception e v
 let ml_raise_break l v = ml_raise l break_exception None v
@@ -215,9 +215,9 @@ let interp_binop l op (m1,t1) (m2,t2) = match op with
     | CTpure PTfloat, CTpure PTfloat ->
 	mk_binop l (interp_float_binop op) m1 m2, t1
     | CTpure PTint, CTpure PTfloat ->
-	mk_binop l (interp_float_binop op) (float_of_int m1.loc m1) m2, t2
+	mk_binop l (interp_float_binop op) (float_of_int m1.ploc m1) m2, t2
     | CTpure PTfloat, CTpure PTint ->
-	mk_binop l (interp_float_binop op) m1 (float_of_int m2.loc m2), t1
+	mk_binop l (interp_float_binop op) m1 (float_of_int m2.ploc m2), t1
     | CTpure PTbool, _ | _, CTpure PTbool ->
         assert false
     | _ -> 
@@ -229,9 +229,9 @@ let interp_binop l op (m1,t1) (m2,t2) = match op with
     | CTpure PTfloat, CTpure PTfloat ->
 	mk_binop l (interp_float_binop op) m1 m2, c_int
     | CTpure PTint, CTpure PTfloat ->
-	mk_binop l (interp_float_binop op) (float_of_int m1.loc m1) m2, c_int
+	mk_binop l (interp_float_binop op) (float_of_int m1.ploc m1) m2, c_int
     | CTpure PTfloat, CTpure PTint ->
-	mk_binop l (interp_float_binop op) m1 (float_of_int m2.loc m2), c_int
+	mk_binop l (interp_float_binop op) m1 (float_of_int m2.ploc m2), c_int
     | CTpure pt1, CTpure pt2 when pt1 = pt2 ->
 	mk_binop l t_eq m1 m2, c_int
     | _ ->
@@ -399,7 +399,7 @@ let rec interp_expr cenv et e =
 	   with Failure "int_of_string" ->
 	     ml_const l (ConstFloat s), c_float)
     in
-    coerce ml.loc et ml ct
+    coerce ml.ploc et ml ct
 
 (*s [interp_call] translates a function call *)
 
@@ -446,7 +446,7 @@ and interp_boolean cenv = function
       let m,_ as mt = interp_expr cenv None e in 
       let e,_ = 
 	(* OPTIM: directement 0.0 quand float *)
-	interp_binop m.loc Neq mt (ml_const m.loc (ConstInt 0), c_int) 
+	interp_binop m.ploc Neq mt (ml_const m.ploc (ConstInt 0), c_int) 
       in
       e
 
@@ -590,24 +590,40 @@ let interp_annotated_block cenv et (l, p, bl, q) =
     else 
       bl
   in
-  { pdesc = bl.pdesc; pre = interp_c_pre p; post = interp_c_post q; loc=l },
-  st.abrupt_return
+  { pdesc = bl.pdesc; pre = p; post = q; ploc=l }, st.abrupt_return
 
 let interp_binder (pt, id) = (id, BindType (PVpure pt))
 
 let interp_binders = List.map interp_binder
 
-let interp_fun id cenv l bl v bs =
+let interp_fun_type bl v =
+  CTfun (List.map (fun (v,_) -> CTpure v) bl, CTpure v), false
+
+let interp_fun id cenv l bl v (l,p,bs,q) =
+  let bs,var = 
+    let p,var = match interp_c_pre p with
+      | None -> [], None
+      | Some (p, var) -> list_of_some p, var
+    in 
+    let q = match interp_c_post q with None -> None | Some q -> q in
+    (l, p, bs, q), var 
+  in
+  let isrec = var <> None in
   let cenv' = 
+    let blv = interp_fun_type bl v in
+    let cenv = if isrec then Idmap.add id blv cenv else cenv in
     List.fold_right (fun (v,id) -> Idmap.add id (CTpure v, false)) bl cenv 
   in
   return_exception := Ident.create ("Return_" ^ Ident.string id);
   let bs',ar = interp_annotated_block cenv' (CTpure v) bs in
-  mk_ptree l (Slam (interp_binders bl, bs')) [] None, ar
+  let e = match var with
+    | Some var ->
+	mk_ptree l (Srec (id, interp_binders bl, PVpure v, var, bs')) [] None
+    | None -> 
+	mk_ptree l (Slam (interp_binders bl, bs')) [] None
+  in
+  e, ar
 		    
-
-let interp_fun_type bl v =
-  CTfun (List.map (fun (v,_) -> CTpure v) bl, CTpure v), false
 
 (*s C declarations *)
 
@@ -625,10 +641,11 @@ let interp_decl cenv = function
       assert false
   | Cfundef (l, id, bl, v, bs) ->
       let bl = if bl = [] then [PTunit, anonymous] else bl in
+      let blv = interp_fun_type bl v in
       let e,ar = interp_fun id cenv l bl v bs in
       let d = [ Program (id, e) ] in
       (if ar then (Exception (l, !return_exception, Some v)) :: d else d),
-      Idmap.add id (interp_fun_type bl v) cenv
+      Idmap.add id blv cenv
 
 let interp l = 
   let rec interp_list cenv = function

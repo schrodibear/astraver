@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.mli,v 1.22 2002-10-18 11:18:38 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.23 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -37,7 +37,7 @@ val exn_arg_type : Ident.t -> cc_type
 (*s Basic monadic operators. They operate over values of type [interp] i.e.
     functions building a [cc_term] given a renaming structure. *)
 
-type interp = Rename.t -> predicate cc_term
+type interp = Rename.t -> (Loc.t * predicate) cc_term
 
 (*s The [unit] operator encapsulates a term in a computation. *)
 

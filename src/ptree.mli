@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.10 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.11 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -75,7 +75,7 @@ type t =
   { pdesc : t_desc;
     pre : lexpr asst list;
     post : lexpr post option;
-    loc : Loc.t }
+    ploc : Loc.t }
 
 and t_desc =
   | Svar of variable

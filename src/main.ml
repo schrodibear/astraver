@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.45 2002-12-05 16:25:11 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.46 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -62,7 +62,7 @@ let print_if_debug p x = if_debug_3 eprintf "  @[%a@]@." p x
 
 let interp_program id p =
   reset_names ();
-  let ploc = p.loc in
+  let ploc = p.ploc in
   if_verbose_3 eprintf "*** interpreting program %a@." Ident.print id;
 
   if_debug eprintf "* typing with effects@.";
@@ -113,7 +113,7 @@ let interp_decl d =
   let lenv = Env.logical_env env in
   match d with 
   | Program (id, p) ->
-      if Env.is_global id then raise_located p.loc (Clash id);
+      if Env.is_global id then raise_located p.ploc (Clash id);
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ids, v) ->
       let v = Ltyping.type_v loc lab env lenv v in

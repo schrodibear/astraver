@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.67 2002-12-05 13:22:27 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.68 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -154,7 +154,7 @@ let apply_term ren env t =
 let apply_assert ren env c =
   let ids = predicate_vars c.a_value in
   let s = make_subst None ren env ids in
-  { a_name = c.a_name; a_value = subst_in_predicate s c.a_value }
+  { c with a_value = subst_in_predicate s c.a_value }
  
 let apply_post before ren env q =
   let ids = post_vars q in
@@ -389,8 +389,9 @@ let rec print_prog fmt p =
   if k.c_pre = [] && k.c_post = None then
     fprintf fmt "@[%s:@,%a@]" p.info.label print_desc p.desc
   else
-    fprintf fmt "@[<hv>%s:@,@[{%a}@]@ @[%a@]@ @[{%a}@]@]" 
-      p.info.label print_pre k.c_pre print_desc p.desc print_post k.c_post
+  fprintf fmt "@[<hv>[%d-%d]%s:@,@[{%a}@]@ @[%a@]@ @[{%a}@]@]" 
+    (fst p.info.loc) (snd p.info.loc)
+    p.info.label print_pre k.c_pre print_desc p.desc print_post k.c_post
 
 and print_desc fmt = function
   | Var id -> 
@@ -404,13 +405,13 @@ and print_desc fmt = function
   | TabAff (_, id, p1, p2) -> 
       fprintf fmt "%a[%a] :=@ %a" Ident.print id print_prog p1 print_prog p2
   | Seq bl -> 
-      fprintf fmt "begin@\n  @[%a@]@\nend" print_block bl
+      fprintf fmt "@[begin@\n  @[%a@]@\nend@]" print_block bl
   | While (p, i, var, e) ->
       fprintf fmt 
 	"while %a do@\n  { invariant %a variant _ }@\n  @[%a@]@\ndone" 
 	print_prog p (print_option print_assertion) i print_prog e
   | If (p1, p2, p3) ->
-      fprintf fmt "if %a then@ %a else@ %a" 
+      fprintf fmt "@[if %a then@ %a else@ %a@]" 
 	print_prog p1 print_prog p2 print_prog p3
   | Lam (bl, p) -> 
       fprintf fmt "@[fun <bl> ->@\n  %a@]" print_prog p
@@ -528,7 +529,7 @@ let rec print_cc_term fmt = function
 	print_cc_term e (print_list newline print_case) pl
   | CC_term c ->
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
-  | CC_hole c ->
+  | CC_hole (_, c) ->
       fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"
   | CC_type t ->
       print_cc_type fmt t

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.33 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.34 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -72,7 +72,7 @@ and uniq_binder fv s (id,b) =
   else 
     (id,b'), Idset.add id fv, s
 
-and uniq_binders fv s = uniq_list uniq_binder fv s
+and uniq_binders fv s bl = uniq_list uniq_binder fv s bl
 
 and uniq_pattern fv s = function
   | PPvariable b -> 
@@ -102,8 +102,8 @@ let rec uniq_cc fv s = function
       CC_case (uniq_cc fv s e, List.map uniq_branch pl)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
-  | CC_hole ty ->
-      CC_hole (tsubst_in_predicate s ty)
+  | CC_hole (x, ty) ->
+      CC_hole (x, tsubst_in_predicate s ty)
   | CC_type t ->
       CC_type (uniq_tt fv s t)
 
@@ -192,7 +192,7 @@ let rec iota_subst s = function
 
 (*s Reduction. Substitution is done at the same time for greater efficiency *)
 
-let rm_binders = List.fold_left (fun sp (id,_) -> Idmap.remove id sp)
+let rm_binders sp = List.fold_left (fun sp (id,_) -> Idmap.remove id sp) sp
 
 let rec rm_pat_binders sp = function
   | PPvariable (id, _) -> Idmap.remove id sp
@@ -253,8 +253,8 @@ let rec red sp s cct =
       CC_tuple (List.map (red sp s) al,	option_app (cc_type_subst s) po)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
-  | CC_hole ty ->
-      CC_hole (tsubst_in_predicate s ty)
+  | CC_hole (x, ty) ->
+      CC_hole (x, tsubst_in_predicate s ty)
   | CC_type t ->
       CC_type (cc_type_subst s t)
 

@@ -1245,9 +1245,10 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
   \\[0.1em]
 
   \nt{c\_pre}
-    & $::=$ & \te{/*@} \nt{precondition} \te{*/}  \\
+    & $::=$ & \te{/*@} $[$ \nt{precondition} $]$ $[$ \te{variant} \nt{wf\_arg}
+              $]$ \te{*/}  \\
   \nt{c\_post}
-    & $::=$ & \te{/*@} \nt{postcondition} \te{*/}  \\
+    & $::=$ & \te{/*@} $[$ \nt{postcondition} $]$ \te{*/}  \\
   \nt{c\_loop\_annot}
     & $::=$ & \te{/*@} \te{invariant} \nt{assertion} 
               \te{variant} \nt{wf\_arg} \te{*/}  \\

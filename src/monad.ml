@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.62 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.63 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -185,7 +185,7 @@ let rec make_exn ty x v = function
     type [interp] (functions producing a [cc_term] when given a renaming
     data structure). *)
 
-type interp = Rename.t -> predicate cc_term
+type interp = Rename.t -> (Loc.t * predicate) cc_term
 
 type result = 
   | Value of term
@@ -233,9 +233,9 @@ let unit info r ren =
 	    in
 	    match r with
 	      | Value t | Exn (_, Some t) ->
-		  tsubst_in_predicate (subst_one result t) a.a_value
+		  a.a_loc, tsubst_in_predicate (subst_one result t) a.a_value
 	      | Exn _ ->
-		  a.a_value
+		  a.a_loc, a.a_value
 	  in
 	  (* type of the obligation: [y1]...[yn][res]Q *)
 	  let ht = 
@@ -291,10 +291,10 @@ let binding_of_alist ren env =
 
 let make_pre env ren p = 
   let p = apply_assert ren env p in
-  pre_name p.a_name, p.a_value
+  pre_name p.a_name, (p.a_loc, p.a_value)
 
 let let_pre (id, h) cc = 
-  CC_letin (false, [id, CC_pred_binder h], CC_hole h, cc)
+  CC_letin (false, [id, CC_pred_binder (snd h)], CC_hole h, cc)
 
 let let_many_pre = List.fold_right let_pre
 
@@ -474,7 +474,7 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   let vphi = variant_name () in
   let wr = get_writes info.kappa.c_effect in
   let info' = 
-    let eq = Misc.anonymous (equality (Tvar vphi) phi) in
+    let eq = Misc.anonymous Loc.dummy (equality (Tvar vphi) phi) in
     { info with kappa = { info.kappa 
 			  with c_effect = keep_writes info.kappa.c_effect;
 			       c_pre = eq :: info.kappa.c_pre }}
@@ -492,9 +492,13 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   let input ren =
     let args = List.map (fun (id,_) -> CC_var id) bl in
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
-    let pl = (Misc.anonymous (equality phi phi)) :: info.kappa.c_pre in
+    let pl = 
+      (Misc.anonymous info.loc (equality phi phi)) :: info.kappa.c_pre 
+    in
     let holes = 
-      List.map (fun p -> CC_hole (apply_assert ren env p).a_value) pl 
+      List.map (fun p -> 
+		  let p = apply_assert ren env p in
+		  CC_hole (p.a_loc, p.a_value)) pl 
     in
     args @ input @ holes
   in
@@ -505,12 +509,12 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   in
   let fw ren = 
     let tphi = apply_term ren env phi in
-    let decphi = Papp (r, [tphi; Tvar vphi]) in
+    let decphi = info.loc, Papp (r, [tphi; Tvar vphi]) in
     cc_applist (CC_var w) ([CC_term tphi; CC_hole decphi] @ input ren) 
   in
   cc_applist (CC_var well_founded_induction)
     ([CC_type a; CC_term (Tvar r);
-      CC_hole (Papp (well_founded, [Tvar r]));
+      CC_hole (info.loc, Papp (well_founded, [Tvar r]));
       CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
       cc_lam 
 	([vphi, CC_var_binder a; w, CC_var_binder tw] @ bl)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.27 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.28 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -73,6 +73,7 @@ let is_local_set env id =
 (* typed programs *)
 
 type typing_info = {
+  loc : Loc.t;
   env : local_env;
   label : string;
   obligations : assertion list;
@@ -199,7 +200,7 @@ let compare_type op t =
 	       relation op (Tvar x) (Tvar y),
 	       not_relation op (Tvar x) (Tvar y))
   in
-  let q = make_c bool (Some (anonymous q, [])) in
+  let q = make_c bool (Some (anonymous Loc.dummy q, [])) in
   make_arrow [x, BindType t; y, BindType t] q
 
 let _ = add_global t_lt_int (compare_type t_lt_int int) None

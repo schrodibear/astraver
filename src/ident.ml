@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.40 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.41 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -105,6 +105,7 @@ let decomp n = create ("decomp" ^ string_of_int n)
 
 let anonymous = create "_"
 let implicit = create "?"
+let default_post = create "%default_post"
 
 let t_add = create "%add"
 let t_sub = create "%sub"

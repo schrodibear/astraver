@@ -41,4 +41,4 @@ type proof =
 
 type validation = proof cc_term
 
-val vcg : string -> predicate cc_term -> obligation list * validation
+val vcg : string -> (Loc.t * predicate) cc_term -> obligation list * validation

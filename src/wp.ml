@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.69 2002-11-29 08:47:42 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.70 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -96,6 +96,7 @@ let add_pre pl w =
     [wp: typed_program -> postcondition option -> assertion option] *)
 
 let rec wp p q =
+  let q = option_app (force_post_loc p.info.loc) q in
   let env = p.info.env in
   let lab = p.info.label in
   let postp = post p in
@@ -110,7 +111,7 @@ let rec wp p q =
     | Some q', Some q when not (is_while p) ->
 	let res = (result, result_type p) in
 	let w = abstract_wp q' q res (output p) in
-	Some (anonymous (erase_label lab w))
+	Some (anonymous p.info.loc (erase_label lab w))
     | _ -> 
 	w
   in

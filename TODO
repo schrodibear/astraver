@@ -12,13 +12,8 @@ FEATURES
 
  - keyword absurd (similar to "assert false" in ocaml)
 
- - suppress dependent types for array
-   (=> array_length function to be used instead of static size information)
-
 COQ
 ===
-
- - simplification tactic for arrays
 
 PVS
 ===
@@ -36,14 +31,17 @@ MISC
 ====
 
  - emacs mode
-   - switch .mlw / _why.v
    - menu / keys -> typecheck, wp, coq, pvs, ocaml
+
+ - why viewer
 
 BUGS
 ====
 
 IMPLEMENTATION
 ==============
+
+ - do not overwrite .bak if no change
 
  - references mentioned in specs are added to read references; e.g.
        t:array 10 of int -> {} unit { access(t,1) = 2 }

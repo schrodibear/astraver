@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: types.mli,v 1.16 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: types.mli,v 1.17 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Types for programs *)
 
@@ -22,7 +22,7 @@ open Logic
 
 (*s Pre- and postconditions. *)
 
-type 'a asst = { a_name : Ident.name; a_value : 'a }
+type 'a asst = { a_name : Ident.name; a_value : 'a; a_loc : Loc.t }
 
 type assertion = predicate asst
 

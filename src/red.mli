@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.mli,v 1.5 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: red.mli,v 1.6 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Cc
 open Logic 
@@ -22,5 +22,5 @@ open Logic
 (* reduction on intermediate programs 
  * get rid of redexes of the kind let (x1,...,xn) = e in (x1,...,xn) *)
 
-val red : predicate cc_term -> predicate cc_term
+val red : ('a * predicate) cc_term -> ('a * predicate) cc_term
 

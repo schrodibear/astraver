@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.6 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.7 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -26,7 +26,11 @@ open Types
 
 (* Automatic annotations *)
 
-let default_post = anonymous Pfalse
+let default_post = anonymous Loc.dummy (Pvar Ident.default_post)
+
+let is_default_post a = match a.a_value with
+  | Pvar id when id == Ident.default_post -> true
+  | _ -> false
 
 (* maximum *)
 
@@ -39,7 +43,7 @@ let sup q q' = match q, q' with
       assert (List.length ql = List.length ql');
       let supx (x,a) (x',a') =
 	assert (x = x');
-	x, if a == default_post then a' else a
+	x, if is_default_post a then a' else a
       in
       Some (q, List.map2 supx ql ql') 
 
@@ -49,11 +53,12 @@ let force_post env q e = match q with
   | None -> 
       e
   | Some c ->
+      let c = force_post_loc e.info.loc c in
       let ids = post_refs env c in
       let ef = Effect.add_reads ids e.info.kappa.c_effect in
-      let k = { e.info.kappa with c_post = q; c_effect = ef } in
+      let k = { e.info.kappa with c_post = Some c; c_effect = ef } in
       let i = { e.info with kappa = k } in
-      { desc = e.desc; info = i }
+      { e with info = i }
 
 let post_if_none env q p = match post p with
   | None -> force_post env q p 
@@ -65,14 +70,15 @@ let default_exns_post e =
   let xs = Effect.get_exns e in
   List.map (fun x -> x, default_post) xs
  
-let while_post info b inv = 
+let while_post loc info b inv = 
   let _,s = decomp_boolean (post b) in
   let s = change_label b.info.label info.label s in
   let ql = default_exns_post info.kappa.c_effect in
   match inv with
-    | None -> Some (anonymous s, ql)
+    | None -> Some (anonymous loc s, ql)
     | Some i -> Some ({ a_value = pand i.a_value s; 
-			a_name = Name (post_name_from i.a_name) }, ql)
+			a_name = Name (post_name_from i.a_name);
+			a_loc = loc }, ql)
 
 let while_post_block env inv (phi,_,r) e = 
   let lab = e.info.label in
@@ -80,14 +86,16 @@ let while_post_block env inv (phi,_,r) e =
   let ql = default_exns_post (effect e) in
   match inv with
     | None -> 
-	anonymous decphi, ql
+	anonymous e.info.loc decphi, ql
     | Some i -> 
 	{ a_value = pand i.a_value decphi; 
-	  a_name = Name (post_name_from i.a_name) }, ql
+	  a_name = Name (post_name_from i.a_name);
+	  a_loc = e.info.loc }, ql
 
 (* misc. *)
 
-let post_named c = { a_value = c; a_name = Name (post_name Anonymous) }
+let post_named c = 
+  { a_value = c; a_name = Name (post_name Anonymous); a_loc = Loc.dummy }
 
 let create_postval c = Some (post_named c)
 
@@ -98,15 +106,14 @@ let is_conditional p = match p.desc with If _ -> true | _ -> false
 (* [extract_pre p] erase the pre-condition of [p] and returns it *)
 
 let extract_oblig pr =
-  { desc = pr.desc; info = { pr.info with obligations = [] } },
+  { pr with info = { pr.info with obligations = [] } },
   pr.info.obligations
 
 (* adds some pre-conditions *)
 
 let add_oblig p1 pr =
   let o = pr.info.obligations in
-  { desc = pr.desc; 
-    info = { pr.info with obligations = o @ p1 } }
+  { pr with info = { pr.info with obligations = o @ p1 } }
   
 (* change the statement *)
 
@@ -160,7 +167,7 @@ let rec normalize p =
 	let p = change_desc p (While (b', invopt, var, e)) in
 	(match post p with
 	   | None -> 
-	       let q = while_post p.info b' invopt in
+	       let q = while_post p.info.loc p.info b' invopt in
 	       force_post env q p
 	   | Some q ->
 	       let q = post_app (change_label "" p.info.label) q in
@@ -179,6 +186,7 @@ let rec normalize p =
 and normalize_boolean env b =
   let k = b.info.kappa in
   let give_post b q =
+    let q = option_app (force_post_loc b.info.loc) q in
     { b with info = { b.info with kappa = { k with c_post = q } } }
   in
   let q = k.c_post in

@@ -106,7 +106,7 @@ let loop_variant_1 hyps concl =
     | _ -> 
 	raise Exit
 
-let discharge ctx concl =
+let discharge_methods ctx concl =
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
   try reflexivity concl with Exit -> 
@@ -115,8 +115,11 @@ let discharge ctx concl =
   try conjunction ctx concl with Exit ->
   loop_variant_1 ctx concl
 
-let discharge_msg () =
-  if_verbose eprintf "one obligation trivially discharged@."
+let discharge loc ctx concl =
+  let pr = discharge_methods ctx concl in
+  eprintf "obligation %a discharged at %d-%d@\n" print_predicate concl (fst loc) (snd loc);
+  if_verbose eprintf "one obligation trivially discharged@.";
+  pr
 
 (*s Cleaning the sequents *)
 
@@ -166,7 +169,8 @@ let rec cut_last_binders = function
 let vcg base t =
   let po = ref [] in
   let cpt = ref 0 in
-  let push ctx concl = 
+  let push loc ctx concl = 
+    eprintf "obligation at %d-%d@\n" (fst loc) (snd loc);
     incr cpt;
     let id = base ^ "_po_" ^ string_of_int !cpt in
     let ctx' = clean_sequent (List.rev ctx) concl in
@@ -178,9 +182,8 @@ let vcg base t =
     | CC_term _ 
     | CC_type _ as cc -> 
 	cc
-    | CC_hole p -> 
-	CC_hole (try let pr = discharge ctx p in discharge_msg (); pr
-		 with Exit -> push ctx p)
+    | CC_hole (loc, p) -> 
+	CC_hole (try discharge loc ctx p with Exit -> push loc ctx p)
     (* special treatment for the if-then-else *)
     | CC_letin (dep, ([idb, CC_var_binder (TTpure PTbool); 
 		       _, CC_pred_binder _] as bl1), e1, 

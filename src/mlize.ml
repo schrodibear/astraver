@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.63 2002-12-02 13:42:55 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.64 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -131,7 +131,7 @@ and trad_desc info d ren = match d with
 	(fun v1 ren' -> 
 	   let x' = current_var ren' x in
 	   let t = make_raw_access info.env (x,x') (Tvar v1) in
-	   let p = anonymous (make_pre_access info.env x (Tvar v1)) in
+	   let p = anonymous info.loc (make_pre_access info.env x (Tvar v1)) in
 	   insert_pre info.env p (Monad.unit info (Value t)) ren')
 	ren
 
@@ -147,7 +147,7 @@ and trad_desc info d ren = match d with
 		 let st = make_raw_store info.env (x,x') (Tvar v1) (Tvar v2) in
 		 let p = make_pre_access info.env x (Tvar v1) in
 		 CC_letin (false, [x'', CC_var_binder tx], CC_term st,
-			   insert_pre info.env (anonymous p)
+			   insert_pre info.env (anonymous info.loc p)
 			     (Monad.unit info (Value (Tconst ConstUnit))) 
 			     ren'')))
 	 ren
@@ -234,6 +234,7 @@ and trad_conditional info info1 te1 info2 te2 info3 te3 =
 	 option_app (apply_post info1.label ren' info.env) info1.kappa.c_post
        in
        let branch infob eb tb = 
+	 (* let info = { info with loc = infob.loc } in *)
 	 let t = 
 	   Monad.compose infob eb info
 	     (fun r -> Monad.unit info (Value (Tvar r))) ren'

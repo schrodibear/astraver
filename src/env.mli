@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.19 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.20 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -41,7 +41,8 @@ val is_local_set : local_env -> Ident.t -> bool
 (*s typed programs *)
 
 type typing_info = 
-  { env : local_env;
+  { loc : Loc.t;
+    env : local_env;
     label : label;
     obligations : assertion list;
     kappa : type_c }

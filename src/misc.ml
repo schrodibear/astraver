@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.63 2002-12-06 10:32:55 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.64 2002-12-09 10:14:57 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -137,22 +137,40 @@ let rationalize s =
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
 
-let asst_app f x = { a_name = x.a_name; a_value = (f x.a_value) }
+let asst_app f x = { x with a_value = (f x.a_value) }
 
 let post_app f (q,l) = 
   (asst_app f q, List.map (fun (x,a) -> (x, asst_app f a)) l)
 
 let optpost_app f = option_app (post_app f)
 
-let anonymous x = { a_name = Anonymous; a_value = x }
+let anonymous loc x = { a_name = Anonymous; a_value = x; a_loc = loc }
 
-let force_name f a = { a_name = Name (f a.a_name); a_value = a.a_value }
+let force_name f a = { a with a_name = Name (f a.a_name) }
 
 let force_post_name = option_app (fun (q,l) -> (force_name post_name q, l))
 
 let force_bool_name = 
   let f = function Name id -> id | Anonymous -> bool_name() in
   option_app (fun (q,l) -> (force_name f q, l))
+
+let force_loc l a = { a with a_loc = l }
+
+let force_post_loc l (q,ql) = 
+  (force_loc l q, List.map (fun (x,a) -> (x, force_loc l a)) ql)
+
+let rec force_type_c_loc l c =
+  { c with 
+      c_result_type = force_type_v_loc l c.c_result_type;
+      c_pre = List.map (force_loc l) c.c_pre;
+      c_post = option_app (force_post_loc l) c.c_post }
+
+and force_type_v_loc l = function
+  | Ref v -> Ref (force_type_v_loc l v)
+  | Array v -> Array (force_type_v_loc l v)
+  | Arrow (bl, c) -> Arrow (bl, force_type_c_loc l c)
+  | (PureType _) as v -> v
+
 
 (* selection of postcondition's parts *)
 let post_val = fst
@@ -432,7 +450,7 @@ let tt_arrow = List.fold_right (fun b t -> TTarrow (b, t))
 (*s functions over AST *)
 
 let arg_loc = function 
-  | Sterm t -> t.Ptree.loc 
+  | Sterm t -> t.Ptree.ploc 
   | Stype _ -> assert false (* TODO *)
 
 (*s Pretty-print *)
