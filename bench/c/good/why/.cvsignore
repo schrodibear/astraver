@@ -1,0 +1,15 @@
+*.why
+*_why.pvs
+*.prf
+.pvscontext
+*.bin
+*.vo
+*.pvs
+old
+*.ml
+pvstc.el
+*_valid.v
+*.sx
+*.sx.all
+.depend
+a.out

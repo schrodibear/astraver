@@ -2,28 +2,28 @@
 CADUCEUS=../../../bin/caduceus.opt 
 CADUCEUSLIB=../../../lib/why
 
-all: struct_why.vo pointer_why.vo
+all: coq/struct_why.vo coq/pointer_why.vo
 
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
-%.why %_valid.v: %.c $(CADUCEUS) $(CADUCEUSLIB)/caduceus.why
+why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/caduceus.why
 	$(EXECCADUCEUS) $<
 
 WHY=../../../bin/why.opt
 
-%_why.v %_valid.v: %.why $(WHY)
-	$(WHY) --valid -V --coq-v8 --coq-preamble "Require Export Why" caduceus.why $<
+coq/%_why.v coq/%_valid.v: why/%.why $(WHY)
+	$(WHY) -dir coq --valid -V --coq-v8 --coq-preamble "Require Export Why" why/caduceus.why $<
 
-%_why.sx: %.why $(WHY)
-	$(WHY) -V --simplify --no-simplify-prelude caduceus.why $<
+simplify/%_why.sx: why/%.why $(WHY)
+	$(WHY) -dir simplify -V --simplify --no-simplify-prelude why/caduceus.why $<
 
-caduceus_why.v: caduceus.why $(WHY)
-	$(WHY) --coq-v8 caduceus.why
+coq/caduceus_why.v: why/caduceus.why $(WHY)
+	$(WHY) -dir coq --coq-v8 why/caduceus.why
 
-%_valid.vo: %_why.vo
+coq/%_valid.vo: coq/%_why.vo
 
-%.vo: %.v
-	coqc -R ../../../lib/coq Coq.why $<
+coq/%.vo: coq/%.v
+	coqc -R ../../../lib/coq Coq.why -I coq $<
 
 simplify:
 	time make do_simplify > simplify.log
@@ -32,10 +32,11 @@ simplify:
 	@echo -n "invalid obligations: " 
 	@egrep '[0-9]+: Invalid.$$' simplify.log | wc -l
 
-do_simplify: arith_why.sxcheck sum2_why.sxcheck pointer_why.sxcheck
+do_simplify: simplify/arith_why.sxcheck simplify/sum2_why.sxcheck \
+	     simplify/pointer_why.sxcheck
 
-%.sxcheck: %.sx
-	cat caduceus_why.sx $< > $<.all
+simplify/%.sxcheck: simplify/%.sx
+	cat simplify/caduceus_why.sx $< > $<.all
 	Simplify $<.all
 
 type-all:
@@ -47,4 +48,4 @@ type-all:
 include .depend
 
 depend .depend:
-	coqdep *.v > .depend
+	coqdep -I coq coq/*.v > .depend
