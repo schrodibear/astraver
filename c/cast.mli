@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.10 2003-12-24 12:13:35 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.11 2003-12-24 13:51:44 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -63,12 +63,18 @@ type assign_operator =
   | Aand | Axor | Aor
 
 type unary_operator = 
-  | Prefix_inc | Prefix_dec | Postfix_inc | Postfix_dec 
-  | Uplus | Uminus | Not | Ustar | Uamp | Utilde
+  | Uprefix_inc | Uprefix_dec | Upostfix_inc | Upostfix_dec 
+  | Uplus | Uminus | Unot | Ustar | Uamp | Utilde
+  (* these are introduced during typing *)
+  | Ufloat_of_int | Uint_of_float
 
 type binary_operator =
-  | Plus | Minus | Mult | Div | Mod | Lt | Gt | Le | Ge | Eq | Neq 
-  | Bw_and | Bw_xor | Bw_or | And | Or
+  | Badd | Bsub | Bmul | Bdiv | Bmod 
+  | Blt | Bgt | Ble | Bge | Beq | Bneq 
+  | Bbw_and | Bbw_xor | Bbw_or | Band | Bor
+  (* these are introduced during typing *)
+  | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int 
+  | Badd_float | Bsub_float | Bmul_float | Bdiv_float 
 
 type shift = Left | Right
 
@@ -103,10 +109,10 @@ type cstatement = cstatement_node located
 and cstatement_node =
   | CSnop
   | CSexpr of cexpr
-  | CScond of cexpr * cstatement * cstatement
-  | CSwhile of cexpr * annot * cstatement
-  | CSdowhile of cstatement * annot * cexpr
-  | CSfor of cexpr * cexpr * cexpr * annot * cstatement
+  | CSif of cexpr * cstatement * cstatement
+  | CSwhile of cexpr * annot option * cstatement
+  | CSdowhile of cstatement * annot option * cexpr
+  | CSfor of cexpr * cexpr * cexpr * annot option * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -135,13 +141,6 @@ type file = decl located list
 
 open Logic
 
-type tunary_operator = 
-  | TUint_of_float | TUfloat_of_int
-
-type tbinary_operator =
-  | TBadd_int | TBsub_int | TBmul_int | TBdiv_int | TBmod_int 
-  | TBadd_float | TBsub_float | TBmul_float | TBdiv_float 
-
 type texpr = {
   texpr_node : texpr_node;
   texpr_type : texpr ctype;
@@ -158,8 +157,8 @@ and texpr_node =
   | TEarrget of lvalue * texpr
   | TEseq of texpr * texpr
   | TEassign of lvalue * assign_operator * texpr
-  | TEunary of tunary_operator * texpr
-  | TEbinary of texpr * tbinary_operator * texpr
+  | TEunary of unary_operator * texpr
+  | TEbinary of texpr * binary_operator * texpr
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr
   | TEshift of texpr * shift * texpr
@@ -186,10 +185,11 @@ type tstatement = {
 and tstatement_node =
   | TSnop
   | TSexpr of texpr
-  | TScond of texpr * tstatement * tstatement
-  | TSwhile of texpr * tstatement * loop_info * loop_annotation
-  | TSdowhile of tstatement * texpr * loop_info * loop_annotation
-  | TSfor of texpr * texpr * texpr * tstatement * loop_info * loop_annotation
+  | TSif of texpr * tstatement * tstatement
+  | TSwhile of texpr * tstatement * loop_info * loop_annotation option
+  | TSdowhile of tstatement * texpr * loop_info * loop_annotation option
+  | TSfor of 
+      texpr * texpr * texpr * tstatement * loop_info * loop_annotation option
   | TSblock of tblock
   | TSreturn of texpr option
   | TSbreak

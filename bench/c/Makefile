@@ -1,7 +1,7 @@
 
 test:
 	-gcc -Wall -c test.c
-	../../bin/caduceus.opt -d -v -type-only test.c
+	../../bin/caduceus.opt -v -type-only test.c
 
 gcc:
 	gcc test.c && ./a.out

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.4 2003-12-24 12:13:35 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.5 2003-12-24 13:51:44 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -87,6 +87,7 @@ let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
 
 (* Type equality (i.e. structural equality, but ignoring attributes) *)
+(* TODO: pointers = arrays *)
 
 let rec eq_type ty1 ty2 = 
   eq_type_node ty1.ctype_node ty2.ctype_node
@@ -134,9 +135,9 @@ let compatible ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
 
 let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
   | CTint _, CTfloat _ -> 
-      { e with texpr_node = TEunary (TUfloat_of_int, e); texpr_type = ty }
+      { e with texpr_node = TEunary (Ufloat_of_int, e); texpr_type = ty }
   | CTfloat _, CTint _ ->
-      { e with texpr_node = TEunary (TUint_of_float, e); texpr_type = ty }
+      { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
   | _ ->
@@ -233,13 +234,52 @@ and type_expr_node loc env = function
 	TEcond (e1, e2, coerce ty2 e3), ty2
       else
 	error loc "type mismatch in conditional expression"
-(**
-  | CEassign of cexpr * assign_operator * cexpr
-  | CEunary of unary_operator * cexpr
-  | CEbinary of cexpr * binary_operator * cexpr
-  | CEcall of cexpr * cexpr list
-  | CEshift of cexpr * shift * cexpr
-**)
+  | CEassign (e1, op, e2) ->
+      let e1 = type_lvalue env e1 in
+      let e2 = type_expr env e2 in
+      begin match op with
+	| Aequal ->
+	    assert false (*TODO*)
+	| Amul | Adiv | Aadd | Asub -> 
+            assert false (*TODO*)
+	| Amod | Aleft | Aright 
+	| Aand | Axor | Aor ->
+	    assert false (*TODO*)
+      end
+  | CEunary ((Uprefix_inc|Uprefix_dec|Upostfix_inc|Upostfix_dec as op), e) ->
+      let e = type_lvalue env e in
+      begin match e.texpr_type.ctype_node with
+	| CTint _ | CTfloat _ | CTpointer _ -> TEunary (op, e), e.texpr_type
+	| _ -> error loc "wrong type to {de,in}crement"
+      end
+  | CEunary (Unot, e) ->
+      let e = type_boolean env e in
+      TEunary (Unot, e), c_int
+  | CEunary ((Uplus | Uminus as op), e) ->
+      let e = type_expr env e in
+      assert false (*TODO*)
+  | CEunary ((Ustar | Uamp | Utilde as op), e) ->
+      let e = type_expr env e in
+      assert false (*TODO*)
+  (* these other unops cannot be built by the parser *)
+  | CEunary ((Uint_of_float|Ufloat_of_int), _) ->
+      assert false
+  | CEbinary (e1, (Badd | Bsub | Bmul | Bdiv | Bmod 
+		  | Blt | Bgt | Ble | Bge | Beq | Bneq 
+		  | Bbw_and | Bbw_xor | Bbw_or | Band | Bor as op), e2) ->
+      let e1 = type_expr env e1 in
+      let e2 = type_expr env e2 in
+      assert false (*TODO*)
+  (* these other binops cannot be built by the parser *)
+  | CEbinary (_, (Bdiv_float|Bmul_float|Bsub_float|Badd_float
+		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int), _) ->
+      assert false
+  | CEcall (e, el) ->
+      assert false (*TODO*)
+  | CEshift (e1, sh, e2) ->
+      let e1 = type_int_expr env e1 in
+      let e2 = type_int_expr env e2 in
+      TEshift (e1, sh, e2), e1.texpr_type
   | CEcast (ty, e) ->
       let ty = type_type ty in
       let e = type_expr env e in
@@ -250,8 +290,6 @@ and type_expr_node loc env = function
   | CEsizeof ty ->
       let ty = type_type ty in
       TEsizeof ty, c_int
-  | _ ->
-      assert false (*TODO*)
 
 and type_lvalue env e = type_expr env e (*TODO*)
 
@@ -272,7 +310,12 @@ and type_int_expr env e = match type_expr env e with
 
 (*s Typing of ``boolean'' expressions *)
 
-and type_boolean env e = type_int_expr env e (*TODO: vérifier booléen*)
+and type_boolean env e = 
+  let e' = type_expr env e in
+  let ty = e'.texpr_type in
+  match ty.ctype_node with
+    | CTint _ | CTfloat _ | CTpointer _ | CTarray _ -> e'
+    | _ -> error e.loc "invalid operand to binary !="
 
 (*s Typing of initializers *)
 
@@ -314,11 +357,11 @@ and type_statement_node loc env et = function
   | CSexpr e ->
       let e = type_expr env e in
       TSexpr e, mt_status
-  | CScond (e, s1, s2) ->
+  | CSif (e, s1, s2) ->
       let e = type_boolean env e in
       let s1,st1 = type_statement env et s1 in
       let s2,st2 = type_statement env et s2 in
-      TScond (e, s1, s2), or_status st1 st2
+      TSif (e, s1, s2), or_status st1 st2
   | CSbreak ->
       TSbreak, { mt_status with break = true }
   | CScontinue -> 

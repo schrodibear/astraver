@@ -42,6 +42,7 @@
   let warning s =
     Format.eprintf "%a warning: %s\n" Loc.report_line (symbol_start ()) s
   let vwarning s = if verbose then warning s
+  let dwarning s = if debug then warning s
 
   let add_pre_loc lb = function
     | Some (b,_) -> Loc.join (b,0) lb 
@@ -331,9 +332,9 @@ postfix_expression
         | postfix_expression PTR_OP identifier/*ICI*/ 
 	    { locate (CEarrow ($1, $3)) }
         | postfix_expression INC_OP 
-	    { locate (CEunary (Postfix_inc, $1)) }
+	    { locate (CEunary (Upostfix_inc, $1)) }
         | postfix_expression DEC_OP
-	    { locate (CEunary (Postfix_dec, $1)) }
+	    { locate (CEunary (Upostfix_dec, $1)) }
         ;
 
 argument_expression_list
@@ -343,8 +344,8 @@ argument_expression_list
 
 unary_expression
         : postfix_expression { $1 }
-        | INC_OP unary_expression { locate (CEunary (Prefix_inc, $2)) }
-        | DEC_OP unary_expression { locate (CEunary (Prefix_dec, $2)) }
+        | INC_OP unary_expression { locate (CEunary (Uprefix_inc, $2)) }
+        | DEC_OP unary_expression { locate (CEunary (Uprefix_dec, $2)) }
         | unary_operator cast_expression { locate (CEunary ($1, $2)) }
         | SIZEOF unary_expression { locate (CEsizeof_expr $2) }
         | SIZEOF LPAR type_name RPAR 
@@ -357,7 +358,7 @@ unary_operator
         | PLUS { Uplus }
         | MINUS { Uminus }
         | TILDE { Utilde }
-        | EXL { Not }
+        | EXL { Unot }
         ;
 
 cast_expression
@@ -370,20 +371,20 @@ multiplicative_expression
         : cast_expression 
             { $1 }
         | multiplicative_expression STAR cast_expression 
-	    { locate (CEbinary ($1, Mult, $3)) }
+	    { locate (CEbinary ($1, Bmul, $3)) }
         | multiplicative_expression SLASH cast_expression 
-	    { locate (CEbinary ($1, Div, $3)) }
+	    { locate (CEbinary ($1, Bdiv, $3)) }
         | multiplicative_expression PERCENT cast_expression 
-	    { locate (CEbinary ($1, Mod, $3)) }
+	    { locate (CEbinary ($1, Bmod, $3)) }
         ;
 
 additive_expression
         : multiplicative_expression 
            { $1 }
         | additive_expression PLUS multiplicative_expression 
-	    { locate (CEbinary ($1, Plus, $3)) }
+	    { locate (CEbinary ($1, Badd, $3)) }
         | additive_expression MINUS multiplicative_expression 
-	    { locate (CEbinary ($1, Minus, $3)) }
+	    { locate (CEbinary ($1, Bsub, $3)) }
         ;
 
 shift_expression
@@ -398,57 +399,57 @@ relational_expression
         : shift_expression 
             { $1 }
         | relational_expression LT shift_expression 
-	    { locate (CEbinary ($1, Lt, $3)) }
+	    { locate (CEbinary ($1, Blt, $3)) }
         | relational_expression GT shift_expression
-	    { locate (CEbinary ($1, Gt, $3)) }
+	    { locate (CEbinary ($1, Bgt, $3)) }
         | relational_expression LE_OP shift_expression
-	    { locate (CEbinary ($1, Le, $3)) }
+	    { locate (CEbinary ($1, Ble, $3)) }
         | relational_expression GE_OP shift_expression
-	    { locate (CEbinary ($1, Ge, $3)) }
+	    { locate (CEbinary ($1, Bge, $3)) }
         ;
 
 equality_expression
         : relational_expression 
             { $1 }
         | equality_expression EQ_OP relational_expression 
-	    { locate (CEbinary ($1, Eq, $3)) }
+	    { locate (CEbinary ($1, Beq, $3)) }
         | equality_expression NE_OP relational_expression 
-	    { locate (CEbinary ($1, Neq, $3)) }
+	    { locate (CEbinary ($1, Bneq, $3)) }
         ;
 
 and_expression
         : equality_expression 
             { $1 }
         | and_expression AMP equality_expression 
-	    { locate (CEbinary ($1, Bw_and, $3)) }
+	    { locate (CEbinary ($1, Bbw_and, $3)) }
         ;
 
 exclusive_or_expression
         : and_expression 
             { $1 }
         | exclusive_or_expression HAT and_expression 
-	    { locate (CEbinary ($1, Bw_xor, $3)) }
+	    { locate (CEbinary ($1, Bbw_xor, $3)) }
         ;
 
 inclusive_or_expression
         : exclusive_or_expression 
             { $1 }
         | inclusive_or_expression PIPE exclusive_or_expression 
-	    { locate (CEbinary ($1, Bw_or, $3)) }
+	    { locate (CEbinary ($1, Bbw_or, $3)) }
         ;
 
 logical_and_expression
         : inclusive_or_expression 
             { $1 }
         | logical_and_expression AND_OP inclusive_or_expression 
-	    { locate (CEbinary ($1, And, $3)) }
+	    { locate (CEbinary ($1, Band, $3)) }
         ;
 
 logical_or_expression
         : logical_and_expression 
             { $1 }
         | logical_or_expression OR_OP logical_and_expression 
-	    { locate (CEbinary ($1, Or, $3)) }
+	    { locate (CEbinary ($1, Bor, $3)) }
         ;
 
 conditional_expression
@@ -636,7 +637,7 @@ enumerator
 type_qualifier
         : CONST { Sconst }
         | VOLATILE { Svolatile }
-	| RESTRICT { vwarning "ignored __restrict"; Srestrict }
+	| RESTRICT { dwarning "ignored __restrict"; Srestrict }
         ;
 
 declarator
@@ -671,10 +672,10 @@ annot
 pointer
         : STAR { fun d -> Dpointer d }
         | STAR type_qualifier_list 
-	    { vwarning "ignored qualifiers"; fun d -> Dpointer d }
+	    { dwarning "ignored qualifiers"; fun d -> Dpointer d }
         | STAR pointer { fun d -> Dpointer ($2 d) }
         | STAR type_qualifier_list pointer 
-	    { vwarning "ignored qualifiers"; fun d -> Dpointer ($3 d) }
+	    { dwarning "ignored qualifiers"; fun d -> Dpointer ($3 d) }
         ;
 
 type_qualifier_list
@@ -686,7 +687,7 @@ type_qualifier_list
 parameter_type_list
         : parameter_list { $1 }
         /* TODO */
-        | parameter_list COMMA ELLIPSIS { vwarning "ignored <...>"; $1 }
+        | parameter_list COMMA ELLIPSIS { dwarning "ignored <...>"; $1 }
         ;
 
 parameter_list
@@ -804,24 +805,24 @@ expression_statement
 
 selection_statement
         : IF LPAR expression RPAR statement 
-            { locate (CScond ($3, $5, locate CSnop)) }
+            { locate (CSif ($3, $5, locate CSnop)) }
         | IF LPAR expression RPAR statement ELSE statement 
-	    { locate (CScond ($3, $5, $7)) }
+	    { locate (CSif ($3, $5, $7)) }
         | SWITCH LPAR expression RPAR statement 
 	    { locate (CSswitch ($3, $5)) }
         ;
 
 iteration_statement
-        : WHILE LPAR expression RPAR ANNOT statement 
+        : WHILE LPAR expression RPAR annot statement 
             { locate (CSwhile ($3, $5, $6)) }
-        | DO statement ANNOT WHILE LPAR expression RPAR SEMICOLON 
+        | DO statement annot WHILE LPAR expression RPAR SEMICOLON 
 	    { locate (CSdowhile ($2, $3, $6)) }
         | FOR LPAR expression_statement expression_statement RPAR 
-          ANNOT statement 
+          annot statement 
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
 			     locate CEnop, $6, $7)) }
         | FOR LPAR expression_statement expression_statement expression RPAR 
-          ANNOT statement 
+          annot statement 
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
 			     $5, $7, $8)) }
         ;
@@ -867,7 +868,7 @@ function_prototype
 
 attributes_opt:
   /* empty */ {}
-| attributes { vwarning "ignored attributes" }
+| attributes { dwarning "ignored attributes" }
 ;
 
 attributes:
