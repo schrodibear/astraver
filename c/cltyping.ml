@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.24 2004-03-04 16:14:20 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.25 2004-03-18 14:11:46 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -154,7 +154,7 @@ and type_term_node loc env = function
       Tnull, c_void_star
   | PLcast (ty, t) ->
       assert false (* TODO *)
-  | PLvalid _ | PLvalid_index _ | PLvalid_range _ 
+  | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ 
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->
       raise (Stdpp.Exc_located (loc, Parsing.Parse_error))
@@ -268,6 +268,12 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let q = type_quantifiers env q in
       let env' = add_quantifiers q env in
       Pexists (q, type_predicate env' p)
+  | PLfresh (t) ->
+      let tloc = t.lexpr_loc in
+      let t = type_term env t in
+      (match t.term_type.ctype_node with
+	 | CTarray _ | CTpointer _ -> Pfresh(t)
+	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLvalid (t) ->
       let tloc = t.lexpr_loc in
       let t = type_term env t in

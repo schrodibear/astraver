@@ -159,12 +159,6 @@ let locations ll =
     (fun acc l -> union acc (location l)) empty ll
 
 
-let logic_type ls =
-  match ls with
-    | Clogic.Predicate_reads(args,locs) -> locations locs
-    | Clogic.Predicate_def(args,pred) -> assert false (* TODO *)
-    | Clogic.Function(args,ret,locs) -> locations locs
-
 let rec predicate p = 
   match p with
     | Ptrue -> empty
@@ -182,11 +176,19 @@ let rec predicate p =
     | Pif (t, p1, p2) -> union (term t) (union (predicate p1) (predicate p2))
     | Pforall (_, p) -> predicate p	
     | Pexists (_, p) -> predicate p
+    | Pfresh t -> term t
     | Pvalid t -> term t
     | Pvalid_index (t1,t2) -> union (term t1) (term t2)
     | Pvalid_range (t1,t2, t3) -> union (term t1) (union (term t2) (term t3))
     | Pold p -> predicate p
     | Pat (p,_) -> predicate p
+
+let logic_type ls =
+  match ls with
+    | Clogic.Predicate_reads(args,locs) -> locations locs
+    | Clogic.Predicate_def(args,pred) -> predicate pred
+    | Clogic.Function(args,ret,locs) -> locations locs
+
 
 let option f = function None -> empty | Some x -> f x
 let ef_option f = function None -> ef_empty | Some x -> f x

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.17 2004-03-04 16:14:20 marche Exp $ i*)
+(*i $Id: cllexer.mll,v 1.18 2004-03-18 14:11:46 marche Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -56,6 +56,7 @@ rule token = parse
   | "\\result" { RESULT }
   | "\\block_length" { BLOCK_LENGTH }
   | "\\valid" { VALID }
+  | "\\fresh" { FRESH }
   | "\\valid_index" { VALID_INDEX }
   | "\\valid_range" { VALID_RANGE }
   | "if"                    { IF }
@@ -117,7 +118,9 @@ rule token = parse
   | ("]"|":>")              { RSQUARE }
 
   | eof { EOF }
-  | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
+  | '\\' rL (rL | rD)* 
+    { lex_error lexbuf ("Illegal escape sequence " ^ lexeme lexbuf) }
+  | _   { lex_error lexbuf ("Illegal character " ^ lexeme lexbuf) }
  
 and comment = parse
   | "*)" { () }
