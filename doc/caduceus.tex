@@ -339,14 +339,29 @@ We now illustrate how arrays are handled by \caduceus{}.
 Let us first consider a trivial program which permutes to elements of
 an array of integers: 
 \begin{code}
-void swap(int t[],int i,int j) {
+void swap(int t[],int i,int j) \{
   int tmp = t[i];
   t[j] = t[i]; 
   t[i] = tmp;
-}
+\}
 \end{code}
-
-\index{valid\_index@\texttt{\bs{}valid\_index}}
+Running \caduceus{} on this program, without any annotation, leads to
+two obligations which are indeed not provable: as before, \verb|t|
+must not be null, but also the indexes \verb|i| and \verb|j| must be
+valid. With \caduceus{}, these conditions may be required using
+predicate
+\verb|valid_index|\index{valid\_index@\texttt{\bs{}valid\_index}},
+i.e. inserting the pre-condition
+\begin{code}
+//@ requires \valid_index(t,i) && \valid_index(t,j) 
+\end{code}
+As this, the obligations are now solved automatically both with
+Simplify and Coq. However, one may want to specify the function in
+more details: for example
+\begin{code}
+/*@ requires \valid_index(t,i) && \valid_index(t,j) 
+  @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
+\end{code}
 
 \subsection{Arrays and loops}
 

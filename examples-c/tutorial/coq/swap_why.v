@@ -41,8 +41,10 @@ Lemma swap_impl_po_2 :
          (intP0 = (upd intP result0 result2) ->
           (forall (result0:pointer),
            (result0 = (shift t i) ->
-            (forall (intP:((memory) Z)),
-             (intP = (upd intP0 result0 result) -> True)) /\
+            (forall (intP1:((memory) Z)),
+             (intP1 = (upd intP0 result0 result) -> (acc intP1 (shift t i)) =
+              (acc intP (shift t j)) /\ (acc intP1 (shift t j)) =
+              (acc intP (shift t i)))) /\
             (valid alloc result0))))) /\
         (valid alloc result0))) /\
       (valid alloc result1))))).
