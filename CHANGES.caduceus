@@ -1,5 +1,9 @@
 Note: These are the changes for Caduceus.
 
+version 0.73, February 23rd, 2005
+=================================
+ o fixed bug with float to int casts
+ o fixed bug with enum initialization
  o fixed bug with separation axioms generation
 
 version 0.72, February 17th, 2005
