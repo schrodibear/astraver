@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.75 2004-04-22 12:03:34 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.76 2004-04-22 13:24:13 filliatr Exp $ i*)
 
 
 open Format
@@ -730,10 +730,10 @@ let interp_assigns assigns = function
   | None ->
       LTrue
 
-(* table for invariants *)
+(* table for weak invariants *)
 let weak_invariants = Hashtbl.create 97
 
-let interp_weak_invariant id p =
+let add_weak_invariant id p =
   let e = Ceffect.predicate p in
   Hashtbl.add weak_invariants id (interp_predicate None "" p, e)
 
@@ -1035,7 +1035,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       (why_code, Axiom(id,a)::why_spec, prover_decl)
   | Tinvariant(id,p) -> 
       lprintf "translating invariant declaration %s@." id;      
-      interp_weak_invariant id p;
+      add_weak_invariant id p;
       why
   | Ttypedecl ({ ctype_node = CTenum _ } as ctype)
   | Ttypedef (ctype,_) -> 
@@ -1047,15 +1047,20 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       assert false
   | Tdecl(ctype,v,init) -> 
       lprintf "translating global declaration of %s@." v.var_name;
-      (*let t = base_type (Ceffect.interp_type ctype) in*)
-      begin
-	match init with 
-	  | Inothing ->
-	      why
-	  | _ -> 
-	      warning decl.loc ("ignoring initializer for " ^ v.var_name);
-	      why
-      end
+      begin match ctype.ctype_node with
+	| CTstruct _ -> 
+	    let id = "valid_" ^ v.var_name in
+	    add_weak_invariant id (Cltyping.valid_var v ctype)
+	| _ -> 
+	    ()
+      end;
+      begin match init with 
+	| Inothing ->
+	    ()
+	| _ -> 
+	    warning decl.loc ("ignoring initializer for " ^ v.var_name);
+      end;
+      why
   | Tfunspec(spec,ctype,id,params) -> 
       (why_code, interp_function_spec id spec ctype params :: why_spec,
        prover_decl)

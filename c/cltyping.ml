@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.34 2004-04-22 11:23:56 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.35 2004-04-22 13:24:13 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -404,4 +404,7 @@ let type_spec result env s =
     assigns = m;
     ensures = q;
     decreases = v }
+
+let valid_var v ty =
+  Pvalid { term_node = Tvar v; term_type = c_pointer ty }
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.35 2004-04-22 12:03:34 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.36 2004-04-22 13:24:13 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -273,6 +273,20 @@ let loop_annot a =
   let r = union (option predicate a.invariant) (option variant a.variant) in
   { reads = r; assigns = empty (* TODO *) }
 
+(* table for weak invariants *)
+let weak_invariants = Hashtbl.create 97
+
+let add_weak_invariant id p =
+  Hashtbl.add weak_invariants id (Ceffect.predicate p)
+
+let weak_invariants_for hvs =
+  Hashtbl.fold
+    (fun _ e acc -> 
+       if not (HeapVarSet.is_empty (HeapVarSet.inter e hvs)) then
+	 union e acc 
+       else acc)
+    weak_invariants empty
+
 let spec sp = 
   ef_union
     { reads = 
@@ -439,11 +453,16 @@ let decl d =
 	  "effects of logic declaration of %s: @[%a@]@." id.logic_name
 	  print_effects l;
 	id.logic_args <- l
+    | Tinvariant(id,p) -> 
+	add_weak_invariant id p
+    | Tdecl({ctype_node=CTstruct _} as ty, v, _) ->
+	lprintf "adding implicit invariant valid(%s)@." v.var_name;
+	let id = "valid_" ^ v.var_name in
+	add_weak_invariant id (Cltyping.valid_var v ty)
+    | Tdecl(ctype,v,init) -> () (* TODO *)
     | Taxiom(id,p) -> () (* TODO *)
-    | Tinvariant(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 
     | Ttypedecl(ctype) -> ()
-    | Tdecl(ctype,v,init) -> () (* TODO *)
     | Tfunspec(spec,ctype,id,params) -> () (* TODO *)
     | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)
 
@@ -452,6 +471,10 @@ let file l = List.iter decl l
 let functions dl = 
   let fixpoint = ref true in
   let declare id ef =
+    let ef  = {
+      reads = union ef.reads (weak_invariants_for (union ef.reads ef.assigns));
+      assigns = ef.assigns }
+    in
     lprintf "effects for function %s: reads %a writes %a@." id.var_name 
       print_effects ef.reads print_effects ef.assigns;
     if not (HeapVarSet.subset ef.reads id.function_reads) then begin
