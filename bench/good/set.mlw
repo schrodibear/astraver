@@ -26,3 +26,11 @@ let p3 (y:int ref) =
     y := !y - 1 
   done 
   { y = 0 }
+
+let p4 (y:int ref) = 
+  { y >= 1 } 
+  while begin y := !y - 1; (set_and_test_nzero !y) end do 
+    { invariant y >= 1 variant y } 
+    void
+  done 
+  { y = 0 }
