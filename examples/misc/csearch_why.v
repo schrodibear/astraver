@@ -3,10 +3,9 @@
 
 Require Why.
 
-(* Why obligation from file "csearch.c", characters 233-237 *)
+(* Why obligation from file "csearch.c", characters 237-241 *)
 Lemma index_po_1 : 
   (n: Z)
-  (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
   (i: Z)
@@ -14,14 +13,14 @@ Lemma index_po_1 :
   (Variant1: Z)
   (i1: Z)
   (Pre4: Variant1 = `n - i1`)
-  (Pre3: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`)))
+  (Pre3: `0 <= i1`)
   (Test2: `i1 < n`)
   `0 <= i1` /\ `i1 < (array_length t)`.
 Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "csearch.c", characters 233-242 *)
+(* Why obligation from file "csearch.c", characters 237-246 *)
 Lemma index_po_2 : 
   (n: Z)
   (v: Z)
@@ -32,7 +31,7 @@ Lemma index_po_2 :
   (Variant1: Z)
   (i1: Z)
   (Pre4: Variant1 = `n - i1`)
-  (Pre3: `0 <= i1` /\ ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`)))
+  (Pre3: `0 <= i1`)
   (Test2: `i1 < n`)
   (Pre2: `0 <= i1` /\ `i1 < (array_length t)`)
   (c_aux_1: Z)
@@ -40,10 +39,7 @@ Lemma index_po_2 :
   (result0: bool)
   (Post14: (if result0 then `c_aux_1 = v` else `c_aux_1 <> v`))
   (if result0 then (`0 <= i1` /\ `i1 < n` -> `(access t i1) = v`)
-   else ((i:Z)
-         (i = `i1 + 1` -> (`0 <= i` /\
-          ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> v`))) /\
-          (Zwf `0` `n - i` `n - i1`)))).
+   else ((i:Z) (i = `i1 + 1` -> `0 <= i` /\ (Zwf `0` `n - i` `n - i1`)))).
 Proof.
 Destruct result0; Intuition.
 Assert `k=i1` \/ `k<i1`. Omega. Intuition.
@@ -51,20 +47,19 @@ Subst k c_aux_1; Auto.
 Apply (H0 k); Auto with *.
 Save.
 
-(* Why obligation from file "csearch.c", characters 150-198 *)
+(* Why obligation from file "csearch.c", characters 150-156 *)
 Lemma index_po_3 : 
   (n: Z)
-  (v: Z)
   (t: (array Z))
   (Pre5: `(array_length t) = n`)
   (i: Z)
   (Post4: i = `0`)
-  `0 <= i` /\ ((k:Z) (`0 <= k` /\ `k < i` -> `(access t k) <> v`)).
+  `0 <= i`.
 Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "csearch.c", characters 116-263 *)
+(* Why obligation from file "csearch.c", characters 116-267 *)
 Lemma index_po_4 : 
   (n: Z)
   (v: Z)
@@ -73,16 +68,14 @@ Lemma index_po_4 :
   (i: Z)
   (Post4: i = `0`)
   (i1: Z)
-  (Post3: (`0 <= i1` /\
-          ((k:Z) (`0 <= k` /\ `k < i1` -> `(access t k) <> v`))) /\ `
-          i1 >= n`)
+  (Post3: `0 <= i1` /\ `i1 >= n`)
   (`0 <= i1` /\ `i1 < n` -> `(access t i1) = v`).
 Proof.
 Intuition.
 Save.
 
 
-(* Why obligation from file "csearch.c", characters 566-570 *)
+(* Why obligation from file "csearch.c", characters 570-574 *)
 Lemma index2_po_1 : 
   (n: Z)
   (v: Z)
@@ -100,7 +93,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "csearch.c", characters 566-575 *)
+(* Why obligation from file "csearch.c", characters 570-579 *)
 Lemma index2_po_2 : 
   (n: Z)
   (v: Z)
@@ -130,7 +123,7 @@ Subst k c_aux_2; Auto.
 Apply (H0 k); Auto with *.
 Save.
 
-(* Why obligation from file "csearch.c", characters 483-531 *)
+(* Why obligation from file "csearch.c", characters 487-535 *)
 Lemma index2_po_3 : 
   (n: Z)
   (v: Z)
@@ -143,7 +136,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "csearch.c", characters 609-610 *)
+(* Why obligation from file "csearch.c", characters 613-614 *)
 Lemma index2_po_4 : 
   (n: Z)
   (v: Z)

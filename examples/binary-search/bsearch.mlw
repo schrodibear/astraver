@@ -14,9 +14,10 @@ let binary_search =
   begin
     l := 1; u := (array_length t)-1; p := 0;
     while !l <= !u do
-      { invariant 1 <= l and u <= array_length(t)-1 and 0 <= p <= array_length(t)-1
-               and (p = 0 -> In(t,1,array_length(t)-1) -> In(t,l,u))
-               and (p > 0 -> t[p]=v)
+      { invariant 
+	  1 <= l and u <= array_length(t)-1 and 0 <= p <= array_length(t)-1
+          and (p = 0 -> In(t,1,array_length(t)-1) -> In(t,l,u))
+          and (p > 0 -> t[p]=v)
         variant 2+u-l }
       m := (mean !l !u);
       assert { l <= m and m <= u };
@@ -29,5 +30,6 @@ let binary_search =
       end       
     done
   end
-  { (1 <= p <= array_length(t)-1 and t[p]=v) or (p = 0 and not In(t,1,array_length(t)-1)) }
+  { (1 <= p <= array_length(t)-1 and t[p]=v) or 
+    (p = 0 and not In(t,1,array_length(t)-1)) }
 

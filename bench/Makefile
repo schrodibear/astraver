@@ -27,6 +27,11 @@ c-pvs:
 
 harvey:
 	../bin/why.opt --harvey -d -V test.mlw
+	for f in test*.rv; do rvc $$f; done
+
+simplify:
+	../bin/why.opt --simplify -d -V test.mlw
+	Simplify test_why.sx
 
 hol:
 	../bin/why.opt --hol-light -d -V test.mlw

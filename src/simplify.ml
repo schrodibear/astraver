@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.1 2003-09-15 08:40:40 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.2 2003-09-16 15:56:39 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -47,8 +47,8 @@ let prefix id =
   else if id == t_add_int then "+"
   else if id == t_sub_int then "-"
   else if id == t_mul_int then "*"
-  else if id == t_div_int then "arith_div"
-  else if id == t_mod_int then "arith_mod"
+  else if id == t_div_int then "int_div"
+  else if id == t_mod_int then "int_mod"
   else if id == t_neg_int then "-"
   (* float ops *)
   else if id == t_add_float 
@@ -80,8 +80,6 @@ let rec print_term fmt = function
       (*
       fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_term b
 	print_term c *)
-  | Tapp (id, [a]) when id == Ident.array_length ->
-      fprintf fmt "@[(len %a)@]" print_term a
   | Tapp (id, [a; b]) when id == access ->
       fprintf fmt "@[(select@ %a@ %a)@]" print_term a print_term b
   | Tapp (id, [a; b; c]) when id == store ->
@@ -149,14 +147,17 @@ let print_sequent fmt (hyps,concl) =
   print_seq fmt hyps
 
 let print_obligation fmt (loc, o, s) = 
-  fprintf fmt "@[(* %s, %a *)@]@\n" o Loc.report_obligation loc;
-  fprintf fmt "@[<hov 2>(LEMMA@ %a)@]@\n@\n" print_sequent s
+  fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation loc;
+  fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s
+
+let prelude = ref 
+"(BG_PUSH (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t))))"
 
 let output_file fwe =
-  let sep = "(* DO NOT EDIT BELOW THIS LINE *)" in
-  let f = fwe ^ "_why.ax" in
+  let sep = ";; DO NOT EDIT BELOW THIS LINE" in
+  let f = fwe ^ "_why.sx" in
   do_not_edit f
-    (fun _ -> ())
+    (fun fmt -> fprintf fmt "@[%s@]@\n" !prelude)
     sep
     (fun fmt -> Queue.iter (print_obligation fmt) oblig)
 

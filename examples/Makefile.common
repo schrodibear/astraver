@@ -14,6 +14,12 @@ WHYOPTIONS=--valid
 %_why.pvs: %.mlw $(WHY)
 	$(WHY) --pvs $(WHYOPTIONS) $<
 
+%_why.sx: %.mlw $(WHY)
+	$(WHY) --simplify $(WHYOPTIONS) $<
+
+%_why.sx: %.c $(WHY)
+	$(WHY) --simplify $(WHYOPTIONS) $<
+
 %.ml: %.mlw
 	$(WHY) -ocaml $< > $@
 	ocamlc -c -i $@

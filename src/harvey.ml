@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.10 2003-09-15 08:40:40 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.11 2003-09-16 15:56:38 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -176,7 +176,7 @@ let output_obligation f (loc, o, s) =
     let fname = f ^ "_" ^ o ^ ".rv" in
     let cout = open_out fname in
     let fmt = formatter_of_out_channel cout in
-    fprintf fmt "@[;; %a@]@\n" Loc.report_obligation loc;
+    fprintf fmt "@[()@\n;; %a@]@\n" Loc.report_obligation loc;
     output_sequent fmt s;
     pp_print_flush fmt ();
     close_out cout
