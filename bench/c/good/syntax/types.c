@@ -82,3 +82,10 @@ char (*(*krf[3])())[5];
 
 /* typedefs */
 
+typedef int t1;
+typedef struct { int fq; } t2;
+typedef struct S1 t3;
+typedef struct S2 * t4;
+typedef int t5[10];
+
+typedef struct t6_ { int fr; struct t6_ * fs; } * t6;
