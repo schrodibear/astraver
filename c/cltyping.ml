@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.4 2004-02-09 15:57:22 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.5 2004-02-09 16:07:33 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -88,6 +88,10 @@ and type_term_node loc env = function
   | Told t ->
       assert false
   | Tat (t, l) ->
+      assert false
+  | Tlength t ->
+      assert false
+  | Tresult ->
       assert false
 
 and type_terms loc env at tl =

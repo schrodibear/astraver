@@ -121,6 +121,8 @@ term:
 | term QUESTION term COLON term %prec prec_question { info (Tif ($1, $3, $5)) }
 | OLD LPAR term RPAR { info (Told $3) }
 | AT LPAR term COMMA IDENTIFIER RPAR { info (Tat ($3, $5)) }
+| LENGTH LPAR term RPAR { info (Tlength $3) }
+| RESULT { info Tresult }
 ;
 
 term_list:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.5 2004-02-09 15:57:21 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.6 2004-02-09 16:07:33 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -40,7 +40,7 @@ let rFS	= ('f'|'F'|'l'|'L')
 let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
-  | [' ' '\t' '\012' '\r' '\n']+ { token lexbuf }
+  | '@' | [' ' '\t' '\012' '\r' '\n']+ { token lexbuf }
   | "(*"                    { comment lexbuf; token lexbuf }
 
   | "forall"  { FORALL }
