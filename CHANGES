@@ -1,4 +1,7 @@
 
+version 1.51, April 6th, 2004
+=============================
+  o Simplify typing constraints only with --simplify-typing option
   o fixed bug in automatic annotation of x := e when e has a postcondition
 
 version 1.50, March 26th, 2004

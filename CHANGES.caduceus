@@ -2,7 +2,10 @@ Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
 
-  o fixed bug in effect inference for predicates (alloc was missing)
+version 0.51 (1.51), April 6th, 2004
+====================================
+ o fixed bug with multi-dimensional arrays
+ o fixed bug in effect inference for predicates (alloc was missing)
 
 version 0.50 (1.50), March 26th, 2004
 =====================================
