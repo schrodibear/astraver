@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.78 2005-01-24 15:20:17 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.79 2005-01-25 15:57:00 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -117,8 +117,7 @@ let is_memory_var v =
     with Not_found -> assert false
 
 let declare_heap_var v ty =
-
-  eprintf "declare_heap_var %s (%a)%s\n" v (print_list comma pp_print_string) (fst ty) (snd ty); flush stderr;
+(*  eprintf "declare_heap_var %s (%a)%s\n" v (print_list comma pp_print_string) (fst ty) (snd ty); flush stderr;*)
   if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty
   else assert (Hashtbl.find heap_vars v = ty)
 

@@ -3,12 +3,12 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/clash.why", characters 145-203 *)
+(* Why obligation from file "why/clash.why", characters 178-236 *)
 Lemma f1_impl_po_1 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (toto: ((memory) Z)),
-  forall (Pre4: (valid alloc ma_structure)),
+  forall (Pre4: (valid alloc ma_structure) /\ (valid alloc ma_structure)),
   forall (toto_0_1: Z),
   forall (Post1: toto_0_1 = 0),
   forall (Pre3: (valid alloc ma_structure)),
@@ -19,12 +19,12 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 654-681 *)
+(* Why obligation from file "why/clash.why", characters 728-755 *)
 Lemma f2_impl_po_1 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (substruct: ((memory) pointer)),
-  forall (Pre8: (valid alloc ma_structure) /\
+  forall (Pre8: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
                 (valid alloc (acc substruct ma_structure))),
   forall (alloc0: alloc_table),
   forall (substruct_0: pointer),
@@ -35,13 +35,13 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 705-735 *)
+(* Why obligation from file "why/clash.why", characters 779-809 *)
 Lemma f2_impl_po_2 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (fst: ((memory) Z)),
   forall (substruct: ((memory) pointer)),
-  forall (Pre8: (valid alloc ma_structure) /\
+  forall (Pre8: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
                 (valid alloc (acc substruct ma_structure))),
   forall (alloc0: alloc_table),
   forall (substruct_0: pointer),
@@ -56,13 +56,13 @@ intuition.
 apply alloc_stack_valid with substruct_0 alloc; auto.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 744-793 *)
+(* Why obligation from file "why/clash.why", characters 818-867 *)
 Lemma f2_impl_po_3 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (fst: ((memory) Z)),
   forall (substruct: ((memory) pointer)),
-  forall (Pre8: (valid alloc ma_structure) /\
+  forall (Pre8: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
                 (valid alloc (acc substruct ma_structure))),
   forall (alloc0: alloc_table),
   forall (substruct_0: pointer),
@@ -83,13 +83,13 @@ intuition.
 subst; apply alloc_stack_valid with substruct_0 alloc; auto.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 744-793 *)
+(* Why obligation from file "why/clash.why", characters 818-867 *)
 Lemma f2_impl_po_4 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
   forall (fst: ((memory) Z)),
   forall (substruct: ((memory) pointer)),
-  forall (Pre8: (valid alloc ma_structure) /\
+  forall (Pre8: (valid alloc ma_structure) /\ (valid alloc ma_structure) /\
                 (valid alloc (acc substruct ma_structure))),
   forall (alloc0: alloc_table),
   forall (substruct_0: pointer),
@@ -124,7 +124,7 @@ Admitted.
 
 
 
-(* Why obligation from file "why/clash.why", characters 1009-1032 *)
+(* Why obligation from file "why/clash.why", characters 1083-1106 *)
 Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (Test2: x = 0),
@@ -137,7 +137,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1076-1099 *)
+(* Why obligation from file "why/clash.why", characters 1150-1173 *)
 Lemma f_impl_po_2 : 
   forall (x: Z),
   forall (Test1: x <> 0),
@@ -150,7 +150,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1295-1318 *)
+(* Why obligation from file "why/clash.why", characters 1369-1392 *)
 Lemma g_impl_po_1 : 
   forall (y: Z),
   forall (y_0_1: Z),
@@ -162,7 +162,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1557-1580 *)
+(* Why obligation from file "why/clash.why", characters 1631-1654 *)
 Lemma h_impl_po_1 : 
   forall (x: Z),
   forall (y_0_1: Z),
@@ -177,7 +177,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1593-1594 *)
+(* Why obligation from file "why/clash.why", characters 1667-1668 *)
 Lemma h_impl_po_2 : 
   forall (x: Z),
   forall (y_0_1: Z),
