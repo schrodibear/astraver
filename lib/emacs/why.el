@@ -29,7 +29,7 @@
    '("(\\*\\([^*]\\|\\*[^)]\\)*\\*)" . font-lock-comment-face)
    '("{\\([^}]*\\)}" . font-lock-type-face)
    `(,(why-regexp-opt '("external" "logic" "parameter" "exception")) . font-lock-builtin-face)
-   `(,(why-regexp-opt '("let" "rec" "in" "if" "then" "else" "begin" "end" "while" "do" "done" "label" "assert")) . font-lock-keyword-face)
+   `(,(why-regexp-opt '("let" "rec" "in" "if" "then" "else" "begin" "end" "while" "do" "done" "label" "assert" "try" "with")) . font-lock-keyword-face)
    ; `(,(why-regexp-opt '("unit" "bool" "int" "float" "prop" "array")) . font-lock-type-face)
    )
   "Minimal highlighting for Why mode")

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.14 2003-03-20 14:20:25 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.15 2003-03-20 16:21:35 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -132,21 +132,18 @@ let get_equality_rhs = function
 (* [extract_pre p] erase the pre-condition of [p] and returns it *)
 
 let extract_oblig pr =
-  { pr with info = { pr.info with obligations = [] } },
-  pr.info.obligations
-
-(***
-let extract_pre pr =
   let k = pr.info.kappa in
-  { pr with info = { pr.info with kappa = { k with c_pre = [] } } },
-  k.c_pre
-***)
+  { pr with info = { pr.info with 
+		       obligations = []; 
+		       kappa = { k with c_pre = [] } } },
+  pr.info.obligations @ k.c_pre
 
 (* adds some pre-conditions *)
 
 let add_oblig p1 pr =
   let o = pr.info.obligations in
   { pr with info = { pr.info with obligations = o @ p1 } }
+
   
 (* change the statement *)
 
@@ -172,35 +169,6 @@ let lift_oblig_assign p = match p.desc with
       change_desc (add_oblig (p1 @ p2) p) (TabAff (check,x,e1',e2'))
   | _ ->
       p
-
-(*s Moving preconditions up in let-in (as obligations) *)
-
-(***
-let lift_pre_let_in p = match p.desc with
-  | LetIn (x, ({ desc = Expression t } as e1), e2) 
-    when post e1 = None && post e2 <> None ->
-      let e'1,o1 = extract_pre e1 in
-      let e'2,o2 = extract_pre e2 in
-      if o1 <> [] || o2 <> [] then
-	let s = tsubst_in_predicate (subst_one x (unref_term t)) in
-	let o2 = List.map (asst_app s) o2 in
-	add_oblig (o1 @ o2) { p with desc = LetIn (x, e'1, e'2) }
-      else
-	p
-  | LetIn (x, e1, e2)
-    when is_equality (post e1) && post e2 <> None && is_pure e1 ->
-      let e'1,o1 = extract_pre e1 in
-      let e'2,o2 = extract_pre e2 in
-      if o1 <> [] || o2 <> [] then
-	let t = get_equality_rhs (post e1) in
-	let s = tsubst_in_predicate (subst_one x (unref_term t)) in
-	let o2 = List.map (asst_app s) o2 in
-	add_oblig (o1 @ o2) { p with desc = LetIn (x, e'1, e'2) }
-      else
-	p
-  | _ ->
-      p
-***)
 
 (*s Normalization. In this first pass, we
     (2) annotate [x := E] with [{ x = E }]
@@ -316,25 +284,6 @@ and normalize_boolean force env b =
 		| _ ->
 		    b
 	      end
-
-(***
-	  | LetIn (x, ({ desc = Expression t } as e1), e2) 
-            when post e1 = None && post e2 <> None && is_pure e2 ->
-	      let s = tsubst_in_predicate (subst_one x (unref_term t)) in
-	      let q = optpost_app s (post e2) in
-	      let blab = b.info.label in
-	      let q = optpost_app (change_label e2.info.label blab) q in
-	      lift_pre_let_in (give_post b q)
-	  | LetIn (x, e1, e2) when is_equality (post e1) && post e2 <> None && 
-            is_pure e1 && is_pure e2 ->
-	      let t = get_equality_rhs (post e1) in
-	      let s = tsubst_in_predicate (subst_one x (unref_term t)) in
-	      let q = optpost_app s (post e2) in
-	      let blab = b.info.label in
-	      let q = optpost_app (change_label e1.info.label blab) q in
-	      let q = optpost_app (change_label e2.info.label blab) q in
-	      lift_pre_let_in (give_post b q)
-***)
 	  | _ -> 
 	      b
       end
