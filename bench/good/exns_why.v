@@ -38,7 +38,7 @@ Definition p1 := (* validation *)
 
 (*Why*) Implicits post_F.
 
-Definition p := (* validation *)
+Definition p2 := (* validation *)
   (exist_1 (post_F [result0: Z]`result0 = 1` [result0: unit]False) (Exn_F
                                                                     unit 
                                                                     `1`)

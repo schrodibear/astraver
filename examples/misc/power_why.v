@@ -145,8 +145,6 @@ Unfold Zpower; Unfold Zpower_pos; Simpl; Ring.
 Generalize (Zdiv2_ge_0 n0); Omega.
 Omega.
 Rewrite H0; Apply Zdiv2_ge_0; Omega.
-Apply Zge_le.
-Rewrite H0; Apply Zdiv2_ge_0; Omega.
 Rewrite H0; Apply Zdiv2_lt; Omega.
 Save.
 
@@ -182,8 +180,6 @@ Unfold square.
 Unfold div2.
 Ring.
 Generalize (Zdiv2_ge_0 n0); Omega.
-Rewrite H0; Apply Zdiv2_ge_0; Omega.
-Apply Zge_le.
 Rewrite H0; Apply Zdiv2_ge_0; Omega.
 Rewrite H0; Apply Zdiv2_lt; Omega.
 Save.

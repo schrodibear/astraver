@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.50 2002-09-20 12:59:34 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.51 2002-10-01 13:12:05 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -142,7 +142,7 @@ let lambda_vars =
 (* builds (post_E1 [r][Q1] (post_E2 [r][Q2] (... (post_En [r][Qn] [r]Q)))) *)
 
 let make_post ren env res k q =
-  let (q,ql) = post_app (subst_in_predicate (subst_onev result res)) q in
+  let q = post_app (subst_in_predicate (subst_onev result res)) q in
   let abs_pred v c =
     let c = c.a_value in
     match v with
@@ -155,10 +155,10 @@ let make_post ren env res k q =
     (fun x c -> 
        let tx = find_exception x in
        let tx = option_app (fun x -> PureType x) tx in
-       let qx = List.assoc x ql in
+       let qx = post_exn x q in
        TTapp (exn_post x, [abs_pred tx qx; c]))
     (get_exns k.c_effect) 
-    (abs_pred (Some k.c_result_type) q)
+    (abs_pred (Some k.c_result_type) (post_val q))
 
 (*s The Monadic operators. They are operating on values of the following
     type [interp] (functions producing a [cc_term] when given a renaming
@@ -205,8 +205,10 @@ let unit info r ren =
       | Some q -> 
 	  (* proof obligation *)
 	  let h = 
-	    let (q,ql) = apply_post info.label ren env q in
-	    let a = match r with Value _ -> q | Exn (x,_) -> List.assoc x ql in
+	    let q = apply_post info.label ren env q in
+	    let a = 
+	      match r with Value _ -> post_val q | Exn (x,_) -> post_exn x q 
+	    in
 	    match r with
 	      | Value t | Exn (_, Some t) ->
 		  tsubst_in_predicate (subst_one result t) a.a_value
@@ -326,7 +328,7 @@ let gen_compose isapp info1 e1 info2 e2 ren =
 	let xt = find_exception x in
 	let r = Exn (x, option_app (fun _ -> Tvar res1) xt) in
 	let res1 = option_app (fun pt1 -> res1, pt1) xt in
-	let add_hyp (_,ql) = abs_post (List.assoc x ql) in
+	let add_hyp q = abs_post (post_exn x q) in
 	exn_pattern x res1 x1, option_fold add_hyp q1 (unit info2 r ren')
       in
       CC_case (CC_var res1, 

@@ -79,7 +79,6 @@ Ring.
 Omega.
 Unfold Zwf. 
 Repeat Split; Try Omega.
-Rewrite H3; Apply Zge_le; Apply Z_div_ge0; Omega.
 Rewrite H3; Apply Z_div_lt; Try Omega.
 Cut ~`a0 = 0`; [ Intro; Omega | Assumption ].
 Save.
@@ -121,7 +120,6 @@ Assumption.
 Omega.
 Unfold Zwf.
 Repeat Split; Try Omega.
-Rewrite H3; Apply Zge_le; Apply Z_div_ge0; Omega.
 Rewrite H3; Apply Z_div_lt; Try Omega.
 Cut ~`a0 = 0`; [ Intro; Omega | Assumption ].
 Save.

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.40 2002-09-20 12:59:34 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.41 2002-10-01 13:12:05 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -13,10 +13,23 @@ open Cc
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
 
+(* Substitution within assertions and pre/post-conditions *)
 val named_app : (predicate -> predicate) -> assertion -> assertion
+val optnamed_app : 
+  (predicate -> predicate) -> assertion option -> assertion option
 val pre_app : (predicate -> predicate) -> precondition -> precondition
 val post_app : (predicate -> predicate) -> postcondition -> postcondition
 val optpost_app : 
+  (predicate -> predicate) -> postcondition option -> postcondition option
+
+(* Substitution within some parts of postconditions (value or exns) *)
+val val_app : (predicate -> predicate) -> postcondition -> postcondition
+val exn_app : Ident.t -> 
+              (predicate -> predicate) -> postcondition -> postcondition
+val optval_app : 
+  (predicate -> predicate) -> postcondition option -> postcondition option
+val optexn_app : 
+  Ident.t -> 
   (predicate -> predicate) -> postcondition option -> postcondition option
 
 val anonymous : 'a -> 'a asst
@@ -26,6 +39,11 @@ val assert_of_pre : precondition -> assertion
 
 val force_post_name : postcondition option -> postcondition option
 val force_bool_name : postcondition option -> postcondition option
+
+val post_val : postcondition -> assertion
+val post_exn : Ident.t -> postcondition -> assertion
+val optpost_val : postcondition option -> assertion option
+val optpost_exn : Ident.t -> postcondition option -> assertion option
 
 val map_succeed : ('a -> 'b) -> 'a list -> 'b list
 
@@ -158,6 +176,6 @@ val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
 val print_assertion : formatter -> assertion -> unit
-val print_wp : formatter -> postcondition option -> unit
+val print_wp : formatter -> assertion option -> unit
 
 val warning : string -> unit

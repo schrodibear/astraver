@@ -127,6 +127,14 @@ let vcg base t =
 	let br'1 = traverse ctx br1 in
 	let br'2 = traverse ctx br2 in
 	CC_letin (x, bl1, e'1, CC_if (CC_var idb', br'1, br'2))
+    (* special treatment for the composition of exceptions *)
+    | CC_letin (x, ([idb, CC_var_binder _; 
+		     _, CC_untyped_binder] as bl1), e1, 
+		CC_case (CC_term (Tvar idb'), br))
+      when idb = idb' ->
+	let e'1 = traverse ctx e1 in
+	let br' = List.map (traverse_case ctx) br in
+	CC_letin (x, bl1, e'1, CC_case (CC_var idb', br'))
     | CC_letin (x, bl, e1, e2) -> 
 	let e'1 = traverse ctx e1 in
 	let e'2 = traverse (traverse_binders ctx bl) e2 in

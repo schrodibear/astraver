@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.49 2002-09-20 12:59:34 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.50 2002-10-01 13:12:05 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -14,7 +14,7 @@ open Cc
 let map_succeed f = 
   let rec map_f = function 
     | [] -> []
-    |  h::t -> try (let x = f h in x :: map_f t) with Failure _ -> map_f t
+    | h :: t -> try let x = f h in x :: map_f t with Failure _ -> map_f t
   in 
   map_f 
 
@@ -146,6 +146,22 @@ let pre_of_assert b x =
 
 let assert_of_pre x =
   { a_name = x.p_name; a_value = x.p_value }
+
+(* selection of postcondition's parts *)
+let post_val = fst
+let post_exn x (_,l) = List.assoc x l
+
+let optpost_val = option_app post_val
+let optpost_exn x = option_app (post_exn x)
+
+(* substititution within some parts of postconditions *)
+let val_app f (x,xl) = (named_app f x, xl)
+let exn_app x f (x,xl) = (x, List.map (fun (x,a) -> x, named_app f a) xl)
+
+let optval_app f = option_app (val_app f)
+let optexn_app x f = option_app (exn_app x f)
+
+let optnamed_app f = option_app (named_app f)
 
 (*s Functions on terms and predicates. *)
 
@@ -469,4 +485,4 @@ let print_assertion fmt a = print_predicate fmt a.a_value
 
 let print_wp fmt = function
   | None -> fprintf fmt "<no weakest precondition>"
-  | Some ({a_value=p},_) -> print_predicate fmt p
+  | Some {a_value=p} -> print_predicate fmt p

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.53 2002-09-18 06:12:20 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.54 2002-10-01 13:12:05 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -52,8 +52,11 @@ let while_post_block env inv (phi,_,r) e =
 
 (* misc. *)
 
-let create_post c =
-  Some ({ a_value = c; a_name = Name (post_name Anonymous) }, [])
+let post_named c = { a_value = c; a_name = Name (post_name Anonymous) }
+
+let create_postval c = Some (post_named c)
+
+let create_post c = Some (post_named c, [])
 
 let is_conditional p = match p.desc with If _ -> true | _ -> false
 
@@ -209,13 +212,34 @@ and normalize_boolean env b =
 	      normalize b
       end
 
-(*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
-    and gives postcondition [q] to [p] if necessary. *)
-
 let output p = 
   let w = Effect.get_writes (effect p) in
   let env = p.info.env in
   List.map (fun id -> (id, type_in_env env id)) w
+
+(*s [filter_post k q] removes exc. postconditions from [q] which do not
+    appear in typing info [k] *)
+
+let filter_post k =
+  let ef = k.kappa.c_effect in
+  let keep (x,_) = is_exn ef x in
+  option_app (fun (q, ql) -> (q, List.filter keep ql))
+
+(*s [saturate_post k a q] makes a postcondition for a program of type [k]
+    out of a normal postcondition [a] and the exc. postconditions from [q] *)
+
+let saturate_post k a q = 
+  let ql = match q with Some (_,l) -> l | None -> [] in
+  let set_post x = x, try List.assoc x ql with Not_found -> anonymous Ptrue in
+  let xs = get_exns k.kappa.c_effect in
+  let saturate a = (a, List.map set_post xs) in
+  option_app saturate a
+
+
+(*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
+    and gives postcondition [q] to [p] if necessary.
+
+    wp: typed_program -> postcondition option -> assertion option *)
 
 let rec wp p q =
   let env = p.info.env in
@@ -225,13 +249,13 @@ let rec wp p q =
   let q0 = optpost_app (change_label "" lab) q0 in
   let d,w = wp_desc p.info p.desc q0 in
   let p = change_desc p d in
-  let w = optpost_app (erase_label lab) w in
+  let w = option_app (named_app (erase_label lab)) w in
   let p = if postp = None then force_post env q0 p else p in
   let w = match postp, q with
     | Some ({a_value=q'}, []), Some ({a_value=q}, []) ->
 	let vars = (result, result_type p) :: (output p) in
 	let w = foralls vars (Pimplies (q', q)) in
-	Some (anonymous (erase_label lab w), [])
+	Some (anonymous (erase_label lab w))
     | Some _, Some _ ->
 	assert false
     | _ -> 
@@ -244,17 +268,20 @@ and wp_desc info d q =
   match d with
     (* TODO: check if likely *)
     | Var x ->
-	d, optpost_app (tsubst_in_predicate (subst_one result (Tvar x))) q
+	let w = optpost_val q in
+	d, optnamed_app (tsubst_in_predicate (subst_one result (Tvar x))) w
     (* $wp(E,q) = q[result \leftarrow E]$ *)
     | Expression t ->
-	d, optpost_app (tsubst_in_predicate (subst_one result t)) q
+	let w = optpost_val q in
+	d, optnamed_app (tsubst_in_predicate (subst_one result t)) w
     (* $wp(!x,q) = q[result \leftarrow x]$ *)
     | Acc x ->
-	d, optpost_app (subst_in_predicate (subst_onev result x)) q
+	let w = optpost_val q in
+	d, optnamed_app (subst_in_predicate (subst_onev result x)) w
     (* $wp(x := e, q) = wp(e, q[result\leftarrow void; x\leftarrow result])$ *)
     | Aff (x, p) ->
-	let q = optpost_app (tsubst_in_predicate (subst_one result tvoid)) q in
-	let q = optpost_app (subst_in_predicate (subst_onev x result)) q in
+	let q = optval_app (tsubst_in_predicate (subst_one result tvoid)) q in
+	let q = optval_app (subst_in_predicate (subst_onev x result)) q in
 	let p',w = wp p q in
 	Aff (x, p'), w
     | TabAcc (ck, x, e1) ->
@@ -267,26 +294,27 @@ and wp_desc info d q =
 	let q = optpost_app (tsubst_in_predicate (subst_one result tvoid)) q in
 	let v = fresh_var () in
 	let st = make_raw_store info.env (x,x) (Tvar result) (Tvar v) in
-	let q = optpost_app (tsubst_in_predicate (subst_one x st)) q in
-	let _,w1 = wp e1 q in
+	let q1 = optpost_app (tsubst_in_predicate (subst_one x st)) q in
+	let q1 = filter_post e1.info q1 in
+	let _,w1 = wp e1 q1 in
 	let e'1,_ = wp e1 None in
-	let w1 = optpost_app (subst_in_predicate (subst_onev v result)) w1 in
-	let e'2,w2 = wp e2 w1 in
+	let w1 = optnamed_app (subst_in_predicate (subst_onev v result)) w1 in
+	let q2 = saturate_post e2.info w1 q in
+	let e'2,w2 = wp e2 q2 in
 	TabAff (ck, x, e'1, e'2), w2
     (* conditional: two cases depending on [p1.post] *)
     | If (p1, p2, p3) ->
-	let p'2,w2 = wp p2 q in
-	let p'3,w3 = wp p3 q in
+	let p'2,w2 = wp p2 (filter_post p2.info q) in
+	let p'3,w3 = wp p3 (filter_post p3.info q) in
 	(match w2, w3, post p1 with
-	   | Some ({a_value=q2},[]), Some ({a_value=q3},[]), _ -> 
+	   | Some {a_value=q2}, Some {a_value=q3}, _ -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
-	       let q1 = Pif (Tvar result1, q2, q3) in
-	       let p'1,w1 = wp p1 (create_post q1) in
+	       let q1 = create_postval (Pif (Tvar result1, q2, q3)) in
+	       let q1 = saturate_post p1.info q1 q in
+	       let p'1,w1 = wp p1 q1 in
 	       If (p'1, p'2, p'3), w1
-	   | Some _, Some _, _ ->
-	       assert false
 	   | _ ->
 	       let p'1,_ = wp p1 None in
 	       If (p'1, p'2, p'3), None)
@@ -308,16 +336,18 @@ and wp_desc info d q =
 	  (AnyMessage ("cannot compute wp due to capture variable;\n" ^
                        "please rename variable " ^ Ident.string x))
     | LetIn (x, e1, e2) ->
-	let e'2, w = wp e2 q in
-	let q' = optpost_app (subst_in_predicate (subst_onev x result)) w in
-	let e'1,w' = wp e1 q' in
-	LetIn (x, e'1, e'2), w'
+	let e'2, w2 = wp e2 (filter_post e2.info q) in
+	let q1 = optnamed_app (subst_in_predicate (subst_onev x result)) w2 in
+	let q1 = saturate_post e1.info q1 q in
+	let e'1,w = wp e1 q1 in
+	LetIn (x, e'1, e'2), w
     | LetRef (x, e1, e2) ->
 	(* same as LetIn: correct? *)
-	let e'2, w = wp e2 q in
-	let q' = optpost_app (subst_in_predicate (subst_onev x result)) w in
-	let e'1,w' = wp e1 q' in
-	LetRef (x, e'1, e'2), w'
+	let e'2, w2 = wp e2 (filter_post e2.info q) in
+	let q1 = optnamed_app (subst_in_predicate (subst_onev x result)) w2 in
+	let q1 = saturate_post e1.info q1 q in
+	let e'1,w = wp e1 q1 in
+	LetRef (x, e'1, e'2), w
     | Rec (f, bl, v, var, e) ->
 	let e',_ = wp e None in
 	Rec (f, bl, v, var, e'), None
@@ -328,24 +358,25 @@ and wp_desc info d q =
 	While (b', inv, var, e'), None
     (* TODO: wp for raise *)
     | Raise (id, None) ->
-	Raise (id, None), None
+	d, None (* option_app (fun (_,ql) -> List.assoc id ql) q *)
     | Raise (id, Some e) ->
 	let e',_ = wp e None in
 	Raise (id, Some e'), None
 
 and wp_block bl q = match bl with
   | [] ->
-      [], q
+      [], option_app post_val q
   | Statement p :: bl ->
       let bl', w = wp_block bl q in
+      let w = saturate_post p.info w q in
       let p', w' = wp p w in
       Statement p' :: bl', w'
   | Label l :: bl ->
       let bl', w = wp_block bl q in
-      Label l :: bl', optpost_app (erase_label l) w
+      Label l :: bl', optnamed_app (erase_label l) w
   | Assert p :: bl ->
       let bl', w = wp_block bl q in
-      Assert p :: bl', optpost_app (fun c -> pand p.a_value c) w
+      Assert p :: bl', optnamed_app (fun c -> pand p.a_value c) w
 
 let propagate p =
   let p = normalize p in
