@@ -1,5 +1,5 @@
 
-(* Unitary tests *)
+(* Unitary (typing) tests *)
 
 (* types syntax: values *)
 parameter v1 : bool ref

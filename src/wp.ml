@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.38 2002-04-18 13:22:17 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.39 2002-04-18 13:52:29 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -260,7 +260,7 @@ and wp_desc info d q =
 	let e'1,w = wp e1 q in
 	TabAcc (ck, x, e'1), w
     | TabAff (ck, x, e1, e2) ->
-	(* TODO: does not propagate inside [e2] *)
+	(* TODO: does not propagate inside [e1] *)
 	let q = optpost_app (tsubst_in_predicate (subst_one result tvoid)) q in
 	let v = fresh_var () in
 	let st = make_raw_store info.env (x,x) (Tvar result) (Tvar v) in

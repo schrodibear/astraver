@@ -1,11 +1,11 @@
 
 (* Test program *)
 
-(* parameter x : int ref *)
+parameter x : int ref
 
 parameter t : array 10 of int
 
-let p = begin t[1+2] := 3+4; t[2] := 1 end { t[3] = 7 }
+let p = (t[begin x := 0; !x end] := !x) { t[0] = x@ }
 
 (*
 let rec f (x:int) : unit { variant x } = 

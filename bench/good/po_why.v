@@ -173,3 +173,58 @@ Proof.
 Intros; Omega.
 Save.
 
+Lemma p15_po_1 : 
+  `0 <= 0` /\ `0 < 10`.
+Proof. (* p15_po_1 *)
+Omega.
+Save.
+
+Lemma p16_po_1 : 
+  (t: (array `10` Z))
+  (result: Z)
+  (Post1: (store t `9` result) = (store t `9` `1`))
+  `0 <= 9` /\ `9 < 10`.
+Proof. (* p16_po_1 *)
+Intros; Omega.
+Save.
+
+Lemma p17_po_1 : 
+  (t: (array `10` Z))
+  (Pre3: `0 <= (access t 0)` /\ `(access t 0) < 10`)
+  `0 <= 0` /\ `0 < 10`.
+Proof. (* p17_po_1 *)
+Intros; Omega.
+Save.
+
+Lemma p18_po_1 : 
+  (t: (array `10` Z))
+  (x: Z)
+  ((x0:Z) (x0 = `0` -> (access (store t x0 x) `0`) = x)).
+Proof. (* p18_po_1 *)
+Intros.
+Rewrite H; Rewrite store_def_1; Omega.
+Save.
+
+Lemma p18_po_2 : 
+  (t: (array `10` Z))
+  (x: Z)
+  (result: Z)
+  (Post2: ((x0:Z) (x0 = `0` -> (access (store t x0 result) `0`) = x)))
+  (result0: Z)
+  `0 <= result0` /\ `result0 < 10`.
+Proof. (* p18_po_2 *)
+
+Save.
+
+Lemma p18_po_3 : 
+  (t: (array `10` Z))
+  (x: Z)
+  (result: Z)
+  (Post2: ((x0:Z) (x0 = `0` -> (access (store t x0 result) `0`) = x)))
+  (result0: Z)
+  (Pre1: `0 <= result0` /\ `result0 < 10`)
+  (access (store t result0 result) `0`) = x.
+Proof. (* p18_po_3 *)
+(* FILL PROOF HERE *)
+Save.
+

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.42 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.43 2002-04-18 13:52:29 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -366,6 +366,7 @@ and typef_desc lab env loc = function
 
   | TabAcc (check, x, e) ->
       let t_e = typef lab env e in
+      expected_type e.info.loc (result_type t_e) type_v_int;
       let efe = t_e.info.kappa.c_effect in
       let ef = Effect.add_read x efe in
       let _,ty = dearray_type (type_in_env env x) in
@@ -381,7 +382,10 @@ and typef_desc lab env loc = function
 
   | TabAff (check, x, e1, e2) ->
       let t_e1 = typef lab env e1 in
+      expected_type e1.info.loc (result_type t_e1) type_v_int;
       let t_e2 = typef lab env e2 in 
+      let _,et = dearray_type (type_in_env env x) in
+      expected_type e2.info.loc (result_type t_e2) et;
       let ef1 = t_e1.info.kappa.c_effect in
       let ef2 = t_e2.info.kappa.c_effect in
       let ef = Effect.add_write x (Effect.union ef1 ef2) in

@@ -54,3 +54,15 @@ parameter incrx2 : unit -> { } int writes x { x = x@ + 1 and result = x }
 
 let p14 = { x = 0 } (incrx2 void) { result = 1 }
 
+(* arrays *)
+
+parameter t : array 10 of int
+
+let p15 = t[0]
+
+let p16 = t[9] := 1
+
+let p17 = { 0 <= t[0] < 10 } t[t[0]] := 1
+
+let p18 = (t[begin x := 0; !x end] := !x) { t[0] = x@ }
+

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.29 2002-04-17 14:52:16 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.30 2002-04-18 13:52:29 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -231,7 +231,7 @@ let reprint_obligation fmt (id,s) =
 
 let print_obligation fmt o = 
   reprint_obligation fmt o;
-  fprintf fmt "Proof. (* %s *)@\n(* FILL PROOF HERE *)@\nSave.@\n" (fst o)
+  fprintf fmt "Proof.@\n(* FILL PROOF HERE *)@\nSave.@\n"
 
 let reprint_validation fmt id v =
   fprintf fmt "@[Definition %s_valid :=@\n  %a.@]@\n" id print_cc_term v
