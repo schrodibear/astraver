@@ -30,9 +30,9 @@ boolean field $c$ is used internally by the algorithm, to denote which
 of the children is currently explored.
  
 \begin{figure}[b]
-\vspace*{-5mm}
-\hrulefill
-\vspace*{-2mm}
+%\vspace*{-5mm}
+%\hrulefill
+%\vspace*{-2mm}
 \begin{alltt}
 void schorr_waite(node root) \{
   node t = root; node p = NULL;
@@ -51,7 +51,7 @@ void schorr_waite(node root) \{
   \}
 \}
 \end{alltt}
-\vspace*{-5mm}
+%\vspace*{-5mm}
 \caption{C version of the Schorr-Waite algorithm}
 \label{fig:code}
 \end{figure}
@@ -69,9 +69,9 @@ new node and then explores the left child. `swing' occurs when the left
 child has been explored: the search continues to the right child. `pop' is used
 when the right child is explored: the search goes back up.        
 
-\begin{figure*}[b]
-\vspace*{-5mm}
-\hrulefill
+\begin{figure*}
+%\vspace*{-5mm}
+%\hrulefill
 \vspace*{2mm}
 \begin{center}
   \unitlength=0.5mm
