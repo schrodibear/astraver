@@ -41,8 +41,9 @@ CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
            src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
-	   src/holl.cmo src/harvey.cmo src/simplify.cmo src/mizar.cmo \
-	   src/coq.cmo src/cparser.cmo src/clexer.cmo src/cinterp.cmo \
+	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
+   	   src/regen.cmo src/mizar.cmo src/coq.cmo \
+           src/cparser.cmo src/clexer.cmo src/cinterp.cmo \
            src/ocaml.cmo src/main.cmo
 
 CMX      = $(CMO:.cmo=.cmx)

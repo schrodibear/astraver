@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.23 2003-09-17 15:48:47 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.24 2003-09-17 21:08:07 filliatr Exp $ i*)
 
 open Format
 
@@ -28,6 +28,7 @@ let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref "Require Why."
+let mizar_preamble_ = ref ""
 let werror_ = ref false
 
 let ocaml_ = ref false
@@ -103,6 +104,10 @@ Coq-specific options:
   --coq-preamble <text>
               gives some Coq preamble to be substituted to \"Require Why\"
 
+Mizar-specific options:
+  --mizar-preamble <text>
+              gives some Mizar preamble to be inserted in the `environ' segment
+
 Misc options:
   --ocaml        Ocaml code output
   --ocaml-annot  Show all annotations in ocaml code
@@ -140,6 +145,12 @@ let files =
       :: s :: args -> coq_preamble_ := s; parse args
     | ("-coqpreamble"|"--coqpreamble"|"-coq-preamble"|"--coq-preamble")::[] ->
 	usage (); exit 1
+    | ("-mizarpreamble" | "--mizarpreamble" | 
+       "-mizar-preamble" | "--mizar-preamble") 
+      :: s :: args -> mizar_preamble_ := s; parse args
+    | ("-mizarpreamble" | "--mizarpreamble" | 
+       "-mizar-preamble"|"--mizar-preamble") :: [] ->
+	usage (); exit 1
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
 	ocaml_annot_ := true; parse args
@@ -168,6 +179,7 @@ let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = !coq_preamble_
+let mizar_preamble = !mizar_preamble_
 let wol = !wol_
 let werror = !werror_
 

@@ -1,6 +1,7 @@
 
 version 1.3, September 17th, 2003
 ================================= 
+  o Mizar output (with option --mizar)
   o new tool why2html to convert Why input files to HTML
   o Simplify output (with option --simplify)
   o fixed bug with WP of constants false/true (simplification added)
