@@ -139,6 +139,9 @@ rule token = parse
   | "|"                     { PIPE }
   | "?"                     { QUESTION }
 
+  (* TODO: analyze lines inserted by the pre-processor *)
+  | '#' [^ '\n']* '\n'      { token lexbuf }
+
   | eof { EOF }
   | '"' { lex_error lexbuf "Unterminated string" }
   | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }

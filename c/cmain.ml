@@ -4,17 +4,28 @@ open Cerror
 open Creport
 
 let parse_only = ref false
+let cpp_command = ref "gcc -E"
+
+(* C pre-processor *)
+let cpp inf outf = 
+  ignore (Sys.command (sprintf "%s %s > %s" !cpp_command inf outf))
 
 let files = Queue.create ()
 let add_file f = Queue.add f files
 
 let interp_file f =
   Loc.set_file f;
-  let c = open_in f in
-  let d = Clexer.parse c in
-  if !parse_only then raise Exit;
-  let p = Cinterp.interp d in
-  ()
+  let ppf = Filename.temp_file (Filename.basename f) ".i" in
+  try
+    cpp f ppf;
+    let c = open_in ppf in
+    let d = Clexer.parse c in
+    if !parse_only then raise Exit;
+    let p = Cinterp.interp d in
+    ()
+  with e ->
+    Sys.remove ppf;
+    raise e
 
 let _ = 
   Arg.parse 
