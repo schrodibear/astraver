@@ -6,6 +6,8 @@ CADUCEUS
 
  - cpp
 
+ - struct forward reference: breaks Cenv.eq_type (e.g. line 27)
+
 WHY FEATURES
 ============
 

@@ -23,7 +23,8 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       eq_type ty1 ty2
   | CTstruct (s1, _), CTstruct (s2, _) ->
       s1 = s2
-  | CTstruct_named _, _ | _, CTstruct_named _ ->
+  | CTstruct_named x, _ | _, CTstruct_named x ->
+      eprintf "%a / %a\n" print_type_node tn1 print_type_node tn2;
       assert false
   | CTunion (u1, _), CTunion (u2, _) ->
       u1 = u2

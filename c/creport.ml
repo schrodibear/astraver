@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.4 2004-02-10 08:18:02 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.5 2004-02-20 16:27:09 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -24,7 +24,10 @@ exception Error of (Loc.t option) * Cerror.t
 
 (*s Pretty-printing of types *)
 
-let rec print_type fmt t = match t.ctype_node with
+let rec print_type fmt t = 
+  print_type_node fmt t.ctype_node
+
+and print_type_node fmt = function
   | CTvoid -> fprintf fmt "void"
   | CTint (s, i) -> fprintf fmt "%a %a" print_sign s print_integer i
   | CTfloat f -> print_float fmt f

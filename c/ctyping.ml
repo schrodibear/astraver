@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.29 2004-02-13 08:42:08 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.30 2004-02-20 16:27:09 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -269,7 +269,7 @@ and type_expr_node loc env = function
       let e = type_lvalue env e in
       TEunary (Uamp, e), noattr (CTpointer e.texpr_type)
   | CEunary (Ustar, e) ->
-      let e = type_lvalue env e in
+      let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
 	| CTpointer ty | CTarray (ty, _) -> TEunary (Ustar, e), ty
 	| _ -> error loc "invalid type argument of `unary *'"
@@ -406,8 +406,16 @@ and type_lvalue env e =
   e
 
 and check_lvalue loc e = match e.texpr_node with
-  | TEvar _ | TEunary _ | TEarrget _ -> ()
-  | _ -> error loc "invalid lvalue"
+  | TEvar _ 
+  | TEunary (Ustar, _)
+  | TEarrget _ 
+  | TEarrow _ 
+  | TEdot _ -> 
+      ()
+  | TEcast (_, e) ->
+      check_lvalue loc e
+  | _ -> 
+      error loc "invalid lvalue"
 
 and type_expr_option env eo = option_app (type_expr env) eo
 
@@ -475,6 +483,14 @@ let seq_status s1 s2 =
     abrupt_return = s1.abrupt_return || s2.abrupt_return;
     break = s1.break || s2.break;
     continue = s1.continue || s2.continue }
+
+let rec unreachable = function
+  | [] -> ()
+  | { node = CSlabel _ } :: _ -> ()
+  | { node = CSnop } :: bl -> unreachable bl
+  | { loc = loc } :: _ ->
+      warning loc "unreachable statement";
+      if werror then exit 1
 
 let rec type_statement env et s =
   let sn,st = type_statement_node s.loc env et s.node in
@@ -579,10 +595,7 @@ and type_block env et (dl,sl) =
 	[s'], st
     | s :: bl ->
 	let s', st1 = type_statement env' et s in
-	if st1.always_return then begin
-	  warning (List.hd bl).loc "unreachable statement";
-	  if werror then exit 1
-	end;
+	if st1.always_return then unreachable bl;
 	let bl', st2 = type_bl bl in
 	s' :: bl', seq_status st1 st2
   in
@@ -643,7 +656,7 @@ let type_decl d = match d.node with
       Tfunspec (s, ty, f, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
-      let et = if ty = c_void then None else Some ty in
+      let et = if eq_type ty c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       let s = option_app (type_spec ty env) s in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
