@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.24 2005-02-08 12:48:16 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.25 2005-02-11 12:59:22 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -172,6 +172,8 @@ and expr_node loc ty t =
 		 ne_arrow (expr lvalue) var_info
 	     | TEarrow(lvalue,var_info) -> 
 		 NEarrow (expr lvalue, var_info)
+	     | TEarrget (lvalue,t) ->
+		 NEbinary(expr lvalue, Badd_pointer_int, expr t)
 	     | _ -> 
 		 warning loc "this & cannot be normalized";
 		 NEunary (Uamp,expr texpr))
