@@ -45,7 +45,7 @@ predicate:
   predicate ARROW predicate { info (Pimplies ($1, $3)) }
 | predicate OR predicate     { info (Por ($1, $3)) }
 | predicate AND predicate    { info (Pand ($1, $3)) }
-| NOT predicate              { info (Pnot $2) }
+| NOT predicate %prec prec_not { info (Pnot $2) }
 | TRUE { info Ptrue }
 | FALSE { info Pfalse }
 | IDENTIFIER { info (Pvar $1) }
