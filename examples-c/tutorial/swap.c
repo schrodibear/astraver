@@ -3,8 +3,8 @@
   @*/
 void swap(int t[],int i,int j) {
   int tmp = t[i];
-  t[j] = t[i]; 
-  t[i] = tmp;
+  t[i] = t[j]; 
+  t[j] = tmp;
 }
 
 

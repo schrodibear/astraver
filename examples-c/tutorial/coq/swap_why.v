@@ -32,15 +32,15 @@ Lemma swap_impl_po_2 :
   forall (result: Z),
   forall (Post4: result = (acc intP aux_1)),
   (forall (result0:pointer),
-   (result0 = (shift t j) ->
+   (result0 = (shift t i) ->
     (forall (result1:pointer),
-     (result1 = (shift t i) ->
+     (result1 = (shift t j) ->
       (forall (result2:Z),
        (result2 = (acc intP result1) ->
         (forall (intP0:((memory) Z)),
          (intP0 = (upd intP result0 result2) ->
           (forall (result0:pointer),
-           (result0 = (shift t i) ->
+           (result0 = (shift t j) ->
             (forall (intP1:((memory) Z)),
              (intP1 = (upd intP0 result0 result) -> (acc intP1 (shift t i)) =
               (acc intP (shift t j)) /\ (acc intP1 (shift t j)) =
@@ -50,5 +50,9 @@ Lemma swap_impl_po_2 :
       (valid alloc result1))))).
 Proof.
 intuition; subst; auto.
+assert (i=j \/ i<>j); [omega | intuition].
+subst i; caduceus.
+caduceus.
+caduceus.
 Save.
 

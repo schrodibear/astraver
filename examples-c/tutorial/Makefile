@@ -1,6 +1,6 @@
 
 
-all: max abs swap purse
+all: max abs swap search purse 
 
 %: %.c 
 	caduceus $*.c

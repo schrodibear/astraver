@@ -6,6 +6,20 @@ typedef struct {
 //@ predicate purse_inv(purse *p) { \valid(p) && p->balance >= 0 }
 
 /*@ requires purse_inv(p) && s >= 0
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
+  @*/
+void credit0(purse *p,int s) {
+  p->balance = p->balance + s;
+}
+
+/*@ requires purse_inv(p) && 0 <= s <= p->balance
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) - s
+  @*/
+void withdraw0(purse *p,int s) {
+  p->balance = p->balance - s;
+}
+
+/*@ requires purse_inv(p) && s >= 0
   @ assigns p->balance
   @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
   @*/
