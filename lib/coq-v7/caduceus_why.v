@@ -2,6 +2,7 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Why.
+Require WhyFloat.
 
 Parameter pointer : Set.
 Parameter alloc : Set.
@@ -10,10 +11,11 @@ Parameter assign_loc : Set.
 
 (*Why*) Parameter any_int : (_: unit)Z.
 
+(*Why*) Parameter any_float : (_: unit)R.
+
 (*Why*) Parameter any_pointer : (_: unit)pointer.
 
-(*Why logic*) Definition null : pointer.
-Admitted.
+(*Why*) Parameter null : pointer.
 
 (*Why logic*) Definition block_length : alloc -> pointer -> Z.
 Admitted.
@@ -23,6 +25,14 @@ Admitted.
 
 (*Why logic*) Definition shift : pointer -> Z -> pointer.
 Admitted.
+
+(*Why*) Parameter eq_pointer :
+  (p: pointer)(q: pointer)
+  (sig_1 bool [result: bool]((if result then p = q else ~(p = q)))).
+
+(*Why*) Parameter neq_pointer :
+  (p: pointer)(q: pointer)
+  (sig_1 bool [result: bool]((if result then ~(p = q) else p = q))).
 
 (*Why predicate*) Definition valid  [a:alloc] [p:pointer]
   := ~(p = null) /\ `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.

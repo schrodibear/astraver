@@ -8,7 +8,7 @@ C test file
 int x;
 int i;
 
-/*@ requires x >= 0  assigns x  ensures x == 10 */ 
+/*@ requires x >= 0  ensures x == 10 */ 
 void main() 
 {
   x = 0;

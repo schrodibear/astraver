@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.47 2004-03-18 15:21:38 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.48 2004-03-23 08:04:34 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -56,6 +56,12 @@ let int_op = function
   | Bmul -> Bmul_int
   | Bdiv -> Bdiv_int
   | Bmod -> Bmod_int
+  | Blt -> Blt_int
+  | Ble -> Ble_int
+  | Bgt -> Bgt_int
+  | Bge -> Bge_int
+  | Beq -> Beq_int
+  | Bneq -> Blt_int
   | _ -> assert false
 
 let float_op = function
@@ -63,11 +69,27 @@ let float_op = function
   | Bsub -> Bsub_float
   | Bmul -> Bmul_float
   | Bdiv -> Bdiv_float
+  | Blt -> Blt_float
+  | Ble -> Ble_float
+  | Bgt -> Bgt_float
+  | Bge -> Bge_float
+  | Beq -> Beq_float
+  | Bneq -> Blt_float
+  | _ -> assert false
+
+let pointer_op = function
+  | Blt -> Blt_pointer
+  | Ble -> Ble_pointer
+  | Bgt -> Bgt_pointer
+  | Bge -> Bge_pointer
+  | Beq -> Beq_pointer
+  | Bneq -> Bneq_pointer
   | _ -> assert false
 
 let type_op op ty = match ty.ctype_node with 
   | CTint _ | CTenum _ -> int_op op 
   | CTfloat _ -> float_op op 
+  | CTpointer _ | CTarray _ -> pointer_op op
   | _ -> assert false 
 
 let is_bitfield ty = match ty.ctype_node with
@@ -354,17 +376,17 @@ and type_expr_node loc env = function
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
 	| (CTint _ | CTenum _ | CTfloat _), (CTint _ | CTenum _ | CTfloat _) ->
-	    let e1,e2,_ = conversion e1 e2 in
-	    TEbinary (e1, op, e2), c_int
+	    let e1,e2,ty = conversion e1 e2 in
+	    TEbinary (e1, type_op op ty, e2), c_int
 	| (CTpointer ty1  | CTarray (ty1,_)), 
 	  (CTpointer ty2 | CTarray (ty2,_)) ->
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
-	    TEbinary (e1, op, e2), c_int
+	    TEbinary (e1, pointer_op op, e2), c_int
 	| (CTpointer _  | CTarray _), (CTint _ | CTenum _ | CTfloat _)
 	| (CTint _ | CTenum _ | CTfloat _), (CTpointer _  | CTarray _) ->
 	    warning loc "comparison between pointer and integer";
-	    TEbinary (e1, op, e2), c_int
+	    TEbinary (e1, pointer_op op, e2), c_int
 	| _ ->
 	    error loc "invalid operands to comparison"
       end
@@ -381,6 +403,10 @@ and type_expr_node loc env = function
   (* these other binops cannot be built by the parser *)
   | CEbinary (_, (Bdiv_float|Bmul_float|Bsub_float|Badd_float
 		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int
+		 |Blt_pointer|Bgt_pointer|Ble_pointer|Bge_pointer
+		 |Bneq_pointer|Beq_pointer
+		 |Bneq_float|Beq_float|Bge_float|Ble_float|Bgt_float|Blt_float
+		 |Bneq_int|Beq_int|Bge_int|Ble_int|Bgt_int|Blt_int
 		 |Bsub_pointer|Bsub_pointer_int
 		 |Badd_int_pointer|Badd_pointer_int), _) ->
       assert false
@@ -543,7 +569,7 @@ let or_status s1 s2 =
 
 let rec unreachable = function
   | [] -> ()
-  | { node = CSlabel _ } :: _ -> ()
+  | { node = CScase _ | CSlabel _ } :: _ -> ()
   | { node = CSnop } :: bl -> unreachable bl
   | { loc = loc } :: _ ->
       warning loc "unreachable statement";

@@ -1,7 +1,9 @@
 
 #include "list.h"
 
-/*@ ensures if \result then cyclic(l1) else !cyclic(l1) */
+/*@ ensures 
+      (\result != 0 => cyclic(l1)) &&
+      (\result == 0 => !cyclic(l1)) */
 int cyclic(list l1) {
   list l2;
   if (!l1) return 0;

@@ -10,11 +10,13 @@ open Output
 let interp_type ctype =
   match ctype.ctype_node with
   | CTvoid -> "unit"
-  | CTint(sign,cint) -> "int"
+  | CTenum _ | CTint _ -> "int"
   | CTfloat(cfloat) -> "float"
   | CTarray(t,None) -> "pointer"      
   | CTarray(t,Some e) -> "pointer"
   | CTpointer(t) -> "pointer"      
+  | CTvar x -> x (* must be a logic type *)
+  | tyn -> eprintf "%a@." Creport.print_type_node tyn; exit 1
   | _ -> assert false (* TODO *)
 (*
   | CTvar of string

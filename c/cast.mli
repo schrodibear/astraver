@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.38 2004-03-17 17:07:15 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.39 2004-03-23 08:04:34 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -78,11 +78,15 @@ type binary_operator =
   | Bshift_left | Bshift_right
   (* these are introduced during typing *)
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int 
+  | Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
   | Badd_float | Bsub_float | Bmul_float | Bdiv_float 
+  | Blt_float | Bgt_float | Ble_float | Bge_float | Beq_float | Bneq_float 
   | Badd_pointer_int (* pointer + int *) 
   | Badd_int_pointer (* int + pointer *)
   | Bsub_pointer_int (* pointer - int *)
   | Bsub_pointer     (* pointer - pointer *)
+  | Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
+  | Beq_pointer | Bneq_pointer
 
 type cexpr = cexpr_node located
 

@@ -1,13 +1,19 @@
 
 (* default variable initialisation *)
 parameter any_int: unit -> int
+parameter any_float: unit -> float
 parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
-logic null : -> pointer
+parameter null : pointer
 logic block_length: alloc,pointer -> int
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
+
+parameter eq_pointer : 
+  p:pointer -> q:pointer -> {} bool { if result then p=q else p<>q }
+parameter neq_pointer : 
+  p:pointer -> q:pointer -> {} bool { if result then p<>q else p=q }
 
 parameter alloc : alloc ref
 

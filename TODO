@@ -2,9 +2,21 @@
 CADUCEUS
 ========
 
- - & in logic term syntax
+ - C features
+   - &x for local variable x
+   - switch
+   - union
+   - memory allocation
+   - sizeof / sizeof_expr
 
- - cpp
+ - implementation:
+   - evaluation order: add an interference test to exclude expressions where
+     evaluation order changes the result
+   - heap variables: rename to avoid clashes
+
+ - Coq: tactic `caduceus'
+
+ - logic: & in logic term syntax
 
  - struct forward reference: breaks Cenv.eq_type (e.g. line 27)
 

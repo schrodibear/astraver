@@ -17,7 +17,6 @@ int index(int t[], int n, int v) {
   return i;
 }
 
-#if 0
 /* same thing, with a return instead of a break */
 
 /*@ requires \valid_range(t,0,n)
@@ -33,4 +32,3 @@ int index2(int t[], int n, int v) {
   }
   return n;
 }
-#endif

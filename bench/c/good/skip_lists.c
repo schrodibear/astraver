@@ -1,7 +1,12 @@
 
 /* Skip lists. */
 
+#if 0
 #include <stdlib.h>
+#else
+void* malloc(int);
+float drand48();
+#endif
 
 #define MaxNbLevels 16
 #define MaxLevel 15
@@ -102,7 +107,7 @@ void insert(list l, int v) {
 }
 
 /* test */
-#if 1
+#if 0
 #include <stdio.h>
 
 void print(list l) {

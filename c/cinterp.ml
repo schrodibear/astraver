@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.44 2004-03-22 15:51:45 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.45 2004-03-23 08:04:34 filliatr Exp $ i*)
 
 
 open Format
@@ -105,13 +105,15 @@ let rec interp_predicate label old_label p =
   let ft = interp_term label old_label in
   match p with
     | Ptrue -> LTrue
-    | Pexists (_, _) -> assert false (* TODO *)
+    | Pexists (l, p) -> 
+	List.fold_right
+	  (fun (t,x) p -> LExists(x,([],Ceffect.interp_type t),p)) l (f p)
     | Pforall (l, p) ->
 	List.fold_right
 	  (fun (t,x) p -> LForall(x,([],Ceffect.interp_type t),p))
 	  l (interp_predicate label old_label p)
-    | Pif (_, _, _)
-    | Pnot _ -> assert false (* TODO *)
+    | Pif (_, _, _) -> assert false (* TODO *)
+    | Pnot p -> LNot (f p)
     | Pimplies (p1, p2) -> make_impl (f p1) (f p2)
     | Por (p1, p2) -> make_or (f p1) (f p2)
     | Pand (p1, p2) -> make_and (f p1) (f p2)
@@ -146,12 +148,24 @@ let interp_bin_op op =
   | Badd_int -> "add_int"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
-  | Blt -> "lt_int"
-  | Bgt -> "gt_int"
-  | Ble -> "le_int"
-  | Bge -> "ge_int"
-  | Beq -> "eq_int"
-  | Bneq -> "neq_int" 
+  | Blt_int -> "lt_int"
+  | Bgt_int -> "gt_int"
+  | Ble_int -> "le_int"
+  | Bge_int -> "ge_int"
+  | Beq_int -> "eq_int"
+  | Bneq_int -> "neq_int" 
+  | Blt_float -> "lt_float"
+  | Bgt_float -> "gt_float"
+  | Ble_float -> "le_float"
+  | Bge_float -> "ge_float"
+  | Beq_float -> "eq_float"
+  | Bneq_float -> "neq_float" 
+  | Blt_pointer -> "lt_pointer"
+  | Bgt_pointer -> "gt_pointer"
+  | Ble_pointer -> "le_pointer"
+  | Bge_pointer -> "ge_pointer"
+  | Beq_pointer -> "eq_pointer"
+  | Bneq_pointer -> "neq_pointer" 
   | _ -> assert false (* TODO *)
 
 let interp_incr_op op =
@@ -219,7 +233,12 @@ let rec interp_expr e =
 	    v.var_is_assigned;
 	end;
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
-    | TEbinary(_,(Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
+    | TEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
+		 |Blt_float | Bgt_float | Ble_float | Bge_float 
+		 |Beq_float | Bneq_float 
+		 |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
+		 |Beq_pointer | Bneq_pointer 
+		 |Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor),_) 
     | TEunary (Unot, _) ->
 	If(interp_boolean_expr e, Cte(Prim_int(1)), Cte(Prim_int(0)))
     | TEbinary(e1,op,e2) ->
@@ -262,16 +281,24 @@ let rec interp_expr e =
 		build_complex_app (Var (v.var_name ^ "_parameter")) targs
 	    | _ -> assert false
 	end
-    | TEcast(t,e)
-      -> assert false (* TODO *)
-    | TEsizeof_expr(e)
-      -> assert false (* TODO *)
-    | TEsizeof(t)
-      -> assert false (* TODO *)
+    | TEcast({ctype_node = CTpointer {ctype_node = CTvoid}}, 
+	     {texpr_node = TEconstant "0"}) ->
+	Var "null"
+    | TEcast(t,e) -> 
+	assert false (* TODO *)
+    | TEsizeof_expr(e) -> 
+	assert false (* TODO *)
+    | TEsizeof(t) -> 
+	assert false (* TODO *)
 
 and interp_boolean_expr e =
   match e.texpr_node with
-    | TEbinary(e1, (Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
+    | TEbinary(e1, (Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
+		   |Blt_float | Bgt_float | Ble_float | Bge_float 
+		   |Beq_float | Bneq_float 
+		   |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
+		   |Beq_pointer | Bneq_pointer 
+		   |Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
 	build_complex_app (Var (interp_bin_op op))
 	  [interp_expr e1;interp_expr e2]
     | TEbinary (e1, Band, e2) ->
@@ -406,10 +433,12 @@ let interp_decl d acc =
 	let tinit =
 	  match init with 
 	    | Inothing ->
-(*
-		if ctype = c_int then TODO
-*)
-		  App(Var("any_int"),Var("void"))
+		begin match ctype.ctype_node with
+		  | CTint _ -> App(Var("any_int"),Var("void"))
+		  | CTfloat _ -> App(Var("any_float"),Var("void"))
+		  | CTfun _ -> assert false (* TODO *)
+		  | _ -> App(Var("any_pointer"),Var("void"))
+		end
 	    | Iexpr e -> interp_expr e		
 	    | Ilist _ -> assert false (* TODO *)
 	in
@@ -506,20 +535,44 @@ let break b e = if b then try_with_void "Break" e else e
 
 let continue b e = if b then try_with_void "Continue" e else e    
 
-let rec interp_statement stat = match stat.st_node with
+let return_exn ty = match ty.ctype_node with
+  | CTint _ -> "Return_int"
+  | CTfloat _ -> "Return_float"
+  | _ -> "Return_pointer"
+
+(* [abrupt_return] contains the exception used for last abrupt return if any *)
+let abrupt_return = ref None
+
+let catch_return e = match !abrupt_return with
+  | None -> 
+      e
+  | Some "Return" ->
+      Try (e, "Return", None, Void)
+  | Some r ->
+      Try (e, r, Some "result", Var "result")
+
+(* [ab] indicates if returns are abrupt *)
+
+let rec interp_statement ab stat = match stat.st_node with
   | TSnop -> 
       Void
   | TSexpr e ->
       interp_statement_expr e
   | TSreturn eopt ->
-      (* TODO: abrupt return *)
-      begin
-	match eopt with
-	  | None -> Void
-	  | Some e -> interp_expr e
+      if ab then match eopt with
+	| None -> 
+	    abrupt_return := Some "Return";
+	    Raise ("Return", None)
+	| Some e -> 
+	    let r = return_exn e.texpr_type in 
+	    abrupt_return := Some r;
+	    Raise (r, Some (interp_expr e))
+      else begin match eopt with
+	| None -> Void
+	| Some e -> interp_expr e
       end
   | TSif(e,s1,s2) -> 
-      If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
+      If(interp_boolean_expr e,interp_statement ab s1,interp_statement ab s2)
   | TSfor(annot,e1,e2,e3,body) ->
       let (inv,dec) = interp_invariant annot in
       append
@@ -528,29 +581,29 @@ let rec interp_statement stat = match stat.st_node with
 	   (make_while (interp_boolean_expr e2) inv dec 
 	      (continue body.st_continue
 		 (append 
-		    (interp_statement body) 
+		    (interp_statement true body) 
 		    (interp_statement_expr e3)))))
   | TSwhile(annot,e,s) -> 
       let (inv,dec) = interp_invariant annot in
       break s.st_break
 	(make_while (interp_boolean_expr e) inv dec 
-	   (continue s.st_continue (interp_statement s)))
+	   (continue s.st_continue (interp_statement true s)))
   | TSdowhile(annot,s,e) -> 
       let (inv,dec) = interp_invariant annot in
       break true
 	(make_while (Cte (Prim_bool true)) inv dec
 	   (continue s.st_continue
-	      (append (interp_statement s)
+	      (append (interp_statement true s)
 		 (If (Not (interp_boolean_expr e), 
 		      Raise ("Break", None), Void)))))
   | TSblock(b) -> 
-      interp_block b 
+      interp_block ab b 
   | TSbreak -> 
       Raise ("Break", None)
   | TScontinue -> 
       Raise ("Continue", None)
   | TSlabel(lab,s) -> 
-      append (Output.Label lab) (interp_statement s)
+      append (Output.Label lab) (interp_statement ab s)
   | TSswitch(e,s) -> 
       assert false (* TODO *)
   | TScase(e,s) -> 
@@ -563,13 +616,34 @@ let rec interp_statement stat = match stat.st_node with
       assert false (* TODO *)
   | TSspec (spec,s) ->
       let (pre,post) = interp_spec spec in
-      Triple(pre,interp_statement s,post,None)
+      Triple(pre,interp_statement ab s,post,None)
 
-and interp_block (decls,stats) =
-  let b = 
-    List.fold_right 
-      (fun s acc -> append (interp_statement s) acc) stats Void in
-  List.fold_right interp_decl decls b 
+and interp_block ab (decls,stats) =
+  let rec block = function
+    | [] -> 
+	Void
+    | [s] ->
+	interp_statement ab s
+    | { st_node = TSnop } :: bl ->
+	block bl
+    | { st_node = TSif (e, s1, s2) } as s :: bl ->
+	begin match s1.st_term, s2.st_term with
+	  | true, true ->
+	      append (interp_statement true s) (block bl)
+	  | false, false ->
+	      (* [bl] is actually unreachable *)
+	      interp_statement ab s
+	  | true, false ->
+	      If (interp_boolean_expr e, 
+		  block (s1 :: bl), interp_statement ab s2)
+	  | false, true ->
+	      If (interp_boolean_expr e,
+		  interp_statement ab s1, block (s2 :: bl))
+	end
+    | s :: bl ->
+	append (interp_statement true s) (block bl)
+  in
+  List.fold_right interp_decl decls (block stats)
 
 let no_spec = 
   { requires = None; 
@@ -581,27 +655,34 @@ let interp_spec_option = function
   | None -> interp_spec no_spec
   | Some s -> interp_spec s
 
+let interp_predicate_args id args =
+  let args =
+    List.fold_right
+      (fun (id,t) args -> (id,([],Ceffect.interp_type t))::args)
+      args []
+  in
+  HeapVarSet.fold
+    (fun arg t -> (arg,Ceffect.heap_var_type arg)::t)
+    id.logic_args args
+
 let cinterp_logic_symbol id ls =
   match ls with
-    | Predicate_reads(args,locs) -> assert false (* TODO *)
+    | Predicate_reads(args,locs) -> 
+	let args = interp_predicate_args id args in
+	let ty = 
+	  List.fold_right (fun (x,t) ty -> Prod_type (x, Base_type t, ty)) 
+	    args (Base_type ([],"prop"))
+	in
+	Logic(false, id.logic_name, ty)
     | Predicate_def(args,p) -> 
-	let a = interp_predicate None "" p
-	and e = Ceffect.predicate p in
-	let args =
-	  List.fold_right
-	    (fun (id,t) args -> (id,([],Ceffect.interp_type t))::args)
-	    args []
-	in
-	let args =
-	  HeapVarSet.fold
-	  (fun arg t -> (arg,Ceffect.heap_var_type arg)::t)
-	    e args
-	in
+	let a = interp_predicate None "" p in
+	let args = interp_predicate_args id args in
 	Predicate(false,id.logic_name,args,a)
     | Function(args,ret,_) ->
 	let local_type =
 	  List.fold_right
-	    (fun (id,ty) t -> Prod_type(id,base_type (Ceffect.interp_type ty),t))
+	    (fun (id,ty) t -> 
+	       Prod_type(id,base_type (Ceffect.interp_type ty),t))
 	    args (base_type (Ceffect.interp_type ret))
 	in
 	let final_type =
@@ -684,7 +765,8 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       lprintf "translating function %s@." id.var_name;
       let tparams = interp_fun_params params in
       let pre,post = interp_spec_option spec in
-      let tblock = interp_statement block in
+      abrupt_return := None;
+      let tblock = catch_return (interp_statement false block) in
       ((Def(id.var_name,Fun(tparams,pre,tblock,post,None)))::why_code,
        interp_function_spec id spec ctype params :: why_spec,
        prover_decl)
