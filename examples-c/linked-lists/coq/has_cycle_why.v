@@ -25,9 +25,14 @@ Lemma cyclic_impl_po_1 :
   (if result
    then (forall (l2:pointer),
          (l2 = (acc tl l1) ->
+          (((exists pl1:plist, (lpath alloc tl l pl1 l1)) /\
+          (exists pl2:plist, (lpath alloc tl l pl2 l2))) /\
+          (exists pl12:plist, (lpath alloc tl l1 pl12 l2))) /\
           (forall (l1:pointer),
            (forall (l2:pointer),
-            (True ->
+            (((exists pl1:plist, (lpath alloc tl l pl1 l1)) /\
+             (exists pl2:plist, (lpath alloc tl l pl2 l2))) /\
+             (exists pl12:plist, (lpath alloc tl l1 pl12 l2)) ->
              ((~(l1 = l2) ->
                (forall (result:pointer),
                 (result = l1 ->
@@ -43,7 +48,14 @@ Lemma cyclic_impl_po_1 :
                              (forall (result:pointer),
                               (result = (acc tl l2) ->
                                (forall (result0:pointer),
-                                (result0 = (acc tl result) -> (Zwf 0 0 0))) /\
+                                (result0 = (acc tl result) ->
+                                 (((exists pl1:plist,
+                                    (lpath alloc tl l pl1 l1_0)) /\
+                                 (exists pl2:plist,
+                                  (lpath alloc tl l pl2 result0))) /\
+                                 (exists pl12:plist,
+                                  (lpath alloc tl l1_0 pl12 result0))) /\
+                                 (Zwf 0 0 0))) /\
                                (valid alloc result))) /\
                              (valid alloc l2))) /\
                            (valid alloc l1))) /\
@@ -58,7 +70,7 @@ intros; destruct result; intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 398-453 *)
+(* Why obligation from file "why/has_cycle.why", characters 594-649 *)
 Lemma cyclic_impl_po_2 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -75,6 +87,9 @@ Lemma cyclic_impl_po_2 :
   forall (l1_1: pointer),
   forall (l2_2: pointer),
   forall (Pre14: Variant1 = 0),
+  forall (Pre13: ((exists pl1:plist, (lpath alloc tl l pl1 l1_1)) /\
+                 (exists pl2:plist, (lpath alloc tl l pl2 l2_2))) /\
+                 (exists pl12:plist, (lpath alloc tl l1_1 pl12 l2_2))),
   forall (Test2: ~(l1_1 = l2_2)),
   forall (caduceus_3: pointer),
   forall (Post2: caduceus_3 = l1_1),
@@ -93,7 +108,11 @@ Lemma cyclic_impl_po_2 :
                   (forall (result:pointer),
                    (result = (acc tl l2_2) ->
                     (forall (result0:pointer),
-                     (result0 = (acc tl result) -> (Zwf 0 0 0))) /\
+                     (result0 = (acc tl result) ->
+                      (((exists pl1:plist, (lpath alloc tl l pl1 l1)) /\
+                      (exists pl2:plist, (lpath alloc tl l pl2 result0))) /\
+                      (exists pl12:plist, (lpath alloc tl l1 pl12 result0))) /\
+                      (Zwf 0 0 0))) /\
                     (valid alloc result))) /\
                   (valid alloc l2_2))) /\
                 (valid alloc l1_1))) /\
@@ -106,7 +125,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 475-530 *)
+(* Why obligation from file "why/has_cycle.why", characters 671-726 *)
 Lemma cyclic_impl_po_3 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -123,6 +142,9 @@ Lemma cyclic_impl_po_3 :
   forall (l1_1: pointer),
   forall (l2_2: pointer),
   forall (Pre14: Variant1 = 0),
+  forall (Pre13: ((exists pl1:plist, (lpath alloc tl l pl1 l1_1)) /\
+                 (exists pl2:plist, (lpath alloc tl l pl2 l2_2))) /\
+                 (exists pl12:plist, (lpath alloc tl l1_1 pl12 l2_2))),
   forall (Test2: ~(l1_1 = l2_2)),
   forall (caduceus_2: pointer),
   forall (Post3: caduceus_2 = l2_2),
@@ -138,7 +160,11 @@ Lemma cyclic_impl_po_3 :
               (forall (result:pointer),
                (result = (acc tl l2_2) ->
                 (forall (result0:pointer),
-                 (result0 = (acc tl result) -> (Zwf 0 0 0))) /\
+                 (result0 = (acc tl result) ->
+                  (((exists pl1:plist, (lpath alloc tl l pl1 l1)) /\
+                  (exists pl2:plist, (lpath alloc tl l pl2 result0))) /\
+                  (exists pl12:plist, (lpath alloc tl l1 pl12 result0))) /\
+                  (Zwf 0 0 0))) /\
                 (valid alloc result))) /\
               (valid alloc l2_2))) /\
             (valid alloc l1_1))) /\
@@ -149,7 +175,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 552-634 *)
+(* Why obligation from file "why/has_cycle.why", characters 748-830 *)
 Lemma cyclic_impl_po_4 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -166,6 +192,9 @@ Lemma cyclic_impl_po_4 :
   forall (l1_1: pointer),
   forall (l2_2: pointer),
   forall (Pre14: Variant1 = 0),
+  forall (Pre13: ((exists pl1:plist, (lpath alloc tl l pl1 l1_1)) /\
+                 (exists pl2:plist, (lpath alloc tl l pl2 l2_2))) /\
+                 (exists pl12:plist, (lpath alloc tl l1_1 pl12 l2_2))),
   forall (Test2: ~(l1_1 = l2_2)),
   forall (Pre5: (valid alloc l2_2)),
   forall (caduceus_1: pointer),
@@ -179,7 +208,11 @@ Lemma cyclic_impl_po_4 :
           (forall (result:pointer),
            (result = (acc tl l2_2) ->
             (forall (result0:pointer),
-             (result0 = (acc tl result) -> (Zwf 0 0 0))) /\
+             (result0 = (acc tl result) ->
+              (((exists pl1:plist, (lpath alloc tl l pl1 l1)) /\
+              (exists pl2:plist, (lpath alloc tl l pl2 result0))) /\
+              (exists pl12:plist, (lpath alloc tl l1 pl12 result0))) /\
+              (Zwf 0 0 0))) /\
             (valid alloc result))) /\
           (valid alloc l2_2))) /\
    (valid alloc l1_1) else (0 <> 0 <-> (cyclic alloc tl l))).
@@ -188,7 +221,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 313-769 *)
+(* Why obligation from file "why/has_cycle.why", characters 313-965 *)
 Lemma cyclic_impl_po_5 : 
   forall (l: pointer),
   forall (alloc: alloc_table),
@@ -205,33 +238,16 @@ Lemma cyclic_impl_po_5 :
   forall (l1_1: pointer),
   forall (l2_2: pointer),
   forall (Pre14: Variant1 = 0),
-  forall (Test2: ~(l1_1 = l2_2)),
-  forall (Post6: (Zwf 0 0 0)),
-  (Zwf 0 0 Variant1).
+  forall (Pre13: ((exists pl1:plist, (lpath alloc tl l pl1 l1_1)) /\
+                 (exists pl2:plist, (lpath alloc tl l pl2 l2_2))) /\
+                 (exists pl12:plist, (lpath alloc tl l1_1 pl12 l2_2))),
+  forall (Test1: l1_1 = l2_2),
+  (1 <> 0 <-> (cyclic alloc tl l)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/has_cycle.why", characters 313-769 *)
-Lemma cyclic_impl_po_6 : 
-  forall (l: pointer),
-  forall (alloc: alloc_table),
-  forall (tl: ((memory) pointer)),
-  forall (Pre16: (valid alloc l)),
-  forall (l1: pointer),
-  forall (Post5: l1 = l),
-  forall (l2: pointer),
-  forall (Post4: l2 = (any_pointer tt)),
-  forall (Pre15: (valid alloc l1)),
-  forall (l2_1: pointer),
-  forall (Post23: l2_1 = (acc tl l1)),
-  forall (Variant1: Z),
-  forall (l1_1: pointer),
-  forall (l2_2: pointer),
-  forall (Pre14: Variant1 = 0),
-  forall (Test1: l1_1 = l2_2),
-  (1 <> 0 <-> (cyclic alloc tl l)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
