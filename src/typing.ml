@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: typing.ml,v 1.1 2001-08-17 00:52:39 filliatr Exp $ *)
+(* $Id: typing.ml,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Format
 open Ident
@@ -27,7 +27,6 @@ let check_num loc t =
 
 let rec typing_term loc env = function
   | Tvar id -> 
-      eprintf "%s@\n" (Ident.string id); flush stderr;
       (match type_in_env env id with Ref v -> v | v -> v) (* SAFE *)
   | Tconst (ConstInt _) -> type_v_int
   | Tconst (ConstBool _) -> type_v_bool
@@ -84,7 +83,7 @@ let type_v_sup loc t1 t2 =
 
 let typed_var ren env (phi,r) =
   (* TODO: type variants *)
-  let a = Tvar (Ident.create "<type of variant>") in
+  let a = PTint in
   (phi,r,a)
 
 (* Function application *)

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.ml,v 1.2 2001-08-17 00:52:40 filliatr Exp $ *)
+(* $Id: util.ml,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Logic
 open Ident
@@ -12,12 +12,6 @@ open Env
 open Rename
 
 (*s Various utility functions. *)
-let map_succeed f = 
-  let rec map_f = function 
-    | [] -> []
-    |  h::t -> try (let x = f h in x :: map_f t) with Failure _ -> map_f t
-  in 
-  map_f 
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
@@ -83,18 +77,23 @@ let make_assoc_list ren env on_prime ids =
   Idset.fold
     (fun id al ->
        if is_mutable_in_env env id then
-	 (id,current_var ren id)::al
+	 (id,current_var ren id) :: al
        else if is_at id then
 	 let uid,d = un_at id in
 	   if is_mutable_in_env env uid then
 	     (match d with
-		  "" -> (id,on_prime ren uid)
-		| _  -> (id,var_at_date ren d uid))::al
+		| "" -> (id,on_prime ren uid)
+		| _  -> (id,var_at_date ren d uid)) :: al
 	   else
 	     al
        else
 	 al) 
     ids []
+
+let apply_term ren env t =
+  let ids = term_vars t in
+  let al = make_assoc_list ren env current_var ids in
+  subst_in_term al t
 
 let apply_pre ren env c =
   let ids = predicate_vars c.p_value in
@@ -186,6 +185,9 @@ let deref_type = function
 let dearray_type = function
   | Array (size,v) -> size,v
   | _ -> invalid_arg "dearray_type"
+
+let decomp_kappa c = 
+  ((c.c_result_name, c.c_result_type), c.c_effect, c.c_pre, c.c_post)
 
 let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 
@@ -309,44 +311,39 @@ and pp_binder fmt = function
 
 (* pretty-print of cc-terms (intermediate terms) *)
 
-let print_cc_term fmt c = fprintf fmt "<cc_term>"
-
-(*i
-let rec pp_cc_term = function
-  | CC_var id -> pr_id id
-  | CC_letin (_,_,bl,c,c1) ->
-      hOV 0 [< hOV 2 [< 'sTR"let ";
-		  	prlist_with_sep (fun () -> [< 'sTR"," >])
-			  (fun (id,_) -> pr_id id) bl;
-		  	'sTR" ="; 'sPC;
-		  	pp_cc_term c;
-		  	'sTR " in">];
-	       'fNL;
-	       pp_cc_term c1 >]
+let rec print_cc_term fmt = function
+  | CC_var id -> fprintf fmt "%s" (Ident.string id)
+  | CC_letin (_,bl,c,c1) ->
+      fprintf fmt "@[@[<hov 2>let ";
+      print_list fmt comma (fun fmt (id,_) -> Ident.print fmt id) bl;
+      fprintf fmt " =@ "; print_cc_term fmt c;
+      fprintf fmt " in@]@\n"; print_cc_term fmt c1; fprintf fmt "@]"
   | CC_lam (bl,c) ->
-      hOV 2 [< prlist (fun (id,_) -> [< 'sTR"["; pr_id id; 'sTR"]" >]) bl;
-	       'cUT;
-	       pp_cc_term c >]
+      fprintf fmt "@[<hov 2>";
+      print_binders fmt bl;
+      fprintf fmt "@,"; print_cc_term fmt c; fprintf fmt "@]"
   | CC_app (f,args) ->
-      hOV 2 [< 'sTR"("; 
-	       pp_cc_term f; 'sPC;
-	       prlist_with_sep (fun () -> [< 'sPC >]) pp_cc_term args;
-	       'sTR")" >]
-  | CC_tuple (_,_,cl) ->
-      hOV 2 [< 'sTR"(";
-	       prlist_with_sep (fun () -> [< 'sTR","; 'cUT >])
-		 pp_cc_term cl;
-	       'sTR")" >]
-  | CC_case (_,b,[e1;e2]) ->
-      hOV 0 [< 'sTR"if "; pp_cc_term b; 'sTR" then"; 'fNL;
-	       'sTR"  "; hOV 0 (pp_cc_term e1); 'fNL;
-	       'sTR"else"; 'fNL;
-	       'sTR"  "; hOV 0 (pp_cc_term e2) >]
+      fprintf fmt "@[<hov 2>("; 
+      print_cc_term fmt f; fprintf fmt "@ ";
+      print_list fmt pp_print_space print_cc_term args;
+      fprintf fmt ")@]"
+  | CC_tuple cl ->
+      fprintf fmt "@[<hov 2>(";
+      print_list fmt comma print_cc_term cl;
+      fprintf fmt ")@]"
+  | CC_case (b,[bl1,e1; bl2,e2]) ->
+      fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
+      hov 0 fmt (fun fmt () -> print_binders fmt bl1; print_cc_term fmt e1) ();
+      fprintf fmt "@\nelse@\n  ";
+      hov 0 fmt (fun fmt () -> print_binders fmt bl2; print_cc_term fmt e2) ();
+      fprintf fmt "@]"
   | CC_case _ ->
-      hOV 0 [< 'sTR"<Case: not yet implemented>" >]
+      fprintf fmt "<Case...>"
   | CC_expr c ->
-      hOV 0 (prterm c)
+      fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole c ->
-      [< 'sTR"(?::"; prterm c; 'sTR")" >]
-i*)
+      fprintf fmt "@[(? :@ "; print_predicate fmt c; fprintf fmt ")@]"
 
+and print_binders fmt bl =
+  print_list fmt 
+    nothing (fun fmt (id,_) -> fprintf fmt "[%s]" (Ident.string id)) bl

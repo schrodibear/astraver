@@ -1,8 +1,9 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: monad.ml,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
+(* $Id: monad.ml,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
 
+open Ident
 open Misc
 open Util
 open Logic
@@ -94,7 +95,7 @@ and output ren env ((id,v),e) =
   (prod ren env o) @ [id,tv]
 
 and input_output ren env c =
-  let ((res,v),e,_,_) = c in
+  let ((res,v),e,_,_) = decomp_kappa c in
   input ren env e, output ren env ((res,v),e)
 
 (* The function t -> \barre{t} on V and C. *)
@@ -182,6 +183,7 @@ let simple_term_of_prog = function
   | CC_var id -> Tvar id
   | _ -> assert false
 
+(*i
 let make_tuple l q ren env before = match l with
   | [e,_] when q = None -> 
       e
@@ -197,20 +199,28 @@ let make_tuple l q ren env before = match l with
 	    [ CC_hole (Term.applist (c.a_value, args)) ], (* hole *)
 	    [ c.a_value ]                     (* type of the hole *)
       in 
-      CC_tuple (dep, tl @ th, (List.map fst l) @ h)
+      CC_tuple (dep, (List.map fst l) @ h)
+i*)
 
-let result_tuple ren before env (res,v) (ef,q) =
+let result_tuple ren before env (resid,res,v) (ef,q) =
   let ids = get_writes ef in
-  let lo = 
-    (List.map (fun id -> 
-		 let id' = current_var ren id in
-		 CC_var id', trad_type_in_env ren env id) ids)
-    @ [res,v]
-  in
-  let q = abstract_post ren env (ef,q) in
-  make_tuple lo q ren env before,
-  product ren env before lo q
-
+  if ids = [] && q = None then
+    res, v
+  else 
+    let hole = match q with
+      | None -> 
+	  []
+      | Some c -> 
+	  let c = apply_post ren env before c in
+	  let c = 
+	    tsubst_in_predicate [resid, simple_term_of_prog res] c.a_value
+	  in
+	  [ CC_hole c ]
+    in
+    CC_tuple (
+      (List.map (fun id -> let id' = current_var ren id in CC_var id') ids) @
+      [res] @ hole),
+    CC_type
 
 (* [make_let_in ren env fe p (vo,q) (res,v) t] constructs the term
    
@@ -224,24 +234,24 @@ let result_tuple ren before env (res,v) (ef,q) =
 
 let let_in_pre ty p t =
   let h = p.p_value in
-  CC_letin (false, ty, [pre_name p.p_name,CC_typed_binder h], CC_hole h, t)
+  CC_letin (false, [pre_name p.p_name,CC_pred_binder h], CC_hole h, t)
 
 let multiple_let_in_pre ty hl t =
   List.fold_left (fun t h -> let_in_pre ty h t) t hl
 
 let make_let_in ren env fe p (vo,q) (res,tyres) (t,ty) =
-  let b = [res, CC_typed_binder tyres] in
+  let b = [res, CC_var_binder tyres] in
   let b',dep = match q with
     | None -> [],false
-    | Some q -> [post_name q.a_name, CC_untyped_binder],true 
+    | Some q -> [post_name q.a_name, CC_pred_binder q.a_value],true 
   in
   let bl = (binding_of_alist ren env vo) @ b @ b' in
-  let tyapp =
+(*i  let tyapp =
     let n = succ (List.length vo) in
     let name = match q with None -> product_name n | _ -> dep_product_name n in
     constant name 
-  in
-  let t = CC_letin (dep, ty, bl, fe, t) in
+  in i*)
+  let t = CC_letin (dep, bl, fe, t) in
   multiple_let_in_pre ty (List.map (apply_pre ren env) p) t
 
 
@@ -259,11 +269,11 @@ let abs_pre ren env (t,ty) pl =
 	 let_in_pre ty (apply_pre ren env p) t
        else
 	 let h = pre_name p.p_name in 
-	 CC_lam ([h,CC_typed_binder (apply_pre ren env p).p_value],t))
+	 CC_lam ([h,CC_pred_binder (apply_pre ren env p).p_value],t))
     t pl
     
 
-(* [make_block ren env finish bl] builds the translation of a block
+(* [make_block ren env finish bl] builds the translation of a block.
  * finish is the function that is applied to the result at the end of the
  * block. *)
 
@@ -280,11 +290,14 @@ let make_block ren env finish bl =
 	let ren' = push_date ren s in
 	rec_block ren' result block
     | (Statement (te,info)) :: block ->
-	let (_,tye),efe,pe,qe = info in
+	let tye = info.c_result_type in
+	let efe = info.c_effect in
+	let pe = info.c_pre in
+	let qe = info.c_post in
 	let w = get_writes efe in
 	let ren' = next ren w in
-	let id = result_id in
-	let tye = trad_ml_type_v ren env tye in
+	let id = Ident.result in
+	(*i let tye = trad_ml_type_v ren env tye in i*)
 	let t = rec_block ren' (Some (id,tye)) block in
 	make_let_in ren env te pe (current_vars ren' w,qe) (id,tye) t,
 	snd t
@@ -299,10 +312,11 @@ let make_block ren env finish bl =
  *)
 
 let eq ty e1 e2 =
-  Term.applist (constant "eq", [ty; e1; e2])
+  Tapp (Ident.t_eq, [e1; e2])
 
-let lt r e1 e2 =
-  Term.applist (r, [e1; e2])
+let lt r e1 e2 = match r with
+  | Tvar id -> Tapp (id, [e1; e2])
+  | _ -> assert false
 
 let is_recursive env = function
   | CC_var x -> 
@@ -317,55 +331,57 @@ let if_recursion env f = function
 let dec_phi ren env s svi =
   if_recursion env
     (fun (phi0,(cphi,r,_)) f -> 
-       let phi = subst_in_constr svi (subst_in_constr s cphi) in
-       let phi = (apply_pre ren env (anonymous_pre true phi)).p_value in
-       [CC_expr phi; CC_hole (lt r phi (mkVar phi0))])
+       let phi = subst_in_term svi (subst_in_term s cphi) in
+       let phi = apply_term ren env phi in
+       [CC_expr phi; CC_hole (Pterm (lt r phi (Tvar phi0)))])
 
 let eq_phi ren env s svi =
   if_recursion env
     (fun (phi0,(cphi,_,a)) f ->
-       let phi = subst_in_constr svi (subst_in_constr s cphi) in
-       let phi = (apply_pre ren env (anonymous_pre true phi)).p_value in
-       [CC_hole (eq a phi phi)])
+       let phi = subst_in_term svi (subst_in_term s cphi) in
+       let phi = apply_term ren env phi in
+       [CC_hole (Pterm (eq a phi phi))])
 
 let is_ref_binder = function 
   | (_,BindType (Ref _ | Array _)) -> true
   | _ -> false
 
 let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
-  let ((_,tvf),ef,pf,qf) = cf in
-  let (_,eapp,papp,qapp) = capp in
-  let ((_,v),e,p,q) = c in
+  let ((_,tvf),ef,pf,qf) = decomp_kappa cf in
+  let (_,eapp,papp,qapp) = decomp_kappa capp in
+  let ((_,v),e,p,q) = decomp_kappa c in
   let bl = List.filter (fun b -> not (is_ref_binder b)) bl in
   let recur = is_recursive env tf in
   let before = current_date ren in
   let ren'' = next ren' (get_writes ef) in
   let ren''' = next ren'' (get_writes eapp) in
-  let res = result_id in
+  let res = Ident.result in
   let vi,svi =
-    let ids = List.map fst bl in 
-    let s = fresh (avoid ren ids) ids in
+    let ids = List.map fst bl in
+    let av = List.fold_right Idset.add ids Idset.empty in
+    let s = fresh (avoid ren av) ids in
     List.map snd s, s
   in
-  let tyres = subst_in_constr svi (trad_ml_type_v ren env v) in
-  let t,ty = result_tuple ren''' before env (CC_var res, tyres) (e,q) in
-  let res_f = id_of_string "vf" in
+  let tyres = v in
+              (*i subst_in_constr svi (trad_ml_type_v ren env v) in i*)
+  let t,ty = result_tuple ren''' before env (res, CC_var res, CC_type) (e,q) in
+  let res_f = Ident.create "vf" in
   let inf,outf =
-    let i,o = let _,e,_,_ = cb in get_reads e, get_writes e in
+    let i,o = let _,e,_,_ = decomp_kappa cb in get_reads e, get_writes e in
     let apply_s = List.map (fun id -> try List.assoc id s with _ -> id) in
     apply_s i, apply_s o
   in
   let fe =
     let xi = List.rev (List.map snd (current_vars ren'' inf)) in
     let holes = List.map (fun x -> (apply_pre ren'' env x).p_value)
-		  (List.map (pre_app (subst_in_constr svi)) papp) in
+		  (List.map (pre_app (subst_in_predicate svi)) papp) in
     CC_app ((if recur then tf else CC_var res_f),
 	    (dec_phi ren'' env s svi tf) 
 	    @(List.map (fun id -> CC_var id) (vi @ xi))
 	    @(eq_phi ren'' env s svi tf)
 	    @(List.map (fun c -> CC_hole c) holes))
   in
-  let qapp' = option_app (named_app (subst_in_constr svi)) qapp in
+  let qapp' = option_app (named_app (subst_in_predicate svi)) qapp in
   let t = 
     make_let_in ren'' env fe [] (current_vars ren''' outf,qapp')
       (res,tyres) (t,ty)
@@ -376,16 +392,17 @@ let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
     else
       make_let_in ren' env tf pf
 	(current_vars ren'' (get_writes ef),qf)
-	(res_f,trad_ml_type_v ren env tvf) (t,ty)
+	(res_f,tvf (*i trad_ml_type_v ren env tvf i*)) (t,ty)
   in
   let rec eval_args ren = function
     | [] -> t
-    | (vx,(ta,((_,tva),ea,pa,qa)))::args ->
+    | (vx,(ta,ca)) :: args ->
+	let ((_,tva),ea,pa,qa) = decomp_kappa ca in
 	let w = get_writes ea in
 	let ren' = next ren w in
 	let t' = eval_args ren' args in
 	make_let_in ren env ta pa (current_vars ren' (get_writes ea),qa)
-	  (vx,trad_ml_type_v ren env tva) (t',ty)
+	  (vx,tva (*i trad_ml_type_v ren env tva i*)) (t',ty)
   in
   eval_args ren (List.combine vi args)
 
@@ -401,40 +418,37 @@ let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
  *                   (proj (o1,o2)), v2 [,?::q] 
  *)
 
-let make_if_case ren env ty (b,qb) (br1,br2) =
-  let id_b,ty',ty1,ty2 = match qb with
+let make_if_case ren env ty (idb,b,qb) (br1,br2) =
+  let ty1,ty2 = match qb with
     | Some q ->  
   	let q = apply_post ren env (current_date ren) q in
-    	let (name,t1,t2) = Term.destLambda q.a_value in
-	q.a_name,
-    	Term.mkLambda (name, t1, mkArrow t2 ty),
-	Term.mkApp (q.a_value, [| coq_true |]),
-	Term.mkApp (q.a_value, [| coq_false |])
+	tsubst_in_predicate [idb, Tconst (ConstBool true)] q.a_value,
+	tsubst_in_predicate [idb, Tconst (ConstBool false)] q.a_value
     | None -> assert false
   in
   let n = test_name Anonymous in
-  CC_app (CC_case (ty', b, [CC_lam ([n,CC_typed_binder ty1], br1);
-			    CC_lam ([n,CC_typed_binder ty2], br2)]),
-	  [CC_var (post_name id_b)])
+  (CC_case (b, [[n,CC_pred_binder ty1], br1;
+		[n,CC_pred_binder ty2], br2]))
 
 let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
-  let ((_,tvb),eb,pb,qb) = cb in
-  let ((_,tv1),e1,p1,q1) = c1 in
-  let ((_,tv2),e2,p2,q2) = c2 in
-  let ((_,t),e,p,q) = c in
+  let ((_,tvb),eb,pb,qb) = decomp_kappa cb in
+  let ((_,tv1),e1,p1,q1) = decomp_kappa c1 in
+  let ((_,tv2),e2,p2,q2) = decomp_kappa c2 in
+  let ((_,t),e,p,q) = decomp_kappa c in
 
   let wb = get_writes eb in
-  let resb = id_of_string "resultb" in
-  let res = result_id in
-  let tyb = trad_ml_type_v ren' env tvb in
-  let tt = trad_ml_type_v ren env t in
+  let resb = Ident.create "resultb" in
+  let res = Ident.result in
+  let tyb = tvb (*i trad_ml_type_v ren' env tvb i*) in
+  let tt = t (*i trad_ml_type_v ren env t i*) in
 
   (* une branche de if *)
-  let branch (tv_br,e_br,p_br,q_br) f_br  = 
+  let branch cbr f_br  = 
+    let (tv_br,e_br,p_br,q_br) = decomp_kappa cbr in
     let w_br = get_writes e_br in
     let ren'' = next ren' w_br in
     let t,ty = result_tuple ren'' (current_date ren') env
-		 (CC_var res,tt) (e,q) in
+		 (res,CC_var res,CC_type) (e,q) in
     make_let_in ren' env f_br p_br (current_vars ren'' w_br,q_br)
       (res,tt) (t,ty),
     ty
@@ -443,7 +457,7 @@ let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
   let t2,ty2 = branch c2 t2 in
   let ty = ty1 in
   let qb = force_bool_name qb in
-  let t = make_if_case ren env ty (CC_var resb,qb) (t1,t2) in
+  let t = make_if_case ren env ty (resb,CC_var resb,qb) (t1,t2) in
   make_let_in ren env tb pb (current_vars ren' wb,qb) (resb,tyb) (t,ty)
 
 
@@ -462,12 +476,12 @@ let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
  *              phi(x) x ? ?)
  *)
 
-let id_phi = id_of_string "phi"
-let id_phi0 = id_of_string "phi0"
+let id_phi = Ident.create "phi"
+let id_phi0 = Ident.create "phi0"
 
 let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
-  let ((_,tvb),eb,pb,qb) = cb in
-  let (_,ef,_,is) = c in
+  let ((_,tvb),eb,pb,qb) = decomp_kappa cb in
+  let ((res,_),ef,_,is) = decomp_kappa c in
 
   let ren' = next ren (get_writes ef) in
   let before = current_date ren in
@@ -477,8 +491,8 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
     let _,lo = input_output ren env c in
     product ren env before lo is 
   in
-  let resb = id_of_string "resultb" in
-  let tyb = trad_ml_type_v ren' env tvb in
+  let resb = Ident.create "resultb" in
+  let tyb = tvb (*i trad_ml_type_v ren' env tvb i*) in
   let wb = get_writes eb in
 
   (* première branche: le test est vrai => e;w *)
@@ -489,9 +503,9 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
 	     let v = List.rev (current_vars ren'' (get_writes ef)) in
 	       CC_app (CC_var id_w,
 		       [CC_expr (phi_of ren'');
-			CC_hole (lt r (phi_of ren'') (mkVar id_phi0))]
+			CC_hole (Pterm (lt r (phi_of ren'') (Tvar id_phi0)))]
 		       @(List.map (fun (_,id) -> CC_var id) v)
-		       @(CC_hole (eq a (phi_of ren'') (phi_of ren'')))
+		       @(CC_hole (Pterm (eq a (phi_of ren'') (phi_of ren''))))
 		       ::(match i with
 			    | None -> [] 
 			    | Some c -> 
@@ -504,12 +518,12 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
   (* deuxième branche: le test est faux => on sort de la boucle *)
   let t2,_ = 
     result_tuple ren' before env
-      (CC_expr (constant "tt"),constant "unit") (ef,is)
+      (res, CC_expr (Tconst ConstUnit), CC_type) (ef,is)
   in
 
   let b_al = current_vars ren' (get_reads eb) in
   let qb = force_bool_name qb in
-  let t = make_if_case ren' env ty (CC_var resb,qb) (t1,t2) in
+  let t = make_if_case ren' env ty (resb,CC_var resb,qb) (t1,t2) in
   let t = 
     make_let_in ren' env tb pb (current_vars ren' wb,qb) (resb,tyb) (t,ty) 
   in
@@ -519,20 +533,22 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
   in
   let t = 
     CC_lam ([var_name Anonymous,
-	     CC_typed_binder (eq a (mkVar id_phi0) (phi_of ren'))],t) 
+	     CC_pred_binder (Pterm (eq a (Tvar id_phi0) (phi_of ren')))],t) 
   in
   let bl = binding_of_alist ren env (current_vars ren' (get_writes ef)) in
   make_abs (List.rev bl) t
 
 
 let make_while ren env (cphi,r,a) (tb,cb) tbl (i,c) =
-  let (_,ef,_,is) = c in
-  let phi_of ren = (apply_pre ren env (anonymous_pre true cphi)).p_value in
-  let wf_a_r = Term.applist (constant "well_founded", [a; r]) in
+  let (_,ef,_,is) = decomp_kappa c in
+  let phi_of ren = apply_term ren env cphi in
+  let wf_a_r = Tapp (Ident.well_founded, [(*i a; i*) r]) in
 
   let before = current_date ren in
   let ren' = next ren (get_writes ef) in
   let al = current_vars ren' (get_writes ef) in
+  let v = CC_type in
+(*i
   let v =   
     let _,lo = input_output ren env c in
     let is = abstract_post ren' env (ef,is) in
@@ -551,21 +567,22 @@ let make_while ren env (cphi,r,a) (tb,cb) tbl (i,c) =
     Term.mkNamedProd id_phi a
       (Term.mkArrow (lt r (mkVar id_phi) (mkVar id_phi0)) v) 
   in
-  let id_w = id_of_string "loop" in
+i*)
+  let id_w = Ident.create "loop" in
   let vars = List.rev (current_vars ren (get_writes ef)) in
   let body =
     make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) 
   in
-  CC_app (CC_expr (constant "well_founded_induction"),
-	  [CC_expr a; CC_expr r;
-	   CC_hole wf_a_r;
-	   CC_expr (Term.mkNamedLambda id_phi a v);
-	   CC_lam ([id_phi0, CC_typed_binder a;
-		    id_w, CC_typed_binder tw],
+  CC_app (CC_expr (Tapp (well_founded_induction, [])),
+	  [(*i CC_expr a; i*) CC_expr r;
+	   CC_hole (Pterm wf_a_r);
+	   (*i CC_expr (Term.mkNamedLambda id_phi a v); i*)
+	   CC_lam ([id_phi0, CC_var_binder (PureType a);
+		    (*i id_w, CC_typed_binder tw i*) ],
 		   body);
 	   CC_expr (phi_of ren)]
 	  @(List.map (fun (_,id) -> CC_var id) vars)
-          @(CC_hole (eq a (phi_of ren) (phi_of ren)))
+          @(CC_hole (Pterm (eq a (phi_of ren) (phi_of ren))))
 	  ::(match i with
 	       | None -> [] 
 	       | Some c -> [CC_hole (apply_assert ren env c).a_value])) 
@@ -583,12 +600,14 @@ let make_while ren env (cphi,r,a) (tb,cb) tbl (i,c) =
  *)
 
 let make_letrec ren env (id_phi0,(cphi,r,a)) idf bl (te,ce) c =
-  let (_,ef,p,q) = c in
-  let phi_of ren = (apply_pre ren env (anonymous_pre true cphi)).p_value in
-  let wf_a_r = Term.applist (constant "well_founded", [a; r]) in
+  let (_,ef,p,q) = decomp_kappa c in
+  let phi_of ren = apply_term ren env cphi in
+  let wf_a_r = Tapp (well_founded, [(*i a; i*) r]) in
 
   let before = current_date ren in
   let al = current_vars ren (get_reads ef) in
+  let v = CC_type in
+(*i
   let v = 
     let _,lo = input_output ren env c in
     let q = abstract_post ren env (ef,q) in
@@ -608,29 +627,31 @@ let make_letrec ren env (id_phi0,(cphi,r,a)) idf bl (te,ce) c =
     Term.mkNamedProd id_phi a
       (Term.mkArrow (lt r (mkVar id_phi) (mkVar id_phi0)) v) 
   in
+i*)
   let vars = List.rev (current_vars ren (get_reads ef)) in
   let body =
     let al = current_vars ren (get_reads ef) in
     let bod = abs_pre ren env (te,v) p in
-    let bod = CC_lam ([var_name Anonymous,
-		       CC_typed_binder (eq a (mkVar id_phi0) (phi_of ren))],
-		      bod) 
+    let bod = 
+      CC_lam ([var_name Anonymous,
+	       CC_pred_binder (Pterm (eq a (Tvar id_phi0) (phi_of ren)))],
+	       bod) 
     in
     let bl' = binding_of_alist ren env al in
     make_abs (bl@(List.rev bl')) bod
   in
   let t =
-    CC_app (CC_expr (constant "well_founded_induction"),
-	    [CC_expr a; CC_expr r;
-	     CC_hole wf_a_r;
-	     CC_expr (Term.mkNamedLambda id_phi a v);
-	     CC_lam ([id_phi0, CC_typed_binder a;
-		      idf, CC_typed_binder tw],
+    CC_app (CC_expr (Tapp (well_founded_induction, [])),
+	    [(*i CC_expr a; i*) CC_expr r;
+	     CC_hole (Pterm wf_a_r);
+	     (*i CC_expr (Term.mkNamedLambda id_phi a v); i*)
+	     CC_lam ([id_phi0, CC_var_binder (PureType a);
+		      (*i idf, CC_typed_binder tw i*) ],
 		     body);
 	     CC_expr (phi_of ren)]
 	    @(List.map (fun (id,_) -> CC_var id) bl)
 	    @(List.map (fun (_,id) -> CC_var id) vars)
-            @[CC_hole (eq a (phi_of ren) (phi_of ren))]
+            @[CC_hole (Pterm (eq a (phi_of ren) (phi_of ren)))]
 	   )
   in
   (* on abstrait juste par rapport aux variables de ef *)

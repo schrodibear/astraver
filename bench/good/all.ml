@@ -19,4 +19,15 @@ external f : fun (a:int)(b:int ref) returns c:int
 					    writes b
 					    pre a=0 and b=0
 					    post b > 0 end
-let p5 = (f 0 x)
+let p5 = { x = 0 } (f 0 x)
+
+let p6 = 
+  let x = ref 0 in
+  begin
+    x := !x + 1;
+    x := !x + 2;
+    assert { x = 3 };
+    x := !x + 3
+  end
+  { x = 6 }
+

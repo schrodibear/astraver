@@ -39,7 +39,12 @@ val default : t
 val access : t
 val store : t
 val annot_bool : t
+val well_founded : t
+val well_founded_induction : t
 
 val p_or : t
 val p_and : t
 val p_not : t
+
+val is_relation : t -> bool
+val is_arith : t -> bool

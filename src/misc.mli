@@ -1,11 +1,13 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.mli,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
+(* $Id: misc.mli,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
 
 (* Some misc. functions *)
 
 open Logic
+
+val map_succeed : ('a -> 'b) -> 'a list -> 'b list
 
 val reraise_with_loc : Loc.t -> ('a -> 'b) -> 'a -> 'b
 
@@ -49,6 +51,9 @@ val tsubst_in_term : (Ident.t * term) list -> term -> term
 val subst_in_predicate : (Ident.t * Ident.t) list -> predicate -> predicate
 val tsubst_in_predicate : (Ident.t * term) list -> predicate -> predicate
 
+val equals_true : term -> term
+val equals_false : term -> term
+
 (* CIC terms *)
 
 (*i
@@ -82,6 +87,9 @@ open Format
 
 val print_list : formatter -> (formatter -> unit -> unit) -> 
   (formatter -> 'a -> unit) -> 'a list -> unit
+val comma : formatter -> unit -> unit
+val nothing : formatter -> unit -> unit
+val hov : int -> formatter -> (formatter -> 'a -> unit) -> 'a -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit

@@ -57,7 +57,17 @@ let default = "_"
 let access = "access"
 let store = "store"
 let annot_bool = "annot_bool"
+let well_founded = "well_founded"
+let well_founded_induction = "well_founded_induction"
 
 let p_and = "and"
 let p_or = "or"
 let p_not = "not"
+
+let is_relation id = 
+  id == t_lt || id == t_le || id == t_gt || id == t_ge ||
+  id == t_eq || id == t_noteq
+
+let is_arith id =
+  id == t_add || id == t_sub || id == t_mul || id == t_div || id == t_neg
+

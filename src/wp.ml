@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: wp.ml,v 1.1 2001-08-17 00:52:40 filliatr Exp $ *)
+(* $Id: wp.ml,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Ident
 open Logic
@@ -111,22 +111,20 @@ let normalize_boolean ren env b =
       | Some _ ->
 	  (* il y a une annotation : on se contente de lui forcer un nom *)
 	  let q = force_bool_name q in
-	  { desc = b.desc; pre = b.pre; post = q; loc = b.loc;
-	    info = { env = b.info.env; kappa = { k with c_post = q } } }
+	  { b with post = q;
+  	           info = { b.info with kappa = { k with c_post = q } } }
       | None -> begin
 	  (* il n'y a pas d'annotation : on cherche à en mettre une *)
 	  match b.desc with
 	    | Expression c ->
-		b (* TODO *)
-(*i
-	    	let c' = Tapp (Ident.annot_bool, [c]) in
-		let ty = type_of_expression ren env c' in
-		let (_,q') = dest_sig ty in
-		let q' = Some { a_value = q'; a_name = Name (bool_name()) } in
-		{ desc = Expression c'; 
-		  pre = b.pre; post = q'; loc = b.loc;
-		  info = { env = b.info.env; kappa = ((res, v),ef,p,q') } }
-i*)
+		let q = 
+		  Pif (Pterm (Tvar Ident.result),
+		       Pterm (equals_true c),
+		       Pterm (equals_false c))
+		in
+		let q = Some { a_value = q; a_name = Name (bool_name ()) } in
+		{ b with post = q; 
+                         info = { b.info with kappa = { k with c_post = q } } }
 	    | _ -> b
 	end
   else
@@ -194,7 +192,7 @@ let add_decreasing env inv (var,r) lab bl =
 
 let post_last_statement env top q bl =
   match List.rev bl with
-      Statement e :: rem when annotation_candidate e -> 
+    | Statement e :: rem when annotation_candidate e -> 
 	List.rev ((Statement (post_if_none_up env top q e)) :: rem)
     | _ -> bl
 

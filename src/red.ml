@@ -1,45 +1,40 @@
-(***********************************************************************)
-(*  v      *   The Coq Proof Assistant  /  The Coq Development Team    *)
-(* <O___,, *        INRIA-Rocquencourt  &  LRI-CNRS-Orsay              *)
-(*   \VV/  *************************************************************)
-(*    //   *      This file is distributed under the terms of the      *)
-(*         *       GNU Lesser General Public License Version 2.1       *)
-(***********************************************************************)
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: red.ml,v 1.1 2001-08-17 00:52:39 filliatr Exp $ *)
+(* $Id: red.ml,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
 
-open Pp
 open Ast
 open Misc
+open Util
 
 let rec cc_subst subst = function
   | CC_var id as c -> 
       (try CC_expr (List.assoc id subst) with Not_found -> c)
-  | CC_letin (b,ty,bl,c1,c2) ->
-      CC_letin (b, real_subst_in_constr subst ty, cc_subst_binders subst bl,
+  | CC_letin (b,bl,c1,c2) ->
+      CC_letin (b, cc_subst_binders subst bl,
 		cc_subst subst c1, cc_subst (cc_cross_binders subst bl) c2)
   | CC_lam (bl, c) ->
       CC_lam (cc_subst_binders subst bl, 
 	      cc_subst (cc_cross_binders subst bl) c)
   | CC_app (c, cl) ->
       CC_app (cc_subst subst c, List.map (cc_subst subst) cl)
-  | CC_tuple (b, tl, cl) ->
-      CC_tuple (b, List.map (real_subst_in_constr subst) tl,
-		List.map (cc_subst subst) cl)
-  | CC_case (ty, c, cl) ->
-      CC_case (real_subst_in_constr subst ty, cc_subst subst c,
-	       List.map (cc_subst subst) cl)
+  | CC_tuple cl ->
+      CC_tuple (List.map (cc_subst subst) cl)
+  | CC_case (c, cl) ->
+      CC_case (cc_subst subst c,
+	       List.map (fun (bl,e) -> 
+			   (cc_subst_binders subst bl,
+			    cc_subst (cc_cross_binders subst bl) e)) cl)
   | CC_expr c ->
-      CC_expr (real_subst_in_constr subst c)
+      CC_expr (tsubst_in_term subst c)
   | CC_hole ty ->
-      CC_hole (real_subst_in_constr subst ty)
+      CC_hole (tsubst_in_predicate subst ty)
 
 and cc_subst_binders subst = List.map (cc_subst_binder subst)
 
 and cc_subst_binder subst = function
-  | id,CC_typed_binder c -> id,CC_typed_binder (real_subst_in_constr subst c)
+  | id,CC_var_binder c -> id, CC_var_binder (type_v_rsubst subst c)
+  | id,CC_pred_binder c -> id, CC_pred_binder (tsubst_in_predicate subst c)
   | b -> b
 
 and cc_cross_binders subst = function
@@ -58,35 +53,36 @@ let is_eta_redex bl al =
     List.for_all2
       (fun (id,_) t -> match t with CC_var id' -> id=id' | _ -> false)
       bl al
-  with
-      Invalid_argument("List.for_all2") -> false
+  with Invalid_argument("List.for_all2") -> 
+    false
 
 let rec red = function
-  | CC_letin (_, _, [id,_], CC_expr c1, e2) ->
+  | CC_letin (_, [id,_], CC_expr c1, e2) ->
       red (cc_subst [id,c1] e2)
-  | CC_letin (dep, ty, bl, e1, e2) ->
+  | CC_letin (dep, bl, e1, e2) ->
       begin match red e2 with
-	| CC_tuple (false,tl,al) ->
+	| CC_tuple al ->
 	    if is_eta_redex bl al then
 	      red e1
 	    else
-	      CC_letin (dep, ty, bl, red e1,
-			CC_tuple (false,tl,List.map red al))
-	| e -> CC_letin (dep, ty, bl, red e1, e)
+	      CC_letin (dep, bl, red e1,
+			CC_tuple (List.map red al))
+	| e -> 
+	    CC_letin (dep, bl, red e1, e)
       end
   | CC_lam (bl, e) ->
       CC_lam (bl, red e)
   | CC_app (e, al) ->
       CC_app (red e, List.map red al)
-  | CC_case (ty, e1, el) ->
-      CC_case (ty, red e1, List.map red el)
-  | CC_tuple (dep, tl, al) ->
-      CC_tuple (dep, tl, List.map red al)
+  | CC_case (e1, el) ->
+      CC_case (red e1, List.map (fun (bl,e) -> (bl, red e)) el)
+  | CC_tuple al ->
+      CC_tuple (List.map red al)
   | e -> e
 
 
 (* How to reduce uncomplete proof terms when they have become constr *)
-
+(*i
 open Term
 open Reduction
 
@@ -113,3 +109,4 @@ let red_cci c =
   (*i let c = strong bin_app c in i*) 
   strong whd_programs (Global.env ()) Evd.empty c
 
+i*)

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: env.mli,v 1.1 2001-08-15 21:08:51 filliatr Exp $ *)
+(* $Id: env.mli,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Logic
 open Types
@@ -65,7 +65,7 @@ val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
 (* local environnements also contains a list of recursive functions
  * with the associated variant *)
 
-val add_recursion : Ident.t * (Ident.t*variant) -> local_env -> local_env
+val add_recursion : Ident.t * (Ident.t * variant) -> local_env -> local_env
 val find_recursion : Ident.t -> local_env -> Ident.t * variant
 
 (* We also maintain a table of the currently edited proofs of programs

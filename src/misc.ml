@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.ml,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
+(* $Id: misc.ml,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Ident
 open Logic
@@ -9,6 +9,13 @@ open Logic
 (* debug *)
 
 let debug = ref false
+
+let map_succeed f = 
+  let rec map_f = function 
+    | [] -> []
+    |  h::t -> try (let x = f h in x :: map_f t) with Failure _ -> map_f t
+  in 
+  map_f 
 
 let option_app f = function None -> None | Some x -> Some (f x)
 
@@ -112,6 +119,7 @@ and collect_pred s = function
   | Pterm t -> collect_term s t
   | Pimplies (a, b) | Pand (a, b) | Por (a, b) -> 
       collect_pred (collect_pred s a) b
+  | Pif (a, b, c) -> collect_pred (collect_pred (collect_pred s a) b) c
   | Pnot a -> collect_pred s a
 
 let term_vars = collect_term Idset.empty
@@ -126,6 +134,9 @@ let rec tsubst_in_predicate alist = function
   | Pterm t -> Pterm (tsubst_in_term alist t)
   | Pimplies (a, b) -> Pimplies (tsubst_in_predicate alist a,
 				 tsubst_in_predicate alist b)
+  | Pif (a,b,c) -> Pif (tsubst_in_predicate alist a,
+			tsubst_in_predicate alist b,
+			tsubst_in_predicate alist c)
   | Pand (a,b) -> Pand (tsubst_in_predicate alist a,
 			tsubst_in_predicate alist b)
   | Por (a,b) -> Por (tsubst_in_predicate alist a,
@@ -137,6 +148,23 @@ let subst_in_term alist =
 let subst_in_predicate alist = 
   tsubst_in_predicate (List.map (fun (id,id') -> (id, Tvar id')) alist)
 
+let equals_true = function
+  | Tapp (id, _) as t when is_relation id -> t
+  | t -> Tapp (t_eq, [t; Tconst (ConstBool true)])
+
+let negate id =
+  if id == t_lt then t_ge
+  else if id == t_le then t_gt 
+  else if id == t_gt then t_le
+  else if id == t_ge then t_lt
+  else if id == t_eq then t_noteq
+  else if id == t_noteq then t_eq
+  else assert false
+
+let equals_false = function
+  | Tapp (id, l) when is_relation id -> Tapp (negate id, l)
+  | t -> Tapp (t_eq, [t; Tconst (ConstBool false)])
+
 (*s Pretty-print *)
 
 open Format
@@ -146,8 +174,35 @@ let rec print_list fmt sep print = function
   | [x] -> print fmt x
   | x :: r -> print fmt x; sep fmt (); print_list fmt sep print r
 
-let print_term fmt t = fprintf fmt "<term>"
-let print_predicate fmt p = fprintf fmt "<predicate>"
+let comma fmt () = fprintf fmt ",@ "
+let nothing fmt () = ()
+
+let hov n fmt f x = pp_open_hovbox fmt n; f fmt x; pp_close_box fmt ()
+
+let rec print_term fmt = function
+  | Tconst _ -> fprintf fmt "<const>"
+  | Tvar id -> fprintf fmt "%s" (Ident.string id)
+  | Tapp (id, tl) -> 
+      fprintf fmt "%s(" (Ident.string id);
+      print_list fmt comma print_term tl; fprintf fmt ")"
+
+let rec print_predicate fmt = function
+  | Pterm t -> print_term fmt t
+  | Pimplies (a, b) -> 
+      fprintf fmt "("; print_predicate fmt a; fprintf fmt " ->@ ";
+      print_predicate fmt b; fprintf fmt ")"
+  | Pif (a, b, c) -> 
+      fprintf fmt "(if"; print_predicate fmt a; fprintf fmt " then@ ";
+      print_predicate fmt b; fprintf fmt " else@ ";
+      print_predicate fmt c; fprintf fmt ")"
+  | Pand (a, b) ->
+      fprintf fmt "("; print_predicate fmt a; fprintf fmt " and@ ";
+      print_predicate fmt b; fprintf fmt ")"
+  | Por (a, b) ->
+      fprintf fmt "("; print_predicate fmt a; fprintf fmt " or@ ";
+      print_predicate fmt b; fprintf fmt ")"
+  | Pnot a ->
+      fprintf fmt "(not "; print_predicate fmt a; fprintf fmt ")"
 
 (*i
 (* functions on CIC terms *)

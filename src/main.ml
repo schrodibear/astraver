@@ -10,11 +10,11 @@ open Util
 let debug = ref false
 
 let interp_program id p =
-  if !debug then eprintf "interpreting program %s@\n" (Ident.string id);
+  if !debug then eprintf "=== interpreting program %s@\n" (Ident.string id);
   (* 1. globalization *)
   let p = Db.db_prog p in
   (* 2. typing with effects *)
-  if !debug then eprintf "typing with effects...@\n";
+  if !debug then eprintf "=== typing with effects...@\n";
   let env = Env.empty in
   let ren = initial_renaming env in
   let p = Typing.states ren env p in
@@ -25,20 +25,32 @@ let interp_program id p =
   (* 3. w.p. *)
   let p = Wp.propagate ren p in
   (* 4. functionalization *)
-  if !debug then eprintf "functionalization...@\n";
+  if !debug then eprintf "=== functionalization...@\n";
   let cc = Mlize.trans ren p in
   let cc = Red.red cc in
   if !debug then begin print_cc_term err_formatter cc;eprintf "@\n" end;
-  () (* TODO *)
+  (* 5. VCG *)
+  Vcg.vcg (Ident.string id) cc
 
 let interp_decl = function
-  | Program (id, p) -> interp_program id p
-  | External (id, v) -> Env.add_global id v None
+  | Program (id, p) ->
+      let ol = interp_program id p in
+      Pvs.print_obligations std_formatter ol
+  | External (id, v) -> 
+      Env.add_global id v None
 
-let deal_channel cin =
+let deal_channel base cin =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
-  List.iter interp_decl d
+  Pvs.begin_theory std_formatter base;
+  List.iter interp_decl d;
+  Pvs.end_theory std_formatter
+
+let deal_file f =
+  let base = Filename.chop_extension (Filename.basename f) in
+  let c = open_in f in 
+  deal_channel base c;
+  close_in c
 
 let parse_args () =
   let files = ref [] in
@@ -52,9 +64,9 @@ let parse_args () =
 let main () =
   let files = parse_args () in
   if files = [] then
-    deal_channel stdin
+    deal_channel "Input" stdin
   else
-    List.iter (fun f -> let c = open_in f in deal_channel c; close_in c) files
+    List.iter deal_file files
 
 let rec explain_exception fmt = function
   | Stream.Error s -> 

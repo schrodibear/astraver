@@ -1,11 +1,16 @@
 
 (*s Verification Conditions Generator. *)
 
-type sequent_element =
+open Types
+open Logic
+open Ast
+
+type context_element =
   | Svar of Ident.t * type_v
   | Spred of predicate
 
-type sequent = sequent_element list
+type sequent = context_element list * predicate
 
-val vcg : cc_term -> sequent list
+type obligation = string * sequent
 
+val vcg : string -> cc_term -> obligation list

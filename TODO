@@ -1,0 +1,6 @@
+
+ - variant = identifier ?
+
+ - arguments which are types
+
+ - quick cleaning on the obligations (including discharging by assumption)

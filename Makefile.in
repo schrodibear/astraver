@@ -29,7 +29,8 @@ OFLAGS   = $(INCLUDES) -I @CAMLP4LIB@
 CMO      = src/loc.cmo src/ident.cmo src/misc.cmo src/effect.cmo	\
            src/error.cmo						\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
-           src/db.cmo src/typing.cmo src/wp.cmo src/monad.cmo src/main.cmo
+           src/db.cmo src/typing.cmo src/wp.cmo src/monad.cmo		\
+	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 
 # main targets

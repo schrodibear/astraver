@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.mli,v 1.2 2001-08-17 00:52:40 filliatr Exp $ *)
+(* $Id: util.mli,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Logic
 open Misc
@@ -30,6 +30,7 @@ val make_before_after : predicate -> predicate
 val traverse_binders : local_env -> (type_v binder) list -> local_env
 val initial_renaming : local_env -> Rename.t
 
+val apply_term : Rename.t -> local_env -> term -> term
 val apply_pre : Rename.t -> local_env -> precondition -> precondition
 val apply_post : Rename.t -> local_env -> string -> postcondition ->
   postcondition
@@ -50,7 +51,12 @@ val term_now_vars : local_env -> term -> Ident.set
 val deref_type : type_v -> type_v
 val dearray_type : type_v -> term * type_v
 
+val decomp_kappa : type_c -> 
+  (Ident.t * type_v) * Effect.t * precondition list * postcondition option
+
 (* Functions to translate array operations *)
+
+val array_info : Rename.t -> local_env -> Ident.t -> term * type_v
 
 val make_raw_access :
   Rename.t -> local_env -> Ident.t * Ident.t -> term -> term

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: parser.ml4,v 1.2 2001-08-17 00:52:38 filliatr Exp $ *)
+(* $Id: parser.ml4,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
 
 open Logic
 open Rename
@@ -154,7 +154,7 @@ EXTEND
     | f = FLOAT -> ConstFloat (float_of_string f) ] ]
   ;
   predicate:
-  [ [ a = predicate; "->"; b = predicate0 -> Pimplies (a,b)
+  [ [ a = predicate0; "->"; b = predicate -> Pimplies (a,b)
     | a = predicate0 -> a ] ]
   ; 
   predicate0:
@@ -391,7 +391,7 @@ i*)
       | ">"  -> Ident.t_gt
       | ">=" -> Ident.t_ge
       | "="  -> Ident.t_eq
-      | "<>" -> Ident.t_noteq ] ] 
+      | "/=" -> Ident.t_noteq ] ] 
   ;
 
   (* Other entries (invariants, etc.) *)
