@@ -26,7 +26,9 @@ parameter any_pointer: unit -> {} pointer { true }
 
 (* pointer arithmetic *)
 
+
 parameter null : pointer
+
 logic block_length: alloc_table,pointer -> int
 logic base_addr: pointer -> addr
 logic offset: pointer -> int
@@ -50,26 +52,22 @@ parameter neq_pointer :
 parameter alloc : alloc_table ref
 
 predicate valid(a:alloc_table, p:pointer) = 
-	p <> null 
-	and 0 <= offset(p)
+	0 <= offset(p)
 	and offset(p) < block_length(a,p)
 
 predicate valid_index(a:alloc_table, p:pointer, i:int) =
-	p <> null 
-	and 0 <= offset(p)+i 
+	0 <= offset(p)+i 
 	and offset(p)+i < block_length(a,p)
 
 predicate valid_range(a:alloc_table, p:pointer, i:int, j:int) =
-	p <> null 
-	and 0 <= offset(p)+i 
+	0 <= offset(p)+i 
 	and i <= j
 	and offset(p)+j < block_length(a,p)
 
-(*
 axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
-*)
+
 axiom shift_zero :
   forall p:pointer. shift(p,0) = p
 
@@ -84,14 +82,6 @@ axiom base_addr_shift :
 axiom block_length_shift :
   forall a:alloc_table. forall p:pointer. forall i:int.
   block_length(a,shift(p,i)) = block_length(a,p)
-
-axiom shift_null :
-  forall p:pointer. forall i:int.
-    p=null -> shift(p,i)=null
-
-axiom shift_not_null :
-  forall p:pointer. forall i:int.
-    p<>null -> shift(p,i)<>null
 
 axiom base_addr_block_length :
   forall a:alloc_table. forall p1:pointer. forall p2:pointer.
@@ -255,6 +245,16 @@ axiom unchanged_range_elim :
     forall a:int. forall b:int.
        unchanged(p1,range_loc(p2,a,b)) ->
  	(forall i:int. a <= i <= b -> p1 <> shift(p2,i))  
+
+axiom unchanged_all_intro :
+  forall p1:pointer.forall p2:pointer.
+	base_addr(p1) <> base_addr(p2) -> 
+  	       unchanged(p1,all_loc(p2))	
+
+axiom unchanged_all_elim :
+  forall p1:pointer.forall p2:pointer.
+       unchanged(p1,all_loc(p2)) ->
+ 	(base_addr(p1) <> base_addr(p2))  
 
 axiom assigns_trans :
   forall a:alloc_table. forall l:assign_loc. 

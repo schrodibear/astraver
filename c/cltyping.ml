@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.73 2005-01-24 15:20:17 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.74 2005-02-02 14:02:48 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -163,7 +163,7 @@ and type_term_node loc env = function
 			term_type = ty2 } in
 	    Tbinop (t1, Badd, mt2), ty1
 	| (Tpointer _ | Tarray _), (Tpointer _ | Tarray _) ->
-	    Tbinop (t1, Bsub, t2), ty1 (* TODO check types *)
+	    Tbinop (t1, Bsub, t2), c_int (* TODO check types *)
 	| _ -> error loc "invalid operands to binary -"
       end
   | PLbinop (t1, (Bmul | Bdiv as op), t2) ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.132 2005-01-31 16:21:19 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.133 2005-02-02 14:02:48 marche Exp $ i*)
 
 
 open Format
@@ -85,27 +85,29 @@ let interp_rel (t1 : nctype nterm) t2 r =
   | _ ->
       (match r with Eq -> t1,"eq",t2 | Neq -> t1,"neq",t2 | _ -> assert false)
 
-let interp_term_bin_op ty op =
-  match ty.ctype_node, op with
-  | (Tenum _ | Tint _), Badd -> "add_int"
-  | (Tenum _ | Tint _), Bsub -> "sub_int"
-  | (Tenum _ | Tint _), Bmul -> "mul_int"
-  | (Tenum _ | Tint _), Bdiv -> "div_int"
-  | (Tenum _ | Tint _), Bmod -> "dmod_int"
-  | Tfloat _, Badd -> "add_real"
-  | Tfloat _, Bsub -> "sub_real"
-  | Tfloat _, Bmul -> "mul_real"
-  | Tfloat _, Bdiv -> "div_real"
-  | (Tpointer _ | Tarray _), Badd -> "shift"
-  | (Tpointer _ | Tarray _), Bsub -> "sub_pointer"
-  | Tfloat _, Bmod -> assert false
-  | Tarray (_, _), (Bmod|Bdiv|Bmul) -> assert false
-  | Tpointer _, (Bmod|Bdiv|Bmul) -> assert false
-  | Tfun (_, _), _-> assert false 
-  | Tunion _ , _ -> assert false
-  | Tstruct _ , _-> assert false
-  | Tvar _ , _-> assert false 
-  | Tvoid , _-> assert false
+let interp_term_bin_op ty1 ty2 op =
+  match ty1.ctype_node, ty2.ctype_node, op with
+  | (Tenum _ | Tint _), _, Badd -> "add_int"
+  | (Tenum _ | Tint _), _, Bsub -> "sub_int"
+  | (Tenum _ | Tint _), _, Bmul -> "mul_int"
+  | (Tenum _ | Tint _), _, Bdiv -> "div_int"
+  | (Tenum _ | Tint _), _, Bmod -> "dmod_int"
+  | Tfloat _, _, Badd -> "add_real"
+  | Tfloat _, _, Bsub -> "sub_real"
+  | Tfloat _, _, Bmul -> "mul_real"
+  | Tfloat _, _, Bdiv -> "div_real"
+  | (Tpointer _ | Tarray _), _, Badd -> "shift"
+  | (Tpointer _ | Tarray _), (Tenum _ | Tint _), Bsub -> assert false (* normalized at typing *)
+  | (Tpointer _ | Tarray _), (Tpointer _ | Tarray _), Bsub -> "sub_pointer"
+  | (Tpointer _ | Tarray _), _, Bsub -> assert false
+  | Tfloat _, _, Bmod -> assert false
+  | Tarray (_, _), _, (Bmod|Bdiv|Bmul) -> assert false
+  | Tpointer _, _, (Bmod|Bdiv|Bmul) -> assert false
+  | Tfun (_, _), _, _-> assert false 
+  | Tunion _ , _, _ -> assert false
+  | Tstruct _ , _, _-> assert false
+  | Tvar _ , _, _-> assert false 
+  | Tvoid , _, _-> assert false
 
 let interp_term_un_op ty op = match ty.ctype_node, op with
   | (Tenum _ | Tint _), Uminus -> "neg_int"
@@ -131,7 +133,7 @@ let rec interp_term label old_label t =
 	else LVar n
     | NTold t ->	interp_term (Some old_label) old_label t
     | NTbinop (t1, op, t2) ->
-	LApp(interp_term_bin_op t.nterm_type op,[f t1;f t2])
+	LApp(interp_term_bin_op t1.nterm_type t2.nterm_type op,[f t1;f t2])
     | NTbase_addr t -> 
 	LApp("base_addr",[f t])
     | NTblock_length t -> 
