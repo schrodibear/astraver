@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.51 2002-10-01 14:45:59 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.52 2002-10-09 18:00:45 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -451,11 +451,14 @@ and print_binder fmt (id,b) =
     | CC_untyped_binder -> 
 	()
 
-let rec print_pattern fmt = function
+let rec print_cc_pattern fmt = function
   | PPvariable (id, _) -> 
       Ident.print fmt id
   | PPcons (id, pl) -> 
-      fprintf fmt "(%a %a)" Ident.print id (print_list space print_pattern) pl
+      fprintf fmt "(%a %a)" 
+	Ident.print id (print_list space print_cc_pattern) pl
+
+let print_case_pred fmt (x,_) = Ident.print fmt x
 
 let rec print_cc_term fmt = function
   | CC_var id -> 
@@ -476,9 +479,9 @@ let rec print_cc_term fmt = function
       fprintf fmt "@\nelse@\n  ";
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
-  | CC_case (e,pl) ->
-      fprintf fmt "@[<v>match %a with@\n  @[%a@]@\nend@]" print_cc_term e
-	(print_list newline print_case) pl
+  | CC_case (x,qx,pl) ->
+      fprintf fmt "@[<v>match %a %a with@\n  @[%a@]@\nend@]" Ident.print x
+	(print_option print_case_pred) qx (print_list newline print_case) pl
   | CC_term c ->
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole c ->
@@ -490,7 +493,7 @@ and print_binders fmt bl =
   print_list nothing (fun fmt b -> fprintf fmt "[%a]" print_binder b) fmt bl
 
 and print_case fmt (p,e) =
-  fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_pattern p print_cc_term e
+  fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term e
 
 let print_subst fmt =
   Idmap.iter

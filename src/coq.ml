@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.64 2002-10-09 16:43:05 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.65 2002-10-09 18:00:45 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -310,8 +310,13 @@ let rec print_cc_term fmt = function
       fprintf fmt "@\nelse@\n  ";
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
-  | CC_case (e, pl) ->
-      fprintf fmt "case (todo)"
+  | CC_case (x, None, pl) ->
+      fprintf fmt "@[Cases %a of@\n%a@\nend@]" Ident.print x
+	(print_list newline print_case) pl
+  | CC_case (x, Some (qx,n), pl) ->
+      fprintf fmt "@[Cases (decomp%d %a %a) of@\n%a@\nend@]" 
+	n Ident.print x Ident.print qx 
+	(print_list newline print_case) pl
   | CC_letin (_,[id,_],c,c1) ->
       fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
       Ident.print id print_cc_term c print_cc_term c1
@@ -325,6 +330,10 @@ let rec print_cc_term fmt = function
       print_proof fmt pr
   | CC_type t ->
       print_cc_type fmt t
+
+and print_case fmt (p,e) =
+  fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term e
+
       
 let reprint_obligation fmt (id,s) =
   fprintf fmt "@[<hov 2>Lemma %s : @\n%a.@]@\n" id print_sequent s

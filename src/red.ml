@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.25 2002-09-18 06:12:19 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.26 2002-10-09 18:00:45 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -71,8 +71,8 @@ let rec uniq_cc fv s = function
       CC_if (uniq_cc fv s a, uniq_cc fv s b, uniq_cc fv s c)
   | CC_tuple (al, po) ->
       CC_tuple (List.map (uniq_cc fv s) al, option_app (uniq_tt fv s) po)
-  | CC_case (e,pl) ->
-      CC_case (uniq_cc fv s e, List.map (fun (p,e) -> (p, uniq_cc fv s e)) pl)
+  | CC_case (x, qx, pl) ->
+      CC_case (x, qx, List.map (fun (p,e) -> (p, uniq_cc fv s e)) pl)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
   | CC_hole ty ->
@@ -182,8 +182,8 @@ let rec red sp s cct =
 	     CC_app (rf, ra))
   | CC_if (a, b, c) ->
       CC_if (red sp s a, red sp s b, red sp s c)
-  | CC_case (e, pl) ->
-      CC_case (red sp s e, List.map (fun (p,e) -> (p, red sp s e)) pl)
+  | CC_case (x, qx, pl) ->
+      CC_case (x, qx, List.map (fun (p,e) -> (p, red sp s e)) pl)
   | CC_tuple (al, po) ->
       CC_tuple (List.map (red sp s) al,	option_app (cc_type_subst s) po)
   | CC_term c ->

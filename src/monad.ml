@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.52 2002-10-09 16:43:06 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.53 2002-10-09 18:00:45 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -328,7 +328,8 @@ let gen_compose isapp info1 e1 info2 e2 ren =
 	let add_hyp q = abs_post (post_exn x q) in
 	exn_pattern x res1 x1, option_fold add_hyp q1 (unit info2 r ren')
       in
-      CC_case (CC_var res1, 
+      let cp = match b' with [q,_] -> Some (q, List.length x1) | _ -> None in
+      CC_case (res1, cp,
 	       (val_pattern (res1, tv1) x1, 
 		option_fold (fun (q,_) -> abs_post q) q1 (e2 res1 ren')) ::
 	       (List.map exn_branch x1))
