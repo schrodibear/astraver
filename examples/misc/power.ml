@@ -6,8 +6,14 @@ parameter x : int
 parameter n,m,y : int ref
 
 external div2 : int -> int
+pvs "div2(x:int) : int = floor(x/2)"
 
 external is_odd : n:int -> { } bool { if result then Zodd(n) else Zeven(n) }
+pvs "is_odd : [int -> bool] = odd?"
+pvs "Zodd : [int -> bool] = odd?"
+pvs "Zeven : [int -> bool] = even?"
+
+pvs "Zpower : [int, int -> int] = ^"
 
 let power1 =
   { n >= 0 }

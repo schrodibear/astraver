@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.17 2002-05-07 15:53:24 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.18 2002-07-01 13:29:42 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -75,6 +75,15 @@ let rec print_pure_type fmt = function
       fprintf fmt "[int -> "; print_pure_type fmt v; fprintf fmt "]"
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
+let infix_relation id =
+  if id == t_lt then "<" 
+  else if id == t_le then "<="
+  else if id == t_gt then ">"
+  else if id == t_ge then ">="
+  else if id == t_eq || id == t_eq_int then "="
+  else if id == t_neq || id == t_neq_int then "/="
+  else assert false
+
 let print_predicate fmt p =
   let rec print0 = function
     | Pif (a, b, c) -> 
@@ -91,19 +100,26 @@ let print_predicate fmt p =
     | Pand (a, b) -> print2 a; fprintf fmt " AND@ "; print3 b
     | p -> print3 p
   and print3 = function
-    | Pvar id -> Ident.print fmt id
+    | Pvar id -> 
+	Ident.print fmt id
+    | Papp (id, [t]) when id == well_founded ->
+	fprintf fmt "well_founded?(%a)" print_term t
+    | Papp (id, [a;b]) when is_relation id ->
+	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
     | Papp (id, l) -> 	
 	fprintf fmt "%s(@[" (Ident.string id);
 	print_list (fun fmt () -> fprintf fmt ",@ ") print_term fmt l;
 	fprintf fmt "@])"
-    | Pnot p -> fprintf fmt "NOT "; print3 p
+    | Pnot p -> 
+	fprintf fmt "NOT "; print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[FORALL (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 p'; fprintf fmt "@])"
-    | p -> fprintf fmt "("; print0 p; fprintf fmt ")"
+    | p -> 
+	fprintf fmt "("; print0 p; fprintf fmt ")"
   in
   print0 p
 
@@ -139,15 +155,18 @@ let print_obligations fmt ol =
 
 let begin_theory fmt th =
   fprintf fmt "%s: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  unit: TYPE = int@\n@\n  unit: unit = 0@\n@\n"
+  fprintf fmt "  why: LIBRARY = \"../../lib/pvs\"@\n  importing why@@why@\n@\n"
     
 let end_theory fmt th =
   fprintf fmt "END %s@\n" th
 
+let print_parameter fmt id v =
+  fprintf fmt "  %s: VAR @[%a@]@\n@\n" id print_cc_type v
 
 type elem = 
   | Verbatim of string
   | Obligations of obligation list
+  | Parameter of string * cc_type
 
 let queue = Queue.create ()
 
@@ -157,11 +176,12 @@ let push_verbatim s = Queue.add (Verbatim s) queue
 
 let push_obligations ol = Queue.add (Obligations ol) queue
 
-let push_parameter id v = failwith "todo: Pvs.push_parameter"
+let push_parameter id v = Queue.add (Parameter (id,v)) queue
 
 let output_elem fmt = function
   | Verbatim s -> fprintf fmt "  %s@\n@\n" s
   | Obligations ol -> print_obligations fmt ol
+  | Parameter (id, v) -> print_parameter fmt id v
 
 let output_file fwe =
   let f = fwe ^ "_why.pvs" in

@@ -8,6 +8,9 @@ WHYOPTIONS=--valid
 %.vo: %.v
 	coqc -I ../../lib/coq $<
 
+%_why.pvs: %.ml $(WHY)
+	$(WHY) --pvs $(WHYOPTIONS) $<
+
 clean::
 	rm -f *~ *.vo
 
