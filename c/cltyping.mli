@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.20 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cltyping.mli,v 1.21 2004-10-19 07:35:02 filliatr Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -37,6 +37,8 @@ val c_float : tctype
 val c_string : tctype
 val c_array : 'a ctype -> 'a ctype
 val c_pointer : 'a ctype -> 'a ctype
+
+val sizeof : Loc.t -> Cast.tctype -> int64
 
 val eval_const_expr : Cast.texpr -> int64
 

@@ -14,11 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.mli,v 1.3 2004-10-18 08:04:48 filliatr Exp $ i*)
+(*i $Id: ctyping.mli,v 1.4 2004-10-19 07:35:02 filliatr Exp $ i*)
 
 (* Typing C programs *)
 
 val type_file : Cast.file -> Cast.tfile
 
-val sizeof : Loc.t -> Cast.tctype -> int64
 

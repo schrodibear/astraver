@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.104 2004-10-18 11:17:28 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.105 2004-10-19 07:35:02 filliatr Exp $ i*)
 
 
 open Format
@@ -503,7 +503,7 @@ let rec interp_expr e =
 	      unsupported "cast"
 	end
     | TEsizeof(t) -> 
-	Cte (Prim_int (Int64.to_int (Ctyping.sizeof e.texpr_loc t)))
+	Cte (Prim_int (Int64.to_int (Cltyping.sizeof e.texpr_loc t)))
 
 and interp_boolean_expr e =
   match e.texpr_node with
