@@ -1,5 +1,12 @@
 #!/bin/sh
 
+FILES="array assigns break call clash clash_alloc clash_redef \
+    continue coord \
+    copy dowhile invariants ifs logic_cast \
+    param passing purse queue rec ref ref_glob search see \
+    sizeof \
+    struct switch enum separation3 separation"
+
 # benchmark for caduceus
 export CADUCEUSLIB=`pwd`/../../lib/why
 
@@ -111,12 +118,23 @@ echo "C interp (good)"
 cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 parsing="../../../bin/caduceus.opt"
-for f in array assigns break call clash clash_alloc clash_redef \
-    continue coord \
-    copy dowhile invariants ifs logic_cast \
-    param passing purse queue rec ref ref_glob search see \
-    sizeof \
-    struct switch enum separation3 separation ; do
+
+rm -f simplify/*_why.sx.all
+for f in $FILES; do
+    echo -n "  Generating simplify VCG for $f.c... "
+    if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
+        make -f $f.makefile simplify/${f}_why.sx.all > /tmp/caduceus.tmp 2>&1
+	echo "ok"
+    else
+	echo "caduceus FAILED (rejected a good file) :"
+	cat /tmp/caduceus.tmp
+	exit 1
+    fi
+done
+../../../bin/dp.opt -timeout 10 simplify/*_why.sx.all || true
+
+
+for f in $FILES; do
     echo -n "  $f.c... "
     rm -f coq/caduceus_spec_why.v
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
