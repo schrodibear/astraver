@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.61 2004-03-25 10:37:22 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.62 2004-03-25 13:05:15 filliatr Exp $ i*)
 
 
 open Format
@@ -65,6 +65,8 @@ let interp_term_bin_op ty op =
   | CTfloat _, Bsub -> "sub_float"
   | CTfloat _, Bmul -> "mul_float"
   | CTfloat _, Bdiv -> "div_float"
+  | (CTpointer _ | CTarray _), Badd -> "shift"
+  | (CTpointer _ | CTarray _), Bsub -> unsupported "logic pointer sub"
   | _ -> assert false
 
 let interp_term_un_op ty op = match ty.ctype_node, op with
@@ -187,12 +189,18 @@ let interp_bin_op = function
   | Badd_int -> "add_int"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
+  | Bdiv_int -> "div_int"
+  | Bmod_int -> "mod_int"
   | Blt_int -> "lt_int"
   | Bgt_int -> "gt_int"
   | Ble_int -> "le_int"
   | Bge_int -> "ge_int"
   | Beq_int -> "eq_int"
   | Bneq_int -> "neq_int" 
+  | Badd_float -> "add_float"
+  | Bsub_float -> "sub_float"
+  | Bmul_float -> "mul_float"
+  | Bdiv_float -> "div_float"
   | Blt_float -> "lt_float"
   | Bgt_float -> "gt_float"
   | Ble_float -> "le_float"
@@ -205,7 +213,16 @@ let interp_bin_op = function
   | Bge_pointer -> "ge_pointer"
   | Beq_pointer -> "eq_pointer"
   | Bneq_pointer -> "neq_pointer" 
-  | _ -> unsupported "binary operator"
+  | Badd_pointer_int -> "shift_"
+  | Bsub_pointer -> "sub_pointer_"
+  (* not yet supported *)
+  | Bbw_and | Bbw_xor | Bbw_or 
+  | Bshift_left | Bshift_right ->
+      unsupported "binary operator"
+  (* should not happen *)
+  | Badd | Bsub | Bmul | Bdiv | Bmod 
+  | Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor ->
+      assert false
 
 let int_one = Cte(Prim_int 1)
 let int_minus_one = Cte(Prim_int (-1))
@@ -511,7 +528,7 @@ and interp_address e = match e.texpr_node with
   | TEdot ({texpr_node = TEunary (Ustar, e1)}, f)
   | TEdot (e1, f)
   | TEarrow (e1, f) ->
-      begin match e1.texpr_type.ctype_node with
+      begin match e.texpr_type.ctype_node with
 	| CTenum _ | CTint _ | CTfloat _ -> 
   	    interp_expr e1
 	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->

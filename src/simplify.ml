@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.15 2004-03-24 07:40:37 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.16 2004-03-25 13:05:15 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -62,7 +62,6 @@ let prefix id =
   else if id == t_mul_int then "*"
   else if id == t_div_int then "int_div"
   else if id == t_mod_int then "int_mod"
-  else if id == t_neg_int then "-"
   (* float ops *)
   else if is_float_comparison id || is_float_arith id || id == t_float_of_int 
   then
@@ -92,6 +91,8 @@ let rec print_term fmt = function
   | Tapp (id, [a; b; c]) when id == store ->
       fprintf fmt "@[(store@ %a@ %a@ %a)@]" 
 	print_term a print_term b print_term c
+  | Tapp (id, [t]) when id == t_neg_int ->
+      fprintf fmt "@[(- 0 %a)@]" print_term t
   | Tapp (id, tl) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, tl) ->

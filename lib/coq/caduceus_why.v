@@ -101,9 +101,32 @@ Admitted.
       (~((base_addr p1) = (base_addr p2)) -> ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
+(*Why axiom*) Lemma neq_offset_neq_shift :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      (((offset p1) + i) <> ((offset p2) + j) ->
+       ~((shift p1 i) = (shift p2 j))))))).
+Admitted.
+
+(*Why axiom*) Lemma valid_range_valid_shift :
+  (forall (a:alloc),
+   (forall (p:pointer),
+    (forall (i:Z),
+     (forall (j:Z),
+      (forall (k:Z),
+       ((valid_range a p i j) -> (i <= k /\ k <= j -> (valid a (shift p k))))))))).
+Admitted.
+
 (*Why*) Parameter shift_ :
   forall (p: pointer), forall (i: Z),
   (sig_1 pointer (fun (result: pointer)  => (result = (shift p i)))).
+
+(*Why*) Parameter sub_pointer_ :
+  forall (p1: pointer), forall (p2: pointer),
+  forall (H: (base_addr p1) = (base_addr p2)),
+  (sig_1 Z (fun (result: Z)  => (result = ((offset p1) - (offset p2))))).
 
 (*Why logic*) Definition acc :
   forall (A32:Set), ((memory) A32) -> pointer -> A32.

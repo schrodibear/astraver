@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.51 2004-03-24 16:52:17 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.52 2004-03-25 13:05:15 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -352,7 +352,7 @@ and type_expr_node loc env = function
 	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
 	    TEbinary (e1, Badd_pointer_int, e2), ty1
 	| (CTenum _ | CTint _), (CTpointer _ | CTarray _) ->
-	    TEbinary (e1, Badd_int_pointer, e2), ty2
+	    TEbinary (e2, Badd_pointer_int, e1), ty2
 	| _ -> error loc "invalid operands to binary +"
       end
   | CEbinary (e1, Bsub, e2) ->
@@ -365,9 +365,11 @@ and type_expr_node loc env = function
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Bsub ty, e2), ty
 	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
-	    TEbinary (e1, Bsub_pointer_int, e2), ty1
+	    let me2 = { e2 with texpr_node = TEunary (Uminus, e2);
+			  texpr_type = ty2 } in
+	    TEbinary (e1, Badd_pointer_int, me2), ty1
 	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
-	    TEbinary (e1, Bsub_pointer, e2), ty2
+	    TEbinary (e1, Bsub_pointer, e2), c_int (* TODO check types *)
 	| _ -> error loc "invalid operands to binary -"
       end
   | CEbinary (e1, (Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
@@ -408,8 +410,7 @@ and type_expr_node loc env = function
 		 |Bneq_pointer|Beq_pointer
 		 |Bneq_float|Beq_float|Bge_float|Ble_float|Bgt_float|Blt_float
 		 |Bneq_int|Beq_int|Bge_int|Ble_int|Bgt_int|Blt_int
-		 |Bsub_pointer|Bsub_pointer_int
-		 |Badd_int_pointer|Badd_pointer_int), _) ->
+		 |Bsub_pointer|Badd_pointer_int), _) ->
       assert false
   | CEcall (e, el) ->
       let e = type_expr env e in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.29 2004-03-25 10:37:22 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.30 2004-03-25 13:05:15 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -106,7 +106,37 @@ and type_term_node loc env = function
 	| CTpointer ty | CTarray (ty, _) -> Tunop (Ustar, t), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
-  | PLbinop (t1, (Badd | Bsub | Bmul | Bdiv as op), t2) ->
+  | PLbinop (t1, Badd, t2) ->
+      let t1 = type_term env t1 in
+      let ty1 = t1.term_type in
+      let t2 = type_term env t2 in
+      let ty2 = t2.term_type in
+      begin match ty1.ctype_node, ty2.ctype_node with
+	| (CTenum _ | CTint _ | CTfloat _), (CTenum _ | CTint _ | CTfloat _) ->
+	    Tbinop (t1, Badd, t2), max_type ty1 ty2
+	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
+	    Tbinop (t1, Badd, t2), ty1
+	| (CTenum _ | CTint _), (CTpointer _ | CTarray _) ->
+	    Tbinop (t2, Badd, t1), ty2
+	| _ -> 
+	    error loc "invalid operands to binary +"
+      end
+  | PLbinop (t1, Bsub, t2) ->
+      let t1 = type_term env t1 in
+      let ty1 = t1.term_type in
+      let t2 = type_term env t2 in
+      let ty2 = t2.term_type in
+      begin match ty1.ctype_node, ty2.ctype_node with
+	| (CTenum _ | CTint _ | CTfloat _), (CTenum _ | CTint _ | CTfloat _) ->
+	    Tbinop (t1, Bsub, t2), max_type ty1 ty2
+	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
+	    let mt2 = { term_node = Tunop (Uminus, t2); term_type = ty2 } in
+	    Tbinop (t1, Badd, mt2), ty1
+	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
+	    Tbinop (t1, Bsub, t2), ty1 (* TODO check types *)
+	| _ -> error loc "invalid operands to binary -"
+      end
+  | PLbinop (t1, (Bmul | Bdiv as op), t2) ->
       let t1 = type_num_term env t1 in
       let t2 = type_num_term env t2 in
       Tbinop (t1, op, t2), max_type t1.term_type t2.term_type

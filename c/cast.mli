@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.40 2004-03-23 12:54:53 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.41 2004-03-25 13:05:15 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -82,8 +82,6 @@ type binary_operator =
   | Badd_float | Bsub_float | Bmul_float | Bdiv_float 
   | Blt_float | Bgt_float | Ble_float | Bge_float | Beq_float | Bneq_float 
   | Badd_pointer_int (* pointer + int *) 
-  | Badd_int_pointer (* int + pointer *)
-  | Bsub_pointer_int (* pointer - int *)
   | Bsub_pointer     (* pointer - pointer *)
   | Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
   | Beq_pointer | Bneq_pointer
