@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.54 2002-10-14 09:44:16 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.55 2002-10-16 13:46:19 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -199,10 +199,16 @@ and occur_arrow id bl c = match bl with
   | (_, (BindSet | Untyped)) :: bl' -> 
       occur_arrow id bl' c
 
-let forall x v p =
-  let n = Ident.bound x in
-  let p = subst_in_predicate (subst_onev x n) p in
-  Forall (x, n, mlize_type v, p)
+let forall x v p = match v with
+  (* particular case: $\forall b:bool. Q(b) = Q(true) and Q(false)$ *)
+  | PureType PTbool ->
+      let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
+      let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
+      pand (simplify ptrue) (simplify pfalse)
+  | _ ->
+      let n = Ident.bound x in
+      let p = subst_in_predicate (subst_onev x n) p in
+      Forall (x, n, mlize_type v, p)
 
 let foralls =
   List.fold_right

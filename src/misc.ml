@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.51 2002-10-01 14:45:59 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.52 2002-10-16 13:46:19 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -380,6 +380,8 @@ let pand a b =
   if a = Ptrue then b else if b = Ptrue then a else
   if a = Pfalse || b = Pfalse then Pfalse else
   Pand (a, b)
+
+let pands = List.fold_left pand Ptrue
 
 let por a b =
   if a = Ptrue || b = Ptrue then Ptrue else

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.61 2002-10-15 13:56:35 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.62 2002-10-16 13:46:19 filliatr Exp $ i*)
 
 open Ident
 open Error
@@ -41,6 +41,26 @@ let saturate_post k a q =
 let need_a_post p = 
   post p = None && match p.desc with Lam _ | Rec _ -> false | _ -> true
 
+(*s Weakest precondition of an annotated program:
+    $wp(e{Q'}, Q) = forall y,v. Q' => Q$ 
+
+    When [e] may raise exceptions:
+    $wp(e{Q'|Q'1|...Q'k}, Q|Q1|...Qk) = (forall y,v. Q' => Q) and ...
+    and (forall y,x. Q'k => Qk)$ *)
+
+let abstract_wp (q',ql') (q,ql) res out =
+  assert (List.length ql' = List.length ql);
+  let quantify a' a res =
+    let vars = match res with Some b -> b :: out | None -> out in
+    foralls vars (Pimplies (a'.a_value, a.a_value)) 
+  in
+  let quantify_h (x',a') (x,a) =
+    assert (x' = x);
+    let pt = find_exception x in
+    quantify a' a (option_app (fun t -> (result, PureType t)) pt)
+  in
+  pands (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
+
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
 
@@ -57,12 +77,10 @@ let rec wp p q =
   let w = option_app (named_app (erase_label lab)) w in
   let p = if need_a_post p then force_post env q0 p else p in
   let w = match postp, q with
-    | Some ({a_value=q'}, []), Some ({a_value=q}, []) ->
-	let vars = (result, result_type p) :: (output p) in
-	let w = foralls vars (Pimplies (q', q)) in
+    | Some q', Some q ->
+	let res = (result, result_type p) in
+	let w = abstract_wp q' q res (output p) in
 	Some (anonymous (erase_label lab w))
-    | Some _, Some _ ->
-	assert false
     | _ -> 
 	w
   in
@@ -107,19 +125,12 @@ and wp_desc info d q =
 	let q2 = saturate_post e2.info w1 q in
 	let e'2,w2 = wp e2 q2 in
 	TabAff (ck, x, e'1, e'2), w2
-    (* conditional: two cases depending on [p1.post] *)
+    (* conditional: two cases *)
     | If (p1, p2, p3) ->
 	let p'2,w2 = wp p2 (filter_post p2.info q) in
 	let p'3,w3 = wp p3 (filter_post p3.info q) in
-	(match post p1, w2, w3 with
-	   | Some _ as q1, Some {a_value=q2}, Some {a_value=q3} -> 
-	       (* $wp(if p1 then p2 else p3, q) = 
-		  (q1(true) => wp(p2, q)) and (q1(false) => wp(p3, q))$ *)
-	       let q1t,q1f = decomp_boolean q1 in
-	       let w = Pand (Pimplies (q1t, q2), Pimplies (q1f, q3)) in
-	       let p'1,_ = wp p1 None in
-	       If (p'1, p'2, p'3), (create_postval w)
-	   | None, Some {a_value=q2}, Some {a_value=q3} -> 
+	(match w2, w3 with
+	   | Some {a_value=q2}, Some {a_value=q3} -> 
 	       (* $wp(if p1 then p2 else p3, q) = 
 		  wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
@@ -165,8 +176,9 @@ and wp_desc info d q =
 	Rec (f, bl, v, var, e'), None
     | While (b, inv, var, e) ->
 	let b',_ = wp b None in
-	let q = while_post_block info.env inv var e in
-	let e',_ = wp e (Some q) in
+	let a = while_post_block info.env inv var e in
+	let q = saturate_post e.info (Some a) q in
+	let e',_ = wp e q in
 	While (b', inv, var, e'), None
     (* $wp(raise E, _, R) = R$ *)
     | Raise (id, None) ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: annot.ml,v 1.1 2002-10-15 09:05:53 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.2 2002-10-16 13:46:19 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -43,10 +43,10 @@ let while_post_block env inv (phi,_,r) e =
   let decphi = Papp (r, [phi; put_label_term env lab phi]) in
   match inv with
     | None -> 
-	(anonymous decphi, [])
+	anonymous decphi
     | Some i -> 
-	({ a_value = pand i.a_value decphi; 
-	   a_name = Name (post_name_from i.a_name) }, [])
+	{ a_value = pand i.a_value decphi; 
+	  a_name = Name (post_name_from i.a_name) }
 
 (* misc. *)
 
