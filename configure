@@ -999,7 +999,7 @@ else
 fi
 
     if test "$COQDEP" = true ; then
-	echo "configure: warning: Cannot find coqdep." 1>&2
+	{ echo "configure: error: Cannot find coqdep." 1>&2; exit 1; }
     fi
     COQLIB=`coqc -where`
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.2 2003-09-16 15:56:39 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.3 2003-10-21 15:55:35 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -94,6 +94,19 @@ let rec print_term fmt = function
 and print_terms fmt tl = 
   print_list space print_term fmt tl
 
+let external_type = function
+  | PTexternal _ | PTarray (PTexternal _) -> true
+  | _ -> false
+
+let has_type ty fmt id = match ty with
+  | PTexternal ty ->
+      fprintf fmt "(EQ (IS%a %a) |@@true|)" Ident.print ty Ident.print id
+  | PTarray (PTexternal ty) ->
+      fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
+	Ident.print ty Ident.print id
+  | _ -> 
+      assert false
+
 let rec print_predicate fmt = function
   | Ptrue ->
       fprintf fmt "TRUE"
@@ -126,6 +139,11 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(OR@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(NOT@ %a)@]" print_predicate a
+  | Forall (_, id, n, ty, p) when external_type ty -> 
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
+	Ident.print id' (has_type ty) id' print_predicate p'
   | Forall (_,id,n,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
@@ -135,10 +153,27 @@ let rec print_predicate fmt = function
       let p' = subst_in_predicate (subst_onev n id') p in
       fprintf fmt "@[(EXISTS (%a)@ %a)@]" Ident.print id' print_predicate p'
 
+let cc_external_type = function
+  | Cc.TTpure ty -> external_type ty
+  | Cc.TTarray (Cc.TTpure (PTexternal _)) -> true
+  | _ -> false
+
+let cc_has_type ty fmt id = match ty with
+  | Cc.TTpure ty when external_type ty ->
+      has_type ty fmt id
+  | Cc.TTarray (Cc.TTpure (PTexternal ty)) ->
+      fprintf fmt "(FORALL (k) (EQ (IS%a (select %a k)) |@@true|))" 
+	Ident.print ty Ident.print id
+  | _ -> 
+      assert false
+
 let print_sequent fmt (hyps,concl) =
   let rec print_seq fmt = function
     | [] ->
 	print_predicate fmt concl
+    | Svar (id, ty) :: hyps when cc_external_type ty -> 
+	fprintf fmt "@[(FORALL (%a) (IMPLIES %a@ %a))@]" 
+	  Ident.print id (cc_has_type ty) id print_seq hyps
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id print_seq hyps
     | Spred (_,p) :: hyps -> 
