@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.138 2005-02-18 14:38:59 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.139 2005-02-23 13:03:46 filliatr Exp $ i*)
 
 
 open Format
@@ -190,6 +190,8 @@ let rec interp_term label old_label t =
 	      f t
 	  | Tfloat _, (Tenum _ | Tint _) ->
 	      LApp ("real_of_int", [f t])
+	  | (Tenum _ | Tint _), Tfloat _ ->
+	      LApp ("int_of_real", [f t])
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      f t
 	  | _ -> 
