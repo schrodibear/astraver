@@ -22,7 +22,7 @@ struct S *ps;
 int g() {
   T *p;
   ps = &s;
-  p = &s.t;
+  p = &(s.t);
   ps->t.x = 1;
   return s.t.x;
 }

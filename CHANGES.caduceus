@@ -1,9 +1,14 @@
 Note: These are the changes for Caduceus.
 
+version 0.69, December 16th, 2004
+=================================
+
+ o automatic invariants for expressing the so-called 'separation' of
+   global variables
  o automatic addition of invariants for constant values. new option
    -closed to assume a closed program, i.e where all files 
    are given, allowing more invariants 
- o labeled predicates with syntax "id: predicate" and lowest precedence
+ o labeled predicates with syntax "id:: predicate" and lowest precedence
    (labels are not interpreted; they are passed to Why and then to provers)
 
 version 0.68, November 30th, 2004

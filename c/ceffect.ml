@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.69 2004-12-15 16:03:46 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.70 2004-12-16 16:12:09 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -55,7 +55,7 @@ let rec pointer_heap_var ty =
 	let v,_ = pointer_heap_var ty in
 	(v ^ "P", "pointer")
     | Tstruct _ 
-    | Tunion _ -> "pointer", "pointer" (* OK? *)
+    | Tunion _ -> "pointer", "pointer" 
     | Tfun _ -> assert false (* bad typing ! *)
 
 let memory_type t = ([t],"memory")
@@ -391,7 +391,7 @@ and assign_expr e = match e.nexpr_node with
 and address_expr e = match e.nexpr_node with
   | NEvar v -> 
       begin match e.nexpr_type.Ctypes.ctype_node with
-	| Tstruct _ | Tunion _ -> ef_empty
+	| Tstruct _ | Tunion _ -> assert false (* ef_empty *)
 	| _ -> ef_empty (* unsupported "& operator" *)
       end
   | NEstar  e1 ->
@@ -670,7 +670,8 @@ let decl d =
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
 	  match ty.Ctypes.ctype_node with
-	    | Tstruct _ | Tarray _ ->
+	    | Tstruct _ -> assert false
+	    | Tarray _ ->
 		lprintf "adding implicit invariant for validity of %s@." 
 		  v.var_name;
 		let id = "separation_" ^ v.var_name in

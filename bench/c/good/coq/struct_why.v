@@ -46,13 +46,14 @@ Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 691-703 *)
+(* Why obligation from file "why/struct.why", characters 720-732 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (valid_s alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
+                 (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   (valid alloc s).
@@ -60,13 +61,14 @@ Proof.
 unfold valid_s; intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 727-740 *)
+(* Why obligation from file "why/struct.why", characters 756-769 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (valid_s alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
+                 (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -77,13 +79,14 @@ unfold valid_s; intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 745-769 *)
+(* Why obligation from file "why/struct.why", characters 774-798 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (valid_s alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
+                 (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -97,14 +100,15 @@ unfold valid_s; intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 710-769 *)
+(* Why obligation from file "why/struct.why", characters 739-798 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (x: ((memory) Z)),
-  forall (Pre11: (valid alloc ps) /\ (valid_s alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (separation_intern_s s) /\
+                 (valid_s alloc t s)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),

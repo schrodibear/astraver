@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/all.why", characters 123-266 *)
+(* Why obligation from file "why/all.why", characters 124-204 *)
 Lemma f2_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -14,7 +14,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 305-448 *)
+(* Why obligation from file "why/all.why", characters 243-323 *)
 Lemma f3_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -25,7 +25,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 565-611 *)
+(* Why obligation from file "why/all.why", characters 440-486 *)
 Lemma f4_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -40,7 +40,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 737-771 *)
+(* Why obligation from file "why/all.why", characters 615-649 *)
 Lemma f5_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -53,7 +53,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1193-1336 *)
+(* Why obligation from file "why/all.why", characters 732-812 *)
 Lemma f6_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x = 1),
@@ -64,7 +64,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1444-1444 *)
+(* Why obligation from file "why/all.why", characters 920-920 *)
 Lemma f7a_impl_po_1 : 
   forall (x: Z),
   forall (Test2: x = 0),
@@ -73,7 +73,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1451-1451 *)
+(* Why obligation from file "why/all.why", characters 927-927 *)
 Lemma f7a_impl_po_2 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -83,7 +83,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1376-1471 *)
+(* Why obligation from file "why/all.why", characters 852-950 *)
 Lemma f7a_impl_po_3 : 
   forall (x: Z),
   forall (Pre1: x = 0),
@@ -94,7 +94,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1580-1580 *)
+(* Why obligation from file "why/all.why", characters 1059-1059 *)
 Lemma f7b_impl_po_1 : 
   forall (x: Z),
   forall (Pre1: x <> 0),
@@ -104,7 +104,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1587-1587 *)
+(* Why obligation from file "why/all.why", characters 1066-1066 *)
 Lemma f7b_impl_po_2 : 
   forall (x: Z),
   forall (Test1: x <> 0),
@@ -113,7 +113,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1511-1607 *)
+(* Why obligation from file "why/all.why", characters 990-1089 *)
 Lemma f7b_impl_po_3 : 
   forall (x: Z),
   forall (Pre1: x <> 0),
@@ -124,42 +124,56 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1780-1781 *)
+(* Why obligation from file "why/all.why", characters 1325-1353 *)
 Lemma t1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
-  forall (Pre3: (acc intP (shift t 0)) = 1 /\ (valid_range alloc t 0 2)),
-  (forall (result:pointer),
-   (result = (shift t 0) ->
-    (forall (result0:Z),
-     (result0 = (acc intP result) -> result0 = (acc intP (shift t 0)))) /\
-    (valid alloc result))).
+  forall (Pre3: (acc intP (shift t 0)) = 1 /\ (valid_t alloc t)),
+  forall (aux_1: pointer),
+  forall (Post2: aux_1 = (shift t 0)),
+  (valid alloc aux_1).
 Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 1646-1831 *)
+(* Why obligation from file "why/all.why", characters 1325-1353 *)
 Lemma t1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
-  forall (Pre3: (acc intP (shift t 0)) = 1 /\ (valid_range alloc t 0 2)),
+  forall (Pre3: (acc intP (shift t 0)) = 1 /\ (valid_t alloc t)),
+  forall (aux_1: pointer),
+  forall (Post2: aux_1 = (shift t 0)),
+  forall (Pre1: (valid alloc aux_1)),
+  forall (result: Z),
+  forall (Post4: result = (acc intP aux_1)),
+  result = (acc intP (shift t 0)).
+Proof.
+intuition.
+Save.
+
+(* Why obligation from file "why/all.why", characters 1236-1376 *)
+Lemma t1_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (t: pointer),
+  forall (Pre3: (acc intP (shift t 0)) = 1 /\ (valid_t alloc t)),
   forall (y0: Z),
   forall (Post1: y0 = (acc intP (shift t 0))),
   y0 = 1.
 Proof.
 intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/all.why", characters 2138-2311 *)
+(* Why obligation from file "why/all.why", characters 1673-1846 *)
 Lemma t2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre4: (x = 0 /\ (acc intP (shift t 0)) = 1) /\
-                (valid_range alloc t 0 2)),
+  forall (Pre4: (x = 0 /\ (acc intP (shift t 0)) = 1) /\ (valid_t alloc t)),
   forall (caduceus_1: pointer),
   forall (Post12: caduceus_1 = t),
   forall (caduceus: Z),
@@ -176,14 +190,13 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 2581-2699 *)
+(* Why obligation from file "why/all.why", characters 2109-2227 *)
 Lemma t3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre4: (x = 0 /\ (acc intP (shift t 1)) = 1) /\
-                (valid_range alloc t 0 2)),
+  forall (Pre4: (x = 0 /\ (acc intP (shift t 1)) = 1) /\ (valid_t alloc t)),
   forall (caduceus_1: pointer),
   forall (Post10: caduceus_1 = t),
   forall (x0: Z),
@@ -198,14 +211,13 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 2972-2994 *)
+(* Why obligation from file "why/all.why", characters 2462-2484 *)
 Lemma t4_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre4: (x = 2 /\ (acc intP (shift t 2)) = 3) /\
-                (valid_range alloc t 0 2)),
+  forall (Pre4: (x = 2 /\ (acc intP (shift t 2)) = 3) /\ (valid_t alloc t)),
   forall (caduceus1: pointer),
   forall (Post8: caduceus1 = (shift t x)),
   (valid alloc caduceus1).
@@ -213,14 +225,13 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "why/all.why", characters 3118-3312 *)
+(* Why obligation from file "why/all.why", characters 2608-2802 *)
 Lemma t4_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
   forall (x: Z),
-  forall (Pre4: (x = 2 /\ (acc intP (shift t 2)) = 3) /\
-                (valid_range alloc t 0 2)),
+  forall (Pre4: (x = 2 /\ (acc intP (shift t 2)) = 3) /\ (valid_t alloc t)),
   forall (caduceus1: pointer),
   forall (Post8: caduceus1 = (shift t x)),
   forall (Pre3: (valid alloc caduceus1)),
