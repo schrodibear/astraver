@@ -64,6 +64,8 @@ WHYVO=@WHYLIBCOQ@/Why.vo
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
+MIZARFILES = lib/mizar/why.voc lib/mizar/why.miz
+
 GENERATED = src/version.ml src/parser.ml \
 	    src/clexer.ml src/cparser.ml src/cparser.mli \
 	    intf/hilight.ml tools/why2html.ml
@@ -159,7 +161,7 @@ src/logic.ml: src/logic.mli
 # installation
 ##############
 
-install: install-binary install-man install-coq-@COQ@ install-pvs-@PVS@
+install: install-binary install-man install-coq-@COQ@ install-pvs-@PVS@ install-mizar-@MIZAR@
 
 install-binary: $(BINARY) $(WHY2HTML)
 	mkdir -p $(BINDIR)
@@ -180,6 +182,10 @@ install-pvs-yes:
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSLIB)/why
 
+install-mizar-no:
+install-mizar-yes:
+	cp $(MIZARFILES) @MIZARLIB@/mml
+
 local: $(STATICBINARY) $(WHY2HTML) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
@@ -187,6 +193,7 @@ local: $(STATICBINARY) $(WHY2HTML) $(VO)
 	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
 	mkdir -p $(PVSLIB)/why
 	cp $(PVSFILES) $(PVSLIB)/why
+	cp $(MIZARFILES) $(MIZFILES)/mml
 	cp -f doc/*.1 $$HOME/man/man1
 
 demons: $(STATICBINARY) doc/manual.ps
@@ -282,7 +289,8 @@ FILES =src/*.ml* intf/*.ml* tools/*.ml* \
        Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
-	examples/Makefile* examples/*/*.mlw examples/*/*.v examples/*/*.sx \
+	examples/Makefile* \
+	examples/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/good*/*.mlw bench/good*/*.c bench/good*/*.v \
 	lib/coq*/*.v lib/pvs/why.* lib/mizar/*.*
@@ -318,7 +326,7 @@ linux: binary
 
 BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO) \
 	doc/why.1 doc/manual.ps \
-	lib/coq*/*.v lib/pvs/why.*
+	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.*
 
 binary: $(BINARYFILES)
 	mkdir -p export/$(BINARYNAME)

@@ -1,6 +1,7 @@
 
-version 1.31
+version 1.32
 ============
+  o Mizar article in lib/mizar/why.miz (installed by "make install")
   o Mizar output (with option --mizar)
 
 version 1.3, September 17th, 2003

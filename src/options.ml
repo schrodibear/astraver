@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.24 2003-09-17 21:08:07 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.25 2003-09-22 15:57:48 filliatr Exp $ i*)
 
 open Format
 
@@ -28,7 +28,7 @@ let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref "Require Why."
-let mizar_preamble_ = ref ""
+let mizar_preamble_ = ref None
 let werror_ = ref false
 
 let ocaml_ = ref false
@@ -147,7 +147,7 @@ let files =
 	usage (); exit 1
     | ("-mizarpreamble" | "--mizarpreamble" | 
        "-mizar-preamble" | "--mizar-preamble") 
-      :: s :: args -> mizar_preamble_ := s; parse args
+      :: s :: args -> mizar_preamble_ := Some s; parse args
     | ("-mizarpreamble" | "--mizarpreamble" | 
        "-mizar-preamble"|"--mizar-preamble") :: [] ->
 	usage (); exit 1

@@ -1065,7 +1065,61 @@ else
     PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`/lib
 fi
 
+# Mizar
+# Extract the first word of "mizf", so it can be a program name with args.
+set dummy mizf; ac_word=$2
+echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
+echo "configure:1073: checking for $ac_word" >&5
+if eval "test \"`echo '$''{'ac_cv_prog_MIZF'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  if test -n "$MIZF"; then
+  ac_cv_prog_MIZF="$MIZF" # Let the user override the test.
+else
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
+  ac_dummy="$PATH"
+  for ac_dir in $ac_dummy; do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      ac_cv_prog_MIZF="mizf"
+      break
+    fi
+  done
+  IFS="$ac_save_ifs"
+  test -z "$ac_cv_prog_MIZF" && ac_cv_prog_MIZF="no"
+fi
+fi
+MIZF="$ac_cv_prog_MIZF"
+if test -n "$MIZF"; then
+  echo "$ac_t""$MIZF" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
+if test "$MIZF" = no; then
+    MIZAR=no
+    echo "configure: warning: Cannot find Mizar." 1>&2
+else
+    MIZAR=yes
+    echo $ac_n "checking Mizar library""... $ac_c" 1>&6
+echo "configure:1106: checking Mizar library" >&5
+    if test -d "$MIZFILES"; then
+	MIZARLIB=$MIZFILES
+	echo "$ac_t""$MIZARLIB" 1>&6
+    else if test -d /usr/local/lib/mizar; then
+	MIZARLIB=$MIZFILES
+	echo "$ac_t""$MIZARLIB" 1>&6
+    else
+	{ echo "configure: error: Cannot find Mizar library; please set \$MIZFILES" 1>&2; exit 1; }
+    fi
+    fi
+fi
+
 # substitutions to perform
+
+
+
+
 
 
 
@@ -1246,6 +1300,7 @@ s%@CAMLP4O@%$CAMLP4O%g
 s%@COQC@%$COQC%g
 s%@COQDEP@%$COQDEP%g
 s%@PVSC@%$PVSC%g
+s%@MIZF@%$MIZF%g
 s%@OCAMLBEST@%$OCAMLBEST%g
 s%@OCAMLVERSION@%$OCAMLVERSION%g
 s%@OCAMLLIB@%$OCAMLLIB%g
@@ -1255,6 +1310,8 @@ s%@COQLIB@%$COQLIB%g
 s%@WHYLIBCOQ@%$WHYLIBCOQ%g
 s%@PVS@%$PVS%g
 s%@PVSLIB@%$PVSLIB%g
+s%@MIZAR@%$MIZAR%g
+s%@MIZARLIB@%$MIZARLIB%g
 
 CEOF
 EOF

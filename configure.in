@@ -193,6 +193,26 @@ else
     PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`/lib
 fi
 
+# Mizar
+AC_CHECK_PROG(MIZF,mizf,mizf,no)
+if test "$MIZF" = no; then
+    MIZAR=no
+    AC_MSG_WARN(Cannot find Mizar.)
+else
+    MIZAR=yes
+    AC_MSG_CHECKING(Mizar library)
+    if test -d "$MIZFILES"; then
+	MIZARLIB=$MIZFILES
+	AC_MSG_RESULT($MIZARLIB)
+    else if test -d /usr/local/lib/mizar; then
+	MIZARLIB=$MIZFILES
+	AC_MSG_RESULT($MIZARLIB)
+    else
+	AC_MSG_ERROR(Cannot find Mizar library; please set \$MIZFILES)
+    fi
+    fi
+fi
+
 # substitutions to perform
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
@@ -215,6 +235,10 @@ AC_SUBST(WHYLIBCOQ)
 AC_SUBST(PVS)
 AC_SUBST(PVSC)
 AC_SUBST(PVSLIB)
+
+AC_SUBST(MIZAR)
+AC_SUBST(MIZF)
+AC_SUBST(MIZARLIB)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

@@ -1,4 +1,4 @@
-(* Load Programs. *)(*
+(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: Why.v,v 1.13 2003-09-22 13:16:39 filliatr Exp $ *)
+(* $Id: Why.v,v 1.14 2003-09-22 15:57:48 filliatr Exp $ *)
 
 Require Export WhyCoqCompat.
 

@@ -18,6 +18,15 @@ COQ
 PVS
 ===
 
+Mizar
+=====
+
+ - option --mizar-preamble-from <file> to extract environ from <file>
+
+ - 80 characters limit
+
+ - split conjunctions in lemma conclusion
+
 Simplify
 ========
 
