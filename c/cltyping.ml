@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.45 2004-06-22 14:52:16 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.46 2004-06-28 13:22:11 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -448,36 +448,42 @@ let make_and p1 p2 = match p1, p2 with
   | _, Ptrue -> p1
   | _ -> Pand (p1, p2)
 
+let make_implies p1 = function
+  | Ptrue -> Ptrue
+  | p2 -> Pimplies (p1, p2)
+
+let make_forall q = function
+  | Ptrue -> Ptrue
+  | p -> Pforall (q, p)
+
 let fresh_index = 
   let r = ref (-1) in fun () -> incr r; "index_" ^ string_of_int !r
 
-let valid_for_type ?(fresh=false) loc v tn ty =
-  let rec valid_fields valid_for_current n tn ty = 
-    let t = { term_node = tn; term_type = c_pointer ty } in
+let valid_for_type ?(fresh=false) loc v t =
+  let rec valid_fields valid_for_current n t = 
     begin match tag_type_definition n with
       | Defined (CTstruct (_, Decl fl)) ->
 	  List.fold_right 
-	    (fun (tyf, f, _) acc -> match tyf.ctype_node with
-	       | CTstruct _ | CTarray _ ->
-		   let tnf = Tarrow (t, find_field n f) in
-		   make_and acc (valid_for tnf tyf)
-	       | _ ->
-		   acc)
-	    fl (if valid_for_current then 
-		  if fresh then Pand(Pvalid t,Pfresh t) else Pvalid t 
-		else Ptrue)
+	    (fun (tyf, f, _) acc -> 
+	       let tf = 
+		 { term_node = Tdot (t, find_field n f); term_type = tyf } 
+	       in
+	       make_and acc (valid_for tf))
+	    fl 
+	    (if valid_for_current then 
+	       if fresh then Pand(Pvalid t, Pfresh t) else Pvalid t 
+	     else Ptrue)
       | Defined _ ->
 	  assert false
       | Incomplete ->
 	  error loc ("`" ^ v.var_name ^ "' has incomplete type")
     end
-  and valid_for tn ty = match ty.ctype_node with
+  and valid_for t = match t.term_type.ctype_node with
     | CTstruct (n, _) ->
- 	valid_fields true n tn ty
+ 	valid_fields true n t
     | CTarray (ty, None) ->
 	error loc ("array size missing in `" ^ v.var_name ^ "'")
     | CTarray (ty, Some s) ->
-	let t = { term_node = tn; term_type = c_array_size ty s } in
 	let ts = eval_array_size s in
 	let valid_form =
 	  make_and
@@ -488,24 +494,28 @@ let valid_for_type ?(fresh=false) loc v tn ty =
 	  | CTstruct (n,_) ->
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let vti = valid_fields false n (Tbinop (t, Badd, vari)) ty in
+	      let ti = 
+		{ term_node = Tbinop (t, Badd, vari); term_type = t.term_type }
+	      in
+	      let vti = valid_fields false n ti in
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
-	      Pand(valid_form,Pforall ([c_int, i.var_name], Pimplies (ineq, vti)))
-	  | CTarray _ ->
+	      make_and valid_form
+		(make_forall [c_int, i.var_name] (make_implies ineq vti))
+	  | _ ->
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let vti = valid_for (Tarrget (t, vari)) ty in
+	      let ti = { term_node = Tarrget (t, vari); term_type = ty } in
+	      let vti = valid_for ti in
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
-	      Pand(valid_form, Pforall ([c_int, i.var_name], Pimplies (ineq, vti)))
-	  | _ ->
-	      valid_form
+	      make_and valid_form
+		(make_forall [c_int, i.var_name] (make_implies ineq vti))
 	end
     | _ -> 
-	assert false
+	Ptrue
   in
-  valid_for tn ty
+  valid_for t
 
 
 (*
@@ -562,9 +572,25 @@ let rec disjoint_locs locs =
 *)
 
 
+open Format
 
+let rec print_term_node fmt = function
+  | Tvar v -> 
+      fprintf fmt "%s" v.var_name
+  | Tbinop (t1, Badd, t2) -> 
+      fprintf fmt "(%a+%a)" print_term t1 print_term t2
+  | Tarrow (t1, f) ->
+      fprintf fmt "(%a->%s)" print_term t1 f.field_name
+  | Tarrget (t1, t2) ->
+      fprintf fmt "%a[%a]" print_term t1 print_term t2
+  | Tresult ->
+      fprintf fmt "result"
+  | _ -> 
+      fprintf fmt "<other>"
 
-let local_alloc_post loc v ty =
+and print_term fmt t = print_term_node fmt t.term_node
+
+let local_alloc_post loc v t =
 (*
 
 [local_alloc_for allocs tn ty] returns a pair (allocs',f), f is a formula expressing that 
@@ -574,7 +600,10 @@ let local_alloc_post loc v ty =
 
 *)
 
-  let rec local_alloc_for allocs tn ty = match ty.ctype_node with
+  let rec local_alloc_for allocs tn ty = 
+    Format.eprintf "tn = %a ty = %a@." 
+      print_term_node tn Creport.print_type ty;
+    match ty.ctype_node with
     | CTstruct (n, _) ->
 	let t = { term_node = tn; term_type = c_pointer ty } in
 	let form = 
@@ -619,18 +648,19 @@ let local_alloc_post loc v ty =
 	  let ineq = Pand (Prel (int_constant "0", Le, varj),
 			   Prel (varj, Lt, i)) 
 	  in
-	  let tj = { term_node = op varj ; term_type = c_pointer ty } in
 	  (fun x -> Pforall([c_int, j.var_name], 
-			    Pimplies(ineq,Prel(x,Neq,tj))))
+			    Pimplies(ineq,Prel(x,Neq,op varj))))
 	in
 	let new_allocs = (fun x -> Prel(x,Neq,t)) in
 	begin match ty.ctype_node with
 	  | CTstruct _ ->
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let op j = Tbinop (t, Badd, j) in
+	      let op j = 
+		{ term_node = Tbinop (t, Badd, j); term_type = c_pointer ty }
+	      in
 	      let new_allocs', vti = 
-		local_alloc_for (allocs_before vari op :: new_allocs :: allocs) (op vari) ty in
+		local_alloc_for (allocs_before vari op :: new_allocs :: allocs) (op vari).term_node (c_pointer ty) in
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
 	      (allocs_before ts op :: new_allocs :: new_allocs'),
@@ -638,18 +668,19 @@ let local_alloc_post loc v ty =
 	  | CTarray _ ->
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let op j = Tarrget(t, j) in
+	      let op j = { term_node = Tarrget(t, j); term_type = ty } in
 	      let new_allocs', vti = 
-		local_alloc_for (allocs_before vari op :: new_allocs :: allocs) (op vari) ty in
+		local_alloc_for (allocs_before vari op :: new_allocs :: allocs) (op vari).term_node ty in
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
 	      (allocs_before ts op :: new_allocs :: new_allocs'),
 	      Pand(form,Pforall ([c_int, i.var_name], Pimplies (ineq, vti)))
 	  | _ ->
-	      let op j = Tarrget(t, j) in
+	      let op j = { term_node = Tarrget(t, j); term_type = ty } in
 	      [allocs_before ts op ; new_allocs],form
 	end
     | _ -> 
 	assert false
   in
-  let _,f = local_alloc_for [] Tresult ty in f
+  Ptrue (* let _,f = local_alloc_for [] Tresult ty in f *)
+
