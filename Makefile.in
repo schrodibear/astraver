@@ -274,8 +274,8 @@ local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) coq-@COQ@
 	cp -f $(CADUCEUS) $$HOME/bin/$$OSTYPE/caduceus
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
 	cp -f $(DP) $$HOME/bin/$$OSTYPE/dp
-	mkdir -p $(COQLIB)/contrib7/why
-	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib7/why
+#	mkdir -p $(COQLIB)/contrib7/why
+#	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib7/why
 	mkdir -p $(COQLIB)/contrib/why
 	cp -f $(VO8) $(VFILES) $(COQLIB)/contrib/why
 	mkdir -p $(PVSLIB)/why

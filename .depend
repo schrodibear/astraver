@@ -260,8 +260,10 @@ c/cparser.cmx: c/cast.cmi c/cerror.cmi c/clogic.cmi c/coptions.cmx \
     c/creport.cmx c/ctypes.cmx src/loc.cmx src/ptree.cmi c/cparser.cmi 
 c/cpp.cmo: c/coptions.cmi src/loc.cmi c/cpp.cmi 
 c/cpp.cmx: c/coptions.cmx src/loc.cmx c/cpp.cmi 
-c/creport.cmo: c/cast.cmi c/cerror.cmi src/loc.cmi c/creport.cmi 
-c/creport.cmx: c/cast.cmi c/cerror.cmi src/loc.cmx c/creport.cmi 
+c/creport.cmo: c/cast.cmi c/cerror.cmi c/coptions.cmi src/loc.cmi \
+    c/creport.cmi 
+c/creport.cmx: c/cast.cmi c/cerror.cmi c/coptions.cmx src/loc.cmx \
+    c/creport.cmi 
 c/ctypes.cmo: c/coptions.cmi c/ctypes.cmi 
 c/ctypes.cmx: c/coptions.cmx c/ctypes.cmi 
 c/ctyping.cmo: c/cast.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi c/cltyping.cmi \

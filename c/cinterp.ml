@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.96 2004-10-04 15:30:58 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.97 2004-10-05 09:01:42 filliatr Exp $ i*)
 
 
 open Format
@@ -1040,7 +1040,8 @@ let rec interp_statement ab may_break stat = match stat.st_node with
 	| Some e -> interp_expr e
       end
   | TSif(e,s1,s2) -> 
-      If(interp_boolean_expr e,interp_statement ab may_break s1,interp_statement ab may_break s2)
+      If(interp_boolean_expr e,
+	 interp_statement ab may_break s1, interp_statement ab may_break s2)
   | TSfor(annot,e1,e2,e3,body) ->
       let label = new_label () in
       let ef = 
@@ -1100,7 +1101,8 @@ let rec interp_statement ab may_break stat = match stat.st_node with
       let tmp = tmp_var() in
       let switch_may_break = ref false in
       let res = 
-	Output.Let(tmp,interp_expr e,interp_switch tmp ab switch_may_break l [] used_cases false)
+	Output.Let(tmp, interp_expr e,
+		   interp_switch tmp ab switch_may_break l [] used_cases false)
       in
       if !switch_may_break then
 	Try(res,"Break", None,Void)
@@ -1148,10 +1150,12 @@ and interp_block ab may_break (decls,stats) =
 	append (interp_statement true may_break s) (block bl)
   in
   List.fold_right interp_decl decls (block stats)
-and  interp_switch tmp ab may_break l c used_cases post_default=
+
+and interp_switch tmp ab may_break l c used_cases post_default =
   match l with
     | ([], i):: l ->
-	let (a,lc) = make_switch_condition_default tmp c used_cases in(* [bl] is actually unreachable *)
+	let (a,lc) = make_switch_condition_default tmp c used_cases in
+	(* [bl] is actually unreachable *)
 	let (linstr,final) = interp_case ab may_break i in
 	if final 
 	then
@@ -1160,10 +1164,8 @@ and  interp_switch tmp ab may_break l c used_cases post_default=
 		      ,
 		      interp_switch tmp ab may_break l lc used_cases false)
 	else
-	  Block ((Output.If(a,
-			    Block linstr
-			      ,
-			      Void))::[interp_switch tmp ab may_break l lc used_cases true])	
+	  Block ((Output.If (a, Block linstr, Void)) ::
+		 [interp_switch tmp ab may_break l lc used_cases true])	
 	    
     | (lc, i):: l ->  
 	let (a,lc) = 
@@ -1179,9 +1181,9 @@ and  interp_switch tmp ab may_break l c used_cases post_default=
 		    Block linstr,
 		    interp_switch tmp ab may_break l [] used_cases false)
 	else
-	  Block ([Output.If(a,
-			    Block linstr,
-			    Void);interp_switch tmp ab may_break l lc  used_cases post_default])
+	  Block 
+	    ([Output.If(a, Block linstr, Void);
+	      interp_switch tmp ab may_break l lc  used_cases post_default])
     | [] -> Void
 
 and interp_case ab may_break i =
