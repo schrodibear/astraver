@@ -1,11 +1,11 @@
 (BG_PUSH 
   (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t)))
   (FORALL (x) (OR (EQ (int_mod x 2) 0) (EQ (int_mod x 2) 1)))
-  (FORALL (x) (IMPLIES (EQ (int_mod x 2) 0) (EQ x (* 2 (/ x 2)))))
+  (FORALL (x) (IMPLIES (EQ (int_mod x 2) 0) (EQ x (* 2 (int_div x 2)))))
   (FORALL (x) (IMPLIES (EQ (int_mod x 2) 1) 
-	               (EQ x (+ (* 2 (/ x 2)) 1))))
-  (FORALL (x) (EQ x (+ (* 2 (/ x 2)) (int_mod x 2))))
-  (EQ (/ 1 2) 0)
+	               (EQ x (+ (* 2 (int_div x 2)) 1))))
+  (FORALL (x) (EQ x (+ (* 2 (int_div x 2)) (int_mod x 2))))
+  (EQ (int_div 1 2) 0)
 )
 
 
@@ -52,7 +52,7 @@
 (IMPLIES (EQ p2 (+ p1 b1))
 (AND
 (FORALL (a)
-(IMPLIES (EQ a (/ a1 2))
+(IMPLIES (EQ a (int_div a1 2))
 (FORALL (b)
 (IMPLIES (EQ b (* 2 b1))
 (AND (AND (>= a 0) (EQ (+ p2 (* a b)) (* x y))) (AND (<= 0 a1) (< a a1)))))))
@@ -79,7 +79,7 @@
 (IMPLIES (NEQ (int_mod a1 2) 1)
 (AND
 (FORALL (a)
-(IMPLIES (EQ a (/ a1 2))
+(IMPLIES (EQ a (int_div a1 2))
 (FORALL (b)
 (IMPLIES (EQ b (* 2 b1))
 (AND (AND (>= a 0) (EQ (+ p1 (* a b)) (* x y))) (AND (<= 0 a1) (< a a1)))))))

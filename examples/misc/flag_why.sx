@@ -1,13 +1,18 @@
 (BG_PUSH (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t))))
 
 (BG_PUSH 
+  ; N is non-negative
   (<= 0 N)
+  ; the sole colors are red, blue and white
   (DISTINCT blue red white)
-;  (FORALL (c) (IMPLIES (AND (NEQ c white) (NEQ c blue)) (EQ c red)))
+  (FORALL (c) (IMPLIES (EQ (ISCOLOR c) |@true|) (OR (EQ c white) (EQ c blue) (EQ c red))))
+  ; definition of monochrome
   (FORALL (t i j c) 
     (IFF
       (EQ (monochrome t i j c) |@true|) 
       (FORALL (k) (IMPLIES (AND (<= i k) (< k j)) (EQ (select t k) c)))))
+  ; any array element considered here is a color
+  (FORALL (t i) (EQ (ISCOLOR (select t i)) |@true|))
 )
 
 ;; DO NOT EDIT BELOW THIS LINE
