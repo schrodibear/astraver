@@ -16,14 +16,14 @@
 
 \thispagestyle{empty}
 \begin{center}
+~\\[3cm]
+\rule\textwidth{0.1cm}\\[0.5cm]
+{\Huge\sf The WHY certification tool}\\[1cm]
+{\Large\sf Tutorial and Reference Manual}\\[0.1cm]
+\rule\textwidth{0.1cm}\\[3cm]
+Jean-Christophe Filli\^atre
 \vfill
-\rule\textwidth{0.1cm}\\[0.3cm]
-{\Huge\sf WHY Reference Manual}\\[0.5cm]
-{\large August 2001}\\
-\rule\textwidth{0.1cm}
-\vfill
-\noindent Jean-Christophe Filli\^atre
-\vfill
+\today\\
 \end{center}
 
 \tableofcontents
@@ -103,16 +103,24 @@ Then
 
 \begin{enumerate}
 \item Configure with \texttt{./configure}
+
+  
+
 \item Compile with \texttt{make}
-\item \why\ executable \texttt{bin/why}. It is standalone, 
-  so you can move it anywhere, or make a symbolic link to it from anywhere.
+
+\item Install with \texttt{make install}
+
+  (Alternatively, you can move/copy the \why\ executable
+  \texttt{bin/why} anywhere, or make a symbolic link to it from anywhere.)
 \end{enumerate}
 
 
-\chapter{Syntax}
+\chapter{Reference manual}
 \label{syntax}
 
-\section{Terms}
+\section{Logic syntax}
+
+\subsection{Terms}
 
 Syntax of terms is given in Figure~\ref{fig:terms}.
 Usual precedences apply to arithmetical operations.
@@ -148,7 +156,7 @@ Usual precedences apply to arithmetical operations.
 \end{center}            
 \end{figure}
 
-\section{Predicates}
+\subsection{Predicates}
 
 Syntax of predicates is given in Figure~\ref{fig:predicates}.
 It is a first-order quantifier-free syntax, independent from the \pvs\ one.
@@ -180,7 +188,10 @@ stronger than the implication's one. Implication is right associative.
 \end{center}            
 \end{figure}
 
-\section{Types}
+
+\section{Syntax of ML programs}
+
+\subsection{ML types}
 
 Syntax of types is given in Figure~\ref{fig:types}.
 
@@ -221,7 +232,7 @@ Syntax of types is given in Figure~\ref{fig:types}.
 \end{center}            
 \end{figure}
 
-\section{Annotated Caml programs}
+\subsection{ML expressions}
 
 Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
 \begin{figure}[htbp]
@@ -300,7 +311,7 @@ Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
 \end{center}
 \end{figure}
 
-\section{Input files}
+\subsection{ML files}
 
 Syntax of input files is given in Figure~\ref{fig:input}.
 
