@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.44 2002-11-21 16:23:09 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.45 2002-12-05 16:25:11 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -33,10 +33,12 @@ open Util
 let reset () = match prover with
   | Pvs -> Pvs.reset ()
   | Coq -> Coq.reset ()
+  | Harvey -> Harvey.reset ()
 
 let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
   | Coq -> Coq.push_obligations ol
+  | Harvey -> Harvey.push_obligations ol
 
 let push_validation id v = 
   if valid && prover = Coq then Coq.push_validation id v
@@ -44,6 +46,7 @@ let push_validation id v =
 let push_parameter id v = match prover with
   | Pvs -> Pvs.push_parameter id v
   | Coq -> Coq.push_parameter id v
+  | Harvey -> () (* nothing to do? *)
 
 let output fwe = 
   if ocaml then 
@@ -51,6 +54,7 @@ let output fwe =
   else match prover with
     | Pvs -> Pvs.output_file fwe
     | Coq -> Coq.output_file fwe
+    | Harvey -> Harvey.output_file fwe
 
 (*s Processing of a single declaration [let id = p]. *)
 

@@ -16,6 +16,9 @@ pvs:
 	../bin/why.opt --pvs -d -V test.mlw
 	pvs -batch -v 3 -l batch.el
 
+harvey:
+	../bin/why.opt --harvey -d -V test.mlw
+
 test:
 	../bin/why.opt -d -V --valid --coq-tactic Magic test.mlw
 	coqc -R ../lib/coq Coq.why test_why.v

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.12 2002-11-05 08:44:50 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.13 2002-12-05 16:25:11 filliatr Exp $ i*)
 
 open Format
 
@@ -33,7 +33,7 @@ let ocaml_annot_ = ref false
 let ocaml_externals_ = ref false
 let output_ = ref None
 
-type prover = Coq | Pvs
+type prover = Coq | Pvs | Harvey
 let prover_ = ref Coq
 
 (*s Parsing the command-line *)
@@ -84,6 +84,7 @@ Typing/Annotations options:
 Prover options:
   --coq       selects COQ prover (default)
   --pvs       selects PVS prover
+  --harvey    selects haRVey prover
   --valid, 
   --no-valid  set/unset the functional validation (Coq only; default is no)
   --coq-tactic <tactic> 
@@ -104,6 +105,7 @@ let files =
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover_ := Coq; parse args
+    | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args

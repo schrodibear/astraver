@@ -1,0 +1,124 @@
+(*
+ * The Why certification tool
+ * Copyright (C) 2002 Jean-Christophe FILLIATRE
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
+
+(*i $Id: harvey.ml,v 1.1 2002-12-05 16:25:11 filliatr Exp $ i*)
+
+(*s Harvey's output *)
+
+open Ident
+open Misc
+open Error
+open Logic
+open Vcg
+open Format
+
+let oblig = Queue.create ()
+
+let vars = Hashtbl.create 97
+
+let reset () = Queue.clear oblig
+
+let push_obligations = List.iter (fun o -> Queue.add o oblig)
+
+let uncapitalize fmt id = 
+  fprintf fmt "%s" (String.uncapitalize (Ident.string id))
+
+let rec print_term fmt = function
+  | Tvar id -> 
+      fprintf fmt "%a" uncapitalize id
+  | Tconst (ConstInt n) -> 
+      fprintf fmt "%d" n
+  | Tconst (ConstBool b) -> 
+      fprintf fmt "%b" b
+  | Tconst ConstUnit -> 
+      fprintf fmt "tt" 
+  | Tconst (ConstFloat _) ->
+      Report.raise_unlocated (AnyMessage "haRVey does not support floats")
+  | Tderef _ -> 
+      assert false
+  | Tapp (id, tl) ->
+      fprintf fmt "@[(%a@ %a)@]" 
+	uncapitalize id (print_list space print_term) tl
+
+let rec print_predicate fmt = function
+  | Pvar id -> 
+      fprintf fmt "%a" uncapitalize id
+  | Papp (id, [a; b]) when is_eq id ->
+      fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
+  | Papp (id, [a; b]) when is_neq id ->
+      fprintf fmt "@[(not (= %a@ %a))@]" print_term a print_term b
+  | Papp (id, tl) -> 
+      fprintf fmt "@[(%a@ %a)@]" 
+	uncapitalize id (print_list space print_term) tl
+  | Ptrue ->
+      fprintf fmt "true"
+  | Pfalse ->
+      fprintf fmt "false"
+  | Pimplies (a, b) ->
+      fprintf fmt "@[(->@ %a@ %a)@]" print_predicate a print_predicate b
+  | Pif (a, b, c) ->
+      fprintf fmt "@[(ite@ %a@ %a@ %a)@]" print_term a print_predicate b
+	print_predicate c
+  | Pand (a, b) ->
+      fprintf fmt "@[(and@ %a@ %a)@]" print_predicate a print_predicate b
+  | Por (a, b) ->
+      fprintf fmt "@[(or@ %a@ %a)@]" print_predicate a print_predicate b
+  | Pnot a ->
+      fprintf fmt "@[(not@ %a)@]" print_predicate a
+  | Forall _
+  | Exists _ -> assert false
+
+let rec is_first_order = function
+  | Pvar _
+  | Papp _
+  | Ptrue
+  | Pfalse -> true
+  | Pimplies (a, b) -> is_first_order a && is_first_order b
+  | Pif (_, a, b) -> is_first_order a && is_first_order b
+  | Pand (a, b) | Por (a, b) -> is_first_order a && is_first_order b
+  | Pnot a -> is_first_order a 
+  | Forall _
+  | Exists _ -> false
+
+let rec filter_context = function
+  | [] -> []
+  | Svar (id, _) :: ctx -> Hashtbl.add vars id id; filter_context ctx
+  | Spred (_, p) :: ctx when is_first_order p -> p :: filter_context ctx
+  | Spred _ :: ctx -> filter_context ctx
+
+let output_sequent fmt (ctx, c) = 
+  Hashtbl.clear vars;
+  match filter_context ctx with
+    | [] -> 
+	fprintf fmt "@[%a@]" print_predicate c
+    | [p] -> 
+	fprintf fmt "@[<hov 2>(->@ @[%a@]@ %a)@]" 
+	  print_predicate p print_predicate c
+    | ctx -> 
+	fprintf fmt "@[<hov 2>(->@ @[<hov 2>(and@ %a)@]@ %a)@]"
+	  (print_list space print_predicate) ctx print_predicate c
+
+let output_obligation f (o, s) = 
+  let fname = f ^ "_" ^ o ^ ".hv" in
+  let cout = open_out fname in
+  let fmt = formatter_of_out_channel cout in
+  output_sequent fmt s;
+  pp_print_flush fmt ();
+  close_out cout
+
+let output_file f = Queue.iter (output_obligation f) oblig
+
+
