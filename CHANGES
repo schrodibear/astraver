@@ -1,4 +1,6 @@
 
+version 1.63, August 26th, 2004
+===============================
   o WP completely redesigned: side-effects free expressions are now
     given an adequate specification, so that the WP calculus does not
     enter them. It results in significantly simpler proof obligations.
