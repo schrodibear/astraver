@@ -219,13 +219,14 @@ source:  doc/manual.ps
 	cp --parents $(FILES) $(EXPORT)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
 	cp CHANGES export/$(NAME).tar.gz $(FTP)
+	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
 
 EXFILES = lib/coq/*.v examples/*/*.v examples/*/*.ml 
 
 export-examples:
 	cp --parents $(EXFILES) $(WWW)
 	make -C $(WWW)/examples clean depend
-	make -C $(WWW)/examples all
+	echo "*** faire make all dans $(WWW)/examples ***"
 
 export-doc: doc/manual.ps doc/manual.html
 	cp $^ $(WWW)
