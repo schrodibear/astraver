@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.22 2004-03-30 15:39:28 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.23 2004-05-13 08:51:24 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -239,11 +239,13 @@ let rec normalize p =
 
 	   (* test is annotated -> postcondition is [inv and not test] *)
 	   | Some _ ->
+	       (***
 	       let p = change_desc p (While (b', invopt, var, e)) in
 	       if post p = None then
 		 let q = while_post p.info.loc p.info b' invopt in
 		 force_post env q p
-	       else 
+	       else
+	       ***)
 		 p
 	in
 	let q = optpost_app (change_label "" p.info.label) (post p) in

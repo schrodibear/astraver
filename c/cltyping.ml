@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.37 2004-05-04 12:37:12 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.38 2004-05-13 08:51:22 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -319,6 +319,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
   | PLiff (p1, p2) -> 
       Piff (type_predicate env p1, type_predicate env p2) 
   | PLnot p -> 
+      (* TODO: negate == as !=, != as ==, < as >=, etc. Useful? *)
       Pnot (type_predicate env p)
   | PLapp (p, tl) ->
       (try
@@ -375,7 +376,10 @@ let rec type_predicate env p0 = match p0.lexpr_node with
   | PLcast _ | PLblock_length _ | PLbase_addr _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
   | PLresult ->
-      raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))
+      (*raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))*)
+      (* interpret term [t] as [t != 0] *)
+      let t = type_int_term env p0 in
+      Prel (t, Neq, { term_node = Tconstant "0"; term_type = c_int })
 
 let type_variant env = function 
   | (t, None) -> (type_int_term env t, None)

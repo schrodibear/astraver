@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.38 2004-04-30 14:30:20 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.39 2004-05-13 08:51:24 filliatr Exp $ i*)
 
 open Format
 
@@ -36,6 +36,7 @@ let no_harvey_prelude_ = ref false
 let werror_ = ref false
 let fpi_ = ref false
 let dir_ = ref ""
+let split_ = ref false
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -116,10 +117,11 @@ Generic Options:
   -v, --version  prints version and exits
   --warranty     prints license and exits
 
-Typing/Annotations options:
+Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
+  --split            split conditions into several pieces
 
 Prover selection:
   --coq       selects COQ prover (default)
@@ -234,6 +236,8 @@ let files =
 	dir_ := d; parse args
     | ("-dir" | "--dir") :: [] ->
 	usage (); exit 1
+    | ("-split" | "--split") :: args ->
+	split_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -264,6 +268,7 @@ let wol = !wol_
 let werror = !werror_
 let fpi = !fpi_
 let dir = !dir_
+let split = !split_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 

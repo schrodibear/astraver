@@ -2,6 +2,7 @@
 /* C tests with pointers */
 
 /*@ requires \valid(x)
+  @ assigns *x
   @ ensures *x == 1 && \result == 0 */
 int f(int *x) {
   *x = 0;

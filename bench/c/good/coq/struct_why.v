@@ -46,14 +46,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct.why", characters 739-752 *)
+(* Why obligation from file "why/struct.why", characters 765-778 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
+  forall (Pre14: (((valid alloc s) /\ (valid alloc (acc t s))) /\
+                 (valid alloc ps)) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
   forall (ps0: pointer),
@@ -64,14 +64,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct.why", characters 787-801 *)
+(* Why obligation from file "why/struct.why", characters 813-827 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
+  forall (Pre14: (((valid alloc s) /\ (valid alloc (acc t s))) /\
+                 (valid alloc ps)) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
   forall (ps0: pointer),
@@ -85,14 +85,14 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct.why", characters 805-830 *)
+(* Why obligation from file "why/struct.why", characters 831-856 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
+  forall (Pre14: (((valid alloc s) /\ (valid alloc (acc t s))) /\
+                 (valid alloc ps)) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
   forall (ps0: pointer),
@@ -109,15 +109,15 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/struct.why", characters 770-830 *)
+(* Why obligation from file "why/struct.why", characters 796-856 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (x: ((memory) Z)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
+  forall (Pre14: (((valid alloc s) /\ (valid alloc (acc t s))) /\
+                 (valid alloc ps)) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = (any_pointer tt)),
   forall (ps0: pointer),

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.82 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.83 2004-05-13 08:51:24 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -31,10 +31,12 @@ open Annot
 
 (*s to quantify over all the variables modified by [p] *)
 
-let output p = 
-  let w = Effect.get_writes (effect p) in
-  let env = p.info.env in
+let output_info info = 
+  let w = Effect.get_writes info.kappa.c_effect in
+  let env = info.env in
   List.map (fun id -> (id, type_in_env env id)) w
+
+let output p = output_info p.info
 
 (*s [filter_post k q] removes exc. postconditions from [q] which do not
     appear in typing info [k] *)
@@ -215,13 +217,41 @@ and wp_desc info d q =
     | Rec (f, bl, v, var, e) ->
 	let e',_ = wp e None in
 	Rec (f, bl, v, var, e'), None
+(***
     | While (b, inv, var, e) ->
 	let b',_ = wp b None in
 	let qbl = while_post_block info.env inv var e in
 	let q = Annot.sup (Some qbl) q in (* exc. posts taken from [q] *)
 	let e',_ = wp e q in
 	While (b', inv, var, e'), inv (* None *)
-
+***)
+    | While (b, inv, var, e) ->
+        (* wp = I /\ 
+	   forall w. I => wp(e1, if result then wp(e2, I/\var<var@) else q) *)
+	let qe = while_post_block info.env inv var e in
+	let qe = Annot.sup (Some qe) q in (* exc. posts taken from [q] *)
+	let e',we = wp e qe in
+	let qb = 
+	  let resultb = b.info.kappa.c_result_name in
+	  let qexit = match q with None -> Ptrue | Some (q,_) -> q.a_value in
+	  let qbody = match we with None -> Ptrue | Some we -> we.a_value in
+	  let qb = create_postval (Pif (Tvar resultb, qbody, qexit)) in
+	  let qb = force_wp_name qb in
+	  saturate_post b.info qb q
+	in
+	let b',wb = wp b qb in
+	let w = match inv,wb with
+	  | None, _ ->
+	      None
+	  | Some _, None ->
+	      inv
+	  | Some {a_value=i}, Some {a_value=wb} ->
+	      let vars = output_info info in
+	      Some 
+		(wp_named info.loc
+		   (pand true i (foralls true vars (Pimplies (true, i, wb)))))
+	in
+	While (b', inv, var, e'), w
     | Raise (id, None) ->
 	(* $wp(raise E, _, R) = R$ *)
 	d, option_app (fun (_,ql) -> List.assoc id ql) q

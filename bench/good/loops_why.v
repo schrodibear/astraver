@@ -75,10 +75,10 @@ Lemma loop2_po_3 :
   forall (x: Z),
   forall (Pre4: x <= 10),
   forall (x0: Z),
-  forall (Post4: x0 = 10),
+  forall (Post5: x0 = 10),
   forall (Test4: x0 > 0),
   forall (x1: Z),
-  forall (Post11: x1 = (Zopp x0)),
+  forall (Post13: x1 = (Zopp x0)),
   x1 = (Zopp 10).
 Proof.
 simpl; intros; omega.
@@ -89,7 +89,7 @@ Lemma loop2_po_4 :
   forall (x: Z),
   forall (Pre4: x <= 10),
   forall (x0: Z),
-  forall (Post4: x0 = 10),
+  forall (Post5: x0 = 10),
   forall (Test3: x0 <= 0),
   x0 = (Zopp 10).
 Proof.

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/schorr_waite.why", characters 447-447 *)
+(* Why obligation from file "why/schorr_waite.why", characters 478-478 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -135,7 +135,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 339-352 *)
+(* Why obligation from file "why/schorr_waite.why", characters 369-382 *)
 Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -156,7 +156,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 256-445 *)
+(* Why obligation from file "why/schorr_waite.why", characters 285-476 *)
 Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -177,9 +177,9 @@ Lemma schorr_waite_impl_po_3 :
   forall (Test3: ~(t1 = null)),
   forall (Pre4: (valid alloc t1)),
   forall (caduceus_10: Z),
-  forall (Post38: caduceus_10 = (acc m0 t1)),
+  forall (Post40: caduceus_10 = (acc m0 t1)),
   forall (result2: bool),
-  forall (Post40: (if result2 then caduceus_10 <> 0 else caduceus_10 = 0)),
+  forall (Post42: (if result2 then caduceus_10 <> 0 else caduceus_10 = 0)),
   (if result2 then True
    else ((t1 = null ->
           (forall (result:Z),
@@ -295,7 +295,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 124-1485 *)
+(* Why obligation from file "why/schorr_waite.why", characters 152-1557 *)
 Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (t: pointer),

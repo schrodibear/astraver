@@ -83,11 +83,6 @@ Admitted.
   := ~(p = null) /\ 0 <= ((offset p) + i) /\ i <= j /\ ((offset p) + j) <
      (block_length a p).
 
-(*Why axiom*) Lemma offset_shift :
-  (forall (p:pointer),
-   (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
-Admitted.
-
 (*Why axiom*) Lemma base_addr_shift :
   (forall (p:pointer),
    (forall (i:Z), (base_addr (shift p i)) = (base_addr p))).

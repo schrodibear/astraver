@@ -5,7 +5,7 @@ int b;
 int b1; 
 int b2;
 
-/*@ ensures \result == b && b == 1 - \old(b) */
+/*@ assigns b ensures \result == b && b == 1 - \old(b) */
 int f() {
   b = 1 - b;
   return b;

@@ -376,7 +376,7 @@ FTP = $(HOME)/ftp/why
 WWW = $(HOME)/WWW/why
 
 FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
-       Version Makefile.in configure.in configure .depend \
+       Version Makefile.in configure.in configure .depend .depend.coq \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
 	examples-c/*/*.c examples-c/Makefile examples-c/*/Makefile \

@@ -121,8 +121,49 @@ assert ((k < y1)%Z \/ k = y1).
 subst; intuition.
 Qed.
 
-(* Why obligation from file "max.mlw", characters 449-533 *)
+(* Why obligation from file "max.mlw", characters 415-620 *)
 Lemma pgm_max_end_po_5 : 
+  forall (a: (array Z)),
+  forall (Pre15: (array_length a) = l),
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (y0: Z),
+  forall (Post2: y0 = 1),
+  forall (Variant1: Z),
+  forall (x1: Z),
+  forall (y1: Z),
+  forall (Pre11: Variant1 = (l - y1)),
+  forall (Pre10: (0 <= y1 /\ y1 <= l) /\ (0 <= x1 /\ x1 < l) /\
+                 (forall (k:Z),
+                  (0 <= k /\ k < y1 -> (access a k) <= (access a x1)))),
+  forall (Test1: y1 >= l),
+  (forall (a0:(array Z)),
+   ((array_length a0) = l /\ (access a0 x1) = (access a (l - 1)) /\
+    (access a0 (l - 1)) = (access a x1) /\
+    (forall (k:Z),
+     (0 <= k /\ k < l ->
+      (k <> x1 -> (k <> (l - 1) -> (access a0 k) = (access a k))))) ->
+    (forall (k:Z),
+     (0 <= k /\ k < (l - 1) -> (k <> x1 -> (access a0 k) = (access a k)))) /\
+    (access a0 x1) = (access a (l - 1)) /\ (access a0 (l - 1)) =
+    (access a x1) /\
+    (forall (k:Z),
+     (0 <= k /\ k < (l - 1) -> (access a0 k) <= (access a0 (l - 1)))))) /\
+  (array_length a) = l.
+Proof.
+intuition.
+assert (k = x1 \/ k <> x1).
+ omega.
+ intuition.
+subst; intuition.
+rewrite H6; rewrite H; apply H3; omega.
+rewrite H6.
+ rewrite H8; try omega.
+apply H3; omega.
+Qed.
+
+(* Why obligation from file "max.mlw", characters 449-533 *)
+Lemma pgm_max_end_po_6 : 
   forall (a: (array Z)),
   forall (Pre15: (array_length a) = l),
   forall (x0: Z),
@@ -137,46 +178,5 @@ assert (k = 0%Z \/ (0 < k)%Z).
  omega.
  intuition.
 subst; intuition.
-Qed.
-
-(* Why obligation from file "max.mlw", characters 355-807 *)
-Lemma pgm_max_end_po_6 : 
-  forall (a: (array Z)),
-  forall (Pre15: (array_length a) = l),
-  forall (x0: Z),
-  forall (Post1: x0 = 0),
-  forall (y0: Z),
-  forall (Post2: y0 = 1),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Post5: ((0 <= y1 /\ y1 <= l) /\ (0 <= x1 /\ x1 < l) /\
-                 (forall (k:Z),
-                  (0 <= k /\ k < y1 -> (access a k) <= (access a x1)))) /\
-                 y1 >= l),
-  forall (Pre14: (array_length a) = l),
-  forall (a0: (array Z)),
-  forall (Post10: (array_length a0) = l /\ (access a0 x1) =
-                  (access a (l - 1)) /\ (access a0 (l - 1)) =
-                  (access a x1) /\
-                  (forall (k:Z),
-                   (0 <= k /\ k < l ->
-                    (k <> x1 ->
-                     (k <> (l - 1) -> (access a0 k) = (access a k)))))),
-  (forall (k:Z),
-   (0 <= k /\ k < (l - 1) -> (k <> x1 -> (access a0 k) = (access a k)))) /\
-  (access a0 x1) = (access a (l - 1)) /\ (access a0 (l - 1)) =
-  (access a x1) /\
-  (forall (k:Z),
-   (0 <= k /\ k < (l - 1) -> (access a0 k) <= (access a0 (l - 1)))).
-Proof.
-intuition.
-assert (k = x1 \/ k <> x1).
- omega.
- intuition.
-subst; intuition.
-rewrite H7; rewrite H6; apply H4; omega.
-rewrite H6.
- rewrite H9; try omega.
-apply H4; omega.
 Qed.
 

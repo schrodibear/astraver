@@ -69,7 +69,7 @@ Lemma p3_po_1 :
   forall (Test2: true = true),
   forall (x1: Z),
   forall (b: bool),
-  forall (Post10: x1 = y0 /\ ((if b then x1 <> 0 else x1 = 0))),
+  forall (Post11: x1 = y0 /\ ((if b then x1 <> 0 else x1 = 0))),
   (if b then (forall (y:Z), (y = (y0 - 1) -> y >= 0 /\ (Zwf 0 y y0)))
    else y0 = 0).
 Proof.
@@ -89,7 +89,7 @@ Lemma p4_po_1 :
   forall (Post1: y1 = (y0 - 1)),
   forall (x1: Z),
   forall (result1: bool),
-  forall (Post10: x1 = y1 /\ ((if result1 then x1 <> 0 else x1 = 0))),
+  forall (Post11: x1 = y1 /\ ((if result1 then x1 <> 0 else x1 = 0))),
   (if result1 then y1 >= 1 /\ (Zwf 0 y1 y0) else y1 = 0).
 Proof.
 unfold Zwf; simple destruct result1; intuition.

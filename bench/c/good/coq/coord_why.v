@@ -3,11 +3,12 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/coord.why", characters 89-121 *)
+(* Why obligation from file "why/coord.why", characters 168-200 *)
 Lemma g_impl_po_1 : 
   forall (index: Z),
   forall (alloc: alloc_table),
   forall (tab: pointer),
+  forall (Pre5: (0 <= index /\ index < 3) /\ (valid_range alloc tab 0 2)),
   forall (aux_1: pointer),
   forall (Post2: aux_1 = (shift tab index)),
   (valid alloc aux_1).
@@ -16,12 +17,13 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/coord.why", characters 89-121 *)
+(* Why obligation from file "why/coord.why", characters 168-200 *)
 Lemma g_impl_po_2 : 
   forall (index: Z),
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) Z)),
+  forall (Pre5: (0 <= index /\ index < 3) /\ (valid_range alloc tab 0 2)),
   forall (aux_1: pointer),
   forall (Post2: aux_1 = (shift tab index)),
   forall (Pre1: (valid alloc aux_1)),

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.78 2004-05-04 12:37:12 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.79 2004-05-13 08:51:22 filliatr Exp $ i*)
 
 
 open Format
@@ -44,12 +44,12 @@ let interp_rel t1 t2 r = match t1.ctype_node, t2.ctype_node, r with
   | (CTenum _ | CTint _), (CTenum _ | CTint _), Ge -> "ge_int"
   | (CTenum _ | CTint _), (CTenum _ | CTint _), Eq -> "eq_int"
   | (CTenum _ | CTint _), (CTenum _ | CTint _), Neq -> "neq_int"
-  | CTfloat _, CTfloat _, Lt -> "lt_float"
-  | CTfloat _, CTfloat _, Gt -> "gt_float"
-  | CTfloat _, CTfloat _, Le -> "le_float"
-  | CTfloat _, CTfloat _, Ge -> "ge_float"
-  | CTfloat _, CTfloat _, Eq -> "eq_float"
-  | CTfloat _, CTfloat _, Neq -> "neq_float"
+  | CTfloat _, CTfloat _, Lt -> "lt_real"
+  | CTfloat _, CTfloat _, Gt -> "gt_real"
+  | CTfloat _, CTfloat _, Le -> "le_real"
+  | CTfloat _, CTfloat _, Ge -> "ge_real"
+  | CTfloat _, CTfloat _, Eq -> "eq_real"
+  | CTfloat _, CTfloat _, Neq -> "neq_real"
   | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Lt -> "lt_pointer"
   | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Le -> "le_pointer"
   | (CTarray _ | CTpointer _), (CTarray _ | CTpointer _), Gt -> "gt_pointer"
@@ -65,17 +65,17 @@ let interp_term_bin_op ty op =
   | (CTenum _ | CTint _), Bmul -> "mul_int"
   | (CTenum _ | CTint _), Bdiv -> "div_int"
   | (CTenum _ | CTint _), Bmod -> "dmod_int"
-  | CTfloat _, Badd -> "add_float"
-  | CTfloat _, Bsub -> "sub_float"
-  | CTfloat _, Bmul -> "mul_float"
-  | CTfloat _, Bdiv -> "div_float"
+  | CTfloat _, Badd -> "add_real"
+  | CTfloat _, Bsub -> "sub_real"
+  | CTfloat _, Bmul -> "mul_real"
+  | CTfloat _, Bdiv -> "div_real"
   | (CTpointer _ | CTarray _), Badd -> "shift"
   | (CTpointer _ | CTarray _), Bsub -> "sub_pointer"
   | _ -> assert false
 
 let interp_term_un_op ty op = match ty.ctype_node, op with
   | (CTenum _ | CTint _), Uminus -> "neg_int"
-  | CTfloat _, Uminus -> "neg_float"
+  | CTfloat _, Uminus -> "neg_real"
   | _ -> assert false
 
 let interp_var label v =
@@ -142,7 +142,7 @@ let rec interp_term label old_label t =
 	  | CTfloat _, CTfloat _ -> 
 	      f t
 	  | CTfloat _, (CTenum _ | CTint _) ->
-	      LApp ("float_of_int", [f t])
+	      LApp ("real_of_int", [f t])
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      f t
 	  | _ -> 
@@ -215,16 +215,16 @@ let interp_bin_op = function
   | Bge_int -> "ge_int"
   | Beq_int -> "eq_int"
   | Bneq_int -> "neq_int" 
-  | Badd_float -> "add_float"
-  | Bsub_float -> "sub_float"
-  | Bmul_float -> "mul_float"
-  | Bdiv_float -> "div_float"
-  | Blt_float -> "lt_float"
-  | Bgt_float -> "gt_float"
-  | Ble_float -> "le_float"
-  | Bge_float -> "ge_float"
-  | Beq_float -> "eq_float"
-  | Bneq_float -> "neq_float" 
+  | Badd_float -> "add_real"
+  | Bsub_float -> "sub_real"
+  | Bmul_float -> "mul_real"
+  | Bdiv_float -> "div_real"
+  | Blt_float -> "lt_real"
+  | Bgt_float -> "gt_real"
+  | Ble_float -> "le_real"
+  | Bge_float -> "ge_real"
+  | Beq_float -> "eq_real"
+  | Bneq_float -> "neq_real" 
   | Blt_pointer -> "lt_pointer_"
   | Bgt_pointer -> "gt_pointer_"
   | Ble_pointer -> "le_pointer_"
@@ -250,8 +250,8 @@ let float_one = Cte(Prim_float 1.0)
 let interp_incr_op ty op = match ty.ctype_node, op with
   | (CTenum _ | CTint _), (Upostfix_inc | Uprefix_inc) -> "add_int", int_one
   | (CTenum _ | CTint _), (Upostfix_dec | Uprefix_dec) -> "sub_int", int_one
-  | CTfloat _, (Upostfix_inc | Uprefix_inc) -> "add_float", float_one
-  | CTfloat _, (Upostfix_dec | Uprefix_dec) -> "sub_float", float_one
+  | CTfloat _, (Upostfix_inc | Uprefix_inc) -> "add_real", float_one
+  | CTfloat _, (Upostfix_dec | Uprefix_dec) -> "sub_real", float_one
   | (CTpointer _ | CTarray _), 
     (Upostfix_inc | Uprefix_inc) -> "shift_", int_one
   | (CTpointer _ | CTarray _), 
@@ -408,13 +408,13 @@ let rec interp_expr e =
     | TEunary(Uminus, e) -> 
 	begin match e.texpr_type.ctype_node with
 	  | CTenum _ | CTint _ -> make_app "neg_int" [interp_expr e]
-	  | CTfloat _ -> make_app "neg_float" [interp_expr e]
+	  | CTfloat _ -> make_app "neg_real" [interp_expr e]
 	  | _ -> assert false
 	end
     | TEunary (Uint_of_float, e) ->
 	unsupported "int_of_float"
     | TEunary (Ufloat_of_int, e) ->
-	make_app "float_of_int" [interp_expr e]
+	make_app "real_of_int" [interp_expr e]
     | TEunary (Utilde, e) ->
 	make_app "bw_compl" [interp_expr e]
     | TEunary (Uamp, e) ->
@@ -440,7 +440,7 @@ let rec interp_expr e =
 	  | CTfloat _, CTfloat _ -> 
 	      interp_expr e
 	  | CTfloat _, (CTenum _ | CTint _) ->
-	      make_app "float_of_int" [interp_expr e]
+	      make_app "real_of_int" [interp_expr e]
 	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
 	      interp_expr e
 	  | _ -> 
@@ -471,7 +471,7 @@ and interp_boolean_expr e =
     | _ -> 
 	let cmp,zero = match e.texpr_type.ctype_node with
 	  | CTenum _ | CTint _ -> "neq_int", Cte (Prim_int 0)
-	  | CTfloat _ -> "neq_float", Cte (Prim_float 0.0)
+	  | CTfloat _ -> "neq_real", Cte (Prim_float 0.0)
 	  | CTarray _ | CTpointer _ -> "neq_pointer", Var "null"
 	  | _ -> assert false
 	in
@@ -777,7 +777,7 @@ let interp_decl d acc =
 	    | Inothing ->
 		begin match ctype.ctype_node with
 		  | CTenum _ | CTint _ -> App(Var("any_int"),Var("void"))
-		  | CTfloat _ -> App(Var("any_float"),Var("void"))
+		  | CTfloat _ -> App(Var("any_real"),Var("void"))
 		  | CTfun _ -> assert false
 		  | _ -> App(Var("any_pointer"),Var("void"))
 		end
@@ -824,7 +824,7 @@ let continue b e = if b then try_with_void "Continue" e else e
 
 let return_exn ty = match ty.ctype_node with
   | CTenum _ | CTint _ -> "Return_int"
-  | CTfloat _ -> "Return_float"
+  | CTfloat _ -> "Return_real"
   | _ -> "Return_pointer"
 
 (* [abrupt_return] contains the exception used for last abrupt return if any *)

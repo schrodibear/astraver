@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.56 2004-05-03 12:59:18 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.57 2004-05-13 08:51:23 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -350,7 +350,7 @@ and type_expr_node loc env = function
   | CEbinary (e1, Bmod, e2) ->
       let e1 = type_int_expr env e1 in
       let e2 = type_int_expr env e2 in
-      TEbinary (e1, Bmod, e2), e1.texpr_type (* TODO: max ty1 ty2 ? *)
+      TEbinary (e1, Bmod_int, e2), e1.texpr_type (* TODO: max ty1 ty2 ? *)
   | CEbinary (e1, Badd, e2) ->
       let e1 = type_expr env e1 in
       let ty1 = e1.texpr_type in

@@ -13,3 +13,5 @@ pvstc.el
 *.sx.all
 .depend
 a.out
+caduceus_spec_why.v
+test_why.v

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.23 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.24 2004-05-13 08:51:24 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -126,6 +126,8 @@ let rec print_predicate fmt = function
       fprintf fmt "FALSE"
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
+  | Papp (id, [t]) when id == well_founded ->
+      fprintf fmt "TRUE ; was well_founded@\n"
   | Papp (id, [a; b]) when is_eq id ->
       fprintf fmt "@[(EQ %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->

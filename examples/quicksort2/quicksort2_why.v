@@ -193,7 +193,7 @@ Lemma quick_rec_po_4 :
   forall (Pre9: (0 <= i1 /\ i1 < (array_length t1)) /\ 0 <= m2 /\ m2 <
                 (array_length t1)),
   forall (t2: (array Z)),
-  forall (Post30: (exchange t2 t1 i1 m2)),
+  forall (Post31: (exchange t2 t1 i1 m2)),
   (forall (i:Z),
    (i = (i1 + 1) ->
     ((forall (j:Z), (l0 < j /\ j <= m2 -> (access t2 j) < v)) /\
@@ -361,7 +361,7 @@ Lemma quick_rec_po_8 :
   forall (Pre23: (0 <= l0 /\ l0 < (array_length t1)) /\ 0 <= m1 /\ m1 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (Post32: (exchange t2 t1 l0 m1)),
+  forall (Post33: (exchange t2 t1 l0 m1)),
   0 <= l0 /\ (m1 - 1) < (array_length t2).
 Proof.
 intuition ArrayLength.
@@ -397,7 +397,7 @@ Lemma quick_rec_po_9 :
   forall (Pre23: (0 <= l0 /\ l0 < (array_length t1)) /\ 0 <= m1 /\ m1 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (Post32: (exchange t2 t1 l0 m1)),
+  forall (Post33: (exchange t2 t1 l0 m1)),
   forall (Pre22: 0 <= l0 /\ (m1 - 1) < (array_length t2)),
   forall (Pre16: 0 <= l0 /\ (m1 - 1) < (array_length t2)),
   forall (Pre17: 0 <= l0 /\ (m1 - 1) < (array_length t2)),
@@ -436,10 +436,10 @@ Lemma quick_rec_po_10 :
   forall (Pre23: (0 <= l0 /\ l0 < (array_length t1)) /\ 0 <= m1 /\ m1 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (Post32: (exchange t2 t1 l0 m1)),
+  forall (Post33: (exchange t2 t1 l0 m1)),
   forall (Pre22: 0 <= l0 /\ (m1 - 1) < (array_length t2)),
   forall (t3: (array Z)),
-  forall (Post34: (sorted_array t3 l0 (m1 - 1)) /\
+  forall (Post35: (sorted_array t3 l0 (m1 - 1)) /\
                   (sub_permut l0 (m1 - 1) t3 t2)),
   0 <= (m1 + 1) /\ r0 < (array_length t3).
 Proof.
@@ -478,10 +478,10 @@ Lemma quick_rec_po_11 :
   forall (Pre23: (0 <= l0 /\ l0 < (array_length t1)) /\ 0 <= m1 /\ m1 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (Post32: (exchange t2 t1 l0 m1)),
+  forall (Post33: (exchange t2 t1 l0 m1)),
   forall (Pre22: 0 <= l0 /\ (m1 - 1) < (array_length t2)),
   forall (t3: (array Z)),
-  forall (Post34: (sorted_array t3 l0 (m1 - 1)) /\
+  forall (Post35: (sorted_array t3 l0 (m1 - 1)) /\
                   (sub_permut l0 (m1 - 1) t3 t2)),
   forall (Pre21: 0 <= (m1 + 1) /\ r0 < (array_length t3)),
   forall (Pre19: 0 <= (m1 + 1) /\ r0 < (array_length t3)),
@@ -521,14 +521,14 @@ Lemma quick_rec_po_12 :
   forall (Pre23: (0 <= l0 /\ l0 < (array_length t1)) /\ 0 <= m1 /\ m1 <
                  (array_length t1)),
   forall (t2: (array Z)),
-  forall (Post32: (exchange t2 t1 l0 m1)),
+  forall (Post33: (exchange t2 t1 l0 m1)),
   forall (Pre22: 0 <= l0 /\ (m1 - 1) < (array_length t2)),
   forall (t3: (array Z)),
-  forall (Post34: (sorted_array t3 l0 (m1 - 1)) /\
+  forall (Post35: (sorted_array t3 l0 (m1 - 1)) /\
                   (sub_permut l0 (m1 - 1) t3 t2)),
   forall (Pre21: 0 <= (m1 + 1) /\ r0 < (array_length t3)),
   forall (t4: (array Z)),
-  forall (Post36: (sorted_array t4 (m1 + 1) r0) /\
+  forall (Post37: (sorted_array t4 (m1 + 1) r0) /\
                   (sub_permut (m1 + 1) r0 t4 t3)),
   (sorted_array t4 l0 r0) /\ (sub_permut l0 r0 t4 t0).
 Proof.

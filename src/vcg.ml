@@ -525,13 +525,41 @@ let simplify_sequent ctx p =
   List.map simplify_hyp ctx, simplify p
 ***)
 
+(*s Splitting verification conditions on WP connectives
+    [split: sequent -> sequent list * (proof list -> proof)] *)
+
+let rec split_list n1 l2 = 
+  if n1 = 0 then 
+    [], l2
+  else match l2 with
+    | [] -> assert false
+    | x :: r2 -> let l1,r2 = split_list (n1 - 1) r2 in x :: l1, r2
+
+let conj = match prover with
+  | Coq V7 -> Ident.create "conj ? ?"
+  | _ -> Ident.create "conj"
+
+let rec split ctx = function
+  | Pand (true, p1, p2) ->
+      let o1,pr1 = split ctx p1 in
+      let n1 = List.length o1 in
+      let o2,pr2 = split ctx p2 in
+      o1 @ o2, 
+      (fun pl -> 
+	 let l1,l2 = split_list n1 pl in 
+	 ProofTerm 
+	   (cc_applist (cc_var conj) [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
+  | concl -> 
+      [ctx,concl], (function [pr] -> pr | _ -> assert false)
+
+
 (*s The VCG; it's trivial, we just traverse the CC term and push a 
     new obligation on each hole. *)
 
 let vcg base t =
   let po = ref [] in
   let cpt = ref 0 in
-  let push loc ctx concl = 
+  let push_one loc ctx concl = 
     incr cpt;
     let id = base ^ "_po_" ^ string_of_int !cpt in
     let ctx' = clean_sequent (List.rev ctx) concl in
@@ -539,6 +567,13 @@ let vcg base t =
     po := (loc, id, sq) :: !po;
     log (snd loc) sq (Some id);
     Lemma (id, hyps_names ctx')
+  in
+  let push loc ctx concl =
+    if Options.split then
+      let ol,pr = split ctx concl in
+      pr (List.map (fun (ctx,c) -> push_one loc ctx c) ol)
+    else
+      push_one loc ctx concl
   in
   let rec traverse ctx = function
     | CC_var _ 

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/copy.why", characters 326-334 *)
+(* Why obligation from file "why/copy.why", characters 355-363 *)
 Lemma copy_impl_po_1 : 
   forall (t1: pointer),
   forall (t2: pointer),
@@ -52,7 +52,7 @@ subst; valid.
 subst; valid.
 Save.
 
-(* Why obligation from file "why/copy.why", characters 397-554 *)
+(* Why obligation from file "why/copy.why", characters 429-589 *)
 Lemma copy_impl_po_2 : 
   forall (t1: pointer),
   forall (t2: pointer),

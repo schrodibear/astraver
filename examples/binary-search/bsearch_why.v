@@ -322,8 +322,37 @@ absurd (p2 = 0%Z); Omega'.
 subst p2; omega.
 Qed.
 
-(* Why obligation from file "bsearch.mlw", characters 350-511 *)
+(* Why obligation from file "bsearch.mlw", characters 310-776 *)
 Lemma binary_search_po_6 : 
+  forall (t: (array Z)),
+  forall (Pre15: (array_length t) >= 1 /\
+                 (sorted_array t 1 ((array_length t) - 1))),
+  forall (l0: Z),
+  forall (Post1: l0 = 1),
+  forall (u0: Z),
+  forall (Post2: u0 = ((array_length t) - 1)),
+  forall (p0: Z),
+  forall (Post3: p0 = 0),
+  forall (Variant1: Z),
+  forall (l1: Z),
+  forall (p1: Z),
+  forall (u1: Z),
+  forall (Pre14: Variant1 = (2 + u1 - l1)),
+  forall (Pre13: 1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\ p1 <=
+                 ((array_length t) - 1)) /\
+                 ((p1 = 0 ->
+                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
+                 ((p1 > 0 -> (access t p1) = v))),
+  forall (Test1: l1 > u1),
+  (1 <= p1 /\ p1 <= ((array_length t) - 1)) /\ (access t p1) = v \/ p1 = 0 /\
+  ~(In t 1 ((array_length t) - 1)).
+Proof.
+intuition.
+subst l0 u0; assumption.
+Qed.
+
+(* Why obligation from file "bsearch.mlw", characters 350-511 *)
+Lemma binary_search_po_7 : 
   forall (t: (array Z)),
   forall (Pre15: (array_length t) >= 1 /\
                  (sorted_array t 1 ((array_length t) - 1))),
@@ -337,32 +366,6 @@ Lemma binary_search_po_6 :
   ((array_length t) - 1)) /\
   ((p0 = 0 -> ((In t 1 ((array_length t) - 1)) -> (In t l0 u0)))) /\
   ((p0 > 0 -> (access t p0) = v)).
-Proof.
-intuition.
-subst l0 u0; assumption.
-Qed.
-
-(* Why obligation from file "bsearch.mlw", characters 188-879 *)
-Lemma binary_search_po_7 : 
-  forall (t: (array Z)),
-  forall (Pre15: (array_length t) >= 1 /\
-                 (sorted_array t 1 ((array_length t) - 1))),
-  forall (l0: Z),
-  forall (Post1: l0 = 1),
-  forall (u0: Z),
-  forall (Post2: u0 = ((array_length t) - 1)),
-  forall (p0: Z),
-  forall (Post3: p0 = 0),
-  forall (l1: Z),
-  forall (p1: Z),
-  forall (u1: Z),
-  forall (Post9: (1 <= l1 /\ u1 <= ((array_length t) - 1) /\ (0 <= p1 /\
-                 p1 <= ((array_length t) - 1)) /\
-                 ((p1 = 0 ->
-                   ((In t 1 ((array_length t) - 1)) -> (In t l1 u1)))) /\
-                 ((p1 > 0 -> (access t p1) = v))) /\ l1 > u1),
-  (1 <= p1 /\ p1 <= ((array_length t) - 1)) /\ (access t p1) = v \/ p1 = 0 /\
-  ~(In t 1 ((array_length t) - 1)).
 Proof.
 intuition.
 elim (Z_lt_ge_dec 0 p1); intro.

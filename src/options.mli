@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.32 2004-04-06 12:49:09 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.33 2004-05-13 08:51:24 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -41,11 +41,11 @@ val c_file : bool ref
 
 val werror : bool
 
-(*s Typing options *)
-
 val parse_only : bool
 val type_only : bool
 val wp_only : bool
+
+val split : bool
 
 (*s Prover options *)
 

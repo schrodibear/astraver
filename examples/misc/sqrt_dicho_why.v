@@ -32,11 +32,11 @@ Lemma sqrt_po_1 :
   forall (x: Z),
   forall (Pre5: x >= 0),
   forall (inf: Z),
-  forall (Post7: inf = 0),
+  forall (Post6: inf = 0),
   forall (sup: Z),
-  forall (Post6: sup = (x + 1)),
+  forall (Post5: sup = (x + 1)),
   forall (mil: Z),
-  forall (Post5: mil = 0),
+  forall (Post4: mil = 0),
   forall (Variant1: Z),
   forall (inf1: Z),
   forall (sup1: Z),
@@ -53,11 +53,11 @@ Lemma sqrt_po_2 :
   forall (x: Z),
   forall (Pre5: x >= 0),
   forall (inf: Z),
-  forall (Post7: inf = 0),
+  forall (Post6: inf = 0),
   forall (sup: Z),
-  forall (Post6: sup = (x + 1)),
+  forall (Post5: sup = (x + 1)),
   forall (mil: Z),
-  forall (Post5: mil = 0),
+  forall (Post4: mil = 0),
   forall (Variant1: Z),
   forall (inf1: Z),
   forall (sup1: Z),
@@ -96,11 +96,11 @@ Lemma sqrt_po_3 :
   forall (x: Z),
   forall (Pre5: x >= 0),
   forall (inf: Z),
-  forall (Post7: inf = 0),
+  forall (Post6: inf = 0),
   forall (sup: Z),
-  forall (Post6: sup = (x + 1)),
+  forall (Post5: sup = (x + 1)),
   forall (mil: Z),
-  forall (Post5: mil = 0),
+  forall (Post4: mil = 0),
   forall (Variant1: Z),
   forall (inf1: Z),
   forall (sup1: Z),
@@ -131,16 +131,38 @@ apply mean1; omega.
 omega.
 Qed.
 
-(* Why obligation from file "sqrt_dicho.mlw", characters 235-287 *)
+(* Why obligation from file "sqrt_dicho.mlw", characters 185-409 *)
 Lemma sqrt_po_4 : 
   forall (x: Z),
   forall (Pre5: x >= 0),
   forall (inf: Z),
-  forall (Post7: inf = 0),
+  forall (Post6: inf = 0),
   forall (sup: Z),
-  forall (Post6: sup = (x + 1)),
+  forall (Post5: sup = (x + 1)),
   forall (mil: Z),
-  forall (Post5: mil = 0),
+  forall (Post4: mil = 0),
+  forall (Variant1: Z),
+  forall (inf1: Z),
+  forall (sup1: Z),
+  forall (Pre4: Variant1 = (sup1 - inf1)),
+  forall (Pre3: (inf1 * inf1) <= x /\ x < (sup1 * sup1) /\ inf1 < sup1),
+  forall (Test1: (inf1 + 1) = sup1),
+  (inf1 * inf1) <= x /\ x < ((inf1 + 1) * (inf1 + 1)).
+Proof.
+intuition.
+rewrite Test1; assumption.
+Qed.
+
+(* Why obligation from file "sqrt_dicho.mlw", characters 235-287 *)
+Lemma sqrt_po_5 : 
+  forall (x: Z),
+  forall (Pre5: x >= 0),
+  forall (inf: Z),
+  forall (Post6: inf = 0),
+  forall (sup: Z),
+  forall (Post5: sup = (x + 1)),
+  forall (mil: Z),
+  forall (Post4: mil = 0),
   (inf * inf) <= x /\ x < (sup * sup) /\ inf < sup.
 Proof.
 intuition.
@@ -150,26 +172,6 @@ ring ((x + 1) * (x + 1))%Z.
 assert (0 <= x * x)%Z.
 auto with *.
 omega.
-Qed.
-
-(* Why obligation from file "sqrt_dicho.mlw", characters 412-416 *)
-Lemma sqrt_po_5 : 
-  forall (x: Z),
-  forall (Pre5: x >= 0),
-  forall (inf: Z),
-  forall (Post7: inf = 0),
-  forall (sup: Z),
-  forall (Post6: sup = (x + 1)),
-  forall (mil: Z),
-  forall (Post5: mil = 0),
-  forall (inf1: Z),
-  forall (sup1: Z),
-  forall (Post4: ((inf1 * inf1) <= x /\ x < (sup1 * sup1) /\ inf1 < sup1) /\
-                 (inf1 + 1) = sup1),
-  (inf1 * inf1) <= x /\ x < ((inf1 + 1) * (inf1 + 1)).
-Proof.
-intuition.
-rewrite H0; assumption.
 Qed.
 
 

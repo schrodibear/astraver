@@ -5,7 +5,7 @@ C test file
 
 */
 
-/*@ requires \valid(x) ensures *x == 0 */
+/*@ requires \valid(x) assigns *x ensures *x == 0 */
 void g(int* x) { *x = 0; }
 
 int * r;
@@ -18,7 +18,7 @@ int g2() { g(r); return *r; }
 int g3() { int i = 1; g(&i); return i; }
 #endif
 
-/*@ requires \valid_index(x,0)  ensures x[0] == 1 */ 
+/*@ requires \valid_index(x,0)  assigns x[0]  ensures x[0] == 1 */ 
 void f(int x[]) { 
   x[0] = 1;
 }

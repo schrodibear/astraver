@@ -25,29 +25,32 @@ Lemma add1_po_1 :
  unfold Zwf; intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 211-247 *)
+(* Why obligation from file "peano.mlw", characters 178-309 *)
 Lemma add1_po_2 : 
   forall (y: Z),
   forall (x: Z),
   forall (Pre3: y >= 0),
   forall (z: Z),
   forall (Post3: z = y),
-  0 <= z /\ x = (x + (y - z)).
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (z1: Z),
+  forall (Pre2: Variant1 = z1),
+  forall (I: 0 <= z1 /\ x0 = (x + (y - z1))),
+  forall (Test1: z1 <= 0),
+  x0 = (x + y).
 Proof.
 unfold Zwf; intros; omega.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 158-309 *)
+(* Why obligation from file "peano.mlw", characters 211-247 *)
 Lemma add1_po_3 : 
   forall (y: Z),
   forall (x: Z),
   forall (Pre3: y >= 0),
   forall (z: Z),
   forall (Post3: z = y),
-  forall (x0: Z),
-  forall (z1: Z),
-  forall (I: (0 <= z1 /\ x0 = (x + (y - z1))) /\ z1 <= 0),
-  x0 = (x + y).
+  0 <= z /\ x = (x + (y - z)).
 Proof.
 intuition.
 Qed.
@@ -211,7 +214,7 @@ Lemma mult1_po_2 :
   forall (Test2: z1 > 0),
   forall (Pre4: savex >= 0),
   forall (x2: Z),
-  forall (Post9: x2 = (x1 + savex)),
+  forall (Post14: x2 = (x1 + savex)),
   forall (z2: Z),
   forall (Post2: z2 = (z1 - 1)),
   (0 <= z2 /\ x2 = (x * (y - z2))) /\ (Zwf 0 z2 z1).
@@ -224,8 +227,37 @@ subst x1.
 ring.
 Qed.
 
-(* Why obligation from file "peano.mlw", characters 868-904 *)
+(* Why obligation from file "peano.mlw", characters 833-977 *)
 Lemma mult1_po_3 : 
+  forall (y: Z),
+  forall (x: Z),
+  forall (Pre6: x >= 0 /\ y >= 0),
+  forall (z: Z),
+  forall (Post4: z = y),
+  forall (savex: Z),
+  forall (Post3: savex = x),
+  forall (x0: Z),
+  forall (Post1: x0 = 0),
+  forall (Variant1: Z),
+  forall (x1: Z),
+  forall (z1: Z),
+  forall (Pre5: Variant1 = z1),
+  forall (I: 0 <= z1 /\ x1 = (x * (y - z1))),
+  forall (Test1: z1 <= 0),
+  x1 = (x * y).
+ Proof.
+ simpl; intros.
+cut (z1 = 0%Z).
+intros eq; rewrite eq in I.
+ intuition.
+generalize H2.
+ ring (x * (y - 0))%Z.
+ intro; ring; assumption.
+omega.
+Qed.
+
+(* Why obligation from file "peano.mlw", characters 868-904 *)
+Lemma mult1_po_4 : 
   forall (y: Z),
   forall (x: Z),
   forall (Pre6: x >= 0 /\ y >= 0),
@@ -239,32 +271,6 @@ Lemma mult1_po_3 :
  Proof.
  intros.
 subst z; split; [ omega | ring ]; assumption.
-Qed.
-
-(* Why obligation from file "peano.mlw", characters 809-984 *)
-Lemma mult1_po_4 : 
-  forall (y: Z),
-  forall (x: Z),
-  forall (Pre6: x >= 0 /\ y >= 0),
-  forall (z: Z),
-  forall (Post4: z = y),
-  forall (savex: Z),
-  forall (Post3: savex = x),
-  forall (x0: Z),
-  forall (Post1: x0 = 0),
-  forall (x1: Z),
-  forall (z1: Z),
-  forall (I: (0 <= z1 /\ x1 = (x * (y - z1))) /\ z1 <= 0),
-  x1 = (x * y).
- Proof.
- simpl; intros.
-cut (z1 = 0%Z).
-intros eq; rewrite eq in I.
- intuition.
-generalize H4.
- ring (x * (y - 0))%Z.
- intro; ring; assumption.
-omega.
 Qed.
 
 

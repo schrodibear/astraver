@@ -108,17 +108,35 @@ Lemma f_impl_po_2 :
   forall (Pre7: (valid alloc caduceus1)),
   forall (intP1: ((memory) Z)),
   forall (Post10: intP1 = (upd intP0 caduceus1 (1 + caduceus2))),
-  (acc intP1 x) = 1 /\ caduceus2 = 0.
+  ((acc intP1 x) = 1 /\ caduceus2 = 0) /\
+  (assigns alloc intP intP1 (pointer_loc x)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1430-1449 *)
+(* Why obligation from file "why/pointer.why", characters 1167-1377 *)
+Lemma g_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (r: pointer),
+  forall (Pre4: (valid alloc r)),
+  forall (Pre3: (valid alloc r)),
+  forall (intP0: ((memory) Z)),
+  forall (result: Z),
+  forall (Post1: ((acc intP0 r) = 1 /\ result = 0) /\
+                 (assigns alloc intP intP0 (pointer_loc r))),
+  (acc intP0 r) = 1.
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/pointer.why", characters 1510-1529 *)
 Lemma struct1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
-  forall (Pre10: (valid alloc s)),
+  forall (Pre10: (valid alloc s) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = s),
   (valid alloc p).
@@ -127,12 +145,12 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1488-1513 *)
+(* Why obligation from file "why/pointer.why", characters 1568-1593 *)
 Lemma struct1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
-  forall (Pre10: (valid alloc s)),
+  forall (Pre10: (valid alloc s) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = s),
   forall (Pre9: (valid alloc p)),
@@ -146,13 +164,13 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/pointer.why", characters 1465-1513 *)
+(* Why obligation from file "why/pointer.why", characters 1545-1593 *)
 Lemma struct1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (y: ((memory) Z)),
-  forall (Pre10: (valid alloc s)),
+  forall (Pre10: (valid alloc s) /\ (valid alloc s)),
   forall (p: pointer),
   forall (Post2: p = s),
   forall (Pre9: (valid alloc p)),

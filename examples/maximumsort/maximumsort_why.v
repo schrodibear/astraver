@@ -375,7 +375,7 @@ Lemma maxisort_po_2 :
   forall (Pre7: (0 <= i1 /\ i1 <= i1) /\ i1 <= i1 /\ i1 <
                 (array_length t0) /\ (Maximize t0 i1 (access t0 i1) i1)),
   forall (r: Z),
-  forall (Post7: (0 <= r /\ r <= i1) /\ (Maximize t0 i1 (access t0 r) 0)),
+  forall (Post8: (0 <= r /\ r <= i1) /\ (Maximize t0 i1 (access t0 r) 0)),
   (0 <= i1 /\ i1 < (array_length t0)) /\ 0 <= r /\ r < (array_length t0).
   Proof.
   intros; Omega'.
@@ -400,11 +400,11 @@ Lemma maxisort_po_3 :
   forall (Pre7: (0 <= i1 /\ i1 <= i1) /\ i1 <= i1 /\ i1 <
                 (array_length t0) /\ (Maximize t0 i1 (access t0 i1) i1)),
   forall (r: Z),
-  forall (Post7: (0 <= r /\ r <= i1) /\ (Maximize t0 i1 (access t0 r) 0)),
+  forall (Post8: (0 <= r /\ r <= i1) /\ (Maximize t0 i1 (access t0 r) 0)),
   forall (Pre6: (0 <= i1 /\ i1 < (array_length t0)) /\ 0 <= r /\ r <
                 (array_length t0)),
   forall (t1: (array Z)),
-  forall (Post9: (exchange t1 t0 i1 r)),
+  forall (Post10: (exchange t1 t0 i1 r)),
   (forall (i:Z),
    (i = (i1 - 1) -> ((0 <= (i + 1) /\ (i + 1) <= (array_length t1)) /\
     (sorted_array t1 (i + 1) ((array_length t1) - 1)) /\ (permut t1 t) /\

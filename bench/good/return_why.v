@@ -55,26 +55,29 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "good/return.mlw", characters 189-195 *)
+(* Why obligation from file "good/return.mlw", characters 155-345 *)
 Lemma p_po_4 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
   forall (i0: Z),
   forall (Post1: i0 = 0),
-  0 <= i0.
+  forall (Variant1: Z),
+  forall (i1: Z),
+  forall (Pre8: Variant1 = (N - i1)),
+  forall (Pre7: 0 <= i1),
+  forall (Test1: i1 >= N),
+  (0 <= N /\ N < N -> (access t N) = 0).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "good/return.mlw", characters 351-352 *)
+(* Why obligation from file "good/return.mlw", characters 189-195 *)
 Lemma p_po_5 : 
   forall (t: (array Z)),
   forall (Pre9: (array_length t) = N),
   forall (i0: Z),
   forall (Post1: i0 = 0),
-  forall (i1: Z),
-  forall (Post3: 0 <= i1 /\ i1 >= N),
-  (0 <= N /\ N < N -> (access t N) = 0).
+  0 <= i0.
 Proof.
 auto with *.
 Qed.

@@ -11,9 +11,9 @@ Lemma average_impl_po_1 :
   forall (intP: ((memory) Z)),
   forall (Pre7: (valid_range alloc t 0 n) /\ n > 0),
   forall (i: Z),
-  forall (Post5: i = (any_int tt)),
+  forall (Post4: i = (any_int tt)),
   forall (sum: Z),
-  forall (Post4: sum = 0),
+  forall (Post3: sum = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -23,7 +23,7 @@ Lemma average_impl_po_1 :
   forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
   forall (Test2: i2 < n),
   forall (aux_1: pointer),
-  forall (Post11: aux_1 = (shift t i2)),
+  forall (Post12: aux_1 = (shift t i2)),
   (valid alloc aux_1).
 Proof.
 intuition.
@@ -38,9 +38,9 @@ Lemma average_impl_po_2 :
   forall (intP: ((memory) Z)),
   forall (Pre7: (valid_range alloc t 0 n) /\ n > 0),
   forall (i: Z),
-  forall (Post5: i = (any_int tt)),
+  forall (Post4: i = (any_int tt)),
   forall (sum: Z),
-  forall (Post4: sum = 0),
+  forall (Post3: sum = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
   forall (Variant1: Z),
@@ -50,10 +50,10 @@ Lemma average_impl_po_2 :
   forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
   forall (Test2: i2 < n),
   forall (aux_1: pointer),
-  forall (Post11: aux_1 = (shift t i2)),
+  forall (Post12: aux_1 = (shift t i2)),
   forall (Pre2: (valid alloc aux_1)),
   forall (result1: Z),
-  forall (Post13: result1 = (acc intP aux_1)),
+  forall (Post14: result1 = (acc intP aux_1)),
   (forall (i:Z),
    (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (i * (min intP t i)) <=
     (sum1 + result1)) /\ (Zwf 0 (n - i) (n - i2)))).
@@ -88,7 +88,7 @@ unfold is_min; intuition.
 omega.
 Qed.
 
-(* Why obligation from file "why/average.why", characters 281-367 *)
+(* Why obligation from file "why/average.why", characters 232-493 *)
 Lemma average_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -96,18 +96,24 @@ Lemma average_impl_po_3 :
   forall (intP: ((memory) Z)),
   forall (Pre7: (valid_range alloc t 0 n) /\ n > 0),
   forall (i: Z),
-  forall (Post5: i = (any_int tt)),
+  forall (Post4: i = (any_int tt)),
   forall (sum: Z),
-  forall (Post4: sum = 0),
+  forall (Post3: sum = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  (0 <= i1 /\ i1 <= n) /\ (i1 * (min intP t i1)) <= sum.
+  forall (Variant1: Z),
+  forall (i2: Z),
+  forall (sum1: Z),
+  forall (Pre5: Variant1 = (n - i2)),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1),
+  forall (Test1: i2 >= n),
+  (min intP t n) <= ((Zdiv sum1 n)) /\ ~(n = 0).
 Proof.
 intuition.
 subst; omega.
 Save.
 
-(* Why obligation from file "why/average.why", characters 209-500 *)
+(* Why obligation from file "why/average.why", characters 281-367 *)
 Lemma average_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -115,16 +121,12 @@ Lemma average_impl_po_4 :
   forall (intP: ((memory) Z)),
   forall (Pre7: (valid_range alloc t 0 n) /\ n > 0),
   forall (i: Z),
-  forall (Post5: i = (any_int tt)),
+  forall (Post4: i = (any_int tt)),
   forall (sum: Z),
-  forall (Post4: sum = 0),
+  forall (Post3: sum = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  forall (i2: Z),
-  forall (sum1: Z),
-  forall (Post3: ((0 <= i2 /\ i2 <= n) /\ (i2 * (min intP t i2)) <= sum1) /\
-                 i2 >= n),
-  (min intP t n) <= ((Zdiv sum1 n)) /\ ~(n = 0).
+  (0 <= i1 /\ i1 <= n) /\ (i1 * (min intP t i1)) <= sum.
 Proof.
 intuition.
 assert (i2 = n). omega. subst.
@@ -143,7 +145,7 @@ Lemma min_impl_po_1 :
   forall (alloc: alloc_table),
   forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
   forall (i: Z),
-  forall (Post4: i = (any_int tt)),
+  forall (Post3: i = (any_int tt)),
   forall (aux_1: pointer),
   forall (Post9: aux_1 = (shift t 0)),
   (valid alloc aux_1).
@@ -160,14 +162,38 @@ Lemma min_impl_po_2 :
   forall (intP: ((memory) Z)),
   forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
   forall (i: Z),
-  forall (Post4: i = (any_int tt)),
+  forall (Post3: i = (any_int tt)),
   forall (aux_1: pointer),
   forall (Post9: aux_1 = (shift t 0)),
   forall (Pre1: (valid alloc aux_1)),
   forall (result: Z),
   forall (Post11: result = (acc intP aux_1)),
   (forall (i:Z),
-   (i = 1 -> (1 <= i /\ i <= n) /\ (is_min alloc intP t i result))).
+   (i = 1 -> ((1 <= i /\ i <= n) /\ (is_min alloc intP t i result)) /\
+    (forall (i:Z),
+     (forall (tmp:Z),
+      ((1 <= i /\ i <= n) /\ (is_min alloc intP t i tmp) ->
+       ((i < n ->
+         (forall (result:pointer),
+          (result = (shift t i) ->
+           (forall (result0:Z),
+            (result0 = (acc intP result) ->
+             ((result0 < tmp ->
+               (forall (result:pointer),
+                (result = (shift t i) ->
+                 (forall (result0:Z),
+                  (result0 = (acc intP result) ->
+                   (forall (i0:Z),
+                    (i0 = (i + 1) -> ((1 <= i0 /\ i0 <= n) /\
+                     (is_min alloc intP t i0 result0)) /\
+                     (Zwf 0 (n - i0) (n - i)))))) /\
+                 (valid alloc result))))) /\
+             ((result0 >= tmp ->
+               (forall (i0:Z),
+                (i0 = (i + 1) -> ((1 <= i0 /\ i0 <= n) /\
+                 (is_min alloc intP t i0 tmp)) /\ (Zwf 0 (n - i0) (n - i)))))))) /\
+           (valid alloc result))))) /\
+       ((i >= n -> (is_min alloc intP t n tmp)))))))).
 Proof.
 intuition.
 red; subst; intuition.
@@ -176,68 +202,11 @@ subst; intuition.
 exists 0; intuition.
 Save.
 
-(* Why obligation from file "why/average.why", characters 1000-1029 *)
-Lemma min_impl_po_3 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (i: Z),
-  forall (Post4: i = (any_int tt)),
-  forall (tmp: Z),
-  forall (i1: Z),
-  forall (Post1: i1 = 1),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (tmp1: Z),
-  forall (Pre9: Variant1 = (n - i2)),
-  forall (Pre8: (1 <= i2 /\ i2 <= n) /\ (is_min alloc intP t i2 tmp1)),
-  forall (Test2: i2 < n),
-  forall (aux_2: pointer),
-  forall (Post15: aux_2 = (shift t i2)),
-  (valid alloc aux_2).
 Proof.
 intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 1000-1029 *)
-Lemma min_impl_po_4 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (i: Z),
-  forall (Post4: i = (any_int tt)),
-  forall (tmp: Z),
-  forall (i1: Z),
-  forall (Post1: i1 = 1),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (tmp1: Z),
-  forall (Pre9: Variant1 = (n - i2)),
-  forall (Pre8: (1 <= i2 /\ i2 <= n) /\ (is_min alloc intP t i2 tmp1)),
-  forall (Test2: i2 < n),
-  forall (aux_2: pointer),
-  forall (Post15: aux_2 = (shift t i2)),
-  forall (Pre4: (valid alloc aux_2)),
-  forall (result1: Z),
-  forall (Post17: result1 = (acc intP aux_2)),
-  ((result1 < tmp1 ->
-    (forall (result:pointer),
-     (result = (shift t i2) ->
-      (forall (result0:Z),
-       (result0 = (acc intP result) ->
-        (forall (i:Z),
-         (i = (i2 + 1) -> ((1 <= i /\ i <= n) /\
-          (is_min alloc intP t i result0)) /\ (Zwf 0 (n - i) (n - i2)))))) /\
-      (valid alloc result))))) /\
-  ((result1 >= tmp1 ->
-    (forall (i:Z),
-     (i = (i2 + 1) -> ((1 <= i /\ i <= n) /\ (is_min alloc intP t i tmp1)) /\
-      (Zwf 0 (n - i) (n - i2)))))).
 Proof.
 intuition.
 unfold is_min in *|-*; subst; intuition.
@@ -252,23 +221,6 @@ subst; omega.
 elim H6; intros i1 Hi1; exists i1; intuition.
 Save.
 
-(* Why obligation from file "why/average.why", characters 804-1173 *)
-Lemma min_impl_po_5 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre10: n > 0 /\ (valid_range alloc t 0 n)),
-  forall (i: Z),
-  forall (Post4: i = (any_int tt)),
-  forall (tmp: Z),
-  forall (i1: Z),
-  forall (Post1: i1 = 1),
-  forall (i2: Z),
-  forall (tmp1: Z),
-  forall (Post3: ((1 <= i2 /\ i2 <= n) /\ (is_min alloc intP t i2 tmp1)) /\
-                 i2 >= n),
-  (is_min alloc intP t n tmp1).
 Proof.
 intuition.
 assert (i2=n). omega. subst; trivial.

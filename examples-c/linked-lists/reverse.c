@@ -7,15 +7,14 @@
   @ ensures \exists plist l0; llist(\result, l0) && \old(llist(p0, rev(l0)))
   @*/
 list rev(list p0) {
-  list p = p0;
-  list r = p;
-  p = NULL;
+  list r = p0;
+  list p = NULL;
   /*@ invariant 
         \exists plist lp; \exists plist lr;
           llist(p, lp) && llist(r, lr) && disjoint(lp, lr) &&
           \forall plist l; 
             \old(llist(p0, l)) => app(rev(lr), lp) == rev(l)
-    @ variant store_pointer_pair(r) for ll_order */
+    @ variant length(r) for length_order */
   while (r != NULL) {
     list q = r;
     r = r->tl;

@@ -25,7 +25,8 @@ typedef struct list_struct {
 
 node NIL;
 
-/*@ ensures \valid(\result) && \block_length(\result->forward) == lvl */
+/*@ assigns \nothing
+  @ ensures \valid(\result) && \block_length(\result->forward) == lvl */
 node make_node(int lvl) {
   return (node)malloc(sizeof(struct node_struct) + lvl * sizeof(node));
 }
@@ -55,10 +56,10 @@ list empty() {
   return l;
 }
 
-/*@ ensures 0.0 <= \result <= 1.0 */
+/*@ assigns \nothing ensures 0.0 <= \result <= 1.0 */
 float rand01();
 
-/*@ ensures 1 <= \result <= MaxNbLevels */
+/*@ assigns \nothing ensures 1 <= \result <= MaxNbLevels */
 int random_level() {
   static float prob = 0.25;
   int lvl = 1;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.38 2004-05-04 12:37:12 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.39 2004-05-13 08:51:22 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -29,7 +29,7 @@ let interp_type ctype =
   match ctype.ctype_node with
   | CTvoid -> "unit"
   | CTenum _ | CTint _ -> "int"
-  | CTfloat(cfloat) -> "float"
+  | CTfloat(cfloat) -> "real"
   | CTarray(t,None) -> "pointer"      
   | CTarray(t,Some e) -> "pointer"
   | CTpointer(t) -> "pointer"      
@@ -44,7 +44,7 @@ let rec pointer_heap_var ty =
     | CTvoid -> failwith "void * not supported"
     | CTint _ -> "int", "int"
     | CTenum _ -> "int", "int"
-    | CTfloat _ -> "float", "float"
+    | CTfloat _ -> "real", "real"
     | CTarray ({ctype_node = CTstruct _ | CTunion _}, _) 
     | CTpointer {ctype_node = CTstruct _ | CTunion _} ->
 	"pointer", "pointer"

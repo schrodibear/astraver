@@ -40,20 +40,23 @@ Lemma f_impl_po_2 :
   forall (Pre3: (valid alloc caduceus_1)),
   forall (intP0: ((memory) Z)),
   forall (Post4: intP0 = (upd intP caduceus_1 1)),
-  (acc intP0 (shift x 0)) = 1.
+  (acc intP0 (shift x 0)) = 1 /\
+  (assigns alloc intP intP0 (pointer_loc (shift x 0))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 278-324 *)
+(* Why obligation from file "why/passing.why", characters 346-392 *)
 Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
   forall (r: pointer),
   forall (Pre7: (valid alloc r)),
   forall (Pre6: (valid alloc r)),
   forall (intP0: ((memory) Z)),
-  forall (Post2: (acc intP0 r) = 0),
+  forall (Post2: (acc intP0 r) = 0 /\
+                 (assigns alloc intP intP0 (pointer_loc r))),
   forall (Pre5: (valid alloc r)),
   forall (result0: Z),
   forall (Post4: result0 = (acc intP0 r)),
@@ -68,7 +71,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/passing.why", characters 390-609 *)
+(* Why obligation from file "why/passing.why", characters 458-991 *)
 Lemma g_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -77,7 +80,7 @@ Lemma g_impl_po_1 :
   forall (Pre3: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post1: intP0 = (upd intP x 0)),
-  (acc intP0 x) = 0.
+  (acc intP0 x) = 0 /\ (assigns alloc intP intP0 (pointer_loc x)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

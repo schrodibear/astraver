@@ -1,7 +1,8 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
- o new connective <=>
+ o a term is now accepted as a predicate (with usual C interpretation x != 0)
+ o new connective <=> (if and only if)
 
 version 0.55, May 3rd, 2004
 ===========================

@@ -176,37 +176,37 @@ Qed.
 
 (** * WF relation over linked lists *)
 
-Definition StorePointerPair := ((memory pointer) * pointer)%type.
-Definition store_pointer_pair (a: alloc_table) (t: memory pointer) (p:pointer) := (t, p).
+Definition Length := ((memory pointer) * pointer)%type.
+Definition length (a: alloc_table) (t: memory pointer) (p:pointer) := (t, p).
 
-Definition ll_order (c1 c2: memory pointer * pointer) : Prop :=
+Definition length_order (c1 c2: memory pointer * pointer) : Prop :=
   let (t1, p1) := c1 in
   let (t2, p2) := c2 in
     exists a : alloc_table,
     exists l1 : plist,
     exists l2 : plist,
-    llist a t1 p1 l1 /\ llist a t2 p2 l2 /\ (length l1 < length l2)%nat.
+    llist a t1 p1 l1 /\ llist a t2 p2 l2 /\ (List.length l1 < List.length l2)%nat.
 
-Lemma ll_order_wf : well_founded ll_order.
+Lemma length_order_wf : well_founded length_order.
 Proof.
 apply well_founded_inv_lt_rel_compat with
- (F := fun (x:StorePointerPair) n =>
+ (F := fun (x:Length) n =>
          let (t, p) := x in 
          exists a : alloc_table,
-         exists l : plist, llist a t p l /\ length l = n).
-unfold ll_order, inv_lt_rel.
+         exists l : plist, llist a t p l /\ List.length l = n).
+unfold length_order, inv_lt_rel.
 simple destruct x; simple destruct y; intuition.
 elim H; clear H; intros a H; elim H; clear H; 
 intros l1 H; elim H; clear H; intros l2 H.
 intuition.
-exists (length l1).
+exists (List.length l1).
 exists a; exists l1; intuition.
 intuition.
 elim H1; clear H1; intros a0 H1; elim H1; intros l2'; intuition.
 generalize (llist_function a a0 _ _ _ _ H H4); intro; subst l2.
 omega.
 Qed.
-Hint Resolve ll_order_wf .
+Hint Resolve length_order_wf .
 
 
 (** * Disjointness *)

@@ -65,9 +65,11 @@ predicate valid_range(a:alloc_table, p:pointer, i:int, j:int) =
 	and i <= j
 	and offset(p)+j < block_length(a,p)
 
+(*
 axiom offset_shift :
   forall p:pointer. forall i:int.
   offset(shift(p,i)) = offset(p)+i
+*)
 
 axiom base_addr_shift :
   forall p:pointer. forall i:int.
@@ -190,7 +192,7 @@ exception Break
 exception Continue
 exception Return
 exception Return_int of int
-exception Return_float of real
+exception Return_real of real
 exception Return_pointer of pointer
 
 (* for Simplify *)

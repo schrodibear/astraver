@@ -25,9 +25,9 @@ Lemma gcd1_po_1 :
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post4: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
+  forall (Post3: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -52,9 +52,9 @@ Lemma gcd1_po_2 :
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post4: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
+  forall (Post3: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -75,38 +75,41 @@ assert (h: x1 <> y1).
  case (Z_le_gt_dec x1 y2); case (Z_le_gt_dec x1 y1); intros; omega.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 299-338 *)
+(* Why obligation from file "gcd.mlw", characters 262-441 *)
 Lemma gcd1_po_3 : 
   forall (a: Z),
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post4: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
-  0 < x /\ 0 < y /\ (gcd x y) = (gcd a b).
+  forall (Post3: y = b),
+  forall (Variant1: Z),
+  forall (x1: Z),
+  forall (y1: Z),
+  forall (Pre3: Variant1 = (max x1 y1)),
+  forall (Pre2: 0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)),
+  forall (Test1: x1 = y1),
+  x1 = (gcd a b).
 Proof.
 intuition.
-subst; reflexivity.
+rewrite <- H4; rewrite Test1.
+auto.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 448-450 *)
+(* Why obligation from file "gcd.mlw", characters 299-338 *)
 Lemma gcd1_po_4 : 
   forall (a: Z),
   forall (b: Z),
   forall (Pre4: a > 0 /\ b > 0),
   forall (x: Z),
-  forall (Post5: x = a),
+  forall (Post4: x = a),
   forall (y: Z),
-  forall (Post4: y = b),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Post3: (0 < x1 /\ 0 < y1 /\ (gcd x1 y1) = (gcd a b)) /\ x1 = y1),
-  x1 = (gcd a b).
+  forall (Post3: y = b),
+  0 < x /\ 0 < y /\ (gcd x y) = (gcd a b).
 Proof.
 intuition.
-rewrite <- H5; rewrite H2.
-auto.
+subst; reflexivity.
 Qed.
 
 
@@ -116,9 +119,9 @@ Lemma gcd2_po_1 :
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post6: x = a),
+  forall (Post5: x = a),
   forall (y: Z),
-  forall (Post5: y = b),
+  forall (Post4: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -136,9 +139,9 @@ Lemma gcd2_po_2 :
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post6: x = a),
+  forall (Post5: x = a),
   forall (y: Z),
-  forall (Post5: y = b),
+  forall (Post4: y = b),
   forall (Variant1: Z),
   forall (x1: Z),
   forall (y1: Z),
@@ -171,37 +174,40 @@ assert (h1_y0: (y1 > 0)).
 generalize (Z_mod_lt x1 y1 h1_y0); omega.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 653-694 *)
+(* Why obligation from file "gcd.mlw", characters 617-787 *)
 Lemma gcd2_po_3 : 
   forall (a: Z),
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post6: x = a),
+  forall (Post5: x = a),
   forall (y: Z),
-  forall (Post5: y = b),
-  0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b).
+  forall (Post4: y = b),
+  forall (Variant1: Z),
+  forall (x1: Z),
+  forall (y1: Z),
+  forall (Pre4: Variant1 = y1),
+  forall (Pre3: 0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)),
+  forall (Test1: y1 = 0),
+  x1 = (gcd a b).
 Proof.
 intuition.
-subst; reflexivity.
+rewrite <- H4; rewrite Test1; auto.
 Qed.
 
-(* Why obligation from file "gcd.mlw", characters 794-796 *)
+(* Why obligation from file "gcd.mlw", characters 653-694 *)
 Lemma gcd2_po_4 : 
   forall (a: Z),
   forall (b: Z),
   forall (Pre5: a >= 0 /\ b >= 0),
   forall (x: Z),
-  forall (Post6: x = a),
+  forall (Post5: x = a),
   forall (y: Z),
-  forall (Post5: y = b),
-  forall (x1: Z),
-  forall (y1: Z),
-  forall (Post4: (0 <= x1 /\ 0 <= y1 /\ (gcd x1 y1) = (gcd a b)) /\ y1 = 0),
-  x1 = (gcd a b).
+  forall (Post4: y = b),
+  0 <= x /\ 0 <= y /\ (gcd x y) = (gcd a b).
 Proof.
 intuition.
-rewrite <- H5; rewrite H2; auto.
+subst; reflexivity.
 Qed.
 
 

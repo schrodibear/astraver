@@ -113,8 +113,34 @@ repeat split; try omega.
 subst a0; apply Z_div_lt; try omega.
 Qed.
 
-(* Why obligation from file "arith.mlw", characters 304-333 *)
+(* Why obligation from file "arith.mlw", characters 268-436 *)
 Lemma mult_po_4 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre9: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (Post6: a = x),
+  forall (b: Z),
+  forall (Post5: b = y),
+  forall (p: Z),
+  forall (Post4: p = 0),
+  forall (Variant1: Z),
+  forall (a1: Z),
+  forall (b1: Z),
+  forall (p1: Z),
+  forall (Pre8: Variant1 = a1),
+  forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
+  forall (Test1: a1 = 0),
+  p1 = (x * y).
+Proof.
+intuition.
+clear Pre8; subst a1.
+rewrite <- H2.
+ring.
+Qed.
+
+(* Why obligation from file "arith.mlw", characters 304-333 *)
+Lemma mult_po_5 : 
   forall (x: Z),
   forall (y: Z),
   forall (Pre9: x >= 0 /\ y >= 0),
@@ -128,29 +154,6 @@ Lemma mult_po_4 :
 Proof.
 intuition.
 subst; ring.
-Qed.
-
-(* Why obligation from file "arith.mlw", characters 443-445 *)
-Lemma mult_po_5 : 
-  forall (x: Z),
-  forall (y: Z),
-  forall (Pre9: x >= 0 /\ y >= 0),
-  forall (a: Z),
-  forall (Post6: a = x),
-  forall (b: Z),
-  forall (Post5: b = y),
-  forall (p: Z),
-  forall (Post4: p = 0),
-  forall (a1: Z),
-  forall (b1: Z),
-  forall (p1: Z),
-  forall (Inv: (a1 >= 0 /\ (p1 + a1 * b1) = (x * y)) /\ a1 = 0),
-  p1 = (x * y).
-Proof.
-intuition.
-subst a1.
-rewrite <- H4.
-ring.
 Qed.
 
 
