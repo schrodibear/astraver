@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.84 2005-02-21 09:52:16 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.85 2005-02-23 13:07:18 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -700,92 +700,6 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
   | Tarray (ty', _) -> has_constant_values ty'
   | Tunion _ | Tfun _ | Tvar _ -> false
 
-(*let heapVarSet_to_list loc ty pre =
-  (HeapVarSet.fold 
-     (fun x acc ->
-	({
-	   nterm_node = NTvar x;
-	   nterm_loc = loc;
-	   nterm_type = ty;
-	 })::acc) 
-     (predicate pre) [])
-
-let rec valid ?(fresh=false) loc name ty =
-  let rec valid_struct valid_for_current n (t : Cast.nterm) = 
-    begin match tag_type_definition n with
-      | TTStructUnion (Tstruct (_), fl) ->
-	  List.fold_right 
-	    (fun f acc -> 
-	       let tf = 
-		 { nterm_node = NTarrow (t, f); 
-		   nterm_loc = t.nterm_loc;
-		   nterm_type = f.var_type } 
-	       in
-	       Cnorm.make_and acc (valid t.nterm_loc f.var_name tf.nterm_type))
-	    fl 
-	    (if valid_for_current then 
-	       if fresh then NPand(NPvalid t, NPfresh t) else NPvalid t 
-	     else NPtrue)
-      | TTIncomplete ->
-	  error loc ("`" ^ name ^ "' has incomplete type")
-      | _ ->
-	  assert false
-    end  in
-  match ty.Ctypes.ctype_node with
-    | Tstruct (n) ->
-	let v = default_var_info "point" in 
-	Info.set_var_type (Var_info v) ty;
-	let t = {
-	  nterm_node = NTvar v;
-	  nterm_loc = loc;
-	  nterm_type = ty;
-	} in
-	let info = default_logic_info ("valid_" ^ (ctype ty) ^ "_pointer") in
-	let pre = (valid_struct false n t) in
- 	add_strong_invariant_2 ("valid_" ^ (ctype ty) ^ "_pointer") pre [];
-	let pre = heapVarSet_to_list loc ty pre in
-	if pre = [] then
-	  NPtrue
-	else
-	  NPapp (info,pre)
-    | Tarray (ty, None) ->
-	error loc ("array size missing in `" ^ name ^ "'")	  
-    | Tarray (ty,Some s) ->
-	if s = Int64.one then
-	  valid loc name ty
-	else
-	  let info = default_logic_info ("valid_" ^ (ctype ty) ^ "_range") in
-	  let i = default_var_info "counter" in
-	  let borne_sup =  default_var_info "sup" in
-	  let vari = { nterm_node = NTvar i; 
-		       nterm_loc = loc;
-		       nterm_type = c_int } in	  
-	  let term_sup = { nterm_node = NTvar borne_sup; 
-		       nterm_loc = loc;
-		       nterm_type = c_int } in
-	  let ineq = NPand 
-		       (NPrel (Cnorm.nzero, Le, vari),
-			NPrel (vari, Lt, 
-			       term_sup)) in
-	  let pre = NPforall ([({ 
-				  Ctypes.ctype_node = 
-				    Tint (Signed, Ctypes.Int);
-				  ctype_storage = No_storage;
-				  ctype_const = false;
-				  ctype_volatile = false;
-				}, i)], 
-			      NPimplies (ineq,
-					 valid loc i.var_unique_name ty)) in
-	  add_strong_invariant_2 ("valid_" ^ (ctype ty) ^ "_range") pre 
-	    [(borne_sup.var_unique_name, ([],"int"))];
-	  let pre = heapVarSet_to_list loc ty pre in
-	  if pre = []
-	  then
-	    NPtrue
-	  else
-	    NPapp (info, pre)
-    | _ -> NPtrue
-*)
 	  
 let rec validity x ty size =
   match ty.Ctypes.ctype_node with
