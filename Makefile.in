@@ -277,11 +277,12 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) coq-@COQ@
+local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE) coq-@COQ@
 	cp -f bin/why.opt $$HOME/bin/$$OSTYPE/why
 	cp -f $(CADUCEUS) $$HOME/bin/$$OSTYPE/caduceus
 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
 	cp -f $(DP) $$HOME/bin/$$OSTYPE/dp
+	cp -f $(RVMERGE) $$HOME/bin/$$OSTYPE/rv_merge
 #	mkdir -p $(COQLIB)/contrib7/why
 #	cp -f $(VO7) $(VFILES) $(COQLIB)/contrib7/why
 	mkdir -p $(COQLIB)/contrib/why

@@ -6,6 +6,14 @@ EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS) -v -print-norm
 CFILES=$(shell ls *.c)
 WFILES=$(addprefix why/, $(CFILES:.c=.why))
 
+BENCHFILES = array assigns break call clash clash_alloc clash_redef \
+    continue coord \
+    copy dowhile invariants ifs logic_cast \
+    param passing purse queue rec ref ref_glob search see \
+    sizeof alloca \
+    struct struct2 switch enum separation3 separation
+
+
 # generating and type-checking Why files for all C files
 default:
 	for f in $(CFILES:.c=); do \
@@ -34,17 +42,18 @@ cvcl: $(CFILES)
 	done
 	dp -timeout 10 cvcl/*_why.cvc.all
 
+harvey:
+	for f in $(BENCHFILES); do \
+	  rm -f why/$$f.why; \
+	  make why/$$f.why; \
+	  make -f $$f.makefile harvey/$${f}_why.all.rv; \
+	done
+	dp -timeout 10 cvcl/*_why.all.rv
+
 # running Coq on all programs
 
-COQFILES = array assigns break call clash clash_alloc clash_redef \
-    continue coord \
-    copy dowhile invariants ifs logic_cast \
-    param passing purse queue rec ref ref_glob search see \
-    sizeof alloca \
-    struct struct2 switch enum separation3 separation
-
 coq:
-	for f in $(COQFILES); do \
+	for f in $(BENCHFILES); do \
 	  rm -f why/$$f.why; \
 	  make why/$$f.why; \
 	  make -f $$f.makefile coq || exit 1; \
@@ -77,7 +86,7 @@ why/init2.why: init2.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	make why/$*.why
 	make -f $*.makefile coq
 
-.PHONY: simplify coq
+.PHONY: simplify coq harvey
 
 clean:
 	rm -f why/*.why coq/*.vo \

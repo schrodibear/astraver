@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation2.why", characters 7808-7823 *)
+(* Why obligation from file "why/separation2.why", characters 4756-4771 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (m: pointer),
@@ -40,31 +40,26 @@ Lemma f_impl_po_1 :
                     (~((base_addr (acc p1 x)) = (base_addr (acc pp1 y))) /\
                     ~((base_addr (acc p2 x)) = (base_addr (acc pp1 y)))) /\
                     ~((base_addr (acc pp1 x)) = (base_addr (acc pp1 y))))))) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                 (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                 (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                 (valid_anonymous_1 v2_0) /\
-                 (valid_anonymous_0 alloc p1 p2 u) /\
-                 (valid_anonymous_0 alloc p1 p2 v) /\
-                 (valid_anonymous_0 alloc p1 p2 w) /\
-                 (valid_anonymous_0 alloc p1 p2 m) /\
-                 (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                 (separation_m_w w m) /\ (separation_m_v v m) /\
-                 (separation_m_u u m) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
+                 (separation_w_v alloc p1 p2 v w) /\
+                 (separation_u2_w alloc p1 p2 w u2) /\
+                 (valid_range alloc u 0 1) /\
+                 (separation_w_u alloc p1 p2 u w) /\
+                 (separation_u2_v alloc p1 p2 v u2) /\
+                 (separation_u2_u alloc p1 p2 u u2) /\
+                 (valid_range alloc m 0 1) /\
+                 (separation_u2_m alloc p1 p2 m u2) /\
+                 (separation_v2_u2 u2 v2_0) /\
+                 (separation_m_w alloc p1 p2 w m) /\
+                 (separation_m_v alloc p1 p2 v m) /\
+                 (separation_m_u alloc p1 p2 u m) /\
+                 (separation_v2_w alloc p1 p2 w v2_0) /\
+                 (separation_v2_v alloc p1 p2 v v2_0) /\
+                 (separation_v2_u alloc p1 p2 u v2_0) /\
+                 (separation_v2_m alloc p1 p2 m v2_0) /\
                  (valid_range alloc v2_0 0 1) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u)),
+                 (separation_v_u alloc p1 p2 u v) /\
+                 (valid_range alloc u2 0 1)),
   ((((((valid alloc u) /\ (valid alloc (acc p1 u))) /\
   (valid alloc (acc p2 u))) /\ (valid alloc (acc pp1 u))) /\
   (valid_range alloc (acc p1 u) 0 5)) /\
@@ -87,7 +82,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 7829-7844 *)
+(* Why obligation from file "why/separation2.why", characters 4777-4792 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -127,31 +122,26 @@ Lemma f_impl_po_2 :
                     (~((base_addr (acc p1 x)) = (base_addr (acc pp1 y))) /\
                     ~((base_addr (acc p2 x)) = (base_addr (acc pp1 y)))) /\
                     ~((base_addr (acc pp1 x)) = (base_addr (acc pp1 y))))))) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                 (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                 (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                 (valid_anonymous_1 v2_0) /\
-                 (valid_anonymous_0 alloc p1 p2 u) /\
-                 (valid_anonymous_0 alloc p1 p2 v) /\
-                 (valid_anonymous_0 alloc p1 p2 w) /\
-                 (valid_anonymous_0 alloc p1 p2 m) /\
-                 (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                 (separation_m_w w m) /\ (separation_m_v v m) /\
-                 (separation_m_u u m) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
+                 (separation_w_v alloc p1 p2 v w) /\
+                 (separation_u2_w alloc p1 p2 w u2) /\
+                 (valid_range alloc u 0 1) /\
+                 (separation_w_u alloc p1 p2 u w) /\
+                 (separation_u2_v alloc p1 p2 v u2) /\
+                 (separation_u2_u alloc p1 p2 u u2) /\
+                 (valid_range alloc m 0 1) /\
+                 (separation_u2_m alloc p1 p2 m u2) /\
+                 (separation_v2_u2 u2 v2_0) /\
+                 (separation_m_w alloc p1 p2 w m) /\
+                 (separation_m_v alloc p1 p2 v m) /\
+                 (separation_m_u alloc p1 p2 u m) /\
+                 (separation_v2_w alloc p1 p2 w v2_0) /\
+                 (separation_v2_v alloc p1 p2 v v2_0) /\
+                 (separation_v2_u alloc p1 p2 u v2_0) /\
+                 (separation_v2_m alloc p1 p2 m v2_0) /\
                  (valid_range alloc v2_0 0 1) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u)),
+                 (separation_v_u alloc p1 p2 u v) /\
+                 (valid_range alloc u2 0 1)),
   forall (Pre12: ((((((valid alloc u) /\ (valid alloc (acc p1 u))) /\
                  (valid alloc (acc p2 u))) /\ (valid alloc (acc pp1 u))) /\
                  (valid_range alloc (acc p1 u) 0 5)) /\
@@ -203,7 +193,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 7850-7865 *)
+(* Why obligation from file "why/separation2.why", characters 4798-4813 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -243,31 +233,26 @@ Lemma f_impl_po_3 :
                     (~((base_addr (acc p1 x)) = (base_addr (acc pp1 y))) /\
                     ~((base_addr (acc p2 x)) = (base_addr (acc pp1 y)))) /\
                     ~((base_addr (acc pp1 x)) = (base_addr (acc pp1 y))))))) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                 (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                 (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                 (valid_anonymous_1 v2_0) /\
-                 (valid_anonymous_0 alloc p1 p2 u) /\
-                 (valid_anonymous_0 alloc p1 p2 v) /\
-                 (valid_anonymous_0 alloc p1 p2 w) /\
-                 (valid_anonymous_0 alloc p1 p2 m) /\
-                 (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                 (separation_m_w w m) /\ (separation_m_v v m) /\
-                 (separation_m_u u m) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
+                 (separation_w_v alloc p1 p2 v w) /\
+                 (separation_u2_w alloc p1 p2 w u2) /\
+                 (valid_range alloc u 0 1) /\
+                 (separation_w_u alloc p1 p2 u w) /\
+                 (separation_u2_v alloc p1 p2 v u2) /\
+                 (separation_u2_u alloc p1 p2 u u2) /\
+                 (valid_range alloc m 0 1) /\
+                 (separation_u2_m alloc p1 p2 m u2) /\
+                 (separation_v2_u2 u2 v2_0) /\
+                 (separation_m_w alloc p1 p2 w m) /\
+                 (separation_m_v alloc p1 p2 v m) /\
+                 (separation_m_u alloc p1 p2 u m) /\
+                 (separation_v2_w alloc p1 p2 w v2_0) /\
+                 (separation_v2_v alloc p1 p2 v v2_0) /\
+                 (separation_v2_u alloc p1 p2 u v2_0) /\
+                 (separation_v2_m alloc p1 p2 m v2_0) /\
                  (valid_range alloc v2_0 0 1) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u)),
+                 (separation_v_u alloc p1 p2 u v) /\
+                 (valid_range alloc u2 0 1)),
   forall (Pre12: ((((((valid alloc u) /\ (valid alloc (acc p1 u))) /\
                  (valid alloc (acc p2 u))) /\ (valid alloc (acc pp1 u))) /\
                  (valid_range alloc (acc p1 u) 0 5)) /\
@@ -348,7 +333,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 7871-7886 *)
+(* Why obligation from file "why/separation2.why", characters 4819-4834 *)
 Lemma f_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -388,31 +373,26 @@ Lemma f_impl_po_4 :
                     (~((base_addr (acc p1 x)) = (base_addr (acc pp1 y))) /\
                     ~((base_addr (acc p2 x)) = (base_addr (acc pp1 y)))) /\
                     ~((base_addr (acc pp1 x)) = (base_addr (acc pp1 y))))))) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                 (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                 (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                 (valid_anonymous_1 v2_0) /\
-                 (valid_anonymous_0 alloc p1 p2 u) /\
-                 (valid_anonymous_0 alloc p1 p2 v) /\
-                 (valid_anonymous_0 alloc p1 p2 w) /\
-                 (valid_anonymous_0 alloc p1 p2 m) /\
-                 (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                 (separation_m_w w m) /\ (separation_m_v v m) /\
-                 (separation_m_u u m) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
+                 (separation_w_v alloc p1 p2 v w) /\
+                 (separation_u2_w alloc p1 p2 w u2) /\
+                 (valid_range alloc u 0 1) /\
+                 (separation_w_u alloc p1 p2 u w) /\
+                 (separation_u2_v alloc p1 p2 v u2) /\
+                 (separation_u2_u alloc p1 p2 u u2) /\
+                 (valid_range alloc m 0 1) /\
+                 (separation_u2_m alloc p1 p2 m u2) /\
+                 (separation_v2_u2 u2 v2_0) /\
+                 (separation_m_w alloc p1 p2 w m) /\
+                 (separation_m_v alloc p1 p2 v m) /\
+                 (separation_m_u alloc p1 p2 u m) /\
+                 (separation_v2_w alloc p1 p2 w v2_0) /\
+                 (separation_v2_v alloc p1 p2 v v2_0) /\
+                 (separation_v2_u alloc p1 p2 u v2_0) /\
+                 (separation_v2_m alloc p1 p2 m v2_0) /\
                  (valid_range alloc v2_0 0 1) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u)),
+                 (separation_v_u alloc p1 p2 u v) /\
+                 (valid_range alloc u2 0 1)),
   forall (Pre12: ((((((valid alloc u) /\ (valid alloc (acc p1 u))) /\
                  (valid alloc (acc p2 u))) /\ (valid alloc (acc pp1 u))) /\
                  (valid_range alloc (acc p1 u) 0 5)) /\
@@ -522,7 +502,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 35-9179 *)
+(* Why obligation from file "why/separation2.why", characters 35-6127 *)
 Lemma f_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -562,31 +542,26 @@ Lemma f_impl_po_5 :
                     (~((base_addr (acc p1 x)) = (base_addr (acc pp1 y))) /\
                     ~((base_addr (acc p2 x)) = (base_addr (acc pp1 y)))) /\
                     ~((base_addr (acc pp1 x)) = (base_addr (acc pp1 y))))))) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                 (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                 (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                 (valid_anonymous_1 v2_0) /\
-                 (valid_anonymous_0 alloc p1 p2 u) /\
-                 (valid_anonymous_0 alloc p1 p2 v) /\
-                 (valid_anonymous_0 alloc p1 p2 w) /\
-                 (valid_anonymous_0 alloc p1 p2 m) /\
-                 (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                 (separation_m_w w m) /\ (separation_m_v v m) /\
-                 (separation_m_u u m) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 m) /\
+                 (separation_w_v alloc p1 p2 v w) /\
+                 (separation_u2_w alloc p1 p2 w u2) /\
+                 (valid_range alloc u 0 1) /\
+                 (separation_w_u alloc p1 p2 u w) /\
+                 (separation_u2_v alloc p1 p2 v u2) /\
+                 (separation_u2_u alloc p1 p2 u u2) /\
+                 (valid_range alloc m 0 1) /\
+                 (separation_u2_m alloc p1 p2 m u2) /\
+                 (separation_v2_u2 u2 v2_0) /\
+                 (separation_m_w alloc p1 p2 w m) /\
+                 (separation_m_v alloc p1 p2 v m) /\
+                 (separation_m_u alloc p1 p2 u m) /\
+                 (separation_v2_w alloc p1 p2 w v2_0) /\
+                 (separation_v2_v alloc p1 p2 v v2_0) /\
+                 (separation_v2_u alloc p1 p2 u v2_0) /\
+                 (separation_v2_m alloc p1 p2 m v2_0) /\
                  (valid_range alloc v2_0 0 1) /\
-                 (internal_separation_anonymous_1 v2_0) /\
-                 (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                 (internal_separation_anonymous_1 u2) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                 (internal_separation_anonymous_0 alloc p1 p2 u)),
+                 (separation_v_u alloc p1 p2 u v) /\
+                 (valid_range alloc u2 0 1)),
   forall (Pre12: ((((((valid alloc u) /\ (valid alloc (acc p1 u))) /\
                  (valid alloc (acc p2 u))) /\ (valid alloc (acc pp1 u))) /\
                  (valid_range alloc (acc p1 u) 0 5)) /\
@@ -733,7 +708,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 15590-15670 *)
+(* Why obligation from file "why/separation2.why", characters 9463-9476 *)
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (m: pointer),
@@ -744,38 +719,33 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (v: pointer),
   forall (v2_0: pointer),
   forall (w: pointer),
-  forall (Pre203: (internal_separation_anonymous_0 alloc p1 p2 m) /\
-                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                  (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                  (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                  (valid_anonymous_1 v2_0) /\
-                  (valid_anonymous_0 alloc p1 p2 u) /\
-                  (valid_anonymous_0 alloc p1 p2 v) /\
-                  (valid_anonymous_0 alloc p1 p2 w) /\
-                  (valid_anonymous_0 alloc p1 p2 m) /\
-                  (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                  (separation_m_w w m) /\ (separation_m_v v m) /\
-                  (separation_m_u u m) /\
-                  (internal_separation_anonymous_1 u2) /\
-                  (internal_separation_anonymous_1 v2_0) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 m) /\
+  forall (Pre203: (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
+                  (separation_w_v alloc p1 p2 v w) /\
+                  (separation_u2_w alloc p1 p2 w u2) /\
+                  (valid_range alloc u 0 1) /\
+                  (separation_w_u alloc p1 p2 u w) /\
+                  (separation_u2_v alloc p1 p2 v u2) /\
+                  (separation_u2_u alloc p1 p2 u u2) /\
+                  (valid_range alloc m 0 1) /\
+                  (separation_u2_m alloc p1 p2 m u2) /\
+                  (separation_v2_u2 u2 v2_0) /\
+                  (separation_m_w alloc p1 p2 w m) /\
+                  (separation_m_v alloc p1 p2 v m) /\
+                  (separation_m_u alloc p1 p2 u m) /\
+                  (separation_v2_w alloc p1 p2 w v2_0) /\
+                  (separation_v2_v alloc p1 p2 v v2_0) /\
+                  (separation_v2_u alloc p1 p2 u v2_0) /\
+                  (separation_v2_m alloc p1 p2 m v2_0) /\
                   (valid_range alloc v2_0 0 1) /\
-                  (internal_separation_anonymous_1 v2_0) /\
-                  (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                  (internal_separation_anonymous_1 u2) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 u)),
+                  (separation_v_u alloc p1 p2 u v) /\
+                  (valid_range alloc u2 0 1)),
   (valid alloc u).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 15678-15706 *)
+(* Why obligation from file "why/separation2.why", characters 9481-9509 *)
 Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (m: pointer),
@@ -786,41 +756,36 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (v: pointer),
   forall (v2_0: pointer),
   forall (w: pointer),
-  forall (Pre203: (internal_separation_anonymous_0 alloc p1 p2 m) /\
-                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                  (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                  (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                  (valid_anonymous_1 v2_0) /\
-                  (valid_anonymous_0 alloc p1 p2 u) /\
-                  (valid_anonymous_0 alloc p1 p2 v) /\
-                  (valid_anonymous_0 alloc p1 p2 w) /\
-                  (valid_anonymous_0 alloc p1 p2 m) /\
-                  (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                  (separation_m_w w m) /\ (separation_m_v v m) /\
-                  (separation_m_u u m) /\
-                  (internal_separation_anonymous_1 u2) /\
-                  (internal_separation_anonymous_1 v2_0) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 m) /\
+  forall (Pre203: (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
+                  (separation_w_v alloc p1 p2 v w) /\
+                  (separation_u2_w alloc p1 p2 w u2) /\
+                  (valid_range alloc u 0 1) /\
+                  (separation_w_u alloc p1 p2 u w) /\
+                  (separation_u2_v alloc p1 p2 v u2) /\
+                  (separation_u2_u alloc p1 p2 u u2) /\
+                  (valid_range alloc m 0 1) /\
+                  (separation_u2_m alloc p1 p2 m u2) /\
+                  (separation_v2_u2 u2 v2_0) /\
+                  (separation_m_w alloc p1 p2 w m) /\
+                  (separation_m_v alloc p1 p2 v m) /\
+                  (separation_m_u alloc p1 p2 u m) /\
+                  (separation_v2_w alloc p1 p2 w v2_0) /\
+                  (separation_v2_v alloc p1 p2 v v2_0) /\
+                  (separation_v2_u alloc p1 p2 u v2_0) /\
+                  (separation_v2_m alloc p1 p2 m v2_0) /\
                   (valid_range alloc v2_0 0 1) /\
-                  (internal_separation_anonymous_1 v2_0) /\
-                  (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                  (internal_separation_anonymous_1 u2) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 u)),
+                  (separation_v_u alloc p1 p2 u v) /\
+                  (valid_range alloc u2 0 1)),
   forall (Pre4: (valid alloc u)),
-  forall (caduceus_94: pointer),
-  forall (Post3: caduceus_94 = (shift (acc p1 u) 0)),
-  (valid alloc caduceus_94).
+  forall (caduceus_86: pointer),
+  forall (Post3: caduceus_86 = (acc p1 u)),
+  (valid alloc caduceus_86).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation2.why", characters 15572-15706 *)
+(* Why obligation from file "why/separation2.why", characters 9445-9509 *)
 Lemma invariants_initially_established_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -836,37 +801,32 @@ Lemma invariants_initially_established_impl_po_3 :
   forall (v2: ((memory) Z)),
   forall (v2_0: pointer),
   forall (w: pointer),
-  forall (Pre203: (internal_separation_anonymous_0 alloc p1 p2 m) /\
-                  (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
-                  (separation_w_v v w) /\ (valid_range alloc u 0 1) /\
-                  (separation_w_u u w) /\ (valid_anonymous_1 u2) /\
-                  (valid_anonymous_1 v2_0) /\
-                  (valid_anonymous_0 alloc p1 p2 u) /\
-                  (valid_anonymous_0 alloc p1 p2 v) /\
-                  (valid_anonymous_0 alloc p1 p2 w) /\
-                  (valid_anonymous_0 alloc p1 p2 m) /\
-                  (valid_range alloc m 0 1) /\ (separation_v2_u2 u2 v2_0) /\
-                  (separation_m_w w m) /\ (separation_m_v v m) /\
-                  (separation_m_u u m) /\
-                  (internal_separation_anonymous_1 u2) /\
-                  (internal_separation_anonymous_1 v2_0) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 u) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 m) /\
+  forall (Pre203: (valid_range alloc w 0 1) /\ (valid_range alloc v 0 1) /\
+                  (separation_w_v alloc p1 p2 v w) /\
+                  (separation_u2_w alloc p1 p2 w u2) /\
+                  (valid_range alloc u 0 1) /\
+                  (separation_w_u alloc p1 p2 u w) /\
+                  (separation_u2_v alloc p1 p2 v u2) /\
+                  (separation_u2_u alloc p1 p2 u u2) /\
+                  (valid_range alloc m 0 1) /\
+                  (separation_u2_m alloc p1 p2 m u2) /\
+                  (separation_v2_u2 u2 v2_0) /\
+                  (separation_m_w alloc p1 p2 w m) /\
+                  (separation_m_v alloc p1 p2 v m) /\
+                  (separation_m_u alloc p1 p2 u m) /\
+                  (separation_v2_w alloc p1 p2 w v2_0) /\
+                  (separation_v2_v alloc p1 p2 v v2_0) /\
+                  (separation_v2_u alloc p1 p2 u v2_0) /\
+                  (separation_v2_m alloc p1 p2 m v2_0) /\
                   (valid_range alloc v2_0 0 1) /\
-                  (internal_separation_anonymous_1 v2_0) /\
-                  (separation_v_u u v) /\ (valid_range alloc u2 0 1) /\
-                  (internal_separation_anonymous_1 u2) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 w) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 v) /\
-                  (internal_separation_anonymous_0 alloc p1 p2 u)),
+                  (separation_v_u alloc p1 p2 u v) /\
+                  (valid_range alloc u2 0 1)),
   forall (Pre4: (valid alloc u)),
-  forall (caduceus_94: pointer),
-  forall (Post3: caduceus_94 = (shift (acc p1 u) 0)),
-  forall (Pre3: (valid alloc caduceus_94)),
+  forall (caduceus_86: pointer),
+  forall (Post3: caduceus_86 = (acc p1 u)),
+  forall (Pre3: (valid alloc caduceus_86)),
   forall (intP0: ((memory) Z)),
-  forall (Post163: intP0 = (upd intP caduceus_94 0)),
+  forall (Post163: intP0 = (upd intP caduceus_86 0)),
   (forall (result:pointer),
    (result = (shift (acc p1 u) 1) ->
     (forall (intP:((memory) Z)),
@@ -884,7 +844,7 @@ Lemma invariants_initially_established_impl_po_3 :
                 (forall (intP0:((memory) Z)),
                  (intP0 = (upd intP result 0) ->
                   (forall (result:pointer),
-                   (result = (shift (acc p2 u) 0) ->
+                   (result = (acc p2 u) ->
                     (forall (intP:((memory) Z)),
                      (intP = (upd intP0 result 0) ->
                       (forall (result:pointer),
@@ -917,8 +877,7 @@ Lemma invariants_initially_established_impl_po_3 :
                                                  (pp1_0 = (upd pp1 result
                                                            null) ->
                                                   (forall (result:pointer),
-                                                   (result = (shift (
-                                                              acc p1 v) 0) ->
+                                                   (result = (acc p1 v) ->
                                                     (forall (intP0:((memory) Z)),
                                                      (intP0 = (upd intP
                                                                result 0) ->
@@ -959,9 +918,7 @@ Lemma invariants_initially_established_impl_po_3 :
                                                                     forall (result:pointer),
                                                                     (
                                                                     result = (
-                                                                    shift (
-                                                                    acc p2 v)
-                                                                    0) ->
+                                                                    acc p2 v) ->
                                                                     (
                                                                     forall (intP:((memory) Z)),
                                                                     (
@@ -1055,9 +1012,7 @@ Lemma invariants_initially_established_impl_po_3 :
                                                                     forall (result:pointer),
                                                                     (
                                                                     result = (
-                                                                    shift (
-                                                                    acc p1 w)
-                                                                    0) ->
+                                                                    acc p1 w) ->
                                                                     (
                                                                     forall (intP0:((memory) Z)),
                                                                     (
@@ -1120,9 +1075,7 @@ Lemma invariants_initially_established_impl_po_3 :
                                                                     forall (result:pointer),
                                                                     (
                                                                     result = (
-                                                                    shift (
-                                                                    acc p2 w)
-                                                                    0) ->
+                                                                    acc p2 w) ->
                                                                     (
                                                                     forall (intP:((memory) Z)),
                                                                     (
@@ -1216,9 +1169,7 @@ Lemma invariants_initially_established_impl_po_3 :
                                                                     forall (result:pointer),
                                                                     (
                                                                     result = (
-                                                                    shift (
-                                                                    acc p1 m)
-                                                                    0) ->
+                                                                    acc p1 m) ->
                                                                     (
                                                                     forall (intP0:((memory) Z)),
                                                                     (
@@ -1281,9 +1232,7 @@ Lemma invariants_initially_established_impl_po_3 :
                                                                     forall (result:pointer),
                                                                     (
                                                                     result = (
-                                                                    shift (
-                                                                    acc p2 m)
-                                                                    0) ->
+                                                                    acc p2 m) ->
                                                                     (
                                                                     forall (intP:((memory) Z)),
                                                                     (

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.23 2005-02-11 16:01:45 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.24 2005-02-14 08:57:43 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -146,14 +146,15 @@ let rec print_predicate fmt = function
       print_predicate fmt p
 
 let print_axiom fmt id p =
-  fprintf fmt "@[(;; Why axiom %s@]@\n" id;
+  fprintf fmt "@[;; Why axiom %s@]@\n" id;
   let p = p.Env.scheme_type in
   fprintf fmt " @[<hov 2>%a@]" print_predicate p;
-  fprintf fmt ")@]@\n@\n" 
+  fprintf fmt "@]@\n@\n" 
 
 let print_predicate_def fmt id p =
   let (bl,p) = p.Env.scheme_type in
-  fprintf fmt "@[(DEFPRED (%s %a) @[%a@])@]@\n@\n" id
+  fprintf fmt "@[(forall %a (<-> (%s %a)@ @[%a@]))@]@\n@\n" 
+    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl id
     (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
     print_predicate p;
   Hashtbl.add defpred (Ident.create id) ()

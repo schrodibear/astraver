@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: dp.ml,v 1.7 2004-07-20 09:55:39 filliatr Exp $ i*)
+(*i $Id: dp.ml,v 1.8 2005-02-14 08:57:44 filliatr Exp $ i*)
 
 (* script to call Simplify and CVC Lite *)
 
@@ -55,6 +55,22 @@ let call_simplify f =
     (sprintf "ulimit -t %d; Simplify %s > out 2>&1 && grep -q -w Valid out" 
        !timeout f)
 
+let call_harvey f =
+  let out = Sys.command (sprintf "rvc %s > /dev/null 2>&1" f) in
+  if out = 0 then begin 
+    let f = Filename.chop_suffix f ".rv" in
+    let rec iter i =
+      let fi = f ^ "-" ^ string_of_int i ^ ".baf" in
+      if Sys.file_exists fi then begin
+	let cmd = sprintf "ulimit -t %d; rv %s > out 2>&1 && grep \"Proof obligation in\" out | grep -q \"is valid\"" !timeout fi in
+	call cmd;
+	iter (i+1)
+      end
+    in
+    iter 0
+  end
+  else begin eprintf "rvc failed!" end
+
 let split f =
   printf "%s: " f; flush stdout;
   let oldv = !nvalid in
@@ -65,6 +81,9 @@ let split f =
   else 
   if Filename.check_suffix f ".sx" || Filename.check_suffix f ".sx.all" then
     Simplify_split.iter call_simplify f 
+  else 
+  if Filename.check_suffix f ".rv" then
+    call_harvey f 
   else 
     begin Arg.usage spec usage; exit 1 end;
   printf 

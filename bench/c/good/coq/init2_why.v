@@ -13,7 +13,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init2.why", characters 35-419 *)
+(* Why obligation from file "why/init2.why", characters 265-280 *)
 Lemma f_impl_po_1 : 
   forall (a: ((memory) Z)),
   forall (alloc: alloc_table),
@@ -24,11 +24,14 @@ Lemma f_impl_po_1 :
   forall (le: Z),
   forall (ls: pointer),
   forall (varglo: Z),
-  forall (Pre1: (constant_laconstante laconstante) /\
+  forall (Pre1: (valid_range alloc ls 0 1) /\
+                (constant_laconstante laconstante) /\
                 (constant_varglo varglo) /\ (constant_ls alloc a b c d ls) /\
-                (constant_le le) /\ (valid_ls alloc c ls)),
+                (constant_le le)),
+  forall (varloc: Z),
+  forall (Post2: varloc = 4),
   forall (result: Z),
-  forall (Post1: result = 4),
+  forall (Post1: result = varloc),
   ((((acc a (acc c ls)) = 1 /\ varglo = 123) /\ result = 4) /\ le = 34) /\
   laconstante = 7.
 Proof.
@@ -51,87 +54,16 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init2.why", characters 716-729 *)
-Lemma invariants_initially_established_impl_po_1 : 
-  forall (a: ((memory) Z)),
-  forall (alloc: alloc_table),
-  forall (b: ((memory) Z)),
-  forall (c: ((memory) pointer)),
-  forall (d: ((memory) Z)),
-  forall (laconstante: Z),
-  forall (le: Z),
-  forall (ls: pointer),
-  forall (varglo: Z),
-  forall (Pre12: (constant_laconstante laconstante) /\
-                 (constant_varglo varglo) /\
-                 (constant_ls alloc a b c d ls) /\ (constant_le le) /\
-                 (valid_ls alloc c ls)),
-  (valid alloc ls).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init2.why", characters 734-758 *)
-Lemma invariants_initially_established_impl_po_2 : 
-  forall (a: ((memory) Z)),
-  forall (alloc: alloc_table),
-  forall (b: ((memory) Z)),
-  forall (c: ((memory) pointer)),
-  forall (d: ((memory) Z)),
-  forall (laconstante: Z),
-  forall (le: Z),
-  forall (ls: pointer),
-  forall (varglo: Z),
-  forall (Pre12: (constant_laconstante laconstante) /\
-                 (constant_varglo varglo) /\
-                 (constant_ls alloc a b c d ls) /\ (constant_le le) /\
-                 (valid_ls alloc c ls)),
-  forall (Pre4: (valid alloc ls)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (acc c ls)),
-  (valid alloc caduceus_3).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/init2.why", characters 699-758 *)
-Lemma invariants_initially_established_impl_po_3 : 
-  forall (a: ((memory) Z)),
-  forall (alloc: alloc_table),
-  forall (b: ((memory) Z)),
-  forall (c: ((memory) pointer)),
-  forall (d: ((memory) Z)),
-  forall (laconstante: Z),
-  forall (le: Z),
-  forall (ls: pointer),
-  forall (varglo: Z),
-  forall (Pre12: (constant_laconstante laconstante) /\
-                 (constant_varglo varglo) /\
-                 (constant_ls alloc a b c d ls) /\ (constant_le le) /\
-                 (valid_ls alloc c ls)),
-  forall (Pre4: (valid alloc ls)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (acc c ls)),
-  forall (Pre3: (valid alloc caduceus_3)),
-  forall (a0: ((memory) Z)),
-  forall (Post13: a0 = (upd a caduceus_3 1)),
-  (forall (result:pointer),
-   (result = (acc c ls) ->
-    (forall (b0:((memory) Z)),
-     (b0 = (upd b result 2) ->
-      (forall (result:pointer),
-       (result = ls ->
-        (forall (d0:((memory) Z)),
-         (d0 = (upd d result 3) ->
-          (forall (varglo:Z),
-           (varglo = 123 ->
-            (forall (le:Z),
-             (le = b_0 -> (forall (laconstante:Z), (laconstante = 7 -> True)))))))) /\
-        (valid alloc result))))) /\
-    (valid alloc result))) /\
-  (valid alloc ls).
 Proof.
 intuition.
 (* FILL PROOF HERE *)

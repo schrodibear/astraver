@@ -3,13 +3,11 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/extern.why", characters 67-200 *)
+(* Why obligation from file "why/extern.why", characters 138-150 *)
 Lemma f_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (alloc0: alloc_table),
-  forall (Post3: (alloc_extends alloc alloc0)),
+  forall (x_1: Z),
   forall (result: Z),
-  forall (Post1: (exists x_1:Z, result = x_1)),
+  forall (Post1: result = x_1),
   result = 5.
 Proof.
 intuition.
