@@ -6,13 +6,22 @@ Require Export PolyList.
 
 Definition plist := (list pointer).
 
-Inductive list_of [t:pointer_store] : pointer -> plist -> Prop :=
-  | List_of_null : (list_of t null (nil pointer))
-  | List_of_cons : (p:pointer) (is_valid_pointer t p) ->
-                   (l:(list pointer))(list_of t (access_pointer t p) l) ->
-	           (list_of t p (cons p l)).
+(* [(lpath t p1 l p2)] :
+   there is a path from pointer [p1] to pointer [p2] using links in store [t],
+   and the list of pointers along this path is [l]. *)
 
-Hint list_of : core := Constructors list_of.
+Inductive lpath [t:pointer_store] : pointer -> plist -> pointer -> Prop :=
+  | Path_null : (p:pointer)(lpath t p (nil pointer) p)
+  | Path_cons : (p1,p2:pointer) (is_valid_pointer t p1) ->
+                (l:(list pointer))(lpath t (pget t p1) l p2) ->
+                (lpath t p1 (cons p1 l) p2).
+
+Hint lpath : core := Constructors lpath.
+
+(* [(llist t p l)]: there is a (finite) linked list starting from pointer [p]
+   using links in store [t], and this list of pointers is [l] *)
+
+Definition llist [t:pointer_store; p:pointer; l:plist] := (lpath t p l null).
 
 (* no common element between two lists *)
 
@@ -20,22 +29,100 @@ Definition disjoint [l1,l2: plist] : Prop :=
   ((x:pointer)(In x l1) -> ~(In x l2)) /\
   ((x:pointer)(In x l2) -> ~(In x l1)).
 
-(* invariance of a list when updating a cell outside of this list *)
+(* inductive characterization of [llist] (which could have been an
+   inductive definition of [llist])  *)
 
-Lemma list_of_update_same : 
-  (t:pointer_store)(p:pointer)(l:plist)(list_of t p l) -> 
-  (p1,p2:pointer) (is_valid_pointer t p1) -> ~(In p1 l) -> 
-  (list_of (update_pointer t p1 p2) p l).
+Lemma llist_null : 
+  (t:pointer_store)(p:pointer)(llist t p (nil pointer)) -> p=null.
 Proof.
-Induction 1; Intuition.
-Apply List_of_cons; Auto.
-Rewrite update_access_other_pointer; Auto.
-Auto with *.
-Red; Intro; Apply H4; Subst p1; Auto with *.
+Unfold llist; Inversion 1; Trivial.
 Save.
 
+Lemma llist_cons : 
+  (t:pointer_store)(p1,p2:pointer)(l:plist)
+  (llist t p1 (cons p2 l)) -> p1 = p2 /\ (llist t (pget t p2) l).
+Proof.
+Unfold llist; Inversion 1; Intuition.
+Save.
+
+(* invariance of a list when updating a cell outside of this list *)
+
+Lemma llist_pset_same : 
+  (t:pointer_store)(p:pointer)(l:plist)(llist t p l) -> 
+  (p1,p2:pointer) (is_valid_pointer t p1) -> ~(In p1 l) -> 
+  (llist (pset t p1 p2) p l).
+Proof.
+Unfold llist; Induction 1; Intuition.
+Apply Path_cons; Auto.
+Rewrite PointerStore.get_set_other; Auto.
+Auto with *.
+Red; Intro; Apply H4; Subst p0; Auto with *.
+Save.
+Hints Resolve llist_pset_same.
+
+(* [llist] is a function *)
+
+Lemma llist_function : 
+  (t:pointer_store)(l1,l2:plist)(p:pointer)
+  (llist t p l1) -> (llist t p l2) -> l1=l2.
+Proof.
+Induction l1; Intuition.
+Inversion H; Subst.
+Inversion H0; Intuition.
+Inversion H1.
+Inversion H0; Subst.
+Inversion H1; Subst.
+Inversion H5.
+Apply (f_equal ? ? (cons a)).
+Apply H with (pget t a); Auto.
+Save.
+
+Lemma llist_append : 
+  (t:pointer_store)(l1,l2:plist)(p:pointer)
+  (llist t p (app l1 l2)) -> 
+  (EX p':pointer | (lpath t p l1 p') /\ (llist t p' l2)).
+Proof.
+Induction l1; Simpl; Intuition.
+Exists p; Auto.
+Inversion H0; Subst.
+Elim (H l2 (pget t a) H6); Intuition.
+Exists x; Auto.
+Save.
+
+(* should go in PolyList *)
+Lemma In_app_cons : 
+  (A:Set)(l:(list A))(x:A) (In x l) -> 
+  (EX l1 : (list A) | (EX l2 : (list A) | l = (app l1 (cons x l2)))).
+Proof.
+Induction l; Simpl; Intuition.
+Exists (nil A); Exists l0; Simpl; Subst; Auto.
+Elim (H x H1); Clear H; Intros.
+Elim H; Clear H; Intuition.
+Exists (cons a x0); Exists x1; Simpl; Subst; Auto.
+Save.
+
+Lemma x_eq_app_cons_x_absurd : .
+Proof.
+length
+Save.
+
+Lemma llist_not_starting : 
+  (t:pointer_store)(p:pointer)(l:plist)
+  (llist t (pget t p) l) -> ~(In p l).
+Proof.
+Red; Intros.
+Elim (In_app_cons ? l p H0); Intros.
+Elim H1; Clear H1; Intros.
+Subst l.
+Elim (llist_append t x (cons p x0) (pget t p) H); Intuition.
+Inversion H3; Subst.
+Generalize (llist_function t x0 (app x (cons p x0)) (pget t p) H8 H).
+
+Save.
+
+(***
 Lemma no_cycle_1 : (t:pointer_store)(p:pointer)(is_valid_pointer t p) ->
-  (l:plist)(list_of t p l) -> ~p=(access_pointer t p).
+  (l:plist)(list_of t p l) -> ~p=(pget t p).
 Proof.
 Inversion 2.
 Rewrite <- H1 in H; Simpl in H; Tauto.
@@ -44,7 +131,6 @@ Inversion H0.
 Inversion H3.
 
 Save.
-
 
 Lemma list_of_not_in : 
   (t:pointer_store)(l:plist)(p,p':pointer)
@@ -58,14 +144,15 @@ Subst.
 
 Save.
 
-Hints Resolve list_of_update_same list_of_not_in.
+Hints Resolve list_of_not_in.
+***)
 
 (* finite lists characterization *)
 
 Inductive is_list [h: int_store; t: pointer_store] : pointer -> Prop :=
   | List_null : (is_list h t null)
   | List_cons : (p:pointer) (is_valid_int h p) -> (is_valid_pointer t p)
-                -> (is_list h t (access_pointer t p)) -> (is_list h t p).
+                -> (is_list h t (pget t p)) -> (is_list h t p).
 
 Hint is_list : core := Constructors is_list.
 
@@ -89,7 +176,7 @@ Definition tl_order [c1,c2:(int_store * (pointer_store * pointer))] : Prop :=
   let (t1,p1) = tp1 in
   let (h2,tp2) = c2 in
   let (t2,p2) = tp2 in
-  t1=t2 /\ (is_list h2 t2 p2) /\ (access_pointer t2 p2)=p1.
+  t1=t2 /\ (is_list h2 t2 p2) /\ (pget t2 p2)=p1.
 
 Axiom tl_order_wf : (well_founded tl_order).
 (**

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.2 2003-04-10 15:59:51 filliatr Exp $ *)
+(* $Id: WhyCM.v,v 1.3 2003-04-11 10:28:22 filliatr Exp $ *)
 
 Require Export WhyArrays.
 
@@ -42,25 +42,27 @@ Destruct p; Intuition.
 Right; Intro H; Discriminate H.
 Save.
 
-(* Stores *)
+(* Polymorphic Stores *)
 
-Section Stores.
+Module Type AnySet.
+  Parameter T : Set.
+End AnySet.
 
-Variable T:Set.
+Module Store [X : AnySet].
 
-Definition cstore : Set := adr -> (array T).
+Definition cstore : Set := adr -> (array X.T).
 
-Definition paccess [s:cstore; p:pointer] : T :=
+Definition get [s:cstore; p:pointer] : X.T :=
   Cases p of
   | null => (access (s dummy_adr) `0`)
   | (Ref a ofs) => (access (s a) ofs) end.
 
-Definition cstore_update [s:cstore; a:adr; v:(array T)] : cstore :=
+Definition cstore_update [s:cstore; a:adr; v:(array X.T)] : cstore :=
   [a':adr]Cases (eq_adr_dec a' a) of 
           | (left _) => v
           | (right _) => (s a') end.
 
-Definition pupdate [s:cstore; p:pointer; v:T] : cstore :=
+Definition set [s:cstore; p:pointer; v:X.T] : cstore :=
   Cases p of 
   | null => s
   | (Ref a ofs) => (cstore_update s a (store (s a) ofs v)) end.
@@ -75,23 +77,23 @@ Definition is_valid [s:cstore; p:pointer] : Prop :=
 (* access/update lemmas *)
 
 Lemma cstore_update_same : 
-  (s:cstore)(a:adr)(v:(array T))
+  (s:cstore)(a:adr)(v:(array X.T))
   ((cstore_update s a v) a) = v.
 Proof.
 Intros. Unfold cstore_update; Case (eq_adr_dec a a); Intuition.
 Save.
 
-Lemma pupdate_paccess_same : 
-  (s:cstore)(p:pointer)(v:T)
-  (is_valid s p) -> (paccess (pupdate s p v) p) = v.
+Lemma get_set_same : 
+  (s:cstore)(p:pointer)(v:X.T)
+  (is_valid s p) -> (get (set s p v) p) = v.
 Proof.
 Destruct p; Simpl; Intuition.
 Unfold cstore_update; Case (eq_adr_dec a a); Intuition.
 Save.
 
-Lemma pupdate_paccess_eq : 
-  (s:cstore)(p1,p2:pointer)(v:T)
-  (is_valid s p1) -> p1=p2 -> (paccess (pupdate s p1 v) p2) = v.
+Lemma get_set_eq : 
+  (s:cstore)(p1,p2:pointer)(v:X.T)
+  (is_valid s p1) -> p1=p2 -> (get (set s p1 v) p2) = v.
 Proof.
 Destruct p1; Destruct p2; Simpl; Intuition.
 Discriminate H0.
@@ -99,10 +101,10 @@ Injection H0; Intros.
 Unfold cstore_update; Subst a z; Case (eq_adr_dec a0 a0); Intuition.
 Save.
 
-Lemma pupdate_paccess_other : 
-  (s:cstore)(p1,p2:pointer)(v:T)
+Lemma get_set_other : 
+  (s:cstore)(p1,p2:pointer)(v:X.T)
   (is_valid s p1) -> (is_valid s p2) -> ~p1=p2 -> 
-  (paccess (pupdate s p1 v) p2) = (paccess s p2).
+  (get (set s p1 v) p2) = (get s p2).
 Proof.
 Destruct p1; Destruct p2; Simpl; Intuition.
 Unfold cstore_update; Case (eq_adr_dec a0 a); Intuition.
@@ -113,42 +115,42 @@ Save.
 
 (* lemmas about [is_valid] *)
 
-Lemma is_valid_update : 
-  (s:cstore)(p1,p2:pointer)(v:T)
-  (is_valid s p1) -> (is_valid (pupdate s p2 v) p1).
+Lemma is_valid_set : 
+  (s:cstore)(p1,p2:pointer)(v:X.T)
+  (is_valid s p1) -> (is_valid (set s p2 v) p1).
 Proof.
 Unfold is_valid; Destruct p1; Intuition.
-Unfold pupdate; Case p2; Intuition.
+Unfold set; Case p2; Intuition.
 Unfold cstore_update; Case (eq_adr_dec a a0); Intuition.
 Subst a; WhyArrays; Trivial.
 Save.
 
-Hints Resolve is_valid_update.
+Hints Resolve is_valid_set.
 
-End Stores.
+End Store.
 
 (* Instanciations on integers and pointers *)
 
-Definition int_store := (cstore Z).
-Definition access_int : int_store -> pointer -> Z := (!paccess Z).
-Definition update_int : int_store -> pointer -> Z -> int_store := (!pupdate Z).
-Definition is_valid_int := (!is_valid Z).
+Module Int : AnySet with Definition T := Z.
+  Definition T := Z.
+End Int.
+Module IntStore := (Store Int).
 
-Definition pointer_store := (cstore pointer).
-Definition access_pointer : pointer_store -> pointer -> pointer := (!paccess pointer).
-Definition update_pointer : pointer_store -> pointer -> pointer -> pointer_store := (!pupdate pointer).
-Definition is_valid_pointer := (!is_valid pointer).
-Definition is_valid_update_pointer : 
-  (s:pointer_store)(p1,p2:pointer)(v:pointer)
-  (is_valid_pointer s p1) -> (is_valid_pointer (update_pointer s p2 v) p1)
-:= (!is_valid_update pointer).
-Definition update_access_other_pointer : 
-  (s:pointer_store)(p1,p2:pointer)(v:pointer)
-  (is_valid_pointer s p1) -> (is_valid_pointer s p2) -> ~p1=p2 -> 
-  (access_pointer (update_pointer s p1 v) p2) = (access_pointer s p2)
-:= (!pupdate_paccess_other pointer).
+Definition int_store := IntStore.cstore.
+Definition get_int := IntStore.get.
+Definition set_int := IntStore.set.
+Definition is_valid_int := IntStore.is_valid.
 
-Hints Resolve is_valid_update_pointer.
+Module Pointer : AnySet with Definition T := pointer.
+  Definition T := pointer.
+End Pointer.
+Module PointerStore := (Store Pointer).
+
+Definition pointer_store := PointerStore.cstore.
+Definition pget := PointerStore.get.
+Definition pset := PointerStore.set.
+Definition is_valid_pointer := PointerStore.is_valid.
+Hints Unfold pget pset is_valid_pointer.
 
 (* The set of allocated addresses *)
 
