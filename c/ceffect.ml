@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.53 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.54 2004-10-11 11:17:44 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -340,7 +340,7 @@ let rec expr e = match e.texpr_node with
       List.fold_left (fun ef arg -> ef_union (expr arg) ef) ef el
   | TEcond (e1, e2, e3) ->
       ef_union (ef_union (expr e1) (expr e2)) (expr e3)
-  | TEcast (_, e) | TEsizeof_expr e ->
+  | TEcast (_, e) ->
       expr e
 
 (* effects for [e = ...] *)

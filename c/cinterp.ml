@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.98 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.99 2004-10-11 11:17:44 filliatr Exp $ i*)
 
 
 open Format
@@ -496,10 +496,8 @@ let rec interp_expr e =
 	  | _ -> 
 	      unsupported "cast"
 	end
-    | TEsizeof_expr(e) -> 
-	unsupported "sizeof_expr"
     | TEsizeof(t) -> 
-	unsupported "sizeof"
+	Cte (Prim_int (Ctyping.sizeof t))
 
 and interp_boolean_expr e =
   match e.texpr_node with
@@ -693,7 +691,6 @@ and interp_statement_expr e =
 			     [Var "caduceus2"; interp_expr e]]))
 	end 
     | TEsizeof _ 
-    | TEsizeof_expr _
     | TEcast (_, _)
     | TEcond (_, _, _)
     | TEbinary (_, _, _)

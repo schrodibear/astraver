@@ -14,13 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.10 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.11 2004-10-11 11:17:44 filliatr Exp $ i*)
 
 module HeapVarSet : Set.S with type elt = string
 
 type var_info =
     {
       var_name : string;
+      mutable var_unique_name : string;
       mutable var_is_assigned : bool;
       mutable var_is_static : bool;
       mutable enum_constant_value : int64;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.46 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.47 2004-10-11 11:17:44 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -206,7 +206,6 @@ and texpr_node =
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr
   | TEcast of texpr ctype * texpr
-  | TEsizeof_expr of texpr
   | TEsizeof of texpr ctype
 
 and lvalue = texpr (* TODO: cf CIL *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.66 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.67 2004-10-11 11:17:44 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -470,7 +470,7 @@ and type_expr_node loc env = function
       TEcast (ty, e), ty
   | CEsizeof_expr e ->
       let e = type_expr env e in
-      TEsizeof_expr e, c_int
+      TEsizeof e.texpr_type, c_int
   | CEsizeof ty ->
       let ty = type_type loc env ty in
       TEsizeof ty, c_int
@@ -865,3 +865,26 @@ let type_decl d = match d.node with
 
 let type_file = List.map (fun d -> { d with node = type_decl d })
 
+let sizeof ty = assert false (* TODO *)
+(*
+let rec sizeof ty = match ty.ctype_node with
+  | CTvoid ->
+  | CTint (_, Char) -> 1 
+  | CTint (_, Short) -> 2
+  | CTint (_, Int) ->
+  | CTint (_, Long) -> 4
+  | CTint (_, LongLong) ->
+  | CTint (_, Bitfield e) ->
+  | CTfloat Float ->
+  | CTfloat Double ->
+  | CTfloat LongDoubleof ->
+  | CTvar x -> assert false
+  | CTarray (ty, Some e) ->
+  | Ctarray (ty, None ->
+  | CTpointer _ -> 4
+  | CTstruct (n, _) ->
+  | CTunion (n, _) ->
+  | CTenum _ ->
+  | CTfun _ ->
+
+*)
