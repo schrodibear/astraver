@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.68 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.69 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -198,6 +198,11 @@ let print_predicate fmt p =
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
+	  print_pure_type t print0 p'
+    | Exists (id,n,t,p) -> 
+	let id' = next_away id (predicate_vars p) in
+	let p' = subst_in_predicate (subst_onev n id') p in
+	fprintf fmt "(@[(EX %s:%a |@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
     | (Por _ | Pand _ | Pif _ | Pimplies _) as p -> 
 	fprintf fmt "(%a)" print0 p

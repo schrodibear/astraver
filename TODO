@@ -25,10 +25,6 @@ DOCUMENTATION
 
  - foreword, bibliography
 
- - lexical conventions
-
- - semantics (evaluation strategy)
-
  - whydoc (to LaTeX / HTML)
 
 MISC

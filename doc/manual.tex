@@ -650,10 +650,10 @@ Keywords of the logic are:
 \begin{center}
 {\tt\begin{tabular}{l@{\qquad}l@{\qquad}l}
 and & bool & else \\
-false & float & forall \\
-if & int & not \\
-or & then & true \\
-unit & void
+exists & false & float \\
+forall & if & int  \\
+not & or & then  \\
+true & unit & void
 \end{tabular}}
 \end{center}
 
@@ -733,6 +733,8 @@ $R_1$ and $R_2$. Example: \texttt{0 <= x < y}.
               \te{else} \nt{predicate} \\
       & $|$ & \te{forall} \nt{identifier} \te{:} \nt{primitive\_type}
               \te{.} \nt{predicate} \\
+      & $|$ & \te{exists} \nt{identifier} \te{:} \nt{primitive\_type}
+              \te{.} \nt{predicate} \\
       & $|$ & \te{(} \nt{predicate} \te{)} \\
   \\[0.1em]
 
@@ -760,13 +762,14 @@ The set of keywords is now:
 {\tt\begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
 and & array & as & assert & begin \\
 bool & do & done & else & end \\
-exception & external & false & float & for \\
-forall & fun & if & in & int \\
-invariant & label & let & logic & not \\
-of & or & parameter & prop & pvs \\
-raise & raises & reads & rec & ref \\
-returns & then & true & try & unit \\
-variant & void & while & with & writes \\
+exception & exists & external & false & float  \\
+for & forall & fun & if & in  \\
+int & invariant & label & let & logic \\
+not & of & or & parameter & prop  \\
+pvs & raise & raises & reads & rec  \\
+ref & returns & then & true & try  \\
+unit & variant & void & while & with \\
+writes
 \end{tabular}}
 \end{center}
 
