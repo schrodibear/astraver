@@ -296,7 +296,7 @@ FILES =src/*.ml* intf/*.ml* tools/*.ml* \
 	examples/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/good*/*.mlw bench/good*/*.c bench/good*/*.v \
-	lib/coq*/*.v lib/pvs/why.* lib/mizar/*.*
+	lib/coq*/*.v lib/pvs/why.* lib/mizar/*.* lib/mizar/dict/*.*
 
 distrib export: source export-doc export-examples linux
 	make -C $(HOME)/www/why install
