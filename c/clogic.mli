@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.43 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.44 2005-04-01 13:52:57 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -131,22 +131,6 @@ type 'ctype predicate =
   | Pnamed of string * 'ctype predicate
 
 type 'term location = 'term
-
-(*
-  | Lterm of 'term
-  | Lstar of 'term (* e[*] *)
-  | Lrange of 'term * 'term * 'term (* e[e..e] *)
-*)
-
-(* should be :
-  | Lvar of Info.var_info
-  | Larrget of 'term location * 'term
-  | Larrow of 'term location * Info.field_info
-  | Ldot of 'term location * Info.field_info
-  | Lrange of 'term location * 'term * 'term (* l[e..e] *)
-  | Lallrange of 'term location  (* l[*] *)
-  | Lstar of 'term location (* *l *)
-*)
 
 type 'term variant = 'term * string option
 

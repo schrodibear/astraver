@@ -1,5 +1,9 @@
 Note: These are the changes for Caduceus.
 
+version 0.77, April 1st, 2005
+=============================
+ o fixed bug with separation axioms
+
 version 0.76, March 29th, 2005
 ==============================
  o functions bodies effects are now computed only for functions to be verified

@@ -276,21 +276,6 @@ locations:
 location:
   lexpr { $1 }
 ;
-/***
-  location_term { Lterm $1 }
-| location_term LSQUARE STAR RSQUARE { Lstar $1 }
-| location_term LSQUARE lexpr DOTDOT lexpr RSQUARE    
-   { Lrange ($1, $3, $5) }
-;
-
-location_term:
-| IDENTIFIER { info (PLvar (Info.default_var_info $1)) }
-| location_term ARROW IDENTIFIER { info (PLarrow ($1, $3)) }
-| location_term DOT IDENTIFIER { info (PLdot ($1, $3)) }
-| location_term LSQUARE lexpr RSQUARE { info (PLarrget ($1, $3)) }
-| STAR location_term { info (PLunop (Ustar, $2)) }
-;
-***/
 
 decl:
   LOGIC logic_type IDENTIFIER LPAR parameters RPAR 
