@@ -1,6 +1,20 @@
-(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
+(*
+ * The Why certification tool
+ * Copyright (C) 2002 Jean-Christophe FILLIATRE
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
 
-(*i $Id: parser.ml4,v 1.59 2002-10-17 12:52:20 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.60 2002-10-17 15:01:53 filliatr Exp $ i*)
 
 open Logic
 open Rename

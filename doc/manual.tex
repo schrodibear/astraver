@@ -42,13 +42,41 @@ Jean-Christophe Filli\^atre
 \tableofcontents
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \chapter*{Foreword}
-% \addcontentsline{toc}{chapter}{Foreword}
+\chapter*{Foreword}
+\addcontentsline{toc}{chapter}{Foreword}
 
-% \why\ is a certification tool.
-% It generates proof obligations from annotated programs.
+A computer program is telling the machine \emph{how} to compute some
+output from its input. It is not giving the meaning of this
+computation, nor the reason \emph{why} the program is correct. In the
+best case, comments inserted in the code would give part of this
+information. A formal method gives you the ability of telling the
+machine both \emph{how} to compute and \emph{why} it is correct; hence
+the name of this tool, \why.
 
-% TODO
+\why\ is a certification tool.
+It generates proof obligations from annotated programs.
+
+\medskip
+
+This manual is organized as follows. Chapter~\ref{tutorial} gives an
+overview of \why, illustrating all features with one-line examples.
+Chapter~\ref{refman} is a reference manual.
+
+
+\subsection*{License}
+
+The \why\ certification tool is \copyright\ 2002 Laboratoire de
+Recherche en Informatique (\url{www.lri.fr}).
+It is open source and freely available under the terms of the GNU
+GENERAL PUBLIC LICENSE Version 2. See the files \texttt{COPYING} and
+\texttt{GPL} in the distribution.
+
+
+\subsection*{Availability}
+
+The \why\ tool is available from \url{http://why.lri.fr/}, in source
+and binary formats, together with this documentation and many
+examples.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -294,7 +322,7 @@ allow you to relate the values of references at any points of the
 program. 
 
 
-\subsection{Exceptions}
+\subsection{Exceptions (experimental in version \whyversion)}
 \label{exception}\index{Exception}
 
 Exceptions are raised with the construct \texttt{raise}:
@@ -348,7 +376,7 @@ Side effects must be explicited beside the result type:
 \begin{verbatim}
      unit -> { x >= 0 } unit writes x { x < x@ }
      a:int ref -> b:int ref -> { } unit reads b writes a { a = a@ + b }
-     n:int -> { } int raises Negative { result = sqrt(n) | Negative => n< 0 }
+     n:int -> { } int raises Negative { result = sqrt(n) | Negative => n<0 }
 \end{verbatim}
 Finally, the result may be given a name other than \texttt{result},
 with the following syntax:
@@ -871,6 +899,11 @@ Syntax of input files is given in Figure~\ref{fig:input}.
 \end{center}           
 \end{figure}
 
+\subsection{ML semantics}
+\label{semantics:ml}\index{ML program!semantics}
+
+TODO
+
 \subsection{Predefined functions}
 
 These are the functions predefined in \why:
@@ -917,6 +950,8 @@ These are the functions predefined in \why:
 
 \end{description}
 
+\newpage
+\addcontentsline{toc}{chapter}{Index}
 \printindex
 
 \end{document}
