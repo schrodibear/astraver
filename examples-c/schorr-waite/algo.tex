@@ -33,14 +33,13 @@ of the children is currently explored.
 \hrulefill
 \begin{alltt}
 void schorr_waite(node root) \{
-  node t = root;
-  node p = NULL;
+  node t = root; node p = NULL;
   while (p != NULL || (t != NULL && ! t->m)) \{
     if (t == NULL || t->m) \{
-      if (p->c) \{ \begin{slshape}/* pop */\end{slshape}
+      if (p->c) \{ \begin{slshape}/* \textbf{pop} */\end{slshape}
         node q = t; t = p; p = p->r; t->r = q;
       \} 
-      else \{ \begin{slshape}/* swing */\end{slshape}
+      else \{ \begin{slshape}/* \textbf{swing} */\end{slshape}
         node q = t; t = p->r; p->r = p->l; p->l = q; p->c = 1;
       \}
     \} 
@@ -58,13 +57,15 @@ void schorr_waite(node root) \{
 The Schorr-Waite graph-marking algorithm, written directly in true C
 source code, is given in Figure~\ref{fig:code}. 
 %This algorithm is a non-recursive graph marking. 
-A sample execution is illustrated in Figure~\ref{fig:algo}, with each
-possible move `push', `swing' and `pop'. $t$ is the next node to
+The beginning of a sample execution is illustrated in
+Figure~\ref{fig:algo}, with each possible move `push', `swing' and
+`pop'. The black nodes represent marked nodes, whereas white nodes are
+unmarked. The sample graph shown is a tree forreadibility, but of
+course any graph could be given. $t$ is the next node to 
 explore and $p$ is the head of the backtracking stack. `push' marks a
 new node and then explores the left child. `swing' occurs when the left
 child has been explored: the search continues to the right child. `pop' is used
 when the right child is explored: the search goes back up.        
-{\Huge expiquer les n{\oe}uds noirs et blancs}
 
 \begin{figure}[t]
 \begin{center}
@@ -234,7 +235,6 @@ declaration of a C function, whose implementation will be given
 latter. Such predicates have to be `implemented' latter, either
 by giving additional \caduceus{} annotations (such as \verb|axioms|)
 or in the back-end prover. 
-
 The \texttt{reads} clause that follows the predicate
 declaration above gives information on which data the predicate
 depends on: in this case, it does depend on \verb|p1| and
@@ -246,18 +246,15 @@ node expressions from \verb|p1| using the left and right children.
 \begin{figure}[b]
 \hrulefill
 \begin{alltt}\begin{slshape}
-/*@ requires 
-  @   \bs{}forall node x; 
-  @      x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
-  @ ensures 
-  @   (\bs{}forall node x; 
-  @       \old(x->l) == x->l && \old(x->r) == x->r) 
-  @   &&
-  @   (\bs{}forall node x; 
-  @       x != \bs{}null && reachable(root,x) => x->m) 
-  @   &&
-  @   (\bs{}forall node x; 
-  @       ! reachable(root,x) => x->m == \old(x->m))
+/*@ \textbf{requires}
+  @  \bs{}forall node x; 
+  @     x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
+  @ \textbf{ensures}
+  @  (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @ &&
+  @  (\bs{}forall node x; x != \bs{}null && reachable(root,x) => x->m) 
+  @ &&
+  @  (\bs{}forall node x; ! reachable(root,x) => x->m == \old(x->m))
   @*/\end{slshape}
 void schorr_waite(node root);
 \end{alltt}
@@ -285,7 +282,7 @@ denotes the null pointer. Notice that our annotation language
 inherits from C the fact that booleans are not clearly distinguished
 from the integers: when an integer expression $e$ is used as a logical
 atom, then it should be understood as the boolean $e\neq 0$, so that
-one can write \verb|! x->m| to mean \verb|x->m == 0|. 
+one can indifferently write \verb|! x->m| or \verb|x->m == 0|. 
 
 In the pre-condition, the built-in predicate $\valid(p)$ means that
 the pointer $p$ points to a correctly allocated memory block, i.e. that
@@ -309,9 +306,10 @@ which were not reachable, their mark is not changed by the algorithm,
 that is the unreachable nodes are not traversed by the algorithm.
 
 Notice that we use a standard first order logic: every function is
-total (no 3-valued logic) so that an expression \verb|p->f| is valid
-even if \verb|p| is \verb|null|, but meaningless (very similarly to
-division by zero for example).
+total (like in JML, i.e. no 3-valued logic) so that an expression
+\verb|p->f| is valid even if \verb|p| is \verb|null|, but no
+property of it is known (very similarly to division by zero for
+example). 
 
 With respect to the most recent formal specification given in
 Isabelle/HOL~\cite{mehta03cade}, we added two things: first the
@@ -319,8 +317,8 @@ pre-condition that all pointers of the graph are regularly
 allocated at the beginning, so that we are now able to prove that no
 wrong pointer dereferencing can occur. Second, we also talk about the
 non-reachable nodes of the graph: we are also able to show that they
-are not affected. In Section~\ref{sec:termination}, we will add
-more annotations in order to establish the termination of the
+are not traversed and not modified. In Section~\ref{sec:termination},
+we will add more annotations in order to establish the termination of the
 function.
 
 

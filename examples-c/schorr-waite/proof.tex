@@ -84,37 +84,36 @@ children when $c$ is 0, or the right children when $c$ is 1.
 \begin{figure}[t]
 \begin{alltt}
 void schorr_waite(node root) \{
-  node t = root;
-  node p = NULL;\begin{slshape}
+  node t = root; node p = NULL;\begin{slshape}
   /*@ invariant
     @  (I1 :: \bs{}forall node x; \old(reachable(root,x)) => 
-    @         reachable(t,x) || reachable(p,x))
+    @    reachable(t,x) || reachable(p,x))
     @ &&
     @  (I2 :: \bs{}forall node x; x != \bs{}null => 
-    @         ((reachable(t,x) || reachable(p,x)) => 
-    @         \old(reachable(root,x))))
+    @         (reachable(t,x) || reachable(p,x)) => 
+    @         \old(reachable(root,x)))
     @ &&
     @  (I3 :: \bs{}forall node x; ! \old(reachable(root,x)) => 
     @         x->m == \old(x->m)) 
     @ &&
     @  \bs{}exists plist stack;
-    @   (I4a :: clr_list (p,stack)) 
-    @   &&
-    @   (I4b :: \bs{}forall node p; in_list (p,stack) => p->m) 
-    @   &&
-    @   (I4c :: \bs{}forall node x; 
-    @           \valid(x) && \old(reachable(root,x)) && !x->m =>
-    @           unmarked_reachable(t,x) || 
-    @           (\bs{}exists node y; in_list(y,stack) && unmarked_reachable(y->r,x))) 
-    @   &&
-    @   (I4d :: \bs{}forall node x; !in_list(x,stack) =>  
-    @           (x->r == \old(x->r) && x->l == \old(x->l))) 
-    @   &&
-    @   (I4e :: \bs{}forall node p1; \bs{}forall node p2;
-    @           pair_in_list(p1,p2,cons(t,stack)) => 
-    @           (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
-    @           &&
-    @           (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)) 
+    @  (I4a :: clr_list (p,stack)) 
+    @  &&
+    @  (I4b :: \bs{}forall node p; in_list (p,stack) => p->m) 
+    @  &&
+    @  (I4c :: \bs{}forall node x; 
+    @          \valid(x) && \old(reachable(root,x)) && !x->m =>
+    @          unmarked_reachable(t,x) || (\bs{}exists node y; 
+    @            in_list(y,stack) && unmarked_reachable(y->r,x))) 
+    @  &&
+    @  (I4d :: \bs{}forall node x; !in_list(x,stack) =>  
+    @          (x->r == \old(x->r) && x->l == \old(x->l))) 
+    @  &&
+    @  (I4e :: \bs{}forall node p1; \bs{}forall node p2;
+    @          pair_in_list(p1,p2,cons(t,stack)) => 
+    @          (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
+    @          &&
+    @          (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)) 
     @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
     ...
@@ -147,15 +146,13 @@ consecutive elements in a list $l$.
 The loop invariant finally requires the declaration of two predicates:
 \begin{alltt}\begin{slshape}
 /*@ predicate unmarked_reachable (node p1, node p2) 
-  @   reads p1->r,p1->l,p1->m 
-  @*/\end{slshape}
+  @   reads p1->r,p1->l,p1->m */\end{slshape}
 \end{alltt}
 specifies that $p_2$ is reachable from $p_1$ by traversing only
 unmarked nodes; and
 \begin{alltt}\begin{slshape}
 /*@ predicate clr_list (node p, plist stack) 
-  @   reads p->c,p->l,p->r 
-  @*/\end{slshape}
+  @   reads p->c,p->l,p->r */\end{slshape}
 \end{alltt}
 specifies that \verb|stack| is the list of pointers obtained from $p$ as
 described on Figure~\ref{fig:stack}.
@@ -164,27 +161,27 @@ On Figure~\ref{fig:loopinv}, we use the \caduceus{} notation to name
 formulas with double-colons. The loop
 invariant is made of eight assertions:
 \begin {enumerate}
-\item[I1] means that all nodes which were initially reachable from
-  root, are reachable from $t$ or $p$
-\item[I2] means that conversely, all (non-null) nodes reachable from $t$
-  or $p$ were initially reachable from \verb|root|. This is true only
-  for non-null node, because \verb|null| may not be reachable from
+\item[I1] means that each node which was initially reachable from
+  root, is reachable from $t$ or $p$
+\item[I2] means that conversely, each (non-null) nodes reachable from $t$
+  or $p$ was initially reachable from \verb|root|. This is true only
+  for non-null nodes, because \verb|null| may not be reachable from
   \verb|root| if the graph is cyclic.
-\item[I3] means that for initially unreachable nodes, the marks
+\item[I3] means that for initially unreachable nodes, the mark
   remain unchanged.
 \item[I4a] defines the backtracking stack as on Figure~\ref{fig:stack}.
 \item[I4b] means that all nodes in the \texttt{stack} are marked.
 \item[I4c] is the trickiest annotation: it means that
   any valid node, initially reachable from root, 
   and not yet marked, is reachable by traversing only
-  unmarked nodes, either from $t$ or from the right children of a node
+  unmarked nodes, either from $t$ or from the right child of a node
   in the stack.
 \item[I4d] means that all nodes out of \texttt{stack} have
   the same children as initially. 
 \item[I4e] is essential for being able to
   `recover' the correct children of nodes of the stack, as it can be
   seen again on Figure~\ref{fig:stack}: if $p_1$ is in
-  the stack, followed by $p_2$ (or if $p_1$ is $t$ and $p2$ is the head of the
+  the stack, followed by $p_2$ (or if $p_1$ is $t$ and $p_2$ is the head of the
   stack), then: if $p_2\verb|->c|$ is
   1 then its left child is the same as its was initially
      and its right child is $p_1$; and if $p_2\verb|->c|$ is 0 then
@@ -231,7 +228,7 @@ ajout axiome reachable(p,p) :
 \end{comment}
 
 Running \caduceus{} on the annotated source code leads to twelve
-verification conditions. Five of them relate to the functional
+verification conditions. Five of them relate to the behavioral
 specification of the algorithm: loop invariant true when entering the
 loop, preservation of the loop invariant for each of the branches
 `pop', `swing' and `push', and validity of the post-condition. The
@@ -247,7 +244,7 @@ automatically discharged, for example \verb|p->r| in the `pop` branch
 because it was preceeded by \verb|p->c| and \verb|p| did not change.
 
 A first attempt can be made to solve these obligations with an
-automatic prover. Here we present the result with Simplify, which appears
+automatic prover. Here we present the results with Simplify, which appears
 to be the best in that case. Four of the twelve obligations are
 solved automatically, which are the validity of the dereferencings
 occuring in the `pop', `swing' and `push' branches. Indeed, a quick
@@ -332,7 +329,7 @@ and then
 p_2, s) \\
 \verb|unmarked_reachable|(a,m,l,r, p_1, p_2) = \\
 \qquad\qquad\qquad \exists s,~\verb|path|(a,l,r, p_1,
-p_2, s) \land \forall p, in(p,s) \rightarrow select(m,p) = 0 \\
+p_2, s) \land \forall p, p \in s \rightarrow select(m,p) = 0 \\
 \end{array} 
 \]
 Notice that it is now easy to establish the validity of the axiom
@@ -474,7 +471,7 @@ termination are given Figure~\ref{fig:term}, where in Coq we define
 \[
 \begin{array}{l}
 \verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
-\forall p, in(p,s) \leftrightarrow reachable(a,l,r,root,p) 
+\forall p, p \in s \leftrightarrow reachable(a,l,r,root,p) 
 \end{array}
 \]
 The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
@@ -491,8 +488,7 @@ the measure above.
        \bs{}exists plist s; reachable_elements(root,s) && 
      ... */\end{slshape}
 void schorr_waite(node root) \{
-  node t = root;
-  node p = NULL;\begin{slshape}
+  node t = root; node p = NULL;\begin{slshape}
   /*@ invariant ...
     @ variant weight(p,t) for order_mark_m_and_c_and_stack 
     @*/\end{slshape}
