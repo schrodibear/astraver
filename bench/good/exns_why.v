@@ -25,3 +25,22 @@ Save.
 Definition p1 := (* validation *)
   (exist_1 (post_E True [result: unit]False) (Exn_E unit) p1_po_1).
 
+(*Why*) Inductive ET_F [T:Set] : Set :=
+  | Val_F : T -> (ET_F T)
+  | Exn_F : Z -> (ET_F T).
+
+(*Why*) Definition post_F :=
+  [T:Set][P:Z -> Prop][Q:T->Prop][x:(ET_F T)]
+  Cases x of 
+  | (Val_F v) => (Q v)
+  | (Exn_F v) => (P v)
+  end.
+
+(*Why*) Implicits post_F.
+
+Definition p := (* validation *)
+  (exist_1 (post_F [result0: Z]`result0 = 1` [result0: unit]False) (Exn_F
+                                                                    unit 
+                                                                    `1`)
+(refl_equal ? `1`)).
+

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.67 2002-09-13 12:15:40 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.68 2002-09-13 12:32:55 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -207,8 +207,7 @@ let state_post lab env (id,v,ef) loc = function
   | None -> 
       Effect.bottom, None
   | Some q ->
-      let lenv = Env.add_logic id v (logical_env env) in
-      let q = type_post lab lenv q in
+      let q = type_post lab (logical_env env) id v q in
       let ids = post_vars q in
       let ef,q = 
 	Idset.fold

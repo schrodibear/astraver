@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.7 2002-09-12 11:31:24 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.8 2002-09-13 12:32:55 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -222,10 +222,17 @@ let type_pre lab lenv p = { p with p_value = predicate lab lenv p.p_value }
 
 let type_assert lab lenv a = { a with a_value = predicate lab lenv a.a_value }
 
-let type_post lab lenv (a,al) = 
+let type_post lab lenv id v (a,al) = 
   let lab' = LabelSet.add "" lab in 
-  let f = type_assert lab' lenv in
-  (f a, List.map (fun (x,a) -> (x, f a)) al)
+  let a' = let lenv' = Env.add_logic id v lenv in type_assert lab' lenv' a in
+  let type_exn_post (x,a) =
+    let lenv' = match find_exception x with
+      | None -> lenv
+      | Some pt -> Env.add_logic result (PureType pt) lenv
+    in
+    (x, type_assert lab' lenv' a)
+  in
+  (a', List.map type_exn_post al)
 
 let check_effect loc env e =
   let check_ref id =
@@ -256,8 +263,7 @@ and type_c loc lab env lenv c =
   let v = type_v loc lab env lenv c.pc_result_type in
   let id = c.pc_result_name in
   let p = List.map (type_pre lab lenv) c.pc_pre in
-  let lenv' = Env.add_logic id v lenv in
-  let q = option_app (type_post lab lenv') c.pc_post in
+  let q = option_app (type_post lab lenv id v) c.pc_post in
   let s = subst_onev id Ident.result in
   let q = optpost_app (subst_in_predicate s) q in
   { c_result_name = c.pc_result_name; c_effect = c.pc_effect;
