@@ -1,20 +1,24 @@
 
-\section{Description of the Schorr-Waite algorithm}
+\section{The Schorr-Waite algorithm and its formal specification}
 \label{sec:algo}
 
 The Schorr-Waite algorithm performs a depth-first traversal of a
 directed graph, starting from a specific node of the graph called the
-root. In the version we consider here, we assume that the nodes have
+root. 
+
+\subsection{The C source code}
+
+In the version we consider here, we assume that the nodes have
 at most two children, which is situation for example for a garbage
 collector for a pure lisp interpreter, where the only memory allocated value
 is the \textsf{cons} of lists. In C, these \textsf{cons} structures
 can be defined as
 \begin{alltt}
-typedef struct struct_node {
+typedef struct struct_node \{
   unsigned int m :1;
   unsigned int c :1;
   struct struct_node *l, *r;
-} * node;
+\} * node;
 \end{alltt}
 where $l$ and $r$ are respectively pointers to the left and to the
 right child (they may be assigned to NULL). The boolean field $m$ is a
@@ -23,59 +27,69 @@ at the end of the traversal, they will have to be all marked. The
 boolean field $c$ is used internally by the algorithm, to denote which
 of the children is currently explored.
  
+\begin{figure}[t]
 \begin{alltt}
-\begin{slshape}
-/* Schorr-Waite algorithm */
-\end{slshape}
-void schorr_waite(node root) {
+void schorr_waite(node root) \{
   node t = root;
   node p = NULL;
-  while (p != NULL || (t != NULL && ! t->m)) {
-    if (t == NULL || t->m) {
-      if (p->c) {
-\begin{slshape}
-	/* pop */
-\end{slshape}
-      node q = t;
-	t = p;
-	p = p->r;
-	t->r = q;
-      } else {
-\begin{slshape}
-	/* swing */
-\end{slshape}
-      node q = t;
-	t = p->r;
-	p->r = p->l;
-	p->l = q;
-	p->c = 1;
-      }
-    } else {
-\begin{slshape}
-      /* push */
-\end{slshape}
+  while (p != NULL || (t != NULL && ! t->m)) \{
+    if (t == NULL || t->m) \{
+      if (p->c) \{ \begin{slshape}/* pop */\end{slshape}
+        node q = t;
+        t = p;
+        p = p->r;
+        t->r = q;
+        \} else \{ \begin{slshape}/* swing */\end{slshape}
+        node q = t;
+        t = p->r;
+        p->r = p->l;
+        p->l = q;
+        p->c = 1;
+      \}
+    \} else \{ \begin{slshape}/* push */ \end{slshape}
       node q = p;
       p = t;
       t = t->l;
       p->l = q;
       p->m = 1;
       p->c = 0;
-    }
-  }
-}
+    \}
+  \}
+\}
 \end{alltt}
+\caption{C version of the Schorr-Waite algorithm}
+\label{fig:code}
+\end{figure}
 
+The Schorr-Waite graph-marking algorithm, written in C source code, is
+then given in Figure~\ref{fig:code}
 
-\subsection{Graph reachability, and formal specification of the algorithm}
+\subsection{Formal specification of the algorithm}
 
+The informal specification given above talks about nodes of the graph
+which are reachable from the root node: all of them have to be
+marked. So it appears immediately that to formally specify the
+algorithm, one needs to talk about reachability of some node from
+another in the graph. In the \caduceus{} methodology, such an
+``external'' notion can be declared by a predicate annotation. For the
+reachability predicate, this is written has
 \begin{alltt}
 \begin{slshape}
 /*@ predicate isreachable (node p1, node p2) reads p1->r,p1->l */
 \end{slshape}
 \end{alltt}
+It is important to notice that this annotation is simply a declaration
+of a logical predicate, but nothing yet is sais about its semantics:
+we only declare a binary predicate that is intended to relate two
+nodes. The \texttt{reads} clause that follows the predicate
+declaration is for giving information on which data the predicate
+depends on: in this case, we say that the value of the children of
+\texttt{p1}. There is a small trick here: TODO
 
-\begin{alltt}
-\begin{slshape}
+Once the \texttt{isreachable} predicate is declared, it is possible to
+give a specification to the algorithm, even if we did not give the
+semantics of \texttt{isreachable} yet. The specification is as follows:
+\begin{alltt}\begin{slshape}
 /*@ requires 
   @   \bs{}forall node x; 
   @      x != \null && isreachable(root,x) => \valid(x) && ! x->m  
@@ -85,10 +99,42 @@ void schorr_waite(node root) {
   @   (\bs{}forall node x; \valid(x) && isreachable(root,x) => x->m) 
   @   &&
   @   (\bs{}forall node x; ! isreachable(root,x) => x->m == \old(x->m))
-  @*/
-\end{slshape}
+  @*/\end{slshape}
 void schorr_waite(node root);
 \end{alltt}
+
+The clause \texttt{requires} specifies
+the pre-condition. The built-in predicate $\valid(p)$ in \caduceus{}
+means that the pointer $p$ points to a correctly allocated memory
+block, so that dereferencing $p$ is safe. So the pre-condition is that
+for any node $x$ that is not null and reachable 
+from the root, it should be valid, and its $m$ field must be false,
+that is $x$ is unmarked. 
+
+The clause \texttt{ensures} specifies
+the post-condition: it is a conjunct of three assertions. The built-in
+construct $\old(e)$ in \caduceus{} denotes the value of expression $e$
+before the execution of the function. So the first assertion means
+that for all nodes (even the non-reachable ones), the children are the
+same after the run of the algorithm, as they were before. This is of
+course very important to specify, because during the execution the
+children are modified, so one wants to prove that the initial
+structure of the graph is restored. The second assertion specifies
+that any node $x$ that is regularly allocated {\Huge Pourquoi pas non
+  null seulement ?} and reachable 
+from the root, is now marked. So this specifies that all the graph has
+been traversed. The third assertion says that for the nodes that were
+not reachable, their mark is not changed by the algorithm, that is the
+unreachable node are not traversed by the algorithm.
+
+With respect to the most recent formal specification given in
+Isabelle/HOL \cite{mehta03cade}, we added two things: first the
+pre-condition that of all pointers of the graph are regularly
+allocated at the beginning, so that we are now able to prove that no
+wrong pointer dereferencing can occur. Second, we also talk about the
+non-reachable nodes of the graph: we are also able to show that they
+are not affected.
+
 
 %%% Local Variables: 
 %%% mode: latex
