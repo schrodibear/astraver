@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.65 2002-12-10 15:03:14 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.66 2003-01-09 16:50:21 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -537,3 +537,32 @@ let print_assertion fmt a = print_predicate fmt a.a_value
 let print_wp fmt = function
   | None -> fprintf fmt "<no weakest precondition>"
   | Some {a_value=p} -> print_predicate fmt p
+
+let do_not_edit sep file after =
+  let cout = 
+    if not (Sys.file_exists file) then begin
+      let cout = open_out file in
+      output_string cout ("\n" ^ sep ^ "\n\n");
+      cout
+    end else begin
+      let file_bak = file ^ ".bak" in
+      Sys.rename file file_bak;
+      let cin = open_in file_bak in
+      let cout = open_out file in
+      begin try 
+	while true do 
+	  let s = input_line cin in
+	  output_string cout (s ^ "\n");
+	  if s = sep then raise Exit
+	done
+      with
+	| End_of_file -> output_string cout (sep ^ "\n\n")
+	| Exit -> output_string cout "\n"
+      end;
+      cout
+    end
+  in
+  after cout;
+  close_out cout
+
+    

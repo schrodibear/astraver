@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.2 2003-01-09 16:13:59 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.3 2003-01-09 16:50:21 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -84,9 +84,9 @@ let rec print_predicate fmt = function
   | Pvar id -> 
       fprintf fmt "%a" Ident.print id
   | Papp (id, [a; b]) when is_eq id ->
-      fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
+      fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->
-      fprintf fmt "@[(not (= %a@ %a))@]" print_term a print_term b
+      fprintf fmt "@[~(%a =@ %a))@]" print_term a print_term b
 (**
   | Papp (id, tl) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
@@ -131,12 +131,27 @@ let print_sequent fmt (hyps,concl) =
     | Svar (id, v) :: hyps -> 
 	fprintf fmt "!%a:%a.@\n" Ident.print id print_cc_type v;
 	print_seq fmt hyps
-    | Spred (id, p) :: hyps -> 
-	fprintf fmt "(%a: @[%a@])@\n" Ident.print id print_predicate p;
+    | Spred (_, p) :: hyps -> 
+	fprintf fmt "@[%a@] ==>@\n" print_predicate p;
 	print_seq fmt hyps
   in
   fprintf fmt "@[%a@]@?" print_seq hyps
 
-let output_file fwe =
-  failwith "todo"
+let print_parameter fmt id v =
+  fprintf fmt "<parameter ???>"
 
+let print_obligation fmt id sq =
+  fprintf fmt "let %s = `%a`;;@\n@\n" id print_sequent sq
+
+let print_elem fmt = function
+  | Parameter (id, v) -> print_parameter fmt id v
+  | Obligation (s, sq) -> print_obligation fmt s sq
+
+let output_file fwe =
+  let sep = "(* DO NOT EDIT BELOW THIS LINE *)" in
+  let f = fwe ^ "_why.ml" in
+  do_not_edit sep f
+    (fun cout ->
+       let fmt = formatter_of_out_channel cout in
+       Queue.iter (print_elem fmt) elem_q;
+       pp_print_flush fmt ())

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.16 2003-01-09 16:13:59 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.17 2003-01-09 16:50:21 filliatr Exp $ i*)
 
 open Format
 
@@ -85,6 +85,7 @@ Typing/Annotations options:
 Prover options:
   --coq       selects COQ prover (default)
   --pvs       selects PVS prover
+  --hol-light selects HOL Light prover
   --harvey    selects haRVey prover
   --valid, 
   --no-valid  set/unset the functional validation (Coq only; default is no)
