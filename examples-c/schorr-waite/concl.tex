@@ -30,25 +30,30 @@ reachability analysis by itself.
 
 Finally, we emphasize again that we use a generic tool for arbitrary C
 programs, without anything specialized for this case study, which
-additionally gives the choice of the back-end prover.  We claim this
-is a very successful case study, which provides a clear evidence that
-the \caduceus{} approach is powerful. We think that the ability of
-using predicates in annotations which are only defined on the prover
-side is fundamental. As said before, our specification language is
-inspired from JML annotation language for Java. But with JML, as far
-as we know, it is not possible to declare predicates without also
-defined them as Java methods: this are the so-called \emph{pure}
-methods. The latter choice is natural for the main goal of JML, that
-is runtime assertion checking: specifications must be executable. But
-for the goal of formal verification, we believe that this is not a
-good choice, in other words we do not agree with the claim
-in~\cite{leavens03a} that JML is suitable both for runtime assertime
-checking and formal verification. Of course, it should be easy to
-simply relax the JML constraint that pure methods must have an
-implementation. But then runtime assertion checking is not possible
-anymore: achieving both runtime assertion checking and formal
-verification with exactly the same JML annotations remains, to us, an
-open problem.
+additionally gives the choice of the back-end prover. At the
+beginning, it was not clear whether the \caduceus{} specification
+language would be enough, in particular because it is first-order, but
+we finally succeeded.  We claim this is a very successful case study,
+which provides a clear evidence that the \caduceus{} approach is
+powerful. We think that the ability of using predicates in annotations
+which are only defined on the prover side is fundamental. As said
+before, our specification language is inspired from JML annotation
+language for Java. But with JML, as far as we know, it is not possible
+to declare predicates without also defined them as Java methods: this
+are the so-called \emph{pure} methods. The latter choice is natural
+for the main goal of JML, that is runtime assertion checking:
+specifications must be executable. But for the goal of formal
+verification, we believe that this is not a good choice, in other
+words we do not agree with the claim in~\cite{leavens03a} that JML is
+suitable both for runtime assertime checking and formal verification.
+Of course, it should be easy to simply relax the JML constraint that
+pure methods must have an implementation. But then runtime assertion
+checking is not possible anymore: achieving both runtime assertion
+checking and formal verification with exactly the same JML annotations
+remains, to us, an open problem. This would require to define
+predicates in a way which allows both computation and reasoning with
+them, which is possible as far as we know, only in higher-order
+logical frameworks.
 
 There are still many potential improvements in our approach. One
 improvement clearly emphasized by this case study is the ability to
