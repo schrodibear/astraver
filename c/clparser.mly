@@ -28,7 +28,7 @@
 %}
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL
-%token LPAR RPAR IF ELSE COLON DOT DOTDOT 
+%token LPAR RPAR IF ELSE COLON DOT DOTDOT AMP
 %token INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IFF IMPLIES AND OR NOT 
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR
@@ -47,7 +47,7 @@
 %left prec_relation LT GT LE GE EQ NE
 %right QUESTION prec_question
 %left PLUS MINUS
-%left STAR SLASH PERCENT
+%left STAR SLASH PERCENT AMP
 %right prec_uminus 
 %left DOT ARROW LSQUARE
 
@@ -91,6 +91,7 @@ lexpr:
 | MINUS lexpr %prec prec_uminus { info (PLunop (Uminus, $2)) }
 | PLUS lexpr %prec prec_uminus { $2 }
 | STAR lexpr { info (PLunop (Ustar, $2)) }
+| AMP lexpr { info (PLunop (Uamp, $2)) }
 | lexpr QUESTION lexpr COLON lexpr %prec prec_question 
     { info (PLif ($1, $3, $5)) }
 | OLD LPAR lexpr RPAR { info (PLold $3) }

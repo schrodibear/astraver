@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.85 2004-06-02 13:11:16 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.86 2004-06-10 15:40:30 marche Exp $ i*)
 
 
 open Format
@@ -145,6 +145,8 @@ let rec interp_term label old_label t =
 	let te1 = f t1 in
 	let var = global_var_for_type t.term_type in
 	LApp("acc",[interp_var label var;te1])
+    | Tunop (Uamp, t1) -> 
+	interp_term_address label old_label t1
     | Tunop (Uminus, t1) -> 
 	LApp(interp_term_un_op t1.term_type Uminus, [f t1])
     | Tunop (Ufloat_of_int, t1) ->
@@ -172,6 +174,34 @@ let rec interp_term label old_label t =
 	  | _ -> 
 	      unsupported "logic cast"
 	end
+
+and interp_term_address  label old_label e = match e.term_node with
+  | Tvar v -> 
+      begin match e.term_type.ctype_node with
+	| CTstruct _ | CTunion _ -> LVar v.var_name
+	| _ -> unsupported "& operator"
+      end
+  | Tunop (Ustar, e1) -> 
+      interp_term  label old_label e1
+  | Tarrget (e1, e2) ->
+      LApp("shift",[interp_term  label old_label e1; 
+		    interp_term  label old_label e2])
+  | Tdot ({term_node = Tunop (Ustar, e1)}, f) ->
+      assert false
+  | Tdot (e1, f)
+  | Tarrow (e1, f) ->
+      begin match e.term_type.ctype_node with
+	| CTenum _ | CTint _ | CTfloat _ -> 
+  	    interp_term  label old_label e1
+	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
+	    let var = f.field_heap_var_name in
+	    LApp("acc",[interp_var label var; interp_term label old_label e1])
+	| _ -> unsupported "& operator on a field"
+      end
+  | Tcast (_, e1) ->
+      interp_term_address  label old_label e1
+  | _ -> 
+      assert false (* not a left value *)
 
 let rec interp_predicate label old_label p =
   let f = interp_predicate label old_label in
@@ -850,7 +880,7 @@ let interp_invariant label effects annot =
   let inv = make_and (interp_assigns label effects annot.loop_assigns) inv in
   let var = match annot.variant with
     | None -> LConst (Prim_int 0), None
-    | Some (var,r) -> interp_term None "" var, r
+    | Some (var,r) -> interp_term None "init" var, r
   in
   (inv, var)
 

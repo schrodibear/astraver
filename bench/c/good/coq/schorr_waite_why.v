@@ -177,9 +177,9 @@ Lemma schorr_waite_impl_po_3 :
   forall (Test3: ~(t1 = null)),
   forall (Pre4: (valid alloc t1)),
   forall (caduceus_10: Z),
-  forall (Post40: caduceus_10 = (acc m0 t1)),
+  forall (Post39: caduceus_10 = (acc m0 t1)),
   forall (result2: bool),
-  forall (Post42: (if result2 then caduceus_10 <> 0 else caduceus_10 = 0)),
+  forall (Post41: (if result2 then caduceus_10 <> 0 else caduceus_10 = 0)),
   (if result2 then True
    else ((t1 = null ->
           (forall (result:Z),

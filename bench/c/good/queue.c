@@ -37,3 +37,11 @@ char pop() {
   q.empty = q.first == q.last;
   return r;
 }
+
+/*@ requires \valid(q1) && q1 != &q && !q.empty
+  @ ensures \result == \old(q1->empty) 
+  @*/
+int test(struct queue *q1) {
+  pop();
+  return q1->empty;
+}

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.30 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.31 2004-06-10 15:40:31 marche Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -28,7 +28,7 @@ type logic_type =
 (* parsed terms and predicates *)
 
 type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
-type term_unop = Uminus | Ustar | Ufloat_of_int
+type term_unop = Uminus | Ustar | Uamp | Ufloat_of_int
 
 type 'ctype quantifiers = ('ctype * string) list
 

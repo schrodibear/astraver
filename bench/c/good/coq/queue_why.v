@@ -371,3 +371,71 @@ rewrite acc_upd in H9; omega.
 Save.
 
 
+(* Why obligation from file "why/queue.why", characters 4834-4854 *)
+Lemma test_impl_po_1 : 
+  forall (q1: pointer),
+  forall (alloc: alloc_table),
+  forall (contents: ((memory) pointer)),
+  forall (empty: ((memory) Z)),
+  forall (first: ((memory) Z)),
+  forall (last: ((memory) Z)),
+  forall (length: ((memory) Z)),
+  forall (q: pointer),
+  forall (Pre7: (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
+                (valid alloc q) /\
+                ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+                0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
+                (acc last q) /\ (acc last q) < (acc length q)),
+  (acc empty q) = 0 /\ (valid alloc q) /\
+  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
+  (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <= (acc last q) /\
+  (acc last q) < (acc length q).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/queue.why", characters 4858-4862 *)
+Lemma test_impl_po_2 : 
+  forall (q1: pointer),
+  forall (alloc: alloc_table),
+  forall (contents: ((memory) pointer)),
+  forall (empty: ((memory) Z)),
+  forall (first: ((memory) Z)),
+  forall (full: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (last: ((memory) Z)),
+  forall (length: ((memory) Z)),
+  forall (q: pointer),
+  forall (Pre7: (((valid alloc q1) /\ ~(q1 = q)) /\ (acc empty q) = 0) /\
+                (valid alloc q) /\
+                ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+                0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
+                (acc last q) /\ (acc last q) < (acc length q)),
+  forall (Pre3: (acc empty q) = 0 /\ (valid alloc q) /\
+                ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+                0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
+                (acc last q) /\ (acc last q) < (acc length q)),
+  forall (empty0: ((memory) Z)),
+  forall (first0: ((memory) Z)),
+  forall (full0: ((memory) Z)),
+  forall (caduceus_1: Z),
+  forall (Post2: ((acc full0 q) = 0 /\ caduceus_1 =
+                 (acc intP (shift (acc contents q) (acc first q)))) /\
+                 (((assigns alloc full full0 (pointer_loc q)) /\
+                 (assigns alloc first first0 (pointer_loc q))) /\
+                 (assigns alloc empty empty0 (pointer_loc q))) /\
+                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
+                 0 <= (acc first0 q) /\ (acc first0 q) < (acc length q)) /\
+                 0 <= (acc last q) /\ (acc last q) < (acc length q)),
+  (forall (result:Z),
+   (result = (acc empty0 q1) -> result = (acc empty q1) /\
+    ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
+    (acc first0 q) /\ (acc first0 q) < (acc length q)) /\ 0 <=
+    (acc last q) /\ (acc last q) < (acc length q))) /\
+  (valid alloc q1).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+

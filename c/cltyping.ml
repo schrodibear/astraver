@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.43 2004-05-26 09:12:37 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.44 2004-06-10 15:40:31 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -121,6 +121,9 @@ and type_term_node loc env = function
 	| CTpointer ty | CTarray (ty, _) -> Tunop (Ustar, t), ty
 	| _ -> error loc "invalid type argument of `unary *'"
       end
+  | PLunop (Uamp, t) -> 
+      let t = type_term env t in
+      Tunop (Uamp, t), noattr (CTpointer t.term_type)
   | PLunop (Ufloat_of_int, _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
