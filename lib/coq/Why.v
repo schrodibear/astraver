@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: Why.v,v 1.8 2002-11-14 09:38:05 filliatr Exp $ *)
+(* $Id: Why.v,v 1.9 2002-12-04 15:35:20 filliatr Exp $ *)
 
 Require Export WhyCoqCompat.
 
@@ -24,6 +24,7 @@ Require Export WhyBool.
 Require Export WhyArrays.
 Require Export WhyPermut.
 Require Export WhySorted.
+Require Export WhyTactics.
 Require Export WhyExn.
 Require Export WhyLemmas.
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.4 2002-12-04 10:29:50 filliatr Exp $ *)
+(* $Id: WhyPermut.v,v 1.5 2002-12-04 15:35:20 filliatr Exp $ *)
 
 Require WhyArrays.
 Require Omega.
@@ -95,6 +95,16 @@ Save.
 Hints Resolve exchange_id : v62 datatypes.
 
 
+Lemma exchange_length :
+  (A:Set)(t,t':(array A))(i,j:Z)
+  (exchange t t' i j) -> 
+  (array_length t) = (array_length t').
+Proof.
+Intros A t t' i j. Induction 1; Auto.
+Save.
+
+Hints Resolve exchange_length : v62 datatypes.
+
 (****************************************************************************)
 (*                    Permutations of elements in arrays                    *)
 (*                        Definition and properties                         *)
@@ -127,6 +137,7 @@ Elim H0; Auto.
 Omega.
 Save.
 
+Hints Resolve permut_length : v62 datatypes.
 
 (* We also define the permutation on a segment of an array, "sub_permut",
  * the other parts of the array being unchanged
@@ -160,6 +171,8 @@ Intros t t' g d; Induction 1; Auto; Intros.
 Elim H2; Auto.
 Omega.
 Save.
+
+Hints Resolve sub_permut_length : v62 datatypes.
 
 Lemma sub_permut_function :
   (A:Set)(t,t':(array A))(g,d:Z)
