@@ -14,17 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.1 2004-01-13 14:37:06 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.2 2004-01-13 15:24:35 filliatr Exp $ i*)
 
 (* AST for C annotations *)
-
-type ('a, 'b) info = { node : 'a; info : 'b }
 
 type pure_type =
   | PTint
   | PTfloat
   | PTarray of pure_type
-  | PTid of string
+  | PTvarid of string
   | PTvar of type_var
   | PTexternal of pure_type list * string
 
@@ -38,13 +36,21 @@ type logic_type =
 type label = Current | Before | At of string
 
 
+type ('a, 'b) info = { node : 'a; info : 'b }
+
+type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
+type term_unop = Uplus | Uminus | Ustar
+
 type 'a term = ('a term_node, 'a) info
 
 and 'a term_node =
+  | Tconstant of string
   | Tvar of string * label
+  | Tapp of string * 'a term list
+  | Tbinop of 'a term * term_binop * 'a term
+  | Tif of 'a term * 'a term * 'a term
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
-
 
 type 'a predicate = ('a predicate_node, 'a) info
 
@@ -57,4 +63,8 @@ and 'a predicate_node =
   | Por of 'a predicate * 'a predicate
   | Pimplies of 'a predicate * 'a predicate
   | Pnot of 'a predicate
+  | Papp of string * 'a term list
+  | Pif of 'a term * 'a predicate * 'a predicate
+  | Pforall of string * pure_type * 'a predicate
+  | Pexists of string * pure_type * 'a predicate
 
