@@ -1,5 +1,13 @@
 Note: These are the changes for Caduceus.
 
+ o fix of a bug introduced in last version, with redeclaration of
+   functions 
+ o bug fix: caduceus now allows redeclaration of a local variable
+ o better renaming when name clash between local variables and
+   structure fields 
+ o bug fix: now 0xFFFFFFFF is not anymore a too large constant (only a
+   warning) 
+
 version 0.65, October 18th, 2004
 ================================
  o support for local variables of union types

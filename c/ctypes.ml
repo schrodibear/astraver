@@ -14,12 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.6 2003-12-24 13:25:46 filliatr Exp $ i*)
+(*i $Id: ctypes.ml,v 1.7 2004-10-20 12:56:43 hubert Exp $ i*)
 
 open Format
 open Coptions
-
-module Sset = Set.Make(String)
+open Lib
 
 let stack = ref [ref Sset.empty]
 

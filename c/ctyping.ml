@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.72 2004-10-19 07:35:02 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.73 2004-10-20 12:56:43 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -25,6 +25,7 @@ open Cltyping
 open Creport
 open Info
 open Cenv
+open Lib
 
 (* Typing C programs *)
 
@@ -686,11 +687,11 @@ and type_statement_node loc env et = function
       TSspec (spec, s), st
 
 and type_block env et (dl,sl) = 
-  let rec type_decls env = function
+  let rec type_decls vs env = function
     | [] -> 
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
-	if Env.mem x env then error d.loc ("redeclaration of `" ^ x ^ "'");
+	if Sset.mem x vs then error d.loc ("redeclaration of `" ^ x ^ "'");
 	let ty = type_type d.loc env ty in	
 	if eq_type_node ty.ctype_node CTvoid then 
 	  error d.loc ("variable `" ^ x ^ "' declared void");
@@ -698,16 +699,16 @@ and type_block env et (dl,sl) =
 	let info = default_var_info x in
 	if ty.ctype_storage = Static then info.var_is_static <- true;
 	let env' = Env.add x ty info env in
-	let dl',env'' = type_decls env' dl in
+	let dl',env'' = type_decls (Sset.add x vs) env' dl in
 	{ d with node = Tdecl (ty, info, i) } :: dl', env''
     | { node = Ctypedecl ty } as d :: dl ->
 	let ty' = type_type d.loc env ty in
-	let dl',env' = type_decls env dl in
+	let dl',env' = type_decls vs env dl in
 	{ d with node = Ttypedecl ty' } :: dl', env'
     | { loc = l } :: _ ->
 	error l "unsupported local declaration"
   in
-  let dl',env' = type_decls (Env.new_block env) dl in
+  let dl',env' = type_decls Sset.empty (Env.new_block env) dl in
   let rec type_bl = function
     | [] -> 
 	[], mt_status
@@ -750,22 +751,22 @@ let type_logic_parameters env pl =
 
 let type_spec_decl ofs = function
   | LDaxiom (id, p) -> 
-      Taxiom (id, type_predicate ofs Env.empty p)
+      Taxiom (id, type_predicate ofs (Env.empty ()) p)
   | LDinvariant (id, p) -> 
-      Tinvariant (id, type_predicate ofs Env.empty p)
+      Tinvariant (id, type_predicate ofs (Env.empty ()) p)
   | LDlogic (id, ty, pl, ll) ->
-      let ty = type_logic_type Env.empty ty in
-      let pl,env' = type_logic_parameters Env.empty pl in
+      let ty = type_logic_type (Env.empty ()) ty in
+      let pl,env' = type_logic_parameters (Env.empty ()) pl in
       let ll = List.map (type_location ofs env') ll in
       Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
   | LDpredicate_reads (id, pl, ll) ->
-      let pl,env' = type_logic_parameters Env.empty pl in
+      let pl,env' = type_logic_parameters (Env.empty ()) pl in
       let ll = List.map (type_location ofs env') ll in
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_reads (pl, ll))
   | LDpredicate_def (id, pl, p) ->
-      let pl,env' = type_logic_parameters Env.empty pl in
+      let pl,env' = type_logic_parameters (Env.empty ()) pl in
       let p = type_predicate ofs env' p in
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
@@ -814,14 +815,14 @@ let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
       type_spec_decl ofs s
   | Ctypedef (ty, x) -> 
-      let ty = type_type d.loc Env.empty ty in
+      let ty = type_type d.loc (Env.empty ()) ty in
       add_typedef d.loc x ty;
       Ttypedef (ty, x)
   | Ctypedecl ty -> 
-      let ty = type_type d.loc Env.empty ty in
+      let ty = type_type d.loc (Env.empty ()) ty in
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
-      let ty = type_type d.loc Env.empty ty in
+      let ty = type_type d.loc (Env.empty ()) ty in
       let info = add_sym d.loc x ty (default_var_info x) in
       begin match ty.ctype_node with
 	| CTfun (pl, ty) ->
@@ -833,11 +834,11 @@ let type_decl d = match d.node with
 	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
 	    info.var_is_assigned <- true;
 	    let ty = array_size_from_initializer d.loc ty i in
-	    Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
+	    Tdecl (ty, info, type_initializer d.loc (Env.empty ()) ty i)
       end
   | Cfunspec (s, ty, f, pl) ->
-      let ty = type_type d.loc Env.empty ty in
-      let pl,env = type_parameters d.loc Env.empty pl in
+      let ty = type_type d.loc (Env.empty ()) ty in
+      let pl,env = type_parameters d.loc (Env.empty ()) pl in
       let s = type_spec ~result:ty env s in
       let s = function_spec d.loc f (Some s) in
       let info = default_var_info f in
@@ -846,9 +847,9 @@ let type_decl d = match d.node with
       let info = add_sym d.loc f (noattr (CTfun (spl, ty))) info in
       Tfunspec (s, ty, info, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
-      let ty = type_type d.loc Env.empty ty in
+      let ty = type_type d.loc (Env.empty ()) ty in
       let et = if eq_type ty c_void then None else Some ty in
-      let pl,env = type_parameters d.loc Env.empty pl in
+      let pl,env = type_parameters d.loc (Env.empty ()) pl in
       let s = option_app (type_spec ~result:ty env) s in
       let s = function_spec d.loc f s in
       let info = default_var_info f in

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/selection.why", characters 1364-1479 *)
+(* Why obligation from file "why/selection.why", characters 1409-1524 *)
 Lemma selection_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -34,16 +34,16 @@ Lemma selection_impl_po_1 :
   forall (min3: Z),
   forall (Pre8: Variant3 = (n - j3)),
   forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
+                (forall (k_0:Z),
+                 (i2 <= k_0 /\ k_0 < j3 -> (acc intP0 (shift t min3)) <=
+                  (acc intP0 (shift t k_0))))),
   forall (Test5: j3 < n),
   (valid alloc (shift t j3)).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1364-1479 *)
+(* Why obligation from file "why/selection.why", characters 1409-1524 *)
 Lemma selection_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -74,9 +74,9 @@ Lemma selection_impl_po_2 :
   forall (min3: Z),
   forall (Pre8: Variant3 = (n - j3)),
   forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
+                (forall (k_0:Z),
+                 (i2 <= k_0 /\ k_0 < j3 -> (acc intP0 (shift t min3)) <=
+                  (acc intP0 (shift t k_0))))),
   forall (Test5: j3 < n),
   forall (Pre4: (valid alloc (shift t j3))),
   (valid alloc (shift t min3)).
@@ -84,7 +84,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1494-1503 *)
+(* Why obligation from file "why/selection.why", characters 1541-1549 *)
 Lemma selection_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -115,9 +115,9 @@ Lemma selection_impl_po_3 :
   forall (min3: Z),
   forall (Pre8: Variant3 = (n - j3)),
   forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
+                (forall (k_0:Z),
+                 (i2 <= k_0 /\ k_0 < j3 -> (acc intP0 (shift t min3)) <=
+                  (acc intP0 (shift t k_0))))),
   forall (Test5: j3 < n),
   forall (Pre4: (valid alloc (shift t j3))),
   forall (Pre6: (valid alloc (shift t min3))),
@@ -126,9 +126,9 @@ Lemma selection_impl_po_3 :
   forall (Post7: min4 = j3),
   (forall (j:Z),
    (j = (j3 + 1) -> ((((i2 + 1) <= j /\ j <= n) /\ i2 <= min4 /\ min4 < n) /\
-    (forall (k:Z),
-     (i2 <= k /\ k < j -> (acc intP0 (shift t min4)) <=
-      (acc intP0 (shift t k))))) /\
+    (forall (k_0:Z),
+     (i2 <= k_0 /\ k_0 < j -> (acc intP0 (shift t min4)) <=
+      (acc intP0 (shift t k_0))))) /\
     (Zwf 0 (n - j) (n - j3)))).
 Proof.
 intuition.
@@ -188,7 +188,7 @@ subst; auto.
 
 ***)
 
-(* Why obligation from file "why/selection.why", characters 1518-1522 *)
+(* Why obligation from file "why/selection.why", characters 1566-1566 *)
 Lemma selection_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -219,9 +219,9 @@ Lemma selection_impl_po_4 :
   forall (min3: Z),
   forall (Pre8: Variant3 = (n - j3)),
   forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
+                (forall (k_0:Z),
+                 (i2 <= k_0 /\ k_0 < j3 -> (acc intP0 (shift t min3)) <=
+                  (acc intP0 (shift t k_0))))),
   forall (Test5: j3 < n),
   forall (Pre4: (valid alloc (shift t j3))),
   forall (Pre6: (valid alloc (shift t min3))),
@@ -230,9 +230,9 @@ Lemma selection_impl_po_4 :
   forall (Post6: result5 = tt),
   (forall (j:Z),
    (j = (j3 + 1) -> ((((i2 + 1) <= j /\ j <= n) /\ i2 <= min3 /\ min3 < n) /\
-    (forall (k:Z),
-     (i2 <= k /\ k < j -> (acc intP0 (shift t min3)) <=
-      (acc intP0 (shift t k))))) /\
+    (forall (k_0:Z),
+     (i2 <= k_0 /\ k_0 < j -> (acc intP0 (shift t min3)) <=
+      (acc intP0 (shift t k_0))))) /\
     (Zwf 0 (n - j) (n - j3)))).
 Proof.
 intuition.
@@ -242,7 +242,7 @@ omega.
 subst; omega.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 999-1567 *)
+(* Why obligation from file "why/selection.why", characters 1028-1613 *)
 Lemma selection_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -273,9 +273,9 @@ Lemma selection_impl_po_5 :
   forall (min3: Z),
   forall (Pre8: Variant3 = (n - j3)),
   forall (Pre7: (((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                (forall (k:Z),
-                 (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                  (acc intP0 (shift t k))))),
+                (forall (k_0:Z),
+                 (i2 <= k_0 /\ k_0 < j3 -> (acc intP0 (shift t min3)) <=
+                  (acc intP0 (shift t k_0))))),
   forall (Test2: j3 >= n),
   (forall (result:Z),
    (result = min3 ->
@@ -304,7 +304,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/selection.why", characters 1056-1317 *)
+(* Why obligation from file "why/selection.why", characters 1087-1359 *)
 Lemma selection_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
@@ -331,9 +331,9 @@ Lemma selection_impl_po_6 :
   forall (j2: Z),
   forall (Post4: j2 = (i2 + 1)),
   (((i2 + 1) <= j2 /\ j2 <= n) /\ i2 <= min2 /\ min2 < n) /\
-  (forall (k:Z),
-   (i2 <= k /\ k < j2 -> (acc intP0 (shift t min2)) <=
-    (acc intP0 (shift t k)))).
+  (forall (k_0:Z),
+   (i2 <= k_0 /\ k_0 < j2 -> (acc intP0 (shift t min2)) <=
+    (acc intP0 (shift t k_0)))).
 Proof.
 intuition.
 red; intuition.
@@ -341,7 +341,7 @@ Save.
 
 
 
-(* Why obligation from file "why/selection.why", characters 320-1697 *)
+(* Why obligation from file "why/selection.why", characters 332-1748 *)
 Lemma selection_impl_po_7 : 
   forall (t: pointer),
   forall (n: Z),
@@ -370,7 +370,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 385-862 *)
+(* Why obligation from file "why/selection.why", characters 399-883 *)
 Lemma selection_impl_po_8 : 
   forall (t: pointer),
   forall (n: Z),
@@ -390,7 +390,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2052-2080 *)
+(* Why obligation from file "why/selection.why", characters 2113-2140 *)
 Lemma swap_impl_po_1 : 
   forall (t: pointer),
   forall (i: Z),
@@ -403,7 +403,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2161-2189 *)
+(* Why obligation from file "why/selection.why", characters 2225-2252 *)
 Lemma swap_impl_po_2 : 
   forall (t: pointer),
   forall (i: Z),
@@ -450,7 +450,7 @@ subst; auto.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2135-2190 *)
+(* Why obligation from file "why/selection.why", characters 2199-2253 *)
 Lemma swap_impl_po_3 : 
   forall (t: pointer),
   forall (i: Z),
@@ -472,7 +472,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2135-2190 *)
+(* Why obligation from file "why/selection.why", characters 2199-2253 *)
 Lemma swap_impl_po_4 : 
   forall (t: pointer),
   forall (i: Z),

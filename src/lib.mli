@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: lib.mli,v 1.3 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: lib.mli,v 1.4 2004-10-20 12:56:43 hubert Exp $ i*)
+
+module Sset : Set.S with type elt = string
 
 val mkdir_p : string -> unit
 

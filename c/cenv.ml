@@ -144,13 +144,16 @@ let used_names = Hashtbl.create 97
 let mark_as_used x = Hashtbl.add used_names x ()
 let is_used_name n = Hashtbl.mem used_names n
 
-let use_name n = if is_used_name n then raise Exit; n
+let use_name ?local_names n = 
+  if is_used_name n then raise Exit; 
+  begin match local_names with Some h -> if Hashtbl.mem h n then raise Exit | None -> () end;
+  n
 
-let rec next_name n i = 
+let rec next_name ?local_names n i = 
   let n_i = n ^ "_" ^ string_of_int i in
-  try use_name n_i with Exit -> next_name n (succ i)
+  try use_name ?local_names n_i with Exit -> next_name ?local_names n (succ i)
 
-let unique_name n = try use_name n with Exit -> next_name n 0
+let unique_name ?local_names n = try use_name ?local_names n with Exit -> next_name ?local_names n 0
 
 (* variables and functions *)
 let (sym_t : (string, (texpr ctype * var_info)) Hashtbl.t) = Hashtbl.create 97
@@ -198,17 +201,25 @@ module Env = struct
      each block maps a tag name to a tag type *)
   type t = { 
     vars : (texpr ctype * var_info) M.t; 
+    used_names : (string, unit) Hashtbl.t;
     tags : (string, tag_type) Hashtbl.t list;
   }
 
   (* note: the first hash table in [tags] is shared *)
-  let empty = { vars = M.empty; tags = [Hashtbl.create 17] }
+  let shared_hash_table = Hashtbl.create 17
+
+  let empty () = 
+    { vars = M.empty; 
+      used_names = Hashtbl.create 97; 
+      tags = [shared_hash_table] }
 
   let new_block env = { env with tags = Hashtbl.create 17 :: env.tags }
 
   (* symbols *)
   let add x t info env = 
-    info.var_unique_name <- unique_name x;
+    let n = unique_name ~local_names:env.used_names x in
+    info.var_unique_name <- n;
+    Hashtbl.add env.used_names n ();
     { env with vars = M.add x (t,info) env.vars }
 
   let find x env = M.find x env.vars
@@ -265,7 +276,14 @@ let find_field ~tag:n ~field:x =
   try 
     Hashtbl.find fields_t (n,x)
   with Not_found -> 
-    let f = { field_name = x; field_tag = n; field_heap_var_name = x } in
+    let u = 
+      try use_name x with Exit -> 
+	let n_x = n ^ "_" ^ x in 
+	try use_name n_x with Exit -> 
+	  next_name n_x 0
+    in
+    let f = { field_name = x; field_tag = n; field_heap_var_name = u } in
+    mark_as_used u; 
     Hashtbl.add fields_t (n,x) f; f
 
 let declare_fields tyn fl = match tyn with
@@ -296,13 +314,3 @@ let type_of_field loc x ty =
     | _ -> error loc ("request for member `" ^ x ^ 
 		      "' in something not a structure or union")
 
-let uniquize_names () =
-  let name n {field_name = f} = 
-    try use_name f with Exit -> 
-    let n_f = n ^ "_" ^ f in 
-    try use_name n_f with Exit -> 
-    next_name n_f 0
-  in
-  Hashtbl.iter (fun (n,_) f -> f.field_heap_var_name <- name n f) fields_t
-
-    

@@ -7,7 +7,7 @@ typedef struct struct_node {
   struct struct_node *l, *r;
 } * node;
 
-/*@ logic plist cons(node p, plist pl) */
+/*@ logic plist cons(node p, plist l) */
 
 /*@ predicate in_list(node p,plist stack) */
 

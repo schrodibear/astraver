@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/average.why", characters 426-454 *)
+(* Why obligation from file "why/average.why", characters 440-468 *)
 Lemma average_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -28,7 +28,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 426-454 *)
+(* Why obligation from file "why/average.why", characters 440-468 *)
 Lemma average_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -55,7 +55,7 @@ Proof.
 intuition; subst; auto.
 Qed.
 
-(* Why obligation from file "why/average.why", characters 403-483 *)
+(* Why obligation from file "why/average.why", characters 417-498 *)
 Lemma average_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -94,7 +94,7 @@ omega.
 rewrite Z_div_plus; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 232-489 *)
+(* Why obligation from file "why/average.why", characters 241-505 *)
 Lemma average_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -118,7 +118,7 @@ intuition.
 subst; omega.
 Qed.
 
-(* Why obligation from file "why/average.why", characters 281-366 *)
+(* Why obligation from file "why/average.why", characters 292-378 *)
 Lemma average_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -135,7 +135,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 742-769 *)
+(* Why obligation from file "why/average.why", characters 765-792 *)
 Lemma min_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -147,7 +147,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/average.why", characters 983-1066 *)
+(* Why obligation from file "why/average.why", characters 1015-1099 *)
 Lemma min_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -222,7 +222,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1085-1113 *)
+(* Why obligation from file "why/average.why", characters 1119-1147 *)
 Lemma min_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -250,7 +250,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1085-1113 *)
+(* Why obligation from file "why/average.why", characters 1119-1147 *)
 Lemma min_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -281,7 +281,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1078-1113 *)
+(* Why obligation from file "why/average.why", characters 1112-1147 *)
 Lemma min_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -311,7 +311,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 1125-1125 *)
+(* Why obligation from file "why/average.why", characters 1160-1160 *)
 Lemma min_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
@@ -341,7 +341,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 827-1162 *)
+(* Why obligation from file "why/average.why", characters 855-1199 *)
 Lemma min_impl_po_7 : 
   forall (t: pointer),
   forall (n: Z),
@@ -365,7 +365,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/average.why", characters 876-943 *)
+(* Why obligation from file "why/average.why", characters 906-973 *)
 Lemma min_impl_po_8 : 
   forall (t: pointer),
   forall (n: Z),

@@ -116,7 +116,12 @@ for f in consts param clash invariants switch; do
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
 	echo -n "caduceus ok... "
 	if make -f $f.makefile coq > /tmp/caduceus.tmp 2>&1; then
-	    echo "Coq proof ok... "
+	    n=`grep -c Admitted coq/${f}_why.v`
+	    if test $n -ne 0 ; then
+		echo "Coq proof ok (with $n Admitted)... "
+	    else
+		echo "Coq proof ok... "
+	    fi
 	else
 	    echo "Coq proof FAILED !"
 	    cat /tmp/caduceus.tmp

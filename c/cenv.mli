@@ -37,7 +37,7 @@ module Env : sig
 
   type t
 
-  val empty : t
+  val empty : unit -> t
 
   val new_block : t -> t
 
@@ -54,4 +54,6 @@ val find_field : tag:string -> field:string -> field_info
 val declare_fields : texpr ctype_node -> ('a * string * 'b) list -> unit
 
 (* make heap var names unique *)
+(*
 val uniquize_names : unit -> unit
+*)

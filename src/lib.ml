@@ -14,8 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: lib.ml,v 1.3 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: lib.ml,v 1.4 2004-10-20 12:56:43 hubert Exp $ i*)
 
+module Sset = Set.Make(String)
 
 (* small library common to Why and Caduceus *)
 
