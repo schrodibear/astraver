@@ -14,8 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.75 2003-02-21 09:50:38 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.76 2003-03-07 13:51:29 filliatr Exp $ i*)
 
+open Options
 open Logic
 open Rename
 open Misc
@@ -318,6 +319,7 @@ EXTEND
     | c = assertion; "|"; l = LIST1 exn_condition SEP "|" -> (c,l) 
     | "|"; l = LIST1 exn_condition SEP "|" -> 
 	wprintf loc "no postcondition; false inserted@\n";
+        if werror then exit 1;
 	(anonymous loc (mk_pp loc PPfalse), l)
   ] ]
   ;

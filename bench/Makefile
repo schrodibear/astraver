@@ -16,6 +16,10 @@ pvs:
 	../bin/why.opt --pvs -d -V test.mlw
 	pvs -batch -v 3 -l batch.el
 
+c-pvs:
+	../bin/why.opt --pvs -d -V ctest.c
+	pvs -batch -v 3 -l batch.el
+
 harvey:
 	../bin/why.opt --harvey -d -V test.mlw
 

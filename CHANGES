@@ -1,4 +1,7 @@
 
+  o PVS: change in array type (warray) to get better TCCs
+  o fixed ocaml output (array_length)
+
 version 1.04, March 5th, 2003
 =============================
   o C: logic declarations with syntax /*W ... */

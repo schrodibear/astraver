@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.17 2003-02-05 08:14:11 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.18 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
 open Format
+open Options
 open Ident
 open Logic
 open Types
@@ -296,6 +297,20 @@ let check_effect loc env e =
   List.iter check_ref w;
   List.iter check_exn x
 
+(* warns if a ref occuring in a predicate is not mentioned in the effect,
+   and adds it as read to the effect *)
+let warn_refs loc env p = 
+  Idset.fold 
+    (fun id ef -> 
+       if not (Effect.is_read ef id) then begin
+	 wprintf loc "mutable %a is not declared in effect; added as read\n"
+	   Ident.print id;
+	 if werror then exit 1;
+	 Effect.add_read id ef
+       end else
+	 ef)
+    (predicate_refs env p)
+
 let rec type_v loc lab env lenv = function
   | PVref v -> 
       Ref (type_v loc lab env lenv v)
@@ -308,14 +323,17 @@ let rec type_v loc lab env lenv = function
       PureType pt
 
 and type_c loc lab env lenv c =
-  check_effect loc env c.pc_effect;
+  let ef = c.pc_effect in
+  check_effect loc env ef;
   let v = type_v loc lab env lenv c.pc_result_type in
   let id = c.pc_result_name in
   let p = List.map (type_assert lab env lenv) c.pc_pre in
-  let q = option_app (type_post lab env lenv id v c.pc_effect) c.pc_post in
+  let q = option_app (type_post lab env lenv id v ef) c.pc_post in
+  let ef = List.fold_right (asst_fold (warn_refs loc env)) p ef in
+  let ef = optpost_fold (warn_refs loc env) q ef in
   let s = subst_onev id Ident.result in
   let q = optpost_app (subst_in_predicate s) q in
-  { c_result_name = c.pc_result_name; c_effect = c.pc_effect;
+  { c_result_name = c.pc_result_name; c_effect = ef;
     c_result_type = v; c_pre = p; c_post = q }
 
 and binders loc lab env lenv = function

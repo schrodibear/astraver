@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.19 2003-02-18 16:54:56 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.20 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 open Format
 
@@ -28,6 +28,7 @@ let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref "Require Why."
+let werror_ = ref false
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -77,6 +78,7 @@ Generic Options:
   -V, --verbose  verbose mode
   -q, --quiet    quiet mode (default)
   -d, --debug    debugging mode (implies verbose mode)
+  --werror       treat warnings as errors
   -v, --version  prints version and exits
   --warranty     prints license and exits
 
@@ -141,6 +143,8 @@ let files =
 	usage (); exit 1
     | ("--wol") :: args ->
 	wol_ := true; parse args
+    | ("-werror" | "--werror") :: args ->
+	werror_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -157,6 +161,7 @@ let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = !coq_preamble_
 let wol = !wol_
+let werror = !werror_
 
 let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_

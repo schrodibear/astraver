@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.5 2002-12-04 10:29:51 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.6 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -116,6 +116,8 @@ let rec expression fmt = function
       constant fmt c
   | Tderef id ->
       fprintf fmt "!%a" Ident.print id
+  | Tapp (id, [Tderef t]) when id == Ident.array_length ->
+      fprintf fmt "(Array.length %a)" Ident.print t
   | Tapp (id, [a; b]) when id == access ->
       fprintf fmt "%a.(%a)" expression a expression b
   | Tapp (id, [a; b]) when caml_infix id ->

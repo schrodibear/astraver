@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.28 2003-02-21 09:50:38 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.29 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
 open Format
+open Options
 open Misc
 open Util
 open Ident
@@ -685,8 +686,10 @@ and interp_block l cenv et abrupt (d,b) =
 	m
     | s :: bl ->
 	let s', st1 = interp_statement cenv' et true s in
-	if st1.always_return then 
+	if st1.always_return then begin
 	  wprintf (loc_of_statement (List.hd bl)) "unreachable statement\n";
+	  if werror then exit 1
+	end;
 	let bl', st2 = interp_bl bl in
 	mk_seq l s' bl', or_status st1 st2
   in

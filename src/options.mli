@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.18 2003-02-18 16:54:56 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.19 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -38,6 +38,8 @@ val output : (Format.formatter -> unit) -> unit
 val wol : bool
 
 val c_file : bool ref
+
+val werror : bool
 
 (*s Typing options *)
 

@@ -25,18 +25,21 @@ END why
 why_arrays[T: TYPE]: THEORY
 BEGIN
 
-  warray: TYPE = [ n:int, [ below(n) -> T ] ]
+  warray: TYPE = [ n:int, [ int -> T ] ]
 
   t : VAR warray
-  i,j : VAR int
-  v : VAR T
 
   array_length(t) : int = proj_1(t)
 
-  access(t, i) : T = proj_2(t)(i)
+  index_type(t) : TYPE = { x:int | 0 <= x <= proj_1(t) }
 
-  store(t, i, v) : warray = 
-    (proj_1(t), (LAMBDA j: IF j = i THEN v ELSE proj_2(t)(j) ENDIF))
+  v : VAR T
+
+  access(t:warray, i:index_type(t)) : T = proj_2(t)(i)
+
+  store(t:warray, i:index_type(t), v) : warray = 
+    (proj_1(t), 
+     (LAMBDA (j:index_type(t)): IF j = i THEN v ELSE proj_2(t)(j) ENDIF))
 
 END why_arrays
 
@@ -51,7 +54,6 @@ BEGIN
   
   % t[i..j] is sorted
   sorted_array(t,i,j) : bool =
-    i <= j and
     forall k: i <= k and k < j implies access(t,k) <= access(t,k+1)
 
 END why_int_array_pred

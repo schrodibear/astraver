@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.57 2003-02-27 16:55:34 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.58 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -34,6 +34,9 @@ val optasst_app :
 val post_app : (predicate -> predicate) -> postcondition -> postcondition
 val optpost_app : 
   (predicate -> predicate) -> postcondition option -> postcondition option
+
+val asst_fold : (predicate -> 'a -> 'a) -> assertion -> 'a -> 'a
+val optpost_fold : (predicate -> 'a -> 'a) -> postcondition option -> 'a -> 'a
 
 (* Substitution within some parts of postconditions (value or exns) *)
 val val_app : (predicate -> predicate) -> postcondition -> postcondition

@@ -14,8 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.10 2003-03-03 14:32:03 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.11 2003-03-07 13:51:28 filliatr Exp $ i*)
 
+open Options
 open Ident
 open Misc
 open Logic
@@ -101,9 +102,11 @@ let while_post_block env inv (phi,_,r) e =
 	  a_loc = e.info.loc }, ql
 
 let check_while_test b =
-  if post b = None then
+  if post b = None then begin
     wprintf b.info.loc 
-      "couldn't give this test a postcondition (possible incompleteness)\n"
+      "couldn't give this test a postcondition (possible incompleteness)\n";
+    if werror then exit 1
+  end
 
 (* misc. *)
 

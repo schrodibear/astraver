@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.72 2003-03-03 14:32:03 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.73 2003-03-07 13:51:29 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -146,6 +146,11 @@ let post_app f (q,l) =
   (asst_app f q, List.map (fun (x,a) -> (x, asst_app f a)) l)
 
 let optpost_app f = option_app (post_app f)
+
+let asst_fold f x v = f x.a_value v
+let post_fold f (q,l) v = 
+  List.fold_right (fun (_,p) -> asst_fold f p) l (asst_fold f q v)
+let optpost_fold f = option_fold (post_fold f)
 
 let anonymous loc x = { a_name = Anonymous; a_value = x; a_loc = loc }
 let wp_named loc x = { a_name = Name (wp_name ()); a_value = x; a_loc = loc }
