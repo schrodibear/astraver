@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: effect.ml,v 1.17 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.18 2002-11-12 14:35:02 filliatr Exp $ i*)
 
 (*s Effects. *)
 
@@ -165,7 +165,7 @@ let print fmt { input = r; output = w; exns = e } =
     print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt w;
   end;
   let e = Idset.elements e in
-  if w <> [] && e <> [] then fprintf fmt "@ ";
+  if (r <> [] || w <> []) && e <> [] then fprintf fmt "@ ";
   if e <> [] then begin
     fprintf fmt "raises ";
     print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt e;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.30 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.31 2002-11-12 14:35:02 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -32,6 +32,14 @@ open Cc
 
 (*s Phase 1: Renaming of bound variables. Argument [fv] is the set of 
     already traversed binders (a set of identifiers) *)
+
+let rec uniq_list f fv s = function
+  | [] -> 
+      [], fv, s
+  | x :: l -> 
+      let x',fv',s' = f fv s x in 
+      let l',fv'',s'' = uniq_list f fv' s' l in
+      x' :: l', fv'', s''
 
 let rec uniq_tt fv s = function
   | TTarray (t, tt) -> 
@@ -64,13 +72,13 @@ and uniq_binder fv s (id,b) =
   else 
     (id,b'), Idset.add id fv, s
 
-and uniq_binders fv s = function
-  | [] -> 
-      [], fv, s
-  | b :: bl -> 
-      let b',fv',s' = uniq_binder fv s b in 
-      let bl',fv'',s'' = uniq_binders fv' s' bl in
-      b' :: bl', fv'', s''
+and uniq_binders fv s = uniq_list uniq_binder fv s
+
+and uniq_pattern fv s = function
+  | PPvariable b -> 
+      let b',fv',s' = uniq_binder fv s b in PPvariable b',fv',s'
+  | PPcons (id, pl) -> 
+      let pl',fv',s' = uniq_list uniq_pattern fv s pl in PPcons (id,pl'),fv',s'
 
 let rec uniq_cc fv s = function
   | CC_var x | CC_term (Tvar x) ->
@@ -88,7 +96,10 @@ let rec uniq_cc fv s = function
   | CC_tuple (al, po) ->
       CC_tuple (List.map (uniq_cc fv s) al, option_app (uniq_tt fv s) po)
   | CC_case (e, pl) ->
-      CC_case (uniq_cc fv s e, List.map (fun (p,e) -> (p, uniq_cc fv s e)) pl)
+      let uniq_branch (p,e) = 
+	let p',fv',s' = uniq_pattern fv s p in (p', uniq_cc fv' s' e)
+      in
+      CC_case (uniq_cc fv s e, List.map uniq_branch pl)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
   | CC_hole ty ->
@@ -109,6 +120,14 @@ let in_rng id s =
 
 (*s Traversing binders and substitution within CC types *)
 
+let rec cc_subst_list f s = function
+  | [] -> 
+      [], s
+  | x :: l -> 
+      let x',s' = f s x in 
+      let l',s'' = cc_subst_list f s' l in
+      x' :: l', s''
+
 let rec cc_subst_binder_type s = function
   | CC_var_binder c -> CC_var_binder (cc_type_subst s c)
   | CC_pred_binder c -> CC_pred_binder (tsubst_in_predicate s c)
@@ -117,13 +136,7 @@ let rec cc_subst_binder_type s = function
 and cc_subst_binder s (id,b) = 
   (id, cc_subst_binder_type s b), Idmap.remove id s
 
-and cc_subst_binders s = function
-  | [] -> 
-      [], s
-  | b :: bl -> 
-      let b',s' = cc_subst_binder s b in 
-      let bl',s'' = cc_subst_binders s' bl in
-      b' :: bl', s''
+and cc_subst_binders s = cc_subst_list cc_subst_binder s
 
 and cc_type_subst s = function
   | TTarray (t, tt) -> 
@@ -143,6 +156,12 @@ and cc_type_subst s = function
       TTapp (cc_type_subst s tt, List.map (cc_type_subst s) l)
   | TTterm t ->
       TTterm (tsubst_in_term s t)
+
+let rec cc_subst_pat s = function
+  | PPvariable b -> 
+      let b',s' = cc_subst_binder s b in PPvariable b', s'
+  | PPcons (id, pl) -> 
+      let pl', s' = cc_subst_list cc_subst_pat s pl in PPcons (id, pl'), s'
 
 (*s Eta and iota redexes. *)
 
@@ -166,6 +185,12 @@ let rec iota_subst s = function
 
 (*s Reduction. Substitution is done at the same time for greater efficiency *)
 
+let rm_binders = List.fold_left (fun sp (id,_) -> Idmap.remove id sp)
+
+let rec rm_pat_binders sp = function
+  | PPvariable (id, _) -> Idmap.remove id sp
+  | PPcons (_, pl) -> List.fold_left rm_pat_binders sp pl
+
 let rec red sp s cct = 
   match cct with
   | CC_var x | CC_term (Tvar x) ->
@@ -184,7 +209,8 @@ let rec red sp s cct =
 	     red sp (iota_subst s (bl, al)) e2
 	 | re1 ->
 	     let bl',s' = cc_subst_binders s bl in
-	     (match red sp s' e2 with
+	     let sp' = rm_binders sp bl in
+	     (match red sp' s' e2 with
 		(* [let (x1,...,xn) = e1 in (x1,...,xn)] *)
 		| CC_tuple (al,_) when is_eta_redex bl al ->
 		    red sp s e1
@@ -192,7 +218,8 @@ let rec red sp s cct =
 		    CC_letin (dep, bl', re1, re2)))
   | CC_lam (b, e) ->
       let b',s' = cc_subst_binder s b in
-      CC_lam (b', red sp s' e)
+      let sp' = rm_binders sp [b] in
+      CC_lam (b', red sp' s' e)
   | CC_app (f, a) ->
       (match red sp s f, red sp s a with
 	 (* two terms *)
@@ -208,7 +235,12 @@ let rec red sp s cct =
   | CC_if (a, b, c) ->
       CC_if (red sp s a, red sp s b, red sp s c)
   | CC_case (e, pl) ->
-      CC_case (red sp s e, List.map (fun (p,e) -> (p, red sp s e)) pl)
+      let red_branch (p,e) = 
+	let p',s' = cc_subst_pat s p in 
+	let sp' = rm_pat_binders sp p in
+	p', red sp' s' e 
+      in
+      CC_case (red sp s e, List.map red_branch pl)
   | CC_tuple (al, po) ->
       CC_tuple (List.map (red sp s) al,	option_app (cc_type_subst s) po)
   | CC_term c ->

@@ -56,4 +56,4 @@ IMPLEMENTATION
   
      x=t, A and P(t) |- P(x)
 
-     
+ - automatic discharge of (well_founded (Zwf _))     

@@ -51,17 +51,14 @@ let search2 =
 
 (* 3. With a recursive function *)
 
-(***
-
 let search3 =
-  let rec search_rec (i:int) : int { variant N - i } =
-    { 0 <= i }
-    (if i = N then raise Not_found : int
-     else if t[i] = 0 then i
-     else (search_rec (i + 1)))
-    { t[result] = 0 | Not_found => forall k:int. i <= k < N -> t[k] <> 0 }
-  in
-  (search_rec 0)
+  { 0 <= N }
+  (let rec search_rec (i:int) : int { variant N - i } =
+     { 0 <= i <= N }
+     (if i = N then raise Not_found : int
+      else if t[i] = 0 then i
+      else (search_rec (i + 1)))
+     { t[result] = 0 | Not_found => forall k:int. i <= k < N -> t[k] <> 0 }
+   in
+  (search_rec 0))
   { t[result] = 0 | Not_found => forall k:int. 0 <= k < N -> t[k] <> 0 }
-  
-***)

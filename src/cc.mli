@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.8 2002-10-17 15:01:52 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.9 2002-11-12 14:35:02 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -40,7 +40,7 @@ and cc_bind_type =
 and cc_binder = variable * cc_bind_type
 
 type cc_pattern = 
-  | PPvariable of variable * cc_bind_type
+  | PPvariable of cc_binder
   | PPcons of Ident.t * cc_pattern list
 
 (* ['a] is the type of holes *)
