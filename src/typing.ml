@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.54 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.55 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -8,6 +8,7 @@ open Format
 open Options
 open Ident
 open Misc
+open Ltyping
 open Util
 open Logic
 open Rename
@@ -15,10 +16,6 @@ open Types
 open Ast
 open Env 
 open Effect
-
-module LabelSet = Set.Make(struct type t = string let compare = compare end)
-
-let initial_labels = LabelSet.singleton "init"
 
 (*s Typing of terms (used to type pure expressions). *)
 
@@ -70,60 +67,6 @@ and check_app loc bl c tl = match bl, tl with
   | _ ->
       assert false
 
-(*s Checking types *)
-
-let check_predicate loc lab env p =
-  let vars = predicate_vars p in
-  Idset.iter
-    (if_labelled 
-       (fun (_,l) -> 
-	  if not (LabelSet.mem l lab) then Error.unbound_label l loc))
-    vars
-
-let check_pre loc lab env p = check_predicate loc lab env p.p_value
-
-let check_post loc lab env a = 
-  let lab' = LabelSet.add "" lab in check_predicate loc lab' env a.a_value
-
-let check_effect loc env e =
-  let check_ref id =
-    if not (Env.is_ref env id) then Error.unbound_reference id loc
-  in
-  let check_exn id =
-    if not (Env.is_exception id) then Error.unbound_exception id loc
-  in
-  let r,w,x = Effect.get_repr e in
-  List.iter check_ref r;
-  List.iter check_ref w;
-  List.iter check_exn x
-
-let rec check_type_v loc lab env = function
-  | Ref v -> 
-      check_type_v loc lab env v
-  | Array (t, v) -> 
-      check_type_v loc lab env v
-  | Arrow (bl, c) -> 
-      let env' = check_binders loc lab env bl in check_type_c loc lab env' c
-  | PureType _ -> 
-      ()
-
-and check_type_c loc lab env c =
-  check_effect loc env c.c_effect;
-  check_type_v loc lab env c.c_result_type;
-  List.iter (check_pre loc lab env) c.c_pre;
-  option_iter (check_post loc lab env) c.c_post
-
-and check_binders loc lab env = function
-  | [] ->
-      env
-  | (id, BindType v) :: bl ->
-      check_type_v loc lab env v;
-      check_binders loc lab (Env.add id v env) bl
-  | (id, BindSet) :: bl ->
-      check_binders loc lab (Env.add_set id env) bl
-  | (id, Untyped) :: bl ->
-      check_binders loc lab env bl
-
 (*s Utility functions for typing *)
 
 let just_reads e = difference (get_reads e) (get_writes e)
@@ -133,7 +76,7 @@ let type_v_sup loc t1 t2 =
   t1
 
 let check_type_var loc env var = ()
-(*i todo: type variants i*)
+(*i TODO: type variants i*)
 
 (* TODO: subtype is currently structural equality *)
 let rec subtype = function
@@ -166,44 +109,51 @@ let expected_type loc t et =
 let check_for_alias loc id v = 
   if occur_type_v id v then Error.raise_with_loc (Some loc) (Error.Alias id)
 
-let expected_cmp loc =
-  Error.expected_type loc (fun fmt -> fprintf fmt "unit, bool, int or float")
+(*s Instantiation of polymorphic functions *)
 
-let expected_num loc =
-  Error.expected_type loc (fun fmt -> fprintf fmt "int or float")
-
-let type_eq loc = function
-  | PureType PTint -> Ident.t_eq_int
-  | PureType PTbool -> Ident.t_eq_bool
-  | PureType PTfloat -> Ident.t_eq_float
-  | PureType PTunit -> Ident.t_eq_unit
+let type_prim idint idfloat idbool idunit loc = function
+  | PureType PTint -> idint
+  | PureType PTbool -> idbool
+  | PureType PTfloat -> idfloat
+  | PureType PTunit -> idunit
   | _ -> expected_cmp loc
 
-let type_neq loc = function
-  | PureType PTint -> Ident.t_neq_int
-  | PureType PTbool -> Ident.t_neq_bool
-  | PureType PTfloat -> Ident.t_neq_float
-  | PureType PTunit -> Ident.t_neq_unit
-  | _ -> expected_cmp loc
+let type_eq = type_prim t_eq_int t_eq_float t_eq_bool t_eq_unit
+let type_neq = type_prim t_neq_int t_neq_float t_neq_bool t_neq_unit
 
-let type_cmp idint idfloat loc = function
+let type_num idint idfloat loc = function
   | PureType PTint -> idint
   | PureType PTfloat -> idfloat
   | _ -> expected_num loc
 
-let type_lt = type_cmp Ident.t_lt_int Ident.t_lt_float
-let type_le = type_cmp Ident.t_le_int Ident.t_le_float
-let type_gt = type_cmp Ident.t_gt_int Ident.t_gt_float
-let type_ge = type_cmp Ident.t_ge_int Ident.t_ge_float
+let type_lt = type_num t_lt_int t_lt_float
+let type_le = type_num t_le_int t_le_float
+let type_gt = type_num t_gt_int t_gt_float
+let type_ge = type_num t_ge_int t_ge_float
+let type_add = type_num t_add_int t_add_float
+let type_sub = type_num t_sub_int t_sub_float
+let type_mul = type_num t_mul_int t_mul_float
+let type_div = type_num t_div_int t_div_float
+let type_neg = type_num t_neg_int t_neg_float
 
-let type_comparison id =
+let type_poly id =
   if id == t_eq then type_eq 
   else if id == t_neq then type_neq
   else if id == t_lt then type_lt
   else if id == t_le then type_le 
   else if id == t_gt then type_gt
-  else if id == t_ge then  type_ge
+  else if id == t_ge then type_ge
+  else if id == t_add then type_add 
+  else if id == t_sub then type_sub
+  else if id == t_mul then type_mul
+  else if id == t_div then type_div
+  else if id == t_neg then type_neg 
   else assert false
+
+let type_un_poly id =
+  if id == t_neg then type_neg else assert false
+
+(*s Making nodes *)
 
 let make_node p env l k = 
   { desc = p; info = { env = env; label = l; kappa = k } }
@@ -237,9 +187,9 @@ let state_var lab env (phi,_,_) =
     Return the effect i.e. variables appearing in the precondition. 
     Check existence of labels. *)
 
-let state_pre lab env loc pl =
+let predicates_effect lab env loc pl =
   let state e p =
-    let ids = predicate_vars p.p_value in
+    let ids = predicate_vars p in
     Idset.fold
       (fun id e ->
 	 if is_reference env id then
@@ -255,16 +205,24 @@ let state_pre lab env loc pl =
 	   e)
       ids e 
   in
-  List.fold_left state Effect.bottom pl 
+  List.fold_left state Effect.bottom pl
+
+let state_pre lab env loc pl =
+  let lenv = logical_env env in
+  let pl = List.map (type_pre lab lenv) pl in
+  predicates_effect lab env loc (List.map (fun x -> x.p_value) pl), pl
 
 let state_assert lab env loc a =
-  let p = pre_of_assert true a in
-  state_pre lab env loc [p]
+  let a = type_post lab (logical_env env) a in
+  predicates_effect lab env loc [a.a_value], a
 
 let state_inv lab env loc = function
-  | None -> Effect.bottom
-  | Some i -> state_assert lab env loc i
-	  
+  | None -> 
+      Effect.bottom, None
+  | Some i -> 
+      let i = type_post lab (logical_env env) i in
+      predicates_effect lab env loc [i.a_value], Some i
+	
 
 (*s Typing postconditions.
     Return the effect i.e. variables appearing in the postcondition,
@@ -276,6 +234,8 @@ let state_post lab env (id,v,ef) loc = function
   | None -> 
       Effect.bottom, None
   | Some q ->
+      let lenv = Env.add_logic id v (logical_env env) in
+      let q = type_post lab lenv q in
       let ids = predicate_vars q.a_value in
       let ef,c = 
 	Idset.fold
@@ -352,11 +312,11 @@ let check_array_type loc env id =
 let rec typef lab env expr =
   let (d,(v,e),p1) = typef_desc lab env expr.info.loc expr.desc in
   let loc = Some expr.info.loc in
-  let ep = state_pre lab env loc expr.info.pre in
+  let (ep,p) = state_pre lab env loc expr.info.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
-  let p' = expr.info.pre @ List.map assert_pre p1 in
+  let p' = p @ List.map assert_pre p1 in
   match q, d with
     | None, Coerce expr' ->
 	let c = { c_result_name = result; c_result_type = v;
@@ -461,7 +421,7 @@ and typef_desc lab env loc = function
       Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
       let t_e = typef lab env e in
       let efe = t_e.info.kappa.c_effect in
-      let efinv = state_inv lab env (Some loc) invopt in
+      let efinv,invopt = state_inv lab env (Some loc) invopt in
       let ef = 
 	Effect.union (Effect.union efe efb) (Effect.union efinv efphi)
       in
@@ -472,18 +432,18 @@ and typef_desc lab env loc = function
       assert false
 
   | Lam (bl, e) ->
-      let env' = check_binders (Some loc) lab env bl in
+      let bl',env',_ = binders (Some loc) lab env (logical_env env) bl in
       let t_e = typef initial_labels env' e in
-      let v = make_arrow_type t_e.info.label bl t_e.info.kappa in
+      let v = make_arrow_type t_e.info.label bl' t_e.info.kappa in
       let ef = Effect.bottom in
-      Lam (bl,t_e), (v,ef), []
+      Lam (bl',t_e), (v,ef), []
 
   | App (_, _, Some _) ->
       assert false
 
-  | App ({desc=Var id} as e, Term a, None) when is_comparison id ->
+  | App ({desc=Var id} as e, Term a, None) when is_poly id ->
       let t_a = typef lab env a in
-      let eq = type_comparison id a.info.loc (result_type t_a) in
+      let eq = type_poly id a.info.loc (result_type t_a) in
       typef_desc lab env loc (App ({e with desc = Var eq}, Term a, None))
       (* TODO: avoid recursive call *)
 
@@ -602,15 +562,15 @@ and typef_desc lab env loc = function
       If (t_b, t_e1, t_e2), (v,ef), []
 
   | Rec (f,bl,v,var,e) ->
-      let env' = check_binders (Some loc) lab env bl in
-      check_type_v (Some loc) lab env' v;
+      let bl',env',lenv' = binders (Some loc) lab env (logical_env env) bl in
+      let v = type_v (Some loc) lab env' lenv' v in
       let efvar = state_var lab env' var in
       let phi0 = phi_name () in
       check_type_var loc env' var;
       (* effect for a let/rec construct is computed as a fixpoint *)
       let rec state_rec c =
 	(* TODO: change label to "init" in [c] *)
-	let tf = make_arrow bl c in
+	let tf = make_arrow bl' c in
 	let env'' = add_rec f (add f tf env') in
 	let t_e = typef initial_labels env'' e in
 	if t_e.info.kappa = c then
@@ -623,8 +583,8 @@ and typef_desc lab env loc = function
       let c0 = { c_result_name = result; c_result_type = v;
 		 c_effect = efvar; c_pre = []; c_post = None } in
       let t_e = state_rec c0 in
-      let tf = make_arrow bl t_e.info.kappa in (* IDEM *)
-      Rec (f,bl,v,var,t_e), (tf,Effect.bottom), []
+      let tf = make_arrow bl' t_e.info.kappa in (* IDEM *)
+      Rec (f,bl',v,var,t_e), (tf,Effect.bottom), []
 
   | Raise (id, e, ct) ->
       let xt =
@@ -645,9 +605,9 @@ and typef_desc lab env loc = function
       in
       let v = match ct with 
 	| None -> type_v_unit 
-	| Some v -> check_type_v (Some loc) lab env v; v 
+	| Some v -> type_v (Some loc) lab env (logical_env env) v
       in
-      Raise (id, t_e, ct), (v, Effect.add_exn id Effect.bottom), []
+      Raise (id, t_e, Some v), (v, Effect.add_exn id Effect.bottom), []
 	    
   | Coerce e ->
       let te = typef lab env e in
@@ -661,9 +621,9 @@ and typef_block lab env bl =
 	  | None -> assert false
 	end
     | (Assert c) :: block -> 
-	let ep = state_assert lab env None c in
+	let ep,p = state_assert lab env None c in
 	let bl,t,ef = ef_block lab tyres block in
-	(Assert c)::bl, t, Effect.union ep ef
+	(Assert p)::bl, t, Effect.union ep ef
     | (Label s) :: block ->
 	let lab' = LabelSet.add s lab in
 	let bl,t,ef = ef_block lab' tyres block in

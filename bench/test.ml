@@ -1,4 +1,6 @@
 
+logic f : int,int -> prop
+
 let x = 1.1 = 2.2
 
 (***

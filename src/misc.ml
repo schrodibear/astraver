@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.40 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.41 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -411,12 +411,12 @@ let rec print_term fmt = function
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 
 let relation_string id =
-  if id == t_lt then "<" 
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
-  else if id == t_eq then "="
-  else if id == t_neq then "<>"
+  if id == t_lt || id == t_lt_int || id == t_lt_float then "<" 
+  else if id == t_le || id == t_le_int || id == t_le_float then "<="
+  else if id == t_gt || id == t_gt_int || id == t_gt_float then ">"
+  else if id == t_ge || id == t_ge_int || id == t_ge_float then ">="
+  else if id == t_eq || id == t_eq_int || id == t_eq_float then "="
+  else if id == t_neq || id == t_neq_int || id == t_neq_float then "<>"
   else assert false
 
 let rec print_predicate fmt = function

@@ -1,5 +1,5 @@
 
-(*i $Id: logic.mli,v 1.7 2002-04-29 08:47:37 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.8 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -39,6 +39,6 @@ type predicate =
   | Pnot of predicate
   | Forall of Ident.t * Ident.t * pure_type * predicate
 
-  
-
-
+type logic_type =
+  | Predicate of pure_type list
+  | Function of pure_type list * pure_type

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.42 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.43 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -21,6 +21,12 @@ let predicate = gec "predicate"
 let predicate0 = gec "predicate0"
 let predicate1 = gec "predicate1"
 let predicate2 = gec "predicate2"
+let predicate3 = gec "predicate3"
+let predicate4 = gec "predicate4"
+let predicate5 = gec "predicate5"
+let predicate6 = gec "predicate6"
+let predicate7 = gec "predicate7"
+let pp_relation = gec "pp_relation"
 let constant = gec "constant"
 
 (* types *)
@@ -76,17 +82,18 @@ let name = gec "name"
 
 let decl = gec "decl"
 let decls = gec "decls"
+let logic_type = gec "logic_type"
+let logic_arg = gec "logic_arg"
+
 
 (*s Utility functions. *)
 
-let predicate_of_term loc = function
-  | Tvar id -> Pvar id
-  | Tapp (id, lt) -> Papp (id, lt)
-  | Tconst _ -> raise (Stdpp.Exc_located (loc, 
-					  Stream.Error "predicate expected"))
+let mk_pp loc d = { pp_loc = loc; pp_desc = d }
+let infix_pp loc a i b = mk_pp loc (PPinfix (a, i, b))
+let prefix_pp loc p a = mk_pp loc (PPprefix (p, a))
 
 let conj_assert {a_name=n; a_value=a} {a_value=b} = 
-  { a_value = Pand (a,b); a_name = n }
+  { a_value = infix_pp (Loc.join a.pp_loc b.pp_loc) a PPand b; a_name = n }
 
 let conj = function
   | None,None     -> None
@@ -143,23 +150,18 @@ EXTEND
 
   (* Logic *)
   term:
-  [ [ a = term; "+"; b = term0 -> Tapp (Ident.t_add_int, [a;b])
-    | a = term; "-"; b = term0 -> Tapp (Ident.t_sub_int, [a;b])
-    | a = term; "+."; b = term0 -> Tapp (Ident.t_add_float, [a;b])
-    | a = term; "-."; b = term0 -> Tapp (Ident.t_sub_float, [a;b])
+  [ [ a = term; "+"; b = term0 -> Tapp (Ident.t_add, [a;b])
+    | a = term; "-"; b = term0 -> Tapp (Ident.t_sub, [a;b])
     | a = term0 -> a ] ]
   ;
   term0:
-  [ [ a = term0; "*"; b = term1 -> Tapp (Ident.t_mul_int, [a;b])
-    | a = term0; "/"; b = term1 -> Tapp (Ident.t_div_int, [a;b])
-    | a = term0; "*."; b = term1 -> Tapp (Ident.t_mul_float, [a;b])
-    | a = term0; "/."; b = term1 -> Tapp (Ident.t_div_float, [a;b])
+  [ [ a = term0; "*"; b = term1 -> Tapp (Ident.t_mul, [a;b])
+    | a = term0; "/"; b = term1 -> Tapp (Ident.t_div, [a;b])
     | a = term0; "%"; b = term1 -> Tapp (Ident.t_mod, [a;b])
     | a = term1 -> a ] ]
   ;
   term1:
-  [ [ "-"; a = term1 -> Tapp (Ident.t_neg_int, [a])
-    | "-."; a = term1 -> Tapp (Ident.t_neg_float, [a])
+  [ [ "-"; a = term1 -> Tapp (Ident.t_neg, [a])
     | c = constant -> Tconst c
     | x = qualid_ident -> Tvar x
     | x = qualid_ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
@@ -175,38 +177,77 @@ EXTEND
     | f = FLOAT -> ConstFloat (float_of_string f) ] ]
   ;
   predicate:
-  [ [ a = predicate0; "->"; b = predicate -> Pimplies (a,b)
+  [ [ a = predicate0; "->"; b = predicate -> infix_pp loc a PPimplies b
     | a = predicate0 -> a ] ]
   ; 
   predicate0:
-  [ [ a = predicate0; "or"; b = predicate1 -> Por (a,b)
+  [ [ a = predicate0; "or"; b = predicate1 -> infix_pp loc a PPor b
     | a = predicate1 -> a ] ]
   ; 
   predicate1:
-  [ [ a = predicate1; "and"; b = predicate2 -> Pand (a,b)
+  [ [ a = predicate1; "and"; b = predicate2 -> infix_pp loc a PPand b
     | a = predicate2 -> a ] ]
   ;
   predicate2:
-  [ [ t = term -> 
-	predicate_of_term loc t
-    | t1 = term; r = relation; t2 = term -> 
-	Papp (make_int_relation r, [t1;t2])
-    | t1 = term; r1 = relation; t2 = term; r2 = relation; t3 = term ->
-	Pand (Papp (make_int_relation r1, [t1;t2]), 
-	      Papp (make_int_relation r2, [t2;t3]))
-    | "if"; t = term; "then"; p1 = predicate; "else"; p2 = predicate ->
-	Pif (t, p1, p2)
+  [ [ "not"; a = predicate3 -> prefix_pp loc PPnot a
+    | a = predicate3 -> a ] ]
+  ;
+  predicate3:
+  [ [ a = predicate4; r = pp_relation; b = predicate4 -> 
+	infix_pp loc a r b
+    | a = predicate4; r1 = pp_relation; b = predicate4;
+      r2 = pp_relation; c = predicate4 -> 
+	infix_pp loc (infix_pp loc a r1 b) PPand (infix_pp loc b r2 c)
+    | a = predicate4 -> 
+	a ] ]
+  ;
+  predicate4:
+  [ [ a = predicate5; "+"; b = predicate4 -> infix_pp loc a PPadd b
+    | a = predicate5; "-"; b = predicate4 -> infix_pp loc a PPsub b
+    | a = predicate5 -> a ] ]
+  ;
+  predicate5:
+  [ [ a = predicate6; "*"; b = predicate5 -> infix_pp loc a PPmul b
+    | a = predicate6; "/"; b = predicate5 -> infix_pp loc a PPdiv b
+    | a = predicate6; "%"; b = predicate5 -> infix_pp loc a PPmod b
+    | a = predicate6 -> a ] ]
+  ;
+  predicate6:
+  [ [ "-"; a = predicate6 -> prefix_pp loc PPneg a
+    | a = predicate7 -> a ] ]
+  ;
+  predicate7:
+  [ [ "true" -> 
+	mk_pp loc PPtrue
+    | "false" -> 
+	mk_pp loc PPfalse
+    | c = constant ->
+	mk_pp loc (PPconst c)
+(*** make result a keyword?
+    | LIDENT "result" ->
+	mk_pp loc (PPvar Ident.result)
+***)
+    | x = qualid_ident ->
+	mk_pp loc (PPvar x)
+    | x = qualid_ident; "("; l = LIST1 predicate SEP ","; ")" -> 
+	mk_pp loc (PPapp (x,l))
+    | x = qualid_ident; "["; t = predicate; "]" -> 
+	mk_pp loc (PPapp (Ident.access, [mk_pp loc (PPvar x); t]))
+    | "if"; p0 = predicate; "then"; p1 = predicate; "else"; p2 = predicate ->
+	mk_pp loc (PPif (p0, p1, p2))
     | LIDENT "forall"; id = ident; ":"; t = primitive_type; 
       "." ; a = predicate -> 
-	forall id (PureType t) a 
-    | "not"; a = predicate -> 
-	Pnot a
-    | "true" -> 
-	Ptrue
-    | "false" -> 
-	Pfalse
+	mk_pp loc (PPforall (id, t, a))
     | "("; a = predicate; ")" -> 
 	a ] ] 
+  ;
+  pp_relation:
+  [ [ "<" -> PPlt
+    | "<=" -> PPle
+    | ">" -> PPgt
+    | ">=" -> PPge
+    | "=" -> PPeq
+    | "<>" -> PPneq ] ]
   ;
 
   (* Types *)
@@ -220,12 +261,13 @@ EXTEND
   (* [ident] is expansed to allow factorization *)
   type_v:
   [ [ v = simple_type_v; "->"; c = type_c -> 
-	make_arrow [Ident.anonymous, BindType v] c
+	Arrow ([Ident.anonymous, BindType v], c)
     | x = LIDENT; ":"; v = simple_type_v; "->"; c = type_c -> 
-	make_arrow [(Ident.create x, BindType v)] c
+	Arrow ([(Ident.create x, BindType v)], c)
     | x = UIDENT; ":"; v = simple_type_v; "->"; c = type_c -> 
-	make_arrow [(Ident.create x, BindType v)] c
-    | t = simple_type_v -> t ] ]
+	Arrow ([(Ident.create x, BindType v)], c)
+    | t = simple_type_v -> 
+	t ] ]
   ;
   simple_type_v:
   [ [ "array"; size = term; "of"; v = simple_type_v -> Array (size,v)
@@ -237,8 +279,6 @@ EXTEND
   [ [ "{"; p = OPT pre_condition; "}";
       (id,v) = result; e = effects; 
       "{"; q = OPT post_condition; "}" ->
-	let s = subst_onev id Ident.result in
-	let q = optpost_app (subst_in_predicate s) q in
         { c_result_name = id; c_result_type = v;
 	  c_effect = e; c_pre = list_of_some p; c_post = q } 
     | v = type_v -> 
@@ -348,23 +388,18 @@ EXTEND
     | x = prog4 -> x ] ]
   ;
   ast4:
-  [ [ x = prog5; "+"; y = prog4 -> bin_op Ident.t_add_int loc x y
-    | x = prog5; "-"; y = prog4 -> bin_op Ident.t_sub_int loc x y
-    | x = prog5; "+."; y = prog4 -> bin_op Ident.t_add_float loc x y
-    | x = prog5; "-."; y = prog4 -> bin_op Ident.t_sub_float loc x y
+  [ [ x = prog5; "+"; y = prog4 -> bin_op Ident.t_add loc x y
+    | x = prog5; "-"; y = prog4 -> bin_op Ident.t_sub loc x y
     | x = prog5 -> x ] ]
   ;
   ast5:
-  [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul_int loc x y 
-    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div_int loc x y 
-    | x = prog6; "*."; y = prog5 -> bin_op Ident.t_mul_float loc x y 
-    | x = prog6; "/."; y = prog5 -> bin_op Ident.t_div_float loc x y 
+  [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul loc x y 
+    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div loc x y 
     | x = prog6; "%"; y = prog5 -> bin_op Ident.t_mod loc x y 
     | x = prog6 -> x ] ]
   ;
   ast6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg_int loc x
-    | "-."; x = prog6 -> un_op Ident.t_neg_float loc x
     | LIDENT "sqrt"; x = prog6 -> un_op Ident.t_sqrt loc x
     | x = ast7 -> without_annot loc x ] ]
   ;
@@ -483,11 +518,23 @@ i*)
 	Parameter (loc, ids, v)
     | "exception"; id = ident; v = OPT exception_type ->
 	Exception (loc, id, v)
+    | "logic"; id = ident; ":"; t = logic_type ->
+	Logic (loc, id, t)
     | LIDENT "pvs"; s = STRING ->
         QPvs s ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]
+  ;
+  logic_type:
+  [ [ b = LIST1 logic_arg SEP ","; "->"; LIDENT "prop" -> Predicate b
+    | b = LIST1 logic_arg SEP ","; "->"; t = primitive_type -> Function (b,t)
+  ] ]
+  ;	
+  logic_arg:
+  [ [ t = primitive_type -> t
+    | "array"; t = primitive_type -> PTarray (Tvar Ident.implicit, t)
+  ] ]
   ;
 END
 ;;

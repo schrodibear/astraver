@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.16 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.17 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -185,8 +185,10 @@ let if_branches loc = raise_with_loc (Some loc) BranchesSameType
 let check_for_not_mutable loc v = 
   if is_mutable v then raise_with_loc (Some loc) CannotBeMutable
 
+let must_be_pure loc = raise_with_loc (Some loc) MustBePure
+
 let check_for_pure_type loc v =
-  if not (is_pure v) then raise_with_loc (Some loc) MustBePure
+  if not (is_pure v) then must_be_pure loc
 
 let check_for_let_ref loc v =
   if not (is_pure v) then raise_with_loc (Some loc) LetRef

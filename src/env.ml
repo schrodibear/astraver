@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.17 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.18 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -62,7 +62,7 @@ type typing_info = {
   kappa : type_c
 }
   
-type typed_program = typing_info Ast.t
+type typed_program = (typing_info, predicate) Ast.t
 
 
 (* The global environment.
@@ -234,4 +234,38 @@ let un_arith_type t =
 
 let _ = add_global t_neg_int (un_arith_type int) None
 let _ = add_global t_neg_float (un_arith_type float) None
+
+(* Logical environment *)
+
+type logical_env = logic_type Idmap.t
+
+let logic_table = ref Idmap.empty
+
+let add_global_logic x t = logic_table := Idmap.add x t !logic_table
+
+let is_logic = Idmap.mem
+let find_logic = Idmap.find
+
+let add_logic id v env = match v with
+  | (Ref (PureType pt)) | (PureType pt) -> 
+      Idmap.add id (Function ([], pt)) env
+  | (Array (n, PureType t)) -> 
+      Idmap.add id (Function ([], PTarray (n,t))) env
+  | _ -> 
+      env
+
+let logical_env (m,_,_) = 
+  let transl m lenv = 
+    Idmap.fold (fun id v e -> match v with 
+		  | TypeV v -> add_logic id v e
+		  | _ -> e) m lenv
+  in
+  transl m (let (gm,_,_) = !env in transl gm Idmap.empty)
+  
+
+(*s Labels *)
+
+module LabelSet = Set.Make(struct type t = string let compare = compare end)
+
+let initial_labels = LabelSet.singleton "init"
 

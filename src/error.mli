@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.13 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.14 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -72,6 +72,8 @@ val check_no_effect : Loc.t -> Effect.t -> unit
 val should_be_boolean : Loc.t -> 'a
 val test_should_be_annotated : Loc.t -> 'a
 val if_branches : Loc.t -> 'a
+
+val must_be_pure : Loc.t -> 'a
 
 val check_for_not_mutable : Loc.t -> type_v -> unit
 val check_for_pure_type : Loc.t -> type_v -> unit

@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.22 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.23 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -47,6 +47,12 @@ val exn_exn : t -> t
 
 val anonymous : t
 val implicit : t
+
+val t_add : t
+val t_sub : t
+val t_mul : t
+val t_div : t
+val t_neg : t
 
 val t_add_int : t
 val t_sub_int : t
@@ -102,6 +108,8 @@ val well_founded_induction : t
 val p_or : t
 val p_and : t
 val p_not : t
+
+val is_poly : t -> bool
 
 val is_comparison : t -> bool
 val is_int_comparison : t -> bool

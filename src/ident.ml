@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.24 2002-07-04 15:47:17 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.25 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -81,6 +81,12 @@ let exn_exn id = create ("Exn_" ^ id.name)
 let anonymous = create "_"
 let implicit = create "?"
 
+let t_add = create "%add"
+let t_sub = create "%sub"
+let t_mul = create "%mul"
+let t_div = create "%div"
+let t_neg = create "%neg"
+
 let t_add_int = create "%add_int"
 let t_sub_int = create "%sub_int"
 let t_mul_int = create "%mul_int"
@@ -136,9 +142,14 @@ let p_and = create "and"
 let p_or = create "or"
 let p_not = create "not"
 
-let is_comparison id =
+let is_comparison id = 
   id == t_lt || id == t_le || id == t_gt || id == t_ge || 
-  id == t_eq || id == t_neq
+  id == t_eq || id == t_neq 
+
+let is_poly id =
+  is_comparison id || 
+  id == t_add || id == t_sub || id == t_mul || id == t_div ||
+  id == t_neg
 
 let is_int_comparison id =
   id == t_eq_int || id == t_neq_int ||

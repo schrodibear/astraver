@@ -25,7 +25,7 @@ parameter f5 : foo -> foo
 parameter f6 : x:foo -> foo
 parameter f7 : x:foo -> {} foo {}
 
-parameter f8 : t:array 10 of int -> {} unit reads t { access(t,1) = 2 }
+parameter f8 : t:array 10 of int -> {} unit reads t { t[1] = 2 }
 
 (* predicates *)
 let p1 = 0 { true }

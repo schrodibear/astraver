@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.30 2002-07-04 08:58:13 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.31 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -47,7 +47,7 @@ let interp_program id p =
 
   if_debug eprintf "* typing with effects@.";
   let env = Env.empty in
-  let p = Typing.typef Typing.initial_labels env p in
+  let p = Typing.typef Env.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
   Error.check_for_not_mutable ploc v;
@@ -85,24 +85,31 @@ let add_external loc v id =
 let add_parameter tv id =
   push_parameter (Ident.string id) tv
     
-let interp_decl = function
+let interp_decl d = 
+  let env = Env.empty in
+  let lab = Env.initial_labels in
+  let lenv = Env.logical_env env in
+  match d with 
   | Program (id, p) ->
       if Env.is_global id then Error.clash id (Some p.info.loc);
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ids, v) ->
-      Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
+      let v = Ltyping.type_v (Some loc) lab env lenv v in
       List.iter (add_external loc v) ids;
       if not (is_mutable v) then
-	let tv = Monad.trad_type_v (initial_renaming Env.empty) Env.empty v in
+	let tv = Monad.trad_type_v (initial_renaming env) env v in
 	List.iter (add_parameter tv) ids
   | External (loc, ids, v) -> 
+      let v = Ltyping.type_v (Some loc) lab env lenv v in
       if is_mutable v then raise_with_loc (Some loc) MutableExternal;
-      Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
       List.iter (add_external loc v) ids
   | Exception (loc, id, v) ->
       if is_exception id then Error.clash_exn id (Some loc);
       add_exception id v;
       push_exception (Ident.string id) (option_app (fun x -> TTpure x) v)
+  | Logic (loc, id, t) ->
+      if is_logic id lenv then Error.clash id (Some loc);
+      add_global_logic id t
   | QPvs s ->
       Pvs.push_verbatim s
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.14 2002-07-04 08:58:13 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.15 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -32,7 +32,7 @@ type typing_info =
     label : label;
     kappa : type_c }
   
-type typed_program = typing_info Ast.t
+type typed_program = (typing_info, predicate) Ast.t
 
 (* global environment *)
 
@@ -72,3 +72,20 @@ val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
 val add_rec : Ident.t -> local_env -> local_env
 val is_rec : Ident.t -> local_env -> bool
 
+(*s Logical environment *)
+
+val add_global_logic : Ident.t -> logic_type -> unit
+
+type logical_env
+
+val add_logic : Ident.t -> type_v -> logical_env -> logical_env
+val is_logic : Ident.t -> logical_env -> bool
+val find_logic : Ident.t -> logical_env -> logic_type
+
+val logical_env : local_env -> logical_env
+
+(*s Labels *)
+
+module LabelSet : Set.S with type elt = string
+
+val initial_labels : LabelSet.t

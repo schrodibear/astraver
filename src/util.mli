@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.20 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.21 2002-07-05 16:14:09 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -77,6 +77,7 @@ open Format
 
 val print_pred_binders : bool ref
 
+val print_pure_type : formatter -> pure_type -> unit
 val print_type_v : formatter -> type_v -> unit
 val print_type_c : formatter -> type_c -> unit
 val print_prog : formatter -> typed_program -> unit
