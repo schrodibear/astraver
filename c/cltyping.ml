@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.74 2005-02-02 14:02:48 marche Exp $ i*)
+(*i $Id: cltyping.ml,v 1.75 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -22,12 +22,6 @@ open Creport
 open Cerror
 open Cenv
 open Ctypes
-
-(* location offset (for warnings) *)
-
-let offset = ref 0
-
-let warning (lb,le) s = warning (!offset+lb, !offset+le) s
 
 let option_app f = function Some x -> Some (f x) | None -> None
 
@@ -90,7 +84,7 @@ let set_referenced t = match t.term_node with
 
 let rec type_term env t =
   let t', ty = type_term_node t.lexpr_loc env t.lexpr_node in
-  { term_node = t'; term_loc = t.lexpr_loc; term_type = ty }
+  { term_node = t'; term_loc = reloc t.lexpr_loc; term_type = ty }
 
 and type_term_node loc env = function
   | PLconstant (IntConstant _ as c) -> 
@@ -208,6 +202,15 @@ and type_term_node loc env = function
 	     Tarrget (t1, t2), ty
 	 | _ ->
 	     error loc "subscripted value is neither array nor pointer")
+  | PLrange (t1, t2, t3) ->
+      let t1 = type_term env t1 in
+      (match t1.term_type.ctype_node with
+	 | Tarray (ty,_) | Tpointer ty ->
+	     let t2 = type_int_term_option env t2 in
+	     let t3 = type_int_term_option env t3 in
+	     Trange (t1, t2, t3), ty
+	 | _ ->
+	     error loc "subscripted value is neither array nor pointer")
   | PLif (t1, t2, t3) ->
       (* TODO type de t1 ? *)
       unsupported loc "logic if-then-else"
@@ -253,6 +256,10 @@ and type_int_term env t =
   let tt = type_term env t in
   expected_int t.lexpr_loc tt;
   tt
+
+and type_int_term_option env = function
+  | None -> None 
+  | Some t -> Some (type_int_term env t)
 
 and type_num_term env t =
   let tt = type_term env t in
@@ -343,7 +350,8 @@ let rec type_predicate env p0 = match p0.lexpr_node with
   | PLtrue -> Ptrue
   | PLrel ({lexpr_node = PLrel (_, _, t2)} as p1, op, t3) ->
       let p1 = type_predicate env p1 in
-      let p2 = { lexpr_node = PLrel (t2, op, t3); lexpr_loc = p0.lexpr_loc } in
+      let p2 = { lexpr_node = PLrel (t2, op, t3); 
+		 lexpr_loc = reloc p0.lexpr_loc } in
       let p2 = type_predicate env p2 in
       Pand (p1, p2)
   | PLrel (t1, (Lt | Le | Gt | Ge as r), t2) -> 
@@ -448,7 +456,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       Pat (type_predicate env p, l)
   | PLcast _ | PLblock_length _ | PLbase_addr _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 
-  | PLresult ->
+  | PLresult | PLrange _ ->
       (*raise (Stdpp.Exc_located (p0.lexpr_loc, Parsing.Parse_error))*)
       (* interpret term [t] as [t != 0] *)
       let t = type_int_term env p0 in
@@ -460,6 +468,8 @@ let type_variant env = function
   | (t, None) -> (type_int_term env t, None)
   | (t, r) -> (type_term env t, r)
 
+let type_location = type_term
+(***
 let rec type_location env = function
   | Lterm t -> 
       Lterm (type_term env t)
@@ -467,6 +477,7 @@ let rec type_location env = function
       Lstar (type_term env l)
   | Lrange (l1, l2, l3) -> 
       Lrange (type_term env l1, type_term env l2, type_term env l3)
+***)
 
 let type_loop_annot env la =
   { invariant = option_app (type_predicate env) la.invariant;

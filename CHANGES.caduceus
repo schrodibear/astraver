@@ -1,5 +1,14 @@
 Note: These are the changes for Caduceus.
 
+ o names changes in the model: 
+     assign_loc -> pset
+     unchanged -> not_in_pset
+     assigns -> not_assigns
+ o syntax change: location t[*] now written t[..]
+ o new locations in assigns clause: t[..a] and t[a..]
+ o extended locations in assigns clause: 
+   locations such as t[..]->x or t[1..10].x[..] are now allowed (cf manual)
+
 version 0.75, March 15th, 2005
 =============================
  o dp: support for harvey 0.5.0 (requires 'timeout' to be installed)

@@ -13,6 +13,8 @@ WBENCHFILES=$(addprefix why/, $(CBENCHFILES:.c=.why))
 SBENCHFILES=$(addprefix simplify/, $(CBENCHFILES:.c=_why.sx.all))
 HBENCHFILES=$(addprefix harvey/, $(CBENCHFILES:.c=_why.all.rv))
 
+TIMEOUT=10
+
 # generating and type-checking Why files for all C files
 default:
 	for f in $(CFILES:.c=); do \
@@ -26,11 +28,11 @@ default:
 
 # running Simplify on all programs
 simplify: $(SBENCHFILES)
-	dp -timeout 10 $(SBENCHFILES)
+	dp -timeout $(TIMEOUT) $(SBENCHFILES)
 
 # running haRVey on all programs
 harvey: $(HBENCHFILES)
-	dp -timeout 10 $(HBENCHFILES)
+	dp -timeout $(TIMEOUT) $(HBENCHFILES)
 
 cvcl: $(CVCBENCHFILES)
 	for f in $(BENCHFILES); do \

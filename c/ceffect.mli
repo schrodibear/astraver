@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.19 2005-01-19 16:19:19 hubert Exp $ i*)
+(*i $Id: ceffect.mli,v 1.20 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 val interp_type : Cast.nctype -> string
 
@@ -37,7 +37,7 @@ val print_heap_vars : Format.formatter -> unit -> unit
 val heap_var_type : var_info -> Output.base_type
 val is_memory_var : var_info -> bool
 
-val location : Cast.nterm Clogic.location -> HeapVarSet.t
+(*val location : Cast.nterm Clogic.location -> HeapVarSet.t*)
 
 val locations : Cast.nterm Clogic.location list -> HeapVarSet.t
 

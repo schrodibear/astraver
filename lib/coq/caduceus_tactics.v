@@ -80,7 +80,7 @@ Hint Extern 0 (valid_index _ _ _) => valid_index.
   tactics for proving 'assigns' clauses 
 ****************************************)
 
-Hint Resolve assigns_refl.
+Hint Resolve not_assigns_refl.
 
 Ltac CleanAssigns :=
   match goal with
@@ -88,7 +88,7 @@ Ltac CleanAssigns :=
   | id:(store_extends ?X1 ?X1) |- _ =>
       clear id; CleanAssigns
 *)
-  | id:(assigns ?X2 ?X1 ?X1 ?X3) |- _ =>
+  | id:(not_assigns ?X2 ?X1 ?X1 ?X3) |- _ =>
       clear id; CleanAssigns
   | _ => idtac
   end.
@@ -96,7 +96,7 @@ Ltac CleanAssigns :=
 
 Ltac AssignsRec :=
   match goal with
-  | id:(assigns ?X1 ?X2 ?X3 ?X4) |- (assigns ?X1 ?X2 ?X3 ?X4) =>
+  | id:(not_assigns ?X1 ?X2 ?X3 ?X4) |- (not_assigns ?X1 ?X2 ?X3 ?X4) =>
       exact id
 (*
   |  |- (assigns ?X1 ?X2 ?X2 ?X4) =>
@@ -116,7 +116,7 @@ Ltac AssignsRec :=
        (modifiable_trans (h:=X1) (m1:=X7) (m2:=X2) (m3:=(
           update X2 X3 X4)) (unch:=X6)); ModRec
 *)
-  | id:(?X2 = ?X3) |- (assigns ?X1 ?X4 ?X2 ?X5) =>
+  | id:(?X2 = ?X3) |- (not_assigns ?X1 ?X4 ?X2 ?X5) =>
       rewrite id; AssignsRec
 (*
   | id:(modifiable ?X1 ?X2 ?X3 ?X4) |- (modifiable ?X5 ?X6 ?X3 ?X7) =>
@@ -124,9 +124,9 @@ Ltac AssignsRec :=
        [ subst; krakatoa; unfold inter_loc; intuition; fail 
        | Store | ModRec ]
 *)
-  |  |- (assigns ?X1 ?X2 ?X3 (pointer_loc ?X4)) =>
-       unfold assigns; intros tmpp validcond unchangedcond;
-        generalize (unchanged_pointer_elim tmpp X4 unchangedcond);
+  |  |- (not_assigns ?X1 ?X2 ?X3 (pset_singleton ?X4)) =>
+       unfold not_assigns; intros tmpp validcond unchangedcond;
+        generalize (pset_singleton_elim tmpp X4 unchangedcond);
         intro neq_pointer_cond;
         caduceus; progress auto
 (*
@@ -137,16 +137,24 @@ Ltac AssignsRec :=
 
 Ltac Assigns := CleanAssigns; AssignsRec.
 
+Lemma not_not_in_pset_singleton : 
+  forall p, ~ (not_in_pset p (pset_singleton p)).
+Proof.
+  intro; red; intro H.
+  elim (pset_singleton_elim  p p H); auto.
+Save.
+Hint Resolve not_not_in_pset_singleton.
+
 Ltac Unchanged :=
   match goal with
-  | |- (unchanged ?X1 nothing_loc) =>
-      apply unchanged_nothing_intro
-  | |- (unchanged ?X1 (pointer_loc ?X2)) =>
-      apply unchanged_pointer_intro;auto with *
-  | |- (unchanged ?X1 (union_loc ?X2 ?X3)) =>
-      apply unchanged_union_intro;auto with *
+  | |- (not_in_pset ?X1 pset_empty) =>
+      apply pset_empty_intro
+  | |- (not_in_pset ?X1 (pset_singleton ?X2)) =>
+      apply pset_singleton_intro;auto with *
+  | |- (not_in_pset ?X1 (pset_union ?X2 ?X3)) =>
+      apply pset_union_intro;auto with *
  end.
 
 
-Hint Extern 0 (assigns _ _ _ _) => Assigns.
-Hint Extern 0 (unchanged _ _) => Unchanged.
+Hint Extern 0 (not_assigns _ _ _ _) => Assigns.
+Hint Extern 0 (not_in_pset _ _) => Unchanged.

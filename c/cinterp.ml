@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.139 2005-02-23 13:03:46 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.140 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 
 open Format
@@ -197,6 +197,8 @@ let rec interp_term label old_label t =
 	  | _ -> 
 	      unsupported t.nterm_loc "logic cast"
 	end
+    | NTrange _ ->
+	error t.nterm_loc "range operator .. invalid here"
 
 and interp_term_address  label old_label e = match e.nterm_node with
   | NTvar v -> 
@@ -737,43 +739,78 @@ module StringMap = Map.Make(String)
 
 type mem_or_ref = Reference of bool | Memory of Output.term list
 
+type term_loc_interp = Pset of Output.term | Term of Output.term
+
 let collect_locations before acc loc =
-  let var,iloc =
-    match loc with
-      | Lterm t -> 
-	  begin
-	    match t.nterm_node with
-	      | NTarrow(e,f) ->
-		  let loc = 
-		    LApp("pointer_loc",[interp_term (Some before) before e]) 
-		  in
-		  f.var_unique_name, Some loc
-	      | NTstar e1 -> 
-		  let var = global_var_for_array_type e1.nterm_type in
-		  let loc = 
-		    LApp("pointer_loc", [interp_term (Some before) before e1])
-		  in
-		  var, Some loc
-	      | NTvar v ->
-		  v.var_unique_name, None
-	      | _ ->
-		  assert false
-	  end
-    | Lstar t -> 
+  (* term_loc t interprets t either as Term t' with t' a Why term of type 
+     pointer, or as Pset s with s a Why term of type pset *)
+  let rec term_or_pset t = match t.nterm_node with
+    | NTarrow (e, f) ->
+	let m = interp_var (Some before) f.var_unique_name in
+	begin match term_or_pset e with
+	  | Term te -> Term (LApp ("acc", [m; te]))
+	  | Pset s -> Pset (LApp ("pset_arrow", [s; m]))
+	end
+    | NTrange (e, None, None) ->
+	let var = global_var_for_type t.nterm_type in
+	Pset (LApp ("pset_acc_all", [pset e; interp_var (Some before) var]))
+    | NTrange (e, None, Some a) ->
+	let var = global_var_for_type t.nterm_type in
+	Pset (LApp ("pset_acc_range_left", 
+		    [pset e; interp_var (Some before) var;
+		     interp_term (Some before) before a]))
+    | NTrange (e, Some a, None) ->
+	let var = global_var_for_type t.nterm_type in
+	Pset (LApp ("pset_acc_range_right", 
+		    [pset e; interp_var (Some before) var;
+		     interp_term (Some before) before a]))
+    | NTrange (e, Some a, Some b) ->
+	let var = global_var_for_type t.nterm_type in
+	Pset (LApp ("pset_acc_range", 
+		    [pset e; interp_var (Some before) var;
+		     interp_term (Some before) before a;
+		     interp_term (Some before) before b]))
+    | _ ->
+	Term (interp_term (Some before) before t)
+
+  (* term_loc t interprets t as a Why term of type pset *)
+  and pset t = match term_or_pset t with
+    | Pset l -> l
+    | Term t -> LApp ("pset_singleton", [t])
+  in
+  let var,iloc = match loc.nterm_node with
+    | NTarrow(e,f) ->
+	f.var_unique_name, Some (pset e)
+    | NTstar e1 -> 
+	let var = global_var_for_array_type e1.nterm_type in
+	var, Some (pset e1)
+    | NTvar v ->
+	v.var_unique_name, None
+    | NTrange (t, None, None) -> 
 	let var = global_var_for_array_type t.nterm_type in
-	let loc = 
-	  LApp("all_loc",[interp_term (Some before) before t])
-	in
+	let loc = LApp ("pset_all", [pset t]) in
 	var, Some loc
-    | Lrange(t1,t2,t3) -> 
+    | NTrange (t, None, Some a) -> 
+	let var = global_var_for_array_type t.nterm_type in
+	let loc = LApp ("pset_range_left", 
+			[pset t; interp_term (Some before) before a]) in
+	var, Some loc
+    | NTrange (t, Some a, None) -> 
+	let var = global_var_for_array_type t.nterm_type in
+	let loc = LApp ("pset_range_right", 
+			[pset t; interp_term (Some before) before a]) in
+	var, Some loc
+    | NTrange(t1, Some t2, Some t3) -> 
 	let var = global_var_for_array_type t1.nterm_type in
 	let loc = 
-	  LApp("range_loc",
-	       [interp_term (Some before) before t1;
+	  LApp("pset_range",
+	       [pset t1;
 		interp_term (Some before) before t2;
 		interp_term (Some before) before t3;])
 	in
 	var, Some loc
+    | _ ->
+	assert false
   in
   try
     let p = StringMap.find var acc in
@@ -787,9 +824,9 @@ let collect_locations before acc loc =
        | Some l -> StringMap.add var (Memory [l]) acc)
 
 let rec make_union_loc = function
-  | [] -> LVar "nothing_loc"
+  | [] -> LVar "pset_empty"
   | [l] -> l
-  | l::r -> LApp("union_loc",[l;make_union_loc r])
+  | l::r -> LApp("pset_union",[l;make_union_loc r])
 
 let interp_assigns before assigns = function
   | Some locl ->
@@ -809,7 +846,7 @@ let interp_assigns before assigns = function
 	(fun v p acc -> match p with
 	   | Memory p ->
 	       make_and acc
-		 (LPred("assigns",
+		 (LPred("not_assigns",
 			[LVarAtLabel("alloc",before); LVarAtLabel(v,before);
 			 LVar v; make_union_loc p]))
 	   | Reference false ->

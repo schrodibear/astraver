@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.mli,v 1.8 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: creport.mli,v 1.9 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 open Format
 
@@ -32,3 +32,7 @@ val print_type_node : formatter -> Ctypes.ctype_node -> unit
 
 val error : Loc.t -> string -> 'a
 val warning : Loc.t -> string -> unit
+
+val reloc : Loc.t -> Loc.t
+val with_offset : int -> ('a -> 'b) -> 'a -> 'b
+

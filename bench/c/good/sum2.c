@@ -5,7 +5,7 @@
 /* on veut sum(t,i,j) = t[i]+...+t[j-1] */
 
 /*@ logic int sum(int t[], int i, int j) 
-  reads i,j,t,t[*] 
+  reads i,j,t,t[..] 
 */
 
 /*@ axiom sum1 : 
@@ -31,7 +31,7 @@ int test1(int t[],int n) {
 }
 
 /*@ requires \valid_range(t,0,n)
-  @ assigns t[*]
+  @ assigns t[..]
   @ ensures sum(t,0,n) == \old(sum(t,0,n))+n
   @*/
 void test2(int t[],int n) {

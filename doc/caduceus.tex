@@ -690,7 +690,7 @@ H6 : valid alloc p2
 H7 : p2 # balance0 >= 0
 balance1 : memory Z
 Pre7 : valid alloc p1
-H8 : assigns alloc balance0 balance1 (pointer_loc p2)
+H8 : not_assigns alloc balance0 balance1 (pset_singleton p2)
 H10 : p2 # balance1 = p2 # balance0 + 100
 H2 : valid alloc p2
 H11 : p2 # balance1 >= 0
@@ -1104,13 +1104,15 @@ annotations.
   \\[0.1em]
 
   \nt{location}
-    & $::=$ & \nt{identifier} \\
-    &   $|$ & \nt{term} \te{.} \nt{identifier} \\
-    &   $|$ & \nt{term} \te{->} \nt{identifier} \\
-    &   $|$ & \te{*} \nt{term} \\
-    &   $|$ & \nt{term} \te{[} \nt{term} \te{]} \\
-    &   $|$ & \nt{term} \te{[} \te{*} \te{]} \\
-    &   $|$ & \nt{term} \te{[} \nt{term} \te{..} \nt{term} \te{]} \\
+    & $::=$ & \nt{term} \\
+    &   $|$ & \nt{location} \te{.} \nt{identifier} \\
+    &   $|$ & \nt{location} \te{->} \nt{identifier} \\
+    &   $|$ & \te{*} \nt{location} \\
+    &   $|$ & \nt{location} \te{[} \nt{term} \te{]} \\
+    &   $|$ & \nt{location} \te{[} \te{..} \te{]} $|$
+              \nt{location} \te{[} \nt{term} \te{..} \te{]} \\
+    &   $|$ & \nt{location} \te{[} \te{..} \nt{term} \te{]} $|$
+              \nt{location} \te{[} \nt{term} \te{..} \nt{term} \te{]} \\
   \\[0.1em]
 \end{tabular}\\
 \hrulefill

@@ -14,12 +14,12 @@ Lemma f1_impl_po_1 :
   forall (Pre3: (valid alloc ma_structure)),
   forall (toto0: ((memory) Z)),
   forall (Post8: toto0 = (upd toto ma_structure toto_0_1)),
-  (assigns alloc toto toto0 (pointer_loc ma_structure)).
+  (not_assigns alloc toto toto0 (pset_singleton ma_structure)).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 540-559 *)
+(* Why obligation from file "why/clash.why", characters 547-566 *)
 Lemma f2_impl_po_1 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
@@ -31,7 +31,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 644-674 *)
+(* Why obligation from file "why/clash.why", characters 651-681 *)
 Lemma f2_impl_po_2 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
@@ -58,7 +58,7 @@ apply alloc_stack_valid with substruct_0 alloc; auto.
 
 Save.
 
-(* Why obligation from file "why/clash.why", characters 685-734 *)
+(* Why obligation from file "why/clash.why", characters 692-741 *)
 Lemma f2_impl_po_3 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
@@ -90,7 +90,7 @@ intuition.
 subst; apply alloc_stack_valid with substruct_0 alloc; auto.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 685-734 *)
+(* Why obligation from file "why/clash.why", characters 692-741 *)
 Lemma f2_impl_po_4 : 
   forall (ma_structure: pointer),
   forall (alloc: alloc_table),
@@ -119,14 +119,14 @@ Lemma f2_impl_po_4 :
   forall (Pre5: (valid alloc0 caduceus_1)),
   forall (fst1: ((memory) Z)),
   forall (Post17: fst1 = (upd fst0 caduceus_1 aux_1)),
-  (assigns alloc fst fst1 (pointer_loc (acc substruct ma_structure))).
+  (not_assigns alloc fst fst1 (pset_singleton (acc substruct ma_structure))).
 Proof.
 intros.
-unfold assigns.
+unfold not_assigns.
 intros.
 subst.
 caduceus.
-rewrite acc_upd_neq;generalize (unchanged_pointer_elim p (ma_structure # substruct) H0);auto.
+rewrite acc_upd_neq;generalize (pset_singleton_elim p (ma_structure # substruct) H0);auto.
 intro.
 rewrite acc_upd_neq;auto.
 inversion_clear Post9.
@@ -144,7 +144,7 @@ Save.
 
 
 
-(* Why obligation from file "why/clash.why", characters 971-994 *)
+(* Why obligation from file "why/clash.why", characters 989-1012 *)
 Lemma f_impl_po_1 : 
   forall (x: Z),
   forall (Test2: x = 0),
@@ -157,7 +157,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1054-1077 *)
+(* Why obligation from file "why/clash.why", characters 1072-1095 *)
 Lemma f_impl_po_2 : 
   forall (x: Z),
   forall (Test1: x <> 0),
@@ -170,7 +170,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1288-1311 *)
+(* Why obligation from file "why/clash.why", characters 1306-1329 *)
 Lemma g_impl_po_1 : 
   forall (y: Z),
   forall (y_0_1: Z),
@@ -182,7 +182,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1586-1609 *)
+(* Why obligation from file "why/clash.why", characters 1604-1627 *)
 Lemma h_impl_po_1 : 
   forall (x: Z),
   forall (y_0_1: Z),
@@ -197,7 +197,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/clash.why", characters 1628-1629 *)
+(* Why obligation from file "why/clash.why", characters 1646-1647 *)
 Lemma h_impl_po_2 : 
   forall (x: Z),
   forall (y_0_1: Z),

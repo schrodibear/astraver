@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.13 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: creport.ml,v 1.14 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -76,13 +76,37 @@ let report fmt = function
   | Unsupported s ->
       fprintf fmt "Error: unsupported feature (%s)" s
 
-let raise_located loc e = raise (Error (Some loc, e))
-let raise_unlocated e = raise (Error (None, e))
-let raise_locop locop e = raise (Error (locop, e))
-let unsupported loc s = raise (Error (Some loc, Unsupported s))
+let offset = ref 0
 
-let error l s = raise (Error (Some l, AnyMessage s))
+let reloc (ls, le) = (!offset + ls, !offset + le)
+
+let with_offset ofs f x =
+  let old_offset = !offset in
+  try
+    offset := ofs;
+    let r = f x in
+    offset := old_offset;
+    r
+  with e ->
+    offset := old_offset;
+    raise e
+(*** 
+    | Stdpp.Exc_located (loc, e) -> 
+	raise (Stdpp.Exc_located (Compat.offset ofs loc, e))
+    | Error (Some loc, e) ->
+	raise (Error (Some (offset ofs loc), e))
+***)
+
+let option_app f = function Some x -> Some (f x) | None -> None
+
+let raise_located loc e = raise (Error (Some (reloc loc), e))
+let raise_unlocated e = raise (Error (None, e))
+let raise_locop locop e = raise (Error (option_app reloc locop, e))
+let unsupported loc s = raise (Error (Some (reloc loc), Unsupported s))
+
+let error l s = raise (Error (Some (reloc l), AnyMessage s))
 let warning l s = 
+  let l = reloc l in
   Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s;
   if Coptions.werror then exit 1
 

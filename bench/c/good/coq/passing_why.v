@@ -15,7 +15,7 @@ subst; auto.
 rewrite <- shift_zero;apply valid_index_valid_shift;auto.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 37-193 *)
+(* Why obligation from file "why/passing.why", characters 37-200 *)
 Lemma f_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -24,13 +24,13 @@ Lemma f_impl_po_2 :
   forall (Pre3: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post3: intP0 = (upd intP x 1)),
-  (acc intP0 x) = 1 /\ (assigns alloc intP intP0 (pointer_loc x)).
+  (acc intP0 x) = 1 /\ (not_assigns alloc intP intP0 (pset_singleton x)).
 Proof.
 intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 232-335 *)
+(* Why obligation from file "why/passing.why", characters 239-342 *)
 Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -38,7 +38,7 @@ Lemma g2_impl_po_1 :
   forall (Pre4: (valid alloc r)),
   forall (intP0: ((memory) Z)),
   forall (Post3: (acc intP0 r) = 0 /\
-                 (assigns alloc intP intP0 (pointer_loc r))),
+                 (not_assigns alloc intP intP0 (pset_singleton r))),
   forall (Pre3: (valid alloc r)),
   forall (result0: Z),
   forall (Post2: result0 = (acc intP0 r)),
@@ -47,7 +47,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 375-522 *)
+(* Why obligation from file "why/passing.why", characters 382-536 *)
 Lemma g_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -55,14 +55,14 @@ Lemma g_impl_po_1 :
   forall (Pre3: (valid alloc x)),
   forall (intP0: ((memory) Z)),
   forall (Post3: intP0 = (upd intP x 0)),
-  (acc intP0 x) = 0 /\ (assigns alloc intP intP0 (pointer_loc x)).
+  (acc intP0 x) = 0 /\ (not_assigns alloc intP intP0 (pset_singleton x)).
 Proof.
 intuition.
 subst; caduceus.
 Save.
 
 
-(* Why obligation from file "why/passing.why", characters 615-630 *)
+(* Why obligation from file "why/passing.why", characters 629-644 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),

@@ -53,8 +53,8 @@ Lemma f1_impl_po_2 :
   forall (Post3: ((assigns alloc v2 v2_0 (pointer_loc u1)) /\
                  (assigns alloc v1 v1_0 (pointer_loc u1))) /\
                  (assigns alloc intP intP0
-                  (union_loc (range_loc (acc p2 u1) 0 5)
-                   (range_loc (acc p1 u1) 0 5)))),
+                  (union_loc (range_loc (pointer_loc (acc p2 u1)) 0 5)
+                   (range_loc (pointer_loc (acc p1 u1)) 0 5)))),
   ((((valid alloc u2) /\ (valid alloc (acc p1 u2))) /\
   (valid alloc (acc p2 u2))) /\ (valid_range alloc (acc p1 u2) 0 5)) /\
   (valid_range alloc (acc p2 u2) 0 5).
@@ -62,7 +62,7 @@ Proof.
 intuition;generalize (H u2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36-898 *)
+(* Why obligation from file "why/separation.why", characters 36-950 *)
 Lemma f1_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -90,8 +90,8 @@ Lemma f1_impl_po_3 :
   forall (Post3: ((assigns alloc v2 v2_0 (pointer_loc u1)) /\
                  (assigns alloc v1 v1_0 (pointer_loc u1))) /\
                  (assigns alloc intP intP0
-                  (union_loc (range_loc (acc p2 u1) 0 5)
-                   (range_loc (acc p1 u1) 0 5)))),
+                  (union_loc (range_loc (pointer_loc (acc p2 u1)) 0 5)
+                   (range_loc (pointer_loc (acc p1 u1)) 0 5)))),
   forall (Pre5: ((((valid alloc u2) /\ (valid alloc (acc p1 u2))) /\
                 (valid alloc (acc p2 u2))) /\
                 (valid_range alloc (acc p1 u2) 0 5)) /\
@@ -102,14 +102,15 @@ Lemma f1_impl_po_3 :
   forall (Post5: ((assigns alloc v2_0 v2_1 (pointer_loc u2)) /\
                  (assigns alloc v1_0 v1_1 (pointer_loc u2))) /\
                  (assigns alloc intP0 intP1
-                  (union_loc (range_loc (acc p2 u2) 0 5)
-                   (range_loc (acc p1 u2) 0 5)))),
+                  (union_loc (range_loc (pointer_loc (acc p2 u2)) 0 5)
+                   (range_loc (pointer_loc (acc p1 u2)) 0 5)))),
   ((assigns alloc v2 v2_1 (union_loc (pointer_loc u2) (pointer_loc u1))) /\
   (assigns alloc v1 v1_1 (union_loc (pointer_loc u2) (pointer_loc u1)))) /\
   (assigns alloc intP intP1
-   (union_loc (range_loc (acc p2 u2) 0 5)
-    (union_loc (range_loc (acc p1 u2) 0 5)
-     (union_loc (range_loc (acc p2 u1) 0 5) (range_loc (acc p1 u1) 0 5))))).
+   (union_loc (range_loc (pointer_loc (acc p2 u2)) 0 5)
+    (union_loc (range_loc (pointer_loc (acc p1 u2)) 0 5)
+     (union_loc (range_loc (pointer_loc (acc p2 u1)) 0 5)
+      (range_loc (pointer_loc (acc p1 u1)) 0 5))))).
 Proof.
 intuition.
 apply assigns_trans with v2_0.
@@ -151,7 +152,7 @@ p H22);intro.
 apply unchanged_union_intro;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32322-32339 *)
+(* Why obligation from file "why/separation.why", characters 32374-32391 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -269,7 +270,7 @@ Proof.
 intuition;generalize (H u3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32345-32362 *)
+(* Why obligation from file "why/separation.why", characters 32397-32414 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -391,8 +392,9 @@ Lemma f3_impl_po_2 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -405,7 +407,7 @@ Proof.
 intuition;generalize (H u4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32368-32385 *)
+(* Why obligation from file "why/separation.why", characters 32420-32437 *)
 Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -527,8 +529,9 @@ Lemma f3_impl_po_3 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -542,8 +545,9 @@ Lemma f3_impl_po_3 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -556,7 +560,7 @@ Proof.
 intuition;generalize (H w1);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32391-32408 *)
+(* Why obligation from file "why/separation.why", characters 32443-32460 *)
 Lemma f3_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -678,8 +682,9 @@ Lemma f3_impl_po_4 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -693,8 +698,9 @@ Lemma f3_impl_po_4 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -708,8 +714,9 @@ Lemma f3_impl_po_4 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -722,7 +729,7 @@ Proof.
 intuition;generalize (H w2);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32414-32431 *)
+(* Why obligation from file "why/separation.why", characters 32466-32483 *)
 Lemma f3_impl_po_5 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -844,8 +851,9 @@ Lemma f3_impl_po_5 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -859,8 +867,9 @@ Lemma f3_impl_po_5 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -874,8 +883,9 @@ Lemma f3_impl_po_5 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -889,8 +899,9 @@ Lemma f3_impl_po_5 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -903,7 +914,7 @@ Proof.
 intuition;generalize (H w3);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32437-32454 *)
+(* Why obligation from file "why/separation.why", characters 32489-32506 *)
 Lemma f3_impl_po_6 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1025,8 +1036,9 @@ Lemma f3_impl_po_6 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1040,8 +1052,9 @@ Lemma f3_impl_po_6 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1055,8 +1068,9 @@ Lemma f3_impl_po_6 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1070,8 +1084,9 @@ Lemma f3_impl_po_6 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1085,8 +1100,9 @@ Lemma f3_impl_po_6 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -1099,7 +1115,7 @@ Proof.
 intuition;generalize (H w4);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32460-32477 *)
+(* Why obligation from file "why/separation.why", characters 32512-32529 *)
 Lemma f3_impl_po_7 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1221,8 +1237,9 @@ Lemma f3_impl_po_7 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1236,8 +1253,9 @@ Lemma f3_impl_po_7 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1251,8 +1269,9 @@ Lemma f3_impl_po_7 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1266,8 +1285,9 @@ Lemma f3_impl_po_7 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1281,8 +1301,9 @@ Lemma f3_impl_po_7 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -1296,8 +1317,9 @@ Lemma f3_impl_po_7 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -1310,7 +1332,7 @@ Proof.
 intuition;generalize (H w5);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32483-32500 *)
+(* Why obligation from file "why/separation.why", characters 32535-32552 *)
 Lemma f3_impl_po_8 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1432,8 +1454,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1447,8 +1470,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1462,8 +1486,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1477,8 +1502,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1492,8 +1518,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -1507,8 +1534,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -1522,8 +1550,9 @@ Lemma f3_impl_po_8 :
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
   forall (Post25: ((assigns alloc intP5 intP6
-                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pointer_loc w5))) /\
                   (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -1536,7 +1565,7 @@ Proof.
 intuition;generalize (H w6);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32506-32523 *)
+(* Why obligation from file "why/separation.why", characters 32558-32575 *)
 Lemma f3_impl_po_9 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1658,8 +1687,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1673,8 +1703,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1688,8 +1719,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1703,8 +1735,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1718,8 +1751,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -1733,8 +1767,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -1748,8 +1783,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
   forall (Post25: ((assigns alloc intP5 intP6
-                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pointer_loc w5))) /\
                   (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -1763,8 +1799,9 @@ Lemma f3_impl_po_9 :
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
   forall (Post27: ((assigns alloc intP6 intP7
-                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
-                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w6))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w6)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pointer_loc w6))) /\
                   (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -1777,7 +1814,7 @@ Proof.
 intuition;generalize (H w7);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32529-32546 *)
+(* Why obligation from file "why/separation.why", characters 32581-32598 *)
 Lemma f3_impl_po_10 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -1899,8 +1936,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -1914,8 +1952,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -1929,8 +1968,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -1944,8 +1984,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -1959,8 +2000,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -1974,8 +2016,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -1989,8 +2032,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
   forall (Post25: ((assigns alloc intP5 intP6
-                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pointer_loc w5))) /\
                   (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -2004,8 +2048,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
   forall (Post27: ((assigns alloc intP6 intP7
-                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
-                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w6))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w6)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pointer_loc w6))) /\
                   (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -2019,8 +2064,9 @@ Lemma f3_impl_po_10 :
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
   forall (Post29: ((assigns alloc intP7 intP8
-                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
-                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w7))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w7)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pointer_loc w7))) /\
                   (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -2033,7 +2079,7 @@ Proof.
 intuition;generalize (H w8);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32552-32569 *)
+(* Why obligation from file "why/separation.why", characters 32604-32621 *)
 Lemma f3_impl_po_11 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2155,8 +2201,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -2170,8 +2217,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -2185,8 +2233,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -2200,8 +2249,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -2215,8 +2265,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -2230,8 +2281,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -2245,8 +2297,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
   forall (Post25: ((assigns alloc intP5 intP6
-                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pointer_loc w5))) /\
                   (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -2260,8 +2313,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
   forall (Post27: ((assigns alloc intP6 intP7
-                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
-                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w6))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w6)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pointer_loc w6))) /\
                   (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -2275,8 +2329,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
   forall (Post29: ((assigns alloc intP7 intP8
-                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
-                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w7))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w7)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pointer_loc w7))) /\
                   (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -2290,8 +2345,9 @@ Lemma f3_impl_po_11 :
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
   forall (Post31: ((assigns alloc intP8 intP9
-                    (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
-                     (range_loc (acc anonymous_2_p1 w8) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w8))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w8)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
                    (pointer_loc w8))) /\
                   (assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
@@ -2304,7 +2360,7 @@ Proof.
 intuition;generalize (H w9);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 32575-32593 *)
+(* Why obligation from file "why/separation.why", characters 32627-32645 *)
 Lemma f3_impl_po_12 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2426,8 +2482,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -2441,8 +2498,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -2456,8 +2514,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -2471,8 +2530,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -2486,8 +2546,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -2501,8 +2562,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -2516,8 +2578,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
   forall (Post25: ((assigns alloc intP5 intP6
-                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pointer_loc w5))) /\
                   (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -2531,8 +2594,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
   forall (Post27: ((assigns alloc intP6 intP7
-                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
-                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w6))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w6)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pointer_loc w6))) /\
                   (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -2546,8 +2610,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
   forall (Post29: ((assigns alloc intP7 intP8
-                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
-                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w7))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w7)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pointer_loc w7))) /\
                   (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -2561,8 +2626,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
   forall (Post31: ((assigns alloc intP8 intP9
-                    (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
-                     (range_loc (acc anonymous_2_p1 w8) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w8))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w8)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
                    (pointer_loc w8))) /\
                   (assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
@@ -2576,8 +2642,9 @@ Lemma f3_impl_po_12 :
   forall (anonymous_2_v2_10: ((memory) Z)),
   forall (intP10: ((memory) Z)),
   forall (Post33: ((assigns alloc intP9 intP10
-                    (union_loc (range_loc (acc anonymous_2_p2 w9) 0 5)
-                     (range_loc (acc anonymous_2_p1 w9) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w9))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w9)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
                    (pointer_loc w9))) /\
                   (assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
@@ -2590,7 +2657,7 @@ Proof.
 intuition;generalize (H w10);intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 937-35071 *)
+(* Why obligation from file "why/separation.why", characters 989-35435 *)
 Lemma f3_impl_po_13 : 
   forall (alloc: alloc_table),
   forall (anonymous_2_p1: ((memory) pointer)),
@@ -2712,8 +2779,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_0: ((memory) Z)),
   forall (intP0: ((memory) Z)),
   forall (Post13: ((assigns alloc intP intP0
-                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2 anonymous_2_v2_0
                    (pointer_loc u3))) /\
                   (assigns alloc anonymous_2_v1 anonymous_2_v1_0
@@ -2727,8 +2795,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_1: ((memory) Z)),
   forall (intP1: ((memory) Z)),
   forall (Post15: ((assigns alloc intP0 intP1
-                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 u4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 u4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
                    (pointer_loc u4))) /\
                   (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
@@ -2742,8 +2811,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_2: ((memory) Z)),
   forall (intP2: ((memory) Z)),
   forall (Post17: ((assigns alloc intP1 intP2
-                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w1))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w1)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
                    (pointer_loc w1))) /\
                   (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
@@ -2757,8 +2827,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_3: ((memory) Z)),
   forall (intP3: ((memory) Z)),
   forall (Post19: ((assigns alloc intP2 intP3
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w2)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
                    (pointer_loc w2))) /\
                   (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
@@ -2772,8 +2843,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_4: ((memory) Z)),
   forall (intP4: ((memory) Z)),
   forall (Post21: ((assigns alloc intP3 intP4
-                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w3)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
                    (pointer_loc w3))) /\
                   (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
@@ -2787,8 +2859,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_5: ((memory) Z)),
   forall (intP5: ((memory) Z)),
   forall (Post23: ((assigns alloc intP4 intP5
-                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w4)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
                    (pointer_loc w4))) /\
                   (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
@@ -2802,8 +2875,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_6: ((memory) Z)),
   forall (intP6: ((memory) Z)),
   forall (Post25: ((assigns alloc intP5 intP6
-                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
                    (pointer_loc w5))) /\
                   (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
@@ -2817,8 +2891,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_7: ((memory) Z)),
   forall (intP7: ((memory) Z)),
   forall (Post27: ((assigns alloc intP6 intP7
-                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
-                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w6))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w6)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
                    (pointer_loc w6))) /\
                   (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
@@ -2832,8 +2907,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_8: ((memory) Z)),
   forall (intP8: ((memory) Z)),
   forall (Post29: ((assigns alloc intP7 intP8
-                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
-                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w7))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w7)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
                    (pointer_loc w7))) /\
                   (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
@@ -2847,8 +2923,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_9: ((memory) Z)),
   forall (intP9: ((memory) Z)),
   forall (Post31: ((assigns alloc intP8 intP9
-                    (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
-                     (range_loc (acc anonymous_2_p1 w8) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w8))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w8)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
                    (pointer_loc w8))) /\
                   (assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
@@ -2862,8 +2939,9 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_10: ((memory) Z)),
   forall (intP10: ((memory) Z)),
   forall (Post33: ((assigns alloc intP9 intP10
-                    (union_loc (range_loc (acc anonymous_2_p2 w9) 0 5)
-                     (range_loc (acc anonymous_2_p1 w9) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w9))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w9)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
                    (pointer_loc w9))) /\
                   (assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
@@ -2877,37 +2955,58 @@ Lemma f3_impl_po_13 :
   forall (anonymous_2_v2_11: ((memory) Z)),
   forall (intP11: ((memory) Z)),
   forall (Post35: ((assigns alloc intP10 intP11
-                    (union_loc (range_loc (acc anonymous_2_p2 w10) 0 5)
-                     (range_loc (acc anonymous_2_p1 w10) 0 5))) /\
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2
+                                                        w10))
+                                0 5)
+                     (range_loc (pointer_loc (acc anonymous_2_p1 w10)) 0 5))) /\
                   (assigns alloc anonymous_2_v2_10 anonymous_2_v2_11
                    (pointer_loc w10))) /\
                   (assigns alloc anonymous_2_v1_10 anonymous_2_v1_11
                    (pointer_loc w10))),
   ((assigns alloc intP intP11
-    (union_loc (range_loc (acc anonymous_2_p2 w10) 0 5)
-     (union_loc (range_loc (acc anonymous_2_p1 w10) 0 5)
-      (union_loc (range_loc (acc anonymous_2_p2 w9) 0 5)
-       (union_loc (range_loc (acc anonymous_2_p1 w9) 0 5)
-        (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
-         (union_loc (range_loc (acc anonymous_2_p1 w8) 0 5)
-          (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
-           (union_loc (range_loc (acc anonymous_2_p1 w7) 0 5)
-            (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
-             (union_loc (range_loc (acc anonymous_2_p1 w6) 0 5)
-              (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
-               (union_loc (range_loc (acc anonymous_2_p1 w5) 0 5)
-                (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
-                 (union_loc (range_loc (acc anonymous_2_p1 w4) 0 5)
-                  (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
-                   (union_loc (range_loc (acc anonymous_2_p1 w3) 0 5)
-                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
-                     (union_loc (range_loc (acc anonymous_2_p1 w2) 0 5)
-                      (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
-                       (union_loc (range_loc (acc anonymous_2_p1 w1) 0 5)
-                        (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
-                         (union_loc (range_loc (acc anonymous_2_p1 u4) 0 5)
-                          (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
-                           (range_loc (acc anonymous_2_p1 u3) 0 5))))))))))))))))))))))))) /\
+    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w10)) 0 5)
+     (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w10)) 0 5)
+      (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w9)) 0 5)
+       (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w9)) 0 5)
+        (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w8)) 0 5)
+         (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w8)) 0 5)
+          (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w7)) 0 5)
+           (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w7)) 0 5)
+            (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w6)) 0 5)
+             (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w6)) 0 5)
+              (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w5)) 0 5)
+               (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w5)) 0
+                           5)
+                (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w4)) 0
+                            5)
+                 (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w4))
+                             0 5)
+                  (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w3))
+                              0 5)
+                   (union_loc (range_loc (pointer_loc (acc anonymous_2_p1 w3))
+                               0 5)
+                    (union_loc (range_loc (pointer_loc (acc anonymous_2_p2 w2))
+                                0 5)
+                     (union_loc (range_loc (pointer_loc (acc anonymous_2_p1
+                                                         w2))
+                                 0 5)
+                      (union_loc (range_loc (pointer_loc (acc anonymous_2_p2
+                                                          w1))
+                                  0 5)
+                       (union_loc (range_loc (pointer_loc (acc anonymous_2_p1
+                                                           w1))
+                                   0 5)
+                        (union_loc (range_loc (pointer_loc (acc anonymous_2_p2
+                                                            u4))
+                                    0 5)
+                         (union_loc (range_loc (pointer_loc (acc anonymous_2_p1
+                                                             u4))
+                                     0 5)
+                          (union_loc (range_loc (pointer_loc (acc anonymous_2_p2
+                                                              u3))
+                                      0 5)
+                           (range_loc (pointer_loc (acc anonymous_2_p1 u3)) 0
+                            5))))))))))))))))))))))))) /\
   (assigns alloc anonymous_2_v2 anonymous_2_v2_11
    (union_loc (pointer_loc w10)
     (union_loc (pointer_loc w9)
@@ -2936,7 +3035,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/separation.why", characters 35438-35451 *)
+(* Why obligation from file "why/separation.why", characters 35802-35815 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -2954,7 +3053,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35456-35483 *)
+(* Why obligation from file "why/separation.why", characters 35820-35847 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -2980,7 +3079,7 @@ valid.
 unfold valid_s1_t;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35421-35483 *)
+(* Why obligation from file "why/separation.why", characters 35785-35847 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -3054,7 +3153,7 @@ generalize (valid_s1_t_pointer alloc t s H4).
 unfold valid_s1_t;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35825-35840 *)
+(* Why obligation from file "why/separation.why", characters 36189-36204 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
@@ -3064,7 +3163,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35949-35977 *)
+(* Why obligation from file "why/separation.why", characters 36313-36341 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
@@ -3074,7 +3173,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35949-35977 *)
+(* Why obligation from file "why/separation.why", characters 36313-36341 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),

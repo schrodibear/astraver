@@ -24,11 +24,11 @@ Lemma f_impl_po_2 :
   forall (Pre6: (valid alloc0 i)),
   forall (intP0: ((memory) Z)),
   forall (Post9: (acc intP0 i) = 1 /\
-                 (assigns alloc0 intP intP0 (pointer_loc i))),
+                 (not_assigns alloc0 intP intP0 (pset_singleton i))),
   forall (Pre5: (valid alloc0 i)),
   forall (result0: Z),
   forall (Post2: result0 = (acc intP0 i)),
-  result0 = 1 /\ (assigns alloc intP intP0 nothing_loc).
+  result0 = 1 /\ (not_assigns alloc intP intP0 pset_empty).
 Proof.
 intuition.
 subst; auto.
@@ -37,13 +37,13 @@ intros.
 red in H7.
 apply H7.
 apply alloc_stack_valid with i alloc;auto.
-apply unchanged_pointer_intro.
+apply pset_singleton_intro.
 intro;subst.
 generalize (fresh_not_valid _ _ H3 0);rewrite shift_zero.
 tauto.
 Save.
 
-(* Why obligation from file "why/ref.why", characters 275-422 *)
+(* Why obligation from file "why/ref.why", characters 278-432 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -51,7 +51,7 @@ Lemma g_impl_po_1 :
   forall (Pre3: (valid alloc p)),
   forall (intP0: ((memory) Z)),
   forall (Post3: intP0 = (upd intP p 1)),
-  (acc intP0 p) = 1 /\ (assigns alloc intP intP0 (pointer_loc p)).
+  (acc intP0 p) = 1 /\ (not_assigns alloc intP intP0 (pset_singleton p)).
 Proof.
 intuition; subst; caduceus.
 Save.

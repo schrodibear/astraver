@@ -19,8 +19,8 @@ Lemma erase_impl_po_1 :
   forall (mutable_p1: pointer),
   forall (mutable_size1: Z),
   forall (Pre6: Variant1 = mutable_size1),
-  forall (Pre5: (assigns alloc intP intP0
-                 (range_loc mutable_p 0 (mutable_size - 1))) /\
+  forall (Pre5: (not_assigns alloc intP intP0
+                 (pset_range (pset_singleton mutable_p) 0 (mutable_size - 1))) /\
                 (0 <= mutable_size1 /\ mutable_size1 <= mutable_size) /\
                 mutable_p1 = (shift (shift mutable_p mutable_size)
                               (Zopp mutable_size1))),
@@ -38,28 +38,30 @@ Lemma erase_impl_po_1 :
        (intP1 = (upd intP0 result 0) ->
         (forall (mutable_p0:pointer),
          (mutable_p0 = (shift mutable_p1 1) ->
-          ((assigns alloc intP intP1
-            (range_loc mutable_p 0 (mutable_size - 1))) /\
+          ((not_assigns alloc intP intP1
+            (pset_range (pset_singleton mutable_p) 0 (mutable_size - 1))) /\
           (0 <= mutable_size2 /\ mutable_size2 <= mutable_size) /\
           mutable_p0 = (shift (shift mutable_p mutable_size)
                         (Zopp mutable_size2))) /\
           (Zwf 0 mutable_size2 mutable_size1))))) /\
       (valid alloc result))))) /\
-  ((result1 = 0 -> (assigns alloc intP intP0 (range_loc p 0 (size - 1))))).
+  ((result1 = 0 ->
+    (not_assigns alloc intP intP0
+     (pset_range (pset_singleton p) 0 (size - 1))))).
 Proof.
 intuition; subst; auto.
-apply assigns_trans with intP0; auto.
+apply not_assigns_trans with intP0; auto.
 rewrite shift_shift; red; intuition.
 rewrite acc_upd_neq; auto.
 assert (p0 <> shift p (size + - mutable_size1)).
-apply unchanged_range_elim with 0 (size-1); auto with *.
+apply pset_range_elim with (pset_singleton p) 0 (size-1); auto with *.
 auto with *.
 
 autorewrite with caduceus.
 replace  (- (mutable_size1 - 1)) with (-mutable_size1+1); auto with *.
 Save.
 
-(* Why obligation from file "why/assigns.why", characters 484-825 *)
+(* Why obligation from file "why/assigns.why", characters 484-854 *)
 Lemma erase_impl_po_2 : 
   forall (p: pointer),
   forall (size: Z),
@@ -70,7 +72,8 @@ Lemma erase_impl_po_2 :
   forall (Post10: mutable_p = p),
   forall (mutable_size: Z),
   forall (Post9: mutable_size = size),
-  (assigns alloc intP intP (range_loc mutable_p 0 (mutable_size - 1))) /\
+  (not_assigns alloc intP intP
+   (pset_range (pset_singleton mutable_p) 0 (mutable_size - 1))) /\
   (0 <= mutable_size /\ mutable_size <= mutable_size) /\
   mutable_p = (shift (shift mutable_p mutable_size) (Zopp mutable_size)).
 Proof.

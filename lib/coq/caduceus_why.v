@@ -191,145 +191,307 @@ Admitted.
 
 
 (*Why logic*) Definition acc :
-  forall (A21:Set), ((memory) A21) -> pointer -> A21.
+  forall (A29:Set), ((memory) A29) -> pointer -> A29.
 Admitted.
 Implicit Arguments acc.
 
 
 (*Why logic*) Definition upd :
-  forall (A22:Set), ((memory) A22) -> pointer -> A22 -> ((memory) A22).
+  forall (A30:Set), ((memory) A30) -> pointer -> A30 -> ((memory) A30).
 Admitted.
 Implicit Arguments upd.
 
 
 (*Why axiom*) Lemma acc_upd :
-  forall (A23:Set),
-  (forall (m:((memory) A23)),
-   (forall (p:pointer), (forall (a:A23), (acc (upd m p a) p) = a))).
+  forall (A31:Set),
+  (forall (m:((memory) A31)),
+   (forall (p:pointer), (forall (a:A31), (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A24:Set),
-  (forall (m:((memory) A24)),
+  forall (A32:Set),
+  (forall (m:((memory) A32)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A24), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+     (forall (a:A32), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  forall (A25:Set),
-  (forall (m:((memory) A25)),
+  forall (A33:Set),
+  (forall (m:((memory) A33)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A25), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A33), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
 Admitted.
 
-(*Why logic*) Definition nothing_loc : assign_loc.
+Parameter pset : Set.
+
+(*Why logic*) Definition pset_empty : pset.
 Admitted.
 
-(*Why logic*) Definition pointer_loc : pointer -> assign_loc.
+(*Why logic*) Definition pset_singleton : pointer -> pset.
 Admitted.
 
-(*Why logic*) Definition all_loc : pointer -> assign_loc.
+(*Why logic*) Definition pset_arrow : pset -> ((memory) pointer) -> pset.
 Admitted.
 
-(*Why logic*) Definition range_loc : pointer -> Z -> Z -> assign_loc.
+(*Why logic*) Definition pset_star : pset -> ((memory) pointer) -> pset.
 Admitted.
 
-(*Why logic*) Definition union_loc : assign_loc -> assign_loc -> assign_loc.
+(*Why logic*) Definition pset_all : pset -> pset.
 Admitted.
 
-(*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
+(*Why logic*) Definition pset_range : pset -> Z -> Z -> pset.
 Admitted.
 
-(*Why predicate*) Definition assigns (A26:Set) (a:alloc_table)
-  (m1:((memory) A26)) (m2:((memory) A26)) (l:assign_loc)
+(*Why logic*) Definition pset_range_left : pset -> Z -> pset.
+Admitted.
+
+(*Why logic*) Definition pset_range_right : pset -> Z -> pset.
+Admitted.
+
+(*Why logic*) Definition pset_acc_all : pset -> ((memory) pointer) -> pset.
+Admitted.
+
+(*Why logic*) Definition pset_acc_range :
+  pset -> ((memory) pointer) -> Z -> Z -> pset.
+Admitted.
+
+(*Why logic*) Definition pset_acc_range_left :
+  pset -> ((memory) pointer) -> Z -> pset.
+Admitted.
+
+(*Why logic*) Definition pset_acc_range_right :
+  pset -> ((memory) pointer) -> Z -> pset.
+Admitted.
+
+(*Why logic*) Definition pset_union : pset -> pset -> pset.
+Admitted.
+
+(*Why logic*) Definition not_in_pset : pointer -> pset -> Prop.
+Admitted.
+
+(*Why predicate*) Definition not_assigns (A34:Set) (a:alloc_table)
+  (m1:((memory) A34)) (m2:((memory) A34)) (l:pset)
   := (forall (p:pointer),
-      ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
-Implicit Arguments assigns.
+      ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
+Implicit Arguments not_assigns.
 
-(*Why axiom*) Lemma unchanged_nothing_intro :
-  (forall (p:pointer), (unchanged p nothing_loc)).
+(*Why axiom*) Lemma pset_empty_intro :
+  (forall (p:pointer), (not_in_pset p pset_empty)).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_pointer_intro :
+(*Why axiom*) Lemma pset_singleton_intro :
   (forall (p1:pointer),
-   (forall (p2:pointer), (~(p1 = p2) -> (unchanged p1 (pointer_loc p2))))).
+   (forall (p2:pointer), (~(p1 = p2) -> (not_in_pset p1 (pset_singleton p2))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_pointer_elim :
+(*Why axiom*) Lemma pset_singleton_elim :
   (forall (p1:pointer),
-   (forall (p2:pointer), ((unchanged p1 (pointer_loc p2)) -> ~(p1 = p2)))).
+   (forall (p2:pointer), ((not_in_pset p1 (pset_singleton p2)) -> ~(p1 = p2)))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_intro :
-  (forall (l1:assign_loc),
-   (forall (l2:assign_loc),
+(*Why axiom*) Lemma pset_union_intro :
+  (forall (l1:pset),
+   (forall (l2:pset),
     (forall (p:pointer),
-     ((unchanged p l1) /\ (unchanged p l2) -> (unchanged p (union_loc l1 l2)))))).
+     ((not_in_pset p l1) /\ (not_in_pset p l2) ->
+      (not_in_pset p (pset_union l1 l2)))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_elim1 :
-  (forall (l1:assign_loc),
-   (forall (l2:assign_loc),
+(*Why axiom*) Lemma pset_union_elim1 :
+  (forall (l1:pset),
+   (forall (l2:pset),
     (forall (p:pointer),
-     ((unchanged p (union_loc l1 l2)) -> (unchanged p l1))))).
+     ((not_in_pset p (pset_union l1 l2)) -> (not_in_pset p l1))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_elim2 :
-  (forall (l1:assign_loc),
-   (forall (l2:assign_loc),
+(*Why axiom*) Lemma pset_union_elim2 :
+  (forall (l1:pset),
+   (forall (l2:pset),
     (forall (p:pointer),
-     ((unchanged p (union_loc l1 l2)) -> (unchanged p l2))))).
+     ((not_in_pset p (pset_union l1 l2)) -> (not_in_pset p l2))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_range_intro :
-  (forall (p1:pointer),
-   (forall (p2:pointer),
+(*Why axiom*) Lemma pset_all_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    ((forall (p':pointer),
+      (~(not_in_pset p' l) -> ~((base_addr p) = (base_addr p')))) ->
+     (not_in_pset p (pset_all l))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_all_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    ((not_in_pset p (pset_all l)) ->
+     (forall (p':pointer),
+      (~(not_in_pset p' l) -> ~((base_addr p) = (base_addr p'))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_range_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
     (forall (a:Z),
      (forall (b:Z),
-      ((forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i)))) ->
-       (unchanged p1 (range_loc p2 a b))))))).
+      ((forall (p':pointer), (not_in_pset p' l) \/
+        (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p' i))))) ->
+       (not_in_pset p (pset_range l a b))))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_range_elim :
-  (forall (p1:pointer),
-   (forall (p2:pointer),
+(*Why axiom*) Lemma pset_range_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
     (forall (a:Z),
      (forall (b:Z),
-      ((unchanged p1 (range_loc p2 a b)) ->
-       (forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i))))))))).
+      ((not_in_pset p (pset_range l a b)) ->
+       (forall (p':pointer),
+        (~(not_in_pset p' l) ->
+         (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p' i))))))))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_all_intro :
-  (forall (p1:pointer),
-   (forall (p2:pointer),
-    (~((base_addr p1) = (base_addr p2)) -> (unchanged p1 (all_loc p2))))).
+(*Why axiom*) Lemma pset_range_left_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (a:Z),
+     ((forall (p':pointer), (not_in_pset p' l) \/
+       (forall (i:Z), (i <= a -> ~(p = (shift p' i))))) ->
+      (not_in_pset p (pset_range_left l a)))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_all_elim :
-  (forall (p1:pointer),
-   (forall (p2:pointer),
-    ((unchanged p1 (all_loc p2)) -> ~((base_addr p1) = (base_addr p2))))).
+(*Why axiom*) Lemma pset_range_left_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (a:Z),
+     ((not_in_pset p (pset_range_left l a)) ->
+      (forall (p':pointer),
+       (~(not_in_pset p' l) ->
+        (forall (i:Z), (i <= a -> ~(p = (shift p' i)))))))))).
 Admitted.
 
-(*Why axiom*) Lemma assigns_trans :
-  forall (A27:Set),
+(*Why axiom*) Lemma pset_range_right_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (a:Z),
+     ((forall (p':pointer), (not_in_pset p' l) \/
+       (forall (i:Z), (a <= i -> ~(p = (shift p' i))))) ->
+      (not_in_pset p (pset_range_right l a)))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_range_right_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (a:Z),
+     ((not_in_pset p (pset_range_right l a)) ->
+      (forall (p':pointer),
+       (~(not_in_pset p' l) ->
+        (forall (i:Z), (a <= i -> ~(p = (shift p' i)))))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_all_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     ((forall (p':pointer),
+       (~(not_in_pset p' l) -> (forall (i:Z), ~(p = (acc m (shift p' i)))))) ->
+      (not_in_pset p (pset_acc_all l m)))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_all_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     ((not_in_pset p (pset_acc_all l m)) ->
+      (forall (p':pointer),
+       (~(not_in_pset p' l) -> (forall (i:Z), ~(p = (acc m (shift p' i)))))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_range_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     (forall (a:Z),
+      (forall (b:Z),
+       ((forall (p':pointer),
+         (~(not_in_pset p' l) ->
+          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p' i))))))) ->
+        (not_in_pset p (pset_acc_range l m a b)))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_range_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     (forall (a:Z),
+      (forall (b:Z),
+       ((not_in_pset p (pset_acc_range l m a b)) ->
+        (forall (p':pointer),
+         (~(not_in_pset p' l) ->
+          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p' i))))))))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_range_left_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     (forall (a:Z),
+      ((forall (p':pointer),
+        (~(not_in_pset p' l) ->
+         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p' i))))))) ->
+       (not_in_pset p (pset_acc_range_left l m a))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_range_left_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     (forall (a:Z),
+      ((not_in_pset p (pset_acc_range_left l m a)) ->
+       (forall (p':pointer),
+        (~(not_in_pset p' l) ->
+         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p' i)))))))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_range_right_intro :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     (forall (a:Z),
+      ((forall (p':pointer),
+        (~(not_in_pset p' l) ->
+         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p' i))))))) ->
+       (not_in_pset p (pset_acc_range_right l m a))))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_acc_range_right_elim :
+  (forall (p:pointer),
+   (forall (l:pset),
+    (forall (m:((memory) pointer)),
+     (forall (a:Z),
+      ((not_in_pset p (pset_acc_range_right l m a)) ->
+       (forall (p':pointer),
+        (~(not_in_pset p' l) ->
+         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p' i)))))))))))).
+Admitted.
+
+(*Why axiom*) Lemma not_assigns_trans :
+  forall (A35:Set),
   (forall (a:alloc_table),
-   (forall (l:assign_loc),
-    (forall (m1:((memory) A27)),
-     (forall (m2:((memory) A27)),
-      (forall (m3:((memory) A27)),
-       ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
+   (forall (l:pset),
+    (forall (m1:((memory) A35)),
+     (forall (m2:((memory) A35)),
+      (forall (m3:((memory) A35)),
+       ((not_assigns a m1 m2 l) ->
+        ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
 Admitted.
 
-(*Why axiom*) Lemma assigns_refl :
-  forall (A28:Set),
+(*Why axiom*) Lemma not_assigns_refl :
+  forall (A36:Set),
   (forall (a:alloc_table),
-   (forall (l:assign_loc), (forall (m:((memory) A28)), (assigns a m m l)))).
+   (forall (l:pset), (forall (m:((memory) A36)), (not_assigns a m m l)))).
 Admitted.
 
 (*Why logic*) Definition on_heap : alloc_table -> pointer -> Prop.

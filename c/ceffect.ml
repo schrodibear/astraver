@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.87 2005-03-02 09:45:56 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.88 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -168,56 +168,84 @@ let assigns_add_field_var v ty e =
 let assigns_add_pointer_var ty e = 
   { e with assigns = add_pointer_var ty e.assigns }
 
-let rec term t =
-  match t.nterm_node with 
-    | NTvar v -> 
-	if v.var_is_static
-	then add_var v t.nterm_type empty
-	else empty
-    | NTarrow (t1,f) -> 
-	add_alloc (add_field_var f t.nterm_type (term t1))
-    | NTstar t ->
-	add_alloc (add_pointer_var t.nterm_type (term t))
-    | NTunop (Ustar,_) -> assert false
-    | NTunop (Uamp, t) -> term t
-    | NTunop (Uminus, t) -> term t
-    | NTunop (Utilde, t) -> term t
-    | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
-    | NTbase_addr t -> term t
-    | NTblock_length t -> add_alloc (term t)
-    | NTat (t, _) -> 
-	term t
-    | NTold t -> 
-	term t
-    | NTif (t1, t2, t3) -> 
-	union (term t1) (union (term t2) (term t3))
-    | NTbinop (t1, _, t2) -> 
-	union (term t1) (term t2) 
-    | NTapp (id, l) -> 
-	List.fold_left 
-	  (fun acc t -> union acc (term t)) 
-	  id.logic_args
-	  l
-    | NTconstant _ -> empty
-    | NTnull -> empty
-    | NTresult -> empty
-    | NTcast (_, t) -> term t
+let rec term t = match t.nterm_node with 
+  | NTvar v -> 
+      if v.var_is_static
+      then add_var v t.nterm_type empty
+      else empty
+  | NTarrow (t1,f) -> 
+      add_alloc (add_field_var f t.nterm_type (term t1))
+  | NTstar t ->
+      add_alloc (add_pointer_var t.nterm_type (term t))
+  | NTunop (Ustar,_) -> assert false
+  | NTunop (Uamp, t) -> term t
+  | NTunop (Uminus, t) -> term t
+  | NTunop (Utilde, t) -> term t
+  | NTunop ((Ufloat_of_int | Uint_of_float), t) -> term t
+  | NTbase_addr t -> term t
+  | NTblock_length t -> add_alloc (term t)
+  | NTat (t, _) -> 
+      term t
+  | NTold t -> 
+      term t
+  | NTif (t1, t2, t3) -> 
+      union (term t1) (union (term t2) (term t3))
+  | NTbinop (t1, _, t2) -> 
+      union (term t1) (term t2) 
+  | NTapp (id, l) -> 
+      List.fold_left (fun acc t -> union acc (term t)) id.logic_args l
+  | NTconstant _ -> empty
+  | NTnull -> empty
+  | NTresult -> empty
+  | NTcast (_, t) -> term t
+  | NTrange (t1, t2, t3) ->
+      add_alloc 
+	(add_pointer_var t1.nterm_type 
+	   (union (term t1) (union (term_option t2) (term_option t3))))
 
-let location loc =
-  match loc with
-    | Lterm t -> term t 
-    | Lstar t ->
-	add_pointer_var t.nterm_type (term t)
-    | Lrange(t1,t2,t3) -> 
-	add_pointer_var t1.nterm_type
-	  (union 
-	     (term t1)
-	     (union (term t2) (term t3)))
+and term_option = function None -> empty | Some t -> term t
 
+
+(* used to interpret the reads clause *)
 let locations ll =
   List.fold_left
-    (fun acc l -> union acc (location l)) empty ll
+    (fun acc l -> union acc (term l)) empty ll
 
+(* used to interpret the assigns clause *)
+let rec assign_location t = match t.nterm_node with 
+  | NTvar v -> 
+      if v.var_is_static
+      then { reads = empty; assigns = add_var v t.nterm_type empty }
+      else ef_empty
+  | NTarrow (t1,f) -> 
+      { reads = add_alloc (term t1);
+	assigns = add_field_var f t.nterm_type empty }
+  | NTstar t1 ->
+      { reads = add_alloc (term t1);
+	assigns = add_pointer_var t1.nterm_type empty }
+  | NTunop (Ustar,_) -> assert false
+  | NTunop (Uamp, _) -> assert false
+  | NTunop (Uminus, _)  
+  | NTunop (Utilde, _)  
+  | NTunop ((Ufloat_of_int | Uint_of_float), _)  
+  | NTbase_addr _  
+  | NTblock_length _  
+  | NTat (_, _)  
+  | NTold _  
+  | NTif (_, _, _)  
+  | NTbinop (_, _, _)  
+  | NTapp (_, _)  
+  | NTconstant _  
+  | NTnull  
+  | NTresult  
+  | NTcast (_, _) -> 
+      error t.nterm_loc "invalid location"
+  | NTrange (t1, t2, t3) ->
+      { reads = add_alloc 
+	  (union (term t1) (union (term_option t2) (term_option t3)));
+	assigns = add_pointer_var t1.nterm_type empty }
+
+(***
 let assign_location loc =
   match loc with
     | Lterm t ->
@@ -244,7 +272,7 @@ let assign_location loc =
     | Lrange(t1,t2,t3) -> 
 	{ reads = add_alloc (union (term t1) (union (term t2) (term t3)));
 	  assigns = add_pointer_var t1.nterm_type empty }
-	  
+***)	  
 
 let rec predicate p = 
   match p with

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.7 2005-02-16 13:14:27 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.8 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -97,6 +97,8 @@ let rec nterm fmt t = match t.nterm_node with
       fprintf fmt "null"
   | NTcast (ty, t) ->
       fprintf fmt "(%a)%a" ctype ty nterm t
+  | NTrange (t1, t2, t3) ->
+      fprintf fmt "%a[%a..%a]" nterm t1 nterm_option t2 nterm_option t3
 
 and nterm_p fmt t = match t.nterm_node with
   | NTconstant _ | NTvar _ | NTapp _ | NTresult | NTnull | NTold _ | NTat _ ->
@@ -104,6 +106,9 @@ and nterm_p fmt t = match t.nterm_node with
   | _ ->
       fprintf fmt "(%a)" nterm t
 
+and nterm_option fmt = function
+  | None -> ()
+  | Some t -> nterm fmt t
 
 let quantifier fmt (ty, x) = fprintf fmt "%a %s" ctype ty x.var_unique_name
 
@@ -165,10 +170,13 @@ let logic_parameter fmt (x, ty) = fprintf fmt "%a %s" ctype ty x.var_unique_name
 
 let logic_parameters = print_list comma logic_parameter
 
+let location = nterm
+(****
 let location fmt = function
   | Lterm t -> nterm fmt t
   | Lstar t -> fprintf fmt "%a[*]" nterm t
   | Lrange (t1, t2, t3) -> fprintf fmt "%a[%a..%a]" nterm t1 nterm t2 nterm t3
+****)
 
 let locations = print_list comma location
 

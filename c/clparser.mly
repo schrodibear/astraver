@@ -103,6 +103,8 @@ lexpr:
 | lexpr ARROW IDENTIFIER { info (PLarrow ($1, $3)) }
 | lexpr DOT IDENTIFIER { info (PLdot ($1, $3)) }
 | lexpr LSQUARE lexpr RSQUARE { info (PLarrget ($1, $3)) }
+| lexpr LSQUARE lexpr_option DOTDOT lexpr_option RSQUARE    
+   { info (PLrange ($1, $3, $5)) }
 | MINUS lexpr %prec prec_uminus { info (PLunop (Uminus, $2)) }
 | PLUS lexpr %prec prec_uminus { $2 }
 | STAR lexpr { info (PLunop (Ustar, $2)) }
@@ -126,6 +128,11 @@ lexpr:
 	| PLvar x -> info (PLcast (LTvar x.Info.var_name, $4))
 	| _ -> raise Parse_error }
 | IDENTIFIER COLONCOLON lexpr %prec prec_named { info (PLnamed ($1, $3)) }
+;
+
+lexpr_option:
+| /* epsilon */ { None }
+| lexpr         { Some $1 }
 ;
 
 logic_type:
@@ -267,6 +274,9 @@ locations:
 ;
 
 location:
+  lexpr { $1 }
+;
+/***
   location_term { Lterm $1 }
 | location_term LSQUARE STAR RSQUARE { Lstar $1 }
 | location_term LSQUARE lexpr DOTDOT lexpr RSQUARE    
@@ -280,6 +290,7 @@ location_term:
 | location_term LSQUARE lexpr RSQUARE { info (PLarrget ($1, $3)) }
 | STAR location_term { info (PLunop (Ustar, $2)) }
 ;
+***/
 
 decl:
   LOGIC logic_type IDENTIFIER LPAR parameters RPAR 

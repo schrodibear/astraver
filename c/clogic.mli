@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.42 2004-12-08 14:17:29 hubert Exp $ i*)
+(*i $Id: clogic.mli,v 1.43 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -61,6 +61,7 @@ and lexpr_node =
   | PLresult
   | PLnull
   | PLcast of logic_type * lexpr
+  | PLrange of lexpr * lexpr option * lexpr option
   (* predicates *)
   | PLfalse
   | PLtrue
@@ -104,6 +105,7 @@ and 'ctype term_node =
   | Tresult
   | Tnull
   | Tcast of 'ctype * 'ctype term
+  | Trange of 'ctype term * 'ctype term option * 'ctype term option
 
 (* typed predicates *)
 
@@ -128,10 +130,13 @@ type 'ctype predicate =
   | Pfresh of 'ctype term 
   | Pnamed of string * 'ctype predicate
 
-type 'term location = 
+type 'term location = 'term
+
+(*
   | Lterm of 'term
   | Lstar of 'term (* e[*] *)
   | Lrange of 'term * 'term * 'term (* e[e..e] *)
+*)
 
 (* should be :
   | Lvar of Info.var_info
@@ -191,6 +196,7 @@ and 'ctype nterm_node =
   | NTresult
   | NTnull
   | NTcast of 'ctype * 'ctype nterm
+  | NTrange of 'ctype nterm * 'ctype nterm option * 'ctype nterm option
 
 type 'ctype npredicate =
   | NPfalse

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.27 2005-02-16 13:14:27 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.28 2005-03-23 14:59:18 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -251,7 +251,7 @@ let rec term_node loc t =
   | Tresult -> NTresult
   | Tnull -> NTnull
   | Tcast (ty, t) -> NTcast (ctype ty, term t)
-
+  | Trange (t1, t2, t3) -> NTrange (term t1, term_option t2, term_option t3)
 
 and term t = 
 { 
@@ -260,11 +260,16 @@ and term t =
   nterm_type = t.term_type;
 }
 
+and term_option = function None -> None | Some t -> Some (term t)
+
+let nlocation = term
+(***
 let nlocation l =
   match l with
     | Lterm(t) -> Lterm(term t)
     | Lstar(t) -> Lstar(term t)
     | Lrange(t1,t2,t3) -> Lrange(term t1,term t2,term t3)
+***)
 	
 let nvariant v =
   match v with (t, sopt) -> (term t,sopt)
@@ -557,6 +562,8 @@ let rec expr_of_term (t : nterm) : nexpr =
 	      "result can't be used with ghost variables"
 	| NTnull -> NEconstant (IntConstant "0")
 	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
+	| NTrange _ -> 
+	    error t.nterm_loc "range cannot by used with ghost variables"
     end;
     nexpr_type = t.nterm_type;
     nexpr_loc  = t.nterm_loc

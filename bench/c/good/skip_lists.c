@@ -42,7 +42,7 @@ void init() {
 /*@ predicate mem(int x, int_list l) */
 
 /*@ predicate elements(list l, int_list il) 
-      reads l->header,l->header->forward[*] */
+      reads l->header,l->header->forward[..] */
 
 /*@ ensures \valid(\result) && elements(\result,nil()) */
 list empty() {

@@ -67,7 +67,7 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 445-446 *)
+(* Why obligation from file "why/sum2.why", characters 452-453 *)
 Lemma test1_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -82,7 +82,7 @@ Lemma test1_impl_po_1 :
   forall (i2: Z),
   forall (s1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum intP t 0 i2)),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum alloc intP t 0 i2)),
   forall (Test2: i2 < n),
   (forall (result:pointer),
    (result = (shift t i2) ->
@@ -95,7 +95,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 423-548 *)
+(* Why obligation from file "why/sum2.why", characters 430-555 *)
 Lemma test1_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -110,20 +110,20 @@ Lemma test1_impl_po_2 :
   forall (i2: Z),
   forall (s1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum intP t 0 i2)),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum alloc intP t 0 i2)),
   forall (Test2: i2 < n),
   forall (s2: Z),
   forall (Post3: s2 = (s1 + (acc intP (shift t i2)))),
   forall (i3: Z),
   forall (Post4: i3 = (i2 + 1)),
-  ((0 <= i3 /\ i3 <= n) /\ s2 = (sum intP t 0 i3)) /\
+  ((0 <= i3 /\ i3 <= n) /\ s2 = (sum alloc intP t 0 i3)) /\
   (Zwf 0 (n - i3) (n - i2)).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 243-558 *)
+(* Why obligation from file "why/sum2.why", characters 243-565 *)
 Lemma test1_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -138,15 +138,15 @@ Lemma test1_impl_po_3 :
   forall (i2: Z),
   forall (s1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum intP t 0 i2)),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum alloc intP t 0 i2)),
   forall (Test1: i2 >= n),
-  (forall (result:Z), (result = s1 -> result = (sum intP t 0 n))).
+  (forall (result:Z), (result = s1 -> result = (sum alloc intP t 0 n))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 300-378 *)
+(* Why obligation from file "why/sum2.why", characters 300-385 *)
 Lemma test1_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -157,7 +157,7 @@ Lemma test1_impl_po_4 :
   forall (Post6: s = 0),
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  (0 <= i1 /\ i1 <= n) /\ s = (sum intP t 0 i1).
+  (0 <= i1 /\ i1 <= n) /\ s = (sum alloc intP t 0 i1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -168,7 +168,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 1126-1148 *)
+(* Why obligation from file "why/sum2.why", characters 1170-1192 *)
 Lemma test2_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -181,8 +181,8 @@ Lemma test2_impl_po_1 :
   forall (i2: Z),
   forall (intP0: ((memory) Z)),
   forall (Pre7: Variant1 = (n - i2)),
-  forall (Pre6: (0 <= i2 /\ i2 <= n) /\ (sum intP0 t 0 n) =
-                ((sum intP t 0 n) + i2)),
+  forall (Pre6: (0 <= i2 /\ i2 <= n) /\ (sum alloc intP0 t 0 n) =
+                ((sum alloc intP t 0 n) + i2)),
   forall (Test2: i2 < n),
   forall (caduceus1: pointer),
   forall (Post6: caduceus1 = (shift t i2)),
@@ -192,7 +192,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 1110-1208 *)
+(* Why obligation from file "why/sum2.why", characters 1154-1252 *)
 Lemma test2_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -205,8 +205,8 @@ Lemma test2_impl_po_2 :
   forall (i2: Z),
   forall (intP0: ((memory) Z)),
   forall (Pre7: Variant1 = (n - i2)),
-  forall (Pre6: (0 <= i2 /\ i2 <= n) /\ (sum intP0 t 0 n) =
-                ((sum intP t 0 n) + i2)),
+  forall (Pre6: (0 <= i2 /\ i2 <= n) /\ (sum alloc intP0 t 0 n) =
+                ((sum alloc intP t 0 n) + i2)),
   forall (Test2: i2 < n),
   forall (caduceus1: pointer),
   forall (Post6: caduceus1 = (shift t i2)),
@@ -217,14 +217,14 @@ Lemma test2_impl_po_2 :
   forall (intP1: ((memory) Z)),
   forall (Post17: intP1 = (upd intP0 caduceus1 (caduceus2 + 1))),
   (forall (i:Z),
-   (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (sum intP1 t 0 n) =
-    ((sum intP t 0 n) + i)) /\ (Zwf 0 (n - i) (n - i2)))).
+   (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (sum alloc intP1 t 0 n) =
+    ((sum alloc intP t 0 n) + i)) /\ (Zwf 0 (n - i) (n - i2)))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 867-1246 *)
+(* Why obligation from file "why/sum2.why", characters 881-1290 *)
 Lemma test2_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -237,17 +237,17 @@ Lemma test2_impl_po_3 :
   forall (i2: Z),
   forall (intP0: ((memory) Z)),
   forall (Pre7: Variant1 = (n - i2)),
-  forall (Pre6: (0 <= i2 /\ i2 <= n) /\ (sum intP0 t 0 n) =
-                ((sum intP t 0 n) + i2)),
+  forall (Pre6: (0 <= i2 /\ i2 <= n) /\ (sum alloc intP0 t 0 n) =
+                ((sum alloc intP t 0 n) + i2)),
   forall (Test1: i2 >= n),
-  (sum intP0 t 0 n) = ((sum intP t 0 n) + n) /\
-  (assigns alloc intP intP0 (all_loc t)).
+  (sum alloc intP0 t 0 n) = ((sum alloc intP t 0 n) + n) /\
+  (assigns alloc intP intP0 (all_loc (pointer_loc t))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sum2.why", characters 920-1027 *)
+(* Why obligation from file "why/sum2.why", characters 934-1071 *)
 Lemma test2_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -256,7 +256,8 @@ Lemma test2_impl_po_4 :
   forall (Pre8: (valid_range alloc t 0 n)),
   forall (i1: Z),
   forall (Post1: i1 = 0),
-  (0 <= i1 /\ i1 <= n) /\ (sum intP t 0 n) = ((sum intP t 0 n) + i1).
+  (0 <= i1 /\ i1 <= n) /\ (sum alloc intP t 0 n) =
+  ((sum alloc intP t 0 n) + i1).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
