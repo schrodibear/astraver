@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.49 2004-03-23 14:21:40 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.50 2004-03-23 14:47:59 marche Exp $ i*)
 
 
 open Format
@@ -27,6 +27,11 @@ open Clogic
 let global_var_for_type t =
   match t.ctype_node with
     | CTint _ -> "intP"
+    | _ -> assert false (* TODO *)
+
+let global_var_for_array_type t =
+  match t.ctype_node with
+    | CTarray(ty,_) -> global_var_for_type ty
     | _ -> assert false (* TODO *)
 
 let interp_rel = function
@@ -383,23 +388,49 @@ and interp_lvalue e =
 module StringMap = Map.Make(String)
 
 let collect_locations acc loc =
-  match loc with
-    | Lterm t -> 
-	begin
-	  match t.term_node with
-	    | Tarrow(e,f) ->
-		let loc = LApp("pointer_loc",[interp_term (Some "") "" e]) in
-		begin
-		  try
-		    let p = StringMap.find f acc in
-		    StringMap.add f (LApp("union_loc",[loc;p])) acc
-		  with
-		      Not_found -> StringMap.add f loc acc
-		end
+  let var,iloc =
+    match loc with
+      | Lterm t -> 
+	  begin
+	    match t.term_node with
+	      | Tarrow(e,f) ->
+		  f,LApp("pointer_loc",[interp_term (Some "") "" e])
+	      | Tarrget(e1,e2) -> 
+		  let var = global_var_for_array_type e1.term_type in
+		  let loc = 
+		    LApp("pointer_loc",
+			 [LApp("shift",
+			       [interp_term (Some "") "" e1;
+				interp_term (Some "") "" e2])]) 
+		  in
+		  var,loc
 	    | _ -> assert false (* TODO *)
-	end
-    | Lstar t -> assert false (* TODO *)
-    | Lrange(t1,t2,t3) -> assert false (* TODO *)
+	  end
+    | Lstar t -> 
+	let var = global_var_for_array_type t.term_type in
+	let loc = 
+	  LApp("all_loc",[interp_term (Some "") "" t])
+	in
+	var,loc
+	
+    | Lrange(t1,t2,t3) -> 
+	let var = global_var_for_array_type t1.term_type in
+	let loc = 
+	  LApp("range_loc",
+	       [interp_term (Some "") "" t1;
+		interp_term (Some "") "" t2;
+		interp_term (Some "") "" t3;])
+	in
+	var,loc
+
+
+  in
+  try
+    let p = StringMap.find var acc in
+    StringMap.add var (LApp("union_loc",[iloc;p])) acc
+  with
+      Not_found -> StringMap.add var iloc acc
+
 
 
 let interp_assigns locl =
@@ -493,7 +524,7 @@ let rec interp_statement_expr e =
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
 		in
-		build_complex_app (Var v.var_name) targs
+		build_complex_app (Var (v.var_name ^ "_parameter")) targs
 	    | _ -> assert false
 	end
     | TEbinary (_, _, _) -> assert false (* TODO *)

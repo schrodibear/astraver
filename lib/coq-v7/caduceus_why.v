@@ -106,6 +106,12 @@ Admitted.
 (*Why logic*) Definition pointer_loc : pointer -> assign_loc.
 Admitted.
 
+(*Why logic*) Definition all_loc : pointer -> assign_loc.
+Admitted.
+
+(*Why logic*) Definition range_loc : pointer -> Z -> Z -> assign_loc.
+Admitted.
+
 (*Why logic*) Definition union_loc : assign_loc -> assign_loc -> assign_loc.
 Admitted.
 
@@ -118,32 +124,50 @@ Admitted.
   := ((p:pointer) ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicits assigns [1].
 
-(*Why axiom*) Lemma unchanged_pointer_elim :
+(*Why axiom*) Lemma unchanged_pointer_intro :
   ((p1:pointer)
    ((p2:pointer) (~(p1 = p2) -> (unchanged p1 (pointer_loc p2))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_pointer_intro :
+(*Why axiom*) Lemma unchanged_pointer_elim :
   ((p1:pointer)
    ((p2:pointer) ((unchanged p1 (pointer_loc p2)) -> ~(p1 = p2)))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_elim :
+(*Why axiom*) Lemma unchanged_union_intro :
   ((l1:assign_loc)
    ((l2:assign_loc)
     ((p:pointer)
      ((unchanged p l1) /\ (unchanged p l2) -> (unchanged p (union_loc l1 l2)))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_intro1 :
+(*Why axiom*) Lemma unchanged_union_elim1 :
   ((l1:assign_loc)
    ((l2:assign_loc)
     ((p:pointer) ((unchanged p (union_loc l1 l2)) -> (unchanged p l1))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_intro2 :
+(*Why axiom*) Lemma unchanged_union_elim2 :
   ((l1:assign_loc)
    ((l2:assign_loc)
     ((p:pointer) ((unchanged p (union_loc l1 l2)) -> (unchanged p l2))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_range_intro :
+  ((p1:pointer)
+   ((p2:pointer)
+    ((a:Z)
+     ((b:Z)
+      (((i:Z) (`a <= i` /\ `i < b` -> ~(p1 = (shift p2 i)))) ->
+       (unchanged p1 (range_loc p2 a b))))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_range_elim :
+  ((p1:pointer)
+   ((p2:pointer)
+    ((a:Z)
+     ((b:Z)
+      ((unchanged p1 (range_loc p2 a b)) ->
+       ((i:Z) (`a <= i` /\ `i < b` -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 

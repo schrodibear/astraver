@@ -92,6 +92,8 @@ axiom false_not_true : false <> true
 (* modeling assigns clauses *)
 
 logic pointer_loc : pointer -> assign_loc
+logic all_loc : pointer -> assign_loc
+logic range_loc : pointer,int,int -> assign_loc
 logic union_loc : assign_loc, assign_loc -> assign_loc
 logic unchanged : pointer,assign_loc -> prop
 
@@ -100,25 +102,38 @@ predicate assigns (a:alloc,m1:'a memory,m2:'a memory,l:assign_loc) =
     (valid(a,p) and unchanged(p,l)) -> acc(m2,p)=acc(m1,p)
 
 
-axiom unchanged_pointer_elim : 
+axiom unchanged_pointer_intro : 
   forall p1:pointer.forall p2:pointer.
     p1 <> p2 -> unchanged(p1,pointer_loc(p2))
 
-axiom unchanged_pointer_intro : 
+axiom unchanged_pointer_elim : 
   forall p1:pointer. forall p2:pointer.
     unchanged(p1,pointer_loc(p2)) -> p1 <> p2
 
-axiom unchanged_union_elim : 
+axiom unchanged_union_intro : 
   forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
      unchanged(p,l1) and unchanged(p,l2) -> 
      unchanged(p,union_loc(l1,l2))
 
-axiom unchanged_union_intro1 : 
+axiom unchanged_union_elim1 : 
   forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
     unchanged(p,union_loc(l1,l2)) -> unchanged(p,l1) 
 
-axiom unchanged_union_intro2 : 
+axiom unchanged_union_elim2 : 
   forall l1:assign_loc. forall l2:assign_loc. forall p:pointer.
     unchanged(p,union_loc(l1,l2)) -> unchanged(p,l2)
+
+axiom unchanged_range_intro :
+  forall p1:pointer.forall p2:pointer.
+    forall a:int. forall b:int.
+ 	(forall i:int.
+	    (a <= i < b) -> (p1 <> shift(p2,i))) -> 
+  	       unchanged(p1,range_loc(p2,a,b))	
+
+axiom unchanged_range_elim :
+  forall p1:pointer.forall p2:pointer.
+    forall a:int. forall b:int.
+       unchanged(p1,range_loc(p2,a,b)) ->
+ 	(forall i:int. a <= i < b -> p1 <> shift(p2,i))  
 
 

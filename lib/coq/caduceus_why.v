@@ -113,6 +113,12 @@ Admitted.
 (*Why logic*) Definition pointer_loc : pointer -> assign_loc.
 Admitted.
 
+(*Why logic*) Definition all_loc : pointer -> assign_loc.
+Admitted.
+
+(*Why logic*) Definition range_loc : pointer -> Z -> Z -> assign_loc.
+Admitted.
+
 (*Why logic*) Definition union_loc : assign_loc -> assign_loc -> assign_loc.
 Admitted.
 
@@ -125,34 +131,52 @@ Admitted.
       ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicit Arguments assigns.
 
-(*Why axiom*) Lemma unchanged_pointer_elim :
+(*Why axiom*) Lemma unchanged_pointer_intro :
   (forall (p1:pointer),
    (forall (p2:pointer), (~(p1 = p2) -> (unchanged p1 (pointer_loc p2))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_pointer_intro :
+(*Why axiom*) Lemma unchanged_pointer_elim :
   (forall (p1:pointer),
    (forall (p2:pointer), ((unchanged p1 (pointer_loc p2)) -> ~(p1 = p2)))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_elim :
+(*Why axiom*) Lemma unchanged_union_intro :
   (forall (l1:assign_loc),
    (forall (l2:assign_loc),
     (forall (p:pointer),
      ((unchanged p l1) /\ (unchanged p l2) -> (unchanged p (union_loc l1 l2)))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_intro1 :
+(*Why axiom*) Lemma unchanged_union_elim1 :
   (forall (l1:assign_loc),
    (forall (l2:assign_loc),
     (forall (p:pointer),
      ((unchanged p (union_loc l1 l2)) -> (unchanged p l1))))).
 Admitted.
 
-(*Why axiom*) Lemma unchanged_union_intro2 :
+(*Why axiom*) Lemma unchanged_union_elim2 :
   (forall (l1:assign_loc),
    (forall (l2:assign_loc),
     (forall (p:pointer),
      ((unchanged p (union_loc l1 l2)) -> (unchanged p l2))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_range_intro :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (forall (a:Z),
+     (forall (b:Z),
+      ((forall (i:Z), (a <= i /\ i < b -> ~(p1 = (shift p2 i)))) ->
+       (unchanged p1 (range_loc p2 a b))))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_range_elim :
+  (forall (p1:pointer),
+   (forall (p2:pointer),
+    (forall (a:Z),
+     (forall (b:Z),
+      ((unchanged p1 (range_loc p2 a b)) ->
+       (forall (i:Z), (a <= i /\ i < b -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 

@@ -1,7 +1,15 @@
 
 /* Dijkstra's dutch flag */
 
+/* en attente de interp
 typedef enum { BLUE, WHITE, RED } color;
+*/
+
+typedef enum { aBLUE, aWHITE, aRED } color;
+
+color BLUE;
+color WHITE;
+color RED;
 
 /*@ predicate isColor(int i) { i == BLUE || i == WHITE || i == RED }
   @*/
@@ -19,7 +27,7 @@ void swap(int t[], int i, int j);
 /*@ requires 
   @   \valid_range(t,0,n) &&
   @   (\forall int k; 0 <= k && k < n => isColor(t[k]))
-  @ assigns t[*]
+  @ assigns t[0 .. n]
   @ ensures 
   @   (\exists int b, int r; 
   @            isMonochrome(t,0,b,BLUE) &&
@@ -39,6 +47,7 @@ void flag(int t[], int n) {
     @ variant r - i
     @*/
   while (i < r) {
+    /* en attente de l'interp du switch 
     switch (t[i]) {
     case BLUE:  
       swap(t, b++, i++);
@@ -50,6 +59,10 @@ void flag(int t[], int n) {
       swap(t, --r, i);
       break;
     }
+    */
+    if (t[i] == BLUE) swap(t, b++, i++);
+    else if (t[i] == WHITE) i++; 
+    else if (t[i] == RED) swap(t, --r, i);
   }
 }
 
