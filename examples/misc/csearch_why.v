@@ -21,27 +21,8 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "csearch.c", characters 244-250 *)
-Lemma index_po_2 : 
-  (n: Z)
-  (v: Z)
-  (t: (array Z))
-  (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `n - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`)))
-  (Test4: `i0 < n`)
-  (Test3: `(access t i0) = v`)
-  (`0 <= i0` /\ `i0 < n` -> `(access t i0) = v`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "csearch.c", characters 229-250 *)
-Lemma index_po_3 : 
+Lemma index_po_2 : 
   (n: Z)
   (v: Z)
   (t: (array Z))
@@ -60,7 +41,6 @@ Lemma index_po_3 :
     (Zwf `0` `n - i` `n - i0`))).
 Proof.
 Intuition.
-Intuition.
 Assert `k=i0` \/ `k<i0`. Omega. Intuition.
 Apply Test2; Subst k; Auto.
 Apply (H0 k); Auto with *.
@@ -68,7 +48,7 @@ Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "csearch.c", characters 150-198 *)
-Lemma index_po_4 : 
+Lemma index_po_3 : 
   (n: Z)
   (v: Z)
   (t: (array Z))
@@ -81,7 +61,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "csearch.c", characters 116-263 *)
-Lemma index_po_5 : 
+Lemma index_po_4 : 
   (n: Z)
   (v: Z)
   (t: (array Z))
@@ -115,27 +95,8 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "csearch.c", characters 584-585 *)
-Lemma index2_po_2 : 
-  (n: Z)
-  (v: Z)
-  (t: (array Z))
-  (Pre5: `(array_length t) = n`)
-  (result: Z)
-  (Post4: result = `0`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre4: Variant1 = `n - i0`)
-  (Pre3: `0 <= i0` /\ ((k:Z) (`0 <= k` /\ `k < i0` -> `(access t k) <> v`)))
-  (Test4: `i0 < n`)
-  (Test3: `(access t i0) = v`)
-  (`0 <= i0` /\ `i0 < n` -> `(access t i0) = v`).
-Proof.
-Intuition.
-Save.
-
 (* Why obligation from file "csearch.c", characters 562-586 *)
-Lemma index2_po_3 : 
+Lemma index2_po_2 : 
   (n: Z)
   (v: Z)
   (t: (array Z))
@@ -161,7 +122,7 @@ Unfold Zwf; Omega.
 Save.
 
 (* Why obligation from file "csearch.c", characters 483-531 *)
-Lemma index2_po_4 : 
+Lemma index2_po_3 : 
   (n: Z)
   (v: Z)
   (t: (array Z))
@@ -174,7 +135,7 @@ Intuition.
 Save.
 
 (* Why obligation from file "csearch.c", characters 609-610 *)
-Lemma index2_po_5 : 
+Lemma index2_po_4 : 
   (n: Z)
   (v: Z)
   (t: (array Z))

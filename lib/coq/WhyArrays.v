@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyArrays.v,v 1.7 2002-12-05 13:22:27 filliatr Exp $ *)
+(* $Id: WhyArrays.v,v 1.8 2003-03-03 14:32:03 filliatr Exp $ *)
 
 (**************************************)
 (* Functional arrays, for use in Why. *)
@@ -86,7 +86,7 @@ Axiom new_def : (T:Set)(n:Z)(v0:T)
                 (i:Z) `0 <= i < n` -> (access (new n v0) i) = v0.
 
 Axiom store_def_1 : (T:Set)(t:(array T))(v:T)
-                    (i:Z) `0 <=i < (array_length t)` ->
+                    (i:Z) `0 <= i < (array_length t)` ->
                     (access (store t i v) i) = v.
 
 Axiom store_def_2 : (T:Set)(t:(array T))(v:T)

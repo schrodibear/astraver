@@ -5,37 +5,6 @@ Require Why.
 
 
 
-
-
-
-
-
-
-
-(* Why obligation from file "good/exns.mlw", characters 461-462 *)
-Lemma p4_po_1 : 
-  (Test1: false = true)
-  `2 = 1`.
-Proof.
-Intro H; Discriminate H.
-Save.
-
-(* Why obligation from file "good/exns.mlw", characters 522-546 *)
-Lemma p5_po_1 : 
-  (Test1: false = true)
-  False.
-Proof.
-Intro H; Discriminate H.
-Save.
-
-(* Why obligation from file "good/exns.mlw", characters 661-662 *)
-Lemma p6_po_1 : 
-  (Test2: true = false)
-  False.
-Proof.
-Intro H; Discriminate H.
-Save.
-
 (* Why obligation from file "good/exns.mlw", characters 838-845 *)
 Lemma p7_po_1 : 
   (x0: Z)

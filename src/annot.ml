@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.9 2003-01-23 13:44:38 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.10 2003-03-03 14:32:03 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -173,7 +173,7 @@ let rec normalize p =
 	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
     | If (e1, e2, e3) ->
-	change_desc p (If (normalize_boolean env e1, e2, e3))
+	change_desc p (If (normalize_boolean false env e1, e2, e3))
     | TabAff (_, x, ({desc=Expression t1} as e1), ({desc=Expression t2} as e2))
       when post e1 = None && post e2 = None && k.c_post = None ->
 	let t1 = put_label_term env p.info.label (unref_term t1) in
@@ -182,7 +182,7 @@ let rec normalize p =
 	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
     | While (b, invopt, var, e) ->
-	let b' = normalize_boolean env b in
+	let b' = normalize_boolean true env b in
 	check_while_test b';
 	let p = change_desc p (While (b', invopt, var, e)) in
 	(match post p with
@@ -204,9 +204,10 @@ let rec normalize p =
 	p
 
 (* [normalize_boolean b] checks if the boolean expression [b] (of type
-   [bool]) is annotated; if not, tries to give it an annotation. *)
+   [bool]) is annotated; if not, tries to give it an annotation. 
+   [force] indicates whether annotating is mandatory. *)
 
-and normalize_boolean env b =
+and normalize_boolean force env b =
   let k = b.info.kappa in
   let give_post b q =
     let q = option_app (force_post_loc b.info.loc) q in
@@ -219,14 +220,14 @@ and normalize_boolean env b =
 	give_post b (force_bool_name q)
     | None -> begin
 	match b.desc with
-	  | Expression c ->
+	  | Expression c when force ->
 	      (* expression E -> result=E *)
 	      let c = equality (Tvar Ident.result) (unref_term c) in
 	      give_post b (create_post c)
 	  | If (e1, e2, e3) ->
-	      let ne1 = normalize_boolean env e1 in
-	      let ne2 = normalize_boolean env e2 in
-	      let ne3 = normalize_boolean env e3 in
+	      let ne1 = normalize_boolean force env e1 in
+	      let ne2 = normalize_boolean force env e2 in
+	      let ne3 = normalize_boolean force env e3 in
 	      begin  match post ne1, post ne2, post ne3 with
 		| Some q1, Some q2, Some q3 ->
 		    let q1t,q1f = decomp_boolean q1 in

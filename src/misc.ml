@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.71 2003-02-27 16:55:34 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.72 2003-03-03 14:32:03 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -537,10 +537,10 @@ let rec print_predicate fmt = function
       fprintf fmt "(not %a)" print_predicate a
   | Forall (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(forall %a:@ %a)@]" 
-	Ident.print b print_predicate p
+	Ident.dbprint b print_predicate p
   | Exists (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
-	Ident.print b print_predicate p
+	Ident.dbprint b print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 

@@ -34,6 +34,13 @@ BUGS
 IMPLEMENTATION
 ==============
 
+ - auto-discharging of obligations when WP in context: quantification over
+   booleans is not handled correctly
+
+ - relax the no-side-effect condition on if-then-else test
+   (currently validation would not type-check, since it is built-in
+   in Vcg and Coq that the test has no side-effect)
+
  - do not overwrite .bak if no change
 
  - references mentioned in specs are added to read references; e.g.

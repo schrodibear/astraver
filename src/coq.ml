@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.88 2003-02-18 16:54:56 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.89 2003-03-03 14:32:03 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -529,7 +529,7 @@ let push_validation id tt v = Queue.add (id,tt,v) valid_q
 
 let print_validation fmt (id, tt, v) =
   fprintf fmt 
-    "@[Definition %s (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n" 
+    "@[Definition %s (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n@\n" 
     id print_cc_type tt print_cc_term v
 
 let print_validations fwe fmt =
