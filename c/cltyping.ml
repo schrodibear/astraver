@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.49 2004-06-30 08:57:53 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.50 2004-06-30 09:42:37 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -617,7 +617,11 @@ let print_allocs =
   let varx = { term_node = Tvar x; term_type = c_pointer c_void } in
   fun fmt p -> fprintf fmt "fun x -> %a" print_predicate (p varx)
 
-let local_alloc_post loc v t =
+let separation loc v ?(allocs=(fun x -> Ptrue)) t =
+  let not_alias x y = 
+    let ba t = { term_node = Tbase_addr t; term_type = c_addr } in 
+    Prel (ba x, Neq, ba y)
+  in
 (*
 [local_alloc_for t] returns a pair (allocs,f), f is a formula expressing that 
 all allocations in [t] are not aliased and [allocs] is a function expressing
@@ -651,7 +655,7 @@ that a pointer is different from all allocated pointers in [t]
     match t.term_type.ctype_node with
     | CTstruct (n, _) ->
 	let allocs_t = allocs t in
-	let allocs x = make_and (allocs x) (Prel (x, Neq, t)) in
+	let allocs x = make_and (allocs x) (not_alias x t) in
 	let allocs',form = local_alloc_fields allocs n t in
 	allocs', make_and allocs_t form
     | CTarray (ty, None) ->
@@ -665,7 +669,6 @@ that a pointer is different from all allocated pointers in [t]
 	       pi)
 	in
 	let allocs_t = allocs t in
-	let allocs x = make_and (allocs x) (Prel (x, Neq, t)) in
 	begin match ty.ctype_node with
 	  | CTstruct (n, _) ->
 	      Format.eprintf "  cas d'un tableau de struct@.";
@@ -674,20 +677,26 @@ that a pointer is different from all allocated pointers in [t]
 	      let ti = 
 		{ term_node = Tbinop (t, Badd, vari); term_type = t.term_type }
 	      in
-	      let allocs_i,form_i = local_alloc_fields allocs n ti in
+	      let allocs_i,_ = local_alloc_fields (fun x -> Ptrue) n ti in
 	      let j = default_var_info (fresh_index ()) in
 	      let varj ={ term_node = Tvar j; term_type = c_int } in
 	      let allocs' x =
-		(* forall i 0<=i<ts -> i<>j -> allocs_i x *)
-		forall_index i vari
-		  (make_implies (Prel (vari, Neq, varj)) (allocs_i x))
+		(* allocs x and x<>t and 
+		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
+		make_and 
+		  (make_and (allocs x) (not_alias x t))
+		  (forall_index i vari
+		     (make_implies (Prel (vari, Neq, varj)) (allocs_i x)))
 	      in
 	      let tj = 
 		{ term_node = Tbinop (t, Badd, varj); term_type = t.term_type }
 	      in
 	      let _,form_j = local_alloc_fields allocs' n tj in
-	      (* x -> forall i 0<=i<ts -> allocs_i x *)
-	      (fun x -> forall_index i vari (allocs_i x)),
+	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
+	      (fun x -> 
+		 make_and 
+		   (make_and (allocs x) (not_alias x t))
+		   (forall_index i vari (allocs_i x))),
 	      (* forall j 0<=j<ts -> form_j *)
 	      begin let p = make_and allocs_t (forall_index j varj form_j) in
 	      Format.eprintf "  local_alloc_for (struct arr) ---> %a@." print_predicate p; p end
@@ -696,29 +705,36 @@ that a pointer is different from all allocated pointers in [t]
 	      let i = default_var_info (fresh_index ()) in
 	      let vari = { term_node = Tvar i; term_type = c_int } in
 	      let ti = { term_node = Tarrget (t, vari); term_type = ty } in
-	      let allocs_i,_ = local_alloc_for allocs ti in
+	      let allocs_i,_ = local_alloc_for (fun x -> Ptrue) ti in
 	      let j = default_var_info (fresh_index ()) in
 	      let varj ={ term_node = Tvar j; term_type = c_int } in
 	      let allocs' x =
-		(* forall i 0<=i<ts -> i<>j -> allocs_i x *)
-		forall_index i vari
-		  (make_implies (Prel (vari, Neq, varj)) (allocs_i x))
+		(* allocs x and x<> t and
+		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
+		make_and 
+		  (make_and (allocs x) (not_alias x t))
+		  (forall_index i vari
+		     (make_implies (Prel (vari, Neq, varj)) (allocs_i x)))
 	      in
 	      let tj = { term_node = Tarrget (t, varj); term_type = ty } in
 	      let _,form_j = local_alloc_for allocs' tj in
-	      (* x -> forall i 0<=i<ts -> allocs_i x *)
-	      (fun x -> forall_index i vari (allocs_i x)),
+	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
+	      (fun x -> 
+		 make_and 
+		   (make_and (allocs x) (not_alias x t))
+		   (forall_index i vari (allocs_i x))),
 	      (* forall j 0<=j<ts -> form_j *)
 	      begin let p = make_and allocs_t (forall_index j varj form_j) in
 	      Format.eprintf "  local_alloc_for (other arr) ---> %a@." print_predicate p; p end
 	  | _ ->
+	      let allocs x = make_and (allocs x) (not_alias x t) in
 	      allocs, allocs_t
 	end
     | _ ->
 	Format.eprintf "autre (%a)@." print_term t;
 	allocs, Ptrue
   in
-  snd (local_alloc_for (fun x -> Ptrue) t)
+  local_alloc_for allocs t
 
 (****
 	let allocs_before i op =

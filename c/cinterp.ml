@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.89 2004-06-29 12:37:39 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.90 2004-06-30 09:42:37 filliatr Exp $ i*)
 
 
 open Format
@@ -836,10 +836,16 @@ let interp_spec effect_reads effect_assigns s =
   in 
   (tpre,tpost)
 
+let alloc_global =
+  let allocs = ref (fun x -> Ptrue) in
+  fun loc v t ->
+    let allocs',form = Cltyping.separation ~allocs:!allocs loc v t in
+    allocs := allocs';
+    Pand (form, Cltyping.valid_for_type loc v t)
 
 let alloc_on_stack loc v t =
   let form = 
-    Pand (Cltyping.local_alloc_post loc v t,
+    Pand (snd (Cltyping.separation loc v t),
 	  Cltyping.valid_for_type ~fresh:true loc v t) 
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
@@ -1164,7 +1170,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	| CTstruct _ | CTarray _ -> 
 	    let id = "valid_" ^ v.var_name in
 	    let t = { term_node = Tvar v; term_type = ctype } in
-	    add_weak_invariant id (Cltyping.valid_for_type decl.loc v t)
+	    add_weak_invariant id (alloc_global decl.loc v t)
 	| _ -> 
 	    ()
       end;
