@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.60 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.61 2002-10-28 13:22:00 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -309,8 +309,7 @@ EXTEND
   [ [ c = assertion -> (c,[]) 
     | c = assertion; "|"; l = LIST1 exn_condition SEP "|" -> (c,l) 
     | "|"; l = LIST1 exn_condition SEP "|" -> 
-	Format.eprintf "%awarning: no postcondition; false inserted@\n" 
-	  Loc.report loc;
+	wprintf loc "no postcondition; false inserted@\n";
 	(anonymous (mk_pp loc PPfalse), l)
   ] ]
   ;

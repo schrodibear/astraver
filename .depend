@@ -44,9 +44,9 @@ src/main.cmx: src/ast.cmi src/cc.cmi src/cinterp.cmx src/clexer.cmx \
     src/ltyping.cmx src/misc.cmx src/mlize.cmx src/monad.cmx src/options.cmx \
     src/parser.cmx src/ptree.cmi src/pvs.cmx src/red.cmx src/report.cmx \
     src/types.cmi src/typing.cmx src/util.cmx src/vcg.cmx src/wp.cmx 
-src/misc.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/ident.cmi \
+src/misc.cmo: src/ast.cmi src/cc.cmi src/effect.cmi src/ident.cmi src/loc.cmi \
     src/logic.cmi src/ptree.cmi src/types.cmi src/misc.cmi 
-src/misc.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/ident.cmx \
+src/misc.cmx: src/ast.cmi src/cc.cmi src/effect.cmx src/ident.cmx src/loc.cmx \
     src/logic.cmx src/ptree.cmi src/types.cmi src/misc.cmi 
 src/mlize.cmo: src/ast.cmi src/cc.cmi src/env.cmi src/ident.cmi src/logic.cmi \
     src/misc.cmi src/monad.cmi src/rename.cmi src/types.cmi src/util.cmi \
@@ -133,8 +133,8 @@ src/red.cmi: src/cc.cmi src/logic.cmi
 src/rename.cmi: src/ident.cmi 
 src/report.cmi: src/error.cmi src/loc.cmi 
 src/types.cmi: src/effect.cmi src/ident.cmi src/logic.cmi 
-src/typing.cmi: src/ast.cmi src/env.cmi src/loc.cmi src/logic.cmi \
-    src/ptree.cmi src/types.cmi 
+src/typing.cmi: src/ast.cmi src/env.cmi src/loc.cmi src/ptree.cmi \
+    src/types.cmi 
 src/util.cmi: src/ast.cmi src/cc.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/cc.cmi src/ident.cmi src/logic.cmi src/types.cmi 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.77 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.78 2002-10-28 13:22:00 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -310,7 +310,14 @@ let saturation loc e (a,al) =
     if not (List.mem x xs) then raise_located loc (CannotBeRaised x);
   in
   List.iter check al;
-  let set_post x = x, try List.assoc x al with Not_found -> default_post in
+  let set_post x = 
+    try 
+      x, List.assoc x al 
+    with Not_found -> 
+      wprintf loc "no postcondition for exception %a; false inserted@\n" 
+	Ident.print x;
+      x, default_post 
+  in
   (a, List.map set_post xs)
 
 (*s Typing programs. We infer here the type with effects. 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.45 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.46 2002-10-28 13:22:00 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -196,4 +196,4 @@ val print_assertion : formatter -> assertion -> unit
 val print_wp : formatter -> assertion option -> unit
 
 val warning : string -> unit
-val wprintf : ('a, Format.formatter, unit) format -> 'a
+val wprintf : Loc.t -> ('a, Format.formatter, unit) format -> 'a

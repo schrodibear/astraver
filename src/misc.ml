@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.54 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.55 2002-10-28 13:22:00 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -121,7 +121,8 @@ let post_name_from =
       id'
 
 let warning s = Format.eprintf "warning: %s@\n" s
-let wprintf f = Format.eprintf "warning: "; Format.eprintf f
+let wprintf loc f = 
+  Format.eprintf "%awarning: " Loc.report loc; Format.eprintf f
 
 (*s Various utility functions. *)
 
