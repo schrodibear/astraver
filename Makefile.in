@@ -239,7 +239,7 @@ source: doc/manual.ps
 	cp CHANGES export/$(NAME).tar.gz $(FTP)
 	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
 
-EXFILES = lib/coq/*.v examples/*/*.v examples/*/*.ml 
+EXFILES = lib/coq/*.v examples/*/*.v examples/*/*.mlw
 
 export-examples:
 	cp --parents $(EXFILES) $(WWW)
