@@ -58,8 +58,8 @@ OCAMLLIB=`$OCAMLC -v | tail -1 | cut -f 4 -d " "`
 echo "ocaml library path is $OCAMLLIB"
 
 case $OCAMLVERSION in
-  0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*)
-        AC_MSG_ERROR(You need Objective 3.07 or later);;
+  0.*|1.*|2.00|3.00*|3.01*|3.02*|3.03*|3.04*|3.05*|3.06*|3.07*)
+        AC_MSG_ERROR(You need Objective 3.08 or later);;
   3.07*)
 	OCAMLV=307;;
   3.08*)
