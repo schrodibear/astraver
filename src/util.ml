@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.95 2004-07-05 11:58:47 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.96 2004-07-08 07:12:29 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -288,6 +288,13 @@ let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 (* [decomp_boolean c] returns the specs R and S of a boolean expression *)
 
 let equality t1 t2 = Papp (t_eq, [t1; t2])
+
+let tequality v t1 t2 = match v with
+  | PureType PTint -> Papp (t_eq_int, [t1; t2])
+  | PureType PTbool -> Papp (t_eq_bool, [t1; t2])
+  | PureType PTreal -> Papp (t_eq_real, [t1; t2])
+  | PureType PTunit -> Papp (t_eq_unit, [t1; t2])
+  | _ -> Papp (t_eq, [t1; t2])
 
 let decomp_boolean ({ a_value = c }, _) =
   (* q -> if result then q(true) else q(false) *)

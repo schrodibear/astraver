@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.27 2004-07-07 15:27:32 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.28 2004-07-08 07:12:29 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -119,10 +119,12 @@ let create_post c = Some (post_named c, [])
 
 let is_conditional p = match p.desc with If _ -> true | _ -> false
 
+(* BUG: use is_eq and not t_eq
 let is_equality = function
   | Some ({ a_value = Papp (id, [Tvar t1; t2]) }, []) -> 
       id == t_eq && t1 == result
   | _ -> false
+*)
 
 let get_equality_rhs = function
   | Some ({ a_value = Papp (id, [Tvar t1; t2]) }, []) 
@@ -390,7 +392,7 @@ let q_true_false q =
   simplify ctrue, simplify cfalse
 
 let is_result_eq = function
-  | Papp (id, [Tvar id'; t]) when id == t_eq && id' == result -> Some t
+  | Papp (id, [Tvar id'; t]) when is_eq id && id' == result -> Some t
   | _ -> None
 
 let a_values = List.map (fun a -> a.a_value)
@@ -403,7 +405,7 @@ let rec purify p =
       | Expression t when post p = None -> 
 	  a_values (pre p), 
 	  a_values p.info.obligations,
-	  equality (Tvar Ident.result) (unref_term t)
+	  tequality (result_type p) (Tvar Ident.result) (unref_term t)
       | LetIn (x, e1, e2) when post p = None -> 
 	  let pre1,o1,post1 = pure e1 in
 	  let pre2,o2,post2 = pure e2 in
@@ -485,5 +487,67 @@ let rec purify p =
 	  | _ -> assert false
 	end else
 	  map_desc purify p
+    | TabAff (_, x, e1, e2) ->
+	let e1 = purify e1 in
+	let e2 = purify e2 in
+	if is_pure e1 && is_pure e2 then begin
+	  match post e1, post e2 with
+	    | Some ({a_value=q1},_), Some ({a_value=q2},_) -> begin
+		match is_result_eq q1, is_result_eq q2 with
+		  | Some t1, Some t2 ->
+		let t1 = put_label_term env p.info.label (unref_term t1) in
+		let t2 = put_label_term env p.info.label (unref_term t2) in
+		let t = make_raw_store env (x, at_id x p.info.label) t1 t2 in
+		let q = create_post (equality (Tvar x) t) in
+		post_if_none env q p
+	    | _ ->
+		map_desc purify p
+	      end
+	    | _ ->
+		map_desc purify p
+	  end else
+	    map_desc purify p
+    | While (b, invopt, var, e) ->
+	let b = purify b in
+	let e = purify e in
+	let p = match post b with
+          (* test is not annotated -> translation using an exception *)
+	  | None ->
+	      let effect_and_exit k = 
+		let ef = Effect.add_exn exit_exn k.c_effect in
+		let k' = type_c_of_v k.c_result_type in
+		{ k' with c_effect = ef }
+	      in
+	      let bloc = b.info.loc in
+	      let praise_exit = 
+		make_raise bloc exit_exn (PureType PTunit) env
+	      in
+	      let body = 
+		(* if b then e else raise Exit *)
+		make_lnode e.info.loc (If (b, e, praise_exit))
+		  env [] (effect_and_exit p.info.kappa)
+	      in
+	      let d = 
+		Try 
+		  (make_lnode p.info.loc
+		     (While (make_annot_bool bloc true env, 
+			     invopt, var, body))
+		     env [] (effect_and_exit p.info.kappa),
+		     [ (exit_exn, None), make_void p.info.loc env])
+	      in
+	      change_desc p d
+ 	  (* test is annotated -> postcondition is [inv and not test] *)
+	  | Some _ ->
+	      (***
+		let p = change_desc p (While (b, invopt, var, e)) in
+		if post p = None then
+		let q = while_post p.info.loc p.info b invopt in
+		force_post env q p
+		else
+	      ***)
+	      p
+	in
+	let q = optpost_app (change_label "" p.info.label) (post p) in
+	force_post env q p
     | _ -> 
 	map_desc purify p

@@ -3,17 +3,17 @@
 
 Require Import Why.
 
-(*Why*) Parameter f :
-  forall (_: unit), forall (x: Z),
-  (sig_2 Z unit (fun (x0: Z) (result: unit)  => (x0 = (1 - x)))).
 
-(* Why obligation from file "good/wpcalls.mlw", characters 146-150 *)
+(* Why obligation from file "good/wpcalls.mlw", characters 184-206 *)
 Lemma p_po_1 : 
   forall (x: Z),
-  forall (t: unit),
-  forall (Post1: t = tt),
-  (forall (x0:Z),
-   (x0 = (1 - x) -> (forall (x1:Z), (x1 = (1 - x0) -> x1 = x)))).
+  forall (result: unit),
+  forall (Post1: result = tt),
+  forall (x0: Z),
+  forall (Post5: x0 = (1 - x)),
+  forall (x1: Z),
+  forall (Post7: x1 = (1 - x0)),
+  x1 = x.
 Proof.
 intuition.
 Qed.

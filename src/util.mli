@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.42 2004-07-05 11:58:47 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.43 2004-07-08 07:12:29 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -52,6 +52,7 @@ val decomp_kappa : type_c ->
   (Ident.t * type_v) * Effect.t * precondition list * postcondition option
 
 val equality : term -> term -> predicate
+val tequality : type_v -> term -> term -> predicate
 
 val decomp_boolean : postcondition -> predicate * predicate
 
