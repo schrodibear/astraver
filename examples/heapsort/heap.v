@@ -1,4 +1,4 @@
-(**************************************************************************)
+(* Load Programs. *)(**************************************************************************)
 (*                                                                        *)
 (* Proof of the Heapsort Algorithm.                                       *)
 (*                                                                        *)
@@ -7,13 +7,14 @@
 (*                                                                        *)
 (**************************************************************************)
 
-Require ZArith.
-Require Why.
-Require Omega.
+Require Import ZArith.
+Require Import Why.
+Require Import Omega.
 
-Tactic Definition Omega' := Abstract Omega.
+Ltac Omega' := abstract omega.
 
-Implicit Arguments On.
+Set Implicit Arguments.
+Unset Strict Implicit.
 
 (* First we define the heap structure.
  * 
@@ -29,145 +30,160 @@ Implicit Arguments On.
  * It is expressed by the predicate (heap t n k), defined as follows:
  *)
 
-Inductive heap [t:(array Z); n:Z] : Z -> Prop :=
-  heap_cons : (k:Z) 
-     `0 <= k <= n`
-  -> (`2*k+1 <= n` -> (Zge #t[k] #t[`2*k+1`]))
-  -> (`2*k+1 <= n` -> (heap t n `2*k+1`))
-  -> (`2*k+2 <= n` -> (Zge #t[k] #t[`2*k+2`]))
-  -> (`2*k+2 <= n` -> (heap t n `2*k+2`))
-  -> (heap t n k).
+Inductive heap (t:array Z) (n:Z) : Z -> Prop :=
+    heap_cons :
+      forall k:Z,
+        (0 <= k <= n)%Z ->
+        ((2 * k + 1 <= n)%Z -> (access t k >= access t (2 * k + 1))%Z) ->
+        ((2 * k + 1 <= n)%Z -> heap t n (2 * k + 1)%Z) ->
+        ((2 * k + 2 <= n)%Z -> (access t k >= access t (2 * k + 2))%Z) ->
+        ((2 * k + 2 <= n)%Z -> heap t n (2 * k + 2)%Z) -> heap t n k.
 
 (* Some lemmas about heaps *)
 
 (* A tree reduce to one element is a heap *)
 
 Lemma heap_leaf :
-  (t:(array Z))(n:Z)(k:Z) 
-    `0 <= k <= n` -> `2*k >= n` -> (heap t n k).
+ forall (t:array Z) (n k:Z),
+   (0 <= k <= n)%Z -> (2 * k >= n)%Z -> heap t n k.
 Proof.
-Intros t n k H1k H2k.
-Apply heap_cons;
-  [ Omega'
-  | (Intro; Absurd `2*k >= n`; [ Omega' | Assumption ])
-  | (Intro; Absurd `2*k >= n`; [ Omega' | Assumption ])
-  | (Intro; Absurd `2*k >= n`; [ Omega' | Assumption ])
-  | (Intro; Absurd `2*k >= n`; [ Omega' | Assumption ]) ].
-Save.
+intros t n k H1k H2k.
+apply heap_cons;
+ [ Omega'
+ | intro; absurd (2 * k >= n)%Z; [ Omega' | assumption ]
+ | intro; absurd (2 * k >= n)%Z; [ Omega' | assumption ]
+ | intro; absurd (2 * k >= n)%Z; [ Omega' | assumption ]
+ | intro; absurd (2 * k >= n)%Z; [ Omega' | assumption ] ].
+Qed.
 
 (* The tree with only two elements (it is the case when 2k+1 is equal
  * to n, the greatest element) is a heap as soon as t[k] <= t[2k+1] *)
 
-Lemma heap_son : 
-  (t:(array Z))(n:Z) `n >= 0` ->
-    (k:Z) `2*k+1 = n` -> (Zge #t[k] #t[`2*k+1`]) -> (heap t n k).
+Lemma heap_son :
+ forall (t:array Z) (n:Z),
+   (n >= 0)%Z ->
+   forall k:Z,
+     (2 * k + 1)%Z = n ->
+     (access t k >= access t (2 * k + 1))%Z -> heap t n k.
 Proof.
-Intros t n Hn k Hk Ht.
-Apply heap_cons; 
-  [ Omega'
-  | Intro; Assumption
-  | Intro; Apply heap_leaf; Omega'
-  | Intro; Absurd `2*k+1 = n`; Omega' 
-  | Intro; Absurd `2*k+1 = n`; Omega' ].
-Save.
+intros t n Hn k Hk Ht.
+apply heap_cons;
+ [ Omega'
+ | intro; assumption
+ | intro; apply heap_leaf; Omega'
+ | intro; absurd ((2 * k + 1)%Z = n); Omega'
+ | intro; absurd ((2 * k + 1)%Z = n); Omega' ].
+Qed.
 
 (* If we have a heap t[k..n] and t[k..n]=t'[k..n] then we have a heap
  * in t'[k..n] *)
 
 Lemma heap_id :
-  (t,t':(array Z))(n,k:Z)
-    (heap t n k) -> (array_id t t' k n) -> (heap t' n k).
+ forall (t t':array Z) (n k:Z),
+   heap t n k -> array_id t t' k n -> heap t' n k.
 Proof.
-Intros t t' n k H_heap.
-Unfold array_id.
-Elim H_heap; Intros; Clear H_heap.
-Apply heap_cons. 
-Assumption.
-Intro; Rewrite <- (H6 k0); 
-  [ Rewrite <- (H6 `2*k0+1`); [ Auto | Idtac ] | Idtac ]; 
-  Clear H0 H1 H2 H3 H4 H5 H6; Omega'.
-Intro; Apply H2; 
-  [ Assumption 
-  | Intros i Hi; Apply (H6 i); Clear H0 H1 H2 H3 H4 H5 H6; Omega' ].
-Intro; Rewrite <- (H6 k0); 
-  [ Rewrite <- (H6 `2*k0+2`); [ Auto | Idtac ] | Idtac ];
-  Clear H0 H1 H2 H3 H4 H5 H6; Omega'.
-Intro; Apply H5; 
-  [ Assumption 
-  | Intros i Hi; Apply (H6 i); Clear H0 H1 H2 H3 H4 H5 H6; Omega' ].
-Save.
+intros t t' n k H_heap.
+unfold array_id.
+elim H_heap; intros; clear H_heap.
+apply heap_cons.
+ assumption.
+intro; rewrite <- (H6 k0);
+ [ rewrite <- (H6 (2 * k0 + 1)%Z); [ auto | idtac ] | idtac ];
+ clear H0 H1 H2 H3 H4 H5 H6; Omega'.
+intro; apply H2;
+ [ assumption
+ | intros i Hi; apply (H6 i); clear H0 H1 H2 H3 H4 H5 H6; Omega' ].
+intro; rewrite <- (H6 k0);
+ [ rewrite <- (H6 (2 * k0 + 2)%Z); [ auto | idtac ] | idtac ];
+ clear H0 H1 H2 H3 H4 H5 H6; Omega'.
+intro; apply H5;
+ [ assumption
+ | intros i Hi; apply (H6 i); clear H0 H1 H2 H3 H4 H5 H6; Omega' ].
+Qed.
 
 (* If t[k..n] is a heap then t[k..n-1] is a heap *)
 
 Lemma heap_weakening :
-  (t:(array Z))(n,k:Z)
-    `1 <= n` -> (heap t n k) -> `k <= n-1` -> (heap t `n-1` k).
+ forall (t:array Z) (n k:Z),
+   (1 <= n)%Z -> heap t n k -> (k <= n - 1)%Z -> heap t (n - 1) k.
 Proof.
-Intros t n k Hn H. 
-Elim H; Intros.
-Apply heap_cons.
-Clear H1 H2 H3 H4 H5 H6; Omega.
-Intro; Apply H1; Clear H2 H3 H4 H5 H6; Omega.
-Intro; Apply H3; Clear H1 H2 H4 H5 H6; Omega.
-Intro; Apply H4; Clear H1 H2 H3 H5 H6; Omega.
-Intro; Apply H6; Clear H1 H2 H3 H4 H5; Omega.
-Save.
+intros t n k Hn H.
+ elim H; intros.
+apply heap_cons.
+clear H1 H2 H3 H4 H5 H6; omega.
+intro; apply H1; clear H2 H3 H4 H5 H6; omega.
+intro; apply H3; clear H1 H2 H4 H5 H6; omega.
+intro; apply H4; clear H1 H2 H3 H5 H6; omega.
+intro; apply H6; clear H1 H2 H3 H4 H5; omega.
+Qed.
 
 (* To prove the lemma heap_all (see further), we need an induction principle
  * following the structure of heaps *)
 
 Lemma heap_induction :
-  (P:Z->Prop)
-  (P `0`) ->
-  ((k:Z) `0 <= k` -> (P k) -> (P `2*k+1`) /\ (P `2*k+2`)) ->
-  (k:Z)`0 <= k` -> (P k).
+ forall P:Z -> Prop,
+   P 0%Z ->
+   (forall k:Z, (0 <= k)%Z -> P k -> P (2 * k + 1)%Z /\ P (2 * k + 2)%Z) ->
+   forall k:Z, (0 <= k)%Z -> P k.
 Proof.
-Intros P H H0 k Hk; Generalize Hk; Pattern k; Apply Z_lt_induction.
-Intros.
-Elim (Z_modulo_2 x); Intro.
+intros P H H0 k Hk; generalize Hk; pattern k; apply Z_lt_induction.
+intros.
+elim (Z_modulo_2 x); intro.
 (* x = 2y+2 *)
-Elim (Z_le_lt_eq_dec `0` x). 
-(* 0 < x *)
-Intro.
-(Elim a; Intros).
-Replace x with `2*(x0-1)+2`.
-Elim (H0 `x0-1`).
-Auto. Omega.
-Apply H1; Omega. Omega.
+elim (Z_le_lt_eq_dec 0 x).
+ (* 0 < x *)
+intro.
+elim a; intros.
+replace x with (2 * (x0 - 1) + 2)%Z.
+elim (H0 (x0 - 1)%Z).
+auto.
+ omega.
+apply H1; omega.
+ omega.
 (* 0 = x *)
-Intro H3. Rewrite <- H3. Assumption. Assumption.
+intro H3.
+ rewrite <- H3.
+ assumption.
+ assumption.
 (* x = 2y+1 *)
-(Elim b; Intros).
-Rewrite p.
-Elim (H0 x0).
-Auto. Omega.
-(Apply H1; Omega).
-Assumption.
-Save.
+elim b; intros.
+rewrite p.
+elim (H0 x0).
+auto.
+ omega.
+apply H1; omega.
+assumption.
+Qed.
 
 (* If t[0..n] is a heap, then every sub-array t[k..n] is also a heap *)
 
 Lemma heap_all :
-  (t:(array Z))(n:Z)
-    (heap t n `0`) -> (i:Z)`0 <= i <= n` -> (heap t n i).
+ forall (t:array Z) (n:Z),
+   heap t n 0 -> forall i:Z, (0 <= i <= n)%Z -> heap t n i.
 Proof.
-Intros t n H0 i H. Generalize H.
-Pattern i.
-Apply heap_induction. Auto.
+intros t n H0 i H.
+ generalize H.
+pattern i.
+apply heap_induction.
+ auto.
 
-Intros.
-Split.
-Intro. Generalize H3.
-Elim H2. Intros.
-(Apply H6; Intuition).
+intros.
+split.
+intro.
+ generalize H3.
+elim H2.
+ intros.
+apply H6; intuition.
 
-Omega.
+omega.
 
-Intro. Generalize H3. 
-Elim H2. Intros.
-(Apply H9; Intuition).
+intro.
+ generalize H3.
+ elim H2.
+ intros.
+apply H9; intuition.
 
-Omega.
-Intuition.
-Save.
+omega.
+intuition.
+Qed.
 

@@ -1,4 +1,4 @@
-(**************************************************************************)
+(* Load Programs. *)(**************************************************************************)
 (*                                                                        *)
 (* Proof of the Bresenham line drawing algorithm.                         *)
 (*                                                                        *)
@@ -9,9 +9,9 @@
 
 (*s Some lemmas about absolute value (over type [Z]). *)
 
-Require ZArith.
-Require Omega.
-Require ZArithRing.
+Require Import ZArith.
+Require Import Omega.
+Require Import ZArithRing.
 
 (*s First a tactic [Case_Zabs] to do case split over [(Zabs x)]: 
     introduces two subgoals, one where [x] is assumed to be non negative
@@ -19,154 +19,186 @@ Require ZArithRing.
     [x] is assumed to be non positive and thus where [Zabs x] is
     replaced by [-x]. *)
 
-Lemma Z_gt_le : (x,y:Z)`x > y` -> `y <= x`.
+Lemma Z_gt_le : forall x y:Z, (x > y)%Z -> (y <= x)%Z.
 Proof.
-Intros; Omega.
-Save.
+intros; omega.
+Qed.
 
-Tactic Definition Case_Zabs a Ha := 
-  Elim (Z_le_gt_dec ZERO a); Intro Ha; 
-  [ Rewrite (Zabs_eq a Ha) 
-  | Rewrite (Zabs_non_eq a (Z_gt_le ZERO a Ha)) ].
+Ltac Case_Zabs a Ha :=
+  elim (Z_le_gt_dec 0 a); intro Ha;
+   [ rewrite (Zabs_eq a Ha)
+   | rewrite (Zabs_non_eq a (Z_gt_le 0 a Ha)) ].
 
 (*s A useful lemma to establish $|a| \le |b|$. *)
 
-Lemma Zabs_le_Zabs : 
-  (a,b:Z)(`b <= a <= 0` \/ `0 <= a <= b`) -> `|a| <= |b|`.
+Lemma Zabs_le_Zabs :
+ forall a b:Z,
+   (b <= a <= 0)%Z \/ (0 <= a <= b)%Z -> (Zabs a <= Zabs b)%Z.
 Proof.
-Intro a; Case_Zabs a Ha; Intro b; Case_Zabs b Hb; Omega.
-Save.
+intro a; Case_Zabs a Ha; intro b; Case_Zabs b Hb; omega.
+Qed.
 
 (*s A useful lemma to establish $|a| \le $. *)
 
-Lemma Zabs_le : (a,b:Z) `0 <= b` -> `-b <= a <= b` <-> `|a| <= b`.
+Lemma Zabs_le :
+ forall a b:Z, (0 <= b)%Z -> (Zopp b <= a <= b)%Z <-> (Zabs a <= b)%Z.
 Proof.
-Intros a b Hb. Case_Zabs a Ha; Split; Omega.
-Save.
+intros a b Hb.
+ Case_Zabs a Ha; split; omega.
+Qed.
 
 (*s Two tactics. [ZCompare x y H] discriminates between [x<y], [x=y] and 
     [x>y] ([H] is the hypothesis name). [RingSimpl x y] rewrites [x] by [y]
     using the [Ring] tactic. *)
 
-Tactic Definition ZCompare x y H :=
-  Elim (Z_gt_le_dec x y); Intro H; 
-  [ Idtac | Elim (Z_le_lt_eq_dec x y H); Clear H; Intro H ].
+Ltac ZCompare x y H :=
+  elim (Z_gt_le_dec x y); intro H;
+   [ idtac | elim (Z_le_lt_eq_dec x y H); clear H; intro H ].
 
-Tactic Definition RingSimpl x y :=
-  Replace x with y; [ Idtac | Ring ].
+Ltac RingSimpl x y := replace x with y; [ idtac | ring ].
 
 (*s Key lemma for Bresenham's proof: if [b] is at distance less or equal 
     than [1/2] from the rational [c/a], then it is the closest such integer.
     We express this property in [Z], thus multiplying everything by [2a]. *)
 
-Lemma closest : 
-  (a,b,c:Z) 
-     `0 <= a`
-  -> `|2*a*b - 2*c| <= a` 
-  -> (b':Z) `|a*b - c| <= |a*b' - c|`.
+Lemma closest :
+ forall a b c:Z,
+   (0 <= a)%Z ->
+   (Zabs (2 * a * b - 2 * c) <= a)%Z ->
+   forall b':Z, (Zabs (a * b - c) <= Zabs (a * b' - c))%Z.
 Proof.
-Intros a b c Ha Hmin.
-Generalize (proj2 ? ? (Zabs_le `2*a*b-2*c` a Ha) Hmin).
-Intros Hmin' b'.
-Elim (Z_le_gt_dec `2*a*b` `2*c`); Intro Habc.
+intros a b c Ha Hmin.
+generalize (proj2 (Zabs_le (2 * a * b - 2 * c) a Ha) Hmin).
+intros Hmin' b'.
+elim (Z_le_gt_dec (2 * a * b) (2 * c)); intro Habc.
 (* 2ab <= 2c *)
-Rewrite (Zabs_non_eq `a*b-c`).
+rewrite (Zabs_non_eq (a * b - c)).
 ZCompare b b' Hbb'.
   (* b > b' *)
-  Rewrite (Zabs_non_eq `a*b'-c`).
-  Apply Zle_left_rev.
-  RingSimpl '`(-(a*b'-c))+(-(-(a*b-c)))` '`a*(b-b')`.
-  Apply Zle_ZERO_mult; Omega.
-  Apply Zge_le.
-  Apply Zge_trans with m := `a*b-c`.
-  Apply Zge_mult_simpl with c := `2`. Omega.
-  RingSimpl '`0*2` '`0`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega.
-  RingSimpl '`a*b'-c` '`a*b'+(-c)`.
-  RingSimpl '`a*b-c` '`a*b+(-c)`.
-  Apply Zle_ge.  
-  Apply Zle_reg_r.
-  Apply Zle_Zmult_pos_left; Omega.
+  rewrite (Zabs_non_eq (a * b' - c)).
+  apply Zle_left_rev.
+  RingSimpl (Zopp (a * b' - c) + Zopp (Zopp (a * b - c)))%Z
+   (a * (b - b'))%Z.
+  apply Zle_ZERO_mult; omega.
+  apply Zge_le.
+  apply Zge_trans with (m := (a * b - c)%Z).
+  apply Zge_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (0 * 2)%Z 0%Z.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+  RingSimpl (a * b' - c)%Z (a * b' + Zopp c)%Z.
+  RingSimpl (a * b - c)%Z (a * b + Zopp c)%Z.
+  apply Zle_ge.
+    apply Zle_reg_r.
+  apply Zle_Zmult_pos_left; omega.
   (* b < b' *)
-  Rewrite (Zabs_eq `a*b'-c`).
-  Apply Zle_mult_simpl with c := `2`. Omega.
-  RingSimpl '`(a*b'-c)*2` '`2*(a*b'-a*b)+2*(a*b-c)`.
-  Apply Zle_trans with `a`. 
-  RingSimpl '`(-(a*b-c))*2` '`-(2*a*b-2*c)`. Omega.
-  Apply Zle_trans with `2*a+(-a)`. Omega.
-  Apply Zle_plus_plus.
-  RingSimpl '`2*a` '`2*a*1`.
-  RingSimpl '`2*(a*b'-a*b)` '`2*a*(b'-b)`.
-  Apply Zle_Zmult_pos_left; Omega.
-  RingSimpl '`2*(a*b-c)` '`2*a*b-2*c`. Omega.
+  rewrite (Zabs_eq (a * b' - c)).
+  apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl ((a * b' - c) * 2)%Z
+   (2 * (a * b' - a * b) + 2 * (a * b - c))%Z.
+  apply Zle_trans with a.
+   RingSimpl (Zopp (a * b - c) * 2)%Z (Zopp (2 * a * b - 2 * c)).
+ omega.
+  apply Zle_trans with (2 * a + Zopp a)%Z.
+ omega.
+  apply Zle_plus_plus.
+  RingSimpl (2 * a)%Z (2 * a * 1)%Z.
+  RingSimpl (2 * (a * b' - a * b))%Z (2 * a * (b' - b))%Z.
+  apply Zle_Zmult_pos_left; omega.
+  RingSimpl (2 * (a * b - c))%Z (2 * a * b - 2 * c)%Z.
+ omega.
     (* 0 <= ab'-c *)
-    RingSimpl '`a*b'-c` '`(a*b'-a*b)+(a*b-c)`.
-    RingSimpl '`0` '`a+(-a)`.
-    Apply Zle_plus_plus.
-    RingSimpl '`a` '`a*1`.
-    RingSimpl '`a*1*b'-a*1*b` '`a*(b'-b)`.
-    Apply Zle_Zmult_pos_left; Omega.
-    Apply Zle_mult_simpl with c := `2`. Omega.
-    Apply Zle_trans with `-a`. Omega.  
-    RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega.
+    RingSimpl (a * b' - c)%Z (a * b' - a * b + (a * b - c))%Z.
+    RingSimpl 0%Z (a + Zopp a)%Z.
+    apply Zle_plus_plus.
+    RingSimpl a (a * 1)%Z.
+    RingSimpl (a * 1 * b' - a * 1 * b)%Z (a * (b' - b))%Z.
+    apply Zle_Zmult_pos_left; omega.
+    apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+    apply Zle_trans with (Zopp a).
+ omega.
+      RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
   (* b = b' *)
-  Rewrite <- Hbb'.
-  Rewrite (Zabs_non_eq `a*b-c`). Omega.
-  Apply Zge_le.
-  Apply Zge_mult_simpl with c := `2`. Omega.
-  RingSimpl '`0*2` '`0`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega. 
-  Apply Zge_le.
-  Apply Zge_mult_simpl with c := `2`. Omega.
-  RingSimpl '`0*2` '`0`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega. 
-
+  rewrite <- Hbb'.
+  rewrite (Zabs_non_eq (a * b - c)).
+ omega.
+  apply Zge_le.
+  apply Zge_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (0 * 2)%Z 0%Z.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+   apply Zge_le.
+  apply Zge_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (0 * 2)%Z 0%Z.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+ 
 (* 2ab > 2c *)
-Rewrite (Zabs_eq `a*b-c`).
+rewrite (Zabs_eq (a * b - c)).
 ZCompare b b' Hbb'.
   (* b > b' *)
-  Rewrite (Zabs_non_eq `a*b'-c`).
-  Apply Zle_mult_simpl with c := `2`. Omega.
-  RingSimpl '`(-(a*b'-c))*2` '`2*(c-a*b)+2*(a*b-a*b')`.
-  Apply Zle_trans with `a`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega.
-  Apply Zle_trans with `(-a)+2*a`. Omega.
-  Apply Zle_plus_plus.
-  RingSimpl '`2*(c-a*b)` '`2*c-2*a*b`. Omega.
-  RingSimpl '`2*a` '`2*a*1`.
-  RingSimpl '`2*(a*b-a*b')` '`2*a*(b-b')`.
-  Apply Zle_Zmult_pos_left; Omega.
+  rewrite (Zabs_non_eq (a * b' - c)).
+  apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (Zopp (a * b' - c) * 2)%Z
+   (2 * (c - a * b) + 2 * (a * b - a * b'))%Z.
+  apply Zle_trans with a.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+  apply Zle_trans with (Zopp a + 2 * a)%Z.
+ omega.
+  apply Zle_plus_plus.
+  RingSimpl (2 * (c - a * b))%Z (2 * c - 2 * a * b)%Z.
+ omega.
+  RingSimpl (2 * a)%Z (2 * a * 1)%Z.
+  RingSimpl (2 * (a * b - a * b'))%Z (2 * a * (b - b'))%Z.
+  apply Zle_Zmult_pos_left; omega.
     (* 0 >= ab'-c *)
-    RingSimpl '`a*b'-c` '`(a*b'-a*b)+(a*b-c)`.
-    RingSimpl '`0` '`(-a)+a`.
-    Apply Zle_plus_plus.
-    RingSimpl '`-a` '`a*(-1)`.
-    RingSimpl '`a*b'-a*b` '`a*(b'-b)`.
-    Apply Zle_Zmult_pos_left; Omega.
-    Apply Zle_mult_simpl with c := `2`. Omega.
-    Apply Zle_trans with `a`.
-    RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`.
-    Omega. Omega.
+    RingSimpl (a * b' - c)%Z (a * b' - a * b + (a * b - c))%Z.
+    RingSimpl 0%Z (Zopp a + a)%Z.
+    apply Zle_plus_plus.
+    RingSimpl (Zopp a) (a * (-1))%Z.
+    RingSimpl (a * b' - a * b)%Z (a * (b' - b))%Z.
+    apply Zle_Zmult_pos_left; omega.
+    apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+    apply Zle_trans with a.
+    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+    omega.
+ omega.
   (* b < b' *)
-  Rewrite (Zabs_eq `a*b'-c`).
-  Apply Zle_left_rev.
-  RingSimpl '`a*b'-c+(-(a*b-c))` '`a*(b'-b)`.
-  Apply Zle_ZERO_mult; Omega.
-  Apply Zle_trans with m := `a*b-c`.
-  Apply Zle_mult_simpl with c := `2`. Omega.
-  RingSimpl '`0*2` '`0`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega.
-  RingSimpl '`a*b'-c` '`a*b'+(-c)`.
-  RingSimpl '`a*b-c` '`a*b+(-c)`.
-  Apply Zle_reg_r.
-  Apply Zle_Zmult_pos_left; Omega.
+  rewrite (Zabs_eq (a * b' - c)).
+  apply Zle_left_rev.
+  RingSimpl (a * b' - c + Zopp (a * b - c))%Z (a * (b' - b))%Z.
+  apply Zle_ZERO_mult; omega.
+  apply Zle_trans with (m := (a * b - c)%Z).
+  apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (0 * 2)%Z 0%Z.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+  RingSimpl (a * b' - c)%Z (a * b' + Zopp c)%Z.
+  RingSimpl (a * b - c)%Z (a * b + Zopp c)%Z.
+  apply Zle_reg_r.
+  apply Zle_Zmult_pos_left; omega.
   (* b = b' *)
-  Rewrite <- Hbb'.  
-  Rewrite (Zabs_eq `a*b-c`). Omega.
-  Apply Zle_mult_simpl with c := `2`. Omega.
-  RingSimpl '`0*2` '`0`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega. 
-  Apply Zle_mult_simpl with c := `2`. Omega.
-  RingSimpl '`0*2` '`0`. 
-  RingSimpl '`(a*b-c)*2` '`2*a*b-2*c`. Omega. 
-Save.
+  rewrite <- Hbb'.
+    rewrite (Zabs_eq (a * b - c)).
+ omega.
+  apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (0 * 2)%Z 0%Z.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+   apply Zle_mult_simpl with (c := 2%Z).
+ omega.
+  RingSimpl (0 * 2)%Z 0%Z.
+   RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
+ omega.
+ Qed.

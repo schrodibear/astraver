@@ -1,4 +1,4 @@
-(**************************************************************************)
+(* Load Programs. *)(**************************************************************************)
 (*                                                                        *)
 (* Proof of the Knuth-Morris-Pratt Algorithm.                             *)
 (*                                                                        *)
@@ -7,11 +7,12 @@
 (*                                                                        *)
 (**************************************************************************)
 
-Require Match.
-Require ZArithRing.
-Require Omega.
+Require Import Match.
+Require Import ZArithRing.
+Require Import Omega.
 
-Implicit Arguments On.
+Set Implicit Arguments.
+Unset Strict Implicit.
 
 (* next[j] is the maximal n < j such that the n first elements of p
  * match the n last elemnts of p[0..j-1]
@@ -27,77 +28,83 @@ Implicit Arguments On.
 Section next_prop.
 
 Variable A : Set.
-Variable p : (array A).
+Variable p : array A.
 
 (* Definition *)
  
-Inductive Next [j,n:Z] : Prop :=
-  Next_cons : 
-     `0 <= n < j`
-  -> (match p `j-n` p `0` n)
-  -> ((z:Z)`n < z < j` -> ~(match p `j-z` p `0` z))   (* n is maximal *)
-  -> (Next j n).
+(* n is maximal *)
+Inductive Next (j n:Z) : Prop :=
+    Next_cons :
+      (0 <= n < j)%Z ->
+      match_ p (j - n) p 0 n ->
+      (forall z:Z, (n < z < j)%Z -> ~ match_ p (j - z) p 0 z) ->
+      Next j n.
 
 
 (* Some properties of the predicate Next *)
 
-Variable a : (array A).
+Variable a : array A.
 
 Lemma next_iteration :
-  (i,j,n:Z)
-         `0 < j < (array_length p)`
-      -> `j <= i <= (array_length a)`
-      -> (match a `i-j` p `0` j)
-      -> (Next j n)
-      -> (match a `i-n` p `0` n).
+ forall i j n:Z,
+   (0 < j < array_length p)%Z ->
+   (j <= i <= array_length a)%Z ->
+   match_ a (i - j) p 0 j -> Next j n -> match_ a (i - n) p 0 n.
 Proof.
-Intros i j n Hj Hi Hmatch Hnext.
-Elim Hnext; Intros.
-Apply match_cons. Omega. Omega.
-Intros i0 Hi0.
-Apply trans_equal with y := #p[`j-n+i0`].
-Elim Hmatch; Intros.
-Replace `i-n+i0` with `i-j+(j-n+i0)`.
-Replace `j-n+i0` with `0+(j-n+i0)`.
-Apply H4.
-Omega. Omega. Omega.
-Elim H0; Intros.
-Apply H4.
-Omega.
-Save.
+intros i j n Hj Hi Hmatch Hnext.
+elim Hnext; intros.
+apply match_cons.
+ omega.
+ omega.
+intros i0 Hi0.
+apply trans_equal with (y := access p (j - n + i0)).
+elim Hmatch; intros.
+replace (i - n + i0)%Z with (i - j + (j - n + i0))%Z.
+replace (j - n + i0)%Z with (0 + (j - n + i0))%Z.
+apply H4.
+omega.
+ omega.
+ omega.
+elim H0; intros.
+apply H4.
+omega.
+Qed.
 
 
 Lemma next_is_maximal :
-  (i,j,n,k:Z)
-        `0 < j < (array_length p)`
-     -> `j <= i <= (array_length a)`
-     -> `i-j < k < i-n`
-     -> (match a `i-j` p `0` j)
-     -> (Next j n)
-     -> ~(match a k p `0` (array_length p)).
+ forall i j n k:Z,
+   (0 < j < array_length p)%Z ->
+   (j <= i <= array_length a)%Z ->
+   (i - j < k < i - n)%Z ->
+   match_ a (i - j) p 0 j ->
+   Next j n -> ~ match_ a k p 0 (array_length p).
 Proof.
-Intros i j n k Hj Hi Hk Hmatch Hnext.
-Red. Intro Hmax.
-Elim Hnext; Intros.
-Absurd (match p `j-(i-k)` p `0` `i-k`).
-Apply H1; Omega.
-Apply match_trans with t2 := a i2 := k.
-Apply match_sym.
-Apply match_left_weakening with n := j.
-Ring `k-(j-(i-k))`. Ring `j-(i-k)-(j-(i-k))`. Assumption.
-Omega.
-Apply match_right_weakening with n := (array_length p).
-Assumption.
-Omega.
-Save.
+intros i j n k Hj Hi Hk Hmatch Hnext.
+red.
+ intro Hmax.
+elim Hnext; intros.
+absurd (match_ p (j - (i - k)) p 0 (i - k)).
+apply H1; omega.
+apply match_trans with (t2 := a) (i2 := k).
+apply match_sym.
+apply match_left_weakening with (n := j).
+ring (k - (j - (i - k)))%Z.
+ ring (j - (i - k) - (j - (i - k)))%Z.
+ assumption.
+omega.
+apply match_right_weakening with (n := array_length p).
+assumption.
+omega.
+Qed.
 
-Lemma next_1_0 : `1 <= (array_length p)` -> (Next `1` `0`).
+Lemma next_1_0 : (1 <= array_length p)%Z -> Next 1 0.
 Proof.
-Intro HM.
-Apply Next_cons. 
-Omega.
-Apply match_empty; Omega.
-Intros z Hz. Absurd `0 < z`; Omega.
-Save.
+intro HM.
+apply Next_cons.
+ omega.
+apply match_empty; omega.
+intros z Hz.
+ absurd (0 < z)%Z; omega.
+Qed.
 
 End next_prop.

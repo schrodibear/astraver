@@ -1,11 +1,11 @@
-(**********************************************************************)
+(* Load Programs. *)(**********************************************************************)
 (*                                                                    *)
 (* FIND, an historical example.                                       *)
 (*                                                                    *)
 (* The proof of this program was originally done by C. A. R. Hoare    *)
 (* and fully detailed in the following paper:                         *)
 (*                                                                    *)
-(* C. A. R. Hoare, "Proof of a Program: FIND", Communications of the  *)
+(* C. A. R. Hoare, , Communications of the  *)
 (* ACM, 14(1), 39--45, January 1971.                                  *)
 (*                                                                    *)
 (**********************************************************************)
@@ -14,511 +14,676 @@
 (* find_lemmas.v                                                      *)
 (**********************************************************************)
 
-Require find_spec.
-Require Why.
-Require Omega.
+Require Import find_spec.
+Require Import Why.
+Require Import Omega.
 
 (* Lemmas *)
 
-Lemma Lemma_1 : (A:(array Z))
-  (m_invariant `1` A).
+Lemma Lemma_1 : forall A:array Z, m_invariant 1 A.
 Proof.
-Intro A. Unfold m_invariant.
-Split ; [ Exact le_1_f | Intros ].
-Absurd `1 <= p`; Abstract Omega.
-Save.
+intro A.
+ unfold m_invariant.
+split; [ exact le_1_f | intros ].
+absurd (1 <= p)%Z; abstract omega.
+Qed.
 
-Lemma Lemma_2 : (A:(array Z))
-  (n_invariant N A).
+Lemma Lemma_2 : forall A:array Z, n_invariant N A.
 Proof.
-Intro A. Unfold n_invariant.
-Split ; [ Exact le_f_N | Intros ].
-Absurd `q <= N`; Abstract Omega.
-Save.
+intro A.
+ unfold n_invariant.
+split; [ exact le_f_N | intros ].
+absurd (q <= N)%Z; abstract omega.
+Qed.
 
-Lemma Lemma_3 : (m,n:Z)(A:(array Z))
-    (m_invariant m A)
- -> (n_invariant n A)
- -> `m >= n`
- -> (found A).
+Lemma Lemma_3 :
+ forall (m n:Z) (A:array Z),
+   m_invariant m A -> n_invariant n A -> (m >= n)%Z -> found A.
 Proof.
-Unfold m_invariant n_invariant found.
-Intros m n A H_m H_n le_n_m p q H1 H2 H3 H4.
-Cut m=f. Cut n=f. Intros eq_m_f eq_n_f.
-Decompose [and] H_m. Decompose [and] H_n.
-Split.
-Case (Z_le_lt_eq_dec p f H2).
-  Intro lt_p_f. Generalize (H0 p f). Intros. Abstract Omega.
-  Intro eq_p_f. Rewrite eq_p_f. Abstract Omega.
-Case (Z_le_lt_eq_dec f q H3).
-  Intro lt_f_q. Generalize (H6 f q). Intros. Abstract Omega.
-  Intro eq_f_q. Rewrite eq_f_q. Abstract Omega.
-Abstract Omega.
-Abstract Omega.
-Save.
+unfold m_invariant, n_invariant, found.
+intros m n A H_m H_n le_n_m p q H1 H2 H3 H4.
+cut (m = f).
+ cut (n = f).
+ intros eq_m_f eq_n_f.
+decompose [and] H_m.
+ decompose [and] H_n.
+split.
+case (Z_le_lt_eq_dec p f H2).
+  intro lt_p_f.
+ generalize (H0 p f).
+ intros.
+ abstract omega.
+  intro eq_p_f.
+ rewrite eq_p_f.
+ abstract omega.
+case (Z_le_lt_eq_dec f q H3).
+  intro lt_f_q.
+ generalize (H6 f q).
+ intros.
+ abstract omega.
+  intro eq_f_q.
+ rewrite eq_f_q.
+ abstract omega.
+abstract omega.
+abstract omega.
+Qed.
 
-Lemma Lemma_4 : (m:Z)(A:(array Z))
-    (m_invariant m A)
- -> (p:Z) `1 <= p < m` -> (Zle #A[p] #A[f]).
+Lemma Lemma_4 :
+ forall (m:Z) (A:array Z),
+   m_invariant m A ->
+   forall p:Z, (1 <= p < m)%Z -> (access A p <= access A f)%Z.
 Proof.
-Unfold m_invariant. Intros m A H_m p H_p.
-Decompose [and] H_m.
-Generalize (H0 p f).
-Intros. Generalize le_f_N. Abstract Omega.
-Save.
+unfold m_invariant.
+ intros m A H_m p H_p.
+decompose [and] H_m.
+generalize (H0 p f).
+intros.
+ generalize le_f_N.
+ abstract omega.
+Qed.
 
-Lemma Lemma_5 : (n:Z)(A:(array Z))
-    (n_invariant n A)
- -> (q:Z) `n < q <= N` -> (Zle #A[f] #A[q]).
+Lemma Lemma_5 :
+ forall (n:Z) (A:array Z),
+   n_invariant n A ->
+   forall q:Z, (n < q <= N)%Z -> (access A f <= access A q)%Z.
 Proof.
-Unfold n_invariant. Intros n A H_n q H_q.
-Decompose [and] H_n.
-Generalize (H0 f q).
-Intros. Generalize le_1_f. Abstract Omega.
-Save.
+unfold n_invariant.
+ intros n A H_n q H_q.
+decompose [and] H_n.
+generalize (H0 f q).
+intros.
+ generalize le_1_f.
+ abstract omega.
+Qed.
 
-Lemma Lemma_6_a : (m,n,i,j,r:Z)(A:(array Z))
-    `i > j`
- -> (m_invariant m A) -> (n_invariant n A)
- -> (i_invariant m n i r A) -> (j_invariant m n j r A)
- -> `f <= j`
- -> (n_invariant j A).
+Lemma Lemma_6_a :
+ forall (m n i j r:Z) (A:array Z),
+   (i > j)%Z ->
+   m_invariant m A ->
+   n_invariant n A ->
+   i_invariant m n i r A ->
+   j_invariant m n j r A -> (f <= j)%Z -> n_invariant j A.
 Proof.
-Unfold m_invariant n_invariant i_invariant j_invariant.
-Intros m n i j r A lt_i_j H_m H_n H_i H_j le_f_j.
-Decompose [and] H_m. Decompose [and] H_n. 
-Decompose [and] H_i. Decompose [and] H_j. 
-Clear H_m H_n H_i H_j.
-Split.
-Assumption.
-Intros. 
-Generalize (H5 p). Generalize (H8 q).
-Abstract Omega.
-Save.
+unfold m_invariant, n_invariant, i_invariant, j_invariant.
+intros m n i j r A lt_i_j H_m H_n H_i H_j le_f_j.
+decompose [and] H_m.
+ decompose [and] H_n.
+ decompose [and] H_i.
+ decompose [and] H_j.
+ clear H_m H_n H_i H_j.
+split.
+assumption.
+intros.
+ generalize (H5 p).
+ generalize (H8 q).
+abstract omega.
+Qed.
 
-Lemma Lemma_6_b : (m,n,i,j,r:Z)(A:(array Z))
-    `i > j`
- -> (m_invariant m A) -> (n_invariant n A)
- -> (i_invariant m n i r A) -> (j_invariant m n j r A)
- -> `i <= f`
- -> (m_invariant i A).
+Lemma Lemma_6_b :
+ forall (m n i j r:Z) (A:array Z),
+   (i > j)%Z ->
+   m_invariant m A ->
+   n_invariant n A ->
+   i_invariant m n i r A ->
+   j_invariant m n j r A -> (i <= f)%Z -> m_invariant i A.
 Proof.
-Unfold m_invariant n_invariant i_invariant j_invariant.
-Intros m n i j r A lt_j_i H_m H_n H_i H_j le_i_f.
-Decompose [and] H_m. Decompose [and] H_n. 
-Decompose [and] H_i. Decompose [and] H_j. 
-Clear H_m H_n H_i H_j.
-Split.
-Assumption.
-Intros. 
-Generalize (H5 p). Generalize (H8 q).
-Abstract Omega.
-Save.
+unfold m_invariant, n_invariant, i_invariant, j_invariant.
+intros m n i j r A lt_j_i H_m H_n H_i H_j le_i_f.
+decompose [and] H_m.
+ decompose [and] H_n.
+ decompose [and] H_i.
+ decompose [and] H_j.
+ clear H_m H_n H_i H_j.
+split.
+assumption.
+intros.
+ generalize (H5 p).
+ generalize (H8 q).
+abstract omega.
+Qed.
 
-Lemma Lemma_6_c1 : (m,n,i,j,r:Z)(A:(array Z))
-    `i > j`
- -> (m_invariant m A) -> (n_invariant n A)
- -> (i_invariant m n i r A) -> (j_invariant m n j r A)
- -> `j < f < i`
- -> (m_invariant f A).
+Lemma Lemma_6_c1 :
+ forall (m n i j r:Z) (A:array Z),
+   (i > j)%Z ->
+   m_invariant m A ->
+   n_invariant n A ->
+   i_invariant m n i r A ->
+   j_invariant m n j r A -> (j < f < i)%Z -> m_invariant f A.
 Proof.
-Unfold m_invariant n_invariant i_invariant j_invariant.
-Intros m n i j r A lt_j_i H_m H_n H_i H_j lt_j_f_i.
-Decompose [and] H_m. Decompose [and] H_n. 
-Decompose [and] H_i. Decompose [and] H_j. 
-Clear H_m H_n H_i H_j.
-Split.
-Abstract Omega.
-Intros.
-Generalize (H5 p). Generalize (H8 q).
-Abstract Omega.
-Save.
+unfold m_invariant, n_invariant, i_invariant, j_invariant.
+intros m n i j r A lt_j_i H_m H_n H_i H_j lt_j_f_i.
+decompose [and] H_m.
+ decompose [and] H_n.
+ decompose [and] H_i.
+ decompose [and] H_j.
+ clear H_m H_n H_i H_j.
+split.
+abstract omega.
+intros.
+generalize (H5 p).
+ generalize (H8 q).
+abstract omega.
+Qed.
 
-Lemma Lemma_6_c2 : (m,n,i,j,r:Z)(A:(array Z))
-    `i > j`
- -> (m_invariant m A) -> (n_invariant n A)
- -> (i_invariant m n i r A) -> (j_invariant m n j r A)
- -> `j < f < i`
- -> (n_invariant f A).
+Lemma Lemma_6_c2 :
+ forall (m n i j r:Z) (A:array Z),
+   (i > j)%Z ->
+   m_invariant m A ->
+   n_invariant n A ->
+   i_invariant m n i r A ->
+   j_invariant m n j r A -> (j < f < i)%Z -> n_invariant f A.
 Proof.
-Unfold m_invariant n_invariant i_invariant j_invariant.
-Intros m n i j r A lt_j_i H_m H_n H_i H_j lt_j_f_i.
-Decompose [and] H_m. Decompose [and] H_n. 
-Decompose [and] H_i. Decompose [and] H_j. 
-Clear H_m H_n H_i H_j.
-Split.
-Abstract Omega.
-Intros.
-Generalize (H5 p). Generalize (H8 q).
-Abstract Omega.
-Save.
+unfold m_invariant, n_invariant, i_invariant, j_invariant.
+intros m n i j r A lt_j_i H_m H_n H_i H_j lt_j_f_i.
+decompose [and] H_m.
+ decompose [and] H_n.
+ decompose [and] H_i.
+ decompose [and] H_j.
+ clear H_m H_n H_i H_j.
+split.
+abstract omega.
+intros.
+generalize (H5 p).
+ generalize (H8 q).
+abstract omega.
+Qed.
 
-(* Lemma 7 is not useful because we don't do a \verb"goto L" statement
-   to exit the loop. Actually, we do \verb"n := f; m := f" and [Lemma_6_c1]
+(* Lemma 7 is not useful because we don't do a \verb statement
+   to exit the loop. Actually, we do \verb and [Lemma_6_c1]
    and [Lemma_6_c2] are what we need *)
 
-Lemma Lemma_8 : (i,m,r:Z)(A:(array Z))
-    (Zle #A[i] r)
- -> ((Zle m i) /\ ((p:Z)((Zle `1` p)->(Zlt p i)->(Zle #A[p] r))))
- -> ((Zle m (Zs i)) /\ ((p:Z)((Zle `1` p)->(Zlt p (Zs i))->(Zle #A[p] r)))).
+Lemma Lemma_8 :
+ forall (i m r:Z) (A:array Z),
+   (access A i <= r)%Z ->
+   (m <= i)%Z /\
+   (forall p:Z, (1 <= p)%Z -> (p < i)%Z -> (access A p <= r)%Z) ->
+   (m <= Zs i)%Z /\
+   (forall p:Z, (1 <= p)%Z -> (p < Zs i)%Z -> (access A p <= r)%Z).
 Proof.
-Intros i m r A H H0.
-Decompose [and] H0.
-Split.
-Abstract Omega.
-Intros.
-Elim (Z_le_lt_eq_dec p i); [ Auto | Idtac | Abstract Omega ].
-Intro Heq. Rewrite Heq. Auto.
-Save.
+intros i m r A H H0.
+decompose [and] H0.
+split.
+abstract omega.
+intros.
+elim (Z_le_lt_eq_dec p i); [ auto | idtac | abstract omega ].
+intro Heq.
+ rewrite Heq.
+ auto.
+Qed.
 
-Lemma Lemma_9 : (j,n,r:Z)(A:(array Z))
-    (Zle r #A[j])
- -> ((Zle j n) /\ ((q:Z)((Zlt j q)->(Zle q N)->(Zle r #A[q]))))
- -> (  (Zle (Zpred j) n) 
-    /\ ((q:Z)((Zlt (Zpred j) q)->(Zle q N)->(Zle r #A[q])))).
+Lemma Lemma_9 :
+ forall (j n r:Z) (A:array Z),
+   (r <= access A j)%Z ->
+   (j <= n)%Z /\
+   (forall q:Z, (j < q)%Z -> (q <= N)%Z -> (r <= access A q)%Z) ->
+   (Zpred j <= n)%Z /\
+   (forall q:Z, (Zpred j < q)%Z -> (q <= N)%Z -> (r <= access A q)%Z).
 Proof.
-Intros j n r A H H0.
-Decompose [and] H0.
-Split.
-Unfold Zpred. Abstract Omega.
-Intros.
-Elim (Z_le_lt_eq_dec j q).
-Auto.
-Intro Heq. Rewrite <- Heq. Auto.
-Unfold Zpred in H3. Abstract Omega.
-Save.
+intros j n r A H H0.
+decompose [and] H0.
+split.
+unfold Zpred.
+ abstract omega.
+intros.
+elim (Z_le_lt_eq_dec j q).
+auto.
+intro Heq.
+ rewrite <- Heq.
+ auto.
+unfold Zpred in H3.
+ abstract omega.
+Qed.
 
-Lemma Lemma_10 : (m,i,j,r:Z)(A,A':(array Z))
-    `m <= i <= j`
- -> (exchange A A' i j)
- -> ((p:Z)(`1<=p` -> `p<i` -> (Zle #A[p] r)))
- -> `m <= i` /\ ((p:Z)(`1<=p` -> `p<i` -> (Zle #A'[p] r))).
+Lemma Lemma_10 :
+ forall (m i j r:Z) (A A':array Z),
+   (m <= i <= j)%Z ->
+   exchange A A' i j ->
+   (forall p:Z, (1 <= p)%Z -> (p < i)%Z -> (access A p <= r)%Z) ->
+   (m <= i)%Z /\
+   (forall p:Z, (1 <= p)%Z -> (p < i)%Z -> (access A' p <= r)%Z).
 Proof.
-Intros m i j r A A' H_i_j H_ex H_A.
-Elim H_ex. Intros H_l H_i H_j H_Ai H_Aj H_Ak.
-Split; [ Abstract Omega | Intros p H1 H2 ].
-Generalize (H_Ak p). Intros.
-Generalize (H_A p). Intros. Abstract Omega.
-Save.
+intros m i j r A A' H_i_j H_ex H_A.
+elim H_ex.
+ intros H_l H_i H_j H_Ai H_Aj H_Ak.
+split; [ abstract omega | intros p H1 H2 ].
+generalize (H_Ak p).
+ intros.
+generalize (H_A p).
+ intros.
+ abstract omega.
+Qed.
 
-Lemma Lemma_8_10_1 : (m,n,i,j,r:Z)(A,A':(array Z))
-  `m <= i <= j` ->
-  `n <= N` ->
-  `1 <= m` ->
-  (exchange A A' i j) ->
-  (Zle #A[i] r) ->
-  (Zle r #A[j]) ->
-  (i_invariant m n i r A') -> 
-  (j_invariant m n j r A') -> 
-  (i_invariant m n i r A).
+Lemma Lemma_8_10_1 :
+ forall (m n i j r:Z) (A A':array Z),
+   (m <= i <= j)%Z ->
+   (n <= N)%Z ->
+   (1 <= m)%Z ->
+   exchange A A' i j ->
+   (access A i <= r)%Z ->
+   (r <= access A j)%Z ->
+   i_invariant m n i r A' ->
+   j_invariant m n j r A' -> i_invariant m n i r A.
 Proof.
-Intros m n i j r A A' H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_i H_j.
-Unfold i_invariant. Unfold i_invariant in H_i. Decompose [and] H_i.
-Split; [ Abstract Omega | Split ].
-Intros p H1' H2'. 
-Cut (exchange A' A i j). Intro H_ex'.
-Elim (Lemma_10 m i j r A' A H_i_j H_ex' H1).
-Auto. Auto with datatypes.
-Intro. Exists j. 
-  Unfold j_invariant in H_j. Decompose [and] H_j.
-  Abstract Omega.
-Save.
+intros m n i j r A A' H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_i H_j.
+unfold i_invariant.
+ unfold i_invariant in H_i.
+ decompose [and] H_i.
+split; [ abstract omega | split ].
+intros p H1' H2'.
+ cut (exchange A' A i j).
+ intro H_ex'.
+elim (Lemma_10 m i j r A' A H_i_j H_ex' H1).
+auto.
+ auto with datatypes.
+intro.
+ exists j.
+   unfold j_invariant in H_j.
+ decompose [and] H_j.
+  abstract omega.
+Qed.
 
-Lemma Lemma_8_10 : (m,n,i,j,r:Z)(A,A':(array Z))
-  `(array_length A)=N+1` -> 
-  `m <= i <= j` ->
-  `n <= N` ->
-  `1 <= m` ->
-  (exchange A A' i j) ->
-  (Zle #A[i] r) ->
-  (Zle r #A[j]) ->
-  (i_invariant m n i r A') -> 
-  (j_invariant m n j r A') -> 
-  (i_invariant m n (Zs i) r A).
+Lemma Lemma_8_10 :
+ forall (m n i j r:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (m <= i <= j)%Z ->
+   (n <= N)%Z ->
+   (1 <= m)%Z ->
+   exchange A A' i j ->
+   (access A i <= r)%Z ->
+   (r <= access A j)%Z ->
+   i_invariant m n i r A' ->
+   j_invariant m n j r A' -> i_invariant m n (Zs i) r A.
 Proof.
-Intros m n i j r A A' Hl H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_i H_j.
-Cut (i_invariant m n i r A). Intro H_int. 
-Unfold i_invariant. 
-Unfold i_invariant in H_int. Decompose [and] H_int.
-Split; [ Abstract Omega | Split ].
-Intros p H1' H2'. 
-Elim (Lemma_8 i m r A H_i_r (conj ? ? H H1)); Auto.
-Unfold j_invariant in H_j. Decompose [and] H_j.
-Cut `i<=j`. Intro le_i_j. Case (Z_le_lt_eq_dec i j le_i_j). 
-  Intros. Exists j. Abstract Omega.
-Intros eq_i_j lt_i_n.
-  Exists (Zs i).
-  Split ; [ Abstract Omega | Split; [ Assumption | Idtac ] ].
-  Generalize (exchange_id H_ex eq_i_j). Intro Hk.
-  Cut (access A (Zs i))=(access A' (Zs i)). Intro Hr. Rewrite Hr.
-  Apply (H4 (Zs i)); Abstract Omega.
-  Apply (Hk (Zs i)); Try Omega.
-Omega.
-Apply Lemma_8_10_1 with j:=j A':=A'; Assumption.
-Save.
+intros m n i j r A A' Hl H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_i H_j.
+cut (i_invariant m n i r A).
+ intro H_int.
+ unfold i_invariant.
+ unfold i_invariant in H_int.
+ decompose [and] H_int.
+split; [ abstract omega | split ].
+intros p H1' H2'.
+ elim (Lemma_8 i m r A H_i_r (conj H H1)); auto.
+unfold j_invariant in H_j.
+ decompose [and] H_j.
+cut (i <= j)%Z.
+ intro le_i_j.
+ case (Z_le_lt_eq_dec i j le_i_j).
+   intros.
+ exists j.
+ abstract omega.
+intros eq_i_j lt_i_n.
+  exists (Zs i).
+  split; [ abstract omega | split; [ assumption | idtac ] ].
+  generalize (exchange_id H_ex eq_i_j).
+ intro Hk.
+  cut (access A (Zs i) = access A' (Zs i)).
+ intro Hr.
+ rewrite Hr.
+  apply (H4 (Zs i)); abstract omega.
+  apply (Hk (Zs i)); try omega.
+omega.
+apply Lemma_8_10_1 with (j := j) (A' := A'); assumption.
+Qed.
 
-Lemma Lemma_11 : (n,i,j,r:Z)(A,A':(array Z))
- `(array_length A)=N+1`
- -> `i <= j <= n`
- -> (exchange A A' i j)
- -> ((q:Z)(`j<q` -> `q<=N` -> (Zle r #A[q])))
- -> `j <= n` /\ ((q:Z)(`j<q` -> `q<=N` -> (Zle r #A'[q]))).
+Lemma Lemma_11 :
+ forall (n i j r:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (i <= j <= n)%Z ->
+   exchange A A' i j ->
+   (forall q:Z, (j < q)%Z -> (q <= N)%Z -> (r <= access A q)%Z) ->
+   (j <= n)%Z /\
+   (forall q:Z, (j < q)%Z -> (q <= N)%Z -> (r <= access A' q)%Z).
 Proof.
-Intros n i j r A A' HN H_i_j H_ex H_A.
-Elim H_ex. Intros Hl H_i H_j H_Ai H_Aj H_Ak.
-Split; [ Abstract Omega | Intros q H1 H2 ].
-Generalize (H_Ak q). Intros.
-Generalize (H_A q). Intros. Abstract Omega.
-Save.
+intros n i j r A A' HN H_i_j H_ex H_A.
+elim H_ex.
+ intros Hl H_i H_j H_Ai H_Aj H_Ak.
+split; [ abstract omega | intros q H1 H2 ].
+generalize (H_Ak q).
+ intros.
+generalize (H_A q).
+ intros.
+ abstract omega.
+Qed.
 
-Lemma Lemma_9_11_1 : (m,n,i,j,r:Z)(A,A':(array Z))
-  `(array_length A)=N+1` -> 
-  `i <= j <= n` ->
-  `n <= N` ->
-  `1 <= m` ->
-  (exchange A A' i j) ->
-  (Zle #A[i] r) ->
-  (Zle r #A[j]) ->
-  (j_invariant m n j r A') -> 
-  (i_invariant m n i r A') -> 
-  (j_invariant m n j r A).
+Lemma Lemma_9_11_1 :
+ forall (m n i j r:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (i <= j <= n)%Z ->
+   (n <= N)%Z ->
+   (1 <= m)%Z ->
+   exchange A A' i j ->
+   (access A i <= r)%Z ->
+   (r <= access A j)%Z ->
+   j_invariant m n j r A' ->
+   i_invariant m n i r A' -> j_invariant m n j r A.
 Proof.
-Intros m n i j r A A' HN H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_j H_i.
-Unfold j_invariant. Unfold j_invariant in H_j. Decompose [and] H_j.
-Split; [ Abstract Omega | Split ].
-Intros q H1' H2'. 
-Cut (exchange A' A i j). Intro H_ex'.
-SameLength A A'. Rewrite H0 in HN.
-Elim (Lemma_11 n i j r A' A HN H_i_j H_ex' H1).
-Auto. Auto with datatypes.
-Intro. Exists i. 
-  Unfold i_invariant in H_i. Decompose [and] H_i.
-  Abstract Omega.
-Save.
+intros m n i j r A A' HN H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_j H_i.
+unfold j_invariant.
+ unfold j_invariant in H_j.
+ decompose [and] H_j.
+split; [ abstract omega | split ].
+intros q H1' H2'.
+ cut (exchange A' A i j).
+ intro H_ex'.
+SameLength A A'.
+ rewrite H0 in HN.
+elim (Lemma_11 n i j r A' A HN H_i_j H_ex' H1).
+auto.
+ auto with datatypes.
+intro.
+ exists i.
+   unfold i_invariant in H_i.
+ decompose [and] H_i.
+  abstract omega.
+Qed.
 
-Lemma Lemma_9_11 : (m,n,i,j,r:Z)(A,A':(array Z))
-  `(array_length A)=N+1` -> 
-  `i <= j <= n` ->
-  `n <= N` ->
-  `1 <= m` ->
-  (exchange A A' i j) ->
-  (Zle #A[i] r) ->
-  (Zle r #A[j]) ->
-  (j_invariant m n j r A') -> 
-  (i_invariant m n i r A') -> 
-  (j_invariant m n (Zpred j) r A).
+Lemma Lemma_9_11 :
+ forall (m n i j r:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (i <= j <= n)%Z ->
+   (n <= N)%Z ->
+   (1 <= m)%Z ->
+   exchange A A' i j ->
+   (access A i <= r)%Z ->
+   (r <= access A j)%Z ->
+   j_invariant m n j r A' ->
+   i_invariant m n i r A' -> j_invariant m n (Zpred j) r A.
 Proof.
-Intros m n i j r A A' HN H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_j H_i.
-Cut (j_invariant m n j r A). Intro H_int. 
-Unfold j_invariant. 
-Unfold j_invariant in H_int. Decompose [and] H_int.
-Split; [ Unfold Zpred; Abstract Omega | Split ].
-Intros q H1' H2'. 
-Elim (Lemma_9 j n r A H_r_j (conj ? ? H H1)); Auto.
-Unfold i_invariant in H_i. Decompose [and] H_i.
-Cut `i<=j`. Intro le_i_j. Case (Z_le_lt_eq_dec i j le_i_j). 
-  Intros. Exists i. Unfold Zpred. Abstract Omega.
-Intros eq_i_j lt_m_j.
-  Exists (Zpred j). 
-  Split ; [ Unfold Zpred; Unfold Zpred in lt_m_j; Abstract Omega 
-          | Split; [ Unfold Zpred; Unfold Zpred in lt_m_j; Abstract Omega | Idtac ] ].
-  Generalize (exchange_id H_ex eq_i_j). Intro Hk.
-  Cut (access A (Zpred j))=(access A' (Zpred j)). Intro Hr. Rewrite Hr.
-  Apply (H4 (Zpred j)); Unfold Zpred; Unfold Zpred in lt_m_j; Abstract Omega.
-  Apply (Hk (Zpred j)); Unfold Zpred; Abstract Omega.
-Abstract Omega.
-Apply Lemma_9_11_1 with i:=i A':=A'; Assumption.
-Save.
+intros m n i j r A A' HN H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_j H_i.
+cut (j_invariant m n j r A).
+ intro H_int.
+ unfold j_invariant.
+ unfold j_invariant in H_int.
+ decompose [and] H_int.
+split; [ unfold Zpred; abstract omega | split ].
+intros q H1' H2'.
+ elim (Lemma_9 j n r A H_r_j (conj H H1)); auto.
+unfold i_invariant in H_i.
+ decompose [and] H_i.
+cut (i <= j)%Z.
+ intro le_i_j.
+ case (Z_le_lt_eq_dec i j le_i_j).
+   intros.
+ exists i.
+ unfold Zpred.
+ abstract omega.
+intros eq_i_j lt_m_j.
+  exists (Zpred j).
+   split;
+    [ unfold Zpred; unfold Zpred in lt_m_j; abstract omega
+    | split;
+       [ unfold Zpred; unfold Zpred in lt_m_j; abstract omega | idtac ] ].
+  generalize (exchange_id H_ex eq_i_j).
+ intro Hk.
+  cut (access A (Zpred j) = access A' (Zpred j)).
+ intro Hr.
+ rewrite Hr.
+  apply (H4 (Zpred j)); unfold Zpred; unfold Zpred in lt_m_j;
+   abstract omega.
+  apply (Hk (Zpred j)); unfold Zpred; abstract omega.
+abstract omega.
+apply Lemma_9_11_1 with (i := i) (A' := A'); assumption.
+Qed.
 
-Lemma Lemma_12 : (m,i,j:Z)(A,A':(array Z))
-    `(array_length A)=N+1`
- -> `m <= i <= j`
- -> (exchange A A' i j)
- -> ((p,q:Z)(`1<=p` -> `p<m` -> `m<=q` -> `q<=N` -> (Zle #A[p] #A[q])))
- -> ((p,q:Z)(`1<=p` -> `p<m` -> `m<=q` -> `q<=N` -> (Zle #A'[p] #A'[q]))).
+Lemma Lemma_12 :
+ forall (m i j:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (m <= i <= j)%Z ->
+   exchange A A' i j ->
+   (forall p q:Z,
+      (1 <= p)%Z ->
+      (p < m)%Z ->
+      (m <= q)%Z -> (q <= N)%Z -> (access A p <= access A q)%Z) ->
+   forall p q:Z,
+     (1 <= p)%Z ->
+     (p < m)%Z ->
+     (m <= q)%Z -> (q <= N)%Z -> (access A' p <= access A' q)%Z.
 Proof.
-Intros m i j A A' HN H_m_i_j H_ex H_A p q H1 H2 H3 H4.
-Elim H_ex. Intros Hl H_i H_j H_ij H_ji H_k.
-Cut #A'[p]=#A[p]. Intro H_A'p_Ap.
-Case (Z_eq_dec q i).
-  Intro eq_q_i.
-  Generalize (H_A p j H1 H2). Intro H6.
-  Rewrite eq_q_i. Abstract Omega.
-Intro not_eq_q_i. Case (Z_eq_dec q j).
-  Intro eq_q_j.
-  Generalize (H_A p i H1 H2). Intro H6.
-  Rewrite eq_q_j. Abstract Omega.
-Intro not_eq_q_j.
-  Generalize (H_k q). Intros.
-  Generalize (H_A p q). Intros.
-  Abstract Omega.
-Generalize (H_k p). Intros. Abstract Omega.
-Save.
+intros m i j A A' HN H_m_i_j H_ex H_A p q H1 H2 H3 H4.
+elim H_ex.
+ intros Hl H_i H_j H_ij H_ji H_k.
+cut (access A' p = access A p).
+ intro H_A'p_Ap.
+case (Z_eq_dec q i).
+  intro eq_q_i.
+  generalize (H_A p j H1 H2).
+ intro H6.
+  rewrite eq_q_i.
+ abstract omega.
+intro not_eq_q_i.
+ case (Z_eq_dec q j).
+  intro eq_q_j.
+  generalize (H_A p i H1 H2).
+ intro H6.
+  rewrite eq_q_j.
+ abstract omega.
+intro not_eq_q_j.
+  generalize (H_k q).
+ intros.
+  generalize (H_A p q).
+ intros.
+  abstract omega.
+generalize (H_k p).
+ intros.
+ abstract omega.
+Qed.
 
-Lemma Lemma_12' : (m,i,j:Z)(A,A':(array Z))
-    `(array_length A)=N+1`
- -> `m <= i <= j`
- -> (exchange A A' i j)
- -> (m_invariant m A)
- -> (m_invariant m A').
+Lemma Lemma_12' :
+ forall (m i j:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (m <= i <= j)%Z ->
+   exchange A A' i j -> m_invariant m A -> m_invariant m A'.
 Proof.
-Unfold m_invariant.
-Intros m i j A A' HN H_m_i_j H_ex H_m.
-Decompose [and] H_m.
-Split; [ Assumption | Idtac ].
-Exact (Lemma_12 m i j A A' HN H_m_i_j H_ex H0).
-Save.
+unfold m_invariant.
+intros m i j A A' HN H_m_i_j H_ex H_m.
+decompose [and] H_m.
+split; [ assumption | idtac ].
+exact (Lemma_12 m i j A A' HN H_m_i_j H_ex H0).
+Qed.
 
-Lemma Lemma_13 : (n,i,j:Z)(A,A':(array Z))
-    `(array_length A)=N+1`
- -> `1 <= i`
- -> `i <= j <= n`
- -> (exchange A A' i j)
- -> ((p,q:Z)(`1<=p` -> `p<=n` -> `n<q` -> `q<=N` -> (Zle #A[p] #A[q])))
- -> ((p,q:Z)(`1<=p` -> `p<=n` -> `n<q` -> `q<=N` -> (Zle #A'[p] #A'[q]))).
+Lemma Lemma_13 :
+ forall (n i j:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (1 <= i)%Z ->
+   (i <= j <= n)%Z ->
+   exchange A A' i j ->
+   (forall p q:Z,
+      (1 <= p)%Z ->
+      (p <= n)%Z ->
+      (n < q)%Z -> (q <= N)%Z -> (access A p <= access A q)%Z) ->
+   forall p q:Z,
+     (1 <= p)%Z ->
+     (p <= n)%Z ->
+     (n < q)%Z -> (q <= N)%Z -> (access A' p <= access A' q)%Z.
 Proof.
-Intros n i j A A' HN le_1_i H_n_i_j H_ex H_A p q H1 H2 H3 H4.
-Elim H_ex. Intros Hl H_i H_j H_ij H_ji H_k.
-Cut #A'[q]=#A[q]. Intro H_A'q_Aq.
-Case (Z_eq_dec p i).
-  Intro eq_p_i.
-  Generalize (H_A j q). Intro H6.
-  Rewrite eq_p_i. Abstract Omega.
-Intro not_eq_p_i. Case (Z_eq_dec p j).
-  Intro eq_p_j.
-  Generalize (H_A i q). Intro H6.
-  Rewrite eq_p_j. Abstract Omega.
-Intro not_eq_p_j.
-  Generalize (H_k p). Intros.
-  Generalize (H_A p q). Intros.
-  Abstract Omega.
-Generalize (H_k q). Intros. Abstract Omega.
-Save.
+intros n i j A A' HN le_1_i H_n_i_j H_ex H_A p q H1 H2 H3 H4.
+elim H_ex.
+ intros Hl H_i H_j H_ij H_ji H_k.
+cut (access A' q = access A q).
+ intro H_A'q_Aq.
+case (Z_eq_dec p i).
+  intro eq_p_i.
+  generalize (H_A j q).
+ intro H6.
+  rewrite eq_p_i.
+ abstract omega.
+intro not_eq_p_i.
+ case (Z_eq_dec p j).
+  intro eq_p_j.
+  generalize (H_A i q).
+ intro H6.
+  rewrite eq_p_j.
+ abstract omega.
+intro not_eq_p_j.
+  generalize (H_k p).
+ intros.
+  generalize (H_A p q).
+ intros.
+  abstract omega.
+generalize (H_k q).
+ intros.
+ abstract omega.
+Qed.
 
-Lemma Lemma_13' : (n,i,j:Z)(A,A':(array Z))
-    `(array_length A)=N+1`
- -> `1 <= i`
- -> `i <= j <= n`
- -> (exchange A A' i j)
- -> (n_invariant n A)
- -> (n_invariant n A').
+Lemma Lemma_13' :
+ forall (n i j:Z) (A A':array Z),
+   array_length A = (N + 1)%Z ->
+   (1 <= i)%Z ->
+   (i <= j <= n)%Z ->
+   exchange A A' i j -> n_invariant n A -> n_invariant n A'.
 Proof.
-Unfold n_invariant.
-Intros n i j A A' HN le_1_i H_i_j_n H_ex H_n.
-Decompose [and] H_n.
-Split; [ Assumption | Idtac ].
-Exact (Lemma_13 n i j A A' HN le_1_i H_i_j_n H_ex H0).
-Save.
+unfold n_invariant.
+intros n i j A A' HN le_1_i H_i_j_n H_ex H_n.
+decompose [and] H_n.
+split; [ assumption | idtac ].
+exact (Lemma_13 n i j A A' HN le_1_i H_i_j_n H_ex H0).
+Qed.
 
-Lemma Lemma_14 : (m,n:Z)(A:(array Z))
-     `m <= f <= n`
-  -> (EX p:Z | `m <= p` /\ `p <= n` /\ (Zle #A[f] #A[p])).
+Lemma Lemma_14 :
+ forall (m n:Z) (A:array Z),
+   (m <= f <= n)%Z ->
+    EX p : Z | (m <= p)%Z /\ (p <= n)%Z /\ (access A f <= access A p)%Z.
 Proof.
-Intros m n A H_m_f_n.
-Exists f. Abstract Omega.
-Save.
+intros m n A H_m_f_n.
+exists f.
+ abstract omega.
+Qed.
 
-Lemma Lemma_4_14 : (m,n:Z)(A:(array Z))
-    `m <= f <= n`
- -> (m_invariant m A)
- -> (i_invariant m n m #A[f] A).
+Lemma Lemma_4_14 :
+ forall (m n:Z) (A:array Z),
+   (m <= f <= n)%Z ->
+   m_invariant m A -> i_invariant m n m (access A f) A.
 Proof.
-Intros m n A H_f H_m.
-Unfold i_invariant.
-Split ; [ Abstract Omega | Split ].
-Intros. EApply Lemma_4 ; EAuto.
-Intro. Apply Lemma_14; Auto.
-Save.
+intros m n A H_f H_m.
+unfold i_invariant.
+split; [ abstract omega | split ].
+intros.
+ eapply Lemma_4; eauto.
+intro.
+ apply Lemma_14; auto.
+Qed.
 
-Lemma Lemma_14' : (m,n:Z)(A:(array Z))
-     `m <= f <= n`
-  -> (EX q:Z | `m <= q` /\ `q <= n` /\ (Zle #A[q] #A[f])).
+Lemma Lemma_14' :
+ forall (m n:Z) (A:array Z),
+   (m <= f <= n)%Z ->
+    EX q : Z | (m <= q)%Z /\ (q <= n)%Z /\ (access A q <= access A f)%Z.
 Proof.
-Intros m n A H_m_f_n.
-Exists f. Abstract Omega.
-Save.
+intros m n A H_m_f_n.
+exists f.
+ abstract omega.
+Qed.
 
-Lemma Lemma_5_14' : (m,n:Z)(A:(array Z))
-    `m <= f <= n`
- -> (n_invariant n A)
- -> (j_invariant m n n #A[f] A).
+Lemma Lemma_5_14' :
+ forall (m n:Z) (A:array Z),
+   (m <= f <= n)%Z ->
+   n_invariant n A -> j_invariant m n n (access A f) A.
 Proof.
-Intros m n A H_f H_n.
-Unfold j_invariant.
-Split ; [ Abstract Omega | Split ].
-Intros. EApply Lemma_5 ; EAuto.
-Intro. Apply Lemma_14'; Auto.
-Save.
+intros m n A H_f H_n.
+unfold j_invariant.
+split; [ abstract omega | split ].
+intros.
+ eapply Lemma_5; eauto.
+intro.
+ apply Lemma_14'; auto.
+Qed.
 
-Lemma Lemma_15 : (n,i,r:Z)(A:(array Z))
-    (Zlt #A[i] r)
- -> (EX p:Z | (Zle i p) /\ (Zle p n) /\ (Zle r #A[p]))
- -> (EX p:Z | (Zle (Zs i) p) /\ (Zle p n) /\ (Zle r #A[p])).
+Lemma Lemma_15 :
+ forall (n i r:Z) (A:array Z),
+   (access A i < r)%Z ->
+   ( EX p : Z | (i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z) ->
+    EX p : Z | (Zs i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z.
 Proof.
-Intros n i r A H H0.
-Elim H0. Intros p Hp. Decompose [and] Hp.
-Case (Z_le_lt_eq_dec i p H1).
-Intro. Exists p. Abstract Omega.
-Intro eq_i_p. Absurd (Zle r #A[p]). Rewrite <- eq_i_p. Abstract Omega. Assumption.
-Save.
+intros n i r A H H0.
+elim H0.
+ intros p Hp.
+ decompose [and] Hp.
+case (Z_le_lt_eq_dec i p H1).
+intro.
+ exists p.
+ abstract omega.
+intro eq_i_p.
+ absurd (r <= access A p)%Z.
+ rewrite <- eq_i_p.
+ abstract omega.
+ assumption.
+Qed.
 
-Lemma Lemma_8_15 : (i,m,n,r:Z)(A:(array Z))
-    (i_invariant m n i r A)
- -> (Zlt #A[i] r)
- -> (i_invariant m n (Zs i) r A).
+Lemma Lemma_8_15 :
+ forall (i m n r:Z) (A:array Z),
+   i_invariant m n i r A ->
+   (access A i < r)%Z -> i_invariant m n (Zs i) r A.
 Proof.
-Unfold i_invariant.
-Intros i m n r A H H0.
-Decompose [and] H.
-Split.
-Abstract Omega.
-Split.
-Elim (Lemma_8 i m r A) ; [ Auto | Abstract Omega | Auto ].
-Intro. Apply Lemma_15; Auto. Apply H4; Abstract Omega.
-Save.
+unfold i_invariant.
+intros i m n r A H H0.
+decompose [and] H.
+split.
+abstract omega.
+split.
+elim (Lemma_8 i m r A); [ auto | abstract omega | auto ].
+intro.
+ apply Lemma_15; auto.
+ apply H4; abstract omega.
+Qed.
 
 
-Lemma Lemma_17' : (j,m,n,r:Z)(A:(array Z))
-    (j_invariant m n j r A)
- -> (Zle `1` m)
- -> (Zle m j)
- -> (Zlt r #A[j])
- -> (Zlt `0` j).
+Lemma Lemma_17' :
+ forall (j m n r:Z) (A:array Z),
+   j_invariant m n j r A ->
+   (1 <= m)%Z -> (m <= j)%Z -> (r < access A j)%Z -> (0 < j)%Z.
 Proof.
-Unfold j_invariant.
-Intros j m n r A H Hm le_m_j H0.
-Decompose [and] H.
-Elim (H4 le_m_j). Intros q Hq. Decompose [and] Hq.
-  Case (Z_le_lt_eq_dec q j H6).
-    Intro. Abstract Omega.
-    Intro eq_q_j. Absurd (Zle #A[q] r). Rewrite eq_q_j. 
-    Abstract Omega. Assumption.
-Save.
+unfold j_invariant.
+intros j m n r A H Hm le_m_j H0.
+decompose [and] H.
+elim (H4 le_m_j).
+ intros q Hq.
+ decompose [and] Hq.
+  case (Z_le_lt_eq_dec q j H6).
+    intro.
+ abstract omega.
+    intro eq_q_j.
+ absurd (access A q <= r)%Z.
+ rewrite eq_q_j.
+     abstract omega.
+ assumption.
+Qed.
 
-Lemma Lemma_17 : (m,j,r:Z)(A:(array Z))
-    (Zlt r #A[j])
- -> (EX q:Z | (Zle m q) /\ (Zle q j) /\ (Zle #A[q] r))
- -> (EX q:Z | (Zle m q) /\ (Zle q (Zpred j)) /\ (Zle #A[q] r)).
+Lemma Lemma_17 :
+ forall (m j r:Z) (A:array Z),
+   (r < access A j)%Z ->
+   ( EX q : Z | (m <= q)%Z /\ (q <= j)%Z /\ (access A q <= r)%Z) ->
+    EX q : Z | (m <= q)%Z /\ (q <= Zpred j)%Z /\ (access A q <= r)%Z.
 Proof.
-Intros m j r A H H0.
-Elim H0. Intros q Hq. Decompose [and] Hq.
-Case (Z_le_lt_eq_dec q j H3).
-Intro. Exists q. Unfold Zpred. Abstract Omega.
-Intro eq_q_j. Absurd (Zle #A[q] r). Rewrite eq_q_j. Abstract Omega. Assumption.
-Save.
+intros m j r A H H0.
+elim H0.
+ intros q Hq.
+ decompose [and] Hq.
+case (Z_le_lt_eq_dec q j H3).
+intro.
+ exists q.
+ unfold Zpred.
+ abstract omega.
+intro eq_q_j.
+ absurd (access A q <= r)%Z.
+ rewrite eq_q_j.
+ abstract omega.
+ assumption.
+Qed.
 
-Lemma Lemma_9_17 : (j,m,n,r:Z)(A:(array Z))
-    (j_invariant m n j r A)
- -> (Zlt r #A[j])
- -> (j_invariant m n (Zpred j) r A).
+Lemma Lemma_9_17 :
+ forall (j m n r:Z) (A:array Z),
+   j_invariant m n j r A ->
+   (r < access A j)%Z -> j_invariant m n (Zpred j) r A.
 Proof.
-Unfold j_invariant.
-Intros j m n r A H H0.
-Decompose [and] H.
-Split.
-Unfold Zpred. Abstract Omega.
-Split.
-Elim (Lemma_9 j n r A) ; [ Auto | Abstract Omega | Auto ].
-Intro. Apply Lemma_17; Auto. Apply H4.
-Unfold Zpred in H2; Abstract Omega.
-Save.
+unfold j_invariant.
+intros j m n r A H H0.
+decompose [and] H.
+split.
+unfold Zpred.
+ abstract omega.
+split.
+elim (Lemma_9 j n r A); [ auto | abstract omega | auto ].
+intro.
+ apply Lemma_17; auto.
+ apply H4.
+unfold Zpred in H2; abstract omega.
+Qed.

@@ -1,4 +1,4 @@
-(**************************************************************************)
+(* Load Programs. *)(**************************************************************************)
 (*                                                                        *)
 (* Proof of the Knuth-Morris-Pratt Algorithm.                             *)
 (*                                                                        *)
@@ -9,7 +9,8 @@
 
 Require Export WhyArrays.
 
-Implicit Arguments On.
+Set Implicit Arguments.
+Unset Strict Implicit.
 
 
 (* Here we define the property (match t1 i1 t2 i2 n) which expresses
@@ -17,152 +18,180 @@ Implicit Arguments On.
  * are equal.
  *)
 
-Inductive match [ A:Set; t1:(array A); i1:Z;
-                         t2:(array A); i2:Z; n:Z ] : Prop :=
-  match_cons :
-     `0 <= i1 <= (array_length t1)-n`
-  -> `0 <= i2 <= (array_length t2)-n`
-  -> ((i:Z) `0 <= i < n` -> #t1[`i1+i`] = #t2[`i2+i`])
-  -> (match t1 i1 t2 i2 n).
+Inductive match_ (A:Set) (t1:array A) (i1:Z) (t2:array A) (i2 n:Z) :
+Prop :=
+    match_cons :
+      (0 <= i1 <= array_length t1 - n)%Z ->
+      (0 <= i2 <= array_length t2 - n)%Z ->
+      (forall i:Z,
+         (0 <= i < n)%Z -> access t1 (i1 + i) = access t2 (i2 + i)) ->
+      match_ t1 i1 t2 i2 n.
 
 
 (* Lemmas about match *)
 
-Require Omega.
+Require Import Omega.
 
 Section match_lemmas.
 
 Variable A : Set.
-Variable t1 : (array A).
-Variable t2 : (array A).
+Variable t1 : array A.
+Variable t2 : array A.
 
 Lemma match_empty :
-  (i1,i2:Z)`0 <= i1 <= (array_length t1)`
-      	  -> `0 <= i2 <= (array_length t2)`
-	  -> (match t1 i1 t2 i2 `0`).
+ forall i1 i2:Z,
+   (0 <= i1 <= array_length t1)%Z ->
+   (0 <= i2 <= array_length t2)%Z -> match_ t1 i1 t2 i2 0.
 Proof.
-Intros i1 i2 Hi1 Hi2.
-Apply match_cons. Omega. Omega.
-Intros. Absurd `i<0`; Omega.
-Save.
+intros i1 i2 Hi1 Hi2.
+apply match_cons.
+ omega.
+ omega.
+intros.
+ absurd (i < 0)%Z; omega.
+Qed.
 
 Lemma match_right_extension :
-  (i1,i2,n:Z)(match t1 i1 t2 i2 n)
-      	  -> `i1 <= (array_length t1)-n-1`
-	  -> `i2 <= (array_length t2)-n-1`
-          -> #t1[`i1+n`]=#t2[`i2+n`]
-	  -> (match t1 i1 t2 i2 `n+1`).
+ forall i1 i2 n:Z,
+   match_ t1 i1 t2 i2 n ->
+   (i1 <= array_length t1 - n - 1)%Z ->
+   (i2 <= array_length t2 - n - 1)%Z ->
+   access t1 (i1 + n) = access t2 (i2 + n) ->
+   match_ t1 i1 t2 i2 (n + 1).
 Proof.
-Intros i1 i2 n Hmatch Hi1 Hi2 Hn.
-Elim Hmatch; Intros Hi1' Hi2' Heq.
-Apply match_cons.
-Omega.
-Omega.
-Intros i Hi.
-Elim (Z_le_lt_eq_dec i n).
-Intro. Apply Heq. Omega.
-Intro H. Rewrite H. Auto.
-Omega.
-Save.
+intros i1 i2 n Hmatch Hi1 Hi2 Hn.
+elim Hmatch; intros Hi1' Hi2' Heq.
+apply match_cons.
+omega.
+omega.
+intros i Hi.
+elim (Z_le_lt_eq_dec i n).
+intro.
+ apply Heq.
+ omega.
+intro H.
+ rewrite H.
+ auto.
+omega.
+Qed.
 
 Lemma match_contradiction_at_first :
-  (i1,i2,n:Z) `0 < n`
-         -> ~ (#t1[i1]=#t2[i2])
-         -> ~ (match t1 i1 t2 i2 n).
+ forall i1 i2 n:Z,
+   (0 < n)%Z -> access t1 i1 <> access t2 i2 -> ~ match_ t1 i1 t2 i2 n.
 Proof.
-Intros i1 i2 n Hn Heq.
-Red. Intro Hmatch. Elim Hmatch; Intros.
-Absurd #t1[i1]=#t2[i2]; [ Assumption | Idtac ].
-Replace i1 with `i1+0`. Replace i2 with `i2+0`.
-Apply (H1 `0`).
-Omega.
-Omega.
-Omega.
-Save.
+intros i1 i2 n Hn Heq.
+red.
+ intro Hmatch.
+ elim Hmatch; intros.
+absurd (access t1 i1 = access t2 i2); [ assumption | idtac ].
+replace i1 with (i1 + 0)%Z.
+ replace i2 with (i2 + 0)%Z.
+apply (H1 0%Z).
+omega.
+omega.
+omega.
+Qed.
 
 Lemma match_contradiction_at_i :
-  (i1,i2,i,n:Z) `0 < n`
-         -> `0 <= i < n`
-         -> ~ (#t1[`i1+i`]=#t2[`i2+i`])
-         -> ~ (match t1 i1 t2 i2 n).
+ forall i1 i2 i n:Z,
+   (0 < n)%Z ->
+   (0 <= i < n)%Z ->
+   access t1 (i1 + i) <> access t2 (i2 + i) -> ~ match_ t1 i1 t2 i2 n.
 Proof.
-Intros i1 i2 i n Hn Hi Heq.
-Red. Intro Hmatch. Elim Hmatch; Intros.
-Absurd #t1[`i1+i`]=#t2[`i2+i`]; [ Assumption | Idtac ].
-Apply (H1 i); Omega.
-Save.  
-
+intros i1 i2 i n Hn Hi Heq.
+red.
+ intro Hmatch.
+ elim Hmatch; intros.
+absurd (access t1 (i1 + i) = access t2 (i2 + i));
+ [ assumption | idtac ].
+apply (H1 i); omega.
+Qed.
+  
 Lemma match_right_weakening :
-  (i1,i2,n,n':Z)
-     (match t1 i1 t2 i2 n)
-  -> `n' < n`
-  -> (match t1 i1 t2 i2 n').
+ forall i1 i2 n n':Z,
+   match_ t1 i1 t2 i2 n -> (n' < n)%Z -> match_ t1 i1 t2 i2 n'.
 Proof.
-Intros i1 i2 n n' Hmatch Hn.
-Elim Hmatch; Intros.
-Apply match_cons. Omega. Omega.
-Intros i Hi. Apply H1; Omega.
-Save.
+intros i1 i2 n n' Hmatch Hn.
+elim Hmatch; intros.
+apply match_cons.
+ omega.
+ omega.
+intros i Hi.
+ apply H1; omega.
+Qed.
 
 Lemma match_left_weakening :
-  (i1,i2,n,n':Z)
-     (match t1 `i1-(n-n')` t2 `i2-(n-n')` n)
-  -> `n' < n`
-  -> (match t1 i1 t2 i2 n').
+ forall i1 i2 n n':Z,
+   match_ t1 (i1 - (n - n')) t2 (i2 - (n - n')) n ->
+   (n' < n)%Z -> match_ t1 i1 t2 i2 n'.
 Proof.
-Intros i1 i2 n n' Hmatch Hn.
-Decompose [match] Hmatch.
-Apply match_cons. Omega. Omega.
-Intros i Hi.
-Replace `i1+i` with `i1-(n-n')+(i+(n-n'))`.
-Replace `i2+i` with `i2-(n-n')+(i+(n-n'))`.
-Apply H1.
-Omega. Omega. Omega.
-Save.
+intros i1 i2 n n' Hmatch Hn.
+decompose [match_] Hmatch.
+apply match_cons.
+ omega.
+ omega.
+intros i Hi.
+replace (i1 + i)%Z with (i1 - (n - n') + (i + (n - n')))%Z.
+replace (i2 + i)%Z with (i2 - (n - n') + (i + (n - n')))%Z.
+apply H1.
+omega.
+ omega.
+ omega.
+Qed.
 
 Lemma match_sym :
-  (i1,i2,n:Z) (match t1 i1 t2 i2 n) -> (match t2 i2 t1 i1 n).
+ forall i1 i2 n:Z, match_ t1 i1 t2 i2 n -> match_ t2 i2 t1 i1 n.
 Proof.
-Intros i1 i2 n Hmatch.
-Decompose [match] Hmatch.
-Apply match_cons. Omega. Omega.
-Intros i Hi. Symmetry.
-Apply H1; Omega.
-Save.
+intros i1 i2 n Hmatch.
+decompose [match_] Hmatch.
+apply match_cons.
+ omega.
+ omega.
+intros i Hi.
+ symmetry.
+apply H1; omega.
+Qed.
 
-Variable t3 : (array A).
+Variable t3 : array A.
 
 Lemma match_trans :
-  (i1,i2,i3,n:Z)
-       (match t1 i1 t2 i2 n)
-    -> (match t2 i2 t3 i3 n)
-    -> (match t1 i1 t3 i3 n).
+ forall i1 i2 i3 n:Z,
+   match_ t1 i1 t2 i2 n -> match_ t2 i2 t3 i3 n -> match_ t1 i1 t3 i3 n.
 Proof.
-Intros i1 i2 i3 n H12 H23.
-Decompose [match] H12. Decompose [match] H23.
-Apply match_cons. Omega. Omega.
-Intros i Hi. Apply trans_equal with y := #t2[`i2+i`].
-Apply H1; Omega.
-Apply H4; Omega.
-Save.
+intros i1 i2 i3 n H12 H23.
+decompose [match_] H12.
+ decompose [match_] H23.
+apply match_cons.
+ omega.
+ omega.
+intros i Hi.
+ apply trans_equal with (y := access t2 (i2 + i)).
+apply H1; omega.
+apply H4; omega.
+Qed.
 
 Lemma match_left_extension :
-  (i,j,n:Z)
-  `0 <= i` -> `0 <= j` -> `0 < n` ->
-  (access t1 i) = (access t2 j) ->
-  (match t1 `i+1` t2 `j+1` `n-1`) ->
-  (match t1 i t2 j n).
+ forall i j n:Z,
+   (0 <= i)%Z ->
+   (0 <= j)%Z ->
+   (0 < n)%Z ->
+   access t1 i = access t2 j ->
+   match_ t1 (i + 1) t2 (j + 1) (n - 1) -> match_ t1 i t2 j n.
 Proof.
-Intros i j n H1 H2 H3 H4 Hmatch.
-Decompose [match] Hmatch.
-Apply match_cons. Omega. Omega.
-Intuition.
-Assert `i0=0` \/ `0<i0`. Omega. Intuition.
-Subst; Ring `i+0`; Ring `j+0`; Assumption.
-Replace `i+i0` with `i+1+(i0-1)`; Try Omega.
-Replace `j+i0` with `j+1+(i0-1)`; Try Omega.
-Apply H5; Omega.
-Save.
+intros i j n H1 H2 H3 H4 Hmatch.
+decompose [match_] Hmatch.
+apply match_cons.
+ omega.
+ omega.
+intuition.
+assert (i0 = 0%Z \/ (0 < i0)%Z).
+ omega.
+ intuition.
+subst; ring (i + 0)%Z; ring (j + 0)%Z; assumption.
+replace (i + i0)%Z with (i + 1 + (i0 - 1))%Z; try omega.
+replace (j + i0)%Z with (j + 1 + (i0 - 1))%Z; try omega.
+apply H5; omega.
+Qed.
 
 End match_lemmas.
 

@@ -1,4 +1,4 @@
-(**************************************************************************)
+(* Load Programs. *)(**************************************************************************)
 (*                                                                        *)
 (* Proof of the Bresenham line drawing algorithm.                         *)
 (*                                                                        *)
@@ -7,18 +7,18 @@
 (*                                                                        *)
 (**************************************************************************)
 
-Require zaux.
-Require Why.
-Require ZArith. 
-Require Omega.
-Require ZArithRing.
+Require Import zaux.
+Require Import Why.
+Require Import ZArith.
+ Require Import Omega.
+Require Import ZArithRing.
 
 (*Why*) Parameter x2 : Z.
 (*Why*) Parameter y2 : Z.
 
-Axiom first_octant : `0 <= y2 <= x2`.
+Axiom first_octant : (0 <= y2 <= x2)%Z.
 
-Tactic Definition Omega' := Generalize first_octant; Omega.
+Ltac Omega' := generalize first_octant; omega.
 
 (*s Specification of the correctness. 
     [(best x y)] expresses that the point [(x,y)] is the best
@@ -26,151 +26,124 @@ Tactic Definition Omega' := Generalize first_octant; Omega.
     This line has slope [y2/x2] thus the point on
     the line is [(x,x*y2/x2)]. *)
 
-Definition best := [x,y:Z](y':Z)`|x2*y-x*y2| <= |x2*y'-x*y2|`.
+Definition best (x y:Z) :=
+  forall y':Z, (Zabs (x2 * y - x * y2) <= Zabs (x2 * y' - x * y2))%Z.
 
 (*s Invariant. The invariant relates [x], [y] and [e] and
     gives lower and upper bound for [e]. The key lemma 
     [invariant_is_ok] establishes that this invariant implies the
     expected property. *)
 
-Definition invariant := 
- [x,y,e:Z]`e = 2*(x+1)*y2 - (2*y+1)*x2` /\ `2*(y2-x2) <= e <= 2*y2`.
+Definition invariant (x y e:Z) :=
+  e = (2 * (x + 1) * y2 - (2 * y + 1) * x2)%Z /\
+  (2 * (y2 - x2) <= e <= 2 * y2)%Z.
 
-Lemma invariant_is_ok : 
-  (x,y,e:Z)(invariant x y e) -> (best x y).
+Lemma invariant_is_ok : forall x y e:Z, invariant x y e -> best x y.
 Proof.
-Intros x y e.
-Unfold invariant; Unfold best; Intros [E I'] y'.
-Cut `0 <= x2`; [ Intro Hx2 | Idtac ].
-Apply closest.
-Assumption.
-Apply (proj1 ? ? (Zabs_le `2*x2*y-2*(x*y2)` `x2` Hx2)).
-Rewrite E in I'.
-Split.
+intros x y e.
+unfold invariant; unfold best; intros [E I'] y'.
+cut (0 <= x2)%Z; [ intro Hx2 | idtac ].
+apply closest.
+assumption.
+apply (proj1 (Zabs_le (2 * x2 * y - 2 * (x * y2)) x2 Hx2)).
+rewrite E in I'.
+split.
 (* 0 <= x2 *)
-Generalize (proj2 ? ? I').
-RingSimpl '`2*(x+1)*y2-(2*y+1)*x2` '`2*x*y2-2*x2*y+2*y2-x2`.
-Intro.
-RingSimpl '`2*(x*y2)` '`2*x*y2`.
-Omega.
+generalize (proj2 I').
+RingSimpl (2 * (x + 1) * y2 - (2 * y + 1) * x2)%Z
+ (2 * x * y2 - 2 * x2 * y + 2 * y2 - x2)%Z.
+intro.
+RingSimpl (2 * (x * y2))%Z (2 * x * y2)%Z.
+omega.
 (* 0 <= x2 *)
-Generalize (proj1 ? ? I').
-RingSimpl '`2*(x+1)*y2-(2*y+1)*x2` '`2*x*y2-2*x2*y+2*y2-x2`.
-RingSimpl '`2*(y2-x2)` '`2*y2-2*x2`.
-RingSimpl '`2*(x*y2)` '`2*x*y2`.
-Omega.
-Omega.
-Save.
+generalize (proj1 I').
+RingSimpl (2 * (x + 1) * y2 - (2 * y + 1) * x2)%Z
+ (2 * x * y2 - 2 * x2 * y + 2 * y2 - x2)%Z.
+RingSimpl (2 * (y2 - x2))%Z (2 * y2 - 2 * x2)%Z.
+RingSimpl (2 * (x * y2))%Z (2 * x * y2)%Z.
+omega.
+omega.
+Qed.
 
 (*s Program correctness. *)
 
-(* Why obligation from file "bresenham.mlw", characters 1620-1630 *)
-Lemma bresenham_po_1 : 
-  (x0: Z)
-  (Post1: x0 = `0`)
-  (y0: Z)
-  (Post2: y0 = `0`)
-  (e0: Z)
-  (Post3: e0 = `2 * y2 - x2`)
-  (Variant1: Z)
-  (e1: Z)
-  (x1: Z)
-  (y1: Z)
-  (Pre4: Variant1 = `x2 + 1 - x1`)
-  (Pre3: (`0 <= x1` /\ `x1 <= x2 + 1`) /\ (invariant x1 y1 e1))
-  (Test4: `x1 <= x2`)
-  (best x1 y1).
+(* Why obligation from file , characters 1620-1630 *)
+Lemma bresenham_po_1 :
+ forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
+   (Post3:e0 = (2 * y2 - x2)%Z) (Variant1 e1 x1 y1:Z)
+   (Pre4:Variant1 = (x2 + 1 - x1)%Z)
+   (Pre3:((0 <= x1)%Z /\ (x1 <= x2 + 1)%Z) /\ invariant x1 y1 e1)
+   (Test4:(x1 <= x2)%Z), best x1 y1.
 Proof.
-Intros.
-Decompose [and] Pre3.
-Exact (invariant_is_ok x1 y1 e1 H0).
-Save.
+intros.
+decompose [and] Pre3.
+exact (invariant_is_ok x1 y1 e1 H0).
+Qed.
 
-(* Why obligation from file "bresenham.mlw", characters 1656-1672 *)
-Lemma bresenham_po_2 : 
-  (x0: Z)
-  (Post1: x0 = `0`)
-  (y0: Z)
-  (Post2: y0 = `0`)
-  (e0: Z)
-  (Post3: e0 = `2 * y2 - x2`)
-  (Variant1: Z)
-  (e1: Z)
-  (x1: Z)
-  (y1: Z)
-  (Pre4: Variant1 = `x2 + 1 - x1`)
-  (Pre3: (`0 <= x1` /\ `x1 <= x2 + 1`) /\ (invariant x1 y1 e1))
-  (Test4: `x1 <= x2`)
-  (Pre2: (best x1 y1))
-  (Test3: `e1 < 0`)
-  (e2: Z)
-  (Post4: e2 = `e1 + 2 * y2`)
-  ((x:Z)
-   (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\ (invariant x y1 e2)) /\
-    (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
+(* Why obligation from file , characters 1656-1672 *)
+Lemma bresenham_po_2 :
+ forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
+   (Post3:e0 = (2 * y2 - x2)%Z) (Variant1 e1 x1 y1:Z)
+   (Pre4:Variant1 = (x2 + 1 - x1)%Z)
+   (Pre3:((0 <= x1)%Z /\ (x1 <= x2 + 1)%Z) /\ invariant x1 y1 e1)
+   (Test4:(x1 <= x2)%Z) (Pre2:best x1 y1) (Test3:(e1 < 0)%Z) (e2:Z)
+   (Post4:e2 = (e1 + 2 * y2)%Z) (x:Z),
+   x = (x1 + 1)%Z ->
+   (((0 <= x)%Z /\ (x <= x2 + 1)%Z) /\ invariant x y1 e2) /\
+   Zwf 0 (x2 + 1 - x) (x2 + 1 - x1).
 Proof.
-Intros.
-Rewrite H; Clear x H.
-Split. Split. Omega'.
-Unfold invariant. Unfold invariant in Pre3.
-Split.
-Replace `2*(x1+1+1)*y2` with `2*(x1+1)*y2+2*y2`;
- [ Omega' | Ring ].
+intros.
+rewrite H; clear x H.
+split.
+ split.
+ Omega'.
+unfold invariant.
+ unfold invariant in Pre3.
+split.
+replace (2 * (x1 + 1 + 1) * y2)%Z with (2 * (x1 + 1) * y2 + 2 * y2)%Z;
+ [ Omega' | ring ].
 Omega'.
-Unfold Zwf; Omega'.
-Save.
+unfold Zwf; Omega'.
+Qed.
 
-(* Why obligation from file "bresenham.mlw", characters 1684-1738 *)
-Lemma bresenham_po_3 : 
-  (x0: Z)
-  (Post1: x0 = `0`)
-  (y0: Z)
-  (Post2: y0 = `0`)
-  (e0: Z)
-  (Post3: e0 = `2 * y2 - x2`)
-  (Variant1: Z)
-  (e1: Z)
-  (x1: Z)
-  (y1: Z)
-  (Pre4: Variant1 = `x2 + 1 - x1`)
-  (Pre3: (`0 <= x1` /\ `x1 <= x2 + 1`) /\ (invariant x1 y1 e1))
-  (Test4: `x1 <= x2`)
-  (Pre2: (best x1 y1))
-  (Test2: `e1 >= 0`)
-  (y3: Z)
-  (Post5: y3 = `y1 + 1`)
-  (e2: Z)
-  (Post6: e2 = `e1 + 2 * (y2 - x2)`)
-  ((x:Z)
-   (x = `x1 + 1` -> ((`0 <= x` /\ `x <= x2 + 1`) /\ (invariant x y3 e2)) /\
-    (Zwf `0` `x2 + 1 - x` `x2 + 1 - x1`))).
+(* Why obligation from file , characters 1684-1738 *)
+Lemma bresenham_po_3 :
+ forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
+   (Post3:e0 = (2 * y2 - x2)%Z) (Variant1 e1 x1 y1:Z)
+   (Pre4:Variant1 = (x2 + 1 - x1)%Z)
+   (Pre3:((0 <= x1)%Z /\ (x1 <= x2 + 1)%Z) /\ invariant x1 y1 e1)
+   (Test4:(x1 <= x2)%Z) (Pre2:best x1 y1) (Test2:(e1 >= 0)%Z) (y3:Z)
+   (Post5:y3 = (y1 + 1)%Z) (e2:Z) (Post6:e2 = (e1 + 2 * (y2 - x2))%Z)
+   (x:Z),
+   x = (x1 + 1)%Z ->
+   (((0 <= x)%Z /\ (x <= x2 + 1)%Z) /\ invariant x y3 e2) /\
+   Zwf 0 (x2 + 1 - x) (x2 + 1 - x1).
 Proof.
-Intros.
-Subst x.
-Unfold invariant. Unfold invariant in Pre3.
-Split. Split. Omega'.
-Split. 
-Subst y3.
-Replace `2*(x1+1+1)*y2-(2*(y1+1)+1)*x2` 
-   with `2*(x1+1)*y2+2*y2-(2*y1+1)*x2-2*x2`;
- [ Omega' | Ring ].
+intros.
+subst x.
+unfold invariant.
+ unfold invariant in Pre3.
+split.
+ split.
+ Omega'.
+split.
+ subst y3.
+replace (2 * (x1 + 1 + 1) * y2 - (2 * (y1 + 1) + 1) * x2)%Z with
+ (2 * (x1 + 1) * y2 + 2 * y2 - (2 * y1 + 1) * x2 - 2 * x2)%Z;
+ [ Omega' | ring ].
 Omega'.
-Unfold Zwf; Omega'.
-Save.
+unfold Zwf; Omega'.
+Qed.
 
-(* Why obligation from file "bresenham.mlw", characters 1493-1532 *)
-Lemma bresenham_po_4 : 
-  (x0: Z)
-  (Post1: x0 = `0`)
-  (y0: Z)
-  (Post2: y0 = `0`)
-  (e0: Z)
-  (Post3: e0 = `2 * y2 - x2`)
-  (`0 <= x0` /\ `x0 <= x2 + 1`) /\ (invariant x0 y0 e0).
+(* Why obligation from file , characters 1493-1532 *)
+Lemma bresenham_po_4 :
+ forall (x0:Z) (Post1:x0 = 0%Z) (y0:Z) (Post2:y0 = 0%Z) (e0:Z)
+   (Post3:e0 = (2 * y2 - x2)%Z),
+   ((0 <= x0)%Z /\ (x0 <= x2 + 1)%Z) /\ invariant x0 y0 e0.
 Proof.
-Intuition.
+intuition.
 Omega'.
-Subst x0; Subst y0; Subst e0; Unfold invariant; Omega'.
-Save.
+subst x0; subst y0; subst e0; unfold invariant; Omega'.
+Qed.
 
 

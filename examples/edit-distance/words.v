@@ -1,26 +1,26 @@
-
+(* Load Programs. *)
 (*s Axiomatization of words over a alphabet [A]. *)
 
-Require PolyList.
-Require ZArith.
-Require ZArithRing.
-Require WhyArrays.
-Require Zwf.
-Require Omega.
+Require Import PolyList.
+Require Import ZArith.
+Require Import ZArithRing.
+Require Import WhyArrays.
+Require Import Zwf.
+Require Import Omega.
 
 (*s Alphabet. This is an abstract type [A] where equality is decidable.*)
 
-Parameter A:Set.
+Parameter A : Set.
  
-Axiom A_eq_dec : (a,b:A) { a=b }+{ ~a=b }.
+Axiom A_eq_dec : forall a b:A, {a = b} + {a <> b}.
 
 (*s Words are list of characters. *)
 
-Definition word := (list A).
-Definition eps := (nil A).
+Definition word := list A.
+Definition eps := nil (A:=A).
 
 Definition concat := app.
-Implicits concat [1].
+Implicit Arguments concat [1].
 
 
 (*s Distance. It is axiomatized as a predicate [dist w1 w2 n] expressing that
@@ -28,256 +28,274 @@ Implicits concat [1].
     length [n] from [w1] to [w2]). *)
 
 Inductive dist : word -> word -> Z -> Prop :=
-  dist_eps :
-    (dist eps eps `0`)
-| dist_add_left : 
-    (w1,w2:word)(n:Z) (dist w1 w2 n) -> (a:A) (dist (cons a w1) w2 `n+1`)
-| dist_add_right : 
-    (w1,w2:word)(n:Z) (dist w1 w2 n) -> (a:A) (dist w1 (cons a w2) `n+1`)
-| dist_context :
-    (w1,w2:word)(n:Z) (dist w1 w2 n) -> (a:A) (dist (cons a w1) (cons a w2) n).
+  | dist_eps : dist eps eps 0%Z
+  | dist_add_left :
+      forall (w1 w2:word) (n:Z),
+        dist w1 w2 n -> forall a:A, dist (cons a w1) w2 (n + 1)%Z
+  | dist_add_right :
+      forall (w1 w2:word) (n:Z),
+        dist w1 w2 n -> forall a:A, dist w1 (cons a w2) (n + 1)%Z
+  | dist_context :
+      forall (w1 w2:word) (n:Z),
+        dist w1 w2 n -> forall a:A, dist (cons a w1) (cons a w2) n.
 
 (*s Then we introducve the minimal distance between two words. *)
 
-Definition min_dist := 
-  [w1,w2:word][n:Z] (dist w1 w2 n) /\ ((m:Z)(dist w1 w2 m) -> `n <= m`).
+Definition min_dist (w1 w2:word) (n:Z) :=
+  dist w1 w2 n /\ (forall m:Z, dist w1 w2 m -> (n <= m)%Z).
 
 
 (*s Length of a word (in type [Z]). *)
 
-Fixpoint Zlength [w:word] : Z :=
-  Cases w of
-    nil => `0`
-  | (cons _ w') => `(Zlength w')+1`
-end.
+Fixpoint Zlength (w:word) : Z :=
+  match w with
+  | nil => 0%Z
+  | cons _ w' => (Zlength w' + 1)%Z
+  end.
 
 
 (*s Auxiliary result on words:
     Any word [au] starting with a character can be written as a
     word [vb] ending with a character. *)
 
-Fixpoint last_char [a:A][u:word] : A :=
-  Cases u of
-    nil => a
-  | (cons c u') => (last_char c u') end.
+Fixpoint last_char (a:A) (u:word) {struct u} : A :=
+  match u with
+  | nil => a
+  | cons c u' => last_char c u'
+  end.
 
-Fixpoint but_last [a:A][u:word] : word := 
-  Cases u of
-    nil => eps
-  | (cons c u') => (cons a (but_last c u')) end.
+Fixpoint but_last (a:A) (u:word) {struct u} : word :=
+  match u with
+  | nil => eps
+  | cons c u' => cons a (but_last c u')
+  end.
 
-Lemma first_last_explicit : 
-  (u:word)(a:A)
-    (concat (but_last a u) (cons (last_char a u) eps))=(cons a u).
+Lemma first_last_explicit :
+ forall (u:word) (a:A),
+   concat (but_last a u) (cons (last_char a u) eps) = cons a u.
 Proof.
-Induction u; Simpl.
-Reflexivity.
-Intros.
-Rewrite (H a).
-Reflexivity.
-Save.
+oldinduction u; simpl.
+reflexivity.
+intros.
+rewrite (H a).
+reflexivity.
+Qed.
 
-Lemma first_last : 
-  (a:A)(u:word)
-  (EX v | (EX b | (concat v (cons b eps))=(cons a u)
-               /\ (Zlength v)=(Zlength u))).
+Lemma first_last :
+ forall (a:A) (u:word),
+    EX v : _
+   | ( EX b : _
+      | concat v (cons b eps) = cons a u /\ Zlength v = Zlength u).
 Proof.
-Intros a u.
-Exists (but_last a u).
-Exists (last_char a u).
-Split. Exact (first_last_explicit u a).
-Generalize a; Induction u; Simpl; Intros.
-Omega.
-Generalize (Hrecu a0); Intros; Omega.
-Save.
+intros a u.
+exists (but_last a u).
+exists (last_char a u).
+split.
+ exact (first_last_explicit u a).
+generalize a; oldinduction u; simpl; intros.
+omega.
+generalize (Hrecu a0); intros; omega.
+Qed.
 
 
 (*s Key lemma: if [dist w1 aw2 n] then there exists [u1], [v1],
     [k] such that [dist v1 w2 k], [w1=u1v1] and [k+(length u1)-1<=m]. *)
 
 Lemma key_lemma_right :
-  (w1,w'2:word)(m:Z)(a:A)
-  (dist w1 w'2 m) -> 
-  (w2:word) w'2=(cons a w2) ->
-  (EX u1 | (EX v1 | (EX k |
-     w1 = (concat u1 v1) /\ (dist v1 w2 k) 
-  /\ `k + (Zlength u1) <= m + 1`))).
+ forall (w1 w'2:word) (m:Z) (a:A),
+   dist w1 w'2 m ->
+   forall w2:word,
+     w'2 = cons a w2 ->
+      EX u1 : _
+     | ( EX v1 : _
+        | ( EX k : _
+           | w1 = concat u1 v1 /\
+             dist v1 w2 k /\ (k + Zlength u1 <= m + 1)%Z)).
 Proof.
-Intros w1 w'2 m a H; Elim H.
+intros w1 w'2 m a H; elim H.
 (* 1. [dist_eps]: absurd *)
-Intros; Discriminate H0.
+intros; discriminate H0.
 (* 2. [dist_add_left]: we use induction hypothesis. *)
-Intros w'1 w3 n Hdist Hrec b w2 Heq.  
-Elim (Hrec w2 Heq); Intros u'1 Hex.
-Elim Hex; Clear Hex; Intros v'1 Hex.
-Elim Hex; Clear Hex; Intros k Hex.
-Decompose [and] Hex; Clear Hex.
-Elim (first_last b u'1); Intros u1 Hex.
-Elim Hex; Intros c [ Hc Hlength ].
-Exists u1; Exists (cons c v'1); Exists `k+1`.
-Repeat Split.
-Rewrite H0.
-Rewrite app_comm_cons.
-Rewrite <- Hc.
-Rewrite app_ass; Reflexivity.
-Apply dist_add_left; Assumption.
-Omega.
+intros w'1 w3 n Hdist Hrec b w2 Heq.
+  elim (Hrec w2 Heq); intros u'1 Hex.
+elim Hex; clear Hex; intros v'1 Hex.
+elim Hex; clear Hex; intros k Hex.
+decompose [and] Hex; clear Hex.
+elim (first_last b u'1); intros u1 Hex.
+elim Hex; intros c [Hc Hlength].
+exists u1; exists (cons c v'1); exists (k + 1)%Z.
+repeat split.
+rewrite H0.
+rewrite app_comm_cons.
+rewrite <- Hc.
+rewrite app_ass; reflexivity.
+apply dist_add_left; assumption.
+omega.
 (* 3. [dist_add_right]: direct *)
-Intros.
-Exists eps; Exists w0; Exists n.
-Repeat Split.
-Inversion H2.
-Rewrite <- H5; Assumption.
-Simpl; Omega.
+intros.
+exists eps; exists w0; exists n.
+repeat split.
+inversion H2.
+rewrite <- H5; assumption.
+simpl; omega.
 (* 4. [dist_context]: direct *)
-Intros.
-Inversion H2.
-Exists (cons a eps); Exists w0; Exists n.
-Repeat Split.
-Rewrite <- H5; Assumption.
-Simpl; Omega.
-Save.
+intros.
+inversion H2.
+exists (cons a eps); exists w0; exists n.
+repeat split.
+rewrite <- H5; assumption.
+simpl; omega.
+Qed.
 
 
 (*s To get the symmetric key lemma, we use the symmetry of [dist]. *)
 
-Lemma dist_symetry : 
-  (w1,w2:word)(n:Z) (dist w1 w2 n) -> (dist w2 w1 n).
+Lemma dist_symetry :
+ forall (w1 w2:word) (n:Z), dist w1 w2 n -> dist w2 w1 n.
 Proof.
-Induction 1; Intros.
-Exact dist_eps.
-Apply dist_add_right; Assumption.
-Apply dist_add_left; Assumption.
-Apply dist_context; Assumption.
-Save.
+oldinduction 1; intros.
+exact dist_eps.
+apply dist_add_right; assumption.
+apply dist_add_left; assumption.
+apply dist_context; assumption.
+Qed.
 
 Lemma key_lemma_left :
-  (w1,w2:word)(m:Z)(a:A)
-  (dist (cons a w1) w2 m) -> 
-  (EX u2 | (EX v2 | (EX k |
-     w2 = (concat u2 v2) /\ (dist w1 v2 k) 
-  /\ `k + (Zlength u2) <= m + 1`))).
+ forall (w1 w2:word) (m:Z) (a:A),
+   dist (cons a w1) w2 m ->
+    EX u2 : _
+   | ( EX v2 : _
+      | ( EX k : _
+         | w2 = concat u2 v2 /\
+           dist w1 v2 k /\ (k + Zlength u2 <= m + 1)%Z)).
 Proof.
-Intros w1 w2 m a Hdist.
-Generalize (dist_symetry (cons a w1) w2 m Hdist); Intro Hrev.
+intros w1 w2 m a Hdist.
+generalize (dist_symetry (cons a w1) w2 m Hdist); intro Hrev.
 
-Elim (key_lemma_right w2 (cons a w1) m a Hrev w1).
-Intros u2 Hex; Elim Hex; Clear Hex.
-Intros v2 Hex; Elim Hex; Clear Hex.
-Intros k Hex.
-Decompose [and] Hex; Clear Hex.
-Exists u2.
-Exists v2.
-Exists k.
-Repeat Split; Try Assumption.
-Apply dist_symetry; Assumption.
-Reflexivity.
-Save.
+elim (key_lemma_right w2 (cons a w1) m a Hrev w1).
+intros u2 Hex; elim Hex; clear Hex.
+intros v2 Hex; elim Hex; clear Hex.
+intros k Hex.
+decompose [and] Hex; clear Hex.
+exists u2.
+exists v2.
+exists k.
+repeat split; try assumption.
+apply dist_symetry; assumption.
+reflexivity.
+Qed.
 
 
 (*s Concatenation to the left: if [dist w1 w2 n] then
     [dist uw1 w2 (|u|+n)] and [dist w1 uw2 (|u|+n)]. *)
 
 Lemma dist_concat_left :
-  (u,v,w:word)(n:Z)
-  (dist v w n) -> (dist (concat u v) w `(Zlength u)+n`).
+ forall (u v w:word) (n:Z),
+   dist v w n -> dist (concat u v) w (Zlength u + n).
 Proof.
-Induction u; Simpl; Intros.
-Auto.
-Replace `(Zlength l)+1+n` with `((Zlength l)+n)+1`; [ Idtac | Omega ].
-Apply dist_add_left; Auto.
-Save.
+oldinduction u; simpl; intros.
+auto.
+replace (Zlength l + 1 + n)%Z with (Zlength l + n + 1)%Z;
+ [ idtac | omega ].
+apply dist_add_left; auto.
+Qed.
 
 Lemma dist_concat_right :
-  (u,v,w:word)(n:Z)
-  (dist v w n) -> (dist v (concat u w) `(Zlength u)+n`).
+ forall (u v w:word) (n:Z),
+   dist v w n -> dist v (concat u w) (Zlength u + n).
 Proof.
-Induction u; Simpl; Intros.
-Auto.
-Replace `(Zlength l)+1+n` with `((Zlength l)+n)+1`; [ Idtac | Omega ].
-Apply dist_add_right; Auto.
-Save.
+oldinduction u; simpl; intros.
+auto.
+replace (Zlength l + 1 + n)%Z with (Zlength l + n + 1)%Z;
+ [ idtac | omega ].
+apply dist_add_right; auto.
+Qed.
 
 
 (*s First main lemma for correctness: [d(aw1,aw2)=d(w1,w2)]. *)
 
-Lemma min_dist_equal : 
-  (w1,w2:word)(a:A)(n:Z)
-  (min_dist w1 w2 n) ->
-  (min_dist (cons a w1) (cons a w2) n).
+Lemma min_dist_equal :
+ forall (w1 w2:word) (a:A) (n:Z),
+   min_dist w1 w2 n -> min_dist (cons a w1) (cons a w2) n.
 Proof.
-Intros w1 w2 a n.
-Unfold min_dist.
-Generalize dist_context;Intuition.
+intros w1 w2 a n.
+unfold min_dist.
+generalize dist_context; intuition.
 
-Inversion H0.
+inversion H0.
 
-Elim (key_lemma_right w1 (cons a w2) n0 a H7 w2); [ Idtac | Reflexivity ].
-Intros u1 Hex; Elim Hex; Clear Hex.
-Intros v1 Hex; Elim Hex; Clear Hex.
-Intros k Hex. Decompose [and] Hex; Clear Hex.
-Generalize (dist_concat_left u1 v1 w2 k H10); Intro.
-Apply Zle_trans with `(Zlength u1)+k`.
-Apply H2.
-Rewrite H8; Assumption.
-Omega.
-Elim (key_lemma_left w1 w2 n0 a H7).
-Intros u2 Hex; Elim Hex; Clear Hex.
-Intros v2 Hex; Elim Hex; Clear Hex.
-Intros k Hex. Decompose [and] Hex; Clear Hex.
-Generalize (dist_concat_right u2 w1 v2 k H10); Intro.
-Apply Zle_trans with `(Zlength u2)+k`.
-Apply H2.
-Rewrite H8; Assumption.
-Omega.
-Auto.
-Save.
+elim (key_lemma_right w1 (cons a w2) n0 a H7 w2);
+ [ idtac | reflexivity ].
+intros u1 Hex; elim Hex; clear Hex.
+intros v1 Hex; elim Hex; clear Hex.
+intros k Hex.
+ decompose [and] Hex; clear Hex.
+generalize (dist_concat_left u1 v1 w2 k H10); intro.
+apply Zle_trans with (Zlength u1 + k)%Z.
+apply H2.
+rewrite H8; assumption.
+omega.
+elim (key_lemma_left w1 w2 n0 a H7).
+intros u2 Hex; elim Hex; clear Hex.
+intros v2 Hex; elim Hex; clear Hex.
+intros k Hex.
+ decompose [and] Hex; clear Hex.
+generalize (dist_concat_right u2 w1 v2 k H10); intro.
+apply Zle_trans with (Zlength u2 + k)%Z.
+apply H2.
+rewrite H8; assumption.
+omega.
+auto.
+Qed.
 
 
 (*s Second main lemma for correctness: \par\noindent
     if [~a=b], then [d(aw1,bw2)=1+min(d(aw1,w2),d(w1,bw2))]. *)
 
 Lemma min_dist_diff :
-  (w1,w2:word)(a,b:A)(m,p:Z)
-  ~a=b ->
-  (min_dist (cons a w1) w2          p) ->
-  (min_dist w1          (cons b w2) m) ->
-  (min_dist (cons a w1) (cons b w2) `(Zmin m p)+1`). 
-Proof.
-Intros w1 w2 a b m p. Unfold min_dist; Intuition.
-Unfold Zmin.
-Case (Zcompare m p); Generalize dist_add_left dist_add_right; Intuition.
+ forall (w1 w2:word) (a b:A) (m p:Z),
+   a <> b ->
+   min_dist (cons a w1) w2 p ->
+   min_dist w1 (cons b w2) m ->
+   min_dist (cons a w1) (cons b w2) (Zmin m p + 1).
+ Proof.
+intros w1 w2 a b m p.
+ unfold min_dist; intuition.
+unfold Zmin.
+case (m ?= p)%Z; generalize dist_add_left dist_add_right; intuition.
 
-Generalize (Zle_min_l m p) (Zle_min_r m p) Zle_reg_r Zle_trans.
-Inversion H1; Intuition EAuto.
-Save.
+generalize (Zle_min_l m p) (Zle_min_r m p) Zle_reg_r Zle_trans.
+inversion H1; intuition eauto.
+Qed.
 
 (*s Two trivial lemmas needed for correctness. *)
 
-Lemma min_dist_eps : 
-  (w:word)(a:A)(n:Z)
-  (min_dist w eps n) -> (min_dist (cons a w) eps `n+1`).
+Lemma min_dist_eps :
+ forall (w:word) (a:A) (n:Z),
+   min_dist w eps n -> min_dist (cons a w) eps (n + 1).
  Proof.
-Unfold min_dist.
-Intros w a n [H1 H2]. Split.
-Apply dist_add_left.
-Assumption.
-Intros m Hm; Inversion Hm.
-Generalize (H2 n0 H5).
-Intros; Omega.
-Save.
+unfold min_dist.
+intros w a n [H1 H2].
+ split.
+apply dist_add_left.
+assumption.
+intros m Hm; inversion Hm.
+generalize (H2 n0 H5).
+intros; omega.
+Qed.
 
-Lemma min_dist_eps_length : (w:word)(min_dist eps w (Zlength w)).
+Lemma min_dist_eps_length : forall w:word, min_dist eps w (Zlength w).
 Proof.
-Intros w; Unfold min_dist; Intuition.
-Induction w; Simpl; Intros.
-Exact dist_eps.
-Apply dist_add_right; Assumption.
-Generalize m H. Clear m H.
-Induction w; Intros m H; Inversion H; Simpl.
-Omega.
-Generalize (Hrecw n H4); Intro; Omega.
-Save.
+intros w; unfold min_dist; intuition.
+oldinduction w; simpl; intros.
+exact dist_eps.
+apply dist_add_right; assumption.
+generalize m H.
+ clear m H.
+oldinduction w; intros m H; inversion H; simpl.
+omega.
+generalize (Hrecw n H4); intro; omega.
+Qed.
 
 
 (*s Suffixes of an array of characters. 
@@ -287,100 +305,102 @@ Save.
 
 Section suffixes.
 
-Variable n:Z.
-Variable t:(array A).
+Variable n : Z.
+Variable t : array A.
 
-Definition F : (i:Z)((j:Z)(Zwf_up n j i)->word)->word.
-Proof.
-Intros i f.
-Elim (Z_lt_ge_dec i `0`); Intro Hi.
-Exact eps.
-Elim (Z_lt_ge_dec i n); Intro H1.
-Refine (cons (access t i) (f `i+1` ?)).
-Unfold Zwf_up; Omega.
-Exact eps.
+Definition F : forall i:Z, (forall j:Z, Zwf_up n j i -> word) -> word.
+intros i f.
+elim (Z_lt_ge_dec i 0); intro Hi.
+exact eps.
+elim (Z_lt_ge_dec i n); intro H1.
+refine (cons (access t i) (f (i + 1)%Z _)).
+unfold Zwf_up; omega.
+exact eps.
 Defined.
 
-Definition suffix := 
-  (fix Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F).
+Definition suffix := Fix (Zwf_up_well_founded n) (fun i:Z => word) F.
 
 (*s To use [Fix_eq], we need to establish extensionality of [F]. *)
 
-Lemma extensionality :   
-  (x:Z; f,g:((y:Z)(Zwf_up n y x)->word))
-    ((y:Z; p:(Zwf_up n y x))(f y p)=(g y p))->(F x f)=(F x g).
+Lemma extensionality :
+ forall (x:Z) (f g:forall y:Z, Zwf_up n y x -> word),
+   (forall (y:Z) (p:Zwf_up n y x), f y p = g y p) -> F x f = F x g.
 Proof.
-Intros.
-Unfold F.
-Case (Z_lt_ge_dec x `0`); Simpl.
-Auto.
-Intro; Case (Z_lt_ge_dec x n); Simpl.
-Intro. Apply (f_equal ? ? (cons (access t x))).
-Apply H.
-Auto.
-Save.
+intros.
+unfold F.
+case (Z_lt_ge_dec x 0); simpl.
+auto.
+intro; case (Z_lt_ge_dec x n); simpl.
+intro.
+ apply (f_equal (cons (access t x))).
+apply H.
+auto.
+Qed.
 
 (*s Induction case for [suffix]. *)
 
-Lemma suffix_is_cons : 
-  (i:Z)`0 <= i < n` ->
-  (suffix i) = (cons (access t i) (suffix `i+1`)).
+Lemma suffix_is_cons :
+ forall i:Z,
+   (0 <= i < n)%Z -> suffix i = cons (access t i) (suffix (i + 1)).
 Proof.
-Intros i Hi.
-Rewrite (Fix_eq Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F
-         extensionality).
-Unfold F.
-Case (Z_lt_ge_dec i `0`).
-Intros; Absurd `i < 0`; Omega.
-Case (Z_lt_ge_dec i n).
-Intros; Simpl.
-Reflexivity.
-Intros; Absurd `i >= n`; Omega.
-Save.
+intros i Hi.
+rewrite
+ (Fix_eq (Zwf_up_well_founded n) (fun i:Z => word) F extensionality)
+ .
+unfold F.
+case (Z_lt_ge_dec i 0).
+intros; absurd (i < 0)%Z; omega.
+case (Z_lt_ge_dec i n).
+intros; simpl.
+reflexivity.
+intros; absurd (i >= n)%Z; omega.
+Qed.
 
 (*s Base case: the empty suffix. *)
 
-Lemma suffix_n_is_eps : (suffix n) = eps. 
-Proof.
-Rewrite (Fix_eq Z (Zwf_up n) (Zwf_up_well_founded n) [i:Z]word F
-         extensionality).
-Unfold F.
-Case (Z_lt_ge_dec n `0`).
-Reflexivity.
-Case (Z_lt_ge_dec n n).
-Intros; Absurd `n < n`; Omega.
-Reflexivity.
-Save.
+Lemma suffix_n_is_eps : suffix n = eps.
+ Proof.
+rewrite
+ (Fix_eq (Zwf_up_well_founded n) (fun i:Z => word) F extensionality)
+ .
+unfold F.
+case (Z_lt_ge_dec n 0).
+reflexivity.
+case (Z_lt_ge_dec n n).
+intros; absurd (n < n)%Z; omega.
+reflexivity.
+Qed.
 
 (*s The whole array as a word. *)
 
-Definition word_of_array := (suffix `0`).
+Definition word_of_array := suffix 0.
 
 (*s Length of a suffix. *)
 
-Lemma suffix_length : 
-  (i:Z)`0 <= i <= n` -> `(Zlength (suffix i)) = n-i`.
-Proof.
+Lemma suffix_length :
+ forall i:Z, (0 <= i <= n)%Z -> Zlength (suffix i) = (n - i)%Z.
 (* proof is by induction over [n-i] *)
-Intros i Hi. Generalize Hi. 
-Replace i with `n-(n-i)`.
-Replace `n-(n-(n-i))` with `n-i`.
-Pattern `n-i`; Apply natlike_ind.
+Proof.
+intros i Hi.
+ generalize Hi.
+ replace i with (n - (n - i))%Z.
+replace (n - (n - (n - i)))%Z with (n - i)%Z.
+pattern (n - i)%Z; apply natlike_ind.
 (* base case *)
-Intros; Replace `n-0` with n.
-Rewrite suffix_n_is_eps; Reflexivity.
-Omega.
+intros; replace (n - 0)%Z with n.
+rewrite suffix_n_is_eps; reflexivity.
+omega.
 (* induction case *)
-Intros.
-Rewrite suffix_is_cons; [ Idtac | Omega ].
-Simpl.
-Unfold Zs; Ring.
-Replace `n-(1+x)+1` with `n-x`; [ Idtac | Ring ].
-Apply H0; Omega.
-Omega.
-Omega.
-Omega.
-Save.
+intros.
+rewrite suffix_is_cons; [ idtac | omega ].
+simpl.
+unfold Zs; ring.
+replace (n - (1 + x) + 1)%Z with (n - x)%Z; [ idtac | ring ].
+apply H0; omega.
+omega.
+omega.
+omega.
+Qed.
 
 End suffixes.
 
@@ -389,69 +409,73 @@ End suffixes.
     distance. *)
 
 Inductive dist' : word -> word -> Z -> Prop :=
-  dist'_eps :
-    (dist' eps eps `0`)
-| dist'_add_left : 
-    (w1,w2:word)(n:Z) (dist' w1 w2 n) -> (a:A) (dist' (cons a w1) w2 `n+1`)
-| dist'_add_right : 
-    (w1,w2:word)(n:Z) (dist' w1 w2 n) -> (a:A) (dist' w1 (cons a w2) `n+1`)
-| dist'_context :
-    (w1,w2,u,v:word)(n:Z) 
-    (dist' w1 w2 n) -> 
-    (dist' (concat u (concat w1 v)) (concat u (concat w2 v)) n).
+  | dist'_eps : dist' eps eps 0%Z
+  | dist'_add_left :
+      forall (w1 w2:word) (n:Z),
+        dist' w1 w2 n -> forall a:A, dist' (cons a w1) w2 (n + 1)%Z
+  | dist'_add_right :
+      forall (w1 w2:word) (n:Z),
+        dist' w1 w2 n -> forall a:A, dist' w1 (cons a w2) (n + 1)%Z
+  | dist'_context :
+      forall (w1 w2 u v:word) (n:Z),
+        dist' w1 w2 n ->
+        dist' (concat u (concat w1 v)) (concat u (concat w2 v)) n.
 
 Lemma cons_is_concat :
-  (w:word)(a:A)(cons a w)=(concat (cons a eps) (concat w eps)).
+ forall (w:word) (a:A), cons a w = concat (cons a eps) (concat w eps).
 Proof.
-Intros w a; Simpl.
-Unfold concat; Unfold eps; Rewrite <- app_nil_end.
-Reflexivity.
-Save.
+intros w a; simpl.
+unfold concat; unfold eps; rewrite <- app_nil_end.
+reflexivity.
+Qed.
 
 Lemma dist_is_dist' :
-  (w1,w2:word)(n:Z)(dist w1 w2 n) -> (dist' w1 w2 n).
+ forall (w1 w2:word) (n:Z), dist w1 w2 n -> dist' w1 w2 n.
 Proof.
-Induction 1.
-Exact dist'_eps.
-Intros; Apply dist'_add_left; Assumption.
-Intros; Apply dist'_add_right; Assumption.
-Intros.
-Rewrite (cons_is_concat w0 a).
-Rewrite (cons_is_concat w3 a).
-Apply dist'_context; Assumption.
-Save.
+oldinduction 1.
+exact dist'_eps.
+intros; apply dist'_add_left; assumption.
+intros; apply dist'_add_right; assumption.
+intros.
+rewrite (cons_is_concat w0 a).
+rewrite (cons_is_concat w3 a).
+apply dist'_context; assumption.
+Qed.
 
-Lemma dist_concat_both_left : 
-  (n:Z)(u,w1,w2:word)
-  (dist w1 w2 n) -> (dist (concat u w1) (concat u w2) n).
+Lemma dist_concat_both_left :
+ forall (n:Z) (u w1 w2:word),
+   dist w1 w2 n -> dist (concat u w1) (concat u w2) n.
 Proof.
-Induction u; Simpl; Intros.
-Auto.
-Apply dist_context; Auto.
-Save.
+oldinduction u; simpl; intros.
+auto.
+apply dist_context; auto.
+Qed.
 
-Lemma dist_concat_both_right : 
-  (n:Z)(w1,w2:word)
-  (dist w1 w2 n) -> (u:word)(dist (concat w1 u) (concat w2 u) n).
+Lemma dist_concat_both_right :
+ forall (n:Z) (w1 w2:word),
+   dist w1 w2 n -> forall u:word, dist (concat w1 u) (concat w2 u) n.
 Proof.
-Induction 1; Simpl; Intros.
-Induction u; Simpl.
-Exact dist_eps.
-Apply dist_context; Assumption.
-Apply dist_add_left. Exact (H1 u).
-Apply dist_add_right. Exact (H1 u).
-Apply dist_context. Exact (H1 u).
-Save.
+oldinduction 1; simpl; intros.
+oldinduction u; simpl.
+exact dist_eps.
+apply dist_context; assumption.
+apply dist_add_left.
+ exact (H1 u).
+apply dist_add_right.
+ exact (H1 u).
+apply dist_context.
+ exact (H1 u).
+Qed.
 
 Lemma dist'_is_dist :
-  (w1,w2:word)(n:Z)(dist' w1 w2 n) -> (dist w1 w2 n).
+ forall (w1 w2:word) (n:Z), dist' w1 w2 n -> dist w1 w2 n.
 Proof.
-Induction 1.
-Exact dist_eps.
-Intros; Apply dist_add_left; Assumption.
-Intros; Apply dist_add_right; Assumption.
-Intros.
-Apply dist_concat_both_left.
-Apply dist_concat_both_right.
-Assumption.
-Save.
+oldinduction 1.
+exact dist_eps.
+intros; apply dist_add_left; assumption.
+intros; apply dist_add_right; assumption.
+intros.
+apply dist_concat_both_left.
+apply dist_concat_both_right.
+assumption.
+Qed.
