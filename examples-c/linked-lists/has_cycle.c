@@ -2,7 +2,7 @@
 #include "list.h"
 
 /*@ requires
-  @   \valid(l)
+  @   finite(l)
   @ ensures 
   @   \result <=> cyclic(l) 
   @*/

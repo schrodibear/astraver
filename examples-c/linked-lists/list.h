@@ -29,6 +29,8 @@ typedef struct struct_list {
 
 /*@ predicate is_list(list l) reads l->tl */
 
+/*@ predicate finite(list l) reads l->tl */
+
 /*@ predicate cyclic(list l) reads l->tl */
 
 /*@ logic Length length(list l) reads l->tl */

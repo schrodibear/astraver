@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.34 2004-05-18 09:34:23 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.35 2004-06-02 13:11:17 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -47,6 +47,7 @@ val wp_only : bool
 
 val wbb : bool
 val split : bool
+val all_vc : bool
 
 (*s Prover options *)
 
@@ -69,6 +70,8 @@ val no_harvey_prelude : bool
 val simplify_typing : bool
 
 val fpi : bool
+
+(*s [file f] appends [f] to the directory specified with [-dir], if any *)
 
 val file : string -> string
 

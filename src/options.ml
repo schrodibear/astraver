@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.40 2004-05-18 09:34:23 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.41 2004-06-02 13:11:17 filliatr Exp $ i*)
 
 open Format
 
@@ -38,6 +38,7 @@ let fpi_ = ref false
 let dir_ = ref ""
 let wbb_ = ref false
 let split_ = ref false
+let all_vc_ = ref false
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -124,6 +125,7 @@ Typing/Annotations/VCG options:
   -wp, --wp-only     exits after annotation
   --wbb              while loops as black boxes (careful: incomplete WP)
   --split            split conditions into several pieces
+  --all-vc           outputs all verification conditions (no auto discharge)
 
 Prover selection:
   --coq       selects COQ prover (default)
@@ -132,7 +134,7 @@ Prover selection:
   --mizar     selects Mizar prover
   --harvey    selects haRVey prover
   --simplify  selects Simplify prover
-  --fpi       outputs realing-point obligations into a separate .fpi file
+  --fpi       outputs floating-point obligations into a separate .fpi file
 
 Coq-specific options:
   --valid, 
@@ -242,6 +244,8 @@ let files =
 	wbb_ := true; parse args
     | ("-split" | "--split") :: args ->
 	split_ := true; parse args
+    | ("-all-vc" | "--all-vc" | "--allvc") :: args ->
+	all_vc_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -274,6 +278,7 @@ let fpi = !fpi_
 let dir = !dir_
 let wbb = !wbb_
 let split = !split_
+let all_vc = !all_vc_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f
 

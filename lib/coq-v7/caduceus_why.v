@@ -30,7 +30,8 @@ Admitted.
 
 (*Why*) Parameter any_int : (_: unit)Z.
 
-(*Why*) Parameter any_float : (_: unit)R.
+
+(*Why*) Parameter any_real : (_: unit)R.
 
 (*Why*) Parameter any_pointer : (_: unit)pointer.
 

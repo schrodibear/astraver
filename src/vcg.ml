@@ -454,7 +454,7 @@ let print_sequent fmt (ctx, concl) =
 let count = ref 0
 
 let discharge loc ctx concl =
-  let pr = discharge_methods ctx concl in
+  let pr = (if all_vc then linear else discharge_methods) ctx concl in
   log (snd loc) (ctx, concl) None;
   incr count;
   if_verbose_2 eprintf "one obligation trivially discharged [%d]@." !count;

@@ -249,3 +249,48 @@ Qed.
 End Disjointness.
 Hint Resolve disjoint_cons disjoint_nil_l disjoint_l_nil .
 
+(** * Cyclicity *)
+
+Section Cyclicity.
+
+Variable a : alloc_table.
+Variable tl : memory pointer.
+
+Definition finite (p : pointer) :=
+  exists r : plist, 
+  forall p', 
+  (exists lpp', lpath a tl p lpp' p') -> p'<>null -> valid a p' /\ In p' r.
+
+Lemma finite_is_valid : forall p, p<>null -> finite p -> valid a p.
+Proof.
+unfold finite; intuition.
+elim H0; clear H0; intuition.
+assert (h : exists lpp' : plist, lpath a tl p lpp' p).
+exists (@nil pointer); auto.
+generalize (H0 p h); clear H0; intuition.
+Save.
+
+Definition cyclic (p : pointer) :=
+  exists l1:plist, exists l2:plist, exists p',
+  p'<>null /\ lpath a tl p l1 p' /\ lpath a tl p' l2 p'.
+
+(** [cyclic] and [is_list] are exclusive *)
+Lemma cyclic_is_list_exclusive : forall p,
+  cyclic p -> is_list a tl p -> False.
+Proof.
+intros.
+elim H; clear H; intros l1 H; elim H; clear H; intros l2 H;
+elim H; clear H; intros p'; intuition.
+elim (is_list_llist a tl p H0); clear H0; intros l0 Hl0.
+unfold llist in Hl0.
+
+Admitted.
+
+(** when a list is finite, it is either [cyclic] or [is_list] *)
+Lemma finite_cyclic_or_is_list : forall p, 
+  finite p -> cyclic p \/ is_list a tl p.
+Proof.
+Admitted.
+
+End Cyclicity.
+

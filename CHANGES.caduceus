@@ -1,6 +1,9 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
+ o fixed bug with any_real not defined in Why
+ o fixed bug with pointers to float
+
 version 0.61, May 27th, 2004
 ============================
  o improved Coq tactics; new Coq tactics eq_pointer and neq_pointer

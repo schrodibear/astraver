@@ -1,4 +1,7 @@
 
+  o new option --all-vc to get all verification conditions (no more
+    automatic discharging of the most trivial conditions)
+
 version 1.61, May 27th, 2004
 ============================
   o Simplify output: do not fail on floats anymore (now uninterpreted symbols)
