@@ -191,37 +191,37 @@ Admitted.
 
 
 (*Why logic*) Definition acc :
-  forall (A29:Set), ((memory) A29) -> pointer -> A29.
+  forall (A31:Set), ((memory) A31) -> pointer -> A31.
 Admitted.
 Implicit Arguments acc.
 
 
 (*Why logic*) Definition upd :
-  forall (A30:Set), ((memory) A30) -> pointer -> A30 -> ((memory) A30).
+  forall (A32:Set), ((memory) A32) -> pointer -> A32 -> ((memory) A32).
 Admitted.
 Implicit Arguments upd.
 
 
 (*Why axiom*) Lemma acc_upd :
-  forall (A31:Set),
-  (forall (m:((memory) A31)),
-   (forall (p:pointer), (forall (a:A31), (acc (upd m p a) p) = a))).
+  forall (A33:Set),
+  (forall (m:((memory) A33)),
+   (forall (p:pointer), (forall (a:A33), (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A32:Set),
-  (forall (m:((memory) A32)),
+  forall (A34:Set),
+  (forall (m:((memory) A34)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A32), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+     (forall (a:A34), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  forall (A33:Set),
-  (forall (m:((memory) A33)),
+  forall (A35:Set),
+  (forall (m:((memory) A35)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A33), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A35), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -233,9 +233,6 @@ Parameter pset : Set.
 Admitted.
 
 (*Why logic*) Definition pset_singleton : pointer -> pset.
-Admitted.
-
-(*Why logic*) Definition pset_arrow : pset -> ((memory) pointer) -> pset.
 Admitted.
 
 (*Why logic*) Definition pset_star : pset -> ((memory) pointer) -> pset.
@@ -274,8 +271,8 @@ Admitted.
 (*Why logic*) Definition not_in_pset : pointer -> pset -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns (A34:Set) (a:alloc_table)
-  (m1:((memory) A34)) (m2:((memory) A34)) (l:pset)
+(*Why predicate*) Definition not_assigns (A36:Set) (a:alloc_table)
+  (m1:((memory) A36)) (m2:((memory) A36)) (l:pset)
   := (forall (p:pointer),
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments not_assigns.
@@ -292,6 +289,10 @@ Admitted.
 (*Why axiom*) Lemma pset_singleton_elim :
   (forall (p1:pointer),
    (forall (p2:pointer), ((not_in_pset p1 (pset_singleton p2)) -> ~(p1 = p2)))).
+Admitted.
+
+(*Why axiom*) Lemma not_not_in_singleton :
+  (forall (p:pointer), ~(not_in_pset p (pset_singleton p))).
 Admitted.
 
 (*Why axiom*) Lemma pset_union_intro :
@@ -314,6 +315,22 @@ Admitted.
    (forall (l2:pset),
     (forall (p:pointer),
      ((not_in_pset p (pset_union l1 l2)) -> (not_in_pset p l2))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_star_intro :
+  (forall (l:pset),
+   (forall (m:((memory) pointer)),
+    (forall (p:pointer),
+     ((forall (p1:pointer), (p = (acc m p1) -> (not_in_pset p1 l))) ->
+      (not_in_pset p (pset_star l m)))))).
+Admitted.
+
+(*Why axiom*) Lemma pset_star_elim :
+  (forall (l:pset),
+   (forall (m:((memory) pointer)),
+    (forall (p:pointer),
+     ((not_in_pset p (pset_star l m)) ->
+      (forall (p1:pointer), (p = (acc m p1) -> (not_in_pset p1 l))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_all_intro :
@@ -350,7 +367,7 @@ Admitted.
       ((not_in_pset p (pset_range l a b)) ->
        (forall (p1:pointer),
         (~(not_in_pset p1 l) ->
-         (forall (i:Z), (a <= i /\ i <= b -> ~(p = (shift p1 i))))))))))).
+         (forall (i:Z), (a <= i /\ i <= b -> ~((shift p1 i) = p)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_left_intro :
@@ -369,7 +386,7 @@ Admitted.
      ((not_in_pset p (pset_range_left l a)) ->
       (forall (p1:pointer),
        (~(not_in_pset p1 l) ->
-        (forall (i:Z), (i <= a -> ~(p = (shift p1 i)))))))))).
+        (forall (i:Z), (i <= a -> ~((shift p1 i) = p))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_range_right_intro :
@@ -388,7 +405,7 @@ Admitted.
      ((not_in_pset p (pset_range_right l a)) ->
       (forall (p1:pointer),
        (~(not_in_pset p1 l) ->
-        (forall (i:Z), (a <= i -> ~(p = (shift p1 i)))))))))).
+        (forall (i:Z), (a <= i -> ~((shift p1 i) = p))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_all_intro :
@@ -406,7 +423,7 @@ Admitted.
     (forall (m:((memory) pointer)),
      ((not_in_pset p (pset_acc_all l m)) ->
       (forall (p1:pointer),
-       (~(not_in_pset p1 l) -> (forall (i:Z), ~(p = (acc m (shift p1 i)))))))))).
+       (~(not_in_pset p1 l) -> (forall (i:Z), ~((acc m (shift p1 i)) = p)))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_intro :
@@ -430,7 +447,7 @@ Admitted.
        ((not_in_pset p (pset_acc_range l m a b)) ->
         (forall (p1:pointer),
          (~(not_in_pset p1 l) ->
-          (forall (i:Z), (a <= i /\ i <= b -> ~(p = (acc m (shift p1 i))))))))))))).
+          (forall (i:Z), (a <= i /\ i <= b -> ~((acc m (shift p1 i)) = p))))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_left_intro :
@@ -452,7 +469,7 @@ Admitted.
       ((not_in_pset p (pset_acc_range_left l m a)) ->
        (forall (p1:pointer),
         (~(not_in_pset p1 l) ->
-         (forall (i:Z), (i <= a -> ~(p = (acc m (shift p1 i)))))))))))).
+         (forall (i:Z), (i <= a -> ~((acc m (shift p1 i)) = p)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma pset_acc_range_right_intro :
@@ -474,24 +491,24 @@ Admitted.
       ((not_in_pset p (pset_acc_range_right l m a)) ->
        (forall (p1:pointer),
         (~(not_in_pset p1 l) ->
-         (forall (i:Z), (a <= i -> ~(p = (acc m (shift p1 i)))))))))))).
+         (forall (i:Z), (a <= i -> ~((acc m (shift p1 i)) = p)))))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_trans :
-  forall (A35:Set),
+  forall (A37:Set),
   (forall (a:alloc_table),
    (forall (l:pset),
-    (forall (m1:((memory) A35)),
-     (forall (m2:((memory) A35)),
-      (forall (m3:((memory) A35)),
+    (forall (m1:((memory) A37)),
+     (forall (m2:((memory) A37)),
+      (forall (m3:((memory) A37)),
        ((not_assigns a m1 m2 l) ->
         ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_refl :
-  forall (A36:Set),
+  forall (A38:Set),
   (forall (a:alloc_table),
-   (forall (l:pset), (forall (m:((memory) A36)), (not_assigns a m m l)))).
+   (forall (l:pset), (forall (m:((memory) A38)), (not_assigns a m m l)))).
 Admitted.
 
 (*Why logic*) Definition on_heap : alloc_table -> pointer -> Prop.

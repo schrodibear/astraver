@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.88 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.89 2005-03-25 15:37:44 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -975,33 +975,39 @@ let functions dl =
     | Nfunspec (sp, _, id) ->
 	declare id (spec sp)
     | Nfundef (sp, _, id, s) ->
-	let ef_spec = spec sp and ef_body = statement s in
-	begin
-	  match sp.Clogic.assigns with
-	    | None -> 
-		(* no assigns given by user:
-		   emit a warning if some side-effects have been detected *)
-		if id <> Cinit.invariants_initially_established_info &&
-		  not (HeapVarSet.is_empty ef_body.assigns) then
-		  Queue.add 
-		    (d.loc,
-		     "function " ^ id.fun_name ^ 
-		     " has side-effects but no 'assigns' clause given")
-		    warnings
-	    | Some _ -> 
-		(* some assigns given by user:
-		   emit a warning if side-effects of spec differs from 
-		   side-effects of body *) 
-		if not (HeapVarSet.equal ef_spec.assigns ef_body.assigns) then 
-		  begin 
+	let ef_spec = spec sp in
+	let ef = 
+	  if verify id.fun_name then
+	    let ef_body = statement s in
+	    begin match sp.Clogic.assigns with
+	      | None -> 
+		  (* no assigns given by user:
+		     emit a warning if some side-effects have been detected *)
+		  if id <> Cinit.invariants_initially_established_info &&
+		    not (HeapVarSet.is_empty ef_body.assigns) then
+		      Queue.add 
+			(d.loc,
+			 "function " ^ id.fun_name ^ 
+			   " has side-effects but no 'assigns' clause given")
+			warnings
+	      | Some _ -> 
+		  (* some assigns given by user:
+		     emit a warning if side-effects of spec differs from 
+		     side-effects of body *) 
+		  if not (HeapVarSet.equal ef_spec.assigns ef_body.assigns) 
+		  then begin 
 		    Queue.add 
 		      (d.loc,
 		       "'assigns' clause for function " ^ id.fun_name ^
-		       " do not match side-effects of its body ")
+			 " do not match side-effects of its body ")
 		      warnings		    
 		  end
-	end;
-	declare id (ef_union ef_spec ef_body)
+	    end;
+	    ef_union ef_spec ef_body
+	  else
+	    ef_spec
+	in
+	declare id ef
     | _ -> 
 	()
   in

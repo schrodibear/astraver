@@ -1,5 +1,6 @@
 Note: These are the changes for Caduceus.
 
+ o functions bodies effects are now computed only for functions to be verified
  o names changes in the model: 
      assign_loc -> pset
      unchanged -> not_in_pset

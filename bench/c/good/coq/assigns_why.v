@@ -53,7 +53,7 @@ intuition; subst; auto.
 apply not_assigns_trans with intP0; auto.
 rewrite shift_shift; red; intuition.
 rewrite acc_upd_neq; auto.
-assert (p0 <> shift p (size + - mutable_size1)).
+assert (shift p (size + - mutable_size1)<> p0).
 apply pset_range_elim with (pset_singleton p) 0 (size-1); auto with *.
 auto with *.
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.140 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.141 2005-03-25 15:37:44 hubert Exp $ i*)
 
 
 open Format
@@ -749,7 +749,14 @@ let collect_locations before acc loc =
 	let m = interp_var (Some before) f.var_unique_name in
 	begin match term_or_pset e with
 	  | Term te -> Term (LApp ("acc", [m; te]))
-	  | Pset s -> Pset (LApp ("pset_arrow", [s; m]))
+	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
+	end
+    | NTstar e ->
+	let var = global_var_for_type t.nterm_type in
+	let m = interp_var (Some before) var in
+	begin match term_or_pset e with
+	  | Term te -> Term (LApp ("acc", [m; te]))
+	  | Pset s -> Pset (LApp ("pset_star", [s; m]))
 	end
     | NTrange (e, None, None) ->
 	let var = global_var_for_type t.nterm_type in
