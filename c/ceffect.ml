@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.86 2005-02-28 09:00:41 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.87 2005-03-02 09:45:56 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -531,25 +531,62 @@ let invariant_for_global =
 *)
 let not_a_constant_value loc = error loc "is not a constant value"
 
-let binop loc = function
-  | Badd | Badd_int | Badd_float | Badd_pointer_int -> Clogic.Badd
-  | Bsub | Bsub_int | Bsub_float | Bsub_pointer -> Clogic.Bsub
-  | Bmul | Bmul_int | Bmul_float -> Clogic.Bmul
-  | Bdiv | Bdiv_int | Bdiv_float -> Clogic.Bdiv
-  | Bmod | Bmod_int -> Clogic.Bmod
-  | Beq | Beq_int | Beq_float | Beq_pointer 
-  | Blt | Blt_int | Blt_float | Blt_pointer
-  | Bgt | Bgt_int | Bgt_float | Bgt_pointer
-  | Ble | Ble_int | Ble_float | Ble_pointer
-  | Bge | Bge_int | Bge_float | Bge_pointer
-  | Bneq | Bneq_int | Bneq_float | Bneq_pointer
-  | Bbw_and
-  | Bbw_xor
-  | Bbw_or
-  | Band
-  | Bor
-  | Bshift_left
-  | Bshift_right -> not_a_constant_value loc
+(*let binop loc e1 e2 op = 
+  match e1.nexpr_node, e2.nexpr_node, op with
+  | _, _, Badd | _, _, Badd_int | _, _, Badd_float | _, _, Badd_pointer_int ->
+      NTbinop(term_of_expr e1, Clogic.Badd, term_of_expr e2)
+  | _, _, Bsub | _, _, Bsub_int | _, _, Bsub_float | _, _, Bsub_pointer -> 
+      NTbinop(term_of_expr e1, Clogic.Bsub, term_of_expr e2)
+  | _, _, Bmul | _, _, Bmul_int | _, _, Bmul_float -> 
+      NTbinop(term_of_expr e1, Clogic.Bmul, term_of_expr e2)
+  | _, _, Bdiv | _, _, Bdiv_int | _, _, Bdiv_float -> 
+      NTbinop(term_of_expr e1, Clogic.Bdiv, term_of_expr e2)
+  | _, _, Bmod | _, _, Bmod_int ->  
+      NTbinop(term_of_expr e1, Clogic.Bmod, term_of_expr e2)
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_int 
+  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Beq_float 
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_pointer  ->
+      if e1 = e2 then NEconstant (Intconstant "0")
+      else NEconstant (IntConstant "1")
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bneq_int 
+  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Bneq_float 
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bneq_pointer  ->
+      if e1 = e2 then NEconstant (IntConstant "1")
+      else NEconstant (IntConstant "0")
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Blt_int 
+  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Blt_float 
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Blt_pointer  ->
+      if e1 < e2 then NEconstant (IntConstant "0")
+      else NEconstant (IntConstant "1")
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bgt_int 
+  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Bgt_float 
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bgt_pointer  ->
+      if e1 > e2 then NEconstant (IntConstant "0")
+      else NEconstant (IntConstant "1")
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Ble_int 
+  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Ble_float 
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Ble_pointer  ->
+      if e1 <= e2 then NEconstant (IntConstant "0")
+      else NEconstant (IntConstant "1")
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bge_int 
+  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), Bge_float 
+  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bge_pointer  ->
+      if e1 >= e2 then NEconstant (IntConstant "0")
+      else NEconstant (IntConstant "1")
+  | _, _, Beq | _, _, Beq_int | _, _, Beq_float | _, _, Beq_pointer      
+  |  _, _, Blt |  _, _, Blt_int |  _, _, Blt_float |  _, _, Blt_pointer
+  |  _, _, Bgt |  _, _, Bgt_int |  _, _, Bgt_float |  _, _, Bgt_pointer
+  |  _, _, Ble |  _, _, Ble_int |  _, _, Ble_float |  _, _, Ble_pointer
+  |  _, _, Bge |  _, _, Bge_int |  _, _, Bge_float |  _, _, Bge_pointer
+  |  _, _, Bneq |  _, _, Bneq_int |  _, _, Bneq_float |  _, _, Bneq_pointer
+  |  _, _, Bbw_and
+  |  _, _, Bbw_xor
+  |  _, _, Bbw_or
+  |  _, _, Band
+  |  _, _, Bor
+  |  _, _, Bshift_left
+  |  _, _, Bshift_right -> error loc "not a constant value"
+*)
 
 let unop = function
   | Ustar -> Clogic.Ustar
@@ -580,7 +617,77 @@ let rec term_of_expr e =
   | NEunary (op, nexpr) ->  
       make (NTunop (unop op, term_of_expr nexpr))  
   | NEbinary (e1, op, e2) ->
-      make (NTbinop(term_of_expr e1, binop e.nexpr_loc op, term_of_expr e2))
+      begin
+	match e1.nexpr_node, e2.nexpr_node, op with
+	  | _, _, Badd | _, _, Badd_int | _, _, Badd_float 
+	  | _, _, Badd_pointer_int ->
+	      make (NTbinop(term_of_expr e1, Clogic.Badd, term_of_expr e2))
+	  | _, _, Bsub | _, _, Bsub_int | _, _, Bsub_float 
+	  | _, _, Bsub_pointer -> 
+	      make (NTbinop(term_of_expr e1, Clogic.Bsub, term_of_expr e2))
+	  | _, _, Bmul | _, _, Bmul_int | _, _, Bmul_float -> 
+	      make (NTbinop(term_of_expr e1, Clogic.Bmul, term_of_expr e2))
+	  | _, _, Bdiv | _, _, Bdiv_int | _, _, Bdiv_float -> 
+	      make (NTbinop(term_of_expr e1, Clogic.Bdiv, term_of_expr e2))
+	  | _, _, Bmod | _, _, Bmod_int ->  
+	      make (NTbinop(term_of_expr e1, Clogic.Bmod, term_of_expr e2))
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Beq_int 
+	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
+	    Beq_float 
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
+	    Beq_pointer  ->
+	      if e1 = e2 then make (NTconstant (IntConstant "0"))
+	      else make (NTconstant (IntConstant "1"))
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bneq_int 
+	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
+	    Bneq_float 
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
+	    Bneq_pointer  ->
+	      if e1 = e2 then make (NTconstant (IntConstant "1"))
+	      else make (NTconstant (IntConstant "0"))
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Blt_int 
+	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
+	    Blt_float 
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
+	    Blt_pointer  ->
+	      if e1 < e2 then make (NTconstant (IntConstant "0"))
+	      else make (NTconstant (IntConstant "1"))
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bgt_int 
+	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
+	    Bgt_float 
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
+	    Bgt_pointer  ->
+	      if e1 > e2 then make (NTconstant (IntConstant "0"))
+	      else make (NTconstant (IntConstant "1"))
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Ble_int 
+	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
+	    Ble_float 
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
+	    Ble_pointer  ->
+	      if e1 <= e2 then make (NTconstant (IntConstant "0"))
+	      else make (NTconstant (IntConstant "1"))
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), Bge_int 
+	  | NEconstant (FloatConstant e1), NEconstant (FloatConstant e2), 
+	    Bge_float 
+	  | NEconstant (IntConstant e1), NEconstant (IntConstant e2), 
+	    Bge_pointer  ->
+	      if e1 >= e2 then make (NTconstant (IntConstant "0"))
+	      else make (NTconstant (IntConstant "1"))
+	  | _, _, Beq | _, _, Beq_int | _, _, Beq_float | _, _, Beq_pointer 
+	  |  _, _, Blt |  _, _, Blt_int |  _, _, Blt_float |  _, _, Blt_pointer
+	  |  _, _, Bgt |  _, _, Bgt_int |  _, _, Bgt_float |  _, _, Bgt_pointer
+	  |  _, _, Ble |  _, _, Ble_int |  _, _, Ble_float |  _, _, Ble_pointer
+	  |  _, _, Bge |  _, _, Bge_int |  _, _, Bge_float |  _, _, Bge_pointer
+	  |  _, _, Bneq |  _, _, Bneq_int |  _, _, Bneq_float 
+	  |  _, _, Bneq_pointer
+	  |  _, _, Bbw_and
+	  |  _, _, Bbw_xor
+	  |  _, _, Bbw_or
+	  |  _, _, Band
+	  |  _, _, Bor
+	  |  _, _, Bshift_left
+	  |  _, _, Bshift_right -> error e.nexpr_loc "not a constant value"
+      end
   | NEcond (e1, e2, e3) ->
       make (NTif (term_of_expr e1, term_of_expr e2, term_of_expr e3))
   | NEcast (ty, e) ->
