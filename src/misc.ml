@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.20 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.21 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -242,6 +242,13 @@ let por a b =
 
 let pnot a =
   if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a
+
+(*s functions over CC terms *)
+
+let rec cc_applist f l = match (f, l) with
+  | f, [] -> f
+  | CC_app (f, l), l' -> CC_app (f, l @ l')
+  | f, l -> CC_app (f, l)
 
 (*s functions over AST *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.16 2002-03-13 16:15:47 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.17 2002-03-14 11:40:53 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -308,7 +308,8 @@ let rec print_pure_type fmt = function
 
 and print_type_v fmt = function
   | Arrow (b,c) ->
-      fprintf fmt "@[%a@ -> %a@]" (print_list arrow pp_binder) b print_type_c c
+      fprintf fmt "@[<hov 2>%a ->@ %a@]" 
+	(print_list arrow pp_binder) b print_type_c c
   | v -> 
       print_type_v2 fmt v
 
@@ -341,7 +342,7 @@ and print_type_c fmt c =
   if e = Effect.bottom && p = [] && q = None then
     print_type_v fmt v
   else
-    fprintf fmt "@[{%a} returns %a: %a@ %a{%a}@]" 
+    fprintf fmt "@[{%a}@ returns %a: %a@ %a@,{%a}@]" 
       print_pre p
       Ident.print id 
       print_type_v v 

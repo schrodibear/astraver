@@ -45,3 +45,39 @@ Proof.
 Intuition.
 Save.
 
+Lemma swap3_po_1 : 
+  (y0: Z) 
+  (x0: Z) 
+  ((x:Z) (x = y0 -> ((y:Z) (y = x0 -> x = y0 /\ y = x0)))).
+Proof.
+Intuition.
+Save.
+
+Lemma swap3_po_2 : 
+  (y0: Z) 
+  (x0: Z) 
+  (result: Z) 
+  ((x:Z) (x = y0 -> ((y:Z) (y = result -> x = y0 /\ y = x0)))) ->
+  (x1: Z) 
+  x1 = y0 ->
+  (y1: Z) 
+  y1 = result ->
+  x1 = y0 /\ y1 = x0.
+Proof.
+Intuition.
+Save.
+
+Lemma swap4_po_1 : 
+  (y0: Z) 
+  (x0: Z) 
+  (tmp0: Z) 
+  tmp0 = x0 ->
+  (x1: Z) 
+  x1 = y0 ->
+  (y1: Z) 
+  y1 = tmp0 ->
+  x1 = y0 /\ y1 = x0.
+Proof.
+Intuition.
+Save.
+

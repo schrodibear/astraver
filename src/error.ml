@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.9 2002-03-13 16:15:46 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.10 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -29,6 +29,7 @@ type error =
   | AppNonFunction
   | TooManyArguments
   | TooComplexArgument
+  | Alias of Ident.t
   | PartialApp
   | TermExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectedType of (formatter -> unit)
@@ -88,6 +89,8 @@ let report fmt = function
   | TooComplexArgument ->
       fprintf fmt 
 	"@[This argument is too complex; application cannot be given a type@]"
+  | Alias id ->
+      fprintf fmt "@[Application to %a creates an alias@]" Ident.print id
   | PartialApp ->
       fprintf fmt "@[This function does not have@ ";
       fprintf fmt "the right number of arguments@]"

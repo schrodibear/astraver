@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.6 2002-03-11 15:17:57 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.7 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -30,6 +30,7 @@ type error =
   | AppNonFunction
   | TooManyArguments
   | TooComplexArgument
+  | Alias of Ident.t
   | PartialApp
   | TermExpectedType of (formatter -> unit) * (formatter -> unit)
   | ExpectedType of (formatter -> unit)
@@ -42,6 +43,8 @@ type error =
   | NoVariableAtDate of Ident.t * string
 
 exception Error of (Loc.t option) * error
+
+val raise_with_loc : Loc.t option -> error -> 'a
 
 val report : formatter -> error -> unit
 

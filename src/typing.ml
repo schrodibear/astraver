@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.26 2002-03-13 16:15:47 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.27 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -160,6 +160,10 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
 
 let expected_type loc t et =
   if t <> et then Error.expected_type loc (fun fmt -> print_type_v fmt et)
+
+let check_for_alias loc id k = 
+  if Effect.occur id k.c_effect || occur_type_v id k.c_result_type then
+    Error.raise_with_loc (Some loc) (Error.Alias id)
 
 let type_eq loc = function
   | PureType PTint -> Ident.t_eq_int
@@ -417,7 +421,7 @@ and typef_desc lab env loc = function
       let _,eapp,_,_ = decomp_kappa kapp in
       let ef = union3effects (effect t_a) (effect t_f) eapp in
       (match t_a.desc with
-	 | Expression ca when t_a.info.kappa.c_post = None ->
+	 | Expression ca when post t_a = None && pre t_a = [] ->
 	     let kapp = type_c_rsubst [x,ca] kapp in
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     (match t_f.desc with
@@ -428,19 +432,27 @@ and typef_desc lab env loc = function
 		| _ ->	   
 		    App (t_f, Term t_a, Some kapp), (tapp, ef), [])
 	 | _ ->
-	     let (_,tapp),_,_,qapp = decomp_kappa kapp in
+	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
+	     (* TODO: rename [x] to avoid capture *)
+	     let info = { loc = loc; pre = []; post = None } in
+	     let var_x = { desc = Var x; info = info } in
+	     let app_f_x = { desc = App (f, Term var_x, None); info = info } in
+	     typef_desc lab env loc (LetIn (x, a, app_f_x)))
+(*i***
 	     if occur_post x qapp then
 	       App (t_f, Term t_a, Some kapp), (tapp, ef), []
 	     else
 	       let kapp = { kapp with c_pre = [] } in
-	       App (t_f, Term t_a, Some kapp), (tapp, ef), [])
+	       App (t_f, Term t_a, Some kapp), (tapp, ef), []
+***i*)
 
   | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
       let tr = type_in_env env r in
       expected_type locr tr tx;
+      check_for_alias locr r kapp;
       let kapp = type_c_subst [x,r] kapp in
       let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let ef = Effect.union (effect t_f) eapp in
@@ -518,8 +530,8 @@ and typef_block lab env bl =
   let rec ef_block lab tyres = function
     | [] ->
 	begin match tyres with
-	    Some ty -> [],ty,Effect.bottom
-	  | None -> failwith "a block should contain at least one statement"
+	  | Some ty -> [], ty, Effect.bottom
+	  | None -> assert false
 	end
     | (Assert c) :: block -> 
 	let ep = state_assert lab env None c in

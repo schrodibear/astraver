@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.11 2002-03-13 16:15:47 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.12 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -160,42 +160,61 @@ let binding_of_alist ren env =
   List.map
     (fun (id,id') -> (id', CC_var_binder (trad_type_in_env ren env id)))
 
-let insert_pre env p t ren =
+let make_pre env ren p = 
   let p = apply_pre ren env p in
-  let h = p.p_value in
-  CC_letin (false, [pre_name p.p_name, CC_pred_binder h], CC_hole h, t ren)
+  pre_name p.p_name, p.p_value
 
-let insert_many_pre env pl t =
-  List.fold_left (fun t h -> insert_pre env h t) t pl
+let let_pre (id, h) cc = 
+  CC_letin (false, [id, CC_pred_binder h], CC_hole h, cc)
 
-let compose info1 e1 e2 ren =
+let let_many_pre = List.fold_right let_pre
+
+let gen_compose isapp info1 e1 e2 ren =
   let env = info1.env in
   let k1 = info1.kappa in
   let (res1,v1),ef1,p1,q1 = decomp_kappa k1 in
-  insert_many_pre env p1
-    (fun ren ->
-       let w1 = get_writes ef1 in
-       let ren' = next ren w1 in
-       let res1,ren' = fresh ren' res1 in
-       let tt1 = trad_ml_type_v ren env v1 in
-       let b = [res1, CC_var_binder tt1] in
-       let b',dep = match q1 with
-	 | None -> 
-	     [], false
-	 | Some q1 -> 
-	     let q1 = apply_post ren' env q1 in
-	     let hyp = subst_in_predicate [Ident.result, res1] q1.a_value in
-	     [post_name q1.a_name, CC_pred_binder hyp], true 
-       in
-       let vo = current_vars ren' w1 in
-       let bl = (binding_of_alist ren env vo) @ b @ b' in
-       CC_letin (dep, bl, e1 ren, e2 res1 ren'))
-    (push_date ren info1.label)
+  let ren = push_date ren info1.label in
+  let r1,w1 = get_repr ef1 in
+  let ren' = next ren w1 in
+  let res1,ren' = fresh ren' res1 in
+  let tt1 = trad_ml_type_v ren env v1 in
+  let b = [res1, CC_var_binder tt1] in
+  let b',dep = match q1 with
+    | None -> 
+	[], false
+    | Some q1 -> 
+	let q1 = apply_post ren' env q1 in
+	let hyp = subst_in_predicate [Ident.result, res1] q1.a_value in
+	[post_name q1.a_name, CC_pred_binder hyp], true 
+  in
+  let vo = current_vars ren' w1 in
+  let bl = (binding_of_alist ren env vo) @ b @ b' in
+  let pre1 = List.map (make_pre env ren) p1 in
+  let cc1 = 
+    if isapp then 
+      let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r1) in
+      let inputpre = List.map (fun (id,_) -> CC_var id) pre1 in
+      cc_applist (e1 ren) (input @ inputpre)
+    else 
+      e1 ren 
+  in
+  let cc = CC_letin (dep, bl, cc1, e2 res1 ren') in
+  let_many_pre pre1 cc
+
+let compose = gen_compose false
+let apply = gen_compose true
 
 (*s [cross_label] is an operator to be used when a label is encountered *)
 
 let cross_label l e ren = e (push_date ren l)
 
+(*s Inserting assertions *)
+
+let insert_pre env p t ren = 
+  let_pre (make_pre env ren p) (t ren)
+
+let insert_many_pre env pl t =
+  List.fold_left (fun t h -> insert_pre env h t) t pl
 
 (*s [abstraction env k e] abstracts a term [e] with respect to the 
     list of read variables, to the preconditions/assertions, i.e.
@@ -226,7 +245,7 @@ let abstraction env k e ren =
   let al = current_vars ren ids in
   let c = abs_pre env p e ren in
   let bl = binding_of_alist ren env al in
-  make_abs (List.rev bl) c
+  make_abs bl c
 
 let fresh id e ren =
   let id',ren' = Rename.fresh ren id in

@@ -1,9 +1,9 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.8 2002-03-13 14:26:41 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.9 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
-   (with module [Mlize]) *)
+    (with module [Mlize]) *)
 
 open Logic
 open Types
@@ -17,15 +17,25 @@ val trad_ml_type_c : Rename.t -> local_env -> type_c -> cc_type
 val trad_imp_type  : Rename.t -> local_env -> type_v -> cc_type
 val trad_type_in_env : Rename.t -> local_env -> Ident.t -> cc_type
 
-(*s Monadic operators *)
+(*s Basic monadic operators. They operate over values of type [interp] i.e.
+    functions building a [cc_term] given a renaming structure. *)
 
 type interp = Rename.t -> cc_term
 
+(* The [unit] operator encapsulates a term in a computation. *)
+
 val unit : typing_info -> term -> interp
 
-val compose : typing_info -> interp ->
-              (Ident.t -> interp) ->
-	      interp
+(* [compose k1 e1 e2] evaluates computation [e1] of type [k1] and 
+   passes its result (actually, a variable naming this result) to a
+   second computation [e2]. [apply] is a variant of [compose] where
+   [e2] is abstracted (typically, a function) and thus must be applied
+   to its input. *)
+
+val compose : typing_info -> interp -> (Ident.t -> interp) -> interp
+val apply   : typing_info -> interp -> (Ident.t -> interp) -> interp
+
+(*s Other monadic operators. *)
 
 val cross_label : string -> interp -> interp
 

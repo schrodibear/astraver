@@ -27,14 +27,17 @@ let swap3 = fun (x,y : int ref) ->
   (let t = !x in begin x := !y; y := t end)
   { x = y@ and y = x@ }
 
+(*
 let test_swap3 =
   let a = ref 1 in
   let b = ref 2 in
   (swap3 a b) { b = 1 }
+*)
 
 (* called on the globals x,y *)
-let call_swap3 = (swap3 x y)
+let call_swap3_x_y = (swap3 x y) { x = y@ and y = x@ }
 
+let call_swap3_y_x = (swap3 y x) { x = y@ and y = x@ }
 
 (* 3. with a function using a global variable *)
 

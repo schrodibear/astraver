@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.21 2002-03-13 16:15:47 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.22 2002-03-14 11:40:52 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -393,7 +393,7 @@ i*)
     | p = program -> Term p ] ]
   ;
   block:
-  [ [ s = block_statement; ";"; b = block -> s::b
+  [ [ s = block_statement; ";"; b = block -> s :: b
     | s = block_statement                 -> [s] ] ]
   ;
   block_statement:

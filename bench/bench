@@ -27,8 +27,13 @@ goods () {
 bads () {
     for f in $1/*.ml; do
 	echo -n "  "$f"... "
-	if $pgm $2 $f > /dev/null 2>&1; 
-        then echo "FAILED!"; exit 1; else echo "ok"; fi
+	if $pgm $2 $f > /dev/null 2>&1; then 
+	    echo "$pgm $2 $f"
+	    echo "FAILED!"
+	    exit 1 
+        else 
+	    echo "ok"
+	fi
     done
 }
 
