@@ -210,6 +210,8 @@ induction visited.
 intros;constructor 1.
 intuition.
 
+
+
 (*simpl.
 intros.
 assert (H1:p<>p0).

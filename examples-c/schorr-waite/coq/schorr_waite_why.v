@@ -356,8 +356,8 @@ Lemma schorr_waite_impl_po_5 :
 Proof.
 (* preservation of loop invariant for the first branch of if "pop" *)
 intuition.
+generalize (H x_7 H3).
 subst.
-generalize (H x H3).
 intro.
 inversion_clear H2.
 left.
@@ -381,13 +381,12 @@ apply Path_left;auto.
 replace (upd (upd r0 p1 null) p1 null) with (upd r0 p1 null).
 auto.
 apply Essai.
-left.
-apply Path_right;auto.
-generalize (acc_upd pointer r0 p1 null).
-intro.
-replace (p1 # (upd r0 p1 null)) with null.
+right.
+clear H H1 H3 H0 H4 H2 Pre31 Pre34 Pre32 Pre37 Pre33 Test4 root l m r.
 
-
+induction H5.
+apply Path_null.
+apply Path_left;auto.
 
 
 
