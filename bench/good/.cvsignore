@@ -2,7 +2,6 @@
 *.prf
 .pvscontext
 *.bin
-*_why.v
 *.vo
 *.pvs
 old
