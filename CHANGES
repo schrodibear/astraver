@@ -1,8 +1,7 @@
 
-  o arbitrary side-effects now allowed in tests (if / while)
-
-version 1.06, March 18th, 2003
+version 1.07, March 25th, 2003
 ==============================
+  o arbitrary side-effects now allowed in tests (if / while)
   o label "init" suppressed; new syntax label:expression to insert labels
   o syntax: logic may introduce several identifiers in a single declaration
   o linear proof search restricted to WP obligations
