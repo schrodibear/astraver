@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.99 2004-07-21 08:07:09 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.100 2004-12-02 17:24:26 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -58,6 +58,7 @@ let gec s = Grammar.Entry.create gram s
 
 (* logic *)
 let lexpr = gec "lexpr"
+let lexpr00 = gec "lexpr00"
 let lexpr0 = gec "lexpr0"
 let lexpr1 = gec "lexpr1"
 let lexpr2 = gec "lexpr2"
@@ -211,8 +212,13 @@ EXTEND
     | f = FLOAT -> let (f,i,e) = Float_lexer.split f in ConstFloat (f,i,e) ] ]
   ;
   lexpr:
-  [ [ a = lexpr0; "->"; b = lexpr -> infix_pp loc a PPimplies b
-    | a = lexpr0; "<->"; b = lexpr -> infix_pp loc a PPiff b
+  [ [ ":"; id = ident; ":"; a = lexpr -> 
+	mk_pp loc (PPnamed (Ident.string id, a))
+    | a = lexpr00 -> a ] ]
+  ;
+  lexpr00:  
+  [ [ a = lexpr0; "->"; b = lexpr00 -> infix_pp loc a PPimplies b
+    | a = lexpr0; "<->"; b = lexpr00 -> infix_pp loc a PPiff b
     | a = lexpr0 -> a ] ]
   ; 
   lexpr0:

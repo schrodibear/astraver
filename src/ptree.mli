@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.22 2004-05-04 12:37:13 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.23 2004-12-02 17:24:26 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -46,6 +46,7 @@ and pp_desc =
   | PPforall of Ident.t * pure_type * lexpr
   | PPexists of Ident.t * pure_type * lexpr
   | PPfpi of lexpr * real_constant * real_constant
+  | PPnamed of string * lexpr
 
 (*s Parsed types *)
 

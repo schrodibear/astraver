@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.36 2004-07-21 08:07:09 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.37 2004-12-02 17:24:26 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -216,6 +216,8 @@ and desc_predicate loc lab env lenv = function
 	 | te, PTreal -> Pfpi (te, f1, f2)
 	 | _ -> raise_located e.pp_loc 
 	         (AnyMessage "this expression should have type real"))
+  | PPnamed (n, a) ->
+      Pnamed (n, predicate lab env lenv a)
 
 and type_pvar loc lenv x =
   if is_at x then 
@@ -289,7 +291,7 @@ and desc_term loc lab env lenv = function
 	 | ta, PTint -> Tapp (t_neg_int, [ta], []), PTint
 	 | ta, PTreal -> Tapp (t_neg_real, [ta], []), PTreal
 	 | _ -> expected_num loc)
-  | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ ->
+  | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ | PPnamed _ ->
       term_expected loc
 
 and type_if lab env lenv a b c =

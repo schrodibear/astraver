@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.129 2004-12-01 17:10:02 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.130 2004-12-02 17:24:26 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -522,7 +522,7 @@ let print_predicate_v8 fmt p =
     | Pfpi _ ->
 	failwith "fpi not supported with Coq V8"
     | Pnamed (n, p) ->
-	fprintf fmt "@[((* %s *)@ %a)@]" n print3 p
+	fprintf fmt "@[(* %s *)@ %a@]" n print3 p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
