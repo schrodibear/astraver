@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.15 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.16 2002-09-13 12:15:40 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -44,3 +44,4 @@ type t =
   | MutableExternal
   | AnyMessage of string
   | ExceptionArgument of Ident.t * bool
+  | CannotBeRaised of Ident.t

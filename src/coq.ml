@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.58 2002-09-13 09:01:44 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.59 2002-09-13 12:15:40 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -344,19 +344,19 @@ let reprint_parameter fmt id c =
 let print_parameter = reprint_parameter
 
 let reprint_exception_type fmt id v =
-  fprintf fmt "(*Why*) Inductive ET_%s [T:Set] : Set :=@\n" id;
+  fprintf fmt "@[(*Why*) Inductive ET_%s [T:Set] : Set :=@\n" id;
   fprintf fmt "  | Val_%s : T -> (ET_%s T)@\n" id id;
   fprintf fmt "  | Exn_%s : " id;
   begin match v with
     | None -> ()
     | Some t -> fprintf fmt "%a -> " print_cc_type t
   end;
-  fprintf fmt "(ET_%s T).@\n" id
+  fprintf fmt "(ET_%s T).@]@\n" id
 
 let print_exception_type = reprint_exception_type
 
 let reprint_exception_post fmt id v =
-  fprintf fmt "(*Why*) Definition post_%s :=@\n" id;
+  fprintf fmt "@[(*Why*) Definition post_%s :=@\n" id;
   begin match v with
     | None -> 
 	fprintf fmt "  [T:Set][P:Prop][Q:T->Prop][x:(ET_%s T)]@\n" id;
@@ -370,12 +370,12 @@ let reprint_exception_post fmt id v =
 	fprintf fmt "  | (Val_%s v) => (Q v)@\n" id;
 	fprintf fmt "  | (Exn_%s v) => (P v)@\n" id
   end;
-  fprintf fmt "  end.@\n"
+  fprintf fmt "  end.@]@\n"
 
 let print_exception_post = reprint_exception_post
 
 let reprint_exception_impl fmt id =
-  fprintf fmt "(*Why*) Implicits post_%s.@\n" id
+  fprintf fmt "@[(*Why*) Implicits post_%s.@]@\n" id
 
 let print_exception_impl = reprint_exception_impl
 
@@ -464,7 +464,7 @@ let _ =
   add_regexp
     "(\\*Why\\*) Definition[ ]+post_\\([^ ]*\\).*" Exc_p;
   add_regexp
-    "(\\*Why\\*) Implicits[ ]+post_\\([^ ]*\\).*" Exc_i
+    "(\\*Why\\*) Implicits[ ]+post_\\([^.]*\\)\\." Exc_i
 
 let check_line s =
   let rec test = function

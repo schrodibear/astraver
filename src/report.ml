@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: report.ml,v 1.2 2002-07-29 13:38:38 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.3 2002-09-13 12:15:40 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -100,6 +100,9 @@ let report fmt = function
       fprintf fmt "Exception %a needs an argument" Ident.print id
   | ExceptionArgument (id, false) ->
       fprintf fmt "Exception %a has no argument" Ident.print id
+  | CannotBeRaised id ->
+      fprintf fmt "Exception %a cannot be raised by this expression" 
+	Ident.print id
 
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false

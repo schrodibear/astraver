@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.66 2002-09-12 13:20:55 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.67 2002-09-13 12:15:40 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -280,6 +280,19 @@ let check_array_type loc env id =
 let check_no_effect loc ef =
   if not (Effect.get_writes ef = []) then raise_located loc HasSideEffects
 
+(*s Saturation of post-conditions: a postcondition must be set for
+    any possibly raised exception *)
+
+let saturation loc e (a,al) =
+  let xs = Effect.get_exns e in
+  let check (x,_) =
+    if not (Env.is_exception x) then raise_located loc (UnboundException x);
+    if not (List.mem x xs) then raise_located loc (CannotBeRaised x);
+  in
+  List.iter check al;
+  let set_post x = x, try List.assoc x al with Not_found -> anonymous Ptrue in
+  (a, List.map set_post xs)
+
 (*s Typing programs. We infer here the type with effects. 
     [lab] is the set of labels, [env] the environment 
     and [expr] the program. *)
@@ -289,6 +302,7 @@ let rec typef lab env expr =
   let loc = expr.loc in
   let (ep,p) = state_pre lab env loc expr.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.post in
+  let q = option_app (saturation loc e) q in
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = p @ List.map assert_pre p1 in
