@@ -27,6 +27,10 @@ val find_fun : string -> tctype list * tctype
 val add_pred : string -> tctype list -> unit
 val find_pred : string -> tctype list
 
+(* tag types *)
+type tag_type_definition = Incomplete | Defined of texpr ctype_node
+val tag_type_definition : string -> tag_type_definition
+
 (* Local environment *)
 module Env : sig
 

@@ -92,6 +92,9 @@ type tag_type = {
 (* map from unique names to tagged types *)
 let (tags_t : (string, tag_type) Hashtbl.t) = Hashtbl.create 97
 
+let tag_type_definition n = 
+  let tt = Hashtbl.find tags_t n in tt.tag_type
+
 let create_tag_type k n ty =
   let rec fresh i = 
     let un = n ^ "_" ^ string_of_int i in

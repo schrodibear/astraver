@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.34 2004-02-24 10:27:22 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.35 2004-02-24 11:08:55 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -466,15 +466,40 @@ and type_boolean env e =
 
 (*s Typing of initializers *)
 
-let rec type_initializer env ty = function
+let rec type_initializer loc env ty = function
   | Inothing -> 
       Inothing
   | Iexpr e -> 
       let e = type_expr env e in
       Iexpr (coerce ty e)
   | Ilist el -> 
-      assert false (* TODO *)
-      (* Ilist (List.map (type_initializer env ty) el) (* FAUX! *) *)
+      (match ty.ctype_node with
+	 | CTarray (ty, _) ->
+	     Ilist (List.map (type_initializer loc env ty) el)
+	 | CTstruct (n, _) ->
+	     (match tag_type_definition n with
+		| Incomplete -> 
+		    error loc "initializer but incomplete type"
+		| Defined (CTstruct (_, Decl fl)) -> 
+		    Ilist (type_struct_initializer loc env fl el)
+		| Defined _ -> 
+		    assert false)
+	 | _ -> 
+	     (match el with
+		| [] -> error loc "empty initializer"
+		| e :: el -> 
+		    if el <> [] then 
+		      warning loc "excess elements in initializer";
+		    Ilist [type_initializer loc env ty e]))
+
+and type_struct_initializer loc env fl el = match fl, el with
+  | _, [] -> 
+      []
+  | (ty,_,_) :: fl, e :: el ->
+      let e = type_initializer loc env ty e in
+      e :: type_struct_initializer loc env fl el
+  | [], _ ->
+      error loc "excess elements in struct initializer"
 
 (*s Statements *)
 
@@ -528,6 +553,7 @@ and type_statement_node loc env et = function
   | CScontinue -> 
      TScontinue, { mt_status with continue = true }
   | CSlabel (lab, s) ->
+      (* TODO: %default% label not within a switch statement *)
       let s, st = type_statement env et s in
       TSlabel (lab, s), st
   | CSblock bl ->
@@ -574,9 +600,14 @@ and type_statement_node loc env et = function
       in
       TSreturn e', { mt_status with always_return = true }
   | CSswitch (e, s) ->
-      assert false (*TODO*)
+      let e = type_int_expr env e in
+      let s,st = type_statement env et s in
+      TSswitch (e, s), { st with break = false }
   | CScase (e, s) ->
-      assert false (*TODO*)
+      (* TODO: duplicate case value *)
+      let e = type_int_expr env e in
+      let s,st = type_statement env et s in
+      TScase (e, s), st
   | CSannot (ofs, Assert p) ->
       let p = type_predicate ofs env p in
       TSassert p, mt_status
@@ -591,7 +622,7 @@ and type_block env et (dl,sl) =
 	let ty = type_type d.loc env ty in
 	if eq_type_node ty.ctype_node CTvoid then 
 	  error d.loc ("variable `"^x^"' declared void");
-	let i = type_initializer env ty i in
+	let i = type_initializer d.loc env ty i in
 	let info = default_var_info x in
 	let env' = Env.add x ty info env in
 	let dl',env'' = type_decls env' dl in
@@ -669,7 +700,7 @@ let type_decl d = match d.node with
       let ty = type_type d.loc Env.empty ty in
       add_sym d.loc x ty;
       let info = default_var_info x in
-      Tdecl (ty, info, type_initializer Env.empty ty i)
+      Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc Env.empty ty in
       let pl,env = type_parameters d.loc Env.empty pl in
