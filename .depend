@@ -136,6 +136,7 @@ examples/misc/power_why.vo: examples/misc/power_why.v lib/coq/Why.vo
 examples/misc/peano_why.vo: examples/misc/peano_why.v lib/coq/Why.vo
 examples/misc/mac_carthy_why.vo: examples/misc/mac_carthy_why.v lib/coq/Why.vo
 examples/misc/loop0_why.vo: examples/misc/loop0_why.v lib/coq/Why.vo
+examples/misc/fib_why.vo: examples/misc/fib_why.v lib/coq/Why.vo
 examples/misc/arith_why.vo: examples/misc/arith_why.v lib/coq/Why.vo
 examples/kmp/kmp_why.vo: examples/kmp/kmp_why.v lib/coq/Why.vo examples/kmp/Match.vo examples/kmp/Next.vo examples/kmp/Lex.vo
 examples/kmp/Next.vo: examples/kmp/Next.v examples/kmp/Match.vo

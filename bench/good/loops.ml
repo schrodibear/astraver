@@ -16,7 +16,7 @@ let loop1 =
 
 parameter x: int ref
 
-let oppose = fun (u:unit) -> (x := - !x) { x = -x@ }
+let oppose (u:unit) = (x := - !x) { x = -x@ }
 
 let loop2 = 
   { x <= 10 }

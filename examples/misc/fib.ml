@@ -4,7 +4,8 @@
 
        n:int -> { n >= 0 } int { result = F(n) }
 
-    where F is the Fibonacci function defined on the logical side: *)
+    where F is the Fibonacci function defined on the logical side
+    (with F(0) = F(1) = 1 and F(n+2) = F(n+1) + F(n)) *)
 
 logic F : int -> int
 
@@ -35,7 +36,7 @@ let fib2 = fun (n:int) ->
 
 (** Imperative *)
 
-let fib3 = fun (n:int) ->
+let fib3 (n:int) =
  { n >= 0 }
  (let k = ref 1 in
   let x = ref 1 in
@@ -55,3 +56,26 @@ let fib3 = fun (n:int) ->
   end)
  { result = F(n) }
 
+(** Imperative, in an array *)
+
+parameter N : int
+
+parameter t : array N of int
+
+let fib4 (n:int) =
+  { 0 <= n < N }
+  (if n <= 1 then
+     1
+   else begin
+     t[0] := 1;
+     t[1] := 1;
+     let k = ref 2 in
+     while !k <= n do
+       { invariant 2 <= k <= n+1 and forall i:int. 0 <= i < k -> t[i] = F(i)  
+         variant n+1 - k }
+       t[!k] := t[!k - 1] + t[!k - 2];
+       k := !k + 1
+     done;
+     t[n]
+   end)
+  { result = F(n) }

@@ -808,7 +808,7 @@ Syntax of input files is given in Figure~\ref{fig:input}.
   \\[0.1em]
 
   \nt{declaration}
-    & $::=$ & \te{let} \nt{identifier} \te{=} \nt{prog} \\
+    & $::=$ & \te{let} \nt{identifier} $[$ \nt{binders} $]$ \te{=} \nt{prog} \\
       & $|$ & \te{let} \te{rec} \nt{recfun} \\
       & $|$ & \te{parameter} \nt{identifier}\plussep{\te{,}}
               \te{:} \nt{value\_type} \\ \indextt{parameter}

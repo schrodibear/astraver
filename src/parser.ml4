@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.48 2002-07-09 11:45:02 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.49 2002-07-11 11:52:09 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -484,6 +484,8 @@ i*)
   decl:
   [ [ "let"; id = ident; "="; p = program -> 
 	Program (id, p)
+    | "let"; id = ident; bl = binders; "="; p = program -> 
+	Program (id, without_annot loc (Slam (bl, p)))
     | "let"; "rec"; p = recfun -> 
 	Program (rec_name p, without_annot loc p)
     | "external"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
