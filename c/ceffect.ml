@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.23 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.24 2004-03-24 09:58:09 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -32,6 +32,7 @@ let interp_type ctype =
   | CTarray(t,None) -> "pointer"      
   | CTarray(t,Some e) -> "pointer"
   | CTpointer(t) -> "pointer"      
+  | CTstruct _ -> "pointer"
   | CTvar x -> x (* must be a logic type *)
   | _ -> assert false (* TODO *)
 (*
@@ -52,14 +53,17 @@ let rec pointer_heap_var ty =
     | CTvar v -> assert false (* should have been expanded *)
     | CTvoid -> failwith "void * not supported"
     | CTint _ -> "int", "int"
+    | CTenum _ -> "int", "int"
     | CTfloat _ -> "float", "float"
+    | CTarray ({ctype_node = CTstruct _ | CTunion _}, _) 
+    | CTpointer {ctype_node = CTstruct _ | CTunion _} ->
+	"pointer", "pointer"
     | CTarray (ty,_)
     | CTpointer ty ->
 	let v,_ = pointer_heap_var ty in
 	(v ^ "P", "pointer")
-    | CTstruct _ -> "pointer", "pointer" (* probably wrong *)
-    | CTunion _ -> "pointer", "pointer" (* probably wrong *)
-    | CTenum _ -> "int", "int"
+    | CTstruct _ 
+    | CTunion _ -> assert false (* TODO *)
     | CTfun _ -> assert false (* bad typing ! *)
 
 let memory_type t = ([t],"memory")
@@ -156,10 +160,9 @@ let rec term t =
 	if v.var_is_static
 	then add_var v.var_name t.term_type empty
 	else empty
+    | Tdot(t1,f)
     | Tarrow(t1,f) -> 
 	add_field_var f t.term_type (term t1)
-    | Tdot(t,f) -> 
-	assert false
     | Tarrget(t1,t2) ->
 	union
 	  (add_pointer_var t1.term_type (term t1))
@@ -262,8 +265,7 @@ let rec expr e = match e.texpr_node with
       if v.var_is_static
       then reads_add_var v.var_name e.texpr_type ef_empty
       else ef_empty
-  | TEdot (e, f) ->
-      assert false
+  | TEdot (e1, f)
   | TEarrow (e1, f) ->	
       reads_add_field_var f e.texpr_type (expr e1)
   | TEarrget (e1, e2) ->	
@@ -303,12 +305,11 @@ and assign_expr e = match e.texpr_node with
       assigns_add_pointer_var e.texpr_type (expr e)
   | TEarrget (e1, e2) ->
       ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2) 
+  | TEdot (e1, f)
   | TEarrow (e1, f) ->
       assigns_add_field_var f e.texpr_type (expr e1)
-  | TEdot (e, f) ->
-      assert false
-  | TEcast (_, e) ->
-      assign_expr e
+  | TEcast (_, e1) ->
+      assign_expr e1
   | _ -> 
       assert false (* not a left value *)
 

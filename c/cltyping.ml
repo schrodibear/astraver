@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.27 2004-03-24 07:40:37 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.28 2004-03-24 09:58:09 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -278,6 +278,7 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let tloc = t.lexpr_loc in
       let t = type_term env t in
       (match t.term_type.ctype_node with
+	 | CTstruct _ | CTunion _
 	 | CTarray _ | CTpointer _ -> Pvalid(t)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLvalid_index (t,a) ->

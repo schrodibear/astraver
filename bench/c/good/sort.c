@@ -28,6 +28,7 @@ void sort4_4(int t[]) {
 }
 #endif
 
+#if 0
 /*@ requires \valid(a) && \valid(b) && \valid(c) && \valid(d) &&
   @   a != b && a != c && a != d && b != c && b != d && c != d
   @ ensures *a <= *b <= *c <= *d */
@@ -39,8 +40,8 @@ void sort4_2(int *a, int *b, int *c, int *d) {
   if (*b > *d) { tmp = *b; *b = *d; *d = tmp; }
   if (*b > *c) { tmp = *b; *b = *c; *c = tmp; }
 }
+#endif
 
-#if 0
 /*@ requires \valid(a) && \valid(b) && \valid(c) && \valid(d) &&
   @   a != b && a != c && a != d && b != c && b != d && c != d
   @ ensures *a <= *b <= *c <= *d */
@@ -57,4 +58,3 @@ void sort4_3(int *a, int *b, int *c, int *d) {
   //@ assigns *b,*c ensures *b <= *c
   if (*b > *c) { tmp = *b; *b = *c; *c = tmp; }
 }
-#endif

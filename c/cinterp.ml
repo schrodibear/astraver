@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.54 2004-03-24 08:19:08 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.55 2004-03-24 09:58:09 filliatr Exp $ i*)
 
 
 open Format
@@ -28,16 +28,14 @@ open Creport
 let rec global_var_for_type t =
   match t.ctype_node with
     | CTint _ -> "intP"
-(***
     | CTpointer ty -> global_var_for_type ty ^ "P"
     | CTstruct _ -> "pointer"
-***)
     | _ -> assert false (* TODO *)
 
 let global_var_for_array_type t =
   match t.ctype_node with
-    | CTarray(ty,_) -> global_var_for_type ty
-    | _ -> assert false (* TODO *)
+    | CTpointer ty | CTarray(ty,_) -> global_var_for_type ty
+    | _ -> assert false
 
 let interp_rel t1 t2 r = match t1.ctype_node, t2.ctype_node, r with
   | CTint _, CTint _, Lt -> "lt_int"
@@ -106,12 +104,11 @@ let rec interp_term label old_label t =
 	let te1 = f t1 and te2 = f t2 in
 	let var = global_var_for_type t.term_type in
 	LApp("acc",[interp_var label var;LApp("shift",[te1;te2])])
+    | Tdot (t, field)
     | Tarrow (t, field) -> 
 	let te = f t in
 	let var = field in
 	LApp("acc",[interp_var label var;te])
-    | Tdot (_, _) -> 
-	unsupported "logic . operator"
     | Tunop (Ustar, t1) -> 
 	let te1 = f t1 in
 	let var = global_var_for_type t.term_type in
@@ -286,7 +283,8 @@ let rec interp_expr e =
     | TEarrget(e1,e2) ->
 	let te1 = interp_expr e1 and te2 = interp_expr e2 in
 	let var = global_var_for_type e.texpr_type in
-	App(App(Var("acc_"),Var(var)),App(App(Var("shift_"),te1),te2))
+	App(App(Var("acc_"),Var(var)),
+	    build_complex_app (Var "shift_") [te1; te2])
     | TEassign (e1,e2) ->
 	begin
 	  match interp_lvalue e1 with
@@ -338,8 +336,7 @@ let rec interp_expr e =
 	If(interp_boolean_expr e1, interp_expr e2, interp_expr e3)
     | TEstring_literal s -> 
 	unsupported "string literal"
-    | TEdot(e,s) -> 
-	unsupported ". operator"
+    | TEdot(e,s)
     | TEarrow(e,s) ->
 	let te = interp_expr e in
 	let var = s in
@@ -467,8 +464,7 @@ and interp_lvalue e =
 	let var = global_var_for_type e.texpr_type in
 	HeapRef(var,build_complex_app (Var "shift_")
 		  [interp_expr e1; interp_expr e2])
-    | TEdot(e1,f) ->
-	unsupported "left-value . operator"
+    | TEdot(e1,f)
     | TEarrow(e1,f) ->
 	HeapRef(f,interp_expr e1)
     | _ -> 
@@ -560,6 +556,7 @@ let collect_locations acc loc =
       | Lterm t -> 
 	  begin
 	    match t.term_node with
+	      | Tdot(e,f)
 	      | Tarrow(e,f) ->
 		  f,LApp("pointer_loc",[interp_term (Some "") "" e])
 	      | Tarrget(e1,e2) -> 
@@ -893,7 +890,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       assert false
   | Tdecl(ctype,v,init) -> 
       lprintf "translating global declaration of %s@." v.var_name;
-      let t = base_type (Ceffect.interp_type ctype) in
+      (*let t = base_type (Ceffect.interp_type ctype) in*)
       begin
 	match init with 
 	  | Inothing ->
@@ -914,7 +911,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	let pre,tparams = interp_fun_params pre params in
 	abrupt_return := None;
 	let tblock = catch_return (interp_statement false block) in
-	((Def(f, Fun(tparams,pre,tblock,post,None)))::why_code,
+	((Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
 	 interp_function_spec id spec ctype params :: why_spec,
 	 prover_decl)
       with Error (_, Cerror.Unsupported s) ->
