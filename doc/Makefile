@@ -1,5 +1,5 @@
 
-all: why-manual.dvi doc.dvi
+all: manual.dvi doc.dvi
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
@@ -18,4 +18,4 @@ code.tex::
 	dvips -o $@ $<
 
 clean::
-	rm -f *~ *.dvi *.log *.aux *.toc
+	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps
