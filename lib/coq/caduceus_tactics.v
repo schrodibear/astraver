@@ -3,14 +3,35 @@ Require Export caduceus_why.
 
 Notation " p # f " := (acc f p) (at level 30, f at level 0).
 
+(* tactic to prove the equality of two pointers *)
+Ltac eq_pointer :=
+  repeat rewrite shift_shift;
+  progress auto with * ||
+  match goal with
+  | |- (shift ?P1 ?O1) = (shift ?P2 ?O2) => solve [ring O1; ring O2; auto with *]
+  | |- (shift ?P1 ?O1) = ?P2 => solve [ring O1; auto with *]
+  | |- ?P1 = (shift ?P2 ?O2) => solve [ring O2; auto with *]
+  end.
+
+(* tactic to prove the disequality of two pointers *)
+Ltac neq_pointer := 
+  repeat rewrite shift_shift; 
+  progress auto with * ||
+  match goal with
+  | |- (shift ?P1 ?O1) <> (shift ?P2 ?O2) =>
+       solve [ apply neq_offset_neq_shift; auto with * ]
+  end.
+
+Hint Extern 0 (eq pointer _ _) => eq_pointer.
+Hint Extern 0 (not (eq pointer _ _)) => neq_pointer.
 
 (**************************************
   handling (acc (upd ...)) patterns
 **************************************)
 Ltac Acc_upd :=
   rewrite acc_upd ||
-  (rewrite acc_upd_eq; [ idtac | progress auto with * ]) ||
-  (rewrite acc_upd_neq; [ idtac | progress auto with * ]); 
+  (rewrite acc_upd_eq; [ idtac | eq_pointer ]) ||
+  (rewrite acc_upd_neq; [ idtac | neq_pointer ]); 
   auto with *.
 
 Ltac caduceus := repeat Acc_upd.
@@ -23,11 +44,13 @@ Hint Resolve neq_base_addr_neq_shift.
 Hint Resolve neq_offset_neq_shift.
 Hint Resolve eq_offset_eq_shift.
 
-Ltac valid := match goal with
+Ltac valid := 
+  repeat rewrite shift_shift; 
+  match goal with
   | id:(valid_range ?X1 ?X2 ?X3 ?X4) |-  (valid ?X1 (shift ?X2 ?X5))
-  => solve [apply valid_range_valid_shift with X3 X4; auto with *]
+  => solve [repeat rewrite shift_shift; apply valid_range_valid_shift with X3 X4; auto with *]
   | id:(valid_index ?X1 ?X2 ?X3) |- (valid ?X1 (shift ?X2 ?X3))
-    => solve [apply valid_index_valid_shift; auto with *]
+    => solve [repeat rewrite shift_shift; apply valid_index_valid_shift; auto with *]
 end.
 
 Hint Extern 0 (valid _ _) => valid.

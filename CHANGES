@@ -1,4 +1,6 @@
 
+version 1.61, May 27th, 2004
+============================
   o Simplify output: do not fail on floats anymore (now uninterpreted symbols)
   o added primitive int_of_real: real -> int (in both logic and programs)
 

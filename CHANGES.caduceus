@@ -1,7 +1,9 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
- 
+version 0.61, May 27th, 2004
+============================
+ o improved Coq tactics; new Coq tactics eq_pointer and neq_pointer
  o array size deduced from initializer when any 
  o added automatic invariants for structures and arrays
  o fixed bug when several structures fields have the same name
