@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.29 2003-10-27 16:21:19 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.30 2003-11-04 14:07:57 marche Exp $ i*)
 
 open Format
 
@@ -30,6 +30,7 @@ let coq_tactic_ = ref None
 let coq_preamble_ = ref "Require Why."
 let mizar_environ_ = ref None
 let no_simplify_prelude_ = ref false
+let no_harvey_prelude_ = ref false
 let werror_ = ref false
 
 let ocaml_ = ref false
@@ -195,6 +196,8 @@ let files =
 	usage (); exit 1
     | ("--no-simplify-prelude" | "-no-simplify-prelude") :: args ->
 	no_simplify_prelude_ := true; parse args
+    | ("--no-harvey-prelude" | "-no-harvey-prelude") :: args ->
+	no_harvey_prelude_ := true; parse args
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
 	ocaml_annot_ := true; parse args
@@ -225,6 +228,7 @@ let coq_tactic = !coq_tactic_
 let coq_preamble = !coq_preamble_
 let mizar_environ = !mizar_environ_
 let no_simplify_prelude = !no_simplify_prelude_
+let no_harvey_prelude = !no_harvey_prelude_
 let wol = !wol_
 let werror = !werror_
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.11 2003-09-16 15:56:38 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.12 2003-11-04 14:07:57 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -33,26 +33,23 @@ let push_obligations = List.iter (fun o -> Queue.add o oblig)
 
 (*s Pretty print *)
 
-let uncapitalize fmt id = 
-  fprintf fmt "%s" (String.uncapitalize (Ident.string id))
-
 let prefix id =
-  if id == t_lt then "arith_less"
-  else if id == t_le then "arith_leq"
-  else if id == t_gt then "arith_gr"
-  else if id == t_ge then "arith_greq"
+  if id == t_lt then assert false
+  else if id == t_le then assert false
+  else if id == t_gt then assert false
+  else if id == t_ge then assert false
   (* int cmp *)
-  else if id == t_lt_int then "arith_less"
-  else if id == t_le_int then "arith_leq"
-  else if id == t_gt_int then "arith_gr"
-  else if id == t_ge_int then "arith_greq"
+  else if id == t_lt_int then "<"
+  else if id == t_le_int then "<="
+  else if id == t_gt_int then ">"
+  else if id == t_ge_int then ">="
   (* int ops *)
-  else if id == t_add_int then "arith_add"
-  else if id == t_sub_int then "arith_minus"
-  else if id == t_mul_int then "arith_times"
-  else if id == t_div_int then "arith_div"
-  else if id == t_mod_int then "arith_mod"
-  else if id == t_neg_int then "arith_opp"
+  else if id == t_add_int then "+"
+  else if id == t_sub_int then "-"
+  else if id == t_mul_int then "*"
+  else if id == t_div_int then "int_div"
+  else if id == t_mod_int then "int_mod"
+  else if id == t_neg_int then "-"
   (* float ops *)
   else if id == t_add_float 
        || id == t_sub_float 
@@ -67,7 +64,7 @@ let prefix id =
 
 let rec print_term fmt = function
   | Tvar id -> 
-      fprintf fmt "%a" uncapitalize id
+      fprintf fmt "%a" Ident.print id
   | Tconst (ConstInt n) -> 
       fprintf fmt "%d" n
   | Tconst (ConstBool b) -> 
@@ -85,7 +82,7 @@ let rec print_term fmt = function
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Tapp (id, tl) ->
       fprintf fmt "@[(%a@ %a)@]" 
-	uncapitalize id (print_list space print_term) tl
+	Ident.print id (print_list space print_term) tl
 
 and print_terms fmt tl = 
   print_list space print_term fmt tl
@@ -98,7 +95,7 @@ let rec print_predicate fmt = function
   | Pfalse ->
       fprintf fmt "false"
   | Pvar id -> 
-      fprintf fmt "%a" uncapitalize id
+      fprintf fmt "%a" Ident.print id
   | Papp (id, [a; b]) when is_eq id ->
       fprintf fmt "@[(= %a@ %a)@]" print_term a print_term b
   | Papp (id, [a; b]) when is_neq id ->
@@ -106,10 +103,10 @@ let rec print_predicate fmt = function
   | Papp (id, tl) when is_relation id || is_arith id ->
       fprintf fmt "@[(%s %a)@]" (prefix id) print_terms tl
   | Papp (id, [a;b]) when id == t_zwf_zero ->
-      fprintf fmt "@[(and (arith_leq 0 %a)@ (arith_less %a %a))@]" 
+      fprintf fmt "@[(and (<= 0 %a)@ (< %a %a))@]" 
 	print_term b print_term a print_term b
   | Papp (id, tl) -> 
-      fprintf fmt "@[(%a@ %a)@]" uncapitalize id print_terms tl
+      fprintf fmt "@[(%a@ %a)@]" Ident.print id print_terms tl
   | Pimplies (_, a, b) ->
       fprintf fmt "@[(->@ %a@ %a)@]" print_predicate a print_predicate b
   | Pif (a, b, c) ->
@@ -124,11 +121,11 @@ let rec print_predicate fmt = function
   | Forall (_,id,n,_,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id' print_predicate p'
+      fprintf fmt "@[(forall %a@ %a)@]" Ident.print id' print_predicate p'
   | Exists (id,n,t,p) -> 
       let id' = next_away id (predicate_vars p) in
       let p' = subst_in_predicate (subst_onev n id') p in
-      fprintf fmt "@[(EXISTS (%a)@ %a)@]" Ident.print id' print_predicate p'
+      fprintf fmt "@[(exists %a@ %a)@]" Ident.print id' print_predicate p'
 
 let output_sequent fmt (ctx, c) = match ctx with
   | [] -> 
@@ -163,12 +160,7 @@ let rec filter_context = function
 
 exception NotFirstOrder
 
-let rec prepare_conclusion = function
-  | Forall (_, _, _, _, p) -> prepare_conclusion p
-  | p -> p
-
-let prepare_sequent (ctx, c) = 
-  filter_context ctx, prepare_conclusion c
+let prepare_sequent (ctx, c) = filter_context ctx, c
 
 let output_obligation f (loc, o, s) = 
   try
@@ -176,7 +168,9 @@ let output_obligation f (loc, o, s) =
     let fname = f ^ "_" ^ o ^ ".rv" in
     let cout = open_out fname in
     let fmt = formatter_of_out_channel cout in
-    fprintf fmt "@[()@\n;; %a@]@\n" Loc.report_obligation loc;
+    fprintf fmt "@[";
+    if not Options.no_harvey_prelude then fprintf fmt "()@\n";
+    fprintf fmt ";; %a@]@\n" Loc.report_obligation loc;
     output_sequent fmt s;
     pp_print_flush fmt ();
     close_out cout

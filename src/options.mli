@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.27 2003-10-27 16:21:19 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.28 2003-11-04 14:07:57 marche Exp $ i*)
 
 (*s General options *)
 
@@ -62,6 +62,8 @@ val coq_preamble : string
 val mizar_environ : string option
 
 val no_simplify_prelude : bool
+
+val no_harvey_prelude : bool
 
 (*s Files given on the command line *)
 

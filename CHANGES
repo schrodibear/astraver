@@ -1,4 +1,10 @@
 
+  o syntax of haRVey output now uses integer constants, predefined
+    arithmetic operators, and does not change capitalization of
+    variables, to be conform with the syntax of the next version of
+    haRVey (presumably 0.4)
+    Also added option --no-harvey-prelude
+   
 version 1.32
 ============
   o output for Coq version 8 with --coq-v8
@@ -142,3 +148,7 @@ version 0.6, July 19th, 2002
 version 0.5,  July 2nd, 2002
 ============================
   o first (beta) release
+
+Local Variables: 
+mode: text
+End: 
