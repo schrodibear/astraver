@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.11 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: cc.mli,v 1.12 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -57,3 +57,5 @@ type 'a cc_term =
   | CC_term of term
   | CC_hole of 'a
   | CC_type of cc_type
+  | CC_any of cc_type
+

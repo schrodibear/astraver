@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.88 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: util.ml,v 1.89 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -475,6 +475,8 @@ and print_desc fmt = function
       print_term fmt t
   | Absurd ->
       fprintf fmt "absurd"
+  | Any k ->
+      fprintf fmt "[%a]" print_type_c k
 
 and print_handler fmt ((id, a), e) = match a with
   | None -> 
@@ -575,6 +577,8 @@ let rec print_cc_term fmt = function
       fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"
   | CC_type t ->
       print_cc_type fmt t
+  | CC_any t ->
+      fprintf fmt "@[(any(%a))@]" print_cc_type t
 
 and print_binders fmt bl =
   print_list nothing (fun fmt b -> fprintf fmt "[%a]" print_binder b) fmt bl
@@ -639,6 +643,7 @@ let rec print_ptree fmt p = match p.pdesc with
 	print_ptree e (print_list newline print_phandler) hl
   | Sconst c -> print_term fmt (Tconst c)
   | Sabsurd _ -> fprintf fmt "<Sabsurd>"
+  | Sany _ -> fprintf fmt "<Sany>"
 
 and print_phandler fmt = function
   | (x, None), e -> 

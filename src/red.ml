@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.35 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: red.ml,v 1.36 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -106,7 +106,8 @@ let rec uniq_cc fv s = function
       CC_hole (x, tsubst_in_predicate s ty)
   | CC_type t ->
       CC_type (uniq_tt fv s t)
-
+  | CC_any t ->
+      CC_any (uniq_tt fv s t)
 
 (*s Phase 2: we reduce. *)
 
@@ -257,7 +258,8 @@ let rec red sp s cct =
       CC_hole (x, tsubst_in_predicate s ty)
   | CC_type t ->
       CC_type (cc_type_subst s t)
-
+  | CC_any t ->
+      CC_any (cc_type_subst s t)
 
 let red c = 
   let c' = uniq_cc Idset.empty Idmap.empty c in

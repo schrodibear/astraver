@@ -543,7 +543,8 @@ let vcg base t =
   let rec traverse ctx = function
     | CC_var _ 
     | CC_term _ 
-    | CC_type _ as cc -> 
+    | CC_type _ 
+    | CC_any _ as cc -> 
 	cc
     | CC_hole (loc, p) -> 
 	CC_hole (try discharge loc ctx p with Exit -> push loc ctx p)

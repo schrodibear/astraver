@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.116 2004-03-01 14:48:49 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.117 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -356,6 +356,9 @@ let rec print_cc_term_v7 fmt = function
       print_proof_v7 fmt pr
   | CC_type t ->
       print_cc_type_v7 fmt t
+  | CC_any _ ->
+      Report.raise_unlocated 
+      (Error.AnyMessage "can't produce a validation for an incomplete program")
 
 and print_case_v7 fmt (p,e) =
   fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term_v7 e
@@ -623,6 +626,9 @@ let rec print_cc_term_v8 fmt = function
       print_proof_v8 fmt pr
   | CC_type t ->
       print_cc_type_v8 fmt t
+  | CC_any _ ->
+      Report.raise_unlocated 
+      (Error.AnyMessage "can't produce a validation for an incomplete program")
 
 and print_case_v8 fmt (p,e) =
   fprintf fmt "@[<hov 2>| %a =>@ %a@]" print_cc_pattern p print_cc_term_v8 e

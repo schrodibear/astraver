@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.69 2003-04-28 07:37:42 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.70 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -209,6 +209,9 @@ and trad_desc info d ren = match d with
 	            [CC_type tv; CC_hole (info.loc, Pfalse)])
 	info (fun v -> Monad.unit info (Value (Tvar v)))
 	ren
+
+  | Any c ->
+      CC_any (Monad.trad_type_c ren info.env c)
 
 and trad_binders ren env = function
   | [] -> 

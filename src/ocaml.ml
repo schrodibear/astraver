@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.10 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: ocaml.ml,v 1.11 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -199,6 +199,8 @@ and exprd fmt = function
       expression fmt t
   | Absurd ->
       fprintf fmt "@[assert false@]"
+  | Any _ ->
+      fprintf fmt "@[assert false (* code not given *)@]"
 
 and block fmt = fprintf fmt "@[<hv>%a@]" (print_list space block_st)
 

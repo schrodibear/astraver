@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.102 2003-12-18 13:31:36 marche Exp $ i*)
+(*i $Id: typing.ml,v 1.103 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -363,6 +363,7 @@ let rec typef lab env expr =
   let q = option_app (saturation loc e) q in
   let e' = Effect.union e (Effect.union (Effect.union ep eo) eq) in
   let ol,q' = match q, d with
+    | None, Any k'
     | None, App (_,_,k') -> o @ o1 @ k'.c_pre, k'.c_post
     | _ -> o @ o1, q
   in
@@ -706,6 +707,10 @@ and typef_desc lab env loc = function
 	| Some v -> type_v loc lab env (logical_env env) v
       in
       Absurd, (v, Effect.bottom), [anonymous loc Pfalse]
+
+  | Sany c ->
+      let c = type_c loc lab env (logical_env env) c in
+      Any c, (c.c_result_type, c.c_effect), []
 
 and typef_block lab env bl =
   let rec ef_block lab tyres = function

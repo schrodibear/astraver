@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.20 2003-12-16 10:04:09 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.21 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -255,7 +255,7 @@ let rec normalize p =
 	change_desc p (LetIn (x, post_if_none env q e1, e2))
     | Expression _ | Var _ | Acc _ | Aff _ | TabAcc _ | TabAff _  
     | Seq _ | Lam _ | LetIn _ | LetRef _ | Rec _ | App _ 
-    | Raise _ | Try _ | Absurd ->
+    | Raise _ | Try _ | Absurd | Any _ ->
 	p
 
 (* [normalize_boolean b] checks if the boolean expression [b] (of type

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.49 2004-03-10 14:37:39 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.50 2004-03-11 14:39:26 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -68,12 +68,14 @@ let print_term fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "unit" 
+    | Tconst (ConstFloat ("0" | "0.0")) -> 
+	fprintf fmt "0"
     | Tconst (ConstFloat f) -> 
 	let n,d = rationalize f in
 	if d = "1" then 
 	  fprintf fmt "(%s :: real)" n 
 	else 
-	  fprintf fmt "(%s/%s)" n d
+	  fprintf fmt "(%s / %s)" n d
     | Tapp (id, [Tconst (ConstInt n)]) when id == t_float_of_int ->
 	fprintf fmt "(%d :: real)" n
     | Tderef _ ->
