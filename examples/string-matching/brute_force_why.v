@@ -95,18 +95,16 @@ Lemma BF_po_3 :
   (c_aux_2: Z)
   (Post3: c_aux_2 = (access y `i3 + j2`))
   (result4: bool)
-  (Post26: (if result4 then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
+  (Post25: (if result4 then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
   (if result4
    then ((i:Z)
          (i = `i3 + 1` -> ((`0 <= i` /\ `i <= m`) /\ (match x `0` y j2 i)) /\
           (Zwf `0` `m - i` `m - i3`)))
    else ((`i3 >= m` ->
-          ((result:Z)
-           (result = j2 ->
-            ((j:Z)
-             (j = `j2 + 1` -> `0 <= j` /\
-              (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))) /\
-            (match x `0` y j2 (array_length x)))))) /\
+          ((j:Z)
+           (j = `j2 + 1` -> `0 <= j` /\
+            (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))) /\
+          (match x `0` y j2 (array_length x)))) /\
    ((`i3 < m` ->
      ((j:Z)
       (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`)))))).
@@ -115,7 +113,6 @@ Destruct result4; Intuition.
 Subst i.
 Apply match_right_extension; Auto with *.
 Subst c_aux_1 c_aux_2; Ring `0+i3`; Ring `j2+i3`; Assumption.
-Subst result.
 Assert i3=(array_length x). Omega. Subst i3; Assumption.
 Save.
 
@@ -143,12 +140,9 @@ Lemma BF_po_4 :
   (Test5: true = true)
   (Test3: `i3 >= m`)
   ((`i3 >= m` ->
-    ((result:Z)
-     (result = j2 ->
-      ((j:Z)
-       (j = `j2 + 1` -> `0 <= j` /\
-        (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))) /\
-      (match x `0` y j2 (array_length x)))))) /\
+    ((j:Z)
+     (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))) /\
+    (match x `0` y j2 (array_length x)))) /\
   ((`i3 < m` ->
     ((j:Z)
      (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`))))).

@@ -55,7 +55,7 @@ Lemma NSN_po_3 :
   (c_aux_2: Z)
   (Post1: c_aux_2 = (access x `1`))
   (result: bool)
-  (Post28: (if result then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
+  (Post27: (if result then `c_aux_1 = c_aux_2` else `c_aux_1 <> c_aux_2`))
   (if result
    then ((k:Z)
          (k = `2` ->
@@ -113,8 +113,8 @@ Lemma NSN_po_5 :
   (Pre9: `0 <= j2`)
   (Test2: `j2 <= n - m`)
   (Pre5: `0 <= 1` /\ `1 < (array_length x)`)
-  (c_aux_8: Z)
-  (Post9: c_aux_8 = (access x `1`))
+  (c_aux_7: Z)
+  (Post9: c_aux_7 = (access x `1`))
   `0 <= j2 + 1` /\ `j2 + 1 < (array_length y)`.
 Proof.
 Intuition.
@@ -139,13 +139,13 @@ Lemma NSN_po_6 :
   (Pre9: `0 <= j2`)
   (Test2: `j2 <= n - m`)
   (Pre5: `0 <= 1` /\ `1 < (array_length x)`)
-  (c_aux_8: Z)
-  (Post9: c_aux_8 = (access x `1`))
+  (c_aux_7: Z)
+  (Post9: c_aux_7 = (access x `1`))
   (Pre4: `0 <= j2 + 1` /\ `j2 + 1 < (array_length y)`)
-  (c_aux_9: Z)
-  (Post8: c_aux_9 = (access y `j2 + 1`))
+  (c_aux_8: Z)
+  (Post8: c_aux_8 = (access y `j2 + 1`))
   (result3: bool)
-  (Post31: (if result3 then `c_aux_8 <> c_aux_9` else `c_aux_8 = c_aux_9`))
+  (Post30: (if result3 then `c_aux_7 <> c_aux_8` else `c_aux_7 = c_aux_8`))
   (if result3
    then ((j:Z)
          (j = `j2 + k1` -> `0 <= j` /\ (Zwf `0` `n - m - j` `n - m - j2`)))
@@ -160,12 +160,10 @@ Lemma NSN_po_6 :
                 ((result0:Z)
                  (result0 = (access y j2) ->
                   ((`result = result0` ->
-                    ((result:Z)
-                     (result = j2 ->
-                      ((j:Z)
-                       (j = `j2 + ell1` -> `0 <= j` /\
-                        (Zwf `0` `n - m - j` `n - m - j2`))) /\
-                      (match x `0` y j2 (array_length x)))))) /\
+                    ((j:Z)
+                     (j = `j2 + ell1` -> `0 <= j` /\
+                      (Zwf `0` `n - m - j` `n - m - j2`))) /\
+                    (match x `0` y j2 (array_length x)))) /\
                   ((`result <> result0` ->
                     ((j:Z)
                      (j = `j2 + ell1` -> `0 <= j` /\

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.17 2003-04-28 14:15:42 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.18 2003-06-12 12:35:48 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -185,6 +185,13 @@ let rec normalize p =
 	let t = put_label_term env p.info.label (unref_term t) in
 	let q = create_post (equality (Tvar x) t) in
 	post_if_none env q p
+    | Aff (x, e1) when post e1 <> None ->
+	(match post e1 with
+	   | Some q1 ->
+	       let q = post_app (change_label e1.info.label p.info.label) q1 in
+	       let q = post_app (subst_in_predicate (subst_onev result x)) q in
+	       post_if_none env (Some q) p
+	   | _ -> assert false)
     | If (e1, e2, e3) ->
 	change_desc p (If (normalize_boolean false env e1, e2, e3))
     | TabAff (_, x, ({desc=Expression t1} as e1), ({desc=Expression t2} as e2))

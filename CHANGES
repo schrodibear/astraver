@@ -1,6 +1,7 @@
 
-version 1.21, June 21th, 2003
+version 1.22, June 21th, 2003
 =============================
+  o fixed lost of annotation in C function calls
   o C: /*W external/parameter ...*/ correctly added to C environment
   o Coq: added Hints Unfold Zwf
   o (almost) conservative change in renaming strategy; a reference x1 is now
