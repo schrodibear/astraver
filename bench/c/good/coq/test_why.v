@@ -94,96 +94,40 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/test.why", characters 207-220 *)
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+Proof.
+intuition.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/test.why", characters 120-121 *)
 Lemma f_impl_po_1 : 
-  forall (alloc: alloc),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
-  forall (p: pointer),
-  forall (Post2: p = (any_pointer tt)),
-  forall (ps0: pointer),
-  forall (Post1: ps0 = s),
-  (valid alloc s).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/test.why", characters 255-269 *)
-Lemma f_impl_po_2 : 
-  forall (alloc: alloc),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
-  forall (p: pointer),
-  forall (Post2: p = (any_pointer tt)),
-  forall (ps0: pointer),
-  forall (Post1: ps0 = s),
-  forall (Pre13: (valid alloc s)),
-  forall (p1: pointer),
-  forall (Post6: p1 = (acc t s)),
-  (valid alloc ps0).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/test.why", characters 273-298 *)
-Lemma f_impl_po_3 : 
-  forall (alloc: alloc),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
-  forall (p: pointer),
-  forall (Post2: p = (any_pointer tt)),
-  forall (ps0: pointer),
-  forall (Post1: ps0 = s),
-  forall (Pre13: (valid alloc s)),
-  forall (p1: pointer),
-  forall (Post6: p1 = (acc t s)),
-  forall (Pre7: (valid alloc ps0)),
-  forall (caduceus_1: pointer),
-  forall (Post10: caduceus_1 = (acc t ps0)),
-  (valid alloc caduceus_1).
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/test.why", characters 238-298 *)
-Lemma f_impl_po_4 : 
-  forall (alloc: alloc),
-  forall (ps: pointer),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (z: ((memory) Z)),
-  forall (Pre14: ((valid alloc s) /\ (valid alloc (acc t s))) /\
-                 (valid alloc ps)),
-  forall (p: pointer),
-  forall (Post2: p = (any_pointer tt)),
-  forall (ps0: pointer),
-  forall (Post1: ps0 = s),
-  forall (Pre13: (valid alloc s)),
-  forall (p1: pointer),
-  forall (Post6: p1 = (acc t s)),
-  forall (Pre7: (valid alloc ps0)),
-  forall (caduceus_1: pointer),
-  forall (Post10: caduceus_1 = (acc t ps0)),
-  forall (Pre6: (valid alloc caduceus_1)),
-  forall (z0: ((memory) Z)),
-  forall (Post12: z0 = (upd z caduceus_1 A)),
-  (forall (result:pointer),
-   (result = (acc t s) ->
-    (forall (result0:Z), (result0 = (acc z0 result) -> result0 = A)) /\
-    (valid alloc result))) /\
-  (valid alloc s).
+  forall (i: Z),
+  forall (Post3: i = 0),
+  forall (a: Z),
+  forall (Post2: a = i),
+  forall (t: pointer),
+  forall (Post1: t = (any_pointer tt)),
+  a = 0.
 Proof.
 intuition.
 (* FILL PROOF HERE *)

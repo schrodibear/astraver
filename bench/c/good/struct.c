@@ -12,3 +12,17 @@ int f(T* t) {
   t->x++; 
   return t->x++;
 }
+
+struct S { int z; T t; } s;
+struct S *ps;
+
+/*@ requires \valid(s) && \valid(s.t) && \valid(ps)
+  @ ensures \result == 1
+  @*/
+int g() {
+  T *p;
+  ps = &s;
+  p = &s.t;
+  ps->t.x = 1;
+  return s.t.x;
+}

@@ -3,17 +3,12 @@
 
 Require Export caduceus_why. Require Export caduceus_tactics.
 
-(*Why*) Parameter A : Z.
-
-(*Why*) Parameter B : Z.
-
-(*Why*) Parameter C : Z.
-
-(*Why*) Parameter f_parameter :
-  forall (tt: unit), forall (alloc: alloc), forall (ps: pointer),
-  forall (s: pointer), forall (t: ((memory) pointer)),
-  forall (z: ((memory) Z)), forall (H: ((valid alloc s) /\
-  (valid alloc (acc t s))) /\ (valid alloc ps)),
-  (sig_3 pointer ((memory) Z) Z
-   (fun (ps0: pointer) (z0: ((memory) Z)) (result: Z)  => (result = A))).
+(*Why*) Parameter copy_parameter :
+  forall (t1: pointer), forall (t2: pointer), forall (n: Z),
+  forall (alloc: alloc), forall (intP: ((memory) Z)),
+  forall (H: (valid_range alloc t1 0 n) /\ (valid_range alloc t2 0 n)),
+  (sig_2 ((memory) Z) unit
+   (fun (intP0: ((memory) Z)) (result: unit)  =>
+    ((forall (k:Z),
+      (0 <= k /\ k < n -> (acc intP0 (shift t2 k)) = (acc intP0 (shift t1 k))))))).
 
