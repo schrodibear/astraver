@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.22 2004-03-18 14:11:46 marche Exp $ i*)
+(*i $Id: clogic.mli,v 1.23 2004-03-18 15:21:38 marche Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -137,6 +137,6 @@ type ('term,'pred) loop_annot = {
 }
 
 type ('term,'ctype) logic_symbol =
-  | Predicate_reads of 'ctype list * 'term location list
-  | Predicate_def of 'ctype list * 'ctype predicate 
-  | Function of 'ctype list * 'ctype * 'term location list
+  | Predicate_reads of (string * 'ctype) list * 'term location list
+  | Predicate_def of (string * 'ctype) list * 'ctype predicate 
+  | Function of (string * 'ctype) list * 'ctype * 'term location list

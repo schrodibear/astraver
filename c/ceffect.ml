@@ -336,7 +336,7 @@ let decl d =
     | Ttypedef(ctype,id) -> () 
     | Ttypedecl(ctype) -> assert false (* TODO *)
     | Tdecl(ctype,v,init) -> () (* TODO *)
-    | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
+    | Tfunspec(spec,ctype,id,params) -> () (* TODO *)
     | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)
 
 let file l = List.iter decl l

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.46 2004-03-17 17:07:15 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.47 2004-03-18 15:21:38 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -688,7 +688,7 @@ let type_logic_parameters env pl =
     (fun (ty,x) (pl,env) ->
        let info = default_var_info x in
        let ty = type_logic_type env ty in 
-	       ty :: pl, Env.add x ty info env)
+	       (x,ty) :: pl, Env.add x ty info env)
     pl 
     ([], env)
 
@@ -699,17 +699,17 @@ let type_spec_decl ofs = function
       let ty = type_logic_type Env.empty ty in
       let pl,env' = type_logic_parameters Env.empty pl in
       let ll = List.map (type_location ofs env') ll in
-      Cenv.add_fun id.logic_name (pl, ty, id);
+      Cenv.add_fun id.logic_name (List.map snd pl, ty, id);
       Tlogic (id, Function (pl, ty, ll))
   | LDpredicate_reads (id, pl, ll) ->
       let pl,env' = type_logic_parameters Env.empty pl in
       let ll = List.map (type_location ofs env') ll in
-      Cenv.add_pred id.logic_name (pl,id);
+      Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_reads (pl, ll))
   | LDpredicate_def (id, pl, p) ->
       let pl,env' = type_logic_parameters Env.empty pl in
       let p = type_predicate ofs env' p in
-      Cenv.add_pred id.logic_name (pl,id);
+      Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
 
 let type_decl d = match d.node with

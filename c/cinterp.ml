@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.35 2004-03-18 14:11:46 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.36 2004-03-18 15:21:38 marche Exp $ i*)
 
 
 open Format
@@ -78,8 +78,11 @@ let rec interp_term label old_label t =
 	let te1 = f t1 and te2 = f t2 in
 	let var = global_var_for_type t.term_type in
 	LApp("acc",[LVar var;LApp("shift",[te1;te2])])
+    | Tarrow (t, field) -> 
+	let te = f t in
+	let var = field in
+	LApp("acc",[LVar var;te])
 
-    | Tarrow (_, _) -> assert false (* TODO *)
     | Tdot (_, _) -> assert false (* TODO *)
     | Tunop (Ustar, t1) -> 
 	let te1 = f t1 in
@@ -503,19 +506,35 @@ let interp_spec_option = function
 let cinterp_logic_symbol id ls =
   match ls with
     | Predicate_reads(args,locs) -> assert false (* TODO *)
-    | Predicate_def(args,pred) -> assert false (* TODO *)
+    | Predicate_def(args,p) -> 
+	let a = interp_predicate None "" p
+	and e = Ceffect.predicate p in
+	let args =
+	  List.fold_right
+	    (fun (id,t) args -> (id,([],Ceffect.interp_type t))::args)
+	    args []
+	in
+	let args =
+	  HeapVarSet.fold
+	  (fun arg t -> (arg,Ceffect.heap_var_type arg)::t)
+	    e args
+	in
+	Predicate(false,id.logic_name,args,a)
     | Function(args,ret,_) ->
 	let local_type =
 	  List.fold_right
-	    (fun arg t -> Prod_type("",base_type (Ceffect.interp_type arg),t))
+	    (fun (id,ty) t -> Prod_type(id,base_type (Ceffect.interp_type ty),t))
 	    args (base_type (Ceffect.interp_type ret))
 	in
-	HeapVarSet.fold
-	  (fun arg t -> 
-	     let ty = Ceffect.heap_var_type arg in 
-	     Prod_type("",Base_type ty,t))
-	  id.logic_args local_type
-
+	let final_type =
+	  HeapVarSet.fold
+	    (fun arg t -> 
+	       let ty = Ceffect.heap_var_type arg in 
+	       Prod_type("",Base_type ty,t))
+	    id.logic_args local_type
+	in
+	Logic(false,id.logic_name,final_type)
+	  
 let interp_axiom p =
   let a = interp_predicate None "" p
   and e = Ceffect.predicate p in
@@ -532,7 +551,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
   | Tlogic(id,ltype) -> 
       lprintf 
       "translating logic declaration of %s@." id.logic_name;
-      ((Logic(false,id.logic_name,cinterp_logic_symbol id ltype))::why_decls,
+      (cinterp_logic_symbol id ltype::why_decls,
        prover_decl)
   | Taxiom(id,p) -> 
       lprintf 

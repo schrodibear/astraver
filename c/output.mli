@@ -126,12 +126,15 @@ type why_decl =
   | Def of string * expr               (*r global let in why *)
   | Logic of bool * string * why_type  (*r logic decl in why *)
   | Axiom of string * assertion            (*r Axiom *)
+  | Predicate of bool * string * (string * base_type) list * assertion  
 
 type prover_decl =
   | Parameter  of string * why_type       (*r Parameter *)
   | Definition of string * expr           (*r Definition *) 
+(*
   | Predicate of string * (string * why_type) list * assertion  
                                           (*r Predicate *) 
+*)
 (*
   | Axiom of string * assertion            (*r Axiom *)
 *)
