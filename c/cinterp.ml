@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.32 2004-03-17 13:27:19 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.33 2004-03-17 16:13:58 filliatr Exp $ i*)
 
 
 open Format
@@ -88,7 +88,7 @@ let rec interp_term label old_label t =
     | Tunop (_, _) -> assert false (* TODO *)
     | Tapp (g, l) -> 
 	LApp(g.logic_name,
-	     (HeapVarSet.fold (fun (x,_) acc -> (interp_var label x)::acc) 
+	     (HeapVarSet.fold (fun x acc -> (interp_var label x)::acc) 
 		g.logic_args []) 
 	     @ List.map f l)
     | Tnull -> LVar "null"
@@ -508,18 +508,20 @@ let cinterp_logic_symbol id ls =
 	    args (base_type (Ceffect.interp_type ret))
 	in
 	HeapVarSet.fold
-	  (fun (arg,ty) t -> Prod_type("",Base_type ty,t))
+	  (fun arg t -> 
+	     let ty = Ceffect.heap_var_type arg in 
+	     Prod_type("",Base_type ty,t))
 	  id.logic_args local_type
 
 let interp_axiom p =
   let a = interp_predicate None "" p
   and e = Ceffect.predicate p in
   HeapVarSet.fold
-    (fun (arg,ty) t -> LForall(arg,ty,t))
+    (fun arg t -> LForall(arg,Ceffect.heap_var_type arg,t))
     e a
 
 let interp_effects e =
-  HeapVarSet.fold (fun (var,ty) acc -> var::acc) e []
+  HeapVarSet.fold (fun var acc -> var::acc) e []
 
 
 let interp_located_tdecl (why_decls,prover_decl) decl =

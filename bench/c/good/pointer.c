@@ -18,13 +18,13 @@ int f2(int *x) {
 int* r;
 
 
+#if 0
 /*@ requires \valid(r)
   @ ensures *r == 1 */
 int g() { 
   return f(r); 
 }
 
-#if 0
 /*@ ensures *r == 1 */
 int g2() { 
   r = (int *)malloc(sizeof(int));

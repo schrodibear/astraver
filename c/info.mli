@@ -1,7 +1,5 @@
 
-
-
-module HeapVarSet : Set.S with type elt = string * Output.base_type
+module HeapVarSet : Set.S with type elt = string
 
 type var_info =
     {

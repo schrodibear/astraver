@@ -1,10 +1,7 @@
 
 
 
-module HeapVarSet = Set.Make
- (struct type t = string * Output.base_type
-	 let compare (a,_) (b,_) = String.compare a b end)
-
+module HeapVarSet = Set.Make(String)
 
 type var_info =
     {
