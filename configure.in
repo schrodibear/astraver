@@ -245,6 +245,6 @@ AC_SUBST(MIZF)
 AC_SUBST(MIZARLIB)
 
 # Finally create the Makefile from Makefile.in
-AC_OUTPUT(Makefile bench/bench examples/Makefile.common)
-chmod a-w Makefile bench/bench examples/Makefile.common
+AC_OUTPUT(Makefile bench/bench)
+chmod a-w Makefile bench/bench
 chmod a+x bench/bench

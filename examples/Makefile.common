@@ -1,12 +1,13 @@
+# Generated automatically from Makefile.common.in by configure.
 
 WHY=../../bin/why.opt
 WHYOPTIONS=--valid
 
 %_valid.v %_why.v: %.mlw $(WHY)
-	$(WHY) @COQVER@ $(WHYOPTIONS) $<
+	$(WHY) --coq-v8 $(WHYOPTIONS) $<
 
 %_valid.v %_why.v: %.c $(WHY)
-	$(WHY) @COQVER@ $(WHYOPTIONS) $<
+	$(WHY) --coq-v8 $(WHYOPTIONS) $<
 
 %.vo: %.v
 	coqc -R ../../lib/coq Coq.why $<
