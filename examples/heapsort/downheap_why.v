@@ -3,7 +3,7 @@
 
 Require Why.
 Require Omega.
-Require Heap.
+Require heap.
 Require Inftree.
 
 Lemma R11 : (k:Z) `2*k+1+1` = `2*k+2`.

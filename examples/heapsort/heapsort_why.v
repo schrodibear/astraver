@@ -3,7 +3,7 @@
 
 Require Why.
 Require Omega.
-Require Heap.
+Require heap.
 Require Inftree.
 Require ZArithRing.
 

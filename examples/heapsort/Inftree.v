@@ -11,7 +11,7 @@ Require ZArith.
 Require Why.
 Require Omega.
 
-Require Heap.
+Require heap.
 
 Implicit Arguments On.
 
