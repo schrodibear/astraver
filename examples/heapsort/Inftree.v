@@ -22,7 +22,7 @@ Implicit Arguments On.
  * defined as follows:
  *)
 
-Inductive inftree [N:Z; t:(array N Z); n,v:Z] : Z -> Prop :=
+Inductive inftree [t:(array Z); n,v:Z] : Z -> Prop :=
   inftree_cons : (k:Z)
       `0 <= k <= n` 
    -> `(access t k) <= v`
@@ -32,18 +32,18 @@ Inductive inftree [N:Z; t:(array N Z); n,v:Z] : Z -> Prop :=
 
 (* Some lemmas about inftree *)
 
-Lemma inftree_1 : (N:Z)(t:(array N Z))(n,v,k:Z)
+Lemma inftree_1 : (t:(array Z))(n,v,k:Z)
   (inftree t n v k) -> `(access t k) <= v`.
 Proof.
-Intros N t n v k H. Elim H; Auto.
+Intros t n v k H. Elim H; Auto.
 Save.
 
-Lemma inftree_id : (N:Z)(t1,t2:(array N Z))(n,v,k:Z)
+Lemma inftree_id : (t1,t2:(array Z))(n,v,k:Z)
     (inftree t1 n v k)
  -> ((i:Z) `k <= i <= n` -> `(access t1 i) = (access t2 i)`)
  -> (inftree t2 n v k).
 Proof.
-Intros N t1 t2 n v k H. Elim H; Intros.
+Intros t1 t2 n v k H. Elim H; Intros.
 Apply inftree_cons.
 Assumption.
 
@@ -56,15 +56,15 @@ Intro. Apply H5. Assumption.
 Intros i Hi. Apply H6; Omega'.
 Save.
 
-Lemma inftree_2 : (N:Z)(t1,t2:(array N Z))(n,v,k,j:Z)
-    `n < N`
+Lemma inftree_2 : (t1,t2:(array Z))(n,v,k,j:Z)
+    `n < (array_length t1)`
  -> (inftree t1 n v j) 
  -> (exchange t2 t1 k j)
  -> `k < j`
  -> `(access t1 k) <= (access t1 j)`
  -> (inftree t2 n v j).
 Proof.
-Intros N t1 t2 n v k j Hn H. Case H.
+Intros t1 t2 n v k j Hn H. Case H.
 Intros.
 Apply inftree_cons.
 Assumption.
@@ -72,28 +72,28 @@ Decompose [exchange] H4. Omega'.
 
 Intro. Apply inftree_id with t1:=t1. Auto.
 Decompose [exchange] H4.
-Intros i Hi. Symmetry. Apply H12.
+Intros i Hi. Symmetry. Apply H13.
 Omega'. Omega'. Omega'.
 
 Intro. Apply inftree_id with t1:=t1. Auto.
 Decompose [exchange] H4.
-Intros i Hi. Symmetry. Apply H12.
+Intros i Hi. Symmetry. Apply H13.
 Omega'. Omega'. Omega'.
 Save.
 
-Lemma inftree_trans : (N:Z)(t:(array N Z))(n,k,v,v':Z)
+Lemma inftree_trans : (t:(array Z))(n,k,v,v':Z)
   `v <= v'` -> (inftree t n v k) -> (inftree t n v' k).
 Proof.
-Intros N t n k v v' Hvv' H.
+Intros t n k v v' Hvv' H.
 (Elim H; Intros).
 Apply inftree_cons.
 Assumption. Omega'. Auto. Auto.
 Save.
 
-Lemma inftree_3 : (N:Z)(t:(array N Z))(n,k:Z)
+Lemma inftree_3 : (t:(array Z))(n,k:Z)
   (heap t n k) -> (inftree t n #t[k] k).
 Proof.
-Intros N t n k H. Elim H; Intros.
+Intros t n k H. Elim H; Intros.
 Apply inftree_cons.
 Assumption.
 Auto with zarith.
@@ -103,10 +103,10 @@ Intro. Apply inftree_trans with v:=#t[`2*k0+2`] v':=#t[k0].
 Omega'. Auto.
 Save.
 
-Lemma inftree_all : (N:Z)(t:(array N Z))(n,v:Z)
+Lemma inftree_all : (t:(array Z))(n,v:Z)
   (inftree t n v `0`) -> (i:Z)`0 <= i <= n` -> (inftree t n v i).
 Proof.
-Intros N t n v H0 i H.
+Intros t n v H0 i H.
 Generalize H.
 Pattern i.
 Apply heap_induction.
@@ -127,17 +127,17 @@ Intro. (Split; Intro; Absurd `k > n`; Omega).
 Intuition.
 Save.
 
-Lemma inftree_0_right : (N:Z)(t:(array N Z))(n,v:Z)
+Lemma inftree_0_right : (t:(array Z))(n,v:Z)
   (inftree t n v `0`) -> (i:Z)`0 <= i <= n` -> `(access t i) <= v`.
 Proof.
-Intros N t n v H.
+Intros t n v H.
 Generalize (inftree_all H).
 Intros.
 Apply inftree_1 with n:=n.
 Exact (H0 i H1).
 Save.
 
-Lemma inftree_0_left : (N:Z)(t:(array N Z))(n,v:Z)
+Lemma inftree_0_left : (t:(array Z))(n,v:Z)
   `0 <= n` -> 
   ((i:Z)`0 <= i <= n` -> `(access t i) <= v`) -> (inftree t n v `0`).
 Proof.
@@ -169,8 +169,8 @@ Omega.
 Omega. Omega.
 Save.
 
-Lemma inftree_exchange : (N:Z)(t1,t2:(array N Z))(n,v:Z)
-    `n < N`
+Lemma inftree_exchange : (t1,t2:(array Z))(n,v:Z)
+    `n < (array_length t1)`
  -> (inftree t1 n v `0`) 
  -> (exchange t2 t1 `0` n)
  -> (inftree t2 n v `0`).
@@ -185,28 +185,28 @@ Intros.
 Decompose [exchange] H1.
 (Elim (Z_lt_ge_dec `0` i); Intro).
 (Elim (Z_lt_ge_dec i n); Intro).
-Rewrite (H8 i).
+Rewrite (H9 i).
 (Apply H2; Omega).
 
 Omega. Omega. Omega.
 
 Replace i with n.
-Rewrite H7.
+Rewrite H8.
 (Apply H2; Omega).
 
 Omega.
 
 Replace i with `0`.
-Rewrite H6.
+Rewrite H7.
 (Apply H2; Omega).
 
 Omega.
 Save.
 
-Lemma inftree_weakening : (N:Z)(t:(array N Z))(n,v,k:Z)
-  `1 <= n < N` -> (inftree t n v k) -> `k <= n-1` -> (inftree t `n-1` v k).
+Lemma inftree_weakening : (t:(array Z))(n,v,k:Z)
+  `1 <= n < (array_length t)` -> (inftree t n v k) -> `k <= n-1` -> (inftree t `n-1` v k).
 Proof.
-Intros N t n v k Hn Htree.
+Intros t n v k Hn Htree.
 Elim Htree; Intros.
 Apply inftree_cons.
 Omega.

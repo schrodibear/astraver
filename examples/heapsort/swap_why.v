@@ -5,32 +5,68 @@ Require Why.
 Require Omega.
 
 Lemma swap_po_1 : 
-  (N: Z)
   (i: Z)
   (j: Z)
-  (t: (array N Z))
-  (Pre5: (`0 <= i` /\ `i < N`) /\ `0 <= j` /\ `j < N`)
-  (Pre4: `0 <= i` /\ `i < N`)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
   (v: Z)
   (Post3: v = (access t i))
-  `0 <= j` /\ `j < N`.
+  `0 <= j` /\ `j < (array_length t)`.
 Proof.
 Intros; Omega.
 Save.
 
 Lemma swap_po_2 : 
-  (N: Z)
   (i: Z)
   (j: Z)
-  (t: (array N Z))
-  (Pre5: (`0 <= i` /\ `i < N`) /\ `0 <= j` /\ `j < N`)
-  (Pre4: `0 <= i` /\ `i < N`)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
   (v: Z)
   (Post3: v = (access t i))
-  (Pre3: `0 <= j` /\ `j < N`)
-  (t0: (array N Z))
+  (Pre3: `0 <= j` /\ `j < (array_length t)`)
+  (result: Z)
+  (Post1: (store t i result) = (store t i (access t j)))
+  `0 <= i` /\ `i < (array_length (store t i result))`.
+Proof.
+Intros; Simpl; Omega.
+Save.
+
+Lemma swap_po_3 : 
+  (i: Z)
+  (j: Z)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
+  (v: Z)
+  (Post3: v = (access t i))
+  (Pre3: `0 <= j` /\ `j < (array_length t)`)
+  (t0: (array Z))
   (Post1: t0 = (store t i (access t j)))
-  (t1: (array N Z))
+  (result0: Z)
+  (Post2: (store t0 j result0) = (store t0 j v))
+  `0 <= j` /\ `j < (array_length (store t0 j result0))`.
+Proof.
+Intros; ArraySubst t0.
+Save.
+
+Lemma swap_po_4 : 
+  (i: Z)
+  (j: Z)
+  (t: (array Z))
+  (Pre5: (`0 <= i` /\ `i < (array_length t)`) /\ `0 <= j` /\
+         `j < (array_length t)`)
+  (Pre4: `0 <= i` /\ `i < (array_length t)`)
+  (v: Z)
+  (Post3: v = (access t i))
+  (Pre3: `0 <= j` /\ `j < (array_length t)`)
+  (t0: (array Z))
+  (Post1: t0 = (store t i (access t j)))
+  (t1: (array Z))
   (Post2: t1 = (store t0 j v))
   (exchange t1 t i j).
 Proof.
@@ -39,29 +75,30 @@ Auto with datatypes.
 Save.
 
 Definition swap := (* validation *)
-  [N: Z; i: Z; j: Z; t: (array N Z); Pre5: (`0 <= i` /\ `i < N`) /\
-   `0 <= j` /\ `j < N`]
+  [i: Z; j: Z; t: (array Z); Pre5: (`0 <= i` /\ `i < (array_length t)`) /\
+   `0 <= j` /\ `j < (array_length t)`]
     let Pre4 = (proj1 ? ? Pre5) in
     let (v, Post3) = (exist_1 [result: Z]result = (access t i) (access t i)
       (refl_equal ? (access t i))) in
     let (t0, result, Post4) =
-      let Pre3 = (swap_po_1 N i j t Pre5 Pre4 v Post3) in
+      let Pre3 = (swap_po_1 i j t Pre5 Pre4 v Post3) in
       let (t0, result, Post1) =
         let (result, Post1) = (exist_1 [result: Z]
           (store t i result) = (store t i (access t j)) (access t j)
           (refl_equal ? (store t i (access t j)))) in
-        let Pre1 = Pre4 in
-        (exist_2 [t1: (array N Z)][result1: unit]
+        let Pre1 = (swap_po_2 i j t Pre5 Pre4 v Post3 Pre3 result Post1) in
+        (exist_2 [t1: (array Z)][result1: unit]
         t1 = (store t i (access t j)) (store t i result) tt Post1) in
       let (t1, result0, Post2) =
         let (result0, Post2) = (exist_1 [result0: Z]
           (store t0 j result0) = (store t0 j v) v
           (refl_equal ? (store t0 j v))) in
-        let Pre2 = Pre3 in
-        (exist_2 [t2: (array N Z)][result2: unit]
+        let Pre2 =
+          (swap_po_3 i j t Pre5 Pre4 v Post3 Pre3 t0 Post1 result0 Post2) in
+        (exist_2 [t2: (array Z)][result2: unit]
         t2 = (store t0 j v) (store t0 j result0) tt Post2) in
-      (exist_2 [t2: (array N Z)][result1: unit](exchange t2 t i j) t1 
-      result0 (swap_po_2 N i j t Pre5 Pre4 v Post3 Pre3 t0 Post1 t1 Post2)) in
-    (exist_2 [t1: (array N Z)][result0: unit](exchange t1 t i j) t0 result
+      (exist_2 [t2: (array Z)][result1: unit](exchange t2 t i j) t1 result0
+      (swap_po_4 i j t Pre5 Pre4 v Post3 Pre3 t0 Post1 t1 Post2)) in
+    (exist_2 [t1: (array Z)][result0: unit](exchange t1 t i j) t0 result
     Post4).
 

@@ -1,7 +1,7 @@
 
 let swap =
-  fun (N:int)(t:array N of int)(i,j:int) ->
-    { 0 <= i < N and 0 <= j < N }
+  fun (t:int array)(i,j:int) ->
+    { 0 <= i < array_length(t) and 0 <= j < array_length(t) }
     (let v = t[i] in
      begin
        t[i] := t[j];

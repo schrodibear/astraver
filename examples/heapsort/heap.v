@@ -29,7 +29,7 @@ Implicit Arguments On.
  * It is expressed by the predicate (heap t n k), defined as follows:
  *)
 
-Inductive heap [N:Z; t:(array N Z); n:Z] : Z -> Prop :=
+Inductive heap [t:(array Z); n:Z] : Z -> Prop :=
   heap_cons : (k:Z) 
      `0 <= k <= n`
   -> (`2*k+1 <= n` -> (Zge #t[k] #t[`2*k+1`]))
@@ -43,10 +43,10 @@ Inductive heap [N:Z; t:(array N Z); n:Z] : Z -> Prop :=
 (* A tree reduce to one element is a heap *)
 
 Lemma heap_leaf :
-  (N:Z)(t:(array N Z))(n:Z)(k:Z) 
+  (t:(array Z))(n:Z)(k:Z) 
     `0 <= k <= n` -> `2*k >= n` -> (heap t n k).
 Proof.
-Intros N t n k H1k H2k.
+Intros t n k H1k H2k.
 Apply heap_cons;
   [ Omega'
   | (Intro; Absurd `2*k >= n`; [ Omega' | Assumption ])
@@ -59,10 +59,10 @@ Save.
  * to n, the greatest element) is a heap as soon as t[k] <= t[2k+1] *)
 
 Lemma heap_son : 
-  (N:Z)(t:(array N Z))(n:Z) `n >= 0` ->
+  (t:(array Z))(n:Z) `n >= 0` ->
     (k:Z) `2*k+1 = n` -> (Zge #t[k] #t[`2*k+1`]) -> (heap t n k).
 Proof.
-Intros N t n Hn k Hk Ht.
+Intros t n Hn k Hk Ht.
 Apply heap_cons; 
   [ Omega'
   | Intro; Assumption
@@ -75,10 +75,10 @@ Save.
  * in t'[k..n] *)
 
 Lemma heap_id :
-  (N:Z)(t,t':(array N Z))(n,k:Z)
+  (t,t':(array Z))(n,k:Z)
     (heap t n k) -> (array_id t t' k n) -> (heap t' n k).
 Proof.
-Intros N t t' n k H_heap.
+Intros t t' n k H_heap.
 Unfold array_id.
 Elim H_heap; Intros; Clear H_heap.
 Apply heap_cons. 
@@ -100,10 +100,10 @@ Save.
 (* If t[k..n] is a heap then t[k..n-1] is a heap *)
 
 Lemma heap_weakening :
-  (N:Z)(t:(array N Z))(n,k:Z)
+  (t:(array Z))(n,k:Z)
     `1 <= n` -> (heap t n k) -> `k <= n-1` -> (heap t `n-1` k).
 Proof.
-Intros N t n k Hn H. 
+Intros t n k Hn H. 
 Elim H; Intros.
 Apply heap_cons.
 Clear H1 H2 H3 H4 H5 H6; Omega.
@@ -148,10 +148,10 @@ Save.
 (* If t[0..n] is a heap, then every sub-array t[k..n] is also a heap *)
 
 Lemma heap_all :
-  (N:Z)(t:(array N Z))(n:Z)
+  (t:(array Z))(n:Z)
     (heap t n `0`) -> (i:Z)`0 <= i <= n` -> (heap t n i).
 Proof.
-Intros N t n H0 i H. Generalize H.
+Intros t n H0 i H. Generalize H.
 Pattern i.
 Apply heap_induction. Auto.
 
