@@ -22,6 +22,7 @@ DOCUMENTATION
 =============
 
  - whydoc (to LaTeX / HTML)
+ - a simple why2html similar to caml2html?
 
 MISC
 ====
@@ -31,15 +32,24 @@ MISC
 BUGS
 ====
 
+ - higher order needs intensive testing; known bugs:
+
+   ======================================================================
+   let f (g:int->int) = (g 0)
+   let g (x:int) = x
+   let h = (f g)
+   ======================================================================
+   parameter x : int ref
+   let g (t:void) =
+     let a = ref 0 in
+     a := let v1 = (sub_int !x) in let v2 = (v1 2) in v2
+   ======================================================================
+
 IMPLEMENTATION
 ==============
 
  - auto-discharging of obligations when WP in context: quantification over
    booleans is not handled correctly
-
- - relax the no-side-effect condition on if-then-else test
-   (currently validation would not type-check, since it is built-in
-   in Vcg and Coq that the test has no side-effect)
 
  - do not overwrite .bak if no change
 
