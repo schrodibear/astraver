@@ -29,19 +29,24 @@ bads () {
     echo "  checking bad files"
     for f in $1/*.ml; do
 	echo -n "    "$f"... "
-	if $pgm $f > /dev/null 2>&1; 
+	if $pgm $2 $f > /dev/null 2>&1; 
         then echo "FAILED!"; exit 1; else echo "ok"; fi
     done
 }
 
 # 1. Syntax
 echo "=== Checking parsing ==="
-bads bad/syntax
+bads bad/syntax --parse-only
 echo ""
 
 # 2. Typing
 echo "=== Checking typing ==="
-bads bad/typing
+bads bad/typing --type-only
+echo ""
+
+# 2. Other
+echo "=== Checking typing ==="
+bads bad/other
 echo ""
 
 # 3. Benchmark
