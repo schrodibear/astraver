@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.18 2004-02-04 16:21:28 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.19 2004-02-09 13:31:12 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -350,7 +350,8 @@ and type_expr_node loc env = function
 	    error loc "invalid type argument of `->'"
       end
   | CEarrget (e1, e2) ->
-      let te1 = type_lvalue env e1 in
+(* Claude: j'ai remplace type_lvalue par type_expr ci-dessous *)
+      let te1 = type_expr env e1 in
       (match te1.texpr_type.ctype_node with
 	 | CTarray (ty, _) | CTpointer ty ->
 	     let te2 = type_int_expr env e2 in
@@ -395,10 +396,10 @@ and type_expr_node loc env = function
 	| Aand | Axor | Aor ->
 	    assert false (*TODO*)
       end
-  | CEunary ((Uprefix_inc|Uprefix_dec|Upostfix_inc|Upostfix_dec as op), e) ->
+  | CEincr (op, e) ->
       let e = type_lvalue env e in
       begin match e.texpr_type.ctype_node with
-	| CTint _ | CTfloat _ | CTpointer _ -> TEunary (op, e), e.texpr_type
+	| CTint _ | CTfloat _ | CTpointer _ -> TEincr (op, e), e.texpr_type
 	| _ -> error loc "wrong type to {de,in}crement"
       end
   | CEunary (Unot, e) ->
@@ -550,7 +551,11 @@ and type_lvalue env e =
   let loc = e.loc in
   let e = type_expr env e in
   match e.texpr_node with
-    | TEvar v -> v.var_is_assigned <- true; e 
+    | TEvar v -> 
+	Loc.report Coptions.log loc;
+	fprintf Coptions.log "Variable %s is assigned@." v.var_name;
+	v.var_is_assigned <- true; 
+	e 
     | TEunary (Ustar, _) -> e
     | _ -> error loc "invalid lvalue"
 

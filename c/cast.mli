@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.19 2004-02-04 16:21:28 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.20 2004-02-09 13:31:12 marche Exp $ i*)
 
 (*s C types *)
 
@@ -62,8 +62,10 @@ type assign_operator =
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
   | Aand | Axor | Aor
 
-type unary_operator = 
+type incr_operator = 
   | Uprefix_inc | Uprefix_dec | Upostfix_inc | Upostfix_dec 
+
+type unary_operator = 
   | Uplus | Uminus | Unot | Ustar | Uamp | Utilde
   (* these are introduced during typing *)
   | Ufloat_of_int | Uint_of_float
@@ -94,6 +96,7 @@ and cexpr_node =
   | CEseq of cexpr * cexpr
   | CEassign of cexpr * assign_operator * cexpr
   | CEunary of unary_operator * cexpr
+  | CEincr of incr_operator * cexpr
   | CEbinary of cexpr * binary_operator * cexpr
   | CEcall of cexpr * cexpr list
   | CEcond of cexpr * cexpr * cexpr
@@ -160,6 +163,7 @@ and texpr_node =
   | TEseq of texpr * texpr
   | TEassign of lvalue * assign_operator * texpr
   | TEunary of unary_operator * texpr
+  | TEincr of incr_operator * texpr
   | TEbinary of texpr * binary_operator * texpr
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr

@@ -10,7 +10,6 @@
 /* @ axiom sum(t,i,j+1) == sum(t,i,j) + t[j] */
 
 
-
 /* @ requires t != null && n <= \length(t);
   @ ensures \result == sum(t,0,n);
   @*/

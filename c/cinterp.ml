@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.5 2004-02-03 08:24:43 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.6 2004-02-09 13:31:12 marche Exp $ i*)
 
 (*****
 
@@ -936,11 +936,27 @@ let interp_bin_op op =
   | Badd_int -> "add_int"
   | Bsub_int -> "sub_int"
   | Bmul_int -> "mul_int"
+  | Blt -> "lt_int"
+  | Bgt -> "gt_int"
+  | Ble -> "le_int"
+  | Bge -> "ge_int"
+  | Beq -> "eq"
+  | Bneq -> "neq" 
   | _ -> assert false (* TODO *)
+
+let interp_incr_op op =
+  match op with
+    | Upostfix_inc | Uprefix_inc -> "add_int"
+    | Upostfix_dec | Uprefix_dec -> "sub_int"
 
 let rec interp_expr e =
   match e.texpr_node with
-    | TEconstant(c) -> Cte(Prim_int(int_of_string c))
+    | TEconstant(c) -> 
+	begin
+	  try
+	    Cte(Prim_int(int_of_string c))
+	  with Failure "int_of_string" -> assert false (* TODO *)
+	end
     | TEvar(v) -> 
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
     | TEbinary(e1,op,e2) ->
@@ -949,23 +965,45 @@ let rec interp_expr e =
 	let te1 = interp_expr e1
 	and te2 = interp_expr e2 
 	in
-	App(App(Var("acc"),Var("intA")),App(App(Var("shift"),te1),te2))
-    | _ -> assert false (* TODO *)
-(*
-  | TEnop
-  | TEstring_literal of string
-  | TEdot of lvalue * string
-  | TEarrow of lvalue * string
-  | TEarrget of lvalue * texpr
-  | TEseq of texpr * texpr
-  | TEassign of lvalue * assign_operator * texpr
-  | TEunary of unary_operator * texpr
-  | TEcall of texpr * texpr list
-  | TEcond of texpr * texpr * texpr
-  | TEcast of texpr ctype * texpr
-  | TEsizeof_expr of texpr
-  | TEsizeof of texpr ctype
-*)
+	App(App(Var("acc"),Deref("intA")),App(App(Var("shift"),te1),te2))
+    | TEassign(e1,op,e2) ->
+	assert false (* TODO *)
+	(*begin
+	  match op with
+	    | Aequal ->
+		begin
+		  match e1.texpr_node with
+		    | TEvar(v) ->
+			Assign(v.var_name,interp_expr e2)
+		    | _ -> assert false (* TODO *)
+		end
+	    | _ -> assert false (* TODO *)
+	end*)	
+    | TEincr(op,e) ->
+	assert false (* TODO *)
+    | TEseq(e1,e2) ->
+	assert false (* TODO *)
+    | TEnop -> 
+	assert false (* TODO *)
+    | TEcond(e1,e2,e3) ->
+	If(interp_expr e1,interp_expr e2,interp_expr e3)
+    | TEstring_literal s
+	-> assert false (* TODO *)
+    | TEdot(e,s)
+      -> assert false (* TODO *)
+    | TEarrow(e,s)
+      -> assert false (* TODO *)
+    | TEunary(op,e)
+      -> assert false (* TODO *)
+    | TEcall(e,args)
+      -> assert false (* TODO *)
+    | TEcast(t,e)
+      -> assert false (* TODO *)
+    | TEsizeof_expr(e)
+      -> assert false (* TODO *)
+    | TEsizeof(t)
+      -> assert false (* TODO *)
+
 
 let interp_decl d acc = 
   match d.node with 
@@ -988,8 +1026,12 @@ let interp_decl d acc =
 	  Let(v.var_name,tinit,acc)
     | _ -> assert false (* TODO *)
 
-let interp_statement_expr e accu =
+let rec interp_statement_expr e accu =
   match e.texpr_node with
+    | TEseq(e1,e2) ->
+	interp_statement_expr e1 (interp_statement_expr e2 accu)
+    | TEnop -> 
+	assert false (* TODO *)
     | TEassign(l,Aequal,e) ->
 	begin
 	  match l.texpr_node with
@@ -997,6 +1039,15 @@ let interp_statement_expr e accu =
 		append (Assign(v.var_name,interp_expr e)) accu
 	    | _ -> assert false (* TODO *)
 	end 
+    | TEincr(op,e) ->
+	begin
+	  match e.texpr_node with
+	    | TEvar v ->
+		Assign(v.var_name,
+		       App(App(Var(interp_incr_op op),Deref(v.var_name)),
+			   Cte(Prim_int 1)))
+	    | _ -> assert false (* TODO *)
+	end
     | _ -> assert false (* TODO *)
 
 let rec interp_statement stat acc =
@@ -1016,10 +1067,33 @@ let rec interp_statement stat acc =
 	    | None -> (LTrue,LConst (Prim_int 0))
 	    | Some(i,d) -> assert false (* TODO *)
 	in
-	append (interp_expr e1)
+	interp_statement_expr e1
 	  (make_while (interp_expr e2) inv dec 
-	     (interp_statement body (interp_expr e3)))
-    | _ -> assert false (* TODO *)
+	     (interp_statement body (interp_statement_expr e3 Void)))
+  | TSnop
+      -> assert false (* TODO *)
+  | TSif(e,s1,s2)
+      -> assert false (* TODO *)
+  | TSwhile(e,s,info,annot)
+      -> assert false (* TODO *)
+  | TSdowhile(s,e,info,annot)
+      -> assert false (* TODO *)
+  | TSblock(b) -> 
+      interp_block b (* TODO *)
+  | TSbreak
+      -> assert false (* TODO *)
+  | TScontinue
+      -> assert false (* TODO *)
+  | TSlabel(lab,s)
+      -> assert false (* TODO *)
+  | TSswitch(e,s)
+      -> assert false (* TODO *)
+  | TScase(e,s)
+      -> assert false (* TODO *)
+  | TSgoto(lab)
+      -> assert false (* TODO *)
+  | TSassert(pred)
+      -> assert false (* TODO *)
 
 and interp_block (decls,stats) =
   let b = List.fold_right interp_statement stats Void in

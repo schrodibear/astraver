@@ -341,9 +341,9 @@ postfix_expression
         | postfix_expression PTR_OP identifier/*ICI*/ 
 	    { locate (CEarrow ($1, $3)) }
         | postfix_expression INC_OP 
-	    { locate (CEunary (Upostfix_inc, $1)) }
+	    { locate (CEincr (Upostfix_inc, $1)) }
         | postfix_expression DEC_OP
-	    { locate (CEunary (Upostfix_dec, $1)) }
+	    { locate (CEincr (Upostfix_dec, $1)) }
         ;
 
 argument_expression_list
@@ -353,8 +353,8 @@ argument_expression_list
 
 unary_expression
         : postfix_expression { $1 }
-        | INC_OP unary_expression { locate (CEunary (Uprefix_inc, $2)) }
-        | DEC_OP unary_expression { locate (CEunary (Uprefix_dec, $2)) }
+        | INC_OP unary_expression { locate (CEincr (Uprefix_inc, $2)) }
+        | DEC_OP unary_expression { locate (CEincr (Uprefix_dec, $2)) }
         | unary_operator cast_expression { locate (CEunary ($1, $2)) }
         | SIZEOF unary_expression { locate (CEsizeof_expr $2) }
         | SIZEOF LPAR type_name RPAR 
