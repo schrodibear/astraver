@@ -19,6 +19,7 @@ goods () {
 	    fi
 	else 
 	    echo "why FAILED"
+	    $pgm -coq $f
 	    exit 1
 	fi
     done

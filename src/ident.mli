@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.10 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.11 2002-03-04 14:07:55 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -38,6 +38,8 @@ val bound_id : bound -> int
 val print_bound : Format.formatter -> bound -> unit
 
 (*s Some pre-defined identifiers. *)
+
+val anonymous : t
 
 val t_add : t
 val t_sub : t

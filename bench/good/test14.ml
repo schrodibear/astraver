@@ -10,5 +10,4 @@ let p =
     if !b = 0 && !c = 0 then begin a := 4; c := 5 end
   end
   { q(a,b,c,d) }
-
     

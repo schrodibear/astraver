@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.13 2002-03-01 16:29:49 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.14 2002-03-04 14:07:55 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -189,10 +189,10 @@ EXTEND
 
   (* Types *)
   pure_type:
-  [ [ LIDENT "int" -> PTint
-    | LIDENT "bool" -> PTbool
-    | LIDENT "float" -> PTfloat
-    | LIDENT "unit" -> PTunit
+  [ [ "int" -> PTint
+    | "bool" -> PTbool
+    | "float" -> PTfloat
+    | "unit" -> PTunit
     | id = ident -> PTexternal id ] ] 
   ;    
 
@@ -203,7 +203,12 @@ EXTEND
   [ [ t = type_v1 -> t ] ]
   ;
   type_v1:
-  [ [ t = type_v2 -> t ] ]
+  [ RIGHTA
+    [ v = type_v2; "->"; c = type_c -> 
+	make_arrow [Ident.anonymous, BindType v] c
+    | x = ident; ":"; v = type_v2; "->"; c = type_c -> 
+	make_arrow [(x, BindType v)] c
+    | t = type_v2 -> t ] ]
   ;
   type_v2:
   [ LEFTA
@@ -212,12 +217,13 @@ EXTEND
   ;
   type_v3:
   [ [ LIDENT "array"; size = term; "of"; v = type_v0 -> Array (size,v)
-    | bl = binders; c = type_c -> make_arrow bl c
-    | c = pure_type -> PureType c ] ]
+    | c = pure_type -> PureType c
+    | "("; v = type_v; ")" -> v ] ] 
   ;
   type_c:
-  [ [ LIDENT "returns"; id = ident; ":"; v = type_v;
-      e = effects; p = OPT pre_condition; q = OPT post_condition; "end" ->
+  [ [ "{"; p = OPT pre_condition; "}";
+      LIDENT "returns"; id = ident; ":"; v = type_v; e = effects; 
+      "{"; q = OPT post_condition; "}" ->
         { c_result_name = id; c_result_type = v;
 	  c_effect = e; c_pre = list_of_some p; c_post = q } 
     | v = type_v -> 
@@ -239,10 +245,10 @@ EXTEND
   [ [ LIDENT "writes"; l=LIST0 ident SEP "," -> l ] ]
   ;
   pre_condition:
-  [ [ LIDENT "pre"; c = assertion -> pre_of_assert false c ] ]
+  [ [ c = assertion -> pre_of_assert false c ] ]
   ;
   post_condition:
-  [ [ LIDENT "post"; c = assertion -> c ] ]
+  [ [ c = assertion -> c ] ]
   ;
 
   (* Binders (for both types and programs) *)

@@ -74,8 +74,7 @@ bench:: $(BINARY)
 	cd bench; ./bench ../$(BINARY)
 
 test:: $(BINARY)
-	$(BINARY) -d -V -coq bench/good/test.ml
-	cat bench/good/test_why.v
+	$(BINARY) -d -V -coq bench/test.ml
 
 # installation
 ##############
@@ -96,8 +95,12 @@ CAMLP4=camlp4o pa_extend.cmo
 
 src/parser.cmo: src/parser.ml4
 	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -impl" -impl $<
+
 src/parser.cmx: src/parser.ml4
 	$(OCAMLOPT) -c $(OFLAGS) -pp "$(CAMLP4) -impl" -impl $<
+
+src/parser.ml: src/parser.ml4
+	$(CAMLP4) pr_o.cmo -impl $< > $@
 
 # generic rules
 ###############
@@ -164,9 +167,9 @@ clean::
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
 
-.depend depend::
+.depend depend:: src/parser.ml
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
-	$(CAMLP4) pr_depend.cmo -- $(INCLUDES) -impl src/parser.ml4 >> .depend
+#	$(CAMLP4) pr_depend.cmo -- $(INCLUDES) -impl src/parser.ml4 >> .depend
 
 include .depend

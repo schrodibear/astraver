@@ -1,6 +1,6 @@
 
 external visible : 
-  (x:int) returns result:bool pre x > 0 post q(result,x) end
+  x:int -> { x > 0 } returns result:bool { q(result,x) }
 
 external a : int
 

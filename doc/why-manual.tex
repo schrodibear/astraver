@@ -184,28 +184,29 @@ Syntax of types is given in Figure~\ref{fig:types}.
 \begin{center}
 \hrulefill\\
 \begin{tabular}{lrl}
-  \nt{value\_type}
+  \nt{simple\_value\_type}
     & $::=$ & \nt{primitive\_type} \\
-      & $|$ & \nt{value\_type} \te{ref} \\
-      & $|$ & \te{array} \nt{term} \te{of} \nt{value\_type} \\
-      & $|$ & \nt{binders} \nt{computation\_type} 
+      & $|$ & \nt{simple\_value\_type} \te{ref} \\
+      & $|$ & \te{array} \nt{term} \te{of} \nt{simple\_value\_type} \\
+      & $|$ & \te{(} \nt{value\_type} \te{)} \\
+  \\[0.1em]
+
+  \nt{value\_type}
+    & $::=$ & \nt{simple\_value\_type} \\
+      & $|$ & \nt{simple\_value\_type} \te{->} \nt{computation\_type} \\
+      & $|$ & \nt{identifier} \te{:} \nt{simple\_value\_type} 
+              \te{->} \nt{computation\_type} \\
   \\[0.1em]
 
   \nt{computation\_type}
-    & $::=$ & \te{returns} \nt{identifier} \te{:} \nt{value\_type} \\
+    & $::=$ & \te{\{} $[$ \nt{predicate} $]$ \te{\}} \\
+      &     & \te{returns} \nt{identifier} \te{:} \nt{value\_type} \\
       &     & $[$~ \te{reads} 
                    \nt{identifier}\te{,}\ldots\te{,}\nt{identifier} $]$~ \\
       &     & $[$~ \te{writes} 
                    \nt{identifier}\te{,}\ldots\te{,}\nt{identifier} $]$~ \\
-      &     & $[$~ \te{pre} \nt{predicate} $]$ ~ 
-              $[$~ \te{post} \nt{predicate} $]$ \\
-      &     & \te{end} \\
-      & $|$ & \nt{value\_type}
-  \\[0.1em]
-
-  \nt{binders}
-    & $::=$ & \te{(} \nt{identifier}\te{,}\dots\te{,}\nt{identifier}  \te{:}
-              \nt{value\_type}  \te{)}$^+$ 
+      &     & \te{\{} $[$ \nt{predicate} $]$ \te{\}} \\
+      & $|$ & \nt{value\_type} \\
   \\[0.1em]
 
   \nt{primitive\_type}
@@ -275,6 +276,11 @@ Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
       & $|$ & \te{assert}  \te{\{}  \nt{predicate}  \te{\}} \\
 
       & & \\[0.1em]
+
+  \nt{binders}
+    & $::=$ & \te{(} \nt{identifier}\te{,}\dots\te{,}\nt{identifier}  \te{:}
+              \nt{value\_type}  \te{)}$^+$ \\
+  \\[0.1em]
 
   \nt{loop\_annot}
     & $::=$ & \te{\{}  \te{invariant}  \nt{predicate} 

@@ -33,10 +33,10 @@ BUGS
 IMPLEMENTATION
 ==============
 
- - no substitution when result name is not "result" => force it?
-
- - add renaming in typing info
+ - no substitution when result name is not "result" => force it
 
  - variant = identifier ?
 
  - wp: function application: incorrect when function has effects
+
+ - well-formedness of types (in external, in particular)

@@ -1,11 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.5 2002-03-01 12:03:44 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.6 2002-03-04 14:07:55 filliatr Exp $ i*)
 
+open Ident
 open Misc
 open Ast
 open Types
-open Ident
 open Logic
 
 (* Environments for imperative programs.

@@ -22,12 +22,11 @@ external H : float
 external eps : float
 
 external visible : 
-  (a:vector3)(x:float)(eps:float)
-  returns result:bool pre  pre_visible(a,x,eps)
-                      post post_visible(a,x,eps,result) end
+  a:vector3 -> x:float -> eps:float ->
+  { pre_visible(a,x,eps) } returns result:bool { post_visible(a,x,eps,result) }
 
 external res : listv ref
-external cons : (ex:float)(ey:float)(ez:float)(l:listv) listv
+external cons : float -> float -> float -> listv -> listv
 
 (***
 let vert_top_bot =
