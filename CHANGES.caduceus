@@ -1,7 +1,10 @@
 Note: These are the changes for Caduceus.
 
+version 0.65, October 18th, 2004
+================================
  o support for local variables of union types
  o support for sizeof
+ o fixed bug with identifiers renaming
 
 version 0.64, October 13th, 2004
 ================================
