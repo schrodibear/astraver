@@ -1,6 +1,6 @@
 
 all:
-	../../bin/why.opt -d -V --valid all.mlw
+	../../bin/why.opt -d -V --coq-v8 --valid all.mlw
 	coqc -R ../../lib/coq Coq.why all_why.v
 
 bench:
@@ -12,7 +12,7 @@ tc:
 WHY=../../bin/why.opt
 
 %_why.v %_valid.v: %.mlw $(WHY)
-	$(WHY) --valid -V $<
+	$(WHY) --valid -V --coq-v8 $<
 
 %.vo: %.v
 	coqc -R ../../lib/coq Coq.why $<
