@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.8 2004-02-10 09:00:03 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.9 2004-02-11 09:32:26 filliatr Exp $ i*)
 
 (*****
 
@@ -966,7 +966,7 @@ let rec interp_expr e =
 	and te2 = interp_expr e2 
 	in
 	App(App(Var("acc"),Deref("intA")),App(App(Var("shift"),te1),te2))
-    | TEassign(e1,op,e2) ->
+    | TEassign (e1,e2) ->
 	assert false (* TODO *)
 	(*begin
 	  match op with
@@ -979,6 +979,8 @@ let rec interp_expr e =
 		end
 	    | _ -> assert false (* TODO *)
 	end*)	
+    | TEassign_op(e1,op,e2) ->
+	assert false (* TODO *)
     | TEincr(op,e) ->
 	assert false (* TODO *)
     | TEseq(e1,e2) ->
@@ -1032,7 +1034,7 @@ let rec interp_statement_expr e accu =
 	interp_statement_expr e1 (interp_statement_expr e2 accu)
     | TEnop -> 
 	assert false (* TODO *)
-    | TEassign(l,Aequal,e) ->
+    | TEassign(l,e) ->
 	begin
 	  match l.texpr_node with
 	    | TEvar(v) ->

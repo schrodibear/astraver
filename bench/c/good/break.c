@@ -5,7 +5,7 @@
 /*@ ensures \result == 12 */
 int f1()
 {
-  while (1) /*@ invariant true variant 1 */ break;
+  while (1) /*@ invariant \true variant 1 */ break;
   return 12;
 }
 

@@ -481,7 +481,18 @@ assignment_expression
         : conditional_expression 
             { $1 }
         | unary_expression assignment_operator assignment_expression 
-	    { locate (CEassign ($1, $2, $3)) }
+	    { locate (match $2 with
+			| Aequal -> CEassign ($1, $3)
+			| Amul -> CEassign_op ($1, Bmul, $3)
+			| Adiv -> CEassign_op ($1, Bdiv, $3)
+			| Amod -> CEassign_op ($1, Bmod, $3)
+			| Aadd -> CEassign_op ($1, Badd, $3)
+			| Asub -> CEassign_op ($1, Bsub, $3)
+			| Aleft -> CEassign_op ($1, Bshift_left, $3)
+			| Aright -> CEassign_op ($1, Bshift_right, $3)
+			| Aand -> CEassign_op ($1, Bbw_and, $3)
+			| Axor -> CEassign_op ($1, Bbw_xor, $3)
+			| Aor -> CEassign_op ($1, Bbw_or, $3)) }
         ;
 
 assignment_operator

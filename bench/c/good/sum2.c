@@ -7,12 +7,12 @@
 /*@ logic int sum(int[] t,int i,int j) */
 
 /*@ axiom sum1 : 
-      forall int[] t, int i; sum(t,i,i) == 0 */
+      \forall int[] t, int i; sum(t,i,i) == 0 */
 /*@ axiom sum2 : 
-      forall int[] t, int i, int j; sum(t,i,j+1) == sum(t,i,j) + t[j] */
+      \forall int[] t, int i, int j; sum(t,i,j+1) == sum(t,i,j) + t[j] */
 
 
-/*@ requires t != null && n <= \length(t)
+/*@ requires t != \null && n <= \length(t)
   @ ensures \result == sum(t,0,n)
   @*/
 int test(int t[],int n) {

@@ -267,14 +267,14 @@ except that:
 \item some character sequences are now recognized as keywords: \par
   \begin{center}
   \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
-  \verb!forall! & \verb!exists! & \verb!int! & \verb!float! \\
-  \verb!true! & \verb!false! & \verb!if! & \verb!then! & \verb!else! \\
+  \verb!\forall! & \verb!\exists! & \verb!int! & \verb!float! \\
+  \verb!\true! & \verb!\false! & \verb!if! & \verb!then! & \verb!else! \\
   \verb!invariant! & \verb!variant! & \verb!for! & \verb!label! & 
   \verb!assert! \\ 
   \verb!requires! & \verb!ensures! & \verb!modifiable! & \verb!logic! & 
   \verb!axiom! \\
   \verb!predicate! & \verb!\result! & \verb!\old! & 
-  \verb!\length! & \verb!null!
+  \verb!\length! & \verb!\null!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -371,7 +371,7 @@ annotations.
       & $|$ & \verb!\at! \te{(} \nt{term} \te{,} \nt{identifier} \te{)} \\
       & $|$ & \verb!\length! \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\result! \\
-      & $|$ & \verb!null! \\
+      & $|$ & \verb!\null! \\
   \\[0.1em]
 
   \nt{constant}\indexnt{constant}
@@ -384,8 +384,8 @@ annotations.
   \\[0.1em]
 
   \nt{predicate}\indexnt{predicate}
-    & $::=$ & \te{true} \\
-      & $|$ & \te{false} \\
+    & $::=$ & \verb!\true! \\
+      & $|$ & \verb!\false! \\
       & $|$ & \nt{identifier} \\
       & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{term} \nt{relation} \nt{term} 
@@ -396,9 +396,9 @@ annotations.
       & $|$ & \te{!} \nt{predicate} \\
       & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
               \te{else} \nt{predicate} \\
-      & $|$ & \te{forall} \nt{logic\_type} \nt{identifier} \te{,} 
+      & $|$ & \verb!\forall! \nt{logic\_parameter}\etoilesep{\te{,}} \te{;} 
               \nt{predicate} \\
-      & $|$ & \te{exists} \nt{logic\_type} \nt{identifier} \te{,} 
+      & $|$ & \verb!\exists! \nt{logic\_parameter}\etoilesep{\te{,}} \te{;} 
               \nt{predicate} \\
       & $|$ & \te{(} \nt{predicate} \te{)} \\
   \\[0.1em]

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.26 2004-02-10 13:39:12 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.27 2004-02-11 09:32:26 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -220,28 +220,31 @@ and type_expr_node loc env = function
 	TEcond (e1, e2, coerce ty2 e3), ty2
       else
 	error loc "type mismatch in conditional expression"
-  | CEassign (e1, op, e2) ->
+  | CEassign (e1, e2) ->
       let e1loc = e1.loc in
       let e1 = type_lvalue env e1 in
       warn_for_read_only e1loc e1;
       let ty1 = e1.texpr_type in
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
-      begin match op with
-	| Aequal ->
-	    if (arith_type ty1 && arith_type ty2) || 
-	       (sub_type ty2 ty1) || 
-	       (pointer_type ty1 && is_null e2) 
-	    then
-	      TEassign (e1, op, coerce ty1 e2), ty1
-	    else
-	      error loc "incompatible types in assignment"
-	| Amul | Adiv | Aadd | Asub -> 
-            assert false (*TODO*)
-	| Amod | Aleft | Aright 
-	| Aand | Axor | Aor ->
-	    assert false (*TODO*)
-      end
+      if (arith_type ty1 && arith_type ty2) || 
+	(sub_type ty2 ty1) || 
+	(pointer_type ty1 && is_null e2) 
+      then
+	TEassign (e1, coerce ty1 e2), ty1
+      else
+	error loc "incompatible types in assignment"
+  | CEassign_op (e1, ( Badd | Bsub | Bmul | Bdiv | Bmod 
+		     | Bbw_and | Bbw_xor | Bbw_or 
+		     | Bshift_left | Bshift_right as op), e2) ->
+      (match type_expr_node loc env (CEbinary (e1, op, e2)) with
+	 | TEbinary (te1, op', te2), ty -> 
+	     check_lvalue e1.loc te1;
+	     TEassign_op (te1, op', te2), te1.texpr_type (* TODO type ok? *)
+	 | _ -> 
+	     assert false)
+  | CEassign_op _ ->
+      assert false
   | CEincr (op, e) ->
       let e = type_lvalue env e in
       begin match e.texpr_type.ctype_node with
@@ -396,15 +399,20 @@ and type_expr_node loc env = function
 and type_lvalue env e = 
   let loc = e.loc in
   let e = type_expr env e in
-  match e.texpr_node with
+  check_lvalue loc e;
+  begin match e.texpr_node with
     | TEvar v -> 
 	Loc.report Coptions.log loc;
 	fprintf Coptions.log "Variable %s is assigned@." v.var_name;
-	v.var_is_assigned <- true; 
-	e 
-    | TEunary (Ustar, _) 
-    | TEarrget _ -> e
-    | _ -> error loc "invalid lvalue"
+	v.var_is_assigned <- true
+    | _ -> 
+	()
+  end;
+  e
+
+and check_lvalue loc e = match e.texpr_node with
+  | TEvar _ | TEunary _ | TEarrget _ -> ()
+  | _ -> error loc "invalid lvalue"
 
 and type_expr_option env eo = option_app (type_expr env) eo
 
@@ -463,6 +471,12 @@ let mt_status =
 
 let or_status s1 s2 =
   { always_return = s1.always_return && s2.always_return;
+    abrupt_return = s1.abrupt_return || s2.abrupt_return;
+    break = s1.break || s2.break;
+    continue = s1.continue || s2.continue }
+
+let seq_status s1 s2 =
+  { always_return = s1.always_return || s2.always_return;
     abrupt_return = s1.abrupt_return || s2.abrupt_return;
     break = s1.break || s2.break;
     continue = s1.continue || s2.continue }
@@ -567,8 +581,6 @@ and type_block env et (dl,sl) =
 	[], mt_status
     | [s] ->
 	let s',st = type_statement env' et s in
-	if not st.always_return && et <> None then
-	  warning s.loc "control reaches end of non-void function";
 	[s'], st
     | s :: bl ->
 	let s', st1 = type_statement env' et s in
@@ -577,7 +589,7 @@ and type_block env et (dl,sl) =
 	  if werror then exit 1
 	end;
 	let bl', st2 = type_bl bl in
-	s' :: bl', or_status st1 st2
+	s' :: bl', seq_status st1 st2
   in
   let sl', st = type_bl sl in
   (dl', sl'), st
@@ -641,6 +653,8 @@ let type_decl d = match d.node with
       let s = option_app (type_spec ty env) s in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
       let bl,st = type_block env et bl in
+      if not st.always_return && et <> None then
+	warning d.loc "control reaches end of non-void function";
       if st.break then 
 	error d.loc "break statement not within a loop or switch";
       if st.continue then 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.25 2004-02-10 10:05:48 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.26 2004-02-11 09:32:26 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -96,7 +96,8 @@ and cexpr_node =
   | CEarrow of cexpr * string
   | CEarrget of cexpr * cexpr
   | CEseq of cexpr * cexpr
-  | CEassign of cexpr * assign_operator * cexpr
+  | CEassign of cexpr * cexpr
+  | CEassign_op of cexpr * binary_operator * cexpr
   | CEunary of unary_operator * cexpr
   | CEincr of incr_operator * cexpr
   | CEbinary of cexpr * binary_operator * cexpr
@@ -187,7 +188,8 @@ and texpr_node =
   | TEarrow of lvalue * string
   | TEarrget of lvalue * texpr
   | TEseq of texpr * texpr
-  | TEassign of lvalue * assign_operator * texpr
+  | TEassign of lvalue * texpr
+  | TEassign_op of lvalue * binary_operator * texpr
   | TEunary of unary_operator * texpr
   | TEincr of incr_operator * texpr
   | TEbinary of texpr * binary_operator * texpr
