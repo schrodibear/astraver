@@ -6,7 +6,7 @@ Require Export LinkedLists.
 
 (* Definition eq_list := (@eq (list pointer)). *)
 
-(* Why obligation from file "why/reverse.why", characters 166-709 *)
+(* Why obligation from file "why/reverse.why", characters 166-678 *)
 Lemma rev_impl_po_1 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -33,7 +33,7 @@ rewrite app_ass; auto.
 Qed.
 
 
-(* Why obligation from file "why/reverse.why", characters 172-226 *)
+(* Why obligation from file "why/reverse.why", characters 610-624 *)
 Lemma rev_impl_po_2 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -55,32 +55,10 @@ Lemma rev_impl_po_2 :
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test2: true = true),
-  forall (caduceus_1: pointer),
-  forall (Post2: caduceus_1 = r1),
-  forall (result1: bool),
-  forall (Post18: (if result1 then ~(caduceus_1 = null)
-                   else caduceus_1 = null)),
-  (if result1
-   then (forall (result:pointer),
-         (result = r1 ->
-          (forall (r:pointer),
-           (r = (acc tl0 r1) ->
-            (forall (tl1:((memory) pointer)),
-             (tl1 = (upd tl0 result p3) ->
-              (forall (p:pointer),
-               (p = result ->
-                (exists lp:plist,
-                 (exists lr:plist, (((llist alloc tl1 p lp) /\
-                  (llist alloc tl1 r lr)) /\ (disjoint lp lr)) /\
-                  (forall (l:plist),
-                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
-                (ll_order (store_pointer_pair alloc tl1 r)
-                 (store_pointer_pair alloc tl0 r1)))))) /\
-            (valid alloc result))) /\
-          (valid alloc r1)))
-   else (exists l0:plist, (llist alloc tl0 p3 l0) /\
-         (llist alloc tl p0 (rev l0)))).
+  forall (Test2: ~(r1 = null)),
+  forall (q: pointer),
+  forall (Post3: q = r1),
+  (valid alloc r1).
 Proof.
 destruct result1; intuition.
 elim Pre7; clear Pre7; intuition.
@@ -138,7 +116,7 @@ rewrite <- H; auto.
 rewrite rev_involutive; auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 166-709 *)
+(* Why obligation from file "why/reverse.why", characters 634-652 *)
 Lemma rev_impl_po_3 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -160,7 +138,88 @@ Lemma rev_impl_po_3 :
                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
                   (forall (l:plist),
                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
-  forall (Test2: true = true),
+  forall (Test2: ~(r1 = null)),
+  forall (q: pointer),
+  forall (Post3: q = r1),
+  forall (Pre6: (valid alloc r1)),
+  forall (r2: pointer),
+  forall (Post13: r2 = (acc tl0 r1)),
+  (valid alloc q).
+Proof.
+intros; subst; intuition.
+Save.
+
+(* Why obligation from file "why/reverse.why", characters 626-664 *)
+Lemma rev_impl_po_4 : 
+  forall (p0: pointer),
+  forall (alloc: alloc_table),
+  forall (tl: ((memory) pointer)),
+  forall (Pre9: (is_list alloc tl p0)),
+  forall (p: pointer),
+  forall (Post6: p = p0),
+  forall (r: pointer),
+  forall (Post5: r = p),
+  forall (p2: pointer),
+  forall (Post1: p2 = null),
+  forall (Variant1: StorePointerPair),
+  forall (p3: pointer),
+  forall (r1: pointer),
+  forall (tl0: ((memory) pointer)),
+  forall (Pre8: Variant1 = (store_pointer_pair alloc tl0 r1)),
+  forall (Pre7: (exists lp:plist,
+                 (exists lr:plist, (((llist alloc tl0 p3 lp) /\
+                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+                  (forall (l:plist),
+                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
+  forall (Test2: ~(r1 = null)),
+  forall (q: pointer),
+  forall (Post3: q = r1),
+  forall (Pre6: (valid alloc r1)),
+  forall (r2: pointer),
+  forall (Post13: r2 = (acc tl0 r1)),
+  forall (Pre5: (valid alloc q)),
+  forall (tl1: ((memory) pointer)),
+  forall (Post16: tl1 = (upd tl0 q p3)),
+  forall (p4: pointer),
+  forall (Post2: p4 = q),
+  (exists lp:plist,
+   (exists lr:plist, (((llist alloc tl1 p4 lp) /\ (llist alloc tl1 r2 lr)) /\
+    (disjoint lp lr)) /\
+    (forall (l:plist), ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
+  (ll_order (store_pointer_pair alloc tl1 r2)
+   (store_pointer_pair alloc tl0 r1)).
+Proof.
+intros; subst.
+exists (nil (A:=pointer)).
+elim (is_list_llist alloc tl p0 Pre9); intros l Hl; exists l.
+intuition.
+rewrite (llist_function _ _ _ _ _ _ Hl H).
+rewrite <- app_nil_end; auto.
+Save.
+
+(* Why obligation from file "why/reverse.why", characters 166-678 *)
+Lemma rev_impl_po_5 : 
+  forall (p0: pointer),
+  forall (alloc: alloc_table),
+  forall (tl: ((memory) pointer)),
+  forall (Pre9: (is_list alloc tl p0)),
+  forall (p: pointer),
+  forall (Post6: p = p0),
+  forall (r: pointer),
+  forall (Post5: r = p),
+  forall (p2: pointer),
+  forall (Post1: p2 = null),
+  forall (Variant1: StorePointerPair),
+  forall (p3: pointer),
+  forall (r1: pointer),
+  forall (tl0: ((memory) pointer)),
+  forall (Pre8: Variant1 = (store_pointer_pair alloc tl0 r1)),
+  forall (Pre7: (exists lp:plist,
+                 (exists lr:plist, (((llist alloc tl0 p3 lp) /\
+                  (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+                  (forall (l:plist),
+                   ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l)))))),
+  forall (Test2: ~(r1 = null)),
   forall (p4: pointer),
   forall (r2: pointer),
   forall (tl1: ((memory) pointer)),
@@ -173,11 +232,12 @@ Lemma rev_impl_po_3 :
                   (store_pointer_pair alloc tl0 r1))),
   (ll_order (store_pointer_pair alloc tl1 r2) Variant1).
 Proof.
-intros; subst; intuition.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 256-538 *)
-Lemma rev_impl_po_4 : 
+(* Why obligation from file "why/reverse.why", characters 225-507 *)
+Lemma rev_impl_po_6 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
   forall (tl: ((memory) pointer)),
@@ -193,11 +253,34 @@ Lemma rev_impl_po_4 :
     (disjoint lp lr)) /\
     (forall (l:plist), ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))).
 Proof.
-intros; subst.
-exists (nil (A:=pointer)).
-elim (is_list_llist alloc tl p0 Pre9); intros l Hl; exists l.
 intuition.
-rewrite (llist_function _ _ _ _ _ _ Hl H).
-rewrite <- app_nil_end; auto.
+(* FILL PROOF HERE *)
+Save.
+
+(* Why obligation from file "why/reverse.why", characters 684-686 *)
+Lemma rev_impl_po_7 : 
+  forall (p0: pointer),
+  forall (alloc: alloc_table),
+  forall (tl: ((memory) pointer)),
+  forall (Pre9: (is_list alloc tl p0)),
+  forall (p: pointer),
+  forall (Post6: p = p0),
+  forall (r: pointer),
+  forall (Post5: r = p),
+  forall (p2: pointer),
+  forall (Post1: p2 = null),
+  forall (p3: pointer),
+  forall (r1: pointer),
+  forall (tl0: ((memory) pointer)),
+  forall (Post4: (exists lp:plist,
+                  (exists lr:plist, (((llist alloc tl0 p3 lp) /\
+                   (llist alloc tl0 r1 lr)) /\ (disjoint lp lr)) /\
+                   (forall (l:plist),
+                    ((llist alloc tl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
+                 r1 = null),
+  (exists l0:plist, (llist alloc tl0 p3 l0) /\ (llist alloc tl p0 (rev l0))).
+Proof.
+intuition.
+(* FILL PROOF HERE *)
 Save.
 

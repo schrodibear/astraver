@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.28 2004-04-07 07:45:48 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.29 2004-04-07 09:18:47 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -136,7 +136,7 @@ let main () =
 	    fprintf fmt "depend %s.depend: coq/caduceus_spec_why.v coq/caduceus_tactics.v coq/%s_why.v@\n" f f;
 	    fprintf fmt "\t-coqdep -I coq coq/*.v > %s.depend@\n@\n" f;
 	    fprintf fmt "clean:@\n";
-	    fprintf fmt "\trm -f coq/*.vo coq/caduceus_spec_why.v@\n@\n";
+	    fprintf fmt "\trm -f coq/*.vo@\n@\n";
 	 )
 	 (f ^ ".makefile"))
     (files ())

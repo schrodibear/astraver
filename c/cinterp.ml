@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.71 2004-04-07 08:13:09 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.72 2004-04-07 09:18:47 marche Exp $ i*)
 
 
 open Format
@@ -278,22 +278,27 @@ let build_complex_app e args =
     | [] -> App(e,Void)
     | _ -> build 1 e args
 
-(*
-let is_pure e =
-  match e with
-    | 
-let rec build_app1 e args =
-  if List.for_all is_pure args then
-    List.fold_left (fun acc x -> App(acc,x)) e args
-  else
-    build_complex_app e args
+let is_bin_op = function
+  | "add_int"
+  | "sub_int" -> true
+  | _ -> false
 
-and build_app e args =
+let rec is_pure e =
+  match e with
+    | Var _ | Deref _ | Cte _ -> true
+    | App(Var id,l) -> is_bin_op id && is_pure l
+    | App(e1,e2) -> is_pure e1 && is_pure e2
+    | _ -> false
+
+
+let build_minimal_app e args =
   match args with
     | [] -> App(e,Void)
-    | _ -> build_app1 e args
-*)
-
+    | _ ->
+	if List.for_all is_pure args then
+	  List.fold_left (fun acc x -> App(acc,x)) e args
+	else
+	  build_complex_app e args
 
 let rec interp_expr e =
   match e.texpr_node with
@@ -322,7 +327,7 @@ let rec interp_expr e =
     | TEunary (Unot, _) ->
 	If(interp_boolean_expr e, Cte(Prim_int(1)), Cte(Prim_int(0)))
     | TEbinary(e1,op,e2) ->
-	build_complex_app (Var (interp_bin_op op))
+	build_minimal_app (Var (interp_bin_op op)) 
 	  [interp_expr e1;interp_expr e2]
     | TEarrget(e1,e2) ->
 	let te1 = interp_expr e1 and te2 = interp_expr e2 in
@@ -445,8 +450,8 @@ and interp_boolean_expr e =
 		   |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
 		   |Beq_pointer | Bneq_pointer 
 		   |Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
-	build_complex_app (Var (interp_bin_op op))
-	  [interp_expr e1;interp_expr e2]
+	build_minimal_app (Var (interp_bin_op op)) 
+	  [interp_expr e1; interp_expr e2]
     | TEbinary (e1, Band, e2) ->
 	And(interp_boolean_expr e1, interp_boolean_expr e2)
     | TEbinary (e1, Bor, e2) ->
