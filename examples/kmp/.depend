@@ -2,4 +2,3 @@ kmp_why.vo: kmp_why.v ../../lib/coq/Why.vo Match.vo Next.vo Lex.vo
 Next.vo: Next.v Match.vo
 Match.vo: Match.v
 Lex.vo: Lex.v
-KMP.vo: KMP.v Match.vo Next.vo Lex.vo
