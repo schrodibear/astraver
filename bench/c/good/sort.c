@@ -47,14 +47,14 @@ void sort4_2(int *a, int *b, int *c, int *d) {
   @ ensures *a <= *b <= *c <= *d */
 void sort4_3(int *a, int *b, int *c, int *d) {
   int tmp;
-  //@ assigns *a,*b ensures *a <= *b
+  //@ assigns *a,*b,tmp ensures *a <= *b
   if (*a > *b) { tmp = *a; *a = *b; *b = tmp; }
-  //@ assigns *c,*d ensures *c <= *d
+  //@ assigns *c,*d,tmp ensures *c <= *d
   if (*c > *d) { tmp = *c; *c = *d; *d = tmp; }
-  //@ assigns *a,*c ensures *a <= *c
+  //@ assigns *a,*c,tmp ensures *a <= *c
   if (*a > *c) { tmp = *a; *a = *c; *c = tmp; }
-  //@ assigns *b,*d ensures *b <= *d
+  //@ assigns *b,*d,tmp ensures *b <= *d
   if (*b > *d) { tmp = *b; *b = *d; *d = tmp; }
-  //@ assigns *b,*c ensures *b <= *c
+  //@ assigns *b,*c,tmp ensures *b <= *c
   if (*b > *c) { tmp = *b; *b = *c; *c = tmp; }
 }

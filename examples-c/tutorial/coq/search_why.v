@@ -87,6 +87,8 @@ Lemma index_impl_po_3 :
     (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))).
 Proof.
 intuition.
+subst; auto.
+apply (H0 i0); intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 233-374 *)
@@ -102,7 +104,5 @@ Lemma index_impl_po_4 :
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
 Proof.
 intuition.
-subst; auto.
-apply (H2 i0); intuition.
 Save.
 

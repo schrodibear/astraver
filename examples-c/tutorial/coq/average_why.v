@@ -110,7 +110,13 @@ Lemma average_impl_po_3 :
   (min intP t n) <= ((Zdiv sum1 n)) /\ ~(n = 0).
 Proof.
 intuition.
-subst; omega.
+assert (i2 = n). omega. subst.
+replace (min intP t n) with ((0 + min intP t n * n) / n).
+apply Zge_le.
+apply Z_div_ge; auto.
+rewrite Zmult_comm.
+omega.
+rewrite Z_div_plus; auto.
 Save.
 
 (* Why obligation from file "why/average.why", characters 281-367 *)
@@ -129,13 +135,7 @@ Lemma average_impl_po_4 :
   (0 <= i1 /\ i1 <= n) /\ (i1 * (min intP t i1)) <= sum.
 Proof.
 intuition.
-assert (i2 = n). omega. subst.
-replace (min intP t n) with ((0 + min intP t n * n) / n).
-apply Zge_le.
-apply Z_div_ge; auto.
-rewrite Zmult_comm.
-omega.
-rewrite Z_div_plus; auto.
+subst; omega.
 Qed.
 
 (* Why obligation from file "why/average.why", characters 742-770 *)
@@ -195,36 +195,17 @@ Lemma min_impl_po_2 :
            (valid alloc result))))) /\
        ((i >= n -> (is_min alloc intP t n tmp)))))))).
 Proof.
-intuition.
-red; subst; intuition.
-assert (i=0). omega.
+unfold is_min; intuition; subst; auto with *.
+assert (i1=0). omega.
 subst; intuition.
 exists 0; intuition.
-Save.
-
-Proof.
-intuition.
-subst; auto.
-Save.
-
-Proof.
-intuition.
-unfold is_min in *|-*; subst; intuition.
-assert (i<i2 \/ i=i2). omega. intuition.
-generalize (H5 i); intuition.
+assert (i3<i1 \/ i3=i1). omega. intuition.
+generalize (H3 i3); intuition.
 subst; omega.
-exists i2; intuition.
-subst; auto.
-unfold is_min in *|-*; subst; intuition.
-assert (i<i2 \/ i=i2). omega. intuition.
+exists i1; intuition.
+assert (i3<i1 \/ i3=i1). omega. intuition.
 subst; omega.
-elim H6; intros i1 Hi1; exists i1; intuition.
+elim H6; intros i2 Hi2; exists i2; intuition.
+assert (i1=n). omega. subst; trivial.
 Save.
-
-Proof.
-intuition.
-assert (i2=n). omega. subst; trivial.
-Qed.
-
-
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.39 2004-05-13 08:51:22 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.40 2004-05-13 14:06:27 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -82,6 +82,13 @@ let print_heap_vars fmt () =
 let heap_var_type = function
   | "alloc" -> ([], "alloc_table")
   | v -> Hashtbl.find heap_vars v
+
+let is_memory_var = function
+  | "alloc" -> 
+      false
+  | v -> 
+      (try let (_,t) = Hashtbl.find heap_vars v in t = "memory"
+       with Not_found -> assert false)
 
 let declare_heap_var v ty =
   if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty

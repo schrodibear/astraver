@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.9 2004-04-14 07:33:55 marche Exp $ i*)
+(*i $Id: ceffect.mli,v 1.10 2004-05-13 14:06:27 filliatr Exp $ i*)
 
 val interp_type : Cast.tctype -> string
 
@@ -31,6 +31,7 @@ val heap_vars : (string, Output.base_type) Hashtbl.t
 val print_heap_vars : Format.formatter -> unit -> unit
 
 val heap_var_type : string -> Output.base_type
+val is_memory_var : string -> bool
 
 val location : Cast.tterm Clogic.location -> HeapVarSet.t
 

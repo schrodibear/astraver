@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.79 2004-05-13 08:51:22 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.80 2004-05-13 14:06:27 filliatr Exp $ i*)
 
 
 open Format
@@ -317,12 +317,6 @@ let rec interp_expr e =
 	    Cte(Prim_float(float_of_string c))
 	end
     | TEvar(v) -> 
-        if v.var_name = "t"
-	then begin
-	  Loc.report Coptions.log e.texpr_loc;
-	  lprintf "translating var t: is_assigned = %b@."
-	    v.var_is_assigned;
-	end;
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
     (* a ``boolean'' expression is [if e then 1 else 0] *)
     | TEbinary(_,(Blt_int | Bgt_int | Ble_int | Bge_int | Beq_int | Bneq_int 
@@ -658,6 +652,8 @@ and interp_statement_expr e =
 
 module StringMap = Map.Make(String)
 
+type mem_or_ref = Reference of bool | Memory of Output.term list
+
 let collect_locations before acc loc =
   let var,iloc =
     match loc with
@@ -668,7 +664,10 @@ let collect_locations before acc loc =
 		  assert false
 	      | Tdot(e,f)
 	      | Tarrow(e,f) ->
-		  f,LApp("pointer_loc",[interp_term (Some before) before e])
+		  let loc = 
+		    LApp("pointer_loc",[interp_term (Some before) before e]) 
+		  in
+		  f, Some loc
 	      | Tarrget(e1,e2) -> 
 		  let var = global_var_for_array_type e1.term_type in
 		  let loc = 
@@ -677,13 +676,15 @@ let collect_locations before acc loc =
 			       [interp_term (Some before) before e1;
 				interp_term (Some before) before e2])]) 
 		  in
-		  var,loc
+		  var, Some loc
 	      | Tunop (Clogic.Ustar, e1) -> 
 		  let var = global_var_for_array_type e1.term_type in
 		  let loc = 
 		    LApp("pointer_loc", [interp_term (Some before) before e1])
 		  in
-		  var,loc
+		  var, Some loc
+	      | Tvar v ->
+		  v.var_name, None
 	      | _ ->
 		  assert false
 	  end
@@ -692,7 +693,7 @@ let collect_locations before acc loc =
 	let loc = 
 	  LApp("all_loc",[interp_term (Some before) before t])
 	in
-	var,loc
+	var, Some loc
     | Lrange(t1,t2,t3) -> 
 	let var = global_var_for_array_type t1.term_type in
 	let loc = 
@@ -701,21 +702,18 @@ let collect_locations before acc loc =
 		interp_term (Some before) before t2;
 		interp_term (Some before) before t3;])
 	in
-	var,loc
+	var, Some loc
   in
   try
     let p = StringMap.find var acc in
-    StringMap.add var (iloc::p) acc
-  with
-      Not_found -> 
-	assert false (* it is a real assert false *)
-	(* old was: StringMap.add var iloc acc *)
-
-
-
-let map_of_assigns assigns =
-  HeapVarSet.fold 
-    (fun v acc -> StringMap.add v [] acc) assigns StringMap.empty 
+    (match p, iloc with
+       | Reference _, None -> StringMap.add var (Reference true) acc
+       | Memory l, Some iloc -> StringMap.add var (Memory (iloc::l)) acc
+       | _ -> assert false)
+  with Not_found -> 
+    (match iloc with
+       | None -> StringMap.add var (Reference true) acc
+       | Some l -> StringMap.add var (Memory [l]) acc)
 
 let rec make_union_loc = function
   | [] -> LVar "nothing_loc"
@@ -724,15 +722,29 @@ let rec make_union_loc = function
 
 let interp_assigns before assigns = function
   | Some locl ->
+      let m = 
+	HeapVarSet.fold
+	  (fun v m -> 
+	     let t = 
+	       if Ceffect.is_memory_var v then Memory []  else Reference false
+	     in
+	     StringMap.add v t m)
+	  assigns StringMap.empty
+      in
       let l = 
-	List.fold_left (collect_locations before) (map_of_assigns assigns) locl
+	List.fold_left (collect_locations before) m locl
       in
       StringMap.fold
-	(fun v p acc ->
-	   make_and acc
-	     (LPred("assigns",
-		    [LVarAtLabel("alloc",before); LVarAtLabel(v,before);
-		     LVar v; make_union_loc p])))
+	(fun v p acc -> match p with
+	   | Memory p ->
+	       make_and acc
+		 (LPred("assigns",
+			[LVarAtLabel("alloc",before); LVarAtLabel(v,before);
+			 LVar v; make_union_loc p]))
+	   | Reference false ->
+	       make_and acc (LPred("eq", [LVar v; LVarAtLabel(v,before)]))
+	   | Reference true ->
+	       acc)
 	l LTrue
   | None ->
       LTrue
