@@ -726,6 +726,7 @@ Command line options are the following:
 \label{library}\index{Library}
 
 \subsection{Logic}
+\label{lib:logic}
 
 \subsubsection{Predefined functions}
 \index{Function!predefined}
@@ -784,7 +785,7 @@ These are the predicates predefined in \why:
   and $j$.
 
 \item[\texttt{sub\_permut : int, int, int array, int array -> prop}] ~\par
-  \indextt{sub\_permut }
+  \indextt{sub\_permut}
   \texttt{sub\_permut($i$,$j$,$t_1$,$t_2$)} states that the sub-arrays
   $t_1[i..j]$ and $t_2[i..j]$ are permutations of each other, the
   other parts of these arrays being the same.
@@ -794,25 +795,118 @@ These are the predicates predefined in \why:
   \texttt{permut($t_1$,$t_2$)} states that the two arrays $t_1$ and
   $t_2$ are permutations of each other.
 
-\item[\texttt{array\_le : int array, int, int, int -> prop}] ~\par
-  \indextt{array\_le}
-  \texttt{array\_le($t$,$i$,$j$,$v$)} states that $\forall k. ~ i \le
-  k \le j \Rightarrow t[i] \le v$.
-
-\item[\texttt{array\_ge : int array, int, int, int -> prop}] ~\par
-  \indextt{array\_ge}
-  \texttt{array\_ge($t$,$i$,$j$,$v$)} states that $\forall k. ~ i \le
-  k \le j \Rightarrow t[i] \ge v$.
-
+\item[\texttt{array\_id : int array, int array, int, int -> prop}] ~\par
+  \indextt{array\_id}
+  \texttt{array\_id($t_1$,$t_2$,i,j)} states that the two sub-arrays 
+  $t_1[i..j]$ and $t_2[i..j]$ are identical.
 \end{description}
 
 \subsection{Coq}
-\index{Coq library}
-TODO
+\label{lib:coq}\index{Coq library}
+
+Several \coq\ modules are delivered with \why. If installation is
+properly done, they should be found in subdirectory
+\texttt{contrib/why} of the \coq\ library.
+
+\paragraph{Types.} 
+Types are mapped as follows:
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    \why & \coq \\
+    \hline
+    \texttt{unit} & \texttt{unit} \\
+    \hline
+    \texttt{bool} & \texttt{bool} \\
+    \hline
+    \texttt{int} & \texttt{Z} \\
+    \hline
+    \texttt{float} & \texttt{R} \\
+    \hline
+    $\tau$ \texttt{array} & \texttt{(array $\tau$)},
+                            from module \texttt{WhyArrays} \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\paragraph{Arrays.} 
+Arrays are defined in module \texttt{WhyArrays}. Actually, they are
+mainly axiomatized; only the length is really represented.
+There are three axioms about arrays:
+\begin{displaymath}
+  \begin{array}{rl}
+    (\te{new\_def}) &
+    0 \le i < n \Rightarrow (\te{access} ~ (\te{new} ~ n ~ v_0) ~ i) = v_0 
+    \\[1em]
+    (\te{store\_def\_1}) &
+    0 \le i < (\te{array\_length} ~ t) \Rightarrow
+                    (\te{access} ~ (\te{store} ~ t ~ i ~ v) ~ i) = v
+    \\[1em]
+    (\te{store\_def\_2}) &
+    0 \le i < (\te{array\_length} ~ t) \Rightarrow
+    0 \le j < (\te{array\_length} ~ t) \Rightarrow \\ &
+                    i \not= j \Rightarrow
+                    (\te{access} ~ (\te{store} ~ t ~ i ~ v) ~ i) =
+                    (\te{access} ~ t ~ j)
+  \end{array}
+\end{displaymath}
+and one equality which is provable by convertibility:
+\begin{displaymath}
+  (\te{array\_length} ~ (\te{store} ~ t ~ i ~ v)) \equiv
+  (\te{array\_length} ~ t)
+\end{displaymath}
+
+Some tactics are provided to help the user simplifying array expressions
+in proof obligations:
+\begin{description}
+\item[\texttt{WhyArrays}] : repeatedly simplifies using
+  \texttt{store\_def\_1} and \texttt{array\_length}
+\item[\texttt{AccessSame}] : rewrites using \texttt{store\_def\_1},
+  simplifies with \texttt{WhyArrays} and attempts \texttt{Omega} on
+  every subgoal
+\item[\texttt{AccessOther}] : rewrites using \texttt{store\_def\_2},
+  simplifies with \texttt{WhyArrays} and attempts \texttt{Omega} on
+  every subgoal
+\item[\texttt{ArraySubst} $t$] : similar to \texttt{Subst $t$}, with
+  additional simplifications
+\end{description}
+
+The following table indicates in which \coq\ modules the predicates
+introduced in Section~\ref{lib:logic} are defined. See these modules
+to get the associated lemmas.
+\begin{center}
+  \begin{tabular}{rl}
+    \tt WhyPermut: & \tt exchange, sub\_permut, permut, array\_id \\
+    \tt WhySorted: & \tt sorted\_array
+  \end{tabular}
+\end{center}
+
 
 \subsection{PVS}
-\index{PVS library}
-TODO
+\label{lib:pvs}\index{PVS library}
+
+\paragraph{Types.} 
+Types are mapped as follows:
+\begin{center}
+  \begin{tabular}{|l|l|}
+    \hline
+    \why & \coq \\
+    \hline
+    \texttt{unit} & \texttt{unit}, from theory \texttt{why} \\
+    \hline
+    \texttt{bool} & \texttt{bool} \\
+    \hline
+    \texttt{int} & \texttt{int} \\
+    \hline
+    \texttt{float} & \texttt{real} \\
+    \hline
+    $\tau$ \texttt{array} & \texttt{warray[$\tau$]},
+                            from theory \texttt{why} \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\paragraph{Arrays.}
 
 
 \section{Logic syntax}
@@ -867,6 +961,11 @@ true & unit & void
 Syntax of terms is given in Figure~\ref{fig:terms}.
 Arithmetical operations have usual precedences and are left associative.
 
+The conditional construct \texttt{if $t_1$ then $t_2$ else $t_3$} can
+be written in prefix notation as \texttt{if\_then\_else($t_1$, $t_2$,
+  $t_3$)}. $t_1$ must have type \texttt{bool}, and $t_2$ and $t_3$ must
+have the same type.
+
 \begin{figure}[htbp]
 \begin{center}
 \hrulefill\\
@@ -878,6 +977,7 @@ Arithmetical operations have usual precedences and are left associative.
       & $|$ & \nt{lab\_identifier} \\
       & $|$ & \nt{lab\_identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
       & $|$ & \nt{lab\_identifier} \te{[} \nt{term} \te{]} \\
+      & $|$ & \te{if} \nt{term} \te{then} \nt{term} \te{else} \nt{term} \\
       & $|$ & \te{(} \nt{term} \te{)} \\
   \\[0.1em]
 
@@ -909,6 +1009,9 @@ and the \pvs\ ones.
 Precedences are the following (from strongest to weakest): \te{not}, 
 \te{and}, \te{or}, implication, and \te{forall}. 
 Implication, conjunction and disjunction are right associative.
+
+In the conditional construct \texttt{if $t$ then $p$ else $q$} the
+term $t$ must have type \texttt{bool}.
 
 Primitive types (non terminal \nt{primitive\_type}) are defined in
 Figure~\ref{fig:types}. 

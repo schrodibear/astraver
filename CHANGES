@@ -1,3 +1,7 @@
+ 
+  o doc: C programs, Coq and PVS libraries documented
+  o logic: if-then-else construct on terms
+  o PVS: arrays defined in Why prelude and fixed pretty-print; installation
 
 version 0.92, January 13th, 2003
 ===============================
@@ -44,7 +48,7 @@ version 0.7, October 2nd, 2002
   o examples: quicksort (2 versions) 
   o more obligations automatically discharged 
     (True  /  A and B |- A  /  A,B |- A and B)
-  o fixed associativity in Coq pretty-print for /\ and \/ (right)
+  o Coq: fixed associativity in pretty-print for /\ and \/ (right)
     right associativity adopted in Why
   o fixed typing and Coq output for primitive float_of_int
 

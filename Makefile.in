@@ -60,6 +60,9 @@ VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
 VFILES=$(VO:.vo=.v)
 WHYVO=lib/coq/Why.vo
 
+PVSFILES = lib/pvs/why.pvs
+PVSLIB = @PVSLIB@
+
 GENERATED = src/version.ml src/parser.ml \
 	    src/clexer.ml src/cparser.ml src/cparser.mli
 
@@ -147,11 +150,15 @@ install-coq-yes:
 
 install-pvs-no:
 install-pvs-yes:
+	mkdir -p $(PVSLIB)/why
+	cp $(PVSFILES) $(PVSLIB)/why
 
 local: $(STATICBINARY) $(VO)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
 	mkdir -p $(COQLIB)/contrib/why
 	cp -f $(VO) $(VFILES) $(COQLIB)/contrib/why
+	mkdir -p $(PVSLIB)/why
+	cp $(PVSFILES) $(PVSLIB)/why
 
 demons: $(STATICBINARY) doc/manual.ps
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why

@@ -184,6 +184,8 @@ if test "$PVSC" = no ; then
     AC_MSG_WARN(Cannot find PVS.)
 else
     PVS=yes
+    PVSFILE=`which pvs`
+    PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`
 fi
 
 # substitutions to perform
@@ -206,6 +208,7 @@ AC_SUBST(COQLIB)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)
+AC_SUBST(PVSLIB)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

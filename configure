@@ -1056,9 +1056,12 @@ if test "$PVSC" = no ; then
     echo "configure: warning: Cannot find PVS." 1>&2
 else
     PVS=yes
+    PVSFILE=`which pvs`
+    PVSLIB=`sed -n -e "s/PVSPATH=\(.*\)/\1/p" $PVSFILE`
 fi
 
 # substitutions to perform
+
 
 
 
@@ -1244,6 +1247,7 @@ s%@CAMLP4LIB@%$CAMLP4LIB%g
 s%@COQ@%$COQ%g
 s%@COQLIB@%$COQLIB%g
 s%@PVS@%$PVS%g
+s%@PVSLIB@%$PVSLIB%g
 
 CEOF
 EOF

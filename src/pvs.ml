@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.32 2003-01-16 15:42:48 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.33 2003-01-20 15:36:01 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -194,7 +194,7 @@ let print_obligations fmt ol =
 
 let begin_theory fmt th =
   fprintf fmt "%s_why: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  why: LIBRARY = \"../../lib/pvs\"@\n  importing why@@why@\n"
+  fprintf fmt "  importing why@@why@\n"
     
 let end_theory fmt th =
   fprintf fmt "END %s_why@\n" th
