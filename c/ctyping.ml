@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.76 2004-11-22 16:14:27 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.77 2004-11-29 15:38:42 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -736,7 +736,10 @@ let type_parameters loc env pl =
     let info = default_var_info x in
     let ty = type_type loc env ty in 
     set_formal_param info;
-    (ty,info) :: pl, Env.add x ty (Var_info info) env
+    let env = Env.add x ty (Var_info info) env in
+    Coptions.lprintf 
+      "Parameter %s added in env with unique name %s@." x info.var_unique_name;
+    (ty,info) :: pl, env 
   in
   let is_void (ty,_) = ty.ctype_node = CTvoid in
   let pl, env = List.fold_right type_one pl ([], env) in
@@ -830,17 +833,21 @@ let type_decl d = match d.node with
       let ty = type_type d.loc (Env.empty ()) ty in
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
-      let ty = type_type d.loc (Env.empty ()) ty in
       begin match ty.ctype_node with
-	| CTfun (pl, ty') ->
+	| CTfun(pl,ty_res) ->
+	    let pl,env = type_parameters d.loc (Env.empty ()) pl in
+	    let ty_res = type_type d.loc (Env.empty ()) ty_res in
+	    let info = default_fun_info x in
+	    let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
 	    let info = 
-	      match add_sym d.loc x ty (Fun_info (default_fun_info x)) with
+	      match add_sym d.loc x (noattr (CTfun (spl, ty_res))) 
+		(Fun_info info) with
 		| Var_info _ -> assert false
 		| Fun_info f -> f
 	    in
-	    let pl = List.map (fun (t,x) -> (t,default_var_info x)) pl in
-	    Tfunspec (function_spec d.loc x None, ty', info, pl)
+	    Tfunspec (function_spec d.loc x None, ty_res, info, pl)
 	| _ -> 
+	    let ty = type_type d.loc (Env.empty ()) ty in
 	    let info = 
 	      match add_sym d.loc x ty (Var_info (default_var_info x)) with
 		| Var_info v -> v

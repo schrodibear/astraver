@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
 
- 
+ o bug fix: removed name clashes in presence of multiple declaration of
+   functions 
  o added cast in annotations syntax
  o bug fix in handling 'continue' statements into 'for' loops
  o preliminary support for & on non-structure variable. Caution is

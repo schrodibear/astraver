@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.14 2004-11-22 16:14:27 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.15 2004-11-29 15:38:42 marche Exp $ i*)
 
 type var_info =
     {
@@ -94,5 +94,9 @@ type env_info =
 
 let set_unique_name e n =
   match e with
-    | Var_info v -> v.var_unique_name <- n
+    | Var_info v -> 
+(*
+	Coptions.lprintf "Setting unique name of %s to %s@." v.var_name n;
+*)
+	v.var_unique_name <- n
     | Fun_info f -> f.fun_unique_name <- n

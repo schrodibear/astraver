@@ -1,8 +1,12 @@
 
 
-typedef struct{int * p2;} las; 
+typedef struct{int * p2;} las;
+
 int f3(  las*  p1,  int*  p2); 
 
+/*@ requires \valid(p1)
+  @ ensures \result == 0 
+  @*/ 
 int f3(  las*  p1,  int*  p2) 
 { 
   p1->p2 = p2; 

@@ -2,7 +2,6 @@
 /* sort 4 integers */
 
 
-#if 1
 void sort4_1() {
   int a, b, c, d;
   int tmp;
@@ -13,9 +12,9 @@ void sort4_1() {
   if (b > c) { tmp = b; b = c; c = tmp; }
   /*@ assert a <= b <= c <= d */
 }
-#endif
 
-#if 1
+
+
 /*@ requires \valid_range(t,0,4) 
     ensures t[0] <= t[1] <= t[2] <= t[3] */
 void sort4_4(int t[]) {
@@ -28,6 +27,9 @@ void sort4_4(int t[]) {
 }
 #endif
 
+
+
+/* commented because of memory explosion */
 #if 0
 /*@ requires \valid(a) && \valid(b) && \valid(c) && \valid(d) &&
   @   a != b && a != c && a != d && b != c && b != d && c != d
@@ -42,13 +44,14 @@ void sort4_2(int *a, int *b, int *c, int *d) {
 }
 #endif
 
+
+
 /*@ predicate swap_ord(int a2,int b2,int a1,int b1) {
   @   (a1 <= b1 => (a2 == a1 && b2 == b1)) && 
   @   (a1 > b1 => (a2 == b1 && b2 == a1))
   @ }
   @*/
 
-#if 1
 /*@ requires \valid(a) && \valid(b) && \valid(c) && \valid(d) &&
   @   a != b && a != c && a != d && b != c && b != d && c != d
   @ ensures *a <= *b <= *c <= *d */
@@ -65,4 +68,4 @@ void sort4_3(int *a, int *b, int *c, int *d) {
   //@ assigns *b,*c,tmp ensures swap_ord( *b,*c,\old( *b),\old( *c))
   if (*b > *c) { tmp = *b; *b = *c; *c = tmp; }
 }
-#endif
+

@@ -111,7 +111,8 @@ echo "C interp (good)"
 cd ../good
 export CADUCEUSLIB=`pwd`/../../../lib
 parsing="../../../bin/caduceus.opt"
-for f in array assigns break call clash clash_alloc consts continue coord \
+for f in array assigns break call clash clash_alloc clash_redef \
+    consts continue coord \
     copy dowhile invariants ifs \
     param passing purse queue rec ref search see sizeof \
     struct switch ; do
