@@ -40,8 +40,10 @@ CMO      = src/options.cmo src/loc.cmo src/ident.cmo src/misc.cmo 	\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
            src/db.cmo src/typing.cmo src/wp.cmo src/monad.cmo		\
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo            \
-	   src/coq.cmo src/main.cmo
+	   src/coq.cmo src/version.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
+
+GENERATED = src/version.ml src/parser.ml
 
 # main targets
 ##############
@@ -62,6 +64,12 @@ bin/why.byte: $(CMO)
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
+
+VERSION=0.1
+
+src/version.ml: Makefile
+	echo "let version = \""$(VERSION)"\"" > $@
+	echo "let date = \""`date`"\"" >> $@
 
 doc::
 	cd doc; make
@@ -165,12 +173,13 @@ configure: configure.in
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f bin/why.opt bin/why.byte bin/top
+	rm -f $(GENERATED)
 	cd doc; make clean
 
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
 
-.depend depend:: src/parser.ml
+.depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
 #	$(CAMLP4) pr_depend.cmo -- $(INCLUDES) -impl src/parser.ml4 >> .depend

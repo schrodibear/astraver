@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.13 2002-03-05 14:41:51 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.14 2002-03-06 14:37:16 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -87,26 +87,51 @@ let deal_file f =
 
 (*s Command line parsing. *)
 
+let copying () =
+  eprintf "\
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License version 2, as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the GNU General Public License version 2 for more details
+(enclosed in the file GPL).
+";
+  flush stderr
+
+let banner () =
+  eprintf "\
+This is why version %s, compiled on %s
+Copyright (c) 2002 Jean-Christophe Filliâtre
+This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
+" Version.version Version.date;
+  flush stderr
+  
 let usage () =
-  eprintf "
-usage: why [options] [files...]
+  eprintf "\
+Usage: why [options] [files...]
 
 If no file is given, the source is read on standard input and
 output is written in file `WhyOutput'
 
-General Options:
+Generic Options:
   -h, --help     prints this message
   -V, --verbose  verbose mode
   -q, --quiet    quiet mode (default)
   -d, --debug    debugging mode
+  -v, --version  prints version and exits
+  --warranty     prints license and exits
 
 Typing/Annotations options:
   -tc, --type-only  exits after type-checking
   -wp, --wp-only    exits after annotation
 
 Prover options:
-  --pvs      selects PVS prover
   --coq      selects COQ prover (default)
+  --pvs      selects PVS prover
 ";
   flush stderr
 
@@ -121,6 +146,8 @@ let parse_args () =
     | ("-tc" | "--type-only") :: args -> type_only := true; parse args
     | ("-wp" | "--wp-only") :: args -> wp_only := true; parse args
     | ("-q" | "--quiet") :: args -> verbose := false; parse args
+    | ("-v" | "-version" | "--version") :: _ -> banner (); exit 0
+    | ("-warranty" | "--warranty") :: _ -> copying (); exit 0
     | ("-V" | "--verbose") :: args -> verbose := true; parse args
     | f :: args -> files := f :: !files; parse args
   in
