@@ -25,9 +25,9 @@ Hint Resolve eq_offset_eq_shift.
 
 Ltac valid := match goal with
   | id:(valid_range ?X1 ?X2 ?X3 ?X4) |-  (valid ?X1 (shift ?X2 ?X5))
-  => apply valid_range_valid_shift with X3 X4; auto with *
+  => solve [apply valid_range_valid_shift with X3 X4; auto with *]
   | id:(valid_index ?X1 ?X2 ?X3) |- (valid ?X1 (shift ?X2 ?X3))
-    => apply valid_index_valid_shift; auto with *
+    => solve [apply valid_index_valid_shift; auto with *]
 end.
 
 Hint Extern 0 (valid _ _) => valid.
