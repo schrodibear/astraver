@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.11 2004-02-10 13:39:12 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.12 2004-02-11 11:15:29 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -283,9 +283,22 @@ let type_variant env = function
 let type_loop_annot env (i,v) =
   option_app (type_predicate env) i, type_variant env v
 
-let type_spec ~result:ty env (p,e,q) = 
-  let p = option_app (type_predicate env) p in
+let rec type_location env = function
+  | Lterm t -> 
+      Lterm (type_term env t)
+  | Lstar l -> 
+      Lstar (type_term env l)
+  | Lrange (l1, l2, l3) -> 
+      Lrange (type_term env l1, type_term env l2, type_term env l3)
+
+let type_spec ~result:ty env s = 
+  let p = option_app (type_predicate env) s.requires in
   let env' = Env.add "\\result" ty (Info.default_var_info "\\result") env in
-  let q = option_app (type_predicate env') q in
-  p, e, q
+  let q = option_app (type_predicate env') s.ensures in
+  let v = option_app (type_variant env) s.decreases in
+  let m = List.map (type_location env) s.modifiable in
+  { requires = p;
+    modifiable = m;
+    ensures = q;
+    decreases = v }
 

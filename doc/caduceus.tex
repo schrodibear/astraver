@@ -267,7 +267,8 @@ except that:
 \item some character sequences are now recognized as keywords: \par
   \begin{center}
   \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
-  \verb!\forall! & \verb!\exists! & \verb!int! & \verb!float! \\
+  \verb!\forall! & \verb!\exists! & \verb!int! & \verb!float! &
+  \verb!decreases! \\
   \verb!\true! & \verb!\false! & \verb!if! & \verb!then! & \verb!else! \\
   \verb!invariant! & \verb!variant! & \verb!for! & \verb!label! & 
   \verb!assert! \\ 
@@ -313,8 +314,9 @@ annotations.
 
   \nt{c\_spec}
     & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
-              $[$ \te{modifiable} \nt{locations} $]$\\
-           && $[$ \te{ensures} \nt{predicate} $]$ \te{*/}  \\
+              $[$ \te{modifiable} \nt{location}\plussep{\te{,}} $]$\\
+           && $[$ \te{ensures} \nt{predicate} $]$ 
+              $[$ \te{decreases} \nt{variant} $]$ \te{*/} \\
   \\[0.1em]
 
   \nt{statement}
@@ -327,12 +329,13 @@ annotations.
            && \nt{c\_loop\_annot} \nt{statement} \\
     &   $|$ & \te{/*@} \te{assert} \nt{predicate} \te{*/} \\ \indextt{assert}
     &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
+    &   $|$ & \nt{c\_spec} \nt{statement} \\
   \\[0.1em]
 
   \nt{c\_loop\_annot}
     & $::=$ & \te{/*@} \te{invariant} \nt{predicate} 
-              \te{variant} \nt{wf\_arg} \te{*/}  \\
-  \nt{wf\_arg} 
+              \te{variant} \nt{variant} \te{*/}  \\
+  \nt{variant} 
     & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
 
   \\[0.1em]
@@ -343,6 +346,16 @@ annotations.
   \nt{logic\_parameter}
     & $::=$ & \nt{logic\_type} \nt{identifier} \\
 
+  \\[0.1em]
+
+  \nt{location}
+    & $::=$ & \nt{identifier} \\
+    &   $|$ & \nt{term} \te{.} \nt{identifier} \\
+    &   $|$ & \nt{term} \te{->} \nt{identifier} \\
+    &   $|$ & \te{*} \nt{term} \\
+    &   $|$ & \nt{term} \te{[} \nt{term} \te{]} \\
+    &   $|$ & \nt{term} \te{[} \te{*} \te{]} \\
+    &   $|$ & \nt{term} \te{[} \nt{term} \te{..} \nt{term} \te{]} \\
   \\[0.1em]
 \end{tabular}\\
 \hrulefill

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.10 2004-02-10 13:39:12 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.11 2004-02-11 11:15:29 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -79,14 +79,19 @@ type ('term, 'ctype) predicate =
   | Pforall of 'ctype quantifiers * ('term, 'ctype) predicate
   | Pexists of 'ctype quantifiers * ('term, 'ctype) predicate
 
-type location = 
-  | Lid of string
-
-type modifiable = location list
-
-type 'pred spec = 'pred option * modifiable * 'pred option
+type 'term location = 
+  | Lterm of 'term
+  | Lstar of 'term (* e[*] *)
+  | Lrange of 'term * 'term * 'term (* e[e..e] *)
 
 type 'term variant = 'term * string option
+
+type ('term,'pred) spec = { 
+  requires : 'pred option;
+  modifiable : 'term location list;    
+  ensures : 'pred option;
+  decreases : 'term variant option
+}
 
 type ('term,'ctype) loop_annot = 
     ('term,'ctype) predicate option * 'term variant

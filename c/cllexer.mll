@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.9 2004-02-11 09:32:26 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.10 2004-02-11 11:15:29 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -60,6 +60,7 @@ rule token = parse
   | "else"                  { ELSE }
   | "invariant" { INVARIANT }
   | "variant"   { VARIANT }
+  | "decreases"   { DECREASES }
   | "for"       { FOR }
   | "assert"    { ASSERT }
   | "label"     { LABEL }

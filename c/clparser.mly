@@ -32,7 +32,7 @@
 %token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IMPLIES AND OR NOT TRUE FALSE OLD AT RESULT LENGTH THEN AT
 %token QUESTION MINUS PLUS STAR SLASH PERCENT LSQUARE RSQUARE EOF
-%token INVARIANT VARIANT FOR LABEL ASSERT SEMICOLON NULL
+%token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES MODIFIABLE LOGIC PREDICATE AXIOM
 
 %nonassoc prec_forall prec_exists
@@ -135,7 +135,8 @@ post_condition:
 ;
 
 spec:
-  pre_condition effects post_condition EOF { ($1, $2, $3) }
+  pre_condition effects post_condition decreases EOF 
+    { { requires = $1; modifiable = $2; ensures = $3; decreases = $4 } }
 ;
 
 loop_annot:
@@ -152,9 +153,9 @@ variant:
 | term                { ($1, None) }
 ;
 
-opt_variant:
+decreases:
   /* epsilon */   { None }
-| VARIANT variant { Some $2 }
+| DECREASES variant { Some $2 }
 ;
 
 annot:
@@ -176,7 +177,18 @@ locations:
 ;
 
 location:
-  IDENTIFIER { Lid $1 }
+  location_term { Lterm $1 }
+| location_term LSQUARE STAR RSQUARE { Lstar $1 }
+| location_term LSQUARE location_term DOT DOT location_term RSQUARE    
+   { Lrange ($1, $3, $6) }
+;
+
+location_term:
+| IDENTIFIER { info (Tvar $1) }
+| location_term ARROW IDENTIFIER { info (Tarrow ($1, $3)) }
+| location_term DOT IDENTIFIER { info (Tdot ($1, $3)) }
+| location_term LSQUARE location_term RSQUARE { info (Tarrget ($1, $3)) }
+| STAR location_term { info (Tunop (Ustar, $2)) }
 ;
 
 decl:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.9 2004-02-11 09:32:26 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.10 2004-02-11 11:15:29 filliatr Exp $ i*)
 
 (*****
 
@@ -1103,13 +1103,19 @@ and interp_block (decls,stats) =
   let b = List.fold_right interp_statement stats Void in
   List.fold_right interp_decl decls b 
 
-let interp_spec (pre,mods,post) =
-  let tpre = interp_predicate pre
-  and tpost = interp_predicate post
+let interp_spec s =
+  let tpre = interp_predicate s.Clogic.requires
+  and tpost = interp_predicate s.Clogic.ensures
   in (tpre,tpost)
 
+let no_spec = 
+  { Clogic.requires = None; 
+    Clogic.modifiable = []; 
+    Clogic.ensures = None; 
+    Clogic.decreases = None }
+
 let interp_spec_option = function
-  | None -> interp_spec (None, [], None)
+  | None -> interp_spec no_spec
   | Some s -> interp_spec s
 
 let interp_located_tdecl why_decls decl =
