@@ -1,0 +1,86 @@
+(BG_PUSH (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t))))
+
+(BG_PUSH
+  ; Zeven and Zodd
+;   (EQ (Zeven 0) |@true|)
+;   (EQ (Zodd 1) |@true|)
+;   (FORALL (n) (IFF (EQ (Zeven n) |@true|) (EQ (Zodd (+ 1 n)) |@true|)))
+;   ; div2
+;   (FORALL (n) (IFF (EQ (Zeven n) |@true|) (EQ n (* 2 (div2 n)))))
+;   (FORALL (n) (IFF (EQ (Zodd n) |@true|) (EQ n (+ 1 (* 2 (div2 n))))))
+;   ; Zpower
+;   (FORALL (x) (EQ (Zpower x 0) 1))
+;   (FORALL (x n) (EQ (Zpower x (* 2 n)) (* (Zpower x n) (Zpower x n))))
+;   (FORALL (x n) (EQ (Zpower x (+ 1 (* 2 n))) (* x (* (Zpower x n) (Zpower x n)))))
+)
+
+;; DO NOT EDIT BELOW THIS LINE
+
+;; power1_po_1, Why obligation from file "power.mlw", characters 506-518
+(FORALL (n)
+(IMPLIES (>= n 0)
+(FORALL (m0)
+(IMPLIES (EQ m0 x)
+(FORALL (y0)
+(IMPLIES (EQ y0 1)
+(FORALL (Variant1)
+(FORALL (m1)
+(FORALL (n0)
+(FORALL (y1)
+(IMPLIES (EQ Variant1 n0)
+(IMPLIES (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
+(IMPLIES (> n0 0)
+(IMPLIES (EQ (Zodd n0) |@true|)
+(FORALL (y2)
+(IMPLIES (EQ y2 (* y1 m1))
+(FORALL (m)
+(IMPLIES (EQ m (* m1 m1))
+(FORALL (n1)
+(IMPLIES (EQ n1 (div2 n0))
+(AND (AND (EQ (Zpower x n) (* y2 (Zpower m n1))) (>= n1 0))
+(AND (<= 0 n0) (< n1 n0)))))))))))))))))))))))
+
+;; power1_po_2, Why obligation from file "power.mlw", characters 518-518
+(FORALL (n)
+(IMPLIES (>= n 0)
+(FORALL (m0)
+(IMPLIES (EQ m0 x)
+(FORALL (y0)
+(IMPLIES (EQ y0 1)
+(FORALL (Variant1)
+(FORALL (m1)
+(FORALL (n0)
+(FORALL (y1)
+(IMPLIES (EQ Variant1 n0)
+(IMPLIES (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
+(IMPLIES (> n0 0)
+(IMPLIES (EQ (Zeven n0) |@true|)
+(FORALL (m)
+(IMPLIES (EQ m (* m1 m1))
+(FORALL (n1)
+(IMPLIES (EQ n1 (div2 n0))
+(AND (AND (EQ (Zpower x n) (* y1 (Zpower m n1))) (>= n1 0))
+(AND (<= 0 n0) (< n1 n0)))))))))))))))))))))
+
+;; power1_po_3, Why obligation from file "power.mlw", characters 414-459
+(FORALL (n)
+(IMPLIES (>= n 0)
+(FORALL (m0)
+(IMPLIES (EQ m0 x)
+(FORALL (y0)
+(IMPLIES (EQ y0 1) (AND (EQ (Zpower x n) (* y0 (Zpower m0 n))) (>= n 0))))))))
+
+;; power1_po_4, Why obligation from file "power.mlw", characters 345-575
+(FORALL (n)
+(IMPLIES (>= n 0)
+(FORALL (m0)
+(IMPLIES (EQ m0 x)
+(FORALL (y0)
+(IMPLIES (EQ y0 1)
+(FORALL (m1)
+(FORALL (n0)
+(FORALL (y1)
+(IMPLIES (AND (AND (EQ (Zpower x n) (* y1 (Zpower m1 n0))) (>= n0 0))
+         (<= n0 0))
+(EQ y1 (Zpower x n))))))))))))
+
