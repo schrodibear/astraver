@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.18 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.19 2004-03-02 15:13:53 filliatr Exp $ i*)
 
 
 open Format
@@ -49,7 +49,7 @@ let interp_term_bin_op op =
 
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
-  match t.Clogic.node with
+  match t.Clogic.term_node with
     | Clogic.Tconstant c ->
 	begin
 	  try
@@ -71,7 +71,7 @@ let rec interp_term label old_label t =
     | Clogic.Tif (_, _, _) -> assert false (* TODO *)
     | Clogic.Tarrget (t1, t2) -> 
 	let te1 = f t1 and te2 = f t2 in
-	let var = global_var_for_type t.Clogic.info in
+	let var = global_var_for_type t.Clogic.term_type in
 	LApp("acc",[LVar var;LApp("shift",[te1;te2])])
 
     | Clogic.Tarrow (_, _) -> assert false (* TODO *)
@@ -102,7 +102,7 @@ let rec interp_predicate label old_label p =
     | Clogic.Pand (p1, p2) -> make_and (f p1) (f p2)
     | Clogic.Prel (t1, op, t2) ->
 	LPred(interp_rel op,[ft t1;ft t2])
-    | Clogic.Papp (_, _, _)
+    | Clogic.Papp (_, _)
     | Clogic.Pfalse -> LFalse
     | Clogic.Pvalid (t,a,b) ->
 	LPred("valid",[ft t;ft a;ft b])

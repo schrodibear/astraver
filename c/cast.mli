@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.33 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.34 2004-03-02 15:13:53 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -115,17 +115,19 @@ type pctype = cexpr ctype
 
 (* parsed logic AST *)
 
-type parsed_term = (logic_type, Loc.t) term
-type parsed_predicate = (parsed_term, logic_type) predicate
+type parsed_term = Clogic.lexpr
+type parsed_predicate = Clogic.lexpr
 type parsed_spec = (parsed_term, parsed_predicate) spec
-type parsed_loop_annot = (parsed_term, logic_type) loop_annot
+type parsed_loop_annot = (parsed_term, parsed_predicate) loop_annot
 type parsed_logic_type = logic_type
 
 type parsed_decl = 
-  | LDlogic of Info.logic_info * parsed_logic_type * (parsed_logic_type * string) list
+  | LDlogic of 
+      Info.logic_info * parsed_logic_type * (parsed_logic_type * string) list
       * parsed_term location list
   | LDpredicate_reads of 
-      Info.logic_info * (parsed_logic_type * string) list * parsed_term location list
+      Info.logic_info * (parsed_logic_type * string) list 
+      * parsed_term location list
   | LDpredicate_def of 
       Info.logic_info * (parsed_logic_type * string) list * parsed_predicate
   | LDaxiom of string * parsed_predicate
@@ -206,15 +208,15 @@ and lvalue = texpr (* TODO: cf CIL *)
 
 type tctype = texpr ctype
 
-type tterm = (tctype, tctype) term
+type tterm = tctype term
 
-type predicate = (tterm, tctype) Clogic.predicate
+type predicate = tctype Clogic.predicate
 
 type spec = (tterm, predicate) Clogic.spec
 
 type variant = tterm * string option
 
-type loop_annot = (tterm, tctype) Clogic.loop_annot
+type loop_annot = (tterm, predicate) Clogic.loop_annot
 
 type loop_info = { loop_break : bool; loop_continue : bool }
 

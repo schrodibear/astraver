@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.36 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: ctyping.ml,v 1.37 2004-03-02 15:13:53 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -197,10 +197,10 @@ and type_expr_node loc env = function
       in
       (TEvar var_info),t
   | CEdot (e, x) ->
-      let te = type_lvalue env e in
+      let te = type_expr env e in
       TEdot (te, x), type_of_field loc env x te.texpr_type
   | CEarrow (e, x) ->
-      let te = type_lvalue env e in
+      let te = type_expr env e in
       begin match te.texpr_type.ctype_node with
 	| CTpointer ty ->
 	    TEarrow (te, x), type_of_field loc env x ty
@@ -208,7 +208,7 @@ and type_expr_node loc env = function
 	    error loc "invalid type argument of `->'"
       end
   | CEarrget (e1, e2) ->
-      let te1 = type_lvalue env e1 in
+      let te1 = type_expr env e1 in
       (match te1.texpr_type.ctype_node with
 	 | CTarray (ty, _) | CTpointer ty ->
 	     let te2 = type_int_expr env e2 in
@@ -412,8 +412,7 @@ and check_lvalue loc e = match e.texpr_node with
   | TEunary (Ustar, _)
   | TEarrget _ 
   | TEarrow _ 
-  | TEdot _
-  | TEbinary (_,(Badd_pointer_int | Badd_int_pointer | Bsub_pointer_int),_) ->
+  | TEdot _ ->
       ()
   | TEcast (_, e) ->
       check_lvalue loc e

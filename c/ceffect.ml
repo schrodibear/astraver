@@ -64,32 +64,32 @@ let pointer_heap_array_var ty =
 
 
 let rec term t acc =
-  match t.node with 
+  match t.term_node with 
     | Tvar v -> 
 	if v.var_is_static
-	then HeapVarSet.add (v.var_name, ([],interp_type t.info)) acc
+	then HeapVarSet.add (v.var_name, ([],interp_type t.term_type)) acc
 	else acc
     | Tarrow(t,f) -> 
-	term t (HeapVarSet.add (f,([],interp_type t.info)) 
-		  (HeapVarSet.add (pointer_heap_array_var t.info) acc))
-    | Tdot(t,f) -> term t (HeapVarSet.add (f,([],interp_type t.info)) acc)
+	term t (HeapVarSet.add (f,([],interp_type t.term_type)) 
+		  (HeapVarSet.add (pointer_heap_array_var t.term_type) acc))
+    | Tdot(t,f) -> term t (HeapVarSet.add (f,([],interp_type t.term_type)) acc)
     | Tarrget(t1,t2) ->
 	term t1 
 	(term t2 
-	   (HeapVarSet.add (pointer_heap_array_var t1.info) acc))	
+	   (HeapVarSet.add (pointer_heap_array_var t1.term_type) acc))	
     | Tunop (Ustar, t) ->
-	term t (HeapVarSet.add (pointer_heap_array_var t.info) acc)
+	term t (HeapVarSet.add (pointer_heap_array_var t.term_type) acc)
     | _ -> assert false (* bad parsing ??? *)
 
 let location loc =
   match loc with
     | Lterm t -> term t HeapVarSet.empty
-    | Lstar t -> term t (HeapVarSet.singleton (pointer_heap_array_var t.info))
+    | Lstar t -> term t (HeapVarSet.singleton (pointer_heap_array_var t.term_type))
     | Lrange(t1,t2,t3) -> 
 	term t1 
 	(term t2 
 	   (term t3 
-	      (HeapVarSet.singleton (pointer_heap_array_var t1.info))))
+	      (HeapVarSet.singleton (pointer_heap_array_var t1.term_type))))
 
 let locations ll =
   List.fold_left
