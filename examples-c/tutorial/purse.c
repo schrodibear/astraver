@@ -19,7 +19,7 @@ void withdraw0(purse *p,int s) {
   p->balance = p->balance - s;
 }
 
-
+#if 0
 /*@ requires purse_inv(p1) && purse_inv(p2)
   @ ensures \result == 0
   @*/
@@ -28,7 +28,7 @@ int test0(purse *p1, purse *p2) {
     credit0(p2,100);
     return p1->balance;
 }
-
+#endif
 
 
 /* using assigns clauses */
@@ -62,7 +62,7 @@ int test1(purse *p1, purse *p2) {
 /* example of memory allocation
  * currently does not work
  */
-//@ ensures \fresh(\result) && purse_inv(\result) 
+//@ assigns \nothing ensures \fresh(\result) && purse_inv(\result) 
 purse *new_purse();
 
 

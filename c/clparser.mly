@@ -35,7 +35,7 @@
 %token VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
-%token REQUIRES ENSURES ASSIGNS NOTHING 
+%token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
 %token READS LOGIC PREDICATE AXIOM LBRACE RBRACE
 
 %nonassoc prec_forall prec_exists
@@ -149,9 +149,14 @@ spec:
 ;
 
 loop_annot:
-  invariant variant { { invariant = Some $1; variant = Some $2 } }
-| variant { { invariant = None; variant = Some $1 } }
-| invariant { { invariant = Some $1; variant = None } }
+  invariant loop_effects variant 
+    { { invariant = Some $1; loop_assigns = $2; variant = Some $3 } }
+| loop_effects variant 
+    { { invariant = None; loop_assigns = $1; variant = Some $2 } }
+| invariant loop_effects 
+    { { invariant = Some $1; loop_assigns = $2; variant = None } }
+| ne_loop_effects 
+    { { invariant = None; loop_assigns = Some $1; variant = None } }
 ;
 
 invariant:
@@ -184,6 +189,16 @@ effects:
   /* epsilon */ { None }
 | ASSIGNS locations { Some $2 }
 | ASSIGNS NOTHING { Some [] }
+;
+
+loop_effects:
+  /* epsilon */ { None }
+| ne_loop_effects { Some $1 }
+;
+
+ne_loop_effects:
+| LOOP_ASSIGNS locations { $2 }
+| LOOP_ASSIGNS NOTHING { [] }
 ;
 
 locations:

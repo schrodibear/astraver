@@ -547,7 +547,7 @@ for each subgoals. The situation is almost the same for
 \verb|withdraw|.
 
 \section{Calling functions}
-\label{assigns}
+\label{assigns}\indextt{assigns}
 
 The next step in this tutorial is to deal with function call. Let us
 use again our \verb|purse| structure, and consider a simple test:
@@ -561,6 +561,9 @@ int test1(purse *p1, purse *p2) \{
     return p1->balance;
 \}
 \end{code}
+
+{\huge TODO: this is now rejected by \caduceus}
+
 This function requires three proof obligations, two of them being
 solved by Simplify. Unfortunately, this time the counter-example
 proposed by Simplify is not easy to interpret. Let's go to Coq proofs:

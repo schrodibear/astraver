@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.7 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: info.mli,v 1.8 2004-05-03 12:59:18 filliatr Exp $ i*)
 
 module HeapVarSet : Set.S with type elt = string
 
@@ -25,6 +25,7 @@ type var_info =
       mutable var_is_static : bool;
       mutable function_reads : HeapVarSet.t;
       mutable function_writes : HeapVarSet.t;
+      mutable has_assigns : bool;
     }
 
 val default_var_info : string -> var_info

@@ -1,6 +1,9 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
+ o a function which is called must have an assigns clause
+ o new clause loop_assigns in loop annotation
+
 version 0.54, April 22nd, 2004
 ==============================
  o new feature: invariants

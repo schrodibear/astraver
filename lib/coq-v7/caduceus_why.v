@@ -220,7 +220,7 @@ Admitted.
    ((if result then `(offset p1) >= (offset p2)`
      else `(offset p1) < (offset p2)`))).
 
-(*Why logic*) Definition acc : (A32:Set) ((memory) A32) -> pointer -> A32.
+(*Why logic*) Definition acc : (A41:Set) ((memory) A41) -> pointer -> A41.
 Admitted.
 Implicits acc [1].
 
@@ -229,7 +229,7 @@ Implicits acc [1].
   (H: (valid alloc p))(sig_1 A5 [result: A5](result = (acc m p))).
 
 (*Why logic*) Definition upd :
-  (A33:Set) ((memory) A33) -> pointer -> A33 -> ((memory) A33).
+  (A42:Set) ((memory) A42) -> pointer -> A42 -> ((memory) A42).
 Admitted.
 Implicits upd [1].
 
@@ -240,23 +240,23 @@ Implicits upd [1].
    (m0 = (upd m p v))).
 
 (*Why axiom*) Lemma acc_upd :
-  (A34:Set)
-  ((m:((memory) A34)) ((p:pointer) ((a:A34) (acc (upd m p a) p) = a))).
+  (A43:Set)
+  ((m:((memory) A43)) ((p:pointer) ((a:A43) (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (A35:Set)
-  ((m:((memory) A35))
+  (A44:Set)
+  ((m:((memory) A44))
    ((p1:pointer)
-    ((p2:pointer) ((a:A35) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+    ((p2:pointer) ((a:A44) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A36:Set)
-  ((m:((memory) A36))
+  (A45:Set)
+  ((m:((memory) A45))
    ((p1:pointer)
     ((p2:pointer)
-     ((a:A36) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     ((a:A45) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
@@ -284,8 +284,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns [A37:Set] [a:alloc_table]
-  [m1:((memory) A37)] [m2:((memory) A37)] [l:assign_loc]
+(*Why predicate*) Definition assigns [A46:Set] [a:alloc_table]
+  [m1:((memory) A46)] [m2:((memory) A46)] [l:assign_loc]
   := ((p:pointer)
       ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicits assigns [1].
@@ -355,5 +355,15 @@ Admitted.
 
 Admitted.
 
+Admitted.
+
+(*Why axiom*) Lemma assigns_trans :
+  (A47:Set)
+  ((a:alloc_table)
+   ((l:assign_loc)
+    ((m1:((memory) A47))
+     ((m2:((memory) A47))
+      ((m3:((memory) A47))
+       ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
 Admitted.
 

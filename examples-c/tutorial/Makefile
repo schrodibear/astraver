@@ -4,6 +4,7 @@ FILES = max abs swap search purse average
 coq:
 	for f in $(FILES); do \
 	  caduceus $$f.c; \
+	  rm -f coq/caduceus_spec_why.v; \
 	  make -f $$f.makefile coq; \
 	done
 

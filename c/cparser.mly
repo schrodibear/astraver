@@ -43,7 +43,10 @@
   let vwarning s = if verbose then warning s
   let dwarning s = if debug then warning s
 
-  let no_loop_annot = { Clogic.invariant = None; Clogic.variant = None }
+  let no_loop_annot = 
+    { Clogic.invariant = None; 
+      Clogic.loop_assigns = None;
+      Clogic.variant = None }
 
   let add_pre_loc lb = function
     | Some (b,_) -> Loc.join (b,0) lb 

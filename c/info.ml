@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.7 2004-03-24 08:22:03 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.8 2004-05-03 12:59:18 filliatr Exp $ i*)
 
 module HeapVarSet = Set.Make(String)
 
@@ -25,6 +25,7 @@ type var_info =
       mutable var_is_static : bool;
       mutable function_reads : HeapVarSet.t;
       mutable function_writes : HeapVarSet.t;
+      mutable has_assigns : bool;
     }
 
 let default_var_info x =
@@ -33,6 +34,7 @@ let default_var_info x =
     var_is_static = false;
     function_reads = HeapVarSet.empty;
     function_writes = HeapVarSet.empty; 
+    has_assigns = false
   }
 
 type logic_info =

@@ -248,6 +248,10 @@ axiom unchanged_range_elim :
        unchanged(p1,range_loc(p2,a,b)) ->
  	(forall i:int. a <= i <= b -> p1 <> shift(p2,i))  
 
+axiom assigns_trans :
+  forall a:alloc_table. forall l:assign_loc. 
+  forall m1:'a memory. forall m2:'a memory. forall m3: 'a memory.
+  assigns(a,m1,m2,l) -> assigns(a,m2,m3,l) -> assigns(a,m1,m3,l)
 
 
 

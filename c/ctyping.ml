@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.55 2004-04-22 12:03:34 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.56 2004-05-03 12:59:18 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -815,6 +815,7 @@ let type_decl d = match d.node with
       let s = type_spec ~result:ty env s in
       let s = function_spec d.loc f (Some s) in
       let info = default_var_info f in
+      info.has_assigns <- (s.assigns <> None);
       let info = add_sym d.loc f (noattr (CTfun (pl, ty))) info in
       Tfunspec (s, ty, info, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
@@ -824,6 +825,7 @@ let type_decl d = match d.node with
       let s = option_app (type_spec ~result:ty env) s in
       let s = function_spec d.loc f s in
       let info = default_var_info f in
+      info.has_assigns <- (s.assigns <> None);
       let info = add_sym d.loc f (noattr (CTfun (pl, ty))) info in
       let bl,st = type_statement env et bl in
       if st.term && et <> None then

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/selection.why", characters 1280-1309 *)
+(* Why obligation from file "why/selection.why", characters 1381-1410 *)
 Lemma selection_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -45,14 +45,14 @@ Lemma selection_impl_po_1 :
                   (acc intP0 (shift t k))))),
   forall (Test3: j3 < n),
   forall (aux_1: pointer),
-  forall (Post23: aux_1 = (shift t j3)),
+  forall (Post24: aux_1 = (shift t j3)),
   (valid alloc aux_1).
 Proof.
 intuition.
 subst; auto.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1280-1309 *)
+(* Why obligation from file "why/selection.why", characters 1381-1410 *)
 Lemma selection_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -94,10 +94,10 @@ Lemma selection_impl_po_2 :
                   (acc intP0 (shift t k))))),
   forall (Test3: j3 < n),
   forall (aux_1: pointer),
-  forall (Post23: aux_1 = (shift t j3)),
+  forall (Post24: aux_1 = (shift t j3)),
   forall (Pre3: (valid alloc aux_1)),
   forall (result4: Z),
-  forall (Post25: result4 = (acc intP0 aux_1)),
+  forall (Post26: result4 = (acc intP0 aux_1)),
   (forall (result:pointer),
    (result = (shift t min3) ->
     (forall (result0:Z),
@@ -139,7 +139,7 @@ subst; auto with *.
 subst; auto.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 967-1220 *)
+(* Why obligation from file "why/selection.why", characters 1056-1317 *)
 Lemma selection_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -183,7 +183,7 @@ subst; omega.
 Qed.
 
 
-(* Why obligation from file "why/selection.why", characters 1489-1525 *)
+(* Why obligation from file "why/selection.why", characters 953-1578 *)
 Lemma selection_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -222,74 +222,26 @@ Lemma selection_impl_po_4 :
                   (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
                    (acc intP0 (shift t k))))) /\
                  j3 >= n),
-  forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = min3),
-  (valid_index alloc t caduceus_1) /\ (valid_index alloc t i2).
+  (forall (result:Z),
+   (result = min3 ->
+    (forall (intP1:((memory) Z)),
+     (((acc intP1 (shift t result)) = (acc intP0 (shift t i2)) /\
+      (acc intP1 (shift t i2)) = (acc intP0 (shift t result))) /\
+      (assigns alloc intP0 intP1
+       (union_loc (pointer_loc (shift t i2)) (pointer_loc (shift t result)))) ->
+      (forall (i:Z),
+       (i = (i2 + 1) -> ((((0 <= i /\ i <= (n - 1)) /\
+        (sorted alloc intP1 t 0 (i - 1))) /\
+        (mset intP1 t 0 (n - 1)) = (mset intP t 0 (n - 1))) /\
+        (forall (k:Z),
+         (forall (l:Z),
+          (0 <= k /\ k < i ->
+           (i <= l /\ l < n -> (acc intP1 (shift t k)) <=
+            (acc intP1 (shift t l))))))) /\
+        (Zwf 0 (n - i) (n - i2)))))) /\
+    (valid_index alloc t result) /\ (valid_index alloc t i2))).
 Proof.
 intuition.
-Save.
-
-(* Why obligation from file "why/selection.why", characters 1464-1525 *)
-Lemma selection_impl_po_5 : 
-  forall (t: pointer),
-  forall (n: Z),
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (Pre14: n >= 1 /\ (valid_range alloc t 0 (n - 1))),
-  forall (i: Z),
-  forall (Post12: i = (any_int tt)),
-  forall (j: Z),
-  forall (Post11: j = (any_int tt)),
-  forall (min: Z),
-  forall (Post10: min = (any_int tt)),
-  forall (i1: Z),
-  forall (Post1: i1 = 0),
-  forall (Variant1: Z),
-  forall (i2: Z),
-  forall (intP0: ((memory) Z)),
-  forall (Pre13: Variant1 = (n - i2)),
-  forall (Pre12: (((0 <= i2 /\ i2 <= (n - 1)) /\
-                 (sorted alloc intP0 t 0 (i2 - 1))) /\
-                 (mset intP0 t 0 (n - 1)) = (mset intP t 0 (n - 1))) /\
-                 (forall (k:Z),
-                  (forall (l:Z),
-                   (0 <= k /\ k < i2 ->
-                    (i2 <= l /\ l < n -> (acc intP0 (shift t k)) <=
-                     (acc intP0 (shift t l))))))),
-  forall (Test4: i2 < (n - 1)),
-  forall (min2: Z),
-  forall (Post2: min2 = i2),
-  forall (j2: Z),
-  forall (Post3: j2 = (i2 + 1)),
-  forall (j3: Z),
-  forall (min3: Z),
-  forall (Post6: ((((i2 + 1) <= j3 /\ j3 <= n) /\ i2 <= min3 /\ min3 < n) /\
-                 (forall (k:Z),
-                  (i2 <= k /\ k < j3 -> (acc intP0 (shift t min3)) <=
-                   (acc intP0 (shift t k))))) /\
-                 j3 >= n),
-  forall (caduceus_1: Z),
-  forall (Post7: caduceus_1 = min3),
-  forall (Pre11: (valid_index alloc t caduceus_1) /\ (valid_index alloc t i2)),
-  forall (intP1: ((memory) Z)),
-  forall (Post33: ((acc intP1 (shift t caduceus_1)) =
-                  (acc intP0 (shift t i2)) /\ (acc intP1 (shift t i2)) =
-                  (acc intP0 (shift t caduceus_1))) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc (shift t i2))
-                    (pointer_loc (shift t caduceus_1))))),
-  (forall (i:Z),
-   (i = (i2 + 1) -> ((((0 <= i /\ i <= (n - 1)) /\
-    (sorted alloc intP1 t 0 (i - 1))) /\
-    (mset intP1 t 0 (n - 1)) = (mset intP t 0 (n - 1))) /\
-    (forall (k:Z),
-     (forall (l:Z),
-      (0 <= k /\ k < i ->
-       (i <= l /\ l < n -> (acc intP1 (shift t k)) <= (acc intP1 (shift t l))))))) /\
-    (Zwf 0 (n - i) (n - i2)))).
-Proof.
-intuition.
-
 unfold sorted in *|-*; intuition.
 assert (k < i2-1 \/ k = i2-1).
 omega.
@@ -299,7 +251,7 @@ rewrite H15; auto with *.
 subst.
 rewrite H15; auto with *.
 ring (i2 -1 +1).
-rewrite H17; caduceus; auto with *.
+rewrite H16; caduceus; auto with *.
 
 Focus 2.
 assert (k < i2 \/ k=i2).
@@ -311,23 +263,23 @@ rewrite H15; auto with *.
 assert (l=min3\/l<>min3).
 omega.
 intuition idtac.
-subst; rewrite H16; auto with *.
+subst; rewrite H13; auto with *.
 rewrite H15; auto with *.
 
 
-subst; rewrite H17; auto with *.
+subst; rewrite H16; auto with *.
 
 assert (l=min3\/l<>min3).
 omega.
 intuition idtac.
-subst; rewrite H16; auto with *.
+subst; rewrite H13; auto with *.
 rewrite H15; auto with *.
 
 Admitted.
 (* Save. *)
 
-(* Why obligation from file "why/selection.why", characters 351-820 *)
-Lemma selection_impl_po_6 : 
+(* Why obligation from file "why/selection.why", characters 385-862 *)
+Lemma selection_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -353,8 +305,8 @@ red; intuition.
 Save.
 
 
-(* Why obligation from file "why/selection.why", characters 265-1578 *)
-Lemma selection_impl_po_7 : 
+(* Why obligation from file "why/selection.why", characters 295-1705 *)
+Lemma selection_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -391,7 +343,7 @@ Save.
 
 
 
-(* Why obligation from file "why/selection.why", characters 1918-1946 *)
+(* Why obligation from file "why/selection.why", characters 2052-2080 *)
 Lemma swap_impl_po_1 : 
   forall (t: pointer),
   forall (i: Z),
@@ -406,7 +358,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 1918-1946 *)
+(* Why obligation from file "why/selection.why", characters 2052-2080 *)
 Lemma swap_impl_po_2 : 
   forall (t: pointer),
   forall (i: Z),

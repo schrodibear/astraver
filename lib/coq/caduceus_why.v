@@ -226,7 +226,7 @@ Admitted.
       (offset p2))))).
 
 (*Why logic*) Definition acc :
-  forall (A32:Set), ((memory) A32) -> pointer -> A32.
+  forall (A41:Set), ((memory) A41) -> pointer -> A41.
 Admitted.
 Implicit Arguments acc.
 
@@ -236,7 +236,7 @@ Implicit Arguments acc.
   (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
 (*Why logic*) Definition upd :
-  forall (A33:Set), ((memory) A33) -> pointer -> A33 -> ((memory) A33).
+  forall (A42:Set), ((memory) A42) -> pointer -> A42 -> ((memory) A42).
 Admitted.
 Implicit Arguments upd.
 
@@ -248,25 +248,25 @@ Implicit Arguments upd.
    (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
 
 (*Why axiom*) Lemma acc_upd :
-  forall (A34:Set),
-  (forall (m:((memory) A34)),
-   (forall (p:pointer), (forall (a:A34), (acc (upd m p a) p) = a))).
+  forall (A43:Set),
+  (forall (m:((memory) A43)),
+   (forall (p:pointer), (forall (a:A43), (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A35:Set),
-  (forall (m:((memory) A35)),
+  forall (A44:Set),
+  (forall (m:((memory) A44)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A35), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+     (forall (a:A44), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  forall (A36:Set),
-  (forall (m:((memory) A36)),
+  forall (A45:Set),
+  (forall (m:((memory) A45)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A36), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A45), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc_table -> pointer -> Prop.
@@ -293,8 +293,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns (A37:Set) (a:alloc_table)
-  (m1:((memory) A37)) (m2:((memory) A37)) (l:assign_loc)
+(*Why predicate*) Definition assigns (A46:Set) (a:alloc_table)
+  (m1:((memory) A46)) (m2:((memory) A46)) (l:assign_loc)
   := (forall (p:pointer),
       ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicit Arguments assigns.
@@ -352,5 +352,18 @@ Admitted.
        (forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 
+
+
+(*Why axiom*) Lemma assigns_trans :
+  forall (A47:Set),
+  (forall (a:alloc_table),
+   (forall (l:assign_loc),
+    (forall (m1:((memory) A47)),
+     (forall (m2:((memory) A47)),
+      (forall (m3:((memory) A47)),
+       ((assigns a m1 m2 l) -> ((assigns a m2 m3 l) -> (assigns a m1 m3 l)))))))).
+Proof.
+unfold assigns; intuition; rewrite H0; auto.
+Save.
 
 

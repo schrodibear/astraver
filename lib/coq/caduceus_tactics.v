@@ -100,10 +100,12 @@ Ltac Assigns := CleanAssigns; AssignsRec.
 
 Ltac Unchanged :=
   match goal with
+  | |- (unchanged ?X1 nothing_loc) =>
+      apply unchanged_nothing_intro
   | |- (unchanged ?X1 (pointer_loc ?X2)) =>
-      apply unchanged_pointer_intro;auto
+      apply unchanged_pointer_intro;auto with *
   | |- (unchanged ?X1 (union_loc ?X2 ?X3)) =>
-      apply unchanged_union_intro;auto
+      apply unchanged_union_intro;auto with *
  end.
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.30 2004-04-14 11:47:00 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.31 2004-05-03 12:59:18 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -128,7 +128,7 @@ let main () =
 	    fprintf fmt "do_simplify: simplify/%s_why.sxcheck@\n@\n" f;
 	    fprintf fmt "simplify/%s_why.sxcheck: simplify/%s_why.sx@\n" f f;
 	    fprintf fmt "\t@@cat simplify/caduceus_why.sx simplify/caduceus_spec_why.sx $< > $<.all@\n";
-	    fprintf fmt "\t@@echo 'Running Simplify on proof obligations for %s.c' && Simplify $<.all@\n@\n" f;
+	    fprintf fmt "\t@@echo 'Running Simplify on proof obligations for %s.c' && (ulimit -t 4; Simplify $<.all)@\n@\n" f;
 	    fprintf fmt "simplify/%s_why.sx: why/caduceus_spec.why why/%s.why@\n" f f;
 	    fprintf fmt "\t@@echo 'why -simplify [...] why/%s.why' && why -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
 

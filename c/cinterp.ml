@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.76 2004-04-22 13:24:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.77 2004-05-03 12:59:18 filliatr Exp $ i*)
 
 
 open Format
@@ -301,6 +301,10 @@ let build_minimal_app e args =
 	else
 	  build_complex_app e args
 
+let check_for_assigns loc v =
+  if not v.has_assigns then
+    error loc "call to a function without `assigns'"
+
 let rec interp_expr e =
   match e.texpr_node with
     | TEconstant(c) -> 
@@ -417,6 +421,7 @@ let rec interp_expr e =
 	begin
 	  match e.texpr_node with
 	    | TEvar v ->
+		check_for_assigns e.texpr_loc v;
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
@@ -602,6 +607,7 @@ and interp_statement_expr e =
 	begin
 	  match e1.texpr_node with
 	    | TEvar v ->
+		check_for_assigns e1.texpr_loc v;
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
@@ -650,7 +656,7 @@ and interp_statement_expr e =
 
 module StringMap = Map.Make(String)
 
-let collect_locations acc loc =
+let collect_locations before acc loc =
   let var,iloc =
     match loc with
       | Lterm t -> 
@@ -660,20 +666,20 @@ let collect_locations acc loc =
 		  assert false
 	      | Tdot(e,f)
 	      | Tarrow(e,f) ->
-		  f,LApp("pointer_loc",[interp_term (Some "") "" e])
+		  f,LApp("pointer_loc",[interp_term (Some before) before e])
 	      | Tarrget(e1,e2) -> 
 		  let var = global_var_for_array_type e1.term_type in
 		  let loc = 
 		    LApp("pointer_loc",
 			 [LApp("shift",
-			       [interp_term (Some "") "" e1;
-				interp_term (Some "") "" e2])]) 
+			       [interp_term (Some before) before e1;
+				interp_term (Some before) before e2])]) 
 		  in
 		  var,loc
 	      | Tunop (Clogic.Ustar, e1) -> 
 		  let var = global_var_for_array_type e1.term_type in
 		  let loc = 
-		    LApp("pointer_loc", [interp_term (Some "") "" e1])
+		    LApp("pointer_loc", [interp_term (Some before) before e1])
 		  in
 		  var,loc
 	      | _ ->
@@ -682,21 +688,18 @@ let collect_locations acc loc =
     | Lstar t -> 
 	let var = global_var_for_array_type t.term_type in
 	let loc = 
-	  LApp("all_loc",[interp_term (Some "") "" t])
+	  LApp("all_loc",[interp_term (Some before) before t])
 	in
 	var,loc
-	
     | Lrange(t1,t2,t3) -> 
 	let var = global_var_for_array_type t1.term_type in
 	let loc = 
 	  LApp("range_loc",
-	       [interp_term (Some "") "" t1;
-		interp_term (Some "") "" t2;
-		interp_term (Some "") "" t3;])
+	       [interp_term (Some before) before t1;
+		interp_term (Some before) before t2;
+		interp_term (Some before) before t3;])
 	in
 	var,loc
-
-
   in
   try
     let p = StringMap.find var acc in
@@ -717,15 +720,17 @@ let rec make_union_loc = function
   | [l] -> l
   | l::r -> LApp("union_loc",[l;make_union_loc r])
 
-let interp_assigns assigns = function
+let interp_assigns before assigns = function
   | Some locl ->
-      let l = List.fold_left collect_locations (map_of_assigns assigns) locl in
+      let l = 
+	List.fold_left (collect_locations before) (map_of_assigns assigns) locl
+      in
       StringMap.fold
 	(fun v p acc ->
 	   make_and acc
 	     (LPred("assigns",
-		    [LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; 
-		     make_union_loc p])))
+		    [LVarAtLabel("alloc",before); LVarAtLabel(v,before);
+		     LVar v; make_union_loc p])))
 	l LTrue
   | None ->
       LTrue
@@ -754,7 +759,7 @@ let interp_spec effect_reads effect_assigns s =
     make_and
       (interp_predicate_opt None "" s.ensures)
       (make_and 
-	 (interp_assigns effect_assigns s.assigns)
+	 (interp_assigns "" effect_assigns s.assigns)
 	 (weak_invariants_for effect_assigns))
   in 
   (tpre,tpost)
@@ -795,16 +800,19 @@ let interp_decl d acc =
 	assert false
 
 
-let interp_invariant annot =
-  match annot with
-    | { invariant = None; variant = None } -> 
-	(LTrue, (LConst (Prim_int 0), None))
-    | { invariant = Some inv; variant = Some (var,r) } -> 
-	(interp_predicate None "init" inv, (interp_term None "" var, r))
-    | { invariant = None; variant = Some (var,r) } -> 
-	(LTrue, (interp_term None "" var, r))
-    | { invariant = Some inv; variant = None } -> 
-	(interp_predicate None "init" inv, (LConst (Prim_int 0), None))
+let interp_invariant label effects annot =
+  let inv = match annot.invariant with
+    | None -> LTrue
+    | Some inv -> interp_predicate None "init" inv
+  in
+  let inv = make_and (interp_assigns label effects annot.loop_assigns) inv in
+  let var = match annot.variant with
+    | None -> LConst (Prim_int 0), None
+    | Some (var,r) -> interp_term None "" var, r
+  in
+  (inv, var)
+
+let new_label = let r = ref 0 in fun () -> incr r; "label_" ^ string_of_int !r
 
 let try_with_void ex e = Try (e, ex, None, Void)  
 
@@ -851,28 +859,50 @@ let rec interp_statement ab stat = match stat.st_node with
   | TSif(e,s1,s2) -> 
       If(interp_boolean_expr e,interp_statement ab s1,interp_statement ab s2)
   | TSfor(annot,e1,e2,e3,body) ->
-      let (inv,dec) = interp_invariant annot in
+      let label = new_label () in
+      let ef = 
+	HeapVarSet.union 
+	  (HeapVarSet.union (Ceffect.expr e1).Ceffect.assigns
+	     (Ceffect.expr e2).Ceffect.assigns)
+	  (HeapVarSet.union (Ceffect.expr e3).Ceffect.assigns 
+	     (Ceffect.statement body).Ceffect.assigns)
+      in
+      let (inv,dec) = interp_invariant label ef annot in
       append
-	(interp_statement_expr e1)
-	(break body.st_break 
-	   (make_while (interp_boolean_expr e2) inv dec 
-	      (continue body.st_continue
-		 (append 
-		    (interp_statement true body) 
-		    (interp_statement_expr e3)))))
+	(Output.Label label)
+	(append
+	   (interp_statement_expr e1)
+	   (break body.st_break 
+	      (make_while (interp_boolean_expr e2) inv dec 
+		 (continue body.st_continue
+		    (append 
+		       (interp_statement true body) 
+		       (interp_statement_expr e3))))))
   | TSwhile(annot,e,s) -> 
-      let (inv,dec) = interp_invariant annot in
-      break s.st_break
-	(make_while (interp_boolean_expr e) inv dec 
-	   (continue s.st_continue (interp_statement true s)))
+      let label = new_label () in
+      let ef = 
+	HeapVarSet.union (Ceffect.expr e).Ceffect.assigns
+	  (Ceffect.statement s).Ceffect.assigns 
+      in
+      let (inv,dec) = interp_invariant label ef annot in
+      append (Output.Label label)
+	(break s.st_break
+	   (make_while (interp_boolean_expr e) inv dec 
+	      (continue s.st_continue (interp_statement true s))))
   | TSdowhile(annot,s,e) -> 
-      let (inv,dec) = interp_invariant annot in
-      break true
-	(make_while (Cte (Prim_bool true)) inv dec
-	   (continue s.st_continue
-	      (append (interp_statement true s)
-		 (If (Not (interp_boolean_expr e), 
-		      Raise ("Break", None), Void)))))
+      let label = new_label () in
+      let ef = 
+	HeapVarSet.union (Ceffect.expr e).Ceffect.assigns
+	  (Ceffect.statement s).Ceffect.assigns 
+      in
+      let (inv,dec) = interp_invariant label ef annot in
+      append (Output.Label label)
+	(break true
+	   (make_while (Cte (Prim_bool true)) inv dec
+	      (continue s.st_continue
+		 (append (interp_statement true s)
+		    (If (Not (interp_boolean_expr e), 
+			 Raise ("Break", None), Void))))))
   | TSblock(b) -> 
       interp_block ab b 
   | TSbreak -> 
