@@ -42,3 +42,23 @@ for f in *.c; do
 	echo "caduceus ok... "
     fi
 done
+
+echo "C parsing/typing (bad)"
+cd ../bad-sem
+parsing="../../../bin/caduceus.opt -type-only"
+for f in *.c; do
+    echo -n "  "$f"... "
+    if gcc -c $f > /dev/null 2>&1; then
+	echo "GCC failed (accepted a bad file)"
+	gcc -c $f
+	exit 1
+    fi
+    echo -n "GCC ok... "
+    if $parsing  $f > /dev/null 2>&1; then
+	echo "caduceus FAILED (accepted a bad file)"
+	#$parsing $f
+	#exit 1
+    else
+	echo "caduceus ok... "
+    fi
+done

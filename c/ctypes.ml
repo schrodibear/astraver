@@ -14,25 +14,24 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: ctypes.ml,v 1.3 2003-12-22 15:51:00 filliatr Exp $ *)
+(* $Id: ctypes.ml,v 1.4 2003-12-23 09:14:24 filliatr Exp $ *)
 
 open Format
+open Coptions
 
 module Sset = Set.Make(String)
 
 let stack = ref [ref Sset.empty]
 
-let debug = ref false
-
 let add s = match !stack with
   | m :: _ -> 
-      if !debug then eprintf "Ctypes.add %s@." s; 
+      if debug then eprintf "Ctypes.add %s@." s; 
       m := Sset.add s !m
   | [] -> assert false
 
 let remove s = match !stack with
   | m :: _ -> 
-      if !debug then eprintf "Ctypes.remove %s@." s; 
+      if debug then eprintf "Ctypes.remove %s@." s; 
       m := Sset.remove s !m
   | [] -> assert false
 

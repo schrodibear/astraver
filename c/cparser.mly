@@ -19,6 +19,7 @@
 %{
 
   open Format
+  open Coptions
   open Logic
   open Ptree
   open Cast
@@ -185,7 +186,7 @@
     let bt = base_type None specs in
     let sg = apply_sign sg bt in
     let ty = full_type bt decl in
-    if !Ctypes.debug then eprintf "%a@." explain_type ty;
+    if debug then eprintf "%a@." explain_type ty;
     { ctype_expr = ty;
       ctype_storage = st;
       ctype_const = List.exists ((=) Sconst) specs;

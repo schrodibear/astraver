@@ -41,6 +41,10 @@ struct T; /* forward declaration */
 struct S { int fa; }; 
 struct T { char fb; float fc; };
 struct { int fd :3; } sa; /* bit field */
+struct { struct S fe; int ff; } sb;
+struct U { struct T * fg; };
+struct V { int fh; struct V * next; };
+struct V * sc;
 
 /* unions */
 

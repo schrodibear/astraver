@@ -103,7 +103,8 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 # caduceus
-CCMO = src/linenum.cmo src/loc.cmo c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
+CCMO = src/linenum.cmo src/loc.cmo c/coptions.cmo \
+       c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
        c/cinterp.cmo c/creport.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 
