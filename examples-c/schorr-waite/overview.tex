@@ -4,14 +4,14 @@
 In the following, we assume the reader fairly familiar with ANSI
 C~\cite{KR88}.  In the \caduceus{} setting, the properties that may be
 checked are of two kinds. First, the program may be checked to be free
-of \emph{threats}, that is operations which may lead to abnormal
+of \emph{threats}, that are operations which may lead to abnormal
 program termination: division by zero and such, including the crucial
 case of dereferencing a pointer that does not point to a valid memory
 block (i.e. on the current stack or allocated on the heap by a
 \texttt{malloc}-like call). In our approach, out-of-bounds array
 access is a particular case of pointer dereferencing threat, because
-we fully support pointer arithmetic.  The second kind of properties
-which can be proved are user-defined functional properties given as
+we support full pointer arithmetic.  The second kind of properties
+which can be proved are user-defined behavioral properties given as
 functions's \emph{postconditions}.
 
 These kinds of properties are not independent since they both usually
@@ -24,8 +24,8 @@ language we use in those comments is largely inspired by the Java
 Modeling Language (JML)~\cite{leavens00jml}. It has however
 significant differences, mainly due to the fact that unlike JML we do
 not seek runtime assertion checking. Description of this annotation
-language is not the purpose of this article, we refer
-to~\cite{Caduceus,filliatre04icfem} for more information, we will
+language is not the purpose of this article ; we refer
+to~\cite{Caduceus,filliatre04icfem} for more information. We will
 simply introduce here what we need for the case study.
 One feature of this annotation language, shared with JML, is that
 annotations must follow a similar syntax as C syntax, so that a C

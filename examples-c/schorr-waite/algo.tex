@@ -69,7 +69,7 @@ when the right child is explored, and goes back up.
 \begin{center}
   \unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
-\begin{picture}(100,150)
+\begin{picture}(100,150)(-50,0)
 \put(-80,180){\rnode{null}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(-80,160){\unode{n0}}
 \put(-70,140){\unode{n1}}
@@ -100,7 +100,7 @@ when the right child is explored, and goes back up.
 \ncline{n2}{null3}
 \ncline{p}{n0}
 \ncline{t}{n2}
-\ncline{fig1}{fig2}\Aput{PUSH}
+\ncline[doubleline=true]{fig1}{fig2}\Aput{PUSH}
 \put(10,160){\rnode{fig2}}
 \put(40,160){\rnode{fig3}}
 \put(80,180){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
