@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyPermut.v,v 1.9 2003-09-25 13:55:01 filliatr Exp $ *)
+(* $Id: WhyPermut.v,v 1.10 2003-10-15 08:36:15 filliatr Exp $ *)
 
 Require Import WhyArrays.
 Require Import Omega.
@@ -118,7 +118,7 @@ Lemma exchange_length :
    exchange t t' i j -> array_length t = array_length t'.
 Proof.
 intros A t t' i j.
- oldinduction 1; auto.
+simple_induction 1; auto.
 Qed.
 
 Hints Resolve exchange_length : v62 datatypes.
@@ -147,7 +147,7 @@ Hints Resolve exchange_is_permut permut_refl permut_sym permut_trans :
 Lemma permut_length :
  forall t t':array Z, permut t t' -> array_length t = array_length t'.
 Proof.
-intros t t'; oldinduction 1; auto; intros.
+intros t t'; simple_induction 1; auto; intros.
 elim H0; auto.
 omega.
 Qed.
@@ -181,7 +181,7 @@ Lemma sub_permut_length :
  forall (A:Set) (t t':array A) (g d:Z),
    sub_permut g d t t' -> array_length t = array_length t'.
 Proof.
-intros t t' g d; oldinduction 1; auto; intros.
+intros t t' g d; simple_induction 1; auto; intros.
 elim H2; auto.
 omega.
 Qed.
@@ -195,11 +195,11 @@ Lemma sub_permut_function :
    (d < array_length t)%Z ->
    forall i:Z,
      (g <= i <= d)%Z ->
-     ( EX j : Z | (g <= j <= d)%Z /\ access t i = access t' j) /\
-     ( EX j : Z | (g <= j <= d)%Z /\ access t' i = access t j).
+     ( exists j : Z | (g <= j <= d)%Z /\ access t i = access t' j) /\
+     ( exists j : Z | (g <= j <= d)%Z /\ access t' i = access t j).
 Proof.
 intros A t t' g d.
-oldinduction 1; intros.
+simple_induction 1; intros.
 (* 1. exchange *)
 elim H2; intros.
 elim (Z_eq_dec i0 i); intros.
@@ -312,7 +312,7 @@ Lemma sub_permut_id :
    array_id t t' (d + 1) (array_length t - 1).
 Proof.
 intros A t t' g d.
- oldinduction 1; intros.
+simple_induction 1; intros.
 elim H2; intros.
 unfold array_id; split; intros.
 apply H8; omega.
@@ -349,7 +349,7 @@ Lemma sub_permut_is_permut :
    sub_permut g d t t' -> permut t t'.
 Proof.
 intros A t t' g d.
- oldinduction 1; intros; eauto with datatypes.
+simple_induction 1; intros; eauto with datatypes.
 Qed.
 
 Hints Resolve sub_permut_is_permut .
@@ -363,7 +363,7 @@ Lemma sub_permut_void :
    (d < g)%Z -> sub_permut g d t t' -> sub_permut g' d' t t'.
 Proof.
 intros A t t' g g' d d' Hdg.
-oldinduction 1; intros.
+simple_induction 1; intros.
 absurd (g <= d)%Z; omega.
 auto with datatypes.
 auto with datatypes.
@@ -380,7 +380,7 @@ Lemma sub_permut_extension :
    (d <= d')%Z -> sub_permut g d t t' -> sub_permut g' d' t t'.
 Proof.
 intros A t t' g g' d d' Hgg' Hdd'.
-oldinduction 1; intros.
+simple_induction 1; intros.
 apply exchange_is_sub_permut with (i := i) (j := j);
  [ omega | omega | assumption ].
 auto with datatypes.
