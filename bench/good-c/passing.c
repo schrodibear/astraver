@@ -13,6 +13,8 @@ int * r;
 
 int g2() { g(r); return *r; } /*@ result = 0 */
 
+int g3() { int i = 1; g(&i); return i; } /*@ result = 0 */
+
 void f(int x[]) /*@ array_length(x) = 1 */ { 
   x[0] = 1;
 } /*@ x[0] = 1 */

@@ -10,6 +10,8 @@
 \newcommand{\coq}{\textsf{Coq}}
 \newcommand{\harvey}{\textsf{haRVey}}
 \newcommand{\hollight}{\textsf{HOL Light}}
+\newcommand{\krakatoa}{\textsf{Krakatoa}}
+\newcommand{\java}{\textsc{Java}}
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
@@ -121,8 +123,10 @@ Contrary to the \coq\ file, the \pvs\ file must not be
 edited. Instead, the \texttt{pvs} declaration must be used in the
 input file (see below). The \harvey\ files are not intended to be edited.
 
+\section{Verifying ML programs}
+\label{tutorial:ml}\index{ML program}
 
-\section{Input files}
+\subsection{Input files}
 
 The input file contains the following kinds of declaration:
 \begin{itemize}
@@ -189,7 +193,7 @@ The input file contains the following kinds of declaration:
 \end{itemize}
 
 
-\section{Annotations}
+\subsection{Annotations}
 \label{annotations}\index{Annotation}
 
 Annotations are inserted into the program to give its specification.
@@ -203,7 +207,7 @@ Any annotation may refer to the value of a variable.  For a mutable
 variable \texttt{x} (i.e. a reference or an array), \texttt{x} always 
 denotes the \emph{current} value of \texttt{x}.
 
-\subsection{Pre/postconditions}\index{Precondition}\index{Postcondition}
+\subsubsection{Pre/postconditions}\index{Precondition}\index{Postcondition}
 Pre- and postconditions are written using the traditional Hoare logic
 syntax 
 \begin{center}
@@ -245,7 +249,7 @@ or even better
 \end{verbatim}
 
 
-\subsection{Assertions}
+\subsubsection{Assertions}
 \index{Assertion}
 Assertions can be inserted within sequences using the \texttt{assert}
 keyword. Example:
@@ -260,7 +264,7 @@ Assertions are not taken into consideration when computing weakest
 preconditions, but may help handling the proofs by introducing cuts.
 
 
-\subsection{Loops annotations}
+\subsubsection{Loops annotations}
 \index{Loop}\index{Invariant}\index{Variant}\indextt{while}
 Loops can (and usually must) be given invariants and must always be
 given variants. Both are introduced as a single annotation following
@@ -282,7 +286,7 @@ the type \texttt{int} and the usual order relation over non negative
 integers are assumed.
 
 
-\subsection{Recursive functions}
+\subsubsection{Recursive functions}
 \index{Recursive function}
 Recursive functions are annotated with the result type and a variant.
 For instance, the famous Mac Carthy's 91 function is written:
@@ -296,7 +300,7 @@ For instance, the famous Mac Carthy's 91 function is written:
 \end{verbatim}
 Variants are similar to the ones for loops.
 
-\subsection{Labels}
+\subsubsection{Labels}
 \index{Label}
 Labels may be inserted within sequences using the 
 \te{label} keyword and the value of a reference \texttt{x} at the
@@ -331,7 +335,7 @@ allow you to relate the values of references at any points of the
 program. 
 
 
-\subsection{Exceptions (experimental in version \whyversion)}
+\subsubsection{Exceptions (experimental in version \whyversion)}
 \label{exception}\index{Exception}
 
 Exceptions are raised with the construct \texttt{raise}:
@@ -359,7 +363,7 @@ In postconditions, it is not possible to mention exceptions which
 are not possibly raised by the program.
 
 
-\section{Types with effect}
+\subsection{Types with effect}
 \label{types}\index{Type}
 
 Program expressions are given types including side-effects and
@@ -395,7 +399,7 @@ with the following syntax:
 Section~\ref{syntax:mltypes} gives the syntax of types.
 
 
-\section{Weakest preconditions}
+\subsection{Weakest preconditions}
 \label{wp}\index{Weakest precondition}
 To achieve completeness, annotations are propagated inside
 subexpressions using a calculus of weakest preconditions.
@@ -422,7 +426,7 @@ Any program establishing \texttt{x = 2} can be substituted to the
 second assignment without changing the second obligation.
 
 
-\section{Restrictions with respect to ML}
+\subsection{Restrictions with respect to ML}
 The ML input language is close to (some fragment of) \caml. However,
 there are some---more or less significant---differences:
 \begin{itemize}
@@ -446,9 +450,124 @@ Getting true \caml\ code from a \why\ source is the subject of the
 next section.
 
 
+\section{Verifying C programs}
+\label{tutorial:C}\index{C program}
+
+\why\ also handles C programs.
+Contrary to ML input files, C input files conform to the usual ANSI C
+syntax~\cite{KR88} and annotations are inserted in the source as
+special comments of the shape 
+\begin{verbatim}
+     /*@ ... */
+\end{verbatim}
+On a C file \texttt{foo.c}, \why\ is invoked as for ML files:
+\begin{verbatim}
+     why foo.c
+\end{verbatim}
+and obligations are generated in file \texttt{foo\_why.v} (assuming prover
+\coq\ is selected).
+
+\subsection{Input files}
+\index{C program!files}
+
+C files contain variable and function declarations, and function
+definitions. 
+A variable declaration has no particular annotation:
+\begin{verbatim}
+     int x;
+     float t[];
+     int* r;
+\end{verbatim}
+Such a declaration corresponds to a \texttt{parameter} declaration in
+an ML input file.
+
+A function declaration can be given a specification:
+\begin{verbatim}
+     int f(int x);
+     int g(int x) /*@ pre x <> 0 */;
+     int h(int x) /*@ writes r post x = r */;
+\end{verbatim}
+The specification is made of an optional precondition (following
+the keyword \texttt{pre}), an effect (in the same syntax as in ML
+programs), and an optional postcondition (following the keyword
+\texttt{post}). 
+
+A function definition is given (optional) pre- and postcondition as
+comments preceding and following the function body:
+\begin{verbatim}
+     void f() /*@ x = 0 */ { y = x++; } /*@ x = 1 and y = 0 */
+     void g(int* x) { *x = 0; } /*@ x = 0 */
+\end{verbatim}
+When the function is recursive, the variant is given right after the
+precondition, inside the same comment:
+\begin{verbatim}
+     int f(int x) /*@ x >= 0 variant x */ {
+       if (x == 0) return 0;
+       return f(x - 1);
+     } /*@ result = 0 */
+\end{verbatim}
+
+
+\subsection{Annotations}
+\index{C program!annotations}
+
+Inside C code, annotations can be inserted to give loops invariant and
+variant. \texttt{for} loops are given an annotation right before the
+loop body:
+\begin{verbatim}
+     for (i = 0; i < 10; ++i)
+       /*@ invariant x = i and i <= 10 variant 10-i */
+       { x = x + 1; }
+\end{verbatim}
+Similarly for \texttt{while} loops:
+\begin{verbatim}
+     while (n >= 0) 
+       /*@ invariant 1 <= n variant n */ { 
+       if (n == 1) { n++; break; }
+       n--;
+     }
+\end{verbatim}
+On the contrary, \texttt{do} loops are annotated after the loop body:
+\begin{verbatim}
+     do {
+       x = x + 1;
+       i = i - 1;
+     }
+     /*@ invariant x = 10 - i and i >= 0 variant i */
+     while (i > 0);
+\end{verbatim}
+
+
+\subsection{C fragment currently covered}
+\index{C program!unsupported constructs}
+
+Section~\ref{syntax:C} gives the syntactic fragment of ANSI C
+currently supported in \why. Additionally, some semantic restrictions
+are added.
+\begin{description}
+\item[No pointer arithmetic.] Pointers are partly supported. They can
+  be used to do reference-passing, as in:
+\begin{verbatim}
+     void g(int* x) { *x = 0; } /*@ x = 0 */
+     void f() { int i = 1; g(&i); }
+\end{verbatim}
+  but pointer arithmetic is not allowed, as in:
+\begin{verbatim}
+     for (p = a; c = *p; p++) ...
+\end{verbatim}
+
+\item[Types.] Currently, the types \texttt{char},
+  \texttt{short}, \texttt{int} and \texttt{long} are all identified
+  (and modeled as unbound integers as in ML). Similarly, types
+  \texttt{float} and \texttt{double} are identified (and modeled as
+  reals as in ML).
+
+\end{description}
+
+
 \section{Caml code generation}
 \label{ocamlcode}\index{Caml code generation}
-In order to run your \why\ code, true \caml\ code can be
+In order to run your \why\ ML code, true \caml\ code can be
 produced with option \texttt{--ocaml}: 
 \begin{verbatim}
      why --ocaml foo.mlw
@@ -484,12 +603,16 @@ is translated into the following piece of \caml\ code:
 external \caml\ code. However, it is possible to make them arguments
 of the functor too, with command line option \texttt{--ocaml-ext}.
 
+Note that \caml\ code can also be generated from C input files, giving
+an ML translation of the C code. (This is not of great use, though,
+since the C input code is already executable.)
+
 
 \section{Installation}
 \label{install}\index{Installation}
 
-To compile \why, you need both \textsf{Objective Caml} and
-\textsf{Camlp4} to be installed, in version at least 3.01. Both can
+To compile \why, you need both \textsf{Objective Caml} to be
+installed, in version at least 3.06. Both can 
 be fetched from \url{http://caml.inria.fr}.
 Then 
 
@@ -506,7 +629,7 @@ Then
 \item Install with \texttt{make install}
 
   (Alternatively, you can move/copy the \why\ executable
-  \texttt{bin/why} anywhere, or make a symbolic link to it from anywhere.)
+  \texttt{bin/why.opt} anywhere, or make a symbolic link to it from anywhere.)
 \end{enumerate}
 
 
@@ -518,6 +641,18 @@ subdirectory \texttt{examples/} of the distribution.
 They are also available on the \why\ web site, at
 \url{http://why.lri.fr/examples/}.
 
+
+\section{Verifying Java programs with Krakatoa}
+
+\why\ does not handle \java\ programs by itself.  However, this can be
+achieved by using \why\ in combination with the \krakatoa\ 
+tool~\cite{Krakatoa}. Developed by C.~Marché and X.~Urbain, this other
+tool tackles \java\ programs annotated using the Java Modeling
+Language (JML)~\cite{JML}. Such programs are translated into
+\why\ ML input code, expressing the semantics of the original \java\ 
+code. A \coq\ model is produced beside.
+
+See the \krakatoa\ web site, at \url{http://www.lri.fr/~marche/krakatoa/}.
 
 
 \chapter{Reference manual}
@@ -1158,8 +1293,8 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
   \\[0.1em]
 
   \nt{c\_declaration}
-    & $::=$ & \nt{c\_type} \nt{identifier} \te{;} \\
-      & $|$ & \nt{c\_type} \te{[]} \nt{identifier} \te{;} \\
+    & $::=$ & \nt{c\_type} $[$ \te{*} $]$ \nt{identifier} \te{;} \\
+      & $|$ & \nt{c\_type} \nt{identifier} \te{[]} \te{;} \\
       & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               $[$ \nt{c\_spec} $]$ \te{;} \\
@@ -1175,7 +1310,8 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
   \\[0.1em]
 
   \nt{parameter}
-    & $::=$ & \nt{c\_type} \nt{identifier} \\
+    & $::=$ & \nt{c\_type} $[$ \te{*} $]$ \nt{identifier} 
+          $|$ \nt{c\_type} \nt{identifier} \te{[]} \\
   \\[0.1em]
 
   \nt{c\_spec}
