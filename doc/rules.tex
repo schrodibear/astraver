@@ -1,0 +1,49 @@
+
+\section{Syntax}
+
+\subsection{Abstract syntax}
+
+\begin{displaymath}
+  \begin{array}{rrl}
+    \epsilon
+      & ::= & (\{x,\ldots,x\}, \{x,\ldots,x\}) \\
+    \tau
+      & ::= & \beta \\
+      &   | & \tref{\tau} \\
+      &   | & \tarray{t}{\tau} \\
+      &   | & (x:\tau)\rightarrow\kappa \\
+    \kappa
+      & ::= & (x:\tau, \epsilon, p, p) \\[1em]
+
+    e
+      & ::= & \prepost{p}{s}{p} \\[1em]
+    s
+      & ::= & x \\
+      &   | & \access{x} \\
+      &   | & \assign{x}{e} \\
+      &   | & \taccess{x}{e} \\ % sugar?
+      &   | & \tassign{x}{e}{e} \\ % sugar?
+      &   | & \seq{e}{e} \\
+      &   | & \plabel{x}{e} \\
+      &   | & \assert{p}{e} \\
+      &   | & \while{e}{p}{t}{p}{e} \\
+      &   | & \ite{e}{e}{e} \\
+      &   | & \fun{x}{\tau}{e} \\
+      &   | & \app{e}{e} \\
+      &   | & \rec{x}{\tau}{e} \\
+      &   | & \letin{x}{e}{e}
+  \end{array}
+\end{displaymath}
+
+\subsection{Syntactic sugar}
+
+\section{Typing}
+
+\section{Weakest preconditions}
+
+\section{Functional interpretation}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "theory"
+%%% End: 
