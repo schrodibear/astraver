@@ -166,8 +166,8 @@
       | Darray (d, so) -> CTarray (full_type ty d, so)
       | Dfunction (d, pl, _) -> CTfun (params pl, full_type ty d)
       | Dbitfield (d, e) -> assert false
-    and params = 
-      List.map (fun (s,d,x) -> (interp_type s d, x))
+    and params pl = 
+      List.map (fun (s,d,x) -> (interp_type s d, x)) pl
     in
     let ty = full_type (base_type None specs) decl in
     { ctype_expr = ty;
