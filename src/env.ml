@@ -1,12 +1,14 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.20 2002-07-08 11:02:32 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.21 2002-07-08 13:21:27 filliatr Exp $ i*)
 
 open Ident
 open Misc
 open Ast
 open Types
 open Logic
+open Error
+open Report
 
 (* Environments for imperative programs.
  *
@@ -83,7 +85,7 @@ let (init_table : term Idmap.t ref) = ref Idmap.empty
 let add_global id v p =
   try
     let _ = Penv.find id !env in
-    Error.clash id None
+    raise_unlocated (Clash id)
   with Not_found -> begin
     env := Penv.add id (TypeV v) !env; 
     pgm_table := Idmap.add id p !pgm_table
@@ -92,7 +94,7 @@ let add_global id v p =
 let add_global_set id =
   try
     let _ = Penv.find id !env in
-    Error.clash id None
+    raise_unlocated (Error.Clash id)
   with Not_found -> 
     env := Penv.add id Set !env
 

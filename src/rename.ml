@@ -1,9 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: rename.ml,v 1.5 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: rename.ml,v 1.6 2002-07-08 13:21:27 filliatr Exp $ i*)
 
 open Ident
 open Misc
+open Report
+open Error
 
 (* Variables names management *)
 
@@ -106,7 +108,7 @@ let var_at_date r d id =
   try
     find (until d r) id
   with Not_found ->
-    Error.no_variable_at_date id d
+    raise_unlocated (NoVariableAtDate (id, d))
 
 let vars_at_date r d ids =
   let r' = until d r in List.map (fun id -> id,find r' id) ids

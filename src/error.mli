@@ -1,15 +1,12 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.14 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.15 2002-07-08 13:21:27 filliatr Exp $ i*)
 
 (*s Errors. *)
 
-open Ident
-open Types
-open Ast
 open Format
 
-type error = 
+type t = 
   | UnboundVariable of Ident.t
   | UnboundReference of Ident.t
   | UnboundArray of Ident.t
@@ -47,58 +44,3 @@ type error =
   | MutableExternal
   | AnyMessage of string
   | ExceptionArgument of Ident.t * bool
-
-exception Error of (Loc.t option) * error
-
-val raise_with_loc : Loc.t option -> error -> 'a
-
-val report : formatter -> error -> unit
-
-val unbound_variable : Ident.t -> Loc.t option -> 'a
-val unbound_reference : Ident.t -> Loc.t option -> 'a
-val unbound_array : Ident.t -> Loc.t option -> 'a
-val unbound_label : string -> Loc.t option -> 'a
-val unbound_exception : Ident.t -> Loc.t option -> 'a
-
-val clash : Ident.t -> Loc.t option -> 'a
-val not_defined : Ident.t -> 'a
-val clash_exn : Ident.t -> Loc.t option -> 'a
-
-val not_a_reference : Loc.t -> Ident.t -> 'a
-val not_an_array : Loc.t -> Ident.t -> 'a
-
-val check_for_index_type : Loc.t -> type_v -> unit
-val check_no_effect : Loc.t -> Effect.t -> unit
-val should_be_boolean : Loc.t -> 'a
-val test_should_be_annotated : Loc.t -> 'a
-val if_branches : Loc.t -> 'a
-
-val must_be_pure : Loc.t -> 'a
-
-val check_for_not_mutable : Loc.t -> type_v -> unit
-val check_for_pure_type : Loc.t -> type_v -> unit
-val check_for_let_ref : Loc.t -> type_v -> unit
-
-val variant_informative : Loc.t -> 'a
-val should_be_informative : Loc.t -> 'a
-
-val app_of_non_function : Loc.t -> 'a
-val too_many_arguments : Loc.t -> 'a
-val too_complex_argument : Loc.t -> 'a
-val partial_app : Loc.t -> 'a
-val term_expected_type : 
-  Loc.t -> (formatter -> unit) -> (formatter -> unit) -> 'a
-val expected_type : Loc.t -> (formatter -> unit) -> 'a
-val expects_a_type : Ident.t -> Loc.t -> 'a
-val expects_a_term : Ident.t -> 'a
-val should_be_a_variable : Loc.t -> 'a
-val should_be_a_reference : Loc.t -> Ident.t -> 'a
-val should_not_be_a_reference : Loc.t -> 'a
-val ill_typed_argument : Loc.t -> (formatter -> unit) -> 'a
-
-val no_variable_at_date : Ident.t -> string -> 'a
-
-val check_for_non_constant : Loc.t -> Logic.term -> unit
-
-val exception_argument : Loc.t -> Ident.t -> bool -> 'a
-

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.3 2002-07-08 11:02:32 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.4 2002-07-08 13:21:27 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -12,9 +12,11 @@ open Ptree
 open Misc
 open Util
 open Env
+open Error
+open Report
 
 let expected_num loc =
-  Error.expected_type loc (fun fmt -> fprintf fmt "int or float")
+  raise_located loc (ExpectedType (fun fmt -> fprintf fmt "int or float"))
 
 (*s Typing predicates *)
 
@@ -53,7 +55,7 @@ let make_comparison loc = function
   | (a,ta), (PPeq | PPneq as r), (b,tb) when ta = tb ->
       Papp (other_cmp (ta,r), [a; b])
   | _, _, (_,tb) ->
-      Error.expected_type loc (fun f -> Util.print_pure_type f tb)
+      raise_located loc (ExpectedType (fun f -> Util.print_pure_type f tb))
 
 let int_arith = function
   | PPadd -> t_add_int
@@ -81,7 +83,7 @@ let make_arith loc = function
 let check_label loc lab =
   if_labelled 
     (fun (_,l) -> 
-       if not (LabelSet.mem l lab) then Error.unbound_label l (Some loc))
+       if not (LabelSet.mem l lab) then raise_located loc (UnboundLabel l))
 
 let predicate_expected loc =
   raise (Stdpp.Exc_located (loc, Stream.Error "predicate expected"))
@@ -120,20 +122,20 @@ and desc_predicate loc lab lenv = function
   | PPif (a, b, c) ->
       (match term lab lenv a with
 	 | ta, PTbool -> Pif (ta, predicate lab lenv b, predicate lab lenv c)
-	 | _ -> Error.should_be_boolean a.pp_loc)
+	 | _ -> raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, a) ->
       let v = PureType pt in
       forall id v (predicate lab (Env.add_logic id v lenv) a)
 
 and type_pvar loc lenv x =
-  if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
     | Predicate [] -> Pvar x
     | Function _ -> predicate_expected loc
-    | _ -> Error.partial_app loc
+    | _ -> raise_located loc PartialApp
 
 and type_papp loc lenv x tl =
-  if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
     | Predicate at -> check_type_args loc at tl; Papp (x, List.map fst tl)
     | _ -> predicate_expected loc
@@ -150,7 +152,7 @@ and desc_term loc lab lenv = function
 	 | (a, PTarray (_,v)), (b, PTint) ->
 	     Tapp (x, [a;b]), v
 	 | (Tvar t,_), _ ->
-	     Error.unbound_array t (Some a.pp_loc)
+	     raise_located a.pp_loc (UnboundArray t)
 	 | _ ->
 	     assert false)
   | PPapp (x, tl) ->
@@ -176,16 +178,16 @@ and desc_term loc lab lenv = function
 
 and type_tvar loc lenv x = 
   let x = if is_at x then fst (un_at x) else x in
-  if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
     | Function ([], t) -> t
-    | _ -> Error.must_be_pure loc
+    | _ -> raise_located loc (MustBePure)
 
 and type_tapp loc lenv x tl =
-  if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
     | Function (at, t) -> check_type_args loc at tl; t
-    | _ -> Error.app_of_non_function loc
+    | _ -> raise_located loc (AppNonFunction)
 
 and check_type_args loc at tl =
   let illtyped a b = match a, b with
@@ -197,13 +199,13 @@ and check_type_args loc at tl =
 	()
     | a :: al, (tb,b) :: bl ->
 	if illtyped a b then
-	  Error.term_expected_type loc 
-	    (fun f -> print_term f tb) (fun f -> print_pure_type f a); 
+	  raise_located loc (TermExpectedType ((fun f -> print_term f tb),
+					       fun f -> print_pure_type f a)); 
 	check_arg (al, bl)
     | [], _ ->
-	Error.too_many_arguments loc
+	raise_located loc TooManyArguments
     | _, [] ->
-	Error.partial_app loc
+	raise_located loc PartialApp
   in
   check_arg (at, tl)
 
@@ -224,10 +226,10 @@ let type_post lab lenv a =
 
 let check_effect loc env e =
   let check_ref id =
-    if not (Env.is_ref env id) then Error.unbound_reference id loc
+    if not (Env.is_ref env id) then raise_located loc (UnboundReference id)
   in
   let check_exn id =
-    if not (Env.is_exception id) then Error.unbound_exception id loc
+    if not (Env.is_exception id) then raise_located loc (UnboundException id)
   in
   let r,w,x = Effect.get_repr e in
   List.iter check_ref r;

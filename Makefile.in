@@ -36,7 +36,7 @@ BFLAGS   = -g $(INCLUDES) -I @CAMLP4LIB@
 OFLAGS   = $(INCLUDES) -I @CAMLP4LIB@
 
 CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
-	   src/effect.cmo src/misc.cmo src/error.cmo		\
+	   src/effect.cmo src/misc.cmo src/report.cmo		\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
            src/ltyping.cmo src/typing.cmo src/wp.cmo src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo            \

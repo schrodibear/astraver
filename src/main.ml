@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.32 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.33 2002-07-08 13:21:27 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -9,6 +9,7 @@ open Types
 open Env
 open Format
 open Error
+open Report
 open Misc
 open Util
 
@@ -51,7 +52,7 @@ let interp_program id p =
   let p = Typing.typef Env.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
-  Error.check_for_not_mutable ploc v;
+  Typing.check_for_not_mutable ploc v;
   Env.add_global id v None;
   print_if_debug print_type_c c;
   if type_only then raise Exit;
@@ -80,7 +81,7 @@ let interp_program id p =
 (*s Processing of a program. *)
 
 let add_external loc v id =
-  if Env.is_global id then Error.clash id (Some loc);
+  if Env.is_global id then raise_located loc (Clash id);
   Env.add_global id v None
 
 let add_parameter tv id =
@@ -92,24 +93,24 @@ let interp_decl d =
   let lenv = Env.logical_env env in
   match d with 
   | Program (id, p) ->
-      if Env.is_global id then Error.clash id (Some p.loc);
+      if Env.is_global id then raise_located p.loc (Clash id);
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ids, v) ->
-      let v = Ltyping.type_v (Some loc) lab env lenv v in
+      let v = Ltyping.type_v loc lab env lenv v in
       List.iter (add_external loc v) ids;
       if not (is_mutable v) then
 	let tv = Monad.trad_type_v (initial_renaming env) env v in
 	List.iter (add_parameter tv) ids
   | External (loc, ids, v) -> 
-      let v = Ltyping.type_v (Some loc) lab env lenv v in
-      if is_mutable v then raise_with_loc (Some loc) MutableExternal;
+      let v = Ltyping.type_v loc lab env lenv v in
+      if is_mutable v then raise_located loc MutableExternal;
       List.iter (add_external loc v) ids
   | Exception (loc, id, v) ->
-      if is_exception id then Error.clash_exn id (Some loc);
+      if is_exception id then raise_located loc (ClashExn id);
       add_exception id v;
       push_exception (Ident.string id) (option_app (fun x -> TTpure x) v)
   | Logic (loc, id, t) ->
-      if is_logic id lenv then Error.clash id (Some loc);
+      if is_logic id lenv then raise_located loc (Clash id);
       add_global_logic id t
   | QPvs s ->
       Pvs.push_verbatim s

@@ -1,53 +1,15 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.17 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: report.ml,v 1.1 2002-07-08 13:21:27 filliatr Exp $ i*)
 
 open Ident
 open Logic
 open Types
 open Ast
 open Format
+open Error
 
-type error = 
-  | UnboundVariable of Ident.t
-  | UnboundReference of Ident.t
-  | UnboundArray of Ident.t
-  | UnboundLabel of string
-  | UnboundException of Ident.t
-  | Clash of Ident.t
-  | ClashExn of Ident.t
-  | Undefined of Ident.t
-  | NotAReference of Ident.t
-  | NotAnArray of Ident.t
-  | NotAnIndex
-  | HasSideEffects
-  | ShouldBeBoolean
-  | ShouldBeAnnotated
-  | CannotBeMutable
-  | MustBePure
-  | BranchesSameType
-  | LetRef
-  | VariantInformative
-  | ShouldBeInformative
-  | AppNonFunction
-  | TooManyArguments
-  | TooComplexArgument
-  | Alias of Ident.t
-  | PartialApp
-  | TermExpectedType of (formatter -> unit) * (formatter -> unit)
-  | ExpectedType of (formatter -> unit)
-  | ExpectsAType of Ident.t
-  | ExpectsATerm of Ident.t
-  | ShouldBeVariable
-  | ShouldBeReference of Ident.t
-  | ShouldNotBeReference
-  | IllTypedArgument of (formatter -> unit)
-  | NoVariableAtDate of Ident.t * string
-  | MutableExternal
-  | AnyMessage of string
-  | ExceptionArgument of Ident.t * bool
-
-exception Error of (Loc.t option) * error
+exception Error of (Loc.t option) * Error.t
 
 let report fmt = function
   | AnyMessage s ->
@@ -142,91 +104,6 @@ let report fmt = function
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
 
-let raise_with_loc loc e = raise (Error (loc, e))
-
-let unbound_variable id loc = raise_with_loc loc (UnboundVariable id)
-
-let unbound_reference id loc = raise_with_loc loc (UnboundReference id)
-
-let unbound_array id loc = raise_with_loc loc (UnboundArray id)
-
-let unbound_label id loc = raise_with_loc loc (UnboundLabel id)
-
-let unbound_exception id loc = raise_with_loc loc (UnboundException id)
-
-let clash id loc = raise_with_loc loc (Clash id)
-
-let clash_exn id loc = raise_with_loc loc (ClashExn id)
-
-let not_defined id = raise_with_loc None (Undefined id)
-
-let not_a_reference loc id = raise_with_loc (Some loc) (NotAReference id)
-
-let not_an_array loc id = raise_with_loc (Some loc) (NotAnArray id)
-
-let is_int_type = function
-  | PureType PTint -> true
-  | _ -> false 
-
-let check_for_index_type loc v =
-  let is_index = is_int_type v in
-  if not is_index then raise_with_loc (Some loc) NotAnIndex
-
-let check_no_effect loc ef =
-  if not (Effect.get_writes ef = []) then 
-    raise_with_loc (Some loc) HasSideEffects
-
-let should_be_boolean loc = raise_with_loc (Some loc) ShouldBeBoolean
-
-let test_should_be_annotated loc = raise_with_loc (Some loc) ShouldBeAnnotated
-
-let if_branches loc = raise_with_loc (Some loc) BranchesSameType
-
-let check_for_not_mutable loc v = 
-  if is_mutable v then raise_with_loc (Some loc) CannotBeMutable
-
-let must_be_pure loc = raise_with_loc (Some loc) MustBePure
-
-let check_for_pure_type loc v =
-  if not (is_pure v) then must_be_pure loc
-
-let check_for_let_ref loc v =
-  if not (is_pure v) then raise_with_loc (Some loc) LetRef
-
-let variant_informative loc = raise_with_loc (Some loc) VariantInformative
-let should_be_informative loc = raise_with_loc (Some loc) ShouldBeInformative
-
-let app_of_non_function loc = raise_with_loc (Some loc) AppNonFunction
-let too_many_arguments loc = raise_with_loc (Some loc) TooManyArguments
-let too_complex_argument loc = raise_with_loc (Some loc) TooComplexArgument
-  
-let partial_app loc = raise_with_loc (Some loc) PartialApp
-  
-let term_expected_type loc t v = 
-  raise_with_loc (Some loc) (TermExpectedType (t,v))
-
-let expected_type loc v = raise_with_loc (Some loc) (ExpectedType v)
-
-let expects_a_type id loc = raise_with_loc (Some loc) (ExpectsAType id)
-
-let expects_a_term id = raise_with_loc None (ExpectsATerm id)
-
-let should_be_a_variable loc = 
-  raise_with_loc (Some loc) ShouldBeVariable
-   
-let should_be_a_reference loc id = 
-  raise_with_loc (Some loc) (ShouldBeReference id)
-
-let should_not_be_a_reference loc = 
-  raise_with_loc (Some loc) ShouldNotBeReference
-
-let ill_typed_argument loc t = raise_with_loc (Some loc) (IllTypedArgument t)
-
-let no_variable_at_date id d = raise_with_loc None (NoVariableAtDate (id,d))
-
-let check_for_non_constant loc = function
-  | Tconst _ -> raise_with_loc (Some loc) AppNonFunction
-  | _ -> ()
-
-let exception_argument loc id b = 
-  raise_with_loc (Some loc) (ExceptionArgument (id, b))
+let raise_located loc e = raise (Error (Some loc, e))
+let raise_unlocated e = raise (Error (None, e))
+let raise_locop locop e = raise (Error (locop, e))
