@@ -16,7 +16,7 @@ list rev(list p0) {
           llist(p, lp) && llist(r, lr) && disjoint(lp, lr) &&
           \forall plist l; 
             \old(llist(p0, l)) => eq_list(app(rev(lr), lp), rev(l))
-    @ variant store_pointer_pair(r) for ll_order (* ??? *) */
+    @ variant store_pointer_pair(r) for ll_order */
   while (r != nil) {
     list q = r;
     r = r->tl;
