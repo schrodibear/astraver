@@ -24,7 +24,7 @@ simple_destruct p; auto with zarith.
 simpl.
  omega.
 intros.
- absurd (NEG p >= 0)%Z; red; auto with zarith.
+ absurd (Zneg p >= 0)%Z; red; auto with zarith.
 Qed.
 
 Lemma Zdiv2_lt : forall x:Z, (x > 0)%Z -> (Zdiv2 x < x)%Z.
@@ -36,14 +36,14 @@ simple_destruct p; auto with zarith.
 
 simpl.
 intro p0.
-replace (POS (xI p0)) with (2 * POS p0 + 1)%Z.
+replace (Zpos (xI p0)) with (2 * Zpos p0 + 1)%Z.
 omega.
 simpl.
  auto with zarith.
 
 intro p0.
 simpl.
-replace (POS (xO p0)) with (2 * POS p0)%Z.
+replace (Zpos (xO p0)) with (2 * Zpos p0)%Z.
 omega.
 simpl.
  auto with zarith.
@@ -52,7 +52,7 @@ simpl.
  omega.
 
 intros.
- absurd (NEG p > 0)%Z; red; auto with zarith.
+ absurd (Zneg p > 0)%Z; red; auto with zarith.
 elim p; auto with zarith.
 Qed.
 

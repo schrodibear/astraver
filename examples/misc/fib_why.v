@@ -7,7 +7,7 @@ Parameter F : Z -> Z.
 Axiom F_0 : F 0 = 1%Z.
 Axiom F_1 : F 1 = 1%Z.
 Axiom F_n : forall n:Z, (n >= 2)%Z -> F n = (F (n - 1) + F (n - 2))%Z.
-Hints Resolve F_0 F_1 F_n .
+Hint Resolve F_0 F_1 F_n .
 
 (* Why obligation from file "fib.mlw", characters 429-430 *)
 Lemma fib1_po_1 : 

@@ -25,7 +25,7 @@ auto with *.
 omega.
 Qed.
 
-Hints Resolve mean1 mean2 .
+Hint Resolve mean1 mean2 .
 
 (* Why obligation from file "sqrt_dicho.mlw", characters 326-346 *)
 Lemma sqrt_po_1 : 

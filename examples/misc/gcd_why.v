@@ -11,7 +11,7 @@ Axiom gcd_a_a : forall a:Z, gcd a a = a.
 Axiom gcd_a_0 : forall a:Z, gcd a 0 = a.
 Axiom gcd_a_amodb : forall a b:Z, gcd a b = gcd b (a mod b).
 
-Hints Resolve gcd_asubb_b gcd_a_bsuba gcd_a_a gcd_a_0 gcd_a_amodb .
+Hint Resolve gcd_asubb_b gcd_a_bsuba gcd_a_a gcd_a_0 gcd_a_amodb .
 
 Definition max (x y:Z) : Z :=
   match Z_le_gt_dec x y with

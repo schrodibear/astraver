@@ -17,7 +17,7 @@ Proof.
 simple_destruct x; auto.
 intros.
 simpl in H.
-absurd (0 <= NEG p)%Z.
+absurd (0 <= Zneg p)%Z.
 simpl.
  compute.
  auto.
