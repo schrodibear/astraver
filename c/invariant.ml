@@ -136,7 +136,6 @@ let rec tab_struct loc mark v1 v2 s ty n n1 n2=
 	  let t = { nterm_node = t.nterm_node;
 		    nterm_loc = t.nterm_loc;
 		    nterm_type = ty;} in
-	  Format.eprintf "v2 = %a ty= %a @." nterm t ctype t.nterm_type; 
 	  local_separation loc mark n1 v1 (n2^"[i]") t(*indirection loc ty t*)))
       
 and local_separation loc mark n1 v1 n2 v2 =
