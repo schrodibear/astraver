@@ -71,7 +71,7 @@ let rec init_expr loc t lvalue initializers =
 	end
     | Tunion n ->
 	begin match tag_type_definition n with
-	  | TTStructUnion (Tstruct (_), f::_) ->
+	  | TTStructUnion (Tunion (_), f::_) ->
 	      let block, init' =
 		init_expr loc f.var_type 
 		  (noattr loc f.var_type (TEarrow(lvalue, f)))

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.137 2005-02-16 13:14:27 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.138 2005-02-18 14:38:59 hubert Exp $ i*)
 
 
 open Format
@@ -32,6 +32,7 @@ let rec global_var_for_type t =
     | Tfloat _ -> "realP"
     | Tarray (ty,_) | Tpointer ty -> global_var_for_type ty ^ "P"
     | Tstruct _ -> "pointer"
+    | Tunion _ -> unsupported Loc.dummy "union types"
     | _ -> assert false (* TODO *)
 
 let global_var_for_array_type t =

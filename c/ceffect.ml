@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.82 2005-02-17 16:09:31 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.83 2005-02-18 14:38:59 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -56,7 +56,7 @@ let rec pointer_heap_var ty =
 	(v ^ "P", "pointer")
     | Tstruct _ 
     | Tunion _ -> "pointer", "pointer" 
-    | Tfun _ -> assert false (* bad typing ! *)
+    | Tfun _ -> unsupported Loc.dummy "first-class functions"
 
 let memory_type t = ([t],"memory")
 
@@ -856,8 +856,8 @@ let decl d =
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
-	   begin
-	   match ty.Ctypes.ctype_node with
+	begin
+	  match ty.Ctypes.ctype_node with
 	   | Tstruct _ | Tarray (_,None) -> assert false
 	   | Tarray (typ, Some s) ->
 	       lprintf "adding implicit invariant for validity of %s@." 
@@ -872,7 +872,7 @@ let decl d =
 			     add_strong_invariant_2 x p [])
 		  (invariant_for_global d.loc v);
 	   | _ -> ()
-	   end;
+	end;
 	
 	let init = (match init with | None -> [] | Some l -> [l]) in
 	if has_constant_values ty then begin
