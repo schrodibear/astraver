@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.17 2004-01-14 16:33:28 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.18 2004-02-03 08:24:43 marche Exp $ i*)
 
 (*s C types *)
 
@@ -153,7 +153,7 @@ and texpr_node =
   | TEnop
   | TEconstant of string
   | TEstring_literal of string
-  | TEvar of string
+  | TEvar of Info.var_info
   | TEdot of lvalue * string
   | TEarrow of lvalue * string
   | TEarrget of lvalue * texpr
@@ -214,7 +214,7 @@ and tdecl =
   | Tlogic of string list * logic_type
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype
-  | Tdecl of texpr ctype * string * texpr c_initializer
+  | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
   | Tfundef of 
       texpr ctype * string * texpr parameter list * annotated_tblock * fun_info
 

@@ -3,9 +3,6 @@
 
 Require Import Why.
 
-Proof.
-intuition.
-subst; omega.
-Qed.
+
 
 

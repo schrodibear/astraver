@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.4 2004-02-02 16:54:10 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.5 2004-02-03 08:24:43 marche Exp $ i*)
 
 (*****
 
@@ -897,16 +897,18 @@ let interp l =
 open Cast
 open Format
 open Output
+open Info
 
 let interp_type ctype =
   match ctype.ctype_node with
   | CTvoid -> unit_type
   | CTint(sign,cint) -> int_type
   | CTfloat(cfloat) -> assert false (* TODO *)
+  | CTarray(t,None) -> base_type "pointer"      
+  | CTarray(t,Some e) ->     assert false (* TODO *)
   | _ -> assert false (* TODO *)
 (*
   | CTvar of string
-  | CTarray of 'expr ctype * 'expr option
   | CTpointer of 'expr ctype
   | CTstruct_named of string
   | CTstruct of string * 'expr field list
@@ -918,6 +920,7 @@ let interp_type ctype =
 *)
 
 let interp_param (t,id) =
+  (* TODO : tester si param is assigned *)
   (id,interp_type t)
 
 let interp_predicate pred =
@@ -938,26 +941,51 @@ let interp_bin_op op =
 let rec interp_expr e =
   match e.texpr_node with
     | TEconstant(c) -> Cte(Prim_int(int_of_string c))
-    | TEvar(id) -> Deref(id)
+    | TEvar(v) -> 
+	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
     | TEbinary(e1,op,e2) ->
 	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
+    | TEarrget(e1,e2) ->
+	let te1 = interp_expr e1
+	and te2 = interp_expr e2 
+	in
+	App(App(Var("acc"),Var("intA")),App(App(Var("shift"),te1),te2))
     | _ -> assert false (* TODO *)
+(*
+  | TEnop
+  | TEstring_literal of string
+  | TEdot of lvalue * string
+  | TEarrow of lvalue * string
+  | TEarrget of lvalue * texpr
+  | TEseq of texpr * texpr
+  | TEassign of lvalue * assign_operator * texpr
+  | TEunary of unary_operator * texpr
+  | TEcall of texpr * texpr list
+  | TEcond of texpr * texpr * texpr
+  | TEcast of texpr ctype * texpr
+  | TEsizeof_expr of texpr
+  | TEsizeof of texpr ctype
+*)
 
 let interp_decl d acc = 
   match d.node with 
-    | Tdecl(ctype,id,init) -> 
-	fprintf Coptions.log "translating local declaration of %s@." id;
-	begin
+    | Tdecl(ctype,v,init) -> 
+	fprintf Coptions.log 
+	  "translating local declaration of %s@." v.var_name;
+	let tinit =
 	  match init with 
 	    | Inothing ->
 (*
 		if ctype = c_int then TODO
 *)
-		  Let(id,App(Var("any_int"),Var("void")),acc)
-	    | Iexpr e -> 
-		  Let(id,interp_expr e,acc)		
+		  App(Var("any_int"),Var("void"))
+	    | Iexpr e -> interp_expr e		
 	    | Ilist _ -> assert false (* TODO *)
-	end
+	in
+	if v.var_is_assigned then
+	  Let_ref(v.var_name,tinit,acc)
+	else
+	  Let(v.var_name,tinit,acc)
     | _ -> assert false (* TODO *)
 
 let interp_statement_expr e accu =
@@ -965,19 +993,35 @@ let interp_statement_expr e accu =
     | TEassign(l,Aequal,e) ->
 	begin
 	  match l.texpr_node with
-	    | TEvar(id) ->
-		append (Assign(id,interp_expr e)) accu
+	    | TEvar(v) ->
+		append (Assign(v.var_name,interp_expr e)) accu
 	    | _ -> assert false (* TODO *)
 	end 
     | _ -> assert false (* TODO *)
 
-let interp_statement stat acc =
+let rec interp_statement stat acc =
   match stat.st_node with
     | TSexpr e ->
 	interp_statement_expr e acc
+    | TSreturn eopt ->
+	(* TODO: abrupt return *)
+	begin
+	  match eopt with
+	    | None -> Void
+	    | Some e -> interp_expr e
+	end
+    | TSfor(e1,e2,e3,body,info,annot) ->
+	let (inv,dec) =
+	  match annot with
+	    | None -> (LTrue,LConst (Prim_int 0))
+	    | Some(i,d) -> assert false (* TODO *)
+	in
+	append (interp_expr e1)
+	  (make_while (interp_expr e2) inv dec 
+	     (interp_statement body (interp_expr e3)))
     | _ -> assert false (* TODO *)
 
-let interp_block (decls,stats) =
+and interp_block (decls,stats) =
   let b = List.fold_right interp_statement stats Void in
   List.fold_right interp_decl decls b 
 
@@ -993,13 +1037,14 @@ let interp_located_tdecl why_decls decl =
   | Tlogic(idlist,ltype) -> assert false (* TODO *)
   | Ttypedef(ctype,id) -> assert false (* TODO *)
   | Ttypedecl(ctype) -> assert false (* TODO *)
-  | Tdecl(ctype,id,init) -> 
-      fprintf Coptions.log "translating global declaration of %s@." id;
+  | Tdecl(ctype,v,init) -> 
+      fprintf Coptions.log 
+        "translating global declaration of %s@." v.var_name;
       let t = interp_type ctype in
       begin
 	match init with 
 	  | Inothing ->
-	      (Param(id,Ref_type(t)))::why_decls
+	      (Param(v.var_name,Ref_type(t)))::why_decls
 	  | _ -> assert false (* TODO *)
       end
   | Tfundef(ctype,id,params,block,info) ->      

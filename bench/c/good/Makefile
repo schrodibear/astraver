@@ -12,5 +12,5 @@ WHY=../../../bin/why.opt
 %_valid.vo: %_why.vo
 
 %.vo: %.v
-	coqc -R ../../lib/coq Coq.why $<
+	coqc -R ../../../lib/coq Coq.why $<
 

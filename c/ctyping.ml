@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.15 2004-01-14 16:33:28 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.16 2004-02-03 08:24:43 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -22,6 +22,7 @@ open Cast
 open Cerror
 open Creport
 open Cltyping
+open Info
 
 (* Typing C programs *)
 
@@ -200,7 +201,7 @@ let warn_for_read_only loc e =
   | TEdot (e1, x) when e1.texpr_type.ctype_const ->
       warning loc ("assigment of read-only member `" ^ x ^ "'")
   | TEvar x when e.texpr_type.ctype_const ->
-      warning loc ("assigment of read-only variable `" ^ x ^ "'")
+      warning loc ("assigment of read-only variable `" ^ x.var_name ^ "'")
   | _ when e.texpr_type.ctype_const ->
       warning loc "assigment of read-only location"
   | _ -> 
@@ -259,7 +260,7 @@ let add_typedef l x ty =
     Hashtbl.add typedef_t x ty
 
 (* variables and functions *)
-let (sym_t : (string, texpr ctype) Hashtbl.t) = Hashtbl.create 97
+let (sym_t : (string, (texpr ctype * var_info)) Hashtbl.t) = Hashtbl.create 97
 
 let is_sym = Hashtbl.mem sym_t
 
@@ -267,11 +268,13 @@ let find_sym = Hashtbl.find sym_t
 
 let add_sym l x ty = 
   if is_sym x then begin
-    if not (eq_type (find_sym x) ty) then 
-      (* TODO accepter fonctions avec arguments si aucun la première fois *)
+    let (t,i) = find_sym x in
+    if not (eq_type t ty) then 
+      (* TODO accepter fonctions avec arguments si aucun la première fois 
+	 Question de Claude: accepter aussi un raffinement des specs ? *)
       error l ("conflicting types for " ^ x)
   end else
-    Hashtbl.add sym_t x ty
+    Hashtbl.add sym_t x (ty,default_var_info x)
 
 (*s Environments for local variables and local structs/unions/enums *)
 
@@ -279,11 +282,12 @@ module Env = struct
 
   module M = Map.Make(String)
 
-  type t = { vars : texpr ctype M.t; tags : texpr ctype M.t }
+  type t = { vars : (texpr ctype * var_info) M.t; tags : texpr ctype M.t }
 
   let empty = { vars = M.empty; tags = M.empty }
 
-  let add x t env = { env with vars = M.add x t env.vars }
+  let add x t info env = 
+    { env with vars = M.add x (t,info) env.vars }
 
   let find x env = M.find x env.vars
 
@@ -357,9 +361,12 @@ and type_expr_node loc env = function
   | CEstring_literal s ->
       TEstring_literal s, c_string
   | CEvar x ->
-      TEvar x,
-      (try Env.find x env with Not_found -> 
-       try find_sym x with Not_found -> error loc (x ^ " undeclared"))
+      let (t,var_info) =
+	try Env.find x env with Not_found -> 
+	  try find_sym x with Not_found -> 
+	    error loc (x ^ " undeclared")
+      in
+      (TEvar var_info),t
   | CEdot (e, x) ->
       let te = type_lvalue env e in
       begin match te.texpr_type.ctype_node with
@@ -589,7 +596,8 @@ and type_lvalue env e =
   let loc = e.loc in
   let e = type_expr env e in
   match e.texpr_node with
-    | TEvar _ | TEunary (Ustar, _) -> e
+    | TEvar v -> v.var_is_assigned <- true; e 
+    | TEunary (Ustar, _) -> e
     | _ -> error loc "invalid lvalue"
 
 and type_expr_option env eo = option_app (type_expr env) eo
@@ -733,9 +741,10 @@ and type_block env et (dl,sl) =
 	(* TODO: ty = void interdit *)
 	let ty',env' = declare_local_type d.loc ty env in
 	let i = type_initializer env ty' i in
-	let env' = Env.add x ty' env' in
+	let info = default_var_info x in
+	let env' = Env.add x ty' info env' in
 	let dl',env'' = type_decls env' dl in
-	{ d with node = Tdecl (ty', x, i) } :: dl', env''
+	{ d with node = Tdecl (ty', info, i) } :: dl', env''
     | { node = Ctypedecl ty } as d :: dl ->
 	let ty',env' = declare_local_type d.loc ty env in
 	let dl',env'' = type_decls env' dl in
@@ -774,7 +783,8 @@ and type_annotated_block env et (p,bl,q) =
 let type_parameters loc env pl =
   List.fold_right
     (fun (ty,x) (pl,env) ->
-       let ty = type_type loc env ty in (ty,x) :: pl, Env.add x ty env)
+       let info = default_var_info x in
+       let ty = type_type loc env ty in (ty,x) :: pl, Env.add x ty info env)
     pl 
     ([], env)
   
@@ -797,7 +807,8 @@ let type_decl d = match d.node with
   | Cdecl (ty, x, i) -> 
       let ty = declare_type d.loc ty in
       add_sym d.loc x ty;
-      Tdecl (ty, x, type_initializer Env.empty ty i)
+      let info = default_var_info x in
+      Tdecl (ty, info, type_initializer Env.empty ty i)
   | Cfundef (ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
       let et = if ty = c_void then None else Some ty in
