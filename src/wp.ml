@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.35 2002-03-25 13:05:14 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.36 2002-03-28 16:12:43 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -182,9 +182,6 @@ and normalize_boolean env b =
     | None -> begin
 	match b.desc with
 	  | Expression c ->
-	      (* expression E -> if result then E=true else E=false 
-	      let c = Pif (Tvar Ident.result, 
-			   equality c ttrue, equality c tfalse) in *)
 	      (* expression E -> result=E *)
 	      let c = equality (Tvar Ident.result) c in
 	      give_post b (create_post c)

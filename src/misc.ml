@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.28 2002-03-28 14:50:28 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.29 2002-03-28 16:12:43 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -249,6 +249,14 @@ let por a b =
 
 let pnot a =
   if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a
+
+(*s [simplify] only performs simplications which are Coq reductions.
+     Currently: only [if true] and [if false] *)
+
+let rec simplify = function
+  | Pif (Tconst (ConstBool true), a, _) -> simplify a
+  | Pif (Tconst (ConstBool false), _, b) -> simplify b
+  | p -> map_predicate simplify p
 
 (*s functions over CC terms *)
 

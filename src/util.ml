@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.26 2002-03-21 15:47:06 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.27 2002-03-28 16:12:43 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -266,7 +266,7 @@ let decomp_boolean = function
       (* q -> if result then q(true) else q(false) *)
       let ctrue = tsubst_in_predicate [Ident.result,ttrue] c in
       let cfalse = tsubst_in_predicate [Ident.result,tfalse] c in
-      ctrue, cfalse
+      simplify ctrue, simplify cfalse
   | None -> 
       equality (Tvar Ident.result) ttrue,
       equality (Tvar Ident.result) tfalse

@@ -148,7 +148,7 @@ Any annotation may refer to the value of a variable.  For a mutable
 variable \texttt{x} (i.e. a reference or an array), \texttt{x} always 
 denotes the \emph{current} value of \texttt{x}.
 
-\subsection{Pre/postconditions}\index{Pre/postcondition}
+\subsection{Pre/postconditions}\index{Precondition}\index{Postcondition}
 Pre- and postconditions are written using the traditional Hoare logic
 syntax 
 \begin{center}
@@ -336,7 +336,7 @@ there are some---more or less significant---differences:
 \begin{verbatim}
      (if b then x else y) := 1
 \end{verbatim}
-as in ML, but must write instead
+as in ML, but one must write instead
 \begin{verbatim}
      if b then x := 1 else y := 1
 \end{verbatim}
@@ -400,13 +400,21 @@ TODO
 
 TODO
 
+\section{Quicksort}
+\label{quicksort}\index{Quicksort}
+
+\exsummary{quicksort}{Quicksort (the famous divide-and-conquer sorting
+  algorithm}
+
+TODO
+
 
 \chapter{Reference manual}
 \label{refman}
 
 
 \section{Command line options}
-\label{usage}\index{Option (of the command line)}
+\label{usage}\index{Option, of the command line}
 
 \why\ is invoked as a batch compiler, given a list of input files:
 \begin{center}

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.9 2002-03-20 15:01:56 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.10 2002-03-28 16:12:43 filliatr Exp $ i*)
 
 open Ast
 open Misc
@@ -54,7 +54,9 @@ and cc_type_subst subst = function
       TTarrow (cc_subst_binder subst b, 
 	       cc_type_subst (cc_cross_binders subst [b]) tt)
   | TTtuple (ttl, p) -> 
-      let subst' = List.fold_right List.remove_assoc (List.map fst ttl) subst in
+      let subst' =
+	List.fold_right List.remove_assoc (List.map fst ttl) subst 
+      in
       TTtuple (List.map (fun (id,t) -> (id, cc_type_subst subst t)) ttl,
 	       option_app (tsubst_in_predicate subst') p)
   | TTpure _ as t -> 

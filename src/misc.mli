@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.24 2002-03-21 15:47:06 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.25 2002-03-28 16:12:43 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -103,6 +103,8 @@ val pif : term -> predicate -> predicate -> predicate
 val pand : predicate -> predicate -> predicate
 val por : predicate -> predicate -> predicate
 val pnot : predicate -> predicate
+
+val simplify : predicate -> predicate
 
 (*s functions over CC terms *)
 

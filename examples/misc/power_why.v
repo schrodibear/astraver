@@ -114,9 +114,9 @@ Lemma power1_po_2 :
   (m1: Z)
   (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Pre4: Variant1 = n0)
-  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Test4: `n0 > 0`)
   (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Test3: (if true then (Zodd n0) else (Zeven n0)))
+  (Test3: (Zodd n0))
   (y2: Z)
   (Post3: y2 = `y1 * m1`)
   ((m:Z) (m = `m1 * m1` ->
@@ -160,9 +160,9 @@ Lemma power1_po_3 :
   (m1: Z)
   (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Pre4: Variant1 = n0)
-  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Test4: `n0 > 0`)
   (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Test2: (if false then (Zodd n0) else (Zeven n0)))
+  (Test2: (Zeven n0))
   ((m:Z) (m = `m1 * m1` ->
           ((n1:Z) (n1 = (div2 n0) -> (Zpower x n) = `y1 * (Zpower m n1)` /\
                    `n1 >= 0` /\ (Zwf `0` n1 n0))))).
@@ -198,7 +198,7 @@ Lemma power1_po_4 :
   (m1: Z)
   (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Pre4: Variant1 = n0)
-  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Test4: `n0 > 0`)
   (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (y2: Z)
   (Post12: ((m:Z) (m = `m1 * m1` ->
@@ -227,7 +227,7 @@ Lemma power1_po_5 :
   (m1: Z)
   (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Pre4: Variant1 = n0)
-  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Test4: `n0 > 0`)
   (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (m2: Z)
   (n1: Z)
@@ -252,7 +252,7 @@ Lemma power1_po_6 :
   (m1: Z)
   (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Pre4: Variant1 = n0)
-  (Test4: (if true then `n0 > 0` else `n0 <= 0`))
+  (Test4: `n0 > 0`)
   (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (m2: Z)
   (n1: Z)
@@ -277,7 +277,7 @@ Lemma power1_po_7 :
   (m1: Z)
   (Pre5: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Pre4: Variant1 = n0)
-  (Test1: (if false then `n0 > 0` else `n0 <= 0`))
+  (Test1: `n0 <= 0`)
   (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\
   ((if false then `n0 > 0` else `n0 <= 0`)).
