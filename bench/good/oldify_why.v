@@ -1,4 +1,4 @@
-(* Load Programs. *)
+
 Require Import Why.
 
 Parameter q : array Z -> array Z -> Z -> Prop.

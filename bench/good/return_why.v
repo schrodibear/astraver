@@ -1,4 +1,4 @@
-(* Load Programs. *)
+
 Require Import Why.
 
 (*Why*) Parameter N : Z.
