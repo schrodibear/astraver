@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.106 2004-04-30 14:47:57 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.107 2004-04-30 14:50:16 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -703,7 +703,7 @@ and typef_desc lab env loc = function
 
   | Sabsurd ct -> 	    
       let v = match ct with 
-	| None -> type_v_unit 
+	| None -> PureType (PTvar (new_type_var ()))
 	| Some v -> type_v loc lab env (logical_env env) v
       in
       Absurd, (v, Effect.bottom), [anonymous loc Pfalse]

@@ -1,4 +1,7 @@
 
+  o type `float' is renamed into `real'
+  o absurd and raise now polymorphic
+
 version 1.51, April 6th, 2004
 =============================
   o Simplify typing constraints only with --simplify-typing option
