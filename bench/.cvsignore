@@ -16,3 +16,4 @@ ctest.c
 *.rv
 *.wol
 test_why.ml
+test_valid.v

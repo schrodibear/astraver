@@ -165,15 +165,14 @@ let rec unif_pred u = function
    and we return [forall vi. q(a1...ak)] (together with a proof of it)
    where the [vi]s not in the [aj]s. *)
 
-let lookup_instance id bvars p q ctx =
+let first_hyp f = 
+  list_first (function Svar _ -> raise Exit | Spred (h, p) -> f h p)
+
+let lookup_instance id bvars p q hpx p' =
   let u0 = 
     List.fold_right (fun (_,n,_) -> Idmap.add n None) bvars Idmap.empty 
   in
-  let rec lookup = function
-    | Svar _ -> raise Exit
-    | Spred (id, p') -> id, unif_pred u0 (p, p')
-  in
-  let hpx, u = list_first lookup ctx in
+  let u = unif_pred u0 (p, p') in
   let bvars',vars,s =
     List.fold_right 
       (fun ((x,n,_) as b) (bv,vl,s) -> match Idmap.find n u with
@@ -200,7 +199,8 @@ let unify bvars p c =
        | Some x -> x) bvars
 
 (* alpha-equivalence over predicates *)
-let alpha = unif_pred Idmap.empty
+let alpha a b = 
+  try let _ = unif_pred Idmap.empty (a, b) in true with Exit -> false
 
 let lookup_boolean_instance a b =
   let rec lookup = function
@@ -315,13 +315,42 @@ let linear ctx concl =
 	    ProofTerm (cc_applist (CC_var id) (List.map cc_var vars))
 	  with Exit -> match p with
 	    | Pimplies (p, q) ->
-  	    (* 2. *)
-		let qx,pr_qx = lookup_instance id bvars p q ctx in
-		let h1 = fresh_hyp () in
-		let ctx' = Spred (h1, qx) :: ctx in
+  	    (* 2. we have [p => q]: try to unify [p] and an hypothesis *)
+		first_hyp 
+		  (fun h ph ->
+		     let qx,pr_qx = lookup_instance id bvars p q h ph in
+		     let h1 = fresh_hyp () in
+		     let ctx' = Spred (h1, qx) :: ctx in
+		     ProofTerm 
+		       (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
+				  CC_hole (search ctx'))))
+		  ctx
+	    | Pand (p1, p2) ->
+            (* 3. we have [a and b]: split under the quantifiers *)
+                let h1 = fresh_hyp () in
+		let h2 = fresh_hyp () in
+		let qpi pi =
+		  List.fold_right
+		    (fun (x, n, ty) p -> Forall (x, n, ty, p)) bvars pi
+		in
+		let qp1 = qpi p1 in
+		let qp2 = qpi p2 in
+		let ctx' = Spred (h1, qp1) :: Spred (h2, qp2) :: ctx in
+		let pr = search ctx' in
+		let pr_qpi hi = 
+		  cc_lam 
+		    (List.map (fun (x,_,ty) -> x, CC_var_binder (TTpure ty)) 
+		       bvars)
+		    (CC_letin (false, [h1, CC_pred_binder p1;
+				       h2, CC_pred_binder p2], 
+			       cc_applist (CC_var id) 
+				 (List.map (fun (_,x,_) -> CC_var x) bvars),
+			       CC_var hi))
+		in
 		ProofTerm 
-		  (CC_letin (false, [h1, CC_pred_binder qx], pr_qx,
-			     CC_hole (search ctx')))
+		  (CC_letin (false, [h1, CC_pred_binder qp1], pr_qpi h1,
+   	           CC_letin (false, [h2, CC_pred_binder qp2], pr_qpi h2,
+			     CC_hole pr)))
 	    | _ ->
 		raise Exit
 	end
@@ -341,7 +370,7 @@ let linear ctx concl =
     | _ :: ctx ->
 	search ctx
   in
-  (* we cut the context at the last WP *)
+  (* we cut the context at the last WP (and reverse it) *)
   let rec cut_context acc = function
     | [] -> acc
     | Spred (id, _) as h :: _ when is_wp id -> h :: acc

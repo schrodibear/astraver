@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.7 2003-02-27 16:55:34 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.8 2003-02-28 16:37:22 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -52,3 +52,11 @@ Destruct b; Assumption.
 Save.
 Implicits why_boolean_wp [1 2].
 
+Lemma why_boolean_if_1 :
+  (q1t,q1f,q3t,q3f:Prop)(q2:bool->Prop)
+  q1t->(b:bool)(q2b:(q2 b))
+  (if b then (q1t /\ (q2 true))  \/ (q1f /\ q3t)
+        else (q1t /\ (q2 false)) \/ (q1f /\ q3f)).
+Proof.
+Destruct b; Auto.
+Save.

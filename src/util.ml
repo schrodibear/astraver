@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.72 2003-01-24 13:53:48 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.73 2003-02-28 16:37:22 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -429,10 +429,10 @@ and print_desc fmt = function
   | App (p, a, k) -> 
       fprintf fmt "(@[%a %a ::@ %a@])" print_prog p print_arg a print_type_c k
   | LetRef (id, p1, p2) ->
-      fprintf fmt "let %a = ref %a in@ %a" 
+      fprintf fmt "@[<hv>@[<hv 2>let %a =@ ref %a@ in@]@ %a@]" 
 	Ident.print id print_prog p1 print_prog p2
   | LetIn (id, p1, p2) ->
-      fprintf fmt "let %a = %a in@ %a" 
+      fprintf fmt "@[<hv>@[<hv 2>let %a =@ %a in@]@ %a@]" 
 	Ident.print id print_prog p1 print_prog p2
   | Rec (id, bl, v, var, p) ->
       fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.63 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.64 2003-02-28 16:37:22 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -233,7 +233,8 @@ let unit info r ren =
 	    in
 	    match r with
 	      | Value t | Exn (_, Some t) ->
-		  a.a_loc, tsubst_in_predicate (subst_one result t) a.a_value
+		  a.a_loc, 
+		  simplify (tsubst_in_predicate (subst_one result t) a.a_value)
 	      | Exn _ ->
 		  a.a_loc, a.a_value
 	  in
