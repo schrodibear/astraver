@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.31 2004-12-06 13:58:12 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.32 2005-02-03 13:38:49 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -227,10 +227,35 @@ let print_obligation fmt (loc, o, s) =
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.report_obligation loc;
   fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s
 
+let push_foralls p =
+  let change = ref false in
+  let split vars p =
+    let vars_p = predicate_vars p in
+    List.fold_left 
+      (fun (in_p, out_p) ((_,_,b,_) as v) -> 
+	 if Idset.mem b vars_p then v :: in_p, out_p else in_p, v :: out_p)
+      ([],[]) vars
+  in
+  let quantify = List.fold_right (fun (w,id,b,v) p -> Forall (w,id,b,v,p)) in
+  let rec push vars = function
+    | Forall (w, id, b, v, p) -> 
+	push ((w,id,b,v) :: vars) p
+    | Pimplies (w, p1, p2) -> 
+	let in_p1, out_p1 = split vars p1 in 
+	if out_p1 <> [] then change := true;
+	quantify in_p1 (Pimplies (w, p1, push out_p1 p2))
+    | p ->
+	quantify vars p
+  in
+  push [] p, !change
+
 let print_axiom fmt id p =
   fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@]@\n" id;
-  fprintf fmt " @[<hov 2>%a@])@]@\n@\n" 
-    (print_predicate true) p.Env.scheme_type
+  let p = p.Env.scheme_type in
+  fprintf fmt " @[<hov 2>%a@]" (print_predicate true) p;
+  let p,c = push_foralls p in
+  if c then fprintf fmt "@\n@\n @[<hov 2>%a@]" (print_predicate true) p;
+  fprintf fmt ")@]@\n@\n" 
 
 let print_predicate fmt id p =
   let (bl,p) = p.Env.scheme_type in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.89 2005-02-03 10:44:38 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.90 2005-02-03 13:38:48 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -949,7 +949,7 @@ let type_spec_decl loc ofs = function
 	match cinit with
 	  | None -> None
 	  | Some (Iexpr t) -> Some(Iexpr (type_term (Env.empty()) t))
-	  | _ -> assert false
+	  | _ -> assert false(*TODO*)
       in
       Tghost (info, cinit)
 
