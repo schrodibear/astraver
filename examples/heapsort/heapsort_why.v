@@ -125,8 +125,8 @@ Lemma heapsort_po_2 :
   ((`(-1) <= k1` /\ `k1 <= (array_length t1) - 1`) /\
   ((i:Z)
    (`k1 + 1 <= i` /\ `i <= (array_length t1) - 1` ->
-    (heap t1 `(array_length t1) - 1` i))) /\ (permut t1 t)) /\
-  (Zwf `0` `k1 + 1` `k0 + 1`).
+    (heap t1 `(array_length t1) - 1` i))) /\
+  (permut t1 t)) /\ (Zwf `0` `k1 + 1` `k0 + 1`).
 Proof.
 Intuition (SameLength t1 t0; Try Omega).
 Rewrite H10; Auto with *.
@@ -142,7 +142,8 @@ Lemma heapsort_po_3 :
   (`(-1) <= result` /\ `result <= (array_length t) - 1`) /\
   ((i:Z)
    (`result + 1 <= i` /\ `i <= (array_length t) - 1` ->
-    (heap t `(array_length t) - 1` i))) /\ (permut t t).
+    (heap t `(array_length t) - 1` i))) /\
+  (permut t t).
 Proof.
 Intros.
 Generalize (lem_div2_0 (array_length t) Pre16); Intuition Try Omega'.
@@ -272,8 +273,8 @@ Lemma heapsort_po_7 :
   ((`k1 + 1 <= (array_length t3) - 1` ->
     `(access t3 0) <= (access t3 k1 + 1)`)) /\
   ((`k1 + 1 <= (array_length t3) - 1` ->
-    (sorted_array t3 `k1 + 1` `(array_length t3) - 1`))) /\ (permut t3 t)) /\
-  (Zwf `0` k1 k0).
+    (sorted_array t3 `k1 + 1` `(array_length t3) - 1`))) /\
+  (permut t3 t)) /\ (Zwf `0` k1 k0).
 Proof.
 Intuition.
 SameLength t3 t2; Omega.

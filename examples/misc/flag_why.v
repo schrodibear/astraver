@@ -439,7 +439,8 @@ Subst t2 t1; Do 2 AccessOther.
 Apply H3; Omega.
 Assert h:`k = r1` \/ `r1 < k`. Omega. Intuition.
 Assert h':`k = i0` \/ `i0 < k`. Omega. Intuition.
-Subst t2 t1 k; AccessSame.
+Generalize H15; Clear H15; 
+  Subst t2 t1 k; AccessSame; Intro H15.
 Subst u; Rewrite <- H15; Subst r1.
 Generalize Test4; Generalize Test2 ; Case (access t0 i0); Tauto.
 Subst t2 t1 k; AccessOther.

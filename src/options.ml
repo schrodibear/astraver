@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.15 2002-12-11 15:44:10 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.16 2003-01-09 16:13:59 filliatr Exp $ i*)
 
 open Format
 
@@ -34,7 +34,7 @@ let ocaml_externals_ = ref false
 let output_ = ref None
 let wol_ = ref false
 
-type prover = Coq | Pvs | Harvey
+type prover = Coq | Pvs | HolLight | Harvey
 let prover_ = ref Coq
 
 (*s Parsing the command-line *)
@@ -106,6 +106,7 @@ let files =
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
     | ("-pvs" | "--pvs") :: args -> prover_ := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover_ := Coq; parse args
+    | ("-hol-light" | "--hol-light") :: args -> prover_ := HolLight; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args

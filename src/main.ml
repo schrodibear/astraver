@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.48 2002-12-11 15:44:10 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.49 2003-01-09 16:13:59 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -35,11 +35,13 @@ let reset () =
   match prover with
   | Pvs -> Pvs.reset ()
   | Coq -> Coq.reset ()
+  | HolLight -> Holl.reset ()
   | Harvey -> Harvey.reset ()
 
 let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
   | Coq -> Coq.push_obligations ol
+  | HolLight -> Holl.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
 
 let push_validation id v = 
@@ -48,6 +50,7 @@ let push_validation id v =
 let push_parameter id v = match prover with
   | Pvs -> Pvs.push_parameter id v
   | Coq -> Coq.push_parameter id v
+  | HolLight -> Holl.push_parameter id v
   | Harvey -> () (* nothing to do? *)
 
 let output fwe = 
@@ -60,6 +63,7 @@ let output fwe =
   else begin match prover with
     | Pvs -> Pvs.output_file fwe
     | Coq -> Coq.output_file fwe
+    | HolLight -> Holl.output_file fwe
     | Harvey -> Harvey.output_file fwe
   end
 

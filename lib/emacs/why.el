@@ -11,6 +11,7 @@
   (setq why-mode-map (make-keymap))
   (define-key why-mode-map "\C-c\C-c" 'why-generate-obligations)
   (define-key why-mode-map "\C-c\C-a" 'why-find-alternate-file)
+  (define-key why-mode-map "\C-c\C-v" 'why-viewer)
   (define-key why-mode-map [(control return)] 'font-lock-fontify-buffer))
 
 (setq auto-mode-alist
@@ -84,6 +85,10 @@
   "Why options"
   :group 'why :type 'string)
 
+(defcustom why-viewer-prog-name "why_viewer"
+  "Why viewer executable name"
+  :group 'why :type 'string)
+
 (defun why-command-line (file)
   (concat why-prog-name " -" why-prover " " why-options " " file))
 
@@ -99,6 +104,15 @@
   (interactive)
   (let ((f (buffer-name)))
     (compile (why-command-line f))))
+
+(defun why-viewer-command-line (file)
+  (concat why-viewer-prog-name " " file))
+
+(defun why-viewer ()
+  "launch the why viewer"
+  (interactive)
+  (let ((f (buffer-name)))
+    (compile (why-viewer-command-line f))))
 
 (defun why-generate-ocaml ()
   "generate the ocaml code"
@@ -118,7 +132,8 @@
      ["Customize Why mode" (customize-group 'why) t]
      "---"
      ["Type-check buffer" why-type-check t]
-     ["Show WP" why-show-wp t]
+     ; ["Show WP" why-show-wp t]
+     ["Why viewer" why-viewer t]
      ["Generate obligations" why-generate-obligations t]
      ["Switch to obligations buffer" why-find-alternate-file t]
      ["Generate Ocaml code" why-generate-ocaml t]
