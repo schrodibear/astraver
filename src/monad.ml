@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.20 2002-03-18 10:29:27 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.21 2002-03-18 13:30:11 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -258,15 +258,16 @@ let fresh id e ren =
 (*s Well-founded recursion. 
 
     \begin{verbatim}
-    [h:(I x)](well_founded_induction
-              A R ?::(well_founded A R)
-              [Phi:A] (x) Phi=phi(x) -> <info>
-              [Phi:A][w:(Phi0:A) Phi0<Phi -> (x) Phi=phi(x) -> <info>]
-                [x][eq:Phi=phi(x)][h:(I x)]
+    (well_founded_induction
+       A R ?::(well_founded A R)
+       [Phi:A] (x) Phi=phi(x) -> <info>
+       [Phi:A][w:(Phi0:A) Phi0<Phi -> (x) Phi=phi(x) -> <info>]
+         [x][eq:Phi=phi(x)][h:<pre info>]
 
-                      <body where w <- (w phi(x1) ? x1 ? ?)>
+            <body where w <- (w phi(x1) ?::phi(x1)<Phi 
+                              x1 ?::phi(x1)=phi(x1) ?::<pre info>)>
 
-              phi(x) x ? ?)
+       phi(x) x ?::phi(x)=phi(x) ?::<pre info>)
     \end{verbatim}
 *)
 
@@ -306,6 +307,6 @@ let wfrec (phi,r) info f ren =
 	   CC_type (TTarrow ((vphi, CC_var_binder a), tphi));
 	   CC_lam ([vphi, CC_var_binder a; w, CC_var_binder tw],
 		   let ren' = next ren (get_writes k.c_effect) in 
-		   Monad.abstraction info' (f fw) ren');
+		   abstraction info' (f fw) ren');
 	   CC_expr (apply_term ren env phi)] @
 	  input ren)

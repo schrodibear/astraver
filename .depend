@@ -39,11 +39,11 @@ src/mlize.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
     src/logic.cmi src/misc.cmx src/monad.cmx src/rename.cmx src/types.cmi \
     src/util.cmx src/mlize.cmi 
 src/monad.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
-    src/logic.cmi src/misc.cmi src/monad.cmi src/rename.cmi src/types.cmi \
-    src/util.cmi src/monad.cmi 
+    src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi src/util.cmi \
+    src/monad.cmi 
 src/monad.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
-    src/logic.cmi src/misc.cmx src/monad.cmx src/rename.cmx src/types.cmi \
-    src/util.cmx src/monad.cmi 
+    src/logic.cmi src/misc.cmx src/rename.cmx src/types.cmi src/util.cmx \
+    src/monad.cmi 
 src/options.cmo: src/options.cmi 
 src/options.cmx: src/options.cmi 
 src/parser.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
