@@ -4,7 +4,7 @@
 int index(int t[], int n, int v) /*@ array_length(t) = n */ {
   int i = 0;
   while (i < n) 
-    /*@ invariant 0 <= i (*and forall k:int. 0 <= k < i -> t[k] <> v*)
+    /*@ invariant 0 <= i and forall k:int. 0 <= k < i -> t[k] <> v
         variant n - i */ {
     if (t[i] == v) break;
     i++;
