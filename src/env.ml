@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.34 2003-12-18 12:24:05 marche Exp $ i*)
+(*i $Id: env.ml,v 1.35 2004-01-06 11:04:51 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -239,12 +239,6 @@ let is_global_set id =
 
 
 let lookup_global id = find id !env
-(*
-  let s = Penv.find id !env in
-  match s.scheme_type with 
-    | TypeV v -> specialize_type_v s.scheme_vars v 
-    | Set -> raise Not_found
-*)
 
 let find_pgm id = Idmap.find id !pgm_table
 

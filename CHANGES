@@ -1,5 +1,5 @@
 
-version 1.4, December 19th, 2003
+version 1.40, December 19th, 2003
 ================================
   o disabled C support: C is now supported by an external tool, Caduceus
     (to be released soon with Why)
