@@ -35,8 +35,8 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
 INCLUDES = -I src -I c -I intf -I tools
-BFLAGS   = -g $(INCLUDES) -I +camlp4 -I +lablgtk2
-OFLAGS   = $(INCLUDES) -I +camlp4 -I +lablgtk2
+BFLAGS   = -dtypes -g $(INCLUDES) -I +camlp4 -I +lablgtk2
+OFLAGS   = -dtypes $(INCLUDES) -I +camlp4 -I +lablgtk2
 
 COQC7  = @COQC7@
 COQC8  = @COQC8@
@@ -109,7 +109,8 @@ bin/why.static: $(CMX) src/why.cmx
 	strip $@
 
 bin/top: $(CMO)
-	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
+	$(OCAMLC) $(BFLAGS) -a -o why.cma $(CMO)
+	ocamlmktop $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma why.cma
 
 # caduceus
 CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
