@@ -1,11 +1,10 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.11 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.12 2002-04-29 08:47:36 filliatr Exp $ i*)
 
 (*s Effects. *)
 
 open Ident
-open Misc
 
 (*s An effect is composed of two lists [(r,w)] of variables.
     The first one is the list of all variables (the input)
@@ -108,6 +107,12 @@ let subst = Idmap.fold subst_one
 (*s pretty-print *)
 
 open Format
+
+(* copied to avoid circularity Effect <-> Misc *)
+let rec print_list sep print fmt = function
+  | [] -> ()
+  | [x] -> print fmt x
+  | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
 
 let print fmt (r,w) =
   fprintf fmt "@[";

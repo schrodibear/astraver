@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.44 2002-04-18 15:22:52 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.45 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -47,8 +47,6 @@ let rec typing_term loc env = function
 	     check_app loc bl c ttl
 	 | _ -> 
 	     Error.app_of_non_function loc)
-  | Tbound _ ->
-      assert false
 
 and check_same_type loc env a b =
   let ta = typing_term loc env a in

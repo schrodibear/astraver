@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.33 2002-04-18 13:22:17 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.34 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -129,7 +129,7 @@ let applist f l = match (f,l) with
   | f, [] -> f
   | Tvar id, l -> Tapp (id, l)
   | Tapp (id, l), l' -> Tapp (id, l @ l')
-  | (Tbound _ | Tconst _), _ -> assert false
+  | Tconst _, _ -> assert false
 
 let papplist f l = match (f,l) with
   | f, [] -> f
@@ -145,7 +145,7 @@ let rec predicate_of_term = function
 let rec collect_term s = function
   | Tvar id -> Idset.add id s
   | Tapp (_, l) -> List.fold_left collect_term s l
-  | Tconst _ | Tbound _ -> s
+  | Tconst _ -> s
 
 and collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
@@ -168,7 +168,7 @@ let rec tsubst_in_term s = function
       let l' = List.map (tsubst_in_term s) l in
       (try applist (Idmap.find x s) l' with Not_found -> Tapp (x,l'))
 ***i*)
-  | Tconst _ | Tbound _ as t -> 
+  | Tconst _ as t -> 
       t
 
 let rec map_predicate f = function
@@ -192,15 +192,6 @@ let subst_in_term s =
 
 let subst_in_predicate s = 
   tsubst_in_predicate (Idmap.map (fun id -> Tvar id) s)
-
-let rec bsubst_in_term alist = function
-  | Tbound n as t -> (try List.assoc n alist with Not_found -> t)
-  | Tapp (x,l) -> Tapp (x, List.map (bsubst_in_term alist) l)
-  | Tconst _ | Tvar _ as t -> t
-
-let rec bsubst_in_predicate alist = function
-  | Papp (id, l) -> Papp (id, List.map (bsubst_in_term alist) l)
-  | p -> map_predicate (bsubst_in_predicate alist) p
 
 let subst_one x t = Idmap.add x t Idmap.empty
 
@@ -228,6 +219,63 @@ let rec mlize_type = function
   | Ref v -> mlize_type v
   | Array (s, v) -> PTarray (s, mlize_type v)
   | Arrow _ -> assert false
+
+(*s Substitutions *)
+
+let rec type_c_subst s c =
+  let {c_result_name=id; c_result_type=t; c_effect=e; c_pre=p; c_post=q} = c in
+  let s' = Idmap.fold (fun x x' -> Idmap.add (at_id x "") (at_id x' "")) s s in
+  { c_result_name = id;
+    c_result_type = type_v_subst s t;
+    c_effect = Effect.subst s e;
+    c_pre = List.map (pre_app (subst_in_predicate s)) p;
+    c_post = option_app (post_app (subst_in_predicate s')) q }
+
+and type_v_subst s = function
+  | Ref v -> Ref (type_v_subst s v)
+  | Array (n,v) -> Array (n,type_v_subst s v)
+  | Arrow (bl,c) -> Arrow (List.map (binder_subst s) bl, type_c_subst s c)
+  | (PureType _) as v -> v
+
+and binder_subst s = function
+  | (n, BindType v) -> (n, BindType (type_v_subst s v))
+  | b -> b
+
+(*s substitution of term for variables *)
+
+let rec type_c_rsubst s c =
+  { c_result_name = c.c_result_name;
+    c_result_type = type_v_rsubst s c.c_result_type;
+    c_effect = c.c_effect;
+    c_pre = List.map (pre_app (tsubst_in_predicate s)) c.c_pre;
+    c_post = option_app (post_app (tsubst_in_predicate s)) c.c_post }
+
+and type_v_rsubst s = function
+  | Ref v -> Ref (type_v_rsubst s v)
+  | Array (n,v) -> Array (tsubst_in_term s n, type_v_rsubst s v)
+  | Arrow (bl,c) -> Arrow(List.map (binder_rsubst s) bl, type_c_rsubst s c)
+  | PureType _ as v -> v
+
+and binder_rsubst s = function
+  | (n, BindType v) -> (n, BindType (type_v_rsubst s v))
+  | b -> b
+
+let type_c_of_v v =
+  { c_result_name = Ident.result;
+    c_result_type = v;
+    c_effect = Effect.bottom; c_pre = []; c_post = None }
+
+(* make_arrow bl c = (x1:V1)...(xn:Vn)c *)
+
+let make_arrow bl c = match bl with
+  | [] -> 
+      invalid_arg "make_arrow: no binder"
+  | _ -> 
+      let rename (id,v) (bl,s) = 
+	let id' = Ident.bound id in ((id',v) :: bl, Idmap.add id id' s)
+      in
+      let bl',s = List.fold_right rename bl ([], Idmap.empty) in
+      Arrow (bl', type_c_subst s c)
 
 (*s Smart constructors. *)
 
@@ -312,8 +360,6 @@ let rec print_term fmt = function
       fprintf fmt "void" 
   | Tconst (ConstFloat f) -> 
       fprintf fmt "%f" f
-  | Tbound b ->
-      Ident.print_bound fmt b
   | Tvar id -> 
       Ident.print fmt id
   | Tapp (id, tl) -> 
@@ -351,8 +397,8 @@ let rec print_predicate fmt = function
   | Pnot a ->
       fprintf fmt "(not %a)" print_predicate a
   | Forall (_,b,_,p) ->
-      fprintf fmt "@[<hov 2>(forall #%d:@ %a)@]" 
-	(Ident.bound_id b) print_predicate p
+      fprintf fmt "@[<hov 2>(forall %a:@ %a)@]" 
+	Ident.print b print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 

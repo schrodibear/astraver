@@ -1,5 +1,5 @@
 
-(*i $Id: logic.mli,v 1.6 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: logic.mli,v 1.7 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 (*s Logic. *)
 
@@ -11,7 +11,6 @@ type constant =
 
 type term =
   | Tvar of Ident.t
-  | Tbound of Ident.bound
   | Tconst of constant
   | Tapp of Ident.t * term list
 
@@ -38,7 +37,7 @@ type predicate =
   | Pand of predicate * predicate
   | Por of predicate * predicate
   | Pnot of predicate
-  | Forall of Ident.t * Ident.bound * pure_type * predicate
+  | Forall of Ident.t * Ident.t * pure_type * predicate
 
   
 

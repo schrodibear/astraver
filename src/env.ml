@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.14 2002-04-17 08:48:58 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.15 2002-04-29 08:47:36 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -169,11 +169,12 @@ let compare_type op t =
 	       relation op (Tvar x) (Tvar y),
 	       not_relation op (Tvar x) (Tvar y))
   in
-  Arrow ([x, BindType t; y, BindType t], 
-	 { c_result_name = result;
-	   c_result_type = bool;
-	   c_effect = Effect.bottom;
-	   c_pre = []; c_post = Some (anonymous q) })
+  make_arrow 
+    [x, BindType t; y, BindType t]
+    { c_result_name = result;
+      c_result_type = bool;
+      c_effect = Effect.bottom;
+      c_pre = []; c_post = Some (anonymous q) }
 
 let _ = add_global t_lt (compare_type t_lt int) None
 let _ = add_global t_le (compare_type t_le int) None
@@ -191,11 +192,12 @@ let _ = add_global t_neq_bool (compare_type t_neq bool) None
 let _ = add_global t_neq_float (compare_type t_neq float) None
 
 let bin_arith_type = 
-  Arrow ([x, BindType int; y, BindType int], 
-	 { c_result_name = result;
-	   c_result_type = int;
-	   c_effect = Effect.bottom;
-	   c_pre = []; c_post = None })
+  make_arrow 
+    [x, BindType int; y, BindType int]
+    { c_result_name = result;
+      c_result_type = int;
+      c_effect = Effect.bottom;
+      c_pre = []; c_post = None }
 
 let _ = add_global t_add bin_arith_type None
 let _ = add_global t_sub bin_arith_type None
@@ -204,11 +206,12 @@ let _ = add_global t_div bin_arith_type None
 let _ = add_global t_mod bin_arith_type None
 
 let un_arith_type = 
-  Arrow ([x, BindType int], 
-	 { c_result_name = result;
-	   c_result_type = int;
-	   c_effect = Effect.bottom;
-	   c_pre = []; c_post = None })
+  make_arrow 
+    [x, BindType int]
+    { c_result_name = result;
+      c_result_type = int;
+      c_effect = Effect.bottom;
+      c_pre = []; c_post = None }
 
 let _ = add_global t_neg un_arith_type None
 

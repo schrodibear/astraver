@@ -64,5 +64,7 @@ let p16 = t[9] := 1
 
 let p17 = { 0 <= t[0] < 10 } t[t[0]] := 1
 
+(**TODO
 let p18 = (t[begin x := 0; !x end] := !x) { t[0] = x@ }
+**)
 

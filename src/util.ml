@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.30 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.31 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -147,7 +147,7 @@ let initial_renaming env =
 let rec occur_term id = function
   | Tvar id' -> id = id'
   | Tapp (_, l) -> List.exists (occur_term id) l
-  | Tconst _ | Tbound _ -> false
+  | Tconst _ -> false
 
 let rec occur_predicate id = function
   | Pvar _ | Ptrue | Pfalse -> false
@@ -187,65 +187,14 @@ and occur_arrow id bl c = match bl with
       occur_arrow id bl' c
 
 let forall x v p =
-  let n = Ident.bound () in
-  let p = tsubst_in_predicate (Idmap.add x (Tbound n) Idmap.empty) p in
+  let n = Ident.bound x in
+  let p = subst_in_predicate (subst_onev x n) p in
   Forall (x, n, mlize_type v, p)
 
 let foralls =
   List.fold_right
     (fun (x,v) p -> if occur_predicate x p then forall x v p else p)
     
-(*s Substitutions *)
-
-let rec type_c_subst s c =
-  let {c_result_name=id; c_result_type=t; c_effect=e; c_pre=p; c_post=q} = c in
-  let s' = Idmap.fold (fun x x' -> Idmap.add (at_id x "") (at_id x' "")) s s in
-  { c_result_name = id;
-    c_result_type = type_v_subst s t;
-    c_effect = Effect.subst s e;
-    c_pre = List.map (pre_app (subst_in_predicate s)) p;
-    c_post = option_app (post_app (subst_in_predicate s')) q }
-
-and type_v_subst s = function
-  | Ref v -> Ref (type_v_subst s v)
-  | Array (n,v) -> Array (n,type_v_subst s v)
-  | Arrow (bl,c) -> Arrow (List.map (binder_subst s) bl, type_c_subst s c)
-  | (PureType _) as v -> v
-
-and binder_subst s = function
-  | (n, BindType v) -> (n, BindType (type_v_subst s v))
-  | b -> b
-
-(*s substitution of term for variables *)
-
-let rec type_c_rsubst s c =
-  { c_result_name = c.c_result_name;
-    c_result_type = type_v_rsubst s c.c_result_type;
-    c_effect = c.c_effect;
-    c_pre = List.map (pre_app (tsubst_in_predicate s)) c.c_pre;
-    c_post = option_app (post_app (tsubst_in_predicate s)) c.c_post }
-
-and type_v_rsubst s = function
-  | Ref v -> Ref (type_v_rsubst s v)
-  | Array (n,v) -> Array (tsubst_in_term s n, type_v_rsubst s v)
-  | Arrow (bl,c) -> Arrow(List.map (binder_rsubst s) bl, type_c_rsubst s c)
-  | PureType _ as v -> v
-
-and binder_rsubst s = function
-  | (n, BindType v) -> (n, BindType (type_v_rsubst s v))
-  | b -> b
-
-let type_c_of_v v =
-  { c_result_name = Ident.result;
-    c_result_type = v;
-    c_effect = Effect.bottom; c_pre = []; c_post = None }
-
-(* make_arrow bl c = (x1:V1)...(xn:Vn)c *)
-
-let make_arrow bl c = match bl with
-  | [] -> invalid_arg "make_arrow: no binder"
-  | _ -> Arrow (bl,c)
-
 (* misc. functions *)
 
 let deref_type = function

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.15 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.16 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -20,15 +20,6 @@ val apply_pre : Rename.t -> local_env -> precondition -> precondition
 val apply_assert : Rename.t -> local_env -> assertion -> assertion
 val apply_post : 
   label -> Rename.t -> local_env -> postcondition -> postcondition
-
-val type_v_subst : var_substitution -> type_v -> type_v
-val type_c_subst : var_substitution -> type_c -> type_c
-
-val type_v_rsubst : substitution -> type_v -> type_v
-val type_c_rsubst : substitution -> type_c -> type_c
-
-val type_c_of_v : type_v -> type_c
-val make_arrow : type_v binder list -> type_c -> type_v
 
 val is_reference : local_env -> Ident.t -> bool
 val predicate_now_refs : local_env -> predicate -> Ident.set

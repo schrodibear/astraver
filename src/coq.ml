@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.30 2002-04-18 13:52:29 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.31 2002-04-29 08:47:36 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -64,8 +64,6 @@ let print_term fmt t =
 	(* TODO *)
 	assert (floor f = f);
 	openz fmt; fprintf fmt "%d" (truncate f); closez fmt
-    | Tbound _ ->
-	assert false
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 
@@ -132,7 +130,7 @@ let print_predicate fmt p =
 	fprintf fmt "~%a" print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
-	let p' = bsubst_in_predicate [n, Tvar id'] p in
+	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[(%s:%a)@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
     | p -> 

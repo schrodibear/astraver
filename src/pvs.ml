@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.15 2002-03-26 13:43:41 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.16 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -52,8 +52,6 @@ let print_term fmt t =
 	(* TODO *)
 	assert (floor f = f);
 	fprintf fmt "%d" (truncate f)
-    | Tbound _ ->
-	assert false
     | Tvar id | Tapp (id, []) -> 
 	fprintf fmt "%s" (Ident.string id)
     | Tapp (id, [t]) when id == t_neg ->
@@ -101,7 +99,7 @@ let print_predicate fmt p =
     | Pnot p -> fprintf fmt "NOT "; print3 p
     | Forall (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
-	let p' = bsubst_in_predicate [n, Tvar id'] p in
+	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[FORALL (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 p'; fprintf fmt "@])"

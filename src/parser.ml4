@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.34 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.35 2002-04-29 08:47:37 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -81,7 +81,6 @@ let predicate_of_term loc = function
   | Tapp (id, lt) -> Papp (id, lt)
   | Tconst _ -> raise (Stdpp.Exc_located (loc, 
 					  Stream.Error "predicate expected"))
-  | Tbound _ -> assert false
 
 let conj_assert {a_name=n; a_value=a} {a_value=b} = 
   { a_value = Pand (a,b); a_name = n }
