@@ -14,10 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyFloat.v,v 1.4 2003-01-07 16:54:07 filliatr Exp $ *)
+(* $Id: WhyFloat.v,v 1.5 2003-01-30 13:09:47 filliatr Exp $ *)
 
 Require Why.
-Require Export Reals.
+Require Export Rbase.
 
 Parameter R_lt_ge_bool : 
  (x,y:R) { b:bool | if b then ``x < y`` else ``x >= y`` }.
