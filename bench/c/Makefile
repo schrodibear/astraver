@@ -1,6 +1,6 @@
 
 test:
-	-gcc -c test.c
+	-gcc -Wall -c test.c
 	../../bin/caduceus.opt -d -v -type-only test.c
 
 gcc:

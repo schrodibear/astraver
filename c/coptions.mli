@@ -14,12 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.2 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.3 2003-12-24 12:13:35 filliatr Exp $ i*)
 
 val parse_only : bool
 val type_only : bool
 val debug : bool
 val verbose : bool
+val werror : bool
 val with_cpp : bool
 val cpp_command : string
 

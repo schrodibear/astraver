@@ -763,7 +763,7 @@ statement
 labeled_statement
         : identifier/*ICI*/ COLON statement { locate (CSlabel ($1, $3)) }
         | CASE constant_expression COLON statement { locate (CScase ($2, $4)) }
-        | DEFAULT COLON statement { locate (CSdefault $3) }
+        | DEFAULT COLON statement { locate (CSlabel ("%default%", $3)) }
         ;
 
 compound_statement
@@ -819,11 +819,11 @@ iteration_statement
         | FOR LPAR expression_statement expression_statement RPAR 
           ANNOT statement 
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
-			     None, $6, $7)) }
+			     locate CEnop, $6, $7)) }
         | FOR LPAR expression_statement expression_statement expression RPAR 
           ANNOT statement 
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
-			     Some $5, $7, $8)) }
+			     $5, $7, $8)) }
         ;
 
 jump_statement
@@ -849,8 +849,7 @@ function_definition
             { Ctypes.pop (); (* pushed by function_prototype *)
 	      let ty,id,pl,p = $1 in
 	      let b,q = $2 in
-	      let l = add_pre_loc (loc_i 2) p in
-	      locate (Cfundef (ty, id, pl, with_loc l (p,b,q))) }
+	      locate (Cfundef (ty, id, pl, (p,b,q))) }
         ;
 	      
 function_prototype

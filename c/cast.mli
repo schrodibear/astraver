@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.9 2003-12-23 16:34:36 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.10 2003-12-24 12:13:35 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -106,7 +106,7 @@ and cstatement_node =
   | CScond of cexpr * cstatement * cstatement
   | CSwhile of cexpr * annot * cstatement
   | CSdowhile of cstatement * annot * cexpr
-  | CSfor of cexpr * cexpr * cexpr option * annot * cstatement
+  | CSfor of cexpr * cexpr * cexpr * annot * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -114,7 +114,6 @@ and cstatement_node =
   | CSlabel of string * cstatement
   | CSswitch of cexpr * cstatement
   | CScase of cexpr * cstatement
-  | CSdefault of cstatement
   | CSgoto of string
   | CSannot of annot
 
@@ -127,8 +126,7 @@ and decl =
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
   | Cdecl of cexpr ctype * string * cexpr c_initializer
-  | Cfundef of 
-      cexpr ctype * string * cexpr parameter list * annotated_block located
+  | Cfundef of cexpr ctype * string * cexpr parameter list * annotated_block
 
 type file = decl located list
 
@@ -136,6 +134,13 @@ type file = decl located list
 (*s C typed abstract syntax trees *)
 
 open Logic
+
+type tunary_operator = 
+  | TUint_of_float | TUfloat_of_int
+
+type tbinary_operator =
+  | TBadd_int | TBsub_int | TBmul_int | TBdiv_int | TBmod_int 
+  | TBadd_float | TBsub_float | TBmul_float | TBdiv_float 
 
 type texpr = {
   texpr_node : texpr_node;
@@ -153,8 +158,8 @@ and texpr_node =
   | TEarrget of lvalue * texpr
   | TEseq of texpr * texpr
   | TEassign of lvalue * assign_operator * texpr
-  | TEunary of unary_operator * texpr
-  | TEbinary of texpr * binary_operator * texpr
+  | TEunary of tunary_operator * texpr
+  | TEbinary of texpr * tbinary_operator * texpr
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr
   | TEshift of texpr * shift * texpr
@@ -168,23 +173,30 @@ type variant = term * pure_type * string
 
 type loop_annotation = predicate option * variant
 
-type tstatement = tstatement_node located
+type loop_info = { loop_break : bool; loop_continue : bool }
+
+type fun_info = { fun_abrupt_return : bool }
+
+type tstatement = {
+  st_node : tstatement_node;
+  st_abrupt_return : bool;
+  st_loc : Loc.t
+}
 
 and tstatement_node =
   | TSnop
   | TSexpr of texpr
   | TScond of texpr * tstatement * tstatement
-  | TSwhile of texpr * loop_annotation * tstatement
-  | TSdowhile of tstatement * loop_annotation * texpr
-  | TSfor of texpr * texpr * texpr option * loop_annotation * tstatement
-  | TSblock of block
+  | TSwhile of texpr * tstatement * loop_info * loop_annotation
+  | TSdowhile of tstatement * texpr * loop_info * loop_annotation
+  | TSfor of texpr * texpr * texpr * tstatement * loop_info * loop_annotation
+  | TSblock of tblock
   | TSreturn of texpr option
   | TSbreak
   | TScontinue
   | TSlabel of string * tstatement
   | TSswitch of texpr * tstatement
   | TScase of texpr * tstatement
-  | TSdefault of tstatement
   | TSgoto of string
   | TSassert of predicate
 
@@ -198,6 +210,6 @@ and tdecl =
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * string * texpr c_initializer
   | Tfundef of 
-      texpr ctype * string * texpr parameter list * annotated_tblock located
+      texpr ctype * string * texpr parameter list * annotated_tblock * fun_info
 
 type tfile = tdecl located list

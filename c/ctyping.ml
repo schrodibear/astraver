@@ -14,8 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.3 2003-12-23 16:34:36 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.4 2003-12-24 12:13:35 filliatr Exp $ i*)
 
+open Format
+open Coptions
 open Cast
 open Cerror
 open Creport
@@ -27,6 +29,52 @@ let located_app f x = { node = f x.node; loc = x.loc }
 let option_app f = function Some x -> Some (f x) | None -> None
 
 let error l s = raise (Error (Some l, AnyMessage s))
+let warning l s = 
+  Format.eprintf "%a warning: %s\n" Loc.report_line (fst l) s
+
+(*s Pretty-printing of types *)
+
+let rec print_type fmt t = match t.ctype_node with
+  | CTvoid -> fprintf fmt "void"
+  | CTint (s, i) -> fprintf fmt "%a %a" print_sign s print_integer i
+  | CTfloat f -> print_float fmt f
+  | CTvar x -> fprintf fmt "%s" x
+  | CTarray (ty, None) -> fprintf fmt "%a[]" print_type ty
+  | CTarray (ty, Some e) -> fprintf fmt "%a[_]" print_type ty
+  | CTpointer ty -> fprintf fmt "%a*" print_type ty
+  | CTstruct_named x -> fprintf fmt "struct %s" x
+  | CTstruct_decl (_, fl) -> fprintf fmt "struct _ { %a}" print_fields fl
+  | CTunion_named x -> fprintf fmt "union %s" x
+  | CTunion_decl (_, fl) -> fprintf fmt "union _ { %a}" print_fields fl
+  | CTenum_named x -> fprintf fmt "enum %s" x
+  | CTenum_decl (_, el) -> fprintf fmt "enum _ { %a}" print_enums el
+  | CTfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
+
+and print_sign fmt = function
+  | Signed -> fprintf fmt "signed"
+  | Unsigned -> fprintf fmt "unsigned"
+
+and print_integer fmt = function
+  | Char -> fprintf fmt "char"
+  | Short -> fprintf fmt "short"
+  | Int -> fprintf fmt "int"
+  | Long -> fprintf fmt "long"
+  | LongLong -> fprintf fmt "long long"
+
+and print_float fmt = function
+  | Float -> fprintf fmt "float"
+  | Double -> fprintf fmt "double"
+  | LongDouble -> fprintf fmt "long double"
+
+and print_fields fmt = function
+  | [] -> ()
+  | (ty, x, _) :: fl -> fprintf fmt "%a %s; %a" print_type ty x print_fields fl
+
+and print_enums fmt = function
+  | [] -> ()
+  | (x, _) :: el -> fprintf fmt "%s, %a" x print_enums el
+
+(*s Some predefined types, subtype relation, etc. *)
 
 let noattr tyn = { ctype_node = tyn; 
 		   ctype_storage = No_storage;
@@ -38,9 +86,75 @@ let c_char = noattr (CTint (Unsigned, Char))
 let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
 
+(* Type equality (i.e. structural equality, but ignoring attributes) *)
+
+let rec eq_type ty1 ty2 = 
+  eq_type_node ty1.ctype_node ty2.ctype_node
+
+and eq_type_node tn1 tn2 = match tn1, tn2 with
+  | CTvoid, CTvoid
+  | CTint _, CTint _ 
+  | CTfloat _, CTfloat _ ->
+      true
+  | CTvar x1, CTvar x2 ->
+      x1 = x2
+  | CTarray (ty1, _), CTarray (ty2, _) ->
+      eq_type ty1 ty2 (* TODO: taille? *)
+  | CTpointer ty1, CTpointer ty2 ->
+      eq_type ty1 ty2
+  | CTstruct_named s1, CTstruct_named s2 ->
+      s1 = s2
+  | CTstruct_decl _, _ | _, CTstruct_decl _ ->
+      assert false
+  | CTunion_named u1, CTunion_named u2 ->
+      u1 = u2
+  | CTunion_decl _, _ | _, CTunion_decl _ ->
+      assert false
+  | CTenum_named e1, CTenum_named e2 ->
+      e1 = e2
+  | CTenum_decl _, _ | _, CTenum_decl _ ->
+      assert false
+  | CTfun (pl1, ty1), CTfun (pl2, ty2) ->
+      eq_type ty1 ty2 &&
+      (try List.for_all2 (fun (ty1,_) (ty2,_) -> eq_type ty1 ty2) pl1 pl2
+       with Invalid_argument _ -> false)
+  | _ ->
+      false
+
+(* [sub_type ty1 ty2] is true if type [ty1] can be coerced
+   to type [ty2] (with function [coerce] below) *)
+
+let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
+  | CTint _, CTfloat _ -> true
+  | _ -> eq_type ty1 ty2
+
+let compatible ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
+
+(* Coercions (ints to floats, floats to int) *)
+
+let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
+  | CTint _, CTfloat _ -> 
+      { e with texpr_node = TEunary (TUfloat_of_int, e); texpr_type = ty }
+  | CTfloat _, CTint _ ->
+      { e with texpr_node = TEunary (TUint_of_float, e); texpr_type = ty }
+  | ty1, ty2 when eq_type_node ty1 ty2 ->
+      e
+  | _ ->
+      if verbose || debug then eprintf 
+	"expected %a, found %a@." print_type e.texpr_type print_type ty;
+      error e.texpr_loc "incompatible type"
+
 (*s Environments for local variables *)
 
 module Env = Map.Make(String)
+
+(*s Logic *)
+
+let rec type_predicate env p = 
+  assert false (*TODO*)
+
+let type_loop_annot env a =
+  assert false (*TODO*)
 
 (*s Types *)
 
@@ -86,7 +200,9 @@ and type_expr_node loc env = function
   | CEstring_literal s ->
       TEstring_literal s, c_string
   | CEvar x ->
-      assert false (*TODO*)
+      (* TODO: global *)
+      (try TEvar x, Env.find x env 
+       with Not_found -> error loc (x ^ " undeclared"))
   | CEdot (e, x) ->
       let te = type_lvalue env e in
       assert false (*TODO type_of_field te.texpr_type x *)
@@ -101,18 +217,39 @@ and type_expr_node loc env = function
 	     TEarrget (te1, te2), ty
 	 | _ ->
 	     error loc "subscripted value is neither array nor pointer")
+  | CEseq (e1, e2) ->
+      let e1 = type_expr env e1 in
+      let e2 = type_expr env e2 in
+      TEseq (e1, e2), e2.texpr_type
+  | CEcond (e1, e2, e3) ->
+      let e1 = type_boolean env e1 in
+      let e2 = type_expr env e2 in
+      let ty2 = e2.texpr_type in
+      let e3 = type_expr env e3 in
+      let ty3 = e3.texpr_type in
+      if sub_type ty2 ty3 then
+	TEcond (e1, coerce ty3 e2, e3), ty3
+      else if sub_type ty3 ty2 then
+	TEcond (e1, e2, coerce ty2 e3), ty2
+      else
+	error loc "type mismatch in conditional expression"
 (**
-  | CEseq of cexpr * cexpr
   | CEassign of cexpr * assign_operator * cexpr
   | CEunary of unary_operator * cexpr
   | CEbinary of cexpr * binary_operator * cexpr
   | CEcall of cexpr * cexpr list
-  | CEcond of cexpr * cexpr * cexpr
   | CEshift of cexpr * shift * cexpr
-  | CEcast of cexpr ctype * cexpr
-  | CEsizeof_expr of cexpr
-  | CEsizeof of cexpr ctype
 **)
+  | CEcast (ty, e) ->
+      let ty = type_type ty in
+      let e = type_expr env e in
+      TEcast (ty, e), ty
+  | CEsizeof_expr e ->
+      let e = type_expr env e in
+      TEsizeof_expr e, c_int
+  | CEsizeof ty ->
+      let ty = type_type ty in
+      TEsizeof ty, c_int
   | _ ->
       assert false (*TODO*)
 
@@ -120,28 +257,176 @@ and type_lvalue env e = type_expr env e (*TODO*)
 
 and type_expr_option env eo = option_app (type_expr env) eo
 
+and type_parameter (ty, x) = (type_type ty, x)
+
+and type_field (ty, x, bf) = (type_type ty, x, type_expr_option Env.empty bf)
+
+(*s Typing of integers expressions: to be used when coercion is not allowed
+    (array subscript, array size, enum value, etc.) *)
+
 and type_int_expr_option env eo = option_app (type_int_expr env) eo
 
 and type_int_expr env e = match type_expr env e with
   | { texpr_type = { ctype_node = CTint _ } } as te -> te
   | _ -> error e.loc "expected int"
 
-and type_parameter (ty, x) = (type_type ty, x)
+(*s Typing of ``boolean'' expressions *)
 
-and type_field (ty, x, bf) = (type_type ty, x, type_expr_option Env.empty bf)
+and type_boolean env e = type_int_expr env e (*TODO: vérifier booléen*)
 
-let rec type_initializer ty = function
-  | Inothing -> Inothing
-  | Iexpr e -> Iexpr (type_expr Env.empty e) (* TODO: vérifier type = ty *)
-  | Ilist el -> Ilist (List.map (type_initializer ty) el) (* TODO: FAUX! *)
+(*s Typing of initializers *)
 
-let rec type_statement s =
-  assert false (*TODO*)
+let rec type_initializer env ty = function
+  | Inothing -> 
+      Inothing
+  | Iexpr e -> 
+      let e = type_expr env e in
+      Iexpr (coerce ty e)
+  | Ilist el -> 
+      assert false (* TODO *)
+      (* Ilist (List.map (type_initializer env ty) el) (* FAUX! *) *)
 
-and type_block bl = 
-  assert false (*TODO*)
- 
-let type_decl = function
+(*s Statements *)
+
+type status = { 
+  always_return : bool; 
+  abrupt_return : bool;
+  break : bool; 
+  continue : bool }
+
+let mt_status = 
+  { always_return = false; abrupt_return = false; 
+    break = false; continue = false }
+
+let or_status s1 s2 =
+  { always_return = s1.always_return && s2.always_return;
+    abrupt_return = s1.abrupt_return || s2.abrupt_return;
+    break = s1.break || s2.break;
+    continue = s1.continue || s2.continue }
+
+let rec type_statement env et s =
+  let sn,st = type_statement_node s.loc env et s.node in
+  { st_node = sn; st_abrupt_return = st.abrupt_return; st_loc = s.loc }, st
+
+and type_statement_node loc env et = function
+  | CSnop -> 
+      TSnop, mt_status
+  | CSexpr e ->
+      let e = type_expr env e in
+      TSexpr e, mt_status
+  | CScond (e, s1, s2) ->
+      let e = type_boolean env e in
+      let s1,st1 = type_statement env et s1 in
+      let s2,st2 = type_statement env et s2 in
+      TScond (e, s1, s2), or_status st1 st2
+  | CSbreak ->
+      TSbreak, { mt_status with break = true }
+  | CScontinue -> 
+     TScontinue, { mt_status with continue = true }
+  | CSlabel (lab, s) ->
+      let s, st = type_statement env et s in
+      TSlabel (lab, s), st
+  | CSblock bl ->
+      let bl,st = type_block env et bl in
+      TSblock bl, st
+  | CSgoto lab ->
+      (* TODO: vérifier existence label *)
+      TSgoto lab, mt_status
+  | CSfor (e1, e2, e3, an, s) ->
+      let an = type_loop_annot env an in
+      let e1 = type_expr env e1 in
+      let e2 = type_boolean env e2 in
+      let e3 = type_expr env e3 in
+      let s,st = type_statement env et s in
+      let li = { loop_break = st.break; loop_continue = st.continue } in
+      TSfor (e1, e2, e3, s, li, an),
+      { mt_status with abrupt_return = st.abrupt_return }
+  | CSdowhile (s, an, e) ->
+      let an = type_loop_annot env an in
+      let s, st = type_statement env et s in
+      let e = type_boolean env e in
+      let li = { loop_break = st.break; loop_continue = st.continue } in
+      TSdowhile (s, e, li, an), 
+      { mt_status with abrupt_return = st.abrupt_return }
+  | CSwhile (e, an, s) ->
+      let an = type_loop_annot env an in
+      let e = type_boolean env e in
+      let s, st = type_statement env et s in
+      let li = { loop_break = st.break; loop_continue = st.continue } in
+      TSwhile (e, s, li, an), 
+      { mt_status with abrupt_return = st.abrupt_return }
+  | CSreturn None ->
+      if et <> None then warning loc 
+	      "`return' with no value, in function returning non-void";
+      TSreturn None,{ mt_status with always_return = true } 
+  | CSreturn (Some e) ->
+      let e' = type_expr env e in
+      let e' = match et with
+	| None -> 
+	    warning e.loc "`return' with a value, in function returning void";
+	    None
+	| Some ty ->
+	    Some (coerce ty e')
+      in
+      TSreturn e', { mt_status with always_return = true }
+  | CSswitch (e, s) ->
+      assert false (*TODO*)
+  | CScase (e, s) ->
+      assert false (*TODO*)
+  | CSannot an ->
+      assert false (*TODO*)
+
+and type_block env et (dl,sl) = 
+  let rec type_decls env = function
+    | [] -> 
+	[], env
+    | { node = Cdecl (ty, x, i) } as d :: dl ->
+	Printf.eprintf "typage %s\n" x; flush stderr;
+	(* TODO: ty = void interdit *)
+	let ty = type_type ty in
+	let i = type_initializer env ty i in
+	let env' = Env.add x ty env in
+	let dl',env'' = type_decls env' dl in
+	{ d with node = Tdecl (ty, x, i) } :: dl', env''
+    | { loc = l } :: _ ->
+	error l "unsupported local declaration"
+  in
+  let dl',env' = type_decls env dl in
+  let rec type_bl = function
+    | [] -> 
+	[], mt_status
+    | [s] ->
+	let s',st = type_statement env' et s in
+	if not st.always_return && et <> None then
+	  warning s.loc "control reaches end of non-void function";
+	[s'], st
+    | s :: bl ->
+	let s', st1 = type_statement env' et s in
+	if st1.always_return then begin
+	  warning (List.hd bl).loc "unreachable statement";
+	  if werror then exit 1
+	end;
+	let bl', st2 = type_bl bl in
+	s' :: bl', or_status st1 st2
+  in
+  let sl', st = type_bl sl in
+  (dl', sl'), st
+
+
+and type_annotated_block env et (p,bl,q) =
+  let bl,st = type_block env et bl in
+  let p = option_app (type_predicate env) p in
+  let q = option_app (type_predicate env) q in
+  (p, bl, q), st
+
+let type_parameters pl =
+  List.fold_right
+    (fun (ty,x) (pl,env) ->
+       let ty = type_type ty in (ty,x)::pl, Env.add x ty env)
+    pl 
+    ([], Env.empty)
+  
+let type_decl d = match d.node with
   | Cspecdecl a -> 
       assert false (*TODO*)
   | Ctypedef (ty, x) -> 
@@ -150,10 +435,20 @@ let type_decl = function
       Ttypedecl (type_type ty)
   | Cdecl (ty, x, i) -> 
       let ty = type_type ty in
-      Tdecl (ty, x, type_initializer ty i)
+      Tdecl (ty, x, type_initializer Env.empty ty i)
   | Cfundef (ty, f, pl, bl) -> 
-      Tfundef (type_type ty, f, List.map type_parameter pl, 
-	       located_app type_block bl)
+      let ty = type_type ty in
+      let et = if ty = c_void then None else Some ty in
+      let pl,env = type_parameters pl in
+      (* TODO: ajouter f plutot comme global + vérif si déjà déclarée *)
+      let env = Env.add f (noattr (CTfun (pl, ty))) env in
+      let bl,st = type_annotated_block env et bl in
+      if st.break then 
+	error d.loc "break statement not within a loop or switch";
+      if st.continue then 
+	error d.loc "continue statement not within a loop";
+      let fi = { fun_abrupt_return = st.abrupt_return } in
+      Tfundef (ty, f, pl, bl, fi)
 
-let type_file = List.map (located_app type_decl)
+let type_file = List.map (fun d -> { d with node = type_decl d })
 

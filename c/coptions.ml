@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.4 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.5 2003-12-24 12:13:35 filliatr Exp $ i*)
 
 let parse_only = ref false
 let type_only = ref false
@@ -22,6 +22,7 @@ let cpp_command = ref "gcc -E -C"
 let with_cpp = ref true
 let debug = ref false
 let verbose = ref false
+let werror = ref false
 
 let files = Queue.create ()
 let add_file f = Queue.add f files
@@ -39,12 +40,16 @@ let _ =
 	"-d", Arg.Set debug,
           "  debugging mode";
 	"-v", Arg.Set verbose,
-          "  verbose mode" ]
+          "  verbose mode";
+	"--werror", Arg.Set werror,
+          "  treats warnings as errors";
+      ]
       add_file "caduceus [options] file..."
 
 let parse_only = !parse_only
 let type_only = !type_only
 let debug = !debug
 let verbose = !verbose
+let werror = !werror
 let with_cpp = !with_cpp
 let cpp_command = !cpp_command
