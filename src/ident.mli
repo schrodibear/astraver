@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.17 2002-04-29 08:47:37 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.18 2002-05-07 15:53:23 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -18,6 +18,7 @@ type 'a map = 'a Idmap.t
 val next_away : t -> set -> t
 
 val print : Format.formatter -> t -> unit
+val dbprint : Format.formatter -> t -> unit
 
 (*s Possibly anonymous names *)
 
@@ -30,7 +31,6 @@ val print_name : Format.formatter -> name -> unit
 val at_id : t -> string -> t
 val un_at : t -> t * string
 val is_at : t -> bool
-val adr_id : t -> t
 
 (*s Bound variables. *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.32 2002-05-06 12:05:45 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.33 2002-05-07 15:53:23 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -162,7 +162,9 @@ let rec print_cc_type fmt = function
 	(print_list nothing 
 	     (fun fmt (id,t) -> 
 		fprintf fmt "[%a:%a]" Ident.print id print_cc_type t)) bl
-	print_predicate q
+	print_cc_type q
+  | TTpred p ->
+      print_predicate fmt p
 
 and print_binder fmt (id,b) = 
   Ident.print fmt id;
@@ -208,9 +210,11 @@ let rec print_cc_term fmt = function
   | CC_app (f,a) ->
       fprintf fmt "@[<hov 2>(%a@ %a)@]" print_cc_term f print_cc_term a
   | CC_tuple (cl, None) ->
-      fprintf fmt "<Tuple %a>" (print_list space print_cc_term) cl
+      fprintf fmt "(Build_tuple_%d %a)" (List.length cl)
+	(print_list space print_cc_term) cl
   | CC_tuple (cl, Some q) ->
-      fprintf fmt "<Tuple_dep %a>" (print_list space print_cc_term) cl
+      fprintf fmt "(exist_%d %a %a)" (List.length cl - 1)
+	print_cc_type q (print_list space print_cc_term) cl
   | CC_case _ ->
       fprintf fmt "<Case (TODO)>"
   | CC_if (b,e1,e2) ->

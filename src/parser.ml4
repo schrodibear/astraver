@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.36 2002-05-03 15:40:22 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.37 2002-05-07 15:53:24 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -133,9 +133,9 @@ EXTEND
   [ [ id = ident ->
 	id
     | id = ident; "@" -> 
-	Ident.create (Ident.string id ^ "@")
+	Ident.at_id id ""
     | id = ident; "@"; l = ident -> 
-	Ident.create (Ident.string id ^ "@" ^ Ident.string l) ] ]
+	Ident.at_id id (Ident.string l) ] ]
   ;
 
   (* Logic *)

@@ -465,7 +465,6 @@ Lemma downheap_po_12 :
     `i < N` -> (access t2 i) = (access t0 i))) /\
   ((v:Z) ((inftree t0 n v k) -> (inftree t2 n v k))).
 Proof.
-
 Intuition.
 (* permut *)
 Apply permut_trans with t' := t1.

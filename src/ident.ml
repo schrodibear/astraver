@@ -1,9 +1,9 @@
 
-(*i $Id: ident.ml,v 1.18 2002-04-29 08:47:36 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.19 2002-05-07 15:53:23 filliatr Exp $ i*)
 
-type t = { stamp : int; name : string }
+type t = { stamp : int; name : string; label : string option }
 
-let create s = { stamp = 0; name = s }
+let create s = { stamp = 0; name = s; label = None }
 
 let string s = s.name
 
@@ -39,6 +39,7 @@ let rec next_away id s =
   if Idset.mem id s then next_away (create (next id.name)) s else id
 
 let print fmt s = Format.fprintf fmt "%s" s.name
+let dbprint fmt s = Format.fprintf fmt "%s#%d" s.name s.stamp
 
 (*s Possibly anonymous names *)
 
@@ -50,27 +51,19 @@ let print_name fmt = function
 
 (*s Labelled identifiers. *)
 
-let at_id id d = create (id.name ^ "@" ^ d)
+let at_id id d = { id with label = Some d }
 
-let is_at id =
-  try let _ = String.index id.name '@' in true with Not_found -> false
+let is_at id = id.label <> None
 
-let un_at id =
-  let s = id.name in 
-  try
-    let n = String.index s '@' in
-    create (String.sub s 0 n),
-    String.sub s (succ n) (pred (String.length s - n))
-  with Not_found ->
-    invalid_arg "Ident.un_at"
-
-let adr_id id = create ("adr_" ^ id.name)
+let un_at = function
+  | { label = Some d } as id -> { id with label = None }, d
+  | _ -> invalid_arg"Ident.un_at"
 
 (*s Bound variables. *)
 
 let bound =
   let n = ref 0 in
-  fun s -> incr n; { stamp = !n; name = s.name }
+  fun s -> incr n; { s with stamp = !n }
 
 (*s Pre-defined. *)
 

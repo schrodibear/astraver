@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.29 2002-05-06 12:05:45 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.30 2002-05-07 15:53:23 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -10,8 +10,8 @@ open Logic
 open Types
 open Ast
 open Rename
-open Env
 open Effect
+open Env
 
 (*s [product ren [y1,z1;...;yk,zk] q] constructs the (possibly dependent) 
     tuple type
@@ -20,9 +20,12 @@ open Effect
     or $\exists. y1:z1. ... yk:zk. (Q x1 ... xn)$  otherwise *)
  
 let product before ren env w q = match q,w with
-  | None, [_,v] -> v
-  | None, _ -> TTtuple (w, None)
-  | Some q, _ -> TTtuple (w, Some (apply_post before ren env q).a_value)
+  | None, [_,v] -> 
+      v
+  | None, _ -> 
+      TTtuple (w, None)
+  | Some q, _ -> 
+      TTtuple (w, Some (TTpred (apply_post before ren env q).a_value))
 
 
 (*s [arrow_pred ren v pl] abstracts the term [v] over the pre-condition if any
@@ -52,11 +55,11 @@ let arrow_vars =
     into CC types. *)
 
 let rec trad_type_c ren env k = 
-  let ((res,v),e,p,q) = decomp_kappa k in
+  let ((_,v),e,p,q) = decomp_kappa k in
   let i,o = get_repr e in
   let before = label_name () in
   let ren' = next (push_date ren before) o in
-  let lo = output ren' env ((res,v),o) in
+  let lo = output ren' env (v,o) in
   let ty = product before ren' env lo q in
   let ty = arrow_pred ren env ty p in
   let li = input ren env i in
@@ -66,17 +69,17 @@ and trad_type_v ren env = function
   | Ref _ 
   | Array _ -> 
       assert false
-  | Arrow (bl, c) ->
+  | Arrow (bl, c) ->  
       let bl',ren',env' =
 	List.fold_left
 	  (fun (bl,ren,env) b -> match b with
 	     | (id, BindType ((Ref _ | Array _) as v)) ->
-		 let env' = add id v env in
+		 let env' = Env.add id v env in
 		 let ren' = initial_renaming env' in
 		 (bl, ren', env')
 	     | (id, BindType v) -> 
 		 let tt = trad_type_v ren env v in
-		 let env' = add id v env in
+		 let env' = Env.add id v env in
 		 let ren' = initial_renaming env' in
 		 (id,tt)::bl, ren', env'
 	     | _ -> 
@@ -90,14 +93,14 @@ and trad_type_v ren env = function
 and input ren env i =
   prod ren env i
 
-and output ren env ((id,v),o) =
+and output ren env (v,o) =
   let tv = trad_type_v ren env v in
-  (prod ren env o) @ [id,tv]
+  (prod ren env o) @ [result,tv]
 
 and input_output ren env c =
-  let ((res,v),e,_,_) = decomp_kappa c in
+  let ((_,v),e,_,_) = decomp_kappa c in
   let i,o = get_repr e in
-  input ren env i, output ren env ((res,v),o)
+  input ren env i, output ren env (v,o)
 
 and prod ren env g = 
   List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
@@ -127,6 +130,9 @@ type interp = Rename.t -> predicate cc_term
    If there is no [yi] and no postcondition, it is simplified into 
    [t] itself. *)
 
+let lambda_vars =
+  List.fold_left (fun t (id,v) -> TTlambda ((id, CC_var_binder v), t))
+
 let unit info t ren = 
   let env = info.env in
   let t = apply_term ren env t in
@@ -141,26 +147,24 @@ let unit info t ren =
       | None -> 
 	  [], None
       | Some c -> 
-	  let c = apply_post info.label ren env c in
-	  let c = tsubst_in_predicate (subst_one result t) c.a_value in
-	  [ CC_hole c ],
-	  None (* TODO *)
+	  let h = 
+	    let c = apply_post info.label ren env c in
+	    tsubst_in_predicate (subst_one result t) c.a_value
+	  in
+	  let ht = 
+	    let _,o = get_repr ef in
+	    let bl = 
+	      List.map (fun id -> (id, trad_type_in_env ren env id)) o @
+	      [result, trad_type_v ren env k.c_result_type]
+	    in
+	    lambda_vars (TTpred c.a_value) bl
+	  in
+	  [ CC_hole h ], Some ht
     in
     CC_tuple (
       (List.map (fun id -> let id' = current_var ren id in CC_var id') ids) @
       (CC_term t) :: hole,
       holet)
-
-(*i***    
-  let ((res,v),e,p,q) = decomp_kappa k in
-  let i,o = get_repr e in
-  let before = label_name () in
-  let ren' = next (push_date ren before) o in
-  let lo = output ren' env ((res,v),o) in
-  let ty = product before ren' env lo q in
-
-  apply_post before ren env q).a_value
-***i*)
 
 (*s [compose k1 e1 e2 ren env] constructs the term
    

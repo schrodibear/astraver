@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.14 2002-05-06 12:05:45 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.15 2002-05-07 15:53:24 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -38,7 +38,9 @@ and cc_type_subst s = function
   | TTtuple (ttl, p) -> 
       let s' = List.fold_right Idmap.remove (List.map fst ttl) s in
       TTtuple (List.map (fun (id,t) -> (id, cc_type_subst s t)) ttl,
-	       option_app (tsubst_in_predicate s') p)
+	       option_app (cc_type_subst s') p)
+  | TTpred p ->
+      TTpred (tsubst_in_predicate s p)
   | TTpure _ as t -> 
       t
 
@@ -112,7 +114,7 @@ let rec red sp s cct =
       CC_if (red sp s a, red sp s b, red sp s c)
   | CC_tuple (al, po) ->
       CC_tuple (List.map (red sp s) al,
-		option_app (tsubst_in_predicate s) po)
+		option_app (cc_type_subst s) po)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
   | CC_hole ty ->

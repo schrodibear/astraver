@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.34 2002-04-29 08:47:37 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.35 2002-05-07 15:53:23 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -272,7 +272,9 @@ let make_arrow bl c = match bl with
       invalid_arg "make_arrow: no binder"
   | _ -> 
       let rename (id,v) (bl,s) = 
-	let id' = Ident.bound id in ((id',v) :: bl, Idmap.add id id' s)
+	let id' = Ident.bound id in 
+	(id',v) :: bl, 
+	Idmap.add id id' (Idmap.add (at_id id "") (at_id id' "") s)
       in
       let bl',s = List.fold_right rename bl ([], Idmap.empty) in
       Arrow (bl', type_c_subst s c)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.11 2002-04-17 08:48:58 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.12 2002-05-07 15:53:23 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -65,3 +65,4 @@ val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
 
 val add_rec : Ident.t -> local_env -> local_env
 val is_rec : Ident.t -> local_env -> bool
+

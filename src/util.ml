@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.32 2002-05-06 12:05:45 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.33 2002-05-07 15:53:24 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -393,7 +393,9 @@ let rec print_cc_type fmt = function
   | TTtuple (bl, None) -> 
       fprintf fmt "{%a}" print_tuple bl
   | TTtuple (bl, Some q) -> 
-      fprintf fmt "{%a | %a}" print_tuple bl print_predicate q
+      fprintf fmt "{%a | %a}" print_tuple bl print_cc_type q
+  | TTpred p ->
+      print_predicate fmt p
 
 and print_tuple fmt =
   print_list comma 
@@ -456,3 +458,13 @@ let print_subst fmt =
 let print_cc_subst fmt =
   Idmap.iter
     (fun id t -> fprintf fmt "%a -> %a@\n" Ident.print id print_cc_term t)
+
+
+let print_env fmt e =
+  let print_type_info fmt = function
+    | Set -> fprintf fmt "Set"
+    | TypeV v -> print_type_v fmt v
+  in
+  fold_all (fun (id, v) () -> fprintf fmt "%a:%a, " Ident.dbprint id 
+		print_type_info v) e ()
+

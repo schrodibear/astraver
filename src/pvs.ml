@@ -1,5 +1,5 @@
 
-(*i $Id: pvs.ml,v 1.16 2002-04-29 08:47:37 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.17 2002-05-07 15:53:24 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -112,7 +112,8 @@ let rec print_cc_type fmt = function
   | TTarray (_, v) -> fprintf fmt "[int -> %a]" print_cc_type v
   | TTlambda _
   | TTarrow _
-  | TTtuple _ -> assert false
+  | TTtuple _ 
+  | TTpred _ -> assert false
 
 let print_sequent fmt (hyps,concl) =
   let rec print_seq = function
