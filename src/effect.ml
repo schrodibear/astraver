@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.13 2002-06-21 14:22:32 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.14 2002-06-24 09:37:35 filliatr Exp $ i*)
 
 (*s Effects. *)
 
@@ -72,6 +72,8 @@ let get_repr e = e
 
 let is_read  (r,_) id = List.mem id r
 let is_write (_,w) id = List.mem id w
+
+let keep_writes (_,w) = (w,w)
 
 (*s union and disjunction *)
 

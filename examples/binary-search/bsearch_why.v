@@ -155,7 +155,6 @@ Lemma binary_search_po_2 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -184,7 +183,6 @@ Lemma binary_search_po_3 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -213,7 +211,6 @@ Lemma binary_search_po_4 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -249,7 +246,6 @@ Lemma binary_search_po_5 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -280,7 +276,6 @@ Lemma binary_search_po_6 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -320,7 +315,6 @@ Lemma binary_search_po_7 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -361,7 +355,6 @@ Lemma binary_search_po_8 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -393,7 +386,6 @@ Lemma binary_search_po_9 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -426,7 +418,6 @@ Lemma binary_search_po_10 :
   (Variant1: Z)
   (l1: Z)
   (p1: Z)
-  (t: (array `N + 1` Z))
   (u1: Z)
   (Pre6: Variant1 = `2 + u1 - l1`)
   (Pre5: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
@@ -488,3 +479,376 @@ Generalize (H0 H5 H7); Intro.
 Decompose [In] H8.
 Absurd `l1 <= i <= u1`; Omega'.
 Save.
+
+
+Definition binary_search := (* validation *)
+  [l: Z]
+    [m: Z]
+      [p: Z]
+        [t: (array `N + 1` Z)]
+          [u: Z]
+            [Pre7: (sorted_array t `1` N)]
+              let (l0, result, Post1) =
+                let (result, Post1) = (exist_1 [result: Z]result = `1` 
+                  `1` (refl_equal ? `1`)) in
+                (exist_2 [l1: Z][result0: unit]l1 = `1` result tt Post1) in
+              let (u0, result0, Post2) =
+                let (result0, Post2) = (exist_1 [result0: Z]result0 = N 
+                  N (refl_equal ? N)) in
+                (exist_2 [u1: Z][result1: unit]u1 = N result0 tt Post2) in
+              let (p0, result1, Post3) =
+                let (result1, Post3) = (exist_1 [result1: Z]result1 = `0` 
+                  `0` (refl_equal ? `0`)) in
+                (exist_2 [p1: Z][result2: unit]p1 = `0` result1 tt Post3) in
+              let (l1, m0, p1, u1, result2, Post11) =
+                ((((((((((((well_founded_induction Z) (Zwf ZERO))
+                           (binary_search_po_1 t Pre7 l0 Post1 u0 Post2 p0
+                           Post3))
+                          [Variant1: Z](l1: Z)(m0: Z)(p1: Z)(u1: Z)(_: 
+                          Variant1 = `2 + u1 - l1`)(_: `1 <= l1` /\
+                          `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+                          ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+                          ((`p1 > 0` -> (access t p1) = v)))(sig_5 Z Z Z Z
+                          unit [l2:Z][m1:Z][p2:Z][u2:Z][result:unit](`
+                          1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\
+                          `p2 <= N`) /\
+                          ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
+                          ((`p2 > 0` -> (access t p2) = v)) /\ `l2 > u2`)))
+                         [Variant1: Z]
+                           [wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))(l1: Z)(m0: Z)(p1: Z)(u1: Z)(_: 
+                             Variant2 = `2 + u1 - l1`)(_: `1 <= l1` /\
+                             `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+                             ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+                             ((`p1 > 0` -> (access t p1) = v)))(sig_5 Z Z Z Z
+                             unit [l2:Z][m1:Z][p2:Z][u2:Z][result:unit](`
+                             1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\
+                             `p2 <= N`) /\
+                             ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
+                             ((`p2 > 0` -> (access t p2) = v)) /\
+                             `l2 > u2`))]
+                             [l1: Z]
+                               [m0: Z]
+                                 [p1: Z]
+                                   [u1: Z]
+                                     [Pre6: Variant1 = `2 + u1 - l1`]
+                                       [Pre5: `1 <= l1` /\ `u1 <= N` /\
+                                         (`0 <= p1` /\ `p1 <= N`) /\
+                                         ((p1 = `0` ->
+                                           ((In t `1` N) -> (In t l1 u1)))) /\
+                                         ((`p1 > 0` -> (access t p1) = v))]
+                                         let (result2, Bool1) =
+                                           let (result4, Post12) =
+                                             (Z_le_gt_bool l1 u1) in
+                                           (exist_1 [result5: bool](if result5
+                                                                    then `
+                                                                    l1 <= u1`
+                                                                    else `
+                                                                    l1 > u1`) 
+                                           result4 Post12) in
+                                         (Cases (btest [result2:bool](
+                                         if result2 then `l1 <= u1`
+                                         else `l1 > u1`) result2 Bool1) of
+                                         | (left Test6) =>
+                                             let (l2, m1, p2, u2, result3,
+                                               Post14) =
+                                               let (l2, m1, p2, u2, result3,
+                                                 Post15) =
+                                                 let (m1, result3, Post4) =
+                                                   let (result3, Post4) =
+                                                     (exist_1 [result3: Z]
+                                                     result3 = (mean l1 u1) 
+                                                     (mean l1 u1)
+                                                     (refl_equal ? (mean l1
+                                                                    u1))) in
+                                                   (exist_2 [m2: Z][result4: unit]
+                                                   m2 = (mean l1 u1) 
+                                                   result3 tt Post4) in
+                                                 let Pre4 =
+                                                   (binary_search_po_2 t Pre7
+                                                   l0 Post1 u0 Post2 p0 Post3
+                                                   Variant1 l1 p1 u1 Pre6
+                                                   Pre5 Test6 m1 Post4) in
+                                                 let (l2, p2, u2, result4,
+                                                   Post16) =
+                                                   let (result4, Bool3) =
+                                                     let result5 =
+                                                       let Pre2 =
+                                                         (binary_search_po_3 t
+                                                         Pre7 l0 Post1 u0
+                                                         Post2 p0 Post3
+                                                         Variant1 l1 p1 u1
+                                                         Pre6 Pre5 Test6 m1
+                                                         Post4 Pre4) in
+                                                       (Z_lt_ge_bool (
+                                                        access t m1)) in
+                                                     let (result6, Post17) =
+                                                       (result5 v) in
+                                                     (exist_1 [result7: bool](
+                                                     if result7
+                                                     then `(access t m1) < v`
+                                                     else `(access t m1) >= v`) 
+                                                     result6 Post17) in
+                                                   (Cases (btest [result4:bool](
+                                                   if result4
+                                                   then `(access t m1) < v`
+                                                   else `(access t m1) >= v`) result4 Bool3) of
+                                                   | (left Test5) =>
+                                                       let (l2, result5,
+                                                         Post8) =
+                                                         let (result5,
+                                                           Post8) =
+                                                           (exist_1 [result5: Z]
+                                                           result5 = `
+                                                           m1 + 1` `m1 + 1`
+                                                           (refl_equal ? `
+                                                           m1 + 1`)) in
+                                                         (exist_2 [l3: Z][result6: unit]
+                                                         l3 = `m1 + 1` 
+                                                         result5 tt Post8) in
+                                                       (exist_4 [l3: Z][p2: Z][u2: Z][result6: unit]`
+                                                       1 <= l3` /\
+                                                       `u2 <= N` /\
+                                                       (`0 <= p2` /\
+                                                       `p2 <= N`) /\
+                                                       ((p2 = `0` ->
+                                                         ((In t `1` N) ->
+                                                          (In t l3 u2)))) /\
+                                                       ((`p2 > 0` ->
+                                                         (access t p2) = v)) /\
+                                                       (Zwf `0` `2 + u2 - l3` `
+                                                       2 + u1 - l1`) 
+                                                       l2 p1 u1 result5
+                                                       (binary_search_po_4 t
+                                                       Pre7 l0 Post1 u0 Post2
+                                                       p0 Post3 Variant1 l1
+                                                       p1 u1 Pre6 Pre5 Test6
+                                                       m1 Post4 Pre4 Test5 l2
+                                                       Post8))
+                                                   | (right Test4) =>
+                                                       let (l2, p2, u2,
+                                                         result5, Post18) =
+                                                         let (result5,
+                                                           Bool2) =
+                                                           let result6 =
+                                                             let Pre3 =
+                                                               (binary_search_po_5 t
+                                                               Pre7 l0 Post1
+                                                               u0 Post2 p0
+                                                               Post3 Variant1
+                                                               l1 p1 u1 Pre6
+                                                               Pre5 Test6 m1
+                                                               Post4 Pre4
+                                                               Test4) in
+                                                             (Z_gt_le_bool (
+                                                              access t m1)) in
+                                                           let (result7,
+                                                             Post19) =
+                                                             (result6 v) in
+                                                           (exist_1 [result8: bool](
+                                                           if result8
+                                                           then `(access t m1) >
+                                                                 v`
+                                                           else `(access t m1) <=
+                                                                 v`) 
+                                                           result7 Post19) in
+                                                         (Cases (btest [result5:bool](
+                                                         if result5
+                                                         then `(access t m1) >
+                                                               v`
+                                                         else `(access t m1) <=
+                                                               v`) result5 Bool2) of
+                                                         | (left Test3) =>
+                                                             let (u2,
+                                                               result6,
+                                                               Post7) =
+                                                               let (result6,
+                                                                 Post7) =
+                                                                 (exist_1 [result6: Z]
+                                                                 result6 =
+                                                                 `m1 - 1` 
+                                                                 `m1 - 1`
+                                                                 (refl_equal ? `
+                                                                 m1 - 1`)) in
+                                                               (exist_2 [u3: Z][result7: unit]
+                                                               u3 = `
+                                                               m1 - 1` 
+                                                               result6 
+                                                               tt Post7) in
+                                                             (exist_4 [l2: Z][p2: Z][u3: Z][result7: unit]`
+                                                             1 <= l2` /\
+                                                             `u3 <= N` /\
+                                                             (`0 <= p2` /\
+                                                             `p2 <= N`) /\
+                                                             ((p2 = `0` ->
+                                                               ((In t `1` N) ->
+                                                                (In t l2 u3)))) /\
+                                                             ((`p2 > 0` ->
+                                                               (access t p2) =
+                                                               v)) /\
+                                                             (Zwf `0` `
+                                                             2 + u3 - l2` `
+                                                             2 + u1 - l1`) 
+                                                             l1 p1 u2 
+                                                             result6
+                                                             (binary_search_po_6 t
+                                                             Pre7 l0 Post1 u0
+                                                             Post2 p0 Post3
+                                                             Variant1 l1 p1
+                                                             u1 Pre6 Pre5
+                                                             Test6 m1 Post4
+                                                             Pre4 Test4 Test3
+                                                             u2 Post7))
+                                                         | (right Test2) =>
+                                                             let (l2, p2,
+                                                               result6,
+                                                               Post20) =
+                                                               let (p2,
+                                                                 result6,
+                                                                 Post5) =
+                                                                 let (result6,
+                                                                   Post5) =
+                                                                   (exist_1 [result6: Z]
+                                                                   result6 =
+                                                                   m1 
+                                                                   m1
+                                                                   (refl_equal ? m1)) in
+                                                                 (exist_2 [p3: Z][result7: unit]
+                                                                 p3 = m1 
+                                                                 result6 
+                                                                 tt Post5) in
+                                                               let (l2,
+                                                                 result7,
+                                                                 Post6) =
+                                                                 let (result7,
+                                                                   Post6) =
+                                                                   (exist_1 [result7: Z]
+                                                                   result7 =
+                                                                   `u1 + 1` 
+                                                                   `u1 + 1`
+                                                                   (refl_equal ? `
+                                                                   u1 + 1`)) in
+                                                                 (exist_2 [l3: Z][result8: unit]
+                                                                 l3 =
+                                                                 `u1 + 1` 
+                                                                 result7 
+                                                                 tt Post6) in
+                                                               (exist_3 [l3: Z][p3: Z][result8: unit]`
+                                                               1 <= l3` /\
+                                                               `u1 <= N` /\
+                                                               (`0 <= p3` /\
+                                                               `p3 <= N`) /\
+                                                               ((p3 = `0` ->
+                                                                 ((In t `1` N) ->
+                                                                  (In t l3 u1)))) /\
+                                                               ((`p3 > 0` ->
+                                                                 (access t p3) =
+                                                                 v)) /\
+                                                               (Zwf `0` `
+                                                               2 + u1 - l3` `
+                                                               2 + u1 - l1`) 
+                                                               l2 p2 
+                                                               result7
+                                                               (binary_search_po_7 t
+                                                               Pre7 l0 Post1
+                                                               u0 Post2 p0
+                                                               Post3 Variant1
+                                                               l1 p1 u1 Pre6
+                                                               Pre5 Test6 m1
+                                                               Post4 Pre4
+                                                               Test4 Test2 p2
+                                                               Post5 l2
+                                                               Post6)) in
+                                                             (exist_4 [l3: Z][p3: Z][u2: Z][result7: unit]`
+                                                             1 <= l3` /\
+                                                             `u2 <= N` /\
+                                                             (`0 <= p3` /\
+                                                             `p3 <= N`) /\
+                                                             ((p3 = `0` ->
+                                                               ((In t `1` N) ->
+                                                                (In t l3 u2)))) /\
+                                                             ((`p3 > 0` ->
+                                                               (access t p3) =
+                                                               v)) /\
+                                                             (Zwf `0` `
+                                                             2 + u2 - l3` `
+                                                             2 + u1 - l1`) 
+                                                             l2 p2 u1 
+                                                             result6 Post20) end) in
+                                                       (exist_4 [l3: Z][p3: Z][u3: Z][result6: unit]`
+                                                       1 <= l3` /\
+                                                       `u3 <= N` /\
+                                                       (`0 <= p3` /\
+                                                       `p3 <= N`) /\
+                                                       ((p3 = `0` ->
+                                                         ((In t `1` N) ->
+                                                          (In t l3 u3)))) /\
+                                                       ((`p3 > 0` ->
+                                                         (access t p3) = v)) /\
+                                                       (Zwf `0` `2 + u3 - l3` `
+                                                       2 + u1 - l1`) 
+                                                       l2 p2 u2 result5
+                                                       Post18) end) in
+                                                 (exist_5 [l3: Z][m2: Z][p3: Z][u3: Z][result5: unit]`
+                                                 1 <= l3` /\ `u3 <= N` /\
+                                                 (`0 <= p3` /\ `p3 <= N`) /\
+                                                 ((p3 = `0` ->
+                                                   ((In t `1` N) ->
+                                                    (In t l3 u3)))) /\
+                                                 ((`p3 > 0` ->
+                                                   (access t p3) = v)) /\
+                                                 (Zwf `0` `2 + u3 - l3` `
+                                                 2 + u1 - l1`) l2 m1 
+                                                 p2 u2 result4 Post16) in
+                                               ((((((((wf1 `2 + u2 - l2`)
+                                                       (binary_search_po_8 t
+                                                       Pre7 l0 Post1 u0 Post2
+                                                       p0 Post3 Variant1 l1
+                                                       p1 u1 Pre6 Pre5 Test6
+                                                       l2 p2 u2 Post15)) 
+                                                      l2) m1) p2) u2)
+                                                  (refl_equal ? `2 + u2 - l2`))
+                                                 (binary_search_po_9 t Pre7
+                                                 l0 Post1 u0 Post2 p0 Post3
+                                                 Variant1 l1 p1 u1 Pre6 Pre5
+                                                 Test6 l2 p2 u2 Post15)) in
+                                             (exist_5 [l3: Z][m2: Z][p3: Z][u3: Z][result4: unit]`
+                                             1 <= l3` /\ `u3 <= N` /\
+                                             (`0 <= p3` /\ `p3 <= N`) /\
+                                             ((p3 = `0` ->
+                                               ((In t `1` N) -> (In t l3 u3)))) /\
+                                             ((`p3 > 0` -> (access t p3) = v)) /\
+                                             `l3 > u3` l2 m1 p2 u2 result3
+                                             Post14)
+                                         | (right Test1) =>
+                                             let (l2, m1, p2, u2, result3,
+                                               Post13) =
+                                               (exist_5 [l2: Z][m1: Z][p2: Z][u2: Z][result3: unit]`
+                                               1 <= l2` /\ `u2 <= N` /\
+                                               (`0 <= p2` /\ `p2 <= N`) /\
+                                               ((p2 = `0` ->
+                                                 ((In t `1` N) ->
+                                                  (In t l2 u2)))) /\
+                                               ((`p2 > 0` ->
+                                                 (access t p2) = v)) /\
+                                               `l2 > u2` l1 m0 p1 u1 
+                                               tt
+                                               (binary_search_po_10 t Pre7 l0
+                                               Post1 u0 Post2 p0 Post3
+                                               Variant1 l1 p1 u1 Pre6 Pre5
+                                               Test1)) in
+                                             (exist_5 [l3: Z][m2: Z][p3: Z][u3: Z][result4: unit]`
+                                             1 <= l3` /\ `u3 <= N` /\
+                                             (`0 <= p3` /\ `p3 <= N`) /\
+                                             ((p3 = `0` ->
+                                               ((In t `1` N) -> (In t l3 u3)))) /\
+                                             ((`p3 > 0` -> (access t p3) = v)) /\
+                                             `l3 > u3` l2 m1 p2 u2 result3
+                                             Post13) end)) `2 + u0 - l0`) 
+                       l0) m) p0) u0) (refl_equal ? `2 + u0 - l0`))
+                  (binary_search_po_11 t Pre7 l0 Post1 u0 Post2 p0 Post3)) in
+              (exist_5 [l2: Z][m1: Z][p2: Z][u2: Z][result3: unit]`1 <= p2` /\
+              `p2 <= N` /\ (access t p2) = v \/ p2 = `0` /\ ~(In t `1` N) 
+              l1 m0 p1 u1 result2
+              (binary_search_po_12 t Pre7 l0 Post1 u0 Post2 p0 Post3 l1 p1 u1
+              Post11)).
+

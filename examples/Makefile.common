@@ -1,8 +1,9 @@
 
 WHY=../../bin/why.static
+WHYOPTIONS=--valid
 
 %_why.v: %.ml $(WHY)
-	$(WHY) $<
+	$(WHY) $(WHYOPTIONS) $<
 
 %.vo: %.v
 	coqc -I ../../lib/coq $<

@@ -1,11 +1,11 @@
 
-parameter x,y : int ref
+parameter x,y,z : int ref
 
 let p = 
   while true do
-    { invariant x = y variant x }
-    x := !y;
-    y := !x
+    { invariant x = z variant x }
+    x := !z;
+    y := !z
   done
 
 (****

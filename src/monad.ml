@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.36 2002-06-21 15:20:24 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.37 2002-06-24 09:37:35 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -298,7 +298,9 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   let wr = get_writes info.kappa.c_effect in
   let info' = 
     let eq = anonymous_pre false (equality (Tvar vphi) phi) in
-    { info with kappa = { info.kappa with c_pre = eq :: info.kappa.c_pre }}
+    { info with kappa = { info.kappa 
+			  with c_effect = keep_writes info.kappa.c_effect;
+			       c_pre = eq :: info.kappa.c_pre }}
   in
   let a = TTpure a in
   let w = wf_name () in

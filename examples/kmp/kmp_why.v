@@ -334,12 +334,12 @@ Lemma initnext_po_11 :
   (i1: Z)
   (j1: Z)
   (next2: (array M Z))
-  (Post22: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
-           (match p `i1 - j1` p `0` j1) /\
-           ((z:Z)
-            (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-           ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
-           (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
+  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+        (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
   (lexZ (pairZ `M - i1` j1) Variant1).
 Proof.
 (* FILL PROOF HERE *)
@@ -370,12 +370,12 @@ Lemma initnext_po_12 :
   (i1: Z)
   (j1: Z)
   (next2: (array M Z))
-  (Post22: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
-           (match p `i1 - j1` p `0` j1) /\
-           ((z:Z)
-            (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
-           ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
-           (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
+  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
+        (match p `i1 - j1` p `0` j1) /\
+        ((z:Z)
+         (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i1` -> (Next p k (access next2 k)))) /\
+        (lexZ (pairZ `M - i1` j1) (pairZ `M - i0` j0)))
   `0 <= j1` /\ `j1 <= M` /\ (`j1 < i1` /\ `i1 <= M`) /\
   (match p `i1 - j1` p `0` j1) /\
   ((z:Z) (`j1 + 1 < z` /\ `z < i1 + 1` -> ~(match p `i1 + 1 - z` p `0` z))) /\
@@ -448,12 +448,12 @@ Lemma initnext_po_15 :
   (i0: Z)
   (j0: Z)
   (next1: (array M Z))
-  (Post18: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
-           (match p `i0 - j0` p `0` j0) /\
-           ((z:Z)
-            (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
-           ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
-           `i0 >= M - 1`)
+  (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 < i0` /\ `i0 <= M`) /\
+        (match p `i0 - j0` p `0` j0) /\
+        ((z:Z)
+         (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
+        ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))) /\
+        `i0 >= M - 1`)
   ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next1 j)))).
 Proof.
 (* FILL PROOF HERE *)
@@ -471,6 +471,7 @@ Lemma initnext_po_16 :
 Proof.
 (* FILL PROOF HERE *)
 Save.
+
 
 
 
@@ -505,7 +506,7 @@ Definition initnext := (* validation *)
                                                                  `1` `
                                                                  0`) 
                     (store next `1` result2) tt Post3) in
-                  let (i0, j0, next1, result3, Post18) =
+                  let (i0, j0, next1, result3, Inv) =
                     (((((((((((well_founded_induction prodZZ) lexZ)
                               (initnext_po_2 next result Post1 result0 Post2
                               Test8 next0 Post3))
@@ -568,22 +569,22 @@ Definition initnext := (* validation *)
                                              (`0 < k` /\ `k <= i0` ->
                                               (Next p k (access next1 k))))]
                                             let (result3, Bool1) =
-                                              let (result5, Post19) =
+                                              let (result5, Post18) =
                                                 (Z_lt_ge_bool i0 `M - 1`) in
                                               (exist_1 [result6: bool](
                                               if result6 then `i0 < M - 1`
                                               else `i0 >= M - 1`) result5
-                                              Post19) in
+                                              Post18) in
                                             (Cases (btest [result3:bool](
                                             if result3 then `i0 < M - 1`
                                             else `i0 >= M - 1`) result3 Bool1) of
                                             | (left Test7) =>
                                                 let (i1, j1, next2, result4,
-                                                  Post21) =
+                                                  Inv) =
                                                   let (i1, j1, next2,
-                                                    result4, Post22) =
+                                                    result4, Inv) =
                                                     let (i1, j1, next2,
-                                                      result4, Post23) =
+                                                      result4, Inv) =
                                                       let (result4, Bool3) =
                                                         let Pre3 =
                                                           (initnext_po_3 next
@@ -605,7 +606,7 @@ Definition initnext := (* validation *)
                                                           (A_eq_bool (
                                                            access p i0)) in
                                                         let (result6,
-                                                          Post24) =
+                                                          Post19) =
                                                           (result5 (access p
                                                                     j0)) in
                                                         (exist_1 [result7: bool](
@@ -614,7 +615,7 @@ Definition initnext := (* validation *)
                                                              (access p j0)
                                                         else ~(access p i0) =
                                                               (access p j0)) 
-                                                        result6 Post24) in
+                                                        result6 Post19) in
                                                       (Cases (btest [result4:bool](
                                                       if result4
                                                       then (access p i0) =
@@ -623,8 +624,7 @@ Definition initnext := (* validation *)
                                                             (access p j0)) result4 Bool3) of
                                                       | (left Test6) =>
                                                           let (i1, j1, next2,
-                                                            result5,
-                                                            Post28) =
+                                                            result5, Inv) =
                                                             let (i1, result5,
                                                               Post7) =
                                                               let (result5,
@@ -744,15 +744,14 @@ Definition initnext := (* validation *)
                                                                  M - i2` j2)
                                                            (pairZ `M - i0` j0)) 
                                                           i1 j1 next2 
-                                                          result5 Post28)
+                                                          result5 Inv)
                                                       | (right Test5) =>
                                                           let (i1, j1, next2,
-                                                            result5,
-                                                            Post25) =
+                                                            result5, Inv) =
                                                             let (result5,
                                                               Bool2) =
                                                               let (result7,
-                                                                Post26) =
+                                                                Post20) =
                                                                 (Z_eq_bool j0
                                                                    `0`) in
                                                               (exist_1 [result8: bool](
@@ -760,7 +759,7 @@ Definition initnext := (* validation *)
                                                               then j0 = `0`
                                                               else ~(j0 =
                                                               `0`)) result7
-                                                              Post26) in
+                                                              Post20) in
                                                             (Cases (btest [result5:bool](
                                                             if result5
                                                             then j0 = `0`
@@ -770,7 +769,7 @@ Definition initnext := (* validation *)
                                                                 let (i1,
                                                                   next2,
                                                                   result6,
-                                                                  Post27) =
+                                                                  Inv) =
                                                                   let (i1,
                                                                     result6,
                                                                     Post5) =
@@ -922,8 +921,7 @@ Definition initnext := (* validation *)
                                                                   M - i0` j0)) 
                                                                 i1 j0 
                                                                 next2 
-                                                                result6
-                                                                Post27)
+                                                                result6 Inv)
                                                             | (right Test3) =>
                                                                 let Pre5 =
                                                                   (initnext_po_9 next
@@ -1022,7 +1020,7 @@ Definition initnext := (* validation *)
                                                                  M - i2` j2)
                                                            (pairZ `M - i0` j0)) 
                                                           i1 j1 next2 
-                                                          result5 Post25) end) in
+                                                          result5 Inv) end) in
                                                     (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result5: unit]`
                                                     0 <= j2` /\ `j2 <= M` /\
                                                     (`j2 < i2` /\
@@ -1040,8 +1038,7 @@ Definition initnext := (* validation *)
                                                        (access next3 k)))) /\
                                                     (lexZ (pairZ `M - i2` j2)
                                                      (pairZ `M - i0` j0)) 
-                                                    i1 j1 next2 result4
-                                                    Post23) in
+                                                    i1 j1 next2 result4 Inv) in
                                                   (((((((wf1 (pairZ `
                                                               M - i1` j1))
                                                          (initnext_po_11 next
@@ -1050,7 +1047,7 @@ Definition initnext := (* validation *)
                                                          next0 Post3 Variant1
                                                          i0 j0 next1 p Pre8
                                                          Inv Test7 i1 j1
-                                                         next2 Post22)) 
+                                                         next2 Inv)) 
                                                         i1) j1) next2)
                                                      (refl_equal ? (pairZ `
                                                                     M - i1`
@@ -1060,7 +1057,7 @@ Definition initnext := (* validation *)
                                                     Post2 Test8 next0 Post3
                                                     Variant1 i0 j0 next1 p
                                                     Pre8 Inv Test7 i1 j1
-                                                    next2 Post22)) in
+                                                    next2 Inv)) in
                                                 (exist_4 [i2: Z][j2: Z][next3: (array M Z)][result5: unit]`
                                                 0 <= j2` /\ `j2 <= M` /\
                                                 (`j2 < i2` /\ `i2 <= M`) /\
@@ -1074,10 +1071,10 @@ Definition initnext := (* validation *)
                                                  (`0 < k` /\ `k <= i2` ->
                                                   (Next p k (access next3 k)))) /\
                                                 `i2 >= M - 1` i1 j1 next2
-                                                result4 Post21)
+                                                result4 Inv)
                                             | (right Test2) =>
                                                 let (i1, j1, next2, result4,
-                                                  Post20) =
+                                                  Inv) =
                                                   (exist_4 [i1: Z][j1: Z][next2: (array M Z)][result4: unit]`
                                                   0 <= j1` /\ `j1 <= M` /\
                                                   (`j1 < i1` /\ `i1 <= M`) /\
@@ -1111,7 +1108,7 @@ Definition initnext := (* validation *)
                                                  (`0 < k` /\ `k <= i2` ->
                                                   (Next p k (access next3 k)))) /\
                                                 `i2 >= M - 1` i1 j1 next2
-                                                result4 Post20) end))
+                                                result4 Inv) end))
                            (pairZ `M - result` result0)) result) result0)
                         next0) (refl_equal ? (pairZ `M - result` result0)))
                       (initnext_po_14 next p result Post1 result0 Post2 Test8
@@ -1120,7 +1117,7 @@ Definition initnext := (* validation *)
                   (j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next2 j)))) 
                   i0 j0 next1 result3
                   (initnext_po_15 next p result Post1 result0 Post2 Test8
-                  next0 Post3 i0 j0 next1 Post18)) in
+                  next0 Post3 i0 j0 next1 Inv)) in
                 (exist_4 [i1: Z][j1: Z][next1: (array M Z)][result3: unit](
                 (j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next1 j)))) 
                 i0 j0 next0 result2 Post17)
@@ -1408,10 +1405,10 @@ Lemma kmp_po_10 :
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
   (i1: Z)
   (j1: Z)
-  (Post22: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
-           (match a `i1 - j1` p `0` j1) /\
-           ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
-           (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
+  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
+        (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
   (lexZ (pairZ `N - i1` j1) Variant1).
 Proof.
 (* FILL PROOF HERE *)
@@ -1438,10 +1435,10 @@ Lemma kmp_po_11 :
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
   (i1: Z)
   (j1: Z)
-  (Post22: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
-           (match a `i1 - j1` p `0` j1) /\
-           ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
-           (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
+  (Inv: `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
+        (match a `i1 - j1` p `0` j1) /\
+        ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))) /\
+        (lexZ (pairZ `N - i1` j1) (pairZ `N - i0` j0)))
   `0 <= j1` /\ `j1 <= M` /\ (`j1 <= i1` /\ `i1 <= N`) /\
   (match a `i1 - j1` p `0` j1) /\
   ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))).
@@ -1503,10 +1500,10 @@ Lemma kmp_po_14 :
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (i0: Z)
   (j0: Z)
-  (Post17: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
-           (match a `i0 - j0` p `0` j0) /\
-           ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))) /\
-           (`j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false))
+  (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
+        (match a `i0 - j0` p `0` j0) /\
+        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))) /\
+        (`j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false))
   (Test10: j0 = M)
   (first_occur p a `i0 - M`).
 Proof.
@@ -1524,15 +1521,16 @@ Lemma kmp_po_15 :
   (Post15: ((j:Z) (`0 < j` /\ `j < M` -> (Next p j (access next0 j)))))
   (i0: Z)
   (j0: Z)
-  (Post17: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
-           (match a `i0 - j0` p `0` j0) /\
-           ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))) /\
-           (`j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false))
+  (Inv: `0 <= j0` /\ `j0 <= M` /\ (`j0 <= i0` /\ `i0 <= N`) /\
+        (match a `i0 - j0` p `0` j0) /\
+        ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))) /\
+        (`j0 < M` /\ `i0 >= N` \/ `j0 >= M` /\ false = false))
   (Test9: ~(j0 = M))
   (first_occur p a i0).
 Proof.
 (* FILL PROOF HERE *)
 Save.
+
 
 
 
@@ -1554,7 +1552,7 @@ Definition kmp := (* validation *)
                                                             (Next p j
                                                              (access next1 j)))) 
               next0 result3 Post16) in
-            let (i0, j0, result2, Post17) =
+            let (i0, j0, result2, Inv) =
               ((((((((((well_founded_induction prodZZ) lexZ)
                        (kmp_po_1 p result Post1 result0 Post2 next0 Post15))
                       [Variant1: prodZZ](a: (array N A))(i0: Z)(j0: Z)(next0: (array M Z))(p: (array M A))(_: 
@@ -1598,25 +1596,25 @@ Definition kmp := (* validation *)
                                          ~(match a k p `0` M)))]
                                        let (result2, Post4) =
                                          let (result2, Bool1) =
-                                           let (result4, Post18) =
+                                           let (result4, Post17) =
                                              (Z_lt_ge_bool j0 M) in
                                            (exist_1 [result5: bool](if result5
                                                                     then `
                                                                     j0 < M`
                                                                     else `
                                                                     j0 >= M`) 
-                                           result4 Post18) in
+                                           result4 Post17) in
                                          (Cases (btest [result2:bool](
                                          if result2 then `j0 < M`
                                          else `j0 >= M`) result2 Bool1) of
                                          | (left Test2) =>
                                              let (result3, Bool2) =
-                                               let (result5, Post19) =
+                                               let (result5, Post18) =
                                                  (Z_lt_ge_bool i0 N) in
                                                (exist_1 [result6: bool](
                                                if result6 then `i0 < N`
                                                else `i0 >= N`) result5
-                                               Post19) in
+                                               Post18) in
                                              (exist_1 [result4: bool](
                                              if result4 then `j0 < M` /\
                                              `i0 < N` \/ `j0 >= M` /\
@@ -1660,10 +1658,9 @@ Definition kmp := (* validation *)
                                                                     false =
                                                                     false) result2 Post4) of
                                        | (left Test8) =>
-                                           let (i1, j1, result3, Post21) =
-                                             let (i1, j1, result3, Post22) =
-                                               let (i1, j1, result3,
-                                                 Post23) =
+                                           let (i1, j1, result3, Inv) =
+                                             let (i1, j1, result3, Inv) =
+                                               let (i1, j1, result3, Inv) =
                                                  let (result3, Bool4) =
                                                    let Pre2 =
                                                      (kmp_po_4 a p result
@@ -1678,7 +1675,7 @@ Definition kmp := (* validation *)
                                                        a i0 j0 p Pre5 Inv
                                                        Test8 Pre2) in
                                                      (A_eq_bool (access a i0)) in
-                                                   let (result5, Post24) =
+                                                   let (result5, Post19) =
                                                      (result4 (access p j0)) in
                                                    (exist_1 [result6: bool](
                                                    if result6
@@ -1686,7 +1683,7 @@ Definition kmp := (* validation *)
                                                         (access p j0)
                                                    else ~(access a i0) =
                                                          (access p j0)) 
-                                                   result5 Post24) in
+                                                   result5 Post19) in
                                                  (Cases (btest [result3:bool](
                                                  if result3
                                                  then (access a i0) =
@@ -1695,7 +1692,7 @@ Definition kmp := (* validation *)
                                                        (access p j0)) result3 Bool4) of
                                                  | (left Test7) =>
                                                      let (i1, j1, result4,
-                                                       Post27) =
+                                                       Inv) =
                                                        let (i1, result4,
                                                          Post7) =
                                                          let (result4,
@@ -1753,19 +1750,19 @@ Definition kmp := (* validation *)
                                                        ~(match a k p `0` M))) /\
                                                      (lexZ (pairZ `N - i2` j2)
                                                       (pairZ `N - i0` j0)) 
-                                                     i1 j1 result4 Post27)
+                                                     i1 j1 result4 Inv)
                                                  | (right Test6) =>
                                                      let (i1, j1, result4,
-                                                       Post25) =
+                                                       Inv) =
                                                        let (result4, Bool3) =
                                                          let (result6,
-                                                           Post26) =
+                                                           Post20) =
                                                            (Z_eq_bool j0 `0`) in
                                                          (exist_1 [result7: bool](
                                                          if result7
                                                          then j0 = `0`
                                                          else ~(j0 = `
-                                                         0`)) result6 Post26) in
+                                                         0`)) result6 Post20) in
                                                        (Cases (btest [result4:bool](
                                                        if result4
                                                        then j0 = `0`
@@ -1876,7 +1873,7 @@ Definition kmp := (* validation *)
                                                        ~(match a k p `0` M))) /\
                                                      (lexZ (pairZ `N - i2` j2)
                                                       (pairZ `N - i0` j0)) 
-                                                     i1 j1 result4 Post25) end) in
+                                                     i1 j1 result4 Inv) end) in
                                                (exist_3 [i2: Z][j2: Z][result4: unit]`
                                                0 <= j2` /\ `j2 <= M` /\
                                                (`j2 <= i2` /\ `i2 <= N`) /\
@@ -1886,19 +1883,19 @@ Definition kmp := (* validation *)
                                                  ~(match a k p `0` M))) /\
                                                (lexZ (pairZ `N - i2` j2)
                                                 (pairZ `N - i0` j0)) 
-                                               i1 j1 result3 Post23) in
+                                               i1 j1 result3 Inv) in
                                              ((((((wf1 (pairZ `N - i1` j1))
                                                    (kmp_po_10 a p result
                                                    Post1 result0 Post2 next0
                                                    Post15 Variant1 a i0 j0 p
-                                                   Pre5 Inv Test8 i1 j1
-                                                   Post22)) i1) j1)
+                                                   Pre5 Inv Test8 i1 j1 Inv))
+                                                  i1) j1)
                                                 (refl_equal ? (pairZ `
                                                                N - i1` j1)))
                                                (kmp_po_11 a p result Post1
                                                result0 Post2 next0 Post15
                                                Variant1 a i0 j0 p Pre5 Inv
-                                               Test8 i1 j1 Post22)) in
+                                               Test8 i1 j1 Inv)) in
                                            (exist_3 [i2: Z][j2: Z][result4: unit]`
                                            0 <= j2` /\ `j2 <= M` /\
                                            (`j2 <= i2` /\ `i2 <= N`) /\
@@ -1908,9 +1905,9 @@ Definition kmp := (* validation *)
                                              ~(match a k p `0` M))) /\
                                            (`j2 < M` /\ `i2 >= N` \/
                                            `j2 >= M` /\ false = false) 
-                                           i1 j1 result3 Post21)
+                                           i1 j1 result3 Inv)
                                        | (right Test3) =>
-                                           let (i1, j1, result3, Post20) =
+                                           let (i1, j1, result3, Inv) =
                                              (exist_3 [i1: Z][j1: Z][result3: unit]`
                                              0 <= j1` /\ `j1 <= M` /\
                                              (`j1 <= i1` /\ `i1 <= N`) /\
@@ -1934,35 +1931,35 @@ Definition kmp := (* validation *)
                                              ~(match a k p `0` M))) /\
                                            (`j2 < M` /\ `i2 >= N` \/
                                            `j2 >= M` /\ false = false) 
-                                           i1 j1 result3 Post20) end))
+                                           i1 j1 result3 Inv) end))
                     (pairZ `N - result` result0)) result) result0)
                  (refl_equal ? (pairZ `N - result` result0)))
                 (kmp_po_13 a p result Post1 result0 Post2 next0 Post15)) in
-            let (result3, Post28) =
+            let (result3, Post21) =
               let (result3, Bool5) =
-                let (result5, Post29) = (Z_eq_bool j0 M) in
+                let (result5, Post22) = (Z_eq_bool j0 M) in
                 (exist_1 [result6: bool](if result6 then j0 = M else ~(j0 =
                                          M)) result5
-                Post29) in
+                Post22) in
               (Cases (btest [result3:bool](if result3 then j0 = M else ~(j0 =
                                            M)) result3 Bool5) of
               | (left Test10) =>
-                  let (result4, Post31) =
+                  let (result4, Post24) =
                     (exist_1 [result4: Z](first_occur p a result4) `i0 - M`
                     (kmp_po_14 a p result Post1 result0 Post2 next0 Post15 i0
-                    j0 Post17 Test10)) in
+                    j0 Inv Test10)) in
                   (exist_1 [result5: Z](first_occur p a result5) result4
-                  Post31)
+                  Post24)
               | (right Test9) =>
-                  let (result4, Post30) =
+                  let (result4, Post23) =
                     (exist_1 [result4: Z](first_occur p a result4) i0
                     (kmp_po_15 a p result Post1 result0 Post2 next0 Post15 i0
-                    j0 Post17 Test9)) in
+                    j0 Inv Test9)) in
                   (exist_1 [result5: Z](first_occur p a result5) result4
-                  Post30) end) in
+                  Post23) end) in
             (exist_4 [i1: Z][j1: Z][next1: (array M Z)][result4: Z](first_occur p
                                                                     a result4) 
-            i0 j0 next0 result3 Post28) in
+            i0 j0 next0 result3 Post21) in
           (exist_3 [i1: Z][next1: (array M Z)][result2: Z](first_occur p a
                                                            result2) i0
           next0 result1 Post14) in

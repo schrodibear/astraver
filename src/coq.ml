@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.40 2002-06-24 08:48:04 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.41 2002-06-24 09:37:35 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -14,26 +14,14 @@ open Misc
 
 let out_file f = f ^ "_why.v"
 
-let relation id =
-  if id == t_lt then "<" 
-  else if id == t_le then "<="
-  else if id == t_gt then ">"
-  else if id == t_ge then ">="
-  else if id == t_eq then "="
-  else if id == t_neq then "<>"
-  else assert false
-
-let relation_bool id =
+let prefix_id id =
   if id == t_lt then "Z_lt_ge_bool" 
   else if id == t_le then "Z_le_gt_bool"
   else if id == t_gt then "Z_gt_le_bool"
   else if id == t_ge then "Z_ge_lt_bool"
   else if id == t_eq_int then "Z_eq_bool"
   else if id == t_neq_int then "Z_noteq_bool"
-  else assert false
-
-let arith id =
-  if id == t_add then "Zplus"
+  else if id == t_add then "Zplus"
   else if id == t_sub then "Zminus"
   else if id == t_mul then "Zmult"
   else if id == t_div then "Zdiv"
@@ -48,7 +36,7 @@ let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
 let print_term fmt t = 
   let rec print0 fmt = function
     | Tapp (id, [a;b]) when is_relation id ->
-	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (relation_bool id)
+	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (prefix_id id)
 	print1 a print1 b
     | t -> 
 	print1 fmt t
@@ -92,8 +80,8 @@ let print_term fmt t =
 	fprintf fmt "@[(%a)@]" print0 t
     | Tapp (id, tl) when id == t_zwf_zero -> 
 	openz fmt; fprintf fmt "(@[Zwf 0 %a@])" print_terms tl; closez fmt
-    | Tapp (id, tl) when is_arith id -> 
-	fprintf fmt "(@[%s %a@])" (arith id) print_terms tl
+    | Tapp (id, tl) when is_relation id || is_arith id -> 
+	fprintf fmt "(@[%s %a@])" (prefix_id id) print_terms tl
     | Tapp (id, tl) -> 
 	fprintf fmt "(@[%s %a@])" (Ident.string id) print_terms tl
   and print_terms fmt tl =
@@ -109,6 +97,15 @@ let rec print_pure_type fmt = function
   | PTarray (s, v) -> 
       fprintf fmt "(array %a %a)" print_term s print_pure_type v
   | PTexternal id -> Ident.print fmt id
+
+let infix_relation id =
+  if id == t_lt then "<" 
+  else if id == t_le then "<="
+  else if id == t_gt then ">"
+  else if id == t_ge then ">="
+  else if id == t_eq then "="
+  else if id == t_neq then "<>"
+  else assert false
 
 let print_predicate fmt p =
   let rec print0 fmt = function
@@ -141,7 +138,7 @@ let print_predicate fmt p =
 	fprintf fmt "(Zwf `0` %a %a)" print_term a print_term b
     | Papp (id, [a;b]) when is_comparison id ->
 	openz fmt; 
-	fprintf fmt "%a %s@ %a" print_term a (relation id) print_term b; 
+	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b; 
 	closez fmt
     | Papp (id, l) ->
 	fprintf fmt "(@[%s %a@])" (Ident.string id)

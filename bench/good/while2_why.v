@@ -16,6 +16,8 @@ Require Omega.
 
 
 
+
+
 Definition oppose := (* validation *)
   [u: unit]
     [x: Z]
@@ -112,6 +114,8 @@ Lemma test_po_7 :
 Proof.
 Intros; Omega.
 Save.
+
+
 
 
 

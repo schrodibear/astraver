@@ -44,6 +44,8 @@ Save.
 
 
 
+
+
 Definition p1 := (* validation *)
   (exist_1 [result: Z]True `0` p1_po_1).
 
@@ -52,6 +54,8 @@ Lemma p2_po_1 :
 Proof.
 Tauto.
 Save.
+
+
 
 
 
@@ -80,6 +84,8 @@ Save.
 
 
 
+
+
 Definition p3 := (* validation *)
   (exist_1 [result: Z]True /\ True `0` p3_po_1).
 
@@ -88,6 +94,8 @@ Lemma p4_po_1 :
 Proof.
 Tauto.
 Save.
+
+
 
 
 
@@ -116,6 +124,8 @@ Save.
 
 
 
+
+
 Definition p5 := (* validation *)
   (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
 
@@ -124,6 +134,8 @@ Lemma p6_po_1 :
 Proof.
 Auto.
 Save.
+
+
 
 
 
@@ -152,6 +164,8 @@ Save.
 
 
 
+
+
 Definition p7 := (* validation *)
   (exist_1 [result: Z]((x:Z) x = x) `0` p7_po_1).
 
@@ -170,6 +184,8 @@ Save.
 
 
 
+
+
 Definition p8 := (* validation *)
   (exist_1 [result: Z]True /\ ((x:Z) x = x) `0` p8_po_1).
 
@@ -178,6 +194,28 @@ Lemma p9_po_1 :
 Proof.
 Auto.
 Save.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -326,6 +364,8 @@ Save.
 
 
 
+
+
 Definition ar6 := (* validation *)
   let Pre1 = ar6_po_1 in
   `(Zdiv 1 1)`.
@@ -335,6 +375,62 @@ Lemma ar7_po_1 :
 Proof.
 Omega.
 Save.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -856,6 +952,8 @@ Save.
 
 
 
+
+
 Definition arr1 := (* validation *)
   [v6: (array `10` Z)]let Pre1 = arr1_po_1 in
                       (access v6 `0`).
@@ -865,6 +963,8 @@ Lemma arr2_po_1 :
 Proof. (* arr2_po_1 *)
 Omega.
 Save.
+
+
 
 
 
@@ -886,6 +986,8 @@ Lemma arr3_po_1 :
 Proof. (* arr3_po_1 *)
 Intros; Omega.
 Save.
+
+
 
 
 
@@ -928,6 +1030,8 @@ Save.
 
 
 
+
+
 Definition arr4 := (* validation *)
   [v6: (array `10` Z)]
     [Pre3: (access v6 `0`) = `9`]
@@ -943,6 +1047,8 @@ Lemma arr5_po_1 :
 Proof. (* arr5_po_1 *)
 Intros; Omega.
 Save.
+
+
 
 
 
@@ -970,6 +1076,8 @@ Lemma arr6_po_1 :
 Proof. (* arr6_po_1 *)
 Intros; Omega.
 Save.
+
+
 
 
 
@@ -1009,6 +1117,12 @@ Lemma arr7_po_2 :
 Proof. (* arr7_po_2 *)
 Intros; Omega.
 Save.
+
+
+
+
+
+
 
 
 
@@ -1085,6 +1199,10 @@ Proof. Intros; Omega. Save.
 
 
 
+
+
+
+
 Definition fc3 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
     (refl_equal ? `0`)) in
@@ -1121,6 +1239,8 @@ Save.
 
 
 
+
+
 Definition an2 := (* validation *)
   [v4: Z]
     [Pre1: `v4 >= 0`]
@@ -1140,6 +1260,8 @@ Lemma an3_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
 
 
 

@@ -81,8 +81,8 @@ Lemma heapsort_po_2 :
   (result: Z)
   (Post1: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
-  (t0: (array N Z))
   (k0: Z)
+  (t0: (array N Z))
   (Pre4: Variant1 = `k0 + 1`)
   (Pre3: `(-1) <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
@@ -101,8 +101,8 @@ Lemma heapsort_po_3 :
   (result: Z)
   (Post1: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
-  (t0: (array N Z))
   (k0: Z)
+  (t0: (array N Z))
   (Pre4: Variant1 = `k0 + 1`)
   (Pre3: `(-1) <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
@@ -133,8 +133,8 @@ Lemma heapsort_po_4 :
   (result: Z)
   (Post1: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
-  (t0: (array N Z))
   (k0: Z)
+  (t0: (array N Z))
   (Pre4: Variant1 = `k0 + 1`)
   (Pre3: `(-1) <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
@@ -157,8 +157,8 @@ Lemma heapsort_po_5 :
   (result: Z)
   (Post1: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
-  (t0: (array N Z))
   (k0: Z)
+  (t0: (array N Z))
   (Pre4: Variant1 = `k0 + 1`)
   (Pre3: `(-1) <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
@@ -183,8 +183,8 @@ Lemma heapsort_po_6 :
   (result: Z)
   (Post1: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
-  (t0: (array N Z))
   (k0: Z)
+  (t0: (array N Z))
   (Pre4: Variant1 = `k0 + 1`)
   (Pre3: `(-1) <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
@@ -254,8 +254,8 @@ Lemma heapsort_po_10 :
   (result0: Z)
   (Post3: result0 = `N - 1`)
   (Variant3: Z)
-  (t1: (array N Z))
   (k0: Z)
+  (t1: (array N Z))
   (Pre9: Variant3 = k0)
   (Pre8: `0 <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
@@ -277,8 +277,8 @@ Lemma heapsort_po_11 :
   (result0: Z)
   (Post3: result0 = `N - 1`)
   (Variant3: Z)
-  (t1: (array N Z))
   (k0: Z)
+  (t1: (array N Z))
   (Pre9: Variant3 = k0)
   (Pre8: `0 <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
@@ -309,8 +309,8 @@ Lemma heapsort_po_12 :
   (result0: Z)
   (Post3: result0 = `N - 1`)
   (Variant3: Z)
-  (t1: (array N Z))
   (k0: Z)
+  (t1: (array N Z))
   (Pre9: Variant3 = k0)
   (Pre8: `0 <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
@@ -392,8 +392,8 @@ Lemma heapsort_po_13 :
   (result0: Z)
   (Post3: result0 = `N - 1`)
   (Variant3: Z)
-  (t1: (array N Z))
   (k0: Z)
+  (t1: (array N Z))
   (Pre9: Variant3 = k0)
   (Pre8: `0 <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
@@ -422,8 +422,8 @@ Lemma heapsort_po_14 :
   (result0: Z)
   (Post3: result0 = `N - 1`)
   (Variant3: Z)
-  (t1: (array N Z))
   (k0: Z)
+  (t1: (array N Z))
   (Pre9: Variant3 = k0)
   (Pre8: `0 <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
@@ -456,8 +456,8 @@ Lemma heapsort_po_15 :
   (result0: Z)
   (Post3: result0 = `N - 1`)
   (Variant3: Z)
-  (t1: (array N Z))
   (k0: Z)
+  (t1: (array N Z))
   (Pre9: Variant3 = k0)
   (Pre8: `0 <= k0` /\ `k0 <= N - 1` /\
          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
