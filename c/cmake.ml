@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.5 2005-03-08 10:24:53 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.6 2005-03-11 14:22:26 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -43,7 +43,6 @@ let generic f targets =
        fprintf fmt "WHY=why %s@\n@\n" Coptions.why_opt;	    
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
-       fprintf fmt "WHYCOQ=%s/coq@\n@\n" Coptions.whylib;
        fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey@\n@\n";
        fprintf fmt "all: coq/caduceus_spec_why.v %a@\n@\n" 
 	 (print_files simplify) targets;
@@ -52,7 +51,7 @@ let generic f targets =
        fprintf fmt "\t@@echo 'why -coq-v8 [...] why/$*.why' &&$(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export caduceus_spec_why.\" -coq-tactic \"$(COQTACTIC)\" $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/$*.why@\n@\n";
        fprintf fmt "coq/caduceus_spec_why.v: why/caduceus_spec.why@\n";
        fprintf fmt "\t@@echo 'why -coq-v8 [...] why/caduceus_spec.why' && $(WHY) -coq-v8 -dir coq -coq-preamble \"Require Export caduceus_why. Require Export caduceus_tactics.\" $(CADULIB)/why/caduceus.why why/caduceus_spec.why@\n@\n";
-       fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq -I $(WHYCOQ) $<@\n@\n";
+       fprintf fmt "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
        
        fprintf fmt "pvs: %a@\n@\n" (print_files pvs) targets;
        fprintf fmt "pvs/%%_why.pvs: pvs/caduceus_spec_why.pvs why/%%.why@\n";
