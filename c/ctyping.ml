@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.87 2005-02-01 13:40:38 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.88 2005-02-01 15:17:39 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -678,7 +678,6 @@ let int_to_init loc env ty i=
 
 let rec type_initializer loc env ty = function
   | Iexpr e -> 	      
-      eprintf "type : %a@\n" print_type ty;
       begin
 	match e.node with
 	  | CEstring_literal s ->
@@ -687,7 +686,6 @@ let rec type_initializer loc env ty = function
 		  | Tpointer ty | Tarray (ty,_) -> ty
 		  | _ ->  ty
 	      in
-	      eprintf "%a@\n" print_type ty;
 	      let l = ref [int_to_init e.loc env ty 0] in 
 	      let n = (String.length s) -1 in
 	      for i = 1 to n-1  do
