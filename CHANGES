@@ -1,7 +1,7 @@
 
 version 1.10, April 4th, 2003
 ==============================
-  o C: added statement /*@ label id */
+  o C: added label statement and alternate syntax /*@ label id */ 
   o fixed bug in ocaml code generation
 
 version 1.08, March 28th, 2003

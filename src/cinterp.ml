@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.33 2003-04-04 07:29:52 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.34 2003-04-04 11:59:36 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -88,16 +88,17 @@ let loc_of_expr = function
   | CEcond (l, _, _, _) -> l
 
 let loc_of_statement = function
-  | CSnop l -> l
-  | CSexpr (l, _) -> l
-  | CScond (l, _, _, _) -> l
-  | CSwhile (l, _, _, _) -> l
-  | CSdowhile (l, _, _, _) -> l
-  | CSfor (l, _, _, _, _, _) -> l
-  | CSblock (l, _) -> l
-  | CSreturn (l, _) -> l
-  | CSbreak l -> l
-  | CScontinue l -> l
+  | CSnop l
+  | CSexpr (l, _)
+  | CScond (l, _, _, _)
+  | CSwhile (l, _, _, _)
+  | CSdowhile (l, _, _, _)
+  | CSfor (l, _, _, _, _, _)
+  | CSblock (l, _)
+  | CSreturn (l, _)
+  | CSbreak l
+  | CScontinue l
+  | CSlabel (l, _, _)
   | CSannot (l, _) -> l
 
 (* the environment gives the C type, together with a boolean indicating
@@ -661,6 +662,9 @@ let rec interp_statement cenv et abrupt = function
   | CScontinue l -> 
       ml_raise_continue l (Some (PVpure PTunit)), 
       { mt_status with continue = true }
+  | CSlabel (l, lab, s) ->
+      let m, st = interp_statement cenv et abrupt s in
+      mk_seq l (ml_label l lab) m, st
   | CSannot (l, (ofs, a)) ->
       (match interp_c_annot ofs a with
 	 | Sassert a -> ml_assert l a, mt_status

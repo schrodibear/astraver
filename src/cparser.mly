@@ -472,7 +472,7 @@ statement
         ;
 
 labeled_statement
-        : IDENTIFIER COLON statement { uns () }
+        : IDENTIFIER COLON statement { CSlabel (loc (), $1, $3) }
         | CASE constant_expression COLON statement { uns () }
         | DEFAULT COLON statement { uns () }
         ;

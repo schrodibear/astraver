@@ -571,6 +571,12 @@ Labels are inserted within statements with a similar syntax:
      /*@ label L */;
      x = x + 1;
 \end{verbatim}
+or using C labels directly:
+\begin{verbatim}
+     x = 2 * x;
+   L:
+     x = x + 1;
+\end{verbatim}
 
 \subsection{C fragment currently covered}
 \index{C program!unsupported constructs}
@@ -1517,7 +1523,7 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
 \begin{center}
 \hrulefill\\
 \begin{tabular}{lrl}
-  \nt{c\_statement}
+  \nt{statement}
     & $::=$ & \nt{c\_expr} \\
     &   $|$ & \te{if} \te{(} \nt{c\_expr} \te{)} \nt{statement} 
               $[$ \te{else} \nt{statement} $]$ \\
@@ -1528,6 +1534,7 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
     &   $|$ & \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
               $[$ \nt{c\_expr} $]$ \te{)} \\
            && \nt{c\_loop\_annot} \nt{statement} \\
+    &   $|$ & \nt{identifier} \te{:} \nt{statement} \\
     &   $|$ & \te{/*@} \te{assert} \nt{assertion} \te{*/} \\ \indextt{assert}
     &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
     &   $|$ & \nt{block} \\
