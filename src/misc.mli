@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.39 2002-09-18 14:35:28 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.40 2002-09-20 12:59:34 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -31,6 +31,7 @@ val map_succeed : ('a -> 'b) -> 'a list -> 'b list
 
 val option_app : ('a -> 'b) -> 'a option -> 'b option
 val option_iter : ('a -> unit) -> 'a option -> unit
+val option_fold : ('a -> 'b -> 'b) -> 'a option -> 'b -> 'b
 
 val list_of_some : 'a option -> 'a list
 val difference : 'a list -> 'a list -> 'a list

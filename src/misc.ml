@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.48 2002-09-18 14:35:28 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.49 2002-09-20 12:59:34 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -21,6 +21,8 @@ let map_succeed f =
 let option_app f = function None -> None | Some x -> Some (f x)
 
 let option_iter f = function None -> () | Some x -> f x
+
+let option_fold f x c = match x with None -> c | Some x -> f x c 
 
 let list_of_some = function None -> [] | Some x -> [x]
 

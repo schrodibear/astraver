@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.49 2002-09-18 14:35:28 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.50 2002-09-20 12:59:34 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -136,6 +136,30 @@ let rec make_exn ty x v = function
 let make_val t xs = 
   List.fold_right (fun x cc -> CC_app (CC_var (Ident.exn_val x), cc)) xs t
 
+let lambda_vars =
+  List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
+
+(* builds (post_E1 [r][Q1] (post_E2 [r][Q2] (... (post_En [r][Qn] [r]Q)))) *)
+
+let make_post ren env res k q =
+  let (q,ql) = post_app (subst_in_predicate (subst_onev result res)) q in
+  let abs_pred v c =
+    let c = c.a_value in
+    match v with
+      | Some v -> 
+	  lambda_vars [res, trad_type_v ren env v] (TTpred c)
+      | None -> 
+	  TTpred c
+  in
+  List.fold_right 
+    (fun x c -> 
+       let tx = find_exception x in
+       let tx = option_app (fun x -> PureType x) tx in
+       let qx = List.assoc x ql in
+       TTapp (exn_post x, [abs_pred tx qx; c]))
+    (get_exns k.c_effect) 
+    (abs_pred (Some k.c_result_type) q)
+
 (*s The Monadic operators. They are operating on values of the following
     type [interp] (functions producing a [cc_term] when given a renaming
     data structure). *)
@@ -158,9 +182,6 @@ let apply_result ren env = function
    where the [yi] are the values of the output of [k].
    If there is no [yi] and no postcondition, it is simplified into 
    [t] itself. *)
-
-let lambda_vars =
-  List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
 
 let result_term ef v = function
   | Value t -> make_val (CC_term t) (Effect.get_exns ef)
@@ -197,26 +218,8 @@ let unit info r ren =
 	    let _,o,xs = get_repr ef in
 	    let ren' = Rename.next ren (result :: o) in
 	    let result' = current_var ren' result in
-	    let (q,ql) = apply_post info.label ren' env q in
-	    let abs_pred v c =
-	      let c = c.a_value in
-	      let c = subst_in_predicate (subst_onev result result') c in
-	      match v with
-		| Some v -> 
-		    lambda_vars [result', trad_type_v ren' env v] (TTpred c)
-		| None -> 
-		    TTpred c
-	    in
-	    let c = abs_pred (Some k.c_result_type) q in
-	    let c = 
-	      List.fold_right 
-		(fun x c -> 
-		   let tx = find_exception x in
-		   let tx = option_app (fun x -> PureType x) tx in
-		   let qx = List.assoc x ql in
-		   TTapp (exn_post x, [abs_pred tx qx; c]))
-		xs c 
-	    in
+	    let q = apply_post info.label ren' env q in
+	    let c = make_post ren' env result' k q in
 	    let bl = 
 	      List.map (fun id -> (current_var ren' id, 
 				   trad_type_in_env ren env id)) o
@@ -232,7 +235,7 @@ let unit info r ren =
 
 (*s Case patterns *)
 
-(* (Val_e1 (Val_e2 ... (Exn_ei v))) *)
+(* pattern for an exception: (Val_e1 (Val_e2 ... (Exn_ei v))) *)
 let exn_pattern x res xs =
   let rec make = function
     | [] -> 
@@ -247,7 +250,7 @@ let exn_pattern x res xs =
   in
   make xs
 
-(* (Val_e1 (Val_e2 ... (Val_en v))) *)
+(* pattern for a value: (Val_e1 (Val_e2 ... (Val_en v))) *)
 let val_pattern (res,t) xs =
   let t = [PPvariable (res, t)] in
   List.hd (List.fold_right (fun x cc -> [PPcons (Ident.exn_val x, cc)]) xs t)
@@ -288,10 +291,14 @@ let gen_compose isapp info1 e1 info2 e2 ren =
     | None -> 
 	[], false
     | Some q1 -> 
-	(* TODO *)
-	let (q1,_) = apply_post info1.label ren' env q1 in
-	let hyp = subst_in_predicate (subst_onev result res1) q1.a_value in
-	[post_name q1.a_name, CC_pred_binder hyp], true 
+	if x1 = [] then
+	  let (q,_) = apply_post info1.label ren' env q1 in
+	  let hyp = subst_in_predicate (subst_onev result res1) q.a_value in
+	  [post_name q.a_name, CC_pred_binder hyp], true 
+	else
+	  (* TODO: type of binder is
+	     TTapp (make_post ren' env res1 k1 q1, res1) *)
+	  [post_name Anonymous , CC_untyped_binder], true 
   in
   let vo = current_vars ren' w1 in
   let bl = (binding_of_alist ren env vo) @ b @ b' in
@@ -310,14 +317,21 @@ let gen_compose isapp info1 e1 info2 e2 ren =
       e2 res1 ren'
     else
       (* e1 may raise an exception *)
+      let q1 = option_app (apply_post info1.label ren' env) q1 in
+      let q1 = optpost_app (subst_in_predicate (subst_onev result res1)) q1 in
+      let abs_post a c = 
+	CC_lam ((post_name a.a_name, CC_pred_binder a.a_value), c)
+      in
       let exn_branch x =
 	let xt = find_exception x in
 	let r = Exn (x, option_app (fun _ -> Tvar res1) xt) in
 	let res1 = option_app (fun pt1 -> res1, pt1) xt in
-	exn_pattern x res1 x1, (* TODO [q1] *) unit info2 r ren'
+	let add_hyp (_,ql) = abs_post (List.assoc x ql) in
+	exn_pattern x res1 x1, option_fold add_hyp q1 (unit info2 r ren')
       in
       CC_case (CC_var res1, 
-	       (val_pattern (res1, tv1) x1, (* TODO [q1] *) e2 res1 ren') ::
+	       (val_pattern (res1, tv1) x1, 
+		option_fold (fun (q,_) -> abs_post q) q1 (e2 res1 ren')) ::
 	       (List.map exn_branch x1))
   in
   let cc = CC_letin (dep, bl, cc1, cc2) in
