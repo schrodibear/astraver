@@ -70,72 +70,77 @@ Intuition.
 Save.
 
 
-Definition main := (* validation *)
-  [_: unit; i: Z; x: Z; Pre4: `x >= 0`]
-    let (x0, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
-        (refl_equal ? `0`)) in
-      (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
-    let (i0, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = `10` `10`
-        (refl_equal ? `10`)) in
-      (exist_2 [i1: Z][result1: unit]i1 = `10` result0 tt Post2) in
-    let (x1, result1, Post3) =
-      let (result1, Post3) = (exist_1 [result1: Z]result1 = `x0 + 1` 
-        `x0 + 1` (refl_equal ? `x0 + 1`)) in
-      (exist_2 [x2: Z][result2: unit]x2 = `x0 + 1` result1 tt Post3) in
-    let (i1, result2, Post4) =
-      let (result2, Post4) = (exist_1 [result2: Z]result2 = `i0 - 1` 
-        `i0 - 1` (refl_equal ? `i0 - 1`)) in
-      (exist_2 [i2: Z][result3: unit]i2 = `i0 - 1` result2 tt Post4) in
-    let (i2, x2, result3, Post7) =
-      (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
-        [Variant1: Z](i2: Z)(x2: Z)(_0: Variant1 = i2)(_1: `x2 = 10 - i2` /\
-        `i2 >= 0`)
-        (sig_3 Z Z unit [i3: Z][x3: Z][result3: unit]((`x3 = 10 - i3` /\
-         `i3 >= 0`) /\ `i3 <= 0`))
-        [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
-         (i2: Z)(x2: Z)(_0: Variant2 = i2)(_1: `x2 = 10 - i2` /\ `i2 >= 0`)
-         (sig_3 Z Z unit [i3: Z][x3: Z][result3: unit]((`x3 = 10 - i3` /\
-          `i3 >= 0`) /\ `i3 <= 0`));
-         i2: Z; x2: Z; Pre3: Variant1 = i2; Pre2: `x2 = 10 - i2` /\ `
-         i2 >= 0`]
-          let (result3, Bool1) =
-            let (result5, Post9) = (Z_gt_le_bool i2 `0`) in
-            (exist_1 [result6: bool]
-            (if result6 then `i2 > 0` else `i2 <= 0`) result5 Post9) in
-          (Cases (btest
-                  [result3:bool](if result3 then `i2 > 0` else `i2 <= 0`)
-                  result3 Bool1) of
-          | (left Test2) =>
-              let (i3, x3, result4, Post7) =
-                let (i3, x3, result4, Post8) =
-                  let (x3, result4, Post5) =
-                    let (result4, Post5) = (exist_1 [result4: Z]
-                      result4 = `x2 + 1` `x2 + 1` (refl_equal ? `x2 + 1`)) in
-                    (exist_2 [x4: Z][result5: unit]x4 = `x2 + 1` result4 
-                    tt Post5) in
-                  let (i3, result5, Post6) =
-                    let (result5, Post6) = (exist_1 [result5: Z]
-                      result5 = `i2 - 1` `i2 - 1` (refl_equal ? `i2 - 1`)) in
-                    (exist_2 [i4: Z][result6: unit]i4 = `i2 - 1` result5 
-                    tt Post6) in
-                  (exist_3 [i4: Z][x4: Z][result6: unit](`x4 = 10 - i4` /\
-                  `i4 >= 0`) /\ (Zwf `0` i4 i2) i3 x3 result5
-                  (main_po_1 x Pre4 x0 Post1 i0 Post2 x1 Post3 i1 Post4
-                  Variant1 i2 x2 Pre3 Pre2 Test2 x3 Post5 i3 Post6)) in
-                ((wf1 i3) (loop_variant_1 Pre3 Post8) i3 x3 (refl_equal ? i3)
-                  (proj1 ? ? Post8)) in
-              (exist_3 [i4: Z][x4: Z][result5: unit](`x4 = 10 - i4` /\
-              `i4 >= 0`) /\ `i4 <= 0` i3 x3 result4 Post7)
-          | (right Test1) =>
-              let (i3, x3, result4, Post7) = (exist_3 [i3: Z][x3: Z]
-                [result4: unit](`x3 = 10 - i3` /\ `i3 >= 0`) /\ `i3 <= 0` 
-                i2 x2 tt (conj ? ? Pre2 Test1)) in
-              (exist_3 [i4: Z][x4: Z][result5: unit](`x4 = 10 - i4` /\
-              `i4 >= 0`) /\ `i4 <= 0` i3 x3 result4 Post7) end) i1 i1 
-        x1 (refl_equal ? i1)
-        (main_po_2 x Pre4 x0 Post1 i0 Post2 x1 Post3 i1 Post4)) in
-    (exist_3 [i3: Z][x3: Z][result4: unit]`x3 = 10` i2 x2 result3
-    (main_po_3 x Pre4 x0 Post1 i0 Post2 x1 Post3 i1 Post4 i2 x2 Post7)).
+Definition main (* validation *)
+  : (_: unit)(i: Z)(x: Z)(_: `x >= 0`)
+    (sig_3 Z Z unit [i0: Z][x0: Z][result: unit](`x0 = 10`))
+  := [_: unit; i: Z; x: Z; Pre4: `x >= 0`]
+       let (x0, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
+           (refl_equal ? `0`)) in
+         (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
+       let (i0, result0, Post2) =
+         let (result0, Post2) = (exist_1 [result0: Z]result0 = `10` `10`
+           (refl_equal ? `10`)) in
+         (exist_2 [i1: Z][result1: unit]i1 = `10` result0 tt Post2) in
+       let (x1, result1, Post3) =
+         let (result1, Post3) = (exist_1 [result1: Z]
+           result1 = `x0 + 1` `x0 + 1` (refl_equal ? `x0 + 1`)) in
+         (exist_2 [x2: Z][result2: unit]x2 = `x0 + 1` result1 tt Post3) in
+       let (i1, result2, Post4) =
+         let (result2, Post4) = (exist_1 [result2: Z]
+           result2 = `i0 - 1` `i0 - 1` (refl_equal ? `i0 - 1`)) in
+         (exist_2 [i2: Z][result3: unit]i2 = `i0 - 1` result2 tt Post4) in
+       let (i2, x2, result3, Post7) =
+         (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
+           [Variant1: Z](i2: Z)(x2: Z)(_0: Variant1 = i2)
+           (_1: `x2 = 10 - i2` /\ `i2 >= 0`)
+           (sig_3 Z Z unit [i3: Z][x3: Z][result3: unit]((`x3 = 10 - i3` /\
+            `i3 >= 0`) /\ `i3 <= 0`))
+           [Variant1: Z; wf1: (Variant2: Z)
+            (Pre1: (Zwf `0` Variant2 Variant1))(i2: Z)(x2: Z)
+            (_0: Variant2 = i2)(_1: `x2 = 10 - i2` /\ `i2 >= 0`)
+            (sig_3 Z Z unit [i3: Z][x3: Z][result3: unit]((`x3 = 10 - i3` /\
+             `i3 >= 0`) /\ `i3 <= 0`));
+            i2: Z; x2: Z; Pre3: Variant1 = i2; Pre2: `x2 = 10 - i2` /\
+            `i2 >= 0`]
+             let (result3, Bool1) =
+               let (result5, Post9) = (Z_gt_le_bool i2 `0`) in
+               (exist_1 [result6: bool]
+               (if result6 then `i2 > 0` else `i2 <= 0`) result5 Post9) in
+             (Cases (btest
+                     [result3:bool](if result3 then `i2 > 0` else `i2 <= 0`)
+                     result3 Bool1) of
+             | (left Test2) =>
+                 let (i3, x3, result4, Post7) =
+                   let (i3, x3, result4, Post8) =
+                     let (x3, result4, Post5) =
+                       let (result4, Post5) = (exist_1 [result4: Z]
+                         result4 = `x2 + 1` `x2 + 1`
+                         (refl_equal ? `x2 + 1`)) in
+                       (exist_2 [x4: Z][result5: unit]x4 = `x2 + 1` result4
+                       tt Post5) in
+                     let (i3, result5, Post6) =
+                       let (result5, Post6) = (exist_1 [result5: Z]
+                         result5 = `i2 - 1` `i2 - 1`
+                         (refl_equal ? `i2 - 1`)) in
+                       (exist_2 [i4: Z][result6: unit]i4 = `i2 - 1` result5
+                       tt Post6) in
+                     (exist_3 [i4: Z][x4: Z][result6: unit](`x4 = 10 - i4` /\
+                     `i4 >= 0`) /\ (Zwf `0` i4 i2) i3 x3 result5
+                     (main_po_1 x Pre4 x0 Post1 i0 Post2 x1 Post3 i1 Post4
+                     Variant1 i2 x2 Pre3 Pre2 Test2 x3 Post5 i3 Post6)) in
+                   ((wf1 i3) (loop_variant_1 Pre3 Post8) i3 x3
+                     (refl_equal ? i3) (proj1 ? ? Post8)) in
+                 (exist_3 [i4: Z][x4: Z][result5: unit](`x4 = 10 - i4` /\
+                 `i4 >= 0`) /\ `i4 <= 0` i3 x3 result4 Post7)
+             | (right Test1) =>
+                 let (i3, x3, result4, Post7) = (exist_3 [i3: Z][x3: Z]
+                   [result4: unit](`x3 = 10 - i3` /\ `i3 >= 0`) /\
+                   `i3 <= 0` i2 x2 tt (conj ? ? Pre2 Test1)) in
+                 (exist_3 [i4: Z][x4: Z][result5: unit](`x4 = 10 - i4` /\
+                 `i4 >= 0`) /\ `i4 <= 0` i3 x3 result4 Post7) end) i1 
+           i1 x1 (refl_equal ? i1)
+           (main_po_2 x Pre4 x0 Post1 i0 Post2 x1 Post3 i1 Post4)) in
+       (exist_3 [i3: Z][x3: Z][result4: unit]`x3 = 10` i2 x2 result3
+       (main_po_3 x Pre4 x0 Post1 i0 Post2 x1 Post3 i1 Post4 i2 x2 Post7)).
 

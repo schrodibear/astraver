@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.5 2003-01-21 16:58:30 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.6 2003-02-05 08:49:54 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -110,8 +110,14 @@ let rec print_predicate fmt = function
       fprintf fmt "@[(or@ %a@ %a)@]" print_predicate a print_predicate b
   | Pnot a ->
       fprintf fmt "@[(not@ %a)@]" print_predicate a
-  | Forall _
-  | Exists _ -> assert false
+  | Forall (id,n,_,p) -> 
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      fprintf fmt "@[(FORALL (%a)@ %a)@]" Ident.print id' print_predicate p'
+  | Exists (id,n,t,p) -> 
+      let id' = next_away id (predicate_vars p) in
+      let p' = subst_in_predicate (subst_onev n id') p in
+      fprintf fmt "@[(EXISTS (%a)@ %a)@]" Ident.print id' print_predicate p'
 
 let output_sequent fmt (ctx, c) = match ctx with
   | [] -> 
@@ -125,6 +131,7 @@ let output_sequent fmt (ctx, c) = match ctx with
 
 (*s First-order checks *)
 
+(*
 let rec is_first_order = function
   | Pvar _
   | Papp _
@@ -136,18 +143,18 @@ let rec is_first_order = function
   | Pnot a -> is_first_order a 
   | Forall _
   | Exists _ -> false
+*)
 
 let rec filter_context = function
   | [] -> []
   | Svar (id, _) :: ctx -> filter_context ctx
-  | Spred (_, p) :: ctx when is_first_order p -> p :: filter_context ctx
-  | Spred _ :: ctx -> filter_context ctx
+  | Spred (_, p) :: ctx -> p :: filter_context ctx
 
 exception NotFirstOrder
 
 let rec prepare_conclusion = function
   | Forall (_, _, _, p) -> prepare_conclusion p
-  | p -> if is_first_order p then p else raise NotFirstOrder
+  | p -> p
 
 let prepare_sequent (ctx, c) = 
   filter_context ctx, prepare_conclusion c

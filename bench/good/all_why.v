@@ -32,8 +32,9 @@ Parameter foo : Set.
 
 
 
-Definition p1 := (* validation *)
-  (exist_1 [result: Z]True `0` I).
+Definition p1 (* validation *)
+  : (sig_1 Z [result: Z](True))
+  := (exist_1 [result: Z]True `0` I).
 
 (* Why obligation from file "good/all.mlw", characters 709-727 *)
 Lemma p2_po_1 : 
@@ -45,8 +46,9 @@ Save.
 
 
 
-Definition p2 := (* validation *)
-  (exist_1 [result: Z]~False `0` p2_po_1).
+Definition p2 (* validation *)
+  : (sig_1 Z [result: Z](~False))
+  := (exist_1 [result: Z]~False `0` p2_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 737-759 *)
 Lemma p3_po_1 : 
@@ -58,8 +60,9 @@ Save.
 
 
 
-Definition p3 := (* validation *)
-  (exist_1 [result: Z]True /\ True `0` p3_po_1).
+Definition p3 (* validation *)
+  : (sig_1 Z [result: Z](True /\ True))
+  := (exist_1 [result: Z]True /\ True `0` p3_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 769-791 *)
 Lemma p4_po_1 : 
@@ -71,8 +74,9 @@ Save.
 
 
 
-Definition p4 := (* validation *)
-  (exist_1 [result: Z]True \/ False `0` p4_po_1).
+Definition p4 (* validation *)
+  : (sig_1 Z [result: Z](True \/ False))
+  := (exist_1 [result: Z]True \/ False `0` p4_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 801-828 *)
 Lemma p5_po_1 : 
@@ -84,8 +88,9 @@ Save.
 
 
 
-Definition p5 := (* validation *)
-  (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
+Definition p5 (* validation *)
+  : (sig_1 Z [result: Z](False \/ ~False))
+  := (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 838-864 *)
 Lemma p6_po_1 : 
@@ -97,8 +102,9 @@ Save.
 
 
 
-Definition p6 := (* validation *)
-  (exist_1 [result: Z](True -> ~False) `0` p6_po_1).
+Definition p6 (* validation *)
+  : (sig_1 Z [result: Z]((True -> ~False)))
+  := (exist_1 [result: Z](True -> ~False) `0` p6_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 874-900 *)
 Lemma p7_po_1 : 
@@ -110,8 +116,9 @@ Save.
 
 
 
-Definition p7 := (* validation *)
-  (exist_1 [result: Z]((x:Z) `x = x`) `0` p7_po_1).
+Definition p7 (* validation *)
+  : (sig_1 Z [result: Z](((x:Z) `x = x`)))
+  := (exist_1 [result: Z]((x:Z) `x = x`) `0` p7_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 910-945 *)
 Lemma p8_po_1 : 
@@ -123,8 +130,9 @@ Save.
 
 
 
-Definition p8 := (* validation *)
-  (exist_1 [result: Z]True /\ ((x:Z) `x = x`) `0` p8_po_1).
+Definition p8 (* validation *)
+  : (sig_1 Z [result: Z](True /\ ((x:Z) `x = x`)))
+  := (exist_1 [result: Z]True /\ ((x:Z) `x = x`) `0` p8_po_1).
 
 (* Why obligation from file "good/all.mlw", characters 955-1002 *)
 Lemma p9_po_1 : 
@@ -166,38 +174,49 @@ Save.
 
 
 
-Definition p9 := (* validation *)
-  (exist_1 [result: Z]((x:Z) ((y:Z) (`x = y` -> `x = y`))) `0` p9_po_1).
+Definition p9 (* validation *)
+  : (sig_1 Z [result: Z](((x:Z) ((y:Z) (`x = y` -> `x = y`)))))
+  := (exist_1 [result: Z]((x:Z) ((y:Z) (`x = y` -> `x = y`))) `0` p9_po_1).
 
-Definition acc1 := (* validation *)
-  v2.
+Definition acc1 (* validation *)
+  : Z
+  := v2.
 
-Definition acc2 := (* validation *)
-  acc1.
+Definition acc2 (* validation *)
+  : Z
+  := acc1.
 
-Definition acc3 := (* validation *)
-  f8.
+Definition acc3 (* validation *)
+  : (t: (array Z))(sig_1 unit [result: unit](`(access t 1) = 2`))
+  := f8.
 
-Definition d1 := (* validation *)
-  [v1: bool]v1.
+Definition d1 (* validation *)
+  : (v1: bool)bool
+  := [v1: bool]v1.
 
-Definition d2 := (* validation *)
-  [v4: Z]v4.
+Definition d2 (* validation *)
+  : (v4: Z)Z
+  := [v4: Z]v4.
 
-Definition ar1 := (* validation *)
-  `1`.
+Definition ar1 (* validation *)
+  : Z
+  := `1`.
 
-Definition ar2 := (* validation *)
-  `(-1)`.
+Definition ar2 (* validation *)
+  : Z
+  := `(-1)`.
 
-Definition ar3 := (* validation *)
-  `1 + 1`.
+Definition ar3 (* validation *)
+  : Z
+  := `1 + 1`.
 
-Definition ar4 := (* validation *)
-  `1 - 1`.
+Definition ar4 (* validation *)
+  : Z
+  := `1 - 1`.
 
-Definition ar5 := (* validation *)
-  `1 * 1`.
+Definition ar5 (* validation *)
+  : Z
+  := `1 * 1`.
 
 (* Why obligation from file "good/all.mlw", characters 1198-1201 *)
 Lemma ar6_po_1 : 
@@ -209,9 +228,10 @@ Save.
 
 
 
-Definition ar6 := (* validation *)
-  let Pre1 = ar6_po_1 in
-  (Zdiv `1` `1`).
+Definition ar6 (* validation *)
+  : Z
+  := let Pre1 = ar6_po_1 in
+     (Zdiv `1` `1`).
 
 (* Why obligation from file "good/all.mlw", characters 1212-1215 *)
 Lemma ar7_po_1 : 
@@ -304,258 +324,287 @@ Save.
 
 
 
-Definition ar7 := (* validation *)
-  let Pre1 = ar7_po_1 in
-  (Zmod `1` `1`).
+Definition ar7 (* validation *)
+  : Z
+  := let Pre1 = ar7_po_1 in
+     (Zmod `1` `1`).
 
-Definition a1 := (* validation *)
-  [v4: Z]
-    let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
-      (refl_equal ? `1`)) in
-    (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1).
+Definition a1 (* validation *)
+  : (v4: Z)(sig_2 Z unit [v9: Z][result: unit](v9 = `1`))
+  := [v4: Z]
+       let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+         (refl_equal ? `1`)) in
+       (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1).
 
-Definition a2 := (* validation *)
-  [v1: bool]
-    let (result, Post1) = (exist_1 [result: bool]result = true true
-      (refl_equal ? true)) in
-    (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1).
+Definition a2 (* validation *)
+  : (v1: bool)(sig_2 bool unit [v9: bool][result: unit](v9 = true))
+  := [v1: bool]
+       let (result, Post1) = (exist_1 [result: bool]result = true true
+         (refl_equal ? true)) in
+       (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1).
 
-Definition a3 := (* validation *)
-  [v4: Z]
-    let (result, Post1) = (exist_1 [result: Z]result = `2 + 2` `2 + 2`
-      (refl_equal ? `2 + 2`)) in
-    (exist_2 [v10: Z][result0: unit]v10 = `2 + 2` result tt Post1).
+Definition a3 (* validation *)
+  : (v4: Z)(sig_2 Z unit [v9: Z][result: unit](v9 = `2 + 2`))
+  := [v4: Z]
+       let (result, Post1) = (exist_1 [result: Z]result = `2 + 2` `2 + 2`
+         (refl_equal ? `2 + 2`)) in
+       (exist_2 [v10: Z][result0: unit]v10 = `2 + 2` result tt Post1).
 
-Definition a4 := (* validation *)
-  [v4: Z]
-    let (result, Post1) = (exist_1 [result: Z]result = v4 v4
-      (refl_equal ? v4)) in
-    (exist_2 [v10: Z][result0: unit]v10 = v4 result tt Post1).
+Definition a4 (* validation *)
+  : (v4: Z)(sig_2 Z unit [v9: Z][result: unit](v9 = v4))
+  := [v4: Z]
+       let (result, Post1) = (exist_1 [result: Z]result = v4 v4
+         (refl_equal ? v4)) in
+       (exist_2 [v10: Z][result0: unit]v10 = v4 result tt Post1).
 
-Definition s1 := (* validation *)
-  [v4: Z]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
-        (refl_equal ? `1`)) in
-      (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1) in
-    let (v10, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
-        (refl_equal ? `2`)) in
-      (exist_2 [v11: Z][result1: unit]v11 = `2` result0 tt Post2) in
-    (Build_tuple_2 v10 result0).
+Definition s1 (* validation *)
+  : (v4: Z)(tuple_2 Z unit)
+  := [v4: Z]
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+           (refl_equal ? `1`)) in
+         (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1) in
+       let (v10, result0, Post2) =
+         let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+           (refl_equal ? `2`)) in
+         (exist_2 [v11: Z][result1: unit]v11 = `2` result0 tt Post2) in
+       (Build_tuple_2 v10 result0).
 
-Definition s2 := (* validation *)
-  [v1: bool; v4: Z]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: bool]result = true true
-        (refl_equal ? true)) in
-      (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1) in
-    let (v10, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
-        (refl_equal ? `2`)) in
-      (exist_2 [v11: Z][result1: unit]v11 = `2` result0 tt Post2) in
-    (Build_tuple_3 v9 v10 result0).
+Definition s2 (* validation *)
+  : (v1: bool)(v4: Z)(tuple_3 bool Z unit)
+  := [v1: bool; v4: Z]
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: bool]result = true true
+           (refl_equal ? true)) in
+         (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1) in
+       let (v10, result0, Post2) =
+         let (result0, Post2) = (exist_1 [result0: Z]result0 = `2` `2`
+           (refl_equal ? `2`)) in
+         (exist_2 [v11: Z][result1: unit]v11 = `2` result0 tt Post2) in
+       (Build_tuple_3 v9 v10 result0).
 
-Definition s3 := (* validation *)
-  [v4: Z]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
-        (refl_equal ? `1`)) in
-      (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1) in
-    let (v10, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = v9 v9
-        (refl_equal ? v9)) in
-      (exist_2 [v11: Z][result1: unit]v11 = v9 result0 tt Post2) in
-    let (v11, result1, Post3) =
-      let (result1, Post3) = (exist_1 [result1: Z]result1 = `3` `3`
-        (refl_equal ? `3`)) in
-      (exist_2 [v12: Z][result2: unit]v12 = `3` result1 tt Post3) in
-    (Build_tuple_2 v11 result1).
+Definition s3 (* validation *)
+  : (v4: Z)(tuple_2 Z unit)
+  := [v4: Z]
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+           (refl_equal ? `1`)) in
+         (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1) in
+       let (v10, result0, Post2) =
+         let (result0, Post2) = (exist_1 [result0: Z]result0 = v9 v9
+           (refl_equal ? v9)) in
+         (exist_2 [v11: Z][result1: unit]v11 = v9 result0 tt Post2) in
+       let (v11, result1, Post3) =
+         let (result1, Post3) = (exist_1 [result1: Z]result1 = `3` `3`
+           (refl_equal ? `3`)) in
+         (exist_2 [v12: Z][result2: unit]v12 = `3` result1 tt Post3) in
+       (Build_tuple_2 v11 result1).
 
-Definition s4 := (* validation *)
-  [v4: Z]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
-        (refl_equal ? `1`)) in
-      (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1) in
-    (Build_tuple_2 v9 `2`).
+Definition s4 (* validation *)
+  : (v4: Z)(tuple_2 Z Z)
+  := [v4: Z]
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `1` `1`
+           (refl_equal ? `1`)) in
+         (exist_2 [v10: Z][result0: unit]v10 = `1` result tt Post1) in
+       (Build_tuple_2 v9 `2`).
 
-Definition c1 := (* validation *)
-  let (result, Post1) = (exist_1 [result: bool]result = true true
-    (refl_equal ? true)) in
-  (Cases (btest [result:bool]result = true result Post1) of
-  | (left Test2) => `1`
-  | (right Test1) => `2` end).
+Definition c1 (* validation *)
+  : Z
+  := let (result, Post1) = (exist_1 [result: bool]result = true true
+       (refl_equal ? true)) in
+     (Cases (btest [result:bool]result = true result Post1) of
+     | (left Test2) => `1`
+     | (right Test1) => `2` end).
 
-Definition c2 := (* validation *)
-  [v1: bool]
-    let (result, Post1) = (exist_1 [result: bool]result = v1 v1
-      (refl_equal ? v1)) in
-    (Cases (btest [result:bool]result = v1 result Post1) of
-    | (left Test2) => `1`
-    | (right Test1) => `2` end).
+Definition c2 (* validation *)
+  : (v1: bool)Z
+  := [v1: bool]
+       let (result, Post1) = (exist_1 [result: bool]result = v1 v1
+         (refl_equal ? v1)) in
+       (Cases (btest [result:bool]result = v1 result Post1) of
+       | (left Test2) => `1`
+       | (right Test1) => `2` end).
 
-Definition c3 := (* validation *)
-  [v4: Z]
-    let (result, Bool1) =
-      let (result1, Post4) = (Z_eq_bool v4 `1`) in
-      (exist_1 [result2: bool]
-      (if result2 then `v4 = 1` else `v4 <> 1`) result1 Post4) in
-    (Cases (btest [result:bool](if result then `v4 = 1` else `v4 <> 1`)
-            result Bool1) of
-    | (left Test2) =>
-        let (v9, result0, Post1) =
-          let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
-            (refl_equal ? `2`)) in
-          (exist_2 [v10: Z][result1: unit]v10 = `2` result0 tt Post1) in
-        (Build_tuple_2 v9 result0)
-    | (right Test1) =>
-        let (v9, result0, Post2) =
-          let (result0, Post2) = (exist_1 [result0: Z]result0 = `3` `3`
-            (refl_equal ? `3`)) in
-          (exist_2 [v10: Z][result1: unit]v10 = `3` result0 tt Post2) in
-        (Build_tuple_2 v9 result0) end).
+Definition c3 (* validation *)
+  : (v4: Z)(tuple_2 Z unit)
+  := [v4: Z]
+       let (result, Bool1) =
+         let (result1, Post4) = (Z_eq_bool v4 `1`) in
+         (exist_1 [result2: bool]
+         (if result2 then `v4 = 1` else `v4 <> 1`) result1 Post4) in
+       (Cases (btest [result:bool](if result then `v4 = 1` else `v4 <> 1`)
+               result Bool1) of
+       | (left Test2) =>
+           let (v9, result0, Post1) =
+             let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` 
+               `2` (refl_equal ? `2`)) in
+             (exist_2 [v10: Z][result1: unit]v10 = `2` result0 tt Post1) in
+           (Build_tuple_2 v9 result0)
+       | (right Test1) =>
+           let (v9, result0, Post2) =
+             let (result0, Post2) = (exist_1 [result0: Z]result0 = `3` 
+               `3` (refl_equal ? `3`)) in
+             (exist_2 [v10: Z][result1: unit]v10 = `3` result0 tt Post2) in
+           (Build_tuple_2 v9 result0) end).
 
-Definition l1 := (* validation *)
-  let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
-    (refl_equal ? `1`)) in
-  x.
+Definition l1 (* validation *)
+  : Z
+  := let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
+       (refl_equal ? `1`)) in
+     x.
 
-Definition l2 := (* validation *)
-  [v4: Z]
-    let (x, Post2) = (exist_1 [result: Z]result = `1` `1`
-      (refl_equal ? `1`)) in
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = x x
-        (refl_equal ? x)) in
-      (exist_2 [v10: Z][result0: unit]v10 = x result tt Post1) in
-    (Build_tuple_2 v9 result).
+Definition l2 (* validation *)
+  : (v4: Z)(tuple_2 Z unit)
+  := [v4: Z]
+       let (x, Post2) = (exist_1 [result: Z]result = `1` `1`
+         (refl_equal ? `1`)) in
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = x x
+           (refl_equal ? x)) in
+         (exist_2 [v10: Z][result0: unit]v10 = x result tt Post1) in
+       (Build_tuple_2 v9 result).
 
-Definition l3 := (* validation *)
-  let (x, Post2) = (exist_1 [result: Z]result = `1` `1`
-    (refl_equal ? `1`)) in
-  let result =
-    let (y, Post1) = (exist_1 [result: Z]result = `2` `2`
-      (refl_equal ? `2`)) in
-    `x + y` in
-  result.
+Definition l3 (* validation *)
+  : Z
+  := let (x, Post2) = (exist_1 [result: Z]result = `1` `1`
+       (refl_equal ? `1`)) in
+     let result =
+       let (y, Post1) = (exist_1 [result: Z]result = `2` `2`
+         (refl_equal ? `2`)) in
+       `x + y` in
+     result.
 
-Definition l4 := (* validation *)
-  [v4: Z]
-    let result =
-      let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
-        (refl_equal ? `1`)) in
-      `1` in
-    (Build_tuple_2 result tt).
+Definition l4 (* validation *)
+  : (v4: Z)(tuple_2 Z unit)
+  := [v4: Z]
+       let result =
+         let (x, Post1) = (exist_1 [result: Z]result = `1` `1`
+           (refl_equal ? `1`)) in
+         `1` in
+       (Build_tuple_2 result tt).
 
-Definition l5 := (* validation *)
-  [v1: bool; v4: Z]
-    let (x, Post3) = (exist_1 [result: Z]result = `1` `1`
-      (refl_equal ? `1`)) in
-    let (v10, v9, result) =
-      let (v9, result, Post1) =
-        let (result, Post1) = (exist_1 [result: bool]result = true true
-          (refl_equal ? true)) in
-        (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1) in
-      let (v10, result0, Post2) =
-        let (result0, Post2) = (exist_1 [result0: Z]result0 = x x
-          (refl_equal ? x)) in
-        (exist_2 [v11: Z][result1: unit]v11 = x result0 tt Post2) in
-      (Build_tuple_3 v9 v10 result0) in
-    (Build_tuple_3 v10 v9 result).
+Definition l5 (* validation *)
+  : (v1: bool)(v4: Z)(tuple_3 bool Z unit)
+  := [v1: bool; v4: Z]
+       let (x, Post3) = (exist_1 [result: Z]result = `1` `1`
+         (refl_equal ? `1`)) in
+       let (v10, v9, result) =
+         let (v9, result, Post1) =
+           let (result, Post1) = (exist_1 [result: bool]result = true 
+             true (refl_equal ? true)) in
+           (exist_2 [v10: bool][result0: unit]v10 = true result tt Post1) in
+         let (v10, result0, Post2) =
+           let (result0, Post2) = (exist_1 [result0: Z]result0 = x x
+             (refl_equal ? x)) in
+           (exist_2 [v11: Z][result1: unit]v11 = x result0 tt Post2) in
+         (Build_tuple_3 v9 v10 result0) in
+       (Build_tuple_3 v10 v9 result).
 
-Definition lr1 := (* validation *)
-  let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
-    (refl_equal ? `1`)) in
-  let (x0, result0, Post1) =
-    let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
-      (refl_equal ? `2`)) in
-    (exist_2 [x1: Z][result1: unit]x1 = `2` result0 tt Post1) in
-  result0.
+Definition lr1 (* validation *)
+  : unit
+  := let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
+       (refl_equal ? `1`)) in
+     let (x0, result0, Post1) =
+       let (result0, Post1) = (exist_1 [result0: Z]result0 = `2` `2`
+         (refl_equal ? `2`)) in
+       (exist_2 [x1: Z][result1: unit]x1 = `2` result0 tt Post1) in
+     result0.
 
-Definition lr2 := (* validation *)
-  let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
-    (refl_equal ? `1`)) in
-  let (x0, result0) =
-    let (x0, result0, Post1) =
-      let (result0, Post1) = (exist_1 [result0: Z]
-        result0 = `result + 1` `result + 1` (refl_equal ? `result + 1`)) in
-      (exist_2 [x1: Z][result1: unit]x1 = `result + 1` result0 tt Post1) in
-    (Build_tuple_2 x0 x0) in
-  result0.
+Definition lr2 (* validation *)
+  : Z
+  := let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
+       (refl_equal ? `1`)) in
+     let (x0, result0) =
+       let (x0, result0, Post1) =
+         let (result0, Post1) = (exist_1 [result0: Z]
+           result0 = `result + 1` `result + 1`
+           (refl_equal ? `result + 1`)) in
+         (exist_2 [x1: Z][result1: unit]x1 = `result + 1` result0 tt Post1) in
+       (Build_tuple_2 x0 x0) in
+     result0.
 
-Definition lr3 := (* validation *)
-  let (result, Post3) = (exist_1 [result: Z]result = `1` `1`
-    (refl_equal ? `1`)) in
-  let (x0, result0) =
-    let (result0, Post2) = (exist_1 [result0: Z]result0 = result result
-      (refl_equal ? result)) in
-    let (x0, result1, Post1) =
-      let (result1, Post1) = (exist_1 [result1: Z]result1 = result0 result0
-        (refl_equal ? result0)) in
-      (exist_2 [x1: Z][result2: unit]x1 = result0 result1 tt Post1) in
-    (Build_tuple_2 x0 result1) in
-  result0.
+Definition lr3 (* validation *)
+  : unit
+  := let (result, Post3) = (exist_1 [result: Z]result = `1` `1`
+       (refl_equal ? `1`)) in
+     let (x0, result0) =
+       let (result0, Post2) = (exist_1 [result0: Z]result0 = result result
+         (refl_equal ? result)) in
+       let (x0, result1, Post1) =
+         let (result1, Post1) = (exist_1 [result1: Z]
+           result1 = result0 result0 (refl_equal ? result0)) in
+         (exist_2 [x1: Z][result2: unit]x1 = result0 result1 tt Post1) in
+       (Build_tuple_2 x0 result1) in
+     result0.
 
-Definition r1 := (* validation *)
-  let (result1, Post1) = (Z_eq_bool `1` `1`) in
-  (exist_1 [result2: bool](if result2 then `1 = 1` else `1 <> 1`) result1
-  Post1).
+Definition r1 (* validation *)
+  : (sig_1 bool [result: bool]((if result then `1 = 1` else `1 <> 1`)))
+  := let (result1, Post1) = (Z_eq_bool `1` `1`) in
+     (exist_1 [result2: bool](if result2 then `1 = 1` else `1 <> 1`) 
+     result1 Post1).
 
-Definition r2 := (* validation *)
-  let (result1, Post1) = (Z_gt_le_bool `2` `1`) in
-  (exist_1 [result2: bool](if result2 then `2 > 1` else `2 <= 1`) result1
-  Post1).
+Definition r2 (* validation *)
+  : (sig_1 bool [result: bool]((if result then `2 > 1` else `2 <= 1`)))
+  := let (result1, Post1) = (Z_gt_le_bool `2` `1`) in
+     (exist_1 [result2: bool](if result2 then `2 > 1` else `2 <= 1`) 
+     result1 Post1).
 
-Definition r3 := (* validation *)
-  let (result1, Post1) = (Z_ge_lt_bool `2` `1`) in
-  (exist_1 [result2: bool](if result2 then `2 >= 1` else `2 < 1`) result1
-  Post1).
+Definition r3 (* validation *)
+  : (sig_1 bool [result: bool]((if result then `2 >= 1` else `2 < 1`)))
+  := let (result1, Post1) = (Z_ge_lt_bool `2` `1`) in
+     (exist_1 [result2: bool](if result2 then `2 >= 1` else `2 < 1`) 
+     result1 Post1).
 
-Definition r4 := (* validation *)
-  let (result1, Post1) = (Z_lt_ge_bool `1` `2`) in
-  (exist_1 [result2: bool](if result2 then `1 < 2` else `1 >= 2`) result1
-  Post1).
+Definition r4 (* validation *)
+  : (sig_1 bool [result: bool]((if result then `1 < 2` else `1 >= 2`)))
+  := let (result1, Post1) = (Z_lt_ge_bool `1` `2`) in
+     (exist_1 [result2: bool](if result2 then `1 < 2` else `1 >= 2`) 
+     result1 Post1).
 
-Definition r5 := (* validation *)
-  let (result1, Post1) = (Z_le_gt_bool `1` `2`) in
-  (exist_1 [result2: bool](if result2 then `1 <= 2` else `1 > 2`) result1
-  Post1).
+Definition r5 (* validation *)
+  : (sig_1 bool [result: bool]((if result then `1 <= 2` else `1 > 2`)))
+  := let (result1, Post1) = (Z_le_gt_bool `1` `2`) in
+     (exist_1 [result2: bool](if result2 then `1 <= 2` else `1 > 2`) 
+     result1 Post1).
 
-Definition r6 := (* validation *)
-  let (result1, Post1) = (Z_noteq_bool `1` `2`) in
-  (exist_1 [result2: bool](if result2 then `1 <> 2` else `1 = 2`) result1
-  Post1).
+Definition r6 (* validation *)
+  : (sig_1 bool [result: bool]((if result then `1 <> 2` else `1 = 2`)))
+  := let (result1, Post1) = (Z_noteq_bool `1` `2`) in
+     (exist_1 [result2: bool](if result2 then `1 <> 2` else `1 = 2`) 
+     result1 Post1).
 
-Definition r7 := (* validation *)
-  let (result, Bool1) =
-    let (result1, Post1) = (Z_eq_bool `1` `2`) in
-    (exist_1 [result2: bool](if result2 then `1 = 2` else `1 <> 2`) result1
-    Post1) in
-  (Cases (btest [result:bool](if result then `1 = 2` else `1 <> 2`) result
-          Bool1) of
-  | (left Test2) => true
-  | (right Test1) =>
-      let (result0, Post2) =
-        let (result2, Post3) = (Z_eq_bool `2` `3`) in
-        (exist_1 [result3: bool]
-        (if result3 then `2 = 3` else `2 <> 3`) result2 Post3) in
-      result0 end).
+Definition r7 (* validation *)
+  : bool
+  := let (result, Bool1) =
+       let (result1, Post1) = (Z_eq_bool `1` `2`) in
+       (exist_1 [result2: bool]
+       (if result2 then `1 = 2` else `1 <> 2`) result1 Post1) in
+     (Cases (btest [result:bool](if result then `1 = 2` else `1 <> 2`) result
+             Bool1) of
+     | (left Test2) => true
+     | (right Test1) =>
+         let (result0, Post2) =
+           let (result2, Post3) = (Z_eq_bool `2` `3`) in
+           (exist_1 [result3: bool]
+           (if result3 then `2 = 3` else `2 <> 3`) result2 Post3) in
+         result0 end).
 
-Definition r8 := (* validation *)
-  let (result, Bool1) =
-    let (result1, Post1) = (Z_eq_bool `1` `2`) in
-    (exist_1 [result2: bool](if result2 then `1 = 2` else `1 <> 2`) result1
-    Post1) in
-  (Cases (btest [result:bool](if result then `1 = 2` else `1 <> 2`) result
-          Bool1) of
-  | (left Test2) =>
-      let (result0, Post2) =
-        let (result2, Post3) = (Z_eq_bool `2` `3`) in
-        (exist_1 [result3: bool]
-        (if result3 then `2 = 3` else `2 <> 3`) result2 Post3) in
-      result0
-  | (right Test1) => false end).
+Definition r8 (* validation *)
+  : bool
+  := let (result, Bool1) =
+       let (result1, Post1) = (Z_eq_bool `1` `2`) in
+       (exist_1 [result2: bool]
+       (if result2 then `1 = 2` else `1 <> 2`) result1 Post1) in
+     (Cases (btest [result:bool](if result then `1 = 2` else `1 <> 2`) result
+             Bool1) of
+     | (left Test2) =>
+         let (result0, Post2) =
+           let (result2, Post3) = (Z_eq_bool `2` `3`) in
+           (exist_1 [result3: bool]
+           (if result3 then `2 = 3` else `2 <> 3`) result2 Post3) in
+         result0
+     | (right Test1) => false end).
 
 (* Why obligation from file "good/all.mlw", characters 2156-2190 *)
 Lemma arr1_po_1 : 
@@ -569,10 +618,11 @@ Save.
 
 
 
-Definition arr1 := (* validation *)
-  [v6: (array Z); Pre2: `(array_length v6) >= 1`]
-    let Pre1 = (arr1_po_1 v6 Pre2) in
-    (access v6 `0`).
+Definition arr1 (* validation *)
+  : (v6: (array Z))(_: `(array_length v6) >= 1`)Z
+  := [v6: (array Z); Pre2: `(array_length v6) >= 1`]
+       let Pre1 = (arr1_po_1 v6 Pre2) in
+       (access v6 `0`).
 
 (* Why obligation from file "good/all.mlw", characters 2203-2239 *)
 Lemma arr2_po_1 : 
@@ -586,10 +636,11 @@ Save.
 
 
 
-Definition arr2 := (* validation *)
-  [v6: (array Z); Pre2: `(array_length v6) >= 4`]
-    let Pre1 = (arr2_po_1 v6 Pre2) in
-    (access v6 `1 + 2`).
+Definition arr2 (* validation *)
+  : (v6: (array Z))(_: `(array_length v6) >= 4`)Z
+  := [v6: (array Z); Pre2: `(array_length v6) >= 4`]
+       let Pre1 = (arr2_po_1 v6 Pre2) in
+       (access v6 `1 + 2`).
 
 (* Why obligation from file "good/all.mlw", characters 2251-2298 *)
 Lemma arr3_po_1 : 
@@ -604,10 +655,11 @@ Save.
 
 
 
-Definition arr3 := (* validation *)
-  [v4: Z; v6: (array Z); Pre2: `(array_length v6) >= 1` /\ `v4 = 0`]
-    let Pre1 = (arr3_po_1 v4 v6 Pre2) in
-    (access v6 v4).
+Definition arr3 (* validation *)
+  : (v4: Z)(v6: (array Z))(_: `(array_length v6) >= 1` /\ `v4 = 0`)Z
+  := [v4: Z; v6: (array Z); Pre2: `(array_length v6) >= 1` /\ `v4 = 0`]
+       let Pre1 = (arr3_po_1 v4 v6 Pre2) in
+       (access v6 v4).
 
 (* Why obligation from file "good/all.mlw", characters 2354-2359 *)
 Lemma arr4_po_1 : 
@@ -631,11 +683,12 @@ Save.
 
 
 
-Definition arr4 := (* validation *)
-  [v6: (array Z); Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`]
-    let Pre2 = (arr4_po_1 v6 Pre3) in
-    let Pre1 = (arr4_po_2 v6 Pre3 Pre2) in
-    (access v6 (access v6 `0`)).
+Definition arr4 (* validation *)
+  : (v6: (array Z))(_: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)Z
+  := [v6: (array Z); Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`]
+       let Pre2 = (arr4_po_1 v6 Pre3) in
+       let Pre1 = (arr4_po_2 v6 Pre3 Pre2) in
+       (access v6 (access v6 `0`)).
 
 (* Why obligation from file "good/all.mlw", characters 2376-2415 *)
 Lemma arr5_po_1 : 
@@ -646,12 +699,15 @@ Proof. (* arr5_po_1 *)
 Intros; Simpl; Omega.
 Save.
 
-Definition arr5 := (* validation *)
-  [v6: (array Z); Pre2: `(array_length v6) >= 1`]
-    let Pre1 = (arr5_po_1 v6 Pre2) in
-    (exist_2 [v10: (array Z)][result1: unit]
-    v10 = (store v6 `0` `1`) (store v6 `0` `1`) tt
-    (refl_equal ? (store v6 `0` `1`))).
+Definition arr5 (* validation *)
+  : (v6: (array Z))(_: `(array_length v6) >= 1`)
+    (sig_2 (array Z) unit [v9: (array Z)][result: unit]
+     (v9 = (store v6 `0` `1`)))
+  := [v6: (array Z); Pre2: `(array_length v6) >= 1`]
+       let Pre1 = (arr5_po_1 v6 Pre2) in
+       (exist_2 [v10: (array Z)][result1: unit]
+       v10 = (store v6 `0` `1`) (store v6 `0` `1`) tt
+       (refl_equal ? (store v6 `0` `1`))).
 
 (* Why obligation from file "good/all.mlw", characters 2427-2470 *)
 Lemma arr6_po_1 : 
@@ -663,12 +719,15 @@ Intros; Simpl; Omega.
 Save.
 
 
-Definition arr6 := (* validation *)
-  [v6: (array Z); Pre2: `(array_length v6) >= 4`]
-    let Pre1 = (arr6_po_1 v6 Pre2) in
-    (exist_2 [v10: (array Z)][result1: unit]
-    v10 = (store v6 `1 + 2` `3 + 4`) (store v6 `1 + 2` `3 + 4`) tt
-    (refl_equal ? (store v6 `1 + 2` `3 + 4`))).
+Definition arr6 (* validation *)
+  : (v6: (array Z))(_: `(array_length v6) >= 4`)
+    (sig_2 (array Z) unit [v9: (array Z)][result: unit]
+     (v9 = (store v6 `1 + 2` `3 + 4`)))
+  := [v6: (array Z); Pre2: `(array_length v6) >= 4`]
+       let Pre1 = (arr6_po_1 v6 Pre2) in
+       (exist_2 [v10: (array Z)][result1: unit]
+       v10 = (store v6 `1 + 2` `3 + 4`) (store v6 `1 + 2` `3 + 4`) tt
+       (refl_equal ? (store v6 `1 + 2` `3 + 4`))).
 
 (* Why obligation from file "good/all.mlw", characters 2482-2540 *)
 Lemma arr7_po_1 : 
@@ -690,19 +749,24 @@ Intros; Simpl; Omega.
 Save.
 
 
-Definition arr7 := (* validation *)
-  [v6: (array Z); Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`]
-    let Pre2 = (arr7_po_1 v6 Pre3) in
-    let Pre1 = (arr7_po_2 v6 Pre3 Pre2) in
-    (exist_2 [v10: (array Z)][result1: unit]
-    v10 = (store v6 (access v6 `0`) `1`) (store v6 (access v6 `0`) `1`) 
-    tt (refl_equal ? (store v6 (access v6 `0`) `1`))).
+Definition arr7 (* validation *)
+  : (v6: (array Z))(_: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
+    (sig_2 (array Z) unit [v9: (array Z)][result: unit]
+     (v9 = (store v6 (access v6 `0`) `1`)))
+  := [v6: (array Z); Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`]
+       let Pre2 = (arr7_po_1 v6 Pre3) in
+       let Pre1 = (arr7_po_2 v6 Pre3 Pre2) in
+       (exist_2 [v10: (array Z)][result1: unit]
+       v10 = (store v6 (access v6 `0`) `1`) (store v6 (access v6 `0`) `1`) 
+       tt (refl_equal ? (store v6 (access v6 `0`) `1`))).
 
-Definition fc1 := (* validation *)
-  (f5 v5).
+Definition fc1 (* validation *)
+  : foo
+  := (f5 v5).
 
-Definition fc2 := (* validation *)
-  (f4 tt).
+Definition fc2 (* validation *)
+  : unit
+  := (f4 tt).
 
 (* Why obligation from file "good/all.mlw", characters 2645-2653 *)
 Lemma fc3_po_1 : 
@@ -719,24 +783,26 @@ Proof. Intros; Omega. Save.
 
 
 
-Definition fc3 := (* validation *)
-  let (result, Post2) = (exist_1 [result: Z]result = `0` `0`
-    (refl_equal ? `0`)) in
-  let result0 =
-    let (result0, Post1) = (exist_1 [result0: Z]result0 = `0` `0`
-      (refl_equal ? `0`)) in
-    let Pre3 = (fc3_po_1 result Post2 result0 Post1) in
-    let (b0, result1, Post3) =
-      let Pre1 = Pre3 in
-      let Pre2 = Pre1 in
-      let (b0, r, Post4) = (f3 result result0 Pre1) in
-      (exist_2 [b1: Z][result2: Z]`b1 = result0 + result + result2` b0 
-      r Post4) in
-    result1 in
-  result0.
+Definition fc3 (* validation *)
+  : Z
+  := let (result, Post2) = (exist_1 [result: Z]result = `0` `0`
+       (refl_equal ? `0`)) in
+     let result0 =
+       let (result0, Post1) = (exist_1 [result0: Z]result0 = `0` `0`
+         (refl_equal ? `0`)) in
+       let Pre3 = (fc3_po_1 result Post2 result0 Post1) in
+       let (b0, result1, Post3) =
+         let Pre1 = Pre3 in
+         let Pre2 = Pre1 in
+         let (b0, r, Post4) = (f3 result result0 Pre1) in
+         (exist_2 [b1: Z][result2: Z]`b1 = result0 + result + result2` 
+         b0 r Post4) in
+       result1 in
+     result0.
 
-Definition an1 := (* validation *)
-  (exist_1 [result: Z]`result = 0` `0` (refl_equal ? `0`)).
+Definition an1 (* validation *)
+  : (sig_1 Z [result: Z](`result = 0`))
+  := (exist_1 [result: Z]`result = 0` `0` (refl_equal ? `0`)).
 
 (* Why obligation from file "good/all.mlw", characters 2796-2844 *)
 Lemma an2_po_1 : 
@@ -752,14 +818,15 @@ Save.
 
 
 
-Definition an2 := (* validation *)
-  [v4: Z; Pre1: `v4 >= 0`]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `v4 + 1` `v4 + 1`
-        (refl_equal ? `v4 + 1`)) in
-      (exist_2 [v10: Z][result0: unit]v10 = `v4 + 1` result tt Post1) in
-    (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
-    (an2_po_1 v4 Pre1 v9 Post1)).
+Definition an2 (* validation *)
+  : (v4: Z)(_: `v4 >= 0`)(sig_2 Z unit [v9: Z][result: unit](`v9 > v4`))
+  := [v4: Z; Pre1: `v4 >= 0`]
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `v4 + 1` 
+           `v4 + 1` (refl_equal ? `v4 + 1`)) in
+         (exist_2 [v10: Z][result0: unit]v10 = `v4 + 1` result tt Post1) in
+       (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
+       (an2_po_1 v4 Pre1 v9 Post1)).
 
 (* Why obligation from file "good/all.mlw", characters 2855-2907 *)
 Lemma an3_po_1 : 
@@ -814,14 +881,15 @@ Save.
 (*Why*) Implicits post_E3.
 
 
-Definition an3 := (* validation *)
-  [v4: Z; Pre1: `v4 >= 0`]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `v4 + 1` `v4 + 1`
-        (refl_equal ? `v4 + 1`)) in
-      (exist_2 [v10: Z][result0: unit]v10 = `v4 + 1` result tt Post1) in
-    (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
-    (an3_po_1 v4 Pre1 v9 Post1)).
+Definition an3 (* validation *)
+  : (v4: Z)(_: `v4 >= 0`)(sig_2 Z unit [v9: Z][result: unit](`v9 > v4`))
+  := [v4: Z; Pre1: `v4 >= 0`]
+       let (v9, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `v4 + 1` 
+           `v4 + 1` (refl_equal ? `v4 + 1`)) in
+         (exist_2 [v10: Z][result0: unit]v10 = `v4 + 1` result tt Post1) in
+       (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
+       (an3_po_1 v4 Pre1 v9 Post1)).
 
 (*Why*) Parameter f1_ex : (n: Z)(EM unit unit).
 

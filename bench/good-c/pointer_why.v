@@ -17,31 +17,36 @@ Intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Definition f := (* validation *)
-  [x: Z]
-    let (x0, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
-        (refl_equal ? `0`)) in
-      (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
-    let (x1, result0, Post4) =
-      let (c_aux_1, Post3) = (exist_1 [result0: Z]result0 = x0 x0
-        (refl_equal ? x0)) in
-      let (x1, result0, Post5) =
-        let (x1, result0, Post2) =
-          let (result0, Post2) = (exist_1 [result0: Z]
-            result0 = `x0 + 1` `x0 + 1` (refl_equal ? `x0 + 1`)) in
-          (exist_2 [x2: Z][result1: unit]x2 = `x0 + 1` result0 tt Post2) in
-        let (result1, Post6) = (exist_1 [result1: Z]`x1 = 1` /\
-          `result1 = 0` c_aux_1 (f_po_1 x0 Post1 c_aux_1 Post3 x1 Post2)) in
-        (exist_2 [x2: Z][result2: Z]`x2 = 1` /\ `result2 = 0` x1 result1
-        Post6) in
-      (exist_2 [x2: Z][result1: Z]`x2 = 1` /\ `result1 = 0` x1 result0 Post5) in
-    (exist_2 [x2: Z][result1: Z]`x2 = 1` /\ `result1 = 0` x1 result0 Post4).
+Definition f (* validation *)
+  : (x: Z)(sig_2 Z Z [x0: Z][result: Z](`x0 = 1` /\ `result = 0`))
+  := [x: Z]
+       let (x0, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
+           (refl_equal ? `0`)) in
+         (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
+       let (x1, result0, Post4) =
+         let (c_aux_1, Post3) = (exist_1 [result0: Z]result0 = x0 x0
+           (refl_equal ? x0)) in
+         let (x1, result0, Post5) =
+           let (x1, result0, Post2) =
+             let (result0, Post2) = (exist_1 [result0: Z]
+               result0 = `x0 + 1` `x0 + 1` (refl_equal ? `x0 + 1`)) in
+             (exist_2 [x2: Z][result1: unit]x2 = `x0 + 1` result0 tt Post2) in
+           let (result1, Post6) = (exist_1 [result1: Z]`x1 = 1` /\
+             `result1 = 0` c_aux_1
+             (f_po_1 x0 Post1 c_aux_1 Post3 x1 Post2)) in
+           (exist_2 [x2: Z][result2: Z]`x2 = 1` /\ `result2 = 0` x1 result1
+           Post6) in
+         (exist_2 [x2: Z][result1: Z]`x2 = 1` /\ `result1 = 0` x1 result0
+         Post5) in
+       (exist_2 [x2: Z][result1: Z]`x2 = 1` /\ `result1 = 0` x1 result0
+       Post4).
 
-Definition g := (* validation *)
-  [_: unit; r: Z]
-    let (r0, result0, Post1) = (f r) in
-    (exist_2 [r1: Z][result1: Z]`r1 = 1` r0 result0 (proj1 ? ? Post1)).
+Definition g (* validation *)
+  : (_: unit)(r: Z)(sig_2 Z Z [r0: Z][result: Z](`r0 = 1`))
+  := [_: unit; r: Z]
+       let (r0, result0, Post1) = (f r) in
+       (exist_2 [r1: Z][result1: Z]`r1 = 1` r0 result0 (proj1 ? ? Post1)).
 
 (* Why obligation from file "good-c/pointer.c", characters 187-196 *)
 Lemma h_po_1 : 
@@ -58,22 +63,23 @@ Intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Definition h := (* validation *)
-  [_: unit]
-    let (result, Post2) = (exist_1 [result: Z]result = `0` `0`
-      (refl_equal ? `0`)) in
-    let (z0, result0, Post3) =
-      let (z0, c_aux_2, Post4) =
-        let (z0, result1, Post5) = (f result) in
-        (exist_2 [z1: Z][result2: Z]`z1 = 1` /\ `result2 = 0` z0 result1
-        Post5) in
-      let (result0, Post6) =
-        let (c_aux_3, Post1) = (exist_1 [result0: Z]result0 = z0 z0
-          (refl_equal ? z0)) in
-        let (result0, Post7) = (exist_1 [result0: Z]
-          `result0 = 1` `c_aux_2 + c_aux_3`
-          (h_po_1 result Post2 z0 c_aux_2 Post4 c_aux_3 Post1)) in
-        (exist_1 [result1: Z]`result1 = 1` result0 Post7) in
-      (exist_2 [z1: Z][result1: Z]`result1 = 1` z0 result0 Post6) in
-    (exist_1 [result1: Z]`result1 = 1` result0 Post3).
+Definition h (* validation *)
+  : (_: unit)(sig_1 Z [result: Z](`result = 1`))
+  := [_: unit]
+       let (result, Post2) = (exist_1 [result: Z]result = `0` `0`
+         (refl_equal ? `0`)) in
+       let (z0, result0, Post3) =
+         let (z0, c_aux_2, Post4) =
+           let (z0, result1, Post5) = (f result) in
+           (exist_2 [z1: Z][result2: Z]`z1 = 1` /\ `result2 = 0` z0 result1
+           Post5) in
+         let (result0, Post6) =
+           let (c_aux_3, Post1) = (exist_1 [result0: Z]result0 = z0 z0
+             (refl_equal ? z0)) in
+           let (result0, Post7) = (exist_1 [result0: Z]
+             `result0 = 1` `c_aux_2 + c_aux_3`
+             (h_po_1 result Post2 z0 c_aux_2 Post4 c_aux_3 Post1)) in
+           (exist_1 [result1: Z]`result1 = 1` result0 Post7) in
+         (exist_2 [z1: Z][result1: Z]`result1 = 1` z0 result0 Post6) in
+       (exist_1 [result1: Z]`result1 = 1` result0 Post3).
 

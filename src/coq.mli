@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.mli,v 1.11 2002-12-05 16:25:11 filliatr Exp $ i*)
+(*i $Id: coq.mli,v 1.12 2003-02-05 08:49:54 filliatr Exp $ i*)
 
 open Cc
 open Vcg
@@ -23,7 +23,7 @@ val reset : unit -> unit
 
 val push_obligations : obligation list -> unit
 
-val push_validation : string -> validation -> unit
+val push_validation : string -> cc_type -> validation -> unit
 
 val push_parameter : string -> cc_type -> unit
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.84 2003-01-29 16:33:03 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.85 2003-02-05 08:49:54 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -377,9 +377,10 @@ let print_obligation fmt o =
   option_iter (fun t -> fprintf fmt "%s.@\n" t) coq_tactic;
   fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
 
-let reprint_validation fmt id v =
-  fprintf fmt "@[Definition %s := (* validation *)@\n  %a.@]@\n" 
-    id print_cc_term v
+let reprint_validation fmt id tt v =
+  fprintf fmt 
+    "@[Definition %s (* validation *)@\n  : @[%a@]@\n  := @[%a@].@]@\n" 
+    id print_cc_type tt print_cc_term v
 
 let print_validation = reprint_validation
 
@@ -401,7 +402,7 @@ type element_id = element_kind * string
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
-  | Validation of string * validation
+  | Validation of string * cc_type * validation
 
 let elem_t = Hashtbl.create 97 (* maps [element_id] to [element] *)
 let elem_q = Queue.create ()   (* queue of [element_id * element] *)
@@ -413,8 +414,8 @@ let reset () = Queue.clear elem_q; Hashtbl.clear elem_t
 let push_obligations = 
   List.iter (fun ((_,l,_) as o) -> add_elem (Oblig, l) (Obligation o))
 
-let push_validation id v = 
-  add_elem (Valid, id) (Validation (id,v))
+let push_validation id tt v = 
+  add_elem (Valid, id) (Validation (id,tt,v))
 
 let push_parameter id v =
   add_elem (Param, id) (Parameter (id,v))
@@ -428,14 +429,14 @@ let print_element fmt e =
   begin match e with
     | Parameter (id, c) -> print_parameter fmt id c
     | Obligation o -> print_obligation fmt o
-    | Validation (id, v) -> print_validation fmt id v
+    | Validation (id, tt, v) -> print_validation fmt id tt v
   end;
   fprintf fmt "@\n"
 
 let reprint_element fmt = function
   | Parameter (id, c) -> reprint_parameter fmt id c
   | Obligation o -> reprint_obligation fmt o
-  | Validation (id, v) -> reprint_validation fmt id v
+  | Validation (id, tt, v) -> reprint_validation fmt id tt v
 
 (*s Generating the output. *)
 
@@ -448,6 +449,8 @@ let _ =
     "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*" Oblig;
   add_regexp 
     "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*" Valid;
+  add_regexp 
+    "Definition[ ]+\\([^ ]*\\)[ ]*(\\* validation \\*)[ ]*" Valid;
   add_regexp 
     "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*" Param
 

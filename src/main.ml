@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.52 2003-01-24 13:53:48 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.53 2003-02-05 08:49:54 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -45,8 +45,8 @@ let push_obligations ol = match prover with
   | HolLight -> Holl.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
 
-let push_validation id v = 
-  if valid && prover = Coq then Coq.push_validation id v
+let push_validation id tt v = 
+  if valid && prover = Coq then Coq.push_validation id tt v
 
 let push_parameter id v tv = match prover with
   | Pvs -> if is_pure_type_v v then Pvs.push_parameter id tv
@@ -81,8 +81,11 @@ let interp_program id p =
   let env = Env.empty in
   let p = Typing.typef Env.initial_labels env p in
   let c = p.info.kappa in
+  let c = 
+    { c with c_post = optpost_app (change_label p.info.label "") c.c_post }
+  in
+  let c = normalize_type_c c in
   let v = c.c_result_type in
-  let v = normalize_type_v v in
   check_for_not_mutable ploc v;
   Env.add_global id v None;
   print_if_debug print_type_c c;
@@ -107,7 +110,8 @@ let interp_program id p =
   let ids = Ident.string id in
   let ol,v = Vcg.vcg ids cc in
   push_obligations ol;
-  push_validation ids v;
+  let tt = Monad.trad_type_c ren env c in
+  push_validation ids tt v;
   if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
   flush stderr
 

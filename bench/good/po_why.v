@@ -19,14 +19,15 @@ Save.
 
 
 
-Definition p1 := (* validation *)
-  [x: Z; Pre1: (q `x + 1`)]
-    let (x0, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `x + 1` `x + 1`
-        (refl_equal ? `x + 1`)) in
-      (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
-    (exist_2 [x1: Z][result0: unit](q x1) x0 result
-    (p1_po_1 x Pre1 x0 Post1)).
+Definition p1 (* validation *)
+  : (x: Z)(_: (q `x + 1`))(sig_2 Z unit [x0: Z][result: unit]((q x0)))
+  := [x: Z; Pre1: (q `x + 1`)]
+       let (x0, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `x + 1` `x + 1`
+           (refl_equal ? `x + 1`)) in
+         (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
+       (exist_2 [x1: Z][result0: unit](q x1) x0 result
+       (p1_po_1 x Pre1 x0 Post1)).
 
 (* Why obligation from file "good/po.mlw", characters 205-243 *)
 Lemma p2_po_1 : 
@@ -40,13 +41,15 @@ Save.
 
 
 
-Definition p2 := (* validation *)
-  [x: Z; Pre1: (q `7`)]
-    let (x0, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `3 + 4` `3 + 4`
-        (refl_equal ? `3 + 4`)) in
-      (exist_2 [x1: Z][result0: unit]x1 = `3 + 4` result tt Post1) in
-    (exist_2 [x1: Z][result0: unit](q x1) x0 result (p2_po_1 Pre1 x0 Post1)).
+Definition p2 (* validation *)
+  : (x: Z)(_: (q `7`))(sig_2 Z unit [x0: Z][result: unit]((q x0)))
+  := [x: Z; Pre1: (q `7`)]
+       let (x0, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `3 + 4` `3 + 4`
+           (refl_equal ? `3 + 4`)) in
+         (exist_2 [x1: Z][result0: unit]x1 = `3 + 4` result tt Post1) in
+       (exist_2 [x1: Z][result0: unit](q x1) x0 result
+       (p2_po_1 Pre1 x0 Post1)).
 
 (* Why obligation from file "good/po.mlw", characters 254-306 *)
 Lemma p3_po_1 : 
@@ -62,18 +65,19 @@ Save.
 
 
 
-Definition p3 := (* validation *)
-  [x: Z]
-    let (x0, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `x + 1` `x + 1`
-        (refl_equal ? `x + 1`)) in
-      (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
-    let (x1, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = `x0 + 2` 
-        `x0 + 2` (refl_equal ? `x0 + 2`)) in
-      (exist_2 [x2: Z][result1: unit]x2 = `x0 + 2` result0 tt Post2) in
-    (exist_2 [x2: Z][result1: unit]`x2 = x + 3` x1 result0
-    (p3_po_1 x x0 Post1 x1 Post2)).
+Definition p3 (* validation *)
+  : (x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = x + 3`))
+  := [x: Z]
+       let (x0, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `x + 1` `x + 1`
+           (refl_equal ? `x + 1`)) in
+         (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
+       let (x1, result0, Post2) =
+         let (result0, Post2) = (exist_1 [result0: Z]
+           result0 = `x0 + 2` `x0 + 2` (refl_equal ? `x0 + 2`)) in
+         (exist_2 [x2: Z][result1: unit]x2 = `x0 + 2` result0 tt Post2) in
+       (exist_2 [x2: Z][result1: unit]`x2 = x + 3` x1 result0
+       (p3_po_1 x x0 Post1 x1 Post2)).
 
 (* Why obligation from file "good/po.mlw", characters 317-360 *)
 Lemma p4_po_1 : 
@@ -88,18 +92,19 @@ Save.
 
 
 
-Definition p4 := (* validation *)
-  [x: Z]
-    let (x0, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `7` `7`
-        (refl_equal ? `7`)) in
-      (exist_2 [x1: Z][result0: unit]x1 = `7` result tt Post1) in
-    let (x1, result0, Post2) =
-      let (result0, Post2) = (exist_1 [result0: Z]result0 = `2 * x0` 
-        `2 * x0` (refl_equal ? `2 * x0`)) in
-      (exist_2 [x2: Z][result1: unit]x2 = `2 * x0` result0 tt Post2) in
-    (exist_2 [x2: Z][result1: unit]`x2 = 14` x1 result0
-    (p4_po_1 x0 Post1 x1 Post2)).
+Definition p4 (* validation *)
+  : (x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = 14`))
+  := [x: Z]
+       let (x0, result, Post1) =
+         let (result, Post1) = (exist_1 [result: Z]result = `7` `7`
+           (refl_equal ? `7`)) in
+         (exist_2 [x1: Z][result0: unit]x1 = `7` result tt Post1) in
+       let (x1, result0, Post2) =
+         let (result0, Post2) = (exist_1 [result0: Z]
+           result0 = `2 * x0` `2 * x0` (refl_equal ? `2 * x0`)) in
+         (exist_2 [x2: Z][result1: unit]x2 = `2 * x0` result0 tt Post2) in
+       (exist_2 [x2: Z][result1: unit]`x2 = 14` x1 result0
+       (p4_po_1 x0 Post1 x1 Post2)).
 
 (* Why obligation from file "good/po.mlw", characters 371-396 *)
 Lemma p5_po_1 : 
@@ -110,8 +115,9 @@ Save.
 
 
 
-Definition p5 := (* validation *)
-  (exist_1 [result: Z]`result = 7` `3 + 4` p5_po_1).
+Definition p5 (* validation *)
+  : (sig_1 Z [result: Z](`result = 7`))
+  := (exist_1 [result: Z]`result = 7` `3 + 4` p5_po_1).
 
 (* Why obligation from file "good/po.mlw", characters 424-429 *)
 Lemma p6_po_1 : 
@@ -124,12 +130,13 @@ Save.
 
 
 
-Definition p6 := (* validation *)
-  let (a, Post1) = (exist_1 [result: Z]result = `3` `3`
-    (refl_equal ? `3`)) in
-  let (result, Post2) = (exist_1 [result: Z]`result = 7` `a + 4`
-    (p6_po_1 a Post1)) in
-  (exist_1 [result0: Z]`result0 = 7` result Post2).
+Definition p6 (* validation *)
+  : (sig_1 Z [result: Z](`result = 7`))
+  := let (a, Post1) = (exist_1 [result: Z]result = `3` `3`
+       (refl_equal ? `3`)) in
+     let (result, Post2) = (exist_1 [result: Z]`result = 7` `a + 4`
+       (p6_po_1 a Post1)) in
+     (exist_1 [result0: Z]`result0 = 7` result Post2).
 
 (* Why obligation from file "good/po.mlw", characters 478-483 *)
 Lemma p7_po_1 : 
@@ -142,16 +149,17 @@ Save.
 
 
 
-Definition p7 := (* validation *)
-  let (aux_1, Post2) =
-    let (a, Post1) = (exist_1 [result: Z]result = `4` `4`
-      (refl_equal ? `4`)) in
-    let (result, Post3) = (exist_1 [result: Z]`3 + result = 11` `a + a`
-      (p7_po_1 a Post1)) in
-    (exist_1 [result0: Z]`3 + result0 = 11` result Post3) in
-  let (result, Post4) = (exist_1 [result: Z]`result = 11` `3 + aux_1`
-    Post2) in
-  (exist_1 [result0: Z]`result0 = 11` result Post4).
+Definition p7 (* validation *)
+  : (sig_1 Z [result: Z](`result = 11`))
+  := let (aux_1, Post2) =
+       let (a, Post1) = (exist_1 [result: Z]result = `4` `4`
+         (refl_equal ? `4`)) in
+       let (result, Post3) = (exist_1 [result: Z]`3 + result = 11` `a + a`
+         (p7_po_1 a Post1)) in
+       (exist_1 [result0: Z]`3 + result0 = 11` result Post3) in
+     let (result, Post4) = (exist_1 [result: Z]`result = 11` `3 + aux_1`
+       Post2) in
+     (exist_1 [result0: Z]`result0 = 11` result Post4).
 
 (* Why obligation from file "good/po.mlw", characters 592-594 *)
 Lemma p8_po_1 : 
@@ -166,20 +174,23 @@ Save.
 
 
 
-Definition p8 := (* validation *)
-  [x: Z; Pre1: (q `x + 1`)]
-    let (x0, aux_1, Post2) =
-      let (x0, result, Post1) =
-        let (result, Post1) = (exist_1 [result: Z]result = `x + 1` `x + 1`
-          (refl_equal ? `x + 1`)) in
-        (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
-      let (result0, Post3) = (exist_1 [result0: Z](q x0) /\
-        `3 + result0 = x + 4` x0 (p8_po_1 x Pre1 x0 Post1)) in
-      (exist_2 [x1: Z][result1: Z](q x1) /\ `3 + result1 = x + 4` x0 
-      result0 Post3) in
-    let (result, Post4) = (exist_1 [result: Z](q x0) /\
-      `result = x + 4` `3 + aux_1` Post2) in
-    (exist_2 [x1: Z][result0: Z](q x1) /\ `result0 = x + 4` x0 result Post4).
+Definition p8 (* validation *)
+  : (x: Z)(_: (q `x + 1`))
+    (sig_2 Z Z [x0: Z][result: Z]((q x0) /\ `result = x + 4`))
+  := [x: Z; Pre1: (q `x + 1`)]
+       let (x0, aux_1, Post2) =
+         let (x0, result, Post1) =
+           let (result, Post1) = (exist_1 [result: Z]result = `x + 1` 
+             `x + 1` (refl_equal ? `x + 1`)) in
+           (exist_2 [x1: Z][result0: unit]x1 = `x + 1` result tt Post1) in
+         let (result0, Post3) = (exist_1 [result0: Z](q x0) /\
+           `3 + result0 = x + 4` x0 (p8_po_1 x Pre1 x0 Post1)) in
+         (exist_2 [x1: Z][result1: Z](q x1) /\ `3 + result1 = x + 4` 
+         x0 result0 Post3) in
+       let (result, Post4) = (exist_1 [result: Z](q x0) /\
+         `result = x + 4` `3 + aux_1` Post2) in
+       (exist_2 [x1: Z][result0: Z](q x1) /\ `result0 = x + 4` x0 result
+       Post4).
 
 (* Why obligation from file "good/po.mlw", characters 723-724 *)
 Lemma p9_po_1 : 
@@ -203,32 +214,35 @@ Save.
 
 
 
-Definition p9 := (* validation *)
-  [x: Z]
-    let (x0, aux_2, Post4) =
-      let (x0, result, Post3) =
-        let (result, Post3) = (exist_1 [result: Z]result = `2` `2`
-          (refl_equal ? `2`)) in
-        (exist_2 [x1: Z][result0: unit]x1 = `2` result tt Post3) in
-      let (result0, Post5) = (exist_1 [result0: Z]
-        ((x:Z) (x = `1` -> `1 + result0 = 2` /\ `x = 1`)) `1`
-        (p9_po_1 x0 Post3)) in
-      (exist_2 [x1: Z][result1: Z]
-      ((x:Z) (x = `1` -> `1 + result1 = 2` /\ `x = 1`)) x0 result0 Post5) in
-    let (x1, result, Post6) =
-      let (x1, aux_1, Post7) =
-        let (x1, result, Post2) =
-          let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
-            (refl_equal ? `1`)) in
-          (exist_2 [x2: Z][result0: unit]x2 = `1` result tt Post2) in
-        let (result0, Post8) = (exist_1 [result0: Z]`result0 + aux_2 = 2` /\
-          `x1 = 1` `1` (p9_po_2 aux_2 Post4 x1 Post2)) in
-        (exist_2 [x2: Z][result1: Z]`result1 + aux_2 = 2` /\ `x2 = 1` 
-        x1 result0 Post8) in
-      let (result, Post9) = (exist_1 [result: Z]`result = 2` /\
-        `x1 = 1` `aux_1 + aux_2` Post7) in
-      (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post9) in
-    (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post6).
+Definition p9 (* validation *)
+  : (x: Z)(sig_2 Z Z [x0: Z][result: Z](`result = 2` /\ `x0 = 1`))
+  := [x: Z]
+       let (x0, aux_2, Post4) =
+         let (x0, result, Post3) =
+           let (result, Post3) = (exist_1 [result: Z]result = `2` `2`
+             (refl_equal ? `2`)) in
+           (exist_2 [x1: Z][result0: unit]x1 = `2` result tt Post3) in
+         let (result0, Post5) = (exist_1 [result0: Z]
+           ((x:Z) (x = `1` -> `1 + result0 = 2` /\ `x = 1`)) `1`
+           (p9_po_1 x0 Post3)) in
+         (exist_2 [x1: Z][result1: Z]
+         ((x:Z) (x = `1` -> `1 + result1 = 2` /\ `x = 1`)) x0 result0 Post5) in
+       let (x1, result, Post6) =
+         let (x1, aux_1, Post7) =
+           let (x1, result, Post2) =
+             let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
+               (refl_equal ? `1`)) in
+             (exist_2 [x2: Z][result0: unit]x2 = `1` result tt Post2) in
+           let (result0, Post8) = (exist_1 [result0: Z]
+             `result0 + aux_2 = 2` /\ `x1 = 1` `1`
+             (p9_po_2 aux_2 Post4 x1 Post2)) in
+           (exist_2 [x2: Z][result1: Z]`result1 + aux_2 = 2` /\ `x2 = 1` 
+           x1 result0 Post8) in
+         let (result, Post9) = (exist_1 [result: Z]`result = 2` /\
+           `x1 = 1` `aux_1 + aux_2` Post7) in
+         (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result
+         Post9) in
+       (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post6).
 
 (* Why obligation from file "good/po.mlw", characters 784-785 *)
 Lemma p9a_po_1 : 
@@ -241,20 +255,21 @@ Save.
 
 
 
-Definition p9a := (* validation *)
-  [x: Z]
-    let (x0, aux_1, Post3) =
-      let (x0, result, Post2) =
-        let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
-          (refl_equal ? `1`)) in
-        (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post2) in
-      let (result0, Post4) = (exist_1 [result0: Z]`result0 + 1 = 2` /\
-        `x0 = 1` `1` (p9a_po_1 x0 Post2)) in
-      (exist_2 [x1: Z][result1: Z]`result1 + 1 = 2` /\ `x1 = 1` x0 result0
-      Post4) in
-    let (result, Post5) = (exist_1 [result: Z]`result = 2` /\
-      `x0 = 1` `aux_1 + 1` Post3) in
-    (exist_2 [x1: Z][result0: Z]`result0 = 2` /\ `x1 = 1` x0 result Post5).
+Definition p9a (* validation *)
+  : (x: Z)(sig_2 Z Z [x0: Z][result: Z](`result = 2` /\ `x0 = 1`))
+  := [x: Z]
+       let (x0, aux_1, Post3) =
+         let (x0, result, Post2) =
+           let (result, Post2) = (exist_1 [result: Z]result = `1` `1`
+             (refl_equal ? `1`)) in
+           (exist_2 [x1: Z][result0: unit]x1 = `1` result tt Post2) in
+         let (result0, Post4) = (exist_1 [result0: Z]`result0 + 1 = 2` /\
+           `x0 = 1` `1` (p9a_po_1 x0 Post2)) in
+         (exist_2 [x1: Z][result1: Z]`result1 + 1 = 2` /\ `x1 = 1` x0 
+         result0 Post4) in
+       let (result, Post5) = (exist_1 [result: Z]`result = 2` /\
+         `x0 = 1` `aux_1 + 1` Post3) in
+       (exist_2 [x1: Z][result0: Z]`result0 = 2` /\ `x1 = 1` x0 result Post5).
 
 (*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result: Z](`result = x + 1`)).
 
@@ -269,9 +284,10 @@ Save.
 
 
 
-Definition p10 := (* validation *)
-  let (result1, Post1) = (fsucc `0`) in
-  (exist_1 [result2: Z]`result2 = 1` result1 (p10_po_1 result1 Post1)).
+Definition p10 (* validation *)
+  : (sig_1 Z [result: Z](`result = 1`))
+  := let (result1, Post1) = (fsucc `0`) in
+     (exist_1 [result2: Z]`result2 = 1` result1 (p10_po_1 result1 Post1)).
 
 (* Why obligation from file "good/po.mlw", characters 963-1004 *)
 Lemma p11_po_1 : 
@@ -286,18 +302,19 @@ Save.
 
 
 
-Definition p11 := (* validation *)
-  let (aux_2, Post1) =
-    let (result1, Post2) = (fsucc `3`) in
-    (exist_1 [result2: Z]`result2 = 3 + 1` result1 Post2) in
-  let (result, Post3) =
-    let (aux_1, Post4) =
-      let (result1, Post5) = (fsucc `0`) in
-      (exist_1 [result2: Z]`result2 = 0 + 1` result1 Post5) in
-    let (result, Post6) = (exist_1 [result: Z]`result = 5` `aux_1 + aux_2`
-      (p11_po_1 aux_2 Post1 aux_1 Post4)) in
-    (exist_1 [result0: Z]`result0 = 5` result Post6) in
-  (exist_1 [result0: Z]`result0 = 5` result Post3).
+Definition p11 (* validation *)
+  : (sig_1 Z [result: Z](`result = 5`))
+  := let (aux_2, Post1) =
+       let (result1, Post2) = (fsucc `3`) in
+       (exist_1 [result2: Z]`result2 = 3 + 1` result1 Post2) in
+     let (result, Post3) =
+       let (aux_1, Post4) =
+         let (result1, Post5) = (fsucc `0`) in
+         (exist_1 [result2: Z]`result2 = 0 + 1` result1 Post5) in
+       let (result, Post6) = (exist_1 [result: Z]`result = 5` `aux_1 + aux_2`
+         (p11_po_1 aux_2 Post1 aux_1 Post4)) in
+       (exist_1 [result0: Z]`result0 = 5` result Post6) in
+     (exist_1 [result0: Z]`result0 = 5` result Post3).
 
 (* Why obligation from file "good/po.mlw", characters 1042-1047 *)
 Lemma p11a_po_1 : 
@@ -310,13 +327,14 @@ Save.
 
 
 
-Definition p11a := (* validation *)
-  let (a, Post1) =
-    let (result1, Post2) = (fsucc `1`) in
-    (exist_1 [result2: Z]`result2 = 1 + 1` result1 Post2) in
-  let (result, Post3) = (exist_1 [result: Z]`result = 4` `a + a`
-    (p11a_po_1 a Post1)) in
-  (exist_1 [result0: Z]`result0 = 4` result Post3).
+Definition p11a (* validation *)
+  : (sig_1 Z [result: Z](`result = 4`))
+  := let (a, Post1) =
+       let (result1, Post2) = (fsucc `1`) in
+       (exist_1 [result2: Z]`result2 = 1 + 1` result1 Post2) in
+     let (result, Post3) = (exist_1 [result: Z]`result = 4` `a + a`
+       (p11a_po_1 a Post1)) in
+     (exist_1 [result0: Z]`result0 = 4` result Post3).
 
 (*Why*) Parameter incrx :
   (_: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = x + 1`)).
@@ -334,11 +352,12 @@ Save.
 
 
 
-Definition p12 := (* validation *)
-  [x: Z; Pre1: `x = 0`]
-    let (x0, result1, Post1) = (incrx tt x) in
-    (exist_2 [x1: Z][result2: unit]`x1 = 1` x0 result1
-    (p12_po_1 x Pre1 x0 Post1)).
+Definition p12 (* validation *)
+  : (x: Z)(_: `x = 0`)(sig_2 Z unit [x0: Z][result: unit](`x0 = 1`))
+  := [x: Z; Pre1: `x = 0`]
+       let (x0, result1, Post1) = (incrx tt x) in
+       (exist_2 [x1: Z][result2: unit]`x1 = 1` x0 result1
+       (p12_po_1 x Pre1 x0 Post1)).
 
 (* Why obligation from file "good/po.mlw", characters 1234-1292 *)
 Lemma p13_po_1 : 
@@ -354,16 +373,17 @@ Save.
 
 
 
-Definition p13 := (* validation *)
-  [x: Z]
-    let (x0, result, Post1) =
-      let (x0, result1, Post2) = (incrx tt x) in
-      (exist_2 [x1: Z][result2: unit]`x1 = x + 1` x0 result1 Post2) in
-    let (x1, result0, Post3) =
-      let (x1, result2, Post4) = (incrx tt x0) in
-      (exist_2 [x2: Z][result3: unit]`x2 = x0 + 1` x1 result2 Post4) in
-    (exist_2 [x2: Z][result1: unit]`x2 = x + 2` x1 result0
-    (p13_po_1 x x0 Post1 x1 Post3)).
+Definition p13 (* validation *)
+  : (x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = x + 2`))
+  := [x: Z]
+       let (x0, result, Post1) =
+         let (x0, result1, Post2) = (incrx tt x) in
+         (exist_2 [x1: Z][result2: unit]`x1 = x + 1` x0 result1 Post2) in
+       let (x1, result0, Post3) =
+         let (x1, result2, Post4) = (incrx tt x0) in
+         (exist_2 [x2: Z][result3: unit]`x2 = x0 + 1` x1 result2 Post4) in
+       (exist_2 [x2: Z][result1: unit]`x2 = x + 2` x1 result0
+       (p13_po_1 x x0 Post1 x1 Post3)).
 
 (* Why obligation from file "good/po.mlw", characters 1305-1347 *)
 Lemma p13a_po_1 : 
@@ -379,16 +399,17 @@ Save.
 
 
 
-Definition p13a := (* validation *)
-  [x: Z]
-    let (x0, aux_1, Post1) =
-      let (x0, result1, Post2) = (incrx tt x) in
-      (exist_2 [x1: Z][result2: unit]`x1 = x + 1` x0 result1 Post2) in
-    let (x1, result, Post3) =
-      let (x1, result1, Post4) = (incrx aux_1 x0) in
-      (exist_2 [x2: Z][result2: unit]`x2 = x0 + 1` x1 result1 Post4) in
-    (exist_2 [x2: Z][result0: unit]`x2 = x + 2` x1 result
-    (p13a_po_1 x x0 Post1 x1 Post3)).
+Definition p13a (* validation *)
+  : (x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = x + 2`))
+  := [x: Z]
+       let (x0, aux_1, Post1) =
+         let (x0, result1, Post2) = (incrx tt x) in
+         (exist_2 [x1: Z][result2: unit]`x1 = x + 1` x0 result1 Post2) in
+       let (x1, result, Post3) =
+         let (x1, result1, Post4) = (incrx aux_1 x0) in
+         (exist_2 [x2: Z][result2: unit]`x2 = x0 + 1` x1 result1 Post4) in
+       (exist_2 [x2: Z][result0: unit]`x2 = x + 2` x1 result
+       (p13a_po_1 x x0 Post1 x1 Post3)).
 
 (*Why*) Parameter incrx2 :
   (_: unit)(x: Z)
@@ -408,11 +429,12 @@ Save.
 
 
 
-Definition p14 := (* validation *)
-  [x: Z; Pre1: `x = 0`]
-    let (x0, result1, Post1) = (incrx2 tt x) in
-    (exist_2 [x1: Z][result2: Z]`result2 = 1` x0 result1
-    (p14_po_1 x Pre1 x0 result1 Post1)).
+Definition p14 (* validation *)
+  : (x: Z)(_: `x = 0`)(sig_2 Z Z [x0: Z][result: Z](`result = 1`))
+  := [x: Z; Pre1: `x = 0`]
+       let (x0, result1, Post1) = (incrx2 tt x) in
+       (exist_2 [x1: Z][result2: Z]`result2 = 1` x0 result1
+       (p14_po_1 x Pre1 x0 result1 Post1)).
 
 (* Why obligation from file "good/po.mlw", characters 1584-1616 *)
 Lemma p15_po_1 : 
@@ -425,10 +447,11 @@ Save.
 
 
 
-Definition p15 := (* validation *)
-  [t: (array Z); Pre2: `(array_length t) = 10`]
-    let Pre1 = (p15_po_1 t Pre2) in
-    (access t `0`).
+Definition p15 (* validation *)
+  : (t: (array Z))(_: `(array_length t) = 10`)Z
+  := [t: (array Z); Pre2: `(array_length t) = 10`]
+       let Pre1 = (p15_po_1 t Pre2) in
+       (access t `0`).
 
 (* Why obligation from file "good/po.mlw", characters 1629-1666 *)
 Lemma p16_po_1 : 
@@ -441,12 +464,15 @@ Save.
 
 
 
-Definition p16 := (* validation *)
-  [t: (array Z); Pre2: `(array_length t) = 10`]
-    let Pre1 = (p16_po_1 t Pre2) in
-    (exist_2 [t1: (array Z)][result1: unit]
-    t1 = (store t `9` `1`) (store t `9` `1`) tt
-    (refl_equal ? (store t `9` `1`))).
+Definition p16 (* validation *)
+  : (t: (array Z))(_: `(array_length t) = 10`)
+    (sig_2 (array Z) unit [t0: (array Z)][result: unit]
+     (t0 = (store t `9` `1`)))
+  := [t: (array Z); Pre2: `(array_length t) = 10`]
+       let Pre1 = (p16_po_1 t Pre2) in
+       (exist_2 [t1: (array Z)][result1: unit]
+       t1 = (store t `9` `1`) (store t `9` `1`) tt
+       (refl_equal ? (store t `9` `1`))).
 
 (* Why obligation from file "good/po.mlw", characters 1679-1738 *)
 Lemma p17_po_1 : 
@@ -478,14 +504,18 @@ Proof.
 Intros; Simpl; Omega.
 Save.
 
-Definition p17 := (* validation *)
-  [t: (array Z); Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
-   `(access t 0) < 10`]
-    let Pre2 = (p17_po_1 t Pre3) in
-    let Pre1 = (p17_po_2 t Pre3 Pre2) in
-    (exist_2 [t1: (array Z)][result1: unit]
-    t1 = (store t (access t `0`) `1`) (store t (access t `0`) `1`) tt
-    (refl_equal ? (store t (access t `0`) `1`))).
+Definition p17 (* validation *)
+  : (t: (array Z))(_: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
+    `(access t 0) < 10`)
+    (sig_2 (array Z) unit [t0: (array Z)][result: unit]
+     (t0 = (store t (access t `0`) `1`)))
+  := [t: (array Z); Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
+      `(access t 0) < 10`]
+       let Pre2 = (p17_po_1 t Pre3) in
+       let Pre1 = (p17_po_2 t Pre3 Pre2) in
+       (exist_2 [t1: (array Z)][result1: unit]
+       t1 = (store t (access t `0`) `1`) (store t (access t `0`) `1`) 
+       tt (refl_equal ? (store t (access t `0`) `1`))).
 
 (* Why obligation from file "good/po.mlw", characters 1796-1798 *)
 Lemma p18_po_1 : 
@@ -517,28 +547,31 @@ Proof.
 Intuition.
 Save.
 
-Definition p18 := (* validation *)
-  [t: (array Z); x: Z; Pre2: `(array_length t) = 10`]
-    let (aux_2, Post2) = (exist_1 [result: Z]result = x x
-      (refl_equal ? x)) in
-    let (t0, x0, result, Post3) =
-      let (x0, aux_1, Post4) =
-        let (x0, result, Post1) =
-          let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
-            (refl_equal ? `0`)) in
-          (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
-        let (result0, Post5) = (exist_1 [result0: Z]
-          `(access (store t result0 aux_2) 0) = x` /\ `0 <= result0` /\
-          `result0 < (array_length t)` x0
-          (p18_po_1 t x Pre2 aux_2 Post2 x0 Post1)) in
-        (exist_2 [x1: Z][result1: Z]
-        `(access (store t result1 aux_2) 0) = x` /\ `0 <= result1` /\
-        `result1 < (array_length t)` x0 result0 Post5) in
-      let Pre1 = (p18_po_2 t x Pre2 aux_2 Post2 aux_1 Post4) in
-      let (t0, result, Post6) = (exist_2 [t1: (array Z)][result1: unit]
-        `(access t1 0) = x` (store t aux_1 aux_2) tt (proj1 ? ? Post4)) in
-      (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 
-      t0 x0 result Post6) in
-    (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 
-    t0 x0 result Post3).
+Definition p18 (* validation *)
+  : (t: (array Z))(x: Z)(_: `(array_length t) = 10`)
+    (sig_3 (array Z) Z unit [t0: (array Z)][x0: Z][result: unit]
+     (`(access t0 0) = x`))
+  := [t: (array Z); x: Z; Pre2: `(array_length t) = 10`]
+       let (aux_2, Post2) = (exist_1 [result: Z]result = x x
+         (refl_equal ? x)) in
+       let (t0, x0, result, Post3) =
+         let (x0, aux_1, Post4) =
+           let (x0, result, Post1) =
+             let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
+               (refl_equal ? `0`)) in
+             (exist_2 [x1: Z][result0: unit]x1 = `0` result tt Post1) in
+           let (result0, Post5) = (exist_1 [result0: Z]
+             `(access (store t result0 aux_2) 0) = x` /\ `0 <= result0` /\
+             `result0 < (array_length t)` x0
+             (p18_po_1 t x Pre2 aux_2 Post2 x0 Post1)) in
+           (exist_2 [x1: Z][result1: Z]
+           `(access (store t result1 aux_2) 0) = x` /\ `0 <= result1` /\
+           `result1 < (array_length t)` x0 result0 Post5) in
+         let Pre1 = (p18_po_2 t x Pre2 aux_2 Post2 aux_1 Post4) in
+         let (t0, result, Post6) = (exist_2 [t1: (array Z)][result1: unit]
+           `(access t1 0) = x` (store t aux_1 aux_2) tt (proj1 ? ? Post4)) in
+         (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 
+         t0 x0 result Post6) in
+       (exist_3 [t1: (array Z)][x1: Z][result0: unit]`(access t1 0) = x` 
+       t0 x0 result Post3).
 
