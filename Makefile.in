@@ -65,10 +65,11 @@ GENERATED = src/version.ml src/parser.ml \
 ##############
 
 BINARY=bin/why.$(OCAMLBEST)
+CADUCEUS=bin/caduceus.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
 
-all: $(BINARY) coq-@COQ@ $(WHY2HTML)
+all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(WHY2HTML)
 
 opt: bin/why.opt bin/caduceus.opt
 
@@ -102,7 +103,7 @@ bin/top: $(CMO)
 
 # caduceus
 CCMO = src/loc.cmo c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
-       c/cinterp.cmo c/cmain.cmo
+       c/cinterp.cmo c/creport.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 
 bin/caduceus.opt: $(CCMX)
