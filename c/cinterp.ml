@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.53 2004-03-24 07:40:37 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.54 2004-03-24 08:19:08 filliatr Exp $ i*)
 
 
 open Format
@@ -219,7 +219,7 @@ type interp_lvalue =
   | HeapRef of string * Output.expr
 
 let tempvar_count = ref 0;;
-
+let reset_tmp_var () = tempvar_count := 0
 let tmp_var () = incr tempvar_count; "caduceus_" ^ string_of_int !tempvar_count
 
 let build_complex_app e args =
@@ -906,6 +906,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       (why_code, interp_function_spec id spec ctype params :: why_spec,
        prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
+      reset_tmp_var ();
       let f = id.var_name in
       lprintf "translating function %s@." f;
       begin try
