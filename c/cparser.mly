@@ -798,7 +798,7 @@ statement
 labeled_statement
         : identifier/*ICI*/ COLON statement { locate (CSlabel ($1, $3)) }
         | CASE constant_expression COLON statement { locate (CScase ($2, $4)) }
-        | DEFAULT COLON statement { locate (CSlabel ("%default%", $3)) }
+        | DEFAULT COLON statement { locate (CSdefault($3)) }
         ;
 
 compound_statement

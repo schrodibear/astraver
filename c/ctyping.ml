@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.64 2004-09-23 08:40:27 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.65 2004-10-04 15:30:58 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -586,14 +586,6 @@ let or_status s1 s2 =
     continue = s1.continue || s2.continue;
     term = s1.term || s2.term }
 
-let rec unreachable = function
-  | [] -> ()
-  | { node = CScase _ | CSlabel _ } :: _ -> ()
-  | { node = CSnop } :: bl -> unreachable bl
-  | { loc = loc } :: _ ->
-      warning loc "unreachable statement";
-      if werror then exit 1
-
 let rec type_statement env et s =
   let sn,st = type_statement_node s.loc env et s.node in
   { st_node = sn; 
@@ -667,10 +659,12 @@ and type_statement_node loc env et = function
       let s,st = type_statement env et s in
       TSswitch (e, s), { st with break = false }
   | CScase (e, s) ->
-      (* TODO: duplicate case value *)
       let e = type_int_expr env e in
       let s,st = type_statement env et s in
       TScase (e, s), st
+  | CSdefault (s) ->
+      let s,st = type_statement env et s in
+      TSdefault (s), st
   | CSannot (ofs, Assert p) ->
       let p = type_predicate ofs env p in
       TSassert p, mt_status
@@ -712,7 +706,6 @@ and type_block env et (dl,sl) =
 	[s'], st
     | s :: bl ->
 	let s', st1 = type_statement env' et s in
-	if not st1.term then unreachable bl;
 	let bl', st2 = type_bl bl in
 	let st = or_status st1 st2 in
 	s' :: bl', { st with term = st2.term }

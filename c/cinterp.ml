@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.95 2004-09-30 13:46:37 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.96 2004-10-04 15:30:58 hubert Exp $ i*)
 
 
 open Format
@@ -920,11 +920,108 @@ let catch_return e = match !abrupt_return with
   | Some "Return" ->
       Try (e, "Return", None, Void)
   | Some r ->
-      Try (e, r, Some "result", Var "result")
+      let tmp = tmp_var () in
+      Try (e, r, Some tmp, Var tmp)
+
+
+
+
+let unreachable_block = function
+  | [] -> ()
+  | s::_ -> warning s.st_loc "unreachable statement"
+
+let rec st_cases used_cases i =
+  match i.st_node with 
+    | TScase ( e ,i') ->
+	let n =  Cltyping.eval_const_expr e in
+	if List.mem n used_cases 
+	then
+	  error i.st_loc ("duplicate case")
+	else
+	  let (used_cases' , l,i) = st_cases ( n::used_cases) i' in
+	  (used_cases', n::l,i)
+    | i' -> (used_cases , [] , i)
+
+let rec st_instr l =
+  match l with
+    | [] -> l,[]
+    | i ::l' -> 
+	match i .st_node with
+	  | TSdefault _ -> l,[]
+	  | TScase(_,_) -> l,[]
+	  | _ -> let (l,instr) = st_instr l' in
+	    (l,i::instr)
+
+      
+    
+
+let rec st_case_list used_cases l =
+  match l with 
+    | [] -> (used_cases, [] )
+    | i::l ->
+	match i.st_node with 
+	  | TSdefault s ->
+	      begin
+		match s.st_node with
+		  | TScase _ -> unsupported "case following default"
+		  | _ ->		 
+		      let (l,instr) = st_instr l in
+		      let(used_cases'', l'') = (st_case_list used_cases l) in
+		      (used_cases'',([],s::instr)::l'')
+	      end
+	  | TScase(e,i) -> 
+	      let n = Cltyping.eval_const_expr e in 
+	      if List.mem n used_cases 
+	      then
+		error i.st_loc ("duplicate case")
+	      else
+		let (used_cases', l', i') = st_cases (used_cases) i in 
+		let (l,instr) = st_instr l in
+		let (used_cases'', l'') = st_case_list (n::used_cases') l in
+		(used_cases'',(n::l',i'::instr)::l'')
+	  | _ ->  
+	      let (used_cases', l') = st_case_list used_cases l in
+	      match l' with
+		| [] -> 
+		    error i.st_loc ("unreachable statement at beginning of switch")
+		| (lc,i')::l -> (used_cases',(lc,i'@[i])::l)
+		
+
+
+
+let st_switch i =
+  match i.st_node with 
+    | TSblock (_,l) -> st_case_list [] l
+    | _ -> st_case_list [] [i]
+
+let make_switch_condition tmp l = 
+  match l with
+    | [] -> assert false
+    | n::l' ->
+	let a = List.fold_left 
+	  (fun test n -> Or (App(App (Var "eq_int",Var tmp), Cte (Prim_int n)), test)) 
+	  (App(App (Var "eq_int",Var tmp), Cte (Prim_int n)))
+	  l'  
+	in
+	(a,l)
+
+let make_switch_condition_default tmp l used_cases= 
+  let fl = List.filter 
+    (fun x -> not (List.mem x l)) used_cases in
+  let cond = 
+    match fl with
+      | [] -> Cte (Prim_bool true)
+      | n::l ->
+	  List.fold_left 
+	    (fun test n -> And (App(App (Var "neq_int",Var tmp), Cte (Prim_int n)), test)) 
+	    (App(App (Var "neq_int",Var tmp), Cte (Prim_int n)))
+	    l
+  in
+  cond,fl
 
 (* [ab] indicates if returns are abrupt *)
 
-let rec interp_statement ab stat = match stat.st_node with
+let rec interp_statement ab may_break stat = match stat.st_node with
   | TSnop -> 
       Void
   | TSexpr e ->
@@ -943,7 +1040,7 @@ let rec interp_statement ab stat = match stat.st_node with
 	| Some e -> interp_expr e
       end
   | TSif(e,s1,s2) -> 
-      If(interp_boolean_expr e,interp_statement ab s1,interp_statement ab s2)
+      If(interp_boolean_expr e,interp_statement ab may_break s1,interp_statement ab may_break s2)
   | TSfor(annot,e1,e2,e3,body) ->
       let label = new_label () in
       let ef = 
@@ -962,7 +1059,7 @@ let rec interp_statement ab stat = match stat.st_node with
 	      (make_while (interp_boolean_expr e2) inv dec 
 		 (continue body.st_continue
 		    (append 
-		       (interp_statement true body) 
+		       (interp_statement true (ref false) body) 
 		       (interp_statement_expr e3))))))
   | TSwhile(annot,e,s) -> 
       let label = new_label () in
@@ -974,7 +1071,7 @@ let rec interp_statement ab stat = match stat.st_node with
       append (Output.Label label)
 	(break s.st_break
 	   (make_while (interp_boolean_expr e) inv dec 
-	      (continue s.st_continue (interp_statement true s))))
+	      (continue s.st_continue (interp_statement true (ref false) s))))
   | TSdowhile(annot,s,e) -> 
       let label = new_label () in
       let ef = 
@@ -986,21 +1083,33 @@ let rec interp_statement ab stat = match stat.st_node with
 	(break true
 	   (make_while (Cte (Prim_bool true)) inv dec
 	      (continue s.st_continue
-		 (append (interp_statement true s)
+		 (append (interp_statement true (ref false) s)
 		    (If (Not (interp_boolean_expr e), 
 			 Raise ("Break", None), Void))))))
   | TSblock(b) -> 
-      interp_block ab b 
+      interp_block ab may_break b 
   | TSbreak -> 
+      may_break := true;
       Raise ("Break", None)
   | TScontinue -> 
       Raise ("Continue", None)
   | TSlabel(lab,s) -> 
-      append (Output.Label lab) (interp_statement ab s)
+      append (Output.Label lab) (interp_statement ab may_break s)
   | TSswitch(e,s) -> 
-      unsupported "switch"
+      let (used_cases,l) = st_switch s in
+      let tmp = tmp_var() in
+      let switch_may_break = ref false in
+      let res = 
+	Output.Let(tmp,interp_expr e,interp_switch tmp ab switch_may_break l [] used_cases false)
+      in
+      if !switch_may_break then
+	Try(res,"Break", None,Void)
+      else
+	res
   | TScase(e,s) -> 
       unsupported "case"
+  | TSdefault(s) -> 
+      unsupported "default"
   | TSgoto(lab) -> 
       unsupported "goto"
   | TSassert(pred) -> 
@@ -1010,34 +1119,86 @@ let rec interp_statement ab stat = match stat.st_node with
   | TSspec (spec,s) ->
       let eff = Ceffect.statement s in
       let pre,post = interp_spec eff.Ceffect.reads eff.Ceffect.assigns spec in
-      Triple(pre,interp_statement ab s,post,None)
+      Triple(pre,interp_statement ab may_break s,post,None)
 
-and interp_block ab (decls,stats) =
+and interp_block ab may_break (decls,stats) =
   let rec block = function
     | [] -> 
 	Void
     | [s] ->
-	interp_statement ab s
+	interp_statement ab may_break s
     | { st_node = TSnop } :: bl ->
 	block bl
     | { st_node = TSif (e, s1, s2) } as s :: bl ->
 	begin match s1.st_term, s2.st_term with
 	  | true, true ->
-	      append (interp_statement true s) (block bl)
+	      append (interp_statement true may_break s) (block bl)
 	  | false, false ->
-	      (* [bl] is actually unreachable *)
-	      interp_statement ab s
+	      unreachable_block bl;
+	      interp_statement ab may_break s
 	  | true, false ->
 	      If (interp_boolean_expr e, 
-		  block (s1 :: bl), interp_statement ab s2)
+		  block (s1 :: bl), interp_statement ab may_break s2)
 	  | false, true ->
 	      If (interp_boolean_expr e,
-		  interp_statement ab s1, block (s2 :: bl))
+		  interp_statement ab may_break s1, block (s2 :: bl))
 	end
     | s :: bl ->
-	append (interp_statement true s) (block bl)
+	if not s.st_term then unreachable_block bl;
+	append (interp_statement true may_break s) (block bl)
   in
   List.fold_right interp_decl decls (block stats)
+and  interp_switch tmp ab may_break l c used_cases post_default=
+  match l with
+    | ([], i):: l ->
+	let (a,lc) = make_switch_condition_default tmp c used_cases in(* [bl] is actually unreachable *)
+	let (linstr,final) = interp_case ab may_break i in
+	if final 
+	then
+	  Output.If(a,
+		    Block linstr
+		      ,
+		      interp_switch tmp ab may_break l lc used_cases false)
+	else
+	  Block ((Output.If(a,
+			    Block linstr
+			      ,
+			      Void))::[interp_switch tmp ab may_break l lc used_cases true])	
+	    
+    | (lc, i):: l ->  
+	let (a,lc) = 
+	  if post_default
+	  then
+	    make_switch_condition_default tmp lc c
+	  else
+	    make_switch_condition tmp (c@lc) in
+	let (linstr,final) = interp_case ab may_break i in
+	if final
+	then
+	  Output.If(a,
+		    Block linstr,
+		    interp_switch tmp ab may_break l [] used_cases false)
+	else
+	  Block ([Output.If(a,
+			    Block linstr,
+			    Void);interp_switch tmp ab may_break l lc  used_cases post_default])
+    | [] -> Void
+
+and interp_case ab may_break i =
+  match i with
+    | [] -> [],false
+    | a::i -> 
+	if a.st_term
+	then
+	  let (instr,isfinal) = interp_case ab may_break i in
+	  ((interp_statement ab may_break a)::instr),isfinal
+	else
+	  begin
+	    unreachable_block i;
+	    (if a.st_node=TSbreak then [] else [interp_statement ab may_break a]),true
+	  end
+	  
+	  
 
 let interp_predicate_args id args =
   let args =
@@ -1180,7 +1341,9 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	let pre,post = interp_spec id.function_reads id.function_writes spec in
 	let pre,tparams = interp_fun_params pre params in
 	abrupt_return := None;
-	let tblock = catch_return (interp_statement false block) in
+	let may_break = ref false in
+	let tblock = catch_return (interp_statement false may_break block) in
+	assert (not !may_break);
 	let tspec = interp_function_spec id spec ctype params in
 	printf "generating Why code for function %s@." f;
 	((Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,

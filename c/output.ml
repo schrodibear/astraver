@@ -438,6 +438,8 @@ let rec fprintf_expr form e =
 	  fprintf_assertion inv
 	  fprintf_variant var
 	  fprintf_expr_list e2
+    | Block([]) ->
+	fprintf form "void"
     | Block(el) ->
 	fprintf form "@[<hv 0>begin@ @[<hv 1>  %a@]@ end@]" fprintf_expr_list el
     | Assign(id,e) ->

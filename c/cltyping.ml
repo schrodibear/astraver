@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.55 2004-09-23 14:44:48 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.56 2004-10-04 15:30:58 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -426,16 +426,17 @@ let type_spec result env s =
 
 let int_constant n = { term_node = Tconstant n; term_type = c_int }
 
+let rec eval_const_expr e = match e.texpr_node with
+  | TEconstant (IntConstant c) -> int_of_string c
+  | TEunary (Uplus, t) -> eval_const_expr t
+  | TEunary (Cast.Uminus, t) -> -(eval_const_expr t)
+  | TEbinary (t1, Cast.Badd_int, t2) -> eval_const_expr t1 + eval_const_expr t2
+  | TEcast (_, e) -> eval_const_expr e
+  | _ -> error e.texpr_loc "not a constant expression"
+
+
 let eval_array_size e = 
-  let rec eval e = match e.texpr_node with
-    | TEconstant (IntConstant c) -> int_of_string c
-    | TEunary (Uplus, t) -> eval t
-    | TEunary (Cast.Uminus, t) -> -(eval t)
-    | TEbinary (t1, Cast.Badd_int, t2) -> eval t1 + eval t2
-    | TEcast (_, e) -> eval e
-    | _ -> assert false
-  in
-  { term_node = Tconstant (string_of_int (eval e)); term_type = c_int }
+  { term_node = Tconstant (string_of_int (eval_const_expr e)); term_type = c_int }
 
 let tpred t = match t.term_node with
   | Tconstant c -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.51 2004-09-30 13:46:37 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.52 2004-10-04 15:30:58 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -415,6 +415,8 @@ let rec statement s = match s.st_node with
   | TSswitch (e, s)
   | TScase (e, s) ->
       ef_union (expr e) (statement s)
+  | TSdefault ( s) ->
+      statement s
   | TSassert p ->
       { reads = predicate p; assigns = empty }
   | TSspec (sp, s) ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.8 2004-03-24 07:40:37 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.9 2004-10-04 15:30:58 hubert Exp $ i*)
 
 open Format
 open Cerror
@@ -91,5 +91,7 @@ let unsupported s = raise (Error (None, Unsupported s))
 
 let error l s = raise (Error (Some l, AnyMessage s))
 let warning l s = 
-  Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s
+  Format.eprintf "@[%a warning: %s@]@." Loc.report_line (fst l) s;
+  if Coptions.werror then exit 1
+
 

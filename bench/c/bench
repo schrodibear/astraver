@@ -86,3 +86,25 @@ for f in *.c; do
 	echo "caduceus ok... "
     fi
 done
+
+echo "C interp (bad)"
+cd ../bad-interp
+parsing="../../../bin/caduceus.opt"
+for f in *.c; do
+    echo -n "  "$f"... "
+    if gcc -ansi -pedantic -Wall -Werror -c $f > /dev/null 2>&1; then
+	echo "GCC failed (accepted a bad file, maybe not detected)"
+	gcc -ansi -pedantic -Wall -Werror -c $f
+    else
+        echo -n "GCC ok... "
+    fi
+    if $parsing  $f > /dev/null 2>&1; then
+	echo "caduceus FAILED (accepted a bad file)"
+	#$parsing $f
+	#exit 1
+    else
+	echo "caduceus ok... "
+    fi
+done
+
+

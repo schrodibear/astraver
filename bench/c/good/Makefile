@@ -58,7 +58,7 @@ why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 %: %.c
 	rm -f why/$*.why
 	make why/$*.why
-	make -f $*.makefile do_simplify
+	make -f $*.makefile simplify
 
 .PHONY: simplify coq
 
