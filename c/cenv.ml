@@ -142,9 +142,9 @@ let add_typedef l x ty =
 (* used names (in order to rename heap variables when necessary) *)
 let used_names = Hashtbl.create 97
 let mark_as_used x = Hashtbl.add used_names x ()
-let is_used_name = Hashtbl.mem used_names
+let is_used_name n = Hashtbl.mem used_names n
 
-let use_name n = if is_used_name n then raise Exit; mark_as_used n; n
+let use_name n = if is_used_name n then raise Exit; n
 
 let rec next_name n i = 
   let n_i = n ^ "_" ^ string_of_int i in
@@ -160,7 +160,9 @@ let is_sym = Hashtbl.mem sym_t
 let find_sym = Hashtbl.find sym_t
 
 let add_sym l x ty info = 
-  info.var_unique_name <- unique_name x;
+  let n = unique_name x in
+  mark_as_used n; 
+  info.var_unique_name <- n;
   if is_sym x then begin
     let (t,i) = find_sym x in
     if not (eq_type t ty) then 
