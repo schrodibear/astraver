@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.8 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.9 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -83,6 +83,40 @@ let reset_names,pre_name,post_name,inv_name,
 let id_of_name = function Name id -> id | Anonymous -> default
 
 let warning s = Format.eprintf "warning: %s\n" s
+
+(*s Various utility functions. *)
+
+let is_mutable = function Ref _ | Array _ -> true | _ -> false
+let is_pure = function PureType _ -> true | _ -> false
+
+let named_app f x = { a_name = x.a_name; a_value = (f x.a_value) }
+
+let pre_app f x = 
+  { p_assert = x.p_assert; p_name = x.p_name; p_value = f x.p_value }
+
+let post_app = named_app
+
+let anonymous x = { a_name = Anonymous; a_value = x }
+
+let anonymous_pre b x = { p_assert = b; p_name = Anonymous; p_value = x }
+
+let force_name f x =
+  option_app (fun q -> { a_name = Name (f q.a_name); a_value = q.a_value }) x
+
+let force_post_name x = force_name post_name x
+
+let force_bool_name x = 
+  force_name (function Name id -> id | Anonymous -> bool_name()) x
+
+let out_post = function
+    Some { a_value = x } -> x
+  | None -> invalid_arg "out_post"
+
+let pre_of_assert b x =
+  { p_assert = b; p_name = x.a_name; p_value = x.a_value }
+
+let assert_of_pre x =
+  { a_name = x.p_name; a_value = x.p_value }
 
 (*s Functions on terms and predicates. *)
 

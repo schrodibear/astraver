@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.9 2002-02-05 09:50:29 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.10 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 type t = string
 
@@ -69,19 +69,19 @@ let print_bound fmt b = Format.fprintf fmt "#%d" b
 
 (*s Pre-defined. *)
 
-let t_add = "add"
-let t_sub = "sub"
-let t_mul = "mul"
-let t_div = "div"
-let t_neg = "neg"
-let t_sqrt = "sqrt"
+let t_add = "@add"
+let t_sub = "@sub"
+let t_mul = "@mul"
+let t_div = "@div"
+let t_neg = "@neg"
+let t_sqrt = "@sqrt"
 
-let t_lt = "lt"
-let t_le = "le"
-let t_gt = "gt"
-let t_ge = "ge"
-let t_eq = "eq"
-let t_neq = "neq"
+let t_lt = "@lt"
+let t_le = "@le"
+let t_gt = "@gt"
+let t_ge = "@ge"
+let t_eq = "@eq"
+let t_neq = "@neq"
 
 let t_zwf_zero = "zwf_zero"
 let result = "result"

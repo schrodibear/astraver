@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.10 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.11 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -14,6 +14,10 @@ open Types
 open Ast
 open Env 
 open Effect
+
+module LabelSet = Set.Make(struct type t = string let compare = compare end)
+
+let initial_labels = LabelSet.singleton "0"
 
 (*s Typing of terms. *)
 
@@ -39,6 +43,7 @@ let rec typing_term loc env = function
   | Tconst (ConstFloat _) -> type_v_float
   | Tapp (id, [a;b]) when id == t_eq || id == t_neq ->
       check_same_type loc env a b; type_v_bool
+(*i***
   | Tapp (id, [a;b]) when is_arith id ->
       check_two_nums loc env a b
   | Tapp (id, [a]) when id == t_neg ->
@@ -61,6 +66,7 @@ let rec typing_term loc env = function
 	Error.expected_type loc 
 	  (fun fmt -> print_term fmt a) (fun fmt -> fprintf fmt "float");
       type_v_float
+***i*)
   | Tapp (id, tl) as t ->
       if not (is_in_env env id) then Error.app_of_non_function loc;
       (match type_in_env env id with
@@ -119,7 +125,7 @@ let type_v_sup loc t1 t2 =
   else
     Error.if_branches loc
 
-let typed_var ren env (phi,r) =
+let typed_var env (phi,r) =
   (* TODO: type variants *)
   let a = PTint in
   (phi,r,a)
@@ -151,23 +157,23 @@ and is_pure_type_c c =
   is_pure_type_v c.c_result_type && c.c_effect = Effect.bottom &&
   c.c_pre = [] && c.c_post = None
 
-let rec is_pure_desc ren env = function
+let rec is_pure_desc env = function
   | Var id -> not (is_in_env env id) || (is_pure_type_v (type_in_env env id))
   | Expression c -> 
       true (* TODO *)
       (*i (c = isevar) || (is_pure_cci (type_of_expression ren env c)) i*)
   | Acc _ -> true
-  | TabAcc (_,_,p) -> is_pure ren env p
+  | TabAcc (_,_,p) -> is_pure env p
   | App (p,args) -> 
-      is_pure ren env p && List.for_all (is_pure_arg ren env) args
+      is_pure env p && List.for_all (is_pure_arg env) args
   | Aff _ | TabAff _ | Seq _ | While _ | If _ 
   | Lam _ | LetRef _ | LetIn _ | LetRec _ -> false
-  | Debug (_,p) -> is_pure ren env p
-  | PPoint (_,d) -> is_pure_desc ren env d
-and is_pure ren env p =
-  p.info.pre = [] && p.info.post = None && is_pure_desc ren env p.desc
-and is_pure_arg ren env = function
-  | Term p -> is_pure ren env p
+  | Debug (_,p) -> is_pure env p
+  | PPoint (_,d) -> is_pure_desc env d
+and is_pure env p =
+  p.info.pre = [] && p.info.post = None && is_pure_desc env p.desc
+and is_pure_arg env = function
+  | Term p -> is_pure env p
   | Type _ -> true
   | Refarg _ -> false
 
@@ -188,32 +194,33 @@ let state_var ren env (phi,r) =
  * over the variables xi (i.e. c NOT [x1]...[xn]c !)
  *)
 
-let state_pre ren env pl =
+let state_pre lab env loc pl =
   let state e p =
     let ids = predicate_vars p.p_value in
     Idset.fold
       (fun id e ->
 	 if is_mutable_in_env env id then
 	   Effect.add_read id e
-	 else if is_at id then
-	   let uid,_ = un_at id in
+	 else if is_at id then begin
+	   let uid,l = un_at id in
+	   if not (LabelSet.mem l lab) then Error.unbound_label l loc;
 	   if is_mutable_in_env env uid then
 	     Effect.add_read uid e
 	   else
 	     e
-	 else
+	 end else
 	   e)
       ids e 
   in
   List.fold_left state Effect.bottom pl 
 
-let state_assert ren env a =
+let state_assert lab env loc a =
   let p = pre_of_assert true a in
-  state_pre ren env [p]
+  state_pre lab env loc [p]
 
-let state_inv ren env = function
+let state_inv lab env loc = function
   | None -> Effect.bottom
-  | Some i -> state_assert ren env i
+  | Some i -> state_assert lab env loc i
 	  
 (* [state_post ren env (id,v,ef) q] returns a pair (e,c)
  * where e is the effect of the
@@ -223,7 +230,7 @@ let state_inv ren env = function
  * RO variables, and (id,v) is the result
  *)
 
-let state_post ren env (id,v,ef) = function
+let state_post lab env (id,v,ef) loc = function
   | None -> 
       Effect.bottom, None
   | Some q ->
@@ -237,13 +244,15 @@ let state_post ren env (id,v,ef) = function
 	       else
 		 Effect.add_read id e,
 		 subst_in_predicate [id,at_id id ""] c
-	     else if is_at id then
-	       let uid,_ = un_at id in
+	     else if is_at id then begin
+	       let uid,l = un_at id in
+	       if l <> "" && not (LabelSet.mem l lab) then 
+		 Error.unbound_label l loc;
 	       if is_mutable_in_env env uid then
 		 Effect.add_read uid e, c
 	       else
 		 e,c
-	     else
+	     end else
 	       e,c)
 	  ids (Effect.bottom, q.a_value)
       in
@@ -252,6 +261,7 @@ let state_post ren env (id,v,ef) = function
 
 (* transformation of AST into constr in types V and C *)
 
+(****
 let rec cic_type_v env ren = function
   | Ref v -> 
       Ref (cic_type_v env ren v)
@@ -275,9 +285,9 @@ let rec cic_type_v env ren = function
 and cic_type_c env ren c =
   let id = c.c_result_name in
   let v' = cic_type_v env ren c.c_result_type in
-  let efp = state_pre ren env c.c_pre in
+  let efp = state_pre env c.c_pre in
   let e = c.c_effect in
-  let efq,q' = state_post ren env (id,v',e) c.c_post in
+  let efq,q' = state_post env (id,v',e) c.c_post in
   let ef = Effect.union e (Effect.union efp efq) in
   { c_result_name = id; c_result_type = v';
     c_effect = ef; c_pre = c.c_pre; c_post = q' }
@@ -298,6 +308,7 @@ and cic_binders env ren = function
       let env' = traverse_binders env [b'] in
       let ren' = initial_renaming env' in
       b' :: (cic_binders env' ren' bl)
+***)
 
 
 (* The case of expressions.
@@ -322,7 +333,7 @@ let partial_pre = function
   | _ ->
       []
 
-let states_expression ren env expr =
+let states_expression lab env expr =
   let rec effect pl = function
     | Var id -> 
 	Tvar id, pl, Effect.bottom
@@ -332,8 +343,8 @@ let states_expression ren env expr =
 	Tvar id, pl, Effect.add_read id Effect.bottom
     | TabAcc (_,id,p) ->
 	let c,pl,ef = effect pl p.desc in
-	let pre = make_pre_access ren env id c in
-	make_raw_access ren env (id,id) c, 
+	let pre = make_pre_access env id c in
+	make_raw_access env (id,id) c, 
 	(anonymous_pre true pre) :: pl, Effect.add_read id ef
     | App (p,args) ->
 	let a,pl,e = effect pl p.desc in
@@ -358,7 +369,7 @@ let states_expression ren env expr =
     | _ -> 
 	assert false
   in
-  let e0 = state_pre ren env expr.info.pre in
+  let e0 = state_pre lab env (Some expr.info.loc) expr.info.pre in
   let c,pl,e = effect [] expr.desc in
   let v = typing_term expr.info.loc env c in
   let ef = Effect.union e0 e in
@@ -384,7 +395,7 @@ let states_expression ren env expr =
 
 let verbose_fix = ref false
 
-let rec states_desc ren env loc = function
+let rec states_desc lab env loc = function
 	
   | Expression c ->
       let v = typing_term loc env c in
@@ -401,7 +412,7 @@ let rec states_desc ren env loc = function
   | Aff (x, e1) ->
       let et = type_in_env env x in
       Error.check_for_reference loc x et;
-      let s_e1 = states ren env e1 in
+      let s_e1 = states lab env e1 in
       if s_e1.info.kappa.c_result_type <> deref_type et then 
 	Error.expected_type e1.info.loc 
 	  (fun fmt -> ()) (fun fmt -> print_type_v fmt (deref_type et));
@@ -411,15 +422,15 @@ let rec states_desc ren env loc = function
       Aff (x, s_e1), (v, ef)
 
   | TabAcc (check, x, e) ->
-      let s_e = states ren env e in
+      let s_e = states lab env e in
       let efe = s_e.info.kappa.c_effect in
       let ef = Effect.add_read x efe in
       let _,ty = dearray_type (type_in_env env x) in
       TabAcc (check, x, s_e), (ty, ef)
 
   | TabAff (check, x, e1, e2) ->
-      let s_e1 = states ren env e1 in
-      let s_e2 = states ren env e2 in 
+      let s_e1 = states lab env e1 in
+      let s_e2 = states lab env e2 in 
       let ef1 = s_e1.info.kappa.c_effect in
       let ef2 = s_e2.info.kappa.c_effect in
       let ef = Effect.add_write x (Effect.union ef1 ef2) in
@@ -427,17 +438,16 @@ let rec states_desc ren env loc = function
       TabAff (check, x, s_e1, s_e2), (v,ef)
 
   | Seq bl ->
-      let bl,v,ef,_ = states_block ren env bl in
+      let bl,v,ef = states_block lab env bl in
       Seq bl, (v,ef)
 	      
   | While (b, invopt, (var,r), bl) ->
-      let efphi = state_var ren env (var,r) in
-      let ren' = next ren [] in
-      let s_b = states ren' env b in
+      let efphi = state_var lab env (var,r) in
+      let s_b = states lab env b in
       Error.check_no_effect b.info.loc s_b.info.kappa.c_effect;
-      let s_bl,_,ef_bl,_ = states_block ren' env bl in
+      let s_bl,_,ef_bl = states_block lab env bl in
       let cb = s_b.info.kappa in
-      let efinv = state_inv ren env invopt in
+      let efinv = state_inv lab env (Some loc) invopt in
       let efb = s_b.info.kappa.c_effect in
       let ef = 
 	Effect.union (Effect.union ef_bl efb) (Effect.union efinv efphi)
@@ -453,13 +463,12 @@ let rec states_desc ren env loc = function
       assert false
 
   | Lam (bl, e) ->
-      let bl' = cic_binders env ren bl in
-      let env' = traverse_binders env bl' in
-      let ren' = initial_renaming env' in
-      let s_e = states ren' env' e in
-      let v = make_arrow bl' s_e.info.kappa in
+      (* let bl' = cic_binders env ren bl in *)
+      let env' = traverse_binders env bl in
+      let s_e = states initial_labels env' e in
+      let v = make_arrow bl s_e.info.kappa in
       let ef = Effect.bottom in
-      Lam(bl',s_e), (v,ef)
+      Lam(bl,s_e), (v,ef)
 	 
   (* ATTENTION:
      Si un argument réel de type ref. correspond à une ref. globale
@@ -470,7 +479,7 @@ let rec states_desc ren env loc = function
             mais le séquencement ne sera pas correct. *)
 
   | App (f, args) ->
-      let (s_f, s_args, capp) = states_app ren env f args in
+      let (s_f, s_args, capp) = states_app lab env f args in
       let eff = s_f.info.kappa.c_effect in
       let ef_args = 
 	List.map 
@@ -486,12 +495,11 @@ let rec states_desc ren env loc = function
       App (s_f, s_args), (tapp, ef)
       
   | LetRef (x, e1, e2) ->
-      let s_e1 = states ren env e1 in
+      let s_e1 = states lab env e1 in
       let ef1 = s_e1.info.kappa.c_effect in
       let v1 = s_e1.info.kappa.c_result_type in
       let env' = add (x,Ref v1) env in
-      let ren' = next ren [x] in
-      let s_e2 = states ren' env' e2 in
+      let s_e2 = states lab env' e2 in
       let ef2 = s_e2.info.kappa.c_effect in
       let v2 = s_e2.info.kappa.c_result_type in
       Error.check_for_let_ref loc v2;
@@ -499,22 +507,22 @@ let rec states_desc ren env loc = function
       LetRef (x, s_e1, s_e2), (v2,ef)
 	
   | LetIn (x, e1, e2) ->
-      let s_e1 = states ren env e1 in
+      let s_e1 = states lab env e1 in
       let ef1 = s_e1.info.kappa.c_effect in
       let v1 = s_e1.info.kappa.c_result_type in
       Error.check_for_not_mutable e1.info.loc v1;
       let env' = add (x,v1) env in
-      let s_e2 = states ren env' e2 in
+      let s_e2 = states lab env' e2 in
       let ef2 = s_e2.info.kappa.c_effect in
       let v2 = s_e2.info.kappa.c_result_type in
       let ef = Effect.compose ef1 ef2 in
       LetIn (x, s_e1, s_e2), (v2,ef)
 	    
   | If (b, e1, e2) ->
-      let s_b = states ren env b in
+      let s_b = states lab env b in
       Error.check_no_effect b.info.loc s_b.info.kappa.c_effect;
-      let s_e1 = states ren env e1
-      and s_e2 = states ren env e2 in
+      let s_e1 = states lab env e1
+      and s_e2 = states lab env e2 in
       let efb = s_b.info.kappa.c_effect in
       let tb = s_b.info.kappa.c_result_type in
       let ef1 = s_e1.info.kappa.c_effect in
@@ -526,18 +534,17 @@ let rec states_desc ren env loc = function
       If (s_b, s_e1, s_e2), (v,ef)
 
   | LetRec (f,bl,v,var,e) ->
-      let bl' = cic_binders env ren bl in
-      let env' = traverse_binders env bl' in
-      let ren' = initial_renaming env' in
-      let v' = cic_type_v env' ren' v in
-      let efvar = state_var ren' env' var in
+      (* let bl' = cic_binders env ren bl in *)
+      let env' = traverse_binders env bl in
+      (* let v' = cic_type_v env' ren' v in *)
+      let efvar = state_var lab env' var in
       let phi0 = phi_name () in
-      let tvar = typed_var ren env' var in
+      let tvar = typed_var env' var in
       (* effect for a let/rec construct is computed as a fixpoint *)
       let rec state_rec c =
-	let tf = make_arrow bl' c in
+	let tf = make_arrow bl c in
 	let env'' = add_recursion (f,(phi0,tvar)) (add (f,tf) env') in
-	let s_e = states ren' env'' e in
+	let s_e = states initial_labels env'' e in
 	if s_e.info.kappa = c then
 	  s_e
       	else begin
@@ -545,36 +552,37 @@ let rec states_desc ren env loc = function
 	  state_rec s_e.info.kappa
       	end
       in 
-      let c0 = { c_result_name = result; c_result_type = v';
+      let c0 = { c_result_name = result; c_result_type = v;
 		 c_effect = efvar; c_pre = []; c_post = None } in
       let s_e = state_rec c0 in
-      let tf = make_arrow bl' s_e.info.kappa in
-      LetRec (f,bl',v',var,s_e), (tf,Effect.bottom)
+      let tf = make_arrow bl s_e.info.kappa in
+      LetRec (f,bl,v,var,s_e), (tf,Effect.bottom)
 
   | PPoint (s,d) -> 
-      let ren' = push_date ren s in
-      states_desc ren' env loc d
+      let lab' = LabelSet.add s lab in
+      states_desc lab' env loc d
 	
   | Debug _ -> failwith "Typing.states: Debug: TODO"
 
 
-and states_arg ren env = function
-  | Term a    -> let s_a = states ren env a in Term s_a
+and states_arg lab env = function
+  | Term a    -> let s_a = states lab env a in Term s_a
   | Refarg id -> Refarg id
-  | Type v    -> let v' = cic_type_v env ren v in Type v'
+  | Type v    -> (*i let v' = cic_type_v env lab v in i*) Type v
 	
 
-and states ren env expr =
+and states lab env expr =
   (* Here we deal with the pre- and post- conditions:
    * we add their effects to the effects of the program *)
   let (d,(v,e),p1) = 
-    if is_pure_desc ren env expr.desc then
-      states_expression ren env expr
+    if is_pure_desc env expr.desc then
+      states_expression lab env expr
     else
-      let (d,ve) = states_desc ren env expr.info.loc expr.desc in (d,ve,[])
+      let (d,ve) = states_desc lab env expr.info.loc expr.desc in (d,ve,[])
   in
-  let ep = state_pre ren env expr.info.pre in
-  let (eq,q) = state_post ren env (result,v,e) expr.info.post in
+  let loc = Some expr.info.loc in
+  let ep = state_pre lab env loc expr.info.pre in
+  let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = p1 @ expr.info.pre in
   let c = { c_result_name = result; c_result_type = v;
@@ -583,30 +591,29 @@ and states ren env expr =
   { desc = d; info = tinfo }
 
 
-and states_block ren env bl =
-  let rec ef_block ren tyres = function
+and states_block lab env bl =
+  let rec ef_block lab tyres = function
     | [] ->
 	begin match tyres with
-	    Some ty -> [],ty,Effect.bottom,ren
+	    Some ty -> [],ty,Effect.bottom
 	  | None -> failwith "a block should contain at least one statement"
 	end
     | (Assert c) :: block -> 
-	let ep = state_assert ren env c in
-	let bl,t,ef,ren' = ef_block ren tyres block in
-	(Assert c)::bl, t, Effect.union ep ef, ren'
+	let ep = state_assert lab env None c in
+	let bl,t,ef = ef_block lab tyres block in
+	(Assert c)::bl, t, Effect.union ep ef
     | (Label s) :: block ->
-	let ren' = push_date ren s in
-	let bl,t,ef,ren'' = ef_block ren' tyres block in
-	(Label s)::bl, t, ef, ren''
+	let lab' = LabelSet.add s lab in
+	let bl,t,ef = ef_block lab' tyres block in
+	(Label s)::bl, t, ef
     | (Statement e) :: block ->
-	let s_e = states ren env e in
+	let s_e = states lab env e in
 	let efe = s_e.info.kappa.c_effect in
 	let t = s_e.info.kappa.c_result_type in
-	let ren' = next ren (get_writes efe) in
-	let bl,t,ef,ren'' = ef_block ren' (Some t) block in
-	(Statement s_e)::bl, t, Effect.compose efe ef, ren''
+	let bl,t,ef = ef_block lab (Some t) block in
+	(Statement s_e)::bl, t, Effect.compose efe ef
   in
-  ef_block ren None bl
+  ef_block lab None bl
 
 and states_app ren env f args =
   let floc = f.info.loc in

@@ -1,28 +1,12 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.5 2001-08-24 19:00:08 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.6 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Logic
 open Misc
 open Types
 open Ast
 open Env
-
-val is_mutable : type_v -> bool
-val is_pure : type_v -> bool
-
-val named_app : (predicate -> predicate) -> assertion -> assertion
-val pre_app : (predicate -> predicate) -> precondition -> precondition
-val post_app : (predicate -> predicate) -> postcondition -> postcondition
-
-val anonymous : predicate -> assertion
-val anonymous_pre : bool -> predicate -> precondition
-val out_post : postcondition option -> predicate
-val pre_of_assert : bool -> assertion -> precondition
-val assert_of_pre : precondition -> assertion
-
-val force_post_name : postcondition option -> postcondition option
-val force_bool_name : postcondition option -> postcondition option
 
 val make_before_after : predicate -> predicate
 val make_after_before : local_env -> predicate -> predicate
@@ -61,16 +45,17 @@ val decomp_boolean : postcondition option -> predicate * predicate
 
 (*s Functions to translate array operations *)
 
-val array_info : Rename.t -> local_env -> Ident.t -> term * type_v
+val array_info : 
+  local_env -> Ident.t -> term * type_v
 
 val make_raw_access :
-  Rename.t -> local_env -> Ident.t * Ident.t -> term -> term
+  local_env -> Ident.t * Ident.t -> term -> term
 
 val make_raw_store :
-  Rename.t -> local_env -> Ident.t * Ident.t -> term -> term -> term
+  local_env -> Ident.t * Ident.t -> term -> term -> term
 
 val make_pre_access :
-  Rename.t -> local_env -> Ident.t -> term -> predicate
+  local_env -> Ident.t -> term -> predicate
 
 (*s Pretty printers. *)
 

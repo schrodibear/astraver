@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.6 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.7 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -9,40 +9,6 @@ open Types
 open Ast
 open Env
 open Rename
-
-(*s Various utility functions. *)
-
-let is_mutable = function Ref _ | Array _ -> true | _ -> false
-let is_pure = function PureType _ -> true | _ -> false
-
-let named_app f x = { a_name = x.a_name; a_value = (f x.a_value) }
-
-let pre_app f x = 
-  { p_assert = x.p_assert; p_name = x.p_name; p_value = f x.p_value }
-
-let post_app = named_app
-
-let anonymous x = { a_name = Anonymous; a_value = x }
-
-let anonymous_pre b x = { p_assert = b; p_name = Anonymous; p_value = x }
-
-let force_name f x =
-  option_app (fun q -> { a_name = Name (f q.a_name); a_value = q.a_value }) x
-
-let force_post_name x = force_name post_name x
-
-let force_bool_name x = 
-  force_name (function Name id -> id | Anonymous -> bool_name()) x
-
-let out_post = function
-    Some { a_value = x } -> x
-  | None -> invalid_arg "out_post"
-
-let pre_of_assert b x =
-  { p_assert = b; p_name = x.a_name; p_value = x.a_value }
-
-let assert_of_pre x =
-  { a_name = x.p_name; a_value = x.p_value }
 
 (* Some generic functions on programs *)
 
@@ -229,23 +195,23 @@ let decomp_boolean = function
  * Constructs [t:(array s T)](access_g s T t c ?::(lt c s)).
  *)
 
-let array_info ren env id =
+let array_info env id =
   let ty = type_in_env env id in
   let size,v = dearray_type ty in
   (*i let ty_elem = trad_ml_type_v ren env v in
   let ty_array = trad_imp_type ren env ty in i*)
   size,v
 
-let make_raw_access ren env (id,id') c =
-  let size,_ = array_info ren env id in
+let make_raw_access env (id,id') c =
+  let size,_ = array_info env id in
   Tapp (Ident.access, [Tvar id'; c])
 
-let make_pre_access ren env id c =
-  let size,_ = array_info ren env id in
+let make_pre_access env id c =
+  let size,_ = array_info env id in
   Pand (le (Tconst (ConstInt 0)) c, lt c size)
       
-let make_raw_store ren env (id,id') c1 c2 =
-  let size,_ = array_info ren env id in
+let make_raw_store env (id,id') c1 c2 =
+  let size,_ = array_info env id in
   Tapp (Ident.store, [Tvar id'; c1; c2])
 
 (*s Pretty printers (for debugging purposes) *)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.8 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.9 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -63,20 +63,20 @@ and trad_desc ren env ct d =
       failwith "Mlise.trad: pure terms are supposed to be expressions"
 
   | TabAcc (check, x, e1) ->
-      let _,ty_elem = array_info ren env x in
+      let _,ty_elem = array_info env x in
       let te1 = trad ren e1 in
       let (_,ef1,p1,q1) = decomp_kappa e1.info.kappa in
       let w = get_writes ef1 in
       let ren' = next ren w in
       let id = Ident.create "index" in
       let access = 
-	make_raw_access ren' env (x,current_var ren' x) (Tvar id) 
+	make_raw_access env (x,current_var ren' x) (Tvar id) 
       in
       let t,ty = result_tuple ren' (current_date ren) env
 		   (rest, CC_expr access, CC_type) (eft,qt) in
       let t =
 	if check then 
-	  let h = make_pre_access ren env x (Tvar id) in 
+	  let h = make_pre_access env x (Tvar id) in 
 	  let_in_pre ty (anonymous_pre true h) t
 	else
 	  t 
@@ -98,7 +98,7 @@ and trad_desc ren env ct d =
 	(current_vars ren' w1,q1) (current_var ren' x,tx) t_ty
 
   | TabAff (check, x, e1, e2) ->
-      let _,ty_elem = array_info ren env x in
+      let _,ty_elem = array_info env x in
       let te1 = trad ren e1 in
       let (_,ef1,p1,q1) = decomp_kappa e1.info.kappa in
       let w1 = get_writes ef1 in
@@ -112,7 +112,7 @@ and trad_desc ren env ct d =
       let ren''' = next ren'' [x] in
       let t,ty = result_tuple ren''' (current_date ren) env
 		   (rest, CC_expr (Tconst ConstUnit), CC_type) (eft,qt) in
-      let store = make_raw_store ren'' env (x,current_var ren'' x) (Tvar id1)
+      let store = make_raw_store env (x,current_var ren'' x) (Tvar id1)
 		   (Tvar id2) in
       let t = make_let_in ren'' ren''' env (CC_expr store) [] ([],None) 
 		(current_var ren''' x, type_in_env env x) (t,ty) in
@@ -120,7 +120,7 @@ and trad_desc ren env ct d =
      		(current_vars ren'' w2,q2) (id2,ty_elem) (t,ty) in
       let t = 
 	if check then
-	  let h = make_pre_access ren' env x (Tvar id1) in
+	  let h = make_pre_access env x (Tvar id1) in
 	  let_in_pre ty (anonymous_pre true h) t
 	else
 	  t 
@@ -162,7 +162,7 @@ and trad_desc ren env ct d =
       let ren' = next ren (get_writes eft) in
       let tb = trad ren' b' in
       let tbl = trad_block ren' env bl in
-      let var' = typed_var ren env var in
+      let var' = typed_var env var in
       make_while ren env var' (tb,b.info.kappa) tbl (inv,ct)
 
   | Lam (bl, e) ->

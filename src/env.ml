@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.3 2001-08-24 19:07:16 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.4 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Misc
 open Ast
@@ -24,6 +24,7 @@ module Penv = struct
   let add id v (m,l,r) = (Idmap.add id v m, (id,v)::l, r)
   let find id (m,_,_) = Idmap.find id m
   let fold f (_,l,_) x0 = List.fold_right f l x0
+  let iter f (_,l,_) = List.iter f l
   let add_rec (id,var) (m,l,r) = (m,l,(id,var)::r)
   let find_rec id (_,_,r) = List.assoc id r
 end
@@ -153,6 +154,50 @@ let add_recursion = Penv.add_rec
 
 let find_recursion = Penv.find_rec
 
+
+
+(* Initial symbol table *)
+
+let x = Ident.create "x"
+let y = Ident.create "y"
+let int = PureType PTint
+let bool = PureType PTbool
+
+let compare_type op =
+  let q = Pif (Tvar Ident.result,
+	       relation op (Tvar x) (Tvar y),
+	       not_relation op (Tvar x) (Tvar y))
+  in
+  Arrow ([x, BindType int; y, BindType int], 
+	 { c_result_name = Ident.result;
+	   c_result_type = bool;
+	   c_effect = Effect.bottom;
+	   c_pre = []; c_post = Some (anonymous q) })
+
+let _ = add_global Ident.t_lt (compare_type Ident.t_lt) None
+let _ = add_global Ident.t_le (compare_type Ident.t_le) None
+let _ = add_global Ident.t_gt (compare_type Ident.t_gt) None
+let _ = add_global Ident.t_ge (compare_type Ident.t_ge) None
+
+let bin_arith_type = 
+  Arrow ([x, BindType int; y, BindType int], 
+	 { c_result_name = Ident.result;
+	   c_result_type = int;
+	   c_effect = Effect.bottom;
+	   c_pre = []; c_post = None })
+
+let _ = add_global Ident.t_add bin_arith_type None
+let _ = add_global Ident.t_sub bin_arith_type None
+let _ = add_global Ident.t_mul bin_arith_type None
+
+let un_arith_type = 
+  Arrow ([x, BindType int], 
+	 { c_result_name = Ident.result;
+	   c_result_type = int;
+	   c_effect = Effect.bottom;
+	   c_pre = []; c_post = None })
+
+let _ = add_global Ident.t_neg un_arith_type None
 
 (* We also maintain a table of the currently edited proofs of programs
  * in order to add them in the environnement when the user does Save *)

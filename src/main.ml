@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.10 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.11 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -33,13 +33,14 @@ let interp_program id p =
   let p = Db.db_prog p in
   if !debug then eprintf "=== typing with effects ===@\n";
   let env = Env.empty in
-  let ren = initial_renaming env in
-  let p = Typing.states ren env p in
+  let p = Typing.states Typing.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
   Error.check_for_not_mutable ploc v;
   if !debug then begin print_type_c err_formatter c; eprintf "@\n" end;
+  if !type_only then exit 0;
   if !debug then eprintf "=== weakest preconditions ===@\n";
+  let ren = initial_renaming env in
   let p = Wp.propagate ren p in
   if !debug then eprintf "=== functionalization ===@\n";
   let cc = Mlize.trans ren p in
@@ -106,6 +107,7 @@ let parse_args () =
     | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover := Coq; parse args
     | ("-d" | "--debug") :: args -> debug := true; parse args
+    | ("-tc" | "--type-only") :: args -> type_only := true; parse args
     | ("-q" | "--quiet") :: args -> verbose := false; parse args
     | ("-V" | "--verbose") :: args -> verbose := true; parse args
     | f :: args -> files := f :: !files; parse args

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.4 2001-08-24 19:07:16 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.5 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -11,6 +11,7 @@ open Format
 type error = 
   | UnboundVariable of Ident.t
   | UnboundReference of Ident.t
+  | UnboundLabel of string
   | Clash of Ident.t
   | Undefined of Ident.t
   | NotAReference of Ident.t
@@ -42,6 +43,8 @@ let report fmt = function
       fprintf fmt "Unbound variable %s" (Ident.string id)
   | UnboundReference id ->
       fprintf fmt "Unbound reference or array %s" (Ident.string id)
+  | UnboundLabel s ->
+      fprintf fmt "Unbound label '%s'" s
   | Clash id ->
       fprintf fmt "Clash with previous constant %s" (Ident.string id)
   | Undefined id ->
@@ -107,6 +110,8 @@ let raise_with_loc loc e = raise (Error (loc, e))
 let unbound_variable id loc = raise_with_loc loc (UnboundVariable id)
 
 let unbound_reference id loc = raise_with_loc loc (UnboundReference id)
+
+let unbound_label id loc = raise_with_loc loc (UnboundLabel id)
 
 let clash id loc = raise_with_loc loc (Clash id)
 

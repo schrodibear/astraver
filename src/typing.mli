@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.mli,v 1.2 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.3 2002-02-07 15:11:51 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -9,7 +9,11 @@ open Env
 
 (* This module realizes type and effect inference *)
 
-val cic_type_v : local_env -> Rename.t -> type_v -> type_v
+module LabelSet : Set.S with type elt = string
+
+val initial_labels : LabelSet.t
+
+(*i val cic_type_v : local_env -> Rename.t -> type_v -> type_v i*)
 
 val effect_app : Rename.t -> local_env
             -> typing_info Ast.t
@@ -18,8 +22,8 @@ val effect_app : Rename.t -> local_env
              * ((Ident.t * Ident.t) list * (Ident.t * term) list * bool)
              * type_c
 
-val typed_var : Rename.t -> local_env -> term * term -> variant
+val typed_var : local_env -> term * term -> variant
 
-val states : Rename.t -> local_env -> parsed_program -> typed_program
+val states : LabelSet.t -> local_env -> parsed_program -> typed_program
 
-val type_of_expression : Rename.t -> local_env -> term -> type_v
+val type_of_expression : LabelSet.t -> local_env -> term -> type_v

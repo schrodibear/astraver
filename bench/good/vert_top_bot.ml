@@ -29,7 +29,7 @@ external visible :
 external res : listv ref
 external cons : (ex:float)(ey:float)(ez:float)(l:listv) listv
 
-
+(***
 let vert_top_bot =
   fun (a:vector3)(vo:vector3)(vi:vector3)(eps:float) ->
   { pre_vtb }
@@ -58,4 +58,4 @@ let vert_top_bot =
   end else 
     res := (cons (x vo) (y vo) (z vi) !res))
   { correct(res) }
-
+***)
