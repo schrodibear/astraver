@@ -9,6 +9,7 @@
 \newcommand{\pvs}{\textsf{PVS}\index{PVS@\textsf{PVS}}}
 \newcommand{\coq}{\textsf{Coq}\index{Coq@\textsf{Coq}}}
 \newcommand{\harvey}{\textsf{haRVey}\index{haRVey@\textsf{haRVey}}}
+\newcommand{\simplify}{\textsf{Simplify}\index{Simplify@\textsf{Simplify}}}
 \newcommand{\hollight}{\textsf{HOL Light}\index{HOL Light@\textsf{HOL Light}}}
 \newcommand{\krakatoa}{\textsf{Krakatoa}\index{Krakatoa@\textsf{Krakatoa}}}
 \newcommand{\java}{\textsc{Java}\index{Java@\textsf{Java}}}
@@ -96,7 +97,7 @@ Currently, the input syntax is either a dialect of ML (with a syntax close to
 \caml's, with annotations on top) or an ANSI C file where annotations
 are inserted as special comments.
 The output is a \pvs\ theory~\cite{PVS}, a \coq\ module~\cite{Coq},
-a \hollight\ file~\cite{HOLLight}
+a \hollight\ file~\cite{HOLLight}, a \simplify\ input file~\cite{Simplify}
 or a bunch of input files for \harvey~\cite{haRVey}. 
 
 If the input file is \texttt{foo.mlw}, \why\ is simply invoked as
@@ -108,10 +109,12 @@ Similarly, invoking \why\ as
 \begin{verbatim}
      why --pvs foo.mlw
      why --hol-light foo.mlw
+     why --simplify foo.mlw
      why --harvey foo.mlw
 \end{verbatim}
 (re)generates a \pvs\ theory \texttt{foo\_why.pvs}, an input file
-\texttt{foo\_why.ml} for \hollight\ or a bunch of files
+\texttt{foo\_why.ml} for \hollight, an input file \texttt{foo\_why.ax}
+for \simplify\ or a bunch of files
 \texttt{foo\_}\textit{xxx}\texttt{.hv} to be 
 produced by \harvey.
 % Section~\ref{usage} details the various command line options.
@@ -123,7 +126,7 @@ overwritten. A backup of the old file is also made automatically.
 Contrary to the \coq\ file, the edition of the \pvs\ or \hollight\
 file is limited to the beginning of the file (a comment
 marks the separation).
-The \harvey\ files are not intended to be edited.
+The \simplify\ and \harvey\ files are not intended to be edited.
 
 \section{Verifying ML programs}
 \label{tutorial:ml}\index{ML program}
@@ -738,10 +741,12 @@ Command line options are the following:
   \item[\texttt{--wp-only}]:    ~\par  
     Stop after annotation.
 
-  \item[Prover options:] ~\par
+  \item[Prover selection:] ~\par
   \item[\texttt{--coq}, \texttt{--pvs}, \texttt{--hol-light}, 
-        \texttt{--harvey}]: ~\par 
+        \texttt{--harvey}, \texttt{--simplify}]: ~\par 
     Select the prover; it defaults to \coq.
+
+  \item[Coq-specific options:] ~\par
   \item[\texttt{--valid}, \texttt{--no-valid}]: ~\par
     Set/Unset the functional validation. Only meaningful with the
     \coq\ prover. When set, \why\ outputs a functional interpretation

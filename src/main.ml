@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.58 2003-06-18 14:07:50 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.59 2003-09-15 08:40:40 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -41,12 +41,14 @@ let reset () =
   | Coq -> Coq.reset ()
   | HolLight -> Holl.reset ()
   | Harvey -> Harvey.reset ()
+  | Simplify -> Simplify.reset ()
 
 let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
   | Coq -> Coq.push_obligations ol
   | HolLight -> Holl.push_obligations ol
   | Harvey -> Harvey.push_obligations ol
+  | Simplify -> Simplify.push_obligations ol
 
 let push_validation id tt v = 
   if valid && prover = Coq then Coq.push_validation id tt v
@@ -55,7 +57,7 @@ let push_parameter id v tv = match prover with
   | Pvs -> if is_pure_type_v v then Pvs.push_parameter id tv
   | Coq -> Coq.push_parameter id tv
   | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
-  | Harvey -> () (* nothing to do? *)
+  | Harvey | Simplify -> () (* nothing to do? *)
 
 let output fwe = 
   if wol then begin
@@ -68,6 +70,7 @@ let output fwe =
     | Coq -> Coq.output_file fwe
     | HolLight -> Holl.output_file fwe
     | Harvey -> Harvey.output_file fwe
+    | Simplify -> Simplify.output_file fwe
   end
 
 (*s Processing of a single declaration [let id = p]. *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.9 2003-05-12 14:13:38 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.10 2003-09-15 08:40:40 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -54,6 +54,15 @@ let prefix id =
   else if id == t_mod_int then "arith_mod"
   else if id == t_neg_int then "arith_opp"
   (* float ops *)
+  else if id == t_add_float 
+       || id == t_sub_float 
+       || id == t_mul_float 
+       || id == t_div_float 
+       || id == t_neg_float 
+       || id == t_sqrt_float 
+       || id == t_float_of_int 
+  then
+    Report.raise_unlocated (AnyMessage "haRVey does not support floats")
   else assert false
 
 let rec print_term fmt = function

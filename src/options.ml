@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.21 2003-06-18 14:07:50 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.22 2003-09-15 08:40:40 filliatr Exp $ i*)
 
 open Format
 
@@ -38,7 +38,7 @@ let wol_ = ref false
 
 let c_file = ref false
 
-type prover = Coq | Pvs | HolLight | Harvey
+type prover = Coq | Pvs | HolLight | Harvey | Simplify
 let prover_ = ref Coq
 
 (*s Parsing the command-line *)
@@ -87,15 +87,20 @@ Typing/Annotations options:
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
 
-Prover options:
+Prover selection:
   --coq       selects COQ prover (default)
   --pvs       selects PVS prover
   --hol-light selects HOL Light prover
   --harvey    selects haRVey prover
+  --simplify  selects Simplify prover
+
+Coq-specific options:
   --valid, 
-  --no-valid  set/unset the functional validation (Coq only; default is no)
+  --no-valid  set/unset the functional validation (default is no)
   --coq-tactic <tactic> 
               gives a default tactic for new proof obligations
+  --coq-preamble <text>
+              gives some Coq preamble to be substituted to \"Require Why\"
 
 Misc options:
   --ocaml        Ocaml code output
@@ -114,6 +119,7 @@ let files =
     | ("-coq" | "--coq") :: args -> prover_ := Coq; parse args
     | ("-hol-light" | "--hol-light") :: args -> prover_ := HolLight; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
+    | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args

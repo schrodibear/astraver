@@ -15,7 +15,7 @@ let search1 =
     let i = ref 0 in begin
     while !i < (array_length t) do
       { invariant 0 <= i and forall k:int. 0 <= k < i -> t[k] <> 0
-        variant array_length(t) - i }							 
+        variant array_length(t) - i } 
       if t[!i] = 0 then raise (Found !i);
       i := !i + 1
     done;

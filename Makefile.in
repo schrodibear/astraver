@@ -41,7 +41,7 @@ CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
            src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
            src/monad.cmo      \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
-	   src/holl.cmo src/harvey.cmo  \
+	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
 	   src/coq.cmo src/cparser.cmo src/clexer.cmo src/cinterp.cmo \
            src/ocaml.cmo src/main.cmo
 
@@ -65,15 +65,16 @@ PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/parser.ml \
 	    src/clexer.ml src/cparser.ml src/cparser.mli \
-	    intf/hilight.ml
+	    intf/hilight.ml tools/why2html.ml
 
 # main targets
 ##############
 
 BINARY=bin/why.$(OCAMLBEST)
 STATICBINARY=bin/why.static
+WHY2HTML=bin/why2html.$(OCAMLBEST)
 
-all: $(BINARY) coq-@COQ@
+all: $(BINARY) coq-@COQ@ $(WHY2HTML)
 
 opt: bin/why.opt
 
@@ -102,6 +103,12 @@ bin/gwhy.byte: $(GCMO)
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
+
+bin/why2html.byte: tools/why2html.ml
+	$(OCAMLC) $(BFLAGS) -o $@ $^
+
+bin/why2html.opt: tools/why2html.ml
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 static:: $(STATICBINARY)
 
