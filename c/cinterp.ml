@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.36 2004-03-18 15:21:38 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.37 2004-03-18 16:49:26 marche Exp $ i*)
 
 
 open Format
@@ -247,7 +247,13 @@ let rec interp_expr e =
 	let var = global_var_for_type e.texpr_type in
 	make_app "acc_" [Var var;te1]
     | TEunary(_,_) -> assert false (* TODO *)	
-    | TEcall(e,args) -> assert false (* TODO *)
+    | TEcall(e,args) -> 
+	begin
+	  match e.texpr_node with
+	    | TEvar v ->
+		make_app v.var_name (List.map interp_expr args)
+	    | _ -> assert false
+	end
     | TEcast(t,e)
       -> assert false (* TODO *)
     | TEsizeof_expr(e)
@@ -401,7 +407,13 @@ let rec interp_statement_expr e =
     | TEsizeof_expr _ -> assert false (* TODO *)
     | TEcast (_, _) -> assert false (* TODO *)
     | TEcond (_, _, _) -> assert false (* TODO *)
-    | TEcall (_, _) -> assert false (* TODO *)
+    | TEcall (e,args) -> 
+	begin
+	  match e.texpr_node with
+	    | TEvar v ->
+		make_app v.var_name (List.map interp_expr args)
+	    | _ -> assert false
+	end
     | TEbinary (_, _, _) -> assert false (* TODO *)
     | TEunary (_, _) -> assert false (* TODO *)
     | TEassign_op (l, op, e) -> 
