@@ -21,6 +21,7 @@ type obligation = string * sequent
 
 type proof = 
   | Lemma of string * Ident.t list
+  | True
   | Reflexivity of term
   | Assumption of Ident.t
   | Proj1 of Ident.t
@@ -29,6 +30,10 @@ type proof =
 type validation = proof cc_term
 
 (*s We automatically prove the trivial obligations *)
+
+let ptrue = function
+  | Ptrue -> True
+  | _ -> raise Exit
 
 let is_eq id = id == Ident.t_eq || id == Ident.t_eq_int
 
@@ -50,6 +55,7 @@ let conjunction ctx = function
   | _ -> raise Exit
 
 let discharge ctx concl =
+  try ptrue concl with Exit ->
   try reflexivity concl with Exit -> 
   try list_first (assumption concl) ctx with Exit ->
   conjunction ctx concl

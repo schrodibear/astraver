@@ -15,6 +15,7 @@ type obligation = string * sequent
 
 type proof = 
   | Lemma of string * Ident.t list
+  | True
   | Reflexivity of term
   | Assumption of Ident.t
   | Proj1 of Ident.t

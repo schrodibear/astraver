@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.61 2002-09-18 14:35:28 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.62 2002-10-01 13:38:00 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -250,6 +250,8 @@ let print_proof fmt = function
       fprintf fmt "%s" s
   | Lemma (s, vl) ->
       fprintf fmt "@[(%s %a)@]" s (print_list space Ident.print) vl
+  | True ->
+      fprintf fmt "I"
   | Reflexivity t ->
       fprintf fmt "@[(refl_equal ? %a)@]" print_term t
   | Assumption id -> 

@@ -16,14 +16,6 @@ Require Why.
 
 (*Why*) Implicits post_E.
 
-Lemma p1_po_1 : 
-  True.
-Proof.
-Exact I.
-Save.
-
-Definition p1 := (* validation *)
-  (exist_1 (post_E True [result: unit]False) (Exn_E unit) p1_po_1).
 
 (*Why*) Inductive ET_F [T:Set] : Set :=
   | Val_F : T -> (ET_F T)
@@ -38,9 +30,4 @@ Definition p1 := (* validation *)
 
 (*Why*) Implicits post_F.
 
-Definition p2 := (* validation *)
-  (exist_1 (post_F [result0: Z]`result0 = 1` [result0: unit]False) (Exn_F
-                                                                    unit 
-                                                                    `1`)
-(refl_equal ? `1`)).
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.54 2002-10-01 13:12:05 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.55 2002-10-01 13:38:00 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -356,12 +356,15 @@ and wp_desc info d q =
 	let q = while_post_block info.env inv var e in
 	let e',_ = wp e (Some q) in
 	While (b', inv, var, e'), None
-    (* TODO: wp for raise *)
+    (* $wp(raise E, _, R) = R$ *)
     | Raise (id, None) ->
-	d, None (* option_app (fun (_,ql) -> List.assoc id ql) q *)
+	d, option_app (fun (_,ql) -> List.assoc id ql) q
+    (* $wp(raise (E e), _, R) = wp(e, R, R)$ *)
     | Raise (id, Some e) ->
-	let e',_ = wp e None in
-	Raise (id, Some e'), None
+	let make_post (_,ql) = let r = List.assoc id ql in (r, [id, r]) in
+	let qe = filter_post e.info (option_app make_post q) in
+	let e',w = wp e qe in
+	Raise (id, Some e'), w
 
 and wp_block bl q = match bl with
   | [] ->
