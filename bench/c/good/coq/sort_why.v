@@ -390,7 +390,8 @@ Lemma sort4_3_impl_po_3 :
   (forall (intP1:((memory) Z)),
    (intP1 = (upd intP0 b tmp1) ->
     (swap_ord (acc intP1 a) (acc intP1 b) (acc intP a) (acc intP b)) /\
-    (assigns alloc intP intP1 (union_loc (pointer_loc b) (pointer_loc a))))) /\
+    (not_assigns alloc intP intP1
+     (pset_union (pset_singleton b) (pset_singleton a))))) /\
   (valid alloc b).
 Proof.
 intuition.
@@ -426,13 +427,14 @@ Lemma sort4_3_impl_po_4 :
   forall (result0: unit),
   forall (Post1: result0 = tt),
   (swap_ord (acc intP a) (acc intP b) (acc intP a) (acc intP b)) /\
-  (assigns alloc intP intP (union_loc (pointer_loc b) (pointer_loc a))).
+  (not_assigns alloc intP intP
+   (pset_union (pset_singleton b) (pset_singleton a))).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1988-2070 *)
+(* Why obligation from file "why/sort.why", characters 1999-2081 *)
 Lemma sort4_3_impl_po_5 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -447,15 +449,15 @@ Lemma sort4_3_impl_po_5 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   (valid alloc c).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1988-2070 *)
+(* Why obligation from file "why/sort.why", characters 1999-2081 *)
 Lemma sort4_3_impl_po_6 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -470,15 +472,15 @@ Lemma sort4_3_impl_po_6 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (Pre23: (valid alloc c)),
   (valid alloc d).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2141-2173 *)
+(* Why obligation from file "why/sort.why", characters 2152-2184 *)
 Lemma sort4_3_impl_po_7 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -493,8 +495,8 @@ Lemma sort4_3_impl_po_7 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (Pre23: (valid alloc c)),
   forall (Pre24: (valid alloc d)),
   forall (Test4: (acc intP0 c) > (acc intP0 d)),
@@ -509,7 +511,8 @@ Lemma sort4_3_impl_po_7 :
   (forall (intP:((memory) Z)),
    (intP = (upd intP1 d tmp2) ->
     (swap_ord (acc intP c) (acc intP d) (acc intP0 c) (acc intP0 d)) /\
-    (assigns alloc intP0 intP (union_loc (pointer_loc d) (pointer_loc c))))) /\
+    (not_assigns alloc intP0 intP
+     (pset_union (pset_singleton d) (pset_singleton c))))) /\
   (valid alloc d).
 Proof.
 intuition.
@@ -527,7 +530,7 @@ generalize (unchanged_pointer_elim _ _ H13).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2232-2232 *)
+(* Why obligation from file "why/sort.why", characters 2243-2243 *)
 Lemma sort4_3_impl_po_8 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -542,20 +545,21 @@ Lemma sort4_3_impl_po_8 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (Pre23: (valid alloc c)),
   forall (Pre24: (valid alloc d)),
   forall (Test3: (acc intP0 c) <= (acc intP0 d)),
   forall (result1: unit),
   forall (Post9: result1 = tt),
   (swap_ord (acc intP0 c) (acc intP0 d) (acc intP0 c) (acc intP0 d)) /\
-  (assigns alloc intP0 intP0 (union_loc (pointer_loc d) (pointer_loc c))).
+  (not_assigns alloc intP0 intP0
+   (pset_union (pset_singleton d) (pset_singleton c))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2439-2521 *)
+(* Why obligation from file "why/sort.why", characters 2461-2543 *)
 Lemma sort4_3_impl_po_9 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -570,19 +574,19 @@ Lemma sort4_3_impl_po_9 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   (valid alloc a).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2439-2521 *)
+(* Why obligation from file "why/sort.why", characters 2461-2543 *)
 Lemma sort4_3_impl_po_10 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -597,20 +601,20 @@ Lemma sort4_3_impl_po_10 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (Pre35: (valid alloc a)),
   (valid alloc c).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2592-2624 *)
+(* Why obligation from file "why/sort.why", characters 2614-2646 *)
 Lemma sort4_3_impl_po_11 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -625,13 +629,13 @@ Lemma sort4_3_impl_po_11 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (Pre35: (valid alloc a)),
   forall (Pre36: (valid alloc c)),
   forall (Test6: (acc intP1 a) > (acc intP1 c)),
@@ -646,7 +650,8 @@ Lemma sort4_3_impl_po_11 :
   (forall (intP:((memory) Z)),
    (intP = (upd intP2 c tmp3) ->
     (swap_ord (acc intP a) (acc intP c) (acc intP1 a) (acc intP1 c)) /\
-    (assigns alloc intP1 intP (union_loc (pointer_loc c) (pointer_loc a))))) /\
+    (not_assigns alloc intP1 intP
+     (pset_union (pset_singleton c) (pset_singleton a))))) /\
   (valid alloc c).
 Proof.
 intuition.
@@ -664,7 +669,7 @@ generalize (unchanged_pointer_elim _ _ H15).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2683-2683 *)
+(* Why obligation from file "why/sort.why", characters 2705-2705 *)
 Lemma sort4_3_impl_po_12 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -679,25 +684,26 @@ Lemma sort4_3_impl_po_12 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (Pre35: (valid alloc a)),
   forall (Pre36: (valid alloc c)),
   forall (Test5: (acc intP1 a) <= (acc intP1 c)),
   forall (result2: unit),
   forall (Post17: result2 = tt),
   (swap_ord (acc intP1 a) (acc intP1 c) (acc intP1 a) (acc intP1 c)) /\
-  (assigns alloc intP1 intP1 (union_loc (pointer_loc c) (pointer_loc a))).
+  (not_assigns alloc intP1 intP1
+   (pset_union (pset_singleton c) (pset_singleton a))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2890-2972 *)
+(* Why obligation from file "why/sort.why", characters 2923-3005 *)
 Lemma sort4_3_impl_po_13 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -712,24 +718,24 @@ Lemma sort4_3_impl_po_13 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   (valid alloc b).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 2890-2972 *)
+(* Why obligation from file "why/sort.why", characters 2923-3005 *)
 Lemma sort4_3_impl_po_14 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -744,25 +750,25 @@ Lemma sort4_3_impl_po_14 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (Pre47: (valid alloc b)),
   (valid alloc d).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3043-3075 *)
+(* Why obligation from file "why/sort.why", characters 3076-3108 *)
 Lemma sort4_3_impl_po_15 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -777,18 +783,18 @@ Lemma sort4_3_impl_po_15 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (Pre47: (valid alloc b)),
   forall (Pre48: (valid alloc d)),
   forall (Test8: (acc intP2 b) > (acc intP2 d)),
@@ -803,7 +809,8 @@ Lemma sort4_3_impl_po_15 :
   (forall (intP:((memory) Z)),
    (intP = (upd intP3 d tmp4) ->
     (swap_ord (acc intP b) (acc intP d) (acc intP2 b) (acc intP2 d)) /\
-    (assigns alloc intP2 intP (union_loc (pointer_loc d) (pointer_loc b))))) /\
+    (not_assigns alloc intP2 intP
+     (pset_union (pset_singleton d) (pset_singleton b))))) /\
   (valid alloc d).
 Proof.
 intuition.
@@ -821,7 +828,7 @@ generalize (unchanged_pointer_elim _ _ H17).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3134-3134 *)
+(* Why obligation from file "why/sort.why", characters 3167-3167 *)
 Lemma sort4_3_impl_po_16 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -836,30 +843,31 @@ Lemma sort4_3_impl_po_16 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (Pre47: (valid alloc b)),
   forall (Pre48: (valid alloc d)),
   forall (Test7: (acc intP2 b) <= (acc intP2 d)),
   forall (result3: unit),
   forall (Post25: result3 = tt),
   (swap_ord (acc intP2 b) (acc intP2 d) (acc intP2 b) (acc intP2 d)) /\
-  (assigns alloc intP2 intP2 (union_loc (pointer_loc d) (pointer_loc b))).
+  (not_assigns alloc intP2 intP2
+   (pset_union (pset_singleton d) (pset_singleton b))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3341-3423 *)
+(* Why obligation from file "why/sort.why", characters 3385-3467 *)
 Lemma sort4_3_impl_po_17 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -874,29 +882,29 @@ Lemma sort4_3_impl_po_17 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
   forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
-                  (assigns alloc intP2 intP3
-                   (union_loc (pointer_loc d) (pointer_loc b)))),
+                  (not_assigns alloc intP2 intP3
+                   (pset_union (pset_singleton d) (pset_singleton b)))),
   (valid alloc b).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3341-3423 *)
+(* Why obligation from file "why/sort.why", characters 3385-3467 *)
 Lemma sort4_3_impl_po_18 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -911,30 +919,30 @@ Lemma sort4_3_impl_po_18 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
   forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
-                  (assigns alloc intP2 intP3
-                   (union_loc (pointer_loc d) (pointer_loc b)))),
+                  (not_assigns alloc intP2 intP3
+                   (pset_union (pset_singleton d) (pset_singleton b)))),
   forall (Pre59: (valid alloc b)),
   (valid alloc c).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3494-3526 *)
+(* Why obligation from file "why/sort.why", characters 3538-3570 *)
 Lemma sort4_3_impl_po_19 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -949,23 +957,23 @@ Lemma sort4_3_impl_po_19 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
   forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
-                  (assigns alloc intP2 intP3
-                   (union_loc (pointer_loc d) (pointer_loc b)))),
+                  (not_assigns alloc intP2 intP3
+                   (pset_union (pset_singleton d) (pset_singleton b)))),
   forall (Pre59: (valid alloc b)),
   forall (Pre60: (valid alloc c)),
   forall (Test10: (acc intP3 b) > (acc intP3 c)),
@@ -980,7 +988,8 @@ Lemma sort4_3_impl_po_19 :
   (forall (intP:((memory) Z)),
    (intP = (upd intP4 c tmp5) ->
     (swap_ord (acc intP b) (acc intP c) (acc intP3 b) (acc intP3 c)) /\
-    (assigns alloc intP3 intP (union_loc (pointer_loc c) (pointer_loc b))))) /\
+    (not_assigns alloc intP3 intP
+     (pset_union (pset_singleton c) (pset_singleton b))))) /\
   (valid alloc c).
 Proof.
 intuition.
@@ -998,7 +1007,7 @@ generalize (unchanged_pointer_elim _ _ H19).
 intro; caduceus.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 3585-3585 *)
+(* Why obligation from file "why/sort.why", characters 3629-3629 *)
 Lemma sort4_3_impl_po_20 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -1013,35 +1022,36 @@ Lemma sort4_3_impl_po_20 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
   forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
-                  (assigns alloc intP2 intP3
-                   (union_loc (pointer_loc d) (pointer_loc b)))),
+                  (not_assigns alloc intP2 intP3
+                   (pset_union (pset_singleton d) (pset_singleton b)))),
   forall (Pre59: (valid alloc b)),
   forall (Pre60: (valid alloc c)),
   forall (Test9: (acc intP3 b) <= (acc intP3 c)),
   forall (result4: unit),
   forall (Post33: result4 = tt),
   (swap_ord (acc intP3 b) (acc intP3 c) (acc intP3 b) (acc intP3 c)) /\
-  (assigns alloc intP3 intP3 (union_loc (pointer_loc c) (pointer_loc b))).
+  (not_assigns alloc intP3 intP3
+   (pset_union (pset_singleton c) (pset_singleton b))).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/sort.why", characters 1493-3771 *)
+(* Why obligation from file "why/sort.why", characters 1493-3826 *)
 Lemma sort4_3_impl_po_21 : 
   forall (a: pointer),
   forall (b: pointer),
@@ -1056,28 +1066,28 @@ Lemma sort4_3_impl_po_21 :
   forall (intP0: ((memory) Z)),
   forall (Post50: (swap_ord (acc intP0 a) (acc intP0 b) (acc intP a)
                    (acc intP b)) /\
-                  (assigns alloc intP intP0
-                   (union_loc (pointer_loc b) (pointer_loc a)))),
+                  (not_assigns alloc intP intP0
+                   (pset_union (pset_singleton b) (pset_singleton a)))),
   forall (intP1: ((memory) Z)),
   forall (Post58: (swap_ord (acc intP1 c) (acc intP1 d) (acc intP0 c)
                    (acc intP0 d)) /\
-                  (assigns alloc intP0 intP1
-                   (union_loc (pointer_loc d) (pointer_loc c)))),
+                  (not_assigns alloc intP0 intP1
+                   (pset_union (pset_singleton d) (pset_singleton c)))),
   forall (intP2: ((memory) Z)),
   forall (Post66: (swap_ord (acc intP2 a) (acc intP2 c) (acc intP1 a)
                    (acc intP1 c)) /\
-                  (assigns alloc intP1 intP2
-                   (union_loc (pointer_loc c) (pointer_loc a)))),
+                  (not_assigns alloc intP1 intP2
+                   (pset_union (pset_singleton c) (pset_singleton a)))),
   forall (intP3: ((memory) Z)),
   forall (Post74: (swap_ord (acc intP3 b) (acc intP3 d) (acc intP2 b)
                    (acc intP2 d)) /\
-                  (assigns alloc intP2 intP3
-                   (union_loc (pointer_loc d) (pointer_loc b)))),
+                  (not_assigns alloc intP2 intP3
+                   (pset_union (pset_singleton d) (pset_singleton b)))),
   forall (intP4: ((memory) Z)),
   forall (Post82: (swap_ord (acc intP4 b) (acc intP4 c) (acc intP3 b)
                    (acc intP3 c)) /\
-                  (assigns alloc intP3 intP4
-                   (union_loc (pointer_loc c) (pointer_loc b)))),
+                  (not_assigns alloc intP3 intP4
+                   (pset_union (pset_singleton c) (pset_singleton b)))),
   ((acc intP4 a) <= (acc intP4 b) /\ (acc intP4 b) <= (acc intP4 c)) /\
   (acc intP4 c) <= (acc intP4 d).
 Proof.
@@ -1085,7 +1095,7 @@ intuition.
 
 Save.
 
-(* Why obligation from file "why/sort.why", characters 4085-4182 *)
+(* Why obligation from file "why/sort.why", characters 4140-4237 *)
 Lemma sort4_4_impl_po_1 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
@@ -1096,7 +1106,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 4085-4182 *)
+(* Why obligation from file "why/sort.why", characters 4140-4237 *)
 Lemma sort4_4_impl_po_2 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
@@ -1108,7 +1118,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 4253-4298 *)
+(* Why obligation from file "why/sort.why", characters 4308-4353 *)
 Lemma sort4_4_impl_po_3 : 
   forall (t: pointer),
   forall (alloc: alloc_table),
@@ -1717,7 +1727,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/sort.why", characters 4403-4403 *)
+(* Why obligation from file "why/sort.why", characters 4458-4458 *)
 Lemma sort4_4_impl_po_4 : 
   forall (t: pointer),
   forall (alloc: alloc_table),

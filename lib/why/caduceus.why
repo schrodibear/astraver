@@ -250,113 +250,113 @@ axiom pset_union_elim2 :
 
 axiom pset_all_intro :
   forall p:pointer. forall l:pset.
-    (forall p':pointer. 
-       (not not_in_pset(p',l)) -> base_addr(p) <> base_addr(p')) -> 
+    (forall p1:pointer. 
+       (not not_in_pset(p1,l)) -> base_addr(p) <> base_addr(p1)) -> 
     not_in_pset(p, pset_all(l))	
 
 axiom pset_all_elim :
   forall p:pointer. forall l:pset.
     not_in_pset(p, pset_all(l)) ->
-    (forall p':pointer. 
-       (not not_in_pset(p',l)) -> base_addr(p) <> base_addr(p'))
+    (forall p1:pointer. 
+       (not not_in_pset(p1,l)) -> base_addr(p) <> base_addr(p1))
 
 axiom pset_range_intro :
   forall p:pointer. forall l:pset. forall a:int. forall b:int.
-    (forall p':pointer. not_in_pset(p', l) or
-	forall i:int. (a <= i <= b) -> (p <> shift(p',i))) -> 
+    (forall p1:pointer. not_in_pset(p1, l) or
+	forall i:int. (a <= i <= b) -> (p <> shift(p1,i))) -> 
     not_in_pset(p, pset_range(l,a,b))	
 
 axiom pset_range_elim :
   forall p:pointer. forall l:pset. forall a:int. forall b:int.
     not_in_pset(p, pset_range(l,a,b)) ->
-      forall p':pointer. (not not_in_pset(p', l)) ->
-	forall i:int. a <= i <= b -> p <> shift(p',i)
+      forall p1:pointer. (not not_in_pset(p1, l)) ->
+	forall i:int. a <= i <= b -> p <> shift(p1,i)
 
 axiom pset_range_left_intro :
   forall p:pointer. forall l:pset. forall a:int.
-    (forall p':pointer. not_in_pset(p', l) or
-	forall i:int. (i <= a) -> (p <> shift(p',i))) -> 
+    (forall p1:pointer. not_in_pset(p1, l) or
+	forall i:int. (i <= a) -> (p <> shift(p1,i))) -> 
     not_in_pset(p, pset_range_left(l,a))	
 
 axiom pset_range_left_elim :
   forall p:pointer. forall l:pset. forall a:int. 
     not_in_pset(p, pset_range_left(l,a)) ->
-      forall p':pointer. (not not_in_pset(p', l)) ->
-	forall i:int. i <= a -> p <> shift(p',i)
+      forall p1:pointer. (not not_in_pset(p1, l)) ->
+	forall i:int. i <= a -> p <> shift(p1,i)
 
 axiom pset_range_right_intro :
   forall p:pointer. forall l:pset. forall a:int.
-    (forall p':pointer. not_in_pset(p', l) or
-	forall i:int. (a <= i) -> (p <> shift(p',i))) -> 
+    (forall p1:pointer. not_in_pset(p1, l) or
+	forall i:int. (a <= i) -> (p <> shift(p1,i))) -> 
     not_in_pset(p, pset_range_right(l,a))	
 
 axiom pset_range_right_elim :
   forall p:pointer. forall l:pset. forall a:int. 
     not_in_pset(p, pset_range_right(l,a)) ->
-      forall p':pointer. (not not_in_pset(p', l)) ->
-	forall i:int. a <= i -> p <> shift(p',i)
+      forall p1:pointer. (not not_in_pset(p1, l)) ->
+	forall i:int. a <= i -> p <> shift(p1,i)
 
 (* elements of s[..] *)
 
 axiom pset_acc_all_intro :
   forall p:pointer. forall l:pset. forall m:pointer memory.
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> forall i:int. p <> acc(m, shift(p',i))) ->
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> forall i:int. p <> acc(m, shift(p1,i))) ->
     not_in_pset(p, pset_acc_all(l, m))
 
 axiom pset_acc_all_elim :
   forall p:pointer. forall l:pset. forall m:pointer memory.
     not_in_pset(p, pset_acc_all(l, m)) ->
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> forall i:int. p <> acc(m, shift(p',i)))
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> forall i:int. p <> acc(m, shift(p1,i)))
 
 axiom pset_acc_range_intro :
   forall p:pointer. forall l:pset. forall m:pointer memory. 
   forall a:int. forall b:int.
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> 
-      forall i:int. a <= i <= b -> p <> acc(m, shift(p',i))) ->
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> 
+      forall i:int. a <= i <= b -> p <> acc(m, shift(p1,i))) ->
     not_in_pset(p, pset_acc_range(l, m, a, b))
 
 axiom pset_acc_range_elim :
   forall p:pointer. forall l:pset. forall m:pointer memory.
   forall a:int. forall b:int.
     not_in_pset(p, pset_acc_range(l, m, a, b)) ->
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> 
-	 forall i:int. a <= i <= b -> p <> acc(m, shift(p',i)))
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> 
+	 forall i:int. a <= i <= b -> p <> acc(m, shift(p1,i)))
 
 axiom pset_acc_range_left_intro :
   forall p:pointer. forall l:pset. forall m:pointer memory. 
   forall a:int.
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> 
-      forall i:int. i <= a -> p <> acc(m, shift(p',i))) ->
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> 
+      forall i:int. i <= a -> p <> acc(m, shift(p1,i))) ->
     not_in_pset(p, pset_acc_range_left(l, m, a))
 
 axiom pset_acc_range_left_elim :
   forall p:pointer. forall l:pset. forall m:pointer memory.
   forall a:int.
     not_in_pset(p, pset_acc_range_left(l, m, a)) ->
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> 
-	 forall i:int. i <= a -> p <> acc(m, shift(p',i)))
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> 
+	 forall i:int. i <= a -> p <> acc(m, shift(p1,i)))
 
 axiom pset_acc_range_right_intro :
   forall p:pointer. forall l:pset. forall m:pointer memory. 
   forall a:int.
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> 
-      forall i:int. a <= i -> p <> acc(m, shift(p',i))) ->
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> 
+      forall i:int. a <= i -> p <> acc(m, shift(p1,i))) ->
     not_in_pset(p, pset_acc_range_right(l, m, a))
 
 axiom pset_acc_range_right_elim :
   forall p:pointer. forall l:pset. forall m:pointer memory.
   forall a:int.
     not_in_pset(p, pset_acc_range_right(l, m, a)) ->
-    (forall p':pointer.
-      (not not_in_pset(p',l)) -> 
-	 forall i:int. a <= i -> p <> acc(m, shift(p',i)))
+    (forall p1:pointer.
+      (not not_in_pset(p1,l)) -> 
+	 forall i:int. a <= i -> p <> acc(m, shift(p1,i)))
 
 (* lemmas on not_assigns *)
 

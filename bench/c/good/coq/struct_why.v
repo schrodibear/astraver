@@ -39,14 +39,14 @@ Lemma f_impl_po_2 :
        (x1 = (upd x0 result (1 + result0)) ->
         (forall (result:Z),
          (result = result0 -> ((result = 1 /\ (acc x1 t) = 2) /\ (acc y t) =
-          (acc y t)) /\ (assigns alloc x x1 (pointer_loc t)))))) /\
+          (acc y t)) /\ (not_assigns alloc x x1 (pset_singleton t)))))) /\
       (valid alloc result))) /\
     (valid alloc result))).
 Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 713-725 *)
+(* Why obligation from file "why/struct.why", characters 720-732 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -59,7 +59,7 @@ Proof.
  intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 751-764 *)
+(* Why obligation from file "why/struct.why", characters 758-771 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -76,7 +76,7 @@ Proof.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 769-793 *)
+(* Why obligation from file "why/struct.why", characters 776-800 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
@@ -99,7 +99,7 @@ generalize (valid_S_t_pointer alloc t s).
 intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 734-793 *)
+(* Why obligation from file "why/struct.why", characters 741-800 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
