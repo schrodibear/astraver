@@ -278,7 +278,8 @@ EXPORT=export/$(NAME)
 FTP = $(HOME)/ftp/why
 WWW = $(HOME)/WWW/why
 
-FILES =src/*.ml* intf/*.ml* Makefile.in configure.in configure .depend \
+FILES =src/*.ml* intf/*.ml* tools/*.ml* \
+       Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
 	examples/Makefile* examples/*/*.mlw examples/*/*.v examples/*/*.sx \
