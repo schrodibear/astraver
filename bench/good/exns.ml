@@ -51,3 +51,30 @@ let p9 = (raise (F begin x := 1; !x end)) { false | F => x = 1 and result = 1 }
 let p10 = (try raise E : int with E -> 0 end) { result = 0 }
 
 let p11 = (try raise (F 1) : int with F x -> x end) { result = 1 }
+
+let p12 = 
+  try 
+    begin raise E; raise (F 1); 1 end
+  with E -> 2
+     | F x -> 3
+  end
+  { result = 2 }
+
+let p13 = 
+  try 
+    begin raise E; raise (F 1); x := 1 end
+  with E -> x := 2
+     | F _ -> x := 3
+  end
+  { x = 2 }
+
+exception E1 
+exception E2
+
+let p14 = 
+  begin
+    if !x = 1 then raise E1;
+    if !x = 2 then raise E2;
+    raise E
+  end
+  { false | E1 => x = 1 | E2 => x = 2 | E => x <> 1 and x <> 2 }
