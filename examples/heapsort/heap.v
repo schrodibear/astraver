@@ -2,7 +2,7 @@
 (*                                                                        *)
 (* Proof of the Heapsort Algorithm.                                       *)
 (*                                                                        *)
-(* Jean-Christophe Filli‚tre (LRI, UniversitÈ Paris Sud)                  *)
+(* Jean-Christophe Filli√¢tre (LRI, Universit√© Paris Sud)                  *)
 (* March 1999                                                             *)
 (*                                                                        *)
 (**************************************************************************)
@@ -124,7 +124,7 @@ Lemma heap_induction :
 Proof.
 Intros P H H0 k Hk; Generalize Hk; Pattern k; Apply Z_lt_induction.
 Intros.
-Elim (Z_modulo_2 x); [ Intro | Intro | Omega ].
+Elim (Z_modulo_2 x); Intro.
 (* x = 2y+2 *)
 Elim (Z_le_lt_eq_dec `0` x). 
 (* 0 < x *)

@@ -139,9 +139,8 @@ Lemma partition_po_3 :
   (Test3: `(access t0 i2) <= pv`)
   (result1: bool)
   (Bool2: (if result1 then `i2 < j1` else `i2 >= j1`))
-  (if result1 then `(access t0 i2) <= pv` /\ `i2 < j1` \/
-   `(access t0 i2) > pv` /\ true = false else `(access t0 i2) <= pv` /\
-   `i2 >= j1` \/ `(access t0 i2) > pv` /\ false = false).
+  (if result1 then `(access t0 i2) <= pv` /\ `i2 < j1`
+   else `(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`).
 Proof.
 Intuition.
 Induction result1; Auto.
@@ -177,12 +176,11 @@ Lemma partition_po_4 :
   (Test2: `(access t0 i2) > pv`)
   (result1: bool)
   (Post2: result1 = false)
-  (if result1 then `(access t0 i2) <= pv` /\ `i2 < j1` \/
-   `(access t0 i2) > pv` /\ true = false else `(access t0 i2) <= pv` /\
-   `i2 >= j1` \/ `(access t0 i2) > pv` /\ false = false).
+  (if result1 then `(access t0 i2) <= pv` /\ `i2 < j1`
+   else `(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`).
 Proof.
 Intuition.
-Induction result1; Auto.
+Induction result1; Auto. Discriminate Post2.
 Save.
 
 (* Why obligation from file "partition.mlw", characters 1944-2095 *)
@@ -211,8 +209,7 @@ Lemma partition_po_5 :
   (i2: Z)
   (Pre8: Variant3 = `r - i2`)
   (Invi: (`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv))
-  (Test5: `(access t0 i2) <= pv` /\ `i2 < j1` \/ `(access t0 i2) > pv` /\
-          true = false)
+  (Test5: `(access t0 i2) <= pv` /\ `i2 < j1`)
   (i3: Z)
   (Post1: i3 = `i2 + 1`)
   ((`i1 <= i3` /\ `i3 <= r`) /\ (array_le t0 `l + 1` `i3 - 1` pv)) /\
@@ -280,8 +277,7 @@ Lemma partition_po_7 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (Variant5: Z)
   (j2: Z)
   (Pre15: Variant5 = j2)
@@ -315,8 +311,7 @@ Lemma partition_po_8 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (Variant5: Z)
   (j2: Z)
   (Pre15: Variant5 = j2)
@@ -325,9 +320,8 @@ Lemma partition_po_8 :
   (Test7: `(access t0 j2) >= pv`)
   (result2: bool)
   (Bool4: (if result2 then `i2 < j2` else `i2 >= j2`))
-  (if result2 then `(access t0 j2) >= pv` /\ `i2 < j2` \/
-   `(access t0 j2) < pv` /\ true = false else `(access t0 j2) >= pv` /\
-   `i2 >= j2` \/ `(access t0 j2) < pv` /\ false = false).
+  (if result2 then `(access t0 j2) >= pv` /\ `i2 < j2`
+   else `(access t0 j2) < pv` \/ `(access t0 j2) >= pv` /\ `i2 >= j2`).
 Proof. 
 Intuition.
 Induction result2; Auto.
@@ -358,8 +352,7 @@ Lemma partition_po_9 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (Variant5: Z)
   (j2: Z)
   (Pre15: Variant5 = j2)
@@ -368,13 +361,12 @@ Lemma partition_po_9 :
   (Test6: `(access t0 j2) < pv`)
   (result2: bool)
   (Post5: result2 = false)
-  (if result2 then `(access t0 j2) >= pv` /\ `i2 < j2` \/
-   `(access t0 j2) < pv` /\ true = false else `(access t0 j2) >= pv` /\
-   `i2 >= j2` \/ `(access t0 j2) < pv` /\ false = false).
+  (if result2 then `(access t0 j2) >= pv` /\ `i2 < j2`
+   else `(access t0 j2) < pv` \/ `(access t0 j2) >= pv` /\ `i2 >= j2`).
 Proof.
 Intuition.
-Induction result2; Auto.
-Induction result2; Auto.
+Induction result2; Auto Orelse Discriminate Post5.
+Induction result2; Auto Orelse Discriminate Post5.
 Save.
 
 (* Why obligation from file "partition.mlw", characters 2098-2239 *)
@@ -401,30 +393,25 @@ Lemma partition_po_10 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (Variant5: Z)
   (j2: Z)
   (Pre15: Variant5 = j2)
   (Invj: (`l <= j2` /\ `j2 <= j1`) /\ (array_ge t0 `j2 + 1` r pv))
-  (Test9: `(access t0 j2) >= pv` /\ `i2 < j2` \/ `(access t0 j2) < pv` /\
-          true = false)
+  (Test9: `(access t0 j2) >= pv` /\ `i2 < j2`)
   (j3: Z)
   (Post4: j3 = `j2 - 1`)
   ((`l <= j3` /\ `j3 <= j1`) /\ (array_ge t0 `j3 + 1` r pv)) /\
   (Zwf `0` j3 j2).
 Proof.
 Intuition.
-Apply array_ge_cons. Intros j0 Hj0. Omega.
-Discriminate H21.
-Discriminate H21.
 Apply array_ge_cons. Intros j0 Hj0. 
 Elim (Z_le_gt_dec `j2+1` j0); Intro.
-Elim H17; Intros. Apply H13; Omega.
+Elim H16; Intros. Apply H12; Omega.
 Cut `j0 = j2`; [ Intro | Omega ].
-Rewrite H13; Omega.
-Discriminate H21.
-Discriminate H21.
+Rewrite H12; Omega.
+Apply array_ge_cons. Intros j0 Hj0. 
+Omega.
 Save.
 
 (* Why obligation from file "partition.mlw", characters 2145-2194 *)
@@ -451,8 +438,7 @@ Lemma partition_po_11 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (`l <= j1` /\ `j1 <= j1`) /\ (array_ge t0 `j1 + 1` r pv).
 Proof.
 Intuition.
@@ -482,12 +468,10 @@ Lemma partition_po_12 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (j2: Z)
   (Invj: ((`l <= j2` /\ `j2 <= j1`) /\ (array_ge t0 `j2 + 1` r pv)) /\
-         (`(access t0 j2) >= pv` /\ `i2 >= j2` \/ `(access t0 j2) < pv` /\
-         false = false))
+         (`(access t0 j2) < pv` \/ `(access t0 j2) >= pv` /\ `i2 >= j2`))
   (Test11: `i2 < j2`)
   (`0 <= i2` /\ `i2 < (array_length t0)`) /\ `0 <= j2` /\
   `j2 < (array_length t0)`.
@@ -519,12 +503,10 @@ Lemma partition_po_13 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (j2: Z)
   (Invj: ((`l <= j2` /\ `j2 <= j1`) /\ (array_ge t0 `j2 + 1` r pv)) /\
-         (`(access t0 j2) >= pv` /\ `i2 >= j2` \/ `(access t0 j2) < pv` /\
-         false = false))
+         (`(access t0 j2) < pv` \/ `(access t0 j2) >= pv` /\ `i2 >= j2`))
   (Test11: `i2 < j2`)
   (Pre18: (`0 <= i2` /\ `i2 < (array_length t0)`) /\ `0 <= j2` /\
           `j2 < (array_length t0)`)
@@ -541,35 +523,45 @@ Lemma partition_po_13 :
 Proof.
 Intros.
 Decompose [and or] Invj; Clear Invj. 
-Absurd `i2 < j2`; Omega.
-Repeat (Apply conj); Try Omega.
+Intuition Unfold Zwf; ArrayLength; Try Omega.
 Replace `i3-1` with `(i2-1)+1`.
 Apply array_le_right_extension.
-Decompose [and] Invi. Apply array_le_exchange with t:=t0 x:=i2 y:=j2.
+Apply array_le_exchange with t:=t0 x:=i2 y:=j2.
 Omega. Omega. 
+Assumption.
+Omega. Apply exchange_sym; Assumption.
+Ring `(i2-1+1)`. Elim Post25; Intros. Rewrite H26.
+Omega.
+Omega.
+Replace `j3+1` with `(j2+1)-1`.
+Apply array_ge_left_extension.
+Apply array_ge_exchange with t:=t0 x:=i2 y:=j2.
+Omega. 
+Generalize (sub_permut_length H20); Intro; Omega.
 Assumption. Omega. Apply exchange_sym; Assumption.
-Ring `(i2-1+1)`. Elim Post25; Intros. Rewrite H7.
+Ring `(j2+1-1)`. Elim Post25; Intros. Rewrite H27.
 Omega.
 Omega.
-(* (array_ge t1 `(Zpred j1)+1` r (#t[l])) *)
+Apply sub_permut_trans with t':=t0.
+Apply exchange_is_sub_permut with i:=i2 j:=j2; [Omega | Omega | Assumption].
+Assumption.
+Rewrite <- H23.
+Elim Post25; Intros.
+Apply H28; Omega.
+Absurd `i2 < j2`; Omega.
 Replace `j3+1` with `(j2+1)-1`.
 Apply array_ge_left_extension.
 Apply array_ge_exchange with t:=t0 x:=i2 y:=j2.
 Omega. 
 Intuition; Generalize (sub_permut_length H21); Intro; Omega.
 Assumption. Omega. Apply exchange_sym; Assumption.
-Ring `(j2+1-1)`. Elim Post25; Intros. Rewrite H8.
+Ring `(j2+1-1)`. Elim Post25; Intros. Rewrite H28.
 Omega.
 Omega.
-(* (sub_permut l r t1 t) *)
 Apply sub_permut_trans with t':=t0.
 Apply exchange_is_sub_permut with i:=i2 j:=j2; [Omega | Omega | Assumption].
-Decompose [and] Inv; Assumption.
-(* (access t1 l) = (access t l) *)
-Decompose [and] Inv. Rewrite <- H11.
-Elim Post25; Intros.
-Apply H16; Omega.
-Unfold Zwf; ArrayLength; Omega.
+Assumption.
+Absurd `i2 < j2`; Omega.
 Save.
 
 (* Why obligation from file "partition.mlw", characters 2242-2324 *)
@@ -596,12 +588,10 @@ Lemma partition_po_14 :
   (Test12: `i1 < j1`)
   (i2: Z)
   (Invi: ((`i1 <= i2` /\ `i2 <= r`) /\ (array_le t0 `l + 1` `i2 - 1` pv)) /\
-         (`(access t0 i2) <= pv` /\ `i2 >= j1` \/ `(access t0 i2) > pv` /\
-         false = false))
+         (`(access t0 i2) > pv` \/ `(access t0 i2) <= pv` /\ `i2 >= j1`))
   (j2: Z)
   (Invj: ((`l <= j2` /\ `j2 <= j1`) /\ (array_ge t0 `j2 + 1` r pv)) /\
-         (`(access t0 j2) >= pv` /\ `i2 >= j2` \/ `(access t0 j2) < pv` /\
-         false = false))
+         (`(access t0 j2) < pv` \/ `(access t0 j2) >= pv` /\ `i2 >= j2`))
   (Test10: `i2 >= j2`)
   ((`l + 1 <= i2` /\ `i2 <= r`) /\ `j2 <= r` /\
   (array_le t0 `l + 1` `i2 - 1` pv) /\ (array_ge t0 `j2 + 1` r pv) /\

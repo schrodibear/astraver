@@ -629,8 +629,8 @@ Lemma kmp_po_3 :
   (Test2: `j1 < M`)
   (result1: bool)
   (Bool4: (if result1 then `i1 < N` else `i1 >= N`))
-  (if result1 then `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false
-   else `j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false).
+  (if result1 then `j1 < M` /\ `i1 < N` else `j1 >= M` \/ `j1 < M` /\
+   `i1 >= N`).
 Proof.
 Intuition Induction result1; Tauto.
 Save.
@@ -660,10 +660,10 @@ Lemma kmp_po_4 :
   (Test1: `j1 >= M`)
   (result1: bool)
   (Post5: result1 = false)
-  (if result1 then `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false
-   else `j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false).
+  (if result1 then `j1 < M` /\ `i1 < N` else `j1 >= M` \/ `j1 < M` /\
+   `i1 >= N`).
 Proof.
-Intuition Induction result1; Tauto.
+Induction result1; Intuition; Discriminate Post5.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2586-2591 *)
@@ -688,11 +688,10 @@ Lemma kmp_po_5 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   `0 <= i1` /\ `i1 < (array_length a)`.
 Proof.
 Intuition.
-Discriminate H14.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2592-2597 *)
@@ -717,12 +716,11 @@ Lemma kmp_po_6 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
   `0 <= j1` /\ `j1 < (array_length p)`.
 Proof.
 Intuition.
-Discriminate H16.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2604-2648 *)
@@ -747,7 +745,7 @@ Lemma kmp_po_7 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
   (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
   (Test7: (access a i1) = (access p j1))
@@ -767,7 +765,7 @@ Subst j2 i2.
   Omega'. Omega'.
   Ring `i1+1-(j1+1)+j1`. Ring `0+j1`. Assumption.
   Replace `i1+1-(j1+1)` with `i1-j1`. 
-  Apply (H16 k); Assumption Orelse Omega'.
+  Apply (H18 k); Assumption Orelse Omega'.
   Omega'.
   Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
@@ -794,7 +792,7 @@ Lemma kmp_po_8 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
   (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
   (Test6: ~(access a i1) = (access p j1))
@@ -810,7 +808,7 @@ Intuition Discriminate H18 Orelse Auto with *.
   Subst j1.
   Apply match_empty. Omega'. Omega'.
   Elim (Z_le_lt_eq_dec k `i1-j1`).
-  Intro. Apply (H16 k); Assumption Orelse Omega'.
+  Intro. Apply (H18 k); Assumption Orelse Omega'.
   Intro. Generalize H19. Apply match_contradiction_at_first. Omega'.
   Rewrite b. Subst j1. Ring `i1-0`. Assumption.
   Omega'.
@@ -839,7 +837,7 @@ Lemma kmp_po_9 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
   (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
   (Test6: ~(access a i1) = (access p j1))
@@ -871,7 +869,7 @@ Lemma kmp_po_10 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   (Pre11: `0 <= i1` /\ `i1 < (array_length a)`)
   (Pre12: `0 <= j1` /\ `j1 < (array_length p)`)
   (Test6: ~(access a i1) = (access p j1))
@@ -898,7 +896,7 @@ Intuition (Assert `j1<>0`; Auto with *).
   (* ~(match a k p `0` M) *)
   Elim (Z_lt_ge_dec k `i1-j1`); Intro Hck.
   (* k < i0-j0 *)
-  Apply (H18 k); Assumption Orelse Omega'.
+  Apply (H20 k); Assumption Orelse Omega'.
   Elim (Z_ge_lt_dec `i1-j1` k); Intro Hck'.
   (* k = i0-j0 *)
   Generalize H21. Replace k with `i1-j1`.
@@ -913,8 +911,6 @@ Intuition (Assert `j1<>0`; Auto with *).
   Unfold lexZ lex Zwf pairZ. 
   Elim (H5 j1). Intros.
   Right. Omega'. Omega'.
-Discriminate H20.
-Discriminate H20.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2338-2714 *)
@@ -939,7 +935,7 @@ Lemma kmp_po_11 :
   (Inv: (`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M))))
-  (Test8: `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false)
+  (Test8: `j1 < M` /\ `i1 < N`)
   (i2: Z)
   (j2: Z)
   (Inv0: ((`0 <= j2` /\ `j2 <= M`) /\ (`j2 <= i2` /\ `i2 <= N`) /\
@@ -1004,7 +1000,7 @@ Lemma kmp_po_13 :
   (Inv: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
-        (`j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false))
+        (`j1 >= M` \/ `j1 < M` /\ `i1 >= N`))
   (Test10: `j1 = M`)
   (first_occur p a `i1 - M`).
 Proof.
@@ -1039,7 +1035,7 @@ Lemma kmp_po_14 :
   (Inv: ((`0 <= j1` /\ `j1 <= M`) /\ (`j1 <= i1` /\ `i1 <= N`) /\
         (match a `i1 - j1` p `0` j1) /\
         ((k:Z) (`0 <= k` /\ `k < i1 - j1` -> ~(match a k p `0` M)))) /\
-        (`j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false))
+        (`j1 >= M` \/ `j1 < M` /\ `i1 >= N`))
   (Test9: `j1 <> M`)
   (first_occur p a i1).
 Proof.

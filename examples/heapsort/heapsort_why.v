@@ -33,7 +33,7 @@ Omega. Omega.
 Intro H0; Elim H0; Clear H0; Intros.
 Replace `n-2` with `2*(x-1)+1`.
 Rewrite double_div2_bis.
-Omega. Omega. Omega. Omega.
+Omega. Omega. Omega. 
 Replace n with `1`.
 Simpl. Omega. Omega.
 Save.
@@ -56,7 +56,7 @@ Omega. Omega.
 Intro H0; Elim H0; Clear H0; Intros x Hx.
 Replace `n-2` with `2*(x-1)+1`.
 Rewrite double_div2_bis.
-Omega. Omega. Omega. Omega.
+Omega. Omega. Omega. 
 Replace n with `1`.
 Simpl. Omega. Omega.
 Save.

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.18 2003-06-12 12:35:48 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.19 2003-06-13 14:08:34 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -278,21 +278,51 @@ and normalize_boolean force env b =
 	      let ne1 = normalize_boolean force env e1 in
 	      let ne2 = normalize_boolean force env e2 in
 	      let ne3 = normalize_boolean force env e3 in
-	      begin  match post ne1, post ne2, post ne3 with
-		| Some q1, Some q2, Some q3 ->
-		    let q1t,q1f = decomp_boolean q1 in
-		    let q2t,q2f = decomp_boolean q2 in
-		    let q3t,q3f = decomp_boolean q3 in
-		    let c = 
-		      Pif (Tvar Ident.result,
-			   por (pand false q1t q2t) (pand false q1f q3t),
-			   por (pand false q1t q2f) (pand false q1f q3f)) 
-		    in
-		    let b' = change_desc b (If (ne1,ne2,ne3)) in
-		    give_post b' (create_post c)
-		| _ ->
-		    b
-	      end
+	      if is_pure e1 && is_pure e2 && is_pure e3 then
+		let q1 = post ne1 in
+		let q2 = post ne2 in
+		let q3 = post ne3 in
+		match q1, (e2.desc, q2), (e3.desc, q3) with
+		  (* [a && b] *)
+		  | Some q1, (_,Some q2), 
+		    (Expression (Tconst (ConstBool false)),_) ->
+		      let q1t,q1f = decomp_boolean q1 in
+		      let q2t,q2f = decomp_boolean q2 in
+		      let c = 
+			Pif (Tvar Ident.result,
+			     pand false q1t q2t,
+			     por q1f (pand false q1t q2f))
+		      in
+		      let b' = change_desc b (If (ne1,ne2,ne3)) in
+		      give_post b' (create_post c)
+		  (* [a || b] *)
+		  | Some q1, (Expression (Tconst (ConstBool true)),_), 
+		    (_,Some q3) ->
+		      let q1t,q1f = decomp_boolean q1 in
+		      let q3t,q3f = decomp_boolean q3 in
+		      let c = 
+			Pif (Tvar Ident.result,
+			     por q1t (pand false q1f q3t),
+			     pand false q1f q3f)
+		      in
+		      let b' = change_desc b (If (ne1,ne2,ne3)) in
+		      give_post b' (create_post c)
+                  (* generic case *)
+		  | Some q1, (_,Some q2), (_,Some q3) -> 
+		      let q1t,q1f = decomp_boolean q1 in
+		      let q2t,q2f = decomp_boolean q2 in
+		      let q3t,q3f = decomp_boolean q3 in
+		      let c = 
+			Pif (Tvar Ident.result,
+			     por (pand false q1t q2t) (pand false q1f q3t),
+			     por (pand false q1t q2f) (pand false q1f q3f)) 
+		      in
+		      let b' = change_desc b (If (ne1,ne2,ne3)) in
+		      give_post b' (create_post c)
+		  | _ ->
+		      b
+		else 
+		  b
 	  | _ -> 
 	      b
       end
