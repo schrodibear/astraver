@@ -80,12 +80,14 @@ byte : bin/why.byte
 
 bin/why.opt: $(CMX)
 	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
+	strip $@
 
 bin/why.byte: $(CMO)
 	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 bin/why.static: $(CMX)
 	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ gramlib.cmxa str.cmxa $^
+	strip $@
 
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
@@ -95,7 +97,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: $(VO)
 
-VERSION=0.92
+VERSION=1.0
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@

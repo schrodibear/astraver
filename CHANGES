@@ -1,4 +1,6 @@
 
+version 1.0, January 31st, 2003
+================================
   o syntax: pre- and postconditions brackets now come by pairs (but,
     inside, the predicates may be omitted)
   o fixed WP bug in a sequence of calls with before-after annotations
@@ -12,7 +14,7 @@
   o PVS: arrays defined in Why prelude and fixed pretty-print; installation
 
 version 0.92, January 13th, 2003
-===============================
+================================
   o C: fixed bug in array/reference passing
   o fixed check for exceptions in external declarations
   o HOL Light output (with option --hol-light)

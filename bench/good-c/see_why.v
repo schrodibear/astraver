@@ -3,7 +3,7 @@
 
 Require Why.
 
-(* Why obligation from file "see.c", characters 122-123 *)
+(* Why obligation from file "good-c/see.c", characters 122-123 *)
 Lemma f_po_1 : 
   (b: Z)
   (b0: Z)
@@ -24,7 +24,7 @@ Definition f := (* validation *)
     (exist_2 [b3: Z][result1: Z]`result1 = b3` /\ `b3 = 1 - b` b0 result0
     Post2).
 
-(* Why obligation from file "see.c", characters 196-203 *)
+(* Why obligation from file "good-c/see.c", characters 196-203 *)
 Lemma k_po_1 : 
   (b0: Z)
   (Post1: b0 = `1`)
@@ -46,7 +46,7 @@ Intuition.
 Subst result0 result b b0 b1 b3 b4; Ring.
 Save.
 
-(* Why obligation from file "see.c", characters 214-221 *)
+(* Why obligation from file "good-c/see.c", characters 214-221 *)
 Lemma k_po_2 : 
   (b0: Z)
   (Post1: b0 = `1`)
@@ -69,7 +69,7 @@ Proof.
 LinearIntuition.
 Save.
 
-(* Why obligation from file "see.c", characters 213-228 *)
+(* Why obligation from file "good-c/see.c", characters 213-228 *)
 Lemma k_po_3 : 
   (b0: Z)
   (Post1: b0 = `1`)
