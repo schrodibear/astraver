@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.52 2004-03-25 13:05:15 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.53 2004-03-29 13:51:07 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -746,10 +746,11 @@ let type_spec_decl ofs = function
 let function_specs = Hashtbl.create 97
 
 let empty_spec () = 
-  { requires = None; assigns = []; ensures = None; decreases = None } 
+  { requires = None; assigns = None; ensures = None; decreases = None } 
 
 let is_empty_spec s = 
-  s.requires = None && s.assigns = [] && s.ensures = None && s.decreases = None
+  s.requires = None && s.assigns = None && 
+  s.ensures = None && s.decreases = None
 
 let function_spec loc f = function
   (* no spec given; we return the current spec if any, or [empty_spec] *)

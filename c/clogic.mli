@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.25 2004-03-25 10:37:22 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.26 2004-03-29 13:51:07 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -128,7 +128,7 @@ type 'term variant = 'term * string option
 
 type ('term,'pred) spec = { 
   mutable requires : 'pred option;
-  mutable assigns : 'term location list;    
+  mutable assigns : 'term location list option;    
   mutable ensures : 'pred option;
   mutable decreases : 'term variant option
 }

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.28 2004-03-25 10:37:22 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.29 2004-03-29 13:51:07 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -243,7 +243,7 @@ let spec sp =
       union 
 	(union (option predicate sp.requires) (option predicate sp.ensures))
 	(option variant sp.decreases);
-    assigns = locations sp.Clogic.assigns }
+    assigns = option locations sp.Clogic.assigns }
 
 open Cast
 

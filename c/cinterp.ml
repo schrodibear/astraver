@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.67 2004-03-26 16:11:33 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.68 2004-03-29 13:51:07 filliatr Exp $ i*)
 
 
 open Format
@@ -696,16 +696,20 @@ let collect_locations acc loc =
 
 
 
-let interp_assigns locl =
-  let l = List.fold_left collect_locations StringMap.empty locl in
-  StringMap.fold
-    (fun v p acc ->
-       make_and acc
-	 (LPred("assigns",
-		[LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; p])))
-    l LTrue
-
-	 
+let interp_assigns = function
+  | Some [] ->
+      assert false (* nothing: TODO *)
+  | Some locl ->
+      let l = List.fold_left collect_locations StringMap.empty locl in
+      StringMap.fold
+	(fun v p acc ->
+	   make_and acc
+	     (LPred("assigns",
+		    [LVarAtLabel("alloc",""); LVarAtLabel(v,"");LVar v; p])))
+	l LTrue
+  | None ->
+      LTrue
+ 
 
 
 let interp_spec s =

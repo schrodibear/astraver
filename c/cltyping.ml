@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.31 2004-03-25 17:00:59 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.32 2004-03-29 13:51:07 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -379,7 +379,7 @@ let type_spec result env s =
   in
   let q = option_app (type_predicate env') s.ensures in
   let v = option_app (type_variant env) s.decreases in
-  let m = List.map (type_location env) s.assigns in
+  let m = option_app (List.map (type_location env)) s.assigns in
   { requires = p;
     assigns = m;
     ensures = q;
