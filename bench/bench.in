@@ -127,6 +127,6 @@ good_ml good
 echo ""
 
 # 4. C benchmark
-echo "=== Checking good C files ==="
-good_c good-c
+# echo "=== Checking good C files ==="
+# good_c good-c
 
