@@ -194,9 +194,9 @@ invariant has 9 assertions:
 \end{enumerate}
 
 
-\subsection{Performing the verification}
+\subsection{Verification using automatic provers}
 
-12 VCG
+\begin{comment}
 
 . invariant vrai init
 . post cond
@@ -229,6 +229,70 @@ ajout axiome reachable(p,p) :
 
 -> 7/12 (po2,3,4 en plus)
 
+\end{comment}
+
+Running \caduceus{} on the annotated source code leads to twelve
+verification conditions. Five of them relate to the functional
+specification of the algorithm: loop invariant true when entering the
+loop, preservation of the loop invariant for each of the branches
+`pop', `swing' and `push', and validity of the post-condition. The
+seven others are requested to establish the absence of invalid pointer
+dereferencing: the first one asks for validity of \verb|t| for the
+field access \verb|t->m| in the condition of the \verb|while|, and the
+six others similarly ask for validity of dereferencing \verb|t->m| in
+the first \verb|if|, \verb|p->c| in the second \verb|if|, \verb|t->r|
+in the `pop' branch, \verb|p->l| in the `swing' branch, \verb|t->l|
+and \verb|p->l| in the `push' branch. Notice that some accesses do not
+require validity check, because they are trivial enough to be
+automatically discharged, for example \verb|p->r| in the `pop` branch
+because it was preceeded by \verb|p->c| and \verb|p| did not change.
+
+A first attempt can be made to solve these obligations by an
+automatic prover. Here we present the result with Simplify, which appears
+to be the best in that case. Four of the twelve obligations are
+solved automatically, which are the validity of the dereferencings
+occuring in the `pop', `swing' and `push' branches. Indeed, a quick
+look at those obligations shows that they can be solved by equality
+reasoning: for example the \verb|t->r| access in the `pop' branch is
+valid because \verb|t| is equal to the old value of \verb|p| in the
+condition of the if, which is already assumed valid. It is not
+surprising at all that Simplify do not solve the other obligations,
+because until now we did not give any definition or axiomatization of
+the introduce predicates, in particular reachability. Indeed, to
+establish for example validity of \verb|t->m| in the condition of the
+\verb|while|, one needs to use the function's pre-condition saying
+that any non-null, initially reachable node is valid. To establish
+that \verb|t| is initially reachable, one can use the \verb|I1|
+assertion of the loop invariant, as soon as one knows the simple fact
+that \verb|t| is reachable from itself! So one thing that can be done
+is to add in the source an axiom for \verb|reachable|:
+\begin{alltt}\begin{slshape}
+//@ axiom reachable_refl : \bs{}forall node p ; reachable(p,p) 
+\end{slshape}\end{alltt}
+Indeed with that new axiom, Simplify automatically solves the three
+remaining obligations for validity of pointer dereferencing: we have
+certified the absence of threat. 
+
+At this point, any of our attempts to add axioms for solving the
+remaining obligations failed. These obligations are apparently too
+difficult, so we switch to an interactive prover: the Coq proof
+assistant. 
+
+\subsection{Verification with the Coq interactive prover}
+
+Unlike with Simplify, we have now all the power of the Coq
+specification language, in particular we do not need to axiomatize
+predicates in the C source file, but we can \emph{define} them, and in
+particular for reachability, it is natural to use an inductive
+definition.
+
+Due to lack of space, we do not present any Coq code here, the whole
+development can be found from the \caduceus{} web
+page~\cite{Caduceus}. The first step is to deal with the type
+\verb|plist| used to modelize the stack: we simply use the finite list
+datatype of the Coq standard library. The \verb|clr_list|
+predicate can be defined inductively with the clauses:
+clr_list, we need to specify what is the list of pointers
 
 passage a Coq:
 
@@ -248,6 +312,7 @@ Coq: 12/12
 
 chiffres avec coqwc
 
+\begin{comment}
 \subsubsection{Intermediate lemmas}
 
 For define in coq the reachability two definitions:
@@ -339,8 +404,9 @@ let next t := if Z_eq_dec (acc c t) 0 then (acc l t) else (acc r t) in
 llist a next .
 \end{slshape}
 \end{alltt}
+\end{comment}
 
-\section{Termination}
+\subsection{Termination}
 \label{sec:termination}
 
 \begin{alltt}

@@ -68,7 +68,7 @@ It has to be noticed that with \caduceus{}, we indeed formally proved
 more properties of the Schorr-Waite algorithm than previous studies.
 The first additional property we show is the absence of \emph{threats}
 (null pointer dereferencing, out-of-bounds array access, or in general
-dereferencing a pointer that does not point to a reguarly allocated
+dereferencing a pointer that does not point to a regularly allocated
 memory block): if the initial graph structure is regularly allocated
 at the beginning, then no invalid pointer deferencing occur during
 execution of the algorithm. Even if this is not hard to do on this
@@ -84,8 +84,9 @@ were known since Topor~\cite{topor79acta} (A VERIFIER), no formal
 verification has been made before. This is now done.
 
 This paper is organized as follows.  Section~\ref{sec:overview} gives
-an overview of the use of \caduceus{}.  In Section~\ref{sec:algo}, we
-describe the Schorr-Waite algorithm and its functional specification.
+an overview of the \caduceus{} tool.  In Section~\ref{sec:algo}, we
+describe the Schorr-Waite algorithm, and provide a functional
+specification for it in the \caduceus{} specification language.
 We then describe the formal proof of it in Section~\ref{sec:proof},
 including the additional annotations needed, mainly the loop
 invariant.  We conclude in Section~\ref{sec:conclusion} with a
