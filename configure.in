@@ -124,7 +124,6 @@ if test "$CAMLP4" = no ; then
 fi
 CAMLP4LIB=`camlp4 -where`
 CAMLP4VERSION=`$CAMLP4 -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
-echo "CAMLP4VERSION=$CAMLP4VERSION"
 AC_MSG_CHECKING(camlp4 version)
 if test "$CAMLP4VERSION" != $OCAMLVERSION ; then
     AC_MSG_ERROR(differs from ocaml version)
