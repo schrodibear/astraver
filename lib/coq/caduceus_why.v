@@ -308,10 +308,21 @@ Admitted.
        (forall (i:Z), (a <= i /\ i <= b -> ~(p1 = (shift p2 i))))))))).
 Admitted.
 
-(*Why logic*) Definition unary_compl : Z -> Z.
+(*Why logic*) Definition bw_compl : Z -> Z.
 Admitted.
 
+(*Why logic*) Definition bw_and : Z -> Z -> Z.
+Admitted.
 
-(*Why*) Parameter unary_compl_ :
-  forall (x: Z), (sig_1 Z (fun (result: Z)  => (result = (unary_compl x)))).
+(*Why logic*) Definition bw_xor : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_or : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition lsl : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition lsr : Z -> Z -> Z.
+Admitted.
 

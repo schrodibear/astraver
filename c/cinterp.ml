@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.66 2004-03-26 09:05:29 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.67 2004-03-26 16:11:33 filliatr Exp $ i*)
 
 
 open Format
@@ -230,10 +230,11 @@ let interp_bin_op = function
   | Bneq_pointer -> "neq_pointer" 
   | Badd_pointer_int -> "shift_"
   | Bsub_pointer -> "sub_pointer_"
-  (* not yet supported *)
-  | Bbw_and | Bbw_xor | Bbw_or 
-  | Bshift_left | Bshift_right ->
-      unsupported "binary operator"
+  | Bbw_and -> "bw_and"
+  | Bbw_xor -> "bw_xor"
+  | Bbw_or -> "bw_or"
+  | Bshift_left -> "lsl"
+  | Bshift_right -> "lsr"
   (* should not happen *)
   | Badd | Bsub | Bmul | Bdiv | Bmod 
   | Blt | Bgt | Ble | Bge | Beq | Bneq | Band | Bor ->
@@ -402,9 +403,7 @@ let rec interp_expr e =
     | TEunary (Ufloat_of_int, e) ->
 	make_app "float_of_int" [interp_expr e]
     | TEunary (Utilde, e) ->
-	(* TODO: fix Why bug
-	make_app "unary_compl_" [interp_expr e] *)
-	unsupported "~ operator"
+	make_app "bw_compl" [interp_expr e]
     | TEunary (Uamp, e) ->
 	interp_address e
     | TEcall(e,args) -> 

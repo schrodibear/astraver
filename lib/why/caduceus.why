@@ -211,9 +211,23 @@ axiom unchanged_range_elim :
  	(forall i:int. a <= i <= b -> p1 <> shift(p2,i))  
 
 (* bitwise operations *)
-logic unary_compl : int -> int
+logic bw_compl : int -> int
+external parameter bw_compl : int -> int
 
-parameter unary_compl_ : x:int -> {} int { result = unary_compl(x) }
+logic bw_and : int,int -> int
+external parameter bw_and : int -> int -> int
+
+logic bw_xor : int,int -> int
+external parameter bw_xor : int -> int -> int
+
+logic bw_or : int,int -> int
+external parameter bw_or : int -> int -> int
+
+logic lsl : int,int -> int
+external parameter lsl : int -> int -> int
+
+logic lsr : int,int -> int
+external parameter lsr : int -> int -> int
 
 (* redondant axioms *)
 
