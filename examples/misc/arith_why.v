@@ -34,10 +34,6 @@ Lemma mult_po_2 :
   forall (x: Z),
   forall (y: Z),
   forall (Pre9: x >= 0 /\ y >= 0),
-  forall (a: Z),
-  forall (Post6: a = x),
-  forall (b: Z),
-  forall (Post5: b = y),
   forall (p: Z),
   forall (Post4: p = 0),
   forall (Variant1: Z),
@@ -51,27 +47,27 @@ Lemma mult_po_2 :
   forall (Test3: ((Zmod a1 2)) = 1),
   forall (p2: Z),
   forall (Post1: p2 = (p1 + b1)),
-  (forall (a:Z),
-   (a = ((Zdiv a1 2)) ->
-    (forall (b:Z),
-     (b = (2 * b1) -> (a >= 0 /\ (p2 + a * b) = (x * y)) /\ (Zwf 0 a a1))))) /\
-  ~(2 = 0).
+  forall (a: Z),
+  forall (HW_1: a = ((Zdiv a1 2))),
+  forall (b: Z),
+  forall (HW_2: b = (2 * b1)),
+  (a >= 0 /\ (p2 + a * b) = (x * y)) /\ (Zwf 0 a a1).
 Proof.
 intuition.
-subst a0; apply Z_div_ge0; omega.
+subst a; apply Z_div_ge0; omega.
 rewrite (Z_div_mod_eq a1 2) in H2.
 rewrite <- H2.
 subst p2.
-subst a0 b0.
+subst a b.
 rewrite Test3.
 ring.
 omega.
 unfold Zwf.
  repeat split; try omega.
-subst a0; apply Z_div_lt; try omega.
+subst a; apply Z_div_lt; try omega.
 Qed.
 
-(* Why obligation from file "arith.mlw", characters 386-386 *)
+(* Why obligation from file "arith.mlw", characters 374-386 *)
 Lemma mult_po_3 : 
   forall (x: Z),
   forall (y: Z),
@@ -90,18 +86,41 @@ Lemma mult_po_3 :
   forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
   forall (Test4: a1 <> 0),
   forall (Pre6: ~(2 = 0)),
-  forall (Test2: ((Zmod a1 2)) <> 1),
-  (forall (a:Z),
-   (a = ((Zdiv a1 2)) ->
-    (forall (b:Z),
-     (b = (2 * b1) -> (a >= 0 /\ (p1 + a * b) = (x * y)) /\ (Zwf 0 a a1))))) /\
+  forall (Test3: ((Zmod a1 2)) = 1),
+  forall (p2: Z),
+  forall (Post1: p2 = (p1 + b1)),
   ~(2 = 0).
 Proof.
 intuition.
-subst a0; apply Z_div_ge0; try omega.
+Qed.
+
+(* Why obligation from file "arith.mlw", characters 386-386 *)
+Lemma mult_po_4 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre9: x >= 0 /\ y >= 0),
+  forall (p: Z),
+  forall (Post4: p = 0),
+  forall (Variant1: Z),
+  forall (a1: Z),
+  forall (b1: Z),
+  forall (p1: Z),
+  forall (Pre8: Variant1 = a1),
+  forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
+  forall (Test4: a1 <> 0),
+  forall (Pre6: ~(2 = 0)),
+  forall (Test2: ((Zmod a1 2)) <> 1),
+  forall (a: Z),
+  forall (HW_3: a = ((Zdiv a1 2))),
+  forall (b: Z),
+  forall (HW_4: b = (2 * b1)),
+  (a >= 0 /\ (p1 + a * b) = (x * y)) /\ (Zwf 0 a a1).
+Proof.
+intuition.
+subst a; apply Z_div_ge0; try omega.
 rewrite (Z_div_mod_eq a1 2) in H2.
 rewrite <- H2.
-subst a0 b0.
+subst a b.
 replace (a1 mod 2)%Z with 0%Z.
 ring.
 cut (2 > 0)%Z; [ intro h | omega ].
@@ -110,11 +129,37 @@ cut ((a1 mod 2)%Z <> 1%Z); intros; try omega.
 omega.
 unfold Zwf.
 repeat split; try omega.
-subst a0; apply Z_div_lt; try omega.
+subst a; apply Z_div_lt; try omega.
 Qed.
 
+(* Why obligation from file "arith.mlw", characters 386-386 *)
+Lemma mult_po_5 : 
+  forall (x: Z),
+  forall (y: Z),
+  forall (Pre9: x >= 0 /\ y >= 0),
+  forall (a: Z),
+  forall (Post6: a = x),
+  forall (b: Z),
+  forall (Post5: b = y),
+  forall (p: Z),
+  forall (Post4: p = 0),
+  forall (Variant1: Z),
+  forall (a1: Z),
+  forall (b1: Z),
+  forall (p1: Z),
+  forall (Pre8: Variant1 = a1),
+  forall (Inv: a1 >= 0 /\ (p1 + a1 * b1) = (x * y)),
+  forall (Test4: a1 <> 0),
+  forall (Pre6: ~(2 = 0)),
+  forall (Test2: ((Zmod a1 2)) <> 1),
+  ~(2 = 0).
+Proof.
+intuition.
+Qed.
+
+
 (* Why obligation from file "arith.mlw", characters 268-436 *)
-Lemma mult_po_4 : 
+Lemma mult_po_6 : 
   forall (x: Z),
   forall (y: Z),
   forall (Pre9: x >= 0 /\ y >= 0),
@@ -137,10 +182,10 @@ intuition.
 clear Pre8; subst a1.
 rewrite <- H2.
 ring.
-Qed.
+Save.
 
 (* Why obligation from file "arith.mlw", characters 304-333 *)
-Lemma mult_po_5 : 
+Lemma mult_po_7 : 
   forall (x: Z),
   forall (y: Z),
   forall (Pre9: x >= 0 /\ y >= 0),
@@ -152,8 +197,6 @@ Lemma mult_po_5 :
   forall (Post4: p = 0),
   a >= 0 /\ (p + a * b) = (x * y).
 Proof.
-intuition.
-subst; ring.
-Qed.
-
+intuition; subst; ring.
+Save.
 

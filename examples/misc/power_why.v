@@ -119,18 +119,18 @@ Lemma power1_po_1 :
   forall (Test3: (Zodd n0)),
   forall (y2: Z),
   forall (Post3: y2 = (y1 * m1)),
-  (forall (m:Z),
-   (m = (m1 * m1) ->
-    (forall (n1:Z),
-     (n1 = (div2 n0) -> ((Zpower x n) = (y2 * (Zpower m n1)) /\ n1 >= 0) /\
-      (Zwf 0 n1 n0))))).
+  forall (m: Z),
+  forall (HW_3: m = (m1 * m1)),
+  forall (n1: Z),
+  forall (HW_4: n1 = (div2 n0)),
+  ((Zpower x n) = (y2 * (Zpower m n1)) /\ n1 >= 0) /\ (Zwf 0 n1 n0).
 Proof.
 simpl; intros.
 repeat split; try omega.
 subst n1.
 decompose [and] Pre2; clear Pre2.
-rewrite (Zodd_div2 n0 H1 Test3) in H0.
- rewrite H0.
+rewrite (Zodd_div2 n0 H0 Test3) in H.
+ rewrite H.
 subst m.
 subst y2.
 rewrite Zpower_exp.
@@ -163,17 +163,17 @@ Lemma power1_po_2 :
   forall (Pre2: (Zpower x n) = (y1 * (Zpower m1 n0)) /\ n0 >= 0),
   forall (Test4: n0 > 0),
   forall (Test2: (Zeven n0)),
-  (forall (m:Z),
-   (m = (m1 * m1) ->
-    (forall (n1:Z),
-     (n1 = (div2 n0) -> ((Zpower x n) = (y1 * (Zpower m n1)) /\ n1 >= 0) /\
-      (Zwf 0 n1 n0))))).
+  forall (m: Z),
+  forall (HW_7: m = (m1 * m1)),
+  forall (n1: Z),
+  forall (HW_8: n1 = (div2 n0)),
+  ((Zpower x n) = (y1 * (Zpower m n1)) /\ n1 >= 0) /\ (Zwf 0 n1 n0).
 Proof.
 simpl; intros.
 repeat split; try omega.
 decompose [and] Pre2; clear Pre2.
-rewrite (Zeven_div2 n0 Test2) in H1.
- rewrite H1.
+rewrite (Zeven_div2 n0 Test2) in H.
+ rewrite H.
 subst m.
 subst n1.
 rewrite Zpower_2n.

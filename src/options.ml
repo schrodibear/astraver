@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.39 2004-05-13 08:51:24 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.40 2004-05-18 09:34:23 filliatr Exp $ i*)
 
 open Format
 
@@ -36,6 +36,7 @@ let no_harvey_prelude_ = ref false
 let werror_ = ref false
 let fpi_ = ref false
 let dir_ = ref ""
+let wbb_ = ref false
 let split_ = ref false
 
 let ocaml_ = ref false
@@ -121,6 +122,7 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
+  --wbb              while loops as black boxes (careful: incomplete WP)
   --split            split conditions into several pieces
 
 Prover selection:
@@ -236,6 +238,8 @@ let files =
 	dir_ := d; parse args
     | ("-dir" | "--dir") :: [] ->
 	usage (); exit 1
+    | ("-wbb" | "--wbb") :: args ->
+	wbb_ := true; parse args
     | ("-split" | "--split") :: args ->
 	split_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
@@ -268,6 +272,7 @@ let wol = !wol_
 let werror = !werror_
 let fpi = !fpi_
 let dir = !dir_
+let wbb = !wbb_
 let split = !split_
 
 let file f = if dir = "" then f else Lib.file ~dir ~file:f

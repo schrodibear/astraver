@@ -5,6 +5,3 @@ partition_why.v partition_valid.v quicksort_why.v quicksort_valid.v: partition.m
 	$(WHY) $(WHYOPTIONS) partition.mlw quicksort.mlw
 
 include ../Makefile.common
-
-
-

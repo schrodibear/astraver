@@ -115,10 +115,6 @@ Qed.
 Lemma dutch_flag_po_4 : 
   forall (t: (array color)),
   forall (Pre18: (array_length t) = N),
-  forall (b: Z),
-  forall (Post13: b = 0),
-  forall (i: Z),
-  forall (Post12: i = 0),
   forall (r: Z),
   forall (Post11: r = N),
   forall (Variant1: Z),
@@ -143,13 +139,13 @@ Lemma dutch_flag_po_4 :
   forall (Pre11: 0 <= i1 /\ i1 < (array_length t1)),
   forall (t2: (array color)),
   forall (Post2: t2 = (store t1 i1 u)),
-  (forall (b:Z),
-   (b = (b1 + 1) ->
-    (forall (i:Z),
-     (i = (i1 + 1) -> ((0 <= b /\ b <= i) /\ (i <= r1 /\ r1 <= N) /\
-      (monochrome t2 0 b blue) /\ (monochrome t2 b i white) /\
-      (monochrome t2 r1 N red) /\ (array_length t2) = N) /\
-      (Zwf 0 (r1 - i) (r1 - i1)))))).
+  forall (b: Z),
+  forall (HW_3: b = (b1 + 1)),
+  forall (i: Z),
+  forall (HW_4: i = (i1 + 1)),
+  ((0 <= b /\ b <= i) /\ (i <= r1 /\ r1 <= N) /\ (monochrome t2 0 b blue) /\
+  (monochrome t2 b i white) /\ (monochrome t2 r1 N red) /\
+  (array_length t2) = N) /\ (Zwf 0 (r1 - i) (r1 - i1)).
 Proof.
 unfold monochrome, Zwf; intuition try omega.
 assert (h: (k < b1)%Z \/ k = b1).

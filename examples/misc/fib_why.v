@@ -526,13 +526,40 @@ Lemma fib4_po_8 :
                 (array_length t) /\
                 (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
   forall (Test1: k1 > n),
-  (access t2 n) = (F n) /\ 0 <= n /\ n < (array_length t2).
+  (access t2 n) = (F n).
+Proof.
+intuition.
+Qed.
+
+(* Why obligation from file "fib.mlw", characters 1468-1713 *)
+Lemma fib4_po_9 : 
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre10: 0 <= n /\ n < (array_length t)),
+  forall (Test3: n > 1),
+  forall (Pre9: 0 <= 0 /\ 0 < (array_length t)),
+  forall (t0: (array Z)),
+  forall (Post1: t0 = (store t 0 1)),
+  forall (Pre8: 0 <= 1 /\ 1 < (array_length t0)),
+  forall (t1: (array Z)),
+  forall (Post2: t1 = (store t0 1 1)),
+  forall (k: Z),
+  forall (Post5: k = 2),
+  forall (Variant1: Z),
+  forall (k1: Z),
+  forall (t2: (array Z)),
+  forall (Pre6: Variant1 = (n + 1 - k1)),
+  forall (Pre5: (2 <= k1 /\ k1 <= (n + 1)) /\ (array_length t2) =
+                (array_length t) /\
+                (forall (i:Z), (0 <= i /\ i < k1 -> (access t2 i) = (F i)))),
+  forall (Test1: k1 > n),
+  0 <= n /\ n < (array_length t2).
 Proof.
 intuition.
 Qed.
 
 (* Why obligation from file "fib.mlw", characters 1504-1616 *)
-Lemma fib4_po_9 : 
+Lemma fib4_po_10 : 
   forall (n: Z),
   forall (t: (array Z)),
   forall (Pre10: 0 <= n /\ n < (array_length t)),
@@ -558,5 +585,5 @@ subst t0; AccessSame.
  auto.
 subst i t1; AccessSame.
  auto.
-Qed.
+Save.
 

@@ -348,7 +348,16 @@ Lemma binary_search_po_6 :
   ~(In t 1 ((array_length t) - 1)).
 Proof.
 intuition.
-subst l0 u0; assumption.
+elim (Z_lt_ge_dec 0 p1); intro.
+left; Omega'.
+right.
+ cut (p1 = 0%Z); [ intro | Omega' ].
+split.
+ assumption.
+intro.
+ generalize (H2 H5 H8); intro.
+decompose [In] H9.
+absurd (l1 <= i <= u1)%Z; Omega'.
 Qed.
 
 (* Why obligation from file "bsearch.mlw", characters 350-511 *)
@@ -368,16 +377,7 @@ Lemma binary_search_po_7 :
   ((p0 > 0 -> (access t p0) = v)).
 Proof.
 intuition.
-elim (Z_lt_ge_dec 0 p1); intro.
-left; Omega'.
-right.
- cut (p1 = 0%Z); [ intro | Omega' ].
-split.
- assumption.
-intro.
- generalize (H4 H6 H9); intro.
-decompose [In] H10.
-absurd (l1 <= i <= u1)%Z; Omega'.
+subst l0 u0; assumption.
 Qed.
 
 

@@ -549,6 +549,11 @@ let rec split ctx = function
 	 let l1,l2 = split_list n1 pl in 
 	 ProofTerm 
 	   (cc_applist (cc_var conj) [CC_hole (pr1 l1); CC_hole (pr2 l2)]))
+  | Pimplies (true, _, _)
+  | Forall (true, _, _, _, _) as concl ->
+      let ctx',concl',pr_intros = intros ctx concl in
+      let ol,prl = split ctx' concl' in
+      ol, (fun pl -> pr_intros (prl pl))
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.83 2004-05-13 08:51:24 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.84 2004-05-18 09:34:23 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -217,14 +217,13 @@ and wp_desc info d q =
     | Rec (f, bl, v, var, e) ->
 	let e',_ = wp e None in
 	Rec (f, bl, v, var, e'), None
-(***
-    | While (b, inv, var, e) ->
+    (* While loops as black boxes (old-style WP, incomplete!) *)
+    | While (b, inv, var, e) when Options.wbb ->
 	let b',_ = wp b None in
 	let qbl = while_post_block info.env inv var e in
 	let q = Annot.sup (Some qbl) q in (* exc. posts taken from [q] *)
 	let e',_ = wp e q in
 	While (b', inv, var, e'), inv (* None *)
-***)
     | While (b, inv, var, e) ->
         (* wp = I /\ 
 	   forall w. I => wp(e1, if result then wp(e2, I/\var<var@) else q) *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.11 2004-03-17 17:07:15 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.12 2004-05-18 09:34:21 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -54,6 +54,7 @@ let with_cpp = ref true
 let debug = ref false
 let verbose = ref false
 let werror = ref false
+let why_opt = ref ""
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -80,6 +81,8 @@ let _ =
 	  "  stops after pre-processing and dump pre-processed file";
 	"-d", Arg.Set debug,
           "  debugging mode";
+        "-why-opt", Arg.String ((:=) why_opt),
+	  " <why options>  passes options to Why";
 	"-v", Arg.Set verbose,
           "  verbose mode";
 	"-q", Arg.Clear verbose,
@@ -99,4 +102,5 @@ let werror = !werror
 let with_cpp = !with_cpp
 let cpp_command = !cpp_command
 let cpp_dump = !cpp_dump
+let why_opt = !why_opt
 

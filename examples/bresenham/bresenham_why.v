@@ -2,7 +2,7 @@
 (*                                                                        *)
 (* Proof of the Bresenham line drawing algorithm.                         *)
 (*                                                                        *)
-(* Jean-Christophe Filli‚tre (LRI, UniversitÈ Paris Sud)                  *)
+(* Jean-Christophe Filli√¢tre (LRI, Universit√© Paris Sud)                  *)
 (* May 2001                                                               *)
 (*                                                                        *)
 (**************************************************************************)
@@ -108,12 +108,13 @@ Lemma bresenham_po_2 :
   forall (Test3: e1 < 0),
   forall (e2: Z),
   forall (Post4: e2 = (e1 + 2 * y2)),
-  (forall (x:Z),
-   (x = (x1 + 1) -> ((0 <= x /\ x <= (x2 + 1)) /\ (invariant x y1 e2)) /\
-    (Zwf 0 (x2 + 1 - x) (x2 + 1 - x1)))).
+  forall (x: Z),
+  forall (HW_2: x = (x1 + 1)),
+  ((0 <= x /\ x <= (x2 + 1)) /\ (invariant x y1 e2)) /\
+  (Zwf 0 (x2 + 1 - x) (x2 + 1 - x1)).
 Proof.
 intros.
-rewrite H; clear x H.
+subst x.
 split.
  split.
  Omega'.
@@ -147,9 +148,10 @@ Lemma bresenham_po_3 :
   forall (Post5: y3 = (y1 + 1)),
   forall (e2: Z),
   forall (Post6: e2 = (e1 + 2 * (y2 - x2))),
-  (forall (x:Z),
-   (x = (x1 + 1) -> ((0 <= x /\ x <= (x2 + 1)) /\ (invariant x y3 e2)) /\
-    (Zwf 0 (x2 + 1 - x) (x2 + 1 - x1)))).
+  forall (x: Z),
+  forall (HW_4: x = (x1 + 1)),
+  ((0 <= x /\ x <= (x2 + 1)) /\ (invariant x y3 e2)) /\
+  (Zwf 0 (x2 + 1 - x) (x2 + 1 - x1)).
 Proof.
 intros.
 subst x.

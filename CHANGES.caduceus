@@ -1,6 +1,10 @@
 Note: These are the changes for Caduceus.
       Why version is indicated between parentheses.
 
+version 0.60, May 18th, 2004
+============================
+ o new option -why-opt to pass options to Why (in generated makefile)
+ o assigns x for x local or global variable
  o a term is now accepted as a predicate (with usual C interpretation x != 0)
  o new connective <=> (if and only if)
 

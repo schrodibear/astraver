@@ -23,8 +23,6 @@ Qed.
 (* Why obligation from file "search.mlw", characters 414-414 *)
 Lemma search1_po_2 : 
   forall (t: (array Z)),
-  forall (i: Z),
-  forall (Post2: i = 0),
   forall (Variant1: Z),
   forall (i1: Z),
   forall (Pre8: Variant1 = ((array_length t) - i1)),
@@ -33,10 +31,10 @@ Lemma search1_po_2 :
   forall (Test4: i1 < (array_length t)),
   forall (Pre6: 0 <= i1 /\ i1 < (array_length t)),
   forall (Test2: (access t i1) <> 0),
-  (forall (i:Z),
-   (i = (i1 + 1) -> (0 <= i /\
-    (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))) /\
-    (Zwf 0 ((array_length t) - i) ((array_length t) - i1)))).
+  forall (i: Z),
+  forall (HW_2: i = (i1 + 1)),
+  (0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))) /\
+  (Zwf 0 ((array_length t) - i) ((array_length t) - i1)).
 Proof.
 intuition.
 assert (k = i1 \/ (k < i1)%Z).
@@ -96,8 +94,6 @@ Qed.
 (* Why obligation from file "search.mlw", characters 911-911 *)
 Lemma search2_po_2 : 
   forall (t: (array Z)),
-  forall (i: Z),
-  forall (Post2: i = 0),
   forall (Variant1: Z),
   forall (i1: Z),
   forall (Pre8: Variant1 = ((array_length t) - i1)),
@@ -106,10 +102,10 @@ Lemma search2_po_2 :
   forall (Test4: i1 < (array_length t)),
   forall (Pre6: 0 <= i1 /\ i1 < (array_length t)),
   forall (Test2: (access t i1) <> 0),
-  (forall (i:Z),
-   (i = (i1 + 1) -> (0 <= i /\
-    (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))) /\
-    (Zwf 0 ((array_length t) - i) ((array_length t) - i1)))).
+  forall (i: Z),
+  forall (HW_2: i = (i1 + 1)),
+  (0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> 0))) /\
+  (Zwf 0 ((array_length t) - i) ((array_length t) - i1)).
 Proof.
 intuition.
 assert (k = i1 \/ (k < i1)%Z).

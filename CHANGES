@@ -1,4 +1,7 @@
 
+version 1.60, May 18th, 2004
+============================
+  o fixed WP for while loops (may break Coq proofs)
   o new connective <->
 
 version 1.55, May 3rd, 2004
@@ -22,7 +25,7 @@ version 1.42, March 16th, 2004
 ==============================
   o new option --pvs-preamble
   o change in syntax: "external" is now a modifier for "parameter" and
-    "logic" (see the manual for explanaitions); to be conservative, 
+    "logic" (see the manual for explainations); to be conservative, 
     the following substitutions have to be made:
        "external" -> "external parameter"
        "logic"    -> "external logic"
