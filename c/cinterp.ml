@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.37 2004-03-18 16:49:26 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.38 2004-03-18 16:52:34 marche Exp $ i*)
 
 
 open Format
@@ -338,9 +338,9 @@ and interp_lvalue e =
 	HeapRef(var,build_complex_app (Var "shift_")
 		  [interp_expr e1; interp_expr e2])
     | TEdot(e1,f) ->
-	HeapRef(f,interp_expr e1)
+	assert false
     | TEarrow(e1,f) ->
-	HeapRef(f,interp_expr { e with texpr_node = TEunary(Ustar,e1) })
+	HeapRef(f,interp_expr e1)
     | _ -> assert false (* wrong typing of lvalue ??? *)
 	  
 
