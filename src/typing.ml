@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.81 2002-11-28 16:18:35 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.82 2002-11-29 08:47:42 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -324,7 +324,7 @@ let saturation loc e (a,al) =
     and [expr] the program. *)
 
 let rec typef lab env expr =
-  let (d,(v,e),p1) = typef_desc lab env expr.loc expr.pdesc in
+  let (d,(v,e),o1) = typef_desc lab env expr.loc expr.pdesc in
   let loc = expr.loc in
   let (ep,p) = state_pre lab env loc expr.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.post in
@@ -332,8 +332,8 @@ let rec typef lab env expr =
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
   let ol,q' = match q, d with
-    | None, App (_,_,k') -> p1 @ k'.c_pre, k'.c_post
-    | _ -> p1, q
+    | None, App (_,_,k') -> o1 @ k'.c_pre, k'.c_post
+    | _ -> o1, q
   in
   let pr = 
     let c = { c_result_name = result; c_result_type = v; c_effect = e'; 

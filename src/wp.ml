@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.68 2002-11-28 16:18:35 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.69 2002-11-29 08:47:42 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -114,7 +114,7 @@ let rec wp p q =
     | _ -> 
 	w
   in
-  let w = optasst_app (add_pre (obligations p)) w in
+  let w = optasst_app (add_pre (pre p @ obligations p)) w in
   p, w
 
 and wp_desc info d q = 

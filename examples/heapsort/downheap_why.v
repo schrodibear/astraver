@@ -412,10 +412,12 @@ Lemma downheap_po_10 :
   (Post22: (exchange t1 t0 k0 j'))
   (Pre11: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
           ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
-  (Pre10: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
-          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (Pre9: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre10: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre16: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (Zwf `0` `n0 - j'` Variant1).
 Proof.
 Intros; Unfold Zwf; Decompose [select_son] Post11; Omega'.
@@ -447,10 +449,12 @@ Lemma downheap_po_11 :
   (Post22: (exchange t1 t0 k0 j'))
   (Pre11: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
           ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
-  (Pre10: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
-          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (Pre9: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre10: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre16: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
   ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))).
 Proof.
@@ -764,10 +768,11 @@ Definition downheap := (* validation *)
                           (downheap_po_8 N k n t Pre15 Variant1 N0 k0 n0 t0
                           Pre14 Pre13 j Post2 Test8 j' Post11 Test7) in
                         let (t1, result1, Post22) =
-                          let Pre7 = Pre12 in
+                          let Pre6 = Pre12 in
+                          let Pre7 = Pre6 in
                           let (t1, result3, Post23) =
-                            let Pre6 = Pre7 in
-                            (swap N0 k0 j' t0 Pre6) in
+                            let Pre8 = Pre7 in
+                            (swap N0 k0 j' t0 Pre8) in
                           (exist_2 [t2: (array N0 Z)][result4: unit]
                           (exchange t2 t0 k0 j') t1 result3 Post23) in
                         let Pre11 =
@@ -775,17 +780,18 @@ Definition downheap := (* validation *)
                           Pre14 Pre13 j Post2 Test8 j' Post11 Test7 Pre12 t1
                           Post22) in
                         let (t2, result2, Post24) =
-                          let Pre10 = Pre11 in
+                          let Pre9 = Pre11 in
+                          let Pre10 = Pre9 in
                           let (t2, result4, Post25) =
-                            let Pre9 = Pre10 in
+                            let Pre16 = Pre10 in
                             ((wf1 `n0 - j'`)
                               (downheap_po_10 N k n t Pre15 Variant1 N0 k0 n0
                               t0 Pre14 Pre13 j Post2 Test8 j' Post11 Test7
-                              Pre12 t1 Post22 Pre11 Pre10 Pre9) N0 j' 
-                              n0 t1 (refl_equal ? `n0 - j'`)
+                              Pre12 t1 Post22 Pre11 Pre9 Pre10 Pre16) 
+                              N0 j' n0 t1 (refl_equal ? `n0 - j'`)
                               (downheap_po_11 N k n t Pre15 Variant1 N0 k0 n0
                               t0 Pre14 Pre13 j Post2 Test8 j' Post11 Test7
-                              Pre12 t1 Post22 Pre11 Pre10 Pre9)) in
+                              Pre12 t1 Post22 Pre11 Pre9 Pre10 Pre16)) in
                           (exist_2 [t3: (array N0 Z)][result5: unit]
                           (permut t3 t1) /\
                           ((i:Z) (`j' <= i` /\ `i <= n0` -> (heap t3 n0 i))) /\

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.59 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.60 2002-11-29 08:47:42 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -333,10 +333,10 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
   in
   let vo = current_vars ren' w1 in
   let bl = (binding_of_alist ren env vo) @ b @ b' in
+  let pre1 = List.map (make_pre env ren) p1 in
   let cc1 = 
     if isapp then 
       let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r1) in
-      let pre1 = List.map (make_pre env ren) p1 in
       let inputpre = List.map (fun (id,_) -> CC_var id) pre1 in
       let cc = cc_applist (e1 ren) (input @ inputpre) in
       let_many_pre pre1 cc
@@ -377,7 +377,7 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
   in
   let cc = CC_letin (dep, bl, cc1, cc2) in
   let ob1 = List.map (make_pre env ren) info1.obligations in
-  let_many_pre ob1 cc
+  let_many_pre (pre1 @ ob1) cc
 
 (* [compose], [apply] and [handle] are instances of [gen_compose].
    [compose] and [apply] use the default handler [reraise]. *)

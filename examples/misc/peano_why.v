@@ -114,6 +114,7 @@ Proof. Intros; Omega. Save.
 Lemma u1_po_2 : 
   (result: Z)
   (Post1: result = `3`)
+  (Pre1: `7 >= 0`)
   (r0: Z)
   (Post3: `r0 = result + 7`)
   `r0 = 10`.
@@ -123,11 +124,11 @@ Definition u1 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `3` `3`
     (refl_equal ? `3`)) in
   let (r0, result0, Post2) =
-    let (r0, result2, Post3) =
-      let Pre1 = (u1_po_1 result Post1) in
-      (add1 `7` result Pre1) in
+    let Pre1 = (u1_po_1 result Post1) in
+    let (r0, result2, Post3) = let Pre2 = Pre1 in
+                               (add1 `7` result Pre2) in
     (exist_2 [r1: Z][result3: unit]`r1 = 10` r0 result2
-    (u1_po_2 result Post1 r0 Post3)) in
+    (u1_po_2 result Post1 Pre1 r0 Post3)) in
   result0.
 
 Lemma rec_add1_po_1 : 
@@ -158,8 +159,9 @@ Lemma rec_add1_po_2 :
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
   (Pre5: `y0 - 1 >= 0`)
-  (Pre4: `y0 - 1 >= 0`)
   (Pre3: `y0 - 1 >= 0`)
+  (Pre4: `y0 - 1 >= 0`)
+  (Pre9: `y0 - 1 >= 0`)
   (Zwf `0` `y0 - 1` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -224,13 +226,14 @@ Definition rec_add1 := (* validation *)
                 (rec_add1_po_1 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test2 x1
                 Post2) in
               let (x2, result1, Post7) =
-                let Pre4 = Pre5 in
+                let Pre3 = Pre5 in
+                let Pre4 = Pre3 in
                 let (x2, result3, Post8) =
-                  let Pre3 = Pre4 in
+                  let Pre9 = Pre4 in
                   ((wf1 `y0 - 1`)
                     (rec_add1_po_2 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test2 x1
-                    Post2 Pre5 Pre4 Pre3) `y0 - 1` x1 (refl_equal ? `y0 - 1`)
-                    Pre3) in
+                    Post2 Pre5 Pre3 Pre4 Pre9) `y0 - 1` x1
+                    (refl_equal ? `y0 - 1`) Pre9) in
                 (exist_2 [x3: Z][result4: unit]`x3 = x1 + (y0 - 1)` x2
                 result3 Post8) in
               (exist_2 [x3: Z][result2: unit]`x3 = x0 + y0` x2 result1
@@ -254,6 +257,7 @@ Save.
 Lemma u11_po_2 : 
   (result: Z)
   (Post1: result = `3`)
+  (Pre1: `7 >= 0`)
   (r0: Z)
   (Post3: `r0 = result + 7`)
   `r0 = 10`.
@@ -265,11 +269,12 @@ Definition u11 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `3` `3`
     (refl_equal ? `3`)) in
   let (r0, result0, Post2) =
+    let Pre1 = (u11_po_1 result Post1) in
     let (r0, result2, Post3) =
-      let Pre1 = (u11_po_1 result Post1) in
-      (rec_add1 `7` result Pre1) in
+      let Pre2 = Pre1 in
+      (rec_add1 `7` result Pre2) in
     (exist_2 [r1: Z][result3: unit]`r1 = 10` r0 result2
-    (u11_po_2 result Post1 r0 Post3)) in
+    (u11_po_2 result Post1 Pre1 r0 Post3)) in
   result0.
 
 Lemma mult1_po_1 : 
@@ -401,10 +406,11 @@ Definition mult1 := (* validation *)
                         (mult1_po_1 y x Pre6 result Post4 savex Post3 x0
                         Post1 Variant1 x1 z0 Pre5 I Test2) in
                       let (x2, result2, Post8) =
-                        let Pre3 = Pre4 in
+                        let Pre2 = Pre4 in
+                        let Pre3 = Pre2 in
                         let (x2, result4, Post9) =
-                          let Pre2 = Pre3 in
-                          (add1 savex x1 Pre2) in
+                          let Pre7 = Pre3 in
+                          (add1 savex x1 Pre7) in
                         (exist_2 [x3: Z][result5: unit]`x3 = x1 + savex` 
                         x2 result4 Post9) in
                       let (z1, result3, Post2) =
@@ -443,6 +449,7 @@ Proof. Intros; Omega. Save.
 Lemma u2_po_2 : 
   (result: Z)
   (Post1: result = `4`)
+  (Pre1: `result >= 0` /\ `6 >= 0`)
   (r0: Z)
   (Post3: `r0 = result * 6`)
   `r0 = 24`.
@@ -452,10 +459,10 @@ Definition u2 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `4` `4`
     (refl_equal ? `4`)) in
   let (r0, result0, Post2) =
-    let (r0, result2, Post3) =
-      let Pre1 = (u2_po_1 result Post1) in
-      (mult1 `6` result Pre1) in
+    let Pre1 = (u2_po_1 result Post1) in
+    let (r0, result2, Post3) = let Pre2 = Pre1 in
+                               (mult1 `6` result Pre2) in
     (exist_2 [r1: Z][result3: unit]`r1 = 24` r0 result2
-    (u2_po_2 result Post1 r0 Post3)) in
+    (u2_po_2 result Post1 Pre1 r0 Post3)) in
   result0.
 

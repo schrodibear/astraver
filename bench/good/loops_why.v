@@ -4,12 +4,13 @@ Require Omega.
 
 Lemma loop1_po_1 : 
   (i: Z)
-  (Pre4: `i <= 10`)
+  (Pre6: `i <= 10`)
   (Variant1: Z)
   (i0: Z)
-  (Pre3: Variant1 = `10 - i0`)
-  (Pre2: `i0 <= 10`)
+  (Pre5: Variant1 = `10 - i0`)
+  (Pre4: `i0 <= 10`)
   (Test2: `i0 < 10`)
+  (Pre3: `i0 <= 10`)
   (i1: Z)
   (Post1: i1 = `i0 + 1`)
   `i1 <= 10` /\ (Zwf `0` `10 - i1` `10 - i0`).
@@ -19,12 +20,13 @@ Save.
 
 Lemma loop1_po_2 : 
   (i: Z)
-  (Pre4: `i <= 10`)
+  (Pre6: `i <= 10`)
   (Variant1: Z)
   (i0: Z)
-  (Pre3: Variant1 = `10 - i0`)
-  (Pre2: `i0 <= 10`)
+  (Pre5: Variant1 = `10 - i0`)
+  (Pre4: `i0 <= 10`)
   (Test1: `i0 >= 10`)
+  (Pre2: `i0 <= 10`)
   `i0 = 10`.
 Proof.
 Intros; Omega.
@@ -35,14 +37,14 @@ Save.
 
 
 Definition loop1 := (* validation *)
-  [i: Z; Pre4: `i <= 10`]
+  [i: Z; Pre6: `i <= 10`]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
       (i0: Z)(_: Variant1 = `10 - i0`)(_0: `i0 <= 10`)
       (sig_2 Z unit [i1: Z][result: unit](`i1 = 10`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (i0: Z)(_: Variant2 = `10 - i0`)(_0: `i0 <= 10`)
        (sig_2 Z unit [i1: Z][result: unit](`i1 = 10`)); i0: Z;
-       Pre3: Variant1 = `10 - i0`; Pre2: `i0 <= 10`]
+       Pre5: Variant1 = `10 - i0`; Pre4: `i0 <= 10`]
         let (result, Bool1) =
           let (result1, Post3) = (Z_lt_ge_bool i0 `10`) in
           (exist_1 [result2: bool]
@@ -50,6 +52,7 @@ Definition loop1 := (* validation *)
         (Cases (btest [result:bool](if result then `i0 < 10` else `i0 >= 10`)
                 result Bool1) of
         | (left Test2) =>
+            let Pre3 = Pre4 in
             let (i1, result0, Post5) =
               let (i1, result0, Post2) =
                 let (i1, result0, Post1) =
@@ -59,16 +62,17 @@ Definition loop1 := (* validation *)
                   tt Post1) in
                 (exist_2 [i2: Z][result1: unit]`i2 <= 10` /\
                 (Zwf `0` `10 - i2` `10 - i0`) i1 result0
-                (loop1_po_1 i Pre4 Variant1 i0 Pre3 Pre2 Test2 i1 Post1)) in
-              ((wf1 `10 - i1`) (loop_variant_1 Pre3 Post2) i1
+                (loop1_po_1 i Pre6 Variant1 i0 Pre5 Pre4 Test2 Pre3 i1 Post1)) in
+              ((wf1 `10 - i1`) (loop_variant_1 Pre5 Post2) i1
                 (refl_equal ? `10 - i1`) (proj1 ? ? Post2)) in
             (exist_2 [i2: Z][result1: unit]`i2 = 10` i1 result0 Post5)
         | (right Test1) =>
+            let Pre2 = Pre4 in
             let (i1, result0, Post4) = (exist_2 [i1: Z][result0: unit]
               `i1 = 10` i0 tt
-              (loop1_po_2 i Pre4 Variant1 i0 Pre3 Pre2 Test1)) in
+              (loop1_po_2 i Pre6 Variant1 i0 Pre5 Pre4 Test1 Pre2)) in
             (exist_2 [i2: Z][result1: unit]`i2 = 10` i1 result0 Post4) end)
-      `10 - i` i (refl_equal ? `10 - i`) Pre4).
+      `10 - i` i (refl_equal ? `10 - i`) Pre6).
 
 Definition oppose := (* validation *)
   [u: unit; x: Z]

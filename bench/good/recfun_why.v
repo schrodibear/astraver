@@ -25,8 +25,9 @@ Lemma f1_po_2 :
   (Pre6: `x0 >= 0`)
   (Test2: `x0 > 0`)
   (Pre5: `x0 - 1 >= 0`)
-  (Pre4: `x0 - 1 >= 0`)
   (Pre3: `x0 - 1 >= 0`)
+  (Pre4: `x0 - 1 >= 0`)
+  (Pre9: `x0 - 1 >= 0`)
   (Zwf `0` `x0 - 1` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -67,12 +68,13 @@ Definition f1 := (* validation *)
         | (left Test2) =>
             let Pre5 = (f1_po_1 x Pre8 Variant1 x0 Pre7 Pre6 Test2) in
             let (result0, Post4) =
-              let Pre4 = Pre5 in
+              let Pre3 = Pre5 in
+              let Pre4 = Pre3 in
               let (result2, Post5) =
-                let Pre3 = Pre4 in
+                let Pre9 = Pre4 in
                 ((wf1 `x0 - 1`)
-                  (f1_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Test2 Pre5 Pre4 Pre3)
-                  `x0 - 1` (refl_equal ? `x0 - 1`) Pre3) in
+                  (f1_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Test2 Pre5 Pre3 Pre4
+                  Pre9) `x0 - 1` (refl_equal ? `x0 - 1`) Pre9) in
               (exist_1 [result3: Z]`result3 = 0` result2 Post5) in
             (exist_1 [result1: Z]`result1 = 0` result0 Post4)
         | (right Test1) =>
@@ -107,8 +109,9 @@ Lemma f2_po_2 :
   (x1: Z)
   (Post2: x1 = `x0 - 1`)
   (Pre5: `x1 >= 0`)
-  (Pre4: `x1 >= 0`)
   (Pre3: `x1 >= 0`)
+  (Pre4: `x1 >= 0`)
+  (Pre9: `x1 >= 0`)
   (Zwf `0` x1 Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -155,12 +158,13 @@ Definition f2 := (* validation *)
               let Pre5 =
                 (f2_po_1 x Pre8 Variant1 x0 Pre7 Pre6 Test2 x1 Post2) in
               let (x2, result1, Post7) =
-                let Pre4 = Pre5 in
+                let Pre3 = Pre5 in
+                let Pre4 = Pre3 in
                 let (x2, result3, Post8) =
-                  let Pre3 = Pre4 in
+                  let Pre9 = Pre4 in
                   ((wf1 x1)
                     (f2_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Test2 x1 Post2 Pre5
-                    Pre4 Pre3) tt x1 (refl_equal ? x1) Pre3) in
+                    Pre3 Pre4 Pre9) tt x1 (refl_equal ? x1) Pre9) in
                 (exist_2 [x3: Z][result4: unit]`x3 = 0` x2 result3 Post8) in
               (exist_2 [x3: Z][result2: unit]`x3 = 0` x2 result1 Post7) in
             (exist_2 [x2: Z][result1: unit]`x2 = 0` x1 result0 Post6)
@@ -198,8 +202,9 @@ Lemma f3_po_2 :
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
   (Pre5: `a0 - 1 >= 0`)
-  (Pre4: `a0 - 1 >= 0`)
   (Pre3: `a0 - 1 >= 0`)
+  (Pre4: `a0 - 1 >= 0`)
+  (Pre9: `a0 - 1 >= 0`)
   (Zwf `0` `a0 - 1` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -266,12 +271,14 @@ Definition f3 := (* validation *)
               let Pre5 =
                 (f3_po_1 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post2) in
               let (x2, result1, Post7) =
-                let Pre4 = Pre5 in
+                let Pre3 = Pre5 in
+                let Pre4 = Pre3 in
                 let (x2, result3, Post8) =
-                  let Pre3 = Pre4 in
+                  let Pre9 = Pre4 in
                   ((wf1 `a0 - 1`)
                     (f3_po_2 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post2
-                    Pre5 Pre4 Pre3) `a0 - 1` x1 (refl_equal ? `a0 - 1`) Pre3) in
+                    Pre5 Pre3 Pre4 Pre9) `a0 - 1` x1 (refl_equal ? `a0 - 1`)
+                    Pre9) in
                 (exist_2 [x3: Z][result4: unit]`x3 = x1 + (a0 - 1)` x2
                 result3 Post8) in
               (exist_2 [x3: Z][result2: unit]`x3 = x0 + a0` x2 result1
@@ -316,8 +323,9 @@ Lemma f4_po_2 :
   (a1: Z)
   (Post4: a1 = `a0 - 1`)
   (Pre5: `a1 >= 0`)
-  (Pre4: `a1 >= 0`)
   (Pre3: `a1 >= 0`)
+  (Pre4: `a1 >= 0`)
+  (Pre9: `a1 >= 0`)
   (Zwf `0` a1 Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -392,12 +400,14 @@ Definition f4 := (* validation *)
                 (f4_po_1 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post3 a1
                 Post4) in
               let (a2, x2, result2, Post9) =
-                let Pre4 = Pre5 in
+                let Pre3 = Pre5 in
+                let Pre4 = Pre3 in
                 let (a2, x2, result3, Post10) =
-                  let Pre3 = Pre4 in
+                  let Pre9 = Pre4 in
                   ((wf1 a1)
                     (f4_po_2 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post3
-                    a1 Post4 Pre5 Pre4 Pre3) a1 x1 (refl_equal ? a1) Pre3) in
+                    a1 Post4 Pre5 Pre3 Pre4 Pre9) a1 x1 (refl_equal ? a1)
+                    Pre9) in
                 (exist_3 [a3: Z][x3: Z][result4: unit]`x3 = x1 + a1` 
                 a2 x2 result3 Post10) in
               (exist_3 [a3: Z][x3: Z][result3: unit]`x3 = x0 + a0` a2 

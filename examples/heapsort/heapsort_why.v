@@ -394,10 +394,11 @@ Definition heapsort := (* validation *)
                       (heapsort_po_1 N t Pre16 result Post3 Variant1 k0 t0
                       Pre6 Pre5 Test2) in
                     let (t1, result1, Post11) =
-                      let Pre3 = Pre4 in
+                      let Pre2 = Pre4 in
+                      let Pre3 = Pre2 in
                       let (t1, result3, Post12) =
-                        let Pre2 = Pre3 in
-                        (downheap N k0 `N - 1` t0 Pre2) in
+                        let Pre7 = Pre3 in
+                        (downheap N k0 `N - 1` t0 Pre7) in
                       (exist_2 [t2: (array N Z)][result4: unit]
                       (permut t2 t0) /\
                       ((i:Z)
@@ -497,20 +498,22 @@ Definition heapsort := (* validation *)
                       (heapsort_po_5 N t Pre16 t0 Post9 result0 Post6
                       Variant3 k0 t1 Pre15 Pre14 Test4) in
                     let (t2, result2, Post15) =
-                      let Pre9 = Pre13 in
+                      let Pre8 = Pre13 in
+                      let Pre9 = Pre8 in
                       let (t2, result4, Post16) =
-                        let Pre8 = Pre9 in
-                        (swap N `0` k0 t1 Pre8) in
+                        let Pre10 = Pre9 in
+                        (swap N `0` k0 t1 Pre10) in
                       (exist_2 [t3: (array N Z)][result5: unit]
                       (exchange t3 t1 `0` k0) t2 result4 Post16) in
                     let Pre12 =
                       (heapsort_po_6 N t Pre16 t0 Post9 result0 Post6
                       Variant3 k0 t1 Pre15 Pre14 Test4 Pre13 t2 Post15) in
                     let (t3, result3, Post17) =
-                      let Pre11 = Pre12 in
+                      let Pre10 = Pre12 in
+                      let Pre11 = Pre10 in
                       let (t3, result5, Post18) =
-                        let Pre10 = Pre11 in
-                        (downheap N `0` `k0 - 1` t2 Pre10) in
+                        let Pre17 = Pre11 in
+                        (downheap N `0` `k0 - 1` t2 Pre17) in
                       (exist_2 [t4: (array N Z)][result6: unit]
                       (permut t4 t2) /\
                       ((i:Z)
