@@ -197,8 +197,8 @@ Lemma Lemma_8 :
    (access A i <= r)%Z ->
    (m <= i)%Z /\
    (forall p:Z, (1 <= p)%Z -> (p < i)%Z -> (access A p <= r)%Z) ->
-   (m <= Zs i)%Z /\
-   (forall p:Z, (1 <= p)%Z -> (p < Zs i)%Z -> (access A p <= r)%Z).
+   (m <= Zsucc i)%Z /\
+   (forall p:Z, (1 <= p)%Z -> (p < Zsucc i)%Z -> (access A p <= r)%Z).
 Proof.
 intros i m r A H H0.
 decompose [and] H0.
@@ -292,7 +292,7 @@ Lemma Lemma_8_10 :
    (access A i <= r)%Z ->
    (r <= access A j)%Z ->
    i_invariant m n i r A' ->
-   j_invariant m n j r A' -> i_invariant m n (Zs i) r A.
+   j_invariant m n j r A' -> i_invariant m n (Zsucc i) r A.
 Proof.
 intros m n i j r A A' Hl H_i_j le_n_N le_1_m H_ex H_i_r H_r_j H_i H_j.
 cut (i_invariant m n i r A).
@@ -312,15 +312,15 @@ cut (i <= j)%Z.
  exists j.
  abstract omega.
 intros eq_i_j lt_i_n.
-  exists (Zs i).
+  exists (Zsucc i).
   split; [ abstract omega | split; [ assumption | idtac ] ].
   generalize (exchange_id H_ex eq_i_j).
  intro Hk.
-  cut (access A (Zs i) = access A' (Zs i)).
+  cut (access A (Zsucc i) = access A' (Zsucc i)).
  intro Hr.
  rewrite Hr.
-  apply (H4 (Zs i)); abstract omega.
-  apply (Hk (Zs i)); try omega.
+  apply (H4 (Zsucc i)); abstract omega.
+  apply (Hk (Zsucc i)); try omega.
 omega.
 apply Lemma_8_10_1 with (j := j) (A' := A'); assumption.
 Qed.
@@ -591,7 +591,7 @@ Lemma Lemma_15 :
  forall (n i r:Z) (A:array Z),
    (access A i < r)%Z ->
    ( exists p : Z | (i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z) ->
-    exists p : Z | (Zs i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z.
+    exists p : Z | (Zsucc i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z.
 Proof.
 intros n i r A H H0.
 elim H0.
@@ -611,7 +611,7 @@ Qed.
 Lemma Lemma_8_15 :
  forall (i m n r:Z) (A:array Z),
    i_invariant m n i r A ->
-   (access A i < r)%Z -> i_invariant m n (Zs i) r A.
+   (access A i < r)%Z -> i_invariant m n (Zsucc i) r A.
 Proof.
 unfold i_invariant.
 intros i m n r A H H0.

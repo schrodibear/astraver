@@ -19,7 +19,7 @@ Require Import find_lemmas.
 Require Import Why.
 Require Import Omega.
 
-Lemma zero_f_SN : (0 <= f < Zs N)%Z.
+Lemma zero_f_SN : (0 <= f < Zsucc N)%Z.
 Proof.
 generalize le_1_f; generalize le_f_N; intros; omega.
 Qed.
@@ -29,7 +29,7 @@ Qed.
 Lemma bound_3 :
  forall (m n i r:Z) (A:array Z),
    i_invariant m n i r A ->
-   (i <= n)%Z -> (access A i < r)%Z -> (Zs i <= n)%Z.
+   (i <= n)%Z -> (access A i < r)%Z -> (Zsucc i <= n)%Z.
 Proof.
 unfold i_invariant.
 intros m n i r A Hi le_i_n lt_Ai_r.
@@ -82,7 +82,7 @@ Lemma subgoal_1 :
    m_invariant m1 A0 /\
    n_invariant n1 A0 /\ permut A0 A /\ (1 <= m1)%Z /\ (n1 <= N)%Z ->
    (m1 < n1)%Z ->
-   (0 <= f < Zs N)%Z ->
+   (0 <= f < Zsucc N)%Z ->
    i_invariant m1 n1 i2 (access A0 f) A1 /\
    j_invariant m1 n1 j2 (access A0 f) A1 /\
    m_invariant m1 A1 /\
@@ -95,9 +95,9 @@ Lemma subgoal_1 :
    (i2 <= i3)%Z /\
    (i3 <= n1)%Z /\ termination i3 j2 m1 n1 (access A0 f) A1 ->
    (access A1 i3 < access A0 f)%Z ->
-   i_invariant m1 n1 (Zs i3) (access A0 f) A1 /\
-   (i2 <= Zs i3)%Z /\
-   (Zs i3 <= n1)%Z /\ termination (Zs i3) j2 m1 n1 (access A0 f) A1.
+   i_invariant m1 n1 (Zsucc i3) (access A0 f) A1 /\
+   (i2 <= Zsucc i3)%Z /\
+   (Zsucc i3 <= n1)%Z /\ termination (Zsucc i3) j2 m1 n1 (access A0 f) A1.
 
 Proof.
 intros m1 n1 i2 j2 i3 A A0 A1 HH_43 HH_42 HH_40 HH_28 HH_27 HH_4 HH_2.
@@ -109,7 +109,7 @@ decompose [and] HH_4.
  intros.
  abstract omega.
 split; [ abstract omega | split ].
-cut (Zs i3 <= n1)%Z.
+cut (Zsucc i3 <= n1)%Z.
  abstract omega.
 apply bound_3 with (m := m1) (r := access A0 f) (A := A1); auto.
 elim HH_4; auto.
@@ -139,7 +139,7 @@ Lemma subgoal_2 :
    m_invariant m1 A0 /\
    n_invariant n1 A0 /\ permut A0 A /\ (1 <= m1)%Z /\ (n1 <= N)%Z ->
    (m1 < n1)%Z ->
-   (0 <= f < Zs N)%Z ->
+   (0 <= f < Zsucc N)%Z ->
    i_invariant m1 n1 i2 (access A0 f) A1 /\
    j_invariant m1 n1 j2 (access A0 f) A1 /\
    m_invariant m1 A1 /\
@@ -206,7 +206,7 @@ Lemma subgoal_3 :
    m_invariant m0 A0 /\
    n_invariant n0 A0 /\ permut A0 A /\ (1 <= m0)%Z /\ (n0 <= N)%Z ->
    (m0 < n0)%Z ->
-   (0 <= f < Zs N)%Z ->
+   (0 <= f < Zsucc N)%Z ->
    i_invariant m0 n0 i0 (access A0 f) A1 /\
    j_invariant m0 n0 j0 (access A0 f) A1 /\
    m_invariant m0 A1 /\
@@ -228,14 +228,14 @@ Lemma subgoal_3 :
    exchange A2 A1 i1 j1 ->
    (access A2 i1 <= access A0 f)%Z ->
    (access A0 f <= access A2 j1)%Z ->
-   Zwf 0 (N + 2 + Zpred j1 - Zs i1) (N + 2 + j0 - i0) /\
-   i_invariant m0 n0 (Zs i1) (access A0 f) A2 /\
+   Zwf 0 (N + 2 + Zpred j1 - Zsucc i1) (N + 2 + j0 - i0) /\
+   i_invariant m0 n0 (Zsucc i1) (access A0 f) A2 /\
    j_invariant m0 n0 (Zpred j1) (access A0 f) A2 /\
    m_invariant m0 A2 /\
    n_invariant n0 A2 /\
    (0 <= Zpred j1)%Z /\
-   (Zs i1 <= N + 1)%Z /\
-   termination (Zs i1) (Zpred j1) m0 n0 (access A0 f) A2 /\ permut A2 A.
+   (Zsucc i1 <= N + 1)%Z /\
+   termination (Zsucc i1) (Zpred j1) m0 n0 (access A0 f) A2 /\ permut A2 A.
 Proof.
 intros m0 n0 i0 j0 i1 j1 A A0 A1 A2 HN Inv_mn Test7 Pre12 Inv_ij Test4
  Inv_i Inv_j Pre10 Test3 Post7 Pre8 Pre7.
@@ -333,7 +333,7 @@ Lemma subgoal_5 :
    m_invariant m1 A0 /\
    n_invariant n1 A0 /\ permut A0 A /\ (1 <= m1)%Z /\ (n1 <= N)%Z ->
    (m1 < n1)%Z ->
-   (0 <= f < Zs N)%Z ->
+   (0 <= f < Zsucc N)%Z ->
    (i_invariant m1 n1 i2 (access A0 f) A1 /\
     j_invariant m1 n1 j2 (access A0 f) A1 /\
     m_invariant m1 A1 /\
@@ -367,7 +367,7 @@ Lemma subgoal_6 :
    m_invariant m1 A0 /\
    n_invariant n1 A0 /\ permut A0 A /\ (1 <= m1)%Z /\ (n1 <= N)%Z ->
    (m1 < n1)%Z ->
-   (0 <= f < Zs N)%Z ->
+   (0 <= f < Zsucc N)%Z ->
    (i_invariant m1 n1 i2 (access A0 f) A1 /\
     j_invariant m1 n1 j2 (access A0 f) A1 /\
     m_invariant m1 A1 /\
@@ -401,7 +401,7 @@ Lemma subgoal_7 :
    m_invariant m1 A0 /\
    n_invariant n1 A0 /\ permut A0 A /\ (1 <= m1)%Z /\ (n1 <= N)%Z ->
    (m1 < n1)%Z ->
-   (0 <= f < Zs N)%Z ->
+   (0 <= f < Zsucc N)%Z ->
    (i_invariant m1 n1 i2 (access A0 f) A1 /\
     j_invariant m1 n1 j2 (access A0 f) A1 /\
     m_invariant m1 A1 /\

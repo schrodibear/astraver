@@ -27,9 +27,9 @@ Lemma sqr_gt :
 Proof.
 intros.
 assert (x * y > y * y)%Z.
-apply Zgt_Zmult_right; omega.
+apply Zmult_gt_compat_r; omega.
 assert (x * x > x * y)%Z.
-apply Zgt_Zmult_left; omega.
+apply Zmult_gt_compat_l; omega.
 omega.
 Qed.
 
@@ -124,7 +124,7 @@ rewrite zVal.
 apply Z_mult_div_ge; omega.
 assert (2 * y * z <= y * (x / y + y))%Z.
 replace (2 * y * z)%Z with (y * (2 * z))%Z; try ring.
-apply Zle_Zmult_pos_left; trivial || omega.
+apply Zmult_le_compat_l; trivial || omega.
 assert (y * (x / y + y) <= x + y * y)%Z.
 assert ((y * (x / y + y))%Z = (y * (x / y) + y * y)%Z); try ring.
  assert (y * (x / y) <= x)%Z.
@@ -155,8 +155,8 @@ replace (y * (x / y + y - (x / y + y) mod 2))%Z with
  (y * (x / y) + y * y - y * ((x / y + y) mod 2))%Z.
 replace (y * (x / y))%Z with (x - x mod y)%Z.
 assert (y >= y * ((x / y + y) mod 2))%Z.
-pattern y 1; replace y with (y * 1)%Z.
-apply Zge_Zmult_pos_left.
+pattern y at 1; replace y with (y * 1)%Z.
+apply Zmult_ge_compat_l.
 omega.
 omega.
 ring.
@@ -181,15 +181,15 @@ intro.
 assert
  (2 * y * (z + 1) * (2 * y * (z + 1)) > (x + y * y) * (x + y * y))%Z.
 assert (2 * y * (z + 1) * (x + y * y) > (x + y * y) * (x + y * y))%Z.
-apply Zgt_Zmult_right.
+apply Zmult_gt_compat_r.
 generalize (sqr_pos y).
 omega.
 assumption.
 assert
  (2 * y * (z + 1) * (2 * y * (z + 1)) > 2 * y * (z + 1) * (x + y * y))%Z;
  try omega.
-apply Zgt_Zmult_left; try assumption.
-apply Zgt_ZERO_mult; try omega.
+apply Zmult_gt_compat_l; try assumption.
+apply Zmult_gt_0_compat; try omega.
 assert (z >= 0)%Z; try omega.
 rewrite zVal.
 apply Z_div_ge0; try omega.
@@ -199,8 +199,8 @@ assert ((x + y * y) * (x + y * y) - 4 * y * y * x >= 0)%Z; try omega.
 replace ((x + y * y) * (x + y * y) - 4 * y * y * x)%Z with
  ((x - y * y) * (x - y * y))%Z; try ring.
 apply sqr_pos.
-apply (Zmult_gt (4 * y * y)).
-apply Zgt_ZERO_mult; try omega.
+apply (Zmult_gt_0_reg_l (4 * y * y)).
+apply Zmult_gt_0_compat; try omega.
 omega.
 Qed.
 
@@ -215,7 +215,7 @@ Proof.
 intros x y z xPos yPos zVal zGey.
 generalize (iter_sqrt_invar1 x y z xPos yPos zVal); intros.
 assert (y * y <= y * z)%Z.
-apply Zle_Zmult_pos_left; try omega.
+apply Zmult_le_compat_l; try omega.
 assert ((2 * y * z)%Z = (y * z + y * z)%Z); try ring.
 omega.
 Qed.
@@ -343,7 +343,7 @@ Proof.
 intuition.
 subst z.
 assert ((x + 1) / 2 >= 1)%Z.
-pattern 1%Z 2; replace 1%Z with (2 / 2)%Z; trivial.
+pattern 1%Z at 2; replace 1%Z with (2 / 2)%Z; trivial.
 apply Z_div_ge; try omega.
 omega.
 subst y.
@@ -356,7 +356,7 @@ rewrite H; trivial.
 
 subst y.
 assert ((x + 1) * (x + 1) >= (x + 1) * 1)%Z.
-apply Zge_Zmult_pos_left; try omega.
+apply Zmult_ge_compat_l; try omega.
 assert (((x + 1) * 1)%Z = (x + 1)%Z); try ring.
 omega.
 

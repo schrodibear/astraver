@@ -687,7 +687,7 @@ Lemma kmp_po_3 :
   forall (Bool4: (if result1 then i1 < N else i1 >= N)),
   (if result1 then j1 < M /\ i1 < N else j1 >= M \/ j1 < M /\ i1 >= N).
 Proof.
-intuition simple_induction result1; tauto.
+intuition simple induction result1; tauto.
 Qed.
 
 (* Why obligation from file "kmp.mlw", characters 2363-2363 *)
@@ -719,7 +719,7 @@ Lemma kmp_po_4 :
   forall (Post5: result1 = false),
   (if result1 then j1 < M /\ i1 < N else j1 >= M \/ j1 < M /\ i1 >= N).
 Proof.
-simple_induction result1; intuition; discriminate Post5.
+simple induction result1; intuition; discriminate Post5.
 Qed.
 
 (* Why obligation from file "kmp.mlw", characters 2591-2596 *)
