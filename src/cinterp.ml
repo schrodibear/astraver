@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.25 2003-01-13 10:32:35 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.26 2003-01-31 13:35:48 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -509,7 +509,13 @@ and interp_call l cenv e el =
 	bind l cenv (Some at) a
 	  (fun (m,_) -> interp_args (m :: args) (al, pt))
   in
-  interp_args [] (el, pt)
+  if el = [] then
+    (match pt with 
+       | [] -> assert false
+       | [CTpure PTunit] -> ml_app l f (ml_const l ConstUnit), rt
+       | _ -> raise_located l PartialApp)
+  else 
+    interp_args [] (el, pt)
 
 (*s Monadic operator to enforce evaluation order when needed *)
 
