@@ -1,4 +1,7 @@
 
+version 1.03, February 21st, 2003
+=================================
+  o C: logic declarations with syntax /*W ... */
   o improved automatic proof (thus less obligations)
   o validation in a separate file f_valid.v
 

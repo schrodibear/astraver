@@ -43,6 +43,8 @@ rule token = parse
   | "/*"                    { comment lexbuf; token lexbuf }
   | "/*@"                   { annot_start_pos := lexeme_start lexbuf + 4;
 			      Buffer.clear buf; annot lexbuf }
+  | "/*W"                   { annot_start_pos := lexeme_start lexbuf + 4;
+			      Buffer.clear buf; wdecl lexbuf }
   | "auto"                  { AUTO }
   | "break"                 { BREAK }
   | "case"                  { CASE }
@@ -149,6 +151,11 @@ and annot = parse
   | "*/" { ANNOT (!annot_start_pos, Buffer.contents buf) }
   | eof  { lex_error lexbuf "Unterminated annotation" }
   | _    { Buffer.add_char buf (lexeme_char lexbuf 0); annot lexbuf }
+
+and wdecl = parse
+  | "*/" { WDECL (!annot_start_pos, Buffer.contents buf) }
+  | eof  { lex_error lexbuf "Unterminated annotation" }
+  | _    { Buffer.add_char buf (lexeme_char lexbuf 0); wdecl lexbuf }
 
 {
 

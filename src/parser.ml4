@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.74 2003-02-03 16:09:08 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.75 2003-02-21 09:50:38 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -570,3 +570,4 @@ let parse_c_spec = parse_with_offset c_spec
 let parse_c_pre = parse_with_offset c_pre
 let parse_c_post = parse_with_offset c_post
 let parse_c_loop_annot = parse_with_offset c_loop_annot
+let parse_c_decl = parse_with_offset decl

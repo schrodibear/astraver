@@ -44,6 +44,7 @@
 %}
 
 %token <int * string> ANNOT
+%token <int * string> WDECL
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL TYPE_NAME
 %token SIZEOF
@@ -251,6 +252,7 @@ declaration
 	    { List.map (fun (p,d) -> 
 			  let v = if p then CTpointer $1 else $1 in
 			  Ctypedecl (loc(), d, v)) $2 }
+	| WDECL { [Cspecdecl $1] } /* ADDED FOR WHY */
         ;
 
 declaration_specifiers

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.13 2002-12-18 16:21:44 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.14 2003-02-21 09:50:38 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -81,6 +81,7 @@ and block = decl list * cstatement list
 and annotated_block = Loc.t * annot option * block * annot option
 
 and decl = 
+  | Cspecdecl of annot
   | Ctypedecl of Loc.t * declarator * ctype
   | Cfundef of Loc.t * Ident.t * parameters * ctype * annotated_block
 

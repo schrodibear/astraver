@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.27 2003-02-03 16:09:08 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.28 2003-02-21 09:50:38 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -785,6 +785,9 @@ let interp_decl cenv = function
       Idmap.add id blv cenv
   | Cfundef _ ->
       assert false
+  | Cspecdecl (l,wd) ->
+      let d = Parser.parse_c_decl l wd in
+      [d], cenv
 
 let interp l = 
   let rec interp_list cenv = function

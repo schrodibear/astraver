@@ -509,6 +509,13 @@ precondition, inside the same comment:
      } /*@ result = 0 */
 \end{verbatim}
 
+Finally, \why\ declarations can be inserted in the middle of C
+declarations, with comments of the shape \texttt{/*W}\dots\texttt{*/}:
+\begin{verbatim}
+     int x;
+     /*W logic f: int -> int */
+     int y;
+\end{verbatim}
 
 \subsection{Annotations}
 \index{C program!annotations}
@@ -1387,9 +1394,7 @@ for instance~\cite{KR88}).
 \index{C program!annotations}
 
 Annotations are inserted as special comments of the shape
-\begin{verbatim}
-     /*@ ... */
-\end{verbatim}
+\texttt{/*@ ... */} or \texttt{/*W ... */}.
 Note that within annotations the syntax in use is the one given in
 Section~\ref{syntax:logic}, with its own lexical conventions,
 different from the C ones. In particular, comments are enclosed by
@@ -1417,12 +1422,14 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
       & $|$ & \nt{c\_type} \nt{identifier} \te{(} 
               \nt{parameter}\etoilesep{\te{,}} \te{)} 
               \nt{annotated\_block} \te{;} \\
+      & $|$ & \te{/*W} \te{logic} \nt{identifier} \te{:} 
+              \nt{logic\_type} \te{*/} \\
   \\[0.1em]
 
   \nt{c\_type}
     & $::=$ & \te{void} $|$ \te{char} $|$ \te{short} $|$ \te{int} 
-              $|$ \te{long} $|$ \te{float} $|$ \te{double} \\
-    &   $|$ & \nt{identifier} \\
+              $|$ \te{long} $|$ \te{float} $|$ \te{double} 
+              $|$ \nt{identifier} \\
   \\[0.1em]
 
   \nt{parameter}
