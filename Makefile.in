@@ -228,9 +228,9 @@ FILES =src/*.ml* Makefile.in configure.in configure .depend \
 	examples/*/.depend examples/*/Makefile \
 	lib/coq/*.v lib/pvs/why.*
 
-distrib export: clean source export-doc export-examples linux
+distrib export: source export-doc export-examples linux
 
-source:  doc/manual.ps
+source: doc/manual.ps
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
