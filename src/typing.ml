@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.101 2003-12-18 12:24:06 marche Exp $ i*)
+(*i $Id: typing.ml,v 1.102 2003-12-18 13:31:36 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -64,7 +64,19 @@ let rec unify_type_v v1 v2 =
       unify_type_v v1 v2
   | (Array v1, Array v2) -> 
       unify_type_v v1 v2
-  | _ -> assert false
+  | (Arrow(bl1,t1),Arrow(bl2,t2)) ->
+      (List.length bl1 = List.length bl2)
+      && (List.for_all2 
+	    (fun (id1,b1) (id2,b2) ->
+	       id1=id2 && 
+	       match (b1,b2) with
+		 | (BindType(t1),BindType(t2)) -> 
+		     unify_type_v t1 t2
+		 | (BindSet,BindSet) -> true
+		 | _ -> false)	 
+	    bl1 bl2)
+      && unify_type_v t1.c_result_type t2.c_result_type			
+  | _ -> false
 (*
   | (v1,v2) -> 
       v1 = v2
