@@ -126,6 +126,10 @@ bin/caduceus.opt: $(CCMX)
 bin/caduceus.byte: $(CCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ unix.cma gramlib.cma str.cma $^
 
+bin/caduceus.static: $(CCMX)
+	$(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa gramlib.cmxa str.cmxa $^
+	strip $@
+
 # graphical interface
 GCMO = $(CMO) intf/navig.cmo intf/hilight.cmo intf/viewer.cmo
 GCMX = $(GCMO:.cmo=.cmx)
@@ -340,11 +344,11 @@ lib/coq/%.vo: lib/coq/%.v
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -R lib/coq-v7 Coq.why $<
 
-%_why.v: %.mlw $(BINARY)
-	$(BINARY) -coq $*.mlw
+# %_why.v: %.mlw $(BINARY)
+# 	$(BINARY) -coq $*.mlw
 
-%_why.pvs: %.mlw $(BINARY)
-	$(BINARY) -pvs $*.mlw
+# %_why.pvs: %.mlw $(BINARY)
+# 	$(BINARY) -pvs $*.mlw
 
 # Emacs tags
 ############
@@ -379,7 +383,7 @@ FILES =src/*.ml* c/*.ml* intf/*.ml* tools/*.ml* \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
 	examples/Makefile* \
-	examples/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
+	examples-c/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.v \
         bench/c/bench bench/c/*/*.c bench/c/*/*/*.c \
@@ -427,9 +431,13 @@ BINARYNAME = $(NAME)-$(OSTYPE)
 
 linux: binary
 
-BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO7) $(VO8) \
-	doc/why.1 doc/manual.ps \
-	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.* lib/mizar/dict/why.*
+BINARYFILES = $(FILES) bin/why.opt bin/caduceus.opt \
+	bin/why.static bin/caduceus.static
+# README INSTALL COPYING GPL $(VO7) $(VO8) \
+# 	bin/why.static bin/caduceus.static \
+# 	doc/why.1 doc/manual.ps \
+# 	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.* lib/mizar/dict/why.* \
+# 	lib/why/*.why examples-c/*/*.c
 
 binary: $(BINARYFILES)
 	mkdir -p export/$(BINARYNAME)
