@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.41 2004-06-02 13:11:17 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.42 2004-07-05 11:58:47 filliatr Exp $ i*)
 
 open Format
 
@@ -36,6 +36,8 @@ let no_harvey_prelude_ = ref false
 let werror_ = ref false
 let fpi_ = ref false
 let dir_ = ref ""
+let white_ = ref false
+let black_ = ref true
 let wbb_ = ref false
 let split_ = ref false
 let all_vc_ = ref false
@@ -123,6 +125,8 @@ Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
   -tc, --type-only   exits after type-checking
   -wp, --wp-only     exits after annotation
+  --white            white boxes: WP calculus enters pure expressions
+  --black            black boxes: WP calculus does not enter pure expressions
   --wbb              while loops as black boxes (careful: incomplete WP)
   --split            split conditions into several pieces
   --all-vc           outputs all verification conditions (no auto discharge)
@@ -240,6 +244,10 @@ let files =
 	dir_ := d; parse args
     | ("-dir" | "--dir") :: [] ->
 	usage (); exit 1
+    | ("-white" | "--white") :: args ->
+	white_ := true; black_ := false; parse args
+    | ("-black" | "--black") :: args ->
+	black_ := true; white_ := false; parse args
     | ("-wbb" | "--wbb") :: args ->
 	wbb_ := true; parse args
     | ("-split" | "--split") :: args ->
@@ -276,6 +284,8 @@ let wol = !wol_
 let werror = !werror_
 let fpi = !fpi_
 let dir = !dir_
+let white = !white_
+let black = !black_
 let wbb = !wbb_
 let split = !split_
 let all_vc = !all_vc_
@@ -311,5 +321,9 @@ let gui = ref false
 (* compatibility checks *)
 let () = if fpi && valid then begin
   Printf.eprintf "options -valid and -fpi are not compatible\n";
+  exit 1
+end
+let () = if white && black then begin
+  Printf.eprintf "options -white and -black are not compatible\n";
   exit 1
 end

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.24 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.25 2004-07-05 11:58:47 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -389,23 +389,34 @@ let q_true_false q =
   let cfalse = tsubst_in_predicate (subst_one Ident.result tfalse) q in
   simplify ctrue, simplify cfalse
 
+let is_result_eq = function
+  | Papp (id, [Tvar id'; t]) when id == t_eq && id' == result -> Some t
+  | _ -> None
+
 let rec purify p =
   let a_values = List.map (fun a -> a.a_value) in
   if is_pure p then 
+    (* [pure p] computes obligations and postcondition for [p] *)
     let rec pure p = match p.desc with
       | Expression t when post p = None -> 
-	  [],
+	  a_values p.info.obligations,
 	  equality (Tvar Ident.result) (unref_term t)
       | LetIn (x, e1, e2) when post p = None -> 
-	  (* TODO: optimiser quand post1 de la forme result=E *)
 	  let pre1,post1 = pure e1 in
 	  let pre2,post2 = pure e2 in
-	  let tyx = result_type e1 in
-	  let post1_x = subst_in_predicate (subst_onev result x) post1 in
-	  (* pre1 and forall x. post1(x) => pre2 *)
-	  (pre1 @ [pforall x tyx (pimplies post1_x (pands pre2))]),
-	  (* forall x. post1(x) => post2 *)
-	  pforall x tyx (pimplies post1_x post2)
+	  begin match is_result_eq post1 with
+	    | Some t1 -> (* optimized when [post1] is [result=t1] *)
+		let s = tsubst_in_predicate (subst_one x t1) in
+		pre1 @ (List.map s pre2), s post2
+	    | None ->
+		let tyx = result_type e1 in
+		let post1_x = subst_in_predicate (subst_onev result x) post1 in
+		(* pre1 and (forall x. post1(x) => pre2) *)
+		(pre1 @ [(*pimplies (pands pre1)*)
+		   (pforall x tyx (pimplies post1_x (pands pre2)))]),
+		(* exists x. post1(x) and post2 *)
+		pexists x tyx (pand post1_x post2)
+	  end
       | If (e1, e2, e3) when post p = None -> 
 	  let p1,q1 = pure e1 in
 	  let p2,q2 = pure e2 in
@@ -429,22 +440,14 @@ let rec purify p =
 		(* q1(true) and q2 or q1(false) and q3 *)
 		por (pand q1t q2) (pand q1f q3)
 	  end
-
-	  (*let q2t,q2f = q_true_false q2 in
-	  let q3t,q3f = q_true_false q3 in*)
-	  (* if result then 
-	       post1(true) and post2(true) or post1(false) and post3(true)
-	     else
-	       post1(true) and post2(false) or post1(false) and post3(false) *)
-	  (*Pif (Tvar Ident.result,
-	       por (pand q1t q2t) (pand q1f q3t),
-	       por (pand q1t q2f) (pand q1f q3f))*)
-
       | App (e1, Term e2, k) when post p = None || post p = k.c_post ->
 	  (* TODO : collecter oblig/pre de e1 et e2 *)
+	  assert (pre e1 = [] && pre e2 = []);
 	  begin match k.c_post with
-	    | Some (q,_) -> [], q.a_value
-	    | None -> raise Exit
+	    | Some (q,_) -> 
+		a_values (e1.info.obligations @ e2.info.obligations), q.a_value
+	    | None -> 
+		raise Exit
 	  end
       | _ -> 
 	  raise Exit (* we give up *)
@@ -452,11 +455,10 @@ let rec purify p =
     try 
       let pre,post = pure p in
       let pre = List.map (anonymous p.info.loc) pre in
-      let o = p.info.obligations @ pre in
       let c = { p.info.kappa with c_post = create_post post } in
       { p with 
 	  desc = Any c; 
-	  info = { p.info with obligations = o; kappa = c } }
+	  info = { p.info with obligations = pre; kappa = c } }
     with Exit -> 
       map_desc purify p
   else 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.71 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.72 2004-07-05 11:58:47 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -141,9 +141,14 @@ let interp_program id p =
   print_if_debug print_prog p;
   if type_only then raise Exit;
 
-  if_debug eprintf "* purification@.";
-  let p = Annot.purify p in
-  print_if_debug print_prog p;
+  let p = if black then begin
+    if_debug eprintf "* purification@.";
+    let p = Annot.purify p in
+    print_if_debug print_prog p;
+    p
+  end else 
+    p
+  in
 
   if_debug eprintf "* weakest preconditions@.";
   let p,wp = Wp.wp p in
