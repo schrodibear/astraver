@@ -223,9 +223,9 @@
     \wpre{\taccess{t}{e}}{q} & =
        \wpre{e}{q[\result\leftarrow \faccess{t}{\result}]} \\
     \wpre{\tassign{t}{e_1}{e_2}}{q} & =
-       \wpre{e_1}{\wpre{e_2}{q_1}[v_1\leftarrow\result] \\
+       \wpre{e_1}{\wpre{e_2}{q_1}[v_1\leftarrow\result]} \\
        & \quad\mbox{with }q_1=q[\result\leftarrow\void;
-                                t\leftarrow\fupdate{t}{v_1}{\result}]} \\
+                                t\leftarrow\fupdate{t}{v_1}{\result}] \\
     \wpre{\seq{e_1}{e_2}}{q} & =
        \wpre{e_1}{\wpre{e_2}{q}} \\
     \wpre{\plabel{l}{e}}{q} & =

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.12 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.13 2002-03-05 14:41:51 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -31,6 +31,7 @@ let interp_program id p =
   let ploc = p.info.loc in
   if_debug_3 eprintf "=== interpreting program %a ===@\n@?" Ident.print id;
   let p = Db.db_prog p in
+
   if_debug eprintf "=== typing with effects ===@\n@?";
   let env = Env.empty in
   let p = Typing.typef Typing.initial_labels env p in
@@ -39,13 +40,17 @@ let interp_program id p =
   Error.check_for_not_mutable ploc v;
   if_debug_3 eprintf "%a@\n@?" print_type_c c;
   if !type_only then exit 0;
+
   if_debug eprintf "=== weakest preconditions ===@\n@?";
-  let ren = initial_renaming env in
-  let p = Wp.propagate ren p in
+  let p = Wp.propagate p in
+  if !wp_only then exit 0;
+
   if_debug eprintf "=== functionalization ===@\n@?";
+  let ren = initial_renaming env in
   let cc = Mlize.trans ren p in
   let cc = Red.red cc in
   if_debug_3 eprintf "%a@\n@?" print_cc_term cc;
+
   if_debug eprintf "=== generating obligations ===@\n@?";
   let ol = Vcg.vcg (Ident.string id) cc in
   if_verbose_2 eprintf "%d proof obligation(s)@\n@?" (List.length ol);
@@ -89,13 +94,19 @@ usage: why [options] [files...]
 If no file is given, the source is read on standard input and
 output is written in file `WhyOutput'
 
-Options are:
-  --help     prints this message
+General Options:
+  -h, --help     prints this message
+  -V, --verbose  verbose mode
+  -q, --quiet    quiet mode (default)
+  -d, --debug    debugging mode
+
+Typing/Annotations options:
+  -tc, --type-only  exits after type-checking
+  -wp, --wp-only    exits after annotation
+
+Prover options:
   --pvs      selects PVS prover
   --coq      selects COQ prover (default)
-  --verbose  verbose mode
-  --quiet    quiet mode (default)
-  --debug    debugging mode
 ";
   flush stderr
 
@@ -108,6 +119,7 @@ let parse_args () =
     | ("-coq" | "--coq") :: args -> prover := Coq; parse args
     | ("-d" | "--debug") :: args -> debug := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only := true; parse args
+    | ("-wp" | "--wp-only") :: args -> wp_only := true; parse args
     | ("-q" | "--quiet") :: args -> verbose := false; parse args
     | ("-V" | "--verbose") :: args -> verbose := true; parse args
     | f :: args -> files := f :: !files; parse args

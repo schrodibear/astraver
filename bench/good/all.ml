@@ -25,7 +25,7 @@ external f4 : unit -> {} unit {}
 
 external f5 : foo -> foo
 external f6 : x:foo -> foo
-xexternal f7 : x:foo -> {} foo {}
+external f7 : x:foo -> {} foo {}
 
 external f8 : t:array 10 of int -> {} unit { access(t,1) = 2 }
 

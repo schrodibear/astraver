@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: options.ml,v 1.3 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.4 2002-03-05 14:41:51 filliatr Exp $ i*)
 
 open Format
 
@@ -22,6 +22,8 @@ let dprintf f = if !debug then eprintf f else fprintf null_formatter f
 i*)
 
 let type_only = ref false
+
+let wp_only = ref false
 
 type prover = Coq | Pvs
 
