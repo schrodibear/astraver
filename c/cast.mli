@@ -14,9 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.21 2004-02-09 15:55:09 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.22 2004-02-10 08:18:02 filliatr Exp $ i*)
 
 (*s C types *)
+
+open Clogic
 
 type 'a located = { node : 'a; loc : Loc.t }
 
@@ -107,16 +109,38 @@ type 'expr c_initializer =
   | Iexpr of 'expr
   | Ilist of 'expr c_initializer list
 
+type pctype = cexpr ctype
+
+(* parsed logic AST *)
+
+type parsed_predicate = (Loc.t term, pctype) predicate
+type parsed_spec = parsed_predicate spec
+type parsed_loop_annot = (Loc.t term, pctype) loop_annot
+type parsed_logic_type = pctype logic_type
+
+type parsed_decl = 
+  | LDlogic of string * parsed_logic_type * (parsed_logic_type * string) list
+  | LDpredicate of string * (parsed_logic_type * string) list
+  | LDaxiom of string * parsed_predicate
+
+type parsed_code_annot = Assert of parsed_predicate | Label of string
+
+type parsed_annot = 
+  | Adecl of parsed_decl
+  | Aspec of parsed_spec
+  | Acode_annot of parsed_code_annot
+  | Aloop_annot of parsed_loop_annot
+
 type cstatement = cstatement_node located
 
 and cstatement_node =
   | CSnop
   | CSexpr of cexpr
   | CSif of cexpr * cstatement * cstatement
-  | CSwhile of cexpr * Clogic.parsed_loop_annot option * cstatement
-  | CSdowhile of cstatement * Clogic.parsed_loop_annot option * cexpr
+  | CSwhile of cexpr * parsed_loop_annot option * cstatement
+  | CSdowhile of cstatement * parsed_loop_annot option * cexpr
   | CSfor of 
-      cexpr * cexpr * cexpr * Clogic.parsed_loop_annot option * cstatement
+      cexpr * cexpr * cexpr * parsed_loop_annot option * cstatement
   | CSblock of block
   | CSreturn of cexpr option
   | CSbreak
@@ -125,23 +149,22 @@ and cstatement_node =
   | CSswitch of cexpr * cstatement
   | CScase of cexpr * cstatement
   | CSgoto of string
-  | CSannot of Clogic.parsed_code_annot
+  | CSannot of parsed_code_annot
 
 and block = decl located list * cstatement list
 
 and decl = 
-  | Cspecdecl of Clogic.parsed_decl
+  | Cspecdecl of parsed_decl
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
   | Cdecl of cexpr ctype * string * cexpr c_initializer
   | Cfunspec of 
-      Clogic.parsed_spec * cexpr ctype * string * cexpr parameter list
+      parsed_spec * cexpr ctype * string * cexpr parameter list
   | Cfundef of 
-      Clogic.parsed_spec option * 
+      parsed_spec option * 
       cexpr ctype * string * cexpr parameter list * block
 
 type file = decl located list
-
 
 (*s C typed abstract syntax trees *)
 
@@ -176,17 +199,19 @@ and lvalue = texpr (* TODO: cf CIL *)
 
 type tctype = texpr ctype
 
-type predicate = (tctype term, string) Clogic.predicate
+type predicate = (tctype term, tctype) Clogic.predicate
 
 type spec = predicate Clogic.spec
 
 type variant = tctype term * string option
 
-type loop_annot = (tctype term, string) Clogic.loop_annot
+type loop_annot = (tctype term, tctype) Clogic.loop_annot
 
 type loop_info = { loop_break : bool; loop_continue : bool }
 
 type fun_info = { fun_abrupt_return : bool }
+
+type logic_type = tctype Clogic.logic_type
 
 type tstatement = {
   st_node : tstatement_node;
@@ -215,7 +240,7 @@ and tstatement_node =
 and tblock = tdecl located list * tstatement list
 
 and tdecl = 
-  | Tlogic of string list * logic_type
+  | Tlogic of string * tctype logic_symbol
   | Taxiom of string * predicate
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype

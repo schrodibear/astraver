@@ -1,7 +1,7 @@
 
 /* search for a value in an array */
 
-int index(int t[], int n, int v) /*@ array_length(t) = n */ {
+int index(int t[], int n, int v) /*@ array_length(t) >= n */ {
   int i = 0;
   while (i < n) 
     /*@ invariant 0 <= i and forall k:int. 0 <= k < i -> t[k] <> v
@@ -11,7 +11,8 @@ int index(int t[], int n, int v) /*@ array_length(t) = n */ {
   }
   return i;
 }
-/*@ 0 <= result < n -> t[result] = v */
+/*@ (0 <= result < n -> t[result] = v) and
+    (result =n -> forall i:int. 0 <= i < n -> t[i] <> v) */
 
 /* same thing, with a return instead of a break */
 

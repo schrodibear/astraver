@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: creport.ml,v 1.3 2004-02-04 13:45:19 filliatr Exp $ i*)
+(*i $Id: creport.ml,v 1.4 2004-02-10 08:18:02 filliatr Exp $ i*)
 
 open Format
 open Cerror
@@ -77,3 +77,8 @@ let report fmt = function
 let raise_located loc e = raise (Error (Some loc, e))
 let raise_unlocated e = raise (Error (None, e))
 let raise_locop locop e = raise (Error (locop, e))
+
+let error l s = raise (Error (Some l, AnyMessage s))
+let warning l s = 
+  Format.eprintf "%a warning: %s\n" Loc.report_line (fst l) s
+

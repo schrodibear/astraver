@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.6 2004-02-09 16:07:33 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.7 2004-02-10 08:18:02 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -69,6 +69,8 @@ rule token = parse
   | "logic"    { LOGIC }
   | "predicate"    { PREDICATE }
   | "axiom"    { AXIOM }
+  | "int" { INT }
+  | "float" { FLOAT }
 
   | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
 
@@ -127,10 +129,6 @@ and comment = parse
       | Stdpp.Exc_located ((ls, le), e) -> 
 	  raise (Stdpp.Exc_located ((ofs + ls, ofs + le), e))
 
-  let predicate = parse_with_offset Clparser.predicate
-  let spec = parse_with_offset Clparser.spec
-  let loop_annot = parse_with_offset Clparser.loop_annot
-  let decl = parse_with_offset Clparser.decl
   let annot = parse_with_offset Clparser.annot
 
 }

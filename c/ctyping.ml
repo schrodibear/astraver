@@ -14,34 +14,23 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.20 2004-02-09 15:55:09 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.21 2004-02-10 08:18:02 filliatr Exp $ i*)
 
 open Format
 open Coptions
+open Clogic
 open Cast
 open Cerror
 open Cltyping
 open Creport
 open Info
+open Cenv
 
 (* Typing C programs *)
 
 let located_app f x = { node = f x.node; loc = x.loc }
 
 let option_app f = function Some x -> Some (f x) | None -> None
-
-let error l s = raise (Error (Some l, AnyMessage s))
-let warning l s = 
-  Format.eprintf "%a warning: %s\n" Loc.report_line (fst l) s
-
-let predicate env p =
-  let p = Cllexer.predicate p in
-  Cltyping.type_predicate env p
-
-let loop_annot env a =
-  let iv = Cllexer.loop_annot a in
-  Cltyping.type_loop_annot env iv
-
 
 (*s Some predefined types, subtype relation, etc. *)
 
@@ -60,63 +49,6 @@ let float_op = function
   | Bdiv -> Bdiv_float
   | _ -> assert false
 
-(* Type equality (i.e. structural equality, but ignoring attributes) *)
-(* TODO: pointers = arrays *)
-
-let rec eq_type ty1 ty2 = 
-  eq_type_node ty1.ctype_node ty2.ctype_node
-
-and eq_type_node tn1 tn2 = match tn1, tn2 with
-  | CTvoid, CTvoid
-  | CTint _, CTint _ 
-  | CTfloat _, CTfloat _ ->
-      true
-  | CTvar x1, CTvar x2 ->
-      x1 = x2
-  | CTarray (ty1, _), CTarray (ty2, _) ->
-      eq_type ty1 ty2 (* TODO: taille? *)
-  | CTpointer ty1, CTpointer ty2 ->
-      eq_type ty1 ty2
-  | CTstruct (s1, _), CTstruct (s2, _) ->
-      s1 = s2
-  | CTstruct_named _, _ | _, CTstruct_named _ ->
-      assert false
-  | CTunion (u1, _), CTunion (u2, _) ->
-      u1 = u2
-  | CTunion_named _, _ | _, CTunion_named _ ->
-      assert false
-  | CTenum (e1, _), CTenum (e2, _) ->
-      e1 = e2
-  | CTenum_named _, _ | _, CTenum_named _ ->
-      assert false
-  | CTfun (pl1, ty1), CTfun (pl2, ty2) ->
-      eq_type ty1 ty2 &&
-      (try List.for_all2 (fun (ty1,_) (ty2,_) -> eq_type ty1 ty2) pl1 pl2
-       with Invalid_argument _ -> false)
-  | _ ->
-      false
-
-(* [sub_type ty1 ty2] is true if type [ty1] can be coerced
-   to type [ty2] (with function [coerce] below) *)
-
-let sub_type ty1 ty2 = match ty1.ctype_node, ty2.ctype_node with
-  | CTint _, CTfloat _ -> true
-  | CTpointer { ctype_node = CTvoid }, CTpointer _ -> true
-  | _ -> eq_type ty1 ty2
-
-let compatible ty1 ty2 = sub_type ty1 ty2 || sub_type ty2 ty1
-
-let arith_type ty = match ty.ctype_node with
-  | CTint _ | CTfloat _ -> true
-  | _ -> false
-
-let pointer_type ty = match ty.ctype_node with
-  | CTpointer _ -> true
-  | _ -> false
-
-let is_null e = match e.texpr_node with
-  | TEconstant s -> (try int_of_string s = 0 with _ -> false)
-  | _ -> false
 
 (* Coercions (ints to floats, floats to int) *)
 
@@ -164,97 +96,6 @@ let rec type_of_field su l x = function
 
 let type_of_struct_field = type_of_field "structure"
 let type_of_union_field = type_of_field "union"
-
-(*s Global environment *)
-
-(* tagged types *)
-let (tags_t : (string, texpr ctype) Hashtbl.t) = Hashtbl.create 97
-
-exception Redefinition
-exception WrongKind
-
-let clash_tag l s1 s2 = 
-  let redef t n = error l (sprintf "redeclaration of `%s %s'" t n) in
-  match s1.ctype_node, s2.ctype_node with
-  | CTstruct (n,_), CTstruct _ -> redef "struct" n
-  | CTunion (n,_), CTunion _ -> redef "union" n
-  | CTenum (n,_), CTenum _ -> redef "enum" n
-  | (CTstruct (n,_) | CTunion (n,_) | CTenum (n,_)), 
-    (CTstruct _ | CTunion _ | CTenum _) -> 
-      error l (sprintf "`%s' defined as wrong kind of tag" n)
-  | _ -> assert false
-
-let is_tag_type = Hashtbl.mem tags_t
-
-let find_tag_type = Hashtbl.find tags_t
-
-let add_tag_type l x s = 
-  if is_tag_type x then clash_tag l s (find_tag_type x);
-  Hashtbl.add tags_t x s
-
-(* typedefs *)
-
-let typedef_t = Hashtbl.create 97
-
-let is_typedef = Hashtbl.mem typedef_t
-
-let find_typedef = Hashtbl.find typedef_t
-
-let add_typedef l x ty = 
-  if is_typedef x then begin
-    if ty = find_typedef x then error l ("redefinition of `" ^ x ^ "'")
-    else error l ("conflicting types for `" ^ x ^ "'")
-  end else
-    Hashtbl.add typedef_t x ty
-
-(* variables and functions *)
-let (sym_t : (string, (texpr ctype * var_info)) Hashtbl.t) = Hashtbl.create 97
-
-let is_sym = Hashtbl.mem sym_t
-
-let find_sym = Hashtbl.find sym_t
-
-let add_sym l x ty = 
-  if is_sym x then begin
-    let (t,i) = find_sym x in
-    if not (eq_type t ty) then 
-      (* TODO accepter fonctions avec arguments si aucun la première fois 
-	 Question de Claude: accepter aussi un raffinement des specs ? *)
-      error l ("conflicting types for " ^ x)
-  end else
-    Hashtbl.add sym_t x (ty,default_var_info x)
-
-(*s Environments for local variables and local structs/unions/enums *)
-
-module Env = struct
-
-  module M = Map.Make(String)
-
-  type t = { 
-    vars : (texpr ctype * var_info) M.t; 
-    tags : texpr ctype M.t;
-    lenv : Cltyping.env
-  }
-
-  let empty = { vars = M.empty; tags = M.empty; lenv = Cltyping.empty }
-
-  let add x t info env = 
-    { env with vars = M.add x (t,info) env.vars }
-
-  let find x env = M.find x env.vars
-
-  (* add a local tagged type *)
-  let add_tag_type l x s env = 
-    if M.mem x env.tags then clash_tag l s (M.find x env.tags);
-    { env with tags = M.add x s env.tags }
-
-  (* look for a tagged type first in locals then in globals *)
-  let find_tag_type x env = 
-    try M.find x env.tags with Not_found -> find_tag_type x
-
-  let logic env = env.lenv
-
-end
 
 (*s Types *)
 
@@ -649,7 +490,7 @@ and type_statement_node loc env et = function
       (* TODO: vérifier existence label *)
       TSgoto lab, mt_status
   | CSfor (e1, e2, e3, an, s) -> 
-      let an = option_app (type_loop_annot (Env.logic env)) an in
+      let an = option_app (type_loop_annot env) an in
       let e1 = type_expr env e1 in
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
@@ -658,14 +499,14 @@ and type_statement_node loc env et = function
       TSfor (e1, e2, e3, s, li, an),
       { mt_status with abrupt_return = st.abrupt_return }
   | CSdowhile (s, an, e) ->
-      let an = option_app (type_loop_annot (Env.logic env)) an in
+      let an = option_app (type_loop_annot env) an in
       let s, st = type_statement env et s in
       let e = type_boolean env e in
       let li = { loop_break = st.break; loop_continue = st.continue } in
       TSdowhile (s, e, li, an), 
       { mt_status with abrupt_return = st.abrupt_return }
   | CSwhile (e, an, s) ->
-      let an = option_app (type_loop_annot (Env.logic env)) an in
+      let an = option_app (type_loop_annot env) an in
       let e = type_boolean env e in
       let s, st = type_statement env et s in
       let li = { loop_break = st.break; loop_continue = st.continue } in
@@ -733,13 +574,6 @@ and type_block env et (dl,sl) =
   (dl', sl'), st
 
 
-and type_annotated_block env et (p,bl,q) =
-  let bl,st = type_block env et bl in
-  let lenv = Env.logic env in
-  let p = option_app (predicate lenv) p in
-  let q = option_app (predicate lenv) q in
-  (p, bl, q), st
-
 let type_parameters loc env pl =
   List.fold_right
     (fun (ty,x) (pl,env) ->
@@ -754,9 +588,25 @@ let declare_type l ty =
   | CTstruct (n,_) | CTunion (n,_) | CTenum (n,_) -> add_tag_type l n ty'; ty'
   | _ -> ty'
 
+let type_logic_parameters env = 
+  List.map (fun (ty, _) -> type_logic_type env ty)
+
+let type_spec_decl loc = function
+  | LDaxiom (id, p) -> 
+      Taxiom (id, type_predicate Env.empty p)
+  | LDlogic (s, ty, pl) ->
+      let ty = type_logic_type Env.empty ty in
+      let pl = type_logic_parameters Env.empty pl in
+      Cenv.add_fun s (pl, ty);
+      Tlogic (s, Function (pl, ty))
+  | LDpredicate (s, pl) ->
+      let pl = type_logic_parameters Env.empty pl in
+      Cenv.add_pred s pl;
+      Tlogic (s, Predicate pl)
+
 let type_decl d = match d.node with
-  | Cspecdecl a -> 
-      assert false (*TODO*)
+  | Cspecdecl s -> 
+      type_spec_decl d.loc s
   | Ctypedef (ty, x) -> 
       let ty = declare_type d.loc ty in
       add_typedef d.loc x ty;
@@ -770,13 +620,13 @@ let type_decl d = match d.node with
       let info = default_var_info x in
       Tdecl (ty, info, type_initializer Env.empty ty i)
   | Cfunspec (s, ty, f, pl) ->
-      let s = type_spec Cltyping.empty s in
+      let s = type_spec Env.empty s in
       let ty = type_type d.loc Env.empty ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       add_sym d.loc f (noattr (CTfun (pl, ty)));
       Tfunspec (s, ty, f, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
-      let s = option_app (type_spec Cltyping.empty) s in
+      let s = option_app (type_spec Env.empty) s in
       let ty = type_type d.loc Env.empty ty in
       let et = if ty = c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in

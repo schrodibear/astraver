@@ -18,6 +18,7 @@
 
 %{
 
+  open Cast
   open Clogic
 
   let loc () = (symbol_start (), symbol_end ())
@@ -47,19 +48,7 @@
 %right prec_uminus 
 %left DOT ARROW LSQUARE
 
-%type <Clogic.parsed_predicate> predicate
-%start predicate
-
-%type <Clogic.parsed_spec> spec
-%start spec
-
-%type <Clogic.parsed_loop_annot> loop_annot
-%start loop_annot
-
-%type <Clogic.parsed_decl> decl
-%start decl
-
-%type <Clogic.parsed_annot> annot
+%type <Cast.parsed_annot> annot
 %start annot
 
 %%
@@ -71,25 +60,25 @@ predicate:
 | NOT predicate %prec prec_not { Pnot $2 }
 | TRUE { Ptrue }
 | FALSE { Pfalse }
-| IDENTIFIER { Pvar (info $1) }
-| IDENTIFIER LPAR term_list RPAR { Papp (info_i 1 $1, $3) }
+| IDENTIFIER { Pvar (loc (), $1) }
+| IDENTIFIER LPAR term_list RPAR { Papp (loc_i 1, $1, $3) }
 | term relation term %prec prec_relation { Prel ($1, $2, $3) }
 | term relation term relation term %prec prec_relation 
       { Pand (Prel ($1, $2, $3), Prel ($3, $4, $5)) }
 | IF term THEN predicate ELSE predicate %prec prec_if
       { Pif ($2, $4, $6) }
-| FORALL IDENTIFIER COLON pure_type DOT predicate %prec prec_forall
+| FORALL IDENTIFIER COLON logic_type DOT predicate %prec prec_forall
       { Pforall ($2, $4, $6) }
-| EXISTS IDENTIFIER COLON pure_type DOT predicate %prec prec_exists
+| EXISTS IDENTIFIER COLON logic_type DOT predicate %prec prec_exists
       { Pexists ($2, $4, $6) }
 | LPAR predicate RPAR { $2 }
 ;
 
-pure_type:
-  IDENTIFIER { PTexternal ([], $1) }
-| INT        { PTint }
-| FLOAT      { PTfloat }
-| pure_type LSQUARE RSQUARE { PTarray $1 }
+logic_type:
+  IDENTIFIER { Cltyping.noattr (CTvar $1) }
+| INT        { Cltyping.c_int }
+| FLOAT      { Cltyping.c_float }
+| logic_type LSQUARE RSQUARE { Cltyping.c_array $1 }
 ;
 
 relation:
@@ -103,9 +92,7 @@ relation:
 
 term:
 | CONSTANT { info (Tconstant $1) }
-| IDENTIFIER { info (Tvar ($1, Current)) }
-| IDENTIFIER AT { info (Tvar ($1, Before)) }
-| IDENTIFIER AT IDENTIFIER { info (Tvar ($1, At $3)) }
+| IDENTIFIER { info (Tvar $1) }
 | IDENTIFIER LPAR term_list RPAR { info (Tapp ($1, $3)) }
 | term PLUS term { info (Tbinop ($1, Badd, $3)) }
 | term MINUS term { info (Tbinop ($1, Bsub, $3)) }
@@ -191,7 +178,7 @@ location:
 ;
 
 decl:
-  LOGIC pure_type IDENTIFIER LPAR parameters RPAR { LDlogic ($3, $2, $5) }
+  LOGIC logic_type IDENTIFIER LPAR parameters RPAR { LDlogic ($3, $2, $5) }
 | PREDICATE IDENTIFIER LPAR parameters RPAR { LDpredicate ($2, $4) }
 | AXIOM IDENTIFIER COLON predicate { LDaxiom ($2, $4) }
 ;
@@ -202,8 +189,8 @@ parameters:
 ;
 
 ne_parameters:
-  pure_type IDENTIFIER { [($1, $2)] }
-| pure_type IDENTIFIER COMMA ne_parameters { ($1,$2) :: $4 }
+  logic_type IDENTIFIER { [($1, $2)] }
+| logic_type IDENTIFIER COMMA ne_parameters { ($1,$2) :: $4 }
 ;
 
 %%

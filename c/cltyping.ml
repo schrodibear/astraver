@@ -14,33 +14,15 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.5 2004-02-09 16:07:33 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.6 2004-02-10 08:18:02 filliatr Exp $ i*)
 
 open Cast
 open Clogic
 open Creport
 open Cerror
-
-(*s Environments for the logical side *)
-
-module Smap = Map.Make(String)
-
-type env = { 
-  functions : (tctype list * tctype) Smap.t; 
-  predicates : tctype list Smap.t 
-}
-
-let empty = { functions = Smap.empty; predicates = Smap.empty }
-
-let add_fun f pl env = { env with functions = Smap.add f pl env.functions }
-let find_fun f env = Smap.find f env.functions
-
-let add_pred p pl env = { env with predicates = Smap.add p pl env.predicates }
-let find_pred p env = Smap.find p env.predicates
+open Cenv
 
 let option_app f = function Some x -> Some (f x) | None -> None
-
-let error l s = raise (Error (Some l, AnyMessage s))
 
 (* Typing terms *)
 
@@ -53,15 +35,14 @@ let c_int = noattr (CTint (Signed, Int))
 let c_char = noattr (CTint (Unsigned, Char))
 let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
+let c_array ty = noattr (CTarray (ty, None))
 
-let rec type_term env et t =
+let expected_type loc t1 t2 =
+  if not (eq_type t1 t2) then raise_located loc (ExpectedType (t1, t2))
+
+let rec type_term env t =
   let t, ty = type_term_node t.info env t.node in
-  match et with
-    | Some ety -> 
-	(* TODO vérifier ety = ty *)
-	{ node = t; info = ty }
-    | None ->
-	{ node = t; info = ty }
+  { node = t; info = ty }
 
 and type_term_node loc env = function
   | Tconstant c -> 
@@ -69,10 +50,18 @@ and type_term_node loc env = function
 	 let _ = int_of_string c in Tconstant c, c_int
        with _ -> 
 	 Tconstant c, c_float)
-  | Tvar (s, lab) ->
-      assert false
+  | Tvar x ->
+      (try
+	 let (ty,_) = Env.find x env in Tvar x, ty
+       with Not_found ->
+	 error loc ("unbound variable " ^ x))
   | Tapp (f, tl) ->
-      assert false
+      (try 
+	 let pl, ty = find_fun f in
+	 let tl = type_terms loc env pl tl in
+	 Tapp (f, tl), ty
+       with Not_found -> 
+	 error loc ("unbound function " ^ f))
   | Tunop (op, t) -> 
       assert false
   | Tbinop (t1, op, t2) ->
@@ -98,8 +87,9 @@ and type_terms loc env at tl =
   let rec type_list = function
     | [], [] -> 
 	[]
-    | et :: etl, t :: tl ->
-	let t = type_term env (Some et) t in
+    | et :: etl, ({info=tloc} as t) :: tl ->
+	let t = type_term env t in
+	expected_type tloc et t.info;
 	t :: type_list (etl, tl)
     | [], _ ->
 	raise_located loc TooManyArguments
@@ -108,21 +98,42 @@ and type_terms loc env at tl =
   in
   type_list (at, tl)
 
+(* Typing logic types *)
+
+let rec type_type env t = 
+  { t with ctype_node = type_type_node env t.ctype_node }
+
+and type_type_node env = function
+  | CTint _ | CTfloat _ as t -> t
+  | CTarray (ty, None) -> CTarray (type_type env ty, None)
+  | _ -> assert false
+
+let type_logic_type = type_type
+(** abandon provisoire 
+let rec type_logic_type env = function
+  | PTctype ct ->
+      PTctype (type_type env ct)
+  | PTvar {tag=n; type_val =t } -> 
+      PTvar { tag = n; type_val = option_app (type_logic_type env) t }
+  | PTexternal (tl, s) -> 
+      PTexternal (List.map (type_logic_type env) tl, s)
+**)
+
 (* Typing predicates *)
 
 let rec type_predicate env = function
   | Pfalse
   | Ptrue as p -> 
       p
-  | Pvar { node = x; info = loc } -> 
+  | Pvar (loc, x) -> 
       (try 
-	 (match find_pred x env with
-	    | [] -> Pvar x
+	 (match find_pred x with
+	    | [] -> Pvar (loc, x)
 	    | _ -> error loc ("predicate " ^ x ^ " expects arguments"))
        with Not_found -> error loc ("unbound predicate " ^ x))
   | Prel (t1, r, t2) -> 
-      let t1 = type_term env None t1 in
-      let t2 = type_term env None t2 in
+      let t1 = type_term env t1 in
+      let t2 = type_term env t2 in
       (*TODO verif *) 
       Prel (t1, r, t2)
   | Pand (p1, p2) -> 
@@ -133,24 +144,28 @@ let rec type_predicate env = function
       Pimplies (type_predicate env p1, type_predicate env p2) 
   | Pnot p -> 
       Pnot (type_predicate env p)
-  | Papp ({node=p; info=locp}, tl) ->
+  | Papp (locp, p, tl) ->
       (try
-	 let pl = find_pred p env in
+	 let pl = find_pred p in
 	 let tl = type_terms locp env pl tl in
-	 Papp (p, tl)
+	 Papp (locp, p, tl)
        with Not_found -> 
 	 error locp ("unbound predicate " ^ p))
   | Pif (t, p1, p2) -> 
       (* TODO type t ? *)
-      let t = type_term env None t in
+      let t = type_term env t in
       Pif (t, type_predicate env p1, type_predicate env p2)
-  | Pforall (s, pt, p) -> 
-      Pforall (s, pt, type_predicate env p)
-  | Pexists (s, pt, p) -> 
-      Pexists (s, pt, type_predicate env p)
+  | Pforall (x, pt, p) -> 
+      let pt = type_logic_type env pt in
+      let env' = Env.add x pt (Info.default_var_info x) env in
+      Pforall (x, pt, type_predicate env' p)
+  | Pexists (x, pt, p) -> 
+      let pt = type_logic_type env pt in
+      let env' = Env.add x pt (Info.default_var_info x) env in
+      Pexists (x, pt, type_predicate env' p)
 
 let type_variant env (t, r) = 
-  let t = type_term env None t in
+  let t = type_term env t in
   (t, r) (* TODO et=int ? *)
 
 let type_loop_annot env (i,v) =

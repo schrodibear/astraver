@@ -14,27 +14,24 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.7 2004-02-09 16:07:33 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.8 2004-02-10 08:18:02 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
-type pure_type =
-  | PTint
-  | PTfloat
-  | PTarray of pure_type
-  | PTvarid of string
-  | PTvar of type_var
-  | PTexternal of pure_type list * string
+(** abandon provisoire polymorphisme et types abstraits
+type 'ctype logic_type =
+  | PTctype of 'ctype
+  | PTvar of 'ctype type_var
+  | PTexternal of 'ctype logic_type list * string
 
-and type_var =
-  { tag : int; mutable type_val : pure_type option }
+and 'ctype type_var =
+  { tag : int; mutable type_val : 'ctype logic_type option }
+**)
+type 'ctype logic_type = 'ctype
 
-type logic_type =
-  | Predicate of pure_type list
-  | Function of pure_type list * pure_type
-
-type label = Current | Before | At of string
-
+type 'ctype logic_symbol =
+  | Predicate of 'ctype logic_type list
+  | Function of 'ctype logic_type list * 'ctype logic_type
 
 type ('a, 'b) info = { node : 'a; info : 'b }
 
@@ -45,7 +42,7 @@ type 'a term = ('a term_node, 'a) info
 
 and 'a term_node =
   | Tconstant of string
-  | Tvar of string * label
+  | Tvar of string
   | Tapp of string * 'a term list
   | Tunop of term_unop * 'a term
   | Tbinop of 'a term * term_binop * 'a term
@@ -60,19 +57,19 @@ and 'a term_node =
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
 
-type ('term, 'ident) predicate =
+type ('term, 'ctype) predicate =
   | Pfalse
   | Ptrue
-  | Pvar of 'ident
-  | Papp of 'ident * 'term list
+  | Pvar of Loc.t * string
+  | Papp of Loc.t * string * 'term list
   | Prel of 'term * relation * 'term
-  | Pand of ('term, 'ident) predicate * ('term, 'ident) predicate
-  | Por of ('term, 'ident) predicate * ('term, 'ident) predicate
-  | Pimplies of ('term, 'ident) predicate * ('term, 'ident) predicate
-  | Pnot of ('term, 'ident) predicate
-  | Pif of 'term * ('term, 'ident) predicate * ('term, 'ident) predicate
-  | Pforall of string * pure_type * ('term, 'ident) predicate
-  | Pexists of string * pure_type * ('term, 'ident) predicate
+  | Pand of ('term, 'ctype) predicate * ('term, 'ctype) predicate
+  | Por of ('term, 'ctype) predicate * ('term, 'ctype) predicate
+  | Pimplies of ('term, 'ctype) predicate * ('term, 'ctype) predicate
+  | Pnot of ('term, 'ctype) predicate
+  | Pif of 'term * ('term, 'ctype) predicate * ('term, 'ctype) predicate
+  | Pforall of string * 'ctype logic_type * ('term, 'ctype) predicate
+  | Pexists of string * 'ctype logic_type * ('term, 'ctype) predicate
 
 type location = 
   | Lid of string
@@ -83,25 +80,7 @@ type 'pred spec = 'pred option * modifiable * 'pred option
 
 type 'term variant = 'term * string option
 
-type ('term,'ident) loop_annot = 
-  ('term,'ident) predicate option * 'term variant
+type ('term,'ctype) loop_annot = 
+    ('term,'ctype) predicate option * 'term variant
 
-(* parsed AST *)
-
-type parsed_predicate = (Loc.t term, (string, Loc.t) info) predicate
-type parsed_spec = parsed_predicate spec
-type parsed_loop_annot = (Loc.t term, (string, Loc.t) info) loop_annot
-
-type parsed_decl = 
-  | LDlogic of string * pure_type * (pure_type * string) list
-  | LDpredicate of string * (pure_type * string) list
-  | LDaxiom of string * parsed_predicate
-
-type parsed_code_annot = Assert of parsed_predicate | Label of string
-
-type parsed_annot = 
-  | Adecl of parsed_decl
-  | Aspec of parsed_spec
-  | Acode_annot of parsed_code_annot
-  | Aloop_annot of parsed_loop_annot
 

@@ -290,10 +290,10 @@
 
 %}
 
-%token <Clogic.parsed_spec> SPEC
-%token <Clogic.parsed_decl> DECL
-%token <Clogic.parsed_code_annot> CODE_ANNOT
-%token <Clogic.parsed_loop_annot> LOOP_ANNOT
+%token <Cast.parsed_spec> SPEC
+%token <Cast.parsed_decl> DECL
+%token <Cast.parsed_code_annot> CODE_ANNOT
+%token <Cast.parsed_loop_annot> LOOP_ANNOT
 
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL TYPE_NAME
 %token SIZEOF
