@@ -558,11 +558,17 @@ On the contrary, \texttt{do} loops are annotated after the loop body:
 \end{verbatim}
 
 \paragraph{Other annotations.}
-\indextt{assert}
+\indextt{assert}\indextt{label}
 Assertions can be inserted within statements, with the syntax:
 \begin{verbatim}
      x = 2 * x;
      /*@ assert even(x) */;
+     x = x + 1;
+\end{verbatim}
+Labels are inserted within statements with a similar syntax:
+\begin{verbatim}
+     x = 2 * x;
+     /*@ label L */;
      x = x + 1;
 \end{verbatim}
 
@@ -1232,9 +1238,9 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
     & $::=$ & \nt{block\_statement}\plussep{\te{;}} \\
   \\[0.1em]
 
-      \nt{block\_statement}
+  \nt{block\_statement}
     & $::=$ & \nt{prog} \\
-      & $|$ & \te{label} \nt{identifier} \\
+      & $|$ & \te{label} \nt{identifier} \\ \indextt{label}
       & $|$ & \te{assert} \te{\{} \nt{assertion} \te{\}} \\ \indextt{assert}
   \\[0.1em]
  
@@ -1523,6 +1529,7 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
               $[$ \nt{c\_expr} $]$ \te{)} \\
            && \nt{c\_loop\_annot} \nt{statement} \\
     &   $|$ & \te{/*@} \te{assert} \nt{assertion} \te{*/} \\ \indextt{assert}
+    &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
     &   $|$ & \nt{block} \\
   \\[0.1em]
 

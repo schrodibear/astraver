@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.80 2003-03-26 07:10:18 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.81 2003-04-04 07:29:52 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -550,7 +550,7 @@ let c_loop_annot = gec "c_loop_annot"
 let c_pre = gec "c_pre"
 let c_variant = gec "c_variant"
 let c_post = gec "c_post"
-let c_assert = gec "c_assert"
+let c_annot = gec "c_annot"
 
 EXTEND
   c_pre_condition:
@@ -570,8 +570,9 @@ EXTEND
   [ [ LIDENT "variant"; v = variant -> v ] ];
   c_post:
   [ [ q = OPT post_condition -> q ] ];
-  c_assert:
-  [ [ LIDENT "assert"; p = assertion -> p ] ];
+  c_annot:
+  [ [ LIDENT "assert"; p = assertion -> Sassert p 
+    | LIDENT "label"; s = ident -> Slabel (Ident.string s) ] ];
 END
 ;;
 
@@ -587,4 +588,4 @@ let parse_c_pre = parse_with_offset c_pre
 let parse_c_post = parse_with_offset c_post
 let parse_c_loop_annot = parse_with_offset c_loop_annot
 let parse_c_decl = parse_with_offset decl
-let parse_c_assert = parse_with_offset c_assert
+let parse_c_annot = parse_with_offset c_annot
