@@ -24,19 +24,20 @@ that is referencing a memory location by several ways, must be taken
 into account. 
 
 The Schorr-Waite algorithm~\cite{schorr67cacm} is a graph-marking
-algorithm, intended to be used in garbage collectors. It performs a
+algorithm intended to be used in garbage collectors. It performs a
 depth-first traversal of an arbitrary graph structure (hence a
 structure where aliasing may occur), without using additional memory,
 but using the pointers in the graph structure itself as a backtracking
 stack. A first (non computer-aided) proof of correctness of this
-algorithm has been proposed by Topor~\cite{topor79acta} (see
-also~\cite{morris82}). %  Reynolds ? 
+algorithm was given by Topor~\cite{topor79acta} in 1979, and in 1982
+Morris~\cite{morris82} presented a semi-formal proof using a general
+mechanism for dealing with inductive data structures.
 
 %automatic proof by Suzuki ? 
 
 In 2000, Bornat~\cite{bornat00mpc} has been able to perform a
 computer-aided formal proof of the Schorr-Waite algorithm using the
-Jape system. To make the proof tractable, an old idea by
+Jape system~\cite{bornat99}. To make the proof tractable, an old idea by
 Burstall~\cite{burstall72} for reasoning on pointer programs has been
 reused, called the `component-as-array' trick by Bornat: the heap
 memory is not modelled by single large array, but by several ones,
@@ -45,7 +46,7 @@ aliasing can occur between two parts. These parts correspond to
 differents fields of records (i.e. structures in C, or instance
 variables in Java).
 
-% PARLER aussi de la preuve en B
+% PARLER aussi de la preuve en B ?
 
 In 2003, the Schorr-Waite algorithm has been used again as a case
 study by Mehta and Nipkow~\cite{mehta03cade}, this time for
