@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.31 2003-03-26 07:10:17 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.32 2003-03-26 10:45:14 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -669,13 +669,24 @@ and interp_block l cenv et abrupt (d,b) =
   let rec interp_locals cenv = function
     | [] ->
 	cenv, []
-    | Ctypedecl (l, CDvar (id, Some e), v) :: dl ->
-	let m,_ = interp_expr cenv (Some v) e in
+    | Ctypedecl (l, CDvar (id, b), v) :: dl ->
+	let m = match b with 
+	  | None -> 
+	      (match v with
+		 | CTpure PTint ->
+		     ml_app l (ml_var l any_int) (ml_const l ConstUnit)
+		 | CTpure PTunit ->
+		     ml_app l (ml_var l any_unit) (ml_const l ConstUnit)
+		 | CTpure PTfloat ->
+		     ml_app l (ml_var l any_float) (ml_const l ConstUnit)
+		 | _ -> 
+		     assert false)
+	  | Some e -> 
+	      let m,_ = interp_expr cenv (Some v) e in m
+	in
 	let cenv' = Idmap.add id (v, true) cenv in
 	let cenv'',lv = interp_locals cenv' dl in
 	cenv'', (id, m) :: lv
-    | Ctypedecl (l, CDvar (_, None), _) :: _ -> 
-	raise_located l (AnyMessage "Local variables must be initialized")
     | _ ->
 	unsupported l
   in

@@ -146,6 +146,24 @@ Apply H1; Omega.
 Apply H4; Omega.
 Save.
 
+Lemma match_left_extension :
+  (i,j,n:Z)
+  `0 <= i` -> `0 <= j` -> `0 < n` ->
+  (access t1 i) = (access t2 j) ->
+  (match t1 `i+1` t2 `j+1` `n-1`) ->
+  (match t1 i t2 j n).
+Proof.
+Intros i j n H1 H2 H3 H4 Hmatch.
+Decompose [match] Hmatch.
+Apply match_cons. Omega. Omega.
+Intuition.
+Assert `i0=0` \/ `0<i0`. Omega. Intuition.
+Subst; Ring `i+0`; Ring `j+0`; Assumption.
+Replace `i+i0` with `i+1+(i0-1)`; Try Omega.
+Replace `j+i0` with `j+1+(i0-1)`; Try Omega.
+Apply H5; Omega.
+Save.
+
 End match_lemmas.
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyFloat.v,v 1.5 2003-01-30 13:09:47 filliatr Exp $ *)
+(* $Id: WhyFloat.v,v 1.6 2003-03-26 10:45:14 filliatr Exp $ *)
 
 Require Why.
 Require Export Rbase.
@@ -31,3 +31,7 @@ Parameter R_eq_bool :
  (x,y:R) { b:bool | if b then ``x == y`` else ``x <> y`` }.
 Parameter R_noteq_bool : 
  (x,y:R) { b:bool | if b then ``x <> y`` else ``x == y`` }.
+
+(* no validation for programs using floats
+Parameter why_any_float : (_: unit)(sig_1 R [result: R](True)).
+*)

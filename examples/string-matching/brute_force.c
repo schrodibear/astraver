@@ -9,7 +9,7 @@ void BF(char x[], int m, char y[], int n)
 /*@ array_length(x) = m and array_length(y) = n and
     0 <= n and 0 <= m */
 {
-  int i = 0, j = 0;
+  int i, j;
 
   for (j = 0; j <= n - m; ++j) 
   /*@ invariant 0 <= j  variant n - m + 1 - j */

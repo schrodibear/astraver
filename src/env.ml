@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.31 2003-03-20 14:20:25 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.32 2003-03-26 10:45:14 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -248,6 +248,13 @@ let _ = add_global t_sqrt_float (un_arith_type float) None
 
 let _ = add_global t_float_of_int 
 	  (make_arrow [x, BindType int] (make_c float None)) None
+
+let any t = 
+  make_arrow [x, BindType unit] 
+    (make_c t (Some (anonymous Loc.dummy Ptrue, [])))
+let _ = add_global any_int (any int) None
+let _ = add_global any_unit (any unit) None
+let _ = add_global any_float (any float) None
 
 (* Logical environment *)
 

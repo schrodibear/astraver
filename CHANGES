@@ -1,4 +1,5 @@
 
+  o C: local variables can be uninitialized
   o examples: C programs for exact string matching (in string-matching)
   o fixed bug in WP (not collecting some intermediate assertions)
   o C: added statement /*@ assert p */

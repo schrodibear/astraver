@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyInt.v,v 1.3 2002-11-14 09:38:05 filliatr Exp $ *)
+(* $Id: WhyInt.v,v 1.4 2003-03-26 10:45:14 filliatr Exp $ *)
 
 Require Export ZArith.
 Require Export ZArith_dec.
@@ -24,3 +24,4 @@ Theorem Znotzero : (x:Z){`x<>0`}+{`x=0`}.
 Proof.
 Intro x. Elim (Z_eq_dec x `0`) ; Auto.
 Save.
+

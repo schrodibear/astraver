@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.9 2003-03-20 14:20:24 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.10 2003-03-26 10:45:14 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -65,3 +65,9 @@ Lemma why_boolean_discriminate : false=true->(p:Prop)p.
 Proof.
 Intros; Discriminate.
 Save.
+
+Require WhyInt.
+Require WhyTuples.
+
+Parameter why_any_int : (_: unit)(sig_1 Z [result: Z](True)).
+Parameter why_any_unit : (_: unit)(sig_1 unit [result: unit](True)).

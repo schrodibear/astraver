@@ -9,8 +9,9 @@ ml:
 	../bin/why.opt --ocaml test.mlw
 
 c:
-	../bin/why.opt -d -V --coq-tactic Magic ctest.c
+	../bin/why.opt -d -V --valid --coq-tactic Magic ctest.c
 	coqc -R ../lib/coq Coq.why ctest_why.v
+	coqc -R ../lib/coq Coq.why ctest_valid.v
 	#coqide ctest_why.v
 
 pvs:
