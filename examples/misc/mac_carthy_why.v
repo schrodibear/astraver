@@ -31,10 +31,10 @@ Lemma f91_po_3 :
   (n: Z)
   (Pre2: Variant1 = (max `0` `101 - n`))
   (Test2: `n <= 100`)
-  (result0: Z)
-  (Post5: `n + 11 <= 100` /\ result0 = `91` \/ `n + 11 >= 101` /\
-          result0 = `n + 11 - 10`)
-  (Zwf `0` (max `0` `101 - result0`) Variant1).
+  (aux_2: Z)
+  (Post5: `n + 11 <= 100` /\ aux_2 = `91` \/ `n + 11 >= 101` /\
+          aux_2 = `n + 11 - 10`)
+  (Zwf `0` (max `0` `101 - aux_2`) Variant1).
 Proof.
 Intros n Variant1 n0. Unfold Zwf max.
 Case (Z_le_gt_dec `0` `101-n0`); Intros H Pre2 Test2 result0 Post5;
@@ -47,13 +47,13 @@ Lemma f91_po_4 :
   (n: Z)
   (Pre2: Variant1 = (max `0` `101 - n`))
   (Test2: `n <= 100`)
+  (aux_2: Z)
+  (Post5: `n + 11 <= 100` /\ aux_2 = `91` \/ `n + 11 >= 101` /\
+          aux_2 = `n + 11 - 10`)
   (result0: Z)
-  (Post5: `n + 11 <= 100` /\ result0 = `91` \/ `n + 11 >= 101` /\
-          result0 = `n + 11 - 10`)
-  (result1: Z)
-  (Post7: `result0 <= 100` /\ result1 = `91` \/ `result0 >= 101` /\
-          result1 = `result0 - 10`)
-  `n <= 100` /\ result1 = `91` \/ `n >= 101` /\ result1 = `n - 10`.
+  (Post7: `aux_2 <= 100` /\ result0 = `91` \/ `aux_2 >= 101` /\
+          result0 = `aux_2 - 10`)
+  `n <= 100` /\ result0 = `91` \/ `n >= 101` /\ result0 = `n - 10`.
 Proof.
 Intuition Omega.
 Save.
@@ -68,6 +68,7 @@ Lemma f91_po_5 :
 Proof.
 Intuition Omega.
 Save.
+
 
 
 
@@ -91,23 +92,23 @@ Definition f91 := (* validation *)
                 result Bool1) of
         | (left Test2) =>
             let (result0, Post4) =
-              let (result0, Post5) =
+              let (aux_2, Post5) =
                 let (result2, Post6) =
                   ((wf1 (max `0` `101 - (n + 11)`))
                     (f91_po_2 n Variant1 n Pre2 Test2) `n + 11`
                     (refl_equal ? (max `0` `101 - (n + 11)`))) in
                 (exist_1 [result3: Z]`n + 11 <= 100` /\ result3 = `91` \/
                 `n + 11 >= 101` /\ result3 = `n + 11 - 10` result2 Post6) in
-              let (result1, Post7) =
-                let (result3, Post8) =
-                  ((wf1 (max `0` `101 - result0`))
-                    (f91_po_3 n Variant1 n Pre2 Test2 result0 Post5) 
-                    result0 (refl_equal ? (max `0` `101 - result0`))) in
-                (exist_1 [result4: Z]`result0 <= 100` /\ result4 = `91` \/
-                `result0 >= 101` /\ result4 = `result0 - 10` result3 Post8) in
-              (exist_1 [result2: Z]`n <= 100` /\ result2 = `91` \/
-              `n >= 101` /\ result2 = `n - 10` result1
-              (f91_po_4 n Variant1 n Pre2 Test2 result0 Post5 result1 Post7)) in
+              let (result0, Post7) =
+                let (result2, Post8) =
+                  ((wf1 (max `0` `101 - aux_2`))
+                    (f91_po_3 n Variant1 n Pre2 Test2 aux_2 Post5) aux_2
+                    (refl_equal ? (max `0` `101 - aux_2`))) in
+                (exist_1 [result3: Z]`aux_2 <= 100` /\ result3 = `91` \/
+                `aux_2 >= 101` /\ result3 = `aux_2 - 10` result2 Post8) in
+              (exist_1 [result1: Z]`n <= 100` /\ result1 = `91` \/
+              `n >= 101` /\ result1 = `n - 10` result0
+              (f91_po_4 n Variant1 n Pre2 Test2 aux_2 Post5 result0 Post7)) in
             (exist_1 [result1: Z]`n <= 100` /\ result1 = `91` \/
             `n >= 101` /\ result1 = `n - 10` result0 Post4)
         | (right Test1) =>

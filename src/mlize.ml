@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.45 2002-06-21 15:20:24 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.46 2002-06-24 14:34:44 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -60,12 +60,19 @@ and trad_desc info d ren = match d with
 	ren
 
   | LetIn (x, e1, e2) ->
-      Monad.compose e1.info (trad e1)
+      let k1 = { e1.info.kappa with c_result_name = x } in
+      let info1 = { e1.info with kappa = k1 } in
+      Monad.compose info1 (trad e1)
 	(fun v1 ren' ->
-	   let t1 = trad_type_v ren info.env (result_type e1) in
-	   CC_letin (false, [x, CC_var_binder t1], CC_var v1, 
-		     Monad.compose e2.info (trad e2) 
-		       (fun v2 -> Monad.unit info (Tvar v2)) ren'))
+	   let te2 = 
+	     Monad.compose e2.info (trad e2) 
+	       (fun v2 -> Monad.unit info (Tvar v2)) ren' 
+	   in
+	   if v1 <> x then
+	     let ty1 = trad_type_v ren info.env (result_type e1) in
+	     CC_letin (false, [x, CC_var_binder ty1], CC_var v1, te2)
+	   else
+	     te2)
 	ren
 
   | LetRef (x, e1, e2) ->

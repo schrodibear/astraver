@@ -2,10 +2,10 @@
 parameter x,y,z : int ref
 
 let p = 
+  let i = 0 in
   while true do
-    { invariant x = z variant x }
-    x := !z;
-    y := !z
+    { invariant x = i variant x }
+    x := i
   done
 
 (****

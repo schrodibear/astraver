@@ -138,9 +138,9 @@ Save.
 
 
 Lemma p6_po_1 : 
-  (result: Z)
-  (Post1: result = `3`)
-  `result + 4` = `7`.
+  (a: Z)
+  (Post1: a = `3`)
+  `a + 4` = `7`.
 Proof.
 Intros; Omega.
 Save.
@@ -163,9 +163,9 @@ Save.
 
 
 Lemma p7_po_1 : 
-  (result: Z)
-  (Post1: result = `4`)
-  `3 + (result + result)` = `11`.
+  (a: Z)
+  (Post1: a = `4`)
+  `3 + (a + a)` = `11`.
 Proof.
 Intros; Omega.
 Save.
@@ -223,11 +223,11 @@ Intuition.
 Save.
 
 Lemma p9_po_2 : 
-  (result: Z)
-  (Post3: ((x:Z) (x = `1` -> `1 + result` = `2` /\ x = `1`)))
+  (aux_2: Z)
+  (Post3: ((x:Z) (x = `1` -> `1 + aux_2` = `2` /\ x = `1`)))
   (x1: Z)
   (Post1: x1 = `1`)
-  `1 + result` = `2` /\ x1 = `1`.
+  `1 + aux_2` = `2` /\ x1 = `1`.
 Proof.
 Intuition.
 Save.
@@ -294,11 +294,11 @@ Save.
 
 
 Lemma p11_po_1 : 
-  (result: Z)
-  (Post1: result = `3 + 1`)
-  (result0: Z)
-  (Post4: result0 = `0 + 1`)
-  `result0 + result` = `5`.
+  (aux_2: Z)
+  (Post1: aux_2 = `3 + 1`)
+  (aux_1: Z)
+  (Post4: aux_1 = `0 + 1`)
+  `aux_1 + aux_2` = `5`.
 Proof.
 Intros; Omega.
 Save.
@@ -321,9 +321,9 @@ Save.
 
 
 Lemma p11a_po_1 : 
-  (result: Z)
-  (Post1: result = `1 + 1`)
-  `result + result` = `4`.
+  (a: Z)
+  (Post1: a = `1 + 1`)
+  `a + a` = `4`.
 Proof.
 Intros; Omega.
 Save.

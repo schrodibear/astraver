@@ -115,6 +115,7 @@ Save.
 
 
 
+
 Definition p := (* validation *)
   [x: Z; Pre6: `x >= 0`]
     (well_founded_induction Z (Zwf ZERO) (p_po_1 x Pre6) [Variant1: Z](x0: Z)
