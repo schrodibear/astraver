@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.65 2002-12-11 10:33:13 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.66 2002-12-11 15:39:01 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -231,7 +231,8 @@ and trad_conditional info info1 te1 info2 te2 info3 te3 =
 	 option_app (apply_post info1.label ren' info.env) info1.kappa.c_post
        in
        let branch infob eb tb = 
-	 (* let info = { info with loc = infob.loc } in *)
+	 let info = { info with loc = infob.loc;
+			kappa = force_type_c_loc infob.loc info.kappa } in
 	 let t = 
 	   Monad.compose infob eb info
 	     (fun r -> Monad.unit info (Value (Tvar r))) ren'

@@ -60,6 +60,7 @@ let log l p is_discharged =
       fprintf fmt "@[%a@]@?" print_predicate p;
       Buffer.contents buf
     in
+    if_debug (fun () -> eprintf "at %d, %b, %s@\n" l is_discharged s) ();
     logs := (l, s, is_discharged) :: !logs
 
 (*s We automatically prove the trivial obligations *)
