@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
 
 
+ o fixed bug with casts in array sizes
  o fixed bug with `too large' integer literals (e.g. 0xFFFF0000)
 
 version 0.63, August 26th, 2004
