@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.mli,v 1.1 2003-09-18 11:52:58 filliatr Exp $ i*)
+(*i $Id: regen.mli,v 1.2 2003-09-18 12:19:41 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -61,6 +61,8 @@ module Make(X : S) : sig
   val regen : string -> formatter -> unit
 
   val first_time : formatter -> unit
+
+  val output_file : string -> unit
 
 end
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.2 2003-09-17 21:08:07 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.3 2003-09-18 12:19:41 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -317,12 +317,4 @@ let _ =
 
 let output_file fwe =
   let f = fwe ^ "_why.miz" in
-  if Sys.file_exists f then begin
-    let fbak = f ^ ".bak" in
-    Sys.rename f fbak; 
-    if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
-    print_in_file (Gen.regen fbak) f
-  end else begin
-    if_verbose_2 eprintf "*** generating file %s@." f;
-    print_in_file Gen.first_time f
-  end
+  Gen.output_file f

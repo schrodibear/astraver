@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: regen.ml,v 1.2 2003-09-18 11:52:58 filliatr Exp $ i*)
+(*i $Id: regen.ml,v 1.3 2003-09-18 12:19:41 filliatr Exp $ i*)
 
 (* files partly edited and partly regenerated *)
 
@@ -22,6 +22,7 @@ open Format
 open Options
 open Cc
 open Vcg
+open Misc
 
 type element_kind = 
   | Param
@@ -130,5 +131,26 @@ module Make(X : S) = struct
   let first_time fmt =
     X.first_time fmt;
     Queue.iter (fun (_,e) -> X.print_element fmt e) elem_q
+
+  let output_file f =
+    if Sys.file_exists f then begin
+      let ftmp = f ^ ".tmp" in
+      print_in_file (regen f) ftmp;
+      let old_md5 = Digest.file f in
+      let new_md5 = Digest.file ftmp in
+      if old_md5 = new_md5 then begin
+	if_verbose_2 eprintf "*** file %s is unchanged (not overridden)@." f;
+	Sys.remove ftmp
+      end else begin
+	let fbak = f ^ ".bak" in
+	if_verbose_3 
+	  eprintf "*** re-generating file %s (backup in %s)@." f fbak;
+	Sys.rename f fbak; 
+	Sys.rename ftmp f
+      end
+    end else begin
+      if_verbose_2 eprintf "*** generating file %s@." f;
+      print_in_file first_time f
+    end
 
 end
