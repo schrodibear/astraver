@@ -7,7 +7,7 @@ let add1 = fun (x:int ref) (y:int) ->
   { y >= 0 }
   (let z = ref y in
    while !z > 0 do
-     { invariant 0 <= z and x = x@0 + (y - z)
+     { invariant 0 <= z and x = x@init + (y - z)
        variant z }
      x := !x + 1;
      z := !z - 1
@@ -28,7 +28,7 @@ let mult1 = fun (x:int ref) (y:int) ->
    begin
      x := 0;
      while !z > 0 do
-       { invariant 0 <= z and x = x@0 * (y - z) variant z }
+       { invariant 0 <= z and x = x@init * (y - z) variant z }
        (add1 x savex);
        z := !z - 1
      done

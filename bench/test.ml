@@ -3,9 +3,7 @@
 
 external x : int ref
 
-external t : array 10 of int
-
-let q = { x = 0 } { x = 1 } t[!x] = 0
+let p = begin x := 1; (x := !x +1) { x = 2 }; x := !x + 1 end { x = 3 }
 
 (***
 let f = let rec f (u:unit) : unit { variant gx } = begin gx := 0; u end

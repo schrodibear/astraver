@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.35 2002-03-19 14:31:50 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.36 2002-03-19 23:45:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -18,7 +18,7 @@ open Effect
 
 module LabelSet = Set.Make(struct type t = string let compare = compare end)
 
-let initial_labels = LabelSet.singleton "0"
+let initial_labels = LabelSet.singleton "init"
 
 (*s Typing of terms (used to type pure expressions). *)
 
@@ -507,7 +507,7 @@ and typef_desc lab env loc = function
       let tvar = typed_var loc env' var in
       (* effect for a let/rec construct is computed as a fixpoint *)
       let rec state_rec c =
-	(* TODO: change label to "0" in [c] *)
+	(* TODO: change label to "init" in [c] *)
 	let tf = make_arrow bl c in
 	let env'' = add_recursion (f,(phi0,tvar)) (add f tf env') in
 	let t_e = typef initial_labels env'' e in

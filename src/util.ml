@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.23 2002-03-18 16:48:35 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.24 2002-03-19 23:45:33 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -135,7 +135,7 @@ let rec traverse_binders env = function
 	  
 let initial_renaming env =
   let ids = Env.fold_all (fun (id,_) l -> id::l) env [] in
-  update empty_ren "0" ids
+  update empty_ren "init" ids
 
 
 (*s Occurrences *)
