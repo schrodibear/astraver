@@ -50,7 +50,7 @@ type-all:
 
 why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
-	$(EXECCADUCEUS) -why-opt "-d -V" $<
+	$(EXECCADUCEUS) $<
 
 %: %.c
 	rm -f why/$*.why

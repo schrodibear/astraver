@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.49 2004-07-01 11:51:21 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.50 2004-07-09 15:38:28 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -462,7 +462,8 @@ let decl d =
 	id.logic_args <- l
     | Tinvariant(id,p) -> 
 	add_weak_invariant id p
-    | Tdecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) ->
+    | Tdecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) 
+      when ty.ctype_storage <> Extern ->
 	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
 	let t = { term_node = Tvar v; term_type = ty } in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.8 2004-07-09 12:32:43 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.9 2004-07-09 15:38:29 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -110,8 +110,10 @@ let rec print_term fmt = function
       fprintf fmt "%a" Ident.print id
   | Tconst (ConstInt n) -> 
       fprintf fmt "%d" n
-  | Tconst (ConstBool b) -> 
-      fprintf fmt "%B" b
+  | Tconst (ConstBool true) -> 
+      fprintf fmt "TRUE"
+  | Tconst (ConstBool false) -> 
+      fprintf fmt "FALSE"
   | Tconst ConstUnit -> 
       fprintf fmt "tt" (* TODO: CORRECT? *)
   | Tconst (ConstFloat (i,f,e)) ->
@@ -162,6 +164,10 @@ let rec print_predicate fmt = function
       fprintf fmt "%a" Ident.print id
   | Papp (id, [t], _) when id == well_founded ->
       fprintf fmt "TRUE %% was well_founded@\n"
+  | Papp (id, [a; b], _) when id == t_eq_bool ->
+      fprintf fmt "@[(%a <=>@ %a)@]" print_term a print_term b
+  | Papp (id, [a; b], _) when id == t_neq_bool ->
+      fprintf fmt "@[(NOT (%a <=>@ %a))@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_eq id ->
       fprintf fmt "@[(%a =@ %a)@]" print_term a print_term b
   | Papp (id, [a; b], _) when is_neq id ->

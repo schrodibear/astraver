@@ -16,6 +16,6 @@ sx: $(VO:_why.vo=_why.sx)
 	for f in $^; do echo $$f; Simplify $$f; done
 
 cvc: $(VO:_why.vo=_why.cvc)
-	for f in $^; do echo $$f; cvcl < $$f; done
+	for f in $^; do echo $$f; cvcl-optimized < $$f; done
 
 include ../Makefile.common
