@@ -39,6 +39,7 @@ type proof =
   | Loop_variant_1 of Ident.t * Ident.t
   | Absurd of Ident.t
   | ProofTerm of proof cc_term
+  | ShouldBeAWp
 
 type validation = proof cc_term
 

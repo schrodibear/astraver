@@ -134,4 +134,3 @@ Lemma f_impl_po_5 :
 Proof.
 intuition.
 Save.
-

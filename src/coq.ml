@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.127 2004-07-09 12:32:43 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.128 2004-10-12 13:33:30 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -388,7 +388,9 @@ and print_proof_v7 fmt = function
       fprintf fmt "(False_ind ? %a)" Ident.print h
   | ProofTerm t ->
       fprintf fmt "@[%a@]" print_cc_term_v7 t
-
+  | ShouldBeAWp ->
+      Report.raise_unlocated 
+      (Error.AnyMessage "can't produce a validation for an incomplete program")
 
 (* printers for Coq V8 *)
 
@@ -667,6 +669,9 @@ and print_proof_v8 fmt = function
       fprintf fmt "(False_ind _ %a)" Ident.print h
   | ProofTerm t ->
       fprintf fmt "@[%a@]" print_cc_term_v8 t
+  | ShouldBeAWp ->
+      Report.raise_unlocated 
+      (Error.AnyMessage "can't produce a validation for an incomplete program")
 
 and print_list_par sep pr fmt l =
    print_list sep (fun fmt x -> fprintf fmt "(%a)" pr x) fmt l
@@ -714,6 +719,8 @@ let print_logic_type fmt s =
   | Function (pl, t) ->
       fprintf fmt "%a -> %a" 
 	(print_list arrow print_pure_type) pl print_pure_type t
+  | Predicate [] ->
+      fprintf fmt "Prop"
   | Predicate pl ->
       fprintf fmt "%a -> Prop" (print_list arrow print_pure_type) pl
 

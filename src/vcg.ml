@@ -46,6 +46,7 @@ type proof =
   | Loop_variant_1 of Ident.t * Ident.t
   | Absurd of Ident.t
   | ProofTerm of proof cc_term
+  | ShouldBeAWp
 
 type validation = proof cc_term
 
@@ -307,6 +308,9 @@ let make_forall_proof id = function
   | _ -> 
       assert false
 
+let should_be_a_wp ctx =
+  first_hyp (fun id _ -> if not (is_wp id) then raise Exit) ctx; ShouldBeAWp
+
 (* Tautologies in linear minimal first-order logic.
    Context [ctx] is given in reverse order ([ctx = xk:tk, ..., x1:t1]). 
 
@@ -483,6 +487,7 @@ let discharge_methods ctx concl =
   try rewrite_var ctx concl with Exit ->
   try discriminate ctx concl with Exit ->
   try boolean_destruct ctx concl with Exit ->
+  try should_be_a_wp ctx with Exit ->
   try linear ctx concl with Exit ->
   boolean_case ctx concl
   end
