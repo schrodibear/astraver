@@ -54,9 +54,6 @@ Lemma index_impl_po_2 :
 Proof.
 intuition.
 subst ; auto.
-assert (k<i1 \/ k=i1) ; [omega | intuition ].
-apply (H0 k); auto with *.
-subst; auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 527-547 *)
@@ -85,8 +82,12 @@ Lemma index_impl_po_3 :
   (Zwf 0 (n - i2) (n - i1)).
 Proof.
 intuition.
+assert (k<i1 \/ k=i1).
+omega.
+intuition.
+apply (H0 k); intuition.
+apply Test2.
 subst; auto.
-apply (H0 i0); intuition.
 Save.
 
 (* Why obligation from file "why/search.why", characters 184-553 *)
@@ -113,6 +114,9 @@ Lemma index_impl_po_4 :
       (forall (i:Z), (0 <= i /\ i < n -> (acc intP (shift t i)) <> v)))))).
 Proof.
 intuition.
+apply H0 with i0.
+omega.
+subst;auto.
 Save.
 
 (* Why obligation from file "why/search.why", characters 233-373 *)
@@ -128,6 +132,5 @@ Lemma index_impl_po_5 :
   0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (acc intP (shift t k)) <> v)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

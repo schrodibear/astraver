@@ -6,7 +6,7 @@ typedef struct {
 //@ predicate purse_inv(purse *p) { \valid(p) && p->balance >= 0 }
 
 /*@ requires purse_inv(p) && s >= 0
-  @ assigns p->balance
+  @ assigns \nothing
   @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
   @*/
 void credit(purse *p,int s) {
@@ -38,8 +38,7 @@ int test1(purse *p1, purse *p2) {
 purse *new_purse();
 
 
-/*@ assigns \nothing
-  @ ensures \result == 150
+/*@ ensures \result == 150
   @*/
 int test2() {
     purse *p1 = new_purse();

@@ -1,6 +1,11 @@
 Note: These are the changes for Caduceus.
 
 
+ o missing 'assigns' clause is not anymore a fatal error: if no
+   side-effects is detected, 'assigns \nothing' is assumed, otherwise
+   'assigns <everything>', and in this second case, a warning is
+   issued. A warning is also issued when the 'assigns' clause is
+   statically detected to be incompatible with the function body.
  o fixed bug with casts in array sizes
  o fixed bug with `too large' integer literals (e.g. 0xFFFF0000)
 

@@ -13,7 +13,6 @@ Lemma swap_impl_po_1 :
   (valid alloc (shift t i)).
 Proof.
 intuition.
-subst; auto.
 Save.
 
 (* Why obligation from file "why/swap.why", characters 263-290 *)
@@ -32,10 +31,6 @@ Lemma swap_impl_po_2 :
   (valid alloc (shift t j)).
 Proof.
 intuition; subst; auto.
-assert (i=j \/ i<>j); [omega | intuition].
-subst i; caduceus.
-caduceus.
-caduceus.
 Save.
 
 (* Why obligation from file "why/swap.why", characters 237-291 *)
@@ -56,8 +51,7 @@ Lemma swap_impl_po_3 :
   forall (Post3: aux_3 = (acc intP (shift t j))),
   (valid alloc caduceus_2).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intuition;subst;auto.
 Save.
 
 (* Why obligation from file "why/swap.why", characters 237-291 *)
@@ -87,7 +81,9 @@ Lemma swap_impl_po_4 :
       (acc intP (shift t i)))) /\
     (valid alloc result))).
 Proof.
-intuition.
-(* FILL PROOF HERE *)
+intros.
+assert (i=j\/i<>j).
+omega.
+intuition; subst; auto; caduceus.
 Save.
 

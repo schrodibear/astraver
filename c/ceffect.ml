@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.50 2004-07-09 15:38:28 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.51 2004-09-30 13:46:37 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -479,6 +479,8 @@ let file l = List.iter decl l
 
 (* second pass: compute functions effects as a fixpoint *)
 
+let warnings = Queue.create ()
+
 let functions dl = 
   let fixpoint = ref true in
   let declare id ef =
@@ -501,7 +503,30 @@ let functions dl =
     | Tfunspec (sp, _, id, _) ->
 	declare id (spec sp)
     | Tfundef (sp, _, id, _, s) ->
-	declare id (ef_union (spec sp) (statement s))
+	let ef_spec = spec sp and ef_body = statement s in
+	begin
+	  match sp.Clogic.assigns with
+	    | None -> 
+		(* no assigns given by user:
+		   emit a warning if some side-effects have been detected *)
+		if not (HeapVarSet.is_empty ef_body.assigns) then
+		  Queue.add 
+		    (d.loc,
+		     "function " ^ id.var_name ^ " has side-effects but no 'assigns' clause given")
+		    warnings
+	    | Some _ -> 
+		(* some assigns given by user:
+		   emit a warning if side-effects of spec differs from side-effects of body *) 
+		if not (HeapVarSet.equal ef_spec.assigns ef_body.assigns) then 
+		  begin 
+		    Queue.add 
+		      (d.loc,
+		       "'assigns' clause for function " ^ id.var_name ^
+		       " do not match side-effects of its body ")
+		      warnings		    
+		  end
+	end;
+	declare id (ef_union ef_spec ef_body)
     | _ -> 
 	()
   in

@@ -27,7 +27,7 @@ Lemma abs1_impl_po_2 :
   forall (Post9: intP0 = (upd intP p aux_2)),
   (acc intP0 p) >= 0.
 Proof.
-destruct result; intuition.
+intuition.
 subst; caduceus.
 Save.
 
@@ -62,7 +62,7 @@ Lemma abs2_impl_po_1 :
   (acc intP0 p) >= 0.
 Proof.
 (* intuition. *)
-destruct result; intuition.
+intuition.
 subst intP0.
 caduceus.
 Save.
@@ -79,6 +79,5 @@ Lemma abs2_impl_po_2 :
   (acc intP p) >= 0.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

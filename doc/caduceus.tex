@@ -519,6 +519,10 @@ void withdraw(purse *p,int s) \{
   p->balance = p->balance - s;
 \}
 \end{code}
+Execution of \caduceus{} on this file produces indeed a warning, which
+will be explained in the next section. For the moment, it can be
+safely ignored.
+
 The four obligations are solved automatically by Simplify. With Coq,
 the first thing to do manually is to unfold the definition of
 \verb|purse_inv|, and indeed the first obligation for \verb|credit|,
@@ -582,8 +586,6 @@ int test1(purse *p1, purse *p2) \{
 \}
 \end{code}
 
-{\huge TODO: this is now rejected by \caduceus}
-
 This function requires three proof obligations, two of them being
 solved by Simplify. Unfortunately, this time the counter-example
 proposed by Simplify is not easy to interpret. Let's go to Coq proofs:
@@ -636,7 +638,8 @@ Coq. The problem now is that when proving post-condition of
 \verb|test1|, we do not see anymore the implementation of
 \verb|credit| but only its specification, and in this specification,
 nothing is said about modification of memory locations other than
-\verb|p->balance|. So, the right thing to do is to add an 
+\verb|p->balance|. Indeed, this is why \caduceus{} issues a warning
+on function \verb|credit|: the right thing to do is to add an 
 \emph{\texttt{assigns} clause}\indextt{assigns} into the specification
 of \verb|credit|. The program now looks like
 \begin{code}

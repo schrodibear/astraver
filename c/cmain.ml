@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.40 2004-08-26 13:00:44 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.41 2004-09-30 13:46:37 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -78,8 +78,13 @@ let main () =
   (* effects *)
   List.iter (fun (_,p) -> Ceffect.file p) tfiles;
   while not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles) do 
-    () 
+    Queue.clear Ceffect.warnings; 
   done;
+  Queue.iter 
+    (fun (loc,msg) ->
+       lprintf "%a %s@." Loc.report loc msg;
+       warning loc msg)
+    Ceffect.warnings;
   lprintf "heap variables: %a@." Ceffect.print_heap_vars ();
   (* Why interpretation *)
   let why_specs =

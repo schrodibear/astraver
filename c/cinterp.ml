@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.94 2004-09-23 08:40:27 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.95 2004-09-30 13:46:37 hubert Exp $ i*)
 
 
 open Format
@@ -364,10 +364,6 @@ let build_minimal_app e args =
 	else
 	  build_complex_app e args
 
-let check_for_assigns loc v =
-  if not v.has_assigns then
-    error loc "call to a function without `assigns'"
-
 let rec interp_expr e =
   match e.texpr_node with
     | TEconstant (IntConstant c) -> 
@@ -475,7 +471,6 @@ let rec interp_expr e =
 	begin
 	  match e.texpr_node with
 	    | TEvar v ->
-		check_for_assigns e.texpr_loc v;
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
@@ -665,7 +660,6 @@ and interp_statement_expr e =
 	begin
 	  match e1.texpr_node with
 	    | TEvar v ->
-		check_for_assigns e1.texpr_loc v;
 		let targs = match args with
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args

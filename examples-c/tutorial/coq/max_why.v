@@ -13,11 +13,5 @@ Lemma max_impl_po_1 :
   (forall (z:Z), (z >= x /\ z >= y -> z >= result)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
 Save.
 

@@ -52,34 +52,7 @@ Lemma average_impl_po_2 :
   forall (Post15: result1 = (acc intP aux_1)),
   (sum1 + result1) = (sum1 + (acc intP (shift t i2))).
 Proof.
-intuition.
-subst.
-assert (i2=0 \/ i2>0). omega. intuition.
-subst; ring (0+1).
-assert (min intP t 1 = shift t 0 # intP).
-generalize (min_is_min alloc intP t 1).
-assert (1>0). omega. unfold is_min in *|-*. intuition.
-elim H7; intros i Hi. assert (i=0). omega.
-subst; intuition.
-omega.
-replace ((i2 + 1) * min intP t (i2 + 1)) with ((i2 * min intP t (i2+1)) + min intP t (i2+1)).
-2:ring.
-assert (min intP t (i2 + 1) <= min intP t i2).
-generalize (min_is_min alloc intP t i2).
-assert (i2+1>0). omega.
-generalize (min_is_min alloc intP t (i2+1)).
-unfold is_min; intuition.
-elim H9; intros i Hi.
-intuition.
-rewrite H11.
-intuition.
-assert (i2 * min intP t (i2 + 1) <= i2 * min intP t i2).
-apply Zmult_le_compat_l; auto with *.
-assert (min intP t (i2 + 1) <= shift t i2 # intP).
-assert (i2+1>0). omega.
-generalize (min_is_min alloc intP t (i2+1)).
-unfold is_min; intuition.
-omega.
+intuition; subst; auto.
 Qed.
 
 (* Why obligation from file "why/average.why", characters 403-483 *)
@@ -107,6 +80,11 @@ Lemma average_impl_po_3 :
   (Zwf 0 (n - i3) (n - i2)).
 Proof.
 intuition.
+subst.
+
+
+
+
 assert (i2 = n). omega. subst.
 replace (min intP t n) with ((0 + min intP t n * n) / n).
 apply Zge_le.
@@ -206,6 +184,32 @@ Save.
 Proof.
 intuition.
 (* FILL PROOF HERE *)
+assert (i2=0 \/ i2>0). omega. intuition.
+subst; ring (0+1).
+assert (min intP t 1 = shift t 0 # intP).
+generalize (min_is_min alloc intP t 1).
+assert (1>0). omega. unfold is_min in *|-*. intuition.
+elim H7; intros i Hi. assert (i=0). omega.
+subst; intuition.
+omega.
+replace ((i2 + 1) * min intP t (i2 + 1)) with ((i2 * min intP t (i2+1)) + min intP t (i2+1)).
+2:ring.
+assert (min intP t (i2 + 1) <= min intP t i2).
+generalize (min_is_min alloc intP t i2).
+assert (i2+1>0). omega.
+generalize (min_is_min alloc intP t (i2+1)).
+unfold is_min; intuition.
+elim H9; intros i Hi.
+intuition.
+rewrite H11.
+intuition.
+assert (i2 * min intP t (i2 + 1) <= i2 * min intP t i2).
+apply Zmult_le_compat_l; auto with *.
+assert (min intP t (i2 + 1) <= shift t i2 # intP).
+assert (i2+1>0). omega.
+generalize (min_is_min alloc intP t (i2+1)).
+unfold is_min; intuition.
+omega.
 Save.
 
 Proof.
