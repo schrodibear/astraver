@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.13 2003-01-10 15:27:58 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.14 2003-01-16 16:05:38 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -177,6 +177,10 @@ and desc_term loc lab lenv = function
 	 | a, PTarray _ -> Tapp (x, [a]), PTint
 	 | Tvar t, _ -> raise_located a.pp_loc (UnboundArray t)
 	 | _ -> raise_located a.pp_loc (AnyMessage "array expected"))
+  | PPapp (id, [a; b; c]) when id == if_then_else ->
+      type_if lab lenv a b c
+  | PPif (a, b, c) ->
+      type_if lab lenv a b c
   | PPapp (x, tl) ->
       let tl = List.map (term lab lenv) tl in
       Tapp (x, List.map fst tl), type_tapp loc lenv x tl
@@ -195,8 +199,17 @@ and desc_term loc lab lenv = function
 	 | ta, PTint -> Tapp (t_neg_int, [ta]), PTint
 	 | ta, PTfloat -> Tapp (t_neg_float, [ta]), PTfloat
 	 | _ -> expected_num loc)
-  | PPprefix (PPnot, _) | PPif _ | PPforall _ | PPexists _ ->
+  | PPprefix (PPnot, _) | PPforall _ | PPexists _ ->
       term_expected loc
+
+and type_if lab lenv a b c =
+  match term lab lenv a, term lab lenv b, term lab lenv c with
+    | (ta, PTbool), (tb, tyb), (tc, tyc) -> 
+	if tyb <> tyc then 
+	  raise_located c.pp_loc 
+	    (ExpectedType (fun f -> print_pure_type f tyb));
+	Tapp (if_then_else, [ta; tb; tc]), tyb
+    | _ -> raise_located a.pp_loc ShouldBeBoolean
 
 and type_tvar loc lenv x = 
   let x = if is_at x then fst (un_at x) else x in

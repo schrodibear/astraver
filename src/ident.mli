@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.36 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.37 2003-01-16 16:05:38 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -123,14 +123,12 @@ val t_zwf_zero : t
 val result : t
 val default : t
 val array_length : t
+val if_then_else : t
 val access : t
 val store : t
 val annot_bool : t
 val well_founded : t
 val well_founded_induction : t
-
-val p_or : t
-val p_and : t
 
 (*s Category tests *)
 
