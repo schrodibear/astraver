@@ -2,4 +2,4 @@
 *.prf
 .pvscontext
 *.bin
-*.why.v
+*_why.v

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.2 2002-01-25 09:47:00 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.3 2002-01-25 13:18:18 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -9,7 +9,7 @@ open Ident
 open Format
 open Vcg
 
-let out_file f = f ^ ".why.v"
+let out_file f = f ^ "_why.v"
 
 let relation id =
   if id == t_lt then "<" 
