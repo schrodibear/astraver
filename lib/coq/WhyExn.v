@@ -16,7 +16,7 @@
 
 (* This file is a contribution by Christine Paulin *)
 
-(* $Id: WhyExn.v,v 1.6 2003-11-25 12:15:33 paulin Exp $ *)
+(* $Id: WhyExn.v,v 1.7 2004-03-30 15:19:42 urbain Exp $ *)
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -33,7 +33,8 @@ Inductive EM : Set :=
 Variable Q : U -> Prop.
 Variable P : T -> Prop.
 
-Definition qcomb (v:EM) : Prop := if v then P else Q.
+Definition qcomb (v:EM) : Prop := match v with Val v => P v | Exn u => Q u end.
+(* if v then P else Q *)
 
 Inductive QEM (A:Set) : Set :=
   | Qval : A -> QEM A
