@@ -10,55 +10,51 @@ Admitted.
    (forall (t:pointer), (forall (i:Z), (sum intP t i i) = 0))).
 Admitted.
 
-Admitted.
-
-(* Why obligation from file "sum2.why", characters 358-402 *)
+(* Why obligation from file "sum2.why", characters 334-378 *)
 Lemma test1_po_1 : 
   forall (t: pointer),
   forall (n: Z),
   forall (intP: ((memory) Z)),
   forall (Pre6: (valid_range t 0 n)),
   forall (i: Z),
-  forall (Post8: i = (any_int tt)),
+  forall (Post7: i = (any_int tt)),
   forall (s: Z),
-  forall (Post7: s = 0),
-  forall (s1: Z),
-  forall (Post1: s1 = s),
+  forall (Post6: s = 0),
   forall (i1: Z),
-  forall (Post2: i1 = 0),
+  forall (Post1: i1 = 0),
   forall (Variant1: Z),
   forall (i2: Z),
-  forall (s2: Z),
+  forall (s1: Z),
   forall (Pre5: Variant1 = (n - i2)),
-  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s2 = (sum intP t 0 i2)),
+  forall (Pre4: (0 <= i2 /\ i2 <= n) /\ s1 = (sum intP t 0 i2)),
   forall (Test2: true = true),
   forall (caduceus1: Z),
-  forall (Post3: caduceus1 = i2),
-  forall (result2: bool),
-  forall (Post21: (if result2 then caduceus1 < n else caduceus1 >= n)),
-  (if result2
+  forall (Post2: caduceus1 = i2),
+  forall (result1: bool),
+  forall (Post19: (if result1 then caduceus1 < n else caduceus1 >= n)),
+  (if result1
    then (if 1
          then (forall (result:pointer),
                (result = (shift t i2) ->
                 (forall (result0:Z),
                  (result0 = (acc intP result) ->
                   (forall (i:Z),
-                   (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (s2 + result0) =
+                   (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (s1 + result0) =
                     (sum intP t 0 i)) /\ (Zwf 0 (n - i) (n - i2)))))) /\
                 ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-                (length result)))
-         else s2 = (sum intP t 0 n))
+                (block_length result)))
+         else s1 = (sum intP t 0 n))
    else (if 0
          then (forall (result:pointer),
                (result = (shift t i2) ->
                 (forall (result0:Z),
                  (result0 = (acc intP result) ->
                   (forall (i:Z),
-                   (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (s2 + result0) =
+                   (i = (i2 + 1) -> ((0 <= i /\ i <= n) /\ (s1 + result0) =
                     (sum intP t 0 i)) /\ (Zwf 0 (n - i) (n - i2)))))) /\
                 ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-                (length result)))
-         else s2 = (sum intP t 0 n))).
+                (block_length result)))
+         else s1 = (sum intP t 0 n))).
 Proof.
 intuition.
 apply shift_not_null with (p:=t) (i:=i2).
@@ -80,21 +76,19 @@ assumption.
 omega.
 Qed.
 
-(* Why obligation from file "sum2.why", characters 444-506 *)
+(* Why obligation from file "sum2.why", characters 411-473 *)
 Lemma test1_po_2 : 
   forall (t: pointer),
   forall (n: Z),
   forall (intP: ((memory) Z)),
   forall (Pre6: (valid_range t 0 n)),
   forall (i: Z),
-  forall (Post8: i = (any_int tt)),
+  forall (Post7: i = (any_int tt)),
   forall (s: Z),
-  forall (Post7: s = 0),
-  forall (s1: Z),
-  forall (Post1: s1 = s),
+  forall (Post6: s = 0),
   forall (i1: Z),
-  forall (Post2: i1 = 0),
-  (0 <= i1 /\ i1 <= n) /\ s1 = (sum intP t 0 i1).
+  forall (Post1: i1 = 0),
+  (0 <= i1 /\ i1 <= n) /\ s = (sum intP t 0 i1).
 Proof.
 intuition; subst; auto with *.
 (* rewrite sum2... *)
@@ -116,7 +110,7 @@ omega.
 subst; auto.
 Save.
 
-(* Why obligation from file "sum2.why", characters 871-915 *)
+(* Why obligation from file "sum2.why", characters 826-870 *)
 Lemma test2_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -150,9 +144,9 @@ Lemma test2_po_1 :
                       (sum intP1 t 0 n) = ((sum intP t 0 n) + i)) /\
                       (Zwf 0 (n - i) (n - i2)))))) /\
                   ~(result = null) /\ 0 <= (offset result) /\
-                  (offset result) < (length result))) /\
+                  (offset result) < (block_length result))) /\
                 ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-                (length result)))
+                (block_length result)))
          else (sum intP0 t 0 n) = ((sum intP t 0 n) + n))
    else (if 0
          then (forall (result:pointer),
@@ -166,16 +160,16 @@ Lemma test2_po_1 :
                       (sum intP1 t 0 n) = ((sum intP t 0 n) + i)) /\
                       (Zwf 0 (n - i) (n - i2)))))) /\
                   ~(result = null) /\ 0 <= (offset result) /\
-                  (offset result) < (length result))) /\
+                  (offset result) < (block_length result))) /\
                 ~(result = null) /\ 0 <= (offset result) /\ (offset result) <
-                (length result)))
+                (block_length result)))
          else (sum intP0 t 0 n) = ((sum intP t 0 n) + n))).
 Proof.
 Admitted.
 
 
 
-(* Why obligation from file "sum2.why", characters 957-1058 *)
+(* Why obligation from file "sum2.why", characters 912-1013 *)
 Lemma test2_po_2 : 
   forall (t: pointer),
   forall (n: Z),

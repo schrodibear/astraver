@@ -16,7 +16,13 @@ Admitted.
    (forall (y:Z), (forall (z:Z), ((x + y) * z) = (x * z + y * z)))).
 Admitted.
 
-(* Why obligation from file "arith.why", characters 460-483 *)
+(*Why axiom*) Lemma id1 : (forall (x:Z), (x * 1) = x).
+Admitted.
+
+(*Why axiom*) Lemma id2 : (forall (x:Z), (1 * x) = x).
+Admitted.
+
+(* Why obligation from file "arith.why", characters 558-581 *)
 Lemma test_po_1 : 
   forall (k: Z),
   forall (j: Z),

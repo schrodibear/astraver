@@ -114,9 +114,9 @@ let rec term t =
 	then add_var v.var_name t.term_type empty
 	else empty
     | Tarrow(t,f) -> 
-	add_var f t.term_type (add_pointer_var t.term_type (term t))
-    | Tdot(t,f) -> 
 	add_var f t.term_type (term t)
+    | Tdot(t,f) -> 
+	assert false
     | Tarrget(t1,t2) ->
 	union
 	  (add_pointer_var t1.term_type (term t1))
@@ -219,10 +219,9 @@ let rec expr e = match e.texpr_node with
       then reads_add_var v.var_name e.texpr_type ef_empty
       else ef_empty
   | TEdot (e, f) ->
-      reads_add_var f e.texpr_type (expr e)
+      assert false
   | TEarrow (e, f) ->	
-      reads_add_var f e.texpr_type 
-	(reads_add_pointer_var e.texpr_type (expr e))
+      reads_add_var f e.texpr_type (expr e)
   | TEarrget (e1, e2) ->	
       ef_union
 	(reads_add_pointer_var e1.texpr_type (expr e1))
@@ -261,10 +260,9 @@ and assign_expr e = match e.texpr_node with
   | TEarrget (e1, e2) ->
       ef_union (assigns_add_pointer_var e1.texpr_type (expr e1)) (expr e2) 
   | TEarrow (e, f) ->
-      assigns_add_var f e.texpr_type 
-	(reads_add_pointer_var e.texpr_type (expr e))
-  | TEdot (e, f) ->
       assigns_add_var f e.texpr_type (expr e)
+  | TEdot (e, f) ->
+      assert false
   | TEcast (_, e) ->
       assign_expr e
   | _ -> 

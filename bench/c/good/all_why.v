@@ -16,8 +16,7 @@ Lemma e1_po_1 :
   forall (Post1: x0 = (caduceus + 1)),
   (caduceus4 + caduceus) = 4.
 Proof.
-(* FILL PROOF HERE *)
-Save.
+intuition.Save.
 
 (* Why obligation from file "all.why", characters 439-441 *)
 Lemma e2_po_1 : 
