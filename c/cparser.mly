@@ -239,7 +239,7 @@
     let l = loc() in
     if is_typedef specs then
       let interp = function
-	| (n,d), Inothing -> 
+	| (n,d), None -> 
 	    Ctypes.add n; Ctypedef (interp_type true specs d, n)
 	| (n,_), _ -> 
 	    error ("typedef " ^ n ^ " is initialized")
@@ -276,7 +276,7 @@
     (* we first check that no parameter is initialized or occurs twice *)
     List.iter
       (fun d -> match d.node with
-	 | Cdecl (ty, x, Inothing) -> 
+	 | Cdecl (ty, x, None) -> 
 	     if not (List.mem x pids) then 
 	       error ("declaration for " ^ x ^ " but no such parameter");
 	     if Hashtbl.mem h x then error ("duplicate declaration for " ^ x);
@@ -568,9 +568,9 @@ init_declarator_list
 
 init_declarator
         : declarator 
-            { $1, Inothing }
+            { $1, None }
         | declarator EQUAL c_initializer 
-	    { $1, $3 }
+	    { $1, Some $3 }
         ;
 
 storage_class_specifier

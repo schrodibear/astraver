@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.3 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.4 2004-12-06 14:16:02 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -360,11 +360,13 @@ let logic_symbol l =
 	ctype c,
 	List.map nlocation l2)
 
-let rec c_initializer c= 
-  match c with
-  | Inothing -> Inothing
+let rec c_initializer c = match c with
   | Iexpr e ->  Iexpr (expr e)
   | Ilist l -> Ilist (List.map (fun x -> (c_initializer x))l)
+
+let c_initializer_option = function
+  | None -> None
+  | Some i -> Some (c_initializer i)
 
 let variant v = let (x,y) = v in ((term x), y)
 
@@ -498,7 +500,7 @@ and decl e1=
   | Tinvariant(s, p) -> Ninvariant (s, predicate p)
   | Ttypedef (t, s) -> Ntypedef((ctype t),s)
   | Ttypedecl t -> Ntypedecl (ctype t)
-  | Tdecl (t, v, c) -> Ndecl ((ctype t),v,c_initializer c)
+  | Tdecl (t, v, c) -> Ndecl ((ctype t),v,c_initializer_option c)
   | Tfunspec (s, t, f, l) -> Nfunspec (spec s,ctype t,f,
 				   (List.map (fun (x,y) -> (ctype x,y)) l))
   | Tfundef (s, t, f, l, st) -> Nfundef (spec s,ctype t,f,

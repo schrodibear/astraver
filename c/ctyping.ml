@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.80 2004-12-02 15:08:47 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.81 2004-12-06 14:16:02 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -653,8 +653,6 @@ and type_boolean env e =
 (*s Typing of initializers *)
 
 let rec type_initializer loc env ty = function
-  | Inothing -> 
-      Inothing
   | Iexpr e -> 
       let e = type_expr env e in
       Iexpr (coerce ty e)
@@ -686,6 +684,10 @@ and type_struct_initializer loc env fl el = match fl, el with
       e :: type_struct_initializer loc env fl el
   | [], _ ->
       error loc "excess elements in struct initializer"
+
+and type_initializer_option loc env ty = function
+  | None -> None
+  | Some i -> Some (type_initializer loc env ty i)
 
 (*s Statements *)
 
@@ -803,7 +805,7 @@ and type_block env et (dl,sl) =
 	let ty = type_type d.loc env ty in	
 	if eq_type_node ty.ctype_node Tvoid then 
 	  error d.loc ("variable `" ^ x ^ "' declared void");
-	let i = type_initializer d.loc env ty i in
+	let i = type_initializer_option d.loc env ty i in
 	let info = default_var_info x in
 	if ty.ctype_storage = Static then set_static info;
 	let env' = Env.add x ty (Var_info info) env in
@@ -915,7 +917,7 @@ let function_spec loc f = function
 	 Hashtbl.add function_specs f s; s)
 
 let array_size_from_initializer loc ty i = match ty.ctype_node, i with
-  | Tarray (ety, None), Ilist l -> 
+  | Tarray (ety, None), Some (Ilist l) -> 
       let s = of_int (List.length l) in
       { ty with ctype_node = Tarray (ety, Some s) }
   | _ -> 
@@ -957,7 +959,7 @@ let type_decl d = match d.node with
 	    fprintf Coptions.log "Variable %s is assigned@." info.var_name;
 	    set_assigned info; (* ????? *)
 	    let ty = array_size_from_initializer d.loc ty i in
-	    Tdecl (ty, info, type_initializer d.loc (Env.empty ()) ty i)
+	    Tdecl (ty, info, type_initializer_option d.loc (Env.empty ()) ty i)
       end
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc (Env.empty ()) ty in

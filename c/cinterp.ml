@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.118 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.119 2004-12-06 14:16:02 filliatr Exp $ i*)
 
 
 open Format
@@ -887,7 +887,7 @@ let interp_decl d acc =
 	  Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
 	else
 	  let tinit = match init with 
-	    | Inothing ->
+	    | None ->
 		begin match ctype.Ctypes.ctype_node with
 		  | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
 		  | Tfloat _ -> App(Var("any_real"),Var("void"))
@@ -900,8 +900,9 @@ let interp_decl d acc =
                       alloc_on_stack d.loc v t
 		  | Tvoid | Tvar _ | Tfun _ -> assert false
 		end
-	    | Iexpr e -> interp_expr e		
-	    | Ilist _ -> unsupported d.loc "structured initializer for local var"
+	    | Some (Iexpr e) -> interp_expr e		
+	    | Some (Ilist _) -> 
+		unsupported d.loc "structured initializer for local var"
 	  in
 	  if v.var_is_assigned then
 	    Let_ref(v.var_unique_name,tinit,acc)
@@ -1325,7 +1326,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
   | Ndecl(ctype,v,init) -> 
       lprintf "translating global declaration of %s@." v.var_unique_name;
       begin match init with 
-	| Inothing ->
+	| None ->
 	    ()
 	| _ -> 
 	    warning decl.loc ("ignoring initializer for " ^ v.var_unique_name);

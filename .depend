@@ -221,6 +221,7 @@ c/clparser.cmi: c/cast.cmi c/clogic.cmi
 c/cltyping.cmi: c/cast.cmi c/cenv.cmi c/clogic.cmi src/env.cmi 
 c/cnorm.cmi: c/cast.cmi c/info.cmi src/loc.cmi 
 c/cparser.cmi: c/cast.cmi c/clogic.cmi 
+c/cprint.cmi: c/cast.cmi c/clogic.cmi 
 c/creport.cmi: c/cerror.cmi c/ctypes.cmi src/loc.cmi 
 c/ctyping.cmi: c/cast.cmi 
 c/info.cmi: c/ctypes.cmi 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.52 2004-12-02 15:00:24 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.53 2004-12-06 14:16:02 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -104,7 +104,6 @@ and cexpr_node =
   | CEsizeof of cexpr ctype
 
 type 'expr c_initializer = 
-  | Inothing
   | Iexpr of 'expr
   | Ilist of 'expr c_initializer list
 
@@ -165,7 +164,7 @@ and decl =
   | Cspecdecl of offset * parsed_decl
   | Ctypedef of cexpr ctype * string
   | Ctypedecl of cexpr ctype
-  | Cdecl of cexpr ctype * string * cexpr c_initializer
+  | Cdecl of cexpr ctype * string * cexpr c_initializer option
   | Cfunspec of 
       (offset * parsed_spec) * cexpr ctype * string * cexpr parameter list
   | Cfundef of 
@@ -254,7 +253,7 @@ and tdecl =
   | Tinvariant of string * predicate
   | Ttypedef of tctype * string
   | Ttypedecl of tctype
-  | Tdecl of tctype * Info.var_info * texpr c_initializer
+  | Tdecl of tctype * Info.var_info * texpr c_initializer option
   | Tfunspec of spec * tctype * Info.fun_info * 
       (tctype * Info.var_info) list
   | Tfundef of spec * tctype * Info.fun_info * 
@@ -341,7 +340,7 @@ and ndecl =
   | Ninvariant of string * npredicate
   | Ntypedef of nctype * string
   | Ntypedecl of nctype
-  | Ndecl of nctype * Info.var_info * nexpr c_initializer
+  | Ndecl of nctype * Info.var_info * nexpr c_initializer option
   | Nfunspec of nspec * nctype * Info.fun_info * 
       (nctype * Info.var_info) list
   | Nfundef of nspec * nctype * Info.fun_info * 

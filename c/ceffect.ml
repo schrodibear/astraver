@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.63 2004-12-02 15:00:24 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.64 2004-12-06 14:16:02 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -426,7 +426,7 @@ let rec statement s = match s.nst_node with
 
 and block (dl, sl) =
   let local_decl d = match d.node with
-    | Ndecl (_, _, i) -> initializer_ i
+    | Ndecl (_, _, i) -> initializer_option i
     | Ntypedecl _ -> ef_empty
     | _ -> ef_empty (* unsupported local declaration *)
   in
@@ -436,12 +436,14 @@ and block (dl, sl) =
     sl
 
 and initializer_ = function
-  | Inothing -> 
-      ef_empty
   | Iexpr e -> 
       expr e
   | Ilist il -> 
       List.fold_left (fun ef i -> ef_union (initializer_ i) ef) ef_empty il
+
+and initializer_option = function
+  | None -> ef_empty
+  | Some i -> initializer_ i
 
 let print_effects fmt l =
   fprintf fmt "@[%a@]"
