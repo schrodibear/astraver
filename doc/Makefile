@@ -14,11 +14,12 @@ dep.ps:
 code.tex: $(SRCFILES)
 	ocamlweb --no-preamble -o $@ $(SRCFILES)
 
-manual.dvi: manual.tex
+manual.ps: manual.tex
 	latex manual
 	latex manual
 	makeindex manual
 	latex manual
+	dvips manual.dvi -o manual.ps
 
 manual.html: manual.tex
 	hevea manual.tex
