@@ -875,11 +875,13 @@ function_definition
         : function_prototype compound_statement
             { Ctypes.pop (); (* pushed by function_prototype *)
 	      let ty,id,pl = $1 in
-	      locate (Cfundef (None, ty, id, pl, $2)) }
+	      let bl = locate_i 2 (CSblock $2) in
+	      locate (Cfundef (None, ty, id, pl, bl)) }
         | SPEC function_prototype compound_statement
             { Ctypes.pop (); (* pushed by function_prototype *)
 	      let ty,id,pl = $2 in
-	      locate (Cfundef (Some $1, ty, id, pl, $3)) }
+	      let bl = locate_i 3 (CSblock $3) in
+	      locate (Cfundef (Some $1, ty, id, pl, bl)) }
         ;
 	      
 function_prototype

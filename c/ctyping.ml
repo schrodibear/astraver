@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.44 2004-03-08 19:26:48 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.45 2004-03-17 09:54:37 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -526,26 +526,20 @@ and type_struct_initializer loc env fl el = match fl, el with
 (*s Statements *)
 
 type status = { 
-  always_return : bool; 
-  abrupt_return : bool;
   break : bool; 
-  continue : bool }
+  continue : bool; 
+  return : bool;
+  term : bool
+}
 
 let mt_status = 
-  { always_return = false; abrupt_return = false; 
-    break = false; continue = false }
+  { return = false; break = false; continue = false; term = true }
 
 let or_status s1 s2 =
-  { always_return = s1.always_return && s2.always_return;
-    abrupt_return = s1.abrupt_return || s2.abrupt_return;
+  { return = s1.return || s2.return;
     break = s1.break || s2.break;
-    continue = s1.continue || s2.continue }
-
-let seq_status s1 s2 =
-  { always_return = s1.always_return || s2.always_return;
-    abrupt_return = s1.abrupt_return || s2.abrupt_return;
-    break = s1.break || s2.break;
-    continue = s1.continue || s2.continue }
+    continue = s1.continue || s2.continue;
+    term = s1.term || s2.term }
 
 let rec unreachable = function
   | [] -> ()
@@ -557,7 +551,12 @@ let rec unreachable = function
 
 let rec type_statement env et s =
   let sn,st = type_statement_node s.loc env et s.node in
-  { st_node = sn; st_abrupt_return = st.abrupt_return; st_loc = s.loc }, st
+  { st_node = sn; 
+    st_return = st.return; 
+    st_break = st.break;
+    st_continue = st.continue;
+    st_term = st.term;
+    st_loc = s.loc }, st
 
 and type_statement_node loc env et = function
   | CSnop -> 
@@ -571,9 +570,9 @@ and type_statement_node loc env et = function
       let s2,st2 = type_statement env et s2 in
       TSif (e, s1, s2), or_status st1 st2
   | CSbreak ->
-      TSbreak, { mt_status with break = true }
+      TSbreak, { mt_status with term = false; break = true }
   | CScontinue -> 
-     TScontinue, { mt_status with continue = true }
+     TScontinue, { mt_status with term = false; continue = true }
   | CSlabel (lab, s) ->
       (* TODO: %default% label not within a switch statement *)
       let s, st = type_statement env et s in
@@ -590,27 +589,24 @@ and type_statement_node loc env et = function
       let e2 = type_boolean env e2 in
       let e3 = type_expr env e3 in
       let s,st = type_statement env et s in
-      let li = { loop_break = st.break; loop_continue = st.continue } in
-      TSfor (an, e1, e2, e3, s, li),
-      { mt_status with abrupt_return = st.abrupt_return }
+      TSfor (an, e1, e2, e3, s),
+      { mt_status with return = st.return }
   | CSdowhile (an, s, e) ->
       let an = type_loop_annot env an in
       let s, st = type_statement env et s in
       let e = type_boolean env e in
-      let li = { loop_break = st.break; loop_continue = st.continue } in
-      TSdowhile (an, s, e, li), 
-      { mt_status with abrupt_return = st.abrupt_return }
+      TSdowhile (an, s, e), 
+      { mt_status with return = st.return }
   | CSwhile (an, e, s) ->
       let an = type_loop_annot env an in
       let e = type_boolean env e in
       let s, st = type_statement env et s in
-      let li = { loop_break = st.break; loop_continue = st.continue } in
-      TSwhile (an, e, s, li), 
-      { mt_status with abrupt_return = st.abrupt_return }
+      TSwhile (an, e, s), 
+      { mt_status with return = st.return }
   | CSreturn None ->
       if et <> None then warning loc 
 	      "`return' with no value, in function returning non-void";
-      TSreturn None,{ mt_status with always_return = true } 
+      TSreturn None,{ mt_status with term = false; return = true } 
   | CSreturn (Some e) ->
       let e' = type_expr env e in
       let e' = match et with
@@ -620,7 +616,7 @@ and type_statement_node loc env et = function
 	| Some ty ->
 	    Some (coerce ty e')
       in
-      TSreturn e', { mt_status with always_return = true }
+      TSreturn e', { mt_status with term = false; return = true }
   | CSswitch (e, s) ->
       let e = type_int_expr env e in
       let s,st = type_statement env et s in
@@ -670,9 +666,10 @@ and type_block env et (dl,sl) =
 	[s'], st
     | s :: bl ->
 	let s', st1 = type_statement env' et s in
-	if st1.always_return then unreachable bl;
+	if not st1.term then unreachable bl;
 	let bl', st2 = type_bl bl in
-	s' :: bl', seq_status st1 st2
+	let st = or_status st1 st2 in
+	s' :: bl', { st with term = st2.term }
   in
   let sl', st = type_bl sl in
   (dl', sl'), st
@@ -748,15 +745,14 @@ let type_decl d = match d.node with
       let s = option_app (type_spec ~result:ty env) s in
       let info = default_var_info f in
       add_sym d.loc f (noattr (CTfun (pl, ty))) info;
-      let bl,st = type_block env et bl in
-      if not st.always_return && et <> None then
+      let bl,st = type_statement env et bl in
+      if st.term && et <> None then
 	warning d.loc "control reaches end of non-void function";
       if st.break then 
 	error d.loc "break statement not within a loop or switch";
       if st.continue then 
 	error d.loc "continue statement not within a loop";
-      let fi = { fun_abrupt_return = st.abrupt_return } in
-      Tfundef (s, ty, f, pl, bl, fi)
+      Tfundef (s, ty, f, pl, bl)
 
 let type_file = List.map (fun d -> { d with node = type_decl d })
 

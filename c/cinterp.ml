@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.30 2004-03-08 20:28:44 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.31 2004-03-17 09:54:37 filliatr Exp $ i*)
 
 
 open Format
@@ -443,7 +443,7 @@ let rec interp_statement stat =
 	    | None -> Void
 	    | Some e -> interp_expr e
 	end
-    | TSfor(annot,e1,e2,e3,body,info) ->
+    | TSfor(annot,e1,e2,e3,body) ->
 	let (inv,dec) = interp_invariant annot in
 	append
 	  (interp_statement_expr e1)
@@ -454,10 +454,10 @@ let rec interp_statement stat =
   | TSnop -> Void
   | TSif(e,s1,s2) -> 
       If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
-  | TSwhile(annot,e,s,info) -> 
+  | TSwhile(annot,e,s) -> 
       let (inv,dec) = interp_invariant annot in
       make_while (interp_expr e) inv dec (interp_statement s)
-  | TSdowhile(s,e,info,annot)
+  | TSdowhile(annot,s,e)
       -> assert false (* TODO *)
   | TSblock(b) -> 
       interp_block b 
@@ -562,7 +562,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
 	  params annot_type
       in
       ((Param(false,id.var_name,local_type))::why_decls, prover_decl)
-  | Tfundef(spec,ctype,id,params,block,info) ->      
+  | Tfundef(spec,ctype,id,params,block) ->      
       fprintf Coptions.log "translating function %s@." id;
       let tparams = 
 	if params=[]
@@ -570,7 +570,7 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
 	else List.map interp_param params 
       in
       let pre,post = interp_spec_option spec in
-      let tblock = interp_block block in
+      let tblock = interp_statement block in
       ((Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls,
        prover_decl)
 

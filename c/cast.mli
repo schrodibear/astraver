@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.36 2004-03-03 15:25:02 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.37 2004-03-17 09:54:37 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -171,7 +171,7 @@ and decl =
       (offset * parsed_spec) * cexpr ctype * string * cexpr parameter list
   | Cfundef of 
       (offset * parsed_spec) option * 
-      cexpr ctype * string * cexpr parameter list * block
+      cexpr ctype * string * cexpr parameter list * cstatement
 
 type file = decl located list
 
@@ -219,13 +219,12 @@ type variant = tterm * string option
 
 type loop_annot = (tterm, predicate) Clogic.loop_annot
 
-type loop_info = { loop_break : bool; loop_continue : bool }
-
-type fun_info = { fun_abrupt_return : bool }
-
 type tstatement = {
   st_node : tstatement_node;
-  st_abrupt_return : bool;
+  st_break : bool;    (* may breaks *)
+  st_continue : bool; (* may continue *)
+  st_return : bool;   (* may return *)
+  st_term : bool;     (* may terminate normally *)
   st_loc : Loc.t
 }
 
@@ -233,9 +232,9 @@ and tstatement_node =
   | TSnop
   | TSexpr of texpr
   | TSif of texpr * tstatement * tstatement
-  | TSwhile of loop_annot * texpr * tstatement * loop_info 
-  | TSdowhile of loop_annot * tstatement * texpr * loop_info
-  | TSfor of loop_annot * texpr * texpr * texpr * tstatement * loop_info
+  | TSwhile of loop_annot * texpr * tstatement
+  | TSdowhile of loop_annot * tstatement * texpr
+  | TSfor of loop_annot * texpr * texpr * texpr * tstatement
   | TSblock of tblock
   | TSreturn of texpr option
   | TSbreak
@@ -258,6 +257,6 @@ and tdecl =
   | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
   | Tfunspec of spec * texpr ctype * Info.var_info * texpr parameter list
   | Tfundef of spec option *
-      texpr ctype * string * texpr parameter list * tblock * fun_info
+      texpr ctype * string * texpr parameter list * tstatement
 
 type tfile = tdecl located list

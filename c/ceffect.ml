@@ -131,7 +131,7 @@ let decl d =
     | Ttypedecl(ctype) -> assert false (* TODO *)
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
-    | Tfundef(spec,ctype,id,params,block,info) -> () (* TODO *)
+    | Tfundef(spec,ctype,id,params,block) -> () (* TODO *)
 
 
 
