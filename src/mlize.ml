@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.25 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.26 2002-03-15 12:38:06 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -49,7 +49,11 @@ and trad_desc info d ren = match d with
   | Seq bl ->
       trad_block info bl ren
 
-  | If (b, e1, e2) ->
+  | If (e1, e2, e3) ->
+      trad_conditional info 
+	e1.info (trad e1) e2.info (trad e2) e3.info (trad e3) 
+	ren
+(***
       Monad.compose b.info (trad b)
 	(fun resb ren' -> 
 	   let branch e tb = 
@@ -67,6 +71,7 @@ and trad_desc info d ren = match d with
 	   in
 	   CC_if (CC_var resb, branch e1 ttrue, branch e2 tfalse))
 	ren
+***)
 
   | LetIn (x, e1, e2) ->
       Monad.compose e1.info (trad e1)
@@ -113,6 +118,9 @@ and trad_desc info d ren = match d with
 	     (fun v -> Monad.unit info (Tvar v)))
 	ren
 
+  | App (_, Type _, _) ->
+      failwith "Mlize.trad: App Type"
+
   | Lam (bl, e) ->
       let bl',env' = trad_binders ren info.env bl in
       let ren' = initial_renaming env' in
@@ -141,7 +149,11 @@ and trad_desc info d ren = match d with
 			   Monad.unit info (Tconst ConstUnit) ren'')))
 	 ren
 
-  | _ -> failwith "Mlize.trad: TODO"
+  | While (b, inv, var, bl) ->
+      failwith "Mlize.trad: While"
+
+  | Rec _ -> 
+      failwith "Mlize.trad: Rec"
 
 (*i***
   | While (b, inv, var, bl) ->
@@ -198,6 +210,25 @@ and trad_block info =
   in
   block None
 
+(* to be used for both [if] and [while] *)
+and trad_conditional info info1 te1 info2 te2 info3 te3 =
+  Monad.compose info1 te1
+    (fun resb ren' -> 
+       let branch infob eb tb = 
+	 let t = 
+	   Monad.compose infob eb
+	     (fun r -> Monad.unit info (Tvar r)) ren'
+	 in
+	 match info1.kappa.c_post with
+	   | Some q1 -> 
+	       let n = test_name Anonymous in
+	       let q = apply_post info1.label ren' info.env q1 in
+	       let q = tsubst_in_predicate [result, tb] q.a_value in
+	       CC_lam ([n, CC_pred_binder q], t)
+	   | None -> t
+       in
+       CC_if (CC_var resb, branch info2 te2 ttrue, branch info3 te3 tfalse))
+
 and trans e =
-  cross_label e.info.label (abstraction e.info.env e.info.kappa (trad e))
+  cross_label e.info.label (abstraction e.info (trad e))
 

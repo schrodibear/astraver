@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.15 2002-03-15 10:00:13 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.16 2002-03-15 12:38:06 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -241,7 +241,9 @@ let abs_pre env pl t =
 	 (fun ren -> CC_lam ([bind_pre ren env p], t ren)))
     t pl
 
-let abstraction env k e ren =
+let abstraction info e ren =
+  let env = info.env in
+  let k = info.kappa in
   let _,ef,p,_ = decomp_kappa k in
   let ids = get_reads ef in
   let al = current_vars ren ids in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.9 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.10 2002-03-15 12:38:06 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -43,7 +43,7 @@ val insert_pre : local_env -> precondition -> interp -> interp
 
 val insert_many_pre : local_env -> precondition list -> interp -> interp
 
-val abstraction : local_env -> type_c -> interp -> interp
+val abstraction : typing_info -> interp -> interp
 
 val fresh : Ident.t -> (Ident.t -> interp) -> interp
 
