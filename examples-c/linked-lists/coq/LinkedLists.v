@@ -69,8 +69,8 @@ Hint Resolve llist_pset_same .
 (** [llist] is a function *)
 
 Lemma llist_function :
- forall (a: alloc) (t: memory pointer) (l1 l2:plist) (p:pointer),
-   llist a t p l1 -> llist a t p l2 -> l1 = l2.
+ forall (a a': alloc) (t: memory pointer) (l1 l2:plist) (p:pointer),
+   llist a t p l1 -> llist a' t p l2 -> l1 = l2.
 Proof.
 simple induction l1; intuition.
 inversion H; subst.
@@ -138,7 +138,7 @@ elim H1; clear H1; intros.
 subst l.
 elim (llist_append a t x (cons p x0) (acc t p) H); intuition.
 inversion H3; subst.
-generalize (llist_function a t x0 (app x (cons p x0)) (acc t p) H8 H).
+generalize (llist_function a a t x0 (app x (cons p x0)) (acc t p) H8 H).
 intro; apply (list_length_absurd _ x0 (app x (cons p x0))); auto.
 rewrite length_app; simpl; omega.
 Qed.
@@ -177,30 +177,33 @@ Qed.
 (** * WF relation over linked lists *)
 
 Definition StorePointerPair := ((memory pointer) * pointer)%type.
-Definition store_pointer_pair (t: memory pointer) (p:pointer) := (t, p).
+Definition store_pointer_pair (a: alloc) (t: memory pointer) (p:pointer) := (t, p).
 
-Definition ll_order (a: alloc) (c1 c2: memory pointer * pointer) : Prop :=
+Definition ll_order (c1 c2: memory pointer * pointer) : Prop :=
   let (t1, p1) := c1 in
   let (t2, p2) := c2 in
+    exists a : alloc,
     exists l1 : plist,
     exists l2 : plist,
     llist a t1 p1 l1 /\ llist a t2 p2 l2 /\ (length l1 < length l2)%nat.
 
-Lemma ll_order_wf : forall (a:alloc), well_founded (ll_order a).
+Lemma ll_order_wf : well_founded ll_order.
 Proof.
-intro a.
 apply well_founded_inv_lt_rel_compat with
  (F := fun (x:StorePointerPair) n =>
-         let (t, p) := x in exists l : plist, llist a t p l /\ length l = n).
+         let (t, p) := x in 
+         exists a : alloc,
+         exists l : plist, llist a t p l /\ length l = n).
 unfold ll_order, inv_lt_rel.
 simple destruct x; simple destruct y; intuition.
-elim H; clear H; intros l1 H; elim H; clear H; intros l2 H.
+elim H; clear H; intros a H; elim H; clear H; 
+intros l1 H; elim H; clear H; intros l2 H.
 intuition.
 exists (length l1).
-exists l1; intuition.
+exists a; exists l1; intuition.
 intuition.
-elim H1; intros l2'; intuition.
-generalize (llist_function a _ _ _ _ H H4); intro; subst l2.
+elim H1; clear H1; intros a0 H1; elim H1; intros l2'; intuition.
+generalize (llist_function a a0 _ _ _ _ H H4); intro; subst l2.
 omega.
 Qed.
 Hint Resolve ll_order_wf .

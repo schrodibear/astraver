@@ -1,4 +1,7 @@
 
+rev:
+	caduceus reverse.c
+	make -f reverse.makefile depend coq
 
 all: reverse hash_cycle
 

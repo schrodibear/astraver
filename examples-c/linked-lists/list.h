@@ -15,3 +15,5 @@ typedef struct struct_list {
 /*@ predicate eq_list(plist l1, plist l2) */
 /*@ predicate disjoint(plist l1, plist l2) */
 
+/*@ logic StorePointerPair store_pointer_pair(list l) reads l->tl */
+
