@@ -53,7 +53,7 @@ type validation = proof cc_term
 let logs = ref ([] : Log.t)
 
 let log l p is_discharged =
-  if viewer then
+  if wol then
     let s = 
       let buf = Buffer.create 1024 in
       let fmt = formatter_of_buffer buf in

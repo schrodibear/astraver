@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.47 2002-12-11 10:33:13 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.48 2002-12-11 15:44:10 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -51,17 +51,16 @@ let push_parameter id v = match prover with
   | Harvey -> () (* nothing to do? *)
 
 let output fwe = 
-  if ocaml then 
+  if wol then begin
+    let cout = open_out (fwe ^ ".wol") in
+    output_value cout !Vcg.logs;
+    close_out cout
+  end else if ocaml then 
     Options.output Ocaml.output 
   else begin match prover with
     | Pvs -> Pvs.output_file fwe
     | Coq -> Coq.output_file fwe
     | Harvey -> Harvey.output_file fwe
-  end;
-  if viewer then begin
-    let cout = open_out (fwe ^ ".wol") in
-    output_value cout !Vcg.logs;
-    close_out cout
   end
 
 (*s Processing of a single declaration [let id = p]. *)
