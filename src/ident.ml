@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.19 2002-05-07 15:53:23 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.20 2002-06-07 14:28:32 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -39,6 +39,11 @@ let rec next_away id s =
   if Idset.mem id s then next_away (create (next id.name)) s else id
 
 let print fmt s = Format.fprintf fmt "%s" s.name
+
+let lprint fmt s = match s.label with
+  | None -> Format.fprintf fmt "%s" s.name
+  | Some l -> Format.fprintf fmt "%s@@%s" s.name l
+
 let dbprint fmt s = Format.fprintf fmt "%s#%d" s.name s.stamp
 
 (*s Possibly anonymous names *)
@@ -115,7 +120,7 @@ let is_comparison id =
 
 let is_relation id = 
   id == t_lt || id == t_le || id == t_gt || id == t_ge ||
-  id == t_eq || id == t_neq
+  id == t_eq || id == t_neq || id == t_eq_int || id == t_neq_int
 
 let is_arith id =
   id == t_add || id == t_sub || id == t_mul || id == t_div || id == t_neg

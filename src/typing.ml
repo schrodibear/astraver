@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.47 2002-06-07 09:34:46 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.48 2002-06-07 14:28:32 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -475,6 +475,7 @@ and typef_desc lab env loc = function
       let t_a = typef lab env a in
       expected_type a.info.loc (result_type t_a) tx;
       (match tx with 
+      (* the function expects a mutable; it must be a variable *)
       | Ref _ | Array _ -> (match t_a with
 	  | { desc = Var r } ->
 	      check_for_alias a.info.loc r (result_type t_f);
@@ -484,6 +485,7 @@ and typef_desc lab env loc = function
 	      App (t_f, Refarg r, Some kapp), (tapp, ef), []
 	  | _ ->
 	      Error.should_be_a_variable a.info.loc)
+      (* argument is not mutable *)
       | _ ->
 	  let _,eapp,_,_ = decomp_kappa kapp in
 	  let ef = union3effects (effect t_a) (effect t_f) eapp in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.31 2002-06-07 08:51:16 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.32 2002-06-07 14:28:32 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -153,11 +153,16 @@ let unit info t ren =
 	  in
 	  let ht = 
 	    let _,o = get_repr ef in
+	    let ren' = Rename.next ren (result :: o) in
+	    let result' = current_var ren' result in
 	    let bl = 
-	      List.map (fun id -> (id, trad_type_in_env ren env id)) o @
-	      [result, trad_type_v ren env k.c_result_type]
+	      List.map (fun id -> (current_var ren' id, 
+				   trad_type_in_env ren env id)) o @
+	      [result', trad_type_v ren env k.c_result_type]
 	    in
-	    lambda_vars bl (TTpred c.a_value)
+	    let c = apply_post info.label ren' env c in
+	    let c = subst_in_predicate (subst_onev result result') c.a_value in
+	    lambda_vars bl (TTpred c)
 	  in
 	  [ CC_hole h ], Some ht
     in

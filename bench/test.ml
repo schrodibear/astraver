@@ -1,9 +1,7 @@
 
-parameter x : int ref
+let p = if true then 1 else 2
 
-let p = !x + y
-
-(****
+(***
 
 (* Test program *)
 
@@ -139,5 +137,5 @@ let rec has (this:value) (c:value) : bool { variant phi(this) } =
 	!res
 	end    
 ***)
-   
-****)
+
+***)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.34 2002-06-07 08:51:16 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.35 2002-06-07 14:28:32 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -23,6 +23,15 @@ let relation id =
   else if id == t_neq then "<>"
   else assert false
 
+let relation_bool id =
+  if id == t_lt then "Z_lt_ge_bool" 
+  else if id == t_le then "Z_le_gt_bool"
+  else if id == t_gt then "Z_gt_le_bool"
+  else if id == t_ge then "Z_ge_lt_bool"
+  else if id == t_eq_int then "Z_eq_bool"
+  else if id == t_neq_int then "Z_noteq_bool"
+  else assert false
+
 let inz = ref 0
 let openz fmt = if !inz == 0 then fprintf fmt "`@["; incr inz 
 let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
@@ -30,8 +39,10 @@ let closez fmt = decr inz; if !inz == 0 then fprintf fmt "@]`"
 let print_term fmt t = 
   let rec print0 fmt = function
     | Tapp (id, [a;b]) when is_relation id ->
-	fprintf fmt "(@[<hov 2>Z%s_bool@ %a@ %a@])" (Ident.string id)
+	fprintf fmt "(@[<hov 2>%s@ %a@ %a@])" (relation_bool id)
 	print1 a print1 b
+    | Tapp (id, [a;b]) when id == t_eq_int ->
+	fprintf fmt "(@[Z_eq_bool %a@ %a@])" print_term a print_term b
     | t -> 
 	print1 fmt t
   and print1 fmt = function
@@ -201,13 +212,6 @@ let print_binder_id fmt (id,_) = Ident.print fmt id
 let rec print_cc_term fmt = function
   | CC_var id -> 
       Ident.print fmt id
-  | CC_letin (_,[id,_],c,c1) ->
-      fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
-      Ident.print id print_cc_term c print_cc_term c1
-  | CC_letin (_,bl,c,c1) ->
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
-      (print_list comma print_binder_id) bl
-      print_cc_term c print_cc_term c1
   | CC_lam (b,c) ->
       fprintf fmt "@[<hov 2>[%a]@,%a@]" print_binder b print_cc_term c
   | CC_app (f,a) ->
@@ -220,12 +224,31 @@ let rec print_cc_term fmt = function
 	print_cc_type q (print_list space print_cc_term) cl
   | CC_case _ ->
       fprintf fmt "<Case (TODO)>"
+  (* special treatment for the if-then-else *)
+  | CC_letin (_, ([idb, CC_var_binder (TTpure PTbool); 
+		   qb, CC_pred_binder q] as bl), e1, 
+	      CC_if (CC_var idb', 
+		     CC_lam ((idt, CC_pred_binder _), brt),
+		     CC_lam ((idf, CC_pred_binder _), brf))) 
+    when idb = idb' ->
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (sumbool_of_bool %a) of@\n  (left %a) => %a@\n| (right %a) => %a end)@]"
+      (print_list comma print_binder_id) bl print_cc_term e1 
+	Ident.print qb Ident.print idt print_cc_term brt
+	Ident.print idf print_cc_term brf
+  (* non-dependent boolean if-then-else (probably not of use) *)
   | CC_if (b,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
       hov 0 fmt (print_cc_term fmt) e1;
       fprintf fmt "@\nelse@\n  ";
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
+  | CC_letin (_,[id,_],c,c1) ->
+      fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
+      Ident.print id print_cc_term c print_cc_term c1
+  | CC_letin (_,bl,c,c1) ->
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
+      (print_list comma print_binder_id) bl
+      print_cc_term c print_cc_term c1
   | CC_term c ->
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole pr ->

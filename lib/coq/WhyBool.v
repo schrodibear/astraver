@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: WhyBool.v,v 1.1 2002-03-21 09:49:17 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.2 2002-06-07 14:28:32 filliatr Exp $ *)
 
 Require Export Compare_dec.
 Require Export Peano_dec.
@@ -112,3 +112,14 @@ Definition nat_noteq_bool :=
 
 Definition zerop_bool := [x:nat](bool_of_sumbool ? ? (zerop x)).
 Definition notzerop_bool := [x:nat](bool_of_sumbool ? ? (notzerop x)).
+
+(** Conversely, we build a [sumbool] out of a boolean, 
+    for the need of validations *)
+
+Definition sumbool_of_bool 
+  [q:bool->Prop][b:bool][p:(q b)] : {(q true)}+{(q false)} :=
+  (<[b:bool](q b)->{(q true)}+{(q false)}>
+   Cases b of true => [p](left (q true) (q false) p) 
+      | false => [p](right (q true) (q false) p) 
+   end 
+   p).

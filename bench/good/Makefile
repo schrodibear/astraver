@@ -1,6 +1,7 @@
 
 all:
-	../../bin/why.opt -d -V all.ml
+	../../bin/why.opt -d -V --valid all.ml
+	coqc -I ../../lib/coq all_why.v
 
 bench:
 	cd ..; ./bench ../bin/why.opt

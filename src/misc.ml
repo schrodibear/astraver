@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.36 2002-06-07 09:34:45 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.37 2002-06-07 14:28:32 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -362,7 +362,7 @@ let rec print_term fmt = function
   | Tconst (ConstFloat f) -> 
       fprintf fmt "%f" f
   | Tvar id -> 
-      Ident.print fmt id
+      Ident.lprint fmt id
   | Tapp (id, tl) -> 
       fprintf fmt "%s(%a)" (Ident.string id) (print_list comma print_term) tl
 

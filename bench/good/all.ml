@@ -3,29 +3,29 @@
 
 (* types syntax: values *)
 parameter v1 : bool ref
-external  v2 : int
-external  v3 : (int)
+parameter  v2 : int
+parameter  v3 : (int)
 parameter v4 : (int) ref
-external  v5 : foo
+parameter  v5 : foo
 parameter v6 : array 10 of int
 parameter v7 : array 10 of (int)
 parameter v8 : array 3+4 of (int -> int)
 
 (* types syntax: functions *)
-external f1 : int -> bool -> int
+parameter f1 : int -> bool -> int
 
-external f2 : int -> int ref -> bool
+parameter f2 : int -> int ref -> bool
 
-external f3 : x:int ref -> y:int ref -> 
+parameter f3 : x:int ref -> y:int ref -> 
              { x >= 0 } returns r:int reads x,y writes y { y = y@ + x + r }
 
-external f4 : unit -> {} unit {}
+parameter f4 : unit -> {} unit {}
 
-external f5 : foo -> foo
-external f6 : x:foo -> foo
-external f7 : x:foo -> {} foo {}
+parameter f5 : foo -> foo
+parameter f6 : x:foo -> foo
+parameter f7 : x:foo -> {} foo {}
 
-external f8 : t:array 10 of int -> {} unit { access(t,1) = 2 }
+parameter f8 : t:array 10 of int -> {} unit reads t { access(t,1) = 2 }
 
 (* predicates *)
 let p1 = 0 { true }
