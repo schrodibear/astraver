@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.25 2005-02-11 12:59:22 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.26 2005-02-14 13:17:16 filliatr Exp $ i*)
 
 open Creport
 open Cconst
@@ -60,7 +60,7 @@ let rec ctype (t : tctype) : nctype =
 		  Decl (
 		    (List.map (fun (t,s,op) -> (ctype t,s,noption eval_const_expr op))) 
 			  l))*)
-      | Tfun (l ,c)-> Tfun (List.map (fun (t,s) -> (ctype t,s)) l, ctype c)
+      | Tfun (l ,c)-> Tfun (List.map ctype l, ctype c)
       | Tenum (string) ->Tenum string
 	  (*match l with 
 	    | Tag -> Tenum (string,Tag)
@@ -380,8 +380,8 @@ let noattr3 tyn = { Ctypes.ctype_node = tyn;
 let alloca loc n =
   {nexpr_node = NEcall ((noattr2  loc 
 			   (noattr3(
-			      Tfun ([(noattr3
-					(Tint(Signed,Ctypes.Int)),"n")], 
+			      Tfun ([noattr3
+					(Tint(Signed,Ctypes.Int))], 
 				    noattr3 (Tpointer (noattr3 Tvoid))))) 
 			   (NEvar  (Fun_info (default_fun_info "alloca")))), 
 			[{ nexpr_node = NEconstant  (IntConstant n);

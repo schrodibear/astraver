@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.mli,v 1.6 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: ctypes.mli,v 1.7 2005-02-14 13:17:16 filliatr Exp $ i*)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -39,7 +39,7 @@ type ctype_node =
   | Tstruct of string 
   | Tunion of string 
   | Tenum of string 
-  | Tfun of parameter list * ctype
+  | Tfun of ctype list * ctype
 
 and ctype = { 
   ctype_node : ctype_node;
@@ -47,9 +47,6 @@ and ctype = {
   ctype_const : bool;
   ctype_volatile : bool;
 }
-
-and parameter = ctype * string
-
 
 
 val noattr : ctype_node -> ctype

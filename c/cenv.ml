@@ -41,8 +41,7 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       eq_type ty1 ty2
   | Tfun (pl1, ty1), Tfun (pl2, ty2) ->
       eq_type ty1 ty2 &&
-      (try List.for_all2 (fun (ty1,_) (ty2,_) -> eq_type ty1 ty2) pl1 pl2
-       with Invalid_argument _ -> false)
+      (try List.for_all2 eq_type pl1 pl2 with Invalid_argument _ -> false)
   | _ ->
       false
 

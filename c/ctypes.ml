@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.9 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: ctypes.ml,v 1.10 2005-02-14 13:17:16 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -39,7 +39,7 @@ type ctype_node =
   | Tstruct of string 
   | Tunion of string 
   | Tenum of string 
-  | Tfun of parameter list * ctype
+  | Tfun of ctype list * ctype
 
 and ctype = { 
   ctype_node : ctype_node;
@@ -47,9 +47,6 @@ and ctype = {
   ctype_const : bool;
   ctype_volatile : bool;
 }
-
-and parameter = ctype * string
-
 
 
 

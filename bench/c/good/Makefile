@@ -48,7 +48,7 @@ harvey:
 	  make why/$$f.why; \
 	  make -f $$f.makefile harvey/$${f}_why.all.rv; \
 	done
-	dp -timeout 10 cvcl/*_why.all.rv
+	dp -timeout 10 harvey/*_why.all.rv
 
 # running Coq on all programs
 

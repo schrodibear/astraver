@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.90 2005-02-03 13:38:48 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.91 2005-02-14 13:17:16 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -328,9 +328,9 @@ and type_type_node loc env = function
       let fl = enum_fields Int64.zero fl in
       Env.set_enum_type loc env (Tenum x) fl 
   | CTfun (pl, tyn) ->
-      let pl = List.map (fun (ty,x) -> (type_type loc env ty, x)) pl in
+      let pl = List.map (fun (ty,x) -> type_type loc env ty) pl in
       let pl = match pl with
-	| [{ctype_node = Tvoid},_] -> []
+	| [{ctype_node = Tvoid}] -> []
 	| _ -> pl
       in
       Tfun (pl, type_type loc env tyn)
@@ -568,7 +568,7 @@ and type_expr_node loc env = function
 	    let rec check_args i el' = function
 	      | [], [] -> 
 		  TEcall (e, List.rev el'), ty
-	      | e :: el, (t, _) :: tl when compatible_type e.texpr_type t ->
+	      | e :: el, t :: tl when compatible_type e.texpr_type t ->
 		  check_args (i+1) (coerce t e :: el') (el, tl)
 	      | e :: _, _ :: _ ->
 		  error loc ("incompatible type for argument " ^ 
@@ -1001,7 +1001,7 @@ let type_decl d = match d.node with
 	    let pl,env = type_parameters d.loc (Env.empty ()) pl in
 	    let ty_res = type_type d.loc (Env.empty ()) ty_res in
 	    let info = default_fun_info x in
-	    let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
+	    let spl = List.map fst pl in
 	    let info = 
 	      match add_sym d.loc x (noattr (Tfun (spl, ty_res))) 
 		(Fun_info info) with
@@ -1031,7 +1031,7 @@ let type_decl d = match d.node with
       let s = function_spec d.loc f (Some s) in
       let info = default_fun_info f in
       info.has_assigns <- (s.assigns <> None);
-      let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
+      let spl = List.map fst pl in
       let info = 
 	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with 
 	  | Var_info _ -> assert false
@@ -1046,7 +1046,7 @@ let type_decl d = match d.node with
       let s = function_spec d.loc f s in
       let info = default_fun_info f in
       info.has_assigns <- (s.assigns <> None);
-      let spl = List.map (fun (ty,v) -> (ty,v.var_name)) pl in
+      let spl = List.map fst pl in
       let info = 
 	match add_sym d.loc f (noattr (Tfun (spl, ty))) (Fun_info info) with
 	  | Var_info v -> assert false
