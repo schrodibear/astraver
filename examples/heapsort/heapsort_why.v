@@ -286,13 +286,13 @@ Proof.
 Intuition.
 SameLength t3 t2; Omega.
 (* heap *)
-Subst k1; Apply H17; Omega'.
+Subst k2; Apply H17; Omega'.
 (* t[0] <= t[k] *)
-Subst k1; Ring `k0-1+1`. 
-Rewrite (H16 k0); [ Idtac | Omega' ].
+Subst k2; Ring `k1-1+1`. 
+Rewrite (H16 k1); [ Idtac | Omega' ].
 Decompose [exchange] Post15.
 Rewrite H24.
-Apply inftree_1 with n:=`k0-1`.
+Apply inftree_1 with n:=`k1-1`.
 Apply H19.
 Apply inftree_weakening. Omega'.
 Apply inftree_exchange with t1:=t1. Omega'.
@@ -300,10 +300,10 @@ Apply inftree_3.
 Apply H1; Omega'.
 Assumption. Omega'.
 (* sorted *)
-Subst k1; Ring `k0-1+1`.  
-Elim (Z_le_lt_eq_dec k0 `(array_length t1)-1` H6); Intro.
+Subst k2; Ring `k1-1+1`.  
+Elim (Z_le_lt_eq_dec k1 `(array_length t1)-1` H6); Intro.
   (* k0 < N-1 *)
-  Replace k0 with `(k0+1)-1`; [ Idtac | Omega' ].
+  Replace k1 with `(k1+1)-1`; [ Idtac | Omega' ].
   Apply left_extension. Omega'. Omega'.
   Apply sorted_array_id with t1:=t2. 
   Apply sorted_array_id with t1:=t1. 
@@ -314,12 +314,12 @@ Elim (Z_le_lt_eq_dec k0 `(array_length t1)-1` H6); Intro.
   SameLength t3 t2; Apply H25; Try Omega'.
   Unfold array_id. Intros i Hi. Symmetry. Apply H16; Omega'.
   (* t3[k0] <= t3[k0+1] *)
-  Ring `k0+1-1`. 
-  Rewrite (H16 k0); [ Idtac | Omega' ].
-  Rewrite (H16 `k0+1`); 
+  Ring `k1+1-1`. 
+  Rewrite (H16 k1); [ Idtac | Omega' ].
+  Rewrite (H16 `k1+1`); 
     [ Idtac | SameLength t3 t2; SameLength t2 t1; Omega' ].
   Decompose [exchange] Post15.
-  Rewrite H24. Rewrite (H25 `k0+1`); [ Idtac | Omega' | Omega' | Omega' ].
+  Rewrite H24. Rewrite (H25 `k1+1`); [ Idtac | Omega' | Omega' | Omega' ].
   Apply H4; Omega'.
   (* k0 = N-1 *)
   Rewrite b. 
@@ -330,7 +330,7 @@ Elim (Z_le_lt_eq_dec k0 `(array_length t1)-1` H6); Intro.
 (* (permut t3 t) *)
 Apply permut_trans with t':=t2; Try Assumption. 
 Apply permut_trans with t':=t1.
-Apply exchange_is_permut with i:=`0` j:=k0. Assumption. 
+Apply exchange_is_permut with i:=`0` j:=k1. Assumption. 
 Assumption. 
 (* Zwf *)
 Unfold Zwf; Omega'.
@@ -353,7 +353,7 @@ Lemma heapsort_po_8 :
 Proof.
 Intuition SameLength t0 t; Try Omega.
 Apply heap_all.
-Subst result0; Assumption.
+Subst k; Assumption.
 Tauto.
 Intro; Absurd `(array_length t0)-1+1 <= (array_length t0)-1`; Omega'.
 Save.
@@ -382,12 +382,12 @@ Elim (Z_le_lt_eq_dec `1` (array_length t) Pre16); Intro.
   (* 1 < N *)
   Replace `0` with `1-1`; [ Idtac | Omega' ].
   Apply left_extension. Omega'. Omega'.
-  Replace `1` with `k0+1`; [ Idtac | Omega' ].
-  Replace `(array_length t1)-(k0+1)` with `(array_length t1)-1`; 
+  Replace `1` with `k1+1`; [ Idtac | Omega' ].
+  Replace `(array_length t1)-(k1+1)` with `(array_length t1)-1`; 
   [ Idtac | Omega' ].
   Apply H6; SameLength t1 t; Omega'.
   Replace `1-1` with `0`; [ Idtac | Omega' ]. (* Ring `1-1`. *)
-  Replace `1` with `k0+1`; [ Idtac | Omega' ].
+  Replace `1` with `k1+1`; [ Idtac | Omega' ].
   Apply H4; SameLength t1 t; Omega'.
   (* 1 = N *)
   Unfold sorted_array. 

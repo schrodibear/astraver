@@ -111,14 +111,14 @@ Lemma BF_po_3 :
      ((j:Z)
       (j = `j2 + 1` -> `0 <= j` /\ (Zwf `0` `n - m + 1 - j` `n - m + 1 - j2`)))))).
 Proof.
-Destruct result6; Intuition.
+Destruct result4; Intuition.
 Subst i.
 Apply match_right_extension; Auto with *.
-Subst c_aux_1 c_aux_2; Ring `0+i2`; Ring `j1+i2`; Assumption.
+Subst c_aux_1 c_aux_2; Ring `0+i3`; Ring `j2+i3`; Assumption.
 Unfold Zwf; Omega.
 Unfold Zwf; Omega.
 Subst result.
-Assert i2=(array_length x). Omega. Subst i2; Assumption.
+Assert i3=(array_length x). Omega. Subst i3; Assumption.
 Unfold Zwf; Omega.
 Save.
 
@@ -158,7 +158,7 @@ Lemma BF_po_4 :
 Proof.
 Intuition.
 Unfold Zwf; Omega.
-Assert i2=(array_length x). Omega. Subst i2; Assumption.
+Assert i3=(array_length x). Omega. Subst i3; Assumption.
 Unfold Zwf; Omega.
 Save.
 
@@ -182,7 +182,7 @@ Lemma BF_po_5 :
   (`0 <= i2` /\ `i2 <= m`) /\ (match x `0` y j2 i2).
 Proof.
 Intuition.
-Subst i1; Apply match_empty; Auto with *.
+Subst i2; Apply match_empty; Auto with *.
 Save.
 
 (* Why obligation from file "brute_force.c", characters 307-313 *)

@@ -121,11 +121,11 @@ Lemma selection_po_3 :
     (Zwf `0` `(array_length t0) - j` `(array_length t0) - j1`))).
 Proof.
 Intuition.
-Assert h: `k<j0` \/ `k=j0`. Omega. Intuition.
-Apply Zle_trans with (access t0 min0).
-Subst min1; Omega.
+Assert h: `k<j1` \/ `k=j1`. Omega. Intuition.
+Apply Zle_trans with (access t0 min1).
+Subst min2; Omega.
 Apply H12; Omega.
-Subst min1 k; Omega.
+Subst min2 k; Omega.
 Unfold Zwf; Omega.
 Save.
 
@@ -170,7 +170,7 @@ Lemma selection_po_4 :
     (Zwf `0` `(array_length t0) - j` `(array_length t0) - j1`))).
 Proof.
 Intuition.
-Assert h: `k<j0` \/ `k=j0`. Omega. Intuition.
+Assert h: `k<j1` \/ `k=j1`. Omega. Intuition.
 Subst k; Omega.
 Unfold Zwf; Omega.
 Save.
@@ -202,8 +202,8 @@ Lemma selection_po_5 :
   ((k:Z) (`i1 <= k` /\ `k < j` -> `(access t0 min) <= (access t0 k)`)).
 Proof.
 Intuition.
-Assert h:`k=i0`. Omega.
-Subst result1 k; Omega.
+Assert h:`k=i1`. Omega.
+Subst min k; Omega.
 Save.
 
 (* Why obligation from file "selection.mlw", characters 898-905 *)
@@ -372,11 +372,11 @@ Proof.
 Intuition.
 ArraySubst t2.
 ArraySubst t1.
-Assert h: `i0=0` \/ `0<i0`. Omega. Intuition.
-Replace `i-1` with `0`.
+Assert h: `i1=0` \/ `0<i1`. Omega. Intuition.
+Replace `i0-1` with `0`.
 Unfold sorted_array; Intros; Omega.
 Omega.
-Replace `i-1` with `(i0-1)+1`.
+Replace `i0-1` with `(i1-1)+1`.
 Apply right_extension.
 Omega.
 ArraySubst t2.
@@ -385,7 +385,7 @@ Apply sorted_array_id with t0.
 Assumption.
 Unfold array_id; Intros.
 Subst t2; Do 2 AccessOther.
-Replace `i0-1+1` with i0.
+Replace `i1-1+1` with i1.
 Subst t2 t1; Do 2 AccessOther.
 Subst w.
 Apply H4; Omega.
@@ -393,15 +393,15 @@ Omega.
 Omega.
 Apply permut_trans with t0.
 Subst t2; Subst t1; Subst w.
-Apply exchange_is_permut with min0 i0; Auto with *.
+Apply exchange_is_permut with min1 i1; Auto with *.
 Assumption.
-Assert h:`k=i0` \/ `k<i0`. Omega. Intuition.
+Assert h:`k=i1` \/ `k<i1`. Omega. Intuition.
 Subst k.
 Subst t2; Simpl in H23.
 AccessSame.
 AccessOther.
 Subst t1; Simpl in H23.
-Assert h:`l=min0` \/ `min0<>l`. Omega. Intuition.
+Assert h:`l=min1` \/ `min1<>l`. Omega. Intuition.
 Subst l; AccessSame.
 Subst w; Apply H11; Omega.
 AccessOther.
@@ -409,7 +409,7 @@ Subst w; Apply H11; Try Omega.
 Subst t2; Simpl in H23. AccessOther.
 AccessOther.
 Subst t1; Simpl in H23.
-Assert h:`l=min0` \/ `min0<>l`. Omega. Intuition.
+Assert h:`l=min1` \/ `min1<>l`. Omega. Intuition.
 Subst l; AccessSame.
 AccessOther.
 Apply H4; Omega.
@@ -455,9 +455,9 @@ Lemma selection_po_11 :
   (sorted_array t0 `0` `(array_length t0) - 1`) /\ (permut t0 t).
 Proof.
 Intuition.
-Assert h:`i0=0` \/ `0<i0`. Omega. Intuition.
+Assert h:`i1=0` \/ `0<i1`. Omega. Intuition.
 Unfold sorted_array; Intros; Omega.
-Replace `(array_length t0)-1` with `(i0-1)+1`.
+Replace `(array_length t0)-1` with `(i1-1)+1`.
 Apply right_extension; Try Omega. 
 Assumption.
 Apply H5; Omega.

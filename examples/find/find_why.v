@@ -121,8 +121,8 @@ Lemma find_po_3 :
 Proof.
 Intros. 
 Subst r.
-Subst i2.
-Generalize (subgoal_1 m0 n0 i0 j0 i1 A A0 A1 
+Subst i3.
+Generalize (subgoal_1 m1 n1 i1 j1 i2 A A0 A1 
               Inv_mn Test14 zero_f_SN Inv_ij Test9 Inv_i Test4).
 Intuition.
 Unfold Zwf; Omega.
@@ -263,8 +263,8 @@ Lemma find_po_6 :
 Proof.
 Intros. 
 Subst r.
-Subst j2.
-Generalize (subgoal_2 m0 n0 i0 j0 i1 j1 A A0 A1
+Subst j3.
+Generalize (subgoal_2 m1 n1 i1 j1 i2 j2 A A0 A1
                   Inv_mn Test14 zero_f_SN Inv_ij Test9 Inv_i 
                   Inv_j Test6).
 Intuition.
@@ -571,15 +571,15 @@ Lemma find_po_12 :
 Proof.
 Intros.
 Subst r.
-Assert H:(exchange A3 A1 i1 j1).
+Assert H:(exchange A3 A1 i2 j2).
 Subst A3. Subst A2. Subst w.
 Auto with datatypes.
 
-Assert H0:`(access A3 i1) <= (access A0 f)`.
+Assert H0:`(access A3 i2) <= (access A0 f)`.
 Elim H; Intros; Rewrite H3; Omega.
-Assert H1:`(access A0 f) <= (access A3 j1)`.
+Assert H1:`(access A0 f) <= (access A3 j2)`.
 Elim H; Intros; Rewrite H5; Omega.
-Generalize (subgoal_3 m0 n0 i0 j0 i1 j1 A A0 A1 A3 Pre27 Inv_mn Test14 
+Generalize (subgoal_3 m1 n1 i1 j1 i2 j2 A A0 A1 A3 Pre27 Inv_mn Test14 
   zero_f_SN Inv_ij 
   Test9 Inv_i Inv_j Pre22 Test8 H H0 H1).
 Intuition Subst; Intuition.
@@ -661,7 +661,7 @@ Lemma find_po_14 :
   (m_invariant m1 A0) /\ (n_invariant n1 A0) /\ `0 <= j` /\ `i <= N + 1` /\
   (termination i j m1 n1 r A0) /\ (permut A0 A).
 Proof.
-Intros; Subst r; Subst result2; Subst result3; Intuition.
+Intros; Subst r i j; Intuition.
 Apply Lemma_4_14; Auto.
 Elim H; Elim H3; Omega.
 Apply Lemma_5_14'; Auto.
@@ -743,11 +743,11 @@ Lemma find_po_16 :
   ((m_invariant m1 A1) /\ (n_invariant n2 A1) /\ (permut A1 A) /\
   `1 <= m1` /\ `n2 <= N`) /\ (Zwf `0` `n2 - m1` `n1 - m1`).
 Proof.
-Intros; Subst n1; Subst r.
+Intros; Subst n2 r.
 Assert (array_length A0)=(array_length A).
 Intuition; ProveSameLength A0 A.
 Rewrite H in Pre25; Rewrite Pre27 in Pre25.
-Generalize (subgoal_5 m0 n0 i0 j0 A A0 A1 
+Generalize (subgoal_5 m1 n1 i1 j1 A A0 A1 
                  Inv_mn Test14 Pre25 Inv_ij Pre24 Test13).
 Intuition.
 Save.
@@ -790,11 +790,11 @@ Lemma find_po_17 :
   ((m_invariant m2 A1) /\ (n_invariant n1 A1) /\ (permut A1 A) /\
   `1 <= m2` /\ `n1 <= N`) /\ (Zwf `0` `n1 - m2` `n1 - m1`).
 Proof.
-Intros; Subst m1; Subst r.
+Intros; Subst m2 r.
 Assert (array_length A0)=(array_length A).
 Intuition; ProveSameLength A0 A.
 Rewrite H in Pre25; Rewrite Pre27 in Pre25.
-Generalize (subgoal_6 m0 n0 i0 j0 A A0 A1
+Generalize (subgoal_6 m1 n1 i1 j1 A A0 A1
                  Inv_mn Test14 Pre25 Inv_ij Pre24 Test12 Test11).
 Intuition.
 Save.
@@ -839,11 +839,11 @@ Lemma find_po_18 :
   ((m_invariant m2 A1) /\ (n_invariant n2 A1) /\ (permut A1 A) /\
   `1 <= m2` /\ `n2 <= N`) /\ (Zwf `0` `n2 - m2` `n1 - m1`).
 Proof.
-Intros; Subst n1; Subst m1; Subst r.
+Intros; Subst n2 m2 r.
 Assert (array_length A0)=(array_length A).
 Intuition; ProveSameLength A0 A.
 Rewrite H in Pre25; Rewrite Pre27 in Pre25.
-Generalize (subgoal_7 m0 n0 i0 j0 A A0 A1
+Generalize (subgoal_7 m1 n1 i1 j1 A A0 A1
                  Inv_mn Test14 Pre25 Inv_ij Pre24 Test12 Test10).
 Intuition.
 Save.
@@ -860,8 +860,8 @@ Lemma find_po_19 :
   `n <= N`.
 Proof.
 Intuition.
-Subst result; Exact (Lemma_1 A).
-Subst result0; Exact (Lemma_2 A).
+Subst m; Exact (Lemma_1 A).
+Subst n; Exact (Lemma_2 A).
 Save.
 
 (* Why obligation from file "find.mlw", characters 1423-2893 *)
@@ -880,7 +880,7 @@ Lemma find_po_20 :
   (found A0) /\ (permut A0 A).
 Proof.
 Intuition.
-Apply Lemma_3 with m:=m0 n:=n0; Auto.
+Apply Lemma_3 with m:=m1 n:=n1; Auto.
 Save.
 
 

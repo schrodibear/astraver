@@ -193,25 +193,25 @@ Lemma initnext_po_6 :
   (lexZ (pairZ `M - i2` j2) (pairZ `M - i1` j1)).
 Proof.
 Intuition.
-Subst i1 j1.
+Subst i2 j2.
 Apply match_right_extension.
-Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
+Replace `i1+1-(j1+1)` with `i1-j1`. Assumption. Omega'.
   Omega'. Omega'.
-  Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
-  Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
+  Ring `i1+1-(j1+1)+j1`. Ring `0+j1`. Assumption.
+  Absurd (match p `i1+1-(z-1)` p `0` `z-1`).
   Red; Apply H11; Omega'.
   Apply match_right_weakening with n := z.
-  Replace `i0+1-(z-1)` with `i0+1+1-z`.
-  Subst i1; Assumption. Omega'. Omega'.
-  Elim (Z_lt_ge_dec k `i0+1`); Intro Hk'.  
+  Replace `i1+1-(z-1)` with `i1+1+1-z`.
+  Subst i2; Assumption. Omega'. Omega'.
+  Elim (Z_lt_ge_dec k `i1+1`); Intro Hk'.  
   Subst next2; Rewrite store_def_2.
   Apply H13; Omega'. Omega'. Omega'. Omega'.
-  Cut `i0+1 = k`. Intro Heq.	
-  Subst next2 i1; Rewrite Heq. Rewrite store_def_1.
+  Cut `i1+1 = k`. Intro Heq.	
+  Subst next2 i2; Rewrite Heq. Rewrite store_def_1.
   Rewrite <- Heq. Apply Next_cons. Omega'.
-  Subst j1; Replace `i0+1-(j0+1)` with `i0-j0`.
+  Subst j2; Replace `i1+1-(j1+1)` with `i1-j1`.
   Apply match_right_extension; Omega' Orelse Try Assumption.
-  Ring `i0-j0+j0`; Ring `0+j0`; Assumption. Omega'.
+  Ring `i1-j1+j1`; Ring `0+j1`; Assumption. Omega'.
   Intros z Hz. 
   Red; Apply H11; Omega'.
   Omega'. Omega'.
@@ -299,22 +299,22 @@ Proof.
 Intuition.
   Rewrite Test4.
   Apply match_empty. Omega'. Omega'.
-  Elim (Z_lt_ge_dec `j0+2` z); Intro.
-  Absurd (match p `i0+1-(z-1)` p `0` `z-1`).
+  Elim (Z_lt_ge_dec `j1+2` z); Intro.
+  Absurd (match p `i1+1-(z-1)` p `0` `z-1`).
   Red; Apply H11; Omega'.
   Apply match_right_weakening with n := z.
-  Subst i1.
-  Replace `i0+1-(z-1)` with `i0+1+1-z`; [ Assumption | Omega' ]. Omega'.
-  Absurd (#p[i0])=(#p[j0]); [ Assumption | Idtac ].
+  Subst i2.
+  Replace `i1+1-(z-1)` with `i1+1+1-z`; [ Assumption | Omega' ]. Omega'.
+  Absurd (#p[i1])=(#p[j1]); [ Assumption | Idtac ].
   Decompose [match] H18.
-  Replace i0 with `i0+1+1-2+j0`; [ Idtac | Omega' ].
-  Replace #p[j0] with #p[`0+j0`]; [ Idtac | Ring `0+j0`; Reflexivity ].
+  Replace i1 with `i1+1+1-2+j1`; [ Idtac | Omega' ].
+  Replace #p[j1] with #p[`0+j1`]; [ Idtac | Ring `0+j1`; Reflexivity ].
   Cut `z = 2`; [ Intro Heq | Omega' ].
   Rewrite <- Heq. Rewrite <- Post5; Apply H22; Omega'.
-  Elim (Z_lt_ge_dec k `i0+1`); Intro.
+  Elim (Z_lt_ge_dec k `i1+1`); Intro.
   Subst next2. AccessOther.
   Apply H13; Omega'. 
-  Cut `i0+1 = k`; [ Intro Heq | Omega' ].
+  Cut `i1+1 = k`; [ Intro Heq | Omega' ].
   Rewrite Post6; Rewrite Post5; Rewrite Heq. AccessSame.
   Rewrite <- Heq. Apply Next_cons. Omega'.
   Apply match_empty; Omega'.
@@ -324,10 +324,10 @@ Intuition.
   Red; Apply H11; Omega'.
   (* z = 1 *)
   Red; Intro.
-  Absurd (#p[i0])=(#p[j0]); [ Assumption | Rewrite Test4 ].
+  Absurd (#p[i1])=(#p[j1]); [ Assumption | Rewrite Test4 ].
   Decompose [match] H17.
   Replace `0` with `0+0`; [ Idtac | Omega' ].
-  Replace `i0` with `i0+1-z+0`; [ Idtac | Omega' ].
+  Replace `i1` with `i1+1-z+0`; [ Idtac | Omega' ].
   Apply H22; Omega'.
   ArraySubst next2.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
@@ -406,46 +406,46 @@ Lemma initnext_po_10 :
   `(array_length next1) = M`) /\
   (lexZ (pairZ `M - i1` j2) (pairZ `M - i1` j1)).
 Proof.
-Intuition (Cut ~`j0=0`; [ Clear Test3; Intro Test3 | Assumption ]).
-  Subst j1.
-  Elim (H15 j0); Omega'.
-  Elim (H15 j0); Omega'.
-  Elim (H15 j0); Omega'.
-  Subst j1.
-  Apply match_trans with t2 := p i2 := `j0-(access   next1 j0)`.
-  Apply match_left_weakening with n := j0.
-  Replace `i0-(access   next1 j0)-(j0-(access   next1 j0))` 
-    with `i0-j0` ; [ Idtac | Omega' ].
-  Replace `j0-(access   next1 j0)-(j0-(access   next1 j0))` 
+Intuition (Cut ~`j1=0`; [ Clear Test3; Intro Test3 | Assumption ]).
+  Subst j2.
+  Elim (H15 j1); Omega'.
+  Elim (H15 j1); Omega'.
+  Elim (H15 j1); Omega'.
+  Subst j2.
+  Apply match_trans with t2 := p i2 := `j1-(access   next1 j1)`.
+  Apply match_left_weakening with n := j1.
+  Replace `i1-(access   next1 j1)-(j1-(access   next1 j1))` 
+    with `i1-j1` ; [ Idtac | Omega' ].
+  Replace `j1-(access   next1 j1)-(j1-(access   next1 j1))` 
     with `0` ; [ Assumption | Omega' ].
-  Elim (H15 j0); Omega'. Elim (H15 j0); Auto; Omega'.
+  Elim (H15 j1); Omega'. Elim (H15 j1); Auto; Omega'.
 
-  Elim (Z_lt_ge_dec `j0+1` z); Intro.
+  Elim (Z_lt_ge_dec `j1+1` z); Intro.
   (* j0+1 < z < i0+1 *)
   Apply (H13 z); Assumption Orelse Omega'.
-  Elim (Z_ge_lt_dec z `j0+1`); Intro.
+  Elim (Z_ge_lt_dec z `j1+1`); Intro.
   (* z = j0+1 *)
-  Absurd (#p[i0])=(#p[j0]) ; [ Assumption | Idtac ].
+  Absurd (#p[i1])=(#p[j1]) ; [ Assumption | Idtac ].
   Decompose [match] H18.
-  Replace i0 with `i0+1-z+j0`; [ Idtac | Omega' ].
-  Replace j0 with `0+j0`; [ Idtac | Omega' ].
+  Replace i1 with `i1+1-z+j1`; [ Idtac | Omega' ].
+  Replace j1 with `0+j1`; [ Idtac | Omega' ].
   Apply H22; Omega'.
   (* next[j0]+1 < z < j0+1 *)
-  Absurd (match p `j0-(z-1)` p `0` `z-1`).
+  Absurd (match p `j1-(z-1)` p `0` `z-1`).
   Decompose [match] H18.
-  Elim (H15 j0); Omega' Orelse Intros.
+  Elim (H15 j1); Omega' Orelse Intros.
   Apply H25; Omega'.
-  Apply match_trans with t2 := p i2 := `i0-(z-1)`.
+  Apply match_trans with t2 := p i2 := `i1-(z-1)`.
   Apply match_sym.
-  Apply match_left_weakening with n := j0.
-  Replace `i0-(z-1)-(j0-(z-1))` with `i0-j0` ; [ Idtac | Omega' ].
-  Ring `j0-(z-1)-(j0-(z-1))`. Assumption.
+  Apply match_left_weakening with n := j1.
+  Replace `i1-(z-1)-(j1-(z-1))` with `i1-j1` ; [ Idtac | Omega' ].
+  Ring `j1-(z-1)-(j1-(z-1))`. Assumption.
   Omega'.
   Apply match_right_weakening with n := z.
-  Replace `i0-(z-1)` with `i0+1-z` ; [ Assumption | Omega' ].
+  Replace `i1-(z-1)` with `i1+1-z` ; [ Assumption | Omega' ].
   Omega'.
 Unfold lexZ lex Zwf pairZ. 
-Elim (H15 j0) ; [ Intros | Omega' ].
+Elim (H15 j1) ; [ Intros | Omega' ].
 Right. Omega'.
 Save.
 
@@ -510,7 +510,7 @@ Lemma initnext_po_12 :
   `(array_length next0) = M`.
 Proof.
 Intuition.
-Subst result result0.
+Subst i j .
 Apply match_empty ; Omega'.
 Replace k with `1` ; [ Subst next0; Rewrite store_def_1 | Omega' ].
 Apply next_1_0; Omega'.
@@ -632,7 +632,7 @@ Lemma kmp_po_3 :
   (if result1 then `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false
    else `j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false).
 Proof.
-Intuition Induction result3; Tauto.
+Intuition Induction result1; Tauto.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2344-2360 *)
@@ -663,7 +663,7 @@ Lemma kmp_po_4 :
   (if result1 then `j1 < M` /\ `i1 < N` \/ `j1 >= M` /\ true = false
    else `j1 < M` /\ `i1 >= N` \/ `j1 >= M` /\ false = false).
 Proof.
-Intuition Induction result3; Tauto.
+Intuition Induction result1; Tauto.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2586-2591 *)
@@ -761,12 +761,12 @@ Lemma kmp_po_7 :
   (lexZ (pairZ `N - i2` j2) (pairZ `N - i1` j1)).
 Proof.
 Intuition Discriminate H18 Orelse Auto with *.
-Subst j1 i1.
+Subst j2 i2.
   Apply match_right_extension.
-  Replace `i0+1-(j0+1)` with `i0-j0`. Assumption. Omega'.
+  Replace `i1+1-(j1+1)` with `i1-j1`. Assumption. Omega'.
   Omega'. Omega'.
-  Ring `i0+1-(j0+1)+j0`. Ring `0+j0`. Assumption.
-  Replace `i0+1-(j0+1)` with `i0-j0`. 
+  Ring `i1+1-(j1+1)+j1`. Ring `0+j1`. Assumption.
+  Replace `i1+1-(j1+1)` with `i1-j1`. 
   Apply (H16 k); Assumption Orelse Omega'.
   Omega'.
   Unfold lexZ lex Zwf pairZ. Left; Omega'.
@@ -807,12 +807,12 @@ Lemma kmp_po_8 :
   (lexZ (pairZ `N - i2` j1) (pairZ `N - i1` j1)).
 Proof.
 Intuition Discriminate H18 Orelse Auto with *.
-  Subst j0.
+  Subst j1.
   Apply match_empty. Omega'. Omega'.
-  Elim (Z_le_lt_eq_dec k `i0-j0`).
+  Elim (Z_le_lt_eq_dec k `i1-j1`).
   Intro. Apply (H16 k); Assumption Orelse Omega'.
   Intro. Generalize H19. Apply match_contradiction_at_first. Omega'.
-  Rewrite b. Subst j0. Ring `i0-0`. Assumption.
+  Rewrite b. Subst j1. Ring `i1-0`. Assumption.
   Omega'.
 Unfold lexZ lex Zwf pairZ. Left; Omega'.
 Save.
@@ -884,34 +884,34 @@ Lemma kmp_po_10 :
   ((k:Z) (`0 <= k` /\ `k < i1 - j2` -> ~(match a k p `0` M)))) /\
   (lexZ (pairZ `N - i1` j2) (pairZ `N - i1` j1)).
 Proof.
-Intuition (Assert `j0<>0`; Auto with *).
+Intuition (Assert `j1<>0`; Auto with *).
   (* invariant *)
-  Elim (H5 j0); Intros. Omega'.
+  Elim (H5 j1); Intros. Omega'.
   Omega'.
-  Elim (H5 j0); Intros; Omega'.
-  Elim (H5 j0); Intros; Omega'.
-  Apply next_iteration with j := j0.
+  Elim (H5 j1); Intros; Omega'.
+  Elim (H5 j1); Intros; Omega'.
+  Apply next_iteration with j := j1.
   Omega'.
   Omega'.
   Assumption.
-  Subst j1; Apply (H5 j0); Omega'.
+  Subst j2; Apply (H5 j1); Omega'.
   (* ~(match a k p `0` M) *)
-  Elim (Z_lt_ge_dec k `i0-j0`); Intro Hck.
+  Elim (Z_lt_ge_dec k `i1-j1`); Intro Hck.
   (* k < i0-j0 *)
   Apply (H18 k); Assumption Orelse Omega'.
-  Elim (Z_ge_lt_dec `i0-j0` k); Intro Hck'.
+  Elim (Z_ge_lt_dec `i1-j1` k); Intro Hck'.
   (* k = i0-j0 *)
-  Generalize H21. Replace k with `i0-j0`.
-  Apply match_contradiction_at_i with i := j0.
-  Omega'. Omega'. Ring `i0-j0+j0`. Ring `0+j0`. Assumption. Omega'. 
+  Generalize H21. Replace k with `i1-j1`.
+  Apply match_contradiction_at_i with i := j1.
+  Omega'. Omega'. Ring `i1-j1+j1`. Ring `0+j1`. Assumption. Omega'. 
   (* i0-j0 < k *)
   Generalize H21. Rewrite <- H.
-  Apply next_is_maximal with i := i0 j := j0 n := #next0[j0]. 
+  Apply next_is_maximal with i := i1 j := j1 n := #next0[j1]. 
   Omega'. Omega'. Omega'.
   Assumption.
-  Apply (H5 j0); Omega'.
+  Apply (H5 j1); Omega'.
   Unfold lexZ lex Zwf pairZ. 
-  Elim (H5 j0). Intros.
+  Elim (H5 j1). Intros.
   Right. Omega'. Omega'.
 Discriminate H20.
 Discriminate H20.
@@ -979,7 +979,7 @@ Proof.
 Intuition.
 Generalize M_positive; Omega'.
 Generalize N_positive; Omega'.
-Subst result result0.
+Subst i j .
 Apply match_empty.
 Generalize N_positive; Omega'. Generalize M_positive; Omega'.
 Save.
@@ -1013,8 +1013,8 @@ Decompose [and] Inv.
 Unfold first_occur. 
 Split. 
 Intro. Rewrite <- Test10.  
-Replace (array_length p) with j0. Assumption. Omega'.
-Replace `i0-M` with `i0-j0`. 
+Replace (array_length p) with j1. Assumption. Omega'.
+Replace `i1-M` with `i1-j1`. 
 Replace (array_length p) with M. Assumption. Omega'.
 Omega'.
 Save.
@@ -1045,9 +1045,9 @@ Lemma kmp_po_14 :
 Proof.
 Intros. Unfold first_occur. Decompose [and] Inv.
 Split. 
-Intro. Absurd `i0 < N`; Omega'.
+Intro. Absurd `i1 < N`; Omega'.
 Intros k Hk. 
-Elim (Z_lt_ge_dec k `i0-j0`); Intro Hk'.
+Elim (Z_lt_ge_dec k `i1-j1`); Intro Hk'.
 Replace (array_length p) with M.
 Apply H6; Omega'. Omega'.
 Red; Intro. Decompose [match] H4.

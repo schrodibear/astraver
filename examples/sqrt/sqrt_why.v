@@ -296,11 +296,11 @@ Lemma sqrt_po_5 :
   `x < (y2 + 1) * (y2 + 1)` /\ `x < (z2 + 1) * (z2 + 1)`) /\ (Zwf `0` y2 y1).
 Proof. 
 Unfold Zwf; Intuition.
-Subst z1.
+Subst z2.
 Apply iter_sqrt_pos; Omega.
-Subst y1; Assumption.
-Subst y1; Assumption.
-Apply (iter_sqrt_invar3 x z0); Auto.
+Subst y2; Assumption.
+Subst y2; Assumption.
+Apply (iter_sqrt_invar3 x z1); Auto.
 Omega.
 Save.
 
@@ -320,12 +320,12 @@ Lemma sqrt_po_6 :
 Proof. 
 (* sqrt_po_6 *)
 Intuition.
-Subst result2.
+Subst z.
 Assert `(x+1)/2 >= 1`.
 Pattern 2 `1`; Replace `1` with `2/2`; Trivial.
 Apply Z_div_ge; Try Omega.
 Omega.
-Subst result1.
+Subst y.
 Assert `x/x+x = x+1`.
 Assert xPos:`x>0`; Try Omega.
 Generalize (Z_div_same x xPos). 
@@ -333,13 +333,13 @@ Intro.
 Rewrite H; Omega.
 Rewrite H; Trivial.
 
-Subst result1.
+Subst y.
 Assert `(x+1)*(x+1) >= (x+1)*1`.
 Apply Zge_Zmult_pos_left; Try Omega.
 Assert `(x+1)*1 = x+1`; Try Ring.
 Omega.
 
-Subst result2.
+Subst z.
 Apply (iter_sqrt_invar3 x x); Try Omega.
 Assert `x/x+x = x+1`.
 Assert xPos:`x>0`; Try Omega.
@@ -368,6 +368,6 @@ Lemma sqrt_po_7 :
   `y1 * y1 <= x` /\ `x < (y1 + 1) * (y1 + 1)`.
 Proof.
 Intuition.
-Apply (iter_sqrt_invar4 x y0 z0); Try Omega.
+Apply (iter_sqrt_invar4 x y1 z1); Try Omega.
 Save.
 

@@ -339,7 +339,7 @@ Lemma maxisort_po_1 :
 Proof.
   Intros; Split. Omega'. Split. Omega'. Split. Omega'.
   Constructor 1. Omega'.
-  Intros H; Absurd `i0 < i0`; Omega'.
+  Intros H; Absurd `i1 < i1`; Omega'.
 Save.
 
 (* Why obligation from file "maximumsort.mlw", characters 1163-1176 *)
@@ -408,9 +408,9 @@ Proof.
    Intros C1 k C2 C3;
    Case Post9.
     Intros Clength C4 C5 C6 C7 C8.
-     Case (Z_eq_dec k i0).
+     Case (Z_eq_dec k i1).
        Intros C9; Rewrite C9; Rewrite C6; Rewrite C8; Try Omega'.
-       Apply Maximize_ext1 with n:=i0 k:=`0`; Try Omega'.
+       Apply Maximize_ext1 with n:=i1 k:=`0`; Try Omega'.
          Apply H5; Omega'.
        Intros C9; Rewrite C8; Try Omega'. Rewrite C8; Try Omega'.
        Apply H0; Try Omega'.
@@ -419,13 +419,13 @@ Proof.
    EApply exchange_is_permut; EAuto.
    (* post-condition 3 *)
    Decompose [and] Post7; Clear Post7. Case Post9; Clear Post9.
-   Intros Clength C1 C2 C3 C4 C5 C5a; Replace `i+1` with i0. Rewrite C3.
+   Intros Clength C1 C2 C3 C4 C5 C5a; Replace `i0+1` with i1. Rewrite C3.
      Apply Maximize_ext2; Intros i' C6.
      Case (Z_eq_dec i' r).
        Intros C7; Rewrite C7; Rewrite C4.
-         Apply Maximize_ext1 with n:=i0 k:=`0`; Try Omega'; Auto.
+         Apply Maximize_ext1 with n:=i1 k:=`0`; Try Omega'; Auto.
        Intros; Rewrite C5; Try Omega'.
-         Apply Maximize_ext1 with n:=i0 k:=`0`; Try Omega'; Auto.
+         Apply Maximize_ext1 with n:=i1 k:=`0`; Try Omega'; Auto.
    Omega.
    Unfold Zwf; Omega.
 Save.
@@ -440,7 +440,7 @@ Lemma maxisort_po_4 :
   (sorted_array t `i + 1` `(array_length t) - 1`) /\ (permut t t) /\
   ((`i + 1 < (array_length t)` -> (Maximize t i (access t `i + 1`) `0`))).
 Proof.
-  Intros;  Subst result; Ring `(array_length t)-1+1`; Split.   Omega'.
+  Intros;  Subst i; Ring `(array_length t)-1+1`; Split.   Omega'.
   Split. Unfold sorted_array; Intros H; 
   Absurd `(array_length t) <= (array_length t)-1`; [Omega' | Auto].
   Split. Apply permut_refl.
@@ -463,7 +463,7 @@ Lemma maxisort_po_5 :
           `i1 < 0`)
   (sorted_array t0 `0` `(array_length t0) - 1`) /\ (permut t0 t).
 Proof.
-  Intros; Cut `i0+1=0`; [Intros H; Rewrite H in Post2; Split; Tauto | Omega'].
+  Intros; Cut `i1+1=0`; [Intros H; Rewrite H in Post2; Split; Tauto | Omega'].
 Save.
 
 

@@ -203,18 +203,18 @@ Lemma quick_rec_po_4 :
     `m2 < i`) /\ `i <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i` `1 + r0 - i1`))).
 Proof.
 Intuition.
-Assert hj : `j < m1` \/ j = m1. Omega. 
+Assert hj : `j < m2` \/ j = m2. Omega. 
 Decompose [exchange] Post30. Intuition.
 Rewrite H26; Try Omega.
 Apply H5; Omega.
 Subst j; Rewrite H25; Assumption.
-Assert hj : `j < i0` \/ j = i0. Omega. 
+Assert hj : `j < i1` \/ j = i1. Omega. 
 Decompose [exchange] Post30. Intuition.
 Rewrite H26; Try Omega.
 Apply H9; Omega.
 Subst j; Rewrite H24. Apply H9; Omega.
 Apply sub_permut_trans with t1.
-Apply exchange_is_sub_permut with i0 m1; Assumption Orelse Omega.
+Apply exchange_is_sub_permut with i1 m2; Assumption Orelse Omega.
 Assumption.
 Decompose [exchange] Post30. Intuition.
 Rewrite H24; Omega.
@@ -261,7 +261,7 @@ Lemma quick_rec_po_5 :
     `m1 < i`) /\ `i <= r0 + 1`) /\ (Zwf `0` `1 + r0 - i` `1 + r0 - i1`))).
 Proof.
 Intuition.
-Assert hj : `j < i0` \/ `j = i0`. Omega. Intuition.
+Assert hj : `j < i1` \/ `j = i1`. Omega. Intuition.
 Rewrite H15; Assumption.
 Unfold Zwf; Omega.
 Save.
@@ -530,7 +530,7 @@ Lemma quick_rec_po_12 :
 Proof.
 Intuition.
 Unfold sorted_array; Intros.
-Assert hx: `x < m0-1` \/ `x = m0-1` \/ x = m0 \/ `m0 < x`. 
+Assert hx: `x < m1-1` \/ `x = m1-1` \/ x = m1 \/ `m1 < x`. 
 Omega. Intuition.
 (* x < m0-1 *)
 Elim (sub_permut_id H24); Intros.
@@ -542,10 +542,10 @@ Elim (sub_permut_id H24); Intros.
 Unfold array_id in H28.
 Rewrite (H28 x). Rewrite (H28 `x+1`). 
 Clear H28 H30. Elim (sub_permut_id H20); Intros.
-Unfold array_id in H30. Replace `x+1` with m0.
-Rewrite (H30 m0). Elim Post32; Intros.
+Unfold array_id in H30. Replace `x+1` with m1.
+Rewrite (H30 m1). Elim Post32; Intros.
 Rewrite H35. Rewrite H13. Clear H34 H35 H36.
-Assert hm0 : `m0-1 < (array_length t2)`. Omega.
+Assert hm0 : `m1-1 < (array_length t2)`. Omega.
 Rewrite <- (sub_permut_length H20) in hm0.
 Generalize (sub_permut_function H20 H1 hm0); Intros.
 Elim (H34 x). Clear H34. Intuition.
@@ -554,7 +554,7 @@ Rewrite H2j.
 Assert j = l0 \/ `l0 < j`. Omega. Intuition.
 Elim Post32; Intros.
 Subst j. Rewrite H44.
-Assert `(access t1 m0) < v`.
+Assert `(access t1 m1) < v`.
 Apply H9; Omega. Omega.
 Elim Post32; Intros.
 Rewrite H46; Try Omega.
@@ -565,8 +565,8 @@ Omega. Omega. Omega. Omega. Omega.
 Subst x.
 Elim (sub_permut_id H24); Intros.
 Unfold array_id in H28.
-Rewrite (H28 m0). Clear H28 H29.
-Assert hm0 : `0 <= m0+1`. Omega.
+Rewrite (H28 m1). Clear H28 H29.
+Assert hm0 : `0 <= m1+1`. Omega.
 Assert hl:(array_length t4)=(array_length t0).
   ArrayLength; Clear H24.
   ArrayLength; Clear H20.
@@ -574,12 +574,12 @@ Assert hl:(array_length t4)=(array_length t0).
   ArrayLength.
 Rewrite <- hl in H2.
 Generalize (sub_permut_function H24 hm0 H2); Intros.
-Elim (H28 `m0+1`). Clear H28. Intuition.
+Elim (H28 `m1+1`). Clear H28. Intuition.
 Elim H28; Intros j [H1j H2j]. Rewrite H2j.
 Clear H28 H29 H2j.
 Elim (sub_permut_id H20); Intros.
 Unfold array_id in H29.
-Rewrite (H29 m0); Try Omega. Rewrite (H29 j); Try Omega.
+Rewrite (H29 m1); Try Omega. Rewrite (H29 j); Try Omega.
 Elim Post32; Intros.
 Rewrite H34.
 Rewrite (H35 j); Try Omega.
@@ -589,13 +589,13 @@ Apply H8; Omega. ArrayLength; Clear Post32; ArrayLength.
 Omega. Omega.
 (* sub_permut *)
 Apply sub_permut_trans with t3.
-Apply sub_permut_extension with `m0+1` r0.
+Apply sub_permut_extension with `m1+1` r0.
 Omega. Omega. Assumption.
 Apply sub_permut_trans with t2.
-Apply sub_permut_extension with l0 `m0-1`.
+Apply sub_permut_extension with l0 `m1-1`.
 Omega. Omega. Assumption.
 Apply sub_permut_trans with t1.
-Apply exchange_is_sub_permut with l0 m0.
+Apply exchange_is_sub_permut with l0 m1.
 Omega. Omega. Assumption.
 Assumption.
 Save.
