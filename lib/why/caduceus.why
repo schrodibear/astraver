@@ -1,10 +1,31 @@
 
+(* bitwise operations *)
+logic bw_compl : int -> int
+external parameter bw_compl : int -> int
+
+logic bw_and : int,int -> int
+external parameter bw_and : int -> int -> int
+
+logic bw_xor : int,int -> int
+external parameter bw_xor : int -> int -> int
+
+logic bw_or : int,int -> int
+external parameter bw_or : int -> int -> int
+
+logic lsl : int,int -> int
+external parameter lsl : int -> int -> int
+
+logic lsr : int,int -> int
+external parameter lsr : int -> int -> int
+
 (* default variable initialisation *)
+
 parameter any_int: unit -> int
 parameter any_float: unit -> float
 parameter any_pointer: unit -> pointer
 
 (* pointer arithmetic *)
+
 parameter null : pointer
 logic block_length: alloc_table,pointer -> int
 logic base_addr: pointer -> addr
@@ -97,9 +118,15 @@ axiom valid_index_valid_shift :
   forall a:alloc_table. forall p:pointer. forall i:int. 
   valid_index(a,p,i) -> valid(a,shift(p,i))
 
+(* redondant avec le predecent et le suivant, mais utile *)
 axiom valid_range_valid_shift :
   forall a:alloc_table. forall p:pointer. forall i:int. forall j:int. forall k:int.
   valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
+
+
+axiom valid_range_valid_index :
+  forall a:alloc_table. forall p:pointer. forall i:int. forall j:int. forall k:int.
+  valid_range(a,p,i,j) -> i <= k <= j -> valid_index(a,p,k)
 
 axiom sub_pointer_def :
   forall p1:pointer. forall p2:pointer.
@@ -167,6 +194,7 @@ exception Return_float of float
 exception Return_pointer of pointer
 
 (* for Simplify *)
+
 axiom false_not_true : false <> true
 
 (* modeling assigns clauses *)
@@ -179,7 +207,7 @@ logic unchanged : pointer,assign_loc -> prop
 
 predicate assigns (a:alloc_table,m1:'a memory,m2:'a memory,l:assign_loc) =
  forall p:pointer.
-    (valid(a,p) and unchanged(p,l)) -> acc(m2,p)=acc(m1,p)
+    valid(a,p) -> unchanged(p,l) -> acc(m2,p)=acc(m1,p)
 
 
 axiom unchanged_pointer_intro : 
@@ -216,33 +244,8 @@ axiom unchanged_range_elim :
        unchanged(p1,range_loc(p2,a,b)) ->
  	(forall i:int. a <= i <= b -> p1 <> shift(p2,i))  
 
-(* bitwise operations *)
-logic bw_compl : int -> int
-external parameter bw_compl : int -> int
 
-logic bw_and : int,int -> int
-external parameter bw_and : int -> int -> int
 
-logic bw_xor : int,int -> int
-external parameter bw_xor : int -> int -> int
-
-logic bw_or : int,int -> int
-external parameter bw_or : int -> int -> int
-
-logic lsl : int,int -> int
-external parameter lsl : int -> int -> int
-
-logic lsr : int,int -> int
-external parameter lsr : int -> int -> int
-
-(* redondant axioms *)
-
-(* marche pas: order sup
-axiom assigns_upd :
- forall a:alloc_table. forall m:'a memory. forall unch:assign_loc.
-   forall p:pointer. forall x:'a.
-    not(unch(p)) -> assigns(a,m,upd(m,p,x),unch)
-*)
 
 
 

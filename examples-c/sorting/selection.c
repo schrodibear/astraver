@@ -8,7 +8,7 @@
 void swap(int t[],int i,int j) {
   int tmp = t[i]; 
   t[i] = t[j]; 
-  t[i] = tmp;
+  t[j] = tmp;
 }
 
 //@ logic intmset mset(int t[],int i,int j) reads t[*]

@@ -127,14 +127,14 @@ assert (k < j3 \/ k=j3).
 omega.
 intuition.
 generalize (H7 k).
-subst; intuition.
+subst; auto with *.
 subst; omega.
 
 (* subgoal 2 *)
 assert (k < j3 \/ k=j3).
 omega.
-subst; intuition.
-subst k; omega.
+intuition.
+subst; auto with *.
 
 subst; auto.
 Qed.
@@ -182,44 +182,6 @@ omega.
 subst; omega.
 Qed.
 
-Proof.
-intuition.
-subst; auto.
-Qed.
-
-Proof.
-intuition; 
-  try solve [subst; auto with *].
-
-unfold sorted in *|-*; intuition.
-subst result result2 min2.
-assert (k < i2-1 \/ k = i2-1).
-omega.
-intuition; subst; caduceus.
-
-Focus 2.
-assert (k < i2 \/ k=i2).
-omega.
-assert (l=min3\/l<>min3).
-omega.
-intuition;subst; caduceus.
-
-Admitted.
-
-Proof.
-intuition.
-red; intuition.
-Save.
-
-Proof.
-intuition.
-unfold sorted in *|-*; intuition.
-assert (k < n-2 \/ k=n-2).
-omega.
-intuition.
-Save.
-
-
 
 (* Why obligation from file "why/selection.why", characters 1489-1525 *)
 Lemma selection_impl_po_4 : 
@@ -265,7 +227,6 @@ Lemma selection_impl_po_4 :
   (valid_index alloc t caduceus_1) /\ (valid_index alloc t i2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
 (* Why obligation from file "why/selection.why", characters 1464-1525 *)
@@ -328,8 +289,42 @@ Lemma selection_impl_po_5 :
     (Zwf 0 (n - i) (n - i2)))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
+
+unfold sorted in *|-*; intuition.
+assert (k < i2-1 \/ k = i2-1).
+omega.
+intuition idtac.
+rewrite H15; auto with *.
+rewrite H15; auto with *.
+subst.
+rewrite H15; auto with *.
+ring (i2 -1 +1).
+rewrite H17; caduceus; auto with *.
+
+Focus 2.
+assert (k < i2 \/ k=i2).
+omega.
+intuition idtac.
+
+rewrite H15; auto with *.
+
+assert (l=min3\/l<>min3).
+omega.
+intuition idtac.
+subst; rewrite H16; auto with *.
+rewrite H15; auto with *.
+
+
+subst; rewrite H17; auto with *.
+
+assert (l=min3\/l<>min3).
+omega.
+intuition idtac.
+subst; rewrite H16; auto with *.
+rewrite H15; auto with *.
+
+Admitted.
+(* Save. *)
 
 (* Why obligation from file "why/selection.why", characters 351-820 *)
 Lemma selection_impl_po_6 : 
@@ -354,8 +349,9 @@ Lemma selection_impl_po_6 :
      (i1 <= l /\ l < n -> (acc intP (shift t k)) <= (acc intP (shift t l)))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+red; intuition.
 Save.
+
 
 (* Why obligation from file "why/selection.why", characters 265-1578 *)
 Lemma selection_impl_po_7 : 
@@ -387,8 +383,13 @@ Lemma selection_impl_po_7 :
   (mset intP0 t 0 (n - 1)) = (mset intP t 0 (n - 1)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+unfold sorted in *|-*; intuition.
+assert (k < n-2 \/ k=n-2).
+omega.
+intuition.
 Save.
+
+
 
 (* Why obligation from file "why/selection.why", characters 1918-1946 *)
 Lemma swap_impl_po_1 : 
@@ -402,7 +403,7 @@ Lemma swap_impl_po_1 :
   (valid alloc aux_1).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; auto.
 Save.
 
 (* Why obligation from file "why/selection.why", characters 1918-1946 *)
@@ -427,7 +428,7 @@ Lemma swap_impl_po_2 :
         (forall (intP0:((memory) Z)),
          (intP0 = (upd intP result0 result2) ->
           (forall (result0:pointer),
-           (result0 = (shift t i) ->
+           (result0 = (shift t j) ->
             (forall (intP1:((memory) Z)),
              (intP1 = (upd intP0 result0 result) ->
               ((acc intP1 (shift t i)) = (acc intP (shift t j)) /\
@@ -439,6 +440,34 @@ Lemma swap_impl_po_2 :
       (valid alloc result1))))).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+assert (i=j \/ i <> j).
+omega.
+intuition idtac.
+subst; caduceus.
+subst; caduceus.
+
+assert (i=j \/ i <> j).
+omega.
+intuition idtac.
+subst; caduceus.
+subst; caduceus.
+
+unfold assigns.
+intros.
+assert (p <> result3).
+apply unchanged_pointer_elim.
+eapply unchanged_union_elim1.
+subst result3.
+apply H8.
+subst intP1; caduceus.
+assert (p <> result0).
+apply unchanged_pointer_elim.
+eapply unchanged_union_elim2.
+subst result0.
+apply H8.
+subst intP0; caduceus.
+subst; auto.
+subst; auto.
+subst; auto.
 Save.
 

@@ -3,6 +3,10 @@ Require Export caduceus_why.
 
 Notation " p # f " := (acc f p) (at level 30, f at level 0).
 
+
+(**************************************
+  handling (acc (upd ...)) patterns
+**************************************)
 Ltac Acc_upd :=
   rewrite acc_upd ||
   (rewrite acc_upd_eq; [ idtac | progress auto with * ]) ||
@@ -11,16 +15,33 @@ Ltac Acc_upd :=
 
 Ltac caduceus := repeat Acc_upd.
 
+(*******************************************
+  handling valid, valid_index, valid_range
+*********************************************)
+
 Hint Resolve neq_base_addr_neq_shift.
 Hint Resolve neq_offset_neq_shift.
 Hint Resolve eq_offset_eq_shift.
 
 Ltac valid := match goal with
-  | id:(valid_range ?X1 ?X2 ?X3 ?X4) |- (valid ?X1 (shift ?X2 ?X5))
-    => apply valid_range_valid_shift with X3 X4; auto with *
+  | id:(valid_range ?X1 ?X2 ?X3 ?X4) |-  (valid ?X1 (shift ?X2 ?X5))
+  => apply valid_range_valid_shift with X3 X4; auto with *
   | id:(valid_index ?X1 ?X2 ?X3) |- (valid ?X1 (shift ?X2 ?X3))
     => apply valid_index_valid_shift; auto with *
 end.
+
+Hint Extern 0 (valid _ _) => valid.
+
+Ltac valid_index := match goal with
+  | id:(valid_range ?X1 ?X2 ?X3 ?X4) |- (valid_index ?X1 ?X2 ?X5)
+    => apply valid_range_valid_index with X3 X4; auto with *
+end.
+
+Hint Extern 0 (valid_index _ _ _) => valid_index.
+
+(***************************************
+  tactics for proving 'assigns' clauses 
+****************************************)
 
 Ltac CleanAssigns :=
   match goal with
@@ -65,12 +86,13 @@ Ltac AssignsRec :=
        | Store | ModRec ]
 *)
   |  |- (assigns ?X1 ?X2 ?X3 (pointer_loc ?X4)) =>
-       unfold assigns; intro tmpp; intro assigncond; 
-        elim assigncond; clear assigncond; 
-        intros validcond unchangedcond;
+       unfold assigns; intros tmpp validcond unchangedcond;
         generalize (unchanged_pointer_elim tmpp X4 unchangedcond);
         intro neq_pointer_cond;
         caduceus; progress auto
+(*
+  |  |- (assigns ?X1 ?X2 ?X3 (union_loc ?X4 ?X5)) =>
+*) 
   end.
 
 
@@ -80,9 +102,10 @@ Ltac Unchanged :=
   match goal with
   | |- (unchanged ?X1 (pointer_loc ?X2)) =>
       apply unchanged_pointer_intro;auto
+  | |- (unchanged ?X1 (union_loc ?X2 ?X3)) =>
+      apply unchanged_union_intro;auto
  end.
 
 
 Hint Extern 0 (assigns _ _ _ _) => Assigns.
-Hint Extern 0 (valid _ _) => valid.
 Hint Extern 0 (unchanged _ _) => Unchanged.

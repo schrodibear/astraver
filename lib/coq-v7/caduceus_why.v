@@ -10,6 +10,24 @@ Parameter alloc : Set.
 Parameter memory : Set -> Set.
 Parameter assign_loc : Set.
 
+(*Why logic*) Definition bw_compl : Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_and : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_xor : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition bw_or : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition lsl : Z -> Z -> Z.
+Admitted.
+
+(*Why logic*) Definition lsr : Z -> Z -> Z.
+Admitted.
+
 (*Why*) Parameter any_int : (_: unit)Z.
 
 (*Why*) Parameter any_float : (_: unit)R.
@@ -140,6 +158,10 @@ Admitted.
    ((p:pointer) ((i:Z) ((valid_index a p i) -> (valid a (shift p i)))))).
 Admitted.
 
+Admitted.
+
+Admitted.
+
 (*Why axiom*) Lemma valid_range_valid_shift :
   ((a:alloc_table)
    ((p:pointer)
@@ -150,6 +172,14 @@ Admitted.
         (`i <= k` /\ `k <= j` -> (valid a (shift p k))))))))).
 Admitted.
 
+(*Why axiom*) Lemma valid_range_valid_index :
+  ((a:alloc_table)
+   ((p:pointer)
+    ((i:Z)
+     ((j:Z)
+      ((k:Z)
+       ((valid_range a p i j) ->
+        (`i <= k` /\ `k <= j` -> (valid_index a p k)))))))).
 Admitted.
 
 (*Why axiom*) Lemma sub_pointer_def :
@@ -253,7 +283,8 @@ Admitted.
 
 (*Why predicate*) Definition assigns [A37:Set] [a:alloc_table]
   [m1:((memory) A37)] [m2:((memory) A37)] [l:assign_loc]
-  := ((p:pointer) ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
+  := ((p:pointer)
+      ((valid a p) -> ((unchanged p l) -> (acc m2 p) = (acc m1 p)))).
 Implicits assigns [1].
 
 (*Why axiom*) Lemma unchanged_pointer_intro :
@@ -307,21 +338,15 @@ Admitted.
 
 
 
-(*Why logic*) Definition bw_compl : Z -> Z.
 Admitted.
 
-(*Why logic*) Definition bw_and : Z -> Z -> Z.
 Admitted.
 
-(*Why logic*) Definition bw_xor : Z -> Z -> Z.
 Admitted.
 
-(*Why logic*) Definition bw_or : Z -> Z -> Z.
 Admitted.
 
-(*Why logic*) Definition lsl : Z -> Z -> Z.
 Admitted.
 
-(*Why logic*) Definition lsr : Z -> Z -> Z.
 Admitted.
 
