@@ -9,7 +9,7 @@ ml:
 	../bin/why.opt --ocaml test.mlw
 
 c:
-	../bin/why.opt -d -V ctest.c
+	../bin/why.opt -d -V --coq-tactic Intuition ctest.c
 	coqc -R ../lib/coq Coq.why ctest_why.v
 
 pvs:

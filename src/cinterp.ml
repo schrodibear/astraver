@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.12 2002-11-26 16:54:21 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.13 2002-11-27 08:14:36 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -222,6 +222,11 @@ let interp_assign_op = function
   | Aleft | Aright | Aand | Axor | Aor -> assert false (* TODO *)
   | Aequal -> assert false
 
+let interp_unary_op = function
+  | Prefix_inc | Postfix_inc -> Plus
+  | Prefix_dec | Postfix_dec -> Minus
+  | _ -> assert false
+
 (*s Coercion of [e] of type [t] to an expected type [et] *)
 
 let coerce l et e t = match et with
@@ -311,19 +316,33 @@ let rec interp_expr cenv et e =
 	  int_of_bool l (interp_boolean cenv e), c_int
       | CEbinary (l, e1, (Bw_and | Bw_or | Bw_xor as op), e2) ->
 	  assert false
-      | CEunary (l, Prefix_inc, lv) ->
+      | CEunary (l, (Prefix_inc | Prefix_dec as op), lv) ->
 	  (match interp_lvalue cenv lv with
 	     | LVid (_, id), ct -> 
 		 let getid = ml_refget l id in
 		 let id_1,_ = 
-		   interp_binop l Plus (getid, ct) 
+		   interp_binop l (interp_unary_op op) (getid, ct) 
 		     (ml_const l (ConstInt 1), c_int)
 		 in
-		 let incrid = ml_refset l id id_1 in (* id := !id + 1 *)
+		 let incrid = ml_refset l id id_1 in (* id := !id +- 1 *)
 		 if et = Some void then 
 		   incrid, void
 		 else 
 		   mk_seq l incrid getid, ct)
+      | CEunary (l, (Postfix_inc | Postfix_dec as op), lv) ->
+	  (match interp_lvalue cenv lv with
+	     | LVid (_, id), ct -> 
+		 let getid = ml_refget l id in
+		 let id_1,_ = 
+		   interp_binop l (interp_unary_op op) (getid, ct) 
+		     (ml_const l (ConstInt 1), c_int)
+		 in
+		 let incrid = ml_refset l id id_1 in (* id := !id +- 1 *)
+		 if et = Some void then 
+		   incrid, void
+		 else 
+		   ml_let_tmp l getid 
+		     (fun x -> mk_seq l incrid (ml_var l x), ct))
       | CEunary (l, Not, e) ->
 	  ml_if l (interp_boolean cenv e) (c_false l) (c_true l), c_int
       | CEunary (l, Uplus, e) ->
@@ -334,8 +353,6 @@ let rec interp_expr cenv et e =
 	     | CTpure PTint -> ml_unop l t_neg_int m, t
 	     | CTpure PTfloat -> ml_unop l t_neg_float m, t
 	     | _ -> expected_num l)
-      | CEunary _ ->
-	  assert false
       | CEarrget (l, CEvar (l', id), e) ->
 	  let m,_ = interp_expr cenv (Some c_int) e in
 	  (match get_type l' cenv id with
