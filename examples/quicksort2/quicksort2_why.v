@@ -595,6 +595,67 @@ Lemma quick_rec_po_16 :
   (sorted_array t4 l0 r0) /\ (sub_permut l0 r0 t4 t0).
 Proof.
 Intuition.
+Unfold sorted_array; Intros.
+Assert hx: `x < m0-1` \/ `x = m0-1` \/ x = m0 \/ `m0 < x`. 
+Omega. Intuition.
+(* x < m0-1 *)
+Elim (sub_permut_id H16); Intros.
+Unfold array_id in H21.
+Rewrite (H21 x). Rewrite (H21 `x+1`). 
+Apply H10; Omega. Omega. Omega.
+(* x = m0-1 *)
+Elim (sub_permut_id H16); Intros.
+Unfold array_id in H20.
+Rewrite (H20 x). Rewrite (H20 `x+1`). 
+Clear H20 H22. Elim (sub_permut_id H14); Intros.
+Unfold array_id in H22. Replace `x+1` with m0.
+Rewrite (H22 m0). Elim Post23; Intros.
+Rewrite H26. Rewrite H9. Clear H25 H26 H27.
+Assert hm0 : `m0-1 < N`. Omega.
+Generalize (sub_permut_function H1 hm0 H14); Intros.
+Elim (H25 x). Clear H25. Intuition.
+Elim H25; Intros j [ H1j H2j].
+Rewrite H2j.
+Assert j = l0 \/ `l0 < j`. Omega. Intuition.
+Elim Post23; Intros.
+Subst j. Rewrite H34.
+Assert `(access t1 m0) < v`.
+Apply H7; Omega. Omega.
+Elim Post23; Intros.
+Rewrite H36; Try Omega.
+Assert `(access t1 j) < v`.
+Apply H7; Omega. Omega.
+Omega. Omega. Omega. Omega. Omega.
+(* x = m0 *)
+Subst x.
+Elim (sub_permut_id H16); Intros.
+Unfold array_id in H20.
+Rewrite (H20 m0). Clear H20 H21.
+Assert hm0 : `0 <= m0+1`. Omega.
+Generalize (sub_permut_function hm0 H2 H16); Intros.
+Elim (H20 `m0+1`). Clear H20. Intuition.
+Elim H20; Intros j [H1j H2j]. Rewrite H2j.
+Clear H20 H21 H2j.
+Elim (sub_permut_id H14); Intros.
+Unfold array_id in H21.
+Rewrite (H21 m0); Try Omega. Rewrite (H21 j); Try Omega.
+Elim Post23; Intros.
+Rewrite H25.
+Rewrite (H26 j); Try Omega.
+Rewrite H9.
+Apply Zge_le.
+Apply H5; Omega. Omega. Omega.
+(* sub_permut *)
+Apply sub_permut_trans with t3.
+Apply sub_permut_extension with `m0+1` r0.
+Omega. Omega. Assumption.
+Apply sub_permut_trans with t2.
+Apply sub_permut_extension with l0 `m0-1`.
+Omega. Omega. Assumption.
+Apply sub_permut_trans with t1.
+Apply exchange_is_sub_permut with l0 m0.
+Omega. Omega. Assumption.
+Assumption.
 Save.
 
 Lemma quick_rec_po_17 : 
@@ -610,7 +671,8 @@ Lemma quick_rec_po_17 :
   (Test1: `l0 >= r0`)
   (sorted_array t0 l0 r0) /\ (sub_permut l0 r0 t0 t0).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Unfold sorted_array; Intros; Omega.
 Save.
 
 Definition quick_rec := (* validation *)
@@ -962,7 +1024,7 @@ Definition quick_rec := (* validation *)
 Lemma quicksort_po_1 : 
   `0 <= 0` /\ `N - 1 < N`.
 Proof.
-(* FILL PROOF HERE *)
+Omega.
 Save.
 
 Lemma quicksort_po_2 : 
@@ -972,7 +1034,8 @@ Lemma quicksort_po_2 :
   (Post1: (sorted_array t0 `0` `N - 1`) /\ (sub_permut `0` `N - 1` t0 t))
   (sorted_array t0 `0` `N - 1`) /\ (permut t0 t).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+EAuto.
 Save.
 
 Definition quicksort := (* validation *)
