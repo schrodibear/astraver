@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctypes.ml,v 1.5 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: ctypes.ml,v 1.6 2003-12-24 13:25:46 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -28,6 +28,8 @@ let add s = match !stack with
       if debug then eprintf "Ctypes.add %s@." s; 
       m := Sset.add s !m
   | [] -> assert false
+
+let _ = add "__builtin_va_list"
 
 let remove s = match !stack with
   | m :: _ -> 
