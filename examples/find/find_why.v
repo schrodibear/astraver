@@ -1547,7 +1547,7 @@ Lemma find_po_37 :
   (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\ (permut A0 A) /\
            `1 <= m0` /\ `n0 <= N`)
   (Test1: `m0 >= n0`)
-  (found A0) /\ (permut A0 A0).
+  (found A0) /\ (permut A0 A).
 Proof.
 Intuition.
 Apply Lemma_3 with m:=m0 n:=n0; Auto.
@@ -1581,13 +1581,13 @@ Definition find := (* validation *)
           (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
           (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`)
           (sig_4 (array `N + 1` Z) Z Z unit [A1: (array `N + 1` Z)][m1: Z]
-           [n1: Z][result1: unit]((found A1) /\ (permut A1 A0)))
+           [n1: Z][result1: unit]((found A1) /\ (permut A1 A)))
           [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
            (A0: (array `N + 1` Z))(m0: Z)(n0: Z)(_: Variant2 = `n0 - m0`)
            (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
            (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`)
            (sig_4 (array `N + 1` Z) Z Z unit [A1: (array `N + 1` Z)][m1: Z]
-            [n1: Z][result1: unit]((found A1) /\ (permut A1 A0)));
+            [n1: Z][result1: unit]((found A1) /\ (permut A1 A)));
            A0: (array `N + 1` Z); m0: Z; n0: Z; Pre20: Variant1 = `n0 - m0`;
            Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
            (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`]
@@ -2542,16 +2542,16 @@ Definition find := (* validation *)
                     (find_po_36 A result Post1 result0 Post2 Variant1 A0 m0
                     n0 Pre20 Inv_mn Test14 A1 m1 n1 Inv_mn0)) in
                 (exist_4 [A2: (array `N + 1` Z)][m2: Z][n2: Z][result3: unit]
-                (found A2) /\ (permut A2 A0) A1 m1 n1 result2 Post23)
+                (found A2) /\ (permut A2 A) A1 m1 n1 result2 Post23)
             | (right Test1) =>
                 let (A1, m1, n1, result2, Post22) =
                   (exist_4 [A1: (array `N + 1` Z)][m1: Z][n1: Z]
-                  [result2: unit](found A1) /\ (permut A1 A0) A0 m0 n0 
+                  [result2: unit](found A1) /\ (permut A1 A) A0 m0 n0 
                   tt
                   (find_po_37 A result Post1 result0 Post2 Variant1 A0 m0 n0
                   Pre20 Inv_mn Test1)) in
                 (exist_4 [A2: (array `N + 1` Z)][m2: Z][n2: Z][result3: unit]
-                (found A2) /\ (permut A2 A0) A1 m1 n1 result2 Post22) end)
+                (found A2) /\ (permut A2 A) A1 m1 n1 result2 Post22) end)
           `result0 - result` A result result0
           (refl_equal ? `result0 - result`)
           (find_po_38 A result Post1 result0 Post2)) in

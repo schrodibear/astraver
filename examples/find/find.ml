@@ -82,4 +82,4 @@ let find =
         begin n := f; m := f end
     end
   done
-  { found(A) and permut(A,A@) }
+  { found(A) and permut(A,A@init) }
