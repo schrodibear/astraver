@@ -87,6 +87,7 @@ let assumption concl = function
   | Spred (id, Pand (a, b)) when a = concl -> Proj1 id
   | _ -> raise Exit
 
+(* alpha-equivalence ? *)
 let lookup_hyp a = 
   let test = function Spred (id, b) when a = b -> id | _ -> raise Exit in
   list_first test
@@ -220,7 +221,7 @@ let unify bvars p c =
        | Some x -> x) bvars
 
 (* alpha-equivalence over predicates *)
-let alpha a b = 
+let alpha_eq a b = 
   try let _ = unif_pred Idmap.empty (a, b) in true with Exit -> false
 
 let lookup_boolean_instance a b =
@@ -303,7 +304,7 @@ let linear ctx concl =
     | [] -> 
 	raise Exit
     (* assumption *)
-    | Spred (id, p) :: _ when p = concl -> (* alpha-equivalence ? *)
+    | Spred (id, p) :: _ when alpha_eq p concl ->
 	Assumption id
     (* and-elimination *)
     | Spred (id, Pand (a, b)) :: ctx ->
@@ -370,12 +371,11 @@ let linear ctx concl =
 		raise Exit
 	end
     (* implication-elimination *)
-    | Spred (id, Pimplies (p, q)) :: ctx -> (* alpha-equivalence ? *)
+    | Spred (id, Pimplies (p, q)) :: ctx ->
 	begin try
-
 	  search ctx
 	with Exit ->
-	  let hp = lookup_hyp p ctx in
+	  let hp = lookup_hyp p ctx in (* alpha-equivalence ? *)
 	  let hq = fresh_hyp () in
 	  let ctx' = Spred (hq, q) :: ctx in
 	  ProofTerm
