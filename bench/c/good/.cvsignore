@@ -16,3 +16,6 @@ a.out
 test.c
 *.depend
 *.makefile
+cvcl
+pvs
+*.out

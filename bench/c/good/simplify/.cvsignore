@@ -13,3 +13,4 @@ pvstc.el
 *.sx.all
 .depend
 a.out
+test_why.all
