@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.60 2004-10-19 07:35:02 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.61 2004-10-19 08:42:51 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -512,7 +512,7 @@ and eval_const_expr e = match e.texpr_node with
   | TEbinary (t1, Cast.Bdiv_int, t2) -> 
       Int64.div (eval_const_expr t1)  (eval_const_expr t2)
   | TEcast (_, e) -> eval_const_expr e
-  | TEsizeof t -> Cltyping.sizeof e.texpr_loc t
+  | TEsizeof t -> sizeof e.texpr_loc t
   | TEvar v ->
       if e.texpr_type.ctype_const 
       then v.enum_constant_value
