@@ -14,9 +14,11 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.14 2004-01-07 16:13:06 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.15 2004-01-13 14:37:06 filliatr Exp $ i*)
 
 (*s C types *)
+
+type 'a located = { node : 'a; loc : Loc.t }
 
 type storage_class = No_storage | Extern | Auto | Static | Register
 
@@ -53,8 +55,6 @@ and 'expr parameter = 'expr ctype * string
 and 'expr field = 'expr ctype * string * 'expr option
 
 (*s C parsed abstract syntax trees *)
-
-type 'a located = { node : 'a; loc : Loc.t }
 
 type annot = int * string
 
@@ -141,7 +141,7 @@ type file = decl located list
 
 (*s C typed abstract syntax trees *)
 
-open Logic
+open Clogic
 
 type texpr = {
   texpr_node : texpr_node;
@@ -169,9 +169,11 @@ and texpr_node =
 
 and lvalue = texpr (* TODO: cf CIL *)
 
-type variant = term * pure_type * string
+type tctype = texpr ctype
 
-type loop_annotation = predicate option * variant
+type variant = tctype term * pure_type * string
+
+type loop_annotation = tctype predicate option * variant
 
 type loop_info = { loop_break : bool; loop_continue : bool }
 
@@ -199,11 +201,12 @@ and tstatement_node =
   | TSswitch of texpr * tstatement
   | TScase of texpr * tstatement
   | TSgoto of string
-  | TSassert of predicate
+  | TSassert of tctype predicate
 
 and tblock = tdecl located list * tstatement list
 
-and annotated_tblock = predicate option * tblock * predicate option
+and annotated_tblock = 
+    tctype predicate option * tblock * tctype predicate option
 
 and tdecl = 
   | Tlogic of string list * logic_type

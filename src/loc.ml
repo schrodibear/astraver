@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.8 2003-12-22 15:51:00 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.9 2004-01-13 14:37:06 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
@@ -83,4 +83,5 @@ let report_line fmt n =
 let line n = match !file with
   | Some f -> let (_,l,_) = Linenum.from_char f n in l
   | None -> assert false
+
 

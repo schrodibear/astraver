@@ -20,7 +20,7 @@
 
   open Format
   open Coptions
-  open Logic
+  open Clogic
   open Ptree
   open Cast
   open Parsing
@@ -31,6 +31,8 @@
   let locate x = { node = x; loc = loc() }
   let locate_i i x = { node = x; loc = loc_i i }
   let with_loc l x = { node = x; loc = l }
+
+  let info x = { Clogic.node = x; info = loc () }
 
   let error s = raise (Stdpp.Exc_located (loc (), Stream.Error s))
 
@@ -307,6 +309,9 @@
 /* non-ANSI tokens */
 %token ATTRIBUTE RESTRICT
 
+/* extra tokens for the logic */
+%token FORALL EXISTS AND OR NOT TRUE FALSE OLD RESULT LENGTH THEN AT
+
 %nonassoc specs
 %nonassoc TYPE_NAME
 %nonassoc no_annot
@@ -314,6 +319,8 @@
 
 %type <Cast.file> file
 %start file
+%type <Loc.t Clogic.predicate> predicate
+%start predicate
 %%
 
 file
@@ -902,9 +909,55 @@ attrib:
 | identifier LPAR argument_expression_list RPAR {}
 ;
 
-%%
 
-(* C annotations *)
+/* C annotations */
+
+predicate:
+  predicate0 PTR_OP predicate { info (Pimplies ($1, $3)) }
+| predicate0 { $1 }
+;
+
+predicate0:
+  predicate1 OR predicate0 { info (Por ($1, $3)) }
+| predicate1 { $1 }
+;
+
+predicate1:
+  predicate2 AND predicate1 { info (Pand ($1, $3)) }
+| predicate2 { $1 }
+;
+
+predicate2:
+  NOT predicate3 { info (Pnot $2) }
+| predicate3 { $1 }
+;
+
+predicate3:
+  TRUE { info Ptrue }
+| FALSE { info Pfalse }
+| IDENTIFIER { info (Pvar $1) }
+| term relation term { info (Prel ($1, $2, $3)) }
+| term relation term relation term { info 
+				       (Pand (info (Prel ($1, $2, $3)),
+					      info (Prel ($3, $4, $5)))) }
+;
+
+relation:
+  | LT { Lt } 
+  | GT { Gt }
+  | LE_OP { Le }
+  | GE_OP { Ge }
+  | EQ_OP { Eq }
+  | NE_OP { Neq }
+;
+
+term:
+| IDENTIFIER { info (Tvar ($1, Current)) }
+| IDENTIFIER AT { info (Tvar ($1, Before)) }
+| IDENTIFIER AT IDENTIFIER { info (Tvar ($1, At $3)) }
+;
+
+%%
 
 (***
 (* Entries for the C parser *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.mli,v 1.8 2003-12-22 15:51:00 filliatr Exp $ i*)
+(*i $Id: loc.mli,v 1.9 2004-01-13 14:37:06 filliatr Exp $ i*)
 
 open Format
 
@@ -39,4 +39,5 @@ val report_line : formatter -> int -> unit
 
 val report : formatter -> t -> unit
 val report_obligation : formatter -> t -> unit
+
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.7 2004-01-12 14:59:53 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.8 2004-01-13 14:37:06 filliatr Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -178,6 +178,21 @@ and wdecl = parse
 
 and ltoken = parse
   | [' ' '\t' '\012' '\r' '\n']+ { ltoken lexbuf }
+
+  | "forall"  { FORALL }
+  | "exists"  { EXISTS }
+  | "and"     { AND }
+  | "or"      { OR }
+  | "not"     { NOT }
+  | "true"    { TRUE }
+  | "false"   { FALSE }
+  | "\\old"    { OLD }
+  | "\\result" { RESULT }
+  | "\\length" { LENGTH }
+  | "if"                    { IF }
+  | "then"                  { THEN }
+  | "else"                  { ELSE }
+
   | rL (rL | rD)*       { let s = lexeme lexbuf in
 			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
 
@@ -189,8 +204,29 @@ and ltoken = parse
   | rD+ rE rFS?             { CONSTANT (lexeme lexbuf) }
   | rD* "." rD+ (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
   | rD+ "." rD* (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
+  | 'L'? '"' [^ '"']* '"'   { STRING_LITERAL (lexeme lexbuf) }
 
-  | 'L'? '"' [^ '"']* '"'     { STRING_LITERAL (lexeme lexbuf) }
+  | "@"                     { AT }
+  | ","                     { COMMA }
+  | "->"                    { PTR_OP }
+  | "?"                     { QUESTION }
+  | ":"                     { COLON }
+  | "."                     { DOT }
+  | "-"                     { MINUS }
+  | "+"                     { PLUS }
+  | "*"                     { STAR }
+  | "/"                     { SLASH }
+  | "%"                     { PERCENT }
+  | "<"                     { LT }
+  | ">"                     { GT }
+  | "<="                    { LE_OP }
+  | ">="                    { GE_OP }
+  | "=="                    { EQ_OP }
+  | "!="                    { NE_OP }
+  | "("                     { LPAR }
+  | ")"                     { RPAR }
+  | ("["|"<:")              { LSQUARE }
+  | ("]"|":>")              { RSQUARE }
 
   | eof { EOF }
   | _   { lex_error lexbuf ("Illegal_character " ^ lexeme lexbuf) }
