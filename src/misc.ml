@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.30 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.31 2002-04-15 13:29:19 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -160,9 +160,16 @@ let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
 
 let rec tsubst_in_term s = function
-  | Tvar x as t -> (try Idmap.find x s with Not_found -> t)
-  | Tapp (x,l) -> Tapp (x, List.map (tsubst_in_term s) l)
-  | Tconst _ | Tbound _ as t -> t
+  | Tvar x as t -> 
+      (try Idmap.find x s with Not_found -> t)
+  | Tapp (x,l) -> 
+      Tapp (x, List.map (tsubst_in_term s) l)
+(*i***EXP
+      let l' = List.map (tsubst_in_term s) l in
+      (try applist (Idmap.find x s) l' with Not_found -> Tapp (x,l'))
+***i*)
+  | Tconst _ | Tbound _ as t -> 
+      t
 
 let rec map_predicate f = function
   | Pimplies (a, b) -> Pimplies (f a, f b)

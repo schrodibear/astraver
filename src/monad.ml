@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.25 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.26 2002-04-15 13:29:19 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -135,7 +135,7 @@ let unit info t ren =
   let q = k.c_post in
   let ids = get_writes ef in
   if ids = [] && q = None then
-    CC_expr t
+    CC_term t
   else 
     let hole = match q with
       | None -> 
@@ -147,7 +147,7 @@ let unit info t ren =
     in
     CC_tuple (
       (List.map (fun id -> let id' = current_var ren id in CC_var id') ids) @
-      (CC_expr t) :: hole)
+      (CC_term t) :: hole)
     
 
 (*s [compose k1 e1 e2 ren env] constructs the term
@@ -301,15 +301,15 @@ let wfrec (phi,r) info f ren =
   let fw ren = 
     let tphi = apply_term ren env phi in
     let decphi = predicate_of_term (applist r [tphi; Tvar vphi]) in
-    CC_app (CC_var w, [CC_expr tphi; CC_hole decphi] @ input ren) 
+    CC_app (CC_var w, [CC_term tphi; CC_hole decphi] @ input ren) 
   in
   CC_app (CC_var well_founded_induction,
-	  [CC_expr r;
+	  [CC_term r;
 	   CC_hole (papplist (Pvar well_founded) [r]);
 	   CC_type (TTarrow ((vphi, CC_var_binder a), tphi));
 	   cc_lam 
 	     [vphi, CC_var_binder a; w, CC_var_binder tw]
 	     (let ren' = next ren (get_writes k.c_effect) in 
 	      abstraction info' (f fw) ren');
-	   CC_expr (apply_term ren env phi)] @
+	   CC_term (apply_term ren env phi)] @
 	  input ren)

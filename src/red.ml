@@ -1,72 +1,49 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.11 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.12 2002-04-15 13:29:19 filliatr Exp $ i*)
 
 open Ast
+open Logic
 open Ident
 open Misc
 open Util
 
-let rec cc_subst subst = function
-  | CC_var id as c -> 
-      (try CC_expr (Idmap.find id subst) with Not_found -> c)
-  | CC_letin (b,bl,c1,c2) ->
-      CC_letin (b, cc_subst_binders subst bl,
-		cc_subst subst c1, cc_subst (cc_cross_binders subst bl) c2)
-  | CC_lam (b, c) ->
-      CC_lam (cc_subst_binder subst b, 
-	      cc_subst (cc_cross_binders subst [b]) c)
-  | CC_app (c, cl) ->
-      CC_app (cc_subst subst c, List.map (cc_subst subst) cl)
-  | CC_tuple cl ->
-      CC_tuple (List.map (cc_subst subst) cl)
-  | CC_case (c, cl) ->
-      CC_case (cc_subst subst c,
-	       List.map (fun (bl,e) -> 
-			   (cc_subst_binders subst bl,
-			    cc_subst (cc_cross_binders subst bl) e)) cl)
-  | CC_if (a,b,c) ->
-      CC_if (cc_subst subst a, cc_subst subst b, cc_subst subst c)
-  | CC_expr c ->
-      CC_expr (tsubst_in_term subst c)
-  | CC_hole ty ->
-      CC_hole (tsubst_in_predicate subst ty)
-  | CC_type t ->
-      CC_type (cc_type_subst subst t)
+(*s Here we only perform eta-reductions on programs to eliminate
+    redexes of the kind [let (x1,...,xn) = e in (x1,...,xn)] *)
 
-and cc_subst_binders subst = List.map (cc_subst_binder subst)
+(*s Traversing binders and substitution within CC types *)
 
-and cc_subst_binder subst = function
-  | id, CC_var_binder c -> id, CC_var_binder (cc_type_subst subst c)
-  | id, CC_pred_binder c -> id, CC_pred_binder (tsubst_in_predicate subst c)
-  | b -> b
+let rec cc_subst_binder s (id,b) = 
+  let b' = match b with 
+    | CC_var_binder c -> CC_var_binder (cc_type_subst s c)
+    | CC_pred_binder c -> CC_pred_binder (tsubst_in_predicate s c)
+    | CC_untyped_binder -> CC_untyped_binder
+  in
+  (id,b'), Idmap.remove id s
 
-and cc_cross_binders subst = function
-  | [] -> subst
-  | (id,_) :: bl -> cc_cross_binders (Idmap.remove id subst) bl
+and cc_subst_binders s = function
+  | [] -> 
+      [], s
+  | b :: bl -> 
+      let b',s' = cc_subst_binder s b in 
+      let bl',s'' = cc_subst_binders s' bl in
+      b'::bl', s''
 
-and cc_type_subst subst = function
+and cc_type_subst s = function
   | TTarray (t, tt) -> 
-      TTarray (tsubst_in_term subst t, cc_type_subst subst tt)
+      TTarray (tsubst_in_term s t, cc_type_subst s tt)
   | TTlambda (b, tt) ->
-      TTlambda (cc_subst_binder subst b,
-		cc_type_subst (cc_cross_binders subst [b]) tt)
+      let b',s' = cc_subst_binder s b in TTlambda (b', cc_type_subst s' tt)
   | TTarrow (b, tt) -> 
-      TTarrow (cc_subst_binder subst b, 
-	       cc_type_subst (cc_cross_binders subst [b]) tt)
+      let b',s' = cc_subst_binder s b in TTarrow (b', cc_type_subst s' tt)
   | TTtuple (ttl, p) -> 
-      let subst' = List.fold_right Idmap.remove (List.map fst ttl) subst in
-      TTtuple (List.map (fun (id,t) -> (id, cc_type_subst subst t)) ttl,
-	       option_app (tsubst_in_predicate subst') p)
+      let s' = List.fold_right Idmap.remove (List.map fst ttl) s in
+      TTtuple (List.map (fun (id,t) -> (id, cc_type_subst s t)) ttl,
+	       option_app (tsubst_in_predicate s') p)
   | TTpure _ as t -> 
       t
 
-(* here we only perform eta-reductions on programs to eliminate
- * redexes of the kind
- *
- *   let (x1,...,xn) = e in (x1,...,xn)  -->  e
- *
- *)
+(*s Eta and iota redexes. *)
 
 let is_eta_redex bl al =
   try
@@ -76,40 +53,64 @@ let is_eta_redex bl al =
   with Invalid_argument "List.for_all2" -> 
     false
 
-let is_expr = function CC_expr _ -> true | _ -> false
+let is_term = function CC_term _ -> true | _ -> false
+
+let dterm = function CC_term t -> t | _ -> assert false
 
 let is_iota_redex l1 l2 = 
-  (List.length l1 = List.length l2) &&
-  List.for_all is_expr l2
+  (List.length l1 = List.length l2) && List.for_all is_term l2
 
-let rec iota_subst = function
-  | [], [] -> Idmap.empty
-  | (id,_) :: l1, CC_expr t :: l2 -> Idmap.add id t (iota_subst (l1, l2))
+let rec iota_subst s = function
+  | [], [] -> s
+  | (id,_) :: l1, CC_term t :: l2 -> iota_subst (Idmap.add id t s) (l1, l2)
   | _ -> assert false
 
-let rec red = function
-  | CC_letin (_, [id,_], CC_expr c1, e2) ->
-      red (cc_subst (subst_one id c1) e2)
+(*s Reduction. Substitution is done at the same time for greater efficiency *)
+
+let rec red s = function
+  | CC_var x ->
+      CC_term (try Idmap.find x s with Not_found -> Tvar x)
   | CC_letin (dep, bl, e1, e2) ->
-      (match red e2 with
-	 | CC_tuple al when is_eta_redex bl al ->
-	     red e1
-	 | re2 ->
-	     (match red e1 with
-		| CC_tuple al when is_iota_redex bl al ->
-		    red (cc_subst (iota_subst (bl, al)) re2)
-		| re1 ->
-		    CC_letin (dep, bl, re1, re2)))
-  | CC_lam (bl, e) ->
-      CC_lam (bl, red e)
+      (match red s e1 with
+	 (* [let x = t1 in e2] *)
+	 | CC_term t1 when List.length bl = 1 ->
+	     red (Idmap.add (fst (List.hd bl)) t1 s) e2
+	 (* [let (x1,...,xn) = (t1,...,tn) in e2] *)
+	 | CC_tuple al when is_iota_redex bl al ->
+	     red (iota_subst s (bl, al)) e2
+	 | re1 ->
+	     let bl',s' = cc_subst_binders s bl in
+	     (match red s' e2 with
+		(* [let (x1,...,xn) = e1 in (x1,...,xn)] *)
+		| CC_tuple al when is_eta_redex bl al ->
+		    red s e1
+		| re2 ->
+		    CC_letin (dep, bl', re1, re2)))
+  | CC_lam (b, e) ->
+      let b',s' = cc_subst_binder s b in
+      CC_lam (b', red s' e)
   | CC_app (e, al) ->
-      CC_app (red e, List.map red al)
+      let al' = List.map (red s) al in
+      (match red s e with
+	 | CC_term t when List.for_all is_term al' ->
+	     CC_term (applist t (List.map dterm al'))
+	 | _ -> 
+	     CC_app (red s e, List.map (red s) al))
   | CC_case (e1, el) ->
-      CC_case (red e1, List.map (fun (bl,e) -> (bl, red e)) el)
+      let red_branch (bl,e) = 
+	let bl',s' = cc_subst_binders s bl in (bl', red s' e)
+      in
+      CC_case (red s e1, List.map red_branch el)
   | CC_if (a,b,c) ->
-      CC_if (red a, red b, red c)
+      CC_if (red s a, red s b, red s c)
   | CC_tuple al ->
-      CC_tuple (List.map red al)
-  | CC_var _ | CC_hole _ | CC_expr _ | CC_type _ as e -> e
+      CC_tuple (List.map (red s) al)
+  | CC_term c ->
+      CC_term (tsubst_in_term s c)
+  | CC_hole ty ->
+      CC_hole (tsubst_in_predicate s ty)
+  | CC_type t ->
+      CC_type (cc_type_subst s t)
 
 
+let red = red Idmap.empty

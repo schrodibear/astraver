@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.28 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.29 2002-04-15 13:29:19 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -490,7 +490,7 @@ let rec print_cc_term fmt = function
       fprintf fmt "@\nelse@\n  ";
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
-  | CC_expr c ->
+  | CC_term c ->
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole c ->
       fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"

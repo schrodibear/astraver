@@ -77,6 +77,8 @@ bin/why.static: $(CMX)
 bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
+coq:: $(VO)
+
 VERSION=0.1
 
 src/version.ml: Makefile

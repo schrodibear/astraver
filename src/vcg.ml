@@ -82,7 +82,7 @@ let vcg base t =
   in
   let rec traverse ctx = function
     | CC_var _ 
-    | CC_expr _ 
+    | CC_term _ 
     | CC_type _ as cc -> 
 	cc
     | CC_hole p -> 

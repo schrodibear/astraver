@@ -6,3 +6,6 @@ WHY=../../bin/why.opt
 
 %.vo: %.v
 	coqc -I ../../lib/coq $<
+
+clean::
+	rm -f *~ *.vo

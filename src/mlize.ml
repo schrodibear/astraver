@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.34 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.35 2002-04-15 13:29:19 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -32,7 +32,7 @@ and trad_desc info d ren = match d with
       if is_local info.env id then
 	CC_var id
       else
-	CC_expr (Tvar id)
+	CC_term (Tvar id)
 
   | Acc _ ->
       assert false
@@ -44,7 +44,7 @@ and trad_desc info d ren = match d with
 	   let tx = trad_type_in_env ren info.env x in
 	   let ren'' = next ren' [x] in
 	   let x' = current_var ren'' x in
-	   CC_letin (false, [x', CC_var_binder tx], CC_expr (Tvar res1), 
+	   CC_letin (false, [x', CC_var_binder tx], CC_term (Tvar res1), 
 		     Monad.unit info (Tconst ConstUnit) ren''))
 	ren
 
@@ -60,7 +60,7 @@ and trad_desc info d ren = match d with
       Monad.compose e1.info (trad e1)
 	(fun v1 ren' ->
 	   let t1 = trad_type_v ren info.env (result_type e1) in
-	   CC_letin (false, [x, CC_var_binder t1], CC_expr (Tvar v1), 
+	   CC_letin (false, [x, CC_var_binder t1], CC_term (Tvar v1), 
 		     Monad.compose e2.info (trad e2) 
 		       (fun v2 -> Monad.unit info (Tvar v2)) ren'))
 	ren
@@ -71,7 +71,7 @@ and trad_desc info d ren = match d with
 	   let t1 = trad_type_v ren info.env (result_type e1) in
 	   let ren'' = next ren' [x] in
 	   let x' = current_var ren'' x in
-	   CC_letin (false, [x', CC_var_binder t1], CC_expr (Tvar v1), 
+	   CC_letin (false, [x', CC_var_binder t1], CC_term (Tvar v1), 
 		     Monad.compose e2.info (trad e2)
 		       (fun v2 -> Monad.unit info (Tvar v2)) ren''))
 	ren
@@ -128,7 +128,7 @@ and trad_desc info d ren = match d with
 		 let ren'' = next ren' [x] in
   		 let x'' = current_var ren'' x in
 		 let st = make_raw_store info.env (x,x') (Tvar v1) (Tvar v2) in
-		 CC_letin (false, [x'', CC_var_binder tx], CC_expr st,
+		 CC_letin (false, [x'', CC_var_binder tx], CC_term st,
 			   Monad.unit info (Tconst ConstUnit) ren'')))
 	 ren
 

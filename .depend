@@ -56,8 +56,10 @@ src/pvs.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/types.cmi src/util.cmi src/vcg.cmi src/pvs.cmi 
 src/pvs.cmx: src/ast.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
     src/types.cmi src/util.cmx src/vcg.cmx src/pvs.cmi 
-src/red.cmo: src/ast.cmi src/misc.cmi src/util.cmi src/red.cmi 
-src/red.cmx: src/ast.cmi src/misc.cmx src/util.cmx src/red.cmi 
+src/red.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
+    src/util.cmi src/red.cmi 
+src/red.cmx: src/ast.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
+    src/util.cmx src/red.cmi 
 src/rename.cmo: src/error.cmi src/ident.cmi src/misc.cmi src/rename.cmi 
 src/rename.cmx: src/error.cmx src/ident.cmx src/misc.cmx src/rename.cmi 
 src/typing.cmo: src/ast.cmi src/effect.cmi src/env.cmi src/error.cmi \
