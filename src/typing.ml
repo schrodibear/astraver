@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.34 2002-03-18 16:20:29 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.35 2002-03-19 14:31:50 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -428,7 +428,7 @@ and typef_desc lab env loc = function
       let _,eapp,_,_ = decomp_kappa kapp in
       let ef = union3effects (effect t_a) (effect t_f) eapp in
       (match t_a.desc with
-	 | Expression ca when post t_a = None && pre t_a = [] ->
+	 | Expression ca when post t_a = None ->
 	     let kapp = type_c_rsubst [x,ca] kapp in
 	     let (_,tapp),_,_,_ = decomp_kappa kapp in
 	     (match t_f.desc with

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.15 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.16 2002-03-19 14:31:50 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -184,7 +184,7 @@ let print_lemma fmt (id,s) =
 
 let print_obligation fmt o = 
   print_lemma fmt o;
-  fprintf fmt "@\n"
+  fprintf fmt "Proof.@\n(* FILL PROOF HERE *)@\nSave.@\n@\n"
 
 
 (*s Queueing elements. *)

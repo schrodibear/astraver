@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.21 2002-03-18 13:30:11 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.22 2002-03-19 14:31:50 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -274,9 +274,12 @@ let fresh id e ren =
 let wfrec (phi,r) info f ren =
   let env = info.env in
   let vphi = variant_name () in
+  let wr = get_writes info.kappa.c_effect in
   let info' = 
     let eq = anonymous_pre false (equality (Tvar vphi) phi) in
-    { info with kappa = { info.kappa with c_pre = eq :: info.kappa.c_pre }}
+    let e = List.fold_left (fun e x -> add_read x (add_write x e)) bottom wr in
+    { info with kappa = 
+	{ info.kappa with c_effect = e; c_pre = eq :: info.kappa.c_pre }}
   in
   let a = TTpure PTint in (* TODO: type variant *)
   let w = wf_name () in
@@ -285,8 +288,7 @@ let wfrec (phi,r) info f ren =
   let vphi0 = variant_name () in
   let tphi0 = trad_type_c ren env (type_c_subst [vphi,vphi0] k) in
   let input ren =
-    let r,_ = get_repr k.c_effect in
-    let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r) in
+    let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
     let pl = (anonymous_pre false (equality phi phi)) :: info.kappa.c_pre in
     let holes = List.map (fun p -> CC_hole (apply_pre ren env p).p_value) pl in
     input @ holes

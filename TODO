@@ -2,6 +2,8 @@
 INPUT
 =====
 
+ - syntax for a <= b <= c in predicates
+
 FEATURES
 ========
 
@@ -28,18 +30,6 @@ DOCUMENTATION
 
 BUGS
 ====
-
- - clash between global and local references:
-   =======================================================
-   external x : int ref
-   let f = fun (u:unit) -> x := 0
-   let g = fun (x':int ref) -> begin (f void); x' := 1 end
-   =======================================================
-   => rename locals in Db (globals are unique)
-   => forbid local-global clash
-
- - wp: function application: does not use kappa information => BUG
-       let x = ref e1 in e2: CORRECT?
 
 IMPLEMENTATION
 ==============

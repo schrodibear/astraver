@@ -1,13 +1,17 @@
 
 (* Test program *)
 
-external gx : int ref
+external x : int ref
 
+external t : array 10 of int
+
+let p = t[!x] = 0
+
+(***
 let f = let rec f (u:unit) : unit { variant gx } = begin gx := 0; u end
 
 let g = fun (x:int ref) -> begin (f void); x := 1 end
 
-(***
 (****)
 
 let f = fun (a,b,c:int ref) -> 

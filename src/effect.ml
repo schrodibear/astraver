@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.9 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.10 2002-03-19 14:31:50 filliatr Exp $ i*)
 
 (*s Effects. *)
 
@@ -57,9 +57,11 @@ let list_union l1 l2 =
 
 let add_read x ((r,w) as e) = (list_add x r, w)
 
-let add_reads ids = Ident.Idset.fold add_read ids
+let add_reads = Ident.Idset.fold add_read
 
 let add_write x (r,w) = (list_add x r, list_add x w)
+
+let add_writes = Ident.Idset.fold add_write
 
 (*s access *)
 
