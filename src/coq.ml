@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.33 2002-05-07 15:53:23 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.34 2002-06-07 08:51:16 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -201,6 +201,9 @@ let print_binder_id fmt (id,_) = Ident.print fmt id
 let rec print_cc_term fmt = function
   | CC_var id -> 
       Ident.print fmt id
+  | CC_letin (_,[id,_],c,c1) ->
+      fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
+      Ident.print id print_cc_term c print_cc_term c1
   | CC_letin (_,bl,c,c1) ->
       fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n%a@]"
       (print_list comma print_binder_id) bl
@@ -238,7 +241,8 @@ let print_obligation fmt o =
   fprintf fmt "Proof.@\n(* FILL PROOF HERE *)@\nSave.@\n"
 
 let reprint_validation fmt id v =
-  fprintf fmt "@[Definition %s_valid :=@\n  %a.@]@\n" id print_cc_term v
+  fprintf fmt "@[Definition %s := (* validation *)@\n  %a.@]@\n" 
+    id print_cc_term v
 
 let print_validation = reprint_validation
 
@@ -296,9 +300,12 @@ let reprint_element fmt = function
 
 (*s Generating the output. *)
 
-let oblig_regexp = Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
-let valid_regexp = Str.regexp "Definition[ ]+\\(.*\\)_valid[ ]*:=[ ]*"
-let param_regexp = Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
+let oblig_regexp = 
+  Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
+let valid_regexp = 
+  Str.regexp "Definition[ ]+\\(.*\\)[ ]*:=[ ]*(\\* validation \\*)"
+let param_regexp = 
+  Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
 
 let check_line s =
   let test r = 

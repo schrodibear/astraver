@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.12 2002-05-07 15:53:23 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.13 2002-06-07 08:51:16 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -11,7 +11,7 @@ open Ast
  * Here we manage the global environment, which is imperative,
  * and we provide a functional local environment. 
  *
- * The most important functions, is_in_env, type_in_env and fold_all
+ * The most important functions, [is_in_env], [type_in_env] and [fold_all]
  * first look in the local environment then in the global one.
  *)
 

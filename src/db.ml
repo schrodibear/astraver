@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.17 2002-03-19 12:59:33 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.18 2002-06-07 08:51:16 filliatr Exp $ i*)
 
 (*s Names separation *)
 
@@ -68,7 +68,7 @@ let rec db_pattern = function
 i*)
 
 (* db programs *)
-  
+
 let db_prog e =
   let loc = e.info.loc in
   (* tids = type idents, ids = variables, refs = references and arrays *)

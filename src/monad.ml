@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.30 2002-05-07 15:53:23 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.31 2002-06-07 08:51:16 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -131,7 +131,7 @@ type interp = Rename.t -> predicate cc_term
    [t] itself. *)
 
 let lambda_vars =
-  List.fold_left (fun t (id,v) -> TTlambda ((id, CC_var_binder v), t))
+  List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
 
 let unit info t ren = 
   let env = info.env in
@@ -157,7 +157,7 @@ let unit info t ren =
 	      List.map (fun id -> (id, trad_type_in_env ren env id)) o @
 	      [result, trad_type_v ren env k.c_result_type]
 	    in
-	    lambda_vars (TTpred c.a_value) bl
+	    lambda_vars bl (TTpred c.a_value)
 	  in
 	  [ CC_hole h ], Some ht
     in
