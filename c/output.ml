@@ -488,7 +488,7 @@ let rec fprintf_expr form e =
 	fprintf form "@]->@ @[<hv 0>{ "; 
 	if pre <> LTrue 
 	then fprintf_assertion form pre;
-	fprintf form " }@ begin@ label init;@ %a@ end@]" fprintf_expr body;
+	fprintf form " }@ %a@]" fprintf_expr body;
 	begin
 	  match signals with
 	    | None -> 

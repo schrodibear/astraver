@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/invariants.why", characters 384-441 *)
+(* Why obligation from file "why/invariants.why", characters 387-444 *)
 Lemma f_impl_po_1 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -22,7 +22,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 583-708 *)
+(* Why obligation from file "why/invariants.why", characters 590-716 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -48,12 +48,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/invariants.why", characters 560-709 *)
+(* Why obligation from file "why/invariants.why", characters 567-717 *)
 Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -79,10 +74,10 @@ Lemma f_impl_po_3 :
   (valid alloc caduceus_2).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 560-709 *)
+(* Why obligation from file "why/invariants.why", characters 567-717 *)
 Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -111,10 +106,11 @@ Lemma f_impl_po_4 :
   (0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
+subst; caduceus.
+subst; caduceus.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 718-718 *)
+(* Why obligation from file "why/invariants.why", characters 727-727 *)
 Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -137,6 +133,5 @@ Lemma f_impl_po_5 :
   (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 

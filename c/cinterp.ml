@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.100 2004-10-11 12:47:19 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.101 2004-10-11 15:22:48 hubert Exp $ i*)
 
 
 open Format
@@ -114,10 +114,10 @@ let rec interp_term label old_label t =
 	LConst(Prim_int(Int64.to_int (Cconst.int t.term_loc c)))
     | Tconstant (FloatConstant c) ->
 	LConst(Prim_float(float_of_string c))
-    | Tvar { var_name = v ; var_is_assigned = true } -> 
-	interp_var label v
-    | Tvar { var_name = v ; var_is_assigned = false } -> 
-	LVar v
+    | Tvar id ->
+	if id.var_is_assigned then
+	  interp_var label id.var_unique_name
+	else LVar id.var_unique_name
     | Told t ->	interp_term (Some old_label) old_label t
     | Tbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op t.term_type op,[f t1;f t2])
@@ -1287,22 +1287,19 @@ let interp_param pre (t,id) =
   (id,base_type tt)
 *)
 
-let interp_fun_params pre params =
+let interp_fun_params params =
   if params=[]
-  then pre, ["tt",unit_type]
+  then ["tt",unit_type]
   else List.fold_right 
-    (fun (t,id) (pre,tpl) ->
+    (fun (t,id) tpl ->
        let tt = Ceffect.interp_type t in
-       (((*if tt="pointer" 
-	 then make_and (LNot(LPred("fresh",[LVar "alloc";LVar id]))) pre
-	 else*) pre),
-	(id,base_type tt)::tpl))
- params (pre,[])
+       (id.var_unique_name,base_type tt)::tpl)
+ params []
 
 
 let interp_function_spec id sp ty pl =
+  let tpl = interp_fun_params pl in
   let pre,post = interp_spec id.function_reads id.function_writes sp in
-  let pre,tpl = interp_fun_params pre pl in
   let r = HeapVarSet.elements id.function_reads in
   let w = HeapVarSet.elements id.function_writes in
   let annot_type = 
@@ -1315,7 +1312,7 @@ let interp_function_spec id sp ty pl =
       tpl 
       annot_type
   in
-  Param (false, id.var_unique_name ^ "_parameter", ty)
+  tpl,pre,post, Param (false, id.var_unique_name ^ "_parameter", ty)
 
 let interp_type loc ctype = match ctype.ctype_node with
   | CTenum (e, _) ->
@@ -1360,20 +1357,34 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       end;
       why
   | Tfunspec(spec,ctype,id,params) -> 
-      (why_code, interp_function_spec id spec ctype params :: why_spec,
+      let _,_,_,spec = interp_function_spec id spec ctype params in
+      (why_code, spec :: why_spec,
        prover_decl)
   | Tfundef(spec,ctype,id,params,block) ->      
       reset_tmp_var ();
+      let tparams,pre,post,tspec = 
+	interp_function_spec id spec ctype params in
       let f = id.var_unique_name in
       lprintf "translating function %s@." f;
       begin try
-	let pre,post = interp_spec id.function_reads id.function_writes spec in
-	let pre,tparams = interp_fun_params pre params in
 	abrupt_return := None;
 	let may_break = ref false in
+	let list_of_refs =
+	  List.fold_right
+	    (fun (ty,id) bl ->
+	       if id.var_is_assigned
+	       then 
+		 let n = id.var_unique_name in
+		 id.var_unique_name <- "mutable_" ^ n; 
+		 [id.var_unique_name,n]
+	       else bl) params [] in
 	let tblock = catch_return (interp_statement false may_break block) in
 	assert (not !may_break);
-	let tspec = interp_function_spec id spec ctype params in
+	let tblock =
+	  List.fold_right
+	    (fun (mut_id,id) bl ->
+	       Let_ref(mut_id,Var(id),bl)) list_of_refs tblock in
+	let tblock = make_label "init" tblock in
 	printf "generating Why code for function %s@." f;
 	((Def(f ^ "_impl", Fun(tparams,pre,tblock,post,None)))::why_code,
 	 tspec :: why_spec,
@@ -1382,7 +1393,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	lprintf "unsupported feature (%s); skipping function %s@." s f;
 	eprintf "unsupported feature (%s); skipping function %s@." s f;
 	(why_code,
-	 interp_function_spec id spec ctype params :: why_spec,
+	 tspec :: why_spec,
 	 prover_decl)
       end
 

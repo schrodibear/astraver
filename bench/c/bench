@@ -107,4 +107,26 @@ for f in *.c; do
     fi
 done
 
+echo "C interp (good)"
+cd ../good
+export CADUCEUSLIB=`pwd`/../../../lib
+parsing="../../../bin/caduceus.opt"
+for f in consts param clash invariants switch; do
+    echo -n "  $f.c... "
+    if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
+	echo -n "caduceus ok... "
+	if make -f $f.makefile coq > /tmp/caduceus.tmp 2>&1; then
+	    echo "Coq proof ok... "
+	else
+	    echo "Coq proof FAILED !"
+	    cat /tmp/caduceus.tmp
+	    exit 1
+	fi
+    else
+	echo "caduceus FAILED (rejected a good file) :"
+	cat /tmp/caduceus.tmp
+	exit 1
+    fi
+done
+
 

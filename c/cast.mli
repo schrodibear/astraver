@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.47 2004-10-11 11:17:44 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.48 2004-10-11 15:22:48 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -45,6 +45,7 @@ type 'expr ctype_node =
   | CTunion of string * 'expr field list tagged
   | CTenum of string * (string * 'expr option) list tagged
   | CTfun of 'expr parameter list * 'expr ctype
+  | CTtyped_fun of ('expr ctype * Info.var_info) list * 'expr ctype
 
 and 'expr ctype = { 
   ctype_node : 'expr ctype_node;
@@ -260,8 +261,9 @@ and tdecl =
   | Ttypedef of texpr ctype * string
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * Info.var_info * texpr c_initializer
-  | Tfunspec of spec * texpr ctype * Info.var_info * texpr parameter list
-  | Tfundef of spec *
-      texpr ctype * Info.var_info * texpr parameter list * tstatement
+  | Tfunspec of spec * texpr ctype * Info.var_info * 
+      (texpr ctype * Info.var_info) list
+  | Tfundef of spec * texpr ctype * Info.var_info * 
+      (texpr ctype * Info.var_info) list * tstatement
 
 type tfile = tdecl located list
