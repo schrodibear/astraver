@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.56 2002-09-18 06:27:31 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.57 2002-10-01 14:45:59 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -169,6 +169,9 @@ and trad_desc info d ren = match d with
       Monad.compose e.info (trad e) info
 	(fun v -> Monad.exn info id (Some (Tvar v))) 
 	ren
+
+  | Try _ ->
+      assert false
 
 and trad_binders ren env = function
   | [] -> 

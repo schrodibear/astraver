@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.70 2002-09-19 15:22:09 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.71 2002-10-01 14:45:59 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -573,11 +573,8 @@ and typef_desc lab env loc = function
       Rec (f,bl',v,var,t_e), (tf,Effect.bottom), []
 
   | Sraise (id, e, ct) ->
-      let xt =
-	try find_exception id 
-	with Not_found -> raise_located loc (UnboundException id)
-      in
-      let t_e = match xt, e with
+      if not (is_exception id) then raise_located loc (UnboundException id);
+      let t_e = match find_exception id , e with
 	| None, Some _ -> 
 	    raise_located loc (ExceptionArgument (id, false))
 	| Some _, None ->
@@ -595,8 +592,28 @@ and typef_desc lab env loc = function
       in
       Raise (id, t_e), (v, Effect.add_exn id Effect.bottom), []
 
-  | Stry _ ->
-      assert false
+  | Stry (e, hl) ->
+      let te = typef lab env e in
+      let v = result_type te in
+      let ef = effect te in
+      let xs = get_exns ef in
+      let ef = List.fold_left (fun e ((x,_),_) -> remove_exn x e) ef hl in
+      let type_handler ((x,a),h) =
+	if not (is_exception x) then raise_located loc (UnboundException x);
+	if not (List.mem x xs) then raise_located e.loc (CannotBeRaised x);
+	let env' = match a, find_exception x with 
+	  | None, None -> env 
+	  | Some v, Some tv -> Env.add v (PureType tv) env
+	  | None, Some _ -> raise_located loc (ExceptionArgument (x, true))
+	  | Some _, None -> raise_located loc (ExceptionArgument (x, false))
+	in
+	let th = typef lab env' h in
+	expected_type h.loc (result_type th) v;
+	((x,a), th)
+      in
+      let thl = List.map type_handler hl in
+      let ef = List.fold_left (fun e (_,th) -> union e (effect th)) ef thl in
+      Try (te, thl), (v, ef), []
 	    
 and typef_block lab env bl =
   let rec ef_block lab tyres = function

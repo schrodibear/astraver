@@ -1,5 +1,11 @@
 
-  o more obligations automatically discharged (A and B |- A ; A,B |- A and B)
+version 0.7, 
+==============================
+
+  o code ported to ocaml 3.06  
+  o examples: quicksort (2 versions) 
+  o more obligations automatically discharged 
+    (True  /  A and B |- A  /  A,B |- A and B)
   o fixed associativity in Coq pretty-print for /\ and \/ (right)
     right associativity adopted in Why
   o fixed typing and Coq output for primitive float_of_int

@@ -17,6 +17,9 @@ Require Why.
 (*Why*) Implicits post_E.
 
 
+Definition p1 := (* validation *)
+  (exist_1 (post_E True [result: unit]False) (Exn_E unit) I).
+
 (*Why*) Inductive ET_F [T:Set] : Set :=
   | Val_F : T -> (ET_F T)
   | Exn_F : Z -> (ET_F T).
@@ -30,4 +33,12 @@ Require Why.
 
 (*Why*) Implicits post_F.
 
+
+Definition p2 := (* validation *)
+  let (result, Post1) = (exist_1 [result: Z]`result = 1` `1`
+    (refl_equal ? `1`)) in
+  (exist_1 (post_F [result0: Z]`result0 = 1` [result0: unit]False) (Exn_F
+                                                                    unit
+                                                                    result)
+  Post1).
 

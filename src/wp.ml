@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.55 2002-10-01 13:38:00 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.56 2002-10-01 14:45:59 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -165,6 +165,9 @@ let rec normalize p =
 	change_desc p (App (normalize e1, Type v, k))
     | Raise (id, po) ->
 	change_desc p (Raise (id, option_app normalize po))
+    | Try (e, hl) ->
+	change_desc p (Try (normalize e, 
+			    List.map (fun (p,e) -> (p, normalize e)) hl))
 
 and normalize_block = function
   | [] ->
@@ -365,6 +368,10 @@ and wp_desc info d q =
 	let qe = filter_post e.info (option_app make_post q) in
 	let e',w = wp e qe in
 	Raise (id, Some e'), w
+    (* TODO: wp try/with *)
+    | Try (e, hl) ->
+	let e',w = wp e None in
+	Try (e', hl), None
 
 and wp_block bl q = match bl with
   | [] ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.50 2002-10-01 13:12:05 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.51 2002-10-01 14:45:59 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -425,6 +425,7 @@ let rec print_list sep print fmt = function
 let comma fmt () = fprintf fmt ",@ "
 let semi fmt () = fprintf fmt ";@ "
 let space fmt () = fprintf fmt "@ "
+let alt fmt () = fprintf fmt "|@ "
 let newline fmt () = fprintf fmt "@\n"
 let arrow fmt () = fprintf fmt "@ -> "
 let nothing fmt () = ()
