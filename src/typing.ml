@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.61 2002-07-19 13:01:36 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.62 2002-07-25 11:40:50 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -589,7 +589,7 @@ and typef_block lab env bl =
   let rec ef_block lab tyres = function
     | [] ->
 	begin match tyres with
-	  | Some ty -> [], ty, Effect.bottom
+	  | Some (ty,_) -> [], ty, Effect.bottom
 	  | None -> assert false
 	end
     | (Sassert c) :: block -> 
@@ -601,10 +601,11 @@ and typef_block lab env bl =
 	let bl,t,ef = ef_block lab' tyres block in
 	(Label s)::bl, t, ef
     | (Sstatement e) :: block ->
+	option_iter (fun (t,l) -> expected_type l t type_v_unit) tyres;
 	let t_e = typef lab env e in
 	let efe = t_e.info.kappa.c_effect in
 	let t = t_e.info.kappa.c_result_type in
-	let bl,t,ef = ef_block lab (Some t) block in
+	let bl,t,ef = ef_block lab (Some (t,e.loc)) block in
 	(Statement t_e)::bl, t, Effect.union efe ef
   in
   ef_block lab None bl
