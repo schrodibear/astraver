@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.8 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.9 2004-01-30 16:58:37 marche Exp $ i*)
 
-(*i $Id: cmain.ml,v 1.8 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.9 2004-01-30 16:58:37 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -44,6 +44,9 @@ let interp_file f =
   let p = Ctyping.type_file p in
   if type_only then raise Exit;
   let p = Cinterp.interp p in
+  let ch = open_out (f ^ ".why") in
+  Output.fprintf_why_decls (formatter_of_out_channel ch) p;
+  close_out ch;
   rm_ppf ()
 
 let main () = Queue.iter (fun f -> try interp_file f with Exit -> ()) files

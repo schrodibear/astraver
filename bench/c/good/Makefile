@@ -1,8 +1,8 @@
 
-WHY=../../bin/why.opt
+CADUCEUS=../../../bin/caduceus.opt
 
 %_why.v %_valid.v: %.c $(WHY)
-	$(WHY) --coq-v8 --coq-tactic intuition --valid -V $<
+	$(CADUCEUS) $<
 
 %_valid.vo: %_why.vo
 

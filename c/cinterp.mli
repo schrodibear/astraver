@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.mli,v 1.3 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: cinterp.mli,v 1.4 2004-01-30 16:58:37 marche Exp $ i*)
 
 (* Interpretation of C programs *)
 
-val interp : Cast.tfile -> Ptree.file
+val interp : Cast.tfile -> Output.why_decl list;;
 

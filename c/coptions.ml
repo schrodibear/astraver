@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.5 2003-12-24 12:13:35 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.6 2004-01-30 16:58:37 marche Exp $ i*)
 
 let parse_only = ref false
 let type_only = ref false
@@ -53,3 +53,14 @@ let verbose = !verbose
 let werror = !werror
 let with_cpp = !with_cpp
 let cpp_command = !cpp_command
+
+let c = ref stdout;;
+let log =
+  c := open_out "caduceus.log";
+  Format.formatter_of_out_channel !c
+;;
+let close_log () =
+  Format.fprintf log "End of log.@.";
+  close_out !c;
+  c := stdout
+;;

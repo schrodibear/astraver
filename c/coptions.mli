@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.3 2003-12-24 12:13:35 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.4 2004-01-30 16:58:37 marche Exp $ i*)
 
 val parse_only : bool
 val type_only : bool
@@ -25,3 +25,9 @@ val with_cpp : bool
 val cpp_command : string
 
 val files : string Queue.t
+
+(*s The log file *)
+
+val log : Format.formatter;;
+val close_log : unit -> unit;;
+

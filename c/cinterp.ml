@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.2 2003-12-23 09:18:57 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.3 2004-01-30 16:58:37 marche Exp $ i*)
 
 (*****
 
@@ -894,5 +894,105 @@ let interp l =
 
 ***)
 
-let interp l = 
-  failwith "Plus de programmes C pour l'instant (grand chantier en cours)"
+open Cast
+open Format
+open Output
+
+let interp_type ctype =
+  match ctype.ctype_node with
+  | CTvoid -> unit_type
+  | CTint(sign,cint) -> int_type
+  | CTfloat(cfloat) -> assert false (* TODO *)
+  | _ -> assert false (* TODO *)
+(*
+  | CTvar of string
+  | CTarray of 'expr ctype * 'expr option
+  | CTpointer of 'expr ctype
+  | CTstruct_named of string
+  | CTstruct of string * 'expr field list
+  | CTunion_named of string
+  | CTunion of string * 'expr field list
+  | CTenum_named of string
+  | CTenum of string * (string * 'expr option) list
+  | CTfun of 'expr parameter list * 'expr ctype
+*)
+
+let interp_param (t,id) =
+  (id,interp_type t)
+
+let interp_predicate pred =
+  match pred with
+    | None -> LTrue
+    | Some _ -> assert false (* TODO *)
+
+let interp_decl d acc = 
+  assert false (* TODO *)
+
+let interp_bin_op op =
+  match op with
+  | Badd_int -> "add_int"
+  | Bsub_int -> "sub_int"
+  | Bmul_int -> "mul_int"
+  | _ -> assert false (* TODO *)
+
+let rec interp_expr e =
+  match e.texpr_node with
+    | TEconstant(c) -> assert false
+    | TEvar(id) -> Deref(id)
+    | TEbinary(e1,op,e2) ->
+	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
+    | _ -> assert false (* TODO *)
+
+let interp_statement_expr e accu =
+  match e.texpr_node with
+    | TEassign(l,Aequal,e) ->
+	begin
+	  match l.texpr_node with
+	    | TEvar(id) ->
+		append (Assign(id,interp_expr e)) accu
+	    | _ -> assert false (* TODO *)
+	end 
+    | _ -> assert false (* TODO *)
+
+let interp_statement stat acc =
+  match stat.st_node with
+    | TSexpr e ->
+	interp_statement_expr e acc
+    | _ -> assert false (* TODO *)
+
+let interp_block (decls,stats) =
+  let b = List.fold_right interp_statement stats Void in
+  List.fold_right interp_decl decls b 
+
+let interp_annotated_block (pre,block,post) =
+  let tpre = interp_predicate pre
+  and tpost = interp_predicate post
+  and tblock = interp_block block 
+  in (tpre,tblock,tpost)
+      
+
+let interp_located_tdecl why_decls decl =
+  match decl.node with
+  | Tlogic(idlist,ltype) -> assert false (* TODO *)
+  | Ttypedef(ctype,id) -> assert false (* TODO *)
+  | Ttypedecl(ctype) -> assert false (* TODO *)
+  | Tdecl(ctype,id,init) -> 
+      fprintf Coptions.log "translating global declaration of %s@." id;
+      let t = interp_type ctype in
+      begin
+	match init with 
+	  | Inothing ->
+	      (Param(id,Ref_type(t)))::why_decls
+	  | _ -> assert false (* TODO *)
+      end
+  | Tfundef(ctype,id,params,block,info) ->      
+      fprintf Coptions.log "translating function %s@." id;
+      let tparams = List.map interp_param params in
+      let (pre,tblock,post) = interp_annotated_block block in
+      (Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls
+
+
+let interp l =
+  List.fold_left interp_located_tdecl [] l
+
+
