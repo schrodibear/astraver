@@ -11,7 +11,7 @@ are loops like the \verb|while| of Schorr-Waite, it is mandatory
 (except in simple cases) to manually add a loop invariant. The design
 of a suitable loop invariant is the most difficult part of
 the verification process, more difficult than performing the proof
-themselves. Fortunately for us, suitable loop invariants were proposed
+itself. Fortunately for us, suitable loop invariants were proposed
 by previous works on Schorr-Waite algorithm. However, some
 difficulties remain. The main one is that we need to express this loop
 invariant in the \caduceus{} syntax, which is limited to
@@ -165,18 +165,18 @@ unmarked nodes; and
 specifies that \verb|stack| is the list of pointers obtained from $p$ as
 described on Figure~\ref{fig:stack}.
 
-On Figure~\ref{fig:loopinv}, we use the \caduceus{} notation to name
+In Figure~\ref{fig:loopinv}, we use the \caduceus{} notation to name
 formulas with double-colons. The loop
 invariant is made of eight assertions:
 \begin {enumerate}
 \item[I1] means that each node which was initially reachable from
   root, is reachable from $t$ or $p$
-\item[I2] means that conversely, each (non-null) nodes reachable from $t$
+\item[I2] means that conversely, each (non-null) node reachable from $t$
   or $p$ was initially reachable from \verb|root|. This is true only
   for non-null nodes, because \verb|null| may not be reachable from
   \verb|root| if the graph is cyclic.
 \item[I3] means that for initially unreachable nodes, the mark
-  remain unchanged.
+  remains unchanged.
 \item[I4a] defines the backtracking stack as on
   Figure~\ref{fig:stack}, using the \verb|clr_list| predicate declared
   before. The precise definition of it will be given in Section~\ref{sec:coq}.
@@ -193,7 +193,7 @@ invariant is made of eight assertions:
   seen again on Figure~\ref{fig:stack}: if $p_1$ is in
   the stack, followed by $p_2$ (or if $p_1$ is $t$ and $p_2$ is the head of the
   stack), then: if $p_2\verb|->c|$ is
-  1 then its left child is the same as its was initially
+  1 then its left child is the same as it was initially
      and its right child is $p_1$; and if $p_2\verb|->c|$ is 0 then
      its left child is $p_1$ and its right child is the same as it was
      initially. 
@@ -243,7 +243,7 @@ verification conditions. Five of them relate to the behavioral
 specification of the algorithm: loop invariant true when entering the
 loop, preservation of the loop invariant for each of the branches
 `pop', `swing' and `push', and validity of the post-condition. The
-seven others are requested to establish the absence of invalid pointer
+seven others are required to establish the absence of invalid pointer
 dereferencing: the first one asks for validity of \verb|t| for the
 field access \verb|t->m| in the condition of the \verb|while|, and the
 six others similarly ask for validity of dereferencing \verb|t->m| in

@@ -15,12 +15,12 @@ pointer aliasing should climb.
 Using formal methods for verifying properties of programs at their
 source code level has gained more interest with the increased use of
 embedded programs, which are short programs where a high-level of
-confidence is required. Such embedded programs are no more written in
-assembly language but in C (plane command control, cars, etc.) or in
+confidence is required. Such embedded programs are no longer written in
+assembly language but rather in C (plane command control, cars, etc.) or in
 JavaCard~\cite{JavaCard} (mobile phones, smart cards, etc.).  To
 perform formal verification of C or Java programs, one faces the
 general issue of verification of pointer programs: \emph{aliasing},
-that is referencing a memory location by several ways, must be taken
+that is referencing a memory location by several pointers, must be taken
 into account. 
 
 The Schorr-Waite algorithm~\cite{schorr67cacm} is a graph-marking

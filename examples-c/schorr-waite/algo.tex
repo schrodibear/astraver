@@ -193,7 +193,7 @@ typedef struct struct_node \{
 \} * node;
 \end{alltt}
 where $l$ and $r$ are respectively pointers to the left and to the
-right child (they may be assigned to NULL). The boolean field $m$ is a
+right child (they may be set to NULL). The boolean field $m$ is a
 mark: initially, all nodes of the graph will be assumed unmarked, and
 at the end of the traversal, they will have to be all marked. The
 boolean field $c$ is used internally by the algorithm, to denote which
@@ -258,7 +258,7 @@ by induction) about reachability, not only compute with it. In the
 \caduceus{} methodology, such a logical notion must be declared, by a
 \verb|predicate| annotation, and supposed to be defined or axiomatized
 in the back-end prover. This is very similar to a forward declaration
-of a C function, whose implementation will be given latter: such
+of a C function, whose implementation will be given later: such
 predicates have to be `implemented' latter, either by giving
 additional \caduceus{} annotations (such as \verb|axioms|) or in the
 back-end prover. For the reachability predicate, we write
@@ -289,19 +289,19 @@ the semantics of \texttt{reachable} yet. The specification, in the
 \caduceus{} syntax, is given on Figure~\ref{fig:spec}. It is made of
 two clauses: the \texttt{requires} clause specifies the pre-condition
 whereas the \texttt{ensures} clause specifies the post-condition. Both
-are followed by a logical formula, where logical connectives follows a
+are followed by a logical formula, where logical connectives follow a
 C-like syntax: C operator \verb|&&| denotes conjunction, \verb|!|
 denotes negation, etc. Additional syntax is introduced to denote
 implication by \verb|=>|, and universal quantification by
 $\bs{}\verb|forall|~\textsl{type}~x ; \textsl{formula}$. C expressions 
-can be used in logical formulas as soon as they are side-effect free. On this example we use equality and disequality (\verb|==| and
+can be used in logical formulas as long as they are side-effect free. On this example we use equality and inequality (\verb|==| and
 \verb|!=|) and field accesses like \verb|x->l|. Additional predicates
 exist, all prefixed by a backslash, such as \verb|\null| which 
 denotes the null pointer. Notice that our annotation language
 inherits from C the fact that booleans are not clearly distinguished
 from the integers: when an integer expression $e$ is used as a logical
 atom, then it should be understood as the boolean $e\neq 0$, so that
-one can indifferently write \verb|! x->m| or \verb|x->m == 0|. 
+one can equivalently write \verb|! x->m| or \verb|x->m == 0|. 
 Notice that we use a standard first order logic: every function is
 total (like in JML, i.e. no 3-valued logic) so that an expression
 \verb|p->f| is valid even if \verb|p| is \verb|null|, but no
