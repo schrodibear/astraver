@@ -133,331 +133,327 @@ Save.
 (* Obligations *)
 
 Lemma binary_search_po_1 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
   (well_founded ? (Zwf ZERO)).
 Proof. Auto with *. Save.
 
 Lemma binary_search_po_2 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (m1: Z) 
-  m1 = (mean l1 u1) ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (m1: Z)
+  (Post4: m1 = (mean l1 u1))
   `l1 <= m1` /\ `m1 <= u1`.
 Proof.
 Intros.
-Clear H3 result2 H5; Simpl in H6.
-Split. Rewrite H8; Apply le_mean; Omega'.
-Rewrite H8; Apply ge_mean; Omega'.
+Clear Pre8 result2 Bool1; Simpl in Test6.
+Split. Rewrite Post4; Apply le_mean; Omega'.
+Rewrite Post4; Apply ge_mean; Omega'.
 Save.
 
 Lemma binary_search_po_3 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (m1: Z) 
-  m1 = (mean l1 u1) ->
-  `l1 <= m1` /\ `m1 <= u1` ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (m1: Z)
+  (Post4: m1 = (mean l1 u1))
+  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
   `0 <= m1` /\ `m1 < N + 1`.
 Proof.
 Intros.
-Clear H3 result2 H5.
+Clear Pre8 result2 Bool1.
 Omega'.
 Save.
 
 Lemma binary_search_po_4 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (m1: Z) 
-  m1 = (mean l1 u1) ->
-  `l1 <= m1` /\
-  `m1 <= u1` ->
-  (result4: bool) 
-  (if result4 then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (if true then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (l2: Z) 
-  l2 = `m1 + 1` ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (m1: Z)
+  (Post4: m1 = (mean l1 u1))
+  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (result4: bool)
+  (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
+  (Test5: (if true then `(access t m1) < v` else `(access t m1) >= v`))
+  (l2: Z)
+  (Post8: l2 = `m1 + 1`)
   `1 <= l2` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l2 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\ (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
 Intros.
-Clear H3 result2 H5; Simpl in H6.
-Clear result4 H10; Simpl in H11.
+Clear Pre8 result2 Bool1; Simpl in Test6.
+Clear result4 Bool3; Simpl in Test5.
 Repeat Split; Try Omega'.
-Rewrite H12; Clear H12; Rewrite H8.
+Rewrite Post8; Clear Post8; Rewrite Post4.
 Intros; Apply In_right_side; Assumption Orelse Intuition.
-Rewrite <- H8; Assumption.
+Rewrite <- Post4; Assumption.
 Save.
 
 Lemma binary_search_po_5 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (m1: Z) 
-  m1 = (mean l1 u1) ->
-  `l1 <= m1` /\
-  `m1 <= u1` ->
-  (result4: bool) 
-  (if result4 then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (if false then `(access t m1) < v` else `(access t m1) >= v`) ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (m1: Z)
+  (Post4: m1 = (mean l1 u1))
+  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (result4: bool)
+  (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
+  (Test4: (if false then `(access t m1) < v` else `(access t m1) >= v`))
   `0 <= m1` /\ `m1 < N + 1`.
 Proof.
 Intros.
-Clear H3 result2 H5; Simpl in H6.
-Clear result4 H10; Simpl in H11.
+Clear Pre5 result2 Bool1; Simpl in Test6.
+Clear result4 Bool3; Simpl in Test4.
 Repeat Split; Try Omega'.
 Save.
 
 Lemma binary_search_po_6 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (m1: Z) 
-  m1 = (mean l1 u1) ->
-  `l1 <= m1` /\
-  `m1 <= u1` ->
-  (result4: bool) 
-  (if result4 then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (if false then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (result5: bool) 
-  (if result5 then `(access t m1) > v` else `(access t m1) <= v`) ->
-  (if true then `(access t m1) > v` else `(access t m1) <= v`) ->
-  (u2: Z) 
-  u2 = `m1 - 1` ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (m1: Z)
+  (Post4: m1 = (mean l1 u1))
+  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (result4: bool)
+  (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
+  (Test4: (if false then `(access t m1) < v` else `(access t m1) >= v`))
+  (result5: bool)
+  (Bool2: (if result5 then `(access t m1) > v` else `(access t m1) <= v`))
+  (Test3: (if true then `(access t m1) > v` else `(access t m1) <= v`))
+  (u2: Z)
+  (Post7: u2 = `m1 - 1`)
   `1 <= l1` /\ `u2 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u2)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\ (Zwf `0` `2 + u2 - l1` `2 + u1 - l1`).
 Proof.
 Intros.
-Clear H3 result2 H5; Simpl in H6.
-Clear result4 H10; Simpl in H11.
-Clear result5 H12; Simpl in H13.
+Clear Pre5 result2 Bool1; Simpl in Test6.
+Clear result4 Bool3; Simpl in Test4.
+Clear result5 Bool2; Simpl in Test3.
 Repeat Split; Try Omega'.
-Rewrite H14; Clear H14; Rewrite H8.
+Rewrite Post7; Clear Post7; Rewrite Post4.
 Intros; Apply In_left_side; Assumption Orelse Intuition.
-Rewrite <- H8; Assumption.
+Rewrite <- Post4; Assumption.
 Save.
 
 Lemma binary_search_po_7 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (m1: Z) 
-  m1 = (mean l1 u1) ->
-  `l1 <= m1` /\
-  `m1 <= u1` ->
-  (result4: bool) 
-  (if result4 then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (if false then `(access t m1) < v` else `(access t m1) >= v`) ->
-  (result5: bool) 
-  (if result5 then `(access t m1) > v` else `(access t m1) <= v`) ->
-  (if false then `(access t m1) > v` else `(access t m1) <= v`) ->
-  (p2: Z) 
-  p2 = m1 ->
-  (l2: Z) 
-  l2 = `u1 + 1` ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (m1: Z)
+  (Post4: m1 = (mean l1 u1))
+  (Pre6: `l1 <= m1` /\ `m1 <= u1`)
+  (result4: bool)
+  (Bool3: (if result4 then `(access t m1) < v` else `(access t m1) >= v`))
+  (Test4: (if false then `(access t m1) < v` else `(access t m1) >= v`))
+  (result5: bool)
+  (Bool2: (if result5 then `(access t m1) > v` else `(access t m1) <= v`))
+  (Test2: (if false then `(access t m1) > v` else `(access t m1) <= v`))
+  (p2: Z)
+  (Post5: p2 = m1)
+  (l2: Z)
+  (Post6: l2 = `u1 + 1`)
   `1 <= l2` /\ `u1 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((p2 = `0` -> ((In t `1` N) -> (In t l2 u1)))) /\
   ((`p2 > 0` -> (access t p2) = v)) /\ (Zwf `0` `2 + u1 - l2` `2 + u1 - l1`).
 Proof.
 Intros.
-Clear H3 result2 H5; Simpl in H6.
-Clear result4 H10; Simpl in H11.
-Clear result5 H12; Simpl in H13.
+Clear Pre8 result2 Bool1; Simpl in Test6.
+Clear result4 Bool3; Simpl in Test4.
+Clear result5 Bool2; Simpl in Test2.
 Repeat Split; Try Omega'.
 Intros; Absurd `p2 = 0`; Omega'.
-Intro; Rewrite H14; Omega'.
+Intro; Rewrite Post5; Omega'.
 Save.
 
 Lemma binary_search_po_8 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (l2: Z) 
-  (p2: Z) 
-  (u2: Z) 
-  `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
-  ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-  ((`p2 > 0` -> (access t p2) = v)) /\
-  (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`) ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (l2: Z)
+  (p2: Z)
+  (u2: Z)
+  (Post15: `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+           ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
+           ((`p2 > 0` -> (access t p2) = v)) /\
+           (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`))
   (Zwf `0` `2 + u2 - l2` Variant1).
 Proof.
 Intros.
-Rewrite H4; Tauto.
+Rewrite Pre7; Tauto.
 Save.
 
 Lemma binary_search_po_9 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if true then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  (l2: Z) 
-  (p2: Z) 
-  (u2: Z) 
-  `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
-  ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
-  ((`p2 > 0` -> (access t p2) = v)) /\
-  (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`) ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test6: (if true then `l1 <= u1` else `l1 > u1`))
+  (Pre3: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (l2: Z)
+  (p2: Z)
+  (u2: Z)
+  (Post15: `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
+           ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
+           ((`p2 > 0` -> (access t p2) = v)) /\
+           (Zwf `0` `2 + u2 - l2` `2 + u1 - l1`))
   `1 <= l2` /\ `u2 <= N` /\ (`0 <= p2` /\ `p2 <= N`) /\
   ((p2 = `0` -> ((In t `1` N) -> (In t l2 u2)))) /\
   ((`p2 > 0` -> (access t p2) = v)).
@@ -466,28 +462,28 @@ Intros; Intuition.
 Save.
 
 Lemma binary_search_po_10 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (Variant1: Z) 
-  (u1: Z) 
-  (p1: Z) 
-  (l1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
-  Variant1 = `2 + u1 - l1` ->
-  (result2: bool) 
-  (if result2 then `l1 <= u1` else `l1 > u1`) ->
-  (if false then `l1 <= u1` else `l1 > u1`) ->
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (Variant1: Z)
+  (u1: Z)
+  (p1: Z)
+  (l1: Z)
+  (Pre8: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
+  (Pre7: Variant1 = `2 + u1 - l1`)
+  (result2: bool)
+  (Bool1: (if result2 then `l1 <= u1` else `l1 > u1`))
+  (Test1: (if false then `l1 <= u1` else `l1 > u1`))
+  (Pre2: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+         ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+         ((`p1 > 0` -> (access t p1) = v)))
   `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
   ((`p1 > 0` -> (access t p1) = v)) /\
@@ -498,14 +494,14 @@ Intuition.
 Save.
 
 Lemma binary_search_po_11 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
   `1 <= l0` /\ `u0 <= N` /\ (`0 <= p0` /\ `p0 <= N`) /\
   ((p0 = `0` -> ((In t `1` N) -> (In t l0 u0)))) /\
   ((`p0 > 0` -> (access t p0) = v)).
@@ -513,25 +509,25 @@ Proof.
 Intros.
 Generalize N_positive; Intro.
 Repeat Split; Intros; Try Omega'.
-Rewrite H0; Rewrite H1; Assumption.
+Rewrite Post1; Rewrite Post2; Assumption.
 Save.
 
 Lemma binary_search_po_12 : 
-  (t: (array `N + 1` Z)) 
-  (sorted_array t `1` N) ->
-  (l0: Z) 
-  l0 = `1` ->
-  (u0: Z) 
-  u0 = N ->
-  (p0: Z) 
-  p0 = `0` ->
-  (l1: Z) 
-  (p1: Z) 
-  (u1: Z) 
-  `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
-  ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) /\
-  ((if false then `l1 <= u1` else `l1 > u1`)) ->
+  (t: (array `N + 1` Z))
+  (Pre9: (sorted_array t `1` N))
+  (l0: Z)
+  (Post1: l0 = `1`)
+  (u0: Z)
+  (Post2: u0 = N)
+  (p0: Z)
+  (Post3: p0 = `0`)
+  (l1: Z)
+  (p1: Z)
+  (u1: Z)
+  (Post11: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
+           ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
+           ((`p1 > 0` -> (access t p1) = v)) /\
+           ((if false then `l1 <= u1` else `l1 > u1`)))
   `1 <= p1` /\ `p1 <= N` /\ (access t p1) = v \/ p1 = `0` /\ ~(In t `1` N).
 Proof.
 Intros.
@@ -542,7 +538,7 @@ Right.
 Cut `p1 = 0`; [ Intro | Omega' ].
 Split. Assumption.
 Intro. 
-Generalize (H5 H9 H11); Intro.
-Decompose [In] H12.
+Generalize (H0 H5 H7); Intro.
+Decompose [In] H8.
 Absurd `l1 <= i <= u1`; Omega'.
 Save.
