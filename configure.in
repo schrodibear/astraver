@@ -32,6 +32,17 @@
 # ADAPT THE FOLLOWING LINE TO YOUR SOURCES!
 AC_INIT(src/monad.mli)
 
+# Check for arch/OS
+
+AC_MSG_CHECKING(executable suffix)
+if uname -s | grep -q CYGWIN ; then
+  EXE=.exe
+  AC_MSG_RESULT(.exe) 
+else
+  EXE=
+  AC_MSG_RESULT(<none>)
+fi
+
 # Check for Ocaml compilers
 
 # we first look for ocamlc in the path; if not present, we fail
@@ -222,6 +233,8 @@ else
 fi
 
 # substitutions to perform
+AC_SUBST(EXE)
+
 AC_SUBST(OCAMLC)
 AC_SUBST(OCAMLOPT)
 AC_SUBST(OCAMLDEP)

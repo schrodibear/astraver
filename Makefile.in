@@ -19,6 +19,8 @@ exec_prefix=@exec_prefix@
 BINDIR=@bindir@
 LIBDIR=@libdir@/why
 
+EXE=@EXE@
+
 # where to install the man page
 MANDIR=@mandir@
 
@@ -207,9 +209,9 @@ install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@P
 
 install-binary: $(BINARY) $(CADUCEUS) $(WHY2HTML)
 	mkdir -p $(BINDIR)
-	cp -f $(BINARY) $(BINDIR)/why
-	cp -f $(CADUCEUS) $(BINDIR)/caduceus
-	cp -f $(WHY2HTML) $(BINDIR)/why2html
+	cp -f $(BINARY) $(BINDIR)/why$(EXE)
+	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
+	cp -f $(WHY2HTML) $(BINDIR)/why2html$(EXE)
 
 install-lib:
 	mkdir -p $(LIBDIR)
@@ -258,6 +260,9 @@ local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(VO)
 demons: $(STATICBINARY) doc/manual.ps
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why
 	cp doc/manual.ps /users/demons/demons/docs/why.ps
+
+zip:
+	zip -A -r why-$(VERSION).zip c:/why/bin c:/why/lib c:/coq/lib/contrib/why c:/coq/lib/contrib7/why
 
 # doc
 
