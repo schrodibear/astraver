@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.22 2005-02-03 10:44:38 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.23 2005-02-03 12:47:26 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -746,7 +746,6 @@ let global_decl e1 =
       let validity_for_struct = 
 	List.fold_left 
 	  (fun acc (x,y) ->
-	     Format.eprintf "type = %s" y.var_name ;
 	     match x.Ctypes.ctype_node with
 	       | Tstruct _ | Tunion _ -> NPand (NPvalid 
 						  {nterm_node = NTvar y;
