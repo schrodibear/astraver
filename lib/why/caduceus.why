@@ -79,9 +79,7 @@ exception Return
 exception Return_int of int
 exception Return_float of float
 exception Return_pointer of pointer
- 
-(* integer pointer/arrays *)
-parameter intP : int memory ref
 
-axiom false_not_true : false <> true (* for Simplify *)
+(* for Simplify *)
+axiom false_not_true : false <> true
 

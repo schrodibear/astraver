@@ -1,7 +1,6 @@
 
 /* search for a value in an array */
 
-#if 0
 /*@ requires \valid_range(t,0,n)
   @ ensures 
   @   (0 <= \result < n => t[\result] == v) &&
@@ -17,8 +16,8 @@ int index(int t[], int n, int v) {
   }
   return i;
 }
-#endif
 
+#if 0
 /* same thing, with a return instead of a break */
 
 /*@ requires \valid_range(t,0,n)
@@ -34,3 +33,4 @@ int index2(int t[], int n, int v) {
   }
   return n;
 }
+#endif

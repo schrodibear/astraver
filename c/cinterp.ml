@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.42 2004-03-22 15:06:21 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.43 2004-03-22 15:16:26 filliatr Exp $ i*)
 
 
 open Format
@@ -259,7 +259,7 @@ let rec interp_expr e =
 		  | [] -> [Output.Var "void"]
 		  | _ -> List.map interp_expr args
 		in
-		make_app (v.var_name ^ "_parameter") targs
+		build_complex_app (Var (v.var_name ^ "_parameter")) targs
 	    | _ -> assert false
 	end
     | TEcast(t,e)
@@ -419,7 +419,11 @@ let rec interp_statement_expr e =
 	begin
 	  match e.texpr_node with
 	    | TEvar v ->
-		make_app v.var_name (List.map interp_expr args)
+		let targs = match args with
+		  | [] -> [Output.Var "void"]
+		  | _ -> List.map interp_expr args
+		in
+		build_complex_app (Var v.var_name) targs
 	    | _ -> assert false
 	end
     | TEbinary (_, _, _) -> assert false (* TODO *)
