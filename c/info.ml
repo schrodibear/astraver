@@ -19,7 +19,7 @@ let default_var_info x =
 type logic_info =
     {
       logic_name : string;
-      mutable logic_args : string list;
+      mutable logic_args : (string * Output.base_type) list;
     }
 
 let default_logic_info x =

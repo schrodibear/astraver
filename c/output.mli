@@ -13,6 +13,8 @@ type term =
   | LVarAtLabel of string * string     (*r x@L *)
 ;;
 
+type base_type = string list * string       (*r int, float, int list, ... *)
+
 type assertion = 
   | LTrue | LFalse
   | LAnd of assertion * assertion
@@ -21,9 +23,9 @@ type assertion =
   | LImpl of assertion * assertion
   | LIf of term * assertion * assertion
   | LLet of string * term * assertion
-  | LForall of string * string * assertion
+  | LForall of string * base_type * assertion
       (*r forall x:t.a *)
-  | LExists of string * string * assertion
+  | LExists of string * base_type * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
 ;;
@@ -38,7 +40,7 @@ val fprintf_assertion : Format.formatter -> assertion -> unit
 
 type why_type = 
   | Prod_type of string * why_type * why_type (*r (x:t1)->t2 *)
-  | Base_type of why_type list * string       (*r int, float, int list, ... *)
+  | Base_type of base_type
   | Ref_type of why_type
   | Annot_type of 
       assertion * why_type * 
@@ -124,13 +126,16 @@ type why_decl =
   | Def of string * expr               (*r global let in why *)
   | External of string * why_type      (*r external decl in why *)
   | Logic of string * why_type         (*r logic decl in why *)
+  | Axiom of string * assertion            (*r Axiom *)
 
 type prover_decl =
   | Parameter  of string * why_type       (*r Parameter *)
   | Definition of string * expr           (*r Definition *) 
   | Predicate of string * (string * why_type) list * assertion  
                                           (*r Predicate *) 
-  | Axiom of string * why_type            (*r Axiom *)
+(*
+  | Axiom of string * assertion            (*r Axiom *)
+*)
   | CoqVerbatim of string                 (*r Verbatim Coq text (hints...) *)
 
 

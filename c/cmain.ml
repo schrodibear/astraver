@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.13 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.14 2004-02-27 16:55:56 marche Exp $ i*)
 
-(*i $Id: cmain.ml,v 1.13 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.14 2004-02-27 16:55:56 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -44,10 +44,10 @@ let interp_file f =
   let p = Ctyping.type_file p in
   if type_only then raise Exit;
   Ceffect.file p;
-  let p = Cinterp.interp p in
+  let (why,prover) = Cinterp.interp p in
   let f = Filename.chop_extension f in
   let ch = open_out (f ^ ".why") in
-  Output.fprintf_why_decls (formatter_of_out_channel ch) p;
+  Output.fprintf_why_decls (formatter_of_out_channel ch) why;
   close_out ch;
   rm_ppf ()
 

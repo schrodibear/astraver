@@ -1,15 +1,18 @@
 
-module StringSet : Set.S with type elt = string
+
+val interp_type : Cast.tctype -> string
+
+module HeapVarSet : Set.S with type elt = string * Output.base_type
 
 type effect =
     {
-      reads : StringSet.t;
-      assigns : StringSet.t;
+      reads : HeapVarSet.t;
+      assigns : HeapVarSet.t;
     }
 
-val location : Cast.tterm Clogic.location -> StringSet.t
+val location : Cast.tterm Clogic.location -> HeapVarSet.t
 
-val locations : Cast.tterm Clogic.location list -> StringSet.t
+val locations : Cast.tterm Clogic.location list -> HeapVarSet.t
 
 val file : Cast.tfile -> unit
 

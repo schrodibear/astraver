@@ -15,7 +15,7 @@ val default_var_info : string -> var_info
 type logic_info =
     {
       logic_name : string;
-      mutable logic_args : string list;
+      mutable logic_args : (string * Output.base_type) list;
     }
 
 val default_logic_info : string -> logic_info

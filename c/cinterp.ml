@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.16 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.17 2004-02-27 16:55:56 marche Exp $ i*)
 
 
 open Format
@@ -22,29 +22,15 @@ open Output
 open Info
 open Cast
 
-let interp_type ctype =
-  match ctype.ctype_node with
-  | CTvoid -> unit_type
-  | CTint(sign,cint) -> int_type
-  | CTfloat(cfloat) -> assert false (* TODO *)
-  | CTarray(t,None) -> base_type "pointer"      
-  | CTarray(t,Some e) -> assert false (* TODO *)
-  | CTpointer(t) -> base_type "pointer"      
-  | _ -> assert false (* TODO *)
-(*
-  | CTvar of string
-  | CTstruct_named of string
-  | CTstruct of string * 'expr field list
-  | CTunion_named of string
-  | CTunion of string * 'expr field list
-  | CTenum_named of string
-  | CTenum of string * (string * 'expr option) list
-  | CTfun of 'expr parameter list * 'expr ctype
-*)
+
+let global_var_for_type t =
+  match t.ctype_node with
+    | CTint _ -> "intP"
+    | _ -> assert false (* TODO *)
 
 let interp_param (t,id) =
   (* TODO : tester si param is assigned *)
-  (id,interp_type t)
+  (id,base_type (Ceffect.interp_type t))
 
 let interp_rel = function
   | Clogic.Lt -> "lt_int"
@@ -83,13 +69,17 @@ let rec interp_term label old_label t =
     | Clogic.Tat (t, l) -> 
 	interp_term (Some l) old_label t
     | Clogic.Tif (_, _, _) -> assert false (* TODO *)
-    | Clogic.Tarrget (_, _) -> assert false (* TODO *)
+    | Clogic.Tarrget (t1, t2) -> 
+	let te1 = f t1 and te2 = f t2 in
+	let var = global_var_for_type t.Clogic.info in
+	LApp("acc",[LVar var;LApp("shift",[te1;te2])])
+
     | Clogic.Tarrow (_, _) -> assert false (* TODO *)
     | Clogic.Tdot (_, _) -> assert false (* TODO *)
     | Clogic.Tunop (_, _) -> assert false (* TODO *)
     | Clogic.Tapp (g, l) -> 
 	LApp(g.logic_name,
-	     (List.map (fun x -> LVar x) g.logic_args) @ List.map f l)
+	     (List.map (fun (x,_) -> LVar x) g.logic_args) @ List.map f l)
     | Clogic.Tnull -> LVar "null"
     | Clogic.Tresult -> LVar "result"
 
@@ -100,13 +90,16 @@ let rec interp_predicate label old_label p =
   let ft = interp_term label old_label in
   match p with
     | Clogic.Ptrue -> LTrue
-    | Clogic.Pexists (_, _)
-    | Clogic.Pforall (_, _)
+    | Clogic.Pexists (_, _) -> assert false (* TODO *)
+    | Clogic.Pforall (l, p) ->
+	List.fold_right
+	  (fun (t,x) p -> LForall(x,([],Ceffect.interp_type t),p))
+	  l (interp_predicate label old_label p)
     | Clogic.Pif (_, _, _)
-    | Clogic.Pnot _ 
-    | Clogic.Pimplies (_, _) -> assert false
-    | Clogic.Por (p1, p2) -> LOr(f p1,f p2)
-    | Clogic.Pand (p1, p2) -> LAnd(f p1,f p2)
+    | Clogic.Pnot _ -> assert false (* TODO *)
+    | Clogic.Pimplies (p1, p2) -> make_impl (f p1) (f p2)
+    | Clogic.Por (p1, p2) -> make_or (f p1) (f p2)
+    | Clogic.Pand (p1, p2) -> make_and (f p1) (f p2)
     | Clogic.Prel (t1, op, t2) ->
 	LPred(interp_rel op,[ft t1;ft t2])
     | Clogic.Papp (_, _, _)
@@ -139,10 +132,6 @@ let interp_incr_op op =
     | Upostfix_inc | Uprefix_inc -> "add_int"
     | Upostfix_dec | Uprefix_dec -> "sub_int"
 
-let global_var_for_type t =
-  match t.ctype_node with
-    | CTint _ -> "intP"
-    | _ -> assert false (* TODO *)
 
 let rec interp_expr e =
   match e.texpr_node with
@@ -413,33 +402,44 @@ let interp_spec_option = function
   | None -> interp_spec no_spec
   | Some s -> interp_spec s
 
-let cinterp_logic_symbol ls =
+let cinterp_logic_symbol id ls =
   match ls with
     | Clogic.Predicate_reads(args,locs) -> assert false (* TODO *)
     | Clogic.Predicate_def(args,pred) -> assert false (* TODO *)
-    | Clogic.Function(args,ret,locs) ->
+    | Clogic.Function(args,ret,_) ->
+	let local_type =
+	  List.fold_right
+	    (fun arg t -> Prod_type("",base_type (Ceffect.interp_type arg),t))
+	    args (base_type (Ceffect.interp_type ret))
+	in
 	List.fold_right
-	(fun arg t -> Prod_type("",interp_type arg,t))
-	args (interp_type ret)
+	  (fun (arg,ty) t -> Prod_type("",Base_type ty,t))
+	  id.logic_args local_type
 
 
-let interp_located_tdecl why_decls decl =
+
+let interp_located_tdecl (why_decls,prover_decl) decl =
   match decl.node with
   | Tlogic(id,ltype) -> 
       fprintf Coptions.log 
       "translating logic declaration of %s@." id.logic_name;
-      (Logic(id.logic_name,cinterp_logic_symbol ltype))::why_decls 
-  | Taxiom(id,p) -> why_decls (* assert false *) (* TODO *)
+      ((Logic(id.logic_name,cinterp_logic_symbol id ltype))::why_decls,
+       prover_decl)
+  | Taxiom(id,p) -> 
+      fprintf Coptions.log 
+      "translating axiom declaration %s@." id;
+      ((Axiom(id,interp_predicate None "" p))::why_decls,
+       prover_decl)
   | Ttypedef(ctype,id) -> assert false (* TODO *)
   | Ttypedecl(ctype) -> assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 
       fprintf Coptions.log 
         "translating global declaration of %s@." v.var_name;
-      let t = interp_type ctype in
+      let t = base_type (Ceffect.interp_type ctype) in
       begin
 	match init with 
 	  | Inothing ->
-	      (Param(v.var_name,Ref_type(t)))::why_decls
+	      ((Param(v.var_name,Ref_type(t)))::why_decls,prover_decl)
 	  | _ -> assert false (* TODO *)
       end
   | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
@@ -448,10 +448,11 @@ let interp_located_tdecl why_decls decl =
       let tparams = List.map interp_param params in
       let pre,post = interp_spec_option spec in
       let tblock = interp_block block in
-      (Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls
+      ((Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls,
+       prover_decl)
 
 
 let interp l =
-  List.fold_left interp_located_tdecl [] l
+  List.fold_left interp_located_tdecl ([],[]) l
 
 

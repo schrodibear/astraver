@@ -432,7 +432,7 @@ coq-clean::
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli c/*.mli c/*.ml intf/*.ml intf/*.mli > .depend
 
 .depend.coq: lib/coq*/*.v
-	if test @COQ@ == yes; then \
+	if test @COQ@ = yes; then \
 	  rm -f .depend.coq; \
 	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v > .depend.coq; \
 	  $(COQDEP) -R lib/coq-v7 Coq.why lib/coq-v7/*.v >> .depend.coq; \

@@ -49,6 +49,8 @@ let rec fprintf_term form t =
   | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
 ;;
 
+type base_type = string list * string       (*r int, float, int list, ... *)
+
 type assertion = 
   | LTrue | LFalse
   | LAnd of assertion * assertion
@@ -58,9 +60,9 @@ type assertion =
   | LIf of term * assertion * assertion
   | LLet of string * term * assertion
       (*r warning: only for Coq assertions *)
-  | LForall of string * string * assertion
+  | LForall of string * base_type * assertion
       (*r forall x:t.a *)
-  | LExists of string * string * assertion
+  | LExists of string * base_type * assertion
       (*r exists x:t.a *)
   | LPred of string * term list
 ;;
@@ -111,10 +113,18 @@ let rec iter_assertion f a =
   | LIf(t,a1,a2) -> 
       iter_term f t; iter_assertion f a1; iter_assertion f a2 
   | LLet(id,t,a) -> iter_term f t; iter_assertion f a
-  | LForall(id,t,a) -> f t; iter_assertion f a
-  | LExists(id,t,a) -> f t; iter_assertion f a
+  | LForall(id,(l,t),a) -> List.iter f l;f t; iter_assertion f a
+  | LExists(id,(l,t),a) -> List.iter f l;f t; iter_assertion f a
   | LPred(id,l) -> f id; List.iter (iter_term f) l
 ;;
+
+let fprintf_base_type form (l,t) =
+  match l with
+    | [] -> fprintf form "%s" t
+    | x::l ->
+	fprintf form "(%s" x;
+	List.iter (fun t -> fprintf form ",%s" t) l;
+	fprintf form ") %s" t
 
 let rec fprintf_assertion form a =
   match a with
@@ -141,11 +151,11 @@ let rec fprintf_assertion form a =
       fprintf form "@[<hv 1>(let @[<hv 1>%s =@ %a in@]@ %a)@]" id
 	fprintf_term t fprintf_assertion a
   | LForall(id,t,a) -> 
-      fprintf form "@[<hv 1>(forall %s:%s.@ %a)@]" 
-	id t fprintf_assertion a
+      fprintf form "@[<hv 1>(forall %s:%a.@ %a)@]" 
+	id fprintf_base_type t fprintf_assertion a
   | LExists(id,t,a) -> 
-      fprintf form "@[<hv 1>(exists %s:%s.@ %a)@]" 
-	id t fprintf_assertion a
+      fprintf form "@[<hv 1>(exists %s:%a.@ %a)@]" 
+	id fprintf_base_type t fprintf_assertion a
   | LPred("eq",[t1;t2]) ->
       fprintf form "@[(%a = %a)@]" 
 	fprintf_term t1
@@ -166,7 +176,7 @@ let rec fprintf_assertion form a =
 
 type why_type = 
   | Prod_type of string * why_type * why_type      (*r (x:t1)->t2 *)
-  | Base_type of why_type list * string       (*r int, float, int list, ... *)
+  | Base_type of base_type
   | Ref_type of why_type
   | Annot_type of 
       assertion * why_type * 
@@ -190,7 +200,7 @@ let rec iter_why_type f t =
   match t with
     | Prod_type(_,t1,t2) ->
 	iter_why_type f t1; iter_why_type f t2
-    | Base_type(tl,id) -> List.iter (iter_why_type f) tl; f id
+    | Base_type(tl,id) -> List.iter f tl; f id
     | Ref_type(t) -> iter_why_type f t 
     | Annot_type (pre,t,reads,writes,post,signals) ->
 	iter_assertion f pre;
@@ -219,18 +229,8 @@ let rec fprintf_type anon form t =
 	else
 	  fprintf form "@[<hv 1>%s:%a ->@ %a@]" id
 	    (fprintf_type anon) t1 (fprintf_type anon) t2
-    | Base_type([],s) -> 
-	fprintf form "%s" s
-    | Base_type((t::r) as tl,s) -> 
-	if r=[]
-	then
-	  fprintf form "%a %s" (fprintf_type anon) t s
-	else
-	  begin
-	    fprintf form "(%a" (fprintf_type anon) t; 
-	    List.iter (fun t -> fprintf form ",%a" (fprintf_type anon) t) r;
-	    fprintf form ") %s" s
-	  end
+    | Base_type t  -> 
+	fprintf_base_type form t
     | Ref_type(t) -> 
 	fprintf form "%a ref" (fprintf_type anon) t
     | Annot_type(p,t,reads,writes,q,signals) ->
@@ -273,13 +273,13 @@ let rec fprint_logic_type sep form t =
     | Prod_type(_,Base_type([],s),t2) ->
 	fprintf form "@[<hv 1>%s%s%a@]" sep s (fprint_logic_type ", ") t2
     | Prod_type(_,Base_type(t::tl,s),t2) ->
-	fprintf form "@[<hv 1>%s(%a" sep (fprintf_type true) t;
-	List.iter (fun t -> fprintf form ",%a" (fprintf_type true) t) tl;
+	fprintf form "@[<hv 1>%s(%s" sep t;
+	List.iter (fun t -> fprintf form ",%s" t) tl;
 	fprintf form ") %s %a@]" s (fprint_logic_type ", ") t2
     | Base_type([],s) -> fprintf form "-> %s" s
     | Base_type(t::tl,s) -> 
-	fprintf form "-> (%a" (fprintf_type true) t;
-	List.iter (fun t -> fprintf form ",%a" (fprintf_type true) t) tl;
+	fprintf form "-> (%s" t;
+	List.iter (fun t -> fprintf form ",%s" t) tl;
 	fprintf form ") %s" s 
     | Ref_type(_) -> assert false (* should never happen *)
     | Prod_type _ -> assert false (* should never happen *)
@@ -500,12 +500,12 @@ type why_decl =
   | Def of string * expr               (*r global let in why *)
   | External of string * why_type      (*r external decl in why *)
   | Logic of string * why_type         (*r logic decl in why *)
+  | Axiom of string * assertion         (*r Axiom *)
 
 type prover_decl =
   | Parameter  of string * why_type    (*r Parameter *)
   | Definition of string * expr        (*r Definition *) 
   | Predicate of string * (string * why_type) list * assertion  (*r Predicate *) 
-  | Axiom of string * why_type         (*r Axiom *)
   | CoqVerbatim of string                 (*r Text in Coq *)
 
 
@@ -515,6 +515,7 @@ let get_why_id d =
     | External(id,_) -> id
     | Logic(id,_) -> id
     | Def(id,_) -> id
+    | Axiom(id,_) -> id
       
 let iter_why_decl f d =
   match d with
@@ -522,11 +523,14 @@ let iter_why_decl f d =
     | External(id,t) -> iter_why_type f t
     | Logic(id,t) -> iter_why_type f t
     | Def(id,t) -> iter_expr f t
+    | Axiom(id,t) -> iter_assertion f t
       
 let get_prover_id d =
   match d with
     | Parameter(id,_) -> id
+(*
     | Axiom(id,_) -> id
+*)
     | Definition(id,_) -> id
     | Predicate(id,_,_) -> id
     | CoqVerbatim(s) -> assert false
@@ -579,13 +583,18 @@ let fprintf_why_decl form d =
     | Logic(id,t) ->
 	fprintf form "@[<hv 1>logic %s :@ %a@]@.@." id 
 	  fprint_logic_type t
+    | Axiom(id,p) ->
+	fprintf form "@[<hv 1>axiom %s :@ %a@]@.@." id 
+	  fprintf_assertion p
     | Def(id,e) ->
 	fprintf form "@[<hv 1>let %s =@ %a@]@.@." id fprintf_expr e
 
 let iter_prover_decl f d =
   match d with
     | Parameter(id,t) -> iter_why_type f t
-    | Axiom(id,t) -> iter_why_type f t
+(*
+    | Axiom(id,t) -> iter_assertion f t
+*)
     | Definition(id,e) -> iter_expr f e
     | Predicate(id,args,a) -> iter_assertion f a
     | CoqVerbatim (s) -> assert false
