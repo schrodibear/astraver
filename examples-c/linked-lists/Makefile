@@ -1,0 +1,13 @@
+
+
+all: reverse hash_cycle
+
+%: %.c 
+	caduceus $*.c
+	make -f $*.makefile simplify
+	make -f $*.makefile coq
+
+clean:
+	make -f reverse.makefile clean
+	make -f has_cycle.makefile clean
+	rm -f why/*.why
