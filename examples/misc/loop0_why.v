@@ -15,8 +15,6 @@ Lemma p_po_2 :
   (x0: Z)
   (Pre5: `0 <= x0` /\ `x0 <= x`)
   (Pre4: Variant1 = x0)
-  (result: bool)
-  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
   `x0 >= 0`.
 Proof.
@@ -30,8 +28,6 @@ Lemma p_po_3 :
   (x0: Z)
   (Pre5: `0 <= x0` /\ `x0 <= x`)
   (Pre4: Variant1 = x0)
-  (result: bool)
-  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
   (Pre3: `x0 >= 0`)
   (x1: Z)
@@ -48,8 +44,6 @@ Lemma p_po_4 :
   (x0: Z)
   (Pre5: `0 <= x0` /\ `x0 <= x`)
   (Pre4: Variant1 = x0)
-  (result: bool)
-  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
   (Pre3: `x0 >= 0`)
   (x1: Z)
@@ -66,8 +60,6 @@ Lemma p_po_5 :
   (x0: Z)
   (Pre5: `0 <= x0` /\ `x0 <= x`)
   (Pre4: Variant1 = x0)
-  (result: bool)
-  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test2: `x0 > 0`)
   (Pre3: `x0 >= 0`)
   (x1: Z)
@@ -84,8 +76,6 @@ Lemma p_po_6 :
   (x0: Z)
   (Pre5: `0 <= x0` /\ `x0 <= x`)
   (Pre4: Variant1 = x0)
-  (result: bool)
-  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test1: `x0 <= 0`)
   `x0 >= 0`.
 Proof.
@@ -99,8 +89,6 @@ Lemma p_po_7 :
   (x0: Z)
   (Pre5: `0 <= x0` /\ `x0 <= x`)
   (Pre4: Variant1 = x0)
-  (result: bool)
-  (Bool1: (if result then `x0 > 0` else `x0 <= 0`))
   (Test1: `x0 <= 0`)
   (Pre2: `x0 >= 0`)
   x0 = `0`.
