@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.66 2002-12-11 15:39:01 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.67 2003-03-13 16:48:16 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -239,7 +239,10 @@ and trad_conditional info info1 te1 info2 te2 info3 te3 =
 	 in
 	 match q1 with
 	   | Some (q,_) -> 
-	       let n = test_name Anonymous in
+	       let n = match q.a_name with
+		 | Name id when is_wp id -> id 
+		 | _ -> test_name Anonymous
+	       in
 	       let q = tsubst_in_predicate (subst_one result tb) q.a_value in
 	       CC_lam ((n, CC_pred_binder (simplify q)), t)
 	   | None -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.74 2003-03-11 13:38:36 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.75 2003-03-13 16:48:16 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -166,6 +166,7 @@ and wp_desc info d q =
 	       (* $wp(p1, if result then wp(p2, q) else wp(p3, q))$ *)
 	       let result1 = p1.info.kappa.c_result_name in
 	       let q1 = create_postval (Pif (Tvar result1, q2, q3)) in
+	       let q1 = force_wp_name q1 in
 	       let q1 = saturate_post p1.info q1 q in
 	       let p'1,w1 = wp p1 q1 in
 	       If (p'1, p'2, p'3), w1
