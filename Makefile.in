@@ -149,7 +149,7 @@ coq-v7: $(VO7)
 coq-v8: $(VO7) $(VO8)
 
 # Why version
-VERSION=1.40
+VERSION=1.41
 # Caduceus version
 CVERSION=0.1
 
