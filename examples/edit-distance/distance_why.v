@@ -4,6 +4,7 @@
 Require Why.
 Require words.
 Require Omega.
+Require Sumbool.
 
 (*Why*) Parameter n1 : Z.
 Axiom n1_non_negative : `0 <= n1`.
@@ -20,7 +21,7 @@ Definition min_suffix :=
   [w1:(array n1 A)][w2:(array n2 A)][i,j,n:Z]
   (min_dist (suffix w1 i) (suffix w2 j) n).
 
-Definition test_char := [a,b:A](bool_of_sumbool ? ? (A_eq_dec a b)).
+Definition test_char := [a,b:A](bool_of_sumbool (A_eq_dec a b)).
 
 Lemma distance_po_1 : 
   (i0: Z)

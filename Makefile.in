@@ -107,6 +107,13 @@ test:: $(BINARY) $(VO)
 examples:: $(STATICBINARY) $(VO)
 	make -C examples
 
+# debugging
+
+db debug: bin/why.byte src/logic.cmo
+
+src/logic.ml: src/logic.mli
+	cp -f $^ $@
+
 # installation
 ##############
 

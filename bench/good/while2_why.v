@@ -81,7 +81,7 @@ Lemma test_po_6 :
   (Post11: x1 = `(-x0)`)
   x1 = `(-10)`.
 Proof.
-Simpl; Intros; Omega.
+Intros; Omega.
 Save.
 
 Lemma test_po_7 : 
@@ -92,9 +92,6 @@ Lemma test_po_7 :
   (Test3: `x0 <= 0`)
   x0 = `(-10)`.
 Proof.
-Simpl; Intros; Omega.
+Intros; Omega.
 Save.
-
-
-
 

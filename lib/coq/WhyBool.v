@@ -1,24 +1,10 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: WhyBool.v,v 1.2 2002-06-07 14:28:32 filliatr Exp $ *)
+(* $Id: WhyBool.v,v 1.3 2002-06-20 12:55:22 filliatr Exp $ *)
 
-Require Export Compare_dec.
-Require Export Peano_dec.
 Require ZArith.
 Require Sumbool.
-
-(* Programs use the booleans of type "bool", so we tranform any decidability
- * proof, in type sumbool, into a function returning a boolean with the
- * correct specification, through the following function:
- *)
-
-Definition bool_of_sumbool : 
-  (A,B:Prop) {A}+{B} -> { b:bool | if b then A else B }.
-Proof.
-Intros A B H.
-Elim H; [ Intro; Exists true; Assumption
-        | Intro; Exists false; Assumption ].
-Save.
+Require Bool_nat.
 
 Definition annot_bool :
   (b:bool) { b':bool | if b' then b=true else b=false }.
@@ -69,49 +55,6 @@ Elim H. Intro b.
 Case b; Intro.
 Exists false; Auto. Exists true; Auto.
 Save.
-
-
-(* Application: the decidability of equality and order relations over
- * type Z give some boolean functions with the adequate specification.
- * For instance, Z_lt_ge_bool has type:
- * 
- *        (x,y:Z){b:bool | if b then `x < y` else `x >= y`}
- *)
-
-Definition Z_lt_ge_bool := [x,y:Z](bool_of_sumbool ? ? (Z_lt_ge_dec x y)).
-Definition Z_ge_lt_bool := [x,y:Z](bool_of_sumbool ? ? (Z_ge_lt_dec x y)).
-
-Definition Z_le_gt_bool := [x,y:Z](bool_of_sumbool ? ? (Z_le_gt_dec x y)).
-Definition Z_gt_le_bool := [x,y:Z](bool_of_sumbool ? ? (Z_gt_le_dec x y)).
-
-Definition Z_eq_bool := [x,y:Z](bool_of_sumbool ? ? (Z_eq_dec x y)).
-Definition Z_noteq_bool := [x,y:Z](bool_of_sumbool ? ? (Z_noteq_dec x y)).
-
-Definition Zeven_odd_bool := [x:Z](bool_of_sumbool ? ? (Zeven_odd_dec x)).
-
-(* ... and similarly for type nat *)
-
-Definition notzerop := [n:nat] (sumbool_not ? ? (zerop n)).
-Definition lt_ge_dec : (x,y:nat){(lt x y)}+{(ge x y)} := 
-  [n,m:nat] (sumbool_not ? ? (le_lt_dec m n)).
-
-Definition nat_lt_ge_bool := 
-  [x,y:nat](bool_of_sumbool ? ? (lt_ge_dec x y)).
-Definition nat_ge_lt_bool := 
-  [x,y:nat](bool_of_sumbool ? ? (sumbool_not ? ? (lt_ge_dec x y))).
-
-Definition nat_le_gt_bool := 
-  [x,y:nat](bool_of_sumbool ? ? (le_gt_dec x y)).
-Definition nat_gt_le_bool := 
-  [x,y:nat](bool_of_sumbool ? ? (sumbool_not ? ? (le_gt_dec x y))).
-
-Definition nat_eq_bool :=
-  [x,y:nat](bool_of_sumbool ? ? (eq_nat_dec x y)).
-Definition nat_noteq_bool := 
-  [x,y:nat](bool_of_sumbool ? ? (sumbool_not ? ? (eq_nat_dec x y))).
-
-Definition zerop_bool := [x:nat](bool_of_sumbool ? ? (zerop x)).
-Definition notzerop_bool := [x:nat](bool_of_sumbool ? ? (notzerop x)).
 
 (** Conversely, we build a [sumbool] out of a boolean, 
     for the need of validations *)

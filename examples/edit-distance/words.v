@@ -5,7 +5,7 @@ Require PolyList.
 Require ZArith.
 Require ZArithRing.
 Require WhyArrays.
-Require ProgWf.
+Require Zwf.
 Require Omega.
 
 (*s Alphabet. This is an abstract type [A] where equality is decidable.*)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.36 2002-06-18 09:28:12 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.37 2002-06-20 12:55:22 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -30,6 +30,14 @@ let relation_bool id =
   else if id == t_ge then "Z_ge_lt_bool"
   else if id == t_eq_int then "Z_eq_bool"
   else if id == t_neq_int then "Z_noteq_bool"
+  else assert false
+
+let arith id =
+  if id == t_add then "Zplus"
+  else if id == t_sub then "Zminus"
+  else if id == t_mul then "Zmult"
+  else if id == t_div then "Zdiv"
+  else if id == t_neg then "Zopp"
   else assert false
 
 let inz = ref 0
@@ -77,6 +85,11 @@ let print_term fmt t =
 	openz fmt; fprintf fmt "%d" (truncate f); closez fmt
     | Tvar id when id == t_zwf_zero ->
 	fprintf fmt "(Zwf ZERO)"
+    (* partial application of arithmetical operators *)
+    | Tapp (id, []) | Tvar id when is_arith_unop id ->
+	fprintf fmt "%s" (arith id)
+    | Tapp (id, [t]) when is_arith_binop id ->
+	fprintf fmt "@[(%s %a)@]" (arith id) print0 t
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
     | Tapp (id, [t]) when id == t_neg ->
@@ -231,7 +244,7 @@ let rec print_cc_term fmt = function
 		     CC_lam ((idt, CC_pred_binder _), brt),
 		     CC_lam ((idf, CC_pred_binder _), brf)))
     when idb = idb' ->
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (sumbool_of_bool [%a:bool]%a %a %a) of@\n  (left %a) => %a@\n| (right %a) => %a end)@]"
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (sumbool_of_bool [%a:bool]%a %a %a) of@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end)@]"
       (print_list comma print_binder_id) bl print_cc_term e1 
 	Ident.print idb print_predicate q Ident.print idb Ident.print qb
 	Ident.print idt print_cc_term brt

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.49 2002-06-18 09:28:12 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.50 2002-06-20 12:55:22 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -207,6 +207,8 @@ let make_arrow_type lab bl k =
     { k with c_post = q }
   in
   make_arrow bl k
+
+let k_add_effects k e = { k with c_effect = Effect.union k.c_effect e }
 
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
@@ -487,7 +489,7 @@ and typef_desc lab env loc = function
 	      Error.should_be_a_variable a.info.loc)
       (* argument is not mutable *)
       | _ ->
-	  let _,eapp,_,_ = decomp_kappa kapp in
+	  let (_,tapp),eapp,_,_ = decomp_kappa kapp in
 	  let ef = union3effects (effect t_a) (effect t_f) eapp in
 	  (match t_a.desc with
   	     (* argument is pure: it is substituted *)
@@ -500,12 +502,20 @@ and typef_desc lab env loc = function
 			let e = applist cf [ca] in
 			let pl = partial_pre e @ pre t_a @ pre t_f in
 			coerce (Expression e) env kapp, (tapp, ef), pl
+ 		    (* function is [let y = ty in E]: we lift this let *)
+		    | LetIn (y, ty, ({ desc = Expression cf } as tf'))
+		      when post tf' = None && post t_f = None ->
+			let e = applist cf [ca] in
+			let env' = tf'.info.env in
+			let pl = partial_pre e @ pre tf' @ pre t_a @ pre t_f in
+			LetIn (y, ty, make_lnode (Expression e) env' kapp),
+			(tapp, ef), pl
+	            (* otherwise: true application *)
 		    | _ ->	   
 			App (t_f, Term t_a, Some kapp), (tapp, ef), [])
 	     (* argument is complex: 
 		we transform into [let v = arg in (f v)] *)
 	     | _ ->
-		 let (_,tapp),_,_,_ = decomp_kappa kapp in
 		 if occur_type_v x tapp then 
 		   Error.too_complex_argument a.info.loc;
 		 let v = fresh_var () in
@@ -513,40 +523,28 @@ and typef_desc lab env loc = function
 		 let info = { loc = loc; pre = []; post = None } in
 		 let env' = Env.add v tx env in
 		 let app_f_v,pl = match t_f.desc with
-		   (* function itself is pure: we collapse terms *)
+		   (* function is pure: we collapse terms *)
 		   | Expression cf when post t_f = None ->
 		       let e = applist cf [Tvar v] in
 		       Expression e, partial_pre e @ pre t_f
 		   (* function is [let y = ty in E]: we lift this let *)
 		   | LetIn (y, ty, ({ desc = Expression cf } as tf')) 
-		       when post tf' = None && post t_f = None ->
+		     when post tf' = None && post t_f = None ->
 		       let e = applist cf [Tvar v] in
 		       let env'' = Env.add v tx tf'.info.env in
 		       LetIn (y, ty, make_lnode (Expression e) env'' kapp),
 		       partial_pre e @ pre tf' @ pre t_f
+	           (* otherwise: true application *)
 		   | _ ->
-		       let var_v = 
-			 make_lnode (Var v) env' (type_c_of_v tx) 
-		       in
+		       let var_v = make_lnode (Var v) env' (type_c_of_v tx) in
 		       App (t_f, Term var_v, Some kapp), []
 		 in
-		 LetIn (v, t_a, make_lnode app_f_v env' kapp), 
+		 let kfv = k_add_effects kapp (effect t_f) in
+		 LetIn (v, t_a, make_lnode app_f_v env' kfv), 
 		 (tapp, ef), pl))
 
   | App (_, Refarg _, _) -> 
       assert false
-(***	      
-  | App (f, (Refarg (locr,r) as a), None) ->
-      let t_f = typef lab env f in
-      let x,tx,kapp = decomp_fun_type f t_f in
-      let tr = type_in_env env r in
-      expected_type locr tr tx;
-      check_for_alias locr r (result_type t_f);
-      let kapp = type_c_subst (subst_onev x r) kapp in
-      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
-      let ef = Effect.union (effect t_f) eapp in
-      App (t_f, a, Some kapp), (tapp, ef), []
-***)
 
   | App (f, Type _, None) ->
       failwith "todo: typing: application to a type"

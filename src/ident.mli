@@ -1,5 +1,5 @@
 
-(*i $Id: ident.mli,v 1.19 2002-06-07 14:28:32 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.20 2002-06-20 12:55:22 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -82,4 +82,7 @@ val p_not : t
 val is_eq_neq : t -> bool
 val is_comparison : t -> bool
 val is_relation : t -> bool
+
+val is_arith_binop : t -> bool
+val is_arith_unop : t -> bool
 val is_arith : t -> bool
