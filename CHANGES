@@ -5,6 +5,9 @@ version 1.50, March 26th, 2004
   o added ``typing'' contraints in Simplify output (using predicates ISxxx)
   o new declaration "predicate" to define a predicate
   o new option --dir to output files into a given directory
+
+version 1.42, March 16th, 2004
+==============================
   o new option --pvs-preamble
   o change in syntax: "external" is now a modifier for "parameter" and
     "logic" (see the manual for explanaitions); to be conservative, 
