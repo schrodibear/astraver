@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.23 2003-12-15 14:58:08 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.24 2003-12-18 12:24:06 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -173,7 +173,6 @@ and type_pvar loc lenv x =
     raise_located loc (AnyMessage "predicates cannot be labelled");
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
-    | Generalized _ -> assert false
     | Predicate [] -> Pvar x
     | Function _ -> predicate_expected loc
     | _ -> raise_located loc PartialApp
@@ -181,7 +180,6 @@ and type_pvar loc lenv x =
 and type_papp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
-    | Generalized _ -> assert false
     | Predicate at -> check_type_args loc at tl; Papp (x, List.map fst tl)
     | _ -> predicate_expected loc
 
@@ -252,24 +250,16 @@ and type_tvar loc lab env lenv x =
   in
   if not (is_logic xu lenv) then raise_located loc (UnboundVariable xu);
   match find_logic xu lenv with
-    | Generalized _ -> assert false
     | Function ([], t) -> Tvar x, t
     | _ -> raise_located loc (MustBePure)
 
 and type_tapp loc lenv x tl =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
   match find_logic x lenv with
-    | Generalized _ -> assert false
     | Function (at, t) -> check_type_args loc at tl; t
     | _ -> raise_located loc (AppNonFunction)
 
 and check_type_args loc at tl =
-(*
-  let illtyped a b = match a, b with
-    | PTarray a, PTarray b -> a <> b
-    | _ -> a <> b
-  in
-*)
   let rec check_arg = function
     | [], [] -> 
 	()

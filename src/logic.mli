@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: logic.mli,v 1.16 2003-12-15 14:58:08 marche Exp $ i*)
+(*i $Id: logic.mli,v 1.17 2003-12-18 12:24:06 marche Exp $ i*)
 
 (*s Logic. *)
 
@@ -64,6 +64,5 @@ type predicate =
   | Exists of Ident.t * Ident.t * pure_type * predicate
 
 type logic_type =
-  | Generalized of (type_var -> logic_type)
   | Predicate of pure_type list
   | Function of pure_type list * pure_type

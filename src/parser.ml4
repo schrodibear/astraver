@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.87 2003-12-15 15:50:56 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.88 2003-12-18 12:24:06 marche Exp $ i*)
 
 open Options
 open Logic
@@ -275,7 +275,10 @@ EXTEND
     | "unit" -> PTunit 
     | v = type_var -> PTvarid v
     | id = ident -> PTexternal ([],id) 
-    | "["; l = LIST1 primitive_type SEP ","; id = ident; "]" -> PTexternal (l,id) ] ]
+    | t = primitive_type ; id = ident -> PTexternal ([t],id) 
+    | "("; l = LIST1 primitive_type SEP ","; ")" ; id = ident -> 
+	PTexternal (l,id) 
+    ] ] 
   ;
   (* [ident] is expansed to allow factorization *)
   type_v:

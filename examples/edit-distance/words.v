@@ -83,9 +83,10 @@ Qed.
 
 Lemma first_last :
  forall (a:A) (u:word),
-    exists v : _
-   | ( exists b : _
-      | concat v (cons b eps) = cons a u /\ Zlength v = Zlength u).
+    exists v, 
+      exists b, 
+        concat v (cons b eps) = cons a u /\
+          Zlength v = Zlength u.
 Proof.
 intros a u.
 exists (but_last a u).
@@ -106,11 +107,11 @@ Lemma key_lemma_right :
    dist w1 w'2 m ->
    forall w2:word,
      w'2 = cons a w2 ->
-      exists u1 : _
-     | ( exists v1 : _
-        | ( exists k : _
-           | w1 = concat u1 v1 /\
-             dist v1 w2 k /\ (k + Zlength u1 <= m + 1)%Z)).
+      exists u1,
+       exists v1,
+        exists k,
+           w1 = concat u1 v1 /\
+             dist v1 w2 k /\ (k + Zlength u1 <= m + 1)%Z.
 Proof.
 intros w1 w'2 m a H; elim H.
 (* 1. [dist_eps]: absurd *)
@@ -163,11 +164,11 @@ Qed.
 Lemma key_lemma_left :
  forall (w1 w2:word) (m:Z) (a:A),
    dist (cons a w1) w2 m ->
-    exists u2 : _
-   | ( exists v2 : _
-      | ( exists k : _
-         | w2 = concat u2 v2 /\
-           dist w1 v2 k /\ (k + Zlength u2 <= m + 1)%Z)).
+    exists u2,
+      exists v2,
+        exists k,
+          w2 = concat u2 v2 /\
+           dist w1 v2 k /\ (k + Zlength u2 <= m + 1)%Z.
 Proof.
 intros w1 w2 m a Hdist.
 generalize (dist_symetry (cons a w1) w2 m Hdist); intro Hrev.

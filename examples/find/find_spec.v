@@ -46,13 +46,13 @@ Definition i_invariant (m n i r:Z) (A:array Z) :=
   (m <= i)%Z /\
   (forall p:Z, (1 <= p)%Z -> (p < i)%Z -> (access A p <= r)%Z) /\
   ((i <= n)%Z ->
-    exists p : Z | (i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z).
+    exists p : Z, (i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z).
   
 Definition j_invariant (m n j r:Z) (A:array Z) :=
   (j <= n)%Z /\
   (forall q:Z, (j < q)%Z -> (q <= N)%Z -> (r <= access A q)%Z) /\
   ((m <= j)%Z ->
-    exists q : Z | (m <= q)%Z /\ (q <= j)%Z /\ (access A q <= r)%Z).
+    exists q : Z, (m <= q)%Z /\ (q <= j)%Z /\ (access A q <= r)%Z).
 
 Definition termination (i j i0 j0 r:Z) (A:array Z) :=
   (i > i0)%Z /\ (j < j0)%Z \/ (i <= f <= j)%Z /\ access A f = r.

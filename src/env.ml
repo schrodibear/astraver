@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.33 2003-12-15 14:58:07 marche Exp $ i*)
+(*i $Id: env.ml,v 1.34 2003-12-18 12:24:05 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -23,6 +23,106 @@ open Types
 open Logic
 open Error
 open Report
+
+(* generalization *)
+
+type 'a scheme = { scheme_vars : string list; scheme_type : 'a }
+
+let empty_scheme t = { scheme_vars = [] ; scheme_type = t }
+
+let rec find_pure_type_vars env t =
+  match t with
+    | PTvarid id ->
+	let s = Ident.string id in
+	if List.mem s env then env else s::env
+    | PTexternal(l,id) ->
+	List.fold_left find_pure_type_vars env l
+    | PTarray ta -> find_pure_type_vars env ta
+    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> env
+
+let find_logic_type_vars t =
+  match t with
+    | Function(tl,tr) ->
+	let env = find_pure_type_vars [] tr in
+	List.fold_left find_pure_type_vars env tl
+    | Predicate(tl) ->
+	List.fold_left find_pure_type_vars [] tl
+
+let rec find_type_v_vars acc t =
+  match t with
+    | Ref t | Array t -> find_type_v_vars acc t
+    | Arrow(bl,c) ->
+	let acc = find_type_c_vars acc c in
+	List.fold_left find_binder_vars acc bl
+    | PureType t -> find_pure_type_vars acc t
+and find_type_c_vars acc c = find_type_v_vars acc c.c_result_type
+and find_binder_vars acc (_,b) =
+  match b with
+    | BindType t -> find_type_v_vars acc t
+    | BindSet | Untyped -> acc
+
+
+let generalize_logic_type t =
+  let l = find_logic_type_vars t in
+  { scheme_vars = l ; scheme_type = t }
+
+(*
+let generalize_type_c p =
+  let l = find_type_v_vars [] p in
+  { scheme_vars = l ; scheme_type = p }
+*)
+
+(* specialization *)
+
+let new_type_var =
+  let c = ref 0 in
+  fun () -> incr c;{ tag = !c; type_val = None }
+
+let rec subst_pure_type x v t =
+  match t with
+    | PTvarid id ->
+	if x = Ident.string id then PTvar v else t
+    | PTexternal(l,id) ->
+	PTexternal(List.map (subst_pure_type x v) l,id)
+    | PTarray ta -> PTarray (subst_pure_type x v ta)
+    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> t
+
+let subst_logic_type x v t =
+  match t with
+    | Function(tl,tr) -> 
+	Function(List.map (subst_pure_type x v) tl,subst_pure_type x v tr)
+    | Predicate(tl) -> 
+	Predicate(List.map (subst_pure_type x v) tl)
+
+let rec subst_type_v x v t =
+  match t with
+  | Ref t -> Ref (subst_type_v x v t)
+  | Array t -> Array (subst_type_v x v t)
+  | Arrow(bl,c) ->
+      Arrow(List.map (subst_binder x v) bl,subst_type_c x v c)
+  | PureType t -> PureType(subst_pure_type x v t)
+and subst_binder x v ((id,t) as b) =
+  match t with
+    | BindSet | Untyped -> b
+    | BindType t -> (id,BindType (subst_type_v x v t))
+and subst_type_c x v c =
+  { c with c_result_type = subst_type_v x v c.c_result_type }
+
+let rec specialize_logic_type t =
+  List.fold_left
+    (fun t x -> 
+       let v = new_type_var() in 
+       subst_logic_type x v t)
+    t.scheme_type
+    t.scheme_vars
+
+let rec specialize_type_v l t =
+  List.fold_left
+    (fun t x -> 
+       let v = new_type_var() in 
+       subst_type_v x v t)
+    t
+    l
 
 (* Environments for imperative programs.
  *
@@ -43,32 +143,37 @@ module Penv = struct
   let is_rec x (_,_,r) = Idset.mem x r
 end
 
+
 (* Local environments *)
 
 type type_info = Set | TypeV of type_v
 
-type local_env = type_info Penv.t
+type local_env = type_info scheme Penv.t
 
 let empty = (Penv.empty : local_env)
 
-let add id v = Penv.add id (TypeV v)
+let add id v = Penv.add id (empty_scheme (TypeV v))
 
-let add_set id = Penv.add id Set
+let add_set id = Penv.add id (empty_scheme Set)
 
 let find id env =
-  match Penv.find id env with TypeV v -> v | Set -> raise Not_found
+  let s = Penv.find id env in
+  match s.scheme_type with 
+    | TypeV v -> specialize_type_v s.scheme_vars v 
+    | Set -> raise Not_found
 
 let is_local env id =
   try
-    match Penv.find id env with TypeV _ -> true | Set -> false
+    match (Penv.find id env).scheme_type with TypeV _ -> true | Set -> false
   with Not_found -> 
     false
 
 let is_local_set env id =
   try
-    match Penv.find id env with TypeV _ -> false | Set -> true
+    match (Penv.find id env).scheme_type with TypeV _ -> false | Set -> true
   with Not_found -> 
     false
+
 
 (* typed programs *)
 
@@ -82,7 +187,6 @@ type typing_info = {
   
 type typed_program = typing_info Ast.t
 
-
 (* The global environment.
  *
  * We have a global typing environment env
@@ -90,7 +194,7 @@ type typed_program = typing_info Ast.t
  * and a table of initializations (still for extraction)
  *)
 
-let (env : type_info Penv.t ref) = ref Penv.empty
+let (env : type_info scheme Penv.t ref) = ref Penv.empty
 
 let (pgm_table : (typed_program option) Idmap.t ref) = ref Idmap.empty
 
@@ -98,12 +202,17 @@ let (init_table : term Idmap.t ref) = ref Idmap.empty
 
 (* Operations on the global environment. *)
 
+let generalize_type_v t =
+  let l = find_type_v_vars [] t in
+  { scheme_vars = l ; scheme_type = TypeV t }
+
 let add_global id v p =
   try
     let _ = Penv.find id !env in
     raise_unlocated (Clash id)
   with Not_found -> begin
-    env := Penv.add id (TypeV v) !env; 
+    let v = generalize_type_v v in
+    env := Penv.add id v !env; 
     pgm_table := Idmap.add id p !pgm_table
   end
 
@@ -112,36 +221,43 @@ let add_global_set id =
     let _ = Penv.find id !env in
     raise_unlocated (Error.Clash id)
   with Not_found -> 
-    env := Penv.add id Set !env
+    env := Penv.add id { scheme_vars = []; scheme_type = Set} !env
 
 let is_global id =
   try
-    match Penv.find id !env with TypeV _ -> true | Set -> false
+    match (Penv.find id !env).scheme_type with TypeV _ -> true | Set -> false
   with Not_found -> 
     false
 
 let is_global_set id =
   try
-    match Penv.find id !env with TypeV _ -> false | Set -> true
+    match (Penv.find id !env).scheme_type with TypeV _ -> false | Set -> true
   with Not_found -> 
     false
 
 
-let lookup_global id =
-  match Penv.find id !env with TypeV v -> v | Set -> raise Not_found
+
+
+let lookup_global id = find id !env
+(*
+  let s = Penv.find id !env in
+  match s.scheme_type with 
+    | TypeV v -> specialize_type_v s.scheme_vars v 
+    | Set -> raise Not_found
+*)
 
 let find_pgm id = Idmap.find id !pgm_table
 
 
 let all_vars () =
-  let add_var (id,v) s = match v with
+  let add_var (id,v) s = match v.scheme_type with
     | TypeV (Arrow _ | PureType _) -> Idset.add id s 
     | _ -> s
   in
   Penv.fold add_var !env (Idset.add t_eq (Idset.singleton t_neq))
 
 let all_refs () =
-  let add_ref (id,v) s = match v with
+  let add_ref (id,v) s = match v.scheme_type with
     | TypeV (Ref _ | Array _) -> Idset.add id s 
     | _ -> s
   in
@@ -177,6 +293,7 @@ let is_ref env id =
   try is_mutable (type_in_env env id) with Not_found -> false
 
 let fold_all f lenv x0 =
+  let f (id,s) = f (id,s.scheme_type) in
   let x1 = Penv.fold f !env x0 in
   Penv.fold f lenv x1
 
@@ -258,55 +375,12 @@ let _ = add_global any_float (any float) None
 
 (* Logical environment *)
 
-type logical_env = logic_type Idmap.t
+type logical_env = logic_type scheme Idmap.t
 
 let logic_table = ref Idmap.empty
 
-let rec subst_type x v t =
-  match t with
-    | PTvarid id ->
-	if x = Ident.string id then PTvar v else t
-    | PTexternal(l,id) ->
-	PTexternal(List.map (subst_type x v) l,id)
-    | PTarray ta -> PTarray (subst_type x v ta)
-    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> t
-
-let subst x v t =
-  match t with
-    | Function(tl,tr) -> 
-	Function(List.map (subst_type x v) tl,subst_type x v tr)
-    | Predicate(tl) -> 
-	Predicate(List.map (subst_type x v) tl)
-    | Generalized _ -> assert false
-
-let rec find_type_vars env t =
-  match t with
-    | PTvarid id ->
-	let s = Ident.string id in
-	if List.mem s env then env else s::env
-    | PTexternal(l,id) ->
-	List.fold_left find_type_vars env l
-    | PTarray ta -> find_type_vars env ta
-    | PTint | PTfloat | PTbool | PTunit | PTvar _ -> env
-
-let find_type_vars t =
-  match t with
-    | Function(tl,tr) ->
-	let env = find_type_vars [] tr in
-	List.fold_left find_type_vars env tl
-    | Predicate(tl) ->
-	List.fold_left find_type_vars [] tl
-    | Generalized _ -> assert false
-
-let generalize t =
-  let l = find_type_vars t in
-  List.fold_left
-    (fun t x -> Generalized (fun v -> subst x v t))
-    t
-    l
-
 let add_global_logic x t = 
-  let t = generalize t in
+  let t = generalize_logic_type t in
   logic_table := Idmap.add x t !logic_table
 
 let int_array = PTarray PTint
@@ -359,30 +433,26 @@ let _ = agl "array_ge"     (Predicate [int_array; PTint; PTint; PTint])
 
 let is_logic = Idmap.mem
 
-let new_type_var =
-  let c = ref 0 in
-  fun () -> incr c;{ tag = !c; type_val = None }
+let find_logic x env = specialize_logic_type (Idmap.find x env)
 
-let rec specialize t =
-  match t with
-    | Generalized f ->
-	let v = new_type_var() in specialize (f v)
-    | _ -> t
-
-let find_logic x env = specialize (Idmap.find x env)
-
-let add_logic id v env = match v with
+let add_logic_aux id vars v env = match v with
   | (Ref (PureType pt)) | (PureType pt) -> 
-      Idmap.add id (Function ([], pt)) env
+      Idmap.add id { scheme_vars = vars ; 
+		     scheme_type = (Function ([], pt)) } env
   | (Array (PureType t)) -> 
-      Idmap.add id (Function ([], PTarray t)) env
+      Idmap.add id { scheme_vars = vars ; 
+		     scheme_type = (Function ([], PTarray t)) } env
   | _ -> 
       env
 
+let add_logic id v env =
+  let l = find_type_v_vars [] v in
+  add_logic_aux id l v env
+
 let logical_env (m,_,_) = 
   let transl m lenv = 
-    Idmap.fold (fun id v e -> match v with 
-		  | TypeV v -> add_logic id v e
+    Idmap.fold (fun id v e -> match v.scheme_type with 
+		  | TypeV t -> add_logic_aux id v.scheme_vars t e
 		  | _ -> e) m lenv
   in
   transl m (let (gm,_,_) = !env in transl gm !logic_table)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.100 2003-12-16 10:04:09 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.101 2003-12-18 12:24:06 marche Exp $ i*)
 
 (*s Typing. *)
 
@@ -56,20 +56,24 @@ let expected_cmp loc =
 
 let just_reads e = difference (get_reads e) (get_writes e)
 
-let type_v_sup loc t1 t2 =
-  if t1 <> t2 then raise_located loc BranchesSameType;
-  t1
-
-(* TODO: subtype is currently structural equality *)
-let rec subtype = function
+let rec unify_type_v v1 v2 = 
+  match (v1,v2) with
   | (PureType c1, PureType c2) -> 
-      c1 = c2
+      Ltyping.unify c1 c2
   | (Ref v1, Ref v2) -> 
-      subtype (v1,v2)
+      unify_type_v v1 v2
   | (Array v1, Array v2) -> 
-      subtype (v1,v2)
+      unify_type_v v1 v2
+  | _ -> assert false
+(*
   | (v1,v2) -> 
       v1 = v2
+*)
+
+let type_v_sup loc t1 t2 =
+  if not(unify_type_v t1 t2) then raise_located loc BranchesSameType;
+  t1
+
 
 let union3effects x y z = Effect.union x (Effect.union y z)
 
@@ -86,7 +90,7 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
       raise_located f.ploc AppNonFunction
 
 let expected_type loc t et =
-  if t <> et then 
+  if not(unify_type_v t et) then 
     raise_located loc (ExpectedType (fun fmt -> print_type_v fmt et))
 
 let check_for_alias loc id v = 

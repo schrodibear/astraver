@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.83 2003-12-15 14:58:08 marche Exp $ i*)
+(*i $Id: util.ml,v 1.84 2003-12-18 12:24:06 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -415,10 +415,6 @@ and print_type_c fmt c =
 let rec print_logic_type fmt lt =
   let print_args = print_list comma print_pure_type in
   match lt with
-    | Generalized f -> 
-	let v = Env.new_type_var() in
-	let t = f v in
-	fprintf fmt "'a%d. %a" v.tag print_logic_type t
     | Predicate l -> fprintf fmt "%a -> prop" print_args l
     | Function (l, pt) -> fprintf fmt "%a -> %a" print_args l print_pure_type pt
 

@@ -542,7 +542,7 @@ Qed.
 Lemma Lemma_14 :
  forall (m n:Z) (A:array Z),
    (m <= f <= n)%Z ->
-    exists p : Z | (m <= p)%Z /\ (p <= n)%Z /\ (access A f <= access A p)%Z.
+    exists p : Z, (m <= p)%Z /\ (p <= n)%Z /\ (access A f <= access A p)%Z.
 Proof.
 intros m n A H_m_f_n.
 exists f.
@@ -566,7 +566,7 @@ Qed.
 Lemma Lemma_14' :
  forall (m n:Z) (A:array Z),
    (m <= f <= n)%Z ->
-    exists q : Z | (m <= q)%Z /\ (q <= n)%Z /\ (access A q <= access A f)%Z.
+    exists q : Z, (m <= q)%Z /\ (q <= n)%Z /\ (access A q <= access A f)%Z.
 Proof.
 intros m n A H_m_f_n.
 exists f.
@@ -590,8 +590,8 @@ Qed.
 Lemma Lemma_15 :
  forall (n i r:Z) (A:array Z),
    (access A i < r)%Z ->
-   ( exists p : Z | (i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z) ->
-    exists p : Z | (Zsucc i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z.
+   ( exists p : Z, (i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z) ->
+    exists p : Z, (Zsucc i <= p)%Z /\ (p <= n)%Z /\ (r <= access A p)%Z.
 Proof.
 intros n i r A H H0.
 elim H0.
@@ -650,8 +650,8 @@ Qed.
 Lemma Lemma_17 :
  forall (m j r:Z) (A:array Z),
    (r < access A j)%Z ->
-   ( exists q : Z | (m <= q)%Z /\ (q <= j)%Z /\ (access A q <= r)%Z) ->
-    exists q : Z | (m <= q)%Z /\ (q <= Zpred j)%Z /\ (access A q <= r)%Z.
+   ( exists q : Z, (m <= q)%Z /\ (q <= j)%Z /\ (access A q <= r)%Z) ->
+    exists q : Z, (m <= q)%Z /\ (q <= Zpred j)%Z /\ (access A q <= r)%Z.
 Proof.
 intros m j r A H H0.
 elim H0.

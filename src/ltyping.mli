@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.mli,v 1.11 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: ltyping.mli,v 1.12 2003-12-18 12:24:06 marche Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -23,6 +23,8 @@ open Types
 open Ptree
 open Ast
 open Env
+
+val unify : Logic.pure_type -> Logic.pure_type -> bool
 
 val type_v : 
   Loc.t -> Label.t -> local_env -> logical_env -> ptype_v -> type_v

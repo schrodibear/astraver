@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.23 2003-12-15 14:58:07 marche Exp $ i*)
+(*i $Id: env.mli,v 1.24 2003-12-18 12:24:06 marche Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -97,7 +97,9 @@ val add_logic : Ident.t -> type_v -> logical_env -> logical_env
 val is_logic : Ident.t -> logical_env -> bool
 
 val new_type_var : unit -> type_var
+(*
 val generalize : logic_type -> logic_type
+*)
 val find_logic : Ident.t -> logical_env -> logic_type
 
 val logical_env : local_env -> logical_env
