@@ -13,7 +13,7 @@ typedef struct {
 int Ch_Pn[4];
 int SPMEP[4];
 
-/*@ requires \valid(Parametre)
+/*@ requires \valid(Parametre) && \valid_range(Pn_Bac, 0, 4)
   @*/
 void V4A (MaStruct *Parametre,int Val_Boitier [ 4 ],int Pn_Bac [ 4 ],MaStruct *Parametre_Ref)
 {

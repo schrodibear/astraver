@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.134 2005-02-03 10:44:38 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.135 2005-02-08 12:48:16 hubert Exp $ i*)
 
 
 open Format
@@ -109,6 +109,13 @@ let interp_term_bin_op ty1 ty2 op =
   | Tvar _ , _, _-> assert false 
   | Tvoid , _, _-> assert false
 
+let term_bin_op ty1 ty2 op t1 t2 =
+  match ty1.ctype_node, op, t2 with
+    | (Tpointer _ | Tarray _), Badd, LConst (Prim_int n) when n = 0L ->
+	t1
+    | _ -> 
+	LApp (interp_term_bin_op ty1 ty2 op, [t1; t2])
+
 let interp_term_un_op ty op = match ty.ctype_node, op with
   | (Tenum _ | Tint _), Uminus -> "neg_int"
   | Tfloat _, Uminus -> "neg_real"
@@ -133,7 +140,7 @@ let rec interp_term label old_label t =
 	else LVar n
     | NTold t ->	interp_term (Some old_label) old_label t
     | NTbinop (t1, op, t2) ->
-	LApp(interp_term_bin_op t1.nterm_type t2.nterm_type op,[f t1;f t2])
+	term_bin_op t1.nterm_type t2.nterm_type op (f t1) (f t2)
     | NTbase_addr t -> 
 	LApp("base_addr",[f t])
     | NTblock_length t -> 
@@ -373,6 +380,12 @@ let build_minimal_app e args =
 	else
 	  build_complex_app e args
 
+let bin_op op t1 t2 = match op, t2 with
+  | Badd_pointer_int, Cte (Prim_int n) when n = 0L ->
+      t1
+  | _ ->
+      build_minimal_app (Var (interp_bin_op op)) [t1; t2]
+
 let rec interp_expr e =
   match e.nexpr_node with
     | NEconstant (IntConstant c) -> 
@@ -394,8 +407,7 @@ let rec interp_expr e =
 	If(interp_boolean_expr e, 
 	   Cte(Prim_int Int64.one), Cte(Prim_int Int64.zero))
     | NEbinary(e1,op,e2) ->
-	build_minimal_app (Var (interp_bin_op op)) 
-	  [interp_expr e1;interp_expr e2]
+	bin_op op (interp_expr e1) (interp_expr e2)
     | NEassign (e1,e2) ->
 	begin
 	  match interp_lvalue e1 with
@@ -422,17 +434,15 @@ let rec interp_expr e =
 	  | LocalRef(v) ->
 	      let n = v.var_unique_name in
 	      append
-	        (Assign(n,
-			make_app (interp_bin_op op) 
-			  [Deref n; interp_expr e2]))
+	        (Assign(n, bin_op op (Deref n) (interp_expr e2)))
 	        (Deref n)
 	  | HeapRef(var,e1) -> 
 	      let tmp1 = tmp_var () in
 	      let tmp2 = tmp_var () in
 	      Let(tmp1, e1,
 		  Let(tmp2, 
-		      make_app (interp_bin_op op)
-			[make_app "acc_" [Var var; Var tmp1]; interp_expr e2],
+		      bin_op op
+			(make_app "acc_" [Var var; Var tmp1]) (interp_expr e2),
 		      append
 			(build_complex_app (Var "upd_") 
 			   [Var var; Var tmp1; Var tmp2])
@@ -514,8 +524,7 @@ and interp_boolean_expr e =
 		   |Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
 		   |Beq_pointer | Bneq_pointer 
 		   |Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
-	build_minimal_app (Var (interp_bin_op op)) 
-	  [interp_expr e1; interp_expr e2]
+	bin_op op (interp_expr e1) (interp_expr e2)
     | NEbinary (e1, Band, e2) ->
 	And(interp_boolean_expr e1, interp_boolean_expr e2)
     | NEbinary (e1, Bor, e2) ->
@@ -699,9 +708,7 @@ and interp_statement_expr e =
 	  match interp_lvalue l with
 	    | LocalRef(v) ->
 		let n = v.var_unique_name in
-		Assign(n,
-		       make_app (interp_bin_op op) 
-			 [Deref n; interp_expr e])
+		Assign(n, bin_op op (Deref n) (interp_expr e))
 	    | HeapRef(var,e1) -> 
 		(* let tmp1 = e1 in
 		   let tmp2 = acc var e1
@@ -710,8 +717,7 @@ and interp_statement_expr e =
 		    Let("caduceus2",make_app "acc_" [Var var;Var "caduceus1"],
 			make_app "upd_"
 			  [Var var; Var "caduceus1"; 
-			   make_app (interp_bin_op op) 
-			     [Var "caduceus2"; interp_expr e]]))
+			   bin_op op (Var "caduceus2") (interp_expr e)]))
 	end 
 (*
     | NEsizeof _ 

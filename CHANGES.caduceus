@@ -1,5 +1,6 @@
 Note: These are the changes for Caduceus.
 
+ o fixed bug with local initialization structures
  o fixed bug with global structures arrays
 
 version 0.71, February 3rd, 2005

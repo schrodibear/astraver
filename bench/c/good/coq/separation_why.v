@@ -2936,7 +2936,7 @@ Proof.
 intuition.
 Admitted.
 
-(* Why obligation from file "why/separation.why", characters 35438-35515 *)
+(* Why obligation from file "why/separation.why", characters 35438-35451 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -2954,7 +2954,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35523-35550 *)
+(* Why obligation from file "why/separation.why", characters 35456-35483 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
@@ -2968,9 +2968,9 @@ Lemma f_impl_po_2 :
                  (separation_v_s alloc t u s v) /\
                  (separation_v_ss alloc t u ss v)),
   forall (Pre4: (valid alloc ss)),
-  forall (caduceus_8: pointer),
-  forall (Post3: caduceus_8 = (shift (acc t ss) 0)),
-  (valid alloc caduceus_8).
+  forall (caduceus_4: pointer),
+  forall (Post3: caduceus_4 = (acc t ss)),
+  (valid alloc caduceus_4).
 Proof.
 intuition.
 subst.
@@ -2980,7 +2980,7 @@ valid.
 unfold valid_s1_t;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 35421-35550 *)
+(* Why obligation from file "why/separation.why", characters 35421-35483 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -2995,27 +2995,27 @@ Lemma f_impl_po_3 :
                  (separation_v_s alloc t u s v) /\
                  (separation_v_ss alloc t u ss v)),
   forall (Pre4: (valid alloc ss)),
-  forall (caduceus_8: pointer),
-  forall (Post3: caduceus_8 = (shift (acc t ss) 0)),
-  forall (Pre3: (valid alloc caduceus_8)),
+  forall (caduceus_4: pointer),
+  forall (Post3: caduceus_4 = (acc t ss)),
+  forall (Pre3: (valid alloc caduceus_4)),
   forall (intP0: ((memory) Z)),
-  forall (Post14: intP0 = (upd intP caduceus_8 0)),
+  forall (Post14: intP0 = (upd intP caduceus_4 0)),
   (forall (result:pointer),
-   (result = (shift (acc t s) 0) ->
+   (result = (acc t s) ->
     (forall (intP:((memory) Z)),
      (intP = (upd intP0 result 1) ->
       (forall (result:pointer),
-       (result = (shift (acc u s) 0) ->
+       (result = (acc u s) ->
         (forall (intP0:((memory) Z)),
          (intP0 = (upd intP result 2) ->
           (forall (result:pointer),
-           (result = (shift v 0) ->
+           (result = v ->
             (forall (intP:((memory) Z)),
              (intP = (upd intP0 result 3) ->
               (((forall (result:Z),
-                 (result = (acc intP (shift (acc t s) 0)) -> result = 1)) /\
-              (valid alloc s)) /\ (valid alloc (shift (acc t s) 0))) /\
-              (valid alloc (shift (acc t s) 0)))) /\
+                 (result = (acc intP (acc t s)) -> result = 1)) /\
+              (valid alloc s)) /\ (valid alloc (acc t s))) /\
+              (valid alloc (acc t s)))) /\
             (valid alloc result))))) /\
         (valid alloc result))) /\
       (valid alloc s))) /\
@@ -3023,9 +3023,6 @@ Lemma f_impl_po_3 :
   (valid alloc s).
 Proof.
 intuition;subst;auto.
-rewrite shift_zero.
-rewrite shift_zero.
-rewrite shift_zero.
 rewrite acc_upd_neq.
 rewrite acc_upd_neq.
 rewrite acc_upd_eq;auto.
@@ -3037,61 +3034,56 @@ intuition.
 generalize (pointer_pair_2 (s # u)  (s # t) H7);intuition. 
 red in H3.
 intuition.
-rewrite shift_zero in H4.
 generalize (pointer_pair_2 v  (s # t) H4).
 intuition. 
 assert (valid alloc s).
 valid.
 generalize (valid_s1_t_pointer alloc t s H4).
-rewrite shift_zero;unfold valid_s1_t;intuition.
+unfold valid_s1_t;intuition.
 assert (valid alloc s).
 valid.
 generalize (valid_s1_t_pointer alloc t s H4).
-rewrite shift_zero;unfold valid_s1_t;intuition.
+unfold valid_s1_t;intuition.
 assert (valid alloc s).
 valid.
 generalize (valid_s1_u_pointer alloc u s H4).
-rewrite shift_zero;unfold valid_s1_u;intuition.
+unfold valid_s1_u;intuition.
 assert (valid alloc s).
 valid.
 generalize (valid_s1_t_pointer alloc t s H4).
-rewrite shift_zero;unfold valid_s1_t;intuition.
+unfold valid_s1_t;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36045-36073 *)
+(* Why obligation from file "why/separation.why", characters 35825-35840 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (v: pointer),
-  forall (Pre3: (valid_range alloc v 0 4)),
-  (valid alloc (shift v 0)).
+  forall (Pre2: (valid_range alloc v 0 4)),
+  (valid alloc v).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36187-36288 *)
+(* Why obligation from file "why/separation.why", characters 35949-35977 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
-  forall (Pre5: (valid_range alloc tab 0 5)),
-  (valid alloc (shift tab 0)).
+  forall (Pre4: (valid_range alloc tab 0 5)),
+  (valid alloc tab).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 36187-36288 *)
+(* Why obligation from file "why/separation.why", characters 35949-35977 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre5: (valid_range alloc tab 0 5)),
-  forall (Pre2: (valid alloc (shift tab 0))),
-  (valid alloc (shift (acc x (shift tab 0)) 0)).
+  forall (Pre4: (valid_range alloc tab 0 5)),
+  forall (Pre1: (valid alloc tab)),
+  (valid alloc (acc x tab)).
 Proof.
 intuition.
-rewrite shift_zero;rewrite shift_zero.
 generalize (valid_anonymous_0_x_pointer alloc x tab).
 unfold valid_anonymous_0_x;intuition.
-assert (valid alloc tab). 
-valid.
-intuition.
 Save.

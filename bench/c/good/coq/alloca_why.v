@@ -11,64 +11,61 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 161-188 *)
+(* Why obligation from file "why/alloca.why", characters 188-215 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
   forall (Pre14: 3 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post13: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post12: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 3 /\
                   (valid_range alloc0 t 0 (3 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (shift t 0)),
-  (valid alloc0 caduceus_3).
+  forall (Pre13: (valid alloc0 t)),
+  forall (intP0: ((memory) Z)),
+  forall (Post16: intP0 = (upd intP t 1)),
+  forall (caduceus_2: pointer),
+  forall (Post5: caduceus_2 = (shift t 1)),
+  (valid alloc0 caduceus_2).
 Proof.
 intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 126-188 *)
+(* Why obligation from file "why/alloca.why", characters 153-215 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre14: 3 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post13: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post12: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 3 /\
                   (valid_range alloc0 t 0 (3 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (shift t 0)),
-  forall (Pre5: (valid alloc0 caduceus_3)),
+  forall (Pre13: (valid alloc0 t)),
   forall (intP0: ((memory) Z)),
-  forall (Post17: intP0 = (upd intP caduceus_3 1)),
+  forall (Post16: intP0 = (upd intP t 1)),
+  forall (caduceus_2: pointer),
+  forall (Post5: caduceus_2 = (shift t 1)),
+  forall (Pre7: (valid alloc0 caduceus_2)),
+  forall (intP1: ((memory) Z)),
+  forall (Post18: intP1 = (upd intP0 caduceus_2 2)),
   (forall (result:pointer),
-   (result = (shift t 1) ->
+   (result = (shift t 2) ->
     (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 2) ->
-      (forall (result:pointer),
-       (result = (shift t 2) ->
-        (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 3) ->
-          ((forall (result:Z),
-            (result = (acc intP0 (shift t 2)) -> result = 3)) /\
-          (valid alloc0 (shift t 2))) /\ (valid alloc0 (shift t 2)))) /\
-        (valid alloc0 result))))) /\
+     (intP = (upd intP1 result 3) ->
+      ((forall (result:Z), (result = (acc intP (shift t 2)) -> result = 3)) /\
+      (valid alloc0 (shift t 2))) /\ (valid alloc0 (shift t 2)))) /\
     (valid alloc0 result))).
 Proof.
 intuition.
 subst;caduceus.
 subst;auto.
-subst.
-assert (0<=1<=3-1).
-omega.
-apply valid_range_valid_shift with 0 (3-1);auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 490-509 *)
+(* Why obligation from file "why/alloca.why", characters 446-465 *)
 Lemma g_impl_po_1 : 
   3 >= 1.
 Proof.
@@ -76,58 +73,59 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 576-603 *)
+(* Why obligation from file "why/alloca.why", characters 559-586 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
   forall (Pre14: 3 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post13: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post12: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 3 /\
                   (valid_range alloc0 t 0 (3 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (shift t 0)),
-  (valid alloc0 caduceus_3).
+  forall (Pre13: (valid alloc0 t)),
+  forall (intP0: ((memory) Z)),
+  forall (Post16: intP0 = (upd intP t 1)),
+  forall (caduceus_2: pointer),
+  forall (Post5: caduceus_2 = (shift t 1)),
+  (valid alloc0 caduceus_2).
 Proof.
 intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 541-603 *)
+(* Why obligation from file "why/alloca.why", characters 524-586 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre14: 3 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post13: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post12: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 3 /\
                   (valid_range alloc0 t 0 (3 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (shift t 0)),
-  forall (Pre5: (valid alloc0 caduceus_3)),
+  forall (Pre13: (valid alloc0 t)),
   forall (intP0: ((memory) Z)),
-  forall (Post17: intP0 = (upd intP caduceus_3 1)),
+  forall (Post16: intP0 = (upd intP t 1)),
+  forall (caduceus_2: pointer),
+  forall (Post5: caduceus_2 = (shift t 1)),
+  forall (Pre7: (valid alloc0 caduceus_2)),
+  forall (intP1: ((memory) Z)),
+  forall (Post18: intP1 = (upd intP0 caduceus_2 2)),
   (forall (result:pointer),
-   (result = (shift t 1) ->
+   (result = (shift t 2) ->
     (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 2) ->
-      (forall (result:pointer),
-       (result = (shift t 2) ->
-        (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 3) ->
-          ((forall (result:Z),
-            (result = (acc intP0 (shift t 2)) -> result = 3)) /\
-          (valid alloc0 (shift t 2))) /\ (valid alloc0 (shift t 2)))) /\
-        (valid alloc0 result))))) /\
+     (intP = (upd intP1 result 3) ->
+      ((forall (result:Z), (result = (acc intP (shift t 2)) -> result = 3)) /\
+      (valid alloc0 (shift t 2))) /\ (valid alloc0 (shift t 2)))) /\
     (valid alloc0 result))).
 Proof.
 intuition;subst;caduceus;auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 973-992 *)
+(* Why obligation from file "why/alloca.why", characters 885-904 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -139,7 +137,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 1059-1086 *)
+(* Why obligation from file "why/alloca.why", characters 998-1025 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -148,19 +146,22 @@ Lemma h_impl_po_2 :
   forall (Pre17: 4 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post16: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post15: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 4 /\
                   (valid_range alloc0 t 0 (4 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_4: pointer),
-  forall (Post3: caduceus_4 = (shift t 0)),
-  (valid alloc0 caduceus_4).
+  forall (Pre16: (valid alloc0 t)),
+  forall (intP0: ((memory) Z)),
+  forall (Post19: intP0 = (upd intP t 1)),
+  forall (caduceus_3: pointer),
+  forall (Post5: caduceus_3 = (shift t 1)),
+  (valid alloc0 caduceus_3).
 Proof.
 intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 1024-1086 *)
+(* Why obligation from file "why/alloca.why", characters 963-1025 *)
 Lemma h_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -169,31 +170,29 @@ Lemma h_impl_po_3 :
   forall (Pre17: 4 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post16: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post15: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 4 /\
                   (valid_range alloc0 t 0 (4 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_4: pointer),
-  forall (Post3: caduceus_4 = (shift t 0)),
-  forall (Pre5: (valid alloc0 caduceus_4)),
+  forall (Pre16: (valid alloc0 t)),
   forall (intP0: ((memory) Z)),
-  forall (Post20: intP0 = (upd intP caduceus_4 1)),
+  forall (Post19: intP0 = (upd intP t 1)),
+  forall (caduceus_3: pointer),
+  forall (Post5: caduceus_3 = (shift t 1)),
+  forall (Pre7: (valid alloc0 caduceus_3)),
+  forall (intP1: ((memory) Z)),
+  forall (Post21: intP1 = (upd intP0 caduceus_3 2)),
   (forall (result:pointer),
-   (result = (shift t 1) ->
+   (result = (shift t 2) ->
     (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 2) ->
+     (intP = (upd intP1 result 3) ->
       (forall (result:pointer),
-       (result = (shift t 2) ->
+       (result = (shift t 3) ->
         (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 3) ->
-          (forall (result:pointer),
-           (result = (shift t 3) ->
-            (forall (intP:((memory) Z)),
-             (intP = (upd intP0 result 4) ->
-              ((forall (result:Z),
-                (result = (acc intP (shift u 2)) -> result = 12)) /\
-              (valid alloc0 (shift u 2))) /\ (valid alloc0 (shift u 2)))) /\
-            (valid alloc0 result))))) /\
+         (intP0 = (upd intP result 4) ->
+          ((forall (result:Z),
+            (result = (acc intP0 (shift u 2)) -> result = 12)) /\
+          (valid alloc0 (shift u 2))) /\ (valid alloc0 (shift u 2)))) /\
         (valid alloc0 result))))) /\
     (valid alloc0 result))).
 Proof.
@@ -214,6 +213,7 @@ generalize (valid_range_valid_shift _ _ _ _ 2 H2 H11).
 intro.
 intro.
 rewrite <- H13 in H12.
+rewrite shift_zero in H9.
 elim (H9 H12).
 generalize (fresh_not_valid _ _ H7 1).
 intro.
@@ -253,11 +253,9 @@ apply valid_range_valid_shift with 0 (4-1);auto.
 omega.
 subst.
 apply valid_range_valid_shift with 0 (4-1);auto.
-subst.
-apply valid_range_valid_shift with 0 (4-1);auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 1476-1495 *)
+(* Why obligation from file "why/alloca.why", characters 1344-1363 *)
 Lemma two_local_arrays_impl_po_1 : 
   4 >= 1.
 Proof.
@@ -265,115 +263,116 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 1562-1589 *)
+(* Why obligation from file "why/alloca.why", characters 1457-1484 *)
 Lemma two_local_arrays_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
   forall (Pre33: 4 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post30: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post28: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 4 /\
                   (valid_range alloc0 t 0 (4 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_8: pointer),
-  forall (Post3: caduceus_8 = (shift t 0)),
-  (valid alloc0 caduceus_8).
+  forall (Pre32: (valid alloc0 t)),
+  forall (intP0: ((memory) Z)),
+  forall (Post32: intP0 = (upd intP t 1)),
+  forall (caduceus_6: pointer),
+  forall (Post5: caduceus_6 = (shift t 1)),
+  (valid alloc0 caduceus_6).
 Proof.
 intuition.
 subst;auto.
 Save.
 
 
-(* Why obligation from file "why/alloca.why", characters 1527-1589 *)
+(* Why obligation from file "why/alloca.why", characters 1422-1484 *)
 Lemma two_local_arrays_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre33: 4 >= 1),
   forall (alloc0: alloc_table),
   forall (t: pointer),
-  forall (Post30: (valid alloc0 t) /\ (offset t) = 0 /\
+  forall (Post28: (valid alloc0 t) /\ (offset t) = 0 /\
                   (block_length alloc0 t) = 4 /\
                   (valid_range alloc0 t 0 (4 - 1)) /\ (fresh alloc t) /\
                   (on_stack alloc0 t) /\ (alloc_stack t alloc alloc0)),
-  forall (caduceus_8: pointer),
-  forall (Post3: caduceus_8 = (shift t 0)),
-  forall (Pre5: (valid alloc0 caduceus_8)),
+  forall (Pre32: (valid alloc0 t)),
   forall (intP0: ((memory) Z)),
-  forall (Post34: intP0 = (upd intP caduceus_8 1)),
+  forall (Post32: intP0 = (upd intP t 1)),
+  forall (caduceus_6: pointer),
+  forall (Post5: caduceus_6 = (shift t 1)),
+  forall (Pre7: (valid alloc0 caduceus_6)),
+  forall (intP1: ((memory) Z)),
+  forall (Post34: intP1 = (upd intP0 caduceus_6 2)),
   (forall (result:pointer),
-   (result = (shift t 1) ->
+   (result = (shift t 2) ->
     (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 2) ->
+     (intP = (upd intP1 result 3) ->
       (forall (result:pointer),
-       (result = (shift t 2) ->
+       (result = (shift t 3) ->
         (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 3) ->
+         (intP0 = (upd intP result 4) ->
           (forall (result:pointer),
-           (result = (shift t 3) ->
-            (forall (intP:((memory) Z)),
-             (intP = (upd intP0 result 4) ->
-              (forall (result:pointer),
-               (forall (alloc:alloc_table),
-                ((valid alloc result) /\ (offset result) = 0 /\
-                 (block_length alloc result) = 5 /\
-                 (valid_range alloc result 0 (5 - 1)) /\
-                 (fresh alloc0 result) /\ (on_stack alloc result) /\
-                 (alloc_stack result alloc0 alloc) ->
-                 (forall (result0:pointer),
-                  (result0 = (shift result 0) ->
-                   (forall (intP0:((memory) Z)),
-                    (intP0 = (upd intP result0 0) ->
-                     (forall (result0:pointer),
-                      (result0 = (shift result 1) ->
-                       (forall (intP:((memory) Z)),
-                        (intP = (upd intP0 result0 0) ->
-                         (forall (result0:pointer),
-                          (result0 = (shift result 2) ->
-                           ((forall (result1:Z),
-                             (result1 = (acc intP (shift t 2)) ->
-                              (forall (intP0:((memory) Z)),
-                               (intP0 = (upd intP result0 result1) ->
-                                (forall (result0:pointer),
-                                 (result0 = (shift result 3) ->
-                                  (forall (intP:((memory) Z)),
-                                   (intP = (upd intP0 result0 0) ->
-                                    ((forall (result0:Z),
-                                      (result0 = (acc intP (shift result 2)) ->
-                                       result0 = 3)) /\
-                                    (valid alloc (shift result 2))) /\
-                                    (valid alloc (shift result 2)))) /\
-                                  (valid alloc result0))))) /\
-                              (valid alloc result0))) /\
-                           (valid alloc (shift t 2))) /\
-                           (valid alloc (shift t 2)))))) /\
-                       (valid alloc result0))))) /\
-                   (valid alloc result0)))))) /\
-              5 >= 1)) /\
-            (valid alloc0 result))))) /\
+           (forall (alloc:alloc_table),
+            ((valid alloc result) /\ (offset result) = 0 /\
+             (block_length alloc result) = 5 /\
+             (valid_range alloc result 0 (5 - 1)) /\ (fresh alloc0 result) /\
+             (on_stack alloc result) /\ (alloc_stack result alloc0 alloc) ->
+             (forall (intP:((memory) Z)),
+              (intP = (upd intP0 result 0) ->
+               (forall (result0:pointer),
+                (result0 = (shift result 1) ->
+                 (forall (intP0:((memory) Z)),
+                  (intP0 = (upd intP result0 0) ->
+                   (forall (result0:pointer),
+                    (result0 = (shift result 2) ->
+                     ((forall (result1:Z),
+                       (result1 = (acc intP0 (shift t 2)) ->
+                        (forall (intP:((memory) Z)),
+                         (intP = (upd intP0 result0 result1) ->
+                          (forall (result0:pointer),
+                           (result0 = (shift result 3) ->
+                            (forall (intP0:((memory) Z)),
+                             (intP0 = (upd intP result0 0) ->
+                              ((forall (result0:Z),
+                                (result0 = (acc intP0 (shift result 2)) ->
+                                 result0 = 3)) /\
+                              (valid alloc (shift result 2))) /\
+                              (valid alloc (shift result 2)))) /\
+                            (valid alloc result0))))) /\
+                        (valid alloc result0))) /\
+                     (valid alloc (shift t 2))) /\ (valid alloc (shift t 2)))))) /\
+                 (valid alloc result0))))) /\
+             (valid alloc result)))) /\
+          5 >= 1)) /\
         (valid alloc0 result))))) /\
     (valid alloc0 result))).
 Proof.
 intuition;subst;caduceus.
+rewrite acc_upd_neq.
+caduceus.
+generalize (fresh_not_valid _ _ H14 0);rewrite shift_zero.
+intro.
+intro;subst.
+intuition.
 apply valid_range_valid_shift with 0 (5-1);auto with zarith.
 apply valid_range_valid_shift with 0 (5-1);auto with zarith.
-apply alloc_stack_valid with result2 alloc0;auto.
-apply alloc_stack_valid with result2 alloc0;auto.
+apply alloc_stack_valid with result1 alloc0;auto.
+apply alloc_stack_valid with result1 alloc0;auto.
 apply valid_range_valid_shift with 0 (5-1);auto with zarith.
-apply valid_range_valid_shift with 0 (5-1);auto with zarith.
-apply valid_range_valid_shift with 0 (4-1);auto with zarith.
 apply valid_range_valid_shift with 0 (4-1);auto with zarith.
 apply valid_range_valid_shift with 0 (4-1);auto with zarith.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 2421-2440 *)
+(* Why obligation from file "why/alloca.why", characters 2201-2220 *)
 Lemma two_local_arrays_not_alias_impl_po_1 : 
   5 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 2467-2486 *)
+(* Why obligation from file "why/alloca.why", characters 2247-2266 *)
 Lemma two_local_arrays_not_alias_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (Pre14: 5 >= 1),
@@ -386,10 +385,9 @@ Lemma two_local_arrays_not_alias_impl_po_2 :
   6 >= 1.
 Proof.
 intuition.
-(* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 2559-2586 *)
+(* Why obligation from file "why/alloca.why", characters 2339-2366 *)
 Lemma two_local_arrays_not_alias_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (Pre14: 5 >= 1),
@@ -418,7 +416,7 @@ intro.
 apply alloc_stack_valid with v alloc0;auto.
 Save.
 
-(* Why obligation from file "why/alloca.why", characters 2524-2586 *)
+(* Why obligation from file "why/alloca.why", characters 2304-2366 *)
 Lemma two_local_arrays_not_alias_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),

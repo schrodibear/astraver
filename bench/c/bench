@@ -5,7 +5,7 @@ FILES="array assigns break call clash clash_alloc clash_redef \
     copy dowhile invariants ifs logic_cast \
     param passing purse queue rec ref ref_glob search see \
     sizeof alloca \
-    struct struct2 switch enum separation3 separation"
+    struct struct2 struct3 switch enum separation3 separation"
 
 # benchmark for caduceus
 export CADUCEUSLIB=`pwd`/../../lib/why

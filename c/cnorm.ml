@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.23 2005-02-03 12:47:26 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.24 2005-02-08 12:48:16 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -342,21 +342,27 @@ let spec ?(add=NPtrue) s =
     decreases = noption variant s.decreases;
   }
 
+let noattr loc ty e =
+  { texpr_node = e;
+    texpr_type = ty;
+    texpr_loc  = loc
+  }
+
 let in_struct v1 v = 
   let x = begin
     match v1.texpr_node with
     | TEunary (Ustar, x)-> TEarrow (x, v)
+    | TEarrget (x,i) -> 
+	TEarrow 
+	  ((noattr v1.texpr_loc v1.texpr_type 
+	     (TEbinary(x, Badd_pointer_int, i))),v)
     | _ -> TEarrow (v1, v)
   end in
   { texpr_node = x; 
     texpr_loc = v1.texpr_loc;
     texpr_type = v.var_type }
 
-let noattr loc ty e =
-  { texpr_node = e;
-    texpr_type = ty;
-    texpr_loc  = loc
-  }
+
 
 let noattr2 loc ty e =
   { nexpr_node = e;
@@ -411,13 +417,14 @@ let rec init_expr loc t lvalue initializers =
 	let x,l = pop_initializer loc t initializers in
 	(match x with 
 	  | Some x ->
-	[{nst_node = NSexpr (noattr2 loc t (NEassign((expr lvalue),(expr x))));
-	  nst_break = false;    
-	  nst_continue = false; 
-	  nst_return = false;   
-	  nst_term = true;
-	  nst_loc = loc     
-	 }]
+	      [{nst_node = NSexpr (noattr2 loc t 
+				     (NEassign((expr lvalue),(expr x))));
+		nst_break = false;    
+		nst_continue = false; 
+		nst_return = false;   
+		nst_term = true;
+		nst_loc = loc     
+	       }]
 	  | None -> []), l
     | Tstruct n ->
 	begin match tag_type_definition n with
@@ -430,16 +437,7 @@ let rec init_expr loc t lvalue initializers =
 		   in (acc@block,init'))
 		([],initializers)  fl
 	      in
-	      (
-		(*{nst_node = NSexpr (noattr2 loc t (NEassign
-						     ((expr lvalue),
-						      (alloca loc "1"))));
-		 nst_break = false;    
-		 nst_continue = false; 
-		 nst_return = false;   
-		 nst_term = true;
-		 nst_loc = loc     
-		}::*)l1,l2)
+	      l1,l2
 	  | _ ->
 	      assert false
 	end
@@ -451,14 +449,7 @@ let rec init_expr loc t lvalue initializers =
 		  (noattr loc f.var_type (TEarrow(lvalue, f)))
 		  initializers
 	      in 
-	     (* {nst_node = NSexpr (noattr2 loc t 
-				    (NEassign((expr lvalue),(alloca loc "1"))));
-	       nst_break = false;    
-	       nst_continue = false; 
-	       nst_return = false;   
-	       nst_term = true;
-	       nst_loc = loc     
-	      }::*)block,init'
+	      block,init'
 	  | _ ->
 	      assert false
 	end

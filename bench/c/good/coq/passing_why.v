@@ -3,40 +3,34 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/passing.why", characters 128-155 *)
+(* Why obligation from file "why/passing.why", characters 86-104 *)
 Lemma f_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (Pre4: (valid_index alloc x 0)),
-  forall (caduceus_1: pointer),
-  forall (Post3: caduceus_1 = (shift x 0)),
-  (valid alloc caduceus_1).
+  (valid alloc x).
 Proof.
 intuition.
 subst; auto.
-apply valid_index_valid_shift;auto.
+rewrite <- shift_zero;apply valid_index_valid_shift;auto.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 93-155 *)
+(* Why obligation from file "why/passing.why", characters 37-193 *)
 Lemma f_impl_po_2 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (Pre4: (valid_index alloc x 0)),
-  forall (caduceus_1: pointer),
-  forall (Post3: caduceus_1 = (shift x 0)),
-  forall (Pre3: (valid alloc caduceus_1)),
+  forall (Pre3: (valid alloc x)),
   forall (intP0: ((memory) Z)),
-  forall (Post5: intP0 = (upd intP caduceus_1 1)),
-  (acc intP0 (shift x 0)) = 1 /\
-  (assigns alloc intP intP0 (pointer_loc (shift x 0))).
+  forall (Post3: intP0 = (upd intP x 1)),
+  (acc intP0 x) = 1 /\ (assigns alloc intP intP0 (pointer_loc x)).
 Proof.
 intuition.
 subst; caduceus.
-subst; auto.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 305-408 *)
+(* Why obligation from file "why/passing.why", characters 232-335 *)
 Lemma g2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
@@ -53,7 +47,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/passing.why", characters 448-595 *)
+(* Why obligation from file "why/passing.why", characters 375-522 *)
 Lemma g_impl_po_1 : 
   forall (x: pointer),
   forall (alloc: alloc_table),
@@ -68,7 +62,7 @@ subst; caduceus.
 Save.
 
 
-(* Why obligation from file "why/passing.why", characters 688-703 *)
+(* Why obligation from file "why/passing.why", characters 615-630 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
