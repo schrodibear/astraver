@@ -90,7 +90,7 @@ $\leadsto$ au tour de Caduceus
 Parcours d'un graphe orienté (binaire) 
 \begin{itemize}
 \item en profondeur
-\item sans utiliser d'allocation memoire
+\item sans utiliser d'allocation mémoire
 \end{itemize}
 
 N{\oe}uds du graphe codés par structure C :
@@ -224,7 +224,7 @@ void schorr_waite(node root);
 \end{alltt}
 
 \begin{itemize}
-\item Les noeuds accessibles à partir de \verb|root| sont initialement
+\item Les n\oe{}uds accessibles à partir de \verb|root| sont initialement
   non-marqués (\verb|n->m == 0|) et marqués à la fin (\verb|n->m == 1|)
 
 \item La structure du graphe est restaurée (pointeurs des fils gauche et
@@ -313,7 +313,7 @@ void schorr_waite(node root);
 $\leadsto$ trouver le bon invariant de boucle.
 
 \begin{minipage}[b]{0.4\textwidth}
-Idée essentielle : codage d'une pile de backtracking dans le graphe
+Idée essentielle : codage d'une pile de \emph{backtracking} dans le graphe
 \end{minipage}\hfill
 \usebox{\pile}
 
@@ -334,8 +334,8 @@ Idée essentielle : codage d'une pile de backtracking dans le graphe
 N{\oe}ud initialement accessible $\Ra$ accessible par $p$ ou $t$
 
 \begin{comment}
-Ce premier invariant indique que tous les noeuds dans le graphe au
-debut de la fonction sont atteignable par t ou p.
+Ce premier invariant indique que tous les n\oe{}uds dans le graphe au
+début de la fonction sont atteignable par t ou p.
 \end{comment}
 
 \bigskip
@@ -350,8 +350,8 @@ debut de la fonction sont atteignable par t ou p.
 N{\oe}ud non null accessible par $p$ ou $t$ $\Ra$ initialement accessible
 
 \begin{comment}
-Ce deuxième invariant indique que tous les noeuds non null atteignable
-par t ou p etaient dans le graphe avant la fonction.
+Ce deuxième invariant indique que tous les n\oe{}uds non null atteignable
+par t ou p étaient dans le graphe avant la fonction.
 \end{comment}
 
 \end{slide}
@@ -368,8 +368,8 @@ par t ou p etaient dans le graphe avant la fonction.
 N{\oe}ud inaccessible $\Ra$ marquage inchangé
 
 \begin{comment}
-Cet invariant indique que tous les noeuds qui n'etait pas dans le
-graphe avant la fonction, ont leur marquage inchanger.
+Cet invariant indique que tous les n\oe{}uds qui n'était pas dans le
+graphe avant la fonction, ont leur marquage inchangé.
 \end{comment}
 \end{slide}
 
@@ -381,11 +381,11 @@ graphe avant la fonction, ont leur marquage inchanger.
 @    &&
 \end{alltt}
 
-Définition de la pile de backtrack \verb|stack|
+Définition de la pile de \emph{backtrack} \verb|stack|
 
 \begin{comment}
-Cet invariant permet de definir la pile de backtrack.
-La declaration de 
+Cet invariant permet de définir la pile de \emph{backtrack}.
+La déclaration de 
 \end{comment}
 \begin{minipage}[b]{0.4\textwidth}
 \verb|clr_list| déclaré dans Caduceus par :
@@ -410,8 +410,8 @@ La declaration de
 @ &&
 \end{alltt}
 \begin{comment}
-Cet invariant precise que tous les noeuds dans la pile sont marqués.
-La declaration de \verb|in_list| dans caduceus est :
+Cet invariant précise que tous les n\oe{}uds dans la pile sont marqués.
+La déclaration de \verb|in_list| dans Caduceus est :
 \end{comment}
 
 \begin{minipage}[b]{0.4\textwidth}
@@ -440,11 +440,11 @@ Tout n{\oe}ud de la pile est marqué
 @  &&
 \end{alltt}
 \begin{comment}
-Cet invariant precise que tous les noeuds non marqués qui etaient
-valid et dans le graphe au debut de la fonction, sont atteignable par
+Cet invariant précise que tous les n\oe{}uds non marqués qui étaient
+valides et dans le graphe au début de la fonction, sont atteignable par
 un chemin non marqués par t ou atteignable par un chemin non marqués
-par un des fils droit des noeuds de la pile de backtrack.
-La declaration de \verb|unmarked_reachable| dans caduceus est :
+par un des fils droit des n\oe{}uds de la pile de \emph{backtrack}.
+La déclaration de \verb|unmarked_reachable| dans Caduceus est :
 \end{comment}
 
 \bigskip
@@ -483,11 +483,13 @@ leur valeurs initiales
 \begin{alltt}
 @ (I4e :: \bs{}forall node p1; \bs{}forall node p2;
 @    pair_in_list(p1,p2,cons(t,stack)) => 
-@        (p2->c => \old(p2->l) == p2->l && \old(p2->r) == p1)
-@     && (!p2->c => \old(p2->l) == p1 && \old(p2->r) == p2->r)) */
+@        (p2->c => \old(p2->l) == p2->l && 
+@         \old(p2->r) == p1)
+@     && (!p2->c => \old(p2->l) == p1 && 
+@         \old(p2->r) == p2->r)) */
 \end{alltt}
 \begin{comment}
-Enfin cet invariant precise que pour tous les elements de la pile de
+Enfin cet invariant précise que pour tous les éléments de la pile de
 backtrack, suivant la valeur de c soit son fils gauche soit son fils
 droit est inchangé et leur fils changer est maintenant la pointeur
 qui les precède dans la pile ou bien t si ce pointer est en tête de la pile.
@@ -498,7 +500,7 @@ La declaration de \verb|pair_in_list| dans caduceus est :
 \end{alltt}
 \end{comment}
 \begin{minipage}[b]{0.4\textwidth}
-Précise les fils gauche et droit des éléments de la pile
+Précise les fils gauches et droits des éléments de la pile
 \end{minipage}\hfill
 \usebox{\pile}
 
@@ -561,11 +563,11 @@ $\leadsto$ tous les accès sont valides
 \end{slide}
 
 \begin{slide}{La preuve Coq}
-Nous devons d''abord definir les predicates utilisés par caduceus.
+Nous devons d''abord définir les prédicats utilisés par Caduceus.
 \fontsize{10pt}{9pt}
 \begin{alltt}
-  Definition llist (a: alloc_table) (next : pointer -> pointer)
-  (p:pointer) (l:plist) :=
+  Definition llist (a: alloc_table) 
+(next : pointer -> pointer)(p:pointer) (l:plist) :=
   lpath a next p l null.
 
   Definition clr_list (a: alloc_table)  (c:memory Z) 
@@ -575,7 +577,7 @@ Nous devons d''abord definir les predicates utilisés par caduceus.
   else (acc r t) in
   llist a next .
 \end{alltt}
-Voici donc la d	finition Coq de la pile de backtrack.
+Voici donc la définition Coq de la pile de \emph{backtrack}.
 \end{slide}
 \begin{slide}{La preuve Coq}
 \fontsize{10pt}{9pt}
@@ -597,7 +599,7 @@ Voici donc la d	finition Coq de la pile de backtrack.
         	  path a l r (acc r p1)  p2 lp -> 
                      path a l r p1 p2 (p1::lp). 
 \end{alltt}
-Ce predicat represente le chemin entre 2 noeuds du graphe.
+Ce prédicat représente le chemin entre 2 n\oe{}uds du graphe.
 \end{slide}
 \begin{slide}{La preuve Coq}
 \fontsize{10pt}{9pt}
@@ -607,7 +609,7 @@ Ce predicat represente le chemin entre 2 noeuds du graphe.
     (p1 :pointer) (p2:pointer) : Prop :=
     exists lp : list pointer, path a l r p1 p2 lp.
 \end{alltt}
-Ce predicat represente l'accesibilite d'un noeuds a un autre dans le graphe.
+Ce prédicat représente l'accessibilité d'un n\oe{}uds a un autre dans le graphe.
 \end{slide}
 \begin{slide}{La preuve Coq}
 \fontsize{10pt}{9pt}
@@ -619,7 +621,7 @@ Definition unmarked_reachable (a: alloc_table)
     (forall x : pointer, In x lp -> (acc m x) = 0 ) 
     /\ path a l r p1 p2 lp.
 \end{alltt}
-Ce predicat represente l'accesibilite par des noeuds non marquer d'un noeuds a un autre dans le graphe.
+Ce prédicat représente l'accessibilité par des n\oe{}uds non marqués d'un n\oe{}ud à un autre dans le graphe.
 \end{slide}
 \begin{slide}{La preuve Coq}
 \fontsize{10pt}{9pt}
@@ -631,7 +633,7 @@ Lemma path_no_cycle : forall (a : alloc_table)
   incl pa' pa /\ no_rep pa' /\ path a l r p1 p2 pa'.   
 \end{alltt}
 Ce lemme affirme que s'y il existe un chemin de p1 a p2, alors il
-existe un chemin de p1 a p2 sans repetition.
+existe un chemin de p1 a p2 sans répétition.
 \end{slide}
 \begin{slide}{La preuve Coq}
 \fontsize{10pt}{9pt}
@@ -642,20 +644,20 @@ Lemma path_upd_left : forall (alloc : alloc_table)
   ~ In p lp -> path alloc l r p1 p0 lp -> 
   path alloc (upd l p p2) r p1 p0 lp.
 \end{alltt}
-Les quatres lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
+Les quatre lemmes \texttt{path\_upd\_left}, \texttt{path\_upd\_right},
 \texttt{path\_inv\_upd\_left} et \texttt{path\_inv\_upd\_right}
 affirme que si il y a un chemin entre p1 et p2 et que l'ont modifie le
 graphe en dehors de ce chemin alors ce chemin existe toujours. 
 \end{slide}
 \begin{slide}{La preuve de terminaison}
 Pour prouver la terminaison il faut monter la terminaison de la boucle
-while. Pour cela en caduceus on annote la boucle avec \emph{variant}:
-une expression qui decroit a chaque tour de la boucle.
-La mesure qui decroit strictement pour cette boucle est 
+while. Pour cela en Caduceus on annote la boucle avec \emph{variant}:
+une expression qui décroît a chaque tour de la boucle.
+La mesure qui décroît strictement pour cette boucle est 
 la mesure lexicographique des 3 mesures suivant :
 \begin{enumerate}
-\item le nombre de noeud non marquer.
-\item le nombre de noeuds qui ont $c=0$
+\item le nombre de n\oe{}ud non marquer.
+\item le nombre de n\oe{}uds qui ont $c=0$
 \item la taille de la pile
 \end{enumerate}
 \end{slide}
@@ -681,7 +683,7 @@ Lemma lex_well_founded :
 
 End lexico.
 \end{alltt} 
-Cette section est utilise afin d'avoir une version non dependante de
+Cette section est utilise afin d'avoir une version non dépendante de
 l'ordre lexicographique.
 \end{comment}
 \item Une généralisation de \verb|Wf_nat.inv_lt_rel| de Coq pour
@@ -707,8 +709,8 @@ Theorem well_founded_inv_rel_compat : well_founded inv_lt_rel.
 End LT_WF_REL.
 
 \end{alltt}
-Cette section est une copie de la section de meme nom tiree de
-WF_nat, mais qui generalise a 
+Cette section est une copie de la section de même nom tirée de
+WF_nat, mais qui généralise a 
 \end{comment}
 n'importe quelle relation bien fondée à la place de \verb|<| sur les
 nat. 
@@ -741,18 +743,24 @@ On doit compléter la spécification
 void schorr_waite(node root) \{
   node t = root; node p = NULL;\begin{slshape}\begin{blue}
   /*@ invariant ...
-    @ variant weight(p,t) for order_mark_m_and_c_and_stack 
+    @ variant weight(p,t) 
+    @         for order_mark_m_and_c_and_stack 
     @*/\end{blue}\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
    ...
 \end{alltt}
 ou en Coq on définit :
-\[
-\begin{array}{l}
-\verb|reachable_elements|(a,l,r, root, s) = %\\\qquad\qquad\qquad 
-\forall p, p \in s \leftrightarrow \verb|reachable|(a,l,r,root,p) 
-\end{array}
-\]
+\fontsize{10pt}{9pt}
+\begin{alltt}
+Definition reachable_elements (a:alloc_table) 
+  (l r:memory pointer) (p t: pointer)
+  (lp : list pointer) : Prop :=
+  no_rep lp /\
+  forall p2 : pointer, p2 <> null -> 
+    (reachable a l r p p2 \/ reachable a l r t p2) 
+    <-> In p2 lp.
+\end{alltt}
+
 Les fonctions \verb|weight| et \verb|order_mark_m_and_c_and_stack|
 définissent la mesure précédente.
 \end{slide}
@@ -761,27 +769,27 @@ Avec Simplify nous avons prouve 8 obligations de preuves sur 13.
 
 Avec Coq nous avons prouve toutes les obligations de preuves avec :
 \begin{enumerate}
-\item 317 lignes de definition et 589 lignes de tatics sur les listes
-et accesibilite.
-\item 985 lignes de obligation de preuve generees automatiquement et
-  2411 lignes de tactiques ont ete insere automatiquement pour les
-  prouvees.
+\item 317 lignes de définitions et 589 lignes de tactiques sur les listes
+et accessibilité.
+\item 985 lignes de obligation de preuve générées automatiquement et
+  2411 lignes de tactiques ont été insérées automatiquement pour les
+  prouver.
 \item environ 40% du travail a ete fait pour la terminaison
-\item 3 semaines ont ete neccessaire pour faire la preuve et 2
+\item 3 semaines ont été nécessaires pour faire la preuve et 2
   semaines de plus pour la terminaison.  
 \end{enumerate}
 
 \end{slide}
 \begin{slide}{Conclusion}
-On a prouver different aspect de l'algorithme de schorrWaite : 
+On a prouver différents aspect de l'algorithme de Schorr-Waite : 
 \begin{enumerate}
-\item cette algorithme est bien un aprcours de graphe
+\item cette algorithme est bien un parcours de graphe
 \item il ne peu y avoir de ``segmentation fault''
-\item que les parties hors du graphes ne sont pas changees
+\item que les parties hors du graphes ne sont pas changées
 \item la terminaison
 \end{enumerate}
 
-De plus contrairement aux autres travaus, cette preuve a ete fait sur un vrai programme C.
+De plus contrairement aux autres travaux, cette preuve a été fait sur un vrai programme C.
 
 
 \end{slide}
@@ -794,3 +802,4 @@ De plus contrairement aux autres travaus, cette preuve a ete fait sur un vrai pr
 %%% mode: latex
 %%% TeX-master: t
 %%% End:
+% LocalWords:  pt list stack
