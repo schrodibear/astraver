@@ -157,7 +157,7 @@ else
     COQ=yes
     AC_CHECK_PROG(COQDEP,coqdep,coqdep,true)
     if test "$COQDEP" = true ; then
-	AC_MSG_WARN(Cannot find coqdep.)
+	AC_MSG_ERROR(Cannot find coqdep.)
     fi
     COQLIB=`coqc -where`
 
