@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.16 2002-11-28 17:09:08 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.17 2002-12-02 13:42:55 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -60,6 +60,12 @@ let c_int = CTpure PTint
 let c_float = CTpure PTfloat
 let c_bool = CTpure PTbool
 
+let rec pvtype_of_ctype = function
+  | CTpure pt -> PVpure pt
+  | CTarray c -> assert false
+  | CTpointer c -> PVref (pvtype_of_ctype c)
+  | CTfun _ -> assert false
+
 let rec print_ctype fmt = function
   | CTpure PTint -> fprintf fmt "int"
   | CTpure PTfloat -> fprintf fmt "float"
@@ -84,6 +90,17 @@ let loc_of_expr = function
   | CEbinary (l, _, _, _) -> l
   | CEcall (l, _, _) -> l
   | CEcond (l, _, _, _) -> l
+
+let loc_of_statement = function
+  | CSnop l -> l
+  | CSexpr (l, _) -> l
+  | CScond (l, _, _, _) -> l
+  | CSwhile (l, _, _, _) -> l
+  | CSdowhile (l, _, _, _) -> l
+  | CSfor (l, _, _, _, _, _) -> l
+  | CSblock (l, _) -> l
+  | CSreturn (l, _) -> l
+
 
 (* the environment gives the C type, together with a boolean indicating
    if a reference is used in the ML translation *)
@@ -120,6 +137,9 @@ let ml_arrget l id e = mk_expr l (Sarrget (true, id, e))
 let ml_unop l op e = mk_expr l (Sapp (mk_expr l (Svar op), Sterm e))
 let ml_letref l x e1 e2 = mk_expr l (Sletref (x, e1, e2))
 let ml_app l f x = mk_expr l (Sapp (f, Sterm x))
+
+let return_exception = ref (Ident.create "Return")
+let ml_raise_return l e v = mk_expr l (Sraise (!return_exception, e, v))
 
 let c_true l = ml_const l (ConstInt 1)
 let c_false l = ml_const l (ConstInt 0)
@@ -423,15 +443,28 @@ let append_to_block l s1 s2 = match s1, s2 with
 (*s [interp_statement] interprets a C statement.
     [et] is the expected type for the returned value (if any).
     [abrupt] indicates if the ML program must return abruptly (with a 
-    [raise Return]. *)
+    [raise Return]) i.e. we are not at the end of control flow. *)
 
-type status = { ab_return : bool; break : bool; continue : bool }
+type status = { 
+  always_return : bool; 
+  abrupt_return : bool;
+  break : bool; 
+  continue : bool }
 
-let mt_status = { ab_return = false; break = false; continue = false }
+let mt_status = 
+  { always_return = false; 
+    abrupt_return = false; break = false; continue = false }
+
+let or_status s1 s2 =
+  { always_return = s1.always_return && s2.always_return;
+    abrupt_return = s1.abrupt_return || s2.abrupt_return;
+    break = s1.break || s2.break;
+    continue = s1.continue || s2.continue }
 
 let rec interp_statement cenv et abrupt = function
   | CSexpr (_, e) -> 
-      let m,_ = interp_expr cenv (Some void) e in m
+      let m,_ = interp_expr cenv (Some void) e in 
+      m, mt_status
   | CSblock (l, bl) ->
       interp_block l cenv et abrupt bl
   | CSfor (l, s1, s2, e3, an, s) ->
@@ -439,34 +472,39 @@ let rec interp_statement cenv et abrupt = function
       let s3 = option_app (fun e -> CSexpr (loc_of_expr e, e)) e3 in
       let m1,_ = interp_expr cenv (Some void) s1 in
       let bl = append_to_block l s s3 in
+      let mbl, st = interp_statement cenv et true bl in
+      assert (not (st.break || st.continue));
       mk_seq l m1
-	(mk_expr l (Swhile (interp_boolean cenv s2, Some i, v, 
-			    interp_statement cenv (Some void) true bl)))
+	(mk_expr l (Swhile (interp_boolean cenv s2, Some i, v, mbl))),
+      { st with always_return = false }
+	
   | CSdowhile (l, s, an, e) ->
       (* do s while (e) = s ; while (e) s *)
       interp_statement cenv et abrupt
 	(CSblock (l, ([], [s; CSwhile (l, e, an, s)])))
   | CSwhile (l, e, an, s) ->
       let (i,v) = interp_loop_annot an in
-      mk_expr l
-	(Swhile (interp_boolean cenv e, Some i, v, 
-		 interp_statement cenv (Some void) true s))
+      let m, st = interp_statement cenv et true s in
+      mk_expr l (Swhile (interp_boolean cenv e, Some i, v, m)),
+      { st with always_return = false }
   | CScond (l, e1, s2, s3) ->
-      mk_expr l 
-	(Sif (interp_boolean cenv e1, 
-	      interp_statement cenv et abrupt s2, 
-	      interp_statement cenv et abrupt s3))
+      let m2, st2 = interp_statement cenv et abrupt s2 in
+      let m3, st3 = interp_statement cenv et abrupt s3 in
+      mk_expr l (Sif (interp_boolean cenv e1, m2, m3)), or_status st2 st3
   | CSnop l ->
-      mk_expr l (Sconst ConstUnit)
+      mk_expr l (Sconst ConstUnit), mt_status
   | CSreturn (l, e) ->
       let m,_ = match e with
-	| Some e -> interp_expr cenv et e
+	| Some e -> interp_expr cenv (Some et) e
 	| None -> ml_const l ConstUnit, void
       in
       if abrupt then
-	assert false (* TODO: raise (Return m) *)
+	ml_raise_return l (Some m) (Some (PVpure PTunit)),
+	{ mt_status with always_return = true; abrupt_return = true }
       else
-	m
+	m, { mt_status with always_return = true }
+
+(*s C blocks *)
 
 and interp_block l cenv et abrupt (d,b) =
   let rec interp_locals cenv = function
@@ -485,52 +523,70 @@ and interp_block l cenv et abrupt (d,b) =
   let cenv',lv = interp_locals cenv d in
   let rec interp_bl = function
     | [] -> 
-	mt_seq l
+	mt_seq l, mt_status
     | [s] ->
-	interp_statement cenv' et abrupt s
+	let _,st as m = interp_statement cenv' et abrupt s in
+	if not abrupt && not st.always_return && not (et = void) then
+	  raise_located l (AnyMessage "return required at end of block");
+	m
     | s :: bl ->
-	mk_seq l (interp_statement cenv' et true s) (interp_bl bl)
+	let s', st1 = interp_statement cenv' et true s in
+	if st1.always_return then 
+	  wprintf (loc_of_statement (List.hd bl)) "unreachable statement\n";
+	let bl', st2 = interp_bl bl in
+	mk_seq l s' bl', or_status st1 st2
   in
-  List.fold_right (fun (id,e) m -> ml_letref l id e m) lv (interp_bl b)
+  let b', st = interp_bl b in
+  List.fold_right (fun (id,e) m -> ml_letref l id e m) lv b', st
+
+(*s C functions *)
 
 let interp_annotated_block cenv et (l, p, bl, q) =
-  { pdesc = (interp_block l cenv et false bl).pdesc;
-    pre = interp_c_pre p; post = interp_c_post q; loc = l }
+  let mlbl, st = interp_block l cenv et false bl in
+  (* assert (not (st.abrupt_return || st.break || st.continue)); *)
+  { pdesc = mlbl.pdesc; pre = interp_c_pre p; post = interp_c_post q; loc=l },
+  st.abrupt_return
 
 let interp_binder (pt, id) = (id, BindType (PVpure pt))
 
 let interp_binders = List.map interp_binder
 
-let interp_fun cenv l bl v bs =
+let interp_fun id cenv l bl v bs =
   let cenv' = 
     List.fold_right (fun (v,id) -> Idmap.add id (CTpure v, false)) bl cenv 
   in
-  mk_ptree l (Slam (interp_binders bl, 
-		    interp_annotated_block cenv' (Some (CTpure v)) bs)) [] None
+  return_exception := Ident.create ("Return_" ^ Ident.string id);
+  let bs',ar = interp_annotated_block cenv' (CTpure v) bs in
+  mk_ptree l (Slam (interp_binders bl, bs')) [] None, ar
+		    
 
 let interp_fun_type bl v =
   CTfun (List.map (fun (v,_) -> CTpure v) bl, CTpure v), false
 
+(*s C declarations *)
+
 let interp_decl cenv = function
   | Ctypedecl (l, CDvar (id, _), v) -> 
-      Parameter (l, [id], PVref (PVpure v)),
+      [ Parameter (l, [id], PVref (PVpure v)) ],
       Idmap.add id (CTpure v, true) cenv
   | Ctypedecl (l, CDfun (id, bl, an), v) -> 
       let bl = if bl = [] then [PTunit, anonymous] else bl in
       let k = interp_c_spec v an in
       let blp = List.map (fun (v, id) -> (id, BindType (PVpure v))) bl in
-      Parameter (l, [id], PVarrow (blp, k)),
+      [ Parameter (l, [id], PVarrow (blp, k)) ],
       Idmap.add id (interp_fun_type bl v) cenv
   | Ctypedecl _ -> 
       assert false
   | Cfundef (l, id, bl, v, bs) ->
       let bl = if bl = [] then [PTunit, anonymous] else bl in
-      Program (id, interp_fun cenv l bl v bs),
+      let e,ar = interp_fun id cenv l bl v bs in
+      let d = [ Program (id, e) ] in
+      (if ar then (Exception (l, !return_exception, Some v)) :: d else d),
       Idmap.add id (interp_fun_type bl v) cenv
 
 let interp = 
   let rec interp_list cenv = function
     | [] -> []
-    | d :: l -> let d',cenv' = interp_decl cenv d in d' :: interp_list cenv' l
+    | d :: l -> let d',cenv' = interp_decl cenv d in d' @ interp_list cenv' l
   in
   interp_list Idmap.empty

@@ -252,8 +252,6 @@ Lemma maximum_po_5 :
          (Maximize t n0 (access t nk) nk))
   (Pre10: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\ `n0 < N0` /\
           (Maximize t n0 (access t nk) nk))
-  (Pre15: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\ `n0 < N0` /\
-          (Maximize t n0 (access t nk) nk))
   (Zwf `0` nk Variant1).
 Proof.
   Intros; Subst nk;
@@ -312,8 +310,6 @@ Lemma maximum_po_7 :
   (Pre5: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\ `n0 < N0` /\
          (Maximize t n0 (access t i0) nk))
   (Pre6: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\ `n0 < N0` /\
-         (Maximize t n0 (access t i0) nk))
-  (Pre8: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\ `n0 < N0` /\
          (Maximize t n0 (access t i0) nk))
   (Zwf `0` nk Variant1).
 Proof.
@@ -385,11 +381,10 @@ Definition maximum := (* validation *)
                       let Pre9 = Pre11 in
                       let Pre10 = Pre9 in
                       let (result3, Post12) =
-                        let Pre15 = Pre10 in
                         ((wf1 nk)
                           (maximum_po_5 N n k i t Pre14 Variant1 N0 n0 k0 i0
-                          Pre13 Pre12 Test3 nk Post2 Test2 Pre11 Pre9 Pre10
-                          Pre15) N0 n0 nk nk (refl_equal ? nk) Pre15) in
+                          Pre13 Pre12 Test3 nk Post2 Test2 Pre11 Pre9 Pre10)
+                          N0 n0 nk nk (refl_equal ? nk) Pre10) in
                       (exist_1 [result4: Z](`0 <= result4` /\
                       `result4 <= n0`) /\
                       (Maximize t n0 (access t result4) `0`) result3 Post12) in
@@ -404,11 +399,10 @@ Definition maximum := (* validation *)
                       let Pre5 = Pre7 in
                       let Pre6 = Pre5 in
                       let (result3, Post10) =
-                        let Pre8 = Pre6 in
                         ((wf1 nk)
                           (maximum_po_7 N n k i t Pre14 Variant1 N0 n0 k0 i0
-                          Pre13 Pre12 Test3 nk Post2 Test1 Pre7 Pre5 Pre6
-                          Pre8) N0 n0 nk i0 (refl_equal ? nk) Pre8) in
+                          Pre13 Pre12 Test3 nk Post2 Test1 Pre7 Pre5 Pre6) 
+                          N0 n0 nk i0 (refl_equal ? nk) Pre6) in
                       (exist_1 [result4: Z](`0 <= result4` /\
                       `result4 <= n0`) /\
                       (Maximize t n0 (access t result4) `0`) result3 Post10) in
@@ -635,9 +629,7 @@ Definition maxisort := (* validation *)
                     let (r, Post7) =
                       let Pre2 = Pre7 in
                       let Pre3 = Pre2 in
-                      let (result3, Post8) =
-                        let Pre4 = Pre3 in
-                        (maximum N i0 i0 i0 t0 Pre4) in
+                      let (result3, Post8) = (maximum N i0 i0 i0 t0 Pre2) in
                       (exist_1 [result4: Z](`0 <= result4` /\
                       `result4 <= i0`) /\
                       (Maximize t0 i0 (access t0 result4) `0`) result3 Post8) in
@@ -647,9 +639,7 @@ Definition maxisort := (* validation *)
                     let (t1, result1, Post9) =
                       let Pre4 = Pre6 in
                       let Pre5 = Pre4 in
-                      let (t1, result3, Post10) =
-                        let Pre11 = Pre5 in
-                        (swap N i0 r t0 Pre11) in
+                      let (t1, result3, Post10) = (swap N i0 r t0 Pre4) in
                       (exist_2 [t2: (array N Z)][result4: unit]
                       (exchange t2 t0 i0 r) t1 result3 Post10) in
                     (exist_2 [t2: (array N Z)][result2: unit]

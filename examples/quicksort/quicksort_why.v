@@ -63,7 +63,6 @@ Lemma quick_rec_po_3 :
   (Pre11: `0 <= l0` /\ `p - 1 < N`)
   (Pre5: `0 <= l0` /\ `p - 1 < N`)
   (Pre6: `0 <= l0` /\ `p - 1 < N`)
-  (Pre7: `0 <= l0` /\ `p - 1 < N`)
   (Zwf `0` `1 + (p - 1) - l0` Variant1).
 Proof.
 Intuition.
@@ -116,7 +115,6 @@ Lemma quick_rec_po_5 :
   (Pre10: `0 <= p + 1` /\ `r0 < N`)
   (Pre8: `0 <= p + 1` /\ `r0 < N`)
   (Pre9: `0 <= p + 1` /\ `r0 < N`)
-  (Pre16: `0 <= p + 1` /\ `r0 < N`)
   (Zwf `0` `1 + r0 - (p + 1)` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -194,9 +192,7 @@ Definition quick_rec := (* validation *)
               let (t1, p, Post5) =
                 let Pre2 = Pre12 in
                 let Pre3 = Pre2 in
-                let (t1, result2, Post6) =
-                  let Pre4 = Pre3 in
-                  (partition l0 r0 t0 Pre4) in
+                let (t1, result2, Post6) = (partition l0 r0 t0 Pre2) in
                 (exist_2 [t2: (array N Z)][result3: Z](`l0 <= result3` /\
                 `result3 <= r0`) /\ (partition_p t2 l0 r0 result3) /\
                 (sub_permut l0 r0 t2 t0) t1 result2 Post6) in
@@ -208,11 +204,10 @@ Definition quick_rec := (* validation *)
                   let Pre5 = Pre11 in
                   let Pre6 = Pre5 in
                   let (t2, result2, Post9) =
-                    let Pre7 = Pre6 in
                     ((wf1 `1 + (p - 1) - l0`)
                       (quick_rec_po_3 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13
-                      Test2 Pre12 t1 p Post5 Pre11 Pre5 Pre6 Pre7) l0 
-                      `p - 1` t1 (refl_equal ? `1 + (p - 1) - l0`) Pre7) in
+                      Test2 Pre12 t1 p Post5 Pre11 Pre5 Pre6) l0 `p - 1` 
+                      t1 (refl_equal ? `1 + (p - 1) - l0`) Pre6) in
                   (exist_2 [t3: (array N Z)][result3: unit]
                   (sorted_array t3 l0 `p - 1`) /\
                   (sub_permut l0 `p - 1` t3 t1) t2 result2 Post9) in
@@ -223,12 +218,10 @@ Definition quick_rec := (* validation *)
                   let Pre8 = Pre10 in
                   let Pre9 = Pre8 in
                   let (t3, result3, Post11) =
-                    let Pre16 = Pre9 in
                     ((wf1 `1 + r0 - (p + 1)`)
                       (quick_rec_po_5 l r Pre15 Variant1 l0 r0 t0 Pre14 Pre13
-                      Test2 Pre12 t1 p Post5 Pre11 t2 Post8 Pre10 Pre8 Pre9
-                      Pre16) `p + 1` r0 t2 (refl_equal ? `1 + r0 - (p + 1)`)
-                      Pre16) in
+                      Test2 Pre12 t1 p Post5 Pre11 t2 Post8 Pre10 Pre8 Pre9)
+                      `p + 1` r0 t2 (refl_equal ? `1 + r0 - (p + 1)`) Pre9) in
                   (exist_2 [t4: (array N Z)][result4: unit]
                   (sorted_array t4 `p + 1` r0) /\
                   (sub_permut `p + 1` r0 t4 t2) t3 result3 Post11) in
@@ -270,9 +263,7 @@ Save.
 Definition quicksort := (* validation *)
   [t: (array N Z)]
     let Pre1 = quicksort_po_1 in
-    let (t0, result1, Post1) =
-      let Pre2 = Pre1 in
-      (quick_rec `0` `N - 1` t Pre2) in
+    let (t0, result1, Post1) = (quick_rec `0` `N - 1` t Pre1) in
     (exist_2 [t1: (array N Z)][result2: unit](sorted_array t1 `0` `N - 1`) /\
     (permut t1 t) t0 result1 (quicksort_po_2 t Pre1 t0 Post1)).
 

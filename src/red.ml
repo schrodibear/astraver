@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.31 2002-11-12 14:35:02 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.32 2002-12-02 13:42:55 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -163,6 +163,13 @@ let rec cc_subst_pat s = function
   | PPcons (id, pl) -> 
       let pl', s' = cc_subst_list cc_subst_pat s pl in PPcons (id, pl'), s'
 
+(*s copy of term [c] under binders [bl], with the necessary renamings *)
+
+let copy_under_binders bl c =
+  let vars = List.map fst bl in
+  let fv = List.fold_right Idset.add vars Idset.empty in
+  uniq_cc fv Idmap.empty c       
+
 (*s Eta and iota redexes. *)
 
 let is_eta_redex bl al =
@@ -215,11 +222,12 @@ let rec red sp s cct =
 		| CC_tuple (al,_) when is_eta_redex bl al ->
 		    red sp s e1
 		| re2 ->
-		    CC_letin (dep, bl', re1, re2)))
+		    CC_letin (dep, bl', re1, copy_under_binders bl' re2)))
   | CC_lam (b, e) ->
       let b',s' = cc_subst_binder s b in
       let sp' = rm_binders sp [b] in
-      CC_lam (b', red sp' s' e)
+      let e' = red sp' s' e in
+      CC_lam (b', copy_under_binders [b'] e')
   | CC_app (f, a) ->
       (match red sp s f, red sp s a with
 	 (* two terms *)

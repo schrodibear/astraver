@@ -726,8 +726,7 @@ Definition fc3 := (* validation *)
     let (b0, result1, Post3) =
       let Pre1 = Pre3 in
       let Pre2 = Pre1 in
-      let (b0, r, Post4) = let Pre4 = Pre2 in
-                           (f3 result result0 Pre4) in
+      let (b0, r, Post4) = (f3 result result0 Pre1) in
       (exist_2 [b1: Z][result2: Z]`b1 = result0 + result + result2` b0 
       r Post4) in
     result1 in

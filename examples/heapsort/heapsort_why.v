@@ -397,8 +397,7 @@ Definition heapsort := (* validation *)
                       let Pre2 = Pre4 in
                       let Pre3 = Pre2 in
                       let (t1, result3, Post12) =
-                        let Pre7 = Pre3 in
-                        (downheap N k0 `N - 1` t0 Pre7) in
+                        (downheap N k0 `N - 1` t0 Pre2) in
                       (exist_2 [t2: (array N Z)][result4: unit]
                       (permut t2 t0) /\
                       ((i:Z)
@@ -500,9 +499,7 @@ Definition heapsort := (* validation *)
                     let (t2, result2, Post15) =
                       let Pre8 = Pre13 in
                       let Pre9 = Pre8 in
-                      let (t2, result4, Post16) =
-                        let Pre10 = Pre9 in
-                        (swap N `0` k0 t1 Pre10) in
+                      let (t2, result4, Post16) = (swap N `0` k0 t1 Pre8) in
                       (exist_2 [t3: (array N Z)][result5: unit]
                       (exchange t3 t1 `0` k0) t2 result4 Post16) in
                     let Pre12 =
@@ -512,8 +509,7 @@ Definition heapsort := (* validation *)
                       let Pre10 = Pre12 in
                       let Pre11 = Pre10 in
                       let (t3, result5, Post18) =
-                        let Pre17 = Pre11 in
-                        (downheap N `0` `k0 - 1` t2 Pre17) in
+                        (downheap N `0` `k0 - 1` t2 Pre10) in
                       (exist_2 [t4: (array N Z)][result6: unit]
                       (permut t4 t2) /\
                       ((i:Z)

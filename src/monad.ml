@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.60 2002-11-29 08:47:42 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.61 2002-12-02 13:42:55 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -338,8 +338,7 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
     if isapp then 
       let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r1) in
       let inputpre = List.map (fun (id,_) -> CC_var id) pre1 in
-      let cc = cc_applist (e1 ren) (input @ inputpre) in
-      let_many_pre pre1 cc
+      cc_applist (e1 ren) (input @ inputpre)
     else
       e1 ren
   in

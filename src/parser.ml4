@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.68 2002-11-28 16:18:35 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.69 2002-12-02 13:42:55 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -595,7 +595,7 @@ END
 type 'a c_parser = int -> string -> 'a
 
 let parse_with_offset f n s =
-  Options.if_debug_3 Format.eprintf "parse_with_offset : %d %s@\n" n s;
+  (* Options.if_debug_3 Format.eprintf "parse_with_offset : %d %s@\n" n s; *)
   let st = Stream.of_string s in
   with_offset n (Grammar.Entry.parse f) st
 

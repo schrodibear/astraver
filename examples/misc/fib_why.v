@@ -49,7 +49,6 @@ Lemma fib1_po_3 :
   (Pre9: `n0 - 2 >= 0`)
   (Pre3: `n0 - 2 >= 0`)
   (Pre4: `n0 - 2 >= 0`)
-  (Pre5: `n0 - 2 >= 0`)
   (Zwf `0` `n0 - 2` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -85,7 +84,6 @@ Lemma fib1_po_5 :
   (Pre8: `n0 - 1 >= 0`)
   (Pre6: `n0 - 1 >= 0`)
   (Pre7: `n0 - 1 >= 0`)
-  (Pre13: `n0 - 1 >= 0`)
   (Zwf `0` `n0 - 1` Variant1).
 Proof.
 Intros; Unfold Zwf; Omega.
@@ -139,10 +137,9 @@ Definition fib1 := (* validation *)
                 let Pre3 = Pre9 in
                 let Pre4 = Pre3 in
                 let (result2, Post5) =
-                  let Pre5 = Pre4 in
                   ((wf1 `n0 - 2`)
                     (fib1_po_3 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9
-                    Pre3 Pre4 Pre5) `n0 - 2` (refl_equal ? `n0 - 2`) Pre5) in
+                    Pre3 Pre4) `n0 - 2` (refl_equal ? `n0 - 2`) Pre4) in
                 (exist_1 [result3: Z]`result3 = (F n0 - 2)` result2 Post5) in
               let (result0, Post6) =
                 let Pre8 =
@@ -152,11 +149,10 @@ Definition fib1 := (* validation *)
                   let Pre6 = Pre8 in
                   let Pre7 = Pre6 in
                   let (result2, Post8) =
-                    let Pre13 = Pre7 in
                     ((wf1 `n0 - 1`)
                       (fib1_po_5 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9
-                      aux_4 Post4 Pre8 Pre6 Pre7 Pre13) `n0 - 1`
-                      (refl_equal ? `n0 - 1`) Pre13) in
+                      aux_4 Post4 Pre8 Pre6 Pre7) `n0 - 1`
+                      (refl_equal ? `n0 - 1`) Pre7) in
                   (exist_1 [result3: Z]`result3 = (F n0 - 1)` result2 Post8) in
                 let (result0, Post9) = (exist_1 [result0: Z]
                   `result0 = (F n0)` `aux_3 + aux_4`
@@ -234,8 +230,6 @@ Lemma fib2_aux_po_3 :
          `fx0 = (F x0 + 1 - 1)`)
   (Pre4: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_2 = (F x0 + 1)` /\
          `fx0 = (F x0 + 1 - 1)`)
-  (Pre9: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_2 = (F x0 + 1)` /\
-         `fx0 = (F x0 + 1 - 1)`)
   (Zwf `0` `n0 - (x0 + 1)` Variant1).
 Proof.
 Intuition.
@@ -276,11 +270,10 @@ Definition fib2_aux := (* validation *)
               let Pre3 = Pre5 in
               let Pre4 = Pre3 in
               let (result2, Post4) =
-                let Pre9 = Pre4 in
                 ((wf1 `n0 - (x0 + 1)`)
                   (fib2_aux_po_3 n x fx fx_1 Pre8 Variant1 n0 x0 fx0 fx_2
-                  Pre7 Pre6 Test1 Pre5 Pre3 Pre4 Pre9) n0 `x0 + 1`
-                  `fx0 + fx_2` fx0 (refl_equal ? `n0 - (x0 + 1)`) Pre9) in
+                  Pre7 Pre6 Test1 Pre5 Pre3 Pre4) n0 `x0 + 1` `fx0 + fx_2`
+                  fx0 (refl_equal ? `n0 - (x0 + 1)`) Pre4) in
               (exist_1 [result3: Z]`result3 = (F n0)` result2 Post4) in
             (exist_1 [result1: Z]`result1 = (F n0)` result0 Post3) end)
       `n - x` n x fx fx_1 (refl_equal ? `n - x`) Pre8).
@@ -322,9 +315,7 @@ Definition fib2 := (* validation *)
         let (result0, Post3) =
           let Pre1 = Pre3 in
           let Pre2 = Pre1 in
-          let (result2, Post4) =
-            let Pre5 = Pre2 in
-            (fib2_aux n `1` `1` `1` Pre5) in
+          let (result2, Post4) = (fib2_aux n `1` `1` `1` Pre1) in
           (exist_1 [result3: Z]`result3 = (F n)` result2 Post4) in
         (exist_1 [result1: Z]`result1 = (F n)` result0 Post3) end).
 

@@ -1186,8 +1186,7 @@ Definition partition := (* validation *)
                                   let Pre8 = Pre10 in
                                   let Pre9 = Pre8 in
                                   let (t1, result7, Post26) =
-                                    let Pre12 = Pre9 in
-                                    (swap i1 j1 t0 Pre12) in
+                                    (swap i1 j1 t0 Pre8) in
                                   (exist_2 [t2: (array N Z)][result8: unit]
                                   (exchange t2 t0 i1 j1) t1 result7 Post26) in
                                 let (i2, result6, Post7) =
@@ -1305,9 +1304,7 @@ Definition partition := (* validation *)
                   let (t1, result3, Post34) =
                     let Pre16 = Pre18 in
                     let Pre17 = Pre16 in
-                    let (t1, result5, Post35) =
-                      let Pre21 = Pre17 in
-                      (swap l i0 t0 Pre21) in
+                    let (t1, result5, Post35) = (swap l i0 t0 Pre16) in
                     (exist_2 [t2: (array N Z)][result6: unit]
                     (exchange t2 t0 l i0) t1 result5 Post35) in
                   let (result4, Post36) = (exist_1 [result4: Z]
@@ -1330,9 +1327,7 @@ Definition partition := (* validation *)
                   let (t1, result3, Post30) =
                     let Pre13 = Pre15 in
                     let Pre14 = Pre13 in
-                    let (t1, result5, Post31) =
-                      let Pre16 = Pre14 in
-                      (swap l `i0 - 1` t0 Pre16) in
+                    let (t1, result5, Post31) = (swap l `i0 - 1` t0 Pre13) in
                     (exist_2 [t2: (array N Z)][result6: unit]
                     (exchange t2 t0 l `i0 - 1`) t1 result5 Post31) in
                   let (result4, Post32) = (exist_1 [result4: Z]

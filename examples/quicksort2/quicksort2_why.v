@@ -417,7 +417,6 @@ Lemma quick_rec_po_10 :
   (Pre18: `0 <= l0` /\ `m0 - 1 < N`)
   (Pre12: `0 <= l0` /\ `m0 - 1 < N`)
   (Pre13: `0 <= l0` /\ `m0 - 1 < N`)
-  (Pre14: `0 <= l0` /\ `m0 - 1 < N`)
   (Zwf `0` `1 + (m0 - 1) - l0` Variant1).
 Proof.
 Intuition.
@@ -494,7 +493,6 @@ Lemma quick_rec_po_12 :
   (Pre17: `0 <= m0 + 1` /\ `r0 < N`)
   (Pre15: `0 <= m0 + 1` /\ `r0 < N`)
   (Pre16: `0 <= m0 + 1` /\ `r0 < N`)
-  (Pre24: `0 <= m0 + 1` /\ `r0 < N`)
   (Zwf `0` `1 + r0 - (m0 + 1)` Variant1).
 Proof.
 Intuition.
@@ -752,8 +750,7 @@ Definition quick_rec := (* validation *)
                                             let Pre4 = Pre6 in
                                             let Pre5 = Pre4 in
                                             let (t2, result7, Post28) =
-                                              let Pre9 = Pre5 in
-                                              (swap i0 m1 t1 Pre9) in
+                                              (swap i0 m1 t1 Pre4) in
                                             (exist_2 [t3: (array N Z)]
                                             [result8: unit]
                                             (exchange t3 t1 i0 m1) t2 
@@ -909,9 +906,7 @@ Definition quick_rec := (* validation *)
                     let (t2, result3, Post29) =
                       let Pre9 = Pre19 in
                       let Pre10 = Pre9 in
-                      let (t2, result5, Post30) =
-                        let Pre11 = Pre10 in
-                        (swap l0 m0 t1 Pre11) in
+                      let (t2, result5, Post30) = (swap l0 m0 t1 Pre9) in
                       (exist_2 [t3: (array N Z)][result6: unit]
                       (exchange t3 t1 l0 m0) t2 result5 Post30) in
                     let Pre18 =
@@ -922,13 +917,12 @@ Definition quick_rec := (* validation *)
                       let Pre12 = Pre18 in
                       let Pre13 = Pre12 in
                       let (t3, result6, Post32) =
-                        let Pre14 = Pre13 in
                         ((wf1 `1 + (m0 - 1) - l0`)
                           (quick_rec_po_10 l r Pre23 Variant1 l0 r0 t0 Pre22
                           Pre21 Test6 Pre20 v Post12 result0 Post11 result1
                           Post10 i0 m0 t1 Post9 Pre19 t2 Post29 Pre18 Pre12
-                          Pre13 Pre14) l0 `m0 - 1` t2
-                          (refl_equal ? `1 + (m0 - 1) - l0`) Pre14) in
+                          Pre13) l0 `m0 - 1` t2
+                          (refl_equal ? `1 + (m0 - 1) - l0`) Pre13) in
                       (exist_2 [t4: (array N Z)][result7: unit]
                       (sorted_array t4 l0 `m0 - 1`) /\
                       (sub_permut l0 `m0 - 1` t4 t2) t3 result6 Post32) in
@@ -940,13 +934,12 @@ Definition quick_rec := (* validation *)
                       let Pre15 = Pre17 in
                       let Pre16 = Pre15 in
                       let (t4, result7, Post34) =
-                        let Pre24 = Pre16 in
                         ((wf1 `1 + r0 - (m0 + 1)`)
                           (quick_rec_po_12 l r Pre23 Variant1 l0 r0 t0 Pre22
                           Pre21 Test6 Pre20 v Post12 result0 Post11 result1
                           Post10 i0 m0 t1 Post9 Pre19 t2 Post29 Pre18 t3
-                          Post31 Pre17 Pre15 Pre16 Pre24) `m0 + 1` r0 
-                          t3 (refl_equal ? `1 + r0 - (m0 + 1)`) Pre24) in
+                          Post31 Pre17 Pre15 Pre16) `m0 + 1` r0 t3
+                          (refl_equal ? `1 + r0 - (m0 + 1)`) Pre16) in
                       (exist_2 [t5: (array N Z)][result8: unit]
                       (sorted_array t5 `m0 + 1` r0) /\
                       (sub_permut `m0 + 1` r0 t5 t3) t4 result7 Post34) in
@@ -996,9 +989,7 @@ Save.
 Definition quicksort := (* validation *)
   [t: (array N Z)]
     let Pre1 = quicksort_po_1 in
-    let (t0, result1, Post1) =
-      let Pre2 = Pre1 in
-      (quick_rec `0` `N - 1` t Pre2) in
+    let (t0, result1, Post1) = (quick_rec `0` `N - 1` t Pre1) in
     (exist_2 [t1: (array N Z)][result2: unit](sorted_array t1 `0` `N - 1`) /\
     (permut t1 t) t0 result1 (quicksort_po_2 t Pre1 t0 Post1)).
 

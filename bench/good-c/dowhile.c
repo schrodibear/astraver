@@ -8,7 +8,7 @@ C test file
 int x;
 int i;
 
-int main() 
+void main() 
 /*@ x >= 0 */ 
 {
   x = 0;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.62 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.63 2002-12-02 13:42:55 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -104,9 +104,9 @@ and trad_desc info d ren = match d with
 	(fun v2 -> 
 	   Monad.compose e1.info (trad e1) info
 	     (fun v1 -> 
-		Monad.apply infoapp 
-		  (fun _ -> CC_app (CC_var v1, CC_var v2)) info
-		  (fun v -> Monad.unit info (Value (Tvar v)))))
+		Monad.apply 
+		  infoapp (fun _ -> CC_app (CC_var v1, CC_var v2)) 
+		  info (fun v -> Monad.unit info (Value (Tvar v)))))
 	ren
 
   | App (e1, Refarg r, kapp) ->

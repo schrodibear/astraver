@@ -16,7 +16,7 @@ int f(int y, int ddd, int z)
 } 
 /*@ result = z */
 
-int main() 
+void main() 
 {
   x = 0;
   x = f(1,++x,2);

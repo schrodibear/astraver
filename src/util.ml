@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.63 2002-11-28 16:18:35 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.64 2002-12-02 13:42:55 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -431,7 +431,7 @@ and print_block fmt =
 and print_block_st fmt = function
   | Statement p -> print_prog fmt p
   | Label l -> fprintf fmt "label %s" l
-  | Assert a -> fprintf fmt "assert {%a}" print_assertion a
+  | Assert a -> fprintf fmt "@[assert@ @[{ %a }@]@]" print_assertion a
 
 and print_arg fmt = function
   | Term p -> print_prog fmt p
@@ -556,11 +556,12 @@ let rec print_ptree fmt p = match p.pdesc with
       fprintf fmt "@[<hv 2>if %a then@ %a else@ %a@]" 
 	print_ptree p1 print_ptree p2 print_ptree p3
   | Slam (bl, p) ->
-      fprintf fmt "fun <...> ->@ %a" print_ptree p
+      fprintf fmt "@[<hov 2>fun <...> ->@ %a@]" print_ptree p
   | Sapp (p, a) ->
       fprintf fmt "(%a %a)" print_ptree p print_arg a
-  | Sletref _ -> 
-      fprintf fmt "<Sletref>"
+  | Sletref (id, e1, e2) -> 
+      fprintf fmt "@[let %a = ref %a in@ %a@]" 
+	Ident.print id print_ptree e1 print_ptree e2
   | Sletin _ ->
       fprintf fmt "<Sletin>"
   | Srec _ ->

@@ -7,7 +7,7 @@ C test file
 
 int x;
 
-int main() 
+void main() 
 /*@ x = 0 */ 
 {
   int i = 0;
