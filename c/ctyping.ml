@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.60 2004-05-26 13:23:32 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.61 2004-06-23 13:37:30 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -61,7 +61,7 @@ let int_op = function
   | Bgt -> Bgt_int
   | Bge -> Bge_int
   | Beq -> Beq_int
-  | Bneq -> Blt_int
+  | Bneq -> Bneq_int
   | _ -> assert false
 
 let float_op = function
@@ -74,7 +74,7 @@ let float_op = function
   | Bgt -> Bgt_float
   | Bge -> Bge_float
   | Beq -> Beq_float
-  | Bneq -> Blt_float
+  | Bneq -> Bneq_float
   | _ -> assert false
 
 let pointer_op = function
