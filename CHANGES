@@ -1,5 +1,7 @@
 
-  O quantifier "exists" added to the logic syntax
+  o caml code generation with option --ocaml
+    (customized with --ocaml-annot, --ocaml-ext, --output)
+  o quantifier "exists" added to the logic syntax
   o manual: added lexical conventions
   o examples: added maximum sort (by Sylvain Boulmé)
   o new feature: exceptions (beta test)
