@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.13 2004-02-23 15:30:13 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.14 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*****
 
@@ -27,7 +27,6 @@ open Util
 open Ident
 open Logic
 open Types
-open Cast
 open Ptree
 open Report
 open Error
@@ -894,11 +893,10 @@ let interp l =
 
 ***)
 
-open Clogic
-open Cast
 open Format
 open Output
 open Info
+open Cast
 
 let interp_type ctype =
   match ctype.ctype_node with
@@ -924,13 +922,62 @@ let interp_param (t,id) =
   (* TODO : tester si param is assigned *)
   (id,interp_type t)
 
-let interp_predicate pred =
+let interp_rel = function
+  | Clogic.Lt -> "lt_int"
+  | Clogic.Gt -> "gt_int"
+  | Clogic.Le -> "le_int"
+  | Clogic.Ge -> "ge_int"
+  | Clogic.Eq -> "eq"
+  | Clogic.Neq -> "neq"
+
+let interp_term_bin_op op =
+  match op with
+  | Clogic.Badd -> "add_int"
+  | Clogic.Bsub -> "sub_int"
+  | Clogic.Bmul -> "mul_int"
+  | _ -> assert false (* TODO *)
+
+let rec interp_term label old_label t =
+  let f = interp_term label old_label in
+  match t.Clogic.node with
+    | Clogic.Tconstant c ->
+	begin
+	  try
+	    LConst(Prim_int(int_of_string c))
+	  with Failure "int_of_string" -> assert false (* TODO *)
+	end  
+    | Clogic.Tvar v -> 
+	(match label with None -> LVar v | Some l -> LVarAtLabel(v,l))
+    | Clogic.Told t ->	interp_term (Some old_label) old_label t
+    | Clogic.Tbinop (t1, op, t2) ->
+	LApp(interp_term_bin_op op,[f t1;f t2])
+    | _ -> assert false (* TODO *)
+
+
+let rec interp_predicate label old_label p =
+  let f = interp_predicate label old_label in
+  match p with
+    | Clogic.Ptrue -> LTrue
+    | Clogic.Pexists (_, _)
+    | Clogic.Pforall (_, _)
+    | Clogic.Pif (_, _, _)
+    | Clogic.Pnot _ 
+    | Clogic.Pimplies (_, _) -> assert false
+    | Clogic.Por (p1, p2) -> LOr(f p1,f p2)
+    | Clogic.Pand (p1, p2) -> LAnd(f p1,f p2)
+    | Clogic.Prel (t1, op, t2) ->
+	LPred(interp_rel op,[interp_term label old_label t1;
+			     interp_term label old_label t2])
+    | Clogic.Papp (_, _, _)
+    | Clogic.Pvar (_, _) -> assert false
+    | Clogic.Pfalse -> LFalse
+
+let interp_predicate_opt label old_label pred =
   match pred with
     | None -> LTrue
-    | Some p -> 
-	match p with
-	  | Clogic.Ptrue -> LTrue
-	  | _ -> assert false (* TODO *)
+    | Some p -> interp_predicate label old_label p
+
+open Cast
 
 let interp_bin_op op =
   match op with
@@ -1111,7 +1158,7 @@ let rec interp_statement stat acc =
     | TSfor(annot,e1,e2,e3,body,info) ->
 	let (inv,dec) =
 	  match annot with
-	    | { invariant = None; variant = None } -> 
+	    | { Clogic.invariant = None; Clogic.variant = None } -> 
 		(LTrue,LConst (Prim_int 0))
 	    | _ -> 
 		assert false (* TODO *)
@@ -1151,8 +1198,8 @@ and interp_block (decls,stats) =
   List.fold_right interp_decl decls b 
 
 let interp_spec s =
-  let tpre = interp_predicate s.Clogic.requires
-  and tpost = interp_predicate s.Clogic.ensures
+  let tpre = interp_predicate_opt None "" s.Clogic.requires
+  and tpost = interp_predicate_opt None "" s.Clogic.ensures
   in (tpre,tpost)
 
 let no_spec = 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.86 2004-02-23 17:14:58 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.87 2004-02-25 15:37:18 marche Exp $ i*)
 
 open Logic
 open Ident
@@ -522,6 +522,8 @@ let rec print_cc_type fmt = function
       fprintf fmt "(%a %a)" print_cc_type tt (print_list space print_cc_type) l
   | TTterm t ->
       print_term fmt t
+  | TTSet -> 
+      fprintf fmt "Set"
 
 and print_tuple fmt = print_list comma print_binder fmt
 

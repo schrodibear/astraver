@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.66 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.67 2004-02-25 15:37:18 marche Exp $ i*)
 
 open Format
 open Misc
@@ -158,6 +158,18 @@ and make_applied_post ren env k = function
   | Some q ->
       let tt = make_post ren env result k q in
       Some (TTapp (tt, [tt_var result]))
+
+
+(* translation of type scheme *)
+
+let trad_scheme_v ren env s =
+  let (l,v) = specialize_type_scheme s in
+  List.fold_right
+    (fun v cc -> 
+       TTarrow((Ident.create ("A"^(string_of_int v.tag)),
+		CC_var_binder TTSet),cc))
+    l
+    (trad_type_v ren env v)
 
 (* builds [Val Ex] *) 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cc.mli,v 1.10 2002-12-04 10:29:50 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.11 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -31,6 +31,7 @@ type cc_type =
   | TTpred of predicate
   | TTapp of cc_type * cc_type list
   | TTterm of term
+  | TTSet
 
 and cc_bind_type = 
   | CC_var_binder of cc_type

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.13 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.14 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -172,7 +172,8 @@ let output_axioms f =
   fprintf fmt "(@[";
   Queue.iter 
     (fun (id, p) -> 
-       fprintf fmt ";; why axiom %s@\n(@[%a@])@\n" id print_predicate p)
+       fprintf fmt ";; why axiom %s@\n(@[%a@])@\n" 
+	 id print_predicate p.Env.scheme_type)
     axiom;
   fprintf fmt "@])@\n";
   pp_print_flush fmt ();

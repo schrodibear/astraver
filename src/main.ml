@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.65 2004-02-23 17:14:58 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.66 2004-02-25 15:37:18 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -66,11 +66,16 @@ let prover_is_coq = match prover with Coq _ -> true | _ -> false
 let push_validation id tt v = 
   if valid && prover_is_coq then Coq.push_validation id tt v
 
+let is_pure_type_scheme s = 
+  match s.scheme_type with
+    | Set -> assert false
+    | TypeV v -> is_pure_type_v v
+
 let push_parameter id v tv = match prover with
-  | Pvs -> if is_pure_type_v v then Pvs.push_parameter id tv
+  | Pvs -> if is_pure_type_scheme v then Pvs.push_parameter id tv
   | Coq _ -> Coq.push_parameter id tv
-  | HolLight -> if is_pure_type_v v then Holl.push_parameter id tv
-  | Mizar -> if is_pure_type_v v then Mizar.push_parameter id tv
+  | HolLight -> if is_pure_type_scheme v then Holl.push_parameter id tv
+  | Mizar -> if is_pure_type_scheme v then Mizar.push_parameter id tv
   | Harvey | Simplify -> () (* nothing to do? *)
 
 let push_logic id t = match prover with
@@ -172,11 +177,10 @@ let interp_decl d =
       if ext && is_mutable v then raise_located loc MutableExternal;
       let v = Env.generalize_type_v v in
       List.iter (add_external loc v) ids;
-      let v = specialize_type_scheme v in
-      if ext && ocaml_externals then Ocaml.push_parameters ids v;
-      if ocaml then Ocaml.push_parameters ids v;
-      if not ext && not (is_mutable v) then
-	let tv = Monad.trad_type_v (initial_renaming env) env v in
+      let v_spec = snd (specialize_type_scheme v) in
+      if ext && ocaml_externals || ocaml then Ocaml.push_parameters ids v_spec;
+      if not ext && not (is_mutable v_spec) then
+	let tv = Monad.trad_scheme_v (initial_renaming env) env v in
 	List.iter (add_parameter v tv) ids
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
@@ -184,6 +188,7 @@ let interp_decl d =
   | Logic (loc, ext, ids, t) ->
       let add id =
 	if is_logic id lenv then raise_located loc (Clash id);
+	let t = generalize_logic_type t in
 	add_global_logic id t;
 	if not ext then push_logic (Ident.string id) t
       in
@@ -191,13 +196,12 @@ let interp_decl d =
   | Predicate_def (loc, id, pl, p) ->
       if is_logic id lenv then raise_located loc (Clash id);
       let t = Predicate (List.map snd pl) in
+      let t = generalize_logic_type t in
       add_global_logic id t;
       assert false (* TODO *)
   | Axiom (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
-(*
       let p = generalize_predicate p in
-*)
       push_axiom (Ident.string id) p
 
 (*s Processing of a channel / a file. *)

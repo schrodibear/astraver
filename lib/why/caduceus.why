@@ -3,21 +3,44 @@
 parameter any_int: unit -> int
 parameter any_pointer: unit -> pointer
 
-(* pointer access *)
-parameter acc: 'a memory -> pointer -> 'a
-logic acc: 'a memory, pointer -> 'a
-
 (* pointer arithmetic *)
-parameter shift: pointer -> int -> pointer
+logic length: pointer -> int
+logic offset: pointer -> int
 logic shift: pointer,int -> pointer
 
-(* pointer update *)
-parameter upd: 'a memory -> pointer -> 'a -> 'a memory
-logic upd: 'a memory, pointer, 'a -> 'a memory
+axiom offset_shift :
+  forall p:pointer. forall i:int.
+  offset(shift(p,i)) = offset(p)+i
 
-axiom acc_upd1 : 
+axiom length_shift :
+  forall p:pointer. forall i:int.
+  length(shift(p,i)) = length(p)
+
+parameter shift_ : p:pointer -> i:int -> 
+  { } pointer { result = shift(p,i) }
+
+(* pointer access *)
+logic acc: 'a memory, pointer -> 'a
+parameter acc_ : m:'a memory ref -> p:pointer -> 
+  { 0 <= offset(p) < length(p) }
+  'a reads m
+  { result = acc(m,p) }
+
+(* pointer update *)
+logic upd: 'a memory, pointer, 'a -> 'a memory
+parameter upd_ : m:'a memory ref -> p:pointer -> v:'a -> 
+  { 0 <= offset(p) < length(p) }
+  unit reads m writes m
+  { m = upd(m@,p,v) }
+
+axiom acc_upd_eq : 
   forall m : 'a memory. forall p : pointer. forall a: 'a.
     acc(upd(m,p,a),p) = a
+ 
+axiom acc_upd_neq : 
+  forall m : 'a memory. forall p1: pointer. forall p2 : pointer. 
+  forall a: 'a.
+    p1 <> p2 -> acc(upd(m,p1,a),p2) = acc(m,p2)
  
 (* integer pointer/arrays *)
 parameter intP : int memory ref

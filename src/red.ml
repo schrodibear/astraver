@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: red.ml,v 1.34 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.35 2004-02-25 15:37:18 marche Exp $ i*)
 
 open Ast
 open Logic
@@ -53,7 +53,7 @@ let rec uniq_tt fv s = function
       TTtuple (bl', option_app (uniq_tt fv' s') p)
   | TTpred p ->
       TTpred (tsubst_in_predicate s p)
-  | TTpure _ as t -> 
+  | TTpure _ | TTSet as t -> 
       t
   | TTapp (tt, l) ->
       TTapp (uniq_tt fv s tt, List.map (uniq_tt fv s) l)
@@ -150,7 +150,7 @@ and cc_type_subst s = function
       TTtuple (bl', option_app (cc_type_subst s') p)
   | TTpred p ->
       TTpred (tsubst_in_predicate s p)
-  | TTpure _ as t -> 
+  | TTpure _ | TTSet as t -> 
       t
   | TTapp (tt, l) ->
       TTapp (cc_type_subst s tt, List.map (cc_type_subst s) l)

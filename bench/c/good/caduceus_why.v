@@ -2,27 +2,69 @@
    It can be modified; only the generated parts will be overwritten. *)
 
 Require Export Why.
+Set Implicit Arguments.
 
 (*Why*) Parameter any_int : forall (_: unit), Z.
 
 (*Why*) Parameter any_pointer : forall (_: unit), pointer.
 
+(*Why logic*) Definition length : pointer -> Z.
+Admitted.
+
+(*Why logic*) Definition offset : pointer -> Z.
+Admitted.
+
+(*Why logic*) Definition shift : pointer -> Z -> pointer.
+Admitted.
+
+(*Why axiom*) Lemma offset_shift :
+  (forall (p:pointer),
+   (forall (i:Z), (offset (shift p i)) = ((offset p) + i))).
+Admitted.
+
+(*Why axiom*) Lemma length_shift :
+  (forall (p:pointer), (forall (i:Z), (length (shift p i)) = (length p))).
+Admitted.
+
+(*Why*) Parameter shift_ :
+  forall (p: pointer), forall (i: Z),
+  (sig_1 pointer (fun (result: pointer)  => (result = (shift p i)))).
+
 Parameter memory: Set -> Set.
 
-(*Why*) Parameter acc : forall (_: ((memory) A1)), forall (_: pointer), A1.
 
-Implicit Arguments acc [A].
+(*Why logic*) Definition acc :
+  forall (A23:Set), ((memory) A23) -> pointer -> A23.
+Admitted.
 
-(*Why*) Parameter shift : forall (_: pointer), forall (_: Z), pointer.
 
-(*Why*) Parameter upd :
-  forall (_: ((memory) A2)), forall (_: pointer), forall (_: A2),
-  ((memory) A2).
+(*Why*) Parameter acc_ :
+  forall (A5: Set), forall (p: pointer), forall (m: ((memory) A5)),
+  forall (H: 0 <= (offset p) /\ (offset p) < (length p)),
+  (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
-Implicit Arguments upd [A].
+(*Why logic*) Definition upd :
+  forall (A24:Set), ((memory) A24) -> pointer -> A24 -> ((memory) A24).
+Admitted.
 
-(*Why axiom*) Lemma acc_upd1 :
-  (forall (m:((memory) VARIDa)),
-   (forall (p:pointer), (forall (a:VARIDa), (acc (upd m p a) p) = a))).
+(*Why*) Parameter upd_ :
+  forall (A11: Set), forall (p: pointer), forall (v: A11),
+  forall (m: ((memory) A11)), forall (H: 0 <= (offset p) /\ (offset p) <
+  (length p)),
+  (sig_2 ((memory) A11) unit
+   (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
+
+(*Why axiom*) Lemma acc_upd_eq :
+  forall (A25:Set),
+  (forall (m:((memory) A25)),
+   (forall (p:pointer), (forall (a:A25), (acc (upd m p a) p) = a))).
+Admitted.
+
+(*Why axiom*) Lemma acc_upd_neq :
+  forall (A26:Set),
+  (forall (m:((memory) A26)),
+   (forall (p1:pointer),
+    (forall (p2:pointer),
+     (forall (a:A26), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 

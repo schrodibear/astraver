@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.113 2004-02-23 17:14:58 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.114 2004-02-25 15:37:18 marche Exp $ i*)
 
 open Options
 open Logic
@@ -274,6 +274,8 @@ let rec print_cc_type_v7 fmt = function
 	(print_list space print_cc_type_v7) l
   | TTterm t ->
       print_term_v7 fmt t
+  | TTSet ->
+      fprintf fmt "Set"
 
 and print_binder_v7 fmt (id,b) = 
   Ident.print fmt id;
@@ -536,6 +538,8 @@ let rec print_cc_type_v8 fmt = function
 	(print_list space print_cc_type_v8) l
   | TTterm t ->
       print_term_v8 fmt t
+  | TTSet ->
+      fprintf fmt "Set"
 
 and print_binder_v8 fmt (id,b) = match b with
   | CC_pred_binder p -> 
@@ -676,7 +680,12 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
-let print_logic_type fmt = function
+let print_logic_type fmt s = 
+  let (l,t) = Env.specialize_logic_type s in
+  List.iter
+    (fun x -> fprintf fmt "forall (A%d:Set),@ " x.tag)
+    l;
+  match t with
   | Function (pl, t) ->
       fprintf fmt "%a -> %a" 
 	(print_list arrow print_pure_type) pl print_pure_type t
@@ -692,9 +701,16 @@ let print_logic fmt id t =
   reprint_logic fmt id t;
   fprintf fmt "Admitted.@\n"
 
+let print_predicate_scheme fmt p =
+  let (l,p) = Env.specialize_predicate p in
+  List.iter
+    (fun x -> fprintf fmt "forall (A%d:Set),@ " x.tag)
+    l;
+  print_predicate fmt p
+
 let reprint_axiom fmt id p =
   fprintf fmt
-     "@[<hov 2>(*Why axiom*) Lemma %s :@ @[%a@].@]@\n" id print_predicate p
+     "@[<hov 2>(*Why axiom*) Lemma %s :@ @[%a@].@]@\n" id print_predicate_scheme p
 
 let print_axiom fmt id p = 
   reprint_axiom fmt id p;

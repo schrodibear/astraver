@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.36 2004-02-11 16:39:41 marche Exp $ i*)
+(*i $Id: env.ml,v 1.37 2004-02-25 15:37:18 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -66,11 +66,29 @@ let generalize_logic_type t =
   let l = find_logic_type_vars t in
   { scheme_vars = l ; scheme_type = t }
 
-(*
-let generalize_type_c p =
-  let l = find_type_v_vars [] p in
+
+let rec find_predicate_vars acc p =
+  match p with
+    | Pvar _
+    | Papp _
+    | Ptrue
+    | Pfalse -> acc
+    | Pimplies (_,p1,p2) 
+    | Pif (_,p1,p2)
+    | Pand (_,p1,p2)
+    | Por (p1,p2) ->
+	find_predicate_vars (find_predicate_vars acc p1) p2
+    | Pnot p -> find_predicate_vars acc p
+    | Forall (_,_,_,t,p) 
+    | Exists (_,_,t,p) ->
+	find_predicate_vars (find_pure_type_vars acc t) p
+    | Forallb (_,_,_,p1,p2,p3) ->
+	find_predicate_vars 
+	  (find_predicate_vars (find_predicate_vars acc p1) p2) p3
+
+let generalize_predicate p =
+  let l = find_predicate_vars [] p in
   { scheme_vars = l ; scheme_type = p }
-*)
 
 (* specialization *)
 
@@ -78,51 +96,63 @@ let new_type_var =
   let c = ref 0 in
   fun () -> incr c;{ tag = !c; type_val = None }
 
-let rec subst_pure_type x v t =
+let rec subst_pure_type s t =
   match t with
     | PTvarid id ->
-	if x = Ident.string id then PTvar v else t
+	(try PTvar (List.assoc (Ident.string id) s) 
+	 with Not_found -> t)
     | PTexternal(l,id) ->
-	PTexternal(List.map (subst_pure_type x v) l,id)
-    | PTarray ta -> PTarray (subst_pure_type x v ta)
+	PTexternal(List.map (subst_pure_type s) l,id)
+    | PTarray ta -> PTarray (subst_pure_type s ta)
     | PTint | PTfloat | PTbool | PTunit | PTvar _ -> t
 
-let subst_logic_type x v t =
+let subst_logic_type s t =
   match t with
     | Function(tl,tr) -> 
-	Function(List.map (subst_pure_type x v) tl,subst_pure_type x v tr)
+	Function(List.map (subst_pure_type s) tl,subst_pure_type s tr)
     | Predicate(tl) -> 
-	Predicate(List.map (subst_pure_type x v) tl)
+	Predicate(List.map (subst_pure_type s) tl)
 
-let rec subst_type_v x v t =
+let rec subst_type_v s t =
   match t with
-  | Ref t -> Ref (subst_type_v x v t)
-  | Array t -> Array (subst_type_v x v t)
+  | Ref t -> Ref (subst_type_v s t)
+  | Array t -> Array (subst_type_v s t)
   | Arrow(bl,c) ->
-      Arrow(List.map (subst_binder x v) bl,subst_type_c x v c)
-  | PureType t -> PureType(subst_pure_type x v t)
-and subst_binder x v ((id,t) as b) =
+      Arrow(List.map (subst_binder s) bl,subst_type_c s c)
+  | PureType t -> PureType(subst_pure_type s t)
+and subst_binder s ((id,t) as b) =
   match t with
     | BindSet | Untyped -> b
-    | BindType t -> (id,BindType (subst_type_v x v t))
-and subst_type_c x v c =
-  { c with c_result_type = subst_type_v x v c.c_result_type }
+    | BindType t -> (id,BindType (subst_type_v s t))
+and subst_type_c s c =
+  { c with c_result_type = subst_type_v s c.c_result_type }
 
-let rec specialize_logic_type t =
-  List.fold_left
-    (fun t x -> 
-       let v = new_type_var() in 
-       subst_logic_type x v t)
-    t.scheme_type
-    t.scheme_vars
+let specialize_scheme subst s =
+  let env =
+    List.map
+      (fun x -> (x,new_type_var()))
+      s.scheme_vars
+  in 
+  (List.map snd env,subst env s.scheme_type)
 
-let rec specialize_type_v l t =
-  List.fold_left
-    (fun t x -> 
-       let v = new_type_var() in 
-       subst_type_v x v t)
-    t
-    l
+let specialize_logic_type = specialize_scheme subst_logic_type
+
+let specialize_type_v = specialize_scheme subst_type_v
+
+let rec subst_predicate s p =
+  let f = subst_predicate s in
+  match p with
+  | Pimplies (w, a, b) -> Pimplies (w, f a, f b)
+  | Pif (a, b, c) -> Pif (a, f b, f c)
+  | Pand (w, a, b) -> Pand (w, f a, f b)
+  | Por (a, b) -> Por (f a, f b)
+  | Pnot a -> Pnot (f a)
+  | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
+  | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
+  | Forallb (w, id, v, p, a, b) -> Forallb (w, id, v, f p, f a, f b)
+  | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
+
+let specialize_predicate = specialize_scheme subst_predicate
 
 (* Environments for imperative programs.
  *
@@ -158,12 +188,12 @@ let add_set id = Penv.add id (empty_scheme Set)
 
 let specialize_type_scheme s =
   match s.scheme_type with 
-    | TypeV v -> specialize_type_v s.scheme_vars v 
-    | Set -> raise Not_found
+    | TypeV v -> specialize_type_v {s with scheme_type = v }
+    | Set -> assert false (* ? *)
 
 let find id env =
   let s = Penv.find id env in
-  specialize_type_scheme s
+  snd (specialize_type_scheme s)
 
 let is_local env id =
   try
@@ -380,11 +410,13 @@ type logical_env = logic_type scheme Idmap.t
 let logic_table = ref Idmap.empty
 
 let add_global_logic x t = 
-  let t = generalize_logic_type t in
   logic_table := Idmap.add x t !logic_table
 
+let add_global_logic_gen x t =
+ add_global_logic x (generalize_logic_type t)
+
 let int_array = PTarray PTint
-let agl s = add_global_logic (Ident.create s)
+let agl s = add_global_logic_gen (Ident.create s)
 
 let int_cmp = Predicate [PTint; PTint]
 let _ = agl "lt_int" int_cmp
@@ -433,7 +465,7 @@ let _ = agl "array_ge"     (Predicate [int_array; PTint; PTint; PTint])
 
 let is_logic = Idmap.mem
 
-let find_logic x env = specialize_logic_type (Idmap.find x env)
+let find_logic x env = snd (specialize_logic_type (Idmap.find x env))
 
 let add_logic_aux id vars v env = match v with
   | (Ref (PureType pt)) | (PureType pt) -> 

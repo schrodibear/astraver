@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.11 2004-02-23 17:14:58 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.12 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*s Mizar output *)
 
@@ -30,8 +30,8 @@ open Cc
 type elem = 
   | Parameter of string * cc_type
   | Obligation of obligation
-  | Logic of string * logic_type
-  | Axiom of string * predicate
+  | Logic of string * logic_type Env.scheme
+  | Axiom of string * predicate Env.scheme
 
 let elem_q = Queue.create ()
 
@@ -282,11 +282,14 @@ let reprint_parameter fmt id c =
 let print_parameter = reprint_parameter
 
 let print_logic fmt id t = 
+  let (l,t) = Env.specialize_logic_type t in
   assert false (*TODO*)
 
 let reprint_logic fmt id t = print_logic fmt id t
 
 let reprint_axiom fmt id p =
+  let (l,p) = Env.specialize_predicate p in
+  assert false; (*TODO*)
   fprintf fmt "@[ :: Why Axiom @]@\n";
   fprintf fmt "@[ theorem %s:@\n @[%a@];@]@\n" id print_predicate p
 

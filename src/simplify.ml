@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.8 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.9 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -28,7 +28,7 @@ open Format
 
 type elem = 
   | Oblig of obligation 
-  | Axiom of string * predicate
+  | Axiom of string * predicate Env.scheme
 
 let queue = Queue.create ()
 
@@ -194,7 +194,7 @@ let print_obligation fmt (loc, o, s) =
 
 let print_axiom fmt id p =
   fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@]@\n" id;
-  fprintf fmt " @[<hov 2>%a@])@]@\n@\n" print_predicate p
+  fprintf fmt " @[<hov 2>%a@])@]@\n@\n" print_predicate p.Env.scheme_type
 
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o

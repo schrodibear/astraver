@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.15 2004-02-23 17:14:58 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.16 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -29,8 +29,8 @@ open Cc
 type elem = 
   | Parameter of string * cc_type
   | Obligation of obligation
-  | Logic of string * logic_type
-  | Axiom of string * predicate
+  | Logic of string * logic_type Env.scheme
+  | Axiom of string * predicate Env.scheme
 
 let elem_q = Queue.create ()
 
@@ -218,6 +218,7 @@ let print_parameter fmt id v =
 
 (* TODO *)
 let print_logic fmt id t =
+  let (l,t) = Env.specialize_logic_type t in
   fprintf fmt "(* logic %s *);;" id
 
 (* TODO *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.mli,v 1.23 2002-12-09 10:14:57 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.24 2004-02-25 15:37:18 marche Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -27,6 +27,7 @@ open Env
 
 (*s Translation of types *)
 
+val trad_scheme_v : Rename.t -> local_env -> type_info scheme -> cc_type
 val trad_type_v : Rename.t -> local_env -> type_v -> cc_type
 val trad_type_c : Rename.t -> local_env -> type_c -> cc_type
 val trad_imp_type  : Rename.t -> local_env -> type_v -> cc_type
