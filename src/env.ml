@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.30 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.31 2003-03-20 14:20:25 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -155,6 +155,8 @@ let add_exception = Hashtbl.add exn_table
 let is_exception = Hashtbl.mem exn_table
 let find_exception = Hashtbl.find exn_table
 
+(* predefined exception [Exit] *)
+let _ = add_exception exit_exn None
 
 (* initializations *)
 

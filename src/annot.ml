@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.13 2003-03-20 10:44:28 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.14 2003-03-20 14:20:25 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -243,13 +243,14 @@ let rec normalize p =
 	       in
 	       let body = 
 		 (* if b then e else raise Exit *)
-		 make_lnode e.info.loc (If (b, e, praise_exit))
-		   env [] (effect_and_exit b.info.kappa)
+		 make_lnode e.info.loc (If (b', e, praise_exit))
+		   env [] (effect_and_exit k)
 	       in
 	       let d = 
 		 Try 
 		   (make_lnode p.info.loc
-		      (While (make_bool bloc true env, invopt, var, body))
+		      (While (make_annot_bool bloc true env, 
+			      invopt, var, body))
 		      env [] (effect_and_exit k),
 		    [ (exit_exn, None), make_void p.info.loc env])
 	       in

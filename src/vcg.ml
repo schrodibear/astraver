@@ -94,6 +94,16 @@ let lookup_hyp a =
 (* ..., h:False, ... |- C *)
 let absurd ctx =  Absurd (lookup_hyp Pfalse ctx)
 
+(* ..., h:false=true, ... |- C *)
+let discriminate_lemma = Ident.create "why_boolean_discriminate"
+let discriminate ctx concl = 
+  let false_eq_true = 
+    equality (Tconst (ConstBool false)) (Tconst (ConstBool true))
+  in
+  let h = lookup_hyp false_eq_true ctx in
+  ProofTerm 
+    (cc_applist (CC_var discriminate_lemma) [CC_var h; CC_type (TTpred concl)])
+
 (* ..., h:A, ..., h':B, ... |- A and B *)
 let conjunction ctx = function
   | Pand (a, b) -> Conjunction (lookup_hyp a ctx, lookup_hyp b ctx)
@@ -425,6 +435,7 @@ let discharge_methods ctx concl =
   try conjunction ctx concl with Exit ->
   try loop_variant_1 ctx concl with Exit ->
   try rewrite_var ctx concl with Exit ->
+  try discriminate ctx concl with Exit ->
   try linear ctx concl with Exit ->
   boolean_case ctx concl
   

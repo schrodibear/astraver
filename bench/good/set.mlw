@@ -3,7 +3,26 @@
 
 parameter x : int ref
 
-parameter f : 
+parameter set_and_test_zero : 
   v:int -> {} bool writes x { x = v and if result then x = 0 else x <> 0 }
 
-let p = {} if (f 0) then 1 else 2 { result = 1 }
+let p = {} if (set_and_test_zero 0) then 1 else 2 { result = 1 }
+
+parameter set_and_test_nzero : 
+  v:int -> {} bool writes x { x = v and if result then x <> 0 else x = 0 }
+
+let p2 (y:int ref) = 
+  { y >= 0 } 
+  while (set_and_test_nzero !y) do 
+    { invariant y >= 0 variant y } 
+    y := !y - 1 
+  done 
+  { y = 0 }
+
+let p3 (y:int ref) = 
+  { y >= 0 } 
+  while let b = (set_and_test_nzero !y) in b do 
+    { invariant y >= 0 variant y } 
+    y := !y - 1 
+  done 
+  { y = 0 }

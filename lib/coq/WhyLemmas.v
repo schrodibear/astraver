@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.8 2003-02-28 16:37:22 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.9 2003-03-20 14:20:24 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -59,4 +59,9 @@ Lemma why_boolean_if_1 :
         else (q1t /\ (q2 false)) \/ (q1f /\ q3f)).
 Proof.
 Destruct b; Auto.
+Save.
+
+Lemma why_boolean_discriminate : false=true->(p:Prop)p.
+Proof.
+Intros; Discriminate.
 Save.
