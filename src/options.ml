@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.43 2004-07-05 13:18:44 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.44 2004-07-05 14:05:21 filliatr Exp $ i*)
 
 open Format
 
@@ -31,6 +31,7 @@ let coq_preamble_ = ref None
 let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
 let no_simplify_prelude_ = ref false
+let no_cvcl_prelude_ = ref false
 let simplify_typing_ = ref false
 let no_harvey_prelude_ = ref false
 let werror_ = ref false
@@ -228,6 +229,8 @@ let files =
 	no_simplify_prelude_ := true; parse args
     | ("--simplify-typing" | "-simplify-typing") :: args ->
 	simplify_typing_ := true; parse args
+    | ("--no-cvcl-prelude" | "-no-cvcl-prelude") :: args ->
+	no_cvcl_prelude_ := true; parse args
     | ("--no-harvey-prelude" | "-no-harvey-prelude") :: args ->
 	no_harvey_prelude_ := true; parse args
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
@@ -281,6 +284,7 @@ let pvs_preamble = match !pvs_preamble_ with
 
 let mizar_environ = !mizar_environ_
 let no_simplify_prelude = !no_simplify_prelude_
+let no_cvcl_prelude = !no_cvcl_prelude_
 let simplify_typing = !simplify_typing_
 let no_harvey_prelude = !no_harvey_prelude_
 let wol = !wol_
