@@ -1,4 +1,4 @@
-(*
+(* Load Programs. *)(*
  * The Why certification tool
  * Copyright (C) 2002 Jean-Christophe FILLIATRE
  * 
@@ -14,9 +14,10 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: Why.v,v 1.11 2003-05-13 12:30:13 filliatr Exp $ *)
+(* $Id: Why.v,v 1.12 2003-09-22 13:11:59 filliatr Exp $ *)
 
-Require Export WhyCoqCompat.
+Require Export Bool_nat.
+Require Export Zwf.
 
 Require Export WhyTuples.
 Require Export WhyInt.
@@ -30,5 +31,5 @@ Require Export WhyLemmas.
 
 Require Export WhyCM.
 
-Implicits well_founded [1].
-Hints Unfold Zwf.
+Implicit Arguments well_founded [1].
+Hints Unfold Zwf .

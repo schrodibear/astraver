@@ -51,15 +51,15 @@ CMX      = $(CMO:.cmo=.cmx)
 COQC   = @COQC@
 COQDEP = @COQDEP@
 COQLIB = @COQLIB@
-COQINCLUDES = -R lib/coq Coq.why
+COQINCLUDES = -R @WHYLIBCOQ@ Coq.why
 
-VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
-     lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
-     lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo \
-     lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo lib/coq/WhyLemmas.vo \
-     lib/coq/WhyTactics.vo lib/coq/WhyCM.vo
+VO = @WHYLIBCOQ@/WhyArrays.vo  @WHYLIBCOQ@/WhyBool.vo  @WHYLIBCOQ@/WhyInt.vo \
+     @WHYLIBCOQ@/WhyTuples.vo  @WHYLIBCOQ@/WhyPermut.vo \
+     @WHYLIBCOQ@/WhySorted.vo  @WHYLIBCOQ@/Why.vo     @WHYLIBCOQ@/WhyFloat.vo \
+     @WHYLIBCOQ@/WhyExn.vo \
+     @WHYLIBCOQ@/WhyLemmas.vo  @WHYLIBCOQ@/WhyTactics.vo @WHYLIBCOQ@/WhyCM.vo
 VFILES=$(VO:.vo=.v)
-WHYVO=lib/coq/Why.vo
+WHYVO=@WHYLIBCOQ@/Why.vo
 
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
@@ -116,7 +116,7 @@ static:: $(STATICBINARY)
 coq-no:
 coq-yes: $(VO)
 
-VERSION=1.31
+VERSION=1.32
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -285,7 +285,7 @@ FILES =src/*.ml* intf/*.ml* tools/*.ml* \
 	examples/Makefile* examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/good*/*.mlw bench/good*/*.c bench/good*/*.v \
-	lib/coq/*.v lib/pvs/why.*
+	lib/coq*/*.v lib/pvs/why.* lib/mizar/*.*
 
 distrib export: source export-doc export-examples linux
 	make -C $(HOME)/www/why install
@@ -301,7 +301,7 @@ export/$(NAME).tar.gz:
 
 tarball: export/$(NAME).tar.gz
 
-EXFILES = lib/coq/*.v examples/*/*.v examples/*/*.mlw
+EXFILES = lib/coq*/*.v examples/*/*.v examples/*/*.mlw
 
 export-examples:
 	cp --parents $(EXFILES) $(WWW)
@@ -318,7 +318,7 @@ linux: binary
 
 BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO) \
 	doc/why.1 doc/manual.ps \
-	lib/coq/*.v lib/pvs/why.*
+	lib/coq*/*.v lib/pvs/why.*
 
 binary: $(BINARYFILES)
 	mkdir -p export/$(BINARYNAME)
@@ -344,7 +344,7 @@ configure: configure.in
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
-	rm -f lib/coq/*.vo lib/coq/*~
+	rm -f lib/coq*/*.vo lib/coq*/*~
 	rm -f $(GENERATED)
 	make -C doc clean
 	make -C examples clean
@@ -353,13 +353,13 @@ dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
 
 coq-clean::
-	rm -f lib/coq/*.vo examples/*/*.vo
+	rm -f lib/coq*/*.vo examples/*/*.vo
 
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli intf/*.ml intf/*.mli > .depend
 	if test @COQ@ == yes; then \
-	  $(COQDEP) $(COQINCLUDES) lib/coq/*.v >> .depend; fi
+	  $(COQDEP) $(COQINCLUDES) @WHYLIBCOQ@/*.v >> .depend; fi
 
 alldepend:
 	make -C examples depend

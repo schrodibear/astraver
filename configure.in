@@ -167,10 +167,15 @@ else
     case $COQVERSION in
     7.3.1)
 	AC_MSG_RESULT($COQVERSION)
-	cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
+	WHYLIBCOQ=lib/coq-v7
+	cp -f lib/coq/WhyCoq73.v lib/coq-v7/WhyCoqCompat.v;;
     7.3.1*|7.4*)
 	AC_MSG_RESULT($COQVERSION)
-	cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
+	WHYLIBCOQ=lib/coq-v7
+	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v;;
+    8.*)
+	AC_MSG_RESULT($COQVERSION)
+	WHYLIBCOQ=lib/coq;;
     *)
 	COQ=no
 	AC_MSG_WARN(You need Coq 7.3.1 or later; Coq discarded);;
@@ -205,6 +210,7 @@ AC_SUBST(COQ)
 AC_SUBST(COQC)
 AC_SUBST(COQDEP)
 AC_SUBST(COQLIB)
+AC_SUBST(WHYLIBCOQ)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)
