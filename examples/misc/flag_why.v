@@ -180,7 +180,7 @@ Lemma dutch_flag_po_6 :
   (Test6: `i0 < r0`)
   (Test5: (access t0 i0) = blue)
   (t1: (array N color))
-  (Post24: ((b:Z)
+  (Post23: ((b:Z)
             (b = `b0 + 1` ->
              ((i:Z)
               (i = `i0 + 1` -> `0 <= b` /\ `b <= i` /\ (`i <= r0` /\
@@ -381,7 +381,7 @@ Lemma dutch_flag_po_12 :
   (i1: Z)
   (r1: Z)
   (t1: (array N color))
-  (Post15: `0 <= b1` /\ `b1 <= i1` /\ (`i1 <= r1` /\ `r1 <= N`) /\
+  (Post14: `0 <= b1` /\ `b1 <= i1` /\ (`i1 <= r1` /\ `r1 <= N`) /\
            (monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 i1 white) /\
            (monochrome t1 r1 N red) /\ (Zwf `0` `r1 - i1` `r0 - i0`))
   (Zwf `0` `r1 - i1` Variant1).
@@ -410,7 +410,7 @@ Lemma dutch_flag_po_13 :
   (i1: Z)
   (r1: Z)
   (t1: (array N color))
-  (Post15: `0 <= b1` /\ `b1 <= i1` /\ (`i1 <= r1` /\ `r1 <= N`) /\
+  (Post14: `0 <= b1` /\ `b1 <= i1` /\ (`i1 <= r1` /\ `r1 <= N`) /\
            (monochrome t1 `0` b1 blue) /\ (monochrome t1 b1 i1 white) /\
            (monochrome t1 r1 N red) /\ (Zwf `0` `r1 - i1` `r0 - i0`))
   `0 <= b1` /\ `b1 <= i1` /\ (`i1 <= r1` /\ `r1 <= N`) /\
@@ -474,7 +474,7 @@ Definition dutch_flag := (* validation *)
       let (b0, i0, t0, result1) =
         let (result1, Post3) = (exist_1 [result1: Z]result1 = N N
           (refl_equal ? N)) in
-        let (b0, i0, r0, t0, result2, Post18) =
+        let (b0, i0, r0, t0, result2, Post17) =
           (well_founded_induction Z (Zwf ZERO)
             (dutch_flag_po_1 result Post1 result0 Post2 result1 Post3)
             [Variant1: Z](b0: Z)(i0: Z)(r0: Z)(t0: (array N color))
@@ -500,35 +500,35 @@ Definition dutch_flag := (* validation *)
              (`i0 <= r0` /\ `r0 <= N`) /\ (monochrome t0 `0` b0 blue) /\
              (monochrome t0 b0 i0 white) /\ (monochrome t0 r0 N red)]
               let (result2, Bool1) =
-                let (result4, Post19) = (Z_lt_ge_bool i0 r0) in
+                let (result4, Post18) = (Z_lt_ge_bool i0 r0) in
                 (exist_1 [result5: bool]
-                (if result5 then `i0 < r0` else `i0 >= r0`) result4 Post19) in
+                (if result5 then `i0 < r0` else `i0 >= r0`) result4 Post18) in
               (Cases (btest
                       [result2:bool](if result2 then `i0 < r0`
                                      else `i0 >= r0`)
                       result2 Bool1) of
               | (left Test6) =>
-                  let (b1, i1, r1, t1, result3, Post21) =
-                    let (b1, i1, r1, t1, result3, Post15) =
-                      let (b1, i1, r1, t1, result3, Post15) =
+                  let (b1, i1, r1, t1, result3, Post20) =
+                    let (b1, i1, r1, t1, result3, Post14) =
+                      let (b1, i1, r1, t1, result3, Post14) =
                         let (result3, Bool3) =
                           let Pre2 =
                             (dutch_flag_po_2 result Post1 result0 Post2
                             result1 Post3 Variant1 b0 i0 r0 t0 Pre13 Pre12
                             Test6) in
-                          let (result5, Post22) = (eq_blue (access t0 i0)) in
+                          let (result5, Post21) = (eq_blue (access t0 i0)) in
                           (exist_1 [result6: bool]
                           (if result6 then (access t0 i0) = blue
                            else ~((access t0 i0) = blue)) result5
-                          Post22) in
+                          Post21) in
                         (Cases (btest
                                 [result3:bool](if result3
                                                then (access t0 i0) = blue
                                                else ~((access t0 i0) = blue))
                                 result3 Bool3) of
                         | (left Test5) =>
-                            let (b1, i1, t1, result4, Post15) =
-                              let (t1, result4, Post24) =
+                            let (b1, i1, t1, result4, Post14) =
+                              let (t1, result4, Post23) =
                                 let Pre8 =
                                   (dutch_flag_po_3 result Post1 result0 Post2
                                   result1 Post3 Variant1 b0 i0 r0 t0 Pre13
@@ -536,7 +536,7 @@ Definition dutch_flag := (* validation *)
                                 let (u, Post9) = (exist_1 [result4: color]
                                   result4 = (access t0 b0) (access t0 b0)
                                   (refl_equal ? (access t0 b0))) in
-                                let (t1, result4, Post25) =
+                                let (t1, result4, Post24) =
                                   let Pre9 =
                                     (dutch_flag_po_4 result Post1 result0
                                     Post2 result1 Post3 Variant1 b0 i0 r0 t0
@@ -590,7 +590,7 @@ Definition dutch_flag := (* validation *)
                                     (monochrome t2 b i white) /\
                                     (monochrome t2 r0 N red) /\
                                     (Zwf `0` `r0 - i` `r0 - i0`))))) 
-                                t1 result4 Post25) in
+                                t1 result4 Post24) in
                               let (b1, result5, Post12) =
                                 let (result5, Post12) = (exist_1 [result5: Z]
                                   result5 = `b0 + 1` `b0 + 1`
@@ -613,7 +613,7 @@ Definition dutch_flag := (* validation *)
                               result6
                               (dutch_flag_po_6 result Post1 result0 Post2
                               result1 Post3 Variant1 b0 i0 r0 t0 Pre13 Pre12
-                              Test6 Test5 t1 Post24 b1 Post12 i1 Post13)) in
+                              Test6 Test5 t1 Post23 b1 Post12 i1 Post13)) in
                             (exist_5 [b2: Z][i2: Z][r1: Z]
                             [t2: (array N color)][result5: unit]`0 <= b2` /\
                             `b2 <= i2` /\ (`i2 <= r1` /\ `r1 <= N`) /\
@@ -621,20 +621,20 @@ Definition dutch_flag := (* validation *)
                             (monochrome t2 b2 i2 white) /\
                             (monochrome t2 r1 N red) /\
                             (Zwf `0` `r1 - i2` `r0 - i0`) b1 i1 r0 t1 
-                            result4 Post15)
+                            result4 Post14)
                         | (right Test4) =>
-                            let (i1, r1, t1, result4, Post15) =
+                            let (i1, r1, t1, result4, Post14) =
                               let (result4, Bool2) =
                                 let Pre3 =
                                   (dutch_flag_po_7 result Post1 result0 Post2
                                   result1 Post3 Variant1 b0 i0 r0 t0 Pre13
                                   Pre12 Test6 Test4) in
-                                let (result6, Post23) =
+                                let (result6, Post22) =
                                   (eq_white (access t0 i0)) in
                                 (exist_1 [result7: bool]
                                 (if result7 then (access t0 i0) = white
                                  else ~((access t0 i0) = white)) result6
-                                Post23) in
+                                Post22) in
                               (Cases (btest
                                       [result4:bool](if result4
                                                      then (access t0 i0) =
@@ -663,7 +663,7 @@ Definition dutch_flag := (* validation *)
                                   result1 Post3 Variant1 b0 i0 r0 t0 Pre13
                                   Pre12 Test6 Test4 Test3 i1 Post8))
                               | (right Test2) =>
-                                  let (r1, t1, result5, Post15) =
+                                  let (r1, t1, result5, Post14) =
                                     let (r1, result5, Post4) =
                                       let (result5, Post4) =
                                         (exist_1 [result5: Z]
@@ -671,7 +671,7 @@ Definition dutch_flag := (* validation *)
                                         (refl_equal ? `r0 - 1`)) in
                                       (exist_2 [r2: Z][result6: unit]
                                       r2 = `r0 - 1` result5 tt Post4) in
-                                    let (t1, result6, Post15) =
+                                    let (t1, result6, Post14) =
                                       let Pre4 =
                                         (dutch_flag_po_9 result Post1 result0
                                         Post2 result1 Post3 Variant1 b0 i0 r0
@@ -682,7 +682,7 @@ Definition dutch_flag := (* validation *)
                                         result6 = (access t0 r1) (access t0
                                                                   r1)
                                         (refl_equal ? (access t0 r1))) in
-                                      let (t1, result6, Post15) =
+                                      let (t1, result6, Post14) =
                                         let Pre5 =
                                           (dutch_flag_po_10 result Post1
                                           result0 Post2 result1 Post3
@@ -736,7 +736,7 @@ Definition dutch_flag := (* validation *)
                                       (monochrome t2 b0 i0 white) /\
                                       (monochrome t2 r1 N red) /\
                                       (Zwf `0` `r1 - i0` `r0 - i0`) t1
-                                      result6 Post15) in
+                                      result6 Post14) in
                                     (exist_3 [r2: Z][t2: (array N color)]
                                     [result7: unit]`0 <= b0` /\ `b0 <= i0` /\
                                     (`i0 <= r2` /\ `r2 <= N`) /\
@@ -744,7 +744,7 @@ Definition dutch_flag := (* validation *)
                                     (monochrome t2 b0 i0 white) /\
                                     (monochrome t2 r2 N red) /\
                                     (Zwf `0` `r2 - i0` `r0 - i0`) r1 
-                                    t1 result6 Post15) in
+                                    t1 result6 Post14) in
                                   (exist_4 [i1: Z][r2: Z]
                                   [t2: (array N color)][result6: unit]
                                   `0 <= b0` /\ `b0 <= i1` /\ (`i1 <= r2` /\
@@ -753,7 +753,7 @@ Definition dutch_flag := (* validation *)
                                   (monochrome t2 b0 i1 white) /\
                                   (monochrome t2 r2 N red) /\
                                   (Zwf `0` `r2 - i1` `r0 - i0`) i0 r1 
-                                  t1 result5 Post15) end) in
+                                  t1 result5 Post14) end) in
                             (exist_5 [b1: Z][i2: Z][r2: Z]
                             [t2: (array N color)][result5: unit]`0 <= b1` /\
                             `b1 <= i2` /\ (`i2 <= r2` /\ `r2 <= N`) /\
@@ -761,7 +761,7 @@ Definition dutch_flag := (* validation *)
                             (monochrome t2 b1 i2 white) /\
                             (monochrome t2 r2 N red) /\
                             (Zwf `0` `r2 - i2` `r0 - i0`) b0 i1 r1 t1 
-                            result4 Post15) end) in
+                            result4 Post14) end) in
                       (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array N color)]
                       [result4: unit]`0 <= b2` /\ `b2 <= i2` /\
                       (`i2 <= r2` /\ `r2 <= N`) /\
@@ -769,20 +769,20 @@ Definition dutch_flag := (* validation *)
                       (monochrome t2 b2 i2 white) /\
                       (monochrome t2 r2 N red) /\
                       (Zwf `0` `r2 - i2` `r0 - i0`) b1 i1 r1 t1 result3
-                      Post15) in
+                      Post14) in
                     ((wf1 `r1 - i1`)
                       (dutch_flag_po_12 result Post1 result0 Post2 result1
                       Post3 Variant1 b0 i0 r0 t0 Pre13 Pre12 Test6 b1 i1 r1
-                      t1 Post15) b1 i1 r1 t1 (refl_equal ? `r1 - i1`)
+                      t1 Post14) b1 i1 r1 t1 (refl_equal ? `r1 - i1`)
                       (dutch_flag_po_13 result Post1 result0 Post2 result1
                       Post3 Variant1 b0 i0 r0 t0 Pre13 Pre12 Test6 b1 i1 r1
-                      t1 Post15)) in
+                      t1 Post14)) in
                   (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array N color)]
                   [result4: unit](monochrome t2 `0` b2 blue) /\
                   (monochrome t2 b2 r2 white) /\ (monochrome t2 r2 N red) 
-                  b1 i1 r1 t1 result3 Post21)
+                  b1 i1 r1 t1 result3 Post20)
               | (right Test1) =>
-                  let (b1, i1, r1, t1, result3, Post20) = (exist_5 [b1: Z]
+                  let (b1, i1, r1, t1, result3, Post19) = (exist_5 [b1: Z]
                     [i1: Z][r1: Z][t1: (array N color)][result3: unit]
                     (monochrome t1 `0` b1 blue) /\
                     (monochrome t1 b1 r1 white) /\
@@ -792,7 +792,7 @@ Definition dutch_flag := (* validation *)
                   (exist_5 [b2: Z][i2: Z][r2: Z][t2: (array N color)]
                   [result4: unit](monochrome t2 `0` b2 blue) /\
                   (monochrome t2 b2 r2 white) /\ (monochrome t2 r2 N red) 
-                  b1 i1 r1 t1 result3 Post20) end) `result1 - result0` 
+                  b1 i1 r1 t1 result3 Post19) end) `result1 - result0` 
             result result0 result1 t (refl_equal ? `result1 - result0`)
             (dutch_flag_po_15 t result Post1 result0 Post2 result1 Post3)) in
         (Build_tuple_4 b0 i0 t0 result2) in

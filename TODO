@@ -57,3 +57,8 @@ IMPLEMENTATION
      A and B |- A
      A, B |- A and B
      
+ - typing of unary minus: - 1.2
+
+ - float_of_int
+
+ - accessibility of primitives (%add_int, %neg_int, ...)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: rename.ml,v 1.6 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: rename.ml,v 1.7 2002-07-19 09:12:24 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -99,7 +99,7 @@ let rec valid_date da r =
 (* [until d r] selects the part of the renaming [r] starting from date [d] *)
 let rec until da r =
   let rec cut = function
-    | [] -> invalid_arg "Renamings.until"
+    | [] -> failwith ("unknown label " ^ da)
     | (d,_) :: rem as r -> if d = da then r else cut rem
   in
   { avoid = r.avoid; levels = cut r.levels; cpt = r.cpt }

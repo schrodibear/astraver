@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.49 2002-07-09 11:45:01 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.50 2002-07-19 09:12:24 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -138,23 +138,24 @@ and trad_desc info d ren = match d with
 			     (Monad.unit info (Tconst ConstUnit)) ren'')))
 	 ren
 
-  | While (b, inv, ((phi,_,_) as var), e) ->
+  | While (b, inv, var, e) ->
       let info' = 
 	let p = 
 	  match inv with Some a -> [pre_of_assert false a] | None -> [] 
 	in
 	{ info with kappa = { info.kappa with c_pre = p }}
       in
+      let infoc = make_info info.env info.kappa in
       Monad.wfrec var info'
 	(fun w -> 
 	   let exit = Monad.unit info (Tconst ConstUnit) in
 	   let loop = Monad.compose e.info (trad e) (fun _ -> w) in
-	   trad_conditional info b.info (trad b) info loop info exit)
+	   trad_conditional infoc b.info (trad b) infoc loop infoc exit)
 	ren
 
   | Rec (f, bl, v, var, e) -> 
       let bl',env' = trad_binders ren info.env bl in
-      let ren' = initial_renaming env' in
+      let ren' = push_date (initial_renaming env') e.info.label in
       let recf w ren = cc_lam bl' (abstraction e.info w ren) in
       cc_lam bl' 
 	(abstraction e.info 

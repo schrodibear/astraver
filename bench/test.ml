@@ -10,17 +10,13 @@ logic q : array int, array int -> prop
 
 parameter A : array N+1 of int 
 
-parameter m,i,j : int ref
+parameter m,i,j,n : int ref
 parameter r : int
 
 let find =
-  let n = ref N in
   while true do
-    { invariant Iloopmn(m,n,A) variant n-m }
-    while true do
-      { invariant Iloopij(m,n,i,j,r,A)  variant N+2+j-i }
-      let w = A[!i] in begin A[!i] := A[!j]; A[!j] := w end
-    done
+    {  variant n }
+      A[1] := 2
   done
   { q(A,A@) }
 

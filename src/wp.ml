@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.47 2002-07-17 15:38:43 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.48 2002-07-19 09:12:24 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -132,8 +132,13 @@ let rec normalize p =
     | While (b, invopt, var, e) ->
 	let b' = normalize_boolean env b in
 	let p = change_desc p (While (b', invopt, var, normalize e)) in
-	let q = while_post p.info b' invopt in
-	post_if_none env q p
+	(match post p with
+	   | None -> 
+	       let q = while_post p.info b' invopt in
+	       force_post env q p
+	   | Some q ->
+	       let q = post_app (change_label "" p.info.label) q in
+	       force_post env (Some q) p)
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_post (equality (Tvar Ident.result) t) in
 	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
@@ -219,9 +224,9 @@ let output p =
 
 let rec wp p q =
   let env = p.info.env in
+  let lab = p.info.label in
   let postp = post p in
   let q0 = if postp = None then q else postp in
-  let lab = p.info.label in
   let q0 = optpost_app (change_label "" lab) q0 in
   let d,w = wp_desc p.info p.desc q0 in
   let p = change_desc p d in
