@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.18 2004-07-19 08:40:49 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.19 2004-07-19 09:24:05 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -396,14 +396,17 @@ module SV = struct
 end
 module SubstV = GenSubst(SV)
 
+(* sets of symbols instances *)
+module SymbolsI = 
+  Set.Make(struct 
+	     type t = Ident.t * pure_type list 
+	     let compare = compare
+	   end)
+
 (* the following module collects instances (within [Tapp] and [Papp]) *)
 module OpenInstances = struct
 
-  module S = 
-    Set.Make(struct 
-	       type t = Ident.t * pure_type list 
-	       let compare = compare
-	     end)
+  module S = SymbolsI
 
   let add ((_,i) as e) s =
     let is_open pt = not (is_closed_pure_type pt) in
@@ -461,28 +464,6 @@ let rec unify s t1 t2 = match (t1,t2) with
 
 let unify_i = List.fold_left2 unify
 
-let print_axiom fmt id p =
-  fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
-  let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
-  let all_i = OpenInstances.S.elements all_i in
-  let rec iter s = function
-    | [] ->
-	if List.for_all 
-	  (fun x -> List.mem_assoc x s 
-	     && is_closed_pure_type (List.assoc x s)) p.scheme_vars 
-	then
-	  let ps = SubstV.predicate s p.scheme_type in
-	  fprintf fmt "@[<hov 2>ASSERT %a;@]@\n" print_predicate ps
-    | (x,oi) :: oil ->
-	Instances.iter 
-	  (fun ci -> 
-	     try let s = unify_i s oi ci in iter s oil
-	     with Exit -> ()) 
-	  (instances x);
-	iter s oil
-  in
-  iter [] all_i;
-  fprintf fmt "@\n"
 
 let rec print_logic_type fmt = function
   | Predicate [] ->
@@ -567,10 +548,93 @@ let print_predicate_def fmt id p0 =
   else 
     Hashtbl.add logic_symbols (Ident.create id) (Defined p0)
 
+(* Axioms *)
+
+let print_axiom_instance fmt id p =
+  IterIT.predicate (declare_logic fmt) (declare_type fmt) p;
+  fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
+  fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
+
+type axiom = {
+  ax_pred : predicate scheme;
+  ax_open_instances : SymbolsI.elt list;
+  ax_open_symbols : Ident.set;
+  mutable ax_instances : SymbolsI.t; (* already considered instances *)
+}
+
+let axioms = Hashtbl.create 97
+
+let print_axiom fmt id p =
+  if p.scheme_vars = [] then
+    print_axiom_instance fmt id p.scheme_type
+  else
+    let oi = OpenInstances.predicate SymbolsI.empty p.scheme_type in
+    let os = SymbolsI.fold (fun (id,_) -> Idset.add id) oi Idset.empty in
+    let a = 
+      { ax_pred = p; ax_open_instances = SymbolsI.elements oi; 
+	ax_open_symbols = os; ax_instances = SymbolsI.empty } 
+    in
+    Hashtbl.add axioms id a
+
+(* instantiating axioms may generate new instances, so we have to repeat it
+   again until the fixpint is reached *)
+
+let fixpoint = ref false
+
+(* instantiate a polymorphic axiom according to new symbols instances *)
+let instantiate_axiom fmt id a =
+  (* first pass: we look at all (closed) instances encountered so far
+     appearing in axiom [a] *)
+  let all_ci = 
+    Hashtbl.fold
+      (fun ((id,_) as i) () s -> 
+	 if Idset.mem id a.ax_open_symbols then SymbolsI.add i s else s)
+      declared_logic SymbolsI.empty
+  in
+  (* second pass: if this set has not been already considered we instantiate *)
+  if not (SymbolsI.subset all_ci a.ax_instances) then begin
+    a.ax_instances <- all_ci;
+    fixpoint := false;
+    let p = a.ax_pred in
+    let rec iter s = function
+      | [] ->
+	  if List.for_all 
+	    (fun x -> List.mem_assoc x s 
+	       && is_closed_pure_type (List.assoc x s)) p.scheme_vars 
+	  then
+	    let ps = SubstV.predicate s p.scheme_type in
+	    print_axiom_instance fmt id ps
+      | (x,oi) :: oil ->
+	  SymbolsI.iter 
+	    (fun (y,ci) -> 
+	       if x = y then
+		 try let s = unify_i s oi ci in iter s oil
+		 with Exit -> ()) 
+	    all_ci;
+	  iter s oil
+    in
+    iter [] a.ax_open_instances
+  end
+
+(***
+let print_axiom fmt id p =
+  let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
+  let all_i = OpenInstances.S.elements all_i in
+  fprintf fmt "@\n"
+***)
+
+let instantiate_axioms fmt = 
+  fixpoint := false;
+  while not !fixpoint do
+    fixpoint := true;
+    Hashtbl.iter (instantiate_axiom fmt) axioms;
+  done
+
 (* Obligations *)
 
 let print_obligation fmt (loc, o, s) = 
   IterIT.sequent (declare_logic fmt) (declare_type fmt) s;
+  instantiate_axioms fmt;
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation loc;
   fprintf fmt "@[<hov 2>QUERY %a;@]@\n@\n" print_sequent s
 
