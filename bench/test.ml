@@ -2,10 +2,21 @@
 (* Test program *)
 
 parameter x : int ref
+external t1,t2 : bool
+external v1,v2,N : int
 
-parameter t : array 10 of int
+let p =
+  begin
+    let k = ref N in
+    while t1 do { invariant I1(x) variant x } x := v1 done;
+    assert { A(x) };
+    while t2 do { invariant I2(x) variant x } x := v2 done
+  end
+  { Q(x) }
 
-let u = let v = begin x := 0; !x end { result=0 } in t[v]
+(* parameter t : array 10 of int *)
 
-let p = (t[begin x := 0; !x end { result=0 }] := !x) { t[0] = x@ }
-
+(*
+let rec f (x:int ref) : unit { variant x } = 
+  { x = 0 } begin x := 1 end { x = 1 }
+*)

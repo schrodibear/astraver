@@ -19,6 +19,8 @@ FEATURES
  - mutually recursive functions 
    (many variants over the same type, one relation)
 
+ - option to pass a default tactic (to be inserted into Coq scripts)
+
 COQ
 ===
 
@@ -48,10 +50,14 @@ IMPLEMENTATION
 
  - wf recursion only on type int (built-in in Monad.wfrec)
 
- - proof obligations related to if-then-else:
-   replace "b:bool,h:Q(b),h':Q(true)" with "Q(true)" directly
-
  - type predicates
    => declare predicates in input files with a syntax like
 	predicate P(type,...,type)
    only pure types?
+
+ - automatic proofs of trivial obligations such as
+  
+     x=t, A and P(t) |- P(x)
+     A and B |- A
+     A, B |- A and B
+     
