@@ -82,7 +82,7 @@ Definition oppose := (* validation *)
       (refl_equal ? `(-x)`)) in
     (exist_2 [x1: Z][result0: unit]`x1 = (-x)` result tt Post1).
 
-(* Why obligation from file "good/loops.mlw", characters 353-421 *)
+(* Why obligation from file "good/loops.mlw", characters 362-430 *)
 Lemma loop2_po_1 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -98,7 +98,7 @@ Proof.
 Unfold Zwf; Intros; Omega.
 Save.
 
-(* Why obligation from file "good/loops.mlw", characters 353-436 *)
+(* Why obligation from file "good/loops.mlw", characters 354-445 *)
 Lemma loop2_po_2 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -112,7 +112,7 @@ Proof.
 Intros; Intuition.
 Save.
 
-(* Why obligation from file "good/loops.mlw", characters 458-471 *)
+(* Why obligation from file "good/loops.mlw", characters 474-487 *)
 Lemma loop2_po_3 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -126,7 +126,7 @@ Proof.
 Simpl; Intros; Omega.
 Save.
 
-(* Why obligation from file "good/loops.mlw", characters 443-471 *)
+(* Why obligation from file "good/loops.mlw", characters 459-487 *)
 Lemma loop2_po_4 : 
   (x: Z)
   (Pre4: `x <= 10`)

@@ -41,5 +41,6 @@ let rec quick_rec (t:int array) (l,r:int) : unit { variant 1+r-l } =
 (* At last, the main program, which is just a call to [quick_rec] *)
 
 let quicksort (t:int array) =
+  {} 
   (quick_rec t 0 ((array_length t)-1))
   { sorted_array(t, 0, array_length(t)-1) and permut(t, t@) }

@@ -1,4 +1,4 @@
 
 exception E
 
-let p = 1 { | E => true }
+let p = { } 1 { | E => true }

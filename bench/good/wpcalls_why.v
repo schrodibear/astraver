@@ -6,7 +6,7 @@ Require Why.
 (*Why*) Parameter f :
   (_: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = 1 - x`)).
 
-(* Why obligation from file "good/wpcalls.mlw", characters 125-129 *)
+(* Why obligation from file "good/wpcalls.mlw", characters 130-134 *)
 Lemma p_po_1 : 
   (x: Z)
   (t: unit)
@@ -16,7 +16,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/wpcalls.mlw", characters 165-175 *)
+(* Why obligation from file "good/wpcalls.mlw", characters 170-180 *)
 Lemma p_po_2 : 
   (x: Z)
   (Post2: ((x0:Z) (`x0 = 1 - x` -> ((x1:Z) (`x1 = 1 - x0` -> `x1 = x`)))))

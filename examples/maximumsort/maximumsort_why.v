@@ -478,7 +478,7 @@ Proof.
   Intros;  Omega'.
 Save.
 
-(* Why obligation from file "maximumsort.mlw", characters 1115-1170 *)
+(* Why obligation from file "maximumsort.mlw", characters 1116-1169 *)
 Lemma maxisort_po_3 : 
   (t: (array Z))
   (Pre10: `0 <= (array_length t)`)

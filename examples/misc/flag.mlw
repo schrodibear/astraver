@@ -18,6 +18,7 @@ let dutch_flag =
   let b = ref 0 in
   let i = ref 0 in
   let r = ref N in
+  {} 
   while !i < !r do
      { invariant 0 <= b <= i and i <= r <= N and
 	         monochrome(t,0,b,blue) and 
@@ -39,3 +40,4 @@ let dutch_flag =
   { monochrome(t,0,b,blue) and 
     monochrome(t,b,r,white) and 
     monochrome(t,r,N,red) }
+  {} 

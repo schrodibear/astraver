@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.72 2003-01-24 13:53:48 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.73 2003-01-31 09:52:34 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -89,13 +89,6 @@ let prog4 = gec "prog4"
 let prog5 = gec "prog5"
 let prog6 = gec "prog6"
 let prog7 = gec "prog7"
-let ast1 = gec "ast1"
-let ast2 = gec "ast2"
-let ast3 = gec "ast3"
-let ast4 = gec "ast4"
-let ast5 = gec "ast5"
-let ast6 = gec "ast6"
-let ast7 = gec "ast7"
 let recfun = gec "recfun"
 let arg = gec "arg"
 let block = gec "block"
@@ -108,8 +101,6 @@ let invariant = gec "invariant"
 let variant = gec "variant"
 let exception_type = gec "exception_type"
 let assertion = gec "assertion"
-let precondition = gec "precondition"
-let postcondition = gec "postcondition"
 let lexpr = gec "lexpr"
 let name = gec "name"
 
@@ -355,41 +346,10 @@ EXTEND
     | -> Ident.Anonymous ] ]
   ;
 
-  precondition:
-  [ [ "{"; p = pre_condition; "}" -> p ] ]
-  ;
-  postcondition:
-  [ [ "{"; q = post_condition; "}" -> q ] ]
-  ;
   program:
   [ [ p = prog1 -> p ] ]
   ;
   prog1:
-  [ [ pre = LIST0 precondition; ast = ast1; post = OPT postcondition ->
-	mk_prog loc ast pre post ] ]
-  ;
-  prog2:
-  [ [ pre = LIST0 precondition; ast = ast2; post = OPT postcondition ->
-	mk_prog loc ast pre post ] ]
-  ;
-  prog3:
-  [ [ pre = LIST0 precondition; ast = ast3; post = OPT postcondition ->
-	mk_prog loc ast pre post ] ]
-  ;
-  prog4:
-  [ [ pre = LIST0 precondition; ast = ast4; post = OPT postcondition ->
-	mk_prog loc ast pre post ] ]
-  ;
-  prog5:
-  [ [ pre = LIST0 precondition; ast = ast5; post = OPT postcondition ->
-	mk_prog loc ast pre post ] ]
-  ;
-  prog6:
-  [ [ pre = LIST0 precondition; ast = ast6; post = OPT postcondition ->
-	mk_prog loc ast pre post ] ]
-  ;
-
-  ast1:
   [ [ x = prog2; "||"; y = prog1  -> 
        let ptrue = without_annot loc (Sconst (ConstBool true)) in
        without_annot loc (Sif (x, ptrue, y))
@@ -398,93 +358,92 @@ EXTEND
        without_annot loc (Sif (x, y, pf))
     | x = prog2 -> x ] ]
   ;
-  ast2:
+  prog2:
   [ [ LIDENT "not"; x = prog3 -> 
        let pf = without_annot loc (Sconst (ConstBool false)) in
        let pt = without_annot loc (Sconst (ConstBool true)) in
        without_annot loc (Sif (x, pf, pt))
     | x = prog3 -> x ] ]
   ;
-  ast3:
+  prog3:
   [ [ x = prog4; rel = relation; y = prog4 -> bin_op rel loc x y
     | x = prog4 -> x ] ]
   ;
-  ast4:
+  prog4:
   [ [ x = prog5; "+"; y = prog4 -> bin_op Ident.t_add loc x y
     | x = prog5; "-"; y = prog4 -> bin_op Ident.t_sub loc x y
     | x = prog5 -> x ] ]
   ;
-  ast5:
+  prog5:
   [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul loc x y 
     | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div loc x y 
     | x = prog6; "%"; y = prog5 -> bin_op Ident.t_mod_int loc x y 
     | x = prog6 -> x ] ]
   ;
-  ast6:
+  prog6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
     | LIDENT "sqrt_float"; x = prog6 -> un_op Ident.t_sqrt_float loc x
-    | x = ast7 -> without_annot loc x ] ]
+    | x = prog7 -> x ] ]
   ;
-  ast7:
+  prog7:
   [ [ v = ident -> 
-	Svar v
+	without_annot loc (Svar v)
     | n = INT ->
-	Sconst (ConstInt (int_of_string n))
+	without_annot loc (Sconst (ConstInt (int_of_string n)))
     | f = FLOAT ->
-	Sconst (ConstFloat f)
+	without_annot loc (Sconst (ConstFloat f))
     | LIDENT "void" ->
-	Sconst ConstUnit
+	without_annot loc (Sconst ConstUnit)
     | "true" ->
-	Sconst (ConstBool true)
+	without_annot loc (Sconst (ConstBool true))
     | "false" ->
-	Sconst (ConstBool false)
+	without_annot loc (Sconst (ConstBool false))
     | "!"; v = ident ->
-	Srefget v
+	without_annot loc (Srefget v)
     | v = ident; ":="; p = program ->
-	Srefset (v,p)
+	without_annot loc (Srefset (v,p))
     | v = ident; "["; e = program; "]" -> 
-	Sarrget (true,v,e)
+	without_annot loc (Sarrget (true,v,e))
     | v = ident; "["; e = program; "]"; ":="; p = program -> 
-	Sarrset (true,v,e,p)
+	without_annot loc (Sarrset (true,v,e,p))
     | "if"; e1 = program; "then"; e2 = program; "else"; e3 = program ->
-	Sif (e1,e2,e3)
+	without_annot loc (Sif (e1,e2,e3))
     | "if"; e1 = program; "then"; e2 = program ->
-	Sif (e1,e2,without_annot loc (Sconst ConstUnit))
+	without_annot loc (Sif (e1,e2,without_annot loc (Sconst ConstUnit)))
     | "while"; b = program; "do"; 
 	"{"; inv = OPT invariant; LIDENT "variant"; wf = variant; "}";
 	bl = block; "done" ->
-	  Swhile (b, inv, wf, without_annot loc (Sseq bl))
+	without_annot loc (Swhile (b, inv, wf, without_annot loc (Sseq bl)))
 (*i
     | "for"; i = ident; "="; v1 = program; "to"; v2 = program;
 	"do"; "{"; inv = invariant; "}"; bl = block; "done" -> 
 	  make_ast_for loc i v1 v2 inv bl
 i*)
     | "let"; v = ident; "="; "ref"; p1 = program; "in"; p2 = program ->
-	Sletref (v, p1, p2)
+	without_annot loc (Sletref (v, p1, p2))
     | "let"; v = ident; "="; p1 = program; "in"; p2 = program ->
-	Sletin (v, p1, p2)
+	without_annot loc (Sletin (v, p1, p2))
     | "begin"; b = block; "end" ->
-	Sseq b
+	without_annot loc (Sseq b)
     | "fun"; bl = binders; "->"; p = program ->
-	Slam (bl,p)
+	without_annot loc (Slam (bl,p))
     | "let"; "rec"; p = recfun -> 
-        p
+        without_annot loc p
     | "let"; "rec"; p = recfun; "in"; p2 = program ->
-	Sletin (rec_name p, without_annot loc p, p2)
+	without_annot loc (Sletin (rec_name p, without_annot loc p, p2))
     | "raise"; id = ident; t = OPT cast ->
-	Sraise (id, None, t)
+	without_annot loc (Sraise (id, None, t))
     | "raise"; "("; id = ident; p = program; ")"; t = OPT cast ->
-	Sraise (id, Some p, t)
+	without_annot loc (Sraise (id, Some p, t))
     | "try"; p = program; "with"; hl = LIST1 handler SEP "|"; "end" ->
-	Stry (p, hl)
+	without_annot loc (Stry (p, hl))
     | "("; p = program; args = LIST0 arg; ")" ->
-	match args with 
-	  | [] -> 
-	      if p.pre <> [] || p.post <> None then
-		warning "Some annotations are lost";
-	      p.pdesc
-          | _  -> 
-	      app p args
+	(match args with 
+	   | [] -> p
+           | _  -> without_annot loc (app p args))
+    | "{"; pre = OPT pre_condition; "}"; p = program; 
+      "{"; post = OPT post_condition; "}" -> 
+        mk_prog loc p (list_of_some pre) post
     ] ]
   ;
   recfun:

@@ -60,7 +60,7 @@ Definition p3 := (* validation *)
     Post4)
   end.
 
-(* Why obligation from file "good/exns.mlw", characters 446-447 *)
+(* Why obligation from file "good/exns.mlw", characters 461-462 *)
 Lemma p4_po_1 : 
   (Test1: false = true)
   `2 = 1`.
@@ -103,7 +103,7 @@ Definition p4 := (* validation *)
         (Exn unit result1) Post6)
       end end).
 
-(* Why obligation from file "good/exns.mlw", characters 501-525 *)
+(* Why obligation from file "good/exns.mlw", characters 522-546 *)
 Lemma p5_po_1 : 
   (Test1: false = true)
   False.
@@ -159,7 +159,7 @@ Definition p5 := (* validation *)
     (Val unit (Exn unit result0)) Post10)
   end.
 
-(* Why obligation from file "good/exns.mlw", characters 634-635 *)
+(* Why obligation from file "good/exns.mlw", characters 661-662 *)
 Lemma p6_po_1 : 
   (Test2: true = false)
   False.
@@ -221,7 +221,7 @@ Definition p6 := (* validation *)
     (False_ind ? Post10))
   end.
 
-(* Why obligation from file "good/exns.mlw", characters 808-815 *)
+(* Why obligation from file "good/exns.mlw", characters 838-845 *)
 Lemma p7_po_1 : 
   (x0: Z)
   (Post1: x0 = `1`)
@@ -230,7 +230,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 794-850 *)
+(* Why obligation from file "good/exns.mlw", characters 821-880 *)
 Lemma p7_po_2 : 
   (x0: Z)
   (Post1: x0 = `1`)
@@ -266,7 +266,7 @@ Definition p7 := (* validation *)
       Post5)
     end.
 
-(* Why obligation from file "good/exns.mlw", characters 887-889 *)
+(* Why obligation from file "good/exns.mlw", characters 923-925 *)
 Lemma p8_po_1 : 
   (x0: Z)
   (Post1: x0 = `1`)
@@ -275,7 +275,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 864-940 *)
+(* Why obligation from file "good/exns.mlw", characters 894-979 *)
 Lemma p8_po_2 : 
   (x0: Z)
   (Post1: x0 = `1`)
@@ -314,7 +314,7 @@ Definition p8 := (* validation *)
       x0 (Exn unit result1) Post6)
     end.
 
-(* Why obligation from file "good/exns.mlw", characters 975-977 *)
+(* Why obligation from file "good/exns.mlw", characters 1020-1022 *)
 Lemma p9_po_1 : 
   (x0: Z)
   (Post1: x0 = `1`)
@@ -411,14 +411,14 @@ Definition p12 := (* validation *)
     (exist_1 [result2: Z]`result2 = 2` result1 Post14)
   end.
 
-(* Why obligation from file "good/exns.mlw", characters 1309-1316 *)
+(* Why obligation from file "good/exns.mlw", characters 1372-1379 *)
 Lemma p13_po_1 : 
   ((x:Z) (x = `2` -> `x = 2`)).
 Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1303-1341 *)
+(* Why obligation from file "good/exns.mlw", characters 1366-1404 *)
 Lemma p13_po_2 : 
   (Post6: ((x:Z) (x = `3` -> `x = 2`)))
   (Post10: ((x:Z) (x = `1` -> `x = 2`)))
@@ -429,7 +429,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1294-1399 *)
+(* Why obligation from file "good/exns.mlw", characters 1351-1462 *)
 Lemma p13_po_3 : 
   (Post13: ((x:Z) (x = `2` -> `x = 2`)))
   (x1: Z)
@@ -439,7 +439,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1294-1399 *)
+(* Why obligation from file "good/exns.mlw", characters 1351-1462 *)
 Lemma p13_po_4 : 
   (Post14: ((x:Z) (x = `3` -> `x = 2`)))
   (x1: Z)
@@ -506,7 +506,7 @@ Definition p13 := (* validation *)
       (p13_po_4 Post14 x1 Post3))
     end.
 
-(* Why obligation from file "good/exns.mlw", characters 1465-1488 *)
+(* Why obligation from file "good/exns.mlw", characters 1534-1557 *)
 Lemma p14_po_1 : 
   (x: Z)
   (Test1: `x <> 1`)
@@ -517,7 +517,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1494-1517 *)
+(* Why obligation from file "good/exns.mlw", characters 1563-1586 *)
 Lemma p14_po_2 : 
   (x: Z)
   (Post10: ((`x = 2` -> `x = 2`)) /\
@@ -529,7 +529,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/exns.mlw", characters 1523-1546 *)
+(* Why obligation from file "good/exns.mlw", characters 1592-1615 *)
 Lemma p14_po_3 : 
   (x: Z)
   (Post10: ((`x = 2` -> `x = 2`)) /\

@@ -629,7 +629,7 @@ Lemma find_po_13 :
   (Pre16: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array Z))
-  (Post28: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
+  (Post26: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
            `r <= (access A2 j1)` /\
            ((i:Z)
             (i = `i1 + 1` ->
@@ -686,7 +686,7 @@ Lemma find_po_14 :
   (Pre16: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array Z))
-  (Post28: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
+  (Post26: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
            `r <= (access A2 j1)` /\
            ((i:Z)
             (i = `i1 + 1` ->
@@ -744,7 +744,7 @@ Lemma find_po_15 :
   (Pre16: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array Z))
-  (Post28: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
+  (Post26: (exchange A2 A1 i1 j1) /\ `(access A2 i1) <= r` /\
            `r <= (access A2 j1)` /\
            ((i:Z)
             (i = `i1 + 1` ->
@@ -1033,30 +1033,8 @@ Generalize (subgoal_7 m0 n0 i0 j0 A A0 A1
 Intuition.
 Save.
 
-(* Why obligation from file "find.mlw", characters 1434-2921 *)
-Lemma find_po_22 : 
-  (A: (array Z))
-  (Pre21: `(array_length A) = N + 1`)
-  (result: Z)
-  (Post16: result = `1`)
-  (result0: Z)
-  (Post15: result0 = N)
-  (Variant1: Z)
-  (A0: (array Z))
-  (m0: Z)
-  (n0: Z)
-  (Pre20: Variant1 = `n0 - m0`)
-  (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\ (permut A0 A) /\
-           `1 <= m0` /\ `n0 <= N`)
-  (Test1: `m0 >= n0`)
-  (found A0) /\ (permut A0 A).
-Proof.
-Intuition.
-Apply Lemma_3 with m:=m0 n:=n0; Auto.
-Save.
-
 (* Why obligation from file "find.mlw", characters 1467-1571 *)
-Lemma find_po_23 : 
+Lemma find_po_22 : 
   (A: (array Z))
   (Pre21: `(array_length A) = N + 1`)
   (result: Z)
@@ -1071,26 +1049,47 @@ Subst result; Exact (Lemma_1 A).
 Subst result0; Exact (Lemma_2 A).
 Save.
 
+(* Why obligation from file "find.mlw", characters 1415-2885 *)
+Lemma find_po_23 : 
+  (A: (array Z))
+  (Pre21: `(array_length A) = N + 1`)
+  (result: Z)
+  (Post16: result = `1`)
+  (result0: Z)
+  (Post15: result0 = N)
+  (A0: (array Z))
+  (m0: Z)
+  (n0: Z)
+  (Inv_mn: ((m_invariant m0 A0) /\ (n_invariant n0 A0) /\ (permut A0 A) /\
+           `1 <= m0` /\ `n0 <= N`) /\ `m0 >= n0`)
+  (found A0) /\ (permut A0 A).
+Proof.
+Intuition.
+Apply Lemma_3 with m:=m0 n:=n0; Auto.
+Save.
+
 Definition find := (* validation *)
   [A: (array Z); Pre21: `(array_length A) = N + 1`]
     let (result, Post16) = (exist_1 [result: Z]result = `1` `1`
       (refl_equal ? `1`)) in
-    let (A0, m0, result0) =
+    let (A0, m0, result0, Post20) =
       let (result0, Post15) = (exist_1 [result0: Z]result0 = N N
         (refl_equal ? N)) in
-      let (A0, m0, n0, result1, Post20) =
+      let (A0, m0, n0, result1, Inv_mn) =
         (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
           [Variant1: Z](A0: (array Z))(m0: Z)(n0: Z)(_: Variant1 = `n0 - m0`)
           (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
           (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`)
           (sig_4 (array Z) Z Z unit [A1: (array Z)][m1: Z][n1: Z]
-           [result1: unit]((found A1) /\ (permut A1 A)))
+           [result1: unit](((m_invariant m1 A1) /\ (n_invariant n1 A1) /\
+           (permut A1 A) /\ `1 <= m1` /\ `n1 <= N`) /\ `m1 >= n1`))
           [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
            (A0: (array Z))(m0: Z)(n0: Z)(_: Variant2 = `n0 - m0`)
            (Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
            (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`)
            (sig_4 (array Z) Z Z unit [A1: (array Z)][m1: Z][n1: Z]
-            [result1: unit]((found A1) /\ (permut A1 A)));
+            [result1: unit](((m_invariant m1 A1) /\ (n_invariant n1 A1) /\
+            (permut A1 A) /\ `1 <= m1` /\ `n1 <= N`) /\ `m1 >= n1`));
            A0: (array Z); m0: Z; n0: Z; Pre20: Variant1 = `n0 - m0`;
            Inv_mn: (m_invariant m0 A0) /\ (n_invariant n0 A0) /\
            (permut A0 A) /\ `1 <= m0` /\ `n0 <= N`]
@@ -1102,7 +1101,7 @@ Definition find := (* validation *)
                     [result1:bool](if result1 then `m0 < n0` else `m0 >= n0`)
                     result1 Bool7) of
             | (left Test14) =>
-                let (A1, m1, n1, result2, Post23) =
+                let (A1, m1, n1, result2, Inv_mn0) =
                   let (A1, m1, n1, result2, Inv_mn0) =
                     let (A1, m1, n1, result2, Inv_mn0) =
                       let Pre19 =
@@ -1168,12 +1167,12 @@ Definition find := (* validation *)
                                  (termination i0 j0 m0 n0 r A1) /\
                                  (permut A1 A)]
                                   let (result4, Bool4) =
-                                    let (result6, Post24) =
+                                    let (result6, Post22) =
                                       (Z_le_gt_bool i0 j0) in
                                     (exist_1 [result7: bool]
                                     (if result7 then `i0 <= j0`
                                      else `i0 > j0`) result6
-                                    Post24) in
+                                    Post22) in
                                   (Cases (btest
                                           [result4:bool](if result4
                                                          then `i0 <= j0`
@@ -1233,13 +1232,13 @@ Definition find := (* validation *)
                                                       i1 Pre5 Inv_i) in
                                                     (Z_lt_ge_bool (access A1
                                                                    i1)) in
-                                                  let (result7, Post25) =
+                                                  let (result7, Post23) =
                                                     (result6 r) in
                                                   (exist_1 [result8: bool]
                                                   (if result8
                                                    then `(access A1 i1) < r`
                                                    else `(access A1 i1) >= r`) 
-                                                  result7 Post25) in
+                                                  result7 Post23) in
                                                 (Cases (btest
                                                         [result5:bool](
                                                         if result5
@@ -1382,14 +1381,14 @@ Definition find := (* validation *)
                                                     A1 i0 j0 Pre17 Inv_ij
                                                     Test9 i1 Inv_i Variant7
                                                     j1 Pre8 Inv_j) in
-                                                  let (result8, Post26) =
+                                                  let (result8, Post24) =
                                                     (Z_lt_ge_bool r
                                                        (access A1 j1)) in
                                                   (exist_1 [result9: bool]
                                                   (if result9
                                                    then `r < (access A1 j1)`
                                                    else `r >= (access A1 j1)`) 
-                                                  result8 Post26) in
+                                                  result8 Post24) in
                                                 (Cases (btest
                                                         [result6:bool](
                                                         if result6
@@ -1493,12 +1492,12 @@ Definition find := (* validation *)
                                           let (A2, i2, j2, result7,
                                             Inv_ij0) =
                                             let (result7, Bool3) =
-                                              let (result9, Post27) =
+                                              let (result9, Post25) =
                                                 (Z_le_gt_bool i1 j1) in
                                               (exist_1 [result10: bool]
                                               (if result10 then `i1 <= j1`
                                                else `i1 > j1`) result9
-                                              Post27) in
+                                              Post25) in
                                             (Cases (btest
                                                     [result7:bool](if result7
                                                                    then `
@@ -1509,7 +1508,7 @@ Definition find := (* validation *)
                                             | (left Test8) =>
                                                 let (A2, i2, j2, result8,
                                                   Inv_ij0) =
-                                                  let (A2, result8, Post28) =
+                                                  let (A2, result8, Post26) =
                                                     let Pre12 =
                                                       (find_po_9 A Pre21
                                                       result Post16 result0
@@ -1527,7 +1526,7 @@ Definition find := (* validation *)
                                                       (refl_equal ? (
                                                       access A1 i1))) in
                                                     let (A2, result8,
-                                                      Post29) =
+                                                      Post27) =
                                                       let Pre10 = Pre12 in
                                                       let Pre11 =
                                                         (find_po_10 A Pre21
@@ -1638,9 +1637,9 @@ Definition find := (* validation *)
                                                         (Zwf `0` `N + 2 + j -
                                                                   i` `
                                                         N + 2 + j0 - i0`))))) 
-                                                    A2 result8 Post29) in
+                                                    A2 result8 Post27) in
                                                   let Pre15 =
-                                                    (proj1 ? ? Post28) in
+                                                    (proj1 ? ? Post26) in
                                                   let Pre14 =
                                                     (find_po_13 A Pre21
                                                     result Post16 result0
@@ -1650,7 +1649,7 @@ Definition find := (* validation *)
                                                     result3 Post12 Variant3
                                                     A1 i0 j0 Pre17 Inv_ij
                                                     Test9 i1 Inv_i j1 Inv_j
-                                                    Pre16 Test8 A2 Post28
+                                                    Pre16 Test8 A2 Post26
                                                     Pre15) in
                                                   let Pre13 =
                                                     (find_po_14 A Pre21
@@ -1661,7 +1660,7 @@ Definition find := (* validation *)
                                                     result3 Post12 Variant3
                                                     A1 i0 j0 Pre17 Inv_ij
                                                     Test9 i1 Inv_i j1 Inv_j
-                                                    Pre16 Test8 A2 Post28
+                                                    Pre16 Test8 A2 Post26
                                                     Pre15 Pre14) in
                                                   let (i2, result9, Post6) =
                                                     let (result9, Post6) =
@@ -1706,7 +1705,7 @@ Definition find := (* validation *)
                                                   result3 Post12 Variant3 A1
                                                   i0 j0 Pre17 Inv_ij Test9 i1
                                                   Inv_i j1 Inv_j Pre16 Test8
-                                                  A2 Post28 Pre15 Pre14 Pre13
+                                                  A2 Post26 Pre15 Pre14 Pre13
                                                   i2 Post6 j2 Post7)) in
                                                 (exist_4 [A3: (array Z)]
                                                 [i3: Z][j3: Z][result9: unit]
@@ -1815,11 +1814,11 @@ Definition find := (* validation *)
                               i0 j0 Inv_ij) in
                             let (m1, n1, result5, Inv_mn0) =
                               let (result5, Bool6) =
-                                let (result7, Post30) =
+                                let (result7, Post28) =
                                   (Z_le_gt_bool f j0) in
                                 (exist_1 [result8: bool]
                                 (if result8 then `f <= j0` else `f > j0`) 
-                                result7 Post30) in
+                                result7 Post28) in
                               (Cases (btest
                                       [result5:bool](if result5
                                                      then `f <= j0`
@@ -1846,12 +1845,12 @@ Definition find := (* validation *)
                               | (right Test12) =>
                                   let (m1, n1, result6, Inv_mn0) =
                                     let (result6, Bool5) =
-                                      let (result8, Post31) =
+                                      let (result8, Post29) =
                                         (Z_le_gt_bool i0 f) in
                                       (exist_1 [result9: bool]
                                       (if result9 then `i0 <= f`
                                        else `i0 > f`) result8
-                                      Post31) in
+                                      Post29) in
                                     (Cases (btest
                                             [result6:bool](if result6
                                                            then `i0 <= f`
@@ -1951,18 +1950,24 @@ Definition find := (* validation *)
                   ((wf1 `n1 - m1`) (loop_variant_1 Pre20 Inv_mn0) A1 
                     m1 n1 (refl_equal ? `n1 - m1`) (proj1 ? ? Inv_mn0)) in
                 (exist_4 [A2: (array Z)][m2: Z][n2: Z][result3: unit]
-                (found A2) /\ (permut A2 A) A1 m1 n1 result2 Post23)
+                ((m_invariant m2 A2) /\ (n_invariant n2 A2) /\
+                (permut A2 A) /\ `1 <= m2` /\ `n2 <= N`) /\ `m2 >= n2` 
+                A1 m1 n1 result2 Inv_mn0)
             | (right Test1) =>
-                let (A1, m1, n1, result2, Post22) = (exist_4 [A1: (array Z)]
-                  [m1: Z][n1: Z][result2: unit](found A1) /\ (permut A1 A) 
-                  A0 m0 n0 tt
-                  (find_po_22 A Pre21 result Post16 result0 Post15 Variant1
-                  A0 m0 n0 Pre20 Inv_mn Test1)) in
+                let (A1, m1, n1, result2, Inv_mn0) = (exist_4 [A1: (array Z)]
+                  [m1: Z][n1: Z][result2: unit]((m_invariant m1 A1) /\
+                  (n_invariant n1 A1) /\ (permut A1 A) /\ `1 <= m1` /\
+                  `n1 <= N`) /\ `m1 >= n1` A0 m0 n0 tt
+                  (conj ? ? Inv_mn Test1)) in
                 (exist_4 [A2: (array Z)][m2: Z][n2: Z][result3: unit]
-                (found A2) /\ (permut A2 A) A1 m1 n1 result2 Post22) end)
-          `result0 - result` A result result0
-          (refl_equal ? `result0 - result`)
-          (find_po_23 A Pre21 result Post16 result0 Post15)) in
-      (Build_tuple_3 A0 m0 result1) in
-    (Build_tuple_2 A0 result0).
+                ((m_invariant m2 A2) /\ (n_invariant n2 A2) /\
+                (permut A2 A) /\ `1 <= m2` /\ `n2 <= N`) /\ `m2 >= n2` 
+                A1 m1 n1 result2 Inv_mn0) end) `result0 - result` A result
+          result0 (refl_equal ? `result0 - result`)
+          (find_po_22 A Pre21 result Post16 result0 Post15)) in
+      (exist_3 [A1: (array Z)][m1: Z][result2: unit](found A1) /\
+      (permut A1 A) A0 m0 result1
+      (find_po_23 A Pre21 result Post16 result0 Post15 A0 m0 n0 Inv_mn)) in
+    (exist_2 [A1: (array Z)][result1: unit](found A1) /\ (permut A1 A) 
+    A0 result0 Post20).
 

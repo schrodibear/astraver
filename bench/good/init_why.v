@@ -2,7 +2,7 @@
 Require Why.
 
 
-(* Why obligation from file "good/init.mlw", characters 41-81 *)
+(* Why obligation from file "good/init.mlw", characters 41-84 *)
 Lemma f_po_1 : 
   (x: Z)
   (x0: Z)
@@ -21,7 +21,7 @@ Definition f := (* validation *)
     (exist_2 [x1: Z][result0: unit]`x1 = 1 - x` x0 result
     (f_po_1 x x0 Post1)).
 
-(* Why obligation from file "good/init.mlw", characters 100-143 *)
+(* Why obligation from file "good/init.mlw", characters 103-149 *)
 Lemma g_po_1 : 
   (x: Z)
   (x0: Z)

@@ -28,15 +28,15 @@ parameter f7 : x:foo -> {} foo {}
 parameter f8 : t:int array -> {} unit reads t { t[1] = 2 }
 
 (* predicates *)
-let p1 = 0 { true }
-let p2 = 0 { not false }
-let p3 = 0 { true and true }
-let p4 = 0 { true or false }
-let p5 = 0 { false or not false }
-let p6 = 0 { true -> not false }
-let p7 = 0 { forall x:int. x=x }
-let p8 = 0 { true and forall x:int. x=x }
-let p9 = 0 { forall x:int. forall y:int. x=y -> x=y }
+let p1 = {} 0 { true }
+let p2 = {} 0 { not false }
+let p3 = {} 0 { true and true }
+let p4 = {} 0 { true or false }
+let p5 = {} 0 { false or not false }
+let p6 = {} 0 { true -> not false }
+let p7 = {} 0 { forall x:int. x=x }
+let p8 = {} 0 { true and forall x:int. x=x }
+let p9 = {} 0 { forall x:int. forall y:int. x=y -> x=y }
 
 (* variables *)
 let acc1 = v2
@@ -96,14 +96,14 @@ let r7 = 1 = 2 || 2 = 3
 let r8 = 1 = 2 && 2 = 3
 
 (* arrays *)
-let arr1 = { array_length(v6) >= 1 } v6[0]
-let arr2 = { array_length(v6) >= 4 } v6[1+2]
-let arr3 = { array_length(v6) >= 1 and v4 = 0 } v6[!v4]
-let arr4 = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]]
+let arr1 = { array_length(v6) >= 1 } v6[0] {} 
+let arr2 = { array_length(v6) >= 4 } v6[1+2] {}
+let arr3 = { array_length(v6) >= 1 and v4 = 0 } v6[!v4] {}
+let arr4 = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]] {}
 
-let arr5 = { array_length(v6) >= 1 } v6[0] := 1
-let arr6 = { array_length(v6) >= 4 } v6[1+2] := 3+4
-let arr7 = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]] := 1
+let arr5 = { array_length(v6) >= 1 } v6[0] := 1 {}
+let arr6 = { array_length(v6) >= 4 } v6[1+2] := 3+4 {}
+let arr7 = { array_length(v6) >= 10 and v6[0] = 9 } v6[v6[0]] := 1 {}
 
 (* function calls *)
 let fc1 = (f5 v5)
@@ -115,7 +115,7 @@ let fc3 = let a = ref 0 in let b = ref 0 in (f3 a b)
 (* recursive functions: in file recfun.ml *)
 
 (* annotations *)
-let an1 = 0 { result = 0 }
+let an1 = {} 0 { result = 0 }
 let an2 = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@ }
 let an3 = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@init }
 

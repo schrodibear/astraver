@@ -143,7 +143,7 @@ Save.
 
 (* Obligations *)
 
-(* Why obligation from file "downheap.mlw", characters 842-848 *)
+(* Why obligation from file "downheap.mlw", characters 845-851 *)
 Lemma downheap_po_1 : 
   (k: Z)
   (n: Z)
@@ -166,7 +166,7 @@ Proof.
 Intros; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 835-839 *)
+(* Why obligation from file "downheap.mlw", characters 838-842 *)
 Lemma downheap_po_2 : 
   (k: Z)
   (n: Z)
@@ -190,7 +190,7 @@ Proof.
 Intros; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 854-857 *)
+(* Why obligation from file "downheap.mlw", characters 857-860 *)
 Lemma downheap_po_3 : 
   (k: Z)
   (n: Z)
@@ -217,7 +217,7 @@ Apply select_right_son;
   [ Reflexivity | Omega' | Rewrite (R11 k0) in Test4; Omega' ].
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 863-864 *)
+(* Why obligation from file "downheap.mlw", characters 866-867 *)
 Lemma downheap_po_4 : 
   (k: Z)
   (n: Z)
@@ -244,7 +244,7 @@ Apply select_left_son;
   [ Reflexivity | Rewrite (R11 k0) in Test3; Intro; Assumption ].
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 870-871 *)
+(* Why obligation from file "downheap.mlw", characters 873-874 *)
 Lemma downheap_po_5 : 
   (k: Z)
   (n: Z)
@@ -269,7 +269,7 @@ Subst j.
 Apply select_left_son; [ Reflexivity | Intro; Absurd `2*k+2 <= n`; Omega' ].
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 943-948 *)
+(* Why obligation from file "downheap.mlw", characters 946-951 *)
 Lemma downheap_po_6 : 
   (k: Z)
   (n: Z)
@@ -293,7 +293,7 @@ Proof.
 Intros; Elim Post12; Intros; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 936-940 *)
+(* Why obligation from file "downheap.mlw", characters 939-943 *)
 Lemma downheap_po_7 : 
   (k: Z)
   (n: Z)
@@ -318,7 +318,7 @@ Proof.
 Intros; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 960-973 *)
+(* Why obligation from file "downheap.mlw", characters 963-976 *)
 Lemma downheap_po_8 : 
   (k: Z)
   (n: Z)
@@ -344,7 +344,7 @@ Proof.
 Intros; Elim Post12; Intros; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 975-992 *)
+(* Why obligation from file "downheap.mlw", characters 978-995 *)
 Lemma downheap_po_9 : 
   (k: Z)
   (n: Z)
@@ -379,7 +379,7 @@ Elim Post23; Intros.
 Symmetry; Apply (H18 i'); Elim Post12; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 665-1225 *)
+(* Why obligation from file "downheap.mlw", characters 665-1228 *)
 Lemma downheap_po_10 : 
   (k: Z)
   (n: Z)
@@ -450,7 +450,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 954-996 *)
+(* Why obligation from file "downheap.mlw", characters 957-999 *)
 Lemma downheap_po_12 : 
   (k: Z)
   (n: Z)
@@ -559,7 +559,7 @@ Elim Post12; Intros; Omega'.
     Assumption. Omega'. Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 933-996 *)
+(* Why obligation from file "downheap.mlw", characters 936-999 *)
 Lemma downheap_po_13 : 
   (k: Z)
   (n: Z)
@@ -600,7 +600,7 @@ Omega'. Rewrite <- H10. Assumption.
 Intro. Apply H7; Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 785-996 *)
+(* Why obligation from file "downheap.mlw", characters 785-999 *)
 Lemma downheap_po_14 : 
   (k: Z)
   (n: Z)

@@ -1,2 +1,2 @@
 
-let p = 1 { false | E => true }
+let p = { } 1 { false | E => true }

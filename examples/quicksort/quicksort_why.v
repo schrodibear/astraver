@@ -261,7 +261,7 @@ Definition quick_rec := (* validation *)
             (sub_permut l0 r0 t1 t0) t0 result0 Post3) end) `1 + r - l` 
       l r t (refl_equal ? `1 + r - l`) Pre15).
 
-(* Why obligation from file "quicksort.mlw", characters 1877-1977 *)
+(* Why obligation from file "quicksort.mlw", characters 1877-1984 *)
 Lemma quicksort_po_1 : 
   (t: (array Z))
   `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`.
@@ -269,7 +269,7 @@ Proof.
 Intuition Omega.
 Save.
 
-(* Why obligation from file "quicksort.mlw", characters 1877-1977 *)
+(* Why obligation from file "quicksort.mlw", characters 1877-1984 *)
 Lemma quicksort_po_2 : 
   (t: (array Z))
   (Pre1: `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`)

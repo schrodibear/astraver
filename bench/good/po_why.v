@@ -48,7 +48,7 @@ Definition p2 := (* validation *)
       (exist_2 [x1: Z][result0: unit]x1 = `3 + 4` result tt Post1) in
     (exist_2 [x1: Z][result0: unit](q x1) x0 result (p2_po_1 Pre1 x0 Post1)).
 
-(* Why obligation from file "good/po.mlw", characters 254-303 *)
+(* Why obligation from file "good/po.mlw", characters 254-306 *)
 Lemma p3_po_1 : 
   (x: Z)
   (x0: Z)
@@ -75,7 +75,7 @@ Definition p3 := (* validation *)
     (exist_2 [x2: Z][result1: unit]`x2 = x + 3` x1 result0
     (p3_po_1 x x0 Post1 x1 Post2)).
 
-(* Why obligation from file "good/po.mlw", characters 314-354 *)
+(* Why obligation from file "good/po.mlw", characters 317-360 *)
 Lemma p4_po_1 : 
   (x0: Z)
   (Post1: x0 = `7`)
@@ -101,7 +101,7 @@ Definition p4 := (* validation *)
     (exist_2 [x2: Z][result1: unit]`x2 = 14` x1 result0
     (p4_po_1 x0 Post1 x1 Post2)).
 
-(* Why obligation from file "good/po.mlw", characters 365-387 *)
+(* Why obligation from file "good/po.mlw", characters 371-396 *)
 Lemma p5_po_1 : 
   `3 + 4 = 7`.
 Proof.
@@ -113,7 +113,7 @@ Save.
 Definition p5 := (* validation *)
   (exist_1 [result: Z]`result = 7` `3 + 4` p5_po_1).
 
-(* Why obligation from file "good/po.mlw", characters 412-417 *)
+(* Why obligation from file "good/po.mlw", characters 424-429 *)
 Lemma p6_po_1 : 
   (a: Z)
   (Post1: a = `3`)
@@ -131,7 +131,7 @@ Definition p6 := (* validation *)
     (p6_po_1 a Post1)) in
   (exist_1 [result0: Z]`result0 = 7` result Post2).
 
-(* Why obligation from file "good/po.mlw", characters 463-468 *)
+(* Why obligation from file "good/po.mlw", characters 478-483 *)
 Lemma p7_po_1 : 
   (a: Z)
   (Post1: a = `4`)
@@ -153,7 +153,7 @@ Definition p7 := (* validation *)
     Post2) in
   (exist_1 [result0: Z]`result0 = 11` result Post4).
 
-(* Why obligation from file "good/po.mlw", characters 577-579 *)
+(* Why obligation from file "good/po.mlw", characters 592-594 *)
 Lemma p8_po_1 : 
   (x: Z)
   (Pre1: (q `x + 1`))
@@ -181,7 +181,7 @@ Definition p8 := (* validation *)
       `result = x + 4` `3 + aux_1` Post2) in
     (exist_2 [x1: Z][result0: Z](q x1) /\ `result0 = x + 4` x0 result Post4).
 
-(* Why obligation from file "good/po.mlw", characters 702-703 *)
+(* Why obligation from file "good/po.mlw", characters 723-724 *)
 Lemma p9_po_1 : 
   (x0: Z)
   (Post3: x0 = `2`)
@@ -190,7 +190,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "good/po.mlw", characters 680-681 *)
+(* Why obligation from file "good/po.mlw", characters 701-702 *)
 Lemma p9_po_2 : 
   (aux_2: Z)
   (Post4: ((x:Z) (x = `1` -> `1 + aux_2 = 2` /\ `x = 1`)))
@@ -230,7 +230,7 @@ Definition p9 := (* validation *)
       (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post9) in
     (exist_2 [x2: Z][result0: Z]`result0 = 2` /\ `x2 = 1` x1 result Post6).
 
-(* Why obligation from file "good/po.mlw", characters 760-761 *)
+(* Why obligation from file "good/po.mlw", characters 784-785 *)
 Lemma p9a_po_1 : 
   (x0: Z)
   (Post2: x0 = `1`)
@@ -258,7 +258,7 @@ Definition p9a := (* validation *)
 
 (*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result: Z](`result = x + 1`)).
 
-(* Why obligation from file "good/po.mlw", characters 900-924 *)
+(* Why obligation from file "good/po.mlw", characters 924-951 *)
 Lemma p10_po_1 : 
   (result1: Z)
   (Post1: `result1 = 0 + 1`)
@@ -273,7 +273,7 @@ Definition p10 := (* validation *)
   let (result1, Post1) = (fsucc `0`) in
   (exist_1 [result2: Z]`result2 = 1` result1 (p10_po_1 result1 Post1)).
 
-(* Why obligation from file "good/po.mlw", characters 936-974 *)
+(* Why obligation from file "good/po.mlw", characters 963-1004 *)
 Lemma p11_po_1 : 
   (aux_2: Z)
   (Post1: `aux_2 = 3 + 1`)
@@ -299,7 +299,7 @@ Definition p11 := (* validation *)
     (exist_1 [result0: Z]`result0 = 5` result Post6) in
   (exist_1 [result0: Z]`result0 = 5` result Post3).
 
-(* Why obligation from file "good/po.mlw", characters 1009-1014 *)
+(* Why obligation from file "good/po.mlw", characters 1042-1047 *)
 Lemma p11a_po_1 : 
   (a: Z)
   (Post1: `a = 1 + 1`)
@@ -321,7 +321,7 @@ Definition p11a := (* validation *)
 (*Why*) Parameter incrx :
   (_: unit)(x: Z)(sig_2 Z unit [x0: Z][result: unit](`x0 = x + 1`)).
 
-(* Why obligation from file "good/po.mlw", characters 1157-1189 *)
+(* Why obligation from file "good/po.mlw", characters 1190-1222 *)
 Lemma p12_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -340,7 +340,7 @@ Definition p12 := (* validation *)
     (exist_2 [x1: Z][result2: unit]`x1 = 1` x0 result1
     (p12_po_1 x Pre1 x0 Post1)).
 
-(* Why obligation from file "good/po.mlw", characters 1201-1256 *)
+(* Why obligation from file "good/po.mlw", characters 1234-1292 *)
 Lemma p13_po_1 : 
   (x: Z)
   (x0: Z)
@@ -365,7 +365,7 @@ Definition p13 := (* validation *)
     (exist_2 [x2: Z][result1: unit]`x2 = x + 2` x1 result0
     (p13_po_1 x x0 Post1 x1 Post3)).
 
-(* Why obligation from file "good/po.mlw", characters 1269-1308 *)
+(* Why obligation from file "good/po.mlw", characters 1305-1347 *)
 Lemma p13a_po_1 : 
   (x: Z)
   (x0: Z)
@@ -394,7 +394,7 @@ Definition p13a := (* validation *)
   (_: unit)(x: Z)
   (sig_2 Z Z [x0: Z][result: Z](`x0 = x + 1` /\ `result = x0`)).
 
-(* Why obligation from file "good/po.mlw", characters 1456-1494 *)
+(* Why obligation from file "good/po.mlw", characters 1495-1533 *)
 Lemma p14_po_1 : 
   (x: Z)
   (Pre1: `x = 0`)
@@ -414,7 +414,7 @@ Definition p14 := (* validation *)
     (exist_2 [x1: Z][result2: Z]`result2 = 1` x0 result1
     (p14_po_1 x Pre1 x0 result1 Post1)).
 
-(* Why obligation from file "good/po.mlw", characters 1545-1574 *)
+(* Why obligation from file "good/po.mlw", characters 1584-1616 *)
 Lemma p15_po_1 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10`)
@@ -430,7 +430,7 @@ Definition p15 := (* validation *)
     let Pre1 = (p15_po_1 t Pre2) in
     (access t `0`).
 
-(* Why obligation from file "good/po.mlw", characters 1586-1619 *)
+(* Why obligation from file "good/po.mlw", characters 1629-1666 *)
 Lemma p16_po_1 : 
   (t: (array Z))
   (Pre2: `(array_length t) = 10`)
@@ -448,7 +448,7 @@ Definition p16 := (* validation *)
     t1 = (store t `9` `1`) (store t `9` `1`) tt
     (refl_equal ? (store t `9` `1`))).
 
-(* Why obligation from file "good/po.mlw", characters 1631-1687 *)
+(* Why obligation from file "good/po.mlw", characters 1679-1738 *)
 Lemma p17_po_1 : 
   (t: (array Z))
   (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
@@ -467,7 +467,7 @@ Save.
 *)
 
 
-(* Why obligation from file "good/po.mlw", characters 1677-1681 *)
+(* Why obligation from file "good/po.mlw", characters 1725-1729 *)
 Lemma p17_po_2 : 
   (t: (array Z))
   (Pre3: `(array_length t) = 10` /\ `0 <= (access t 0)` /\
@@ -487,7 +487,7 @@ Definition p17 := (* validation *)
     t1 = (store t (access t `0`) `1`) (store t (access t `0`) `1`) tt
     (refl_equal ? (store t (access t `0`) `1`))).
 
-(* Why obligation from file "good/po.mlw", characters 1741-1743 *)
+(* Why obligation from file "good/po.mlw", characters 1796-1798 *)
 Lemma p18_po_1 : 
   (t: (array Z))
   (x: Z)
@@ -502,7 +502,7 @@ Intuition.
 Subst x0; AccessSame.
 Save.
 
-(* Why obligation from file "good/po.mlw", characters 1699-1769 *)
+(* Why obligation from file "good/po.mlw", characters 1754-1824 *)
 Lemma p18_po_2 : 
   (t: (array Z))
   (x: Z)

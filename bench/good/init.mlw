@@ -1,6 +1,6 @@
 
 parameter x : int ref
 
-let f (u:unit) = begin x := 1 - !x end { x = 1 - x@init }
+let f (u:unit) = {} begin x := 1 - !x end { x = 1 - x@init }
 
-let g (u:unit) = begin (f void); (f void) end { x = x@init }
+let g (u:unit) = {} begin (f void); (f void) end { x = x@init }

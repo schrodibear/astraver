@@ -35,7 +35,7 @@ Parameter foo : Set.
 Definition p1 := (* validation *)
   (exist_1 [result: Z]True `0` I).
 
-(* Why obligation from file "good/all.mlw", characters 706-721 *)
+(* Why obligation from file "good/all.mlw", characters 709-727 *)
 Lemma p2_po_1 : 
   ~False.
 Proof.
@@ -48,7 +48,7 @@ Save.
 Definition p2 := (* validation *)
   (exist_1 [result: Z]~False `0` p2_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 731-750 *)
+(* Why obligation from file "good/all.mlw", characters 737-759 *)
 Lemma p3_po_1 : 
   True /\ True.
 Proof.
@@ -61,7 +61,7 @@ Save.
 Definition p3 := (* validation *)
   (exist_1 [result: Z]True /\ True `0` p3_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 760-779 *)
+(* Why obligation from file "good/all.mlw", characters 769-791 *)
 Lemma p4_po_1 : 
   True \/ False.
 Proof.
@@ -74,7 +74,7 @@ Save.
 Definition p4 := (* validation *)
   (exist_1 [result: Z]True \/ False `0` p4_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 789-813 *)
+(* Why obligation from file "good/all.mlw", characters 801-828 *)
 Lemma p5_po_1 : 
   False \/ ~False.
 Proof. 
@@ -87,7 +87,7 @@ Save.
 Definition p5 := (* validation *)
   (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 823-846 *)
+(* Why obligation from file "good/all.mlw", characters 838-864 *)
 Lemma p6_po_1 : 
   (True -> ~False).
 Proof.
@@ -100,7 +100,7 @@ Save.
 Definition p6 := (* validation *)
   (exist_1 [result: Z](True -> ~False) `0` p6_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 856-879 *)
+(* Why obligation from file "good/all.mlw", characters 874-900 *)
 Lemma p7_po_1 : 
   ((x:Z) `x = x`).
 Proof.
@@ -113,7 +113,7 @@ Save.
 Definition p7 := (* validation *)
   (exist_1 [result: Z]((x:Z) `x = x`) `0` p7_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 889-921 *)
+(* Why obligation from file "good/all.mlw", characters 910-945 *)
 Lemma p8_po_1 : 
   True /\ ((x:Z) `x = x`).
 Proof.
@@ -126,7 +126,7 @@ Save.
 Definition p8 := (* validation *)
   (exist_1 [result: Z]True /\ ((x:Z) `x = x`) `0` p8_po_1).
 
-(* Why obligation from file "good/all.mlw", characters 931-975 *)
+(* Why obligation from file "good/all.mlw", characters 955-1002 *)
 Lemma p9_po_1 : 
   ((x:Z) ((y:Z) (`x = y` -> `x = y`))).
 Proof.
@@ -199,7 +199,7 @@ Definition ar4 := (* validation *)
 Definition ar5 := (* validation *)
   `1 * 1`.
 
-(* Why obligation from file "good/all.mlw", characters 1171-1174 *)
+(* Why obligation from file "good/all.mlw", characters 1198-1201 *)
 Lemma ar6_po_1 : 
   ~(`1` = `0`).
 Proof.
@@ -213,7 +213,7 @@ Definition ar6 := (* validation *)
   let Pre1 = ar6_po_1 in
   (Zdiv `1` `1`).
 
-(* Why obligation from file "good/all.mlw", characters 1185-1188 *)
+(* Why obligation from file "good/all.mlw", characters 1212-1215 *)
 Lemma ar7_po_1 : 
   ~(`1` = `0`).
 Proof.
@@ -557,7 +557,7 @@ Definition r8 := (* validation *)
       result0
   | (right Test1) => false end).
 
-(* Why obligation from file "good/all.mlw", characters 2129-2160 *)
+(* Why obligation from file "good/all.mlw", characters 2156-2190 *)
 Lemma arr1_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 1`)
@@ -574,7 +574,7 @@ Definition arr1 := (* validation *)
     let Pre1 = (arr1_po_1 v6 Pre2) in
     (access v6 `0`).
 
-(* Why obligation from file "good/all.mlw", characters 2172-2205 *)
+(* Why obligation from file "good/all.mlw", characters 2203-2239 *)
 Lemma arr2_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 4`)
@@ -591,7 +591,7 @@ Definition arr2 := (* validation *)
     let Pre1 = (arr2_po_1 v6 Pre2) in
     (access v6 `1 + 2`).
 
-(* Why obligation from file "good/all.mlw", characters 2217-2261 *)
+(* Why obligation from file "good/all.mlw", characters 2251-2298 *)
 Lemma arr3_po_1 : 
   (v4: Z)
   (v6: (array Z))
@@ -609,7 +609,7 @@ Definition arr3 := (* validation *)
     let Pre1 = (arr3_po_1 v4 v6 Pre2) in
     (access v6 v4).
 
-(* Why obligation from file "good/all.mlw", characters 2317-2322 *)
+(* Why obligation from file "good/all.mlw", characters 2354-2359 *)
 Lemma arr4_po_1 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -618,7 +618,7 @@ Proof. (* arr4_po_1 *)
 Intros; Omega.
 Save.
 
-(* Why obligation from file "good/all.mlw", characters 2273-2323 *)
+(* Why obligation from file "good/all.mlw", characters 2310-2363 *)
 Lemma arr4_po_2 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -637,7 +637,7 @@ Definition arr4 := (* validation *)
     let Pre1 = (arr4_po_2 v6 Pre3 Pre2) in
     (access v6 (access v6 `0`)).
 
-(* Why obligation from file "good/all.mlw", characters 2336-2372 *)
+(* Why obligation from file "good/all.mlw", characters 2376-2415 *)
 Lemma arr5_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 1`)
@@ -653,7 +653,7 @@ Definition arr5 := (* validation *)
     v10 = (store v6 `0` `1`) (store v6 `0` `1`) tt
     (refl_equal ? (store v6 `0` `1`))).
 
-(* Why obligation from file "good/all.mlw", characters 2384-2424 *)
+(* Why obligation from file "good/all.mlw", characters 2427-2470 *)
 Lemma arr6_po_1 : 
   (v6: (array Z))
   (Pre2: `(array_length v6) >= 4`)
@@ -670,7 +670,7 @@ Definition arr6 := (* validation *)
     v10 = (store v6 `1 + 2` `3 + 4`) (store v6 `1 + 2` `3 + 4`) tt
     (refl_equal ? (store v6 `1 + 2` `3 + 4`))).
 
-(* Why obligation from file "good/all.mlw", characters 2436-2491 *)
+(* Why obligation from file "good/all.mlw", characters 2482-2540 *)
 Lemma arr7_po_1 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -679,7 +679,7 @@ Proof. (* arr7_po_1 *)
 Intros; Omega.
 Save.
 
-(* Why obligation from file "good/all.mlw", characters 2480-2485 *)
+(* Why obligation from file "good/all.mlw", characters 2526-2531 *)
 Lemma arr7_po_2 : 
   (v6: (array Z))
   (Pre3: `(array_length v6) >= 10` /\ `(access v6 0) = 9`)
@@ -704,7 +704,7 @@ Definition fc1 := (* validation *)
 Definition fc2 := (* validation *)
   (f4 tt).
 
-(* Why obligation from file "good/all.mlw", characters 2596-2604 *)
+(* Why obligation from file "good/all.mlw", characters 2645-2653 *)
 Lemma fc3_po_1 : 
   (result: Z)
   (Post2: result = `0`)
@@ -738,7 +738,7 @@ Definition fc3 := (* validation *)
 Definition an1 := (* validation *)
   (exist_1 [result: Z]`result = 0` `0` (refl_equal ? `0`)).
 
-(* Why obligation from file "good/all.mlw", characters 2744-2792 *)
+(* Why obligation from file "good/all.mlw", characters 2796-2844 *)
 Lemma an2_po_1 : 
   (v4: Z)
   (Pre1: `v4 >= 0`)
@@ -761,7 +761,7 @@ Definition an2 := (* validation *)
     (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
     (an2_po_1 v4 Pre1 v9 Post1)).
 
-(* Why obligation from file "good/all.mlw", characters 2803-2855 *)
+(* Why obligation from file "good/all.mlw", characters 2855-2907 *)
 Lemma an3_po_1 : 
   (v4: Z)
   (Pre1: `v4 >= 0`)

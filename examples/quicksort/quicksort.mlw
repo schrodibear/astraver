@@ -37,5 +37,6 @@ let quick_rec =
 
 let quicksort =
   fun (t:int array) ->
+    {}
     (quick_rec t 0 ((array_length t)-1))
     { sorted_array(t, 0, array_length(t)-1) and permut(t, t@) }
