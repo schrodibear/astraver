@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.15 2004-12-08 10:42:28 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.16 2004-12-10 15:10:41 hubert Exp $ i*)
 
 (*s The log file *)
 
@@ -58,6 +58,7 @@ let werror = ref false
 let why_opt = ref ""
 let coq_tactic = ref "intuition"
 let separate = ref false
+let closed_program = ref false
 
 let files_ = ref []
 let add_file f = files_ := f :: !files_
@@ -127,6 +128,8 @@ let _ =
 	  " <f,g,h...>  specifies the functions to verify; implies -s";
 	"-assume", Arg.String assume,
 	  " <f,g,h...>  specifies functions not to be verified (i.e. assumed)";
+	"-closed", Arg.Set closed_program,
+	  "  assumes a closed program";
       ]
       add_file "caduceus [options] file..."
 
@@ -142,6 +145,7 @@ let cpp_dump = !cpp_dump
 let why_opt = !why_opt
 let coq_tactic = !coq_tactic
 let separate = !separate
+let closed_program = !closed_program
 
 let verify f = match !verification with
   | All -> true

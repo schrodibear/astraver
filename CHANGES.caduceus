@@ -1,5 +1,8 @@
 Note: These are the changes for Caduceus.
 
+ o automatic addition of invariants for constant values. new option
+   -closed to assume a closed program, i.e where all files 
+   are given, allowing more invariants 
  o labeled predicates with syntax "id: predicate" and lowest precedence
    (labels are not interpreted; they are passed to Why and then to provers)
 

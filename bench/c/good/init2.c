@@ -21,12 +21,12 @@ const int laconstante=7;
 
 /*@ 
 assigns \nothing 
-ensures (* ls.c.a==1 && varglo==123 && *) \result==4 (* && le==34 *) 
-  (* && laconstante==7 *)
+ensures  ls.c.a==1 && varglo==123 &&  \result==4  && le==34  
+   && laconstante==7 
 */ 
 int f() 
 { 
   int varloc=4; 
-  /*  lastruct2 l = { {4,5},6}; */
-  return varloc /* + l.c.b */; 
+  return varloc;  
+
 }

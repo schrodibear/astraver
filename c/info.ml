@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.17 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.18 2004-12-10 15:10:41 hubert Exp $ i*)
 
 open Ctypes
 
@@ -65,6 +65,9 @@ module HeapVarSet =
 		  let compare i1 i2 = 
 		      Pervasives.compare i1.var_uniq_tag i2.var_uniq_tag 
 	   end)
+
+let print_hvs fmt s =
+  HeapVarSet.iter (fun v -> Format.fprintf fmt "%s," v.var_unique_name) s
 
 type logic_info =
     {

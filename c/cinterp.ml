@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.122 2004-12-08 14:17:29 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.123 2004-12-10 15:10:41 hubert Exp $ i*)
 
 
 open Format
@@ -844,27 +844,28 @@ let strong_invariant =
       p
 
 let strong_invariants_for hvs =
+  (** eprintf "strong_invariants: %a @." print_hvs hvs; **)
   Hashtbl.fold
     (fun id (p,e) acc -> 
+       (** eprintf "  e = { %a }@." print_hvs e; **)
        if Ceffect.intersect_only_alloc e hvs then acc
        else make_and (strong_invariant id p) acc) 
     Ceffect.strong_invariants LTrue
 
 let interp_spec add_inv effect_reads effect_assigns s =
   let tpre = 
-    make_and 
+    make_and
       (make_and
 	 (interp_predicate_opt None "" s.requires)
 	 (if add_inv then weak_invariants_for effect_reads else LTrue))
       (strong_invariants_for effect_reads)
   and tpost = 
-    make_and
-      (make_and
-	 (interp_predicate_opt None "" s.ensures)
-	 (make_and 
-	    (interp_assigns "" effect_assigns s.assigns)
-	    (if add_inv then weak_invariants_for effect_assigns else LTrue)))
-      (strong_invariants_for effect_assigns)
+   make_and
+     (interp_predicate_opt None "" s.ensures)
+     (make_and 
+	(interp_assigns "" effect_assigns s.assigns)
+	(if add_inv then make_and (weak_invariants_for effect_assigns)
+	   (strong_invariants_for effect_assigns) else LTrue))
   in 
   (tpre,tpost)
 
@@ -1273,7 +1274,7 @@ let interp_function_spec id sp ty pl =
   let tpl = interp_fun_params pl in
   let pre,post = 
     interp_spec 
-      (id <> Cinit.invariants_initially_established_info)
+      (id != Cinit.invariants_initially_established_info)
       id.function_reads id.function_writes sp 
   in
   let r = heap_var_unique_names id.function_reads in
@@ -1378,6 +1379,16 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
 	(why_code, tspec :: why_spec, prover_decl)
       end
 
+(***
+let add_strong_invariant id (p,_) spec =
+  let a = interp_axiom p in
+  Axiom (id, a) :: spec
+
+let add_strong_invariants =
+  Hashtbl.fold add_strong_invariant Ceffect.strong_invariants
+***)
+
 let interp l =
   List.fold_left interp_located_tdecl ([],[],[]) l
+
 

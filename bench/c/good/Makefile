@@ -55,6 +55,10 @@ why/%.why: %.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
 	rm -f coq/caduceus_spec_why.v
 	$(EXECCADUCEUS) $<
 
+why/init2.why: init2.c $(CADUCEUS) $(CADUCEUSLIB)/why/caduceus.why
+	rm -f coq/caduceus_spec_why.v
+	$(EXECCADUCEUS) -closed $<
+
 %: %.c
 	rm -f why/$*.why
 	make why/$*.why

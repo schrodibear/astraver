@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.16 2004-12-02 15:00:25 hubert Exp $ i*)
+(*i $Id: info.mli,v 1.17 2004-12-10 15:10:41 hubert Exp $ i*)
 
 type var_info = private 
     {
@@ -46,6 +46,8 @@ val unset_formal_param : var_info -> unit
 val set_const_value : var_info -> int64 -> unit
 
 module HeapVarSet : Set.S with type elt = var_info
+
+val print_hvs : Format.formatter -> HeapVarSet.t -> unit
 
 type logic_info =
     {

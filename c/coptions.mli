@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.11 2004-12-08 10:42:28 filliatr Exp $ i*)
+(*i $Id: coptions.mli,v 1.12 2004-12-10 15:10:41 hubert Exp $ i*)
 
 (*s environment variables *)
 
@@ -34,6 +34,7 @@ val cpp_dump : bool
 val why_opt : string
 val coq_tactic : string
 val separate : bool
+val closed_program : bool
 
 val files : unit -> string list 
 

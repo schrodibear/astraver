@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.66 2004-12-08 14:17:29 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.67 2004-12-10 15:10:41 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -462,8 +462,8 @@ and initializer_option = function
 
 let print_effects fmt l =
   fprintf fmt "@[%a@]"
-    (print_list space 
-       (fun fmt v -> pp_print_string fmt v.var_name)) (HeapVarSet.elements l)
+    (print_list space (fun fmt v -> pp_print_string fmt v.var_unique_name)) 
+    (HeapVarSet.elements l)
 
 (* first pass: declare invariants and computes effects for logics *)
 
@@ -576,10 +576,21 @@ let rec invariant_for_constant loc t lvalue initializers =
 	  | TTStructUnion (Tstruct (_), fl) ->
 	      List.fold_left 
 		(fun (acc,init) (tyf, f) -> 
+		   let tyf =  { 
+		     Ctypes.ctype_node = tyf.Ctypes.ctype_node;
+		     Ctypes.ctype_storage = tyf.Ctypes.ctype_storage;
+		     Ctypes.ctype_const = tyf.Ctypes.ctype_const 
+					  || t.Ctypes.ctype_const;
+		     Ctypes.ctype_volatile = tyf.Ctypes.ctype_volatile;
+		   }  in 
 		   let block, init' =
-		      invariant_for_constant loc tyf 
+		     invariant_for_constant loc tyf 
 		       (noattr loc tyf (NTarrow(lvalue, f))) init
-		   in (NPand (acc,block),init'))
+		   in 
+		   if tyf.Ctypes.ctype_const then
+		     (NPand (acc,block),init')
+		   else
+		     (acc,init'))
 		(NPtrue,initializers)  fl
 	  | _ ->
 	      assert false
@@ -605,7 +616,12 @@ let rec invariant_for_constant loc t lvalue initializers =
 	       invariant_for_constant loc ty 
 		(noattr loc ty 
 		   (NTstar 
-		      (noattr loc c_int 
+		      (noattr loc 
+			 {Ctypes.ctype_node = (Tpointer ty);
+			  Ctypes.ctype_storage = ty.Ctypes.ctype_storage;
+			  Ctypes.ctype_const = ty.Ctypes.ctype_const;
+			  Ctypes.ctype_volatile = ty.Ctypes.ctype_volatile;
+			 }
 			 (NTbinop (lvalue,Clogic.Badd, ts))))) init 
 	    in
 	    init_cells (Int64.add i Int64.one) (NPand (block,b),init')
@@ -615,7 +631,18 @@ let rec invariant_for_constant loc t lvalue initializers =
     | Tfun (_, _) -> assert false
     | Tvar _ -> assert false
     | Tvoid -> assert false  
-  
+
+let rec has_constant_values ty = match ty.Ctypes.ctype_node with
+  | Tvoid | Tint _ | Tfloat _ | Tenum _ | Tpointer _ ->
+      ty.Ctypes.ctype_const
+  | Tstruct n -> 
+      ty.Ctypes.ctype_const ||
+      (match tag_type_definition n with
+	 | TTStructUnion (Tstruct _, fl) -> 
+	     List.exists (fun (tyf,_) -> has_constant_values tyf) fl
+	 | _ -> assert false)
+  | Tarray (ty', _) -> has_constant_values ty'
+  | Tunion _ | Tfun _ | Tvar _ -> false
 
 let decl d =
   match d.Cast.node with
@@ -641,21 +668,15 @@ let decl d =
 	    | _ -> ()
 	end;
 	let init = (match init with | None -> [] | Some l -> [l]) in
-	if ty.Ctypes.ctype_const then 	
-	  begin
-	    match ty.Ctypes.ctype_node with
-	      | Tint _ | Tfloat _ | Tenum _ | Tpointer _ 
-	      | Tarray _ | Tstruct _ ->
-		  lprintf "adding implicit invariant for constant %s@." 
-		    v.var_name;
-		  let id = "constant_" ^ v.var_name in
-		  let t = {nterm_node = NTvar v; 
-			   nterm_loc = Loc.dummy;
-			   nterm_type = ty } in
-		  let (pre,_) = invariant_for_constant d.loc ty t init in 
-		  add_strong_invariant id pre
-	      | _ -> ()
-	  end;
+	if has_constant_values ty then begin
+	  lprintf "adding implicit invariant for constant %s@." v.var_name;
+	  let id = "constant_" ^ v.var_name in
+	  let t = {nterm_node = NTvar v; 
+		   nterm_loc = Loc.dummy;
+		   nterm_type = ty } in
+	  let (pre,_) = invariant_for_constant d.loc ty t init in 
+	  add_strong_invariant id pre
+	end;
     | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
     | Naxiom(id,p) -> () (* TODO *)
     | Ntypedef(ctype,id) -> () 
@@ -678,7 +699,7 @@ let functions dl =
       reads = union 
 		(union ef.reads 
 		   (weak_invariants_for (union ef.reads ef.assigns)))
-		  (strong_invariants_for (union ef.reads ef.assigns)) ;
+		(strong_invariants_for (union ef.reads ef.assigns)) ;
       assigns = ef.assigns }
     in
     lprintf "effects for function %s: reads %a writes %a@." id.fun_name 

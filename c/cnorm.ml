@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.6 2004-12-08 10:53:22 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.7 2004-12-10 15:10:41 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -116,7 +116,7 @@ and expr_node loc ty t =
       | TEstring_literal string -> NEstring_literal string
       | TEvar env_info ->
 	  (match env_info with
-	    | Var_info v -> 
+	    | Var_info v ->
 		if var_requires_indirection v then
 		  begin
 		    NEstar
@@ -137,10 +137,11 @@ and expr_node loc ty t =
 	      nexpr_loc = loc;
 	    })
       | TEseq (texpr1,texpr2) -> NEseq ((expr texpr1) , (expr texpr2))
-      | TEassign (lvalue ,texpr) -> NEassign ((expr lvalue) , (expr texpr))
+      | TEassign (lvalue ,texpr) -> 
+	  NEassign ((expr lvalue) , (expr texpr))
       | TEassign_op (lvalue ,binary_operator, texpr) ->
 	  NEassign_op ((expr lvalue),binary_operator , (expr texpr))
-      | TEunary (Ustar ,texpr) ->  NEstar(expr texpr) 
+      | TEunary (Ustar ,texpr) ->  NEstar(expr texpr)
       | TEunary (Uamp ,texpr) ->
 	  (match texpr.texpr_node with
 	     | TEvar v -> NEvar v
@@ -415,12 +416,12 @@ and decl e1=
   | Ttypedecl t -> Ntypedecl (ctype t)
   | Tdecl (t, v, c) -> 
 (* traitement des locales precedemment dans cinterp a rebrancher 
-if v.var_is_referenced then
-	  let t = { nterm_node = NTresult; 
-		    nterm_loc = d.loc;
-		    nterm_type = Ctypes.c_pointer ctype } in
-	  Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
-	else
+   if v.var_is_referenced then
+   let t = { nterm_node = NTresult; 
+   nterm_loc = d.loc;
+   nterm_type = Ctypes.c_pointer ctype } in
+   Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
+   else
 *)	
       if var_requires_indirection v
       then
@@ -447,6 +448,12 @@ let global_decl e1 =
   | Ttypedef (t, s) -> Ntypedef((ctype t),s)
   | Ttypedecl t -> Ntypedecl (ctype t)
   | Tdecl (t, v, c) -> 
+      let t =
+	if v.var_is_assigned && Coptions.closed_program then   
+	  { t with Ctypes.ctype_const = true }
+	else t 
+      in
+      set_var_type (Var_info v) t;
       if var_requires_indirection v
       then
 	begin
