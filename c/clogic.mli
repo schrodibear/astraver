@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.33 2004-07-01 11:51:21 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.34 2004-10-06 12:50:31 hubert Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -26,6 +26,8 @@ type logic_type =
   | LTvar of string
 
 (* parsed terms and predicates *)
+
+type constant = IntConstant of string | FloatConstant of string
 
 type term_binop = Badd | Bsub | Bmul | Bdiv | Bmod
 type term_unop = Uminus | Ustar | Uamp | Ufloat_of_int
@@ -44,7 +46,7 @@ and lexpr_node =
   | PLvar of Info.var_info
   | PLapp of Info.logic_info * lexpr list
   (* terms *)
-  | PLconstant of string
+  | PLconstant of constant
   | PLunop of term_unop * lexpr
   | PLbinop of lexpr * term_binop * lexpr
   | PLdot of lexpr * string
@@ -78,11 +80,12 @@ and lexpr_node =
 
 type 'ctype term = {
   term_node : 'ctype term_node;
+  term_loc : Loc.t;
   term_type : 'ctype
 }
 
 and 'ctype term_node =
-  | Tconstant of string
+  | Tconstant of constant
   | Tvar of Info.var_info
   | Tapp of Info.logic_info * 'ctype term list
   | Tunop of term_unop * 'ctype term

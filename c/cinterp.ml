@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.97 2004-10-05 09:01:42 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.98 2004-10-06 12:50:31 hubert Exp $ i*)
 
 
 open Format
@@ -63,7 +63,9 @@ let interp_pointer_rel = function
   | Neq -> "neq"
 
 let float_of_int t = 
-  { term_type = Cltyping.c_float; term_node = Tunop (Ufloat_of_int, t) }
+  { term_type = Cltyping.c_float; 
+    term_loc = Loc.dummy;
+    term_node = Tunop (Ufloat_of_int, t) }
 
 let interp_rel t1 t2 r = 
   match t1.term_type.ctype_node, t2.term_type.ctype_node with
@@ -108,13 +110,10 @@ let interp_var label v =
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
   match t.term_node with
-    | Tconstant c ->
-	begin
-	  try
-	    LConst(Prim_int(int_of_string c))
-	  with Failure "int_of_string" -> 
-	    LConst(Prim_float(float_of_string c))
-	end  
+    | Tconstant (IntConstant c) ->
+	LConst(Prim_int(Int64.to_int (Cconst.int t.term_loc c)))
+    | Tconstant (FloatConstant c) ->
+	LConst(Prim_float(float_of_string c))
     | Tvar { var_name = v ; var_is_assigned = true } -> 
 	interp_var label v
     | Tvar { var_name = v ; var_is_assigned = false } -> 
@@ -160,7 +159,8 @@ let rec interp_term label old_label t =
 	LVar "null"
     | Tresult -> 
 	LVar "result" 
-    | Tcast({ctype_node = CTpointer _}, {term_node = Tconstant "0"}) ->
+    | Tcast({ctype_node = CTpointer _}, 
+	    {term_node = Tconstant (IntConstant "0")}) ->
 	LVar "null"
     | Tcast (ty, t) -> 
 	begin match ty.ctype_node, t.term_type.ctype_node with
@@ -367,7 +367,7 @@ let build_minimal_app e args =
 let rec interp_expr e =
   match e.texpr_node with
     | TEconstant (IntConstant c) -> 
-	Cte(Prim_int(int_of_string c))
+	Cte (Prim_int (Int64.to_int (Cconst.int e.texpr_loc c)))
     | TEconstant (FloatConstant c) ->
 	Cte(Prim_float(float_of_string c))
     | TEvar(v) -> 
@@ -861,7 +861,9 @@ let interp_decl d acc =
 		  | CTfloat _ -> App(Var("any_real"),Var("void"))
 		  | CTfun _ -> assert false
 		  | CTarray _ | CTpointer _ | CTstruct _ -> 
-                      let t = { term_node = Tresult; term_type = ctype } in
+                      let t = { term_node = Tresult; 
+				term_loc = d.loc;
+				term_type = ctype } in
                       alloc_on_stack d.loc v t
 		  | _ -> assert false
 		end
@@ -923,24 +925,25 @@ let catch_return e = match !abrupt_return with
       let tmp = tmp_var () in
       Try (e, r, Some tmp, Var tmp)
 
-
-
-
 let unreachable_block = function
   | [] -> ()
   | s::_ -> warning s.st_loc "unreachable statement"
+
+(* Interpretation of switch *)
+
+module IntMap = Map.Make(struct type t = int64 let compare = compare end)
 
 let rec st_cases used_cases i =
   match i.st_node with 
     | TScase ( e ,i') ->
 	let n =  Cltyping.eval_const_expr e in
-	if List.mem n used_cases 
+	if IntMap.mem n used_cases 
 	then
 	  error i.st_loc ("duplicate case")
 	else
-	  let (used_cases' , l,i) = st_cases ( n::used_cases) i' in
-	  (used_cases', n::l,i)
-    | i' -> (used_cases , [] , i)
+	  let (used_cases' , l,i) = st_cases (IntMap.add n e used_cases) i' in
+	  (used_cases', (IntMap.add n e l),i)
+    | i' -> (used_cases , IntMap.empty , i)
 
 let rec st_instr l =
   match l with
@@ -967,23 +970,25 @@ let rec st_case_list used_cases l =
 		  | _ ->		 
 		      let (l,instr) = st_instr l in
 		      let(used_cases'', l'') = (st_case_list used_cases l) in
-		      (used_cases'',([],s::instr)::l'')
+		      (used_cases'',(IntMap.empty,s::instr)::l'')
 	      end
 	  | TScase(e,i) -> 
 	      let n = Cltyping.eval_const_expr e in 
-	      if List.mem n used_cases 
+	      if IntMap.mem n used_cases 
 	      then
 		error i.st_loc ("duplicate case")
 	      else
 		let (used_cases', l', i') = st_cases (used_cases) i in 
 		let (l,instr) = st_instr l in
-		let (used_cases'', l'') = st_case_list (n::used_cases') l in
-		(used_cases'',(n::l',i'::instr)::l'')
+		let (used_cases'', l'') = 
+		  st_case_list (IntMap.add n e used_cases') l in
+		(used_cases'',((IntMap.add n e l'),i'::instr)::l'')
 	  | _ ->  
 	      let (used_cases', l') = st_case_list used_cases l in
 	      match l' with
 		| [] -> 
-		    error i.st_loc ("unreachable statement at beginning of switch")
+		    error i.st_loc 
+		      ("unreachable statement at beginning of switch")
 		| (lc,i')::l -> (used_cases',(lc,i'@[i])::l)
 		
 
@@ -991,31 +996,34 @@ let rec st_case_list used_cases l =
 
 let st_switch i =
   match i.st_node with 
-    | TSblock (_,l) -> st_case_list [] l
-    | _ -> st_case_list [] [i]
+    | TSblock (_,l) -> st_case_list IntMap.empty l
+    | _ -> st_case_list IntMap.empty [i]
 
 let make_switch_condition tmp l = 
-  match l with
-    | [] -> assert false
-    | n::l' ->
-	let a = List.fold_left 
-	  (fun test n -> Or (App(App (Var "eq_int",Var tmp), Cte (Prim_int n)), test)) 
-	  (App(App (Var "eq_int",Var tmp), Cte (Prim_int n)))
-	  l'  
-	in
-	(a,l)
-
+  if IntMap.is_empty l 
+  then assert false
+  else
+    let a = 
+      IntMap.fold 
+	(fun x n test -> 
+	   make_or_expr (App(App (Var "eq_int",Var tmp), (interp_expr n))) test) 
+	l
+	(Cte (Prim_bool false))
+    in
+    (a,l)
+    
 let make_switch_condition_default tmp l used_cases= 
-  let fl = List.filter 
-    (fun x -> not (List.mem x l)) used_cases in
-  let cond = 
-    match fl with
-      | [] -> Cte (Prim_bool true)
-      | n::l ->
-	  List.fold_left 
-	    (fun test n -> And (App(App (Var "neq_int",Var tmp), Cte (Prim_int n)), test)) 
-	    (App(App (Var "neq_int",Var tmp), Cte (Prim_int n)))
-	    l
+  let fl = IntMap.fold
+    (fun x e m -> if IntMap.mem x l
+     then m
+     else IntMap.add x e m) used_cases IntMap.empty in
+  let cond =
+    IntMap.fold 
+      (fun x e test -> 
+	 make_and_expr (App(App (Var "neq_int",Var tmp),(interp_expr e))) test)
+      fl
+      (Cte (Prim_bool true))
+      (*App(App (Var "neq_int",Var tmp), (interp_expr e))*)
   in
   cond,fl
 
@@ -1102,7 +1110,8 @@ let rec interp_statement ab may_break stat = match stat.st_node with
       let switch_may_break = ref false in
       let res = 
 	Output.Let(tmp, interp_expr e,
-		   interp_switch tmp ab switch_may_break l [] used_cases false)
+		   interp_switch tmp ab switch_may_break l 
+		     IntMap.empty used_cases false)
       in
       if !switch_may_break then
 	Try(res,"Break", None,Void)
@@ -1153,37 +1162,49 @@ and interp_block ab may_break (decls,stats) =
 
 and interp_switch tmp ab may_break l c used_cases post_default =
   match l with
-    | ([], i):: l ->
-	let (a,lc) = make_switch_condition_default tmp c used_cases in
-	(* [bl] is actually unreachable *)
-	let (linstr,final) = interp_case ab may_break i in
-	if final 
+    | (lc, i):: l ->
+	if IntMap.is_empty lc
 	then
-	  Output.If(a,
-		    Block linstr
-		      ,
-		      interp_switch tmp ab may_break l lc used_cases false)
-	else
-	  Block ((Output.If (a, Block linstr, Void)) ::
-		 [interp_switch tmp ab may_break l lc used_cases true])	
-	    
-    | (lc, i):: l ->  
-	let (a,lc) = 
-	  if post_default
+	  let (a,lc) = make_switch_condition_default tmp c used_cases in
+	  (* [bl] is actually unreachable *)
+	  let (linstr,final) = interp_case ab may_break i in
+	  if final 
 	  then
-	    make_switch_condition_default tmp lc c
+	    Output.If(a,
+		      Block linstr
+			,
+			interp_switch tmp ab may_break l lc used_cases false)
 	  else
-	    make_switch_condition tmp (c@lc) in
-	let (linstr,final) = interp_case ab may_break i in
-	if final
-	then
-	  Output.If(a,
-		    Block linstr,
-		    interp_switch tmp ab may_break l [] used_cases false)
-	else
-	  Block 
-	    ([Output.If(a, Block linstr, Void);
-	      interp_switch tmp ab may_break l lc  used_cases post_default])
+	    Block ((Output.If(a,
+			      Block linstr
+				,
+				Void))::[interp_switch tmp ab may_break l lc 
+					   used_cases true])	
+	else  
+	  let (a,lc) = 
+	    if post_default
+	    then
+	      make_switch_condition_default tmp lc c
+	    else
+	      make_switch_condition tmp 
+		(IntMap.fold 
+		   ( fun x e m ->
+		       IntMap.add x e m)
+		   c
+		   lc) 
+	  in
+	  let (linstr,final) = interp_case ab may_break i in
+	  if final
+	  then
+	    Output.If(a,
+		      Block linstr,
+		      interp_switch tmp ab may_break l 
+			IntMap.empty used_cases false)
+	  else
+	    Block ([Output.If(a,
+			      Block linstr,
+			      Void);interp_switch tmp ab may_break 
+		      l lc  used_cases post_default])
     | [] -> Void
 
 and interp_case ab may_break i =
@@ -1197,7 +1218,9 @@ and interp_case ab may_break i =
 	else
 	  begin
 	    unreachable_block i;
-	    (if a.st_node=TSbreak then [] else [interp_statement ab may_break a]),true
+	    (if a.st_node=TSbreak 
+	     then [] 
+	     else [interp_statement ab may_break a]),true
 	  end
 	  
 	  

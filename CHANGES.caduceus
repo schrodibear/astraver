@@ -1,6 +1,7 @@
 Note: These are the changes for Caduceus.
 
- o Support for arbitrary 'switch' statements (with or without 'break' inside
+ o support for enum constants, and strict constant evaluation
+ o support for arbitrary 'switch' statements (with or without 'break' inside
    cases). The only unsupported case is when a 'case' statement is
    inside an inner block. 
  o missing 'assigns' clause is not anymore a fatal error: if no

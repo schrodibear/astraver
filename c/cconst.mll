@@ -1,0 +1,166 @@
+(*
+ * The Caduceus certification tool
+ * Copyright (C) 2003 Jean-Christophe Filliâtre - Claude Marché
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
+
+(*i $Id: cconst.mll,v 1.1 2004-10-06 12:50:31 hubert Exp $ i*)
+
+(* evaluation of integer literals *)
+
+{
+
+  open Lexing
+  open Int64
+  open Creport
+
+  exception Constant_too_large
+
+  exception Invalid of string
+
+  let val_char = function
+    | '0' -> 0
+    | '1' -> 1
+    | '2' -> 2
+    | '3' -> 3
+    | '4' -> 4
+    | '5' -> 5
+    | '6' -> 6
+    | '7' -> 7
+    | '8' -> 8
+    | '9' -> 9
+    | 'a' | 'A' -> 10
+    | 'b' | 'B' -> 11
+    | 'c' | 'C' -> 12
+    | 'd' | 'D' -> 13
+    | 'e' | 'E' -> 14
+    | 'f' | 'F' -> 15
+    | _ -> assert false
+
+  let val_char c = Int64.of_int (val_char c)
+
+  let check_bounds loc accu suffix =
+    match suffix with
+      | "" ->
+	  if accu > 0x7FFFFFFFL then raise Constant_too_large;
+	  if accu > 0x7FFFL then 
+	    warning loc
+	      "this constant is valid only on >= 32-bit architectures";
+	  accu 
+      | "u" ->
+	  if accu > 0xFFFFFFFFL then raise Constant_too_large;
+	  if accu > 0xFFFFL then 
+	    warning loc
+	      "this constant is valid only on >= 32-bit architectures";
+	  accu 
+      | "l" ->
+	  if accu > 0x7FFFFFFFL then raise Constant_too_large else accu 
+      | "ul" | "lu" ->
+	  if accu > 0xFFFFFFFFL then raise Constant_too_large else accu 
+      | "ll" ->
+	  if accu > 0x7FFFFFFFFFFFFFFFL then raise Constant_too_large else accu
+      | "ull" | "llu" -> accu 
+      | _ ->
+	  raise (Invalid ("suffix '" ^ String.sub suffix 0 1 ^ 
+			  "' on integer constant")) 
+
+}
+
+let rD =	['0'-'9']
+let rL = ['a'-'z' 'A'-'Z' '_']
+let rH = ['a'-'f' 'A'-'F' '0'-'9']
+let rE = ['E''e']['+''-']? rD+
+let rFS	= ('f'|'F'|'l'|'L')
+let rIS = ('u'|'U'|'l'|'L')
+
+(*
+  | '0'['x''X'] rH+ rIS?    { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | '0' rD+ rIS?            { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
+*)
+
+rule eval_int loc = parse
+
+  | '0'['x''X']  { eval_hexa loc Int64.zero lexbuf }
+  | "'" { eval_char lexbuf }
+  | '0' { eval_octa loc Int64.zero lexbuf}
+  | ['1'-'9'] as d { eval_deci loc (val_char d) lexbuf}
+  | 'L' { unsupported "extended character" } 
+  | eof { raise (Invalid "empty literal") }
+  | _   { raise (Invalid ("Illegal character " ^ lexeme lexbuf)) }
+
+and eval_hexa loc accu = parse
+  | rH  { if accu >= 0x10000000L then raise Constant_too_large;
+	  let accu = add (mul 16L accu) (val_char (lexeme_char lexbuf 0)) in 
+	  eval_hexa loc accu lexbuf }
+  | eof { check_bounds loc accu "" }
+  | rIS+ { check_bounds loc accu (lexeme lexbuf) }
+  | _ { raise (Invalid ("digit '" ^ (lexeme lexbuf) ^ 
+			"' in hexadecimal constant")) }
+
+and eval_deci loc accu = parse
+  | rD as c 
+      { if accu >= 0x10000000L then raise Constant_too_large;
+	let accu = add (mul 10L accu) (val_char c) in 
+	eval_deci loc accu lexbuf }
+  | eof 
+      { check_bounds loc accu "" }
+  | rIS+ 
+      { check_bounds loc accu (lexeme lexbuf) }
+  | _ 
+      { raise (Invalid ("digit '" ^ (lexeme lexbuf) ^ 
+			"' in decimal constant")) }
+
+and eval_octa loc accu = parse
+  | ['0'-'7']  { if accu >= 0x10000000L
+	  then raise Constant_too_large
+	  else
+	    let accu = add (mul 8L accu) (val_char (lexeme_char lexbuf 0)) in 
+	    eval_octa loc  accu lexbuf }
+  | eof { check_bounds loc accu "" }
+  | rIS+ { check_bounds loc accu (lexeme lexbuf) }
+  | _ { raise (Invalid ("digit '" ^ (lexeme lexbuf) ^ 
+			"' in octal constant")) }
+
+and eval_char = parse
+  | "\\n'" { Int64.of_int (Char.code '\n') }
+  | "\\t'" { Int64.of_int (Char.code '\t') }
+  | "\\v'" { Int64.of_int 11 }
+  | "\\a'" { Int64.of_int 7 }
+  | "\\b'" { Int64.of_int (Char.code '\b') }
+  | "\\r'" { Int64.of_int (Char.code '\r') }
+  | "\\f'" { Int64.of_int 12 }
+  | "\\\\'" { Int64.of_int (Char.code '\\') }
+  | "\\?'" { Int64.of_int (Char.code '?') }
+  | "\\''" { Int64.of_int (Char.code '\'') }
+  | "\\\"'" { Int64.of_int (Char.code '"') }
+  | "\\" (['0'-'7'] ['0'-'7']? ['0'-'7']? as s) "'" 
+      { Int64.of_int (int_of_string ("0o" ^ s)) }
+  | "\\" (['0'-'9'] ['0'-'9']? ['0'-'9']? as s) "'" 
+      { raise (Invalid ("digits '" ^ s ^ "' in octal constant")) }
+  | "\\x" (rH rH? as s) "'" { Int64.of_int (int_of_string ("0x" ^ s)) }
+  | (_ as c) "'" { Int64.of_int (Char.code c) }
+
+
+{
+
+  let int loc s =
+    try
+      let lb = Lexing.from_string s in
+      eval_int loc lb
+    with
+      | Constant_too_large -> error loc "constant too large"
+      | Invalid msg -> error loc ("invalid constant: " ^ msg)
+
+}

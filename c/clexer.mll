@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clexer.mll,v 1.17 2004-09-23 08:40:27 filliatr Exp $ i*)
+(*i $Id: clexer.mll,v 1.18 2004-10-06 12:50:31 hubert Exp $ i*)
 
 (* from http://www.lysator.liu.se/c/ANSI-C-grammar-l.html *)
 
@@ -24,6 +24,7 @@
   open Cparser
   open Lexing
   open Cerror
+  open Clogic
 
   let loc lexbuf = (lexeme_start lexbuf, lexeme_end lexbuf)
 
@@ -116,7 +117,7 @@ rule token = parse
   | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
   | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | rD+ rE rFS?             { CONSTANT (FloatConstant (lexeme lexbuf)) }
   | rD* "." rD+ (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
   | rD+ "." rD* (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.56 2004-10-04 15:30:58 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.57 2004-10-06 12:50:31 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -43,7 +43,7 @@ let c_addr = noattr (CTvar "addr")
 
 let is_null t = match t.term_node with
   | Tnull -> true
-  | Tconstant s -> (try int_of_string s = 0 with _ -> false)
+  | Tconstant (IntConstant s) -> (try int_of_string s = 0 with _ -> false)
   | _ -> false
 
 let compatible t1 t2 = 
@@ -89,15 +89,14 @@ let max_type t1 t2 = match t1.ctype_node, t2.ctype_node with
 open Info
 
 let rec type_term env t =
-  let t, ty = type_term_node t.lexpr_loc env t.lexpr_node in
-  { term_node = t; term_type = ty }
+  let t', ty = type_term_node t.lexpr_loc env t.lexpr_node in
+  { term_node = t'; term_loc = t.lexpr_loc; term_type = ty }
 
 and type_term_node loc env = function
-  | PLconstant c -> 
-      (try 
-	 let _ = int_of_string c in Tconstant c, c_int
-       with _ -> 
-	 Tconstant c, c_float)
+  | PLconstant (IntConstant _ as c) -> 
+      Tconstant c, c_int
+  | PLconstant (FloatConstant _ as c) ->
+      Tconstant c, c_float
   | PLvar x ->
       let (ty,info) = 
 	try Env.find x.var_name env with Not_found -> 
@@ -150,7 +149,9 @@ and type_term_node loc env = function
 	| (CTenum _ | CTint _ | CTfloat _), (CTenum _ | CTint _ | CTfloat _) ->
 	    Tbinop (t1, Bsub, t2), max_type ty1 ty2
 	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
-	    let mt2 = { term_node = Tunop (Uminus, t2); term_type = ty2 } in
+	    let mt2 = { term_node = Tunop (Uminus, t2); 
+			term_loc = t2.term_loc;
+			term_type = ty2 } in
 	    Tbinop (t1, Badd, mt2), ty1
 	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
 	    Tbinop (t1, Bsub, t2), ty1 (* TODO check types *)
@@ -172,7 +173,9 @@ and type_term_node loc env = function
 	    Tarrow (e, x)
 	| Tarrget (e1, e2) -> 
 	    let a = 
-	      { term_node = Tbinop (e1, Badd, e2); term_type = e1.term_type }
+	      { term_node = Tbinop (e1, Badd, e2); 
+		term_loc = t.term_loc;
+		term_type = e1.term_type }
 	    in
 	    Tarrow (a, x)
 	| _ -> 
@@ -294,7 +297,12 @@ let add_quantifiers q env =
     (fun env (ty, x) -> Env.add x ty (Info.default_var_info x) env)
     env q
 
-let zero = { term_node = Tconstant "0"; term_type = c_int }
+let int_constant n = 
+  { term_node = Tconstant (IntConstant n); 
+    term_loc = Loc.dummy;
+    term_type = c_int }
+
+let zero = int_constant "0"
 
 (* Typing predicates *)
 
@@ -424,23 +432,29 @@ let type_spec result env s =
 
 (* Automatic invariants expressing validity of local/global variables *)
 
-let int_constant n = { term_node = Tconstant n; term_type = c_int }
-
 let rec eval_const_expr e = match e.texpr_node with
-  | TEconstant (IntConstant c) -> int_of_string c
+  | TEconstant (IntConstant c) -> Cconst.int e.texpr_loc c
   | TEunary (Uplus, t) -> eval_const_expr t
-  | TEunary (Cast.Uminus, t) -> -(eval_const_expr t)
-  | TEbinary (t1, Cast.Badd_int, t2) -> eval_const_expr t1 + eval_const_expr t2
+  | TEunary (Cast.Uminus, t) -> Int64.neg (eval_const_expr t)
+  | TEbinary (t1, Cast.Badd_int, t2) -> 
+      Int64.add (eval_const_expr t1)  (eval_const_expr t2)
   | TEcast (_, e) -> eval_const_expr e
+  | TEvar v ->
+      if e.texpr_type.ctype_const 
+      then v.enum_constant_value
+      else error e.texpr_loc "not a const variable"
   | _ -> error e.texpr_loc "not a constant expression"
 
 
 let eval_array_size e = 
-  { term_node = Tconstant (string_of_int (eval_const_expr e)); term_type = c_int }
+  { term_node = Tconstant (IntConstant (Int64.to_string (eval_const_expr e))); 
+    term_loc = e.texpr_loc;
+    term_type = c_int }
 
 let tpred t = match t.term_node with
-  | Tconstant c -> 
-      { t with term_node = Tconstant (string_of_int (int_of_string c - 1)) }
+  | Tconstant (IntConstant c) -> 
+      let c = string_of_int (int_of_string c - 1) in
+      { t with term_node = Tconstant (IntConstant c) }
   | _ ->
       { t with term_node = Tbinop (t, Bsub, int_constant "1") }
 
@@ -467,7 +481,9 @@ let valid_for_type ?(fresh=false) loc v t =
 	  List.fold_right 
 	    (fun (tyf, f, _) acc -> 
 	       let tf = 
-		 { term_node = Tdot (t, find_field n f); term_type = tyf } 
+		 { term_node = Tdot (t, find_field n f); 
+		   term_loc = loc;
+		   term_type = tyf } 
 	       in
 	       make_and acc (valid_for tf))
 	    fl 
@@ -494,9 +510,13 @@ let valid_for_type ?(fresh=false) loc v t =
 	begin match ty.ctype_node with
 	  | CTstruct (n,_) ->
 	      let i = default_var_info (fresh_index ()) in
-	      let vari = { term_node = Tvar i; term_type = c_int } in
+	      let vari = { term_node = Tvar i; 
+			   term_loc = loc;
+			   term_type = c_int } in
 	      let ti = 
-		{ term_node = Tbinop (t, Badd, vari); term_type = t.term_type }
+		{ term_node = Tbinop (t, Badd, vari); 
+		  term_loc = loc;
+		  term_type = t.term_type }
 	      in
 	      let vti = valid_fields false n ti in
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
@@ -505,8 +525,12 @@ let valid_for_type ?(fresh=false) loc v t =
 		(make_forall [c_int, i.var_name] (make_implies ineq vti))
 	  | _ ->
 	      let i = default_var_info (fresh_index ()) in
-	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let ti = { term_node = Tarrget (t, vari); term_type = ty } in
+	      let vari = { term_node = Tvar i; 
+			   term_loc = loc;
+			   term_type = c_int } in
+	      let ti = { term_node = Tarrget (t, vari); 
+			 term_loc = loc;
+			 term_type = ty } in
 	      let vti = valid_for ti in
 	      let ineq = Pand (Prel (int_constant "0", Le, vari),
 			       Prel (vari, Lt, ts)) in
@@ -521,7 +545,7 @@ let valid_for_type ?(fresh=false) loc v t =
 open Format
 
 let rec print_term_node fmt = function
-  | Tconstant c ->
+  | Tconstant (IntConstant c | FloatConstant c) ->
       fprintf fmt "%s" c
   | Tvar v -> 
       fprintf fmt "%s" v.var_name
@@ -560,12 +584,16 @@ let rec print_predicate fmt = function
 
 let print_allocs =
   let x = default_var_info "x" in
-  let varx = { term_node = Tvar x; term_type = c_pointer c_void } in
+  let varx = { term_node = Tvar x; 
+	       term_loc = Loc.dummy;
+	       term_type = c_pointer c_void } in
   fun fmt p -> fprintf fmt "fun x -> %a" print_predicate (p varx)
 
 let separation loc v ?(allocs=(fun x -> Ptrue)) t =
   let not_alias x y = 
-    let ba t = { term_node = Tbase_addr t; term_type = c_addr } in 
+    let ba t = { term_node = Tbase_addr t; 
+		 term_loc = loc;
+		 term_type = c_addr } in 
     Prel (ba x, Neq, ba y)
   in
 (*
@@ -582,7 +610,9 @@ that a pointer is different from all allocated pointers in [t]
 	  List.fold_right 
 	  (fun (tyf, f, _) (allocs,form) -> 
 	     let tf = 
-	       { term_node = Tdot (t, find_field n f); term_type = tyf }
+	       { term_node = Tdot (t, find_field n f); 
+		 term_loc = t.term_loc;
+		 term_type = tyf }
 	     in
 	     let allocs',form' = local_alloc_for allocs tf in
 	     allocs', make_and form form')
@@ -621,13 +651,19 @@ that a pointer is different from all allocated pointers in [t]
 	  | CTstruct (n, _) ->
 	      (* Format.eprintf "  cas d'un tableau de struct@."; *)
 	      let i = default_var_info (fresh_index ()) in
-	      let vari = { term_node = Tvar i; term_type = c_int } in
+	      let vari = { term_node = Tvar i; 
+			   term_loc = t.term_loc;
+			   term_type = c_int } in
 	      let ti = 
-		{ term_node = Tbinop (t, Badd, vari); term_type = t.term_type }
+		{ term_node = Tbinop (t, Badd, vari); 
+		  term_loc = t.term_loc;
+		  term_type = t.term_type }
 	      in
 	      let allocs_i,_ = local_alloc_fields (fun x -> Ptrue) n ti in
 	      let j = default_var_info (fresh_index ()) in
-	      let varj ={ term_node = Tvar j; term_type = c_int } in
+	      let varj ={ term_node = Tvar j; 
+			  term_loc = t.term_loc;
+			  term_type = c_int } in
 	      let allocs' x =
 		(* allocs x and x<>t and 
 		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
@@ -637,7 +673,9 @@ that a pointer is different from all allocated pointers in [t]
 		     (make_implies (Prel (vari, Neq, varj)) (allocs_i x)))
 	      in
 	      let tj = 
-		{ term_node = Tbinop (t, Badd, varj); term_type = t.term_type }
+		{ term_node = Tbinop (t, Badd, varj); 
+		  term_loc = t.term_loc;
+		  term_type = t.term_type }
 	      in
 	      let _,form_j = local_alloc_fields allocs' n tj in
 	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
@@ -650,11 +688,17 @@ that a pointer is different from all allocated pointers in [t]
 	  | CTarray _ ->
 	      (* Format.eprintf "  cas d'un tableau d'autre nature@."; *)
 	      let i = default_var_info (fresh_index ()) in
-	      let vari = { term_node = Tvar i; term_type = c_int } in
-	      let ti = { term_node = Tarrget (t, vari); term_type = ty } in
+	      let vari = { term_node = Tvar i; 
+			   term_loc = t.term_loc;
+			   term_type = c_int } in
+	      let ti = { term_node = Tarrget (t, vari); 
+			 term_loc = t.term_loc;
+			 term_type = ty } in
 	      let allocs_i,_ = local_alloc_for (fun x -> Ptrue) ti in
 	      let j = default_var_info (fresh_index ()) in
-	      let varj ={ term_node = Tvar j; term_type = c_int } in
+	      let varj ={ term_node = Tvar j; 
+			  term_loc = t.term_loc;
+			  term_type = c_int } in
 	      let allocs' x =
 		(* allocs x and x<> t and
 		   forall i 0<=i<ts -> i<>j -> allocs_i x *)
@@ -663,7 +707,9 @@ that a pointer is different from all allocated pointers in [t]
 		  (forall_index i vari
 		     (make_implies (Prel (vari, Neq, varj)) (allocs_i x)))
 	      in
-	      let tj = { term_node = Tarrget (t, varj); term_type = ty } in
+	      let tj = { term_node = Tarrget (t, varj); 
+			 term_loc = t.term_loc;
+			 term_type = ty } in
 	      let _,form_j = local_alloc_for allocs' tj in
 	      (* x -> allocs x and x<>t and forall i 0<=i<ts -> allocs_i x *)
 	      (fun x -> 

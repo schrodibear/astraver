@@ -103,4 +103,27 @@ int f5 (int x){
   return y;
 }
 
+/*@ ensures x==2 => \result==1 */
+int f6 (int x){
+  int y = 0;
+
+  switch (x) { 
+  case 1+1 :
+    y = 1;
+  }
+  return y;
+}
+
+enum {A=5};
+
+/*@ ensures x==A => \result==1 */
+int f7 (int x){
+  int y = 0;
+
+  switch (x) { 
+  case A :
+    y = 1;
+  }
+  return y;
+}
 

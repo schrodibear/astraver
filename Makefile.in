@@ -63,7 +63,7 @@ PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/compat.ml src/parser.ml src/linenum.ml \
 	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
-	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml \
+	    c/cllexer.ml c/clparser.ml c/clparser.mli c/cpp.ml c/cconst.ml \
 	    intf/hilight.ml tools/why2html.ml src/float_lexer.ml \
 	    tools/cvcl_split.ml tools/simplify_split.ml
 
@@ -114,8 +114,8 @@ bin/top: $(CMO)
 # caduceus
 CCMO = src/lib.cmo src/compat.cmo src/linenum.cmo src/loc.cmo src/pp.cmo \
 	c/cversion.cmo c/coptions.cmo \
-	c/ctypes.cmo c/info.cmo \
-	c/creport.cmo c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
+	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
+	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
 	c/clparser.cmo c/cllexer.cmo \
 	c/cparser.cmo c/clexer.cmo \
 	c/output.cmo \

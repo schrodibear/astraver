@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.45 2004-10-04 15:30:58 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.46 2004-10-06 12:50:31 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -85,8 +85,6 @@ type binary_operator =
   | Bsub_pointer     (* pointer - pointer *)
   | Blt_pointer | Bgt_pointer | Ble_pointer | Bge_pointer 
   | Beq_pointer | Bneq_pointer
-
-type constant = IntConstant of string | FloatConstant of string
 
 type cexpr = cexpr_node located
 

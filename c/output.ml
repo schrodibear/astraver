@@ -335,6 +335,23 @@ type expr =
   | BlackBox of why_type
 ;;
 
+let make_or_expr a1 a2 =
+  match (a1,a2) with
+    | (Cte (Prim_bool true),_) -> Cte (Prim_bool true)
+    | (_,Cte (Prim_bool true)) -> Cte (Prim_bool true)
+    | (Cte (Prim_bool false),_) -> a2
+    | (_,Cte (Prim_bool false)) -> a1
+    | (_,_) -> Or(a1,a2)
+
+let make_and_expr a1 a2 =
+  match (a1,a2) with
+    | (Cte (Prim_bool true),_) -> a2
+    | (_,Cte (Prim_bool true)) -> a1
+    | (Cte (Prim_bool false),_) -> Cte (Prim_bool false)
+    | (_,Cte (Prim_bool false)) ->Cte (Prim_bool false)
+    | (_,_) -> And(a1,a2)
+
+
 let rec make_app_rec accu l =
   match l with
     | [] -> accu

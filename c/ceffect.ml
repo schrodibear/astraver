@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.52 2004-10-04 15:30:58 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.53 2004-10-06 12:50:31 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -468,7 +468,9 @@ let decl d =
       when ty.ctype_storage <> Extern ->
 	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
-	let t = { term_node = Tvar v; term_type = ty } in
+	let t = { term_node = Tvar v; 
+		  term_loc = Loc.dummy;
+		  term_type = ty } in
 	add_weak_invariant id (invariant_for_global d.loc v t)
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Taxiom(id,p) -> () (* TODO *)

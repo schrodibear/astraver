@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.26 2004-07-21 08:07:08 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.27 2004-10-06 12:50:31 hubert Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -23,6 +23,7 @@
   open Clparser
   open Lexing
   open Cerror
+  open Clogic
 
   let loc lexbuf = (lexeme_start lexbuf, lexeme_end lexbuf)
 
@@ -87,14 +88,14 @@ rule token = parse
 
   | rL (rL | rD)*       { let s = lexeme lexbuf in IDENTIFIER s }
 
-  | '0'['x''X'] rH+ rIS?    { CONSTANT (lexeme lexbuf)}
-  | '0' rD+ rIS?            { CONSTANT (lexeme lexbuf) }
-  | rD+ rIS?                { CONSTANT (lexeme lexbuf) }
-  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (lexeme lexbuf) }
+  | '0'['x''X'] rH+ rIS?    { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | '0' rD+ rIS?            { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | rD+ rIS?                { CONSTANT (IntConstant (lexeme lexbuf)) }
+  | 'L'? "'" [^ '\n' '\'']+ "'"     { CONSTANT (IntConstant (lexeme lexbuf)) }
 
-  | rD+ rE rFS?             { CONSTANT (lexeme lexbuf) }
-  | rD* "." rD+ (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
-  | rD+ "." rD* (rE)? rFS?  { CONSTANT (lexeme lexbuf) }
+  | rD+ rE rFS?             { CONSTANT (FloatConstant (lexeme lexbuf)) }
+  | rD* "." rD+ (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
+  | rD+ "." rD* (rE)? rFS?  { CONSTANT (FloatConstant (lexeme lexbuf)) }
   | 'L'? '"' [^ '"']* '"'   { STRING_LITERAL (lexeme lexbuf) }
 
   | "@"                     { AT }

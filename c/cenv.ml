@@ -1,5 +1,6 @@
 
 open Format
+open Clogic
 open Cast
 open Creport
 open Info

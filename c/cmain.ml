@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.41 2004-09-30 13:46:37 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.42 2004-10-06 12:50:31 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -171,7 +171,13 @@ let rec explain_exception fmt = function
   | Error (_, e) ->
       report fmt e
   | e ->
-      fprintf fmt "Anomaly: %s" (Printexc.to_string e)
+      fprintf fmt "Anomaly: %s@." (Printexc.to_string e);
+      raise e
+
+
+(* for debugging
+let () = main ()
+*)
 
 let () =
   try
@@ -179,3 +185,4 @@ let () =
   with e ->
     eprintf "%a@." explain_exception e;
     exit 1
+

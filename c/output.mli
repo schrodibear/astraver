@@ -86,6 +86,10 @@ type expr =
   | BlackBox of why_type
 ;;
 
+val make_or_expr : expr -> expr -> expr
+val make_and_expr : expr -> expr -> expr
+
+
 (*
 
   [make_app id [e1;..;en])] builds

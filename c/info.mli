@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.mli,v 1.9 2004-05-26 06:35:26 filliatr Exp $ i*)
+(*i $Id: info.mli,v 1.10 2004-10-06 12:50:31 hubert Exp $ i*)
 
 module HeapVarSet : Set.S with type elt = string
 
@@ -23,6 +23,7 @@ type var_info =
       var_name : string;
       mutable var_is_assigned : bool;
       mutable var_is_static : bool;
+      mutable enum_constant_value : int64;
       mutable function_reads : HeapVarSet.t;
       mutable function_writes : HeapVarSet.t;
       mutable has_assigns : bool;
