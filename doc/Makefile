@@ -17,6 +17,9 @@ manual.dvi: manual.tex
 	makeindex manual
 	latex manual
 
+manual.html: manual.tex
+	hevea manual.tex
+
 %.dvi: %.tex
 	latex $< && latex $<
 

@@ -135,6 +135,9 @@ demons: $(STATICBINARY) doc/manual.ps
 doc/manual.ps: doc/manual.tex
 	make -C doc manual.ps
 
+doc/manual.html: doc/manual.tex
+	make -C doc manual.html
+
 # special rules
 ###############
 
@@ -201,6 +204,7 @@ NAME=why-$(VERSION)
 EXPORT=export/$(NAME)
 
 FTP = $(HOME)/ftp/why
+WWW = $(HOME)/WWW/why
 
 FILES =src/*.ml* Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES doc/manual.ps doc/why.1 \
@@ -208,13 +212,30 @@ FILES =src/*.ml* Makefile.in configure.in configure .depend \
 	examples/*/.depend examples/*/Makefile \
 	lib/coq/*.v lib/pvs/why.*
 
-distrib export: clean source
+distrib export: clean source export-doc linux
 
-source: doc/manual.ps
+source:  doc/manual.ps
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
-	cp doc/manual.ps export/$(NAME).tar.gz $(FTP)
+	cp CHANGES export/$(NAME).tar.gz $(FTP)
+
+export-doc: doc/manual.ps doc/manual.html
+	cp $^ $(WWW)
+
+BINARY = $(NAME)-$(OSTYPE)
+
+linux: clean binary
+
+BINARYFILES = README INSTALL COPYING GPL $(STATICBINARY) $(VO) \
+	doc/why.1 doc/manual.ps \
+	lib/coq/*.v lib/pvs/why.*
+
+binary: $(BINARYFILES)
+	mkdir -p export/$(BINARY)
+	cp --parents $(BINARYFILES) export/$(BINARY)
+	(cd export; tar czf $(BINARY).tar.gz $(BINARY))
+	cp export/$(BINARY).tar.gz $(FTP)
 
 # myself
 ########
