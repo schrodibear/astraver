@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.5 2003-12-24 13:51:44 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.6 2003-12-24 14:36:13 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -85,6 +85,21 @@ let c_int = noattr (CTint (Signed, Int))
 let c_char = noattr (CTint (Unsigned, Char))
 let c_float = noattr (CTfloat Float)
 let c_string = noattr (CTpointer c_char)
+
+let int_op = function
+  | Badd -> Badd_int
+  | Bsub -> Bsub_int
+  | Bmul -> Bmul_int
+  | Bdiv -> Bdiv_int
+  | Bmod -> Bmod_int
+  | _ -> assert false
+
+let float_op = function
+  | Badd -> Badd_float
+  | Bsub -> Bsub_float
+  | Bmul -> Bmul_float
+  | Bdiv -> Bdiv_float
+  | _ -> assert false
 
 (* Type equality (i.e. structural equality, but ignoring attributes) *)
 (* TODO: pointers = arrays *)
@@ -257,15 +272,76 @@ and type_expr_node loc env = function
       TEunary (Unot, e), c_int
   | CEunary ((Uplus | Uminus as op), e) ->
       let e = type_expr env e in
-      assert false (*TODO*)
-  | CEunary ((Ustar | Uamp | Utilde as op), e) ->
-      let e = type_expr env e in
-      assert false (*TODO*)
+      begin match e.texpr_type.ctype_node with
+	| CTint _ | CTfloat _ -> TEunary (op, e), e.texpr_type
+	| _ -> error loc "wrong type argument to unary plus/minus"
+      end
+  | CEunary (Uamp, e) ->
+      (* TODO: cas où e est une fonction *)
+      (* TODO: exclure champ de bit et register *)
+      let e = type_lvalue env e in
+      TEunary (Uamp, e), noattr (CTpointer e.texpr_type)
+  | CEunary (Ustar, e) ->
+      let e = type_lvalue env e in
+      begin match e.texpr_type.ctype_node with
+	| CTpointer ty | CTarray (ty, _) -> TEunary (Ustar, e), ty
+	| _ -> error loc "invalid type argument of `unary *'"
+      end
+  | CEunary (Utilde, e) ->
+      let e = type_int_expr env e in
+      TEunary (Utilde, e), e.texpr_type
   (* these other unops cannot be built by the parser *)
-  | CEunary ((Uint_of_float|Ufloat_of_int), _) ->
+  | CEunary ((Uint_of_float | Ufloat_of_int), _) ->
       assert false
-  | CEbinary (e1, (Badd | Bsub | Bmul | Bdiv | Bmod 
-		  | Blt | Bgt | Ble | Bge | Beq | Bneq 
+  | CEbinary (e1, (Bmul | Bdiv as op), e2) ->
+      let e1 = type_arith_expr env e1 in
+      let ty1 = e1.texpr_type in
+      let e2 = type_arith_expr env e2 in
+      let ty2 = e2.texpr_type in
+      begin match ty1.ctype_node, ty2.ctype_node with
+	| CTint _, CTint _ -> TEbinary (e1, int_op op, e2), ty1
+	| CTfloat _, CTint _ -> TEbinary (e1, float_op op, coerce ty1 e2), ty1
+	| CTint _, CTfloat _ -> TEbinary (coerce ty2 e1, float_op op, e2), ty2
+	| CTfloat _, CTfloat _ -> TEbinary (e1, float_op op, e2), ty1
+	| _ -> assert false
+      end
+  | CEbinary (e1, Bmod, e2) ->
+      let e1 = type_int_expr env e1 in
+      let e2 = type_int_expr env e2 in
+      TEbinary (e1, Bmod, e2), e1.texpr_type (* TODO: max ty1 ty2 ? *)
+  | CEbinary (e1, Badd, e2) ->
+      let e1 = type_expr env e1 in
+      let ty1 = e1.texpr_type in
+      let e2 = type_expr env e2 in
+      let ty2 = e2.texpr_type in
+      begin match ty1.ctype_node, ty2.ctype_node with
+	| CTint _, CTint _ -> TEbinary (e1, Badd_int, e2), ty1
+	| CTint _ , CTfloat _ -> TEbinary (coerce ty2 e1, Badd_float, e2), ty2
+	| CTfloat _ , CTint _ -> TEbinary (e1, Badd_float, coerce ty1 e2), ty1
+	| CTfloat _ , CTfloat _ -> TEbinary (e1, Badd_float, e2), ty2
+	| (CTpointer _ | CTarray _), CTint _ -> 
+	    TEbinary (e1, Badd_pointer_int, e2), ty1
+	| CTint _, (CTpointer _ | CTarray _) ->
+	    TEbinary (e1, Badd_int_pointer, e2), ty2
+	| _ -> error loc "invalid operands to binary +"
+      end
+  | CEbinary (e1, Bsub, e2) ->
+      let e1 = type_expr env e1 in
+      let ty1 = e1.texpr_type in
+      let e2 = type_expr env e2 in
+      let ty2 = e2.texpr_type in
+      begin match ty1.ctype_node, ty2.ctype_node with
+	| CTint _, CTint _ -> TEbinary (e1, Bsub_int, e2), ty1
+	| CTint _ , CTfloat _ -> TEbinary (coerce ty2 e1, Bsub_float, e2), ty2
+	| CTfloat _ , CTint _ -> TEbinary (e1, Bsub_float, coerce ty1 e2), ty1
+	| CTfloat _ , CTfloat _ -> TEbinary (e1, Bsub_float, e2), ty2
+	| (CTpointer _ | CTarray _), CTint _ -> 
+	    TEbinary (e1, Bsub_pointer_int, e2), ty1
+	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
+	    TEbinary (e1, Bsub_pointer, e2), ty2
+	| _ -> error loc "invalid operands to binary -"
+      end
+  | CEbinary (e1, ( Blt | Bgt | Ble | Bge | Beq | Bneq 
 		  | Bbw_and | Bbw_xor | Bbw_or | Band | Bor as op), e2) ->
       let e1 = type_expr env e1 in
       let e2 = type_expr env e2 in
@@ -306,7 +382,13 @@ and type_int_expr_option env eo = option_app (type_int_expr env) eo
 
 and type_int_expr env e = match type_expr env e with
   | { texpr_type = { ctype_node = CTint _ } } as te -> te
-  | _ -> error e.loc "expected int"
+  | _ -> error e.loc "invalid operand (expected integer)"
+
+(*s Typing of arithmetic expressions: integers or floats *)
+
+and type_arith_expr env e = match type_expr env e with
+  | { texpr_type = { ctype_node = CTint _ | CTfloat _ } } as te -> te
+  | _ -> error e.loc "invalid operand (expected integer or float)"
 
 (*s Typing of ``boolean'' expressions *)
 
@@ -424,7 +506,6 @@ and type_block env et (dl,sl) =
     | [] -> 
 	[], env
     | { node = Cdecl (ty, x, i) } as d :: dl ->
-	Printf.eprintf "typage %s\n" x; flush stderr;
 	(* TODO: ty = void interdit *)
 	let ty = type_type ty in
 	let i = type_initializer env ty i in

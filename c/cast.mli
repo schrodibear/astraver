@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.11 2003-12-24 13:51:44 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.12 2003-12-24 14:36:13 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -75,6 +75,10 @@ type binary_operator =
   (* these are introduced during typing *)
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int 
   | Badd_float | Bsub_float | Bmul_float | Bdiv_float 
+  | Badd_pointer_int (* pointer + int *) 
+  | Badd_int_pointer (* int + pointer *)
+  | Bsub_pointer_int (* pointer - int *)
+  | Bsub_pointer     (* pointer - pointer *)
 
 type shift = Left | Right
 
