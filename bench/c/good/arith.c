@@ -14,9 +14,12 @@ void test(int k)
   int l = 1;
   int m = 12;
   i = j + k;
-  l = l * j ;
-  j = j + l + 10 * k + i + m;
+  l *= j ;
+  j += l + 10 * k + i + m;
+
+  /* hack contournement de bug de ctyping */
+  j = j; l = l; 
 }
 
 /* axiom to help simplify make the proof */
-/* @ axiom dist1: \forall int x, int y, int z; x*(y+z) = x*y + x*z */
+/*@ axiom dist1: \forall int x, int y, int z; x*(y+z) == x*y + x*z */

@@ -10,7 +10,8 @@
 
 /*@ axiom sum1 : 
       \forall int[] t, int i; sum(t,i,i) == 0 */
-/*@ axiom sum2 : 
+/* makes simplify loop forever...
+  @ axiom sum2 : 
       \forall int[] t, int i, int j; sum(t,i,j+1) == sum(t,i,j) + t[j] */
 
 /*@ requires \valid_range(t,0,n) 
@@ -18,12 +19,15 @@
   @*/
 int test1(int t[],int n) {
   int i,s = 0;
+  /* hack contournement de bug de ctyping */
+  s = s; 
+
   /*@ invariant 0 <= i <= n && s == sum(t,0,i)
     @ variant n-i
     @*/
   for(i=0; i < n; i++) 
   {
-    s = s + t[i];
+    s += t[i];
   }
   return s;
 }
@@ -41,6 +45,6 @@ void test2(int t[],int n) {
     @*/
   for(i=0; i < n; i++) 
   {
-    t[i] = t[i] + 1;
+    t[i] += 1;
   }
 }

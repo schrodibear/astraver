@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.20 2004-03-02 15:49:06 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.21 2004-03-02 16:16:31 marche Exp $ i*)
 
 
 open Format
@@ -263,12 +263,20 @@ and interp_incr_expr op e =
 			  (make_app "upd_" 
 			     [Var var;Var "caduceus1";
 			      make_app (interp_incr_op op) 
-				[Var "caduceus2";one]])
+				[one;Var "caduceus2"]])
 			  (Var "caduceus2")))
 	    | Uprefix_dec | Uprefix_inc ->
-		(* let tmp = (acc intP v)+1 in
-		   upd intP v tmp; tmp *)
-		assert false (* TODO *)
+		(* let tmp1 = e' in
+		   let tmp2 = (acc var tmp1)+1 in
+		   upd var tmp1 tmp2; tmp2 *)
+		Let("caduceus1",e',
+		    Let("caduceus2",
+			make_app (interp_incr_op op)
+			  [make_app "acc_" [Var var;Var "caduceus1"];one],
+			append
+			  (make_app "upd_" 
+			     [Var var;Var "caduceus1";Var "caduceus2"])
+			  (Var "caduceus2")))
 	end		      
 
 and interp_lvalue e =
@@ -286,7 +294,7 @@ and interp_lvalue e =
 	HeapRef(f,interp_expr e1)
     | TEarrow(e1,f) ->
 	HeapRef(f,interp_expr { e with texpr_node = TEunary(Ustar,e1) })
-    | _ -> assert false (* wrong typing of lvalue *)
+    | _ -> assert false (* wrong typing of lvalue ??? *)
 	  
 
 
@@ -331,12 +339,17 @@ let rec interp_statement_expr e =
 	end 
     | TEincr(op,e) ->
 	begin
-	  match e.texpr_node with
-	    | TEvar v ->
+	  match interp_lvalue e with
+	    | LocalRef v ->
 		Assign(v.var_name,
-			App(App(Var(interp_incr_op op),Deref(v.var_name)),
-			    Cte(Prim_int 1)))
-	    | _ -> assert false (* TODO *)
+		       make_app (interp_incr_op op) [Deref(v.var_name); one])
+	    | HeapRef(var,e1) -> 
+		(* let tmp1 = e1 in
+		   upd var tmp1 (op tmp1 1) *)
+		Let("caduceus1",e1,
+		    make_app "upd_"
+		      [Var var; Var "caduceus1"; 
+		       make_app (interp_incr_op op) [Var "caduceus1"; one]])
 	end
     | TEsizeof _ -> assert false (* TODO *)
     | TEsizeof_expr _ -> assert false (* TODO *)
@@ -345,7 +358,24 @@ let rec interp_statement_expr e =
     | TEcall (_, _) -> assert false (* TODO *)
     | TEbinary (_, _, _) -> assert false (* TODO *)
     | TEunary (_, _) -> assert false (* TODO *)
-    | TEassign_op (l, op, e) -> assert false (* TODO *)
+    | TEassign_op (l, op, e) -> 
+	begin
+	  match interp_lvalue l with
+	    | LocalRef(v) ->
+		Assign(v.var_name,
+		       make_app (interp_bin_op op) 
+			 [Deref(v.var_name); interp_expr e])
+	    | HeapRef(var,e1) -> 
+		(* let tmp1 = e1 in
+		   let tmp2 = acc var e1
+		   upd var tmp1 (op tmp2 e) *)
+		Let("caduceus1",e1,
+		    Let("caduceus2",make_app "acc_" [Var var;Var "caduceus1"],
+			make_app "upd_"
+			  [Var var; Var "caduceus1"; 
+			   make_app (interp_bin_op op) 
+			     [Var "caduceus2"; interp_expr e]]))
+	end 
     | TEarrget (_, _) -> assert false (* TODO *)
     | TEarrow (_, _) -> assert false (* TODO *)
     | TEdot (_, _) -> assert false (* TODO *)

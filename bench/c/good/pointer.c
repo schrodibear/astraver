@@ -8,6 +8,13 @@ int f(int *x) {
   return (*x)++;
 } 
 
+/*@ requires \valid(x)
+  @ ensures *x == 1 && \result == 1 */
+int f2(int *x) {
+  *x = 0;
+  return ++(*x);
+} 
+
 int* r;
 
 
