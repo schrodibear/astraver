@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.33 2002-03-18 15:19:54 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.34 2002-03-18 16:20:29 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -167,9 +167,8 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
 let expected_type loc t et =
   if t <> et then Error.expected_type loc (fun fmt -> print_type_v fmt et)
 
-let check_for_alias loc id k = 
-  if Effect.occur id k.c_effect || occur_type_v id k.c_result_type then
-    Error.raise_with_loc (Some loc) (Error.Alias id)
+let check_for_alias loc id v = 
+  if occur_type_v id v then Error.raise_with_loc (Some loc) (Error.Alias id)
 
 let type_eq loc = function
   | PureType PTint -> Ident.t_eq_int
@@ -455,7 +454,7 @@ and typef_desc lab env loc = function
       let x,tx,kapp = decomp_fun_type f t_f in
       let tr = type_in_env env r in
       expected_type locr tr tx;
-      check_for_alias locr r kapp;
+      check_for_alias locr r (result_type t_f);
       let kapp = type_c_subst [x,r] kapp in
       let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let ef = Effect.union (effect t_f) eapp in

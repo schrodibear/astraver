@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.30 2002-03-18 15:19:54 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.31 2002-03-18 16:20:29 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -288,11 +288,9 @@ and wp_desc info d q =
 	   | _ ->
 	       let p'1,_ = wp p1 None in
 	       If (p'1, p'2, p'3), None)
-    (* sequence *)
     | Seq bl -> 
 	let bl',w = wp_block bl q in
 	Seq bl', w
-    (* function call: $\forall r. Q_f \Rightarrow q$ *)
     | App (_, _, None) ->
 	assert false
     | App (p1, Term p2, k) ->
