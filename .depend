@@ -1,7 +1,11 @@
+src/clexer.cmo: src/cparser.cmi 
+src/clexer.cmx: src/cparser.cmx 
 src/coq.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/options.cmi src/types.cmi src/util.cmi src/vcg.cmi src/coq.cmi 
 src/coq.cmx: src/ast.cmi src/ident.cmx src/logic.cmx src/misc.cmx \
     src/options.cmx src/types.cmi src/util.cmx src/vcg.cmx src/coq.cmi 
+src/cparser.cmo: src/cparser.cmi 
+src/cparser.cmx: src/cparser.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/ast.cmi src/effect.cmi src/error.cmi src/ident.cmi \

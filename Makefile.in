@@ -52,7 +52,8 @@ VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
      lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo
 
-GENERATED = src/version.ml src/parser.ml
+GENERATED = src/version.ml src/parser.ml \
+	    src/clexer.ml src/cparser.ml src/cparser.mli
 
 # main targets
 ##############
@@ -196,6 +197,9 @@ tags:
               "--regex=/exception[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/val[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
+
+otags:
+	otags src/*.mli src/*.ml
 
 # distrib
 #########
