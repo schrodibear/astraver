@@ -1,0 +1,113 @@
+#
+# sample Makefile for Objective Caml
+# Copyright (C) 2001 Jean-Christophe FILLIATRE
+# 
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Library General Public
+# License version 2, as published by the Free Software Foundation.
+# 
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# 
+# See the GNU Library General Public License version 2 for more details
+# (enclosed in the file LGPL).
+
+OCAMLC   = @OCAMLC@
+OCAMLOPT = @OCAMLOPT@
+OCAMLDEP = @OCAMLDEP@
+OCAMLLEX = @OCAMLLEX@
+OCAMLYACC= @OCAMLYACC@
+OCAMLLIB = @OCAMLLIB@
+OCAMLBEST= @OCAMLBEST@
+OCAMLVERSION = @OCAMLVERSION@
+
+INCLUDES = -I src
+BFLAGS   = $(INCLUDES) -I `camlp4 -where`
+OFLAGS   = $(INCLUDES) -I `camlp4 -where`
+
+CMO      = src/ident.cmo src/misc.cmo src/effect.cmo src/error.cmo  \
+           src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo
+CMX      = $(CMO:.cmo=.cmx)
+PROG     = bin/why
+
+all: $(PROG).byte
+
+$(PROG): $(CMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ gramlib.cmxa $^
+
+$(PROG).byte: $(CMO)
+	$(OCAMLC) $(BFLAGS) -o $@ gramlib.cma $^
+
+# special rules
+###############
+
+CAMLP4=camlp4o pa_extend.cmo
+
+src/parser.cmo: src/parser.ml4
+	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -impl" -impl $<
+src/parser.cmx: src/parser.ml4
+	$(OCAMLOPT) -c $(OFLAGS) -pp "$(CAMLP4) -impl" -impl $<
+
+# generic rules
+###############
+
+.SUFFIXES: .mli .ml .cmi .cmo .cmx .mll .mly
+
+.mli.cmi:
+	$(OCAMLC) -c $(BFLAGS) $<
+
+.ml.cmo:
+	$(OCAMLC) -c $(BFLAGS) $<
+
+.ml.o:
+	$(OCAMLOPT) -c $(OFLAGS) $<
+
+.ml.cmx:
+	$(OCAMLOPT) -c $(OFLAGS) $<
+
+.mll.ml:
+	$(OCAMLLEX) $<
+
+.mly.ml:
+	$(OCAMLYACC) -v $<
+
+.mly.mli:
+	$(OCAMLYACC) -v $<
+
+# Emacs tags
+############
+
+tags:
+	find . -name "*.ml*" | sort -r | xargs \
+	etags "--regex=/let[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/let[ \t]+rec[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/and[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/type[ \t]+\([^ \t]+\)/\1/" \
+              "--regex=/exception[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/val[ \t]+\([^ \t]+\)/\1/" \
+	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
+
+# myself
+
+Makefile: Makefile.in config.status
+	./config.status
+
+config.status: configure
+	./config.status --recheck
+
+configure: configure.in
+	autoconf 
+
+# backup, clean and depend :
+############################
+
+clean::
+	rm -f src/*.cm[iox] src/*.o src/*~
+
+.depend depend::
+	rm -f .depend
+	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend
+	$(CAMLP4) pr_depend.cmo -impl src/parser.ml4 $(INCLUDES) >> .depend
+
+include .depend

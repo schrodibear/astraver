@@ -1,0 +1,64 @@
+
+(* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
+
+(* $Id: types.mli,v 1.1 2001-08-15 21:08:54 filliatr Exp $ *)
+
+open Logic
+
+(*s Pre- and postconditions. *)
+
+type precondition = 
+  { p_assert : bool; 
+    p_name : Ident.name; 
+    p_value : predicate }
+
+type assertion  = { a_name : Ident.name; a_value : predicate }
+
+type postcondition = assertion
+
+(*s Binders. *)
+
+type 'a binder_type =
+  | BindType of 'a
+  | BindSet
+  | Untyped
+
+type 'a binder = Ident.t * 'a binder_type
+
+(*s Variant. *)
+
+type variant = term * term * term (* phi, R, A *)
+
+(*s Pure types. *)
+
+type pure_type =
+  | PTint
+  | PTbool
+  | PTfloat
+  | PTunit
+  | PTexternal of Ident.t
+
+(*s Types of values... *)
+
+type type_v =
+  | Ref       of type_v
+  | Array     of term * type_v   (* size x type *)
+  | Arrow     of type_v binder list * type_c
+  | PureType  of pure_type
+
+(* ... and types of computations. 
+ *
+ * INVARIANT: l'effet E contient toutes les variables apparaissant dans
+ *            le programme ET les annotations P et Q
+ *            Si E = { x1,...,xn | y1,...,ym }, les variables x sont les
+ *            variables en lecture seule et y1 les variables modifiées
+ *            les xi sont libres dans P et Q, et les yi,result liées dans Q
+ *            i.e.  P = p(x)
+ *               et Q = [y1]...[yn][res]q(x,y,res)
+ *)
+
+and type_c =
+  { c_result : Ident.t * type_v;
+    c_effect : Effect.t;
+    c_pre    : precondition list;
+    c_post   : postcondition option }
