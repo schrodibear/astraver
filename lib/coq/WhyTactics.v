@@ -5,7 +5,7 @@ Require Import WhyPermut.
 Ltac CallSubst x := subst x.
 
 Ltac ArrayLength :=
-  match context with
+  match goal with
   | h:(exchange _ _ _ _) |- _ =>
       (rewrite (exchange_length h); try omega) ||
         (rewrite <- (exchange_length h); try omega)
@@ -22,7 +22,7 @@ Ltac ArrayLength :=
    and introduces it in the context *)
 
 Ltac ProveSameLength t1 t2 :=
-  match context with
+  match goal with
   | |- (?X1 = ?X1) => reflexivity
   | h:(exchange t1 t2 _ _) |- _ =>
       exact (exchange_length h)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyCM.v,v 1.7 2003-10-27 09:43:10 filliatr Exp $ *)
+(* $Id: WhyCM.v,v 1.8 2003-11-25 12:15:33 paulin Exp $ *)
 
 Require Export WhyArrays.
 
@@ -39,7 +39,7 @@ Inductive pointer : Set :=
 
 Lemma eq_null_dec : forall p:pointer, {p = null} + {p <> null}.
 Proof.
-simple_destruct p; intuition.
+simple destruct p; intuition.
 right; intro H; discriminate H.
 Qed.
 
@@ -93,7 +93,7 @@ Qed.
    forall (s:cstore) (p:pointer) (v:X.T),
      is_valid s p -> get (set s p v) p = v.
 Proof.
-simple_destruct p; simpl; intuition.
+simple destruct p; simpl; intuition.
 unfold cstore_update; case (eq_adr_dec a a); intuition.
 Qed.
 
@@ -101,7 +101,7 @@ Qed.
    forall (s:cstore) (p1 p2:pointer) (v:X.T),
      is_valid s p1 -> p1 = p2 -> get (set s p1 v) p2 = v.
 Proof.
-simple_destruct p1; simple_destruct p2; simpl; intuition.
+simple destruct p1; simple destruct p2; simpl; intuition.
 discriminate H0.
 injection H0; intros.
 unfold cstore_update; subst a z; case (eq_adr_dec a0 a0); intuition.
@@ -112,7 +112,7 @@ Qed.
      is_valid s p1 ->
      is_valid s p2 -> p1 <> p2 -> get (set s p1 v) p2 = get s p2.
 Proof.
-simple_destruct p1; simple_destruct p2; simpl; intuition.
+simple destruct p1; simple destruct p2; simpl; intuition.
 unfold cstore_update; case (eq_adr_dec a0 a); intuition.
 assert (z = z0 \/ z <> z0).
  omega.
@@ -127,7 +127,7 @@ Qed.
    forall (s:cstore) (p1 p2:pointer) (v:X.T),
      is_valid s p1 -> is_valid (set s p2 v) p1.
 Proof.
-unfold is_valid; simple_destruct p1; intuition.
+unfold is_valid; simple destruct p1; intuition.
 unfold set; case p2; intuition.
 unfold cstore_update; case (eq_adr_dec a a0); intuition.
 subst a; WhyArrays; trivial.

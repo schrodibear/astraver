@@ -16,7 +16,7 @@
 
 (*  Library about sorted (sub-)arrays / Nicolas Magaud, July 1998 *)
 
-(* $Id: WhySorted.v,v 1.8 2003-10-27 09:43:10 filliatr Exp $ *)
+(* $Id: WhySorted.v,v 1.9 2003-11-25 12:15:33 paulin Exp $ *)
 
 Require Export WhyArrays.
 Require Import WhyPermut.
@@ -58,7 +58,7 @@ intros.
 apply Zle_trans with (m := access A (k + x)).
 apply H0; omega.
 
-unfold Zs.
+unfold Zsucc.
 replace (k + (x + 1))%Z with (k + x + 1)%Z.
 unfold sorted_array in H_sorted.
 apply H_sorted; omega.

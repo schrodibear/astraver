@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.14 2003-10-15 08:36:14 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.15 2003-11-25 12:15:33 paulin Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -43,7 +43,7 @@ Lemma why_boolean_case :
  forall (A B C D:Prop) (b:bool),
    (if b then A else B) -> (A -> C) -> (B -> D) -> if b then C else D.
 Proof.
-simple_destruct b; intuition.
+simple destruct b; intuition.
 Qed.
 
 Lemma why_boolean_wp :
@@ -51,7 +51,7 @@ Lemma why_boolean_wp :
    (A -> q true) ->
    (B -> q false) -> forall b:bool, (if b then A else B) -> q b.
 Proof.
-simple_destruct b; assumption.
+simple destruct b; assumption.
 Qed.
 Implicit Arguments why_boolean_wp [A B].
 
@@ -63,13 +63,13 @@ Lemma why_boolean_if_1 :
      then q1t /\ q2 true \/ q1f /\ q3t
      else q1t /\ q2 false \/ q1f /\ q3f.
 Proof.
-simple_destruct b; auto.
+simple destruct b; auto.
 Qed.
 
 Lemma why_boolean_forall :
  forall q:bool -> Prop, q true /\ q false -> forall b:bool, q b.
 Proof.
-simple_induction b; intuition.
+simple induction b; intuition.
 Qed.
 Implicit Arguments why_boolean_forall [].
 

@@ -16,7 +16,7 @@
 
 (* This file is a contribution by Christine Paulin *)
 
-(* $Id: WhyExn.v,v 1.5 2003-10-15 08:36:14 filliatr Exp $ *)
+(* $Id: WhyExn.v,v 1.6 2003-11-25 12:15:33 paulin Exp $ *)
 
 Set Implicit Arguments.
 Unset Strict Implicit.
@@ -48,12 +48,12 @@ Defined.
 Definition uncurry :
   forall (A:Set) (P:A -> Prop) (C:Set),
     (forall x:A, P x -> C) -> {x : A | P x} -> C.
-simple_destruct 2; intros.
+simple destruct 2; intros.
 apply H with x; trivial.
 Defined.
 
 Definition QEM_mon : forall A B:Set, (A -> B) -> QEM A -> QEM B.
-simple_destruct 2; intros.
+simple destruct 2; intros.
 apply Qval; auto.
 apply Qexn with u; trivial.
 Defined.
