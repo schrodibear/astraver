@@ -2,26 +2,6 @@
 Require Why.
 Require Omega.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition oppose := (* validation *)
   [u: unit; x: Z]
     let (result, Post1) = (exist_1 [result: Z]result = `(-x)` `(-x)`
@@ -117,23 +97,6 @@ Lemma test_po_7 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition test := (* validation *)
   [x: Z; Pre4: `x <= 10`]

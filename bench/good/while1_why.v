@@ -72,26 +72,6 @@ Proof.
 Simpl; Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p := (* validation *)
   [i: Z; Pre6: `i <= 10`]
     (well_founded_induction Z (Zwf ZERO) (p_po_1 i Pre6) [Variant1: Z](i0: Z)

@@ -35,21 +35,6 @@ Proof.
 Tauto.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p1 := (* validation *)
   (exist_1 [result: Z]True `0` p1_po_1).
 
@@ -58,21 +43,6 @@ Lemma p2_po_1 :
 Proof.
 Tauto.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p2 := (* validation *)
   (exist_1 [result: Z]~False `0` p2_po_1).
@@ -83,21 +53,6 @@ Proof.
 Tauto.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p3 := (* validation *)
   (exist_1 [result: Z]True /\ True `0` p3_po_1).
 
@@ -106,21 +61,6 @@ Lemma p4_po_1 :
 Proof.
 Tauto.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p4 := (* validation *)
   (exist_1 [result: Z]True \/ False `0` p4_po_1).
@@ -131,21 +71,6 @@ Proof.
 Auto.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p5 := (* validation *)
   (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
 
@@ -154,21 +79,6 @@ Lemma p6_po_1 :
 Proof.
 Auto.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p6 := (* validation *)
   (exist_1 [result: Z](True -> ~False) `0` p6_po_1).
@@ -179,21 +89,6 @@ Proof.
 Auto.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p7 := (* validation *)
   (exist_1 [result: Z]((x:Z) x = x) `0` p7_po_1).
 
@@ -203,21 +98,6 @@ Proof.
 Auto.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p8 := (* validation *)
   (exist_1 [result: Z]True /\ ((x:Z) x = x) `0` p8_po_1).
 
@@ -226,171 +106,6 @@ Lemma p9_po_1 :
 Proof.
 Auto.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p9 := (* validation *)
   (exist_1 [result: Z]((x:Z) ((y:Z) (x = y -> x = y))) `0` p9_po_1).
@@ -431,21 +146,6 @@ Proof.
 Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition ar6 := (* validation *)
   let Pre1 = ar6_po_1 in
   `(Zdiv 1 1)`.
@@ -455,426 +155,6 @@ Lemma ar7_po_1 :
 Proof.
 Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition ar7 := (* validation *)
   let Pre1 = ar7_po_1 in
@@ -1135,21 +415,6 @@ Proof. (* arr1_po_1 *)
 Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition arr1 := (* validation *)
   [v6: (array `10` Z)]let Pre1 = arr1_po_1 in
                       (access v6 `0`).
@@ -1159,21 +424,6 @@ Lemma arr2_po_1 :
 Proof. (* arr2_po_1 *)
 Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition arr2 := (* validation *)
   [v6: (array `10` Z)]let Pre1 = arr2_po_1 in
@@ -1186,21 +436,6 @@ Lemma arr3_po_1 :
 Proof. (* arr3_po_1 *)
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition arr3 := (* validation *)
   [v4: Z; v6: (array `10` Z); Pre2: v4 = `0`]
@@ -1224,21 +459,6 @@ Proof. (* arr4_po_2 *)
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition arr4 := (* validation *)
   [v6: (array `10` Z); Pre3: (access v6 `0`) = `9`]
     let Pre2 = (arr4_po_1 v6 Pre3) in
@@ -1253,21 +473,6 @@ Lemma arr5_po_1 :
 Proof. (* arr5_po_1 *)
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition arr5 := (* validation *)
   [v6: (array `10` Z)]
@@ -1286,21 +491,6 @@ Lemma arr6_po_1 :
 Proof. (* arr6_po_1 *)
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition arr6 := (* validation *)
   [v6: (array `10` Z)]
@@ -1330,51 +520,6 @@ Proof. (* arr7_po_2 *)
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition arr7 := (* validation *)
   [v6: (array `10` Z); Pre3: (access v6 `0`) = `9`]
     let Pre2 = (arr7_po_1 v6 Pre3) in
@@ -1399,36 +544,6 @@ Lemma fc3_po_1 :
   (Post2: result0 = `0`)
   `result >= 0`.
 Proof. Intros; Omega. Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition fc3 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `0` `0`
@@ -1457,21 +572,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition an2 := (* validation *)
   [v4: Z; Pre1: `v4 >= 0`]
     let (v9, result, Post1) =
@@ -1490,21 +590,6 @@ Lemma an3_po_1 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition an3 := (* validation *)
   [v4: Z; Pre1: `v4 >= 0`]

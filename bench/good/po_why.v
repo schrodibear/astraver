@@ -16,26 +16,6 @@ Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p1 := (* validation *)
   [x: Z; Pre1: (q `x + 1`)]
     let (x0, result, Post1) =
@@ -53,26 +33,6 @@ Lemma p2_po_1 :
 Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p2 := (* validation *)
   [x: Z; Pre1: (q `7`)]
@@ -92,26 +52,6 @@ Lemma p3_po_1 :
 Proof. 
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p3 := (* validation *)
   [x: Z]
@@ -136,26 +76,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p4 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -175,26 +95,6 @@ Proof.
 Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p5 := (* validation *)
   let (result, Post1) = (exist_1 [result: Z]result = `7` `3 + 4` p5_po_1) in
   (exist_1 [result0: Z]result0 = `7` result Post1).
@@ -206,26 +106,6 @@ Lemma p6_po_1 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p6 := (* validation *)
   let (a, Post1) = (exist_1 [result: Z]result = `3` `3`
@@ -241,26 +121,6 @@ Lemma p7_po_1 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p7 := (* validation *)
   let (aux_1, Post2) =
@@ -282,26 +142,6 @@ Lemma p8_po_1 :
 Proof.
 Intuition; Rewrite Post1; Assumption.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p8 := (* validation *)
   [x: Z; Pre1: (q `x + 1`)]
@@ -335,26 +175,6 @@ Lemma p9_po_2 :
 Proof.
 Intuition.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p9 := (* validation *)
   [x: Z]
@@ -392,18 +212,6 @@ Proof.
 Intuition.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p9a := (* validation *)
   [x: Z]
     let (x0, aux_1, Post2) =
@@ -429,26 +237,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p10 := (* validation *)
   let (result1, Post1) = (fsucc `0`) in
   (exist_1 [result2: Z]result2 = `1` result1 (p10_po_1 result1 Post1)).
@@ -462,26 +250,6 @@ Lemma p11_po_1 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p11 := (* validation *)
   let (aux_2, Post1) =
@@ -504,26 +272,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p11a := (* validation *)
   let (a, Post1) =
     let (result1, Post2) = (fsucc `1`) in
@@ -545,26 +293,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p12 := (* validation *)
   [x: Z; Pre1: x = `0`]
     let (x0, result1, Post1) = (incrx tt x) in
@@ -581,26 +309,6 @@ Lemma p13_po_1 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p13 := (* validation *)
   [x: Z]
@@ -623,26 +331,6 @@ Lemma p13a_po_1 :
 Proof.
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p13a := (* validation *)
   [x: Z]
@@ -669,26 +357,6 @@ Proof.
 Intros; Omega.
 Save.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p14 := (* validation *)
   [x: Z; Pre1: x = `0`]
     let (x0, result1, Post1) = (incrx2 tt x) in
@@ -700,26 +368,6 @@ Lemma p15_po_1 :
 Proof. (* p15_po_1 *)
 Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p15 := (* validation *)
   [t: (array `10` Z)]let Pre1 = p15_po_1 in
@@ -733,26 +381,6 @@ Lemma p16_po_1 :
 Proof. (* p16_po_1 *)
 Intros; Omega.
 Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Definition p16 := (* validation *)
   [t: (array `10` Z)]
@@ -771,34 +399,6 @@ Proof. (* p17_po_1 *)
 Intros; Omega.
 Save.
 
-
-(* 
- Local Variables:
- mode: coq 
-  coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
- End:
-*)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Definition p17 := (* validation *)
   [t: (array `10` Z); Pre3: `0 <= (access t 0)` /\ `(access t 0) < 10`]
     let Pre2 = (p17_po_1 t Pre3) in
@@ -809,4 +409,11 @@ Definition p17 := (* validation *)
     (exist_2 [t1: (array `10` Z)][result1: unit]
     t1 = (store t (access t `0`) `1`) (store t (access t `0`) result) 
     tt Post1).
+
+(* 
+ Local Variables:
+ mode: coq 
+  coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
+ End:
+*)
 
