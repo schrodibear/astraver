@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.29 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.30 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -87,8 +87,8 @@ and 'ctype term_node =
   | Tapp of Info.logic_info * 'ctype term list
   | Tunop of term_unop * 'ctype term
   | Tbinop of 'ctype term * term_binop * 'ctype term
-  | Tdot of 'ctype term * string
-  | Tarrow of 'ctype term * string
+  | Tdot of 'ctype term * Info.field_info
+  | Tarrow of 'ctype term * Info.field_info
   | Tarrget of 'ctype term * 'ctype term
   | Tif of 'ctype term * 'ctype term * 'ctype term
   | Told of 'ctype term

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.81 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.82 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 
 open Format
@@ -138,7 +138,7 @@ let rec interp_term label old_label t =
     | Tdot (t, field)
     | Tarrow (t, field) -> 
 	let te = f t in
-	let var = field in
+	let var = field.field_heap_var_name in
 	LApp("acc",[interp_var label var;te])
     | Tunop (Ustar, t1) -> 
 	let te1 = f t1 in
@@ -415,7 +415,7 @@ let rec interp_expr e =
     | TEdot (e,s)
     | TEarrow (e,s) ->
 	let te = interp_expr e in
-	let var = s in
+	let var = s.field_heap_var_name in
 	Output.make_app "acc_" [Var(var);te]
     | TEunary(Ustar,e1) -> 
 	let te1 = interp_expr e1 in
@@ -561,7 +561,7 @@ and interp_lvalue e =
 	assert false
     | TEdot (e1,f)
     | TEarrow (e1,f) ->
-	HeapRef(f,interp_expr e1)
+	HeapRef(f.field_heap_var_name, interp_expr e1)
     | _ -> 
 	assert false (* wrong typing of lvalue ??? *)
 
@@ -583,7 +583,8 @@ and interp_address e = match e.texpr_node with
 	| CTenum _ | CTint _ | CTfloat _ -> 
   	    interp_expr e1
 	| CTstruct _ | CTunion _ | CTpointer _ | CTarray _ ->
-            build_complex_app (Var "acc_") [Var f; interp_expr e1]
+            build_complex_app (Var "acc_") 
+	    [Var f.field_heap_var_name; interp_expr e1]
 	| _ -> unsupported "& operator on a field"
       end
   | TEcast (_, e1) ->
@@ -693,7 +694,7 @@ let collect_locations before acc loc =
 		  let loc = 
 		    LApp("pointer_loc",[interp_term (Some before) before e]) 
 		  in
-		  f, Some loc
+		  f.field_heap_var_name, Some loc
 	      | Tarrget(e1,e2) -> 
 		  let var = global_var_for_array_type e1.term_type in
 		  let loc = 
@@ -1120,7 +1121,7 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       begin match ctype.ctype_node with
 	| CTstruct _ -> 
 	    let id = "valid_" ^ v.var_name in
-	    add_weak_invariant id (Cltyping.valid_var v ctype)
+	    add_weak_invariant id (Cltyping.valid_for_type v ctype)
 	| _ -> 
 	    ()
       end;

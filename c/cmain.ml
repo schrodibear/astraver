@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.32 2004-05-18 09:34:21 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.33 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -74,6 +74,7 @@ let main () =
   (* typing *)
   let tfiles = List.map type_file pfiles in
   if type_only then exit 0;
+  Cenv.uniquize_names ();
   (* effects *)
   List.iter (fun (_,p) -> Ceffect.file p) tfiles;
   while not (List.for_all (fun (_,p) -> Ceffect.functions p) tfiles) do 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.42 2004-04-22 12:03:34 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.43 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -193,8 +193,8 @@ and texpr_node =
   | TEconstant of string
   | TEstring_literal of string
   | TEvar of Info.var_info
-  | TEdot of lvalue * string
-  | TEarrow of lvalue * string
+  | TEdot of lvalue * Info.field_info
+  | TEarrow of lvalue * Info.field_info
   | TEarrget of lvalue * texpr
   | TEseq of texpr * texpr
   | TEassign of lvalue * texpr

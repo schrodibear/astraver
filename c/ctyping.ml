@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.58 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.59 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -149,11 +149,11 @@ let warn_for_read_only loc e =
   in
   match e.texpr_node with
   | TEarrow (_, x) | TEdot (_, x) when e.texpr_type.ctype_const  ->
-      warning loc ("assigment of read-only member `" ^ x ^ "'")
+      warning loc ("assigment of read-only member `" ^ x.field_name ^ "'")
   | TEarrow (e1, x) when pointer_on_read_only e1.texpr_type ->
-      warning loc ("assigment of read-only member `" ^ x ^ "'")
+      warning loc ("assigment of read-only member `" ^ x.field_name ^ "'")
   | TEdot (e1, x) when e1.texpr_type.ctype_const ->
-      warning loc ("assigment of read-only member `" ^ x ^ "'")
+      warning loc ("assigment of read-only member `" ^ x.field_name ^ "'")
   | TEvar x when e.texpr_type.ctype_const ->
       warning loc ("assigment of read-only variable `" ^ x.var_name ^ "'")
   | TEvar x ->
@@ -235,6 +235,7 @@ and type_expr_node loc env = function
       (TEvar info,t)
   | CEdot (e, x) ->
       let te = type_expr env e in
+      let x,ty = type_of_field loc x te.texpr_type in
       let te_dot_x = match te.texpr_node with
 	| TEunary (Ustar, e) -> TEarrow (e, x)
 	| TEarrget (e1, e2) -> 
@@ -246,12 +247,13 @@ and type_expr_node loc env = function
 	    TEarrow (a, x)
 	| _ -> TEdot (te, x)
       in
-      te_dot_x, type_of_field loc env x te.texpr_type
+      te_dot_x, ty
   | CEarrow (e, x) ->
       let te = type_expr env e in
       begin match te.texpr_type.ctype_node with
 	| CTarray (ty, _) | CTpointer ty ->
-	    TEarrow (te, x), type_of_field loc env x ty
+	    let x,ty = type_of_field loc x ty in
+	    TEarrow (te, x), ty
 	| _ -> 
 	    error loc "invalid type argument of `->'"
       end

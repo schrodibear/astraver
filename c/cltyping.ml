@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.40 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.41 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -162,6 +162,7 @@ and type_term_node loc env = function
       Tbinop (t1, Bmod, t2), c_int
   | PLdot (t, x) ->
       let t = type_term env t in
+      let x,ty = type_of_field loc x t.term_type in
       let t_dot_x = match t.term_node with
 	| Tunop (Ustar, e) -> 
 	    Tarrow (e, x)
@@ -173,12 +174,13 @@ and type_term_node loc env = function
 	| _ -> 
 	    Tdot (t, x)
       in
-      t_dot_x, type_of_field loc env x t.term_type
+      t_dot_x, ty
   | PLarrow (t, x) ->
       let t = type_term env t in
       begin match t.term_type.ctype_node with
 	| CTpointer ty -> 
-	    Tarrow (t, x), type_of_field loc env x ty
+	    let x,ty = type_of_field loc x ty in
+	    Tarrow (t, x), ty
 	| _ -> 
 	    error loc "invalid type argument of `->'"
       end
@@ -417,6 +419,10 @@ let type_spec result env s =
     ensures = q;
     decreases = v }
 
-let valid_var v ty =
+let valid_for_type v ty =
+  (***
+  let rec valid_for ty = match ty.ctype_node with
+    | CTstruct (
+  ***)
   Pvalid { term_node = Tvar v; term_type = c_pointer ty }
 

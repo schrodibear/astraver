@@ -49,5 +49,7 @@ module Env : sig
 
 end
 
-val type_of_field : Loc.t -> Env.t -> string -> tctype -> tctype
+val type_of_field : Loc.t -> string -> tctype -> field_info * tctype
 
+(* make heap var names unique *)
+val uniquize_names : unit -> unit

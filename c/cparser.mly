@@ -165,7 +165,7 @@
     let r = ref (-1) in
     function 
       | Some s -> s
-      | None -> incr r; "%_anonymous_" ^ string_of_int !r
+      | None -> incr r; "anonymous_" ^ string_of_int !r
 
   (* Interpretation of type expression.
      [gl] indicates a global declaration (implies the check for a type or 

@@ -242,11 +242,19 @@ end
 
 (* Field access *)
 
-let type_of_field loc env x ty = 
-  let rec lookup su = function
+let fields_t = Hashtbl.create 97
+let find_field n x = 
+  try 
+    Hashtbl.find fields_t (n,x)
+  with Not_found -> 
+    let f = { field_name = x; field_tag = n; field_heap_var_name = x } in
+    Hashtbl.add fields_t (n,x) f; f
+
+let type_of_field loc x ty = 
+  let rec lookup su n = function
     | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")
-    | (ty, y, _) :: _ when x = y -> ty
-    | _ :: fl -> lookup su fl
+    | (ty, y, _) :: _ when x = y -> find_field n x, ty
+    | _ :: fl -> lookup su n fl
   in
   match ty.ctype_node with
     | CTstruct (n, Tag) | CTunion (n, Tag) -> 
@@ -254,8 +262,8 @@ let type_of_field loc env x ty =
 	let tt = Hashtbl.find tags_t n in
 	begin match tt.tag_type with
 	  | Incomplete -> error loc ("use of incomplete type")
-	  | Defined (CTstruct (_, Decl fl)) -> lookup "structure" fl
-	  | Defined (CTunion (_, Decl fl)) -> lookup "union" fl
+	  | Defined (CTstruct (_, Decl fl)) -> lookup "structure" n fl
+	  | Defined (CTunion (_, Decl fl)) -> lookup "union" n fl
 	  | Defined _ ->
 	      error loc ("request for member `" ^ x ^ 
 			 "' in something not a structure or union")
@@ -264,3 +272,15 @@ let type_of_field loc env x ty =
     | _ -> error loc ("request for member `" ^ x ^ 
 		      "' in something not a structure or union")
 
+let uniquize_names () =
+  let used = Hashtbl.create 97 in
+  (* all globals are considered used *)
+  Hashtbl.iter (fun x _ -> Hashtbl.add used x ()) sym_t;
+  let name n {field_name=f} = 
+    if Hashtbl.mem used f then n ^ "_" ^ f else begin 
+      Hashtbl.add used f (); f
+    end
+  in
+  Hashtbl.iter (fun (n,_) f -> f.field_heap_var_name <- name n f) fields_t
+
+    

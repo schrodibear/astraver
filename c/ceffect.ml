@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.41 2004-05-25 12:33:03 filliatr Exp $ i*)
+(*i $Id: ceffect.ml,v 1.42 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -94,6 +94,7 @@ let declare_heap_var v ty =
   if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty
   else assert (Hashtbl.find heap_vars v = ty)
 
+(**
 let heap_var_names = Hashtbl.create 97 
 
 let name_heap_var v =
@@ -107,26 +108,25 @@ let name_heap_var v =
     let uv = if Hashtbl.mem heap_vars v then fresh 0 else v in
     Hashtbl.add heap_var_names v uv;
     uv
+**)
 
 let empty = HeapVarSet.empty
 let union = HeapVarSet.union
 
 let add_var v ty s =
-  let v = name_heap_var v in
   declare_heap_var v ([], interp_type ty);
   HeapVarSet.add v s
   
 let add_alloc s = HeapVarSet.add "alloc" s
 
 let add_field_var v ty s =
-   let v = name_heap_var v in
+   let v = v.field_heap_var_name in
    let _,ty = pointer_heap_var ty in
    declare_heap_var v (memory_type ty);
    HeapVarSet.add v s
 
 let add_pointer_var ty s =
   let v,ty = pointer_heap_array_var ty in
-  let v = name_heap_var v in
   declare_heap_var v ty;
   HeapVarSet.add v s
 
@@ -464,10 +464,10 @@ let decl d =
 	id.logic_args <- l
     | Tinvariant(id,p) -> 
 	add_weak_invariant id p
-    | Tdecl({ctype_node=CTstruct _} as ty, v, _) ->
-	lprintf "adding implicit invariant valid(%s)@." v.var_name;
+    | Tdecl({ctype_node = CTstruct _ | CTarray _} as ty, v, _) ->
+	lprintf "adding implicit invariant for %s@." v.var_name;
 	let id = "valid_" ^ v.var_name in
-	add_weak_invariant id (Cltyping.valid_var v ty)
+	add_weak_invariant id (Cltyping.valid_for_type v ty)
     | Tdecl(ctype,v,init) -> () (* TODO *)
     | Taxiom(id,p) -> () (* TODO *)
     | Ttypedef(ctype,id) -> () 

@@ -3,7 +3,7 @@
 (BG_PUSH
   (FORALL (x y) (IMPLIES (<= x y) (<= x (int_div (+ x y) 2))))
   (FORALL (x y) (IMPLIES (< x y) (< (int_div (+ x y) 2) y)))
-  (FORALL (a b) (EQ (int_div (+ a (* b 2)) 2) (+ (int_div a 2) b)))
+  ;(FORALL (a b) (EQ (int_div (+ a (* b 2)) 2) (+ (int_div a 2) b)))
 )
 
 ;; DO NOT EDIT BELOW THIS LINE

@@ -122,10 +122,10 @@ src/report.cmx: src/ast.cmi src/error.cmi src/ident.cmx src/loc.cmx \
     src/logic.cmi src/types.cmi src/report.cmi 
 src/simplify.cmo: src/cc.cmi src/env.cmi src/error.cmi src/ident.cmi \
     src/loc.cmi src/logic.cmi src/misc.cmi src/options.cmi src/pp.cmi \
-    src/report.cmi src/vcg.cmi src/simplify.cmi 
+    src/vcg.cmi src/simplify.cmi 
 src/simplify.cmx: src/cc.cmi src/env.cmx src/error.cmi src/ident.cmx \
     src/loc.cmx src/logic.cmi src/misc.cmx src/options.cmx src/pp.cmx \
-    src/report.cmx src/vcg.cmx src/simplify.cmi 
+    src/vcg.cmx src/simplify.cmi 
 src/typing.cmo: src/annot.cmi src/ast.cmi src/effect.cmi src/env.cmi \
     src/error.cmi src/ident.cmi src/logic.cmi src/ltyping.cmi src/misc.cmi \
     src/options.cmi src/ptree.cmi src/rename.cmi src/report.cmi src/types.cmi \
@@ -227,10 +227,10 @@ c/cltyping.cmo: c/cast.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi c/creport.cmi \
     src/env.cmi c/info.cmi src/loc.cmi c/cltyping.cmi 
 c/cltyping.cmx: c/cast.cmi c/cenv.cmx c/cerror.cmi c/clogic.cmi c/creport.cmx \
     src/env.cmx c/info.cmx src/loc.cmx c/cltyping.cmi 
-c/cmain.cmo: c/ceffect.cmi c/cerror.cmi c/cinterp.cmi c/clexer.cmo \
+c/cmain.cmo: c/ceffect.cmi c/cenv.cmi c/cerror.cmi c/cinterp.cmi c/clexer.cmo \
     c/coptions.cmi c/cpp.cmi c/creport.cmi c/ctyping.cmi src/lib.cmi \
     src/loc.cmi c/output.cmi src/pp.cmi 
-c/cmain.cmx: c/ceffect.cmx c/cerror.cmi c/cinterp.cmx c/clexer.cmx \
+c/cmain.cmx: c/ceffect.cmx c/cenv.cmx c/cerror.cmi c/cinterp.cmx c/clexer.cmx \
     c/coptions.cmx c/cpp.cmx c/creport.cmx c/ctyping.cmx src/lib.cmx \
     src/loc.cmx c/output.cmx src/pp.cmx 
 c/coptions.cmo: c/cversion.cmo c/coptions.cmi 

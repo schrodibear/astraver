@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.8 2004-05-03 12:59:18 filliatr Exp $ i*)
+(*i $Id: info.ml,v 1.9 2004-05-26 06:35:26 filliatr Exp $ i*)
 
 module HeapVarSet = Set.Make(String)
 
@@ -47,3 +47,8 @@ let default_logic_info x =
   { logic_name = x;
     logic_args = HeapVarSet.empty }
 
+type field_info = { 
+  field_name : string;
+  field_tag : string;
+  mutable field_heap_var_name : string;
+}
