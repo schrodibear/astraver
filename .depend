@@ -273,6 +273,12 @@ c/creport.cmx: c/cast.cmi c/cerror.cmi c/coptions.cmx src/loc.cmx \
     c/creport.cmi 
 c/ctypes.cmo: c/coptions.cmi c/ctypes.cmi 
 c/ctypes.cmx: c/coptions.cmx c/ctypes.cmi 
+c/ctyping.cmo: c/cast.cmi c/cenv.cmi c/cerror.cmi c/clogic.cmi c/cltyping.cmi \
+    src/compat.cmo c/coptions.cmi c/creport.cmi src/env.cmi c/info.cmi \
+    src/loc.cmi c/ctyping.cmi 
+c/ctyping.cmx: c/cast.cmi c/cenv.cmx c/cerror.cmi c/clogic.cmi c/cltyping.cmx \
+    src/compat.cmx c/coptions.cmx c/creport.cmx src/env.cmx c/info.cmx \
+    src/loc.cmx c/ctyping.cmi 
 c/info.cmo: c/info.cmi 
 c/info.cmx: c/info.cmi 
 c/output.cmo: c/output.cmi 

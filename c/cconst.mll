@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cconst.mll,v 1.1 2004-10-06 12:50:31 hubert Exp $ i*)
+(*i $Id: cconst.mll,v 1.2 2004-10-18 09:15:42 hubert Exp $ i*)
 
 (* evaluation of integer literals *)
 
@@ -49,13 +49,16 @@
 
   let val_char c = Int64.of_int (val_char c)
 
-  let check_bounds loc accu suffix =
+  let check_bounds loc hexa accu suffix =
     match suffix with
       | "" ->
-	  if accu > 0x7FFFFFFFL then raise Constant_too_large;
-	  if accu > 0x7FFFL then 
-	    warning loc
-	      "this constant is valid only on >= 32-bit architectures";
+	  if accu > 0x7FFFFFFFL then 
+	     if hexa then warning loc "Constant too large for a int"
+                     else raise Constant_too_large
+          else
+	    if accu > 0x7FFFL then 
+	      warning loc
+		"this constant is valid only on >= 32-bit architectures";
 	  accu 
       | "u" ->
 	  if accu > 0xFFFFFFFFL then raise Constant_too_large;
@@ -104,8 +107,8 @@ and eval_hexa loc accu = parse
   | rH  { if accu >= 0x10000000L then raise Constant_too_large;
 	  let accu = add (mul 16L accu) (val_char (lexeme_char lexbuf 0)) in 
 	  eval_hexa loc accu lexbuf }
-  | eof { check_bounds loc accu "" }
-  | rIS+ { check_bounds loc accu (lexeme lexbuf) }
+  | eof { check_bounds loc true accu "" }
+  | rIS+ { check_bounds loc true accu (lexeme lexbuf) }
   | _ { raise (Invalid ("digit '" ^ (lexeme lexbuf) ^ 
 			"' in hexadecimal constant")) }
 
@@ -115,9 +118,9 @@ and eval_deci loc accu = parse
 	let accu = add (mul 10L accu) (val_char c) in 
 	eval_deci loc accu lexbuf }
   | eof 
-      { check_bounds loc accu "" }
+      { check_bounds loc false accu "" }
   | rIS+ 
-      { check_bounds loc accu (lexeme lexbuf) }
+      { check_bounds loc false accu (lexeme lexbuf) }
   | _ 
       { raise (Invalid ("digit '" ^ (lexeme lexbuf) ^ 
 			"' in decimal constant")) }
@@ -128,8 +131,8 @@ and eval_octa loc accu = parse
 	  else
 	    let accu = add (mul 8L accu) (val_char (lexeme_char lexbuf 0)) in 
 	    eval_octa loc  accu lexbuf }
-  | eof { check_bounds loc accu "" }
-  | rIS+ { check_bounds loc accu (lexeme lexbuf) }
+  | eof { check_bounds loc false accu "" }
+  | rIS+ { check_bounds loc false accu (lexeme lexbuf) }
   | _ { raise (Invalid ("digit '" ^ (lexeme lexbuf) ^ 
 			"' in octal constant")) }
 
