@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.69 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.70 2005-01-06 14:27:55 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -88,8 +88,9 @@ and type_term_node loc env = function
   | PLvar x ->
       let info = 
 	try Env.find x.var_name env with Not_found -> 
-	try find_sym x.var_name with Not_found -> 
-        error loc ("unbound variable " ^ x.var_name)
+	  try (Var_info (find_ghost x.var_name)) with Not_found -> 
+	    try find_sym x.var_name with Not_found -> 
+              error loc ("unbound logic variable " ^ x.var_name)
       in 
       begin match info with
 	| Var_info v -> Clogic.Tvar v, v.var_type

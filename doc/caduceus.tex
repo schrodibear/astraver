@@ -1033,14 +1033,18 @@ annotations.
               \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
               && $[$ 
               \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\
+              \indextt{logic}
       & $|$ & \te{/*@} \te{predicate} \nt{identifier} \te{(} 
               \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
            && $[$ \te{\{} \nt{predicate} \te{\}} $|$ 
-              \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\
+              \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\ 
+              \indextt{predicate}
       & $|$ & \te{/*@} \te{axiom} \nt{identifier} \te{:} 
-              \nt{predicate} \te{*/} \\
+              \nt{predicate} \te{*/} \\ \indextt{axiom}
       & $|$ & \te{/*@} \te{invariant} \nt{identifier} \te{:} 
-              \nt{predicate} \te{*/} \\
+              \nt{predicate} \te{*/} \\ \indextt{invariant}
+      & $|$ & \te{/*@} \te{ghost} \nt{logic\_type} \nt{identifier} $[$ \te{=} 
+              \nt{term} $]$ \te{*/} \\ \indextt{ghost}
   \\[0.1em]
 
   \nt{assigned\_locs}
@@ -1067,6 +1071,8 @@ annotations.
     &   $|$ & \te{/*@} \te{assert} \nt{predicate} \te{*/} \\ \indextt{assert}
     &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
     &   $|$ & \nt{spec} \nt{statement} \\
+    &   $|$ & \te{/*@} \te{set} \nt{identifier} \te{=} 
+              \nt{term} \te{*/} \\ \indextt{set}
   \\[0.1em]
 
   \nt{loop\_annot}

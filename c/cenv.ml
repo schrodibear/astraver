@@ -198,6 +198,26 @@ let predicates =
 let add_pred = Hashtbl.add predicates
 let find_pred = Hashtbl.find predicates
 
+let ghost = 
+  (Hashtbl.create 97 : (string, Info.var_info) Hashtbl.t) 
+let is_ghost = Hashtbl.mem ghost 
+let find_ghost = Hashtbl.find ghost
+
+let add_ghost l x ty info = 
+  let n = unique_name x in
+  mark_as_used n; 
+  set_unique_name (Var_info info) n;
+  if n <> x then Coptions.lprintf "renaming ghost variable %s into %s@." x n;
+  if is_ghost x then begin
+    error l ("ghost variable " ^ x ^ " already declared");
+  end
+  else begin
+    set_var_type (Var_info info) ty;
+    Hashtbl.add ghost x info;
+    info
+  end
+
+
 (*s Environments for local variables and local structs/unions/enums *)
 
 module Env = struct

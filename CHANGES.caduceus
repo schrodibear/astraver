@@ -1,5 +1,8 @@
 Note: These are the changes for Caduceus.
 
+ o Ghost variables introduced with 'ghost' declaration and modified by
+   'set'
+  
 version 0.69, January 4th, 2005
 ===============================
  o automatic invariants for expressing the so-called 'separation' of

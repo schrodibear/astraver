@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.72 2005-01-04 15:47:59 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.73 2005-01-06 14:27:55 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -752,7 +752,8 @@ let functions dl =
 	    | None -> 
 		(* no assigns given by user:
 		   emit a warning if some side-effects have been detected *)
-		if not (HeapVarSet.is_empty ef_body.assigns) then
+		if id <> Cinit.invariants_initially_established_info &&
+		  not (HeapVarSet.is_empty ef_body.assigns) then
 		  Queue.add 
 		    (d.loc,
 		     "function " ^ id.fun_name ^ " has side-effects but no 'assigns' clause given")

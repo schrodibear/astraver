@@ -25,19 +25,29 @@
   let loc_i i = (rhs_start i, rhs_end i)
   let info x = { Clogic.lexpr_node = x; lexpr_loc = loc () }
 
+  type ghost_decl =
+    | Dsimple 
+    | Darray of ghost_decl * lexpr option
+
+  let ghost ty (id,gd,cinit) = 
+    match gd with
+      | Dsimple -> LDghost(ty,id,cinit)
+      | Darray _ -> assert false
+
+    
 %}
 
 %token <string> IDENTIFIER STRING_LITERAL TYPENAME
 %token <Clogic.constant> CONSTANT
 %token LPAR RPAR IF ELSE COLON COLONCOLON DOT DOTDOT AMP
-%token INT FLOAT LT GT LE GE EQ NE COMMA ARROW
+%token INT FLOAT LT GT LE GE EQ NE COMMA ARROW EQUAL
 %token FORALL EXISTS IFF IMPLIES AND OR NOT 
 %token TRUE FALSE OLD AT RESULT BLOCK_LENGTH BASE_ADDR
 %token VALID VALID_INDEX VALID_RANGE FRESH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS LOOP_ASSIGNS NOTHING 
-%token READS LOGIC PREDICATE AXIOM LBRACE RBRACE
+%token READS LOGIC PREDICATE AXIOM LBRACE RBRACE GHOST SET
 %token VOID CHAR SIGNED UNSIGNED SHORT LONG DOUBLE STRUCT ENUM UNION
 
 %right prec_named
@@ -225,11 +235,14 @@ annot:
 ;
 
 annotation:
-  decl             { Adecl $1 }
+| decl             { Adecl [$1] }
+| ghost_decl       { Adecl $1 }
 | spec             { Aspec $1 }
 | loop_annot       { Aloop_annot $1 }
-| ASSERT lexpr { Acode_annot (Assert $2) }
+| ASSERT lexpr     { Acode_annot (Assert $2) }
 | LABEL IDENTIFIER { Acode_annot (Label $2) }
+| SET IDENTIFIER EQUAL lexpr 
+                   { Acode_annot(GhostSet($2,$4)) }
 ;
 
 effects:
@@ -283,6 +296,11 @@ decl:
 | INVARIANT IDENTIFIER COLON lexpr { LDinvariant ($2, $4) }
 ;
 
+ghost_decl:
+| GHOST logic_type init_declarator_list 
+      { List.map (ghost $2) $3 }
+;
+
 parameters:
   /* epsilon */  { [] }
 | ne_parameters { $1 }
@@ -297,5 +315,45 @@ parameter:
   logic_type IDENTIFIER { ($1, $2) }
 | logic_type IDENTIFIER LSQUARE RSQUARE { (LTarray $1, $2) }
 ;
+
+
+/* ghost variables */
+
+init_declarator_list
+        : init_declarator { [$1] }
+        | init_declarator_list COMMA init_declarator { $1 @ [$3] }
+        ;
+
+init_declarator
+        : declarator 
+            { let (id,d) = $1 in (id,d, None) }
+        | declarator EQUAL c_initializer 
+	    { let (id,d) = $1 in (id,d, Some $3) }
+        ;
+
+declarator
+        : /*TODO pointer direct_declarator { let id,d = $2 in id, $1 d }
+        | */direct_declarator { $1 }
+        ;
+
+direct_declarator
+        : IDENTIFIER
+            { $1, Dsimple }
+        | direct_declarator LSQUARE lexpr RSQUARE 
+	    { let id,d = $1 in id, Darray (d, Some $3) }
+        | direct_declarator LSQUARE RSQUARE 
+	    { let id,d = $1 in id, Darray (d, None) }
+        ;
+
+c_initializer
+        : lexpr { Iexpr $1 }
+        | LBRACE c_initializer_list RBRACE { Ilist $2 }
+        | LBRACE c_initializer_list COMMA RBRACE { Ilist $2 }
+        ;
+
+c_initializer_list
+        : c_initializer { [$1] }
+        | c_initializer_list COMMA c_initializer { $1 @ [$3] }
+        ;
 
 %%

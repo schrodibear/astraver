@@ -302,7 +302,7 @@
 %}
 
 %token <int * Cast.parsed_spec> SPEC
-%token <int * Cast.parsed_decl> DECL
+%token <int * Cast.parsed_decl list> DECL
 %token <int * Cast.parsed_code_annot> CODE_ANNOT
 %token <int * Cast.parsed_loop_annot> LOOP_ANNOT
 
@@ -539,7 +539,8 @@ declaration
 	  declaration_specifiers init_declarator_list attributes_opt SEMICOLON 
 	    { [locate (spec_declaration $1 $2 $3)] }
 	| DECL  /* ADDED FOR WHY */
-	    { let ofs,d = $1 in [locate (Cspecdecl (ofs,d))] }
+	    { let ofs,d = $1 in 
+	      List.map (fun d -> locate (Cspecdecl (ofs,d))) d }
         ;
 
 /* the precedence specs indicates to keep going with declaration_specifiers */

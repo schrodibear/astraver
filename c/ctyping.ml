@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.84 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.85 2005-01-06 14:27:56 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -703,6 +703,11 @@ and type_initializer_option loc env ty = function
   | None -> None
   | Some i -> Some (type_initializer loc env ty i)
 
+let type_initializer_option loc env ty = function
+  | None -> None
+  | Some i -> Some (type_initializer loc env ty i)
+
+
 (*s Statements *)
 
 type status = { 
@@ -805,6 +810,9 @@ and type_statement_node loc env et = function
       TSassert p, mt_status
   | CSannot (_, Label l) ->
       TSlogic_label l, mt_status
+  | CSannot (_, GhostSet(x,t)) ->
+      TSset ((find_ghost x), 
+	    (type_term env t)), mt_status
   | CSspec (spec, s) ->
       let spec = type_spec env spec in
       let s,st = type_statement env et s in
@@ -877,7 +885,7 @@ let type_logic_parameters env pl =
     pl 
     ([], env)
 
-let type_spec_decl ofs = function
+let type_spec_decl loc ofs = function
   | LDaxiom (id, p) -> 
       Taxiom (id, type_predicate ofs (Env.empty ()) p)
   | LDinvariant (id, p) -> 
@@ -898,6 +906,19 @@ let type_spec_decl ofs = function
       let p = type_predicate ofs env' p in
       Cenv.add_pred id.logic_name (List.map snd pl,id);
       Tlogic (id, Predicate_def (pl, p))
+  | LDghost (ty,x,cinit) -> 
+      let ty = type_logic_type (Env.empty ()) ty in
+      let info = add_ghost loc x ty (default_var_info x) in 
+      set_static info;
+      set_var_type (Var_info info) ty;
+      let cinit = 
+	match cinit with
+	  | None -> None
+	  | Some (Iexpr t) -> Some(Iexpr (type_term (Env.empty()) t))
+	  | _ -> assert false
+      in
+      Tghost (info, cinit)
+
 
 (* table storing function specifications *)
 let function_specs = Hashtbl.create 97
@@ -939,7 +960,7 @@ let array_size_from_initializer loc ty i = match ty.ctype_node, i with
 
 let type_decl d = match d.node with
   | Cspecdecl (ofs, s) -> 
-      type_spec_decl ofs s
+      type_spec_decl d.loc ofs s
   | Ctypedef (ty, x) -> 
       let ty = type_type d.loc (Env.empty ()) ty in
       add_typedef d.loc x ty;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.29 2004-12-01 14:45:22 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.30 2005-01-06 14:27:55 hubert Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -63,6 +63,8 @@
 	"struct", STRUCT;
 	"enum", ENUM;
 	"union", UNION;
+	"ghost", GHOST;
+	"set", SET;
       ];
     fun s -> try Hashtbl.find h s with Not_found -> IDENTIFIER s
 
@@ -142,6 +144,7 @@ rule token = parse
   | "}"                     { RBRACE }
   | ("["|"<:")              { LSQUARE }
   | ("]"|":>")              { RSQUARE }
+  | "="                     { EQUAL }
 
   | eof { EOF }
   | '\\' rL (rL | rD)* 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.54 2005-01-04 15:47:59 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.55 2005-01-06 14:27:55 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -128,11 +128,16 @@ type parsed_decl =
       Info.logic_info * (parsed_logic_type * string) list * parsed_predicate
   | LDaxiom of string * parsed_predicate
   | LDinvariant of string * parsed_predicate
+  | LDghost of parsed_logic_type * string * lexpr c_initializer option
 
-type parsed_code_annot = Assert of parsed_predicate | Label of string
+type parsed_code_annot = 
+  | Assert of parsed_predicate 
+  | Label of string
+  | GhostSet of string * lexpr 
+
 
 type parsed_annot = 
-  | Adecl of parsed_decl
+  | Adecl of parsed_decl list
   | Aspec of parsed_spec
   | Acode_annot of parsed_code_annot
   | Aloop_annot of parsed_loop_annot
@@ -244,6 +249,7 @@ and tstatement_node =
   | TSassert of predicate
   | TSlogic_label of string
   | TSspec of spec * tstatement
+  | TSset of (Info.var_info * tterm)
 
 and tblock = tdecl located list * tstatement list
 
@@ -251,6 +257,7 @@ and tdecl =
   | Tlogic of Info.logic_info * (tterm,tctype) logic_symbol
   | Taxiom of string * predicate
   | Tinvariant of string * predicate
+  | Tghost of Info.var_info *  tterm c_initializer option
   | Ttypedef of tctype * string
   | Ttypedecl of tctype
   | Tdecl of tctype * Info.var_info * texpr c_initializer option

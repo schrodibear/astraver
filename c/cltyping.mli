@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.mli,v 1.24 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: cltyping.mli,v 1.25 2005-01-06 14:27:55 hubert Exp $ i*)
 
 (* Typing of C annotations *)
 
@@ -23,7 +23,7 @@ open Cast
 open Cenv
 
 (* logical environments *)
-
+val type_term : Env.t -> parsed_term  -> tterm
 val type_predicate : Env.t -> parsed_predicate -> Cast.predicate
 val type_location : Env.t -> parsed_term location -> tterm location
 val type_spec : tctype option -> Env.t -> parsed_spec -> Cast.spec

@@ -30,6 +30,9 @@ val find_fun : string -> ctype list * ctype * Info.logic_info
 val add_pred : string -> ctype list * Info.logic_info -> unit
 val find_pred : string -> ctype list * Info.logic_info 
 
+val add_ghost : Loc.t -> string -> ctype -> var_info -> var_info
+val find_ghost : string -> var_info
+
 (* tag types *)
 type tag_type_definition = 
   | TTIncomplete 

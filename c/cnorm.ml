@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.12 2005-01-05 10:26:18 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.13 2005-01-06 14:27:56 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -539,6 +539,58 @@ and nlocated s l l2 =
 	end
     | _  -> assert false
 
+let rec expr_of_term (t : nterm) : nexpr = 
+ {
+  nexpr_node = 
+    begin
+      match t.nterm_node with 
+	| NTconstant c ->  NEconstant c
+	| NTvar v -> NEvar (Var_info v)
+	| NTapp (i,l) -> error t.nterm_loc 
+	      "logic function can't be used with ghost variables"
+	| NTunop (t , term) -> NEunary(
+	    begin  match t with 
+	      | Clogic.Uminus -> Uminus 
+	      | Clogic.Utilde -> Utilde 
+	      | Clogic.Ustar -> assert false
+	      | Clogic.Uamp -> assert false
+	      | Clogic.Ufloat_of_int -> Ufloat_of_int
+	      | Clogic.Uint_of_float -> Uint_of_float
+	    end,
+	    (expr_of_term term))
+	      
+	| NTstar t ->  NEstar (expr_of_term t)
+	| NTbinop (t1, b, t2) -> NEbinary 
+	      ((expr_of_term t1),
+	       begin match b with
+		 | Clogic.Badd -> Badd
+		 | Clogic.Bsub -> Bsub
+		 | Clogic.Bmul -> Bmul 
+		 | Clogic.Bdiv -> Bdiv
+		 | Clogic.Bmod -> Bmod
+	       end,
+	       (expr_of_term t2))
+	      
+	| NTarrow (t,v) -> NEarrow (expr_of_term t,v)
+	| NTif (t1,t2,t3)-> NEcond 
+	      (expr_of_term t1,expr_of_term t2,expr_of_term t3)
+	| NTold t -> error t.nterm_loc 
+	      "old can't be used with ghost variables"
+	| NTat (t , s)-> error t.nterm_loc 
+	      "@ can't be used with ghost variables"
+	| NTbase_addr t -> error t.nterm_loc 
+	      "base_addr can't be used with ghost variables"
+	| NTblock_length t -> error t.nterm_loc 
+	      "block_length can't be used with ghost variables"
+	| NTresult -> error t.nterm_loc 
+	      "result can't be used with ghost variables"
+	| NTnull -> NEconstant (IntConstant "0")
+	| NTcast (ty,t) -> NEcast(ty,expr_of_term t)
+    end;
+    nexpr_type = t.nterm_type;
+    nexpr_loc  = t.nterm_loc
+ }
+
 let rec st_cases used_cases (i : tstatement) 
   : 'a IntMap.t * 'a IntMap.t * nstatement =
   match i.st_node with 
@@ -609,7 +661,6 @@ and st_switch i =
     | TSblock (_,l) -> st_case_list IntMap.empty l
     | _ -> st_case_list IntMap.empty [i]
 
-
 and statement s =
   let nst =
     match s.st_node with
@@ -644,6 +695,10 @@ and statement s =
   | TSassert p -> NSassert (predicate p)
   | TSlogic_label  string -> NSlogic_label string
   | TSspec (s, tstatement) -> NSspec (spec s, statement tstatement)
+  | TSset (x, t) -> NSexpr (noattr2 s.st_loc x.var_type 
+			      (NEassign (noattr2 s.st_loc x.var_type 
+					   (NEvar (Var_info x)),
+			      (expr_of_term (term t)))))
   in
   { nst_node = nst;
     nst_break = s.st_break;
@@ -685,6 +740,7 @@ and statement s =
 				    statement st)
 *)
 
+
 let global_decl e1 =
   match e1 with    
   | Tlogic(info, l) -> Nlogic (info , logic_symbol l)
@@ -711,14 +767,18 @@ let global_decl e1 =
   | Tfundef (s, t, f, l, st) -> Nfundef (spec s,ctype t,f,
 				   (List.map (fun (x,y) -> (ctype x,y)) l),
 				    statement st)
-
-
+  | Tghost(x,cinit) ->
+      let cinit = 
+	match cinit with
+	  | None -> None
+	  | Some (Iexpr t) -> Some(Iexpr (expr_of_term (term t)))
+	  | _ -> assert false
+      in
+      Ndecl(x.var_type,x,cinit)
+      
+      
+	
 let file = List.map (fun d -> { node = global_decl d.node ; loc = d.loc})
-
-
-
-let field_types () =
-  Hashtbl.iter 
 
 
 (* Automatic invariants expressing validity of local/global variables *)
