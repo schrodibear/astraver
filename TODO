@@ -2,6 +2,9 @@
 CADUCEUS
 ========
 
+ - structures passed to functions (by value): validity should be added
+   automatically
+
  - C features
    - &x for local variable x
    - switch

@@ -1,5 +1,6 @@
 Note: These are the changes for Caduceus.
 
+ o new option -coq-tactic
  o handling of parameters which are modified in function body
  o renaming when name clash between local and global variable.
  o support for enum constants, and strict constant evaluation
