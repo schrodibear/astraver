@@ -5,7 +5,7 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 476-4129 *)
+(* Why obligation from file "why/schorr_waite.why", characters 368-4021 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -26,7 +26,7 @@ Proof.
 intros; apply order_mark_m_and_c_and_stack_wf.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 483-804 *)
+(* Why obligation from file "why/schorr_waite.why", characters 375-696 *)
 Lemma schorr_waite_impl_po_2 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -103,7 +103,7 @@ apply I2; auto.
 left; exists (@nil pointer); constructor.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3231-3349 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3123-3241 *)
 Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -183,7 +183,7 @@ apply I2; auto.
 left; exists (@nil pointer); constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3371-3428 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3263-3320 *)
 Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -269,7 +269,7 @@ right; exists (@nil pointer); constructor.
 clear Test6; intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3552-3576 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3444-3468 *)
 Lemma schorr_waite_impl_po_5 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -356,7 +356,7 @@ Proof.
 intros; subst;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3529-3576 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3421-3468 *)
 Lemma schorr_waite_impl_po_6 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2002,7 +2002,7 @@ auto.
 Save.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3694-3730 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3586-3622 *)
 Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2091,7 +2091,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3694-3730 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3586-3622 *)
 Lemma schorr_waite_impl_po_8 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3119,7 +3119,7 @@ left.
 unfold reachable; exists (@nil pointer);constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3930-3942 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3822-3834 *)
 Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3198,7 +3198,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3975-3999 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3867-3891 *)
 Lemma schorr_waite_impl_po_10 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3281,7 +3281,7 @@ Proof.
 intros;subst;tauto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3952-3999 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3844-3891 *)
 Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -4086,7 +4086,7 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 476-4129 *)
+(* Why obligation from file "why/schorr_waite.why", characters 368-4021 *)
 Lemma schorr_waite_impl_po_12 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -4216,7 +4216,7 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 476-4129 *)
+(* Why obligation from file "why/schorr_waite.why", characters 368-4021 *)
 Lemma schorr_waite_impl_po_13 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -4413,7 +4413,7 @@ auto.
 apply H3;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 834-3131 *)
+(* Why obligation from file "why/schorr_waite.why", characters 726-3023 *)
 Lemma schorr_waite_impl_po_14 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
