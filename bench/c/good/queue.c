@@ -13,9 +13,9 @@ struct queue {
   @   (* && (q.full != 0 <=> q.last == q.first) *)
   @*/
 
-/*@ requires q.full == 0
+/*@ requires !q.full
   @ assigns  q.empty, q.full, q.last, q.contents[q.last]
-  @ ensures  q.empty == 0 && q.contents[\old(q.last)] == c
+  @ ensures  !q.empty && q.contents[\old(q.last)] == c
   @*/
 void push(char c) {
   q.contents[q.last++] = c;
@@ -26,9 +26,9 @@ void push(char c) {
 
 /* q.last = (q.last + 1) % q.length; BUG */
 
-/*@ requires q.empty == 0
+/*@ requires !q.empty
   @ assigns q.empty, q.full, q.first
-  @ ensures q.full == 0 && \result == q.contents[\old(q.first)]
+  @ ensures !q.full && \result == q.contents[\old(q.first)]
   @*/
 char pop() {
   char r = q.contents[q.first++];

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/queue.why", characters 463-483 *)
+(* Why obligation from file "why/queue.why", characters 456-476 *)
 Lemma pop_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -12,7 +12,7 @@ Lemma pop_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre32: ~(acc empty q) <> 0 /\ (valid alloc q) /\
+  forall (Pre32: (acc empty q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -21,7 +21,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 613-637 *)
+(* Why obligation from file "why/queue.why", characters 606-630 *)
 Lemma pop_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -30,7 +30,7 @@ Lemma pop_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre32: ~(acc empty q) <> 0 /\ (valid alloc q) /\
+  forall (Pre32: (acc empty q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -44,7 +44,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 882-891 *)
+(* Why obligation from file "why/queue.why", characters 875-884 *)
 Lemma pop_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -55,7 +55,7 @@ Lemma pop_impl_po_3 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre32: ~(acc empty q) <> 0 /\ (valid alloc q) /\
+  forall (Pre32: (acc empty q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -96,7 +96,7 @@ Lemma pop_impl_po_3 :
                           ((result1 = result2 ->
                             (forall (empty0:((memory) Z)),
                              (empty0 = (upd empty result 1) ->
-                              (~(acc full0 q) <> 0 /\ result0 =
+                              ((acc full0 q) = 0 /\ result0 =
                               (acc intP
                                (shift (acc contents q) (acc first q)))) /\
                               (((assigns alloc full full0 (pointer_loc q)) /\
@@ -111,7 +111,7 @@ Lemma pop_impl_po_3 :
                           ((result1 <> result2 ->
                             (forall (empty0:((memory) Z)),
                              (empty0 = (upd empty result 0) ->
-                              (~(acc full0 q) <> 0 /\ result0 =
+                              ((acc full0 q) = 0 /\ result0 =
                               (acc intP
                                (shift (acc contents q) (acc first q)))) /\
                               (((assigns alloc full full0 (pointer_loc q)) /\
@@ -140,7 +140,7 @@ Lemma pop_impl_po_3 :
                      (result2 = (acc last q) ->
                       ((result1 = result2 ->
                         (forall (empty0:((memory) Z)),
-                         (empty0 = (upd empty result 1) -> (~(acc full0 q) <>
+                         (empty0 = (upd empty result 1) -> ((acc full0 q) =
                           0 /\ result0 =
                           (acc intP (shift (acc contents q) (acc first q)))) /\
                           (((assigns alloc full full0 (pointer_loc q)) /\
@@ -154,7 +154,7 @@ Lemma pop_impl_po_3 :
                         (valid alloc result))) /\
                       ((result1 <> result2 ->
                         (forall (empty0:((memory) Z)),
-                         (empty0 = (upd empty result 0) -> (~(acc full0 q) <>
+                         (empty0 = (upd empty result 0) -> ((acc full0 q) =
                           0 /\ result0 =
                           (acc intP (shift (acc contents q) (acc first q)))) /\
                           (((assigns alloc full full0 (pointer_loc q)) /\
@@ -179,7 +179,7 @@ rewrite acc_upd in H15; omega.
 rewrite acc_upd in H9; omega.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 2602-2622 *)
+(* Why obligation from file "why/queue.why", characters 2581-2601 *)
 Lemma push_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -188,7 +188,7 @@ Lemma push_impl_po_1 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre33: ~(acc full q) <> 0 /\ (valid alloc q) /\
+  forall (Pre33: (acc full q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -197,7 +197,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 2748-2771 *)
+(* Why obligation from file "why/queue.why", characters 2727-2750 *)
 Lemma push_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (contents: ((memory) pointer)),
@@ -206,7 +206,7 @@ Lemma push_impl_po_2 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre33: ~(acc full q) <> 0 /\ (valid alloc q) /\
+  forall (Pre33: (acc full q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -220,7 +220,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/queue.why", characters 3007-3016 *)
+(* Why obligation from file "why/queue.why", characters 2986-2995 *)
 Lemma push_impl_po_3 : 
   forall (c: Z),
   forall (alloc: alloc_table),
@@ -232,7 +232,7 @@ Lemma push_impl_po_3 :
   forall (last: ((memory) Z)),
   forall (length: ((memory) Z)),
   forall (q: pointer),
-  forall (Pre33: ~(acc full q) <> 0 /\ (valid alloc q) /\
+  forall (Pre33: (acc full q) = 0 /\ (valid alloc q) /\
                  ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)),
@@ -273,7 +273,7 @@ Lemma push_impl_po_3 :
                           ((result0 = result1 ->
                             (forall (full0:((memory) Z)),
                              (full0 = (upd full result 1) ->
-                              (~(acc empty0 q) <> 0 /\
+                              ((acc empty0 q) = 0 /\
                               (acc intP0
                                (shift (acc contents q) (acc last q))) =
                               c) /\
@@ -292,7 +292,7 @@ Lemma push_impl_po_3 :
                           ((result0 <> result1 ->
                             (forall (full0:((memory) Z)),
                              (full0 = (upd full result 0) ->
-                              (~(acc empty0 q) <> 0 /\
+                              ((acc empty0 q) = 0 /\
                               (acc intP0
                                (shift (acc contents q) (acc last q))) =
                               c) /\
@@ -325,7 +325,7 @@ Lemma push_impl_po_3 :
                      (result1 = (acc last0 q) ->
                       ((result0 = result1 ->
                         (forall (full0:((memory) Z)),
-                         (full0 = (upd full result 1) -> (~(acc empty0 q) <>
+                         (full0 = (upd full result 1) -> ((acc empty0 q) =
                           0 /\
                           (acc intP0 (shift (acc contents q) (acc last q))) =
                           c) /\
@@ -342,7 +342,7 @@ Lemma push_impl_po_3 :
                         (valid alloc result))) /\
                       ((result0 <> result1 ->
                         (forall (full0:((memory) Z)),
-                         (full0 = (upd full result 0) -> (~(acc empty0 q) <>
+                         (full0 = (upd full result 0) -> ((acc empty0 q) =
                           0 /\
                           (acc intP0 (shift (acc contents q) (acc last q))) =
                           c) /\
