@@ -1,4 +1,7 @@
 
+  o better automatic annotation of tests (in particular || and && are given
+    postconditions whenever possible)
+
 version 1.22, June 21th, 2003
 =============================
   o fixed lost of annotation in C function calls
