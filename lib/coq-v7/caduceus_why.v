@@ -30,6 +30,11 @@ Admitted.
 (*Why logic*) Definition shift : pointer -> Z -> pointer.
 Admitted.
 
+Admitted.
+
+(*Why logic*) Definition sub_pointer : pointer -> pointer -> Z.
+Admitted.
+
 (*Why*) Parameter eq_pointer :
   (p: pointer)(q: pointer)
   (sig_1 bool [result: bool]((if result then p = q else ~(p = q)))).
@@ -116,6 +121,15 @@ Admitted.
       ((k:Z)
        ((valid_range a p i j) ->
         (`i <= k` /\ `k <= j` -> (valid a (shift p k))))))))).
+Admitted.
+
+Admitted.
+
+(*Why axiom*) Lemma sub_pointer_def :
+  ((p1:pointer)
+   ((p2:pointer)
+    ((base_addr p1) = (base_addr p2) ->
+     `(sub_pointer p1 p2) = (offset p1) - (offset p2)`))).
 Admitted.
 
 (*Why*) Parameter shift_ :

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.62 2004-03-25 13:05:15 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.63 2004-03-25 13:32:13 filliatr Exp $ i*)
 
 
 open Format
@@ -66,7 +66,7 @@ let interp_term_bin_op ty op =
   | CTfloat _, Bmul -> "mul_float"
   | CTfloat _, Bdiv -> "div_float"
   | (CTpointer _ | CTarray _), Badd -> "shift"
-  | (CTpointer _ | CTarray _), Bsub -> unsupported "logic pointer sub"
+  | (CTpointer _ | CTarray _), Bsub -> "sub_pointer"
   | _ -> assert false
 
 let interp_term_un_op ty op = match ty.ctype_node, op with

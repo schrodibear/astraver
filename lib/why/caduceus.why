@@ -10,6 +10,7 @@ logic block_length: alloc,pointer -> int
 logic base_addr: pointer -> addr
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
+logic sub_pointer: pointer,pointer -> int
 
 parameter eq_pointer : 
   p:pointer -> q:pointer -> {} bool { if result then p=q else p<>q }
@@ -80,6 +81,10 @@ axiom neq_offset_neq_shift :
 axiom valid_range_valid_shift :
   forall a:alloc. forall p:pointer. forall i:int. forall j:int. forall k:int.
   valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
+
+axiom sub_pointer_def :
+  forall p1:pointer. forall p2:pointer.
+  base_addr(p1) = base_addr(p2) -> sub_pointer(p1,p2) = offset(p1)-offset(p2)
 
 parameter shift_ : p:pointer -> i:int -> 
   { } pointer { result = shift(p,i) }
