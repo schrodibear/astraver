@@ -146,7 +146,7 @@ Lemma rec_add1_po_1 :
   (Pre6: `y0 >= 0`)
   (Test2: `0 < y0`)
   (x1: Z)
-  (Post2: x1 = `x0 + 1`)
+  (Post3: x1 = `x0 + 1`)
   `y0 - 1 >= 0`.
 Proof.
 Intros; Omega.
@@ -163,7 +163,7 @@ Lemma rec_add1_po_2 :
   (Pre6: `y0 >= 0`)
   (Test2: `0 < y0`)
   (x1: Z)
-  (Post2: x1 = `x0 + 1`)
+  (Post3: x1 = `x0 + 1`)
   (Pre5: `y0 - 1 >= 0`)
   (Pre3: `y0 - 1 >= 0`)
   (Pre4: `y0 - 1 >= 0`)
@@ -183,10 +183,10 @@ Lemma rec_add1_po_3 :
   (Pre6: `y0 >= 0`)
   (Test2: `0 < y0`)
   (x1: Z)
-  (Post2: x1 = `x0 + 1`)
+  (Post3: x1 = `x0 + 1`)
   (Pre5: `y0 - 1 >= 0`)
   (x2: Z)
-  (Post7: `x2 = x1 + (y0 - 1)`)
+  (Post8: `x2 = x1 + (y0 - 1)`)
   `x2 = x0 + y0`.
 Proof.
 Intros; Omega.
@@ -216,40 +216,40 @@ Definition rec_add1 := (* validation *)
        (y0: Z)(x0: Z)(_: Variant2 = y0)(_0: `y0 >= 0`)
        (sig_2 Z unit [x1: Z][result: unit](`x1 = x0 + y0`)); y0: Z; x0: Z;
        Pre7: Variant1 = y0; Pre6: `y0 >= 0`]
-        let (result, Bool2) =
-          let (result1, Post4) = (Z_lt_ge_bool `0` y0) in
+        let (result, Bool3) =
+          let (result1, Post5) = (Z_lt_ge_bool `0` y0) in
           (exist_1 [result2: bool]
-          (if result2 then `0 < y0` else `0 >= y0`) result1 Post4) in
+          (if result2 then `0 < y0` else `0 >= y0`) result1 Post5) in
         (Cases (btest [result:bool](if result then `0 < y0` else `0 >= y0`)
-                result Bool2) of
+                result Bool3) of
         | (left Test2) =>
-            let (x1, result0, Post6) =
-              let (x1, result0, Post2) =
-                let (result0, Post2) = (exist_1 [result0: Z]
+            let (x1, result0, Post7) =
+              let (x1, result0, Post3) =
+                let (result0, Post3) = (exist_1 [result0: Z]
                   result0 = `x0 + 1` `x0 + 1` (refl_equal ? `x0 + 1`)) in
                 (exist_2 [x2: Z][result1: unit]x2 = `x0 + 1` result0 
-                tt Post2) in
+                tt Post3) in
               let Pre5 =
                 (rec_add1_po_1 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test2 x1
-                Post2) in
-              let (x2, result1, Post7) =
+                Post3) in
+              let (x2, result1, Post8) =
                 let Pre3 = Pre5 in
                 let Pre4 = Pre3 in
-                let (x2, result3, Post8) =
+                let (x2, result3, Post9) =
                   ((wf1 `y0 - 1`)
                     (rec_add1_po_2 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test2 x1
-                    Post2 Pre5 Pre3 Pre4) `y0 - 1` x1 (refl_equal ? `y0 - 1`)
+                    Post3 Pre5 Pre3 Pre4) `y0 - 1` x1 (refl_equal ? `y0 - 1`)
                     Pre4) in
                 (exist_2 [x3: Z][result4: unit]`x3 = x1 + (y0 - 1)` x2
-                result3 Post8) in
+                result3 Post9) in
               (exist_2 [x3: Z][result2: unit]`x3 = x0 + y0` x2 result1
-              (rec_add1_po_3 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test2 x1 Post2
-              Pre5 x2 Post7)) in
-            (exist_2 [x2: Z][result1: unit]`x2 = x0 + y0` x1 result0 Post6)
+              (rec_add1_po_3 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test2 x1 Post3
+              Pre5 x2 Post8)) in
+            (exist_2 [x2: Z][result1: unit]`x2 = x0 + y0` x1 result0 Post7)
         | (right Test1) =>
-            let (result0, Post5) = (exist_1 [result0: unit]`x0 = x0 + y0` 
+            let (result0, Post6) = (exist_1 [result0: unit]`x0 = x0 + y0` 
               tt (rec_add1_po_4 y Pre8 Variant1 y0 x0 Pre7 Pre6 Test1)) in
-            (exist_2 [x1: Z][result1: unit]`x1 = x0 + y0` x0 result0 Post5) end)
+            (exist_2 [x1: Z][result1: unit]`x1 = x0 + y0` x0 result0 Post6) end)
       y y x (refl_equal ? y) Pre8).
 
 (* Why obligation from file "peano.mlw", characters 597-622 *)

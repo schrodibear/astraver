@@ -60,13 +60,13 @@ Definition f := (* validation *)
        Pre6: `x0 >= 0`]
         let (result, Post2) =
           let (result, Post3) =
-            let (result, Bool2) =
+            let (result, Bool3) =
               let (result1, Post4) = (Z_eq_bool x0 `0`) in
               (exist_1 [result2: bool]
               (if result2 then `x0 = 0` else `x0 <> 0`) result1 Post4) in
             (Cases (btest
                     [result:bool](if result then `x0 = 0` else `x0 <> 0`)
-                    result Bool2) of
+                    result Bool3) of
             | (left Test2) =>
                 let (result0, Post6) =
                   let (result0, Post7) = (exist_1 [result0: Z]

@@ -849,7 +849,7 @@ Definition search3 := (* validation *)
               result)));
            i0: Z; Pre8: Variant1 = `(array_length t) - i0`;
            Pre7: `0 <= i0` /\ `i0 <= (array_length t)`]
-            let (result, Bool4) =
+            let (result, Bool6) =
               let (result1, Post3) = (Z_eq_bool i0 (array_length t)) in
               (exist_1 [result2: bool]
               (if result2 then `i0 = (array_length t)`
@@ -858,7 +858,7 @@ Definition search3 := (* validation *)
             (Cases (btest
                     [result:bool](if result then `i0 = (array_length t)`
                                   else `i0 <> (array_length t)`)
-                    result Bool4) of
+                    result Bool6) of
             | (left Test4) =>
                 let (result0, Post15) =
                   (exist_1 (qcomb [result0: unit]
@@ -887,7 +887,7 @@ Definition search3 := (* validation *)
                 end
             | (right Test3) =>
                 let (result0, Post4) =
-                  let (result0, Bool3) =
+                  let (result0, Bool5) =
                     let result1 =
                       let Pre2 =
                         (search3_po_3 t Pre13 Pre12 Pre10 Pre11 Variant1 i0
@@ -901,7 +901,7 @@ Definition search3 := (* validation *)
                   (Cases (btest
                           [result0:bool](if result0 then `(access t i0) = 0`
                                          else `(access t i0) <> 0`)
-                          result0 Bool3) of
+                          result0 Bool5) of
                   | (left Test2) =>
                       let (result1, Post12) = (exist_1 [result1: Z]
                         `(access t result1) = 0` i0 Test2) in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.87 2003-01-10 15:27:59 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.88 2003-01-24 10:30:37 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -321,6 +321,19 @@ let saturation loc e (a,al) =
   in
   (a, List.map set_post xs)
 
+(*s The following flag indicates whether exceptions must be checked 
+    as possibly raised in try-with constructs; indeed, this must be disabled
+    when computing the effects of a recursive function. *)
+
+let exn_check = ref true
+let without_exn_check f x =
+  if !exn_check then begin
+    exn_check := false; 
+    try let y = f x in exn_check := true; y 
+    with e -> exn_check := true; raise e
+  end else
+    f x
+
 (*s Typing programs. We infer here the type with effects. 
     [lab] is the set of labels, [env] the environment 
     and [expr] the program. *)
@@ -598,28 +611,32 @@ and typef_desc lab env loc = function
       let var,efvar = state_var lab env' var in
       let phi0 = phi_name () in
       (* effects for a let/rec construct are computed as a fixpoint *)
+      let type_body c =
+	(* TODO: change label to "init" in [c] *)
+	let tf = make_arrow bl' c in
+	let env'' = add_rec f (add f tf env') in
+	typef initial_labels env'' e
+      in
       let fixpoint_reached c1 c2 =
 	c1.c_effect = c2.c_effect && 
         List.length c1.c_pre = List.length c2.c_pre &&
         (match c1.c_post, c2.c_post with 
          | None, None | Some _, Some _ -> true | _ -> false)
       in
-      let rec state_rec c =
-	(* TODO: change label to "init" in [c] *)
-	let tf = make_arrow bl' c in
-	let env'' = add_rec f (add f tf env') in
-	let t_e = typef initial_labels env'' e in
+      let rec fixpoint c =
+	let t_e = type_body c in
 	if fixpoint_reached t_e.info.kappa c then
 	  t_e
       	else begin
 	  if_debug_3 eprintf "  (rec => %a)@\n@?" print_type_c t_e.info.kappa;
-	  state_rec t_e.info.kappa
+	  fixpoint t_e.info.kappa
       	end
       in 
       let c0 = { c_result_name = result; c_result_type = v;
 		 c_effect = efvar; c_pre = []; c_post = None } in
-      let t_e = state_rec c0 in
-      let tf = make_arrow bl' t_e.info.kappa in (* IDEM *)
+      let t_e = without_exn_check fixpoint c0 in (* fixpoint, without check *)
+      let t_e = type_body t_e.info.kappa in (* once again, with checks *)
+      let tf = make_arrow bl' t_e.info.kappa in
       Rec (f,bl',v,var,t_e), (tf,Effect.bottom), []
 
   | Sraise (id, e, ct) ->
@@ -650,7 +667,8 @@ and typef_desc lab env loc = function
       let ef = List.fold_left (fun e ((x,_),_) -> remove_exn x e) ef hl in
       let type_handler ((x,a),h) =
 	if not (is_exception x) then raise_located loc (UnboundException x);
-	if not (List.mem x xs) then raise_located e.ploc (CannotBeRaised x);
+	if not (List.mem x xs) && !exn_check then 
+	  raise_located e.ploc (CannotBeRaised x);
 	let env' = match a, find_exception x with 
 	  | None, None -> env 
 	  | Some v, Some tv -> Env.add v (PureType tv) env

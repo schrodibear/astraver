@@ -182,7 +182,7 @@ Lemma maximum_po_2 :
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
-  (Post2: nk = `k0 - 1`)
+  (Post3: nk = `k0 - 1`)
   `0 <= i0` /\ `i0 < (array_length t)`.
 Proof.
    Intros; Omega'.
@@ -205,7 +205,7 @@ Lemma maximum_po_3 :
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
-  (Post2: nk = `k0 - 1`)
+  (Post3: nk = `k0 - 1`)
   (Pre3: `0 <= i0` /\ `i0 < (array_length t)`)
   `0 <= nk` /\ `nk < (array_length t)`.
 Proof.
@@ -229,7 +229,7 @@ Lemma maximum_po_4 :
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
-  (Post2: nk = `k0 - 1`)
+  (Post3: nk = `k0 - 1`)
   (Test2: `(access t nk) > (access t i0)`)
   (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\ `n0 < (array_length t)` /\
   (Maximize t n0 (access t nk) nk).
@@ -257,7 +257,7 @@ Lemma maximum_po_5 :
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
-  (Post2: nk = `k0 - 1`)
+  (Post3: nk = `k0 - 1`)
   (Test2: `(access t nk) > (access t i0)`)
   (Pre11: (`0 <= nk` /\ `nk <= nk`) /\ `nk <= n0` /\
           `n0 < (array_length t)` /\ (Maximize t n0 (access t nk) nk))
@@ -288,7 +288,7 @@ Lemma maximum_po_6 :
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
-  (Post2: nk = `k0 - 1`)
+  (Post3: nk = `k0 - 1`)
   (Test1: `(access t nk) <= (access t i0)`)
   (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\ `n0 < (array_length t)` /\
   (Maximize t n0 (access t i0) nk).
@@ -314,7 +314,7 @@ Lemma maximum_po_7 :
           `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) k0))
   (Test3: `k0 <> 0`)
   (nk: Z)
-  (Post2: nk = `k0 - 1`)
+  (Post3: nk = `k0 - 1`)
   (Test1: `(access t nk) <= (access t i0)`)
   (Pre7: (`0 <= nk` /\ `nk <= i0`) /\ `i0 <= n0` /\
          `n0 < (array_length t)` /\ (Maximize t n0 (access t i0) nk))
@@ -346,84 +346,84 @@ Definition maximum := (* validation *)
        n0: Z; k0: Z; i0: Z; Pre13: Variant1 = k0; Pre12: (`0 <= k0` /\
        `k0 <= i0`) /\ `i0 <= n0` /\ `n0 < (array_length t)` /\
        (Maximize t n0 (access t i0) k0)]
-        let (result, Bool4) =
-          let (result1, Post5) = (Z_eq_bool k0 `0`) in
+        let (result, Bool6) =
+          let (result1, Post6) = (Z_eq_bool k0 `0`) in
           (exist_1 [result2: bool]
-          (if result2 then `k0 = 0` else `k0 <> 0`) result1 Post5) in
+          (if result2 then `k0 = 0` else `k0 <> 0`) result1 Post6) in
         (Cases (btest [result:bool](if result then `k0 = 0` else `k0 <> 0`)
-                result Bool4) of
+                result Bool6) of
         | (left Test4) =>
-            let (result0, Post13) = (exist_1 [result0: Z](`0 <= result0` /\
+            let (result0, Post14) = (exist_1 [result0: Z](`0 <= result0` /\
               `result0 <= n0`) /\ (Maximize t n0 (access t result0) `0`) 
               i0
               (maximum_po_1 n k i t Pre14 Variant1 n0 k0 i0 Pre13 Pre12
               Test4)) in
             (exist_1 [result1: Z](`0 <= result1` /\ `result1 <= n0`) /\
-            (Maximize t n0 (access t result1) `0`) result0 Post13)
+            (Maximize t n0 (access t result1) `0`) result0 Post14)
         | (right Test3) =>
-            let (result0, Post6) =
-              let (nk, Post2) = (exist_1 [result0: Z]
+            let (result0, Post7) =
+              let (nk, Post3) = (exist_1 [result0: Z]
                 result0 = `k0 - 1` `k0 - 1` (refl_equal ? `k0 - 1`)) in
-              let (result0, Post7) =
-                let (result0, Bool3) =
+              let (result0, Post8) =
+                let (result0, Bool5) =
                   let Pre3 =
                     (maximum_po_2 n k i t Pre14 Variant1 n0 k0 i0 Pre13 Pre12
-                    Test3 nk Post2) in
+                    Test3 nk Post3) in
                   let result1 =
                     let Pre2 =
                       (maximum_po_3 n k i t Pre14 Variant1 n0 k0 i0 Pre13
-                      Pre12 Test3 nk Post2 Pre3) in
+                      Pre12 Test3 nk Post3 Pre3) in
                     (Z_gt_le_bool (access t nk)) in
-                  let (result2, Post8) = (result1 (access t i0)) in
+                  let (result2, Post9) = (result1 (access t i0)) in
                   (exist_1 [result3: bool]
                   (if result3 then `(access t nk) > (access t i0)`
                    else `(access t nk) <= (access t i0)`) result2
-                  Post8) in
+                  Post9) in
                 (Cases (btest
                         [result0:bool](if result0
                                        then `(access t nk) > (access t i0)`
                                        else `(access t nk) <= (access t i0)`)
-                        result0 Bool3) of
+                        result0 Bool5) of
                 | (left Test2) =>
                     let Pre11 =
                       (maximum_po_4 n k i t Pre14 Variant1 n0 k0 i0 Pre13
-                      Pre12 Test3 nk Post2 Test2) in
-                    let (result1, Post11) =
+                      Pre12 Test3 nk Post3 Test2) in
+                    let (result1, Post12) =
                       let Pre9 = Pre11 in
                       let Pre10 = Pre9 in
-                      let (result3, Post12) =
+                      let (result3, Post13) =
                         ((wf1 nk)
                           (maximum_po_5 n k i t Pre14 Variant1 n0 k0 i0 Pre13
-                          Pre12 Test3 nk Post2 Test2 Pre11 Pre9 Pre10) 
+                          Pre12 Test3 nk Post3 Test2 Pre11 Pre9 Pre10) 
                           n0 nk nk (refl_equal ? nk) Pre10) in
                       (exist_1 [result4: Z](`0 <= result4` /\
                       `result4 <= n0`) /\
-                      (Maximize t n0 (access t result4) `0`) result3 Post12) in
+                      (Maximize t n0 (access t result4) `0`) result3 Post13) in
                     (exist_1 [result2: Z](`0 <= result2` /\
                     `result2 <= n0`) /\
-                    (Maximize t n0 (access t result2) `0`) result1 Post11)
+                    (Maximize t n0 (access t result2) `0`) result1 Post12)
                 | (right Test1) =>
                     let Pre7 =
                       (maximum_po_6 n k i t Pre14 Variant1 n0 k0 i0 Pre13
-                      Pre12 Test3 nk Post2 Test1) in
-                    let (result1, Post9) =
+                      Pre12 Test3 nk Post3 Test1) in
+                    let (result1, Post10) =
                       let Pre5 = Pre7 in
                       let Pre6 = Pre5 in
-                      let (result3, Post10) =
+                      let (result3, Post11) =
                         ((wf1 nk)
                           (maximum_po_7 n k i t Pre14 Variant1 n0 k0 i0 Pre13
-                          Pre12 Test3 nk Post2 Test1 Pre7 Pre5 Pre6) 
+                          Pre12 Test3 nk Post3 Test1 Pre7 Pre5 Pre6) 
                           n0 nk i0 (refl_equal ? nk) Pre6) in
                       (exist_1 [result4: Z](`0 <= result4` /\
                       `result4 <= n0`) /\
-                      (Maximize t n0 (access t result4) `0`) result3 Post10) in
+                      (Maximize t n0 (access t result4) `0`) result3 Post11) in
                     (exist_1 [result2: Z](`0 <= result2` /\
                     `result2 <= n0`) /\
-                    (Maximize t n0 (access t result2) `0`) result1 Post9) end) in
+                    (Maximize t n0 (access t result2) `0`) result1 Post10) end) in
               (exist_1 [result1: Z](`0 <= result1` /\ `result1 <= n0`) /\
-              (Maximize t n0 (access t result1) `0`) result0 Post7) in
+              (Maximize t n0 (access t result1) `0`) result0 Post8) in
             (exist_1 [result1: Z](`0 <= result1` /\ `result1 <= n0`) /\
-            (Maximize t n0 (access t result1) `0`) result0 Post6) end) 
+            (Maximize t n0 (access t result1) `0`) result0 Post7) end) 
       k n k i (refl_equal ? k) Pre14).
 
 (* fin preuve de maximum *)

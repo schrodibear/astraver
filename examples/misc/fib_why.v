@@ -67,8 +67,8 @@ Lemma fib1_po_4 :
   (Pre10: `n0 >= 0`)
   (Test1: `n0 > 1`)
   (Pre9: `n0 - 2 >= 0`)
-  (aux_4: Z)
-  (Post4: `aux_4 = (F n0 - 2)`)
+  (aux_6: Z)
+  (Post4: `aux_6 = (F n0 - 2)`)
   `n0 - 1 >= 0`.
 Proof.
 Intros; Omega.
@@ -84,8 +84,8 @@ Lemma fib1_po_5 :
   (Pre10: `n0 >= 0`)
   (Test1: `n0 > 1`)
   (Pre9: `n0 - 2 >= 0`)
-  (aux_4: Z)
-  (Post4: `aux_4 = (F n0 - 2)`)
+  (aux_6: Z)
+  (Post4: `aux_6 = (F n0 - 2)`)
   (Pre8: `n0 - 1 >= 0`)
   (Pre6: `n0 - 1 >= 0`)
   (Pre7: `n0 - 1 >= 0`)
@@ -104,15 +104,15 @@ Lemma fib1_po_6 :
   (Pre10: `n0 >= 0`)
   (Test1: `n0 > 1`)
   (Pre9: `n0 - 2 >= 0`)
-  (aux_4: Z)
-  (Post4: `aux_4 = (F n0 - 2)`)
+  (aux_6: Z)
+  (Post4: `aux_6 = (F n0 - 2)`)
   (Pre8: `n0 - 1 >= 0`)
-  (aux_3: Z)
-  (Post7: `aux_3 = (F n0 - 1)`)
-  `aux_3 + aux_4 = (F n0)`.
+  (aux_5: Z)
+  (Post7: `aux_5 = (F n0 - 1)`)
+  `aux_5 + aux_6 = (F n0)`.
 Proof.
 Intros.
-Subst aux_4 aux_3.
+Subst aux_6 aux_5.
 Symmetry; Auto with *.
 Save.
 
@@ -125,12 +125,12 @@ Definition fib1 := (* validation *)
        (n0: Z)(_: Variant2 = n0)(_0: `n0 >= 0`)
        (sig_1 Z [result: Z](`result = (F n0)`)); n0: Z; Pre11: Variant1 = n0;
        Pre10: `n0 >= 0`]
-        let (result, Bool2) =
+        let (result, Bool3) =
           let (result1, Post2) = (Z_le_gt_bool n0 `1`) in
           (exist_1 [result2: bool]
           (if result2 then `n0 <= 1` else `n0 > 1`) result1 Post2) in
         (Cases (btest [result:bool](if result then `n0 <= 1` else `n0 > 1`)
-                result Bool2) of
+                result Bool3) of
         | (left Test2) =>
             let (result0, Post10) = (exist_1 [result0: Z]
               `result0 = (F n0)` `1`
@@ -139,7 +139,7 @@ Definition fib1 := (* validation *)
         | (right Test1) =>
             let (result0, Post3) =
               let Pre9 = (fib1_po_2 n Pre12 Variant1 n0 Pre11 Pre10 Test1) in
-              let (aux_4, Post4) =
+              let (aux_6, Post4) =
                 let Pre3 = Pre9 in
                 let Pre4 = Pre3 in
                 let (result2, Post5) =
@@ -149,21 +149,21 @@ Definition fib1 := (* validation *)
                 (exist_1 [result3: Z]`result3 = (F n0 - 2)` result2 Post5) in
               let (result0, Post6) =
                 let Pre8 =
-                  (fib1_po_4 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9 aux_4
+                  (fib1_po_4 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9 aux_6
                   Post4) in
-                let (aux_3, Post7) =
+                let (aux_5, Post7) =
                   let Pre6 = Pre8 in
                   let Pre7 = Pre6 in
                   let (result2, Post8) =
                     ((wf1 `n0 - 1`)
                       (fib1_po_5 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9
-                      aux_4 Post4 Pre8 Pre6 Pre7) `n0 - 1`
+                      aux_6 Post4 Pre8 Pre6 Pre7) `n0 - 1`
                       (refl_equal ? `n0 - 1`) Pre7) in
                   (exist_1 [result3: Z]`result3 = (F n0 - 1)` result2 Post8) in
                 let (result0, Post9) = (exist_1 [result0: Z]
-                  `result0 = (F n0)` `aux_3 + aux_4`
-                  (fib1_po_6 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9 aux_4
-                  Post4 Pre8 aux_3 Post7)) in
+                  `result0 = (F n0)` `aux_5 + aux_6`
+                  (fib1_po_6 n Pre12 Variant1 n0 Pre11 Pre10 Test1 Pre9 aux_6
+                  Post4 Pre8 aux_5 Post7)) in
                 (exist_1 [result1: Z]`result1 = (F n0)` result0 Post9) in
               (exist_1 [result1: Z]`result1 = (F n0)` result0 Post6) in
             (exist_1 [result1: Z]`result1 = (F n0)` result0 Post3) end) 
@@ -259,12 +259,12 @@ Definition fib2_aux := (* validation *)
        x0: Z; fx0: Z; fx_2: Z; Pre7: Variant1 = `n0 - x0`;
        Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\
        `fx_2 = (F x0 - 1)`]
-        let (result, Bool2) =
+        let (result, Bool3) =
           let (result1, Post2) = (Z_eq_bool x0 n0) in
           (exist_1 [result2: bool]
           (if result2 then `x0 = n0` else `x0 <> n0`) result1 Post2) in
         (Cases (btest [result:bool](if result then `x0 = n0` else `x0 <> n0`)
-                result Bool2) of
+                result Bool3) of
         | (left Test2) =>
             let (result0, Post5) = (exist_1 [result0: Z]
               `result0 = (F n0)` fx0
