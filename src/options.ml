@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.17 2003-01-09 16:50:21 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.18 2003-01-29 16:33:03 filliatr Exp $ i*)
 
 open Format
 
@@ -27,6 +27,7 @@ let type_only_ = ref false
 let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
+let coq_preamble_ = ref "Require Why."
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -123,6 +124,10 @@ let files =
       :: s :: args -> coq_tactic_ := Some s; parse args
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
 	usage (); exit 1
+    | ("-coqpreamble" | "--coqpreamble" | "-coq-preamble" | "--coq-preamble") 
+      :: s :: args -> coq_preamble_ := s; parse args
+    | ("-coqpreamble"|"--coqpreamble"|"-coq-preamble"|"--coq-preamble")::[] ->
+	usage (); exit 1
     | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | ("--ocaml-annot" | "-ocaml-annot") :: args -> 
 	ocaml_annot_ := true; parse args
@@ -148,6 +153,7 @@ let wp_only = !wp_only_
 let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
+let coq_preamble = !coq_preamble_
 let wol = !wol_
 
 let ocaml = !ocaml_
