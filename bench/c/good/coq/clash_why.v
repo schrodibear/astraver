@@ -129,6 +129,12 @@ caduceus.
 rewrite acc_upd_neq;generalize (unchanged_pointer_elim p (ma_structure # substruct) H0);auto.
 intro.
 rewrite acc_upd_neq;auto.
+inversion_clear Post9.
+inversion_clear H3.
+inversion_clear H5.
+inversion_clear H6.
+inversion_clear H7.
+inversion_clear H8.
 Admitted.
 
 

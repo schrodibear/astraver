@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.20 2005-01-25 15:57:01 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.21 2005-02-01 09:50:20 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -789,6 +789,7 @@ let global_decl e1 =
 	  | Some (Iexpr t) -> Some(Iexpr (expr_of_term (term t)))
 	  | _ -> assert false
       in
+      Info.set_assigned x;
       Ndecl(x.var_type,x,cinit)
       
       
