@@ -18,6 +18,8 @@ int g(){
   return v[0];
 }
 
+/*@ ensures \result == v[0] */
+int g0();
 
 struct {
   int x[1];
@@ -48,9 +50,9 @@ void g1(las * p);
 las u1, u2; 
 
 /*@ requires 
-  @   (\forall las x; (x==u1 || x==u2) => 
-  @      \valid(x) && \valid(x.p1) && \valid(x.p2) 
-  @      && \valid_range(x.p1,0,5) && \valid_range(x.p2,0,5)) 
+  @   (\forall las *x; (x==&u1 || x==&u2) => 
+  @      \valid(x) && \valid(x->p1) && \valid(x->p2) 
+  @      && \valid_range(x->p1,0,5) && \valid_range(x->p2,0,5)) 
   @ assigns 
   @   u1.v1,u1.v2,u1.p1[0 .. 5],u1.p2[0 .. 5], 
   @   u2.v1,u2.v2,u2.p1[0 .. 5],u2.p2[0 .. 5] 
@@ -93,11 +95,11 @@ las2 w1,w2,w3,w4,w5,w6,w7,w8,w9,w10;
 las2 var1,var2,var3,var4,var5,var6,var7,var8,var9,var10; 
 
 /*@ requires 
-  @   (\forall las2 x; 
-  @      (x==u3 || x==u4 || x==w1 || x==w2 || x==w3 || x==w4 || x==w5 
-  @      || x==w6 || x==w7 || x==w8 || x==w9 || x==w10) => 
-  @      \valid(x) && \valid(x.p1) && \valid(x.p2) && \valid_range(x.p1,0,5) 
-  @      && \valid_range(x.p2,0,5)) 
+  @   (\forall las2 *x; 
+  @      (x==&u3 || x==&u4 || x==&w1 || x==&w2 || x==&w3 || x==&w4 || x==&w5 
+  @      || x==&w6 || x==&w7 || x==&w8 || x==&w9 || x==&w10) => 
+  @      \valid(x) && \valid(x->p1) && \valid(x->p2) && \valid_range(x->p1,0,5) 
+  @      && \valid_range(x->p2,0,5)) 
   @ assigns u3.v1,u3.v2,u3.p1[0 .. 5],u3.p2[0 .. 5], 
   @   u4.v1,u4.v2,u4.p1[0 .. 5],u4.p2[0 .. 5], 
   @   w1.v1,w1.v2,w1.p1[0 .. 5],w1.p2[0 .. 5], 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.83 2004-12-08 10:53:22 hubert Exp $ i*)
+(*i $Id: ctyping.ml,v 1.84 2005-01-04 15:48:00 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -74,7 +74,8 @@ let rec sizeof loc =
 	   | TTIncomplete -> 
 	       incomplete_type ()
 	   | TTStructUnion (Tstruct _, fl) -> 
-	       List.fold_left (fun s (ty,_) -> add s (sizeof ~field:true ty)) 
+	       List.fold_left 
+		 (fun s v -> add s (sizeof ~field:true v.var_type)) 
 		 (of_int 0) fl
 	   | _ -> 
 	       assert false)
@@ -83,7 +84,8 @@ let rec sizeof loc =
 	   | TTIncomplete -> 
 	       incomplete_type ()
 	   | TTStructUnion (Tunion _, fl) -> 
-	       List.fold_left (fun s (ty,_) -> max s (sizeof ~field:true ty)) 
+	       List.fold_left 
+		 (fun s v -> max s (sizeof ~field:true v.var_type)) 
 		 (of_int 0) fl
 	   | _ -> 
 	       assert false)
@@ -261,6 +263,7 @@ let warn_for_read_only loc e =
 
 let set_referenced e = match e.texpr_node with
   | TEvar (Var_info x) -> set_is_referenced x
+  | TEdot (_,f) | TEarrow(_,f) -> set_is_referenced f
   | _ -> ()
 
 (*s Types *)
@@ -292,12 +295,13 @@ and type_type_node loc env = function
   | CTenum (x,Tag)  -> Env.find_tag_type loc env (Tenum x)
   | CTstruct (x, Decl fl) ->
       let fl = List.map (type_field x loc env) fl in
-      let tyn = Env.set_struct_union_type loc env (Tstruct x) fl in
+      let tyn = 
+	Env.set_struct_union_type loc env (Tstruct x) (List.map snd fl) in
       declare_fields tyn fl;
       tyn
   | CTunion (x, Decl fl) ->
       let fl = List.map (type_field x loc env) fl in
-      let tyn = Env.set_struct_union_type loc env (Tunion x) fl in
+      let tyn = Env.set_struct_union_type loc env (Tunion x) (List.map snd fl) in
       declare_fields tyn fl;
       tyn
   | CTenum (x, Decl fl) ->
@@ -689,8 +693,8 @@ let rec type_initializer loc env ty = function
 and type_struct_initializer loc env fl el = match fl, el with
   | _, [] -> 
       []
-  | (ty,_) :: fl, e :: el ->
-      let e = type_initializer loc env ty e in
+  | v :: fl, e :: el ->
+      let e = type_initializer loc env v.var_type e in
       e :: type_struct_initializer loc env fl el
   | [], _ ->
       error loc "excess elements in struct initializer"

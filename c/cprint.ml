@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.4 2004-12-08 16:09:20 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.5 2005-01-04 15:48:00 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -36,7 +36,15 @@ and ctype_node fmt = function
   | Tarray (ty, None) -> fprintf fmt "%a[]" ctype ty
   | Tarray (ty, Some n) -> fprintf fmt "%a[%Ld]" ctype ty n
   | Tpointer ty -> fprintf fmt "%a*" ctype ty
-  | Tstruct s -> fprintf fmt "struct %s" s
+  | Tstruct s -> 
+      fprintf fmt "@[<hov 2>struct %s {@\n" s;
+      begin match Cenv.tag_type_definition s with
+	| Cenv.TTStructUnion(_,fields) ->
+	    List.iter (fun f ->
+			fprintf fmt "%a %s;@\n" ctype f.var_type f.var_name) fields 
+	| _ -> assert false
+      end;
+      fprintf fmt "}@]@\n"
   | Tunion s -> fprintf fmt "union %s" s
   | Tenum s -> fprintf fmt "enum %s" s
   | Tfun _ -> fprintf fmt "<fun>"
@@ -319,15 +327,22 @@ let rec nstatement fmt s = match s.nst_node with
   | NSspec (sp, s) ->
       fprintf fmt "%a%a" spec sp nstatement s
   | NSblock b ->
-      fprintf fmt "@[{@\n    @[%a@]@\n}@]" nblock b
+      fprintf fmt "@[{@\n  @[%a@]@\n}@]" nblock b
+  | NSdecl (ty, vi, None,rem) ->
+      fprintf fmt "%a %s;@\n" ctype ty vi.var_name;
+      nstatement fmt rem
+  | NSdecl (ty, vi, Some i, rem) ->
+      fprintf fmt "@[<hov 2>{@\n%a %s = %a;@\n" ctype ty vi.var_name c_initializer i;
+      nstatement fmt rem;
+      fprintf fmt "}@\n@]"
 
 and nstatement_nb fmt s = match s.nst_node with
   | NSblock b -> nblock fmt b
   | _ -> nstatement fmt s
 
-and nblock fmt (dl, sl) =
-  fprintf fmt "@[%a%a@]" 
-    (print_list nothing ndecl) dl (print_list newline nstatement) sl
+and nblock fmt sl =
+  fprintf fmt "@[%a@]" 
+    (print_list newline nstatement) sl
 
 and ndecl fmt d = match d.node with
   | Nlogic (li, ls) -> 

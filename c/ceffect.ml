@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.71 2004-12-17 12:16:12 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.72 2005-01-04 15:47:59 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -104,7 +104,9 @@ let heap_var_type v =
   else 
     try
       Hashtbl.find heap_vars v.var_unique_name
-    with Not_found -> assert false
+    with Not_found -> 
+      eprintf "variable %s not found@." v.var_unique_name;
+      assert false
 
 let is_memory_var v = 
   if v == alloc then false
@@ -298,8 +300,10 @@ let add_weak_invariant id p =
 (* table for strong invariants *)
 let strong_invariants = Hashtbl.create 97
 
-let add_strong_invariant id p =
-  Hashtbl.add strong_invariants id (p, predicate p)
+let add_strong_invariant id p vars =
+  if p <> NPtrue then
+  let ef = predicate p in
+  Hashtbl.add strong_invariants id (p, ef, vars)
 
 let intersect_only_alloc e1 e2 =
   HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
@@ -313,9 +317,9 @@ let weak_invariants_for hvs =
 
 let strong_invariants_for hvs =
   Hashtbl.fold
-    (fun _ (_,e) acc -> 
-       if intersect_only_alloc e hvs then acc
-       else union e acc) 
+    (fun _ (_,_,e) acc -> 
+       if HeapVarSet.subset e hvs then union e acc
+       else acc) 
     strong_invariants empty
 
 let spec sp = 
@@ -441,16 +445,18 @@ let rec statement s = match s.nst_node with
       { reads = predicate p; assigns = empty }
   | NSspec (sp, s) ->
       ef_union (spec sp) (statement s)
+  | NSdecl (_, _, i,rem) -> ef_union (initializer_option i) (statement rem)
 
-and block (dl, sl) =
-  let local_decl d = match d.node with
+and block sl =
+(*  let local_decl d = match d.node with
     | Ndecl (_, _, i) -> initializer_option i
     | Ntypedecl _ -> ef_empty
     | _ -> ef_empty (* unsupported local declaration *)
-  in
+  in*)
   List.fold_left
     (fun ef s -> ef_union (statement s) ef)
-    (List.fold_left (fun ef d -> ef_union (local_decl d) ef) ef_empty dl)
+(*    (List.fold_left (fun ef d -> ef_union (local_decl d) ef) ef_empty dl)*)
+    ef_empty
     sl
 
 and initializer_ = function
@@ -476,11 +482,13 @@ let invariant_for_global =
     let form =
       List.fold_left (fun p x -> 
 			("separation_"^v.var_name^"_"^x.var_name,
-			 Cnorm.separation loc v x)::p) 
+			 (Cnorm.separation loc v x),
+			 HeapVarSet.add v (HeapVarSet.singleton x))::p) 
 	[] !global_var in 
-      global_var := v::!global_var;
-    ("separation_intern_"^v.var_name, (Cnorm.separation_intern loc v))::form
- 
+    global_var := v::!global_var;
+    ("separation_intern_"^v.var_name, (Cnorm.separation_intern loc v),
+     HeapVarSet.singleton v)::form
+    
 (*  let allocs = ref (fun n x -> (*NPtrue*) []) in
   fun loc v t ->
     let allocs',form = Cnorm.separation ~allocs:!allocs loc v t in
@@ -588,7 +596,8 @@ let rec invariant_for_constant loc t lvalue initializers =
 	begin match tag_type_definition n with
 	  | TTStructUnion (Tstruct (_), fl) ->
 	      List.fold_left 
-		(fun (acc,init) (tyf, f) -> 
+		(fun (acc,init) f -> 
+		   let tyf = f.var_type in
 		   let tyf =  { 
 		     Ctypes.ctype_node = tyf.Ctypes.ctype_node;
 		     Ctypes.ctype_storage = tyf.Ctypes.ctype_storage;
@@ -610,10 +619,10 @@ let rec invariant_for_constant loc t lvalue initializers =
 	end
     | Tunion n ->
 	begin match tag_type_definition n with
-	  | TTStructUnion (Tstruct (_), (tyf,f)::_) ->
+	  | TTStructUnion (Tstruct (_), f::_) ->
 	      let block, init' =
-		 invariant_for_constant loc tyf 
-		  (noattr loc tyf (NTarrow(lvalue, f)))
+		 invariant_for_constant loc f.var_type 
+		  (noattr loc f.var_type (NTarrow(lvalue, f)))
 		  initializers
 	      in (block,init')
 	  | _ ->
@@ -652,7 +661,7 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
       ty.Ctypes.ctype_const ||
       (match tag_type_definition n with
 	 | TTStructUnion (Tstruct _, fl) -> 
-	     List.exists (fun (tyf,_) -> has_constant_values tyf) fl
+	     List.exists (fun f -> has_constant_values f.var_type) fl
 	 | _ -> assert false)
   | Tarray (ty', _) -> has_constant_values ty'
   | Tunion _ | Tfun _ | Tvar _ -> false
@@ -678,12 +687,13 @@ let decl d =
 		let t = { nterm_node = NTvar v; 
 			  nterm_loc = Loc.dummy;
 			  nterm_type = ty } in
-		List.iter (fun (x,y) -> 
+		List.iter (fun (x,y,z) -> 
 			     (*(eprintf "%s : %a @." x Cprint.npredicate y);*)
-			     add_strong_invariant x y) 
+			     add_strong_invariant x y z) 
 		  (invariant_for_global d.loc v);
 		add_strong_invariant ("valid_" ^ v.var_name) 
-		  (Cnorm.valid_for_type d.loc v t)
+		  (Cnorm.valid_for_type d.loc v t) 
+		  (HeapVarSet.singleton v)
 	    | _ -> ()
 	end;
 	let init = (match init with | None -> [] | Some l -> [l]) in
@@ -694,7 +704,7 @@ let decl d =
 		   nterm_loc = Loc.dummy;
 		   nterm_type = ty } in
 	  let (pre,_) = invariant_for_constant d.loc ty t init in 
-	  add_strong_invariant id pre
+	  add_strong_invariant id pre (HeapVarSet.singleton v)
 	end;
     | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
     | Naxiom(id,p) -> () (* TODO *)

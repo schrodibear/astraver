@@ -10,7 +10,7 @@ Lemma getcell_impl_po_1 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (separation_intern_t t) /\ (valid_t alloc t intPP)),
+                (separation_intern_t t) /\ (valid_t intPP t alloc)),
   (valid alloc (shift t 1)).
 Proof.
 intuition; subst; auto with *.
@@ -23,124 +23,10 @@ Lemma getcell_impl_po_2 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (separation_intern_t t) /\ (valid_t alloc t intPP)),
+                (separation_intern_t t) /\ (valid_t intPP t alloc)),
   forall (Pre2: (valid alloc (shift t 1))),
   (valid alloc (shift (acc intPP (shift t 1)) 2)).
 Proof.
 intuition.
-(* FILL PROOF HERE *)
-Save.
-
-(* Why obligation from file "why/array.why", characters 511-607 *)
-Lemma invariants_initially_established_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (Pre46: (separation_intern_t t) /\ (valid_t alloc t intPP)),
-  (valid alloc (shift t 0)).
-Proof.
-intuition.
-inversion_clear H0.
-apply valid_range_valid_shift with 0 2;auto.
-omega.
-Save.
-
-(* Why obligation from file "why/array.why", characters 615-643 *)
-Lemma invariants_initially_established_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (Pre46: (separation_intern_t t) /\ (valid_t alloc t intPP)),
-  forall (Pre5: (valid alloc (shift t 0))),
-  forall (caduceus_18: pointer),
-  forall (Post3: caduceus_18 = (shift (acc intPP (shift t 0)) 0)),
-  (valid alloc caduceus_18).
-Proof.
-intuition.
-subst.
-inversion_clear H0.
-rewrite shift_zero.
-assert (0<= 0<3).
-omega.
-generalize ( H2 0 H0).
-intro.
-apply valid_range_valid with 0 2;auto;omega.
-Save.
-
-(* Why obligation from file "why/array.why", characters 493-643 *)
-Lemma invariants_initially_established_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (Pre46: (separation_intern_t t) /\ (valid_t alloc t intPP)),
-  forall (Pre5: (valid alloc (shift t 0))),
-  forall (caduceus_18: pointer),
-  forall (Post3: caduceus_18 = (shift (acc intPP (shift t 0)) 0)),
-  forall (Pre3: (valid alloc caduceus_18)),
-  forall (intP0: ((memory) Z)),
-  forall (Post28: intP0 = (upd intP caduceus_18 0)),
-  ((forall (result:pointer),
-    (result = (shift (acc intPP (shift t 0)) 1) ->
-     (forall (intP:((memory) Z)),
-      (intP = (upd intP0 result 0) ->
-       ((forall (result:pointer),
-         (result = (shift (acc intPP (shift t 0)) 2) ->
-          (forall (intP0:((memory) Z)),
-           (intP0 = (upd intP result 0) ->
-            ((forall (result:pointer),
-              (result = (shift (acc intPP (shift t 1)) 0) ->
-               (forall (intP:((memory) Z)),
-                (intP = (upd intP0 result 0) ->
-                 ((forall (result:pointer),
-                   (result = (shift (acc intPP (shift t 1)) 1) ->
-                    (forall (intP0:((memory) Z)),
-                     (intP0 = (upd intP result 0) ->
-                      ((forall (result:pointer),
-                        (result = (shift (acc intPP (shift t 1)) 2) ->
-                         (forall (intP:((memory) Z)),
-                          (intP = (upd intP0 result 0) ->
-                           ((forall (result:pointer),
-                             (result = (shift (acc intPP (shift t 2)) 0) ->
-                              (forall (intP0:((memory) Z)),
-                               (intP0 = (upd intP result 0) ->
-                                ((forall (result:pointer),
-                                  (result = (shift (acc intPP (shift t 2)) 1) ->
-                                   (forall (intP:((memory) Z)),
-                                    (intP = (upd intP0 result 0) ->
-                                     ((forall (result:pointer),
-                                       (result = (shift (acc intPP
-                                                         (shift t 2))
-                                                  2) ->
-                                        (forall (intP0:((memory) Z)),
-                                         (intP0 = (upd intP result 0) -> True)) /\
-                                        (valid alloc result))) /\
-                                     (valid alloc (shift t 2))) /\
-                                     (valid alloc (shift t 2)))) /\
-                                   (valid alloc result))) /\
-                                (valid alloc (shift t 2))) /\
-                                (valid alloc (shift t 2)))) /\
-                              (valid alloc result))) /\
-                           (valid alloc (shift t 2))) /\
-                           (valid alloc (shift t 2)))) /\
-                         (valid alloc result))) /\
-                      (valid alloc (shift t 1))) /\ (valid alloc (shift t 1)))) /\
-                    (valid alloc result))) /\
-                 (valid alloc (shift t 1))) /\ (valid alloc (shift t 1)))) /\
-               (valid alloc result))) /\
-            (valid alloc (shift t 1))) /\ (valid alloc (shift t 1)))) /\
-          (valid alloc result))) /\
-       (valid alloc (shift t 0))) /\ (valid alloc (shift t 0)))) /\
-     (valid alloc result))) /\
-  (valid alloc (shift t 0))) /\ (valid alloc (shift t 0)).
-Proof.
-intuition;subst
-;inversion_clear H0;
-assert (h:0<=2<3);
-try omega;
-assert (h1:0<=0<3);try omega;
-generalize (H2 2 h);
-intro;
-apply valid_range_valid_shift with 0 2;auto;try omega.
 Save.
 

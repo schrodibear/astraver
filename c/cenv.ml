@@ -85,7 +85,7 @@ let tag_kind = function
 
 type tag_type_definition = 
   | TTIncomplete
-  | TTStructUnion of ctype_node * (ctype * var_info) list
+  | TTStructUnion of ctype_node * (var_info list)
   | TTEnum of ctype_node * (var_info * int64) list
 
 type tag_type = { 
@@ -319,6 +319,7 @@ end
 (* Field access *)
 
 let fields_t = Hashtbl.create 97
+
 let find_field ~tag:n ~field:x = 
   try 
     Hashtbl.find fields_t (n,x)
@@ -342,10 +343,21 @@ let declare_fields tyn fl = match tyn with
   | _ -> 
       assert false
   
+let update_fields_type () =
+  Hashtbl.iter
+    (fun (n,_) x ->
+       if x.var_is_referenced then
+	 begin
+	   Coptions.lprintf "field %s is now a pointer@." x.var_name;
+	   set_var_type (Var_info x) 
+	     (noattr (Tarray(x.var_type,Some Int64.one)))
+	 end)
+    fields_t
+
 let type_of_field loc x ty = 
   let rec lookup su n = function
     | [] -> error loc (su ^ " has no member named `" ^ x ^ "'")
-    | (ty, y) :: _ when x = y.var_name -> find_field n x
+    | y :: _ when x = y.var_name -> find_field n x
     | _ :: fl -> lookup su n fl
   in
   match ty.ctype_node with

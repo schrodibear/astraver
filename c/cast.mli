@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.53 2004-12-06 14:16:02 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.54 2005-01-04 15:47:59 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -331,8 +331,9 @@ and nstatement_node =
   | NSassert of npredicate
   | NSlogic_label of string
   | NSspec of nspec * nstatement
+  | NSdecl of nctype * Info.var_info * nexpr c_initializer option * nstatement
 
-and nblock = ndecl located list * nstatement list
+and nblock = nstatement list
 
 and ndecl = 
   | Nlogic of Info.logic_info * (nterm,nctype) nlogic_symbol

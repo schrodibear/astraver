@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.10 2004-12-16 16:12:09 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.11 2005-01-04 15:48:00 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -113,6 +113,12 @@ let ne_arrow e f =
     | NEstar(x) -> NEarrow (x, f)
     | _ -> NEarrow (e, f)
 
+let ne_star loc ty e =
+  NEstar
+    {nexpr_node = e;
+     nexpr_type = noattr (Tpointer ty);
+     nexpr_loc = loc}
+
 
 let rec expr t =
   let ty = ctype t.texpr_type in
@@ -129,17 +135,21 @@ and expr_node loc ty t =
       | TEvar env_info ->
 	  (match env_info with
 	    | Var_info v ->
+		let t' = NEvar env_info in
 		if var_requires_indirection v then
-		  begin
-		    NEstar
-		      {nexpr_node= NEvar env_info;
-		       nexpr_type = noattr (Tpointer ty);
-		       nexpr_loc = loc}
-		  end
-		else NEvar env_info
+		  ne_star loc ty t'
+		else t'
 	    | Fun_info _  -> NEvar env_info)
-      | TEdot (lvalue,var_info) -> ne_arrow (expr lvalue) var_info
-      | TEarrow (lvalue ,var_info) -> NEarrow ((expr lvalue), var_info)
+      | TEdot (lvalue,var_info) -> 
+	  let t' = ne_arrow (expr lvalue) var_info in
+	  if var_requires_indirection var_info then
+	    ne_star loc ty t'
+	  else t'
+      | TEarrow (lvalue ,var_info) -> 
+	  let t' = NEarrow ((expr lvalue), var_info) in
+	  if var_requires_indirection var_info then
+	    ne_star loc ty t'
+	  else t'
       | TEarrget (lvalue,texpr) -> 
 	  (* t[e] -> *(t+e) *)
 	  NEstar(
@@ -158,13 +168,12 @@ and expr_node loc ty t =
 	  (match texpr.texpr_node with
 	     | TEvar v -> NEvar v
 	     | TEunary (Ustar, texpr)-> expr_node loc ty texpr.texpr_node
-(*FAUX
-	     | TEdot(lvalue,var_info) -> NEarrow ((expr lvalue), var_info)
-*)
+	     | TEdot(lvalue,var_info)->
+		 ne_arrow (expr lvalue) var_info
+	     | TEarrow(lvalue,var_info) -> 
+		 NEarrow (expr lvalue, var_info)
 	     | _ -> 
-(*
 		 warning loc "this & cannot be normalized";
-*)
 		 NEunary (Uamp,expr texpr))
       | TEunary (unary_operator ,texpr) ->
 	  NEunary(unary_operator, expr texpr)
@@ -185,30 +194,48 @@ let nt_arrow t f =
     | NTstar(x) -> NTarrow (x, f)
     | _ -> NTarrow (t, f)
 
-
+let nt_star loc ty t =
+  NTstar { nterm_node = t;
+	   nterm_loc = loc;
+	   nterm_type = ty}
+      
 let rec term_node loc t =
   match t with
   | Tconstant constant -> NTconstant constant
   | Tvar var_info -> 
+      let t' = NTvar var_info in
       if var_requires_indirection var_info then
-	NTstar { nterm_node = NTvar var_info;
-		 nterm_loc = loc;
-		 nterm_type = var_info.var_type}
+	nt_star loc var_info.var_type t'
       else
-	NTvar var_info
+	t'
   | Tapp (logic_info ,l) -> NTapp (
       logic_info, 
       List.map (fun x -> (term x)) l)
   | Tunop (Clogic.Uamp,t) -> 
-      (match t.term_node with
+      begin match t.term_node with
 	| Tvar v-> NTvar v
 	| Tunop(Clogic.Ustar, t) -> term_node loc t.term_node
-	| _ -> NTunop(Clogic.Uamp,term t))    
+	| Tarrow(t,f) -> NTarrow (term t, f) 
+	| Tdot(t,f) -> nt_arrow (term t) f
+	| _ -> 
+	    unsupported loc "cannot handle this & operator"
+	    (* NTunop(Clogic.Uamp,term t)    *)
+      end
   | Tunop (Clogic.Ustar,t) -> NTstar (term t)
   | Tunop (unop,t) -> NTunop(unop,term t)
   | Tbinop (t1, binop, t2) -> NTbinop (term t1, binop, term t2)
-  | Tdot (t, var_info) ->  nt_arrow (term t) var_info 
-  | Tarrow (t, var_info) -> NTarrow (term t, var_info)
+  | Tdot (t, var_info) ->  
+      let t' = nt_arrow (term t) var_info in
+      if var_requires_indirection var_info then
+	nt_star loc var_info.var_type t'
+      else
+	t'
+  | Tarrow (t, var_info) -> 
+      let t' = NTarrow (term t, var_info) in
+      if var_requires_indirection var_info then
+	nt_star loc var_info.var_type t'
+      else
+	t'
   | Tarrget (t1, t2) -> 
       let t1 = term t1 and t2 = term t2 in
       NTstar { nterm_node = NTbinop(t1, Clogic.Badd, t2);
@@ -310,6 +337,193 @@ let spec s =
   decreases = noption variant s.decreases;
 }
 
+let in_struct v1 v = 
+  let x = begin
+    match v1.texpr_node with
+    | TEunary (Ustar, x)-> TEarrow (x, v)
+    | _ -> TEarrow (v1, v)
+  end in
+  { texpr_node = x; 
+    texpr_loc = v1.texpr_loc;
+    texpr_type = v.var_type }
+
+let noattr loc ty e =
+  { texpr_node = e;
+    texpr_type = ty;
+    texpr_loc  = loc
+  }
+
+let noattr2 loc ty e =
+  { nexpr_node = e;
+    nexpr_type = ty;
+    nexpr_loc  = loc
+  }
+
+let noattr3 tyn = { Ctypes.ctype_node = tyn; 
+		   Ctypes.ctype_storage = No_storage;
+		   Ctypes.ctype_const = false;
+		   Ctypes.ctype_volatile = false }
+
+let alloca loc n =
+  {nexpr_node = NEcall ((noattr2  loc 
+			   (noattr3(
+			      Tfun ([(noattr3
+					(Tint(Signed,Ctypes.Int)),"n")], 
+				    noattr3 (Tpointer (noattr3 Tvoid))))) 
+			   (NEvar  (Fun_info (default_fun_info "alloca")))), 
+			[{ nexpr_node = NEconstant  (IntConstant n);
+			   nexpr_type = { Ctypes.ctype_node =  
+					    Tint (Signed,Ctypes.Int);
+					  Ctypes.ctype_storage = No_storage;
+					  Ctypes.ctype_const = false;
+					  Ctypes.ctype_volatile = false;
+					};
+			   nexpr_loc  = loc }]);
+   nexpr_type = noattr3 (Tpointer (noattr3 Tvoid));
+   nexpr_loc  = loc
+  }	  
+
+let copyattr s s' = 
+  { nst_node = s';
+    nst_break = s.st_break;
+    nst_continue = s.st_continue;
+    nst_return = s.st_return;
+    nst_term = s.st_term;
+    nst_loc = s.st_loc;
+  }
+
+let rec pop_initializer loc t i =
+  match i with 
+    | [] ->None,[]
+    | (Iexpr e)::l -> Some e,l
+    | (Ilist [])::l -> pop_initializer loc t l
+    | (Ilist l)::l' -> 
+	let e,r = pop_initializer loc t l in e,r@l'
+
+let rec init_expr loc t lvalue initializers =
+  match t.Ctypes.ctype_node with
+    | Tint _ | Tfloat _ | Tpointer _ | Tenum _ -> 
+	let x,l = pop_initializer loc t initializers in
+	(match x with 
+	  | Some x ->
+	[{nst_node = NSexpr (noattr2 loc t (NEassign((expr lvalue),(expr x))));
+	  nst_break = false;    
+	  nst_continue = false; 
+	  nst_return = false;   
+	  nst_term = true;
+	  nst_loc = loc     
+	 }]
+	  | None -> []), l
+    | Tstruct n ->
+	begin match tag_type_definition n with
+	  | TTStructUnion (Tstruct (_), fl) ->
+	      let l1,l2 = List.fold_left 
+		(fun (acc,init) f -> 
+		   let block, init' =
+		     init_expr loc f.var_type 
+		       (in_struct lvalue f) init
+		   in (acc@block,init'))
+		([],initializers)  fl
+	      in
+	      (
+		{nst_node = NSexpr (noattr2 loc t (NEassign
+						     ((expr lvalue),
+						      (alloca loc "1"))));
+		 nst_break = false;    
+		 nst_continue = false; 
+		 nst_return = false;   
+		 nst_term = true;
+		 nst_loc = loc     
+		}::l1,l2)
+	  | _ ->
+	      assert false
+	end
+    | Tunion n ->
+	begin match tag_type_definition n with
+	  | TTStructUnion (Tstruct (_), f::_) ->
+	      let block, init' =
+		init_expr loc f.var_type 
+		  (noattr loc f.var_type (TEarrow(lvalue, f)))
+		  initializers
+	      in 
+	      {nst_node = NSexpr (noattr2 loc t 
+				    (NEassign((expr lvalue),(alloca loc "1"))));
+	       nst_break = false;    
+	       nst_continue = false; 
+	       nst_return = false;   
+	       nst_term = true;
+	       nst_loc = loc     
+	      }::block,init'
+	  | _ ->
+	      assert false
+	end
+(*
+    | Tarray (ty,None) -> 
+	let i = ref 0 in
+	let block = ref [] in
+	while (initializers != []) do
+	  let b,initializers =  
+	    init_expr tyf (TEarrget(lvalue,i)) initializers in
+	  i := !i + 1;
+	  block := block@b
+	done;
+	(block,[])
+*)
+    | Tarray (ty,Some t) ->
+	let rec init_cells i (block,init) =
+	  if i >= t then (block,init)
+	  else
+	    let ts = Ctyping.int_teconstant (Int64.to_string i) in
+	    let (b,init') = 
+	      init_expr loc ty (noattr loc ty (TEarrget(lvalue,ts))) init 
+	    in
+	    init_cells (Int64.add i Int64.one) (block@b,init')
+	in
+	let l1 , l2 = init_cells Int64.zero ([],initializers) in
+	{nst_node = NSexpr (noattr2 loc ty 
+			      (NEassign((expr lvalue),
+					(alloca loc (Int64.to_string t)))));
+	 nst_break = false;    
+	 nst_continue = false; 
+	 nst_return = false;   
+	 nst_term = true;
+	 nst_loc = loc     
+	}::l1,l2
+    | Tarray (ty,None) -> assert false
+    | Tfun (_, _) -> assert false
+    | Ctypes.Tvar _ -> assert false
+    | Tvoid -> assert false
+
+and nlocated s l l2 = 
+  match l with 
+    | [] -> NSblock l2
+    | {node = Tdecl (t,v,init); loc = l}::decl -> 
+	if var_is_referenced_or_struct_or_union v
+	then
+	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	begin match init with
+	  | None ->
+	      let declar = nlocated s decl l2 in
+	      NSdecl(v.var_type,v,None,copyattr s declar)
+	  | Some c ->
+	      match v.var_type.Ctypes.ctype_node with
+		| Tenum _ | Tint _ | Tfloat _ | Tpointer _ -> 
+		    let declar = nlocated s decl l2 in
+		    begin match c with
+		      | Iexpr e ->
+			  NSdecl(v.var_type,v,Some (Iexpr (expr e)),copyattr s declar)
+		      | _ -> assert false
+		    end
+		| Tarray _ | Tstruct _ | Tunion _ -> 
+		    let declar,_ = 
+		      init_expr l v.var_type 
+			(noattr l v.var_type (TEvar (Var_info v))) [c] 
+		    in
+		    NSdecl(v.var_type,v,None,
+			   copyattr s (nlocated s decl (declar@l2)))
+		| Tvoid | Ctypes.Tvar _ | Tfun _ -> assert false		      
+	end
+    | _  -> assert false
 
 let rec st_cases used_cases (i : tstatement) 
   : 'a IntMap.t * 'a IntMap.t * nstatement =
@@ -401,8 +615,8 @@ and statement s =
 	     (expr texpr2),
 	     (expr texpr3),
 	      (statement tstatement))
-  | TSblock tblock -> let (l1,l2) = tblock in
-    NSblock (List.map nlocated l1, List.map statement l2)
+  | TSblock (l1,l2) -> 
+      nlocated s l1 (List.map statement l2)
   | TSreturn option -> NSreturn (noption expr option)
   | TSbreak -> NSbreak
   | TScontinue -> NScontinue
@@ -417,15 +631,14 @@ and statement s =
   | TSlogic_label  string -> NSlogic_label string
   | TSspec (s, tstatement) -> NSspec (spec s, statement tstatement)
   in
-  {
-    nst_node = nst;
+  { nst_node = nst;
     nst_break = s.st_break;
     nst_continue = s.st_continue;
     nst_return =  s.st_return;
     nst_term = s.st_term;
     nst_loc = s.st_loc;
   }
-and decl e1=
+(*and decl e1=
   match e1 with    
   | Tlogic(info, l) -> Nlogic (info , logic_symbol l)
   | Taxiom (s, p) -> Naxiom (s, predicate p)
@@ -440,23 +653,23 @@ and decl e1=
    nterm_type = Ctypes.c_pointer ctype } in
    Let(v.var_unique_name, alloc_on_stack d.loc v t, acc)
    else
-*)	
-      if var_is_referenced_or_struct_or_union v
-      then
-	begin
-	  set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
-	  Ndecl(v.var_type,v,ilist (c_initializer_option c))
-	end
-      else Ndecl(t,v,c_initializer_option c)
+*)
+      let decl =
+	if var_is_referenced_or_struct_or_union v
+	then
+	  begin
+	    set_var_type (Var_info v) (c_array_size v.var_type Int64.one);
+	    Tdecl(v.var_type,v,ilist ((*c_initializer_option*) c))
+	  end
+	else Tdecl(t,v,(*c_initializer_option*) c)
+      in 
+      nlocated decl
   | Tfunspec (s, t, f, l) -> Nfunspec (spec s,ctype t,f,
 				   (List.map (fun (x,y) -> (ctype x,y)) l))
   | Tfundef (s, t, f, l, st) -> Nfundef (spec s,ctype t,f,
 				   (List.map (fun (x,y) -> (ctype x,y)) l),
 				    statement st)
-and nlocated l = {
-  node = decl l.node;
-  loc = l.loc}
-
+*)
 
 let global_decl e1 =
   match e1 with    
@@ -488,6 +701,10 @@ let global_decl e1 =
 
 let file = List.map (fun d -> { node = global_decl d.node ; loc = d.loc})
 
+
+
+let field_types () =
+  Hashtbl.iter 
 
 
 (* Automatic invariants expressing validity of local/global variables *)
@@ -575,11 +792,11 @@ let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
     begin match tag_type_definition n with
       | TTStructUnion (Tstruct (_), fl) ->
 	  List.fold_right 
-	    (fun (tyf, f) acc -> 
+	    (fun f acc -> 
 	       let tf = 
 		 { nterm_node = NTarrow (t, f); 
 		   nterm_loc = loc;
-		   nterm_type = ctype tyf } 
+		   nterm_type = ctype f.var_type } 
 	       in
 	       make_and acc (valid_for tf))
 	    fl 
@@ -711,7 +928,7 @@ let rec tab_struct loc v1 v2 s ty n n1 n2=
       | _ -> assert false
   end in
   make_and (List.fold_left 
-	      (fun p (_,t) -> 
+	      (fun p t -> 
 		 if  compatible_type t.var_type v2.nterm_type 
 		 then make_and p (not_alias loc v2 (in_struct v1 t))
 		 else p)
@@ -740,13 +957,11 @@ and local_separation loc n1 v1 n2 v2 =
 	    | _ -> assert false
 	end in
 	make_and
-	  (if compatible_type v1.nterm_type v2.nterm_type
+	  (if not (compatible_type v1.nterm_type v2.nterm_type)
 	   then
-	     (not_alias loc v1 v2)
-	   else
 	     (make_and 
 		(List.fold_left
-		   (fun p (_,v) ->
+		   (fun p v ->
 		      if compatible_type v1.nterm_type v.var_type
 		      then
 			make_and (not_alias loc v1 (in_struct v2 v)) p
@@ -754,17 +969,18 @@ and local_separation loc n1 v1 n2 v2 =
 			p)
 		   NPtrue l2)
 		(List.fold_left
-		   (fun p (_,v) ->
+		   (fun p v ->
 		      if compatible_type v2.nterm_type v.var_type
 		      then
 			make_and (not_alias loc v2 (in_struct v2 v)) p
 		      else
 			p)
-		   NPtrue l1)))
+		   NPtrue l1))
+	   else NPtrue)
 	  (List.fold_left 
-	     (fun p (_,t1) -> 
+	     (fun p t1 -> 
 		List.fold_left 
-		  (fun p (_,t2) -> 
+		  (fun p t2 -> 
 		     make_and p 
 		       (local_separation loc n1 (in_struct v1 t1) 
 			  n2 (in_struct v2 t2)))
@@ -823,44 +1039,13 @@ let rec separation_intern loc v1 =
 		  error loc ("array size missing in `" ^ n1 ^ "[i]'")
 	      | Tarray (_,_)  
 	      | Tstruct _ ->
-(*
-		  let ts = int_nconstant (Int64.to_string s) in
-		  let i = default_var_info (fresh_index ()) in
-		  let vari = { nterm_node = NTvar i; 
-			       nterm_loc = loc;
-			       nterm_type = c_int } in
-		  let vi = 
-		    { nterm_node = NTbinop (v1, Badd, vari); 
-		      nterm_loc = loc;
-		      nterm_type = v1.nterm_type }
-		  in
-		  let star_vi = 
-		    { nterm_node = NTstar vi; 
-		      nterm_loc = loc;
-		      nterm_type = ty }
-		  in
-		  let j = default_var_info (fresh_index ()) in
-		  let varj = { nterm_node = NTvar j; 
-			       nterm_loc = loc;
-			       nterm_type = c_int } in
-		  let vj = 
-		    { nterm_node = NTbinop (v1, Badd, varj); 
-		      nterm_loc = loc;
-		      nterm_type = v1.nterm_type }
-		  in
-		  make_and
-		    (forall_index s i ts vari 
-		       (forall_index s j ts varj
-			  (make_implies (NPrel (vari, Neq, varj)) 
-			     (not_alias loc vi vj))))
-		    (forall_index s i ts vari
-		       (local_separation_intern loc (n1^"[i]") star_vi))
-*)
 		  make_and
 		    (make_forall_range loc v1 s 
 		       (fun t1 i1 ->
 			  make_forall_range loc v1 s
 			    (fun t2 i2 -> 
+			       if i1 = nzero && i2 = nzero then NPtrue 
+			       else
 			       make_implies (NPrel (i1, Neq, i2)) 
 				 (not_alias loc t1 t2))))
 		    (make_forall_range loc v1 s 
@@ -881,12 +1066,12 @@ let rec separation_intern loc v1 =
 	  in
 	  let rec f l =
 	    match l with
-	      | ((_,v)::l) -> make_and
+	      | (v::l) -> make_and
 		    (make_and 
 		    (local_separation_intern loc v.var_name 
 		       (var_to_term loc v))
 		    (List.fold_left 
-		       (fun acc (_,x)-> 
+		       (fun acc x -> 
 			  make_and acc (local_separation loc 
 					  v.var_name (in_struct v1 v) 
 					  x.var_name (in_struct v1 x))) 
@@ -902,7 +1087,7 @@ let rec separation_intern loc v1 =
 	
 let separation loc v1 v2 =
   local_separation loc v1.var_name (var_to_term loc v1) 
-    v2.var_name (var_to_term loc v2)  
+    v2.var_name (var_to_term loc v2)
 
 (*
 let separation loc v ?(allocs=(fun n x -> [])) (t : Cast.nterm) =
@@ -1079,3 +1264,4 @@ that a pointer is different from all allocated pointers in [t]
   in
   local_alloc_for allocs t v.var_name
 *)
+

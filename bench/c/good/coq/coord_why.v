@@ -9,68 +9,9 @@ Lemma g_impl_po_1 :
   forall (alloc: alloc_table),
   forall (tab: pointer),
   forall (Pre5: (0 <= index /\ index < 3) /\ (separation_intern_tab tab) /\
-                (valid_tab alloc tab)),
+                (valid_tab tab alloc)),
   (valid alloc (shift tab index)).
 Proof.
 unfold valid_tab .
 intuition.
 Save.
-
-(* Why obligation from file "why/coord.why", characters 479-503 *)
-Lemma invariants_initially_established_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (tab: pointer),
-  forall (Pre19: (separation_intern_tab tab) /\ (valid_tab alloc tab)),
-  forall (caduceus_6: pointer),
-  forall (Post3: caduceus_6 = (shift tab 0)),
-  (valid alloc caduceus_6).
-Proof.
-intuition.
-subst.
-rewrite shift_zero.
-red in H0;auto.
-Save.
-
-(* Why obligation from file "why/coord.why", characters 441-503 *)
-Lemma invariants_initially_established_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (tab: pointer),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (Pre19: (separation_intern_tab tab) /\ (valid_tab alloc tab)),
-  forall (caduceus_6: pointer),
-  forall (Post3: caduceus_6 = (shift tab 0)),
-  forall (Pre3: (valid alloc caduceus_6)),
-  forall (x0: ((memory) Z)),
-  forall (Post19: x0 = (upd x caduceus_6 0)),
-  (forall (result:pointer),
-   (result = (shift tab 0) ->
-    (forall (y0:((memory) Z)),
-     (y0 = (upd y result 0) ->
-      (forall (result:pointer),
-       (result = (shift tab 1) ->
-        (forall (x:((memory) Z)),
-         (x = (upd x0 result 0) ->
-          (forall (result:pointer),
-           (result = (shift tab 1) ->
-            (forall (y:((memory) Z)),
-             (y = (upd y0 result 0) ->
-              (forall (result:pointer),
-               (result = (shift tab 2) ->
-                (forall (x0:((memory) Z)),
-                 (x0 = (upd x result 0) ->
-                  (forall (result:pointer),
-                   (result = (shift tab 2) ->
-                    (forall (y0:((memory) Z)),
-                     (y0 = (upd y result 0) -> True)) /\
-                    (valid alloc result))))) /\
-                (valid alloc result))))) /\
-            (valid alloc result))))) /\
-        (valid alloc result))))) /\
-    (valid alloc result))).
-Proof.
-intuition;subst;
-red in H0;
-apply valid_range_valid_shift with 0 2;auto;omega.
-Save.
-

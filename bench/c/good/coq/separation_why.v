@@ -3,40 +3,3203 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation.why", characters 477-533 *)
+(* Why obligation from file "why/separation.why", characters 593-610 *)
+Lemma f1_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (p1: ((memory) pointer)),
+  forall (p2: ((memory) pointer)),
+  forall (u1: pointer),
+  forall (u2: pointer),
+  forall (Pre7: (forall (x_0:pointer),
+                 (x_0 = u1 \/ x_0 = u2 -> ((((valid alloc x_0) /\
+                  (valid alloc (acc p1 x_0))) /\
+                  (valid alloc (acc p2 x_0))) /\
+                  (valid_range alloc (acc p1 x_0) 0 5)) /\
+                  (valid_range alloc (acc p2 x_0) 0 5))) /\
+                (separation_u2_u1 u2 u1 p2 p1 alloc) /\
+                (separation_intern_u2 u2 p2 p1 alloc) /\
+                (separation_intern_u1 u1 p2 p1 alloc) /\
+                (valid_u2 u2 p2 p1 alloc) /\ (valid_u1 u1 p2 p1 alloc)),
+  ((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
+  (valid alloc (acc p2 u1))) /\ (valid_range alloc (acc p1 u1) 0 5)) /\
+  (valid_range alloc (acc p2 u1) 0 5).
+Proof.
+unfold valid_u1,valid_u2;intuition;generalize (H u1);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 613-630 *)
+Lemma f1_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (p1: ((memory) pointer)),
+  forall (p2: ((memory) pointer)),
+  forall (u1: pointer),
+  forall (u2: pointer),
+  forall (v1: ((memory) Z)),
+  forall (v2: ((memory) Z)),
+  forall (Pre7: (forall (x_0:pointer),
+                 (x_0 = u1 \/ x_0 = u2 -> ((((valid alloc x_0) /\
+                  (valid alloc (acc p1 x_0))) /\
+                  (valid alloc (acc p2 x_0))) /\
+                  (valid_range alloc (acc p1 x_0) 0 5)) /\
+                  (valid_range alloc (acc p2 x_0) 0 5))) /\
+                (separation_u2_u1 u2 u1 p2 p1 alloc) /\
+                (separation_intern_u2 u2 p2 p1 alloc) /\
+                (separation_intern_u1 u1 p2 p1 alloc) /\
+                (valid_u2 u2 p2 p1 alloc) /\ (valid_u1 u1 p2 p1 alloc)),
+  forall (Pre6: ((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
+                (valid alloc (acc p2 u1))) /\
+                (valid_range alloc (acc p1 u1) 0 5)) /\
+                (valid_range alloc (acc p2 u1) 0 5)),
+  forall (intP0: ((memory) Z)),
+  forall (v1_0: ((memory) Z)),
+  forall (v2_0: ((memory) Z)),
+  forall (Post3: ((assigns alloc v2 v2_0 (pointer_loc u1)) /\
+                 (assigns alloc v1 v1_0 (pointer_loc u1))) /\
+                 (assigns alloc intP intP0
+                  (union_loc (range_loc (acc p2 u1) 0 5)
+                   (range_loc (acc p1 u1) 0 5)))),
+  ((((valid alloc u2) /\ (valid alloc (acc p1 u2))) /\
+  (valid alloc (acc p2 u2))) /\ (valid_range alloc (acc p1 u2) 0 5)) /\
+  (valid_range alloc (acc p2 u2) 0 5).
+Proof.
+unfold valid_u1,valid_u2;intuition;generalize (H u2);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 36-1036 *)
+Lemma f1_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (intP: ((memory) Z)),
+  forall (p1: ((memory) pointer)),
+  forall (p2: ((memory) pointer)),
+  forall (u1: pointer),
+  forall (u2: pointer),
+  forall (v1: ((memory) Z)),
+  forall (v2: ((memory) Z)),
+  forall (Pre7: (forall (x_0:pointer),
+                 (x_0 = u1 \/ x_0 = u2 -> ((((valid alloc x_0) /\
+                  (valid alloc (acc p1 x_0))) /\
+                  (valid alloc (acc p2 x_0))) /\
+                  (valid_range alloc (acc p1 x_0) 0 5)) /\
+                  (valid_range alloc (acc p2 x_0) 0 5))) /\
+                (separation_u2_u1 u2 u1 p2 p1 alloc) /\
+                (separation_intern_u2 u2 p2 p1 alloc) /\
+                (separation_intern_u1 u1 p2 p1 alloc) /\
+                (valid_u2 u2 p2 p1 alloc) /\ (valid_u1 u1 p2 p1 alloc)),
+  forall (Pre6: ((((valid alloc u1) /\ (valid alloc (acc p1 u1))) /\
+                (valid alloc (acc p2 u1))) /\
+                (valid_range alloc (acc p1 u1) 0 5)) /\
+                (valid_range alloc (acc p2 u1) 0 5)),
+  forall (intP0: ((memory) Z)),
+  forall (v1_0: ((memory) Z)),
+  forall (v2_0: ((memory) Z)),
+  forall (Post3: ((assigns alloc v2 v2_0 (pointer_loc u1)) /\
+                 (assigns alloc v1 v1_0 (pointer_loc u1))) /\
+                 (assigns alloc intP intP0
+                  (union_loc (range_loc (acc p2 u1) 0 5)
+                   (range_loc (acc p1 u1) 0 5)))),
+  forall (Pre5: ((((valid alloc u2) /\ (valid alloc (acc p1 u2))) /\
+                (valid alloc (acc p2 u2))) /\
+                (valid_range alloc (acc p1 u2) 0 5)) /\
+                (valid_range alloc (acc p2 u2) 0 5)),
+  forall (intP1: ((memory) Z)),
+  forall (v1_1: ((memory) Z)),
+  forall (v2_1: ((memory) Z)),
+  forall (Post5: ((assigns alloc v2_0 v2_1 (pointer_loc u2)) /\
+                 (assigns alloc v1_0 v1_1 (pointer_loc u2))) /\
+                 (assigns alloc intP0 intP1
+                  (union_loc (range_loc (acc p2 u2) 0 5)
+                   (range_loc (acc p1 u2) 0 5)))),
+  ((assigns alloc v2 v2_1 (union_loc (pointer_loc u2) (pointer_loc u1))) /\
+  (assigns alloc v1 v1_1 (union_loc (pointer_loc u2) (pointer_loc u1)))) /\
+  (assigns alloc intP intP1
+   (union_loc (range_loc (acc p2 u2) 0 5)
+    (union_loc (range_loc (acc p1 u2) 0 5)
+     (union_loc (range_loc (acc p2 u1) 0 5) (range_loc (acc p1 u1) 0 5))))).
+Proof.
+intuition.
+apply assigns_trans with v2_0.
+unfold assigns;intros.
+apply H14;auto.
+apply unchanged_union_elim2 with (pointer_loc u2);auto.
+unfold assigns;intros.
+apply H20;auto.
+apply unchanged_union_elim1 with (pointer_loc u1);auto.
+apply assigns_trans with v1_0.
+unfold assigns;intros.
+apply H15;auto.
+apply unchanged_union_elim2 with (pointer_loc u2);auto.
+unfold assigns;intros.
+apply H21;auto.
+apply unchanged_union_elim1 with (pointer_loc u1);auto.
+apply assigns_trans with intP0.
+unfold assigns;intros.
+apply H11;auto.
+generalize (unchanged_union_elim2 (range_loc (u2 # p2) 0 5) 
+(union_loc (range_loc (u2 # p1) 0 5)
+(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5)))
+p H22);intro.
+apply unchanged_union_elim2 with (range_loc (u2 # p1) 0 5);auto.
+unfold assigns;intros.
+apply H19;auto.
+generalize (unchanged_union_elim1 (range_loc (u2 # p2) 0 5) 
+(union_loc (range_loc (u2 # p1) 0 5)
+(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5)))
+p H22);intro.
+generalize (unchanged_union_elim2 (range_loc (u2 # p2) 0 5) 
+(union_loc (range_loc (u2 # p1) 0 5)
+(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5)))
+p H22);intro.
+generalize (unchanged_union_elim1 
+(range_loc (u2 # p1) 0 5)
+(union_loc (range_loc (u1 # p2) 0 5) (range_loc (u1 # p1) 0 5))
+p H24);intro.
+apply unchanged_union_intro;intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44169-44186 *)
+Lemma f3_impl_po_1 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  ((((valid alloc u3) /\ (valid alloc (acc anonymous_2_p1 u3))) /\
+  (valid alloc (acc anonymous_2_p2 u3))) /\
+  (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 u3) 0 5).
+Proof.
+unfold valid_u3;intuition;generalize (H u3);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44192-44209 *)
+Lemma f3_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  ((((valid alloc u4) /\ (valid alloc (acc anonymous_2_p1 u4))) /\
+  (valid alloc (acc anonymous_2_p2 u4))) /\
+  (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 u4) 0 5).
+Proof.
+unfold valid_u4;intuition;generalize (H u4);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44215-44232 *)
+Lemma f3_impl_po_3 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  ((((valid alloc w1) /\ (valid alloc (acc anonymous_2_p1 w1))) /\
+  (valid alloc (acc anonymous_2_p2 w1))) /\
+  (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w1) 0 5).
+Proof.
+unfold valid_w1;intuition;generalize (H w1);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44238-44255 *)
+Lemma f3_impl_po_4 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  ((((valid alloc w2) /\ (valid alloc (acc anonymous_2_p1 w2))) /\
+  (valid alloc (acc anonymous_2_p2 w2))) /\
+  (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w2) 0 5).
+Proof.
+unfold valid_w2;intuition;generalize (H w2);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44261-44278 *)
+Lemma f3_impl_po_5 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  ((((valid alloc w3) /\ (valid alloc (acc anonymous_2_p1 w3))) /\
+  (valid alloc (acc anonymous_2_p2 w3))) /\
+  (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w3) 0 5).
+Proof.
+unfold valid_w3;intuition;generalize (H w3);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44284-44301 *)
+Lemma f3_impl_po_6 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  ((((valid alloc w4) /\ (valid alloc (acc anonymous_2_p1 w4))) /\
+  (valid alloc (acc anonymous_2_p2 w4))) /\
+  (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w4) 0 5).
+Proof.
+unfold valid_w4;intuition;generalize (H w4);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44307-44324 *)
+Lemma f3_impl_po_7 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  ((((valid alloc w5) /\ (valid alloc (acc anonymous_2_p1 w5))) /\
+  (valid alloc (acc anonymous_2_p2 w5))) /\
+  (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w5) 0 5).
+Proof.
+unfold valid_w5;intuition;generalize (H w5);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44330-44347 *)
+Lemma f3_impl_po_8 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  forall (Pre30: ((((valid alloc w5) /\
+                 (valid alloc (acc anonymous_2_p1 w5))) /\
+                 (valid alloc (acc anonymous_2_p2 w5))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (Post25: ((assigns alloc intP5 intP6
+                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                   (pointer_loc w5))) /\
+                  (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                   (pointer_loc w5))),
+  ((((valid alloc w6) /\ (valid alloc (acc anonymous_2_p1 w6))) /\
+  (valid alloc (acc anonymous_2_p2 w6))) /\
+  (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w6) 0 5).
+Proof.
+unfold valid_w6;intuition;generalize (H w6);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44353-44370 *)
+Lemma f3_impl_po_9 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  forall (Pre30: ((((valid alloc w5) /\
+                 (valid alloc (acc anonymous_2_p1 w5))) /\
+                 (valid alloc (acc anonymous_2_p2 w5))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (Post25: ((assigns alloc intP5 intP6
+                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                   (pointer_loc w5))) /\
+                  (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                   (pointer_loc w5))),
+  forall (Pre29: ((((valid alloc w6) /\
+                 (valid alloc (acc anonymous_2_p1 w6))) /\
+                 (valid alloc (acc anonymous_2_p2 w6))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (Post27: ((assigns alloc intP6 intP7
+                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
+                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                   (pointer_loc w6))) /\
+                  (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                   (pointer_loc w6))),
+  ((((valid alloc w7) /\ (valid alloc (acc anonymous_2_p1 w7))) /\
+  (valid alloc (acc anonymous_2_p2 w7))) /\
+  (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w7) 0 5).
+Proof.
+unfold valid_w7;intuition;generalize (H w7);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44376-44393 *)
+Lemma f3_impl_po_10 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  forall (Pre30: ((((valid alloc w5) /\
+                 (valid alloc (acc anonymous_2_p1 w5))) /\
+                 (valid alloc (acc anonymous_2_p2 w5))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (Post25: ((assigns alloc intP5 intP6
+                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                   (pointer_loc w5))) /\
+                  (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                   (pointer_loc w5))),
+  forall (Pre29: ((((valid alloc w6) /\
+                 (valid alloc (acc anonymous_2_p1 w6))) /\
+                 (valid alloc (acc anonymous_2_p2 w6))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (Post27: ((assigns alloc intP6 intP7
+                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
+                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                   (pointer_loc w6))) /\
+                  (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                   (pointer_loc w6))),
+  forall (Pre28: ((((valid alloc w7) /\
+                 (valid alloc (acc anonymous_2_p1 w7))) /\
+                 (valid alloc (acc anonymous_2_p2 w7))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (Post29: ((assigns alloc intP7 intP8
+                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
+                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                   (pointer_loc w7))) /\
+                  (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                   (pointer_loc w7))),
+  ((((valid alloc w8) /\ (valid alloc (acc anonymous_2_p1 w8))) /\
+  (valid alloc (acc anonymous_2_p2 w8))) /\
+  (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w8) 0 5).
+Proof.
+unfold valid_w8;intuition;generalize (H w8);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44399-44416 *)
+Lemma f3_impl_po_11 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  forall (Pre30: ((((valid alloc w5) /\
+                 (valid alloc (acc anonymous_2_p1 w5))) /\
+                 (valid alloc (acc anonymous_2_p2 w5))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (Post25: ((assigns alloc intP5 intP6
+                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                   (pointer_loc w5))) /\
+                  (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                   (pointer_loc w5))),
+  forall (Pre29: ((((valid alloc w6) /\
+                 (valid alloc (acc anonymous_2_p1 w6))) /\
+                 (valid alloc (acc anonymous_2_p2 w6))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (Post27: ((assigns alloc intP6 intP7
+                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
+                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                   (pointer_loc w6))) /\
+                  (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                   (pointer_loc w6))),
+  forall (Pre28: ((((valid alloc w7) /\
+                 (valid alloc (acc anonymous_2_p1 w7))) /\
+                 (valid alloc (acc anonymous_2_p2 w7))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (Post29: ((assigns alloc intP7 intP8
+                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
+                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                   (pointer_loc w7))) /\
+                  (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                   (pointer_loc w7))),
+  forall (Pre27: ((((valid alloc w8) /\
+                 (valid alloc (acc anonymous_2_p1 w8))) /\
+                 (valid alloc (acc anonymous_2_p2 w8))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w8) 0 5)),
+  forall (anonymous_2_v1_9: ((memory) Z)),
+  forall (anonymous_2_v2_9: ((memory) Z)),
+  forall (intP9: ((memory) Z)),
+  forall (Post31: ((assigns alloc intP8 intP9
+                    (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
+                     (range_loc (acc anonymous_2_p1 w8) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
+                   (pointer_loc w8))) /\
+                  (assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
+                   (pointer_loc w8))),
+  ((((valid alloc w9) /\ (valid alloc (acc anonymous_2_p1 w9))) /\
+  (valid alloc (acc anonymous_2_p2 w9))) /\
+  (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w9) 0 5).
+Proof.
+unfold valid_w9;intuition;generalize (H w9);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 44422-44440 *)
+Lemma f3_impl_po_12 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  forall (Pre30: ((((valid alloc w5) /\
+                 (valid alloc (acc anonymous_2_p1 w5))) /\
+                 (valid alloc (acc anonymous_2_p2 w5))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (Post25: ((assigns alloc intP5 intP6
+                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                   (pointer_loc w5))) /\
+                  (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                   (pointer_loc w5))),
+  forall (Pre29: ((((valid alloc w6) /\
+                 (valid alloc (acc anonymous_2_p1 w6))) /\
+                 (valid alloc (acc anonymous_2_p2 w6))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (Post27: ((assigns alloc intP6 intP7
+                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
+                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                   (pointer_loc w6))) /\
+                  (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                   (pointer_loc w6))),
+  forall (Pre28: ((((valid alloc w7) /\
+                 (valid alloc (acc anonymous_2_p1 w7))) /\
+                 (valid alloc (acc anonymous_2_p2 w7))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (Post29: ((assigns alloc intP7 intP8
+                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
+                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                   (pointer_loc w7))) /\
+                  (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                   (pointer_loc w7))),
+  forall (Pre27: ((((valid alloc w8) /\
+                 (valid alloc (acc anonymous_2_p1 w8))) /\
+                 (valid alloc (acc anonymous_2_p2 w8))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w8) 0 5)),
+  forall (anonymous_2_v1_9: ((memory) Z)),
+  forall (anonymous_2_v2_9: ((memory) Z)),
+  forall (intP9: ((memory) Z)),
+  forall (Post31: ((assigns alloc intP8 intP9
+                    (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
+                     (range_loc (acc anonymous_2_p1 w8) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
+                   (pointer_loc w8))) /\
+                  (assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
+                   (pointer_loc w8))),
+  forall (Pre26: ((((valid alloc w9) /\
+                 (valid alloc (acc anonymous_2_p1 w9))) /\
+                 (valid alloc (acc anonymous_2_p2 w9))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w9) 0 5)),
+  forall (anonymous_2_v1_10: ((memory) Z)),
+  forall (anonymous_2_v2_10: ((memory) Z)),
+  forall (intP10: ((memory) Z)),
+  forall (Post33: ((assigns alloc intP9 intP10
+                    (union_loc (range_loc (acc anonymous_2_p2 w9) 0 5)
+                     (range_loc (acc anonymous_2_p1 w9) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
+                   (pointer_loc w9))) /\
+                  (assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
+                   (pointer_loc w9))),
+  ((((valid alloc w10) /\ (valid alloc (acc anonymous_2_p1 w10))) /\
+  (valid alloc (acc anonymous_2_p2 w10))) /\
+  (valid_range alloc (acc anonymous_2_p1 w10) 0 5)) /\
+  (valid_range alloc (acc anonymous_2_p2 w10) 0 5).
+Proof.
+unfold valid_w10;intuition;generalize (H w10);intuition.
+Save.
+
+(* Why obligation from file "why/separation.why", characters 1075-46918 *)
+Lemma f3_impl_po_13 : 
+  forall (alloc: alloc_table),
+  forall (anonymous_2_p1: ((memory) pointer)),
+  forall (anonymous_2_p2: ((memory) pointer)),
+  forall (anonymous_2_v1: ((memory) Z)),
+  forall (anonymous_2_v2: ((memory) Z)),
+  forall (intP: ((memory) Z)),
+  forall (u3: pointer),
+  forall (u4: pointer),
+  forall (w1: pointer),
+  forall (w10: pointer),
+  forall (w2: pointer),
+  forall (w3: pointer),
+  forall (w4: pointer),
+  forall (w5: pointer),
+  forall (w6: pointer),
+  forall (w7: pointer),
+  forall (w8: pointer),
+  forall (w9: pointer),
+  forall (Pre37: (forall (x_0:pointer),
+                  (((((((((((x_0 = u3 \/ x_0 = u4) \/ x_0 = w1) \/
+                   x_0 = w2) \/ x_0 = w3) \/ x_0 = w4) \/ x_0 = w5) \/
+                   x_0 = w6) \/ x_0 = w7) \/ x_0 = w8) \/ x_0 = w9) \/
+                   x_0 = w10 -> ((((valid alloc x_0) /\
+                   (valid alloc (acc anonymous_2_p1 x_0))) /\
+                   (valid alloc (acc anonymous_2_p2 x_0))) /\
+                   (valid_range alloc (acc anonymous_2_p1 x_0) 0 5)) /\
+                   (valid_range alloc (acc anonymous_2_p2 x_0) 0 5))) /\
+                 (separation_w3_u4 w3 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_u3 w3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_u4_u3 u4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u4 w1 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w1_u3 w1 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w10 w10 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w7 w8 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w6 w8 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w5 w8 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w4 w8 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w3 w8 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w2 w8 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_w1 w8 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_intern_w10 w10 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w6_w5 w6 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w4 w6 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w3 w6 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w2 w6 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_w1 w6 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u4 w8 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w8_u3 w8 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w3 w4 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w2 w4 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_w1 w4 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u4 w6 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w6_u3 w6 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_w1 w2 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u4 w4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w4_u3 w4 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w9 w9 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w8 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w7 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w6 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w5 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w4 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w3 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w2 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_w1 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u4 w2 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w2_u3 w2 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u4 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (valid_u3 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w8 w9 w8 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w7 w9 w7 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w6 w9 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_w5 w9 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w9 w10 w9 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w4 w9 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w8 w10 w8 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w3 w9 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w7 w10 w7 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w2 w9 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w6 w10 w6 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w9_w1 w9 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_w5 w10 w5 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w4 w10 w4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w3 w10 w3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w2 w10 w2 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_w1 w10 w1 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w7_w6 w7 w6 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w5 w7 w5 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w4 w7 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w3 w7 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w2 w7 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_w1 w7 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u4 w9 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w9_u3 w9 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w10_u4 w10 u4 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w10_u3 w10 u3 anonymous_2_p2 anonymous_2_p1
+                  alloc) /\
+                 (separation_w5_w4 w5 w4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w3 w5 w3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w2 w5 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_w1 w5 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u4 w7 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w7_u3 w7 u3 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w2 w3 w2 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w3_w1 w3 w1 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u4 w5 u4 anonymous_2_p2 anonymous_2_p1 alloc) /\
+                 (separation_w5_u3 w5 u3 anonymous_2_p2 anonymous_2_p1 alloc)),
+  forall (Pre36: ((((valid alloc u3) /\
+                 (valid alloc (acc anonymous_2_p1 u3))) /\
+                 (valid alloc (acc anonymous_2_p2 u3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u3) 0 5)),
+  forall (anonymous_2_v1_0: ((memory) Z)),
+  forall (anonymous_2_v2_0: ((memory) Z)),
+  forall (intP0: ((memory) Z)),
+  forall (Post13: ((assigns alloc intP intP0
+                    (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                     (range_loc (acc anonymous_2_p1 u3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2 anonymous_2_v2_0
+                   (pointer_loc u3))) /\
+                  (assigns alloc anonymous_2_v1 anonymous_2_v1_0
+                   (pointer_loc u3))),
+  forall (Pre35: ((((valid alloc u4) /\
+                 (valid alloc (acc anonymous_2_p1 u4))) /\
+                 (valid alloc (acc anonymous_2_p2 u4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 u4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 u4) 0 5)),
+  forall (anonymous_2_v1_1: ((memory) Z)),
+  forall (anonymous_2_v2_1: ((memory) Z)),
+  forall (intP1: ((memory) Z)),
+  forall (Post15: ((assigns alloc intP0 intP1
+                    (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                     (range_loc (acc anonymous_2_p1 u4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_0 anonymous_2_v2_1
+                   (pointer_loc u4))) /\
+                  (assigns alloc anonymous_2_v1_0 anonymous_2_v1_1
+                   (pointer_loc u4))),
+  forall (Pre34: ((((valid alloc w1) /\
+                 (valid alloc (acc anonymous_2_p1 w1))) /\
+                 (valid alloc (acc anonymous_2_p2 w1))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w1) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w1) 0 5)),
+  forall (anonymous_2_v1_2: ((memory) Z)),
+  forall (anonymous_2_v2_2: ((memory) Z)),
+  forall (intP2: ((memory) Z)),
+  forall (Post17: ((assigns alloc intP1 intP2
+                    (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                     (range_loc (acc anonymous_2_p1 w1) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_1 anonymous_2_v2_2
+                   (pointer_loc w1))) /\
+                  (assigns alloc anonymous_2_v1_1 anonymous_2_v1_2
+                   (pointer_loc w1))),
+  forall (Pre33: ((((valid alloc w2) /\
+                 (valid alloc (acc anonymous_2_p1 w2))) /\
+                 (valid alloc (acc anonymous_2_p2 w2))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w2) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w2) 0 5)),
+  forall (anonymous_2_v1_3: ((memory) Z)),
+  forall (anonymous_2_v2_3: ((memory) Z)),
+  forall (intP3: ((memory) Z)),
+  forall (Post19: ((assigns alloc intP2 intP3
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (range_loc (acc anonymous_2_p1 w2) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_2 anonymous_2_v2_3
+                   (pointer_loc w2))) /\
+                  (assigns alloc anonymous_2_v1_2 anonymous_2_v1_3
+                   (pointer_loc w2))),
+  forall (Pre32: ((((valid alloc w3) /\
+                 (valid alloc (acc anonymous_2_p1 w3))) /\
+                 (valid alloc (acc anonymous_2_p2 w3))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w3) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w3) 0 5)),
+  forall (anonymous_2_v1_4: ((memory) Z)),
+  forall (anonymous_2_v2_4: ((memory) Z)),
+  forall (intP4: ((memory) Z)),
+  forall (Post21: ((assigns alloc intP3 intP4
+                    (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                     (range_loc (acc anonymous_2_p1 w3) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_3 anonymous_2_v2_4
+                   (pointer_loc w3))) /\
+                  (assigns alloc anonymous_2_v1_3 anonymous_2_v1_4
+                   (pointer_loc w3))),
+  forall (Pre31: ((((valid alloc w4) /\
+                 (valid alloc (acc anonymous_2_p1 w4))) /\
+                 (valid alloc (acc anonymous_2_p2 w4))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w4) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w4) 0 5)),
+  forall (anonymous_2_v1_5: ((memory) Z)),
+  forall (anonymous_2_v2_5: ((memory) Z)),
+  forall (intP5: ((memory) Z)),
+  forall (Post23: ((assigns alloc intP4 intP5
+                    (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                     (range_loc (acc anonymous_2_p1 w4) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_4 anonymous_2_v2_5
+                   (pointer_loc w4))) /\
+                  (assigns alloc anonymous_2_v1_4 anonymous_2_v1_5
+                   (pointer_loc w4))),
+  forall (Pre30: ((((valid alloc w5) /\
+                 (valid alloc (acc anonymous_2_p1 w5))) /\
+                 (valid alloc (acc anonymous_2_p2 w5))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w5) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w5) 0 5)),
+  forall (anonymous_2_v1_6: ((memory) Z)),
+  forall (anonymous_2_v2_6: ((memory) Z)),
+  forall (intP6: ((memory) Z)),
+  forall (Post25: ((assigns alloc intP5 intP6
+                    (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+                     (range_loc (acc anonymous_2_p1 w5) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_5 anonymous_2_v2_6
+                   (pointer_loc w5))) /\
+                  (assigns alloc anonymous_2_v1_5 anonymous_2_v1_6
+                   (pointer_loc w5))),
+  forall (Pre29: ((((valid alloc w6) /\
+                 (valid alloc (acc anonymous_2_p1 w6))) /\
+                 (valid alloc (acc anonymous_2_p2 w6))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w6) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w6) 0 5)),
+  forall (anonymous_2_v1_7: ((memory) Z)),
+  forall (anonymous_2_v2_7: ((memory) Z)),
+  forall (intP7: ((memory) Z)),
+  forall (Post27: ((assigns alloc intP6 intP7
+                    (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
+                     (range_loc (acc anonymous_2_p1 w6) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_6 anonymous_2_v2_7
+                   (pointer_loc w6))) /\
+                  (assigns alloc anonymous_2_v1_6 anonymous_2_v1_7
+                   (pointer_loc w6))),
+  forall (Pre28: ((((valid alloc w7) /\
+                 (valid alloc (acc anonymous_2_p1 w7))) /\
+                 (valid alloc (acc anonymous_2_p2 w7))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w7) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w7) 0 5)),
+  forall (anonymous_2_v1_8: ((memory) Z)),
+  forall (anonymous_2_v2_8: ((memory) Z)),
+  forall (intP8: ((memory) Z)),
+  forall (Post29: ((assigns alloc intP7 intP8
+                    (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
+                     (range_loc (acc anonymous_2_p1 w7) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_7 anonymous_2_v2_8
+                   (pointer_loc w7))) /\
+                  (assigns alloc anonymous_2_v1_7 anonymous_2_v1_8
+                   (pointer_loc w7))),
+  forall (Pre27: ((((valid alloc w8) /\
+                 (valid alloc (acc anonymous_2_p1 w8))) /\
+                 (valid alloc (acc anonymous_2_p2 w8))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w8) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w8) 0 5)),
+  forall (anonymous_2_v1_9: ((memory) Z)),
+  forall (anonymous_2_v2_9: ((memory) Z)),
+  forall (intP9: ((memory) Z)),
+  forall (Post31: ((assigns alloc intP8 intP9
+                    (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
+                     (range_loc (acc anonymous_2_p1 w8) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_8 anonymous_2_v2_9
+                   (pointer_loc w8))) /\
+                  (assigns alloc anonymous_2_v1_8 anonymous_2_v1_9
+                   (pointer_loc w8))),
+  forall (Pre26: ((((valid alloc w9) /\
+                 (valid alloc (acc anonymous_2_p1 w9))) /\
+                 (valid alloc (acc anonymous_2_p2 w9))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w9) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w9) 0 5)),
+  forall (anonymous_2_v1_10: ((memory) Z)),
+  forall (anonymous_2_v2_10: ((memory) Z)),
+  forall (intP10: ((memory) Z)),
+  forall (Post33: ((assigns alloc intP9 intP10
+                    (union_loc (range_loc (acc anonymous_2_p2 w9) 0 5)
+                     (range_loc (acc anonymous_2_p1 w9) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_9 anonymous_2_v2_10
+                   (pointer_loc w9))) /\
+                  (assigns alloc anonymous_2_v1_9 anonymous_2_v1_10
+                   (pointer_loc w9))),
+  forall (Pre25: ((((valid alloc w10) /\
+                 (valid alloc (acc anonymous_2_p1 w10))) /\
+                 (valid alloc (acc anonymous_2_p2 w10))) /\
+                 (valid_range alloc (acc anonymous_2_p1 w10) 0 5)) /\
+                 (valid_range alloc (acc anonymous_2_p2 w10) 0 5)),
+  forall (anonymous_2_v1_11: ((memory) Z)),
+  forall (anonymous_2_v2_11: ((memory) Z)),
+  forall (intP11: ((memory) Z)),
+  forall (Post35: ((assigns alloc intP10 intP11
+                    (union_loc (range_loc (acc anonymous_2_p2 w10) 0 5)
+                     (range_loc (acc anonymous_2_p1 w10) 0 5))) /\
+                  (assigns alloc anonymous_2_v2_10 anonymous_2_v2_11
+                   (pointer_loc w10))) /\
+                  (assigns alloc anonymous_2_v1_10 anonymous_2_v1_11
+                   (pointer_loc w10))),
+  ((assigns alloc intP intP11
+    (union_loc (range_loc (acc anonymous_2_p2 w10) 0 5)
+     (union_loc (range_loc (acc anonymous_2_p1 w10) 0 5)
+      (union_loc (range_loc (acc anonymous_2_p2 w9) 0 5)
+       (union_loc (range_loc (acc anonymous_2_p1 w9) 0 5)
+        (union_loc (range_loc (acc anonymous_2_p2 w8) 0 5)
+         (union_loc (range_loc (acc anonymous_2_p1 w8) 0 5)
+          (union_loc (range_loc (acc anonymous_2_p2 w7) 0 5)
+           (union_loc (range_loc (acc anonymous_2_p1 w7) 0 5)
+            (union_loc (range_loc (acc anonymous_2_p2 w6) 0 5)
+             (union_loc (range_loc (acc anonymous_2_p1 w6) 0 5)
+              (union_loc (range_loc (acc anonymous_2_p2 w5) 0 5)
+               (union_loc (range_loc (acc anonymous_2_p1 w5) 0 5)
+                (union_loc (range_loc (acc anonymous_2_p2 w4) 0 5)
+                 (union_loc (range_loc (acc anonymous_2_p1 w4) 0 5)
+                  (union_loc (range_loc (acc anonymous_2_p2 w3) 0 5)
+                   (union_loc (range_loc (acc anonymous_2_p1 w3) 0 5)
+                    (union_loc (range_loc (acc anonymous_2_p2 w2) 0 5)
+                     (union_loc (range_loc (acc anonymous_2_p1 w2) 0 5)
+                      (union_loc (range_loc (acc anonymous_2_p2 w1) 0 5)
+                       (union_loc (range_loc (acc anonymous_2_p1 w1) 0 5)
+                        (union_loc (range_loc (acc anonymous_2_p2 u4) 0 5)
+                         (union_loc (range_loc (acc anonymous_2_p1 u4) 0 5)
+                          (union_loc (range_loc (acc anonymous_2_p2 u3) 0 5)
+                           (range_loc (acc anonymous_2_p1 u3) 0 5))))))))))))))))))))))))) /\
+  (assigns alloc anonymous_2_v2 anonymous_2_v2_11
+   (union_loc (pointer_loc w10)
+    (union_loc (pointer_loc w9)
+     (union_loc (pointer_loc w8)
+      (union_loc (pointer_loc w7)
+       (union_loc (pointer_loc w6)
+        (union_loc (pointer_loc w5)
+         (union_loc (pointer_loc w4)
+          (union_loc (pointer_loc w3)
+           (union_loc (pointer_loc w2)
+            (union_loc (pointer_loc w1)
+             (union_loc (pointer_loc u4) (pointer_loc u3)))))))))))))) /\
+  (assigns alloc anonymous_2_v1 anonymous_2_v1_11
+   (union_loc (pointer_loc w10)
+    (union_loc (pointer_loc w9)
+     (union_loc (pointer_loc w8)
+      (union_loc (pointer_loc w7)
+       (union_loc (pointer_loc w6)
+        (union_loc (pointer_loc w5)
+         (union_loc (pointer_loc w4)
+          (union_loc (pointer_loc w3)
+           (union_loc (pointer_loc w2)
+            (union_loc (pointer_loc w1)
+             (union_loc (pointer_loc u4) (pointer_loc u3))))))))))))).
+Proof.
+intuition.
+Admitted.
+
+(* Why obligation from file "why/separation.why", characters 47158-47214 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (tab: pointer),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre15: (separation_intern_tab tab) /\
-                 (separation_tab_v tab x v alloc) /\
-                 (separation_tab_s tab x s u t alloc) /\
-                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+  forall (Pre15: (valid_v v alloc) /\ (valid_s s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\
                  (separation_v_s v s u t alloc)),
   (valid alloc s).
 Proof.
 unfold  valid_s; intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 541-568 *)
+(* Why obligation from file "why/separation.why", characters 47222-47249 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (tab: pointer),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre15: (separation_intern_tab tab) /\
-                 (separation_tab_v tab x v alloc) /\
-                 (separation_tab_s tab x s u t alloc) /\
-                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+  forall (Pre15: (valid_v v alloc) /\ (valid_s s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\
                  (separation_v_s v s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_6: pointer),
@@ -47,21 +3210,16 @@ unfold valid_s; intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 460-568 *)
+(* Why obligation from file "why/separation.why", characters 47141-47249 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (tab: pointer),
   forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre15: (separation_intern_tab tab) /\
-                 (separation_tab_v tab x v alloc) /\
-                 (separation_tab_s tab x s u t alloc) /\
-                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
+  forall (Pre15: (valid_v v alloc) /\ (valid_s s u t alloc) /\
+                 (separation_intern_s s u t alloc) /\
                  (separation_v_s v s u t alloc)),
   forall (Pre4: (valid alloc s)),
   forall (caduceus_6: pointer),
@@ -92,256 +3250,50 @@ rewrite shift_zero.
 rewrite acc_upd_neq.
 rewrite acc_upd_neq.
 rewrite acc_upd_eq;auto.
-red in H2.
+red in H0.
 intuition.
-apply H9.
-generalize (pointer_pair_2 (s # u)  (s # t) H6);intuition. 
-red in H7;intuition.
-apply H8.
-generalize (pointer_pair_2 v  (s # t) H6);intuition. 
-rewrite shift_zero;red in H3;auto.
-rewrite shift_zero;red in H4;intuition.
+generalize (pointer_pair_2 (s # u)  (s # t) H2);intuition. 
+red in H3.
+intuition.
+apply H4.
+generalize (pointer_pair_2 v  (s # t) H2);intuition. 
+rewrite shift_zero;red in H;auto.
+rewrite shift_zero;red in H1;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 1315-1343 *)
+(* Why obligation from file "why/separation.why", characters 47618-47646 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (tab: pointer),
-  forall (u: ((memory) pointer)),
   forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre3: (separation_intern_tab tab) /\
-                (separation_tab_v tab x v alloc) /\
-                (separation_tab_s tab x s u t alloc) /\
-                (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
-                (separation_v_s v s u t alloc)),
+  forall (Pre3: (valid_v v alloc)),
   (valid alloc (shift v 0)).
 Proof.
-intuition.
-rewrite shift_zero;red in H3;auto.
+unfold valid_v;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 1821-1922 *)
+(* Why obligation from file "why/separation.why", characters 47788-47889 *)
 Lemma h_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
   forall (tab: pointer),
-  forall (u: ((memory) pointer)),
-  forall (v: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre5: (separation_intern_tab tab) /\
-                (separation_tab_v tab x v alloc) /\
-                (separation_tab_s tab x s u t alloc) /\
-                (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
-                (separation_v_s v s u t alloc)),
+  forall (Pre5: (valid_tab tab x alloc) /\ (separation_intern_tab tab)),
   (valid alloc (shift tab 0)).
 Proof.
-intuition.
-rewrite shift_zero;red in H5;intuition.
+unfold valid_tab;intuition.
 Save.
 
-(* Why obligation from file "why/separation.why", characters 1821-1922 *)
+(* Why obligation from file "why/separation.why", characters 47788-47889 *)
 Lemma h_impl_po_2 : 
   forall (alloc: alloc_table),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
   forall (tab: pointer),
-  forall (u: ((memory) pointer)),
-  forall (v: pointer),
   forall (x: ((memory) pointer)),
-  forall (Pre5: (separation_intern_tab tab) /\
-                (separation_tab_v tab x v alloc) /\
-                (separation_tab_s tab x s u t alloc) /\
-                (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
-                (separation_v_s v s u t alloc)),
+  forall (Pre5: (valid_tab tab x alloc) /\ (separation_intern_tab tab)),
   forall (Pre2: (valid alloc (shift tab 0))),
   (valid alloc (shift (acc x (shift tab 0)) 0)).
 Proof.
-intuition.
-rewrite shift_zero;rewrite shift_zero;red in H5;intuition.
+unfold valid_tab;intuition.
+rewrite shift_zero;rewrite shift_zero.
 assert (h: 0 <= 0 < 5).
 omega. 
-generalize (H8 0 h);rewrite shift_zero;auto.
+generalize (H2 0 h);rewrite shift_zero;auto.
 Save.
-
-(* Why obligation from file "why/separation.why", characters 2451-2530 *)
-Lemma invariants_initially_established_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (tab: pointer),
-  forall (u: ((memory) pointer)),
-  forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre58: (separation_intern_tab tab) /\
-                 (separation_tab_v tab x v alloc) /\
-                 (separation_tab_s tab x s u t alloc) /\
-                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
-                 (separation_v_s v s u t alloc)),
-  (valid alloc s).
-Proof.
-intuition.
-inversion_clear H4.
-auto.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 2538-2566 *)
-Lemma invariants_initially_established_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (tab: pointer),
-  forall (u: ((memory) pointer)),
-  forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre58: (separation_intern_tab tab) /\
-                 (separation_tab_v tab x v alloc) /\
-                 (separation_tab_s tab x s u t alloc) /\
-                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
-                 (separation_v_s v s u t alloc)),
-  forall (Pre4: (valid alloc s)),
-  forall (caduceus_24: pointer),
-  forall (Post3: caduceus_24 = (shift (acc t s) 0)),
-  (valid alloc caduceus_24).
-Proof.
-unfold valid_s;intuition.
-subst.
-apply valid_range_valid with 0 1.
-rewrite shift_zero;auto.
-omega.
-Save.
-
-(* Why obligation from file "why/separation.why", characters 2433-2566 *)
-Lemma invariants_initially_established_impl_po_3 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (tab: pointer),
-  forall (u: ((memory) pointer)),
-  forall (v: pointer),
-  forall (x: ((memory) pointer)),
-  forall (Pre58: (separation_intern_tab tab) /\
-                 (separation_tab_v tab x v alloc) /\
-                 (separation_tab_s tab x s u t alloc) /\
-                 (separation_intern_s s u t alloc) /\ (valid_v v alloc) /\
-                 (valid_s s u t alloc) /\ (valid_tab tab x alloc) /\
-                 (separation_v_s v s u t alloc)),
-  forall (Pre4: (valid alloc s)),
-  forall (caduceus_24: pointer),
-  forall (Post3: caduceus_24 = (shift (acc t s) 0)),
-  forall (Pre3: (valid alloc caduceus_24)),
-  forall (intP0: ((memory) Z)),
-  forall (Post43: intP0 = (upd intP caduceus_24 0)),
-  (forall (result:pointer),
-   (result = (shift (acc t s) 1) ->
-    (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 0) ->
-      (forall (result:pointer),
-       (result = (shift (acc u s) 0) ->
-        (forall (intP0:((memory) Z)),
-         (intP0 = (upd intP result 0) ->
-          (forall (result:pointer),
-           (result = (shift (acc u s) 1) ->
-            (forall (intP:((memory) Z)),
-             (intP = (upd intP0 result 0) ->
-              (forall (result:pointer),
-               (result = (shift (acc u s) 2) ->
-                (forall (intP0:((memory) Z)),
-                 (intP0 = (upd intP result 0) ->
-                  (forall (result:pointer),
-                   (result = (shift v 0) ->
-                    (forall (intP:((memory) Z)),
-                     (intP = (upd intP0 result 0) ->
-                      (forall (result:pointer),
-                       (result = (shift v 1) ->
-                        (forall (intP0:((memory) Z)),
-                         (intP0 = (upd intP result 0) ->
-                          (forall (result:pointer),
-                           (result = (shift v 2) ->
-                            (forall (intP:((memory) Z)),
-                             (intP = (upd intP0 result 0) ->
-                              (forall (result:pointer),
-                               (result = (shift v 3) ->
-                                (forall (intP0:((memory) Z)),
-                                 (intP0 = (upd intP result 0) ->
-                                  ((forall (result:pointer),
-                                    (result = (shift (acc x (shift tab 0)) 0) ->
-                                     (forall (intP:((memory) Z)),
-                                      (intP = (upd intP0 result 0) ->
-                                       ((forall (result:pointer),
-                                         (result = (shift (acc x
-                                                           (shift tab 1))
-                                                    0) ->
-                                          (forall (intP0:((memory) Z)),
-                                           (intP0 = (upd intP result 0) ->
-                                            ((forall (result:pointer),
-                                              (result = (shift (acc x
-                                                                (shift tab 2))
-                                                         0) ->
-                                               (forall (intP:((memory) Z)),
-                                                (intP = (upd intP0 result 0) ->
-                                                 ((forall (result:pointer),
-                                                   (result = (shift (
-                                                              acc x
-                                                              (shift tab 3))
-                                                              0) ->
-                                                    (forall (intP0:((memory) Z)),
-                                                     (intP0 = (upd intP
-                                                               result 0) ->
-                                                      ((forall (result:pointer),
-                                                        (result = (shift (
-                                                                   acc x
-                                                                   (shift tab
-                                                                    4))
-                                                                   0) ->
-                                                         (forall (intP:((memory) Z)),
-                                                          (intP = (upd intP0
-                                                                   result 0) ->
-                                                           True)) /\
-                                                         (valid alloc result))) /\
-                                                      (valid alloc
-                                                       (shift tab 4))) /\
-                                                      (valid alloc
-                                                       (shift tab 4)))) /\
-                                                    (valid alloc result))) /\
-                                                 (valid alloc (shift tab 3))) /\
-                                                 (valid alloc (shift tab 3)))) /\
-                                               (valid alloc result))) /\
-                                            (valid alloc (shift tab 2))) /\
-                                            (valid alloc (shift tab 2)))) /\
-                                          (valid alloc result))) /\
-                                       (valid alloc (shift tab 1))) /\
-                                       (valid alloc (shift tab 1)))) /\
-                                     (valid alloc result))) /\
-                                  (valid alloc (shift tab 0))) /\
-                                  (valid alloc (shift tab 0)))) /\
-                                (valid alloc result))))) /\
-                            (valid alloc result))))) /\
-                        (valid alloc result))))) /\
-                    (valid alloc result))))) /\
-                (valid alloc result))) /\
-              (valid alloc s))) /\
-            (valid alloc result))) /\
-          (valid alloc s))) /\
-        (valid alloc result))) /\
-      (valid alloc s))) /\
-    (valid alloc result))) /\
-  (valid alloc s).
-Proof.
-unfold valid_tab, valid_v,valid_s;intuition;subst;
-try rewrite shift_zero;
-assert (0<=4<5); try omega;
-generalize (H10 4 H4);auto.
-assert (0<=0<5); try omega;
-generalize (H10 0 H11);auto.
-Save.
-

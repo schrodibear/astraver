@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.68 2004-12-08 14:17:29 hubert Exp $ i*)
+(*i $Id: cltyping.ml,v 1.69 2005-01-04 15:48:00 hubert Exp $ i*)
 
 open Cast
 open Clogic
@@ -26,23 +26,6 @@ open Ctypes
 let option_app f = function Some x -> Some (f x) | None -> None
 
 (* Typing terms *)
-
-(*
-let noattr tyn = { ctype_node = tyn; 
-		   ctype_storage = No_storage;
-		   ctype_const = false;
-		   ctype_volatile = false }
-let c_void = noattr CTvoid
-let c_int = noattr (CTint (Signed, Int))
-let c_char = noattr (CTint (Unsigned, Char))
-let c_float = noattr (CTfloat Float)
-let c_string = noattr (CTpointer c_char)
-let c_array ty = noattr (CTarray (ty, None))
-let c_array_size ty s = noattr (CTarray (ty, Some s))
-let c_pointer ty = noattr (CTpointer ty)
-let c_void_star = c_pointer c_void
-let c_addr = noattr (CTvar "addr")
-*)
 
 let is_null t = match t.term_node with
   | Tnull -> true
@@ -336,6 +319,9 @@ let int_constant n =
 
 let zero = int_constant "0"
 
+let compat_pointers ty1 ty2 = 
+  (ty1.ctype_node = Tvoid) || (ty2.ctype_node = Tvoid) || eq_type ty1 ty2
+
 (* Typing predicates *)
 
 let rec type_predicate env p0 = match p0.lexpr_node with
@@ -350,16 +336,41 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let loc = Loc.join t1.lexpr_loc t2.lexpr_loc in
       let t1 = type_num_pointer_term env t1 in
       let t2 = type_num_pointer_term env t2 in
-      if not (compatible t1 t2) then 
-	error loc "comparison of incompatible types";
-      Prel (t1, r, t2)
+       begin match t1.term_type.ctype_node, t2.term_type.ctype_node with
+	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
+	    Prel (t1, r, t2)
+	| (Tpointer ty1  | Tarray (ty1,_)), 
+	  (Tpointer ty2 | Tarray (ty2,_)) ->
+	    if not (compat_pointers ty1 ty2) then
+	      warning loc "comparison of distinct pointer types lacks a cast";
+	    Prel (t1, r, t2)
+	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _)
+	| (Tint _ | Tenum _ | Tfloat _), (Tpointer _  | Tarray _) ->
+	    warning loc "comparison between pointer and integer";
+	    Prel (t1, r, t2)
+	| _ ->
+	    error loc "invalid operands to comparison"
+       end
   | PLrel (t1, (Eq | Neq as r), t2) -> 
       let loc = Loc.join t1.lexpr_loc t2.lexpr_loc in
       let t1 = type_term env t1 in
       let t2 = type_term env t2 in
-      if not (compatible t1 t2) then 
-	error loc "comparison of incompatible types";
-      Prel (t1, r, t2)
+       begin match t1.term_type.ctype_node, t2.term_type.ctype_node with
+	| (Tint _ | Tenum _ | Tfloat _), (Tint _ | Tenum _ | Tfloat _) ->
+	    Prel (t1, r, t2)
+	| (Tpointer ty1  | Tarray (ty1,_)), 
+	  (Tpointer ty2 | Tarray (ty2,_)) ->
+	    if not (compat_pointers ty1 ty2) then
+	      warning loc "comparison of distinct pointer types lacks a cast";
+	    Prel (t1, r, t2)
+	| (Tpointer _  | Tarray _), (Tint _ | Tenum _ | Tfloat _)
+	| (Tint _ | Tenum _ | Tfloat _), (Tpointer _  | Tarray _) ->
+	    warning loc "comparison between pointer and integer";
+	    Prel (t1, r, t2)
+	| (Tvar "addr", Tvar "addr") -> Prel (t1, r, t2)
+	| _ ->
+	    error loc "invalid operands to comparison"
+      end
   | PLand (p1, p2) -> 
       Pand (type_predicate env p1, type_predicate env p2)
   | PLor (p1, p2) -> 

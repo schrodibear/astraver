@@ -326,4 +326,13 @@ axiom free_stack_stack :
   forall a1 : alloc_table. forall a2 : alloc_table. forall a3 : alloc_table. 
     forall p : pointer. valid(a1, p) -> on_stack(a1,p) -> valid(a3, p)
 
+parameter alloca : n:int -> 
+	{ n >= 1 }
+	pointer writes alloc
+	{ valid(alloc,result) and offset(result) = 0 and 	
+	  block_length(alloc,result) = n and valid_range(alloc,result,0,n-1)
+	  and fresh(alloc@,result) and on_stack(alloc,result) }
+
+
+
 

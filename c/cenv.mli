@@ -33,7 +33,7 @@ val find_pred : string -> ctype list * Info.logic_info
 (* tag types *)
 type tag_type_definition = 
   | TTIncomplete 
-  | TTStructUnion of ctype_node * (ctype * var_info) list
+  | TTStructUnion of ctype_node * var_info list
   | TTEnum of ctype_node * (var_info * int64) list
 val tag_type_definition : string -> tag_type_definition
 
@@ -52,7 +52,7 @@ module Env : sig
 
   val find_tag_type : Loc.t -> t -> ctype_node -> ctype_node
   val set_struct_union_type : Loc.t -> t -> ctype_node -> 
-    (ctype * var_info) list -> ctype_node
+    (var_info) list -> ctype_node
   val set_enum_type : Loc.t -> t -> ctype_node -> 
     (var_info * int64) list -> ctype_node
 end
@@ -60,4 +60,7 @@ end
 val type_of_field : Loc.t -> string -> ctype -> var_info 
 val find_field : tag:string -> field:string -> var_info
 val declare_fields : ctype_node -> (ctype * var_info) list -> unit
+
+(* for normalization of fields types *)
+val update_fields_type : unit -> unit
 

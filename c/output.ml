@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: output.ml,v 1.24 2004-12-07 17:19:24 hubert Exp $ i*)
+(*i $Id: output.ml,v 1.25 2005-01-04 15:48:00 hubert Exp $ i*)
 
 open Format;;
 
@@ -196,7 +196,8 @@ let rec fprintf_assertion form a =
       fprintf form "@[%s(%a" id fprintf_term t;
       List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
       fprintf form ")@]"
-  | LPred(_,_) -> assert false      
+  | LPred(id,l) -> 
+      assert false
   | LNamed (n, a) ->
       fprintf form "@[(:%s:@ %a)@]" n fprintf_assertion a
 ;;

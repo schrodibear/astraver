@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.125 2004-12-15 16:03:46 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.126 2005-01-04 15:48:00 hubert Exp $ i*)
 
 
 open Format
@@ -854,7 +854,7 @@ let strong_invariant =
 
 let interp_strong_invariants () =
   Hashtbl.fold
-    (fun id (p,e) acc -> 
+    (fun id (p,e,_) acc -> 
        let args = 
 	 HeapVarSet.fold 
 	   (fun x acc -> (x.var_unique_name, Ceffect.heap_var_type x)::acc) 
@@ -876,10 +876,11 @@ let strong_invariant_name id p e =
 let strong_invariants_for hvs =
   (** eprintf "strong_invariants: %a @." print_hvs hvs; **)
   Hashtbl.fold
-    (fun id (p,e) acc -> 
+    (fun id (p,e1,e2) acc -> 
        (** eprintf "  e = { %a }@." print_hvs e; **)
-       if Ceffect.intersect_only_alloc e hvs then acc
-       else make_and (strong_invariant_name id p e) acc) 
+       if HeapVarSet.subset e2 hvs then 
+	 make_and (strong_invariant_name id p e1) acc
+       else acc) 
     Ceffect.strong_invariants LTrue
 
 let interp_spec add_inv effect_reads effect_assigns s =
@@ -914,38 +915,16 @@ let alloc_on_stack loc v t =
 				[LVar "result"; LVar "alloc@"; LVar "alloc"])),
 		      None))
       
+
+
 let interp_decl d acc = 
   match d.node with 
-    | Ndecl(ctype,v,init) -> 
-	lprintf 
-	  "translating local declaration of %s@." v.var_unique_name;
-	  let tinit = match init with 
-	    | None ->
-		begin match ctype.Ctypes.ctype_node with
-		  | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
-		  | Tfloat _ -> App(Var("any_real"),Var("void"))
-		  | Tarray (_, None) | Tpointer _ -> 
-		      App(Var "any_pointer", Var "void")
-		  | Tarray _ | Tstruct _ | Tunion _ -> 
-                      let t = { nterm_node = NTresult; 
-				nterm_loc = d.loc;
-				nterm_type = ctype } in
-                      alloc_on_stack d.loc v t
-		  | Tvoid | Tvar _ | Tfun _ -> assert false
-		end
-	    | Some (Iexpr e) -> interp_expr e		
-	    | Some (Ilist _) -> 
-		unsupported d.loc "structured initializer for local var"
-	  in
-	  if v.var_is_assigned then
-	    Let_ref(v.var_unique_name,tinit,acc)
-	  else
-	    Let(v.var_unique_name,tinit,acc)
     | Ntypedef _
     | Ntypedecl { Ctypes.ctype_node = Tstruct _ | Tunion _ } -> 
 	acc
     | Ntypedecl { Ctypes.ctype_node = Tenum _ } -> 
 	unsupported d.loc "local enum type"
+    | Ndecl _
     | Ntypedecl _
     | Nfunspec _
     | Naxiom _
@@ -1132,10 +1111,36 @@ let rec interp_statement ab may_break stat = match stat.nst_node with
       Output.Label l
   | NSspec (spec,s) ->
       let eff = Ceffect.statement s in
-      let pre,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns spec in
+      let pre,post = interp_spec false eff.Ceffect.reads eff.Ceffect.assigns 
+		       spec in
       Triple(pre,interp_statement ab may_break s,post,None)
+  | NSdecl(ctype,v,init,rem) -> 
+      lprintf 
+	"translating local declaration of %s@." v.var_unique_name;
+      let tinit = match init with 
+	| None ->
+	    begin match ctype.Ctypes.ctype_node with
+	      | Tenum _ | Tint _ -> App(Var("any_int"),Var("void"))
+	      | Tfloat _ -> App(Var("any_real"),Var("void"))
+	      | Tarray (_, None) | Tpointer _ -> 
+		  App(Var "any_pointer", Var "void")
+	      | Tarray _ | Tstruct _ | Tunion _ -> 
+                  let t = { nterm_node = NTresult; 
+			    nterm_loc = stat.nst_loc;
+			    nterm_type = ctype } in
+                  alloc_on_stack stat.nst_loc v t
+	      | Tvoid | Tvar _ | Tfun _ -> assert false
+	    end
+	| Some (Iexpr e) -> interp_expr e		
+	| Some (Ilist _) -> 
+	    unsupported stat.nst_loc "structured initializer for local var"
+      in
+      if v.var_is_assigned then
+	Let_ref(v.var_unique_name,tinit,interp_statement ab may_break rem)
+      else
+	Let(v.var_unique_name,tinit,interp_statement ab may_break rem)
 
-and interp_block ab may_break (decls,stats) =
+and interp_block ab may_break (*decls,*)stats =
   let rec block = function
     | [] -> 
 	Void
@@ -1161,7 +1166,7 @@ and interp_block ab may_break (decls,stats) =
 	if not s.nst_term then unreachable_block bl;
 	append (interp_statement true may_break s) (block bl)
   in
-  List.fold_right interp_decl decls (block stats)
+  (*List.fold_right interp_decl decls *)(block stats)
 
 and interp_switch tmp ab may_break l c used_cases post_default =
   match l with

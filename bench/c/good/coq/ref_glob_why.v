@@ -3,15 +3,11 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/ref_glob.why", characters 216-243 *)
+(* Why obligation from file "why/ref_glob.why", characters 103-130 *)
 Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
   forall (x: pointer),
-  forall (Pre4: (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
+  forall (Pre4: (valid_x x alloc)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   (valid alloc caduceus_1).
@@ -20,16 +16,12 @@ intuition.
 subst;auto.
 Qed.
 
-(* Why obligation from file "why/ref_glob.why", characters 193-243 *)
+(* Why obligation from file "why/ref_glob.why", characters 80-130 *)
 Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
   forall (x: pointer),
-  forall (Pre4: (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
+  forall (Pre4: (valid_x x alloc)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   forall (Pre3: (valid alloc caduceus_1)),
@@ -42,54 +34,39 @@ subst; caduceus.
 subst;auto.
 Qed.
 
-(* Why obligation from file "why/ref_glob.why", characters 529-544 *)
+(* Why obligation from file "why/ref_glob.why", characters 301-316 *)
 Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
   forall (x: pointer),
-  forall (Pre4: (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
+  forall (Pre4: (valid_x x alloc)),
   (valid alloc x).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 894-909 *)
+(* Why obligation from file "why/ref_glob.why", characters 552-567 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (x: pointer),
   forall (Pre4: (acc intP (shift (acc intPP t) 1)) = 2 /\
-                (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
-  ((valid alloc t) /\ (valid alloc (acc intPP t))) /\
-  (separation_t_x alloc x t intPP) /\ (separation_intern_t t) /\
-  (valid_x alloc x) /\ (valid_t alloc t intPP).
+                (valid_t intPP t alloc)),
+  (valid alloc t) /\ (valid alloc (acc intPP t)).
 Proof.
 unfold valid_t; intuition.
 Qed.
 
-(* Why obligation from file "why/ref_glob.why", characters 673-1021 *)
+(* Why obligation from file "why/ref_glob.why", characters 445-679 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (x: pointer),
   forall (Pre4: (acc intP (shift (acc intPP t) 1)) = 2 /\
-                (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
-  forall (Pre3: ((valid alloc t) /\ (valid alloc (acc intPP t))) /\
-                (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
+                (valid_t intPP t alloc)),
+  forall (Pre3: (valid alloc t) /\ (valid alloc (acc intPP t))),
   forall (intP0: ((memory) Z)),
   forall (Post2: (acc intP0 (acc intPP t)) = 2 /\
                  (assigns alloc intP intP0 (pointer_loc (acc intPP t)))),
@@ -98,57 +75,79 @@ Lemma f3_impl_po_2 :
 Proof.
 intuition.
 rewrite shift_zero; auto.
-rewrite H11; auto.
-red in H9; intuition.
+rewrite H4; auto.
+red in H0; intuition.
 apply unchanged_pointer_intro.
 assert (shift (t # intPP) 1 <> shift (t # intPP) 0).
 apply neq_offset_neq_shift.
 omega.
-rewrite shift_zero in H12; auto.
+rewrite shift_zero in H5; auto.
 Qed.
 
 
-(* Why obligation from file "why/ref_glob.why", characters 1160-1185 *)
+(* Why obligation from file "why/ref_glob.why", characters 806-833 *)
 Lemma f4_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
+  forall (c2: ((memory) pointer)),
   forall (plas: pointer),
-  forall (Pre6: (valid alloc plas)),
-  forall (intP0: ((memory) Z)),
-  forall (Post5: (acc intP0 plas) = 1 /\
-                 (assigns alloc intP intP0 (pointer_loc plas))),
+  forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
-  forall (Post4: caduceus_1 = plas),
+  forall (Post3: caduceus_1 = (acc c2 plas)),
   (valid alloc caduceus_1).
 Proof.
 intuition.
 subst;auto.
-Save.
-
-(* Why obligation from file "why/ref_glob.why", characters 1134-1185 *)
-Lemma f4_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (c1: ((memory) Z)),
-  forall (c2: ((memory) Z)),
-  forall (intP: ((memory) Z)),
-  forall (plas: pointer),
-  forall (Pre6: (valid alloc plas)),
-  forall (intP0: ((memory) Z)),
-  forall (Post5: (acc intP0 plas) = 1 /\
-                 (assigns alloc intP intP0 (pointer_loc plas))),
-  forall (caduceus_1: pointer),
-  forall (Post4: caduceus_1 = plas),
-  forall (Pre5: (valid alloc caduceus_1)),
-  forall (c2_0: ((memory) Z)),
-  forall (Post8: c2_0 = (upd c2 caduceus_1 2)),
-  ((assigns alloc intP intP0 nothing_loc) /\
-  (assigns alloc c2 c2_0 (pointer_loc plas))) /\
-  (assigns alloc c1 c1 (pointer_loc plas)).
-Proof.
-intuition.
 Admitted.
 
-(* Why obligation from file "why/ref_glob.why", characters 1390-1537 *)
+(* Why obligation from file "why/ref_glob.why", characters 768-833 *)
+Lemma f4_impl_po_2 : 
+  forall (alloc: alloc_table),
+  forall (c1: ((memory) pointer)),
+  forall (c2: ((memory) pointer)),
+  forall (intP: ((memory) Z)),
+  forall (plas: pointer),
+  forall (Pre4: (valid alloc plas)),
+  forall (caduceus_1: pointer),
+  forall (Post3: caduceus_1 = (acc c2 plas)),
+  forall (Pre3: (valid alloc caduceus_1)),
+  forall (intP0: ((memory) Z)),
+  forall (Post8: intP0 = (upd intP caduceus_1 2)),
+  (forall (result:pointer),
+   (result = (acc c1 plas) ->
+    (forall (intP1:((memory) Z)),
+     ((acc intP1 result) = 1 /\
+      (assigns alloc intP0 intP1 (pointer_loc result)) ->
+      (forall (result:pointer),
+       (result = (acc c2 plas) ->
+        (forall (intP0:((memory) Z)),
+         ((acc intP0 result) = 1 /\
+          (assigns alloc intP1 intP0 (pointer_loc result)) ->
+          ((acc intP0 (acc c1 plas)) = 1 /\ (acc intP0 (acc c2 plas)) = 1) /\
+          (assigns alloc intP intP0
+           (union_loc (pointer_loc (acc c2 plas)) (pointer_loc (acc c1 plas)))))) /\
+        (valid alloc result))) /\
+      (valid alloc plas))) /\
+    (valid alloc result))) /\
+  (valid alloc plas).
+Proof.
+intros.
+cut (valid alloc (plas # c1)).
+cut (valid alloc (plas # c2)).
+cut (plas # c1 <> plas #c2).
+intuition.
+subst; rewrite H8; auto.
+subst; auto.
+apply assigns_trans with intP1.
+apply assigns_trans with intP0.
+red; subst; intuition.
+assert (p<>plas#c2).
+apply unchanged_pointer_elim.
+apply unchanged_union_elim1 with (pointer_loc (plas # c1)).
+auto.
+caduceus.
+Admitted.
+
+(* Why obligation from file "why/ref_glob.why", characters 1158-1305 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -162,33 +161,12 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 1824-1839 *)
+(* Why obligation from file "why/ref_glob.why", characters 1463-1490 *)
 Lemma h_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (x: pointer),
-  forall (Pre5: ((valid alloc p) /\ (valid alloc (acc intPP p))) /\
-                (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
-  (valid alloc p).
-Proof.
-intuition.
-Save.
-
-(* Why obligation from file "why/ref_glob.why", characters 1844-1871 *)
-Lemma h_impl_po_2 : 
-  forall (p: pointer),
-  forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (x: pointer),
-  forall (Pre5: ((valid alloc p) /\ (valid alloc (acc intPP p))) /\
-                (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
+  forall (Pre5: (valid alloc p) /\ (valid alloc (acc intPP p))),
   forall (Pre4: (valid alloc p)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc intPP p)),
@@ -198,18 +176,13 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 1807-1871 *)
-Lemma h_impl_po_3 : 
+(* Why obligation from file "why/ref_glob.why", characters 1426-1490 *)
+Lemma h_impl_po_2 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (x: pointer),
-  forall (Pre5: ((valid alloc p) /\ (valid alloc (acc intPP p))) /\
-                (separation_t_x alloc x t intPP) /\
-                (separation_intern_t t) /\ (valid_x alloc x) /\
-                (valid_t alloc t intPP)),
+  forall (Pre5: (valid alloc p) /\ (valid alloc (acc intPP p))),
   forall (Pre4: (valid alloc p)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc intPP p)),
@@ -219,64 +192,7 @@ Lemma h_impl_po_3 :
   (acc intP0 (acc intPP p)) = 2 /\
   (assigns alloc intP intP0 (pointer_loc (acc intPP p))).
 Proof.
-intuition.
-subst;caduceus.
-subst;auto.
-Save.
-
-(* Why obligation from file "why/ref_glob.why", characters 2241-2269 *)
-Lemma invariants_initially_established_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (x: pointer),
-  forall (Pre16: (separation_t_x alloc x t intPP) /\
-                 (separation_intern_t t) /\ (valid_x alloc x) /\
-                 (valid_t alloc t intPP)),
-  forall (caduceus_7: pointer),
-  forall (Post3: caduceus_7 = x),
-  (valid alloc caduceus_7).
-Proof.
-intuition.
-subst; auto.
-Save.
-
-(* Why obligation from file "why/ref_glob.why", characters 2218-2269 *)
-Lemma invariants_initially_established_impl_po_2 : 
-  forall (alloc: alloc_table),
-  forall (intP: ((memory) Z)),
-  forall (intPP: ((memory) pointer)),
-  forall (t: pointer),
-  forall (x: pointer),
-  forall (Pre16: (separation_t_x alloc x t intPP) /\
-                 (separation_intern_t t) /\ (valid_x alloc x) /\
-                 (valid_t alloc t intPP)),
-  forall (caduceus_7: pointer),
-  forall (Post3: caduceus_7 = x),
-  forall (Pre3: (valid alloc caduceus_7)),
-  forall (intP0: ((memory) Z)),
-  forall (Post14: intP0 = (upd intP caduceus_7 45)),
-  (forall (plas:pointer),
-   (plas = null ->
-    (forall (result:pointer),
-     (result = (shift (acc intPP t) 0) ->
-      (forall (intP:((memory) Z)),
-       (intP = (upd intP0 result 1) ->
-        (forall (result:pointer),
-         (result = (shift (acc intPP t) 1) ->
-          (forall (intP0:((memory) Z)),
-           (intP0 = (upd intP result 2) ->
-            (forall (result:pointer),
-             (result = (shift (acc intPP t) 2) ->
-              (forall (intP:((memory) Z)),
-               (intP = (upd intP0 result 3) -> True)) /\
-              (valid alloc result))) /\
-            (valid alloc t))) /\
-          (valid alloc result))) /\
-        (valid alloc t))) /\
-      (valid alloc result))) /\
-    (valid alloc t))).
-Proof.
-unfold valid_t; intuition;subst;auto.
+intuition;subst;auto.
+caduceus.
 Save.
 

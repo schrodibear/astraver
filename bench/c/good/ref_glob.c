@@ -29,11 +29,13 @@ las * plas;
 /*@ 
   @ requires \valid(plas) 
   @ assigns plas->c1,plas->c2 
+  @ ensures plas->c1 == 1 && plas->c2 == 1
   @*/ 
 void f4() 
 { 
+  plas->c2 = 2; 
   g(&plas->c1); 
-  plas->c2=2; 
+  g(&plas->c2); 
 }
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.51 2005-01-03 09:26:54 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.52 2005-01-04 15:48:00 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -76,6 +76,8 @@ let main () =
   (* initialisation of global variables *)
   let tfiles = List.map (fun (f,p) -> (f,Cinit.add_init p)) tfiles in
   (* normalisation *)
+  lprintf "starting normalization of programs.@.";
+  Cenv.update_fields_type ();
   let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
   if print_norm then begin
     List.iter 
@@ -86,6 +88,7 @@ let main () =
 	 close_out c) nfiles;
   end;
   (* effects *)
+  lprintf "starting computation of effects.@.";
   List.iter (fun (_,p) -> Ceffect.file p) nfiles;
   while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 
     Queue.clear Ceffect.warnings; 

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/dowhile.why", characters 461-467 *)
+(* Why obligation from file "why/dowhile.why", characters 343-349 *)
 Lemma main_impl_po_1 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -27,7 +27,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 478-478 *)
+(* Why obligation from file "why/dowhile.why", characters 360-360 *)
 Lemma main_impl_po_2 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -53,7 +53,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 249-487 *)
+(* Why obligation from file "why/dowhile.why", characters 131-369 *)
 Lemma main_impl_po_3 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
@@ -73,7 +73,7 @@ intuition.
 discriminate.
 Save.
 
-(* Why obligation from file "why/dowhile.why", characters 287-350 *)
+(* Why obligation from file "why/dowhile.why", characters 169-232 *)
 Lemma main_impl_po_4 : 
   forall (x: Z),
   forall (Pre4: x >= 0),
