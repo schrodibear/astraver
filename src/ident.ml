@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.48 2003-04-02 11:58:57 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.49 2003-05-12 15:13:23 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -38,24 +38,20 @@ let is_index s =
   let n = String.length s in
   (n > 0) && (match s.[n-1] with '0'..'9' -> true | _ -> false)
 
-let rec next id =
-  if not (is_index id) then
-    id ^ "0"
+let rec next id n s =
+  let id' = create (id ^ string_of_int n) in
+  if Idset.mem id' s then
+    next id (succ n) s
   else
-    let n = String.length id in
-    match id.[n - 1] with
-      | '0'..'8' as c -> 
-	  let id' = String.copy id in 
-	  id'.[n - 1] <- Char.chr (Char.code c + 1); 
-	  id'
-      | '9' ->
-	  let id' = String.sub id 0 (n - 1) in
-	  (next (if is_index id' then id' else id' ^ "0")) ^ "0"
-      | _ -> 
-	  assert false
+    id'
 
-let rec next_away id s =
-  if Idset.mem id s then next_away (create (next id.name)) s else id
+let next_away id s = 
+  if Idset.mem id s then 
+    let id0 = id.name in
+    let id0 = if is_index id0 then id0 ^ "_" else id0 in
+    next id0 0 s 
+  else 
+    id
 
 let print fmt s = Format.fprintf fmt "%s" s.name
 

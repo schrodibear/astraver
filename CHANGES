@@ -1,4 +1,7 @@
 
+  o (almost) conservative change in renaming strategy; a reference x1 is now
+    renamed into x1 x1_0 x1_1 etc. instead of x1 x2 x3 etc.
+
 version 1.2, May 12th, 2003
 ===========================
   o true used as default postcondition for exceptions instead of false

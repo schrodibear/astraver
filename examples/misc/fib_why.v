@@ -128,9 +128,9 @@ Lemma fib2_aux_po_1 :
   (n0: Z)
   (x0: Z)
   (fx0: Z)
-  (fx_2: Z)
+  (fx_1_0: Z)
   (Pre7: Variant1 = `n0 - x0`)
-  (Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\ `fx_2 = (F x0 - 1)`)
+  (Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\ `fx_1_0 = (F x0 - 1)`)
   (Test2: `x0 = n0`)
   `fx0 = (F n0)`.
 Proof.
@@ -149,15 +149,15 @@ Lemma fib2_aux_po_2 :
   (n0: Z)
   (x0: Z)
   (fx0: Z)
-  (fx_2: Z)
+  (fx_1_0: Z)
   (Pre7: Variant1 = `n0 - x0`)
-  (Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\ `fx_2 = (F x0 - 1)`)
+  (Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\ `fx_1_0 = (F x0 - 1)`)
   (Test1: `x0 <> n0`)
-  (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_2 = (F x0 + 1)` /\
+  (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_1_0 = (F x0 + 1)` /\
   `fx0 = (F x0 + 1 - 1)`.
 Proof.
 Intuition.
-Subst fx0 fx_2; Symmetry.
+Subst fx0 fx_1_0; Symmetry.
 Generalize H5. Replace x0 with `(x0+1)-1`. Generalize `x0+1`.
 Intros; Ring `z-1+1`; Replace `z-1-1` with `z-2`. 
 Auto with *.
@@ -177,15 +177,15 @@ Lemma fib2_aux_po_3 :
   (n0: Z)
   (x0: Z)
   (fx0: Z)
-  (fx_2: Z)
+  (fx_1_0: Z)
   (Pre7: Variant1 = `n0 - x0`)
-  (Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\ `fx_2 = (F x0 - 1)`)
+  (Pre6: (`1 <= x0` /\ `x0 <= n0`) /\ `fx0 = (F x0)` /\ `fx_1_0 = (F x0 - 1)`)
   (Test1: `x0 <> n0`)
-  (Pre5: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_2 = (F x0 + 1)` /\
+  (Pre5: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_1_0 = (F x0 + 1)` /\
          `fx0 = (F x0 + 1 - 1)`)
-  (Pre3: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_2 = (F x0 + 1)` /\
+  (Pre3: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_1_0 = (F x0 + 1)` /\
          `fx0 = (F x0 + 1 - 1)`)
-  (Pre4: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_2 = (F x0 + 1)` /\
+  (Pre4: (`1 <= x0 + 1` /\ `x0 + 1 <= n0`) /\ `fx0 + fx_1_0 = (F x0 + 1)` /\
          `fx0 = (F x0 + 1 - 1)`)
   (Zwf `0` `n0 - (x0 + 1)` Variant1).
 Proof.

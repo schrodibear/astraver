@@ -372,9 +372,9 @@ Proof. Intros; Omega. Save.
 Lemma an2_po_1 : 
   (v4: Z)
   (Pre1: `v4 >= 0`)
-  (v9: Z)
-  (Post1: v9 = `v4 + 1`)
-  `v9 > v4`.
+  (v4_0: Z)
+  (Post1: v4_0 = `v4 + 1`)
+  `v4_0 > v4`.
 Proof.
 Intros; Omega.
 Save.

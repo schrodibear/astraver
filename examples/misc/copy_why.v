@@ -17,10 +17,10 @@ Lemma copy_po_1 :
   (Post5: i = n)
   (Variant1: Z)
   (i1: Z)
-  (t3: (array Z))
+  (t2_0: (array Z))
   (Pre5: Variant1 = i1)
-  (Pre4: `(array_length t3) >= n` /\ `i1 <= n` /\
-         ((k:Z) (`i1 <= k` /\ `k < n` -> `(access t3 k) = (access t1 k)`)))
+  (Pre4: `(array_length t2_0) >= n` /\ `i1 <= n` /\
+         ((k:Z) (`i1 <= k` /\ `k < n` -> `(access t2_0 k) = (access t1 k)`)))
   (Test2: true = true)
   (c_aux_2: Z)
   (Post2: c_aux_2 = i1)
@@ -30,14 +30,14 @@ Lemma copy_po_1 :
     ((result:Z)
      (result = i2 ->
       (((t2:(array Z))
-        (t2 = (store t3 result (access t1 i2)) ->
+        (t2 = (store t2_0 result (access t1 i2)) ->
          (`(array_length t2) >= n` /\ `i2 <= n` /\
          ((k:Z) (`i2 <= k` /\ `k < n` -> `(access t2 k) = (access t1 k)`))) /\
          (Zwf `0` i2 i1))) /\
-      `0 <= result` /\ `result < (array_length t3)`) /\ `0 <= i2` /\
+      `0 <= result` /\ `result < (array_length t2_0)`) /\ `0 <= i2` /\
       `i2 < (array_length t1)`)))) /\
   ((`c_aux_2 <= 0` ->
-    ((k:Z) (`0 <= k` /\ `k < n` -> `(access t3 k) = (access t1 k)`)))).
+    ((k:Z) (`0 <= k` /\ `k < n` -> `(access t2_0 k) = (access t1 k)`)))).
 Proof.
 Intuition.
 Subst t0; Trivial.

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.41 2003-03-26 10:45:14 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.42 2003-05-12 15:13:23 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -64,6 +64,8 @@ val exist : t
 val decomp : int -> t
 
 val exit_exn : t
+
+val is_index : string -> bool
 
 (*s Some pre-defined identifiers. *)
 

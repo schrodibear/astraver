@@ -33,6 +33,6 @@ Lemma k_po_1 :
         `result0 * (1 - result) = 1`)))))).
 Proof.
 Intuition.
-Subst result result0 b b0 b1 b3 b4; Ring.
+Subst; Ring.
 Save.
 
