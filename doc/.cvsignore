@@ -1,14 +1,21 @@
-manual.toc
-manual.ps
 code.tex
 dep.ps
 doc.ps
 auto
 .advi
+manual.toc
+manual.ps
 manual.idx
 manual.ilg
 manual.ind
 manual.hind
 manual.html
+caduceus.toc
+caduceus.ps
+caduceus.idx
+caduceus.ilg
+caduceus.ind
+caduceus.hind
+caduceus.html
 
 version.tex

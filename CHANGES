@@ -1,5 +1,9 @@
 
-  o support for polymorphic types in the logic
+version 1.4
+===========
+  o disabled C support: C is now supported by an external tool, Caduceus
+    (to be released soon with Why)
+  o support for polymorphism (contribution by C. Marché)
   o syntax of haRVey output now uses integer constants, predefined
     arithmetic operators, and does not change capitalization of
     variables, to be conform with the syntax of the next version of
