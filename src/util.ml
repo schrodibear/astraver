@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.17 2002-03-14 11:40:53 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.18 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -79,7 +79,7 @@ let result_type p = p.info.kappa.c_result_type
     according to a given renaming of variables (and a date that means
     `before' in the case of the post-condition). *)
 
-let make_assoc_list ren env ids =
+let make_assoc_list before ren env ids =
   Idset.fold
     (fun id al ->
        if is_reference env id then
@@ -87,8 +87,12 @@ let make_assoc_list ren env ids =
        else if is_at id then
 	 let uid,d = un_at id in
 	 if is_reference env uid then begin
-	   assert (d <> "");
-	   (id, var_at_date ren d uid) :: al
+	   let d' = match d, before with
+	     | "", None -> assert false
+	     | "", Some l -> l
+	     | _ -> d
+	   in
+	   (id, var_at_date ren d' uid) :: al
 	 end else
 	   al
        else
@@ -97,22 +101,25 @@ let make_assoc_list ren env ids =
 
 let apply_term ren env t =
   let ids = term_vars t in
-  let al = make_assoc_list ren env ids in
+  let al = make_assoc_list None ren env ids in
   subst_in_term al t
 
 let apply_pre ren env c =
   let ids = predicate_vars c.p_value in
-  let al = make_assoc_list ren env ids in
+  let al = make_assoc_list None ren env ids in
   { p_assert = c.p_assert; p_name = c.p_name; 
     p_value = subst_in_predicate al c.p_value }
 
 let apply_assert ren env c =
   let ids = predicate_vars c.a_value in
-  let al = make_assoc_list ren env ids in
+  let al = make_assoc_list None ren env ids in
   { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
  
-let apply_post = apply_assert 
-
+let apply_post before ren env c =
+  let ids = predicate_vars c.a_value in
+  let al = make_assoc_list (Some before) ren env ids in
+  { a_name = c.a_name; a_value = subst_in_predicate al c.a_value }
+  
 (*s [traverse_binder ren env bl] updates renaming [ren] and environment [env]
     as we cross the binders [bl]. *)
 
@@ -158,7 +165,7 @@ let occur_post id = function None -> false | Some q -> occur_assertion id q
 let rec occur_type_v id = function
   | Ref v -> occur_type_v id v
   | Array (t, v) -> occur_term id t || occur_type_v id v
-  | Arrow (bl, c) -> List.exists (occur_binder id) bl || occur_type_c id c
+  | Arrow (bl, c) -> occur_arrow id bl c
   | PureType _ -> false
 
 and occur_type_c id c =
@@ -167,9 +174,13 @@ and occur_type_c id c =
   Effect.occur id c.c_effect ||
   occur_post id c.c_post 
 
-and occur_binder id = function
-  | id', BindType v -> id <> id' && occur_type_v id v
-  | _, (BindSet | Untyped) -> false
+and occur_arrow id bl c = match bl with
+  | [] -> 
+      occur_type_c id c
+  | (id', BindType v) :: bl' -> 
+      occur_type_v id v || (id <> id' && occur_arrow id bl' c)
+  | (_, (BindSet | Untyped)) :: bl' -> 
+      occur_arrow id bl' c
 
 let forall x v p =
   let n = Ident.bound () in
@@ -415,24 +426,41 @@ and print_arg fmt = function
 (*s Pretty-print of cc-terms (intermediate terms) *)
 
 let print_pred_binders = ref true
+let print_var_binders = ref false
 
-let print_binder fmt = function
-  | CC_pred_binder p -> 
-      if !print_pred_binders then begin
-	fprintf fmt ": "; print_predicate fmt p
-      end
-  | _ -> 
-      ()
+let rec print_cc_type fmt = function
+  | TTpure pt -> 
+      print_pure_type fmt pt
+  | TTarray (s, t) -> 
+      fprintf fmt "(array %a %a)" print_term s print_cc_type t
+  | TTarrow (b, t) -> 
+      fprintf fmt "(%a)%a" print_binder b print_cc_type t
+  | TTtuple (bl, None) -> 
+      fprintf fmt "{%a}" print_tuple bl
+  | TTtuple (bl, Some q) -> 
+      fprintf fmt "{%a | %a}" print_tuple bl print_predicate q
+
+and print_tuple fmt =
+  print_list comma 
+    (fun fmt (id,t) -> fprintf fmt "%a:%a" Ident.print id print_cc_type t) fmt
+
+and print_binder fmt (id,b) = 
+  Ident.print fmt id;
+  match b with
+    | CC_pred_binder p -> 
+	if !print_pred_binders then fprintf fmt ": %a" print_predicate p
+    | CC_var_binder t -> 
+	if !print_var_binders then fprintf fmt ": %a" print_cc_type t
+    | CC_untyped_binder -> 
+	()
 
 let rec print_cc_term fmt = function
   | CC_var id -> 
       fprintf fmt "%s" (Ident.string id)
   | CC_letin (_,bl,c,c1) ->
-      fprintf fmt "@[@[<hov 2>let ";
-      print_list comma 
-	(fun fmt (id,b) -> Ident.print fmt id; print_binder fmt b) fmt bl;
-      fprintf fmt " =@ "; print_cc_term fmt c;
-      fprintf fmt " in@]@\n"; print_cc_term fmt c1; fprintf fmt "@]"
+      fprintf fmt "@[@[<hov 2>let %a =@ %a in@]@\n%a@]"
+      (print_list comma print_binder) bl
+      print_cc_term c print_cc_term c1
   | CC_lam (bl,c) ->
       fprintf fmt "@[<hov 2>";
       print_binders fmt bl;
@@ -464,6 +492,4 @@ let rec print_cc_term fmt = function
       fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"
 
 and print_binders fmt bl =
-  print_list nothing 
-    (fun fmt (id,b) -> fprintf fmt "[%a%a]" Ident.print id print_binder b)
-    fmt bl
+  print_list nothing (fun fmt b -> fprintf fmt "[%a]" print_binder b) fmt bl

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.12 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.13 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -19,10 +19,10 @@ open Effect
        $z1 \times ... \times zk$ if no postcondition
     or $\exists. y1:z1. ... yk:zk. (Q x1 ... xn)$  otherwise *)
  
-let product ren env w q = match q,w with
+let product before ren env w q = match q,w with
   | None, [_,v] -> v
   | None, _ -> TTtuple (w, None)
-  | Some q, _ -> TTtuple (w, Some (apply_post ren env q).a_value)
+  | Some q, _ -> TTtuple (w, Some (apply_post before ren env q).a_value)
 
 
 (*s [arrow_pred ren v pl] abstracts the term [v] over the pre-condition if any
@@ -53,10 +53,13 @@ let arrow_vars =
 
 let rec trad_ml_type_c ren env k = 
   let ((res,v),e,p,q) = decomp_kappa k in
-  let lo = output ren env ((res,v),e) in
-  let ty = product ren env lo q in
+  let i,o = get_repr e in
+  let before = label_name () in
+  let ren' = next (push_date ren before) o in
+  let lo = output ren' env ((res,v),o) in
+  let ty = product before ren' env lo q in
   let ty = arrow_pred ren env ty p in
-  let li = input ren env e in
+  let li = input ren env i in
   arrow_vars ty li
 
 and trad_ml_type_v ren env = function
@@ -76,26 +79,25 @@ and trad_ml_type_v ren env = function
 		 let env' = add id v env in
 		 let ren' = initial_renaming env' in
 		 (id,tt)::bl, ren', env'
-	     | _ -> failwith "Monad: trad_ml_type_v: not yet implemented"
- 	  )
+	     | _ -> 
+		 failwith "Monad: trad_ml_type_v: not yet implemented")
  	  ([],ren,env) bl 
       in
       arrow_vars (trad_ml_type_c ren' env' c) bl'
   | PureType c ->
       TTpure c
 
-and input ren env e  =
-  let i,_ = Effect.get_repr e in
+and input ren env i =
   prod ren env i
 
-and output ren env ((id,v),e) =
+and output ren env ((id,v),o) =
   let tv = trad_ml_type_v ren env v in
-  let _,o = Effect.get_repr e in
   (prod ren env o) @ [id,tv]
 
 and input_output ren env c =
   let ((res,v),e,_,_) = decomp_kappa c in
-  input ren env e, output ren env ((res,v),e)
+  let i,o = get_repr e in
+  input ren env i, output ren env ((res,v),o)
 
 and prod ren env g = 
   List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
@@ -139,7 +141,7 @@ let unit info t ren =
       | None -> 
 	  []
       | Some c -> 
-	  let c = apply_post ren env c in
+	  let c = apply_post info.label ren env c in
 	  let c = tsubst_in_predicate [result, t] c.a_value in
 	  [ CC_hole c ]
     in
@@ -183,7 +185,7 @@ let gen_compose isapp info1 e1 e2 ren =
     | None -> 
 	[], false
     | Some q1 -> 
-	let q1 = apply_post ren' env q1 in
+	let q1 = apply_post info1.label ren' env q1 in
 	let hyp = subst_in_predicate [Ident.result, res1] q1.a_value in
 	[post_name q1.a_name, CC_pred_binder hyp], true 
   in

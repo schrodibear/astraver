@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.22 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.23 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -60,7 +60,7 @@ and trad_desc info d ren = match d with
 	     match post b with
 	       | Some qb -> 
 		   let n = test_name Anonymous in
-		   let q = apply_post ren' info.env qb in
+		   let q = apply_post b.info.label ren' info.env qb in
 		   let q = tsubst_in_predicate [result, tb] q.a_value in
 		   CC_lam ([n, CC_pred_binder q], t)
 	       | None -> t
@@ -75,6 +75,17 @@ and trad_desc info d ren = match d with
 	   CC_letin (false, [x, CC_var_binder t1], CC_expr (Tvar v1), 
 		     Monad.compose e2.info (trad e2) 
 		       (fun v2 -> Monad.unit info (Tvar v2)) ren'))
+	ren
+
+  | LetRef (x, e1, e2) ->
+      Monad.compose e1.info (trad e1)
+	(fun v1 ren' ->
+	   let t1 = trad_ml_type_v ren info.env (result_type e1) in
+	   let ren'' = next ren' [x] in
+	   let x' = current_var ren'' x in
+	   CC_letin (false, [x', CC_var_binder t1], CC_expr (Tvar v1), 
+		     Monad.compose e2.info (trad e2)
+		       (fun v2 -> Monad.unit info (Tvar v2)) ren''))
 	ren
 
   | Coerce e ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.19 2002-03-13 10:01:37 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.20 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -25,40 +25,43 @@ let output fwe = match !prover with
   | Pvs -> Pvs.output_file fwe
   | Coq -> Coq.output_file fwe
 
-(*s Processing of a single declaration [p]. *)
+(*s Processing of a single declaration [let id = p]. *)
+
+let print_if_debug p x = if_debug_3 eprintf "  @[%a@]@." p x
 
 let interp_program id p =
   let ploc = p.info.loc in
-  if_debug_3 eprintf "=== interpreting program %a ===@\n@?" Ident.print id;
+  if_verbose_3 eprintf "*** interpreting program %a@." Ident.print id;
   let p = Db.db_prog p in
 
-  if_debug eprintf "=== typing with effects ===@\n@?";
+  if_debug eprintf "* typing with effects@.";
   let env = Env.empty in
   let p = Typing.typef Typing.initial_labels env p in
   let c = p.info.kappa in
   let v = c.c_result_type in
   Error.check_for_not_mutable ploc v;
-  if_debug_3 eprintf "%a@\n@?" print_type_c c;
-  if !type_only then exit 0;
+  Env.add_global id v None;
+  print_if_debug print_type_c c;
+  if !type_only then raise Exit;
 
-  if_debug eprintf "=== weakest preconditions ===@\n@?";
+  if_debug eprintf "* weakest preconditions@.";
   let p,wp = Wp.propagate p in
-  if_debug_3 eprintf "@[%a@]@\n@?" print_wp wp;
-  if_debug_3 eprintf "@[%a@]@\n@?" print_prog p;
-  if !wp_only then exit 0;
+  print_if_debug print_wp wp;
+  print_if_debug print_prog p;
+  if !wp_only then raise Exit;
 
-  if_debug eprintf "=== functionalization ===@\n@?";
+  if_debug eprintf "* functionalization@.";
   let ren = initial_renaming env in
   let cc = Mlize.trans p ren in
-  if_debug_3 eprintf "%a@\n-----@\n@?" print_cc_term cc;
+  if_debug_3 eprintf "  %a@\n  -----@." print_cc_term cc;
   let cc = Red.red cc in
-  if_debug_3 eprintf "%a@\n@?" print_cc_term cc;
+  print_if_debug print_cc_term cc;
 
-  if_debug eprintf "=== generating obligations ===@\n@?";
+  if_debug eprintf "* generating obligations@.";
   let ol = Vcg.vcg (Ident.string id) cc in
-  if_verbose_2 eprintf "%d proof obligation(s)@\n@?" (List.length ol);
-  flush stderr;
-  v, ol
+  push_obligations ol;
+  if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
+  flush stderr
 
 (*s Processing of a program. *)
 
@@ -69,9 +72,7 @@ let add_external loc v id =
 let interp_decl = function
   | Program (id, p) ->
       if Env.is_global id then Error.clash id (Some p.info.loc);
-      let v,ol = interp_program id p in
-      push_obligations ol;
-      Env.add_global id v None
+      (try interp_program id p with Exit -> ())
   | External (loc, ids, v) -> 
       Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
       List.iter (add_external loc v) ids
@@ -153,7 +154,7 @@ let parse_args () =
     | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
     | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
     | ("-coq" | "--coq") :: args -> prover := Coq; parse args
-    | ("-d" | "--debug") :: args -> debug := true; parse args
+    | ("-d" | "--debug") :: args -> verbose := true; debug := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only := true; parse args
     | ("-wp" | "--wp-only") :: args -> wp_only := true; parse args

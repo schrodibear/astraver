@@ -1,9 +1,7 @@
 
 (* Unitary tests *)
 
-(* Types syntax *)
-
-(* values *)
+(* types syntax: values *)
 external v1 : bool ref
 external v2 : int
 external v3 : (int)
@@ -13,7 +11,7 @@ external v6 : array 10 of int
 external v7 : array 10 of (int)
 external v8 : array 3+4 of (int -> int)
 
-(* functions *)
+(* types syntax: functions *)
 external f1 : int -> bool -> int
 
 external f2 : int -> int ref -> bool
@@ -46,7 +44,7 @@ let ar4 = 1-1
 let ar5 = 1*1
 let ar6 = 1/1
 
-(* assignement *)
+(* assignements *)
 let a1 = v4 := 1
 let a2 = v1 := true
 let a3 = v4 := 2+2
@@ -70,6 +68,11 @@ let l3 = let x = 1 in let y = 2 in x + y
 let l4 = v4 := (let x = 1 in 1)
 let l5 = let x = 1 in begin v1 := true; v4 := x end
 
+(* local references *)
+let lr1 = let x = ref 1 in x := 2
+let lr2 = let x = ref 1 in begin x := !x + 1; !x end
+let lr3 = let x = ref 1 in let y = ref !x in x := !y
+
 (* relations *)
 let r1 = 1 = 1
 let r2 = 2 > 1
@@ -81,4 +84,15 @@ let r7 = 1 = 2 || 2 = 3
 let r8 = 1 = 2 && 2 = 3
 
 (* arrays *)
+
+
+(* function calls *)
+let fc1 = (f5 v5)
+let fc2 = (f4 void)
+let fc3 = let a = ref 0 in let b = ref 0 in (f3 a b)
+
+(* while loops *)
+
+
+(* recursive functions *)
 

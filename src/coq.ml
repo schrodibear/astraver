@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.12 2002-03-12 16:05:24 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.13 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -260,6 +260,9 @@ let output_file fwe =
   if Sys.file_exists f then begin
     let fbak = f ^ ".bak" in
     Sys.rename f fbak; 
+    if_verbose_3 eprintf "*** re-generating file %s (backup in %s)@." f fbak;
     print_in_file (regen fbak) f
-  end else 
+  end else begin
+    if_verbose_2 eprintf "*** generating file %s@." f;
     print_in_file first_time f
+  end

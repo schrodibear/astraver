@@ -2,7 +2,7 @@
 all: swap_why.vo
 
 %_why.v: %.ml
-	../../bin/why.opt -d -V $<
+	time ../../bin/why.opt -V $<
 
 %.vo: %.v
-	coqc $<
+	time coqc $<

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.27 2002-03-14 11:40:52 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.28 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -191,6 +191,13 @@ let make_node p env l k =
 let coerce p env k = 
   let l = label_name () in Coerce (make_node p env l k)
 
+let make_arrow_type lab bl k =
+  let k = 
+    let q = optpost_app (change_label lab "") k.c_post in
+    { k with c_post = q }
+  in
+  make_arrow bl k
+
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
@@ -304,7 +311,7 @@ let rec typef lab env expr =
   let ep = state_pre lab env loc expr.info.pre in
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let toplabel = label_name () in
-  let q = optpost_app (change_label "" toplabel) q in
+  (*i let q = optpost_app (change_label "" toplabel) q in i*)
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = List.map assert_pre p1 @ expr.info.pre in
   match q, d with
@@ -396,13 +403,9 @@ and typef_desc lab env loc = function
   | Lam (bl, e) ->
       let env' = check_binders (Some loc) lab env bl in
       let t_e = typef initial_labels env' e in
-      let k = 
-	let q = optpost_app (change_label t_e.info.label "0") (post t_e) in
-	{ t_e.info.kappa with c_post = q }
-      in
-      let v = make_arrow bl k in
+      let v = make_arrow_type t_e.info.label bl t_e.info.kappa in
       let ef = Effect.bottom in
-      Lam(bl,t_e), (v,ef), []
+      Lam (bl,t_e), (v,ef), []
 
   | App (_, _, Some _) ->
       assert false

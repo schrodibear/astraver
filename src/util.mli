@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.12 2002-03-12 16:05:25 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.13 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -17,8 +17,9 @@ val initial_renaming : local_env -> Rename.t
 
 val apply_term : Rename.t -> local_env -> term -> term
 val apply_pre : Rename.t -> local_env -> precondition -> precondition
-val apply_post : Rename.t -> local_env -> postcondition -> postcondition
 val apply_assert : Rename.t -> local_env -> assertion -> assertion
+val apply_post : 
+  label -> Rename.t -> local_env -> postcondition -> postcondition
 
 val type_v_subst : (Ident.t * Ident.t) list -> type_v -> type_v
 val type_c_subst : (Ident.t * Ident.t) list -> type_c -> type_c

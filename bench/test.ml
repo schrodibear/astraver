@@ -1,10 +1,19 @@
-let f = fun (a,b : int ref) -> begin a := 1; b := 1 end
-
-external r : int ref
-
-let p = (f r r)
 
 (* Test program *)
+
+let p = let x = ref 1 in begin x := !x + 1 end { x > 1 }
+
+(***
+
+(*** BUG capture global/local ***)
+
+external x : int ref
+
+let f = fun (u:unit) -> x := 0
+
+let g = fun (x:int ref) -> begin (f void); x := 1 end
+
+(****)
 
 let f = fun (a,b,c:int ref) -> 
   { a = 0 and b = 0 and c = 0 }
@@ -27,3 +36,5 @@ let f = fun (x:int) ->
 
 let p = (f begin s := 2; 1 end { result = 1 }) { s = 0 }
 ****)
+
+***)

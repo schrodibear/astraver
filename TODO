@@ -29,8 +29,14 @@ DOCUMENTATION
 BUGS
 ====
 
+ - clash between global and local references:
+   =======================================================
+   external x : int ref
+   let f = fun (u:unit) -> x := 0
+   let g = fun (x':int ref) -> begin (f void); x' := 1 end
+   =======================================================
+   => rename locals (globals are unique)
+
 IMPLEMENTATION
 ==============
-
- - variant = identifier ?
 

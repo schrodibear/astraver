@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.23 2002-03-13 16:15:47 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.24 2002-03-14 14:38:09 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -195,6 +195,7 @@ let rec wp p q =
   let postp = post p in
   let q0 = if postp = None then q else postp in
   let lab = p.info.label in
+  let q0 = optpost_app (change_label "" lab) q0 in (* ADDED *)
   let d,w = wp_desc p.info p.desc q0 in
   let p = change_desc p d in
   let w = optpost_app (erase_label lab) w in
