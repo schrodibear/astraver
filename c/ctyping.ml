@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.7 2003-12-24 14:36:58 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.8 2003-12-24 15:06:42 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -341,11 +341,36 @@ and type_expr_node loc env = function
 	    TEbinary (e1, Bsub_pointer, e2), ty2
 	| _ -> error loc "invalid operands to binary -"
       end
-  | CEbinary (e1, ( Blt | Bgt | Ble | Bge | Beq | Bneq 
-		  | Bbw_and | Bbw_xor | Bbw_or | Band | Bor as op), e2) ->
+  | CEbinary (e1, (Blt | Bgt | Ble | Bge | Beq | Bneq as op), e2) ->
       let e1 = type_expr env e1 in
+      let ty1 = e1.texpr_type in
       let e2 = type_expr env e2 in
-      assert false (*TODO*)
+      let ty2 = e2.texpr_type in
+      begin match ty1.ctype_node, ty2.ctype_node with
+	| CTint _, CTint _ -> TEbinary (e1, op, e2), c_int
+	| CTint _ , CTfloat _ -> TEbinary (coerce ty2 e1, op, e2), c_int
+	| CTfloat _ , CTint _ -> TEbinary (e1, op, coerce ty1 e2), c_int
+	| CTfloat _ , CTfloat _ -> TEbinary (e1, op, e2), c_int
+	| (CTpointer _  | CTarray _), (CTpointer _  | CTarray _) ->
+	    (* TODO: warning pointeurs types différents *)
+	    TEbinary (e1, op, e2), c_int
+	| (CTpointer _  | CTarray _), (CTint _ | CTfloat _)
+	| (CTint _ | CTfloat _), (CTpointer _  | CTarray _) ->
+	    warning loc "comparison between pointer and integer";
+	    TEbinary (e1, op, e2), c_int
+	| _ ->
+	    error loc "invalid operands to comparison"
+      end
+  | CEbinary (e1, (Band | Bor as op), e2) ->
+      let e1 = type_boolean env e1 in
+      let e2 = type_boolean env e2 in
+      TEbinary (e1, op, e2), c_int
+  | CEbinary (e1, ( Bbw_and | Bbw_xor | Bbw_or 
+		  | Bshift_left | Bshift_right as op), e2) ->
+      (* TODO: max types pour "&" "|" "^" ? *)
+      let e1 = type_int_expr env e1 in
+      let e2 = type_int_expr env e2 in
+      TEbinary (e1, op, e2), e1.texpr_type
   (* these other binops cannot be built by the parser *)
   | CEbinary (_, (Bdiv_float|Bmul_float|Bsub_float|Badd_float
 		 |Bmod_int|Bdiv_int|Bmul_int|Bsub_int|Badd_int
@@ -354,10 +379,6 @@ and type_expr_node loc env = function
       assert false
   | CEcall (e, el) ->
       assert false (*TODO*)
-  | CEshift (e1, sh, e2) ->
-      let e1 = type_int_expr env e1 in
-      let e2 = type_int_expr env e2 in
-      TEshift (e1, sh, e2), e1.texpr_type
   | CEcast (ty, e) ->
       let ty = type_type ty in
       let e = type_expr env e in
@@ -399,7 +420,7 @@ and type_boolean env e =
   let ty = e'.texpr_type in
   match ty.ctype_node with
     | CTint _ | CTfloat _ | CTpointer _ | CTarray _ -> e'
-    | _ -> error e.loc "invalid operand to binary !="
+    | _ -> error e.loc "invalid operand (expected arith or pointer)"
 
 (*s Typing of initializers *)
 

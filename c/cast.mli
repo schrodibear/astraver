@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.12 2003-12-24 14:36:13 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.13 2003-12-24 15:06:42 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -72,6 +72,7 @@ type binary_operator =
   | Badd | Bsub | Bmul | Bdiv | Bmod 
   | Blt | Bgt | Ble | Bge | Beq | Bneq 
   | Bbw_and | Bbw_xor | Bbw_or | Band | Bor
+  | Bshift_left | Bshift_right
   (* these are introduced during typing *)
   | Badd_int | Bsub_int | Bmul_int | Bdiv_int | Bmod_int 
   | Badd_float | Bsub_float | Bmul_float | Bdiv_float 
@@ -79,8 +80,6 @@ type binary_operator =
   | Badd_int_pointer (* int + pointer *)
   | Bsub_pointer_int (* pointer - int *)
   | Bsub_pointer     (* pointer - pointer *)
-
-type shift = Left | Right
 
 type cexpr = cexpr_node located
 
@@ -98,7 +97,6 @@ and cexpr_node =
   | CEbinary of cexpr * binary_operator * cexpr
   | CEcall of cexpr * cexpr list
   | CEcond of cexpr * cexpr * cexpr
-  | CEshift of cexpr * shift * cexpr
   | CEcast of cexpr ctype * cexpr
   | CEsizeof_expr of cexpr
   | CEsizeof of cexpr ctype
@@ -165,7 +163,6 @@ and texpr_node =
   | TEbinary of texpr * binary_operator * texpr
   | TEcall of texpr * texpr list
   | TEcond of texpr * texpr * texpr
-  | TEshift of texpr * shift * texpr
   | TEcast of texpr ctype * texpr
   | TEsizeof_expr of texpr
   | TEsizeof of texpr ctype

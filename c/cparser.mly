@@ -301,6 +301,8 @@
 
 %nonassoc specs
 %nonassoc TYPE_NAME
+%nonassoc no_annot
+%nonassoc ANNOT
 
 %type <Cast.file> file
 %start file
@@ -390,9 +392,9 @@ additive_expression
 shift_expression
         : additive_expression { $1 }
         | shift_expression LEFT_OP additive_expression 
-	    { locate (CEshift ($1, Left, $3)) }
+	    { locate (CEbinary ($1, Bshift_left, $3)) }
         | shift_expression RIGHT_OP additive_expression 
-	    { locate (CEshift ($1, Right, $3)) }
+	    { locate (CEbinary ($1, Bshift_right, $3)) }
         ;
 
 relational_expression
@@ -666,7 +668,7 @@ direct_declarator
 /* ADDED FOR WHY */
 annot
         : ANNOT         { Some $1 }
-        | /* epsilon */ { None }
+        | /* epsilon */ %prec no_annot { None }
         ;
 
 pointer
@@ -818,7 +820,7 @@ iteration_statement
         | DO statement annot WHILE LPAR expression RPAR SEMICOLON 
 	    { locate (CSdowhile ($2, $3, $6)) }
         | FOR LPAR expression_statement expression_statement RPAR 
-          annot statement 
+          annot statement
 	    { locate (CSfor (expr_of_statement $3, expr_of_statement $4, 
 			     locate CEnop, $6, $7)) }
         | FOR LPAR expression_statement expression_statement expression RPAR 
