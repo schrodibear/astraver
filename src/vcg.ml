@@ -52,7 +52,7 @@ type validation = proof cc_term
 
 let logs = ref ([] : Log.t)
 
-let log l p is_discharged =
+let log l p lemma_name =
   if wol then
     let s = 
       let buf = Buffer.create 1024 in
@@ -60,8 +60,8 @@ let log l p is_discharged =
       fprintf fmt "@[%a@]@?" print_predicate p;
       Buffer.contents buf
     in
-    if_debug (fun () -> eprintf "at %d, %b, %s@\n" l is_discharged s) ();
-    logs := (l, s, is_discharged) :: !logs
+    if_debug (fun () -> eprintf "at %d, %b, %s@\n" l (lemma_name = None) s) ();
+    logs := (l, s, lemma_name) :: !logs
 
 (*s We automatically prove the trivial obligations *)
 
@@ -132,7 +132,7 @@ let discharge_methods ctx concl =
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in
-  log (snd loc) concl true;
+  log (snd loc) concl None;
   if_verbose eprintf "one obligation trivially discharged@.";
   pr
 
@@ -185,9 +185,9 @@ let vcg base t =
   let po = ref [] in
   let cpt = ref 0 in
   let push loc ctx concl = 
-    log (snd loc) concl false;
     incr cpt;
     let id = base ^ "_po_" ^ string_of_int !cpt in
+    log (snd loc) concl (Some id);
     let ctx' = clean_sequent (List.rev ctx) concl in
     po := (id, (ctx', concl)) :: !po;
     Lemma (id, hyps_names ctx')

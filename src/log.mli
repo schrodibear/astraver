@@ -3,5 +3,5 @@
    (position, predicate, is automatically dicharged)
 *)
 
-type t = (int * string * bool) list
+type t = (int * string * string option) list
 

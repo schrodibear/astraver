@@ -19,7 +19,7 @@ WHYOPTIONS=--valid
 	$(WHY) --wol $<
 
 clean::
-	rm -f *~ *.vo
+	rm -f *~ *.vo *.wol
 
 depend::
 	coqdep -R ../../lib/coq Coq.why *.v > .depend
