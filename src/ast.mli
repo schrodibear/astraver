@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ast.mli,v 1.47 2002-10-17 15:01:52 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.48 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -53,6 +53,7 @@ and 'a t_desc =
   | Raise of variable * 'a t option
   | Try of 'a t * (exn_pattern * 'a t) list 
   | Expression of term
+  | Absurd
 
 and 'a arg =
   | Term of 'a t

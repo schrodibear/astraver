@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.78 2003-03-20 14:20:25 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.79 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -462,6 +462,8 @@ and print_desc fmt = function
 	(print_list alt print_handler) hl
   | Expression t -> 
       print_term fmt t
+  | Absurd ->
+      fprintf fmt "absurd"
 
 and print_handler fmt ((id, a), e) = match a with
   | None -> 
@@ -623,6 +625,7 @@ let rec print_ptree fmt p = match p.pdesc with
       fprintf fmt "@[<v>try %a with@\n  @[%a@]@\nend@]" 
 	print_ptree e (print_list newline print_phandler) hl
   | Sconst c -> print_term fmt (Tconst c)
+  | Sabsurd _ -> fprintf fmt "<Sabsurd>"
 
 and print_phandler fmt = function
   | (x, None), e -> 

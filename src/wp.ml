@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.77 2003-03-14 15:25:48 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.78 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -248,6 +248,9 @@ and wp_desc info d q =
 	let qe = filter_post e.info (option_app make_post q) in
 	let e',w = wp e qe in
 	Try (e', hl'), w
+
+    | Absurd ->
+	Absurd, Some (anonymous info.loc Pfalse)
 
 and wp_block bl q = match bl with
   | [] ->

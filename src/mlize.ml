@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.67 2003-03-13 16:48:16 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.68 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -194,6 +194,19 @@ and trad_desc info d ren = match d with
 		  CC_letin (false, [a, CC_var_binder ta], CC_var res, hi ren))
       in
       Monad.handle e.info (trad e) info (List.map handler hl) ren
+
+  | Absurd ->
+      let v = info.kappa.c_result_type in
+      let ainfo = 
+	{ info with 
+	    label = label_name (); obligations = []; kappa = type_c_of_v v } 
+      in
+      let tv = trad_type_v ren info.env v in
+      Monad.compose ainfo 
+	(fun _ -> cc_applist (cc_var false_rec) 
+	            [CC_type tv; CC_hole (info.loc, Pfalse)])
+	info (fun v -> Monad.unit info (Value (Tvar v)))
+	ren
 
 and trad_binders ren env = function
   | [] -> 

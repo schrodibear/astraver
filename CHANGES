@@ -1,4 +1,6 @@
 
+  o new construct "absurd" to denote unreachable code
+
 version 1.07, March 25th, 2003
 ==============================
   o arbitrary side-effects now allowed in tests (if / while)

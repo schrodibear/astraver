@@ -10,7 +10,7 @@ FEATURES
  - mutually recursive functions 
    (many variants over the same type, one relation)
 
- - keyword absurd (similar to "assert false" in ocaml)
+ - C: assert statement
 
 COQ
 ===

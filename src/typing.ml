@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.96 2003-03-20 10:44:28 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.97 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -679,7 +679,14 @@ and typef_desc lab env loc = function
       let thl = List.map type_handler hl in
       let ef = List.fold_left (fun e (_,th) -> union e (effect th)) ef thl in
       Try (te, thl), (v, ef), []
-	    
+
+  | Sabsurd ct -> 	    
+      let v = match ct with 
+	| None -> type_v_unit 
+	| Some v -> type_v loc lab env (logical_env env) v
+      in
+      Absurd, (v, Effect.bottom), [anonymous loc Pfalse]
+
 and typef_block lab env bl =
   let rec ef_block lab tyres = function
     | [] ->

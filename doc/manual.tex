@@ -327,7 +327,7 @@ allow you to relate the values of references at any points of the
 program. 
 
 
-\subsubsection{Exceptions (experimental in version \whyversion)}
+\subsubsection{Exceptions}
 \label{exception}\index{Exception}
 
 Exceptions are raised with the construct \texttt{raise}:
@@ -354,6 +354,14 @@ the value carried by the exception (if any).
 In postconditions, it is not possible to mention exceptions which
 are not possibly raised by the program.
 
+
+\subsubsection{Unreachable code}
+\label{absurd}\indextt{absurd}
+
+The construct \texttt{absurd} can be used to denote an unreachable
+point in the code.
+
+TODO
 
 \subsection{Types with effect}
 \label{types}\index{Type}
@@ -1082,16 +1090,16 @@ Section~\ref{lexical:logic} on page~\pageref{lexical:logic}).
 The set of keywords is now:
 \begin{center}
 {\tt\begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
-and & array & as & assert & begin \\
-bool & do & done & else & end \\
-exception & exists & external & false & float  \\
-for & forall & fun & if & in  \\
-int & invariant & label & let & logic \\
-not & of & or & parameter & prop  \\
-raise & raises & reads & rec  \\
-ref & returns & then & true & try  \\
-unit & variant & void & while & with \\
-writes
+absurd & and & array & as & assert  \\
+begin & bool & do & done & else  \\
+end & exception & exists & external & false  \\
+float & for & forall & fun & if  \\
+in & int & invariant & label & let  \\
+logic & not & of & or & parameter \\
+prop & raise & raises & reads \\
+rec & ref & returns & then & true \\
+try & unit & variant & void & while \\
+with & writes
 \end{tabular}}
 \end{center}
 
@@ -1195,6 +1203,7 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
               $[$ \te{:} \nt{value\_type} $]$ \\
       & $|$ & \te{try} \nt{prog} \te{with} 
               \nt{handler}\plussep{\te{|}} \te{end} \\
+      & $|$ & \te{absurd} $[$ \te{:} \nt{value\_type} $]$ \\ \indextt{absurd}
       & $|$ & \te{(} \nt{prog}\plus\  \te{)} \\
   \\[0.1em]
 

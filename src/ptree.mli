@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.14 2003-03-18 13:45:15 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.15 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -95,6 +95,7 @@ and t_desc =
   | Sraise of variable * t option * ptype_v option
   | Stry of t * (exn_pattern * t) list
   | Sconst of constant
+  | Sabsurd of ptype_v option
 
 and arg =
   | Sterm of t

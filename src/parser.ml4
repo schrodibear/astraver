@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.78 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.79 2003-03-25 16:56:33 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -440,6 +440,8 @@ i*)
 	without_annot loc (Sraise (id, Some p, t))
     | "try"; p = program; "with"; hl = LIST1 handler SEP "|"; "end" ->
 	without_annot loc (Stry (p, hl))
+    | "absurd"; t = OPT cast ->
+	without_annot loc (Sabsurd t)
     | "("; p = program; args = LIST0 arg; ")" ->
 	if args = [] then p else without_annot loc (app p args)
     | "{"; pre = OPT pre_condition; "}"; p = program; 

@@ -8,13 +8,14 @@ Require Match.
   (j: Z)(x: (array Z))(y: (array Z))(_: (match x `0` y j (array_length x)))
   unit.
 
-(* Why obligation from file "brute_force.c", characters 441-445 *)
+(* Why obligation from file "brute_force.c", characters 463-467 *)
 Lemma BF_po_1 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -36,16 +37,17 @@ Lemma BF_po_1 :
   (Test4: `i2 < m`)
   `0 <= i2` /\ `i2 < (array_length x)`.
 Proof.
-(* FILL PROOF HERE *)
+Auto with *.
 Save.
 
-(* Why obligation from file "brute_force.c", characters 449-457 *)
+(* Why obligation from file "brute_force.c", characters 471-479 *)
 Lemma BF_po_2 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -70,16 +72,17 @@ Lemma BF_po_2 :
   (Post4: c_aux_1 = (access x i2))
   `0 <= i2 + j1` /\ `i2 + j1 < (array_length y)`.
 Proof.
-(* FILL PROOF HERE *)
+Auto with *.
 Save.
 
-(* Why obligation from file "brute_force.c", characters 441-457 *)
+(* Why obligation from file "brute_force.c", characters 463-479 *)
 Lemma BF_po_3 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -117,16 +120,22 @@ Lemma BF_po_3 :
       (j = `j1 + 1` -> (`0 <= j` /\ `j <= n - m + 1`) /\
        (Zwf `0` `n - m + 1 - j` `n - m + 1 - j1`)))))).
 Proof.
-(* FILL PROOF HERE *)
+Destruct result6; Intuition.
+Subst i.
+Apply match_right_extension; Auto with *.
+Subst c_aux_1 c_aux_2; Ring `0+i2`; Ring `j1+i2`; Assumption.
+Unfold Zwf; Omega.
+Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "brute_force.c", characters 432-457 *)
+(* Why obligation from file "brute_force.c", characters 454-479 *)
 Lemma BF_po_4 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -152,16 +161,18 @@ Lemma BF_po_4 :
      (j = `j1 + 1` -> (`0 <= j` /\ `j <= n - m + 1`) /\
       (Zwf `0` `n - m + 1 - j` `n - m + 1 - j1`))))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "brute_force.c", characters 484-516 *)
+(* Why obligation from file "brute_force.c", characters 506-538 *)
 Lemma BF_po_5 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -177,16 +188,18 @@ Lemma BF_po_5 :
   (Post2: i1 = `0`)
   (`0 <= i1` /\ `i1 <= m`) /\ (match x `0` y j1 i1).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Subst i1; Apply match_empty; Auto with *.
 Save.
 
-(* Why obligation from file "brute_force.c", characters 557-570 *)
+(* Why obligation from file "brute_force.c", characters 579-592 *)
 Lemma BF_po_6 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -211,16 +224,18 @@ Lemma BF_po_6 :
   (Post7: c_aux_3 = j1)
   (match x `0` y c_aux_3 (array_length x)).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+
 Save.
 
-(* Why obligation from file "brute_force.c", characters 557-570 *)
+(* Why obligation from file "brute_force.c", characters 579-592 *)
 Lemma BF_po_7 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
@@ -253,13 +268,14 @@ Proof.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "brute_force.c", characters 367-386 *)
+(* Why obligation from file "brute_force.c", characters 389-408 *)
 Lemma BF_po_8 : 
   (m: Z)
   (n: Z)
   (x: (array Z))
   (y: (array Z))
-  (Pre12: `(array_length x) = m` /\ `(array_length y) = n`)
+  (Pre12: `0 <= n` /\ `0 <= m` /\ `(array_length x) = m` /\
+          `(array_length y) = n`)
   (result: Z)
   (Post11: result = `0`)
   (result0: Z)
