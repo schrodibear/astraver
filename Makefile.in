@@ -206,6 +206,9 @@ clean::
 dist-clean:: clean
 	rm -f Makefile config.status config.cache config.log
 
+coq-clean::
+	rm -f lib/coq/*.vo examples/*/*.vo
+
 .depend depend:: $(GENERATED)
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli > .depend

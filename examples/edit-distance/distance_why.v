@@ -39,8 +39,6 @@ Lemma distance_po_2 :
   (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
   (Pre3: Variant1 = `n2 + 1 - i1`)
-  (result0: bool)
-  (Bool1: (if result0 then `i1 <= n2` else `i1 > n2`))
   (Test2: `i1 <= n2`)
   (result1: Z)
   (Post2: (store t0 i1 result1) = (store t0 i1 `n2 - i1`))
@@ -58,8 +56,6 @@ Lemma distance_po_3 :
   (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
   (Pre3: Variant1 = `n2 + 1 - i1`)
-  (result0: bool)
-  (Bool1: (if result0 then `i1 <= n2` else `i1 > n2`))
   (Test2: `i1 <= n2`)
   (t1: (array `n2 + 1` Z))
   (Post2: t1 = (store t0 i1 `n2 - i1`))
@@ -85,8 +81,6 @@ Lemma distance_po_4 :
   (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
   (Pre3: Variant1 = `n2 + 1 - i1`)
-  (result0: bool)
-  (Bool1: (if result0 then `i1 <= n2` else `i1 > n2`))
   (Test2: `i1 <= n2`)
   (i2: Z)
   (t1: (array `n2 + 1` Z))
@@ -108,8 +102,6 @@ Lemma distance_po_5 :
   (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
   (Pre3: Variant1 = `n2 + 1 - i1`)
-  (result0: bool)
-  (Bool1: (if result0 then `i1 <= n2` else `i1 > n2`))
   (Test2: `i1 <= n2`)
   (i2: Z)
   (t1: (array `n2 + 1` Z))
@@ -131,8 +123,6 @@ Lemma distance_po_6 :
   (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
   (Pre3: Variant1 = `n2 + 1 - i1`)
-  (result0: bool)
-  (Bool1: (if result0 then `i1 <= n2` else `i1 > n2`))
   (Test1: `i1 > n2`)
   `0 <= i1` /\ `i1 <= n2 + 1` /\
   ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\ `i1 > n2`.
@@ -186,8 +176,6 @@ Lemma distance_po_9 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   `0 <= n2` /\ `n2 < n2 + 1`.
 Proof.
@@ -215,8 +203,6 @@ Lemma distance_po_10 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -251,8 +237,6 @@ Lemma distance_po_11 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -274,8 +258,6 @@ Lemma distance_po_11 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -304,8 +286,6 @@ Lemma distance_po_12 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -327,8 +307,6 @@ Lemma distance_po_12 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -360,8 +338,6 @@ Lemma distance_po_13 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -383,8 +359,6 @@ Lemma distance_po_13 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -417,8 +391,6 @@ Lemma distance_po_14 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -440,17 +412,12 @@ Lemma distance_po_14 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
   (Post9: old3 = (access t3 j2))
-  (result9: bool)
-  (Bool4: (if result9 then (access w1 i3) = (access w2 j2)
-           else ~(access w1 i3) = (access w2 j2)))
   (Test6: (access w1 i3) = (access w2 j2))
   (t4: (array `n2 + 1` Z))
   (Post11: t4 = (store t3 j2 result7))
@@ -510,8 +477,6 @@ Lemma distance_po_15 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -533,17 +498,12 @@ Lemma distance_po_15 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
   (Post9: old3 = (access t3 j2))
-  (result9: bool)
-  (Bool4: (if result9 then (access w1 i3) = (access w2 j2)
-           else ~(access w1 i3) = (access w2 j2)))
   (Test5: ~(access w1 i3) = (access w2 j2))
   `0 <= j2 + 1` /\ `j2 + 1 < n2 + 1`.
 Proof.
@@ -570,8 +530,6 @@ Lemma distance_po_16 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -593,17 +551,12 @@ Lemma distance_po_16 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
   (Pre10: `0 <= j2` /\ `j2 < n2 + 1`)
   (old3: Z)
   (Post9: old3 = (access t3 j2))
-  (result9: bool)
-  (Bool4: (if result9 then (access w1 i3) = (access w2 j2)
-           else ~(access w1 i3) = (access w2 j2)))
   (Test5: ~(access w1 i3) = (access w2 j2))
   (Pre13: `0 <= j2 + 1` /\ `j2 + 1 < n2 + 1`)
   (Pre14: `0 <= j2` /\ `j2 < n2 + 1`)
@@ -667,8 +620,6 @@ Lemma distance_po_17 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -690,8 +641,6 @@ Lemma distance_po_17 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (old3: Z)
   (t4: (array `n2 + 1` Z))
@@ -735,8 +684,6 @@ Lemma distance_po_18 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -758,8 +705,6 @@ Lemma distance_po_18 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (j3: Z)
   (old3: Z)
@@ -798,8 +743,6 @@ Lemma distance_po_19 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -821,8 +764,6 @@ Lemma distance_po_19 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test7: `j2 >= 0`)
   (j3: Z)
   (old3: Z)
@@ -864,8 +805,6 @@ Lemma distance_po_20 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -887,8 +826,6 @@ Lemma distance_po_20 :
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
   (Pre17: Variant5 = `j2 + 1`)
-  (result6: bool)
-  (Bool3: (if result6 then `j2 >= 0` else `j2 < 0`))
   (Test4: `j2 < 0`)
   `(-1) <= j2` /\ `j2 <= n2 - 1` /\
   ((k:Z) (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
@@ -919,8 +856,6 @@ Lemma distance_po_21 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -945,19 +880,19 @@ Rewrite suffix_n_is_eps.
 Rewrite store_def_1.
 Apply min_dist_eps.
 Rewrite <- suffix_n_is_eps with t:=w2.
-Apply H6; Omega'.
+Apply H8; Omega'.
 Omega'.
 Omega'.
 Rewrite Post6.
 Rewrite store_def_2.
-Apply H6; Omega'.
+Apply H8; Omega'.
 Omega'.
 Omega'.
 Omega'.
 Rewrite Post5.
 Pattern 2 n2.
 Replace `n2` with `(j1+1)`; [ Idtac | Omega' ].
-Apply H6; Omega'.
+Apply H8; Omega'.
 Save.
 
 Lemma distance_po_22 : 
@@ -980,8 +915,6 @@ Lemma distance_po_22 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -1034,8 +967,6 @@ Lemma distance_po_23 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (i4: Z)
   (t2: (array `n2 + 1` Z))
@@ -1070,8 +1001,6 @@ Lemma distance_po_24 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test8: `i3 >= 0`)
   (i4: Z)
   (t2: (array `n2 + 1` Z))
@@ -1107,8 +1036,6 @@ Lemma distance_po_25 :
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
   (Pre19: Variant3 = `i3 + 1`)
-  (result2: bool)
-  (Bool2: (if result2 then `i3 >= 0` else `i3 < 0`))
   (Test3: `i3 < 0`)
   `(-1) <= i3` /\ `i3 <= n1 - 1` /\
   ((j:Z)

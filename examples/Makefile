@@ -5,3 +5,6 @@ all:
 	make -C bresenham
 	make -C quicksort
 	make -C edit-distance
+
+clean::
+	rm -f */*~ */*.vo

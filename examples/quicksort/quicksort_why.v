@@ -29,8 +29,6 @@ Lemma quick_rec_po_2 :
   (r: Z)
   (Pre: `0 <= l` /\ `r < N`)
   (Pre3: Variant1 = `r - l`)
-  (result: bool)
-  (Bool1: (if result then `l < r` else `l >= r`))
   (Test2: `l < r`)
   `0 <= l` /\ `l < r` /\ `r < N`.
 Proof.
@@ -47,8 +45,6 @@ Lemma quick_rec_po_3 :
   (t0: (array N Z))
   (Pre: `0 <= l` /\ `r < N`)
   (Pre3: Variant1 = `r - l`)
-  (result: bool)
-  (Bool1: (if result then `l < r` else `l >= r`))
   (Test2: `l < r`)
   (t1: (array N Z))
   (result0: Z)
@@ -69,8 +65,6 @@ Lemma quick_rec_po_4 :
   (t0: (array N Z))
   (Pre: `0 <= l` /\ `r < N`)
   (Pre3: Variant1 = `r - l`)
-  (result: bool)
-  (Bool1: (if result then `l < r` else `l >= r`))
   (Test2: `l < r`)
   (t1: (array N Z))
   (result0: Z)
@@ -94,8 +88,6 @@ Lemma quick_rec_po_5 :
   (t0: (array N Z))
   (Pre: `0 <= l` /\ `r < N`)
   (Pre3: Variant1 = `r - l`)
-  (result: bool)
-  (Bool1: (if result then `l < r` else `l >= r`))
   (Test2: `l < r`)
   (t1: (array N Z))
   (result0: Z)
@@ -124,8 +116,6 @@ Lemma quick_rec_po_6 :
   (t0: (array N Z))
   (Pre: `0 <= l` /\ `r < N`)
   (Pre3: Variant1 = `r - l`)
-  (result: bool)
-  (Bool1: (if result then `l < r` else `l >= r`))
   (Test1: `l >= r`)
   (sorted_array t0 l r) /\ (sub_permut l r t0 t0).
 Proof.

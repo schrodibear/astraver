@@ -120,6 +120,9 @@ examples/misc/swap_why.vo: examples/misc/swap_why.v
 examples/misc/power_why.vo: examples/misc/power_why.v
 examples/misc/peano_why.vo: examples/misc/peano_why.v
 examples/misc/loop0_why.vo: examples/misc/loop0_why.v
+examples/misc/arith_why.vo: examples/misc/arith_why.v lib/coq/Why.vo
+examples/edit-distance/words.vo: examples/edit-distance/words.v lib/coq/WhyArrays.vo
+examples/edit-distance/distance_why.vo: examples/edit-distance/distance_why.v lib/coq/Why.vo examples/edit-distance/words.vo
 examples/bresenham/zaux.vo: examples/bresenham/zaux.v
 examples/bresenham/bresenham_why.vo: examples/bresenham/bresenham_why.v examples/bresenham/zaux.vo lib/coq/Why.vo
 examples/binary-search/bsearch_why.vo: examples/binary-search/bsearch_why.v

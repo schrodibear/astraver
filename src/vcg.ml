@@ -91,7 +91,7 @@ let vcg base t =
     (* special treatment for the if-then-else *)
     | CC_letin (x, ([idb, CC_var_binder (TTpure PTbool); 
 		     _, CC_pred_binder _] as bl1), e1, 
-		CC_if (CC_var idb', 
+		CC_if (CC_term (Tvar idb'), 
 		       (CC_lam ((_, CC_pred_binder _), _) as br1),
 		       (CC_lam ((_, CC_pred_binder _), _) as br2)))
       when idb = idb' ->
