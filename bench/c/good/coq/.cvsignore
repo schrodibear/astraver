@@ -15,3 +15,4 @@ pvstc.el
 a.out
 caduceus_why.v
 caduceus_spec_why.v
+caduceus_tactics.v
