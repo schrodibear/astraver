@@ -328,10 +328,28 @@ Admitted.
   pointer -> alloc_table -> alloc_table -> Prop.
 Admitted.
 
-(*Why axiom*) Lemma alloc_stack_1 :
+(*Why axiom*) Lemma alloc_stack_p :
   (forall (p:pointer),
    (forall (a1:alloc_table),
     (forall (a2:alloc_table), ((alloc_stack p a1 a2) -> (valid a2 p))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_stack_valid :
+  (forall (p:pointer),
+   (forall (a1:alloc_table),
+    (forall (a2:alloc_table),
+     ((alloc_stack p a1 a2) ->
+      (forall (q:pointer), ((valid a1 q) -> (valid a2 q))))))).
+Admitted.
+
+(*Why axiom*) Lemma alloc_stack_valid_range :
+  (forall (p:pointer),
+   (forall (a1:alloc_table),
+    (forall (a2:alloc_table),
+     ((alloc_stack p a1 a2) ->
+      (forall (q:pointer),
+       (forall (i:Z),
+        (forall (j:Z), ((valid_range a1 q i j) -> (valid_range a2 q i j))))))))).
 Admitted.
 
 (*Why logic*) Definition free_heap :

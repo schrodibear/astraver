@@ -14,7 +14,7 @@ intuition.
 Qed.
 
 
-(* Why obligation from file "why/call.why", characters 138-184 *)
+(* Why obligation from file "why/call.why", characters 142-188 *)
 Lemma f_impl_po_1 : 
   forall (y: Z),
   forall (ddd: Z),
@@ -34,7 +34,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/call.why", characters 326-360 *)
+(* Why obligation from file "why/call.why", characters 323-357 *)
 Lemma main_impl_po_1 : 
   forall (x0: Z),
   forall (Post1: x0 = 0),
