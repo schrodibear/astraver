@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.29 2004-03-04 16:14:20 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.30 2004-03-08 20:28:44 filliatr Exp $ i*)
 
 
 open Format
@@ -423,6 +423,15 @@ let rec interp_statement_expr e =
     | TEstring_literal _ -> assert false (* TODO *)
     | TEconstant _ -> assert false (* TODO *)
 
+let interp_invariant annot =
+  match annot with
+    | { invariant = None; variant = None } -> 
+	(LTrue,LConst (Prim_int 0))
+    | { invariant = Some inv; variant = Some (var,_) } -> 
+	(interp_predicate None "init" inv,interp_term None "" var)
+    | _ -> 
+	assert false (* TODO *)
+
 let rec interp_statement stat =
   match stat.st_node with
     | TSexpr e ->
@@ -435,15 +444,7 @@ let rec interp_statement stat =
 	    | Some e -> interp_expr e
 	end
     | TSfor(annot,e1,e2,e3,body,info) ->
-	let (inv,dec) =
-	  match annot with
-	    | { invariant = None; variant = None } -> 
-		(LTrue,LConst (Prim_int 0))
-	    | { invariant = Some inv; variant = Some (var,_) } -> 
-		(interp_predicate None "init" inv,interp_term None "" var)
-	    | _ -> 
-		assert false (* TODO *)
-	in
+	let (inv,dec) = interp_invariant annot in
 	append
 	  (interp_statement_expr e1)
 	  (make_while (interp_expr e2) inv dec 
@@ -453,8 +454,9 @@ let rec interp_statement stat =
   | TSnop -> Void
   | TSif(e,s1,s2) -> 
       If(interp_boolean_expr e,interp_statement s1,interp_statement s2)
-  | TSwhile(e,s,info,annot)
-      -> assert false (* TODO *)
+  | TSwhile(annot,e,s,info) -> 
+      let (inv,dec) = interp_invariant annot in
+      make_while (interp_expr e) inv dec (interp_statement s)
   | TSdowhile(s,e,info,annot)
       -> assert false (* TODO *)
   | TSblock(b) -> 
