@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.5 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: cprint.ml,v 1.6 2005-01-19 16:19:20 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -36,18 +36,20 @@ and ctype_node fmt = function
   | Tarray (ty, None) -> fprintf fmt "%a[]" ctype ty
   | Tarray (ty, Some n) -> fprintf fmt "%a[%Ld]" ctype ty n
   | Tpointer ty -> fprintf fmt "%a*" ctype ty
-  | Tstruct s -> 
-      fprintf fmt "@[<hov 2>struct %s {@\n" s;
-      begin match Cenv.tag_type_definition s with
-	| Cenv.TTStructUnion(_,fields) ->
-	    List.iter (fun f ->
-			fprintf fmt "%a %s;@\n" ctype f.var_type f.var_name) fields 
-	| _ -> assert false
-      end;
-      fprintf fmt "}@]@\n"
+  | Tstruct s -> fprintf fmt "struct %s" s
   | Tunion s -> fprintf fmt "union %s" s
   | Tenum s -> fprintf fmt "enum %s" s
   | Tfun _ -> fprintf fmt "<fun>"
+
+let declare_struct fmt s (_,fields) =
+  fprintf fmt "@[<hov 2>struct %s {@\n" s;
+  begin match Cenv.tag_type_definition s with
+    | Cenv.TTStructUnion(_,fields) ->
+	List.iter (fun f ->
+		     fprintf fmt "%a %s;@\n" ctype f.var_type f.var_name) fields 
+    | _ -> assert false
+  end;
+  fprintf fmt "};@]@\n@\n"
 
 let term_unop = function
   | Clogic.Uminus -> "-"
@@ -368,6 +370,7 @@ and ndecl fmt d = match d.node with
 
 let nfile fmt p = 
   fprintf fmt "@[";
+  Cenv.iter_all_struct (declare_struct fmt);
   List.iter (fun d -> ndecl fmt d; fprintf fmt "@\n") p;
   fprintf fmt "@]@."
 

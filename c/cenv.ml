@@ -125,6 +125,23 @@ let clash_tag l s1 s2 =
       error l (sprintf "`%s' defined as wrong kind of tag" n)
   | _ -> assert false
 
+let iter_all_struct f =
+  Hashtbl.iter 
+    (fun s tt -> match tt.tag_type with
+       | TTStructUnion (tn, l) -> f s (tn, l)
+       | _ -> ()) 
+    tags_t
+
+let fold_all_struct f x =
+  Hashtbl.fold 
+    (fun s tt acc ->
+      match tt.tag_type with
+       | TTStructUnion (tn, l) -> f s (tn, l) acc
+       | _ -> acc) 
+    tags_t x
+
+
+
 (* typedefs *)
 
 let typedef_t = (Hashtbl.create 97 : (string, 'a) Hashtbl.t)
@@ -196,7 +213,8 @@ let find_fun = Hashtbl.find functions
 let predicates = 
   (Hashtbl.create 97 : (string, ctype list * Info.logic_info) Hashtbl.t) 
 let add_pred = Hashtbl.add predicates
-let find_pred = Hashtbl.find predicates
+let mem_pred =  Hashtbl.mem predicates
+let find_pred =  Hashtbl.find predicates 
 
 let ghost = 
   (Hashtbl.create 97 : (string, Info.var_info) Hashtbl.t) 

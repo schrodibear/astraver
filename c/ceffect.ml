@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.74 2005-01-10 13:46:54 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.75 2005-01-19 16:19:19 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -303,17 +303,19 @@ let strong_invariants = Hashtbl.create 97
 let add_strong_invariant id p vars =
   if p <> NPtrue then
   let ef = predicate p in
-  Hashtbl.add strong_invariants id (ef,vars)
+  Hashtbl.add strong_invariants id (p,ef,vars)
 
 let strong_invariants_2 = Hashtbl.create 97
 
-let add_strong_invariant_2 id p =
-  if p <> NPtrue then
-  let ef = predicate p in
-  Hashtbl.add strong_invariants_2 id (p, ef)
-
 let mem_strong_invariant_2 id =
   Hashtbl.mem strong_invariants_2 id
+
+let add_strong_invariant_2 id p args =
+  if not (mem_strong_invariant_2 id) 
+  then
+    if p <> NPtrue then
+      let ef = predicate p in
+      Hashtbl.add strong_invariants_2 id (p,ef,args)      
 
 let intersect_only_alloc e1 e2 =
   HeapVarSet.is_empty (HeapVarSet.remove alloc (HeapVarSet.inter e1 e2))
@@ -327,7 +329,7 @@ let weak_invariants_for hvs =
 
 let strong_invariants_for hvs =
   Hashtbl.fold
-    (fun _ (_,e) acc -> 
+    (fun _ (_,_,e) acc -> 
        if HeapVarSet.subset e hvs then union e acc
        else acc) 
     strong_invariants empty
@@ -343,6 +345,7 @@ let spec sp =
        (List.fold_left
 	  (fun acc l -> ef_union acc (assign_location l)) ef_empty)
        sp.Clogic.assigns)
+
 open Cast
 
 let rec expr e = match e.nexpr_node with
@@ -495,39 +498,33 @@ and ctype_node = function
   | Tint _ -> sprintf "int"
   | Tfloat _ -> sprintf "float"
   | Ctypes.Tvar s -> sprintf "%s" s
-  | Tarray (ty, _) -> sprintf "%s_array" (ctype ty)
+  | Tarray (ty, _) -> sprintf "%s" (ctype ty)
   | Tpointer ty -> sprintf "%s*" (ctype ty)
-  | Tstruct s -> sprintf "struct_%s" s;
-  | Tunion s -> sprintf "union_%s" s
-  | Tenum s -> sprintf "enum_%s" s
+  | Tstruct s -> sprintf "%s" s;
+  | Tunion s -> sprintf "%s" s
+  | Tenum s -> sprintf "%s" s
   | Tfun _ -> assert false
 		   
 let invariant_for_global =
   fun loc v ->
     let form =
       List.fold_left (fun p x ->
-			let name ="separation_"^(ctype v.var_type)
-				  ^"_"^(ctype x.var_type) in
-			let pre = (Cnorm.separation loc v x) in
-			  (if not (mem_strong_invariant_2 name) 
-			   then
-			     add_strong_invariant_2 name pre);
-			  (name, 
-			   (pre,HeapVarSet.add v (HeapVarSet.singleton x)))::p)
-	(*		  ("separation_"^v.var_name^"_"^x.var_name,
-			  (Cnorm.separation loc v x),
-			  HeapVarSet.add v (HeapVarSet.singleton x))::p)*) 
+			("separation_"^v.var_name^"_"^x.var_name,
+			 (Cnorm.separation loc v x),
+			 HeapVarSet.add v (HeapVarSet.singleton x))::p) 
 	[] !global_var in 
     global_var := v::!global_var;
-    let name = "separation_intern_"^(ctype v.var_type) in 
-    let p = (Cnorm.separation_intern loc v) in
-      (if not (mem_strong_invariant_2 name) 
-       then
-	 add_strong_invariant_2 name p);
-    (name, (p ,HeapVarSet.singleton v))::form
-(*    ("separation_intern_"^v.var_name, (Cnorm.separation_intern loc v),
-     HeapVarSet.singleton v)::form*)
-    
+    form
+(*    match v.var_type.Ctypes.ctype_node with
+      | Tstruct _  ->
+	  let name = "separation_intern_"^ (ctype v.var_type) in
+	  let t = { nterm_node = NTvar v; 
+		    nterm_loc = Loc.dummy;
+		    nterm_type = v.var_type } in
+	  Some ((name, NPapp (snd (find_pred name), [t]), 
+	   HeapVarSet.singleton v)::form)
+      | _ -> None
+*)	  
 (*  let allocs = ref (fun n x -> (*NPtrue*) []) in
   fun loc v t ->
     let allocs',form = Cnorm.separation ~allocs:!allocs loc v t in
@@ -705,6 +702,123 @@ let rec has_constant_values ty = match ty.Ctypes.ctype_node with
   | Tarray (ty', _) -> has_constant_values ty'
   | Tunion _ | Tfun _ | Tvar _ -> false
 
+(*let heapVarSet_to_list loc ty pre =
+  (HeapVarSet.fold 
+     (fun x acc ->
+	({
+	   nterm_node = NTvar x;
+	   nterm_loc = loc;
+	   nterm_type = ty;
+	 })::acc) 
+     (predicate pre) [])
+
+let rec valid ?(fresh=false) loc name ty =
+  let rec valid_struct valid_for_current n (t : Cast.nterm) = 
+    begin match tag_type_definition n with
+      | TTStructUnion (Tstruct (_), fl) ->
+	  List.fold_right 
+	    (fun f acc -> 
+	       let tf = 
+		 { nterm_node = NTarrow (t, f); 
+		   nterm_loc = t.nterm_loc;
+		   nterm_type = f.var_type } 
+	       in
+	       Cnorm.make_and acc (valid t.nterm_loc f.var_name tf.nterm_type))
+	    fl 
+	    (if valid_for_current then 
+	       if fresh then NPand(NPvalid t, NPfresh t) else NPvalid t 
+	     else NPtrue)
+      | TTIncomplete ->
+	  error loc ("`" ^ name ^ "' has incomplete type")
+      | _ ->
+	  assert false
+    end  in
+  match ty.Ctypes.ctype_node with
+    | Tstruct (n) ->
+	let v = default_var_info "point" in 
+	Info.set_var_type (Var_info v) ty;
+	let t = {
+	  nterm_node = NTvar v;
+	  nterm_loc = loc;
+	  nterm_type = ty;
+	} in
+	let info = default_logic_info ("valid_" ^ (ctype ty) ^ "_pointer") in
+	let pre = (valid_struct false n t) in
+ 	add_strong_invariant_2 ("valid_" ^ (ctype ty) ^ "_pointer") pre [];
+	let pre = heapVarSet_to_list loc ty pre in
+	if pre = [] then
+	  NPtrue
+	else
+	  NPapp (info,pre)
+    | Tarray (ty, None) ->
+	error loc ("array size missing in `" ^ name ^ "'")	  
+    | Tarray (ty,Some s) ->
+	if s = Int64.one then
+	  valid loc name ty
+	else
+	  let info = default_logic_info ("valid_" ^ (ctype ty) ^ "_range") in
+	  let i = default_var_info "counter" in
+	  let borne_sup =  default_var_info "sup" in
+	  let vari = { nterm_node = NTvar i; 
+		       nterm_loc = loc;
+		       nterm_type = c_int } in	  
+	  let term_sup = { nterm_node = NTvar borne_sup; 
+		       nterm_loc = loc;
+		       nterm_type = c_int } in
+	  let ineq = NPand 
+		       (NPrel (Cnorm.nzero, Le, vari),
+			NPrel (vari, Lt, 
+			       term_sup)) in
+	  let pre = NPforall ([({ 
+				  Ctypes.ctype_node = 
+				    Tint (Signed, Ctypes.Int);
+				  ctype_storage = No_storage;
+				  ctype_const = false;
+				  ctype_volatile = false;
+				}, i)], 
+			      NPimplies (ineq,
+					 valid loc i.var_unique_name ty)) in
+	  add_strong_invariant_2 ("valid_" ^ (ctype ty) ^ "_range") pre 
+	    [(borne_sup.var_unique_name, ([],"int"))];
+	  let pre = heapVarSet_to_list loc ty pre in
+	  if pre = []
+	  then
+	    NPtrue
+	  else
+	    NPapp (info, pre)
+    | _ -> NPtrue
+*)
+	  
+let rec validity x ty size =
+  match ty.Ctypes.ctype_node with
+    | Tarray (ty', Some size') ->
+	let i = default_var_info "counter" in
+	let vari = { nterm_node = NTvar i; 
+		     nterm_loc = x.nterm_loc;
+		     nterm_type = c_int } in	  
+	let term_sup = { nterm_node = NTconstant (IntConstant 
+						    (Int64.to_string size)); 
+			 nterm_loc = x.nterm_loc;
+			 nterm_type = c_int } in
+	let ineq = NPand 
+		     (NPrel (Cnorm.nzero, Le, vari),
+		      NPrel (vari, Lt, 
+			       term_sup)) in
+	NPand (
+	  NPvalid_range (x, Cnorm.nzero,term_sup),
+	  NPforall (
+	    [c_int,i],
+	    NPimplies(ineq,validity 
+			(noattr x.nterm_loc ty 
+			   (NTbinop (x,Clogic.Badd,vari)))
+					     ty' size')))
+    | _ ->  
+	let term_sup = { nterm_node = NTconstant (IntConstant 
+						    (Int64.to_string size)); 
+			 nterm_loc = x.nterm_loc;
+			 nterm_type = c_int } in
+      NPvalid_range (x, Cnorm.nzero,term_sup)
+
 let decl d =
   match d.Cast.node with
     | Nlogic(id,ltype) -> 
@@ -716,28 +830,45 @@ let decl d =
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
-	begin
-	  match ty.Ctypes.ctype_node with
-	    | Tstruct _ -> assert false
-	    | Tarray _ ->
-		lprintf "adding implicit invariant for validity of %s@." 
-		  v.var_name;
-		let id = "separation_" ^ v.var_name in
-		let t = { nterm_node = NTvar v; 
-			  nterm_loc = Loc.dummy;
-			  nterm_type = ty } in
-		List.iter (fun (x,(p,y)) -> add_strong_invariant x p y) 
+	   begin
+	   match ty.Ctypes.ctype_node with
+	   | Tstruct _ | Tarray (_,None) -> assert false
+	   | Tarray (typ, Some s) ->
+	       lprintf "adding implicit invariant for validity of %s@." 
+		 v.var_name;
+	       let t = { nterm_node = NTvar v; 
+			 nterm_loc = d.loc;
+			 nterm_type = ty } in
+	       (*if s <> Int64.one then*)
+		  (let name = "valid_range_" ^ v.var_name in
+		   let pre = validity t typ s in
+		   add_strong_invariant name pre (HeapVarSet.singleton v))
+		(*else
+		  let name = "valid_var_" ^ v.var_name in
+		  let pre = NPvalid t in
+		  add_strong_invariant name pre (HeapVarSet.singleton v) 
+	       *);
+		List.iter (fun (x,p,y) -> add_strong_invariant x p y;
+			     add_strong_invariant_2 x p [])
 		  (invariant_for_global d.loc v);
-		let name ="valid_" ^ (ctype v.var_type) in
-		let pre =(Cnorm.valid_for_type d.loc v t) in 
-		  (if not (mem_strong_invariant_2 name) 
-		   then
-		     add_strong_invariant_2 name pre);
-		add_strong_invariant name 
-		  pre
-		  (HeapVarSet.singleton v)
-	    | _ -> ()
-	end;
+	       begin
+		 match typ.Ctypes.ctype_node with
+		   | Tstruct _ ->
+		       let name = "internal_separation_"^ (ctype v.var_type) in
+		        add_strong_invariant
+			  name  (NPapp (snd (find_pred name), [t])) 
+			    (HeapVarSet.singleton v);
+		       let name = "valid_" ^ (ctype typ) in
+		       let pre = NPapp ((snd (find_pred name)),[t]) in
+		       add_strong_invariant name 
+			 pre
+			 (HeapVarSet.singleton v)
+		   | _ -> ()
+	       end;
+		       
+	   | _ -> ()
+	   end;
+	
 	let init = (match init with | None -> [] | Some l -> [l]) in
 	if has_constant_values ty then begin
 	  lprintf "adding implicit invariant for constant %s@." v.var_name;
@@ -746,7 +877,8 @@ let decl d =
 		   nterm_loc = Loc.dummy;
 		   nterm_type = ty } in
 	  let (pre,_) = invariant_for_constant d.loc ty t init in
-	  add_strong_invariant_2 id pre ;
+	  let info = Info.default_logic_info id in 
+	  add_strong_invariant_2 id pre [] ;
 	  add_strong_invariant id pre (HeapVarSet.singleton v)
 	end;
     | Ndecl(ty,v,init) -> () (* nothing to do for extern var *)	
@@ -799,11 +931,13 @@ let functions dl =
 		  not (HeapVarSet.is_empty ef_body.assigns) then
 		  Queue.add 
 		    (d.loc,
-		     "function " ^ id.fun_name ^ " has side-effects but no 'assigns' clause given")
+		     "function " ^ id.fun_name ^ 
+		     " has side-effects but no 'assigns' clause given")
 		    warnings
 	    | Some _ -> 
 		(* some assigns given by user:
-		   emit a warning if side-effects of spec differs from side-effects of body *) 
+		   emit a warning if side-effects of spec differs from 
+		   side-effects of body *) 
 		if not (HeapVarSet.equal ef_spec.assigns ef_body.assigns) then 
 		  begin 
 		    Queue.add 

@@ -68,14 +68,13 @@ subst; caduceus.
 Save.
 
 
-(* Why obligation from file "why/passing.why", characters 686-701 *)
+(* Why obligation from file "why/passing.why", characters 688-703 *)
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre4: (valid_int_array t alloc)),
+  forall (Pre4: (valid_range alloc t 0 2)),
   (valid_index alloc t 0).
 Proof.
-unfold valid_int_array.
 intuition.
 Save.
 

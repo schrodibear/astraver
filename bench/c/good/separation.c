@@ -1,13 +1,16 @@
 
-struct s {
+struct s1 {
   int t[2];
   int u[3];
 } s;
+
+struct s1 ss;
 
 int v[4];
 
 //@ ensures \result == 1
 int f() {
+  ss.t[0] = 0;
   s.t[0] = 1;
   s.u[0] = 2;
   v[0] = 3;

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.4 2004-12-17 12:16:12 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.5 2005-01-19 16:19:20 hubert Exp $ i*)
 
 open Cast
 
@@ -24,8 +24,13 @@ val sizeof : Loc.t -> tctype -> int64
 val eval_const_expr : Cast.texpr -> int64
 
 *)
+
+val int_nconstant : string -> nterm
+
+val nzero : nterm
+
 val valid_for_type : 
-  ?fresh:bool -> Loc.t -> Info.var_info -> 
+  ?fresh:bool -> Loc.t -> string -> 
     nterm -> npredicate
 
 val separation :

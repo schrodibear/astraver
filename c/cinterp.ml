@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.127 2005-01-10 13:46:54 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.128 2005-01-19 16:19:19 hubert Exp $ i*)
 
 
 open Format
@@ -244,7 +244,7 @@ let rec interp_predicate label old_label p =
     | NPapp (v, tl) ->
 	LPred(v.logic_name, 
 	      (HeapVarSet.fold 
-		 (fun x acc -> (interp_var label x.var_unique_name)::acc) 
+		 (fun x acc -> acc@[(interp_var label x.var_unique_name)]) 
 		 v.logic_args []) 
 	      @ List.map ft tl)
     | NPfalse -> 
@@ -840,7 +840,7 @@ let weak_invariants_for hvs =
     Ceffect.weak_invariants LTrue
 
 (* we memoize the translation of strong invariants *)
-(*
+
 let strong_invariant = 
   let h = Hashtbl.create 97 in
   fun id p e -> 
@@ -850,15 +850,14 @@ let strong_invariant =
       let p = interp_predicate None "" p in
       Hashtbl.add h id p;
       p
-*)
 
 let interp_strong_invariants () =
   Hashtbl.fold
-    (fun id (p,e) acc -> 
+    (fun id (p,e,args) acc -> 
        let args = 
 	 HeapVarSet.fold 
-	   (fun x acc -> (x.var_unique_name, Ceffect.heap_var_type x)::acc) 
-	   e []
+	   (fun x acc -> acc@[(x.var_unique_name, Ceffect.heap_var_type x)]) 
+	   e args
        in
        if args = [] then acc else
        (Predicate(false,id,args,interp_predicate None "" p))::acc)
@@ -868,18 +867,19 @@ let interp_strong_invariants () =
 let strong_invariant_name id e =
   LPred(id, 
 	(HeapVarSet.fold 
-	   (fun x acc -> LVar(x.var_unique_name)::acc) 
+	   (fun x acc -> acc@[LVar(x.var_unique_name) ]) 
 	   e []))
 
-
-
 let strong_invariants_for hvs =
-  (** eprintf "strong_invariants: %a @." print_hvs hvs; **)
   Hashtbl.fold
-    (fun id (e1,e2) acc -> 
-       (** eprintf "  e = { %a }@." print_hvs e; **)
-       if HeapVarSet.subset e2 hvs then 
-	 make_and (strong_invariant_name id e1) acc
+    (fun id (p,e1,e2) acc -> 
+       if HeapVarSet.subset e2 hvs then
+	 make_and 
+	   (if (Ceffect.mem_strong_invariant_2 id) || (Cenv.mem_pred id)
+	    then
+	       strong_invariant_name id e1
+	    else
+	      strong_invariant id p e2)  acc
        else acc) 
     Ceffect.strong_invariants LTrue
 
@@ -906,7 +906,7 @@ let alloc_on_stack loc v t =
       (List.fold_left (fun x v2 -> Cnorm.make_and x 
 			   (Cnorm.separation loc v v2)) 
 	 NPtrue !Ceffect.global_var)
-      (Cnorm.valid_for_type ~fresh:true loc v t)
+      (Cnorm.valid_for_type ~fresh:true loc v.var_name t)
   in
   BlackBox(Annot_type(LTrue,base_type "pointer",["alloc"],["alloc"],
 		      make_and 
@@ -1240,9 +1240,9 @@ let interp_predicate_args id args =
 	 (id.var_unique_name,([],Ceffect.interp_type t))::args)
       args []
   in
-  HeapVarSet.fold
-    (fun arg t -> (arg.var_unique_name,Ceffect.heap_var_type arg)::t)
-    id.logic_args args
+  (HeapVarSet.fold
+    (fun arg t -> t@[(arg.var_unique_name,Ceffect.heap_var_type arg)])
+    id.logic_args [])@args
 
 let cinterp_logic_symbol id ls =
   match ls with

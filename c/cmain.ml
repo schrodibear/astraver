@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.52 2005-01-04 15:48:00 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.53 2005-01-19 16:19:19 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -79,6 +79,9 @@ let main () =
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
   let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
+  (*predicate*)
+  let nfiles = List.map (fun (f,p) -> (f, Invariant.add_predicates p)) 
+		 nfiles in
   if print_norm then begin
     List.iter 
       (fun (f,p) -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.16 2005-01-12 14:36:32 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.17 2005-01-19 16:19:19 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -861,7 +861,7 @@ let make_forall_range loc t b f =
 		      NPrel (vari, Lt, int_nconstant (Int64.to_string b))) in
     make_forall [c_int, i] (make_implies ineq (f ti vari))
 
-let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
+let valid_for_type ?(fresh=false) loc name (t : Cast.nterm) =
   let rec valid_fields valid_for_current n (t : Cast.nterm) = 
     begin match tag_type_definition n with
       | TTStructUnion (Tstruct (_), fl) ->
@@ -878,7 +878,7 @@ let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
 	       if fresh then NPand(NPvalid t, NPfresh t) else NPvalid t 
 	     else NPtrue)
       | TTIncomplete ->
-	  error loc ("`" ^ v.var_name ^ "' has incomplete type")
+	  error loc ("`" ^ name ^ "' has incomplete type")
       | _ ->
 	  assert false
     end
@@ -886,7 +886,7 @@ let valid_for_type ?(fresh=false) loc v (t : Cast.nterm) =
     | Tstruct (n) ->
  	valid_fields true n t
     | Tarray (ty, None) ->
-	error loc ("array size missing in `" ^ v.var_name ^ "'")
+	error loc ("array size missing in `" ^ name ^ "'")
     | Tarray (ty, Some s) ->
 	let ts = Int64.to_string s in
 	let vrange = make_valid_range_from_0 t s in
@@ -1034,7 +1034,7 @@ and local_separation loc mark n1 v1 n2 v2 =
 	error loc ("array size missing in `" ^ n1 ^ "'")
     | _, Tarray (ty, None) ->
 	error loc ("array size missing in `" ^ n2 ^ "'")
-    | Tstruct n1, Tstruct n2 ->
+(*    | Tstruct n1, Tstruct n2 ->
 	let l1 = begin
 	  match  tag_type_definition n1 with
 	    | TTStructUnion ((Tstruct _),fl) ->
@@ -1076,7 +1076,7 @@ and local_separation loc mark n1 v1 n2 v2 =
 		       (local_separation loc mark n1 (in_struct v1 t1) 
 			  n2 (in_struct v2 t2)))
 		  p l2)
-	     NPtrue l1)
+	     NPtrue l1)*)
     | Tstruct n , Tarray (ty,Some s) -> tab_struct loc mark v1 v2 s ty n n1 n2
     | Tarray (ty,Some s) , Tstruct n -> tab_struct loc mark v2 v1 s ty n n1 n2
     | Tarray (ty1,Some s1), Tarray(ty2,Some s2) ->

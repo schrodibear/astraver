@@ -3,11 +3,11 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/logic_cast.why", characters 306-334 *)
+(* Why obligation from file "why/logic_cast.why", characters 308-336 *)
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_int_array t alloc)),
+  forall (Pre7: (valid_range alloc t 0 4)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   forall (Variant1: Z),
@@ -20,15 +20,14 @@ Lemma f_impl_po_1 :
   (valid alloc caduceus_1).
 Proof.
 intuition.
-unfold valid_int_array in Pre7.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 269-334 *)
+(* Why obligation from file "why/logic_cast.why", characters 271-336 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_int_array t alloc)),
+  forall (Pre7: (valid_range alloc t 0 4)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   forall (Variant1: Z),
@@ -48,11 +47,11 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/logic_cast.why", characters 208-238 *)
+(* Why obligation from file "why/logic_cast.why", characters 210-240 *)
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_int_array t alloc)),
+  forall (Pre7: (valid_range alloc t 0 4)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   0 <= I1 /\ I1 <= 4.

@@ -230,6 +230,8 @@ c/cprint.cmi: c/ctypes.cmi c/clogic.cmi c/cast.cmi
 c/creport.cmi: src/loc.cmi c/ctypes.cmi c/cerror.cmi 
 c/ctyping.cmi: c/cast.cmi 
 c/info.cmi: c/ctypes.cmi 
+c/invariant.cmi: c/info.cmi c/ctypes.cmi c/creport.cmi c/cnorm.cmi \
+    c/clogic.cmi c/cenv.cmi c/cast.cmi 
 c/cconst.cmo: c/creport.cmi c/cconst.cmi 
 c/cconst.cmx: c/creport.cmx c/cconst.cmi 
 c/ceffect.cmo: src/pp.cmi c/output.cmi src/loc.cmi c/info.cmi c/ctypes.cmi \
@@ -266,14 +268,14 @@ c/cltyping.cmo: src/loc.cmi c/info.cmi src/env.cmi c/ctypes.cmi c/creport.cmi \
     c/clogic.cmi c/cerror.cmi c/cenv.cmi c/cast.cmi c/cltyping.cmi 
 c/cltyping.cmx: src/loc.cmx c/info.cmx src/env.cmx c/ctypes.cmx c/creport.cmx \
     c/clogic.cmi c/cerror.cmi c/cenv.cmx c/cast.cmi c/cltyping.cmi 
-c/cmain.cmo: src/pp.cmi c/output.cmi src/loc.cmi src/lib.cmi c/ctyping.cmi \
-    c/creport.cmi c/cprint.cmi c/cpp.cmi c/coptions.cmi src/compat.cmo \
-    c/cnorm.cmi c/cmake.cmi c/clexer.cmo c/cinterp.cmi c/cinit.cmi \
-    c/cerror.cmi c/cenv.cmi c/ceffect.cmi 
-c/cmain.cmx: src/pp.cmx c/output.cmx src/loc.cmx src/lib.cmx c/ctyping.cmx \
-    c/creport.cmx c/cprint.cmx c/cpp.cmx c/coptions.cmx src/compat.cmx \
-    c/cnorm.cmx c/cmake.cmx c/clexer.cmx c/cinterp.cmx c/cinit.cmx \
-    c/cerror.cmi c/cenv.cmx c/ceffect.cmx 
+c/cmain.cmo: src/pp.cmi c/output.cmi src/loc.cmi src/lib.cmi c/invariant.cmi \
+    c/ctyping.cmi c/creport.cmi c/cprint.cmi c/cpp.cmi c/coptions.cmi \
+    src/compat.cmo c/cnorm.cmi c/cmake.cmi c/clexer.cmo c/cinterp.cmi \
+    c/cinit.cmi c/cerror.cmi c/cenv.cmi c/ceffect.cmi 
+c/cmain.cmx: src/pp.cmx c/output.cmx src/loc.cmx src/lib.cmx c/invariant.cmx \
+    c/ctyping.cmx c/creport.cmx c/cprint.cmx c/cpp.cmx c/coptions.cmx \
+    src/compat.cmx c/cnorm.cmx c/cmake.cmx c/clexer.cmx c/cinterp.cmx \
+    c/cinit.cmx c/cerror.cmi c/cenv.cmx c/ceffect.cmx 
 c/cmake.cmo: src/pp.cmi c/coptions.cmi c/cmake.cmi 
 c/cmake.cmx: src/pp.cmx c/coptions.cmx c/cmake.cmi 
 c/cnorm.cmo: src/loc.cmi c/info.cmi c/ctyping.cmi c/ctypes.cmi c/creport.cmi \
@@ -308,6 +310,10 @@ c/ctyping.cmx: src/loc.cmx src/lib.cmx c/info.cmx src/env.cmx c/ctypes.cmx \
     c/cerror.cmi c/cenv.cmx c/cconst.cmx c/cast.cmi c/ctyping.cmi 
 c/info.cmo: c/ctypes.cmi src/compat.cmo c/info.cmi 
 c/info.cmx: c/ctypes.cmx src/compat.cmx c/info.cmi 
+c/invariant.cmo: src/loc.cmi c/info.cmi c/ctypes.cmi c/creport.cmi \
+    c/cnorm.cmi c/clogic.cmi c/cenv.cmi c/cast.cmi c/invariant.cmi 
+c/invariant.cmx: src/loc.cmx c/info.cmx c/ctypes.cmx c/creport.cmx \
+    c/cnorm.cmx c/clogic.cmi c/cenv.cmx c/cast.cmi c/invariant.cmi 
 c/output.cmo: src/loc.cmi c/creport.cmi c/output.cmi 
 c/output.cmx: src/loc.cmx c/creport.cmx c/output.cmi 
 intf/navig.cmo: intf/navig.cmi 

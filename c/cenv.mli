@@ -28,6 +28,7 @@ val add_fun : string -> ctype list * ctype * Info.logic_info -> unit
 val find_fun : string -> ctype list * ctype * Info.logic_info
 
 val add_pred : string -> ctype list * Info.logic_info -> unit
+val mem_pred : string -> bool 
 val find_pred : string -> ctype list * Info.logic_info 
 
 val add_ghost : Loc.t -> string -> ctype -> var_info -> var_info
@@ -39,6 +40,11 @@ type tag_type_definition =
   | TTStructUnion of ctype_node * var_info list
   | TTEnum of ctype_node * (var_info * int64) list
 val tag_type_definition : string -> tag_type_definition
+
+(* iterates over all declared structures *)
+val iter_all_struct : (string -> ctype_node * var_info list -> unit) -> unit
+val fold_all_struct : 
+  (string -> ctype_node * var_info list -> 'a -> 'a) -> 'a -> 'a
 
 (* Local environment *)
 module Env : sig
