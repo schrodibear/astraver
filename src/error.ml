@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.6 2002-02-28 16:15:12 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.7 2002-03-01 16:29:49 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -53,7 +53,7 @@ let report fmt = function
   | Undefined id ->
       fprintf fmt "The object %s is undefined" (Ident.string id)
   | NotAReference id ->
-      fprintf fmt "%s is not a refenrece" (Ident.string id)
+      fprintf fmt "%s is not a reference" (Ident.string id)
   | NotAnArray id ->
       fprintf fmt "%s is not an array" (Ident.string id)
   | NotAnIndex ->

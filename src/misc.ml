@@ -1,10 +1,11 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.10 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.11 2002-03-01 16:29:49 filliatr Exp $ i*)
 
 open Ident
 open Logic
 open Types 
+open Ast
 
 (*s Utility functions. *)
 
@@ -249,6 +250,13 @@ let por a b =
 
 let pnot a =
   if a = Ptrue then Pfalse else if a = Pfalse then Ptrue else Pnot a
+
+(*s functions over AST *)
+
+let arg_loc = function 
+  | Term t -> t.info.loc 
+  | Refarg (l,_) -> l 
+  | Type _ -> assert false (* TODO *)
 
 (*s Pretty-print *)
 

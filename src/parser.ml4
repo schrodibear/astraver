@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.12 2002-03-01 10:15:42 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.13 2002-03-01 16:29:49 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -94,16 +94,25 @@ let conj = function
   | a,None        -> a
   | Some a,Some b -> Some (conj_assert a b)
 
-let without_effect loc d = 
+let without_annot loc d = 
   { desc = d; info = { pre = []; post = None; loc = loc } }
 
+let rec app f = function
+  | [] -> 
+      assert false
+  | [a] -> 
+      App (f, a)
+  | a :: l -> 
+      let loc = Loc.join f.info.loc (arg_loc a) in 
+      app (without_annot loc (App (f, a))) l
+
 let bin_op op loc e1 e2 =
-  without_effect loc
-    (App (without_effect loc (Expression (Tapp (op,[]))), [Term e1; Term e2]))
+  without_annot loc
+    (app (without_annot loc (Expression (Tapp (op,[])))) [Term e1; Term e2])
 
 let un_op op loc e =
-  without_effect loc
-    (App (without_effect loc (Expression (Tapp (op,[]))), [Term e]))
+  without_annot loc
+    (app (without_annot loc (Expression (Tapp (op,[])))) [Term e])
 
 let bool_not loc a = un_op Ident.p_not loc a
 
@@ -294,11 +303,11 @@ EXTEND
 
   ast1:
   [ [ x = prog2; "||"; y = prog1  -> 
-       let ptrue = without_effect loc (Expression (Tconst (ConstBool true))) in
-       without_effect loc (If (x, ptrue, y))
+       let ptrue = without_annot loc (Expression (Tconst (ConstBool true))) in
+       without_annot loc (If (x, ptrue, y))
     | x = prog2; "&&"; y = prog1 -> 
-       let pf = without_effect loc (Expression (Tconst (ConstBool false))) in
-       without_effect loc (If (x, y, pf))
+       let pf = without_annot loc (Expression (Tconst (ConstBool false))) in
+       without_annot loc (If (x, y, pf))
     | x = prog2 -> x ] ]
   ;
   ast2:
@@ -322,7 +331,7 @@ EXTEND
   ast6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
     | LIDENT "sqrt"; x = prog6 -> un_op Ident.t_sqrt loc x
-    | x = ast7 -> without_effect loc x ] ]
+    | x = ast7 -> without_annot loc x ] ]
   ;
   ast7:
   [ [ v = ident -> 
@@ -351,7 +360,7 @@ EXTEND
     | "if"; e1 = program; "then"; e2 = program; "else"; e3 = program ->
 	If (e1,e2,e3)
     | "if"; e1 = program; "then"; e2 = program ->
-	If (e1,e2,without_effect loc (Expression (Tconst ConstUnit)))
+	If (e1,e2,without_annot loc (Expression (Tconst ConstUnit)))
     | "while"; b = program; "do"; 
 	"{"; inv = OPT invariant; LIDENT "variant"; wf = variant; "}";
 	bl = block; "done" ->
@@ -375,7 +384,7 @@ i*)
     | "let"; "rec"; f = ident; bl = binders; ":"; v = type_v;
       "{"; LIDENT "variant"; var = variant; "}"; "="; p = program;
       "in"; p2 = program ->
-	LetIn (f, without_effect loc (LetRec (f,bl,v,var,p)), p2)
+	LetIn (f, without_annot loc (LetRec (f,bl,v,var,p)), p2)
 	    
     | "@"; s = STRING; p = program ->
 	Debug (s,p)
@@ -387,7 +396,7 @@ i*)
 		warning "Some annotations are lost";
 	      p.desc
           | _  -> 
-	      App(p,args)
+	      app p args
     ] ]
   ;
   arg:

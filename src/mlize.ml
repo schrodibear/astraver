@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.9 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.10 2002-03-01 16:29:49 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -187,10 +187,10 @@ and trad_desc ren env ct d =
 (*i	    let c = trad_ml_type_v ren env v in
 	    ren, (CC_expr c) :: args i*)
       in
-      let ren',targs = List.fold_left trad_arg (ren,[]) args in
+      let ren',targs = List.fold_left trad_arg (ren,[]) [args] in
       let tf = trad ren' f in
       let cf = f.info.kappa in
-      let c,(s,_,_),capp = effect_app ren env f args in
+      let c,(s,_,_),capp = effect_app ren env f [args] in
       let tc_args =
 	List.combine
 	  (List.rev targs)
@@ -200,7 +200,7 @@ and trad_desc ren env ct d =
 		| Refarg _ -> failwith "caught"
 		| Type _ -> assert false
 		    (*i (Ident.result,PureType mkSet),Effect.bottom,[],Nonei*))
-	     args)
+	     [args])
       in
       make_app env ren tc_args ren' (tf,cf) (c,s,capp) ct
 	

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.12 2002-02-05 16:00:01 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.13 2002-03-01 16:29:50 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -164,7 +164,7 @@ let rec normalize ren p =
   let k = p.info.kappa in
   match p.desc with
     | App (f,l) ->
-	let _,(_,so,ok),capp = effect_app ren env f l in
+	let _,(_,so,ok),capp = effect_app ren env f [l] in
 	let qapp = capp.c_post in
 	if ok then
 	  let q = optpost_app (tsubst_in_predicate so) qapp in

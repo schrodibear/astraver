@@ -1,11 +1,13 @@
 
-(*i $Id: loc.ml,v 1.3 2001-08-24 19:07:17 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.4 2002-03-01 16:29:49 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
 type t = int * int
 
 let dummy = (0,0)
+
+let join (b,_) (_,e) = (b,e)
 
 let file = ref (None : string option)
 

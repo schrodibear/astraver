@@ -1,11 +1,12 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.10 2002-02-28 16:15:13 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.11 2002-03-01 16:29:49 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
 open Logic
 open Types
+open Ast
 
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
@@ -71,7 +72,7 @@ val mlize_type : Types.type_v -> pure_type
 val occur_term : Ident.t -> term -> bool
 val occur_predicate : Ident.t -> predicate -> bool
 
-(*s Smart constructors. *)
+(*s Smart constructors for terms and predicates. *)
 
 val ttrue : term
 val tfalse : term
@@ -91,6 +92,10 @@ val pif : term -> predicate -> predicate -> predicate
 val pand : predicate -> predicate -> predicate
 val por : predicate -> predicate -> predicate
 val pnot : predicate -> predicate
+
+(*s functions over AST *)
+
+val arg_loc : parsed_info arg -> Loc.t
 
 (*s Pretty-print *)
 
