@@ -105,7 +105,7 @@ bin/top: $(CMO)
 # caduceus
 CCMO = src/linenum.cmo src/loc.cmo c/coptions.cmo \
        c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
-       c/ctyping.cmo c/cinterp.cmo c/creport.cmo c/cmain.cmo
+       c/creport.cmo c/ctyping.cmo c/cinterp.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 
 bin/caduceus.opt: $(CCMX)

@@ -145,10 +145,14 @@
 
   (* debug *)
   let rec explain_type fmt = function
-    | CTfun (_, t) -> fprintf fmt "fonction retournant %a" explain_type t
-    | CTpointer t -> fprintf fmt "pointeur sur %a" explain_type t
-    | CTarray (t, _) -> fprintf fmt "tableau[] de %a" explain_type t
-    | _ -> fprintf fmt "autre"
+    | CTfun (_, t) -> 
+	fprintf fmt "fonction retournant %a" explain_type t.ctype_node
+    | CTpointer t -> 
+	fprintf fmt "pointeur sur %a" explain_type t.ctype_node
+    | CTarray (t, _) -> 
+	fprintf fmt "tableau[] de %a" explain_type t.ctype_node
+    | _ -> 
+	fprintf fmt "autre"
 
   (* Interpretation of type expression.
      [gl] indicates a global declaration (implies the check for a type or 
@@ -158,6 +162,8 @@
     let st = storage_class specs in
     let sg = sign specs in
     let lg = length specs in
+    let noattr n = { ctype_node = n; ctype_storage = No_storage;
+		     ctype_const = false; ctype_volatile = false } in
     let rec base_type tyo = function
       | [] -> 
 	  (match tyo with 
@@ -177,9 +183,9 @@
 	  base_type tyo sp
     and full_type ty = function
       | Dsimple -> ty
-      | Dpointer d -> full_type (CTpointer ty) d
-      | Darray (d, so) -> full_type (CTarray (ty, so)) d
-      | Dfunction (d, pl, _) -> full_type (CTfun (params pl, ty)) d
+      | Dpointer d -> full_type (noattr (CTpointer ty)) d
+      | Darray (d, so) -> full_type (noattr (CTarray (ty, so))) d
+      | Dfunction (d, pl, _) -> full_type (noattr (CTfun (params pl, ty))) d
     and params pl = 
       List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
     and fields fl =
@@ -187,12 +193,14 @@
     in
     let bt = base_type None specs in
     let bt = apply_sign sg bt in
+    let bt = { ctype_node = bt;
+	       ctype_storage = st;
+	       ctype_const = List.exists ((=) Sconst) specs;
+	       ctype_volatile = List.exists ((=) Svolatile) specs } 
+    in
     let ty = full_type bt decl in
-    if debug then eprintf "%a@." explain_type ty;
-    { ctype_node = ty;
-      ctype_storage = st;
-      ctype_const = List.exists ((=) Sconst) specs;
-      ctype_volatile = List.exists ((=) Svolatile) specs }
+    if debug then eprintf "%a@." explain_type ty.ctype_node;
+    ty
 
   let interp_param (s, d, id) = interp_type false s d, id
   let interp_params = List.map interp_param
