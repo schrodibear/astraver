@@ -5,7 +5,7 @@ Require Export caduceus_spec_why.
 Require Import BinTree.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 368-4021 *)
+(* Why obligation from file "why/schorr_waite.why", characters 368-4040 *)
 Lemma schorr_waite_impl_po_1 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -61,6 +61,7 @@ Lemma schorr_waite_impl_po_2 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -104,7 +105,7 @@ assumption.
 left; exists (@nil pointer); constructor.
 Qed.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3123-3241 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3142-3260 *)
 Lemma schorr_waite_impl_po_3 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -139,6 +140,7 @@ Lemma schorr_waite_impl_po_3 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -184,7 +186,7 @@ apply I2; auto.
 left; exists (@nil pointer); constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3263-3320 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3282-3339 *)
 Lemma schorr_waite_impl_po_4 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -219,6 +221,7 @@ Lemma schorr_waite_impl_po_4 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -270,7 +273,7 @@ right; exists (@nil pointer); constructor.
 clear Test6; intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3444-3468 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3463-3487 *)
 Lemma schorr_waite_impl_po_5 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -305,6 +308,7 @@ Lemma schorr_waite_impl_po_5 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -357,7 +361,7 @@ Proof.
 intros; subst;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3421-3468 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3440-3487 *)
 Lemma schorr_waite_impl_po_6 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -392,6 +396,7 @@ Lemma schorr_waite_impl_po_6 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -449,6 +454,7 @@ Lemma schorr_waite_impl_po_6 :
    (~(x = null) ->
     ((reachable alloc l0 r1 t2 x) \/ (reachable alloc l0 r1 p2 x) ->
      (reachable alloc l r root x))))) /\
+  (* I0 *)
   (exists stack:plist, ((((((* I3 *) (clr_list alloc c0 l0 r1 p2 stack) /\
    (* I4 *)
    (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m0 p_0) <> 0))) /\
@@ -1162,7 +1168,7 @@ auto.
 Save.
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3586-3622 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3605-3641 *)
 Lemma schorr_waite_impl_po_7 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -1197,6 +1203,7 @@ Lemma schorr_waite_impl_po_7 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -1251,7 +1258,7 @@ Qed.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 3586-3622 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3605-3641 *)
 Lemma schorr_waite_impl_po_8 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -1286,6 +1293,7 @@ Lemma schorr_waite_impl_po_8 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -1352,6 +1360,7 @@ Lemma schorr_waite_impl_po_8 :
            (~(x = null) ->
             ((reachable alloc l1 r1 t2 x) \/ (reachable alloc l1 r1 p1 x) ->
              (reachable alloc l r root x))))) /\
+          (* I0 *)
           (exists stack:plist,
            ((((((* I3 *) (clr_list alloc c l1 r1 p1 stack) /\
            (* I4 *)
@@ -2279,7 +2288,7 @@ left.
 unfold reachable; exists (@nil pointer);constructor.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3822-3834 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3841-3853 *)
 Lemma schorr_waite_impl_po_9 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2314,6 +2323,7 @@ Lemma schorr_waite_impl_po_9 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -2358,7 +2368,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3867-3891 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3886-3910 *)
 Lemma schorr_waite_impl_po_10 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2393,6 +2403,7 @@ Lemma schorr_waite_impl_po_10 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -2441,7 +2452,7 @@ Proof.
 intros;subst;tauto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 3844-3891 *)
+(* Why obligation from file "why/schorr_waite.why", characters 3863-3910 *)
 Lemma schorr_waite_impl_po_11 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -2476,6 +2487,7 @@ Lemma schorr_waite_impl_po_11 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -2539,6 +2551,7 @@ Lemma schorr_waite_impl_po_11 :
            (~(x = null) ->
             ((reachable alloc l1 r0 t2 x) \/ (reachable alloc l1 r0 p2 x) ->
              (reachable alloc l r root x))))) /\
+          (* I0 *)
           (exists stack:plist,
            ((((((* I3 *) (clr_list alloc c l1 r0 p2 stack) /\
            (* I4 *)
@@ -3246,7 +3259,7 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 368-4021 *)
+(* Why obligation from file "why/schorr_waite.why", characters 368-4040 *)
 Lemma schorr_waite_impl_po_12 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3281,6 +3294,7 @@ Lemma schorr_waite_impl_po_12 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -3331,6 +3345,7 @@ Lemma schorr_waite_impl_po_12 :
                     ((reachable alloc l1 r1 t2 x) \/
                      (reachable alloc l1 r1 p2 x) ->
                      (reachable alloc l r root x))))) /\
+                  (* I0 *)
                   (exists stack:plist,
                    ((((((* I3 *) (clr_list alloc c1 l1 r1 p2 stack) /\
                    (* I4 *)
@@ -3376,7 +3391,7 @@ Save.
 
 
 
-(* Why obligation from file "why/schorr_waite.why", characters 368-4021 *)
+(* Why obligation from file "why/schorr_waite.why", characters 368-4040 *)
 Lemma schorr_waite_impl_po_13 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3411,6 +3426,7 @@ Lemma schorr_waite_impl_po_13 :
                    ((reachable alloc l0 r0 t1 x) \/
                     (reachable alloc l0 r0 p1 x) ->
                     (reachable alloc l r root x))))) /\
+                 (* I0 *)
                  (exists stack:plist,
                   ((((((* I3 *) (clr_list alloc c0 l0 r0 p1 stack) /\
                   (* I4 *)
@@ -3573,7 +3589,7 @@ auto.
 apply H3;auto.
 Save.
 
-(* Why obligation from file "why/schorr_waite.why", characters 726-3023 *)
+(* Why obligation from file "why/schorr_waite.why", characters 726-3042 *)
 Lemma schorr_waite_impl_po_14 : 
   forall (root: pointer),
   forall (alloc: alloc_table),
@@ -3599,6 +3615,7 @@ Lemma schorr_waite_impl_po_14 :
    (~(x = null) ->
     ((reachable alloc l r t x) \/ (reachable alloc l r p x) ->
      (reachable alloc l r root x))))) /\
+  (* I0 *)
   (exists stack:plist, ((((((* I3 *) (clr_list alloc c l r p stack) /\
    (* I4 *) (forall (p_0:pointer), ((in_list p_0 stack) -> (acc m p_0) <> 0))) /\
    (* I5 *)

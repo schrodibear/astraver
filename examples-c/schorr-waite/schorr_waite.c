@@ -28,6 +28,10 @@ typedef struct struct_node {
   @   reads p1->r,p1->l 
   @*/
 
+
+/*@ axiom reachable_refl : \forall node p ; reachable(p,p) */
+
+
 /*@ predicate unmarked_reachable(node p1, node p2) 
   @   reads p1->r,p1->l,p1->m 
   @*/
@@ -76,7 +80,7 @@ void schorr_waite(node root) {
     @    (reachable(t,x) || reachable(p,x) => 
     @        \old(reachable(root,x)))) 
     @ &&
-    @ \exists plist stack;
+    @ (I0 :: \exists plist stack;
     @   (I3 :: clr_list(p,stack)) 
     @   &&
     @   (I4 :: \forall node p; in_list(p,stack) => p->m) 
@@ -100,7 +104,7 @@ void schorr_waite(node root) {
     @      ! \old(reachable(root,x)) => x->m == \old(x->m)) 
     @    &&
     @   (I9 :: \forall node x; 
-    @      x != \null && \old(reachable(root,x)) => \valid(x)) 
+    @      x != \null && \old(reachable(root,x)) => \valid(x))) 
     @
     @ variant weight(p,t) for order_mark_m_and_c_and_stack
     @

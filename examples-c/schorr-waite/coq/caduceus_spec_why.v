@@ -35,6 +35,15 @@ Defined.
 exact reachable_elements.
 Defined.
 
+(*Why axiom*) Lemma reachable_refl :
+  (forall (alloc:alloc_table),
+   (forall (l:((memory) pointer)),
+    (forall (r:((memory) pointer)),
+     (forall (p:pointer), (reachable alloc l r p p))))).
+exists (@nil pointer).
+constructor.
+Qed.
+
 (*Why logic*) Definition unmarked_reachable :
   alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
   -> pointer -> pointer -> Prop.
