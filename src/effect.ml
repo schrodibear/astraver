@@ -1,14 +1,16 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: effect.ml,v 1.14 2002-06-24 09:37:35 filliatr Exp $ i*)
+(*i $Id: effect.ml,v 1.15 2002-07-04 09:31:12 filliatr Exp $ i*)
 
 (*s Effects. *)
 
 open Ident
 
-(*s An effect is composed of two lists [(r,w)] of variables.
-    The first one is the list of all variables (the input)
-    and the second one is the list of possibly modified variables (the output)
+(*s An effect is composed of three sets of variables.
+
+    The first one is the set of all variables (the input),
+    the second one is the set of possibly modified variables (the output),
+    and the third one the set of possibly raised exceptions.
  
     INVARIANTS: 
     1. there are no duplicate elements in each list 
@@ -18,11 +20,14 @@ open Ident
     but order must not change when a substitution is applied and thus
     lists are preferred *)
 
-type t = Ident.t list * Ident.t list
+type t = { 
+  input : Ident.t list;
+  output : Ident.t list;
+  exns : Ident.set }
 
 (*s the empty effect *)
 
-let bottom = ([], [])
+let bottom = { input = []; output = []; exns = Idset.empty }
 
 (*s basic operations *)
 
@@ -54,30 +59,40 @@ let list_union l1 l2 =
 
 (*s adds reads and writes variables *)
 
-let add_read x ((r,w) as e) = (list_add x r, w)
+let add_read x e = { e with input = list_add x e.input }
 
 let add_reads = Idset.fold add_read
 
-let add_write x (r,w) = (list_add x r, list_add x w)
+let add_write x e = 
+  { input = list_add x e.input; output = list_add x e.output; exns = e.exns }
 
 let add_writes = Idset.fold add_write
 
+let add_exn x e = { e with exns = Idset.add x e.exns }
+
+let add_exns = Idset.fold add_exn
+
 (*s access *)
 
-let get_reads = fst
-let get_writes = snd
-let get_repr e = e
+let get_reads e = e.input
+let get_writes e = e.output
+let get_exns e = Idset.elements e.exns
+let get_repr e = e.input, e.output, Idset.elements e.exns
 
 (*s tests *)
 
-let is_read  (r,_) id = List.mem id r
-let is_write (_,w) id = List.mem id w
+let is_read  e id = List.mem id e.input
+let is_write e id = List.mem id e.output
+let is_exn e id = Idset.mem id e.exns
 
-let keep_writes (_,w) = (w,w)
+let keep_writes e = { e with input = e.output }
 
 (*s union and disjunction *)
 
-let union (r1,w1) (r2,w2) = (list_union r1 r2, list_union w1 w2)
+let union e1 e2 =
+  { input = list_union e1.input e2.input;
+    output = list_union e1.output e2.output;
+    exns = Idset.union e1.exns e2.exns }
 
 (*s comparison relation *)
 
@@ -87,11 +102,16 @@ let inf e1 e2 = failwith "effects: inf: not yet implemented"
 
 (*s remove *)
 
-let remove x (r,w) = (list_remove x r, list_remove x w)
+let remove x e = 
+  { e with 
+      input = list_remove x e.input;
+      output = list_remove x e.output }
+
+let remove_exn x e = { e with exns = Idset.remove x e.exns }
 
 (*s occurrence *)
 
-let occur x (r,w) = List.mem x r || List.mem x w
+let occur x e = List.mem x e.input || List.mem x e.output
 
 (*s substitution *)
 
@@ -102,7 +122,8 @@ let list_subst x x' l =
   in
   if List.mem x l then subst l else l
 
-let subst_one x x' (r,w) = (list_subst x x' r, list_subst x x' w)
+let subst_one x x' e = 
+  { e with input = list_subst x x' e.input; output = list_subst x x' e.output }
 
 let subst = Idmap.fold subst_one
 
@@ -116,7 +137,7 @@ let rec print_list sep print fmt = function
   | [x] -> print fmt x
   | x :: r -> print fmt x; sep fmt (); print_list sep print fmt r
 
-let print fmt (r,w) =
+let print fmt { input = r; output = w; exns = e } =
   fprintf fmt "@[";
   if r <> [] then begin
     fprintf fmt "reads ";
@@ -127,6 +148,12 @@ let print fmt (r,w) =
     fprintf fmt "writes ";
     print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt w;
   end;
-  if r <> [] || w <> [] then fprintf fmt "@ ";
+  let e = Idset.elements e in
+  if w <> [] && e <> [] then fprintf fmt "@ ";
+  if e <> [] then begin
+    fprintf fmt "raises ";
+    print_list (fun fmt () -> fprintf fmt ",@ ") Ident.print fmt e;
+  end;
+  if r <> [] || w <> [] || e <> [] then fprintf fmt "@ ";
   fprintf fmt "@]"
 

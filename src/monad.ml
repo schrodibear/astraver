@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.38 2002-06-24 10:59:55 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.39 2002-07-04 09:31:13 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -48,6 +48,9 @@ let arrow_pred ren env v pl =
 let arrow_vars = 
   List.fold_right (fun (id,v) t -> TTarrow ((id, CC_var_binder v), t))
 
+let trad_exn_type =
+  let exn_id id = Ident.create ("ET_" ^ Ident.string id) in
+  List.fold_right (fun id t -> TTapp (exn_id id, t))
 
 (*s Translation of effects types in CC types.
   
@@ -56,10 +59,10 @@ let arrow_vars =
 
 let rec trad_type_c ren env k = 
   let ((_,v),e,p,q) = decomp_kappa k in
-  let i,o = get_repr e in
+  let i,o,x = get_repr e in
   let before = label_name () in
   let ren' = next (push_date ren before) o in
-  let lo = output ren' env (v,o) in
+  let lo = output ren' env (v,o,x) in
   let ty = product before ren' env lo q in
   let ty = arrow_pred ren env ty p in
   let li = input ren env i in
@@ -93,14 +96,9 @@ and trad_type_v ren env = function
 and input ren env i =
   prod ren env i
 
-and output ren env (v,o) =
+and output ren env (v,o,x) =
   let tv = trad_type_v ren env v in
-  (prod ren env o) @ [result,tv]
-
-and input_output ren env c =
-  let ((_,v),e,_,_) = decomp_kappa c in
-  let i,o = get_repr e in
-  input ren env i, output ren env (v,o)
+  (prod ren env o) @ [result, trad_exn_type x tv]
 
 and prod ren env g = 
   List.map (fun id -> (current_var ren id, trad_type_in_env ren env id)) g
@@ -152,7 +150,8 @@ let unit info t ren =
 	    tsubst_in_predicate (subst_one result t) c.a_value
 	  in
 	  let ht = 
-	    let _,o = get_repr ef in
+	    let _,o,x = get_repr ef in
+	    assert (x = []); (* TODO *)
 	    let ren' = Rename.next ren (result :: o) in
 	    let result' = current_var ren' result in
 	    let bl = 
@@ -197,7 +196,8 @@ let gen_compose isapp info1 e1 e2 ren =
   let k1 = info1.kappa in
   let (res1,v1),ef1,p1,q1 = decomp_kappa k1 in
   let ren = push_date ren info1.label in
-  let r1,w1 = get_repr ef1 in
+  let r1,w1,x1 = get_repr ef1 in
+  assert (x1 = []); (* TODO *)
   let ren' = next ren w1 in
   let res1,ren' = fresh ren' res1 in
   let tt1 = trad_type_v ren env v1 in

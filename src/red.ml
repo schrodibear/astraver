@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.18 2002-06-25 12:52:44 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.19 2002-07-04 09:31:13 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -43,6 +43,8 @@ and cc_type_subst s = function
       TTpred (tsubst_in_predicate s p)
   | TTpure _ as t -> 
       t
+  | TTapp (id, t) ->
+      TTapp (id, cc_type_subst s t)
 
 (*s Eta and iota redexes. *)
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.51 2002-06-21 15:20:24 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.52 2002-07-04 09:31:13 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -89,9 +89,13 @@ let check_effect loc env e =
   let check_ref id =
     if not (Env.is_ref env id) then Error.unbound_reference id loc
   in
-  let r,w = Effect.get_repr e in
+  let check_exn id =
+    if not (Env.is_exception id) then Error.unbound_exception id loc
+  in
+  let r,w,x = Effect.get_repr e in
   List.iter check_ref r;
-  List.iter check_ref w
+  List.iter check_ref w;
+  List.iter check_exn x
 
 let rec check_type_v loc lab env = function
   | Ref v -> 

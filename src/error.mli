@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.mli,v 1.11 2002-07-04 08:58:13 filliatr Exp $ i*)
+(*i $Id: error.mli,v 1.12 2002-07-04 09:31:13 filliatr Exp $ i*)
 
 (*s Errors. *)
 
@@ -14,6 +14,7 @@ type error =
   | UnboundReference of Ident.t
   | UnboundArray of Ident.t
   | UnboundLabel of string
+  | UnboundException of Ident.t
   | Clash of Ident.t
   | ClashExn of Ident.t
   | Undefined of Ident.t
@@ -56,6 +57,7 @@ val unbound_variable : Ident.t -> Loc.t option -> 'a
 val unbound_reference : Ident.t -> Loc.t option -> 'a
 val unbound_array : Ident.t -> Loc.t option -> 'a
 val unbound_label : string -> Loc.t option -> 'a
+val unbound_exception : Ident.t -> Loc.t option -> 'a
 
 val clash : Ident.t -> Loc.t option -> 'a
 val not_defined : Ident.t -> 'a

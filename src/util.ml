@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.36 2002-06-21 14:24:29 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.37 2002-07-04 09:31:13 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -397,6 +397,8 @@ let rec print_cc_type fmt = function
       fprintf fmt "{%a | %a}" print_tuple bl print_cc_type q
   | TTpred p ->
       print_predicate fmt p
+  | TTapp (id, t) ->
+      fprintf fmt "(%a %a)" Ident.print id print_cc_type t
 
 and print_tuple fmt =
   print_list comma 
