@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: simplify.ml,v 1.4 2003-10-27 13:32:20 filliatr Exp $ i*)
+(*i $Id: simplify.ml,v 1.5 2003-10-27 16:13:37 filliatr Exp $ i*)
 
 (*s Simplify's output *)
 
@@ -186,7 +186,9 @@ let print_obligation fmt (loc, o, s) =
   fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s
 
 let prelude = ref 
-"(BG_PUSH (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t))))"
+"(BG_PUSH 
+   (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t)))
+   (DISTINCT |@true| |@false|))"
 
 let output_file fwe =
   let sep = ";; DO NOT EDIT BELOW THIS LINE" in
