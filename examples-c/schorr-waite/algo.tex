@@ -81,8 +81,8 @@ when the right child is explored, and goes back up.
 \put(-60,160){\rnode{fig1}}
 \put(-80,130){\rnode{n11}}
 \put(-60,130){\rnode{n12}}
-\ncline[linestyle=dotted]{n1}{n11}
-\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{-}{n1}{n11}
+\ncline[linestyle=dotted]{-}{n1}{n12}
 \ncline{n0}{n1}
 \ncline{n0}{n2}
 \ncline[nodesepB=1mm]{n2}{null2}
@@ -100,8 +100,8 @@ when the right child is explored, and goes back up.
 \put(0,120){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(0,130){\rnode{n11}}
 \put(20,130){\rnode{n12}}
-\ncline[linestyle=dotted]{n1}{n11}
-\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{-}{n1}{n11}
+\ncline[linestyle=dotted]{-}{n1}{n12}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
@@ -121,10 +121,10 @@ when the right child is explored, and goes back up.
 \put(80,120){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(100,130){\rnode{n11}}
 \put(80,130){\rnode{n12}}
-\ncline[linestyle=dotted]{n1}{n11}
-\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{-}{n1}{n11}
+\ncline[linestyle=dotted]{-}{n1}{n12}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
-\ncarc[arcangleA=120,linewidth=1]{n2}{n0}
+\ncarc[arcangleA=150,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null3}
 \ncline[nodesepA=1mm]{p}{n2}
@@ -137,15 +137,15 @@ when the right child is explored, and goes back up.
 \put(-70,40){\unode{n1}}
 \put(-90,40){\mnode{n2}}
 \put(-110,60){\rnode{p}{\makebox(0,0)[rb]{p}}}
-\put(-90,30){\rnode{t}{\makebox(0,0)[rb]{t}}}
-\put(-110,20){\rnode{null2}{\makebox(0,0)[t]{\tiny NULL}}}
-\put(-80,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
+\put(-90,0){\rnode{t}{\makebox(0,0)[rt]{t}}}
+\put(-110,20){\rnode{null2}{\makebox(0,0)[c]{\tiny NULL}}}
+\put(-80,20){\rnode{null3}{\makebox(0,0)[c]{\tiny NULL}}}
 \put(-80,30){\rnode{n11}}
 \put(-60,30){\rnode{n12}}
-\ncline[linestyle=dotted]{n1}{n11}
-\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{-}{n1}{n11}
+\ncline[linestyle=dotted]{-}{n1}{n12}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
-\ncarc[arcangleA=120,linewidth=1]{n2}{n0}
+\ncarc[arcangleA=-120,linewidth=1]{n2}{n0}
 \ncline{n0}{n1}
 \ncline[nodesepA=1mm]{p}{n2}
 \ncline[nodesep=1mm]{t}{null3}
@@ -163,8 +163,8 @@ when the right child is explored, and goes back up.
 \put(0,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(0,30){\rnode{n11}}
 \put(20,30){\rnode{n12}}
-\ncline[linestyle=dotted]{n1}{n11}
-\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{-}{n1}{n11}
+\ncline[linestyle=dotted]{-}{n1}{n12}
 \ncline{n0}{n1}
 \ncline[nodesepB=1mm]{n2}{null2}
 \ncline[nodesepB=1mm]{n2}{null3}
@@ -184,8 +184,8 @@ when the right child is explored, and goes back up.
 \put(80,20){\rnode{null3}{\makebox(0,0)[t]{\tiny NULL}}}
 \put(100,30){\rnode{n11}}
 \put(80,30){\rnode{n12}}
-\ncline[linestyle=dotted]{n1}{n11}
-\ncline[linestyle=dotted]{n1}{n12}
+\ncline[linestyle=dotted]{-}{n1}{n11}
+\ncline[linestyle=dotted]{-}{n1}{n12}
 \put(90,60){\rnode{fig1}}
 \ncline{n0}{n2}
 \ncline[nodesepB=1mm]{n2}{null2}
