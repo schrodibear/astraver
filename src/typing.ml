@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.43 2002-04-18 13:52:29 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.44 2002-04-18 15:22:52 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -196,6 +196,9 @@ let make_node p env l k =
 let make_lnode p env k = 
   { desc = p; info = { env = env; label = label_name (); kappa = k } }
 
+let make_var x t env =
+  make_lnode (Var x) env (type_c_of_v t)
+
 let coerce p env k = 
   let l = label_name () in Coerce (make_node p env l k)
 
@@ -371,7 +374,7 @@ and typef_desc lab env loc = function
       let ef = Effect.add_read x efe in
       let _,ty = dearray_type (type_in_env env x) in
       let s,p = match t_e.desc with
-	| Expression c when t_e.info.kappa.c_post = None ->
+	| Expression c when post t_e = None ->
 	    let t = make_raw_access env (x,x) c in
 	    let pre = anonymous_pre true (make_pre_access env x c) in
 	    Expression t, pre :: t_e.info.kappa.c_pre
@@ -390,7 +393,27 @@ and typef_desc lab env loc = function
       let ef2 = t_e2.info.kappa.c_effect in
       let ef = Effect.add_write x (Effect.union ef1 ef2) in
       let v = type_v_unit in
-      TabAff (check, x, t_e1, t_e2), (v,ef), []
+      let d = match t_e1.desc, post t_e1, t_e2.desc, post t_e2 with
+	| Expression _, None, Expression _, None ->
+	    (* simple enough to be left as is *)
+	    TabAff (check, x, t_e1, t_e2)
+	| _ ->
+	    (*i TODO: we cannot prove 0 <= e1 < size(x)! i*)
+	    (* turned into [let v2 = e2 in let v1 = e1 in x[v1] := v2] *)
+	    let v1 = fresh_var () in
+	    let v2 = fresh_var () in
+	    let env2 = Env.add v2 et env in
+	    let env1 = Env.add v1 type_v_int env2 in
+	    let varv1 = make_var v1 type_v_int env2 in
+	    let varv2 = make_var v2 et env2 in
+	    let k = type_c_of_v type_v_unit in
+	    LetIn (v2, t_e2,
+		   make_lnode 
+		     (LetIn (v1, t_e1,
+			     make_lnode (TabAff (check, x, varv1, varv2))
+			       env1 k)) env2 k)
+      in
+      d, (v,ef), []
 
   | Seq bl ->
       let bl,v,ef = typef_block lab env bl in

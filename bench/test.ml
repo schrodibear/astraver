@@ -5,10 +5,7 @@ parameter x : int ref
 
 parameter t : array 10 of int
 
-let p = (t[begin x := 0; !x end] := !x) { t[0] = x@ }
+let u = let v = begin x := 0; !x end { result=0 } in t[v]
 
-(*
-let rec f (x:int) : unit { variant x } = 
-  { x >= 0 } if x > 0 then (f (x-1)) else void
-*)
+let p = (t[begin x := 0; !x end { result=0 }] := !x) { t[0] = x@ }
 

@@ -42,9 +42,13 @@ Lemma swap_po_3 :
   (result: Z)
   (Post1: result = (access t i))
   (Pre2: `0 <= j` /\ `j < N`)
-  (exchange (store (store t i (access t j)) j result) t i j).
+  (t0: (array N Z))
+  (Post2: t0 = (store t i (access t j)))
+  (t1: (array N Z))
+  (Post3: t1 = (store t0 j result))
+  (exchange t1 t i j).
 Proof.
-Intros; Rewrite Post1.
+Intros; Rewrite Post3; Rewrite Post2; Rewrite Post1.
 Auto with datatypes.
 Save.
 

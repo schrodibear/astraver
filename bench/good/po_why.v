@@ -199,32 +199,26 @@ Save.
 Lemma p18_po_1 : 
   (t: (array `10` Z))
   (x: Z)
-  ((x0:Z) (x0 = `0` -> (access (store t x0 x) `0`) = x)).
+  (result: Z)
+  (Post1: result = x)
+  (x0: Z)
+  (Post2: x0 = `0`)
+  (access (store t x0 result) `0`) = x.
 Proof. (* p18_po_1 *)
 Intros.
-Rewrite H; Rewrite store_def_1; Omega.
+Rewrite Post1; Rewrite Post2; Rewrite store_def_1; Omega.
 Save.
 
 Lemma p18_po_2 : 
   (t: (array `10` Z))
   (x: Z)
   (result: Z)
-  (Post2: ((x0:Z) (x0 = `0` -> (access (store t x0 result) `0`) = x)))
+  (Post1: result = x)
   (result0: Z)
+  (Post4: (access (store t result0 result) `0`) = x)
+  (result1: Z)
+  (Post7: (access (store t result0 result1) `0`) = x)
   `0 <= result0` /\ `result0 < 10`.
 Proof. (* p18_po_2 *)
 
 Save.
-
-Lemma p18_po_3 : 
-  (t: (array `10` Z))
-  (x: Z)
-  (result: Z)
-  (Post2: ((x0:Z) (x0 = `0` -> (access (store t x0 result) `0`) = x)))
-  (result0: Z)
-  (Pre1: `0 <= result0` /\ `result0 < 10`)
-  (access (store t result0 result) `0`) = x.
-Proof. (* p18_po_3 *)
-(* FILL PROOF HERE *)
-Save.
-
