@@ -249,9 +249,7 @@ constant_expression
 declaration
         : declaration_specifiers SEMICOLON { uns() }
         | declaration_specifiers init_declarator_list SEMICOLON 
-	    { List.map (fun (p,d) -> 
-			  let v = if p then CTpointer $1 else $1 in
-			  Ctypedecl (loc(), d, v)) $2 }
+	    { List.map (fun ((n,d),i) -> Cdecl (loc(), $1, d, n, i)) $2 }
 	| WDECL { [Cspecdecl $1] } /* ADDED FOR WHY */
         ;
 
@@ -271,17 +269,14 @@ init_declarator_list
 
 init_declarator
         : declarator 
-            { $1 }
+            { $1, None }
         | declarator EQUAL c_initializer 
-	    { match $1 with 
-		| p, CDvar (id, _) -> p, CDvar (id, Some $3) 
-		| d -> d 
-	    }
+	    { $1, Some $3 }
         ;
 
 storage_class_specifier
         : TYPEDEF { Typedef }
-        | EXTERN { Extern }
+        | EXTERN { Storage Extern }
         | STATIC { uns () }
         | AUTO { uns () }
         | REGISTER { uns () }
@@ -362,25 +357,25 @@ type_qualifier
         ;
 
 declarator
-        : pointer direct_declarator { true, $2 }
-        | direct_declarator { false, $1 }
+        : pointer direct_declarator { let id,d = $2 in id, CDpointer d }
+        | direct_declarator { $1 }
         ;
 
 direct_declarator
         : IDENTIFIER 
-            { CDvar (Ident.create $1, None) }
+            { Ident.create $1, CDsimple }
         | LPAR declarator RPAR 
 	    { uns() }
         | direct_declarator LSQUARE constant_expression RSQUARE 
 	    { uns() }
         | direct_declarator LSQUARE RSQUARE 
-	    { match $1 with CDvar (id,_) -> CDarr (id, None) | _ -> uns () }
+	    { let id,d = $1 in id, CDarray (d, None) }
         | direct_declarator LPAR parameter_type_list RPAR annot 
-	    { match $1 with CDvar (id,_) -> CDfun (id, $3, $5) | _ -> uns () }
+	    { let id,d = $1 in id, CDfunction (d, $3, $5) }
         | direct_declarator LPAR identifier_list RPAR 
 	    { uns() }
         | direct_declarator LPAR RPAR annot 
-            { match $1 with CDvar (id,_) -> CDfun (id, [], $4) | _ -> uns () }
+            { let id,d = $1 in id, CDfunction (d, [], $4) }
         ;
 
 /* ADDED FOR WHY */
@@ -413,14 +408,9 @@ parameter_list
         ;
 
 parameter_declaration
-        : declaration_specifiers declarator 
-            { match $2 with 
-		| false, CDvar (id, _) -> $1, id 
-		| true, CDvar (id, _) -> CTpointer $1, id 
-		| false, CDarr (id, _) -> CTarray $1, id
-		| _ -> uns() }
+        : declaration_specifiers declarator { let id,d = $2 in $1, d, id }
         | declaration_specifiers abstract_declarator { uns() }
-        | declaration_specifiers { ($1, Ident.anonymous) }
+        | declaration_specifiers { ($1, CDsimple, Ident.anonymous) }
         ;
 
 identifier_list
@@ -551,9 +541,9 @@ function_definition
         | declaration_specifiers declarator compound_statement_with_post
 	    { let (lb,b,q) = $3 in
               match $2 with
-		| false, CDfun (id, pl, p) -> 
+		| id, CDfunction (d, pl, p) -> 
 		    let lb = add_pre_loc lb p in
-		    Cfundef (loc (), id, pl, $1, (lb,p,b,q))
+		    Cfundef (loc (), $1, d, id, pl, (lb,p,b,q))
 		| _ -> uns () }
         | declarator declaration_list compound_statement 
 	    { uns () }

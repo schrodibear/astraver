@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.18 2003-06-12 11:18:32 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.19 2003-10-29 16:51:19 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -30,8 +30,6 @@ type ctype =
   | CTarray of ctype
   | CTpointer of ctype
   | CTfun of ctype list * ctype
-
-type parameters = (ctype * Ident.t) list
 
 type assign_operator = 
   | Aequal | Amul | Adiv | Amod | Aadd | Asub | Aleft | Aright 
@@ -59,12 +57,24 @@ type cexpr =
 
 type c_initializer = cexpr option
 
-type storage_class = Typedef | Extern
+type storage_class = Extern
+
+type specifier = Typedef | Storage of storage_class
+
+type specifiers = specifier list
 
 type declarator =
+  | CDsimple
+  | CDpointer of declarator
+  | CDarray of declarator * constant_expression option
+  | CDfunction of declarator * parameters * annot option
+(*
   | CDvar of Ident.t * c_initializer
   | CDarr of Ident.t * constant_expression option
   | CDfun of Ident.t * parameters * annot option
+*)
+
+and parameters = (ctype * declarator * Ident.t) list
 
 type cstatement = 
   | CSnop of Loc.t
@@ -86,7 +96,8 @@ and annotated_block = Loc.t * annot option * block * annot option
 
 and decl = 
   | Cspecdecl of annot
-  | Ctypedecl of Loc.t * declarator * ctype
-  | Cfundef of Loc.t * Ident.t * parameters * ctype * annotated_block
+  | Cdecl of Loc.t * ctype * declarator * Ident.t * c_initializer
+  | Cfundef of Loc.t * 
+      ctype * declarator * Ident.t * parameters * annotated_block
 
 type file = decl list

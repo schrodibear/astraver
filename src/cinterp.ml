@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.38 2003-06-12 12:35:48 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.39 2003-10-29 16:51:19 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -181,6 +181,14 @@ let expected_num l =
 
 let invalid_binop l = 
   raise_located l (AnyMessage "invalid operands to binary operator")
+
+(*s Declarators *)
+
+let rec interp_declarator l ct = function
+  | CDsimple -> ct
+  | CDpointer d -> CTpointer (interp_declarator l ct d)
+  | CDarray (d, _) -> CTarray (interp_declarator l ct d)
+  | CDfunction _ -> unsupported l
 
 (*s Binary operations *)
 
@@ -694,7 +702,8 @@ and interp_block l cenv et abrupt (d,b) =
   let rec interp_locals cenv = function
     | [] ->
 	cenv, []
-    | Ctypedecl (l, CDvar (id, b), v) :: dl ->
+    | Cdecl (l, v, d, id , b) :: dl ->
+	let v = interp_declarator l v d in
 	let m = match b with 
 	  | None -> 
 	      (match v with
@@ -750,8 +759,8 @@ let interp_annotated_block cenv et (l, p, bl, q) =
   in
   { pdesc = bl.pdesc; pre = p; oblig = []; post = q; ploc=l }, st.abrupt_return
 
-let interp_binder (v, id) = 
-  let t = match v with
+let interp_binder l (v, d, id) = 
+  let t = match interp_declarator l v d with
     | CTpure pt -> PVpure pt
     | CTpointer (CTpure pt) -> PVref (PVpure pt)
     | CTarray (CTpure pt) -> PVarray (PVpure pt)
@@ -759,10 +768,10 @@ let interp_binder (v, id) =
   in
   id, BindType t
 
-let interp_binders = List.map interp_binder
+let interp_binders l = List.map (interp_binder l)
 
-let interp_fun_type bl v =
-  CTfun (List.map (fun (v,_) -> v) bl, CTpure v), false
+let interp_fun_type l bl v =
+  CTfun (List.map (fun (v,d,_) -> interp_declarator l v d) bl, CTpure v), false
 
 let interp_fun id cenv l bl v (l,p,bs,q) =
   let bs,var = 
@@ -775,12 +784,12 @@ let interp_fun id cenv l bl v (l,p,bs,q) =
   in
   let isrec = var <> None in
   let cenv' = 
-    let blv = interp_fun_type bl v in
+    let blv = interp_fun_type l bl v in
     let cenv = if isrec then Idmap.add id blv cenv else cenv in
     List.fold_right 
-      (function
-	 | (CTpure _ as v, id) -> Idmap.add id (v, false)
-	 | (CTpointer _ | CTarray _ as v, id) -> Idmap.add id (v, true)
+      (fun (v,d,id) -> match interp_declarator l v d with
+	 | (CTpure _ as v) -> Idmap.add id (v, false)
+	 | (CTpointer _ | CTarray _ as v) -> Idmap.add id (v, true)
 	 | _ -> assert false)
       bl cenv 
   in
@@ -788,9 +797,9 @@ let interp_fun id cenv l bl v (l,p,bs,q) =
   let bs',ar = interp_annotated_block cenv' (CTpure v) bs in
   let e = match var with
     | Some var ->
-	mk_ptree l (Srec (id, interp_binders bl, PVpure v, var, bs')) [] None
+	mk_ptree l (Srec (id, interp_binders l bl, PVpure v, var, bs')) [] None
     | None -> 
-	mk_ptree l (Slam (interp_binders bl, bs')) [] None
+	mk_ptree l (Slam (interp_binders l bl, bs')) [] None
   in
   e, ar
 		    
@@ -827,30 +836,34 @@ let interp_why_decl d cenv = match d with
 (*s C declarations *)
 
 let interp_decl cenv = function
-  (* pt id; *)
-  | Ctypedecl (l, CDvar (id, _), (CTpure pt as v)) -> 
-      [ Parameter (l, [id], PVref (PVpure pt)) ],
-      Idmap.add id (v, true) cenv
-  (* pt* id; *)
-  | Ctypedecl (l, CDvar (id, _), (CTpointer (CTpure pt) as v)) -> 
-      [ Parameter (l, [id], PVref (PVpure pt)) ],
-      Idmap.add id (v, true) cenv
-  (* pt id[]; *)
-  | Ctypedecl (l, CDarr (id, _), (CTpure pt as v)) ->
-      [ Parameter (l, [id], PVarray (PVpure pt)) ],
-      Idmap.add id (CTarray v, true) cenv
+  | Cdecl (l, ct, (CDsimple | CDpointer _ | CDarray _ as d), id, _) ->
+      (match interp_declarator l ct d with
+	 (* pt id; *)
+	 | CTpure pt as v -> 
+	     [ Parameter (l, [id], PVref (PVpure pt)) ],
+	     Idmap.add id (v, true) cenv
+         (* pt* id; *)
+	 | CTpointer (CTpure pt) as v -> 
+	     [ Parameter (l, [id], PVref (PVpure pt)) ],
+	     Idmap.add id (v, true) cenv
+         (* pt id[]; *)
+	 | CTarray (CTpure pt as v) ->
+	     [ Parameter (l, [id], PVarray (PVpure pt)) ],
+	     Idmap.add id (CTarray v, true) cenv
+	 | _ -> 
+	     assert false)
   (* pt id(bl); *)
-  | Ctypedecl (l, CDfun (id, bl, an), CTpure pt) -> 
-      let bl = if bl = [] then [CTpure PTunit, anonymous] else bl in
+  | Cdecl (l, CTpure pt, CDfunction (CDsimple, bl, an), id, _) -> 
+      let bl = if bl = [] then [CTpure PTunit, CDsimple, anonymous] else bl in
       let k = interp_c_spec pt an in
-      let blp = interp_binders bl in
+      let blp = interp_binders l bl in
       [ Parameter (l, [id], PVarrow (blp, k)) ],
-      Idmap.add id (interp_fun_type bl pt) cenv
-  | Ctypedecl _ ->
+      Idmap.add id (interp_fun_type l bl pt) cenv
+  | Cdecl _ ->
       assert false
-  | Cfundef (l, id, bl, CTpure pt, bs) ->
-      let bl = if bl = [] then [CTpure PTunit, anonymous] else bl in
-      let blv = interp_fun_type bl pt in
+  | Cfundef (l, CTpure pt, CDsimple, id, bl, bs) ->
+      let bl = if bl = [] then [CTpure PTunit, CDsimple, anonymous] else bl in
+      let blv = interp_fun_type l bl pt in
       let e,ar = interp_fun id cenv l bl pt bs in
       let d = [ Program (id, e) ] in
       (if ar then (Exception (l, !return_exception, Some pt)) :: d else d),

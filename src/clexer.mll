@@ -78,7 +78,8 @@ rule token = parse
   | "volatile"              { VOLATILE }
   | "while"                 { WHILE }
 
-  | rL (rL | rD)*           { IDENTIFIER (lexeme lexbuf) }
+  | rL (rL | rD)*       { let s = lexeme lexbuf in
+			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
 
   | '0'['x''X'] rH+ rIS?    { CONSTANT (lexeme lexbuf)}
   | '0' rD+ rIS?            { CONSTANT (lexeme lexbuf) }
