@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.38 2002-11-14 08:54:03 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.39 2002-11-21 14:04:08 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -167,7 +167,6 @@ let well_founded_induction = create "well_founded_induction"
 
 let p_and = create "and"
 let p_or = create "or"
-let p_not = create "not"
 
 (*s tests *)
 

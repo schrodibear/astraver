@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.8 2002-11-21 10:38:31 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.9 2002-11-21 14:04:08 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -73,6 +73,17 @@ let rec print_ctype fmt = function
   | CTfun (ctl, ct) -> 
       fprintf fmt "%a (%a)" print_ctype ct (print_list comma print_ctype) ctl
 
+let loc_of_expr = function
+  | CEconst (l, _) -> l
+  | CEvar (l, _) -> l
+  | CEarrget (l, _, _) -> l
+  | CEseq (l, _, _) -> l
+  | CEassign (l, _, _, _) -> l
+  | CEunary (l, _, _) -> l
+  | CEbinary (l, _, _, _) -> l
+  | CEcall (l, _, _) -> l
+  | CEcond (l, _, _, _) -> l
+
 (* the environment gives the C type, together with the type of the variable
    in the ML translation *)
 
@@ -101,14 +112,27 @@ let ml_let_tmp l e1 k2 =
   let tmp = fresh_var () in 
   let e2,r = k2 tmp in
   mk_expr l (Sletin (tmp, e1, e2)), r
+let ml_arrget l id e = mk_expr l (Sarrget (true, id, e))
+let ml_unop l op e = mk_expr l (Sapp (mk_expr l (Svar op), Sterm e))
 
 let c_true l = ml_const l (ConstInt 1)
 let c_false l = ml_const l (ConstInt 0)
 
-let int_of_bool l e = mk_expr l (Sif (e, c_true l, c_false l))
+let int_of_bool l e = ml_if l e (c_true l) (c_false l)
 
 let float_of_int l e = 
   mk_expr l (Sapp (ml_var l t_float_of_int, Sterm e))
+
+(*s C errors *)
+
+let unsupported l =
+  raise_located l (AnyMessage "unsupported C construct")
+
+let expected_num l =
+  raise_located l (ExpectedType (fun fmt -> fprintf fmt "int or float"))
+
+let invalid_binop l = 
+  raise_located l (AnyMessage "invalid operands to binary operator")
 
 (*s Binary operations *)
 
@@ -141,12 +165,6 @@ let interp_float_binop = function
 
 let mk_binop l op e1 e2 =
   mk_expr l (Sapp (mk_expr l (Sapp (mk_expr l (Svar op), Sterm e1)), Sterm e2))
-
-let expected_num l =
-  raise_located l (ExpectedType (fun fmt -> fprintf fmt "int or float"))
-
-let invalid_binop l = 
-  raise_located l (AnyMessage "invalid operands to binary operator")
 
 let interp_binop l op (m1,t1) (m2,t2) = match op with
   | Plus | Minus | Mult | Div | Le | Lt | Ge | Gt -> 
@@ -183,9 +201,11 @@ let interp_binop l op (m1,t1) (m2,t2) = match op with
 	mk_binop l (interp_int_binop op) m1 m2, c_int
     | _ ->
 	invalid_binop l)
-  | Or|And|Bw_or|Bw_xor|Bw_and ->
-        assert false (* TODO *)
-		  
+  | Or | And ->
+      assert false	   
+  | Bw_or | Bw_xor | Bw_and ->
+      assert false (* TODO *)
+
 (*s Coercion of [e] of type [t] to an expected type [et] *)
 
 let coerce l et e t = match et with
@@ -276,10 +296,25 @@ let rec interp_expr cenv et e =
 		   mk_seq l incrid getid, ct
 	     | _ -> 
 		 raise_located l (NotAReference id))
+      | CEunary (l, Not, e) ->
+	  ml_if l (interp_boolean cenv e) (c_false l) (c_true l), c_int
+      | CEunary (l, Uplus, e) ->
+	  interp_expr cenv et e
+      | CEunary (l, Uminus, e) ->
+	  let m,t = interp_expr cenv et e in
+	  (match t with
+	     | CTpure PTint -> ml_unop l t_neg_int m, t
+	     | CTpure PTfloat -> ml_unop l t_neg_float m, t
+	     | _ -> expected_num l)
       | CEunary _ ->
 	  assert false
-      | CEarrget _ ->
-	  assert false
+      | CEarrget (l, CEvar (l', id), e) ->
+	  let m,_ = interp_expr cenv (Some c_int) e in
+	  (match get_type l' cenv id with
+	     | CTarray ct, _ -> ml_arrget l id m, ct
+	     | _ -> raise_located l' (NotAnArray id))
+      | CEarrget (l, _, _) ->
+	  unsupported l
       | CEconst (l, s) ->
 	  (try
 	     ml_const l (ConstInt (int_of_string s)), c_int
@@ -298,6 +333,8 @@ and interp_boolean cenv = function
       ml_if l (interp_boolean cenv e1) (interp_boolean cenv e2) (c_false l)
   | CEbinary (l, e1, Or, e2) ->
       ml_if l (interp_boolean cenv e1) (c_true l) (interp_boolean cenv e2)
+  | CEunary (l, Not, e) ->
+      ml_if l (interp_boolean cenv e) (c_false l) (c_true l)
   | e ->
       let m,_ as mt = interp_expr cenv None e in 
       let e,_ = 
@@ -325,8 +362,11 @@ let rec interp_statement cenv et = function
 	(interp_statement cenv (Some void) s1) 
 	(mk_expr l (Swhile (interp_statement cenv (Some c_bool) s2, Some i, v, 
 			    interp_statement cenv (Some void) bl)))
-  | CSdowhile _ ->
-      assert false
+  | CSdowhile (l, s, an, e) ->
+      (* = s ; while (!e) s *)
+      let not_e = CEunary (loc_of_expr e, Not, e) in
+      interp_statement cenv et 
+	(CSblock (l, ([], [s; CSwhile (l, not_e, an, s)])))
   | CSwhile (l, e, an, s) ->
       let (i,v) = interp_loop_annot an in
       mk_expr l

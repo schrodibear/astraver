@@ -30,6 +30,7 @@ Parameter foo : Set.
   (t: (array `10` Z))(sig_1 unit [result: unit](`(access t 1) = 2`)).
 
 
+
 Definition p1 := (* validation *)
   (exist_1 [result: Z]True `0` I).
 
@@ -38,6 +39,7 @@ Lemma p2_po_1 :
 Proof.
 Tauto.
 Save.
+
 
 
 Definition p2 := (* validation *)
@@ -50,6 +52,7 @@ Tauto.
 Save.
 
 
+
 Definition p3 := (* validation *)
   (exist_1 [result: Z]True /\ True `0` p3_po_1).
 
@@ -58,6 +61,7 @@ Lemma p4_po_1 :
 Proof.
 Tauto.
 Save.
+
 
 
 Definition p4 := (* validation *)
@@ -70,6 +74,7 @@ Auto.
 Save.
 
 
+
 Definition p5 := (* validation *)
   (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
 
@@ -78,6 +83,7 @@ Lemma p6_po_1 :
 Proof.
 Auto.
 Save.
+
 
 
 Definition p6 := (* validation *)
@@ -90,6 +96,7 @@ Auto.
 Save.
 
 
+
 Definition p7 := (* validation *)
   (exist_1 [result: Z]((x:Z) `x = x`) `0` p7_po_1).
 
@@ -100,6 +107,7 @@ Auto.
 Save.
 
 
+
 Definition p8 := (* validation *)
   (exist_1 [result: Z]True /\ ((x:Z) `x = x`) `0` p8_po_1).
 
@@ -108,6 +116,17 @@ Lemma p9_po_1 :
 Proof.
 Auto.
 Save.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -160,6 +179,7 @@ Omega.
 Save.
 
 
+
 Definition ar6 := (* validation *)
   let Pre1 = ar6_po_1 in
   (Zdiv `1` `1`).
@@ -169,6 +189,34 @@ Lemma ar7_po_1 :
 Proof.
 Omega.
 Save.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -458,6 +506,7 @@ Omega.
 Save.
 
 
+
 Definition arr1 := (* validation *)
   [v6: (array `10` Z)]let Pre1 = arr1_po_1 in
                       (access v6 `0`).
@@ -467,6 +516,7 @@ Lemma arr2_po_1 :
 Proof. (* arr2_po_1 *)
 Omega.
 Save.
+
 
 
 Definition arr2 := (* validation *)
@@ -480,6 +530,7 @@ Lemma arr3_po_1 :
 Proof. (* arr3_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 Definition arr3 := (* validation *)
@@ -505,6 +556,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition arr4 := (* validation *)
   [v6: (array `10` Z); Pre3: `(access v6 0) = 9`]
     let Pre2 = (arr4_po_1 v6 Pre3) in
@@ -519,6 +571,7 @@ Lemma arr5_po_1 :
 Proof. (* arr5_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 Definition arr5 := (* validation *)
@@ -538,6 +591,7 @@ Lemma arr6_po_1 :
 Proof. (* arr6_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 Definition arr6 := (* validation *)
@@ -571,6 +625,9 @@ Save.
 
 
 
+
+
+
 Definition arr7 := (* validation *)
   [v6: (array `10` Z); Pre3: `(access v6 0) = 9`]
     let Pre2 = (arr7_po_1 v6 Pre3) in
@@ -595,6 +652,8 @@ Lemma fc3_po_1 :
   (Post1: result0 = `0`)
   `result >= 0`.
 Proof. Intros; Omega. Save.
+
+
 
 
 
@@ -626,6 +685,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition an2 := (* validation *)
   [v4: Z; Pre1: `v4 >= 0`]
     let (v9, result, Post1) =
@@ -646,14 +706,6 @@ Intros; Omega.
 Save.
 
 
-Definition an3 := (* validation *)
-  [v4: Z; Pre1: `v4 >= 0`]
-    let (v9, result, Post1) =
-      let (result, Post1) = (exist_1 [result: Z]result = `v4 + 1` `v4 + 1`
-        (refl_equal ? `v4 + 1`)) in
-      (exist_2 [v10: Z][result0: unit]v10 = `v4 + 1` result tt Post1) in
-    (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
-    (an3_po_1 v4 Pre1 v9 Post1)).
 
 (*Why*) Inductive ET_E1 [T:Set] : Set :=
   | Val_E1 : T -> (ET_E1 T)
@@ -693,6 +745,15 @@ Definition an3 := (* validation *)
   end.
 
 (*Why*) Implicits post_E3.
+
+Definition an3 := (* validation *)
+  [v4: Z; Pre1: `v4 >= 0`]
+    let (v9, result, Post1) =
+      let (result, Post1) = (exist_1 [result: Z]result = `v4 + 1` `v4 + 1`
+        (refl_equal ? `v4 + 1`)) in
+      (exist_2 [v10: Z][result0: unit]v10 = `v4 + 1` result tt Post1) in
+    (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
+    (an3_po_1 v4 Pre1 v9 Post1)).
 
 (*Why*) Parameter f1_ex : (n: Z)(EM unit unit).
 

@@ -913,6 +913,7 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
       & $|$ & \nt{identifier} \te{[} \nt{prog} \te{]} \\
       & $|$ & \nt{identifier} \te{[} \nt{prog} \te{]} \te{:=} \nt{prog} \\
       & $|$ & \nt{prog} \nt{infix} \nt{prog} \\
+      & $|$ & \nt{prefix} \nt{prog} \\
       & $|$ & \te{let} \nt{identifier} \te{=} \te{ref} 
               \nt{prog} \te{in} \nt{prog} \\
       & $|$ & \te{if} \nt{prog} \te{then} \nt{prog}
@@ -947,6 +948,8 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
               \te{=} $|$ \te{<>} $|$ 
               \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=} $|$
               \te{||} $|$ \te{\&\&} \\
+  \nt{prefix}
+    & $::=$ & \te{-} $|$ \te{not} \\
   \\[0.1em]
 
   \nt{binders}\indexnt{binders}
@@ -1160,6 +1163,11 @@ and is given in Figure~\ref{fig:cfiles}.
     & $::=$ & \nt{c\_type} \nt{identifier} \\
   \\[0.1em]
 
+  \nt{c\_spec}
+    & $::=$ & \te{/*@} $[$ \te{pre} \nt{precondition} $]$ \nt{effects}
+              $[$ \te{post} \nt{postcondition} $]$ \te{*/}  \\
+  \\[0.1em]
+
   \nt{c\_expr}
     & $::=$ & \nt{integer-constant} \\
     &   $|$ & \nt{identifier} \\
@@ -1193,14 +1201,28 @@ and is given in Figure~\ref{fig:cfiles}.
           $|$ \te{\&} $|$ \te{\^} $|$ \te{|} $|$ \te{\&\&} $|$ \te{||} \\
   \\[0.1em]
 
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of C files: declarations and expressions}
+\label{fig:cfiles}
+\end{center}           
+\end{figure}
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
   \nt{c\_statement}
     & $::=$ & \nt{c\_expr} \\
     &   $|$ & \te{if} \te{(} \nt{c\_expr} \te{)} \nt{statement} 
               $[$ \te{else} \nt{statement} $]$ \\
-    &   $|$ & \te{while} \te{(} \nt{c\_expr} \te{)} \nt{statement} \\
-    &   $|$ & \te{do} \nt{statement} \te{while} \te{(} \nt{c\_expr} \te{)} \\
+    &   $|$ & \te{while} \te{(} \nt{c\_expr} \te{)}
+              \nt{c\_loop\_annot} \nt{statement} \\
+    &   $|$ & \te{do} \nt{statement} \nt{c\_loop\_annot} 
+              \te{while} \te{(} \nt{c\_expr} \te{)} \\
     &   $|$ & \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
-              $[$ \nt{c\_expr} $]$ \te{)} \nt{statement} \\
+              $[$ \nt{c\_expr} $]$ \te{)} \\
+           && \nt{c\_loop\_annot} \nt{statement} \\
     &   $|$ & \nt{block} \\
   \\[0.1em]
 
@@ -1213,9 +1235,6 @@ and is given in Figure~\ref{fig:cfiles}.
     & $::=$ & $[$ \nt{c\_pre} $]$ \nt{block} $[$ \nt{c\_post} $]$ \\
   \\[0.1em]
 
-  \nt{c\_spec}
-    & $::=$ & \te{/*@} $[$ \te{pre} \nt{precondition} $]$ \nt{effects}
-              $[$ \te{post} \nt{postcondition} $]$ \te{*/}  \\
   \nt{c\_pre}
     & $::=$ & \te{/*@} \nt{precondition} \te{*/}  \\
   \nt{c\_post}
@@ -1227,7 +1246,7 @@ and is given in Figure~\ref{fig:cfiles}.
 
 \end{tabular}\\
 \hrulefill
-\caption{Syntax of C files}
+\caption{Syntax of C files (cont'd): statements and annotations}
 \label{fig:cfiles}
 \end{center}           
 \end{figure}

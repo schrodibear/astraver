@@ -33,6 +33,31 @@ goods () {
     done
 }
 
+goods_c () {
+    for f in $1/*.c; do
+	echo -n "  "$f"... "
+	base=$1/`basename $f .c`
+	if ! gcc -c $f > /dev/null 2>&1; then
+	    echo "GCC failed"
+	    gcc -c $f
+	    exit 1
+	fi
+	echo -n "GCC ok... "
+	if ! $pgm --coq $f > /dev/null 2>&1; then
+	    echo "why FAILED"
+	    $pgm --coq $f
+	    exit 1
+	fi
+	echo -n "why ok... "
+	if ! $coqc "$base"_why.v > /dev/null 2>&1; then
+	    echo "coq FAILED"
+	    $coqc "$base"_why.v
+	    exit 1
+	fi
+	echo "coq ok"
+    done
+}
+
 bads () {
     for f in $1/*.mlw; do
 	echo -n "  "$f"... "
@@ -45,6 +70,8 @@ bads () {
 	fi
     done
 }
+
+if test $2 == "c"; then goods_c good-c; exit 0; fi
 
 # 1. Syntax
 echo "=== Checking parsing errors ==="
@@ -61,13 +88,18 @@ echo "=== Checking other errors ==="
 bads bad/other
 echo ""
 
-# 3. Benchmark
+# 3. ML benchmark
 echo "=== Checking good files ==="
 goods good
+echo ""
+
+# 4. C benchmark
+echo "=== Checking good C files ==="
+goods_c good-c
 
 exit 0
 
-# 4. Showing the results
+# Showing the results
 for f in good/*.mlw; do
     coq=good/`basename $f .mlw`_why.v
     echo "==== "$coq" ===="

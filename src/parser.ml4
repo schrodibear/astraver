@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.65 2002-11-19 13:31:10 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.66 2002-11-21 14:04:08 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -153,8 +153,6 @@ let bin_op op loc e1 e2 =
 let un_op op loc e =
   without_annot loc
     (app (without_annot loc (Svar op)) [Sterm e])
-
-let bool_not loc a = un_op Ident.p_not loc a
 
 let mk_prog loc p pre post =
   { pdesc = p.pdesc; 
@@ -400,7 +398,10 @@ EXTEND
     | x = prog2 -> x ] ]
   ;
   ast2:
-  [ [ LIDENT "not"; x = prog3 -> bool_not loc x
+  [ [ LIDENT "not"; x = prog3 -> 
+       let pf = without_annot loc (Sconst (ConstBool false)) in
+       let pt = without_annot loc (Sconst (ConstBool true)) in
+       without_annot loc (Sif (x, pf, pt))
     | x = prog3 -> x ] ]
   ;
   ast3:

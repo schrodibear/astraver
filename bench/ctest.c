@@ -6,8 +6,7 @@ C test file
 */
 
 int x;
-short y;
-void z;
+int i;
 
 int f(int a, int b) 
 /*@ pre x = 0
@@ -19,10 +18,14 @@ int f(int a, int b)
 int main() 
 /*@ x >= 0 */ 
 {
-  x = 0 + 2.3;
-  for (y = 0; y < 10; ++y)
-    /*@ invariant x = y and y <= 10 variant 10-y */
+  x = -0;
+  i = 10;
+  do {
     x = x + 1;
+    i = i - 1;
+  }
+  /*@ invariant x = 10 - i and i >= 0 variant 10-i */
+  while (i > 0);
 } 
 /*@ x = 10 */
 

@@ -107,6 +107,9 @@ doc:: doc/version.tex
 bench:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) --valid"
 
+cbench:: $(BINARY) $(WHYVO)
+	cd bench; ./bench "../$(BINARY) --valid" c
+
 bench-tc:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) -tc"
 

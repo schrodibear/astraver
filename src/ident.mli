@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.mli,v 1.33 2002-11-14 08:54:03 filliatr Exp $ i*)
+(*i $Id: ident.mli,v 1.34 2002-11-21 14:04:08 filliatr Exp $ i*)
 
 (*s Identifiers. *)
 
@@ -129,7 +129,6 @@ val well_founded_induction : t
 
 val p_or : t
 val p_and : t
-val p_not : t
 
 (*s Category tests *)
 

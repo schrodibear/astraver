@@ -101,7 +101,7 @@ unary_expression
         : postfix_expression { $1 }
         | INC_OP unary_expression { CEunary (loc (), Prefix_inc, $2) }
         | DEC_OP unary_expression { CEunary (loc (), Prefix_dec, $2) }
-        | unary_operator cast_expression { uns () }
+        | unary_operator cast_expression { CEunary (loc (), $1, $2) }
         | SIZEOF unary_expression { uns () }
         | SIZEOF LPAR type_name RPAR { uns () }
         ;
@@ -498,7 +498,7 @@ selection_statement
 iteration_statement
         : WHILE LPAR expression RPAR ANNOT statement 
             { CSwhile (loc (), $3, $5, $6) }
-        | DO ANNOT statement WHILE LPAR expression RPAR SEMICOLON 
+        | DO statement ANNOT WHILE LPAR expression RPAR SEMICOLON 
 	    { CSdowhile (loc (), $2, $3, $6) }
         | FOR LPAR expression_statement expression_statement RPAR ANNOT statement 
 	    { CSfor (loc (), $3, $4, None, $6, $7) }
