@@ -17,6 +17,7 @@
 prefix=@prefix@
 exec_prefix=@exec_prefix@
 BINDIR=@bindir@
+LIBDIR=@libdir@
 
 # where to install the man page
 MANDIR=@mandir@
@@ -58,7 +59,7 @@ PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
 GENERATED = src/version.ml src/parser.ml src/linenum.ml \
-	    c/clexer.ml c/cparser.ml c/cparser.mli \
+	    c/cversion.ml c/clexer.ml c/cparser.ml c/cparser.mli \
 	    c/cllexer.ml c/clparser.ml c/clparser.mli \
 	    intf/hilight.ml tools/why2html.ml
 
@@ -104,7 +105,8 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 # caduceus
-CCMO = src/linenum.cmo src/loc.cmo c/coptions.cmo \
+CCMO = src/linenum.cmo src/loc.cmo \
+	c/cversion.cmo c/coptions.cmo \
 	c/ctypes.cmo c/info.cmo \
 	c/creport.cmo c/cenv.cmo c/cltyping.cmo c/ctyping.cmo \
 	c/clparser.cmo c/cllexer.cmo \
@@ -152,10 +154,16 @@ CVERSION=0.1
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
-	echo "let cversion = \""$(CVERSION)"\"" >> $@
 	echo "let date = \""`date`"\"" >> $@
+#	echo "let cversion = \""$(CVERSION)"\"" >> $@
 # 	echo "let sources = \""`pwd`"\"" >> $@
 # 	echo "let coqlib = \""$(COQLIB)"\"" >> $@
+
+c/cversion.ml: Makefile
+	echo "let version = \""$(CVERSION)"\"" > $@
+	echo "let date = \""`date`"\"" >> $@
+	echo "let libdir = \""$(LIBDIR)"\"" >> $@
+
 
 doc:: doc/version.tex
 	cd doc; make

@@ -14,7 +14,13 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.4 2004-01-30 16:58:37 marche Exp $ i*)
+(*i $Id: coptions.mli,v 1.5 2004-02-11 16:39:41 marche Exp $ i*)
+
+(*s environment variables *)
+
+val libdir : string
+
+(*s command-line options *)
 
 val parse_only : bool
 val type_only : bool

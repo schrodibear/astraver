@@ -14,7 +14,35 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.6 2004-01-30 16:58:37 marche Exp $ i*)
+(*i $Id: coptions.ml,v 1.7 2004-02-11 16:39:41 marche Exp $ i*)
+
+(*s The log file *)
+
+let c = ref stdout
+
+let log =
+  c := open_out "caduceus.log";
+  Format.formatter_of_out_channel !c
+
+let close_log () =
+  Format.fprintf log "End of log.@.";
+  close_out !c;
+  c := stdout
+
+(*s environment variables *)
+
+let libdir = 
+  try
+    let v = Sys.getenv "CADUCEUSLIB" in
+    Format.fprintf log "CADUCEUSLIB is set to %s@." v;
+    v
+  with Not_found -> 
+    let p = Filename.concat Cversion.libdir "why" in
+    Format.fprintf log 
+      "CADUCEUSLIB is not set, using %s as default@." p;
+    p
+
+(*s command-line options *)
 
 let parse_only = ref false
 let type_only = ref false
@@ -54,13 +82,3 @@ let werror = !werror
 let with_cpp = !with_cpp
 let cpp_command = !cpp_command
 
-let c = ref stdout;;
-let log =
-  c := open_out "caduceus.log";
-  Format.formatter_of_out_channel !c
-;;
-let close_log () =
-  Format.fprintf log "End of log.@.";
-  close_out !c;
-  c := stdout
-;;

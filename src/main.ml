@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.63 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.64 2004-02-11 16:39:41 marche Exp $ i*)
 
 open Options
 open Ptree
@@ -146,7 +146,7 @@ let interp_program id p =
 
 let add_external loc v id =
   if Env.is_global id then raise_located loc (Clash id);
-  Env.add_global id v None
+  Env.add_global_gen id v None
 
 let add_parameter v tv id =
   push_parameter (Ident.string id) v tv
@@ -161,7 +161,9 @@ let interp_decl d =
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ids, v) ->
       let v = Ltyping.type_v loc lab env lenv v in
+      let v = Env.generalize_type_v v in
       List.iter (add_external loc v) ids;
+      let v = specialize_type_scheme v in
       if ocaml then Ocaml.push_parameters ids v;
       if not (is_mutable v) then
 	let tv = Monad.trad_type_v (initial_renaming env) env v in
@@ -169,8 +171,10 @@ let interp_decl d =
   | External (loc, ids, v) -> 
       let v = Ltyping.type_v loc lab env lenv v in
       if is_mutable v then raise_located loc MutableExternal;
+      let v = generalize_type_v v in
+      List.iter (add_external loc v) ids;
+      let v = specialize_type_scheme v in      
       if ocaml_externals then Ocaml.push_parameters ids v;
-      List.iter (add_external loc v) ids
   | Exception (loc, id, v) ->
       if is_exception id then raise_located loc (ClashExn id);
       add_exception id v
@@ -182,6 +186,9 @@ let interp_decl d =
       List.iter add ids
   | Axiom (loc, id, p) ->
       let p = Ltyping.predicate lab env lenv p in
+(*
+      let p = generalize_predicate p in
+*)
       push_axiom (Ident.string id) p
 
 (*s Processing of a channel / a file. *)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.111 2004-01-29 09:15:00 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.112 2004-02-11 16:39:41 marche Exp $ i*)
 
 open Options
 open Logic
@@ -39,7 +39,7 @@ let rec print_pure_type fmt = function
       fprintf fmt "((%a) %a)"
       Ident.print id
       (print_list space print_pure_type) l
-  | PTvarid id -> fprintf fmt "(VARID %a)" Ident.print id 
+  | PTvarid id -> fprintf fmt "VARID%a" Ident.print id 
   | PTvar { type_val = Some t} -> 
       fprintf fmt "%a" print_pure_type t      
   | PTvar v ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.10 2004-02-11 11:15:29 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.11 2004-02-11 16:39:41 marche Exp $ i*)
 
 (*****
 
@@ -906,10 +906,10 @@ let interp_type ctype =
   | CTfloat(cfloat) -> assert false (* TODO *)
   | CTarray(t,None) -> base_type "pointer"      
   | CTarray(t,Some e) ->     assert false (* TODO *)
+  | CTpointer(t) -> base_type "pointer"      
   | _ -> assert false (* TODO *)
 (*
   | CTvar of string
-  | CTpointer of 'expr ctype
   | CTstruct_named of string
   | CTstruct of string * 'expr field list
   | CTunion_named of string
@@ -949,6 +949,11 @@ let interp_incr_op op =
     | Upostfix_inc | Uprefix_inc -> "add_int"
     | Upostfix_dec | Uprefix_dec -> "sub_int"
 
+let global_var_for_type t =
+  match t.ctype_node with
+    | CTint _ -> "intP"
+    | _ -> assert false (* TODO *)
+
 let rec interp_expr e =
   match e.texpr_node with
     | TEconstant(c) -> 
@@ -962,10 +967,9 @@ let rec interp_expr e =
     | TEbinary(e1,op,e2) ->
 	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
     | TEarrget(e1,e2) ->
-	let te1 = interp_expr e1
-	and te2 = interp_expr e2 
-	in
-	App(App(Var("acc"),Deref("intA")),App(App(Var("shift"),te1),te2))
+	let te1 = interp_expr e1 and te2 = interp_expr e2 in
+	let var = global_var_for_type e.texpr_type in
+	App(App(Var("acc"),Deref(var)),App(App(Var("shift"),te1),te2))
     | TEassign (e1,e2) ->
 	assert false (* TODO *)
 	(*begin
@@ -979,9 +983,8 @@ let rec interp_expr e =
 		end
 	    | _ -> assert false (* TODO *)
 	end*)	
+    | TEincr(op,e) -> interp_incr_expr op e
     | TEassign_op(e1,op,e2) ->
-	assert false (* TODO *)
-    | TEincr(op,e) ->
 	assert false (* TODO *)
     | TEseq(e1,e2) ->
 	assert false (* TODO *)
@@ -1005,6 +1008,39 @@ let rec interp_expr e =
       -> assert false (* TODO *)
     | TEsizeof(t)
       -> assert false (* TODO *)
+
+and interp_incr_expr op e =
+  match e.texpr_node with
+    | TEvar v ->
+	begin
+	  match op with
+	    | Upostfix_dec | Upostfix_inc ->
+		assert false (* TODO *)
+	    | Uprefix_dec | Uprefix_inc ->
+		append 
+		(Assign(v.var_name,
+			App(App(Var(interp_incr_op op),Deref(v.var_name)),
+			    Cte(Prim_int 1))))
+		(Deref v.var_name)
+	end
+    | TEunary(Ustar,e') ->
+	begin
+	  match e'.texpr_node with
+	    | TEvar v ->
+		begin
+		  match op with
+		    | Upostfix_dec | Upostfix_inc ->
+			(* let tmp = (acc intP v) in
+			   upd intP v (tmp+1); tmp *)
+			assert false (* TODO *)
+		    | Uprefix_dec | Uprefix_inc ->
+			(* let tmp = (acc intP v)+1 in
+			   upd intP v tmp; tmp *)
+			assert false (* TODO *)
+		end		      
+	    | _ -> assert false (* TODO *)
+	end
+    | _ -> assert false (* TODO *)
 
 
 let interp_decl d acc = 
@@ -1039,6 +1075,14 @@ let rec interp_statement_expr e accu =
 	  match l.texpr_node with
 	    | TEvar(v) ->
 		append (Assign(v.var_name,interp_expr e)) accu
+	    | TEarrget(e1,e2) ->
+		(* P := (upd !P (shift e1 e2) e) *)
+		let var = global_var_for_type e.texpr_type in
+		Assign(var,App(App(App(Var "upd",Deref var),
+				   App(App(Var "shift",
+					   interp_expr e1),
+				       interp_expr e2)),
+			       interp_expr e))
 	    | _ -> assert false (* TODO *)
 	end 
     | TEincr(op,e) ->

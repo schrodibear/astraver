@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.35 2004-01-06 11:04:51 marche Exp $ i*)
+(*i $Id: env.ml,v 1.36 2004-02-11 16:39:41 marche Exp $ i*)
 
 open Ident
 open Misc
@@ -156,11 +156,14 @@ let add id v = Penv.add id (empty_scheme (TypeV v))
 
 let add_set id = Penv.add id (empty_scheme Set)
 
-let find id env =
-  let s = Penv.find id env in
+let specialize_type_scheme s =
   match s.scheme_type with 
     | TypeV v -> specialize_type_v s.scheme_vars v 
     | Set -> raise Not_found
+
+let find id env =
+  let s = Penv.find id env in
+  specialize_type_scheme s
 
 let is_local env id =
   try
@@ -206,15 +209,18 @@ let generalize_type_v t =
   let l = find_type_v_vars [] t in
   { scheme_vars = l ; scheme_type = TypeV t }
 
-let add_global id v p =
+let add_global_gen id v p =
   try
     let _ = Penv.find id !env in
     raise_unlocated (Clash id)
   with Not_found -> begin
-    let v = generalize_type_v v in
     env := Penv.add id v !env; 
     pgm_table := Idmap.add id p !pgm_table
   end
+
+let add_global id v p =
+  let v = generalize_type_v v in
+  add_global_gen id v p
 
 let add_global_set id =
   try

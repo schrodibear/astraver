@@ -1,23 +1,41 @@
 
-CADUCEUS=../../../bin/caduceus.opt
+CADUCEUS=../../../bin/caduceus.opt 
+CADUCEUSLIB=../../../lib/why
 
-%.why %_valid.v: %.c $(CADUCEUS)
-	$(CADUCEUS) $<
+
+EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
+
+%.why %_valid.v: %.c $(CADUCEUS) $(CADUCEUSLIB)/caduceus.why
+	$(EXECCADUCEUS) $<
 
 WHY=../../../bin/why.opt
 
 %_why.v %_valid.v: %.why $(WHY)
-	$(WHY) --valid -V --coq-v8 theory.why $<
+	$(WHY) --valid -V --coq-v8 --coq-preamble "Require Export Why" caduceus.why $<
 
-theory_why.v: theory.why $(WHY)
-	$(WHY) --coq-v8 theory.why
+%_why.sx: %.why $(WHY)
+	$(WHY) -V --simplify --no-simplify-prelude caduceus.why $<
+
+caduceus_why.v: caduceus.why $(WHY)
+	$(WHY) --coq-v8 caduceus.why
 
 %_valid.vo: %_why.vo
 
 %.vo: %.v
 	coqc -R ../../../lib/coq Coq.why $<
 
-sum2.why: theory.why
+simplify:
+	time make do_simplify > simplify.log
+	@echo -n "valid obligations: " 
+	@egrep '[0-9]+: Valid.$$' simplify.log | wc -l
+	@echo -n "invalid obligations: " 
+	@egrep '[0-9]+: Invalid.$$' simplify.log | wc -l
+
+do_simplify: arith_why.sxcheck sum2_why.sxcheck
+
+%.sxcheck: %.sx
+	cat caduceus_why.sx $< > $<.all
+	Simplify $<.all
 
 include .depend
 

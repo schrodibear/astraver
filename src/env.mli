@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.mli,v 1.24 2003-12-18 12:24:06 marche Exp $ i*)
+(*i $Id: env.mli,v 1.25 2004-02-11 16:39:41 marche Exp $ i*)
 
 (*s Environment for imperative programs.
  
@@ -49,9 +49,13 @@ type typing_info =
   
 type typed_program = typing_info Ast.t
 
+type 'a scheme
+type type_info = Set | TypeV of type_v
+
 (*s global environment *)
 
 val add_global : Ident.t -> type_v -> typed_program option -> unit
+val add_global_gen : Ident.t -> type_info scheme -> typed_program option -> unit
 val add_global_set : Ident.t -> unit
 val is_global : Ident.t -> bool
 val is_global_set : Ident.t -> bool
@@ -81,7 +85,6 @@ val type_in_env : local_env -> Ident.t -> type_v
 val is_in_env : local_env -> Ident.t -> bool
 val is_ref : local_env -> Ident.t -> bool
 
-type type_info = Set | TypeV of type_v
 val fold_all : (Ident.t * type_info -> 'a -> 'a) -> local_env -> 'a -> 'a
 
 val add_rec : Ident.t -> local_env -> local_env
@@ -97,9 +100,10 @@ val add_logic : Ident.t -> type_v -> logical_env -> logical_env
 val is_logic : Ident.t -> logical_env -> bool
 
 val new_type_var : unit -> type_var
-(*
-val generalize : logic_type -> logic_type
-*)
+
+val generalize_type_v : type_v -> type_info scheme
+val specialize_type_scheme : type_info scheme -> type_v
+
 val find_logic : Ident.t -> logical_env -> logic_type
 
 val logical_env : local_env -> logical_env

@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.10 2004-02-03 08:24:43 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.11 2004-02-11 16:39:41 marche Exp $ i*)
 
-(*i $Id: cmain.ml,v 1.10 2004-02-03 08:24:43 marche Exp $ i*)
+(*i $Id: cmain.ml,v 1.11 2004-02-11 16:39:41 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -50,7 +50,24 @@ let interp_file f =
   close_out ch;
   rm_ppf ()
 
-let main () = Queue.iter (fun f -> try interp_file f with Exit -> ()) files
+let file_copy src dest =
+  let cin = open_in src
+  and cout = open_out dest
+  and buff = String.make 1023 ' ' 
+  and n = ref 0 
+  in
+  while n:= input cin buff 0 1023; !n <> 0 do 
+    output cout buff 0 !n
+  done;
+  close_in cin; close_out cout
+
+let main () = 
+  let theory = "caduceus.why" in
+  let theorysrc = Filename.concat Coptions.libdir theory in
+  if not (Sys.file_exists theory) or
+    Digest.file theory <> Digest.file theorysrc
+  then file_copy theorysrc theory;
+  Queue.iter (fun f -> try interp_file f with Exit -> ()) files
 
 let rec explain_exception fmt = function
   | Parsing.Parse_error -> 
