@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.114 2004-11-26 16:40:03 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.115 2004-11-29 16:01:14 filliatr Exp $ i*)
 
 
 open Format
@@ -162,6 +162,8 @@ let rec interp_term label old_label t =
 	LApp(interp_term_un_op t1.term_type Uminus, [f t1])
     | Tunop (Ufloat_of_int, t1) ->
 	LApp("real_of_int", [f t1])
+    | Tunop (Uint_of_float, t1) ->
+	LApp("int_of_real", [f t1])
     | Tapp (g, l) -> 
 	LApp(g.logic_name,
 	     (HeapVarSet.fold 

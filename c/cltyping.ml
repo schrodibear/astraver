@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.63 2004-11-29 15:06:54 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.64 2004-11-29 16:01:15 filliatr Exp $ i*)
 
 open Cast
 open Clogic
@@ -127,7 +127,7 @@ and type_term_node loc env = function
   | PLunop (Uamp, t) -> 
       let t = type_term env t in
       Tunop (Uamp, t), noattr (CTpointer t.term_type)
-  | PLunop (Ufloat_of_int, _) ->
+  | PLunop ((Ufloat_of_int | Uint_of_float), _) ->
       assert false
   | PLbinop (t1, Badd, t2) ->
       let t1 = type_term env t1 in
@@ -229,7 +229,16 @@ and type_term_node loc env = function
   | PLnull ->
       Tnull, c_void_star
   | PLcast (ty, t) ->
-      unsupported "logic cast"
+      let t = type_term env t in
+      let tt = t.term_type in
+      begin match ty, tt.ctype_node with
+	| LTvoid, CTvoid
+	| LTint, CTint _ 
+	| LTfloat, CTfloat _ -> t.term_node, tt
+	| LTfloat, CTint _ -> Tunop (Ufloat_of_int, t), c_float
+	| LTint, CTfloat _ -> Tunop (Uint_of_float, t), c_int
+	| _ -> warning loc "ignored cast in annotation"; t.term_node, tt
+      end
   | PLvalid _ | PLvalid_index _ | PLvalid_range _ | PLfresh _ 
   | PLexists _ | PLforall _ | PLnot _ | PLimplies _ | PLiff _
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->

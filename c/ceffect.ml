@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.59 2004-11-26 16:40:03 marche Exp $ i*)
+(*i $Id: ceffect.ml,v 1.60 2004-11-29 16:01:14 filliatr Exp $ i*)
 
 open Cast
 open Coptions
@@ -183,7 +183,7 @@ let rec term t =
 	add_alloc (add_pointer_var t.term_type (term t))
     | Tunop (Uamp, t) -> term t
     | Tunop (Uminus, t) -> term t
-    | Tunop (Ufloat_of_int, t) -> term t
+    | Tunop ((Ufloat_of_int | Uint_of_float), t) -> term t
     | Tbase_addr t -> term t
     | Tblock_length t -> add_alloc (term t)
     | Tat (t, _) -> 
