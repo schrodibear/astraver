@@ -1,38 +1,38 @@
+(* Load Programs. *)
+Require Import Why.
+Require Import Omega.
 
-Require Why.
-Require Omega.
-
-(* Why obligation from file "good/loops.mlw", characters 156-167 *)
+(* Why obligation from file "loops.mlw", characters 156-167 *)
 Lemma loop1_po_1 : 
-  (i: Z)
-  (Pre6: `i <= 10`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre5: Variant1 = `10 - i0`)
-  (Pre4: `i0 <= 10`)
-  (Test2: `i0 < 10`)
-  (Pre3: `i0 <= 10`)
-  (i1: Z)
-  (Post1: i1 = `i0 + 1`)
-  `i1 <= 10` /\ (Zwf `0` `10 - i1` `10 - i0`).
+  forall (i: Z),
+  forall (Pre6: i <= 10),
+  forall (Variant1: Z),
+  forall (i0: Z),
+  forall (Pre5: Variant1 = (10 - i0)),
+  forall (Pre4: i0 <= 10),
+  forall (Test2: i0 < 10),
+  forall (Pre3: i0 <= 10),
+  forall (i1: Z),
+  forall (Post1: i1 = (i0 + 1)),
+  i1 <= 10 /\ (Zwf 0 (10 - i1) (10 - i0)).
 Proof.
-Unfold Zwf; Intros; Omega.
-Save.
+unfold Zwf; intros; omega.
+Qed.
 
-(* Why obligation from file "good/loops.mlw", characters 82-187 *)
+(* Why obligation from file "loops.mlw", characters 82-187 *)
 Lemma loop1_po_2 : 
-  (i: Z)
-  (Pre6: `i <= 10`)
-  (Variant1: Z)
-  (i0: Z)
-  (Pre5: Variant1 = `10 - i0`)
-  (Pre4: `i0 <= 10`)
-  (Test1: `i0 >= 10`)
-  (Pre2: `i0 <= 10`)
-  `i0 = 10`.
+  forall (i: Z),
+  forall (Pre6: i <= 10),
+  forall (Variant1: Z),
+  forall (i0: Z),
+  forall (Pre5: Variant1 = (10 - i0)),
+  forall (Pre4: i0 <= 10),
+  forall (Test1: i0 >= 10),
+  forall (Pre2: i0 <= 10),
+  i0 = 10.
 Proof.
-Intros; Omega.
-Save.
+intros; omega.
+Qed.
 
 
 
@@ -40,61 +40,61 @@ Save.
 
 
 
-(* Why obligation from file "good/loops.mlw", characters 414-425 *)
+(* Why obligation from file "loops.mlw", characters 414-425 *)
 Lemma loop2_po_1 : 
-  (x: Z)
-  (Pre4: `x <= 10`)
-  (Variant1: Z)
-  (x0: Z)
-  (Pre3: Variant1 = `10 - x0`)
-  (Pre2: `x0 <= 10`)
-  (Test2: `x0 < 10`)
-  (x1: Z)
-  (Post1: x1 = `x0 + 1`)
-  `x1 <= 10` /\ (Zwf `0` `10 - x1` `10 - x0`).
+  forall (x: Z),
+  forall (Pre4: x <= 10),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (Pre3: Variant1 = (10 - x0)),
+  forall (Pre2: x0 <= 10),
+  forall (Test2: x0 < 10),
+  forall (x1: Z),
+  forall (Post1: x1 = (x0 + 1)),
+  x1 <= 10 /\ (Zwf 0 (10 - x1) (10 - x0)).
 Proof.
-Unfold Zwf; Intros; Omega.
-Save.
+unfold Zwf; intros; omega.
+Qed.
 
-(* Why obligation from file "good/loops.mlw", characters 354-445 *)
+(* Why obligation from file "loops.mlw", characters 354-445 *)
 Lemma loop2_po_2 : 
-  (x: Z)
-  (Pre4: `x <= 10`)
-  (Variant1: Z)
-  (x0: Z)
-  (Pre3: Variant1 = `10 - x0`)
-  (Pre2: `x0 <= 10`)
-  (Test1: `x0 >= 10`)
-  `x0 = 10`.
+  forall (x: Z),
+  forall (Pre4: x <= 10),
+  forall (Variant1: Z),
+  forall (x0: Z),
+  forall (Pre3: Variant1 = (10 - x0)),
+  forall (Pre2: x0 <= 10),
+  forall (Test1: x0 >= 10),
+  x0 = 10.
 Proof.
-Intros; Intuition.
-Save.
+intros; intuition.
+Qed.
 
-(* Why obligation from file "good/loops.mlw", characters 474-487 *)
+(* Why obligation from file "loops.mlw", characters 474-487 *)
 Lemma loop2_po_3 : 
-  (x: Z)
-  (Pre4: `x <= 10`)
-  (x0: Z)
-  (Post4: `x0 = 10`)
-  (Test4: `x0 > 0`)
-  (x1: Z)
-  (Post11: `x1 = (-x0)`)
-  `x1 = (-10)`.
+  forall (x: Z),
+  forall (Pre4: x <= 10),
+  forall (x0: Z),
+  forall (Post4: x0 = 10),
+  forall (Test4: x0 > 0),
+  forall (x1: Z),
+  forall (Post11: x1 = (Zopp x0)),
+  x1 = (Zopp 10).
 Proof.
-Simpl; Intros; Omega.
-Save.
+simpl; intros; omega.
+Qed.
 
-(* Why obligation from file "good/loops.mlw", characters 487-487 *)
+(* Why obligation from file "loops.mlw", characters 487-487 *)
 Lemma loop2_po_4 : 
-  (x: Z)
-  (Pre4: `x <= 10`)
-  (x0: Z)
-  (Post4: `x0 = 10`)
-  (Test3: `x0 <= 0`)
-  `x0 = (-10)`.
+  forall (x: Z),
+  forall (Pre4: x <= 10),
+  forall (x0: Z),
+  forall (Post4: x0 = 10),
+  forall (Test3: x0 <= 0),
+  x0 = (Zopp 10).
 Proof.
-Intros; Omega.
-Save.
+intros; omega.
+Qed.
 
 
 
