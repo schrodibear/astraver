@@ -2,12 +2,27 @@
 \section{Verification}
 \label{sec:proof}
 
-\subsection{Loop invariant}
+The function is formally specified, now the hard work begins, we need
+to prove that the implementation of Figure~\ref{fig:algo} indeed
+satisfies this specification. If one runs the \caduceus{} tool on that
+annotated code now, it will generate verification conditions that
+are indeed not provable: as usual with a Hoare-like system, when there
+are loops like the \verb|while| of Schorr-Waite, it is mandatory
+(except in simple cases) to manually add a loop invariant. The design
+of a suitable loop invariant is the most difficult part of
+the verification process, more difficult than performing the proof
+themselves. Fortunately for us, suitable loop invariants were proposed
+by previous works on Schorr-Waite algorithm. However, some
+difficulties remain. The main one is that we need to express this loop
+invariant in the \caduceus{} syntax, which is quite poor, for example
+in~\cite{mehta03cade} they use a higher-order syntax that is simply
+not allowed by \caduceus. Also, since we proved a little bit more than
+previous works, namely the absence of invalid pointer dereferencing,
+we needed to add new assertions in the loop invariant.
 
-\newcommand{\unode}[1]{\makebox(0,0){\circlenode{#1}{\hspace*{0.01\unitlength}}}}
-\newcommand{\mnode}[1]{\makebox(0,0){\circlenode[fillstyle=solid,fillcolor=black]{#1}{\hspace*{0.01\unitlength}}}}
+\subsection{Designing the loop invariant}
 
-
+\begin{figure}[t]
 \begin{center}
   \unitlength=0.5mm
   \psset{unit=\unitlength,arrows=->}
@@ -32,32 +47,32 @@
 \ncarc[arcangleA=-100,arcangleB=-30,linewidth=1]{n1}{n0}
 \end{picture}\label{figure}
 \end{center}
+\caption{The backtracking stack inside the graph structure}
+\label{fig:stack}
+\end{figure}
 
+The key idea for the loop invariant is that even if the graph
+structure is temporarily modified, the reachability of nodes is
+preserved. More precisely, each node that is initially reachable from
+the root will be always reachable either from p or from t. We also
+need to describe as a loop invariant how the backtracking stack is
+implemented using the pointers of the graph. On
+Figure~\ref{fig:stack}, we display some state of the graph as it may
+occur at an arbitrary iteration of the loop. The dashed arrows
+corresponds to the children pointers as they were at the beginning,
+whereas the thick arrows shows their current values. the normal arrows
+corresponds to unmodified links. The backtracking stack is indeed the
+list of pointers, starting from p ({\huge t ?}), following either the left
+children when c is 0, or the right children when c is 1.
+
+
+\subsection{Writing the loop invariant}
+
+\begin{figure}[t]
 \begin{alltt}
-\begin{slshape}
-/*@ logic plist cons(node p, plist l) */
-
-/*@ predicate in_list(node p,plist stack) */
-
-/*@ predicate pair_in_list(node p1,node p2, plist stack) */
-\end{slshape}
-\end{alltt}
-
-
-\begin{alltt}
-\begin{slshape}
-/*@ predicate unmarked_reachable (node p1, node p2) 
-  @   reads p1->r,p1->l,p1->m 
-  @*/
-
-/*@ predicate clr_list (node p, plist stack) 
-  @   reads p->c,p->l,p->r 
-  @*/
-\end{slshape}
-
 void schorr_waite(node root) \{
   node t = root;
-  node p = NULL;
+  node p = NULL;\begin{slshape}
   /*@ invariant
     @   (I1 :: \bs{}forall node x; 
     @     \old(reachable(root,x)) => 
@@ -88,53 +103,124 @@ void schorr_waite(node root) \{
                   &&
     @	          (!p2->c => \old(p2->l) == p1 && \old(p2->r) ==
     @              p2->r)) 
-    @*/
+    @*/\end{slshape}
   while (p != NULL || (t != NULL && ! t->m)) \{
-    if (t == NULL || t->m) \{
-      if (p->c) \{ /* pop */
-	node q = t; t = p; p = p->r; t->r = q; 
-      \} 
-      else \{ /* swing */
-	node q = t; t = p->r; p->r = p->l; p->l = q; p->c = 1;
-      \}
-    \} 
-    else \{ /* push */
-      node q = p; p = t; t = t->l; p->l = q; p->m = 1; p->c = 0;
-    \}
-  \}
-\}
+    ...
 \end{alltt}
-The clause \texttt{invariant} specifies the invariant of the while.
-It's have 9 assertion :
-\begin {enumerate}
-\item {I1} : This assertion means that for all nodes reachable by root
-  before this function, there are reachable by t or p in the while.
-\item {I2} : This assertion means that for all nodes reachable by t or
-  p in the while there are reachable by root before this function.
-\item {I3} : This assertion means all nodes not reachable by root before the
-  function her mark are the same.
-\item {I4} :  This assertion means all nodes different of null and
-  reachable by root before the function are valid
-\item {I5a} : This assertion clr\_list define the stack
-  \texttt{stack}. As one can see on the figure \ref{figure} the
-  \texttt{stack} begin with \texttt{p} and according to the mark \texttt{c} it
-  continues until \texttt{null} by the left children if \texttt{c} are true, by the right children otherwise. 
-\item {I5b} : This assertion means all nodes in the
-  \texttt{stack} are mark by \texttt{m}.
-\item {I5c} : This assertion means that for all nodes valid, reachable by root
-  before the function and not mark by \texttt{m} there are reachable with a way
-  totaly not mark by t or a right way of a nodes in the \texttt{stack} .
-\item {I5d} : This assertion means all nodes out of \texttt{stack} are
-  same children then before the function. 
-\item {I5e} : This assertion means that for all two nodes t1 t2 successive in
-  the \texttt{stack} with t on the head if the second mark c of t2 is
-  true then the left children of t2 is the same then before the
-  function and the right children of t2 is t1 else the left children
-  of t2 is t1 and the right children  is the same then before the
-  function.
+\caption{The loop invariant}
+\label{fig:loopinv}
+\end{figure}
 
+The loop invariant as it is writing in the \caduceus{} annotation
+language is displayed on Figure~\ref{fig:loopinv}.  For specifying this
+loop invariant, in particular the stack, we need to talk about lists
+of pointers, in annotations. With \caduceus{}, such a datatype from
+the logical side can be imported, implicitly. Then new predicates and
+logical function symbols can be declared, as the \verb|reachable|
+predicate already introduced, which can take as argument either C
+types or logical types. Here we declare
+\begin{alltt}
+\begin{slshape}
+/*@ logic plist cons(node p, plist l) */
+/*@ predicate in_list(node p,plist l) */
+/*@ predicate pair_in_list(node p1,node p2, plist l) */
+\end{slshape}
+\end{alltt}
+which first introduce the logical type \verb|plist| for finite lists
+of pointers, then a logical function symbol \verb|cons| which adds an
+element to a list, a predicate \verb|in_list| which tests of a
+pointer belongs to a list, and finally a predicate \verb|pair_in_list|,
+saying that p1 and p2 are two consecutive nodes of a list.
+
+The loop invariant finally requires the declaration of two predicates:
+\begin{alltt}
+\begin{slshape}
+/*@ predicate unmarked_reachable (node p1, node p2) 
+  @   reads p1->r,p1->l,p1->m 
+  @*/
+\end{slshape}
+\end{alltt}
+specifies that p2 is reachable from p1, by traversing only unmarked
+nodes; and
+\begin{alltt}
+\begin{slshape}
+/*@ predicate clr_list (node p, plist stack) 
+  @   reads p->c,p->l,p->r 
+  @*/
+\end{slshape}
+\end{alltt}
+specifies that \verb|stack| is the list of pointers obtained from p as
+described on Figure~\ref{fig:stack}.
+
+On Figure~\ref{fig:loopinv}, we used the \caduceus{} notation to name
+formulas, of the form \textsl{name}\verb|::|\textsl{formula}. The loop
+invariant has 9 assertions:
+\begin {enumerate}
+\item {I1} : means that all nodes which were initially reachable from
+  root, are reachable from t or p
+\item {I2} : means that conversely, all (non-null) nodes reachable by t or
+  p were initially reachable from root. This is true only for non-null
+  node, because null may not be reachable from root is the graph is cyclic.
+\item {I3} : means that for nodes initially unreachable, the mark
+  remains unchanged.
+\item {I4} : means all nodes different of null and
+  reachable by root before the function are valid ({\huge utile ????
+    preservation triviale ??? })
+\item {I5a} : defines the backtracking stack as on Figure~\ref{fig:stack}.
+\item {I5b} : means that all nodes in the \texttt{stack} are marked.
+\item {I5c} : the trickest annotation, due to {\Huge ?}, means that
+  any valid {\Huge non null ?} node, initially reachable from root, 
+  and not yet marked, is reachable by traversing only
+  unmarked nodes, either from t or from the right children of a node
+  in the stack.
+\item {I5d} : means all nodes out of \texttt{stack} have
+  the same children as before the function. 
+\item {I5e} : a trick one also, that is essential for being able to
+  `recover' the correct children of nodes of the stack, as it can be
+  seen again on Figure~\ref{fig:stack}: if p1 is in
+  the stack, followed by p2 (or if p1 is t and p2 is the head of the
+  stack), then : if p2->c is
+  1 then its left child is the same as its was initially
+     and its right child is p1 ; and if p2->c is 0 then its left child
+   is p1 and its right child is the same as it was initially.
 \end{enumerate}
-\subsection{Intermediate lemmas}
+
+
+\subsection{Performing the verification}
+
+12 VCG
+
+. invariant vrai init
+. post cond
+. 3 fois invariant preserve resp. pop swing push
+. validité des l'accès
+. autres ?
+
+with Simplify: 4/12
+
+ajout axiome reachable(p,p) : 7/12
+
+
+passage a Coq:
+
+def de plist avec list de la lib standard de Coq
+
+def de llist (le modele component-as-array exposed to the user)
+
+def clr\_list
+
+def des path a la prolog: 3 clauses
+
+def de reachable, unmarked\_reachable
+ 
+lemme intermediaires
+
+Coq: 12/12
+
+chiffres avec coqwc
+
+\subsubsection{Intermediate lemmas}
+
 For define in coq the reachability two definitions:
 Firstly a inductive definition  \texttt{path} which define a path between two pointers.
 \begin{alltt}
@@ -225,7 +311,8 @@ llist a next .
 \end{slshape}
 \end{alltt}
 
-\subsection{Termination}
+\section{Termination}
+\label{sec:termination}
 
 \begin{alltt}
 /*@ logic Length weight(node p , node t) reads p->m,p->c,p->l,p->r*/
@@ -254,6 +341,7 @@ of element in the \texttt{stack}.
 
 
 
+2 VCG en plus: 
 
 
 %%% Local Variables: 

@@ -6,7 +6,8 @@
 \usepackage{pstricks}
 \usepackage{pst-node}
 %\usepackage{verbatim}
-\usepackage{pslatex}
+%\usepackage{pslatex}
+\usepackage{times}
 %\usepackage{listings}
 
 \input{./macros.tex}
@@ -32,17 +33,17 @@ B\^at 490, Universit\'e Paris-sud, 91405 Orsay cedex, France \\
 \maketitle
 
 \begin{abstract}
-  We describe an experiment done using the \caduceus{} tool for formal
-  verification of C programs. We performed a full formal proof of the
+  We describe an experiment of formal verification of C source code,
+  using the \caduceus{} tool. We performed a full formal proof of the
   classical Schorr-Waite graph-marking algorithm, which has already
   been used several times as a case study for formal reasoning
-  computer systems. Our study is original with respect to previous
+  on pointer programs. Our study is original with respect to previous
   experiments for several reasons. First, we use a general-purpose
-  tool for C source code: we start from a real source code written in C,
-  specified using an annotation language for arbitrary C programs.
-  (BOF Second, we are not bound to a specific prover.) Third, we indeed
-  formally established more properties of the algorithm than previous
-  works, in particular a formal proof of termination is made.
+  tool for C source code: we start from a real source code written in
+  C, specified using an annotation language for arbitrary C programs.
+  (BOF Second, we are not bound to a specific prover.) Third, we
+  indeed formally established more properties of the algorithm than
+  previous works, in particular a formal proof of termination is made.
 
   \noindent{\bf Keywords:} Formal verification, Floyd-Hoare logic,
   Pointer programs, Aliasing, C programming language.
@@ -60,7 +61,7 @@ B\^at 490, Universit\'e Paris-sud, 91405 Orsay cedex, France \\
 
 \bigskip
 \paragraph{Acknowledgments.} 
-We thank Jean-Christophe Filliâtre for its fruitful help, advices and
+We thank Jean-Christophe Filli\^atre for its fruitful help, advices and
 remarks about this case study.
 
 \bibliographystyle{abbrv}

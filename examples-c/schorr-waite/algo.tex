@@ -4,15 +4,17 @@
 
 The Schorr-Waite algorithm performs a depth-first traversal of a
 directed graph, starting from a specific node of the graph called the
-root. 
+root. Its main characteristic is that it directly uses the pointers of
+the graph to implement backtracking. This is why its soundness is
+quite difficult to establish. 
 
 \subsection{The C source code}
 
 In the version we consider here, we assume that the nodes have
-at most two children, which is situation for example for a garbage
-collector for a pure lisp interpreter, where the only memory allocated value
-is the \textsf{cons} of lists. In C, these \textsf{cons} structures
-can be defined as
+at most two children, which is the situation for example for a garbage
+collector for a pure lisp interpreter, where the only memory allocated
+value is the \textsf{cons} of lists. In C, these \textsf{cons}
+structures can be defined as
 \begin{alltt}
 typedef struct struct_node \{
   unsigned int m :1;
@@ -51,94 +53,126 @@ void schorr_waite(node root) \{
 \label{fig:code}
 \end{figure}
 
-The Schorr-Waite graph-marking algorithm, written in C source code, is
-then given in Figure~\ref{fig:code}
+The Schorr-Waite graph-marking algorithm, written directly in true C
+source code, is then given in Figure~\ref{fig:code}. 
 
-
-
-
+{\Huge decrire l'algo informellement, avec des dessins pour illustrer
+  les operations pop, push et swing}
 
 \subsection{Formal specification of the algorithm}
 
-The informal specification given above talks about nodes of the graph
-which are reachable from the root node: all of them have to be
-marked. So it appears immediately that to formally specify the
-algorithm, one needs to talk about reachability of some node from
-another in the graph. In the \caduceus{} methodology, such an
-``external'' notion can be declared by a predicate annotation. For the
-reachability predicate, this is written as
-\begin{alltt}\begin{slshape}
-/*@ predicate isreachable (node p1, node p2) 
-  @   reads p1->r,p1->l */
-\end{slshape}\end{alltt}
-It is important to notice that this annotation is simply a declaration
-of a logical predicate, but nothing yet is sais about its semantics:
-we only declare a binary predicate that is intended to relate two
-nodes. {\huge faire analogie avec forward declaration en C}
-The \texttt{reads} clause that follows the predicate
-declaration is for giving information on which data the predicate
-depends on: in this case, we say that the value of the children of
-\texttt{p1}. There is a small trick here: TODO
+The first step in the formal verification process is to give a formal
+specification to the \verb|schorr_waite| function. The informal
+specification says that every node in the graph, reachable from the
+root node, must be marked. Also the graph structure has to be the same
+after the execution of the function, as it was before.
 
-Once the \texttt{isreachable} predicate is declared, it is possible to
-give a specification to the algorithm, even if we did not give the
-semantics of \texttt{isreachable} yet. The specification is as follows:
+So it appears immediately that to formally specify the algorithm, one
+needs to talk about reachability of some node from another in the
+graph. Indeed reasoning about reachability is the main part of all the
+verification, as already noticed by previous studies of the
+Schorr-Waite algorithm.
+
+In the \caduceus{} methodology, such an ``external'' notion must be
+declared, by a \verb|predicate| annotation. For the reachability
+predicate, this is written as
+\begin{alltt}\begin{slshape}
+/*@ predicate reachable (node p1, node p2) 
+  @   reads p1->l,p1->r */
+\end{slshape}\end{alltt}
+This declares a binary predicate on nodes, but nothing yet is
+said about its semantics. This is very similar to a forward
+declaration of a C function, whose implementation will be given
+latter. Such predicates will have to be `implemented' latter, either
+by giving additional \caduceus{} annotations (such as \verb|axioms|)
+or in the back-end prover. 
+
+The \texttt{reads} clause that follows the predicate
+declaration above is for giving information on which data the predicate
+depends on: in this case, it does depend only on \verb|p1| and
+\verb|p2| but also on the graph structure itself. The syntax
+\verb|p1->l,p1->r| is a \caduceus{} idiom, that should be understood
+in fact as $\verb|p1| (\verb|->l| \cup \verb|->r|)^*$ that is all the
+node expressions from \verb|p1| using the left and right children.
+
+\begin{figure}[t]
 \begin{alltt}\begin{slshape}
 /*@ requires 
   @   \bs{}forall node x; 
-  @      x != \null && isreachable(root,x) => \valid(x) && ! x->m  
+  @      x != \bs{}null && reachable(root,x) => \valid(x) && ! x->m  
   @ ensures 
   @   (\bs{}forall node x; 
   @       \old(x->l) == x->l && \old(x->r) == x->r) 
   @   &&
   @   (\bs{}forall node x; 
-  @       \valid(x) && isreachable(root,x) => x->m) 
+  @       x != \bs{}null && reachable(root,x) => x->m) 
   @   &&
   @   (\bs{}forall node x; 
-  @       ! isreachable(root,x) => x->m == \old(x->m))
+  @       ! reachable(root,x) => x->m == \old(x->m))
   @*/\end{slshape}
 void schorr_waite(node root);
 \end{alltt}
+\caption{Specification of Schorr-Waite algorithm in the \caduceus{}
+  syntax}
+\label{fig:spec}
+\end{figure}
 
-The clause \texttt{requires} specifies
-the pre-condition. The built-in predicate $\valid(p)$ in \caduceus{}
-means that the pointer $p$ points to a correctly allocated memory
-block, so that dereferencing $p$ is safe. So the pre-condition is that
-for any node $x$ that is not null and reachable 
-from the root, it should be valid, and its $m$ field must be false,
-that is $x$ is unmarked. 
+Once this \texttt{reachable} predicate is declared, it is possible to
+give a formal specification to the algorithm, even if we did not give
+the semantics of \texttt{reachable} yet. The specification, in the
+\caduceus{} syntax, is given on Figure~\ref{fig:spec}. It is made of
+two clauses: the \texttt{requires} clause specifies the pre-condition
+whereas the \texttt{ensures} clause specifies the post-condition. Both
+are followed by a logical formula, where logical connectives follows a
+C-like syntax: C operator \verb|&&| denotes conjunction, \verb|!|
+denotes negation ; and additional syntax is introduced to denoted
+implication by \verb|=>|, and universal quantification under the form
+$\bs{}\verb|forall|~\textsl{type}~x ; \textsl{formula}$. C expressions
+can be used in logical formulas as soon as they are side-effect free,
+on this example we use equality and disequality (\verb|==| and
+\verb|!=|) and field accesses like \verb|x->l|. Additional predicates
+exist, all prefixed by a backslash, such as \verb|\null| which 
+denotes the null pointer. Notice that our annotation language
+inherits from C the fact that booleans are not clearly distinguished
+from the integers: when an integer expression $e$ is used as a logical
+atom, then it should be understood as the boolean $e\neq 0$, so that
+one can write \verb|! x->m| to indeed mean \verb|x->m == 0|. 
 
-The clause \texttt{ensures} specifies
-the post-condition: it is a conjunct of three assertions. The built-in
-construct $\old(e)$ in \caduceus{} denotes the value of expression $e$
-before the execution of the function. So the first assertion means
-that for all nodes (even the non-reachable ones), the children are the
-same after the run of the algorithm, as they were before. This is of
-course very important to specify, because during the execution the
-children are modified, so one wants to prove that the initial
-structure of the graph is restored. The second assertion specifies
-that any node $x$ that is regularly allocated {\Huge Pourquoi pas non
-  null seulement ?} and reachable 
-from the root, is now marked. So this specifies that all the graph has
-been traversed. The third assertion says that for the nodes that were
-not reachable, their mark is not changed by the algorithm, that is the
-unreachable node are not traversed by the algorithm.
+In the pre-condition, the built-in predicate $\valid(p)$ means that
+the pointer $p$ points to a correctly allocated memory block, so that
+dereferencing $p$ is safe. So the pre-condition specifies that for any
+node $x$ that is not null and reachable from the root, it should be
+regularly allocated, and its $m$ field must be false, that is $x$ is
+unmarked.
 
+The post-condition is a conjunct of three assertions. The built-in
+construct $\old(e)$ in \caduceus{}, inspired from the JML one, denotes
+the value of expression $e$ before the execution of the function. So
+the first assertion means that for all nodes (even the non-reachable
+ones), the children are the same after the run of the algorithm, as
+they were before. This is of course very important to specify, because
+during the execution the children are modified, so one wants to prove
+that the initial structure of the graph is restored. The second
+assertion specifies that any non-null node $x$ reachable from the
+root, is now marked. So this specifies that all the 
+graph has been traversed. The third assertion says that for the nodes
+which were not reachable, their mark is not changed by the algorithm,
+that is the unreachable node are not traversed by the algorithm.
 
-{\Huge il faut aussi parler des connecteurs logiques 
-\begin{alltt}
-\bs{}forall, =>, &&, ! 
-\end{alltt}
-et de l'utilisation de la syntaxe C (== et \verb|->|). Et aussi de l'interprétation des
-expressions entieres comme propositions}
+{\Huge dire quelque chose a propos de la logique, en particulier les
+  "erreurs" : pas de logique 3 valuee, dereference x->r autorisée meme
+  si x est nul, etc.}
+
 
 With respect to the most recent formal specification given in
-Isabelle/HOL \cite{mehta03cade}, we added two things: first the
+Isabelle/HOL~\cite{mehta03cade}, we added two things: first the
 pre-condition that of all pointers of the graph are regularly
 allocated at the beginning, so that we are now able to prove that no
 wrong pointer dereferencing can occur. Second, we also talk about the
 non-reachable nodes of the graph: we are also able to show that they
-are not affected.
+are not affected. In Section~\ref{sec:termination}, we will add
+more annotations in order to establish the termination of the
+function.
 
 
 %%% Local Variables: 
