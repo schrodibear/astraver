@@ -226,6 +226,30 @@ Examples:
 \end{verbatim}
 
 
+\caveat
+In the outermost triple of a program (or a function body) the
+precondition is an \emph{assumption}. In the declaration
+\begin{verbatim}
+     let f (u:unit) = { x = 0 } x := x + 1 { x = 1 }
+\end{verbatim}
+the precondition \texttt{x = 0} is an hypothesis. (The user will be
+asked to prove \texttt{x = 0} when \texttt{f} is called.)
+But preconditions of inner triples are \emph{obligations} to be
+proved. In the declaration 
+\begin{verbatim}
+     let f (u:unit) = 
+       {} begin x := 0; { x = 0 } x := x + 1 {} end { x = 1 }
+\end{verbatim}
+the precondition \texttt{x = 0} has to be established at the
+corresponding program point.
+Note that such an obligation can be given to the outermost expression
+too, using parentheses:
+\begin{verbatim}
+     let f (u:unit) = { x = 0 } ({ odd(x) } x := x / 2 {}) {}
+\end{verbatim}
+Here \texttt{x = 0} is an assumption and \texttt{odd(x)} is an obligation.
+
+
 \subsubsection{Assertions}
 \index{Assertion}
 Assertions can be inserted within sequences using the \texttt{assert}
