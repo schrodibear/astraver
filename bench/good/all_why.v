@@ -600,3 +600,15 @@ Definition an3 := (* validation *)
     (exist_2 [v10: Z][result0: unit]`v10 > v4` v9 result
     (an3_po_1 v4 Pre1 v9 Post1)).
 
+(*Why*) Inductive ET_E1 [T:Set] : Set :=
+  | Val_E1 : T -> (ET_E1 T)
+  | Exn_E1 : (ET_E1 T).
+
+(*Why*) Inductive ET_E2 [T:Set] : Set :=
+  | Val_E2 : T -> (ET_E2 T)
+  | Exn_E2 : Z -> (ET_E2 T).
+
+(*Why*) Inductive ET_E3 [T:Set] : Set :=
+  | Val_E3 : T -> (ET_E3 T)
+  | Exn_E3 : foo -> (ET_E3 T).
+

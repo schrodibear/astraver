@@ -110,12 +110,17 @@ let fc1 = (f5 v5)
 let fc2 = (f4 void)
 let fc3 = let a = ref 0 in let b = ref 0 in (f3 a b)
 
-(* while loops *)
+(* while loops: in file loops.ml *)
 
-
-(* recursive functions *)
+(* recursive functions: in file recfun.ml *)
 
 (* annotations *)
 let an1 = 0 { result = 0 }
 let an2 = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@ }
 let an3 = { v4 >= 0 } begin v4 := !v4 + 1 end { v4 > v4@init }
+
+(* exceptions *)
+exception E1
+exception E2 of int
+exception E3 of foo
+

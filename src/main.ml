@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.29 2002-06-07 09:34:45 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.30 2002-07-04 08:58:13 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -31,6 +31,10 @@ let push_parameter id v = match prover with
 let output fwe = match prover with
   | Pvs -> Pvs.output_file fwe
   | Coq -> Coq.output_file fwe
+
+let push_exception id v = match prover with
+  | Coq -> Coq.push_exception id v
+  | Pvs -> ()
 
 (*s Processing of a single declaration [let id = p]. *)
 
@@ -95,6 +99,10 @@ let interp_decl = function
       if is_mutable v then raise_with_loc (Some loc) MutableExternal;
       Typing.check_type_v (Some loc) Typing.initial_labels Env.empty v;
       List.iter (add_external loc v) ids
+  | Exception (loc, id, v) ->
+      if is_exception id then Error.clash_exn id (Some loc);
+      add_exception id v;
+      push_exception (Ident.string id) (option_app (fun x -> TTpure x) v)
   | QPvs s ->
       Pvs.push_verbatim s
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.15 2002-04-29 08:47:36 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.16 2002-07-04 08:58:13 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -128,6 +128,15 @@ let all_refs () =
     | _ -> s
   in
   Penv.fold add_ref !env Idset.empty
+
+(* exceptions *)
+
+let exn_table = Hashtbl.create 97
+
+let add_exception = Hashtbl.add exn_table
+let is_exception = Hashtbl.mem exn_table
+let find_exception = Hashtbl.find exn_table
+
 
 (* initializations *)
 

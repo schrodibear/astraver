@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.43 2002-06-26 15:24:26 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.44 2002-07-04 08:58:13 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -297,17 +297,31 @@ let reprint_parameter fmt id c =
 
 let print_parameter = reprint_parameter
 
+let reprint_exception fmt id v =
+  fprintf fmt "(*Why*) Inductive ET_%s [T:Set] : Set :=@\n" id;
+  fprintf fmt "  | Val_%s : T -> (ET_%s T)@\n" id id;
+  fprintf fmt "  | Exn_%s : " id;
+  begin match v with
+    | None -> ()
+    | Some t -> fprintf fmt "%a -> " print_cc_type t
+  end;
+  fprintf fmt "(ET_%s T).@\n" id
+
+let print_exception = reprint_exception
+
 (*s Elements to produce. *)
 
 type element_kind = 
   | Param of string
   | Oblig of string
   | Valid of string
+  | Excep of string
 
 type element = 
   | Parameter of string * cc_type
   | Obligation of obligation
   | Validation of string * validation
+  | Exception of string * cc_type option
 
 let elem_t = Hashtbl.create 97 (* maps [element_kind] to [element] *)
 let elem_q = Queue.create ()   (* queue of [element_kind * element] *)
@@ -325,16 +339,21 @@ let push_validation id v =
 let push_parameter id v =
   add_elem (Param id) (Parameter (id,v))
 
+let push_exception id v =
+  add_elem (Excep id) (Exception (id,v))
+
 let print_element_kind fmt = function
   | Param s -> fprintf fmt "parameter %s" s
   | Oblig s -> fprintf fmt "obligation %s" s
   | Valid s -> fprintf fmt "validation %s" s
+  | Excep s -> fprintf fmt "exception %s" s
 
 let print_element fmt e = 
   begin match e with
     | Parameter (id, c) -> print_parameter fmt id c
     | Obligation o -> print_obligation fmt o
     | Validation (id, v) -> print_validation fmt id v
+    | Exception (id, v) -> print_exception fmt id v
   end;
   fprintf fmt "@\n"
 
@@ -342,6 +361,7 @@ let reprint_element fmt = function
   | Parameter (id, c) -> reprint_parameter fmt id c
   | Obligation o -> reprint_obligation fmt o
   | Validation (id, v) -> reprint_validation fmt id v
+  | Exception (id, v) -> reprint_exception fmt id v
 
 (*s Generating the output. *)
 
@@ -351,6 +371,8 @@ let valid_regexp =
   Str.regexp "Definition[ ]+\\([^ ]*\\)[ ]*:=[ ]*(\\* validation \\*)[ ]*"
 let param_regexp = 
   Str.regexp "(\\*Why\\*) Parameter[ ]+\\([^ ]*\\)[ ]*:[ ]*"
+let excep_regexp = 
+  Str.regexp "(\\*Why\\*) Inductive[ ]+ET_\\([^ ]*\\).*"
 
 let check_line s =
   let test r = 
@@ -359,6 +381,7 @@ let check_line s =
   try Some (Oblig (test oblig_regexp)) with Exit ->
   try Some (Valid (test valid_regexp)) with Exit ->
   try Some (Param (test param_regexp)) with Exit ->
+  try Some (Excep (test excep_regexp)) with Exit ->
   None
 
 let end_is_not_dot s =

@@ -1,7 +1,7 @@
 
-let f = fun (a:int) (b:int) -> (a + b) { result = a + b }
+exception E of int
 
-let test_f = let g = (f 2) in (g 3) { result = 5 }
+exception F
 
 (****
 

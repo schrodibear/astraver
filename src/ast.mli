@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.33 2002-06-21 15:20:24 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.34 2002-07-04 08:58:13 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -64,6 +64,7 @@ type decl =
   | Program of Ident.t * parsed_program
   | Parameter of Loc.t * Ident.t list * type_v
   | External of Loc.t * Ident.t list * type_v
+  | Exception of Loc.t * Ident.t * pure_type option
   | QPvs of string
 
 (*s Intermediate CC terms. *)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.38 2002-06-21 15:20:24 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.39 2002-07-04 08:58:13 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -65,6 +65,7 @@ let ident = gec "ident"
 let qualid_ident = gec "qualid_ident"
 let invariant = gec "invariant"
 let variant = gec "variant"
+let exception_type = gec "exception_type"
 let assertion = gec "assertion"
 let precondition = gec "precondition"
 let postcondition = gec "postcondition"
@@ -434,6 +435,9 @@ i*)
     | c = term; ":"; t = primitive_type; "for"; r = term -> (c, t, r)
     | c = term -> (c, PTint, zwf_zero) ] ]
   ;
+  exception_type:
+  [ [ "of"; v = primitive_type -> v ] ]
+  ;
 
   (* declarations *)
   decl:
@@ -445,6 +449,8 @@ i*)
 	External (loc, ids, v)
     | "parameter"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
 	Parameter (loc, ids, v)
+    | "exception"; id = ident; v = OPT exception_type ->
+	Exception (loc, id, v)
     | LIDENT "pvs"; s = STRING ->
         QPvs s ] ]
   ;

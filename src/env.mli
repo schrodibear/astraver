@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.13 2002-06-07 08:51:16 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.14 2002-07-04 08:58:13 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -44,6 +44,12 @@ val lookup_global : Ident.t -> type_v
 
 val all_vars : unit -> Ident.set
 val all_refs : unit -> Ident.set
+
+(* exceptions (only global) *)
+
+val add_exception : Ident.t -> pure_type option -> unit
+val is_exception : Ident.t -> bool
+val find_exception : Ident.t -> pure_type option
 
 (* a table keeps the program (for extraction) *)
 

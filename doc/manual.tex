@@ -128,6 +128,11 @@ The input file contains the following kinds of declaration:
     prover is used---or directly into the generated \coq\ module---when
     the \coq\ prover is used.
 
+  \item\indextt{exception}
+    \te{exception} $E$ $[$ \te{of} $\tau$ $]$
+
+    Declares a new exception $E$, possibly with an argument of type $\tau$.
+
   \item\indextt{pvs}
     \te{pvs "}\textit{any \pvs\ material}\te{"} \par
     Copies the \pvs\ material as-is in the output theory.
@@ -751,6 +756,8 @@ Syntax of input files is given in Figure~\ref{fig:input}.
               \te{:} \nt{value\_type} \\ \indextt{parameter}
       & $|$ & \te{external} \nt{identifier}\plussep{\te{,}}
               \te{:} \nt{value\_type} \\ \indextt{external}
+      & $|$ & \te{exception} \nt{identifier} 
+              $[$ \te{of} \nt{primitive\_type} $]$ \\ \indextt{exception}
       & $|$ & \te{pvs} \nt{string}
 \end{tabular}\\
 \hrulefill
