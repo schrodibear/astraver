@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.94 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.95 2003-03-20 09:57:36 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -153,14 +153,6 @@ let type_un_poly id =
 let make_node loc p env l o k = 
   { desc = p; 
     info = { loc = loc; env = env; label = l; obligations = o; kappa = k } }
-
-let make_lnode loc p env o k = 
-  { desc = p; 
-    info = { loc = loc; env = env; label = label_name (); 
-	     obligations = o; kappa = k } }
-
-let make_var loc x t env =
-  make_lnode loc (Expression (Tvar x)) env [] (type_c_of_v t)
 
 let make_arrow_type lab bl k =
   let k = 

@@ -515,6 +515,7 @@ let vcg base t =
 		       (CC_lam ((_, CC_pred_binder _), _) as br2)))
       when idb = idb' ->
 	let e'1 = traverse ctx e1 in
+	(* let ctx = traverse_binders ctx bl1 in (* EXP *) *)
 	let br'1 = traverse ctx br1 in
 	let br'2 = traverse ctx br2 in
 	CC_letin (dep, bl1, e'1, CC_if (CC_var idb', br'1, br'2))

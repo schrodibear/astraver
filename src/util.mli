@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.34 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.35 2003-03-20 09:57:36 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -90,6 +90,16 @@ val make_raw_store :
 
 val make_pre_access :
   local_env -> Ident.t -> term -> predicate
+
+(*s AST builders *)
+
+val make_lnode : 
+  Loc.t -> typing_info Ast.t_desc ->
+  local_env -> assertion list -> type_c -> typed_program
+val make_var : 
+  Loc.t -> Ident.t -> type_v -> local_env -> typed_program
+val make_expression :
+  Loc.t -> term -> type_v -> local_env -> typed_program
 
 (*s Pretty printers. *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ident.ml,v 1.44 2003-02-27 16:55:34 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.45 2003-03-20 09:57:36 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -99,6 +99,8 @@ let exn_qval = create "Qval"
 let exn_qexn = create "Qexn"
 let exist = create "exist"
 let decomp n = create ("decomp" ^ string_of_int n)
+
+let exit_exn = create "%Exit"
 
 (*s Pre-defined. *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.11 2003-03-07 13:51:28 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.12 2003-03-20 09:57:36 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -135,6 +135,13 @@ let extract_oblig pr =
   { pr with info = { pr.info with obligations = [] } },
   pr.info.obligations
 
+(***
+let extract_pre pr =
+  let k = pr.info.kappa in
+  { pr with info = { pr.info with kappa = { k with c_pre = [] } } },
+  k.c_pre
+***)
+
 (* adds some pre-conditions *)
 
 let add_oblig p1 pr =
@@ -149,12 +156,13 @@ let is_bool = function
   | PureType PTbool -> true
   | _ -> false
 
-(*s Normalization. In this first pass, we
-    (2) annotate [x := E] with [{ x = E }]
-    (3) give tests the right postconditions
-    (4) lift obligations up in assignements *)
+let is_pure e = 
+  let ef = effect e in 
+  Effect.get_writes ef = [] && Effect.get_exns ef = []
 
-let lift_oblig p = match p.desc with
+(*s Moving obligations up in assignments *)
+
+let lift_oblig_assign p = match p.desc with
   | Aff (x,e) ->
       let e1,p1 = extract_oblig e in
       change_desc (add_oblig p1 p) (Aff (x,e1))
@@ -165,9 +173,43 @@ let lift_oblig p = match p.desc with
   | _ ->
       p
 
+(*s Moving preconditions up in let-in (as obligations) *)
+
+(***
+let lift_pre_let_in p = match p.desc with
+  | LetIn (x, ({ desc = Expression t } as e1), e2) 
+    when post e1 = None && post e2 <> None ->
+      let e'1,o1 = extract_pre e1 in
+      let e'2,o2 = extract_pre e2 in
+      if o1 <> [] || o2 <> [] then
+	let s = tsubst_in_predicate (subst_one x (unref_term t)) in
+	let o2 = List.map (asst_app s) o2 in
+	add_oblig (o1 @ o2) { p with desc = LetIn (x, e'1, e'2) }
+      else
+	p
+  | LetIn (x, e1, e2)
+    when is_equality (post e1) && post e2 <> None && is_pure e1 ->
+      let e'1,o1 = extract_pre e1 in
+      let e'2,o2 = extract_pre e2 in
+      if o1 <> [] || o2 <> [] then
+	let t = get_equality_rhs (post e1) in
+	let s = tsubst_in_predicate (subst_one x (unref_term t)) in
+	let o2 = List.map (asst_app s) o2 in
+	add_oblig (o1 @ o2) { p with desc = LetIn (x, e'1, e'2) }
+      else
+	p
+  | _ ->
+      p
+***)
+
+(*s Normalization. In this first pass, we
+    (2) annotate [x := E] with [{ x = E }]
+    (3) give tests the right postconditions
+    (4) lift obligations up in assignements *)
+
 let rec normalize p =
   let env = p.info.env in
-  let p = lift_oblig p in
+  let p = lift_oblig_assign p in
   let k = p.info.kappa in
   match p.desc with
     | Aff (x, ({desc = Expression t} as e1)) 
@@ -186,15 +228,60 @@ let rec normalize p =
 	post_if_none env q p
     | While (b, invopt, var, e) ->
 	let b' = normalize_boolean true env b in
-	check_while_test b';
-	let p = change_desc p (While (b', invopt, var, e)) in
-	(match post p with
-	   | None -> 
-	       let q = while_post p.info.loc p.info b' invopt in
-	       force_post env q p
-	   | Some q ->
-	       let q = post_app (change_label "" p.info.label) q in
-	       force_post env (Some q) p)
+	let p = match post b' with
+
+           (* test is not annotated -> translation using an exception *)
+	   | None ->
+	       let pbool c = make_expression b.info.loc 
+			     (Tconst (ConstBool c)) (PureType PTbool) env
+	       in
+	       let pvoid = make_expression p.info.loc
+			     (Tconst ConstUnit) (PureType PTunit) env 
+	       in
+	       let effect_and_exit k = 
+		 let ef = Effect.add_exn exit_exn k.c_effect in
+		 let k' = type_c_of_v k.c_result_type in
+		 { k' with c_effect = ef }
+	       in
+	       let bloc = b.info.loc in
+	       let praise_exit =
+		 let k = type_c_of_v (PureType PTunit) in
+		 let ef = Effect.add_exn exit_exn Effect.bottom in
+		 make_lnode bloc (Raise (exit_exn, None))
+		   env [] { k with c_effect = ef }
+	       in
+	       let if_notb_raise_exit = 
+		 make_lnode bloc
+		   (If (make_lnode bloc (If (b, pbool false, pbool true)) 
+			  env [] b.info.kappa,
+			praise_exit,
+			pvoid))
+		   env [] (effect_and_exit b.info.kappa)
+	       in
+	       let d = 
+		 Try 
+		   (make_lnode p.info.loc
+		      (While (pbool true, invopt, var, 
+			      make_lnode p.info.loc
+				(Seq [Statement if_notb_raise_exit;
+				      Statement e])
+				env [] (effect_and_exit k)))
+		      env [] (effect_and_exit k),
+		    [ (exit_exn, None), pvoid])
+	       in
+	       change_desc p d
+
+	   (* test is annotated -> postcondition is [inv and not test] *)
+	   | Some _ ->
+	       let p = change_desc p (While (b', invopt, var, e)) in
+	       if post p = None then
+		 let q = while_post p.info.loc p.info b' invopt in
+		 force_post env q p
+	       else 
+		 p
+	in
+	let q = optpost_app (change_label "" p.info.label) (post p) in
+	force_post env q p
     | LetRef (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
 	let q = create_post (equality (Tvar Ident.result) (unref_term t)) in
 	change_desc p (LetRef (x, post_if_none env q e1, e2))
@@ -244,23 +331,25 @@ and normalize_boolean force env b =
 		| _ ->
 		    b
 	      end
+
+(***
 	  | LetIn (x, ({ desc = Expression t } as e1), e2) 
-            when post e1 = None && post e2 <> None ->
+            when post e1 = None && post e2 <> None && is_pure e2 ->
 	      let s = tsubst_in_predicate (subst_one x (unref_term t)) in
 	      let q = optpost_app s (post e2) in
 	      let blab = b.info.label in
 	      let q = optpost_app (change_label e2.info.label blab) q in
-	      give_post b q
-	  | LetIn (x, e1, e2)
-	    when is_equality (post e1) && post e2 <> None &&
-	         Effect.get_writes (effect e1) = [] ->
+	      lift_pre_let_in (give_post b q)
+	  | LetIn (x, e1, e2) when is_equality (post e1) && post e2 <> None && 
+            is_pure e1 && is_pure e2 ->
 	      let t = get_equality_rhs (post e1) in
 	      let s = tsubst_in_predicate (subst_one x (unref_term t)) in
 	      let q = optpost_app s (post e2) in
 	      let blab = b.info.label in
 	      let q = optpost_app (change_label e1.info.label blab) q in
 	      let q = optpost_app (change_label e2.info.label blab) q in
-	      give_post b q
+	      lift_pre_let_in (give_post b q)
+***)
 	  | _ -> 
 	      b
       end

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.75 2003-03-18 14:24:28 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.76 2003-03-20 09:57:36 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -294,6 +294,19 @@ let make_raw_store env (id,id') c1 c2 =
   let _ = array_info env id in
   Tapp (Ident.store, [Tvar id'; c1; c2])
 
+(*s to build AST *)
+
+let make_lnode loc p env o k = 
+  { desc = p; 
+    info = { loc = loc; env = env; label = label_name (); 
+	     obligations = o; kappa = k } }
+
+let make_var loc x t env =
+  make_lnode loc (Expression (Tvar x)) env [] (type_c_of_v t)
+
+let make_expression loc e t env =
+  make_lnode loc (Expression e) env [] (type_c_of_v t)
+
 (*s Pretty printers (for debugging purposes) *)
 
 open Format
@@ -309,7 +322,7 @@ let print_pre fmt l =
 let print_assertion fmt a = print_predicate fmt a.a_value
 
 let print_exn fmt (x,c) = 
-  fprintf fmt "| %a => %a" Ident.print x print_assertion c
+  fprintf fmt "| %a => @[%a@]@," Ident.print x print_assertion c
 
 let print_post fmt = function
   | None -> 
@@ -317,7 +330,7 @@ let print_post fmt = function
   | Some (c,[]) -> 
       fprintf fmt "@[ %a @]" print_assertion c
   | Some (c, l) -> 
-      fprintf fmt "@[ %a %a@ ]" print_assertion c 
+      fprintf fmt "@[ %a@ %a@ ]" print_assertion c 
 	(print_list space print_exn) l
 
 let rec print_pure_type fmt = function
@@ -404,7 +417,7 @@ and print_desc fmt = function
       fprintf fmt "@[begin@\n  @[%a@]@\nend@]" print_block bl
   | While (p, i, var, e) ->
       fprintf fmt 
-	"while %a do@\n  { invariant %a variant _ }@\n  @[%a@]@\ndone" 
+	"while %a do@\n  { invariant @[%a@] variant _ }@\n  @[%a@]@\ndone" 
 	print_prog p (print_option print_assertion) i print_prog e
   | If (p1, p2, p3) ->
       fprintf fmt "@[if %a then@ %a else@ %a@]" 
@@ -427,16 +440,16 @@ and print_desc fmt = function
   | Raise (id, Some p) ->
       fprintf fmt "raise (%a %a)" Ident.print id print_prog p
   | Try (p, hl) ->
-      fprintf fmt "try %a with %a end" print_prog p 
+      fprintf fmt "@[<hv>try@ %a@ with %a@ end@]" print_prog p 
 	(print_list alt print_handler) hl
   | Expression t -> 
       print_term fmt t
 
 and print_handler fmt ((id, a), e) = match a with
   | None -> 
-      fprintf fmt "%a -> %a" Ident.print id print_prog e
+      fprintf fmt "%a ->@ %a" Ident.print id print_prog e
   | Some a -> 
-      fprintf fmt "%a %a -> %a" Ident.print id Ident.print a print_prog e
+      fprintf fmt "%a %a ->@ %a" Ident.print id Ident.print a print_prog e
 
 and print_cast fmt = function
   | None -> ()

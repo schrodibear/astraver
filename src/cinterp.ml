@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.29 2003-03-07 13:51:29 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.30 2003-03-20 09:57:36 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -139,10 +139,7 @@ let return_exception = ref (Ident.create "Return")
 let break_exception = Ident.create "Break"
 let continue_exception = Ident.create "Continue"
 
-let ml_raise l x e v = 
-  let m = mk_expr l (Sraise (x, e, v)) in
-  let pfalse = Misc.anonymous l { pp_loc = l; pp_desc = PPfalse } in
-  { m with post = Some (pfalse, []) }
+let ml_raise l x e v = mk_expr l (Sraise (x, e, v))
 let ml_raise_return l e v = ml_raise l !return_exception e v
 let ml_raise_break l v = ml_raise l break_exception None v
 let ml_raise_continue l v = ml_raise l continue_exception None v

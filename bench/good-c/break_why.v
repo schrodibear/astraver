@@ -3,7 +3,16 @@
 
 Require Why.
 
-
+(* Why obligation from file "good-c/break.c", characters 34-82 *)
+Lemma f1_po_1 : 
+  (Variant1: Z)
+  (Pre3: Variant1 = `1`)
+  (Test2: `1 <> 0`)
+  (Post2: (Zwf `0` `1` `1`))
+  (Zwf `0` `1` Variant1).
+Proof.
+Intros; Subst Variant1; Trivial.
+Save.
 
 (* Why obligation from file "good-c/break.c", characters 227-233 *)
 Lemma f2_po_1 : 
