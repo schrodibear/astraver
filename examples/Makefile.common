@@ -1,0 +1,8 @@
+
+WHY=../../bin/why.opt
+
+%_why.v: %.ml $(WHY)
+	$(WHY) $<
+
+%.vo: %.v
+	coqc $<
