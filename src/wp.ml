@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.31 2002-03-18 16:20:29 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.32 2002-03-18 16:48:35 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -131,6 +131,9 @@ let rec normalize p =
 	change_desc p (LetRef (x, post_if_none env q e1, normalize e2))
     | LetRef (x, e1, e2) ->
 	change_desc p (LetRef (x, normalize e1, normalize e2))
+    | LetIn (x, ({ desc = Expression t } as e1), e2) when post e1 = None ->
+	let q = create_bool_post (equality (Tvar Ident.result) t) in
+	change_desc p (LetIn (x, post_if_none env q e1, normalize e2))
     | LetIn (x, e1, e2) ->
 	change_desc p (LetIn (x, normalize e1, normalize e2))
     | Rec (x, bl, v, var, e1) ->

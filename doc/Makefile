@@ -1,5 +1,5 @@
 
-all: manual.dvi doc.dvi
+all: manual.ps doc.ps
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 

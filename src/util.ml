@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.22 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.23 2002-03-18 16:48:35 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -397,10 +397,10 @@ and print_desc fmt = function
   | App (p, a, Some k) -> 
       fprintf fmt "(@[%a %a ::@ %a@])" print_prog p print_arg a print_type_c k
   | LetRef (id, p1, p2) ->
-      fprintf fmt "let %a = %a in %a" 
+      fprintf fmt "let %a = ref %a in@ %a" 
 	Ident.print id print_prog p1 print_prog p2
   | LetIn (id, p1, p2) ->
-      fprintf fmt "let %a = ref %a in %a" 
+      fprintf fmt "let %a = %a in@ %a" 
 	Ident.print id print_prog p1 print_prog p2
   | Rec (id, bl, v, var, p) ->
       fprintf fmt "rec %a : <bl> %a { variant _ } =@\n%a" 

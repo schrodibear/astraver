@@ -2,10 +2,10 @@
 (* Test program *)
 
 external x : int ref
-external t : array 10 of int
 
-let p = (t[begin t[0] := 3; 4 end] := begin t[4] := 0; 1 end) 
-        { access(t,4) = 1 }
+external f : a:int ref -> b:int -> { pf(a,b) } unit { qf(a,b) }
+
+let p = let y = 3 in begin (f x y) end { q(x) }
 
 (***
 
