@@ -37,7 +37,7 @@ clean::
 	rm -f *~ *.vo *.wol
 	rm -f *_valid.v
 
-depend::
+depend:: $(VO:.vo=.v)
 	coqdep -R ../../lib/coq-v7 Coq.why *.v > .depend
 
 include .depend
