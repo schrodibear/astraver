@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.67 2003-01-16 15:42:48 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.68 2003-01-30 21:39:28 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -488,7 +488,7 @@ let rec print_term fmt = function
   | Tconst (ConstFloat f) -> 
       fprintf fmt "%s" f
   | Tvar id -> 
-      Ident.lprint fmt id
+      Ident.dbprint fmt id
   | Tderef id ->
       fprintf fmt "!%a" Ident.lprint id
   | Tapp (id, tl) -> 
@@ -505,7 +505,7 @@ let relation_string id =
 
 let rec print_predicate fmt = function
   | Pvar id -> 
-      Ident.print fmt id
+      Ident.dbprint fmt id
   | Papp (id, [t1; t2]) when is_relation id ->
       fprintf fmt "%a %s %a" print_term t1 (relation_string id) print_term t2
   | Papp (id, l) ->

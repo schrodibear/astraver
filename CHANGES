@@ -1,4 +1,5 @@
 
+  o fixed WP bug in a sequence of calls with before-after annotations
   o no more "pvs" declaration (the user can now edit the _why.pvs file)
   o fixed bug in type-checking of recursive functions with exceptions
   o fixed bug in loop tests automatic annotation; 
@@ -18,7 +19,7 @@ version 0.92, January 13th, 2003
 
 version 0.8, December 6th, 2002
 ===============================
-  o haRVey output (see http://www.loria.fr/~ranise/haRVey/)
+  o haRVey output (option --harvey; see http://www.loria.fr/~ranise/haRVey/)
   o C input (incomplete: no arrays, no pointers, no recursive functions)
   o Coq: helper tactics (AccessSame, AccessOther, ...)
   o fixed bug in application typing
@@ -40,7 +41,7 @@ version 0.72, November 12th, 2002
 
 version 0.71, October 15th, 2002 (bug fix release)
 ================================
-  o better wp for the if-then-else (when the test is annotated)
+  o better WP for the if-then-else (when the test is annotated)
   o reference masking now forbidden
   o fixed bug in automatic annotations => some postconditions names may change
   o fixed Coq 7.3 compatibility module

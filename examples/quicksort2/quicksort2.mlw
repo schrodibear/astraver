@@ -16,7 +16,7 @@ let swap (t:int array)(i,j:int) =
    a recursive function to sort between [l] and [r] *)
 
 let rec quick_rec (t:int array) (l,r:int) : unit { variant 1+r-l } =
-  { 0 <= l and r < array_length(t) (*as Pre*) }
+  { 0 <= l and r < array_length(t) }
   (if l < r then 
      let v = t[l] in
      let m = ref l in

@@ -1011,7 +1011,7 @@ echo "configure:1008: checking Coq version" >&5
     7.3.1)
 	echo "$ac_t""$COQVERSION" 1>&6
 	cp -f lib/coq/WhyCoq73.v lib/coq/WhyCoqCompat.v;;
-    7.3.1*)
+    7.3.1*|7.4*)
 	echo "$ac_t""$COQVERSION" 1>&6
 	cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v;;
     *)

@@ -83,7 +83,7 @@ Definition swap := (* validation *)
     (exist_2 [t1: (array Z)][result0: unit](exchange t1 t i j) t0 result
     Post4).
 
-(* Why obligation from file "quicksort2.mlw", characters 542-546 *)
+(* Why obligation from file "quicksort2.mlw", characters 531-535 *)
 Lemma quick_rec_po_1 : 
   (l: Z)
   (r: Z)
@@ -101,7 +101,7 @@ Proof.
 Auto with *.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 914-919 *)
+(* Why obligation from file "quicksort2.mlw", characters 903-908 *)
 Lemma quick_rec_po_2 : 
   (l: Z)
   (r: Z)
@@ -137,7 +137,7 @@ Intuition.
 ArrayLength.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 948-962 *)
+(* Why obligation from file "quicksort2.mlw", characters 937-951 *)
 Lemma quick_rec_po_3 : 
   (l: Z)
   (r: Z)
@@ -176,7 +176,7 @@ Proof.
 Intuition ArrayLength; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 929-966 *)
+(* Why obligation from file "quicksort2.mlw", characters 918-955 *)
 Lemma quick_rec_po_4 : 
   (l: Z)
   (r: Z)
@@ -239,7 +239,7 @@ Rewrite H22; Omega.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 911-966 *)
+(* Why obligation from file "quicksort2.mlw", characters 900-955 *)
 Lemma quick_rec_po_5 : 
   (l: Z)
   (r: Z)
@@ -283,7 +283,7 @@ Rewrite H13; Assumption.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 634-1000 *)
+(* Why obligation from file "quicksort2.mlw", characters 623-989 *)
 Lemma quick_rec_po_6 : 
   (l: Z)
   (r: Z)
@@ -332,7 +332,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 665-870 *)
+(* Why obligation from file "quicksort2.mlw", characters 654-859 *)
 Lemma quick_rec_po_7 : 
   (l: Z)
   (r: Z)
@@ -360,7 +360,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 1009-1022 *)
+(* Why obligation from file "quicksort2.mlw", characters 998-1011 *)
 Lemma quick_rec_po_8 : 
   (l: Z)
   (r: Z)
@@ -393,7 +393,7 @@ Proof.
 Intuition ArrayLength; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 1031-1055 *)
+(* Why obligation from file "quicksort2.mlw", characters 1020-1044 *)
 Lemma quick_rec_po_9 : 
   (l: Z)
   (r: Z)
@@ -429,7 +429,7 @@ Proof.
 Intuition ArrayLength.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 465-1154 *)
+(* Why obligation from file "quicksort2.mlw", characters 465-1143 *)
 Lemma quick_rec_po_10 : 
   (l: Z)
   (r: Z)
@@ -469,7 +469,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 1064-1088 *)
+(* Why obligation from file "quicksort2.mlw", characters 1053-1077 *)
 Lemma quick_rec_po_11 : 
   (l: Z)
   (r: Z)
@@ -512,7 +512,7 @@ Generalize (sub_permut_length H10);
 Intros; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 465-1154 *)
+(* Why obligation from file "quicksort2.mlw", characters 465-1143 *)
 Lemma quick_rec_po_12 : 
   (l: Z)
   (r: Z)
@@ -555,7 +555,7 @@ Intuition.
 Unfold Zwf; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 605-1097 *)
+(* Why obligation from file "quicksort2.mlw", characters 594-1086 *)
 Lemma quick_rec_po_13 : 
   (l: Z)
   (r: Z)
@@ -666,7 +666,7 @@ Omega. Omega. Assumption.
 Assumption.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 514-1097 *)
+(* Why obligation from file "quicksort2.mlw", characters 503-1086 *)
 Lemma quick_rec_po_14 : 
   (l: Z)
   (r: Z)
@@ -1041,7 +1041,7 @@ Definition quick_rec := (* validation *)
             (sub_permut l0 r0 t1 t0) t0 result0 Post23) end) `1 + r - l` 
       l r t (refl_equal ? `1 + r - l`) Pre23).
 
-(* Why obligation from file "quicksort2.mlw", characters 1258-1356 *)
+(* Why obligation from file "quicksort2.mlw", characters 1247-1345 *)
 Lemma quicksort_po_1 : 
   (t: (array Z))
   `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`.
@@ -1049,7 +1049,7 @@ Proof.
 Intuition Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 1258-1356 *)
+(* Why obligation from file "quicksort2.mlw", characters 1247-1345 *)
 Lemma quicksort_po_2 : 
   (t: (array Z))
   (Pre1: `0 <= 0` /\ `(array_length t) - 1 < (array_length t)`)

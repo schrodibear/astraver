@@ -3,6 +3,7 @@
 # auto bench for why
 
 pgm=$1
+option=$2
 coqc="coqc -R ../lib/coq Coq.why"
 
 pvstc () {
@@ -30,12 +31,16 @@ provers () {
 	$pgm --pvs $f
 	exit 1
     fi
+    if test "$option" == "pvs"; then 
     if ! pvstc "$base"_why > /dev/null 2>&1; then
 	echo "pvs typecheck FAILED"
 	pvs -q -v 3 -batch -l pvstc.el
 	exit 1
     fi
     echo "pvs ok"
+    else
+    echo
+    fi
 }
 
 good_ml () {

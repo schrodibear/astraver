@@ -502,7 +502,6 @@ Proof.
 Intuition.
 Subst result result0.
 Apply match_empty ; Omega'.
-Absurd `1 < z`; Omega'.
 Replace k with `1` ; [ Subst next0; Rewrite store_def_1 | Omega' ].
 Apply next_1_0; Omega'.
 Omega'.
@@ -1344,7 +1343,6 @@ Generalize N_positive; Omega'.
 Subst result result0.
 Apply match_empty.
 Generalize N_positive; Omega'. Generalize M_positive; Omega'.
-Absurd `0 <= k`; Omega'.
 Save.
 
 (* Why obligation from file "kmp.mlw", characters 2736-2740 *)

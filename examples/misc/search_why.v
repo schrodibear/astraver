@@ -71,7 +71,7 @@ Lemma search1_po_4 :
   (Post3: result = `0`)
   `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
 Proof.
-Intuition. Omega.
+Intuition.
 Save.
 
 (* Why obligation from file "search.mlw", characters 449-470 *)
@@ -434,7 +434,7 @@ Lemma search2_po_4 :
   (Post3: result = `0`)
   `0 <= result` /\ ((k:Z) (`0 <= k` /\ `k < result` -> `(access t k) <> 0`)).
 Proof.
-Intuition. Omega.
+Intuition. 
 Save.
 
 (* Why obligation from file "search.mlw", characters 940-961 *)

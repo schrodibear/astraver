@@ -1,4 +1,4 @@
-Lex.vo: Lex.v /users/homepc8-123/jcf/coq/V7/theories/Relations/Relation_Operators.vo /users/homepc8-123/jcf/coq/V7/theories/Wellfounded/Lexicographic_Product.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo /users/homepc8-123/jcf/coq/V7/theories/ZArith/Zwf.vo
-Match.vo: Match.v
+Lex.vo: Lex.v
+Match.vo: Match.v ../../lib/coq/WhyArrays.vo
 Next.vo: Next.v ./Match.vo
-kmp_why.vo: kmp_why.v ../../lib/coq/Why.vo /users/homepc8-123/jcf/coq/V7/theories/Bool/Sumbool.vo ./Match.vo ./Next.vo ./Lex.vo
+kmp_why.vo: kmp_why.v ../../lib/coq/Why.vo ./Match.vo ./Next.vo ./Lex.vo

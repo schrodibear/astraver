@@ -1,5 +1,5 @@
-Inftree.vo: Inftree.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo ../../lib/coq/Why.vo ./heap.vo
+Inftree.vo: Inftree.v ../../lib/coq/Why.vo ./heap.vo
 downheap_why.vo: downheap_why.v ../../lib/coq/Why.vo ./heap.vo ./Inftree.vo ./swap_why.vo
-heap.vo: heap.v /users/homepc8-123/jcf/coq/V7/theories/ZArith/ZArith.vo ../../lib/coq/Why.vo
+heap.vo: heap.v ../../lib/coq/Why.vo
 heapsort_why.vo: heapsort_why.v ../../lib/coq/Why.vo ./heap.vo ./Inftree.vo ./swap_why.vo ./downheap_why.vo
 swap_why.vo: swap_why.v ../../lib/coq/Why.vo

@@ -47,7 +47,6 @@ Simpl. Omega.
 Intros. 
 Absurd `(NEG p) > 0`; Red; Auto with zarith.
 Elim p; Auto with zarith.
-Omega.
 Save.
 
 (* A property of Zpower:  x^(2*n) = (x^2)^n *)

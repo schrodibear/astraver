@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.71 2002-12-11 10:33:14 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.72 2003-01-30 21:39:28 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -111,7 +111,7 @@ let rec wp p q =
     | Some q', Some q when not (is_while p) ->
 	let res = (result, result_type p) in
 	let w = abstract_wp q' q res (output p) in
-	Some (anonymous p.info.loc (erase_label lab w))
+	Some (anonymous p.info.loc (erase_label lab (erase_label "" w)))
     | _ -> 
 	w
   in

@@ -7,7 +7,7 @@
 (*                                                                        *)
 (**************************************************************************)
 
-(*s Parameters. 
+(*  Parameters. 
     Without loss of generality, we can take [x1=0] and [y1=0]. 
     Thus the line to draw joins [(0,0)] to [(x2,y2)]
     and we have [deltax = x2] and [deltay = y2]. 

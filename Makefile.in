@@ -113,8 +113,11 @@ doc:: doc/version.tex
 bench:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) --valid"
 
-cbench:: $(BINARY) $(WHYVO)
+bench-c:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) --valid" c
+
+bench-pvs:: $(BINARY) $(WHYVO)
+	cd bench; ./bench "../$(BINARY) --valid" pvs
 
 bench-tc:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) -tc"
