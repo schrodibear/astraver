@@ -1,24 +1,13 @@
 
 (* Test program *)
 
-external x : int ref
+external gx : int ref
 
-external f : a:int ref -> b:int -> { pf(a,b) } unit { qf(a,b) }
-
-let p = let y = 3 in begin (f x y) end { q(x) }
-
-(***
-
-external t : array 10 of int
-
-(*** BUG capture global/local ***)
-
-external x : int ref
-
-let f = fun (u:unit) -> x := 0
+let f = let rec f (u:unit) : unit { variant gx } = begin gx := 0; u end
 
 let g = fun (x:int ref) -> begin (f void); x := 1 end
 
+(***
 (****)
 
 let f = fun (a,b,c:int ref) -> 

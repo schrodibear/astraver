@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.16 2002-03-15 15:44:08 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.17 2002-03-19 12:59:33 filliatr Exp $ i*)
 
 (*s Names separation *)
 
@@ -25,20 +25,21 @@ let check_ref idl loc id =
 
 (*s Crossing binders *)
 
-let rec db_binders ((tids,pids,refs) as idl) = function
+let rec db_binders loc ((tids,pids,refs) as idl) = function
   | [] -> 
       idl, []
   | (id, BindType (Ref _ | Array _ as v)) :: rem ->
-      let idl',rem' = db_binders (tids,pids,Ids.add id refs) rem in
+      if is_global id then Error.clash id (Some loc);
+      let idl',rem' = db_binders loc (tids,pids,Ids.add id refs) rem in
       idl', (id, BindType v) :: rem'
   | (id, BindType v) :: rem ->
-      let idl',rem' = db_binders (tids,Ids.add id pids,refs) rem in
+      let idl',rem' = db_binders loc (tids,Ids.add id pids,refs) rem in
       idl', (id, BindType v) :: rem'
   | ((id, BindSet) as t) :: rem ->
-      let idl',rem' = db_binders (Ids.add id tids,pids,refs) rem in
+      let idl',rem' = db_binders loc (Ids.add id tids,pids,refs) rem in
       idl', t :: rem'
   | a :: rem ->
-      let idl',rem' = db_binders idl rem in idl', a :: rem'
+      let idl',rem' = db_binders loc idl rem in idl', a :: rem'
 
 
 (* db patterns *)
@@ -98,7 +99,7 @@ let db_prog e =
 	While (db idl b, inv, var, db idl e)
 	  
     | Lam (bl,e) ->
-	let idl',bl' = db_binders idl bl in Lam(bl', db idl' e)
+	let idl',bl' = db_binders loc idl bl in Lam(bl', db idl' e)
     | App (e1,e2,a) ->
 	App (db idl e1, db_arg idl e2, a)
     | LetRef (x,e1,e2) ->
@@ -107,7 +108,7 @@ let db_prog e =
 	LetIn (x, db idl e1, db (tids,Ids.add x ids,refs) e2)
 	  
     | Rec (f,bl,v,var,e) ->
-	let (tids',ids',refs'),bl' = db_binders idl bl in
+	let (tids',ids',refs'),bl' = db_binders loc idl bl in
 	Rec (f, bl, v, var, db (tids',Ids.add f ids',refs') e)
     | Expression _ as x -> 
 	x

@@ -18,6 +18,7 @@ let add1 = fun (x:int ref) (y:int) ->
 
 let u1 = let r = ref 3 in (add1 r 7) { r = 10 }
 
+
 (* [mult1 x y] muliplies [x] by [y], modifiying [x] *)
 
 let mult1 = fun (x:int ref) (y:int) ->
@@ -33,3 +34,7 @@ let mult1 = fun (x:int ref) (y:int) ->
      done
    end)
   { x = x@ * y }
+
+(* test *)
+
+let u2 = let r = ref 4 in (mult1 r 6) { r = 24 }

@@ -3,16 +3,8 @@ Require Omega.
 Lemma swap1_po_1 : 
   (x: Z) 
   (y: Z) 
-  ((x0:Z) (x0 = y -> ((y0:Z) (y0 = x -> x0 = y /\ y0 = x)))).
-Proof.
-Intuition.
-Save.
-
-Lemma swap1_po_2 : 
-  (x: Z) 
-  (y: Z) 
   (result: Z) 
-  ((x0:Z) (x0 = y -> ((y0:Z) (y0 = result -> x0 = y /\ y0 = x)))) ->
+  result = x ->
   (x0: Z) 
   x0 = y ->
   (y0: Z) 
@@ -22,20 +14,11 @@ Proof.
 Intuition.
 Save.
 
-
 Lemma swap2_po_1 : 
   (x: Z) 
   (y: Z) 
-  ((x0:Z) (x0 = y -> ((y0:Z) (y0 = x -> x0 = y /\ y0 = x)))).
-Proof.
-Intuition.
-Save.
-
-Lemma swap2_po_2 : 
-  (x: Z) 
-  (y: Z) 
   (result: Z) 
-  ((x0:Z) (x0 = y -> ((y0:Z) (y0 = result -> x0 = y /\ y0 = x)))) ->
+  result = x ->
   (x0: Z) 
   x0 = y ->
   (y0: Z) 
@@ -48,16 +31,8 @@ Save.
 Lemma swap3_po_1 : 
   (a: Z) 
   (b: Z) 
-  ((a0:Z) (a0 = b -> ((b0:Z) (b0 = a -> a0 = b /\ b0 = a)))).
-Proof.
-Intuition.
-Save.
-
-Lemma swap3_po_2 : 
-  (a: Z) 
-  (b: Z) 
   (result: Z) 
-  ((a0:Z) (a0 = b -> ((b0:Z) (b0 = result -> a0 = b /\ b0 = a)))) ->
+  result = a ->
   (a0: Z) 
   a0 = b ->
   (b0: Z) 

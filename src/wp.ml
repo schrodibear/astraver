@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.32 2002-03-18 16:48:35 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.33 2002-03-19 12:59:33 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -304,7 +304,7 @@ and wp_desc info d q =
 	let p'1,_ = wp p1 None in
 	App (p'1, a, k), None
     | Lam (bl, p) ->
-	let p',w = wp p None in
+	let p',_ = wp p None in
 	Lam (bl, p'), None
     | LetIn (x, e1, e2) ->
 	let e'2, w = wp e2 q in
@@ -317,8 +317,9 @@ and wp_desc info d q =
 	let q' = optpost_app (subst_in_predicate [x, result]) w in
 	let e'1,w' = wp e1 q' in
 	LetRef (x, e'1, e'2), w'
-    | Rec _ ->
-	failwith "todo: wp rec"
+    | Rec (f, bl, v, var, e) ->
+	let e',_ = wp e None in
+	Rec (f, bl, v, var, e'), None
     | While (b, inv, var, e) ->
 	let b',_ = wp b None in
 	let q = while_post_block info.env inv var e in

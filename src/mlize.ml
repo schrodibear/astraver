@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.30 2002-03-18 10:29:27 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.31 2002-03-19 12:59:33 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -14,8 +14,6 @@ open Effect
 open Monad
 
 let make_info env k = { env = env; label = label_name (); kappa = k }
-
-let kunit = type_c_of_v (PureType PTunit)
 
 (*s Translation of imperative programs into functional ones.
     [ren] is the current renamings of variables,
@@ -148,7 +146,7 @@ and trad_desc info d ren = match d with
 	   trad_conditional info b.info (trad b) info loop info exit)
 	ren
 
-  | Rec _ -> 
+  | Rec (f, bl, v, var, e) -> 
       failwith "Mlize.trad: Rec"
 (*i***
   | LetRec (f,bl,v,var,e) ->

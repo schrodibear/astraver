@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.7 2002-03-15 14:08:33 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.8 2002-03-19 12:59:33 filliatr Exp $ i*)
 
 open Ast
 open Misc
@@ -96,7 +96,7 @@ let rec red = function
 	 | re2 ->
 	     (match red e1 with
 		| CC_tuple al when is_iota_redex bl al ->
-		    cc_subst (iota_subst (bl, al)) re2
+		    red (cc_subst (iota_subst (bl, al)) re2)
 		| re1 ->
 		    CC_letin (dep, bl, re1, re2)))
   | CC_lam (bl, e) ->

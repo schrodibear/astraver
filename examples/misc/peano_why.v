@@ -343,3 +343,19 @@ Intros eq; Rewrite eq in H3. Decompose [and] H3.
 Generalize H6. Ring `x*(y-0)`. Intro; Ring; Assumption.
 Omega.
 Save.
+
+Lemma u2_po_1 : 
+  (result: Z) 
+  result = `4` ->
+  `result >= 0` /\ `6 >= 0`.
+Proof. Intros; Omega. Save.
+
+Lemma u2_po_2 : 
+  (result: Z) 
+  result = `4` ->
+  `result >= 0` /\ `6 >= 0` ->
+  (r0: Z) 
+  r0 = `result * 6` ->
+  r0 = `24`.
+Proof. Intros; Omega. Save.
+
