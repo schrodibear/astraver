@@ -169,6 +169,8 @@
 
   let rec interp_type gl specs decl = 
     let st = storage_class specs in
+    let cst = List.exists ((=) Sconst) specs in
+    let vl = List.exists ((=) Svolatile) specs in
     let sg = sign specs in
     let lg = length specs in
     let noattr n = { ctype_node = n; ctype_storage = No_storage;
@@ -202,10 +204,8 @@
     in
     let bt = base_type None specs in
     let bt = apply_sign sg bt in
-    let bt = { ctype_node = bt;
-	       ctype_storage = st;
-	       ctype_const = List.exists ((=) Sconst) specs;
-	       ctype_volatile = List.exists ((=) Svolatile) specs } 
+    let bt = { ctype_node = bt; ctype_storage = st;
+	       ctype_const = cst; ctype_volatile = vl } 
     in
     let ty = full_type bt decl in
     if debug then eprintf "%a@." explain_type ty.ctype_node;

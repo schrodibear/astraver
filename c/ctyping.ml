@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.10 2004-01-08 10:44:51 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.11 2004-01-09 13:41:27 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -160,6 +160,27 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
 	"expected %a, found %a@." print_type e.texpr_type print_type ty;
       error e.texpr_loc "incompatible type"
 
+(* warns for assigments over read-only left-value *)
+
+let warn_for_read_only loc e = 
+  let pointer_on_read_only ty = match ty.ctype_node with
+    | CTpointer ty -> ty.ctype_const 
+    | _ -> false
+  in
+  match e.texpr_node with
+  | TEarrow (_, x) | TEdot (_, x) when e.texpr_type.ctype_const  ->
+      warning loc ("assigment of read-only member `" ^ x ^ "'")
+  | TEarrow (e1, x) when pointer_on_read_only e1.texpr_type ->
+      warning loc ("assigment of read-only member `" ^ x ^ "'")
+  | TEdot (e1, x) when e1.texpr_type.ctype_const ->
+      warning loc ("assigment of read-only member `" ^ x ^ "'")
+  | TEvar x when e.texpr_type.ctype_const ->
+      warning loc ("assigment of read-only variable `" ^ x ^ "'")
+  | _ when e.texpr_type.ctype_const ->
+      warning loc "assigment of read-only location"
+  | _ -> 
+      ()
+
 (* Field access *)
 
 let rec type_of_field su l x = function
@@ -206,7 +227,8 @@ let find_sym = Hashtbl.find sym_t
 
 let add_sym l x ty = 
   if is_sym x then begin
-    if find_sym x <> ty then error l ("conflicting types for " ^ x)
+    if not (eq_type (find_sym x) ty) then 
+      error l ("conflicting types for " ^ x)
   end else
     Hashtbl.add sym_t x ty
 
@@ -347,11 +369,17 @@ and type_expr_node loc env = function
       else
 	error loc "type mismatch in conditional expression"
   | CEassign (e1, op, e2) ->
+      let e1loc = e1.loc in
       let e1 = type_lvalue env e1 in
+      warn_for_read_only e1loc e1;
+      let ty1 = e1.texpr_type in
       let e2 = type_expr env e2 in
+      let ty2 = e2.texpr_type in
       begin match op with
 	| Aequal ->
-	    assert false (*TODO*)
+	    if not (sub_type ty2 ty1) then 
+	      error loc "incompatible types in assignment";
+	    TEassign (e1, op, coerce ty1 e2), ty1
 	| Amul | Adiv | Aadd | Asub -> 
             assert false (*TODO*)
 	| Amod | Aleft | Aright 
@@ -691,7 +719,6 @@ let type_decl d = match d.node with
       let ty = declare_type d.loc ty in
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
-      eprintf "Cdecl %s\n" x; flush stderr;
       let ty = declare_type d.loc ty in
       add_sym d.loc x ty;
       Tdecl (ty, x, type_initializer Env.empty ty i)
