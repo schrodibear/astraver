@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.36 2003-02-07 16:31:14 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.37 2003-04-25 12:10:04 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -122,7 +122,8 @@ let print_predicate fmt p =
     | Por (a, b) -> print1 fmt a; fprintf fmt " OR@ "; print2 fmt b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (a, b) -> print2 fmt a; fprintf fmt " AND@ "; print3 fmt b
+    | Pand (a, b) | Forallb (_, _, _, a, b) -> 
+        print2 fmt a; fprintf fmt " AND@ "; print3 fmt b
     | p -> print3 fmt p
   and print3 fmt = function
     | Pfalse ->
@@ -161,7 +162,7 @@ let print_predicate fmt p =
 	fprintf fmt "(@[EXIST (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 fmt p'; fprintf fmt "@])"
-    | (Por _ | Pand _ | Pif _ | Pimplies _) as p -> 
+    | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p

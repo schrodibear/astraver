@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.59 2003-03-11 13:38:36 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.60 2003-04-25 12:10:04 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -178,6 +178,7 @@ val simplify : predicate -> predicate
 (*s functions over CC terms *)
 
 val cc_var : Ident.t -> 'a cc_term
+val cc_term : term -> 'a cc_term
 val cc_applist : 'a cc_term -> 'a cc_term list -> 'a cc_term
 val cc_lam : cc_binder list -> 'a cc_term -> 'a cc_term
 

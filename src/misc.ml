@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.74 2003-03-11 13:38:36 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.75 2003-04-25 12:10:04 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -226,7 +226,7 @@ let rec collect_term s = function
 let rec collect_pred s = function
   | Pvar _ | Ptrue | Pfalse -> s
   | Papp (_, l) -> List.fold_left collect_term s l
-  | Pimplies (a, b) | Pand (a, b) | Por (a, b) -> 
+  | Pimplies (a, b) | Pand (a, b) | Por (a, b) | Forallb (_, _, _, a, b) -> 
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
   | Pnot a -> collect_pred s a
@@ -264,6 +264,7 @@ let rec map_predicate f = function
   | Pnot a -> Pnot (f a)
   | Forall (id, b, v, p) -> Forall (id, b, v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
+  | Forallb (id, v, p, a, b) -> Forallb (id, v, f p, f a, f b)
   | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_predicate s = function
@@ -455,6 +456,8 @@ let rec simplify = function
 
 let cc_var x = CC_var x
 
+let cc_term t = CC_term t
+
 let rec cc_applist f l = match (f, l) with
   | f, [] -> f
   | f, x :: l -> cc_applist (CC_app (f, x)) l
@@ -536,7 +539,7 @@ let rec print_predicate fmt = function
   | Pif (a, b, c) -> 
       fprintf fmt "(@[if %a then@ %a else@ %a@])" 
 	print_term a print_predicate b print_predicate c
-  | Pand (a, b) ->
+  | Pand (a, b) | Forallb (_, _, _, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" print_predicate a print_predicate b
   | Por (a, b) ->
       fprintf fmt "(@[%a or@ %a@])" print_predicate a print_predicate b

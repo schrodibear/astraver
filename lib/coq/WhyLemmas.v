@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.10 2003-03-26 10:45:14 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.11 2003-04-25 12:10:04 filliatr Exp $ *)
 
 (* lemmas used to build automatic proofs *)
 
@@ -60,6 +60,13 @@ Lemma why_boolean_if_1 :
 Proof.
 Destruct b; Auto.
 Save.
+
+Lemma why_boolean_forall :
+  (q:bool -> Prop)(q true) /\ (q false) -> (b:bool)(q b).
+Proof.
+Induction b; Intuition.
+Save.
+Implicits why_boolean_forall [].
 
 Lemma why_boolean_discriminate : false=true->(p:Prop)p.
 Proof.

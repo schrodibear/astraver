@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.90 2003-03-20 10:44:28 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.91 2003-04-25 12:10:04 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -165,7 +165,8 @@ let print_predicate fmt p =
     | Por (a, b) -> fprintf fmt "%a \\/@ %a" print2 a print1 b
     | p -> print2 fmt p
   and print2 fmt = function
-    | Pand (a, b) -> fprintf fmt "%a /\\@ %a" print3 a print2 b
+    | Pand (a, b) | Forallb (_, _, _, a, b) -> 
+        fprintf fmt "%a /\\@ %a" print3 a print2 b
     | p -> print3 fmt p
   and print3 fmt = function
     | Ptrue -> 
@@ -209,7 +210,7 @@ let print_predicate fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[EX %s:%a |@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
-    | (Por _ | Pand _ | Pif _ | Pimplies _) as p -> 
+    | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
   print0 fmt p

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.80 2003-03-28 16:16:48 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.81 2003-04-25 12:10:04 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -191,8 +191,9 @@ let rec occur_predicate id = function
   | Papp (_, l) -> List.exists (occur_term id) l
   | Pif (a, b, c) -> 
       occur_term id a || occur_predicate id b || occur_predicate id c
-  | Pimplies (a, b) -> occur_predicate id a || occur_predicate id b
-  | Pand (a, b) -> occur_predicate id a || occur_predicate id b
+  | Forallb (_, _, _, a, b) 
+  | Pimplies (a, b) 
+  | Pand (a, b) 
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
   | Pnot a -> occur_predicate id a
   | Forall (_,_,_,a) -> occur_predicate id a
@@ -232,7 +233,9 @@ let forall x v p = match v with
   | PureType PTbool ->
       let ptrue = tsubst_in_predicate (subst_one x ttrue) p in
       let pfalse = tsubst_in_predicate (subst_one x tfalse) p in
-      pand (simplify ptrue) (simplify pfalse)
+      let n = Ident.bound x in
+      let p = subst_in_predicate (subst_onev x n) p in
+      Forallb (x, n, p, simplify ptrue, simplify pfalse)
   | _ ->
       let n = Ident.bound x in
       let p = subst_in_predicate (subst_onev x n) p in
