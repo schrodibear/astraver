@@ -33,7 +33,7 @@
 %token FORALL EXISTS IMPLIES AND OR NOT TRUE FALSE OLD AT RESULT LENGTH THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
-%token REQUIRES ENSURES MODIFIABLE LOGIC PREDICATE AXIOM
+%token REQUIRES ENSURES ASSIGNS LOGIC PREDICATE AXIOM
 
 %nonassoc prec_forall prec_exists
 %right IMPLIES
@@ -136,7 +136,7 @@ post_condition:
 
 spec:
   pre_condition effects post_condition decreases EOF 
-    { { requires = $1; modifiable = $2; ensures = $3; decreases = $4 } }
+    { { requires = $1; assigns = $2; ensures = $3; decreases = $4 } }
 ;
 
 loop_annot:
@@ -173,7 +173,7 @@ annot:
 
 effects:
   /* epsilon */ { [] }
-| MODIFIABLE locations { $2 }
+| ASSIGNS locations { $2 }
 ;
 
 locations:

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.12 2004-02-13 08:42:07 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.13 2004-02-23 15:30:13 filliatr Exp $ i*)
 
 (*****
 
@@ -1157,7 +1157,7 @@ let interp_spec s =
 
 let no_spec = 
   { Clogic.requires = None; 
-    Clogic.modifiable = []; 
+    Clogic.assigns = []; 
     Clogic.ensures = None; 
     Clogic.decreases = None }
 

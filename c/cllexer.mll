@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cllexer.mll,v 1.11 2004-02-13 09:36:16 filliatr Exp $ i*)
+(*i $Id: cllexer.mll,v 1.12 2004-02-23 15:30:13 filliatr Exp $ i*)
 
 (* tokens for the C annotations *)
 
@@ -66,7 +66,7 @@ rule token = parse
   | "label"     { LABEL }
   | "requires"       { REQUIRES }
   | "ensures"      { ENSURES }
-  | "modifiable"     { MODIFIABLE }
+  | "assigns"     { ASSIGNS }
   | "logic"    { LOGIC }
   | "predicate"    { PREDICATE }
   | "axiom"    { AXIOM }
