@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.50 2004-03-24 16:45:03 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.51 2004-03-24 16:52:17 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -458,6 +458,7 @@ and check_lvalue loc e = match e.texpr_node with
   | TEarrget _ 
   | TEarrow _ 
   | TEdot _ ->
+      (* TODO: check that e is not of enum type *)
       ()
   | TEcast (_, e) ->
       check_lvalue loc e
