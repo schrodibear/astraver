@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.mli,v 1.8 2002-03-05 14:41:51 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.9 2002-03-05 16:01:41 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -45,6 +45,11 @@ val decomp_kappa : type_c ->
 val equality : term -> term -> predicate
 
 val decomp_boolean : postcondition option -> predicate * predicate
+
+val effect : typed_program -> Effect.t
+val pre : typed_program -> precondition list
+val post : typed_program -> postcondition option
+val result_type : typed_program -> type_v
 
 (*s Functions to translate array operations *)
 

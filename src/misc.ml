@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.13 2002-03-05 14:51:26 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.14 2002-03-05 16:01:41 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -220,11 +220,22 @@ let rec occur_predicate id = function
   | Pnot a -> occur_predicate id a
   | Forall (_,_,_,a) -> occur_predicate id a
   
+let forall x v p =
+  let n = Ident.bound () in
+  let p = tsubst_in_predicate [x, Tbound n] p in
+  Forall (x, n, mlize_type v, p)
+
+let foralls =
+  List.fold_right
+    (fun (x,v) p -> if occur_predicate x p then forall x v p else p)
+    
+
 (*s Smart constructors. *)
 
 let ttrue = Tconst (ConstBool true)
 let tfalse = Tconst (ConstBool false)
 let tresult = Tvar Ident.result
+let tvoid = Tconst ConstUnit
 
 let relation op t1 t2 = Papp (op, [t1; t2])
 let not_relation op = relation (negate op)

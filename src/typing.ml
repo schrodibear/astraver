@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.17 2002-03-04 16:15:58 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.18 2002-03-05 16:01:41 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -95,11 +95,6 @@ let rec subtype = function
       s1 = s2 && subtype (v1,v2)
   | (v1,v2) -> 
       v1 = v2
-
-let effect p = p.info.kappa.c_effect
-let pre p = p.info.kappa.c_pre
-let post p = p.info.kappa.c_post
-let result_type p = p.info.kappa.c_result_type
 
 let compose3effects x y z = Effect.compose x (Effect.compose y z)
       

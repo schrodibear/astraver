@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.10 2002-03-05 14:41:51 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.11 2002-03-05 16:01:41 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -54,6 +54,13 @@ let make_after_before env p =
 
 let make_after_before_term env t =
   subst_in_term (make_after_before_al env (term_vars t)) t
+
+(*s shortcuts for typing information *)
+
+let effect p = p.info.kappa.c_effect
+let pre p = p.info.kappa.c_pre
+let post p = p.info.kappa.c_post
+let result_type p = p.info.kappa.c_result_type
 
 
 (* [apply_pre] and [apply_post] instantiate pre- and post- conditions

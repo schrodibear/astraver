@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.14 2002-03-05 14:41:51 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.15 2002-03-05 16:01:41 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -14,65 +14,25 @@ open Effect
 open Typing
 open Rename
 
-(* term utilities *)
-
-let post e = e.info.kappa.c_post
-
 (* force a post-condition *)
 
-let update_post env top ef c =
-  let i,o = Effect.get_repr ef in
-  let al = 
-    Idset.fold
-      (fun id l -> 
-	 if is_mutable_in_env env id then
-	   if is_write ef id then l else (id,at_id id "") :: l
-	 else if is_at id then
-	   let (uid,d) = un_at id in
-	   if is_mutable_in_env env uid && d = "" then 
-	     (id,at_id uid top) :: l 
-	   else 
-	     l
-	 else
-	   l) 
-      (predicate_vars c) []
-  in
-  subst_in_predicate al c
-  
-let force_post up env top q e =
-  let ef = e.info.kappa.c_effect in
-  let q' = 
-    if up then option_app (named_app (update_post env top ef)) q else q 
-  in
-  let c' = { e.info.kappa with c_post = q' } in
+let force_post q e =
+  let c' = { e.info.kappa with c_post = q } in
   let i = { env = e.info.env; kappa = c' } in
   { desc = e.desc; info = i }
 
+let post_if_none env q p = match post p with
+  | None -> force_post q p 
+  | _ -> p
+
 let optpost_app f = option_app (post_app f)
 
-(* put a post-condition if none is present *)
-
-let post_if_none_up env top q p = match p.info.kappa.c_post with
-  | None -> force_post true env top q p 
-  | _ -> p
-
-let post_if_none env q p = match p.info.kappa.c_post with
-  | None -> force_post false env "" q p 
-  | _ -> p
+(* misc. *)
 
 let create_bool_post c =
   Some { a_value = c; a_name = Name (bool_name()) }
 
 let is_conditional p = match p.desc with If _ -> true | _ -> false
-
-(* [annotation_candidate p] determines if p is a candidate for a 
-   post-condition *)
-
-(*i DEAD
-let annotation_candidate = function
-  | { desc = If _ | LetIn _ | LetRef _ ; post = None } -> true
-  | _ -> false
-i*)
 
 (* [extract_pre p] erase the pre-condition of [p] and returns it *)
 
@@ -110,33 +70,6 @@ let top_point = function
 let top_point_block = function
   | (Label s :: _) as b -> s,b
   | b -> let s = label_name () in s, (Label s)::b
-
-(* [add_decreasing env inv (var,r) lab bl] adds the decreasing condition
-   [phi(ren') r phi(ren)] to the last assertion of the block [bl],
-   which is created if needed. *)
-(*i***
-let add_decreasing env inv (var,r) lab bl =
-  let ids = term_now_vars env var in
-  let al = Idset.fold (fun id l -> (id,at_id id lab) :: l) ids [] in
-  let var_lab = subst_in_term al var in
-  let dec = papplist r [var; var_lab] in
-  let post = match inv with
-    | None -> anonymous dec
-    | Some i -> { a_value = Pand (dec, i.a_value); a_name = i.a_name }
-  in
-  bl @ [ Assert post ]
-***i*)
-
-(* [post_last_statement env top q bl] annotates the last statement of the
-   sequence [bl] with [q] if necessary *)
-
-(*i DEAD
-let post_last_statement env top q bl =
-  match List.rev bl with
-    | Statement e :: rem when annotation_candidate e -> 
-	List.rev ((Statement (post_if_none_up env top q e)) :: rem)
-    | _ -> bl
-i*)
 
 (*s Normalization. In this first pass, we
     (2) annotate [x := E] with [{ x = E }]
@@ -274,27 +207,14 @@ and wp_desc info d q =
     | Expression t ->
 	let q = optpost_app make_before_after q in
 	d, optpost_app (tsubst_in_predicate [result,t]) q
-(*i    
-    (* $wp(x := E, q) = q[x\leftarrow E]$ *)
-    | Aff (x, { desc = Expression t }) -> 
-	d, optpost_app (tsubst_in_predicate [x,t]) q
-i*)
-    (* $wp(x := E, q) = \forall x0. x0=E \Rightarrow q[x\leftarrow x0]$ *)
-    | Aff (x, { desc = Expression t; info = ti }) -> 
-	let n = Ident.bound () in
-	let q = 
-	  optpost_app 
-	    (fun q -> 
-	       let q = tsubst_in_predicate [x,Tbound n] q in
-	       let ti = mlize_type ti.kappa.c_result_type in
-	       Forall (x, n, ti, Pimplies (equality (Tbound n) t, q)))
-	    q
-	in
-	d, q
-    (* otherwise: $wp(x := p, q) = wp(p, q[x\leftarrow result])$ *)
+    (* $wp(!x,q) = q[result \leftarrow x]$ *)
+    | Acc x ->
+	d, optpost_app (subst_in_predicate [result,x]) q
+    (* $wp(x := e, q) = wp(e, q[result\leftarrow void; x\leftarrow result])$ *)
     | Aff (x, p) ->
-	let q' = optpost_app (subst_in_predicate [x, result]) q in
-	let p',w = wp p q' in
+	let q = optpost_app (tsubst_in_predicate [result, tvoid]) q in
+	let q = optpost_app (subst_in_predicate [x, result]) q in
+	let p',w = wp p q in
 	Aff (x, p'), w
     (* conditional: two cases depending on [p1.post] *)
     | If (p1, p2, p3) ->
