@@ -296,7 +296,7 @@ FILES =src/*.ml* intf/*.ml* tools/*.ml* \
 	examples/*/*.c examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/bench.in bench/good*/*.mlw bench/good*/*.c bench/good*/*.v \
-	lib/coq*/*.v lib/pvs/why.* lib/mizar/*.* lib/mizar/dict/*.*
+	lib/coq*/*.v lib/pvs/why.* lib/mizar/why.miz lib/mizar/dict/why.voc
 
 distrib export: source export-doc export-examples linux
 	make -C $(HOME)/www/why install
@@ -370,7 +370,9 @@ coq-clean::
 	rm -f .depend
 	$(OCAMLDEP) $(INCLUDES) src/*.ml src/*.mli intf/*.ml intf/*.mli > .depend
 	if test @COQ@ == yes; then \
-	  $(COQDEP) $(COQINCLUDES) @WHYLIBCOQ@/*.v >> .depend; fi
+	  $(COQDEP) -R lib/coq Coq.why lib/coq/*.v >> .depend; \
+	  $(COQDEP) -R lib/coq-v7 Coq.why lib/coq-v7/*.v >> .depend; \
+	fi
 
 alldepend:
 	make -C examples depend
