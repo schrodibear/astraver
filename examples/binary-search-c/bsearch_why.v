@@ -37,7 +37,7 @@ Axiom
         (access t ((l + u) / 2) > v)%Z ->
         In t 0 (array_length t - 1) v -> In t l ((l + u) / 2 - 1) v.
 
-(* Why obligation from file "bsearch.c", characters 719-730 *)
+(* Why obligation from file "bsearch.c", characters 631-642 *)
 Lemma binary_search_po_1 : 
   forall (n: Z),
   forall (v: Z),
@@ -47,24 +47,19 @@ Lemma binary_search_po_1 :
   forall (Post1: l1 = 0),
   forall (u1: Z),
   forall (Post2: u1 = (n - 1)),
-  forall (p1: Z),
-  forall (Post3: p1 = (Zopp 1)),
   forall (Variant1: Z),
   forall (l2: Z),
   forall (u2: Z),
   forall (Pre7: Variant1 = (2 + u2 - l2)),
-  forall (Pre6: 0 <= l2 /\ u2 <= ((array_length t) - 1) /\ ((Zopp 1) <= p1 /\
-                p1 <= ((array_length t) - 1)) /\
-                ((p1 = (Zopp 1) ->
-                  ((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))) /\
-                ((p1 >= 0 -> (access t p1) = v))),
+  forall (Pre6: 0 <= l2 /\ u2 <= ((array_length t) - 1) /\
+                (((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))),
   forall (Test2: l2 <= u2),
   ~(2 = 0).
 Proof.
 intros; omega.
 Qed.
 
-(* Why obligation from file "bsearch.c", characters 748-765 *)
+(* Why obligation from file "bsearch.c", characters 660-677 *)
 Lemma binary_search_po_2 : 
   forall (n: Z),
   forall (v: Z),
@@ -74,21 +69,16 @@ Lemma binary_search_po_2 :
   forall (Post1: l1 = 0),
   forall (u1: Z),
   forall (Post2: u1 = (n - 1)),
-  forall (p1: Z),
-  forall (Post3: p1 = (Zopp 1)),
   forall (Variant1: Z),
   forall (l2: Z),
   forall (u2: Z),
   forall (Pre7: Variant1 = (2 + u2 - l2)),
-  forall (Pre6: 0 <= l2 /\ u2 <= ((array_length t) - 1) /\ ((Zopp 1) <= p1 /\
-                p1 <= ((array_length t) - 1)) /\
-                ((p1 = (Zopp 1) ->
-                  ((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))) /\
-                ((p1 >= 0 -> (access t p1) = v))),
+  forall (Pre6: 0 <= l2 /\ u2 <= ((array_length t) - 1) /\
+                (((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))),
   forall (Test2: l2 <= u2),
   forall (Pre5: ~(2 = 0)),
   forall (m2: Z),
-  forall (Post4: m2 = ((Zdiv (l2 + u2) 2))),
+  forall (Post3: m2 = ((Zdiv (l2 + u2) 2))),
   l2 <= m2 /\ m2 <= u2.
 Proof.
 intuition; subst.
@@ -96,7 +86,7 @@ apply le_mean; omega.
 apply ge_mean; omega.
 Qed.
 
-(* Why obligation from file "bsearch.c", characters 765-768 *)
+(* Why obligation from file "bsearch.c", characters 677-680 *)
 Lemma binary_search_po_3 : 
   forall (n: Z),
   forall (v: Z),
@@ -106,31 +96,23 @@ Lemma binary_search_po_3 :
   forall (Post1: l1 = 0),
   forall (u1: Z),
   forall (Post2: u1 = (n - 1)),
-  forall (p1: Z),
-  forall (Post3: p1 = (Zopp 1)),
   forall (Variant1: Z),
   forall (l2: Z),
   forall (u2: Z),
   forall (Pre7: Variant1 = (2 + u2 - l2)),
-  forall (Pre6: 0 <= l2 /\ u2 <= ((array_length t) - 1) /\ ((Zopp 1) <= p1 /\
-                p1 <= ((array_length t) - 1)) /\
-                ((p1 = (Zopp 1) ->
-                  ((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))) /\
-                ((p1 >= 0 -> (access t p1) = v))),
+  forall (Pre6: 0 <= l2 /\ u2 <= ((array_length t) - 1) /\
+                (((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))),
   forall (Test2: l2 <= u2),
   forall (Pre5: ~(2 = 0)),
   forall (m2: Z),
-  forall (Post4: m2 = ((Zdiv (l2 + u2) 2))),
+  forall (Post3: m2 = ((Zdiv (l2 + u2) 2))),
   forall (Pre4: l2 <= m2 /\ m2 <= u2),
   (forall (result:Z),
    (result = (access t m2) ->
     ((result < v ->
       (forall (l:Z),
        (l = (m2 + 1) -> (0 <= l /\ u2 <= ((array_length t) - 1) /\
-        ((Zopp 1) <= p1 /\ p1 <= ((array_length t) - 1)) /\
-        ((p1 = (Zopp 1) ->
-          ((In t 0 ((array_length t) - 1) v) -> (In t l u2 v)))) /\
-        ((p1 >= 0 -> (access t p1) = v))) /\
+        (((In t 0 ((array_length t) - 1) v) -> (In t l u2 v)))) /\
         (Zwf 0 (2 + u2 - l) (2 + u2 - l2)))))) /\
     ((result >= v ->
       (forall (result:Z),
@@ -138,10 +120,7 @@ Lemma binary_search_po_3 :
         ((result > v ->
           (forall (u:Z),
            (u = (m2 - 1) -> (0 <= l2 /\ u <= ((array_length t) - 1) /\
-            ((Zopp 1) <= p1 /\ p1 <= ((array_length t) - 1)) /\
-            ((p1 = (Zopp 1) ->
-              ((In t 0 ((array_length t) - 1) v) -> (In t l2 u v)))) /\
-            ((p1 >= 0 -> (access t p1) = v))) /\
+            (((In t 0 ((array_length t) - 1) v) -> (In t l2 u v)))) /\
             (Zwf 0 (2 + u - l2) (2 + u2 - l2)))))) /\
         ((result <= v -> (0 <= m2 /\ m2 <= ((array_length t) - 1)) /\
           (access t m2) = v \/ m2 = (Zopp 1) /\
@@ -156,7 +135,7 @@ subst; apply In_left_side; intuition.
 rewrite H; assumption.
 Qed.
 
-(* Why obligation from file "bsearch.c", characters 516-684 *)
+(* Why obligation from file "bsearch.c", characters 504-596 *)
 Lemma binary_search_po_4 : 
   forall (n: Z),
   forall (v: Z),
@@ -166,18 +145,14 @@ Lemma binary_search_po_4 :
   forall (Post1: l1 = 0),
   forall (u1: Z),
   forall (Post2: u1 = (n - 1)),
-  forall (p1: Z),
-  forall (Post3: p1 = (Zopp 1)),
-  0 <= l1 /\ u1 <= ((array_length t) - 1) /\ ((Zopp 1) <= p1 /\ p1 <=
-  ((array_length t) - 1)) /\
-  ((p1 = (Zopp 1) -> ((In t 0 ((array_length t) - 1) v) -> (In t l1 u1 v)))) /\
-  ((p1 >= 0 -> (access t p1) = v)).
+  0 <= l1 /\ u1 <= ((array_length t) - 1) /\
+  (((In t 0 ((array_length t) - 1) v) -> (In t l1 u1 v))).
 Proof.
 intuition.
 subst; rewrite <- H; assumption.
 Qed.
 
-(* Why obligation from file "bsearch.c", characters 882-884 *)
+(* Why obligation from file "bsearch.c", characters 794-796 *)
 Lemma binary_search_po_5 : 
   forall (n: Z),
   forall (v: Z),
@@ -187,28 +162,21 @@ Lemma binary_search_po_5 :
   forall (Post1: l1 = 0),
   forall (u1: Z),
   forall (Post2: u1 = (n - 1)),
-  forall (p1: Z),
-  forall (Post3: p1 = (Zopp 1)),
   forall (l2: Z),
   forall (u2: Z),
-  forall (Post9: (0 <= l2 /\ u2 <= ((array_length t) - 1) /\ ((Zopp 1) <=
-                 p1 /\ p1 <= ((array_length t) - 1)) /\
-                 ((p1 = (Zopp 1) ->
-                   ((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))) /\
-                 ((p1 >= 0 -> (access t p1) = v))) /\ l2 > u2),
+  forall (Post8: (0 <= l2 /\ u2 <= ((array_length t) - 1) /\
+                 (((In t 0 ((array_length t) - 1) v) -> (In t l2 u2 v)))) /\
+                 l2 > u2),
   (0 <= (Zopp 1) /\ (Zopp 1) <= ((array_length t) - 1)) /\
   (access t (Zopp 1)) = v \/ (Zopp 1) = (Zopp 1) /\
   ~(In t 0 ((array_length t) - 1) v).
 Proof.
 intuition.
-elim (Z_lt_ge_dec (-1) p1); intro.
-left; omega.
 right.
-cut (p1 = (-1)%Z); [ intro | omega ].
 split.
  trivial.
 intuition.
-decompose [In] H11.
+decompose [In] H7.
 absurd (l2 <= i <= u2)%Z; omega.
 Qed.
 

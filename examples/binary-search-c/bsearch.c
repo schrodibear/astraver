@@ -12,15 +12,13 @@
 int binary_search(int t[], int n, int v) 
 /*@ array_length(t) = n and n >= 0 and sorted_array(t,0,n-1) */
 {
-  int l,u,p,m;
+  int l,u,m;
   l = 0; 
   u = n-1; 
-  p = -1;
   while (l <= u) 
     /*@ invariant 
-	  0 <= l and u <= array_length(t)-1 and -1 <= p <= array_length(t)-1
-          and (p = -1 -> In(t,0,array_length(t)-1,v) -> In(t,l,u,v))
-          and (p >= 0 -> t[p]=v)
+	  0 <= l and u <= array_length(t)-1 and
+          (In(t,0,array_length(t)-1,v) -> In(t,l,u,v))
         variant 2+u-l */ {
     m = (l + u) / 2;
     /*@ assert l <= m and m <= u */;
