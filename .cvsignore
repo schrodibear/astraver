@@ -2,3 +2,4 @@ config.cache
 config.status
 Makefile
 export
+.depend
