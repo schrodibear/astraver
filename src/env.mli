@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.mli,v 1.15 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: env.mli,v 1.16 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -32,7 +32,7 @@ type typing_info =
     label : label;
     kappa : type_c }
   
-type typed_program = (typing_info, predicate) Ast.t
+type typed_program = typing_info Ast.t
 
 (* global environment *)
 

@@ -1,11 +1,12 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.mli,v 1.8 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: typing.mli,v 1.9 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 (*s This module realizes type and effect inference *)
 
 open Logic
 open Types
+open Ptree
 open Ast
 open Env
 

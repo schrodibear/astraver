@@ -1,8 +1,9 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.31 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.32 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Options
+open Ptree
 open Ast
 open Types
 open Env
@@ -42,7 +43,7 @@ let print_if_debug p x = if_debug_3 eprintf "  @[%a@]@." p x
 
 let interp_program id p =
   reset_names ();
-  let ploc = p.info.loc in
+  let ploc = p.loc in
   if_verbose_3 eprintf "*** interpreting program %a@." Ident.print id;
 
   if_debug eprintf "* typing with effects@.";
@@ -91,7 +92,7 @@ let interp_decl d =
   let lenv = Env.logical_env env in
   match d with 
   | Program (id, p) ->
-      if Env.is_global id then Error.clash id (Some p.info.loc);
+      if Env.is_global id then Error.clash id (Some p.loc);
       (try interp_program id p with Exit -> ())
   | Parameter (loc, ids, v) ->
       let v = Ltyping.type_v (Some loc) lab env lenv v in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.55 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.56 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -13,6 +13,7 @@ open Util
 open Logic
 open Rename
 open Types
+open Ptree
 open Ast
 open Env 
 open Effect
@@ -97,11 +98,11 @@ let decomp_fun_type f tf = match tf.info.kappa.c_result_type with
   | Arrow ((x,BindType v) :: bl, k) ->
       x, v, type_c_of_v (Arrow (bl, k))
   | Arrow ((x,_) :: _, _) ->
-      Error.expects_a_term x f.info.loc
+      Error.expects_a_term x f.loc
   | Arrow ([], _) ->
       assert false
   | _ -> 
-      Error.app_of_non_function f.info.loc
+      Error.app_of_non_function f.loc
 
 let expected_type loc t et =
   if t <> et then Error.expected_type loc (fun fmt -> print_type_v fmt et)
@@ -179,9 +180,11 @@ let k_add_effects k e = { k with c_effect = Effect.union k.c_effect e }
 (*s Typing variants. 
     Return the effect i.e. variables appearing in the variant. *)
 
-let state_var lab env (phi,_,_) = 
+let state_var lab env (phi,r) = 
+  let lenv = logical_env env in
+  let phi,tphi = Ltyping.term lab lenv phi in
   let ids = term_refs env phi in
-  Effect.add_reads ids Effect.bottom
+  (phi,tphi,r), Effect.add_reads ids Effect.bottom
 	
 (*s Typing preconditions.
     Return the effect i.e. variables appearing in the precondition. 
@@ -310,10 +313,10 @@ let check_array_type loc env id =
     and [expr] the program. *)
 
 let rec typef lab env expr =
-  let (d,(v,e),p1) = typef_desc lab env expr.info.loc expr.desc in
-  let loc = Some expr.info.loc in
-  let (ep,p) = state_pre lab env loc expr.info.pre in
-  let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
+  let (d,(v,e),p1) = typef_desc lab env expr.loc expr.pdesc in
+  let loc = Some expr.loc in
+  let (ep,p) = state_pre lab env loc expr.pre in
+  let (eq,q) = state_post lab env (result,v,e) loc expr.post in
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
   let p' = p @ List.map assert_pre p1 in
@@ -333,11 +336,11 @@ let rec typef lab env expr =
 	make_node d env toplabel c
 
 and typef_desc lab env loc = function
-  | Expression c ->
+  | Sexpression c ->
       let v = typing_term loc env c in
       Expression c, (v,Effect.bottom), []
 
-  | Var id as s ->
+  | Svar id ->
       let v = 
 	try type_in_env env id 
 	with Not_found -> Error.unbound_variable id (Some loc)
@@ -346,25 +349,25 @@ and typef_desc lab env loc = function
       if is_pure_type_v v && not (is_rec id env) then 
 	Expression (Tvar id), (v,ef), []
       else 
-	s, (v,ef), [] 
+	Var id, (v,ef), [] 
 
-  | Acc id ->
+  | Srefget id ->
       let v = check_ref_type loc env id in
       let ef = Effect.add_read id Effect.bottom in
       Expression (Tvar id), (v,ef), []
 
-  | Aff (x, e1) ->
+  | Srefset (x, e1) ->
       let et = check_ref_type loc env x in
       let t_e1 = typef lab env e1 in
-      expected_type e1.info.loc (result_type t_e1) et;
+      expected_type e1.loc (result_type t_e1) et;
       let e = t_e1.info.kappa.c_effect in
       let ef = add_write x e in
       let v = type_v_unit in
       Aff (x, t_e1), (v,ef), []
 
-  | TabAcc (check, x, e) ->
+  | Sarrget (check, x, e) ->
       let t_e = typef lab env e in
-      expected_type e.info.loc (result_type t_e) type_v_int;
+      expected_type e.loc (result_type t_e) type_v_int;
       let efe = t_e.info.kappa.c_effect in
       let ef = Effect.add_read x efe in
       let _,ty = check_array_type loc env x in
@@ -378,12 +381,12 @@ and typef_desc lab env loc = function
       in
       s, (ty, ef), p
 
-  | TabAff (check, x, e1, e2) ->
+  | Sarrset (check, x, e1, e2) ->
       let t_e1 = typef lab env e1 in
-      expected_type e1.info.loc (result_type t_e1) type_v_int;
+      expected_type e1.loc (result_type t_e1) type_v_int;
       let t_e2 = typef lab env e2 in 
       let _,et = check_array_type loc env x in
-      expected_type e2.info.loc (result_type t_e2) et;
+      expected_type e2.loc (result_type t_e2) et;
       let ef1 = t_e1.info.kappa.c_effect in
       let ef2 = t_e2.info.kappa.c_effect in
       let ef = Effect.add_write x (Effect.union ef1 ef2) in
@@ -410,15 +413,15 @@ and typef_desc lab env loc = function
       in
       d, (v,ef), []
 
-  | Seq bl ->
+  | Sseq bl ->
       let bl,v,ef = typef_block lab env bl in
       Seq bl, (v,ef), []
 	      
-  | While (b, invopt, var, e) ->
-      let efphi = state_var lab env var in
+  | Swhile (b, invopt, var, e) ->
+      let var,efphi = state_var lab env var in
       let t_b = typef lab env b in
       let efb = t_b.info.kappa.c_effect in
-      Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
+      Error.check_no_effect b.loc t_b.info.kappa.c_effect;
       let t_e = typef lab env e in
       let efe = t_e.info.kappa.c_effect in
       let efinv,invopt = state_inv lab env (Some loc) invopt in
@@ -428,41 +431,41 @@ and typef_desc lab env loc = function
       let v = type_v_unit in
       While (t_b,invopt,var,t_e), (v,ef), []
       
-  | Lam ([],_) ->
+  | Slam ([],_) ->
       assert false
 
-  | Lam (bl, e) ->
+  | Slam (bl, e) ->
       let bl',env',_ = binders (Some loc) lab env (logical_env env) bl in
       let t_e = typef initial_labels env' e in
       let v = make_arrow_type t_e.info.label bl' t_e.info.kappa in
       let ef = Effect.bottom in
       Lam (bl',t_e), (v,ef), []
 
-  | App (_, _, Some _) ->
+  | Sapp (_, _, Some _) ->
       assert false
 
-  | App ({desc=Var id} as e, Term a, None) when is_poly id ->
+  | Sapp ({pdesc=Svar id} as e, Sterm a, None) when is_poly id ->
       let t_a = typef lab env a in
-      let eq = type_poly id a.info.loc (result_type t_a) in
-      typef_desc lab env loc (App ({e with desc = Var eq}, Term a, None))
+      let eq = type_poly id a.loc (result_type t_a) in
+      typef_desc lab env loc (Sapp ({e with pdesc = Svar eq}, Sterm a, None))
       (* TODO: avoid recursive call *)
 
-  | App (f, Term a, None) ->
+  | Sapp (f, Sterm a, None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
       let t_a = typef lab env a in
-      expected_type a.info.loc (result_type t_a) tx;
+      expected_type a.loc (result_type t_a) tx;
       (match tx with 
       (* the function expects a mutable; it must be a variable *)
       | Ref _ | Array _ -> (match t_a with
 	  | { desc = Var r } ->
-	      check_for_alias a.info.loc r (result_type t_f);
+	      check_for_alias a.loc r (result_type t_f);
 	      let kapp = type_c_subst (subst_onev x r) kapp in
 	      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
 	      let ef = Effect.union (effect t_f) eapp in
 	      App (t_f, Refarg r, Some kapp), (tapp, ef), []
 	  | _ ->
-	      Error.should_be_a_variable a.info.loc)
+	      Error.should_be_a_variable a.loc)
       (* argument is not mutable *)
       | _ ->
 	  let (_,tapp),eapp,_,_ = decomp_kappa kapp in
@@ -493,10 +496,9 @@ and typef_desc lab env loc = function
 		we transform into [let v = arg in (f v)] *)
 	     | _ ->
 		 if occur_type_v x tapp then 
-		   Error.too_complex_argument a.info.loc;
+		   Error.too_complex_argument a.loc;
 		 let v = fresh_var () in
 		 let kapp = type_c_subst (subst_onev x v) kapp in
-		 let info = { loc = loc; pre = []; post = None } in
 		 let env' = Env.add v tx env in
 		 let app_f_v,pl = match t_f.desc with
 		   (* function is pure: we collapse terms *)
@@ -519,13 +521,13 @@ and typef_desc lab env loc = function
 		 LetIn (v, t_a, make_lnode app_f_v env' kfv), 
 		 (tapp, ef), pl))
 
-  | App (_, Refarg _, _) -> 
+  | Sapp (_, Srefarg _, _) -> 
       assert false
 
-  | App (f, Type _, None) ->
+  | Sapp (f, Stype _, None) ->
       failwith "todo: typing: application to a type"
       
-  | LetRef (x, e1, e2) ->
+  | Sletref (x, e1, e2) ->
       let t_e1 = typef lab env e1 in
       let ef1 = t_e1.info.kappa.c_effect in
       let v1 = t_e1.info.kappa.c_result_type in
@@ -537,11 +539,11 @@ and typef_desc lab env loc = function
       let ef = Effect.union ef1 (Effect.remove x ef2) in
       LetRef (x, t_e1, t_e2), (v2,ef), []
 	
-  | LetIn (x, e1, e2) ->
+  | Sletin (x, e1, e2) ->
       let t_e1 = typef lab env e1 in
       let ef1 = t_e1.info.kappa.c_effect in
       let v1 = t_e1.info.kappa.c_result_type in
-      Error.check_for_not_mutable e1.info.loc v1;
+      Error.check_for_not_mutable e1.loc v1;
       let env' = add x v1 env in
       let t_e2 = typef lab env' e2 in
       let ef2 = t_e2.info.kappa.c_effect in
@@ -549,10 +551,10 @@ and typef_desc lab env loc = function
       let ef = Effect.union ef1 ef2 in
       LetIn (x, t_e1, t_e2), (v2,ef), []
 	    
-  | If (b, e1, e2) ->
+  | Sif (b, e1, e2) ->
       let t_b = typef lab env b in
-      expected_type b.info.loc (result_type t_b) type_v_bool;
-      Error.check_no_effect b.info.loc t_b.info.kappa.c_effect;
+      expected_type b.loc (result_type t_b) type_v_bool;
+      Error.check_no_effect b.loc t_b.info.kappa.c_effect;
       let t_e1 = typef lab env e1
       and t_e2 = typef lab env e2 in
       let t1 = t_e1.info.kappa.c_result_type in
@@ -561,10 +563,10 @@ and typef_desc lab env loc = function
       let v = type_v_sup loc t1 t2 in
       If (t_b, t_e1, t_e2), (v,ef), []
 
-  | Rec (f,bl,v,var,e) ->
+  | Srec (f,bl,v,var,e) ->
       let bl',env',lenv' = binders (Some loc) lab env (logical_env env) bl in
       let v = type_v (Some loc) lab env' lenv' v in
-      let efvar = state_var lab env' var in
+      let var,efvar = state_var lab env' var in
       let phi0 = phi_name () in
       check_type_var loc env' var;
       (* effect for a let/rec construct is computed as a fixpoint *)
@@ -586,7 +588,7 @@ and typef_desc lab env loc = function
       let tf = make_arrow bl' t_e.info.kappa in (* IDEM *)
       Rec (f,bl',v,var,t_e), (tf,Effect.bottom), []
 
-  | Raise (id, e, ct) ->
+  | Sraise (id, e, ct) ->
       let xt =
 	try find_exception id 
 	with Not_found -> Error.unbound_exception id (Some loc)
@@ -598,7 +600,7 @@ and typef_desc lab env loc = function
 	    Error.exception_argument loc id true
 	| Some xt, Some e ->
 	    let t_e = typef lab env e in
-	    expected_type e.info.loc (result_type t_e) (PureType xt);
+	    expected_type e.loc (result_type t_e) (PureType xt);
 	    Some t_e
 	| None, None -> 
 	    None
@@ -609,10 +611,6 @@ and typef_desc lab env loc = function
       in
       Raise (id, t_e, Some v), (v, Effect.add_exn id Effect.bottom), []
 	    
-  | Coerce e ->
-      let te = typef lab env e in
-      Coerce te, (result_type te, effect te), []
-
 and typef_block lab env bl =
   let rec ef_block lab tyres = function
     | [] ->
@@ -620,15 +618,15 @@ and typef_block lab env bl =
 	  | Some ty -> [], ty, Effect.bottom
 	  | None -> assert false
 	end
-    | (Assert c) :: block -> 
+    | (Sassert c) :: block -> 
 	let ep,p = state_assert lab env None c in
 	let bl,t,ef = ef_block lab tyres block in
 	(Assert p)::bl, t, Effect.union ep ef
-    | (Label s) :: block ->
+    | (Slabel s) :: block ->
 	let lab' = LabelSet.add s lab in
 	let bl,t,ef = ef_block lab' tyres block in
 	(Label s)::bl, t, ef
-    | (Statement e) :: block ->
+    | (Sstatement e) :: block ->
 	let t_e = typef lab env e in
 	let efe = t_e.info.kappa.c_effect in
 	let t = t_e.info.kappa.c_result_type in

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.40 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.41 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -337,18 +337,18 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
     args @ input @ holes
   in
   let tw = 
-    let r_phi0_phi = predicate_of_term (applist r [Tvar vphi0; Tvar vphi]) in
+    let r_phi0_phi = Papp (r, [Tvar vphi0; Tvar vphi]) in
     TTarrow ((vphi0, CC_var_binder a),
 	     TTarrow ((pre_name Anonymous, CC_pred_binder r_phi0_phi), tphi0))
   in
   let fw ren = 
     let tphi = apply_term ren env phi in
-    let decphi = predicate_of_term (applist r [tphi; Tvar vphi]) in
+    let decphi = Papp (r, [tphi; Tvar vphi]) in
     cc_applist (CC_var w) ([CC_term tphi; CC_hole decphi] @ input ren) 
   in
   cc_applist (CC_var well_founded_induction)
-    ([CC_type a; CC_term r;
-      CC_hole (papplist (Pvar well_founded) [r]);
+    ([CC_type a; CC_term (Tvar r);
+      CC_hole (Papp (well_founded, [Tvar r]));
       CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
       cc_lam 
 	([vphi, CC_var_binder a; w, CC_var_binder tw] @ bl)

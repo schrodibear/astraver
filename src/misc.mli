@@ -1,12 +1,13 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.32 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.33 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
 open Logic
 open Types
 open Ast
+open Ptree
 
 val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
@@ -87,7 +88,8 @@ val type_c_subst : var_substitution -> type_c -> type_c
 val type_v_rsubst : substitution -> type_v -> type_v
 val type_c_rsubst : substitution -> type_c -> type_c
 
-val type_c_of_v : 'a ptype_v -> 'a ptype_c
+val ptype_c_of_v : ptype_v -> ptype_c
+val type_c_of_v : type_v -> type_c
 val make_arrow : type_v binder list -> type_c -> type_v
 
 val equals_true : term -> term
@@ -131,7 +133,7 @@ val tt_arrow : cc_binder list -> cc_type -> cc_type
 
 (*s functions over AST *)
 
-val arg_loc : (parsed_info,'a) arg -> Loc.t
+val arg_loc : Ptree.arg -> Loc.t
 
 (*s Pretty-print *)
 

@@ -1,11 +1,12 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.41 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.42 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Ident
 open Logic
 open Types 
 open Ast
+open Ptree
 
 (*s Utility functions. *)
 
@@ -300,6 +301,11 @@ and binder_rsubst s = function
   | (n, BindType v) -> (n, BindType (type_v_rsubst s v))
   | b -> b
 
+let ptype_c_of_v v =
+  { pc_result_name = Ident.result;
+    pc_result_type = v;
+    pc_effect = Effect.bottom; pc_pre = []; pc_post = None }
+
 let type_c_of_v v =
   { c_result_name = Ident.result;
     c_result_type = v;
@@ -375,8 +381,8 @@ let tt_arrow = List.fold_right (fun b t -> TTarrow (b, t))
 (*s functions over AST *)
 
 let arg_loc = function 
-  | Term t -> t.info.loc 
-  | Refarg _ | Type _ -> assert false (* TODO *)
+  | Sterm t -> t.Ptree.loc 
+  | Srefarg _ | Stype _ -> assert false (* TODO *)
 
 (*s Pretty-print *)
 

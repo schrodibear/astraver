@@ -1,22 +1,19 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.43 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.44 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Logic
 open Rename
 open Misc
 open Util
 open Types
-open Ast
+open Ptree
 open Env
 
 let gram = Grammar.create (Plexer.make ())
 let gec s = Grammar.Entry.create gram s
 
 (* logic *)
-let term = gec "term"
-let term0 = gec "term0"
-let term1 = gec "term1"
 let predicate = gec "predicate"
 let predicate0 = gec "predicate0"
 let predicate1 = gec "predicate1"
@@ -102,36 +99,34 @@ let conj = function
   | Some a,Some b -> Some (conj_assert a b)
 
 let without_annot loc d = 
-  { desc = d; info = { pre = []; post = None; loc = loc } }
+  { pdesc = d; pre = []; post = None; loc = loc }
 
 let rec app f = function
   | [] -> 
       assert false
   | [a] -> 
-      App (f, a, None)
+      Sapp (f, a, None)
   | a :: l -> 
-      let loc = Loc.join f.info.loc (arg_loc a) in 
-      app (without_annot loc (App (f, a, None))) l
+      let loc = Loc.join f.loc (arg_loc a) in 
+      app (without_annot loc (Sapp (f, a, None))) l
 
 let bin_op op loc e1 e2 =
   without_annot loc
-    (app (without_annot loc (Var op)) [Term e1; Term e2])
+    (app (without_annot loc (Svar op)) [Sterm e1; Sterm e2])
 
 let un_op op loc e =
   without_annot loc
-    (app (without_annot loc (Expression (Tapp (op,[])))) [Term e])
+    (app (without_annot loc (Sexpression (Tapp (op,[])))) [Sterm e])
 
 let bool_not loc a = un_op Ident.p_not loc a
 
-let zwf_zero = Tvar Ident.t_zwf_zero
-
 let mk_prog loc p pre post =
-  { desc = p.desc; 
-    info = { pre = p.info.pre @ pre; 
-	     post = conj (p.info.post, post); 
-	     loc = loc } }
+  { pdesc = p.pdesc; 
+    pre = p.pre @ pre; 
+    post = conj (p.post, post); 
+    loc = loc }
 
-let rec_name = function Rec (x,_,_,_,_) -> x | _ -> assert false
+let rec_name = function Srec (x,_,_,_,_) -> x | _ -> assert false
 
 EXTEND 
 
@@ -149,26 +144,6 @@ EXTEND
   ;
 
   (* Logic *)
-  term:
-  [ [ a = term; "+"; b = term0 -> Tapp (Ident.t_add, [a;b])
-    | a = term; "-"; b = term0 -> Tapp (Ident.t_sub, [a;b])
-    | a = term0 -> a ] ]
-  ;
-  term0:
-  [ [ a = term0; "*"; b = term1 -> Tapp (Ident.t_mul, [a;b])
-    | a = term0; "/"; b = term1 -> Tapp (Ident.t_div, [a;b])
-    | a = term0; "%"; b = term1 -> Tapp (Ident.t_mod, [a;b])
-    | a = term1 -> a ] ]
-  ;
-  term1:
-  [ [ "-"; a = term1 -> Tapp (Ident.t_neg, [a])
-    | c = constant -> Tconst c
-    | x = qualid_ident -> Tvar x
-    | x = qualid_ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
-    | x = qualid_ident; "["; t = term; "]" -> Tapp (Ident.access, [Tvar x; t])
-
-    | "("; a = term; ")" -> a ] ]
-  ;
   constant:
   [ [ n = INT -> ConstInt (int_of_string n)
     | "true" -> ConstBool true
@@ -261,28 +236,28 @@ EXTEND
   (* [ident] is expansed to allow factorization *)
   type_v:
   [ [ v = simple_type_v; "->"; c = type_c -> 
-	Arrow ([Ident.anonymous, BindType v], c)
+	PVarrow ([Ident.anonymous, BindType v], c)
     | x = LIDENT; ":"; v = simple_type_v; "->"; c = type_c -> 
-	Arrow ([(Ident.create x, BindType v)], c)
+	PVarrow ([(Ident.create x, BindType v)], c)
     | x = UIDENT; ":"; v = simple_type_v; "->"; c = type_c -> 
-	Arrow ([(Ident.create x, BindType v)], c)
+	PVarrow ([(Ident.create x, BindType v)], c)
     | t = simple_type_v -> 
 	t ] ]
   ;
   simple_type_v:
-  [ [ "array"; size = term; "of"; v = simple_type_v -> Array (size,v)
-    | v = simple_type_v; "ref" -> Ref v
-    | t = primitive_type -> PureType t
+  [ [ "array"; size = predicate; "of"; v = simple_type_v -> PVarray (size,v)
+    | v = simple_type_v; "ref" -> PVref v
+    | t = primitive_type -> PVpure t
     | "("; v = type_v; ")" -> v ] ] 
   ;
   type_c:
   [ [ "{"; p = OPT pre_condition; "}";
       (id,v) = result; e = effects; 
       "{"; q = OPT post_condition; "}" ->
-        { c_result_name = id; c_result_type = v;
-	  c_effect = e; c_pre = list_of_some p; c_post = q } 
+        { pc_result_name = id; pc_result_type = v;
+	  pc_effect = e; pc_pre = list_of_some p; pc_post = q } 
     | v = type_v -> 
-	type_c_of_v v ] ] 
+	ptype_c_of_v v ] ] 
   ;
   result:
   [ [ LIDENT "returns"; id = ident; ":"; v = type_v -> (id, v)
@@ -372,11 +347,11 @@ EXTEND
 
   ast1:
   [ [ x = prog2; "||"; y = prog1  -> 
-       let ptrue = without_annot loc (Expression (Tconst (ConstBool true))) in
-       without_annot loc (If (x, ptrue, y))
+       let ptrue = without_annot loc (Sexpression (Tconst (ConstBool true))) in
+       without_annot loc (Sif (x, ptrue, y))
     | x = prog2; "&&"; y = prog1 -> 
-       let pf = without_annot loc (Expression (Tconst (ConstBool false))) in
-       without_annot loc (If (x, y, pf))
+       let pf = without_annot loc (Sexpression (Tconst (ConstBool false))) in
+       without_annot loc (Sif (x, y, pf))
     | x = prog2 -> x ] ]
   ;
   ast2:
@@ -405,60 +380,60 @@ EXTEND
   ;
   ast7:
   [ [ v = ident -> 
-	Var v
+	Svar v
     | n = INT ->
-	Expression (Tconst (ConstInt (int_of_string n)))
+	Sexpression (Tconst (ConstInt (int_of_string n)))
     | f = FLOAT ->
-	Expression (Tconst (ConstFloat (float_of_string f)))
+	Sexpression (Tconst (ConstFloat (float_of_string f)))
     | LIDENT "void" ->
-	Expression (Tconst ConstUnit)
+	Sexpression (Tconst ConstUnit)
     | "true" ->
-	Expression (Tconst (ConstBool true))
+	Sexpression (Tconst (ConstBool true))
     | "false" ->
-	Expression (Tconst (ConstBool false))
+	Sexpression (Tconst (ConstBool false))
     | "!"; v = ident ->
-	Acc v
+	Srefget v
     | v = ident; ":="; p = program ->
-	Aff (v,p)
+	Srefset (v,p)
     | v = ident; "["; e = program; "]" -> 
-	TabAcc (true,v,e)
+	Sarrget (true,v,e)
     | v = ident; "["; e = program; "]"; ":="; p = program -> 
-	TabAff (true,v,e,p)
+	Sarrset (true,v,e,p)
     | "if"; e1 = program; "then"; e2 = program; "else"; e3 = program ->
-	If (e1,e2,e3)
+	Sif (e1,e2,e3)
     | "if"; e1 = program; "then"; e2 = program ->
-	If (e1,e2,without_annot loc (Expression (Tconst ConstUnit)))
+	Sif (e1,e2,without_annot loc (Sexpression (Tconst ConstUnit)))
     | "while"; b = program; "do"; 
 	"{"; inv = OPT invariant; LIDENT "variant"; wf = variant; "}";
 	bl = block; "done" ->
-	  While (b, inv, wf, without_annot loc (Seq bl))
+	  Swhile (b, inv, wf, without_annot loc (Sseq bl))
 (*i
     | "for"; i = ident; "="; v1 = program; "to"; v2 = program;
 	"do"; "{"; inv = invariant; "}"; bl = block; "done" -> 
 	  make_ast_for loc i v1 v2 inv bl
 i*)
     | "let"; v = ident; "="; "ref"; p1 = program; "in"; p2 = program ->
-	LetRef (v, p1, p2)
+	Sletref (v, p1, p2)
     | "let"; v = ident; "="; p1 = program; "in"; p2 = program ->
-	LetIn (v, p1, p2)
+	Sletin (v, p1, p2)
     | "begin"; b = block; "end" ->
-	Seq b
+	Sseq b
     | "fun"; bl = binders; "->"; p = program ->
-	Lam (bl,p)
+	Slam (bl,p)
     | "let"; "rec"; p = recfun -> 
         p
     | "let"; "rec"; p = recfun; "in"; p2 = program ->
-	LetIn (rec_name p, without_annot loc p, p2)
+	Sletin (rec_name p, without_annot loc p, p2)
     | "raise"; id = ident; t = OPT cast ->
-	Raise (id, None, t)
+	Sraise (id, None, t)
     | "raise"; "("; id = ident; p = program; ")"; t = OPT cast ->
-	Raise (id, Some p, t)
+	Sraise (id, Some p, t)
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 
 	  | [] -> 
-	      if p.info.pre <> [] || p.info.post <> None then
+	      if p.pre <> [] || p.post <> None then
 		warning "Some annotations are lost";
-	      p.desc
+	      p.pdesc
           | _  -> 
 	      app p args
     ] ]
@@ -466,11 +441,11 @@ i*)
   recfun:
   [ [ f = ident; bl = binders; ":"; v = type_v;
       "{"; LIDENT "variant"; var = variant; "}"; "="; p = program ->
-	Rec (f,bl,v,var,p) ] ]
+	Srec (f,bl,v,var,p) ] ]
   ;
   arg:
-  [ [ "'"; t = type_v -> Type t
-    | p = program -> Term p ] ]
+  [ [ "'"; t = type_v -> Stype t
+    | p = program -> Sterm p ] ]
   ;
   cast:
   [ [ ":"; t = type_v -> t ] ]
@@ -480,9 +455,9 @@ i*)
     | s = block_statement                 -> [s] ] ]
   ;
   block_statement:
-    [ [ LIDENT "label"; s = ident -> Label (Ident.string s)
-      | LIDENT "assert"; "{"; c = assertion; "}" -> Assert c 
-      | p = program -> Statement p ] ]
+    [ [ LIDENT "label"; s = ident -> Slabel (Ident.string s)
+      | LIDENT "assert"; "{"; c = assertion; "}" -> Sassert c 
+      | p = program -> Sstatement p ] ]
   ;
   relation:
     [ [ "<"  -> Ident.t_lt
@@ -498,9 +473,8 @@ i*)
   [ [ LIDENT "invariant"; c = assertion -> c ] ]
   ;
   variant:
-  [ [ c = term; "for"; r = term -> (c, PTint, r)
-    | c = term; ":"; t = primitive_type; "for"; r = term -> (c, t, r)
-    | c = term -> (c, PTint, zwf_zero) ] ]
+  [ [ c = predicate; "for"; r = ident -> (c, r)
+    | c = predicate -> (c, Ident.t_zwf_zero) ] ]
   ;
   exception_type:
   [ [ "of"; v = primitive_type -> v ] ]

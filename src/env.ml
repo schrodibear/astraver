@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.18 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.19 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -62,7 +62,7 @@ type typing_info = {
   kappa : type_c
 }
   
-type typed_program = (typing_info, predicate) Ast.t
+type typed_program = typing_info Ast.t
 
 
 (* The global environment.

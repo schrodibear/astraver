@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.44 2002-07-04 13:18:12 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.45 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -41,8 +41,7 @@ let while_post info b inv =
 
 let while_post_block env inv (phi,_,r) e = 
   let lab = e.info.label in
-  let decphit = applist r [phi; put_label_term env lab phi] in
-  let decphi = predicate_of_term decphit in
+  let decphi = Papp (r, [phi; put_label_term env lab phi]) in
   match inv with
     | None -> anonymous decphi
     | Some i -> { a_value = pand i.a_value decphi; 

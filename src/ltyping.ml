@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ltyping.ml,v 1.1 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.2 2002-07-08 09:02:28 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -8,7 +8,7 @@ open Format
 open Ident
 open Logic
 open Types
-open Ast
+open Ptree
 open Misc
 open Util
 open Env
@@ -96,9 +96,9 @@ let rec predicate lab lenv p =
 
 and desc_predicate loc lab lenv = function
   | PPvar x ->
-      Pvar x
+      type_pvar loc lenv x
   | PPapp (x, pl) ->
-      Papp (x, List.map (fun p -> fst (term lab lenv p)) pl)
+      type_papp loc lenv x (List.map (term lab lenv) pl)
   | PPtrue ->
       Ptrue
   | PPfalse ->
@@ -126,6 +126,19 @@ and desc_predicate loc lab lenv = function
   | PPforall (id, pt, a) ->
       let v = PureType pt in
       forall id v (predicate lab (Env.add_logic id v lenv) a)
+
+and type_pvar loc lenv x =
+  if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  match find_logic x lenv with
+    | Predicate [] -> Pvar x
+    | Function _ -> predicate_expected loc
+    | _ -> Error.partial_app loc
+
+and type_papp loc lenv x tl =
+  if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  match find_logic x lenv with
+    | Predicate at -> check_type_args loc at tl; Papp (x, List.map fst tl)
+    | _ -> predicate_expected loc
 
 and term lab lenv t =
   desc_term t.pp_loc lab lenv t.pp_desc
@@ -172,6 +185,11 @@ and type_tvar loc lenv x =
 
 and type_tapp loc lenv x tl =
   if not (is_logic x lenv) then Error.unbound_variable x (Some loc);
+  match find_logic x lenv with
+    | Function (at, t) -> check_type_args loc at tl; t
+    | _ -> Error.app_of_non_function loc
+
+and check_type_args loc at tl =
   let rec check_arg = function
     | [], [] -> 
 	()
@@ -185,9 +203,7 @@ and type_tapp loc lenv x tl =
     | _, [] ->
 	Error.partial_app loc
   in
-  match find_logic x lenv with
-    | Function (at, t) -> check_arg (at, tl); t
-    | _ -> Error.app_of_non_function loc
+  check_arg (at, tl)
 
 and type_const = function
   | ConstInt _ -> PTint
@@ -217,26 +233,28 @@ let check_effect loc env e =
   List.iter check_exn x
 
 let rec type_v loc lab env lenv = function
-  | Ref v -> 
+  | PVref v -> 
       Ref (type_v loc lab env lenv v)
-  | Array (t, v) -> 
+  | PVarray (t, v) -> 
+      let t,_ = term lab lenv t in
       Array (t, type_v loc lab env lenv v)
-  | Arrow (bl, c) -> 
+  | PVarrow (bl, c) -> 
       let bl',env',lenv' = binders loc lab env lenv bl in 
       make_arrow bl' (type_c loc lab env' lenv' c)
-  | PureType _ as v -> 
-      v
+  | PVpure pt -> 
+      PureType pt
 
 and type_c loc lab env lenv c =
-  check_effect loc env c.c_effect;
-  let v = type_v loc lab env lenv c.c_result_type in
-  let id = c.c_result_name in
-  let p = List.map (type_pre lab lenv) c.c_pre in
+  check_effect loc env c.pc_effect;
+  let v = type_v loc lab env lenv c.pc_result_type in
+  let id = c.pc_result_name in
+  let p = List.map (type_pre lab lenv) c.pc_pre in
   let lenv' = Env.add_logic id v lenv in
-  let q = option_app (type_post lab lenv') c.c_post in
+  let q = option_app (type_post lab lenv') c.pc_post in
   let s = subst_onev id Ident.result in
   let q = optpost_app (subst_in_predicate s) q in
-  { c with c_result_type = v; c_pre = p; c_post = q }
+  { c_result_name = c.pc_result_name; c_effect = c.pc_effect;
+    c_result_type = v; c_pre = p; c_post = q }
 
 and binders loc lab env lenv = function
   | [] ->
