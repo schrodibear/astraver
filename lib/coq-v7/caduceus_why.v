@@ -113,6 +113,11 @@ Admitted.
       (`(offset p1) + i <> (offset p2) + j` -> ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
+(*Why axiom*) Lemma valid_index_valid_shift :
+  ((a:alloc)
+   ((p:pointer) ((i:Z) ((valid_index a p i) -> (valid a (shift p i)))))).
+Admitted.
+
 (*Why axiom*) Lemma valid_range_valid_shift :
   ((a:alloc)
    ((p:pointer)

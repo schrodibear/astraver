@@ -287,6 +287,7 @@ destruct result; intuition.
 instead of \verb|intuition| alone. This will then result in one
 subgoal (the other case has been solved automatically):
 \begin{verbatim}
+p : pointer
 ...
 intP : memory Z
 ...
@@ -297,27 +298,79 @@ H0 : intP0 = upd intP p (- result)
 ______________________________________(1/1)
 p # intP0 >= 0
 \end{verbatim}
-\indextt{upd}\indextt{\#}\indextt{memory}
-This should be read as follows: \verb|intP| and \verb|intP0| are
-\emph{memory states} containing integers. \verb|p # intP| denotes the
-value stored in \verb|intP| at ``address'' \verb|p|, i.e it is the
-logical representation of the C expression \verb|*p|. \verb|upd| the
-logical function representing memory update: $(\verb|upd|~s~p~v)$ is
-the memory state obtained from $s$ by putting value $v$ at
-``address'' $p$. Addresses considered here must not be understood by
-integers like in a real computer, but simply an abstract type: this
+\indextt{upd}\indextt{\#}\indextt{memory} This should be read as
+follows: \verb|intP| and \verb|intP0| are \emph{memory states}
+containing integers. \verb|p # intP| denotes the value stored in
+\verb|intP| at ``address'' \verb|p|, i.e it is the logical
+representation of the C expression \verb|*p|. \verb|upd| the logical
+function representing memory update: $(\verb|upd|~s~p~v)$ is the
+memory state obtained from $s$ by putting value $v$ at ``address''
+$p$. Addresses considered here must not be understood by integers like
+in a real computer, but simply an abstract type \verb|pointer|: this
 why in the following we will refer to them as \emph{pointers} instead
 of addresses.
 
 So, what should be proved is that the value stored at pointer \verb|p|
-in the memory state \verb|intP0| is non-negative. But
+in the memory state \verb|intP0| is non-negative. Using tactic
+\verb|subst intP0|, we have to prove that
+\begin{verbatim}
+Post3 : caduceus_1 = p # intP
+Post5 : caduceus_1 < 0
+result : Z
+H : result = p # intP
+______________________________________(1/1)
+p # (upd intP p (- result)) >= 0
+\end{verbatim}
+but \verb|p # (upd intP p (- result))| is simply \verb|-result| since
+we access exactly to the value which has just been updated. This shape
+$p~\verb|#|~(\verb|upd|~s~q~v)$ will indeed occur very often when making
+proofs, and it should be rewritten into $v$ when $p=q$ and into
+$p~\verb|#|~s$ otherwise. Since it occurs often, a tactic has been
+made for that, called \verb|caduceus|. So here, the proof is simply
+done using this tactic (all further reasoning is pure linear
+arithmetic that is done automatically).
 
 \section{Arrays}
+
+We now illustrate how arrays are handled by \caduceus{}.
+
+\subsection{Array indexing}
+
+Let us first consider a trivial program which permutes to elements of
+an array of integers: 
+\begin{code}
+void swap(int t[],int i,int j) {
+  int tmp = t[i];
+  t[j] = t[i]; 
+  t[i] = tmp;
+}
+\end{code}
+
 \index{valid\_index@\texttt{\bs{}valid\_index}}
+
+\subsection{Arrays and loops}
+
+Let us now consider a more complex example: searching an element in an
+array, returning its index if it exists, and the first non-existent
+index otherwise: 
+\begin{code}
+/*@ requires \valid_range(t,0,n)
+  @ ensures 
+  @   (0 <= \result < n => t[\result] == v) &&
+  @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
+  @*/
+int index(int t[], int n, int v) {
+  int i = 0;
+  /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
+    variant n - i */ 
+  while (i < n) {
+    if (t[i] == v) break;
+    i++;
+  }
+  return i;
+}
+\end{code}
 \index{valid\_range@\texttt{\bs{}valid\_range}}
-\indextt{invariant}\indextt{variant}
-
-
 
 \begin{code}
 /*@ requires \valid_range(t,0,n)
@@ -337,6 +390,7 @@ int index(int t[], int n, int v) {
 }
 \end{code}
 
+\indextt{invariant}\indextt{variant}
 A loop can be annotated with an invariant (a property which holds at
 the loop entrance and is preserved by the loop body) and a variant (a
 quantity which decreases at each loop step for a well-founded

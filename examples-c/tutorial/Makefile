@@ -1,18 +1,13 @@
 
 
-.PHONY: all purse abs
+.PHONY: all purse abs swap
 
-all: purse abs
+all: max abs swap
 
-purse: 
-	caduceus purse.c
-	make -f purse.makefile simplify
-	make -f purse.makefile coq
-
-abs: 
-	caduceus abs.c
-	make -f abs.makefile simplify
-	make -f abs.makefile coq
+%.do: %.c 
+	caduceus $*.c
+	make -f $*.makefile simplify
+	make -f $*.makefile coq
 
 clean:
 	make -f purse.makefile clean

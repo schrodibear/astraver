@@ -113,6 +113,12 @@ Admitted.
        ~((shift p1 i) = (shift p2 j))))))).
 Admitted.
 
+(*Why axiom*) Lemma valid_index_valid_shift :
+  (forall (a:alloc),
+   (forall (p:pointer),
+    (forall (i:Z), ((valid_index a p i) -> (valid a (shift p i)))))).
+Admitted.
+
 (*Why axiom*) Lemma valid_range_valid_shift :
   (forall (a:alloc),
    (forall (p:pointer),

@@ -78,6 +78,10 @@ axiom neq_offset_neq_shift :
   forall i:int. forall j:int.
   offset(p1)+i <> offset(p2)+j -> shift(p1,i) <> shift(p2,j)
 
+axiom valid_index_valid_shift :
+  forall a:alloc. forall p:pointer. forall i:int. 
+  valid_index(a,p,i) -> valid(a,shift(p,i))
+
 axiom valid_range_valid_shift :
   forall a:alloc. forall p:pointer. forall i:int. forall j:int. forall k:int.
   valid_range(a,p,i,j) -> i <= k <= j -> valid(a,shift(p,k))
