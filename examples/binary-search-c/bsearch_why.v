@@ -136,7 +136,7 @@ Lemma binary_search_po_3 :
             (Zwf `0` `2 + u - l2` `2 + u2 - l2`))))) /\
         ((`result <= v` -> (`0 <= m2` /\ `m2 <= (array_length t) - 1`) /\
           `(access t m2) = v` \/ `m2 = (-1)` /\
-          ~(In t `1` `(array_length t) - 1` v))))) /\
+          ~(In t `0` `(array_length t) - 1` v))))) /\
       `0 <= m2` /\ `m2 < (array_length t)`)))) /\
   `0 <= m2` /\ `m2 < (array_length t)`.
 Proof.
@@ -188,7 +188,7 @@ Lemma binary_search_po_5 :
             ((In t `0` `(array_length t) - 1` v) -> (In t l2 u2 v)))) /\
           ((`p1 >= 0` -> `(access t p1) = v`))) /\ `l2 > u2`)
   (`0 <= (-1)` /\ `(-1) <= (array_length t) - 1`) /\ `(access t (-1)) = v` \/
-  `(-1) = (-1)` /\ ~(In t `1` `(array_length t) - 1` v).
+  `(-1) = (-1)` /\ ~(In t `0` `(array_length t) - 1` v).
 Proof.
 Intuition.
 Elim (Z_lt_ge_dec `-1` p1); Intro.
@@ -196,9 +196,8 @@ Left; Omega.
 Right.
 Cut `p1 = -1`; [ Intro | Omega ].
 Split. Trivial.
-Generalize (H4 H6 H9); Intro.
-Decompose [In] H10.
-Absurd `l1 <= i <= u1`; Omega'.
-
+Intuition.
+Decompose [In] H11.
+Absurd `l2 <= i <= u2`; Omega.
 Save.
 

@@ -26,6 +26,6 @@ int binary_search(int t[], int n, int v)
   return -1;
 }
 /*@ (0 <= result <= array_length(t)-1 and t[result]=v) or 
-    (result = -1 and not In(t,1,array_length(t)-1,v)) */
+    (result = -1 and not In(t,0,array_length(t)-1,v)) */
 
 
