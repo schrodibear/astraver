@@ -2,10 +2,6 @@ src/coq.cmo: src/ast.cmi src/ident.cmi src/logic.cmi src/misc.cmi \
     src/options.cmi src/types.cmi src/util.cmi src/vcg.cmi src/coq.cmi 
 src/coq.cmx: src/ast.cmi src/ident.cmx src/logic.cmi src/misc.cmx \
     src/options.cmx src/types.cmi src/util.cmx src/vcg.cmx src/coq.cmi 
-src/db.cmo: src/ast.cmi src/env.cmi src/error.cmi src/ident.cmi src/logic.cmi \
-    src/types.cmi src/db.cmi 
-src/db.cmx: src/ast.cmi src/env.cmx src/error.cmx src/ident.cmx src/logic.cmi \
-    src/types.cmi src/db.cmi 
 src/effect.cmo: src/ident.cmi src/effect.cmi 
 src/effect.cmx: src/ident.cmx src/effect.cmi 
 src/env.cmo: src/ast.cmi src/effect.cmi src/error.cmi src/ident.cmi \
@@ -20,14 +16,14 @@ src/ident.cmo: src/ident.cmi
 src/ident.cmx: src/ident.cmi 
 src/loc.cmo: src/loc.cmi 
 src/loc.cmx: src/loc.cmi 
-src/main.cmo: src/ast.cmi src/coq.cmi src/db.cmi src/env.cmi src/error.cmi \
-    src/ident.cmi src/loc.cmi src/misc.cmi src/mlize.cmi src/monad.cmi \
-    src/options.cmi src/parser.cmi src/pvs.cmi src/red.cmi src/types.cmi \
-    src/typing.cmi src/util.cmi src/vcg.cmi src/wp.cmi 
-src/main.cmx: src/ast.cmi src/coq.cmx src/db.cmx src/env.cmx src/error.cmx \
-    src/ident.cmx src/loc.cmx src/misc.cmx src/mlize.cmx src/monad.cmx \
-    src/options.cmx src/parser.cmx src/pvs.cmx src/red.cmx src/types.cmi \
-    src/typing.cmx src/util.cmx src/vcg.cmx src/wp.cmx 
+src/main.cmo: src/ast.cmi src/coq.cmi src/env.cmi src/error.cmi src/ident.cmi \
+    src/loc.cmi src/misc.cmi src/mlize.cmi src/monad.cmi src/options.cmi \
+    src/parser.cmi src/pvs.cmi src/red.cmi src/types.cmi src/typing.cmi \
+    src/util.cmi src/vcg.cmi src/wp.cmi 
+src/main.cmx: src/ast.cmi src/coq.cmx src/env.cmx src/error.cmx src/ident.cmx \
+    src/loc.cmx src/misc.cmx src/mlize.cmx src/monad.cmx src/options.cmx \
+    src/parser.cmx src/pvs.cmx src/red.cmx src/types.cmi src/typing.cmx \
+    src/util.cmx src/vcg.cmx src/wp.cmx 
 src/misc.cmo: src/ast.cmi src/effect.cmi src/ident.cmi src/logic.cmi \
     src/types.cmi src/misc.cmi 
 src/misc.cmx: src/ast.cmi src/effect.cmx src/ident.cmx src/logic.cmi \
@@ -84,7 +80,6 @@ src/wp.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
     src/wp.cmi 
 src/ast.cmi: src/ident.cmi src/loc.cmi src/logic.cmi src/types.cmi 
 src/coq.cmi: src/ast.cmi src/vcg.cmi 
-src/db.cmi: src/ast.cmi src/types.cmi 
 src/effect.cmi: src/ident.cmi src/logic.cmi 
 src/env.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/error.cmi: src/ast.cmi src/effect.cmi src/ident.cmi src/loc.cmi \
@@ -114,6 +109,7 @@ lib/coq/WhyInt.vo: lib/coq/WhyInt.v
 lib/coq/WhyBool.vo: lib/coq/WhyBool.v
 lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
 lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyWf.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo
+examples/sqrt/sqrt_why.vo: examples/sqrt/sqrt_why.v lib/coq/Why.vo
 examples/quicksort/quicksort_why.vo: examples/quicksort/quicksort_why.v lib/coq/Why.vo examples/quicksort/Partition.vo examples/quicksort/Quicksort.vo
 examples/quicksort/partition_why.vo: examples/quicksort/partition_why.v lib/coq/Why.vo examples/quicksort/Partition.vo
 examples/quicksort/Quicksort.vo: examples/quicksort/Quicksort.v lib/coq/Why.vo examples/quicksort/Partition.vo

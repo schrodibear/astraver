@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: error.ml,v 1.12 2002-03-26 13:43:41 filliatr Exp $ i*)
+(*i $Id: error.ml,v 1.13 2002-06-07 09:34:45 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -11,6 +11,7 @@ open Format
 type error = 
   | UnboundVariable of Ident.t
   | UnboundReference of Ident.t
+  | UnboundArray of Ident.t
   | UnboundLabel of string
   | Clash of Ident.t
   | Undefined of Ident.t
@@ -35,7 +36,7 @@ type error =
   | ExpectedType of (formatter -> unit)
   | ExpectsAType of Ident.t
   | ExpectsATerm of Ident.t
-  | ShouldBeVariable of Ident.t
+  | ShouldBeVariable
   | ShouldBeReference of Ident.t
   | ShouldNotBeReference
   | IllTypedArgument of (formatter -> unit)
@@ -51,7 +52,9 @@ let report fmt = function
   | UnboundVariable id ->
       fprintf fmt "Unbound variable %s" (Ident.string id)
   | UnboundReference id ->
-      fprintf fmt "Unbound reference or array %s" (Ident.string id)
+      fprintf fmt "Unbound reference %s" (Ident.string id)
+  | UnboundArray id ->
+      fprintf fmt "Unbound array %s" (Ident.string id)
   | UnboundLabel s ->
       fprintf fmt "Unbound label '%s'" s
   | Clash id ->
@@ -110,9 +113,8 @@ let report fmt = function
   | ExpectsATerm id ->
       fprintf fmt "@[The argument %s@ " (Ident.string id);
       fprintf fmt "in this application is supposed to be a term@]"
-  | ShouldBeVariable id ->
-      fprintf fmt "@[The argument %s@ " (Ident.string id);
-      fprintf fmt "in this application should be a variable@]"
+  | ShouldBeVariable ->
+      fprintf fmt "@[This argument should be a variable@]"
   | ShouldBeReference id ->
       fprintf fmt "@[The argument %s@ " (Ident.string id);
       fprintf fmt "in this application should be a reference@]"
@@ -135,19 +137,17 @@ let unbound_variable id loc = raise_with_loc loc (UnboundVariable id)
 
 let unbound_reference id loc = raise_with_loc loc (UnboundReference id)
 
+let unbound_array id loc = raise_with_loc loc (UnboundArray id)
+
 let unbound_label id loc = raise_with_loc loc (UnboundLabel id)
 
 let clash id loc = raise_with_loc loc (Clash id)
 
 let not_defined id = raise_with_loc None (Undefined id)
 
-let check_for_reference loc id = function
-  | Ref _ -> ()
-  | _ -> raise_with_loc (Some loc) (NotAReference id)
+let not_a_reference loc id = raise_with_loc (Some loc) (NotAReference id)
 
-let check_for_array loc id = function
-  | Array _ -> ()
-  | _ -> raise_with_loc (Some loc) (NotAnArray id)
+let not_an_array loc id = raise_with_loc (Some loc) (NotAnArray id)
 
 let is_int_type = function
   | PureType PTint -> true
@@ -194,8 +194,8 @@ let expects_a_type id loc = raise_with_loc (Some loc) (ExpectsAType id)
 
 let expects_a_term id = raise_with_loc None (ExpectsATerm id)
 
-let should_be_a_variable loc id = 
-  raise_with_loc (Some loc) (ShouldBeVariable id)
+let should_be_a_variable loc = 
+  raise_with_loc (Some loc) ShouldBeVariable
    
 let should_be_a_reference loc id = 
   raise_with_loc (Some loc) (ShouldBeReference id)

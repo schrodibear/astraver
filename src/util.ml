@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.33 2002-05-07 15:53:24 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.34 2002-06-07 09:34:46 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -372,8 +372,8 @@ and print_block_st fmt = function
   | Assert a -> fprintf fmt "assert {%a}" print_assertion a
 
 and print_arg fmt = function
-  | Refarg (_,r) -> Ident.print fmt r
   | Term p -> print_prog fmt p
+  | Refarg id -> Ident.print fmt id
   | Type v -> print_type_v fmt v
 
 (*s Pretty-print of cc-terms (intermediate terms) *)

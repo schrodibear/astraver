@@ -1,11 +1,7 @@
 
 parameter x : int ref
 
-(*
-let p = begin x := 1; x := !x end { x = 1 }
-*)
-
-let l3 = let x = 1 in let y = 2 in x + y
+let p = !x + y
 
 (****
 

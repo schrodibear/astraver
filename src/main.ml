@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.28 2002-04-03 15:52:04 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.29 2002-06-07 09:34:45 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -40,7 +40,6 @@ let interp_program id p =
   reset_names ();
   let ploc = p.info.loc in
   if_verbose_3 eprintf "*** interpreting program %a@." Ident.print id;
-  let p = Db.db_prog p in
 
   if_debug eprintf "* typing with effects@.";
   let env = Env.empty in

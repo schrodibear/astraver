@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.29 2002-05-07 15:53:23 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.30 2002-06-07 09:34:45 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -38,7 +38,7 @@ and 'a t_desc =
 
 and 'a arg =
   | Term of 'a t
-  | Refarg of Loc.t * variable
+  | Refarg of variable
   | Type of type_v
 
 and 'a block_st =

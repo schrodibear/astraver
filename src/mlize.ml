@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.41 2002-05-06 12:05:45 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.42 2002-06-07 09:34:45 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -96,7 +96,7 @@ and trad_desc info d ren = match d with
 		  (fun v -> Monad.unit info (Tvar v))))
 	ren
 
-  | App (e1, Refarg (_,r), Some kapp) ->
+  | App (e1, Refarg r, Some kapp) ->
       let infoapp = make_info info.env kapp in
       Monad.compose e1.info (trad e1)
 	(fun v1 -> 

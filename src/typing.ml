@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.46 2002-05-06 08:56:39 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.47 2002-06-07 09:34:46 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -311,6 +311,22 @@ let partial_pre = function
 
 let assert_pre p = { p with p_assert = true }
 
+(*s Types of references and arrays *)
+
+let check_ref_type loc env id =
+  try
+    deref_type (type_in_env env id)
+  with 
+    | Not_found -> Error.unbound_reference id (Some loc)
+    | Invalid_argument _ -> Error.not_a_reference loc id
+      
+let check_array_type loc env id =
+  try
+    dearray_type (type_in_env env id)
+  with 
+    | Not_found -> Error.unbound_array id (Some loc)
+    | Invalid_argument _ -> Error.not_an_array loc id
+      
 (*s Typing programs. We infer here the type with effects. 
     [lab] is the set of labels, [env] the environment 
     and [expr] the program. *)
@@ -344,7 +360,10 @@ and typef_desc lab env loc = function
       Expression c, (v,Effect.bottom), []
 
   | Var id as s ->
-      let v = type_in_env env id in
+      let v = 
+	try type_in_env env id 
+	with Not_found -> Error.unbound_variable id (Some loc)
+      in
       let ef = Effect.bottom in
       if is_pure_type_v v && not (is_rec id env) then 
 	Expression (Tvar id), (v,ef), []
@@ -352,15 +371,14 @@ and typef_desc lab env loc = function
 	s, (v,ef), [] 
 
   | Acc id ->
-      let v = deref_type (type_in_env env id) in
+      let v = check_ref_type loc env id in
       let ef = Effect.add_read id Effect.bottom in
       Expression (Tvar id), (v,ef), []
 
   | Aff (x, e1) ->
-      let et = type_in_env env x in
-      Error.check_for_reference loc x et;
+      let et = check_ref_type loc env x in
       let t_e1 = typef lab env e1 in
-      expected_type e1.info.loc (result_type t_e1) (deref_type et);
+      expected_type e1.info.loc (result_type t_e1) et;
       let e = t_e1.info.kappa.c_effect in
       let ef = add_write x e in
       let v = type_v_unit in
@@ -371,7 +389,7 @@ and typef_desc lab env loc = function
       expected_type e.info.loc (result_type t_e) type_v_int;
       let efe = t_e.info.kappa.c_effect in
       let ef = Effect.add_read x efe in
-      let _,ty = dearray_type (type_in_env env x) in
+      let _,ty = check_array_type loc env x in
       let s,p = match t_e.desc with
 	| Expression c when post t_e = None ->
 	    let t = make_raw_access env (x,x) c in
@@ -386,7 +404,7 @@ and typef_desc lab env loc = function
       let t_e1 = typef lab env e1 in
       expected_type e1.info.loc (result_type t_e1) type_v_int;
       let t_e2 = typef lab env e2 in 
-      let _,et = dearray_type (type_in_env env x) in
+      let _,et = check_array_type loc env x in
       expected_type e2.info.loc (result_type t_e2) et;
       let ef1 = t_e1.info.kappa.c_effect in
       let ef2 = t_e2.info.kappa.c_effect in
@@ -451,55 +469,71 @@ and typef_desc lab env loc = function
       typef_desc lab env loc (App ({e with desc = Var eq}, Term a, None))
       (* TODO: avoid recursive call *)
 	 
-  | App ({desc=Var id} as e, Refarg (loca,_), None) when is_eq_neq id ->
-      expected_cmp loca
-
   | App (f, Term a, None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
       let t_a = typef lab env a in
       expected_type a.info.loc (result_type t_a) tx;
-      let _,eapp,_,_ = decomp_kappa kapp in
-      let ef = union3effects (effect t_a) (effect t_f) eapp in
-      (match t_a.desc with
-	 (* argument is pure: it is substituted *)
-	 | Expression ca when post t_a = None ->
-	     let kapp = type_c_rsubst (subst_one x ca) kapp in
-	     let (_,tapp),_,_,_ = decomp_kappa kapp in
-	     (match t_f.desc with
-	       (* function itself is pure: we collapse terms *)
-		| Expression cf when post t_f = None ->
-		    let e = applist cf [ca] in
-		    let pl = partial_pre e @ pre t_a @ pre t_f in
-		    coerce (Expression e) env kapp, (tapp, ef), pl
-		| _ ->	   
-		    App (t_f, Term t_a, Some kapp), (tapp, ef), [])
-         (* argument is complex: we transform into [let v = arg in (f v)] *)
-	 | _ ->
-	     let (_,tapp),_,_,_ = decomp_kappa kapp in
-	     if occur_type_v x tapp then Error.too_complex_argument a.info.loc;
-	     let v = fresh_var () in
-	     let kapp = type_c_subst (subst_onev x v) kapp in
-	     let info = { loc = loc; pre = []; post = None } in
-	     let env' = Env.add v tx env in
-	     let app_f_v,pl = match t_f.desc with
-	       (* function itself is pure: we collapse terms *)
-	       | Expression cf when post t_f = None ->
-		   let e = applist cf [Tvar v] in
-		   Expression e, partial_pre e @ pre t_f
-               (* function is [let y = ty in E]: we lift this let *)
-	       | LetIn (y, ty, ({ desc = Expression cf } as tf')) 
-                 when post tf' = None && post t_f = None ->
-		   let e = applist cf [Tvar v] in
-		   let env'' = Env.add v tx tf'.info.env in
-		   LetIn (y, ty, make_lnode (Expression e) env'' kapp),
-		   partial_pre e @ pre tf' @ pre t_f
-	       | _ ->
-		   let var_v = make_lnode (Var v) env' (type_c_of_v tx) in
-		   App (t_f, Term var_v, Some kapp), []
-	     in
-	     LetIn (v, t_a, make_lnode app_f_v env' kapp), (tapp, ef), pl)
+      (match tx with 
+      | Ref _ | Array _ -> (match t_a with
+	  | { desc = Var r } ->
+	      check_for_alias a.info.loc r (result_type t_f);
+	      let kapp = type_c_subst (subst_onev x r) kapp in
+	      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
+	      let ef = Effect.union (effect t_f) eapp in
+	      App (t_f, Refarg r, Some kapp), (tapp, ef), []
+	  | _ ->
+	      Error.should_be_a_variable a.info.loc)
+      | _ ->
+	  let _,eapp,_,_ = decomp_kappa kapp in
+	  let ef = union3effects (effect t_a) (effect t_f) eapp in
+	  (match t_a.desc with
+  	     (* argument is pure: it is substituted *)
+	     | Expression ca when post t_a = None ->
+		 let kapp = type_c_rsubst (subst_one x ca) kapp in
+		 let (_,tapp),_,_,_ = decomp_kappa kapp in
+		 (match t_f.desc with
+		    (* function itself is pure: we collapse terms *)
+		    | Expression cf when post t_f = None ->
+			let e = applist cf [ca] in
+			let pl = partial_pre e @ pre t_a @ pre t_f in
+			coerce (Expression e) env kapp, (tapp, ef), pl
+		    | _ ->	   
+			App (t_f, Term t_a, Some kapp), (tapp, ef), [])
+	     (* argument is complex: 
+		we transform into [let v = arg in (f v)] *)
+	     | _ ->
+		 let (_,tapp),_,_,_ = decomp_kappa kapp in
+		 if occur_type_v x tapp then 
+		   Error.too_complex_argument a.info.loc;
+		 let v = fresh_var () in
+		 let kapp = type_c_subst (subst_onev x v) kapp in
+		 let info = { loc = loc; pre = []; post = None } in
+		 let env' = Env.add v tx env in
+		 let app_f_v,pl = match t_f.desc with
+		   (* function itself is pure: we collapse terms *)
+		   | Expression cf when post t_f = None ->
+		       let e = applist cf [Tvar v] in
+		       Expression e, partial_pre e @ pre t_f
+		   (* function is [let y = ty in E]: we lift this let *)
+		   | LetIn (y, ty, ({ desc = Expression cf } as tf')) 
+		       when post tf' = None && post t_f = None ->
+		       let e = applist cf [Tvar v] in
+		       let env'' = Env.add v tx tf'.info.env in
+		       LetIn (y, ty, make_lnode (Expression e) env'' kapp),
+		       partial_pre e @ pre tf' @ pre t_f
+		   | _ ->
+		       let var_v = 
+			 make_lnode (Var v) env' (type_c_of_v tx) 
+		       in
+		       App (t_f, Term var_v, Some kapp), []
+		 in
+		 LetIn (v, t_a, make_lnode app_f_v env' kapp), 
+		 (tapp, ef), pl))
 
+  | App (_, Refarg _, _) -> 
+      assert false
+(***	      
   | App (f, (Refarg (locr,r) as a), None) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
@@ -510,6 +544,7 @@ and typef_desc lab env loc = function
       let (_,tapp),eapp,_,_ = decomp_kappa kapp in
       let ef = Effect.union (effect t_f) eapp in
       App (t_f, a, Some kapp), (tapp, ef), []
+***)
 
   | App (f, Type _, None) ->
       failwith "todo: typing: application to a type"
