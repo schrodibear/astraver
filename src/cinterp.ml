@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.15 2002-11-28 16:18:34 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.16 2002-11-28 17:09:08 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -420,12 +420,20 @@ let append_to_block l s1 s2 = match s1, s2 with
   | CSblock (_, (d, bl)), Some s2 -> CSblock (l, (d, bl @ [s2]))
   | _, Some s2 -> CSblock (l, ([], [s1; s2]))
 
-(* TODO: vérifier [et], sert au return seulement *)
-let rec interp_statement cenv et = function
+(*s [interp_statement] interprets a C statement.
+    [et] is the expected type for the returned value (if any).
+    [abrupt] indicates if the ML program must return abruptly (with a 
+    [raise Return]. *)
+
+type status = { ab_return : bool; break : bool; continue : bool }
+
+let mt_status = { ab_return = false; break = false; continue = false }
+
+let rec interp_statement cenv et abrupt = function
   | CSexpr (_, e) -> 
       let m,_ = interp_expr cenv (Some void) e in m
   | CSblock (l, bl) ->
-      interp_block l cenv et bl
+      interp_block l cenv et abrupt bl
   | CSfor (l, s1, s2, e3, an, s) ->
       let (i,v) = interp_loop_annot an in
       let s3 = option_app (fun e -> CSexpr (loc_of_expr e, e)) e3 in
@@ -433,26 +441,34 @@ let rec interp_statement cenv et = function
       let bl = append_to_block l s s3 in
       mk_seq l m1
 	(mk_expr l (Swhile (interp_boolean cenv s2, Some i, v, 
-			    interp_statement cenv (Some void) bl)))
+			    interp_statement cenv (Some void) true bl)))
   | CSdowhile (l, s, an, e) ->
       (* do s while (e) = s ; while (e) s *)
-      interp_statement cenv et (CSblock (l, ([], [s; CSwhile (l, e, an, s)])))
+      interp_statement cenv et abrupt
+	(CSblock (l, ([], [s; CSwhile (l, e, an, s)])))
   | CSwhile (l, e, an, s) ->
       let (i,v) = interp_loop_annot an in
       mk_expr l
 	(Swhile (interp_boolean cenv e, Some i, v, 
-		 interp_statement cenv (Some void) s))
+		 interp_statement cenv (Some void) true s))
   | CScond (l, e1, s2, s3) ->
       mk_expr l 
 	(Sif (interp_boolean cenv e1, 
-	      interp_statement cenv et s2, interp_statement cenv et s3))
+	      interp_statement cenv et abrupt s2, 
+	      interp_statement cenv et abrupt s3))
   | CSnop l ->
       mk_expr l (Sconst ConstUnit)
-  | CSreturn _ ->
-      assert false
+  | CSreturn (l, e) ->
+      let m,_ = match e with
+	| Some e -> interp_expr cenv et e
+	| None -> ml_const l ConstUnit, void
+      in
+      if abrupt then
+	assert false (* TODO: raise (Return m) *)
+      else
+	m
 
-(* TODO: passer un [et] *)
-and interp_block l cenv et (d,b) =
+and interp_block l cenv et abrupt (d,b) =
   let rec interp_locals cenv = function
     | [] ->
 	cenv, []
@@ -470,13 +486,15 @@ and interp_block l cenv et (d,b) =
   let rec interp_bl = function
     | [] -> 
 	mt_seq l
+    | [s] ->
+	interp_statement cenv' et abrupt s
     | s :: bl ->
-	mk_seq l (interp_statement cenv' et s) (interp_bl bl)
+	mk_seq l (interp_statement cenv' et true s) (interp_bl bl)
   in
   List.fold_right (fun (id,e) m -> ml_letref l id e m) lv (interp_bl b)
 
 let interp_annotated_block cenv et (l, p, bl, q) =
-  { pdesc = (interp_block l cenv et bl).pdesc;
+  { pdesc = (interp_block l cenv et false bl).pdesc;
     pre = interp_c_pre p; post = interp_c_post q; loc = l }
 
 let interp_binder (pt, id) = (id, BindType (PVpure pt))
@@ -484,8 +502,11 @@ let interp_binder (pt, id) = (id, BindType (PVpure pt))
 let interp_binders = List.map interp_binder
 
 let interp_fun cenv l bl v bs =
+  let cenv' = 
+    List.fold_right (fun (v,id) -> Idmap.add id (CTpure v, false)) bl cenv 
+  in
   mk_ptree l (Slam (interp_binders bl, 
-		    interp_annotated_block cenv (Some (CTpure v)) bs)) [] None
+		    interp_annotated_block cenv' (Some (CTpure v)) bs)) [] None
 
 let interp_fun_type bl v =
   CTfun (List.map (fun (v,_) -> CTpure v) bl, CTpure v), false
