@@ -542,7 +542,7 @@ Right.
 Cut `p1 = 0`; [ Intro | Omega' ].
 Split. Assumption.
 Intro. 
-Generalize (H7 H9 H11); Intro.
+Generalize (H5 H9 H11); Intro.
 Decompose [In] H12.
 Absurd `l1 <= i <= u1`; Omega'.
 Save.
