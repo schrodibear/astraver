@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.16 2004-01-14 10:57:24 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.17 2004-01-14 16:33:28 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -171,9 +171,11 @@ and lvalue = texpr (* TODO: cf CIL *)
 
 type tctype = texpr ctype
 
+type predicate = (texpr, string) Clogic.predicate
+
 type variant = tctype term * string option
 
-type loop_annotation = tctype predicate option * variant
+type loop_annot = (texpr, string) Clogic.loop_annot
 
 type loop_info = { loop_break : bool; loop_continue : bool }
 
@@ -189,10 +191,10 @@ and tstatement_node =
   | TSnop
   | TSexpr of texpr
   | TSif of texpr * tstatement * tstatement
-  | TSwhile of texpr * tstatement * loop_info * loop_annotation option
-  | TSdowhile of tstatement * texpr * loop_info * loop_annotation option
+  | TSwhile of texpr * tstatement * loop_info * loop_annot option
+  | TSdowhile of tstatement * texpr * loop_info * loop_annot option
   | TSfor of 
-      texpr * texpr * texpr * tstatement * loop_info * loop_annotation option
+      texpr * texpr * texpr * tstatement * loop_info * loop_annot option
   | TSblock of tblock
   | TSreturn of texpr option
   | TSbreak
@@ -201,12 +203,12 @@ and tstatement_node =
   | TSswitch of texpr * tstatement
   | TScase of texpr * tstatement
   | TSgoto of string
-  | TSassert of tctype predicate
+  | TSassert of predicate
 
 and tblock = tdecl located list * tstatement list
 
 and annotated_tblock = 
-    tctype predicate option * tblock * tctype predicate option
+    predicate option * tblock * predicate option
 
 and tdecl = 
   | Tlogic of string list * logic_type

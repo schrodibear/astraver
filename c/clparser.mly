@@ -21,7 +21,9 @@
   open Clogic
 
   let loc () = (symbol_start (), symbol_end ())
+  let loc_i i = (rhs_start i, rhs_end i)
   let info x = { Clogic.node = x; info = loc () }
+  let info_i i x = { Clogic.node = x; info = loc_i i }
 
 %}
 
@@ -44,36 +46,35 @@
 %right prec_uminus 
 %left DOT ARROW
 
-%type <Loc.t Clogic.predicate> predicate
+%type <Clogic.parsed_predicate> predicate
 %start predicate
 
-%type <Loc.t Clogic.spec> spec
+%type <Clogic.parsed_spec> spec
 %start spec
 
-%type <Loc.t Clogic.loop_annot> loop_annot
+%type <Clogic.parsed_loop_annot> loop_annot
 %start loop_annot
 
 %%
 
 predicate:
-  predicate IMPLIES predicate { info (Pimplies ($1, $3)) }
-| predicate OR predicate     { info (Por ($1, $3)) }
-| predicate AND predicate    { info (Pand ($1, $3)) }
-| NOT predicate %prec prec_not { info (Pnot $2) }
-| TRUE { info Ptrue }
-| FALSE { info Pfalse }
-| IDENTIFIER { info (Pvar $1) }
-| IDENTIFIER LPAR term_list RPAR { info (Papp ($1, $3)) }
-| term relation term %prec prec_relation { info (Prel ($1, $2, $3)) }
+  predicate IMPLIES predicate { Pimplies ($1, $3) }
+| predicate OR predicate     { Por ($1, $3) }
+| predicate AND predicate    { Pand ($1, $3) }
+| NOT predicate %prec prec_not { Pnot $2 }
+| TRUE { Ptrue }
+| FALSE { Pfalse }
+| IDENTIFIER { Pvar (info $1) }
+| IDENTIFIER LPAR term_list RPAR { Papp (info_i 1 $1, $3) }
+| term relation term %prec prec_relation { Prel ($1, $2, $3) }
 | term relation term relation term %prec prec_relation 
-      { info (Pand (info (Prel ($1, $2, $3)),
-		    info (Prel ($3, $4, $5)))) }
+      { Pand (Prel ($1, $2, $3), Prel ($3, $4, $5)) }
 | IF term THEN predicate ELSE predicate %prec prec_if
-      { info (Pif ($2, $4, $6)) }
+      { Pif ($2, $4, $6) }
 | FORALL IDENTIFIER COLON pure_type DOT predicate %prec prec_forall
-      { info (Pforall ($2, $4, $6)) }
+      { Pforall ($2, $4, $6) }
 | EXISTS IDENTIFIER COLON pure_type DOT predicate %prec prec_exists
-      { info (Pexists ($2, $4, $6)) }
+      { Pexists ($2, $4, $6) }
 | LPAR predicate RPAR { $2 }
 ;
 

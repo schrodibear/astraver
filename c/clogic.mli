@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: clogic.mli,v 1.3 2004-01-14 10:57:24 filliatr Exp $ i*)
+(*i $Id: clogic.mli,v 1.4 2004-01-14 16:33:28 filliatr Exp $ i*)
 
 (* AST for C annotations *)
 
@@ -55,29 +55,34 @@ and 'a term_node =
 
 type relation = Lt | Gt | Le | Ge | Eq | Neq
 
-type 'a predicate = ('a predicate_node, 'a) info
-
-and 'a predicate_node =
+type ('term, 'ident) predicate =
   | Pfalse
   | Ptrue
-  | Pvar of string
-  | Prel of 'a term * relation * 'a term
-  | Pand of 'a predicate * 'a predicate
-  | Por of 'a predicate * 'a predicate
-  | Pimplies of 'a predicate * 'a predicate
-  | Pnot of 'a predicate
-  | Papp of string * 'a term list
-  | Pif of 'a term * 'a predicate * 'a predicate
-  | Pforall of string * pure_type * 'a predicate
-  | Pexists of string * pure_type * 'a predicate
+  | Pvar of 'ident
+  | Papp of 'ident * 'term list
+  | Prel of 'term * relation * 'term
+  | Pand of ('term, 'ident) predicate * ('term, 'ident) predicate
+  | Por of ('term, 'ident) predicate * ('term, 'ident) predicate
+  | Pimplies of ('term, 'ident) predicate * ('term, 'ident) predicate
+  | Pnot of ('term, 'ident) predicate
+  | Pif of 'term * ('term, 'ident) predicate * ('term, 'ident) predicate
+  | Pforall of string * pure_type * ('term, 'ident) predicate
+  | Pexists of string * pure_type * ('term, 'ident) predicate
 
 type effects = string list * string list
 
-type 'a spec = 'a predicate option * effects * 'a predicate option
+type 'pred spec = 'pred option * effects * 'pred option
 
-type 'a annot_statement = Assert of 'a predicate | Label of string
+type 'pred annot_statement = Assert of 'pred | Label of string
 
-type 'a variant = 'a term * string option
+type 'term variant = 'term * string option
 
-type 'a loop_annot = 'a predicate option * 'a variant
+type ('term,'ident) loop_annot = 
+  ('term,'ident) predicate option * 'term variant
+
+(* parsed AST *)
+
+type parsed_predicate = (Loc.t term, (string, Loc.t) info) predicate
+type parsed_spec = parsed_predicate spec
+type parsed_loop_annot = (Loc.t term, (string, Loc.t) info) loop_annot
 
