@@ -1,7 +1,7 @@
 
 Require Why.
 
-Require LinkedLists.
+Require Export LinkedLists.
 
 (* Why obligation from file "rev.mlw", characters 1173-1631 *)
 Lemma rev_po_1 : 
