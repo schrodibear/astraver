@@ -11,6 +11,12 @@ dep.ps::
 code.tex::
 	cd ../src; ocamlweb --no-preamble -o ../doc/code.tex $(SRCFILES)
 
+manual.dvi: manual.tex
+	latex manual
+	latex manual
+	makeindex manual
+	latex manual
+
 %.dvi: %.tex
 	latex $< && latex $<
 
