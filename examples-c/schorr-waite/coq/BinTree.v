@@ -200,12 +200,14 @@ apply n.
 left;auto.
 Qed.
 
+
 Lemma reachable_no_cycle : forall (a : alloc_table) (p1 p2 : pointer) 
 ( l r : memory pointer) (path : list pointer), reachable a l r p1 p2 (path) -> 
-exists path' : list pointer, sans_rep (path') /\ reachable a l r p1 p2  (path'). 
+exists path' :list pointer , incl path' path /\ 
+sans_rep (path') /\ reachable a l r p1 p2  (path'). 
 intros.
 induction H.
-exists (@nil pointer). 
+exists (@nil pointer).
 intuition.
 simpl;auto.
 constructor.
@@ -213,27 +215,41 @@ inversion IHreachable.
 case (In_dec eq_pointer_dec p1 x).
 intro.
 generalize (split_list  p1 x i);intro.
-inversion_clear H2;inversion_clear H3.
+inversion_clear H2;inversion_clear H1;inversion_clear H3.
 exists (p1::x1).
-inversion_clear H1.
-split.
-clear H4 i IHreachable H0 H a l r p2 lp.
-induction x.
-generalize (app_cons_not_nil x0 x1 p1).
-intro;elim H;auto.
-apply sans_rep_sublist with (a::x) (x0);auto.
-generalize (Path_left a l r p1 p2  x H H4).
+intuition.
+subst.
+apply incl_cons.
+left;auto.
+red.
+red in H2.
+intros.
+right.
+apply H2.
+apply in_or_app.
+right;right;auto.
+apply sans_rep_sublist with x x0 ;subst;auto.
+generalize (Path_left a l r p1 p2  x H H5).
 subst x.
 intro.
 generalize (split_reachable a p1 p2 l r (p1::x1) (p1::x0) H1).
 intros (p3, (Hp3a,Hp3b)).
 inversion Hp3b;subst;auto.
 intro.
+inversion_clear H1.
+inversion_clear H3.
 exists (p1::x).
 split.
-simpl.
+apply incl_cons.
+left;auto.
+red.
+red in H2.
+intros.
+right.
+apply H2;auto.
+split.
+constructor;auto.
 case (In_dec eq_pointer_dec p1 x);intuition.
-inversion_clear H1.
 constructor 2;auto.
 inversion IHreachable.
 case (In_dec eq_pointer_dec p1 x).
@@ -243,23 +259,39 @@ inversion_clear H2;inversion_clear H3.
 exists (p1::x1).
 inversion_clear H1.
 split.
-clear H4 i IHreachable H0 H a l r p2 lp.
-induction x.
-generalize (app_cons_not_nil x0 x1 p1).
-intro;elim H;auto.
-apply sans_rep_sublist with (a::x) (x0);auto.
-generalize (Path_right a l r p1 p2  x H H4).
+apply incl_cons.
+left;auto.
+red.
+red in H3.
+intros.
+right.
+apply H3.
+subst.
+apply in_or_app.
+right;right;auto.
+inversion_clear H4.
+split.
+apply sans_rep_sublist with x x0 ;subst;auto.
+generalize (Path_right a l r p1 p2  x H H5).
 subst x.
 intro.
-generalize (split_reachable a p1 p2 l r (p1::x1) (p1::x0) H1).
+generalize (split_reachable a p1 p2 l r (p1::x1) (p1::x0) H2).
 intros (p3, (Hp3a,Hp3b)).
 inversion Hp3b;subst;auto.
 intro.
 exists (p1::x).
+inversion_clear H1;inversion_clear H3.
+split.
+apply incl_cons.
+left;auto.
+red.
+red in H2.
+intros.
+right.
+apply H2;auto.
 split.
 simpl.
 case (In_dec eq_pointer_dec p1 x);intuition.
-inversion_clear H1.
 constructor 3;auto.
 Qed.
 
