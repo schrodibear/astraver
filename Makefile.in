@@ -265,6 +265,12 @@ doc/version.tex: Makefile.in
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
 
+doc/caduceus.ps: doc/caduceus.tex doc/version.tex
+	make -C doc caduceus.ps
+
+doc/caduceus.html: doc/caduceus.tex doc/version.tex
+	make -C doc caduceus.html
+
 # special rules
 ###############
 
@@ -377,9 +383,11 @@ export-examples:
 	make -C $(WWW)/examples clean depend
 	echo "*** faire make all dans $(WWW)/examples ***"
 
-export-doc: doc/manual.ps doc/manual.html
-	cp $^ $(WWW)/manual
+export-doc: doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html
+	cp doc/manual.ps doc/manual.html $(WWW)/manual
 	(cd $(WWW)/manual; hacha manual.html)
+	cp doc/caduceus.ps doc/caduceus.html $(WWW)/caduceus/manual
+	(cd $(WWW)/caduceus/manual; hacha caduceus.html)
 
 BINARYNAME = $(NAME)-$(OSTYPE)
 

@@ -24,6 +24,16 @@ manual.ps: manual.tex
 manual.html: manual.tex
 	hevea manual.tex
 
+caduceus.ps: caduceus.tex
+	latex caduceus
+	latex caduceus
+	makeindex caduceus
+	latex caduceus
+	dvips caduceus.dvi -o caduceus.ps
+
+caduceus.html: caduceus.tex
+	hevea caduceus.tex
+
 %.dvi: %.tex
 	latex $< && latex $<
 
@@ -31,4 +41,5 @@ manual.html: manual.tex
 	dvips -o $@ $<
 
 clean::
-	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps
+	rm -f *~ *.dvi *.log *.aux *.toc dep.ps doc.ps manual.ps caduceus.ps
+

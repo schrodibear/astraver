@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.ml,v 1.8 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: coptions.ml,v 1.9 2004-03-04 11:54:50 filliatr Exp $ i*)
 
 (*s The log file *)
 
@@ -56,6 +56,13 @@ let werror = ref false
 let files = Queue.create ()
 let add_file f = Queue.add f files
 
+let version () = 
+  Printf.printf "This is Caduceus version %s, compiled on %s
+Copyright (c) 2003- Jean-Christophe Filliâtre and Claude Marché
+This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
+" Cversion.version Cversion.date;
+  exit 0
+
 let _ = 
   Arg.parse 
       [ "-parse-only", Arg.Set parse_only, 
@@ -72,8 +79,12 @@ let _ =
           "  debugging mode";
 	"-v", Arg.Set verbose,
           "  verbose mode";
+	"-q", Arg.Clear verbose,
+          "  quiet mode (default)";
 	"--werror", Arg.Set werror,
           "  treats warnings as errors";
+	"--version", Arg.Unit version,
+          "  prints version and exit";
       ]
       add_file "caduceus [options] file..."
 

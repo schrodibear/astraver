@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.32 2004-03-01 14:48:49 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.33 2004-03-04 11:54:50 filliatr Exp $ i*)
 
 open Format
 
@@ -136,7 +136,7 @@ Coq-specific options:
 
 PVS-specific options:
   --pvs-preamble <text>
-              gives some PVS preamble to be substituted to \"importing why@why\"
+              gives some PVS preamble to be substituted to \"importing why@@why\"
 
 Simplify-specific options:
   --no-simplify-prelude

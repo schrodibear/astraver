@@ -54,28 +54,36 @@ Jean-Christophe Filli\^atre and Claude March\'e
 \chapter*{Foreword}
 \addcontentsline{toc}{chapter}{Foreword}
 
-TODO
+\caduceus\ is a verification tool for C programs. Programs are
+specified using annotations in special comments. Proof obligations are
+generated using the \why\ tool~\cite{Why} and then can be validated using
+various proof assistants or decision procedures.
 
 \medskip
 
 This manual is organized as follows. Chapter~\ref{tutorial} gives an
-overview of \caduceus, illustrating all features with one-line examples.
+overview of \caduceus, illustrating all features with tiny examples.
 Chapter~\ref{refman} is a reference manual.
 
 
 \subsection*{License}
 
-The \caduceus\ certification tool is \copyright\ 2002 Laboratoire de
+The \caduceus\ certification tool is \copyright\ 2003 Laboratoire de
 Recherche en Informatique (\url{www.lri.fr}).
 It is open source and freely available under the terms of the GNU
 GENERAL PUBLIC LICENSE Version 2. See the files \texttt{COPYING} and
 \texttt{GPL} in the distribution.
 
 
+\subsection*{Authors}
+
+\caduceus\ is developed by Jean-Christophe Filli\^atre and Claude March\'e.
+
 \subsection*{Availability}
 
-The \caduceus\ tool is available from \url{http://why.lri.fr/}, in source
-and binary formats, together with this documentation and many
+The \caduceus\ tool is available from
+\url{http://why.lri.fr/caduceus/}, 
+in source and binary formats, together with this documentation and
 examples.
 
 
@@ -237,9 +245,50 @@ or using C labels directly:
 \chapter{Reference manual}
 \label{refman}
 
+\caduceus\ is invoked as a batch compiler, given a list of input files:
+\begin{center}
+  \texttt{caduceus} [\textit{options}] \textit{file}$_1$\texttt{.c} $\cdots$ \textit{file}$_n$\texttt{.c}
+\end{center}
+
 \section{Command line options}
 \label{usage}\index{Option, of the command line}
 
+\begin{description}
+  \item[Generic options:] ~\par
+  \item[\texttt{--help}]: ~\par    
+    Give usage and exit. 
+  \item[\texttt{--version}]: ~\par    
+    Give \caduceus\ version number and exit. 
+  \item[\texttt{-v}]: ~\par 
+    Verbose mode. 
+  \item[\texttt{-q}]: ~\par  
+    Quiet mode (default).
+  \item[\texttt{--werror}]: ~\par 
+    Turn warnings as errors. \caduceus\ will stop on the first warning.
+  \item[\texttt{-d}]: ~\par 
+    Debugging mode. In this mode, \caduceus\ details everything it does,
+    printing a lot of material on error output. Not of use for the
+    casual user.
+
+  \item[Overall options:] ~\par
+  \item[\texttt{-parse-only}]: ~\par  
+    Stop after parsing.
+  \item[\texttt{-type-only}]: ~\par  
+    Stop after type-checking.
+
+  \item[Pre-processing options:] ~\par
+  \item[\texttt{-no-cpp}]: ~\par  
+    Turn off the pre-processing.
+  \item[\texttt{-cpp} \textit{command}]: ~\par  
+    Set the pre-processor. It must be an executable taking the file
+    to be pre-processed on its command line and printing its output
+    on the standard output. 
+    The default value is \texttt{gcc -C -E}.
+  \item[\texttt{-E}]: ~\par  
+    Stop after pre-processing and dump the pre-processed file on
+    standard output (mainly useful for debugging).
+
+\end{description}
 
 \section{Input Files Syntax}
 \label{syntax}\index{Syntax (of input files)}
