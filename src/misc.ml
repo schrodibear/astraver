@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.55 2002-10-28 13:22:00 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.56 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -211,6 +211,7 @@ and collect_pred s = function
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_term s a) b) c
   | Pnot a -> collect_pred s a
   | Forall (_, _, _, p) -> collect_pred s p
+  | Exists (_, _, _, p) -> collect_pred s p
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
@@ -240,6 +241,7 @@ let rec map_predicate f = function
   | Por (a, b) -> Por (f a, f b)
   | Pnot a -> Pnot (f a)
   | Forall (id, b, v, p) -> Forall (id, b, v, f p)
+  | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
 
 let rec tsubst_in_predicate s = function
@@ -500,6 +502,9 @@ let rec print_predicate fmt = function
       fprintf fmt "(not %a)" print_predicate a
   | Forall (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(forall %a:@ %a)@]" 
+	Ident.print b print_predicate p
+  | Exists (_,b,_,p) ->
+      fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
 	Ident.print b print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.61 2002-10-28 13:22:00 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.62 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -230,9 +230,10 @@ EXTEND
 	mk_pp loc (PPapp (Ident.access, [mk_pp loc (PPvar x); t]))
     | "if"; p0 = lexpr; "then"; p1 = lexpr; "else"; p2 = lexpr ->
 	mk_pp loc (PPif (p0, p1, p2))
-    | LIDENT "forall"; id = ident; ":"; t = primitive_type; 
-      "." ; a = lexpr -> 
+    | LIDENT "forall"; id = ident; ":"; t = primitive_type; "." ; a = lexpr -> 
 	mk_pp loc (PPforall (id, t, a))
+    | LIDENT "exists"; id = ident; ":"; t = primitive_type; "." ; a = lexpr -> 
+	mk_pp loc (PPexists (id, t, a))
     | "("; a = lexpr; ")" -> 
 	a ] ] 
   ;

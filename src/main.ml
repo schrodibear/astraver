@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.40 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.41 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -136,9 +136,10 @@ let c_parser c =
   Cinterp.interp d
 
 let deal_channel parsef cin =
-  let d = parsef cin in
+  let p = parsef cin in
   if parse_only then exit 0;
-  List.iter interp_decl d
+  if ocaml then begin Ocaml.output std_formatter p; exit 0 end;
+  List.iter interp_decl p
 
 let deal_file f =
   Loc.set_file f;
@@ -163,11 +164,9 @@ let rec explain_exception fmt = function
   | Stream.Error s -> 
       fprintf fmt "Syntax error: %s" s
   | Stdpp.Exc_located (loc, e) ->
-      Loc.report fmt loc;
-      explain_exception fmt e
+      fprintf fmt "%a%a" Loc.report loc explain_exception e
   | Error (Some loc, e) ->
-      Loc.report fmt loc;
-      report fmt e
+      fprintf fmt "%a%a" Loc.report loc report e
   | Error (_, e) ->
       report fmt e
   | e ->

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.25 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.26 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -63,6 +63,8 @@ val erase_exns : typing_info -> typing_info
 val forall : Ident.t -> type_v -> predicate -> predicate
 val foralls : (Ident.t  * type_v) list -> predicate -> predicate
 
+val exists : Ident.t -> type_v -> predicate -> predicate
+
 (*s Occurrences *)
 
 val occur_term : Ident.t -> term -> bool
@@ -93,6 +95,7 @@ open Format
 val print_pred_binders : bool ref
 
 val print_pure_type : formatter -> pure_type -> unit
+val print_logic_type : formatter -> logic_type -> unit
 val print_type_v : formatter -> type_v -> unit
 val print_type_c : formatter -> type_c -> unit
 val print_prog : formatter -> typed_program -> unit

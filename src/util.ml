@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.57 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.58 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -181,6 +181,7 @@ let rec occur_predicate id = function
   | Por (a, b) -> occur_predicate id a || occur_predicate id b
   | Pnot a -> occur_predicate id a
   | Forall (_,_,_,a) -> occur_predicate id a
+  | Exists (_,_,_,a) -> occur_predicate id a
 
 let occur_assertion id a = occur_predicate id a.a_value
 
@@ -228,6 +229,11 @@ let foralls =
   List.fold_right
     (fun (x,v) p -> if occur_predicate x p then forall x v p else p)
     
+let exists x v p = 
+  let n = Ident.bound x in
+  let p = subst_in_predicate (subst_onev x n) p in
+  Exists (x, n, mlize_type v, p)
+
 (* misc. functions *)
 
 let deref_type = function
@@ -315,7 +321,7 @@ let rec print_pure_type fmt = function
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "float"
   | PTarray (s,t) -> fprintf fmt "array(%a,%a)" print_term s print_pure_type t
-  | PTexternal id -> fprintf fmt "%s" (Ident.string id)
+  | PTexternal id -> fprintf fmt "%a" Ident.print id
 
 and print_type_v fmt = function
   | Arrow (b,c) ->
@@ -359,6 +365,12 @@ and print_type_c fmt c =
       print_type_v v 
       Effect.print e
       print_post q
+
+let print_logic_type fmt lt =
+  let print_args = print_list comma print_pure_type in
+  match lt with
+  | Predicate l -> fprintf fmt "%a -> prop" print_args l
+  | Function (l, pt) -> fprintf fmt "%a -> %a" print_args l print_pure_type pt
 
 (*s Pretty-print of typed programs *)
 

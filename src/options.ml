@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.9 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.10 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Format
 
@@ -27,6 +27,7 @@ let type_only_ = ref false
 let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
+let ocaml_ = ref false
 
 type prover = Coq | Pvs
 let prover_ = ref Coq
@@ -83,6 +84,9 @@ Prover options:
   --no-valid  set/unset the functional validation (Coq only; default is no)
   --coq-tactic <tactic> 
               gives a default tactic for new proof obligations
+
+Misc options:
+  --ocaml     Ocaml code output
 ";
   flush stderr
 
@@ -107,6 +111,7 @@ let files =
       :: s :: args -> coq_tactic_ := Some s; parse args
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
 	usage (); exit 1
+    | ("--ocaml" | "-ocaml") :: args -> ocaml_ := true; parse args
     | f :: args -> filesq := f :: !filesq; parse args
   in
   parse (List.tl (Array.to_list Sys.argv))
@@ -121,6 +126,7 @@ let wp_only = !wp_only_
 let prover = !prover_
 let valid = !valid_
 let coq_tactic = !coq_tactic_
+let ocaml = !ocaml_
 
 let if_verbose f x = if verbose then f x
 let if_verbose_2 f x y = if verbose then f x y

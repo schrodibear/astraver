@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.24 2002-10-17 15:01:54 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.25 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -130,6 +130,12 @@ let print_predicate fmt p =
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[FORALL (%s: " (Ident.string id');
+	print_pure_type fmt t; fprintf fmt "):@ ";
+	print0 p'; fprintf fmt "@])"
+    | Exists (id,n,t,p) -> 
+	let id' = next_away id (predicate_vars p) in
+	let p' = subst_in_predicate (subst_onev n id') p in
+	fprintf fmt "(@[EXIST (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 p'; fprintf fmt "@])"
     | p -> 

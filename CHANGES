@@ -1,4 +1,5 @@
 
+  O quantifier "exists" added to the logic syntax
   o manual: added lexical conventions
   o examples: added maximum sort (by Sylvain Boulmé)
   o new feature: exceptions (beta test)

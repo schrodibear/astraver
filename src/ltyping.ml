@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.9 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.10 2002-10-31 12:27:00 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -140,6 +140,9 @@ and desc_predicate loc lab lenv = function
   | PPforall (id, pt, a) ->
       let v = PureType pt in
       forall id v (predicate lab (Env.add_logic id v lenv) a)
+  | PPexists (id, pt, a) ->
+      let v = PureType pt in
+      exists id v (predicate lab (Env.add_logic id v lenv) a)
 
 and type_pvar loc lenv x =
   if not (is_logic x lenv) then raise_located loc (UnboundVariable x);
@@ -187,7 +190,7 @@ and desc_term loc lab lenv = function
 	 | ta, PTint -> Tapp (t_neg_int, [ta]), PTint
 	 | ta, PTfloat -> Tapp (t_neg_float, [ta]), PTfloat
 	 | _ -> expected_num loc)
-  | PPprefix (PPnot, _) | PPif _ | PPforall _ ->
+  | PPprefix (PPnot, _) | PPif _ | PPforall _ | PPexists _ ->
       term_expected loc
 
 and type_tvar loc lenv x = 
