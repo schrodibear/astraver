@@ -240,7 +240,7 @@ FILES =src/*.ml* Makefile.in configure.in configure .depend \
 
 distrib export: source export-doc export-examples linux
 
-source: doc/manual.ps export/$(NAME).tar.g
+source: doc/manual.ps export/$(NAME).tar.gz
 	cp CHANGES export/$(NAME).tar.gz $(FTP)
 	echo "<#def version>$(VERSION)</#def>" > $(HOME)/www/why/version.prehtml
 
