@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.3 2003-09-18 12:19:41 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.4 2003-09-18 20:32:55 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -182,7 +182,7 @@ let print_predicate fmt p =
 	print2 fmt p
   and print2 fmt = function
     | Pand (_, a, b) | Forallb (_, _, _, _, a, b) ->
-	fprintf fmt "%a &@ %a" print3 a print2 b
+	fprintf fmt "@[%a &@ %a@]" print3 a print2 b
     | p ->
 	print3 fmt p
   and print3 fmt = function
@@ -234,11 +234,12 @@ let print_sequent fmt (hyps,concl) =
     | [] ->
 	print_predicate fmt concl
     | Svar (id, v) :: hyps -> 
-	fprintf fmt "for %a being @[%a@] holds@\n" 
-	Ident.print id print_cc_type v;
+	fprintf fmt "@[for %a being @[%a@] holds@]@\n" 
+	  Ident.print id print_cc_type v;
 	print_seq fmt hyps
     | Spred (_, p) :: hyps -> 
-	fprintf fmt "%a implies@\n" print_predicate p;
+	fprintf fmt "@[(@[%a@]) %s@]@\n" print_predicate p
+	  (match hyps with Spred _ :: _ -> "&" | _ -> "implies");
 	print_seq fmt hyps
   in
   let print_intro fmt = function

@@ -1,5 +1,6 @@
 
-  o when unchanged, Coq output xxx_why.v 
+  o when unchanged, Coq output xxx_why.v is left untouched (to avoid
+    unncessary recompilations when using make)
 
 version 1.3, September 17th, 2003
 ================================= 
