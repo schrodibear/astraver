@@ -488,10 +488,8 @@ let clean_sequent hyps concl =
 	  clean hl
     | Spred (_, Ptrue) :: hl ->
 	clean hl
-(***
     | Spred (id, _) :: hl when is_wp id ->
 	clean hl
-***)
     | h :: hl ->
 	h :: clean hl
   in
