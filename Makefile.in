@@ -57,7 +57,7 @@ V8FILES=$(VO8:.vo=.v)
 PVSFILES = lib/pvs/why.pvs
 PVSLIB = @PVSLIB@
 
-GENERATED = src/version.ml src/parser.ml \
+GENERATED = src/version.ml src/parser.ml src/linenum.ml \
 	    c/clexer.ml c/cparser.ml c/cparser.mli \
 	    intf/hilight.ml tools/why2html.ml
 
@@ -76,7 +76,8 @@ opt: bin/why.opt bin/caduceus.opt
 byte : bin/why.byte bin/caduceus.byte
 
 # why
-CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
+CMO = src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
+	   src/ident.cmo \
 	   src/effect.cmo src/misc.cmo src/report.cmo		\
            src/env.cmo src/rename.cmo src/util.cmo src/parser.cmo	\
            src/ltyping.cmo src/annot.cmo src/typing.cmo src/wp.cmo \
@@ -102,7 +103,7 @@ bin/top: $(CMO)
 	ocamlmktop $(BFLAGS) -o $@ gramlib.cma str.cma $^
 
 # caduceus
-CCMO = src/loc.cmo c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
+CCMO = src/linenum.cmo src/loc.cmo c/ctypes.cmo c/cparser.cmo c/clexer.cmo \
        c/cinterp.cmo c/creport.cmo c/cmain.cmo
 CCMX = $(CCMO:.cmo=.cmx)
 

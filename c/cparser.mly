@@ -18,6 +18,7 @@
 
 %{
 
+  open Format
   open Logic
   open Ptree
   open Cast
@@ -38,7 +39,7 @@
     raise (Stdpp.Exc_located (loc (), 
 			      Stream.Error ("Unsupported C syntax: " ^ s)))
   let warning s =
-    Format.eprintf "%a warning: %s" Loc.report_line (symbol_start ()) s
+    Format.eprintf "%a warning: %s\n" Loc.report_line (symbol_start ()) s
 
   let add_pre_loc lb = function
     | Some (b,_) -> Loc.join (b,0) lb 
@@ -107,9 +108,9 @@
     loop None
 
   let apply_sign sg ty = match sg, ty with
-    | (None | Some false), CTchar -> false
+    | None, CTchar -> false
     | None, _ -> true
-    | Some b, (CTshort | CTint | CTlong | CTlonglong) -> b
+    | Some b, (CTchar | CTshort | CTint | CTlong | CTlonglong) -> b
     | Some _, _ -> error "signed or unsigned invalid"
 
   type length = Short | Long | LongLong
@@ -139,7 +140,18 @@
     in
     loop None
 
-  let rec interp_type specs decl = 
+  (* debug *)
+  let rec explain_type fmt = function
+    | CTfun (_, t) -> fprintf fmt "fonction retournant %a" explain_type t
+    | CTpointer t -> fprintf fmt "pointeur sur %a" explain_type t
+    | CTarray (t, _) -> fprintf fmt "tableau[] de %a" explain_type t
+    | _ -> fprintf fmt "autre"
+
+  (* Interpretation of type expression.
+     [gl] indicates a global declaration (implies the check for a type or 
+     a storage class) *)
+
+  let rec interp_type gl specs decl = 
     let st = storage_class specs in
     let sg = sign specs in
     let lg = length specs in
@@ -147,7 +159,7 @@
       | [] -> 
 	  (match tyo with 
 	     | Some ty -> ty 
-	     | None when st = No_storage && sg = None && lg = None -> 
+	     | None when gl && st = No_storage && sg = None && lg = None -> 
 		 error "data definition has no type or storage class"
 	     | None -> CTint)
       | Stype t :: sp when tyo = None ->
@@ -163,20 +175,21 @@
     and full_type ty = function
       | Dsimple -> ty
       | Dpointer d -> full_type (CTpointer ty) d
-      | Darray (d, so) -> CTarray (full_type ty d, so)
-      | Dfunction (d, pl, _) -> CTfun (params pl, full_type ty d)
-      | Dbitfield (d, e) -> assert false
+      | Darray (d, so) -> full_type (CTarray (ty, so)) d
+      | Dfunction (d, pl, _) -> full_type (CTfun (params pl, ty)) d
+      | Dbitfield (d, e) -> full_type (CTbitfield (ty, e)) d
     and params pl = 
-      List.map (fun (s,d,x) -> (interp_type s d, x)) pl
+      List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
     in
     let ty = full_type (base_type None specs) decl in
+    if !Ctypes.debug then eprintf "%a@." explain_type ty;
     { ctype_expr = ty;
       ctype_storage = st;
       ctype_const = List.exists ((=) Sconst) specs;
       ctype_volatile = List.exists ((=) Svolatile) specs;
       ctype_signed = apply_sign sg ty }
 
-  let interp_param (s, d, id) = interp_type s d, id
+  let interp_param (s, d, id) = interp_type false s d, id
   let interp_params = List.map interp_param
 
   let is_typedef = List.exists ((=) Stypedef)
@@ -185,15 +198,67 @@
     let l = loc() in
     if is_typedef specs then
       let interp = function
-	| (n,d), Inothing -> Ctypes.add n; Ctypedef (interp_type specs d, n)
-	| (n,_), _ -> error ("typedef " ^ n ^ " is initialized")
+	| (n,d), Inothing -> 
+	    Ctypes.add n; Ctypedef (interp_type true specs d, n)
+	| (n,_), _ -> 
+	    error ("typedef " ^ n ^ " is initialized")
       in
       List.map interp decls
     else
       let interp ((n,d),i) =
-	Ctypes.remove n; Cdecl (interp_type specs d, n, i)
+	Ctypes.remove n; Cdecl (interp_type true specs d, n, i)
       in
       List.map interp decls
+
+  let type_declarations specs =
+    if is_typedef specs then warning "useless keyword in empty declaration";
+    let ty = interp_type true specs Dsimple in
+    match ty.ctype_expr with
+      | CTstruct_decl _ | CTunion_decl _ | CTenum_decl _ 
+      | CTstruct_named _ | CTunion_named _ | CTenum_named _ ->
+          [ locate (Ctypedecl ty) ]
+      | _ ->
+	  warning "empty declaration";
+	  []
+
+  (* old style function prototype: f(x,y,z) t1 x; t2 y; ...
+     some parameters may be omitted *)
+  let old_style_params pl decls =
+    let pids = List.map (fun (_,_,x) -> x) pl in
+    let h = Hashtbl.create 17 in
+    (* we first check that no parameter is initialized or occurs twice *)
+    List.iter
+      (fun d -> match d.node with
+	 | Cdecl (ty, x, Inothing) -> 
+	     if not (List.mem x pids) then 
+	       error ("declaration for " ^ x ^ " but no such parameter");
+	     if Hashtbl.mem h x then error ("duplicate declaration for " ^ x);
+	     Hashtbl.add h x ty
+	 | Cdecl (_,x,_) -> error ("parameter " ^ x ^ " is initialized")
+	 | _ -> ()) decls;
+    (* look for the type for [x] in decls; defaults to [int] *)
+    let type_for x =
+      try Hashtbl.find h x with Not_found -> interp_type false [] Dsimple
+    in
+    (* do it for all parameters *)
+    List.map
+      (function 
+	 | ([], Dsimple, x) -> 
+	     (type_for x, x)
+	 | _ -> 
+	     error "parm types given both in parmlist and separately")
+      pl
+
+  let function_declaration specs d decls = match d with
+    | id, Dfunction (d, pl, p) ->
+	let ty = interp_type false specs d in
+	let pl = 
+	  if decls = [] then interp_params pl else old_style_params pl decls 
+	in
+	List.iter (fun (_,x) -> Ctypes.remove x) pl;
+	ty, id, pl, p
+    | _ -> 
+	uns ()
 
 %}
 
@@ -267,7 +332,7 @@ unary_expression
         | unary_operator cast_expression { locate (CEunary ($1, $2)) }
         | SIZEOF unary_expression { locate (CEsizeof_expr $2) }
         | SIZEOF LPAR type_name RPAR 
-	    { let s,d = $3 in locate (CEsizeof (interp_type s d)) }
+	    { let s,d = $3 in locate (CEsizeof (interp_type false s d)) }
         ;
 
 unary_operator
@@ -282,7 +347,7 @@ unary_operator
 cast_expression
         : unary_expression { $1 }
         | LPAR type_name RPAR cast_expression 
-	    { let s,d = $2 in locate (CEcast (interp_type s d, $4)) }
+	    { let s,d = $2 in locate (CEcast (interp_type false s d, $4)) }
         ;
 
 multiplicative_expression
@@ -409,7 +474,7 @@ constant_expression
 
 declaration
         : declaration_specifiers SEMICOLON 
-            { warning "empty declaration"; [] }
+            { type_declarations $1 }
         | declaration_specifiers init_declarator_list SEMICOLON 
 	    { List.map locate (declaration $1 $2) }
 	| WDECL  /* ADDED FOR WHY */
@@ -566,15 +631,16 @@ direct_declarator
         : identifier
             { $1, Dsimple }
         | LPAR declarator RPAR 
-	    { uns() }
+	    { $2 }
         | direct_declarator LSQUARE constant_expression RSQUARE 
 	    { let id,d = $1 in id, Darray (d, Some $3) }
         | direct_declarator LSQUARE RSQUARE 
 	    { let id,d = $1 in id, Darray (d, None) }
         | direct_declarator LPAR parameter_type_list RPAR annot 
 	    { let id,d = $1 in id, Dfunction (d, $3, $5) }
-        | direct_declarator LPAR identifier_list RPAR 
-	    { uns() }
+        | direct_declarator LPAR identifier_list RPAR annot
+	    { let pl = List.map (fun x -> ([], Dsimple, x)) $3 in
+	      let id,d = $1 in id, Dfunction (d, pl, $5) }
         | direct_declarator LPAR RPAR annot 
             { let id,d = $1 in id, Dfunction (d, [], $4) }
         ;
@@ -600,7 +666,7 @@ type_qualifier_list
 
 parameter_type_list
         : parameter_list { $1 }
-        | parameter_list COMMA ELLIPSIS { uns() }
+        | parameter_list COMMA ELLIPSIS { uns () }
         ;
 
 parameter_list
@@ -618,8 +684,8 @@ parameter_declaration
         ;
 
 identifier_list
-        : IDENTIFIER { }
-        | identifier_list COMMA IDENTIFIER { }
+        : IDENTIFIER { [$1] }
+        | identifier_list COMMA IDENTIFIER { $1 @ [$3] }
         ;
 
 type_name
@@ -761,37 +827,21 @@ external_declaration
 function_definition
         : function_prototype compound_statement_with_post
             { Ctypes.pop (); (* pushed by function_prototype *)
-	      let b,q = $2 in
 	      let ty,id,pl,p = $1 in
+	      let b,q = $2 in
 	      let l = add_pre_loc (loc_i 2) p in
 	      locate (Cfundef (ty, id, pl, with_loc l (p,b,q))) }
         ;
 	      
 function_prototype
         : declaration_specifiers declarator declaration_list 
-            { Ctypes.push ();
-	      match $2 with
-		| id, Dfunction (d, pl, p) ->
-		    let ty = interp_type $1 d in
-		    let pl = interp_params pl in
-		    List.iter (fun (_,x) -> Ctypes.remove x) pl;
-		    ty, id, pl, p
-		| _ -> uns () }
+            { Ctypes.push (); function_declaration $1 $2 $3 }
         | declaration_specifiers declarator 
-	    { Ctypes.push ();
-	      match $2 with
-		| id, Dfunction (d, pl, p) -> 
-		    let ty = interp_type $1 d in
-		    let pl = interp_params pl in
-		    List.iter (fun (_,x) -> Ctypes.remove x) pl;
-		    ty, id, pl, p
-		| _ -> uns () }
-        | declarator declaration_list compound_statement 
-	    { Ctypes.push ();
-	      uns () }
-        | declarator compound_statement 
-	    { Ctypes.push ();
-	      uns () }
+	    { Ctypes.push (); function_declaration $1 $2 [] }
+        | declarator declaration_list
+	    { Ctypes.push (); function_declaration [] $1 $2 }
+        | declarator
+	    { Ctypes.push (); function_declaration [] $1 [] }
         ;
 
 %%

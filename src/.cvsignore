@@ -6,3 +6,4 @@ clexer.ml
 cparser.ml
 cparser.mli
 *.output
+linenum.ml

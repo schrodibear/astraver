@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: ctypes.mli,v 1.1 2003-12-08 13:02:51 filliatr Exp $ *)
+(* $Id: ctypes.mli,v 1.2 2003-12-22 15:51:00 filliatr Exp $ *)
 
 (* Parsing C requires to separate identifiers and type names during
    lexical analysis. This table is for this purpose. It is fill during
@@ -30,3 +30,5 @@ val push : unit -> unit
 
 val pop : unit -> unit
 
+
+val debug : bool ref

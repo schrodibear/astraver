@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.7 2003-12-05 15:49:30 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.8 2003-12-22 15:51:00 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
@@ -28,10 +28,16 @@ let file = ref (None : string option)
 
 let set_file f = file := Some f
 
+let get_file () = match !file with Some x -> x | None -> "No file"
+
 let with_file f = match !file with Some x -> f x | None -> ()
 
 (*s Error reporting. *)
 
+let finally ff f x =
+  let y = try f x with e -> ff (); raise e in ff (); y
+
+(***
 let linenum f b =
   let cin = open_in f in
   let rec lookup n l cl =
@@ -42,7 +48,10 @@ let linenum f b =
       lookup (succ n) (if c == '\n' then succ l else l) 
 	(if c == '\n' then 0 else succ cl)
   in
-  lookup 0 1 0
+  try let r = lookup 0 1 0 in close_in cin; r with e -> close_in cin; raise e
+
+let safe_linenum f b = try linenum f b with _ -> (1,1)
+***)
 
 open Format
 
@@ -51,7 +60,7 @@ let report fmt (b,e) = match !file with
       fprintf fmt "Standard input, characters %d-%d:\n" b e
   | Some f ->
       (try
-         let (l,cl) = linenum f b in
+         let (f,l,cl) = Linenum.from_char f b in
          fprintf fmt "File \"%s\", line %d, characters %d-%d:@\n" 
 	   f l cl (cl+e-b)
        with _ ->
@@ -68,18 +77,10 @@ let report_obligation fmt (b,e) = match !file with
 let report_line fmt n =
   with_file 
     (fun f ->
-       let cin = open_in f in
-       let l = ref 1 in
-       let rec loop i =
-	 if i != n then begin 
-	   let c = input_char cin in 
-	   if c == '\n' then incr l;
-	   loop (succ i) 
-	 end
-       in
-       begin try loop 0 with End_of_file -> () end;
-       close_in cin;
-       fprintf fmt "%s:%d: " f !l)
+       let (f,l,_) = Linenum.from_char f n in
+       fprintf fmt "%s:%d:" f l)
 
-
+let line n = match !file with
+  | Some f -> let (_,l,_) = Linenum.from_char f n in l
+  | None -> assert false
 

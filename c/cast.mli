@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.3 2003-12-15 15:50:56 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.4 2003-12-22 15:51:00 filliatr Exp $ i*)
 
 (* C abstract syntax trees *)
 
@@ -51,6 +51,7 @@ type ctype_expr =
   | CTvar of string
   | CTarray of ctype_expr * cexpr option
   | CTpointer of ctype_expr
+  | CTbitfield of ctype_expr * cexpr
   | CTstruct_named of string
   | CTstruct_decl of string option * parameters 
   | CTunion_named of string
@@ -123,6 +124,7 @@ and annotated_block = annot option * block * annot option
 and decl = 
   | Cspecdecl of annot
   | Ctypedef of ctype * string
+  | Ctypedecl of ctype
   | Cdecl of ctype * string * c_initializer
   | Cfundef of ctype * string * parameters * annotated_block located
 

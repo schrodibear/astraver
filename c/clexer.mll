@@ -31,6 +31,8 @@
 
 }
 
+let space = [' ' '\t' '\012' '\r']
+
 let rD =	['0'-'9']
 let rL = ['a'-'z' 'A'-'Z' '_']
 let rH = ['a'-'f' 'A'-'F' '0'-'9']
@@ -39,7 +41,8 @@ let rFS	= ('f'|'F'|'l'|'L')
 let rIS = ('u'|'U'|'l'|'L')*
 
 rule token = parse
-  | [' ' '\t' '\n']+        { token lexbuf }
+  | [' ' '\t' '\012' '\r' '\n']+        
+                            { token lexbuf }
   | "/*"                    { comment lexbuf; token lexbuf }
   | "/*@"                   { annot_start_pos := lexeme_start lexbuf + 4;
 			      Buffer.clear buf; annot lexbuf }
@@ -49,7 +52,7 @@ rule token = parse
   | "break"                 { BREAK }
   | "case"                  { CASE }
   | "char"                  { CHAR }
-  | "const"                 { CONST }
+  | "__const" | "const"     { CONST }
   | "continue"              { CONTINUE }
   | "default"               { DEFAULT }
   | "do"                    { DO }
@@ -77,6 +80,15 @@ rule token = parse
   | "void"                  { VOID }
   | "volatile"              { VOLATILE }
   | "while"                 { WHILE }
+
+  (* preprocessor, compiler-dependent extensions, etc. *)
+  | "__LINE__"              { let n = lexeme_start lexbuf in
+			      CONSTANT (string_of_int (Loc.line n)) }
+  | "__FILE__"              { let f = Loc.get_file () in
+			      STRING_LITERAL ("\"" ^ f ^ "\"") }
+  | "__extension__"         { token lexbuf }
+  (* we skip # line directives *)
+  | '#' [^'\n']* '\n'       { token lexbuf }
 
   | rL (rL | rD)*       { let s = lexeme lexbuf in
 			  if Ctypes.mem s then TYPE_NAME s else IDENTIFIER s }
@@ -138,9 +150,6 @@ rule token = parse
   | "^"                     { HAT }
   | "|"                     { PIPE }
   | "?"                     { QUESTION }
-
-  (* TODO: analyze lines inserted by the pre-processor *)
-  | '#' [^ '\n']* '\n'      { token lexbuf }
 
   | eof { EOF }
   | '"' { lex_error lexbuf "Unterminated string" }
