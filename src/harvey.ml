@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: harvey.ml,v 1.22 2004-12-01 17:10:03 filliatr Exp $ i*)
+(*i $Id: harvey.ml,v 1.23 2005-02-11 16:01:45 filliatr Exp $ i*)
 
 (*s Harvey's output *)
 
@@ -26,16 +26,22 @@ open Vcg
 open Format
 open Pp
 
-let oblig = Queue.create ()
-let axiom = Queue.create ()
+type elem = 
+  | Axiom of string * predicate Env.scheme
+  | Predicate of string * predicate_def Env.scheme
 
-let reset () = Queue.clear oblig; Queue.clear axiom
+let theory = Queue.create ()
+let oblig = Queue.create ()
+
+let reset () = Queue.clear theory; Queue.clear oblig
 
 let push_obligations = List.iter (fun o -> Queue.add o oblig)
 
-let push_axiom id p = Queue.add (id, p) axiom
+let push_axiom id p = Queue.add (Axiom (id, p)) theory
 
-let push_predicate id p = assert false (*TODO*)
+let push_predicate id p = Queue.add (Predicate (id, p)) theory
+
+let defpred = Hashtbl.create 97
 
 (*s Pretty print *)
 
@@ -139,6 +145,28 @@ let rec print_predicate fmt = function
   | Pnamed (_, p) -> (* TODO: print name *)
       print_predicate fmt p
 
+let print_axiom fmt id p =
+  fprintf fmt "@[(;; Why axiom %s@]@\n" id;
+  let p = p.Env.scheme_type in
+  fprintf fmt " @[<hov 2>%a@]" print_predicate p;
+  fprintf fmt ")@]@\n@\n" 
+
+let print_predicate_def fmt id p =
+  let (bl,p) = p.Env.scheme_type in
+  fprintf fmt "@[(DEFPRED (%s %a) @[%a@])@]@\n@\n" id
+    (print_list space (fun fmt (x,_) -> Ident.print fmt x)) bl 
+    print_predicate p;
+  Hashtbl.add defpred (Ident.create id) ()
+
+let print_elem fmt = function
+  | Axiom (id, p) -> print_axiom fmt id p
+  | Predicate (id, p) -> print_predicate_def fmt id p
+
+let output_theory fmt =
+  fprintf fmt "(@\n@[";
+  Queue.iter (print_elem fmt) theory;
+  fprintf fmt "@]@\n) ;; END THEORY@\n"
+
 let output_sequent fmt (ctx, c) = match ctx with
   | [] -> 
       fprintf fmt "@[%a@]" print_predicate c
@@ -174,37 +202,20 @@ exception NotFirstOrder
 
 let prepare_sequent (ctx, c) = filter_context ctx, c
 
-let output_axioms f =
-  let fname = f ^ "_axioms.rv" in
-  let cout = open_out fname in
-  let fmt = formatter_of_out_channel cout in
-  fprintf fmt "(@[";
-  Queue.iter 
-    (fun (id, p) -> 
-       fprintf fmt ";; why axiom %s@\n(@[%a@])@\n" 
-	 id print_predicate p.Env.scheme_type)
-    axiom;
-  fprintf fmt "@])@\n";
-  pp_print_flush fmt ();
-  close_out cout
-
-let output_obligation f (loc, o, s) = 
+let output_obligation fmt (loc, o, s) = 
   try
     let s = prepare_sequent s in
-    let fname = f ^ "_" ^ o ^ ".rv" in
-    let cout = open_out fname in
-    let fmt = formatter_of_out_channel cout in
-    fprintf fmt "@[";
-    if not Options.no_harvey_prelude then fprintf fmt "()@\n";
-    fprintf fmt ";; %a@]@\n" Loc.report_obligation loc;
-    output_sequent fmt s;
-    pp_print_flush fmt ();
-    close_out cout
+    fprintf fmt "@[;; %a@]@\n" Loc.report_obligation loc;
+    output_sequent fmt s
   with NotFirstOrder ->
     unlocated_wprintf "obligation %s is not first-order@\n" o
 
 let output_file f = 
-  output_axioms f;
-  Queue.iter (output_obligation f) oblig
-
+  let fname = f ^ "_why.rv" in
+  let cout = open_out fname in
+  let fmt = formatter_of_out_channel cout in
+  if Options.no_harvey_prelude then fprintf fmt "()@\n" else output_theory fmt;
+  Queue.iter (output_obligation fmt) oblig;
+  pp_print_flush fmt ();
+  close_out cout
 

@@ -9,3 +9,4 @@ caduceus.opt
 *.static
 dp.byte
 dp.opt
+rv_merge.opt

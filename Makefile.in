@@ -74,9 +74,10 @@ BINARY=bin/why.$(OCAMLBEST)
 CADUCEUS=bin/caduceus.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 WHY2HTML=bin/why2html.$(OCAMLBEST)
+RVMERGE=bin/rv_merge.$(OCAMLBEST)
 DP=bin/dp.$(OCAMLBEST)
 
-all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(WHY2HTML) $(DP)
+all: $(BINARY) $(CADUCEUS) coq-@COQ@ $(WHY2HTML) $(DP) $(RVMERGE)
 
 opt: bin/why.opt bin/caduceus.opt
 
@@ -160,6 +161,12 @@ bin/dp.byte: $(DPCMO)
 	$(OCAMLC) $(BFLAGS) -o $@ $^
 
 bin/dp.opt: $(DPCMX)
+	$(OCAMLOPT) $(OFLAGS) -o $@ $^
+
+bin/rv_merge.byte: tools/rv_merge.ml
+	$(OCAMLC) $(BFLAGS) -o $@ $^
+
+bin/rv_merge.opt: tools/rv_merge.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 static:: $(STATICBINARY)
