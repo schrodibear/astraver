@@ -1,9 +1,12 @@
 
-logic p : int,int -> prop
+parameter x : int ref
+logic q : int -> prop
 
-let rec f (a:int) (b:int) : int { variant a } =
-  { p(a,b) }
-  (f (a+b) a)
+let p = begin 
+          begin x := 1; x := !x + 1 end; 
+          assert { x > 0 }; 
+	  x := !x + 1 
+        end { q(x) }
 
 (***
 exception E of int

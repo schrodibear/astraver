@@ -137,6 +137,7 @@ examples/misc/peano_why.vo: examples/misc/peano_why.v lib/coq/Why.vo
 examples/misc/mac_carthy_why.vo: examples/misc/mac_carthy_why.v lib/coq/Why.vo
 examples/misc/loop0_why.vo: examples/misc/loop0_why.v lib/coq/Why.vo
 examples/misc/gcd_why.vo: examples/misc/gcd_why.v lib/coq/Why.vo
+examples/misc/flag_why.vo: examples/misc/flag_why.v lib/coq/Why.vo
 examples/misc/fib_why.vo: examples/misc/fib_why.v lib/coq/Why.vo
 examples/misc/arith_why.vo: examples/misc/arith_why.v lib/coq/Why.vo
 examples/kmp/kmp_why.vo: examples/kmp/kmp_why.v lib/coq/Why.vo examples/kmp/Match.vo examples/kmp/Next.vo examples/kmp/Lex.vo
@@ -148,6 +149,10 @@ examples/heapsort/heapsort_why.vo: examples/heapsort/heapsort_why.v lib/coq/Why.
 examples/heapsort/downheap_why.vo: examples/heapsort/downheap_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo
 examples/heapsort/Inftree.vo: examples/heapsort/Inftree.v lib/coq/Why.vo examples/heapsort/Heap.vo
 examples/heapsort/Heap.vo: examples/heapsort/Heap.v lib/coq/Why.vo
+examples/find/find_why.vo: examples/find/find_why.v examples/find/find_spec.vo examples/find/find_lemmas.vo examples/find/find_proofs.vo lib/coq/Why.vo
+examples/find/find_spec.vo: examples/find/find_spec.v lib/coq/WhyArrays.vo
+examples/find/find_proofs.vo: examples/find/find_proofs.v examples/find/find_spec.vo examples/find/find_lemmas.vo lib/coq/Why.vo
+examples/find/find_lemmas.vo: examples/find/find_lemmas.v examples/find/find_spec.vo lib/coq/Why.vo
 examples/edit-distance/words.vo: examples/edit-distance/words.v lib/coq/WhyArrays.vo
 examples/edit-distance/distance_why.vo: examples/edit-distance/distance_why.v lib/coq/Why.vo examples/edit-distance/words.vo
 examples/bresenham/zaux.vo: examples/bresenham/zaux.v

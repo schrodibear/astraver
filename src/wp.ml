@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.46 2002-07-09 11:45:02 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.47 2002-07-17 15:38:43 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -340,7 +340,7 @@ and wp_block bl q = match bl with
       Label l :: bl', optpost_app (erase_label l) w
   | Assert p :: bl ->
       let bl', w = wp_block bl q in
-      Assert p :: bl', w
+      Assert p :: bl', optpost_app (fun c -> pand p.a_value c) w
 
 let propagate p =
   let p = normalize p in

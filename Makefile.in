@@ -212,13 +212,20 @@ FILES =src/*.ml* Makefile.in configure.in configure .depend \
 	examples/*/.depend examples/*/Makefile \
 	lib/coq/*.v lib/pvs/why.*
 
-distrib export: clean source export-doc linux
+distrib export: clean source export-doc export-examples linux
 
 source:  doc/manual.ps
 	mkdir -p $(EXPORT)/bin
 	cp --parents $(FILES) $(EXPORT)
 	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
 	cp CHANGES export/$(NAME).tar.gz $(FTP)
+
+EXFILES = lib/coq/*.v examples/*/*.v examples/*/*.ml 
+
+export-examples:
+	cp --parents $(EXFILES) $(WWW)
+	make -C $(WWW)/examples clean depend
+	make -C $(WWW)/examples all
 
 export-doc: doc/manual.ps doc/manual.html
 	cp $^ $(WWW)

@@ -181,15 +181,11 @@ Lemma find_po_6 :
   (termination i2 j0 m0 n0 r A1) /\ (Zwf `0` `N + 1 - i2` `N + 1 - i1`).
 Proof.
 Intros. 
-Rewrite Post3.
-Rewrite Post3 in Inv_ij.
-Rewrite Post3 in Inv_i.
-Rewrite Post3 in Test4.
+Subst r.
+Subst i2.
 Generalize (subgoal_1 m0 n0 i0 j0 i1 A A0 A1 
               Inv_mn Test14 zero_f_SN Inv_ij Test9 Inv_i Test4).
 Intuition.
-Rewrite Post6; Assumption.
-Rewrite Post6; Assumption.
 Unfold Zwf; Omega.
 Save.
 
@@ -490,18 +486,12 @@ Lemma find_po_13 :
   (termination i1 j2 m0 n0 r A1) /\ (Zwf `0` j2 j1).
 Proof.
 Intros. 
-Rewrite Post3.
-Rewrite Post3 in Inv_ij.
-Rewrite Post3 in Inv_i.
-Rewrite Post3 in Inv_j.
-Rewrite Post3 in Test6.
+Subst r.
+Subst j2.
 Generalize (subgoal_2 m0 n0 i0 j0 i1 j1 A A0 A1
                   Inv_mn Test14 zero_f_SN Inv_ij Test9 Inv_i 
                   Inv_j Test6).
 Intuition.
-Rewrite Post7; Assumption.
-Rewrite Post7; Assumption.
-Rewrite Post7; Assumption.
 Unfold Zwf; Omega.
 Save.
 
@@ -867,6 +857,8 @@ Lemma find_po_21 :
   (Post9: A2 = (store A1 i1 (access A1 j1)))
   (A3: (array `N + 1` Z))
   (Post10: A3 = (store A2 j1 w))
+  (exchange A3 A1 i1 j1) /\ (`(access A3 i1) <= r` /\
+  (`r <= (access A3 j1)` /\
   ((i:Z)
    (i = `i1 + 1` ->
     ((j:Z)
@@ -874,12 +866,27 @@ Lemma find_po_21 :
       (j_invariant m0 n0 j r A3) /\ (m_invariant m0 A3) /\
       (n_invariant n0 A3) /\ `0 <= j` /\ `i <= N + 1` /\
       (termination i j m0 n0 r A3) /\ (permut A3 A) /\
-      (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))).
+      (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))).
 Proof.
 Intros.
-
-Exact (subgoal_3 m0 n0 i0 j0 i1 j1 A A0 A1 A2 Inv_mn Test7 zero_f_SN Inv_ij 
-  Test4 Inv_i Inv_j Pre10 Test3 Post7 Pre8 Pre7).
+Subst r.
+Assert H:(exchange A3 A1 i1 j1).
+Subst A3. Subst A2. Subst w.
+Auto with datatypes.
+Split. Assumption.
+Assert H0:`(access A3 i1) <= (access A0 f)`.
+Elim H; Intros; Rewrite H2; Omega.
+Split. Assumption.
+Assert H1:`(access A0 f) <= (access A3 j1)`.
+Elim H; Intros; Rewrite H4; Omega.
+Split. Assumption.
+Intros.
+Subst i.
+Subst j.
+Generalize (subgoal_3 m0 n0 i0 j0 i1 j1 A A0 A1 A3 Inv_mn Test14 
+  zero_f_SN Inv_ij 
+  Test9 Inv_i Inv_j Pre17 Test8 H H0 H1).
+Intuition.
 Save.
 
 Lemma find_po_22 : 
@@ -921,17 +928,19 @@ Lemma find_po_22 :
   (Pre17: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array `N + 1` Z))
-  (Post28: ((i:Z)
+  (Post28: (exchange A2 A1 i1 j1) /\ (`(access A2 i1) <= r` /\
+           (`r <= (access A2 j1)` /\
+           ((i:Z)
             (i = `i1 + 1` ->
              ((j:Z)
               (j = `j1 - 1` -> (i_invariant m0 n0 i r A2) /\
                (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
                (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
                (termination i j m0 n0 r A2) /\ (permut A2 A) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
+               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))))
   (exchange A2 A1 i1 j1).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_23 : 
@@ -973,18 +982,20 @@ Lemma find_po_23 :
   (Pre17: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array `N + 1` Z))
-  (Post28: ((i:Z)
+  (Post28: (exchange A2 A1 i1 j1) /\ (`(access A2 i1) <= r` /\
+           (`r <= (access A2 j1)` /\
+           ((i:Z)
             (i = `i1 + 1` ->
              ((j:Z)
               (j = `j1 - 1` -> (i_invariant m0 n0 i r A2) /\
                (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
                (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
                (termination i j m0 n0 r A2) /\ (permut A2 A) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
+               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))))
   (Pre16: (exchange A2 A1 i1 j1))
   `(access A2 i1) <= r`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_24 : 
@@ -1026,19 +1037,21 @@ Lemma find_po_24 :
   (Pre17: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array `N + 1` Z))
-  (Post28: ((i:Z)
+  (Post28: (exchange A2 A1 i1 j1) /\ (`(access A2 i1) <= r` /\
+           (`r <= (access A2 j1)` /\
+           ((i:Z)
             (i = `i1 + 1` ->
              ((j:Z)
               (j = `j1 - 1` -> (i_invariant m0 n0 i r A2) /\
                (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
                (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
                (termination i j m0 n0 r A2) /\ (permut A2 A) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
+               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))))
   (Pre16: (exchange A2 A1 i1 j1))
   (Pre15: `(access A2 i1) <= r`)
   `r <= (access A2 j1)`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_25 : 
@@ -1080,14 +1093,16 @@ Lemma find_po_25 :
   (Pre17: `(access A1 j1) <= r` /\ `r <= (access A1 i1)`)
   (Test8: `i1 <= j1`)
   (A2: (array `N + 1` Z))
-  (Post28: ((i:Z)
+  (Post28: (exchange A2 A1 i1 j1) /\ (`(access A2 i1) <= r` /\
+           (`r <= (access A2 j1)` /\
+           ((i:Z)
             (i = `i1 + 1` ->
              ((j:Z)
               (j = `j1 - 1` -> (i_invariant m0 n0 i r A2) /\
                (j_invariant m0 n0 j r A2) /\ (m_invariant m0 A2) /\
                (n_invariant n0 A2) /\ `0 <= j` /\ `i <= N + 1` /\
                (termination i j m0 n0 r A2) /\ (permut A2 A) /\
-               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))
+               (Zwf `0` `N + 2 + j - i` `N + 2 + j0 - i0`))))))))
   (Pre16: (exchange A2 A1 i1 j1))
   (Pre15: `(access A2 i1) <= r`)
   (Pre14: `r <= (access A2 j1)`)
@@ -1100,7 +1115,7 @@ Lemma find_po_25 :
   (termination i2 j2 m0 n0 r A2) /\ (permut A2 A) /\
   (Zwf `0` `N + 2 + j2 - i2` `N + 2 + j0 - i0`).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_26 : 
@@ -1146,7 +1161,8 @@ Lemma find_po_26 :
   (termination i1 j1 m0 n0 r A1) /\ (permut A1 A) /\
   (Zwf `0` `N + 2 + j1 - i1` `N + 2 + j0 - i0`).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Unfold Zwf; Omega.
 Save.
 
 Lemma find_po_27 : 
@@ -1188,7 +1204,7 @@ Lemma find_po_27 :
             (permut A2 A) /\ (Zwf `0` `N + 2 + j1 - i1` `N + 2 + j0 - i0`))
   (Zwf `0` `N + 2 + j1 - i1` Variant3).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Rewrite Pre18; Tauto.
 Save.
 
 Lemma find_po_28 : 
@@ -1232,7 +1248,7 @@ Lemma find_po_28 :
   (m_invariant m0 A2) /\ (n_invariant n0 A2) /\ `0 <= j1` /\ `i1 <= N + 1` /\
   (termination i1 j1 m0 n0 r A2) /\ (permut A2 A).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_29 : 
@@ -1269,7 +1285,7 @@ Lemma find_po_29 :
   (m_invariant m0 A1) /\ (n_invariant n0 A1) /\ `0 <= j0` /\ `i0 <= N + 1` /\
   (termination i0 j0 m0 n0 r A1) /\ (permut A1 A) /\ `i0 > j0`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_30 : 
@@ -1298,7 +1314,14 @@ Lemma find_po_30 :
   `result2 <= N + 1` /\ (termination result2 result3 m0 n0 r A0) /\
   (permut A0 A).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Subst r; Subst result2; Subst result3; Intuition.
+Apply Lemma_4_14; Auto.
+Elim H; Elim H3; Omega.
+Apply Lemma_5_14'; Auto.
+Elim H; Elim H3; Omega.
+Unfold termination; Right; Elim H; Elim H3; Intros; Split.
+Omega.
+Auto.
 Save.
 
 Lemma find_po_31 : 
@@ -1331,7 +1354,7 @@ Lemma find_po_31 :
            (permut A1 A) /\ `i0 > j0`)
   `m0 < i0` /\ `j0 < n0`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition (Elim H12; Omega).
 Save.
 
 Lemma find_po_32 : 
@@ -1369,7 +1392,10 @@ Lemma find_po_32 :
   (m_invariant m0 A1) /\ (n_invariant n1 A1) /\ (permut A1 A) /\ `1 <= m0` /\
   `n1 <= N` /\ (Zwf `0` `n1 - m0` `n0 - m0`).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Subst n1; Subst r.
+Generalize (subgoal_5 m0 n0 i0 j0 A A0 A1 
+                 Inv_mn Test14 Pre2 Inv_ij Pre19 Test13).
+Intuition.
 Save.
 
 Lemma find_po_33 : 
@@ -1408,7 +1434,10 @@ Lemma find_po_33 :
   (m_invariant m1 A1) /\ (n_invariant n0 A1) /\ (permut A1 A) /\ `1 <= m1` /\
   `n0 <= N` /\ (Zwf `0` `n0 - m1` `n0 - m0`).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Subst m1; Subst r.
+Generalize (subgoal_6 m0 n0 i0 j0 A A0 A1
+                 Inv_mn Test14 Pre2 Inv_ij Pre19 Test12 Test11).
+Intuition.
 Save.
 
 Lemma find_po_34 : 
@@ -1449,7 +1478,10 @@ Lemma find_po_34 :
   (m_invariant m1 A1) /\ (n_invariant n1 A1) /\ (permut A1 A) /\ `1 <= m1` /\
   `n1 <= N` /\ (Zwf `0` `n1 - m1` `n0 - m0`).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Subst n1; Subst m1; Subst r.
+Generalize (subgoal_7 m0 n0 i0 j0 A A0 A1
+                 Inv_mn Test14 Pre2 Inv_ij Pre19 Test12 Test10).
+Intuition.
 Save.
 
 Lemma find_po_35 : 
@@ -1473,7 +1505,7 @@ Lemma find_po_35 :
             `1 <= m1` /\ `n1 <= N` /\ (Zwf `0` `n1 - m1` `n0 - m0`))
   (Zwf `0` `n1 - m1` Variant1).
 Proof.
-(* FILL PROOF HERE *)
+Intros; Rewrite Pre20; Tauto.
 Save.
 
 Lemma find_po_36 : 
@@ -1498,7 +1530,7 @@ Lemma find_po_36 :
   (m_invariant m1 A1) /\ (n_invariant n1 A1) /\ (permut A1 A) /\ `1 <= m1` /\
   `n1 <= N`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
 Save.
 
 Lemma find_po_37 : 
@@ -1517,7 +1549,8 @@ Lemma find_po_37 :
   (Test1: `m0 >= n0`)
   (found A0) /\ (permut A0 A0).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Apply Lemma_3 with m:=m0 n:=n0; Auto.
 Save.
 
 Lemma find_po_38 : 
@@ -1529,7 +1562,9 @@ Lemma find_po_38 :
   (m_invariant result A) /\ (n_invariant result0 A) /\ (permut A A) /\
   `1 <= result` /\ `result0 <= N`.
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Subst result; Exact (Lemma_1 A).
+Subst result0; Exact (Lemma_2 A).
 Save.
 
 Definition find := (* validation *)
@@ -2111,6 +2146,9 @@ Definition find := (* validation *)
                                                       (exist_2 [A4: (
                                                       array `N + 1` Z)]
                                                       [result10: unit]
+                                                      (exchange A4 A1 i1 j1) /\
+                                                      (`(access A4 i1) <= r` /\
+                                                      (`r <= (access A4 j1)` /\
                                                       ((i:Z)
                                                        (i = `i1 + 1` ->
                                                         ((j:Z)
@@ -2128,7 +2166,7 @@ Definition find := (* validation *)
                                                           (permut A4 A) /\
                                                           (Zwf `0` `N + 2 +
                                                                     j - i` `
-                                                          N + 2 + j0 - i0`))))) 
+                                                          N + 2 + j0 - i0`))))))) 
                                                       A3 result9
                                                       (find_po_21 A result
                                                       Post1 result0 Post2
@@ -2144,6 +2182,9 @@ Definition find := (* validation *)
                                                     (exist_2 [A3: (array
                                                                    `N + 1` Z)]
                                                     [result9: unit]
+                                                    (exchange A3 A1 i1 j1) /\
+                                                    (`(access A3 i1) <= r` /\
+                                                    (`r <= (access A3 j1)` /\
                                                     ((i:Z)
                                                      (i = `i1 + 1` ->
                                                       ((j:Z)
@@ -2161,7 +2202,7 @@ Definition find := (* validation *)
                                                         (permut A3 A) /\
                                                         (Zwf `0` `N + 2 + j -
                                                                   i` `
-                                                        N + 2 + j0 - i0`))))) 
+                                                        N + 2 + j0 - i0`))))))) 
                                                     A2 result8 Post29) in
                                                   let Pre16 =
                                                     (find_po_22 A result

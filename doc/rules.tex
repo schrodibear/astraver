@@ -231,7 +231,7 @@
     \wpre{\plabel{l}{e}}{q} & =
        \wpre{e}{q}[x_l\leftarrow x] \\
     \wpre{\assert{p}{e}}{q} & =
-       \wpre{e}{q} \\ % ???
+       p \land \wpre{e}{q} \\ 
     \wpre{\ite{e_1}{e_2}{e_3}}{q} & =
        \wpre{e_1}{\ite{\result}{\wpre{e_2}{q}}{\wpre{e_3}{q}}} \\
     \wpre{\letin{x}{e_1}{e_2}}{q} & =

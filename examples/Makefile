@@ -1,5 +1,6 @@
 
-DIRS = misc binary-search bresenham quicksort edit-distance heapsort sqrt kmp
+DIRS = misc binary-search bresenham quicksort edit-distance heapsort sqrt kmp \
+       find
 
 all: 
 	for d in $(DIRS); do make -C $$d; done
