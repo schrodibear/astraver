@@ -1,0 +1,25 @@
+
+Why is a certification tool.  It takes annotated programs as input and
+outputs proof obligations for the proof assistants PVS and Coq.
+
+
+DOCUMENTATION
+=============
+
+The documentation (a  tutorial and a reference manual)  is enclosed in
+the subdirectory doc/.
+
+Various examples can be found in the subdirectory examples/.
+
+
+COPYRIGHT
+=========
+
+This program is distributed under the GNU GPL. 
+See the enclosed file COPYING.
+
+
+INSTALLATION
+============
+
+See the enclosed file INSTALL.

@@ -1,5 +1,12 @@
 
-let p = 0
+parameter x : int ref
+
+let p = 
+  { x > 0 } 
+  while begin x := !x - 1; !x > 0 end { x = x@ - 1 and if result then x > 0 else x <= 0 } do 
+    { invariant x >= 0 variant x } void 
+  done
+  { x = 0 }
 
 (****
 

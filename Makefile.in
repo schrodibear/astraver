@@ -49,7 +49,7 @@ COQLIB = @COQLIB@
 COQINCLUDES = -I lib/coq
 
 VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
-     lib/coq/WhyTuples.vo  lib/coq/WhyWf.vo    lib/coq/WhyPermut.vo \
+     lib/coq/WhyTuples.vo  lib/coq/WhyPermut.vo \
      lib/coq/WhySorted.vo  lib/coq/Why.vo   
 
 GENERATED = src/version.ml src/parser.ml
@@ -60,7 +60,7 @@ GENERATED = src/version.ml src/parser.ml
 BINARY=bin/why.$(OCAMLBEST)
 STATICBINARY=bin/why.static
 
-all: $(BINARY) $(STATICBINARY) $(VO)
+all: $(BINARY) $(VO)
 
 opt: bin/why.opt
 
@@ -82,7 +82,7 @@ static:: $(STATICBINARY)
 
 coq:: $(VO)
 
-VERSION=0.1
+VERSION=0.5
 
 src/version.ml: Makefile
 	echo "let version = \""$(VERSION)"\"" > $@
@@ -126,10 +126,14 @@ install: $(BINARY)
 local: $(STATICBINARY)
 	cp -f $(STATICBINARY) $$HOME/bin/$$OSTYPE/why
 
-demons: $(STATICBINARY)
+demons: $(STATICBINARY) doc/manual.ps
 	cp -f $(STATICBINARY) /users/demons/demons/bin/$$OSTYPE/why
-	make -C doc manual.ps
 	cp doc/manual.ps /users/demons/demons/docs/why.ps
+
+# doc
+
+doc/manual.ps: doc/manual.tex
+	make -C doc manual.ps
 
 # special rules
 ###############
@@ -189,6 +193,28 @@ tags:
               "--regex=/exception[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/val[ \t]+\([^ \t]+\)/\1/" \
 	      "--regex=/module[ \t]+\([^ \t]+\)/\1/"
+
+# distrib
+#########
+
+NAME=why-$(VERSION)
+EXPORT=export/$(NAME)
+
+FTP = $(HOME)/ftp/why
+
+FILES =src/*.ml* Makefile.in configure.in configure .depend \
+       README INSTALL COPYING GPL CHANGES doc/manual.ps doc/why.1 \
+	examples/Makefile* examples/*/*.ml examples/*/*.v \
+	examples/*/.depend examples/*/Makefile \
+	lib/coq/*.v lib/pvs/why.*
+
+distrib export: clean source
+
+source: doc/manual.ps
+	mkdir -p $(EXPORT)/bin
+	cp --parents $(FILES) $(EXPORT)
+	cd export; tar cf $(NAME).tar $(NAME); gzip -f --best $(NAME).tar
+	cp doc/manual.ps export/$(NAME).tar.gz $(FTP)
 
 # myself
 ########
