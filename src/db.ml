@@ -1,14 +1,16 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: db.ml,v 1.6 2002-02-28 16:15:12 filliatr Exp $ i*)
+(*i $Id: db.ml,v 1.7 2002-03-01 12:03:44 filliatr Exp $ i*)
 
 open Logic
 open Types
 open Ast
 open Env
 
+module Ids = Ident.Idset
+
 let lookup_var ids locop id =
-  if List.mem id ids then
+  if Ids.mem id ids then
     None
   else begin
     try Some (Tvar id)
@@ -16,7 +18,7 @@ let lookup_var ids locop id =
   end
 
 let check_ref idl loc id =
-  if (not (List.mem id idl)) & (not (Env.is_global id)) then
+  if (not (Ids.mem id idl)) & (not (Env.is_global id)) then
     Error.unbound_reference id (Some loc)
 
 (* db types  : just do nothing for the moment ! *)
@@ -41,13 +43,13 @@ let rec db_binders ((tids,pids,refs) as idl) = function
   | [] -> 
       idl, []
   | (id, BindType (Ref _ | Array _ as v)) :: rem ->
-      let idl',rem' = db_binders (tids,pids,id::refs) rem in
+      let idl',rem' = db_binders (tids,pids,Ids.add id refs) rem in
       idl', (id, BindType (db_type_v tids v)) :: rem'
   | (id, BindType v) :: rem ->
-      let idl',rem' = db_binders (tids,id::pids,refs) rem in
+      let idl',rem' = db_binders (tids,Ids.add id pids,refs) rem in
       idl', (id, BindType (db_type_v tids v)) :: rem'
   | ((id, BindSet) as t) :: rem ->
-      let idl',rem' = db_binders (id::tids,pids,refs) rem in
+      let idl',rem' = db_binders (Ids.add id tids,pids,refs) rem in
       idl', t :: rem'
   | a :: rem ->
       let idl',rem' = db_binders idl rem in idl', a :: rem'
@@ -82,11 +84,11 @@ i*)
   
 let db_prog e =
   let loc = e.info.loc in
-  (* tids = type Ident.ts, ids = variables, refs = references and arrays *)
+  (* tids = type idents, ids = variables, refs = references and arrays *)
   let rec db_desc ((tids,ids,refs) as idl) = function
     | (Var x) as t ->
 	(match lookup_var ids (Some loc) x with
-	     None -> t
+	   | None -> t
 	   | Some c -> Expression c)
     | (Acc x) as t ->
 	check_ref refs loc x;
@@ -102,13 +104,13 @@ let db_prog e =
 	TabAff (b,x, db idl e1, db idl e2)
     | Seq bl ->
 	Seq (List.map (function
-			   Statement p -> Statement (db idl p)
+			 | Statement p -> Statement (db idl p)
 			 | x -> x) bl)
     | If (e1,e2,e3) ->
 	If (db idl e1, db idl e2, db idl e3)
     | While (b,inv,var,bl) ->
 	let bl' = List.map (function
-				Statement p -> Statement (db idl p)
+			      | Statement p -> Statement (db idl p)
 			      | x -> x) bl in
 	While (db idl b, inv, var, bl')
 	  
@@ -117,13 +119,14 @@ let db_prog e =
     | App (e1,l) ->
 	App (db idl e1, List.map (db_arg idl) l)
     | LetRef (x,e1,e2) ->
-	LetRef (x, db idl e1, db (tids,ids,x::refs) e2)
+	LetRef (x, db idl e1, db (tids,ids,Ids.add x refs) e2)
     | LetIn (x,e1,e2) ->
-	LetIn (x, db idl e1, db (tids,x::ids,refs) e2)
+	LetIn (x, db idl e1, db (tids,Ids.add x ids,refs) e2)
 	  
     | LetRec (f,bl,v,var,e) ->
 	let (tids',ids',refs'),bl' = db_binders idl bl in
-	LetRec (f, bl, db_type_v tids' v, var, db (tids',f::ids',refs') e)
+	LetRec (f, bl, db_type_v tids' v, var, 
+		db (tids',Ids.add f ids',refs') e)
 	  
     | Debug (s,e1) ->
 	Debug (s, db idl e1)
@@ -133,7 +136,7 @@ let db_prog e =
 	  
   and db_arg ((tids,_,refs) as idl) = function
     | Term ({ desc = Var id } as t) -> 
-	if List.mem id refs then Refarg (t.info.loc, id) else Term (db idl t)
+	if Ids.mem id refs then Refarg (t.info.loc, id) else Term (db idl t)
     | Term t -> Term (db idl t)
     | Type v -> Type (db_type_v tids v)
     | Refarg _ -> assert false
@@ -143,7 +146,6 @@ let db_prog e =
       info = { pre = e.info.pre; post = e.info.post; loc = e.info.loc } }
 
   in
-  let ids = [] (* TODO: logical variables here *) in
   let vars,refs = all_vars (), all_refs () in
-  db ([],vars@ids,refs) e
+  db (Ids.empty, vars, refs) e
 

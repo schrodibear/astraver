@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: env.ml,v 1.4 2002-02-07 15:11:51 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.5 2002-03-01 12:03:44 filliatr Exp $ i*)
 
 open Misc
 open Ast
@@ -118,15 +118,20 @@ let lookup_global id =
 
 let find_pgm id = Idmap.find id !pgm_table
 
+
 let all_vars () =
-  Penv.fold
-    (fun (id,v) l -> match v with TypeV (Arrow _|PureType _) -> id::l | _ -> l)
-    !env []
+  let add_var (id,v) s = match v with
+    | TypeV (Arrow _ | PureType _) -> Idset.add id s 
+    | _ -> s
+  in
+  Penv.fold add_var !env Idset.empty
 
 let all_refs () =
-  Penv.fold
-    (fun (id,v) l -> match v with TypeV (Ref _ | Array _) -> id::l | _ -> l)
-    !env []
+  let add_ref (id,v) s = match v with
+    | TypeV (Ref _ | Array _) -> Idset.add id s 
+    | _ -> s
+  in
+  Penv.fold add_ref !env Idset.empty
 
 (* initializations *)
 
