@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.103 2003-10-27 13:57:34 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.104 2003-10-28 11:08:34 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -148,7 +148,7 @@ let print_term_v7 fmt t =
     | Tvar id when id == implicit ->
 	fprintf fmt "?"
     | Tvar id when id == t_zwf_zero ->
-	fprintf fmt "(Zwf Z0)"
+	fprintf fmt "(Zwf ZERO)"
     | Tvar id | Tapp (id, []) -> 
 	Ident.print fmt id
     | Tderef _ ->
