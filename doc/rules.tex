@@ -212,14 +212,14 @@
 
 \begin{displaymath}
   \begin{array}{rl}
+    \wpre{e\,\{q'\}}{q} & =
+       \forall\result. ~ \forall\omega. ~ q' \Rightarrow q \\[1em]
     \wpre{E}{q} & = 
        q[\result \leftarrow E] \\
     \wpre{\access{x}}{q} & = 
        q[\result \leftarrow x] \\
     \wpre{\assign{x}{e}}{q} & = 
        \wpre{e}{q[\result\leftarrow\void; x\leftarrow\result]} \\
-%    \wpre{\pref{e}}{q} & =
-%       \mathit{meaningless} \\ % cf typing
     \wpre{\taccess{t}{e}}{q} & =
        \wpre{e}{q[\result\leftarrow \faccess{t}{\result}]} \\
     \wpre{\tassign{t}{e_1}{e_2}}{q} & =
@@ -236,25 +236,20 @@
        \wpre{e_1}{\ite{\result}{\wpre{e_2}{q}}{\wpre{e_3}{q}}} \\
     \wpre{\letin{x}{e_1}{e_2}}{q} & =
        \wpre{e_1}{\wpre{e_2}{q}[x\leftarrow\result]} \\
-    \wpre{\coerce{e}{\kappa}}{q} & =
-       \wpre{e}{q} \\ % ???
   \end{array}
 \end{displaymath}
 
-\begin{displaymath}
-  \begin{array}{rl}
-    \wpre{\fun{x}{\tau}{e}}{q} & =
-       \\
-    \wpre{\app{e_1}{e_2}}{q} & =
-       \\
-    \wpre{\rec{x}{\tau}{\phi}{e}}{q} & =
-       \\
-  \end{array}
-\end{displaymath}
-
-\begin{displaymath}
-  \wpre{\while{e_1}{I}{\phi}{e_2}}{q} = I 
-\end{displaymath}
+%     \wpre{\pref{e}}{q} & =
+%       \mathit{meaningless} \\
+%     \wpre{\coerce{e}{\kappa}}{q} & =
+%        \wpre{e}{q} \\ 
+%     \wpre{\fun{x}{\tau}{e}}{q} & =
+%        \\
+%     \wpre{\app{e_1}{e_2}}{q} & =
+%        \\
+%     \wpre{\rec{x}{\tau}{\phi}{e}}{q} & =
+%        \\
+%     \wpre{\while{e_1}{I}{\phi}{e_2}}{q} = I 
 
 
 \section{Functional interpretation}
