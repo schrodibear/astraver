@@ -66,17 +66,20 @@ Admitted.
 
 
 (*Why predicate*) Definition valid  [a:alloc_table] [p:pointer]
-  := ~(p = null) /\ `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
+  := `0 <= (offset p)` /\ `(offset p) < (block_length a p)`.
 
 (*Why predicate*) Definition valid_index  [a:alloc_table] [p:pointer] [i:Z]
-  := ~(p = null) /\ `0 <= (offset p) + i` /\
-     `(offset p) + i < (block_length a p)`.
+  := `0 <= (offset p) + i` /\ `(offset p) + i < (block_length a p)`.
 
 (*Why predicate*) Definition valid_range  [a:alloc_table] [p:pointer] [i:Z]
   [j:Z]
-  := ~(p = null) /\ `0 <= (offset p) + i` /\ `i <= j` /\
+  := `0 <= (offset p) + i` /\ `i <= j` /\
      `(offset p) + j < (block_length a p)`.
 
+Admitted.
+
+(*Why axiom*) Lemma offset_shift :
+  ((p:pointer) ((i:Z) `(offset (shift p i)) = (offset p) + i`)).
 Admitted.
 
 (*Why axiom*) Lemma shift_zero : ((p:pointer) (shift p `0`) = p).
@@ -95,12 +98,8 @@ Admitted.
    ((p:pointer) ((i:Z) `(block_length a (shift p i)) = (block_length a p)`))).
 Admitted.
 
-(*Why axiom*) Lemma shift_null :
-  ((p:pointer) ((i:Z) (p = null -> (shift p i) = null))).
 Admitted.
 
-(*Why axiom*) Lemma shift_not_null :
-  ((p:pointer) ((i:Z) (~(p = null) -> ~((shift p i) = null)))).
 Admitted.
 
 (*Why axiom*) Lemma base_addr_block_length :
@@ -305,6 +304,18 @@ Admitted.
      ((b:Z)
       ((unchanged p1 (range_loc p2 a b)) ->
        ((i:Z) (`a <= i` /\ `i <= b` -> ~(p1 = (shift p2 i))))))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_all_intro :
+  ((p1:pointer)
+   ((p2:pointer)
+    (~((base_addr p1) = (base_addr p2)) -> (unchanged p1 (all_loc p2))))).
+Admitted.
+
+(*Why axiom*) Lemma unchanged_all_elim :
+  ((p1:pointer)
+   ((p2:pointer)
+    ((unchanged p1 (all_loc p2)) -> ~((base_addr p1) = (base_addr p2))))).
 Admitted.
 
 (*Why axiom*) Lemma assigns_trans :
