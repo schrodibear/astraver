@@ -9,6 +9,8 @@ FILES="array assigns break call clash clash_alloc clash_redef \
 
 # benchmark for caduceus
 export CADUCEUSLIB=`pwd`/../../lib/why
+export WHYCOQ=`pwd`/../../lib/coq
+make="make WHYCOQ=$WHYCOQ"
 
 # C files to parse with success
 echo "C parsing (good)"
@@ -123,7 +125,7 @@ rm -f simplify/*_why.sx.all
 for f in $FILES; do
     echo -n "  Generating simplify VCG for $f.c... "
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
-        if make -f $f.makefile simplify/${f}_why.sx.all > /tmp/caduceus.tmp 2>&1 ; then
+        if $make -f $f.makefile simplify/${f}_why.sx.all > /tmp/caduceus.tmp 2>&1 ; then
 	    echo "ok"
 	else
 	   echo "why FAILED :"
@@ -144,7 +146,7 @@ for f in $FILES; do
     rm -f coq/caduceus_spec_why.v
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then
 	echo -n "caduceus ok... "
-	if make -f $f.makefile coq > /tmp/caduceus.tmp 2>&1; then
+	if $make -f $f.makefile coq > /tmp/caduceus.tmp 2>&1; then
 	    n=`grep -c Admitted coq/${f}_why.v`
 	    if test $n -ne 0 ; then
 		echo "Coq proof ok (with $n Admitted)... "

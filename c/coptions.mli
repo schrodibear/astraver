@@ -14,11 +14,12 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coptions.mli,v 1.12 2004-12-10 15:10:41 hubert Exp $ i*)
+(*i $Id: coptions.mli,v 1.13 2005-03-08 10:24:53 filliatr Exp $ i*)
 
 (*s environment variables *)
 
 val libdir : string
+val whylib : string
 
 (*s command-line options *)
 

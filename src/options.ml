@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.45 2004-09-23 08:40:27 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.46 2005-03-08 10:24:54 filliatr Exp $ i*)
 
 open Format
 
@@ -122,6 +122,7 @@ Generic Options:
   --werror       treat warnings as errors
   -v, --version  prints version and exits
   --warranty     prints license and exits
+  --where        prints library path and exits
 
 Typing/Annotations/VCG options:
   -p,  --parse-only  exits after parsing
@@ -198,6 +199,7 @@ let files =
     | ("-q" | "--quiet") :: args -> verbose_ := false; parse args
     | ("-v" | "-version" | "--version") :: _ -> banner (); exit 0
     | ("-warranty" | "--warranty") :: _ -> copying (); exit 0
+    | ("-where" | "--where") :: _ -> printf "%s\n" Version.libdir; exit 0
     | ("-V" | "--verbose") :: args -> verbose_ := true; parse args
     | ("-valid" | "--valid") :: args -> valid_ := true; parse args
     | ("-novalid" | "--no-valid") :: args -> valid_ := false; parse args

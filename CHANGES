@@ -1,4 +1,14 @@
 
+version 1.74, March 8th, 2005
+=============================
+  o fixed installation issue with Coq 8.0pl2 
+    Coq files are now installed in /usr/local/lib/why/coq (or whatever
+    libdir is) and no more in Coq standard library.
+    Consequently, the user may have to add -I options on the
+    coqtop/coqc/coqide command line.
+  o new option -where to print Why's library path
+    (can be used in Coq command line as -I `why -where`/coq)
+
 version 1.71, February 3rd, 2005
 ================================
   o Simplify output: axioms are also printed with universal
