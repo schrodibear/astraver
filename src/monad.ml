@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.27 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.28 2002-05-03 15:40:22 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -318,3 +318,19 @@ let wfrec_with_binders bl (phi,r) info f ren =
      input ren)
 
 let wfrec = wfrec_with_binders []
+
+
+(*s Interpretations of recursive functions are stored in the following
+    table. *)
+
+let rec_table = Hashtbl.create 97
+
+let is_rec = Hashtbl.mem rec_table
+let find_rec = Hashtbl.find rec_table
+
+let with_rec f tf e ren = 
+  Hashtbl.add rec_table f tf; 
+  let r = e ren in 
+  Hashtbl.remove rec_table f; 
+  r
+

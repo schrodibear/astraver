@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.39 2002-04-23 07:47:39 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.40 2002-05-03 15:40:22 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -14,14 +14,6 @@ open Effect
 open Monad
 
 let make_info env k = { env = env; label = label_name (); kappa = k }
-
-(*s Interpretations of recursive functions are stored in the following
-    table. *)
-
-let rec_table = Hashtbl.create 97
-let add_rec = Hashtbl.add rec_table
-let find_rec = Hashtbl.find rec_table
-let is_rec = Hashtbl.mem rec_table
 
 (*s Translation of imperative programs into functional ones.
     [ren] is the current renamings of variables,
@@ -38,7 +30,8 @@ and trad_desc info d ren = match d with
   | Var id ->
       assert (not (is_reference info.env id));
       if is_rec id then
-	find_rec id ren
+	(try find_rec id ren 
+	 with e -> Printf.eprintf "BUG:%s\n" (string id);flush stderr; raise e)
       else if is_local info.env id then
 	CC_var id
       else
@@ -166,8 +159,7 @@ and trad_desc info d ren = match d with
 	(abstraction e.info 
 	   (Monad.wfrec_with_binders bl' var e.info
 	      (fun w -> 
-		 add_rec f (fun ren -> cc_lam bl' (w ren));
-		 trad e))
+		 with_rec f (fun ren -> cc_lam bl' (w ren)) (trad e)))
 	   ren')
 
 and trad_binders ren env = function

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.14 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.15 2002-05-03 15:40:22 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -53,3 +53,9 @@ val wfrec : variant -> typing_info -> (interp -> interp) -> interp
 
 val wfrec_with_binders : 
   cc_binder list -> variant -> typing_info -> (interp -> interp) -> interp
+
+(*s Table for recursive functions' interpretation *)
+
+val is_rec : Ident.t -> bool
+val find_rec : Ident.t -> interp
+val with_rec : Ident.t -> interp -> ('a -> 'b) -> 'a -> 'b

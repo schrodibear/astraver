@@ -1,5 +1,4 @@
 dir ../src
 load_printer "ident.cmo"
 install_printer Ident.print
-install_printer Ident.print_bound
 set arguments ../bench/test.ml

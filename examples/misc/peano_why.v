@@ -121,6 +121,81 @@ Lemma u1_po_2 :
   r0 = `10`.
 Proof. Intros; Omega. Save.
 
+Lemma rec_add1_po_1 : 
+  (y: Z)
+  (Pre5: `y >= 0`)
+  (well_founded ? (Zwf ZERO)).
+Proof.
+Auto with *.
+Save.
+
+Lemma rec_add1_po_2 : 
+  (y: Z)
+  (Pre5: `y >= 0`)
+  (Variant1: Z)
+  (y: Z)
+  (x0: Z)
+  (Pre4: `y >= 0`)
+  (Pre3: Variant1 = y)
+  (Test2: `0 < y`)
+  (x1: Z)
+  (Post1: x1 = `x0 + 1`)
+  `y - 1 >= 0`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma rec_add1_po_3 : 
+  (y: Z)
+  (Pre5: `y >= 0`)
+  (Variant1: Z)
+  (y: Z)
+  (x0: Z)
+  (Pre4: `y >= 0`)
+  (Pre3: Variant1 = y)
+  (Test2: `0 < y`)
+  (x1: Z)
+  (Post1: x1 = `x0 + 1`)
+  (x2: Z)
+  (Post6: x2 = `x1 + (y - 1)`)
+  x2 = `x0 + y`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma rec_add1_po_4 : 
+  (y: Z)
+  (Pre5: `y >= 0`)
+  (Variant1: Z)
+  (y: Z)
+  (x0: Z)
+  (Pre4: `y >= 0`)
+  (Pre3: Variant1 = y)
+  (Test1: `0 >= y`)
+  x0 = `x0 + y`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma u11_po_1 : 
+  (result: Z)
+  (Post1: result = `3`)
+  `7 >= 0`.
+Proof.
+Intros; Omega.
+Save.
+
+Lemma u11_po_2 : 
+  (result: Z)
+  (Post1: result = `3`)
+  (Pre1: `7 >= 0`)
+  (r0: Z)
+  (Post3: r0 = `result + 7`)
+  r0 = `10`.
+Proof.
+Intros; Omega.
+Save.
+
 Lemma mult1_po_1 : 
   (y: Z)
   (x: Z)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.35 2002-04-29 08:47:37 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.36 2002-05-03 15:40:22 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -147,7 +147,7 @@ EXTEND
   term0:
   [ [ a = term0; "*"; b = term1 -> Tapp (Ident.t_mul, [a;b])
     | a = term0; "/"; b = term1 -> Tapp (Ident.t_div, [a;b])
-    | a = term0; "%"; b = term1 -> Tapp (Ident.t_div, [a;b])
+    | a = term0; "%"; b = term1 -> Tapp (Ident.t_mod, [a;b])
     | a = term1 -> a ] ]
   ;
   term1:
