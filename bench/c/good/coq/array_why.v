@@ -10,7 +10,7 @@ Lemma getcell_impl_po_1 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (separation_intern_t t) /\ (valid_t intPP t alloc)),
+                (separation_intern_t t) /\ (valid_t alloc t intPP)),
   (valid alloc (shift t 1)).
 Proof.
 intuition; subst; auto with *.
@@ -23,7 +23,7 @@ Lemma getcell_impl_po_2 :
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                (separation_intern_t t) /\ (valid_t intPP t alloc)),
+                (separation_intern_t t) /\ (valid_t alloc t intPP)),
   forall (Pre2: (valid alloc (shift t 1))),
   (valid alloc (shift (acc intPP (shift t 1)) 2)).
 Proof.
@@ -36,7 +36,7 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (Pre46: (separation_intern_t t) /\ (valid_t intPP t alloc)),
+  forall (Pre46: (separation_intern_t t) /\ (valid_t alloc t intPP)),
   (valid alloc (shift t 0)).
 Proof.
 intuition.
@@ -50,7 +50,7 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (Pre46: (separation_intern_t t) /\ (valid_t intPP t alloc)),
+  forall (Pre46: (separation_intern_t t) /\ (valid_t alloc t intPP)),
   forall (Pre5: (valid alloc (shift t 0))),
   forall (caduceus_18: pointer),
   forall (Post3: caduceus_18 = (shift (acc intPP (shift t 0)) 0)),
@@ -73,7 +73,7 @@ Lemma invariants_initially_established_impl_po_3 :
   forall (intP: ((memory) Z)),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
-  forall (Pre46: (separation_intern_t t) /\ (valid_t intPP t alloc)),
+  forall (Pre46: (separation_intern_t t) /\ (valid_t alloc t intPP)),
   forall (Pre5: (valid alloc (shift t 0))),
   forall (caduceus_18: pointer),
   forall (Post3: caduceus_18 = (shift (acc intPP (shift t 0)) 0)),

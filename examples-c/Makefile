@@ -1,5 +1,5 @@
 
-DIRS = tutorial sorting linked-lists
+DIRS = tutorial sorting linked-lists schorr-waite
 
 all: 
 	for d in $(DIRS); do \

@@ -7,7 +7,7 @@ Require Export caduceus_spec_why.
 Lemma f_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_t t alloc)),
+  forall (Pre7: (valid_t alloc t)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   forall (Variant1: Z),
@@ -28,7 +28,7 @@ Save.
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_t t alloc)),
+  forall (Pre7: (valid_t alloc t)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   forall (Variant1: Z),
@@ -52,7 +52,7 @@ Save.
 Lemma f_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_t t alloc)),
+  forall (Pre7: (valid_t alloc t)),
   forall (I1: Z),
   forall (Post1: I1 = 0),
   0 <= I1 /\ I1 <= 4.
@@ -64,7 +64,7 @@ Save.
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre13: (valid_t t alloc)),
+  forall (Pre13: (valid_t alloc t)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = (shift t 0)),
   (valid alloc caduceus_4).
@@ -80,7 +80,7 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
-  forall (Pre13: (valid_t t alloc)),
+  forall (Pre13: (valid_t alloc t)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = (shift t 0)),
   forall (Pre3: (valid alloc caduceus_4)),

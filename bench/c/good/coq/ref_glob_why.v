@@ -9,9 +9,9 @@ Lemma f1_impl_po_1 :
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (x: pointer),
-  forall (Pre4: (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+  forall (Pre4: (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   (valid alloc caduceus_1).
@@ -27,9 +27,9 @@ Lemma f1_impl_po_2 :
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (x: pointer),
-  forall (Pre4: (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+  forall (Pre4: (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   forall (Pre3: (valid alloc caduceus_1)),
@@ -48,9 +48,9 @@ Lemma f2_impl_po_1 :
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (x: pointer),
-  forall (Pre4: (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+  forall (Pre4: (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   (valid alloc x).
 Proof.
 intuition.
@@ -65,12 +65,12 @@ Lemma f3_impl_po_1 :
   forall (t: pointer),
   forall (x: pointer),
   forall (Pre4: (acc intP (shift (acc intPP t) 1)) = 2 /\
-                (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+                (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   ((valid alloc t) /\ (valid alloc (acc intPP t))) /\
-  (separation_t_x intPP t x alloc) /\ (separation_intern_t t) /\
-  (valid_x x alloc) /\ (valid_t intPP t alloc).
+  (separation_t_x alloc x t intPP) /\ (separation_intern_t t) /\
+  (valid_x alloc x) /\ (valid_t alloc t intPP).
 Proof.
 unfold valid_t; intuition.
 Qed.
@@ -83,13 +83,13 @@ Lemma f3_impl_po_2 :
   forall (t: pointer),
   forall (x: pointer),
   forall (Pre4: (acc intP (shift (acc intPP t) 1)) = 2 /\
-                (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+                (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   forall (Pre3: ((valid alloc t) /\ (valid alloc (acc intPP t))) /\
-                (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+                (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   forall (intP0: ((memory) Z)),
   forall (Post2: (acc intP0 (acc intPP t)) = 2 /\
                  (assigns alloc intP intP0 (pointer_loc (acc intPP t)))),
@@ -170,9 +170,9 @@ Lemma h_impl_po_1 :
   forall (t: pointer),
   forall (x: pointer),
   forall (Pre5: ((valid alloc p) /\ (valid alloc (acc intPP p))) /\
-                (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+                (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   (valid alloc p).
 Proof.
 intuition.
@@ -186,9 +186,9 @@ Lemma h_impl_po_2 :
   forall (t: pointer),
   forall (x: pointer),
   forall (Pre5: ((valid alloc p) /\ (valid alloc (acc intPP p))) /\
-                (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+                (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   forall (Pre4: (valid alloc p)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc intPP p)),
@@ -207,9 +207,9 @@ Lemma h_impl_po_3 :
   forall (t: pointer),
   forall (x: pointer),
   forall (Pre5: ((valid alloc p) /\ (valid alloc (acc intPP p))) /\
-                (separation_t_x intPP t x alloc) /\
-                (separation_intern_t t) /\ (valid_x x alloc) /\
-                (valid_t intPP t alloc)),
+                (separation_t_x alloc x t intPP) /\
+                (separation_intern_t t) /\ (valid_x alloc x) /\
+                (valid_t alloc t intPP)),
   forall (Pre4: (valid alloc p)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc intPP p)),
@@ -230,9 +230,9 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (x: pointer),
-  forall (Pre16: (separation_t_x intPP t x alloc) /\
-                 (separation_intern_t t) /\ (valid_x x alloc) /\
-                 (valid_t intPP t alloc)),
+  forall (Pre16: (separation_t_x alloc x t intPP) /\
+                 (separation_intern_t t) /\ (valid_x alloc x) /\
+                 (valid_t alloc t intPP)),
   forall (caduceus_7: pointer),
   forall (Post3: caduceus_7 = x),
   (valid alloc caduceus_7).
@@ -248,9 +248,9 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (x: pointer),
-  forall (Pre16: (separation_t_x intPP t x alloc) /\
-                 (separation_intern_t t) /\ (valid_x x alloc) /\
-                 (valid_t intPP t alloc)),
+  forall (Pre16: (separation_t_x alloc x t intPP) /\
+                 (separation_intern_t t) /\ (valid_x alloc x) /\
+                 (valid_t alloc t intPP)),
   forall (caduceus_7: pointer),
   forall (Post3: caduceus_7 = x),
   forall (Pre3: (valid alloc caduceus_7)),

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: info.ml,v 1.18 2004-12-10 15:10:41 hubert Exp $ i*)
+(*i $Id: info.ml,v 1.19 2005-01-03 09:26:54 marche Exp $ i*)
 
 open Ctypes
 
@@ -63,7 +63,10 @@ let set_const_value v n = v.enum_constant_value <- n
 module HeapVarSet = 
   Set.Make(struct type t = var_info 
 		  let compare i1 i2 = 
-		      Pervasives.compare i1.var_uniq_tag i2.var_uniq_tag 
+		    (* compare elements in reverse order, because then
+		       HeapVarSet.fold will be more like fold_right 
+		       instead of fold_left *)  
+		      Pervasives.compare i2.var_uniq_tag i1.var_uniq_tag 
 	   end)
 
 let print_hvs fmt s =

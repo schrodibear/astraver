@@ -1,4 +1,15 @@
 
+
+
+\hfill\begin{minipage}{0.5\textwidth}
+\begin{slshape}
+The Schorr-Waite algorithm is the first moutain that any formalism for
+pointer aliasing should climb.
+\end{slshape}
+
+~\hfill --- Richard Bornat (\cite{bornat00mpc}, page 121)
+\end{minipage}
+
 \section{Introduction}
 
 Using formal methods for verifying properties of programs at their
@@ -18,7 +29,8 @@ depth-first traversal of an arbitrary graph structure (hence a
 structure where aliasing may occur), without using additional memory,
 but using the pointers in the graph structure itself as a backtracking
 stack. A first (non computer-aided) proof of correctness of this
-algorithm has been proposed by Topor~\cite{topor79acta}.
+algorithm has been proposed by Topor~\cite{topor79acta}. {\huge citer
+  aussi Morris \cite{morris82} Reynolds }
 
 In 2000, Bornat~\cite{bornat00mpc} has been able to perform a
 computer-aided formal proof of the Schorr-Waite algorithm using the
@@ -26,9 +38,10 @@ Jape system. To make the proof tractable, an old idea by
 Burstall~\cite{burstall72} for reasoning on pointer programs as been
 reused: the heap memory is not modelled by single large array, but by
 several ones, separating the memory into parts where it is statically
-known that no aliasing can occur between two parts. These parts
-correspond to differents fields of records (i.e. structures in C, or
-instance variables in Java).
+known that no aliasing can occur between two parts. {\huge Bornat dit
+  component-as-array trick} These parts correspond to differents
+fields of records (i.e. structures in C, or instance variables in
+Java).
 
 In 2003, the Schorr-Waite algorithm has been used again as a case
 study by Mehta and Nipkow~\cite{mehta03cade}, this time for
@@ -47,8 +60,8 @@ the Java Modeling Language~\cite{leavens00jml}.
 
 To provide an evidence that \caduceus{} is a powerful approach (and
 tool) to formal verification of C source, we decided to perform again
-the verification of the Schorr-Waite algorithm (On devrait citer la
-phrase de Bornat ici, il faut la retrouver...), and this article report
+the verification of the Schorr-Waite algorithm {\huge faire reference
+  a la citation de Bornat}, and this article report
 on this successful experiment.
 
 It has to be noticed that with \caduceus{}, we indeed formally proved

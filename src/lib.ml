@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: lib.ml,v 1.4 2004-10-20 12:56:43 hubert Exp $ i*)
+(*i $Id: lib.ml,v 1.5 2005-01-03 09:26:55 marche Exp $ i*)
 
 module Sset = Set.Make(String)
 
@@ -30,4 +30,20 @@ let mkdir_p dir =
 let file ~dir ~file = 
   mkdir_p dir;
   Filename.concat dir (Filename.basename file)
+
+let file_copy src dest =
+  let cin = open_in src
+  and cout = open_out dest
+  and buff = String.make 1024 ' ' 
+  and n = ref 0 
+  in
+  while n := input cin buff 0 1024; !n <> 0 do 
+    output cout buff 0 !n
+  done;
+  close_in cin; close_out cout
+
+let file_copy_if_different src dst =
+  if not (Sys.file_exists dst) || Digest.file dst <> Digest.file src then
+    file_copy src dst
+
 

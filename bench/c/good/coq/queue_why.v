@@ -10,8 +10,8 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (q: pointer),
   forall (t: pointer),
   forall (Pre34: (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   forall (caduceus_11: pointer),
   forall (Post3: caduceus_11 = (shift t 0)),
   (valid alloc caduceus_11).
@@ -35,8 +35,8 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (q: pointer),
   forall (t: pointer),
   forall (Pre34: (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   forall (caduceus_11: pointer),
   forall (Post3: caduceus_11 = (shift t 0)),
   forall (Pre3: (valid alloc caduceus_11)),
@@ -121,8 +121,8 @@ Lemma pop_impl_po_1 :
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
                  (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -143,8 +143,8 @@ Lemma pop_impl_po_2 :
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
                  (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
   forall (Post21: caduceus_6 = (acc contents q)),
@@ -174,8 +174,8 @@ Lemma pop_impl_po_3 :
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
                  (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
   forall (Post21: caduceus_6 = (acc contents q)),
@@ -280,8 +280,8 @@ Lemma push_impl_po_1 :
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
                  (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   (valid alloc q).
 Proof.
 intuition.
@@ -303,8 +303,8 @@ Lemma push_impl_po_2 :
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
                  (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
   forall (Post9: caduceus_6 = (acc contents q)),
@@ -334,8 +334,8 @@ Lemma push_impl_po_3 :
                  0 <= (acc first q) /\ (acc first q) < (acc length q)) /\
                  0 <= (acc last q) /\ (acc last q) < (acc length q)) /\
                  (separation_intern_q q) /\
-                 (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                 (valid_q q alloc)),
+                 (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                 (valid_q alloc q)),
   forall (Pre5: (valid alloc q)),
   forall (caduceus_6: pointer),
   forall (Post9: caduceus_6 = (acc contents q)),
@@ -441,14 +441,14 @@ Lemma test_impl_po_1 :
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
                 (separation_intern_q q) /\
-                (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                (valid_q q alloc)),
+                (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                (valid_q alloc q)),
   ((acc empty q) = 0 /\
   ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\ 0 <=
   (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <= (acc last q) /\
   (acc last q) < (acc length q)) /\ (separation_intern_q q) /\
-  (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-  (valid_q q alloc).
+  (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+  (valid_q alloc q).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
@@ -472,15 +472,15 @@ Lemma test_impl_po_2 :
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
                 (separation_intern_q q) /\
-                (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                (valid_q q alloc)),
+                (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                (valid_q alloc q)),
   forall (Pre3: ((acc empty q) = 0 /\
                 ((valid_range alloc (acc contents q) 0 ((acc length q) - 1)) /\
                 0 <= (acc first q) /\ (acc first q) < (acc length q)) /\ 0 <=
                 (acc last q) /\ (acc last q) < (acc length q)) /\
                 (separation_intern_q q) /\
-                (separation_q_t q t contents alloc) /\ (valid_t t alloc) /\
-                (valid_q q alloc)),
+                (separation_q_t alloc contents t q) /\ (valid_t alloc t) /\
+                (valid_q alloc q)),
   forall (empty0: ((memory) Z)),
   forall (first0: ((memory) Z)),
   forall (full0: ((memory) Z)),

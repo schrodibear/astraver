@@ -71,7 +71,7 @@ Save.
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre7: (valid_t t alloc)),
+  forall (Pre7: (valid_t alloc t)),
   forall (r0: pointer),
   forall (Post1: r0 = null),
   forall (caduceus_2: pointer),
@@ -88,7 +88,7 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (t: pointer),
-  forall (Pre7: (valid_t t alloc)),
+  forall (Pre7: (valid_t alloc t)),
   forall (r0: pointer),
   forall (Post1: r0 = null),
   forall (caduceus_2: pointer),
@@ -110,7 +110,7 @@ Save.
 Lemma main_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (t: pointer),
-  forall (Pre4: (valid_t t alloc)),
+  forall (Pre4: (valid_t alloc t)),
   (valid_index alloc t 0).
 Proof.
 unfold valid_t.

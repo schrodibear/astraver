@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/selection.why", characters 1401-1516 *)
+(* Why obligation from file "why/selection.why", characters 1385-1496 *)
 Lemma selection_impl_po_1 : 
   forall (t: pointer),
   forall (n: Z),
@@ -43,7 +43,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1401-1516 *)
+(* Why obligation from file "why/selection.why", characters 1385-1496 *)
 Lemma selection_impl_po_2 : 
   forall (t: pointer),
   forall (n: Z),
@@ -84,7 +84,7 @@ Proof.
 intuition.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1533-1541 *)
+(* Why obligation from file "why/selection.why", characters 1509-1517 *)
 Lemma selection_impl_po_3 : 
   forall (t: pointer),
   forall (n: Z),
@@ -188,7 +188,7 @@ subst; auto.
 
 ***)
 
-(* Why obligation from file "why/selection.why", characters 1558-1558 *)
+(* Why obligation from file "why/selection.why", characters 1530-1530 *)
 Lemma selection_impl_po_4 : 
   forall (t: pointer),
   forall (n: Z),
@@ -242,7 +242,7 @@ omega.
 subst; omega.
 Qed.
 
-(* Why obligation from file "why/selection.why", characters 1028-1605 *)
+(* Why obligation from file "why/selection.why", characters 1044-1569 *)
 Lemma selection_impl_po_5 : 
   forall (t: pointer),
   forall (n: Z),
@@ -304,7 +304,7 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/selection.why", characters 1087-1351 *)
+(* Why obligation from file "why/selection.why", characters 1095-1343 *)
 Lemma selection_impl_po_6 : 
   forall (t: pointer),
   forall (n: Z),
@@ -341,7 +341,7 @@ Save.
 
 
 
-(* Why obligation from file "why/selection.why", characters 332-1740 *)
+(* Why obligation from file "why/selection.why", characters 412-1674 *)
 Lemma selection_impl_po_7 : 
   forall (t: pointer),
   forall (n: Z),
@@ -370,7 +370,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 399-883 *)
+(* Why obligation from file "why/selection.why", characters 475-943 *)
 Lemma selection_impl_po_8 : 
   forall (t: pointer),
   forall (n: Z),
@@ -390,7 +390,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2105-2132 *)
+(* Why obligation from file "why/selection.why", characters 1976-2003 *)
 Lemma swap_impl_po_1 : 
   forall (t: pointer),
   forall (i: Z),
@@ -403,7 +403,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2217-2244 *)
+(* Why obligation from file "why/selection.why", characters 2088-2115 *)
 Lemma swap_impl_po_2 : 
   forall (t: pointer),
   forall (i: Z),
@@ -450,7 +450,7 @@ subst; auto.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2191-2245 *)
+(* Why obligation from file "why/selection.why", characters 2062-2116 *)
 Lemma swap_impl_po_3 : 
   forall (t: pointer),
   forall (i: Z),
@@ -472,7 +472,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/selection.why", characters 2191-2245 *)
+(* Why obligation from file "why/selection.why", characters 2062-2116 *)
 Lemma swap_impl_po_4 : 
   forall (t: pointer),
   forall (i: Z),

@@ -46,7 +46,7 @@ intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/abs.why", characters 392-434 *)
+(* Why obligation from file "why/abs.why", characters 395-437 *)
 Lemma abs2_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -67,7 +67,7 @@ subst intP0.
 caduceus.
 Save.
 
-(* Why obligation from file "why/abs.why", characters 444-444 *)
+(* Why obligation from file "why/abs.why", characters 447-447 *)
 Lemma abs2_impl_po_2 : 
   forall (p: pointer),
   forall (alloc: alloc_table),

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: lib.mli,v 1.4 2004-10-20 12:56:43 hubert Exp $ i*)
+(*i $Id: lib.mli,v 1.5 2005-01-03 09:26:55 marche Exp $ i*)
 
 module Sset : Set.S with type elt = string
 
@@ -23,4 +23,10 @@ val mkdir_p : string -> unit
 (* [file dir file] returns "dir/basename" if [file] is "dirname/basename", 
    creating [dir] if necessary. *)
 val file : dir:string -> file:string -> string
+
+(* [file_copy_if_different f1 f2] copies [f1] into name [f2], unless
+   [f2] already exists and is identical to [f1] (thus keeping the same
+   modification date) *)
+val file_copy_if_different : string -> string -> unit
+
 

@@ -35,24 +35,14 @@ void schorr_waite(node root) \{
   while (p != NULL || (t != NULL && ! t->m)) \{
     if (t == NULL || t->m) \{
       if (p->c) \{ \begin{slshape}/* pop */\end{slshape}
-        node q = t;
-        t = p;
-        p = p->r;
-        t->r = q;
-        \} else \{ \begin{slshape}/* swing */\end{slshape}
-        node q = t;
-        t = p->r;
-        p->r = p->l;
-        p->l = q;
-        p->c = 1;
+        node q = t; t = p; p = p->r; t->r = q;
+      \} 
+      else \{ \begin{slshape}/* swing */\end{slshape}
+        node q = t; t = p->r; p->r = p->l; p->l = q; p->c = 1;
       \}
-    \} else \{ \begin{slshape}/* push */ \end{slshape}
-      node q = p;
-      p = t;
-      t = t->l;
-      p->l = q;
-      p->m = 1;
-      p->c = 0;
+    \} 
+    else \{ \begin{slshape}/* push */ \end{slshape}
+      node q = p; p = t; t = t->l; p->l = q; p->m = 1; p->c = 0;
     \}
   \}
 \}
@@ -72,16 +62,16 @@ marked. So it appears immediately that to formally specify the
 algorithm, one needs to talk about reachability of some node from
 another in the graph. In the \caduceus{} methodology, such an
 ``external'' notion can be declared by a predicate annotation. For the
-reachability predicate, this is written has
-\begin{alltt}
-\begin{slshape}
-/*@ predicate isreachable (node p1, node p2) reads p1->r,p1->l */
-\end{slshape}
-\end{alltt}
+reachability predicate, this is written as
+\begin{alltt}\begin{slshape}
+/*@ predicate isreachable (node p1, node p2) 
+  @   reads p1->r,p1->l */
+\end{slshape}\end{alltt}
 It is important to notice that this annotation is simply a declaration
 of a logical predicate, but nothing yet is sais about its semantics:
 we only declare a binary predicate that is intended to relate two
-nodes. The \texttt{reads} clause that follows the predicate
+nodes. {\huge faire analogie avec forward declaration en C}
+The \texttt{reads} clause that follows the predicate
 declaration is for giving information on which data the predicate
 depends on: in this case, we say that the value of the children of
 \texttt{p1}. There is a small trick here: TODO
@@ -94,11 +84,14 @@ semantics of \texttt{isreachable} yet. The specification is as follows:
   @   \bs{}forall node x; 
   @      x != \null && isreachable(root,x) => \valid(x) && ! x->m  
   @ ensures 
-  @   (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @   (\bs{}forall node x; 
+  @       \old(x->l) == x->l && \old(x->r) == x->r) 
   @   &&
-  @   (\bs{}forall node x; \valid(x) && isreachable(root,x) => x->m) 
+  @   (\bs{}forall node x; 
+  @       \valid(x) && isreachable(root,x) => x->m) 
   @   &&
-  @   (\bs{}forall node x; ! isreachable(root,x) => x->m == \old(x->m))
+  @   (\bs{}forall node x; 
+  @       ! isreachable(root,x) => x->m == \old(x->m))
   @*/\end{slshape}
 void schorr_waite(node root);
 \end{alltt}
@@ -126,6 +119,14 @@ from the root, is now marked. So this specifies that all the graph has
 been traversed. The third assertion says that for the nodes that were
 not reachable, their mark is not changed by the algorithm, that is the
 unreachable node are not traversed by the algorithm.
+
+
+{\Huge il faut aussi parler des connecteurs logiques 
+\begin{alltt}
+\bs{}forall, =>, &&, ! 
+\end{alltt}
+et de l'utilisation de la syntaxe C (== et \verb|->|). Et aussi de l'interprétation des
+expressions entieres comme propositions}
 
 With respect to the most recent formal specification given in
 Isabelle/HOL \cite{mehta03cade}, we added two things: first the

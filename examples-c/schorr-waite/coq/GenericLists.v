@@ -1,11 +1,43 @@
-(* Load Programs. *)
+
 Require Import Why.
 Require Export caduceus_why.
 Require Export List.
 
+Section MoreList.
+(** this should go in List stdlib*)
+
+Lemma not_in_cons_neq :
+  forall A:Set, forall x:A, forall y l,
+  ~ In x (y :: l) -> x <> y.
+Proof.
+unfold not.
+intros; apply H; left; auto.
+Qed.
+
+Implicit Arguments not_in_cons_neq.
+
+Lemma In_app_cons :
+ forall (A:Set) (l:list A) (x:A),
+   In x l ->
+     exists l1 : list A, exists l2 : list A, l = app l1 (cons x l2).
+Proof.
+simple induction l; simpl; intuition.
+exists (nil (A:=A)); exists l0; simpl; subst; auto.
+elim (H x H1); clear H; intros.
+elim H; clear H; intuition.
+exists (cons a x0); exists x1; simpl; subst; auto.
+Qed.
+
+Implicit Arguments In_app_cons.
+
+End MoreList.
+
+
 (** the Coq pointer list associated to a (finite) linked list *)
 
 Definition plist := list pointer.
+
+Definition in_list := (@In pointer).
 
 (** * Paths *)
 
@@ -101,6 +133,8 @@ apply (f_equal (cons a0)).
 apply H with (next a0); auto.
 Qed.
 
+Implicit Arguments llist_function.
+
 Lemma llist_append :
  forall (a: alloc_table) (next : pointer -> pointer) (l1 l2:plist) (p:pointer),
    llist a next p (app l1 l2) ->
@@ -113,18 +147,7 @@ elim (H l2 (next a0) H6); intuition.
 exists x; auto.
 Qed.
 
-(** this should go in PolyList *)
-Lemma In_app_cons :
- forall (A:Set) (l:list A) (x:A),
-   In x l ->
-     exists l1 : list A, exists l2 : list A, l = app l1 (cons x l2).
-Proof.
-simple induction l; simpl; intuition.
-exists (nil (A:=A)); exists l0; simpl; subst; auto.
-elim (H x H1); clear H; intros.
-elim H; clear H; intuition.
-exists (cons a x0); exists x1; simpl; subst; auto.
-Qed.
+Implicit Arguments llist_append.
 
 Lemma list_length_absurd :
  forall (A:Set) (l1 l2:list A), length l1 <> length l2 -> l1 <> l2.
@@ -150,12 +173,12 @@ Lemma llist_not_starting :
    llist a next (next p) l -> ~ In p l.
 Proof.
 red; intros.
-elim (In_app_cons _ l p H0); intros.
+elim (In_app_cons l p H0); intros.
 elim H1; clear H1; intros.
 subst l.
-elim (llist_append a next x (cons p x0) (next p) H); intuition.
+elim (llist_append x (cons p x0) H); intuition.
 inversion H3; subst.
-generalize (llist_function a a next x0 (app x (cons p x0)) (next p) H8 H).
+generalize (llist_function H8 H).
 intro; apply (list_length_absurd _ x0 (app x (cons p x0))); auto.
 rewrite length_app; simpl; omega.
 Qed.
@@ -181,6 +204,7 @@ Inductive is_list (a: alloc_table) (next: pointer-> pointer) : pointer -> Prop :
 
 Hint Constructors is_list.
 
+
 Lemma is_list_llist :
  forall (a: alloc_table) (next: pointer-> pointer) (p:pointer),
    is_list a next p -> exists l : plist, llist a next p l.
@@ -203,8 +227,10 @@ Qed.
 
 (** * WF relation over linked lists *)
 
+(*
 Definition Length := ((memory pointer) * pointer)%type.
-Definition length (a: alloc_table) (t: memory pointer) (p:pointer) := (t, p).
+Definition length (a: alloc_table) 
+   (t: memory pointer) (p:pointer) := (t, p).
 
 Definition length_order (c1 c2: memory pointer * pointer) : Prop :=
   let (t1, p1) := c1 in
@@ -230,9 +256,10 @@ exists (List.length l1).
 exists a; exists l1; intuition.
 intuition.
 elim H1; clear H1; intros a0 H1; elim H1; intros l2'; intuition.
-generalize (llist_function a a0 _ _ _ _ H H4); intro; subst l2.
+generalize (llist_function H H4); intro; subst l2.
 omega.
 Qed.
+
 Hint Resolve length_order_wf .
 
 Lemma length_acc :
@@ -245,9 +272,9 @@ exists a.
 inversion H; intuition.
 absurd (p = null); auto.
 subst p0.
-generalize (is_list_llist _ _ _ H2).
+generalize (is_list_llist H2).
 intros [l1 Hl1]; exists l1.
-generalize (is_list_llist _ _ _ H).
+generalize (is_list_llist H).
 intros [l2 Hl2]; exists l2.
 intuition.
 inversion Hl2.
@@ -256,8 +283,9 @@ assert (l1 = l).
 apply llist_function with a a (acc tl) (acc tl p); auto.
 subst; auto.
 Qed.
-Hint Resolve length_acc.
 
+Hint Resolve length_acc.
+*)
 
 (** * Disjointness *)
 
@@ -301,6 +329,7 @@ Hint Resolve disjoint_cons disjoint_nil_l disjoint_l_nil .
 
 (** * Cyclicity *)
 
+(*
 Section Cyclicity.
 
 Variable a : alloc_table.
@@ -331,7 +360,7 @@ Proof.
 intros.
 elim H; clear H; intros l1 H; elim H; clear H; intros l2 H;
 elim H; clear H; intros p'; intuition.
-elim (is_list_llist a tl p H0); clear H0; intros l0 Hl0.
+elim (is_list_llist H0); clear H0; intros l0 Hl0.
 unfold llist in Hl0.
 Admitted.
 
@@ -342,4 +371,304 @@ Proof.
 Admitted.
 
 End Cyclicity.
+*)
 
+Axiom eq_pointer_dec : forall p1 p2 : pointer, {p1 = p2} + {p1 <> p2}.
+
+Section NoRepetition.
+
+Fixpoint no_rep (l:list pointer) {struct l}: Prop :=
+match l with
+| nil => True
+| (a::l) => (if In_dec eq_pointer_dec a l then False else True)  /\ no_rep l
+end.
+
+Lemma split_list : 
+  forall (A:Set)(x:A) l, In x l -> 
+  exists l1, exists l2, l = l1 ++ x :: l2.
+induction l; simpl; intuition.
+exists (nil :list  A); exists l; subst; auto.
+elim H; clear H; intros l1 H; elim H; clear H; intros l2 H.
+exists (a :: l1); exists l2; subst; auto.
+Qed.
+
+Implicit Arguments split_list.
+
+Lemma no_rep_sublist1 : 
+ forall (l : list pointer)(p:pointer),
+  no_rep (p::l) -> no_rep l. 
+intros.
+destruct H.
+apply H0.
+Qed.
+
+Lemma no_rep_sublist : 
+  forall (l l1 l2 : list pointer), 
+  no_rep l -> l = l1 ++ l2 -> no_rep l2. 
+induction l.
+intros.
+assert (l1++l2=nil);auto.
+generalize (app_eq_nil l1 l2 H1).
+intuition;subst;auto.
+intros.
+destruct l1.
+assert (a::l = l2).
+auto.
+subst;auto.
+apply IHl with l1.
+apply no_rep_sublist1 with a;auto.
+rewrite <-app_comm_cons in H0.
+inversion H0.
+auto.
+Qed.
+
+Ltac caseq t := generalize (refl_equal t);pattern t at -1;case t.
+
+Lemma no_rep_p : forall (p1:pointer)(lp:list pointer), no_rep(p1::lp)->
+~In p1 lp.
+intros.
+simpl in H.
+intro.
+inversion_clear H.
+caseq (In_dec eq_pointer_dec p1 lp).
+intros i e.
+rewrite e in H1.
+elim H1.
+intros i.
+elim (i H0).
+Qed.
+
+Lemma no_rep_sublist2 : forall (l l1 l2 : list pointer) ( a : pointer), no_rep l -> 
+l = l1 ++a::l2 -> no_rep (l1++l2). 
+induction l.
+intros.
+destruct l1.
+simpl in H0.
+inversion H0.
+inversion H0.
+intros.
+induction l1.
+simpl in *|-*.
+apply no_rep_sublist1 with a.
+inversion H0;subst.
+auto.
+inversion H0.
+subst.
+unfold no_rep.
+simpl.
+elim H.
+intros.
+destruct (In_dec eq_pointer_dec a1 (l1 ++ a0::l2) ) .
+inversion H1.
+destruct (In_dec eq_pointer_dec a1 (l1 ++ l2)).
+elim n.
+elim (in_app_or _ _ _ i).
+intro; apply in_or_app; auto.
+intro; apply in_or_app; intuition.
+intuition.
+apply IHl with a0;auto.
+Qed.
+
+Lemma no_rep_sublist_bis : forall (l2 l l1  : list pointer), no_rep l -> 
+l = l1 ++ l2 -> no_rep l1. 
+induction l2.
+intros.
+subst.
+rewrite <- app_nil_end in H.
+auto.
+intros.
+subst.
+assert ((l1 ++ a :: l2) = (l1 ++ a :: l2)).
+auto.
+generalize (no_rep_sublist2 (l1 ++ a :: l2) l1 l2 a H H0).
+intro.
+apply IHl2 with (l1++l2);auto.
+Qed.
+
+Lemma no_rep_false : forall (p1 : pointer)(lp : list pointer),
+no_rep (p1 :: p1 :: lp) -> False.
+intros.
+simpl in H.
+inversion_clear H.
+casetype False.
+destruct (In_dec eq_pointer_dec p1 (p1 :: lp));auto.
+apply n.
+left;auto.
+Qed.
+
+Lemma no_rep_false2 : forall (p1 : pointer)(lp1 lp2 : list pointer),
+no_rep (p1 ::lp1 ++ p1 :: lp2) -> False.
+intros.
+simpl in H.
+inversion_clear H.
+destruct (In_dec eq_pointer_dec p1 (lp1 ++ p1 :: lp2)).
+inversion H0.
+apply n;clear n.
+clear H1.
+induction lp1.
+simpl;left;auto.
+right;auto.
+Qed.
+
+Lemma no_rep_p_bis : forall (p1:pointer)(lp1 lp2:list pointer), no_rep(lp1++p1::lp2)->
+~In p1 lp1.
+intros.
+intro.
+induction lp1.
+inversion H0.
+generalize (eq_pointer_dec a p1).
+intros [p|p].
+subst.
+apply no_rep_false2 with p1 lp1 lp2;auto.
+apply IHlp1.
+apply no_rep_sublist1 with a;auto.
+inversion H0.
+elim (p H1).
+auto.
+Qed.
+
+
+Lemma no_rep_in_app : 
+  forall p : pointer, 
+  forall lp1 lp2a lp2b : list pointer,
+  no_rep (p::lp1) -> no_rep (lp2a++p::lp2b) ->
+  (forall q : pointer, 
+     In q (p::lp1) -> In q (lp2a++p::lp2b)) ->
+  forall q : pointer, In q lp1 -> In q (lp2a ++ lp2b).
+intros.
+case (eq_pointer_dec q p).
+intro.
+subst.
+generalize  (no_rep_p _ _ H).
+intuition.
+intro.
+assert (In q (lp2a ++ p :: lp2b) -> In q (lp2a++lp2b)).
+intros.
+apply in_or_app.
+generalize (in_app_or lp2a (p::lp2b) q H3) .
+intros [H4|H4].
+left;auto.
+destruct H4.
+elim n;auto.
+right;auto.
+apply H3.
+apply H1.
+right;auto.
+Qed.
+
+Lemma no_rep_sublist3 : forall (l l1 l2 : list pointer) ( a : pointer), no_rep l -> 
+l = l1 ++a::l2 -> no_rep (a::l1++l2). 
+induction l.
+intros.
+destruct l1.
+simpl in H0.
+inversion H0.
+inversion H0.
+intros.
+destruct l1.
+simpl in *|-*.
+inversion H.
+inversion H0;subst;auto.
+inversion H0;subst.
+rewrite <- app_comm_cons.
+inversion H.
+case (In_dec eq_pointer_dec p (a0 :: l1 ++ l2));intros.
+destruct (In_dec eq_pointer_dec p (l1 ++ a0 :: l2));intros.
+inversion H1.
+elim n.
+apply in_or_app.
+rewrite app_comm_cons in i.
+generalize (in_app_or (a0:: l1) l2 p i).
+intuition.
+generalize (in_inv H4).
+intuition.
+right;left;auto.
+rewrite <- app_comm_cons in H0.
+assert (l1 ++ a0 :: l2 = l1 ++ a0 :: l2).
+auto.
+generalize (IHl l1 l2 a0 H2 H3).
+intro.
+simpl.
+case (In_dec eq_pointer_dec a0 (p :: l1 ++ l2));intro.
+inversion i.
+subst.
+elim n.
+left;auto.
+inversion H4.
+destruct (In_dec eq_pointer_dec a0 (l1 ++ l2)).
+inversion H6.
+elim (n0 H5).
+split;auto.
+split.
+destruct (In_dec eq_pointer_dec p (l1 ++ l2)).
+elim n.
+right;auto.
+auto.
+apply no_rep_sublist1 with a0;auto.
+Qed.
+
+Lemma no_rep_in_app2 : 
+  forall p : pointer, 
+  forall lp1 lp2a lp2b : list pointer,
+  no_rep (p::lp1) -> no_rep (lp2a++p::lp2b) ->
+  (forall q : pointer, 
+    In q (lp2a++p::lp2b) -> In q (p::lp1)) ->
+  forall q : pointer, In q (lp2a ++ lp2b) -> In q lp1.
+intros.
+case (eq_pointer_dec q p).
+intro.
+subst.
+assert (lp2a ++ p :: lp2b = lp2a ++ p :: lp2b).
+auto.
+generalize (no_rep_sublist2 
+  (lp2a ++ p :: lp2b) lp2a lp2b p H0 H3);intro.
+generalize (no_rep_sublist 
+  (lp2a ++ p :: lp2b) lp2a (p::lp2b)  H0).
+intros.
+generalize (no_rep_sublist3 
+  (lp2a ++ p :: lp2b) lp2a lp2b p H0 H3).
+intro.
+inversion H6.
+destruct (In_dec eq_pointer_dec p (lp2a ++ lp2b)).
+inversion H7.
+elim ( n H2).
+intro.
+assert (In q (lp2a ++ p :: lp2b)).
+generalize ( in_app_or lp2a lp2b q H2).
+intuition.
+generalize (H1 q H3);intro.
+inversion H4.
+elim (n ).
+auto.
+auto.
+Qed.
+
+End NoRepetition.
+
+
+
+(* consecutives pairs in a list *)
+
+Fixpoint pair_in_list (p1:pointer) (p2:pointer)(l:list pointer) {struct l} : Prop :=
+  match l with
+  | nil => False
+  | b :: m => (b = p1 /\ match  m with
+                                      | nil => False
+                                      | c::n => c = p2
+                                      end) 
+                                      \/ pair_in_list p1 p2 m
+  end.
+
+Lemma pair_in_list_in :
+  forall (l : plist) (p1 p2 p3: pointer),
+    pair_in_list p1 p2 (p3::l) -> In p2 l. 
+induction l.
+simpl; tauto.
+simpl; destruct l.
+intros; subst; intuition.
+intros; intuition.
+subst; intuition.
+right.
+apply IHl with p1 null.
+simpl; right; auto.
+Qed.

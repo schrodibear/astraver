@@ -14,8 +14,8 @@ Lemma f_impl_po_1 :
   forall (y: ((memory) Z)),
   forall (Pre7: (n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (0 <= (acc x s) /\
                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                (valid_s s alloc) /\ (valid_c c alloc)),
+                (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                (valid_s alloc s) /\ (valid_c alloc c)),
   (valid alloc s).
 Proof.
 intuition.
@@ -32,8 +32,8 @@ Lemma f_impl_po_2 :
   forall (y: ((memory) Z)),
   forall (Pre7: (n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (0 <= (acc x s) /\
                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                (valid_s s alloc) /\ (valid_c c alloc)),
+                (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                (valid_s alloc s) /\ (valid_c alloc c)),
   forall (Pre6: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -59,8 +59,8 @@ Lemma f_impl_po_3 :
   forall (y: ((memory) Z)),
   forall (Pre7: (n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (0 <= (acc x s) /\
                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                (valid_s s alloc) /\ (valid_c c alloc)),
+                (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                (valid_s alloc s) /\ (valid_c alloc c)),
   forall (Pre6: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -88,8 +88,8 @@ Lemma f_impl_po_4 :
   forall (y: ((memory) Z)),
   forall (Pre7: (n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (0 <= (acc x s) /\
                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                (valid_s s alloc) /\ (valid_c c alloc)),
+                (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                (valid_s alloc s) /\ (valid_c alloc c)),
   forall (Pre6: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -121,8 +121,8 @@ Lemma f_impl_po_5 :
   forall (y: ((memory) Z)),
   forall (Pre7: (n >= 0 /\ (acc intP (shift c 0)) = 12 /\ (0 <= (acc x s) /\
                 (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                (valid_s s alloc) /\ (valid_c c alloc)),
+                (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                (valid_s alloc s) /\ (valid_c alloc c)),
   forall (Pre6: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -141,8 +141,8 @@ Lemma invariants_initially_established_impl_po_1 :
   forall (c: pointer),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
-  forall (Pre13: (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                 (valid_s s alloc) /\ (valid_c c alloc)),
+  forall (Pre13: (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                 (valid_s alloc s) /\ (valid_c alloc c)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = s),
   (valid alloc caduceus_4).
@@ -163,8 +163,8 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre13: (constant_c intP c alloc) /\ (separation_intern_s s) /\
-                 (valid_s s alloc) /\ (valid_c c alloc)),
+  forall (Pre13: (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                 (valid_s alloc s) /\ (valid_c alloc c)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = s),
   forall (Pre3: (valid alloc caduceus_4)),

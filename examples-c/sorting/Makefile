@@ -3,7 +3,7 @@ CADUCEUS=../../bin/caduceus.opt
 CADUCEUSLIB=$(shell pwd)/../../lib
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
-FILES = 
+FILES = selection
 
 TODO = selection
 

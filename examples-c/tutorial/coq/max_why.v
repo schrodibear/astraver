@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/max.why", characters 45-1098 *)
+(* Why obligation from file "why/max.why", characters 153-350 *)
 Lemma max_impl_po_1 : 
   forall (x: Z),
   forall (y: Z),

@@ -6,7 +6,7 @@ Require Export LinkedLists.
 
 (* Definition eq_list := (@eq (list pointer)). *)
 
-(* Why obligation from file "why/reverse.why", characters 168-656 *)
+(* Why obligation from file "why/reverse.why", characters 276-752 *)
 Lemma rev_impl_po_1 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -31,7 +31,7 @@ rewrite app_ass; auto.
 Qed.
 
 
-(* Why obligation from file "why/reverse.why", characters 593-606 *)
+(* Why obligation from file "why/reverse.why", characters 701-714 *)
 Lemma rev_impl_po_2 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -62,7 +62,7 @@ elim H; clear H; intuition.
 inversion H3; intuition.
 Qed.
 
-(* Why obligation from file "why/reverse.why", characters 617-634 *)
+(* Why obligation from file "why/reverse.why", characters 717-734 *)
 Lemma rev_impl_po_3 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -95,7 +95,7 @@ inversion H7;auto.
 elim Test2;auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 609-644 *)
+(* Why obligation from file "why/reverse.why", characters 688-744 *)
 Lemma rev_impl_po_4 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -162,7 +162,7 @@ apply llist_not_starting with alloc tl0; auto.
 rewrite <- H6; simpl; omega.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 168-656 *)
+(* Why obligation from file "why/reverse.why", characters 276-752 *)
 Lemma rev_impl_po_5 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -197,7 +197,7 @@ Proof.
 intros; subst; intuition.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 168-656 *)
+(* Why obligation from file "why/reverse.why", characters 276-752 *)
 Lemma rev_impl_po_6 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
@@ -236,7 +236,7 @@ generalize (H3 l0 H0); simpl; intro.
 rewrite <- H; auto.
 Save.
 
-(* Why obligation from file "why/reverse.why", characters 225-500 *)
+(* Why obligation from file "why/reverse.why", characters 333-608 *)
 Lemma rev_impl_po_7 : 
   forall (p0: pointer),
   forall (alloc: alloc_table),
