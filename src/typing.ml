@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.59 2002-07-08 13:21:27 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.60 2002-07-09 11:45:02 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -44,9 +44,6 @@ let just_reads e = difference (get_reads e) (get_writes e)
 let type_v_sup loc t1 t2 =
   if t1 <> t2 then raise_located loc BranchesSameType;
   t1
-
-let check_type_var loc env var = ()
-(*i TODO: type variants i*)
 
 (* TODO: subtype is currently structural equality *)
 let rec subtype = function
@@ -305,7 +302,7 @@ let rec typef lab env expr =
 		  c_effect = Effect.union e' (effect expr');
 		  c_pre = p' @ (pre expr'); c_post = post expr' } in
 	make_node expr'.desc env toplabel c
-    | None, App (_,_,Some k') ->
+    | None, App (_,_,k') ->
 	let c = { c_result_name = result; c_result_type = v; c_effect = e'; 
 		  c_pre = p'; c_post = k'.c_post } in
 	make_node d env toplabel c
@@ -419,16 +416,13 @@ and typef_desc lab env loc = function
       let ef = Effect.bottom in
       Lam (bl',t_e), (v,ef), []
 
-  | Sapp (_, _, Some _) ->
-      assert false
-
-  | Sapp ({pdesc=Svar id} as e, Sterm a, None) when is_poly id ->
+  | Sapp ({pdesc=Svar id} as e, Sterm a) when is_poly id ->
       let t_a = typef lab env a in
       let eq = type_poly id a.loc (result_type t_a) in
-      typef_desc lab env loc (Sapp ({e with pdesc = Svar eq}, Sterm a, None))
-      (* TODO: avoid recursive call *)
+      typef_desc lab env loc (Sapp ({e with pdesc = Svar eq}, Sterm a))
+      (* TODO: avoid recursive call? *)
 
-  | Sapp (f, Sterm a, None) ->
+  | Sapp (f, Sterm a) ->
       let t_f = typef lab env f in
       let x,tx,kapp = decomp_fun_type f t_f in
       let t_a = typef lab env a in
@@ -441,7 +435,7 @@ and typef_desc lab env loc = function
 	      let kapp = type_c_subst (subst_onev x r) kapp in
 	      let (_,tapp),eapp,_,_ = decomp_kappa kapp in
 	      let ef = Effect.union (effect t_f) eapp in
-	      App (t_f, Refarg r, Some kapp), (tapp, ef), []
+	      App (t_f, Refarg r, kapp), (tapp, ef), []
 	  | _ ->
 	      raise_located a.loc ShouldBeVariable)
       (* argument is not mutable *)
@@ -469,7 +463,7 @@ and typef_desc lab env loc = function
 			(tapp, ef), pl
 	            (* otherwise: true application *)
 		    | _ ->	   
-			App (t_f, Term t_a, Some kapp), (tapp, ef), [])
+			App (t_f, Term t_a, kapp), (tapp, ef), [])
 	     (* argument is complex: 
 		we transform into [let v = arg in (f v)] *)
 	     | _ ->
@@ -493,16 +487,13 @@ and typef_desc lab env loc = function
 	           (* otherwise: true application *)
 		   | _ ->
 		       let var_v = make_lnode (Var v) env' (type_c_of_v tx) in
-		       App (t_f, Term var_v, Some kapp), []
+		       App (t_f, Term var_v, kapp), []
 		 in
 		 let kfv = k_add_effects kapp (effect t_f) in
 		 LetIn (v, t_a, make_lnode app_f_v env' kfv), 
 		 (tapp, ef), pl))
 
-  | Sapp (_, Srefarg _, _) -> 
-      assert false
-
-  | Sapp (f, Stype _, None) ->
+  | Sapp (f, Stype _) ->
       failwith "todo: typing: application to a type"
       
   | Sletref (x, e1, e2) ->
@@ -546,7 +537,6 @@ and typef_desc lab env loc = function
       let v = type_v loc lab env' lenv' v in
       let var,efvar = state_var lab env' var in
       let phi0 = phi_name () in
-      check_type_var loc env' var;
       (* effects for a let/rec construct are computed as a fixpoint *)
       let fixpoint_reached c1 c2 =
 	c1.c_effect = c2.c_effect && 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.42 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.43 2002-07-09 11:45:01 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -382,7 +382,7 @@ let tt_arrow = List.fold_right (fun b t -> TTarrow (b, t))
 
 let arg_loc = function 
   | Sterm t -> t.Ptree.loc 
-  | Srefarg _ | Stype _ -> assert false (* TODO *)
+  | Stype _ -> assert false (* TODO *)
 
 (*s Pretty-print *)
 

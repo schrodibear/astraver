@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ptree.mli,v 1.2 2002-07-08 12:45:57 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.3 2002-07-09 11:45:02 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -70,7 +70,7 @@ and t_desc =
   | Swhile of t * lexpr asst option * variant * t
   | Sif of t * t * t
   | Slam of ptype_v binder list * t
-  | Sapp of t * arg * ptype_c option
+  | Sapp of t * arg
   | Sletref of variable * t * t
   | Sletin of variable * t * t
   | Srec of variable * ptype_v binder list * ptype_v * variant * t
@@ -79,7 +79,6 @@ and t_desc =
 
 and arg =
   | Sterm of t
-  | Srefarg of variable
   | Stype of ptype_v
 
 and block_st =

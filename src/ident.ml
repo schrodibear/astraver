@@ -1,5 +1,5 @@
 
-(*i $Id: ident.ml,v 1.25 2002-07-05 16:14:09 filliatr Exp $ i*)
+(*i $Id: ident.ml,v 1.26 2002-07-09 11:45:01 filliatr Exp $ i*)
 
 type t = { stamp : int; name : string; label : string option }
 
@@ -148,8 +148,7 @@ let is_comparison id =
 
 let is_poly id =
   is_comparison id || 
-  id == t_add || id == t_sub || id == t_mul || id == t_div ||
-  id == t_neg
+  id == t_add || id == t_sub || id == t_mul || id == t_div || id == t_neg
 
 let is_int_comparison id =
   id == t_eq_int || id == t_neq_int ||

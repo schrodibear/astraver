@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.47 2002-07-08 12:46:35 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.48 2002-07-09 11:45:02 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -105,10 +105,10 @@ let rec app f = function
   | [] -> 
       assert false
   | [a] -> 
-      Sapp (f, a, None)
+      Sapp (f, a)
   | a :: l -> 
       let loc = Loc.join f.loc (arg_loc a) in 
-      app (without_annot loc (Sapp (f, a, None))) l
+      app (without_annot loc (Sapp (f, a))) l
 
 let bin_op op loc e1 e2 =
   without_annot loc

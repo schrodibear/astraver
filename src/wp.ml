@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.45 2002-07-08 09:02:28 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.46 2002-07-09 11:45:02 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -146,8 +146,6 @@ let rec normalize p =
 	change_desc p (LetIn (x, normalize e1, normalize e2))
     | Rec (x, bl, v, var, e1) ->
 	change_desc p (Rec (x, bl, v, var, normalize e1))
-    | App (_, _, None) ->
-	assert false
     | App (e1, Term e2, k) ->
 	change_desc p (App (normalize e1, Term (normalize e2), k))
     | App (e1, (Refarg _ as r), k) ->
@@ -291,8 +289,6 @@ and wp_desc info d q =
     | Seq bl -> 
 	let bl',w = wp_block bl q in
 	Seq bl', w
-    | App (_, _, None) ->
-	assert false
     | App (p1, Term p2, k) ->
 	let p'1,_ = wp p1 None in
 	let p'2,_ = wp p2 None in
