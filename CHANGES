@@ -1,4 +1,6 @@
 
+  o syntax: pre- and postconditions brackets now come by pairs (but,
+    inside, the predicates may be omitted)
   o fixed WP bug in a sequence of calls with before-after annotations
   o no more "pvs" declaration (the user can now edit the _why.pvs file)
   o fixed bug in type-checking of recursive functions with exceptions

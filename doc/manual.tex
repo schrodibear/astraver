@@ -208,37 +208,21 @@ syntax
   \textsl{expression}
   \texttt{\{} \textsl{predicate} \texttt{\}} 
 \end{center}
-Any subexpression may be given a pre- and/or a postcondition. Both can be
-omitted, independently and at any place.
+Any subexpression may be a Hoare triple. Within a triple, the pre- or
+the postcondition may be omitted.
 Within a postcondition, the value of a reference \texttt{x} before the
 evaluation (i.e. at the precondition point) is referred to as \texttt{x@}.
 Examples:
 \begin{verbatim}
-     begin x := !x + 1 end { x > x@ }
+     { } begin x := !x + 1 end { x > x@ }
      { x > 0 } begin x := 2 * !x; x := !x - 1 end { x > 0 }
 \end{verbatim}
 In the postcondition, the result of the expression is bound to the
 variable \texttt{result}. \indextt{result} 
 Examples:
 \begin{verbatim}
-     (1 + 2) { result = 3 }
-     begin x := !x + 1; !x end { result <> x@ }
-\end{verbatim}
-
-\caveat\ Pre- and postcondition apply to the \emph{closest
-subexpression}. Thus, in
-\begin{verbatim}
-     x := !x + 1 { x = x@ + 1 }
-\end{verbatim}
-the postcondition \texttt{x = x@ + 1} applies to the expression
-\texttt{1}, leading to the unprovable obligation $x=x+1$. Therefore,
-the above piece of code should be written instead
-\begin{verbatim}
-     (x := !x + 1) { x = x@ + 1 }
-\end{verbatim}
-or even better
-\begin{verbatim}
-     begin x := !x + 1 end { x = x@ + 1 }
+     { } 1 + 2 { result = 3 }
+     { } begin x := !x + 1; !x end { result <> x@ }
 \end{verbatim}
 
 
@@ -285,10 +269,11 @@ Recursive functions are annotated with the result type and a variant.
 For instance, the famous Mac Carthy's 91 function is written:
 \begin{verbatim}
      let rec f91 (n:int) : int { variant max(0,101-n) } =
-       (if n <= 100 then
-          (f91 (f91 (n + 11)))
-        else
-          n - 10)
+       { }
+       if n <= 100 then
+         (f91 (f91 (n + 11)))
+       else
+         n - 10
        { (n <= 100 and result = 91) or (n >= 101 and result = n - 10) }
 \end{verbatim}
 Variants are similar to the ones for loops.
@@ -303,7 +288,7 @@ Example:
      begin 
        x := y;
        label L; 
-       begin x := !x + 1 end { x > x@L }
+       { } begin x := !x + 1 end { x > x@L }
      end
 \end{verbatim}
 The visibility of a label is the same as a local variable's one. In
@@ -347,8 +332,8 @@ by the expression following the \texttt{try}.
 Postconditions are extended to specify the behavior in case of
 uncaught exceptions:
 \begin{verbatim}
-     (raise E) { false | E => true }
-     (raise (F 1)) { false | F => result = 1 }
+     { } raise E { false | E => true }
+     { } raise (F 1) { false | F => result = 1 }
 \end{verbatim}
 In a postcondition regarding an exception, \texttt{result} refers to
 the value carried by the exception (if any).
@@ -404,7 +389,7 @@ outside.
 
 Example: in the following program
 \begin{verbatim}
-     begin x := 1; (x := !x + 1) { x = 2 }; x := !x + 1 end { x = 3 }
+     {} begin x := 1; {} x := !x + 1 { x = 2 }; x := !x + 1 end { x = 3 }
 \end{verbatim}
 the final postcondition \texttt{x = 3} is propagated through the third
 assignment, but then stops at the postcondition \texttt{x = 2};
@@ -639,7 +624,7 @@ They are also available on the \why\ web site, at
 
 \why\ does not handle \java\ programs by itself.  However, this can be
 achieved by using \why\ in combination with the \krakatoa\ 
-tool~\cite{Krakatoa}. Developed by C.~Marché and X.~Urbain, this other
+tool~\cite{Krakatoa}. Developed by C.~March\'e and X.~Urbain, this 
 tool tackles \java\ programs annotated using the Java Modeling
 Language (JML)~\cite{JML}. Such programs are translated into
 \why\ ML input code, expressing the semantics of the original \java\ 
@@ -1158,13 +1143,10 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{prog}\indexnt{prog}
-    & $::=$ & \te{\{} \nt{precondition} \te{\}}\etoile\
-              \nt{statement} 
-              $[$ \te{\{} \nt{postcondition} \te{\}} $]$ \\
-  \\[0.1em]
-
-  \nt{statement}\indexnt{statement}
-    & $::=$ & \nt{constant} \\
+    & $::=$ & \te{\{} $[$ \nt{precondition} $]$ \te{\}}
+              \nt{prog} 
+              \te{\{} $[$ \nt{postcondition} $]$ \te{\}} \\
+      & $|$ & \nt{constant} \\
       & $|$ & \nt{identifier} \\
       & $|$ & \te{!} \nt{identifier} \\
       & $|$ & \nt{identifier} \te{:=} \nt{prog} \\
