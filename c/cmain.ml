@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.35 2004-07-13 13:17:12 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.36 2004-07-13 14:55:41 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -130,7 +130,7 @@ let main () =
 	    fprintf fmt "do_simplify: simplify/%s_why.sxcheck@\n@\n" f;
 	    fprintf fmt "simplify/%s_why.sxcheck: simplify/%s_why.sx@\n" f f;
 	    fprintf fmt "\t@@cat simplify/caduceus_why.sx simplify/caduceus_spec_why.sx $< > $<.all@\n";
-	    fprintf fmt "\t@@echo 'Running Simplify on proof obligations for %s.c' && (ulimit -t 4; Simplify $<.all)@\n@\n" f;
+	    fprintf fmt "\t@@echo 'Running Simplify on proof obligations for %s.c' && (ulimit -t 10; Simplify $<.all)@\n@\n" f;
 	    fprintf fmt "simplify/%s_why.sx: why/caduceus_spec.why why/%s.why@\n" f f;
 	    fprintf fmt "\t@@echo 'why -simplify [...] why/%s.why' && $(WHY) -simplify -no-simplify-prelude -dir simplify $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
 
@@ -143,7 +143,7 @@ let main () =
 	    fprintf fmt "do_cvcl: cvcl/%s_why.cvccheck@\n@\n" f;
 	    fprintf fmt "cvcl/%s_why.cvccheck: cvcl/%s_why.cvc@\n" f f;
 	    fprintf fmt "\t@@cat cvcl/caduceus_why.cvc cvcl/caduceus_spec_why.cvc $< > $<.all@\n";
-	    fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations for %s.c' && (ulimit -t 4; cvcl < $<.all)@\n@\n" f;
+	    fprintf fmt "\t@@echo 'Running CVC Lite on proof obligations for %s.c' && (ulimit -t 20; cvcl < $<.all)@\n@\n" f;
 	    fprintf fmt "cvcl/%s_why.cvc: why/caduceus_spec.why why/%s.why@\n" f f;
 	    fprintf fmt "\t@@echo 'why -cvcl [...] why/%s.why' && $(WHY) -cvcl -no-cvcl-prelude -dir cvcl $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/%s.why@\n@\n" f f;
 

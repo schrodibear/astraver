@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.13 2004-07-13 13:17:12 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.14 2004-07-13 14:55:41 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -35,7 +35,7 @@ type elem =
   | Logic of string * logic_type Env.scheme
   | Oblig of obligation 
   | Axiom of string * predicate Env.scheme
-  | Predicate of string * predicate_def Env.scheme
+  | PredicateDef of string * predicate_def Env.scheme
 
 let queue = Queue.create ()
 
@@ -49,7 +49,7 @@ let push_obligations = List.iter (fun o -> Queue.add (Oblig o) queue)
 
 let push_axiom id p = Queue.add (Axiom (id, p)) queue
 
-let push_predicate id p = Queue.add (Predicate (id, p)) queue
+let push_predicate id p = Queue.add (PredicateDef (id, p)) queue
 
 let defpred = Hashtbl.create 97
 
@@ -271,8 +271,8 @@ module GenSubst(S : Substitution) = struct
   let logic_type s = function
     | Function (tl, tr) -> 
 	Function (List.map (pure_type s) tl, pure_type s tr)
-    | Logic.Predicate tl -> 
-	Logic.Predicate (List.map (pure_type s) tl)
+    | Predicate tl -> 
+	Predicate (List.map (pure_type s) tl)
 
   let binder s (id,pt) = (id, pure_type s pt)
 
@@ -311,6 +311,8 @@ module SV = struct
   let rec pure_type s = function
     | PTvarid id as t ->
 	(try List.assoc (Ident.string id) s with Not_found -> t)
+    | PTvar {type_val=Some pt} ->
+	pure_type s pt
     | PTexternal (l, id) ->
 	PTexternal (List.map (pure_type s) l, id)
     | PTarray ta -> PTarray (pure_type s ta)
@@ -320,6 +322,7 @@ end
 module SubstV = GenSubst(SV)
 
 (* substitution of unification type variables within instances *)
+(***
 module SI = struct
 
   type substitution = (int * pure_type) list
@@ -334,6 +337,7 @@ module SI = struct
 
 end
 module SubstI = GenSubst(SI)
+***)
 
 (* the following module collects instances (within [Tapp] and [Papp]) *)
 module OpenInstances = struct
@@ -373,9 +377,11 @@ let rec unify s t1 t2 = match (t1,t2) with
   | (PTexternal(l1,i1), PTexternal(l2,i2)) ->
       if i1 <> i2 || List.length l1 <> List.length l2 then raise Exit;
       List.fold_left2 unify s l1 l2
-  | (_, PTvar _)
+  | (_, PTvar {type_val=None})
   | (_, PTvarid _) ->
       assert false
+  | (_, PTvar {type_val=Some v2}) ->
+      unify s t1 v2
   | (PTvar {type_val=Some v1}, _) ->
       unify s v1 t2
   | (PTvar {tag=t;type_val=None}, _) ->
@@ -412,14 +418,15 @@ let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   let all_i = OpenInstances.predicate OpenInstances.S.empty p.scheme_type in
   let all_i = OpenInstances.S.elements all_i in
-  eprintf "id = %s length(all_i) = %d@." id (List.length all_i);
   let rec iter s = function
     | [] ->
-	if List.for_all (fun x -> List.mem_assoc x s && is_closed_pure_type (List.assoc x s)) p.scheme_vars then
+	if List.for_all 
+	  (fun x -> List.mem_assoc x s 
+	     && is_closed_pure_type (List.assoc x s)) p.scheme_vars 
+	then
 	  let ps = SubstV.predicate s p.scheme_type in
 	  fprintf fmt "@[<hov 2>ASSERT %a;@]@\n" print_predicate ps
     | (x,oi) :: oil ->
-	eprintf "x = %a #instances = %d@." Ident.print x (Instances.cardinal (instances x));
 	Instances.iter 
 	  (fun ci -> 
 	     try let s = unify_i s oi ci in iter s oil
@@ -431,11 +438,11 @@ let print_axiom fmt id p =
   fprintf fmt "@\n"
 
 let rec print_logic_type fmt = function
-  | Logic.Predicate [] ->
+  | Predicate [] ->
       fprintf fmt "BOOLEAN"
-  | Logic.Predicate [pt] ->
+  | Predicate [pt] ->
       fprintf fmt "[%a -> BOOLEAN]" print_pure_type pt
-  | Logic.Predicate pl ->
+  | Predicate pl ->
       fprintf fmt "[[%a] -> BOOLEAN]" (print_list comma print_pure_type) pl
   | Function ([], pt) ->
       print_pure_type fmt pt
@@ -450,7 +457,7 @@ let print_predicate_def fmt id p0 =
   let print i bl p =
     fprintf fmt "@[<hov 2>%s%a: %a =@ LAMBDA (%a):@ @[%a@];@]@\n@\n"
       id instance i
-      print_logic_type (Logic.Predicate (List.map snd bl))
+      print_logic_type (Predicate (List.map snd bl))
       (print_list comma 
 	 (fun fmt (x,pt) -> 
 	    fprintf fmt "%a: %a" Ident.print x print_pure_type pt )) bl 
@@ -497,7 +504,7 @@ let print_logic fmt id t =
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o
   | Axiom (id, p) -> print_axiom fmt id p
-  | Predicate (id, p) -> print_predicate_def fmt id p
+  | PredicateDef (id, p) -> print_predicate_def fmt id p
   | Logic (id, t) -> print_logic fmt id t
   | Parameter (id, t) -> print_parameter fmt id t
 
@@ -532,7 +539,7 @@ module IterIT = struct
 	
   let logic_type g = function
     | Function (l, pt) -> List.iter g l; g pt
-    | Logic.Predicate l -> List.iter g l
+    | Predicate l -> List.iter g l
 
   let rec cc_type f g = function
     | TTpure pt -> g pt
@@ -569,7 +576,7 @@ module IterIT = struct
 	predicate f g p
     | Axiom (_, p) -> 
 	predicate f g p.scheme_type
-    | Predicate (_, {scheme_type=(bl,p)}) -> 
+    | PredicateDef (_, {scheme_type=(bl,p)}) -> 
 	List.iter (fun (_,pt) -> g pt) bl; predicate f g p
 
 end

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.94 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.95 2004-07-13 14:55:41 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -136,7 +136,8 @@ let unlocated_wprintf f =
 let rec is_closed_pure_type = function
   | PTint | PTbool | PTreal | PTunit -> true
   | PTarray pt -> is_closed_pure_type pt
-  | PTvarid _ | PTvar _ -> false
+  | PTvarid _ | PTvar {type_val=None} -> false
+  | PTvar {type_val=Some t} -> is_closed_pure_type t
   | PTexternal (ptl,_) -> List.for_all is_closed_pure_type ptl
 
 let rationalize s =
