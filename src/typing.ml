@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.80 2002-11-05 08:19:33 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.81 2002-11-28 16:18:35 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -150,14 +150,15 @@ let type_un_poly id =
 
 (*s Making nodes *)
 
-let make_node p env l k = 
-  { desc = p; info = { env = env; label = l; kappa = k } }
+let make_node p env l o k = 
+  { desc = p; info = { env = env; label = l; obligations = o; kappa = k } }
 
-let make_lnode p env k = 
-  { desc = p; info = { env = env; label = label_name (); kappa = k } }
+let make_lnode p env o k = 
+  { desc = p; 
+    info = { env = env; label = label_name (); obligations = o; kappa = k } }
 
 let make_var x t env =
-  make_lnode (Var x) env (type_c_of_v t)
+  make_lnode (Var x) env [] (type_c_of_v t)
 
 let make_arrow_type lab bl k =
   let k = 
@@ -203,8 +204,8 @@ let predicates_effect lab env loc pl =
 
 let state_pre lab env loc pl =
   let lenv = logical_env env in
-  let pl = List.map (type_pre lab lenv) pl in
-  predicates_effect lab env loc (List.map (fun x -> x.p_value) pl), pl
+  let pl = List.map (type_assert lab lenv) pl in
+  predicates_effect lab env loc (List.map (fun x -> x.a_value) pl), pl
 
 let state_assert lab env loc a =
   let a = type_assert lab (logical_env env) a in
@@ -273,14 +274,12 @@ and is_pure_type_c c =
 let partial_pre = function
   | Tapp (id, [a;b]) when id == t_div_int || id == t_mod_int ->
       let p = neq (unref_term b) (Tconst (ConstInt 0)) in
-      [anonymous_pre true p]
+      [anonymous p]
   | Tapp (id, [a]) when id == t_sqrt_float ->
       let p = ge_float (unref_term a) (Tconst (ConstFloat "0.")) in
-      [anonymous_pre true p]
+      [anonymous p]
   | _ ->
       []
-
-let assert_pre p = { p with p_assert = true }
 
 (*s Types of references and arrays *)
 
@@ -332,16 +331,14 @@ let rec typef lab env expr =
   let q = option_app (saturation loc e) q in
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
-  let p' = p @ List.map assert_pre p1 in
-  let pr = match q, d with
-    | None, App (_,_,k') ->
-	let c = { c_result_name = result; c_result_type = v; c_effect = e'; 
-		  c_pre = p'; c_post = k'.c_post } in
-	make_node d env toplabel c
-    | _ ->
-	let c = { c_result_name = result; c_result_type = v;
-		  c_effect = e'; c_pre = p'; c_post = q } in
-	make_node d env toplabel c
+  let ol,q' = match q, d with
+    | None, App (_,_,k') -> p1 @ k'.c_pre, k'.c_post
+    | _ -> p1, q
+  in
+  let pr = 
+    let c = { c_result_name = result; c_result_type = v; c_effect = e'; 
+	      c_pre = p; c_post = q' } in
+    make_node d env toplabel ol c
   in
   Annot.normalize pr
 
@@ -383,8 +380,8 @@ and typef_desc lab env loc = function
       let s,p = match t_e.desc with
 	| Expression c when post t_e = None ->
 	    let t = make_raw_access env (x,x) c in
-	    let pre = anonymous_pre true (make_pre_access env x c) in
-	    Expression t, t_e.info.kappa.c_pre @ [pre]
+	    let pre = anonymous (make_pre_access env x c) in
+	    Expression t, t_e.info.obligations @ [pre]
 	| _ ->
 	    TabAcc (check, x, t_e), []
       in
@@ -418,7 +415,7 @@ and typef_desc lab env loc = function
 		   make_lnode 
 		     (LetIn (v1, t_e1,
 			     make_lnode (TabAff (check, x, varv1, varv2))
-			       env1 k)) env2 k)
+			       env1 [] k)) env2 [] k)
       in
       d, (v,ef), []
 
@@ -494,7 +491,7 @@ and typef_desc lab env loc = function
 			let e = applist cf [ca] in
 			let env' = tf'.info.env in
 			let pl = partial_pre e @ pre tf' @ pre t_a @ pre t_f in
-			LetIn (y, ty, make_lnode (Expression e) env' kapp),
+			LetIn (y, ty, make_lnode (Expression e) env' [] kapp),
 			(tapp, ef), pl
 	            (* otherwise: true application *)
 		    | _ ->	   
@@ -517,15 +514,15 @@ and typef_desc lab env loc = function
 		     when post tf' = None && post t_f = None ->
 		       let e = applist cf [Tvar v] in
 		       let env'' = Env.add v tx tf'.info.env in
-		       LetIn (y, ty, make_lnode (Expression e) env'' kapp),
+		       LetIn (y, ty, make_lnode (Expression e) env'' [] kapp),
 		       partial_pre e @ pre tf' @ pre t_f
 	           (* otherwise: true application *)
 		   | _ ->
-		       let var_v = make_lnode (Var v) env' (type_c_of_v tx) in
+		       let var_v = make_var v tx env' in
 		       App (t_f, Term var_v, kapp), []
 		 in
 		 let kfv = k_add_effects kapp (effect t_f) in
-		 LetIn (v, t_a, make_lnode app_f_v env' kfv), 
+		 LetIn (v, t_a, make_lnode app_f_v env' [] kfv), 
 		 (tapp, ef), pl))
 
   | Sapp (f, Stype _) ->

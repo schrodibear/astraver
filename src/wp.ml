@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.67 2002-11-25 14:33:57 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.68 2002-11-28 16:18:35 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -85,6 +85,11 @@ let abstract_wp (q',ql') (q,ql) res out =
   in
   pands (quantify q' q (Some res) :: List.map2 quantify_h ql' ql)
 
+(*s Adding precondition(s) to the wp *)
+
+let add_pre pl w = 
+  List.fold_left pand w (List.map (fun p -> p.a_value) pl)
+
 (*s WP. [wp p q] computes the weakest precondition [wp(p,q)]
     and gives postcondition [q] to [p] if necessary.
 
@@ -98,7 +103,7 @@ let rec wp p q =
   let q0_ = optpost_app (change_label "" lab) q0 in
   let d,w = wp_desc p.info p.desc q0_ in
   let p = change_desc p d in
-  let w = option_app (named_app (erase_label lab)) w in
+  let w = option_app (asst_app (erase_label lab)) w in
   let p = if need_a_post p then force_post env q0 p else p in
   let w = match postp, q with
     (* abstrac wrt existing post, unless [p] is a loop *)
@@ -109,6 +114,7 @@ let rec wp p q =
     | _ -> 
 	w
   in
+  let w = optasst_app (add_pre (obligations p)) w in
   p, w
 
 and wp_desc info d q = 
@@ -117,16 +123,16 @@ and wp_desc info d q =
     (* TODO: check if likely *)
     | Var x ->
 	let w = optpost_val q in
-	d, optnamed_app (tsubst_in_predicate (subst_one result (Tvar x))) w
+	d, optasst_app (tsubst_in_predicate (subst_one result (Tvar x))) w
     (* $wp(E,q) = q[result \leftarrow E]$ *)
     | Expression t ->
 	let w = optpost_val q in
 	let t = unref_term t in
-	d, optnamed_app (tsubst_in_predicate (subst_one result t)) w
+	d, optasst_app (tsubst_in_predicate (subst_one result t)) w
     (* $wp(!x,q) = q[result \leftarrow x]$ *)
     | Acc x ->
 	let w = optpost_val q in
-	d, optnamed_app (subst_in_predicate (subst_onev result x)) w
+	d, optasst_app (subst_in_predicate (subst_onev result x)) w
     (* $wp(x := e, q) = wp(e, q[result\leftarrow void; x\leftarrow result])$ *)
     | Aff (x, p) ->
 	let q = optval_app (tsubst_in_predicate (subst_one result tvoid)) q in
@@ -147,7 +153,7 @@ and wp_desc info d q =
 	let q1 = filter_post e1.info q1 in
 	let _,w1 = wp e1 q1 in
 	let e'1,_ = wp e1 None in
-	let w1 = optnamed_app (subst_in_predicate (subst_onev v result)) w1 in
+	let w1 = optasst_app (subst_in_predicate (subst_onev v result)) w1 in
 	let q2 = saturate_post e2.info w1 q in
 	let e'2,w2 = wp e2 q2 in
 	TabAff (ck, x, e'1, e'2), w2
@@ -187,14 +193,14 @@ and wp_desc info d q =
 
     | LetIn (x, e1, e2) ->
 	let e'2, w2 = wp e2 (filter_post e2.info q) in
-	let q1 = optnamed_app (subst_in_predicate (subst_onev x result)) w2 in
+	let q1 = optasst_app (subst_in_predicate (subst_onev x result)) w2 in
 	let q1 = saturate_post e1.info q1 q in
 	let e'1,w = wp e1 q1 in
 	LetIn (x, e'1, e'2), w
     | LetRef (x, e1, e2) ->
 	(* same as LetIn: correct? *)
 	let e'2, w2 = wp e2 (filter_post e2.info q) in
-	let q1 = optnamed_app (subst_in_predicate (subst_onev x result)) w2 in
+	let q1 = optasst_app (subst_in_predicate (subst_onev x result)) w2 in
 	let q1 = saturate_post e1.info q1 q in
 	let e'1,w = wp e1 q1 in
 	LetRef (x, e'1, e'2), w
@@ -222,7 +228,7 @@ and wp_desc info d q =
         (* $wp(try e1 with E -> e2, Q, R) = wp(e1, Q, wp(e2, Q, R))$ *)
 	let subst w = function
 	  | None -> w
-	  | Some x -> optnamed_app (subst_in_predicate (subst_onev x result)) w
+	  | Some x -> optasst_app (subst_in_predicate (subst_onev x result)) w
 	in
 	let hl' = 
 	  List.map (fun ((x,v) as p, h) -> 
@@ -253,9 +259,9 @@ and wp_block bl q = match bl with
       Statement p' :: bl', w'
   | Label l :: bl ->
       let bl', w = wp_block bl q in
-      Label l :: bl', optnamed_app (erase_label l) w
+      Label l :: bl', optasst_app (erase_label l) w
   | Assert p :: bl ->
       let bl', w = wp_block bl q in
-      Assert p :: bl', optnamed_app (fun c -> pand p.a_value c) w
+      Assert p :: bl', optasst_app (fun c -> pand p.a_value c) w
 
 let wp p = wp p None

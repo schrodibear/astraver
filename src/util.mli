@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.mli,v 1.27 2002-11-21 16:23:09 filliatr Exp $ i*)
+(*i $Id: util.mli,v 1.28 2002-11-28 16:18:35 filliatr Exp $ i*)
 
 open Logic
 open Misc
@@ -30,7 +30,6 @@ val traverse_binders : local_env -> (type_v binder) list -> local_env
 val initial_renaming : local_env -> Rename.t
 
 val apply_term : Rename.t -> local_env -> term -> term
-val apply_pre : Rename.t -> local_env -> precondition -> precondition
 val apply_assert : Rename.t -> local_env -> assertion -> assertion
 val apply_post : 
   label -> Rename.t -> local_env -> postcondition -> postcondition
@@ -53,6 +52,7 @@ val equality : term -> term -> predicate
 val decomp_boolean : postcondition option -> predicate * predicate
 
 val effect : typed_program -> Effect.t
+val obligations : typed_program -> assertion list
 val pre : typed_program -> precondition list
 val post : typed_program -> postcondition option
 val result_type : typed_program -> type_v

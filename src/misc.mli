@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.mli,v 1.47 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.48 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -28,10 +28,9 @@ val is_mutable : type_v -> bool
 val is_pure : type_v -> bool
 
 (* Substitution within assertions and pre/post-conditions *)
-val named_app : (predicate -> predicate) -> assertion -> assertion
-val optnamed_app : 
+val asst_app : (predicate -> predicate) -> assertion -> assertion
+val optasst_app : 
   (predicate -> predicate) -> assertion option -> assertion option
-val pre_app : (predicate -> predicate) -> precondition -> precondition
 val post_app : (predicate -> predicate) -> postcondition -> postcondition
 val optpost_app : 
   (predicate -> predicate) -> postcondition option -> postcondition option
@@ -47,9 +46,6 @@ val optexn_app :
   (predicate -> predicate) -> postcondition option -> postcondition option
 
 val anonymous : 'a -> 'a asst
-val anonymous_pre : bool -> predicate -> precondition
-val pre_of_assert : bool -> 'a asst -> 'a pre
-val assert_of_pre : precondition -> assertion
 
 val force_post_name : postcondition option -> postcondition option
 val force_bool_name : postcondition option -> postcondition option

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.10 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: ltyping.ml,v 1.11 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -235,8 +235,6 @@ and type_const = function
 
 (*s Checking types *)
 
-let type_pre lab lenv p = { p with p_value = predicate lab lenv p.p_value }
-
 let type_assert lab lenv a = { a with a_value = predicate lab lenv a.a_value }
 
 let type_post lab lenv id v (a,al) = 
@@ -279,7 +277,7 @@ and type_c loc lab env lenv c =
   check_effect loc env c.pc_effect;
   let v = type_v loc lab env lenv c.pc_result_type in
   let id = c.pc_result_name in
-  let p = List.map (type_pre lab lenv) c.pc_pre in
+  let p = List.map (type_assert lab lenv) c.pc_pre in
   let q = option_app (type_post lab lenv id v) c.pc_post in
   let s = subst_onev id Ident.result in
   let q = optpost_app (subst_in_predicate s) q in

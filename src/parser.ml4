@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.67 2002-11-27 08:14:36 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.68 2002-11-28 16:18:35 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -318,7 +318,7 @@ EXTEND
   [ [ LIDENT "raises"; l = LIST0 ident SEP "," -> l ] ]
   ;
   pre_condition:
-  [ [ c = assertion -> pre_of_assert false c ] ]
+  [ [ c = assertion -> c ] ]
   ;
   post_condition:
   [ [ c = assertion -> (c,[]) 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.25 2002-10-17 15:01:53 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.26 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -75,6 +75,7 @@ let is_local_set env id =
 type typing_info = {
   env : local_env;
   label : string;
+  obligations : assertion list;
   kappa : type_c
 }
   

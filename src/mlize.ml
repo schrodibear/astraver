@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.61 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.62 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -29,7 +29,7 @@ open Rename
 open Env
 open Monad
 
-let make_info env k = { env = env; label = label_name (); kappa = k }
+let make_info info k = { info with label = label_name (); kappa = k }
 
 (*s [ren] is the current renamings of variables,
     [e] is the imperative program to translate, annotated with type+effects.
@@ -99,7 +99,7 @@ and trad_desc info d ren = match d with
 	ren
 
   | App (e1, Term e2, kapp) ->
-      let infoapp = make_info info.env kapp in
+      let infoapp = make_info info kapp in
       Monad.compose e2.info (trad e2) info
 	(fun v2 -> 
 	   Monad.compose e1.info (trad e1) info
@@ -110,7 +110,7 @@ and trad_desc info d ren = match d with
 	ren
 
   | App (e1, Refarg r, kapp) ->
-      let infoapp = make_info info.env kapp in
+      let infoapp = make_info info kapp in
       Monad.compose e1.info (trad e1) info
 	(fun v1 -> 
 	   Monad.apply infoapp (fun _ -> CC_var v1) info
@@ -131,7 +131,7 @@ and trad_desc info d ren = match d with
 	(fun v1 ren' -> 
 	   let x' = current_var ren' x in
 	   let t = make_raw_access info.env (x,x') (Tvar v1) in
-	   let p = anonymous_pre true (make_pre_access info.env x (Tvar v1)) in
+	   let p = anonymous (make_pre_access info.env x (Tvar v1)) in
 	   insert_pre info.env p (Monad.unit info (Value t)) ren')
 	ren
 
@@ -147,19 +147,17 @@ and trad_desc info d ren = match d with
 		 let st = make_raw_store info.env (x,x') (Tvar v1) (Tvar v2) in
 		 let p = make_pre_access info.env x (Tvar v1) in
 		 CC_letin (false, [x'', CC_var_binder tx], CC_term st,
-			   insert_pre info.env (anonymous_pre true p)
+			   insert_pre info.env (anonymous p)
 			     (Monad.unit info (Value (Tconst ConstUnit))) 
 			     ren'')))
 	 ren
 
   | While (b, inv, var, e) ->
       let info' = 
-	let p = 
-	  match inv with Some a -> [pre_of_assert false a] | None -> [] 
-	in
+	let p = match inv with Some a -> [a] | None -> [] in
 	{ info with kappa = { info.kappa with c_pre = p }}
       in
-      let infoc = make_info info.env info.kappa in
+      let infoc = make_info info info.kappa in
       Monad.wfrec var info'
 	(fun w -> 
 	   let exit = Monad.unit info (Value (Tconst ConstUnit)) in
@@ -220,10 +218,7 @@ and trad_block info =
 	   | Some id -> Monad.unit info (Value (Tvar id))
 	   | None -> assert false)
     | (Assert c) :: bl ->
-	let p = 
-	  { p_assert = true; p_name = c.a_name; p_value = c.a_value } 
-	in
-	insert_pre info.env p (block res bl)
+	insert_pre info.env c (block res bl)
     | (Label s) :: bl ->
 	cross_label s (block res bl)
     | (Statement e) :: bl ->

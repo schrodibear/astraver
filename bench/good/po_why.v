@@ -17,6 +17,7 @@ Intros; Rewrite Post1; Assumption.
 Save.
 
 
+
 Definition p1 := (* validation *)
   [x: Z; Pre1: (q `x + 1`)]
     let (x0, result, Post1) =
@@ -34,6 +35,7 @@ Lemma p2_po_1 :
 Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
+
 
 
 Definition p2 := (* validation *)
@@ -54,6 +56,7 @@ Lemma p3_po_1 :
 Proof. 
 Intros; Omega.
 Save.
+
 
 
 Definition p3 := (* validation *)
@@ -80,6 +83,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition p4 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -100,6 +104,7 @@ Omega.
 Save.
 
 
+
 Definition p5 := (* validation *)
   (exist_1 [result: Z]`result = 7` `3 + 4` p5_po_1).
 
@@ -110,6 +115,7 @@ Lemma p6_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
 
 
 Definition p6 := (* validation *)
@@ -126,6 +132,7 @@ Lemma p7_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
 
 
 Definition p7 := (* validation *)
@@ -148,6 +155,7 @@ Lemma p8_po_1 :
 Proof.
 Intuition; Rewrite Post1; Assumption.
 Save.
+
 
 
 Definition p8 := (* validation *)
@@ -182,6 +190,7 @@ Lemma p9_po_2 :
 Proof.
 Intuition.
 Save.
+
 
 
 Definition p9 := (* validation *)
@@ -220,6 +229,7 @@ Intuition.
 Save.
 
 
+
 Definition p9a := (* validation *)
   [x: Z]
     let (x0, aux_1, Post3) =
@@ -246,6 +256,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition p10 := (* validation *)
   let (result1, Post1) = (fsucc `0`) in
   (exist_1 [result2: Z]`result2 = 1` result1 (p10_po_1 result1 Post1)).
@@ -259,6 +270,7 @@ Lemma p11_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
 
 
 Definition p11 := (* validation *)
@@ -283,6 +295,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition p11a := (* validation *)
   let (a, Post1) =
     let (result1, Post2) = (fsucc `1`) in
@@ -305,6 +318,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition p12 := (* validation *)
   [x: Z; Pre1: `x = 0`]
     let (x0, result1, Post1) = (incrx tt x) in
@@ -321,6 +335,7 @@ Lemma p13_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
 
 
 Definition p13 := (* validation *)
@@ -344,6 +359,7 @@ Lemma p13a_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
 
 
 Definition p13a := (* validation *)
@@ -373,6 +389,7 @@ Intros; Omega.
 Save.
 
 
+
 Definition p14 := (* validation *)
   [x: Z; Pre1: `x = 0`]
     let (x0, result1, Post1) = (incrx2 tt x) in
@@ -384,6 +401,7 @@ Lemma p15_po_1 :
 Proof. (* p15_po_1 *)
 Omega.
 Save.
+
 
 
 Definition p15 := (* validation *)
@@ -398,6 +416,7 @@ Lemma p16_po_1 :
 Proof. (* p16_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 Definition p16 := (* validation *)
@@ -424,6 +443,7 @@ Save.
   coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
  End:
 *)
+
 
 Definition p17 := (* validation *)
   [t: (array `10` Z); Pre3: `0 <= (access t 0)` /\ `(access t 0) < 10`]

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.59 2002-11-05 08:19:33 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.60 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -135,19 +135,14 @@ let rationalize s =
 let is_mutable = function Ref _ | Array _ -> true | _ -> false
 let is_pure = function PureType _ -> true | _ -> false
 
-let named_app f x = { a_name = x.a_name; a_value = (f x.a_value) }
-
-let pre_app f x = 
-  { p_assert = x.p_assert; p_name = x.p_name; p_value = f x.p_value }
+let asst_app f x = { a_name = x.a_name; a_value = (f x.a_value) }
 
 let post_app f (q,l) = 
-  (named_app f q, List.map (fun (x,a) -> (x, named_app f a)) l)
+  (asst_app f q, List.map (fun (x,a) -> (x, asst_app f a)) l)
 
 let optpost_app f = option_app (post_app f)
 
 let anonymous x = { a_name = Anonymous; a_value = x }
-
-let anonymous_pre b x = { p_assert = b; p_name = Anonymous; p_value = x }
 
 let force_name f a = { a_name = Name (f a.a_name); a_value = a.a_value }
 
@@ -157,12 +152,6 @@ let force_bool_name =
   let f = function Name id -> id | Anonymous -> bool_name() in
   option_app (fun (q,l) -> (force_name f q, l))
 
-let pre_of_assert b x =
-  { p_assert = b; p_name = x.a_name; p_value = x.a_value }
-
-let assert_of_pre x =
-  { a_name = x.p_name; a_value = x.p_value }
-
 (* selection of postcondition's parts *)
 let post_val = fst
 let post_exn x (_,l) = List.assoc x l
@@ -171,13 +160,13 @@ let optpost_val = option_app post_val
 let optpost_exn x = option_app (post_exn x)
 
 (* substititution within some parts of postconditions *)
-let val_app f (x,xl) = (named_app f x, xl)
-let exn_app x f (x,xl) = (x, List.map (fun (x,a) -> x, named_app f a) xl)
+let val_app f (x,xl) = (asst_app f x, xl)
+let exn_app x f (x,xl) = (x, List.map (fun (x,a) -> x, asst_app f a) xl)
 
 let optval_app f = option_app (val_app f)
 let optexn_app x f = option_app (exn_app x f)
 
-let optnamed_app f = option_app (named_app f)
+let optasst_app f = option_app (asst_app f)
 
 (*s Functions on terms and predicates. *)
 
@@ -322,7 +311,7 @@ let rec type_c_subst s c =
   { c_result_name = id;
     c_result_type = type_v_subst s t;
     c_effect = Effect.subst s e;
-    c_pre = List.map (pre_app (subst_in_predicate s)) p;
+    c_pre = List.map (asst_app (subst_in_predicate s)) p;
     c_post = option_app (post_app (subst_in_predicate s')) q }
 
 and type_v_subst s = function
@@ -341,7 +330,7 @@ let rec type_c_rsubst s c =
   { c_result_name = c.c_result_name;
     c_result_type = type_v_rsubst s c.c_result_type;
     c_effect = c.c_effect;
-    c_pre = List.map (pre_app (tsubst_in_predicate s)) c.c_pre;
+    c_pre = List.map (asst_app (tsubst_in_predicate s)) c.c_pre;
     c_post = option_app (post_app (tsubst_in_predicate s)) c.c_post }
 
 and type_v_rsubst s = function

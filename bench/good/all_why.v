@@ -31,6 +31,7 @@ Parameter foo : Set.
 
 
 
+
 Definition p1 := (* validation *)
   (exist_1 [result: Z]True `0` I).
 
@@ -39,6 +40,7 @@ Lemma p2_po_1 :
 Proof.
 Tauto.
 Save.
+
 
 
 
@@ -53,6 +55,7 @@ Save.
 
 
 
+
 Definition p3 := (* validation *)
   (exist_1 [result: Z]True /\ True `0` p3_po_1).
 
@@ -61,6 +64,7 @@ Lemma p4_po_1 :
 Proof.
 Tauto.
 Save.
+
 
 
 
@@ -75,6 +79,7 @@ Save.
 
 
 
+
 Definition p5 := (* validation *)
   (exist_1 [result: Z]False \/ ~False `0` p5_po_1).
 
@@ -83,6 +88,7 @@ Lemma p6_po_1 :
 Proof.
 Auto.
 Save.
+
 
 
 
@@ -97,6 +103,7 @@ Save.
 
 
 
+
 Definition p7 := (* validation *)
   (exist_1 [result: Z]((x:Z) `x = x`) `0` p7_po_1).
 
@@ -108,6 +115,7 @@ Save.
 
 
 
+
 Definition p8 := (* validation *)
   (exist_1 [result: Z]True /\ ((x:Z) `x = x`) `0` p8_po_1).
 
@@ -116,6 +124,17 @@ Lemma p9_po_1 :
 Proof.
 Auto.
 Save.
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -180,6 +199,7 @@ Save.
 
 
 
+
 Definition ar6 := (* validation *)
   let Pre1 = ar6_po_1 in
   (Zdiv `1` `1`).
@@ -189,6 +209,34 @@ Lemma ar7_po_1 :
 Proof.
 Omega.
 Save.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -507,6 +555,7 @@ Save.
 
 
 
+
 Definition arr1 := (* validation *)
   [v6: (array `10` Z)]let Pre1 = arr1_po_1 in
                       (access v6 `0`).
@@ -516,6 +565,7 @@ Lemma arr2_po_1 :
 Proof. (* arr2_po_1 *)
 Omega.
 Save.
+
 
 
 
@@ -530,6 +580,7 @@ Lemma arr3_po_1 :
 Proof. (* arr3_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 
@@ -557,6 +608,7 @@ Save.
 
 
 
+
 Definition arr4 := (* validation *)
   [v6: (array `10` Z); Pre3: `(access v6 0) = 9`]
     let Pre2 = (arr4_po_1 v6 Pre3) in
@@ -571,6 +623,7 @@ Lemma arr5_po_1 :
 Proof. (* arr5_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 
@@ -591,6 +644,7 @@ Lemma arr6_po_1 :
 Proof. (* arr6_po_1 *)
 Intros; Omega.
 Save.
+
 
 
 
@@ -628,6 +682,9 @@ Save.
 
 
 
+
+
+
 Definition arr7 := (* validation *)
   [v6: (array `10` Z); Pre3: `(access v6 0) = 9`]
     let Pre2 = (arr7_po_1 v6 Pre3) in
@@ -657,15 +714,19 @@ Proof. Intros; Omega. Save.
 
 
 
+
+
 Definition fc3 := (* validation *)
   let (result, Post2) = (exist_1 [result: Z]result = `0` `0`
     (refl_equal ? `0`)) in
   let result0 =
     let (result0, Post1) = (exist_1 [result0: Z]result0 = `0` `0`
       (refl_equal ? `0`)) in
+    let Pre3 = (fc3_po_1 result Post2 result0 Post1) in
     let (b0, result1, Post3) =
-      let Pre1 = (fc3_po_1 result Post2 result0 Post1) in
-      let (b0, r, Post4) = (f3 result result0 Pre1) in
+      let Pre2 = Pre3 in
+      let (b0, r, Post4) = let Pre1 = Pre2 in
+                           (f3 result result0 Pre1) in
       (exist_2 [b1: Z][result2: Z]`b1 = result0 + result + result2` b0 
       r Post4) in
     result1 in
@@ -683,6 +744,7 @@ Lemma an2_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
 
 
 
@@ -745,6 +807,7 @@ Save.
   end.
 
 (*Why*) Implicits post_E3.
+
 
 Definition an3 := (* validation *)
   [v4: Z; Pre1: `v4 >= 0`]

@@ -637,7 +637,7 @@ Definition search2 := (* validation *)
     end.
 
 Lemma search3_po_1 : 
-  (Pre9: `0 <= N`)
+  (Pre13: `0 <= N`)
   `0 <= 0` /\ `0 <= N`.
 Proof.
 Intros; Omega.
@@ -645,12 +645,14 @@ Save.
 
 Lemma search3_po_2 : 
   (t: (array N Z))
-  (Pre9: `0 <= N`)
-  (Pre8: `0 <= 0` /\ `0 <= N`)
+  (Pre13: `0 <= N`)
+  (Pre12: `0 <= 0` /\ `0 <= N`)
+  (Pre11: `0 <= 0` /\ `0 <= N`)
+  (Pre10: `0 <= 0` /\ `0 <= N`)
   (Variant1: Z)
   (i0: Z)
-  (Pre6: Variant1 = `N - i0`)
-  (Pre5: `0 <= i0` /\ `i0 <= N`)
+  (Pre8: Variant1 = `N - i0`)
+  (Pre7: `0 <= i0` /\ `i0 <= N`)
   (Test4: `i0 = N`)
   ((k:Z) (`i0 <= k` /\ `k < N` -> `(access t k) <> 0`)).
 Proof.
@@ -658,12 +660,14 @@ Intuition Omega.
 Save.
 
 Lemma search3_po_3 : 
-  (Pre9: `0 <= N`)
-  (Pre8: `0 <= 0` /\ `0 <= N`)
+  (Pre13: `0 <= N`)
+  (Pre12: `0 <= 0` /\ `0 <= N`)
+  (Pre11: `0 <= 0` /\ `0 <= N`)
+  (Pre10: `0 <= 0` /\ `0 <= N`)
   (Variant1: Z)
   (i0: Z)
-  (Pre6: Variant1 = `N - i0`)
-  (Pre5: `0 <= i0` /\ `i0 <= N`)
+  (Pre8: Variant1 = `N - i0`)
+  (Pre7: `0 <= i0` /\ `i0 <= N`)
   (Test3: `i0 <> N`)
   `0 <= i0` /\ `i0 < N`.
 Proof.
@@ -672,12 +676,14 @@ Save.
 
 Lemma search3_po_4 : 
   (t: (array N Z))
-  (Pre9: `0 <= N`)
-  (Pre8: `0 <= 0` /\ `0 <= N`)
+  (Pre13: `0 <= N`)
+  (Pre12: `0 <= 0` /\ `0 <= N`)
+  (Pre11: `0 <= 0` /\ `0 <= N`)
+  (Pre10: `0 <= 0` /\ `0 <= N`)
   (Variant1: Z)
   (i0: Z)
-  (Pre6: Variant1 = `N - i0`)
-  (Pre5: `0 <= i0` /\ `i0 <= N`)
+  (Pre8: Variant1 = `N - i0`)
+  (Pre7: `0 <= i0` /\ `i0 <= N`)
   (Test3: `i0 <> N`)
   (Test1: `(access t i0) <> 0`)
   `0 <= i0 + 1` /\ `i0 + 1 <= N`.
@@ -687,14 +693,18 @@ Save.
 
 Lemma search3_po_5 : 
   (t: (array N Z))
-  (Pre9: `0 <= N`)
-  (Pre8: `0 <= 0` /\ `0 <= N`)
+  (Pre13: `0 <= N`)
+  (Pre12: `0 <= 0` /\ `0 <= N`)
+  (Pre11: `0 <= 0` /\ `0 <= N`)
+  (Pre10: `0 <= 0` /\ `0 <= N`)
   (Variant1: Z)
   (i0: Z)
-  (Pre6: Variant1 = `N - i0`)
-  (Pre5: `0 <= i0` /\ `i0 <= N`)
+  (Pre8: Variant1 = `N - i0`)
+  (Pre7: `0 <= i0` /\ `i0 <= N`)
   (Test3: `i0 <> N`)
   (Test1: `(access t i0) <> 0`)
+  (Pre6: `0 <= i0 + 1` /\ `i0 + 1 <= N`)
+  (Pre5: `0 <= i0 + 1` /\ `i0 + 1 <= N`)
   (Pre4: `0 <= i0 + 1` /\ `i0 + 1 <= N`)
   (Zwf `0` `N - (i0 + 1)` Variant1).
 Proof.
@@ -703,14 +713,17 @@ Save.
 
 Lemma search3_po_6 : 
   (t: (array N Z))
-  (Pre9: `0 <= N`)
-  (Pre8: `0 <= 0` /\ `0 <= N`)
+  (Pre13: `0 <= N`)
+  (Pre12: `0 <= 0` /\ `0 <= N`)
+  (Pre11: `0 <= 0` /\ `0 <= N`)
+  (Pre10: `0 <= 0` /\ `0 <= N`)
   (Variant1: Z)
   (i0: Z)
-  (Pre6: Variant1 = `N - i0`)
-  (Pre5: `0 <= i0` /\ `i0 <= N`)
+  (Pre8: Variant1 = `N - i0`)
+  (Pre7: `0 <= i0` /\ `i0 <= N`)
   (Test3: `i0 <> N`)
   (Test1: `(access t i0) <> 0`)
+  (Pre6: `0 <= i0 + 1` /\ `i0 + 1 <= N`)
   (Post11: ((k:Z) (`i0 + 1 <= k` /\ `k < N` -> `(access t k) <> 0`)))
   ((k:Z) (`i0 <= k` /\ `k < N` -> `(access t k) <> 0`)).
 Proof.
@@ -722,7 +735,8 @@ Save.
 
 Lemma search3_po_7 : 
   (t: (array N Z))
-  (Pre9: `0 <= N`)
+  (Pre13: `0 <= N`)
+  (Pre12: `0 <= 0` /\ `0 <= N`)
   (Post23: ((k:Z) (`0 <= k` /\ `k < N` -> `(access t k) <> 0`)))
   ((k:Z) (`0 <= k` /\ `k < N` -> `(access t k) <> 0`)).
 Proof.
@@ -730,10 +744,12 @@ Intuition.
 Save.
 
 Definition search3 := (* validation *)
-  [t: (array N Z); Pre9: `0 <= N`]
+  [t: (array N Z); Pre13: `0 <= N`]
+    let Pre12 = (search3_po_1 Pre13) in
     let (result, Post18) =
-      let Pre8 = (search3_po_1 Pre9) in
+      let Pre11 = Pre12 in
       let (result1, Post19) =
+        let Pre10 = Pre11 in
         (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`)
           [Variant1: Z](i0: Z)(_: Variant1 = `N - i0`)(_0: `0 <= i0` /\
           `i0 <= N`)
@@ -749,7 +765,7 @@ Definition search3 := (* validation *)
                ((k:Z) (`i0 <= k` /\ `k < N` -> `(access t k) <> 0`))
                [result0: Z]`(access t result0) = 0`)
               result)));
-           i0: Z; Pre6: Variant1 = `N - i0`; Pre5: `0 <= i0` /\ `i0 <= N`]
+           i0: Z; Pre8: Variant1 = `N - i0`; Pre7: `0 <= i0` /\ `i0 <= N`]
             let (result, Bool4) =
               let (result1, Post3) = (Z_eq_bool i0 N) in
               (exist_1 [result2: bool]
@@ -763,7 +779,8 @@ Definition search3 := (* validation *)
                             ((k:Z)
                              (`i0 <= k` /\ `k < N` -> `(access t k) <> 0`))
                             [result0: Z]`(access t result0) = 0`) (Exn Z tt)
-                  (search3_po_2 t Pre9 Pre8 Variant1 i0 Pre6 Pre5 Test4)) in
+                  (search3_po_2 t Pre13 Pre12 Pre11 Pre10 Variant1 i0 Pre8
+                  Pre7 Test4)) in
                 Cases (decomp1 Post15) of
                 | (Qval (exist result1 Post16)) =>
                   (exist_1 (qcomb [result2: unit]
@@ -784,7 +801,8 @@ Definition search3 := (* validation *)
                   let (result0, Bool3) =
                     let result1 =
                       let Pre2 =
-                        (search3_po_3 Pre9 Pre8 Variant1 i0 Pre6 Pre5 Test3) in
+                        (search3_po_3 Pre13 Pre12 Pre11 Pre10 Variant1 i0
+                        Pre8 Pre7 Test3) in
                       (Z_eq_bool (access t i0)) in
                     let (result2, Post5) = (result1 `0`) in
                     (exist_1 [result3: bool]
@@ -804,15 +822,17 @@ Definition search3 := (* validation *)
                                 [result2: Z]`(access t result2) = 0`) 
                       (Val unit result1) Post12)
                   | (right Test1) =>
+                      let Pre6 =
+                        (search3_po_4 t Pre13 Pre12 Pre11 Pre10 Variant1 i0
+                        Pre8 Pre7 Test3 Test1) in
                       let (result1, Post6) =
-                        let Pre4 =
-                          (search3_po_4 t Pre9 Pre8 Variant1 i0 Pre6 Pre5
-                          Test3 Test1) in
+                        let Pre5 = Pre6 in
                         let (result3, Post7) =
+                          let Pre4 = Pre5 in
                           ((wf1 `N - (i0 + 1)`)
-                            (search3_po_5 t Pre9 Pre8 Variant1 i0 Pre6 Pre5
-                            Test3 Test1 Pre4) `i0 + 1`
-                            (refl_equal ? `N - (i0 + 1)`) Pre4) in
+                            (search3_po_5 t Pre13 Pre12 Pre11 Pre10 Variant1
+                            i0 Pre8 Pre7 Test3 Test1 Pre6 Pre5 Pre4) 
+                            `i0 + 1` (refl_equal ? `N - (i0 + 1)`) Pre4) in
                         Cases (decomp1 Post7) of
                         | (Qval (exist result4 Post8)) =>
                           (exist_1 (qcomb [result5: unit]
@@ -844,8 +864,8 @@ Definition search3 := (* validation *)
                                     `(access t k) <> 0`))
                                   [result2: Z]`(access t result2) = 0`) 
                         (Exn Z tt)
-                        (search3_po_6 t Pre9 Pre8 Variant1 i0 Pre6 Pre5 Test3
-                        Test1 Post11))
+                        (search3_po_6 t Pre13 Pre12 Pre11 Pre10 Variant1 i0
+                        Pre8 Pre7 Test3 Test1 Pre6 Post11))
                       end end) in
                 Cases (decomp1 Post4) of
                 | (Qval (exist result1 Post13)) =>
@@ -861,7 +881,7 @@ Definition search3 := (* validation *)
                              (`i0 <= k` /\ `k < N` -> `(access t k) <> 0`))
                             [result1: Z]`(access t result1) = 0`) (Exn Z tt)
                   Post14)
-                end end) `N - 0` `0` (refl_equal ? `N - 0`) Pre8) in
+                end end) `N - 0` `0` (refl_equal ? `N - 0`) Pre10) in
       Cases (decomp1 Post19) of
       | (Qval (exist result2 Post20)) =>
         (exist_1 (qcomb [result3: unit]
@@ -883,6 +903,6 @@ Definition search3 := (* validation *)
       (exist_1 (qcomb [result0: unit]
                 ((k:Z) (`0 <= k` /\ `k < N` -> `(access t k) <> 0`))
                 [result0: Z]`(access t result0) = 0`) (Exn Z tt)
-      (search3_po_7 t Pre9 Post23))
+      (search3_po_7 t Pre13 Pre12 Post23))
     end.
 

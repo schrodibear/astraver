@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.14 2002-11-27 16:43:29 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.15 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -85,10 +85,10 @@ let loc_of_expr = function
   | CEcall (l, _, _) -> l
   | CEcond (l, _, _, _) -> l
 
-(* the environment gives the C type, together with the type of the variable
-   in the ML translation *)
+(* the environment gives the C type, together with a boolean indicating
+   if a reference is used in the ML translation *)
 
-type cenv = (ctype * type_v) Ident.map
+type cenv = (ctype * bool) Ident.map
 
 let get_type l cenv id =
   try Idmap.find id cenv with Not_found -> raise_located l (UnboundVariable id)
@@ -119,6 +119,7 @@ let ml_let_tmp l e1 k2 =
 let ml_arrget l id e = mk_expr l (Sarrget (true, id, e))
 let ml_unop l op e = mk_expr l (Sapp (mk_expr l (Svar op), Sterm e))
 let ml_letref l x e1 e2 = mk_expr l (Sletref (x, e1, e2))
+let ml_app l f x = mk_expr l (Sapp (f, Sterm x))
 
 let c_true l = ml_const l (ConstInt 1)
 let c_false l = ml_const l (ConstInt 0)
@@ -242,7 +243,7 @@ let coerce l et e t = match et with
 let rec is_pure = function
   | CEvar _ | CEconst _  -> true
   | CEbinary (_, e1, _, e2) -> is_pure e1 && is_pure e2
-  | CEunary (_, _, e) -> is_pure e
+  | CEunary (_, (Uplus | Uminus | Not), e) -> is_pure e
   | CEcond (_, e1, e2, e3) -> is_pure e1 && is_pure e2 && is_pure e3
   | _ -> false
 
@@ -254,7 +255,7 @@ type lvalue =
 let interp_lvalue cenv = function
   | CEvar (l, id) ->
       (match get_type l cenv id with
-	 | ct, Ref _ -> LVid (l, id), ct
+	 | ct, true -> LVid (l, id), ct
 	 | _ -> raise_located l (NotAReference id))
   | e ->
       raise_located (loc_of_expr e) (AnyMessage "not a left-value")
@@ -272,7 +273,7 @@ let rec interp_expr cenv et e =
     let ml,ct = match e with
       | CEvar (l, id) -> 
 	  (match get_type l cenv id with
-	     | ct, Ref _ -> ml_refget l id, ct
+	     | ct, true -> ml_refget l id, ct
 	     | ct, _ -> ml_var l id , ct)
       | CEassign (l, lv, op, e) -> 
 	  (match interp_lvalue cenv lv with
@@ -298,13 +299,7 @@ let rec interp_expr cenv et e =
 	  assert (t2 = t3); (* TODO: coercion int/float *)
 	  ml_if l m1 m2 m3, t2
       | CEcall (l, e, el) ->
-	  (* vérifier que tous les arguments sont purs ? *)
-	  assert false;
-(***
-	  List.fold_left 
-	    (fun f a -> mk_expr l (Sapp (f, Sterm (interp_expr a))))
-	    (interp_expr e) el
-***)
+	  interp_call l cenv e el
       | CEbinary (l, e1, (Plus | Minus | Mult | Div | Mod as op), e2) ->
 	  let m1,t1 as m1t1 = interp_expr cenv None e1 in
 	  let m2t2 = interp_expr cenv None e2 in
@@ -371,6 +366,33 @@ let rec interp_expr cenv et e =
     in
     coerce ml.loc et ml ct
 
+(*s [interp_call] translates a function call *)
+
+and interp_call l cenv e el = 
+  let f,pt,rt = match e with
+    | CEvar (lid, id) ->
+	(match get_type lid cenv id with
+	   | CTfun (pt, rt), _ -> ml_var lid id, pt, rt
+	   | _ -> raise_located lid AppNonFunction)
+    | _ -> raise_located l AppNonFunction
+  in
+  let rec interp_args args = function
+    | [], [] ->
+	List.fold_right (fun a f -> ml_app l f a) args f, rt
+    | [], _ ->
+	raise_located l PartialApp
+    | _, [] ->
+	raise_located l TooManyArguments
+    | a :: al, at :: pt ->
+	let m,_ = interp_expr cenv (Some at) a in
+	if is_pure a then
+	  interp_args (m :: args) (al, pt)
+	else
+	  ml_let_tmp l m (fun x -> interp_args (ml_var l x :: args) (al, pt))
+  in
+  interp_args [] (el, pt)
+
+ 
 (*s [interp_boolean] returns an ML expression of type [bool] *)
 
 and interp_boolean cenv = function
@@ -406,7 +428,7 @@ let rec interp_statement cenv et = function
       interp_block l cenv et bl
   | CSfor (l, s1, s2, e3, an, s) ->
       let (i,v) = interp_loop_annot an in
-      let s3 = option_app (fun e -> CSexpr (l, e)) e3 in
+      let s3 = option_app (fun e -> CSexpr (loc_of_expr e, e)) e3 in
       let m1,_ = interp_expr cenv (Some void) s1 in
       let bl = append_to_block l s s3 in
       mk_seq l m1
@@ -436,7 +458,7 @@ and interp_block l cenv et (d,b) =
 	cenv, []
     | Ctypedecl (l, CDvar (id, Some e), v) :: dl ->
 	let m,_ = interp_expr cenv (Some (CTpure v)) e in
-	let cenv' = Idmap.add id (CTpure v, Ref (PureType v)) cenv in
+	let cenv' = Idmap.add id (CTpure v, true) cenv in
 	let cenv'',lv = interp_locals cenv' dl in
 	cenv'', (id, m) :: lv
     | Ctypedecl (l, CDvar (_, None), _) :: _ -> 
@@ -465,22 +487,25 @@ let interp_fun cenv l bl v bs =
   mk_ptree l (Slam (interp_binders bl, 
 		    interp_annotated_block cenv (Some (CTpure v)) bs)) [] None
 
+let interp_fun_type bl v =
+  CTfun (List.map (fun (v,_) -> CTpure v) bl, CTpure v), false
+
 let interp_decl cenv = function
   | Ctypedecl (l, CDvar (id, _), v) -> 
       Parameter (l, [id], PVref (PVpure v)),
-      Idmap.add id (CTpure v, Ref (PureType v)) cenv
+      Idmap.add id (CTpure v, true) cenv
   | Ctypedecl (l, CDfun (id, bl, an), v) -> 
       let bl = if bl = [] then [PTunit, anonymous] else bl in
       let k = interp_c_spec v an in
-      let bl = List.map (fun (v, id) -> (id, BindType (PVpure v))) bl in
-      Parameter (l, [id], PVarrow (bl, k)),
-      cenv (* TODO *)
+      let blp = List.map (fun (v, id) -> (id, BindType (PVpure v))) bl in
+      Parameter (l, [id], PVarrow (blp, k)),
+      Idmap.add id (interp_fun_type bl v) cenv
   | Ctypedecl _ -> 
       assert false
   | Cfundef (l, id, bl, v, bs) ->
       let bl = if bl = [] then [PTunit, anonymous] else bl in
       Program (id, interp_fun cenv l bl v bs),
-      cenv (* TODO *)
+      Idmap.add id (interp_fun_type bl v) cenv
 
 let interp = 
   let rec interp_list cenv = function

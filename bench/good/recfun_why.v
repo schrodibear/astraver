@@ -5,11 +5,11 @@ Require Why.
 
 Lemma f1_po_1 : 
   (x: Z)
-  (Pre6: `x >= 0`)
+  (Pre8: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `x0 >= 0`)
+  (Pre7: Variant1 = x0)
+  (Pre6: `x0 >= 0`)
   (Test2: `x0 > 0`)
   `x0 - 1 >= 0`.
 Proof.
@@ -18,12 +18,14 @@ Save.
 
 Lemma f1_po_2 : 
   (x: Z)
-  (Pre6: `x >= 0`)
+  (Pre8: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `x0 >= 0`)
+  (Pre7: Variant1 = x0)
+  (Pre6: `x0 >= 0`)
   (Test2: `x0 > 0`)
+  (Pre5: `x0 - 1 >= 0`)
+  (Pre4: `x0 - 1 >= 0`)
   (Pre3: `x0 - 1 >= 0`)
   (Zwf `0` `x0 - 1` Variant1).
 Proof.
@@ -32,11 +34,11 @@ Save.
 
 Lemma f1_po_3 : 
   (x: Z)
-  (Pre6: `x >= 0`)
+  (Pre8: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `x0 >= 0`)
+  (Pre7: Variant1 = x0)
+  (Pre6: `x0 >= 0`)
   (Test1: `x0 <= 0`)
   `x0 = 0`.
 Proof.
@@ -46,15 +48,16 @@ Save.
 
 
 
+
 Definition f1 := (* validation *)
-  [x: Z; Pre6: `x >= 0`]
+  [x: Z; Pre8: `x >= 0`]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
       (x0: Z)(_: Variant1 = x0)(_0: `x0 >= 0`)
       (sig_1 Z [result: Z](`result = 0`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (x0: Z)(_: Variant2 = x0)(_0: `x0 >= 0`)
-       (sig_1 Z [result: Z](`result = 0`)); x0: Z; Pre5: Variant1 = x0;
-       Pre4: `x0 >= 0`]
+       (sig_1 Z [result: Z](`result = 0`)); x0: Z; Pre7: Variant1 = x0;
+       Pre6: `x0 >= 0`]
         let (result, Bool2) =
           let (result1, Post2) = (Z_gt_le_bool x0 `0`) in
           (exist_1 [result2: bool]
@@ -62,27 +65,29 @@ Definition f1 := (* validation *)
         (Cases (btest [result:bool](if result then `x0 > 0` else `x0 <= 0`)
                 result Bool2) of
         | (left Test2) =>
+            let Pre5 = (f1_po_1 x Pre8 Variant1 x0 Pre7 Pre6 Test2) in
             let (result0, Post4) =
-              let Pre3 = (f1_po_1 x Pre6 Variant1 x0 Pre5 Pre4 Test2) in
+              let Pre4 = Pre5 in
               let (result2, Post5) =
+                let Pre3 = Pre4 in
                 ((wf1 `x0 - 1`)
-                  (f1_po_2 x Pre6 Variant1 x0 Pre5 Pre4 Test2 Pre3) `x0 - 1`
-                  (refl_equal ? `x0 - 1`) Pre3) in
+                  (f1_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Test2 Pre5 Pre4 Pre3)
+                  `x0 - 1` (refl_equal ? `x0 - 1`) Pre3) in
               (exist_1 [result3: Z]`result3 = 0` result2 Post5) in
             (exist_1 [result1: Z]`result1 = 0` result0 Post4)
         | (right Test1) =>
             let (result0, Post3) = (exist_1 [result0: Z]`result0 = 0` 
-              x0 (f1_po_3 x Pre6 Variant1 x0 Pre5 Pre4 Test1)) in
+              x0 (f1_po_3 x Pre8 Variant1 x0 Pre7 Pre6 Test1)) in
             (exist_1 [result1: Z]`result1 = 0` result0 Post3) end) x 
-      x (refl_equal ? x) Pre6).
+      x (refl_equal ? x) Pre8).
 
 Lemma f2_po_1 : 
   (x: Z)
-  (Pre6: `x >= 0`)
+  (Pre8: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `x0 >= 0`)
+  (Pre7: Variant1 = x0)
+  (Pre6: `x0 >= 0`)
   (Test2: `x0 > 0`)
   (x1: Z)
   (Post2: x1 = `x0 - 1`)
@@ -93,14 +98,16 @@ Save.
 
 Lemma f2_po_2 : 
   (x: Z)
-  (Pre6: `x >= 0`)
+  (Pre8: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `x0 >= 0`)
+  (Pre7: Variant1 = x0)
+  (Pre6: `x0 >= 0`)
   (Test2: `x0 > 0`)
   (x1: Z)
   (Post2: x1 = `x0 - 1`)
+  (Pre5: `x1 >= 0`)
+  (Pre4: `x1 >= 0`)
   (Pre3: `x1 >= 0`)
   (Zwf `0` x1 Variant1).
 Proof.
@@ -109,11 +116,11 @@ Save.
 
 Lemma f2_po_3 : 
   (x: Z)
-  (Pre6: `x >= 0`)
+  (Pre8: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: Variant1 = x0)
-  (Pre4: `x0 >= 0`)
+  (Pre7: Variant1 = x0)
+  (Pre6: `x0 >= 0`)
   (Test1: `x0 <= 0`)
   `x0 = 0`.
 Proof.
@@ -122,15 +129,16 @@ Save.
 
 
 
+
 Definition f2 := (* validation *)
-  [u: unit; x: Z; Pre6: `x >= 0`]
+  [u: unit; x: Z; Pre8: `x >= 0`]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
       (u0: unit)(x0: Z)(_: Variant1 = x0)(_0: `x0 >= 0`)
       (sig_2 Z unit [x1: Z][result: unit](`x1 = 0`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (u0: unit)(x0: Z)(_: Variant2 = x0)(_0: `x0 >= 0`)
        (sig_2 Z unit [x1: Z][result: unit](`x1 = 0`)); u0: unit; x0: Z;
-       Pre5: Variant1 = x0; Pre4: `x0 >= 0`]
+       Pre7: Variant1 = x0; Pre6: `x0 >= 0`]
         let (result, Bool2) =
           let (result1, Post4) = (Z_gt_le_bool x0 `0`) in
           (exist_1 [result2: bool]
@@ -144,30 +152,32 @@ Definition f2 := (* validation *)
                   result0 = `x0 - 1` `x0 - 1` (refl_equal ? `x0 - 1`)) in
                 (exist_2 [x2: Z][result1: unit]x2 = `x0 - 1` result0 
                 tt Post2) in
+              let Pre5 =
+                (f2_po_1 x Pre8 Variant1 x0 Pre7 Pre6 Test2 x1 Post2) in
               let (x2, result1, Post7) =
-                let Pre3 =
-                  (f2_po_1 x Pre6 Variant1 x0 Pre5 Pre4 Test2 x1 Post2) in
+                let Pre4 = Pre5 in
                 let (x2, result3, Post8) =
+                  let Pre3 = Pre4 in
                   ((wf1 x1)
-                    (f2_po_2 x Pre6 Variant1 x0 Pre5 Pre4 Test2 x1 Post2
-                    Pre3) tt x1 (refl_equal ? x1) Pre3) in
+                    (f2_po_2 x Pre8 Variant1 x0 Pre7 Pre6 Test2 x1 Post2 Pre5
+                    Pre4 Pre3) tt x1 (refl_equal ? x1) Pre3) in
                 (exist_2 [x3: Z][result4: unit]`x3 = 0` x2 result3 Post8) in
               (exist_2 [x3: Z][result2: unit]`x3 = 0` x2 result1 Post7) in
             (exist_2 [x2: Z][result1: unit]`x2 = 0` x1 result0 Post6)
         | (right Test1) =>
             let (result0, Post5) = (exist_1 [result0: unit]`x0 = 0` tt
-              (f2_po_3 x Pre6 Variant1 x0 Pre5 Pre4 Test1)) in
+              (f2_po_3 x Pre8 Variant1 x0 Pre7 Pre6 Test1)) in
             (exist_2 [x1: Z][result1: unit]`x1 = 0` x0 result0 Post5) end) 
-      x u x (refl_equal ? x) Pre6).
+      x u x (refl_equal ? x) Pre8).
 
 Lemma f3_po_1 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test2: `a0 > 0`)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
@@ -178,15 +188,17 @@ Save.
 
 Lemma f3_po_2 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test2: `a0 > 0`)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
+  (Pre5: `a0 - 1 >= 0`)
+  (Pre4: `a0 - 1 >= 0`)
   (Pre3: `a0 - 1 >= 0`)
   (Zwf `0` `a0 - 1` Variant1).
 Proof.
@@ -195,15 +207,16 @@ Save.
 
 Lemma f3_po_3 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test2: `a0 > 0`)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
+  (Pre5: `a0 - 1 >= 0`)
   (x2: Z)
   (Post7: `x2 = x1 + (a0 - 1)`)
   `x2 = x0 + a0`.
@@ -213,12 +226,12 @@ Save.
 
 Lemma f3_po_4 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test1: `a0 <= 0`)
   `x0 = x0 + a0`.
 Proof.
@@ -227,15 +240,16 @@ Save.
 
 
 
+
 Definition f3 := (* validation *)
-  [a: Z; x: Z; Pre6: `a >= 0`]
+  [a: Z; x: Z; Pre8: `a >= 0`]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
       (a0: Z)(x0: Z)(_: Variant1 = a0)(_0: `a0 >= 0`)
       (sig_2 Z unit [x1: Z][result: unit](`x1 = x0 + a0`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (a0: Z)(x0: Z)(_: Variant2 = a0)(_0: `a0 >= 0`)
        (sig_2 Z unit [x1: Z][result: unit](`x1 = x0 + a0`)); a0: Z; x0: Z;
-       Pre5: Variant1 = a0; Pre4: `a0 >= 0`]
+       Pre7: Variant1 = a0; Pre6: `a0 >= 0`]
         let (result, Bool2) =
           let (result1, Post4) = (Z_gt_le_bool a0 `0`) in
           (exist_1 [result2: bool]
@@ -249,33 +263,35 @@ Definition f3 := (* validation *)
                   result0 = `x0 + 1` `x0 + 1` (refl_equal ? `x0 + 1`)) in
                 (exist_2 [x2: Z][result1: unit]x2 = `x0 + 1` result0 
                 tt Post2) in
+              let Pre5 =
+                (f3_po_1 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post2) in
               let (x2, result1, Post7) =
-                let Pre3 =
-                  (f3_po_1 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test2 x1 Post2) in
+                let Pre4 = Pre5 in
                 let (x2, result3, Post8) =
+                  let Pre3 = Pre4 in
                   ((wf1 `a0 - 1`)
-                    (f3_po_2 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test2 x1 Post2
-                    Pre3) `a0 - 1` x1 (refl_equal ? `a0 - 1`) Pre3) in
+                    (f3_po_2 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post2
+                    Pre5 Pre4 Pre3) `a0 - 1` x1 (refl_equal ? `a0 - 1`) Pre3) in
                 (exist_2 [x3: Z][result4: unit]`x3 = x1 + (a0 - 1)` x2
                 result3 Post8) in
               (exist_2 [x3: Z][result2: unit]`x3 = x0 + a0` x2 result1
-              (f3_po_3 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test2 x1 Post2 x2
+              (f3_po_3 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post2 Pre5 x2
               Post7)) in
             (exist_2 [x2: Z][result1: unit]`x2 = x0 + a0` x1 result0 Post6)
         | (right Test1) =>
             let (result0, Post5) = (exist_1 [result0: unit]`x0 = x0 + a0` 
-              tt (f3_po_4 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test1)) in
+              tt (f3_po_4 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test1)) in
             (exist_2 [x1: Z][result1: unit]`x1 = x0 + a0` x0 result0 Post5) end)
-      a a x (refl_equal ? a) Pre6).
+      a a x (refl_equal ? a) Pre8).
 
 Lemma f4_po_1 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test2: `a0 > 0`)
   (x1: Z)
   (Post3: x1 = `x0 + 1`)
@@ -288,17 +304,19 @@ Save.
 
 Lemma f4_po_2 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test2: `a0 > 0`)
   (x1: Z)
   (Post3: x1 = `x0 + 1`)
   (a1: Z)
   (Post4: a1 = `a0 - 1`)
+  (Pre5: `a1 >= 0`)
+  (Pre4: `a1 >= 0`)
   (Pre3: `a1 >= 0`)
   (Zwf `0` a1 Variant1).
 Proof.
@@ -307,17 +325,18 @@ Save.
 
 Lemma f4_po_3 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test2: `a0 > 0`)
   (x1: Z)
   (Post3: x1 = `x0 + 1`)
   (a1: Z)
   (Post4: a1 = `a0 - 1`)
+  (Pre5: `a1 >= 0`)
   (x2: Z)
   (Post9: `x2 = x1 + a1`)
   `x2 = x0 + a0`.
@@ -327,12 +346,12 @@ Save.
 
 Lemma f4_po_4 : 
   (a: Z)
-  (Pre6: `a >= 0`)
+  (Pre8: `a >= 0`)
   (Variant1: Z)
   (a0: Z)
   (x0: Z)
-  (Pre5: Variant1 = a0)
-  (Pre4: `a0 >= 0`)
+  (Pre7: Variant1 = a0)
+  (Pre6: `a0 >= 0`)
   (Test1: `a0 <= 0`)
   `x0 = x0 + a0`.
 Proof.
@@ -341,15 +360,16 @@ Save.
 
 
 
+
 Definition f4 := (* validation *)
-  [a: Z; x: Z; Pre6: `a >= 0`]
+  [a: Z; x: Z; Pre8: `a >= 0`]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
       (a0: Z)(x0: Z)(_: Variant1 = a0)(_0: `a0 >= 0`)
       (sig_3 Z Z unit [a1: Z][x1: Z][result: unit](`x1 = x0 + a0`))
       [Variant1: Z; wf1: (Variant2: Z)(Pre1: (Zwf `0` Variant2 Variant1))
        (a0: Z)(x0: Z)(_: Variant2 = a0)(_0: `a0 >= 0`)
        (sig_3 Z Z unit [a1: Z][x1: Z][result: unit](`x1 = x0 + a0`)); a0: Z;
-       x0: Z; Pre5: Variant1 = a0; Pre4: `a0 >= 0`]
+       x0: Z; Pre7: Variant1 = a0; Pre6: `a0 >= 0`]
         let (result, Bool2) =
           let (result1, Post6) = (Z_gt_le_bool a0 `0`) in
           (exist_1 [result2: bool]
@@ -368,25 +388,27 @@ Definition f4 := (* validation *)
                   result1 = `a0 - 1` `a0 - 1` (refl_equal ? `a0 - 1`)) in
                 (exist_2 [a2: Z][result2: unit]a2 = `a0 - 1` result1 
                 tt Post4) in
+              let Pre5 =
+                (f4_po_1 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post3 a1
+                Post4) in
               let (a2, x2, result2, Post9) =
-                let Pre3 =
-                  (f4_po_1 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test2 x1 Post3 a1
-                  Post4) in
+                let Pre4 = Pre5 in
                 let (a2, x2, result3, Post10) =
+                  let Pre3 = Pre4 in
                   ((wf1 a1)
-                    (f4_po_2 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test2 x1 Post3
-                    a1 Post4 Pre3) a1 x1 (refl_equal ? a1) Pre3) in
+                    (f4_po_2 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post3
+                    a1 Post4 Pre5 Pre4 Pre3) a1 x1 (refl_equal ? a1) Pre3) in
                 (exist_3 [a3: Z][x3: Z][result4: unit]`x3 = x1 + a1` 
                 a2 x2 result3 Post10) in
               (exist_3 [a3: Z][x3: Z][result3: unit]`x3 = x0 + a0` a2 
               x2 result2
-              (f4_po_3 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test2 x1 Post3 a1
-              Post4 x2 Post9)) in
+              (f4_po_3 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test2 x1 Post3 a1
+              Post4 Pre5 x2 Post9)) in
             (exist_3 [a2: Z][x2: Z][result1: unit]`x2 = x0 + a0` a1 x1
             result0 Post8)
         | (right Test1) =>
             let (result0, Post7) = (exist_1 [result0: unit]`x0 = x0 + a0` 
-              tt (f4_po_4 a Pre6 Variant1 a0 x0 Pre5 Pre4 Test1)) in
+              tt (f4_po_4 a Pre8 Variant1 a0 x0 Pre7 Pre6 Test1)) in
             (exist_3 [a1: Z][x1: Z][result1: unit]`x1 = x0 + a0` a0 x0
-            result0 Post7) end) a a x (refl_equal ? a) Pre6).
+            result0 Post7) end) a a x (refl_equal ? a) Pre8).
 

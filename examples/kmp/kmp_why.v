@@ -94,7 +94,7 @@ Lemma initnext_po_4 :
          (`j0 + 1 < z` /\ `z < i0 + 1` -> ~(match p `i0 + 1 - z` p `0` z))) /\
         ((k:Z) (`0 < k` /\ `k <= i0` -> (Next p k (access next1 k)))))
   (Test7: `i0 < M - 1`)
-  (Pre3: `0 <= j0` /\ `j0 < M`)
+  (Pre4: `0 <= j0` /\ `j0 < M`)
   `0 <= i0` /\ `i0 < M`.
 Proof.
 Intuition.
@@ -589,15 +589,15 @@ Definition initnext := (* validation *)
                           let (i1, j1, next2, result4, Inv0) =
                             let (i1, j1, next2, result4, Inv0) =
                               let (result4, Bool2) =
-                                let Pre3 =
+                                let Pre4 =
                                   (initnext_po_3 next p result Post9 result0
                                   Post8 Test8 next0 Post1 Variant1 i0 j0
                                   next1 Pre8 Inv Test7) in
                                 let result5 =
-                                  let Pre4 =
+                                  let Pre3 =
                                     (initnext_po_4 next p result Post9
                                     result0 Post8 Test8 next0 Post1 Variant1
-                                    i0 j0 next1 Pre8 Inv Test7 Pre3) in
+                                    i0 j0 next1 Pre8 Inv Test7 Pre4) in
                                   (A_eq_bool (access p i0)) in
                                 let (result6, Post19) =
                                   (result5 (access p j0)) in
@@ -981,7 +981,7 @@ Lemma kmp_po_5 :
         (match a `i0 - j0` p `0` j0) /\
         ((k:Z) (`0 <= k` /\ `k < i0 - j0` -> ~(match a k p `0` M))))
   (Test8: `j0 < M` /\ `i0 < N` \/ `j0 >= M` /\ true = false)
-  (Pre2: `0 <= j0` /\ `j0 < M`)
+  (Pre3: `0 <= j0` /\ `j0 < M`)
   `0 <= i0` /\ `i0 < N`.
 Proof.
 Intuition.
@@ -1341,13 +1341,13 @@ Definition kmp := (* validation *)
                     let (i1, j1, result3, Inv0) =
                       let (i1, j1, result3, Inv0) =
                         let (result3, Bool3) =
-                          let Pre2 =
+                          let Pre3 =
                             (kmp_po_4 a p result Post8 result0 Post7 next0
                             Post15 Variant1 i0 j0 Pre5 Inv Test8) in
                           let result4 =
-                            let Pre3 =
+                            let Pre2 =
                               (kmp_po_5 a p result Post8 result0 Post7 next0
-                              Post15 Variant1 i0 j0 Pre5 Inv Test8 Pre2) in
+                              Post15 Variant1 i0 j0 Pre5 Inv Test8 Pre3) in
                             (A_eq_bool (access a i0)) in
                           let (result5, Post19) = (result4 (access p j0)) in
                           (exist_1 [result6: bool]

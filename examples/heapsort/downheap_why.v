@@ -148,16 +148,16 @@ Lemma downheap_po_1 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -172,21 +172,21 @@ Lemma downheap_po_2 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
   (Test5: `j + 1 <= n0`)
-  (Pre2: `0 <= j + 1` /\ `j + 1 < N0`)
+  (Pre3: `0 <= j + 1` /\ `j + 1 < N0`)
   `0 <= j` /\ `j < N0`.
 Proof.
 Intros; Omega'.
@@ -197,16 +197,16 @@ Lemma downheap_po_3 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -225,16 +225,16 @@ Lemma downheap_po_4 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -253,16 +253,16 @@ Lemma downheap_po_5 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -279,16 +279,16 @@ Lemma downheap_po_6 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -304,22 +304,22 @@ Lemma downheap_po_7 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
   (j': Z)
   (Post11: (select_son t0 k0 n0 j'))
-  (Pre4: `0 <= j'` /\ `j' < N0`)
+  (Pre5: `0 <= j'` /\ `j' < N0`)
   `0 <= k0` /\ `k0 < N0`.
 Proof.
 Intros; Omega'.
@@ -330,16 +330,16 @@ Lemma downheap_po_8 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -356,22 +356,23 @@ Lemma downheap_po_9 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
   (j': Z)
   (Post11: (select_son t0 k0 n0 j'))
   (Test7: `(access t0 k0) < (access t0 j')`)
+  (Pre12: (`0 <= k0` /\ `k0 < N0`) /\ `0 <= j'` /\ `j' < N0`)
   (t1: (array N0 Z))
   (Post22: (exchange t1 t0 k0 j'))
   (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
@@ -382,7 +383,7 @@ Apply heap_id with t := t0.
 Apply H7; Elim Post11; Omega'.
 Unfold array_id. Intros i' Hi'.
 Elim Post22; Intros.
-Symmetry; Apply (H13 i'); Elim Post11; Omega'.
+Symmetry; Apply (H17 i'); Elim Post11; Omega'.
 Save.
 
 Lemma downheap_po_10 : 
@@ -390,25 +391,30 @@ Lemma downheap_po_10 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
   (j': Z)
   (Post11: (select_son t0 k0 n0 j'))
   (Test7: `(access t0 k0) < (access t0 j')`)
+  (Pre12: (`0 <= k0` /\ `k0 < N0`) /\ `0 <= j'` /\ `j' < N0`)
   (t1: (array N0 Z))
   (Post22: (exchange t1 t0 k0 j'))
-  (Pre8: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+  (Pre11: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre10: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre9: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (Zwf `0` `n0 - j'` Variant1).
 Proof.
@@ -420,25 +426,30 @@ Lemma downheap_po_11 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
   (j': Z)
   (Post11: (select_son t0 k0 n0 j'))
   (Test7: `(access t0 k0) < (access t0 j')`)
+  (Pre12: (`0 <= k0` /\ `k0 < N0`) /\ `0 <= j'` /\ `j' < N0`)
   (t1: (array N0 Z))
   (Post22: (exchange t1 t0 k0 j'))
-  (Pre8: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+  (Pre11: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre10: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
+  (Pre9: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
   ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))).
@@ -451,24 +462,27 @@ Lemma downheap_po_12 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
   (j': Z)
   (Post11: (select_son t0 k0 n0 j'))
   (Test7: `(access t0 k0) < (access t0 j')`)
+  (Pre12: (`0 <= k0` /\ `k0 < N0`) /\ `0 <= j'` /\ `j' < N0`)
   (t1: (array N0 Z))
   (Post22: (exchange t1 t0 k0 j'))
+  (Pre11: (`0 <= j'` /\ `j' <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`j' + 1 <= i` /\ `i <= n0` -> (heap t1 n0 i))))
   (t2: (array N0 Z))
   (Post24: (permut t2 t1) /\
            ((i:Z) (`j' <= i` /\ `i <= n0` -> (heap t2 n0 i))) /\
@@ -490,40 +504,40 @@ Intuition. Apply exchange_is_permut with i:=k0 j:=j'; Assumption.
 (* heap *)
 Apply (Lemma_2 N0 t0 t1 t2 n0 k0 j'); Assumption Orelse Omega'.
 (* unchanged parts of the array *)
-Rewrite (H8 i); 
-[ Decompose [exchange] Post22; Apply H17 | Idtac ];
+Rewrite (H16 i);
+[ Decompose [exchange] Post22; Apply H25 | Idtac ];
 Decompose [select_son] Post11; Omega'.
-Rewrite (H8 i); 
-[ Decompose [exchange] Post22; Apply H17 | Idtac ];
+Rewrite (H16 i); 
+[ Decompose [exchange] Post22; Apply H25 | Idtac ];
 Decompose [select_son] Post11; Omega'.
-Rewrite (H8 i); 
-[ Decompose [exchange] Post22; Apply H17 | Idtac ];
+Rewrite (H16 i); 
+[ Decompose [exchange] Post22; Apply H25 | Idtac ];
 Decompose [select_son] Post11; Omega'.
 (* inftree *)
 Apply inftree_cons.
 Split; Assumption.
-Rewrite (H8 k0). 
-Decompose [exchange] Post22. Rewrite H14. 
+Rewrite (H16 k0). 
+Decompose [exchange] Post22. Rewrite H22. 
 Elim Post11; Intros.
   (* j' = 2k+1 *)
-  Rewrite H17. Generalize Test8; Rewrite Post2. Case H10; Intros.
+  Rewrite H25. Generalize Test8; Rewrite Post2. Case H18; Intros.
   Apply inftree_1 with n:=n0. Auto.
   (* j' = 2k+2 *)
-  Generalize H18. Rewrite H17. Case H10; Intros.
+  Generalize H26. Rewrite H25. Case H18; Intros.
   Apply inftree_1 with n:=n0. Auto.
 Elim Post11; Intros; Omega'.
   (* branch 2k+1 *)
   Intro. Elim Post11; Intros.
     (* j' = 2k+1 *)
-    Rewrite <- H13. Apply H11. 
+    Rewrite <- H21. Apply H19. 
     Apply inftree_2 with t1:=t0 k:=k0. Omega'. 
-    Rewrite H13. Generalize H12. Case H10; Auto.
+    Rewrite H21. Generalize H20. Case H18; Auto.
     Assumption. Omega'. Omega'.
     (* j' = 2k+2 *)
     Apply inftree_trans with v:=#t2[`2*k0+1`].
-    Rewrite (H8 `2*k0+1`).
-    Decompose [exchange] Post22. Rewrite (H20 `2*k0+1`).
-    Generalize H12. Case H10; Intros.
+    Rewrite (H16 `2*k0+1`).
+    Decompose [exchange] Post22. Rewrite (H28 `2*k0+1`).
+    Generalize H20. Case H18; Intros.
     Apply inftree_1 with n:=n0. Auto.
     Omega'. Omega'. Omega'. Omega'.
     Apply inftree_3.
@@ -532,17 +546,17 @@ Elim Post11; Intros; Omega'.
   Intro. Elim Post11; Intros.
     (* j' = 2k+1 *)
     Apply inftree_trans with v:=#t2[`2*k0+2`].
-    Rewrite (H8 `2*k0+2`).
-    Decompose [exchange] Post22. Rewrite (H19 `2*k0+2`).
-    Generalize H12. Case H10; Intros.
+    Rewrite (H16 `2*k0+2`).
+    Decompose [exchange] Post22. Rewrite (H27 `2*k0+2`).
+    Generalize H20. Case H18; Intros.
     Apply inftree_1 with n:=n0. Auto.
     Omega'. Omega'. Omega'. Omega'.
     Apply inftree_3.
-    Apply H9; Omega'.
+    Apply H17; Omega'.
     (* j' = 2k+2 *)
-    Rewrite <- H13. Apply H11. 
+    Rewrite <- H21. Apply H19. 
     Apply inftree_2 with t1:=t0 k:=k0. Omega'. 
-    Rewrite H13. Generalize H12. Case H10; Auto.
+    Rewrite H21. Generalize H20. Case H18; Auto.
     Assumption. Omega'. Omega'.
 Save.
 
@@ -551,16 +565,16 @@ Lemma downheap_po_13 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test8: `j <= n0`)
@@ -593,16 +607,16 @@ Lemma downheap_po_14 :
   (k: Z)
   (n: Z)
   (t: (array N Z))
-  (Pre11: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
+  (Pre15: (`0 <= k` /\ `k <= n`) /\ `n < N` /\
           ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i))))
   (Variant1: Z)
   (N0: Z)
   (k0: Z)
   (n0: Z)
   (t0: (array N0 Z))
-  (Pre10: Variant1 = `n0 - k0`)
-  (Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
-         ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
+  (Pre14: Variant1 = `n0 - k0`)
+  (Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+          ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i))))
   (j: Z)
   (Post2: j = `2 * k0 + 1`)
   (Test1: `j > n0`)
@@ -626,7 +640,7 @@ Save.
 Require swap_why.
 
 Definition downheap := (* validation *)
-  [N: Z; k: Z; n: Z; t: (array N Z); Pre11: (`0 <= k` /\ `k <= n`) /\
+  [N: Z; k: Z; n: Z; t: (array N Z); Pre15: (`0 <= k` /\ `k <= n`) /\
    `n < N` /\ ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t n i)))]
     (well_founded_induction Z (Zwf ZERO) (Zwf_well_founded `0`) [Variant1: Z]
       (N0: Z)(k0: Z)(n0: Z)(t0: (array N0 Z))(_: Variant1 = `n0 - k0`)
@@ -650,8 +664,8 @@ Definition downheap := (* validation *)
          (`0 <= i` /\ `i < k0` \/ `k0 < i` /\ `i < 2 * k0 + 1` \/ `n0 < i` /\
           `i < N0` -> `(access t1 i) = (access t0 i)`)) /\
         ((v:Z) ((inftree t0 n0 v k0) -> (inftree t1 n0 v k0)))));
-       N0: Z; k0: Z; n0: Z; t0: (array N0 Z); Pre10: Variant1 = `n0 - k0`;
-       Pre9: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
+       N0: Z; k0: Z; n0: Z; t0: (array N0 Z); Pre14: Variant1 = `n0 - k0`;
+       Pre13: (`0 <= k0` /\ `k0 <= n0`) /\ `n0 < N0` /\
        ((i:Z) (`k0 + 1 <= i` /\ `i <= n0` -> (heap t0 n0 i)))]
         let (j, Post2) = (exist_1 [result: Z]
           result = `2 * k0 + 1` `2 * k0 + 1` (refl_equal ? `2 * k0 + 1`)) in
@@ -677,13 +691,13 @@ Definition downheap := (* validation *)
                   | (left Test5) =>
                       let (result1, Post14) =
                         let (result1, Bool5) =
-                          let Pre2 =
-                            (downheap_po_1 N k n t Pre11 Variant1 N0 k0 n0 t0
-                            Pre10 Pre9 j Post2 Test8 Test5) in
+                          let Pre3 =
+                            (downheap_po_1 N k n t Pre15 Variant1 N0 k0 n0 t0
+                            Pre14 Pre13 j Post2 Test8 Test5) in
                           let result2 =
-                            let Pre3 =
-                              (downheap_po_2 N k n t Pre11 Variant1 N0 k0 n0
-                              t0 Pre10 Pre9 j Post2 Test8 Test5 Pre2) in
+                            let Pre2 =
+                              (downheap_po_2 N k n t Pre15 Variant1 N0 k0 n0
+                              t0 Pre14 Pre13 j Post2 Test8 Test5 Pre3) in
                             (Z_lt_ge_bool (access t0 j)) in
                           let (result3, Post15) =
                             (result2 (access t0 `j + 1`)) in
@@ -702,15 +716,15 @@ Definition downheap := (* validation *)
                         | (left Test4) =>
                             let (result2, Post17) = (exist_1 [result2: Z]
                               (select_son t0 k0 n0 result2) `j + 1`
-                              (downheap_po_3 N k n t Pre11 Variant1 N0 k0 n0
-                              t0 Pre10 Pre9 j Post2 Test8 Test5 Test4)) in
+                              (downheap_po_3 N k n t Pre15 Variant1 N0 k0 n0
+                              t0 Pre14 Pre13 j Post2 Test8 Test5 Test4)) in
                             (exist_1 [result3: Z]
                             (select_son t0 k0 n0 result3) result2 Post17)
                         | (right Test3) =>
                             let (result2, Post16) = (exist_1 [result2: Z]
                               (select_son t0 k0 n0 result2) j
-                              (downheap_po_4 N k n t Pre11 Variant1 N0 k0 n0
-                              t0 Pre10 Pre9 j Post2 Test8 Test5 Test3)) in
+                              (downheap_po_4 N k n t Pre15 Variant1 N0 k0 n0
+                              t0 Pre14 Pre13 j Post2 Test8 Test5 Test3)) in
                             (exist_1 [result3: Z]
                             (select_son t0 k0 n0 result3) result2 Post16) end) in
                       (exist_1 [result2: Z]
@@ -718,19 +732,19 @@ Definition downheap := (* validation *)
                   | (right Test2) =>
                       let (result1, Post13) = (exist_1 [result1: Z]
                         (select_son t0 k0 n0 result1) j
-                        (downheap_po_5 N k n t Pre11 Variant1 N0 k0 n0 t0
-                        Pre10 Pre9 j Post2 Test8 Test2)) in
+                        (downheap_po_5 N k n t Pre15 Variant1 N0 k0 n0 t0
+                        Pre14 Pre13 j Post2 Test8 Test2)) in
                       (exist_1 [result2: Z]
                       (select_son t0 k0 n0 result2) result1 Post13) end) in
                 let (t1, result0, Post18) =
                   let (result0, Bool7) =
-                    let Pre4 =
-                      (downheap_po_6 N k n t Pre11 Variant1 N0 k0 n0 t0 Pre10
-                      Pre9 j Post2 Test8 j' Post11) in
+                    let Pre5 =
+                      (downheap_po_6 N k n t Pre15 Variant1 N0 k0 n0 t0 Pre14
+                      Pre13 j Post2 Test8 j' Post11) in
                     let result1 =
-                      let Pre5 =
-                        (downheap_po_7 N k n t Pre11 Variant1 N0 k0 n0 t0
-                        Pre10 Pre9 j Post2 Test8 j' Post11 Pre4) in
+                      let Pre4 =
+                        (downheap_po_7 N k n t Pre15 Variant1 N0 k0 n0 t0
+                        Pre14 Pre13 j Post2 Test8 j' Post11 Pre5) in
                       (Z_lt_ge_bool (access t0 k0)) in
                     let (result2, Post19) = (result1 (access t0 j')) in
                     (exist_1 [result3: bool]
@@ -746,28 +760,32 @@ Definition downheap := (* validation *)
                           result0 Bool7) of
                   | (left Test7) =>
                       let (t1, result1, Post21) =
+                        let Pre12 =
+                          (downheap_po_8 N k n t Pre15 Variant1 N0 k0 n0 t0
+                          Pre14 Pre13 j Post2 Test8 j' Post11 Test7) in
                         let (t1, result1, Post22) =
-                          let Pre6 =
-                            (downheap_po_8 N k n t Pre11 Variant1 N0 k0 n0 t0
-                            Pre10 Pre9 j Post2 Test8 j' Post11 Test7) in
+                          let Pre7 = Pre12 in
                           let (t1, result3, Post23) =
+                            let Pre6 = Pre7 in
                             (swap N0 k0 j' t0 Pre6) in
                           (exist_2 [t2: (array N0 Z)][result4: unit]
                           (exchange t2 t0 k0 j') t1 result3 Post23) in
+                        let Pre11 =
+                          (downheap_po_9 N k n t Pre15 Variant1 N0 k0 n0 t0
+                          Pre14 Pre13 j Post2 Test8 j' Post11 Test7 Pre12 t1
+                          Post22) in
                         let (t2, result2, Post24) =
-                          let Pre8 =
-                            (downheap_po_9 N k n t Pre11 Variant1 N0 k0 n0 t0
-                            Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
-                            Post22) in
+                          let Pre10 = Pre11 in
                           let (t2, result4, Post25) =
+                            let Pre9 = Pre10 in
                             ((wf1 `n0 - j'`)
-                              (downheap_po_10 N k n t Pre11 Variant1 N0 k0 n0
-                              t0 Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
-                              Post22 Pre8) N0 j' n0 t1
-                              (refl_equal ? `n0 - j'`)
-                              (downheap_po_11 N k n t Pre11 Variant1 N0 k0 n0
-                              t0 Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1
-                              Post22 Pre8)) in
+                              (downheap_po_10 N k n t Pre15 Variant1 N0 k0 n0
+                              t0 Pre14 Pre13 j Post2 Test8 j' Post11 Test7
+                              Pre12 t1 Post22 Pre11 Pre10 Pre9) N0 j' 
+                              n0 t1 (refl_equal ? `n0 - j'`)
+                              (downheap_po_11 N k n t Pre15 Variant1 N0 k0 n0
+                              t0 Pre14 Pre13 j Post2 Test8 j' Post11 Test7
+                              Pre12 t1 Post22 Pre11 Pre10 Pre9)) in
                           (exist_2 [t3: (array N0 Z)][result5: unit]
                           (permut t3 t1) /\
                           ((i:Z) (`j' <= i` /\ `i <= n0` -> (heap t3 n0 i))) /\
@@ -787,9 +805,9 @@ Definition downheap := (* validation *)
                           `(access t3 i) = (access t0 i)`)) /\
                         ((v:Z) ((inftree t0 n0 v k0) -> (inftree t3 n0 v k0))) 
                         t2 result2
-                        (downheap_po_12 N k n t Pre11 Variant1 N0 k0 n0 t0
-                        Pre10 Pre9 j Post2 Test8 j' Post11 Test7 t1 Post22 t2
-                        Post24)) in
+                        (downheap_po_12 N k n t Pre15 Variant1 N0 k0 n0 t0
+                        Pre14 Pre13 j Post2 Test8 j' Post11 Test7 Pre12 t1
+                        Post22 Pre11 t2 Post24)) in
                       (exist_2 [t2: (array N0 Z)][result2: unit]
                       (permut t2 t0) /\
                       ((i:Z) (`k0 <= i` /\ `i <= n0` -> (heap t2 n0 i))) /\
@@ -809,8 +827,8 @@ Definition downheap := (* validation *)
                           `(access t0 i) = (access t0 i)`)) /\
                         ((v:Z) ((inftree t0 n0 v k0) -> (inftree t0 n0 v k0))) 
                         tt
-                        (downheap_po_13 N k n t Pre11 Variant1 N0 k0 n0 t0
-                        Pre10 Pre9 j Post2 Test8 j' Post11 Test6)) in
+                        (downheap_po_13 N k n t Pre15 Variant1 N0 k0 n0 t0
+                        Pre14 Pre13 j Post2 Test8 j' Post11 Test6)) in
                       (exist_2 [t1: (array N0 Z)][result2: unit]
                       (permut t1 t0) /\
                       ((i:Z) (`k0 <= i` /\ `i <= n0` -> (heap t1 n0 i))) /\
@@ -843,8 +861,8 @@ Definition downheap := (* validation *)
                   `n0 < i` /\ `i < N0` -> `(access t0 i) = (access t0 i)`)) /\
                 ((v:Z) ((inftree t0 n0 v k0) -> (inftree t0 n0 v k0))) 
                 tt
-                (downheap_po_14 N k n t Pre11 Variant1 N0 k0 n0 t0 Pre10 Pre9
-                j Post2 Test1)) in
+                (downheap_po_14 N k n t Pre15 Variant1 N0 k0 n0 t0 Pre14
+                Pre13 j Post2 Test1)) in
               (exist_2 [t1: (array N0 Z)][result1: unit](permut t1 t0) /\
               ((i:Z) (`k0 <= i` /\ `i <= n0` -> (heap t1 n0 i))) /\
               ((i:Z)
@@ -858,7 +876,7 @@ Definition downheap := (* validation *)
          (`0 <= i` /\ `i < k0` \/ `k0 < i` /\ `i < 2 * k0 + 1` \/ `n0 < i` /\
           `i < N0` -> `(access t2 i) = (access t0 i)`)) /\
         ((v:Z) ((inftree t0 n0 v k0) -> (inftree t2 n0 v k0))) t1 result
-        Post7) `n - k` N k n t (refl_equal ? `n - k`) Pre11).
+        Post7) `n - k` N k n t (refl_equal ? `n - k`) Pre15).
 
 
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ocaml.ml,v 1.3 2002-11-05 08:19:33 filliatr Exp $ i*)
+(*i $Id: ocaml.ml,v 1.4 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 (*s Ocaml code output *)
 
@@ -31,7 +31,7 @@ open Ast
 (*s pre- and postconditions *)
 
 let pre = 
-  let print fmt p = fprintf fmt "(* @[%a@] *)" print_predicate p.p_value in
+  let print fmt p = fprintf fmt "(* @[%a@] *)" print_predicate p.a_value in
   print_list newline print
 
 let post fmt q = 

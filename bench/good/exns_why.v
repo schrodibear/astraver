@@ -3,6 +3,10 @@
 
 Require Why.
 
+
+
+
+
 Definition p1 := (* validation *)
   (exist_1 (qcomb [result: unit]True [result: unit]False) (Exn unit tt) I).
 
@@ -64,6 +68,7 @@ Intro H; Discriminate H.
 Save.
 
 
+
 Definition p4 := (* validation *)
   let (result, Post1) = (exist_1 [result: bool]result = true true
     (refl_equal ? true)) in
@@ -103,6 +108,7 @@ Lemma p5_po_1 :
 Proof.
 Intro H; Discriminate H.
 Save.
+
 
 
 Definition p5 := (* validation *)
@@ -157,6 +163,7 @@ Lemma p6_po_1 :
 Proof.
 Intro H; Discriminate H.
 Save.
+
 
 Definition p6 := (* validation *)
   let (result, Post3) =
@@ -230,6 +237,7 @@ Proof.
 Intuition.
 Save.
 
+
 Definition p7 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -272,6 +280,7 @@ Proof.
 Intuition.
 Save.
 
+
 Definition p8 := (* validation *)
   [x: Z]
     let (x0, result, Post1) =
@@ -305,6 +314,10 @@ Lemma p9_po_1 :
 Proof.
 Intuition.
 Save.
+
+
+
+
 
 Definition p9 := (* validation *)
   [x: Z]
@@ -424,6 +437,7 @@ Proof.
 Intuition.
 Save.
 
+
 Definition p13 := (* validation *)
   [x: Z]
     let (x0, result, Post4) =
@@ -513,6 +527,7 @@ Lemma p14_po_3 :
 Proof.
 Intuition.
 Save.
+
 
 Definition p14 := (* validation *)
   [x: Z]

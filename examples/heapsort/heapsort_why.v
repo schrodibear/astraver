@@ -67,14 +67,14 @@ Save.
 Lemma heapsort_po_1 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (result: Z)
   (Post3: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
   (k0: Z)
   (t0: (array N Z))
-  (Pre4: Variant1 = `k0 + 1`)
-  (Pre3: (`(-1) <= k0` /\ `k0 <= N - 1`) /\
+  (Pre6: Variant1 = `k0 + 1`)
+  (Pre5: (`(-1) <= k0` /\ `k0 <= N - 1`) /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
          (permut t0 t))
   (Test2: `k0 >= 0`)
@@ -87,17 +87,19 @@ Save.
 Lemma heapsort_po_2 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (result: Z)
   (Post3: result = (Zdiv2 `N - 2`))
   (Variant1: Z)
   (k0: Z)
   (t0: (array N Z))
-  (Pre4: Variant1 = `k0 + 1`)
-  (Pre3: (`(-1) <= k0` /\ `k0 <= N - 1`) /\
+  (Pre6: Variant1 = `k0 + 1`)
+  (Pre5: (`(-1) <= k0` /\ `k0 <= N - 1`) /\
          ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
          (permut t0 t))
   (Test2: `k0 >= 0`)
+  (Pre4: (`0 <= k0` /\ `k0 <= N - 1`) /\ `N - 1 < N` /\
+         ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))))
   (t1: (array N Z))
   (Post11: (permut t1 t0) /\
            ((i:Z) (`k0 <= i` /\ `i <= N - 1` -> (heap t1 `N - 1` i))) /\
@@ -119,7 +121,7 @@ Save.
 Lemma heapsort_po_3 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (result: Z)
   (Post3: result = (Zdiv2 `N - 2`))
   (`(-1) <= result` /\ `result <= N - 1`) /\
@@ -127,9 +129,9 @@ Lemma heapsort_po_3 :
   (permut t t).
 Proof.
 Intros.
-Generalize (lem_div2_0 N Pre10); Intuition Try Omega'.
+Generalize (lem_div2_0 N Pre16); Intuition Try Omega'.
 Apply heap_leaf.
-Generalize (lem_div2_1 N Pre10); Omega'.
+Generalize (lem_div2_1 N Pre16); Omega'.
 Apply (lem_div2_2 N i); Trivial Orelse Omega'.
 Auto with datatypes.
 Save.
@@ -137,7 +139,7 @@ Save.
 Lemma heapsort_po_4 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (result: Z)
   (Post3: result = (Zdiv2 `N - 2`))
   (k0: Z)
@@ -153,7 +155,7 @@ Save.
 Lemma heapsort_po_5 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (t0: (array N Z))
   (Post9: (heap t0 `N - 1` `0`) /\ (permut t0 t))
   (result0: Z)
@@ -161,12 +163,12 @@ Lemma heapsort_po_5 :
   (Variant3: Z)
   (k0: Z)
   (t1: (array N Z))
-  (Pre9: Variant3 = k0)
-  (Pre8: (`0 <= k0` /\ `k0 <= N - 1`) /\
-         ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-         ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
-         ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
-         (permut t1 t))
+  (Pre15: Variant3 = k0)
+  (Pre14: (`0 <= k0` /\ `k0 <= N - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
+          ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
+          ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
+          (permut t1 t))
   (Test4: `k0 >= 1`)
   (`0 <= 0` /\ `0 < N`) /\ `0 <= k0` /\ `k0 < N`.
 Proof.
@@ -176,7 +178,7 @@ Save.
 Lemma heapsort_po_6 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (t0: (array N Z))
   (Post9: (heap t0 `N - 1` `0`) /\ (permut t0 t))
   (result0: Z)
@@ -184,13 +186,14 @@ Lemma heapsort_po_6 :
   (Variant3: Z)
   (k0: Z)
   (t1: (array N Z))
-  (Pre9: Variant3 = k0)
-  (Pre8: (`0 <= k0` /\ `k0 <= N - 1`) /\
-         ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-         ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
-         ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
-         (permut t1 t))
+  (Pre15: Variant3 = k0)
+  (Pre14: (`0 <= k0` /\ `k0 <= N - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
+          ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
+          ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
+          (permut t1 t))
   (Test4: `k0 >= 1`)
+  (Pre13: (`0 <= 0` /\ `0 < N`) /\ `0 <= k0` /\ `k0 < N`)
   (t2: (array N Z))
   (Post15: (exchange t2 t1 `0` k0))
   (`0 <= 0` /\ `0 <= k0 - 1`) /\ `k0 - 1 < N` /\
@@ -202,13 +205,13 @@ Apply heap_weakening. Omega'.
 Apply H1; Omega'. Omega'.
 Decompose [exchange] Post15; Clear Post15.
 Unfold array_id.
-Intros i0 Hi0. Symmetry. Apply H13; Omega'.
+Intros i0 Hi0. Symmetry. Apply H17; Omega'.
 Save.
 
 Lemma heapsort_po_7 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (t0: (array N Z))
   (Post9: (heap t0 `N - 1` `0`) /\ (permut t0 t))
   (result0: Z)
@@ -216,15 +219,18 @@ Lemma heapsort_po_7 :
   (Variant3: Z)
   (k0: Z)
   (t1: (array N Z))
-  (Pre9: Variant3 = k0)
-  (Pre8: (`0 <= k0` /\ `k0 <= N - 1`) /\
-         ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
-         ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
-         ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
-         (permut t1 t))
+  (Pre15: Variant3 = k0)
+  (Pre14: (`0 <= k0` /\ `k0 <= N - 1`) /\
+          ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
+          ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
+          ((`k0 + 1 <= N - 1` -> (sorted_array t1 `k0 + 1` `N - 1`))) /\
+          (permut t1 t))
   (Test4: `k0 >= 1`)
+  (Pre13: (`0 <= 0` /\ `0 < N`) /\ `0 <= k0` /\ `k0 < N`)
   (t2: (array N Z))
   (Post15: (exchange t2 t1 `0` k0))
+  (Pre12: (`0 <= 0` /\ `0 <= k0 - 1`) /\ `k0 - 1 < N` /\
+          ((i:Z) (`0 + 1 <= i` /\ `i <= k0 - 1` -> (heap t2 `k0 - 1` i))))
   (t3: (array N Z))
   (Post17: (permut t3 t2) /\
            ((i:Z) (`0 <= i` /\ `i <= k0 - 1` -> (heap t3 `k0 - 1` i))) /\
@@ -243,14 +249,14 @@ Lemma heapsort_po_7 :
 Proof.
 Intuition.
 (* heap *)
-Subst k1; Apply H9; Omega'.
+Subst k1; Apply H17; Omega'.
 (* t[0] <= t[k] *)
 Subst k1; Ring `k0-1+1`. 
-Rewrite (H8 k0); [ Idtac | Omega' ].
+Rewrite (H16 k0); [ Idtac | Omega' ].
 Decompose [exchange] Post15.
-Rewrite H15.
+Rewrite H23.
 Apply inftree_1 with n:=`k0-1`.
-Apply H11.
+Apply H19.
 Apply inftree_weakening. Omega'.
 Apply inftree_exchange with t1:=t1. Omega'.
 Apply inftree_3.
@@ -258,23 +264,23 @@ Apply H1; Omega'.
 Assumption. Omega'.
 (* sorted *)
 Subst k1; Ring `k0-1+1`.  
-Elim (Z_le_lt_eq_dec k0 `N-1` H4); Intro.
+Elim (Z_le_lt_eq_dec k0 `N-1` H6); Intro.
   (* k0 < N-1 *)
   Replace k0 with `(k0+1)-1`; [ Idtac | Omega' ].
   Apply left_extension. Omega'. Omega'.
   Apply sorted_array_id with t1:=t2. 
   Apply sorted_array_id with t1:=t1. 
-  Apply H5; Omega'.
+  Apply H7; Omega'.
   Decompose [exchange] Post15.
+  Unfold array_id. Intros i Hi. Symmetry. Apply H24; Omega'.
   Unfold array_id. Intros i Hi. Symmetry. Apply H16; Omega'.
-  Unfold array_id. Intros i Hi. Symmetry. Apply H8; Omega'.
   (* t3[k0] <= t3[k0+1] *)
   Ring `k0+1-1`. 
-  Rewrite (H8 k0); [ Idtac | Omega' ].
-  Rewrite (H8 `k0+1`); [ Idtac | Omega' ].
+  Rewrite (H16 k0); [ Idtac | Omega' ].
+  Rewrite (H16 `k0+1`); [ Idtac | Omega' ].
   Decompose [exchange] Post15.
-  Rewrite H15. Rewrite (H16 `k0+1`); [ Idtac | Omega' | Omega' | Omega' ].
-  Apply H2; Omega'.
+  Rewrite H23. Rewrite (H24 `k0+1`); [ Idtac | Omega' | Omega' | Omega' ].
+  Apply H4; Omega'.
   (* k0 = N-1 *)
   Rewrite b. 
   Unfold sorted_array.
@@ -291,7 +297,7 @@ Save.
 Lemma heapsort_po_8 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (t0: (array N Z))
   (Post9: (heap t0 `N - 1` `0`) /\ (permut t0 t))
   (result0: Z)
@@ -312,7 +318,7 @@ Save.
 Lemma heapsort_po_9 : 
   (N: Z)
   (t: (array N Z))
-  (Pre10: `1 <= N`)
+  (Pre16: `1 <= N`)
   (t0: (array N Z))
   (Post9: (heap t0 `N - 1` `0`) /\ (permut t0 t))
   (result0: Z)
@@ -327,7 +333,7 @@ Lemma heapsort_po_9 :
   (sorted_array t1 `0` `N - 1`) /\ (permut t1 t).
 Proof.
 Intuition.
-Elim (Z_le_lt_eq_dec `1` N Pre10); Intro.
+Elim (Z_le_lt_eq_dec `1` N Pre16); Intro.
   (* 1 < N *)
   Replace `0` with `1-1`; [ Idtac | Omega' ].
   Apply left_extension. Omega'. Omega'.
@@ -346,7 +352,7 @@ Require swap_why.
 Require downheap_why.
 
 Definition heapsort := (* validation *)
-  [N: Z; t: (array N Z); Pre10: `1 <= N`]
+  [N: Z; t: (array N Z); Pre16: `1 <= N`]
     let (t0, result, Post9) =
       let (result, Post3) = (exist_1 [result: Z]
         result = (Zdiv2 `N - 2`) (Zdiv2 `N - 2`)
@@ -370,8 +376,8 @@ Definition heapsort := (* validation *)
             (((`(-1) <= k1` /\ `k1 <= N - 1`) /\
             ((i:Z) (`k1 + 1 <= i` /\ `i <= N - 1` -> (heap t1 `N - 1` i))) /\
             (permut t1 t)) /\ `k1 < 0`));
-           k0: Z; t0: (array N Z); Pre4: Variant1 = `k0 + 1`;
-           Pre3: (`(-1) <= k0` /\ `k0 <= N - 1`) /\
+           k0: Z; t0: (array N Z); Pre6: Variant1 = `k0 + 1`;
+           Pre5: (`(-1) <= k0` /\ `k0 <= N - 1`) /\
            ((i:Z) (`k0 + 1 <= i` /\ `i <= N - 1` -> (heap t0 `N - 1` i))) /\
            (permut t0 t)]
             let (result0, Bool1) =
@@ -384,11 +390,13 @@ Definition heapsort := (* validation *)
             | (left Test2) =>
                 let (k1, t1, result1, Post2) =
                   let (k1, t1, result1, Post8) =
+                    let Pre4 =
+                      (heapsort_po_1 N t Pre16 result Post3 Variant1 k0 t0
+                      Pre6 Pre5 Test2) in
                     let (t1, result1, Post11) =
-                      let Pre2 =
-                        (heapsort_po_1 N t Pre10 result Post3 Variant1 k0 t0
-                        Pre4 Pre3 Test2) in
+                      let Pre3 = Pre4 in
                       let (t1, result3, Post12) =
+                        let Pre2 = Pre3 in
                         (downheap N k0 `N - 1` t0 Pre2) in
                       (exist_2 [t2: (array N Z)][result4: unit]
                       (permut t2 t0) /\
@@ -414,9 +422,9 @@ Definition heapsort := (* validation *)
                      (`k2 + 1 <= i` /\ `i <= N - 1` -> (heap t2 `N - 1` i))) /\
                     (permut t2 t)) /\ (Zwf `0` `k2 + 1` `k0 + 1`) k1 
                     t1 result2
-                    (heapsort_po_2 N t Pre10 result Post3 Variant1 k0 t0 Pre4
-                    Pre3 Test2 t1 Post11 k1 Post1)) in
-                  ((wf1 `k1 + 1`) (loop_variant_1 Pre4 Post8) k1 t1
+                    (heapsort_po_2 N t Pre16 result Post3 Variant1 k0 t0 Pre6
+                    Pre5 Test2 Pre4 t1 Post11 k1 Post1)) in
+                  ((wf1 `k1 + 1`) (loop_variant_1 Pre6 Post8) k1 t1
                     (refl_equal ? `k1 + 1`) (proj1 ? ? Post8)) in
                 (exist_3 [k2: Z][t2: (array N Z)][result2: unit]
                 ((`(-1) <= k2` /\ `k2 <= N - 1`) /\
@@ -429,16 +437,16 @@ Definition heapsort := (* validation *)
                   ((i:Z)
                    (`k1 + 1 <= i` /\ `i <= N - 1` -> (heap t1 `N - 1` i))) /\
                   (permut t1 t)) /\ `k1 < 0` k0 t0 tt
-                  (conj ? ? Pre3 Test1)) in
+                  (conj ? ? Pre5 Test1)) in
                 (exist_3 [k2: Z][t2: (array N Z)][result2: unit]
                 ((`(-1) <= k2` /\ `k2 <= N - 1`) /\
                 ((i:Z) (`k2 + 1 <= i` /\ `i <= N - 1` -> (heap t2 `N - 1` i))) /\
                 (permut t2 t)) /\ `k2 < 0` k1 t1 result1 Post2) end)
           `result + 1` result t (refl_equal ? `result + 1`)
-          (heapsort_po_3 N t Pre10 result Post3)) in
+          (heapsort_po_3 N t Pre16 result Post3)) in
       (exist_2 [t1: (array N Z)][result1: unit](heap t1 `N - 1` `0`) /\
       (permut t1 t) t0 result0
-      (heapsort_po_4 N t Pre10 result Post3 k0 t0 Post2)) in
+      (heapsort_po_4 N t Pre16 result Post3 k0 t0 Post2)) in
     let (t1, result0, Post13) =
       let (result0, Post6) = (exist_1 [result0: Z]result0 = `N - 1` `N - 1`
         (refl_equal ? `N - 1`)) in
@@ -456,7 +464,7 @@ Definition heapsort := (* validation *)
            ((`k1 + 1 <= N - 1` -> `(access t2 0) <= (access t2 k1 + 1)`)) /\
            ((`k1 + 1 <= N - 1` -> (sorted_array t2 `k1 + 1` `N - 1`))) /\
            (permut t2 t)) /\ `k1 < 1`))
-          [Variant3: Z; wf2: (Variant4: Z)(Pre5: (Zwf `0` Variant4 Variant3))
+          [Variant3: Z; wf2: (Variant4: Z)(Pre7: (Zwf `0` Variant4 Variant3))
            (k0: Z)(t1: (array N Z))(_: Variant4 = k0)(_0: (`0 <= k0` /\
            `k0 <= N - 1`) /\
            ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
@@ -469,7 +477,7 @@ Definition heapsort := (* validation *)
             ((`k1 + 1 <= N - 1` -> `(access t2 0) <= (access t2 k1 + 1)`)) /\
             ((`k1 + 1 <= N - 1` -> (sorted_array t2 `k1 + 1` `N - 1`))) /\
             (permut t2 t)) /\ `k1 < 1`));
-           k0: Z; t1: (array N Z); Pre9: Variant3 = k0; Pre8: (`0 <= k0` /\
+           k0: Z; t1: (array N Z); Pre15: Variant3 = k0; Pre14: (`0 <= k0` /\
            `k0 <= N - 1`) /\
            ((i:Z) (`0 <= i` /\ `i <= k0` -> (heap t1 k0 i))) /\
            ((`k0 + 1 <= N - 1` -> `(access t1 0) <= (access t1 k0 + 1)`)) /\
@@ -485,19 +493,24 @@ Definition heapsort := (* validation *)
             | (left Test4) =>
                 let (k1, t2, result2, Post5) =
                   let (k1, t2, result2, Post7) =
+                    let Pre13 =
+                      (heapsort_po_5 N t Pre16 t0 Post9 result0 Post6
+                      Variant3 k0 t1 Pre15 Pre14 Test4) in
                     let (t2, result2, Post15) =
-                      let Pre6 =
-                        (heapsort_po_5 N t Pre10 t0 Post9 result0 Post6
-                        Variant3 k0 t1 Pre9 Pre8 Test4) in
-                      let (t2, result4, Post16) = (swap N `0` k0 t1 Pre6) in
+                      let Pre9 = Pre13 in
+                      let (t2, result4, Post16) =
+                        let Pre8 = Pre9 in
+                        (swap N `0` k0 t1 Pre8) in
                       (exist_2 [t3: (array N Z)][result5: unit]
                       (exchange t3 t1 `0` k0) t2 result4 Post16) in
+                    let Pre12 =
+                      (heapsort_po_6 N t Pre16 t0 Post9 result0 Post6
+                      Variant3 k0 t1 Pre15 Pre14 Test4 Pre13 t2 Post15) in
                     let (t3, result3, Post17) =
-                      let Pre7 =
-                        (heapsort_po_6 N t Pre10 t0 Post9 result0 Post6
-                        Variant3 k0 t1 Pre9 Pre8 Test4 t2 Post15) in
+                      let Pre11 = Pre12 in
                       let (t3, result5, Post18) =
-                        (downheap N `0` `k0 - 1` t2 Pre7) in
+                        let Pre10 = Pre11 in
+                        (downheap N `0` `k0 - 1` t2 Pre10) in
                       (exist_2 [t4: (array N Z)][result6: unit]
                       (permut t4 t2) /\
                       ((i:Z)
@@ -523,9 +536,10 @@ Definition heapsort := (* validation *)
                       `(access t4 0) <= (access t4 k2 + 1)`)) /\
                     ((`k2 + 1 <= N - 1` -> (sorted_array t4 `k2 + 1` `N - 1`))) /\
                     (permut t4 t)) /\ (Zwf `0` k2 k0) k1 t3 result4
-                    (heapsort_po_7 N t Pre10 t0 Post9 result0 Post6 Variant3
-                    k0 t1 Pre9 Pre8 Test4 t2 Post15 t3 Post17 k1 Post4)) in
-                  ((wf2 k1) (loop_variant_1 Pre9 Post7) k1 t2
+                    (heapsort_po_7 N t Pre16 t0 Post9 result0 Post6 Variant3
+                    k0 t1 Pre15 Pre14 Test4 Pre13 t2 Post15 Pre12 t3 Post17
+                    k1 Post4)) in
+                  ((wf2 k1) (loop_variant_1 Pre15 Post7) k1 t2
                     (refl_equal ? k1) (proj1 ? ? Post7)) in
                 (exist_3 [k2: Z][t3: (array N Z)][result3: unit]
                 ((`0 <= k2` /\ `k2 <= N - 1`) /\
@@ -542,7 +556,7 @@ Definition heapsort := (* validation *)
                     `(access t2 0) <= (access t2 k1 + 1)`)) /\
                   ((`k1 + 1 <= N - 1` -> (sorted_array t2 `k1 + 1` `N - 1`))) /\
                   (permut t2 t)) /\ `k1 < 1` k0 t1 tt
-                  (conj ? ? Pre8 Test3)) in
+                  (conj ? ? Pre14 Test3)) in
                 (exist_3 [k2: Z][t3: (array N Z)][result3: unit]
                 ((`0 <= k2` /\ `k2 <= N - 1`) /\
                 ((i:Z) (`0 <= i` /\ `i <= k2` -> (heap t3 k2 i))) /\
@@ -550,10 +564,10 @@ Definition heapsort := (* validation *)
                 ((`k2 + 1 <= N - 1` -> (sorted_array t3 `k2 + 1` `N - 1`))) /\
                 (permut t3 t)) /\ `k2 < 1` k1 t2 result2 Post5) end) 
           result0 result0 t0 (refl_equal ? result0)
-          (heapsort_po_8 N t Pre10 t0 Post9 result0 Post6)) in
+          (heapsort_po_8 N t Pre16 t0 Post9 result0 Post6)) in
       (exist_2 [t2: (array N Z)][result2: unit]
       (sorted_array t2 `0` `N - 1`) /\ (permut t2 t) t1 result1
-      (heapsort_po_9 N t Pre10 t0 Post9 result0 Post6 k0 t1 Post5)) in
+      (heapsort_po_9 N t Pre16 t0 Post9 result0 Post6 k0 t1 Post5)) in
     (exist_2 [t2: (array N Z)][result1: unit](sorted_array t2 `0` `N - 1`) /\
     (permut t2 t) t1 result0 Post13).
 

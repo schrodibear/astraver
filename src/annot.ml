@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.5 2002-11-04 16:48:59 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.6 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -97,18 +97,16 @@ let is_conditional p = match p.desc with If _ -> true | _ -> false
 
 (* [extract_pre p] erase the pre-condition of [p] and returns it *)
 
-let extract_pre pr =
-  { desc = pr.desc; 
-    info = { pr.info with kappa = { pr.info.kappa with c_pre = [] } } },
-  pr.info.kappa.c_pre
+let extract_oblig pr =
+  { desc = pr.desc; info = { pr.info with obligations = [] } },
+  pr.info.obligations
 
 (* adds some pre-conditions *)
 
-let add_pre p1 pr =
-  let k = pr.info.kappa in
-  let p' = k.c_pre @ p1 in
+let add_oblig p1 pr =
+  let o = pr.info.obligations in
   { desc = pr.desc; 
-    info = {  pr.info with kappa = { k with c_pre = p' } } }
+    info = { pr.info with obligations = o @ p1 } }
   
 (* change the statement *)
 
@@ -125,22 +123,22 @@ let is_bool = function
 (*s Normalization. In this first pass, we
     (2) annotate [x := E] with [{ x = E }]
     (3) give tests the right postconditions
-    (4) lift preconditions up in assignements *)
+    (4) lift obligations up in assignements *)
 
-let lift_pre p = match p.desc with
+let lift_oblig p = match p.desc with
   | Aff (x,e) ->
-      let e1,p1 = extract_pre e in
-      change_desc (add_pre p1 p) (Aff (x,e1))
+      let e1,p1 = extract_oblig e in
+      change_desc (add_oblig p1 p) (Aff (x,e1))
   | TabAff (check, x, ({ desc = Expression _ } as e1), e2) ->
-      let e1',p1 = extract_pre e1 in
-      let e2',p2 = extract_pre e2 in
-      change_desc (add_pre (p1 @ p2) p) (TabAff (check,x,e1',e2'))
+      let e1',p1 = extract_oblig e1 in
+      let e2',p2 = extract_oblig e2 in
+      change_desc (add_oblig (p1 @ p2) p) (TabAff (check,x,e1',e2'))
   | _ ->
       p
 
 let rec normalize p =
   let env = p.info.env in
-  let p = lift_pre p in
+  let p = lift_oblig p in
   let k = p.info.kappa in
   match p.desc with
     | Aff (x, ({desc = Expression t} as e1)) 

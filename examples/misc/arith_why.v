@@ -51,7 +51,8 @@ Lemma mult_po_2 :
   ((a:Z)
    (a = (Zdiv a0 `2`) ->
     ((b:Z)
-     (b = `2 * b0` -> (`a >= 0` /\ `p1 + a * b = x * y`) /\ (Zwf `0` a a0))))).
+     (b = `2 * b0` -> (`a >= 0` /\ `p1 + a * b = x * y`) /\ (Zwf `0` a a0))))) /\
+  ~(`2` = `0`).
 Proof.
 Intuition.
 Subst a; Apply Z_div_ge0; Omega.
@@ -88,7 +89,8 @@ Lemma mult_po_3 :
   ((a:Z)
    (a = (Zdiv a0 `2`) ->
     ((b:Z)
-     (b = `2 * b0` -> (`a >= 0` /\ `p0 + a * b = x * y`) /\ (Zwf `0` a a0))))).
+     (b = `2 * b0` -> (`a >= 0` /\ `p0 + a * b = x * y`) /\ (Zwf `0` a a0))))) /\
+  ~(`2` = `0`).
 Proof.
 Intuition.
 Subst a; Apply Z_div_ge0; Try Omega.
@@ -128,7 +130,8 @@ Lemma mult_po_4 :
             (a = (Zdiv a0 `2`) ->
              ((b:Z)
               (b = `2 * b0` -> (`a >= 0` /\ `p1 + a * b = x * y`) /\
-               (Zwf `0` a a0))))))
+               (Zwf `0` a a0))))) /\
+           ~(`2` = `0`))
   ~(`2` = `0`).
 Proof.
 Intros; Omega.
@@ -156,7 +159,8 @@ Lemma mult_po_5 :
             (a = (Zdiv a0 `2`) ->
              ((b:Z)
               (b = `2 * b0` -> (`a >= 0` /\ `p1 + a * b = x * y`) /\
-               (Zwf `0` a a0))))))
+               (Zwf `0` a a0))))) /\
+           ~(`2` = `0`))
   (Pre3: ~(`2` = `0`))
   (a1: Z)
   (Post2: a1 = (Zdiv a0 `2`))
@@ -270,8 +274,8 @@ Definition mult := (* validation *)
                                (a = (Zdiv a0 `2`) ->
                                 ((b:Z)
                                  (b = `2 * b0` -> (`a >= 0` /\
-                                  `p2 + a * b = x * y`) /\ (Zwf `0` a a0))))) 
-                              p1 result4
+                                  `p2 + a * b = x * y`) /\ (Zwf `0` a a0))))) /\
+                              ~(`2` = `0`) p1 result4
                               (mult_po_2 x y Pre5 result Post6 result0 Post5
                               result1 Post4 Variant1 a0 b0 p0 Pre4 Inv Test4
                               Test3 p1 Post1))
@@ -282,8 +286,8 @@ Definition mult := (* validation *)
                                  (a = (Zdiv a0 `2`) ->
                                   ((b:Z)
                                    (b = `2 * b0` -> (`a >= 0` /\
-                                    `p0 + a * b = x * y`) /\ (Zwf `0` a a0))))) 
-                                tt
+                                    `p0 + a * b = x * y`) /\ (Zwf `0` a a0))))) /\
+                                ~(`2` = `0`) tt
                                 (mult_po_3 x y Pre5 result Post6 result0
                                 Post5 result1 Post4 Variant1 a0 b0 p0 Pre4
                                 Inv Test4 Test2)) in
@@ -292,8 +296,8 @@ Definition mult := (* validation *)
                                (a = (Zdiv a0 `2`) ->
                                 ((b:Z)
                                  (b = `2 * b0` -> (`a >= 0` /\
-                                  `p1 + a * b = x * y`) /\ (Zwf `0` a a0))))) 
-                              p0 result4 Post14) end) in
+                                  `p1 + a * b = x * y`) /\ (Zwf `0` a a0))))) /\
+                              ~(`2` = `0`) p0 result4 Post14) end) in
                         let Pre3 =
                           (mult_po_4 x y Pre5 result Post6 result0 Post5
                           result1 Post4 Variant1 a0 b0 p0 Pre4 Inv Test4 p1

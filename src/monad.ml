@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monad.ml,v 1.58 2002-10-18 11:18:38 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.59 2002-11-28 16:18:34 filliatr Exp $ i*)
 
 open Format
 open Misc
@@ -52,11 +52,8 @@ let product w q = match q, w with
 let arrow_pred ren env v pl = 
   List.fold_right
     (fun p t -> 
-       if p.p_assert then 
-	 t
-       else 
-	 let p = apply_pre ren env p in
-	 TTarrow ((id_of_name p.p_name, CC_pred_binder p.p_value), t))
+       let p = apply_assert ren env p in
+       TTarrow ((id_of_name p.a_name, CC_pred_binder p.a_value), t))
     pl v
 	
 let arrow_vars = 
@@ -171,6 +168,8 @@ let make_valx x =
 
 let make_val t xs = 
   List.fold_right (fun x cc -> CC_app (make_valx x, cc)) xs t
+
+(* builds [Val_e1 (Val_e2 ... (Exn_ei t))] *)
 
 let rec make_exn ty x v = function
   | [] -> 
@@ -291,8 +290,8 @@ let binding_of_alist ren env =
     (fun (id,id') -> (id', CC_var_binder (trad_type_in_env ren env id)))
 
 let make_pre env ren p = 
-  let p = apply_pre ren env p in
-  pre_name p.p_name, p.p_value
+  let p = apply_assert ren env p in
+  pre_name p.a_name, p.a_value
 
 let let_pre (id, h) cc = 
   CC_letin (false, [id, CC_pred_binder h], CC_hole h, cc)
@@ -334,12 +333,13 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
   in
   let vo = current_vars ren' w1 in
   let bl = (binding_of_alist ren env vo) @ b @ b' in
-  let pre1 = List.map (make_pre env ren) p1 in
   let cc1 = 
     if isapp then 
       let input = List.map (fun (_,id') -> CC_var id') (current_vars ren r1) in
+      let pre1 = List.map (make_pre env ren) p1 in
       let inputpre = List.map (fun (id,_) -> CC_var id) pre1 in
-      cc_applist (e1 ren) (input @ inputpre)
+      let cc = cc_applist (e1 ren) (input @ inputpre) in
+      let_many_pre pre1 cc
     else
       e1 ren
   in
@@ -376,7 +376,8 @@ let gen_compose isapp handler info1 e1 info2 e2 ren =
 	       (List.map exn_branch x1))
   in
   let cc = CC_letin (dep, bl, cc1, cc2) in
-  let_many_pre pre1 cc
+  let ob1 = List.map (make_pre env ren) info1.obligations in
+  let_many_pre ob1 cc
 
 (* [compose], [apply] and [handle] are instances of [gen_compose].
    [compose] and [apply] use the default handler [reraise]. *)
@@ -431,15 +432,11 @@ let make_abs bl t = match bl with
   | _  -> cc_lam bl t
 
 let bind_pre ren env p =
-  pre_name p.p_name, CC_pred_binder (apply_pre ren env p).p_value
+  pre_name p.a_name, CC_pred_binder (apply_assert ren env p).a_value
 
 let abs_pre env pl t =
   List.fold_right
-    (fun p t ->
-       if p.p_assert then
-	 insert_pre env p t
-       else
-	 (fun ren -> CC_lam (bind_pre ren env p, t ren)))
+    (fun p t ren -> CC_lam (bind_pre ren env p, t ren))
     pl t
 
 let abstraction info e ren =
@@ -448,7 +445,8 @@ let abstraction info e ren =
   let _,ef,p,_ = decomp_kappa k in
   let ids = get_reads ef in
   let al = current_vars ren ids in
-  let c = abs_pre env p e ren in
+  let c = List.fold_right (insert_pre env) info.obligations e in
+  let c = abs_pre env p c ren in
   let bl = binding_of_alist ren env al in
   make_abs bl c
 
@@ -477,7 +475,7 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   let vphi = variant_name () in
   let wr = get_writes info.kappa.c_effect in
   let info' = 
-    let eq = anonymous_pre false (equality (Tvar vphi) phi) in
+    let eq = Misc.anonymous (equality (Tvar vphi) phi) in
     { info with kappa = { info.kappa 
 			  with c_effect = keep_writes info.kappa.c_effect;
 			       c_pre = eq :: info.kappa.c_pre }}
@@ -495,8 +493,10 @@ let wfrec_with_binders bl (phi,a,r) info f ren =
   let input ren =
     let args = List.map (fun (id,_) -> CC_var id) bl in
     let input = List.map (fun (_,id') -> CC_var id') (current_vars ren wr) in
-    let pl = (anonymous_pre false (equality phi phi)) :: info.kappa.c_pre in
-    let holes = List.map (fun p -> CC_hole (apply_pre ren env p).p_value) pl in
+    let pl = (Misc.anonymous (equality phi phi)) :: info.kappa.c_pre in
+    let holes = 
+      List.map (fun p -> CC_hole (apply_assert ren env p).a_value) pl 
+    in
     args @ input @ holes
   in
   let tw = 

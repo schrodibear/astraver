@@ -65,7 +65,7 @@ Lemma selection_po_2 :
          ((k:Z)
           (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`)))
   (Test5: `j0 < n`)
-  (Pre3: `0 <= min0` /\ `min0 < n`)
+  (Pre4: `0 <= min0` /\ `min0 < n`)
   `0 <= j0` /\ `j0 < n`.
 Proof.
 Intuition.
@@ -283,7 +283,7 @@ Lemma selection_po_8 :
           ((k:Z)
            (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
           `j0 >= n`)
-  (Pre7: `0 <= min0` /\ `min0 < n`)
+  (Pre10: `0 <= min0` /\ `min0 < n`)
   (w: Z)
   (Post6: w = (access t0 min0))
   `0 <= i0` /\ `i0 < n`.
@@ -316,10 +316,10 @@ Lemma selection_po_9 :
           ((k:Z)
            (`i0 <= k` /\ `k < j0` -> `(access t0 min0) <= (access t0 k)`))) /\
           `j0 >= n`)
-  (Pre7: `0 <= min0` /\ `min0 < n`)
+  (Pre10: `0 <= min0` /\ `min0 < n`)
   (w: Z)
   (Post6: w = (access t0 min0))
-  (Pre8: `0 <= i0` /\ `i0 < n`)
+  (Pre9: `0 <= i0` /\ `i0 < n`)
   (t1: (array n Z))
   (Post4: t1 = (store t0 min0 (access t0 i0)))
   (t2: (array n Z))
@@ -576,19 +576,19 @@ Definition selection := (* validation *)
                                       let (j1, min1, result4, Post13) =
                                         let (min1, result4, Post21) =
                                           let (result4, Bool1) =
-                                            let Pre3 =
+                                            let Pre4 =
                                               (selection_po_1 t Pre13 result
                                               Post11 Variant1 i0 t0 Pre12
                                               Pre11 Test6 result1 Post8
                                               result2 Post7 Variant3 j0 min0
                                               Pre6 Pre5 Test5) in
                                             let result5 =
-                                              let Pre4 =
+                                              let Pre3 =
                                                 (selection_po_2 t Pre13
                                                 result Post11 Variant1 i0 t0
                                                 Pre12 Pre11 Test6 result1
                                                 Post8 result2 Post7 Variant3
-                                                j0 min0 Pre6 Pre5 Test5 Pre3) in
+                                                j0 min0 Pre6 Pre5 Test5 Pre4) in
                                               (Z_lt_ge_bool (access t0 j0)) in
                                             let (result6, Post22) =
                                               (result5 (access t0 min0)) in
@@ -730,7 +730,7 @@ Definition selection := (* validation *)
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
                               Post7)) in
                           let (t1, result4, Post24) =
-                            let Pre7 =
+                            let Pre10 =
                               (selection_po_7 t Pre13 result Post11 Variant1
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
                               Post7 j0 min0 Post3) in
@@ -738,10 +738,10 @@ Definition selection := (* validation *)
                               result4 = (access t0 min0) (access t0 min0)
                               (refl_equal ? (access t0 min0))) in
                             let (t1, result4, Post25) =
-                              let Pre8 =
+                              let Pre9 =
                                 (selection_po_8 t Pre13 result Post11
                                 Variant1 i0 t0 Pre12 Pre11 Test6 result1
-                                Post8 result2 Post7 j0 min0 Post3 Pre7 w
+                                Post8 result2 Post7 j0 min0 Post3 Pre10 w
                                 Post6) in
                               let (t1, result4, Post4) =
                                 let (result4, Post4) = (exist_1 [result4: Z]
@@ -749,7 +749,7 @@ Definition selection := (* validation *)
                                                              (access t0 i0)) 
                                   (access t0 i0)
                                   (refl_equal ? (store t0 min0 (access t0 i0)))) in
-                                let Pre9 = Pre7 in
+                                let Pre7 = Pre10 in
                                 (exist_2 [t2: (array n Z)][result6: unit]
                                 t2 = (store t0 min0 (access t0 i0)) (
                                                                     store t0
@@ -760,7 +760,7 @@ Definition selection := (* validation *)
                                 let (result5, Post5) = (exist_1 [result5: Z]
                                   (store t1 i0 result5) = (store t1 i0 w) 
                                   w (refl_equal ? (store t1 i0 w))) in
-                                let Pre10 = Pre8 in
+                                let Pre8 = Pre9 in
                                 (exist_2 [t3: (array n Z)][result7: unit]
                                 t3 = (store t1 i0 w) (store t1 i0 result5) 
                                 tt Post5) in
@@ -779,7 +779,7 @@ Definition selection := (* validation *)
                               result5
                               (selection_po_9 t Pre13 result Post11 Variant1
                               i0 t0 Pre12 Pre11 Test6 result1 Post8 result2
-                              Post7 j0 min0 Post3 Pre7 w Post6 Pre8 t1 Post4
+                              Post7 j0 min0 Post3 Pre10 w Post6 Pre9 t1 Post4
                               t2 Post5)) in
                             (exist_2 [t2: (array n Z)][result5: unit]
                             ((i:Z)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ptree.mli,v 1.8 2002-10-31 12:27:00 filliatr Exp $ i*)
+(*i $Id: ptree.mli,v 1.9 2002-11-28 16:18:35 filliatr Exp $ i*)
 
 (*s Parse trees. *)
 
@@ -58,7 +58,7 @@ and ptype_c =
   { pc_result_name : Ident.t;
     pc_result_type : ptype_v;
     pc_effect : Effect.t;
-    pc_pre    : lexpr pre list;
+    pc_pre    : lexpr asst list;
     pc_post   : lexpr post option }
 
 (*s Parsed program. *)
@@ -73,7 +73,7 @@ type exn_pattern = variable * variable option
 
 type t = 
   { pdesc : t_desc;
-    pre : lexpr pre list;
+    pre : lexpr asst list;
     post : lexpr post option;
     loc : Loc.t }
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.62 2002-11-25 14:33:57 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.63 2002-11-28 16:18:35 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -92,6 +92,7 @@ let put_label_term env l t =
 (*s shortcuts for typing information *)
 
 let effect p = p.info.kappa.c_effect
+let obligations p = p.info.obligations
 let pre p = p.info.kappa.c_pre
 let post p = p.info.kappa.c_post
 let result_type p = p.info.kappa.c_result_type
@@ -129,12 +130,6 @@ let apply_term ren env t =
   let ids = term_vars t in
   let s = make_subst None ren env ids in
   subst_in_term s t
-
-let apply_pre ren env c =
-  let ids = predicate_vars c.p_value in
-  let s = make_subst None ren env ids in
-  { p_assert = c.p_assert; p_name = c.p_name; 
-    p_value = subst_in_predicate s c.p_value }
 
 let apply_assert ren env c =
   let ids = predicate_vars c.a_value in
@@ -185,8 +180,6 @@ let rec occur_predicate id = function
 
 let occur_assertion id a = occur_predicate id a.a_value
 
-let occur_precondition id p = occur_predicate id p.p_value
-  
 let occur_post id = function 
   | None -> 
       false 
@@ -202,7 +195,7 @@ let rec occur_type_v id = function
 
 and occur_type_c id c =
   occur_type_v id c.c_result_type ||
-  List.exists (occur_precondition id) c.c_pre ||
+  List.exists (occur_assertion id) c.c_pre ||
   Effect.occur id c.c_effect ||
   occur_post id c.c_post 
 
@@ -294,7 +287,7 @@ let print_pre fmt l =
   if l <> [] then begin
     fprintf fmt "@[ ";
     print_list 
-      pp_print_space (fun fmt p -> print_predicate fmt p.p_value) fmt l;
+      pp_print_space (fun fmt p -> print_predicate fmt p.a_value) fmt l;
     fprintf fmt " @]"
   end
 

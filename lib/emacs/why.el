@@ -111,9 +111,11 @@
 (require 'easymenu)
 
 (defun why-menu ()
-  (easy-menu-change 
-   () "Why" 
-   '(["Customize Why mode" (customize-group 'why) t]
+  (easy-menu-define
+   why-mode-menu (list why-mode-map)
+   "Why Mode Menu." 
+   '("Why"
+     ["Customize Why mode" (customize-group 'why) t]
      "---"
      ["Type-check buffer" why-type-check t]
      ["Show WP" why-show-wp t]
@@ -127,7 +129,8 @@
      "---"
      "PVS"
      "---"
-     )))
+     ))
+  (easy-menu-add why-mode-menu))
 
 ;; setting the mode
 
@@ -145,12 +148,12 @@
   ; (make-local-variable 'indent-line-function)
   ; (setq indent-line-function 'why-indent-line)
   ; menu
-  (why-menu)
   ; providing the mode
   (setq major-mode 'why-mode)
   (setq mode-name "WHY")
   (use-local-map why-mode-map)
   (font-lock-mode 1)
+  (why-menu)
   (run-hooks 'why-mode-hook))
 
 (provide 'why-mode)
