@@ -1,4 +1,4 @@
-(* Load Programs. *)Require Import Why.
+Require Import Why.
 Require Import Omega.
 
 (* Why obligation from file "swap0.mlw", characters 149-174 *)

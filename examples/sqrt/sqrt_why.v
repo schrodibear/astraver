@@ -1,4 +1,4 @@
-(* Load Programs. *)(********************************************************************
+(********************************************************************
 
   A simple algorithm for computing the square root of a non-negative
   integer.

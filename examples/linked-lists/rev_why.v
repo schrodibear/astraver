@@ -1,4 +1,4 @@
-(* Load Programs. *)
+
 Require Import Why.
 
 Require Export LinkedLists.

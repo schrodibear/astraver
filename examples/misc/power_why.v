@@ -1,4 +1,4 @@
-(* Load Programs. *)
+
 Require Import Sumbool.
 Require Import Why.
 Require Import Omega.
