@@ -2,3 +2,4 @@
 *.wol
 .pvscontext
 
+*_valid.v

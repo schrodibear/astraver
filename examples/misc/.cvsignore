@@ -3,3 +3,4 @@
 *.bin
 *.pvs
 *.wol
+*_valid.v
