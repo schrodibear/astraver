@@ -2,7 +2,7 @@
 
 val interp_type : Cast.tctype -> string
 
-module HeapVarSet : Set.S with type elt = string * Output.base_type
+open Info
 
 type effect =
     {
@@ -13,6 +13,8 @@ type effect =
 val location : Cast.tterm Clogic.location -> HeapVarSet.t
 
 val locations : Cast.tterm Clogic.location list -> HeapVarSet.t
+
+val predicate : Cast.predicate -> HeapVarSet.t
 
 val file : Cast.tfile -> unit
 

@@ -8,7 +8,8 @@ logic null : -> pointer
 logic length: pointer -> int
 logic offset: pointer -> int
 logic shift: pointer,int -> pointer
-logic valid : pointer, int, int -> prop
+logic valid : pointer -> prop
+logic valid_range : pointer, int, int -> prop
 
 axiom offset_shift :
   forall p:pointer. forall i:int.
@@ -26,29 +27,47 @@ axiom shift_not_null :
   forall p:pointer. forall i:int.
     p<>null -> shift(p,i)<>null
 
+(* axioms for valid *)
 axiom valid_def :
+  forall p:pointer. 
+	(p <> null 
+	and 0 <= offset(p)
+	and offset(p) < length(p))
+	-> valid(p)	
+
+axiom valid_not_null :
+  forall p:pointer. valid(p) -> p <> null 
+
+axiom valid1 :
+  forall p:pointer. valid(p) -> 0 <= offset(p) 
+
+axiom valid2 :
+  forall p:pointer. valid(p) -> offset(p) < length(p)
+
+(* axioms for valid_range *)
+axiom valid_range_def :
   forall p:pointer. forall i:int. forall j:int.
 	(p <> null 
 	and 0 <= offset(p)+i 
 	and i <= j
-	and offset(p)+j <= length(p))
-	-> valid(p,i,j)	
+	and offset(p)+j < length(p))
+	-> valid_range(p,i,j)	
 
-axiom valid_not_null :
+axiom valid_range_not_null :
   forall p:pointer. forall i:int. forall j:int.
-	valid(p,i,j) -> p <> null 
+	valid_range(p,i,j) -> p <> null 
 
-axiom valid1 :
+axiom valid_range1 :
   forall p:pointer. forall i:int. forall j:int.
-	valid(p,i,j) -> 0 <= offset(p)+i 
+	valid_range(p,i,j) -> 0 <= offset(p)+i 
 
-axiom valid2 :
+axiom valid_range2 :
   forall p:pointer. forall i:int. forall j:int.
-	valid(p,i,j) -> i <= j
+	valid_range(p,i,j) -> i <= j
 
-axiom valid3 :
+axiom valid_range3 :
   forall p:pointer. forall i:int. forall j:int.
-	valid(p,i,j) -> offset(p)+j <= length(p)
+	valid_range(p,i,j) -> offset(p)+j < length(p)
 
 parameter shift_ : p:pointer -> i:int -> 
   { } pointer { result = shift(p,i) }

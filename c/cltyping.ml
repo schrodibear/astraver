@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cltyping.ml,v 1.18 2004-03-02 15:13:53 filliatr Exp $ i*)
+(*i $Id: cltyping.ml,v 1.19 2004-03-02 15:49:06 marche Exp $ i*)
 
 open Cast
 open Clogic
@@ -154,7 +154,8 @@ and type_term_node loc env = function
       Tnull, c_void_star
   | PLcast (ty, t) ->
       assert false (* TODO *)
-  | PLvalid _ | PLexists _ | PLforall _ | PLnot _ | PLimplies _ 
+  | PLvalid _ | PLvalid_range _ 
+  | PLexists _ | PLforall _ | PLnot _ | PLimplies _ 
   | PLor _ | PLand _ | PLrel _ | PLtrue | PLfalse ->
       raise (Stdpp.Exc_located (loc, Parsing.Parse_error))
 
@@ -266,13 +267,19 @@ let rec type_predicate env p0 = match p0.lexpr_node with
       let q = type_quantifiers env q in
       let env' = add_quantifiers q env in
       Pexists (q, type_predicate env' p)
-  | PLvalid (t,a,b) ->
+  | PLvalid (t) ->
+      let tloc = t.lexpr_loc in
+      let t = type_term env t in
+      (match t.term_type.ctype_node with
+	 | CTarray _ | CTpointer _ -> Pvalid(t)
+	 | _ -> error tloc "subscripted value is neither array nor pointer")
+  | PLvalid_range (t,a,b) ->
       let tloc = t.lexpr_loc in
       let t = type_term env t in
       let a = type_int_term env a in
       let b = type_int_term env b in
       (match t.term_type.ctype_node with
-	 | CTarray _ | CTpointer _ -> Pvalid(t,a,b)
+	 | CTarray _ | CTpointer _ -> Pvalid_range(t,a,b)
 	 | _ -> error tloc "subscripted value is neither array nor pointer")
   | PLcast _ | PLlength _ | PLat _ | PLold _ | PLarrget _ | PLarrow _ 
   | PLdot _ | PLbinop _ | PLunop _ | PLconstant _ | PLvar _ | PLnull 

@@ -1,7 +1,7 @@
 
 
 
-
+module HeapVarSet : Set.S with type elt = string * Output.base_type
 
 type var_info =
     {
@@ -15,7 +15,7 @@ val default_var_info : string -> var_info
 type logic_info =
     {
       logic_name : string;
-      mutable logic_args : (string * Output.base_type) list;
+      mutable logic_args : HeapVarSet.t;
     }
 
 val default_logic_info : string -> logic_info

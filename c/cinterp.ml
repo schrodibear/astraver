@@ -14,14 +14,14 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.19 2004-03-02 15:13:53 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.20 2004-03-02 15:49:06 marche Exp $ i*)
 
 
 open Format
 open Output
 open Info
 open Cast
-
+open Clogic
 
 let global_var_for_type t =
   match t.ctype_node with
@@ -33,79 +33,92 @@ let interp_param (t,id) =
   (id,base_type (Ceffect.interp_type t))
 
 let interp_rel = function
-  | Clogic.Lt -> "lt_int"
-  | Clogic.Gt -> "gt_int"
-  | Clogic.Le -> "le_int"
-  | Clogic.Ge -> "ge_int"
-  | Clogic.Eq -> "eq"
-  | Clogic.Neq -> "neq"
+  | Lt -> "lt_int"
+  | Gt -> "gt_int"
+  | Le -> "le_int"
+  | Ge -> "ge_int"
+  | Eq -> "eq"
+  | Neq -> "neq"
 
 let interp_term_bin_op op =
   match op with
-  | Clogic.Badd -> "add_int"
-  | Clogic.Bsub -> "sub_int"
-  | Clogic.Bmul -> "mul_int"
+  | Badd -> "add_int"
+  | Bsub -> "sub_int"
+  | Bmul -> "mul_int"
   | _ -> assert false (* TODO *)
 
+let interp_var label v =
+  match label with 
+    | None -> LVar v 
+    | Some l -> LVarAtLabel(v,l)
+  
 let rec interp_term label old_label t =
   let f = interp_term label old_label in
-  match t.Clogic.term_node with
-    | Clogic.Tconstant c ->
+  match t.term_node with
+    | Tconstant c ->
 	begin
 	  try
 	    LConst(Prim_int(int_of_string c))
 	  with Failure "int_of_string" -> assert false (* TODO *)
 	end  
-    | Clogic.Tvar { var_name = v ; var_is_assigned = true } -> 
-	(match label with None -> LVar v 
-	   | Some l -> LVarAtLabel(v,l))
-    | Clogic.Tvar { var_name = v ; var_is_assigned = false } -> 
+    | Tvar { var_name = v ; var_is_assigned = true } -> 
+	interp_var label v
+    | Tvar { var_name = v ; var_is_assigned = false } -> 
 	LVar v
-    | Clogic.Told t ->	interp_term (Some old_label) old_label t
-    | Clogic.Tbinop (t1, op, t2) ->
+    | Told t ->	interp_term (Some old_label) old_label t
+    | Tbinop (t1, op, t2) ->
 	LApp(interp_term_bin_op op,[f t1;f t2])
-    | Clogic.Tlength t -> 
+    | Tlength t -> 
 	LApp("length",[f t])
-    | Clogic.Tat (t, l) -> 
+    | Tat (t, l) -> 
 	interp_term (Some l) old_label t
-    | Clogic.Tif (_, _, _) -> assert false (* TODO *)
-    | Clogic.Tarrget (t1, t2) -> 
+    | Tif (_, _, _) -> assert false (* TODO *)
+    | Tarrget (t1, t2) -> 
 	let te1 = f t1 and te2 = f t2 in
-	let var = global_var_for_type t.Clogic.term_type in
+	let var = global_var_for_type t.term_type in
 	LApp("acc",[LVar var;LApp("shift",[te1;te2])])
 
-    | Clogic.Tarrow (_, _) -> assert false (* TODO *)
-    | Clogic.Tdot (_, _) -> assert false (* TODO *)
-    | Clogic.Tunop (_, _) -> assert false (* TODO *)
-    | Clogic.Tapp (g, l) -> 
+    | Tarrow (_, _) -> assert false (* TODO *)
+    | Tdot (_, _) -> assert false (* TODO *)
+    | Tunop (Ustar, t1) -> 
+	let te1 = f t1 in
+	let var = global_var_for_type t.term_type in
+	LApp("acc",[LVar var;te1])
+
+    | Tunop (_, _) -> assert false (* TODO *)
+    | Tapp (g, l) -> 
 	LApp(g.logic_name,
-	     (List.map (fun (x,_) -> LVar x) g.logic_args) @ List.map f l)
-    | Clogic.Tnull -> LVar "null"
-    | Clogic.Tresult -> LVar "result"
-    | Clogic.Tcast (ty, t) -> assert false (* TODO *)
+	     (HeapVarSet.fold (fun (x,_) acc -> (interp_var label x)::acc) 
+		g.logic_args []) 
+	     @ List.map f l)
+    | Tnull -> LVar "null"
+    | Tresult -> LVar "result"
+    | Tcast (ty, t) -> assert false (* TODO *)
 
 
 let rec interp_predicate label old_label p =
   let f = interp_predicate label old_label in
   let ft = interp_term label old_label in
   match p with
-    | Clogic.Ptrue -> LTrue
-    | Clogic.Pexists (_, _) -> assert false (* TODO *)
-    | Clogic.Pforall (l, p) ->
+    | Ptrue -> LTrue
+    | Pexists (_, _) -> assert false (* TODO *)
+    | Pforall (l, p) ->
 	List.fold_right
 	  (fun (t,x) p -> LForall(x,([],Ceffect.interp_type t),p))
 	  l (interp_predicate label old_label p)
-    | Clogic.Pif (_, _, _)
-    | Clogic.Pnot _ -> assert false (* TODO *)
-    | Clogic.Pimplies (p1, p2) -> make_impl (f p1) (f p2)
-    | Clogic.Por (p1, p2) -> make_or (f p1) (f p2)
-    | Clogic.Pand (p1, p2) -> make_and (f p1) (f p2)
-    | Clogic.Prel (t1, op, t2) ->
+    | Pif (_, _, _)
+    | Pnot _ -> assert false (* TODO *)
+    | Pimplies (p1, p2) -> make_impl (f p1) (f p2)
+    | Por (p1, p2) -> make_or (f p1) (f p2)
+    | Pand (p1, p2) -> make_and (f p1) (f p2)
+    | Prel (t1, op, t2) ->
 	LPred(interp_rel op,[ft t1;ft t2])
-    | Clogic.Papp (_, _)
-    | Clogic.Pfalse -> LFalse
-    | Clogic.Pvalid (t,a,b) ->
-	LPred("valid",[ft t;ft a;ft b])
+    | Papp (_, _)
+    | Pfalse -> LFalse
+    | Pvalid (t) ->
+	LPred("valid",[ft t])
+    | Pvalid_range (t,a,b) ->
+	LPred("valid_range",[ft t;ft a;ft b])
 
 let interp_predicate_opt label old_label pred =
   match pred with
@@ -133,97 +146,11 @@ let interp_incr_op op =
     | Upostfix_dec | Uprefix_dec -> "sub_int"
 
 
-let rec interp_expr e =
-  match e.texpr_node with
-    | TEconstant(c) -> 
-	begin
-	  try
-	    Cte(Prim_int(int_of_string c))
-	  with Failure "int_of_string" -> assert false (* TODO *)
-	end
-    | TEvar(v) -> 
-	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
-    | TEbinary(e1,op,e2) ->
-	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
-    | TEarrget(e1,e2) ->
-	let te1 = interp_expr e1 and te2 = interp_expr e2 in
-	let var = global_var_for_type e.texpr_type in
-	App(App(Var("acc_"),Var(var)),App(App(Var("shift_"),te1),te2))
-    | TEassign (e1,e2) ->
-	assert false (* TODO *)
-	(*begin
-	  match op with
-	    | Aequal ->
-		begin
-		  match e1.texpr_node with
-		    | TEvar(v) ->
-			Assign(v.var_name,interp_expr e2)
-		    | _ -> assert false (* TODO *)
-		end
-	    | _ -> assert false (* TODO *)
-	end*)	
-    | TEincr(op,e) -> interp_incr_expr op e
-    | TEassign_op(e1,op,e2) ->
-	assert false (* TODO *)
-    | TEseq(e1,e2) ->
-	assert false (* TODO *)
-    | TEnop -> 
-	assert false (* TODO *)
-    | TEcond(e1,e2,e3) ->
-	If(interp_expr e1,interp_expr e2,interp_expr e3)
-    | TEstring_literal s
-	-> assert false (* TODO *)
-    | TEdot(e,s)
-      -> assert false (* TODO *)
-    | TEarrow(e,s)
-      -> assert false (* TODO *)
-    | TEunary(op,e)
-      -> assert false (* TODO *)
-    | TEcall(e,args)
-      -> assert false (* TODO *)
-    | TEcast(t,e)
-      -> assert false (* TODO *)
-    | TEsizeof_expr(e)
-      -> assert false (* TODO *)
-    | TEsizeof(t)
-      -> assert false (* TODO *)
+let one = Cte(Prim_int 1)
 
-and interp_incr_expr op e =
-  match e.texpr_node with
-    | TEvar v ->
-	begin
-	  match op with
-	    | Upostfix_dec | Upostfix_inc ->
-		assert false (* TODO *)
-	    | Uprefix_dec | Uprefix_inc ->
-		append 
-		(Assign(v.var_name,
-			App(App(Var(interp_incr_op op),Deref(v.var_name)),
-			    Cte(Prim_int 1))))
-		(Deref v.var_name)
-	end
-    | TEunary(Ustar,e') ->
-	begin
-	  match e'.texpr_node with
-	    | TEvar v ->
-		begin
-		  match op with
-		    | Upostfix_dec | Upostfix_inc ->
-			(* let tmp = (acc intP v) in
-			   upd intP v (tmp+1); tmp *)
-			assert false (* TODO *)
-		    | Uprefix_dec | Uprefix_inc ->
-			(* let tmp = (acc intP v)+1 in
-			   upd intP v tmp; tmp *)
-			assert false (* TODO *)
-		end		      
-	    | _ -> assert false (* TODO *)
-	end
-    | _ -> assert false (* TODO *)
-
-
-
-
+type interp_lvalue =
+  | LocalRef of Info.var_info
+  | HeapRef of string * Output.expr
 
 let tempvar_count = ref 0;;
 
@@ -261,6 +188,110 @@ and build_app e args =
 *)
 
 
+
+let rec interp_expr e =
+  match e.texpr_node with
+    | TEconstant(c) -> 
+	begin
+	  try
+	    Cte(Prim_int(int_of_string c))
+	  with Failure "int_of_string" -> assert false (* TODO *)
+	end
+    | TEvar(v) -> 
+	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
+    | TEbinary(e1,op,e2) ->
+	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
+    | TEarrget(e1,e2) ->
+	let te1 = interp_expr e1 and te2 = interp_expr e2 in
+	let var = global_var_for_type e.texpr_type in
+	App(App(Var("acc_"),Var(var)),App(App(Var("shift_"),te1),te2))
+    | TEassign (e1,e2) ->
+	assert false (* TODO *)
+    | TEincr(op,e) -> interp_incr_expr op e
+    | TEassign_op(e1,op,e2) ->
+	assert false (* TODO *)
+    | TEseq(e1,e2) ->
+	assert false (* TODO *)
+    | TEnop -> 
+	assert false (* TODO *)
+    | TEcond(e1,e2,e3) ->
+	If(interp_expr e1,interp_expr e2,interp_expr e3)
+    | TEstring_literal s
+	-> assert false (* TODO *)
+    | TEdot(e,s)
+      -> assert false (* TODO *)
+    | TEarrow(e,s)
+      -> assert false (* TODO *)
+    | TEunary(op,e)
+      -> assert false (* TODO *)
+    | TEcall(e,args)
+      -> assert false (* TODO *)
+    | TEcast(t,e)
+      -> assert false (* TODO *)
+    | TEsizeof_expr(e)
+      -> assert false (* TODO *)
+    | TEsizeof(t)
+      -> assert false (* TODO *)
+	  
+and interp_incr_expr op e =
+  match interp_lvalue e with
+    | LocalRef v ->
+	begin
+	  match op with
+	    | Upostfix_dec | Upostfix_inc ->
+		(* let tmp = !v in v:= op tmp 1; tmp *)
+		assert false (* TODO *)
+	    | Uprefix_dec | Uprefix_inc ->
+		(* v := op !v 1; !v *)
+		append 
+		  (Assign(v.var_name,
+			App(App(Var(interp_incr_op op),Deref(v.var_name)),
+			    one)))
+		  (Deref v.var_name)
+	end
+    | HeapRef(var,e') ->
+	begin
+	  match op with
+	    | Upostfix_dec | Upostfix_inc ->
+		(* let tmp1 = e' in
+		   let tmp2 = acc var tmp1 in
+		   upd var tmp1 (tmp2+1); tmp2 *)		
+		Let("caduceus1",e',
+		    Let("caduceus2",
+			(make_app "acc_" [Var var;Var "caduceus1"]),
+			append
+			  (make_app "upd_" 
+			     [Var var;Var "caduceus1";
+			      make_app (interp_incr_op op) 
+				[Var "caduceus2";one]])
+			  (Var "caduceus2")))
+	    | Uprefix_dec | Uprefix_inc ->
+		(* let tmp = (acc intP v)+1 in
+		   upd intP v tmp; tmp *)
+		assert false (* TODO *)
+	end		      
+
+and interp_lvalue e =
+  match e.texpr_node with
+    | TEvar v -> LocalRef(v)
+    | TEunary(Ustar,e1) ->
+	let var = global_var_for_type e.texpr_type in
+	HeapRef(var,interp_expr e1)
+    | TEarrget(e1,e2) ->
+	let te1 = interp_expr e1 and te2 = interp_expr e2 in
+	let var = global_var_for_type e.texpr_type in
+	HeapRef(var,build_complex_app (Var "shift_")
+		  [interp_expr e1; interp_expr e2])
+    | TEdot(e1,f) ->
+	HeapRef(f,interp_expr e1)
+    | TEarrow(e1,f) ->
+	HeapRef(f,interp_expr { e with texpr_node = TEunary(Ustar,e1) })
+    | _ -> assert false (* wrong typing of lvalue *)
+	  
+
+
+
+
 let interp_decl d acc = 
   match d.node with 
     | Tdecl(ctype,v,init) -> 
@@ -290,18 +321,13 @@ let rec interp_statement_expr e =
 	assert false (* TODO *)
     | TEassign(l,e) ->
 	begin
-	  match l.texpr_node with
-	    | TEvar(v) ->
+	  match interp_lvalue l with
+	    | LocalRef(v) ->
 		Assign(v.var_name,interp_expr e)
-	    | TEarrget(e1,e2) ->
-		(* P := (upd !P (shift e1 e2) e) *)
-		let var = global_var_for_type e.texpr_type in
+	    | HeapRef(var,e1) ->
+		(* upd var e1 e *)
 		(build_complex_app (Var "upd_")
-		   [Var var;
-		    build_complex_app (Var "shift_")
-		      [interp_expr e1; interp_expr e2];
-		    interp_expr e])
-	    | _ -> assert false (* TODO *)
+		   [Var var;e1; interp_expr e])
 	end 
     | TEincr(op,e) ->
 	begin
@@ -341,9 +367,9 @@ let rec interp_statement stat =
     | TSfor(annot,e1,e2,e3,body,info) ->
 	let (inv,dec) =
 	  match annot with
-	    | { Clogic.invariant = None; Clogic.variant = None } -> 
+	    | { invariant = None; variant = None } -> 
 		(LTrue,LConst (Prim_int 0))
-	    | { Clogic.invariant = Some inv; Clogic.variant = Some (var,_) } -> 
+	    | { invariant = Some inv; variant = Some (var,_) } -> 
 		(interp_predicate None "init" inv,interp_term None "" var)
 	    | _ -> 
 		assert false (* TODO *)
@@ -388,15 +414,15 @@ and interp_block (decls,stats) =
   List.fold_right interp_decl decls b 
 
 let interp_spec s =
-  let tpre = interp_predicate_opt None "" s.Clogic.requires
-  and tpost = interp_predicate_opt None "" s.Clogic.ensures
+  let tpre = interp_predicate_opt None "" s.requires
+  and tpost = interp_predicate_opt None "" s.ensures
   in (tpre,tpost)
 
 let no_spec = 
-  { Clogic.requires = None; 
-    Clogic.assigns = []; 
-    Clogic.ensures = None; 
-    Clogic.decreases = None }
+  { requires = None; 
+    assigns = []; 
+    ensures = None; 
+    decreases = None }
 
 let interp_spec_option = function
   | None -> interp_spec no_spec
@@ -404,18 +430,24 @@ let interp_spec_option = function
 
 let cinterp_logic_symbol id ls =
   match ls with
-    | Clogic.Predicate_reads(args,locs) -> assert false (* TODO *)
-    | Clogic.Predicate_def(args,pred) -> assert false (* TODO *)
-    | Clogic.Function(args,ret,_) ->
+    | Predicate_reads(args,locs) -> assert false (* TODO *)
+    | Predicate_def(args,pred) -> assert false (* TODO *)
+    | Function(args,ret,_) ->
 	let local_type =
 	  List.fold_right
 	    (fun arg t -> Prod_type("",base_type (Ceffect.interp_type arg),t))
 	    args (base_type (Ceffect.interp_type ret))
 	in
-	List.fold_right
+	HeapVarSet.fold
 	  (fun (arg,ty) t -> Prod_type("",Base_type ty,t))
 	  id.logic_args local_type
 
+let interp_axiom p =
+  let a = interp_predicate None "" p
+  and e = Ceffect.predicate p in
+  HeapVarSet.fold
+    (fun (arg,ty) t -> LForall(arg,ty,t))
+    e a
 
 
 let interp_located_tdecl (why_decls,prover_decl) decl =
@@ -427,9 +459,9 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
        prover_decl)
   | Taxiom(id,p) -> 
       fprintf Coptions.log 
-      "translating axiom declaration %s@." id;
-      ((Axiom(id,interp_predicate None "" p))::why_decls,
-       prover_decl)
+      "translating axiom declaration %s@." id;      
+      let a = interp_axiom p in
+      (Axiom(id,a)::why_decls,prover_decl)
   | Ttypedef(ctype,id) -> assert false (* TODO *)
   | Ttypedecl(ctype) -> assert false (* TODO *)
   | Tdecl(ctype,v,init) -> 

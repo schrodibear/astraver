@@ -2,6 +2,7 @@
 CADUCEUS=../../../bin/caduceus.opt 
 CADUCEUSLIB=../../../lib/why
 
+all: pointer_why.vo
 
 EXECCADUCEUS=CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUS)
 
@@ -31,7 +32,7 @@ simplify:
 	@echo -n "invalid obligations: " 
 	@egrep '[0-9]+: Invalid.$$' simplify.log | wc -l
 
-do_simplify: arith_why.sxcheck sum2_why.sxcheck
+do_simplify: arith_why.sxcheck sum2_why.sxcheck pointer_why.sxcheck
 
 %.sxcheck: %.sx
 	cat caduceus_why.sx $< > $<.all

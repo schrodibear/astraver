@@ -30,7 +30,7 @@
 %token <string> IDENTIFIER CONSTANT STRING_LITERAL
 %token LPAR RPAR IF ELSE COLON DOT INT FLOAT LT GT LE GE EQ NE COMMA ARROW
 %token FORALL EXISTS IMPLIES AND OR NOT 
-%token TRUE FALSE OLD AT RESULT LENGTH VALID THEN AT
+%token TRUE FALSE OLD AT RESULT LENGTH VALID VALID_RANGE THEN AT
 %token QUESTION MINUS PLUS STAR AMP SLASH PERCENT LSQUARE RSQUARE EOF
 %token INVARIANT VARIANT DECREASES FOR LABEL ASSERT SEMICOLON NULL
 %token REQUIRES ENSURES ASSIGNS READS LOGIC PREDICATE AXIOM LBRACE RBRACE
@@ -68,7 +68,9 @@ lexpr:
       { info (PLforall ($2, $4)) }
 | EXISTS ne_parameters SEMICOLON lexpr %prec prec_exists
       { info (PLexists ($2, $4)) }
-| VALID LPAR lexpr COMMA lexpr COMMA lexpr RPAR { info (PLvalid ($3,$5,$7)) }
+| VALID LPAR lexpr RPAR { info (PLvalid ($3)) }
+| VALID_RANGE LPAR lexpr COMMA lexpr COMMA lexpr RPAR 
+      { info (PLvalid_range ($3,$5,$7)) }
 /* terms */
 | NULL { info PLnull } 
 | CONSTANT { info (PLconstant $1) }

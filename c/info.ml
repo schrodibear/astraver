@@ -1,6 +1,9 @@
 
 
 
+module HeapVarSet = Set.Make
+ (struct type t = string * Output.base_type
+	 let compare (a,_) (b,_) = String.compare a b end)
 
 
 type var_info =
@@ -19,10 +22,10 @@ let default_var_info x =
 type logic_info =
     {
       logic_name : string;
-      mutable logic_args : (string * Output.base_type) list;
+      mutable logic_args : HeapVarSet.t;
     }
 
 let default_logic_info x =
   { logic_name = x;
-    logic_args = [] }
+    logic_args = HeapVarSet.empty }
 

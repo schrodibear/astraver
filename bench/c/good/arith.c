@@ -18,4 +18,5 @@ void test(int k)
   j = j + l + 10 * k + i + m;
 }
 
-
+/* axiom to help simplify make the proof */
+/* @ axiom dist1: \forall int x, int y, int z; x*(y+z) = x*y + x*z */
