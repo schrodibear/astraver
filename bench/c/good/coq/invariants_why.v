@@ -135,28 +135,27 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 990-1018 *)
+(* Why obligation from file "why/invariants.why", characters 977-1001 *)
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c: pointer),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
-  forall (Pre7: (constant_c alloc c intP) /\ (separation_intern_s s) /\
-                (valid_s alloc s) /\ (valid_c alloc c)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift c 0)),
-  (valid alloc caduceus_2).
+  forall (Pre13: (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                 (valid_s alloc s) /\ (valid_c alloc c)),
+  forall (caduceus_4: pointer),
+  forall (Post3: caduceus_4 = s),
+  (valid alloc caduceus_4).
 Proof.
 intros;subst.
-inversion_clear Pre7.
+inversion_clear Pre13.
 inversion_clear H0.
-unfold valid_c in H2.
-apply valid_range_valid_shift with 0 1.
-tauto.
-omega.
+inversion_clear H2.
+unfold valid_s in H0.
+auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 954-1018 *)
+(* Why obligation from file "why/invariants.why", characters 954-1001 *)
 Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (c: pointer),
@@ -164,20 +163,33 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre7: (constant_c alloc c intP) /\ (separation_intern_s s) /\
-                (valid_s alloc s) /\ (valid_c alloc c)),
-  forall (caduceus_2: pointer),
-  forall (Post3: caduceus_2 = (shift c 0)),
-  forall (Pre3: (valid alloc caduceus_2)),
-  forall (intP0: ((memory) Z)),
-  forall (Post7: intP0 = (upd intP caduceus_2 12)),
+  forall (Pre13: (constant_c alloc c intP) /\ (separation_intern_s s) /\
+                 (valid_s alloc s) /\ (valid_c alloc c)),
+  forall (caduceus_4: pointer),
+  forall (Post3: caduceus_4 = s),
+  forall (Pre3: (valid alloc caduceus_4)),
+  forall (x0: ((memory) Z)),
+  forall (Post13: x0 = (upd x caduceus_4 0)),
   (forall (result:pointer),
-   (result = (shift c 1) ->
-    (forall (intP:((memory) Z)),
-     (intP = (upd intP0 result 14) -> ((0 <= (acc x s) /\ (acc x s) <=
-      (acc y s)) /\ (acc y s) <= 100) /\ (acc intP (shift c 0)) = 12)) /\
+   (result = s ->
+    (forall (y0:((memory) Z)),
+     (y0 = (upd y result 0) ->
+      (forall (result:pointer),
+       (result = (shift c 0) ->
+        (forall (intP0:((memory) Z)),
+         (intP0 = (upd intP result 12) ->
+          (forall (result:pointer),
+           (result = (shift c 1) ->
+            (forall (intP:((memory) Z)),
+             (intP = (upd intP0 result 14) -> ((0 <= (acc x0 s) /\
+              (acc x0 s) <= (acc y0 s)) /\ (acc y0 s) <= 100) /\
+              (acc intP (shift c 0)) = 12)) /\
+            (valid alloc result))))) /\
+        (valid alloc result))))) /\
     (valid alloc result))).
 Proof.
-intuition;subst;auto;caduceus.
-Admitted.
+intuition;subst;auto;caduceus;red in H3;
+apply valid_range_valid_shift with 0 1;auto;
+omega.
+Qed.
 

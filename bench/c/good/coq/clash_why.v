@@ -109,9 +109,20 @@ Lemma f2_impl_po_4 :
   forall (Post15: fst1 = (upd fst0 caduceus_1 aux_1)),
   (assigns alloc fst fst1 (pointer_loc (acc substruct ma_structure))).
 Proof.
-intuition.
+intros.
+unfold assigns.
+intros.
 subst.
+caduceus.
+rewrite acc_upd_neq;generalize (unchanged_pointer_elim p (ma_structure # substruct) H0);auto.
+intro.
+rewrite acc_upd_neq;auto.
 Admitted.
+
+
+
+
+
 
 (* Why obligation from file "why/clash.why", characters 1009-1032 *)
 Lemma f_impl_po_1 : 

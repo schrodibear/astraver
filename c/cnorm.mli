@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.3 2004-12-15 16:03:46 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.4 2004-12-17 12:16:12 hubert Exp $ i*)
 
 open Cast
 
@@ -43,3 +43,5 @@ val separation_intern :
 val make_and : npredicate -> npredicate -> npredicate
 
 val file : tdecl located list -> ndecl located list
+
+val in_struct :  nterm -> Info.var_info -> nterm 

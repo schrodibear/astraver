@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.70 2004-12-16 16:12:09 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.71 2004-12-17 12:16:12 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -598,7 +598,7 @@ let rec invariant_for_constant loc t lvalue initializers =
 		   }  in 
 		   let block, init' =
 		     invariant_for_constant loc tyf 
-		       (noattr loc tyf (NTarrow(lvalue, f))) init
+		       (Cnorm.in_struct lvalue f) init
 		   in 
 		   if tyf.Ctypes.ctype_const then
 		     (NPand (acc,block),init')

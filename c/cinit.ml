@@ -4,6 +4,11 @@ open Clogic
 open Info
 open Ctypes
 
+let in_struct v1 v = 
+ 	{ texpr_node = TEdot (v1, v); 
+	  texpr_loc = v1.texpr_loc;
+	  texpr_type = v.var_type }
+
 let split_decl e ((invs,inits) as acc) = 
   match e.node with 
     | Tinvariant (_,p) -> (p :: invs, inits)
@@ -58,7 +63,7 @@ let rec init_expr loc t lvalue initializers =
 		(fun (acc,init) (tyf, f) -> 
 		   let block, init' =
 		     init_expr loc tyf 
-		       (noattr loc tyf (TEarrow(lvalue, f))) init
+		       (in_struct lvalue f) init
 		   in (acc@block,init'))
 		([],initializers)  fl
 	  | _ ->
@@ -107,7 +112,10 @@ let rec init_expr loc t lvalue initializers =
 let rec assigns decl =
   match decl with
     | [] -> []
-    | {node = Tdecl (_,_,None)}::decl -> assigns decl
+    | {node = Tdecl (t,v,None); loc = l}::decl ->
+	Coptions.lprintf "translating global declaration of %s@." v.var_name;
+	let declar,_ = init_expr l t (noattr l t (TEvar (Var_info v))) [] in
+	declar @ (assigns decl)
     | {node = Tdecl(t, v, Some c) ; loc = l }:: decl ->
 	Coptions.lprintf "translating global declaration of %s@." v.var_name;
 	let declar,_ = init_expr l t (noattr l t (TEvar (Var_info v))) [c] in
