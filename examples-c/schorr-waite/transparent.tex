@@ -531,13 +531,65 @@ graphe en dehors de ce chemin alors ce chemin existe toujours.
 Pour prouver la terminaison il faut monter la terminaison de la boucle
 while. Pour cela en caduceus on annote la boucle avec \emph{variant}:
 une expression qui decroit a chaque tour de la boucle.
-La mesure qui decroit strictement pour cette boucle est: 
+La mesure qui decroit strictement pour cette boucle est 
+la mesure lexicographique des 3 mesures suivant :
 \begin{enumerate}
 \item le nombre de noeud non marquer.
 \item le nombre de noeuds qui ont $c=0$
 \item la taille de la pile
 \end{enumerate}
 \end{slide}
+\begin{slide}{La preuve de terminaison}
+\fontsize{10pt}{9pt}
+\begin{alltt}
+Section lexico.
+
+Variables A B : Set.
+
+Variable Ra : A -> A -> Prop.
+Variable Rb : B -> B -> Prop.
+
+Definition lex := lexprod A (fun _:A => B) Ra (fun _:A => Rb).
+
+Lemma lex_well_founded :
+ well_founded Ra -> well_founded Rb -> well_founded lex.
+
+End lexico.
+\end{alltt} 
+Cette section est utilise afin d'avoir une version non dependante de
+l'ordre lexicographique.
+\fontsize{10pt}{9pt}
+\begin{alltt}
+Section LT_WF_REL.
+Variable A : Set.
+
+Variable X : Set.
+Variable lt : X -> X -> Prop.
+Variable F : A -> X -> Prop.
+Definition inv_lt_rel x y :=
+   exists2 n : _, F x n & (forall m, F y m -> lt n m).
+
+Hypothesis lt_wf : well_founded lt.
+
+Remark acc_lt_rel : forall x:A, (exists n : _, F x n) -> Acc
+inv_lt_rel x.
+
+Theorem well_founded_inv_rel_compat : well_founded inv_lt_rel.
+
+End LT_WF_REL.
+
+\end{alltt}
+Cette section est une copie de la section de meme nom tiree de
+WF_nat, mais qui generalise a n'importe quelle relation bien fondee a
+la place de < sur les nat
+
+Cela permet de prouve la terminaison avec des mesures qui 
+\begin{enumerate}
+\item ne sont pas totales (cad pas defini partout)
+\item a valeur dans autre chose que nat (ici nat * nat * nat)
+\end{enumerate}
+\end{slide}
+
 \begin{slide}{La preuve de terminaison}
 Pour la preuve de terminaison on doit rajouter les elements suivant a
 l'annotation du code.
@@ -567,6 +619,22 @@ ou en Coq on definit :
 \]
 Les fontions \verb|weight| et \verb|order_mark_m_and_c_and_stack| sont
 la definition de la mesure precedente.
+
+\end{slide}
+\begin{slide}{Quelques chiffres}
+Avec Simplify nous avons prouve 8 obligations de preuves sur 13.
+
+Avec Coq nous avons prouve toutes les obligations de preuves avec :
+\begin{enumerate}
+\item 317 lignes de definition et 589 lignes de tatics sur les listes
+et accesibilite.
+\item 985 lignes de obligation de preuve generees automatiquement et
+  2411 lignes de tactiques ont ete insere automatiquement pour les
+  prouvees.
+\item environ 40% du travail a ete fait pour la terminaison
+\item 3 semaines ont ete neccessaire pour faire la preuve et 2
+  semaines de plus pour la terminaison.  
+\end{enumerate}
 
 \end{slide}
 \begin{slide}{Conclusion}
