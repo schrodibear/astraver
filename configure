@@ -877,41 +877,41 @@ fi
 
 
 # camlp4 
-# Extract the first word of "camlp4", so it can be a program name with args.
-set dummy camlp4; ac_word=$2
+# Extract the first word of "camlp4o", so it can be a program name with args.
+set dummy camlp4o; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
 echo "configure:884: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_prog_CAMLP4'+set}'`\" = set"; then
+if eval "test \"`echo '$''{'ac_cv_prog_CAMLP4O'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
-  if test -n "$CAMLP4"; then
-  ac_cv_prog_CAMLP4="$CAMLP4" # Let the user override the test.
+  if test -n "$CAMLP4O"; then
+  ac_cv_prog_CAMLP4O="$CAMLP4O" # Let the user override the test.
 else
   IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS=":"
   ac_dummy="$PATH"
   for ac_dir in $ac_dummy; do
     test -z "$ac_dir" && ac_dir=.
     if test -f $ac_dir/$ac_word; then
-      ac_cv_prog_CAMLP4="camlp4"
+      ac_cv_prog_CAMLP4O="camlp4o"
       break
     fi
   done
   IFS="$ac_save_ifs"
-  test -z "$ac_cv_prog_CAMLP4" && ac_cv_prog_CAMLP4="no"
+  test -z "$ac_cv_prog_CAMLP4O" && ac_cv_prog_CAMLP4O="no"
 fi
 fi
-CAMLP4="$ac_cv_prog_CAMLP4"
-if test -n "$CAMLP4"; then
-  echo "$ac_t""$CAMLP4" 1>&6
+CAMLP4O="$ac_cv_prog_CAMLP4O"
+if test -n "$CAMLP4O"; then
+  echo "$ac_t""$CAMLP4O" 1>&6
 else
   echo "$ac_t""no" 1>&6
 fi
 
-if test "$CAMLP4" = no ; then
-	{ echo "configure: error: Cannot find camlp4." 1>&2; exit 1; }
+if test "$CAMLP4O" = no ; then
+	{ echo "configure: error: Cannot find camlp4o." 1>&2; exit 1; }
 fi
-CAMLP4LIB=`camlp4 -where`
-CAMLP4VERSION=`$CAMLP4 -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
+CAMLP4LIB=`camlp4o -where`
+CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
 echo $ac_n "checking camlp4 version""... $ac_c" 1>&6
 echo "configure:917: checking camlp4 version" >&5
 if test "$CAMLP4VERSION" != $OCAMLVERSION ; then
@@ -920,11 +920,23 @@ else
     echo "$ac_t""ok" 1>&6
 fi
 
+#  AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
+#  if test "CAMLP4OOPT" != no ; then
+#  	AC_MSG_CHECKING(camlp4o.opt version)
+#  	TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
+#  	if test "$TMPVERSION" != $CAMLP4VERSION ; then
+#  	    AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
+#  	else
+#  	    AC_MSG_RESULT(ok)
+#  	    CAMLP4O=$CAMLP4OOPT
+#  	fi
+#  fi
+
 # coq
 # Extract the first word of "coqc", so it can be a program name with args.
 set dummy coqc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:928: checking for $ac_word" >&5
+echo "configure:940: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_COQC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -957,7 +969,7 @@ fi
 # Extract the first word of "coqdep", so it can be a program name with args.
 set dummy coqdep; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:961: checking for $ac_word" >&5
+echo "configure:973: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_COQDEP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -990,6 +1002,7 @@ fi
 COQLIB=`coqc -where`
 
 # substitutions to perform
+
 
 
 
@@ -1158,7 +1171,7 @@ s%@OCAMLLEX@%$OCAMLLEX%g
 s%@OCAMLLEXDOTOPT@%$OCAMLLEXDOTOPT%g
 s%@OCAMLYACC@%$OCAMLYACC%g
 s%@OCAMLWEB@%$OCAMLWEB%g
-s%@CAMLP4@%$CAMLP4%g
+s%@CAMLP4O@%$CAMLP4O%g
 s%@COQC@%$COQC%g
 s%@COQDEP@%$COQDEP%g
 s%@OCAMLBEST@%$OCAMLBEST%g

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.mli,v 1.17 2002-09-06 11:56:52 filliatr Exp $ i*)
+(*i $Id: monad.mli,v 1.18 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 (*s Main part of the translation of imperative programs into functional ones
     (with module [Mlize]) *)
@@ -25,7 +25,11 @@ type interp = Rename.t -> predicate cc_term
 
 (* The [unit] operator encapsulates a term in a computation. *)
 
-val unit : typing_info -> term -> interp
+type result = 
+  | Value of term
+  | Exn of Ident.t * term option
+
+val unit : typing_info -> result -> interp
 
 (* [compose k1 e1 e2] evaluates computation [e1] of type [k1] and 
    passes its result (actually, a variable naming this result) to a

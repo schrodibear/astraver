@@ -123,18 +123,30 @@ fi
 AC_CHECK_PROG(OCAMLWEB,ocamlweb,ocamlweb,true)
 
 # camlp4 
-AC_CHECK_PROG(CAMLP4,camlp4,camlp4,no)
-if test "$CAMLP4" = no ; then
-	AC_MSG_ERROR(Cannot find camlp4.)
+AC_CHECK_PROG(CAMLP4O,camlp4o,camlp4o,no)
+if test "$CAMLP4O" = no ; then
+	AC_MSG_ERROR(Cannot find camlp4o.)
 fi
-CAMLP4LIB=`camlp4 -where`
-CAMLP4VERSION=`$CAMLP4 -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
+CAMLP4LIB=`camlp4o -where`
+CAMLP4VERSION=`$CAMLP4O -v 2>&1 | sed -n -e 's|.*version *\(.*\)$|\1|p'`
 AC_MSG_CHECKING(camlp4 version)
 if test "$CAMLP4VERSION" != $OCAMLVERSION ; then
     AC_MSG_ERROR(differs from ocaml version)
 else
     AC_MSG_RESULT(ok)
 fi
+
+#  AC_CHECK_PROG(CAMLP4OOPT,camlp4o.opt,camlp4o.opt,no)
+#  if test "CAMLP4OOPT" != no ; then
+#  	AC_MSG_CHECKING(camlp4o.opt version)
+#  	TMPVERSION=`$CAMLP4OOPT -v 2>&1 |sed -n -e 's|.*version *\(.*\)$|\1|p'`
+#  	if test "$TMPVERSION" != $CAMLP4VERSION ; then
+#  	    AC_MSG_RESULT(differs from camlp4o; camlp4o.opt discarded.)
+#  	else
+#  	    AC_MSG_RESULT(ok)
+#  	    CAMLP4O=$CAMLP4OOPT
+#  	fi
+#  fi
 
 # coq
 AC_CHECK_PROG(COQC,coqc,coqc,no)
@@ -157,6 +169,7 @@ AC_SUBST(OCAMLBEST)
 AC_SUBST(OCAMLVERSION)
 AC_SUBST(OCAMLLIB)
 AC_SUBST(OCAMLWEB)
+AC_SUBST(CAMLP4O)
 AC_SUBST(CAMLP4LIB)
 AC_SUBST(COQC)
 AC_SUBST(COQDEP)

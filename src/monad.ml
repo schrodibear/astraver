@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.45 2002-09-12 11:31:25 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.46 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -122,21 +122,34 @@ and trad_type_in_env ren env id =
 
 type interp = Rename.t -> predicate cc_term
 
+type result = 
+  | Value of term
+  | Exn of Ident.t * term option
+
+let apply_result ren env = function
+  | Value t -> Value (apply_term ren env t)
+  | Exn (x, Some t) -> Exn (x, Some (apply_term ren env t))
+  | Exn (_, None) as e -> e
 
 (*s [unit k t ren env] constructs the tuple 
   
       (y1, ..., yn, t, ?::(q/ren y1 ... yn t))
   
-    where the [yi] are the values of the output of [k].
+   where the [yi] are the values of the output of [k].
    If there is no [yi] and no postcondition, it is simplified into 
    [t] itself. *)
 
 let lambda_vars =
   List.fold_right (fun (id,v) t -> TTlambda ((id, CC_var_binder v), t))
 
-let unit info t ren = 
+let result_term info = function
+  | Value t -> t
+  | Exn _ -> assert false
+
+let unit info r ren = 
   let env = info.env in
-  let t = apply_term ren env t in
+  let r = apply_result ren env r in
+  let t = result_term info r in
   let k = info.kappa in
   let ef = k.c_effect in
   let q = k.c_post in

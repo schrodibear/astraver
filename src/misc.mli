@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.mli,v 1.37 2002-09-12 11:31:24 filliatr Exp $ i*)
+(*i $Id: misc.mli,v 1.38 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 (* Some misc. functions *)
 
@@ -19,7 +19,7 @@ val post_app : (predicate -> predicate) -> postcondition -> postcondition
 val optpost_app : 
   (predicate -> predicate) -> postcondition option -> postcondition option
 
-val anonymous : predicate -> assertion
+val anonymous : 'a -> 'a asst
 val anonymous_pre : bool -> predicate -> precondition
 val pre_of_assert : bool -> 'a asst -> 'a pre
 val assert_of_pre : precondition -> assertion

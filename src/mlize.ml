@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.54 2002-09-12 11:31:24 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.55 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -25,7 +25,7 @@ let rec trad e =
 
 and trad_desc info d ren = match d with
   | Expression t ->
-      Monad.unit info t ren
+      Monad.unit info (Value t) ren
 
   | Var id ->
       assert (not (is_reference info.env id));
@@ -45,7 +45,7 @@ and trad_desc info d ren = match d with
 	   let ren'' = next ren' [x] in
 	   let x' = current_var ren'' x in
 	   CC_letin (false, [x', CC_var_binder tx], CC_var res1, 
-		     Monad.unit info (Tconst ConstUnit) ren''))
+		     Monad.unit info (Value (Tconst ConstUnit)) ren''))
 	ren
 
   | Seq bl ->
@@ -63,7 +63,7 @@ and trad_desc info d ren = match d with
 	(fun v1 ren' ->
 	   let te2 = 
 	     Monad.compose e2.info (trad e2) 
-	       (fun v2 -> Monad.unit info (Tvar v2)) ren' 
+	       (fun v2 -> Monad.unit info (Value (Tvar v2))) ren' 
 	   in
 	   if v1 <> x then
 	     let ty1 = trad_type_v ren info.env (result_type e1) in
@@ -80,7 +80,7 @@ and trad_desc info d ren = match d with
 	   let x' = current_var ren'' x in
 	   CC_letin (false, [x', CC_var_binder t1], CC_var v1, 
 		     Monad.compose e2.info (trad e2)
-		       (fun v2 -> Monad.unit info (Tvar v2)) ren''))
+		       (fun v2 -> Monad.unit info (Value (Tvar v2))) ren''))
 	ren
 
   | App (e1, Term e2, kapp) ->
@@ -91,7 +91,7 @@ and trad_desc info d ren = match d with
 	     (fun v1 -> 
 		Monad.apply infoapp 
 		  (fun _ -> CC_app (CC_var v1, CC_var v2))
-		  (fun v -> Monad.unit info (Tvar v))))
+		  (fun v -> Monad.unit info (Value (Tvar v)))))
 	ren
 
   | App (e1, Refarg r, kapp) ->
@@ -99,7 +99,7 @@ and trad_desc info d ren = match d with
       Monad.compose e1.info (trad e1)
 	(fun v1 -> 
 	   Monad.apply infoapp (fun _ -> CC_var v1)
-	     (fun v -> Monad.unit info (Tvar v)))
+	     (fun v -> Monad.unit info (Value (Tvar v))))
 	ren
 
   | App (_, Type _, _) ->
@@ -117,7 +117,7 @@ and trad_desc info d ren = match d with
 	   let x' = current_var ren' x in
 	   let t = make_raw_access info.env (x,x') (Tvar v1) in
 	   let p = anonymous_pre true (make_pre_access info.env x (Tvar v1)) in
-	   insert_pre info.env p (Monad.unit info t) ren')
+	   insert_pre info.env p (Monad.unit info (Value t)) ren')
 	ren
 
   | TabAff (_, x, e1, e2) ->
@@ -133,7 +133,8 @@ and trad_desc info d ren = match d with
 		 let p = make_pre_access info.env x (Tvar v1) in
 		 CC_letin (false, [x'', CC_var_binder tx], CC_term st,
 			   insert_pre info.env (anonymous_pre true p)
-			     (Monad.unit info (Tconst ConstUnit)) ren'')))
+			     (Monad.unit info (Value (Tconst ConstUnit))) 
+			     ren'')))
 	 ren
 
   | While (b, inv, var, e) ->
@@ -146,7 +147,7 @@ and trad_desc info d ren = match d with
       let infoc = make_info info.env info.kappa in
       Monad.wfrec var info'
 	(fun w -> 
-	   let exit = Monad.unit info (Tconst ConstUnit) in
+	   let exit = Monad.unit info (Value (Tconst ConstUnit)) in
 	   let loop = Monad.compose e.info (trad e) (fun _ -> w) in
 	   trad_conditional infoc b.info (trad b) infoc loop infoc exit)
 	ren
@@ -186,7 +187,7 @@ and trad_block info =
   let rec block res = function
     | [] -> 
 	(match res with
-	   | Some id -> Monad.unit info (Tvar id)
+	   | Some id -> Monad.unit info (Value (Tvar id))
 	   | None -> assert false)
     | (Assert c) :: bl ->
 	let p = 
@@ -209,7 +210,8 @@ and trad_conditional info info1 te1 info2 te2 info3 te3 =
        in
        let branch infob eb tb = 
 	 let t = 
-	   Monad.compose infob eb (fun r -> Monad.unit info (Tvar r)) ren'
+	   Monad.compose infob eb 
+	     (fun r -> Monad.unit info (Value (Tvar r))) ren'
 	 in
 	 match q1 with
 	   | Some (q,_) -> 

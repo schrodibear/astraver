@@ -672,18 +672,34 @@ Syntax of types is given in Figure~\ref{fig:types}.
   \\[0.1em]
 
   \nt{computation\_type}\indexnt{computation\_type}
-    & $::=$ & \te{\{} $[$ \nt{predicate} $]$ \te{\}} \\
+    & $::=$ & \te{\{} $[$ \nt{precondition} $]$ \te{\}} \\
       &     & $[$ \te{returns} \nt{identifier} \te{:} $]$ \nt{value\_type} \\
       &     & $[$ \te{reads} \nt{identifier}\etoilesep{\te{,}} $]$
               $[$ \te{writes}  \nt{identifier}\etoilesep{\te{,}}  $]$ 
               $[$ \te{raises}  \nt{identifier}\etoilesep{\te{,}}  $]$ \\
-      &     & \te{\{} $[$ \nt{predicate} $]$ \te{\}} \\
+      &     & \te{\{} $[$ \nt{postcondition} $]$ \te{\}} \\
       & $|$ & \nt{value\_type} \\
   \\[0.1em]
 
   \nt{primitive\_type}\indexnt{primitive\_type}
     & $::=$ & \te{int} $|$ \te{bool} $|$ \te{float} $|$ 
-              \te{unit} $|$ \nt{identifier}
+              \te{unit} $|$ \nt{identifier} \\
+  \\[0.1em]
+
+  \nt{precondition}\indexnt{precondition}
+    & $::=$ & \nt{assertion} \\
+  \\[0.1em]
+
+  \nt{postcondition}\indexnt{postcondition}
+    & $::=$ & \nt{assertion} \nt{exn\_condition}\etoile \\
+  \\[0.1em]
+
+  \nt{exn\_condition} 
+    & $::=$ & \te{|} \nt{identifier} \te{=>} \nt{assertion} \\
+  \\[0.1em]
+
+  \nt{assertion} 
+    & $::=$ & \nt{predicate} $[$ \te{as} \nt{identifier} $]$ \\
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of types}
@@ -701,9 +717,9 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 \hrulefill\\
 \begin{tabular}{lrl}
   \nt{prog}\indexnt{prog}
-    & $::=$ & \te{\{} \nt{assertion} \te{\}}\etoile\
+    & $::=$ & \te{\{} \nt{precondition} \te{\}}\etoile\
               \nt{statement} 
-              $[$ \te{\{} \nt{assertion} \te{\}} $]$ \\
+              $[$ \te{\{} \nt{postcondition} \te{\}} $]$ \\
   \\[0.1em]
 
   \nt{statement}\indexnt{statement}
@@ -767,10 +783,6 @@ Syntax of annotated ML programs is given in Figure~\ref{fig:caml}.
 
   \nt{wf\_arg} 
     & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
-  \\[0.1em]
-
-  \nt{assertion} 
-    & $::=$ & \nt{predicate} $[$ \te{as} \nt{identifier} $]$ \\
 
 \end{tabular}\\
 \hrulefill

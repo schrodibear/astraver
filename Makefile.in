@@ -144,7 +144,7 @@ doc/manual.html: doc/manual.tex
 # special rules
 ###############
 
-CAMLP4=camlp4o pa_extend.cmo
+CAMLP4=@CAMLP4O@ pa_extend.cmo
 
 src/parser.cmo: src/parser.ml4
 	$(OCAMLC) -c $(BFLAGS) -pp "$(CAMLP4) -impl" -impl $<

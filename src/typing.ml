@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.65 2002-09-12 11:31:25 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.66 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -206,34 +206,32 @@ let state_inv lab env loc = function
 let state_post lab env (id,v,ef) loc = function
   | None -> 
       Effect.bottom, None
-  | Some ((_,[]) as q) ->
+  | Some q ->
       let lenv = Env.add_logic id v (logical_env env) in
-      let (a,_) as q = type_post lab lenv q in
+      let q = type_post lab lenv q in
       let ids = post_vars q in
-      let ef,c = 
+      let ef,q = 
 	Idset.fold
-	  (fun id (e,c) ->
+	  (fun id (e,q) ->
 	     if is_reference env id then
 	       if is_write ef id then
-		 Effect.add_write id e, c
+		 Effect.add_write id e, q
 	       else
 		 Effect.add_read id e,
-		 subst_in_predicate (subst_onev id (at_id id "")) c
+		 post_app (subst_in_predicate (subst_onev id (at_id id ""))) q
 	     else if is_at id then begin
 	       let uid,l = un_at id in
 	       if l <> "" && not (LabelSet.mem l lab) then 
 		 raise_located loc (UnboundLabel l);
 	       if is_reference env uid then
-		 Effect.add_read uid e, c
+		 Effect.add_read uid e, q
 	       else
 		 raise_located loc (UnboundReference uid)
 	     end else
-	       e,c)
-	  ids (Effect.bottom, a.a_value)
+	       e,q)
+	  ids (Effect.bottom, q)
       in
-      ef, Some ({ a with a_value = c }, [])
-  | Some _ ->
-      assert false
+      ef, Some q
 
 (*s Detection of pure functions. *)
 

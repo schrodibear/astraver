@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.46 2002-09-12 11:31:25 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.47 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -274,10 +274,17 @@ let print_option f fmt = function
   | None -> ()
   | Some x -> f fmt x
 
+let print_exn fmt (x,c) = 
+  fprintf fmt "| %a => %a" Ident.print x print_assertion c
+
 let print_post fmt = function
-  | None -> ()
-  | Some (c,[]) -> fprintf fmt "@[ %a @]" print_assertion c
-  | Some _ -> assert false
+  | None -> 
+      ()
+  | Some (c,[]) -> 
+      fprintf fmt "@[ %a @]" print_assertion c
+  | Some (c, l) -> 
+      fprintf fmt "@[ %a %a@ ]" print_assertion c 
+	(print_list space print_exn) l
 
 let rec print_pure_type fmt = function
   | PTint -> fprintf fmt "int"

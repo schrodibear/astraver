@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.56 2002-09-12 11:31:25 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.57 2002-09-12 13:20:55 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -39,6 +39,7 @@ let raises   = gec "raises"
 let cast     = gec "cast"
 let pre_condition = gec "pre_condition"
 let post_condition = gec "post_condition"
+let exn_condition = gec "exn_condition"
 
 (* binders *)
 let binder  = gec "binder"
@@ -290,7 +291,13 @@ EXTEND
   [ [ c = assertion -> pre_of_assert false c ] ]
   ;
   post_condition:
-  [ [ c = assertion -> (c,[]) ] ]
+  [ [ c = assertion -> (c,[]) 
+    | c = assertion; "|"; l = LIST1 exn_condition SEP "|" -> (c,l) 
+    | "|"; l = LIST1 exn_condition SEP "|" -> (anonymous (mk_pp loc PPtrue), l)
+  ] ]
+  ;
+  exn_condition:
+  [ [ x = ident; "=>"; c = assertion -> (x,c) ] ]
   ;
 
   (* Binders (for both types and programs) *)
