@@ -5,7 +5,7 @@
 
 parameter t : array 10 of int
 
-let p = t[1+2] := 3+4
+let p = begin t[1+2] := 3+4; t[2] := 1 end { t[3] = 7 }
 
 (*
 let rec f (x:int) : unit { variant x } = 

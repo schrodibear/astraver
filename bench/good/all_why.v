@@ -106,15 +106,21 @@ Intros; Omega.
 Save.
 
 Lemma arr5_po_1 : 
+  (v6: (array `10` Z))
+  (result: Z)
+  (Post1: (store v6 `0` result) = (store v6 `0` `1`))
   `0 <= 0` /\ `0 < 10`.
 Proof. (* arr5_po_1 *)
-Omega.
+Intros; Omega.
 Save.
 
 Lemma arr6_po_1 : 
+  (v6: (array `10` Z))
+  (result: Z)
+  (Post1: (store v6 `1 + 2` result) = (store v6 `1 + 2` `3 + 4`))
   `0 <= 1 + 2` /\ `1 + 2 < 10`.
 Proof. (* arr6_po_1 *)
-Omega.
+Intros; Omega.
 Save.
 
 Lemma arr7_po_1 : 
@@ -129,6 +135,8 @@ Lemma arr7_po_2 :
   (v6: (array `10` Z))
   (Pre3: (access v6 `0`) = `9`)
   (Pre2: `0 <= 0` /\ `0 < 10`)
+  (result: Z)
+  (Post1: (store v6 (access v6 `0`) result) = (store v6 (access v6 `0`) `1`))
   `0 <= (access v6 0)` /\ `(access v6 0) < 10`.
 Proof. (* arr7_po_2 *)
 Intros; Omega.

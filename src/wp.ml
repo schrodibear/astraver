@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.37 2002-04-10 08:35:18 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.38 2002-04-18 13:22:17 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -115,6 +115,13 @@ let rec normalize p =
 	p
     | TabAcc (b, x, e) ->
 	change_desc p (TabAcc (b, x, normalize e))
+    | TabAff (_, x, ({desc=Expression t1} as e1), ({desc=Expression t2} as e2))
+      when post e1 = None && post e2 = None && k.c_post = None ->
+	let t1 = put_label_term env p.info.label t1 in
+	let t2 = put_label_term env p.info.label t2 in
+	let t = make_raw_store env (x, at_id x p.info.label) t1 t2 in
+	let q = create_post (equality (Tvar x) t) in
+	post_if_none env q p
     | TabAff (b, x, e1, e2) ->
 	change_desc p (TabAff (b, x, normalize e1, normalize e2))
     | Seq bl ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: misc.ml,v 1.32 2002-04-17 08:48:58 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.33 2002-04-18 13:22:17 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -351,7 +351,8 @@ let rec print_predicate fmt = function
   | Pnot a ->
       fprintf fmt "(not %a)" print_predicate a
   | Forall (_,b,_,p) ->
-      fprintf fmt "(forall #%d: %a)" (Ident.bound_id b) print_predicate p
+      fprintf fmt "@[<hov 2>(forall #%d:@ %a)@]" 
+	(Ident.bound_id b) print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 
