@@ -1,3 +1,21 @@
+(*
+ * The Why certification tool
+ * Copyright (C) 2002 Jean-Christophe FILLIATRE
+ * 
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License version 2, as published by the Free Software Foundation.
+ * 
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * See the GNU General Public License version 2 for more details
+ * (enclosed in the file GPL).
+ *)
+
+(*i $Id: hilight.mll,v 1.2 2003-06-19 07:29:58 filliatr Exp $ i*)
+
 {
   type token = Code of string | Annotation of string
   exception Lex_error of string
