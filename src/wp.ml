@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: wp.ml,v 1.66 2002-11-04 16:49:00 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.67 2002-11-25 14:33:57 filliatr Exp $ i*)
 
 (*s Weakest preconditions *)
 
@@ -54,8 +54,13 @@ let saturate_post k a q =
   let saturate a = (a, List.map set_post xs) in
   option_app saturate a
 
+(*s Misc. test functions *)
+
 let need_a_post p = 
   match p.desc with Lam _ | Rec _ -> false | _ -> true
+
+let is_while p = 
+  match p.desc with While _ -> true | _ -> false
 
 (*s Weakest precondition of an annotated program:
     \begin{verbatim}
@@ -96,7 +101,8 @@ let rec wp p q =
   let w = option_app (named_app (erase_label lab)) w in
   let p = if need_a_post p then force_post env q0 p else p in
   let w = match postp, q with
-    | Some q', Some q ->
+    (* abstrac wrt existing post, unless [p] is a loop *)
+    | Some q', Some q when not (is_while p) ->
 	let res = (result, result_type p) in
 	let w = abstract_wp q' q res (output p) in
 	Some (anonymous (erase_label lab w))
@@ -200,7 +206,7 @@ and wp_desc info d q =
 	let qbl = while_post_block info.env inv var e in
 	let q = Annot.sup (Some qbl) q in (* exc. posts taken from [q] *)
 	let e',_ = wp e q in
-	While (b', inv, var, e'), None
+	While (b', inv, var, e'), inv (* None *)
 
     | Raise (id, None) ->
 	(* $wp(raise E, _, R) = R$ *)

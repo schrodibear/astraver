@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.10 2002-11-21 16:23:09 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.11 2002-11-25 14:33:57 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -102,6 +102,7 @@ let mk_seq loc e1 e2 = match e1, e2 with
   | e1, { pdesc=Sseq l2 } -> mk_expr loc (Sseq (Sstatement e1 :: l2))
   | { pdesc=Sseq l1 }, e2 -> mk_expr loc (Sseq (l1 @ [Sstatement e2]))
   | e1, e2 -> mk_expr loc (Sseq [Sstatement e1; Sstatement e2])
+let mt_seq l = mk_expr l (Sseq [])
 
 let ml_const l c = mk_expr l (Sconst c)
 let ml_true l = ml_const l (ConstBool true)
@@ -357,7 +358,7 @@ let rec interp_statement cenv et = function
   | CSexpr (_, e) -> 
       let m,_ = interp_expr cenv et e in m
   | CSblock (l, bl) ->
-      mk_expr l (interp_block cenv bl)
+      interp_block l cenv bl
   | CSfor (l, s1, s2, e3, an, s) ->
       let (i,v) = interp_loop_annot an in
       let s3 = option_app (fun e -> CSexpr (l, e)) e3 in
@@ -384,13 +385,18 @@ let rec interp_statement cenv et = function
       assert false
 
 (* TODO: passer un [et] *)
-and interp_block cenv (d,b) =
-   assert (d = []);
-   Sseq (List.map 
-	   (fun s -> Sstatement (interp_statement cenv (Some void) s)) b)
+and interp_block l cenv (d,b) =
+  assert (d = []);
+  let rec interp_bl = function
+    | [] -> 
+	mt_seq l
+    | s :: bl ->
+	mk_seq l (interp_statement cenv (Some void) s) (interp_bl bl)
+  in
+  interp_bl b
 
 let interp_annotated_block cenv (l, p, bl, q) =
-  { pdesc = interp_block cenv bl;
+  { pdesc = (interp_block l cenv bl).pdesc;
     pre = interp_c_pre p; post = interp_c_post q; loc = l }
 
 let interp_binder (pt, id) = (id, BindType (PVpure pt))

@@ -1177,7 +1177,7 @@ and is given in Figure~\ref{fig:cfiles}.
     &   $|$ & \nt{c\_expr} \nt{binary\_operator} \nt{c\_expr} \\
     &   $|$ & \nt{c\_expr} \nt{postfix\_operator} \\
     &   $|$ & \nt{prefix\_operator} \nt{c\_expr} \\
-    &   $|$ & \nt{identifier} \te{(} \te{)} \\
+    &   $|$ & \nt{identifier} \te{(} \nt{c\_expr}\etoilesep{\te{,}} \te{)} \\
     &   $|$ & \nt{c\_expr} \te{?} \nt{c\_expr} \te{:} \nt{c\_expr} \\
   \\[0.1em]
 
