@@ -1,0 +1,132 @@
+\documentclass[a4paper,12pt]{report}
+
+\newcommand{\caml}{\textsf{Caml}}
+\newcommand{\t}[1]{\texttt{#1}}
+\newcommand{\nt}[1]{\textsl{#1}}
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+\vfill
+\rule\textwidth{0.1cm}\\[0.3cm]
+{\Huge\sf WHY Reference Manual}\\[0.5cm]
+{\large August 2001}\\
+\rule\textwidth{0.1cm}
+\vfill
+\noindent Jean-Christophe Filli\^atre
+\vfill
+\end{center}
+
+\tableofcontents
+
+\chapter{Usage}
+
+\chapter{Syntax}
+
+\section{Terms and predicates}
+
+\subsection{Terms}
+
+Syntax of terms is given in Figure~\ref{fig:terms}.
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill
+
+\hrulefill
+\caption{Syntax of terms}
+\label{fig:terms}
+\end{center}		
+\end{figure}
+
+\subsection{Predicates}
+
+Syntax of predicates is given in Figure~\ref{fig:predicates}.
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill
+
+\hrulefill
+\caption{Syntax of predicates}
+\label{fig:predicates}
+\end{center}		
+\end{figure}
+
+\subsection{Annotated Caml programs}
+
+Syntax of annotated \caml\ programs is given in Figure~\ref{fig:caml}.
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill
+\begin{tabular}{lrl}
+  prog & $::=$ & \verb!{! ~ predicate ~ \verb!}! *
+                 ~ statement ~ [ \verb!{! ~ predicate ~ \verb!}! ] \\
+
+    & & \\[0.1em]
+
+    statement
+         & ::= & expression \\
+         &   | & identifier ~ \verb!:=! ~ prog \\
+         &   | & identifier ~ \verb![! ~ expression ~ \verb!]!
+                 ~ \verb!:=! ~ prog \\
+         &   | & \verb!let! ~ identifier ~ \verb!=! ~ \verb!ref! ~
+                  prog ~ \verb!in! ~ prog \\
+         &   | & \verb!if! ~ prog ~ \verb!then! ~ prog
+                 ~ [ \verb!else! ~ prog ] \\
+         &   | & \verb!while! ~ prog ~ \verb!do!
+                 ~ loop\_annot ~ block ~ \verb!done! \\
+         &   | & \verb!begin! ~ block ~ \verb!end! \\
+         &   | & \verb!let! ~ identifier ~ \verb!=! ~ prog ~
+                 \verb!in! ~ prog \\
+         &   | & \verb!fun! ~ binders ~ \verb!->! ~ prog \\
+         &   | & \verb!let! ~ \verb!rec! ~ identifier ~ binder ~ \verb!:!
+                 ~ value\_type \\
+         &     & ~~ \verb!{! ~ \verb!variant! ~ wf\_arg ~ \verb!}!
+                 ~ \verb!=! ~ prog ~ [ \verb!in! ~ prog ] \\
+         &   | & \verb!(! ~ prog ~~ prog ~ \verb!)! \\
+
+    & & \\[1em]
+
+    expression
+         & ::= & identifier \\
+         &   | & \verb@!@ ~ identifier \\
+         &   | & identifier ~ \verb![! ~ expression ~ \verb!]! \\
+         &   | & integer \\
+         &   | & \verb!(! ~ expression+  \verb!)! \\
+
+    & & \\[1em]
+
+    block & ::= & block\_statement ~ [ ~ \verb!;! ~ block ~ ] \\
+
+    & & \\[0.1em]
+
+    block\_statement
+          & ::= & prog \\
+          &   | & \verb!label! ~ identifier \\
+          &   | & \verb!assert! ~ \verb!{! ~ predicate ~ \verb!}! \\
+
+    & & \\[1em]
+
+    binders & ::= & \verb!(! ~ identifier,\dots,identifier ~ \verb!:!
+                    ~ value\_type ~ \verb!)! + \\
+
+    & & \\[1em]
+
+    loop\_annot
+          & ::= & \verb!{! ~ \verb!invariant! ~ predicate ~
+                  \verb!variant! ~ wf\_arg ~ \verb!}! \\
+    & & \\[0.1em]
+
+    wf\_arg & ::= & cic\_term ~ [ \verb!for! ~ cic\_term ] \\
+
+  \end{array}
+$$
+\hrulefill
+\caption{Syntax of annotated programs}
+\label{fig:caml}
+\end{center}
+\end{figure}
+
+\end{document}
