@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: typing.ml,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: typing.ml,v 1.3 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Format
 open Ident
@@ -27,7 +27,10 @@ let check_num loc t =
 
 let rec typing_term loc env = function
   | Tvar id -> 
-      (match type_in_env env id with Ref v -> v | v -> v) (* SAFE *)
+      (try 
+	 (match type_in_env env id with Ref v -> v | v -> v)
+       with Not_found ->
+	 Error.unbound_variable id (Some loc))
   | Tconst (ConstInt _) -> type_v_int
   | Tconst (ConstBool _) -> type_v_bool
   | Tconst ConstUnit -> type_v_unit
@@ -51,8 +54,22 @@ let rec typing_term loc env = function
       (match type_in_env env a with 
 	 | Array (_,v) -> v 
 	 | _ -> raise (Error.Error (Some loc, Error.NotAnArray a)))
-  | Tapp _ ->
-      failwith "todo"
+  | Tapp (id, [a]) when id == t_sqrt ->
+      let ta = typing_term loc env a in
+      if ta <> type_v_float then
+	Error.expected_type loc (fun fmt -> fprintf fmt "float");
+      type_v_float
+  | Tapp (id, tl) as t ->
+      (match type_in_env env id with
+	 | Arrow (bl, { c_result_type = v}) ->
+	     let ttl = List.map (typing_term loc env) tl in
+	     check_app loc bl ttl;
+	     v
+	 | _ -> 
+	     print_term err_formatter t; pp_print_newline err_formatter ();
+	     assert false)
+  | Tbound _ ->
+      assert false
 
 and check_same_type loc env a b =
   let ta = typing_term loc env a in
@@ -65,6 +82,20 @@ and check_two_nums loc env a b =
   let tb = typing_term loc env b in
   if ta <> tb then Error.expected_type loc (fun fmt -> print_type_v fmt ta);
   ta
+
+and check_app loc bl tl = match bl, tl with
+  | [], [] ->
+      ()
+  | [], _ ->
+      Error.app_of_non_function loc
+  | _, [] ->
+      Error.partial_app loc
+  | (_,BindType et) :: bl , at :: tl ->
+      if et <> at then 
+	Error.expected_type loc (fun fmt -> print_type_v fmt et);
+      check_app loc bl tl
+  | _ ->
+      assert false
 
 let type_of_expression ren env t =
   typing_term Loc.dummy env t
@@ -149,17 +180,6 @@ let effect_app ren env f args =
   (bl,c), (s,so,ok), 
   { c' with c_result_type = type_v_rsubst so c'.c_result_type }
 
-(* Execution of a Coq AST. Returns value and type.
- * Also returns its variables *)
-(*i
-let state_coq_ast sign a =
-  let j =
-    let env = Global.env_of_context sign in
-    reraise_with_loc (Ast.loc a) (judgment_of_rawconstr Evd.empty env) a in
-  let ids = global_vars j.uj_val in
-  j.uj_val, j.uj_type, ids
-i*)
-
 (* [is_pure p] tests wether the program p is an expression or not. *)
 
 let rec is_pure_type_v = function
@@ -182,14 +202,15 @@ let rec is_pure_desc ren env = function
   | TabAcc (_,_,p) -> is_pure ren env p
   | App (p,args) -> 
       is_pure ren env p && List.for_all (is_pure_arg ren env) args
-  | SApp _ | Aff _ | TabAff _ | Seq _ | While _ | If _ 
+  | Lapp (_,a,b) -> is_pure ren env a && is_pure ren env b
+  | Aff _ | TabAff _ | Seq _ | While _ | If _ 
   | Lam _ | LetRef _ | LetIn _ | LetRec _ -> false
   | Debug (_,p) -> is_pure ren env p
   | PPoint (_,d) -> is_pure_desc ren env d
 and is_pure ren env p =
   p.pre = [] && p.post = None && is_pure_desc ren env p.desc
 and is_pure_arg ren env = function
-    Term p -> is_pure ren env p
+  | Term p -> is_pure ren env p
   | Type _ -> true
   | Refarg _ -> false
 
@@ -334,6 +355,16 @@ and cic_binders env ren = function
  * We also return the effect, which does contain only *read* variables.
  *)
 
+let partial_pre = function
+  | Tapp (id, [a;b]) when id == t_div ->
+      let p = Pterm (Tapp (t_noteq, [b; Tconst (ConstInt 0)])) in
+      [anonymous_pre true p]
+  | Tapp (id, [a]) when id == t_sqrt ->
+      let p = Pterm (Tapp (t_ge, [a; Tconst (ConstInt 0)])) in
+      [anonymous_pre true p]
+  | _ ->
+      []
+
 let states_expression ren env expr =
   let rec effect pl = function
     | Var id -> 
@@ -347,7 +378,7 @@ let states_expression ren env expr =
 	let c,pl,ef = effect pl p.desc in
 	let pre = make_pre_access ren env id c in
 	make_raw_access ren env (id,id) c, 
-	(anonymous_pre true pre)::pl, Effect.add_read id ef
+	(anonymous_pre true pre) :: pl, Effect.add_read id ef
     | App (p,args) ->
 	let a,pl,e = effect pl p.desc in
 	let args,pl,e =
@@ -366,7 +397,8 @@ let states_expression ren env expr =
 	    args ([],pl,e) 
 	in
 	Error.check_for_non_constant p.loc a;
-	applist a args, pl, e
+	let t = applist a args in
+	t, (partial_pre t) @ pl, e
     | _ -> 
 	assert false
   in
@@ -469,21 +501,21 @@ let rec states_desc ren env loc = function
       Lam(bl',s_e), (v,ef)
 	 
   (* Connectives AND and OR *)
-  | SApp ([Var id], [e1;e2]) ->
+  | Lapp (c,e1,e2) ->
       let s_e1 = states ren env e1
       and s_e2 = states ren env e2 in
       let ef1 = s_e1.info.kappa.c_effect
       and ef2 = s_e2.info.kappa.c_effect in
       let ef = Effect.union ef1 ef2 in
-      SApp ([Var id], [s_e1; s_e2]), (type_v_bool, ef)
+      Lapp (c,s_e1,s_e2), (type_v_bool, ef)
 
   (* Connective NOT *)
+(*i
   | SApp ([Var id], [e]) ->
       let s_e = states ren env e in
       let ef = s_e.info.kappa.c_effect in
       SApp ([Var id], [s_e]), (type_v_bool, ef)
-      
-  | SApp _ -> invalid_arg "Typing.states (SApp)"
+i*)      
 
   (* ATTENTION:
      Si un argument réel de type ref. correspond à une ref. globale

@@ -82,7 +82,7 @@ and trad_desc ren env ct d =
 	else
 	  t 
       in
-      make_let_in ren env te1 p1
+      make_let_in ren ren' env te1 p1
 	(current_vars ren' w,q1) (id, PureType PTint) (t,ty)
 
   | Aff (x, e1) ->
@@ -95,7 +95,7 @@ and trad_desc ren env ct d =
 	result_tuple ren' (current_date ren) env
 	  (rest, CC_expr (Tconst ConstUnit), CC_type) (eft,qt) 
       in
-      make_let_in ren env te1 p1
+      make_let_in ren ren' env te1 p1
 	(current_vars ren' w1,q1) (current_var ren' x,tx) t_ty
 
   | TabAff (check, x, e1, e2) ->
@@ -115,9 +115,9 @@ and trad_desc ren env ct d =
 		   (rest, CC_expr (Tconst ConstUnit), CC_type) (eft,qt) in
       let store = make_raw_store ren'' env (x,current_var ren'' x) (Tvar id1)
 		   (Tvar id2) in
-      let t = make_let_in ren'' env (CC_expr store) [] ([],None) 
+      let t = make_let_in ren'' ren''' env (CC_expr store) [] ([],None) 
 		(current_var ren''' x, type_in_env env x) (t,ty) in
-      let t = make_let_in ren' env te2 p2
+      let t = make_let_in ren' ren'' env te2 p2
      		(current_vars ren'' w2,q2) (id2,ty_elem) (t,ty) in
       let t = 
 	if check then
@@ -126,7 +126,7 @@ and trad_desc ren env ct d =
 	else
 	  t 
       in
-      make_let_in ren env te1 p1
+      make_let_in ren ren' env te1 p1
 	(current_vars ren' w1,q1) (id1,PureType PTint) (t,ty)
 
   | Seq bl ->
@@ -141,7 +141,12 @@ and trad_desc ren env ct d =
       make_block ren env finish bl
 
   | If (b, e1, e2) ->
-      let tb = trad ren b in
+      (*i EXP: we do not generate the obligation at the end of test i*)
+      let b' =
+	{ b with post=None; 
+	  info={ b.info with kappa={ b.info.kappa with c_post=None }}}
+      in
+      let tb = trad ren b' in
       let _,efb,_,_ = decomp_kappa b.info.kappa in
       let ren' = next ren (get_writes efb) in
       let te1 = trad ren' e1 in
@@ -165,9 +170,8 @@ and trad_desc ren env ct d =
       let te = trans ren' e in
       CC_lam (bl', te)
 
-  | SApp ([Var id; Expression q1; Expression q2], [e1; e2])
-    when id == p_and || id == p_or ->
-      let c = Tvar id in
+  | Lapp (c, e1, e2) ->
+      let c = Tvar (if c = Land then p_and else p_or) in
       let te1 = trad ren e1
       and te2 = trad ren e2 in
 (*i
@@ -175,15 +179,6 @@ and trad_desc ren env ct d =
       and q2' = apply_post ren env (current_date ren) (anonymous q2) in
 i*)
       CC_app (CC_expr c, [te1; te2])
-
-  | SApp ([Var id; Expression q], [e]) when id == p_not ->
-      let c = Tvar id in
-      let te = trad ren e in
-(*i      let q' = apply_post ren env (current_date ren) (anonymous q) in i*)
-      CC_app (CC_expr c, [te])
-
-  | SApp _ ->
-      invalid_arg "mlise.trad (SApp)"
 
   | App (f, args) ->
       let trad_arg (ren,args) = function
@@ -229,10 +224,10 @@ i*)
       let ren'' = next ren' (get_writes ef2) in
       let t,ty = result_tuple ren'' (current_date ren) env
 		   (Ident.result, CC_var Ident.result, CC_type) (eft,qt) in
-      let t = make_let_in ren' env' te2 p2
+      let t = make_let_in ren' ren'' env' te2 p2
 		(current_vars ren'' (get_writes ef2),q2)
 		(Ident.result,tv2) (t,ty) in
-      let t = make_let_in ren env te1 p1
+      let t = make_let_in ren ren' env te1 p1
      		(current_vars ren' (get_writes ef1),q1) (x,tv1) (t,ty) 
       in
       t
@@ -249,10 +244,10 @@ i*)
       let ren'' = next ren' (get_writes ef2) in
       let t,ty = result_tuple ren'' (current_date ren) env
 		   (Ident.result,CC_var Ident.result, CC_type) (eft,qt) in
-      let t = make_let_in ren' env' te2 p2
+      let t = make_let_in ren' ren'' env' te2 p2
 		(current_vars ren'' (get_writes ef2),q2)
 		(Ident.result,tv2) (t,ty) in
-      let t = make_let_in ren env te1 p1
+      let t = make_let_in ren ren' env te1 p1
      		(current_vars ren' (get_writes ef1),q1) (x,tv1) (t,ty) 
       in
       t

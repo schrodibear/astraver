@@ -1,8 +1,9 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: monad.ml,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: monad.ml,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
+open Format
 open Ident
 open Misc
 open Util
@@ -239,11 +240,14 @@ let let_in_pre ty p t =
 let multiple_let_in_pre ty hl t =
   List.fold_left (fun t h -> let_in_pre ty h t) t hl
 
-let make_let_in ren env fe p (vo,q) (res,tyres) (t,ty) =
+let make_let_in ren ren' env fe p (vo,q) (res,tyres) (t,ty) =
   let b = [res, CC_var_binder tyres] in
   let b',dep = match q with
     | None -> [],false
-    | Some q -> [post_name q.a_name, CC_pred_binder q.a_value],true 
+    | Some q -> 
+	let q = apply_post ren' env (current_date ren) q in
+	let hyp = subst_in_predicate [Ident.result,res] q.a_value in
+	[post_name q.a_name, CC_pred_binder hyp],true 
   in
   let bl = (binding_of_alist ren env vo) @ b @ b' in
 (*i  let tyapp =
@@ -262,17 +266,18 @@ let make_let_in ren env fe p (vo,q) (res,tyres) (t,ty) =
  *   [h1:P1]...[hn:Pn]let h'1 = ?:P'1 in ... let H'm = ?:P'm in t
  *)
 
+let bind_pre ren env p =
+  pre_name p.p_name, CC_pred_binder (apply_pre ren env p).p_value
+
 let abs_pre ren env (t,ty) pl =
   List.fold_left
     (fun t p ->
        if p.p_assert then
 	 let_in_pre ty (apply_pre ren env p) t
        else
-	 let h = pre_name p.p_name in 
-	 CC_lam ([h,CC_pred_binder (apply_pre ren env p).p_value],t))
+	 CC_lam ([bind_pre ren env p], t))
     t pl
     
-
 (* [make_block ren env finish bl] builds the translation of a block.
  * finish is the function that is applied to the result at the end of the
  * block. *)
@@ -299,7 +304,7 @@ let make_block ren env finish bl =
 	let id = Ident.result in
 	(*i let tye = trad_ml_type_v ren env tye in i*)
 	let t = rec_block ren' (Some (id,tye)) block in
-	make_let_in ren env te pe (current_vars ren' w,qe) (id,tye) t,
+	make_let_in ren ren' env te pe (current_vars ren' w,qe) (id,tye) t,
 	snd t
   in
   let t,_ = rec_block ren None bl in
@@ -383,14 +388,14 @@ let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
   in
   let qapp' = option_app (named_app (subst_in_predicate svi)) qapp in
   let t = 
-    make_let_in ren'' env fe [] (current_vars ren''' outf,qapp')
+    make_let_in ren'' ren''' env fe [] (current_vars ren''' outf,qapp')
       (res,tyres) (t,ty)
   in
   let t =
     if recur then 
       t
     else
-      make_let_in ren' env tf pf
+      make_let_in ren' ren'' env tf pf
 	(current_vars ren'' (get_writes ef),qf)
 	(res_f,tvf (*i trad_ml_type_v ren env tvf i*)) (t,ty)
   in
@@ -401,7 +406,7 @@ let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
 	let w = get_writes ea in
 	let ren' = next ren w in
 	let t' = eval_args ren' args in
-	make_let_in ren env ta pa (current_vars ren' (get_writes ea),qa)
+	make_let_in ren ren' env ta pa (current_vars ren' (get_writes ea),qa)
 	  (vx,tva (*i trad_ml_type_v ren env tva i*)) (t',ty)
   in
   eval_args ren (List.combine vi args)
@@ -418,17 +423,19 @@ let make_app env ren args ren' (tf,cf) ((bl,cb),s,capp) c =
  *                   (proj (o1,o2)), v2 [,?::q] 
  *)
 
-let make_if_case ren env ty (idb,b,qb) (br1,br2) =
+let make_if_case ren env ty (tb,qb) (br1,br2) =
   let ty1,ty2 = match qb with
     | Some q ->  
   	let q = apply_post ren env (current_date ren) q in
-	tsubst_in_predicate [idb, Tconst (ConstBool true)] q.a_value,
-	tsubst_in_predicate [idb, Tconst (ConstBool false)] q.a_value
-    | None -> assert false
+        (*i let q = post_app (subst_in_predicate [Ident.result,idb]) q in i*)
+	decomp_boolean (Some q)
+    | None ->
+	print_cc_term err_formatter tb; pp_print_flush err_formatter ();
+	assert false
   in
   let n = test_name Anonymous in
-  (CC_case (b, [[n,CC_pred_binder ty1], br1;
-		[n,CC_pred_binder ty2], br2]))
+  (CC_if (tb, CC_lam ([n, CC_pred_binder ty1], br1),
+	  CC_lam ([n, CC_pred_binder ty2], br2)))
 
 let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
   let ((_,tvb),eb,pb,qb) = decomp_kappa cb in
@@ -449,7 +456,7 @@ let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
     let ren'' = next ren' w_br in
     let t,ty = result_tuple ren'' (current_date ren') env
 		 (res,CC_var res,CC_type) (e,q) in
-    make_let_in ren' env f_br p_br (current_vars ren'' w_br,q_br)
+    make_let_in ren' ren'' env f_br p_br (current_vars ren'' w_br,q_br)
       (res,tt) (t,ty),
     ty
   in
@@ -457,9 +464,13 @@ let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
   let t2,ty2 = branch c2 t2 in
   let ty = ty1 in
   let qb = force_bool_name qb in
+  let t = make_if_case ren env ty (tb,qb) (t1,t2) in
+  let pre = List.map (bind_pre ren env) pb in
+  make_abs pre t
+(*i
   let t = make_if_case ren env ty (resb,CC_var resb,qb) (t1,t2) in
-  make_let_in ren env tb pb (current_vars ren' wb,qb) (resb,tyb) (t,ty)
-
+  make_let_in ren ren' env tb pb (current_vars ren' wb,None) (resb,tyb) (t,ty)
+i*)
 
 (* [make_while ren env (cphi,r,a) (tb,cb) (te,ce) c]
  * constructs the term corresponding to the while, i.e.
@@ -523,9 +534,10 @@ let make_body_while ren env phi_of a r id_phi0 id_w (tb,cb) tbl (i,c) =
 
   let b_al = current_vars ren' (get_reads eb) in
   let qb = force_bool_name qb in
-  let t = make_if_case ren' env ty (resb,CC_var resb,qb) (t1,t2) in
+  let t = make_if_case ren' env ty (tb,qb) (t1,t2) in
   let t = 
-    make_let_in ren' env tb pb (current_vars ren' wb,qb) (resb,tyb) (t,ty) 
+    make_let_in 
+      ren' ren' env tb pb (current_vars ren' wb,qb) (resb,tyb) (t,ty) 
   in
   let t = 
     let pl = List.map (pre_of_assert false) (list_of_some i) in

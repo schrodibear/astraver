@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: util.ml,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: util.ml,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Logic
 open Ident
@@ -56,17 +56,40 @@ let predicate_now_vars env c =
 let term_now_vars env c =
   Idset.filter (is_mutable_in_env env) (term_vars c)
 
-let make_before_after c =
+let gen_change_label f c =
   let ids = Idset.elements (predicate_vars c) in
   let al = 
     map_succeed
       (function id -> 
-	 if is_at id then 
-	   match un_at id with (uid,"") -> (id,uid) | _ -> failwith "caught"
-	 else failwith "caught")
+	 if is_at id then (id, f (un_at id)) else failwith "caught")
       ids
   in
   subst_in_predicate al c
+
+let make_before_after c =
+  gen_change_label 
+    (function (uid,"") -> uid | _ -> failwith "caught") c
+
+let erase_label l c =
+  gen_change_label 
+    (function (uid,l') when l = l' -> uid | _ -> failwith "caught") c
+
+let change_label l1 l2 c =
+  gen_change_label 
+    (function (uid,l) when l = l1 -> at_id uid l2 | _ -> failwith "caught") c
+
+let make_after_before_al env ids =
+  Idset.fold 
+    (fun id al -> 
+       if is_mutable_in_env env id then (id, at_id id "") :: al else al)
+    ids []
+
+let make_after_before env p = 
+  subst_in_predicate (make_after_before_al env (predicate_vars p)) p
+
+let make_after_before_term env t =
+  subst_in_term (make_after_before_al env (term_vars t)) t
+
 
 (* [apply_pre] and [apply_post] instantiate pre- and post- conditions
  * according to a given renaming of variables (and a date that means
@@ -191,6 +214,19 @@ let decomp_kappa c =
 
 let id_from_name = function Name id -> id | Anonymous -> (Ident.create "X")
 
+(* [decomp_boolean c] returns the specs R and S of a boolean expression *)
+
+let decomp_boolean = function
+  | Some { a_value = Pif (Pterm (Tvar id),a,b) } when id = Ident.result ->
+      a,b
+  | Some { a_value = c } -> 
+      (* q -> if result then q(true) else q(false) *)
+      let ctrue = tsubst_in_predicate [Ident.result,ttrue] c in
+      let cfalse = tsubst_in_predicate [Ident.result,tfalse] c in
+      ctrue, cfalse
+  | _ -> 
+      assert false
+
 (* v_of_constr : traduit un type CCI en un type ML *)
 (*i
 let dest_sig c = match matches (Coqlib.build_coq_sig_pattern ()) c with
@@ -277,6 +313,9 @@ let rec print_pure_type fmt = function
   | PTbool -> fprintf fmt "bool"
   | PTunit -> fprintf fmt "unit"
   | PTfloat -> fprintf fmt "float"
+  | PTarray (s,t) -> 
+      fprintf fmt "array("; print_term fmt s; fprintf fmt ","; 
+      print_pure_type fmt t; fprintf fmt ")"
   | PTexternal id -> fprintf fmt "%s" (Ident.string id)
 
 and print_type_v fmt = function
@@ -287,7 +326,7 @@ and print_type_v fmt = function
       print_type_v fmt v; fprintf fmt "@]"
   | Arrow (b,c) ->
       fprintf fmt "@["; print_list fmt (fun _ _ -> ()) pp_binder b;
-      print_type_c fmt c; fprintf fmt "@]"
+      fprintf fmt "@,"; print_type_c fmt c; fprintf fmt "@]"
   | PureType pt -> 
       print_pure_type fmt pt
 
@@ -298,7 +337,7 @@ and print_type_c fmt c =
   print_type_v fmt v; fprintf fmt "@ ";
   Effect.print fmt c.c_effect; fprintf fmt "@ ";
   print_pre fmt c.c_pre; fprintf fmt "@ ";
-  print_post fmt c.c_post; fprintf fmt "end@]"
+  print_post fmt c.c_post; fprintf fmt " end@]"
 
 and pp_binder fmt = function
   | id,BindType v -> 
@@ -311,11 +350,23 @@ and pp_binder fmt = function
 
 (* pretty-print of cc-terms (intermediate terms) *)
 
+let print_pred_binders = ref true
+
+let print_binder fmt = function
+  | CC_pred_binder p -> 
+      if !print_pred_binders then begin
+	fprintf fmt ": "; print_predicate fmt p
+      end
+  | _ -> 
+      ()
+
 let rec print_cc_term fmt = function
-  | CC_var id -> fprintf fmt "%s" (Ident.string id)
+  | CC_var id -> 
+      fprintf fmt "%s" (Ident.string id)
   | CC_letin (_,bl,c,c1) ->
       fprintf fmt "@[@[<hov 2>let ";
-      print_list fmt comma (fun fmt (id,_) -> Ident.print fmt id) bl;
+      print_list fmt comma 
+	(fun fmt (id,b) -> Ident.print fmt id; print_binder fmt b) bl;
       fprintf fmt " =@ "; print_cc_term fmt c;
       fprintf fmt " in@]@\n"; print_cc_term fmt c1; fprintf fmt "@]"
   | CC_lam (bl,c) ->
@@ -332,18 +383,29 @@ let rec print_cc_term fmt = function
       print_list fmt comma print_cc_term cl;
       fprintf fmt ")@]"
   | CC_case (b,[bl1,e1; bl2,e2]) ->
+      let branch bl e =
+	print_binders fmt bl; fprintf fmt "@,"; print_cc_term fmt e in
       fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
-      hov 0 fmt (fun fmt () -> print_binders fmt bl1; print_cc_term fmt e1) ();
+      hov 0 fmt (branch bl1) e1;
       fprintf fmt "@\nelse@\n  ";
-      hov 0 fmt (fun fmt () -> print_binders fmt bl2; print_cc_term fmt e2) ();
+      hov 0 fmt (branch bl2) e2;
       fprintf fmt "@]"
   | CC_case _ ->
       fprintf fmt "<Case...>"
+  | CC_if (b,e1,e2) ->
+      fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
+      hov 0 fmt (print_cc_term fmt) e1;
+      fprintf fmt "@\nelse@\n  ";
+      hov 0 fmt (print_cc_term fmt) e2;
+      fprintf fmt "@]"
   | CC_expr c ->
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole c ->
-      fprintf fmt "@[(? :@ "; print_predicate fmt c; fprintf fmt ")@]"
+      fprintf fmt "@[(?:@ "; print_predicate fmt c; fprintf fmt ")@]"
 
 and print_binders fmt bl =
-  print_list fmt 
-    nothing (fun fmt (id,_) -> fprintf fmt "[%s]" (Ident.string id)) bl
+  print_list fmt nothing 
+    (fun fmt (id,b) -> 
+       fprintf fmt "[%s" (Ident.string id);
+       print_binder fmt b; fprintf fmt "]") 
+    bl

@@ -36,6 +36,16 @@ let rec next_away id s =
 
 let print fmt s = Format.fprintf fmt "%s" s
 
+(*s Bound variables. *)
+
+type bound = int
+
+let bound =
+  let n = ref 0 in
+  fun () -> incr n; !n
+
+let bound_id b = b
+
 (*s Pre-defined. *)
 
 let t_add = "add"
@@ -43,6 +53,7 @@ let t_sub = "sub"
 let t_mul = "mul"
 let t_div = "div"
 let t_neg = "neg"
+let t_sqrt = "sqrt"
 
 let t_lt = "lt"
 let t_le = "le"

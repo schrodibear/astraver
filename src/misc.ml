@@ -1,10 +1,11 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.ml,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: misc.ml,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Ident
 open Logic
+open Types 
 
 (* debug *)
 
@@ -108,12 +109,12 @@ let applist f l = match (f,l) with
   | f, [] -> f
   | Tvar id, l -> Tapp (id, l)
   | Tapp (id, l), l' -> Tapp (id, l @ l')
-  | Tconst _, _ -> assert false
+  | (Tbound _ | Tconst _), _ -> assert false
 
 let rec collect_term s = function
   | Tvar id -> Idset.add id s
   | Tapp (_, l) -> List.fold_left collect_term s l
-  | Tconst _ -> s
+  | Tconst _ | Tbound _ -> s
 
 and collect_pred s = function
   | Pterm t -> collect_term s t
@@ -121,6 +122,7 @@ and collect_pred s = function
       collect_pred (collect_pred s a) b
   | Pif (a, b, c) -> collect_pred (collect_pred (collect_pred s a) b) c
   | Pnot a -> collect_pred s a
+  | Forall (_, _, _, p) -> collect_pred s p
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
@@ -128,25 +130,34 @@ let predicate_vars = collect_pred Idset.empty
 let rec tsubst_in_term alist = function
   | Tvar x as t -> (try List.assoc x alist with Not_found -> t)
   | Tapp (x,l) -> Tapp (x, List.map (tsubst_in_term alist) l)
-  | Tconst _ as t -> t
+  | Tconst _ | Tbound _ as t -> t
+
+let rec map_predicate f = function
+  | Pimplies (a, b) -> Pimplies (f a, f b)
+  | Pif (a, b, c) -> Pif (f a, f b, f c)
+  | Pand (a, b) -> Pand (f a, f b)
+  | Por (a, b) -> Por (f a, f b)
+  | Pnot a -> Pnot (f a)
+  | Forall (id, b, v, p) -> Forall (id, b, v, f p)
+  | Pterm _ as p -> p
 
 let rec tsubst_in_predicate alist = function
   | Pterm t -> Pterm (tsubst_in_term alist t)
-  | Pimplies (a, b) -> Pimplies (tsubst_in_predicate alist a,
-				 tsubst_in_predicate alist b)
-  | Pif (a,b,c) -> Pif (tsubst_in_predicate alist a,
-			tsubst_in_predicate alist b,
-			tsubst_in_predicate alist c)
-  | Pand (a,b) -> Pand (tsubst_in_predicate alist a,
-			tsubst_in_predicate alist b)
-  | Por (a,b) -> Por (tsubst_in_predicate alist a,
-		      tsubst_in_predicate alist b)
-  | Pnot a -> Pnot (tsubst_in_predicate alist a)
+  | p -> map_predicate (tsubst_in_predicate alist) p
 
 let subst_in_term alist = 
   tsubst_in_term (List.map (fun (id,id') -> (id, Tvar id')) alist)
 let subst_in_predicate alist = 
   tsubst_in_predicate (List.map (fun (id,id') -> (id, Tvar id')) alist)
+
+let rec bsubst_in_term alist = function
+  | Tbound n as t -> (try List.assoc n alist with Not_found -> t)
+  | Tapp (x,l) -> Tapp (x, List.map (bsubst_in_term alist) l)
+  | Tconst _ | Tvar _ as t -> t
+
+let rec bsubst_in_predicate alist = function
+  | Pterm t -> Pterm (bsubst_in_term alist t)
+  | p -> map_predicate (bsubst_in_predicate alist) p
 
 let equals_true = function
   | Tapp (id, _) as t when is_relation id -> t
@@ -165,6 +176,50 @@ let equals_false = function
   | Tapp (id, l) when is_relation id -> Tapp (negate id, l)
   | t -> Tapp (t_eq, [t; Tconst (ConstBool false)])
 
+let rec mlize_type = function
+  | PureType pt -> pt
+  | Ref v -> mlize_type v
+  | Array (s, v) -> PTarray (s, mlize_type v)
+  | Arrow _ -> assert false
+
+let rec occur_term id = function
+  | Tvar id' -> id = id'
+  | Tapp (_, l) -> List.exists (occur_term id) l
+  | Tconst _ | Tbound _ -> false
+
+let rec occur_predicate id = function
+  | Pterm t -> occur_term id t
+  | Pif (a, b, c) -> 
+      occur_predicate id a || occur_predicate id b || occur_predicate id c
+  | Pimplies (a, b) -> occur_predicate id a || occur_predicate id b
+  | Pand (a, b) -> occur_predicate id a || occur_predicate id b
+  | Por (a, b) -> occur_predicate id a || occur_predicate id b
+  | Pnot a -> occur_predicate id a
+  | Forall (_,_,_,a) -> occur_predicate id a
+  
+(* smart constructors *)
+
+let ttrue = Tconst (ConstBool true)
+let tfalse = Tconst (ConstBool false)
+let ptrue = Pterm ttrue
+let pfalse = Pterm tfalse
+
+let pif a b c =
+  if a = ptrue then b else if a = pfalse then c else Pif (a, b ,c)
+
+let pand a b = 
+  if a = ptrue then b else if b = ptrue then a else
+  if a = pfalse || b = pfalse then pfalse else
+  Pand (a, b)
+
+let por a b =
+  if a = ptrue || b = ptrue then ptrue else
+  if a = pfalse then b else if b = pfalse then a else
+  Por (a, b)
+
+let pnot a =
+  if a = ptrue then pfalse else if a = pfalse then ptrue else Pnot a
+
 (*s Pretty-print *)
 
 open Format
@@ -177,11 +232,21 @@ let rec print_list fmt sep print = function
 let comma fmt () = fprintf fmt ",@ "
 let nothing fmt () = ()
 
-let hov n fmt f x = pp_open_hovbox fmt n; f fmt x; pp_close_box fmt ()
+let hov n fmt f x = pp_open_hovbox fmt n; f x; pp_close_box fmt ()
 
 let rec print_term fmt = function
-  | Tconst _ -> fprintf fmt "<const>"
-  | Tvar id -> fprintf fmt "%s" (Ident.string id)
+  | Tconst (ConstInt n) -> 
+      fprintf fmt "%d" n
+  | Tconst (ConstBool b) -> 
+      fprintf fmt "%b" b
+  | Tconst ConstUnit -> 
+      fprintf fmt "unit" 
+  | Tconst (ConstFloat f) -> 
+      fprintf fmt "%f" f
+  | Tbound b ->
+      fprintf fmt "#%d" (Ident.bound_id b)
+  | Tvar id -> 
+      fprintf fmt "%s" (Ident.string id)
   | Tapp (id, tl) -> 
       fprintf fmt "%s(" (Ident.string id);
       print_list fmt comma print_term tl; fprintf fmt ")"
@@ -189,20 +254,23 @@ let rec print_term fmt = function
 let rec print_predicate fmt = function
   | Pterm t -> print_term fmt t
   | Pimplies (a, b) -> 
-      fprintf fmt "("; print_predicate fmt a; fprintf fmt " ->@ ";
-      print_predicate fmt b; fprintf fmt ")"
+      fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " ->@ ";
+      print_predicate fmt b; fprintf fmt "@])"
   | Pif (a, b, c) -> 
-      fprintf fmt "(if"; print_predicate fmt a; fprintf fmt " then@ ";
+      fprintf fmt "(@[if "; print_predicate fmt a; fprintf fmt " then@ ";
       print_predicate fmt b; fprintf fmt " else@ ";
-      print_predicate fmt c; fprintf fmt ")"
+      print_predicate fmt c; fprintf fmt "@])"
   | Pand (a, b) ->
-      fprintf fmt "("; print_predicate fmt a; fprintf fmt " and@ ";
-      print_predicate fmt b; fprintf fmt ")"
+      fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " and@ ";
+      print_predicate fmt b; fprintf fmt "@])"
   | Por (a, b) ->
-      fprintf fmt "("; print_predicate fmt a; fprintf fmt " or@ ";
-      print_predicate fmt b; fprintf fmt ")"
+      fprintf fmt "(@["; print_predicate fmt a; fprintf fmt " or@ ";
+      print_predicate fmt b; fprintf fmt "@])"
   | Pnot a ->
       fprintf fmt "(not "; print_predicate fmt a; fprintf fmt ")"
+  | Forall (_,b,_,p) ->
+      fprintf fmt "(forall #%d: " (Ident.bound_id b);
+      print_predicate fmt p; fprintf fmt ")"
 
 (*i
 (* functions on CIC terms *)

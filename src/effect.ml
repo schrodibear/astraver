@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: effect.ml,v 1.1 2001-08-15 21:08:51 filliatr Exp $ *)
+(* $Id: effect.ml,v 1.2 2001-08-21 20:57:01 filliatr Exp $ *)
 
 open Ident
 open Misc
@@ -136,11 +136,13 @@ let print fmt (r,w) =
   fprintf fmt "@[";
   if r <> [] then begin
     fprintf fmt "reads ";
-    print_list fmt (fun fmt () -> fprintf fmt ",@ ") Ident.print r
+    print_list fmt (fun fmt () -> fprintf fmt ",@ ") Ident.print r;
+    fprintf fmt "@ ";
   end;
-  fprintf fmt "@ ";
   if w <> [] then begin
     fprintf fmt "writes ";
-    print_list fmt (fun fmt () -> fprintf fmt ",@ ") Ident.print w
-  end
+    print_list fmt (fun fmt () -> fprintf fmt ",@ ") Ident.print w;
+    fprintf fmt "@ ";
+  end;
+  fprintf fmt "@]"
 

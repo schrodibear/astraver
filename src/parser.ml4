@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: parser.ml4,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: parser.ml4,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Logic
 open Rename
@@ -65,6 +65,7 @@ let block = gec "block"
 let block_statement = gec "block_statement"
 let relation = gec "relation"
 let ident = gec "ident"
+let qualid_ident = gec "qualid_ident"
 let wf_arg = gec "wf_arg"
 let invariant = gec "invariant"
 let variant = gec "variant"
@@ -91,6 +92,10 @@ let conj = function
 let without_effect loc d = 
   { desc = d; pre = []; post = None; loc = loc; info = () }
 
+let type_without_effect v =
+  { c_result_name = Ident.result; c_result_type = v;
+    c_effect = Effect.bottom; c_pre = []; c_post = None }
+
 let bin_op op loc e1 e2 =
   without_effect loc
     (App (without_effect loc (Expression (Tapp (op,[]))), [Term e1; Term e2]))
@@ -101,16 +106,13 @@ let un_op op loc e =
 
 let bool_bin op loc a1 a2 =
   let w = without_effect loc in
-  let d = SApp ([Var op], [a1; a2]) in
+  let d = Lapp (op, a1, a2) in
   w d
 
-let bool_or  loc = bool_bin Ident.p_or loc
-let bool_and loc = bool_bin Ident.p_and loc
+let bool_or  loc = bool_bin Lor loc
+let bool_and loc = bool_bin Land loc
 
-let bool_not loc a =
-  let w = without_effect loc in
-  let d = SApp ([Var Ident.p_not ], [a]) in
-  w d
+let bool_not loc a = un_op Ident.p_not loc a
 
 let zwf_zero = Tapp (Ident.t_zwf_zero, [])
 
@@ -127,6 +129,16 @@ EXTEND
   [ [ id = LIDENT -> Ident.create id
     | id = UIDENT -> Ident.create id ] ]
   ;
+  qualid_ident:
+  [ [ id = ident ->
+	id
+    | id = ident; "@"; INT "0" -> 
+	Ident.create (Ident.string id ^ "@0")
+    | id = ident; "@" -> 
+	Ident.create (Ident.string id ^ "@")
+    | id = ident; "@"; l = ident -> 
+	Ident.create (Ident.string id ^ "@" ^ Ident.string l) ] ]
+  ;
 
   (* Logic *)
   term:
@@ -142,8 +154,8 @@ EXTEND
   term1:
   [ [ "-"; a = term -> Tapp (Ident.t_neg, [a])
     | c = constant -> Tconst c
-    | x = ident -> Tvar x
-    | x = ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
+    | x = qualid_ident -> Tvar x
+    | x = qualid_ident; "("; l = LIST1 term SEP ","; ")" -> Tapp (x,l) 
     | "("; a = term; ")" -> a ] ]
   ;
   constant:
@@ -197,17 +209,16 @@ EXTEND
   ;
   type_v3:
   [ [ LIDENT "array"; size = term; "of"; v = type_v0 -> Array (size,v)
-    | "fun"; bl = binders; c = type_c -> make_arrow bl c
+    | bl = binders; c = type_c -> make_arrow bl c
     | c = pure_type -> PureType c ] ]
   ;
   type_c:
   [ [ LIDENT "returns"; id = ident; ":"; v = type_v;
       e = effects; p = OPT pre_condition; q = OPT post_condition; "end" ->
-        { c_result_name = id;
-	  c_result_type = v;
-	  c_effect = e;
-	  c_pre = list_of_some p;
-	  c_post = q } ] ] 
+        { c_result_name = id; c_result_type = v;
+	  c_effect = e; c_pre = list_of_some p; c_post = q } 
+    | v = type_v -> 
+	type_without_effect v ] ] 
   ;
   effects:
   [ [ r = OPT reads; w = OPT writes ->
@@ -241,7 +252,7 @@ EXTEND
     | v = type_v -> BindType v ] ]
   ;
   binders:
-  [ [ bl = LIST0 binder -> List.flatten bl ] ] 
+  [ [ bl = LIST1 binder -> List.flatten bl ] ] 
   ;
 
   (* Programs *)
@@ -288,8 +299,14 @@ EXTEND
   ;
 
   ast1:
-  [ [ x = prog2; LIDENT "or"; y = prog1  -> bool_or loc x y
-    | x = prog2; LIDENT "and"; y = prog1 -> bool_and loc x y
+  [ [ x = prog2; "||"; y = prog1  -> 
+       let ptrue = without_effect loc (Expression (Tconst (ConstBool true))) in
+       without_effect loc (If (x, ptrue, y))
+       (*i bool_or loc x y i*)
+    | x = prog2; "&&"; y = prog1 -> 
+       let pf = without_effect loc (Expression (Tconst (ConstBool false))) in
+       without_effect loc (If (x, y, pf))
+       (*i bool_and loc x y i*)
     | x = prog2 -> x ] ]
   ;
   ast2:
@@ -307,11 +324,12 @@ EXTEND
   ;
   ast5:
   [ [ x = prog6; "*"; y = prog5 -> bin_op Ident.t_mul loc x y 
-    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_mul loc x y 
+    | x = prog6; "/"; y = prog5 -> bin_op Ident.t_div loc x y 
     | x = prog6 -> x ] ]
   ;
   ast6:
   [ [ "-"; x = prog6 -> un_op Ident.t_neg loc x
+    | LIDENT "sqrt"; x = prog6 -> un_op Ident.t_sqrt loc x
     | x = ast7 -> without_effect loc x ] ]
   ;
   ast7:
@@ -319,6 +337,14 @@ EXTEND
 	Var v
     | n = INT ->
 	Expression (Tconst (ConstInt (int_of_string n)))
+    | f = FLOAT ->
+	Expression (Tconst (ConstFloat (float_of_string f)))
+    | LIDENT "skip" ->
+	Expression (Tconst ConstUnit)
+    | "true" ->
+	Expression (Tconst (ConstBool true))
+    | "false" ->
+	Expression (Tconst (ConstBool false))
     | "!"; v = ident ->
 	Acc v
 (*i | "?" -> isevar i*)
@@ -365,7 +391,7 @@ i*)
     | "("; p = program; args = LIST0 arg; ")" ->
 	match args with 
 	  | [] -> 
-	      if p.pre<>[] or p.post<>None then
+	      if p.pre <> [] || p.post <> None then
 		warning "Some annotations are lost";
 	      p.desc
           | _  -> 
@@ -409,8 +435,12 @@ i*)
 
   (* declarations *)
   decl:
-  [ [ "let"; id = ident; "="; p = program -> Program (id, p)
-    | "external"; id = ident; ":"; v = type_v -> External (id, v) ] ]
+  [ [ "let"; id = ident; "="; p = program -> 
+	Program (id, p)
+    | "external"; ids = LIST1 ident SEP ","; ":"; v = type_v -> 
+	External (ids, v)
+    | LIDENT "pvs"; s = STRING ->
+        Pvs s ] ]
   ;
   decls: 
   [ [ d = LIST0 decl; EOI -> d ] ]

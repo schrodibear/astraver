@@ -28,29 +28,38 @@ let interp_program id p =
   if !debug then eprintf "=== functionalization...@\n";
   let cc = Mlize.trans ren p in
   let cc = Red.red cc in
-  if !debug then begin print_cc_term err_formatter cc;eprintf "@\n" end;
+  if !debug then begin print_cc_term err_formatter cc; eprintf "@\n" end;
   (* 5. VCG *)
-  Vcg.vcg (Ident.string id) cc
-
-let interp_decl = function
+  let ol = Vcg.vcg (Ident.string id) cc in
+  if !debug then eprintf "%d proof obligation(s)@\n" (List.length ol);
+  ol
+    
+let interp_decl fmt = function
   | Program (id, p) ->
       let ol = interp_program id p in
-      Pvs.print_obligations std_formatter ol
-  | External (id, v) -> 
-      Env.add_global id v None
+      Pvs.print_obligations fmt ol
+  | External (ids, v) -> 
+      List.iter (fun id -> Env.add_global id v None) ids
+  | Pvs s ->
+      fprintf fmt "  %s@\n@\n" s
 
-let deal_channel base cin =
+let deal_channel base cin fmt =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
-  Pvs.begin_theory std_formatter base;
-  List.iter interp_decl d;
-  Pvs.end_theory std_formatter
+  Pvs.begin_theory fmt base;
+  List.iter (interp_decl fmt) d;
+  Pvs.end_theory fmt base
 
 let deal_file f =
-  let base = Filename.chop_extension (Filename.basename f) in
-  let c = open_in f in 
-  deal_channel base c;
-  close_in c
+  let cin = open_in f in 
+  let fwe = Filename.chop_extension f in
+  let base = Filename.basename fwe in
+  let cout = open_out (fwe ^ ".pvs") in
+  let fmt = formatter_of_out_channel cout in
+  deal_channel base cin fmt;
+  close_in cin;
+  pp_print_flush fmt ();
+  close_out cout
 
 let parse_args () =
   let files = ref [] in
@@ -64,7 +73,7 @@ let parse_args () =
 let main () =
   let files = parse_args () in
   if files = [] then
-    deal_channel "Input" stdin
+    deal_channel "Input" stdin std_formatter
   else
     List.iter deal_file files
 

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: monad.mli,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: monad.mli,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Logic
 open Types
@@ -33,7 +33,7 @@ val result_tuple : Rename.t -> string -> local_env
 
 val let_in_pre : cc_type -> precondition -> cc_term -> cc_term
 
-val make_let_in : Rename.t -> local_env -> cc_term 
+val make_let_in : Rename.t -> Rename.t -> local_env -> cc_term 
           -> precondition list
           -> ((Ident.t * Ident.t) list * assertion option) 
 	  -> Ident.t * type_v

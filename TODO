@@ -3,4 +3,9 @@
 
  - arguments which are types
 
- - quick cleaning on the obligations (including discharging by assumption)
+ - "if x = 0 then ..." => Failure "todo typing term"
+    actually pbm in globalization
+
+ - no substitution when result name is not "result" => force it?
+
+ - add renaming in typing info

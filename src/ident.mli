@@ -18,6 +18,14 @@ val next_away : t -> set -> t
 
 val print : Format.formatter -> t -> unit
 
+(*s Bound variables. *)
+
+type bound
+
+val bound : unit -> bound
+
+val bound_id : bound -> int
+
 (*s Some pre-defined Ident.ts. *)
 
 val t_add : t
@@ -25,6 +33,7 @@ val t_sub : t
 val t_mul : t
 val t_div : t
 val t_neg : t
+val t_sqrt : t
 
 val t_lt : t
 val t_le : t

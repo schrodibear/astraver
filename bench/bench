@@ -26,9 +26,23 @@ bads () {
 echo "=== Checking parsing ==="
 bads bad/syntax
 echo ""
+
+# 2. Typing
 echo "=== Checking typing ==="
 bads bad/typing
 echo ""
+
+# 3. Benchmark
 echo "=== Checking good files ==="
 goods good
+
+# 4. Showing the results
+for f in good/*.ml; do
+    pvs=good/`basename $f .ml`.pvs
+    echo "==== "$pvs" ===="
+    cat $pvs
+    echo "==== "$f" ===="
+    cat $f
+    read
+done
 

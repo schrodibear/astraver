@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: red.ml,v 1.2 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: red.ml,v 1.3 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Ast
 open Misc
@@ -25,6 +25,8 @@ let rec cc_subst subst = function
 	       List.map (fun (bl,e) -> 
 			   (cc_subst_binders subst bl,
 			    cc_subst (cc_cross_binders subst bl) e)) cl)
+  | CC_if (a,b,c) ->
+      CC_if (cc_subst subst a, cc_subst subst b, cc_subst subst c)
   | CC_expr c ->
       CC_expr (tsubst_in_term subst c)
   | CC_hole ty ->
@@ -56,29 +58,41 @@ let is_eta_redex bl al =
   with Invalid_argument("List.for_all2") -> 
     false
 
+let is_expr = function CC_expr _ -> true | _ -> false
+
+let is_iota_redex l1 l2 = 
+  (List.length l1 = List.length l2) &&
+  List.for_all is_expr l2
+
+let rec iota_subst = function
+  | [], [] -> []
+  | (id,_) :: l1, CC_expr t :: l2 -> (id,t) :: iota_subst (l1, l2)
+  | _ -> assert false
+
 let rec red = function
   | CC_letin (_, [id,_], CC_expr c1, e2) ->
       red (cc_subst [id,c1] e2)
   | CC_letin (dep, bl, e1, e2) ->
-      begin match red e2 with
-	| CC_tuple al ->
-	    if is_eta_redex bl al then
-	      red e1
-	    else
-	      CC_letin (dep, bl, red e1,
-			CC_tuple (List.map red al))
-	| e -> 
-	    CC_letin (dep, bl, red e1, e)
-      end
+      (match red e2 with
+	 | CC_tuple al when is_eta_redex bl al ->
+	     red e1
+	 | re2 ->
+	     (match red e1 with
+		| CC_tuple al when is_iota_redex bl al ->
+		    cc_subst (iota_subst (bl, al)) re2
+		| re1 ->
+		    CC_letin (dep, bl, re1, re2)))
   | CC_lam (bl, e) ->
       CC_lam (bl, red e)
   | CC_app (e, al) ->
       CC_app (red e, List.map red al)
   | CC_case (e1, el) ->
       CC_case (red e1, List.map (fun (bl,e) -> (bl, red e)) el)
+  | CC_if (a,b,c) ->
+      CC_if (red a, red b, red c)
   | CC_tuple al ->
       CC_tuple (List.map red al)
-  | e -> e
+  | CC_var _ | CC_hole _ | CC_expr _ as e -> e
 
 
 (* How to reduce uncomplete proof terms when they have become constr *)

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: types.mli,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: types.mli,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Logic
 
@@ -24,15 +24,6 @@ type 'a binder_type =
   | Untyped
 
 type 'a binder = Ident.t * 'a binder_type
-
-(*s Pure types. *)
-
-type pure_type =
-  | PTint
-  | PTbool
-  | PTfloat
-  | PTunit
-  | PTexternal of Ident.t
 
 (*s Variant. *)
 

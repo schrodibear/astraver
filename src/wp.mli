@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: wp.mli,v 1.1 2001-08-17 00:55:48 filliatr Exp $ *)
+(* $Id: wp.mli,v 1.2 2001-08-21 20:57:02 filliatr Exp $ *)
 
 open Logic
 open Env
@@ -9,3 +9,4 @@ open Env
 val update_post : local_env -> string -> Effect.t -> predicate -> predicate
 
 val propagate : Rename.t -> typed_program -> typed_program
+

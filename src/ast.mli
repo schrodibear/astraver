@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: ast.mli,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: ast.mli,v 1.4 2001-08-21 20:57:01 filliatr Exp $ *)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -13,6 +13,8 @@ type termination =
   | Wf of term * term
 
 type variable = Ident.t
+
+type lazy_connective = Land | Lor
 
 (*i
 type pattern =
@@ -56,7 +58,7 @@ and 'a t_desc =
   | If of 'a t * 'a t * 'a t
   | Lam of type_v binder list * 'a t
   | App of 'a t * 'a arg list
-  | SApp of 'a t_desc list * 'a t list
+  | Lapp of lazy_connective * 'a t * 'a t 
   | LetRef of variable * 'a t * 'a t
   | LetIn of variable * 'a t * 'a t
   | LetRec of variable * type_v binder list * type_v * (term * term) * 'a t
@@ -75,7 +77,8 @@ type parsed_program = unit t
 
 type decl = 
   | Program of Ident.t * parsed_program
-  | External of Ident.t * type_v
+  | External of Ident.t list * type_v
+  | Pvs of string
 
 (*s Intermediate type for CC terms. *)
 
@@ -100,5 +103,6 @@ type cc_term =
   | CC_app of cc_term * cc_term list
   | CC_tuple of cc_term list
   | CC_case of cc_term * (cc_binder list * cc_term) list
+  | CC_if of cc_term * cc_term * cc_term
   | CC_expr of term
   | CC_hole of predicate

@@ -1,7 +1,7 @@
 
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(* $Id: misc.mli,v 1.3 2001-08-19 02:44:48 filliatr Exp $ *)
+(* $Id: misc.mli,v 1.4 2001-08-21 20:57:02 filliatr Exp $ *)
 
 (* Some misc. functions *)
 
@@ -50,9 +50,25 @@ val tsubst_in_term : (Ident.t * term) list -> term -> term
 
 val subst_in_predicate : (Ident.t * Ident.t) list -> predicate -> predicate
 val tsubst_in_predicate : (Ident.t * term) list -> predicate -> predicate
+val bsubst_in_predicate : (Ident.bound * term) list -> predicate -> predicate
 
 val equals_true : term -> term
 val equals_false : term -> term
+
+val mlize_type : Types.type_v -> pure_type
+
+val occur_term : Ident.t -> term -> bool
+val occur_predicate : Ident.t -> predicate -> bool
+
+val ttrue : term
+val tfalse : term
+val ptrue : predicate
+val pfalse : predicate
+val pif : predicate -> predicate -> predicate -> predicate
+val pand : predicate -> predicate -> predicate
+val por : predicate -> predicate -> predicate
+val pnot : predicate -> predicate
+
 
 (* CIC terms *)
 
@@ -89,7 +105,7 @@ val print_list : formatter -> (formatter -> unit -> unit) ->
   (formatter -> 'a -> unit) -> 'a list -> unit
 val comma : formatter -> unit -> unit
 val nothing : formatter -> unit -> unit
-val hov : int -> formatter -> (formatter -> 'a -> unit) -> 'a -> unit
+val hov : int -> formatter -> ('a -> unit) -> 'a -> unit
 
 val print_term : formatter -> term -> unit
 val print_predicate : formatter -> predicate -> unit
