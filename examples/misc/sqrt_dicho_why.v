@@ -16,7 +16,7 @@ Qed.
 Lemma mean2 : forall x y:Z, (x < y)%Z -> ((x + y) / 2 < y)%Z.
 Proof.
 intros.
-apply (Zlt_Zmult_right2 ((x + y) / 2) y (z:=2)).
+apply (Zmult_lt_reg_r ((x + y) / 2) y) with (p:=2).
 auto with *.
 replace ((x + y) / 2 * 2)%Z with (2 * ((x + y) / 2))%Z; auto with *.
 assert (2 * ((x + y) / 2) <= x + y)%Z.

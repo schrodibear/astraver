@@ -22,7 +22,7 @@ Definition mean (x y:Z) := Zdiv2 (x + y).
 Lemma le_mean : forall x y:Z, (0 <= x <= y)%Z -> (x <= mean x y)%Z.
 Proof.
 intros.
-apply Zle_Zmult_right2 with (z := 2%Z).
+apply Zmult_le_reg_r with (p := 2%Z).
 omega.
 rewrite Zmult_comm.
 rewrite (Zmult_comm (mean x y) 2).
@@ -50,7 +50,7 @@ Qed.
 Lemma ge_mean : forall x y:Z, (0 <= x <= y)%Z -> (mean x y <= y)%Z.
 Proof.
 intros.
-apply Zle_Zmult_right2 with (z := 2%Z).
+apply Zmult_le_reg_r with (p := 2%Z).
 omega.
 rewrite Zmult_comm.
 rewrite (Zmult_comm y 2).

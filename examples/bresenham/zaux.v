@@ -2,7 +2,7 @@
 (*                                                                        *)
 (* Proof of the Bresenham line drawing algorithm.                         *)
 (*                                                                        *)
-(* Jean-Christophe Filli‚tre (LRI, UniversitÈ Paris Sud)                  *)
+(* Jean-Christophe Filli√¢tre (LRI, Universit√© Paris Sud)                  *)
 (* May 2001                                                               *)
 (*                                                                        *)
 (**************************************************************************)
@@ -41,7 +41,7 @@ Qed.
 (*s A useful lemma to establish $|a| \le $. *)
 
 Lemma Zabs_le :
- forall a b:Z, (0 <= b)%Z -> (Zopp b <= a <= b)%Z <-> (Zabs a <= b)%Z.
+ forall a b:Z, (0 <= b)%Z -> ((Zopp b <= a <= b)%Z <-> (Zabs a <= b)%Z).
 Proof.
 intros a b Hb.
  Case_Zabs a Ha; split; omega.
@@ -79,10 +79,10 @@ ZCompare b b' Hbb'.
   apply Zle_left_rev.
   RingSimpl (Zopp (a * b' - c) + Zopp (Zopp (a * b - c)))%Z
    (a * (b - b'))%Z.
-  apply Zle_ZERO_mult; omega.
+  apply Zmult_le_0_compat; omega.
   apply Zge_le.
   apply Zge_trans with (m := (a * b - c)%Z).
-  apply Zge_mult_simpl with (c := 2%Z).
+  apply Zmult_ge_reg_r with (p := 2%Z).
  omega.
   RingSimpl (0 * 2)%Z 0%Z.
    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
@@ -90,11 +90,11 @@ ZCompare b b' Hbb'.
   RingSimpl (a * b' - c)%Z (a * b' + Zopp c)%Z.
   RingSimpl (a * b - c)%Z (a * b + Zopp c)%Z.
   apply Zle_ge.
-    apply Zle_reg_r.
-  apply Zle_Zmult_pos_left; omega.
+    apply Zplus_le_compat_r.
+  apply Zmult_le_compat_l; omega.
   (* b < b' *)
   rewrite (Zabs_eq (a * b' - c)).
-  apply Zle_mult_simpl with (c := 2%Z).
+  apply Zmult_le_reg_r with (p := 2%Z).
  omega.
   RingSimpl ((a * b' - c) * 2)%Z
    (2 * (a * b' - a * b) + 2 * (a * b - c))%Z.
@@ -103,20 +103,20 @@ ZCompare b b' Hbb'.
  omega.
   apply Zle_trans with (2 * a + Zopp a)%Z.
  omega.
-  apply Zle_plus_plus.
+  apply Zplus_le_compat.
   RingSimpl (2 * a)%Z (2 * a * 1)%Z.
   RingSimpl (2 * (a * b' - a * b))%Z (2 * a * (b' - b))%Z.
-  apply Zle_Zmult_pos_left; omega.
+  apply Zmult_le_compat_l; omega.
   RingSimpl (2 * (a * b - c))%Z (2 * a * b - 2 * c)%Z.
  omega.
     (* 0 <= ab'-c *)
     RingSimpl (a * b' - c)%Z (a * b' - a * b + (a * b - c))%Z.
     RingSimpl 0%Z (a + Zopp a)%Z.
-    apply Zle_plus_plus.
+    apply Zplus_le_compat.
     RingSimpl a (a * 1)%Z.
     RingSimpl (a * 1 * b' - a * 1 * b)%Z (a * (b' - b))%Z.
-    apply Zle_Zmult_pos_left; omega.
-    apply Zle_mult_simpl with (c := 2%Z).
+    apply Zmult_le_compat_l; omega.
+    apply Zmult_le_reg_r with (p := 2%Z).
  omega.
     apply Zle_trans with (Zopp a).
  omega.
@@ -127,13 +127,13 @@ ZCompare b b' Hbb'.
   rewrite (Zabs_non_eq (a * b - c)).
  omega.
   apply Zge_le.
-  apply Zge_mult_simpl with (c := 2%Z).
+  apply Zmult_ge_reg_r with (p := 2%Z).
  omega.
   RingSimpl (0 * 2)%Z 0%Z.
    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
  omega.
    apply Zge_le.
-  apply Zge_mult_simpl with (c := 2%Z).
+  apply Zmult_ge_reg_r with (p := 2%Z).
  omega.
   RingSimpl (0 * 2)%Z 0%Z.
    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
@@ -144,7 +144,7 @@ rewrite (Zabs_eq (a * b - c)).
 ZCompare b b' Hbb'.
   (* b > b' *)
   rewrite (Zabs_non_eq (a * b' - c)).
-  apply Zle_mult_simpl with (c := 2%Z).
+  apply Zmult_le_reg_r with (p := 2%Z).
  omega.
   RingSimpl (Zopp (a * b' - c) * 2)%Z
    (2 * (c - a * b) + 2 * (a * b - a * b'))%Z.
@@ -153,20 +153,20 @@ ZCompare b b' Hbb'.
  omega.
   apply Zle_trans with (Zopp a + 2 * a)%Z.
  omega.
-  apply Zle_plus_plus.
+  apply Zplus_le_compat.
   RingSimpl (2 * (c - a * b))%Z (2 * c - 2 * a * b)%Z.
  omega.
   RingSimpl (2 * a)%Z (2 * a * 1)%Z.
   RingSimpl (2 * (a * b - a * b'))%Z (2 * a * (b - b'))%Z.
-  apply Zle_Zmult_pos_left; omega.
+  apply Zmult_le_compat_l; omega.
     (* 0 >= ab'-c *)
     RingSimpl (a * b' - c)%Z (a * b' - a * b + (a * b - c))%Z.
     RingSimpl 0%Z (Zopp a + a)%Z.
-    apply Zle_plus_plus.
+    apply Zplus_le_compat.
     RingSimpl (Zopp a) (a * (-1))%Z.
     RingSimpl (a * b' - a * b)%Z (a * (b' - b))%Z.
-    apply Zle_Zmult_pos_left; omega.
-    apply Zle_mult_simpl with (c := 2%Z).
+    apply Zmult_le_compat_l; omega.
+    apply Zmult_le_reg_r with (p := 2%Z).
  omega.
     apply Zle_trans with a.
     RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
@@ -176,27 +176,27 @@ ZCompare b b' Hbb'.
   rewrite (Zabs_eq (a * b' - c)).
   apply Zle_left_rev.
   RingSimpl (a * b' - c + Zopp (a * b - c))%Z (a * (b' - b))%Z.
-  apply Zle_ZERO_mult; omega.
+  apply Zmult_le_0_compat; omega.
   apply Zle_trans with (m := (a * b - c)%Z).
-  apply Zle_mult_simpl with (c := 2%Z).
+  apply Zmult_le_reg_r with (p := 2%Z).
  omega.
   RingSimpl (0 * 2)%Z 0%Z.
    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
  omega.
   RingSimpl (a * b' - c)%Z (a * b' + Zopp c)%Z.
   RingSimpl (a * b - c)%Z (a * b + Zopp c)%Z.
-  apply Zle_reg_r.
-  apply Zle_Zmult_pos_left; omega.
+  apply Zplus_le_compat_r.
+  apply Zmult_le_compat_l; omega.
   (* b = b' *)
   rewrite <- Hbb'.
     rewrite (Zabs_eq (a * b - c)).
  omega.
-  apply Zle_mult_simpl with (c := 2%Z).
+  apply Zmult_le_reg_r with (p := 2%Z).
  omega.
   RingSimpl (0 * 2)%Z 0%Z.
    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.
  omega.
-   apply Zle_mult_simpl with (c := 2%Z).
+   apply Zmult_le_reg_r with (p := 2%Z).
  omega.
   RingSimpl (0 * 2)%Z 0%Z.
    RingSimpl ((a * b - c) * 2)%Z (2 * a * b - 2 * c)%Z.

@@ -72,7 +72,7 @@ simpl.
  auto with zarith.
 
 intros.
-unfold Zs.
+unfold Zsucc.
 rewrite Zpower_exp.
 rewrite Zpower_exp.
 replace (Zpower x0 1) with x0.

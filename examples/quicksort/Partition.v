@@ -173,11 +173,11 @@ Lemma partition_p_permut_right :
    (d < array_length t)%Z ->
    (g <= p <= d)%Z ->
    partition_p t g d p ->
-   sub_permut (Zs p) d t t' -> partition_p t' g d p.
+   sub_permut (Zsucc p) d t t' -> partition_p t' g d p.
 Proof.
 intros t t' g d p hyp1 hyp2 hyp3 hyp4 piv_t perm.
 elim piv_t; intros.
-cut (0 <= Zs p)%Z; [ intro | unfold Zpred; omega ].
+cut (0 <= Zsucc p)%Z; [ intro | unfold Zpred; omega ].
 generalize (sub_permut_function perm H3 hyp3).
  intro.
 constructor; try assumption.
@@ -188,18 +188,18 @@ rewrite <- (sub_permut_eq perm (i:=p)).
 rewrite <- (sub_permut_eq perm (i:=i)).
 elim H1; intros.
 apply H6; omega.
-unfold Zs; omega.
-unfold Zs; omega.
+unfold Zsucc; omega.
+unfold Zsucc; omega.
 (* array_ge *)
 constructor.
  intros.
 rewrite <- (sub_permut_eq perm (i:=p)).
 elim H2; intros.
-elim (H4 i); try (unfold Zs; omega).
+elim (H4 i); try (unfold Zsucc; omega).
  intros.
 elim H8; intros.
 elim H9; intros.
  rewrite H11.
-apply H6; unfold Zs in H10; omega.
-unfold Zs; omega.
+apply H6; unfold Zsucc in H10; omega.
+unfold Zsucc; omega.
 Qed.

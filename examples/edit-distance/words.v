@@ -74,7 +74,7 @@ Lemma first_last_explicit :
  forall (u:word) (a:A),
    concat (but_last a u) (cons (last_char a u) eps) = cons a u.
 Proof.
-simple_induction u; simpl.
+simple induction u; simpl.
 reflexivity.
 intros.
 rewrite (H a).
@@ -92,9 +92,9 @@ exists (but_last a u).
 exists (last_char a u).
 split.
  exact (first_last_explicit u a).
-generalize a; simple_induction u; simpl; intros.
+generalize a; induction u; simpl; intros.
 omega.
-generalize (Hrecu a0); intros; omega.
+generalize (IHu a0); intros; omega.
 Qed.
 
 
@@ -153,7 +153,7 @@ Qed.
 Lemma dist_symetry :
  forall (w1 w2:word) (n:Z), dist w1 w2 n -> dist w2 w1 n.
 Proof.
-simple_induction 1; intros.
+simple induction 1; intros.
 exact dist_eps.
 apply dist_add_right; assumption.
 apply dist_add_left; assumption.
@@ -193,7 +193,7 @@ Lemma dist_concat_left :
  forall (u v w:word) (n:Z),
    dist v w n -> dist (concat u v) w (Zlength u + n).
 Proof.
-simple_induction u; simpl; intros.
+simple induction u; simpl; intros.
 auto.
 replace (Zlength l + 1 + n)%Z with (Zlength l + n + 1)%Z;
  [ idtac | omega ].
@@ -204,7 +204,7 @@ Lemma dist_concat_right :
  forall (u v w:word) (n:Z),
    dist v w n -> dist v (concat u w) (Zlength u + n).
 Proof.
-simple_induction u; simpl; intros.
+simple induction u; simpl; intros.
 auto.
 replace (Zlength l + 1 + n)%Z with (Zlength l + n + 1)%Z;
  [ idtac | omega ].
@@ -264,7 +264,7 @@ intros w1 w2 a b m p.
 unfold Zmin.
 case (m ?= p)%Z; generalize dist_add_left dist_add_right; intuition.
 
-generalize (Zle_min_l m p) (Zle_min_r m p) Zle_reg_r Zle_trans.
+generalize (Zle_min_l m p) (Zle_min_r m p) Zplus_le_compat_r Zle_trans.
 inversion H1; intuition eauto.
 Qed.
 
@@ -287,14 +287,14 @@ Qed.
 Lemma min_dist_eps_length : forall w:word, min_dist eps w (Zlength w).
 Proof.
 intros w; unfold min_dist; intuition.
-simple_induction w; simpl; intros.
+induction w; simpl; intros.
 exact dist_eps.
 apply dist_add_right; assumption.
 generalize m H.
  clear m H.
-simple_induction w; intros m H; inversion H; simpl.
+induction w; intros m H; inversion H; simpl.
 omega.
-generalize (Hrecw n H4); intro; omega.
+generalize (IHw n H4); intro; omega.
 Qed.
 
 
@@ -394,7 +394,7 @@ omega.
 intros.
 rewrite suffix_is_cons; [ idtac | omega ].
 simpl.
-unfold Zs; ring.
+unfold Zsucc; ring.
 replace (n - (1 + x) + 1)%Z with (n - x)%Z; [ idtac | ring ].
 apply H0; omega.
 omega.
@@ -432,7 +432,7 @@ Qed.
 Lemma dist_is_dist' :
  forall (w1 w2:word) (n:Z), dist w1 w2 n -> dist' w1 w2 n.
 Proof.
-simple_induction 1.
+simple induction 1.
 exact dist'_eps.
 intros; apply dist'_add_left; assumption.
 intros; apply dist'_add_right; assumption.
@@ -446,7 +446,7 @@ Lemma dist_concat_both_left :
  forall (n:Z) (u w1 w2:word),
    dist w1 w2 n -> dist (concat u w1) (concat u w2) n.
 Proof.
-simple_induction u; simpl; intros.
+simple induction u; simpl; intros.
 auto.
 apply dist_context; auto.
 Qed.
@@ -455,8 +455,8 @@ Lemma dist_concat_both_right :
  forall (n:Z) (w1 w2:word),
    dist w1 w2 n -> forall u:word, dist (concat w1 u) (concat w2 u) n.
 Proof.
-simple_induction 1; simpl; intros.
-simple_induction u; simpl.
+simple induction 1; simpl; intros.
+induction u; simpl.
 exact dist_eps.
 apply dist_context; assumption.
 apply dist_add_left.
@@ -470,7 +470,7 @@ Qed.
 Lemma dist'_is_dist :
  forall (w1 w2:word) (n:Z), dist' w1 w2 n -> dist w1 w2 n.
 Proof.
-simple_induction 1.
+simple induction 1.
 exact dist_eps.
 intros; apply dist_add_left; assumption.
 intros; apply dist_add_right; assumption.

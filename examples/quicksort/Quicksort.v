@@ -36,8 +36,8 @@ Lemma quicksort_lemma :
    sub_permut g d t1 t0 ->
    sorted_array t2 g (Zpred p) ->
    sub_permut g (Zpred p) t2 t1 ->
-   sorted_array t3 (Zs p) d ->
-   sub_permut (Zs p) d t3 t2 ->
+   sorted_array t3 (Zsucc p) d ->
+   sub_permut (Zsucc p) d t3 t2 ->
    sorted_array t3 g d /\ sub_permut g d t3 t0.
 Proof.
 intros t0 t1 t2 t3 g d p H1 H2 H3 H4 piv_t1 perm_t1 sort_t2 perm_t2
@@ -90,14 +90,14 @@ apply H19; omega.
 omega.
 (* x > p *)
 unfold sorted_array in sort_t3.
-apply sort_t3; unfold Zs; omega.
+apply sort_t3; unfold Zsucc; omega.
 
 (* sub_permut *)
 apply sub_permut_trans with (t' := t2).
-elim (Z_le_gt_dec (Zs p) d); intro.
-apply sub_permut_extension with (g := Zs p) (d := d); try omega.
+elim (Z_le_gt_dec (Zsucc p) d); intro.
+apply sub_permut_extension with (g := Zsucc p) (d := d); try omega.
 assumption.
-apply sub_permut_void with (g := Zs p) (d := d); try omega.
+apply sub_permut_void with (g := Zsucc p) (d := d); try omega.
 assumption.
 apply sub_permut_trans with (t' := t1).
 elim (Z_le_gt_dec g (Zpred p)); intro.
