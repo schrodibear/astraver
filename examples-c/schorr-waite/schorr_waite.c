@@ -18,7 +18,6 @@ typedef struct struct_node {
 /*@ predicate isreachable (node p1, node p2) reads p1->r,p1->l */
 
 /*@ predicate unmarked_reachable (node p1, node p2) reads p1->r,p1->l,p1->m */
-/* predicate stkOk (node p, plist stack) reads p->c,p->l,p->r,\old(p->l),\old(p->r)*/
 
 /*@ predicate clr_list (node p, plist stack) reads p->c,p->l,p->r*/
 
@@ -57,13 +56,7 @@ void schorr_waite(node root) {
     @  (\forall node x; ! \old(isreachable(root,x)) => x->m == \old(x->m)) &&
     @  (\forall node x; x != \null && \old(isreachable(root,x)) => \valid(x)) 
   */
-  /*
-      variant mesure (p,t) for mesure_order
-      (\forall node p1; (\forall node p2;
-              pair_in_list(p1,p2,stack) => 
-	          (\old(p2->l) == (p2->c ? p2->l : p1)) &&
-	          (\old(p2->r) == (p2->c ? p1 : p2->r))))
-  */
+  // variant mesure (p,t) for mesure_order
   while (p != NULL || (t != NULL && ! t->m)) {
     if (t == NULL || t->m) {
       if (p->c) {
