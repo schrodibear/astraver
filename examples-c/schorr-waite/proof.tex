@@ -28,14 +28,20 @@ we needed to add new assertions in the loop invariant.
   \psset{unit=\unitlength,arrows=->}
 \begin{picture}(100,100)
 \put(50,100){\rnode{null}{\makebox(0,0)[b]{\tiny NULL}}}
-\put(50,80){\mnode{n0}}\put(58,83){\makebox(0,0)[b] {c=false}}
-\put(30,60){\mnode{n1}}\put(23,63){\makebox(0,0)[b] {c=true}}
+\put(20,90){\rnode{root}{\makebox(0,0)[c]{root}}}
+\put(50,80){\mnode{n0}}\put(58,83){\makebox(0,0)[b] {c=0}}
+\put(30,60){\mnode{n1}}\put(23,63){\makebox(0,0)[b] {c=1}}
 \put(60,60){\unode{n2}}
 
 \put(20,40){\mnode{n11}}
-\put(40,40){\mnode{n12}}\put(50,43){\makebox(0,0)[b] {c=false}}
+\put(40,40){\mnode{n12}}\put(50,43){\makebox(0,0)[b] {c=0}}
 \put(50,20){\unode{n122}}
 \put(30,20){\unode{n121}}
+\put(40,0){\unode{n1211}}
+\put(20,0){\unode{n1212}}
+\put(0,50){\rnode{p}{\makebox(0,0)[c]{p}}}
+\put(0,30){\rnode{t}{\makebox(0,0)[c]{t}}}
+
 \ncline[linestyle=dashed]{n0}{n1}
 \ncarc[arcangleA=120,linewidth=1]{n0}{null}
 \ncline{n0}{n2}
@@ -45,6 +51,11 @@ we needed to add new assertions in the loop invariant.
 \ncline[linestyle=dashed]{n12}{n121}
 \ncarc[arcangleA=120,linewidth=1]{n12}{n1}
 \ncarc[arcangleA=-100,arcangleB=-30,linewidth=1]{n1}{n0}
+\ncline{root}{n0}
+\ncline{n121}{n1211}
+\ncline{n121}{n1212}
+\ncline{p}{n12}
+\ncline{t}{n121}
 \end{picture}\label{figure}
 \end{center}
 \caption{The backtracking stack inside the graph structure}
