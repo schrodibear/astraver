@@ -1,0 +1,43 @@
+\section{Overview of the caduceus approach}
+\label{sec:overview}
+
+In the following, we assume the reader fairly familiar with ANSI
+C~\cite{KR88}.  In our setting, the properties that may be checked are
+of two kinds: first, the program may be checked to be free of
+\emph{threats} (null pointer dereferencing or out-of-bounds array
+access) and second, it may be proved satisfying functional properties
+given as functions's \emph{postconditions}. These kinds of properties
+are not independent since they both usually need insertion of
+appropriate annotations (functions's \emph{preconditions},
+\emph{global invariants}, \emph{loop invariants}, etc.) as usual in a
+Hoare logic framework.  In practice, these annotations are inserted in
+the source code as comments of a specific shape \verb!/*@...*/!. The
+specification language we use in those comments is largely inspired by
+the Java Modeling Language (JML)~\cite{leavens00jml}. It has however
+significant differences, mainly due to the fact that unlike JML we do
+not seek runtime assertion checking.
+ 
+Once a C program is annotated, verification is done by running 
+\caduceus{} on the sources in a way similar to a classical compiler
+but resulting in the generation of the so-called \emph{verification
+  conditions}: these are first-order predicate logic formulas whose validity
+implies the 
+soundness of the program with respect to the absence of threat and
+to the functional properties given as annotations. At this point, a general
+purpose theorem prover must be used to establish those verification conditions.
+An original \caduceus{} feature is its independence with respect to
+the prover. It currently supports the Coq interactive proof
+assistant~\cite{CoqProofAssistant} and the Simplify automatic
+prover~\cite{simplify}. New 
+provers may easily be added provided a suitable
+pretty-printer; support for PVS~\cite{PVS} and haRVey~\cite{ranise03harvey}
+are planned in a near future.
+
+
+PARLER du modele: on utilise aussi un modèle Burstall-Bornat, mais
+étendu aux tableaux, et à l'arithmétique de pointeurs.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "rapport"
+%%% End: 

@@ -1,39 +1,59 @@
 
 \section{Description of the Schorr-Waite algorithm}
+\label{sec:algo}
 
-\begin{lstlisting}[language=C]{}
-
-/* Schorr-Waite algorithm */
-
+The Schorr-Waite algorithm performs a depth-first traversal of a
+directed graph, starting from a specific node of the graph called the
+root. In the version we consider here, we assume that the nodes have
+at most two children, which is situation for example for a garbage
+collector for a pure lisp interpreter, where the only memory allocated value
+is the \textsf{cons} of lists. In C, these \textsf{cons} structures
+can be defined as
+\begin{alltt}
 typedef struct struct_node {
   unsigned int m :1;
   unsigned int c :1;
   struct struct_node *l, *r;
 } * node;
-
-#define NULL ((void*)0)
-
+\end{alltt}
+where $l$ and $r$ are respectively pointers to the left and to the
+right child (they may be assigned to NULL). The boolean field $m$ is a
+mark: initially, all nodes of the graph will be assumed unmarked, and
+at the end of the traversal, they will have to be all marked. The
+boolean field $c$ is used internally by the algorithm, to denote which
+of the children is currently explored.
+ 
+\begin{alltt}
+\begin{slshape}
+/* Schorr-Waite algorithm */
+\end{slshape}
 void schorr_waite(node root) {
   node t = root;
   node p = NULL;
   while (p != NULL || (t != NULL && ! t->m)) {
     if (t == NULL || t->m) {
       if (p->c) {
+\begin{slshape}
 	/* pop */
-	node q = t;
+\end{slshape}
+      node q = t;
 	t = p;
 	p = p->r;
 	t->r = q;
       } else {
+\begin{slshape}
 	/* swing */
-	node q = t;
+\end{slshape}
+      node q = t;
 	t = p->r;
 	p->r = p->l;
 	p->l = q;
 	p->c = 1;
       }
     } else {
+\begin{slshape}
       /* push */
+\end{slshape}
       node q = p;
       p = t;
       t = t->l;
@@ -43,7 +63,32 @@ void schorr_waite(node root) {
     }
   }
 }
-\end{lstlisting}
+\end{alltt}
+
+
+\subsection{Graph reachability, and formal specification of the algorithm}
+
+\begin{alltt}
+\begin{slshape}
+/*@ predicate isreachable (node p1, node p2) reads p1->r,p1->l */
+\end{slshape}
+\end{alltt}
+
+\begin{alltt}
+\begin{slshape}
+/*@ requires 
+  @   \bs{}forall node x; 
+  @      x != \null && isreachable(root,x) => \valid(x) && ! x->m  
+  @ ensures 
+  @   (\bs{}forall node x; \old(x->l) == x->l && \old(x->r) == x->r) 
+  @   &&
+  @   (\bs{}forall node x; \valid(x) && isreachable(root,x) => x->m) 
+  @   &&
+  @   (\bs{}forall node x; ! isreachable(root,x) => x->m == \old(x->m))
+  @*/
+\end{slshape}
+void schorr_waite(node root);
+\end{alltt}
 
 %%% Local Variables: 
 %%% mode: latex

@@ -22,7 +22,7 @@
 
 \begin{document}
 
-\title{A case study of C Program Verification: the Schorr-Waite algorithm}
+\title{A case study of C source code verification: the Schorr-Waite algorithm}
 \author{Thierry Hubert and Claude March\'e}
 \institute{PCRI --- LRI (CNRS UMR 8623) --- INRIA Futurs ---
   Universit\'e Paris 11 \\
@@ -32,35 +32,36 @@ B\^at 490, Universit\'e Paris-sud, 91405 Orsay cedex, France \\
 \maketitle
 
 \begin{abstract}
-%   Our goal is the verification of C programs at the source code level
-%   using formal proof tools. Programs are specified using annotations such
-%   as pre- and postconditions and global invariants. An
-%   original approach is presented which allows to formally prove that a
-%   function implementation satisfies its specification and is free of
-%   null pointer dereferencing and out-of-bounds array access. 
-%   The method is not bound to a particular back-end theorem prover.  A
-%   significant part of the ANSI C language is supported, including
-%   pointer arithmetic and possible pointer aliasing.  We describe a
-%   prototype tool and give some experimental results.
+  We describe an experiment done using the \caduceus{} tool for formal
+  verification of C programs. We performed a full formal proof of the
+  classical Schorr-Waite graph-marking algorithm, which has already
+  been used several times as a case study for formal reasoning
+  computer systems. Our study is original with respect to previous
+  experiments for several reasons. First, we use a general-purpose
+  tool for C source code: we start from a real source code written in C,
+  specified using an annotation language for arbitrary C programs.
+  (BOF Second, we are not bound to a specific prover.) Third, we indeed
+  formally established more properties of the algorithm than previous
+  works, in particular a formal proof of termination is made.
 
-% \noindent{\bf Keywords:} C programming language, Hoare logic, pointer programs,
-% formal verification and proof.
+  \noindent{\bf Keywords:} C programming language, Hoare logic,
+  pointer programs, formal verification and proof.
 \end{abstract}
 
 \footnotetext{This research was partly supported by the ``projet
   GECCOO de l'ACI S\'ecurit\'e Informatique'', CNRS \& INRIA,
-  \url{http://gecco.lri.fr} + Dassault ? } 
+  \url{http://gecco.lri.fr} + Dassault ? Averroes ?} 
 
 \input{./intro.tex}
+\input{./overview.tex}
 \input{./algo.tex}
 \input{./proof.tex}
 \input{./concl.tex}
 
-%\bigskip
-% \paragraph{Acknowledgments.} 
-% We thank June Andronick from Axalto, Dillon Pariente and
-% Emmanuel Ledinot from Dassault Aviation for their very useful feedback
-% about the specification language and the \caduceus{} prototype.
+\bigskip
+\paragraph{Acknowledgments.} 
+We thank Jean-Christophe Filliâtre for its fruitful help, advices and
+remarks about this case study.
 
 \bibliographystyle{abbrv}
 \input{biblio-demons}

@@ -1,39 +1,24 @@
 
 \section{Verification}
+\label{sec:proof}
 
 \subsection{Modeling lists of pointers}
 
-\begin{lstlisting}[language=C]{}
+\begin{alltt}
 
+\begin{slshape}
 /*@ logic plist cons(node p, plist l) */
 
 /*@ predicate in_list(node p,plist stack) */
 
 /*@ predicate pair_in_list(node p1,node p2, plist stack) */
+\end{slshape}
+\end{alltt}
 
-\end{lstlisting}
-
-\subsection{Graph reachability, and formal specification of the algorithm}
-
-\begin{lstlisting}[language=C]{}
-
-/*@ predicate isreachable (node p1, node p2) reads p1->r,p1->l */
-
-/*@ requires 
-  @   \forall node x; x!=\null && isreachable(root,x) => \valid(x) && ! x ->m  
-  @ ensures 
-  @   (\forall node x; \old (x->l) == x->l && \old (x->r) == x->r) &&
-  @   (\forall node x; \valid(x) && isreachable (root,x) => x->m) &&
-  @   (\forall node x; ! isreachable (root,x) => x->m == \old(x->m))
-*/
-void schorr_waite(node root);
-\end{lstlisting}
 
 \subsection{Loop invariant}
 
 \begin{lstlisting}[language=C]{}
-
-/*@ logic Length mesure (node p , node t) reads p->m,p->c,p->l,p->r*/
 
 /*@ predicate unmarked_reachable (node p1, node p2) reads p1->r,p1->l,p1->m */
 
@@ -94,16 +79,19 @@ void schorr_waite(node root) {
 }
 \end{lstlisting}
 
+\subsection{Intermediate lemmas}
+
 \subsection{Termination}
 
 \begin{lstlisting}[language=C]{}
 
 /*@ logic Length mesure (node p , node t) reads p->m,p->c,p->l,p->r*/
 
+/*@ NE PAS OUBLIER le nouveau requires */
 void schorr_waite(node root) {
   node t = root;
   node p = NULL;
-  /*@variant ...
+  /*@variant A AJOUTER
     @*/
   while (p != NULL || (t != NULL && ! t->m)) {
    ...

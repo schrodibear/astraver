@@ -5,7 +5,7 @@ Require Export caduceus_why. Require Export caduceus_tactics.
 Require Export BinTree.
 
 (*Why logic*) Definition clr_list :
-  alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
+  ((memory) pointer) -> ((memory) pointer) -> ((memory) Z) -> alloc_table
   -> pointer -> plist -> Prop.
 exact clr_list.
 Defined.
@@ -19,14 +19,14 @@ exact in_list.
 Defined.
 
 (*Why logic*) Definition isreachable :
-  alloc_table -> ((memory) pointer) -> ((memory) pointer) -> pointer
+  ((memory) pointer) -> ((memory) pointer) -> alloc_table -> pointer
   -> pointer -> Prop.
 exact isreachable.
 Defined.
 
 (*Why logic*) Definition mkvar_type :
-  alloc_table -> ((memory) Z) -> ((memory) Z) -> ((memory) pointer)
-  -> ((memory) pointer) -> pointer -> pointer -> var_type.
+  ((memory) pointer) -> ((memory) pointer) -> ((memory) Z) -> ((memory) Z)
+  -> alloc_table -> pointer -> pointer -> var_type.
 Admitted.
 
 (*Why logic*) Definition pair_in_list : pointer -> pointer -> plist -> Prop.
@@ -34,12 +34,12 @@ exact pair_in_list.
 Defined.
 
 (*Why logic*) Definition reachable_elements :
-  alloc_table -> ((memory) pointer) -> ((memory) pointer) -> pointer
+  ((memory) pointer) -> ((memory) pointer) -> alloc_table -> pointer
   -> pointer -> plist -> Prop.
 Admitted.
 
 (*Why logic*) Definition unmarked_reachable :
-  alloc_table -> ((memory) Z) -> ((memory) pointer) -> ((memory) pointer)
+  ((memory) pointer) -> ((memory) pointer) -> ((memory) Z) -> alloc_table
   -> pointer -> pointer -> Prop.
 exact unmarked_reachable .
 Defined.
