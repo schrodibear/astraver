@@ -101,17 +101,29 @@ Qed.
 
 (*Why*) Parameter x : Z.
 
-(* Why obligation from file , characters 506-518 *)
-Lemma power1_po_1 :
- forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
-   (Post2:y0 = 1%Z) (Variant1 m1 n0 y1:Z) (Pre3:Variant1 = n0)
-   (Pre2:Zpower x n = (y1 * Zpower m1 n0)%Z /\ (n0 >= 0)%Z)
-   (Test4:(n0 > 0)%Z) (Test3:Zodd n0) (y2:Z) (Post3:y2 = (y1 * m1)%Z)
-   (m:Z),
-   m = (m1 * m1)%Z ->
-   forall n1:Z,
-     n1 = div2 n0 ->
-     (Zpower x n = (y2 * Zpower m n1)%Z /\ (n1 >= 0)%Z) /\ Zwf 0 n1 n0.
+(* Why obligation from file "power.mlw", characters 506-518 *)
+Lemma power1_po_1 : 
+  forall (n: Z),
+  forall (Pre4: n >= 0),
+  forall (m0: Z),
+  forall (Post1: m0 = x),
+  forall (y0: Z),
+  forall (Post2: y0 = 1),
+  forall (Variant1: Z),
+  forall (m1: Z),
+  forall (n0: Z),
+  forall (y1: Z),
+  forall (Pre3: Variant1 = n0),
+  forall (Pre2: (Zpower x n) = (y1 * (Zpower m1 n0)) /\ n0 >= 0),
+  forall (Test4: n0 > 0),
+  forall (Test3: (Zodd n0)),
+  forall (y2: Z),
+  forall (Post3: y2 = (y1 * m1)),
+  (forall (m:Z),
+   (m = (m1 * m1) ->
+    (forall (n1:Z),
+     (n1 = (div2 n0) -> ((Zpower x n) = (y2 * (Zpower m n1)) /\ n1 >= 0) /\
+      (Zwf 0 n1 n0))))).
 Proof.
 simpl; intros.
 repeat split; try omega.
@@ -135,16 +147,27 @@ subst n1; apply Zdiv2_ge_0; omega.
 subst n1; apply Zdiv2_lt; omega.
 Qed.
 
-(* Why obligation from file , characters 518-518 *)
-Lemma power1_po_2 :
- forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
-   (Post2:y0 = 1%Z) (Variant1 m1 n0 y1:Z) (Pre3:Variant1 = n0)
-   (Pre2:Zpower x n = (y1 * Zpower m1 n0)%Z /\ (n0 >= 0)%Z)
-   (Test4:(n0 > 0)%Z) (Test2:Zeven n0) (m:Z),
-   m = (m1 * m1)%Z ->
-   forall n1:Z,
-     n1 = div2 n0 ->
-     (Zpower x n = (y1 * Zpower m n1)%Z /\ (n1 >= 0)%Z) /\ Zwf 0 n1 n0.
+(* Why obligation from file "power.mlw", characters 518-518 *)
+Lemma power1_po_2 : 
+  forall (n: Z),
+  forall (Pre4: n >= 0),
+  forall (m0: Z),
+  forall (Post1: m0 = x),
+  forall (y0: Z),
+  forall (Post2: y0 = 1),
+  forall (Variant1: Z),
+  forall (m1: Z),
+  forall (n0: Z),
+  forall (y1: Z),
+  forall (Pre3: Variant1 = n0),
+  forall (Pre2: (Zpower x n) = (y1 * (Zpower m1 n0)) /\ n0 >= 0),
+  forall (Test4: n0 > 0),
+  forall (Test2: (Zeven n0)),
+  (forall (m:Z),
+   (m = (m1 * m1) ->
+    (forall (n1:Z),
+     (n1 = (div2 n0) -> ((Zpower x n) = (y1 * (Zpower m n1)) /\ n1 >= 0) /\
+      (Zwf 0 n1 n0))))).
 Proof.
 simpl; intros.
 repeat split; try omega.
@@ -162,10 +185,15 @@ subst n1; apply Zdiv2_ge_0; omega.
 subst n1; apply Zdiv2_lt; omega.
 Qed.
 
-(* Why obligation from file , characters 414-459 *)
-Lemma power1_po_3 :
- forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
-   (Post2:y0 = 1%Z), Zpower x n = (y0 * Zpower m0 n)%Z /\ (n >= 0)%Z.
+(* Why obligation from file "power.mlw", characters 414-459 *)
+Lemma power1_po_3 : 
+  forall (n: Z),
+  forall (Pre4: n >= 0),
+  forall (m0: Z),
+  forall (Post1: m0 = x),
+  forall (y0: Z),
+  forall (Post2: y0 = 1),
+  (Zpower x n) = (y0 * (Zpower m0 n)) /\ n >= 0.
 Proof.
 intros.
 split; [ idtac | omega ].
@@ -173,12 +201,19 @@ subst y0; ring.
 subst m0; trivial.
 Qed.
 
-(* Why obligation from file , characters 345-575 *)
-Lemma power1_po_4 :
- forall (n:Z) (Pre4:(n >= 0)%Z) (m0:Z) (Post1:m0 = x) (y0:Z)
-   (Post2:y0 = 1%Z) (m1 n0 y1:Z)
-   (Post6:(Zpower x n = (y1 * Zpower m1 n0)%Z /\ (n0 >= 0)%Z) /\
-          (n0 <= 0)%Z), y1 = Zpower x n.
+(* Why obligation from file "power.mlw", characters 345-575 *)
+Lemma power1_po_4 : 
+  forall (n: Z),
+  forall (Pre4: n >= 0),
+  forall (m0: Z),
+  forall (Post1: m0 = x),
+  forall (y0: Z),
+  forall (Post2: y0 = 1),
+  forall (m1: Z),
+  forall (n0: Z),
+  forall (y1: Z),
+  forall (Post6: ((Zpower x n) = (y1 * (Zpower m1 n0)) /\ n0 >= 0) /\ n0 <= 0),
+  y1 = (Zpower x n).
 Proof.
 intros.
 intuition.

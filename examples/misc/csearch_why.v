@@ -3,78 +3,118 @@
 
 Require Import Why.
 
-(* Why obligation from file , characters 237-241 *)
-Lemma index_po_1 :
- forall (n:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z) (Variant1 i1:Z) (Pre4:Variant1 = (n - i1)%Z)
-   (Pre3:(0 <= i1)%Z) (Test2:(i1 < n)%Z),
-   (0 <= i1)%Z /\ (i1 < array_length t)%Z.
+(* Why obligation from file "csearch.c", characters 237-241 *)
+Lemma index_po_1 : 
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  forall (Variant1: Z),
+  forall (i1: Z),
+  forall (Pre4: Variant1 = (n - i1)),
+  forall (Pre3: 0 <= i1),
+  forall (Test2: i1 < n),
+  0 <= i1 /\ i1 < (array_length t).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 237-246 *)
-Lemma index_po_2 :
- forall (n v:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z) (Variant1 i1:Z) (Pre4:Variant1 = (n - i1)%Z)
-   (Pre3:(0 <= i1)%Z) (Test2:(i1 < n)%Z)
-   (Pre2:(0 <= i1)%Z /\ (i1 < array_length t)%Z) (c_aux_1:Z)
-   (Post1:c_aux_1 = access t i1) (result0:bool)
-   (Post14:if result0 then c_aux_1 = v else c_aux_1 <> v),
-   if result0
-   then (0 <= i1)%Z /\ (i1 < n)%Z -> access t i1 = v
-   else
-    forall i:Z, i = (i1 + 1)%Z -> (0 <= i)%Z /\ Zwf 0 (n - i) (n - i1).
+(* Why obligation from file "csearch.c", characters 237-246 *)
+Lemma index_po_2 : 
+  forall (n: Z),
+  forall (v: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  forall (Variant1: Z),
+  forall (i1: Z),
+  forall (Pre4: Variant1 = (n - i1)),
+  forall (Pre3: 0 <= i1),
+  forall (Test2: i1 < n),
+  forall (Pre2: 0 <= i1 /\ i1 < (array_length t)),
+  forall (c_aux_1: Z),
+  forall (Post1: c_aux_1 = (access t i1)),
+  forall (result0: bool),
+  forall (Post14: (if result0 then c_aux_1 = v else c_aux_1 <> v)),
+  (if result0 then (0 <= i1 /\ i1 < n -> (access t i1) = v)
+   else (forall (i:Z), (i = (i1 + 1) -> 0 <= i /\ (Zwf 0 (n - i) (n - i1))))).
 Proof.
 olddestruct result0; intuition.
 Qed.
 
-(* Why obligation from file , characters 150-156 *)
-Lemma index_po_3 :
- forall (n:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z), (0 <= i)%Z.
+(* Why obligation from file "csearch.c", characters 150-156 *)
+Lemma index_po_3 : 
+  forall (n: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  0 <= i.
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 116-267 *)
-Lemma index_po_4 :
- forall (n v:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z) (i1:Z) (Post3:(0 <= i1)%Z /\ (i1 >= n)%Z),
-   (0 <= i1)%Z /\ (i1 < n)%Z -> access t i1 = v.
+(* Why obligation from file "csearch.c", characters 116-267 *)
+Lemma index_po_4 : 
+  forall (n: Z),
+  forall (v: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  forall (i1: Z),
+  forall (Post3: 0 <= i1 /\ i1 >= n),
+  (0 <= i1 /\ i1 < n -> (access t i1) = v).
 Proof.
 intuition.
 Qed.
 
 
-(* Why obligation from file , characters 570-574 *)
-Lemma index2_po_1 :
- forall (n v:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z) (Variant1 i1:Z) (Pre4:Variant1 = (n - i1)%Z)
-   (Pre3:(0 <= i1)%Z /\
-         (forall k:Z, (0 <= k)%Z /\ (k < i1)%Z -> access t k <> v))
-   (Test2:(i1 < n)%Z), (0 <= i1)%Z /\ (i1 < array_length t)%Z.
+(* Why obligation from file "csearch.c", characters 570-574 *)
+Lemma index2_po_1 : 
+  forall (n: Z),
+  forall (v: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  forall (Variant1: Z),
+  forall (i1: Z),
+  forall (Pre4: Variant1 = (n - i1)),
+  forall (Pre3: 0 <= i1 /\
+                (forall (k:Z), (0 <= k /\ k < i1 -> (access t k) <> v))),
+  forall (Test2: i1 < n),
+  0 <= i1 /\ i1 < (array_length t).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 570-579 *)
-Lemma index2_po_2 :
- forall (n v:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z) (Variant1 i1:Z) (Pre4:Variant1 = (n - i1)%Z)
-   (Pre3:(0 <= i1)%Z /\
-         (forall k:Z, (0 <= k)%Z /\ (k < i1)%Z -> access t k <> v))
-   (Test2:(i1 < n)%Z) (Pre2:(0 <= i1)%Z /\ (i1 < array_length t)%Z)
-   (c_aux_2:Z) (Post1:c_aux_2 = access t i1) (result0:bool)
-   (Post15:if result0 then c_aux_2 = v else c_aux_2 <> v),
-   if result0
-   then (0 <= i1)%Z /\ (i1 < n)%Z -> access t i1 = v
-   else
-    forall i:Z,
-      i = (i1 + 1)%Z ->
-      ((0 <= i)%Z /\
-       (forall k:Z, (0 <= k)%Z /\ (k < i)%Z -> access t k <> v)) /\
-      Zwf 0 (n - i) (n - i1).
+(* Why obligation from file "csearch.c", characters 570-579 *)
+Lemma index2_po_2 : 
+  forall (n: Z),
+  forall (v: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  forall (Variant1: Z),
+  forall (i1: Z),
+  forall (Pre4: Variant1 = (n - i1)),
+  forall (Pre3: 0 <= i1 /\
+                (forall (k:Z), (0 <= k /\ k < i1 -> (access t k) <> v))),
+  forall (Test2: i1 < n),
+  forall (Pre2: 0 <= i1 /\ i1 < (array_length t)),
+  forall (c_aux_2: Z),
+  forall (Post1: c_aux_2 = (access t i1)),
+  forall (result0: bool),
+  forall (Post15: (if result0 then c_aux_2 = v else c_aux_2 <> v)),
+  (if result0 then (0 <= i1 /\ i1 < n -> (access t i1) = v)
+   else (forall (i:Z),
+         (i = (i1 + 1) -> (0 <= i /\
+          (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> v))) /\
+          (Zwf 0 (n - i) (n - i1))))).
 Proof.
 olddestruct result0; intuition.
 assert (k = i1 \/ (k < i1)%Z).
@@ -84,23 +124,32 @@ subst k c_aux_2; auto.
 apply (H0 k); auto with *.
 Qed.
 
-(* Why obligation from file , characters 487-535 *)
-Lemma index2_po_3 :
- forall (n v:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z),
-   (0 <= i)%Z /\
-   (forall k:Z, (0 <= k)%Z /\ (k < i)%Z -> access t k <> v).
+(* Why obligation from file "csearch.c", characters 487-535 *)
+Lemma index2_po_3 : 
+  forall (n: Z),
+  forall (v: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  0 <= i /\ (forall (k:Z), (0 <= k /\ k < i -> (access t k) <> v)).
 Proof.
 intuition.
 Qed.
 
-(* Why obligation from file , characters 613-614 *)
-Lemma index2_po_4 :
- forall (n v:Z) (t:array Z) (Pre5:array_length t = n) (i:Z)
-   (Post4:i = 0%Z) (i1:Z)
-   (Post3:((0 <= i1)%Z /\
-           (forall k:Z, (0 <= k)%Z /\ (k < i1)%Z -> access t k <> v)) /\
-          (i1 >= n)%Z), (0 <= n)%Z /\ (n < n)%Z -> access t n = v.
+(* Why obligation from file "csearch.c", characters 613-614 *)
+Lemma index2_po_4 : 
+  forall (n: Z),
+  forall (v: Z),
+  forall (t: (array Z)),
+  forall (Pre5: (array_length t) = n),
+  forall (i: Z),
+  forall (Post4: i = 0),
+  forall (i1: Z),
+  forall (Post3: (0 <= i1 /\
+                 (forall (k:Z), (0 <= k /\ k < i1 -> (access t k) <> v))) /\
+                 i1 >= n),
+  (0 <= n /\ n < n -> (access t n) = v).
 Proof.
 intuition.
 Qed.
