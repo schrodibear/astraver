@@ -66,9 +66,14 @@ parameter upd_ : m:'a memory ref -> p:pointer -> v:'a ->
   unit reads alloc,m writes m
   { m = upd(m@,p,v) }
 
-axiom acc_upd_eq : 
+axiom acc_upd : 
   forall m : 'a memory. forall p : pointer. forall a: 'a.
     acc(upd(m,p,a),p) = a
+ 
+axiom acc_upd_eq : 
+  forall m : 'a memory. forall p1: pointer. forall p2 : pointer. 
+  forall a: 'a.
+    p1=p2 -> acc(upd(m,p1,a),p2) = a
  
 axiom acc_upd_neq : 
   forall m : 'a memory. forall p1: pointer. forall p2 : pointer. 
@@ -135,5 +140,17 @@ axiom unchanged_range_elim :
     forall a:int. forall b:int.
        unchanged(p1,range_loc(p2,a,b)) ->
  	(forall i:int. a <= i < b -> p1 <> shift(p2,i))  
+
+
+(* redondant axioms *)
+
+(* marche pas: order sup
+axiom assigns_upd :
+ forall a:alloc. forall m:'a memory. forall unch:assign_loc.
+   forall p:pointer. forall x:'a.
+    not(unch(p)) -> assigns(a,m,upd(m,p,x),unch)
+*)
+
+
 
 

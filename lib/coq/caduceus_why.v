@@ -69,7 +69,7 @@ Admitted.
   (sig_1 pointer (fun (result: pointer)  => (result = (shift p i)))).
 
 (*Why logic*) Definition acc :
-  forall (A27:Set), ((memory) A27) -> pointer -> A27.
+  forall (A32:Set), ((memory) A32) -> pointer -> A32.
 Admitted.
 Implicit Arguments acc.
 
@@ -79,7 +79,7 @@ Implicit Arguments acc.
   (sig_1 A5 (fun (result: A5)  => (result = (acc m p)))).
 
 (*Why logic*) Definition upd :
-  forall (A28:Set), ((memory) A28) -> pointer -> A28 -> ((memory) A28).
+  forall (A33:Set), ((memory) A33) -> pointer -> A33 -> ((memory) A33).
 Admitted.
 Implicit Arguments upd.
 
@@ -90,18 +90,26 @@ Implicit Arguments upd.
   (sig_2 ((memory) A11) unit
    (fun (m0: ((memory) A11)) (result: unit)  => (m0 = (upd m p v)))).
 
+(*Why axiom*) Lemma acc_upd :
+  forall (A34:Set),
+  (forall (m:((memory) A34)),
+   (forall (p:pointer), (forall (a:A34), (acc (upd m p a) p) = a))).
+Admitted.
+
 (*Why axiom*) Lemma acc_upd_eq :
-  forall (A29:Set),
-  (forall (m:((memory) A29)),
-   (forall (p:pointer), (forall (a:A29), (acc (upd m p a) p) = a))).
+  forall (A35:Set),
+  (forall (m:((memory) A35)),
+   (forall (p1:pointer),
+    (forall (p2:pointer),
+     (forall (a:A35), (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  forall (A30:Set),
-  (forall (m:((memory) A30)),
+  forall (A36:Set),
+  (forall (m:((memory) A36)),
    (forall (p1:pointer),
     (forall (p2:pointer),
-     (forall (a:A30), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     (forall (a:A36), (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc -> pointer -> Prop.
@@ -125,8 +133,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns (A31:Set) (a:alloc) (m1:((memory) A31))
-  (m2:((memory) A31)) (l:assign_loc)
+(*Why predicate*) Definition assigns (A37:Set) (a:alloc) (m1:((memory) A37))
+  (m2:((memory) A37)) (l:assign_loc)
   := (forall (p:pointer),
       ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicit Arguments assigns.

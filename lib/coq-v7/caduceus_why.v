@@ -65,7 +65,7 @@ Admitted.
 (*Why*) Parameter shift_ :
   (p: pointer)(i: Z)(sig_1 pointer [result: pointer](result = (shift p i))).
 
-(*Why logic*) Definition acc : (A27:Set) ((memory) A27) -> pointer -> A27.
+(*Why logic*) Definition acc : (A32:Set) ((memory) A32) -> pointer -> A32.
 Admitted.
 Implicits acc [1].
 
@@ -74,7 +74,7 @@ Implicits acc [1].
   (sig_1 A5 [result: A5](result = (acc m p))).
 
 (*Why logic*) Definition upd :
-  (A28:Set) ((memory) A28) -> pointer -> A28 -> ((memory) A28).
+  (A33:Set) ((memory) A33) -> pointer -> A33 -> ((memory) A33).
 Admitted.
 Implicits upd [1].
 
@@ -84,17 +84,24 @@ Implicits upd [1].
   (sig_2 ((memory) A11) unit [m0: ((memory) A11)][result: unit]
    (m0 = (upd m p v))).
 
+(*Why axiom*) Lemma acc_upd :
+  (A34:Set)
+  ((m:((memory) A34)) ((p:pointer) ((a:A34) (acc (upd m p a) p) = a))).
+Admitted.
+
 (*Why axiom*) Lemma acc_upd_eq :
-  (A29:Set)
-  ((m:((memory) A29)) ((p:pointer) ((a:A29) (acc (upd m p a) p) = a))).
+  (A35:Set)
+  ((m:((memory) A35))
+   ((p1:pointer)
+    ((p2:pointer) ((a:A35) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A30:Set)
-  ((m:((memory) A30))
+  (A36:Set)
+  ((m:((memory) A36))
    ((p1:pointer)
     ((p2:pointer)
-     ((a:A30) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     ((a:A36) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why logic*) Definition fresh : alloc -> pointer -> Prop.
@@ -119,8 +126,8 @@ Admitted.
 (*Why logic*) Definition unchanged : pointer -> assign_loc -> Prop.
 Admitted.
 
-(*Why predicate*) Definition assigns [A31:Set] [a:alloc] [m1:((memory) A31)]
-  [m2:((memory) A31)] [l:assign_loc]
+(*Why predicate*) Definition assigns [A37:Set] [a:alloc] [m1:((memory) A37)]
+  [m2:((memory) A37)] [l:assign_loc]
   := ((p:pointer) ((valid a p) /\ (unchanged p l) -> (acc m2 p) = (acc m1 p))).
 Implicits assigns [1].
 
