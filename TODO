@@ -1,6 +1,13 @@
 
-FEATURES
+CADUCEUS
 ========
+
+ - & in logic term syntax
+
+ - cpp
+
+WHY FEATURES
+============
 
  - arguments which are types
 
@@ -9,8 +16,6 @@ FEATURES
 
  - mutually recursive functions 
    (many variants over the same type, one relation)
-
- - C: assert statement
 
 COQ
 ===
@@ -71,8 +76,8 @@ BUGS
      a := let v1 = (sub_int !x) in let v2 = (v1 2) in v2
    ======================================================================
 
-IMPLEMENTATION
-==============
+WHY
+===
 
  - do not overwrite .bak if no change
 
