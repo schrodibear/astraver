@@ -86,8 +86,7 @@ Lemma add1_po_5 :
   (Pre2: Variant1 = z0)
   (Test1: `z0 <= 0`)
   (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
-  `0 <= z0` /\ x0 = `x + (y - z0)` /\
-  ((if false then `z0 > 0` else `z0 <= 0`)).
+  `0 <= z0` /\ x0 = `x + (y - z0)` /\ `z0 <= 0`.
 Proof. Intuition. Save.
 
 Lemma add1_po_6 : 
@@ -107,8 +106,7 @@ Lemma add1_po_7 :
   (Post1: result = y)
   (x0: Z)
   (z0: Z)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)` /\
-      ((if false then `z0 > 0` else `z0 <= 0`)))
+  (I: `0 <= z0` /\ x0 = `x + (y - z0)` /\ `z0 <= 0`)
   x0 = `x + y`.
 Proof. Intros; Omega. Save.
 
@@ -263,8 +261,7 @@ Lemma mult1_po_6 :
   (Pre3: Variant1 = z0)
   (Test1: `z0 <= 0`)
   (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
-  `0 <= z0` /\ x1 = `x * (y - z0)` /\
-  ((if false then `z0 > 0` else `z0 <= 0`)).
+  `0 <= z0` /\ x1 = `x * (y - z0)` /\ `z0 <= 0`.
 Proof. Tauto. Save.
 
 Lemma mult1_po_7 : 
@@ -294,8 +291,7 @@ Lemma mult1_po_8 :
   (Post3: x0 = `0`)
   (x1: Z)
   (z0: Z)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)` /\
-      ((if false then `z0 > 0` else `z0 <= 0`)))
+  (I: `0 <= z0` /\ x1 = `x * (y - z0)` /\ `z0 <= 0`)
   x1 = `x * y`.
 Proof.
 Simpl; Intros.

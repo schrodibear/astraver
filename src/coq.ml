@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.25 2002-03-27 16:00:10 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.26 2002-04-03 15:52:04 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -319,10 +319,10 @@ let regen oldf fmt =
 	  scan ()
       | Some e ->
 	  if Hashtbl.mem elem_t e then begin
-	    if !verbose then eprintf "overwriting %a@." print_element_kind e;
+	    if verbose then eprintf "overwriting %a@." print_element_kind e;
 	    print_up_to e
 	  end else
-	    if !verbose then eprintf "erasing %a@." print_element_kind e;
+	    if verbose then eprintf "erasing %a@." print_element_kind e;
 	  if end_is_not_dot s then skip_to_dot ();
 	  scan ()
   and skip_to_dot () =

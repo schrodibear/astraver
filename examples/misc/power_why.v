@@ -279,8 +279,7 @@ Lemma power1_po_7 :
   (Pre4: Variant1 = n0)
   (Test1: `n0 <= 0`)
   (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\
-  ((if false then `n0 > 0` else `n0 <= 0`)).
+  (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`.
 Proof.
 Intuition.
 Save.
@@ -310,8 +309,7 @@ Lemma power1_po_9 :
   (m1: Z)
   (n0: Z)
   (y1: Z)
-  (Post7: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\
-          ((if false then `n0 > 0` else `n0 <= 0`)))
+  (Post7: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`)
   y1 = (Zpower x n).
 Proof.
 Intros.

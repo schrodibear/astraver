@@ -40,7 +40,7 @@ let discharge ctx concl =
   try reflexivity concl with Exit -> list_first (assumption concl) ctx
 
 let discharge_msg () =
-  if !verbose then eprintf "one obligation trivially discharged@."
+  if_verbose eprintf "one obligation trivially discharged@."
 
 (*s Cleaning the sequent: we remove variables not occuring at all in
     hypotheses or conclusion *)

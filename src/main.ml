@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.27 2002-03-28 14:50:28 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.28 2002-04-03 15:52:04 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -13,22 +13,22 @@ open Util
 
 (*s Prover selection. *)
 
-let reset () = match !prover with
+let reset () = match prover with
   | Pvs -> Pvs.reset ()
   | Coq -> Coq.reset ()
 
-let push_obligations ol = match !prover with
+let push_obligations ol = match prover with
   | Pvs -> Pvs.push_obligations ol
   | Coq -> Coq.push_obligations ol
 
 let push_validation id v = 
-  if !valid && !prover = Coq then Coq.push_validation id v
+  if valid && prover = Coq then Coq.push_validation id v
 
-let push_parameter id v = match !prover with
+let push_parameter id v = match prover with
   | Pvs -> Pvs.push_parameter id v
   | Coq -> Coq.push_parameter id v
 
-let output fwe = match !prover with
+let output fwe = match prover with
   | Pvs -> Pvs.output_file fwe
   | Coq -> Coq.output_file fwe
 
@@ -50,13 +50,13 @@ let interp_program id p =
   Error.check_for_not_mutable ploc v;
   Env.add_global id v None;
   print_if_debug print_type_c c;
-  if !type_only then raise Exit;
+  if type_only then raise Exit;
 
   if_debug eprintf "* weakest preconditions@.";
   let p,wp = Wp.propagate p in
   print_if_debug print_wp wp;
   print_if_debug print_prog p;
-  if !wp_only then raise Exit;
+  if wp_only then raise Exit;
 
   if_debug eprintf "* functionalization@.";
   let ren = initial_renaming env in
@@ -104,7 +104,7 @@ let interp_decl = function
 let deal_channel cin =
   let st = Stream.of_channel cin in
   let d = Grammar.Entry.parse Parser.decls st in
-  if !parse_only then exit 0;
+  if parse_only then exit 0;
   List.iter interp_decl d
 
 let deal_file f =
@@ -116,82 +116,7 @@ let deal_file f =
   close_in cin;
   output fwe
 
-(*s Command line parsing. *)
-
-let copying () =
-  eprintf "\
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License version 2, as
-published by the Free Software Foundation.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-See the GNU General Public License version 2 for more details
-(enclosed in the file GPL).
-";
-  flush stderr
-
-let banner () =
-  eprintf "\
-This is why version %s, compiled on %s
-Copyright (c) 2002 Jean-Christophe Filliâtre
-This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
-" Version.version Version.date;
-  flush stderr
-  
-let usage () =
-  eprintf "\
-Usage: why [options] [files...]
-
-If no file is given, the source is read on standard input and
-output is written in file `WhyOutput'
-
-Generic Options:
-  -h, --help     prints this message
-  -V, --verbose  verbose mode
-  -q, --quiet    quiet mode (default)
-  -d, --debug    debugging mode (implies verbose mode)
-  -v, --version  prints version and exits
-  --warranty     prints license and exits
-
-Typing/Annotations options:
-  -p,  --parse-only  exits after parsing
-  -tc, --type-only   exits after type-checking
-  -wp, --wp-only     exits after annotation
-
-Prover options:
-  --coq       selects COQ prover (default)
-  --pvs       selects PVS prover
-  --valid, 
-  --no-valid  set/unset the functional validation (Coq only; default is no)
-";
-  flush stderr
-
-let parse_args () =
-  let files = ref [] in
-  let rec parse = function
-    | [] -> List.rev !files
-    | ("-h" | "-help" | "--help") :: _ -> usage (); exit 0
-    | ("-pvs" | "--pvs") :: args -> prover := Pvs; parse args
-    | ("-coq" | "--coq") :: args -> prover := Coq; parse args
-    | ("-d" | "--debug") :: args -> verbose := true; debug := true; parse args
-    | ("-p" | "--parse-only") :: args -> parse_only := true; parse args
-    | ("-tc" | "--type-only") :: args -> type_only := true; parse args
-    | ("-wp" | "--wp-only") :: args -> wp_only := true; parse args
-    | ("-q" | "--quiet") :: args -> verbose := false; parse args
-    | ("-v" | "-version" | "--version") :: _ -> banner (); exit 0
-    | ("-warranty" | "--warranty") :: _ -> copying (); exit 0
-    | ("-V" | "--verbose") :: args -> verbose := true; parse args
-    | ("-valid" | "--valid") :: args -> valid := true; parse args
-    | ("-novalid" | "--no-valid") :: args -> valid := false; parse args
-    | f :: args -> files := f :: !files; parse args
-  in
-  parse (List.tl (Array.to_list Sys.argv))
-
 let main () =
-  let files = parse_args () in
   if files = [] then begin
     deal_channel stdin;
     output "WhyOutput" 

@@ -456,8 +456,7 @@ Lemma binary_search_po_10 :
          ((`p1 > 0` -> (access t p1) = v)))
   `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
   ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-  ((`p1 > 0` -> (access t p1) = v)) /\
-  ((if false then `l1 <= u1` else `l1 > u1`)).
+  ((`p1 > 0` -> (access t p1) = v)) /\ `l1 > u1`.
 Proof.
 Intuition.
 Save.
@@ -495,8 +494,7 @@ Lemma binary_search_po_12 :
   (u1: Z)
   (Post11: `1 <= l1` /\ `u1 <= N` /\ (`0 <= p1` /\ `p1 <= N`) /\
            ((p1 = `0` -> ((In t `1` N) -> (In t l1 u1)))) /\
-           ((`p1 > 0` -> (access t p1) = v)) /\
-           ((if false then `l1 <= u1` else `l1 > u1`)))
+           ((`p1 > 0` -> (access t p1) = v)) /\ `l1 > u1`)
   `1 <= p1` /\ `p1 <= N` /\ (access t p1) = v \/ p1 = `0` /\ ~(In t `1` N).
 Proof.
 Intros.

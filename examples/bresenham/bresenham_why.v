@@ -269,8 +269,7 @@ Lemma bresenham_po_8 :
   (Pre5: Variant1 = `x2 + 1 - x1`)
   (Test1: `x1 > x2`)
   (Pre2: `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1))
-  `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1) /\
-  ((if false then `x1 <= x2` else `x1 > x2`)).
+  `0 <= x1` /\ `x1 <= x2 + 1` /\ (invariant x1 y1 e1) /\ `x1 > x2`.
 Proof.
 Intuition.
 Save.
