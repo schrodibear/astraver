@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.3 2004-07-05 14:43:57 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.4 2004-07-06 15:00:25 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -99,6 +99,12 @@ let rec print_term fmt = function
 	fprintf fmt "(%s%s / 1%s)" i f (String.make (-e) '0')
   | Tderef _ -> 
       assert false
+  | Tapp (id, ([_;_] as tl)) when id == t_mod_int ->
+      fprintf fmt "@[%a(%a)@]" Ident.print id print_terms tl
+  | Tapp (id, [a]) when id == t_sqrt_real || id == t_int_of_real ->
+      fprintf fmt "@[%a(%a)@]" Ident.print id print_term a
+  | Tapp (id, [a]) when id == t_real_of_int ->
+      fprintf fmt "@[%a@]" print_term a
   | Tapp (id, [a; b; c]) when id == if_then_else ->
       fprintf fmt "@[(IF %a THEN@ %a ELSE@ %a)@]" 
 	print_term a print_term b print_term c
@@ -283,9 +289,12 @@ let prelude = ref
 "
 UNIT: TYPE;
 tt: UNIT;
-array_length: [ARRAY INT OF INT -> INT];
+array_length: [ARRAY INT OF INT -> INT]; %% should be polymorphic
+sqrt_real: [REAL -> REAL];
+int_of_real: [REAL -> INT];
+mod_int: [INT, INT -> INT];
 "
-(*TODO prelude
+(*TODO prelude about exchange, permut and sorted
 "(BG_PUSH 
   ; array_length
   (FORALL (t i v) (EQ (array_length (store t i v)) (array_length t)))

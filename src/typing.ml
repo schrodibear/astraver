@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.110 2004-07-05 13:18:44 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.111 2004-07-06 15:00:26 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -630,7 +630,6 @@ and typef_desc lab env loc = function
       let bl',env',lenv' = binders loc lab env (logical_env env) bl in
       let v = type_v loc lab env' lenv' v in
       let var,efvar = state_var lab env' var in
-      let phi0 = phi_name () in
       (* effects for a let/rec construct are computed as a fixpoint *)
       let type_body c =
 	let tf = make_arrow bl' c in

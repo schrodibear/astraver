@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mlize.ml,v 1.71 2004-07-02 14:45:46 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.72 2004-07-06 15:00:26 filliatr Exp $ i*)
 
 (*s Translation of imperative programs into functional ones. *)
 
@@ -210,15 +210,17 @@ and trad_desc info d ren = match d with
 	info (fun v -> Monad.unit info (Value (Tvar v)))
 	ren
 
+  (**
+  | Any c when info.obligations = [] && info.kappa = c ->
+      CC_any (Monad.trad_type_c ren info.env c)
+  **)
+
   | Any c ->
       let info_c = { info with obligations = []; kappa = c } in
       Monad.compose 
 	info_c (fun ren -> CC_any (Monad.trad_type_c ren info.env c)) 
 	info (fun v -> Monad.unit info (Value (Tvar v)))
 	ren
-      (*
-      CC_any (Monad.trad_type_c ren info.env c)
-      *)
 
 and trad_binders ren env = function
   | [] -> 

@@ -389,9 +389,10 @@ let linear ctx concl =
   in
   pr_intros (search ctx)
 
-(* ..., v=t, p(v) |- p(t) *)
 let rewrite_var_lemma = Ident.create "why_rewrite_var"
+let rewrite_var_left_lemma = Ident.create "why_rewrite_var_left"
 let rewrite_var ctx concl = match ctx, concl with
+  (* ..., v=t, p(v) |- p(t) *)
   | Spred (h1, p1) ::
     Svar (id'1, TTpure PTbool) ::
     Spred (h2, Papp (ide, [Tvar v; t])) ::
@@ -403,6 +404,19 @@ let rewrite_var ctx concl = match ctx, concl with
 	(cc_applist (CC_var rewrite_var_lemma)
 	   [CC_var h2;
 	    CC_type (TTlambda ((v, CC_var_binder ty), TTpred p1));
+	    CC_var h1])
+  (* ..., v=t, p(t) |- p(v) *)
+  | _ :: 
+    Spred (h1, p1) ::
+    Spred (h2, Papp (ide, [Tvar v; t])) ::
+    Svar (v', ty) :: _,
+    p
+    when is_eq ide && v == v' -> 
+      if tsubst_in_predicate (subst_one v t) p <> p1 then raise Exit;
+      ProofTerm 
+	(cc_applist (CC_var rewrite_var_left_lemma)
+	   [CC_var h2;
+	    CC_type (TTlambda ((v, CC_var_binder ty), TTpred p));
 	    CC_var h1])
   | _ -> 
       raise Exit
@@ -489,6 +503,8 @@ let clean_sequent hyps concl =
 	  h :: clean hl
 	else
 	  clean hl
+    | Spred (_, p1) :: (Spred (_, p2) :: _ as hl) when p1 = p2 ->
+	clean hl
     | Spred (_, Ptrue) :: hl ->
 	clean hl
     | Spred (id, _) :: hl when is_wp id ->

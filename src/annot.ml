@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: annot.ml,v 1.25 2004-07-05 11:58:47 filliatr Exp $ i*)
+(*i $Id: annot.ml,v 1.26 2004-07-06 15:00:25 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -396,56 +396,65 @@ let is_result_eq = function
 let rec purify p =
   let a_values = List.map (fun a -> a.a_value) in
   if is_pure p then 
-    (* [pure p] computes obligations and postcondition for [p] *)
+    (* [pure p] computes pre, obligations and post for [p] *)
     let rec pure p = match p.desc with
       | Expression t when post p = None -> 
+	  a_values (pre p), 
 	  a_values p.info.obligations,
 	  equality (Tvar Ident.result) (unref_term t)
       | LetIn (x, e1, e2) when post p = None -> 
-	  let pre1,post1 = pure e1 in
-	  let pre2,post2 = pure e2 in
+	  let pre1,o1,post1 = pure e1 in
+	  let pre2,o2,post2 = pure e2 in
 	  begin match is_result_eq post1 with
 	    | Some t1 -> (* optimized when [post1] is [result=t1] *)
 		let s = tsubst_in_predicate (subst_one x t1) in
-		pre1 @ (List.map s pre2), s post2
+		a_values (pre p), pre1 @ o1 @ (List.map s (pre2 @ o2)), s post2
 	    | None ->
 		let tyx = result_type e1 in
 		let post1_x = subst_in_predicate (subst_onev result x) post1 in
+		a_values (pre p),
 		(* pre1 and (forall x. post1(x) => pre2) *)
-		(pre1 @ [(*pimplies (pands pre1)*)
-		   (pforall x tyx (pimplies post1_x (pands pre2)))]),
+		(pre1 @ o1 @ [(*pimplies (pands pre1)*)
+		   (pforall x tyx (pimplies post1_x (pands (pre2 @ o2))))]),
 		(* exists x. post1(x) and post2 *)
 		pexists x tyx (pand post1_x post2)
 	  end
       | If (e1, e2, e3) when post p = None -> 
-	  let p1,q1 = pure e1 in
-	  let p2,q2 = pure e2 in
-	  let p3,q3 = pure e3 in
+	  let p1,o1,q1 = pure e1 in
+	  let p2,o2,q2 = pure e2 in
+	  let p3,o3,q3 = pure e3 in
 	  let q1t,q1f = q_true_false q1 in
 	  begin match e2.desc, e3.desc with
 	    | _, Expression (Tconst (ConstBool false)) (* e1 && e2 *) ->
 		let q2t,q2f = q_true_false q2 in
-		p1 @ [pimplies q1t (pands p2)],
+		a_values (pre p),
+		p1 @ o1 @ [pimplies q1t (pands (p2 @ o2))],
 		Pif (Tvar Ident.result, pand q1t q2t, por q1f (pand q1t q2f))
 	    | Expression (Tconst (ConstBool true)), _ (* e1 || e2 *) ->
 		let q3t,q3f = q_true_false q3 in
-		p1 @ [pimplies q1f (pands p3)],
+		a_values (pre p),
+		p1 @ o1 @ [pimplies q1f (pands (p3 @ o3))],
 		Pif (Tvar Ident.result, por q1t (pand q1f q3t), pand q1f q3f)
 	    | Expression (Tconst (ConstBool false)),
 	      Expression (Tconst (ConstBool true)) (* not e1 *) ->
-		p1, Pif (Tvar Ident.result, q1f, q1t)
+		a_values (pre p), p1 @ o1, Pif (Tvar Ident.result, q1f, q1t)
 	    | _ -> 
+		a_values (pre p),
 		(* p1 and (q1(true) => p2) and (q1(false) => p3) *)
-		p1 @ [pimplies q1t (pands p2); pimplies q1f (pands p3)],
+		p1 @ o1 @ [pimplies q1t (pands (p2 @ o2)); 
+			   pimplies q1f (pands (p3 @ o3))],
 		(* q1(true) and q2 or q1(false) and q3 *)
 		por (pand q1t q2) (pand q1f q3)
 	  end
+      | App ({desc=Var x}, _, _) when is_rec x p.info.env ->
+	  raise Exit
       | App (e1, Term e2, k) when post p = None || post p = k.c_post ->
-	  (* TODO : collecter oblig/pre de e1 et e2 *)
-	  assert (pre e1 = [] && pre e2 = []);
 	  begin match k.c_post with
 	    | Some (q,_) -> 
-		a_values (e1.info.obligations @ e2.info.obligations), q.a_value
+		a_values (pre p),
+		a_values (k.c_pre @ e1.info.obligations @ pre e1 @ 
+			  e2.info.obligations @ pre e2), 
+		q.a_value
 	    | None -> 
 		raise Exit
 	  end
@@ -453,12 +462,13 @@ let rec purify p =
 	  raise Exit (* we give up *)
     in
     try 
-      let pre,post = pure p in
+      let pre,o,post = pure p in
       let pre = List.map (anonymous p.info.loc) pre in
-      let c = { p.info.kappa with c_post = create_post post } in
+      let o = List.map (anonymous p.info.loc) o in
+      let c = { p.info.kappa with c_pre = pre; c_post = create_post post } in
       { p with 
 	  desc = Any c; 
-	  info = { p.info with obligations = pre; kappa = c } }
+	  info = { p.info with obligations = o; kappa = c } }
     with Exit -> 
       map_desc purify p
   else 
