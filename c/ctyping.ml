@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.37 2004-03-02 15:13:53 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.38 2004-03-02 16:51:45 marche Exp $ i*)
 
 open Format
 open Coptions
@@ -699,22 +699,27 @@ let type_decl d = match d.node with
       Ttypedecl ty
   | Cdecl (ty, x, i) -> 
       let ty = type_type d.loc Env.empty ty in
-      add_sym d.loc x ty;
       let info = default_var_info x in
       info.var_is_static <- true;
+      Loc.report Coptions.log d.loc;
+      fprintf Coptions.log "Variable %s is assigned@." info.var_name;
+      info.var_is_assigned <- true;
+      add_sym d.loc x ty info;
       Tdecl (ty, info, type_initializer d.loc Env.empty ty i)
   | Cfunspec (s, ty, f, pl) ->
       let ty = type_type d.loc Env.empty ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       let s = type_spec ty env s in
-      add_sym d.loc f (noattr (CTfun (pl, ty)));
+      let info = default_var_info f in
+      add_sym d.loc f (noattr (CTfun (pl, ty))) info;
       Tfunspec (s, ty, f, pl)
   | Cfundef (s, ty, f, pl, bl) -> 
       let ty = type_type d.loc Env.empty ty in
       let et = if eq_type ty c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
       let s = option_app (type_spec ty env) s in
-      add_sym d.loc f (noattr (CTfun (pl, ty)));
+      let info = default_var_info f in
+      add_sym d.loc f (noattr (CTfun (pl, ty))) info;
       let bl,st = type_block env et bl in
       if not st.always_return && et <> None then
 	warning d.loc "control reaches end of non-void function";

@@ -14,7 +14,7 @@ val pointer_or_array_type : 'a ctype -> bool
 val is_null : texpr -> bool
 
 (* Global environment *)
-val add_sym : Loc.t -> string -> tctype -> unit
+val add_sym : Loc.t -> string -> tctype -> var_info -> unit
 val find_sym : string -> tctype * var_info
 
 val add_typedef : Loc.t -> string -> tctype -> unit

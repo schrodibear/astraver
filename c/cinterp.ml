@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.21 2004-03-02 16:16:31 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.22 2004-03-02 16:51:45 marche Exp $ i*)
 
 
 open Format
@@ -136,8 +136,8 @@ let interp_bin_op op =
   | Bgt -> "gt_int"
   | Ble -> "le_int"
   | Bge -> "ge_int"
-  | Beq -> "eq"
-  | Bneq -> "neq" 
+  | Beq -> "eq_int"
+  | Bneq -> "neq_int" 
   | _ -> assert false (* TODO *)
 
 let interp_incr_op op =
@@ -198,6 +198,12 @@ let rec interp_expr e =
 	  with Failure "int_of_string" -> assert false (* TODO *)
 	end
     | TEvar(v) -> 
+        if v.var_name = "t"
+ then begin
+      Loc.report Coptions.log e.texpr_loc;
+fprintf Coptions.log "translating var t: is_assigned = %b@."
+v.var_is_assigned;
+end;
 	if v.var_is_assigned then Deref(v.var_name) else Var(v.var_name)
     | TEbinary(e1,op,e2) ->
 	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
@@ -240,7 +246,12 @@ and interp_incr_expr op e =
 	  match op with
 	    | Upostfix_dec | Upostfix_inc ->
 		(* let tmp = !v in v:= op tmp 1; tmp *)
-		assert false (* TODO *)
+		Let("caduceus",Deref(v.var_name),
+		    append 
+		      (Assign(v.var_name,
+			      make_app (interp_incr_op op)
+				[Var "caduceus";one]))
+		      (Var "caduceus"))
 	    | Uprefix_dec | Uprefix_inc ->
 		(* v := op !v 1; !v *)
 		append 
@@ -507,7 +518,11 @@ let interp_located_tdecl (why_decls,prover_decl) decl =
   | Tfunspec(spec,ctype,id,params) -> assert false (* TODO *)
   | Tfundef(spec,ctype,id,params,block,info) ->      
       fprintf Coptions.log "translating function %s@." id;
-      let tparams = List.map interp_param params in
+      let tparams = 
+	if params=[]
+	then ["tt",unit_type]
+	else List.map interp_param params 
+      in
       let pre,post = interp_spec_option spec in
       let tblock = interp_block block in
       ((Def(id,Fun(tparams,pre,tblock,post,None)))::why_decls,

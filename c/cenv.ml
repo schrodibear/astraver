@@ -141,7 +141,7 @@ let is_sym = Hashtbl.mem sym_t
 
 let find_sym = Hashtbl.find sym_t
 
-let add_sym l x ty = 
+let add_sym l x ty info = 
   if is_sym x then begin
     let (t,i) = find_sym x in
     if not (eq_type t ty) then 
@@ -149,7 +149,7 @@ let add_sym l x ty =
 	 Question de Claude: accepter aussi un raffinement des specs ? *)
       error l ("conflicting types for " ^ x)
   end else
-    Hashtbl.add sym_t x (ty,default_var_info x)
+    Hashtbl.add sym_t x (ty,info)
 
 (*s Environments for the logical side *)
 
