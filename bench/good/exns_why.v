@@ -483,109 +483,183 @@ Definition p13 := (* validation *)
 Lemma p14_po_1 : 
   (x: Z)
   (Test1: `x <> 1`)
-  ((`x = 2` -> `x = 2`)) /\ ((`x <> 2` -> `x <> 1` /\ `x <> 2`)).
+  ((`x = 2` -> `x = 2`)) /\
+  ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+    ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))).
 Proof.
 Intuition.
 Save.
 
 Lemma p14_po_2 : 
   (x: Z)
-  (Post1: ((`x = 2` -> `x = 2`)) /\ ((`x <> 2` -> `x <> 1` /\ `x <> 2`)))
+  (Post2: ((`x = 2` -> `x = 2`)) /\
+          ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+            ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))))
   (Test3: `x <> 2`)
-  `x <> 1` /\ `x <> 2`.
+  ((`x = 3` -> `x = 3`)) /\ ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)).
+Proof.
+Intuition.
+Save.
+
+Lemma p14_po_3 : 
+  (x: Z)
+  (Post2: ((`x = 2` -> `x = 2`)) /\
+          ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+            ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))))
+  (Post1: ((`x = 3` -> `x = 3`)) /\
+          ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))
+  (Test5: `x <> 3`)
+  `x <> 1` /\ `x <> 2` /\ `x <> 3`.
 Proof.
 Intuition.
 Save.
 
 Definition p14 := (* validation *)
   [x: Z]
-    let (result, Post3) =
+    let (result, Post4) =
       let (result, Bool1) =
-        let (result1, Post4) = (Z_eq_bool x `1`) in
+        let (result1, Post5) = (Z_eq_bool x `1`) in
         (exist_1 [result2: bool]
-        (if result2 then `x = 1` else `x <> 1`) result1 Post4) in
+        (if result2 then `x = 1` else `x <> 1`) result1 Post5) in
       (Cases (btest [result:bool](if result then `x = 1` else `x <> 1`)
               result Bool1) of
       | (left Test2) =>
-          let (result0, Post5) =
+          let (result0, Post6) =
             (exist_1 (qcomb [result0: unit]`x = 1` [result0: unit]
                       ((`x = 2` -> `x = 2`)) /\
-                      ((`x <> 2` -> `x <> 1` /\ `x <> 2`))) (Exn unit tt)
-            Test2) in
-          Cases (decomp1 Post5) of
-          | (Qval (exist result0 Post1)) =>
+                      ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+                        ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))))) 
+            (Exn unit tt) Test2) in
+          Cases (decomp1 Post6) of
+          | (Qval (exist result0 Post2)) =>
             (exist_1 (qcomb [result1: unit]`x = 1` [result1: unit]
                       ((`x = 2` -> `x = 2`)) /\
-                      ((`x <> 2` -> `x <> 1` /\ `x <> 2`))) (Val unit
-                                                              result0) Post1)
-          | (Qexn _ Post6) =>
+                      ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+                        ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))))) 
+            (Val unit result0) Post2)
+          | (Qexn _ Post7) =>
             (exist_1 (qcomb [result1: unit]`x = 1` [result1: unit]
                       ((`x = 2` -> `x = 2`)) /\
-                      ((`x <> 2` -> `x <> 1` /\ `x <> 2`))) (Exn unit tt)
-            Post6)
+                      ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+                        ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))))) 
+            (Exn unit tt) Post7)
           end
       | (right Test1) =>
-          let (result0, Post1) = (exist_1 [result0: unit]
-            ((`x = 2` -> `x = 2`)) /\ ((`x <> 2` -> `x <> 1` /\ `x <> 2`)) 
-            tt (p14_po_1 x Test1)) in
+          let (result0, Post2) = (exist_1 [result0: unit]
+            ((`x = 2` -> `x = 2`)) /\
+            ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+              ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)))) tt
+            (p14_po_1 x Test1)) in
           (exist_1 (qcomb [result1: unit]`x = 1` [result1: unit]
                     ((`x = 2` -> `x = 2`)) /\
-                    ((`x <> 2` -> `x <> 1` /\ `x <> 2`))) (Val unit result0)
-          Post1) end) in
-    Cases (decomp1 Post3) of
-    | (Qval (exist result Post1)) =>
-      let (result0, Post8) =
+                    ((`x <> 2` -> ((`x = 3` -> `x = 3`)) /\
+                      ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))))) 
+          (Val unit result0) Post2) end) in
+    Cases (decomp1 Post4) of
+    | (Qval (exist result Post2)) =>
+      let (result0, Post9) =
         let (result0, Bool2) =
-          let (result2, Post9) = (Z_eq_bool x `2`) in
+          let (result2, Post10) = (Z_eq_bool x `2`) in
           (exist_1 [result3: bool]
-          (if result3 then `x = 2` else `x <> 2`) result2 Post9) in
+          (if result3 then `x = 2` else `x <> 2`) result2 Post10) in
         (Cases (btest [result0:bool](if result0 then `x = 2` else `x <> 2`)
                 result0 Bool2) of
         | (left Test4) =>
             let (result1, Post11) =
               (exist_1 (qcomb [result1: unit]`x = 2` [result1: unit]
-                        `x <> 1` /\ `x <> 2`) (Exn unit tt) Test4) in
+                        ((`x = 3` -> `x = 3`)) /\
+                        ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))) 
+              (Exn unit tt) Test4) in
             Cases (decomp1 Post11) of
-            | (Qval (exist result1 Post12)) =>
+            | (Qval (exist result1 Post1)) =>
               (exist_1 (qcomb [result2: unit]`x = 2` [result2: unit]
-                        `x <> 1` /\ `x <> 2`) (Val unit result1) Post12)
-            | (Qexn _ Post13) =>
+                        ((`x = 3` -> `x = 3`)) /\
+                        ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))) 
+              (Val unit result1) Post1)
+            | (Qexn _ Post12) =>
               (exist_1 (qcomb [result2: unit]`x = 2` [result2: unit]
-                        `x <> 1` /\ `x <> 2`) (Exn unit tt) Post13)
+                        ((`x = 3` -> `x = 3`)) /\
+                        ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))) 
+              (Exn unit tt) Post12)
             end
         | (right Test3) =>
-            let (result1, Post10) = (exist_1 [result1: unit]`x <> 1` /\
-              `x <> 2` tt (p14_po_2 x Post1 Test3)) in
-            (exist_1 (qcomb [result2: unit]`x = 2` [result2: unit]`x <> 1` /\
-                      `x <> 2`) (Val unit result1)
-            Post10) end) in
-      Cases (decomp1 Post8) of
-      | (Qval (exist result0 Post14)) =>
-        let (result1, Post16) =
-          (exist_1 (qcomb [result1: unit]`x <> 1` /\ `x <> 2` [result1: unit]
-                    False) (Exn unit tt) Post14) in
-        Cases (decomp1 Post16) of
-        | (Qval (exist result1 Post17)) =>
-          (exist_1 (qcomb [result2: unit]`x <> 1` /\ `x <> 2`
+            let (result1, Post1) = (exist_1 [result1: unit]
+              ((`x = 3` -> `x = 3`)) /\
+              ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`)) tt
+              (p14_po_2 x Post2 Test3)) in
+            (exist_1 (qcomb [result2: unit]`x = 2` [result2: unit]
+                      ((`x = 3` -> `x = 3`)) /\
+                      ((`x <> 3` -> `x <> 1` /\ `x <> 2` /\ `x <> 3`))) 
+            (Val unit result1) Post1) end) in
+      Cases (decomp1 Post9) of
+      | (Qval (exist result0 Post1)) =>
+        let (result1, Post14) =
+          let (result1, Bool3) =
+            let (result3, Post15) = (Z_eq_bool x `3`) in
+            (exist_1 [result4: bool]
+            (if result4 then `x = 3` else `x <> 3`) result3 Post15) in
+          (Cases (btest [result1:bool](if result1 then `x = 3` else `x <> 3`)
+                  result1 Bool3) of
+          | (left Test6) =>
+              let (result2, Post17) =
+                (exist_1 (qcomb [result2: unit]`x = 3` [result2: unit]
+                          `x <> 1` /\ `x <> 2` /\ `x <> 3`) (Exn unit tt)
+                Test6) in
+              Cases (decomp1 Post17) of
+              | (Qval (exist result2 Post18)) =>
+                (exist_1 (qcomb [result3: unit]`x = 3` [result3: unit]
+                          `x <> 1` /\ `x <> 2` /\ `x <> 3`) (Val unit
+                                                              result2)
+                Post18)
+              | (Qexn _ Post19) =>
+                (exist_1 (qcomb [result3: unit]`x = 3` [result3: unit]
+                          `x <> 1` /\ `x <> 2` /\ `x <> 3`) (Exn unit tt)
+                Post19)
+              end
+          | (right Test5) =>
+              let (result2, Post16) = (exist_1 [result2: unit]`x <> 1` /\
+                `x <> 2` /\ `x <> 3` tt (p14_po_3 x Post2 Post1 Test5)) in
+              (exist_1 (qcomb [result3: unit]`x = 3` [result3: unit]
+                        `x <> 1` /\ `x <> 2` /\ `x <> 3`) (Val unit result2)
+              Post16) end) in
+        Cases (decomp1 Post14) of
+        | (Qval (exist result1 Post20)) =>
+          let (result2, Post22) =
+            (exist_1 (qcomb [result2: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
+                      [result2: unit]False) (Exn unit tt) Post20) in
+          Cases (decomp1 Post22) of
+          | (Qval (exist result2 Post23)) =>
+            (exist_1 (qcomb [result3: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
+                      (qcomb [result3: unit]`x = 1`
+                       (qcomb [result3: unit]`x = 2`
+                        (qcomb [result3: unit]`x = 3` [result3: unit]False)))) 
+            (Val unit (Val unit (Val unit (Val unit result2)))) Post23)
+          | (Qexn _ Post24) =>
+            (exist_1 (qcomb [result3: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
+                      (qcomb [result3: unit]`x = 1`
+                       (qcomb [result3: unit]`x = 2`
+                        (qcomb [result3: unit]`x = 3` [result3: unit]False)))) 
+            (Exn (EM unit (EM unit (EM unit unit))) tt) Post24)
+          end
+        | (Qexn _ Post21) =>
+          (exist_1 (qcomb [result2: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
                     (qcomb [result2: unit]`x = 1`
-                     (qcomb [result2: unit]`x = 2` [result2: unit]False))) 
-          (Val unit (Val unit (Val unit result1))) Post17)
-        | (Qexn _ Post18) =>
-          (exist_1 (qcomb [result2: unit]`x <> 1` /\ `x <> 2`
-                    (qcomb [result2: unit]`x = 1`
-                     (qcomb [result2: unit]`x = 2` [result2: unit]False))) 
-          (Exn (EM unit (EM unit unit)) tt) Post18)
+                     (qcomb [result2: unit]`x = 2`
+                      (qcomb [result2: unit]`x = 3` [result2: unit]False)))) 
+          (Val unit (Val unit (Val unit (Exn unit tt)))) Post21)
         end
-      | (Qexn _ Post15) =>
-        (exist_1 (qcomb [result1: unit]`x <> 1` /\ `x <> 2`
+      | (Qexn _ Post13) =>
+        (exist_1 (qcomb [result1: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
                   (qcomb [result1: unit]`x = 1`
-                   (qcomb [result1: unit]`x = 2` [result1: unit]False))) 
-        (Val unit (Val unit (Exn unit tt))) Post15)
+                   (qcomb [result1: unit]`x = 2`
+                    (qcomb [result1: unit]`x = 3` [result1: unit]False)))) 
+        (Val unit (Val unit (Exn (EM unit unit) tt))) Post13)
       end
-    | (Qexn _ Post7) =>
-      (exist_1 (qcomb [result0: unit]`x <> 1` /\ `x <> 2`
+    | (Qexn _ Post8) =>
+      (exist_1 (qcomb [result0: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
                 (qcomb [result0: unit]`x = 1`
-                 (qcomb [result0: unit]`x = 2` [result0: unit]False))) 
-      (Val unit (Exn (EM unit unit) tt)) Post7)
+                 (qcomb [result0: unit]`x = 2`
+                  (qcomb [result0: unit]`x = 3` [result0: unit]False)))) 
+      (Val unit (Exn (EM unit (EM unit unit)) tt)) Post8)
     end.
 

@@ -70,11 +70,14 @@ let p13 =
 
 exception E1 
 exception E2
+exception E3
 
 let p14 = 
   begin
     if !x = 1 then raise E1;
     if !x = 2 then raise E2;
+    if !x = 3 then raise E3;
     raise E
   end
-  { false | E1 => x = 1 | E2 => x = 2 | E => x <> 1 and x <> 2 }
+  { false | E1 => x = 1 | E2 => x = 2 | E3 => x = 3 
+  | E => x <> 1 and x <> 2 and x <> 3 }
