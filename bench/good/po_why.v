@@ -96,8 +96,7 @@ Omega.
 Save.
 
 Definition p5 := (* validation *)
-  let (result, Post1) = (exist_1 [result: Z]`result = 7` `3 + 4` p5_po_1) in
-  (exist_1 [result0: Z]`result0 = 7` result Post1).
+  (exist_1 [result: Z]`result = 7` `3 + 4` p5_po_1).
 
 Lemma p6_po_1 : 
   (a: Z)

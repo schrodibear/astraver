@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.54 2002-09-11 14:45:41 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.55 2002-09-11 14:52:28 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -506,9 +506,8 @@ i*)
   [ [ d = LIST0 decl; EOI -> d ] ]
   ;
   logic_type:
-  [ [ b = LIST1 logic_arg SEP ","; "->"; LIDENT "prop" -> Predicate b
-    | t = primitive_type -> Function ([], t)
-    | b = LIST1 logic_arg SEP ","; "->"; t = primitive_type -> Function (b, t)
+  [ [ b = LIST0 logic_arg SEP ","; "->"; LIDENT "prop" -> Predicate b
+    | b = LIST0 logic_arg SEP ","; "->"; t = primitive_type -> Function (b, t)
   ] ]
   ;	
   logic_arg:

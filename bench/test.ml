@@ -1,7 +1,7 @@
 
-logic c : int
+logic c : -> prop
 
-let p = 1 { result = c }
+let p = 1 { c }
 
 (***
 exception E
