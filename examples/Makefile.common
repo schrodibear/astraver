@@ -1,13 +1,14 @@
 # Generated automatically from Makefile.common.in by configure.
 
 WHY=../../bin/why.opt
+CADUCEUS=../../bin/caduceus.opt
 WHYOPTIONS=--coq-v8 --valid
 
 %_valid.v %_why.v: %.mlw $(WHY)
 	$(WHY) $(WHYOPTIONS) $<
 
-%_valid.v %_why.v: %.c $(WHY)
-	$(WHY) $(WHYOPTIONS) $<
+%_valid.v %_why.v: %.c $(CADUCEUS)
+	$(CADUCEUS) $<
 
 %.vo: %.v
 	coqc -R ../../lib/coq Coq.why $(OPT) $<

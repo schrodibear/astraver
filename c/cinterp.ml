@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.3 2004-01-30 16:58:37 marche Exp $ i*)
+(*i $Id: cinterp.ml,v 1.4 2004-02-02 16:54:10 marche Exp $ i*)
 
 (*****
 
@@ -923,10 +923,10 @@ let interp_param (t,id) =
 let interp_predicate pred =
   match pred with
     | None -> LTrue
-    | Some _ -> assert false (* TODO *)
-
-let interp_decl d acc = 
-  assert false (* TODO *)
+    | Some p -> 
+	match p with
+	  | Clogic.Ptrue -> LTrue
+	  | _ -> assert false (* TODO *)
 
 let interp_bin_op op =
   match op with
@@ -937,10 +937,27 @@ let interp_bin_op op =
 
 let rec interp_expr e =
   match e.texpr_node with
-    | TEconstant(c) -> assert false
+    | TEconstant(c) -> Cte(Prim_int(int_of_string c))
     | TEvar(id) -> Deref(id)
     | TEbinary(e1,op,e2) ->
 	App(App(Var(interp_bin_op op),interp_expr e1),interp_expr e2)
+    | _ -> assert false (* TODO *)
+
+let interp_decl d acc = 
+  match d.node with 
+    | Tdecl(ctype,id,init) -> 
+	fprintf Coptions.log "translating local declaration of %s@." id;
+	begin
+	  match init with 
+	    | Inothing ->
+(*
+		if ctype = c_int then TODO
+*)
+		  Let(id,App(Var("any_int"),Var("void")),acc)
+	    | Iexpr e -> 
+		  Let(id,interp_expr e,acc)		
+	    | Ilist _ -> assert false (* TODO *)
+	end
     | _ -> assert false (* TODO *)
 
 let interp_statement_expr e accu =
