@@ -175,6 +175,7 @@ let lookup_instance p bvars ctx =
   in
   list_first lookup ctx
 
+(***
 let rec intros ctx = function
   | Forall (id, n, t, p) ->
       let id' = next_away id (predicate_vars p) in
@@ -184,6 +185,7 @@ let rec intros ctx = function
       let h = fresh_hyp () in intros (Spred (h, a) :: ctx) b
   | c -> 
       ctx, c
+***)
 
 (* [qe_forall (forall x1...forall xn. p => q) = [x1;...;xn],p,q] *)
 let rec qe_forall = function
@@ -201,14 +203,17 @@ let linear ctx concl =
     | Spred (id, p) :: _ when p = concl ->
 	Assumption id
     | Spred (id, Pand (a, b)) :: ctx ->
-	(* TODO: essayer search ctx d'abord ? *)
-	let h1 = fresh_hyp () in
-	let h2 = fresh_hyp () in
-	let ctx' = (Spred (h1, a)) :: (Spred (h2, b)) :: ctx in
-	ProofTerm (CC_letin (false,
-			     [h1, CC_pred_binder a; h2, CC_pred_binder b],
-			     CC_var id,
-			     CC_hole (search ctx')))
+	begin try
+	  search ctx
+	with Exit ->
+	  let h1 = fresh_hyp () in
+	  let h2 = fresh_hyp () in
+	  let ctx' = (Spred (h1, a)) :: (Spred (h2, b)) :: ctx in
+	  ProofTerm (CC_letin (false,
+			       [h1, CC_pred_binder a; h2, CC_pred_binder b],
+			       CC_var id,
+			       CC_hole (search ctx')))
+	end
     | Spred (id, (Forall _ as a)) :: ctx -> 
 	begin try
 	  let bvars,p,q = qe_forall a in
@@ -240,24 +245,44 @@ let linear ctx concl =
   in
   search (List.rev ctx)
 
-(* particular case of a let-in in a test *)
-let annot_if ctx concl = match ctx, concl with
-  | Spred (h1, (Pif (Tvar id1, a1, b1) as p1)) ::
+(* ..., v=t, p(v) |- p(t) *)
+let rewrite_var_lemma = Ident.create "why_rewrite_var"
+let rewrite_var ctx concl = match ctx, concl with
+  | Spred (h1, p1) ::
     Svar (id'1, TTpure PTbool) ::
     Spred (h2, Papp (ide, [Tvar v; t])) ::
     Svar (v', ty) :: _,
-    Pif (Tvar id, a, b) 
-    when is_eq ide && id == id1 && id1 == id'1 && v == v' -> 
-      let s = tsubst_in_predicate (subst_one v t) in
-      if s a1 <> a || s b1 <> b then raise Exit;
+    p
+    when is_eq ide && v == v' -> 
+      if tsubst_in_predicate (subst_one v t) p1 <> p then raise Exit;
       ProofTerm 
-	(cc_applist (CC_var (Ident.create "test_annot")) 
+	(cc_applist (CC_var rewrite_var_lemma)
 	   [CC_var h2;
 	    CC_type (TTlambda ((v, CC_var_binder ty), TTpred p1));
 	    CC_var h1])
   | _ -> 
       raise Exit
 
+(* ..., x:bool, if x then a else b |- if x then c else d *)
+let boolean_case_lemma = Ident.create "why_boolean_case"
+let boolean_case ctx concl = match ctx, concl with
+  | Spred (h1, Pif (Tvar x1, a, b)) ::
+    Svar (x, TTpure PTbool) ::
+    ctx,
+    Pif (Tvar x2, c, d)
+    when x1 == x && x2 == x ->
+      let h2 = fresh_hyp () in
+      let branch h p =
+	let pr = linear (Spred (h2, h) :: ctx) p in
+	CC_lam ((h2, CC_pred_binder h), CC_hole pr)
+      in
+      ProofTerm
+	(cc_applist (CC_var boolean_case_lemma)
+	   [CC_var h1; branch a c; branch b d])
+  | _ ->
+      raise Exit
+
+(* we try the automatic proofs successively, starting with the simplest ones *)
 let discharge_methods ctx concl =
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
@@ -266,8 +291,9 @@ let discharge_methods ctx concl =
   try list_first (assumption concl) ctx with Exit ->
   try conjunction ctx concl with Exit ->
   try loop_variant_1 ctx concl with Exit ->
-  try annot_if ctx concl with Exit ->
-  linear ctx concl
+  try rewrite_var ctx concl with Exit ->
+  try linear ctx concl with Exit ->
+  boolean_case ctx concl
 
 let discharge loc ctx concl =
   let pr = discharge_methods ctx concl in

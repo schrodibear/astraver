@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.53 2003-02-05 08:49:54 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.54 2003-02-18 16:54:56 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -174,7 +174,8 @@ let deal_file f =
   Loc.set_file f;
   reset ();
   let cin = open_in f in 
-  let parsef = if Filename.check_suffix f ".c" then c_parser else ml_parser in
+  c_file := Filename.check_suffix f ".c";
+  let parsef = if !c_file then c_parser else ml_parser in
   deal_channel parsef cin;
   close_in cin;
   let fwe = Filename.chop_extension f in

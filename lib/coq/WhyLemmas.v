@@ -14,7 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(* $Id: WhyLemmas.v,v 1.4 2003-02-18 13:32:19 filliatr Exp $ *)
+(* $Id: WhyLemmas.v,v 1.5 2003-02-18 16:54:56 filliatr Exp $ *)
+
+(* lemmas used to build automatic proofs *)
 
 Implicit Arguments On.
 
@@ -25,10 +27,16 @@ Proof.
 Intros. Rewrite H. Tauto.
 Save.
 
-Lemma test_annot :
+Lemma why_rewrite_var :
   (A:Set)(x,t:A)x=t->(P:A->Prop)(P x)->(P t).
 Proof.
 Intros; Case H; Trivial.
 Save.
+Implicits why_rewrite_var [1 2 3].
 
-Implicits test_annot [1 2 3].
+Lemma why_boolean_case :
+  (A,B,C,D:Prop)
+  (b:bool)(if b then A else B)->(A->C)->(B->D)->(if b then C else D).
+Proof.
+Destruct b; Intuition.
+Save.

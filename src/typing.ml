@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: typing.ml,v 1.90 2003-02-05 08:07:48 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.91 2003-02-18 16:54:57 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -305,6 +305,11 @@ let check_no_effect loc ef =
 (*s Saturation of postconditions: a postcondition must be set for
     any possibly raised exception *)
 
+let warning_no_post loc x = 
+  if not !c_file then
+    wprintf loc "no postcondition for exception %a; false inserted@\n" 
+      Ident.print x
+
 let saturation loc e (a,al) =
   let xs = Effect.get_exns e in
   let check (x,_) =
@@ -315,8 +320,7 @@ let saturation loc e (a,al) =
     try 
       x, List.assoc x al 
     with Not_found -> 
-      wprintf loc "no postcondition for exception %a; false inserted@\n" 
-	Ident.print x;
+      warning_no_post loc x;
       x, default_post 
   in
   (a, List.map set_post xs)

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.18 2003-01-29 16:33:03 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.19 2003-02-18 16:54:56 filliatr Exp $ i*)
 
 open Format
 
@@ -34,6 +34,8 @@ let ocaml_annot_ = ref false
 let ocaml_externals_ = ref false
 let output_ = ref None
 let wol_ = ref false
+
+let c_file = ref false
 
 type prover = Coq | Pvs | HolLight | Harvey
 let prover_ = ref Coq

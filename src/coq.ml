@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.87 2003-02-12 08:54:41 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.88 2003-02-18 16:54:56 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -310,7 +310,7 @@ let rec print_cc_term fmt = function
 		     CC_lam ((idt, CC_pred_binder _), brt),
 		     CC_lam ((idf, CC_pred_binder _), brf)))
     when idb = idb' ->
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (@[btest@ [%a:bool]%a@ %a@ %a@]) of@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end)@]"
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n@[<hov 2>Cases@ (@[btest@ @[[%a:bool]@,%a@] %a@ %a@]) of@]@\n| @[<hov 2>(left %a) =>@ %a@]@\n| @[<hov 2>(right %a) =>@ %a@] end@]"
       (print_list comma print_binder_id) bl print_cc_term e1 
 	Ident.print idb print_predicate q Ident.print idb Ident.print qb
 	Ident.print idt print_cc_term brt
