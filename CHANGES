@@ -1,4 +1,9 @@
 
+version 1.2, May 12th, 2003
+===========================
+  o true used as default postcondition for exceptions instead of false
+    (necessary for a correct translation of C programs)
+  o C: fixed bug in translation from ints to booleans
   o better names given to local references in proof obligations
   o improved automatic proof (both completeness and performance)
 

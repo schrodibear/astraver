@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.34 2003-04-04 11:59:36 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.35 2003-05-12 14:10:58 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -553,10 +553,15 @@ and interp_boolean cenv = function
   | CEunary (l, Not, e) ->
       ml_if l (interp_boolean cenv e) (ml_false l) (ml_true l)
   | e ->
-      let m,_ as mt = interp_expr cenv None e in 
+      let l = loc_of_expr e in
+      let zero = ml_const l (ConstInt 0), c_int in
       let e,_ = 
-	(* OPTIM: directement 0.0 quand float *)
-	interp_binop m.ploc Neq mt (ml_const m.ploc (ConstInt 0), c_int) 
+	if no_effect e then
+	  let m,_ as mt = interp_expr cenv None e in 
+	  (* OPTIM: directement 0.0 quand float *)
+	  interp_binop m.ploc Neq mt zero
+	else
+	  bind l cenv None e (fun m -> interp_binop l Neq m zero)
       in
       e
 
