@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cvcl.ml,v 1.22 2004-07-20 09:55:39 filliatr Exp $ i*)
+(*i $Id: cvcl.ml,v 1.23 2004-08-24 11:11:26 filliatr Exp $ i*)
 
 (*s CVC Lite's output *)
 
@@ -650,7 +650,7 @@ let print_obligation fmt (loc, o, s) =
   IterIT.sequent (declare_logic fmt) (declare_type fmt) s;
   instantiate_axioms fmt;
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.report_obligation loc;
-  fprintf fmt "@[<hov 2>QUERY %a;@]@\n@\n" print_sequent s
+  fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
 
 let print_elem fmt = function
   | Oblig o -> print_obligation fmt o
