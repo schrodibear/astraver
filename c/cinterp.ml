@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.64 2004-03-25 17:00:58 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.65 2004-03-26 07:54:23 filliatr Exp $ i*)
 
 
 open Format
@@ -132,10 +132,21 @@ let rec interp_term label old_label t =
     | Tnull -> 
 	LVar "null"
     | Tresult -> 
-	LVar "result"
+	LVar "result" 
+    | Tcast({ctype_node = CTpointer _}, {term_node = Tconstant "0"}) ->
+	LVar "null"
     | Tcast (ty, t) -> 
-	unsupported "logic cast"
-
+	begin match ty.ctype_node, t.term_type.ctype_node with
+	  | (CTenum _ | CTint _), (CTenum _ | CTint _)
+	  | CTfloat _, CTfloat _ -> 
+	      f t
+	  | CTfloat _, (CTenum _ | CTint _) ->
+	      LApp ("float_of_int", [f t])
+	  | ty1, ty2 when Cenv.eq_type_node ty1 ty2 -> 
+	      f t
+	  | _ -> 
+	      unsupported "logic cast"
+	end
 
 let rec interp_predicate label old_label p =
   let f = interp_predicate label old_label in
@@ -406,8 +417,7 @@ let rec interp_expr e =
 	    | _ -> 
 		unsupported "call of a non-variable function"
 	end
-    | TEcast({ctype_node = CTpointer {ctype_node = CTvoid}}, 
-	     {texpr_node = TEconstant "0"}) ->
+    | TEcast({ctype_node = CTpointer _}, {texpr_node = TEconstant "0"}) ->
 	Var "null"
     | TEcast(t,e) -> 
 	begin match t.ctype_node, e.texpr_type.ctype_node with

@@ -35,6 +35,8 @@
 \def\at{\char'134 at}
 \def\forall{\char'134 forall}
 \def\valid{\char'134 valid}
+\def\block{\char'134 block}
+\def\base{\char'134 base}
 \def\fresh{\char'134 fresh}
 \def\old{\char'134 old}
 \def\bs{\char'134}
@@ -239,7 +241,7 @@ Counterexample:
 \end{verbatim}
 The counter example given contains \verb|(EQ null p)|, meaning that
 this program may not run as expected if pointer \verb|p| is
-null: indeed, a segmentation would occur in that case. If you try to
+null: indeed, a segmentation fault would occur in that case. If you try to
 use Coq instead of Simplify, you will face the same problem when
 trying to prove the first obligation: you will end up with
 \begin{verbatim}
@@ -443,7 +445,83 @@ void withdraw(purse *p,int s) {
 }
 \end{code}
 
-\section{Memory modeling and pointer arithmetic}
+\section{Memory model and pointer arithmetic}
+
+The C language makes almost no distinction between arrays and
+pointers, and \caduceus\ identifies both notions on the model side.
+A pointer \texttt{p} is either the \texttt{null} pointer, or
+designates a particular element of an allocated memory block. In this
+case, \texttt{p} is a pair of a base address, \texttt{base\_addr(p)},
+and an offset inside the block, \texttt{offset(p)}. Pointer arithmetic
+is only a matter of changing offsets inside a given block. If
+\texttt{i} is an integer then the pointer \texttt{p+i} has the same
+base address as \texttt{p} and offset \texttt{offset(p)+i}.
+This situation is illustrated below:
+\newcommand{\carre}[1]{\multicolumn{#1}{|c|}{}}
+\begin{center}
+  \begin{tabular}{rlllllll}
+    &\qquad\qquad\qquad\qquad&&&p&\qquad\qquad\qquad&p&\hspace{-1em}+i=shift(p,i)
+    \\
+    &\multicolumn{3}{c}{\leftarrowfill offset(p)\rightarrowfill}&
+      $\downarrow$&&$\downarrow$
+    \\\cline{2-8}
+    base\_addr(p)&\carre{3}&\carre{1}&\carre{1}&\carre{1}&\carre{1}
+    \\\cline{2-8}\\[-0.5em]
+    &\multicolumn{7}{c}{\leftarrowfill block\_length(a,p)\rightarrowfill}
+  \end{tabular}
+\end{center}
+A memory block is constituted of zero, one or several elements; the
+length of the block \texttt{p} points at is
+\texttt{block\_length(a,p)}, where \texttt{a} is the current
+allocation map. This map is precisely telling if a given base address
+corresponds to an allocated block and, if so, its length. The map
+\texttt{a} changes whenever memory is allocated.
+
+Pointer arithmetic may produce pointers pointing outside blocks; there
+is nothing wrong with this (no proof obligation generated). But
+whenever a pointer is dereferenced a proof obligation is generated
+expressing the validity of this access:
+\begin{displaymath}
+  \mathtt{valid}(a,p) \equiv p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p) < \mathtt{block\_length}(a,p)
+\end{displaymath}
+Additional predicates are introduced to express that access to
+\texttt{p+i} and to the whole range \texttt{p[i\dots j]} is valid:
+\begin{displaymath}
+  \mathtt{valid\_index}(a,p,i) \equiv p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p)+i < \mathtt{block\_length}(a,p)
+\end{displaymath}
+\begin{displaymath}
+  \mathtt{valid\_range}(a,p,i,j) \equiv 
+  \begin{array}[t]{l}
+    p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p)+i ~\land~ i\le j ~\land~ \\
+    \mathtt{offset}(p)+j < \mathtt{block\_length}(a,p)
+  \end{array}
+\end{displaymath}
+As specified in the ANSI C standard, pointer subtraction and pointer
+comparison is restricted to pointers with a same base address.
+When it is so, pointer subtraction (resp. comparison) corresponds to
+the subtraction (resp. comparison) of offsets.
+
+The following table summarizes the various pointer notions:
+\begin{center}
+  \begin{tabular}{l|l|l}
+    C syntax & annotation syntax & logic \\\hline
+    \texttt{p+i} & \texttt{p+i} & \texttt{shift(p,i)} \\
+    \texttt{p-q} & \texttt{p-q} & \texttt{sub\_pointer(p,q)} \\
+    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} & 
+    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} &
+    \{\texttt{lt},\texttt{le},\texttt{gt},\texttt{ge}\}\texttt{\_pointer(p,q)}
+    \\
+        & \texttt{\valid(p)} & \texttt{valid(a,p)} \\
+        & \texttt{\valid\_index(p,i)} & \texttt{valid\_index(a,p,i)} \\
+        & \texttt{\valid\_range(p,i,j)} & \texttt{valid\_range(a,p,i,j)} \\
+        & \texttt{\block\_length(p)} & \texttt{block\_length(a,p)} \\
+        & \texttt{\base\_addr(p)} & \texttt{base\_addr(p)}
+  \end{tabular}
+\end{center}
+
 
 \section{Calling functions}
 
@@ -555,9 +633,9 @@ numerous but smaller proof obligations).
 \chapter{Reference manual}
 \label{refman}
 
-\caduceus\ is invoked as a batch compiler, given a list of input files:
+\caduceus\ is invoked as a batch compiler:
 \begin{center}
-  \texttt{caduceus} [\textit{options}] \textit{file}$_1$\texttt{.c} $\cdots$ \textit{file}$_n$\texttt{.c}
+  \texttt{caduceus} [\textit{options}] \textit{file}\texttt{.c}
 \end{center}
 
 \section{Command line options}
@@ -634,9 +712,10 @@ except that:
   \verb!requires! & \verb!ensures! & \verb!assigns! & \verb!logic! & 
   \verb!axiom! \\
   \verb!predicate! & \verb!\result! & \verb!\old! & 
-  \verb!\length! & \verb!\null! \\
+  \verb!\block_length! & \verb!\null! \\
   \verb!reads! & \verb!\valid! & \verb!\valid_index! &
-  \verb!\valid_range! & \verb!\fresh!
+  \verb!\valid_range! & \verb!\fresh! \\
+  \verb!\base_addr!
   \end{tabular}
   \end{center}
 \end{itemize}
@@ -752,7 +831,8 @@ annotations.
       & $|$ & \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\old! \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\at! \te{(} \nt{term} \te{,} \nt{identifier} \te{)} \\
-      & $|$ & \verb!\length! \te{(} \nt{term} \te{)} \\
+      & $|$ & \verb!\block_length! \te{(} \nt{term} \te{)} \\
+      & $|$ & \verb!\base_addr! \te{(} \nt{term} \te{)} \\
       & $|$ & \verb!\result! \\
       & $|$ & \verb!\null! \\
   \\[0.1em]
