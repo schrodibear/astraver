@@ -3,7 +3,7 @@ all: why-manual.dvi doc.dvi
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
-SRCFILES=ident.mli 
+SRCFILES=ast.mli typing.mli typing.ml monad.mli monad.ml mlize.mli mlize.ml
 
 dep.ps::
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps

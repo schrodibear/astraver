@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.6 2002-02-04 16:42:21 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.7 2002-03-04 16:28:40 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -16,8 +16,8 @@ open Effect
 (* [product ren [y1,z1;...;yk,zk] q] constructs
  * the (possibly dependent) tuple type
  *
- *      z1 x ... x zk                             if no post-condition
- * or   \exists. y1:z1. ... yk:zk. (Q x1 ... xn)  otherwise
+ *      $z1 \times ... \times zk$ if no post-condition
+ * or   $\exists. y1:z1. ... yk:zk. (Q x1 ... xn)$  otherwise
  *
  * where the xi are given by the renaming [ren].
  *)
@@ -98,7 +98,7 @@ and input_output ren env c =
   let ((res,v),e,_,_) = decomp_kappa c in
   input ren env e, output ren env ((res,v),e)
 
-(* The function t -> \barre{t} on V and C. *)
+(* The function $t \rightarrow \barre{t}$ on V and C. *)
 
 and trad_ml_type_c ren env c = CC_type
 (*i
@@ -260,7 +260,7 @@ let make_let_in ren ren' env fe p (vo,q) (res,tyres) (t,ty) =
 
 (* [abs_pre ren env (t,ty) pl] abstracts a term t with respect to the 
  * list of pre-conditions [pl]. Some of them are real pre-conditions
- * and others are assertions, according to the boolean field p_assert,
+ * and others are assertions, according to the boolean field [p_assert],
  * so we construct the term
  *   [h1:P1]...[hn:Pn]let h'1 = ?:P'1 in ... let H'm = ?:P'm in t
  *)
@@ -471,19 +471,21 @@ let make_if ren env (tb,cb) ren' (t1,c1) (t2,c2) c =
   make_let_in ren ren' env tb pb (current_vars ren' wb,None) (resb,tyb) (t,ty)
 i*)
 
-(* [make_while ren env (cphi,r,a) (tb,cb) (te,ce) c]
- * constructs the term corresponding to the while, i.e.
- * 
- *    [h:(I x)](well_founded_induction
- *              A R ?::(well_founded A R)
- *              [Phi:A] (x) Phi=phi(x)->(I x)-> \exists x'.res.(I x')/\(S x')
- *              [Phi_0:A][w:(Phi:A)(Phi<Phi_0)-> ...]
- *                [x][eq:Phi_0=phi(x)][h:(I x)]
- *                   Cases (b x) of
- *                     (left  HH) => (x,?::(IS x))
- *                   | (right HH) => let x1,_,_ = (e x ?) in
- *                                   (w phi(x1) ? x1 ? ?)
- *              phi(x) x ? ?)
+
+(*s [make_while ren env (cphi,r,a) (tb,cb) (te,ce) c]
+   constructs the term corresponding to the while, i.e.
+   \begin{verbatim}
+      [h:(I x)](well_founded_induction
+                A R ?::(well_founded A R)
+                [Phi:A] (x) Phi=phi(x)->(I x)-> \exists x'.res.(I x')/\(S x')
+                [Phi_0:A][w:(Phi:A)(Phi<Phi_0)-> ...]
+                  [x][eq:Phi_0=phi(x)][h:(I x)]
+                     Cases (b x) of
+                       (left  HH) => (x,?::(IS x))
+                     | (right HH) => let x1,_,_ = (e x ?) in
+                                     (w phi(x1) ? x1 ? ?)
+                phi(x) x ? ?)
+   \end{verbatim}
  *)
 
 let id_phi = Ident.create "phi"
@@ -601,13 +603,14 @@ i*)
 
 (* [make_letrec ren env (phi0,(cphi,r,a)) bl (te,ce) c]
  * constructs the term corresponding to the let rec i.e.
- *
- * [x][h:P(x)](well_founded_induction 
- *              A R ?::(well_founded A R)
- *              [Phi:A] (bl) (x) Phi=phi(x)->(P x)-> \exists x'.res.(Q x x')
- *              [Phi_0:A][w:(Phi:A)(Phi<Phi_0)-> ...]
- *                [bl][x][eq:Phi_0=phi(x)][h:(P x)]te
- *              phi(x) bl x ? ?)
+   \begin{verbatim}
+   [x][h:P(x)](well_founded_induction 
+                A R ?::(well_founded A R)
+                [Phi:A] (bl) (x) Phi=phi(x)->(P x)-> \exists x'.res.(Q x x')
+                [Phi_0:A][w:(Phi:A)(Phi<Phi_0)-> ...]
+                  [bl][x][eq:Phi_0=phi(x)][h:(P x)]te
+                phi(x) bl x ? ?)
+  \end{verbatim}
  *)
 
 let make_letrec ren env (id_phi0,(cphi,r,a)) idf bl (te,ce) c =

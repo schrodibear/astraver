@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.11 2002-03-04 16:14:23 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.12 2002-03-04 16:28:40 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -27,7 +27,7 @@ i*)
  * [ren] is the current renamings of variables
  * [t] is the imperative program to translate, annotated with type+effects
  *
- * we return the translated program in type cc_term
+ * we return the translated program in type [cc_term]
  *)
 
 let rec trad ren t =
