@@ -145,6 +145,7 @@ AC_CHECK_PROG(COQDEP,coqdep,coqdep,true)
 if test "$COQDEP" = true ; then
 	AC_MSG_WARN(Cannot find coqdep.)
 fi
+COQLIB=`coqc -where`
 
 # substitutions to perform
 AC_SUBST(OCAMLC)
@@ -159,6 +160,7 @@ AC_SUBST(OCAMLWEB)
 AC_SUBST(CAMLP4LIB)
 AC_SUBST(COQC)
 AC_SUBST(COQDEP)
+AC_SUBST(COQLIB)
 
 # Finally create the Makefile from Makefile.in
 AC_OUTPUT(Makefile)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: main.ml,v 1.24 2002-03-20 16:01:44 filliatr Exp $ i*)
+(*i $Id: main.ml,v 1.25 2002-03-21 13:20:47 filliatr Exp $ i*)
 
 open Options
 open Ast
@@ -17,9 +17,12 @@ let reset () = match !prover with
   | Pvs -> Pvs.reset ()
   | Coq -> Coq.reset ()
 
-let push_obligations id ol = match !prover with
-  | Pvs -> Pvs.push_obligations (fst ol)
-  | Coq -> Coq.push_obligations id ol
+let push_obligations ol = match !prover with
+  | Pvs -> Pvs.push_obligations ol
+  | Coq -> Coq.push_obligations ol
+
+let push_validation id v = 
+  if !valid && !prover = Coq then Coq.push_validation id v
 
 let output fwe = match !prover with
   | Pvs -> Pvs.output_file fwe
@@ -60,9 +63,10 @@ let interp_program id p =
 
   if_debug eprintf "* generating obligations@.";
   let ids = Ident.string id in
-  let ol = Vcg.vcg ids cc in
-  push_obligations ids ol;
-  if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length (fst ol));
+  let ol,v = Vcg.vcg ids cc in
+  push_obligations ol;
+  push_validation ids v;
+  if_verbose_2 eprintf "%d proof obligation(s)@\n@." (List.length ol);
   flush stderr
 
 (*s Processing of a program. *)

@@ -43,8 +43,9 @@ CMO      = src/options.cmo src/loc.cmo src/ident.cmo src/misc.cmo 	\
 	   src/coq.cmo src/version.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 
-COQC = @COQC@
+COQC   = @COQC@
 COQDEP = @COQDEP@
+COQLIB = @COQLIB@
 COQINCLUDES = -I lib/coq
 
 VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
@@ -85,16 +86,16 @@ doc::
 
 .PHONY: bench test
 
-bench:: $(BINARY)
+bench:: $(BINARY) $(VO)
 	cd bench; ./bench ../$(BINARY)
 
-bench-tc:: $(BINARY)
+bench-tc:: $(BINARY) $(VO)
 	cd bench; ./bench "../$(BINARY) -tc"
 
-test:: $(BINARY)
+test:: $(BINARY) $(VO)
 	$(BINARY) -d -V -coq bench/test.ml
 
-examples::
+examples:: $(BINARY) $(VO)
 	make -C examples/misc
 
 # installation
@@ -180,12 +181,13 @@ config.status: configure
 configure: configure.in
 	autoconf 
 
-# backup, clean and depend
-##########################
+# clean and depend
+##################
 
 clean::
 	rm -f src/*.cm[iox] src/*.o src/*~
 	rm -f bin/why.opt bin/why.byte bin/top
+	rm -f lib/coq/*.vo lib/coq/*~
 	rm -f $(GENERATED)
 	cd doc; make clean
 

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.19 2002-03-21 09:49:17 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.20 2002-03-21 13:20:47 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -164,84 +164,89 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq hyps
 
-let print_lemma fmt (id,s) =
+let reprint_obligation fmt (id,s) =
   fprintf fmt "@[<hov 2>Lemma %s : @\n%a.@]@\n" id print_sequent s
 
 let print_obligation fmt o = 
-  print_lemma fmt o;
-  fprintf fmt "Proof.@\n(* FILL PROOF HERE *)@\nSave.@\n@\n"
+  reprint_obligation fmt o;
+  fprintf fmt "Proof. (* %s *)@\n(* FILL PROOF HERE *)@\nSave.@\n@\n" (fst o)
 
-let print_validation fmt (id,v) =
+let print_validation fmt id v =
   fprintf fmt "@[Definition %s_valid := O(*TODO*).@\n@]@\n" id
 
-(*s Queueing elements. *)
+let print_parameter fmt id c =
+  fprintf fmt "@[(*Why*) Parameter %s : %a.@\n@]@\n" id print_type_c c
 
-let oblig_t = Hashtbl.create 97
-let oblig_q = Queue.create ()
+(*s Elements to produce. *)
 
-let valid_t = Hashtbl.create 97
-let valid_q = Queue.create ()
+type element_kind = 
+  | Param of string
+  | Oblig of string
+  | Valid of string
 
-let reset () = 
-  Queue.clear oblig_q; Hashtbl.clear oblig_t; 
-  Queue.clear valid_q; Hashtbl.clear valid_t
+type element = 
+  | Parameter of string * type_c
+  | Obligation of obligation
+  | Validation of string * validation
 
-let push_obligations id (ol,v) = 
-  List.iter (fun o -> Queue.add o oblig_q) ol;
-  List.iter (fun (l,p) -> Hashtbl.add oblig_t l p) ol;
-  if !valid then begin
-    Queue.add (id,v) valid_q;
-    Hashtbl.add valid_t id v 
-  end
+let elem_t = Hashtbl.create 97 (* maps [element_kind] to [element] *)
+let elem_q = Queue.create ()   (* queue of [element_kind * element] *)
+
+let add_elem ek e = Queue.add (ek,e) elem_q; Hashtbl.add elem_t ek e
+
+let reset () = Queue.clear elem_q; Hashtbl.clear elem_t
+
+let push_obligations = 
+  List.iter (fun ((l,_) as o) -> add_elem (Oblig l) (Obligation o))
+
+let push_validation id v = 
+  add_elem (Valid id) (Validation (id,v))
+
+let print_element_kind fmt = function
+  | Param s -> fprintf fmt "parameter %s" s
+  | Oblig s -> fprintf fmt "obligation %s" s
+  | Valid s -> fprintf fmt "validation %s" s
+
+let print_element fmt = function
+  | Parameter (id, c) -> print_parameter fmt id c
+  | Obligation o -> print_obligation fmt o
+  | Validation (id, v) -> print_validation fmt id v
+
+let reprint_element fmt = function
+  | Parameter (id, c) -> print_parameter fmt id c
+  | Obligation o -> reprint_obligation fmt o
+  | Validation (id, v) -> print_validation fmt id v
 
 (*s Generating the output. *)
 
 let oblig_regexp = Str.regexp "Lemma[ ]+\\(.*_po_[0-9]+\\)[ ]*:[ ]*"
 let valid_regexp = Str.regexp "Definition[ ]+\\(.*\\)_valid[ ]*:=[ ]*"
-
-type line = 
-  | Oblig of string
-  | Valid of string
-  | Other
+let param_regexp = Str.regexp "(*Why*) Parameter[ ]+\\(.*\\)[ ]*:[ ]*"
 
 let check_line s =
-  try
-    if Str.string_match oblig_regexp s 0 then
-      Oblig (Str.matched_group 1 s)
-    else if Str.string_match valid_regexp s 0 then
-      Valid (Str.matched_group 1 s)
-    else 
-      Other
-  with Not_found ->
-    Other
+  let test r = 
+    if Str.string_match r s 0 then Str.matched_group 1 s else raise Exit
+  in
+  try Some (Oblig (test oblig_regexp)) with Exit ->
+  try Some (Valid (test valid_regexp)) with Exit ->
+  try Some (Param (test param_regexp)) with Exit ->
+  None
 
 let regen oldf fmt =
   let cin = open_in oldf in
   let rec scan () =
     let s = input_line cin in
     match check_line s with
-      | Oblig l ->
-	  if Hashtbl.mem oblig_t l then begin
-	    if !verbose then eprintf "overwriting obligation %s@\n" l;
-	    let p = Hashtbl.find oblig_t l in
-	    print_lemma fmt (l,p);
-	    Hashtbl.remove oblig_t l
-	  end else
-	    if !verbose then eprintf "erasing obligation %s@\n" l;
-	  skip_to_dot ();
-	  scan ()
-      | Valid id ->
-	  if Hashtbl.mem valid_t id then begin
-	    if !verbose then eprintf "overwriting validation %s@\n" id;
-	    let v = Hashtbl.find valid_t id in
-	    print_validation fmt (id,v);
-	    Hashtbl.remove valid_t id
-	  end else
-	    if !verbose then eprintf "erasing validation %s@\n" id;
-	  skip_to_dot ();
-	  scan ()
-      | Other -> 
+      | None -> 
 	  fprintf fmt "%s@\n" s;
+	  scan ()
+      | Some e ->
+	  if Hashtbl.mem elem_t e then begin
+	    if !verbose then eprintf "overwriting %a@\n" print_element_kind e;
+	    print_up_to e
+	  end else
+	    if !verbose then eprintf "erasing %a@\n" print_element_kind e;
+	  skip_to_dot ();
 	  scan ()
   and skip_to_dot () =
     let s = input_line cin in
@@ -249,23 +254,27 @@ let regen oldf fmt =
     if n = 0 || s.[n-1] <> '.' then skip_to_dot ()
   and tail () = 
     fprintf fmt "%c" (input_char cin); tail () 
+  and print_up_to e =
+    let (e',ee) = Queue.take elem_q in
+    Hashtbl.remove elem_t e'; 
+    if e = e' then 
+      reprint_element fmt ee 
+    else begin
+      print_element fmt ee; print_up_to e
+    end
   in
   begin
     try scan () with End_of_file -> 
     try tail () with End_of_file -> close_in cin
   end;
-  let remaining q h f = 
-    Queue.iter (function (x,_) as o -> if Hashtbl.mem h x then f o) q
-  in
-  remaining oblig_q oblig_t (print_obligation fmt);
-  remaining valid_q valid_t (print_validation fmt)
+  Queue.iter (fun (_,e) -> print_element fmt e) elem_q
 
 let first_time fmt =
   fprintf fmt "\
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)@\n
 Require Why.@\n@\n";
-  Queue.iter (print_obligation fmt) oblig_q
+  Queue.iter (fun (_,e) -> print_element fmt e) elem_q
 
 let print_in_file p f =
   let cout = open_out f in

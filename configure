@@ -987,8 +987,10 @@ fi
 if test "$COQDEP" = true ; then
 	echo "configure: warning: Cannot find coqdep." 1>&2
 fi
+COQLIB=`coqc -where`
 
 # substitutions to perform
+
 
 
 
@@ -1163,6 +1165,7 @@ s%@OCAMLBEST@%$OCAMLBEST%g
 s%@OCAMLVERSION@%$OCAMLVERSION%g
 s%@OCAMLLIB@%$OCAMLLIB%g
 s%@CAMLP4LIB@%$CAMLP4LIB%g
+s%@COQLIB@%$COQLIB%g
 
 CEOF
 EOF
