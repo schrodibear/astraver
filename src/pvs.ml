@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.59 2004-10-05 09:47:37 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.60 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -200,6 +200,8 @@ let print_predicate fmt p =
     | Pfpi (t,f1,f2) ->
 	fprintf fmt 
 	"@[fpi(%a,%a,%a)@]" print_term t print_real f1 print_real f2
+    | Pnamed (_, p) -> (* TODO: print name *)
+	print3 fmt p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.47 2004-07-13 13:17:12 filliatr Exp $ i*)
+(*i $Id: env.ml,v 1.48 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -86,6 +86,8 @@ let rec find_predicate_vars acc p =
 	find_predicate_vars (find_pure_type_vars acc t) p
     | Forallb (_,p1,p2) ->
 	find_predicate_vars (find_predicate_vars acc p1) p2
+    | Pnamed (_,p) ->
+	find_predicate_vars acc p
 
 let generalize_predicate p =
   let l = find_predicate_vars [] p in
@@ -141,6 +143,7 @@ let rec subst_predicate s p =
   | Papp (id, tl, i) -> 
       Papp (id, List.map (subst_term s) tl, List.map (subst_pure_type s) i)
   | Pfpi (t, a, b) -> Pfpi (subst_term s t, a, b)
+  | Pnamed (n, a) -> Pnamed (n, f a)
   | Ptrue | Pfalse | Pvar _ as p -> p
 
 let rec subst_type_v s = function

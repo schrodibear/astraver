@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.95 2004-07-13 14:55:41 filliatr Exp $ i*)
+(*i $Id: misc.ml,v 1.96 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -243,6 +243,7 @@ let rec collect_pred s = function
   | Forall (_, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
   | Pfpi (t, _, _) -> collect_term s t
+  | Pnamed (_, p) -> collect_pred s p
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
@@ -277,6 +278,7 @@ let rec map_predicate f = function
   | Forall (w, id, b, v, p) -> Forall (w, id, b, v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Forallb (w, a, b) -> Forallb (w, f a, f b)
+  | Pnamed (n, a) -> Pnamed (n, f a)
   | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
 
 let rec tsubst_in_predicate s = function
@@ -488,6 +490,7 @@ module Size = struct
     | Forall (_,_,_,_,p) -> 1 + predicate p
     | Exists (_,_,_,p) -> 1 + predicate p
     | Forallb (_,p1,p2) -> 1+ predicate p1 + predicate p2
+    | Pnamed (_,p) -> predicate p
     | Pfpi (t,_,_) -> 1 + term t
 
   let assertion a = predicate a.a_value

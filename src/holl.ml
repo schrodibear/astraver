@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: holl.ml,v 1.24 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: holl.ml,v 1.25 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 (*s HOL Light output *)
 
@@ -205,6 +205,8 @@ let rec print_predicate fmt = function
 	print_pure_type t print_predicate p'
   | Pfpi _ ->
       failwith "fpi not supported in HOL Light"
+  | Pnamed (n, p) ->
+      fprintf fmt "@[(* %s: *) %a@]" n print_predicate p
 
 let rec print_cc_type fmt = function
   | TTpure pt -> 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: monomorph.ml,v 1.2 2004-10-05 09:47:37 filliatr Exp $ i*)
+(*i $Id: monomorph.ml,v 1.3 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 (* monomorphic output *)
 
@@ -55,6 +55,7 @@ module IterIT = struct
     | Pnot a -> predicate f g a
     | Exists (_, _, v, p)
     | Forall (_, _, _, v, p) -> g v; predicate f g p
+    | Pnamed (_, a) -> predicate f g a
     | Ptrue | Pfalse | Pvar _ | Pfpi _ -> ()
     | Papp (id, tl, i) -> f id i; List.iter (term f) tl
 
@@ -157,6 +158,7 @@ module GenSubst(S : Substitution) = struct
 	Exists (id, b, pure_type s v, predicate s p)
     | Forallb (w, a, b) -> Forallb (w, predicate s a, predicate s b)
     | Pfpi (t, a, b) -> Pfpi (term s t, a, b)
+    | Pnamed (n, a) -> Pnamed (n, predicate s a)
     | Ptrue | Pfalse | Pvar _ as p -> p
 
   let predicate_def s (bl,p) = 
@@ -226,6 +228,7 @@ module OpenInstances = struct
     | Pnot a -> predicate s a
     | Forall (_, _, _, _, p) -> predicate s p
     | Exists (_, _, _, p) -> predicate s p
+    | Pnamed (_, p) -> predicate s p
     | Pfpi (t, _, _) -> term s t
 	
 end

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.20 2004-07-09 12:32:44 filliatr Exp $ i*)
+(*i $Id: mizar.ml,v 1.21 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -237,6 +237,8 @@ let print_predicate fmt p =
 	  print_pure_type t print0 p'
     | Pfpi _ ->
 	failwith "fpi not supported with Mizar"
+    | Pnamed (_, p) -> (* TODO: print name *)
+	print3 fmt p
     | (Por _ | Piff _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

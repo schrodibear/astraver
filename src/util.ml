@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: util.ml,v 1.100 2004-07-13 11:31:24 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.101 2004-12-01 17:10:03 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -208,6 +208,7 @@ let rec occur_predicate id = function
   | Forall (_,_,_,_,a) -> occur_predicate id a
   | Exists (_,_,_,a) -> occur_predicate id a
   | Pfpi (t,_,_) -> occur_term id t
+  | Pnamed (_, a) -> occur_predicate id a
 
 let occur_assertion id a = occur_predicate id a.a_value
 
@@ -465,6 +466,8 @@ let rec print_predicate fmt = function
   | Pfpi (t, (i1,f1,e1), (i2,f2,e2)) ->
       fprintf fmt "@[<hov 2>fpi(%a,@ %s.%se%s,@ %s.%se%s)@]" 
 	print_term t i1 f1 e1 i2 f2 e2
+  | Pnamed (n, p) ->
+      fprintf fmt "@[%s: %a@]" n print_predicate p
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 
