@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.24 2002-12-19 14:36:19 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.25 2003-01-13 10:32:35 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -288,7 +288,7 @@ let rec no_effect = function
 let rec is_pure cenv = function
   | CEvar (l, id) ->
       (match get_type l cenv id with
-	 | CTpointer _, _
+	 | (CTarray _ | CTpointer _), _
 	 | CTpure _, false -> true
 	 | _ -> false)
   | CEconst _  -> true
@@ -338,7 +338,8 @@ let rec interp_expr cenv et e =
     let ml,ct = match e with
       | CEvar (l, id) -> 
 	  (match get_type l cenv id with
-	     | CTpointer _ as ct, _ | ct, false -> ml_var l id , ct 
+	     | (CTarray _ | CTpointer _) as ct, _ 
+	     | ct, false -> ml_var l id , ct 
 	     | ct, true -> ml_refget l id, ct)
       | CEassign (l, lv, op, e) -> 
 	  let lv, ct = interp_lvalue cenv lv in

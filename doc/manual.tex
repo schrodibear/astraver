@@ -9,6 +9,7 @@
 \newcommand{\pvs}{\textsf{PVS}}
 \newcommand{\coq}{\textsf{Coq}}
 \newcommand{\harvey}{\textsf{haRVey}}
+\newcommand{\hollight}{\textsf{HOL Light}}
 \newcommand{\why}{\textsf{Why}}
 \newcommand{\te}[1]{\texttt{#1}}
 \newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
@@ -88,9 +89,11 @@ examples.
 
 \why\ acts as a compiler. It takes annotated programs as input and
 generates proof obligations as output.
-Currently, the input syntax is a dialect of ML (with a syntax close to
-\caml's, with annotations on top),
-and the output is a \pvs\ theory~\cite{PVS}, a \coq\ module~\cite{Coq}
+Currently, the input syntax is either a dialect of ML (with a syntax close to
+\caml's, with annotations on top) or an ANSI C file where annotations
+are inserted as special comments.
+The output is a \pvs\ theory~\cite{PVS}, a \coq\ module~\cite{Coq},
+a \hollight\ file~\cite{HOLLight}
 or a bunch of input files for \harvey~\cite{haRVey}. 
 
 If the input file is \texttt{foo.mlw}, \why\ is simply invoked as
@@ -101,12 +104,12 @@ and a \coq\ module \texttt{foo\_why.v} is (re)generated.
 Similarly, invoking \why\ as
 \begin{verbatim}
      why --pvs foo.mlw
-\end{verbatim}
-(re)generates a \pvs\ theory \texttt{foo\_why.pvs} and
-\begin{verbatim}
+     why --hol-light foo.mlw
      why --harvey foo.mlw
 \end{verbatim}
-(re)generates a bunch of files \texttt{foo\_}\textit{xxx}\texttt{.hv} to be
+(re)generates a \pvs\ theory \texttt{foo\_why.pvs}, an input file
+\texttt{foo\_why.ml} for \hollight\ or a bunch of files
+\texttt{foo\_}\textit{xxx}\texttt{.hv} to be 
 produced by \harvey.
 % Section~\ref{usage} details the various command line options.
 
@@ -526,20 +529,19 @@ They are also available on the \why\ web site, at
 
 \why\ is invoked as a batch compiler, given a list of input files:
 \begin{center}
-  \texttt{why} [\textit{options}] \textit{file}$_1$\texttt{.mlw} $\cdots$
-    \textit{file}$_n$\texttt{.mlw}
+  \texttt{why} [\textit{options}] 
+  \textit{file}$_1$\texttt{.}\{\texttt{mlw},\texttt{c}\} $\cdots$
+  \textit{file}$_n$\texttt{.}\{\texttt{mlw},\texttt{c}\}
 \end{center}
-Each file \textit{file}\texttt{.mlw} will be compiled into a \pvs\ theory
-\textit{file}\texttt{\_why.pvs} or a \coq\ module
-\textit{file}\texttt{\_why.v}.
 If no file is given, then standard input is processed and output is
-in a \pvs\ theory (resp. a \coq\ module) named \texttt{Output\_why}.
-
-Options are the following:
+named \texttt{Output\_why}.
+Command line options are the following:
 \begin{description}
   \item[Generic options:] ~\par
   \item[\texttt{--help}]: ~\par    
     Give usage and exit. 
+  \item[\texttt{--version}]: ~\par    
+    Give \why\ version number and exit. 
   \item[\texttt{--verbose}]: ~\par 
     Verbose mode. In this mode, \why\ prints on error output
     information like the program being processed, the obligations
@@ -560,18 +562,21 @@ Options are the following:
     Stop after annotation.
 
   \item[Prover options:] ~\par
-  \item[\texttt{--pvs}, \texttt{--coq}, \texttt{--harvey}]: ~\par 
+  \item[\texttt{--coq}, \texttt{--pvs}, \texttt{--hol-light}, 
+        \texttt{--harvey}]: ~\par 
     Select the prover; it defaults to \coq.
   \item[\texttt{--valid}, \texttt{--no-valid}]: ~\par
     Set/Unset the functional validation. Only meaningful with the
     \coq\ prover. When set, \why\ outputs a functional interpretation
     of each program. Default is no validation. 
+  \item[\texttt{--coq-tactic}] \textit{tactic} : ~\par
+    Give a \coq\ tactic to be inserted as proof for new obligations.
 
   \item[Caml code generation options:] ~\par
   \item[\texttt{--ocaml}]: ~\par 
     Select the \caml\ code generation. The code is produced on
     standard output, unless specified otherwise with option \texttt{--output}.
-  \item[\texttt{--output}] \textit{file}: ~\par 
+  \item[\texttt{--output}] \textit{file} : ~\par 
     Redirect the output to file \textit{file}.
   \item[\texttt{--ocaml-annot}]: ~\par 
     Decorate the \caml\ code with all annotations as comments. Default
@@ -1198,7 +1203,8 @@ and is given in Figures~\ref{fig:cfiles:a} and~\ref{fig:cfiles:b}.
   \\[0.1em]
 
   \nt{prefix\_operator}
-    & $::=$ & \te{++} $|$ \te{--} $|$ \te{-} $|$ \te{!}
+    & $::=$ & \te{++} $|$ \te{--} $|$ \te{-} $|$ \te{!} $|$ \te{\&}
+          $|$ \te{*}
   \\[0.1em]
 
   \nt{postfix\_operator}

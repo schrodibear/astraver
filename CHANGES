@@ -1,6 +1,9 @@
 
-version 0.91, January 7th, 2003
+version 0.92, January 13th, 2003
 ===============================
+  o C: fixed bug in array/reference passing
+  o fixed check for exceptions in external declarations
+  o HOL Light output (with option --hol-light)
   o fixed compatibility with Coq 7.3
   o C: recursive functions, arrays, pointers
 
