@@ -156,6 +156,23 @@ Lemma rec_add1_po_3 :
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
+  (Pre2: `y - 1 >= 0`)
+  (Zwf `0` `y - 1` Variant1).
+Proof.
+Intros; Unfold Zwf; Omega.
+Save.
+
+Lemma rec_add1_po_4 : 
+  (y: Z)
+  (Pre5: `y >= 0`)
+  (Variant1: Z)
+  (y: Z)
+  (x0: Z)
+  (Pre4: `y >= 0`)
+  (Pre3: Variant1 = y)
+  (Test2: `0 < y`)
+  (x1: Z)
+  (Post1: x1 = `x0 + 1`)
   (x2: Z)
   (Post6: x2 = `x1 + (y - 1)`)
   x2 = `x0 + y`.
@@ -163,7 +180,7 @@ Proof.
 Intros; Omega.
 Save.
 
-Lemma rec_add1_po_4 : 
+Lemma rec_add1_po_5 : 
   (y: Z)
   (Pre5: `y >= 0`)
   (Variant1: Z)

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.31 2002-04-29 08:47:36 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.32 2002-05-06 12:05:45 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -207,8 +207,10 @@ let rec print_cc_term fmt = function
       fprintf fmt "@[<hov 2>[%a]@,%a@]" print_binder b print_cc_term c
   | CC_app (f,a) ->
       fprintf fmt "@[<hov 2>(%a@ %a)@]" print_cc_term f print_cc_term a
-  | CC_tuple cl ->
+  | CC_tuple (cl, None) ->
       fprintf fmt "<Tuple %a>" (print_list space print_cc_term) cl
+  | CC_tuple (cl, Some q) ->
+      fprintf fmt "<Tuple_dep %a>" (print_list space print_cc_term) cl
   | CC_case _ ->
       fprintf fmt "<Case (TODO)>"
   | CC_if (b,e1,e2) ->

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.28 2002-05-03 15:40:22 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.29 2002-05-06 12:05:45 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -137,18 +137,30 @@ let unit info t ren =
   if ids = [] && q = None then
     CC_term t
   else 
-    let hole = match q with
+    let hole, holet = match q with
       | None -> 
-	  []
+	  [], None
       | Some c -> 
 	  let c = apply_post info.label ren env c in
 	  let c = tsubst_in_predicate (subst_one result t) c.a_value in
-	  [ CC_hole c ]
+	  [ CC_hole c ],
+	  None (* TODO *)
     in
     CC_tuple (
       (List.map (fun id -> let id' = current_var ren id in CC_var id') ids) @
-      (CC_term t) :: hole)
-    
+      (CC_term t) :: hole,
+      holet)
+
+(*i***    
+  let ((res,v),e,p,q) = decomp_kappa k in
+  let i,o = get_repr e in
+  let before = label_name () in
+  let ren' = next (push_date ren before) o in
+  let lo = output ren' env ((res,v),o) in
+  let ty = product before ren' env lo q in
+
+  apply_post before ren env q).a_value
+***i*)
 
 (*s [compose k1 e1 e2 ren env] constructs the term
    

@@ -67,10 +67,8 @@ Lemma quick_rec_po_4 :
   (result0: Z)
   (Post5: `l <= result0` /\ `result0 <= r` /\ (partition_p t1 l r result0) /\
           (sub_permut l r t1 t0))
-  (t2: (array N Z))
-  (Post8: (sorted_array t2 l `result0 - 1`) /\
-          (sub_permut l `result0 - 1` t2 t1))
-  `0 <= result0 + 1` /\ `r < N`.
+  (Pre: `0 <= l` /\ `result0 - 1 < N`)
+  (Zwf `(-1)` `result0 - 1 - l` Variant1).
 Proof.
 Intuition.
 Save.
@@ -93,10 +91,7 @@ Lemma quick_rec_po_5 :
   (t2: (array N Z))
   (Post8: (sorted_array t2 l `result0 - 1`) /\
           (sub_permut l `result0 - 1` t2 t1))
-  (t3: (array N Z))
-  (Post10: (sorted_array t3 `result0 + 1` r) /\
-           (sub_permut `result0 + 1` r t3 t2))
-  (sorted_array t3 l r) /\ (sub_permut l r t3 t0).
+  `0 <= result0 + 1` /\ `r < N`.
 Proof.
 Intros.
 Apply quicksort_lemma with t1:=t1 t2:=t2 p:=result0;
@@ -113,10 +108,60 @@ Lemma quick_rec_po_6 :
   (t0: (array N Z))
   (Pre: `0 <= l` /\ `r < N`)
   (Pre3: Variant1 = `r - l`)
+  (Test2: `l < r`)
+  (t1: (array N Z))
+  (result0: Z)
+  (Post5: `l <= result0` /\ `result0 <= r` /\ (partition_p t1 l r result0) /\
+          (sub_permut l r t1 t0))
+  (t2: (array N Z))
+  (Post8: (sorted_array t2 l `result0 - 1`) /\
+          (sub_permut l `result0 - 1` t2 t1))
+  (Pre: `0 <= result0 + 1` /\ `r < N`)
+  (Zwf `(-1)` `r - (result0 + 1)` Variant1).
+Proof.
+Intros; Apply quicksort_trivial; Intuition.
+Save.
+
+Lemma quick_rec_po_7 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (t0: (array N Z))
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
+  (Test2: `l < r`)
+  (t1: (array N Z))
+  (result0: Z)
+  (Post5: `l <= result0` /\ `result0 <= r` /\ (partition_p t1 l r result0) /\
+          (sub_permut l r t1 t0))
+  (t2: (array N Z))
+  (Post8: (sorted_array t2 l `result0 - 1`) /\
+          (sub_permut l `result0 - 1` t2 t1))
+  (t3: (array N Z))
+  (Post10: (sorted_array t3 `result0 + 1` r) /\
+           (sub_permut `result0 + 1` r t3 t2))
+  (sorted_array t3 l r) /\ (sub_permut l r t3 t0).
+Proof.
+(* FILL PROOF HERE *)
+Save.
+
+Lemma quick_rec_po_8 : 
+  (l: Z)
+  (r: Z)
+  (Pre: `0 <= l` /\ `r < N`)
+  (Variant1: Z)
+  (l: Z)
+  (r: Z)
+  (t0: (array N Z))
+  (Pre: `0 <= l` /\ `r < N`)
+  (Pre3: Variant1 = `r - l`)
   (Test1: `l >= r`)
   (sorted_array t0 l r) /\ (sub_permut l r t0 t0).
 Proof.
-Intros; Apply quicksort_trivial; Intuition.
+(* FILL PROOF HERE *)
 Save.
 
 Lemma quicksort_po_1 : 

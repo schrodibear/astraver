@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: ast.mli,v 1.27 2002-04-17 08:48:58 filliatr Exp $ i*)
+(*i $Id: ast.mli,v 1.28 2002-05-06 12:05:45 filliatr Exp $ i*)
 
 (*s Abstract syntax of imperative programs. *)
 
@@ -89,7 +89,7 @@ type 'a cc_term =
   | CC_letin of bool * cc_binder list * 'a cc_term * 'a cc_term
   | CC_lam of cc_binder * 'a cc_term
   | CC_app of 'a cc_term * 'a cc_term
-  | CC_tuple of 'a cc_term list
+  | CC_tuple of 'a cc_term list * predicate option
   | CC_case of 'a cc_term * (cc_binder list * 'a cc_term) list
   | CC_if of 'a cc_term * 'a cc_term * 'a cc_term
   | CC_term of term

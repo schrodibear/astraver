@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: red.ml,v 1.13 2002-04-17 08:48:59 filliatr Exp $ i*)
+(*i $Id: red.ml,v 1.14 2002-05-06 12:05:45 filliatr Exp $ i*)
 
 open Ast
 open Logic
@@ -66,8 +66,9 @@ let rec iota_subst s = function
 
 (*s Reduction. Substitution is done at the same time for greater efficiency *)
 
-let rec red sp s = function
-  | CC_var x ->
+let rec red sp s cct = 
+  match cct with
+  | CC_var x | CC_term (Tvar x) ->
       (try Idmap.find x sp 
        with Not_found -> CC_term (try Idmap.find x s with Not_found -> Tvar x))
   | CC_letin (dep, bl, e1, e2) ->
@@ -79,13 +80,13 @@ let rec red sp s = function
 	 | CC_lam _ as re1 when List.length bl = 1 ->
 	     red (Idmap.add (fst (List.hd bl)) re1 sp) s e2
 	 (* [let (x1,...,xn) = (t1,...,tn) in e2] *)
-	 | CC_tuple al when is_iota_redex bl al ->
+	 | CC_tuple (al,_) when is_iota_redex bl al ->
 	     red sp (iota_subst s (bl, al)) e2
 	 | re1 ->
 	     let bl',s' = cc_subst_binders s bl in
 	     (match red sp s' e2 with
 		(* [let (x1,...,xn) = e1 in (x1,...,xn)] *)
-		| CC_tuple al when is_eta_redex bl al ->
+		| CC_tuple (al,_) when is_eta_redex bl al ->
 		    red sp s e1
 		| re2 ->
 		    CC_letin (dep, bl', re1, re2)))
@@ -109,8 +110,9 @@ let rec red sp s = function
       CC_case (red sp s e1, List.map red_branch el)
   | CC_if (a,b,c) ->
       CC_if (red sp s a, red sp s b, red sp s c)
-  | CC_tuple al ->
-      CC_tuple (List.map (red sp s) al)
+  | CC_tuple (al, po) ->
+      CC_tuple (List.map (red sp s) al,
+		option_app (tsubst_in_predicate s) po)
   | CC_term c ->
       CC_term (tsubst_in_term s c)
   | CC_hole ty ->
