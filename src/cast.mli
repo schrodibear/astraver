@@ -3,4 +3,4 @@
 
 type decl = unit (* TODO *)
 
-let file = decl list
+type file = decl list

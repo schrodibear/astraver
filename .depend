@@ -97,6 +97,7 @@ src/wp.cmx: src/ast.cmi src/effect.cmx src/env.cmx src/ident.cmx \
     src/logic.cmx src/misc.cmx src/rename.cmx src/types.cmi src/util.cmx \
     src/wp.cmi 
 src/ast.cmi: src/ident.cmi src/logic.cmi src/ptree.cmi src/types.cmi 
+src/cinterp.cmi: src/cast.cmi src/ptree.cmi 
 src/coq.cmi: src/ast.cmi src/vcg.cmi 
 src/effect.cmi: src/ident.cmi src/logic.cmi 
 src/env.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
@@ -123,49 +124,3 @@ src/util.cmi: src/ast.cmi src/effect.cmi src/env.cmi src/ident.cmi \
     src/logic.cmi src/misc.cmi src/rename.cmi src/types.cmi 
 src/vcg.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/wp.cmi: src/env.cmi src/types.cmi 
-lib/coq/WhyTuples.vo: lib/coq/WhyTuples.v
-lib/coq/WhySorted.vo: lib/coq/WhySorted.v lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo
-lib/coq/WhyPermut.vo: lib/coq/WhyPermut.v lib/coq/WhyArrays.vo
-lib/coq/WhyInt.vo: lib/coq/WhyInt.v
-lib/coq/WhyFloat.vo: lib/coq/WhyFloat.v lib/coq/Why.vo
-lib/coq/WhyBool.vo: lib/coq/WhyBool.v
-lib/coq/WhyArrays.vo: lib/coq/WhyArrays.v lib/coq/WhyInt.vo
-lib/coq/Why.vo: lib/coq/Why.v lib/coq/WhyTuples.vo lib/coq/WhyInt.vo lib/coq/WhyBool.vo lib/coq/WhyArrays.vo lib/coq/WhyPermut.vo lib/coq/WhySorted.vo
-examples/sqrt/sqrt_why.vo: examples/sqrt/sqrt_why.v lib/coq/Why.vo
-examples/selectionsort/selection_why.vo: examples/selectionsort/selection_why.v lib/coq/Why.vo
-examples/quicksort/quicksort_why.vo: examples/quicksort/quicksort_why.v lib/coq/Why.vo examples/quicksort/Partition.vo examples/quicksort/Quicksort.vo examples/quicksort/partition_why.vo
-examples/quicksort/partition_why.vo: examples/quicksort/partition_why.v lib/coq/Why.vo examples/quicksort/Partition.vo
-examples/quicksort/Quicksort.vo: examples/quicksort/Quicksort.v lib/coq/Why.vo examples/quicksort/Partition.vo
-examples/quicksort/Partition.vo: examples/quicksort/Partition.v lib/coq/Why.vo
-examples/misc/swap0_why.vo: examples/misc/swap0_why.v lib/coq/Why.vo
-examples/misc/power_why.vo: examples/misc/power_why.v lib/coq/Why.vo
-examples/misc/peano_why.vo: examples/misc/peano_why.v lib/coq/Why.vo
-examples/misc/mac_carthy_why.vo: examples/misc/mac_carthy_why.v lib/coq/Why.vo
-examples/misc/loop0_why.vo: examples/misc/loop0_why.v lib/coq/Why.vo
-examples/misc/gcd_why.vo: examples/misc/gcd_why.v lib/coq/Why.vo
-examples/misc/flag_why.vo: examples/misc/flag_why.v lib/coq/Why.vo
-examples/misc/fib_why.vo: examples/misc/fib_why.v lib/coq/Why.vo
-examples/misc/arith_why.vo: examples/misc/arith_why.v lib/coq/Why.vo
-examples/kmp/kmp_why.vo: examples/kmp/kmp_why.v lib/coq/Why.vo examples/kmp/Match.vo examples/kmp/Next.vo examples/kmp/Lex.vo
-examples/kmp/Next.vo: examples/kmp/Next.v examples/kmp/Match.vo
-examples/kmp/Match.vo: examples/kmp/Match.v
-examples/kmp/Lex.vo: examples/kmp/Lex.v
-examples/heapsort/swap_why.vo: examples/heapsort/swap_why.v lib/coq/Why.vo
-examples/heapsort/heapsort_why.vo: examples/heapsort/heapsort_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo examples/heapsort/downheap_why.vo
-examples/heapsort/downheap_why.vo: examples/heapsort/downheap_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo examples/heapsort/swap_why.vo
-examples/heapsort/Inftree.vo: examples/heapsort/Inftree.v lib/coq/Why.vo examples/heapsort/Heap.vo
-examples/heapsort/Heap.vo: examples/heapsort/Heap.v lib/coq/Why.vo
-examples/find/find_why.vo: examples/find/find_why.v examples/find/find_spec.vo examples/find/find_lemmas.vo examples/find/find_proofs.vo lib/coq/Why.vo
-examples/find/find_spec.vo: examples/find/find_spec.v lib/coq/WhyArrays.vo
-examples/find/find_proofs.vo: examples/find/find_proofs.v examples/find/find_spec.vo examples/find/find_lemmas.vo lib/coq/Why.vo
-examples/find/find_lemmas.vo: examples/find/find_lemmas.v examples/find/find_spec.vo lib/coq/Why.vo
-examples/edit-distance/words.vo: examples/edit-distance/words.v lib/coq/WhyArrays.vo
-examples/edit-distance/distance_why.vo: examples/edit-distance/distance_why.v lib/coq/Why.vo examples/edit-distance/words.vo
-examples/bresenham/zaux.vo: examples/bresenham/zaux.v
-examples/bresenham/bresenham_why.vo: examples/bresenham/bresenham_why.v examples/bresenham/zaux.vo lib/coq/Why.vo
-examples/binary-search/bsearch_why.vo: examples/binary-search/bsearch_why.v lib/coq/Why.vo
-bench/tmp/floats_why.vo: bench/tmp/floats_why.v lib/coq/Why.vo lib/coq/WhyFloat.vo
-bench/good/recfun_why.vo: bench/good/recfun_why.v lib/coq/Why.vo
-bench/good/po_why.vo: bench/good/po_why.v lib/coq/Why.vo
-bench/good/loops_why.vo: bench/good/loops_why.v lib/coq/Why.vo
-bench/good/all_why.vo: bench/good/all_why.v lib/coq/Why.vo
