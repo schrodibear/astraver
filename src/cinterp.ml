@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.23 2002-12-19 14:30:14 filliatr Exp $ i*)
+(*i $Id: cinterp.ml,v 1.24 2002-12-19 14:36:19 filliatr Exp $ i*)
 
 (*s Interpretation of C programs *)
 
@@ -699,10 +699,6 @@ let interp_annotated_block cenv et (l, p, bl, q) =
       bl
   in
   { pdesc = bl.pdesc; pre = p; post = q; ploc=l }, st.abrupt_return
-
-(***
-let interp_binder (pt, id) = (id, BindType (PVpure pt))
-***)
 
 let interp_binder (v, id) = 
   let t = match v with
