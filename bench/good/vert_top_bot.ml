@@ -13,7 +13,7 @@ pvs "vector3: TYPE
   post_visible: [vector3,real,real,bool -> bool]
 "
 
-external x,y,z : (v:vector3) float
+external x,y,z : vector3 -> float
 
 external A,B,C,Delta,t1,t2,x1,x2,nvoz1,nvoz2 : float ref
 

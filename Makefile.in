@@ -73,6 +73,9 @@ doc::
 bench:: $(BINARY)
 	cd bench; ./bench ../$(BINARY)
 
+bench-tc:: $(BINARY)
+	cd bench; ./bench "../$(BINARY) -tc"
+
 test:: $(BINARY)
 	$(BINARY) -d -V -coq bench/test.ml
 

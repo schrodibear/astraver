@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: parser.ml4,v 1.15 2002-03-04 15:26:35 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.16 2002-03-05 11:24:59 filliatr Exp $ i*)
 
 open Logic
 open Rename
@@ -24,14 +24,10 @@ let predicate2 = gec "predicate2"
 let constant = gec "constant"
 
 (* types *)
-let pure_type= gec "pure_type"
 let type_v   = gec "type_v"
-let type_v0  = gec "type_v0"
-let type_v1  = gec "type_v1"
-let type_v2  = gec "type_v2"
-let type_v3  = gec "type_v3"
-let type_v_app  = gec "type_v_app"
+let simple_type_v   = gec "simple_type_v"
 let type_c   = gec "type_c"
+let result   = gec "result"
 let effects  = gec "effects"
 let reads    = gec "reads"
 let writes   = gec "writes"
@@ -188,46 +184,39 @@ EXTEND
   ;
 
   (* Types *)
-  pure_type:
-  [ [ "int" -> PTint
-    | "bool" -> PTbool
-    | "float" -> PTfloat
-    | "unit" -> PTunit
-    | id = ident -> PTexternal id ] ] 
-  ;    
-
+  (* [ident] is expansed to allow factorization *)
   type_v:
-  [ [ t = type_v0 -> t ] ]
-  ;
-  type_v0:
-  [ [ t = type_v1 -> t ] ]
-  ;
-  type_v1:
-  [ RIGHTA
-    [ v = type_v2; "->"; c = type_c -> 
+  [ [ v = simple_type_v; "->"; c = type_c -> 
 	make_arrow [Ident.anonymous, BindType v] c
-    | x = ident; ":"; v = type_v2; "->"; c = type_c -> 
-	make_arrow [(x, BindType v)] c
-    | t = type_v2 -> t ] ]
+    | x = LIDENT; ":"; v = simple_type_v; "->"; c = type_c -> 
+	make_arrow [(Ident.create x, BindType v)] c
+    | x = UIDENT; ":"; v = simple_type_v; "->"; c = type_c -> 
+	make_arrow [(Ident.create x, BindType v)] c
+    | t = simple_type_v -> t ] ]
   ;
-  type_v2:
-  [ LEFTA
-    [ v = type_v2; "ref" -> Ref v
-    | t = type_v3 -> t ] ]
-  ;
-  type_v3:
-  [ [ LIDENT "array"; size = term; "of"; v = type_v0 -> Array (size,v)
-    | c = pure_type -> PureType c
+  simple_type_v:
+  [ [ "array"; size = term; "of"; v = simple_type_v -> Array (size,v)
+    | v = simple_type_v; "ref" -> Ref v
+    | "int" -> PureType PTint
+    | "bool" -> PureType PTbool
+    | "float" -> PureType PTfloat
+    | "unit" -> PureType PTunit 
+    | id = LIDENT -> PureType (PTexternal (Ident.create id))
+    | id = UIDENT -> PureType (PTexternal (Ident.create id))
     | "("; v = type_v; ")" -> v ] ] 
   ;
   type_c:
   [ [ "{"; p = OPT pre_condition; "}";
-      LIDENT "returns"; id = ident; ":"; v = type_v; e = effects; 
+      (id,v) = result; e = effects; 
       "{"; q = OPT post_condition; "}" ->
         { c_result_name = id; c_result_type = v;
 	  c_effect = e; c_pre = list_of_some p; c_post = q } 
     | v = type_v -> 
 	type_c_of_v v ] ] 
+  ;
+  result:
+  [ [ LIDENT "returns"; id = ident; ":"; v = type_v -> (id, v)
+    | v = type_v -> (Ident.result, v) ] ]
   ;
   effects:
   [ [ r = OPT reads; w = OPT writes ->
