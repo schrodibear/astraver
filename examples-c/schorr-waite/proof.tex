@@ -246,7 +246,7 @@ six others similarly ask for validity of dereferencing \verb|t->m| in
 the first \verb|if|, \verb|p->c| in the second \verb|if|, \verb|t->r|
 in the `pop' branch, \verb|p->l| in the `swing' branch, \verb|t->l|
 and \verb|p->l| in the `push' branch. Notice that some accesses do not
-require validity check, because they are trivial enough to be
+require a validity check, because they are trivial enough to be
 automatically discharged, for example \verb|p->r| in the `pop` branch
 because it was preceeded by \verb|p->c| and \verb|p| did not change.
 
@@ -357,7 +357,7 @@ where \verb|no_rep| is a simple predicate on a list which says that no
 element occurs twice. 
 
 With those definitions and lemmas, we are able to manually
-complete all the proof obligations in Coq. We give a few figures
+complete all the proof obligations in Coq. We give a few numbers
 at the end of the next section.
 % after talking about the last point: termination.
 
@@ -485,7 +485,7 @@ void schorr_waite(node root) \{
 \label{fig:term}
 \end{figure}
 
-Proving termination of the algorithm is proving
+Proving the termination of the algorithm is proving the
 termination of the while loop. In \caduceus{}, one can annotate a
 loop by a \emph{variant}: an expression which decreases with respect
 to some well-founded ordering. It is not hard to find such a
@@ -500,7 +500,7 @@ the number of reachable nodes which have $c=0$;
 the length of the stack.
 %\end{enumerate}
 There is a minor issue: in our modeling, there is no assumption on
-the finiteness of the memory, so indeed nothing tells that the set of
+the finiteness of the memory, so indeed nothing says that the set of
 reachable nodes is finite. So this is an extra assumption we have
 to insert in the pre-condition. The additional annotations for
 termination are given Figure~\ref{fig:term}, where in Coq we define
@@ -511,7 +511,7 @@ termination are given Figure~\ref{fig:term}, where in Coq we define
 \end{array}
 \]
 The \verb|weight| function and the \verb|order_mark_m_and_c_and_stack|
-relation are also defined in Coq according the informal definition of
+relation are also defined in Coq according to the informal definition of
 the measure above. 
 
 With the completed annotated code, \caduceus{} generates two
@@ -529,7 +529,7 @@ a quite good score but of course the 5 remaining obligations are by
 far the most difficult.
 
 With Coq, we completed all the obligations including the
-well-foundedness. Here are a few figures about the whole Coq proof: 
+well-foundedness. Here are a few numbers about the whole Coq proof: 
 definition of predicates on lists, reachability and such, and
 corresponding lemmas amount to 317 lines of definitions and 589 lines
 of proof tactics. The generated verification conditions amount to 985
