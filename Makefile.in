@@ -56,6 +56,7 @@ VO = lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo  lib/coq/WhyInt.vo   \
      lib/coq/WhySorted.vo  lib/coq/Why.vo      lib/coq/WhyFloat.vo \
      lib/coq/WhyExn.vo lib/coq/WhyCoqCompat.vo
 VFILES=$(VO:.vo=.v)
+WHYVO=lib/coq/Why.vo
 
 GENERATED = src/version.ml src/parser.ml \
 	    src/clexer.ml src/cparser.ml src/cparser.mli
@@ -103,16 +104,16 @@ doc:: doc/version.tex
 
 .PHONY: bench test
 
-bench:: $(BINARY) $(VO)
+bench:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) --valid"
 
-bench-tc:: $(BINARY) $(VO)
+bench-tc:: $(BINARY) $(WHYVO)
 	cd bench; ./bench "../$(BINARY) -tc"
 
-test:: $(BINARY) $(VO)
+test:: $(BINARY) $(WHYVO)
 	$(BINARY) -d -V -coq bench/test.ml
 
-examples:: $(STATICBINARY) $(VO)
+examples:: $(STATICBINARY) $(WHYVO)
 	make -C examples
 
 # debugging
