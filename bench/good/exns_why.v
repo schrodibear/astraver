@@ -26,7 +26,7 @@ Definition p2a := (* validation *)
               (qcomb [result1: Z]False [result1: unit]False)) (Val unit
                                                                 (Exn unit
                                                                   result0))
-    Post2)
+    (False_ind ? Post2))
   | (Qexn _ Post3) =>
     (exist_1 (qcomb [result0: unit]True
               (qcomb [result0: Z]False [result0: unit]False)) (Exn
@@ -49,7 +49,7 @@ Definition p3 := (* validation *)
     Cases (decomp1 Post5) of
     | (Qval (exist result2 Post7)) =>
       (exist_1 (qcomb [result3: Z]`result3 = 1` [result3: unit]False) 
-      (Val Z result2) Post7)
+      (Val Z result2) (False_ind ? Post7))
     | (Qexn result2 Post8) =>
       (exist_1 (qcomb [result3: Z]`result3 = 1` [result3: unit]False) 
       (Exn unit result2) Post8)
@@ -82,7 +82,7 @@ Definition p4 := (* validation *)
       Cases (decomp1 Post7) of
       | (Qval (exist result1 Post9)) =>
         (exist_1 (qcomb [result2: Z]`result2 = 1` [result2: unit]False) 
-        (Val Z result1) Post9)
+        (Val Z result1) (False_ind ? Post9))
       | (Qexn result1 Post10) =>
         (exist_1 (qcomb [result2: Z]`result2 = 1` [result2: unit]False) 
         (Exn unit result1) Post10)
@@ -96,7 +96,7 @@ Definition p4 := (* validation *)
       Cases (decomp1 Post3) of
       | (Qval (exist result1 Post5)) =>
         (exist_1 (qcomb [result2: Z]`result2 = 1` [result2: unit]False) 
-        (Val Z result1) Post5)
+        (Val Z result1) (False_ind ? Post5))
       | (Qexn result1 Post6) =>
         (exist_1 (qcomb [result2: Z]`result2 = 1` [result2: unit]False) 
         (Exn unit result1) Post6)
@@ -125,7 +125,7 @@ Definition p5 := (* validation *)
         Cases (decomp1 Post5) of
         | (Qval (exist result1 Post7)) =>
           (exist_1 (qcomb [result2: Z]`result2 = 1` [result2: unit]False) 
-          (Val Z result1) Post7)
+          (Val Z result1) (False_ind ? Post7))
         | (Qexn result1 Post8) =>
           (exist_1 (qcomb [result2: Z]`result2 = 1` [result2: unit]False) 
           (Exn unit result1) Post8)
@@ -134,22 +134,22 @@ Definition p5 := (* validation *)
         let (result0, Post4) = (exist_1 [result0: unit]False tt
           (p5_po_1 Test1)) in
         (exist_1 (qcomb [result1: Z]`result1 = 1` [result1: unit]False) 
-        (Val Z result0) Post4) end) in
+        (Val Z result0) (False_ind ? Post4)) end) in
   Cases (decomp1 Post3) of
   | (Qval (exist result0 Post9)) =>
     let (result1, Post11) =
       (exist_1 (qcomb [result1: unit]False [result1: unit]False) (Exn unit
                                                                    tt)
-      Post9) in
+      (False_ind ? Post9)) in
     Cases (decomp1 Post11) of
     | (Qval (exist result2 Post12)) =>
       (exist_1 (qcomb [result3: unit]False
                 (qcomb [result3: Z]`result3 = 1` [result3: unit]False)) 
-      (Val unit (Val Z result2)) Post12)
+      (Val unit (Val Z result2)) (False_ind ? Post12))
     | (Qexn _ Post13) =>
       (exist_1 (qcomb [result2: unit]False
                 (qcomb [result2: Z]`result2 = 1` [result2: unit]False)) 
-      (Exn (EM Z unit) tt) Post13)
+      (Exn (EM Z unit) tt) (False_ind ? Post13))
     end
   | (Qexn result0 Post10) =>
     (exist_1 (qcomb [result1: unit]False
@@ -176,7 +176,7 @@ Definition p6 := (* validation *)
             (p6_po_1 Test2)) in
           (exist_1 (qcomb [result1: Z]False [result1: unit]True) (Exn unit
                                                                    result0)
-          Post6) in
+          (False_ind ? Post6)) in
         Cases (decomp1 Post5) of
         | (Qval (exist result1 Post7)) =>
           (exist_1 (qcomb [result2: Z]False [result2: unit]True) (Val Z
@@ -185,7 +185,7 @@ Definition p6 := (* validation *)
         | (Qexn result1 Post8) =>
           (exist_1 (qcomb [result2: Z]False [result2: unit]True) (Exn unit
                                                                    result1)
-          Post8)
+          (False_ind ? Post8))
         end
     | (right Test1) =>
         let (result0, Post4) = (exist_1 [result0: unit]True tt I) in
@@ -203,7 +203,7 @@ Definition p6 := (* validation *)
                 (qcomb [result3: Z]False [result3: unit]False)) (Val unit
                                                                   (Val Z
                                                                     result2))
-      Post12)
+      (False_ind ? Post12))
     | (Qexn _ Post13) =>
       (exist_1 (qcomb [result2: unit]True
                 (qcomb [result2: Z]False [result2: unit]False)) (Exn
@@ -215,7 +215,7 @@ Definition p6 := (* validation *)
               (qcomb [result1: Z]False [result1: unit]False)) (Val unit
                                                                 (Exn unit
                                                                   result0))
-    Post10)
+    (False_ind ? Post10))
   end.
 
 Lemma p7_po_1 : 
@@ -648,7 +648,8 @@ Definition p14 := (* validation *)
                       (qcomb [result7: unit]`x = 1`
                        (qcomb [result7: unit]`x = 2`
                         (qcomb [result7: unit]`x = 3` [result7: unit]False)))) 
-            (Val unit (Val unit (Val unit (Val unit result6)))) Post29)
+            (Val unit (Val unit (Val unit (Val unit result6))))
+            (False_ind ? Post29))
           | (Qexn _ Post30) =>
             (exist_1 (qcomb [result6: unit]`x <> 1` /\ `x <> 2` /\ `x <> 3`
                       (qcomb [result6: unit]`x = 1`

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.76 2002-11-14 08:54:03 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.77 2002-12-02 16:05:47 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -289,6 +289,8 @@ let print_proof fmt = function
       fprintf fmt "(Zwf_well_founded %a)" print_term t
   | Loop_variant_1 (h, h') ->
       fprintf fmt "(loop_variant_1 %a %a)" Ident.print h Ident.print h'
+  | Absurd h ->
+      fprintf fmt "(False_ind ? %a)" Ident.print h
 
 let print_binder_id fmt (id,_) = Ident.print fmt id
 

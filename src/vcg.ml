@@ -44,6 +44,7 @@ type proof =
   | Conjunction of Ident.t * Ident.t
   | WfZwf of term
   | Loop_variant_1 of Ident.t * Ident.t
+  | Absurd of Ident.t
 
 type validation = proof cc_term
 
@@ -70,6 +71,9 @@ let assumption concl = function
 let lookup_hyp a = 
   let test = function Spred (id, b) when a = b -> id | _ -> raise Exit in
   list_first test
+
+(* ..., h:False, ... |- C *)
+let absurd ctx =  Absurd (lookup_hyp Pfalse ctx)
 
 (* ..., h:A, ..., h':B, ... |- A and B *)
 let conjunction ctx = function
@@ -106,6 +110,7 @@ let discharge ctx concl =
   try ptrue concl with Exit ->
   try wf_zwf concl with Exit ->
   try reflexivity concl with Exit -> 
+  try absurd ctx with Exit ->
   try list_first (assumption concl) ctx with Exit ->
   try conjunction ctx concl with Exit ->
   loop_variant_1 ctx concl
