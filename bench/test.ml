@@ -1,7 +1,13 @@
 
-let p = if true then 1 else 2
+parameter x : int ref
+parameter t : array 10 of int
+let p = { x = 0 } t[!x]
 
-(***
+(**
+let p9 = (begin x := 1; 1 end + begin x := 2; 1 end) { result = 2 and x = 1 }
+**)
+
+(****
 
 (* Test program *)
 
@@ -138,4 +144,4 @@ let rec has (this:value) (c:value) : bool { variant phi(this) } =
 	end    
 ***)
 
-***)
+****)

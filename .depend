@@ -114,10 +114,11 @@ examples/quicksort/quicksort_why.vo: examples/quicksort/quicksort_why.v lib/coq/
 examples/quicksort/partition_why.vo: examples/quicksort/partition_why.v lib/coq/Why.vo examples/quicksort/Partition.vo
 examples/quicksort/Quicksort.vo: examples/quicksort/Quicksort.v lib/coq/Why.vo examples/quicksort/Partition.vo
 examples/quicksort/Partition.vo: examples/quicksort/Partition.v lib/coq/Why.vo
-examples/misc/swap0_why.vo: examples/misc/swap0_why.v
-examples/misc/power_why.vo: examples/misc/power_why.v
-examples/misc/peano_why.vo: examples/misc/peano_why.v
-examples/misc/loop0_why.vo: examples/misc/loop0_why.v
+examples/misc/swap0_why.vo: examples/misc/swap0_why.v lib/coq/Why.vo
+examples/misc/power_why.vo: examples/misc/power_why.v lib/coq/Why.vo
+examples/misc/peano_why.vo: examples/misc/peano_why.v lib/coq/Why.vo
+examples/misc/mac_carthy_why.vo: examples/misc/mac_carthy_why.v lib/coq/Why.vo
+examples/misc/loop0_why.vo: examples/misc/loop0_why.v lib/coq/Why.vo
 examples/misc/arith_why.vo: examples/misc/arith_why.v lib/coq/Why.vo
 examples/heapsort/swap_why.vo: examples/heapsort/swap_why.v lib/coq/Why.vo
 examples/heapsort/heapsort_why.vo: examples/heapsort/heapsort_why.v lib/coq/Why.vo examples/heapsort/Heap.vo examples/heapsort/Inftree.vo

@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.39 2002-04-18 13:52:29 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.40 2002-06-18 09:28:12 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -64,7 +64,7 @@ let extract_pre pr =
 
 let add_pre p1 pr =
   let k = pr.info.kappa in
-  let p' = p1 @ k.c_pre in
+  let p' = k.c_pre @ p1 in
   { desc = pr.desc; 
     info = {  pr.info with kappa = { k with c_pre = p' } } }
   

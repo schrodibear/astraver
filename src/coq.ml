@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.35 2002-06-07 14:28:32 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.36 2002-06-18 09:28:12 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -227,16 +227,17 @@ let rec print_cc_term fmt = function
   (* special treatment for the if-then-else *)
   | CC_letin (_, ([idb, CC_var_binder (TTpure PTbool); 
 		   qb, CC_pred_binder q] as bl), e1, 
-	      CC_if (CC_var idb', 
+	      CC_if (CC_var idb', _,
 		     CC_lam ((idt, CC_pred_binder _), brt),
-		     CC_lam ((idf, CC_pred_binder _), brf))) 
+		     CC_lam ((idf, CC_pred_binder _), brf)))
     when idb = idb' ->
-      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (sumbool_of_bool %a) of@\n  (left %a) => %a@\n| (right %a) => %a end)@]"
+      fprintf fmt "@[@[<hov 2>let (%a) =@ %a in@]@\n(Cases (sumbool_of_bool [%a:bool]%a %a %a) of@\n  (left %a) => %a@\n| (right %a) => %a end)@]"
       (print_list comma print_binder_id) bl print_cc_term e1 
-	Ident.print qb Ident.print idt print_cc_term brt
+	Ident.print idb print_predicate q Ident.print idb Ident.print qb
+	Ident.print idt print_cc_term brt
 	Ident.print idf print_cc_term brf
   (* non-dependent boolean if-then-else (probably not of use) *)
-  | CC_if (b,e1,e2) ->
+  | CC_if (b,_,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
       hov 0 fmt (print_cc_term fmt) e1;
       fprintf fmt "@\nelse@\n  ";

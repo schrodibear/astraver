@@ -6,6 +6,7 @@ all:
 	make -C quicksort
 	make -C edit-distance
 	make -C heapsort
+	make -C sqrt
 
 clean::
 	rm -f */*~ */*.vo

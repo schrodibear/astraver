@@ -268,9 +268,9 @@ Lemma sqrt_po_5 :
   (Variant1: Z)
   (z0: Z)
   (y0: Z)
-  (Pre6: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
+  (Pre6: Variant1 = y0)
+  (Pre5: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Pre5: Variant1 = y0)
   (Test2: `z0 < y0`)
   (y1: Z)
   (Post3: y1 = z0)
@@ -293,9 +293,9 @@ Lemma sqrt_po_6 :
   (Variant1: Z)
   (z0: Z)
   (y0: Z)
-  (Pre6: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
+  (Pre6: Variant1 = y0)
+  (Pre5: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Pre5: Variant1 = y0)
   (Test2: `z0 < y0`)
   (y1: Z)
   (Post3: y1 = z0)
@@ -329,9 +329,9 @@ Lemma sqrt_po_7 :
   (Variant1: Z)
   (z0: Z)
   (y0: Z)
-  (Pre6: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
+  (Pre6: Variant1 = y0)
+  (Pre5: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Pre5: Variant1 = y0)
   (Test2: `z0 < y0`)
   (y1: Z)
   (z1: Z)
@@ -357,9 +357,9 @@ Lemma sqrt_po_8 :
   (Variant1: Z)
   (z0: Z)
   (y0: Z)
-  (Pre6: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
+  (Pre6: Variant1 = y0)
+  (Pre5: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Pre5: Variant1 = y0)
   (Test2: `z0 < y0`)
   (y1: Z)
   (z1: Z)
@@ -387,9 +387,9 @@ Lemma sqrt_po_9 :
   (Variant1: Z)
   (z0: Z)
   (y0: Z)
-  (Pre6: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
+  (Pre6: Variant1 = y0)
+  (Pre5: `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
          `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)`)
-  (Pre5: Variant1 = y0)
   (Test1: `z0 >= y0`)
   `z0 > 0` /\ `y0 > 0` /\ z0 = `(Zdiv ((Zdiv x y0) + y0) 2)` /\
   `x < (y0 + 1) * (y0 + 1)` /\ `x < (z0 + 1) * (z0 + 1)` /\ `z0 >= y0`.

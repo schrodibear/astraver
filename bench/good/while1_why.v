@@ -15,8 +15,8 @@ Lemma p_po_2 :
   (Pre6: `i <= 10`)
   (Variant1: Z)
   (i0: Z)
-  (Pre5: `i0 <= 10`)
-  (Pre4: Variant1 = `10 - i0`)
+  (Pre5: Variant1 = `10 - i0`)
+  (Pre4: `i0 <= 10`)
   (Test2: `i0 < 10`)
   (Pre3: `i0 <= 10`)
   (i1: Z)
@@ -31,15 +31,15 @@ Lemma p_po_3 :
   (Pre6: `i <= 10`)
   (Variant1: Z)
   (i0: Z)
-  (Pre5: `i0 <= 10`)
-  (Pre4: Variant1 = `10 - i0`)
+  (Pre5: Variant1 = `10 - i0`)
+  (Pre4: `i0 <= 10`)
   (Test2: `i0 < 10`)
   (Pre3: `i0 <= 10`)
   (i1: Z)
   (Post5: `i1 <= 10` /\ (Zwf `0` `10 - i1` `10 - i0`))
   (Zwf `0` `10 - i1` Variant1).
 Proof. 
-Intros. Rewrite Pre4; Tauto.
+Intros. Rewrite Pre5; Tauto.
 Save.
 
 Lemma p_po_4 : 
@@ -47,8 +47,8 @@ Lemma p_po_4 :
   (Pre6: `i <= 10`)
   (Variant1: Z)
   (i0: Z)
-  (Pre5: `i0 <= 10`)
-  (Pre4: Variant1 = `10 - i0`)
+  (Pre5: Variant1 = `10 - i0`)
+  (Pre4: `i0 <= 10`)
   (Test2: `i0 < 10`)
   (Pre3: `i0 <= 10`)
   (i1: Z)
@@ -63,12 +63,15 @@ Lemma p_po_5 :
   (Pre6: `i <= 10`)
   (Variant1: Z)
   (i0: Z)
-  (Pre5: `i0 <= 10`)
-  (Pre4: Variant1 = `10 - i0`)
+  (Pre5: Variant1 = `10 - i0`)
+  (Pre4: `i0 <= 10`)
   (Test1: `i0 >= 10`)
   (Pre2: `i0 <= 10`)
   i0 = `10`.
 Proof.
 Simpl; Intros; Omega.
 Save.
+
+
+
 

@@ -2,6 +2,9 @@
 Require Why.
 Require Omega.
 
+
+
+
 Lemma test_po_1 : 
   (x: Z)
   (Pre4: `x <= 10`)
@@ -15,8 +18,8 @@ Lemma test_po_2 :
   (Pre4: `x <= 10`)
   (Variant1: Z)
   (x0: Z)
-  (Pre3: `x0 <= 10`)
-  (Pre2: Variant1 = `10 - x0`)
+  (Pre3: Variant1 = `10 - x0`)
+  (Pre2: `x0 <= 10`)
   (Test2: `x0 < 10`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -30,14 +33,14 @@ Lemma test_po_3 :
   (Pre4: `x <= 10`)
   (Variant1: Z)
   (x0: Z)
-  (Pre3: `x0 <= 10`)
-  (Pre2: Variant1 = `10 - x0`)
+  (Pre3: Variant1 = `10 - x0`)
+  (Pre2: `x0 <= 10`)
   (Test2: `x0 < 10`)
   (x1: Z)
   (Post7: `x1 <= 10` /\ (Zwf `0` `10 - x1` `10 - x0`))
   (Zwf `0` `10 - x1` Variant1).
 Proof.
-Intros; Rewrite Pre2; Tauto.
+Intros; Rewrite Pre3; Tauto.
 Save.
 
 Lemma test_po_4 : 
@@ -45,8 +48,8 @@ Lemma test_po_4 :
   (Pre4: `x <= 10`)
   (Variant1: Z)
   (x0: Z)
-  (Pre3: `x0 <= 10`)
-  (Pre2: Variant1 = `10 - x0`)
+  (Pre3: Variant1 = `10 - x0`)
+  (Pre2: `x0 <= 10`)
   (Test2: `x0 < 10`)
   (x1: Z)
   (Post7: `x1 <= 10` /\ (Zwf `0` `10 - x1` `10 - x0`))
@@ -60,8 +63,8 @@ Lemma test_po_5 :
   (Pre4: `x <= 10`)
   (Variant1: Z)
   (x0: Z)
-  (Pre3: `x0 <= 10`)
-  (Pre2: Variant1 = `10 - x0`)
+  (Pre3: Variant1 = `10 - x0`)
+  (Pre2: `x0 <= 10`)
   (Test1: `x0 >= 10`)
   x0 = `10`.
 Proof.
@@ -91,4 +94,7 @@ Lemma test_po_7 :
 Proof.
 Simpl; Intros; Omega.
 Save.
+
+
+
 

@@ -36,9 +36,9 @@ Lemma distance_po_2 :
   (Variant1: Z)
   (t0: (array `n2 + 1` Z))
   (i1: Z)
-  (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
+  (Pre4: Variant1 = `n2 + 1 - i1`)
+  (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
-  (Pre3: Variant1 = `n2 + 1 - i1`)
   (Test2: `i1 <= n2`)
   (result1: Z)
   (Post2: (store t0 i1 result1) = (store t0 i1 `n2 - i1`))
@@ -53,9 +53,9 @@ Lemma distance_po_3 :
   (Variant1: Z)
   (t0: (array `n2 + 1` Z))
   (i1: Z)
-  (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
+  (Pre4: Variant1 = `n2 + 1 - i1`)
+  (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
-  (Pre3: Variant1 = `n2 + 1 - i1`)
   (Test2: `i1 <= n2`)
   (t1: (array `n2 + 1` Z))
   (Post2: t1 = (store t0 i1 `n2 - i1`))
@@ -78,9 +78,9 @@ Lemma distance_po_4 :
   (Variant1: Z)
   (t0: (array `n2 + 1` Z))
   (i1: Z)
-  (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
+  (Pre4: Variant1 = `n2 + 1 - i1`)
+  (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
-  (Pre3: Variant1 = `n2 + 1 - i1`)
   (Test2: `i1 <= n2`)
   (i2: Z)
   (t1: (array `n2 + 1` Z))
@@ -90,7 +90,7 @@ Lemma distance_po_4 :
   (Zwf `0` `n2 + 1 - i2` Variant1).
 Proof.
 Intuition.
-Rewrite Pre3; Assumption.
+Rewrite Pre4; Assumption.
 Save.
 
 Lemma distance_po_5 : 
@@ -99,9 +99,9 @@ Lemma distance_po_5 :
   (Variant1: Z)
   (t0: (array `n2 + 1` Z))
   (i1: Z)
-  (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
+  (Pre4: Variant1 = `n2 + 1 - i1`)
+  (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
-  (Pre3: Variant1 = `n2 + 1 - i1`)
   (Test2: `i1 <= n2`)
   (i2: Z)
   (t1: (array `n2 + 1` Z))
@@ -120,9 +120,9 @@ Lemma distance_po_6 :
   (Variant1: Z)
   (t0: (array `n2 + 1` Z))
   (i1: Z)
-  (Pre4: `0 <= i1` /\ `i1 <= n2 + 1` /\
+  (Pre4: Variant1 = `n2 + 1 - i1`)
+  (Pre3: `0 <= i1` /\ `i1 <= n2 + 1` /\
          ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)))
-  (Pre3: Variant1 = `n2 + 1 - i1`)
   (Test1: `i1 > n2`)
   `0 <= i1` /\ `i1 <= n2 + 1` /\
   ((j:Z) (`0 <= j` /\ `j < i1` -> (access t0 j) = `n2 - j`)) /\ `i1 > n2`.
@@ -171,11 +171,11 @@ Lemma distance_po_9 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   `0 <= n2` /\ `n2 < n2 + 1`.
 Proof.
@@ -198,11 +198,11 @@ Lemma distance_po_10 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -232,11 +232,11 @@ Lemma distance_po_11 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -250,14 +250,14 @@ Lemma distance_po_11 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -281,11 +281,11 @@ Lemma distance_po_12 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -299,14 +299,14 @@ Lemma distance_po_12 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -333,11 +333,11 @@ Lemma distance_po_13 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -351,14 +351,14 @@ Lemma distance_po_13 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -386,11 +386,11 @@ Lemma distance_po_14 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -404,14 +404,14 @@ Lemma distance_po_14 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -472,11 +472,11 @@ Lemma distance_po_15 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -490,14 +490,14 @@ Lemma distance_po_15 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -525,11 +525,11 @@ Lemma distance_po_16 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -543,14 +543,14 @@ Lemma distance_po_16 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (result7: Z)
   (Post8: result7 = old2)
@@ -615,11 +615,11 @@ Lemma distance_po_17 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -633,14 +633,14 @@ Lemma distance_po_17 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (old3: Z)
   (t4: (array `n2 + 1` Z))
@@ -679,11 +679,11 @@ Lemma distance_po_18 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -697,14 +697,14 @@ Lemma distance_po_18 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (j3: Z)
   (old3: Z)
@@ -720,7 +720,7 @@ Lemma distance_po_18 :
   (Zwf `0` `j3 + 1` Variant5).
 Proof.
 Intuition.
-Rewrite Pre17; Tauto.
+Rewrite Pre18; Tauto.
 Save.
 
 Lemma distance_po_19 : 
@@ -738,11 +738,11 @@ Lemma distance_po_19 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -756,14 +756,14 @@ Lemma distance_po_19 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test7: `j2 >= 0`)
   (j3: Z)
   (old3: Z)
@@ -800,11 +800,11 @@ Lemma distance_po_20 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -818,14 +818,14 @@ Lemma distance_po_20 :
   (t3: (array `n2 + 1` Z))
   (old2: Z)
   (j2: Z)
-  (Pre18: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
+  (Pre18: Variant5 = `j2 + 1`)
+  (Pre17: `(-1) <= j2` /\ `j2 <= n2 - 1` /\
           ((k:Z)
            (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
           ((k:Z)
            (`0 <= k` /\ `k <= j2` ->
             (min_suffix w1 w2 `i3 + 1` k (access t3 k)))) /\
           (min_suffix w1 w2 `i3 + 1` `j2 + 1` old2))
-  (Pre17: Variant5 = `j2 + 1`)
   (Test4: `j2 < 0`)
   `(-1) <= j2` /\ `j2 <= n2 - 1` /\
   ((k:Z) (`j2 < k` /\ `k <= n2` -> (min_suffix w1 w2 i3 k (access t3 k)))) /\
@@ -851,11 +851,11 @@ Lemma distance_po_21 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -910,11 +910,11 @@ Lemma distance_po_22 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (Pre6: `0 <= n2` /\ `n2 < n2 + 1`)
   (old1: Z)
@@ -962,11 +962,11 @@ Lemma distance_po_23 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (i4: Z)
   (t2: (array `n2 + 1` Z))
@@ -978,7 +978,7 @@ Lemma distance_po_23 :
   (Zwf `0` `i4 + 1` Variant3).
 Proof.
 Intuition.
-Rewrite Pre19; Assumption.
+Rewrite Pre20; Assumption.
 Save.
 
 Lemma distance_po_24 : 
@@ -996,11 +996,11 @@ Lemma distance_po_24 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test8: `i3 >= 0`)
   (i4: Z)
   (t2: (array `n2 + 1` Z))
@@ -1031,11 +1031,11 @@ Lemma distance_po_25 :
   (Variant3: Z)
   (t1: (array `n2 + 1` Z))
   (i3: Z)
-  (Pre20: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
+  (Pre20: Variant3 = `i3 + 1`)
+  (Pre19: `(-1) <= i3` /\ `i3 <= n1 - 1` /\
           ((j:Z)
            (`0 <= j` /\ `j <= n2` ->
             (min_suffix w1 w2 `i3 + 1` j (access t1 j)))))
-  (Pre19: Variant3 = `i3 + 1`)
   (Test3: `i3 < 0`)
   `(-1) <= i3` /\ `i3 <= n1 - 1` /\
   ((j:Z)

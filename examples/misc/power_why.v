@@ -1,5 +1,5 @@
 
-Require Correctness.
+Require Why.
 Require Omega.
 Require ZArithRing.
 
@@ -112,8 +112,8 @@ Lemma power1_po_2 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre2: Variant1 = n0)
+  (Pre3: Variant1 = n0)
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (Test3: (Zodd n0))
   (y2: Z)
@@ -125,10 +125,9 @@ Lemma power1_po_2 :
       (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
-Clear result1 Bool1 result2 Bool2.
 Repeat Split; Try Omega.
 Rewrite H0; Clear H0.
-Decompose [and] Pre3; Clear Pre3.
+Decompose [and] Pre2; Clear Pre2.
 Rewrite (Zodd_div2 n0 H1 Test3) in H0. Rewrite H0.
 Rewrite H; Clear H.
 Rewrite Post3; Clear Post3.
@@ -159,8 +158,8 @@ Lemma power1_po_3 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre2: Variant1 = n0)
+  (Pre3: Variant1 = n0)
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (Test2: (Zeven n0))
   ((m:Z)
@@ -170,9 +169,8 @@ Lemma power1_po_3 :
       (Zwf `0` n1 n0))))).
 Proof.
 Simpl; Intros.
-Clear result1 Bool1 result2 Bool2.
 Repeat Split; Try Omega.
-Decompose [and] Pre3; Clear Pre3.
+Decompose [and] Pre2; Clear Pre2.
 Rewrite (Zeven_div2 n0 Test2) in H1. Rewrite H1.
 Rewrite H; Clear H.
 Rewrite H0; Clear H0.
@@ -198,8 +196,8 @@ Lemma power1_po_4 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre2: Variant1 = n0)
+  (Pre3: Variant1 = n0)
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (y2: Z)
   (Post12: ((m:Z)
@@ -227,8 +225,8 @@ Lemma power1_po_5 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre2: Variant1 = n0)
+  (Pre3: Variant1 = n0)
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (m2: Z)
   (n1: Z)
@@ -237,7 +235,7 @@ Lemma power1_po_5 :
            (Zwf `0` n1 n0))
   (Zwf `0` n1 Variant1).
 Proof.
-Intros; Rewrite Pre2; Tauto.
+Intros; Rewrite Pre3; Tauto.
 Save.
 
 Lemma power1_po_6 : 
@@ -251,8 +249,8 @@ Lemma power1_po_6 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre2: Variant1 = n0)
+  (Pre3: Variant1 = n0)
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test4: `n0 > 0`)
   (m2: Z)
   (n1: Z)
@@ -275,8 +273,8 @@ Lemma power1_po_7 :
   (y1: Z)
   (n0: Z)
   (m1: Z)
-  (Pre3: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
-  (Pre2: Variant1 = n0)
+  (Pre3: Variant1 = n0)
+  (Pre2: (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0`)
   (Test1: `n0 <= 0`)
   (Zpower x n) = `y1 * (Zpower m1 n0)` /\ `n0 >= 0` /\ `n0 <= 0`.
 Proof.

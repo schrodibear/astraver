@@ -15,7 +15,7 @@ Parameter foo : Set.
 (*Why*) Parameter f2 : (_: Z)bool.
 
 (*Why*) Parameter f3 :
-  (y: Z)(x: Z)(_: `x >= 0`)(sig_2 Z
+  (x: Z)(y: Z)(_: `x >= 0`)(sig_2 Z
   Z [y0:Z][result:Z](y0 = `y + x + result`)).
 
 (*Why*) Parameter f4 : (_: unit)unit.
@@ -34,6 +34,11 @@ Lemma p1_po_1 :
 Proof.
 Tauto.
 Save.
+
+
+
+
+
 
 
 
@@ -83,11 +88,21 @@ Save.
 
 
 
+
+
+
+
+
 Lemma p3_po_1 : 
   True /\ True.
 Proof.
 Tauto.
 Save.
+
+
+
+
+
 
 
 
@@ -137,11 +152,21 @@ Save.
 
 
 
+
+
+
+
+
 Lemma p5_po_1 : 
   False \/ ~False.
 Proof. 
 Auto.
 Save.
+
+
+
+
+
 
 
 
@@ -191,6 +216,11 @@ Save.
 
 
 
+
+
+
+
+
 Lemma p7_po_1 : 
   ((x:Z) x = x).
 Proof.
@@ -218,11 +248,21 @@ Save.
 
 
 
+
+
+
+
+
 Lemma p8_po_1 : 
   True /\ ((x:Z) x = x).
 Proof.
 Auto.
 Save.
+
+
+
+
+
 
 
 
@@ -482,11 +522,71 @@ Save.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Lemma ar6_po_1 : 
   ~(`1` = `0`).
 Proof.
 Omega.
 Save.
+
+
+
+
+
 
 
 
@@ -1097,11 +1197,156 @@ Save.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Lemma arr1_po_1 : 
   `0 <= 0` /\ `0 < 10`.
 Proof. (* arr1_po_1 *)
 Omega.
 Save.
+
+
+
+
+
 
 
 
@@ -1151,6 +1396,11 @@ Save.
 
 
 
+
+
+
+
+
 Lemma arr3_po_1 : 
   (v4: Z)
   (Pre2: v4 = `0`)
@@ -1158,6 +1408,11 @@ Lemma arr3_po_1 :
 Proof. (* arr3_po_1 *)
 Intros; Omega.
 Save.
+
+
+
+
+
 
 
 
@@ -1218,6 +1473,11 @@ Save.
 
 
 
+
+
+
+
+
 Lemma arr5_po_1 : 
   (v6: (array `10` Z))
   (result: Z)
@@ -1248,6 +1508,11 @@ Save.
 
 
 
+
+
+
+
+
 Lemma arr6_po_1 : 
   (v6: (array `10` Z))
   (result: Z)
@@ -1256,6 +1521,11 @@ Lemma arr6_po_1 :
 Proof. (* arr6_po_1 *)
 Intros; Omega.
 Save.
+
+
+
+
+
 
 
 
@@ -1360,6 +1630,21 @@ Save.
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Lemma fc3_po_1 : 
   (result: Z)
   (Post1: result = `0`)
@@ -1367,38 +1652,6 @@ Lemma fc3_po_1 :
   (Post2: result0 = `0`)
   `result >= 0`.
 Proof. Intros; Omega. Save.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1441,6 +1694,11 @@ Save.
 
 
 
+
+
+
+
+
 Lemma an3_po_1 : 
   (v4: Z)
   (Pre1: `v4 >= 0`)
@@ -1450,6 +1708,11 @@ Lemma an3_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
+
+
 
 
 

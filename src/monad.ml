@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: monad.ml,v 1.32 2002-06-07 14:28:32 filliatr Exp $ i*)
+(*i $Id: monad.ml,v 1.33 2002-06-18 09:28:12 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -36,17 +36,17 @@ let product before ren env w q = match q,w with
     where the [xi] are given by the renaming [ren]. *)
 
 let arrow_pred ren env v pl = 
-  List.fold_left 
-    (fun t p -> 
+  List.fold_right
+    (fun p t -> 
        if p.p_assert then 
 	 t
        else 
 	 let p = apply_pre ren env p in
 	 TTarrow ((id_of_name p.p_name, CC_pred_binder p.p_value), t))
-    v pl
+    pl v
 	
 let arrow_vars = 
-  List.fold_left (fun t (id,v) -> TTarrow ((id, CC_var_binder v), t))
+  List.fold_right (fun (id,v) t -> TTarrow ((id, CC_var_binder v), t))
 
 
 (*s Translation of effects types in CC types.
@@ -63,7 +63,7 @@ let rec trad_type_c ren env k =
   let ty = product before ren' env lo q in
   let ty = arrow_pred ren env ty p in
   let li = input ren env i in
-  arrow_vars ty li
+  arrow_vars li ty
 
 and trad_type_v ren env = function
   | Ref _ 
@@ -86,7 +86,7 @@ and trad_type_v ren env = function
 		 failwith "Monad: trad_type_v: not yet implemented")
  	  ([],ren,env) bl 
       in
-      arrow_vars (trad_type_c ren' env' c) bl'
+      arrow_vars (List.rev bl') (trad_type_c ren' env' c)
   | PureType c ->
       TTpure c
 
@@ -254,13 +254,13 @@ let bind_pre ren env p =
   pre_name p.p_name, CC_pred_binder (apply_pre ren env p).p_value
 
 let abs_pre env pl t =
-  List.fold_left
-    (fun t p ->
+  List.fold_right
+    (fun p t ->
        if p.p_assert then
 	 insert_pre env p t
        else
 	 (fun ren -> CC_lam (bind_pre ren env p, t ren)))
-    t pl
+    pl t
 
 let abstraction info e ren =
   let env = info.env in
@@ -328,7 +328,7 @@ let wfrec_with_binders bl (phi,r) info f ren =
     cc_applist (CC_var w) ([CC_term tphi; CC_hole decphi] @ input ren) 
   in
   cc_applist (CC_var well_founded_induction)
-    ([CC_term r;
+    ([CC_type a; CC_term r;
       CC_hole (papplist (Pvar well_founded) [r]);
       CC_type (TTlambda ((vphi, CC_var_binder a), tphi));
       cc_lam 

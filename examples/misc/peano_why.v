@@ -1,6 +1,6 @@
 
+Require Why.
 Require Omega.
-Require Correctness.
 Require ZArithRing.
 
 Lemma add1_po_1 : 
@@ -20,8 +20,8 @@ Lemma add1_po_2 :
   (Variant1: Z)
   (z0: Z)
   (x0: Z)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Pre2: Variant1 = z0)
+  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Test2: `z0 > 0`)
   (x1: Z)
   (Post2: x1 = `x0 + 1`)
@@ -41,8 +41,8 @@ Lemma add1_po_3 :
   (Variant1: Z)
   (z0: Z)
   (x0: Z)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Pre2: Variant1 = z0)
+  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Test2: `z0 > 0`)
   (x1: Z)
   (z1: Z)
@@ -61,8 +61,8 @@ Lemma add1_po_4 :
   (Variant1: Z)
   (z0: Z)
   (x0: Z)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Pre2: Variant1 = z0)
+  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Test2: `z0 > 0`)
   (x1: Z)
   (z1: Z)
@@ -79,8 +79,8 @@ Lemma add1_po_5 :
   (Variant1: Z)
   (z0: Z)
   (x0: Z)
-  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Pre2: Variant1 = z0)
+  (I: `0 <= z0` /\ x0 = `x + (y - z0)`)
   (Test1: `z0 <= 0`)
   `0 <= z0` /\ x0 = `x + (y - z0)` /\ `z0 <= 0`.
 Proof. Intuition. Save.
@@ -135,8 +135,8 @@ Lemma rec_add1_po_2 :
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: `y >= 0`)
-  (Pre3: Variant1 = y)
+  (Pre4: Variant1 = y)
+  (Pre3: `y >= 0`)
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -151,8 +151,8 @@ Lemma rec_add1_po_3 :
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: `y >= 0`)
-  (Pre3: Variant1 = y)
+  (Pre4: Variant1 = y)
+  (Pre3: `y >= 0`)
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -168,8 +168,8 @@ Lemma rec_add1_po_4 :
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: `y >= 0`)
-  (Pre3: Variant1 = y)
+  (Pre4: Variant1 = y)
+  (Pre3: `y >= 0`)
   (Test2: `0 < y`)
   (x1: Z)
   (Post1: x1 = `x0 + 1`)
@@ -186,8 +186,8 @@ Lemma rec_add1_po_5 :
   (Variant1: Z)
   (y: Z)
   (x0: Z)
-  (Pre4: `y >= 0`)
-  (Pre3: Variant1 = y)
+  (Pre4: Variant1 = y)
+  (Pre3: `y >= 0`)
   (Test1: `0 >= y`)
   x0 = `x0 + y`.
 Proof.
@@ -239,8 +239,8 @@ Lemma mult1_po_2 :
   (Variant1: Z)
   (z0: Z)
   (x1: Z)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Pre3: Variant1 = z0)
+  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Test2: `z0 > 0`)
   `result0 >= 0`.
 Proof.
@@ -260,8 +260,8 @@ Lemma mult1_po_3 :
   (Variant1: Z)
   (z0: Z)
   (x1: Z)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Pre3: Variant1 = z0)
+  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Test2: `z0 > 0`)
   (x2: Z)
   (Post8: x2 = `x1 + result0`)
@@ -292,8 +292,8 @@ Lemma mult1_po_4 :
   (Variant1: Z)
   (z0: Z)
   (x1: Z)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Pre3: Variant1 = z0)
+  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Test2: `z0 > 0`)
   (x2: Z)
   (z1: Z)
@@ -317,8 +317,8 @@ Lemma mult1_po_5 :
   (Variant1: Z)
   (z0: Z)
   (x1: Z)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Pre3: Variant1 = z0)
+  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Test2: `z0 > 0`)
   (x2: Z)
   (z1: Z)
@@ -341,8 +341,8 @@ Lemma mult1_po_6 :
   (Variant1: Z)
   (z0: Z)
   (x1: Z)
-  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Pre3: Variant1 = z0)
+  (I: `0 <= z0` /\ x1 = `x * (y - z0)`)
   (Test1: `z0 <= 0`)
   `0 <= z0` /\ x1 = `x * (y - z0)` /\ `z0 <= 0`.
 Proof. Tauto. Save.

@@ -16,6 +16,9 @@ Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
 
+
+
+
 Lemma p2_po_1 : 
   (Pre1: (q `7`))
   (x0: Z)
@@ -24,6 +27,9 @@ Lemma p2_po_1 :
 Proof.
 Intros; Rewrite Post1; Assumption.
 Save.
+
+
+
 
 Lemma p3_po_1 : 
   (x: Z)
@@ -36,6 +42,9 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p4_po_1 : 
   (x0: Z)
   (Post1: x0 = `7`)
@@ -46,11 +55,17 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p5_po_1 : 
   `3 + 4` = `7`.
 Proof.
 Omega.
 Save.
+
+
+
 
 Lemma p6_po_1 : 
   (result: Z)
@@ -60,6 +75,9 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p7_po_1 : 
   (result: Z)
   (Post1: result = `4`)
@@ -67,6 +85,9 @@ Lemma p7_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 Lemma p8_po_1 : 
   (x: Z)
@@ -77,6 +98,9 @@ Lemma p8_po_1 :
 Proof.
 Intuition; Rewrite Post1; Assumption.
 Save.
+
+
+
 
 Lemma p9_po_1 : 
   (x0: Z)
@@ -96,6 +120,9 @@ Proof.
 Intuition.
 Save.
 
+
+
+
 (*Why*) Parameter fsucc : (x: Z)(sig_1 Z [result:Z](result = `x + 1`)).
 
 Lemma p10_po_1 : 
@@ -105,6 +132,9 @@ Lemma p10_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 Lemma p11_po_1 : 
   (result: Z)
@@ -116,6 +146,9 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p11a_po_1 : 
   (result: Z)
   (Post1: result = `1 + 1`)
@@ -123,6 +156,9 @@ Lemma p11a_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 (*Why*) Parameter incrx :
   (_: unit)(x: Z)(sig_2 Z unit [x0:Z][result:unit](x0 = `x + 1`)).
@@ -137,6 +173,9 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p13_po_1 : 
   (x: Z)
   (x0: Z)
@@ -148,6 +187,9 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p13a_po_1 : 
   (x: Z)
   (x0: Z)
@@ -158,6 +200,9 @@ Lemma p13a_po_1 :
 Proof.
 Intros; Omega.
 Save.
+
+
+
 
 (*Why*) Parameter incrx2 :
   (_: unit)(x: Z)(sig_2 Z Z [x0:Z][result:Z](x0 = `x + 1` /\ result = x0)).
@@ -173,11 +218,17 @@ Proof.
 Intros; Omega.
 Save.
 
+
+
+
 Lemma p15_po_1 : 
   `0 <= 0` /\ `0 < 10`.
 Proof. (* p15_po_1 *)
 Omega.
 Save.
+
+
+
 
 Lemma p16_po_1 : 
   (t: (array `10` Z))
@@ -187,6 +238,9 @@ Lemma p16_po_1 :
 Proof. (* p16_po_1 *)
 Intros; Omega.
 Save.
+
+
+
 
 Lemma p17_po_1 : 
   (t: (array `10` Z))
@@ -203,4 +257,7 @@ Save.
   coq-prog-name: "coqtop -emacs -q -I ../../lib/coq"
  End:
 *)
+
+
+
 

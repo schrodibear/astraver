@@ -1,6 +1,6 @@
 
+Require Why.
 Require Omega.
-Require Correctness.
 
 Lemma p_po_1 : 
   (x: Z)
@@ -13,8 +13,8 @@ Lemma p_po_2 :
   (Pre6: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: `0 <= x0` /\ `x0 <= x`)
-  (Pre4: Variant1 = x0)
+  (Pre5: Variant1 = x0)
+  (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test2: `x0 > 0`)
   `x0 >= 0`.
 Proof.
@@ -26,8 +26,8 @@ Lemma p_po_3 :
   (Pre6: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: `0 <= x0` /\ `x0 <= x`)
-  (Pre4: Variant1 = x0)
+  (Pre5: Variant1 = x0)
+  (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test2: `x0 > 0`)
   (Pre3: `x0 >= 0`)
   (x1: Z)
@@ -42,15 +42,15 @@ Lemma p_po_4 :
   (Pre6: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: `0 <= x0` /\ `x0 <= x`)
-  (Pre4: Variant1 = x0)
+  (Pre5: Variant1 = x0)
+  (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test2: `x0 > 0`)
   (Pre3: `x0 >= 0`)
   (x1: Z)
   (Post5: `0 <= x1` /\ `x1 <= x` /\ (Zwf `0` x1 x0))
   (Zwf `0` x1 Variant1).
 Proof. 
-Intros; Rewrite Pre4; Intuition.
+Intros; Rewrite Pre5; Intuition.
 Save.
 
 Lemma p_po_5 : 
@@ -58,8 +58,8 @@ Lemma p_po_5 :
   (Pre6: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: `0 <= x0` /\ `x0 <= x`)
-  (Pre4: Variant1 = x0)
+  (Pre5: Variant1 = x0)
+  (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test2: `x0 > 0`)
   (Pre3: `x0 >= 0`)
   (x1: Z)
@@ -74,8 +74,8 @@ Lemma p_po_6 :
   (Pre6: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: `0 <= x0` /\ `x0 <= x`)
-  (Pre4: Variant1 = x0)
+  (Pre5: Variant1 = x0)
+  (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test1: `x0 <= 0`)
   `x0 >= 0`.
 Proof.
@@ -87,8 +87,8 @@ Lemma p_po_7 :
   (Pre6: `x >= 0`)
   (Variant1: Z)
   (x0: Z)
-  (Pre5: `0 <= x0` /\ `x0 <= x`)
-  (Pre4: Variant1 = x0)
+  (Pre5: Variant1 = x0)
+  (Pre4: `0 <= x0` /\ `x0 <= x`)
   (Test1: `x0 <= 0`)
   (Pre2: `x0 >= 0`)
   x0 = `0`.
@@ -103,4 +103,6 @@ Lemma p_po_8 :
 Proof.
 Intros; Omega.
 Save.
+
+
 

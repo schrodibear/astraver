@@ -167,9 +167,9 @@ Lemma downheap_po_2 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -191,9 +191,9 @@ Lemma downheap_po_3 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -216,9 +216,9 @@ Lemma downheap_po_4 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -245,9 +245,9 @@ Lemma downheap_po_5 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -273,9 +273,9 @@ Lemma downheap_po_6 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -299,9 +299,9 @@ Lemma downheap_po_7 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -324,9 +324,9 @@ Lemma downheap_po_8 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -350,9 +350,9 @@ Lemma downheap_po_9 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -376,9 +376,9 @@ Lemma downheap_po_10 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -410,9 +410,9 @@ Lemma downheap_po_11 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -440,9 +440,9 @@ Lemma downheap_po_12 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -540,9 +540,9 @@ Lemma downheap_po_13 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test8: `result <= n`)
@@ -582,9 +582,9 @@ Lemma downheap_po_14 :
   (k: Z)
   (n: Z)
   (t0: (array N Z))
-  (Pre9: `0 <= k` /\ `k <= n` /\ `n < N` /\
+  (Pre9: Variant1 = `n - k`)
+  (Pre8: `0 <= k` /\ `k <= n` /\ `n < N` /\
          ((i:Z) (`k + 1 <= i` /\ `i <= n` -> (heap t0 n i))))
-  (Pre8: Variant1 = `n - k`)
   (result: Z)
   (Post1: result = `2 * k + 1`)
   (Test1: `result > n`)

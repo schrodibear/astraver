@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: typing.ml,v 1.48 2002-06-07 14:28:32 filliatr Exp $ i*)
+(*i $Id: typing.ml,v 1.49 2002-06-18 09:28:12 filliatr Exp $ i*)
 
 (*s Typing. *)
 
@@ -338,7 +338,7 @@ let rec typef lab env expr =
   let (eq,q) = state_post lab env (result,v,e) loc expr.info.post in
   let toplabel = label_name () in
   let e' = Effect.union e (Effect.union ep eq) in
-  let p' = List.map assert_pre p1 @ expr.info.pre in
+  let p' = expr.info.pre @ List.map assert_pre p1 in
   match q, d with
     | None, Coerce expr' ->
 	let c = { c_result_name = result; c_result_type = v;
@@ -394,7 +394,7 @@ and typef_desc lab env loc = function
 	| Expression c when post t_e = None ->
 	    let t = make_raw_access env (x,x) c in
 	    let pre = anonymous_pre true (make_pre_access env x c) in
-	    Expression t, pre :: t_e.info.kappa.c_pre
+	    Expression t, t_e.info.kappa.c_pre @ [pre]
 	| _ ->
 	    TabAcc (check, x, t_e), []
       in

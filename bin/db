@@ -1,4 +1,5 @@
 dir ../src
 load_printer "ident.cmo"
 install_printer Ident.print
-set arguments "--valid ../bench/test.ml"
+set arguments --valid ../bench/test.ml
+

@@ -37,6 +37,8 @@ DOCUMENTATION
 
  - Coq library (in ref man)
 
+ - semantics (evaluation strategy)
+
 BUGS
 ====
 

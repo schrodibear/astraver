@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.34 2002-06-07 09:34:46 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.35 2002-06-18 09:28:12 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -77,6 +77,7 @@ let effect p = p.info.kappa.c_effect
 let pre p = p.info.kappa.c_pre
 let post p = p.info.kappa.c_post
 let result_type p = p.info.kappa.c_result_type
+let result_name p = p.kappa.c_result_name
 
 
 (*s [apply_pre] and [apply_post] instantiate pre- and post- conditions
@@ -434,7 +435,7 @@ let rec print_cc_term fmt = function
       fprintf fmt "@]"
   | CC_case _ ->
       fprintf fmt "<Case...>"
-  | CC_if (b,e1,e2) ->
+  | CC_if (b,_,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
       hov 0 fmt (print_cc_term fmt) e1;
       fprintf fmt "@\nelse@\n  ";

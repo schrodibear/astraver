@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: mlize.ml,v 1.42 2002-06-07 09:34:45 filliatr Exp $ i*)
+(*i $Id: mlize.ml,v 1.43 2002-06-18 09:28:12 filliatr Exp $ i*)
 
 open Ident
 open Logic
@@ -197,20 +197,29 @@ and trad_block info =
 and trad_conditional info info1 te1 info2 te2 info3 te3 =
   Monad.compose info1 te1
     (fun resb ren' -> 
+       let q1 = 
+	 option_app (apply_post info1.label ren' info.env) info1.kappa.c_post
+       in
+       let ty1 = 
+	 option_app 
+	   (fun q -> 	       
+	      TTlambda ((result_name info1, CC_var_binder (TTpure PTbool)),
+			TTpred q.a_value)) q1
+       in
        let branch infob eb tb = 
 	 let t = 
-	   Monad.compose infob eb
-	     (fun r -> Monad.unit info (Tvar r)) ren'
+	   Monad.compose infob eb (fun r -> Monad.unit info (Tvar r)) ren'
 	 in
-	 match info1.kappa.c_post with
-	   | Some q1 -> 
+	 match q1 with
+	   | Some q -> 
 	       let n = test_name Anonymous in
-	       let q = apply_post info1.label ren' info.env q1 in
 	       let q = tsubst_in_predicate (subst_one result tb) q.a_value in
 	       CC_lam ((n, CC_pred_binder (simplify q)), t)
-	   | None -> t
+	   | None -> 
+	       t
        in
-       CC_if (CC_var resb, branch info2 te2 ttrue, branch info3 te3 tfalse))
+       CC_if (CC_var resb, ty1, 
+	      branch info2 te2 ttrue, branch info3 te3 tfalse))
 
 and trans e =
   cross_label e.info.label (abstraction e.info (trad e))
