@@ -563,7 +563,8 @@ Precedences are the following (from strongest to weakest): \te{not},
 Implication is right associative.
 
 Syntactic sugar: $t_1 ~ R_1 ~ t_2 ~ R_2 ~ t_3$ is equivalent to
-$t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$.
+$t_1 ~ R_1 ~ t_2 ~ \texttt{and} ~ t_2 ~ R_2 ~ t_3$ for any relations
+$R_1$ and $R_2$. Example: \texttt{0 <= x < y}.
 
 \begin{figure}[htbp]
 \begin{center}

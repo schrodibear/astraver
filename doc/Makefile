@@ -8,7 +8,7 @@ SRCFILES=ast.mli typing.mli typing.ml monad.mli monad.ml mlize.mli mlize.ml
 dep.ps::
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
 
-code.tex::
+code.tex:
 	cd ../src; ocamlweb --no-preamble -o ../doc/code.tex $(SRCFILES)
 
 manual.dvi: manual.tex
