@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: coq.ml,v 1.38 2002-06-21 14:22:32 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.39 2002-06-21 14:24:29 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -240,7 +240,7 @@ let rec print_cc_term fmt = function
   (* special treatment for the if-then-else *)
   | CC_letin (_, ([idb, CC_var_binder (TTpure PTbool); 
 		   qb, CC_pred_binder q] as bl), e1, 
-	      CC_if (CC_var idb', _,
+	      CC_if (CC_var idb',
 		     CC_lam ((idt, CC_pred_binder _), brt),
 		     CC_lam ((idf, CC_pred_binder _), brf)))
     when idb = idb' ->
@@ -250,7 +250,7 @@ let rec print_cc_term fmt = function
 	Ident.print idt print_cc_term brt
 	Ident.print idf print_cc_term brf
   (* non-dependent boolean if-then-else (probably not of use) *)
-  | CC_if (b,_,e1,e2) ->
+  | CC_if (b,e1,e2) ->
       fprintf fmt "@[if "; print_cc_term fmt b; fprintf fmt " then@\n  ";
       hov 0 fmt (print_cc_term fmt) e1;
       fprintf fmt "@\nelse@\n  ";
