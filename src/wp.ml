@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: wp.ml,v 1.52 2002-09-12 11:31:25 filliatr Exp $ i*)
+(*i $Id: wp.ml,v 1.53 2002-09-18 06:12:20 filliatr Exp $ i*)
 
 open Format
 open Ident
@@ -19,14 +19,12 @@ open Rename
 let force_post env q e = match q with
   | None -> 
       e
-  | Some ({ a_value = c }, []) ->
-      let ids = predicate_refs env c in
+  | Some c ->
+      let ids = post_refs env c in
       let ef = Effect.add_reads ids e.info.kappa.c_effect in
       let k = { e.info.kappa with c_post = q; c_effect = ef } in
       let i = { e.info with kappa = k } in
       { desc = e.desc; info = i }
-  | Some _ ->
-      assert false
 
 let post_if_none env q p = match post p with
   | None -> force_post env q p 

@@ -110,8 +110,8 @@ src/effect.cmi: src/ident.cmi src/logic.cmi
 src/env.cmi: src/ast.cmi src/ident.cmi src/logic.cmi src/types.cmi 
 src/error.cmi: src/ident.cmi 
 src/logic.cmi: src/ident.cmi 
-src/ltyping.cmi: src/ast.cmi src/env.cmi src/loc.cmi src/logic.cmi \
-    src/ptree.cmi src/types.cmi 
+src/ltyping.cmi: src/ast.cmi src/env.cmi src/ident.cmi src/loc.cmi \
+    src/logic.cmi src/ptree.cmi src/types.cmi 
 src/misc.cmi: src/ast.cmi src/cc.cmi src/ident.cmi src/loc.cmi src/logic.cmi \
     src/ptree.cmi src/types.cmi 
 src/mlize.cmi: src/ast.cmi src/cc.cmi src/env.cmi src/logic.cmi \
@@ -178,4 +178,5 @@ bench/tmp/floats_why.vo: bench/tmp/floats_why.v lib/coq/Why.vo lib/coq/WhyFloat.
 bench/good/recfun_why.vo: bench/good/recfun_why.v lib/coq/Why.vo
 bench/good/po_why.vo: bench/good/po_why.v lib/coq/Why.vo
 bench/good/loops_why.vo: bench/good/loops_why.v lib/coq/Why.vo
+bench/good/exns_why.vo: bench/good/exns_why.v lib/coq/Why.vo
 bench/good/all_why.vo: bench/good/all_why.v lib/coq/Why.vo

@@ -32,8 +32,8 @@ OCAMLBEST= @OCAMLBEST@
 OCAMLVERSION = @OCAMLVERSION@
 
 INCLUDES = -I src
-BFLAGS   = -g $(INCLUDES) -I @CAMLP4LIB@
-OFLAGS   = $(INCLUDES) -I @CAMLP4LIB@
+BFLAGS   = -g $(INCLUDES) -I +camlp4
+OFLAGS   = $(INCLUDES) -I +camlp4
 
 CMO = src/version.cmo src/options.cmo src/loc.cmo src/ident.cmo \
 	   src/effect.cmo src/misc.cmo src/report.cmo		\

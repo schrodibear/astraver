@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: cc.mli,v 1.2 2002-09-12 15:12:44 filliatr Exp $ i*)
+(*i $Id: cc.mli,v 1.3 2002-09-18 06:12:19 filliatr Exp $ i*)
 
 (*s Intermediate CC terms. *)
 
@@ -23,6 +23,11 @@ and cc_bind_type =
   | CC_untyped_binder
 
 and cc_binder = variable * cc_bind_type
+
+type cc_pattern = 
+  | PPvariable of variable
+  | PPcons of Ident.t * cc_pattern list
+
 (* ['a] is the type of holes *)
 
 type 'a cc_term =
@@ -32,6 +37,7 @@ type 'a cc_term =
   | CC_app of 'a cc_term * 'a cc_term
   | CC_tuple of 'a cc_term list * cc_type option
   | CC_if of 'a cc_term * 'a cc_term * 'a cc_term
+  | CC_case of 'a cc_term * (cc_pattern * 'a cc_term) list
   | CC_term of term
   | CC_hole of 'a
   | CC_type of cc_type

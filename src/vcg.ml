@@ -138,6 +138,10 @@ let vcg base t =
 	let f' = traverse ctx f in
 	let a' = traverse ctx a in
 	CC_app (f', a')
+    | CC_case (e, pl) ->
+	let e' = traverse ctx e in
+	let pl' = List.map (fun (p, e) -> (p, traverse ctx e)) pl in
+	CC_case (e', pl')
     | CC_tuple (el,p) ->
 	let el' = List.map (traverse ctx) el in
 	CC_tuple (el',p)

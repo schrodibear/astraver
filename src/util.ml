@@ -1,6 +1,6 @@
 (* Certification of Imperative Programs / Jean-Christophe Filliâtre *)
 
-(*i $Id: util.ml,v 1.48 2002-09-12 15:12:45 filliatr Exp $ i*)
+(*i $Id: util.ml,v 1.49 2002-09-18 06:12:20 filliatr Exp $ i*)
 
 open Logic
 open Ident
@@ -42,6 +42,9 @@ let predicate_refs env c =
 
 let term_refs env c =
   set_map_succeed (labelled_reference env) (term_vars c)
+
+let post_refs env q =
+  set_map_succeed (labelled_reference env) (post_vars q)
 
 (*s Labels management *)
 
@@ -458,6 +461,8 @@ let rec print_cc_term fmt = function
       fprintf fmt "@\nelse@\n  ";
       hov 0 fmt (print_cc_term fmt) e2;
       fprintf fmt "@]"
+  | CC_case (e,pl) ->
+      fprintf fmt "@[<case>@]"
   | CC_term c ->
       fprintf fmt "@["; print_term fmt c; fprintf fmt "@]"
   | CC_hole c ->
