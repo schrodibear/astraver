@@ -64,8 +64,8 @@
     | Svolatile
     | Srestrict
     | Ssign of sign
-    | Sstruct_decl of string option * parameters 
-    | Sunion_decl of string option * parameters
+    | Sstruct_decl of string option * fields
+    | Sunion_decl of string option * fields
 	
   and specifiers = specifier list
 
@@ -74,9 +74,10 @@
     | Dpointer of declarator
     | Darray of declarator * cexpr option
     | Dfunction of declarator * parameters * annot option
-    | Dbitfield of declarator * cexpr
 
   and parameters = (specifiers * declarator * string) list
+
+  and fields = (specifiers * declarator * string * cexpr option) list
 
   (* interps a list of specifiers / declarators as a [ctype] *)
   (* TODO: short/long *)
@@ -167,9 +168,9 @@
       | Stype t :: sp when tyo = None ->
 	  base_type (Some t) sp
       | Sstruct_decl (so, pl) :: sp when tyo = None ->
-	  base_type (Some (CTstruct_decl (so, params pl))) sp
+	  base_type (Some (CTstruct_decl (so, fields pl))) sp
       | Sunion_decl (so, pl) :: sp when tyo = None ->
-	  base_type (Some (CTunion_decl (so, params pl))) sp
+	  base_type (Some (CTunion_decl (so, fields pl))) sp
       | (Stype _ | Sstruct_decl _ | Sunion_decl _) :: _ ->
 	  error "two or more data types in declaration"
       | _ :: sp ->
@@ -179,9 +180,10 @@
       | Dpointer d -> full_type (CTpointer ty) d
       | Darray (d, so) -> full_type (CTarray (ty, so)) d
       | Dfunction (d, pl, _) -> full_type (CTfun (params pl, ty)) d
-      | Dbitfield (d, e) -> full_type (CTbitfield (ty, e)) d
     and params pl = 
       List.map (fun (s,d,x) -> (interp_type false s d, x)) pl
+    and fields fl =
+      List.map (fun (s,d,x,bf) -> (interp_type false s d, x, bf)) fl
     in
     let bt = base_type None specs in
     let bt = apply_sign sg bt in
@@ -573,7 +575,7 @@ struct_declaration_list
 
 struct_declaration
         : specifier_qualifier_list struct_declarator_list SEMICOLON 
-            { let s = $1 in List.map (fun (id,d) -> s,d,id) $2 }
+            { let s = $1 in List.map (fun ((id,d),bf) -> s,d,id,bf) $2 }
         ;
 
 specifier_qualifier_list
@@ -597,11 +599,11 @@ struct_declarator_list
 
 struct_declarator
         : declarator 
-            { $1 }
+            { $1, None }
         | COLON constant_expression 
-	    { "_", Dbitfield (Dsimple, $2) }
+	    { ("_", Dsimple), Some $2 }
         | declarator COLON constant_expression 
-	    { let x,d = $1 in x, Dbitfield (d, $3) }
+	    { $1, Some $3 }
         ;
 
 enum_specifier

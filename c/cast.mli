@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.7 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.8 2003-12-23 15:45:53 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -35,12 +35,12 @@ type 'expr ctype_node =
   | CTpointer of 'expr ctype_node
   | CTbitfield of 'expr ctype_node * 'expr
   | CTstruct_named of string
-  | CTstruct_decl of string option * 'expr parameters 
+  | CTstruct_decl of string option * 'expr field list
   | CTunion_named of string
-  | CTunion_decl of string option * 'expr parameters
+  | CTunion_decl of string option * 'expr field list
   | CTenum_named of string
   | CTenum_decl of string option * (string * 'expr option) list
-  | CTfun of 'expr parameters * 'expr ctype_node
+  | CTfun of 'expr parameter list * 'expr ctype_node
 
 and 'expr ctype = { 
   ctype_node : 'expr ctype_node;
@@ -49,8 +49,9 @@ and 'expr ctype = {
   ctype_volatile : bool;
 }
 
-and 'expr parameters = ('expr ctype * string) list
+and 'expr parameter = 'expr ctype * string
 
+and 'expr field = 'expr ctype * string * 'expr option
 
 (*s C parsed abstract syntax trees *)
 
@@ -128,7 +129,7 @@ and decl =
   | Ctypedecl of cexpr ctype
   | Cdecl of cexpr ctype * string * cexpr c_initializer
   | Cfundef of 
-      cexpr ctype * string * cexpr parameters * annotated_block located
+      cexpr ctype * string * cexpr parameter list * annotated_block located
 
 type file = decl located list
 
@@ -198,6 +199,6 @@ and tdecl =
   | Ttypedecl of texpr ctype
   | Tdecl of texpr ctype * string * texpr c_initializer
   | Tfundef of 
-      texpr ctype * string * texpr parameters * annotated_tblock located
+      texpr ctype * string * texpr parameter list * annotated_tblock located
 
 type tfile = tdecl located list

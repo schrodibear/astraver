@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.1 2003-12-23 15:11:00 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.2 2003-12-23 15:45:53 filliatr Exp $ i*)
 
 open Cast
 
@@ -22,14 +22,42 @@ open Cast
 
 let located_app f x = { node = f x.node; loc = x.loc }
 
-let rec type_type ty =
-  assert false (*TODO*)
+let option_app f = function Some x -> Some (f x) | None -> None
+
+let rec type_type ty = { ty with ctype_node = type_type_node ty.ctype_node }
+
+and type_type_node = function
+  | CTvoid | CTint _ | CTfloat _ as ty -> 
+      ty
+  | CTvar _ as ty -> 
+      ty (* TODO: qq chose à vérifier ici ? *)
+  | CTarray (tyn, eo) -> 
+      (* TODO: vérifier type int *)
+      CTarray (type_type_node tyn, type_expr_option eo)
+  | CTpointer tyn -> 
+      CTpointer (type_type_node tyn)
+  | CTbitfield (tyn, e) ->
+      CTbitfield (type_type_node tyn, type_expr e)
+  | CTstruct_named x | CTunion_named x | CTenum_named x as ty ->
+      (* TODO: vérifier existence *)
+      ty
+  | CTstruct_decl (x, fl) ->
+      CTstruct_decl (x, List.map type_field fl)
+  | CTunion_decl (x, fl) ->
+      CTunion_decl (x, List.map type_field fl)
+  | CTenum_decl (x, fl) ->
+      CTenum_decl (x, List.map (fun (f,eo) -> (f, type_expr_option eo)) fl)
+  | CTfun (pl, tyn) ->
+      CTfun (List.map type_parameter pl, type_type_node tyn)
 
 and type_expr e =
   assert false (*TODO*)
 
-and type_parameters pl =
-  assert false (*TODO*)
+and type_expr_option eo = option_app type_expr eo
+
+and type_parameter (ty, x) = (type_type ty, x)
+
+and type_field (ty, x, bf) = (type_type ty, x, type_expr_option bf)
 
 let rec type_initializer = function
   | Inothing -> Inothing
@@ -48,7 +76,8 @@ let type_decl = function
   | Ctypedecl ty -> Ttypedecl (type_type ty)
   | Cdecl (ty, x, i) -> Tdecl (type_type ty, x, type_initializer i)
   | Cfundef (ty, f, pl, bl) -> 
-      Tfundef (type_type ty, f, type_parameters pl, located_app type_block bl)
+      Tfundef (type_type ty, f, List.map type_parameter pl, 
+	       located_app type_block bl)
 
 let type_file = List.map (located_app type_decl)
 
