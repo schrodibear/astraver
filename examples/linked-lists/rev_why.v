@@ -19,21 +19,7 @@ Proof.
 Auto.
 Save.
 
-Lemma disjoint_cons : 
-  (l1,l2:plist)(x:pointer)
-  (disjoint l1 (cons x l2)) -> 
-  ~(In x l2) ->
-  (disjoint (cons x l1) l2).
-Proof.
-Unfold disjoint; Intuition.
-Elim (in_inv H); Intuition.
-Subst x; Intuition.
-Apply H1 with x0; Intuition.
-Elim (in_inv H3); Intuition.
-Subst x; Intuition.
-Apply H1 with x0; Intuition.
-Save.
-
+(* should go in PolyList *)
 Lemma app_rev_cons : 
   (A:Set)(l1,l2:(list A))(x:A)
   (app (rev l1) (cons x l2)) = (app (rev (cons x l1)) l2).
@@ -99,7 +85,14 @@ Apply llist_not_starting with Ltl0; Auto.
 Rewrite app_rev_cons.
 Rewrite H6; Apply H3; Auto.
 Unfold ll_order store_pointer_pair.
-
+Elim Pre2; Clear Pre2; Intuition.
+Elim H; Clear H; Intuition.
+Subst.
+Inversion H; Intuition.
+Exists l; Exists x0; Intuition.
+Apply llist_pset_same; Auto.
+Apply llist_not_starting with Ltl0; Auto.
+Rewrite <- H6; Simpl; Omega.
 Save.
 
 (* Why obligation from file "rev.mlw", characters 1173-1631 *)
@@ -133,7 +126,7 @@ Lemma rev_po_3 :
           (ll_order (store_pointer_pair Ltl1 r2) (store_pointer_pair Ltl0 r1)))
   (ll_order (store_pointer_pair Ltl1 r2) Variant1).
 Proof.
-Destruct result3; Intuition.
+Intros; Subst Variant1; Intuition.
 Save.
 
 (* Why obligation from file "rev.mlw", characters 1222-1445 *)
@@ -152,30 +145,13 @@ Lemma rev_po_4 :
     (disjoint lp lr) /\
     ((l:plist) ((llist Ltl p0 l) -> (app (rev lr) lp) = (rev l))))).
 Proof.
-Intuition; Discriminate H3 Orelse Clear H3.
-Subst.
-Inversion H0; Subst; Intuition.
-Apply List_cons; Intuition.
-Unfold access_pointer update_pointer.
-Rewrite pupdate_paccess_same.
-Apply is_valid_update.
-Save.
-
-
-Proof.
+Intros; Subst.
+Exists (nil pointer).
+Elim (is_list_llist Ltl p0 Pre4); Intros l Hl; Exists l.
 Intuition.
-Discriminate H1.
-Discriminate H1.
-Inversion Pre2.
-Rewrite H in H0; Intuition.
-Case (eq_null_dec p2); Intro.
-Clear Post2; Subst p2; Auto.
-Subst p2; Auto.
-Unfold triple tl_order.
-Inversion Pre2; Intuition.
-Absurd p1=null; Auto.
+Rewrite (llist_function ? ? ? ? Hl H).
+Intuition.
 Save.
-
 
 (* Why obligation from file "rev.mlw", characters 1637-1639 *)
 Lemma rev_po_5 : 
@@ -197,8 +173,17 @@ Lemma rev_po_5 :
             ((l:plist) ((llist Ltl p0 l) -> (app (rev lr) lp) = (rev l))))) /\
           r1 = null)
   (EX l:plist | (llist Ltl0 p3 l) /\
-   ((l0:plist) ((llist Ltl0 p0 l0) -> l = (rev l0)))).
+   ((l0:plist) ((llist Ltl p0 l0) -> l = (rev l0)))).
 Proof.
-(* FILL PROOF HERE *)
+Intuition.
+Elim H; Clear H; Intros lp H; Elim H; Clear H; Intro lr; Intuition.
+Exists lp; Intuition.
+Subst r1.
+Inversion H.
+Rewrite <- (H4 l0); Auto.
+Rewrite <- H5; Trivial.
+Subst.
+Inversion H0.
 Save.
+
 

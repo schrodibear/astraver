@@ -25,12 +25,6 @@ Definition llist [t:pointer_store; p:pointer; l:plist] := (lpath t p l null).
 
 Hints Unfold llist.
 
-(* no common element between two lists *)
-
-Definition disjoint [l1,l2: plist] : Prop :=
-  ((x:pointer)(In x l1) -> ~(In x l2)) /\
-  ((x:pointer)(In x l2) -> ~(In x l1)).
-
 (* inductive characterization of [llist] (which could have been an
    inductive definition of [llist])  *)
 
@@ -162,7 +156,8 @@ Inversion H; Auto.
 Inversion H0; Intuition.
 Save.
 
-(* WF relation over lists *)
+
+(* WF relation over linked lists *)
 
 Definition StorePointerPair := pointer_store * pointer.
 Definition store_pointer_pair := [t:pointer_store; p:pointer](t, p).
@@ -170,7 +165,9 @@ Definition store_pointer_pair := [t:pointer_store; p:pointer](t, p).
 Definition ll_order [c1,c2: pointer_store * pointer] : Prop :=
   let (t1,p1) = c1 in
   let (t2,p2) = c2 in
-  t1=t2 /\ (is_list t2 p2) /\ (pget t2 p2)=p1.
+  (EX l1:plist | (EX l2:plist | 
+    (llist t1 p1 l1) /\ (llist t2 p2 l2) /\ 
+    (lt (length l1) (length l2)))).
 
 Axiom ll_order_wf : (well_founded ll_order).
 (**
@@ -183,4 +180,47 @@ Destruct y; Destruct p2; Unfold 1 ll_order; Intuition.
 Save.
 **)
 Hints Resolve ll_order_wf.
+
+
+(** * Disjointness *)
+
+(** [disjoint l1 l2]: no common element between lists [l1] and [l2] *)
+
+Definition disjoint [A:Set; l1,l2:(list A)] : Prop :=
+  ((x:A)(In x l1) -> ~(In x l2)) /\
+  ((x:A)(In x l2) -> ~(In x l1)).
+Implicits disjoint.
+
+Section Disjointness.
+
+Variable A : Set.
+Variable l1,l2 : (list A).
+Variable x : A.
+
+Lemma disjoint_cons : 
+  (disjoint l1 (cons x l2)) -> 
+  ~(In x l2) ->
+  (disjoint (cons x l1) l2).
+Proof.
+Unfold disjoint; Intuition.
+Elim (in_inv H); Intuition.
+Subst x; Intuition.
+Apply H1 with x0; Intuition.
+Elim (in_inv H3); Intuition.
+Subst x; Intuition.
+Apply H1 with x0; Intuition.
+Save.
+
+Lemma disjoint_nil_l : (disjoint (nil A) l2).
+Proof.
+Unfold disjoint; Intuition.
+Save.
+
+Lemma disjoint_l_nil : (disjoint l1 (nil A)).
+Proof.
+Unfold disjoint; Intuition.
+Save.
+
+End Disjointness.
+Hints Resolve disjoint_cons disjoint_nil_l disjoint_l_nil.
 

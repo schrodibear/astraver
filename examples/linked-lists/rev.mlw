@@ -56,5 +56,5 @@ let rev (p0:pointer) =
   end
   { exists l:plist. 
       llist(Ltl, result, l) and
-      forall l0:plist. llist(Ltl, p0, l0) -> l = rev(l0) }
+      forall l0:plist. llist(Ltl@, p0, l0) -> l = rev(l0) }
 
