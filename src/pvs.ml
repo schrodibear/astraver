@@ -139,7 +139,7 @@ let print_obligations fmt ol =
 
 let begin_theory fmt th =
   fprintf fmt "%s: THEORY@\nBEGIN@\n@\n" th;
-  fprintf fmt "  unit: TYPE@\n@\n  unit: unit@\n@\n"
+  fprintf fmt "  unit: TYPE = int@\n@\n  unit: unit = 0@\n@\n"
     
 let end_theory fmt th =
   fprintf fmt "END %s@\n" th
