@@ -18,16 +18,37 @@ COQ
 PVS
 ===
 
+Simplify
+========
+
+ - types: predicates for abstract types (ISxxx a) are (probably) needed
+   (see for instance flag_why.sx); that is 
+	
+	(FORALL (x) ...)
+
+   is replaced by
+
+	(FORALL (x) (IMPLIES (ISxxx x) ...
+
+   needs to be extended to arrays too (otherwise one looses the fact that
+   elements of an array are of a given type); may someting like
+
+        (FORALL (t) (IMPLIES (FORALL (i) (ISxxx (select t i)))) ...
+
+haRVey
+======
+
+ - types as for Simplify?
+
 DOCUMENTATION
 =============
 
  - whydoc (to LaTeX / HTML)
- - a simple why2html similar to caml2html?
 
-MISC
-====
+WHY VIEWER
+==========
 
- - why viewer
+ - nice pretty-print for internal types
 
 BUGS
 ====
@@ -47,9 +68,6 @@ BUGS
 
 IMPLEMENTATION
 ==============
-
- - auto-discharging of obligations when WP in context: quantification over
-   booleans is not handled correctly
 
  - do not overwrite .bak if no change
 

@@ -280,7 +280,7 @@ WWW = $(HOME)/WWW/why
 FILES =src/*.ml* Makefile.in configure.in configure .depend \
        README INSTALL COPYING GPL CHANGES \
        doc/Makefile doc/manual.ps doc/why.1 \
-	examples/Makefile* examples/*/*.mlw examples/*/*.v \
+	examples/Makefile* examples/*/*.mlw examples/*/*.v examples/*/*.sx \
 	examples/*/.depend examples/*/Makefile \
 	bench/good*/*.mlw bench/good*/*.c bench/good*/*.v \
 	lib/coq/*.v lib/pvs/why.*
