@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: pvs.ml,v 1.50 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: pvs.ml,v 1.51 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Logic
 open Types
@@ -34,6 +34,16 @@ let relation id =
   else if id == t_eq then "="
   else if id == t_neq then "/="
   else assert false
+
+let print_float fmt = function
+  | "0" | "0.0" -> 
+      fprintf fmt "0"
+  | f ->
+      let n,d = rationalize f in
+      if d = "1" then 
+	fprintf fmt "(%s :: real)" n 
+      else 
+	fprintf fmt "(%s / %s)" n d
 
 let print_term fmt t = 
   let rec print0 fmt = function
@@ -68,14 +78,8 @@ let print_term fmt t =
 	fprintf fmt "%b" b
     | Tconst ConstUnit -> 
 	fprintf fmt "unit" 
-    | Tconst (ConstFloat ("0" | "0.0")) -> 
-	fprintf fmt "0"
     | Tconst (ConstFloat f) -> 
-	let n,d = rationalize f in
-	if d = "1" then 
-	  fprintf fmt "(%s :: real)" n 
-	else 
-	  fprintf fmt "(%s / %s)" n d
+	print_float fmt f
     | Tapp (id, [Tconst (ConstInt n)]) when id == t_float_of_int ->
 	fprintf fmt "(%d :: real)" n
     | Tderef _ ->
@@ -133,8 +137,8 @@ let print_predicate fmt p =
 	print0 fmt b; fprintf fmt "@ ELSE "; print0 fmt c; 
 	fprintf fmt " ENDIF@]"
     | Pimplies (_, a, b) -> 
-	fprintf fmt "(@["; print1 fmt a; fprintf fmt " IMPLIES@ "; 
-	print0 fmt b; fprintf fmt "@])"
+	fprintf fmt "@[("; print1 fmt a; fprintf fmt " IMPLIES@ "; 
+	print0 fmt b; fprintf fmt ")@]"
     | p -> print1 fmt p
   and print1 fmt = function
     | Por (a, b) -> print1 fmt a; fprintf fmt " OR@ "; print2 fmt b
@@ -159,7 +163,7 @@ let print_predicate fmt p =
     | Papp (id, [a;b]) when is_int_comparison id || is_float_comparison id ->
 	fprintf fmt "%a %s@ %a" print_term a (infix_relation id) print_term b
     | Papp (id, [a;b]) when is_eq id ->
-	fprintf fmt "%a =@ %a" print_term a print_term b
+	fprintf fmt "@[%a =@ %a@]" print_term a print_term b
     | Papp (id, [a;b]) when is_neq id ->
 	fprintf fmt "%a /=@ %a" print_term a print_term b
     | Papp (id, l) -> 	
@@ -171,15 +175,18 @@ let print_predicate fmt p =
     | Forall (_,id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
-	fprintf fmt "(@[FORALL (%s: " (Ident.string id');
+	fprintf fmt "@[(FORALL (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
-	print0 fmt p'; fprintf fmt "@])"
+	print0 fmt p'; fprintf fmt ")@]"
     | Exists (id,n,t,p) -> 
 	let id' = next_away id (predicate_vars p) in
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[EXISTS (%s: " (Ident.string id');
 	print_pure_type fmt t; fprintf fmt "):@ ";
 	print0 fmt p'; fprintf fmt "@])"
+    | Pfpi (t,f1,f2) ->
+	fprintf fmt 
+	"@[fpi(%a,%a,%a)@]" print_term t print_float f1 print_float f2
     | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

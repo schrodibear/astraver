@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: env.ml,v 1.37 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: env.ml,v 1.38 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Ident
 open Misc
@@ -71,6 +71,7 @@ let rec find_predicate_vars acc p =
   match p with
     | Pvar _
     | Papp _
+    | Pfpi _
     | Ptrue
     | Pfalse -> acc
     | Pimplies (_,p1,p2) 
@@ -150,7 +151,7 @@ let rec subst_predicate s p =
   | Forall (w, id, b, v, p) -> Forall (w, id, b, subst_pure_type s v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, subst_pure_type s v, f p)
   | Forallb (w, id, v, p, a, b) -> Forallb (w, id, v, f p, f a, f b)
-  | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
+  | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
 
 let specialize_predicate = specialize_scheme subst_predicate
 

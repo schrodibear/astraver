@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.33 2004-03-04 11:54:50 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.34 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Format
 
@@ -33,6 +33,7 @@ let mizar_environ_ = ref None
 let no_simplify_prelude_ = ref false
 let no_harvey_prelude_ = ref false
 let werror_ = ref false
+let fpi_ = ref false
 
 let ocaml_ = ref false
 let ocaml_annot_ = ref false
@@ -125,6 +126,7 @@ Prover selection:
   --mizar     selects Mizar prover
   --harvey    selects haRVey prover
   --simplify  selects Simplify prover
+  --fpi       outputs floating-point obligations into a separate .fpi file
 
 Coq-specific options:
   --valid, 
@@ -169,6 +171,7 @@ let files =
     | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
+    | ("-fpi" | "--fpi") :: args -> fpi_ := true; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
     | ("-tc" | "--type-only") :: args -> type_only_ := true; parse args
@@ -247,6 +250,7 @@ let no_simplify_prelude = !no_simplify_prelude_
 let no_harvey_prelude = !no_harvey_prelude_
 let wol = !wol_
 let werror = !werror_
+let fpi = !fpi_
 
 let ocaml = !ocaml_
 let ocaml_annot = !ocaml_annot_
@@ -273,3 +277,9 @@ let if_debug_3 f x y z = if debug then f x y z
 (* GUI *)
 
 let gui = ref false
+
+(* compatibility checks *)
+let () = if fpi && valid then begin
+  Printf.eprintf "options -valid and -fpi are not compatible\n";
+  exit 1
+end

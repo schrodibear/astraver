@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ltyping.ml,v 1.24 2003-12-18 12:24:06 marche Exp $ i*)
+(*i $Id: ltyping.ml,v 1.25 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 (*s Typing on the logical side *)
 
@@ -167,6 +167,11 @@ and desc_predicate loc lab env lenv = function
   | PPexists (id, pt, a) ->
       let v = PureType pt in
       exists id v (predicate lab env (Env.add_logic id v lenv) a)
+  | PPfpi (e, f1, f2) ->
+      (match term lab env lenv e with
+	 | te, PTfloat -> Pfpi (te, f1, f2)
+	 | _ -> raise_located e.pp_loc 
+	         (AnyMessage "this expression should have type float"))
 
 and type_pvar loc lenv x =
   if is_at x then 
@@ -226,7 +231,7 @@ and desc_term loc lab env lenv = function
 	 | ta, PTint -> Tapp (t_neg_int, [ta]), PTint
 	 | ta, PTfloat -> Tapp (t_neg_float, [ta]), PTfloat
 	 | _ -> expected_num loc)
-  | PPprefix (PPnot, _) | PPforall _ | PPexists _ ->
+  | PPprefix (PPnot, _) | PPforall _ | PPexists _ | PPfpi _ ->
       term_expected loc
 
 and type_if lab env lenv a b c =

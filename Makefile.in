@@ -87,7 +87,7 @@ CMO = src/version.cmo src/options.cmo src/linenum.cmo src/loc.cmo \
 	   src/mlize.cmo src/red.cmo src/vcg.cmo src/pvs.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo \
            src/regen.cmo src/mizar.cmo src/coq.cmo \
-           src/ocaml.cmo src/main.cmo
+           src/ocaml.cmo src/fpi.cmo src/main.cmo
 CMX      = $(CMO:.cmo=.cmx)
 
 bin/why.opt: $(CMX) src/why.cmx 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: misc.ml,v 1.81 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: misc.ml,v 1.82 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Options
 open Ident
@@ -235,6 +235,7 @@ let rec collect_pred s = function
   | Pnot a -> collect_pred s a
   | Forall (_, _, _, _, p) -> collect_pred s p
   | Exists (_, _, _, p) -> collect_pred s p
+  | Pfpi (t, _, _) -> collect_term s t
 
 let term_vars = collect_term Idset.empty
 let predicate_vars = collect_pred Idset.empty
@@ -268,13 +269,14 @@ let rec map_predicate f = function
   | Forall (w, id, b, v, p) -> Forall (w, id, b, v, f p)
   | Exists (id, b, v, p) -> Exists (id, b, v, f p)
   | Forallb (w, id, v, p, a, b) -> Forallb (w, id, v, f p, f a, f b)
-  | Ptrue | Pfalse | Pvar _ | Papp _ as p -> p
+  | Ptrue | Pfalse | Pvar _ | Papp _ | Pfpi _ as p -> p
 
 let rec tsubst_in_predicate s = function
   | Papp (id, l) -> Papp (id, List.map (tsubst_in_term s) l)
   | Pif (a, b ,c) -> Pif (tsubst_in_term s a, 
 			  tsubst_in_predicate s b, 
 			  tsubst_in_predicate s c)
+  | Pfpi (t, f1, f2) -> Pfpi (tsubst_in_term s t, f1, f2)
   | p -> map_predicate (tsubst_in_predicate s) p
 
 let subst_in_term s = 
@@ -533,6 +535,8 @@ let rec print_predicate fmt = function
   | Exists (_,b,_,p) ->
       fprintf fmt "@[<hov 2>(exists %a:@ %a)@]" 
 	(if debug then Ident.dbprint else Ident.print) b print_predicate p
+  | Pfpi (t, f1, f2) ->
+      fprintf fmt "@[<hov 2>fpi(%a,@ %s,@ %s)@]" print_term t f1 f2
 
 let print_assertion fmt a = print_predicate fmt a.a_value
 
@@ -573,7 +577,7 @@ let do_not_edit file before sep after =
   file_formatter after cout;
   close_out cout
 
-let print_in_file margin p f =
+let print_in_file ~margin p f =
   let cout = open_out f in
   let fmt = formatter_of_out_channel cout in
   pp_set_margin fmt margin;

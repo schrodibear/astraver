@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: main.ml,v 1.66 2004-02-25 15:37:18 marche Exp $ i*)
+(*i $Id: main.ml,v 1.67 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Options
 open Ptree
@@ -45,6 +45,7 @@ let dispatch f_pvs f_coq f_hol f_miz f_hrv f_smp x = match prover with
 let reset () =
   typed_progs := [];
   Vcg.logs := []; 
+  Fpi.reset ();
   match prover with
   | Pvs -> Pvs.reset ()
   | Coq _ -> Coq.reset ()
@@ -106,7 +107,8 @@ let output fwe =
     | Mizar -> Mizar.output_file fwe
     | Harvey -> Harvey.output_file fwe
     | Simplify -> Simplify.output_file fwe
-  end
+  end;
+  if fpi then Fpi.output fwe
 
 (*s Processing of a single declaration [let id = p]. *)
 
@@ -149,6 +151,7 @@ let interp_program id p =
   if_debug eprintf "* generating obligations@.";
   let ids = Ident.string id in
   let ol,v = Vcg.vcg ids cc in
+  let ol = if fpi then Fpi.split ol else ol in
   push_obligations ol;
   let tt = Monad.trad_type_c ren env c in
   push_validation ids tt v;

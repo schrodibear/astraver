@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: mizar.ml,v 1.13 2004-02-27 08:46:19 marche Exp $ i*)
+(*i $Id: mizar.ml,v 1.14 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 (*s Mizar output *)
 
@@ -228,6 +228,8 @@ let print_predicate fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[ex %s being %a st@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
+    | Pfpi _ ->
+	failwith "fpi not supported with Mizar"
     | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

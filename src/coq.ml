@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: coq.ml,v 1.117 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: coq.ml,v 1.118 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -239,6 +239,8 @@ let print_predicate_v7 fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[EX %s:%a |@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
+    | Pfpi _ ->
+	failwith "fpi not supported with Coq V7"
     | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in
@@ -506,6 +508,8 @@ let print_predicate_v8 fmt p =
 	let p' = subst_in_predicate (subst_onev n id') p in
 	fprintf fmt "(@[exists %s:%a,@ %a@])" (Ident.string id')
 	  print_pure_type t print0 p'
+    | Pfpi _ ->
+	failwith "fpi not supported with Coq V8"
     | (Por _ | Pand _ | Pif _ | Pimplies _ | Forallb _) as p -> 
 	fprintf fmt "(%a)" print0 p
   in

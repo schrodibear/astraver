@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: parser.ml4,v 1.91 2004-03-11 14:39:26 filliatr Exp $ i*)
+(*i $Id: parser.ml4,v 1.92 2004-03-12 14:29:02 filliatr Exp $ i*)
 
 open Options
 open Logic
@@ -253,6 +253,8 @@ EXTEND
 	mk_pp loc (PPforall (id, t, a))
     | LIDENT "exists"; id = ident; ":"; t = primitive_type; "." ; a = lexpr -> 
 	mk_pp loc (PPexists (id, t, a))
+    | LIDENT "fpi"; "("; e = lexpr; ","; f1 = FLOAT; ","; f2 = FLOAT; ")" ->
+	mk_pp loc (PPfpi (e, f1, f2))
     | "("; a = lexpr; ")" -> 
 	a ] ] 
   ;
