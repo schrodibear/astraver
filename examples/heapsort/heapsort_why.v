@@ -89,7 +89,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "heapsort.mlw", characters 596-908 *)
+(* Why obligation from file "heapsort.mlw", characters 849-897 *)
 Lemma heapsort_po_2 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)
@@ -238,7 +238,7 @@ Unfold array_id.
 Intros i0 Hi0. Symmetry. Apply H18; Omega'.
 Save.
 
-(* Why obligation from file "heapsort.mlw", characters 1169-1569 *)
+(* Why obligation from file "heapsort.mlw", characters 1502-1558 *)
 Lemma heapsort_po_7 : 
   (t: (array Z))
   (Pre16: `1 <= (array_length t)`)

@@ -75,7 +75,7 @@ Unfold i_invariant in H13; Omega.
 Omega.
 Save.
 
-(* Why obligation from file "find.mlw", characters 1979-2199 *)
+(* Why obligation from file "find.mlw", characters 2175-2186 *)
 Lemma find_po_3 : 
   (A: (array Z))
   (Pre27: `(array_length A) = N + 1`)
@@ -213,7 +213,7 @@ Unfold j_invariant in H8; Unfold termination in H12; Omega.
 Unfold j_invariant in H8; Unfold termination in H12; Omega.
 Save.
 
-(* Why obligation from file "find.mlw", characters 2217-2434 *)
+(* Why obligation from file "find.mlw", characters 2410-2421 *)
 Lemma find_po_6 : 
   (A: (array Z))
   (Pre27: `(array_length A) = N + 1`)
@@ -583,7 +583,7 @@ Generalize (subgoal_3 m1 n1 i1 j1 i2 j2 A A0 A1 A3 Pre27 Inv_mn Test14
 Intuition Subst; Intuition.
 Save.
 
-(* Why obligation from file "find.mlw", characters 2490-2705 *)
+(* Why obligation from file "find.mlw", characters 2705-2705 *)
 Lemma find_po_13 : 
   (A: (array Z))
   (Pre27: `(array_length A) = N + 1`)

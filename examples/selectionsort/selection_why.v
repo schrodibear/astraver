@@ -128,7 +128,7 @@ Apply H12; Omega.
 Subst min2 k; Omega.
 Save.
 
-(* Why obligation from file "selection.mlw", characters 801-834 *)
+(* Why obligation from file "selection.mlw", characters 834-834 *)
 Lemma selection_po_4 : 
   (t: (array Z))
   (Pre19: `(array_length t) >= 1`)

@@ -2,7 +2,7 @@
 Require Why.
 Require Omega.
 
-(* Why obligation from file "loop0.mlw", characters 248-335 *)
+(* Why obligation from file "loop0.mlw", characters 316-327 *)
 Lemma p_po_1 : 
   (x: Z)
   (Pre4: `x >= 0`)

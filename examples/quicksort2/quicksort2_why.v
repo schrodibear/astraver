@@ -220,7 +220,7 @@ Decompose [exchange] Post30. Intuition.
 Rewrite H24; Omega.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 900-955 *)
+(* Why obligation from file "quicksort2.mlw", characters 955-955 *)
 Lemma quick_rec_po_5 : 
   (l: Z)
   (r: Z)
@@ -596,7 +596,7 @@ Omega. Omega. Assumption.
 Assumption.
 Save.
 
-(* Why obligation from file "quicksort2.mlw", characters 503-1086 *)
+(* Why obligation from file "quicksort2.mlw", characters 1086-1086 *)
 Lemma quick_rec_po_13 : 
   (l: Z)
   (r: Z)

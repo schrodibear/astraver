@@ -296,7 +296,7 @@ Intuition.
 Replace n with k1. Auto. Omega.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 991-1201 *)
+(* Why obligation from file "fib.mlw", characters 1201-1201 *)
 Lemma fib3_po_4 : 
   (n: Z)
   (Pre4: `n >= 0`)
@@ -438,7 +438,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "fib.mlw", characters 1450-1695 *)
+(* Why obligation from file "fib.mlw", characters 1635-1685 *)
 Lemma fib4_po_7 : 
   (n: Z)
   (t: (array Z))

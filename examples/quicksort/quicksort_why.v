@@ -161,7 +161,7 @@ Apply quicksort_lemma with t1:=t1 t2:=t2 p:=p;
 Intuition. 
 Save.
 
-(* Why obligation from file "quicksort.mlw", characters 1574-1703 *)
+(* Why obligation from file "quicksort.mlw", characters 1703-1703 *)
 Lemma quick_rec_po_7 : 
   (l: Z)
   (r: Z)

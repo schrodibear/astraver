@@ -71,7 +71,7 @@ Repeat Split; Try Omega.
 Subst a0; Apply Z_div_lt; Try Omega.
 Save.
 
-(* Why obligation from file "arith.mlw", characters 355-386 *)
+(* Why obligation from file "arith.mlw", characters 386-386 *)
 Lemma mult_po_3 : 
   (x: Z)
   (y: Z)

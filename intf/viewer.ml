@@ -30,22 +30,14 @@ let _ =
 
 module Tree = struct
 
-  type t = typed_program * move_up * move_left * move_right
-  and move_up = Up of (unit -> t)
-  and move_left = Left of (unit -> t)
-  and move_right = Right of (unit -> t)
-
-  exception NoMove
-  let no_move () = raise NoMove
-
-  let create x = x, Up no_move, Left no_move, Right no_move
-
+  type t = typed_program
+	     
   type info = Loc.t * string
 
   let info = 
     let buf = Buffer.create 1024 in
     let fmt = formatter_of_buffer buf in
-    fun (x,_,_,_) -> 
+    fun x -> 
       fprintf fmt "%a@." Util.print_type_c x.info.kappa;
       let s = Buffer.contents buf in
       Buffer.reset buf;
@@ -54,47 +46,24 @@ module Tree = struct
   let show_info_ref = ref (fun i -> ())
   let show_info i = !show_info_ref i
 
-  let up (_, Up f, _, _) = f ()
-  let left (_, _, Left f, _) = f ()
-  let right (_, _, _, Right f) = f ()
+  let rec statements = function
+    | [] -> []
+    | Statement x :: bl -> x :: statements bl
+    | _ :: bl -> statements bl
 
-  let rec block t = function
-    | [] ->
-	raise NoMove
-    | Statement x :: bl -> 
-	let rec self =
-	  x, Up (fun () -> t), Left no_move, 
-	  Right (fun () -> block_from t self bl)
-	in
-	self
-    | _ :: bl ->
-	block t bl
-
-  and block_from t l = function
-    | [] ->
-	raise NoMove
-    | Statement x :: bl -> 
-	let rec self =
-	  x, Up (fun () -> t), Left (fun () -> l), 
-	  Right (fun () -> block_from t self bl)
-	in
-	self
-    | _ :: bl ->
-	block_from t l bl
-
-  let down ((x, up, _, _) as t) = match x.desc with
-    | Seq bl -> block t bl
-    | If (e1, e2, e3) -> block t [Statement e1; Statement e2; Statement e3]
-    | Aff (_, e) -> block t [Statement e]
-    | App (e1, Term e2, _) -> block t [Statement e2; Statement e1]
-    | App (e1, _, _) -> block t [Statement e1]
-    | While (e1, _, _, e2) -> block t [Statement e1; Statement e2]
-    | _ -> raise NoMove
-
+  let children x = match x.desc with
+    | Seq bl -> statements bl
+    | If (e1, e2, e3) -> [e1; e2; e3]
+    | Aff (_, e) -> [e]
+    | App (e1, Term e2, _) -> [e2; e1]
+    | App (e1, _, _) -> [e1]
+    | While (e1, _, _, e2) -> [e1; e2]
+    | _ -> []
 
 end
 
-module Nav = Navig.Make(Tree)
+module NavTree = Navig.MakeNavTree(Tree)
+module Nav = Navig.MakeNavigator(NavTree)
 
 
 let window_width = 800
@@ -321,7 +290,7 @@ let main () =
 	    w#show ();
 	    analyze_all buf1 tb2;
 
-	    Nav.set (Tree.create (List.hd (snd (List.hd !typed_progs))))
+	    Nav.set (NavTree.create (List.hd (snd (List.hd !typed_progs))))
 
 
 

@@ -3,7 +3,7 @@ Require Why.
 Require Omega.
 Require ZArithRing.
 
-(* Why obligation from file "peano.mlw", characters 178-309 *)
+(* Why obligation from file "peano.mlw", characters 272-301 *)
 Lemma add1_po_1 : 
   (y: Z)
   (x: Z)
@@ -128,7 +128,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 494-549 *)
+(* Why obligation from file "peano.mlw", characters 549-549 *)
 Lemma rec_add1_po_4 : 
   (y: Z)
   (Pre8: `y >= 0`)
@@ -188,7 +188,7 @@ Proof.
 Intros; Omega.
 Save.
 
-(* Why obligation from file "peano.mlw", characters 833-977 *)
+(* Why obligation from file "peano.mlw", characters 933-967 *)
 Lemma mult1_po_2 : 
   (y: Z)
   (x: Z)

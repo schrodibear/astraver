@@ -544,7 +544,7 @@ Elim Post12; Intros; Omega'.
     Assumption. Omega'. Omega'.
 Save.
 
-(* Why obligation from file "downheap.mlw", characters 936-999 *)
+(* Why obligation from file "downheap.mlw", characters 999-999 *)
 Lemma downheap_po_12 : 
   (k: Z)
   (n: Z)
@@ -588,7 +588,7 @@ Intro. Apply H7; Omega'.
 Save.
 
 
-(* Why obligation from file "downheap.mlw", characters 785-999 *)
+(* Why obligation from file "downheap.mlw", characters 999-999 *)
 Lemma downheap_po_13 : 
   (k: Z)
   (n: Z)

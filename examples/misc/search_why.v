@@ -19,7 +19,7 @@ Proof.
 Auto with *.
 Save.
 
-(* Why obligation from file "search.mlw", characters 387-421 *)
+(* Why obligation from file "search.mlw", characters 421-421 *)
 Lemma search1_po_2 : 
   (t: (array Z))
   (i: Z)
@@ -83,7 +83,7 @@ Proof.
 Auto with *.
 Save.
 
-(* Why obligation from file "search.mlw", characters 889-918 *)
+(* Why obligation from file "search.mlw", characters 918-918 *)
 Lemma search2_po_2 : 
   (t: (array Z))
   (i: Z)

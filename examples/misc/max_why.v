@@ -85,7 +85,7 @@ Subst; Generalize (H7 k); Intuition.
 Subst; Intuition.
 Save.
 
-(* Why obligation from file "max.mlw", characters 552-581 *)
+(* Why obligation from file "max.mlw", characters 581-581 *)
 Lemma pgm_max_end_po_4 : 
   (a: (array Z))
   (Pre15: `(array_length a) = l`)

@@ -44,7 +44,7 @@ Proof.
 Simpl; Intuition.
 Save.
 
-(* Why obligation from file "distance.mlw", characters 1560-1781 *)
+(* Why obligation from file "distance.mlw", characters 1733-1770 *)
 Lemma distance_po_2 : 
   (t: (array Z))
   (w1: (array A))
@@ -600,7 +600,7 @@ Replace `n2` with `(j1+1)`; [ Idtac | Omega' ].
 Apply H13; Omega'.
 Save.
 
-(* Why obligation from file "distance.mlw", characters 1831-2673 *)
+(* Why obligation from file "distance.mlw", characters 2020-2662 *)
 Lemma distance_po_12 : 
   (t: (array Z))
   (w1: (array A))

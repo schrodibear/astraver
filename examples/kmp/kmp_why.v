@@ -546,7 +546,7 @@ Proof.
 Intuition.
 Save.
 
-(* Why obligation from file "kmp.mlw", characters 1179-1763 *)
+(* Why obligation from file "kmp.mlw", characters 1763-1763 *)
 Lemma initnext_po_14 : 
   (next: (array Z))
   (p: (array A))
@@ -635,7 +635,7 @@ Proof.
 Intuition Induction result1; Tauto.
 Save.
 
-(* Why obligation from file "kmp.mlw", characters 2344-2360 *)
+(* Why obligation from file "kmp.mlw", characters 2360-2360 *)
 Lemma kmp_po_4 : 
   (a: (array A))
   (next: (array Z))

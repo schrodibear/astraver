@@ -136,7 +136,7 @@ Subst n1; Apply Zdiv2_ge_0; Omega.
 Subst n1; Apply Zdiv2_lt; Omega.
 Save.
 
-(* Why obligation from file "power.mlw", characters 486-518 *)
+(* Why obligation from file "power.mlw", characters 518-518 *)
 Lemma power1_po_2 : 
   (n: Z)
   (Pre4: `n >= 0`)

@@ -146,7 +146,7 @@ Intuition.
 Induction result1; Auto.
 Save.
 
-(* Why obligation from file "partition.mlw", characters 1950-1972 *)
+(* Why obligation from file "partition.mlw", characters 1972-1972 *)
 Lemma partition_po_4 : 
   (l: Z)
   (r: Z)
@@ -183,7 +183,7 @@ Intuition.
 Induction result1; Auto. Discriminate Post2.
 Save.
 
-(* Why obligation from file "partition.mlw", characters 1944-2095 *)
+(* Why obligation from file "partition.mlw", characters 2078-2089 *)
 Lemma partition_po_5 : 
   (l: Z)
   (r: Z)
@@ -328,7 +328,7 @@ Induction result2; Auto.
 Induction result2; Auto.
 Save.
 
-(* Why obligation from file "partition.mlw", characters 2104-2126 *)
+(* Why obligation from file "partition.mlw", characters 2126-2126 *)
 Lemma partition_po_9 : 
   (l: Z)
   (r: Z)
@@ -369,7 +369,7 @@ Induction result2; Auto Orelse Discriminate Post5.
 Induction result2; Auto Orelse Discriminate Post5.
 Save.
 
-(* Why obligation from file "partition.mlw", characters 2098-2239 *)
+(* Why obligation from file "partition.mlw", characters 2222-2233 *)
 Lemma partition_po_10 : 
   (l: Z)
   (r: Z)
@@ -564,7 +564,7 @@ Assumption.
 Absurd `i2 < j2`; Omega.
 Save.
 
-(* Why obligation from file "partition.mlw", characters 2242-2324 *)
+(* Why obligation from file "partition.mlw", characters 2324-2324 *)
 Lemma partition_po_14 : 
   (l: Z)
   (r: Z)
