@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cpp.mll,v 1.1 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: cpp.mll,v 1.2 2004-03-04 09:08:27 filliatr Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -49,12 +49,17 @@ and after = parse
 
 {
 
+  let rec local_temp_file basename suffix =
+    let i = Random.int max_int in
+    let f = basename ^ string_of_int i ^ suffix in
+    if Sys.file_exists f then local_temp_file basename suffix else f
+
   (* [translate_using filter f] translates file [f] using lexer rule [filter]
      and returns the translated file *)
   let translate_using filter f =
     let cin = open_in f in
     let lb = from_channel cin in
-    let pf = Filename.temp_file (Filename.basename f) ".c" in
+    let pf = local_temp_file (Filename.basename f) ".c" in
     let cout = open_out pf in
     fprintf cout "# 1 \"%s\"\n" f;
     channel_out := cout;
@@ -69,7 +74,7 @@ and after = parse
   (* [external_cpp f] runs an external C preprocessor on file [f];
      returns the preprocessed file. *)
   let external_cpp f = 
-    let ppf = Filename.temp_file (Filename.basename f) ".i" in
+    let ppf = local_temp_file (Filename.basename f) ".i" in
     ignore (Sys.command (sprintf "%s %s > %s" cpp_command f ppf));
     ppf
 
