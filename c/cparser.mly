@@ -147,13 +147,13 @@
   (* debug *)
   let rec explain_type fmt = function
     | CTfun (_, t) -> 
-	fprintf fmt "fonction retournant %a" explain_type t.ctype_node
+	fprintf fmt "function returning %a" explain_type t.ctype_node
     | CTpointer t -> 
-	fprintf fmt "pointeur sur %a" explain_type t.ctype_node
+	fprintf fmt "pointer on %a" explain_type t.ctype_node
     | CTarray (t, _) -> 
-	fprintf fmt "tableau[] de %a" explain_type t.ctype_node
+	fprintf fmt "array[] of %a" explain_type t.ctype_node
     | _ -> 
-	fprintf fmt "autre"
+	fprintf fmt "other"
 
   (* fresh names for anonymous structures *)
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.12 2004-01-09 14:52:29 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.13 2004-01-09 15:49:50 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -258,6 +258,7 @@ let find_sym = Hashtbl.find sym_t
 let add_sym l x ty = 
   if is_sym x then begin
     if not (eq_type (find_sym x) ty) then 
+      (* TODO accepter fonctions avec arguments si aucun la première fois *)
       error l ("conflicting types for " ^ x)
   end else
     Hashtbl.add sym_t x ty
@@ -315,7 +316,7 @@ and type_type_node loc env = function
 	try 
 	  (Env.find_tag_type x env).ctype_node
 	with Not_found -> 
-	  (* TODO: gcc sometimes says "storage size of `x' isn't known" *)
+	  (* TODO: may fail on "storage size of `x' isn't known" *)
 	  ty
       end
   | CTstruct (x, fl) ->
@@ -548,7 +549,29 @@ and type_expr_node loc env = function
 		 |Badd_int_pointer|Badd_pointer_int), _) ->
       assert false
   | CEcall (e, el) ->
-      assert false (*TODO*)
+      let e = type_expr env e in
+      let el = List.map (type_expr env) el in
+      begin match e.texpr_type.ctype_node with
+	| CTfun (tl, ty) ->
+	    let rec check_args i el' = function
+	      | [], [] -> 
+		  TEcall (e, List.rev el'), ty
+	      | e :: el, (t, _) :: tl when sub_type e.texpr_type t ->
+		  check_args (succ i) (coerce t e :: el') (el, tl)
+	      | e :: _, _ :: _ ->
+		  error loc ("incompatible type for argument " ^ 
+			     string_of_int i)
+	      | [], _ :: _ ->
+		  error loc "too few arguments"
+	      | el, [] ->
+		  (* too many arguments is OK *)
+		  TEcall (e, List.rev_append el' el), ty
+	    in
+	    check_args 1 [] (el, tl)
+	| _ ->
+	    (* TODO should be: warning: implicit declaration of function *)
+	    error loc "not a function"
+      end
   | CEcast (ty, e) ->
       let ty = type_type loc env ty in
       let e = type_expr env e in
@@ -560,7 +583,12 @@ and type_expr_node loc env = function
       let ty = type_type loc env ty in
       TEsizeof ty, c_int
 
-and type_lvalue env e = type_expr env e (* TODO: vérifier *)
+and type_lvalue env e = 
+  let loc = e.loc in
+  let e = type_expr env e in
+  match e.texpr_node with
+    | TEvar _ | TEunary (Ustar, _) -> e
+    | _ -> error loc "invalid lvalue"
 
 and type_expr_option env eo = option_app (type_expr env) eo
 
@@ -744,7 +772,7 @@ and type_annotated_block env et (p,bl,q) =
 let type_parameters loc env pl =
   List.fold_right
     (fun (ty,x) (pl,env) ->
-       let ty = type_type loc env ty in (ty,x)::pl, Env.add x ty env)
+       let ty = type_type loc env ty in (ty,x) :: pl, Env.add x ty env)
     pl 
     ([], env)
   
@@ -772,8 +800,7 @@ let type_decl d = match d.node with
       let ty = type_type d.loc Env.empty ty in
       let et = if ty = c_void then None else Some ty in
       let pl,env = type_parameters d.loc Env.empty pl in
-      (* TODO: ajouter f plutot comme global + vérif si déjà déclarée *)
-      let env = Env.add f (noattr (CTfun (pl, ty))) env in
+      add_sym d.loc f (noattr (CTfun (pl, ty)));
       let bl,st = type_annotated_block env et bl in
       if st.break then 
 	error d.loc "break statement not within a loop or switch";
