@@ -1,5 +1,7 @@
 Note: These are the changes for Caduceus.
 
+version 0.72, February 17th, 2005
+=================================
  o fixed bug with parameter names in redeclaration of functions
  o fixed bug with local initialization structures
  o fixed bug with global structures arrays

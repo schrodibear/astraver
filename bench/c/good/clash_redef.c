@@ -18,7 +18,7 @@ int f3(  las*  p1,  int*  p2)
 
 typedef struct st {  int p;} st; 
 /* ... */ 
-void f4(  int*  p); 
+void f4(  int*  p);
 /* ... */ 
 void f4(  int*  p){}
 
