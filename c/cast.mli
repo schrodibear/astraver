@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.13 2003-12-24 15:06:42 filliatr Exp $ i*)
+(*i $Id: cast.mli,v 1.14 2004-01-07 16:13:06 filliatr Exp $ i*)
 
 (*s C types *)
 
@@ -34,11 +34,11 @@ type 'expr ctype_node =
   | CTarray of 'expr ctype * 'expr option
   | CTpointer of 'expr ctype
   | CTstruct_named of string
-  | CTstruct_decl of string option * 'expr field list
+  | CTstruct of string * 'expr field list
   | CTunion_named of string
-  | CTunion_decl of string option * 'expr field list
+  | CTunion of string * 'expr field list
   | CTenum_named of string
-  | CTenum_decl of string option * (string * 'expr option) list
+  | CTenum of string * (string * 'expr option) list
   | CTfun of 'expr parameter list * 'expr ctype
 
 and 'expr ctype = { 

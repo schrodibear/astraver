@@ -155,6 +155,14 @@
     | _ -> 
 	fprintf fmt "autre"
 
+  (* fresh names for anonymous structures *)
+
+  let fresh_name =
+    let r = ref (-1) in
+    function 
+      | Some s -> s
+      | None -> incr r; "%_anonymous_" ^ string_of_int !r
+
   (* Interpretation of type expression.
      [gl] indicates a global declaration (implies the check for a type or 
      a storage class) *)
@@ -175,9 +183,9 @@
       | Stype t :: sp when tyo = None ->
 	  base_type (Some t) sp
       | Sstruct_decl (so, pl) :: sp when tyo = None ->
-	  base_type (Some (CTstruct_decl (so, fields pl))) sp
+	  base_type (Some (CTstruct (fresh_name so, fields pl))) sp
       | Sunion_decl (so, pl) :: sp when tyo = None ->
-	  base_type (Some (CTunion_decl (so, fields pl))) sp
+	  base_type (Some (CTunion (fresh_name so, fields pl))) sp
       | (Stype _ | Sstruct_decl _ | Sunion_decl _) :: _ ->
 	  error "two or more data types in declaration"
       | _ :: sp ->
@@ -228,7 +236,7 @@
     if is_typedef specs then warning "useless keyword in empty declaration";
     let ty = interp_type true specs Dsimple in
     match ty.ctype_node with
-      | CTstruct_decl _ | CTunion_decl _ | CTenum_decl _ 
+      | CTstruct _ | CTunion _ | CTenum _ 
       | CTstruct_named _ | CTunion_named _ | CTenum_named _ ->
           [ locate (Ctypedecl ty) ]
       | _ ->
@@ -619,9 +627,9 @@ struct_declarator
 
 enum_specifier
         : ENUM LBRACE enumerator_list RBRACE 
-            { Stype (CTenum_decl (None, $3)) }
+            { Stype (CTenum (fresh_name None, $3)) }
         | ENUM identifier/*ICI*/ LBRACE enumerator_list RBRACE 
-	    { Stype (CTenum_decl (Some $2, $4)) }
+	    { Stype (CTenum ($2, $4)) }
         | ENUM identifier/*ICI*/ 
 	    { Stype (CTenum_named $2) }
         ;

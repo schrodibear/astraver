@@ -4,7 +4,7 @@ test:
 	../../bin/caduceus.opt -v -type-only test.c
 
 gcc:
-	gcc test.c && ./a.out
+	gcc -Wall test.c && ./a.out
 
 test.i: test.c
 	gcc -E $^ > $@

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.8 2003-12-24 15:06:42 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.9 2004-01-07 16:13:06 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -43,11 +43,11 @@ let rec print_type fmt t = match t.ctype_node with
   | CTarray (ty, Some e) -> fprintf fmt "%a[_]" print_type ty
   | CTpointer ty -> fprintf fmt "%a*" print_type ty
   | CTstruct_named x -> fprintf fmt "struct %s" x
-  | CTstruct_decl (_, fl) -> fprintf fmt "struct _ { %a}" print_fields fl
+  | CTstruct (_, fl) -> fprintf fmt "struct _ { %a}" print_fields fl
   | CTunion_named x -> fprintf fmt "union %s" x
-  | CTunion_decl (_, fl) -> fprintf fmt "union _ { %a}" print_fields fl
+  | CTunion (_, fl) -> fprintf fmt "union _ { %a}" print_fields fl
   | CTenum_named x -> fprintf fmt "enum %s" x
-  | CTenum_decl (_, el) -> fprintf fmt "enum _ { %a}" print_enums el
+  | CTenum (_, el) -> fprintf fmt "enum _ { %a}" print_enums el
   | CTfun (pl, ty) -> fprintf fmt "%a fun(...)" print_type ty
 
 and print_sign fmt = function
@@ -118,17 +118,17 @@ and eq_type_node tn1 tn2 = match tn1, tn2 with
       eq_type ty1 ty2 (* TODO: taille? *)
   | CTpointer ty1, CTpointer ty2 ->
       eq_type ty1 ty2
-  | CTstruct_named s1, CTstruct_named s2 ->
+  | CTstruct (s1, _), CTstruct (s2, _) ->
       s1 = s2
-  | CTstruct_decl _, _ | _, CTstruct_decl _ ->
+  | CTstruct_named _, _ | _, CTstruct_named _ ->
       assert false
-  | CTunion_named u1, CTunion_named u2 ->
+  | CTunion (u1, _), CTunion (u2, _) ->
       u1 = u2
-  | CTunion_decl _, _ | _, CTunion_decl _ ->
+  | CTunion_named _, _ | _, CTunion_named _ ->
       assert false
-  | CTenum_named e1, CTenum_named e2 ->
+  | CTenum (e1, _), CTenum (e2, _) ->
       e1 = e2
-  | CTenum_decl _, _ | _, CTenum_decl _ ->
+  | CTenum_named _, _ | _, CTenum_named _ ->
       assert false
   | CTfun (pl1, ty1), CTfun (pl2, ty2) ->
       eq_type ty1 ty2 &&
@@ -160,9 +160,25 @@ let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
 	"expected %a, found %a@." print_type e.texpr_type print_type ty;
       error e.texpr_loc "incompatible type"
 
-(*s Environments for local variables *)
+(*s Environments for local variables and local structs *)
 
-module Env = Map.Make(String)
+module Env = struct
+
+  module M = Map.Make(String)
+
+  type t = { vars : texpr ctype M.t; structs : texpr ctype M.t }
+
+  let empty = { vars = M.empty; structs = M.empty }
+
+  let add x t env = { env with vars = M.add x t env.vars }
+
+  let find x env = M.find x env.vars
+
+  let add_struct x s env = { env with structs = M.add x s env.structs }
+
+  let find_struct x env = M.find x env.structs
+
+end
 
 (*s Logic *)
 
@@ -182,20 +198,19 @@ and type_type_node = function
   | CTvar _ as ty -> 
       ty (* TODO: qq chose à vérifier ici ? *)
   | CTarray (tyn, eo) -> 
-      (* TODO: vérifier type int *)
       CTarray (type_type tyn, type_int_expr_option Env.empty eo)
   | CTpointer tyn -> 
       CTpointer (type_type tyn)
   | CTstruct_named x | CTunion_named x | CTenum_named x as ty ->
-      (* TODO: vérifier existence *)
+      (* TODO: rechercher existence *)
       ty
-  | CTstruct_decl (x, fl) ->
-      CTstruct_decl (x, List.map type_field fl)
-  | CTunion_decl (x, fl) ->
-      CTunion_decl (x, List.map type_field fl)
-  | CTenum_decl (x, fl) ->
+  | CTstruct (x, fl) ->
+      CTstruct (x, List.map type_field fl)
+  | CTunion (x, fl) ->
+      CTunion (x, List.map type_field fl)
+  | CTenum (x, fl) ->
       let type_enum_field (f, eo) = (f, type_int_expr_option Env.empty eo) in
-      CTenum_decl (x, List.map type_enum_field fl)
+      CTenum (x, List.map type_enum_field fl)
   | CTfun (pl, tyn) ->
       CTfun (List.map type_parameter pl, type_type tyn)
 
