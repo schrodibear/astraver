@@ -1,5 +1,13 @@
 Note: These are the changes for Caduceus.
 
+version 0.70, January 25th, 2005
+================================
+ o fixed bug with & operator used only in assertions
+ o new predicates separation_x_y expressing separation between globals x and y
+ o new predicates valid_S and internal_separation_S are introduced for
+   each structure S, together with an axiom valid_S_pointer stating
+   that \valid(p) -> valid_S(p) && internal_separation_S(p) for any
+   struct S * p   
  o Ghost variables introduced with 'ghost' declaration and modified by
    'set'
   

@@ -430,13 +430,15 @@ Admitted.
   ((a1:alloc_table)
    ((a2:alloc_table)
     ((a3:alloc_table)
-     ((p:pointer) ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p))))))).
+     ((free_stack a1 a2 a3) ->
+      ((p:pointer) ((valid a2 p) -> ((on_heap a2 p) -> (valid a3 p)))))))).
 Admitted.
 
 (*Why axiom*) Lemma free_stack_stack :
   ((a1:alloc_table)
    ((a2:alloc_table)
     ((a3:alloc_table)
-     ((p:pointer) ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p))))))).
+     ((free_stack a1 a2 a3) ->
+      ((p:pointer) ((valid a1 p) -> ((on_stack a1 p) -> (valid a3 p)))))))).
 Admitted.
 
