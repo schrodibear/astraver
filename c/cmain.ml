@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.53 2005-01-19 16:19:19 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.54 2005-01-20 16:34:56 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -79,6 +79,14 @@ let main () =
   lprintf "starting normalization of programs.@.";
   Cenv.update_fields_type ();
   let nfiles = List.map (fun (f,p) -> (f,Cnorm.file p)) tfiles in
+  if print_norm then begin
+    List.iter 
+      (fun (f,p) -> 
+	 let c = open_out (f ^ "norm") in
+	 let fmt = Format.formatter_of_out_channel c in
+	 fprintf fmt "%a@." Cprint.nfile p;
+	 close_out c) nfiles;
+  end;
   (*predicate*)
   let nfiles = List.map (fun (f,p) -> (f, Invariant.add_predicates p)) 
 		 nfiles in
@@ -144,9 +152,9 @@ let rec explain_exception fmt = function
       raise e
 
 
-(* for debugging 
-let () = main ()
-*)
+(* for debugging *)
+
+(*let () = main (); exit 1*)
 
 let () =
   try

@@ -381,10 +381,14 @@ let declare_fields tyn fl = match tyn with
   | _ -> 
       assert false
   
+let not_struct t = match t.ctype_node with
+  | Tstruct _ -> false
+  | _ -> true
+
 let update_fields_type () =
   Hashtbl.iter
     (fun (n,_) x ->
-       if x.var_is_referenced then
+       if x.var_is_referenced && not_struct x.var_type then
 	 begin
 	   Coptions.lprintf "field %s is now a pointer@." x.var_name;
 	   set_var_type (Var_info x) 

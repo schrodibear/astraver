@@ -50,9 +50,10 @@ void h(int **p) {
   **p = 2;
 }
 
-/*@ requires t[1] == 2
-  @ ensures t[0] == 2 && t[1] == 2 */
-void f3() {
-  h(&t);
-}
+// mal typé !
+// /*@ requires t[1] == 2
+//   @ ensures t[0] == 2 && t[1] == 2 */
+// void f3() {
+//   h(&t);
+// }
 

@@ -46,15 +46,12 @@ Proof.
 intuition; subst; caduceus; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 811-823 *)
+(* Why obligation from file "why/struct.why", characters 698-710 *)
 Lemma g_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
-  forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (internal_separation_S s) /\
-                 (valid_range alloc s 0 1) /\ (internal_separation_S s) /\
-                 (valid_S alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   (valid alloc s).
@@ -62,15 +59,13 @@ Proof.
  intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 847-860 *)
+(* Why obligation from file "why/struct.why", characters 734-747 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (internal_separation_S s) /\
-                 (valid_range alloc s 0 1) /\ (internal_separation_S s) /\
-                 (valid_S alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -81,15 +76,13 @@ Proof.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 865-889 *)
+(* Why obligation from file "why/struct.why", characters 752-776 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
-  forall (Pre11: (valid alloc ps) /\ (internal_separation_S s) /\
-                 (valid_range alloc s 0 1) /\ (internal_separation_S s) /\
-                 (valid_S alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),
@@ -102,18 +95,18 @@ Proof.
 unfold valid_S;intuition.
 subst;
 auto.
+generalize (valid_S_pointer alloc t s).
+unfold valid_S; intuition.
 Save.
 
-(* Why obligation from file "why/struct.why", characters 830-889 *)
+(* Why obligation from file "why/struct.why", characters 717-776 *)
 Lemma g_impl_po_4 : 
   forall (alloc: alloc_table),
   forall (ps: pointer),
   forall (s: pointer),
   forall (t: ((memory) pointer)),
   forall (x: ((memory) Z)),
-  forall (Pre11: (valid alloc ps) /\ (internal_separation_S s) /\
-                 (valid_range alloc s 0 1) /\ (internal_separation_S s) /\
-                 (valid_S alloc t s)),
+  forall (Pre11: (valid alloc ps) /\ (valid_range alloc s 0 1)),
   forall (ps0: pointer),
   forall (Post1: ps0 = s),
   forall (p1: pointer),

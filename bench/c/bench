@@ -115,8 +115,8 @@ for f in array assigns break call clash clash_alloc clash_redef \
     continue coord \
     copy dowhile invariants ifs logic_cast \
     param passing purse queue rec ref ref_glob search see \
-    separation sizeof \
-    struct switch enum ; do
+    sizeof \
+    struct switch enum separation3 separation ; do
     echo -n "  $f.c... "
     rm -f coq/caduceus_spec_why.v
     if $parsing  $f.c > /tmp/caduceus.tmp 2>&1; then

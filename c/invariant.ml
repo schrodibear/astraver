@@ -27,11 +27,15 @@ let noattr_term ty t=
   { nterm_node = t; 
     nterm_loc = Loc.dummy;
     nterm_type = ty }
+
+let find_pred x = snd (find_pred x)
   
 let rec predicate_for name t =
   match t.nterm_type.ctype_node with
     | Tstruct (n) ->
- 	NPapp ((snd (find_pred ("valid_" ^ n))),[t])
+	NPand 
+	  (NPvalid t,
+ 	   NPapp (find_pred ("valid_" ^ n), [t]))
     | Tarray (ty, None) ->
 	error Loc.dummy ("array size missing in `" ^ name ^ "'")
     | Tarray (ty, Some s) ->
@@ -52,16 +56,18 @@ let rec predicate_for name t =
 		      ((NPvalid_range (t,(int_nconstant "0"), 
 			  (int_nconstant (Int64.to_string s)))),
 		      (NPforall ([noattr_type (Tint (Signed, Ctypes.Int)), i], 
-				NPimplies (ineq,
-					   predicate_for name vari))))))
+				NPimplies (ineq, pre))))))
      | _ -> NPtrue
 
 let axiom_for s ty t v=
-   Cast.Naxiom ( 
-    ("valid_" ^ s ^ "_pointer"), 
-    NPforall ([ty,v],(NPimplies 
-			(NPvalid t, 
-			 NPapp ((snd (find_pred ("valid_" ^ s))),[t])))))
+  Cast.Naxiom 
+    ("valid_" ^ s ^ "_pointer", 
+     NPforall ([ty,v], 
+	       NPimplies 
+		 (NPvalid t, 
+		  NPand
+		    (NPapp (find_pred ("valid_" ^ s), [t]),
+		     NPapp (find_pred ("internal_separation_" ^ s), [t])))))
 
 let axiom_for_array s ty t v=
   let i = default_var_info "counter" in
@@ -83,7 +89,7 @@ let axiom_for_array s ty t v=
 			   ((NPvalid (noattr_term 
 				       (noattr_type (Tpointer (ty)))
 					    (NTbinop (tarray,Badd,vari)))),
-			   (NPapp ((snd (find_pred ("valid_" ^ s))),
+			   (NPapp (find_pred ("valid_" ^ s),
 				  [(noattr_term 
 				      (noattr_type (Tpointer (ty)))
 				      (NTbinop (tarray,Badd,vari)))])))))))
@@ -187,7 +193,7 @@ and local_separation loc mark n1 v1 n2 v2 =
 		   (fun p v ->
 		      if compatible_type v2.nterm_type v.var_type
 		      then
-			make_and (not_alias loc v2 (in_struct v2 v)) p
+			make_and (not_alias loc v2 (in_struct v1 v)) p
 		      else
 			p)
 		   NPtrue l1))
@@ -220,62 +226,65 @@ and local_separation loc mark n1 v1 n2 v2 =
     | _, _ -> NPtrue
 
 
-let rec separation_intern loc name v1 =
-  let rec local_separation_intern loc n1 v1 =
-    match v1.nterm_type.Ctypes.ctype_node with
-      | Tarray (_,None) -> 
-	  error loc ("array size missing in `" ^ n1 ^ "'")
-      | Tarray(ty,Some s) -> 
-	  begin
-	    match ty.Ctypes.ctype_node with
-	      | Tarray (_,None) -> 
-		  error loc ("array size missing in `" ^ n1 ^ "[i]'")
-	      | Tarray (_,_)  
-	      | Tstruct _ ->
-		  make_and
-		    (make_forall_range loc v1 s 
-		       (fun t1 i1 ->
-			  make_forall_range loc v1 s
-			    (fun t2 i2 -> 
-			       if i1 = nzero && i2 = nzero then NPtrue 
-			       else
+let rec separation_intern ?(use_pred=false) loc n1 v1 =
+  match v1.nterm_type.Ctypes.ctype_node with
+    | Tarray (_,None) -> 
+	error loc ("array size missing in `" ^ n1 ^ "'")
+    | Tarray(ty,Some s) -> 
+	begin
+	  match ty.Ctypes.ctype_node with
+	    | Tarray (_,None) -> 
+		error loc ("array size missing in `" ^ n1 ^ "[i]'")
+	    | Tarray (_,_)  
+	    | Tstruct _ ->
+		make_and
+		  (make_forall_range loc v1 s 
+		     (fun t1 i1 ->
+			make_forall_range loc v1 s
+			  (fun t2 i2 -> 
+			     if i1 = nzero && i2 = nzero then NPtrue 
+			     else
 			       make_implies (NPrel (i1, Neq, i2)) 
 				 (not_alias loc t1 t2))))
-		    (make_forall_range loc v1 s 
-		       (fun t i -> 
-			  local_separation_intern loc (n1^"[i]") 
-			    (indirection loc ty t)))
-
-	      | _ -> NPtrue
-	  end
-      | Tstruct n -> 
-	  let l =
-	    begin
-	      match  tag_type_definition n with
-		| TTStructUnion ((Tstruct _),fl) ->
-		    fl
-		| _ -> assert false
-	    end  
-	  in
-	  let rec f l =
-	    match l with
-	      | (v::l) -> make_and
-		    (make_and 
-		    (local_separation_intern loc v.var_name 
-		       (var_to_term loc v))
-		    (List.fold_left 
-		       (fun acc x -> 
-			  make_and acc (local_separation loc false
-					  v.var_name (in_struct v1 v) 
-					  x.var_name (in_struct v1 x))) 
-		       NPtrue l))
-		    (f l)
-	      | [] -> NPtrue
-	  in
+		  (make_forall_range loc v1 s 
+		     (fun t i -> 
+			separation_intern ~use_pred:true loc (n1^"[i]") 
+			  (indirection loc ty t)))
+		  
+	    | _ -> NPtrue
+	end
+    | Tstruct n -> 
+	let l =
+	  begin
+	    match  tag_type_definition n with
+	      | TTStructUnion ((Tstruct _),fl) ->
+		  fl
+	      | _ -> assert false
+	  end  
+	in
+	let rec f l =
+	  match l with
+	    | (v::l) -> 
+		make_and
+		  (make_and 
+		     (separation_intern ~use_pred:true loc v.var_name 
+			(in_struct v1 v))
+		     (List.fold_left 
+			(fun acc x -> 
+			   make_and acc (local_separation loc false
+					   v.var_name (in_struct v1 v) 
+					   x.var_name (in_struct v1 x))) 
+			NPtrue l))
+		  (f l)
+	    | [] -> NPtrue
+	in
+	if use_pred then
+	  NPapp (find_pred ("internal_separation_" ^ n), [v1])
+	else
 	  f l
-      | _ -> NPtrue
-  in
-  local_separation_intern loc name v1
+    | _ -> 
+	NPtrue
+
     
 let noattr_located n =  
   { Cast.node = n; Cast.loc = Loc.dummy }
@@ -298,29 +307,43 @@ let noattr_located n =
 
 *)
 
-let separation s1 ty1 s2 (ty2,fl) decls =
-  let ty2 = noattr_type ty2 in
-  let t1_var = default_var_info s1 in
-  let t2_var = default_var_info s2 in
-  let t1 = { nterm_node = NTvar t1_var; 
-	     nterm_loc = Loc.dummy;
-	     nterm_type = ty1 } in
-  let t2 = { nterm_node = NTvar t2_var; 
-	     nterm_loc = Loc.dummy;
-	     nterm_type = ty2 } in
-  let pred = local_separation Loc.dummy false s1 t1 s2 t2 in
-  let pred = NPimplies ((diff Loc.dummy t1 t2),pred)
+let separation_done = Hashtbl.create 17
 
-  in
-  noattr_located (Cast.Naxiom ( 
-		    ("separation_" ^ s1 ^ "_" ^ s2),
-		    NPforall ((ty1,t1_var)::[ty2,t2_var] , pred )))::decls
+let separation s1 ty1 s2 (ty2,fl) decls =
+  if not (Hashtbl.mem separation_done (s2, s1)) then begin
+    Hashtbl.add separation_done (s1, s2) ();
+    let ty2 = noattr_type ty2 in
+    let t1_var = default_var_info s1 in
+    let s2' = if s1 = s2 then s2 ^ "1" else s2 in
+    let t2_var = default_var_info s2' in
+    let t1 = { nterm_node = NTvar t1_var; 
+	       nterm_loc = Loc.dummy;
+	       nterm_type = ty1 } in
+    let t2 = { nterm_node = NTvar t2_var; 
+	       nterm_loc = Loc.dummy;
+	       nterm_type = ty2 } in
+    let pred = local_separation Loc.dummy false s1 t1 s2 t2 in
+    let pred = NPimplies ((diff Loc.dummy t1 t2),pred) in
+    noattr_located (Cast.Naxiom ( 
+		      ("separation_" ^ s1 ^ "_" ^ s2),
+		      NPforall ((ty1,t1_var)::[ty2,t2_var] , pred )))::decls
+  end else
+    decls
     
 let add_predicates l =
+  (* first we enter all names in environment *)
+  Cenv.iter_all_struct 
+    (fun s (ty,_) ->
+       let ty = noattr_type ty in
+       let info = Info.default_logic_info ("valid_" ^ s) in 
+       Cenv.add_pred ("valid_" ^ s)  ([ty], info);
+       let info = Info.default_logic_info ("internal_separation_" ^ s) in 
+       Cenv.add_pred ("internal_separation_" ^ s) 
+	 ([noattr_type (Tpointer ty)],info));
+  (* then we define predicates for all structures *)
   let f s (ty,fl) l2 = 
     let ty = noattr_type ty in
-    let info = Info.default_logic_info ("valid_" ^ s) in 
-    Cenv.add_pred ("valid_" ^ s)  ([ty], info);
+    let info = find_pred ("valid_" ^ s) in
     let st = default_var_info s in
     Info.set_var_type (Var_info st) ty; 
     let t = 
@@ -338,11 +361,8 @@ let add_predicates l =
 	    in
 	    make_and acc (predicate_for s tf))
 	 fl NPtrue))))) ::l2 in
+    let info = find_pred ("internal_separation_" ^ s) in 
     let l2 = noattr_located (axiom_for s ty t st)::l2 in
-(*    let l2 = noattr_located (axiom_for_array s ty t st)::l2 in*)
-    let info = Info.default_logic_info ("internal_separation_" ^ s) in 
-    Cenv.add_pred ("internal_separation_" ^ s)  
-      ([noattr_type (Tpointer ty)],info);
     let l2 = noattr_located (
       Cast.Nlogic (info,
 		   NPredicate_def ([st,ty],

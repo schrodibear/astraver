@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.17 2005-01-19 16:19:19 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.18 2005-01-20 16:34:56 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -993,7 +993,7 @@ let in_struct v1 v =
 
 	
 let compatible_type ty1 ty2 = 
-  Cenv.compatible_type ty1 ty2 && 
+  (* Cenv.compatible_type ty1 ty2 && *)
   match ty1.Ctypes.ctype_node,ty2.Ctypes.ctype_node with
     | Tfun _ , _  | Tenum _, _ | Tpointer _ , _ 
     | Ctypes.Tvar _ , _ | Tvoid, _ | Tint _, _ | Tfloat _, _ -> false

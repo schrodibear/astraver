@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.76 2005-01-20 10:01:23 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.77 2005-01-20 16:34:56 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -869,10 +869,12 @@ let decl d =
 			 nterm_type = ty } in
 	       (*if s <> Int64.one then*)
 	       let name1 = "valid_range_" ^ v.var_name in
-	       let name2 = "internal_separation_array_" ^ v.var_name in
 	       let (pre1,pre2) = validity t typ s in
 	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
+	       (***
+	       let name2 = "internal_separation_array_" ^ v.var_name in
 	       add_strong_invariant name2 pre2 (HeapVarSet.singleton v);
+	       ***)
               (*else
 		  let name = "valid_var_" ^ v.var_name in
 		  let pre = NPvalid t in
@@ -881,6 +883,7 @@ let decl d =
 		List.iter (fun (x,p,y) -> add_strong_invariant x p y;
 			     add_strong_invariant_2 x p [])
 		  (invariant_for_global d.loc v);
+	       (****
 	       begin
 		 match typ.Ctypes.ctype_node with
 		   | Tstruct _ ->
@@ -895,7 +898,7 @@ let decl d =
 			 (HeapVarSet.singleton v)
 		   | _ -> ()
 	       end;
-		       
+	       ****)
 	   | _ -> ()
 	   end;
 	
