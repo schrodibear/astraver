@@ -36,6 +36,10 @@ BUGS
    let g = fun (x':int ref) -> begin (f void); x' := 1 end
    =======================================================
    => rename locals in Db (globals are unique)
+   => forbid local-global clash
+
+ - wp: function application: does not use kappa information => BUG
+       let x = ref e1 in e2: CORRECT?
 
 IMPLEMENTATION
 ==============
