@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.17 2004-03-04 09:08:27 filliatr Exp $ i*)
+(*i $Id: cmain.ml,v 1.18 2004-03-04 12:49:44 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -22,24 +22,19 @@ open Cerror
 open Creport
 
 let interp_file f =
-  let ppf,clean = Cpp.cpp f in
-  try
-    let c = open_in ppf in
-    let p = Clexer.parse c in
-    close_in c;
-    if parse_only then raise Exit;
-    let p = Ctyping.type_file p in
-    if type_only then raise Exit;
-    Ceffect.file p;
-    let (why,prover) = Cinterp.interp p in
-    let f = Filename.chop_extension f in
-    let ch = open_out (f ^ ".why") in
-    Output.fprintf_why_decls (formatter_of_out_channel ch) why;
-    close_out ch;
-    clean ()
-  with e ->
-    clean ();
-    raise e
+  let ppf = Cpp.cpp f in
+  let c = open_in ppf in
+  let p = Clexer.parse c in
+  close_in c;
+  if parse_only then raise Exit;
+  let p = Ctyping.type_file p in
+  if type_only then raise Exit;
+  Ceffect.file p;
+  let (why,prover) = Cinterp.interp p in
+  let f = Filename.chop_extension f in
+  let ch = open_out (f ^ ".why") in
+  Output.fprintf_why_decls (formatter_of_out_channel ch) why;
+  close_out ch
 
 let file_copy src dest =
   let cin = open_in src

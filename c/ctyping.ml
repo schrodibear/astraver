@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ctyping.ml,v 1.42 2004-03-03 15:25:02 filliatr Exp $ i*)
+(*i $Id: ctyping.ml,v 1.43 2004-03-04 12:49:44 filliatr Exp $ i*)
 
 open Format
 open Coptions
@@ -66,7 +66,7 @@ let float_op = function
   | _ -> assert false
 
 let type_op op ty = match ty.ctype_node with 
-  | CTint _ -> int_op op 
+  | CTint _ | CTenum _ -> int_op op 
   | CTfloat _ -> float_op op 
   | _ -> assert false 
 
@@ -77,9 +77,9 @@ let is_bitfield ty = match ty.ctype_node with
 (* Coercions (ints to floats, floats to int) *)
 
 let coerce ty e = match e.texpr_type.ctype_node, ty.ctype_node with
-  | CTint _, CTfloat _ -> 
+  | (CTint _ | CTenum _), CTfloat _ -> 
       { e with texpr_node = TEunary (Ufloat_of_int, e); texpr_type = ty }
-  | CTfloat _, CTint _ ->
+  | CTfloat _, (CTint _ | CTenum _) ->
       { e with texpr_node = TEunary (Uint_of_float, e); texpr_type = ty }
   | ty1, ty2 when eq_type_node ty1 ty2 ->
       e
@@ -98,9 +98,9 @@ let conversion e1 e2 =
   let ty1 = e1.texpr_type in
   let ty2 = e2.texpr_type in
   match ty1.ctype_node, ty2.ctype_node with
-    | CTint _, CTint _ -> e1, e2, ty1
-    | CTfloat _, CTint _ -> e1, coerce ty1 e2, ty1
-    | CTint _, CTfloat _ -> coerce ty2 e1, e2, ty2
+    | (CTint _ | CTenum _), (CTint _ | CTenum _) -> e1, e2, ty1
+    | CTfloat _, (CTint _ | CTenum _) -> e1, coerce ty1 e2, ty1
+    | (CTint _ | CTenum _), CTfloat _ -> coerce ty2 e1, e2, ty2
     | CTfloat _, CTfloat _ -> e1, e2, ty1
     | _ -> assert false
 
@@ -167,8 +167,11 @@ and type_type_node loc env = function
       Env.find_tag_type loc env tyn
   | CTenum (x, Decl fl) ->
       let type_enum_field (f, eo) = (f, type_int_expr_option env eo) in
-      let tyn = CTenum (x, Decl (List.map type_enum_field fl)) in
-      Env.find_tag_type loc env tyn
+      let fl = List.map type_enum_field fl in
+      let tyn = Env.find_tag_type loc env (CTenum (x, Decl fl)) in
+      let ty = noattr tyn in
+      List.iter (fun (f,_) -> add_sym loc f ty (default_var_info f)) fl;
+      tyn
   | CTfun (pl, tyn) ->
       CTfun (List.map (type_parameter loc env) pl, type_type loc env tyn)
 
@@ -263,7 +266,8 @@ and type_expr_node loc env = function
       let e = type_lvalue env e in
       warn_for_read_only e_loc e;
       begin match e.texpr_type.ctype_node with
-	| CTint _ | CTfloat _ | CTpointer _ -> TEincr (op, e), e.texpr_type
+	| CTenum _ | CTint _ | CTfloat _ | CTpointer _ -> 
+            TEincr (op, e), e.texpr_type
 	| _ -> error loc "wrong type to {de,in}crement"
       end
   | CEunary (Unot, e) ->
@@ -272,7 +276,7 @@ and type_expr_node loc env = function
   | CEunary ((Uplus | Uminus as op), e) ->
       let e = type_expr env e in
       begin match e.texpr_type.ctype_node with
-	| CTint _ | CTfloat _ -> TEunary (op, e), e.texpr_type
+	| CTenum _ | CTint _ | CTfloat _ -> TEunary (op, e), e.texpr_type
 	| _ -> error loc "wrong type argument to unary plus/minus"
       end
   | CEunary (Uamp, e) ->
@@ -311,12 +315,12 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	| (CTenum _ | CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Badd ty, e2), ty
-	| (CTpointer _ | CTarray _), CTint _ -> 
+	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
 	    TEbinary (e1, Badd_pointer_int, e2), ty1
-	| CTint _, (CTpointer _ | CTarray _) ->
+	| (CTenum _ | CTint _), (CTpointer _ | CTarray _) ->
 	    TEbinary (e1, Badd_int_pointer, e2), ty2
 	| _ -> error loc "invalid operands to binary +"
       end
@@ -326,10 +330,10 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	| (CTint _ | CTenum _ | CTfloat _), (CTint _ | CTenum _ | CTfloat _) ->
 	    let e1,e2,ty = conversion e1 e2 in
 	    TEbinary (e1, type_op Bsub ty, e2), ty
-	| (CTpointer _ | CTarray _), CTint _ -> 
+	| (CTpointer _ | CTarray _), (CTint _ | CTenum _) -> 
 	    TEbinary (e1, Bsub_pointer_int, e2), ty1
 	| (CTpointer _ | CTarray _), (CTpointer _ | CTarray _) ->
 	    TEbinary (e1, Bsub_pointer, e2), ty2
@@ -341,7 +345,7 @@ and type_expr_node loc env = function
       let e2 = type_expr env e2 in
       let ty2 = e2.texpr_type in
       begin match ty1.ctype_node, ty2.ctype_node with
-	| (CTint _ | CTfloat _), (CTint _ | CTfloat _) ->
+	| (CTint _ | CTenum _ | CTfloat _), (CTint _ | CTenum _ | CTfloat _) ->
 	    let e1,e2,_ = conversion e1 e2 in
 	    TEbinary (e1, op, e2), c_int
 	| (CTpointer ty1  | CTarray (ty1,_)), 
@@ -349,8 +353,8 @@ and type_expr_node loc env = function
 	    if not (compat_pointers ty1 ty2) then
 	      warning loc "comparison of distinct pointer types lacks a cast";
 	    TEbinary (e1, op, e2), c_int
-	| (CTpointer _  | CTarray _), (CTint _ | CTfloat _)
-	| (CTint _ | CTfloat _), (CTpointer _  | CTarray _) ->
+	| (CTpointer _  | CTarray _), (CTint _ | CTenum _ | CTfloat _)
+	| (CTint _ | CTenum _ | CTfloat _), (CTpointer _  | CTarray _) ->
 	    warning loc "comparison between pointer and integer";
 	    TEbinary (e1, op, e2), c_int
 	| _ ->
@@ -437,10 +441,14 @@ and type_field loc env (ty, x, bf) =
 	error loc ("field `"^x^"' declared void")
     | None, _ ->
 	(ty, x, bf)
-    | Some e, CTint (s, i) -> 
-	(match i with 
-	   | Int -> ()
-	   | _ -> warning loc ("bit-field `"^x^"' type invalid in ANSI C"));
+    | Some e, (CTenum _ | CTint _ as tyn) -> 
+	let s = match tyn with
+	  | CTenum _ -> Unsigned (* TODO: verif assez de bits pour l'enum *)
+	  | CTint (s, Int) -> s
+	  | CTint (s, _) ->
+	      warning loc ("bit-field `"^x^"' type invalid in ANSI C"); s
+	  | _ -> assert false
+	in
 	({ty with ctype_node = CTint (s, Bitfield e)}, x, bf)
     | Some _, _ -> 
 	error loc ("bit-field `"^x^"' has invalid type")
@@ -451,13 +459,14 @@ and type_field loc env (ty, x, bf) =
 and type_int_expr_option env eo = option_app (type_int_expr env) eo
 
 and type_int_expr env e = match type_expr env e with
-  | { texpr_type = { ctype_node = CTint _ } } as te -> te
+  | { texpr_type = { ctype_node = CTint _ | CTenum _ } } as te -> te
   | _ -> error e.loc "invalid operand (expected integer)"
 
 (*s Typing of arithmetic expressions: integers or floats *)
 
 and type_arith_expr env e = match type_expr env e with
-  | { texpr_type = { ctype_node = CTint _ | CTfloat _ } } as te -> te
+  | { texpr_type = { ctype_node = CTint _ | CTenum _ | CTfloat _ } } as te -> 
+      te
   | _ -> error e.loc "invalid operand (expected integer or float)"
 
 (*s Typing of ``boolean'' expressions *)
@@ -466,7 +475,7 @@ and type_boolean env e =
   let e' = type_expr env e in
   let ty = e'.texpr_type in
   match ty.ctype_node with
-    | CTint _ | CTfloat _ | CTpointer _ | CTarray _ -> e'
+    | CTint _ | CTenum _ | CTfloat _ | CTpointer _ | CTarray _ -> e'
     | _ -> error e.loc "invalid operand (expected arith or pointer)"
 
 (*s Typing of initializers *)

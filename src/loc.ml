@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: loc.ml,v 1.9 2004-01-13 14:37:06 filliatr Exp $ i*)
+(*i $Id: loc.ml,v 1.10 2004-03-04 12:49:44 filliatr Exp $ i*)
 
 (*s Error locations. *)
 
@@ -63,7 +63,8 @@ let report fmt (b,e) = match !file with
          let (f,l,cl) = Linenum.from_char f b in
          fprintf fmt "File \"%s\", line %d, characters %d-%d:@\n" 
 	   f l cl (cl+e-b)
-       with _ ->
+       with ex ->
+	 eprintf "%s\n" (Printexc.to_string ex);
 	 fprintf fmt "File \"%s\", characters %d-%d:@\n" f b e)
 
 let report_obligation fmt (b,e) = match !file with

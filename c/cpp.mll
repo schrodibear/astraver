@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cpp.mll,v 1.3 2004-03-04 09:16:27 filliatr Exp $ i*)
+(*i $Id: cpp.mll,v 1.4 2004-03-04 12:49:44 filliatr Exp $ i*)
 
 (* C-preprocessor for Caduceus *)
 
@@ -88,10 +88,11 @@ and after = parse
       let pppf = after_cpp ppf in
       Sys.remove ppf; 
       Loc.set_file pppf;
-      pppf, (fun () -> Sys.remove pppf)
+      at_exit (fun () -> Sys.remove pppf);
+      pppf
     end else begin
       Loc.set_file f;
-      f, (fun () -> ())
+      f
     end
 
   let dump f =
@@ -102,9 +103,9 @@ and after = parse
       close_in cin
 
   let cpp f =
-    let (pf,rm_pf as r) = translate f in
-    if cpp_dump then begin dump pf; rm_pf (); exit 0 end;
-    r
+    let pf = translate f in
+    if cpp_dump then begin dump pf; exit 0 end;
+    pf
 
 }
 

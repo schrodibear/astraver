@@ -13,7 +13,9 @@ let rec eq_type ty1 ty2 =
 and eq_type_node tn1 tn2 = match tn1, tn2 with
   | CTvoid, CTvoid
   | CTint _, CTint _ 
-  | CTfloat _, CTfloat _ ->
+  | CTfloat _, CTfloat _ 
+  | CTint _, CTenum _ 
+  | CTenum _, CTint _ ->
       true
   | CTvar x1, CTvar x2 ->
       x1 = x2

@@ -14,9 +14,9 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cpp.mli,v 1.1 2004-03-02 13:42:28 filliatr Exp $ i*)
+(*i $Id: cpp.mli,v 1.2 2004-03-04 12:49:44 filliatr Exp $ i*)
 
-(* [cpp f] preprocesses file [f]; returns the preprocessed file and a 
-   finalizer to be called when the preprocessed file has been used. *)
+(* [cpp f] preprocesses file [f] and returns the preprocessed file. *)
 
-val cpp : string -> string * (unit -> unit)
+val cpp : string -> string
+
