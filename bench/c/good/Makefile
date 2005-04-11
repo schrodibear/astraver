@@ -13,7 +13,7 @@ WBENCHFILES=$(addprefix why/, $(CBENCHFILES:.c=.why))
 SBENCHFILES=$(addprefix simplify/, $(CBENCHFILES:.c=_why.sx.all))
 HBENCHFILES=$(addprefix harvey/, $(CBENCHFILES:.c=_why.all.rv))
 
-TIMEOUT=10
+TIMEOUT=60
 
 # generating and type-checking Why files for all C files
 default:
