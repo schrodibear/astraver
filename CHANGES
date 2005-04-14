@@ -1,4 +1,6 @@
 
+  o SMT-LIB format output (--smtlib option)
+ 
 version 1.75, March 15th, 2005
 =============================
   o fixed installation issue with Coq 8.0pl2 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.mli,v 1.38 2004-07-05 14:05:21 filliatr Exp $ i*)
+(*i $Id: options.mli,v 1.39 2005-04-14 14:58:15 filliatr Exp $ i*)
 
 (*s General options *)
 
@@ -57,6 +57,7 @@ type coq_version = V7 | V8
 
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
+  | SmtLib
 
 val prover : prover
 

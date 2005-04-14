@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmake.ml,v 1.7 2005-04-11 07:00:56 filliatr Exp $ i*)
+(*i $Id: cmake.ml,v 1.8 2005-04-14 14:58:15 filliatr Exp $ i*)
 
 open Format
 open Pp
@@ -32,6 +32,7 @@ let coq_vo fmt f = fprintf fmt "coq/%s_why.vo" f
 let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
 let cvcl_all fmt f = fprintf fmt "cvcl/%s_why.cvc.all" f
 let harvey_all fmt f = fprintf fmt "harvey/%s_why.all.rv" f
+let smtlib_all fmt f = fprintf fmt "smtlib/%s_why.smt" f
 
 let print_files = print_list (fun fmt () -> fprintf fmt "\\@\n  ")
 
@@ -43,7 +44,7 @@ let generic f targets =
        fprintf fmt "WHY=why %s@\n@\n" Coptions.why_opt;	    
        fprintf fmt "CADULIB=%s@\n@\n" Coptions.libdir;	    
        fprintf fmt "COQTACTIC=%s@\n@\n" Coptions.coq_tactic;	    
-       fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey@\n@\n";
+       fprintf fmt ".PHONY: all coq pvs simplify cvcl harvey smtlib@\n@\n";
        fprintf fmt "all: coq/caduceus_spec_why.v %a@\n@\n" 
 	 (print_files simplify) targets;
        fprintf fmt "coq: %a@\n@\n" (print_files coq_vo) targets;
@@ -76,11 +77,16 @@ let generic f targets =
        fprintf fmt "\t@@echo 'why -cvcl [...] why/$*.why' && $(WHY) -cvcl -no-cvcl-prelude -dir cvcl $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/$*.why@\n@\n";
        
        fprintf fmt "harvey: %a@\n" (print_files harvey_all) targets;
-       fprintf fmt "\t@@echo 'Running Simplify on proof obligations' && (dp -timeout 10 $^)@\n@\n";
+       fprintf fmt "\t@@echo 'Running haRVey on proof obligations' && (dp -timeout 10 $^)@\n@\n";
        fprintf fmt "harvey/%%_why.all.rv: harvey/%%_why.rv@\n";
        fprintf fmt "\t@@rv_merge harvey/caduceus_why.rv harvey/caduceus_spec_why.rv $< > $@@@\n@\n";
        fprintf fmt "harvey/%%_why.rv: why/caduceus_spec.why why/%%.why@\n";
        fprintf fmt "\t@@echo 'why -harvey [...] why/$*.why' && $(WHY) -harvey -dir harvey $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/$*.why@\n@\n";
+       
+       fprintf fmt "smtlib: %a@\n" (print_files smtlib_all) targets;
+       fprintf fmt "@\n";
+       fprintf fmt "smtlib/%%_why.smt: why/caduceus_spec.why why/%%.why@\n";
+       fprintf fmt "\t@@echo 'why -smtlib [...] why/$*.why' && $(WHY) -smtlib -dir smtlib $(CADULIB)/why/caduceus.why why/caduceus_spec.why why/$*.why@\n@\n";
        
        fprintf fmt "include %s.depend@\n@\n" f;
        fprintf fmt "depend %s.depend: coq/caduceus_spec_why.v coq/caduceus_tactics.v %a@\n" f (print_files coq_v) targets;

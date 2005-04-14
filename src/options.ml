@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: options.ml,v 1.46 2005-03-08 10:24:54 filliatr Exp $ i*)
+(*i $Id: options.ml,v 1.47 2005-04-14 14:58:15 filliatr Exp $ i*)
 
 open Format
 
@@ -54,6 +54,7 @@ let c_file = ref false
 type coq_version = V7 | V8
 type prover = 
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
+  | SmtLib
 let prover_ = ref (match Version.coqversion with "v8" -> Coq V8 | _ -> Coq V7)
 
 (*s extracting the Mizar environ from a file *)
@@ -142,6 +143,7 @@ Prover selection:
   --harvey    selects haRVey prover
   --simplify  selects Simplify prover
   --cvcl      selects CVC Lite prover
+  --smtlib    selects the SMT-LIB format
   --fpi       outputs floating-point obligations into a separate .fpi file
 
 Coq-specific options:
@@ -191,6 +193,7 @@ let files =
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args
+    | ("-smtlib" | "--smtlib") :: args -> prover_ := SmtLib; parse args
     | ("-fpi" | "--fpi") :: args -> fpi_ := true; parse args
     | ("-d"|"--debug") :: args -> verbose_ := true; debug_ := true; parse args
     | ("-p" | "--parse-only") :: args -> parse_only_ := true; parse args
