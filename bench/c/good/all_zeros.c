@@ -10,7 +10,7 @@ int all_zeros(int t[], int n) {
   return n < 0;
 }
 
-#ifdef 0
+#ifdef ZERO
 /*@ requires \valid_range(t,0,n) 
     ensures \result <=> \forall int i; 0<=i<n => t[i]==0 */
 int all_zeros_1(int t[], int n) {
