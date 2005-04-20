@@ -3,29 +3,18 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/struct3.why", characters 208-227 *)
+(* Why obligation from file "why/struct3.why", characters 75-94 *)
 Lemma f_impl_po_1 : 
-  forall (alloc: alloc_table),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (Pre11: (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_y (acc y S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_x (acc x S))))),
   1 >= 1.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 243-300 *)
+(* Why obligation from file "why/struct3.why", characters 110-167 *)
 Lemma f_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre11: (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_y (acc y S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_x (acc x S))))),
   forall (Pre10: 1 >= 1),
   forall (alloc0: alloc_table),
   forall (a: pointer),
@@ -42,60 +31,28 @@ Lemma f_impl_po_2 :
   forall (Pre7: (valid alloc0 a)),
   forall (result1: Z),
   forall (Post5: result1 = (acc y0 a)),
-  result1 = 2 /\
-  (forall (S:pointer), ((valid alloc0 S) -> (valid_S_y (acc y0 S)))) /\
-  (forall (S:pointer), ((valid alloc0 S) -> (valid_S_x (acc x0 S)))).
+  result1 = 2.
 Proof.
 intuition; subst; auto;
 caduceus;
 red;auto.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 1167-1186 *)
+(* Why obligation from file "why/struct3.why", characters 314-333 *)
 Lemma g_impl_po_1 : 
-  forall (alloc: alloc_table),
   forall (s: ((memory) pointer)),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
-  forall (z: ((memory) Z)),
-  forall (Pre18: (forall (U:pointer),
-                  ((valid alloc U) -> (internal_separation_U alloc s U))) /\
-                 (forall (S:pointer),
-                  (forall (U:pointer),
-                   (~(S = U) -> ~((base_addr S) = (base_addr (acc s U)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_y (acc y S)))) /\
-                 (forall (U:pointer),
-                  ((valid alloc U) -> (valid_U_s alloc (acc s U)))) /\
-                 (forall (U:pointer),
-                  ((valid alloc U) -> (valid_U_z (acc z U)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_x (acc x S))))),
+  forall (Pre18: (valid1 s) /\ (separation2 s s)),
   1 >= 1.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/struct3.why", characters 1275-1299 *)
+(* Why obligation from file "why/struct3.why", characters 422-446 *)
 Lemma g_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (s: ((memory) pointer)),
-  forall (x: ((memory) Z)),
-  forall (y: ((memory) Z)),
   forall (z: ((memory) Z)),
-  forall (Pre18: (forall (U:pointer),
-                  ((valid alloc U) -> (internal_separation_U alloc s U))) /\
-                 (forall (S:pointer),
-                  (forall (U:pointer),
-                   (~(S = U) -> ~((base_addr S) = (base_addr (acc s U)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_y (acc y S)))) /\
-                 (forall (U:pointer),
-                  ((valid alloc U) -> (valid_U_s alloc (acc s U)))) /\
-                 (forall (U:pointer),
-                  ((valid alloc U) -> (valid_U_z (acc z U)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_x (acc x S))))),
+  forall (Pre18: (valid1 s) /\ (separation2 s s)),
   forall (Pre17: 1 >= 1),
   forall (alloc0: alloc_table),
   forall (u: pointer),
@@ -114,26 +71,14 @@ Proof.
 intuition; subst; auto.
 Admitted.
 
-(* Why obligation from file "why/struct3.why", characters 1242-1299 *)
+(* Why obligation from file "why/struct3.why", characters 389-446 *)
 Lemma g_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (s: ((memory) pointer)),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
   forall (z: ((memory) Z)),
-  forall (Pre18: (forall (U:pointer),
-                  ((valid alloc U) -> (internal_separation_U alloc s U))) /\
-                 (forall (S:pointer),
-                  (forall (U:pointer),
-                   (~(S = U) -> ~((base_addr S) = (base_addr (acc s U)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_y (acc y S)))) /\
-                 (forall (U:pointer),
-                  ((valid alloc U) -> (valid_U_s alloc (acc s U)))) /\
-                 (forall (U:pointer),
-                  ((valid alloc U) -> (valid_U_z (acc z U)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_x (acc x S))))),
+  forall (Pre18: (valid1 s) /\ (separation2 s s)),
   forall (Pre17: 1 >= 1),
   forall (alloc0: alloc_table),
   forall (u: pointer),
@@ -154,11 +99,7 @@ Lemma g_impl_po_3 :
    (result = (acc s u) ->
     (forall (y0:((memory) Z)),
      (y0 = (upd y result 3) ->
-      (((forall (result:Z),
-         (result = (acc y0 (acc s u)) -> result = 3 /\
-          (forall (S:pointer), ((valid alloc0 S) -> (valid_S_y (acc y0 S)))) /\
-          (forall (U:pointer), ((valid alloc0 U) -> (valid_U_z (acc z0 U)))) /\
-          (forall (S:pointer), ((valid alloc0 S) -> (valid_S_x (acc x0 S)))))) /\
+      (((forall (result:Z), (result = (acc y0 (acc s u)) -> result = 3)) /\
       (valid alloc0 u)) /\ (valid alloc0 (acc s u))) /\
       (valid alloc0 (acc s u)))) /\
     (valid alloc0 result))) /\

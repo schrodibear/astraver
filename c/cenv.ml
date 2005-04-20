@@ -139,7 +139,14 @@ let fold_all_struct f x =
        | _ -> acc) 
     tags_t x
 
-
+let fold_all_struct_pairs f x =
+  let ls = fold_all_struct (fun s tt acc -> (s,tt) :: acc) [] in
+  let rec fold acc = function
+    | [] -> acc
+    | ((s1, tt1) :: r) as l -> 
+	fold (List.fold_left (fun acc (s2,tt2) -> f s1 tt1 s2 tt2 acc) acc l) r
+  in
+  fold x ls
 
 (* typedefs *)
 

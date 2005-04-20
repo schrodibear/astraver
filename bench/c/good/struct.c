@@ -4,13 +4,13 @@ typedef struct {
   int y;
 } T;
 
-/*@ requires \valid(t) && t->x == 0
-  @ assigns t->x
-  @ ensures \result == 1 && t->x == 2 && t->y == \old(t->y)
+/*@ requires \valid(t2) && t2->x == 0
+  @ assigns t2->x
+  @ ensures \result == 1 && t2->x == 2 && t2->y == \old(t2->y)
   @*/
-int f(T* t) {
-  t->x++; 
-  return t->x++;
+int f(T* t2) {
+  t2->x++; 
+  return t2->x++;
 }
 
 struct S { int z; T t; } s;

@@ -3,13 +3,4 @@
 
 Require Export caduceus_spec_why.
 
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
-
-Proof.
-intuition.
-(* FILL PROOF HERE *)
-Save.
 

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cinterp.ml,v 1.141 2005-03-25 15:37:44 hubert Exp $ i*)
+(*i $Id: cinterp.ml,v 1.142 2005-04-20 14:11:13 hubert Exp $ i*)
 
 
 open Format
@@ -222,6 +222,11 @@ and interp_term_address  label old_label e = match e.nterm_node with
   | _ -> 
       assert false (* not a left value *)
 
+let has_prefix p s = 
+  let n = String.length p in String.length s >= n && String.sub s 0 n = p
+
+let is_internal_pred s = String.length s >= 1 && String.sub s 0 1 = "%"
+
 let rec interp_predicate label old_label p =
   let f = interp_predicate label old_label in
   let ft = interp_term label old_label in
@@ -255,12 +260,34 @@ let rec interp_predicate label old_label p =
     | NPrel (t1, op, t2) ->
 	let t1,op,t2 = interp_rel t1 t2 op in
 	LPred(op,[ft t1;ft t2])
+    |NPapp (v,tl) when is_internal_pred v.logic_name ->
+       let n = v.logic_name in
+       let name,num =
+	 if has_prefix "%valid1_range" n then "valid1_range", 1
+	 else if has_prefix "%valid1" n then "valid1", 1
+	 else if has_prefix "%separation1_range1" n then "separation1_range1",2
+	 else if has_prefix "%separation1_range" n then "separation1_range", 1
+	 else if has_prefix "%separation1" n then "separation1", 2
+	 else if has_prefix "%separation2_range" n then "separation2_range", 2
+	 else if has_prefix "%separation2" n then "separation2", 2
+	 else assert false
+       in
+       let param = 
+	 HeapVarSet.fold 
+	   (fun x acc -> interp_var label x.var_unique_name :: acc)
+	   v.logic_args []
+       in
+       let param = match param, num with
+	 | [x], 2 -> [x; x]
+	 | _ -> param
+       in
+       LPred(name, param @ List.map ft tl)
     | NPapp (v, tl) ->
-	LPred(v.logic_name, 
-	      (HeapVarSet.fold 
+	LPred (v.logic_name,
+	       HeapVarSet.fold 
 		 (fun x acc -> (interp_var label x.var_unique_name) :: acc) 
-		 v.logic_args []) 
-	      @ List.map ft tl)
+		 v.logic_args []
+	       @ List.map ft tl)
     | NPfalse -> 
 	LFalse
     | NPold p -> 
@@ -970,6 +997,7 @@ let interp_decl d acc =
     | Nfunspec _
     | Naxiom _
     | Ninvariant _
+    | Ninvariant_strong _
     | Nlogic _
     | Nfundef _ ->
 	assert false
@@ -1419,6 +1447,9 @@ let interp_located_tdecl ((why_code,why_spec,prover_decl) as why) decl =
       let a = interp_axiom p in
       (why_code, Axiom(id,a)::why_spec, prover_decl)
   | Ninvariant(id,p) -> 
+      lprintf "translating invariant declaration %s@." id;      
+      why
+  | Ninvariant_strong (id,p) ->
       lprintf "translating invariant declaration %s@." id;      
       why
   | Ntypedecl ({ Ctypes.ctype_node = Tenum _ } as ctype)

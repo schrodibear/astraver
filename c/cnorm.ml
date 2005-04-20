@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.28 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: cnorm.ml,v 1.29 2005-04-20 14:11:13 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -536,17 +536,30 @@ let rec expr_of_term (t : nterm) : nexpr =
 	    (expr_of_term term))
 	      
 	| NTstar t ->  NEstar (expr_of_term t)
-	| NTbinop (t1, b, t2) -> NEbinary 
-	      ((expr_of_term t1),
-	       begin match b with (*TODO: Badd_int, etc. et pas Badd *)
-		 | Clogic.Badd -> Badd
-		 | Clogic.Bsub -> Bsub
-		 | Clogic.Bmul -> Bmul 
-		 | Clogic.Bdiv -> Bdiv
-		 | Clogic.Bmod -> Bmod
+	| NTbinop (t1, b, t2) -> 
+	    let t1 = (expr_of_term t1) in
+	    let t2 = (expr_of_term t2) in
+	    NEbinary 
+	      (t1,
+	       begin match b,t1.nexpr_type.Ctypes.ctype_node,
+	       t2.nexpr_type.Ctypes.ctype_node with
+		 | Clogic.Badd,Tint _ , Tint _ -> Badd_int
+		 | Clogic.Badd,Tfloat _ , Tfloat _ -> Badd_float
+		 | Clogic.Badd,Tpointer _ , Tint _ -> Badd_pointer_int
+		 | Clogic.Bsub,Tint _ , Tint _ -> Bsub_int
+		 | Clogic.Bsub,Tfloat _ , Tfloat _ -> Bsub_float
+		 | Clogic.Bsub,Tpointer _ , Tint _ -> Bsub_pointer
+		 | Clogic.Bmul,Tfloat _ , Tfloat _ -> Bmul_float
+		 | Clogic.Bmul,Tint _ , Tint _ -> Bmul_int
+		 | Clogic.Bdiv,Tfloat _ , Tfloat _ -> Bdiv_float
+		 | Clogic.Bdiv,Tint _ , Tint _ -> Bdiv_int
+		 | Clogic.Bmod,Tint _ ,Tint _ -> Bmod_int
+		 | Clogic.Badd,Tarray _ , Tint _ -> Badd_pointer_int
+		 | Clogic.Bsub,Tarray _ , Tint _ -> Bsub_pointer   
+		 | _ -> error  t.nterm_loc 
+		     "this operation can't be used with ghost variables"
 	       end,
-	       (expr_of_term t2))
-	      
+	       t2)
 	| NTarrow (t,v) -> NEarrow (expr_of_term t,v)
 	| NTif (t1,t2,t3)-> NEcond 
 	      (expr_of_term t1,expr_of_term t2,expr_of_term t3)

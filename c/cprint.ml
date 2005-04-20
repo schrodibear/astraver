@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cprint.ml,v 1.8 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: cprint.ml,v 1.9 2005-04-20 14:11:13 hubert Exp $ i*)
 
 (* Pretty-printer for normalized AST *)
 
@@ -361,6 +361,9 @@ and ndecl fmt d = match d.node with
       fprintf fmt "/*@@ @[axiom %s:@ %a@] */@\n" x npredicate p
   | Ninvariant (x, p) -> 
       fprintf fmt "/*@@ @[<hov 2>invariant %s:@ %a@] */@\n" x npredicate p 
+  | Ninvariant_strong (x, p) -> 
+      fprintf fmt "/*@@ @[<hov 2>strong invariant %s:@ %a@] */@\n" x 
+	npredicate p
   | Ntypedef (ty, x) ->
       fprintf fmt "typedef %a %s;@\n" ctype ty x
   | Ntypedecl ty ->

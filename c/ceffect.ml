@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.90 2005-04-01 13:46:57 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.91 2005-04-20 14:11:12 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -117,7 +117,7 @@ let is_memory_var v =
     with Not_found -> assert false
 
 let declare_heap_var v ty =
-(*  eprintf "declare_heap_var %s (%a)%s\n" v (print_list comma pp_print_string) (fst ty) (snd ty); flush stderr;*)
+  (*eprintf "declare_heap_var %s (%a)%s\n" v (print_list comma pp_print_string) (fst ty) (snd ty); flush stderr;*)
   if not (Hashtbl.mem heap_vars v) then Hashtbl.add heap_vars v ty
   else assert (Hashtbl.find heap_vars v = ty)
 
@@ -278,11 +278,11 @@ let rec predicate p =
   match p with
     | NPtrue -> empty
     | NPfalse -> empty
-    | NPapp (id, tl) -> 	
+    | NPapp (id, tl) -> 
 	List.fold_left 
 	  (fun acc t -> union acc (term t)) 
 	  id.logic_args
-	  tl
+	  tl 
     | NPrel (t1, _, t2) -> union (term t1) (term t2)
     | NPand (p1, p2)
     | NPor (p1, p2) 
@@ -360,7 +360,7 @@ let weak_invariants_for hvs =
 
 let strong_invariants_for hvs =
   Hashtbl.fold
-    (fun _ (_,_,e) acc -> 
+    (fun s (_,_,e) acc -> 
        if HeapVarSet.subset e hvs then union e acc
        else acc) 
     strong_invariants empty
@@ -883,7 +883,7 @@ let rec validity x ty size =
 			       (noattr x.nterm_loc ty 
 				  (NTbinop (x,Clogic.Badd,varj))),
 			       pre2))))
-    | Tstruct (n) ->
+(*    | Tstruct (n) ->
 	let term_sup = { nterm_node = NTconstant (IntConstant 
 						    (Int64.to_string size)); 
 			 nterm_loc = x.nterm_loc;
@@ -891,7 +891,7 @@ let rec validity x ty size =
 	let name = "internal_separation_" ^ n in
 	NPvalid_range (x, Cnorm.nzero,term_sup), 
 	NPapp (snd (find_pred name), [x])
-				
+*)			
     | _ ->  
 	let term_sup = { nterm_node = NTconstant (IntConstant 
 						    (Int64.to_string size)); 
@@ -909,6 +909,9 @@ let decl d =
 	id.logic_args <- l
     | Ninvariant(id,p) -> 
 	add_weak_invariant id p
+    | Ninvariant_strong(id,p) -> 
+	let pre = (predicate p) in 
+	add_strong_invariant id p pre	  
     | Ndecl(ty,v,init) when ty.Ctypes.ctype_storage <> Extern -> 
 	begin
 	  match ty.Ctypes.ctype_node with

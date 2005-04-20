@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cast.mli,v 1.56 2005-02-16 13:14:27 hubert Exp $ i*)
+(*i $Id: cast.mli,v 1.57 2005-04-20 14:11:12 hubert Exp $ i*)
 
 (*s C types *)
 
@@ -344,6 +344,7 @@ and ndecl =
   | Nlogic of Info.logic_info * (nterm,nctype) nlogic_symbol
   | Naxiom of string * npredicate
   | Ninvariant of string * npredicate
+  | Ninvariant_strong of string * npredicate
   | Ntypedef of nctype * string
   | Ntypedecl of nctype
   | Ndecl of nctype * Info.var_info * nexpr c_initializer option

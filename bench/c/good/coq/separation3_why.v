@@ -3,139 +3,63 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/separation3.why", characters 4790-4867 *)
+(* Why obligation from file "why/separation3.why", characters 1295-1372 *)
 Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
   forall (l: pointer),
-  forall (p: ((memory) pointer)),
   forall (q: ((memory) pointer)),
   forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre13: ((forall (L:pointer),
-                   ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                 (forall (S:pointer),
-                  (forall (S1:pointer),
-                   (~(S = S1) ->
-                    ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                 (forall (L:pointer),
-                  (forall (S:pointer),
-                   (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                    (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                 (forall (L:pointer),
-                  (forall (L1:pointer),
-                   (~(L = L1) ->
-                    (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                            acc b (acc q L1)))) /\
-                    ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc r L1)))))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_p (acc p L))))) /\
-                 (valid_range alloc l 0 1) /\ (valid_range alloc s0 0 1) /\
-                 (separation_l_s0 alloc b c q r s0 l)),
+  forall (Pre13: (separation2 b b) /\ (separation_s0_l alloc b c q r s0 l) /\
+                 (separation_l_l alloc q r l) /\ (valid1 b) /\
+                 (valid_range alloc l 0 1) /\ (valid_range alloc l 0 1) /\
+                 (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                 (forall (index_3:pointer),
+                  (forall (index_4:pointer),
+                   ~((base_addr (acc b index_3)) = (base_addr (acc b index_4))))) /\
+                 (separation_s0_s0 alloc b c s0) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\ (valid1_range b 5)),
   (valid alloc s0).
 Proof.
 intuition.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 4875-4902 *)
+(* Why obligation from file "why/separation3.why", characters 1380-1407 *)
 Lemma f2_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
   forall (l: pointer),
-  forall (p: ((memory) pointer)),
   forall (q: ((memory) pointer)),
   forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre13: ((forall (L:pointer),
-                   ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                 (forall (S:pointer),
-                  (forall (S1:pointer),
-                   (~(S = S1) ->
-                    ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                 (forall (L:pointer),
-                  (forall (S:pointer),
-                   (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                    (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                 (forall (L:pointer),
-                  (forall (L1:pointer),
-                   (~(L = L1) ->
-                    (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                            acc b (acc q L1)))) /\
-                    ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc r L1)))))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_p (acc p L))))) /\
-                 (valid_range alloc l 0 1) /\ (valid_range alloc s0 0 1) /\
-                 (separation_l_s0 alloc b c q r s0 l)),
+  forall (Pre13: (separation2 b b) /\ (separation_s0_l alloc b c q r s0 l) /\
+                 (separation_l_l alloc q r l) /\ (valid1 b) /\
+                 (valid_range alloc l 0 1) /\ (valid_range alloc l 0 1) /\
+                 (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                 (forall (index_3:pointer),
+                  (forall (index_4:pointer),
+                   ~((base_addr (acc b index_3)) = (base_addr (acc b index_4))))) /\
+                 (separation_s0_s0 alloc b c s0) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\ (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = (shift (acc b s0) 2)),
   (valid alloc caduceus_4).
 Proof.
 intuition; subst.
-generalize (H9 s0).
-unfold valid_S_b; intuition.
+unfold valid1_range in H13.
+generalize (H13 s0 alloc Pre4); intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 4773-4902 *)
+(* Why obligation from file "why/separation3.why", characters 1278-1407 *)
 Lemma f2_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
@@ -146,54 +70,17 @@ Lemma f2_impl_po_3 :
   forall (q: ((memory) pointer)),
   forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre13: ((forall (L:pointer),
-                   ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                 (forall (S:pointer),
-                  (forall (S1:pointer),
-                   (~(S = S1) ->
-                    ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                 (forall (L:pointer),
-                  (forall (S:pointer),
-                   (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                    (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                 (forall (L:pointer),
-                  (forall (L1:pointer),
-                   (~(L = L1) ->
-                    (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                            acc b (acc q L1)))) /\
-                    ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc r L1)))))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_p (acc p L))))) /\
-                 (valid_range alloc l 0 1) /\ (valid_range alloc s0 0 1) /\
-                 (separation_l_s0 alloc b c q r s0 l)),
+  forall (Pre13: (separation2 b b) /\ (separation_s0_l alloc b c q r s0 l) /\
+                 (separation_l_l alloc q r l) /\ (valid1 b) /\
+                 (valid_range alloc l 0 1) /\ (valid_range alloc l 0 1) /\
+                 (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                 (forall (index_3:pointer),
+                  (forall (index_4:pointer),
+                   ~((base_addr (acc b index_3)) = (base_addr (acc b index_4))))) /\
+                 (separation_s0_s0 alloc b c s0) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\
+                 (separation_l_s0 alloc b c q r s0 l) /\ (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = (shift (acc b s0) 2)),
@@ -205,9 +92,7 @@ Lemma f2_impl_po_3 :
     (forall (p0:((memory) pointer)),
      (p0 = (upd p result s0) ->
       (((((forall (result:Z),
-           (result = (acc intP0 (shift (acc b (acc p0 l)) 2)) -> result =
-            1 /\
-            (forall (L:pointer), ((valid alloc L) -> (valid_L_p (acc p0 L)))))) /\
+           (result = (acc intP0 (shift (acc b (acc p0 l)) 2)) -> result = 1)) /\
       (valid alloc l)) /\ (valid alloc (acc p0 l))) /\
       (valid alloc (acc p0 l))) /\
       (valid alloc (shift (acc b (acc p0 l)) 2))) /\
@@ -218,181 +103,103 @@ intuition; subst; try caduceus.
 valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 9401-9478 *)
+(* Why obligation from file "why/separation3.why", characters 4333-4410 *)
 Lemma f3_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
-  forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre12: ((forall (L:pointer),
-                   ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                 (forall (S:pointer),
-                  (forall (S1:pointer),
-                   (~(S = S1) ->
-                    ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                 (forall (L:pointer),
-                  (forall (S:pointer),
-                   (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                    (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                 (forall (L:pointer),
-                  (forall (L1:pointer),
-                   (~(L = L1) ->
-                    (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                            acc b (acc q L1)))) /\
-                    ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc r L1))))))) /\
-                 (valid_range alloc s0 0 1)),
+  forall (Pre12: (separation1 b c) /\ (separation1 b c) /\
+                 (separation2 b b) /\ (valid1 c) /\ (valid1 b) /\
+                 (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                 (separation2 c c) /\ (separation2 b c) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc b index_0)) = (base_addr (acc c index_0)))) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc b index_0)) = (base_addr (acc c index_0)))) /\
+                 (forall (index_3:pointer),
+                  (forall (index_4:pointer),
+                   ~((base_addr (acc b index_3)) = (base_addr (acc b index_4))))) /\
+                 (separation_s0_s0 alloc b c s0) /\
+                 (forall (index_15:pointer),
+                  (forall (index_16:pointer),
+                   ~((base_addr (acc c index_15)) = (base_addr (acc c
+                                                                index_16))))) /\
+                 (forall (index_11:pointer),
+                  (forall (index_12:pointer),
+                   ~((base_addr (acc c index_11)) = (base_addr (acc b
+                                                                index_12))))) /\
+                 (valid1_range c 5) /\ (valid1_range b 5)),
   (valid alloc s0).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 9486-9513 *)
+(* Why obligation from file "why/separation3.why", characters 4418-4445 *)
 Lemma f3_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
-  forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre12: ((forall (L:pointer),
-                   ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                 (forall (S:pointer),
-                  (forall (S1:pointer),
-                   (~(S = S1) ->
-                    ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                 (forall (L:pointer),
-                  (forall (S:pointer),
-                   (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                    (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                 (forall (L:pointer),
-                  (forall (L1:pointer),
-                   (~(L = L1) ->
-                    (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                            acc b (acc q L1)))) /\
-                    ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc r L1))))))) /\
-                 (valid_range alloc s0 0 1)),
+  forall (Pre12: (separation1 b c) /\ (separation1 b c) /\
+                 (separation2 b b) /\ (valid1 c) /\ (valid1 b) /\
+                 (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                 (separation2 c c) /\ (separation2 b c) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc b index_0)) = (base_addr (acc c index_0)))) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc b index_0)) = (base_addr (acc c index_0)))) /\
+                 (forall (index_3:pointer),
+                  (forall (index_4:pointer),
+                   ~((base_addr (acc b index_3)) = (base_addr (acc b index_4))))) /\
+                 (separation_s0_s0 alloc b c s0) /\
+                 (forall (index_15:pointer),
+                  (forall (index_16:pointer),
+                   ~((base_addr (acc c index_15)) = (base_addr (acc c
+                                                                index_16))))) /\
+                 (forall (index_11:pointer),
+                  (forall (index_12:pointer),
+                   ~((base_addr (acc c index_11)) = (base_addr (acc b
+                                                                index_12))))) /\
+                 (valid1_range c 5) /\ (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_5: pointer),
   forall (Post3: caduceus_5 = (shift (acc b s0) 2)),
   (valid alloc caduceus_5).
 Proof.
 intuition; subst.
-generalize (H7 s0); unfold valid_S_b;
+generalize (H16 s0 alloc Pre4);
  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 9384-9513 *)
+(* Why obligation from file "why/separation3.why", characters 4316-4445 *)
 Lemma f3_impl_po_3 : 
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
   forall (intP: ((memory) Z)),
-  forall (q: ((memory) pointer)),
-  forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre12: ((forall (L:pointer),
-                   ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                 (forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                 (forall (S:pointer),
-                  (forall (S1:pointer),
-                   (~(S = S1) ->
-                    ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                 (forall (L:pointer),
-                  (forall (S:pointer),
-                   (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                    (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                 (forall (S:pointer),
-                  ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                 (forall (L:pointer),
-                  (forall (L1:pointer),
-                   (~(L = L1) ->
-                    (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                            acc b (acc q L1)))) /\
-                    ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                  (acc q L1))))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                    ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                    ~((base_addr (acc r L)) = (base_addr (acc r L1))))))) /\
-                 (valid_range alloc s0 0 1)),
+  forall (Pre12: (separation1 b c) /\ (separation1 b c) /\
+                 (separation2 b b) /\ (valid1 c) /\ (valid1 b) /\
+                 (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                 (separation2 c c) /\ (separation2 b c) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc b index_0)) = (base_addr (acc c index_0)))) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc b index_0)) = (base_addr (acc c index_0)))) /\
+                 (forall (index_3:pointer),
+                  (forall (index_4:pointer),
+                   ~((base_addr (acc b index_3)) = (base_addr (acc b index_4))))) /\
+                 (separation_s0_s0 alloc b c s0) /\
+                 (forall (index_15:pointer),
+                  (forall (index_16:pointer),
+                   ~((base_addr (acc c index_15)) = (base_addr (acc c
+                                                                index_16))))) /\
+                 (forall (index_11:pointer),
+                  (forall (index_12:pointer),
+                   ~((base_addr (acc c index_11)) = (base_addr (acc b
+                                                                index_12))))) /\
+                 (valid1_range c 5) /\ (valid1_range b 5)),
   forall (Pre4: (valid alloc s0)),
   forall (caduceus_5: pointer),
   forall (Post3: caduceus_5 = (shift (acc b s0) 2)),
@@ -413,16 +220,15 @@ Proof.
 intuition; subst; caduceus; auto.
 rewrite acc_upd_neq.
 caduceus.
-generalize (H3 s0 Pre4 ); unfold internal_separation_S.
+generalize (H8 s0 ).
 intros;apply neq_base_addr_neq_shift;intuition.
 generalize (neq_base_addr_neq_shift (s0#c) (s0#b) 2 2).
 intuition.
-generalize (H2 s0); unfold valid_S_c; intuition.
+generalize (H14 s0 alloc Pre4);  intuition.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 14554-14578 *)
+(* Why obligation from file "why/separation3.why", characters 5619-5643 *)
 Lemma f_impl_po_1 : 
-  forall (a: ((memory) Z)),
   forall (alloc: alloc_table),
   forall (b: ((memory) pointer)),
   forall (c: ((memory) pointer)),
@@ -430,53 +236,13 @@ Lemma f_impl_po_1 :
   forall (q: ((memory) pointer)),
   forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre9: ((forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                (forall (L:pointer),
-                 ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                (forall (L:pointer),
-                 ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                (forall (S:pointer),
-                 (forall (S1:pointer),
-                  (~(S = S1) ->
-                   ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                   ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                (forall (L:pointer),
-                 (forall (S:pointer),
-                  (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                   (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                   ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                (forall (L:pointer),
-                 (forall (L1:pointer),
-                  (~(L = L1) ->
-                   (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                           acc b (acc q L1)))) /\
-                   ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                 (acc q L1))))) /\
-                   ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                 (acc q L1))))) /\
-                   ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                 (acc q L1))))) /\
-                   ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                   ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc r L1)))))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (valid_S_a (acc a S))))) /\
-                (valid_range alloc l 0 1) /\ (valid_range alloc s0 0 1) /\
+  forall (Pre9: (separation_s0_l alloc b c q r s0 l) /\ (separation2 q q) /\
+                (separation_l_l alloc q r l) /\ (valid_range alloc l 0 1) /\
+                (valid_range alloc l 0 1) /\ (valid1 q) /\
+                (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                (separation_s0_s0 alloc b c s0) /\
+                (separation_l_s0 alloc b c q r s0 l) /\
+                (separation_l_s0 alloc b c q r s0 l) /\
                 (separation_l_s0 alloc b c q r s0 l)),
   forall (caduceus_2: pointer),
   forall (Post3: caduceus_2 = s0),
@@ -485,7 +251,7 @@ Proof.
 intuition; subst; valid.
 Save.
 
-(* Why obligation from file "why/separation3.why", characters 14530-14578 *)
+(* Why obligation from file "why/separation3.why", characters 5595-5643 *)
 Lemma f_impl_po_2 : 
   forall (a: ((memory) Z)),
   forall (alloc: alloc_table),
@@ -495,53 +261,13 @@ Lemma f_impl_po_2 :
   forall (q: ((memory) pointer)),
   forall (r: ((memory) pointer)),
   forall (s0: pointer),
-  forall (Pre9: ((forall (L:pointer),
-                  ((valid alloc L) -> (valid_L_r alloc (acc r L)))) /\
-                (forall (L:pointer),
-                 ((valid alloc L) -> (internal_separation_L alloc b c q r L))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (valid_S_c alloc (acc c S)))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (internal_separation_S alloc b c S))) /\
-                (forall (L:pointer),
-                 ((valid alloc L) -> (valid_L_q alloc (acc q L)))) /\
-                (forall (S:pointer),
-                 (forall (S1:pointer),
-                  (~(S = S1) ->
-                   ((~((base_addr (acc b S)) = (base_addr (acc b S1))) /\
-                   ~((base_addr (acc b S)) = (base_addr (acc c S1)))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc b S1)))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc c S1)))))) /\
-                (forall (L:pointer),
-                 (forall (S:pointer),
-                  (~(L = S) -> ~((base_addr S) = (base_addr (acc q L))) /\
-                   (((~((base_addr (acc b S)) = (base_addr (acc b (acc q L)))) /\
-                   ~((base_addr (acc b S)) = (base_addr (acc c (acc q L))))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc b (acc q L)))) /\
-                   ~((base_addr (acc c S)) = (base_addr (acc c (acc q L))))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc b S)))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc c S)))))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (valid_S_b alloc (acc b S)))) /\
-                (forall (L:pointer),
-                 (forall (L1:pointer),
-                  (~(L = L1) ->
-                   (((((~((base_addr (acc b (acc q L))) = (base_addr (
-                                                           acc b (acc q L1)))) /\
-                   ~((base_addr (acc b (acc q L))) = (base_addr (acc c
-                                                                 (acc q L1))))) /\
-                   ~((base_addr (acc c (acc q L))) = (base_addr (acc b
-                                                                 (acc q L1))))) /\
-                   ~((base_addr (acc c (acc q L))) = (base_addr (acc c
-                                                                 (acc q L1))))) /\
-                   ~((base_addr (acc r L1)) = (base_addr (acc b (acc q L)))) /\
-                   ~((base_addr (acc r L1)) = (base_addr (acc c (acc q L))))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc b (acc q L1)))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc c (acc q L1))))) /\
-                   ~((base_addr (acc r L)) = (base_addr (acc r L1)))))) /\
-                (forall (S:pointer),
-                 ((valid alloc S) -> (valid_S_a (acc a S))))) /\
-                (valid_range alloc l 0 1) /\ (valid_range alloc s0 0 1) /\
+  forall (Pre9: (separation_s0_l alloc b c q r s0 l) /\ (separation2 q q) /\
+                (separation_l_l alloc q r l) /\ (valid_range alloc l 0 1) /\
+                (valid_range alloc l 0 1) /\ (valid1 q) /\
+                (valid_range alloc s0 0 1) /\ (valid_range alloc s0 0 1) /\
+                (separation_s0_s0 alloc b c s0) /\
+                (separation_l_s0 alloc b c q r s0 l) /\
+                (separation_l_s0 alloc b c q r s0 l) /\
                 (separation_l_s0 alloc b c q r s0 l)),
   forall (caduceus_2: pointer),
   forall (Post3: caduceus_2 = s0),
@@ -552,29 +278,21 @@ Lemma f_impl_po_2 :
    (result = (acc q l) ->
     (forall (a:((memory) Z)),
      (a = (upd a0 result 2) ->
-      (forall (result:Z),
-       (result = (acc a s0) -> result = 1 /\
-        (forall (S:pointer), ((valid alloc S) -> (valid_S_a (acc a S)))))) /\
+      (forall (result:Z), (result = (acc a s0) -> result = 1)) /\
       (valid alloc s0))) /\
     (valid alloc result))) /\
   (valid alloc l).
 Proof.
 intuition; subst; caduceus.
 rewrite acc_upd_neq; caduceus.
-red in H2.
 rewrite <- (shift_zero (l#q)).
 rewrite <- (shift_zero s0).
 apply neq_base_addr_neq_shift.
-red in H5.
-inversion_clear H5.
-generalize (neq_base_addr_neq_shift l s0 0 0 H11).
-repeat rewrite shift_zero.
-intro.
-generalize (H8  l s0 H5).
-intuition.
-generalize (H6 l).
-cut (valid alloc l).
-unfold valid_L_q; intuition.
-valid.
+red in H8.
+inversion_clear H8.
+inversion_clear H12.
+inversion_clear H8.
+auto.
+generalize (H4 l alloc);intuition.
 Save.
 

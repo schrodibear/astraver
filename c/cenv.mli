@@ -46,6 +46,12 @@ val iter_all_struct : (string -> ctype_node * var_info list -> unit) -> unit
 val fold_all_struct : 
   (string -> ctype_node * var_info list -> 'a -> 'a) -> 'a -> 'a
 
+(* iterates over all pairs of structures (the pairs (a,b) and (b,a) are
+   identified) *)
+val fold_all_struct_pairs :
+  (string -> ctype_node * var_info list ->
+   string -> ctype_node * var_info list -> 'a -> 'a) -> 'a -> 'a
+
 (* Local environment *)
 module Env : sig
 

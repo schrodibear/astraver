@@ -3,11 +3,12 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/ref_glob.why", characters 113-140 *)
+(* Why obligation from file "why/ref_glob.why", characters 175-202 *)
 Lemma f1_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x: pointer),
-  forall (Pre4: (valid_range alloc x 0 1)),
+  forall (Pre4: (valid_range alloc x 0 1) /\ (valid_range alloc x 0 1) /\
+                (separation_x_x x)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   (valid alloc caduceus_1).
@@ -16,12 +17,13 @@ intuition.
 subst;auto.
 Qed.
 
-(* Why obligation from file "why/ref_glob.why", characters 90-140 *)
+(* Why obligation from file "why/ref_glob.why", characters 152-202 *)
 Lemma f1_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
   forall (x: pointer),
-  forall (Pre4: (valid_range alloc x 0 1)),
+  forall (Pre4: (valid_range alloc x 0 1) /\ (valid_range alloc x 0 1) /\
+                (separation_x_x x)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = x),
   forall (Pre3: (valid alloc caduceus_1)),
@@ -31,14 +33,14 @@ Lemma f1_impl_po_2 :
 Proof.
 intuition.
 subst; caduceus.
-subst;auto.
 Qed.
 
-(* Why obligation from file "why/ref_glob.why", characters 328-343 *)
+(* Why obligation from file "why/ref_glob.why", characters 454-469 *)
 Lemma f2_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (x: pointer),
-  forall (Pre4: (valid_range alloc x 0 1)),
+  forall (Pre4: (valid_range alloc x 0 1) /\ (valid_range alloc x 0 1) /\
+                (separation_x_x x)),
   (valid alloc x).
 Proof.
 intuition.
@@ -46,34 +48,34 @@ intuition.
 Save.
 
 
-(* Why obligation from file "why/ref_glob.why", characters 2091-2118 *)
+(* Why obligation from file "why/ref_glob.why", characters 2741-2768 *)
 Lemma f4_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c1: ((memory) pointer)),
   forall (c2: ((memory) pointer)),
   forall (plas: pointer),
-  forall (Pre11: (valid alloc plas) /\
-                 (forall (anonymous_0:pointer),
-                  ((valid alloc anonymous_0) ->
-                   (valid_anonymous_0_c2 alloc (acc c2 anonymous_0)))) /\
-                 (forall (anonymous_0:pointer),
-                  ((valid alloc anonymous_0) ->
-                   (valid_anonymous_0_c1 alloc (acc c1 anonymous_0)))) /\
-                 (forall (anonymous_0:pointer),
-                  (forall (anonymous_01:pointer),
-                   (~(anonymous_0 = anonymous_01) ->
-                    ((~((base_addr (acc c1 anonymous_0)) = (base_addr (
-                                                            acc c1
-                                                            anonymous_01))) /\
-                    ~((base_addr (acc c1 anonymous_0)) = (base_addr (
-                                                          acc c2 anonymous_01)))) /\
-                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
-                                                          acc c1 anonymous_01)))) /\
-                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
-                                                          acc c2 anonymous_01)))))) /\
-                 (forall (anonymous_0:pointer),
-                  ((valid alloc anonymous_0) ->
-                   (internal_separation_anonymous_0 alloc c1 c2 anonymous_0)))),
+  forall (Pre11: (valid alloc plas) /\ (valid1_range c2 1) /\
+                 (valid1_range c1 1) /\ (separation2 c2 c2) /\
+                 (separation2 c1 c2) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc c1 index_0)) = (base_addr (acc c2 index_0)))) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc c1 index_0)) = (base_addr (acc c2 index_0)))) /\
+                 (forall (index_1:pointer),
+                  (forall (index_2:pointer),
+                   ~((base_addr (acc c1 index_1)) = (base_addr (acc c1
+                                                                index_2))))) /\
+                 (valid1 c2) /\ (valid1 c1) /\
+                 (forall (index_7:pointer),
+                  (forall (index_8:pointer),
+                   ~((base_addr (acc c2 index_7)) = (base_addr (acc c2
+                                                                index_8))))) /\
+                 (forall (index_5:pointer),
+                  (forall (index_6:pointer),
+                   ~((base_addr (acc c2 index_5)) = (base_addr (acc c1
+                                                                index_6))))) /\
+                 (separation1 c1 c2) /\ (separation1 c1 c2) /\
+                 (separation2 c1 c1)),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc c2 plas)),
@@ -81,40 +83,37 @@ Lemma f4_impl_po_1 :
 Proof.
 intuition.
 subst;auto.
-generalize (H1 plas Pre4).
-unfold valid_anonymous_0_c2.
-tauto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 2053-2118 *)
+(* Why obligation from file "why/ref_glob.why", characters 2703-2768 *)
 Lemma f4_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (c1: ((memory) pointer)),
   forall (c2: ((memory) pointer)),
   forall (intP: ((memory) Z)),
   forall (plas: pointer),
-  forall (Pre11: (valid alloc plas) /\
-                 (forall (anonymous_0:pointer),
-                  ((valid alloc anonymous_0) ->
-                   (valid_anonymous_0_c2 alloc (acc c2 anonymous_0)))) /\
-                 (forall (anonymous_0:pointer),
-                  ((valid alloc anonymous_0) ->
-                   (valid_anonymous_0_c1 alloc (acc c1 anonymous_0)))) /\
-                 (forall (anonymous_0:pointer),
-                  (forall (anonymous_01:pointer),
-                   (~(anonymous_0 = anonymous_01) ->
-                    ((~((base_addr (acc c1 anonymous_0)) = (base_addr (
-                                                            acc c1
-                                                            anonymous_01))) /\
-                    ~((base_addr (acc c1 anonymous_0)) = (base_addr (
-                                                          acc c2 anonymous_01)))) /\
-                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
-                                                          acc c1 anonymous_01)))) /\
-                    ~((base_addr (acc c2 anonymous_0)) = (base_addr (
-                                                          acc c2 anonymous_01)))))) /\
-                 (forall (anonymous_0:pointer),
-                  ((valid alloc anonymous_0) ->
-                   (internal_separation_anonymous_0 alloc c1 c2 anonymous_0)))),
+  forall (Pre11: (valid alloc plas) /\ (valid1_range c2 1) /\
+                 (valid1_range c1 1) /\ (separation2 c2 c2) /\
+                 (separation2 c1 c2) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc c1 index_0)) = (base_addr (acc c2 index_0)))) /\
+                 (forall (index_0:pointer),
+                  ~((base_addr (acc c1 index_0)) = (base_addr (acc c2 index_0)))) /\
+                 (forall (index_1:pointer),
+                  (forall (index_2:pointer),
+                   ~((base_addr (acc c1 index_1)) = (base_addr (acc c1
+                                                                index_2))))) /\
+                 (valid1 c2) /\ (valid1 c1) /\
+                 (forall (index_7:pointer),
+                  (forall (index_8:pointer),
+                   ~((base_addr (acc c2 index_7)) = (base_addr (acc c2
+                                                                index_8))))) /\
+                 (forall (index_5:pointer),
+                  (forall (index_6:pointer),
+                   ~((base_addr (acc c2 index_5)) = (base_addr (acc c1
+                                                                index_6))))) /\
+                 (separation1 c1 c2) /\ (separation1 c1 c2) /\
+                 (separation2 c1 c1)),
   forall (Pre4: (valid alloc plas)),
   forall (caduceus_1: pointer),
   forall (Post3: caduceus_1 = (acc c2 plas)),
@@ -142,34 +141,31 @@ Lemma f4_impl_po_2 :
 Proof.
 intuition.
 subst.
-rewrite H10;auto.
-generalize (H0 plas Pre4).
-unfold valid_anonymous_0_c1.
-tauto.
-apply pset_singleton_intro.
-generalize (H4 plas Pre4).
-unfold internal_separation_anonymous_0.
+rewrite H20;auto.
+generalize (H4 plas ).
 intro.
-generalize (neq_base_addr_neq_shift _ _ 0 0 H3).
+apply pset_singleton_intro.
+generalize (neq_base_addr_neq_shift _ _ 0 0 H13).
 repeat rewrite shift_zero;auto.
 subst;auto.
 subst.
 red.
 intros.
-rewrite H10;auto.
-rewrite H7;auto.
+rewrite H20;auto.
+rewrite H17;auto.
 rewrite acc_upd_neq;auto.
 intro;subst.
-generalize (pset_union_elim1 _  _ _  H5);auto.
+generalize (pset_union_elim1 _  _ _  H15);auto.
 apply not_not_in_pset_singleton.
-generalize (pset_union_elim2 _  _ _  H5);auto.
-generalize (pset_union_elim1 _ _ _ H5);auto.
+generalize (pset_union_elim2 _  _ _  H15);auto.
+generalize (pset_union_elim1 _ _ _ H15);auto.
 subst;auto.
 subst.
-generalize (H0 plas Pre4) ; unfold valid_anonymous_0_c1;tauto.
+unfold valid1 in H8.
+intuition.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 2462-2616 *)
+(* Why obligation from file "why/ref_glob.why", characters 3112-3266 *)
 Lemma g_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -183,7 +179,7 @@ intuition.
 subst; caduceus.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 2774-2801 *)
+(* Why obligation from file "why/ref_glob.why", characters 3424-3451 *)
 Lemma h_impl_po_1 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
@@ -198,7 +194,7 @@ intuition.
 subst;auto.
 Save.
 
-(* Why obligation from file "why/ref_glob.why", characters 2737-2801 *)
+(* Why obligation from file "why/ref_glob.why", characters 3387-3451 *)
 Lemma h_impl_po_2 : 
   forall (p: pointer),
   forall (alloc: alloc_table),
