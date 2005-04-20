@@ -96,7 +96,8 @@ Lemma flag_impl_po_2 :
           (Zwf 0 (r1 - i) (r1 - i1)))) /\
         (valid_index alloc t result2) /\ (valid_index alloc t result0))))))).
 Proof.
-intuition.
+unfold isColor; intuition.
+subst.
 (* FILL PROOF HERE *)
 Save.
 
