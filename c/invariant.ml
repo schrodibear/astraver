@@ -137,7 +137,7 @@ let rec separation_intern2  n1 v1 =
     | _ -> 
 	NPtrue
 
-let rec separation loc n1 v1 n2 v2 =
+(*let rec separation loc n1 v1 n2 v2 =
   match (v1.nterm_type.Ctypes.ctype_node,v2.nterm_type.Ctypes.ctype_node) 
   with
     | Tarray (ty, None), _ ->
@@ -183,7 +183,7 @@ let rec separation loc n1 v1 n2 v2 =
 			(noattr_term (noattr_type (Tpointer ty2)) 
 			   (NTbinop (t,Badd,i)))))))
     | _, _ -> NPtrue
-
+*)
   
 let rec fold_2 f l = 
   match l with 
@@ -201,7 +201,7 @@ let noattr_located n =
   { Cast.node = n; Cast.loc = Loc.dummy }
 
 
-let separation_first mark v1 v2 =
+let separation_first mark diag v1 v2 =
   let sep = if mark then "%separation1" else "%separation2" in
   let n1 =  v1.var_unique_name in
   let n2 =  v2.var_unique_name in
@@ -231,12 +231,10 @@ let separation_first mark v1 v2 =
 		"separation_" ^ n1 ^ "_" ^ n2,
 		NPapp
 		  (find_pred (pre ), 
-		   (*(create_term n1)::
-		     (create_term n2)::*)
-		     [noattr_term 
-			(noattr_type (Tint (Signed,Int)))
-			(NTconstant (IntConstant 
-				       (Int64.to_string s)))])))]
+		   [noattr_term 
+		      (noattr_type (Tint (Signed,Int)))
+		      (NTconstant (IntConstant 
+				     (Int64.to_string s)))])))]
 	else []
     | Tstruct _ ,Tarray (ty,Some s)  -> 
 	if compatible_type ty v1.var_type then
@@ -256,7 +254,6 @@ let separation_first mark v1 v2 =
 				      ((Int64.to_string s))))])))]
 	else []
     | Tarray (ty1, Some s1),  Tarray(ty2, Some s2) ->
-	
 	let make_sub_term p ty v = noattr_term ty (NTarrow (p,v)) in
 	if mark then
 	  let pre = sep ^ n1 ^ "_" ^ n2 in
@@ -268,14 +265,14 @@ let separation_first mark v1 v2 =
 	  let term = noattr_term ty (NTvar var) in
 	  noattr_located (
 	    Cast.Ninvariant_strong (
-	      "separation" ^ n1 ^ "_" ^ n2 , 
+	      "internal_separation" ^ n1 ^ "_" ^ n2 , 
 	      NPapp(find_pred (pre),[])))::
 	    [noattr_located
 	       (Cast.Ninvariant_strong (
 		  "separation_" ^ n1 ^ "_" ^ n2,
 		  make_forall 
 		    [ty,var] 
-		    (separation Loc.dummy n1 
+		    (Cnorm.local_separation Loc.dummy n1 
 		       (make_sub_term term v1.var_type v1) n2
 		       (make_sub_term term v2.var_type v2))))]
 	else
@@ -299,12 +296,22 @@ let separation_first mark v1 v2 =
 		     [ty,var1]
 		     (make_forall 
 			[ty,var2]
-			(separation Loc.dummy n1 
-			   (make_sub_term term1 v1.var_type 
-			      v1)
-			   n2 
-			   (make_sub_term term2 v2.var_type 
-			      v2)))))]
+			(if diag 
+			 then 
+			   NPimplies (NPrel (term1,Neq,term2),
+				      (Cnorm.local_separation Loc.dummy n1 
+					 (make_sub_term term1 v1.var_type 
+					    v1)
+					 n2 
+					 (make_sub_term term2 v2.var_type 
+					    v2)))
+			 else
+			   (Cnorm.local_separation Loc.dummy n1 
+			      (make_sub_term term1 v1.var_type 
+				 v1)
+			      n2 
+			      (make_sub_term term2 v2.var_type 
+				 v2))))))]
     | _ , _ -> []
 	  
 
@@ -371,7 +378,7 @@ let rec separation_intern n =
   in
   (List.fold_left (fun acc t ->
      array_intern_separation t@acc) [] l) @ 
-    (fold_2 (separation_first true) l)  
+    (fold_2 (separation_first true false ) l)  
 
 
 let separation_2_struct s1 l1 s2 l2 acc=
@@ -380,7 +387,7 @@ let separation_2_struct s1 l1 s2 l2 acc=
   List.fold_left (fun acc1 t1 ->
 		    (List.fold_left
 		       (fun acc2 t2 ->
-			  separation_first false t1 t2@acc2) acc1 l2)) 
+			  separation_first false (t1=t2) t1 t2@acc2) acc1 l2)) 
     acc l1
 
 let add_predicates l =

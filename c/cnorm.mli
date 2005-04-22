@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.mli,v 1.5 2005-01-19 16:19:20 hubert Exp $ i*)
+(*i $Id: cnorm.mli,v 1.6 2005-04-22 08:56:23 hubert Exp $ i*)
 
 open Cast
 
@@ -36,10 +36,13 @@ val valid_for_type :
 val separation :
     Loc.t -> Info.var_info -> Info.var_info -> Ctypes.ctype Clogic.npredicate
 
-val separation_intern : 
+val local_separation :  
+  Loc.t -> string -> Ctypes.ctype Clogic.nterm -> string -> 
+  Ctypes.ctype Clogic.nterm -> Ctypes.ctype Clogic.npredicate
+(*val separation_intern : 
   Loc.t -> Info.var_info ->Ctypes.ctype Clogic.npredicate
 
-(*val separation : 
+val separation : 
   Loc.t -> Info.var_info -> 
   ?allocs:(string -> nterm -> (string * npredicate) list) -> nterm -> 
     (string -> nterm -> (string * npredicate) list) * 

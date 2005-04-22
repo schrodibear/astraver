@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.91 2005-04-20 14:11:12 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.92 2005-04-22 08:56:23 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -519,7 +519,7 @@ let print_effects fmt l =
     (HeapVarSet.elements l)
 
 (* first pass: declare invariants and computes effects for logics *)
-let global_var = ref []
+
 
 let rec ctype ty =
   ctype_node ty.Ctypes.ctype_node
@@ -536,32 +536,20 @@ and ctype_node = function
   | Tenum s -> sprintf "%s" s
   | Tfun _ -> assert false
 		   
-let invariant_for_global =
-  fun loc v ->
-    let form =
-      List.fold_left (fun p x ->
-			("separation_"^v.var_name^"_"^x.var_name,
-			 (Cnorm.separation loc v x),
-			 HeapVarSet.add v (HeapVarSet.singleton x))::p) 
-	[] !global_var in 
+let global_var = ref [] 
+
+let invariant_for_global loc v =
+  let form =
+    List.fold_left 
+      (fun p x ->
+	 if (v <> x) then
+	   ("separation_"^v.var_name^"_"^x.var_name,
+	    (Cnorm.separation loc v x),
+	    HeapVarSet.add v (HeapVarSet.singleton x))::p
+	 else p) [] !global_var in 
     global_var := v::!global_var;
     form
-(*    match v.var_type.Ctypes.ctype_node with
-      | Tstruct _  ->
-	  let name = "separation_intern_"^ (ctype v.var_type) in
-	  let t = { nterm_node = NTvar v; 
-		    nterm_loc = Loc.dummy;
-		    nterm_type = v.var_type } in
-	  Some ((name, NPapp (snd (find_pred name), [t]), 
-	   HeapVarSet.singleton v)::form)
-      | _ -> None
-*)	  
-(*  let allocs = ref (fun n x -> (*NPtrue*) []) in
-  fun loc v t ->
-    let allocs',form = Cnorm.separation ~allocs:!allocs loc v t in
-    allocs := allocs';
-    form
-*)
+    
 let not_a_constant_value loc = error loc "is not a constant value"
 
 (*let binop loc e1 e2 op = 
@@ -925,9 +913,9 @@ let decl d =
 	       let name1 = "valid_range_" ^ v.var_name in
 	       let (pre1,pre2) = validity t typ s in
 	       add_strong_invariant name1 pre1 (HeapVarSet.singleton v);   
-		List.iter (fun (x,p,y) -> add_strong_invariant x p y;
-			     add_strong_invariant_2 x p [])
-		  (invariant_for_global d.loc v);
+	       List.iter (fun (x,p,y) -> add_strong_invariant x p y;
+			    add_strong_invariant_2 x p [])
+		 (invariant_for_global d.loc v);
 	   | _ -> ()
 	end;
 	
