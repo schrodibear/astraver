@@ -3,43 +3,33 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/array.why", characters 615-718 *)
+(* Why obligation from file "why/array.why", characters 349-452 *)
 Lemma getcell_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                ((valid_range alloc t 0 3) /\
+                (valid_range alloc t 0 3) /\
                 (forall (counter:Z),
                  (0 <= counter /\ counter < 3 ->
-                  (valid_range alloc (shift t counter) 0 3)))) /\
-                ((valid_range alloc t 0 3) /\
-                (forall (counter:Z),
-                 (0 <= counter /\ counter < 3 ->
-                  (valid_range alloc (shift t counter) 0 3)))) /\
-                (separation_t_t alloc t intPP)),
+                  (valid_range alloc (shift t counter) 0 3)))),
   (valid alloc (shift t 1)).
 Proof.
 intuition; subst; auto with *.
 Save.
 
-(* Why obligation from file "why/array.why", characters 615-718 *)
+(* Why obligation from file "why/array.why", characters 349-452 *)
 Lemma getcell_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (intPP: ((memory) pointer)),
   forall (t: pointer),
   forall (Pre5: ((valid_index alloc t 1) /\
                 (valid_index alloc (acc intPP (shift t 1)) 2)) /\
-                ((valid_range alloc t 0 3) /\
+                (valid_range alloc t 0 3) /\
                 (forall (counter:Z),
                  (0 <= counter /\ counter < 3 ->
-                  (valid_range alloc (shift t counter) 0 3)))) /\
-                ((valid_range alloc t 0 3) /\
-                (forall (counter:Z),
-                 (0 <= counter /\ counter < 3 ->
-                  (valid_range alloc (shift t counter) 0 3)))) /\
-                (separation_t_t alloc t intPP)),
+                  (valid_range alloc (shift t counter) 0 3)))),
   forall (Pre2: (valid alloc (shift t 1))),
   (valid alloc (shift (acc intPP (shift t 1)) 2)).
 Proof.

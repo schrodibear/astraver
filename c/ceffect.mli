@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.mli,v 1.20 2005-03-23 14:59:18 filliatr Exp $ i*)
+(*i $Id: ceffect.mli,v 1.21 2005-04-22 13:37:01 hubert Exp $ i*)
 
 val interp_type : Cast.nctype -> string
 
@@ -69,3 +69,4 @@ val mem_strong_invariant_2 : string -> bool
     
 (* table of warnings from computation of effects *)
 val warnings : (Loc.t * string) Queue.t
+

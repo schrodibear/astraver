@@ -3,37 +3,66 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/false.why", characters 244-271 *)
+(* Why obligation from file "why/false.why", characters 373-429 *)
 Lemma false1_impl_po_1 : 
   forall (alloc: alloc_table),
-  forall (x: pointer),
-  forall (y: pointer),
-  forall (Pre7: (valid_range alloc y 0 5) /\ (valid_range alloc x 0 4) /\
-                (separation_y_x x y)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (shift x (Zopp 1))),
-  (valid alloc caduceus_3).
+  forall (x_0: pointer),
+  forall (y: ((memory) pointer)),
+  forall (y_0: pointer),
+  forall (z: pointer),
+  forall (Pre11: (valid_range alloc y_0 0 5) /\
+                 (valid_range alloc x_0 0 4) /\ (separation2 y y) /\
+                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
+                 (separation_y_x x_0 y_0) /\ (valid1_range y 5) /\ (valid1 y)),
+  (valid alloc z).
 Proof.
 Admitted.
 
-(* Why obligation from file "why/false.why", characters 164-271 *)
+(* Why obligation from file "why/false.why", characters 437-464 *)
 Lemma false1_impl_po_2 : 
   forall (alloc: alloc_table),
+  forall (x_0: pointer),
+  forall (y: ((memory) pointer)),
+  forall (y_0: pointer),
+  forall (z: pointer),
+  forall (Pre11: (valid_range alloc y_0 0 5) /\
+                 (valid_range alloc x_0 0 4) /\ (separation2 y y) /\
+                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
+                 (separation_y_x x_0 y_0) /\ (valid1_range y 5) /\ (valid1 y)),
+  forall (Pre4: (valid alloc z)),
+  forall (caduceus_5: pointer),
+  forall (Post3: caduceus_5 = (shift (acc y z) 5)),
+  (valid alloc caduceus_5).
+Proof.
+Admitted.
+
+
+(* Why obligation from file "why/false.why", characters 356-464 *)
+Lemma false1_impl_po_3 : 
+  forall (alloc: alloc_table),
   forall (intP: ((memory) Z)),
-  forall (x: pointer),
-  forall (y: pointer),
-  forall (Pre7: (valid_range alloc y 0 5) /\ (valid_range alloc x 0 4) /\
-                (separation_y_x x y)),
-  forall (caduceus_3: pointer),
-  forall (Post3: caduceus_3 = (shift x (Zopp 1))),
-  forall (Pre3: (valid alloc caduceus_3)),
+  forall (x_0: pointer),
+  forall (y: ((memory) pointer)),
+  forall (y_0: pointer),
+  forall (z: pointer),
+  forall (Pre11: (valid_range alloc y_0 0 5) /\
+                 (valid_range alloc x_0 0 4) /\ (separation2 y y) /\
+                 (forall (index_0:pointer), (forall (index_1:pointer), True)) /\
+                 (separation_y_x x_0 y_0) /\ (valid1_range y 5) /\ (valid1 y)),
+  forall (Pre4: (valid alloc z)),
+  forall (caduceus_5: pointer),
+  forall (Post3: caduceus_5 = (shift (acc y z) 5)),
+  forall (Pre3: (valid alloc caduceus_5)),
   forall (intP0: ((memory) Z)),
-  forall (Post7: intP0 = (upd intP caduceus_3 1)),
+  forall (Post10: intP0 = (upd intP caduceus_5 3)),
   (forall (result:pointer),
-   (result = (shift y 5) ->
-    (forall (intP:((memory) Z)), (intP = (upd intP0 result 2) -> False)) /\
+   (result = (shift x_0 (Zopp 1)) ->
+    (forall (intP:((memory) Z)),
+     (intP = (upd intP0 result 1) ->
+      (forall (result:pointer),
+       (result = (shift y_0 5) ->
+        (forall (intP0:((memory) Z)), (intP0 = (upd intP result 2) -> False)) /\
+        (valid alloc result))))) /\
     (valid alloc result))).
 Proof.
 Admitted.
-
-

@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: ceffect.ml,v 1.92 2005-04-22 08:56:23 hubert Exp $ i*)
+(*i $Id: ceffect.ml,v 1.93 2005-04-22 13:37:01 hubert Exp $ i*)
 
 open Cast
 open Coptions
@@ -539,16 +539,17 @@ and ctype_node = function
 let global_var = ref [] 
 
 let invariant_for_global loc v =
+  assert (not (List.mem v !global_var));
   let form =
     List.fold_left 
       (fun p x ->
-	 if (v <> x) then
-	   ("separation_"^v.var_name^"_"^x.var_name,
-	    (Cnorm.separation loc v x),
-	    HeapVarSet.add v (HeapVarSet.singleton x))::p
-	 else p) [] !global_var in 
-    global_var := v::!global_var;
-    form
+	 ("separation_"^v.var_name^"_"^x.var_name,
+	  Cnorm.separation loc v x,
+	  HeapVarSet.add v (HeapVarSet.singleton x)) :: p) 
+      [] !global_var 
+  in 
+  global_var := v::!global_var;
+  form
     
 let not_a_constant_value loc = error loc "is not a constant value"
 
@@ -1009,4 +1010,5 @@ let functions dl =
   in
   List.iter decl dl;
   !fixpoint
+
 

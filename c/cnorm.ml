@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cnorm.ml,v 1.30 2005-04-22 08:56:23 hubert Exp $ i*)
+(*i $Id: cnorm.ml,v 1.31 2005-04-22 13:37:01 hubert Exp $ i*)
 
 open Creport
 open Cconst
@@ -972,64 +972,6 @@ and local_separation loc n1 v1 n2 v2 =
     | _, _ -> NPtrue
 
     
-(*let rec separation_intern loc v1 =
-  let rec local_separation_intern loc n1 v1 =
-    match v1.nterm_type.Ctypes.ctype_node with
-      | Tarray (_,None) -> 
-	  error loc ("array size missing in `" ^ n1 ^ "'")
-      | Tarray(ty,Some s) -> 
-	  begin
-	    match ty.Ctypes.ctype_node with
-	      | Tarray (_,None) -> 
-		  error loc ("array size missing in `" ^ n1 ^ "[i]'")
-	      | Tarray (_,_)  
-	      | Tstruct _ ->
-		  make_and
-		    (make_forall_range loc v1 s 
-		       (fun t1 i1 ->
-			  make_forall_range loc v1 s
-			    (fun t2 i2 -> 
-			       if i1 = nzero && i2 = nzero then NPtrue 
-			       else
-			       make_implies (NPrel (i1, Neq, i2)) 
-				 (not_alias loc t1 t2))))
-		    (make_forall_range loc v1 s 
-		       (fun t i -> 
-			  local_separation_intern loc (n1^"[i]") 
-			    (indirection loc ty t)))
-
-	      | _ -> NPtrue
-	  end
-      | Tstruct n -> 
-	  let l =
-	    begin
-	      match  tag_type_definition n with
-		| TTStructUnion ((Tstruct _),fl) ->
-		    fl
-		| _ -> assert false
-	    end  
-	  in
-	  let rec f l =
-	    match l with
-	      | (v::l) -> make_and
-		    (make_and 
-		    (local_separation_intern loc v.var_name 
-		       (var_to_term loc v))
-		    (List.fold_left 
-		       (fun acc x -> 
-			  make_and acc (local_separation loc false
-					  v.var_name (in_struct v1 v) 
-					  x.var_name (in_struct v1 x))) 
-		       NPtrue l))
-		    (f l)
-	      | [] -> NPtrue
-	  in
-	  f l
-      | _ -> NPtrue
-  in
-  local_separation_intern loc v1.var_name (var_to_term loc v1) 
-*)  
-	
 let separation loc v1 v2 =
   local_separation loc v1.var_name (var_to_term loc v1) 
     v2.var_name (var_to_term loc v2)

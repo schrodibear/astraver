@@ -389,7 +389,7 @@ predicate valid1(m1: pointer memory) =
 
 predicate valid1_range (m1: pointer memory, size : int) =
 	forall p : pointer. forall a : alloc_table.
-	valid(a,p) -> valid_range (a,acc (m1, p), 0, size) 
+	valid(a,p) -> valid_range (a,acc (m1, p), 0, size-1) 
 
 
 (* separation *)
@@ -401,13 +401,13 @@ predicate separation1(m1:pointer memory, m2:pointer memory) =
 predicate separation1_range1(m1:pointer memory,
 	m2:pointer memory, size : int) =
 	forall p : pointer.forall a : alloc_table.
-	valid(a,p) -> forall i : int . 0<i -> i<size ->
+	valid(a,p) -> forall i : int . 0 <= i < size ->
 	base_addr(acc(m1,(shift (p,i)))) <> base_addr(acc(m2, p))	
 
 predicate separation1_range(m:pointer memory, size:int) =
 	forall p : pointer.forall a : alloc_table.
-	valid(a,p) -> forall i1 : int. forall i2 : int. 0<i1 -> 
-	i1<size -> 0<i2 -> i2 <size -> i1<>i2 -> 
+	valid(a,p) -> forall i1 : int. forall i2 : int. 
+	0 <= i1 < size -> 0 <= i2 < size -> i1 <> i2 -> 
 	base_addr(acc(m,(shift (p,i1)))) <> base_addr(acc(m,shift (p,i2)))  
 
 
@@ -418,8 +418,9 @@ predicate separation2(m1:pointer memory, m2:pointer memory) =
 predicate separation2_range1(m1:pointer memory,
 	m2:pointer memory, size : int) =
 	forall p : pointer. forall q : pointer.forall a : alloc_table.
-	forall i : int . 0<i -> i<size ->
+	forall i : int . 0 <= i < size ->
 	base_addr(acc(m1,(shift (p,i)))) <> base_addr(acc(m2, q))
+
 (* memory allocation *)
 
 logic on_heap : alloc_table, pointer -> prop

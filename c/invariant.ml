@@ -273,8 +273,8 @@ let separation_first mark diag v1 v2 =
 		  make_forall 
 		    [ty,var] 
 		    (Cnorm.local_separation Loc.dummy n1 
-		       (make_sub_term term v1.var_type v1) n2
-		       (make_sub_term term v2.var_type v2))))]
+		       (make_sub_term term ty1 v1) n2
+		       (make_sub_term term ty2 v2))))]
 	else
  	  let pre = sep ^ n1 ^ "_" ^ n2 in
 	  let info = Info.default_logic_info (pre) in
@@ -300,18 +300,14 @@ let separation_first mark diag v1 v2 =
 			 then 
 			   NPimplies (NPrel (term1,Neq,term2),
 				      (Cnorm.local_separation Loc.dummy n1 
-					 (make_sub_term term1 v1.var_type 
-					    v1)
+					 (make_sub_term term1 ty1 v1)
 					 n2 
-					 (make_sub_term term2 v2.var_type 
-					    v2)))
+					 (make_sub_term term2 ty2 v2)))
 			 else
 			   (Cnorm.local_separation Loc.dummy n1 
-			      (make_sub_term term1 v1.var_type 
-				 v1)
+			      (make_sub_term term1 ty1 v1)
 			      n2 
-			      (make_sub_term term2 v2.var_type 
-				 v2))))))]
+			      (make_sub_term term2 ty2 v2))))))]
     | _ , _ -> []
 	  
 
@@ -448,24 +444,5 @@ let add_predicates l =
     in
     (separation_intern s) @ l2
   in
-(*
-    try 
-  let info2 = find_pred ("internal_separation_" ^ s) in 	    
-      let info =Info.default_logic_info 
-	("internal_separation_" ^ s ^ "_bis") in
-      let l2 = noattr_located 
-	(Cast.Nlogic 
-	   (info, NPredicate_def 
-	      ([],NPforall 
-		 ([ty,st], 
-		  NPimplies (NPvalid t, (NPapp (info2, [t]))))))) :: 
-	noattr_located (Cast.Ninvariant ( 
-			  ("internal_separation_" ^ s ^ "_invariant"),
-			  (NPapp (info, []))))
-	::l2 in 
-      Cenv.fold_all_struct (separation s ty) l2
-    with Not_found -> Cenv.fold_all_struct (separation s ty) l2
-
-  in*)
-
-  (fold_all_struct_pairs separation_2_struct l)@Cenv.fold_all_struct f l
+  let l = (fold_all_struct_pairs separation_2_struct l) in
+  Cenv.fold_all_struct f l

@@ -3,7 +3,7 @@
 
 Require Export caduceus_spec_why.
 
-(* Why obligation from file "why/invariants.why", characters 1082-1139 *)
+(* Why obligation from file "why/invariants.why", characters 386-443 *)
 Lemma f_impl_po_1 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -12,21 +12,16 @@ Lemma f_impl_po_1 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (acc intP c) = 12 /\ ((0 <=
-                (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100) /\ (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                (separation_c_s s c) /\ (separation_c_s s c) /\
-                (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (0 <= (acc x s) /\
+                (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
+                (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   (valid alloc s).
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 1322-1351 *)
+(* Why obligation from file "why/invariants.why", characters 626-655 *)
 Lemma f_impl_po_2 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -35,15 +30,10 @@ Lemma f_impl_po_2 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (acc intP c) = 12 /\ ((0 <=
-                (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100) /\ (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                (separation_c_s s c) /\ (separation_c_s s c) /\
-                (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (0 <= (acc x s) /\
+                (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
+                (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   forall (Pre5: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -56,7 +46,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 1299-1352 *)
+(* Why obligation from file "why/invariants.why", characters 603-656 *)
 Lemma f_impl_po_3 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -65,15 +55,10 @@ Lemma f_impl_po_3 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (acc intP c) = 12 /\ ((0 <=
-                (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100) /\ (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                (separation_c_s s c) /\ (separation_c_s s c) /\
-                (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (0 <= (acc x s) /\
+                (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
+                (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   forall (Pre5: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -90,7 +75,7 @@ intuition.
 subst; auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 1299-1352 *)
+(* Why obligation from file "why/invariants.why", characters 603-656 *)
 Lemma f_impl_po_4 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -99,15 +84,10 @@ Lemma f_impl_po_4 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (acc intP c) = 12 /\ ((0 <=
-                (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100) /\ (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                (separation_c_s s c) /\ (separation_c_s s c) /\
-                (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (0 <= (acc x s) /\
+                (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
+                (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   forall (Pre5: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -121,13 +101,12 @@ Lemma f_impl_po_4 :
   forall (Pre1: (valid alloc caduceus_2)),
   forall (x0: ((memory) Z)),
   forall (Post14: x0 = (upd x caduceus_2 aux_3)),
-  ((0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100) /\ (0 <=
-  (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
+  (0 <= (acc x0 s) /\ (acc x0 s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition;subst; caduceus.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 1364-1364 *)
+(* Why obligation from file "why/invariants.why", characters 668-668 *)
 Lemma f_impl_po_5 : 
   forall (n: Z),
   forall (alloc: alloc_table),
@@ -136,15 +115,10 @@ Lemma f_impl_po_5 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (acc intP c) = 12 /\ ((0 <=
-                (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
-                (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <=
-                100) /\ (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                (separation_c_s s c) /\ (separation_c_s s c) /\
-                (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre6: (n >= 0 /\ (acc intP c) = 12 /\ (0 <= (acc x s) /\
+                (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\
+                (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   forall (Pre5: (valid alloc s)),
   forall (t: Z),
   forall (Post7: t = ((acc x s) + n)),
@@ -152,24 +126,19 @@ Lemma f_impl_po_5 :
   forall (Test1: t > ((acc y s) - 20)),
   forall (result0: unit),
   forall (Post1: result0 = tt),
-  ((0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100) /\ (0 <=
-  (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100.
+  (0 <= (acc x s) /\ (acc x s) <= (acc y s)) /\ (acc y s) <= 100.
 Proof.
 intuition.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 2318-2342 *)
+(* Why obligation from file "why/invariants.why", characters 1036-1060 *)
 Lemma invariants_initially_established_impl_po_1 : 
   forall (alloc: alloc_table),
   forall (c: pointer),
   forall (intP: ((memory) Z)),
   forall (s: pointer),
-  forall (Pre13: (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                 (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                 (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                 (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                 (separation_c_s s c) /\ (separation_c_s s c) /\
-                 (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre13: (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                 (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = s),
   (valid alloc caduceus_4).
@@ -180,7 +149,7 @@ inversion_clear H0.
 auto.
 Save.
 
-(* Why obligation from file "why/invariants.why", characters 2295-2342 *)
+(* Why obligation from file "why/invariants.why", characters 1013-1060 *)
 Lemma invariants_initially_established_impl_po_2 : 
   forall (alloc: alloc_table),
   forall (c: pointer),
@@ -188,12 +157,8 @@ Lemma invariants_initially_established_impl_po_2 :
   forall (s: pointer),
   forall (x: ((memory) Z)),
   forall (y: ((memory) Z)),
-  forall (Pre13: (separation_s_s s) /\ (valid_range alloc s 0 1) /\
-                 (constant_c alloc c intP) /\ (valid_range alloc s 0 1) /\
-                 (constant_c alloc c intP) /\ (separation_s_c s c) /\
-                 (valid_range alloc c 0 2) /\ (valid_range alloc c 0 2) /\
-                 (separation_c_s s c) /\ (separation_c_s s c) /\
-                 (separation_c_s s c) /\ (separation_c_c c)),
+  forall (Pre13: (valid_range alloc s 0 1) /\ (constant_c alloc c intP) /\
+                 (valid_range alloc c 0 2) /\ (separation_c_s s c)),
   forall (caduceus_4: pointer),
   forall (Post3: caduceus_4 = s),
   forall (Pre3: (valid alloc caduceus_4)),
@@ -218,5 +183,13 @@ Lemma invariants_initially_established_impl_po_2 :
     (valid alloc result))).
 Proof.
 intuition;subst;auto;caduceus.
+rewrite acc_upd_neq;caduceus.
+assert (offset c +1 <> offset c).
+intuition.
+assert (shift c 1 <> shift c 0 -> shift c 1 <> c).
+rewrite shift_zero;auto.
+apply H4.
+apply neq_offset_neq_shift.
+auto with *.
 Qed.
 

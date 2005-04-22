@@ -14,7 +14,7 @@
  * (enclosed in the file GPL).
  *)
 
-(*i $Id: cmain.ml,v 1.54 2005-01-20 16:34:56 hubert Exp $ i*)
+(*i $Id: cmain.ml,v 1.55 2005-04-22 13:37:01 hubert Exp $ i*)
 
 open Format
 open Coptions
@@ -102,7 +102,7 @@ let main () =
   lprintf "starting computation of effects.@.";
   List.iter (fun (_,p) -> Ceffect.file p) nfiles;
   while not (List.for_all (fun (_,p) -> Ceffect.functions p) nfiles) do 
-    Queue.clear Ceffect.warnings; 
+    Queue.clear Ceffect.warnings
   done;
   Queue.iter 
     (fun (loc,msg) ->
