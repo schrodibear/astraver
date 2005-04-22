@@ -198,35 +198,35 @@ Admitted.
 
 
 
-(*Why logic*) Definition acc : (A31:Set) ((memory) A31) -> pointer -> A31.
+(*Why logic*) Definition acc : (A43:Set) ((memory) A43) -> pointer -> A43.
 Admitted.
 Implicits acc [1].
 
 
 (*Why logic*) Definition upd :
-  (A32:Set) ((memory) A32) -> pointer -> A32 -> ((memory) A32).
+  (A44:Set) ((memory) A44) -> pointer -> A44 -> ((memory) A44).
 Admitted.
 Implicits upd [1].
 
 
 (*Why axiom*) Lemma acc_upd :
-  (A33:Set)
-  ((m:((memory) A33)) ((p:pointer) ((a:A33) (acc (upd m p a) p) = a))).
+  (A45:Set)
+  ((m:((memory) A45)) ((p:pointer) ((a:A45) (acc (upd m p a) p) = a))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_eq :
-  (A34:Set)
-  ((m:((memory) A34))
+  (A46:Set)
+  ((m:((memory) A46))
    ((p1:pointer)
-    ((p2:pointer) ((a:A34) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
+    ((p2:pointer) ((a:A46) (p1 = p2 -> (acc (upd m p1 a) p2) = a))))).
 Admitted.
 
 (*Why axiom*) Lemma acc_upd_neq :
-  (A35:Set)
-  ((m:((memory) A35))
+  (A47:Set)
+  ((m:((memory) A47))
    ((p1:pointer)
     ((p2:pointer)
-     ((a:A35) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
+     ((a:A47) (~(p1 = p2) -> (acc (upd m p1 a) p2) = (acc m p2)))))).
 Admitted.
 
 (*Why axiom*) Lemma false_not_true : ~(false = true).
@@ -311,8 +311,8 @@ Admitted.
 (*Why logic*) Definition not_in_pset : pointer -> pset -> Prop.
 Admitted.
 
-(*Why predicate*) Definition not_assigns [A36:Set] [a:alloc_table]
-  [m1:((memory) A36)] [m2:((memory) A36)] [l:pset]
+(*Why predicate*) Definition not_assigns [A48:Set] [a:alloc_table]
+  [m1:((memory) A48)] [m2:((memory) A48)] [l:pset]
   := ((p:pointer)
       ((valid a p) -> ((not_in_pset p l) -> (acc m2 p) = (acc m1 p)))).
 
@@ -528,20 +528,75 @@ Admitted.
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_trans :
-  (A37:Set)
+  (A49:Set)
   ((a:alloc_table)
    ((l:pset)
-    ((m1:((memory) A37))
-     ((m2:((memory) A37))
-      ((m3:((memory) A37))
+    ((m1:((memory) A49))
+     ((m2:((memory) A49))
+      ((m3:((memory) A49))
        ((not_assigns a m1 m2 l) ->
         ((not_assigns a m2 m3 l) -> (not_assigns a m1 m3 l)))))))).
 Admitted.
 
 (*Why axiom*) Lemma not_assigns_refl :
-  (A38:Set)
-  ((a:alloc_table) ((l:pset) ((m:((memory) A38)) (not_assigns a m m l)))).
+  (A50:Set)
+  ((a:alloc_table) ((l:pset) ((m:((memory) A50)) (not_assigns a m m l)))).
 Admitted.
+
+(*Why predicate*) Definition valid1  [m1:((memory) pointer)]
+  := ((p:pointer) ((a:alloc_table) ((valid a p) -> (valid a (acc m1 p))))).
+
+(*Why predicate*) Definition valid1_range  [m1:((memory) pointer)] [size:Z]
+  := ((p:pointer)
+      ((a:alloc_table) ((valid a p) -> (valid_range a (acc m1 p) `0` size)))).
+
+(*Why predicate*) Definition separation1  [m1:((memory) pointer)]
+  [m2:((memory) pointer)]
+  := ((p:pointer)
+      ((a:alloc_table)
+       ((valid a p) -> ~((base_addr (acc m1 p)) = (base_addr (acc m2 p)))))).
+
+(*Why predicate*) Definition separation1_range1  [m1:((memory) pointer)]
+  [m2:((memory) pointer)] [size:Z]
+  := ((p:pointer)
+      ((a:alloc_table)
+       ((valid a p) ->
+        ((i:Z)
+         (`0 < i` ->
+          (`i < size` ->
+           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 p))))))))).
+
+(*Why predicate*) Definition separation1_range  [m:((memory) pointer)]
+  [size:Z]
+  := ((p:pointer)
+      ((a:alloc_table)
+       ((valid a p) ->
+        ((i1:Z)
+         ((i2:Z)
+          (`0 < i1` ->
+           (`i1 < size` ->
+            (`0 < i2` ->
+             (`i2 < size` ->
+              (`i1 <> i2` ->
+               ~((base_addr (acc m (shift p i1))) = (base_addr (acc m
+                                                                (shift p i2)))))))))))))).
+
+(*Why predicate*) Definition separation2  [m1:((memory) pointer)]
+  [m2:((memory) pointer)]
+  := ((p1:pointer)
+      ((p2:pointer)
+       ((a:alloc_table)
+        (~(p1 = p2) -> ~((base_addr (acc m1 p1)) = (base_addr (acc m2 p2))))))).
+
+(*Why predicate*) Definition separation2_range1  [m1:((memory) pointer)]
+  [m2:((memory) pointer)] [size:Z]
+  := ((p:pointer)
+      ((q:pointer)
+       ((a:alloc_table)
+        ((i:Z)
+         (`0 < i` ->
+          (`i < size` ->
+           ~((base_addr (acc m1 (shift p i))) = (base_addr (acc m2 q))))))))).
 
 (*Why logic*) Definition on_heap : alloc_table -> pointer -> Prop.
 Admitted.
